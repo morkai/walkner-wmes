@@ -15,6 +15,8 @@ module.exports = function setUpMorRoutes(app, module)
 
   express.post('/mor', canManage, updateStateRoute);
 
+  express.get('/mor;reload', userModule.auth('SUPER'), reloadStateRoute);
+
   express.get(
     '/mor/settings',
     canView,
@@ -40,6 +42,19 @@ module.exports = function setUpMorRoutes(app, module)
   function updateStateRoute(req, res, next)
   {
     module.updateState(req.body.action, req.body.params, req.body.instanceId, err =>
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      res.sendStatus(204);
+    });
+  }
+
+  function reloadStateRoute(req, res, next)
+  {
+    module.reloadState(true, err =>
     {
       if (err)
       {

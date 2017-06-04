@@ -11,7 +11,7 @@ define([
   'app/data/orgUnits',
   'app/data/prodFunctions',
   'app/users/User',
-  'app/mor/templates/editMrpForm'
+  'app/mor/templates/editProdFunctionForm'
 ], function(
   _,
   $,
@@ -37,19 +37,19 @@ define([
         var view = this;
         var $submit = view.$id('submit').prop('disabled', true);
         var params = {
-          division: view.model.divisionId,
-          mrp: view.model.mrpId,
-          prodFunction: view.model.prodFunctionId,
+          section: view.model.section._id,
+          mrp: view.model.mrp._id,
+          prodFunction: view.model.prodFunction.id,
           users: view.$id('users').val().split(',').map(function(userId) { return view.users[userId]; })
         };
 
-        view.model.mor.editMrp(params)
+        view.model.mor.editProdFunction(params)
           .fail(function()
           {
             viewport.msg.show({
               type: 'error',
               time: 3000,
-              text: t('mor', 'editMrp:failure')
+              text: t('mor', 'editProdFunction:failure')
             });
 
             $submit.prop('disabled', false);
@@ -76,11 +76,16 @@ define([
 
     serialize: function()
     {
+      var model = this.model;
+      var prodFunction = model.prodFunction;
+      var global = model.mor.isGlobalProdFunction(prodFunction.id);
+      var common = model.mor.isCommonProdFunction(prodFunction.id);
+
       return {
         idPrefix: this.idPrefix,
-        division: orgUnits.getByTypeAndId('division', this.model.divisionId).get('description'),
-        mrp: this.model.mrpId || t('mor', 'editMrp:mrp:all'),
-        prodFunction: prodFunctions.get(this.model.prodFunctionId).getLabel()
+        section: global ? t('mor', 'editProdFunction:section:all') : model.section.name,
+        mrp: global || common ? t('mor', 'editProdFunction:mrp:all') : model.mrp._id,
+        prodFunction: prodFunction.getLabel()
       };
     },
 
@@ -89,7 +94,7 @@ define([
       var view = this;
       var model = view.model;
       var mor = model.mor;
-      var users = mor.getUsers(model.divisionId, model.mrpId, model.prodFunctionId)
+      var users = mor.getUsers(model.section._id, model.mrp._id, model.prodFunction.id)
         .map(function(userId) { return mor.users.get(userId); })
         .filter(function(user) { return !!user; });
       var userIds = users.map(function(user) { return user.id; });
@@ -106,7 +111,7 @@ define([
       view.setUpUsersSelect2(data);
 
       view
-        .ajax({url: '/users?exclude(privileges)&sort(searchName)&limit(999)&prodFunction=' + model.prodFunctionId})
+        .ajax({url: '/users?exclude(privileges)&sort(searchName)&limit(999)&prodFunction=' + model.prodFunction.id})
         .done(function(res)
         {
           _.forEach(res.collection, function(user)

@@ -37,15 +37,17 @@
   padding-top: 0;
   border-top: none;
 }
-.mor-section > h3 > .btn {
+.mor-section > h3 > .btn-group {
   display: none;
+  vertical-align: top;
+}
+.mor-section > h3 .btn {
   padding-top: 0;
   padding-bottom: 0;
   height: 26px;
   line-height: 26px;
-  vertical-align: top;
 }
-.is-editing .mor-section > h3:hover > .btn {
+.is-editing .mor-section > h3:hover > .btn-group {
   display: inline-block;
 }
 .mor-manager {
@@ -54,39 +56,42 @@
 .mor-manager > span {
   margin-right: 14px;
 }
-.mor-available {
+.mor-user-available {
   color: #00af00;
 }
-.mor-unavailable {
+.mor-user-unavailable {
   color: #ee0000;
 }
-.mor-table {
+.mor-watch + .mor-mrps {
+  margin-top: 5px;
+}
+.mor-mrps {
   width: auto;
 }
-.mor-table > tbody > tr > td {
+.mor-mrps > tbody > tr > td {
   vertical-align: top;
   min-width: 100px;
 }
-.mor-table > thead > tr > th:first-child,
+.mor-mrps > thead > tr > th:first-child,
 .mor-mrp {
   width: 275px;
 }
-.mor-table-highlight {
+.mor-mrps-highlight {
   background: #ffffd6!important;
 }
-.mor-editable {
+.mor-is-editable {
   position: relative;
 }
-.mor-editable > .btn-default {
+.mor-is-editable > .btn-group {
   display: none;
   position: absolute;
   bottom: -1px;
   right: -1px;
 }
-th.mor-editable > .btn-default {
+th.mor-is-editable .btn {
   height: 32px;
 }
-.is-editing .mor-editable:hover > .btn-default {
+.is-editing .mor-is-editable:hover > .btn-group {
   display: inline-block;
 }
 .mor-section > h3 > .fa-caret-right {
@@ -102,7 +107,7 @@ th.mor-editable > .btn-default {
 }
 .mor-section.is-collapsed > h4,
 .is-collapsed > .mor-watch,
-.is-collapsed > .mor-table {
+.is-collapsed > .mor-mrps {
   display: none;
 }
 .mor-mrp-name {
@@ -128,4 +133,12 @@ th.mor-editable > .btn-default {
 }
 .mor-dialog .modal-body {
   padding: 0 15px;
+}
+.mor-dnd-indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 15px;
+  border-width: 3px;
+  border-color: orange;
 }

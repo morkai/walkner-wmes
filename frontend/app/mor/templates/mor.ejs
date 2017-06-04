@@ -1,94 +1,92 @@
 <div class="mor">
-  <div class="mor-section <%- watchCollapsed ? 'is-collapsed' : '' %>" data-section-id="WATCH">
+  <% sections.forEach(function(section) { %>
+  <div class="mor-section <%- section.collapsed ? 'is-collapsed' : '' %>" data-section-id="<%- section._id %>">
     <h3>
-      <i class="fa fa-caret-right"></i><i class="fa fa-caret-down"></i><span>Dyżury</span>
-      <% if (isManager || canManage) { %>
-      <button class="btn btn-default" data-action="addWatch"><i class="fa fa-plus"></i></button>
-      <% } %>
+      <i class="fa fa-caret-right"></i><i class="fa fa-caret-down"></i><span class="mor-section-name" draggable="<%- draggable %>"><%= section.label %></span>
+      <div class="btn-group">
+        <% if (section.addWatchVisible) { %>
+        <button class="btn btn-default" data-action="addWatch" title="<%- t('mor', 'action:addWatch') %>"><i class="fa fa-plus"></i></button>
+        <% } %>
+        <% if (sectionActionsVisible) { %>
+        <button class="btn btn-default" data-action="editSection" title="<%- t('mor', 'action:editSection') %>"><i class="fa fa-edit"></i></button>
+        <button class="btn btn-default" data-action="removeSection" title="<%- t('mor', 'action:removeSection') %>"><i class="fa fa-remove"></i></button>
+        <% } %>
+      </div>
     </h3>
-    <table id="<%- idPrefix %>-watch" class="mor-watch">
-      <% watch.forEach(function(user) { %>
-      <tr data-user-id="<%- user._id %>">
-        <td><i class="fa fa-user-circle-o <%- user.available ? 'mor-available' : 'mor-unavailable' %>"></i><span><%- user.label %></span></td>
-        <td><i class="fa fa-wrench"></i><span><%- user.prodFunction %></span></td>
-        <td><i class="fa fa-clock-o"></i><span><%- user.availability %></span></td>
-        <td><i class="fa fa-phone"></i><span><%- user.mobile %></span></td>
+    <% if (section.watchVisible) { %>
+    <table class="mor-watch">
+      <tbody>
+      <% section.watch.forEach(function(watch) { %>
+      <tr data-user-id="<%- watch.user._id %>">
+        <td><i class="fa fa-user-circle-o mor-user-status <%- watch.user.available ? 'mor-user-available' : 'mor-user-unavailable' %>"></i><span><%- watch.user.label %></span></td>
+        <td><i class="fa fa-wrench"></i><span><%- watch.user.prodFunction %></span></td>
+        <% if (section.watchAvailabilityVisible) { %>
+        <td><i class="fa fa-clock-o"></i><span><%- watch.user.availability || '06:00-06:00' %></span></td>
+        <% } %>
+        <td><i class="fa fa-phone"></i><span><%- watch.user.mobile %></span></td>
         <td>
-          <% if (editable) { %>
-          <a href="mailto:<%= user.email %>"><i class="fa fa-envelope"></i><span><%= user.email %></span></a>
+          <% if (linkEmails) { %>
+          <a href="mailto:<%= watch.user.email %>"><i class="fa fa-envelope"></i><span><%= watch.user.email %></span></a>
           <% } else { %>
-          <i class="fa fa-envelope"></i><span><%= user.email %></span>
+          <i class="fa fa-envelope"></i><span><%= watch.user.email %></span>
           <% } %>
         </td>
         <td class="actions">
-          <% if (isManager || canManage) { %>
           <div class="btn-group">
             <button class="btn btn-default" data-action="editWatch"><i class="fa fa-edit"></i></button>
             <button class="btn btn-default" data-action="removeWatch"><i class="fa fa-remove"></i></button>
           </div>
-          <% } %>
         </td>
       </tr>
       <% }) %>
+      </tbody>
     </table>
-  </div>
-  <% divisions.forEach(function(division) {%>
-  <div class="mor-section <%- division.collapsed ? 'is-collapsed' : '' %>" data-section-id="<%- division._id %>" data-division-id="<%- division._id %>">
-    <h3>
-      <i class="fa fa-caret-right"></i><i class="fa fa-caret-down"></i><span><%= division.label %></span>
-    </h3>
-    <% if (division.manager) { %>
-    <h4 class="mor-manager">
-      <i class="fa fa-user-circle-o <%- division.manager.available ? 'mor-available' : 'mor-unavailable' %>"></i><span><%= division.manager.label %></span>
-      <i class="fa fa-wrench"></i><span><%= division.manager.prodFunction %></span>
-      <i class="fa fa-phone"></i><span><%= division.manager.mobile %></span>
-      <% if (editable) { %>
-      <a href="mailto:<%= division.manager.email %>"><i class="fa fa-envelope"></i><span><%= division.manager.email %></span></a>
-      <% } else { %>
-      <i class="fa fa-envelope"></i><span><%= division.manager.email %></span>
-      <% } %>
-    </h4>
     <% } %>
-    <table class="table table-bordered table-condensed table-hover mor-table">
+    <% if (section.mrpsVisible) { %>
+    <table class="table table-bordered table-condensed table-hover mor-mrps">
       <thead>
       <tr>
-        <th class="is-min mor-editable">
+        <% if (section.mrpColumnVisible) { %>
+        <th class="is-min mor-is-editable">
           MRP
-          <% if (canManage || division.canManage) { %>
-          <button class="btn btn-default" data-action="addMrp"><i class="fa fa-plus"></i></button>
-          <% } %>
+          <div class="btn-group">
+            <button class="btn btn-default" data-action="addMrp"><i class="fa fa-plus"></i></button>
+          </div>
         </th>
-        <% prodFunctions.forEach(function(prodFunction) { %>
+        <% } %>
+        <% section.prodFunctions.forEach(function(prodFunction) { %>
         <th class="is-min"><%= prodFunction.label %></th>
         <% }) %>
       </tr>
       </thead>
       <tbody>
-      <% division.mrps.forEach(function(mrp, mrpI) { %>
+      <% section.mrps.forEach(function(mrp) { %>
       <tr data-mrp-id="<%- mrp._id %>">
-        <td class="mor-mrp mor-editable">
-          <span class="mor-mrp-name"><%= mrp._id %></span>
-          <span class="mor-mrp-desc"><%= mrp.label %></span>
-          <% if (canManage || division.canManage) { %>
-          <button class="btn btn-default" data-action="removeMrp"><i class="fa fa-remove"></i></button>
-          <% } %>
-        </td>
-        <% prodFunctions.forEach(function(prodFunction) { %>
-        <% if (!prodFunction.common || mrpI === 0) { %>
-        <td class="is-min mor-editable <%- prodFunction.common ? 'mor-is-common' : '' %>" data-prod-function-id="<%- prodFunction._id %>" rowspan="<%= prodFunction.common ? division.mrps.length : '0' %>">
-          <% ((prodFunction.common ? division.commonProdFunctions[prodFunction._id] : mrp.users[prodFunction._id]) || []).forEach(function(user) { %>
-          <%- prodFunction.ordered ? (user.no + '. ') : '' %><span class="mor-user <%- user.available ? 'mor-available' : 'mor-unavailable' %>" data-user-id="<%- user._id %>"><%= user.label %></span><br>
-          <% }) %>
-          <% if (canManage || division.canManage) { %>
-          <button class="btn btn-default" data-action="editMrp"><i class="fa fa-edit"></i></button>
-          <% } %>
+        <% if (section.mrpColumnVisible) { %>
+        <td class="mor-mrp mor-is-editable">
+          <span class="mor-mrp-name"><%= mrp.name %></span>
+          <span class="mor-mrp-desc"><%= mrp.description %></span>
+          <div class="btn-group">
+            <button class="btn btn-default" data-action="editMrp"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-default" data-action="removeMrp"><i class="fa fa-remove"></i></button>
+          </div>
         </td>
         <% } %>
+        <% mrp.prodFunctions.forEach(function(prodFunction) { %>
+        <td class="is-min mor-is-editable <%- prodFunction.common ? 'mor-is-common' : '' %>" data-prod-function-id="<%- prodFunction._id %>" rowspan="<%= prodFunction.rowspan %>">
+          <% prodFunction.users.forEach(function(user) { %>
+          <%- user.no %><span class="mor-user <%- user.available ? 'mor-user-available' : 'mor-user-unavailable' %>" data-user-id="<%- user._id %>"><%= user.label %></span><br>
+          <% }) %>
+          <div class="btn-group">
+            <button class="btn btn-default" data-action="editProdFunction"><i class="fa fa-edit"></i></button>
+          </div>
+        </td>
         <% }) %>
       </tr>
       <% }) %>
       </tbody>
     </table>
+    <% } %>
   </div>
   <% }) %>
 </div>

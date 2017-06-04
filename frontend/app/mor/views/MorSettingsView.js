@@ -23,6 +23,10 @@ define([
 
     template: template,
 
+    localTopics: {
+      'prodFunctions.synced': 'render'
+    },
+
     events: _.extend({
       'change input[data-setting]': function(e)
       {
@@ -66,6 +70,12 @@ define([
         {
           $prodFunctions.select2('onSortEnd').select2('focus');
         }
+      });
+
+      this.$id('globalProdFunctions').select2({
+        allowClear: true,
+        multiple: true,
+        data: prodFunctions.map(idAndLabel)
       });
 
       this.$id('commonProdFunctions').select2({

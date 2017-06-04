@@ -66,6 +66,9 @@
 .control-label + .radio {
   margin-top: 0;
 }
+.checkbox + .form-group {
+  margin-top: 15px;
+}
 .form-group-datetime {
   display: flex;
 }

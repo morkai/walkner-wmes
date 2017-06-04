@@ -10,10 +10,12 @@ define([
   'app/core/View',
   'app/core/views/DialogView',
   'app/data/prodFunctions',
+  './SectionFormView',
   './WatchFormView',
-  './AddMrpFormView',
-  './EditMrpFormView',
+  './MrpFormView',
+  './EditProdFunctionFormView',
   'app/mor/templates/mor',
+  'app/mor/templates/removeSection',
   'app/mor/templates/removeWatch',
   'app/mor/templates/removeMrp',
   'app/mor/templates/userPopover'
@@ -27,10 +29,12 @@ define([
   View,
   DialogView,
   prodFunctions,
+  SectionFormView,
   WatchFormView,
-  AddMrpFormView,
-  EditMrpFormView,
+  MrpFormView,
+  EditProdFunctionFormView,
   template,
+  removeSectionTemplate,
   removeWatchTemplate,
   removeMrpTemplate,
   userPopoverTemplate
@@ -62,34 +66,51 @@ define([
         var $el = this.$(e.currentTarget);
         var action = $el[0].dataset.action;
         var params = [];
+        var param = function(prop)
+        {
+          return $el.closest('[data-' + prop + ']').attr('data-' + prop);
+        };
 
         switch (action)
         {
+          case 'addSection':
+            params.push();
+            break;
+
+          case 'removeSection':
+            params.push(param('section-id'));
+            break;
+
+          case 'editSection':
+            params.push(param('section-id'));
+            break;
+
+          case 'addWatch':
+            params.push(param('section-id'));
+            break;
+
           case 'removeWatch':
-            params.push($el.closest('[data-user-id]')[0].dataset.userId);
+            params.push(param('section-id'), param('user-id'));
             break;
 
           case 'editWatch':
-            params.push($el.closest('[data-user-id]')[0].dataset.userId);
+            params.push(param('section-id'), param('user-id'));
             break;
 
           case 'addMrp':
-            params.push($el.closest('[data-division-id]')[0].dataset.divisionId);
+            params.push(param('section-id'));
             break;
 
           case 'removeMrp':
-            params.push(
-              $el.closest('[data-division-id]')[0].dataset.divisionId,
-              $el.closest('[data-mrp-id]')[0].dataset.mrpId
-            );
+            params.push(param('section-id'), param('mrp-id'));
             break;
 
           case 'editMrp':
-            params.push(
-              $el.closest('[data-division-id]')[0].dataset.divisionId,
-              $el.closest('[data-mrp-id]')[0].dataset.mrpId,
-              $el.closest('[data-prod-function-id]')[0].dataset.prodFunctionId
-            );
+            params.push(param('section-id'), param('mrp-id'));
+            break;
+
+          case 'editProdFunction':
+            params.push(param('section-id'), param('mrp-id'), param('prod-function-id'));
             break;
         }
 
@@ -104,54 +125,367 @@ define([
       },
       'mouseenter tr[data-mrp-id]': function(e)
       {
-        this.$(e.currentTarget).closest('tbody').find('.mor-is-common').addClass('mor-table-highlight');
+        this.$(e.currentTarget).closest('tbody').find('.mor-is-common').addClass('mor-mrps-highlight');
       },
       'mouseleave tr[data-mrp-id]': function(e)
       {
-        this.$(e.currentTarget).closest('tbody').find('.mor-is-common').removeClass('mor-table-highlight');
+        this.$(e.currentTarget).closest('tbody').find('.mor-is-common').removeClass('mor-mrps-highlight');
+      },
+      'dragenter .mor-section': function(e)
+      {
+        this.hoveredSectionId = e.currentTarget.dataset.sectionId;
       }
     },
 
     initialize: function()
     {
       this.$userPopover = null;
+      this.$dndIndicator = null;
+      this.draggedSectionId = null;
+      this.hoveredSectionId = null;
 
       this.model.subscribe(this.pubsub);
 
-      $(window)
-        .on('keydown.' + this.idPrefix, this.onKeyDown.bind(this))
-        .on('keyup.' + this.idPrefix, this.onKeyUp.bind(this));
+      $(window).on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
+
+      $(document)
+        .on('dragstart.' + this.idPrefix, this.onDragStart.bind(this))
+        .on('dragend.' + this.idPrefix, this.onDragEnd.bind(this))
+        .on('dragenter.' + this.idPrefix, this.onDragEnter.bind(this))
+        .on('dragover.' + this.idPrefix, this.onDragOver.bind(this))
+        .on('drop.' + this.idPrefix, this.onDrop.bind(this));
     },
 
     destroy: function()
     {
       $(window).off('.' + this.idPrefix);
+      $(document).off('.' + this.idPrefix);
 
       this.hideUserPopover();
     },
 
     serialize: function()
     {
+      var prodFunctions = this.serializeProdFunctions();
+
       return {
         idPrefix: this.idPrefix,
-        editable: this.options.editable !== false,
-        canManage: user.isAllowedTo('MOR:MANAGE'),
-        isManager: user.isAllowedTo('FN:manager'),
-        watchCollapsed: !!this.model.collapsedSections.WATCH,
-        prodFunctions: this.model.serializeProdFunctions(),
-        watch: this.model.serializeWatch(),
-        divisions: this.model.serializeDivisions()
+        draggable: this.editing,
+        linkEmails: this.options.editable !== false,
+        sectionActionsVisible: user.isAllowedTo('MOR:MANAGE'),
+        sections: this.serializeSections(prodFunctions),
+        prodFunctions: prodFunctions
       };
+    },
+
+    serializeSections: function(prodFunctions)
+    {
+      return (this.model.get('sections') || []).map(this.serializeSection.bind(this, prodFunctions));
+    },
+
+    serializeSection: function(prodFunctions, morSection)
+    {
+      if (morSection.prodFunctions.length)
+      {
+        prodFunctions = this.serializeProdFunctions(morSection.prodFunctions);
+      }
+
+      var mor = this.model;
+      var viewWatch = this.serializeWatches(morSection);
+      var viewMrps = this.serializeMrps(prodFunctions, morSection);
+
+      return {
+        _id: morSection._id,
+        collapsed: mor.isSectionCollapsed(morSection._id),
+        label: morSection.name,
+        addWatchVisible: morSection.watchEnabled,
+        watchVisible: morSection.watchEnabled && viewWatch.length > 0,
+        watchAvailabilityVisible: _.some(viewWatch, function(d) { return d.user.availability !== ''; }),
+        watch: viewWatch,
+        mrpsVisible: morSection.mrpsEnabled
+          && (viewMrps.length > 0 || (this.options.editable !== false && user.isAllowedTo('MOR:MANAGE'))),
+        mrpColumnVisible: true,
+        mrps: viewMrps,
+        prodFunctions: prodFunctions
+      };
+    },
+
+    serializeWatches: function(morSection)
+    {
+      var mor = this.model;
+
+      return morSection.watch
+        .filter(function(d) { return !!mor.users.get(d.user); })
+        .sort(function(a, b)
+        {
+          a = mor.users.get(a.user);
+          b = mor.users.get(b.user);
+
+          if (a.get('prodFunction') === b.get('prodFunction'))
+          {
+            return a.getLabel().localeCompare(b.getLabel());
+          }
+
+          if (a.get('prodFunction') === 'manager')
+          {
+            return -1;
+          }
+
+          if (b.get('prodFunction') === 'manager')
+          {
+            return 1;
+          }
+
+          return a.getLabel().localeCompare(b.getLabel());
+        })
+        .map(this.serializeWatch, this);
+    },
+
+    serializeWatch: function(morWatch)
+    {
+      return {
+        user: this.serializeUser(morWatch, morWatch.user, -1)
+      };
+    },
+
+    serializeMrps: function(prodFunctions, morSection)
+    {
+      var commonProdFunctions = {};
+
+      morSection.commonProdFunctions.forEach(function(prodFunction)
+      {
+        commonProdFunctions[prodFunction._id] = prodFunction.users;
+      });
+
+      _.forEach(this.model.get('globalProdFunctions'), function(prodFunction)
+      {
+        commonProdFunctions[prodFunction._id] = prodFunction.users;
+      });
+
+      return morSection.mrps
+        .sort(function(a, b) { return a._id.localeCompare(b._id); })
+        .map(this.serializeMrp.bind(this, prodFunctions, commonProdFunctions, morSection.mrps.length));
+    },
+
+    serializeMrp: function(prodFunctions, commonProdFunctions, mrpCount, morMrp, i)
+    {
+      return {
+        _id: morMrp._id,
+        name: /^[A-Za-z0-9]/.test(morMrp._id) ? morMrp._id : '',
+        description: morMrp.description,
+        prodFunctions: this.serializeMrpProdFunctions(
+          prodFunctions,
+          morMrp.prodFunctions,
+          i === 0 ? commonProdFunctions : {},
+          i === 0,
+          mrpCount
+        )
+      };
+    },
+
+    serializeMrpProdFunctions: function(prodFunctions, morProdFunctions, commonProdFunctions, first, mrpCount)
+    {
+      var view = this;
+      var map = {};
+
+      morProdFunctions.forEach(function(d) { map[d._id] = d; });
+
+      return prodFunctions.map(function(prodFunction)
+      {
+        var morProdFunction = map[prodFunction._id] || {
+          _id: prodFunction._id,
+          users: []
+        };
+        var users = (commonProdFunctions[prodFunction._id] || morProdFunction.users).map(function(userId, i)
+        {
+          var user = view.serializeUser(null, userId, i);
+
+          if (!prodFunction.ordered)
+          {
+            user.no = '';
+          }
+
+          return user;
+        });
+
+        if (!prodFunction.ordered)
+        {
+          users.sort(function(a, b) { return a.label.localeCompare(b.label); });
+        }
+
+        return {
+          _id: prodFunction._id,
+          common: prodFunction.common || prodFunction.global,
+          users: users,
+          rowspan: (prodFunction.common || prodFunction.global) && first ? mrpCount : 0
+        };
+      }).filter(function(viewProdFunction)
+      {
+        return first || !viewProdFunction.common;
+      });
+    },
+
+    serializeUser: function(availability, userId, i)
+    {
+      var user = this.model.users.get(userId);
+      var prodFunction = prodFunctions.get(user.get('prodFunction'));
+
+      return {
+        _id: user.id,
+        no: (i + 1) + '. ',
+        label: user.getLabel(),
+        prodFunction: prodFunction ? prodFunction.getLabel() : '?',
+        email: user.get('email') || '?',
+        mobile: user.getMobile() || '?',
+        available: !!user.get('working'),
+        availability: availability && availability.from && availability.to && availability.from !== availability.to
+          ? (availability.from + '-' + availability.to)
+          : ''
+      };
+    },
+
+    serializeProdFunctions: function(allProdFunctions)
+    {
+      var settings = this.model.get('settings') || {};
+      var globalProdFunctions = settings.globalProdFunctions || [];
+      var commonProdFunctions = settings.commonProdFunctions || [];
+      var orderedProdFunctions = settings.orderedProdFunctions || [];
+
+      if (!allProdFunctions)
+      {
+        allProdFunctions = settings.prodFunctions || [];
+      }
+
+      return _.map(allProdFunctions, function(prodFunctionId)
+      {
+        var prodFunction = prodFunctions.get(prodFunctionId);
+
+        return {
+          _id: prodFunction ? prodFunction.id : prodFunctionId,
+          label: prodFunction ? prodFunction.getLabel() : prodFunctionId,
+          global: _.contains(globalProdFunctions, prodFunctionId),
+          common: _.contains(commonProdFunctions, prodFunctionId),
+          ordered: _.contains(orderedProdFunctions, prodFunctionId)
+        };
+      });
     },
 
     beforeRender: function()
     {
-      this.stopListening(this.model, 'change', this.render);
+      this.stopListening(this.model, 'change update', this.render);
     },
 
     afterRender: function()
     {
-      this.listenTo(this.model, 'change', this.render);
+      this.listenTo(this.model, 'change update', this.render);
+    },
+
+    toggleEditing: function(editing)
+    {
+      this.editing = String(editing);
+
+      this.$('[draggable]').attr('draggable', this.editing);
+    },
+
+    onDragStart: function(e)
+    {
+      if (!e.target.draggable
+        || !e.target.classList.contains('mor-section-name')
+        || !user.isAllowedTo('MOR:MANAGE'))
+      {
+        return;
+      }
+
+      e.originalEvent.dataTransfer.dropEffect = 'move';
+
+      this.draggedSectionId = this.$(e.target).closest('[data-section-id]').attr('data-section-id');
+      this.hoveredSectionId = this.draggedSectionId;
+      this.$dndIndicator = $('<hr class="mor-dnd-indicator">');
+
+      this.positionDndIndicator(e);
+
+      this.$dndIndicator.appendTo(document.body);
+    },
+
+    onDragEnter: function(e)
+    {
+      if (this.draggedSectionId)
+      {
+        e.preventDefault();
+      }
+    },
+
+    onDragEnd: function()
+    {
+      if (this.$dndIndicator)
+      {
+        this.$dndIndicator.remove();
+        this.$dndIndicator = null;
+      }
+
+      this.draggedSectionId = null;
+    },
+
+    onDragOver: function(e)
+    {
+      if (!this.draggedSectionId || !this.hoveredSectionId)
+      {
+        return;
+      }
+
+      e.preventDefault();
+
+      this.positionDndIndicator(e);
+    },
+
+    onDrop: function()
+    {
+      if (!this.draggedSectionId)
+      {
+        return;
+      }
+
+      var params = {
+        source: this.draggedSectionId,
+        target: this.hoveredSectionId,
+        position: this.$dndIndicator.attr('data-position')
+      };
+
+      this.draggedSectionId = null;
+      this.hoveredSectionId = null;
+
+      setTimeout(this.model.moveSection.bind(this.model, params), 1);
+    },
+
+    positionDndIndicator: function(e)
+    {
+      var $section = this.$('.mor-section[data-section-id="' + this.hoveredSectionId + '"]');
+      var mouseY = e.originalEvent.pageY;
+      var top = $section.offset().top;
+      var height = $section.outerHeight(true);
+      var position = 'before';
+
+      if (mouseY > top + height / 2)
+      {
+        position = 'after';
+
+        var $next = $section.next();
+
+        if ($next.length)
+        {
+          top = $next.offset().top;
+        }
+        else
+        {
+          top += height + 8;
+        }
+      }
+      else if (!$section.prev().length)
+      {
+        top -= 10;
+      }
+
+      this.$dndIndicator.css('top', top + 'px').attr('data-position', position);
     },
 
     redirectIfNeeded: function(action, params)
@@ -183,21 +517,78 @@ define([
       return true;
     },
 
-    addWatch: function()
+    addSection: function()
+    {
+      viewport.showDialog(
+        new SectionFormView({
+          model: {
+            nlsSuffix: 'add',
+            mor: this.model,
+            section: null
+          }
+        }),
+        t('mor', 'sectionForm:title:add')
+      );
+    },
+
+    removeSection: function(sectionId)
+    {
+      var dialogView = new DialogView({
+        template: removeSectionTemplate,
+        autoHide: false,
+        model: {
+          section: this.model.getSection(sectionId).name
+        }
+      });
+
+      this.listenTo(dialogView, 'answered', function()
+      {
+        this.model.removeSection({section: sectionId})
+          .fail(function()
+          {
+            viewport.msg.show({
+              type: 'error',
+              time: 3000,
+              text: t('mor', 'removeSection:failure')
+            });
+          })
+          .done(function() { viewport.closeDialog(); })
+          .always(function() { dialogView.enableAnswers(); });
+      });
+
+      viewport.showDialog(dialogView, t('mor', 'removeSection:title'));
+    },
+
+    editSection: function(sectionId)
+    {
+      viewport.showDialog(
+        new SectionFormView({
+          model: {
+            nlsSuffix: 'edit',
+            mor: this.model,
+            section: this.model.getSection(sectionId)
+          }
+        }),
+        t('mor', 'sectionForm:title:edit')
+      );
+    },
+
+    addWatch: function(sectionId)
     {
       viewport.showDialog(
         new WatchFormView({
           model: {
-            nlsSuffix: 'add',
+            mode: 'add',
             mor: this.model,
-            selected: null
+            section: this.model.getSection(sectionId),
+            watch: null
           }
         }),
         t('mor', 'watchForm:title:add')
       );
     },
 
-    removeWatch: function(userId)
+    removeWatch: function(sectionId, userId)
     {
       var dialogView = new DialogView({
         template: removeWatchTemplate,
@@ -209,7 +600,7 @@ define([
 
       this.listenTo(dialogView, 'answered', function()
       {
-        this.model.removeWatch({user: userId})
+        this.model.removeWatch({section: sectionId, user: userId})
           .fail(function()
           {
             viewport.msg.show({
@@ -225,47 +616,50 @@ define([
       viewport.showDialog(dialogView, t('mor', 'removeWatch:title'));
     },
 
-    editWatch: function(userId)
+    editWatch: function(sectionId, userId)
     {
       viewport.showDialog(
         new WatchFormView({
           model: {
-            nlsSuffix: 'edit',
+            mode: 'edit',
             mor: this.model,
-            selected: _.findWhere(this.model.get('watch'), {user: userId})
+            section: this.model.getSection(sectionId),
+            watch: this.model.getWatch(sectionId, userId)
           }
         }),
         t('mor', 'watchForm:title:edit')
       );
     },
 
-    addMrp: function(divisionId)
+    addMrp: function(sectionId)
     {
       viewport.showDialog(
-        new AddMrpFormView({
+        new MrpFormView({
           model: {
+            mode: 'add',
             mor: this.model,
-            divisionId: divisionId
+            section: this.model.getSection(sectionId),
+            mrp: null
           }
         }),
-        t('mor', 'addMrp:title')
+        t('mor', 'mrpForm:title:add')
       );
     },
 
-    removeMrp: function(divisionId, mrpId)
+    removeMrp: function(sectionId, mrpId)
     {
       var dialogView = new DialogView({
         template: removeMrpTemplate,
         autoHide: false,
         model: {
-          division: divisionId,
+          section: this.model.getSection(sectionId).name,
           mrp: mrpId
         }
       });
 
       this.listenTo(dialogView, 'answered', function()
       {
-        this.model.removeMrp({division: divisionId, mrp: mrpId})
+        this.model.removeMrp({section: sectionId, mrp: mrpId})
           .fail(function()
           {
             viewport.msg.show({
@@ -281,18 +675,33 @@ define([
       viewport.showDialog(dialogView, t('mor', 'removeMrp:title'));
     },
 
-    editMrp: function(divisionId, mrpId, prodFunctionId)
+    editMrp: function(sectionId, mrpId)
     {
       viewport.showDialog(
-        new EditMrpFormView({
+        new MrpFormView({
           model: {
+            mode: 'edit',
             mor: this.model,
-            divisionId: divisionId,
-            mrpId: this.model.isCommonProdFunction(prodFunctionId) ? null : mrpId,
-            prodFunctionId: prodFunctionId
+            section: this.model.getSection(sectionId),
+            mrp: this.model.getMrp(sectionId, mrpId)
           }
         }),
-        t('mor', 'editMrp:title')
+        t('mor', 'mrpForm:title:edit')
+      );
+    },
+
+    editProdFunction: function(sectionId, mrpId, prodFunctionId)
+    {
+      viewport.showDialog(
+        new EditProdFunctionFormView({
+          model: {
+            mor: this.model,
+            section: this.model.getSection(sectionId),
+            mrp: this.model.getMrp(sectionId, mrpId),
+            prodFunction: prodFunctions.get(prodFunctionId)
+          }
+        }),
+        t('mor', 'editProdFunction:title')
       );
     },
 
@@ -361,22 +770,9 @@ define([
 
     onKeyDown: function(e)
     {
-      if (e.keyCode === 17 && this.options.editable !== false)
-      {
-        this.$el.addClass('is-editing');
-      }
-
       if (e.keyCode === 27)
       {
         this.hideUserPopover();
-      }
-    },
-
-    onKeyUp: function(e)
-    {
-      if (e.keyCode === 17)
-      {
-        this.$el.removeClass('is-editing');
       }
     }
 

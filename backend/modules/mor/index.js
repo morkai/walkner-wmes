@@ -30,12 +30,17 @@ exports.start = function startMorModule(app, module, done)
     kdPosition: 1
   };
   const STATE_UPDATE_ACTIONS = {
+    addSection,
+    removeSection,
+    editSection,
+    moveSection,
     addWatch,
     removeWatch,
     editWatch,
     addMrp,
     removeMrp,
-    editMrp
+    editMrp,
+    editProdFunction
   };
 
   let saveTimer = null;
@@ -45,8 +50,8 @@ exports.start = function startMorModule(app, module, done)
   module.state = {
     settings: {},
     users: [],
-    watch: [],
-    divisions: []
+    globalProdFunctions: [],
+    sections: []
   };
 
   module.updateState = updateState;
@@ -123,7 +128,9 @@ exports.start = function startMorModule(app, module, done)
     saveTimer = null;
     saveInProgress = true;
 
-    fs.writeFile(module.config.statePath, JSON.stringify(_.pick(module.state, 'watch', 'divisions')), function(err)
+    const stateJson = JSON.stringify(_.pick(module.state, 'globalProdFunctions', 'sections'), null, 2);
+
+    fs.writeFile(module.config.statePath, stateJson, function(err)
     {
       if (err)
       {
@@ -149,14 +156,8 @@ exports.start = function startMorModule(app, module, done)
         fs.readFile(module.config.statePath, 'utf8', this.parallel());
 
         app[module.config.settingsId].findValues('mor.', this.parallel());
-
-        app[module.config.mongooseId].model('Division')
-          .find({type: 'prod', deactivatedAt: null}, {_id: 1})
-          .sort({_id: 1})
-          .lean()
-          .exec(this.parallel());
       },
-      function(err, stateData, settings, divisions)
+      function(err, stateData, settings)
       {
         if (err)
         {
@@ -174,17 +175,6 @@ exports.start = function startMorModule(app, module, done)
             module.warn(`Failed to parse the state file: ${err.message}`);
           }
         }
-
-        _.forEach(divisions, division =>
-        {
-          if (!module.state.divisions.find(d => d._id === division._id))
-          {
-            module.state.divisions.push({
-              _id: division._id,
-              mrps: []
-            });
-          }
-        });
 
         if (settings)
         {
@@ -205,16 +195,28 @@ exports.start = function startMorModule(app, module, done)
     );
   }
 
-  function reloadUsers(done)
+  function collectUserIds()
   {
     const userIds = {};
 
-    module.state.watch.forEach(w => userIds[w.user] = 1);
-
-    module.state.divisions.forEach(division =>
+    module.state.globalProdFunctions.forEach(prodFunction =>
     {
-      division.mrps.forEach(mrp =>
+      prodFunction.users.forEach(u => userIds[u] = 1);
+    });
+
+    module.state.sections.forEach(section =>
+    {
+      section.watch.forEach(watch => userIds[watch.user] = 1);
+
+      section.commonProdFunctions.forEach(prodFunction =>
       {
+        prodFunction.users.forEach(u => userIds[u] = 1);
+      });
+
+      section.mrps.forEach(mrp =>
+      {
+        mrp.iptCheckRecipients.forEach(u => userIds[u] = 1);
+
         mrp.prodFunctions.forEach(prodFunction =>
         {
           prodFunction.users.forEach(u => userIds[u] = 1);
@@ -222,13 +224,18 @@ exports.start = function startMorModule(app, module, done)
       });
     });
 
+    return Object.keys(userIds);
+  }
+
+  function reloadUsers(done)
+  {
     step(
       function()
       {
         const User = app[module.config.mongooseId].model('User');
         const conditions = {
           _id: {
-            $in: Object.keys(userIds)
+            $in: collectUserIds()
           }
         };
 
@@ -308,13 +315,82 @@ exports.start = function startMorModule(app, module, done)
     module.state.settings[message._id.replace('mor.', '')] = message.value;
   }
 
+  function addSection(params, done)
+  {
+    let section = module.state.sections.find(s => s._id === params._id);
+
+    if (section)
+    {
+      return done(app.createError('ALREADY_EXISTS'), 400);
+    }
+
+    section = _.defaults(_.pick(params, ['_id', 'name', 'watchEnabled', 'mrpsEnabled', 'prodFunctions']), {
+      _id: '',
+      name: '?',
+      watchEnabled: true,
+      mrpsEnabled: true,
+      prodFunctions: []
+    });
+
+    module.state.sections.push(section);
+
+    done(null, params);
+  }
+
+  function removeSection(params, done)
+  {
+    const section = module.state.sections.find(s => s._id === params.section);
+
+    if (!section)
+    {
+      return done(app.createError('NOT_FOUND'), 400);
+    }
+
+    module.state.sections = module.state.sections.filter(s => s !== section);
+
+    done(null, params);
+  }
+
+  function editSection(params, done)
+  {
+    const section = module.state.sections.find(s => s._id === params._id);
+
+    if (!section)
+    {
+      return done(app.createError('NOT_FOUND'), 400);
+    }
+
+    _.assign(section, _.pick(params, [
+      'name', 'watchEnabled', 'mrpsEnabled', 'prodFunctions'
+    ]));
+
+    done(null, params);
+  }
+
+  function moveSection(params, done)
+  {
+    const sections = module.state.sections;
+    const sourceSection = sections.find(s => s._id === params.source);
+    const targetSection = sections.find(s => s._id === params.target);
+
+    if (sourceSection === targetSection || !sourceSection || !targetSection)
+    {
+      return done(app.createError('INVALID_SECTION'), 400);
+    }
+
+    sections.splice(sections.indexOf(sourceSection), 1);
+    sections.splice(sections.indexOf(targetSection) + (params.position === 'after' ? 1 : 0), 0, sourceSection);
+
+    done(null, params);
+  }
+
   function addWatch(params, done)
   {
-    const watch = module.state.watch.find(w => w.user === params.user);
+    const section = module.state.sections.find(s => s._id === params.section);
 
-    if (watch)
+    if (!section)
     {
-      return done();
+      return done(app.createError('INVALID_SECTION'), 400);
     }
 
     const user = module.state.users.find(u => u._id.equals(params.user));
@@ -324,106 +400,193 @@ exports.start = function startMorModule(app, module, done)
       return done(app.createError('INVALID_USER', 400));
     }
 
-    module.state.watch.push(_.pick(params, ['user', 'from', 'to']));
+    let watch = section.watch.find(w => w.user === params.user);
+
+    if (watch)
+    {
+      return done(app.createError('ALREADY_EXISTS', 400));
+    }
+
+    watch = _.defaults(_.pick(params, ['user', 'days', 'from', 'to']), {
+      user: '',
+      days: [0, 1, 2, 3, 4, 5, 6],
+      from: '06:00',
+      to: '06:00'
+    });
+
+    section.watch.push(watch);
 
     done(null, params);
   }
 
   function removeWatch(params, done)
   {
-    module.state.watch = module.state.watch.filter(w => w.user !== params.user);
+    const section = module.state.sections.find(s => s._id === params.section);
+
+    if (!section)
+    {
+      return done(app.createError('INVALID_SECTION'), 400);
+    }
+
+    const watch = section.watch.find(w => w.user === params.user);
+
+    if (!watch)
+    {
+      return done(app.createError('NOT_FOUND', 400));
+    }
+
+    section.watch = section.watch.filter(w => w !== watch);
 
     done(null, params);
   }
 
   function editWatch(params, done)
   {
-    const watch = module.state.watch.find(w => w.user === params.user);
+    const section = module.state.sections.find(s => s._id === params.section);
+
+    if (!section)
+    {
+      return done(app.createError('INVALID_SECTION'), 400);
+    }
+
+    const watch = section.watch.find(w => w.user === params.user);
 
     if (!watch)
     {
-      return done(app.createError('INVALID_USER', 400));
+      return done(app.createError('NOT_FOUND', 400));
     }
 
-    _.assign(watch, _.pick(params, ['from', 'to']));
+    _.assign(watch, _.pick(params, ['days', 'from', 'to']));
 
     done(null, params);
   }
 
   function addMrp(params, done)
   {
-    const division = module.state.divisions.find(d => d._id === params.division);
+    const section = module.state.sections.find(s => s._id === params.section);
 
-    if (!division)
+    if (!section)
     {
-      return done();
+      return done(app.createError('INVALID_SECTION'), 400);
     }
 
-    const mrp = division.mrps.find(m => m._id === params.mrp);
+    let mrp = section.mrps.find(m => m._id === params.mrp);
 
     if (mrp)
     {
-      return done();
+      return done(app.createError('ALREADY_EXISTS', 400));
     }
 
-    division.mrps.push({
-      _id: params.mrp,
-      prodFunctions: []
-    });
+    loadUsers(params.iptCheckRecipients, function(err, iptCheckRecipients)
+    {
+      if (err)
+      {
+        return done(err);
+      }
 
-    done(null, params);
+      section.mrps.push({
+        _id: params.mrp,
+        description: params.description || '',
+        iptCheck: !!params.iptCheck,
+        iptCheckRecipients: iptCheckRecipients.map(u => u._id.toHexString()),
+        prodFunctions: []
+      });
+
+      done(null, _.assign(params, {iptCheckRecipients}));
+    });
   }
 
   function removeMrp(params, done)
   {
-    const division = module.state.divisions.find(d => d._id === params.division);
+    const section = module.state.sections.find(d => d._id === params.section);
 
-    if (!division)
+    if (!section)
     {
       return done();
     }
 
-    const mrp = division.mrps.find(m => m._id === params.mrp);
+    const mrp = section.mrps.find(m => m._id === params.mrp);
 
     if (!mrp)
     {
       return done();
     }
 
-    division.mrps = division.mrps.filter(m => m._id !== params.mrp);
+    section.mrps = section.mrps.filter(m => m._id !== params.mrp);
 
     done(null, params);
   }
 
   function editMrp(params, done)
   {
-    const division = module.state.divisions.find(d => d._id === params.division);
+    const section = module.state.sections.find(s => s._id === params.section);
 
-    if (!division)
+    if (!section)
     {
-      return done(app.createError('INVALID_DIVISION', 400));
+      return done(app.createError('INVALID_SECTION'), 400);
     }
 
-    let mrp = division.mrps.find(m => m._id === params.mrp);
+    const mrp = section.mrps.find(m => m._id === params.mrp);
 
     if (!mrp)
     {
-      if (params.mrp === null)
-      {
-        mrp = {
-          _id: null,
-          prodFunctions: []
-        };
+      return done(app.createError('NOT_FOUND'), 400);
+    }
 
-        division.mrps.push(mrp);
+    loadUsers(params.iptCheckRecipients, function(err, iptCheckRecipients)
+    {
+      if (err)
+      {
+        return done(err);
       }
-      else
+
+      mrp.description = params.description || '';
+      mrp.iptCheck = !!params.iptCheck;
+      mrp.iptCheckRecipients = iptCheckRecipients.map(u => u._id.toHexString());
+
+      done(null, _.assign(params, {iptCheckRecipients}));
+    });
+  }
+
+  function editProdFunction(params, done)
+  {
+    let prodFunctions = null;
+
+    if (params.section === null)
+    {
+      prodFunctions = module.state.globalProdFunctions;
+    }
+    else if (params.mrp === null)
+    {
+      const section = module.state.sections.find(s => s._id === params.section);
+
+      if (!section)
+      {
+        return done(app.createError('INVALID_SECTION', 400));
+      }
+
+      prodFunctions = section.commonProdFunctions;
+    }
+    else
+    {
+      const section = module.state.sections.find(s => s._id === params.section);
+
+      if (!section)
+      {
+        return done(app.createError('INVALID_SECTION', 400));
+      }
+
+      const mrp = section.mrps.find(m => m._id === params.mrp);
+
+      if (!section)
       {
         return done(app.createError('INVALID_MRP', 400));
       }
+
+      prodFunctions = mrp.prodFunctions;
     }
 
-    let prodFunction = mrp.prodFunctions.find(p => p._id === params.prodFunction);
+    let prodFunction = prodFunctions.find(p => p._id === params.prodFunction);
 
     if (!prodFunction)
     {
@@ -432,12 +595,27 @@ exports.start = function startMorModule(app, module, done)
         users: []
       };
 
-      mrp.prodFunctions.push(prodFunction);
+      prodFunctions.push(prodFunction);
     }
 
+    loadUsers(params.users, function(err, users)
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      prodFunction.users = users.map(u => u._id.toHexString());
+
+      done(null, _.assign(params, {users}));
+    });
+  }
+
+  function loadUsers(userIds, done)
+  {
     app[module.config.mongooseId]
       .model('User')
-      .find({_id: {$in: params.users}}, USER_FIELDS)
+      .find({_id: {$in: userIds}}, USER_FIELDS)
       .lean()
       .exec(function(err, list)
       {
@@ -458,9 +636,7 @@ exports.start = function startMorModule(app, module, done)
           map[user._id] = user;
         });
 
-        prodFunction.users = _.map(params.users, u => map[u]).filter(u => !!u).map(u => u._id.toHexString());
-
-        done(null, _.assign({}, params, {users: prodFunction.users.map(u => map[u])}));
+        done(null, userIds.map(u => map[u]).filter(u => !!u));
       });
   }
 };

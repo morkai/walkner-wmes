@@ -27,18 +27,20 @@ define([
         var view = this;
         var $submit = view.$id('submit').prop('disabled', true);
         var params = {
-          user: view.model.selected ? view.model.selected.user : view.$id('user').val(),
+          section: view.model.section._id,
+          user: view.model.watch ? view.model.watch.user : view.$id('user').val(),
+          days: [],
           from: view.$id('from').val(),
           to: view.$id('to').val()
         };
 
-        view.model.mor[view.model.selected ? 'editWatch' : 'addWatch'](params)
+        view.model.mor[view.model.watch ? 'editWatch' : 'addWatch'](params)
           .fail(function()
           {
             viewport.msg.show({
               type: 'error',
               time: 3000,
-              text: t('mor', 'watchForm:failure:' + view.model.nlsSuffix)
+              text: t('mor', 'watchForm:failure:' + view.model.mode)
             });
 
             $submit.prop('disabled', false);
@@ -56,8 +58,9 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        nlsSuffix: this.model.nlsSuffix,
-        selected: this.model.selected
+        mode: this.model.mode,
+        section: this.model.section.name,
+        watch: this.model.watch
       };
     },
 
@@ -71,11 +74,11 @@ define([
           .map(idAndLabel)
       });
 
-      if (this.model.selected)
+      if (this.model.watch)
       {
         this.$id('user').select2('disable', true).select2('data', {
-          id: this.model.selected.user,
-          text: this.model.mor.users.get(this.model.selected.user).getLabel()
+          id: this.model.watch.user,
+          text: this.model.mor.users.get(this.model.watch.user).getLabel()
         });
       }
     },
@@ -84,14 +87,7 @@ define([
     {
       this.closeDialog = viewport.closeDialog.bind(viewport);
 
-      if (this.model.selected)
-      {
-        this.$id('from').select();
-      }
-      else
-      {
-        this.$id('user').focus();
-      }
+      this.$id(this.model.mode === 'edit' ? 'from' : 'user').focus();
     },
 
     closeDialog: function() {}

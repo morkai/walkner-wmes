@@ -328,12 +328,10 @@ define([
       action.icon = 'fa-' + action.icon.split(' ').join(' fa-');
     }
 
-    if (typeof action.className !== 'string')
+    if (!action.className)
     {
       action.className = '';
     }
-
-    action.className = 'btn btn-' + (action.type || 'default') + ' ' + action.className;
 
     action.prepared = true;
 
@@ -431,13 +429,15 @@ define([
       }
       else
       {
+        var className = 'btn btn-' + (action.type || 'default') + ' ' + _.result(action, 'className');
+
         if (action.href === null)
         {
-          html += '<button class="' + action.className + '">';
+          html += '<button class="' + className + '">';
         }
         else
         {
-          html += '<a class="' + action.className + '" href="' + action.href + '">';
+          html += '<a class="' + className + '" href="' + action.href + '">';
         }
 
         if (typeof action.icon === 'string')

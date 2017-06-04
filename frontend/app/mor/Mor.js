@@ -24,7 +24,22 @@ define([
     return $.Deferred().resolve().promise();
   }
 
+  function rejected()
+  {
+    return $.Deferred().reject().promise();
+  }
+
   return Model.extend({
+
+    defaults: function()
+    {
+      return {
+        users: [],
+        settings: {},
+        globalProdFunctions: [],
+        sections: []
+      };
+    },
 
     initialize: function()
     {
@@ -51,30 +66,69 @@ define([
       pubsub.subscribe('settings.updated.mor.**', this.onSettingUpdated.bind(this));
     },
 
-    getDivision: function(divisionId)
+    getSection: function(sectionId)
     {
-      return _.findWhere(this.get('divisions'), {_id: divisionId}) || null;
+      return _.findWhere(this.get('sections'), {_id: sectionId}) || null;
     },
 
-    getMrp: function(divisionId, mrpId)
+    getWatch: function(sectionId, userId)
     {
-      var division = this.getDivision(divisionId);
+      var section = this.getSection(sectionId);
 
-      return division ? _.findWhere(division.mrps, {_id: mrpId}) : null;
+      return section ? _.findWhere(section.watch, {user: userId}) : null;
     },
 
-    getUsers: function(divisionId, mrpId, prodFunctionId)
+    getMrp: function(sectionId, mrpId)
     {
-      var mrp = this.getMrp(divisionId, mrpId);
+      var section = this.getSection(sectionId);
 
-      if (!mrp)
+      return section ? _.findWhere(section.mrps, {_id: mrpId}) : null;
+    },
+
+    getUsers: function(sectionId, mrpId, prodFunctionId)
+    {
+      var prodFunctions;
+
+      if (this.isGlobalProdFunction(prodFunctionId))
       {
-        return [];
+        prodFunctions = this.get('globalProdFunctions');
+      }
+      else if (this.isCommonProdFunction(prodFunctionId))
+      {
+        prodFunctions = (this.getSection(sectionId) || {}).commonProdFunctions;
+      }
+      else
+      {
+        prodFunctions = (this.getMrp(sectionId, mrpId) || {}).prodFunctions;
       }
 
-      var prodFunction = _.findWhere(mrp.prodFunctions, {_id: prodFunctionId});
+      var prodFunction = _.findWhere(prodFunctions, {_id: prodFunctionId});
 
       return prodFunction ? prodFunction.users : [];
+    },
+
+    toggleSection: function(id, collapsed)
+    {
+      if (!collapsed)
+      {
+        delete this.collapsedSections[id];
+      }
+      else
+      {
+        this.collapsedSections[id] = true;
+      }
+
+      localStorage.MOR_COLLAPSED_SECTIONS = JSON.stringify(this.collapsedSections);
+    },
+
+    isSectionCollapsed: function(sectionId)
+    {
+      return !!this.collapsedSections[sectionId];
+    },
+
+    isGlobalProdFunction: function(prodFunctionId)
+    {
+      return _.contains((this.get('settings') || {}).globalProdFunctions, prodFunctionId);
     },
 
     isCommonProdFunction: function(prodFunctionId)
@@ -100,17 +154,168 @@ define([
       });
     },
 
-    addWatch: function(params, act)
+    addSection: function(params, act)
     {
       var mor = this;
-      var watchUser = _.findWhere(mor.get('watch'), {user: params.user});
+      var section = mor.getSection(params._id);
 
-      if (watchUser)
+      if (section)
       {
         return resolved();
       }
 
-      mor.set('watch', [params].concat(mor.get('watch')));
+      section = _.assign({}, params, {
+        watch: [],
+        commonProdFunctions: [],
+        mrps: []
+      });
+
+      mor.attributes.sections.push(section);
+
+      mor.trigger('update');
+
+      if (act === false)
+      {
+        return resolved();
+      }
+
+      return mor
+        .act('addSection', params)
+        .fail(function()
+        {
+          mor.attributes.sections = _.without(mor.attributes.sections, section);
+
+          mor.trigger('update');
+        });
+    },
+
+    removeSection: function(params, act)
+    {
+      var mor = this;
+      var section = mor.getSection(params.section);
+
+      if (!section)
+      {
+        return resolved();
+      }
+
+      var old = [].concat(mor.attributes.sections);
+
+      mor.attributes.sections = _.without(old, section);
+
+      mor.trigger('update');
+
+      if (act === false)
+      {
+        return resolved();
+      }
+
+      return mor
+        .act('removeSection', params)
+        .done(function()
+        {
+          delete mor.collapsedSections[section.id];
+        })
+        .fail(function()
+        {
+          mor.attributes.sections = old;
+
+          mor.trigger('update');
+        });
+    },
+
+    editSection: function(params, act)
+    {
+      var mor = this;
+      var section = mor.getSection(params._id);
+
+      if (!section)
+      {
+        return rejected();
+      }
+
+      var old = _.clone(section);
+
+      _.assign(section, params);
+
+      mor.trigger('update');
+
+      if (act === false)
+      {
+        return resolved();
+      }
+
+      return mor
+        .act('editSection', params)
+        .fail(function()
+        {
+          _.assign(section, old);
+
+          mor.trigger('update');
+        });
+    },
+
+    moveSection: function(params, act)
+    {
+      var mor = this;
+      var sourceSection = mor.getSection(params.source);
+      var targetSection = mor.getSection(params.target);
+
+      if (sourceSection === targetSection)
+      {
+        return resolved();
+      }
+
+      if (!sourceSection || !targetSection)
+      {
+        return rejected();
+      }
+
+      var sections = mor.get('sections');
+      var old = [].concat(sections);
+
+      sections.splice(sections.indexOf(sourceSection), 1);
+      sections.splice(sections.indexOf(targetSection) + (params.position === 'after' ? 1: 0), 0, sourceSection);
+
+      mor.trigger('update');
+
+      if (act === false)
+      {
+        return resolved();
+      }
+
+      return mor
+        .act('moveSection', params)
+        .fail(function()
+        {
+          mor.attributes.sections = old;
+
+          mor.trigger('update');
+        });
+    },
+
+    addWatch: function(params, act)
+    {
+      var mor = this;
+      var watch = mor.getWatch(params.section, params.user);
+
+      if (watch)
+      {
+        return resolved();
+      }
+
+      var section = mor.getSection(params.section);
+
+      if (!section)
+      {
+        return rejected();
+      }
+
+      watch = _.pick(params, ['user', 'days', 'from', 'to']);
+
+      section.watch.push(watch);
+
+      mor.trigger('update');
 
       if (act === false)
       {
@@ -121,21 +326,27 @@ define([
         .act('addWatch', params)
         .fail(function()
         {
-          mor.set('watch', _.without(mor.get('watch'), params));
+          section.watch = _.without(section.watch, watch);
+
+          mor.trigger('update');
         });
     },
 
     removeWatch: function(params, act)
     {
       var mor = this;
-      var watchUser = _.findWhere(mor.get('watch'), {user: params.user});
+      var watch = mor.getWatch(params.section, params.user);
 
-      if (!watchUser)
+      if (!watch)
       {
         return resolved();
       }
 
-      mor.set('watch', _.without(mor.get('watch'), watchUser));
+      var section = mor.getSection(params.section);
+
+      section.watch = _.without(section.watch, watch);
+
+      mor.trigger('update');
 
       if (act === false)
       {
@@ -146,26 +357,27 @@ define([
         .act('removeWatch', params)
         .fail(function()
         {
-          mor.set('watch', [watchUser].concat(mor.get('watch')));
+          section.watch.push(watch);
+
+          mor.trigger('update');
         });
     },
 
     editWatch: function(params, act)
     {
       var mor = this;
-      var watchUser = _.findWhere(mor.get('watch'), {user: params.user});
+      var watch = mor.getWatch(params.section, params.user);
 
-      if (!watchUser)
+      if (!watch)
       {
-        return resolved();
+        return rejected();
       }
 
-      var oldWatchUser = _.clone(watchUser);
+      var oldWatch = _.clone(watch);
 
-      _.assign(watchUser, params);
+      _.assign(watch, _.pick(params, ['user', 'days', 'from', 'to']));
 
-      mor.trigger('change:watch', mor, mor.get('watch'), {});
-      mor.trigger('change', mor, {});
+      mor.trigger('update');
 
       if (act === false)
       {
@@ -176,40 +388,46 @@ define([
         .act('editWatch', params)
         .fail(function()
         {
-          _.assign(watchUser, oldWatchUser);
+          _.assign(watch, oldWatch);
 
-          mor.trigger('change:watch', mor, mor.get('watch'), {});
-          mor.trigger('change', mor, {});
+          mor.trigger('update');
         });
     },
 
     addMrp: function(params, act)
     {
       var mor = this;
-      var divisions = mor.get('divisions');
-      var division = _.findWhere(divisions, {_id: params.division});
+      var section = mor.getSection(params.section);
 
-      if (!division)
+      if (!section)
       {
-        return resolved();
+        return rejected();
       }
 
-      var mrp = _.findWhere(division.mrps, {_id: params.mrp});
+      var mrp = _.findWhere(section.mrps, {_id: params.mrp});
 
       if (mrp)
       {
-        return resolved();
+        return rejected();
       }
 
       mrp = {
         _id: params.mrp,
+        description: '',
+        iptCheck: false,
+        iptCheckRecipients: [],
         prodFunctions: []
       };
 
-      division.mrps.push(mrp);
+      _.assign(mrp, _.pick(params, ['description', 'iptCheck']), {
+        iptCheckRecipients: _.pick(params.iptCheckRecipients, '_id')
+      });
 
-      mor.trigger('change:divisions', mor, divisions, {});
-      mor.trigger('change', mor, {});
+      mor.users.add(params.iptCheckRecipients);
+
+      section.mrps.push(mrp);
+
+      mor.trigger('update');
 
       if (act === false)
       {
@@ -217,38 +435,35 @@ define([
       }
 
       return mor
-        .act('addMrp', params)
+        .act('addMrp', _.assign({}, params, {iptCheckRecipients: _.pick(params.iptCheckRecipients, '_id')}))
         .fail(function()
         {
-          division.mrps = _.without(division.mrps, mrp);
+          section.mrps = _.without(section.mrps, mrp);
 
-          mor.trigger('change:divisions', mor, divisions, {});
-          mor.trigger('change', mor, {});
+          mor.trigger('update');
         });
     },
 
     removeMrp: function(params, act)
     {
       var mor = this;
-      var divisions = mor.get('divisions');
-      var division = _.findWhere(divisions, {_id: params.division});
+      var section = mor.getSection(params.section);
 
-      if (!division)
+      if (!section)
       {
         return resolved();
       }
 
-      var mrp = _.findWhere(division.mrps, {_id: params.mrp});
+      var mrp = _.findWhere(section.mrps, {_id: params.mrp});
 
       if (!mrp)
       {
         return resolved();
       }
 
-      division.mrps = _.without(division.mrps, mrp);
+      section.mrps = _.without(section.mrps, mrp);
 
-      mor.trigger('change:divisions', mor, divisions, {});
-      mor.trigger('change', mor, {});
+      mor.trigger('update');
 
       if (act === false)
       {
@@ -259,66 +474,38 @@ define([
         .act('removeMrp', params)
         .fail(function()
         {
-          division.mrps.push(mrp);
+          section.mrps.push(mrp);
 
-          mor.trigger('change:divisions', mor, divisions, {});
-          mor.trigger('change', mor, {});
+          mor.trigger('update');
         });
     },
 
     editMrp: function(params, act)
     {
       var mor = this;
-      var divisions = mor.get('divisions');
-      var division = _.findWhere(divisions, {_id: params.division});
+      var section = mor.getSection(params.section);
 
-      if (!division)
+      if (!section)
       {
-        return resolved();
+        return rejected();
       }
 
-      var mrp = _.findWhere(division.mrps, {_id: params.mrp});
+      var mrp = _.findWhere(section.mrps, {_id: params.mrp});
 
       if (!mrp)
       {
-        if (params.mrp === null)
-        {
-          mrp = {
-            _id: null,
-            prodFunctions: []
-          };
-
-          division.mrps.push(mrp);
-        }
-        else
-        {
-          return resolved();
-        }
+        return rejected();
       }
 
-      var prodFunction = _.findWhere(mrp.prodFunctions, {_id: params.prodFunction});
-      var oldUsers = [];
+      var old = _.clone(mrp);
 
-      if (prodFunction)
-      {
-        oldUsers = prodFunction.users;
-      }
-      else
-      {
-        prodFunction = {
-          _id: params.prodFunction,
-          users: []
-        };
+      _.assign(mrp, _.pick(params, ['description', 'iptCheck']), {
+        iptCheckRecipients: _.pluck(params.iptCheckRecipients, '_id')
+      });
 
-        mrp.prodFunctions.push(prodFunction);
-      }
+      mor.users.add(params.iptCheckRecipients);
 
-      this.users.add(params.users);
-
-      prodFunction.users = params.users.map(function(user) { return user._id; });
-
-      mor.trigger('change:divisions', mor, divisions, {});
-      mor.trigger('change', mor, {});
+      mor.trigger('update');
 
       if (act === false)
       {
@@ -326,180 +513,85 @@ define([
       }
 
       return mor
-        .act('editMrp', _.assign({}, params, {users: prodFunction.users}))
+        .act('editMrp', _.assign({}, params, {iptCheckRecipients: _.pluck(params.iptCheckRecipients, '_id')}))
         .fail(function()
         {
-          prodFunction.users = oldUsers;
+          _.assign(mrp, old);
 
-          mor.trigger('change:divisions', mor, divisions, {});
-          mor.trigger('change', mor, {});
+          mor.trigger('update');
         });
     },
 
-    toggleSection: function(id, collapsed)
+    editProdFunction: function(params, act)
     {
-      if (!collapsed)
+      var mor = this;
+      var prodFunctions;
+
+      if (mor.isGlobalProdFunction(params.prodFunction))
       {
-        delete this.collapsedSections[id];
+        params.section = null;
+        params.mrp = null;
+
+        prodFunctions = this.get('globalProdFunctions');
+      }
+      else if (mor.isCommonProdFunction(params.prodFunction))
+      {
+        params.mrp = null;
+
+        var section = this.getSection(params.section);
+
+        if (!section)
+        {
+          return rejected();
+        }
+
+        prodFunctions = section.commonProdFunctions;
       }
       else
       {
-        this.collapsedSections[id] = true;
-      }
+        var mrp = mor.getMrp(params.section, params.mrp);
 
-      localStorage.MOR_COLLAPSED_SECTIONS = JSON.stringify(this.collapsedSections);
-    },
-
-    serializeProdFunctions: function()
-    {
-      var settings = this.get('settings') || {};
-      var allProdFunctions = settings.prodFunctions || [];
-      var commonProdFunctions = settings.commonProdFunctions || [];
-      var orderedProdFunctions = settings.orderedProdFunctions || [];
-
-      return _.map(allProdFunctions, function(prodFunctionId)
-      {
-        var prodFunction = prodFunctions.get(prodFunctionId);
-
-        return {
-          _id: prodFunction ? prodFunction.id : prodFunctionId,
-          label: prodFunction ? prodFunction.getLabel() : prodFunctionId,
-          common: _.contains(commonProdFunctions, prodFunctionId),
-          ordered: _.contains(orderedProdFunctions, prodFunctionId)
-        };
-      });
-    },
-
-    serializeWatch: function()
-    {
-      return (this.get('watch') || [])
-        .map(this.serializeWatchUser, this)
-        .filter(function(user) { return !!user; })
-        .sort(function(a, b)
+        if (!mrp)
         {
-          var cmp = a.prodFunction.localeCompare(b.prodFunction);
-
-          return cmp === 0 ? a.label.localeCompare(b.label) : cmp;
-        });
-    },
-
-    serializeWatchUser: function(watch)
-    {
-      var user = this.users.get(watch.user);
-
-      if (!user)
-      {
-        return null;
-      }
-
-      var prodFunction = user ? prodFunctions.get(user.get('prodFunction')) : null;
-
-      return {
-        _id: user.id,
-        label: user.getLabel(),
-        prodFunction: prodFunction ? prodFunction.getLabel() : '?',
-        email: user.get('email') || '?',
-        mobile: user.getMobile() || '?',
-        available: !!user.get('working'),
-        availability: watch.from && watch.to ? (watch.from + '-' + watch.to) : ''
-      };
-    },
-
-    serializeDivisions: function()
-    {
-      return orgUnits.getAllByType('division')
-        .filter(function(division) { return division.get('type') === 'prod' && division.isActive(); })
-        .map(function(division) { return this.serializeDivision(division.id); }, this)
-        .filter(function(division) { return !!division; })
-        .sort(function(a, b) { return a._id.localeCompare(b._id); });
-    },
-
-    serializeDivision: function(divisionId)
-    {
-      var division = orgUnits.getByTypeAndId('division', divisionId);
-
-      if (!division)
-      {
-        return null;
-      }
-
-      var morDivision = _.find(this.get('divisions'), function(d) { return d._id === division.id; }) || {};
-      var manager = this.users.find(function(user)
-      {
-        return user.get('prodFunction') === 'manager' && user.get('orgUnitId') === division.id;
-      });
-      var commonProdFunctions = {};
-      var mrps = (morDivision.mrps || [])
-        .map(this.serializeMrp, this)
-        .filter(function(mrp)
-        {
-          if (mrp._id === null)
-          {
-            commonProdFunctions = mrp.users;
-          }
-
-          return mrp._id !== null;
-        })
-        .sort(function(a, b) { return a._id.localeCompare(b._id); });
-
-      return {
-        _id: division.id,
-        collapsed: !!this.collapsedSections[division.id],
-        label: division.get('description'),
-        manager: this.serializeUser(manager),
-        canManage: manager && user.data._id === manager.id,
-        commonProdFunctions: commonProdFunctions,
-        mrps: mrps
-      };
-    },
-
-    serializeUser: function(userId, i)
-    {
-      var user = this.users.get(userId);
-
-      if (!user)
-      {
-        return null;
-      }
-
-      var prodFunction = user ? prodFunctions.get(user.get('prodFunction')) : null;
-
-      return {
-        _id: user.id,
-        no: i + 1,
-        label: user.getLabel(),
-        prodFunction: prodFunction ? prodFunction.getLabel() : '?',
-        email: user.get('email') || '?',
-        mobile: user.getMobile() || '?',
-        available: !!user.get('working')
-      };
-    },
-
-    serializeMrp: function(morMrp)
-    {
-      var mor = this;
-      var common = morMrp._id === null;
-      var mrp = orgUnits.getByTypeAndId('mrpController', morMrp._id);
-      var mrpUsers = {};
-
-      morMrp.prodFunctions.forEach(function(morProdFunction)
-      {
-        mrpUsers[morProdFunction._id] = morProdFunction.users.map(mor.serializeUser, mor);
-
-        if (common)
-        {
-          mrpUsers[morProdFunction._id].sort(function(a, b)
-          {
-            return a.label.localeCompare(b.label);
-          });
+          return rejected();
         }
-      });
 
-      return {
-        _id: morMrp._id,
-        label: mrp ? mrp.get('description') : '',
-        users: mrpUsers
-      };
+        prodFunctions = mrp.prodFunctions;
+      }
+
+      var prodFunction = _.findWhere(prodFunctions, {_id: params.prodFunction});
+
+      if (!prodFunction)
+      {
+        prodFunction = {
+          _id: params.prodFunction,
+          users: []
+        };
+
+        prodFunctions.push(prodFunction);
+      }
+
+      var old = [].concat(prodFunction.users);
+
+      prodFunction.users = params.users.map(function(u) { return u._id; });
+
+      mor.users.add(params.users);
+
+      mor.trigger('update');
+
+      if (act === false)
+      {
+        return resolved();
+      }
+
+      return mor
+        .act('editProdFunction', _.assign({}, params, {users: prodFunction.users}))
+        .fail(function()
+        {
+          prodFunction.users = old;
+
+          mor.trigger('update');
+        });
     },
 
     onMorUpdated: function(message)
@@ -518,8 +610,7 @@ define([
       {
         user.set(message.model);
 
-        this.trigger('change:users', this, this.users.toJSON(), {});
-        this.trigger('change', this, {});
+        this.trigger('update');
       }
     },
 
@@ -531,18 +622,15 @@ define([
       {
         this.users.remove(user);
 
-        this.trigger('change:users', this, this.users.toJSON(), {});
-        this.trigger('change', this, {});
+        this.trigger('update');
       }
     },
 
     onSettingUpdated: function(message)
     {
-      var settings = _.clone(this.get('settings'));
+      this.attributes.settings[message._id.replace('mor.', '')] = message.value;
 
-      settings[message._id.replace('mor.', '')] = message.value;
-
-      this.set('settings', settings);
+      this.trigger('update');
     }
 
   });

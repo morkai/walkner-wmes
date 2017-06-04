@@ -1,0 +1,28 @@
+<form class="action-form">
+  <div class="form-group">
+    <label class="control-label"><%- t('mor', 'mrpForm:section') %></label>
+    <p class="form-control-static"><%= section %></p>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-mrp" class="control-label"><%- t('mor', 'mrpForm:mrp') %></label>
+    <input id="<%- idPrefix %>-mrp" class="form-control" type="text" required value="<%= mrp ? mrp._id : '' %>">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-description" class="control-label"><%- t('mor', 'mrpForm:description') %></label>
+    <input id="<%- idPrefix %>-description" class="form-control" type="text" value="<%= mrp ? mrp.description : '' %>">
+  </div>
+  <div class="checkbox">
+    <label>
+      <input id="<%- idPrefix %>-iptCheck" value="1" type="checkbox" <%- mrp && mrp.iptCheck ? 'checked' : '' %>>
+      <%- t('mor', 'mrpForm:iptCheck') %>
+    </label>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-iptCheckRecipients" class="control-label"><%- t('mor', 'mrpForm:iptCheckRecipients') %></label>
+    <input id="<%- idPrefix %>-iptCheckRecipients" type="text" value="<%- mrp ? mrp.iptCheckRecipients.join(',') : '' %>">
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('mor', 'mrpForm:submit:' + mode) %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('mor', 'mrpForm:cancel') %></button>
+  </div>
+</form>
