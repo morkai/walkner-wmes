@@ -376,7 +376,10 @@ exports.start = function startMorModule(app, module, done)
       name: '?',
       watchEnabled: true,
       mrpsEnabled: true,
-      prodFunctions: []
+      prodFunctions: [],
+      commonProdFunctions: [],
+      watch: [],
+      mrps: []
     });
 
     module.state.sections.push(section);

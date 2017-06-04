@@ -421,7 +421,7 @@ define([
       };
 
       _.assign(mrp, _.pick(params, ['description', 'iptCheck']), {
-        iptCheckRecipients: _.pick(params.iptCheckRecipients, '_id')
+        iptCheckRecipients: _.pluck(params.iptCheckRecipients, '_id')
       });
 
       mor.users.add(params.iptCheckRecipients);
@@ -436,7 +436,7 @@ define([
       }
 
       return mor
-        .act('addMrp', _.assign({}, params, {iptCheckRecipients: _.pick(params.iptCheckRecipients, '_id')}))
+        .act('addMrp', _.assign({}, params, {iptCheckRecipients: _.pluck(params.iptCheckRecipients, '_id')}))
         .fail(function()
         {
           section.mrps = _.without(section.mrps, mrp);

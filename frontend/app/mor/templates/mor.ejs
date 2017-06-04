@@ -17,7 +17,7 @@
     <table class="mor-watch">
       <tbody>
       <% section.watch.forEach(function(watch) { %>
-      <tr>
+      <tr data-user-id="<%- watch.user._id %>">
         <td><i class="fa fa-user-circle-o mor-user-presence <%- watch.user.presence ? 'mor-user-present' : 'mor-user-notPresent' %>" data-user-id="<%- watch.user._id %>"></i><span><%- watch.user.label %></span></td>
         <td><i class="fa fa-wrench"></i><span><%- watch.user.prodFunction %></span></td>
         <% if (section.watchAvailabilityVisible) { %>

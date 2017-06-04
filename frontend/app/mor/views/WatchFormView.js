@@ -74,7 +74,7 @@ define([
           .map(idAndLabel)
       });
 
-      if (this.model.watch)
+      if (this.model.mode === 'edit')
       {
         this.$id('user').select2('disable', true).select2('data', {
           id: this.model.watch.user,
