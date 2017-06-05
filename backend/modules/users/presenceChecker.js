@@ -79,7 +79,7 @@ module.exports = function setUpPresenceChecker(app, module)
         }
 
         const sql = `
-          SELECT TOP ${MAX_ROWS+1} PLR_ID, PLR_CARD_ID, PLR_INOUT, PLR_HARDWARE_ID
+          SELECT TOP ${MAX_ROWS+1} PLR_ID, PLR_CARD_ID, PLR_DATE, PLR_INOUT, PLR_HARDWARE_ID
           FROM PL_REGISTRATIONS
           WHERE PLR_ID > ${this.lastRecord}
             AND PLR_HARDWARE_ID IN(${Object.keys(this.hardware)})
@@ -128,7 +128,10 @@ module.exports = function setUpPresenceChecker(app, module)
 
         this.rows.forEach(row =>
         {
-          presence[row.PLR_CARD_ID] = this.hardware[row.PLR_HARDWARE_ID] === row.PLR_INOUT;
+          presence[row.PLR_CARD_ID] = {
+            in: this.hardware[row.PLR_HARDWARE_ID] === row.PLR_INOUT,
+            at: row.PLR_DATE
+          };
         });
       },
       function()
@@ -137,8 +140,13 @@ module.exports = function setUpPresenceChecker(app, module)
         const conditions = {
           card: {$in: Object.keys(this.presence)}
         };
+        const fields = {
+          card: 1,
+          presence: 1,
+          presenceAt: 1
+        };
 
-        User.find(conditions, {card: 1, presence: 1}).lean().exec(this.next());
+        User.find(conditions, fields).lean().exec(this.next());
       },
       function(err, users)
       {
@@ -147,52 +155,30 @@ module.exports = function setUpPresenceChecker(app, module)
           return this.skip(err);
         }
 
-        const present = [];
-        const notPresent = [];
-        const changes = this.changes = {};
+        const User = app[module.config.mongooseId].model('User');
+
+        this.changes = {};
 
         users.forEach(user =>
         {
           const presence = this.presence[user.card];
 
-          if (presence === user.presence)
+          if (presence.in === user.presence || presence.at < user.presenceAt)
           {
             return;
           }
 
-          changes[user._id] = presence;
+          this.changes[user._id] = presence.in;
 
-          if (presence)
-          {
-            present.push(user._id);
-          }
-          else
-          {
-            notPresent.push(user._id);
-          }
+          User.collection.update(
+            {_id: user._id},
+            {$set: {
+              presence: presence.in,
+              presenceAt: presence.at
+            }},
+            this.group()
+          );
         });
-
-        const User = app[module.config.mongooseId].model('User');
-
-        if (present.length)
-        {
-          User.collection.update(
-            {_id: {$in: present}},
-            {$set: {presence: true}},
-            {multi: true},
-            this.parallel()
-          );
-        }
-
-        if (notPresent.length)
-        {
-          User.collection.update(
-            {_id: {$in: notPresent}},
-            {$set: {presence: false}},
-            {multi: true},
-            this.parallel()
-          );
-        }
       },
       function(err)
       {

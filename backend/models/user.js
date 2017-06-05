@@ -87,7 +87,8 @@ module.exports = function setupUserModel(app, mongoose)
     presence: {
       type: Boolean,
       default: false
-    }
+    },
+    presenceAt: Date
   }, {
     id: false,
     toJSON: {
