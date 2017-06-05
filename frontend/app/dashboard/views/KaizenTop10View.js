@@ -47,7 +47,7 @@ define([
 
     getData: function()
     {
-      var from = time.getMoment().add(this.options.month || 0, 'months');
+      var from = time.getMoment().startOf('month').add(this.options.month || 0, 'months');
       var to = from.clone().add(1, 'months');
       var urlTemplate = this.options.urlTemplate
         .replace('${from}', from.valueOf())
