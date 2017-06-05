@@ -164,6 +164,8 @@ define([
       $(document).off('.' + this.idPrefix);
 
       this.hideUserPopover();
+
+      this.$id('jumpList').remove();
     },
 
     serialize: function()
@@ -377,11 +379,59 @@ define([
     beforeRender: function()
     {
       this.stopListening(this.model, 'change update', this.render);
+
+      this.$id('jumpList').remove();
     },
 
     afterRender: function()
     {
       this.listenTo(this.model, 'change update', this.render);
+
+      this.$id('jumpList').on('click', 'a', this.onJumpListClick.bind(this));
+
+      if (viewport.currentDialog === this)
+      {
+        this.$id('jumpList').addClass('hidden mor-jumpList-modal');
+      }
+    },
+
+    onDialogShown: function()
+    {
+      this.$id('jumpList').appendTo(document.body).removeClass('hidden');
+    },
+
+    onJumpListClick: function(e)
+    {
+      var isModal = this.$id('jumpList').hasClass('mor-jumpList-modal');
+      var sectionId = e.currentTarget.dataset.sectionId;
+      var $section = this.$('.mor-section[data-section-id="' + sectionId + '"]');
+
+      if (this.model.isSectionCollapsed(sectionId))
+      {
+        $section.find('.mor-section-name').click();
+      }
+
+      var y = 0;
+
+      if (isModal)
+      {
+        y = $section.position().top + 30;
+      }
+      else
+      {
+        y = $section.offset().top - 14;
+
+        var $navbar = $('.navbar-fixed-top');
+
+        if ($navbar.length)
+        {
+          y -= $navbar.outerHeight();
+        }
+      }
+
+      $(isModal ? '.modal' : 'html, body').stop(true, false).animate({scrollTop: y});
+
+      return false;
     },
 
     toggleEditing: function(editing)

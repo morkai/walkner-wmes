@@ -142,3 +142,28 @@ th.mor-is-editable .btn {
   border-width: 3px;
   border-color: orange;
 }
+.mor-jumpList {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 1041;
+}
+.modal-open .mor .mor-jumpList {
+  display: none;
+}
+.mor-jumpList-modal {
+  right: 47px;
+  bottom: 10px;
+}
+.mor-jumpList > .list-group-item {
+  border-right: 1px solid #337ab7;
+  border-left: 1px solid #337ab7;
+}
+.mor-jumpList > .list-group-item:first-child {
+  border-top: 1px solid #337ab7;
+  border-top-left-radius: 6px;
+}
+.mor-jumpList > .list-group-item:last-child {
+  border-bottom: 1px solid #337ab7;
+  border-bottom-left-radius: 6px;
+}
