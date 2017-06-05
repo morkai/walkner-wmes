@@ -307,8 +307,8 @@ define([
     {
       var formData = this.model.toJSON();
 
-      formData.active = formData.active.toString();
-      formData.privileges = formData.privileges.join(',');
+      formData.active = (!!formData.active).toString();
+      formData.privileges = (formData.privileges || []).join(',');
       formData.vendor = null;
 
       return formData;
