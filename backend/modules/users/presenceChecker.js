@@ -224,7 +224,10 @@ module.exports = function setUpPresenceChecker(app, module)
         }
         else
         {
-          app.broker.publish('users.presence.updated', this.changes);
+          if (!_.isEmpty(this.changes))
+          {
+            app.broker.publish('users.presence.updated', this.changes);
+          }
 
           schedulePresenceCheck(this.more ? 500 : 5000);
         }
