@@ -169,12 +169,14 @@ define([
     serialize: function()
     {
       var prodFunctions = this.serializeProdFunctions();
+      var canManage = user.isAllowedTo('MOR:MANAGE');
 
       return {
         idPrefix: this.idPrefix,
         draggable: this.editing,
         linkEmails: this.options.editable !== false,
-        sectionActionsVisible: user.isAllowedTo('MOR:MANAGE'),
+        sectionActionsVisible: canManage,
+        mrpActionsVisible: canManage,
         sections: this.serializeSections(prodFunctions),
         prodFunctions: prodFunctions
       };

@@ -49,9 +49,11 @@
         <% if (section.mrpColumnVisible) { %>
         <th class="is-min mor-is-editable">
           MRP
+          <% if (mrpActionsVisible) { %>
           <div class="btn-group">
             <button class="btn btn-default" data-action="addMrp"><i class="fa fa-plus"></i></button>
           </div>
+          <% } %>
         </th>
         <% } %>
         <% section.prodFunctions.forEach(function(prodFunction) { %>
@@ -66,10 +68,12 @@
         <td class="mor-mrp mor-is-editable">
           <span class="mor-mrp-name"><%= mrp.name %></span>
           <span class="mor-mrp-desc"><%= mrp.description %></span>
+          <% if (mrpActionsVisible) { %>
           <div class="btn-group">
             <button class="btn btn-default" data-action="editMrp"><i class="fa fa-edit"></i></button>
             <button class="btn btn-default" data-action="removeMrp"><i class="fa fa-remove"></i></button>
           </div>
+          <% } %>
         </td>
         <% } %>
         <% mrp.prodFunctions.forEach(function(prodFunction) { %>
