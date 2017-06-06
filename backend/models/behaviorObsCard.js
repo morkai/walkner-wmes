@@ -97,7 +97,7 @@ module.exports = function setupBehaviorObsCardModel(app, mongoose)
     });
 
     this.users = Object.keys(users);
-    this.anyHardObservations = _.some(this.observations, o => o.easy === false);
+    this.anyHardObservations = _.some(this.observations, o => o.safe === false && o.easy === false);
     this.anyHardRisks = _.some(this.risks, r => r.easy === false);
 
     next();
