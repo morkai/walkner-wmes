@@ -62,6 +62,10 @@
 .mor-user-notPresent {
   color: #ee0000;
 }
+.mor-user + .popover {
+  max-width: none;
+  white-space: nowrap;
+}
 .mor-watch + .mor-mrps {
   margin-top: 5px;
 }

@@ -802,9 +802,8 @@ define([
       var user = this.model.users.get($user[0].dataset.userId);
 
       this.$userPopover = $user.popover({
-        placement: 'auto right',
+        placement: 'right',
         trigger: 'manual',
-        container: 'body',
         html: true,
         title: user.getLabel(),
         content: this.getUserPopoverContent(user),
