@@ -1,6 +1,8 @@
 <dl class="mor-userPopover">
+  <% if (user.prodFunction) { %>
   <dt><%- t('mor', 'prop:prodFunction') %></dt>
-  <dd><%= user.prodFunction || '?' %></dd>
+  <dd><%= user.prodFunction %></dd>
+  <% } %>
   <% if (user.email) { %>
   <dt><%- t('mor', 'prop:email') %></dt>
   <dd>
