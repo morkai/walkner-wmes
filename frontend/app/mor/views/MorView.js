@@ -60,6 +60,8 @@ define([
       'click .mor-user': function(e)
       {
         this.toggleUserPopover(this.$(e.currentTarget));
+
+        return false;
       },
       'click .btn[data-action]': function(e)
       {
@@ -148,7 +150,9 @@ define([
 
       this.listenTo(this.model, 'update:presence', this.onPresenceUpdated);
 
-      $(window).on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
+      $(window)
+        .on('click.' + this.idPrefix, this.onClick.bind(this))
+        .on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
 
       $(document)
         .on('dragstart.' + this.idPrefix, this.onDragStart.bind(this))
@@ -820,6 +824,16 @@ define([
           mobile: user.getMobile()
         }
       });
+    },
+
+    onClick: function(e)
+    {
+      if (!$(e.target).closest('.popover').length)
+      {
+        this.hideUserPopover();
+
+        return false;
+      }
     },
 
     onKeyDown: function(e)
