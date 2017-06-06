@@ -173,6 +173,7 @@ define([
         view: this
       });
 
+      this.toggleButtonGroup('anyHard');
       this.toggleUserSelect2();
     },
 
