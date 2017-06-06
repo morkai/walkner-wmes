@@ -52,6 +52,10 @@
   "PROPERTY:difficulties:behavior:true": "Zachowanie",
   "PROPERTY:difficulties:behavior:false": "Warunki pracy",
   "PROPERTY:easyDiscussed": "&quot;Łatwe&quot; do zmiany zachowania oraz warunki pracy omówiono z osobą obserwowaną i uzyskano potwierdzenie pracy w sposób bezpieczny.",
+  "PROPERTY:observation": "Co zaobserwowano",
+  "PROPERTY:risk": "Ryzykowne warunki w miejscu pracy",
+  "PROPERTY:hardBehavior": "Trudne do zmiany zachowania",
+  "PROPERTY:hardCondition": "Trudne do zmiany warunki pracy",
 
   "FORM:ACTION:add": "Dodaj kartę obserwacji zachowań",
   "FORM:ACTION:edit": "Zapisz kartę obserwacji zachowań",

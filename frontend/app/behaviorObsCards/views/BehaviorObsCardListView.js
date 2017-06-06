@@ -2,18 +2,38 @@
 
 define([
   'underscore',
+  'jquery',
   'app/i18n',
-  'app/core/views/ListView'
+  'app/core/views/ListView',
+  'app/behaviorObsCards/templates/detailsRow'
 ], function(
   _,
+  $,
   t,
-  ListView
+  ListView,
+  detailsRowTemplate
 ) {
   'use strict';
 
   return ListView.extend({
 
     className: 'is-clickable',
+
+    events: _.assign({
+
+      'click .behaviorObsCards-list-expander': function(e)
+      {
+        var tdEl = e.currentTarget;
+
+        if (tdEl.classList.contains('is-enabled'))
+        {
+          this.toggleDetails(tdEl.parentNode.dataset.id, tdEl.dataset.id);
+        }
+
+        return false;
+      }
+
+    }, ListView.prototype.events),
 
     serializeColumns: function()
     {
@@ -27,13 +47,26 @@ define([
         ];
       }
 
+      var textDecorator = function(columnId, value)
+      {
+        return '<span class="behaviorObsCards-list-text">' + value + '</span>';
+      };
+      var textAttrs = function(row)
+      {
+        return 'class="behaviorObsCards-list-expander is-' + (row[this.id] ? 'enabled' : 'disabled') + '"';
+      };
+
       return [
         {id: 'rid', className: 'is-min is-number'},
         {id: 'date', className: 'is-min'},
         {id: 'observer', className: 'is-min'},
         {id: 'section', className: 'is-min'},
         {id: 'line', className: 'is-min'},
-        {id: 'position'}
+        {id: 'position', className: 'is-min'},
+        {id: 'observation', tdAttrs: textAttrs, tdDecorator: textDecorator},
+        {id: 'risk', tdAttrs: textAttrs, tdDecorator: textDecorator},
+        {id: 'hardBehavior', tdAttrs: textAttrs, tdDecorator: textDecorator},
+        {id: 'hardCondition', tdAttrs: textAttrs, tdDecorator: textDecorator}
       ];
     },
 
@@ -58,6 +91,46 @@ define([
 
         return actions;
       };
+    },
+
+    toggleDetails: function(rowId, columnId)
+    {
+      var $rowToExpand = this.$('.list-item[data-id="' + rowId + '"]');
+      var $expandedRow = this.$('.is-expanded');
+
+      this.collapseDetails($expandedRow);
+
+      if ($rowToExpand[0] !== $expandedRow[0])
+      {
+        this.expandDetails($rowToExpand, columnId);
+      }
+    },
+
+    collapseDetails: function($row)
+    {
+      $row.removeClass('is-expanded').next().remove();
+    },
+
+    expandDetails: function($rowToExpand, columnId)
+    {
+      var model = this.collection.get($rowToExpand.attr('data-id'));
+      var property = columnId === 'observation'
+        ? 'observations'
+        : columnId === 'risk'
+          ? 'risks'
+          : 'difficulties';
+      var templateData = {
+        idPrefix: this.idPrefix,
+        columnId: columnId,
+        model: {}
+      };
+
+      templateData.model[property] = model.get(property);
+
+      var $detailsRow = $(detailsRowTemplate(templateData));
+
+      $detailsRow.insertAfter($rowToExpand);
+      $rowToExpand.addClass('is-expanded');
     }
 
   });

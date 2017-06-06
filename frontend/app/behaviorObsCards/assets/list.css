@@ -1,3 +1,23 @@
 .behaviorObsCards-filter select {
   max-width: 200px;
 }
+.behaviorObsCards-list-text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 275px;
+}
+.behaviorObsCards-list-expander.is-enabled {
+  cursor: ns-resize!important;
+}
+.behaviorObsCards-list-expander.is-disabled {
+  cursor: default!important;
+}
+.table > tbody > .behaviorObsCards-list-details:hover > td {
+  background-color: #fff;
+}
+.table > tbody > .behaviorObsCards-list-details > td {
+  padding: 15px;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,0.125);
+}

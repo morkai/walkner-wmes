@@ -71,7 +71,34 @@ define([
 
     serializeRow: function(options)
     {
-      return this.serialize(options);
+      var row = this.serialize(options);
+
+      if (row.observations.length)
+      {
+        row.observation = row.observations[0].observation;
+      }
+
+      if (row.risks.length)
+      {
+        row.risk = row.risks[0].risk;
+      }
+
+      if (row.difficulties.length)
+      {
+        row.difficulties.forEach(function(difficulty)
+        {
+          if (!row.hardBehavior && difficulty.behavior)
+          {
+            row.hardBehavior = difficulty.problem;
+          }
+          else if (!row.hardCondition && !difficulty.behavior)
+          {
+            row.hardCondition = difficulty.problem;
+          }
+        });
+      }
+
+      return row;
     },
 
     serializeDetails: function()

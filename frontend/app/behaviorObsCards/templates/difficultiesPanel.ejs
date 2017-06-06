@@ -1,0 +1,25 @@
+<div class="panel panel-warning">
+  <div class="panel-heading"><%- t('behaviorObsCards', 'PANEL:TITLE:difficulties') %></div>
+  <table class="table table-bordered table-hover behaviorObsCards-details-difficulties">
+    <thead>
+    <tr>
+      <th><%- t('behaviorObsCards', 'PROPERTY:difficulties:problem') %></th>
+      <th><%- t('behaviorObsCards', 'PROPERTY:difficulties:solution') %></th>
+      <th class="is-min text-center">
+        <%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:true') %>
+        /<br>
+        <%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:false') %>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <% model.difficulties.forEach(function(difficulty) { %>
+    <tr>
+      <td class="text-lines"><%= difficulty.problem %></td>
+      <td class="text-lines"><%= difficulty.solution %></td>
+      <td class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:' + difficulty.behavior) %></td>
+    </tr>
+    <% }) %>
+    </tbody>
+  </table>
+</div>

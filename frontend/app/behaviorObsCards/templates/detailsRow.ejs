@@ -1,0 +1,11 @@
+<tr class="behaviorObsCards-list-details">
+  <td colspan="99">
+  <% if (columnId === 'observation') { %>
+  <% include observationsPanel.ejs %>
+  <% } else if (columnId === 'risk') { %>
+  <% include risksPanel.ejs %>
+  <% } else { %>
+  <% include difficultiesPanel.ejs %>
+  <% } %>
+  </td>
+</tr>

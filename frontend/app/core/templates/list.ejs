@@ -34,7 +34,7 @@
             <%- column.noData %>
             <% } %>
             <% } else { %>
-            <%- row[column.id] %>
+            <%- typeof column.tdDecorator === 'function' ? column.tdDecorator(column.id, row[column.id]) : row[column.id] %>
             <% } %>
           </td>
           <% }) %>
