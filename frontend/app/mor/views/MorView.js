@@ -832,8 +832,6 @@ define([
       if (!$(e.target).closest('.popover').length)
       {
         this.hideUserPopover();
-
-        return false;
       }
     },
 
