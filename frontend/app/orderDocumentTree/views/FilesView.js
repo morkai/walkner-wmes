@@ -50,7 +50,7 @@ define([
           keepFile: false
         });
       },
-      'click a[data-hash]': function(e)
+      'mouseup a[data-hash]': function(e)
       {
         if (!e.altKey)
         {
