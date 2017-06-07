@@ -16,9 +16,10 @@ define([
 ) {
   'use strict';
 
-  router.map('/mor', user.auth('LOCAL', 'USER'), function()
+  router.map('/mor', user.auth('LOCAL', 'USER'), function(req)
   {
     viewport.showPage(new MorPage({
+      editing: req.query.edit === '1',
       model: new Mor()
     }));
   });

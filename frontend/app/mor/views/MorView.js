@@ -136,11 +136,22 @@ define([
       'dragenter .mor-section': function(e)
       {
         this.hoveredSectionId = e.currentTarget.dataset.sectionId;
+      },
+      'click #-editMode': function()
+      {
+        viewport.closeDialog();
+
+        this.broker.publish('router.navigate', {
+          url: '/mor?edit=1',
+          trigger: true,
+          replace: false
+        });
       }
     },
 
     initialize: function()
     {
+      this.editing = String(!!this.options.editing);
       this.$userPopover = null;
       this.$dndIndicator = null;
       this.draggedSectionId = null;
@@ -181,6 +192,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         draggable: this.editing,
+        editModeVisible: viewport.currentDialog === this,
         linkEmails: this.options.editable !== false,
         sectionActionsVisible: canManage,
         watchActionsVisible: isManager || canManage,

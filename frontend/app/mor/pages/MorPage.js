@@ -23,6 +23,11 @@ define([
 
     title: t.bound('mor', 'BREADCRUMBS:base'),
 
+    className: function()
+    {
+      return this.editing ? 'is-editing' : '';
+    },
+
     actions: function()
     {
       var page = this;
@@ -62,6 +67,12 @@ define([
             $('.mor-action-addSection').toggleClass('hidden', !page.editing);
 
             page.view.toggleEditing(page.editing);
+
+            page.broker.publish('router.navigate', {
+              url: '/mor' + (page.editing ? '?edit=1' : ''),
+              trigger: false,
+              replace: true
+            });
           }
         },
         {
@@ -75,8 +86,11 @@ define([
 
     initialize: function()
     {
-      this.editing = false;
-      this.view = new MorView({model: this.model});
+      this.editing = !!this.options.editing && user.isAllowedTo('MOR:MANAGE', 'FN:manager', 'MOR:MANAGE:USERS');
+      this.view = new MorView({
+        editing: this.editing,
+        model: this.model
+      });
     },
 
     load: function(when)

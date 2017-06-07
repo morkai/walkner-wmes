@@ -100,4 +100,7 @@
     <a href="#" data-section-id="<%- section._id %>" class="list-group-item"><%= section.label %></a>
     <% }) %>
   </div>
+  <% if (editModeVisible) { %>
+  <button id="<%- idPrefix %>-editMode" class="btn btn-default mor-btn-editMode" type="button"><i class="fa fa-edit"></i><span><%- t.bound('mor', 'PAGE_ACTION:editMode') %></span></button>
+  <% } %>
 </div>

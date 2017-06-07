@@ -146,6 +146,11 @@ th.mor-is-editable .btn {
   border-width: 3px;
   border-color: orange;
 }
+.mor-btn-editMode {
+  position: absolute;
+  top: 0;
+  right: 15px;
+}
 .mor-jumpList {
   position: fixed;
   bottom: 0;
