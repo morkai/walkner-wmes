@@ -9,7 +9,7 @@ module.exports = function setUpMorRoutes(app, module)
   const settingsModule = app[module.config.settingsId];
 
   var canView = userModule.auth('LOCAL', 'USER');
-  var canManage = userModule.auth('FN:manager', 'MOR:MANAGE');
+  var canManage = userModule.auth('FN:manager', 'MOR:MANAGE', 'MOR:MANAGE:USERS');
 
   express.get('/mor', canView, getStateRoute);
 

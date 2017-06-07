@@ -158,6 +158,7 @@
   "PRIVILEGE:D8:DICTIONARIES:VIEW": "8D: przeglądanie słowników",
   "PRIVILEGE:D8:DICTIONARIES:MANAGE": "8D: zarządzanie słownikami",
   "PRIVILEGE:MOR:MANAGE": "Matryca odpowiedzialności: zarządzanie",
+  "PRIVILEGE:MOR:MANAGE:USERS": "Matryca odpowiedzialności: edycja osób",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System",

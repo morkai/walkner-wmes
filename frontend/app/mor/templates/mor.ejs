@@ -4,7 +4,7 @@
     <h3>
       <i class="fa fa-caret-right"></i><i class="fa fa-caret-down"></i><span class="mor-section-name" draggable="<%- draggable %>"><%= section.label %></span>
       <div class="btn-group">
-        <% if (section.addWatchVisible) { %>
+        <% if (watchActionsVisible && section.addWatchVisible) { %>
         <button class="btn btn-default" data-action="addWatch" title="<%- t('mor', 'action:addWatch') %>"><i class="fa fa-plus"></i></button>
         <% } %>
         <% if (sectionActionsVisible) { %>
@@ -31,12 +31,14 @@
           <i class="fa fa-envelope"></i><span><%= watch.user.email %></span>
           <% } %>
         </td>
+        <% if (watchActionsVisible) { %>
         <td class="actions">
           <div class="btn-group">
             <button class="btn btn-default" data-action="editWatch"><i class="fa fa-edit"></i></button>
             <button class="btn btn-default" data-action="removeWatch"><i class="fa fa-remove"></i></button>
           </div>
         </td>
+        <% } %>
       </tr>
       <% }) %>
       </tbody>

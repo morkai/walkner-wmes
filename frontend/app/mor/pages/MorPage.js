@@ -26,7 +26,7 @@ define([
     actions: function()
     {
       var page = this;
-      var canManage = user.isAllowedTo.bind(user, 'MOR:MANAGE', 'FN:manager');
+      var canManage = user.isAllowedTo.bind(user, 'MOR:MANAGE', 'FN:manager', 'MOR:MANAGE:USERS');
 
       return [
         {

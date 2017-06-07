@@ -175,6 +175,7 @@ define([
     serialize: function()
     {
       var prodFunctions = this.serializeProdFunctions();
+      var isManager = user.isAllowedTo('FN:manager');
       var canManage = user.isAllowedTo('MOR:MANAGE');
 
       return {
@@ -182,6 +183,7 @@ define([
         draggable: this.editing,
         linkEmails: this.options.editable !== false,
         sectionActionsVisible: canManage,
+        watchActionsVisible: isManager || canManage,
         mrpActionsVisible: canManage,
         sections: this.serializeSections(prodFunctions),
         prodFunctions: prodFunctions
