@@ -59,7 +59,7 @@ define([
 ) {
   'use strict';
 
-  var IS_EMBEDDED = window.parent !== window || window.location.search.indexOf('touch') !== -1;
+  var IS_EMBEDDED = true;
 
   return View.extend({
 
