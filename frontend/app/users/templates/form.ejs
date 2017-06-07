@@ -34,17 +34,25 @@
           <% } %>
         </div>
         <div class="col-lg-3">
-          <div class="form-group">
-            <label for="<%- idPrefix %>-firstName" class="control-label"><%- t('users', 'PROPERTY:firstName') %></label>
-            <input id="<%- idPrefix %>-firstName" class="form-control" type="text" name="firstName" autofocus maxlength="50">
+          <div class="row">
+            <div class="col-lg-6 form-group">
+                <label for="<%- idPrefix %>-firstName" class="control-label"><%- t('users', 'PROPERTY:firstName') %></label>
+                <input id="<%- idPrefix %>-firstName" class="form-control" type="text" name="firstName" autofocus maxlength="50">
+            </div>
+            <div class="col-lg-6 form-group">
+                <label for="<%- idPrefix %>-lastName" class="control-label"><%- t('users', 'PROPERTY:lastName') %></label>
+                <input id="<%- idPrefix %>-lastName" class="form-control" type="text" name="lastName" maxlength="50">
+            </div>
           </div>
-          <div class="form-group">
-            <label for="<%- idPrefix %>-lastName" class="control-label"><%- t('users', 'PROPERTY:lastName') %></label>
-            <input id="<%- idPrefix %>-lastName" class="form-control" type="text" name="lastName" maxlength="50">
-          </div>
-          <div class="form-group">
-            <label for="<%- idPrefix %>-personellId" class="control-label"><%- t('users', 'PROPERTY:personellId') %></label>
-            <input id="<%- idPrefix %>-personellId" class="form-control" type="text" name="personellId" maxlength="15">
+          <div class="row">
+            <div class="col-lg-6 form-group">
+              <label for="<%- idPrefix %>-personellId" class="control-label"><%- t('users', 'PROPERTY:personellId') %></label>
+              <input id="<%- idPrefix %>-personellId" class="form-control" type="text" name="personellId" maxlength="15">
+            </div>
+            <div class="col-lg-6 form-group">
+              <label for="<%- idPrefix %>-card" class="control-label"><%- t('users', 'PROPERTY:card') %></label>
+              <input id="<%- idPrefix %>-card" class="form-control" type="text" name="card" maxlength="15">
+            </div>
           </div>
           <div class="form-group">
             <label for="<%- idPrefix %>-gender" class="control-label is-required"><%- t('users', 'PROPERTY:gender') %></label>
