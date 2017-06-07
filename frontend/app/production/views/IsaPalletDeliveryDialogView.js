@@ -3,14 +3,12 @@
 define([
   'app/i18n',
   'app/core/View',
-  'app/core/util/idAndLabel',
   'app/data/localStorage',
   'app/data/isaPalletKinds',
   'app/production/templates/isaPalletDeliveryDialog'
 ], function(
   t,
   View,
-  idAndLabel,
   localStorage,
   palletKinds,
   template
@@ -62,7 +60,13 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        palletKinds: palletKinds.map(idAndLabel)
+        palletKinds: palletKinds.map(function(palletKind)
+        {
+          return {
+            id: palletKind.id,
+            text: palletKind.get('fullName')
+          };
+        })
       };
     },
 
