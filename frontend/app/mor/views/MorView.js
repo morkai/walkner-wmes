@@ -192,7 +192,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         draggable: this.editing,
-        editModeVisible: viewport.currentDialog === this,
+        editModeVisible: this.options.editable !== false && viewport.currentDialog === this,
         linkEmails: this.options.editable !== false,
         sectionActionsVisible: canManage,
         watchActionsVisible: isManager || canManage,
