@@ -82,7 +82,14 @@ define([
 
     getActionText: function()
     {
-      return t('isa', 'events:' + this.get('type'), t.flatten(this.get('data')));
+      var data = t.flatten(this.get('data'));
+
+      if (!data.qty)
+      {
+        data.qty = 8;
+      }
+
+      return t('isa', 'events:' + this.get('type'), data);
     }
 
   });

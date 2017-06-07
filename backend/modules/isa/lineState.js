@@ -282,6 +282,7 @@ module.exports = function setUpIsaLineState(app, isaModule)
         }
 
         var data = {
+          qty: parameters.qty || 8,
           palletKind: {
             id: palletKind._id.toString(),
             label: palletKind.shortName

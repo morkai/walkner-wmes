@@ -112,6 +112,7 @@ define([
     {
       var obj = this.toJSON();
 
+      obj.qty = this.getQty();
       obj.palletKind = this.getPalletKind().label;
       obj.palletKindFull = this.getFullPalletKind();
       obj.whman = this.getWhman().label;
@@ -126,6 +127,7 @@ define([
       obj.className = STATUS_TO_SEVERITY_CLASS_NAME[obj.status];
       obj.line = this.getProdLineId();
       obj.type = t('isa', 'requests:type:' + obj.type, {
+        qty: obj.data.qty || 8,
         palletKind: obj.data.palletKind ? obj.data.palletKind.label : '?'
       });
       obj.status = t('isa', 'requests:status:' + obj.status);
@@ -165,6 +167,13 @@ define([
         id: '',
         label: ''
       };
+    },
+
+    getQty: function()
+    {
+      var data = this.get('data');
+
+      return data && data.qty || 8;
     },
 
     getFullPalletKind: function()

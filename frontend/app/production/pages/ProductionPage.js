@@ -297,7 +297,11 @@ define([
         embedded: IS_EMBEDDED,
         vkb: page.vkbView
       });
-      page.isaView = new IsaView({model: model});
+      page.isaView = new IsaView({
+        model: model,
+        embedded: IS_EMBEDDED,
+        vkb: page.vkbView
+      });
 
       var idPrefix = '#' + page.idPrefix + '-';
 

@@ -12,21 +12,13 @@
       <span class="production-isa-status-label"><%- deliveryStatusLabel %></span>
     </div>
     <div class="dropup">
-      <button id="<%- idPrefix %>-deliver" class="btn btn-lg btn-block btn-default production-isa-btn dropdown-toggle <%- deliveryActive ? 'active' : '' %>" <%- deliveryDisabled ? 'disabled' : '' %> data-toggle="<%- dropdownEnabled ? 'dropdown' : '' %>">
+      <button id="<%- idPrefix %>-deliver" class="btn btn-lg btn-block btn-default production-isa-btn <%- deliveryActive ? 'active' : '' %>" <%- deliveryDisabled ? 'disabled' : '' %>>
         <% if (selectedPalletKind) { %>
-        <%- t('production', 'isa:deliver:specific', {palletKind: selectedPalletKind}) %>
+        <%- t('production', 'isa:deliver:specific', {qty: selectedQty, palletKind: selectedPalletKind}) %>
         <% } else { %>
         <%- t('production', 'isa:deliver') %>
         <% } %>
-        <% if (dropdownEnabled) { %>
-        <span class="<%- dropdownEnabled ? 'caret' : 'fa fa-remove' %>"></span>
-        <% } %>
       </button>
-      <ul class="dropdown-menu production-isa-palletKinds">
-        <% palletKinds.forEach(function(palletKind) { %>
-        <li><a data-pallet-kind="<%- palletKind._id %>"><%= palletKind.fullName || palletKind.shortName %></a></li>
-        <% }) %>
-      </ul>
     </div>
   </div>
 </div>

@@ -171,6 +171,12 @@
   font-size: 24px;
   text-transform: uppercase;
 }
+.isa-lineState-header-request > small {
+  padding: 0 0 0 5px;
+  font-size: inherit;
+  text-transform: none;
+  color: #000;
+}
 .isa-lineState-props {
   display: flex;
   flex-wrap: wrap;

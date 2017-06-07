@@ -1,0 +1,18 @@
+<form class="production-isa-palletDelivery">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-qty"><%- t('production', 'isa:deliver:qty') %></label>
+    <input id="<%- idPrefix %>-qty" class="form-control" type="text" data-vkb="numeric" required>
+  </div>
+  <div id="<%- idPrefix %>-palletKind" class="production-form-btn-group">
+    <label><%- t('production', 'isa:deliver:palletKind') %></label>
+    <div class="btn-group-vertical">
+      <% palletKinds.forEach(function(palletKind) { %>
+      <button type="button" class="btn btn-lg btn-default" data-id="<%- palletKind.id %>"><%= palletKind.text %></button>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-lg btn-primary" disabled><%- t('production', 'isa:deliver:submit') %></button>
+    <button type="button" class="cancel btn btn-lg btn-link"><%- t('production', 'isa:deliver:cancel') %></button>
+  </div>
+</form>

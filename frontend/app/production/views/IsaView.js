@@ -7,6 +7,7 @@ define([
   'app/core/View',
   'app/core/views/DialogView',
   'app/data/isaPalletKinds',
+  './IsaPalletDeliveryDialogView',
   'app/production/templates/isa',
   'app/production/templates/isaCancelDialog'
 ], function(
@@ -16,6 +17,7 @@ define([
   View,
   DialogView,
   isaPalletKinds,
+  IsaPalletDeliveryDialogView,
   template,
   cancelDialogTemplate
 ) {
@@ -49,19 +51,29 @@ define([
       {
         var deliveryRequest = this.model.isaRequests.getFirstDelivery();
 
-        if (!deliveryRequest)
+        if (deliveryRequest)
         {
+          if (deliveryRequest.get('status') === 'new')
+          {
+            this.cancel(deliveryRequest);
+          }
+
           return;
         }
 
-        if (deliveryRequest.get('status') === 'new')
+        var dialogView = new IsaPalletDeliveryDialogView({
+          embedded: this.options.embedded,
+          vkb: this.options.vkb
+        });
+
+        this.listenTo(dialogView, 'picked', function(palletKind, count)
         {
-          this.cancel(deliveryRequest);
-        }
-      },
-      'click a[data-pallet-kind]': function(e)
-      {
-        this.deliver(e.currentTarget.dataset.palletKind);
+          dialogView.closeDialog();
+
+          this.deliver(palletKind, count);
+        });
+
+        viewport.showDialog(dialogView, t('production', 'isa:deliver:title'));
       }
     },
 
@@ -105,11 +117,11 @@ define([
       var deliveryActive = !!deliveryRequest;
       var pickupAccepted = pickupRequest ? (pickupRequest.get('status') === 'accepted') : false;
       var deliveryAccepted = deliveryRequest ? (deliveryRequest.get('status') === 'accepted') : false;
+      var selectedQty = deliveryRequest ? deliveryRequest.getQty() : 0;
       var selectedPalletKind = deliveryRequest ? deliveryRequest.getFullPalletKind() : null;
 
       return {
         idPrefix: this.idPrefix,
-        palletKinds: isaPalletKinds.toJSON(),
         pickupIndicatorColor: this.serializeIndicatorColor(pickupRequest),
         deliveryIndicatorColor: this.serializeIndicatorColor(deliveryRequest),
         pickupStatusLabel: this.serializeStatusLabel(pickupRequest),
@@ -118,8 +130,8 @@ define([
         deliveryStatusLabel: this.serializeStatusLabel(deliveryRequest),
         deliveryActive: deliveryActive,
         deliveryDisabled: !this.rendered || locked || syncing || !connected || deliveryAccepted,
-        selectedPalletKind: selectedPalletKind,
-        dropdownEnabled: _.isEmpty(selectedPalletKind)
+        selectedQty: selectedQty,
+        selectedPalletKind: selectedPalletKind
       };
     },
 
@@ -158,10 +170,11 @@ define([
       this.model.isaRequests.pickup(this.model.getSecretKey(), this.showErrorMessage.bind(this, 'pickup'));
     },
 
-    deliver: function(palletKind)
+    deliver: function(palletKind, qty)
     {
       this.model.isaRequests.deliver(
         palletKind,
+        qty,
         this.model.getSecretKey(),
         this.showErrorMessage.bind(this, 'deliver')
       );

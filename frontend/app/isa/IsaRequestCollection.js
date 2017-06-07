@@ -81,9 +81,9 @@ define([
       return this.act({action: 'requestPickup', secretKey: secretKey}, done);
     },
 
-    deliver: function(palletKind, secretKey, done)
+    deliver: function(palletKind, qty, secretKey, done)
     {
-      return this.act({action: 'requestDelivery', secretKey: secretKey, palletKind: palletKind}, done);
+      return this.act({action: 'requestDelivery', secretKey: secretKey, palletKind: palletKind, qty: qty}, done);
     },
 
     cancel: function(requestId, secretKey, done)
