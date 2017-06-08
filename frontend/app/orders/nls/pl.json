@@ -104,6 +104,7 @@
 
   "settings:tab:operations": "Operacje",
   "settings:tab:documents": "Dokumenty",
+  "settings:tab:iptChecker": "Sprawdzanie w IPT",
   "settings:operations:groups": "Grupy operacji",
   "settings:operations:groups:help": "W każdej linii należy podać nazwy operacji, które mają należeć do tej samej grupy, rozdzielone znakiem <code>|</code>. Do każdej nazwy operacji można dodać filtr WorkCenter po znaku <code>@</code>.<br>Na przykład: <code>wykrawanie @ PIVATIC5 | zaginanie</code>",
   "settings:operations:timeCoeffs": "Współczynniki czasów operacji",
@@ -112,6 +113,8 @@
   "settings:documents:extra": "Dodatkowe dokumenty",
   "settings:documents:remoteServer": "Serwer wyszukiwarki dokumentów",
   "settings:documents:useCatalog": "Używaj katalogu WMES przy serwowaniu plików dokumentów",
+  "settings:iptChecker:toBusinessDays": "Ilość dni do sprawdzenia",
+  "settings:iptChecker:mrps": "MRP do sprawdzenia",
 
   "jumpList:details": "Szczegóły",
   "jumpList:operations": "Operacje",

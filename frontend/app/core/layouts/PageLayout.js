@@ -279,7 +279,7 @@ define([
       actions = [actions];
     }
 
-    this.model.actions = actions.map(this.prepareAction.bind(this));
+    this.model.actions = actions.map(this.prepareAction.bind(this, context));
 
     if (this.$actions)
     {
@@ -299,15 +299,23 @@ define([
 
   /**
    * @private
-   * @param action
+   * @param {*} context
+   * @param {object} action
    * @returns {*}
    */
-  PageLayout.prototype.prepareAction = function(action)
+  PageLayout.prototype.prepareAction = function(context, action)
   {
     if (action.prepared)
     {
       return action;
     }
+
+    if (!action.id)
+    {
+      action.id = '';
+    }
+
+    action.idPrefix = context && context.idPrefix || '';
 
     if (typeof action.href === 'string')
     {
@@ -430,14 +438,20 @@ define([
       else
       {
         var className = 'btn btn-' + (action.type || 'default') + ' ' + _.result(action, 'className');
+        var id = _.result(action, 'id');
+
+        if (id && id.charAt(0) === '-')
+        {
+          id = action.idPrefix + id;
+        }
 
         if (action.href === null)
         {
-          html += '<button class="' + className + '">';
+          html += '<button id="' + id + '" class="' + className + '">';
         }
         else
         {
-          html += '<a class="' + className + '" href="' + action.href + '">';
+          html += '<a id="' + id + '" class="' + className + '" href="' + action.href + '">';
         }
 
         if (typeof action.icon === 'string')

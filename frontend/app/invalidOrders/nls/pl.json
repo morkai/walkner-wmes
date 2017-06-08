@@ -1,0 +1,53 @@
+{
+  "BREADCRUMBS:browse": "Nieprawidłowe zlecenia",
+
+  "MSG:LOADING_FAILURE": "Ładowanie nieprawidłowych zleceń nie powiodło się :(",
+
+  "PAGE_ACTION:check": "Sprawdź zlecenia",
+  "PAGE_ACTION:notify": "Powiadom osoby odpowiedzialne",
+  "PAGE_ACTION:settings": "Ustawienia",
+
+  "ACTION_FORM:DIALOG_TITLE:ignore": "Ignorowanie zlecenia",
+  "ACTION_FORM:MESSAGE_SPECIFIC:ignore": "Czy na pewno chcesz zignorować zlecenie {label}?",
+  "ACTION_FORM:BUTTON:ignore": "Ignoruj zlecenie",
+  "ACTION_FORM:MESSAGE_FAILURE:ignore": "Nie udało się zignorować zlecenia :(",
+
+  "ACTION_FORM:DIALOG_TITLE:notify": "Powiadamianie osób odpowiedzialnych",
+  "ACTION_FORM:MESSAGE_SPECIFIC:notify": "Czy na pewno chcesz wysłać powiadomienia do zleceń: {orders}?",
+  "ACTION_FORM:BUTTON:notify": "Wyślij powiadomienia",
+  "ACTION_FORM:MESSAGE_FAILURE:notify": "Nie udało się wysłać powiadomień :(",
+
+  "ACTION_FORM:DIALOG_TITLE:check": "Sprawdzanie zleceń",
+  "ACTION_FORM:MESSAGE:check": "Czy na pewno chcesz ponownie sprawdzić wszystkie zlecenia?",
+  "ACTION_FORM:BUTTON:check": "Sprawdź zlecenia",
+  "ACTION_FORM:MESSAGE_FAILURE:check": "Nie udało się sprawdzić zleceń :(",
+
+  "PROPERTY:orderNo": "Nr zlecenia",
+  "PROPERTY:productName": "Nazwa wyrobu",
+  "PROPERTY:nc12": "12NC",
+  "PROPERTY:mrp": "MRP",
+  "PROPERTY:qty": "Ilość",
+  "PROPERTY:startDate": "Data startu",
+  "PROPERTY:status": "Status",
+  "PROPERTY:problem": "Problem",
+  "PROPERTY:solution": "Rozwiązanie",
+  "PROPERTY:iptStatus": "Status IPT",
+  "PROPERTY:iptComment": "Komentarz IPT",
+
+  "status:invalid": "Błąd",
+  "status:ignored": "Zignorowane",
+  "status:resolved": "Rozwiązane",
+
+  "problem:MISSING": "Brak zlecenia",
+  "problem:EMPTY": "Brak operacji",
+
+  "solution:DONE": "Wykonanie wymaganej ilości.",
+  "solution:STATUS": "Zmiana statusu CNF lub DLV.",
+  "solution:OPERATIONS": "Pojawienie się operacji.",
+
+  "filter:ownMrps": "moje",
+  "filter:submit": "Filtruj zlecenia",
+
+  "LIST:ACTION:select": "Oznacz do powiadomienia",
+  "LIST:ACTION:ignore": "Ignoruj"
+}

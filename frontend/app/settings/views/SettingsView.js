@@ -20,6 +20,12 @@ define([
 
     clientUrl: '#settings',
     defaultTab: null,
+    shouldAutoUpdateSettingField: function(setting)
+    {
+      /*jshint unused:false*/
+
+      return true;
+    },
     updateSettingField: function(setting)
     {
       /*jshint unused:false*/
@@ -201,6 +207,13 @@ define([
     {
       if (!setting || this.inProgress[setting.id])
       {
+        return;
+      }
+
+      if (!this.shouldAutoUpdateSettingField(setting))
+      {
+        this.updateSettingField(setting);
+
         return;
       }
 

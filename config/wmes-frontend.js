@@ -1,7 +1,7 @@
 'use strict';
 
-var mongodb = require('./wmes-mongodb');
-var later = require('later');
+const mongodb = require('./wmes-mongodb');
+const later = require('later');
 
 later.date.localTime();
 
@@ -13,7 +13,7 @@ try
 }
 catch (err) {}
 
-var DATA_PATH = __dirname + '/../data';
+const DATA_PATH = __dirname + '/../data';
 
 exports.id = 'wmes-frontend';
 
@@ -205,7 +205,7 @@ exports.pubsub = {
     'settings.updated.**',
     'xiconf.results.**', 'xiconf.orders.**', 'xiconf.clients.**',
     'icpo.results.synced', 'orders.intake.synced',
-    'orders.updated.*', 'orders.quantityDone.*',
+    'orders.updated.*', 'orders.quantityDone.*', 'orders.invalid.**',
     'orderDocuments.tree.**', 'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*',
     'orderDocuments.eto.synced',
     'kaizen.*.added', 'kaizen.*.edited', 'kaizen.*.deleted', 'kaizen.orders.seen.*',
@@ -234,7 +234,7 @@ exports.mongoose = {
     'division', 'subdivision', 'mrpController', 'workCenter', 'prodFlow', 'prodLine',
     'company', 'vendor', 'prodFunction', 'aor',
     'orderStatus', 'delayReason', 'downtimeReason', 'lossReason', 'prodTask',
-    'order', 'mechOrder', 'emptyOrder', 'clipOrderCount', 'orderZlf1',
+    'order', 'mechOrder', 'emptyOrder', 'clipOrderCount', 'orderZlf1', 'invalidOrder',
     'orderDocumentClient', 'orderDocumentStatus', 'orderDocumentName',
     'orderDocumentFile', 'orderDocumentFolder', 'orderDocumentUpload',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan', 'dailyMrpPlan',
@@ -498,7 +498,8 @@ exports.qi = {
 };
 
 exports.orders = {
-  importPath: DATA_PATH + '/attachments-input'
+  importPath: DATA_PATH + '/attachments-input',
+  iptCheckerClientId: 'messenger/client:wmes-importer-sap'
 };
 
 exports.d8 = {

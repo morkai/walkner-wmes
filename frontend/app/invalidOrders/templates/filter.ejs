@@ -1,0 +1,27 @@
+<form class="well filter-form">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-status"><%- t('invalidOrders', 'PROPERTY:status') %></label>
+    <select id="<%- idPrefix %>-status" name="status[]" class="form-control is-expandable" multiple size="1">
+      <% ['invalid', 'resolved', 'ignored'].forEach(function(status) { %>
+      <option value="<%- status %>"><%- t('invalidOrders', 'status:' + status) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-_id"><%- t('invalidOrders', 'PROPERTY:orderNo') %></label>
+    <input id="<%- idPrefix %>-_id" class="form-control" name="_id" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-mrp">
+      <%- t('invalidOrders', 'PROPERTY:mrp') %>
+      <% if (mrps.length) { %>
+      (<a id="<%- idPrefix %>-ownMrps" href="#"><%- t('invalidOrders', 'filter:ownMrps') %></a>)
+      <% } %>
+    </label>
+    <input id="<%- idPrefix %>-mrp" name="mrp" type="text">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('invalidOrders', 'filter:submit') %></span></button>
+  </div>
+</form>

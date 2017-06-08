@@ -1,0 +1,57 @@
+<p style="margin-top: 0; font-family: Arial, sans-serif; font-size: 12px; margin-bottom: 0">
+  Poniżej znajdują się zlecenia, z którymi może być problem w systemie IPT:
+</p>
+<% orders.forEach(function(order) { %>
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-top: 15px; margin-bottom: 3px; padding-bottom: 3px;">
+  <%- order.no %>
+</h3>
+<table style="font-family: Arial, sans-serif; font-size: 12px">
+  <tbody>
+  <tr>
+    <th align="left" style="white-space: nowrap">Nr zlecenia</th>
+    <td>: <a href="<%- order.wmesOrderUrl %>"><%- order.no %></a></td>
+  </tr>
+  <tr>
+    <th align="left">12NC</th>
+    <td>: <%= order.nc12 %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Nazwa wyrobu</th>
+    <td>: <%= order.productName %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">MRP</th>
+    <td>: <%= order.mrp %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Ilość</th>
+    <td>: <%- order.qtyDone %>/<%- order.qtyTodo %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Data startu</th>
+    <td>: <%- order.startDate %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Problem</th>
+    <td>: <a href="<%- order.iptCheckOrderUrl %>"><%= order.problem %></a></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Status IPT</th>
+    <td>: <%= order.iptStatus %></td>
+  </tr>
+  <tr>
+    <th align="left" style="white-space: nowrap">Komentarz IPT</th>
+    <td>: <%= order.iptComment %></td>
+  </tr>
+</table>
+<% }) %>
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-top: 15px; margin-bottom: 3px; padding-bottom: 3px;">
+  Na skróty
+</h3>
+<ul style="margin-top: 0; font-family: Arial, sans-serif; font-size: 12px">
+  <li><a href="<%- orders[0].wmesInvalidOrdersUrl %>">Wszystkie nieprawidłowe zlecenia IPT</a></li>
+</ul>
+<hr>
+<font face="Arial" color="Gray" size="1">
+  Ta wiadomość została wygenerowana automatycznie przez system WMES.
+</font>

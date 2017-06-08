@@ -5,6 +5,7 @@
 const setUpOrdersRoutes = require('./ordersRoutes');
 const setUpMechOrdersRoutes = require('./mechOrdersRoutes');
 const setUpEmptyOrdersRoutes = require('./emptyOrdersRoutes');
+const setUpInvalidOrdersRoutes = require('./invalidOrdersRoutes');
 const setUpOperationGroups = require('./operationGroups');
 
 exports.DEFAULT_CONFIG = {
@@ -12,6 +13,7 @@ exports.DEFAULT_CONFIG = {
   expressId: 'express',
   userId: 'user',
   settingsId: 'settings',
+  iptCheckerClientId: 'messenger/client',
   importPath: './',
   zintExe: 'zint'
 };
@@ -30,6 +32,7 @@ exports.start = function startOrdersModule(app, module)
       setUpOrdersRoutes(app, module);
       setUpMechOrdersRoutes(app, module);
       setUpEmptyOrdersRoutes(app, module);
+      setUpInvalidOrdersRoutes(app, module);
     }
   );
 

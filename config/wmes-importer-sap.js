@@ -1,5 +1,6 @@
 'use strict';
 
+var frontend = require('./wmes-frontend');
 var mongodb = require('./wmes-mongodb');
 
 var IMPORT_INPUT_DIR = __dirname + '/../data/attachments-input';
@@ -10,9 +11,11 @@ exports.id = 'wmes-importer-sap';
 
 exports.modules = [
   'mongoose',
+  {id: 'mysql', name: 'mysql:ipt'},
   'events',
   'updater',
   'settings',
+  'mail/sender',
   'messenger/server',
   'messenger/client',
   'directoryWatcher',
@@ -21,6 +24,7 @@ exports.modules = [
   'orders/importer/intake',
   'orders/importer/bom',
   'orders/importer/zlf1',
+  'orders/iptChecker',
   'warehouse/importer/importQueue',
   'warehouse/importer/controlCycles',
   'warehouse/importer/transferOrders',
@@ -39,9 +43,9 @@ exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   models: [
-    'event',
+    'event', 'user',
     'setting',
-    'order', 'emptyOrder', 'orderIntake', 'orderZlf1',
+    'order', 'emptyOrder', 'orderIntake', 'orderZlf1', 'invalidOrder',
     'mrpController', 'clipOrderCount',
     'fteLeaderEntry',
     'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics',
@@ -60,6 +64,8 @@ if (mongodb.replSet)
 {
   mongodb.replSet.poolSize = 5;
 }
+
+exports['mysql:ipt'] = frontend['mysql:ipt'];
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },
@@ -108,6 +114,10 @@ exports.updater = {
   frontendVersionKey: null
 };
 
+exports['mail/sender'] = {
+  from: 'WMES Bot <wmes@localhost>'
+};
+
 exports['messenger/server'] = {
   pubHost: '127.0.0.1',
   pubPort: 60020,
@@ -115,7 +125,7 @@ exports['messenger/server'] = {
   repPort: 60021,
   broadcastTopics: [
     'events.saved',
-    'orders.synced', 'orders.intake.synced', 'orders.bom.synced', 'orders.zlf1.synced',
+    'orders.synced', 'orders.intake.synced', 'orders.bom.synced', 'orders.zlf1.synced', 'orders.invalid.synced',
     'emptyOrders.synced',
     'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',
     'xiconf.orders.synced',
@@ -199,4 +209,8 @@ exports['cags/importer/nc12'] = {
   filterRe: /^MARA\.txt$/,
   resultFile: __dirname + '/../data/12nc_to_cags.json',
   parsedOutputDir: IMPORT_OUTPUT_DIR
+};
+
+exports['orders/iptChecker'] = {
+  mysqlId: 'mysql:ipt'
 };

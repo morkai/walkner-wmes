@@ -40,7 +40,7 @@ define([
         var params = {
           section: view.model.section._id,
           mrp: view.model.mrp ? view.model.mrp._id : view.$id('mrp').val(),
-          iptCheck: view.$id('iptCheck').prop('checked'),
+          iptCheck: !!view.$id('iptCheck').prop('checked'),
           iptCheckRecipients: (view.$id('iptCheckRecipients').select2('data') || [])
             .map(function(d) { return d.user; }),
           description: view.$id('description').val()

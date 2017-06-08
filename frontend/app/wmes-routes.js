@@ -10,6 +10,7 @@ define([
   './lossReasons/routes',
   './events/routes',
   './emptyOrders/routes',
+  './invalidOrders/routes',
   './fte/routes',
   './hourlyPlans/routes',
   './mechOrders/routes',

@@ -1,14 +1,14 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
   'underscore',
-  'app/core/util/fixTimeRange',
   'app/core/views/FilterView',
-  'app/orders/templates/filter'
+  'app/core/util/ExpandableSelect',
+  'app/invalidOrders/templates/filter'
 ], function(
   _,
-  fixTimeRange,
   FilterView,
+  ExpandableSelect,
   filterTemplate
 ) {
   'use strict';
@@ -17,55 +17,63 @@ define([
 
     template: filterTemplate,
 
-    events: _.extend({}, FilterView.prototype.events, {
-      'change #-from': function(e)
-      {
-        var $to = this.$id('to');
+    events: _.assign({
 
-        if ($to.attr('data-changed') !== 'true')
-        {
-          $to.val(e.target.value);
-        }
-      },
-      'change #-to': function(e)
+      'click #-ownMrps': function()
       {
-        e.target.setAttribute('data-changed', 'true');
+        this.$id('mrp').select2('data', this.model.mrps.map(function(mrp)
+        {
+          return {
+            id: mrp,
+            text: mrp
+          };
+        }));
+
+        return false;
       }
-    }),
+
+    }, FilterView.prototype.events),
 
     defaultFormData: {
+      status: [],
       _id: '',
-      nc12: '',
-      date: 'finishDate',
-      from: '',
-      to: '',
       mrp: ''
     },
 
     termToForm: {
-      'startDate': function(propertyName, term, formData)
-      {
-        formData.date = propertyName;
-
-        fixTimeRange.toFormData(formData, term, 'date');
-      },
       '_id': function(propertyName, term, formData)
       {
-        var value = term.args[1];
-
-        formData[propertyName] = typeof value === 'string' ? value.replace(/[^0-9]/g, '') : '-';
+        formData[propertyName] = term.args[1];
       },
       'mrp': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1].join(',');
       },
-      'nc12': '_id',
-      'finishDate': 'startDate'
+      'status': function(propertyName, term, formData)
+      {
+        formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
+      }
+    },
+
+    destroy: function()
+    {
+      FilterView.prototype.destroy.call(this);
+
+      this.$('.is-expandable').expandableSelect('destroy');
+    },
+
+    serialize: function()
+    {
+      return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
+        mrps: this.model.mrps
+      });
     },
 
     afterRender: function()
     {
       FilterView.prototype.afterRender.call(this);
+
+      this.$('.is-expandable').expandableSelect();
 
       var $mrp = this.$id('mrp').select2({
         width: '300px',
@@ -74,7 +82,7 @@ define([
         data: [],
         formatNoMatches: null,
         minimumResultsForSearch: 1,
-        adaptDropdownCssClass: function() { return 'hidden'; },
+        dropdownCssClass: 'hidden',
         tokenizer: function(input, selection, selectCallback)
         {
           var result = input;
@@ -112,23 +120,14 @@ define([
       );
     },
 
-    serializeFormToQuery: function(selector, rqlQuery)
+    serializeFormToQuery: function(selector)
     {
-      var timeRange = fixTimeRange.fromView(this);
-      var date = this.$('input[name=date]:checked').val();
+      var _id = this.$id('_id').val();
       var mrp = this.$id('mrp').val();
 
-      this.serializeRegexTerm(selector, '_id', 9, null, false, true);
-      this.serializeRegexTerm(selector, 'nc12', 12, null, false, true);
-
-      if (timeRange.from)
+      if (_id.length)
       {
-        selector.push({name: 'ge', args: [date, timeRange.from]});
-      }
-
-      if (timeRange.to)
-      {
-        selector.push({name: 'le', args: [date, timeRange.to]});
+        selector.push({name: 'eq', args: ['_id', _id]});
       }
 
       if (mrp.length)
@@ -136,7 +135,16 @@ define([
         selector.push({name: 'in', args: ['mrp', mrp.split(',')]});
       }
 
-      rqlQuery.sort = date === 'finishDate' ? {finishDate: 1} : {startDate: 1};
+      var status = (this.$id('status').val() || []).filter(function(v) { return !_.isEmpty(v); });
+
+      if (status.length === 1)
+      {
+        selector.push({name: 'eq', args: ['status', status[0]]});
+      }
+      else if (status.length)
+      {
+        selector.push({name: 'in', args: ['status', status]});
+      }
     }
 
   });

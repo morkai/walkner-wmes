@@ -1,0 +1,161 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+'use strict';
+
+module.exports = function setUpInvalidOrdersRoutes(app, module)
+{
+  const express = app[module.config.expressId];
+  const userModule = app[module.config.userId];
+  const mongoose = app[module.config.mongooseId];
+  const Order = mongoose.model('Order');
+  const InvalidOrder = app[module.config.mongooseId].model('InvalidOrder');
+
+  const canView = userModule.auth('ORDERS:VIEW');
+  const canManage = userModule.auth('ORDERS:MANAGE');
+
+  express.get('/invalidOrders', canView, express.crud.browseRoute.bind(null, app, {
+    model: InvalidOrder,
+    prepareResult: prepareBrowseResult
+  }));
+
+  express.delete('/invalidOrders/:id', canManage, ignoreOrderRoute);
+
+  express.post('/invalidOrders;checkOrders', canView, checkOrdersRoute);
+  express.post('/invalidOrders;notifyUsers', canView, notifyUsersRoute);
+
+  function prepareBrowseResult(totalCount, invalidOrders, done)
+  {
+    if (totalCount === 0)
+    {
+      return done(null, {
+        totalCount,
+        collection: []
+      });
+    }
+
+    const map = {};
+    const conditions = {
+      _id: {$in: []}
+    };
+    const fields = {
+      nc12: 1,
+      name: 1,
+      description: 1,
+      qty: 1,
+      'qtyDone.total': 1,
+      startDate: 1
+    };
+
+    invalidOrders.forEach(o =>
+    {
+      conditions._id.$in.push(o._id);
+
+      map[o._id] = o;
+    });
+
+    Order.find(conditions, fields).lean().exec((err, orders) =>
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      orders.forEach(o => map[o._id].order = o);
+
+      done(null, {
+        totalCount,
+        collection: invalidOrders
+      });
+    });
+  }
+
+  function ignoreOrderRoute(req, res, next)
+  {
+    InvalidOrder.findById(req.params.id, function(err, invalidOrder)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (!invalidOrder)
+      {
+        return next(app.createError('NOT_FOUND', 404));
+      }
+
+      invalidOrder.status = invalidOrder.status === 'ignored' ? 'invalid' : 'ignored';
+      invalidOrder.updatedAt = new Date();
+      invalidOrder.updater = userModule.createUserInfo(req.session.user, req);
+
+      invalidOrder.save(function(err)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.sendStatus(204);
+
+        app.broker.publish('orders.invalid.ignored', {
+          model: invalidOrder,
+          user: invalidOrder.updater
+        });
+      });
+    });
+  }
+
+  function checkOrdersRoute(req, res, next)
+  {
+    if (!app[module.config.iptCheckerClientId])
+    {
+      return next(app.createError('UNAVAILABLE'));
+    }
+
+    const reqData = {
+      responseTimeout: 120 * 1000
+    };
+
+    app[module.config.iptCheckerClientId].request('orders/iptChecker/checkOrders', reqData, function(err)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      res.sendStatus(204);
+    });
+  }
+
+  function notifyUsersRoute(req, res, next)
+  {
+    if (!app[module.config.iptCheckerClientId])
+    {
+      return next(app.createError('UNAVAILABLE'));
+    }
+
+    if (!Array.isArray(req.body.orders))
+    {
+      return next(app.createError('INPUT', 400));
+    }
+
+    const reqData = {
+      responseTimeout: 10000,
+      orders: req.body.orders.filter(o => /^[0-9]+$/.test(o))
+    };
+
+    if (!reqData.orders.length)
+    {
+      return next(app.createError('INPUT', 400));
+    }
+
+    app[module.config.iptCheckerClientId].request('orders/iptChecker/notifyUsers', reqData, function(err)
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      res.sendStatus(204);
+    });
+  }
+};

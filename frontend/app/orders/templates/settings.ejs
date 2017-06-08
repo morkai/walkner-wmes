@@ -2,6 +2,7 @@
   <div class="list-group">
     <a class="list-group-item" href="#orders;settings?tab=operations" data-tab="operations"><%- t('orders', 'settings:tab:operations') %></a>
     <a class="list-group-item" href="#orders;settings?tab=documents" data-tab="documents"><%- t('orders', 'settings:tab:documents') %></a>
+    <a class="list-group-item" href="#orders;settings?tab=iptChecker" data-tab="iptChecker"><%- t('orders', 'settings:tab:iptChecker') %></a>
   </div>
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="operations">
@@ -34,6 +35,16 @@
       <div class="form-group">
         <label for="<%- idPrefix %>-documents-extra"><%- t('orders', 'settings:documents:extra') %></label>
         <textarea id="<%- idPrefix %>-documents-extra" class="form-control text-mono" name="orders.documents.extra" rows="20" data-keyup-delay="10000" data-change-delay="0"></textarea>
+      </div>
+    </div>
+    <div class="panel-body" data-tab="iptChecker">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-iptChecker-toBusinessDays"><%- t('orders', 'settings:iptChecker:toBusinessDays') %></label>
+        <input id="<%- idPrefix %>-iptChecker-toBusinessDays" class="form-control" name="orders.iptChecker.toBusinessDays" type="number" min="1" max="9">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-iptChecker-mrps"><%- t('orders', 'settings:iptChecker:mrps') %></label>
+        <input id="<%- idPrefix %>-iptChecker-mrps" name="orders.iptChecker.mrps" type="text" data-setting>
       </div>
     </div>
   </div>

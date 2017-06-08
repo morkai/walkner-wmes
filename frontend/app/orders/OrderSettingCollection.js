@@ -52,6 +52,21 @@ define([
       {
         return this.prepareOperationTimeCoeffs(newValue);
       }
+
+      if (/toBusinessDays$/.test(id))
+      {
+        return this.prepareNumericValue(newValue, 1, 9);
+      }
+
+      if (/mrps$/.test(id))
+      {
+        if (!Array.isArray(newValue))
+        {
+          newValue = String(newValue).split(',');
+        }
+
+        return newValue.filter(function(mrp) { return mrp.length; });
+      }
     },
 
     prepareExtraDocumentsValue: function(rawValue)

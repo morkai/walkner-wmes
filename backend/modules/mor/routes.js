@@ -34,9 +34,40 @@ module.exports = function setUpMorRoutes(app, module)
 
   express.put('/mor/settings/:id', canManage, settingsModule.updateRoute);
 
+  express.get('/mor/iptCheck', canView, iptCheckRoute);
+
   function getStateRoute(req, res)
   {
     res.json(module.state);
+  }
+
+  function iptCheckRoute(req, res)
+  {
+    const result = {
+      mrpToRecipients: {}
+    };
+
+    module.state.sections.forEach(section =>
+    {
+      section.mrps.forEach(mrp =>
+      {
+        if (!mrp.iptCheckRecipients.length)
+        {
+          return;
+        }
+
+        if (result.mrpToRecipients[mrp._id])
+        {
+          result.mrpToRecipients[mrp._id] = result.mrpToRecipients[mrp._id].concat(mrp.iptCheckRecipients);
+        }
+        else
+        {
+          result.mrpToRecipients[mrp._id] = mrp.iptCheckRecipients;
+        }
+      });
+    });
+
+    res.json(result);
   }
 
   function updateStateRoute(req, res, next)

@@ -242,7 +242,7 @@ exports.start = function startMessengerClientModule(app, module, done)
 
     socket.send(type, data, reply);
 
-    timer = app.timeout(module.config.responseTimeout, function()
+    timer = app.timeout(data && data.responseTimeout || module.config.responseTimeout, function()
     {
       timer = null;
 

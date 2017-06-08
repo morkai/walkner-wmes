@@ -1,0 +1,56 @@
+{
+  "root": {
+    "BREADCRUMBS:browse": "Invalid orders",
+
+    "MSG:LOADING_FAILURE": "Failed to load the invalid orders :(",
+
+    "PAGE_ACTION:check": "Check orders",
+    "PAGE_ACTION:notify": "Notify responsible persons",
+    "PAGE_ACTION:settings": "Settings",
+
+    "ACTION_FORM:DIALOG_TITLE:ignore": "Ignoring order",
+    "ACTION_FORM:MESSAGE_SPECIFIC:ignore": "Are you sure you want to ignore the {label} order?",
+    "ACTION_FORM:BUTTON:ignore": "Ignore order",
+    "ACTION_FORM:MESSAGE_FAILURE:ignore": "Failed to ignore the order :(",
+
+    "ACTION_FORM:DIALOG_TITLE:notify": "Notifying responsible persons",
+    "ACTION_FORM:MESSAGE_SPECIFIC:notify": "Are you sure you want to send notifications about the following orders: {orders}?",
+    "ACTION_FORM:BUTTON:notify": "Send notifications",
+    "ACTION_FORM:MESSAGE_FAILURE:notify": "Failed to send notifications :(",
+
+    "ACTION_FORM:DIALOG_TITLE:check": "Checking orders",
+    "ACTION_FORM:MESSAGE_SPECIFIC:check": "Are you sure you want to re-check all orders?",
+    "ACTION_FORM:BUTTON:check": "Check orders",
+    "ACTION_FORM:MESSAGE_FAILURE:check": "Failed to check orders :(",
+
+    "PROPERTY:orderNo": "Order no",
+    "PROPERTY:productName": "Product name",
+    "PROPERTY:nc12": "12NC",
+    "PROPERTY:mrp": "MRP",
+    "PROPERTY:qty": "Quantity",
+    "PROPERTY:startDate": "Start date",
+    "PROPERTY:status": "Status",
+    "PROPERTY:problem": "Problem",
+    "PROPERTY:solution": "Solution",
+    "PROPERTY:iptStatus": "IPT status",
+    "PROPERTY:iptComment": "IPT comment",
+
+    "status:invalid": "Invalid",
+    "status:ignored": "Ignored",
+    "status:resolved": "Resolved",
+
+    "problem:MISSING": "No order in the IPT database.",
+    "problem:EMPTY": "The IPT order has no operations.",
+
+    "solution:DONE": "Required quantity done.",
+    "solution:STATUS": "Changed status to CNF or DLV.",
+    "solution:OPERATIONS": "Operations showed up.",
+
+    "filter:ownMrps": "mine",
+    "filter:submit": "Filter orders",
+
+    "LIST:ACTION:select": "Mark for notification",
+    "LIST:ACTION:ignore": "Ignore"
+  },
+  "pl": true
+}

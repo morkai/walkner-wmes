@@ -250,6 +250,16 @@ define([
       this.refreshCollection(model);
     },
 
+    $row: function(rowId)
+    {
+      return this.$('tr[data-id="' + rowId + '"]');
+    },
+
+    $cell: function(rowId, columnId)
+    {
+      return this.$('tr[data-id="' + rowId + '"] > td[data-id="' + columnId + '"]');
+    },
+
     refreshCollection: function(message)
     {
       if (message && this.timers.refreshCollection)
