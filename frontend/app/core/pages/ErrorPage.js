@@ -72,6 +72,11 @@ define([
       page.view = new View({
         template: function()
         {
+          if (code === 403 && !user.isLoggedIn())
+          {
+            code += ':guest';
+          }
+
           return template({
             idPrefix: page.idPrefix,
             message: t('core', 'ERROR:' + code + ':message'),

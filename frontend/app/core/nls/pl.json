@@ -34,6 +34,7 @@
   "ERROR:401:message": "Żądanie wymaga uwierzytelnienia. <a href='#login'>Kliknij tutaj, aby przejść do formularza logowania</a>.",
   "ERROR:403:title": "Błąd 403: zabroniony",
   "ERROR:403:message": "Nie masz uprawnień do wykonania żądanej akcji.",
+  "ERROR:403:guest:message": "Nie masz uprawnień do wykonania żądanej akcji. <a href='#login'>Kliknij tutaj, aby przejść do formularza logowania</a>.",
   "ERROR:404:title": "Błąd 404: nie znaleziono",
   "ERROR:404:message": "Wybrana strona nigdy nie istniała lub została usunięta.",
   "ERROR:500:title": "Błąd 500: wewnętrzny błąd serwera",
