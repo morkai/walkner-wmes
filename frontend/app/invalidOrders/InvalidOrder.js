@@ -43,7 +43,7 @@ define([
         o.productName = resolveProductName(o.order);
         o.qty = (o.order.qtyDone.total ? o.order.qtyDone.total : '0') + '/' + o.order.qty;
 
-        var startMoment = time.getMoment(o.startDate);
+        var startMoment = time.getMoment(o.order.startDate);
         var startDiff = startMoment.diff(Date.now(), 'hours');
 
         o.startDate = startMoment.format('L');
