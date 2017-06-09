@@ -75,12 +75,9 @@ exports.start = function startReportsServerModule(app, module)
       {
         module.error("Failed to generate report [%s] in %d ms: %s", req._id, duration, err.stack);
       }
-      else if (duration > 60000)
+      else if (duration > 30000)
       {
-        var options = _.pick(req.options, function(value)
-        {
-          return !_.isObject(value);
-        });
+        var options = _.pickBy(req.options, value => !_.isObject(value));
 
         module.debug(
           "Generated report [%s] using data from %d days in %ss: %s",
