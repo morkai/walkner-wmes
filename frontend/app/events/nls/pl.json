@@ -402,5 +402,9 @@
   "TYPE:orderDocuments.tree.filePurged": "Dokumentacja > Pliki: usunięcie",
   "TEXT:orderDocuments.tree.filePurged": "Usunięto dokument: <em>{file->_id}: {file->name}</em>",
   "TYPE:orderDocuments.tree.folderPurged": "Dokumentacja > Katalogi: usunięcie",
-  "TEXT:orderDocuments.tree.folderPurged": "Usunięto katalog dokumentów: <em>{folder->name}</em>"
+  "TEXT:orderDocuments.tree.folderPurged": "Usunięto katalog dokumentów: <em>{folder->name}</em>",
+  "TYPE:behaviorObsCards.deleted": "Obserwacje: usunięcie",
+  "TEXT:behaviorObsCards.deleted": "Usunięto obserwację: <em>{model->rid}</em>",
+  "TYPE:minutesForSafety.deleted": "Minuty dla bezpieczeństwa: usunięcie",
+  "TEXT:minutesForSafety.deleted": "Usunięto minuty dla bezpieczeństwa: <em>{model->rid}</em>"
 }

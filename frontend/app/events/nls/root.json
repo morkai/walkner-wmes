@@ -403,7 +403,11 @@
     "TYPE:orderDocuments.tree.filePurged": "Documentation > Files: deleted",
     "TEXT:orderDocuments.tree.filePurged": "Deleted documentation file: <em>{file->_id}: {file->name}</em>",
     "TYPE:orderDocuments.tree.folderPurged": "Documentation > Folders: deleted",
-    "TEXT:orderDocuments.tree.folderPurged": "Deleted documentation folder: <em>{folder->name}</em>"
+    "TEXT:orderDocuments.tree.folderPurged": "Deleted documentation folder: <em>{folder->name}</em>",
+    "TYPE:behaviorObsCards.deleted": "Observations: deleted",
+    "TEXT:behaviorObsCards.deleted": "Deleted observation: <em>{model->rid}</em>",
+    "TYPE:minutesForSafety.deleted": "Minutes for safety: deleted",
+    "TEXT:minutesForSafety.deleted": "Deleted minutes for safety: <em>{model->rid}</em>"
   },
   "pl": true
 }
