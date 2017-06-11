@@ -1,4 +1,4 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 'use strict';
 
@@ -56,6 +56,7 @@ module.exports = function setupProdSerialNumberModel(app, mongoose)
   prodSerialNumberSchema.index({orderNo: 1});
   prodSerialNumberSchema.index({prodShiftOrder: 1, scannedAt: -1});
   prodSerialNumberSchema.index({prodLine: 1, scannedAt: -1});
+  prodSerialNumberSchema.index({scannedAt: -1});
 
   prodSerialNumberSchema.post('save', function(doc)
   {
