@@ -1,3 +1,3 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["app/time"],function(t){"use strict";return function(a,r){var d=(a||"").toString().match(/([0-9]+)(?:-([0-9]+))?d/);if(!d)return null;var e=parseInt(d[1],10),n=parseInt(d[2],10)||0,s=t.getMoment(),o=s.hours();s.startOf("day"),r&&6>o&&s.subtract(1,"days");var u=s.clone();return 0===n?(s.add(e,"days"),u.add(e+1,"days")):(s.add(e,"days"),u.add(n,"days")),{from:s.toDate(),to:u.toDate()}}});
+define(["app/time"],function(t){"use strict";return function(a,r){var d=(a||"").toString().match(/([0-9]+)(?:-([0-9]+))?d/);if(!d)return null;var e=parseInt(d[1],10),n=parseInt(d[2],10)||0,s=t.getMoment(),o=s.hours();s.startOf("day"),r&&o<6&&s.subtract(1,"days");var u=s.clone();return 0===n?(s.add(e,"days"),u.add(e+1,"days")):(s.add(e,"days"),u.add(n,"days")),{from:s.toDate(),to:u.toDate()}}});

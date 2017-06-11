@@ -155,6 +155,10 @@ app/icpo/assets/main.css
 ----------------
 app/icpo/assets/main.css
 
+app/invalidOrders/assets/main.css
+----------------
+app/invalidOrders/assets/main.css
+
 app/isa/assets/main.css
 ----------------
 app/isa/assets/main.css
@@ -583,6 +587,7 @@ assets/../app/orderStatuses/assets/main.css
 assets/../app/users/assets/main.css
 assets/../app/prodTasks/assets/main.css
 assets/../app/emptyOrders/assets/main.css
+assets/../app/invalidOrders/assets/main.css
 assets/../app/fte/assets/main.css
 assets/../app/hourlyPlans/assets/main.css
 assets/../app/divisions/assets/main.css
@@ -873,6 +878,7 @@ app/lossReasons/LossReason.js
 app/lossReasons/routes.js
 app/events/routes.js
 app/emptyOrders/routes.js
+app/invalidOrders/routes.js
 app/core/util/getShiftEndDate.js
 app/fte/util/isEditable.js
 app/fte/FteMasterEntry.js
@@ -1003,6 +1009,8 @@ app/production/templates/quantityEditor.js
 app/production/views/QuantityEditorView.js
 app/production/templates/quantities.js
 app/production/views/ProductionQuantitiesView.js
+app/production/templates/isaPalletDeliveryDialog.js
+app/production/views/IsaPalletDeliveryDialogView.js
 app/production/templates/isa.js
 app/production/templates/isaCancelDialog.js
 app/production/views/IsaView.js
@@ -1482,6 +1490,8 @@ app/production/templates/quantityEditor.js
 app/production/views/QuantityEditorView.js
 app/production/templates/quantities.js
 app/production/views/ProductionQuantitiesView.js
+app/production/templates/isaPalletDeliveryDialog.js
+app/production/views/IsaPalletDeliveryDialogView.js
 app/production/templates/isa.js
 app/production/templates/isaCancelDialog.js
 app/production/views/IsaView.js
