@@ -57,9 +57,7 @@ module.exports = function setUpOrderDocumentsConverter(app, module)
         this.targetDirPath = path.join(module.config.uploadedPath, todo.nc15, todo._id);
         this.targetPdfPath = path.join(this.targetDirPath, `${todo.nc15}.pdf`);
 
-        const next = this.next();
-
-        fs.exists(this.sourcePdfPath, exists => next(null, exists));
+        fs.pathExists(this.sourcePdfPath, this.next());
       },
       function ensureDirStep(err, sourcePdfExists)
       {

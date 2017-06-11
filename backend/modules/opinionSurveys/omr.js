@@ -350,7 +350,7 @@ module.exports = function setUpOmr(app, module)
       },
       function moveInputFileStep()
       {
-        fs.move(inputFilePath, processingFilePath, {clobber: true}, this.next());
+        fs.move(inputFilePath, processingFilePath, {overwrite: true}, this.next());
       },
       function handleMoveInputFileResultStep(err)
       {
@@ -929,7 +929,7 @@ module.exports = function setUpOmr(app, module)
             : path.join(processingDirPath, result.inputFileName);
           var toInputFilePath = path.join(module.config.responsesPath, result._id + '.jpg');
 
-          fs.move(fromInputFilePath, toInputFilePath, {clobber: true}, this.group());
+          fs.move(fromInputFilePath, toInputFilePath, {overwrite: true}, this.group());
 
           if (!result.errorCode)
           {

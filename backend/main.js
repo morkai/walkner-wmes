@@ -1,8 +1,10 @@
 // Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
+/* eslint-disable no-process-exit */
+
 'use strict';
 
-var startTime = Date.now();
+const startTime = Date.now();
 
 if (!process.env.NODE_ENV)
 {
@@ -11,16 +13,16 @@ if (!process.env.NODE_ENV)
 
 require('./extensions');
 
-var requireCache = require('./requireCache');
-var _ = require('lodash');
-var moment = require('moment');
-var main = require('h5.main');
-var blocked = process.env.NODE_ENV === 'development' ? require('blocked') : function() {};
-var config = require(process.argv[2]);
+const requireCache = require('./requireCache');
+const _ = require('lodash');
+const moment = require('moment');
+const main = require('h5.main');
+const blocked = process.env.NODE_ENV === 'development' ? require('blocked') : function() {};
+const config = require(process.argv[2]);
 
 moment.locale('pl');
 
-var modules = (config.modules || []).map(function(module)
+const modules = (config.modules || []).map(function(module)
 {
   if (typeof module === 'string')
   {
@@ -29,13 +31,13 @@ var modules = (config.modules || []).map(function(module)
 
   if (typeof module !== 'object' || module === null)
   {
-    console.error("Invalid module:", module);
+    console.error('Invalid module:', module);
     process.exit(1);
   }
 
   if (typeof module.id !== 'string')
   {
-    console.error("Module ID is required:", module);
+    console.error('Module ID is required:', module);
     process.exit(1);
   }
 
@@ -54,7 +56,7 @@ var modules = (config.modules || []).map(function(module)
   return module;
 });
 
-var app = {
+const app = {
   options: _.assign({}, config, {
     id: config.id,
     startTime: startTime,
@@ -68,7 +70,7 @@ _.assign(app, require('./helpers'));
 
 blocked(function(ms)
 {
-  app.debug("Event loop blocked for %sms :(", ms);
+  app.debug('Event loop blocked for %sms :(', ms);
 });
 
 main(app, modules);

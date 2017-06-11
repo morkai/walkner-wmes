@@ -58,7 +58,7 @@ module.exports = function setUpCagsRoutes(app, module)
     var oldPath = planFile.path;
     var newPath = path.join(module.config.planUploadPath, 'CAGS_PLAN_' + Date.now() + '.csv');
 
-    fs.move(oldPath, newPath, {clobber: true}, function(err)
+    fs.move(oldPath, newPath, {overwrite: true}, function(err)
     {
       fs.unlink(oldPath, _.noop);
 

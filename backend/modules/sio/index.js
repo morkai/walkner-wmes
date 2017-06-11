@@ -8,11 +8,8 @@ var SocketIoMultiServer = require('./SocketIoMultiServer');
 var setUpRoutes = require('./routes');
 var pmx = null;
 
-try
-{
-  pmx = require('pmx');
-}
-catch (err) {}
+try { pmx = require('pmx'); }
+catch (err) {} // eslint-disable-line no-empty
 
 exports.DEFAULT_CONFIG = {
   httpServerIds: ['httpServer'],
@@ -31,7 +28,7 @@ exports.start = function startSioModule(app, sioModule)
   sioModule.config.socketIo = _.assign({}, sioModule.config.socketIo, {
     path: sioModule.config.path,
     transports: ['websocket', 'xhr-polling'],
-    serveClient: true
+    serveClient: false
   });
 
   var socketCount = 0;
@@ -98,7 +95,7 @@ exports.start = function startSioModule(app, sioModule)
         socket: {
           _id: socket.id,
           headers: socket.handshake.headers || {},
-          user: socket.handshake.user || {},
+          user: socket.handshake.user || {}
         },
         socketCount: socketCount
       });
@@ -134,5 +131,4 @@ exports.start = function startSioModule(app, sioModule)
       });
     });
   }
-
 };

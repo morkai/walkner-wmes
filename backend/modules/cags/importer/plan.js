@@ -222,7 +222,6 @@ exports.start = function startCagPlanImporterModule(app, module)
 
   function parseInputCsv(inputFilePath, cags, done)
   {
-    var complete = _.once(done);
     var cagPlans = [];
     var columns = {
       cagId: -1,
@@ -232,73 +231,92 @@ exports.start = function startCagPlanImporterModule(app, module)
     };
     var processedCount = 0;
     var invalidCount = 0;
-    var parser = csv().from.path(inputFilePath, {delimiter: ';'});
 
-    parser.once('error', complete);
-
-    parser.once('end', function()
-    {
-      complete(null, cagPlans);
-    });
-
-    parser.on('record', function(row)
-    {
-      if (invalidCount > 10)
+    step(
+      function()
       {
-        return;
-      }
-
-      ++processedCount;
-
-      if (columns.cagId === -1)
+        fs.readFile(inputFilePath, 'utf8', this.next());
+      },
+      function(err, data)
       {
-        if (processedCount <= 10)
+        if (err)
         {
-          findColumns(row, columns);
+          return this.skip(err);
         }
 
-        return;
-      }
-
-      var cagId = row[columns.cagId];
-
-      if (cagId.length !== 6)
+        csv.parse(data, {delimiter: ';'}, this.next());
+      },
+      function(err, rows)
       {
-        return ++invalidCount;
-      }
-
-      var cagName = row[columns.cagName];
-
-      if (!_.isEmpty(cagName))
-      {
-        cags[cagId] = cagName;
-      }
-
-      var offset = row[columns.offset];
-
-      if (offset !== '11')
-      {
-        return;
-      }
-
-      _.forEach(columns.months, function(month)
-      {
-        var value = parseInt((row[month.index] || '0').replace(/[^0-9]/g, ''), 10);
-
-        if (value > 0)
+        if (err)
         {
-          cagPlans.push({
-            _id: {
-              cag: cagId,
-              month: month.date
-            },
-            value: value
+          return this.skip(err);
+        }
+
+        rows.forEach(function(row)
+        {
+          if (invalidCount > 10)
+          {
+            return;
+          }
+
+          ++processedCount;
+
+          if (columns.cagId === -1)
+          {
+            if (processedCount <= 10)
+            {
+              findColumns(row, columns);
+            }
+
+            return;
+          }
+
+          var cagId = row[columns.cagId];
+
+          if (cagId.length !== 6)
+          {
+            return ++invalidCount;
+          }
+
+          var cagName = row[columns.cagName];
+
+          if (!_.isEmpty(cagName))
+          {
+            cags[cagId] = cagName;
+          }
+
+          var offset = row[columns.offset];
+
+          if (offset !== '11')
+          {
+            return;
+          }
+
+          _.forEach(columns.months, function(month)
+          {
+            var value = parseInt((row[month.index] || '0').replace(/[^0-9]/g, ''), 10);
+
+            if (value > 0)
+            {
+              cagPlans.push({
+                _id: {
+                  cag: cagId,
+                  month: month.date
+                },
+                value: value
+              });
+            }
           });
-        }
-      });
 
-      invalidCount = 0;
-    });
+          invalidCount = 0;
+        });
+      },
+      function(err)
+      {
+        done(err, cagPlans);
+      }
+    );
   }
 
   function findColumns(row, columns)

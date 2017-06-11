@@ -4,7 +4,7 @@
 
 var _ = require('lodash');
 var step = require('h5.step');
-var uuid = require('node-uuid');
+var uuid = require('uuid/v4');
 
 module.exports = function setUpIsaLineState(app, isaModule)
 {
@@ -192,7 +192,7 @@ module.exports = function setUpIsaLineState(app, isaModule)
   function createRequest(prodLineId, type, requester, data, done)
   {
     const request = new IsaRequest({
-      _id: uuid.v4().toUpperCase(),
+      _id: uuid.toUpperCase(),
       orgUnits: orgUnitsModule.getAllForProdLineAsList(prodLineId),
       type: type,
       data: data,

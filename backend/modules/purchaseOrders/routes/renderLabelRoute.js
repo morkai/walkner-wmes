@@ -41,13 +41,13 @@ module.exports = function renderLabelRoute(app, poModule, req, res, next)
   step(
     function checkStorageStep()
     {
-      fs.exists(pdfPath, this.next());
+      fs.pathExists(pdfPath, this.next());
     },
-    function findPoPrintStep(exists)
+    function findPoPrintStep(err, exists)
     {
       if (exists)
       {
-        return this.skip(null);
+        return this.skip();
       }
 
       var conditions = {};

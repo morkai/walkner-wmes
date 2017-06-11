@@ -88,7 +88,6 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
         this.fileInfo = fileInfo;
       },
       readArchiveFileStep,
-      openArchiveStep,
       validateLicenseStep,
       parseModelsStep,
       updateModelsStep,
@@ -128,16 +127,21 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
     );
   }
 
-  function readArchiveFileStep()
+  async function readArchiveFileStep()
   {
     /*jshint validthis:true*/
 
     icpoModule.debug("Reading the archive...");
 
-    fs.readFile(this.fileInfo.filePath, this.next());
+    const buf = fs.readFile(this.fileInfo.filePath);
+    const zip = await new JSZip().loadAsync(buf);
+
+    this.meta = JSON.parse(await zip.file('meta.json').async('string'));
+    this.results = JSON.parse(await zip.file('results.json').async('string'));
+    this.files = zip.file(/^files\//);
   }
 
-  function openArchiveStep(err, buf)
+  function validateLicenseStep(err)
   {
     /*jshint validthis:true*/
 
@@ -146,39 +150,10 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
       return this.skip(err);
     }
 
-    var zip = new JSZip(buf);
-
-    this.metaFile = zip.file('meta.json');
-
-    if (!this.metaFile)
-    {
-      return this.skip(new Error('MISSING_META_FILE'));
-    }
-
-    this.resultsFile = zip.file('results.json');
-
-    if (!this.resultsFile)
-    {
-      return this.skip(new Error('MISSING_RESULTS_FILE'));
-    }
-
-    this.files = zip.file(/^files\//);
-  }
-
-  function validateLicenseStep()
-  {
-    /*jshint validthis:true*/
-
     icpoModule.debug("Validating the meta file...");
 
-    try
+    if (!_.isPlainObject(this.meta))
     {
-      this.meta = JSON.parse(this.metaFile.asText());
-    }
-    catch (err)
-    {
-      icpoModule.debug("Failed to parse the meta JSON: %s", err.message);
-
       return this.skip(new Error('INVALID_META_FILE'));
     }
 
@@ -210,15 +185,6 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
     /*jshint validthis:true*/
 
     icpoModule.debug("Parsing the models...");
-
-    try
-    {
-      this.results = JSON.parse(this.resultsFile.asText());
-    }
-    catch (err)
-    {
-      icpoModule.debug("Failed to parse results file: %s", err.message);
-    }
 
     this.results = Array.isArray(this.results)
       ? this.results.map(prepareResult.bind(null, this.fileInfo, this.meta))
@@ -299,19 +265,19 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
     _.forEach(this.files, function(file)
     {
-      steps.push(function()
+      steps.push(async function()
       {
-        var contents = file.asText();
-        var fileHash = file.name.substr('files/'.length);
-        var filePath = path.join(icpoModule.config.fileStoragePath, fileHash);
+        const contents = await file.async('string');
+        const fileHash = file.name.substr('files/'.length);
+        const filePath = path.join(icpoModule.config.fileStoragePath, fileHash);
 
         fs.writeFile(filePath, contents, {flag: 'wx'}, this.next());
       });
     });
 
-    var next = this.next();
+    const next = this.next();
 
-    steps.push(function() { next(); });
+    steps.push(() => next());
 
     step(steps);
   }
@@ -320,7 +286,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
   {
     if (hadError)
     {
-      fs.move(filePath, filePath + '.bad', {clobber: true}, function(err)
+      fs.move(filePath, filePath + '.bad', {overwrite: true}, function(err)
       {
         if (err)
         {

@@ -3,7 +3,7 @@
 'use strict';
 
 var _ = require('lodash');
-var uuid = require('node-uuid');
+var uuid = require('uuid/v4');
 var moment = require('moment');
 
 module.exports = function setUpLicensesRoutes(app, licensesModule)
@@ -141,7 +141,7 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
   {
     if (_.isEmpty(req.body._id))
     {
-      req.body._id = uuid.v4().toUpperCase();
+      req.body._id = uuid.toUpperCase();
     }
 
     prepareLicenseDate(req.body);

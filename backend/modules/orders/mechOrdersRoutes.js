@@ -7,6 +7,7 @@ var fs = require('fs');
 var _ = require('lodash');
 var multer = require('multer');
 var csv = require('csv');
+var step = require('h5.step');
 
 module.exports = function setUpMechOrdersRoutes(app, ordersModule)
 {
@@ -68,61 +69,82 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
     var mechOrders = {};
     var nc12Queue = [];
 
-    csv()
-      .from.stream(fs.createReadStream(mechOrdersFile.path), {delimiter: ';'})
-      .on('record', function(row)
+    step(
+      function()
       {
-        if (row.length < 12 || !/^[0-9]{12}$/.test(row[0]))
+        fs.readFile(mechOrdersFile.path, 'utf8', this.next());
+      },
+      function(err, data)
+      {
+        if (err)
         {
-          return;
+          return this.skip(err);
         }
 
-        var nc12 = row[0];
-
-        if (typeof mechOrders[nc12] === 'undefined')
+        csv.parse(data, {delimiter: ';'}, this.next());
+      },
+      function(err, rows)
+      {
+        if (err)
         {
-          nc12Queue.push(nc12);
-
-          var mrp = row[11].trim();
-
-          if (mrp.length === 0 || mrp.toUpperCase() === 'BRAK')
-          {
-            mrp = null;
-          }
-
-          mechOrders[nc12] = {
-            _id: row[0],
-            name: row[1],
-            mrp: mrp,
-            materialNorm: parseTime(row[10]),
-            operations: [],
-            importTs: importTs
-          };
+          return this.skip(err);
         }
 
-        mechOrders[nc12].operations.push({
-          no: row[2],
-          workCenter: row[3],
-          name: row[4],
-          machineSetupTime: parseTime(row[6]),
-          laborSetupTime: parseTime(row[7]),
-          machineTime: parseTime(row[8]),
-          laborTime: parseTime(row[9])
-        });
-      })
-      .on('end', function()
+        rows.forEach(addMechOrder);
+
+        setImmediate(this.next());
+      },
+      function(err)
       {
-        removeFile(req);
+        if (err)
+        {
+          return next(err);
+        }
+
         upsertNextMechOrder();
-      })
-      .on('error', function(err)
+      }
+    );
+
+    function addMechOrder(row)
+    {
+      if (row.length < 12 || !/^[0-9]{12}$/.test(row[0]))
       {
-        importing = null;
+        return;
+      }
 
-        ordersModule.debug("Failed parsing the CSV file: %s", err.message);
+      var nc12 = row[0];
 
-        next(err);
+      if (typeof mechOrders[nc12] === 'undefined')
+      {
+        nc12Queue.push(nc12);
+
+        var mrp = row[11].trim();
+
+        if (mrp.length === 0 || mrp.toUpperCase() === 'BRAK')
+        {
+          mrp = null;
+        }
+
+        mechOrders[nc12] = {
+          _id: row[0],
+          name: row[1],
+          mrp: mrp,
+          materialNorm: parseTime(row[10]),
+          operations: [],
+          importTs: importTs
+        };
+      }
+
+      mechOrders[nc12].operations.push({
+        no: row[2],
+        workCenter: row[3],
+        name: row[4],
+        machineSetupTime: parseTime(row[6]),
+        laborSetupTime: parseTime(row[7]),
+        machineTime: parseTime(row[8]),
+        laborTime: parseTime(row[9])
       });
+    }
 
     function upsertNextMechOrder()
     {

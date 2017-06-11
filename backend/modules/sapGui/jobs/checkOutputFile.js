@@ -3,7 +3,7 @@
 'use strict';
 
 var path = require('path');
-var fs = require('fs');
+var fs = require('fs-extra');
 
 module.exports = function checkOutputFile(done, err, exitCode, output)
 {
@@ -35,7 +35,7 @@ module.exports = function checkOutputFile(done, err, exitCode, output)
     return done(new Error('NO_OUTPUT_FILE_PATH'), null, output);
   }
 
-  fs.exists(path.join(outputPath, outputFile), function(exists)
+  fs.pathExists(path.join(outputPath, outputFile), function(err, exists)
   {
     done(exists ? null : new Error('MISSING_OUTPUT_FILE'), exitCode, output);
   });

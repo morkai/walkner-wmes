@@ -4,8 +4,8 @@
 
 var url = require('url');
 var _ = require('lodash');
-var uuid = require('node-uuid');
-var twilio = require('twilio');
+var uuid = require('uuid/v4');
+var Twilio = require('twilio');
 var setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
@@ -23,7 +23,7 @@ exports.start = function startTwilioModule(app, twilioModule)
 {
   var config = twilioModule.config;
   var request = _.isEmpty(config.remoteUrl) || _.isEmpty(config.secretKey) ? null : require('request');
-  var client = config.accountSid && config.authToken ? twilio(config.accountSid, config.authToken) : null;
+  var client = config.accountSid && config.authToken ? new Twilio(config.accountSid, config.authToken) : null;
 
   app.onModuleReady(
     [
@@ -93,7 +93,7 @@ exports.start = function startTwilioModule(app, twilioModule)
 
     var TwilioRequest = mongoose.model('TwilioRequest');
     var twilioRequest = new TwilioRequest({
-      _id: uuid.v4().toUpperCase(),
+      _id: uuid.toUpperCase(),
       operation: 'say',
       options: sayOptions,
       status: 'created',
@@ -119,7 +119,7 @@ exports.start = function startTwilioModule(app, twilioModule)
         makeCallOptions.statusCallback = makeCallOptions.url;
       }
 
-      client.makeCall(makeCallOptions, done);
+      client.calls.create(makeCallOptions, done);
     });
   }
 };

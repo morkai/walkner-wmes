@@ -2,15 +2,15 @@
 
 'use strict';
 
-var _ = require('lodash');
-var twilio = require('twilio');
+const _ = require('lodash');
+const Twilio = require('twilio');
 
 module.exports = function setUpTwilioRoutes(app, twilioModule)
 {
-  var express = app[twilioModule.config.expressId];
-  var mongoose = app[twilioModule.config.mongooseId];
-  var TwilioRequest = mongoose.model('TwilioRequest');
-  var TwilioResponse = mongoose.model('TwilioResponse');
+  const express = app[twilioModule.config.expressId];
+  const mongoose = app[twilioModule.config.mongooseId];
+  const TwilioRequest = mongoose.model('TwilioRequest');
+  const TwilioResponse = mongoose.model('TwilioResponse');
 
   express.options('/twilio', function(req, res)
   {
@@ -24,7 +24,7 @@ module.exports = function setUpTwilioRoutes(app, twilioModule)
     res.set('Access-Control-Allow-Origin', '*');
     res.set('Access-Control-Allow-Headers', 'Content-Type');
 
-    var body = req.body;
+    const body = req.body;
 
     if (!_.isObject(body)
       || !_.isFunction(twilioModule[body.operation])
@@ -67,7 +67,9 @@ module.exports = function setUpTwilioRoutes(app, twilioModule)
         return next(express.createHttpError('NOT_FOUND', 400));
       }
 
-      var twimlResponse = new twilio.TwimlResponse();
+      const twimlResponse = twilioRequest.operation === 'say'
+        ? new Twilio.twiml.VoiceResponse()
+        : new Twilio.twiml.MessagingResponse();
 
       twilioRequest.buildTwiml(twimlResponse);
 
@@ -86,7 +88,7 @@ module.exports = function setUpTwilioRoutes(app, twilioModule)
     });
   });
 
-  express.post('/twilio/:id', twilio.webhook(twilioModule.config.authToken), function(req, res)
+  express.post('/twilio/:id', Twilio.webhook(twilioModule.config.authToken), function(req, res)
   {
     res.sendStatus(204);
 

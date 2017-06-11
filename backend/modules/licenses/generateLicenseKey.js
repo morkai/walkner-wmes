@@ -5,7 +5,7 @@
 var _ = require('lodash');
 var moment = require('moment');
 var semver = require('semver');
-var uuid = require('node-uuid');
+var uuid = require('uuid/v4');
 
 module.exports = function generateLicenseKey(privateKey, options)
 {
@@ -63,7 +63,7 @@ module.exports = function generateLicenseKey(privateKey, options)
 
   if (id == null)
   {
-    id = uuid.v4().toUpperCase();
+    id = uuid.toUpperCase();
   }
   else if (!_.isString(id) || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id))
   {

@@ -303,7 +303,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
   {
     var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
-    fs.move(oldFilePath, newFilePath, {clobber: true}, function(err)
+    fs.move(oldFilePath, newFilePath, {overwrite: true}, function(err)
     {
       if (err)
       {

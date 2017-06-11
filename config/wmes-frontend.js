@@ -1,5 +1,7 @@
 'use strict';
 
+const DATA_PATH = __dirname + '/../data';
+
 const mongodb = require('./wmes-mongodb');
 const later = require('later');
 
@@ -8,12 +10,10 @@ later.date.localTime();
 try
 {
   require('pmx').init({
-    ignore_routes: [/socket\.io/]
+    ignore_routes: [/socket\.io/] // eslint-disable-line camelcase
   });
 }
-catch (err) {}
-
-const DATA_PATH = __dirname + '/../data';
+catch (err) {} // eslint-disable-line no-empty
 
 exports.id = 'wmes-frontend';
 
@@ -159,7 +159,7 @@ exports.events = {
     'suggestions.added', 'suggestions.edited',
     'opinionSurveys.responses.added',
     'opinionSurveys.omrResults.edited',
-    'opinionSurveys.actions.added','opinionSurveys.actions.edited',
+    'opinionSurveys.actions.added', 'opinionSurveys.actions.edited',
     'prodDowntimeAlerts.added',
     'qi.results.added', 'qi.results.edited',
     'd8.entries.added', 'd8.entries.edited',
@@ -243,7 +243,7 @@ exports.mongoose = {
     'feedback',
     'license', 'licensePing',
     'xiconfOrderResult', 'xiconfResult', 'xiconfClient', 'xiconfClientSettings',
-    'xiconfOrder','xiconfProgram', 'xiconfInvalidLed', 'xiconfHidLamp', 'xiconfComponentWeight',
+    'xiconfOrder', 'xiconfProgram', 'xiconfInvalidLed', 'xiconfHidLamp', 'xiconfComponentWeight',
     'factoryLayout',
     'whTransferOrder',
     'kaizenSection', 'kaizenArea', 'kaizenCategory', 'kaizenCause', 'kaizenRisk',
