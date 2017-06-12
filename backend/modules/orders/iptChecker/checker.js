@@ -11,6 +11,12 @@ const businessDays = require('../../reports/businessDays');
 
 module.exports = function setUpNotifier(app, module)
 {
+  const RESOLVED_STATUSES = {
+    TECO: true,
+    CNF: true,
+    DLV: true
+  };
+
   let checkInProgress = false;
   let checkCancelled = false;
   let checkCallbacks = [];
@@ -188,7 +194,7 @@ module.exports = function setUpNotifier(app, module)
           {
             this.resolvedOrders[o._id] = 'DONE';
           }
-          else if (_.includes(o.statuses, 'CNF') || _.includes(o.statuses, 'DLV'))
+          else if (o.statuses.some(s => RESOLVED_STATUSES[s]))
           {
             this.resolvedOrders[o._id] = 'STATUS';
           }
@@ -514,5 +520,10 @@ module.exports = function setUpNotifier(app, module)
 
       done();
     });
+  }
+
+  function hasResolvedStatus(o)
+  {
+    return o.statuses.some(s => s === 'TECO' || s === 'CNF' || s === 'DLV');
   }
 };

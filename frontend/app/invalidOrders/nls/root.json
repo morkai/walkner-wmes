@@ -43,7 +43,7 @@
     "problem:EMPTY": "The IPT order has no operations.",
 
     "solution:DONE": "Required quantity done.",
-    "solution:STATUS": "Changed status to CNF or DLV.",
+    "solution:STATUS": "CNF, DLV or TECO.",
     "solution:OPERATIONS": "Operations showed up.",
 
     "filter:ownMrps": "mine",

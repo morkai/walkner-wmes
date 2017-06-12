@@ -42,7 +42,7 @@
   "problem:EMPTY": "Brak operacji",
 
   "solution:DONE": "Wykonanie wymaganej ilości.",
-  "solution:STATUS": "Zmiana statusu CNF lub DLV.",
+  "solution:STATUS": "CNF, DLV lub TECO.",
   "solution:OPERATIONS": "Pojawienie się operacji.",
 
   "filter:ownMrps": "moje",

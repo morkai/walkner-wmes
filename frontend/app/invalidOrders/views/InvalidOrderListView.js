@@ -66,8 +66,8 @@ define([
       {id: 'mrp', className: 'is-min'},
       {id: 'qty', className: 'is-min is-number'},
       {id: 'startDate', className: 'is-min'},
-      {id: 'problem'},
-      {id: 'solution'},
+      {id: 'problem', className: 'is-min'},
+      {id: 'solution', className: 'is-min'},
       {id: 'iptStatus'},
       {id: 'iptComment'}
     ],
