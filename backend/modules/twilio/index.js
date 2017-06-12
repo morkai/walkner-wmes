@@ -93,7 +93,7 @@ exports.start = function startTwilioModule(app, twilioModule)
 
     var TwilioRequest = mongoose.model('TwilioRequest');
     var twilioRequest = new TwilioRequest({
-      _id: uuid.toUpperCase(),
+      _id: uuid().toUpperCase(),
       operation: 'say',
       options: sayOptions,
       status: 'created',

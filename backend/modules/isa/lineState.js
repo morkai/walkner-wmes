@@ -192,7 +192,7 @@ module.exports = function setUpIsaLineState(app, isaModule)
   function createRequest(prodLineId, type, requester, data, done)
   {
     const request = new IsaRequest({
-      _id: uuid.toUpperCase(),
+      _id: uuid().toUpperCase(),
       orgUnits: orgUnitsModule.getAllForProdLineAsList(prodLineId),
       type: type,
       data: data,

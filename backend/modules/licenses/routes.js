@@ -141,7 +141,7 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
   {
     if (_.isEmpty(req.body._id))
     {
-      req.body._id = uuid.toUpperCase();
+      req.body._id = uuid().toUpperCase();
     }
 
     prepareLicenseDate(req.body);

@@ -63,7 +63,7 @@ module.exports = function generateLicenseKey(privateKey, options)
 
   if (id == null)
   {
-    id = uuid.toUpperCase();
+    id = uuid().toUpperCase();
   }
   else if (!_.isString(id) || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id))
   {
