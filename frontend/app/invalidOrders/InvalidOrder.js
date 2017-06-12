@@ -58,7 +58,7 @@ define([
         }
       }
 
-      o.problem = t('invalidOrders', 'solution:' + o.solution);
+      o.problem = t('invalidOrders', 'problem:' + o.problem);
 
       if (o.solution)
       {
