@@ -60,14 +60,19 @@ define([
 
       o.problem = t('invalidOrders', 'problem:' + o.problem);
 
+      if (window.IPT_ORDER_CHECK_URL)
+      {
+        o.problem = '<a href="' + window.IPT_ORDER_CHECK_URL.replace('${order}', o._id) + '">' + o.problem + '</a>';
+      }
+
       if (o.solution)
       {
         o.solution = t('invalidOrders', 'solution:' + o.solution);
       }
 
-      if (window.IPT_ORDER_CHECK_URL)
+      if (o.iptStatus === o.iptComment)
       {
-        o.problem = '<a href="' + window.IPT_ORDER_CHECK_URL.replace('${order}', o._id) + '">' + o.problem + '</a>';
+        o.iptComment = '';
       }
 
       return o;
