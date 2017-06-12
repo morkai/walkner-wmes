@@ -421,7 +421,9 @@ module.exports = function setUpNotifier(app, module)
 
         const $ = cheerio.load(body);
 
-        invalidOrder.iptStatus = $('.status-message > span').first().text().trim();
+        invalidOrder.iptStatus = $('.status-message > span').first().text().trim()
+          .replace('Comment: ', '')
+          .replace('↑ ', '');
         invalidOrder.iptComment = $('.comment').first().text().trim()
           .replace('Comment: ', '')
           .replace('↑ ', '');
