@@ -58,7 +58,12 @@ define([
         }
       }
 
-      o.problem = t('invalidOrders', 'problem:' + o.problem);
+      o.problem = t('invalidOrders', 'solution:' + o.solution);
+
+      if (o.solution)
+      {
+        o.solution = t('invalidOrders', 'solution:' + o.solution);
+      }
 
       if (window.IPT_ORDER_CHECK_URL)
       {
