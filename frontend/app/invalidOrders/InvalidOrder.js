@@ -44,17 +44,21 @@ define([
         o.qty = (o.order.qtyDone.total ? o.order.qtyDone.total : '0') + '/' + o.order.qty;
 
         var startMoment = time.getMoment(o.order.startDate);
-        var startDiff = startMoment.diff(Date.now(), 'hours');
 
         o.startDate = startMoment.format('L');
 
-        if (startDiff < 12)
+        if (o.status === 'ignored')
         {
-          o.className += ' invalidOrders-veryLate';
-        }
-        else if (startDiff < 24)
-        {
-          o.className += ' invalidOrders-late';
+          var startDiff = startMoment.diff(Date.now(), 'hours');
+
+          if (startDiff < 12)
+          {
+            o.className += ' invalidOrders-veryLate';
+          }
+          else if (startDiff < 24)
+          {
+            o.className += ' invalidOrders-late';
+          }
         }
       }
 
