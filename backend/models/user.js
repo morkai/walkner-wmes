@@ -115,7 +115,7 @@ module.exports = function setupUserModel(app, mongoose)
   userSchema.pre('save', function(next)
   {
     this.searchName = transliteration
-      .transliterate(this.lastName + this.firstName)
+      .transliterate(this.lastName + this.firstName, {unknown: '?'})
       .replace(/[^a-zA-Z]+/g, '')
       .toUpperCase();
 

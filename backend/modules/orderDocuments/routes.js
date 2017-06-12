@@ -129,7 +129,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
       if (!_.isEmpty(results.name))
       {
-        res.set('X-Document-Name', transliterate(results.name));
+        res.set('X-Document-Name', transliterate(results.name, {unknown: '?'}));
       }
 
       return res.sendStatus(204);

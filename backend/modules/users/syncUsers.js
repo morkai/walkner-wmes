@@ -300,8 +300,8 @@ function parseAddFields(addFields)
 function generateEmailAddress(generator, kdUser)
 {
   return !generator ? '' : generator({
-    firstName: transliterate(kdUser.firstName || '', '?').toLowerCase(),
-    lastName: transliterate(kdUser.lastName || '', '?').toLowerCase(),
+    firstName: transliterate(kdUser.firstName || '', {unknown: '?'}).toLowerCase(),
+    lastName: transliterate(kdUser.lastName || '', {unknown: '?'}).toLowerCase(),
     personnelId: kdUser.personnelId || '',
     company: (kdUser.company || '').toUpperCase()
   });
