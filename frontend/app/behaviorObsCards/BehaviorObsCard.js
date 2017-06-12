@@ -75,12 +75,16 @@ define([
 
       if (row.observations.length)
       {
-        row.observation = row.observations[0].observation;
+        var observation = _.find(row.observations, function(o) { return !o.safe && !o.easy; });
+
+        row.observation = observation ? (observation.observation || observation.behavior) : '';
       }
 
       if (row.risks.length)
       {
-        row.risk = row.risks[0].risk;
+        var risk = _.find(row.risks, function(r) { return !r.easy; });
+
+        row.risk = risk ? risk.risk : '';
       }
 
       if (row.difficulties.length)
