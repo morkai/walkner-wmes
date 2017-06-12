@@ -99,7 +99,7 @@ define([
         return;
       }
 
-      if (mappedUser === 'PHILIPS' || (mappedUser.email && !newUser.email))
+      if (mappedUser.company === 'PHILIPS' || (mappedUser.email && !newUser.email))
       {
         return;
       }
