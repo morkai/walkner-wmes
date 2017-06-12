@@ -41,7 +41,7 @@ module.exports = function setUpNotifier(app, module)
       function()
       {
         InvalidOrder
-          .find(invalidOrdersConditions, {problem: 1, iptStatus: 1, iptComment: 1})
+          .find(invalidOrdersConditions)
           .lean()
           .exec(this.next());
       },
