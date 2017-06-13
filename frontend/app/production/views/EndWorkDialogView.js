@@ -179,6 +179,11 @@ define([
     {
       var $nc12 = this.$id('spigot-nc12');
 
+      if (!$nc12.length)
+      {
+        return;
+      }
+
       if (e.keyCode === 13)
       {
         return $nc12[0] !== e.target;
