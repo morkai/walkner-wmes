@@ -32,7 +32,8 @@ define([
       prodLine: null,
       type: null,
       shift: 0,
-      orderId: ''
+      orderId: '',
+      bom: ''
     },
 
     termToForm: {
@@ -42,14 +43,21 @@ define([
       },
       'orderData.mrp': function(propertyName, term, formData)
       {
-        formData.mrp = term.args[1].join(',');
+        formData[propertyName] = term.args[1].join(',');
+      },
+      'orderId': function(propertyName, term, formData)
+      {
+        formData[propertyName] = term.name === 'in' ? term.args[1].join(', ') : term.args[1];
+      },
+      'orderData.bom.nc12': function(propertyName, term, formData)
+      {
+        formData.bom = term.name === 'in' ? term.args[1].join(', ') : term.args[1];
       },
       'prodLine': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
       },
-      'shift': 'prodLine',
-      'orderId': 'prodLine'
+      'shift': 'prodLine'
     },
 
     afterRender: function()
@@ -87,7 +95,7 @@ define([
       });
 
       this.$id('prodLine').select2({
-        width: '275px',
+        width: '175px',
         allowClear: !user.getDivision(),
         data: this.getApplicableProdLines(),
         formatResult: function(item, $container, query, e)
@@ -145,11 +153,33 @@ define([
       var mrp = this.$id('mrp').val();
       var prodLine = this.$id('prodLine').val();
       var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
-      var orderId = this.$id('orderId').val();
+      var orderId = this.$id('orderId')
+        .val()
+        .toUpperCase()
+        .split(/[^0-9A-Z]+/)
+        .filter(function(v) { return v.length; });
+      var bom = this.$id('bom')
+        .val()
+        .toUpperCase()
+        .split(/[^0-9A-Z]+/)
+        .filter(function(v) { return v.length === 7 || v.length === 12; });
 
-      if (orderId && orderId.length)
+      if (orderId.length === 1)
       {
-        selector.push({name: 'eq', args: ['orderId', orderId]});
+        selector.push({name: 'eq', args: ['orderId', orderId[0]]});
+      }
+      else if (orderId.length)
+      {
+        selector.push({name: 'in', args: ['orderId', orderId]});
+      }
+
+      if (bom.length === 1)
+      {
+        selector.push({name: 'eq', args: ['orderData.bom.nc12', bom[0]]});
+      }
+      else if (bom.length)
+      {
+        selector.push({name: 'in', args: ['orderData.bom.nc12', bom]});
       }
 
       if (mrp && mrp.length)

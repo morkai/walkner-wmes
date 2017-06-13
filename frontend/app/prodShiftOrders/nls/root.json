@@ -37,13 +37,9 @@
     "FORM:ERROR:NOT_EDITABLE": "Order isn't finished yet!",
 
     "filter:orderId": "Order no/12NC",
+    "filter:bom": "Component 12NC",
     "filter:mrp": "Order MRP",
     "filter:submit": "Filter orders",
-    "filter:placeholder:type": "Any type",
-    "filter:placeholder:mrp": "Any MRP",
-    "filter:placeholder:prodLine": "Any production line",
-    "filter:placeholder:orderId": "Any order",
-    "filter:placeholder:operationNo": "0000",
 
     "PROPERTY:mrpControllers": "MRP Controller",
     "PROPERTY:prodFlow": "Production flow",

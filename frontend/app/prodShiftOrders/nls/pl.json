@@ -21,14 +21,10 @@
   "PANEL:TITLE:addForm": "Formularz dodawania zlecenia produkcyjnego",
   "PANEL:TITLE:editForm": "Formularz edycji danych zlecenia produkcyjnego",
 
-  "filter:orderId": "Nr/12NC zlecenia",
+  "filter:orderId": "Nr/12NC zleceń",
+  "filter:bom": "12NC komponentów",
   "filter:mrp": "Kontroler MRP zlecenia",
   "filter:submit": "Filtruj historię",
-  "filter:placeholder:type": "Dowolny typ",
-  "filter:placeholder:mrp": "Dowolne MRP",
-  "filter:placeholder:prodLine": "Dowolna linia produkcyjna",
-  "filter:placeholder:orderId": "Dowolne zlecenie",
-  "filter:placeholder:operationNo": "0000",
 
   "FORM:ACTION:add": "Dodaj zlecenie",
   "FORM:ACTION:edit": "Edytuj zlecenie",

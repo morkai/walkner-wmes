@@ -20,15 +20,19 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-orderId"><%- t('prodShiftOrders', 'filter:orderId') %></label>
-    <input id="<%- idPrefix %>-orderId" class="form-control prodShiftOrders-filter-orderId" name="orderId" type="text" placeholder="<%- t('prodShiftOrders', 'filter:placeholder:orderId') %>">
+    <input id="<%- idPrefix %>-orderId" class="form-control prodShiftOrders-filter-orderId" name="orderId" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-bom"><%- t('prodShiftOrders', 'filter:bom') %></label>
+    <input id="<%- idPrefix %>-bom" class="form-control prodShiftOrders-filter-orderId" name="bom" type="text">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-mrp"><%- t('prodShiftOrders', 'filter:mrp') %></label>
-    <input id="<%- idPrefix %>-mrp" name="mrp" type="text" data-placeholder="<%- t('prodShiftOrders', 'filter:placeholder:mrp') %>">
+    <input id="<%- idPrefix %>-mrp" name="mrp" type="text" data-placeholder=" ">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-prodLine"><%- t('prodShiftOrders', 'PROPERTY:prodLine') %></label>
-    <input id="<%- idPrefix %>-prodLine" name="prodLine" type="text" data-placeholder="<%- t('prodShiftOrders', 'filter:placeholder:prodLine') %>">
+    <input id="<%- idPrefix %>-prodLine" name="prodLine" type="text" data-placeholder=" ">
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
