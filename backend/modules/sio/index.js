@@ -23,7 +23,7 @@ exports.DEFAULT_CONFIG = {
   }
 };
 
-exports.start = function startSioModule(app, sioModule)
+exports.start = function startSioModule(app, sioModule, done)
 {
   sioModule.config.socketIo = _.assign({}, sioModule.config.socketIo, {
     path: sioModule.config.path,
@@ -57,6 +57,7 @@ exports.start = function startSioModule(app, sioModule)
     });
 
     startSocketIo();
+    done();
   });
 
   function startSocketIo()
