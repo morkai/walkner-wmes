@@ -3,33 +3,20 @@
 define([
   'underscore',
   'h5.rql/index',
+  'app/core/util/transliterate',
   'app/i18n',
   'app/user'
 ], function(
   _,
   rql,
+  transliterate,
   t,
   user
 ) {
   'use strict';
 
-  var TRANSLITERATION_MAP = {
-    'Ę': 'E',
-    'Ó': 'O',
-    'Ą': 'A',
-    'Ś': 'S',
-    'Ł': 'L',
-    'Ż': 'Z',
-    'Ź': 'Z',
-    'Ć': 'C',
-    'Ń': 'N'
-  };
-  var TRANSLITERATION_RE = new RegExp(Object.keys(TRANSLITERATION_MAP).join('|'), 'g');
-
   function formatText(user, name, query)
   {
-    /*jshint unused:false*/
-
     if (user.personellId)
     {
       name += ' (' + user.personellId + ')';
@@ -76,14 +63,6 @@ define([
     };
   }
 
-  function transliterate(value)
-  {
-    return value
-      .toUpperCase()
-      .replace(TRANSLITERATION_RE, function(m) { return TRANSLITERATION_MAP[m]; })
-      .replace(/[^A-Z]+/g, '');
-  }
-
   function filterDuplicates(users)
   {
     var map = {};
@@ -118,7 +97,7 @@ define([
 
     if (property === 'searchName')
     {
-      term = transliterate(term);
+      term = setUpUserSelect2.transliterate(term);
     }
 
     var options = {
@@ -225,7 +204,10 @@ define([
   }
 
   setUpUserSelect2.defaultRqlQueryProvider = createDefaultRqlQuery;
-  setUpUserSelect2.transliterate = transliterate;
+  setUpUserSelect2.transliterate = function(value)
+  {
+    return transliterate(value.toUpperCase()).replace(/[^A-Z]+/g, '');
+  };
 
   return setUpUserSelect2;
 });

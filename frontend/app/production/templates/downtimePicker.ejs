@@ -19,6 +19,7 @@
       <button id="<%- idPrefix %>-selectedReason" class="btn btn-lg btn-block btn-default" type="button"><span><%- t('production', 'downtimePicker:reason:placeholder') %></span></button>
       <button id="<%- idPrefix %>-clearReason" class="btn btn-lg btn-block btn-default" type="button"><i class="fa fa-eraser"></i></button>
     </div>
+    <input id="<%- idPrefix %>-reasonFilter" class="form-control is-embedded is-vkb-focused hidden" type="text" placeholder="<%- t('production', 'downtimePicker:reasonFilter:placeholder') %>" data-ignore-key="1" data-vkb="alpha numeric">
     <div class="btn-group-vertical hidden"></div>
     <% } else { %>
     <input id="<%- idPrefix %>-reason" type="text" placeholder="<%- t('production', 'downtimePicker:reason:placeholder') %>">
@@ -31,6 +32,7 @@
       <button id="<%- idPrefix %>-selectedAor" class="btn btn-lg btn-block btn-default" type="button"><span><%- t('production', 'downtimePicker:aor:placeholder') %></span></button>
       <button id="<%- idPrefix %>-clearAor" class="btn btn-lg btn-block btn-default" type="button"><i class="fa fa-eraser"></i></button>
     </div>
+    <input id="<%- idPrefix %>-aorFilter" class="form-control is-embedded is-vkb-focused hidden" type="text" placeholder="<%- t('production', 'downtimePicker:aorFilter:placeholder') %>" data-ignore-key="1" data-vkb="alpha numeric">
     <div class="btn-group-vertical hidden"></div>
     <% } else { %>
     <input id="<%- idPrefix %>-aor" type="text" placeholder="<%- t('production', 'downtimePicker:aor:placeholder') %>">

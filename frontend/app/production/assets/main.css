@@ -405,6 +405,10 @@
 .production-form-btn-group > .btn-group-vertical > .btn-default:last-child {
   border-bottom: 0;
 }
+.production-form-btn-group > .btn-group-vertical > .btn-default > strong {
+  display: inline-block;
+  min-width: 45px;
+}
 
 .production-action {
   height: 60px;
@@ -506,11 +510,18 @@
 }
 .production-downtimePicker .btn-group-vertical {
   margin: 0;
-  max-height: 590px;
+  height: 360px;
+  max-height: none;
   overflow-y: auto;
 }
 .production-downtimePicker .btn-group-vertical > .btn {
   white-space: normal;
+}
+
+.form-control.is-embedded[data-vkb~="alpha"]::-webkit-input-placeholder {
+  font-family: Arial, "Helvetic Neue", Helvetica, sans-serif;
+  font-size: 28px;
+  text-transform: none;
 }
 
 @media (max-width: 1680px) {

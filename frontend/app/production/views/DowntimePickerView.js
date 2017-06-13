@@ -2,20 +2,24 @@
 
 define([
   'underscore',
+  'jquery',
   'app/i18n',
   'app/time',
   'app/viewport',
   'app/data/aors',
   'app/core/View',
+  'app/core/util/transliterate',
   'app/prodDowntimes/util/reasonAndAor',
   'app/production/templates/downtimePicker'
 ], function(
   _,
+  $,
   t,
   time,
   viewport,
   aors,
   View,
+  transliterate,
   reasonAndAor,
   downtimePickerTemplate
 ) {
@@ -113,11 +117,11 @@ define([
           this.$id('reasonComment').focus();
         }
       },
-      'focus #-reasonComment': function(e)
+      'focus [data-vkb]': function(e)
       {
         if (this.options.embedded && this.options.vkb)
         {
-          this.options.vkb.show(e.target);
+          this.options.vkb.show(e.target, this.onVkbValueChange);
         }
       },
       'click #-clearReason': function()
@@ -140,6 +144,7 @@ define([
         this.$id('commentGroup').addClass('hidden');
         this.$id('submit').prop('disabled', true);
 
+        var $reasonFilter = this.$id('reasonFilter');
         var $reasonGroup = this.$id('reasonGroup').css('margin-top', '15px');
         var $list = $reasonGroup.find('.btn-group-vertical');
         var selectedReason = this.model.reason;
@@ -151,14 +156,20 @@ define([
           .forEach(function(d)
           {
             var className = 'btn btn-lg btn-default ' + (d.reason.id === selectedReason ? 'active' : '');
+            var filter = transliterate(d.reason.id + d.reason.getLabel()).toUpperCase().replace(/[^A-Z0-9]+/g, '');
 
-            html += '<button type="button" class="' + className + '" data-reason="' + d.reason.id + '">'
+            html += '<button type="button" class="' + className + '" data-reason="' + d.reason.id + '" '
+              + 'data-filter="' + filter + '">'
+              + '<strong>' + d.reason.id + '</strong>'
               + _.escape(d.reason.getLabel())
               + '</button>';
           });
 
         $reasonGroup.find('.production-downtimePicker-btn-group').addClass('hidden');
+        $reasonGroup.find('label').addClass('hidden');
+        $reasonFilter.removeClass('hidden');
         $list.html(html).removeClass('hidden');
+        $reasonFilter.focus();
 
         var activeEl = $list.find('.active')[0];
 
@@ -166,6 +177,8 @@ define([
         {
           activeEl.scrollIntoView();
         }
+
+        this.selectingOption = true;
       },
       'click #-selectedAor': function()
       {
@@ -179,6 +192,7 @@ define([
         this.$id('commentGroup').addClass('hidden');
         this.$id('submit').prop('disabled', true);
 
+        var $aorFilter = this.$id('aorFilter');
         var $aorGroup = this.$id('aorGroup').css('margin-top', '15px');
         var $list = $aorGroup.find('.btn-group-vertical');
         var selectedAor = this.model.aor;
@@ -190,14 +204,19 @@ define([
           .forEach(function(d)
           {
             var className = 'btn btn-lg btn-default ' + (d.aor.id === selectedAor ? 'active' : '');
+            var filter = transliterate(d.aor.getLabel()).toUpperCase().replace(/[^A-Z0-9]+/g, '');
 
-            html += '<button type="button" class="' + className + '" data-aor="' + d.aor.id + '">'
+            html += '<button type="button" class="' + className + '" data-aor="' + d.aor.id + '" '
+              + 'data-filter="' + filter + '">'
               + _.escape(d.aor.getLabel())
               + '</button>';
           });
 
         $aorGroup.find('.production-downtimePicker-btn-group').addClass('hidden');
+        $aorGroup.find('label').addClass('hidden');
+        $aorFilter.removeClass('hidden');
         $list.html(html).removeClass('hidden');
+        $aorFilter.focus();
 
         var activeEl = $list.find('.active')[0];
 
@@ -205,6 +224,8 @@ define([
         {
           activeEl.scrollIntoView();
         }
+
+        this.selectingOption = true;
       },
       'click .btn[data-reason]': function(e)
       {
@@ -215,26 +236,49 @@ define([
           return;
         }
 
-        var aors = reasonAndAor.getAorsForReason(this, this.model.reason);
+        var aorsForReason = reasonAndAor.getAorsForReason(this, this.model.reason);
 
-        if (aors.length === 1)
+        if (aorsForReason.length === 1)
         {
-          this.selectEmbeddedAor(aors[0].id);
+          this.selectEmbeddedAor(aorsForReason[0].id);
         }
       },
       'click .btn[data-aor]': function(e)
       {
         this.selectEmbeddedAor(e.currentTarget.dataset.aor);
+      },
+      'input #-reasonFilter': 'filterReasons',
+      'input #-aorFilter': 'filterAors',
+      'keyup #-reasonFilter, #-aorFilter': function(e)
+      {
+        if (e.keyCode !== 13)
+        {
+          return;
+        }
+
+        var $options = this.$(e.target).next().find('.btn:not(.hidden)');
+
+        if ($options.length === 1)
+        {
+          $options.first().click();
+        }
       }
     },
 
     initialize: function()
     {
+      this.onVkbValueChange = this.onVkbValueChange.bind(this);
+      this.selectingOption = false;
+
       reasonAndAor.initialize(this);
+
+      $(window).on('keyup.' + this.idPrefix, this.onKeyUp.bind(this));
     },
 
     destroy: function()
     {
+      $(window).off('.' + this.idPrefix);
+
       reasonAndAor.destroy(this);
 
       if (this.options.vkb)
@@ -306,9 +350,12 @@ define([
         .html(label)
         .val(reason ? reason.id : '');
 
+      this.$id('reasonFilter').val('').addClass('hidden');
+
       var $reasonGroup = this.$id('reasonGroup');
 
       $reasonGroup.find('.btn-group-vertical').addClass('hidden');
+      $reasonGroup.find('label').removeClass('hidden');
       $reasonGroup.find('.production-downtimePicker-btn-group').removeClass('hidden');
 
       this.$id('startedAtGroup').removeClass('hidden');
@@ -317,6 +364,7 @@ define([
       this.$id('submit').prop('disabled', false);
 
       this.model.reason = reason ? reason.id : null;
+      this.selectingOption = false;
     },
 
     selectEmbeddedAor: function(aor)
@@ -331,9 +379,12 @@ define([
         .html(label)
         .val(aor ? aor.id : '');
 
+      this.$id('aorFilter').val('').addClass('hidden');
+
       var $aorGroup = this.$id('aorGroup');
 
       $aorGroup.find('.btn-group-vertical').addClass('hidden');
+      $aorGroup.find('label').removeClass('hidden');
       $aorGroup.find('.production-downtimePicker-btn-group').removeClass('hidden');
 
       this.$id('startedAtGroup').removeClass('hidden');
@@ -342,11 +393,75 @@ define([
       this.$id('submit').prop('disabled', false);
 
       this.model.aor = aor ? aor.id : null;
+      this.selectingOption = false;
+    },
+
+    onVkbValueChange: function(fieldEl)
+    {
+      if (/reasonFilter/.test(fieldEl.id))
+      {
+        this.filterReasons();
+      }
+      else if (/aorFilter/.test(fieldEl.id))
+      {
+        this.filterAors();
+      }
     },
 
     onDialogShown: function()
     {
       this.focusControl();
+    },
+
+    onKeyUp: function(e)
+    {
+      if (!this.selectingOption || (document.activeElement && document.activeElement.dataset.vkb))
+      {
+        return;
+      }
+
+      var $vkb = $('.production-vkb');
+
+      if (!$vkb.length || $vkb.hasClass('hidden'))
+      {
+        return;
+      }
+
+      $vkb.find('.btn[data-key="' + e.originalEvent.key.toUpperCase() + '"]').click();
+    },
+
+    filterReasons: function()
+    {
+      var $options = this.$id('reasonGroup').find('.btn-group-vertical').find('.btn');
+      var filter = transliterate(this.$id('reasonFilter').val()).toUpperCase().replace(/[^A-Z0-9]+/g, '');
+
+      if (reasonAndAor.reasons.get(filter))
+      {
+        $options.addClass('hidden').filter('.btn[data-reason="' + filter + '"]').removeClass('hidden');
+      }
+      else if (filter.length)
+      {
+        $options.addClass('hidden').filter('.btn[data-filter*="' + filter + '"]').removeClass('hidden');
+      }
+      else
+      {
+        $options.removeClass('hidden');
+      }
+    },
+
+    filterAors: function()
+    {
+      var $options = this.$id('aorGroup').find('.btn-group-vertical').find('.btn');
+      var filter = transliterate(this.$id('aorFilter').val()).toUpperCase().replace(/[^A-Z0-9]+/g, '');
+
+      if (filter.length)
+      {
+        $options.addClass('hidden').filter('.btn[data-filter*="' + filter + '"]').removeClass('hidden');
+      }
+      else
+      {
+        $options.removeClass('hidden');
+      }
     },
 
     focusControl: function()
