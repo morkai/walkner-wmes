@@ -810,6 +810,7 @@ app/mor/views/SectionFormView.js
 app/mor/templates/watchForm.js
 app/mor/views/WatchFormView.js
 app/core/util/formatResultWithDescription.js
+app/core/util/transliterate.js
 app/users/util/setUpUserSelect2.js
 app/mor/templates/mrpForm.js
 app/mor/views/MrpFormView.js
@@ -1437,6 +1438,7 @@ app/mor/views/SectionFormView.js
 app/mor/templates/watchForm.js
 app/mor/views/WatchFormView.js
 app/core/util/formatResultWithDescription.js
+app/core/util/transliterate.js
 app/users/util/setUpUserSelect2.js
 app/mor/templates/mrpForm.js
 app/mor/views/MrpFormView.js
@@ -1730,6 +1732,7 @@ app/mor/views/SectionFormView.js
 app/mor/templates/watchForm.js
 app/mor/views/WatchFormView.js
 app/core/util/formatResultWithDescription.js
+app/core/util/transliterate.js
 app/users/util/setUpUserSelect2.js
 app/mor/templates/mrpForm.js
 app/mor/views/MrpFormView.js
