@@ -1,4 +1,4 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
   'underscore',
@@ -6,6 +6,7 @@ define([
   'app/ZeroClipboard',
   'app/i18n',
   'app/user',
+  'app/viewport',
   'app/core/Model',
   'app/core/views/FormView',
   'app/core/util/idAndLabel',
@@ -26,6 +27,7 @@ define([
   ZeroClipboard,
   t,
   user,
+  viewport,
   Model,
   FormView,
   idAndLabel,
@@ -117,10 +119,12 @@ define([
     destroy: function()
     {
       $(window).off('.' + this.idPrefix);
+      $(document).off('.' + this.idPrefix);
 
       if (this.privilegesCopyClient)
       {
         this.privilegesCopyClient.destroy();
+        this.privilegesCopyClient = null;
       }
     },
 
@@ -155,8 +159,6 @@ define([
 
     setUpOrgUnitDropdowns: function()
     {
-      /*jshint -W015*/
-
       var model = null;
       var orgUnit = null;
 
@@ -192,7 +194,7 @@ define([
         });
       });
 
-      var $privileges = this.$id('privileges').select2({
+      this.$id('privileges').select2({
         width: '100%',
         allowClear: false,
         tags: privilegeList,
@@ -209,30 +211,75 @@ define([
         }
       });
 
-      this.privilegesCopyClient = new ZeroClipboard(this.$id('copyPrivileges'));
+      this.setUpPrivilegesCopy();
+    },
 
-      this.privilegesCopyClient.on('load', function(client)
+    serializePrivileges: function()
+    {
+      var selectedOptions = this.$id('privileges').select2('data');
+
+      if (selectedOptions.length === 0)
       {
-        client.on('datarequested', function(client)
-        {
-          var selectedOptions = $privileges.select2('data');
+        return '';
+      }
 
-          if (selectedOptions.length === 0)
-          {
-            client.setText('');
-          }
-          else
-          {
-            client.setText(
-              selectedOptions.map(function(data) { return data.text; }).join(';') + ';'
-            );
-          }
+      return selectedOptions.map(function(data) { return data.text; }).join(';') + ';';
+    },
+
+    setUpPrivilegesCopy: function()
+    {
+      var view = this;
+      var $btn = view.$id('copyPrivileges');
+      var client = view.privilegesCopyClient = new ZeroClipboard($btn);
+
+      client.on('copy', function(e)
+      {
+        e.clipboardData.setData('text/plain', view.serializePrivileges());
+      });
+
+      client.on('aftercopy', function()
+      {
+        viewport.msg.show({
+          type: 'info',
+          time: 2000,
+          text: t('users', 'copyPrivileges:success')
         });
-      } );
+      });
 
-      this.privilegesCopyClient.on('wrongflash noflash', function()
+      client.on('error', function(err)
       {
+        console.error(err);
+
         ZeroClipboard.destroy();
+
+        $(document).on('copy.' + view.idPrefix, view.onCopy.bind(view));
+
+        $btn.on('mousedown', function()
+        {
+          view.captureCopy = true;
+
+          document.execCommand('copy');
+        });
+      });
+    },
+
+    onCopy: function(e)
+    {
+      if (!this.captureCopy)
+      {
+        return;
+      }
+
+      this.captureCopy = false;
+
+      e.preventDefault();
+
+      e.originalEvent.clipboardData.setData('text/plain', this.serializePrivileges());
+
+      viewport.msg.show({
+        type: 'info',
+        time: 2000,
+        text: t('users', 'copyPrivileges:success')
       });
     },
 
