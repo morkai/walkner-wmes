@@ -94,6 +94,8 @@ module.exports = function setUpNotifier(app, module)
           businessDayCount += businessDays.countInDay(to.toDate());
         }
 
+        this.toTime = to.valueOf();
+
         const invalidOrderIds = _.keys(this.invalidOrders);
         const conditions = {
           _id: {
@@ -137,9 +139,9 @@ module.exports = function setUpNotifier(app, module)
 
         this.orders = {};
 
-        ordersToCheck.forEach(o => this.orders[o._id] = o);
+        ordersToCheck.forEach(o => { this.orders[o._id] = o; });
 
-        invalidOrdersToCheck.forEach(o => this.orders[o._id] = o);
+        invalidOrdersToCheck.forEach(o => { this.orders[o._id] = o; });
 
         mysql.pool.getConnection(this.next());
       },
@@ -182,6 +184,7 @@ module.exports = function setUpNotifier(app, module)
         this.missingOrders = {};
         this.emptyOrders = {};
         this.resolvedOrders = {};
+        this.delayedOrders = {};
 
         results.forEach(result =>
         {
@@ -190,7 +193,12 @@ module.exports = function setUpNotifier(app, module)
 
         _.forEach(this.orders, o =>
         {
-          if (o.qtyDone.total >= o.qty)
+          if (o.startDate > this.toTime)
+          {
+            this.delayedOrders[o._id] = true;
+            this.notifyOrders[o._id] = true;
+          }
+          else if (o.qtyDone.total >= o.qty)
           {
             this.resolvedOrders[o._id] = 'DONE';
           }
@@ -214,8 +222,24 @@ module.exports = function setUpNotifier(app, module)
 
         setImmediate(this.next());
       },
-      function findIgnoredOrdersStep()
+      function handleDelayedOrdersStep()
       {
+        const conditions = {
+          _id: {$in: _.keys(this.delayedOrders)}
+        };
+
+        if (conditions._id.$in.length)
+        {
+          InvalidOrder.remove(conditions, this.next());
+        }
+      },
+      function findIgnoredOrdersStep(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
         const conditions = {
           _id: {
             $in: _.keys(this.missingOrders).concat(_.keys(this.emptyOrders))
@@ -280,7 +304,7 @@ module.exports = function setUpNotifier(app, module)
           }
           else
           {
-            this.notifyOrders[missingOrder._id] = missingOrder;
+            this.notifyOrders[missingOrder._id] = true;
 
             insert.push({
               _id: missingOrder._id,
@@ -323,7 +347,7 @@ module.exports = function setUpNotifier(app, module)
 
           if (!invalidOrder)
           {
-            this.notifyOrders[emptyOrder._id] = emptyOrder;
+            this.notifyOrders[emptyOrder._id] = true;
           }
 
           runIptCheck({
@@ -520,10 +544,5 @@ module.exports = function setUpNotifier(app, module)
 
       done();
     });
-  }
-
-  function hasResolvedStatus(o)
-  {
-    return o.statuses.some(s => s === 'TECO' || s === 'CNF' || s === 'DLV');
   }
 };

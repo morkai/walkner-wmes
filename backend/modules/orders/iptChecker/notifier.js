@@ -117,6 +117,11 @@ module.exports = function setUpNotifier(app, module)
           });
         });
 
+        if (_.isEmpty(this.mrpToInvalidOrders))
+        {
+          return this.skip();
+        }
+
         setImmediate(this.next());
       },
       function()
@@ -156,7 +161,7 @@ module.exports = function setUpNotifier(app, module)
 
           mrps.forEach(mrp =>
           {
-            this.mrpToInvalidOrders[mrp].forEach(o => invalidOrders.push(o));
+            this.mrpToInvalidOrders[mrp].forEach(o => invalidOrders.push(o)); // eslint-disable-line max-nested-callbacks
           });
 
           notifyUser(recipient, invalidOrders, this.group());
