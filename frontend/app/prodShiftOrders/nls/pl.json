@@ -22,7 +22,7 @@
   "PANEL:TITLE:editForm": "Formularz edycji danych zlecenia produkcyjnego",
 
   "filter:orderId": "Nr/12NC zleceń",
-  "filter:bom": "12NC komponentów",
+  "filter:bom": "Komponenty",
   "filter:mrp": "Kontroler MRP zlecenia",
   "filter:submit": "Filtruj historię",
 

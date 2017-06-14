@@ -24,3 +24,9 @@
   font-weight: normal;
   text-shadow: 1px 1px 1px #000;
 }
+.prodShiftOrders-filter-orderId + .form-control {
+  position: absolute;
+  margin-top: -34px;
+  width: 383px;
+  z-index: 2;
+}

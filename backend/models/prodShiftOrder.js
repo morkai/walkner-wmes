@@ -183,6 +183,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
   prodShiftOrderSchema.index({prodLine: 1, startedAt: -1});
   prodShiftOrderSchema.index({'orderData.mrp': 1, startedAt: -1});
   prodShiftOrderSchema.index({'orderData.bom.nc12': 1, startedAt: -1});
+  prodShiftOrderSchema.index({'orderData.bom.item': 1, startedAt: -1});
 
   prodShiftOrderSchema.pre('save', function(next)
   {
@@ -301,10 +302,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
 
     this.quantityLost = !Array.isArray(this.losses)
       ? 0
-      : this.losses.reduce(function(sum, loss)
-        {
-          return sum + (loss && typeof loss.count === 'number' ? loss.count : 0);
-        }, 0);
+      : this.losses.reduce((sum, loss) => sum + (loss && typeof loss.count === 'number' ? loss.count : 0), 0);
     this.totalQuantity = this.quantityDone + this.quantityLost;
   };
 

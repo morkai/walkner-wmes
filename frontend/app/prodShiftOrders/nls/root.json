@@ -37,7 +37,7 @@
     "FORM:ERROR:NOT_EDITABLE": "Order isn't finished yet!",
 
     "filter:orderId": "Order no/12NC",
-    "filter:bom": "Component 12NC",
+    "filter:bom": "Components",
     "filter:mrp": "Order MRP",
     "filter:submit": "Filter orders",
 
