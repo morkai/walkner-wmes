@@ -71,6 +71,7 @@
     "FORM:mobile:to": "to",
     "FORM:mobile:empty": "No mobile numbers defined.",
     "FORM:mobile:item": "{number} from {fromTime} to {toTime}",
+    "FORM:copyPrivileges:success": "Privileges copied to clipboard :)",
     "NO_DATA:aors": "All",
     "NO_DATA:company": "Unspecified",
     "NO_DATA:prodFunction": "Unspecified",

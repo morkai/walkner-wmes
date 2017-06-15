@@ -70,6 +70,7 @@
   "FORM:mobile:to": "do",
   "FORM:mobile:empty": "Brak zdefiniowanych telefonów.",
   "FORM:mobile:item": "{number} od {fromTime} do {toTime}",
+  "FORM:copyPrivileges:success": "Uprawnienia skopiowane :)",
   "NO_DATA:aors": "Wszystkie",
   "NO_DATA:company": "Nieokreślona",
   "NO_DATA:prodFunction": "Nieokreślona",

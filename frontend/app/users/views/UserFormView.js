@@ -242,7 +242,7 @@ define([
         viewport.msg.show({
           type: 'info',
           time: 2000,
-          text: t('users', 'copyPrivileges:success')
+          text: t('users', 'FORM:copyPrivileges:success')
         });
       });
 
@@ -279,7 +279,7 @@ define([
       viewport.msg.show({
         type: 'info',
         time: 2000,
-        text: t('users', 'copyPrivileges:success')
+        text: t('users', 'FORM:copyPrivileges:success')
       });
     },
 
