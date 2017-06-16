@@ -32,14 +32,9 @@
         <span class="caret"></span>
       </button>
       <ul class="dropdown-menu">
-        <li><a data-range="currentWeek"><%= t('reports', 'filter:submit:currentWeek') %></a></li>
-        <li><a data-range="prevWeek"><%= t('reports', 'filter:submit:prevWeek') %></a></li>
-        <li><a data-range="currentMonth"><%= t('reports', 'filter:submit:currentMonth') %></a></li>
-        <li><a data-range="prevMonth"><%= t('reports', 'filter:submit:prevMonth') %></a></li>
-        <li><a data-range="q1"><%= t('reports', 'filter:submit:q1') %></a></li>
-        <li><a data-range="q2"><%= t('reports', 'filter:submit:q2') %></a></li>
-        <li><a data-range="q3"><%= t('reports', 'filter:submit:q3') %></a></li>
-        <li><a data-range="q4"><%= t('reports', 'filter:submit:q4') %></a></li>
+        <% ['currentWeek', 'prevWeek', 'lastTwoWeeks', 'currentMonth', 'prevMonth', 'q1', 'q2', 'q3', 'q4'].forEach(function(range) { %>
+        <li><a data-range="<%- range %>"><%= t('reports', 'filter:submit:' + range) %></a></li>
+        <% }) %>
         <li><a data-range="currentYear" data-interval="quarter"><%= t('reports', 'filter:submit:currentYear') %></a></li>
         <li><a data-range="prevYear" data-interval="quarter"><%= t('reports', 'filter:submit:prevYear') %></a></li>
       </ul>

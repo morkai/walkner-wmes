@@ -115,6 +115,7 @@
     "filter:submit:yesterday": "Yesterday",
     "filter:submit:currentWeek": "Current week",
     "filter:submit:prevWeek": "Previous week",
+    "filter:submit:lastTwoWeeks": "Last two weeks",
     "filter:submit:currentMonth": "Current month",
     "filter:submit:prevMonth": "Previous month",
     "filter:submit:currentQuarter": "Current quarter",

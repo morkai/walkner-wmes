@@ -71,6 +71,11 @@ define([
         toMoment = fromMoment.clone().add(7, 'days');
         break;
 
+      case 'lastTwoWeeks':
+        fromMoment.weekday(0).subtract(14, 'days');
+        toMoment = fromMoment.clone().add(14, 'days');
+        break;
+
       case 'today':
         toMoment = fromMoment.clone().add(1, 'days');
 
