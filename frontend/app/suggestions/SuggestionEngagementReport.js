@@ -68,7 +68,9 @@ define([
         var totals = {
           name: 0,
           nearMisses: 0,
-          suggestions: 0
+          suggestions: 0,
+          behaviorObs: 0,
+          minutesForSafety: 0
         };
 
         group = {
@@ -79,11 +81,15 @@ define([
             totals.name += 1;
             totals.nearMisses += user.nearMisses;
             totals.suggestions += user.suggestions;
+            totals.behaviorObs += user.behaviorObs;
+            totals.minutesForSafety += user.minutesForSafety;
 
             return {
               name: report.users[userKey],
               nearMisses: user.nearMisses,
               suggestions: user.suggestions,
+              behaviorObs: user.behaviorObs,
+              minutesForSafety: user.minutesForSafety,
               sections: Object.keys(user.sections).map(function(section)
               {
                 return report.sections[section] || section;
@@ -116,7 +122,7 @@ define([
     serializeToCsv: function()
     {
       var rows = [
-        'date;name;nearMisses;suggestions;sections'
+        'date;name;nearMisses;suggestions;behaviorObs;minutesForSafety;sections'
       ];
 
       _.forEach(this.get('groups'), function(group)
@@ -126,7 +132,11 @@ define([
         _.forEach(group.users, function(user)
         {
           rows.push(
-            row + '"' + user.name + '";' + user.nearMisses + ';' + user.suggestions
+            row + '"' + user.name
+            + '";' + user.nearMisses
+            + ';' + user.suggestions
+            + ';' + user.behaviorObs
+            + ';' + user.minutesForSafety
             + ';"' + user.sections.join(',') + '"'
           );
         });

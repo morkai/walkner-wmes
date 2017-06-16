@@ -186,6 +186,8 @@
     "engagement:name": "Name",
     "engagement:nearMisses": "Near misses",
     "engagement:suggestions": "OSH+ergonomics",
+    "engagement:behaviorObs": "Behavior observations",
+    "engagement:minutesForSafety": "Minutes for safety",
     "engagement:sections": "Section",
     "engagement:empty": "No entries matching the current filters.",
     "engagement:export:action": "Export to file",

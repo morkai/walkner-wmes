@@ -8,11 +8,13 @@ var util = require('../reports/util');
 
 module.exports = function(mongoose, options, done)
 {
-  var KaizenOrder = mongoose.model('KaizenOrder');
-  var Suggestion = mongoose.model('Suggestion');
-  var KaizenSection = mongoose.model('KaizenSection');
+  const KaizenOrder = mongoose.model('KaizenOrder');
+  const Suggestion = mongoose.model('Suggestion');
+  const BehaviorObsCard = mongoose.model('BehaviorObsCard');
+  const MinutesForSafetyCard = mongoose.model('MinutesForSafetyCard');
+  const KaizenSection = mongoose.model('KaizenSection');
 
-  var results = {
+  const results = {
     options: options,
     sections: {},
     users: {},
@@ -22,18 +24,11 @@ module.exports = function(mongoose, options, done)
   step(
     function findStep()
     {
-      findSections(this.parallel());
-      countNearMisses(options, _.once(this.parallel()));
-      countSuggestions(options, _.once(this.parallel()));
-    },
-    function finalizeStep(err)
-    {
-      if (err)
-      {
-        return this.skip(err);
-      }
-
-      return setImmediate(this.next());
+      findSections(this.group());
+      countNearMisses(options, _.once(this.group()));
+      countSuggestions(options, _.once(this.group()));
+      countBehaviorObsCards(options, _.once(this.group()));
+      countMinutesForSafetyCards(options, _.once(this.group()));
     },
     function sendResultsStep(err)
     {
@@ -135,6 +130,68 @@ module.exports = function(mongoose, options, done)
     stream.on('data', handleSuggestion);
   }
 
+  function countBehaviorObsCards(options, done)
+  {
+    const conditions = {};
+
+    if (Array.isArray(options.sections) && !_.isEmpty(options.sections))
+    {
+      conditions.section = {$in: options.sections};
+    }
+
+    if (options.fromTime)
+    {
+      conditions.date = {$gte: new Date(options.fromTime)};
+    }
+
+    if (options.toTime)
+    {
+      if (!conditions.date)
+      {
+        conditions.date = {};
+      }
+
+      conditions.date.$lt = new Date(options.toTime);
+    }
+
+    const stream = BehaviorObsCard.find(conditions, {date: 1, observer: 1, section: 1}).lean().cursor();
+
+    stream.on('error', done);
+    stream.on('end', done);
+    stream.on('data', handleBehaviorObsCard);
+  }
+
+  function countMinutesForSafetyCards(options, done)
+  {
+    const conditions = {};
+
+    if (Array.isArray(options.sections) && !_.isEmpty(options.sections))
+    {
+      conditions.section = {$in: options.sections};
+    }
+
+    if (options.fromTime)
+    {
+      conditions.date = {$gte: new Date(options.fromTime)};
+    }
+
+    if (options.toTime)
+    {
+      if (!conditions.date)
+      {
+        conditions.date = {};
+      }
+
+      conditions.date.$lt = new Date(options.toTime);
+    }
+
+    const stream = MinutesForSafetyCard.find(conditions, {date: 1, owner: 1, section: 1}).lean().cursor();
+
+    stream.on('error', done);
+    stream.on('end', done);
+    stream.on('data', handleMinutesForSafetyCard);
+  }
+
   function handleNearMiss(doc)
   {
     _.forEach(doc.nearMissOwners, function(owner)
@@ -149,6 +206,16 @@ module.exports = function(mongoose, options, done)
     {
       getGroup(util.createGroupKey(options.interval, doc.date, false), owner, doc.section).suggestions += 1;
     });
+  }
+
+  function handleBehaviorObsCard(doc)
+  {
+    getGroup(util.createGroupKey(options.interval, doc.date, false), doc.observer, doc.section).behaviorObs += 1;
+  }
+
+  function handleMinutesForSafetyCard(doc)
+  {
+    getGroup(util.createGroupKey(options.interval, doc.date, false), doc.owner, doc.section).minutesForSafety += 1;
   }
 
   function getGroup(key, owner, section)
@@ -172,6 +239,8 @@ module.exports = function(mongoose, options, done)
       group[user] = {
         nearMisses: 0,
         suggestions: 0,
+        behaviorObs: 0,
+        minutesForSafety: 0,
         sections: {}
       };
     }

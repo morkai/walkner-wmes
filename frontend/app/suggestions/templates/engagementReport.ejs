@@ -10,6 +10,8 @@
       <th class="is-min"><%- t('suggestions', 'engagement:name') %></th>
       <th class="is-min"><%- t('suggestions', 'engagement:nearMisses') %></th>
       <th class="is-min"><%- t('suggestions', 'engagement:suggestions') %></th>
+      <th class="is-min"><%- t('suggestions', 'engagement:behaviorObs') %></th>
+      <th class="is-min"><%- t('suggestions', 'engagement:minutesForSafety') %></th>
       <th><%- t('suggestions', 'engagement:sections') %></th>
     </tr>
     </thead>
@@ -18,6 +20,8 @@
       <td class="is-min is-number"><%- group.totals.name.toLocaleString() %></td>
       <td class="is-min is-number"><%- group.totals.nearMisses.toLocaleString() %></td>
       <td class="is-min is-number"><%- group.totals.suggestions.toLocaleString() %></td>
+      <td class="is-min is-number"><%- group.totals.behaviorObs.toLocaleString() %></td>
+      <td class="is-min is-number"><%- group.totals.minutesForSafety.toLocaleString() %></td>
       <td></td>
     </tr>
     </tfoot>
@@ -27,6 +31,8 @@
       <td class="is-min"><%= user.name %></td>
       <td class="is-min is-number"><%- user.nearMisses.toLocaleString() %></td>
       <td class="is-min is-number"><%- user.suggestions.toLocaleString() %></td>
+      <td class="is-min is-number"><%- user.behaviorObs.toLocaleString() %></td>
+      <td class="is-min is-number"><%- user.minutesForSafety.toLocaleString() %></td>
       <td><%- user.sections.join('; ') %></td>
     </tr>
     <% }) %>

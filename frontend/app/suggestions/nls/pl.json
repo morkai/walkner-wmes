@@ -186,6 +186,8 @@
   "engagement:name": "Nazwisko i imię",
   "engagement:nearMisses": "ZPW",
   "engagement:suggestions": "BHP+ergonomia",
+  "engagement:behaviorObs": "Obserwacje zachowań",
+  "engagement:minutesForSafety": "Minuty dla Bezpieczeństwa",
   "engagement:sections": "Dział zgłaszający",
   "engagement:empty": "Brak zgłoszeń pasujących do aktualnych filtrów.",
   "engagement:export:action": "Eksportuj do pliku",
