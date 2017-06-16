@@ -68,6 +68,7 @@ module.exports = function setupBehaviorObsCardModel(app, mongoose)
 
   behaviorObsCardSchema.index({date: -1});
   behaviorObsCardSchema.index({section: 1});
+  behaviorObsCardSchema.index({'observer.id': 1});
   behaviorObsCardSchema.index({users: 1});
   behaviorObsCardSchema.index({anyHardObservations: 1});
   behaviorObsCardSchema.index({anyHardRisks: 1});
