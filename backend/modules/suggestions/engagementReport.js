@@ -70,6 +70,11 @@ module.exports = function(mongoose, options, done)
       conditions.status = {$in: options.status};
     }
 
+    if (Array.isArray(options.sections) && !_.isEmpty(options.sections))
+    {
+      conditions.section = {$in: options.sections};
+    }
+
     if (options.fromTime)
     {
       conditions.eventDate = {$gte: new Date(options.fromTime)};
@@ -101,6 +106,11 @@ module.exports = function(mongoose, options, done)
     if (Array.isArray(options.status) && !_.isEmpty(options.status))
     {
       conditions.status = {$in: options.status};
+    }
+
+    if (Array.isArray(options.sections) && !_.isEmpty(options.sections))
+    {
+      conditions.section = {$in: options.sections};
     }
 
     if (options.fromTime)

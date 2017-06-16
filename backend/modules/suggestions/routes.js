@@ -596,7 +596,8 @@ module.exports = function setUpSuggestionsRoutes(app, module)
       interval: query.interval || 'year',
       fromTime: reportsModule.helpers.getTime(query.from) || null,
       toTime: reportsModule.helpers.getTime(query.to) || null,
-      status: _.isEmpty(query.status) ? [] : query.status.split(',')
+      status: _.isEmpty(query.status) ? [] : query.status.split(','),
+      sections: _.isEmpty(query.sections) ? [] : query.sections.split(',')
     };
 
     reportsModule.helpers.generateReport(
