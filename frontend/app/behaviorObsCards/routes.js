@@ -1,4 +1,4 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
   'underscore',
@@ -17,6 +17,24 @@ define([
 
   var nls = 'i18n!app/nls/behaviorObsCards';
   var canAccess = user.auth();
+
+  router.map('/behaviorObsCardCountReport', canAccess, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/behaviorObsCards/BehaviorObsCardCountReport',
+        'app/behaviorObsCards/pages/BehaviorObsCardCountReportPage',
+        'i18n!app/nls/reports',
+        nls
+      ],
+      function(BehaviorObsCardCountReport, BehaviorObsCardCountReportPage)
+      {
+        return new BehaviorObsCardCountReportPage({
+          model: BehaviorObsCardCountReport.fromQuery(req.query)
+        });
+      }
+    );
+  });
 
   router.map('/behaviorObsCards', canAccess, function(req)
   {

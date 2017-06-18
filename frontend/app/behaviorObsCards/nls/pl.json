@@ -4,6 +4,7 @@
   "BREADCRUMBS:addForm": "Dodawanie",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
+  "BREADCRUMBS:reports:count": "Ilość obserwacji",
 
   "MSG:LOADING_FAILURE": "Ładowanie kart obserwacji nie powiodło się :(",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie karty obserwacji nie powiodło się :(",
@@ -79,5 +80,15 @@
   "filter:anyHard": "Trudne do zmiany",
   "filter:anyHard:observations": "zachowania",
   "filter:anyHard:risks": "warunki pracy",
-  "filter:submit": "Filtruj"
+  "filter:submit": "Filtruj",
+
+  "report:title:countBySection": "Ilość przeprowadzonych obserwacji",
+  "report:title:safeBySection": "Ilość bezpiecznych zachowań",
+  "report:title:riskyBySection": "Ilość ryzykownych zachowań",
+  "report:title:categories": "Ilość ryzykownych zachowań wg kategorii",
+  "report:series:total": "Suma",
+  "report:filenames:countBySection": "OBS_Ilosc",
+  "report:filenames:safeBySection": "OBS_IloscBezpZach",
+  "report:filenames:riskyBySection": "OBS_IloscRyzykZach",
+  "report:filenames:categories": "OBS_IloscRyzykZachWgKategorii"
 }

@@ -101,6 +101,7 @@ exports['reports/server'] = {
     'suggestions/count': require('../backend/modules/suggestions/countReport'),
     'suggestions/summary': require('../backend/modules/suggestions/summaryReport'),
     'suggestions/engagement': require('../backend/modules/suggestions/engagementReport'),
-    'opinionSurvey': require('../backend/modules/opinionSurveys/report')
+    'opinionSurvey': require('../backend/modules/opinionSurveys/report'),
+    'behaviorObsCards/count': require('../backend/modules/behaviorObsCards/countReport')
   }
 };

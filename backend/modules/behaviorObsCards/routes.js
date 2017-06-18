@@ -3,16 +3,18 @@
 'use strict';
 
 const _ = require('lodash');
+const countReport = require('./countReport');
 
 module.exports = function setUpBehaviorObsCardsRoutes(app, module)
 {
   const express = app[module.config.expressId];
   const userModule = app[module.config.userId];
+  const reportsModule = app[module.config.reportsId];
   const mongoose = app[module.config.mongooseId];
   const BehaviorObsCard = mongoose.model('BehaviorObsCard');
 
-  var canView = userModule.auth('LOCAL', 'USER');
-  var canManage = userModule.auth('USER');
+  const canView = userModule.auth('LOCAL', 'USER');
+  const canManage = userModule.auth('USER');
 
   express.get(
     '/behaviorObsCards', canView, prepareForBrowse, express.crud.browseRoute.bind(null, app, BehaviorObsCard)
@@ -30,14 +32,31 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
   );
 
   express.get('/behaviorObsCards;rid', canView, findByRidRoute);
+
   express.post(
-    '/behaviorObsCards', canManage, prepareForAdd, express.crud.addRoute.bind(null, app, BehaviorObsCard)
+    '/behaviorObsCards',
+    canManage,
+    prepareForAdd,
+    express.crud.addRoute.bind(null, app, BehaviorObsCard)
   );
+
   express.get('/behaviorObsCards/:id', canView, express.crud.readRoute.bind(null, app, BehaviorObsCard));
+
   express.put(
-    '/behaviorObsCards/:id', canManage, prepareForEdit, express.crud.editRoute.bind(null, app, BehaviorObsCard)
+    '/behaviorObsCards/:id',
+    canManage,
+    prepareForEdit,
+    express.crud.editRoute.bind(null, app, BehaviorObsCard)
   );
+
   express.delete('/behaviorObsCards/:id', canManage, express.crud.deleteRoute.bind(null, app, BehaviorObsCard));
+
+  express.get(
+    '/behaviorObsCards/reports/count',
+    canView,
+    reportsModule.helpers.sendCachedReport.bind(null, 'behaviorObsCards/count'),
+    countReportRoute
+  );
 
   function prepareForBrowse(req, res, next)
   {
@@ -164,5 +183,35 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
     });
 
     return rows;
+  }
+
+  function countReportRoute(req, res, next)
+  {
+    var query = req.query;
+    var options = {
+      fromTime: reportsModule.helpers.getTime(query.from) || null,
+      toTime: reportsModule.helpers.getTime(query.to) || null,
+      interval: query.interval || 'month',
+      sections: _.isEmpty(query.sections) ? [] : query.sections.split(',')
+    };
+
+    reportsModule.helpers.generateReport(
+      app,
+      reportsModule,
+      countReport,
+      'behaviorObsCards/count',
+      req.reportHash,
+      options,
+      function(err, reportJson)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.type('json');
+        res.send(reportJson);
+      }
+    );
   }
 };

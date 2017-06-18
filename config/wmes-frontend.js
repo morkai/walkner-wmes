@@ -465,7 +465,8 @@ exports.reports = {
     'qi/count', 'qi/okRatio', 'qi/nokRatio',
     'kaizen/count', 'kaizen/summary',
     'suggestions/count', 'suggestions/summary', 'suggestions/engagement',
-    'opinionSurvey'
+    'opinionSurvey',
+    'behaviorObsCards/count'
   ]
 };
 

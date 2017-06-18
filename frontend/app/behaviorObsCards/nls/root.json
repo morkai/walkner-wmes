@@ -4,7 +4,8 @@
     "BREADCRUMBS:browse": "Cards",
     "BREADCRUMBS:addForm": "Add",
     "BREADCRUMBS:editForm": "Edit",
-    "BREADCRUMBS:ACTION_FORM:delete": "Delete"
+    "BREADCRUMBS:ACTION_FORM:delete": "Delete",
+    "BREADCRUMBS:reports:count": "Observation count"
   },
   "pl": true
 }
