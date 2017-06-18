@@ -77,12 +77,22 @@ define([
       {
         var observation = _.find(row.observations, function(o) { return !o.safe && !o.easy; });
 
+        if (!observation)
+        {
+          observation = _.find(row.observation, function(o) { return !o.safe; });
+        }
+
         row.observation = observation ? (observation.observation || observation.behavior) : '';
       }
 
       if (row.risks.length)
       {
         var risk = _.find(row.risks, function(r) { return !r.easy; });
+
+        if (!risk)
+        {
+          risk = row.risks[0];
+        }
 
         row.risk = risk ? risk.risk : '';
       }
