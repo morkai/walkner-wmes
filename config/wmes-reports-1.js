@@ -88,6 +88,7 @@ exports['reports/server'] = {
     '7': require('../backend/modules/reports/report7'),
     '8': require('../backend/modules/reports/report8'),
     '9': require('../backend/modules/reports/report9'),
+    'qi/count': require('../backend/modules/qi/countReport'),
     'qi/okRatio': require('../backend/modules/qi/okRatioReport'),
     'qi/nokRatio': require('../backend/modules/qi/nokRatioReport')
   }
