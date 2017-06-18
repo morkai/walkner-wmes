@@ -48,6 +48,7 @@ define([
           'from', 'to', 'interval', 'productFamilies', 'kinds', 'errorCategories', 'faultCodes', 'inspector'
         ])
       );
+
       data.kinds = data.kinds.join(',');
       data.errorCategories = data.errorCategories.join(',');
       data.faultCodes = data.faultCodes.join(',');
@@ -147,15 +148,23 @@ define([
 
     fromQuery: function(query)
     {
+      var from = +query.from;
+      var to = +query.to;
+
+      if (!from && !to)
+      {
+        from = time.getMoment().startOf('month').subtract(6, 'months').valueOf();
+      }
+
       return new this({
-        from: +query.from || undefined,
-        to: +query.to || undefined,
+        from: from || 0,
+        to: to || 0,
         interval: query.interval || undefined,
         productFamilies: _.isEmpty(query.productFamilies) ? '' : query.productFamilies,
         kinds: _.isEmpty(query.kinds) ? [] : query.kinds.split(','),
         errorCategories: _.isEmpty(query.errorCategories) ? [] : query.errorCategories.split(','),
         faultCodes: _.isEmpty(query.faultCodes) ? [] : query.faultCodes.split(','),
-        inspector: _.isEmpty(query.inspector) ? '' : query.inspector,
+        inspector: _.isEmpty(query.inspector) ? '' : query.inspector
       });
     }
 
