@@ -40,7 +40,12 @@ exports.mongoose = {
     'clipOrderCount',
     'whShiftMetrics',
     'cag', 'cagGroup', 'cagPlan',
-    'qiResult'
+    'qiResult',
+    'kaizenOrder', 'kaizenSection', 'kaizenCategory',
+    'suggestion',
+    'behaviorObsCard',
+    'minutesForSafetyCard',
+    'opinionSurveyResponse'
   ]
 };
 
@@ -90,6 +95,12 @@ exports['reports/server'] = {
     '9': require('../backend/modules/reports/report9'),
     'qi/count': require('../backend/modules/qi/countReport'),
     'qi/okRatio': require('../backend/modules/qi/okRatioReport'),
-    'qi/nokRatio': require('../backend/modules/qi/nokRatioReport')
+    'qi/nokRatio': require('../backend/modules/qi/nokRatioReport'),
+    'kaizen/count': require('../backend/modules/kaizen/countReport'),
+    'kaizen/summary': require('../backend/modules/kaizen/summaryReport'),
+    'suggestions/count': require('../backend/modules/suggestions/countReport'),
+    'suggestions/summary': require('../backend/modules/suggestions/summaryReport'),
+    'suggestions/engagement': require('../backend/modules/suggestions/engagementReport'),
+    'opinionSurvey': require('../backend/modules/opinionSurveys/report')
   }
 };

@@ -8,7 +8,7 @@ var _ = require('lodash');
 var step = require('h5.step');
 var multer = require('multer');
 var contentDisposition = require('content-disposition');
-var report = require('./report');
+var countReport = require('./countReport');
 var summaryReport = require('./summaryReport');
 
 module.exports = function setUpKaizenRoutes(app, kaizenModule)
@@ -51,8 +51,8 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
   express.get(
     '/kaizen/report',
     canView,
-    reportsModule.helpers.sendCachedReport.bind(null, 'kaizen'),
-    reportRoute
+    reportsModule.helpers.sendCachedReport.bind(null, 'kaizen/count'),
+    countReportRoute
   );
   express.get(
     '/kaizen/reports/summary',
@@ -454,11 +454,11 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
     {
       if (err)
       {
-        kaizenModule.error("Failed to remove an unused attachment [%s]: %s", filePath, err.message);
+        kaizenModule.error(`Failed to remove an unused attachment [${filePath}]: ${err.message}`);
       }
       else
       {
-        kaizenModule.debug("Removed an unused attachment: %s", filePath);
+        kaizenModule.debug(`Removed an unused attachment: ${filePath}`);
       }
     });
   }
@@ -597,7 +597,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
     return _.map(owners, function(owner) { return owner.label; }).join(', ');
   }
 
-  function reportRoute(req, res, next)
+  function countReportRoute(req, res, next)
   {
     var query = req.query;
     var options = {
@@ -610,8 +610,8 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
     reportsModule.helpers.generateReport(
       app,
       reportsModule,
-      report,
-      'kaizen',
+      countReport,
+      'kaizen/count',
       req.reportHash,
       options,
       function(err, reportJson)

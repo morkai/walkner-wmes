@@ -462,7 +462,10 @@ exports.reports = {
   nc12ToCagsJsonPath: __dirname + '/../data/12nc_to_cags.json',
   reports: [
     '1', '2', '3', '4', '5', '6', '7', '8', '9',
-    'qi/count', 'qi/okRatio', 'qi/nokRatio'
+    'qi/count', 'qi/okRatio', 'qi/nokRatio',
+    'kaizen/count', 'kaizen/summary',
+    'suggestions/count', 'suggestions/summary', 'suggestions/engagement',
+    'opinionSurvey'
   ]
 };
 
