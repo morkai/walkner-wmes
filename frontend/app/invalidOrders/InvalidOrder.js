@@ -47,7 +47,7 @@ define([
 
         o.startDate = startMoment.format('L');
 
-        if (o.status === 'ignored')
+        if (o.status === 'invalid')
         {
           var startDiff = startMoment.diff(Date.now(), 'hours');
 
