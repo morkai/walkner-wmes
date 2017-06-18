@@ -133,16 +133,16 @@ define([
             _.forEach(answerCountBySuperior, function(byQuestion, superiorId)
             {
               var superior = view.model.surveys.get(superiorToSurvey[superiorId]).cacheMaps.superiors[superiorId];
-              var answerCount = byQuestion[questionId];
+              var answerCount = byQuestion[questionId] || {no: 0, na: 0, yes: 0};
               var no = answerCount.no;
               var na = answerCount.na;
               var yes = answerCount.yes;
 
               if (view.stacking === 'percent')
               {
-                no = Math.round(no / answerCount.total * 100);
-                na = Math.round(na / answerCount.total * 100);
-                yes = Math.round(yes / answerCount.total * 100);
+                no = no ? Math.round(no / answerCount.total * 100) : 0;
+                na = na ? Math.round(na / answerCount.total * 100) : 0;
+                yes = yes ? Math.round(yes / answerCount.total * 100) : 0;
               }
 
               rows.push({
