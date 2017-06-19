@@ -2,20 +2,20 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
-var util = require('./util');
-var businessDays = require('./businessDays');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
+const util = require('./util');
+const businessDays = require('./businessDays');
 
 module.exports = function(mongoose, options, done)
 {
-  /*jshint validthis:true*/
+  /* jshint validthis:true*/
 
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var ProdDowntime = mongoose.model('ProdDowntime');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const ProdDowntime = mongoose.model('ProdDowntime');
 
-  var report3 = new Report3(options);
+  const report3 = new Report3(options);
 
   step(
     prepareResultsStep,
@@ -45,13 +45,13 @@ module.exports = function(mongoose, options, done)
 
   function prepareResultsStep()
   {
-    var conditions = {
+    const conditions = {
       startedAt: {
         $gte: options.fromTime + 6 * 3600 * 1000,
         $lt: options.toTime + 6 * 3600 * 1000
       }
     };
-    var orderFields = {
+    const orderFields = {
       prodLine: 1,
       startedAt: 1,
       finishedAt: 1,
@@ -59,15 +59,15 @@ module.exports = function(mongoose, options, done)
       quantityDone: 1,
       quantityLost: 1
     };
-    var downtimeFields = {
+    const downtimeFields = {
       prodLine: 1,
       startedAt: 1,
       finishedAt: 1,
       reason: 1
     };
 
-    var orderStreamDone = _.once(this.parallel());
-    var orderStream = ProdShiftOrder
+    const orderStreamDone = _.once(this.parallel());
+    const orderStream = ProdShiftOrder
       .find(conditions, orderFields)
       .sort({startedAt: 1})
       .lean()
@@ -77,8 +77,8 @@ module.exports = function(mongoose, options, done)
     orderStream.on('end', orderStreamDone);
     orderStream.on('data', report3.handleProdShiftOrder.bind(report3));
 
-    var downtimeStreamDone = _.once(this.parallel());
-    var downtimeStream = ProdDowntime
+    const downtimeStreamDone = _.once(this.parallel());
+    const downtimeStream = ProdDowntime
       .find(conditions, downtimeFields)
       .sort({startedAt: 1})
       .lean()
@@ -129,13 +129,13 @@ function Report3(options)
 
 Report3.prototype.toJSON = function()
 {
-  var prodLinesInfo = [];
-  var report = this;
+  const prodLinesInfo = [];
+  const report = this;
 
   _.forEach(this.prodLineIds, function(prodLineId)
   {
-    var prodLineInfo = report.options.prodLines[prodLineId];
-    var deactivatedAt = prodLineInfo.deactivatedAt;
+    const prodLineInfo = report.options.prodLines[prodLineId];
+    const deactivatedAt = prodLineInfo.deactivatedAt;
 
     if (deactivatedAt !== 0 && report.options.fromTime >= deactivatedAt)
     {
@@ -167,21 +167,21 @@ Report3.prototype.toJSON = function()
 
 Report3.prototype.finalize = function()
 {
-  var interval = this.options.interval;
-  var firstGroupKey = util.createGroupKey(interval, new Date(this.options.fromTime + 6 * 3600 * 1000));
-  var lastGroupKey = util.createGroupKey(interval, new Date(this.options.toTime - 18 * 3600 * 1000));
+  const interval = this.options.interval;
+  const firstGroupKey = util.createGroupKey(interval, new Date(this.options.fromTime + 6 * 3600 * 1000));
+  const lastGroupKey = util.createGroupKey(interval, new Date(this.options.toTime - 18 * 3600 * 1000));
 
   this.calcWorkDays(firstGroupKey, lastGroupKey);
 
-  var allGroupKeys = Object.keys(this.workDays);
+  const allGroupKeys = Object.keys(this.workDays);
 
-  for (var i = 0, l = this.prodLineIds.length; i < l; ++i)
+  for (let i = 0, l = this.prodLineIds.length; i < l; ++i)
   {
-    var prodLineId = this.prodLineIds[i];
-    var prodLineInfo = this.options.prodLines[prodLineId];
-    var deactivatedAt = prodLineInfo && prodLineInfo.deactivatedAt ? prodLineInfo.deactivatedAt : null;
-    var deactivated = deactivatedAt !== null;
-    var prodLineData = this.results[prodLineId];
+    const prodLineId = this.prodLineIds[i];
+    const prodLineInfo = this.options.prodLines[prodLineId];
+    const deactivatedAt = prodLineInfo && prodLineInfo.deactivatedAt ? prodLineInfo.deactivatedAt : null;
+    const deactivated = deactivatedAt !== null;
+    let prodLineData = this.results[prodLineId];
 
     if (!prodLineData)
     {
@@ -195,12 +195,12 @@ Report3.prototype.finalize = function()
       }
     }
 
-    var groupKeys = deactivated ? allGroupKeys : Object.keys(prodLineData);
+    const groupKeys = deactivated ? allGroupKeys : Object.keys(prodLineData);
 
-    for (var ii = 0, ll = groupKeys.length; ii < ll; ++ii)
+    for (let ii = 0, ll = groupKeys.length; ii < ll; ++ii)
     {
-      var groupKey = groupKeys[ii];
-      var prodLineSummary = prodLineData[groupKey];
+      const groupKey = groupKeys[ii];
+      let prodLineSummary = prodLineData[groupKey];
 
       if (!prodLineSummary)
       {
@@ -219,7 +219,7 @@ Report3.prototype.finalize = function()
 
 Report3.prototype.calcWorkDays = function(firstGroupKey, lastGroupKey)
 {
-  var createNextGroupKey = util.createCreateNextGroupKey(this.options.interval);
+  const createNextGroupKey = util.createCreateNextGroupKey(this.options.interval);
 
   while (firstGroupKey <= lastGroupKey)
   {
@@ -241,7 +241,7 @@ Report3.prototype.handleProdShiftOrder = function(prodShiftOrder)
 
 Report3.prototype.handleProdDowntime = function(prodDowntime)
 {
-  var downtimeReason = this.options.downtimeReasons[prodDowntime.reason];
+  const downtimeReason = this.options.downtimeReasons[prodDowntime.reason];
 
   if (!downtimeReason || !prodDowntime.finishedAt || !this.options.prodLines[prodDowntime.prodLine])
   {
@@ -260,7 +260,7 @@ Report3.prototype.getProdLineSummary = function(orderOrDowntime)
     this.results[orderOrDowntime.prodLine] = {};
   }
 
-  var groupKey = util.createGroupKey(this.options.interval, orderOrDowntime.startedAt);
+  const groupKey = util.createGroupKey(this.options.interval, orderOrDowntime.startedAt);
 
   if (!this.results[orderOrDowntime.prodLine][groupKey])
   {
@@ -277,8 +277,8 @@ Report3.prototype.countWorkDays = function(groupKey)
     return this.workDays[groupKey];
   }
 
-  var workDays = -1;
-  var date = new Date(groupKey);
+  let workDays = -1;
+  const date = new Date(groupKey);
 
   if (this.options.interval === 'day')
   {
@@ -345,9 +345,9 @@ Report3ProdLineSummary.prototype.roundValues = function()
     return;
   }
 
-  var downtimeTypes = Object.keys(this.downtimes);
+  const downtimeTypes = Object.keys(this.downtimes);
 
-  for (var i = 0, l = downtimeTypes.length; i < l; ++i)
+  for (let i = 0, l = downtimeTypes.length; i < l; ++i)
   {
     this.downtimes[downtimeTypes[i]][1] = util.round(this.downtimes[downtimeTypes[i]][1]);
   }
@@ -362,14 +362,14 @@ Report3ProdLineSummary.prototype.adjustWorkDays = function(countWorkDays, interv
     return;
   }
 
-  var toTime = moment(fromTime).add(1, interval).valueOf();
+  const toTime = moment(fromTime).add(1, interval).valueOf();
 
   if (toTime < deactivatedAt)
   {
     return;
   }
 
-  var totalWorkDays = countWorkDays(fromTime);
+  const totalWorkDays = countWorkDays(fromTime);
 
   if (fromTime >= deactivatedAt)
   {
@@ -378,7 +378,7 @@ Report3ProdLineSummary.prototype.adjustWorkDays = function(countWorkDays, interv
     return;
   }
 
-  var activeWorkDays = businessDays.countBetweenDates(fromTime, deactivatedAt);
+  const activeWorkDays = businessDays.countBetweenDates(fromTime, deactivatedAt);
 
   this.workDayCount -= totalWorkDays - activeWorkDays;
 };
@@ -388,8 +388,8 @@ Report3ProdLineSummary.prototype.handleProdShiftOrder = function(prodShiftOrder)
   this.increaseWeekendWorkDays(prodShiftOrder.startedAt);
   this.increaseWeekendWorkDays(prodShiftOrder.finishedAt);
 
-  this.exploitation +=
-    prodShiftOrder.machineTime / 100 * (prodShiftOrder.quantityDone + prodShiftOrder.quantityLost);
+  this.exploitation
+    += prodShiftOrder.machineTime / 100 * (prodShiftOrder.quantityDone + prodShiftOrder.quantityLost);
   this.quantityDone += prodShiftOrder.quantityDone;
   this.quantityLost += prodShiftOrder.quantityLost;
 };
@@ -400,7 +400,7 @@ Report3ProdLineSummary.prototype.handleProdDowntime = function(
   this.increaseWeekendWorkDays(prodDowntime.startedAt);
   this.increaseWeekendWorkDays(prodDowntime.finishedAt);
 
-  var duration = (prodDowntime.finishedAt - prodDowntime.startedAt) / 3600000;
+  const duration = (prodDowntime.finishedAt - prodDowntime.startedAt) / 3600000;
 
   this.increaseDowntime(downtimeReason.type, duration);
 
@@ -462,14 +462,14 @@ Report3ProdLineSummary.prototype.increaseWeekendWorkDays = function(date)
     date = new Date(date.getTime() - 24 * 3600 * 1000);
   }
 
-  var weekDay = date.getDay();
+  const weekDay = date.getDay();
 
   if (weekDay !== 0 && weekDay !== 6)
   {
     return;
   }
 
-  var key = '' + date.getFullYear() + date.getMonth() + date.getDate();
+  const key = '' + date.getFullYear() + date.getMonth() + date.getDate();
 
   if (this.specialWorkDays[key])
   {

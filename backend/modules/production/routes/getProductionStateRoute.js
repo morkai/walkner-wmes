@@ -2,13 +2,13 @@
 
 'use strict';
 
-var step = require('h5.step');
+const step = require('h5.step');
 
 module.exports = function getProductionStateRoute(app, productionModule, req, res, next)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var Setting = mongoose.model('Setting');
-  var FactoryLayout = mongoose.model('FactoryLayout');
+  const mongoose = app[productionModule.config.mongooseId];
+  const Setting = mongoose.model('Setting');
+  const FactoryLayout = mongoose.model('FactoryLayout');
 
   step(
     function()

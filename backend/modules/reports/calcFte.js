@@ -2,15 +2,15 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var util = require('./util');
+const _ = require('lodash');
+const step = require('h5.step');
+const util = require('./util');
 
 module.exports = function(mongoose, options, done)
 {
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var FteMasterEntry = mongoose.model('FteMasterEntry');
-  var FteLeaderEntry = mongoose.model('FteLeaderEntry');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const FteMasterEntry = mongoose.model('FteMasterEntry');
+  const FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
   if (typeof options.division !== 'string')
   {
@@ -20,7 +20,7 @@ module.exports = function(mongoose, options, done)
   options.fromTime = +options.fromTime;
   options.toTime = +options.toTime;
 
-  var ignoredProdTasks = {};
+  const ignoredProdTasks = {};
 
   if (options.prodTasks)
   {
@@ -33,7 +33,7 @@ module.exports = function(mongoose, options, done)
     });
   }
 
-  var results = {
+  const results = {
     options: options,
     grouped: {},
     totals: {
@@ -47,13 +47,13 @@ module.exports = function(mongoose, options, done)
     ratios: {}
   };
 
-  var from = new Date(options.fromTime);
-  var to = new Date(options.toTime);
+  const from = new Date(options.fromTime);
+  const to = new Date(options.toTime);
 
   step(
     function getActiveOrgUnitsStep()
     {
-      var activeOrgUnitOptions = {
+      const activeOrgUnitOptions = {
         from: from,
         to: to,
         orgUnitTypes: {},
@@ -80,7 +80,7 @@ module.exports = function(mongoose, options, done)
     },
     function handleFteEntriesStep()
     {
-      var fteLeaderEntryStream = FteLeaderEntry
+      const fteLeaderEntryStream = FteLeaderEntry
         .find(
           {date: {$gte: from, $lt: to}},
           {
@@ -98,7 +98,7 @@ module.exports = function(mongoose, options, done)
 
       handleFteLeaderEntryStream(options, this.dateToActiveOrgUnits, fteLeaderEntryStream, _.once(this.parallel()));
 
-      var conditions = {
+      const conditions = {
         date: {$gte: from, $lt: to}
       };
 
@@ -107,7 +107,7 @@ module.exports = function(mongoose, options, done)
         conditions.subdivision = {$in: options.subdivisions};
       }
 
-      var fteMasterEntryStream = FteMasterEntry
+      const fteMasterEntryStream = FteMasterEntry
         .find(conditions, {
           subdivision: 1,
           date: 1,
@@ -124,14 +124,14 @@ module.exports = function(mongoose, options, done)
     },
     function groupResultsStep()
     {
-      var interval = options.interval;
-      var grouped = {};
-      var dates = Object.keys(results.grouped);
+      const interval = options.interval;
+      const grouped = {};
+      const dates = Object.keys(results.grouped);
 
-      for (var i = 0, l = dates.length; i < l; ++i)
+      for (let i = 0, l = dates.length; i < l; ++i)
       {
-        var date = dates[i];
-        var fte = results.grouped[date];
+        let date = dates[i];
+        const fte = results.grouped[date];
 
         fte.total = fte.leader + fte.master;
         fte.prodDenTotal = fte.prodDenLeader + fte.prodDenMaster;
@@ -147,7 +147,7 @@ module.exports = function(mongoose, options, done)
         }
         else if (interval === 'hour')
         {
-          for (var h = 0; h < 8; ++h)
+          for (let h = 0; h < 8; ++h)
           {
             date = +date + 3600 * 1000 * h;
 
@@ -163,7 +163,7 @@ module.exports = function(mongoose, options, done)
         }
         else
         {
-          var groupKey = util.createGroupKey(interval, +date);
+          const groupKey = util.createGroupKey(interval, +date);
 
           if (grouped[groupKey] === undefined)
           {
@@ -219,7 +219,7 @@ module.exports = function(mongoose, options, done)
 
   function getActiveOrgUnits(options, done)
   {
-    var pipeline = [
+    const pipeline = [
       {
         $match: {
           startedAt: {
@@ -230,7 +230,7 @@ module.exports = function(mongoose, options, done)
       }
     ];
 
-    var ignoredProdLines = options.ignoredOrgUnits ? Object.keys(options.ignoredOrgUnits.prodLine) : [];
+    const ignoredProdLines = options.ignoredOrgUnits ? Object.keys(options.ignoredOrgUnits.prodLine) : [];
 
     if (ignoredProdLines.length)
     {
@@ -253,11 +253,11 @@ module.exports = function(mongoose, options, done)
         return done(err);
       }
 
-      var dateToActiveOrgUnits = {};
+      const dateToActiveOrgUnits = {};
 
-      for (var i = 0, l = results.length; i < l; ++i)
+      for (let i = 0, l = results.length; i < l; ++i)
       {
-        var result = results[i];
+        const result = results[i];
 
         dateToActiveOrgUnits[result._id.getTime()] = result;
 
@@ -275,7 +275,7 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    var ratios = results.ratios[key];
+    const ratios = results.ratios[key];
 
     if (ratios && ratios.divided !== -1)
     {
@@ -289,24 +289,24 @@ module.exports = function(mongoose, options, done)
 
     createDefaultRatiosResult(key);
 
-    var allWorkingProdLines = activeOrgUnits.prodLine;
-    var allProdLinesInOrgUnit = options.orgUnits.orgUnit;
-    var allProdLinesInDivision = options.orgUnits[
+    const allWorkingProdLines = activeOrgUnits.prodLine;
+    const allProdLinesInOrgUnit = options.orgUnits.orgUnit;
+    const allProdLinesInDivision = options.orgUnits[
       options.orgUnitType === 'division' ? 'orgUnit' : 'division'
     ];
 
-    var workingProdLinesInOrgUnit = _.intersection(
+    const workingProdLinesInOrgUnit = _.intersection(
       allProdLinesInOrgUnit,
       allWorkingProdLines
     );
-    var allWorkingProdLinesInDivision = options.orgUnitType === 'division'
+    const allWorkingProdLinesInDivision = options.orgUnitType === 'division'
       ? workingProdLinesInOrgUnit
       : _.intersection(allProdLinesInDivision, allWorkingProdLines);
 
-    var dividedRatio = allWorkingProdLinesInDivision.length
+    const dividedRatio = allWorkingProdLinesInDivision.length
       ? (workingProdLinesInOrgUnit.length / allWorkingProdLinesInDivision.length)
       : 0;
-    var undividedRatio = allWorkingProdLines.length
+    const undividedRatio = allWorkingProdLines.length
       ? (workingProdLinesInOrgUnit.length / allWorkingProdLines.length)
       : 0;
 
@@ -323,7 +323,7 @@ module.exports = function(mongoose, options, done)
   {
     createDefaultRatiosResult(key);
 
-    var ratios = results.ratios[key];
+    const ratios = results.ratios[key];
 
     if (!activeOrgUnits
       || !Array.isArray(activeOrgUnits.prodLine)
@@ -342,20 +342,20 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    var allWorkingProdLines = activeOrgUnits.prodLine;
-    var allProdLinesInSubdivision = options.orgUnits.subdivision;
-    var allProdLinesInOrgUnit = options.orgUnits.orgUnit;
-    var workingProdLinesInSubdivision = _.intersection(
+    const allWorkingProdLines = activeOrgUnits.prodLine;
+    const allProdLinesInSubdivision = options.orgUnits.subdivision;
+    const allProdLinesInOrgUnit = options.orgUnits.orgUnit;
+    const workingProdLinesInSubdivision = _.intersection(
       allProdLinesInSubdivision,
       allWorkingProdLines
     );
-    var workingProdLinesInOrgUnit = _.intersection(
+    const workingProdLinesInOrgUnit = _.intersection(
       workingProdLinesInSubdivision,
       allProdLinesInOrgUnit
     );
 
-    var flowsRatio;
-    var tasksRatio = workingProdLinesInOrgUnit.length / workingProdLinesInSubdivision.length;
+    let flowsRatio;
+    let tasksRatio = workingProdLinesInOrgUnit.length / workingProdLinesInSubdivision.length;
 
     if (options.orgUnitType === 'mrpController' || options.orgUnitType === 'prodFlow')
     {
@@ -363,9 +363,9 @@ module.exports = function(mongoose, options, done)
     }
     else
     {
-      var allProdLinesInProdFlow = options.orgUnits.prodFlow;
+      const allProdLinesInProdFlow = options.orgUnits.prodFlow;
 
-      var workingProdLinesInProdFlow = _.intersection(
+      const workingProdLinesInProdFlow = _.intersection(
         allProdLinesInProdFlow,
         workingProdLinesInSubdivision
       );
@@ -404,12 +404,12 @@ module.exports = function(mongoose, options, done)
         return;
       }
 
-      var key = '' + fteLeaderEntry.date.getTime();
+      const key = '' + fteLeaderEntry.date.getTime();
 
       createDefaultGroupedResult(key);
 
-      var activeOrgUnits = dateToActiveOrgUnits[key];
-      var activeDivisionsCount = options.division === null
+      const activeOrgUnits = dateToActiveOrgUnits[key];
+      const activeDivisionsCount = options.division === null
         ? 1
         : activeOrgUnits && activeOrgUnits.division.length
           ? activeOrgUnits.division.length
@@ -420,14 +420,14 @@ module.exports = function(mongoose, options, done)
         return;
       }
 
-      var fte = {
+      const fte = {
         divided: 0,
         undivided: 0,
         prodDenDivided: 0,
         prodDenUndivided: 0
       };
 
-      for (var i = 0, l = fteLeaderEntry.tasks.length; i < l; ++i)
+      for (let i = 0, l = fteLeaderEntry.tasks.length; i < l; ++i)
       {
         countFteLeaderEntryTaskFte(fteLeaderEntry.tasks[i], options.division, fte);
       }
@@ -460,10 +460,10 @@ module.exports = function(mongoose, options, done)
 
   function countFteLeaderEntryTaskFunctionFte(task, division, fte)
   {
-    var inProdProdTask = ignoredProdTasks[task.id] === undefined;
-    var taskFunctions = task.functions;
+    const inProdProdTask = ignoredProdTasks[task.id] === undefined;
+    const taskFunctions = task.functions;
 
-    for (var i = 0, l = taskFunctions.length; i < l; ++i)
+    for (let i = 0, l = taskFunctions.length; i < l; ++i)
     {
       countFteLeaderEntryTaskCompanyFte(taskFunctions[i].companies, inProdProdTask, division, fte);
     }
@@ -471,9 +471,9 @@ module.exports = function(mongoose, options, done)
 
   function countFteLeaderEntryTaskCompanyFte(taskCompanies, inProdProdTask, division, fte)
   {
-    for (var i = 0, l = taskCompanies.length; i < l; ++i)
+    for (let i = 0, l = taskCompanies.length; i < l; ++i)
     {
-      var taskCompany = taskCompanies[i];
+      const taskCompany = taskCompanies[i];
 
       if (typeof taskCompany.count === 'number')
       {
@@ -493,7 +493,7 @@ module.exports = function(mongoose, options, done)
 
   function countDividedFte(count, division, inProdProdTask, fte)
   {
-    for (var i = 0, l = count.length; i < l; ++i)
+    for (let i = 0, l = count.length; i < l; ++i)
     {
       if (division === null || count[i].division === division)
       {
@@ -520,17 +520,17 @@ module.exports = function(mongoose, options, done)
         return;
       }
 
-      var key = '' + fteMasterEntry.date.getTime();
+      const key = '' + fteMasterEntry.date.getTime();
 
       createDefaultGroupedResult(key);
 
-      var fte = {
+      const fte = {
         flows: 0,
         tasks: 0,
         prodDenTasks: 0
       };
 
-      for (var i = 0, l = fteMasterEntry.tasks.length; i < l; ++i)
+      for (let i = 0, l = fteMasterEntry.tasks.length; i < l; ++i)
       {
         countFteMasterEntryTaskFte(options, fteMasterEntry.tasks[i], fte);
       }
@@ -551,7 +551,7 @@ module.exports = function(mongoose, options, done)
 
   function countFteMasterEntryTaskFte(options, task, fte)
   {
-    var isProdFlow = task.type === 'prodFlow';
+    const isProdFlow = task.type === 'prodFlow';
 
     if (task.noPlan || (isProdFlow && !containsProdFlow(options, task)))
     {

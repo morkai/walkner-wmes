@@ -2,42 +2,42 @@
 
 'use strict';
 
-var fs = require('fs');
-var _ = require('lodash');
-var step = require('h5.step');
-var ejs = require('ejs');
-var moment = require('moment');
-var ObjectId = require('mongoose').Types.ObjectId;
-var resolveProductName = require('../util/resolveProductName');
+const fs = require('fs');
+const _ = require('lodash');
+const step = require('h5.step');
+const ejs = require('ejs');
+const moment = require('moment');
+const ObjectId = require('mongoose').Types.ObjectId;
+const resolveProductName = require('../util/resolveProductName');
 
 module.exports = function setUpAlertsServer(app, module)
 {
-  var messengerServer = app[module.config.messengerServerId];
-  var fte = app[module.config.fteId];
-  var mongoose = app[module.config.mongooseId];
-  var User = mongoose.model('User');
-  var Aor = mongoose.model('Aor');
-  var DowntimeReason = mongoose.model('DowntimeReason');
-  var ProdFlow = mongoose.model('ProdFlow');
-  var WorkCenter = mongoose.model('WorkCenter');
-  var ProdLine = mongoose.model('ProdLine');
-  var ProdLogEntry = mongoose.model('ProdLogEntry');
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var ProdDowntime = mongoose.model('ProdDowntime');
-  var ProdDowntimeAlert = mongoose.model('ProdDowntimeAlert');
+  const messengerServer = app[module.config.messengerServerId];
+  const fte = app[module.config.fteId];
+  const mongoose = app[module.config.mongooseId];
+  const User = mongoose.model('User');
+  const Aor = mongoose.model('Aor');
+  const DowntimeReason = mongoose.model('DowntimeReason');
+  const ProdFlow = mongoose.model('ProdFlow');
+  const WorkCenter = mongoose.model('WorkCenter');
+  const ProdLine = mongoose.model('ProdLine');
+  const ProdLogEntry = mongoose.model('ProdLogEntry');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const ProdDowntime = mongoose.model('ProdDowntime');
+  const ProdDowntimeAlert = mongoose.model('ProdDowntimeAlert');
 
-  var emailTemplateFile = __dirname + '/email.pl.ejs';
-  var renderEmail = ejs.compile(fs.readFileSync(emailTemplateFile, 'utf8'), {
+  const emailTemplateFile = __dirname + '/email.pl.ejs';
+  const renderEmail = ejs.compile(fs.readFileSync(emailTemplateFile, 'utf8'), {
     cache: true,
     filename: emailTemplateFile,
     compileDebug: false,
     rmWhitespace: true
   });
-  var onLoad = [];
-  var alertMap = {};
-  var alertList = [];
-  var downtimeMap = {};
-  var nameMaps = {
+  let onLoad = [];
+  let alertMap = {};
+  let alertList = [];
+  const downtimeMap = {};
+  const nameMaps = {
     aor: {},
     reason: {},
     prodFlow: {},
@@ -91,14 +91,14 @@ module.exports = function setUpAlertsServer(app, module)
     {
       if (err)
       {
-        return module.error("Failed to reload all alerts: %s", err.message);
+        return module.error('Failed to reload all alerts: %s', err.message);
       }
 
       loadActiveDowntimes(function(err)
       {
         if (err)
         {
-          return module.error("Failed to load all downtimes: %s", err.message);
+          return module.error('Failed to load all downtimes: %s', err.message);
         }
 
         _.forEach(onLoad, function(cb) { cb(); });
@@ -115,7 +115,7 @@ module.exports = function setUpAlertsServer(app, module)
 
   function finishOldAlerts()
   {
-    var currentShiftTime = fte.currentShift.date.getTime();
+    const currentShiftTime = fte.currentShift.date.getTime();
 
     _.forEach(downtimeMap, function(downtime)
     {
@@ -179,7 +179,7 @@ module.exports = function setUpAlertsServer(app, module)
     {
       if (err)
       {
-        return module.error("Failed to reload alert [%s]: %s", prodDowntimeAlertId, err.message);
+        return module.error('Failed to reload alert [%s]: %s', prodDowntimeAlertId, err.message);
       }
 
       if (prodDowntimeAlert)
@@ -201,7 +201,7 @@ module.exports = function setUpAlertsServer(app, module)
 
     alertMap[alert._id] = alert;
 
-    var index = _.findIndex(alertList, '_id', alert._id);
+    const index = _.findIndex(alertList, '_id', alert._id);
 
     if (index !== -1)
     {
@@ -218,7 +218,7 @@ module.exports = function setUpAlertsServer(app, module)
     step(
       function findProdDowntimesStep()
       {
-        var conditions = {
+        const conditions = {
           date: fte.currentShift.date,
           finishedAt: null
         };
@@ -232,11 +232,11 @@ module.exports = function setUpAlertsServer(app, module)
           return this.skip(err);
         }
 
-        var prodShiftOrdersToFind = {};
+        const prodShiftOrdersToFind = {};
 
         _.forEach(prodDowntimes, function(prodDowntime)
         {
-          var downtime = createDowntime(prodDowntime);
+          const downtime = createDowntime(prodDowntime);
 
           if (_.isEmpty(downtime.alerts))
           {
@@ -267,10 +267,10 @@ module.exports = function setUpAlertsServer(app, module)
       },
       function findProdShiftOrdersStep()
       {
-        var conditions = {
+        const conditions = {
           _id: {$in: Object.keys(this.prodShiftOrdersToFind)}
         };
-        var fields = {
+        const fields = {
           _id: 1,
           prodShift: 1,
           date: 1,
@@ -290,7 +290,7 @@ module.exports = function setUpAlertsServer(app, module)
           return this.skip(err);
         }
 
-        var prodShiftOrdersToFind = this.prodShiftOrdersToFind;
+        const prodShiftOrdersToFind = this.prodShiftOrdersToFind;
 
         _.forEach(prodShiftOrders, function(prodShiftOrder)
         {
@@ -315,8 +315,8 @@ module.exports = function setUpAlertsServer(app, module)
 
   function mapOrderToDowntimes(prodShiftOrder, downtimes)
   {
-    var orderData = prodShiftOrder.orderData || {};
-    var order = {
+    const orderData = prodShiftOrder.orderData || {};
+    const order = {
       prodShiftOrder: prodShiftOrder._id,
       prodShift: prodShiftOrder.prodShift,
       date: prodShiftOrder.date,
@@ -351,7 +351,7 @@ module.exports = function setUpAlertsServer(app, module)
           return this.skip();
         }
 
-        var downtime = mapMatchingAlerts(createDowntime(prodDowntime));
+        const downtime = mapMatchingAlerts(createDowntime(prodDowntime));
 
         if (!_.isEmpty(downtime.alerts))
         {
@@ -360,14 +360,14 @@ module.exports = function setUpAlertsServer(app, module)
       },
       function findProdShiftOrderStep()
       {
-        var downtime = downtimeMap[prodDowntimeId];
+        const downtime = downtimeMap[prodDowntimeId];
 
         if (!downtime || !downtime.prodShiftOrder)
         {
           return this.skip();
         }
 
-        var fields = {
+        const fields = {
           _id: 1,
           prodShift: 1,
           date: 1,
@@ -387,7 +387,7 @@ module.exports = function setUpAlertsServer(app, module)
           return this.skip(err);
         }
 
-        var downtime = downtimeMap[prodDowntimeId];
+        const downtime = downtimeMap[prodDowntimeId];
 
         if (downtime && prodShiftOrder)
         {
@@ -398,7 +398,7 @@ module.exports = function setUpAlertsServer(app, module)
       {
         if (err)
         {
-          module.error("Failed to handle downtime start [%s]: %s", prodDowntimeId, err.message);
+          module.error('Failed to handle downtime start [%s]: %s', prodDowntimeId, err.message);
         }
         else
         {
@@ -410,7 +410,7 @@ module.exports = function setUpAlertsServer(app, module)
 
   function handleDowntimeFinish(prodDowntimeId)
   {
-    var downtime = downtimeMap[prodDowntimeId];
+    const downtime = downtimeMap[prodDowntimeId];
 
     if (downtime)
     {
@@ -422,7 +422,7 @@ module.exports = function setUpAlertsServer(app, module)
 
   function handleDowntimeAlerts(prodDowntimeId)
   {
-    var downtime = downtimeMap[prodDowntimeId];
+    const downtime = downtimeMap[prodDowntimeId];
 
     if (!downtime)
     {
@@ -431,7 +431,7 @@ module.exports = function setUpAlertsServer(app, module)
 
     downtime.duration = Math.max(0, (Date.now() - downtime.startedAt) / 1000);
 
-    var anyActiveAlerts = false;
+    let anyActiveAlerts = false;
 
     _.forEach(downtime.alerts, function(alert)
     {
@@ -467,8 +467,8 @@ module.exports = function setUpAlertsServer(app, module)
       return finishDowntimeAlert(downtime, alert);
     }
 
-    var currentActionIndexes = findCurrentActionIndexes(alert.actions, downtime.duration);
-    var timeToNextAction;
+    const currentActionIndexes = findCurrentActionIndexes(alert.actions, downtime.duration);
+    let timeToNextAction;
 
     if (currentActionIndexes.length === 0)
     {
@@ -476,9 +476,9 @@ module.exports = function setUpAlertsServer(app, module)
     }
     else
     {
-      var currentActionIndex = _.last(currentActionIndexes);
-      var nextActionIndex = currentActionIndex + 1;
-      var isLastAction = nextActionIndex === alert.actions.length;
+      const currentActionIndex = _.last(currentActionIndexes);
+      const nextActionIndex = currentActionIndex + 1;
+      const isLastAction = nextActionIndex === alert.actions.length;
 
       if (alert.action < currentActionIndex || (isLastAction && alert.repeatInterval))
       {
@@ -508,8 +508,8 @@ module.exports = function setUpAlertsServer(app, module)
       return calcTimeToLastActionRepeat(downtime.startedAt, _.last(alert.actions).delay, alert.repeatInterval * 1000);
     }
 
-    var action = alert.actions[actionIndex];
-    var actionStartTime = downtime.startedAt + action.delay * 1000;
+    const action = alert.actions[actionIndex];
+    const actionStartTime = downtime.startedAt + action.delay * 1000;
 
     return actionStartTime - Date.now();
   }
@@ -521,7 +521,7 @@ module.exports = function setUpAlertsServer(app, module)
       return -1;
     }
 
-    var lastActionTime = startedAt + lastActionDelay * 1000;
+    const lastActionTime = startedAt + lastActionDelay * 1000;
 
     return repeatInterval - ((Date.now() - lastActionTime) % repeatInterval);
   }
@@ -535,7 +535,7 @@ module.exports = function setUpAlertsServer(app, module)
       return;
     }
 
-    var data = {
+    const data = {
       downtimeId: downtime._id,
       alertId: alert._id,
       alertName: alert.name
@@ -545,7 +545,7 @@ module.exports = function setUpAlertsServer(app, module)
     {
       if (err)
       {
-        module.error("Failed to save the [finishDowntimeAlert] operation: %s", err.message);
+        module.error('Failed to save the [finishDowntimeAlert] operation: %s', err.message);
       }
       else
       {
@@ -556,12 +556,12 @@ module.exports = function setUpAlertsServer(app, module)
 
   function findCurrentActionIndexes(actions, duration)
   {
-    var currentActionIndexes = [];
-    var matchedDelay = -1;
+    const currentActionIndexes = [];
+    let matchedDelay = -1;
 
-    for (var i = 0; i < actions.length; ++i)
+    for (let i = 0; i < actions.length; ++i)
     {
-      var delay = actions[i].delay;
+      const delay = actions[i].delay;
 
       if (duration >= delay)
       {
@@ -571,7 +571,7 @@ module.exports = function setUpAlertsServer(app, module)
 
     if (matchedDelay !== -1)
     {
-      for (var actionIndex = 0; actionIndex < actions.length; ++actionIndex)
+      for (let actionIndex = 0; actionIndex < actions.length; ++actionIndex)
       {
         if (actions[actionIndex].delay === matchedDelay)
         {
@@ -593,8 +593,8 @@ module.exports = function setUpAlertsServer(app, module)
 
   function executeAction(downtime, alert, actionIndex)
   {
-    var action = alert.actions[actionIndex];
-    var logData = {
+    const action = alert.actions[actionIndex];
+    const logData = {
       downtimeId: downtime._id,
       alertId: alert._id,
       alertName: alert.name,
@@ -615,16 +615,16 @@ module.exports = function setUpAlertsServer(app, module)
           return this.skip(err);
         }
 
-        var currentDate = new Date();
-        var currentTimeValue = currentDate.getHours() * 1000 + currentDate.getMinutes();
-        var emailRecipients = action.sendEmail && app[module.config.mailSenderId]
+        const currentDate = new Date();
+        const currentTimeValue = currentDate.getHours() * 1000 + currentDate.getMinutes();
+        const emailRecipients = action.sendEmail && app[module.config.mailSenderId]
           ? _.filter(users, filterEmailRecipient)
           : [];
-        var smsRecipients = action.sendSms && app[module.config.smsSenderId]
+        const smsRecipients = action.sendSms && app[module.config.smsSenderId]
           ? _.filter(users, filterSmsRecipient.bind(null, currentTimeValue))
           : [];
-        var recipients = {};
-        var addRecipient = function(user) { recipients[user._id] = user.label; };
+        const recipients = {};
+        const addRecipient = function(user) { recipients[user._id] = user.label; };
 
         _.forEach(emailRecipients, addRecipient);
         _.forEach(smsRecipients, addRecipient);
@@ -652,7 +652,7 @@ module.exports = function setUpAlertsServer(app, module)
         if (err)
         {
           module.error(
-            "Failed to execute action [%d] (alert=[%s] downtime=[%s]): %s",
+            'Failed to execute action [%d] (alert=[%s] downtime=[%s]): %s',
             actionIndex,
             alert._id,
             downtime._id,
@@ -669,8 +669,8 @@ module.exports = function setUpAlertsServer(app, module)
 
   function createDowntime(prodDowntime)
   {
-    var startedAt = prodDowntime.startedAt.getTime();
-    var alerts = _.map(prodDowntime.alerts, function(alert)
+    const startedAt = prodDowntime.startedAt.getTime();
+    const alerts = _.map(prodDowntime.alerts, function(alert)
     {
       return alertMap[alert._id] ? null : _.assign(alert, alertMap[alert._id], {
         timer: null
@@ -705,7 +705,7 @@ module.exports = function setUpAlertsServer(app, module)
 
   function createProdLogEntry(type, downtime, data)
   {
-    var createdAt = new Date();
+    const createdAt = new Date();
 
     return new ProdLogEntry({
       _id: ProdLogEntry.generateId(createdAt, downtime.prodLine),
@@ -763,10 +763,10 @@ module.exports = function setUpAlertsServer(app, module)
 
   function matchAlertCondition(downtime, condition)
   {
-    var property = condition.type;
-    var actualValues = _.isArray(downtime[property]) ? downtime[property] : [downtime[property]];
-    var requiredValues = condition.values;
-    var match = _.some(actualValues, function(actualValue) { return _.includes(requiredValues, actualValue); });
+    const property = condition.type;
+    const actualValues = _.isArray(downtime[property]) ? downtime[property] : [downtime[property]];
+    const requiredValues = condition.values;
+    const match = _.some(actualValues, function(actualValue) { return _.includes(requiredValues, actualValue); });
 
     if (condition.mode === 'include')
     {
@@ -783,7 +783,7 @@ module.exports = function setUpAlertsServer(app, module)
 
   function findRecipientUsers(downtime, alert, action, done)
   {
-    var userIds = {};
+    let userIds = {};
 
     _.forEach(alert.userWhitelist, function(user) { userIds[user.id] = true; });
     _.forEach(action.userWhitelist, function(user) { userIds[user.id] = true; });
@@ -801,7 +801,7 @@ module.exports = function setUpAlertsServer(app, module)
     step(
       function()
       {
-        var fields = {
+        const fields = {
           firstName: 1,
           lastName: 1,
           login: 1,
@@ -856,13 +856,13 @@ module.exports = function setUpAlertsServer(app, module)
           return done(err);
         }
 
-        var blacklist = {};
+        const blacklist = {};
 
         _.forEach(alert.userBlacklist, function(user) { blacklist[user.id] = true; });
         _.forEach(action.userBlacklist, function(user) { blacklist[user.id] = true; });
 
-        var users = {};
-        var mapUser = function(user)
+        const users = {};
+        const mapUser = function(user)
         {
           user._id = user._id.toString();
 
@@ -899,9 +899,9 @@ module.exports = function setUpAlertsServer(app, module)
   {
     return _.some(user.mobile, function(mobile)
     {
-      var match = true;
-      var fromTime = parseMobileTime(mobile.fromTime);
-      var toTime = parseMobileTime(mobile.toTime === '00:00' ? '24:00' : mobile.toTime);
+      let match = true;
+      const fromTime = parseMobileTime(mobile.fromTime);
+      const toTime = parseMobileTime(mobile.toTime === '00:00' ? '24:00' : mobile.toTime);
 
       if (toTime.value < fromTime.value)
       {
@@ -923,9 +923,9 @@ module.exports = function setUpAlertsServer(app, module)
 
   function parseMobileTime(time)
   {
-    var parts = time.split(':');
-    var hours = parseInt(parts[0], 10);
-    var minutes = parseInt(parts[1], 10);
+    const parts = time.split(':');
+    const hours = parseInt(parts[0], 10);
+    const minutes = parseInt(parts[1], 10);
 
     return {
       hours: hours,
@@ -936,8 +936,8 @@ module.exports = function setUpAlertsServer(app, module)
 
   function prepareMessageValues(downtime, done)
   {
-    var now = Date.now();
-    var messageValues = {
+    const now = Date.now();
+    const messageValues = {
       urlPrefix: module.config.emailUrlPrefix,
       downtime: {
         prodDowntime: downtime._id,
@@ -1010,15 +1010,15 @@ module.exports = function setUpAlertsServer(app, module)
 
   function findName(Model, downtime, mapProperty, nameProperty, done)
   {
-    var id = downtime[mapProperty];
-    var nameMap = nameMaps[mapProperty];
+    const id = downtime[mapProperty];
+    const nameMap = nameMaps[mapProperty];
 
     if (nameMap[id])
     {
       return setImmediate(done, null, nameMap[id]);
     }
 
-    var fields = {};
+    const fields = {};
     fields[nameProperty] = 1;
 
     Model.findById(id, fields).lean().exec(function(err, model)
@@ -1039,11 +1039,11 @@ module.exports = function setUpAlertsServer(app, module)
 
   function sendEmail(recipients, messageValues)
   {
-    var emails = _.map(recipients, 'email');
-    var subject = `[WMES] Przestój ${messageValues.downtime.rid}: `
+    const emails = _.map(recipients, 'email');
+    const subject = `[WMES] Przestój ${messageValues.downtime.rid}: `
       + `${messageValues.downtime.reason} `
       + `(${messageValues.order.name})`;
-    var mailOptions = {
+    const mailOptions = {
       to: emails,
       replyTo: emails,
       subject: subject,
@@ -1054,7 +1054,7 @@ module.exports = function setUpAlertsServer(app, module)
     {
       if (err)
       {
-        module.error("Failed to send e-mail notification: %s", err.message);
+        module.error('Failed to send e-mail notification: %s', err.message);
       }
       else
       {
@@ -1065,7 +1065,7 @@ module.exports = function setUpAlertsServer(app, module)
 
   function sendSms(recipients, messageValues)
   {
-    var smsOptions = {
+    const smsOptions = {
       to: _.map(recipients, 'mobile'),
       text: 'Przestój ' + messageValues.downtime.rid
         + ' |' + messageValues.downtime.duration
@@ -1079,7 +1079,7 @@ module.exports = function setUpAlertsServer(app, module)
     {
       if (err)
       {
-        module.error("Failed to send SMS notification: %s", err.message);
+        module.error('Failed to send SMS notification: %s', err.message);
       }
       else
       {
@@ -1090,43 +1090,43 @@ module.exports = function setUpAlertsServer(app, module)
 
   function formatShiftNo(date)
   {
-    var hours = date.getHours();
+    const hours = date.getHours();
 
     return hours === 6 ? 'I' : hours === 14 ? 'II' : 'III';
   }
 
   function formatDuration(fromTime, toTime)
   {
-    var compact = true;
-    var ms = false;
-    var time = (toTime - fromTime) / 1000;
+    const compact = true;
+    const ms = false;
+    let time = (toTime - fromTime) / 1000;
 
-    var str = '';
-    var hours = Math.floor(time / 3600);
+    let str = '';
+    const hours = Math.floor(time / 3600);
 
     if (hours > 0)
     {
       str += compact ? (rpad0(hours, 2) + ':') : (' ' + hours + 'h');
-      time = time % 3600;
+      time %= 3600;
     }
     else if (compact)
     {
       str += '00:';
     }
 
-    var minutes = Math.floor(time / 60);
+    const minutes = Math.floor(time / 60);
 
     if (minutes > 0)
     {
       str += compact ? (rpad0(minutes, 2) + ':') : (' ' + minutes + 'min');
-      time = time % 60;
+      time %= 60;
     }
     else if (compact)
     {
       str += '00:';
     }
 
-    var seconds = time;
+    const seconds = time;
 
     if (seconds >= 1)
     {

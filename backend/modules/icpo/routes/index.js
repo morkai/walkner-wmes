@@ -2,20 +2,20 @@
 
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var step = require('h5.step');
-var importRoute = require('./import');
-var downloadRoute = require('./download');
+const fs = require('fs');
+const path = require('path');
+const step = require('h5.step');
+const importRoute = require('./import');
+const downloadRoute = require('./download');
 
 module.exports = function setUpIcpoRoutes(app, icpoModule)
 {
-  var express = app[icpoModule.config.expressId];
-  var mongoose = app[icpoModule.config.mongooseId];
-  var userModule = app[icpoModule.config.userId];
-  var IcpoResult = mongoose.model('IcpoResult');
+  const express = app[icpoModule.config.expressId];
+  const mongoose = app[icpoModule.config.mongooseId];
+  const userModule = app[icpoModule.config.userId];
+  const IcpoResult = mongoose.model('IcpoResult');
 
-  var canView = userModule.auth('ICPO:VIEW');
+  const canView = userModule.auth('ICPO:VIEW');
 
   express.post('/icpo;import', importRoute.bind(null, app, icpoModule));
 
@@ -114,7 +114,7 @@ module.exports = function setUpIcpoRoutes(app, icpoModule)
     step(
       function()
       {
-        var fileStoragePath = icpoModule.config.fileStoragePath;
+        const fileStoragePath = icpoModule.config.fileStoragePath;
 
         fs.readFile(path.join(fileStoragePath, icpoResult.orderFileHash || ''), 'utf8', this.parallel());
         fs.readFile(path.join(fileStoragePath, icpoResult.driverFileHash || ''), 'utf8', this.parallel());
@@ -142,7 +142,7 @@ module.exports = function setUpIcpoRoutes(app, icpoModule)
 
   function findDistinctSrcIds(totalCount, models, done)
   {
-    var result = {
+    const result = {
       totalCount: totalCount,
       collection: models,
       srcIds: null

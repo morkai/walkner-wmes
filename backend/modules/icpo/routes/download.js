@@ -2,11 +2,11 @@
 
 'use strict';
 
-var path = require('path');
+const path = require('path');
 
 module.exports = function downloadRoute(file, icpoModule, IcpoResult, req, res, next)
 {
-  var fields = {
+  const fields = {
     serviceTag: 1
   };
 
@@ -25,8 +25,8 @@ module.exports = function downloadRoute(file, icpoModule, IcpoResult, req, res, 
       return res.sendStatus(404);
     }
 
-    var mimeType;
-    var fileName;
+    let mimeType;
+    let fileName;
 
     switch (file)
     {

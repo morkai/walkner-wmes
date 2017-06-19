@@ -2,8 +2,8 @@
 
 'use strict';
 
-var step = require('h5.step');
-var util = require('./util');
+const step = require('h5.step');
+const util = require('./util');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
@@ -17,7 +17,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find downtime [%s] to delete (LOG=[%s]): %s",
+          'Failed to find downtime [%s] to delete (LOG=[%s]): %s',
           logEntry.data._id,
           logEntry._id,
           err.stack
@@ -29,7 +29,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (!prodDowntime)
       {
         productionModule.warn(
-          "Downtime [%s] not found for deletion (LOG=[%s]): %s",
+          'Downtime [%s] not found for deletion (LOG=[%s]): %s',
           logEntry.data._id,
           logEntry._id,
           err.stack
@@ -38,8 +38,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return this.done(done, null);
       }
 
-      var next = this.next();
-      var orderId = prodDowntime.prodShiftOrder;
+      const next = this.next();
+      const orderId = prodDowntime.prodShiftOrder;
 
       if (orderId)
       {
@@ -48,7 +48,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           if (err)
           {
             productionModule.error(
-              "Failed to find order [%s] while deleting downtime [%s] (LOG=[%s]): %s",
+              'Failed to find order [%s] while deleting downtime [%s] (LOG=[%s]): %s',
               orderId,
               logEntry.data._id,
               logEntry._id,
@@ -69,7 +69,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find order [%s] while deleting downtime [%s] (LOG=[%s]): %s",
+          'Failed to find order [%s] while deleting downtime [%s] (LOG=[%s]): %s',
           prodDowntime.prodShiftOrder,
           logEntry.data._id,
           logEntry._id,
@@ -89,7 +89,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to delete downtime [%s] (LOG=[%s]): %s",
+          'Failed to delete downtime [%s] (LOG=[%s]): %s',
           logEntry.data._id,
           logEntry._id,
           err.stack
@@ -119,7 +119,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to recalc order [%s] durations after deleting downtime [%s] (LOG=[%s]): %s",
+          'Failed to recalc order [%s] durations after deleting downtime [%s] (LOG=[%s]): %s',
           this.prodShiftOrder._id,
           logEntry.data._id,
           logEntry._id,

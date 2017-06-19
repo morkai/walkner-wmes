@@ -4,13 +4,13 @@
 
 module.exports = function setUpProdLogEntriesRoutes(app, prodLogEntriesModule)
 {
-  var express = app[prodLogEntriesModule.config.expressId];
-  var userModule = app[prodLogEntriesModule.config.userId];
-  var orgUnitsModule = app[prodLogEntriesModule.config.orgUnitsId];
-  var mongoose = app[prodLogEntriesModule.config.mongooseId];
-  var ProdLogEntry = mongoose.model('ProdLogEntry');
+  const express = app[prodLogEntriesModule.config.expressId];
+  const userModule = app[prodLogEntriesModule.config.userId];
+  const orgUnitsModule = app[prodLogEntriesModule.config.orgUnitsId];
+  const mongoose = app[prodLogEntriesModule.config.mongooseId];
+  const ProdLogEntry = mongoose.model('ProdLogEntry');
 
-  var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW');
+  const canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW');
 
   express.get(
     '/prodLogEntries',
@@ -32,9 +32,9 @@ module.exports = function setUpProdLogEntriesRoutes(app, prodLogEntriesModule)
 
   function limitOrgUnit(req, res, next)
   {
-    var user = req.session.user || {};
-    var selectors = req.rql.selector.args;
-    var hasProdLineTerm = selectors.some(function(term)
+    const user = req.session.user || {};
+    const selectors = req.rql.selector.args;
+    const hasProdLineTerm = selectors.some(function(term)
     {
       return term.name === 'eq' && term.args[0] === 'prodLine';
     });
@@ -44,7 +44,7 @@ module.exports = function setUpProdLogEntriesRoutes(app, prodLogEntriesModule)
       return next();
     }
 
-    var prodLineIds = orgUnitsModule.getProdLinesFor(user.orgUnitType, user.orgUnitId).map(function(prodLine)
+    const prodLineIds = orgUnitsModule.getProdLinesFor(user.orgUnitType, user.orgUnitId).map(function(prodLine)
     {
       return prodLine._id;
     });

@@ -2,21 +2,21 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
 
 module.exports = function setUpXiconfNotifier(app, xiconfModule)
 {
-  var mailSender = app[xiconfModule.config.mailSenderId];
-  var mongoose = app[xiconfModule.config.mongooseId];
-  var settingsModule = app[xiconfModule.config.settingsId];
-  var User = mongoose.model('User');
-  var Order = mongoose.model('Order');
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var XiconfOrder = mongoose.model('XiconfOrder');
+  const mailSender = app[xiconfModule.config.mailSenderId];
+  const mongoose = app[xiconfModule.config.mongooseId];
+  const settingsModule = app[xiconfModule.config.settingsId];
+  const User = mongoose.model('User');
+  const Order = mongoose.model('Order');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const XiconfOrder = mongoose.model('XiconfOrder');
 
-  var emailUrlPrefix = xiconfModule.config.emailUrlPrefix;
+  let emailUrlPrefix = xiconfModule.config.emailUrlPrefix;
 
   if (emailUrlPrefix.substr(-1) !== '/')
   {
@@ -51,7 +51,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
         this.settings = settings;
 
-        var prodShiftOrderFields = {
+        const prodShiftOrderFields = {
           prodLine: 1,
           division: 1,
           master: 1,
@@ -92,9 +92,9 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           return this.done();
         }
 
-        var noProgramItems = !_.some(xiconfOrder.items, 'kind', 'program');
-        var hasAnyLedItems = _.some(xiconfOrder.items, 'kind', 'led');
-        var hasAnyHidItems = _.some(xiconfOrder.items, 'kind', 'hid');
+        const noProgramItems = !_.some(xiconfOrder.items, 'kind', 'program');
+        const hasAnyLedItems = _.some(xiconfOrder.items, 'kind', 'led');
+        const hasAnyHidItems = _.some(xiconfOrder.items, 'kind', 'hid');
 
         if (hasAnyLedItems
           && noProgramItems
@@ -125,9 +125,9 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
       },
       function findConcernedUsersStep()
       {
-        var userIds = {};
-        var divisionIds = {};
-        var prodLineMap = {};
+        const userIds = {};
+        const divisionIds = {};
+        const prodLineMap = {};
 
         _.forEach(this.prodShiftOrders, function(pso)
         {
@@ -141,7 +141,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
             };
           }
 
-          var qty = pso.quantityDone.toLocaleString();
+          let qty = pso.quantityDone.toLocaleString();
 
           if (pso.orderData && pso.orderData.unit)
           {
@@ -165,7 +165,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           }
         });
 
-        var conditions = {
+        const conditions = {
           $or: [
             {
               _id: {$in: Object.keys(userIds)}
@@ -203,23 +203,23 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           return this.done();
         }
 
-        var orderUrl = this.order ? (emailUrlPrefix + 'r/productionOrder/' + orderNo) : '-';
-        var xiconfOrderUrl = emailUrlPrefix + 'r/xiconfOrder/' + orderNo;
-        var prodShiftOrdersUrl = emailUrlPrefix + 'r/prodShiftOrders/' + orderNo;
-        var productNc12 = this.xiconfOrder.nc12[0];
-        var productName = this.xiconfOrder.name;
-        var quantityTodo = this.xiconfOrder.quantityTodo.toLocaleString();
-        var quantityDone = 0;
-        var firstStartedAt = Number.MAX_VALUE;
-        var lastFinishedAt = Number.MIN_VALUE;
-        var ordersTimes = [];
+        const orderUrl = this.order ? (emailUrlPrefix + 'r/productionOrder/' + orderNo) : '-';
+        const xiconfOrderUrl = emailUrlPrefix + 'r/xiconfOrder/' + orderNo;
+        const prodShiftOrdersUrl = emailUrlPrefix + 'r/prodShiftOrders/' + orderNo;
+        const productNc12 = this.xiconfOrder.nc12[0];
+        const productName = this.xiconfOrder.name;
+        const quantityTodo = this.xiconfOrder.quantityTodo.toLocaleString();
+        let quantityDone = 0;
+        let firstStartedAt = Number.MAX_VALUE;
+        let lastFinishedAt = Number.MIN_VALUE;
+        const ordersTimes = [];
 
         _.forEach(this.prodShiftOrders, function(pso)
         {
           quantityDone += pso.quantityDone;
 
-          var startedAt = pso.startedAt.getTime();
-          var finishedAt = pso.finishedAt.getTime();
+          const startedAt = pso.startedAt.getTime();
+          const finishedAt = pso.finishedAt.getTime();
 
           if (startedAt < firstStartedAt)
           {
@@ -237,14 +237,14 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           });
         });
 
-        var totalDuration = lastFinishedAt - firstStartedAt;
-        var workDuration = calculateNonOverlappingWorkDuration(ordersTimes);
+        const totalDuration = lastFinishedAt - firstStartedAt;
+        const workDuration = calculateNonOverlappingWorkDuration(ordersTimes);
 
-        var incompleteProgramItemCount = 0;
-        var incompleteLedItemCount = 0;
-        var incompleteHidItemCount = 0;
-        var incompleteTestItemCount = 0;
-        var incompleteFtItemCount = 0;
+        let incompleteProgramItemCount = 0;
+        let incompleteLedItemCount = 0;
+        let incompleteHidItemCount = 0;
+        let incompleteTestItemCount = 0;
+        let incompleteFtItemCount = 0;
 
         _.forEach(this.xiconfOrder.items, function(item)
         {
@@ -280,9 +280,9 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           }
         });
 
-        var to = users.map(function(user) { return user.email; });
-        var text = [];
-        var subject;
+        const to = users.map(function(user) { return user.email; });
+        const text = [];
+        let subject;
 
         if (quantityDone < quantityTodo)
         {
@@ -335,7 +335,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
         _.forEach(this.xiconfOrder.items, function(item, i)
         {
-          var quantity = item.kind === 'gprs'
+          const quantity = item.kind === 'gprs'
             ? item.quantityTodo.toLocaleString()
             : (item.quantityDone.toLocaleString() + '/' + item.quantityTodo.toLocaleString());
 
@@ -398,7 +398,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
           'Ta wiadomość została wygenerowana automatycznie przez WMES.'
         );
 
-        var mailOptions = {
+        const mailOptions = {
           to: to,
           replyTo: to,
           subject: subject,
@@ -411,7 +411,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
       {
         if (err)
         {
-          xiconfModule.error("Failed to notify users about a status of the [%s] order: %s", err.message);
+          xiconfModule.error('Failed to notify users about a status of the [%s] order: %s', err.message);
         }
       }
     );
@@ -419,7 +419,7 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
   function calculateNonOverlappingWorkDuration(times)
   {
-    var totalWorkDuration = 0;
+    let totalWorkDuration = 0;
 
     if (times.length === 0)
     {
@@ -433,14 +433,14 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
     times.sort(function(a, b) { return a.startedAt - b.startedAt; });
 
-    var current = {
+    const current = {
       startedAt: 0,
       finishedAt: 0
     };
 
-    for (var i = 0; i < times.length; ++i)
+    for (let i = 0; i < times.length; ++i)
     {
-      var time = times[i];
+      const time = times[i];
 
       if (time.startedAt > current.finishedAt)
       {
@@ -472,24 +472,24 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
     time /= 1000;
 
-    var str = '';
-    var hours = Math.floor(time / 3600);
+    let str = '';
+    const hours = Math.floor(time / 3600);
 
     if (hours > 0)
     {
       str += ' ' + hours + 'h';
-      time = time % 3600;
+      time %= 3600;
     }
 
-    var minutes = Math.floor(time / 60);
+    const minutes = Math.floor(time / 60);
 
     if (minutes > 0)
     {
       str += ' ' + minutes + 'min';
-      time = time % 60;
+      time %= 60;
     }
 
-    var seconds = time;
+    const seconds = time;
 
     if (seconds >= 1)
     {
@@ -505,11 +505,11 @@ module.exports = function setUpXiconfNotifier(app, xiconfModule)
 
   function filterOrderName(nameFilter, name)
   {
-    var nameFilters = nameFilter.split(/\n|;/);
+    const nameFilters = nameFilter.split(/\n|;/);
 
-    for (var i = 0; i < nameFilters.length; ++i)
+    for (let i = 0; i < nameFilters.length; ++i)
     {
-      var pattern = nameFilters[i].trim();
+      let pattern = nameFilters[i].trim();
 
       if (!pattern.length)
       {

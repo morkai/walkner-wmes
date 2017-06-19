@@ -2,13 +2,13 @@
 
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var _ = require('lodash');
+const fs = require('fs');
+const path = require('path');
+const _ = require('lodash');
 
 exports.DEFAULT_CONFIG = {
   savePath: '/var/tmp',
-  matcher: function(email) { /*jshint unused:false*/ return true; },
+  matcher: function(email) { /* jshint unused:false*/ return true; },
   timestamp: false
 };
 
@@ -23,14 +23,14 @@ exports.start = function startMailDownloaderModule(app, module)
 
     if (!Array.isArray(mail.attachments) || mail.attachments.length === 0)
     {
-      return module.debug("Ignoring an e-mail without any attachments: subject=%s", mail.subject);
+      return module.debug('Ignoring an e-mail without any attachments: subject=%s', mail.subject);
     }
 
-    var timestamp = Math.round(Date.now() / 1000);
+    let timestamp = Math.round(Date.now() / 1000);
 
     if (mail.headers.date)
     {
-      var time = new Date(mail.headers.date).getTime();
+      const time = new Date(mail.headers.date).getTime();
 
       if (!isNaN(time))
       {
@@ -38,11 +38,11 @@ exports.start = function startMailDownloaderModule(app, module)
       }
     }
 
-    module.debug("Saving %d attachment(s) from e-mail: %s", mail.attachments.length, mail.subject);
+    module.debug('Saving %d attachment(s) from e-mail: %s', mail.attachments.length, mail.subject);
 
     _.forEach(mail.attachments, function(attachment)
     {
-      var savePath = createSavePath(timestamp, attachment.fileName);
+      const savePath = createSavePath(timestamp, attachment.fileName);
 
       fs.writeFile(savePath, attachment.content, function(err)
       {
@@ -52,7 +52,7 @@ exports.start = function startMailDownloaderModule(app, module)
         }
         else
         {
-          module.debug("Saved attachment: %s", attachment.fileName);
+          module.debug('Saved attachment: %s', attachment.fileName);
         }
       });
     });

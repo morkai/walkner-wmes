@@ -4,12 +4,12 @@
 
 module.exports = function setUpSubdivisionsRoutes(app, subdivisionsModule, useDictionaryModel)
 {
-  var express = app[subdivisionsModule.config.expressId];
-  var auth = app[subdivisionsModule.config.userId].auth;
-  var Subdivision = app[subdivisionsModule.config.mongooseId].model('Subdivision');
+  const express = app[subdivisionsModule.config.expressId];
+  const auth = app[subdivisionsModule.config.userId].auth;
+  const Subdivision = app[subdivisionsModule.config.mongooseId].model('Subdivision');
 
-  var canView = auth('DICTIONARIES:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/subdivisions', canView, express.crud.browseRoute.bind(null, app, Subdivision));
 

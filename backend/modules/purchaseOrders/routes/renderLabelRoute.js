@@ -2,17 +2,17 @@
 
 'use strict';
 
-var format = require('util').format;
-var exec = require('child_process').exec;
-var path = require('path');
-var fs = require('fs');
-var step = require('h5.step');
-var renderLabelHtmlRoute = require('./renderLabelHtmlRoute');
+const format = require('util').format;
+const exec = require('child_process').exec;
+const path = require('path');
+const fs = require('fs');
+const step = require('h5.step');
+const renderLabelHtmlRoute = require('./renderLabelHtmlRoute');
 
 module.exports = function renderLabelRoute(app, poModule, req, res, next)
 {
-  var printId = req.params.printId;
-  var outputFormat = req.params.format;
+  const printId = req.params.printId;
+  const outputFormat = req.params.format;
 
   if (outputFormat === 'pdf+html')
   {
@@ -30,13 +30,13 @@ module.exports = function renderLabelRoute(app, poModule, req, res, next)
     return renderLabelHtmlRoute(app, poModule, req, res, next);
   }
 
-  var httpServer = app[poModule.config.httpServerId];
-  var express = app[poModule.config.expressId];
-  var mongoose = app[poModule.config.mongooseId];
-  var PurchaseOrder = mongoose.model('PurchaseOrder');
-  var PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
+  const httpServer = app[poModule.config.httpServerId];
+  const express = app[poModule.config.expressId];
+  const mongoose = app[poModule.config.mongooseId];
+  const PurchaseOrder = mongoose.model('PurchaseOrder');
+  const PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
 
-  var pdfPath = path.join(poModule.config.pdfStoragePath, printId + '.pdf');
+  const pdfPath = path.join(poModule.config.pdfStoragePath, printId + '.pdf');
 
   step(
     function checkStorageStep()
@@ -50,7 +50,7 @@ module.exports = function renderLabelRoute(app, poModule, req, res, next)
         return this.skip();
       }
 
-      var conditions = {};
+      const conditions = {};
 
       conditions[printId.length === 32 ? 'key' : '_id'] = printId;
 
@@ -68,15 +68,15 @@ module.exports = function renderLabelRoute(app, poModule, req, res, next)
         return this.skip(express.createHttpError('PO_PRINT_NOT_FOUND', 404));
       }
 
-      var url = 'http://'
+      const url = 'http://'
         + (httpServer.config.host === '0.0.0.0' ? '127.0.0.1' : httpServer.config.host)
         + ':' + httpServer.config.port
         + '/purchaseOrders;renderLabelHtml'
         + '?' + (printId.length === 32 ? 'key' : 'id') + '=' + printId;
 
-      var paperOptions = PurchaseOrder.PAPERS[poPrint.paper];
+      const paperOptions = PurchaseOrder.PAPERS[poPrint.paper];
 
-      var cmd = format(
+      const cmd = format(
         '"%s" -q --dpi 120 --disable-smart-shrinking --no-outline %s --page-width %smm --page-height %smm "%s" "%s"',
         poModule.config.wkhtmltopdfExe,
         paperOptions.wkhtmltopdf,

@@ -2,7 +2,7 @@
 
 'use strict';
 
-var parseSapTextTable = require('../../sap/util/parseSapTextTable');
+const parseSapTextTable = require('../../sap/util/parseSapTextTable');
 
 module.exports = function parseOrderDocuments(input)
 {

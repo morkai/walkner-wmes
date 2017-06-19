@@ -91,7 +91,7 @@ module.exports = function setUpOperationGroups(app, ordersModule)
 
       if (!setting)
       {
-        return ordersModule.warn(`No orders.operations.groups setting!`);
+        return ordersModule.warn('No orders.operations.groups setting!');
       }
 
       groups = [];

@@ -2,24 +2,24 @@
 
 'use strict';
 
-var path = require('path');
-var fs = require('fs');
-var _ = require('lodash');
-var step = require('h5.step');
+const path = require('path');
+const fs = require('fs');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function setUpOrderDocumentsCommands(app, module)
 {
-  var sio = app[module.config.sioId];
-  var productionModule = app[module.config.productionId];
-  var mongoose = app[module.config.mongooseId];
-  var Order = mongoose.model('Order');
-  var OrderDocumentClient = mongoose.model('OrderDocumentClient');
+  const sio = app[module.config.sioId];
+  const productionModule = app[module.config.productionId];
+  const mongoose = app[module.config.mongooseId];
+  const Order = mongoose.model('Order');
+  const OrderDocumentClient = mongoose.model('OrderDocumentClient');
 
-  var clients = {};
-  var socketToClient = {};
-  var prodLineToClients = {};
+  const clients = {};
+  const socketToClient = {};
+  const prodLineToClients = {};
 
-  var EMPTY_REMOTE_ORDER = {
+  const EMPTY_REMOTE_ORDER = {
     no: null,
     nc12: '',
     name: '',
@@ -45,7 +45,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 
   function onProductionStateChanged(changes)
   {
-    var pso = changes.prodShiftOrders;
+    const pso = changes.prodShiftOrders;
 
     if (pso === undefined || (_.isPlainObject(pso) && pso.orderId === undefined))
     {
@@ -57,25 +57,25 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 
   function onExtraDocumentsUpdated(extra)
   {
-    var nameToProdLines = {};
+    const nameToProdLines = {};
 
     _.forEach(prodLineToClients, function(clientsMap, prodLineId)
     {
-      var prodLineState = productionModule.getProdLineState(prodLineId);
+      const prodLineState = productionModule.getProdLineState(prodLineId);
 
       if (!prodLineState)
       {
         return;
       }
 
-      var lastOrder = prodLineState.getLastOrder();
+      const lastOrder = prodLineState.getLastOrder();
 
       if (!lastOrder)
       {
         return;
       }
 
-      var name = lastOrder.orderData.name;
+      const name = lastOrder.orderData.name;
 
       if (!name)
       {
@@ -90,24 +90,24 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
       nameToProdLines[name].push(prodLineId);
     });
 
-    var productNames = Object.keys(nameToProdLines);
+    const productNames = Object.keys(nameToProdLines);
 
-    for (var i = 0; i < extra.length; ++i)
+    for (let i = 0; i < extra.length; ++i)
     {
-      var pattern = extra[i].pattern;
+      const pattern = extra[i].pattern;
 
-      for (var ii = 0; ii < productNames.length; ++ii)
+      for (let ii = 0; ii < productNames.length; ++ii)
       {
-        var productName = productNames[ii];
+        const productName = productNames[ii];
 
         if (productName.indexOf(pattern) === -1)
         {
           continue;
         }
 
-        var prodLineIds = nameToProdLines[productName];
+        const prodLineIds = nameToProdLines[productName];
 
-        for (var iii = 0; iii < prodLineIds.length; ++iii)
+        for (let iii = 0; iii < prodLineIds.length; ++iii)
         {
           updateProdLinesRemoteOrder(prodLineIds[iii], null);
         }
@@ -119,8 +119,8 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 
   function handleJoinMessage(socket, message)
   {
-    var newClientId = message.clientId;
-    var newProdLineId = message.prodLineId;
+    const newClientId = message.clientId;
+    const newProdLineId = message.prodLineId;
 
     if (!_.isString(newClientId)
       || _.isEmpty(newClientId)
@@ -130,7 +130,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
       return;
     }
 
-    var currentClient = clients[newClientId];
+    const currentClient = clients[newClientId];
 
     if (currentClient)
     {
@@ -143,7 +143,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
       }
     }
 
-    var newClient = {
+    const newClient = {
       _id: newClientId,
       connectedAt: new Date(),
       disconnectedAt: null,
@@ -163,7 +163,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
     socketToClient[socket.id] = newClientId;
     prodLineToClients[newProdLineId][newClientId] = true;
 
-    module.debug("Client %s:", currentClient ? 'rejoined' : 'joined', {
+    module.debug('Client %s:', currentClient ? 'rejoined' : 'joined', {
       _id: newClient._id,
       prodLine: newClient.prodLine
     });
@@ -174,7 +174,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
     {
       if (err)
       {
-        module.error("Failed to update client [%s] after connection: %s", newClient._id, err.message);
+        module.error('Failed to update client [%s] after connection: %s', newClient._id, err.message);
       }
       else
       {
@@ -190,14 +190,14 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
       return;
     }
 
-    var client = clients[message.clientId];
+    const client = clients[message.clientId];
 
     if (!client || socket.id !== client.socket)
     {
       return;
     }
 
-    var update = {
+    const update = {
       $set: {
         settings: message.settings,
         orderInfo: message.orderInfo
@@ -208,7 +208,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
     {
       if (err)
       {
-        module.error("Failed to update client [%s]: %s", message.clientId, err.message);
+        module.error('Failed to update client [%s]: %s', message.clientId, err.message);
       }
       else
       {
@@ -219,7 +219,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 
   function handleSocketDisconnect(socket)
   {
-    var clientId = socketToClient[socket.id];
+    const clientId = socketToClient[socket.id];
 
     if (!clientId)
     {
@@ -228,7 +228,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 
     delete socketToClient[socket.id];
 
-    var client = clients[clientId];
+    const client = clients[clientId];
 
     if (!client)
     {
@@ -242,12 +242,12 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
       delete prodLineToClients[client.prodLine][socket.id];
     }
 
-    module.debug("Client disconnected:", {
+    module.debug('Client disconnected:', {
       _id: clientId,
       prodLine: client.prodLine
     });
 
-    var clientChanges = {
+    const clientChanges = {
       _id: clientId,
       connectedAt: null,
       disconnectedAt: new Date(),
@@ -258,7 +258,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
     {
       if (err)
       {
-        module.error("Failed to update client [%s] after disconnection: %s", clientId, err.message);
+        module.error('Failed to update client [%s] after disconnection: %s', clientId, err.message);
       }
       else
       {
@@ -269,28 +269,28 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 
   function updateProdLinesRemoteOrder(prodLineId, optSocket)
   {
-    var prodLineClients = prodLineToClients[prodLineId];
+    const prodLineClients = prodLineToClients[prodLineId];
 
     if (_.isEmpty(prodLineClients))
     {
       return;
     }
 
-    var prodLineState = productionModule.getProdLineState(prodLineId);
+    const prodLineState = productionModule.getProdLineState(prodLineId);
 
     if (!prodLineState)
     {
       return emitEmptyRemoteOrderData(prodLineId, optSocket);
     }
 
-    var lastOrder = prodLineState.getLastOrder();
+    const lastOrder = prodLineState.getLastOrder();
 
     if (!lastOrder)
     {
       return emitEmptyRemoteOrderData(prodLineId, optSocket);
     }
 
-    var lastOrderNo = lastOrder.orderData.no;
+    const lastOrderNo = lastOrder.orderData.no;
 
     if (!lastOrderNo)
     {
@@ -301,7 +301,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
     {
       if (err)
       {
-        module.error("Failed to find remote order: %s", err.message);
+        module.error('Failed to find remote order: %s', err.message);
 
         return emitEmptyRemoteOrderData(prodLineId, optSocket);
       }
@@ -322,7 +322,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
       return optSocket.emit('orderDocuments.remoteOrderUpdated', remoteOrder);
     }
 
-    var prodLineClients = prodLineToClients[prodLineId];
+    const prodLineClients = prodLineToClients[prodLineId];
 
     if (_.isEmpty(prodLineClients))
     {
@@ -331,14 +331,14 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 
     _.forEach(Object.keys(prodLineClients), function(clientId)
     {
-      var client = clients[clientId];
+      const client = clients[clientId];
 
       if (!client)
       {
         return;
       }
 
-      var socket = sio.sockets.connected[client.socket];
+      const socket = sio.sockets.connected[client.socket];
 
       if (!socket)
       {
@@ -394,7 +394,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 
   function prepareDocumentsMap(productName, documentsList)
   {
-    var documentsMap = {};
+    const documentsMap = {};
 
     _.forEach(documentsList, function(document)
     {

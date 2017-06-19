@@ -2,14 +2,14 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function setUpKaizenCommands(app, kaizenModule)
 {
-  var userModule = app[kaizenModule.config.userId];
-  var sio = app[kaizenModule.config.sioId];
-  var mongoose = app[kaizenModule.config.mongooseId];
-  var KaizenOrder = mongoose.model('KaizenOrder');
+  const userModule = app[kaizenModule.config.userId];
+  const sio = app[kaizenModule.config.sioId];
+  const mongoose = app[kaizenModule.config.mongooseId];
+  const KaizenOrder = mongoose.model('KaizenOrder');
 
   sio.sockets.on('connection', function(socket)
   {
@@ -39,7 +39,7 @@ module.exports = function setUpKaizenCommands(app, kaizenModule)
       return;
     }
 
-    var user = socket.handshake.user;
+    const user = socket.handshake.user;
 
     if (!_.isObject(req)
       || !_.isString(req._id)

@@ -2,12 +2,12 @@
 
 'use strict';
 
-var path = require('path');
-var _ = require('lodash');
-var moment = require('moment');
-var step = require('h5.step');
-var fs = require('fs-extra');
-var parseTransferOrders = require('./parseTransferOrders');
+const path = require('path');
+const _ = require('lodash');
+const moment = require('moment');
+const step = require('h5.step');
+const fs = require('fs-extra');
+const parseTransferOrders = require('./parseTransferOrders');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -17,17 +17,17 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startTransferOrdersImporterModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("mongoose module is required!");
+    throw new Error('mongoose module is required!');
   }
 
-  var WhTransferOrder = mongoose.model('WhTransferOrder');
-  var WhControlCycle = mongoose.model('WhControlCycle');
+  const WhTransferOrder = mongoose.model('WhTransferOrder');
+  const WhControlCycle = mongoose.model('WhControlCycle');
 
-  var filePathCache = {};
+  const filePathCache = {};
 
   app.broker.subscribe('directoryWatcher.changed', queueFile).setFilter(filterFile);
 
@@ -60,14 +60,14 @@ exports.start = function startTransferOrdersImporterModule(app, module)
       data: fileInfo
     });
 
-    module.debug("Queued %s...", fileInfo.timeKey);
+    module.debug('Queued %s...', fileInfo.timeKey);
   }
 
   function importNext(fileInfo)
   {
-    var startTime = Date.now();
+    const startTime = Date.now();
 
-    module.debug("Importing %s...", fileInfo.timeKey);
+    module.debug('Importing %s...', fileInfo.timeKey);
 
     importFile(fileInfo, function(err, transferOrders)
     {
@@ -75,7 +75,7 @@ exports.start = function startTransferOrdersImporterModule(app, module)
 
       if (err)
       {
-        module.error("Failed to import %s: %s", fileInfo.timeKey, err.message);
+        module.error('Failed to import %s: %s', fileInfo.timeKey, err.message);
 
         app.broker.publish('warehouse.transferOrders.syncFailed', {
           timestamp: fileInfo.timestamp,
@@ -84,7 +84,7 @@ exports.start = function startTransferOrdersImporterModule(app, module)
       }
       else
       {
-        module.debug("Imported %d of %s in %d ms!", transferOrders.length, fileInfo.timeKey, Date.now() - startTime);
+        module.debug('Imported %d of %s in %d ms!', transferOrders.length, fileInfo.timeKey, Date.now() - startTime);
 
         app.broker.publish('warehouse.transferOrders.synced', {
           timestamp: fileInfo.timestamp,
@@ -99,9 +99,9 @@ exports.start = function startTransferOrdersImporterModule(app, module)
     step(
       function fetchControlCyclesStep()
       {
-        var next = _.once(this.next());
-        var nc12ToS = this.nc12ToS = {};
-        var stream = WhControlCycle.find({}, {s: 1}).lean().cursor();
+        const next = _.once(this.next());
+        const nc12ToS = this.nc12ToS = {};
+        const stream = WhControlCycle.find({}, {s: 1}).lean().cursor();
 
         stream.on('error', next);
         stream.on('end', next);
@@ -126,25 +126,25 @@ exports.start = function startTransferOrdersImporterModule(app, module)
           return this.skip(err);
         }
 
-        module.debug("Parsing ~%d bytes of %s...", fileContents.length, fileInfo.timeKey);
+        module.debug('Parsing ~%d bytes of %s...', fileContents.length, fileInfo.timeKey);
 
-        var t = Date.now();
+        const t = Date.now();
 
         this.transferOrders = parseTransferOrders(fileContents, new Date(fileInfo.timestamp), this.nc12ToS);
         this.nc12ToS = null;
 
-        module.debug("Parsed %s in %d ms!", fileInfo.timeKey, Date.now() - t);
+        module.debug('Parsed %s in %d ms!', fileInfo.timeKey, Date.now() - t);
 
         setImmediate(this.next());
       },
       function createBatchesStep()
       {
-        var batchSize = 1000;
-        var batchCount = Math.ceil(this.transferOrders.length / batchSize);
+        const batchSize = 1000;
+        const batchCount = Math.ceil(this.transferOrders.length / batchSize);
 
         this.batches = [];
 
-        for (var i = 0; i < batchCount; ++i)
+        for (let i = 0; i < batchCount; ++i)
         {
           this.batches.push(this.transferOrders.slice(i * batchSize, i * batchSize + batchSize));
         }
@@ -153,7 +153,7 @@ exports.start = function startTransferOrdersImporterModule(app, module)
       },
       function insertTransferOrdersStep()
       {
-        for (var i = 0, l = this.batches.length; i < l; ++i)
+        for (let i = 0, l = this.batches.length; i < l; ++i)
         {
           WhTransferOrder.collection.insert(this.batches[i], {ordered: false}, this.parallel());
         }
@@ -167,7 +167,7 @@ exports.start = function startTransferOrdersImporterModule(app, module)
 
         if (err.err && !err.message)
         {
-          var code = err.code;
+          const code = err.code;
 
           err = new Error(err.err);
           err.name = 'MongoError';
@@ -195,14 +195,14 @@ exports.start = function startTransferOrdersImporterModule(app, module)
 
   function moveFileInfoFile(oldFilePath)
   {
-    var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
+    const newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
     fs.move(oldFilePath, newFilePath, {overwrite: true}, function(err)
     {
       if (err)
       {
         module.error(
-          "Failed to rename file [%s] to [%s]: %s", oldFilePath, newFilePath, err.message
+          'Failed to rename file [%s] to [%s]: %s', oldFilePath, newFilePath, err.message
         );
       }
     });
@@ -214,7 +214,7 @@ exports.start = function startTransferOrdersImporterModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to delete file [%s]: %s", filePath, err.message);
+        module.error('Failed to delete file [%s]: %s', filePath, err.message);
       }
     });
   }

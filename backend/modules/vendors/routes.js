@@ -4,12 +4,12 @@
 
 module.exports = function setUpVendorsRoutes(app, vendorsModule, useDictionaryModel)
 {
-  var express = app[vendorsModule.config.expressId];
-  var auth = app[vendorsModule.config.userId].auth;
-  var Vendor = app[vendorsModule.config.mongooseId].model('Vendor');
+  const express = app[vendorsModule.config.expressId];
+  const auth = app[vendorsModule.config.userId].auth;
+  const Vendor = app[vendorsModule.config.mongooseId].model('Vendor');
 
-  var canView = auth('DICTIONARIES:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/vendors', canView, express.crud.browseRoute.bind(null, app, Vendor));
 

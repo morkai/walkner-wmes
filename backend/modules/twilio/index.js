@@ -2,11 +2,11 @@
 
 'use strict';
 
-var url = require('url');
-var _ = require('lodash');
-var uuid = require('uuid/v4');
-var Twilio = require('twilio');
-var setUpRoutes = require('./routes');
+const url = require('url');
+const _ = require('lodash');
+const uuid = require('uuid/v4');
+const Twilio = require('twilio');
+const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
   expressId: 'express',
@@ -21,9 +21,9 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startTwilioModule(app, twilioModule)
 {
-  var config = twilioModule.config;
-  var request = _.isEmpty(config.remoteUrl) || _.isEmpty(config.secretKey) ? null : require('request');
-  var client = config.accountSid && config.authToken ? new Twilio(config.accountSid, config.authToken) : null;
+  const config = twilioModule.config;
+  const request = _.isEmpty(config.remoteUrl) || _.isEmpty(config.secretKey) ? null : require('request');
+  const client = config.accountSid && config.authToken ? new Twilio(config.accountSid, config.authToken) : null;
 
   app.onModuleReady(
     [
@@ -50,12 +50,12 @@ exports.start = function startTwilioModule(app, twilioModule)
       return say(options, done);
     }
 
-    return setImmediate(done, new Error("No valid transport."));
+    return setImmediate(done, new Error('No valid transport.'));
   };
 
   function sendRemoteRequest(operation, options, done)
   {
-    var reqOptions = {
+    const reqOptions = {
       url: config.remoteUrl,
       method: 'POST',
       json: true,
@@ -84,15 +84,15 @@ exports.start = function startTwilioModule(app, twilioModule)
 
   function say(sayOptions, done)
   {
-    var mongoose = app[config.mongooseId];
+    const mongoose = app[config.mongooseId];
 
     if (!mongoose)
     {
-      return setImmediate(done, new Error("The `mongoose` module is not available!"));
+      return setImmediate(done, new Error('The `mongoose` module is not available!'));
     }
 
-    var TwilioRequest = mongoose.model('TwilioRequest');
-    var twilioRequest = new TwilioRequest({
+    const TwilioRequest = mongoose.model('TwilioRequest');
+    const twilioRequest = new TwilioRequest({
       _id: uuid().toUpperCase(),
       operation: 'say',
       options: sayOptions,
@@ -108,7 +108,7 @@ exports.start = function startTwilioModule(app, twilioModule)
         return done(err);
       }
 
-      var makeCallOptions = _.pick(sayOptions, ['to', 'from', 'statusCallbackEvent', 'timeout', 'record']);
+      const makeCallOptions = _.pick(sayOptions, ['to', 'from', 'statusCallbackEvent', 'timeout', 'record']);
 
       makeCallOptions.method = 'GET';
       makeCallOptions.url = url.format(_.assign(url.parse(config.baseUrl), {pathname: '/twilio/' + twilioRequest._id}));

@@ -2,15 +2,15 @@
 
 'use strict';
 
-var step = require('h5.step');
-var moment = require('moment');
-var helpers = require('./helpers');
-var report9 = require('../report9');
+const step = require('h5.step');
+const moment = require('moment');
+const helpers = require('./helpers');
+const report9 = require('../report9');
 
 module.exports = function report9Route(app, reportsModule, req, res, next)
 {
-  var settingsModule = app[reportsModule.config.settingsId];
-  var options = {
+  const settingsModule = app[reportsModule.config.settingsId];
+  const options = {
     fromTime: moment().startOf('month').subtract(6, 'months').valueOf(),
     toTime: moment().startOf('month').valueOf(),
     nc12ToCagsJsonPath: reportsModule.config.nc12ToCagsJsonPath,

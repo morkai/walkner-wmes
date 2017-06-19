@@ -2,7 +2,7 @@
 
 'use strict';
 
-var setUpRoutes = require('./routes');
+const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -12,7 +12,7 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startVendorNc12sModule(app, module)
 {
-  var config = module.config;
+  const config = module.config;
 
   app.onModuleReady(
     [

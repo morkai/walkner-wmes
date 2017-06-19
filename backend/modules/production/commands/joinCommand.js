@@ -2,8 +2,8 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function joinCommand(app, productionModule, socket, req, reply)
 {
@@ -12,11 +12,11 @@ module.exports = function joinCommand(app, productionModule, socket, req, reply)
     return;
   }
 
-  var prodLineState = productionModule.getProdLineState(req.prodLineId);
+  const prodLineState = productionModule.getProdLineState(req.prodLineId);
 
   if (!prodLineState)
   {
-    return productionModule.warn("Client [%s] tried to join unknown prod line: %s", socket.id, req.prodLineId);
+    return productionModule.warn('Client [%s] tried to join unknown prod line: %s', socket.id, req.prodLineId);
   }
 
   prodLineState.onClientJoin(socket, req);
@@ -26,12 +26,12 @@ module.exports = function joinCommand(app, productionModule, socket, req, reply)
     return;
   }
 
-  var isaModule = app[productionModule.config.isaId];
-  var mongoose = app[productionModule.config.mongooseId];
-  var Order = mongoose.model('Order');
-  var ProdDowntime = mongoose.model('ProdDowntime');
-  var Setting = mongoose.model('Setting');
-  var dictionaries = {};
+  const isaModule = app[productionModule.config.isaId];
+  const mongoose = app[productionModule.config.mongooseId];
+  const Order = mongoose.model('Order');
+  const ProdDowntime = mongoose.model('ProdDowntime');
+  const Setting = mongoose.model('Setting');
+  const dictionaries = {};
 
   step(
     function fetchDictionariesStep()
@@ -43,14 +43,14 @@ module.exports = function joinCommand(app, productionModule, socket, req, reply)
           return;
         }
 
-        var dictionary = app[moduleName];
+        const dictionary = app[moduleName];
 
         if (!dictionary)
         {
           return;
         }
 
-        var serverUpdatedAt = dictionary.updatedAt;
+        const serverUpdatedAt = dictionary.updatedAt;
 
         if (serverUpdatedAt !== -1 && serverUpdatedAt <= clientUpdatedAt)
         {

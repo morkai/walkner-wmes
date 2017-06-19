@@ -2,37 +2,37 @@
 
 'use strict';
 
-var os = require('os');
-var _ = require('lodash');
-var multer = require('multer');
+const os = require('os');
+const _ = require('lodash');
+const multer = require('multer');
 
-var sendCurrentSurveyRoute = require('./sendCurrentSurvey');
-var sendDictionariesRoute = require('./sendDictionaries');
-var sendQrCodeRoute = require('./sendQrCode');
-var saveSurveyPreviewRoute = require('./saveSurveyPreview');
-var sendSurveyPdfRoute = require('./sendSurveyPdf');
-var sendSurveyHtmlRoute = require('./sendSurveyHtml');
-var sendScanTemplateJpgRoute = require('./sendScanTemplateJpg');
-var saveScanTemplateJpgRoute = require('./saveScanTemplateJpg');
-var sendOmrResultInputJpgRoute = require('./sendOmrResultInputJpg');
-var findActionByRidRoute = require('./findActionByRid');
-var reportRoute = require('./report');
-var redirectToActionListRoute = require('./redirectToActionList');
-var redirectToActionDetailsRoute = require('./redirectToActionDetails');
+const sendCurrentSurveyRoute = require('./sendCurrentSurvey');
+const sendDictionariesRoute = require('./sendDictionaries');
+const sendQrCodeRoute = require('./sendQrCode');
+const saveSurveyPreviewRoute = require('./saveSurveyPreview');
+const sendSurveyPdfRoute = require('./sendSurveyPdf');
+const sendSurveyHtmlRoute = require('./sendSurveyHtml');
+const sendScanTemplateJpgRoute = require('./sendScanTemplateJpg');
+const saveScanTemplateJpgRoute = require('./saveScanTemplateJpg');
+const sendOmrResultInputJpgRoute = require('./sendOmrResultInputJpg');
+const findActionByRidRoute = require('./findActionByRid');
+const reportRoute = require('./report');
+const redirectToActionListRoute = require('./redirectToActionList');
+const redirectToActionDetailsRoute = require('./redirectToActionDetails');
 
 module.exports = function setUpOpinionSurveysRoutes(app, module)
 {
-  var express = app[module.config.expressId];
-  var userModule = app[module.config.userId];
-  var mongoose = app[module.config.mongooseId];
-  var settings = app[module.config.settingsId];
-  var reportsModule = app[module.config.reportsId];
-  var OpinionSurvey = mongoose.model('OpinionSurvey');
-  var OpinionSurveyResponse = mongoose.model('OpinionSurveyResponse');
-  var OpinionSurveyAction = mongoose.model('OpinionSurveyAction');
+  const express = app[module.config.expressId];
+  const userModule = app[module.config.userId];
+  const mongoose = app[module.config.mongooseId];
+  const settings = app[module.config.settingsId];
+  const reportsModule = app[module.config.reportsId];
+  const OpinionSurvey = mongoose.model('OpinionSurvey');
+  const OpinionSurveyResponse = mongoose.model('OpinionSurveyResponse');
+  const OpinionSurveyAction = mongoose.model('OpinionSurveyAction');
 
-  var canView = userModule.auth();
-  var canManage = userModule.auth('OPINION_SURVEYS:MANAGE');
+  const canView = userModule.auth();
+  const canManage = userModule.auth('OPINION_SURVEYS:MANAGE');
 
   express.get('/opinion', sendCurrentSurveyRoute.bind(null, app, module));
 
@@ -149,8 +149,8 @@ module.exports = function setUpOpinionSurveysRoutes(app, module)
 
   function setUpCrudRoutes(canView, modelName, dictionaryName)
   {
-    var Model = mongoose.model(modelName);
-    var urlPrefix = '/opinionSurveys/' + dictionaryName;
+    const Model = mongoose.model(modelName);
+    const urlPrefix = '/opinionSurveys/' + dictionaryName;
 
     express.get(urlPrefix, canView, express.crud.browseRoute.bind(null, app, Model));
     express.post(urlPrefix, canManage, express.crud.addRoute.bind(null, app, Model));
@@ -187,14 +187,14 @@ module.exports = function setUpOpinionSurveysRoutes(app, module)
 
   function canManageAction(req, res, next)
   {
-    var user = req.session.user;
+    const user = req.session.user;
 
     if (user.super || _.includes(user.privileges, 'OPINION_SURVEYS:MANAGE') || user.prodFunction === 'manager')
     {
       return next();
     }
 
-    var conditions = {
+    const conditions = {
       _id: req.body.survey,
       'superiors._id': user._id
     };

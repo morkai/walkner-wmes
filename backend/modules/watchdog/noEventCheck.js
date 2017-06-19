@@ -2,15 +2,15 @@
 
 'use strict';
 
-var format = require('util').format;
-var _ = require('lodash');
-var later = require('later');
-var moment = require('moment');
+const format = require('util').format;
+const _ = require('lodash');
+const later = require('later');
+const moment = require('moment');
 
 module.exports = function setUpNoEventCheck(app, watchdogModule)
 {
-  var mailSender = app[watchdogModule.config.mailSenderId];
-  var Event = app[watchdogModule.config.mongooseId].model('Event');
+  const mailSender = app[watchdogModule.config.mailSenderId];
+  const Event = app[watchdogModule.config.mongooseId].model('Event');
 
   _.forEach(watchdogModule.config.events, function(event)
   {
@@ -20,7 +20,7 @@ module.exports = function setUpNoEventCheck(app, watchdogModule)
     });
 
     watchdogModule.debug(
-      "[noEvent] [%s] Setting up... next occurrence at %s!",
+      '[noEvent] [%s] Setting up... next occurrence at %s!',
       event.id,
       app.formatDateTime(later.schedule(event.schedule).next(1))
     );
@@ -30,33 +30,33 @@ module.exports = function setUpNoEventCheck(app, watchdogModule)
 
   function scheduleEventCheck(event)
   {
-    watchdogModule.debug("[noEvent] [%s] Scheduling next check to be in %d minutes...", event.id, event.checkDelay);
+    watchdogModule.debug('[noEvent] [%s] Scheduling next check to be in %d minutes...', event.id, event.checkDelay);
 
     setTimeout(checkEvent, event.checkDelay * 60 * 1000, event);
   }
 
   function checkEvent(event)
   {
-    watchdogModule.debug("[noEvent] [%s] Checking...", event.id);
+    watchdogModule.debug('[noEvent] [%s] Checking...', event.id);
 
-    var conditions = _.assign({type: event.type}, event.conditions);
+    const conditions = _.assign({type: event.type}, event.conditions);
 
     Event.find(conditions, {time: 1}).sort({time: -1}).limit(1).exec(function(err, docs)
     {
       if (err)
       {
-        return watchdogModule.error("[noEvent] [%s] Failed to find events: %s", event.id, err.message);
+        return watchdogModule.error('[noEvent] [%s] Failed to find events: %s', event.id, err.message);
       }
 
-      var lastOccurrenceAt = docs.length ? docs[0].time : 0;
-      var requiredOccurrenceAt = moment().subtract(event.checkWindow, 'minutes').valueOf();
+      const lastOccurrenceAt = docs.length ? docs[0].time : 0;
+      const requiredOccurrenceAt = moment().subtract(event.checkWindow, 'minutes').valueOf();
 
       if (lastOccurrenceAt >= requiredOccurrenceAt)
       {
         return watchdogModule.info("[noEvent] [%s] Event occurred! We're fine, everything is fine :)", event.id);
       }
 
-      watchdogModule.warn("[noEvent] [%s] Event not occurred :( Notifying concerned parties!", event.id);
+      watchdogModule.warn('[noEvent] [%s] Event not occurred :( Notifying concerned parties!', event.id);
 
       notifyNoEvent(event, lastOccurrenceAt);
     });
@@ -64,7 +64,7 @@ module.exports = function setUpNoEventCheck(app, watchdogModule)
 
   function notifyNoEvent(event, lastOccurrenceAt)
   {
-    var to = _.uniq([].concat(
+    const to = _.uniq([].concat(
       event.recipients || [],
       watchdogModule.config.recipients,
       watchdogModule.config.noEventRecipients
@@ -72,31 +72,31 @@ module.exports = function setUpNoEventCheck(app, watchdogModule)
 
     if (to.length === 0)
     {
-      return watchdogModule.warn("[noEvent] [%s] Nobody to notify :(", event.id);
+      return watchdogModule.warn('[noEvent] [%s] Nobody to notify :(', event.id);
     }
 
-    var subject = format("[%s:%s:noEvent] %s", app.options.id, watchdogModule.name, event.id);
-    var text = [
+    const subject = format('[%s:%s:noEvent] %s', app.options.id, watchdogModule.name, event.id);
+    const text = [
       format(
         "Expected an event of type '%s' in the last %d minutes, but no event occurred :(",
         event.type,
         event.checkWindow
       ),
-      format("The last occurrence was at %s.", app.formatDateTime(lastOccurrenceAt)),
-      "",
-      "This message was generated automatically.",
-      "Sincerely, WMES Bot"
+      format('The last occurrence was at %s.', app.formatDateTime(lastOccurrenceAt)),
+      '',
+      'This message was generated automatically.',
+      'Sincerely, WMES Bot'
     ];
 
     mailSender.send(to, subject, text.join('\r\n'), function(err)
     {
       if (err)
       {
-        watchdogModule.error("[noEvent] [%s] Failed to notify [%s]: %s", event.id, to, err.message);
+        watchdogModule.error('[noEvent] [%s] Failed to notify [%s]: %s', event.id, to, err.message);
       }
       else
       {
-        watchdogModule.debug("[noEvent] [%s] Notified: %s", event.id, to);
+        watchdogModule.debug('[noEvent] [%s] Notified: %s', event.id, to);
       }
     });
   }

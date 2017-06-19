@@ -2,12 +2,12 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var logData = logEntry.data;
+  const logData = logEntry.data;
 
   step(
     function()
@@ -19,7 +19,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find prod downtime [%s] to record alert action [%s] (LOG=[%s]): %s",
+          'Failed to find prod downtime [%s] to record alert action [%s] (LOG=[%s]): %s',
           logData.downtimeId,
           logData.alertId,
           logEntry._id,
@@ -45,12 +45,12 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     },
     function(err, prodDowntime)
     {
-      var alert = _.find(prodDowntime.alerts, '_id', logData.alertId);
+      let alert = _.find(prodDowntime.alerts, '_id', logData.alertId);
 
       if (alert && !alert.active)
       {
         productionModule.warn(
-          "Tried to record action of an already finished alert [%s] (downtime=[%s] LOG=[%s])",
+          'Tried to record action of an already finished alert [%s] (downtime=[%s] LOG=[%s])',
           logData.alertId,
           logData.downtimeId,
           logEntry._id
@@ -59,7 +59,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return done();
       }
 
-      var isNew = !alert;
+      const isNew = !alert;
 
       if (isNew)
       {
@@ -100,7 +100,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save prod downtime [%s] after recording alert action (alert=[%s] LOG=[%s]): %s",
+          'Failed to save prod downtime [%s] after recording alert action (alert=[%s] LOG=[%s]): %s',
           logData.downtimeId,
           logData.alertId,
           logEntry._id,

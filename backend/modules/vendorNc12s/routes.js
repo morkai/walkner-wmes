@@ -4,12 +4,12 @@
 
 module.exports = function setUpVendorNc12sRoutes(app, module)
 {
-  var express = app[module.config.expressId];
-  var auth = app[module.config.userId].auth;
-  var VendorNc12 = app[module.config.mongooseId].model('VendorNc12');
+  const express = app[module.config.expressId];
+  const auth = app[module.config.userId].auth;
+  const VendorNc12 = app[module.config.mongooseId].model('VendorNc12');
 
-  var canView = auth('VENDOR_NC12S:VIEW');
-  var canManage = auth('VENDOR_NC12S:MANAGE');
+  const canView = auth('VENDOR_NC12S:VIEW');
+  const canManage = auth('VENDOR_NC12S:MANAGE');
 
   express.get('/vendorNc12s', canView, limitVendorView, express.crud.browseRoute.bind(null, app, VendorNc12));
 
@@ -23,7 +23,7 @@ module.exports = function setUpVendorNc12sRoutes(app, module)
 
   function limitVendorView(req, res, next)
   {
-    var user = req.session.user;
+    const user = req.session.user;
 
     if (user.vendor)
     {
@@ -38,7 +38,7 @@ module.exports = function setUpVendorNc12sRoutes(app, module)
 
   function limitVendorManage(req, res, next)
   {
-    var user = req.session.user;
+    const user = req.session.user;
 
     if (user.vendor)
     {

@@ -2,16 +2,16 @@
 
 'use strict';
 
-var mergeOrders = require('./mergeOrders');
+const mergeOrders = require('./mergeOrders');
 
 module.exports = function parseJsonPoList(json, importedAt, purchaseOrders)
 {
-  var count = 0;
-  var poList = tryJsonParse(json);
+  let count = 0;
+  const poList = tryJsonParse(json);
 
-  for (var i = 0, l = poList.length; i < l; ++i)
+  for (let i = 0, l = poList.length; i < l; ++i)
   {
-    var po = poList[i];
+    const po = poList[i];
 
     if (typeof po._id !== 'string'
       || typeof po.pOrg !== 'string'
@@ -26,7 +26,7 @@ module.exports = function parseJsonPoList(json, importedAt, purchaseOrders)
       continue;
     }
 
-    var lastOrder = {
+    const lastOrder = {
       _id: po._id,
       pOrg: po.pOrg,
       pGr: po.pGr,

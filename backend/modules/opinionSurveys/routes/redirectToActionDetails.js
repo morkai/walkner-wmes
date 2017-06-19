@@ -4,8 +4,8 @@
 
 module.exports = function redirectToActionDetailsRoute(app, module, req, res, next)
 {
-  var mongoose = app[module.config.mongooseId];
-  var OpinionSurveyAction = mongoose.model('OpinionSurveyAction');
+  const mongoose = app[module.config.mongooseId];
+  const OpinionSurveyAction = mongoose.model('OpinionSurveyAction');
 
   OpinionSurveyAction.findOne({rid: parseInt(req.params.rid, 10)}, {_id: 1}).lean().exec(function(err, action)
   {

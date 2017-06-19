@@ -16,10 +16,10 @@ if (!dateMatches)
   throw new Error(`Date not found in the input file: ${inputFile}`);
 }
 
-let yy = parseInt(dateMatches[dateMatches[1].length === 4 ? 1 : 3], 10);
-let mm = parseInt(dateMatches[2], 10);
-let dd = parseInt(dateMatches[dateMatches[1].length === 4 ? 3 : 1], 10);
-let date = new Date();
+const yy = parseInt(dateMatches[dateMatches[1].length === 4 ? 1 : 3], 10);
+const mm = parseInt(dateMatches[2], 10);
+const dd = parseInt(dateMatches[dateMatches[1].length === 4 ? 3 : 1], 10);
+const date = new Date();
 
 date.setUTCFullYear(yy, mm - 1, dd);
 date.setUTCHours(0, 0, 0, 0);

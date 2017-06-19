@@ -2,19 +2,19 @@
 
 'use strict';
 
-var step = require('h5.step');
-var util = require('./util');
+const step = require('h5.step');
+const util = require('./util');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var Order = mongoose.model('Order');
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const mongoose = app[productionModule.config.mongooseId];
+  const Order = mongoose.model('Order');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
 
   step(
     function addOrderStep()
     {
-      var prodShiftOrder = new ProdShiftOrder(logEntry.data);
+      const prodShiftOrder = new ProdShiftOrder(logEntry.data);
       prodShiftOrder.save(this.parallel());
 
       productionModule.getProdDowntimes(prodShiftOrder.prodShift, this.parallel());
@@ -24,7 +24,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save a new order [%s] (LOG=[%s]): %s",
+          'Failed to save a new order [%s] (LOG=[%s]): %s',
           logEntry.data._id,
           logEntry._id,
           err.stack
@@ -42,9 +42,9 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return;
       }
 
-      var orderStartedAt = prodShiftOrder.startedAt;
-      var orderFinishedAt = prodShiftOrder.finishedAt;
-      var downtimeChanges = {
+      const orderStartedAt = prodShiftOrder.startedAt;
+      const orderFinishedAt = prodShiftOrder.finishedAt;
+      const downtimeChanges = {
         master: prodShiftOrder.master,
         leader: prodShiftOrder.leader,
         operator: prodShiftOrder.operator,
@@ -56,9 +56,9 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         workerCount: prodShiftOrder.workerCount
       };
 
-      for (var i = 0, l = prodDowntimes.length; i < l; ++i)
+      for (let i = 0, l = prodDowntimes.length; i < l; ++i)
       {
-        var prodDowntime = prodDowntimes[i];
+        const prodDowntime = prodDowntimes[i];
 
         if (prodDowntime.prodShiftOrder === null
           && prodDowntime.startedAt >= orderStartedAt
@@ -74,7 +74,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to update downtimes after adding order [%s] (LOG=[%s]): %s",
+          'Failed to update downtimes after adding order [%s] (LOG=[%s]): %s',
           logEntry.data._id,
           logEntry._id,
           err.stack
@@ -90,7 +90,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to recalc durations after adding order [%s] (LOG=[%s]): %s",
+          'Failed to recalc durations after adding order [%s] (LOG=[%s]): %s',
           this.prodShiftOrder._id,
           logEntry.data._id,
           logEntry._id,

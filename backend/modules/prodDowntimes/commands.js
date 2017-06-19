@@ -2,15 +2,15 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
 {
-  var sio = app[prodDowntimesModule.config.sioId];
-  var userModule = app[prodDowntimesModule.config.userId];
-  var productionModule = app[prodDowntimesModule.config.productionId];
-  var ProdLogEntry = app[prodDowntimesModule.config.mongooseId].model('ProdLogEntry');
+  const sio = app[prodDowntimesModule.config.sioId];
+  const userModule = app[prodDowntimesModule.config.userId];
+  const productionModule = app[prodDowntimesModule.config.productionId];
+  const ProdLogEntry = app[prodDowntimesModule.config.mongooseId].model('ProdLogEntry');
 
   sio.sockets.on('connection', function(socket)
   {
@@ -24,7 +24,7 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
       reply = function() {};
     }
 
-    var user = socket.handshake.user;
+    const user = socket.handshake.user;
 
     if (!user.loggedIn)
     {
@@ -60,7 +60,7 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
 
         this.prodDowntime = prodDowntime;
 
-        var corroborator = userModule.createUserInfo(user, socket);
+        const corroborator = userModule.createUserInfo(user, socket);
 
         if (_.isObject(data.corroborator) && _.isString(data.corroborator.cname))
         {
@@ -70,14 +70,14 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
         data.corroborator = corroborator;
         data.corroboratedAt = new Date();
 
-        var createdAt = data.corroboratedAt;
+        let createdAt = data.corroboratedAt;
 
         if (createdAt < prodDowntime.startedAt)
         {
           createdAt = new Date(prodDowntime.startedAt.getTime() + 1);
         }
 
-        var prodLogEntry = new ProdLogEntry({
+        const prodLogEntry = new ProdLogEntry({
           _id: ProdLogEntry.generateId(data.corroboratedAt, prodDowntime.prodShift),
           type: 'corroborateDowntime',
           data: data,
@@ -101,14 +101,14 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
         if (err)
         {
           prodDowntimesModule.error(
-            "Failed to create a ProdLogEntry during corroboration of the [%s] ProdDowntime: %s",
+            'Failed to create a ProdLogEntry during corroboration of the [%s] ProdDowntime: %s',
             this.prodDowntime._id,
             err.stack
           );
         }
 
-        var prodDowntime = this.prodDowntime;
-        var changeData = {};
+        const prodDowntime = this.prodDowntime;
+        const changeData = {};
 
         _.forEach(['status', 'reason', 'aor'], function(property)
         {
@@ -132,8 +132,8 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
       },
       function finalizeStep(err)
       {
-        var changes = this.changes;
-        var prodDowntime = this.prodDowntime;
+        const changes = this.changes;
+        const prodDowntime = this.prodDowntime;
 
         this.changes = null;
         this.prodDowntime = null;
@@ -145,7 +145,7 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
             ProdLogEntry.collection.remove({_id: this.prodLogEntryId}, function() {});
           }
 
-          prodDowntimesModule.error("Failed to corroborate downtime [%s]: %s", prodDowntime._id, err.message);
+          prodDowntimesModule.error('Failed to corroborate downtime [%s]: %s', prodDowntime._id, err.message);
 
           return reply(err);
         }

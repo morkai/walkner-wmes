@@ -2,19 +2,19 @@
 
 'use strict';
 
-var _ = require('lodash');
-var parseSapTextTable = require('../../sap/util/parseSapTextTable');
-var parseSapNumber = require('../../sap/util/parseSapNumber');
-var parseSapDate = require('../../sap/util/parseSapDate');
+const _ = require('lodash');
+const parseSapTextTable = require('../../sap/util/parseSapTextTable');
+const parseSapNumber = require('../../sap/util/parseSapNumber');
+const parseSapDate = require('../../sap/util/parseSapDate');
 
 module.exports = function parseXiconfOrders(input, hidLamps)
 {
-  var PROGRAM_RE = /Program\s*(.*?)(?:'|"|”)?$/i;
-  var GPRS_PROGRAM_RE = /^LC/;
-  var GPRS_CONFIG_RE = /\s+(F|T)(P|A)(_|A|B|C|D)/;
-  var HID_RE = /^(((MASTER|HPI-T|MST|CDM-T).*?W\/)|(Halogen|SON-T).*?W)/;
+  const PROGRAM_RE = /Program\s*(.*?)(?:'|"|”)?$/i;
+  const GPRS_PROGRAM_RE = /^LC/;
+  const GPRS_CONFIG_RE = /\s+(F|T)(P|A)(_|A|B|C|D)/;
+  const HID_RE = /^(((MASTER|HPI-T|MST|CDM-T).*?W\/)|(Halogen|SON-T).*?W)/;
 
-  var isFromDocs = /^DOCS/.test(input);
+  const isFromDocs = /^DOCS/.test(input);
 
   return parseSapTextTable(input, {
     columnMatchers: {
@@ -37,9 +37,9 @@ module.exports = function parseXiconfOrders(input, hidLamps)
         return null;
       }
 
-      var programMatches = obj.name.match(PROGRAM_RE);
-      var isProgramItem = programMatches !== null;
-      var isHidItem = false;
+      const programMatches = obj.name.match(PROGRAM_RE);
+      const isProgramItem = programMatches !== null;
+      let isHidItem = false;
 
       obj.source = isFromDocs && isProgramItem ? 'docs' : 'xiconf';
 
@@ -57,8 +57,8 @@ module.exports = function parseXiconfOrders(input, hidLamps)
         isHidItem = true;
       }
 
-      var isGprsItem = isProgramItem && GPRS_PROGRAM_RE.test(obj.name);
-      var isLedItem = !isProgramItem && !isGprsItem && !isHidItem;
+      const isGprsItem = isProgramItem && GPRS_PROGRAM_RE.test(obj.name);
+      const isLedItem = !isProgramItem && !isGprsItem && !isHidItem;
 
       obj.reqDate = new Date(obj.reqDate.y, obj.reqDate.m - 1, obj.reqDate.d);
 

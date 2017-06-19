@@ -2,15 +2,15 @@
 
 'use strict';
 
-var unlockCommand = require('./unlockCommand');
-var lockCommand = require('./lockCommand');
-var syncCommand = require('./syncCommand');
-var getPlannedQuantitiesCommand = require('./getPlannedQuantitiesCommand');
-var joinCommand = require('./joinCommand');
+const unlockCommand = require('./unlockCommand');
+const lockCommand = require('./lockCommand');
+const syncCommand = require('./syncCommand');
+const getPlannedQuantitiesCommand = require('./getPlannedQuantitiesCommand');
+const joinCommand = require('./joinCommand');
 
 module.exports = function setUpProductionCommands(app, productionModule)
 {
-  var sio = app[productionModule.config.sioId];
+  const sio = app[productionModule.config.sioId];
 
   sio.on('connection', function(socket)
   {
@@ -24,7 +24,7 @@ module.exports = function setUpProductionCommands(app, productionModule)
 
   function leaveProductionCommand(socket, prodLineId)
   {
-    var prodLineState = productionModule.getProdLineState(prodLineId);
+    const prodLineState = productionModule.getProdLineState(prodLineId);
 
     if (prodLineState)
     {

@@ -2,29 +2,29 @@
 
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var _ = require('lodash');
-var step = require('h5.step');
-var multer = require('multer');
-var contentDisposition = require('content-disposition');
-var countReport = require('./countReport');
-var summaryReport = require('./summaryReport');
+const fs = require('fs');
+const path = require('path');
+const _ = require('lodash');
+const step = require('h5.step');
+const multer = require('multer');
+const contentDisposition = require('content-disposition');
+const countReport = require('./countReport');
+const summaryReport = require('./summaryReport');
 
 module.exports = function setUpKaizenRoutes(app, kaizenModule)
 {
-  var express = app[kaizenModule.config.expressId];
-  var userModule = app[kaizenModule.config.userId];
-  var mongoose = app[kaizenModule.config.mongooseId];
-  var reportsModule = app[kaizenModule.config.reportsId];
-  var KaizenOrder = mongoose.model('KaizenOrder');
+  const express = app[kaizenModule.config.expressId];
+  const userModule = app[kaizenModule.config.userId];
+  const mongoose = app[kaizenModule.config.mongooseId];
+  const reportsModule = app[kaizenModule.config.reportsId];
+  const KaizenOrder = mongoose.model('KaizenOrder');
 
-  var tmpAttachments = {};
+  const tmpAttachments = {};
 
-  var canViewDictionaries = userModule.auth('KAIZEN:DICTIONARIES:VIEW');
-  var canManageDictionaries = userModule.auth('KAIZEN:DICTIONARIES:VIEW');
-  var canView = userModule.auth('LOCAL', 'USER');
-  var canManage = userModule.auth('USER');
+  const canViewDictionaries = userModule.auth('KAIZEN:DICTIONARIES:VIEW');
+  const canManageDictionaries = userModule.auth('KAIZEN:DICTIONARIES:VIEW');
+  const canView = userModule.auth('LOCAL', 'USER');
+  const canManage = userModule.auth('USER');
 
   express.get('/kaizen/recalcDurations', userModule.auth('SUPER'), recalcDurationsRoute);
 
@@ -84,8 +84,8 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
   function setUpDictionaryRoutes(modelName, dictionaryName)
   {
-    var Model = mongoose.model(modelName);
-    var urlPrefix = '/kaizen/' + dictionaryName;
+    const Model = mongoose.model(modelName);
+    const urlPrefix = '/kaizen/' + dictionaryName;
 
     express.get(urlPrefix, canViewDictionaries, express.crud.browseRoute.bind(null, app, Model));
     express.post(urlPrefix, canManageDictionaries, express.crud.addRoute.bind(null, app, Model));
@@ -96,7 +96,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
   function prepareObserverFilter(req, res, next)
   {
-    var observer = req.query['observers.user.id'];
+    const observer = req.query['observers.user.id'];
 
     if (observer !== 'mine' && observer !== 'unseen')
     {
@@ -135,7 +135,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
     step(
       function findStep()
       {
-        var step = this;
+        const step = this;
 
         _.forEach(kaizenModule.DICTIONARIES, function(modelName)
         {
@@ -149,7 +149,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
           return this.done(next, err);
         }
 
-        var result = {
+        const result = {
           types: KaizenOrder.TYPES,
           statuses: KaizenOrder.STATUSES
         };
@@ -166,7 +166,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
   function prepareForAdd(req, res, next)
   {
-    var body = req.body;
+    const body = req.body;
 
     body.creator = userModule.createUserInfo(req.session.user, req);
     body.creator.id = body.creator.id.toString();
@@ -178,7 +178,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
   function findByRidRoute(req, res, next)
   {
-    var rid = parseInt(req.query.rid, 10);
+    const rid = parseInt(req.query.rid, 10);
 
     if (isNaN(rid) || rid <= 0)
     {
@@ -203,7 +203,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
   function redirectToListRoute(req, res)
   {
-    var url = '/#kaizenOrders';
+    let url = '/#kaizenOrders';
 
     if (req.params.filter === 'mine')
     {
@@ -241,16 +241,16 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
   function editKaizenOrderRoute(req, res, next)
   {
-    var body = req.body;
-    var newAttachmentList = prepareAttachments(body.attachments);
-    var newAttachmentMap = {};
+    const body = req.body;
+    const newAttachmentList = prepareAttachments(body.attachments);
+    const newAttachmentMap = {};
 
     _.forEach(newAttachmentList, function(attachment)
     {
       newAttachmentMap[attachment.description] = attachment;
     });
 
-    var updater = userModule.createUserInfo(req.session.user, req);
+    const updater = userModule.createUserInfo(req.session.user, req);
     updater.id = updater.id.toString();
 
     step(
@@ -307,11 +307,11 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
   function uploadAttachmentsRoute(req, res)
   {
-    var attachments = [];
+    const attachments = [];
 
     _.forEach(req.files, function(file)
     {
-      var id = file.filename.replace(/\..*?$/, '');
+      const id = file.filename.replace(/\..*?$/, '');
 
       tmpAttachments[id] = {
         data: {
@@ -345,12 +345,12 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
         return res.sendStatus(404);
       }
 
-      var attachment;
-      var changeIndex = parseInt(req.query.change, 10);
+      let attachment;
+      const changeIndex = parseInt(req.query.change, 10);
 
       if (!isNaN(changeIndex))
       {
-        var change = kaizenOrder.changes[Math.abs(changeIndex)];
+        const change = kaizenOrder.changes[Math.abs(changeIndex)];
 
         if (change && change.data.attachments)
         {
@@ -373,7 +373,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
         return res.sendStatus(404);
       }
 
-      var disposition = req.query.download ? 'attachment' : 'inline';
+      const disposition = req.query.download ? 'attachment' : 'inline';
 
       res.type(attachment.type);
       res.append('Content-Disposition', contentDisposition(attachment.name, {disposition: disposition}));
@@ -383,11 +383,11 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
   function mergeAttachments(kaizenOrder, newAttachmentMap)
   {
-    var attachments = [];
+    const attachments = [];
 
     _.forEach(kaizenOrder.attachments, function(oldAttachment)
     {
-      var newAttachment = newAttachmentMap[oldAttachment.description];
+      const newAttachment = newAttachmentMap[oldAttachment.description];
 
       if (newAttachment)
       {
@@ -406,7 +406,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
       attachments.push(newAttachment);
     });
 
-    var sortOrder = {
+    const sortOrder = {
       scan: 1,
       before: 2,
       after: 3
@@ -429,7 +429,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
         return null;
       }
 
-      var attachment = tmpAttachments[id];
+      const attachment = tmpAttachments[id];
 
       if (!attachment)
       {
@@ -442,10 +442,10 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
       return attachment.data;
     })
-    .filter(function(attachment)
-    {
-      return attachment !== null;
-    });
+      .filter(function(attachment)
+      {
+        return attachment !== null;
+      });
   }
 
   function removeAttachmentFile(filePath)
@@ -492,7 +492,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
     step(
       function findStep()
       {
-        var step = this;
+        const step = this;
 
         _.forEach(kaizenModule.DICTIONARIES, function(modelName)
         {
@@ -528,9 +528,9 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
   function exportKaizenOrder(doc, req)
   {
-    var multiType = kaizenModule.config.multiType;
-    var dict = req.kaizenDictionaries;
-    var result = {
+    const multiType = kaizenModule.config.multiType;
+    const dict = req.kaizenDictionaries;
+    const result = {
       '#rid': doc.rid
     };
 
@@ -599,8 +599,8 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
   function countReportRoute(req, res, next)
   {
-    var query = req.query;
-    var options = {
+    const query = req.query;
+    const options = {
       fromTime: reportsModule.helpers.getTime(query.from) || null,
       toTime: reportsModule.helpers.getTime(query.to) || null,
       interval: query.interval,
@@ -629,8 +629,8 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
 
   function summaryReportRoute(req, res, next)
   {
-    var query = req.query;
-    var options = {
+    const query = req.query;
+    const options = {
       fromTime: reportsModule.helpers.getTime(query.from) || null,
       toTime: reportsModule.helpers.getTime(query.to) || null,
       section: _.isEmpty(query.section) ? [] : query.section.split(','),

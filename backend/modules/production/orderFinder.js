@@ -2,10 +2,10 @@
 
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
+const _ = require('lodash');
+const moment = require('moment');
 
-var MECH_ORDER_FIELDS = {
+const MECH_ORDER_FIELDS = {
   name: 1,
   mrp: 1,
   operations: 1,
@@ -14,7 +14,7 @@ var MECH_ORDER_FIELDS = {
 
 exports.findOrdersByNo = function(Order, no, done)
 {
-  var query;
+  let query;
 
   if (typeof no !== 'string')
   {
@@ -70,7 +70,7 @@ exports.findOrdersByNc12 = function(Order, MechOrder, nc12, done)
 
 function findOrderByNc12(Order, MechOrder, nc12, done)
 {
-  var query = Order
+  const query = Order
     .find({nc12: nc12, finishDate: {$gte: getTwoWeeksAgo()}}, MECH_ORDER_FIELDS)
     .sort({finishDate: -1})
     .limit(1)
@@ -115,9 +115,9 @@ function findMechOrderByNc12(MechOrder, nc12, done)
 
 function findOrdersStartingWithNc12(Order, MechOrder, nc12, done)
 {
-  /*globals emit:true*/
+  /* globals emit:true*/
 
-  var options = {
+  const options = {
     query: {nc12: new RegExp('^' + nc12), finishDate: {$gte: getTwoWeeksAgo()}},
     out: {inline: 1},
     map: function()
@@ -134,7 +134,7 @@ function findOrdersStartingWithNc12(Order, MechOrder, nc12, done)
     },
     reduce: function(key, orders)
     {
-      var latestOrder = null;
+      let latestOrder = null;
 
       orders.forEach(function(order)
       {
@@ -159,7 +159,7 @@ function findOrdersStartingWithNc12(Order, MechOrder, nc12, done)
     {
       return setMechOrderData(MechOrder, results.map(function(result)
       {
-        var order = result.value;
+        const order = result.value;
 
         order._id = result._id;
 
@@ -175,7 +175,7 @@ function findOrdersStartingWithNc12(Order, MechOrder, nc12, done)
 
 function findMechOrdersStartingWithNc12(MechOrder, nc12, done)
 {
-  var query = MechOrder
+  const query = MechOrder
     .find({_id: new RegExp('^' + nc12)}, MECH_ORDER_FIELDS)
     .sort({_id: 1})
     .limit(10)
@@ -194,14 +194,14 @@ function findMechOrdersStartingWithNc12(MechOrder, nc12, done)
 
 function setMechOrderData(MechOrder, orders, done)
 {
-  var orderMap = {};
+  const orderMap = {};
 
   _.forEach(orders, function(order)
   {
     orderMap[order._id] = order;
   });
 
-  var query = MechOrder.find(
+  const query = MechOrder.find(
     {_id: {$in: Object.keys(orderMap)}},
     {mrp: 1, materialNorm: 1, operations: 1}
   );
@@ -215,7 +215,7 @@ function setMechOrderData(MechOrder, orders, done)
 
     _.forEach(mechOrders, function(mechOrder)
     {
-      var order = orderMap[mechOrder._id];
+      const order = orderMap[mechOrder._id];
 
       order.mrp = mechOrder.mrp;
       order.materialNorm = mechOrder.materialNorm;
@@ -234,7 +234,7 @@ function getTwoWeeksAgo()
 
 function mergeMechOperations(order, mechOrder)
 {
-  var orderOperations = {};
+  const orderOperations = {};
 
   _.forEach(order.operations, function(orderOperation)
   {

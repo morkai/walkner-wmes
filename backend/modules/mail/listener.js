@@ -2,7 +2,7 @@
 
 'use strict';
 
-var MailListener = require('mail-listener2');
+const MailListener = require('mail-listener2');
 
 exports.DEFAULT_CONFIG = {
   username: 'imap-username',
@@ -18,9 +18,9 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startMailListenerModule(app, module)
 {
-  var isConnected = false;
-  var mailListener = null;
-  var disconnectedAt = -1;
+  let isConnected = false;
+  let mailListener = null;
+  let disconnectedAt = -1;
 
   app.broker
     .subscribe('app.started', setUpMailListener)
@@ -46,7 +46,7 @@ exports.start = function startMailListenerModule(app, module)
     {
       isConnected = true;
 
-      module.debug("Connected to the IMAP server");
+      module.debug('Connected to the IMAP server');
     });
 
     mailListener.on('server:disconnected', function()
@@ -56,7 +56,7 @@ exports.start = function startMailListenerModule(app, module)
         isConnected = false;
         disconnectedAt = Date.now();
 
-        module.warn("Disconnected from the IMAP server");
+        module.warn('Disconnected from the IMAP server');
       }
 
       mailListener.removeAllListeners();
@@ -90,18 +90,18 @@ exports.start = function startMailListenerModule(app, module)
 
   function checkRestart()
   {
-    var nextCheckDelay = 20 * 1000;
-    var now = new Date();
+    let nextCheckDelay = 20 * 1000;
+    let now = new Date();
 
     if (mailListener && module.config.restartMinutes.indexOf(now.getMinutes()) !== -1)
     {
-      module.debug("Restarting...");
+      module.debug('Restarting...');
 
       mailListener.stop();
 
       now = now.getTime();
 
-      var then = new Date(now + 60000);
+      const then = new Date(now + 60000);
       then.setSeconds(1);
       then.setMilliseconds(0);
 
@@ -120,7 +120,7 @@ exports.start = function startMailListenerModule(app, module)
       return;
     }
 
-    module.debug("Destroying...");
+    module.debug('Destroying...');
 
     mailListener.removeAllListeners();
     mailListener.imap.destroy();

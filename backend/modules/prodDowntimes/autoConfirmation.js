@@ -26,7 +26,7 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
     {
       if (err)
       {
-        prodDowntimesModule.error("Failed to find settings: %s", err.message);
+        prodDowntimesModule.error('Failed to find settings: %s', err.message);
       }
       else
       {
@@ -59,7 +59,6 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
     {
       timer = setTimeout(confirmOldProdDowntimes, delay);
     }
-
   }
 
   function confirmOldProdDowntimes()
@@ -71,7 +70,7 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
 
     const autoConfirmHours = settings.autoConfirmHours || 168;
 
-    prodDowntimesModule.debug("Confirming downtimes older than %d hours!...", autoConfirmHours);
+    prodDowntimesModule.debug('Confirming downtimes older than %d hours!...', autoConfirmHours);
 
     step(
       function findOldDowntimesStep()
@@ -153,11 +152,11 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
 
         if (err)
         {
-          prodDowntimesModule.error("Failed to confirm old downtimes: %s", err.message);
+          prodDowntimesModule.error('Failed to confirm old downtimes: %s', err.message);
         }
         else if (this.count > 0)
         {
-          prodDowntimesModule.info("Confirmed %d downtimes older than %d hours!", this.count, autoConfirmHours);
+          prodDowntimesModule.info('Confirmed %d downtimes older than %d hours!', this.count, autoConfirmHours);
         }
 
         if (this.count === MAX_BATCH_SIZE)

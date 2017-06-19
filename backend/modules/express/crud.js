@@ -2,14 +2,14 @@
 
 'use strict';
 
-var EventEmitter = require('events').EventEmitter;
-var _ = require('lodash');
-var step = require('h5.step');
-var mongoSerializer = require('h5.rql/lib/serializers/mongoSerializer');
+const EventEmitter = require('events').EventEmitter;
+const _ = require('lodash');
+const step = require('h5.step');
+const mongoSerializer = require('h5.rql/lib/serializers/mongoSerializer');
 
-var CSV_COLUMN_SEPARATOR = ';';
-var CSV_ROW_SEPARATOR = '\r\n';
-var CSV_FORMATTERS = {
+const CSV_COLUMN_SEPARATOR = ';';
+const CSV_ROW_SEPARATOR = '\r\n';
+const CSV_FORMATTERS = {
   '"': function(value)
   {
     if (value === null || value === undefined || value === '')
@@ -32,7 +32,7 @@ var CSV_FORMATTERS = {
 
 exports.browseRoute = function(app, options, req, res, next)
 {
-  var Model;
+  let Model;
 
   if (options.model && options.model.model)
   {
@@ -44,7 +44,7 @@ exports.browseRoute = function(app, options, req, res, next)
     options = {};
   }
 
-  var queryOptions = mongoSerializer.fromQuery(req.rql);
+  const queryOptions = mongoSerializer.fromQuery(req.rql);
 
   if (queryOptions.limit === 0)
   {
@@ -82,7 +82,7 @@ exports.browseRoute = function(app, options, req, res, next)
 
       if (totalCount > 0)
       {
-        var query = Model.find(queryOptions.selector, queryOptions.fields, queryOptions).lean();
+        const query = Model.find(queryOptions.selector, queryOptions.fields, queryOptions).lean();
 
         try
         {
@@ -103,7 +103,7 @@ exports.browseRoute = function(app, options, req, res, next)
         return this.done(next, err);
       }
 
-      var totalCount = this.totalCount;
+      const totalCount = this.totalCount;
 
       if (typeof Model.customizeLeanObject === 'function' && totalCount > 0)
       {
@@ -145,7 +145,7 @@ exports.browseRoute = function(app, options, req, res, next)
 
 exports.addRoute = function(app, Model, req, res, next)
 {
-  var model = req.model || new Model(req.body);
+  const model = req.model || new Model(req.body);
 
   model.save(function(err)
   {
@@ -162,7 +162,7 @@ exports.addRoute = function(app, Model, req, res, next)
         res.statusCode = 400;
         err.code = 'DUPLICATE_KEY';
 
-        var matches = err.message.match(/\.\$(.*?) /);
+        let matches = err.message.match(/\.\$(.*?) /);
 
         if (!matches)
         {
@@ -194,7 +194,7 @@ exports.addRoute = function(app, Model, req, res, next)
 
 exports.readRoute = function(app, options, req, res, next)
 {
-  var Model;
+  let Model;
 
   if (options.model && options.model.model)
   {
@@ -206,8 +206,8 @@ exports.readRoute = function(app, options, req, res, next)
     options = {};
   }
 
-  var queryOptions = mongoSerializer.fromQuery(req.rql);
-  var query = Model.findById(req.params.id, queryOptions.fields).lean();
+  const queryOptions = mongoSerializer.fromQuery(req.rql);
+  const query = Model.findById(req.params.id, queryOptions.fields).lean();
 
   try
   {
@@ -270,7 +270,7 @@ exports.readRoute = function(app, options, req, res, next)
 
 exports.editRoute = function(app, options, req, res, next)
 {
-  var Model;
+  let Model;
 
   if (options.model && options.model.model)
   {
@@ -339,7 +339,7 @@ exports.editRoute = function(app, options, req, res, next)
           res.statusCode = 400;
           err.code = 'DUPLICATE_KEY';
 
-          var matches = err.message.match(/\.\$(.*?) /);
+          let matches = err.message.match(/\.\$(.*?) /);
 
           if (!matches)
           {
@@ -436,11 +436,11 @@ exports.deleteRoute = function(app, Model, req, res, next)
 
 exports.exportRoute = function(options, req, res, next)
 {
-  var queryOptions = mongoSerializer.fromQuery(req.rql);
-  var headerWritten = false;
-  var columnNames = null;
+  const queryOptions = mongoSerializer.fromQuery(req.rql);
+  let headerWritten = false;
+  let columnNames = null;
 
-  var query = options.model
+  const query = options.model
     .find(queryOptions.selector, queryOptions.fields)
     .sort(queryOptions.sort)
     .lean();
@@ -456,7 +456,7 @@ exports.exportRoute = function(options, req, res, next)
 
   if (options.serializeStream)
   {
-    var emitter = new EventEmitter();
+    const emitter = new EventEmitter();
 
     handleExportStream(emitter, false, req, options.cleanUp);
 
@@ -492,8 +492,8 @@ exports.exportRoute = function(options, req, res, next)
 
     queryStream.on('data', function(doc)
     {
-      var row = serializeRow ? options.serializeRow(doc, req) : doc;
-      var multiple = Array.isArray(row);
+      const row = serializeRow ? options.serializeRow(doc, req) : doc;
+      const multiple = Array.isArray(row);
 
       if (!row || (multiple && !row.length))
       {
@@ -532,7 +532,7 @@ exports.exportRoute = function(options, req, res, next)
 
     res.attachment(options.filename + '.csv');
 
-    var line = columnNames
+    const line = columnNames
       .map(function(columnName)
       {
         return CSV_FORMATTERS[columnName.charAt(0)] ? columnName.substr(1) : columnName;
@@ -547,10 +547,10 @@ exports.exportRoute = function(options, req, res, next)
 
   function writeRow(row)
   {
-    var line = columnNames
+    const line = columnNames
       .map(function(columnName)
       {
-        var formatter = CSV_FORMATTERS[columnName.charAt(0)];
+        const formatter = CSV_FORMATTERS[columnName.charAt(0)];
 
         return formatter ? formatter(row[columnName]) : row[columnName];
       })

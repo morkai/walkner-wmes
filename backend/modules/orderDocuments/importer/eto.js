@@ -2,11 +2,11 @@
 
 'use strict';
 
-var path = require('path');
-var _ = require('lodash');
-var step = require('h5.step');
-var fs = require('fs-extra');
-var cheerio = require('cheerio');
+const path = require('path');
+const _ = require('lodash');
+const step = require('h5.step');
+const fs = require('fs-extra');
+const cheerio = require('cheerio');
 
 exports.DEFAULT_CONFIG = {
   filterRe: /^EMAIL_[0-9]+$/,
@@ -16,9 +16,9 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startOrderDocumentsEtoImporterModule(app, module)
 {
-  var filePathCache = {};
-  var locked = false;
-  var queue = [];
+  const filePathCache = {};
+  let locked = false;
+  const queue = [];
 
   app.broker.subscribe('directoryWatcher.changed', queueFile).setFilter(filterFile);
 
@@ -33,7 +33,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
 
     queue.push(fileInfo);
 
-    module.debug("[%s] Queued...", fileInfo.fileName);
+    module.debug('[%s] Queued...', fileInfo.fileName);
 
     setImmediate(importNext);
   }
@@ -45,7 +45,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
       return;
     }
 
-    var fileInfo = queue.shift();
+    const fileInfo = queue.shift();
 
     if (!fileInfo)
     {
@@ -54,9 +54,9 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
 
     locked = true;
 
-    var startTime = Date.now();
+    const startTime = Date.now();
 
-    module.debug("[%s] Importing...", fileInfo.fileName);
+    module.debug('[%s] Importing...', fileInfo.fileName);
 
     importFile(fileInfo, function(err, nc12)
     {
@@ -67,7 +67,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
 
       if (err)
       {
-        module.error("[%s] Failed to import: %s", fileInfo.fileName, err.message);
+        module.error('[%s] Failed to import: %s', fileInfo.fileName, err.message);
 
         app.broker.publish('orderDocuments.eto.syncFailed', {
           timestamp: fileInfo.timestamp,
@@ -77,7 +77,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
       }
       else if (nc12)
       {
-        module.debug("[%s] Imported %s in %d ms!", fileInfo.fileName, nc12, Date.now() - startTime);
+        module.debug('[%s] Imported %s in %d ms!', fileInfo.fileName, nc12, Date.now() - startTime);
 
         app.broker.publish('orderDocuments.eto.synced', {
           timestamp: fileInfo.timestamp,
@@ -87,7 +87,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
       }
       else
       {
-        module.debug("[%s] Ignored!", fileInfo.fileName);
+        module.debug('[%s] Ignored!', fileInfo.fileName);
       }
 
       locked = false;
@@ -110,7 +110,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
           return this.skip(err);
         }
 
-        module.debug("[%s] Parsing ~%d bytes of email.json...", fileInfo.fileName, fileContents.length);
+        module.debug('[%s] Parsing ~%d bytes of email.json...', fileInfo.fileName, fileContents.length);
 
         try
         {
@@ -128,7 +128,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
           return this.skip(err);
         }
 
-        var matches = email.subject.match(/ETO.*?([0-9]{12}|[0-9A-Z]{7})/);
+        const matches = email.subject.match(/ETO.*?([0-9]{12}|[0-9A-Z]{7})/);
 
         if (!matches)
         {
@@ -140,9 +140,9 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
       },
       function findEtoTableStep()
       {
-        var $ = cheerio.load(this.email.body);
-        var $tables = $('table');
-        var etoTableHtml = null;
+        const $ = cheerio.load(this.email.body);
+        const $tables = $('table');
+        let etoTableHtml = null;
 
         $tables.each(function()
         {
@@ -151,7 +151,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
             return;
           }
 
-          var text = $(this).text().replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
+          const text = $(this).text().replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
 
           if (_.includes(text, 'wykonanie') && _.includes(text, '12nc'))
           {
@@ -175,7 +175,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
           mapContentAttachments(this.email.attachments, fileInfo.filePath)
         );
 
-        for (var i = 0; i < this.inlineAttachments.length; ++i)
+        for (let i = 0; i < this.inlineAttachments.length; ++i)
         {
           fs.readFile(this.inlineAttachments[i].path, this.group());
         }
@@ -187,11 +187,11 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
           return this.skip(err);
         }
 
-        for (var i = 0; i < this.inlineAttachments.length; ++i)
+        for (let i = 0; i < this.inlineAttachments.length; ++i)
         {
-          var inlineAttachment = this.inlineAttachments[i];
-          var buffer = buffers[i];
-          var replacement = 'src="data:' + inlineAttachment.type + ';base64,' + buffer.toString('base64') + '"';
+          const inlineAttachment = this.inlineAttachments[i];
+          const buffer = buffers[i];
+          const replacement = 'src="data:' + inlineAttachment.type + ';base64,' + buffer.toString('base64') + '"';
 
           this.etoTableHtml = this.etoTableHtml.replace(inlineAttachment.pattern, replacement);
         }
@@ -225,14 +225,14 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
 
   function moveFileInfoFile(oldFilePath)
   {
-    var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
+    const newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
     fs.move(oldFilePath, newFilePath, {overwrite: true}, function(err)
     {
       if (err)
       {
         module.error(
-          "Failed to move [%s] to [%s]: %s", oldFilePath, newFilePath, err.message
+          'Failed to move [%s] to [%s]: %s', oldFilePath, newFilePath, err.message
         );
       }
     });
@@ -244,7 +244,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to delete directory [%s]: %s", filePath, err.message);
+        module.error('Failed to delete directory [%s]: %s', filePath, err.message);
       }
     });
   }
@@ -258,7 +258,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
   {
     if (retry > 10)
     {
-      return done(new Error("email.json file not found!"));
+      return done(new Error('email.json file not found!'));
     }
 
     fs.readFile(filePath, {encoding: 'utf8'}, function(err, contents)
@@ -274,7 +274,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
 
   function mapContentAttachments(attachments, targetDirPath)
   {
-    var contentAttachments = {};
+    const contentAttachments = {};
 
     _.forEach(attachments, function(attachment)
     {
@@ -291,15 +291,15 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
 
   function findInlineAttachments(html, contentAttachments)
   {
-    var inlineAttachments = [];
-    var re = /src="cid:(.*?)"/g;
-    var match;
+    const inlineAttachments = [];
+    const re = /src="cid:(.*?)"/g;
+    let match;
 
     while ((match = re.exec(html)) !== null)
     {
-      var pattern = match[0];
-      var contentId = match[1];
-      var contentAttachment = contentAttachments[contentId];
+      const pattern = match[0];
+      const contentId = match[1];
+      const contentAttachment = contentAttachments[contentId];
 
       if (contentAttachment)
       {

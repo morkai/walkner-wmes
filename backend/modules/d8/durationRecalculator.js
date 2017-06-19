@@ -2,7 +2,7 @@
 
 'use strict';
 
-var later = require('later');
+const later = require('later');
 
 module.exports = function setUpDurationRecalculator(app, module)
 {
@@ -26,7 +26,7 @@ module.exports = function setUpDurationRecalculator(app, module)
 
     const startedAt = new Date();
 
-    module.debug("[durationRecalculator] Started...");
+    module.debug('[durationRecalculator] Started...');
 
     inProgress = true;
 
@@ -52,7 +52,7 @@ module.exports = function setUpDurationRecalculator(app, module)
     {
       inProgress = false;
 
-      module.error("[durationRecalculator] Failed to recalc: %s", err.message);
+      module.error('[durationRecalculator] Failed to recalc: %s', err.message);
     });
 
     stream.on('data', function(doc)
@@ -64,7 +64,7 @@ module.exports = function setUpDurationRecalculator(app, module)
     {
       inProgress = false;
 
-      module.debug("[durationRecalculator] Done in %d ms.", Date.now() - startedAt);
+      module.debug('[durationRecalculator] Done in %d ms.', Date.now() - startedAt);
     });
   }
 
@@ -81,7 +81,7 @@ module.exports = function setUpDurationRecalculator(app, module)
     {
       if (err)
       {
-        module.error("[durationRecalculator] Failed to recalc [%s]: %s", doc.rid, err.message);
+        module.error('[durationRecalculator] Failed to recalc [%s]: %s', doc.rid, err.message);
       }
     });
   }

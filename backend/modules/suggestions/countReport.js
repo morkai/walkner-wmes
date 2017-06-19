@@ -2,18 +2,18 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var util = require('../reports/util');
+const _ = require('lodash');
+const step = require('h5.step');
+const util = require('../reports/util');
 
 module.exports = function(mongoose, options, done)
 {
-  var Suggestion = mongoose.model('Suggestion');
+  const Suggestion = mongoose.model('Suggestion');
 
-  var groupProperty = 'date';
-  var minGroupKey = Number.MAX_VALUE;
-  var maxGroupKey = Number.MIN_VALUE;
-  var results = {
+  const groupProperty = 'date';
+  let minGroupKey = Number.MAX_VALUE;
+  let maxGroupKey = Number.MIN_VALUE;
+  const results = {
     options: options,
     users: {},
     totals: createGroup(),
@@ -23,8 +23,8 @@ module.exports = function(mongoose, options, done)
   step(
     function findSuggestionsStep()
     {
-      var conditions = {};
-      var sort = {};
+      const conditions = {};
+      const sort = {};
 
       sort[groupProperty] = 1;
 
@@ -61,8 +61,8 @@ module.exports = function(mongoose, options, done)
         conditions.categories = {$in: options.categories};
       }
 
-      var stream = Suggestion.find(conditions, {changes: 0}).sort(sort).lean().cursor();
-      var next = _.once(this.next());
+      const stream = Suggestion.find(conditions, {changes: 0}).sort(sort).lean().cursor();
+      const next = _.once(this.next());
 
       stream.on('error', next);
       stream.on('end', next);
@@ -75,9 +75,9 @@ module.exports = function(mongoose, options, done)
         return this.skip(err);
       }
 
-      var createNextGroupKey = util.createCreateNextGroupKey(options.interval);
-      var groupKey = minGroupKey;
-      var groups = [];
+      const createNextGroupKey = util.createCreateNextGroupKey(options.interval);
+      let groupKey = minGroupKey;
+      const groups = [];
 
       while (groupKey <= maxGroupKey)
       {
@@ -123,9 +123,9 @@ module.exports = function(mongoose, options, done)
 
   function handleSuggestion(s)
   {
-    var totals = results.totals;
-    var groupKey = util.createGroupKey(options.interval, s[groupProperty], false);
-    var group = results.groups[groupKey];
+    const totals = results.totals;
+    const groupKey = util.createGroupKey(options.interval, s[groupProperty], false);
+    let group = results.groups[groupKey];
 
     if (groupKey < minGroupKey)
     {
@@ -157,7 +157,7 @@ module.exports = function(mongoose, options, done)
     inc('category', s.categories);
     inc('productFamily');
 
-    var confirmer = s.confirmer;
+    const confirmer = s.confirmer;
 
     if (confirmer)
     {
@@ -226,8 +226,8 @@ module.exports = function(mongoose, options, done)
 
     function incOwners(type, owners)
     {
-      var totalsByOwner = totals.owner;
-      var groupByOwner = group.owner;
+      const totalsByOwner = totals.owner;
+      const groupByOwner = group.owner;
 
       _.forEach(owners, function(owner)
       {
@@ -254,7 +254,7 @@ module.exports = function(mongoose, options, done)
 
   function sortTotals(property)
   {
-    var totals = [];
+    const totals = [];
 
     _.forEach(results.totals[property], function(value, key)
     {
@@ -266,7 +266,7 @@ module.exports = function(mongoose, options, done)
 
   function sortOwnerTotals()
   {
-    var totals = [];
+    const totals = [];
 
     _.forEach(results.totals.owner, function(values, key)
     {

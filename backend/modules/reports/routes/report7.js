@@ -2,16 +2,16 @@
 
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
-var helpers = require('./helpers');
-var report7 = require('../report7');
+const _ = require('lodash');
+const moment = require('moment');
+const helpers = require('./helpers');
+const report7 = require('../report7');
 
 module.exports = function report7Route(app, reportsModule, req, res, next)
 {
-  var orgUnitsModule = app[reportsModule.config.orgUnitsId];
-  var query = req.query;
-  var options = {
+  const orgUnitsModule = app[reportsModule.config.orgUnitsId];
+  const query = req.query;
+  const options = {
     assemblyMrpControllers: orgUnitsModule.getAssemblyMrpControllersFor(),
     inoutMrpControllers: {},
     statuses: _.isString(query.statuses) && !_.isEmpty(query.statuses) ? query.statuses.split(',') : [],

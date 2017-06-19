@@ -2,13 +2,13 @@
 
 'use strict';
 
-var step = require('h5.step');
-var util = require('./util');
+const step = require('h5.step');
+const util = require('./util');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const mongoose = app[productionModule.config.mongooseId];
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
 
   if (logEntry.data.master === undefined)
   {
@@ -26,7 +26,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find prod shift [%s] to copy personnel data (LOG=[%s]): %s",
+          'Failed to find prod shift [%s] to copy personnel data (LOG=[%s]): %s',
           logEntry.prodShift,
           logEntry._id,
           err.stack
@@ -74,7 +74,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       {
         if (err && err.code !== 11000)
         {
-          productionModule.error("Failed to save a new prod shift order (LOG=[%s]): %s", logEntry._id, err.stack);
+          productionModule.error('Failed to save a new prod shift order (LOG=[%s]): %s', logEntry._id, err.stack);
 
           return this.skip(err);
         }
@@ -91,8 +91,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           return this.skip();
         }
 
-        var oldNextOrders = prodShift.getNextOrders();
-        var newNextOrders = oldNextOrders.filter(next => next.orderNo !== prodShiftOrder.orderId);
+        const oldNextOrders = prodShift.getNextOrders();
+        const newNextOrders = oldNextOrders.filter(next => next.orderNo !== prodShiftOrder.orderId);
 
         if (newNextOrders.length !== oldNextOrders.length)
         {
@@ -112,8 +112,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save prod line [%s] after changing the prod shift order to [%s]"
-            + " (LOG=[%s]): %s",
+            'Failed to save prod line [%s] after changing the prod shift order to [%s]'
+            + ' (LOG=[%s]): %s',
             prodLine._id,
             logEntry.prodShiftOrder,
             logEntry._id,

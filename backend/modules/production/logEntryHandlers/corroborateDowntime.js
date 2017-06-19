@@ -2,7 +2,7 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
@@ -11,7 +11,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     if (err)
     {
       productionModule.error(
-        "Failed to get prod downtime [%s] to corroborate (LOG=[%s]): %s",
+        'Failed to get prod downtime [%s] to corroborate (LOG=[%s]): %s',
         logEntry.data._id,
         logEntry._id,
         err.stack
@@ -31,8 +31,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       return done();
     }
 
-    var logEntryData = logEntry.data;
-    var changeData = {};
+    const logEntryData = logEntry.data;
+    const changeData = {};
 
     _.forEach(['status', 'reason', 'aor'], function(property)
     {
@@ -42,7 +42,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       }
     });
 
-    var changes = {
+    const changes = {
       date: logEntryData.corroboratedAt,
       user: logEntryData.corroborator,
       data: changeData,
@@ -56,7 +56,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save prod downtime [%s] after corroborating (LOG=[%s]): %s",
+          'Failed to save prod downtime [%s] after corroborating (LOG=[%s]): %s',
           logEntry.data._id,
           logEntry._id,
           err.stack
@@ -64,7 +64,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       }
       else
       {
-        var corroborated = _.clone(logEntryData);
+        const corroborated = _.clone(logEntryData);
         corroborated.changes = changes;
 
         app.broker.publish('prodDowntimes.corroborated.' + prodLine._id + '.' + prodDowntime._id, corroborated);

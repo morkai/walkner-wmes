@@ -2,13 +2,13 @@
 
 'use strict';
 
-var orderFinder = require('../orderFinder');
+const orderFinder = require('../orderFinder');
 
 module.exports = function findOrdersRoute(app, productionModule, req, res, next)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var Order = mongoose.model('Order');
-  var MechOrder = mongoose.model('MechOrder');
+  const mongoose = app[productionModule.config.mongooseId];
+  const Order = mongoose.model('Order');
+  const MechOrder = mongoose.model('MechOrder');
 
   if (typeof req.query.no === 'string' && /[0-9]{3,9}/.test(req.query.no))
   {

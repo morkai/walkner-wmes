@@ -2,20 +2,20 @@
 
 'use strict';
 
-var _ = require('lodash');
-var uuid = require('uuid/v4');
-var moment = require('moment');
+const _ = require('lodash');
+const uuid = require('uuid/v4');
+const moment = require('moment');
 
 module.exports = function setUpLicensesRoutes(app, licensesModule)
 {
-  var express = app[licensesModule.config.expressId];
-  var userModule = app[licensesModule.config.userId];
-  var mongoose = app[licensesModule.config.mongooseId];
-  var License = mongoose.model('License');
-  var LicensePing = mongoose.model('LicensePing');
+  const express = app[licensesModule.config.expressId];
+  const userModule = app[licensesModule.config.userId];
+  const mongoose = app[licensesModule.config.mongooseId];
+  const License = mongoose.model('License');
+  const LicensePing = mongoose.model('LicensePing');
 
-  var canView = userModule.auth('DICTIONARIES:VIEW');
-  var canManage = userModule.auth('LICENSES:MANAGE');
+  const canView = userModule.auth('DICTIONARIES:VIEW');
+  const canManage = userModule.auth('LICENSES:MANAGE');
 
   express.get('/licenses', canView, express.crud.browseRoute.bind(null, app, License));
 
@@ -42,9 +42,9 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
 
   function pingRoute(req, res, next)
   {
-    var uuid = req.params.id;
-    var encryptedUuid = req.body.uuid || '';
-    var decryptedUuid = null;
+    const uuid = req.params.id;
+    const encryptedUuid = req.body.uuid || '';
+    let decryptedUuid = null;
 
     try
     {
@@ -68,7 +68,7 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
 
       delete req.body.uuid;
 
-      var ip = req.ip;
+      const ip = req.ip;
 
       if (!license)
       {
@@ -77,7 +77,7 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
         return res.status(404).send('UNKNOWN_LICENSE');
       }
 
-      var conditions = {
+      const conditions = {
         uuid: license._id,
         pingedAt: {$gte: moment().subtract(8, 'hours').toDate()},
         granted: true,
@@ -107,7 +107,7 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
 
   function saveLicensePing(uuid, ip, granted, meta)
   {
-    var licensePing = new LicensePing({
+    const licensePing = new LicensePing({
       uuid: uuid,
       pingedAt: new Date(),
       ip: ip,
@@ -120,7 +120,7 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
       if (err)
       {
         licensesModule.error(
-          "Failed to save a new license ping: %s\nLicense ping: %s",
+          'Failed to save a new license ping: %s\nLicense ping: %s',
           err.message,
           licensePing.toJSON()
         );
@@ -128,8 +128,8 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
       else
       {
         licensesModule.info(
-          "%s [%s] access to the license [%s].",
-          licensePing.granted ? "Granted" : "Denied",
+          '%s [%s] access to the license [%s].',
+          licensePing.granted ? 'Granted' : 'Denied',
           licensePing.ip,
           licensePing.uuid
         );

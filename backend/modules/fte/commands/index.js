@@ -4,8 +4,8 @@
 
 module.exports = function setUpFteCommands(app, fteModule)
 {
-  var masterCommands = require('./master')(app, fteModule);
-  var leaderCommands = require('./leader')(app, fteModule);
+  const masterCommands = require('./master')(app, fteModule);
+  const leaderCommands = require('./leader')(app, fteModule);
 
   app[fteModule.config.sioId].sockets.on('connection', function(socket)
   {

@@ -29,7 +29,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
   const logEntryList = [];
   const savedAt = new Date();
   let lastLogEntryWithInvalidSecretKey = null;
-  let lastLogEntryIndex = logEntryStream.length - 1;
+  const lastLogEntryIndex = logEntryStream.length - 1;
 
   _.forEach(logEntryStream, function(logEntryJson, i)
   {
@@ -61,7 +61,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
     if (err)
     {
       productionModule.error(
-        "Error while saving %d log entries: %s\n%s",
+        'Error while saving %d log entries: %s\n%s',
         logEntryList.length,
         err.stack || err.errmsg || err.err || err.message,
         JSON.stringify({
@@ -123,7 +123,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
 
   function logInvalidEntry(err, logEntryJson)
   {
-    productionModule.debug("Invalid log entry: %s\n%s", err.message, logEntryJson);
+    productionModule.debug('Invalid log entry: %s\n%s', err.message, logEntryJson);
   }
 
   function createInsertStep(i)
@@ -133,7 +133,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
       if (err && err.code !== 11000)
       {
         productionModule.error(
-          "Error while saving %d log entries (step %d): %s\n%s",
+          'Error while saving %d log entries (step %d): %s\n%s',
           logEntryList.length,
           i,
           err.stack || err.errmsg || err.err || err.message,
@@ -154,7 +154,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
 
   function fixOrgUnits(logEntry)
   {
-    var newLine = NEW_LINES[logEntry.prodLine];
+    const newLine = NEW_LINES[logEntry.prodLine];
 
     if (newLine)
     {

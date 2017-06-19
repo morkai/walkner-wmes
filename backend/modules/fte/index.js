@@ -2,12 +2,12 @@
 
 'use strict';
 
-var moment = require('moment');
-var setUpCache = require('./cache');
-var setUpRoutes = require('./routes');
-var setUpCommands = require('./commands');
-var editFteMasterEntry = require('./editFteMasterEntry');
-var editFteLeaderEntry = require('./editFteLeaderEntry');
+const moment = require('moment');
+const setUpCache = require('./cache');
+const setUpRoutes = require('./routes');
+const setUpCommands = require('./commands');
+const editFteMasterEntry = require('./editFteMasterEntry');
+const editFteLeaderEntry = require('./editFteLeaderEntry');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -21,7 +21,7 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startFteModule(app, module)
 {
-  var shiftChangeTimer = null;
+  let shiftChangeTimer = null;
 
   module.getCurrentShift = getCurrentShift;
 
@@ -70,17 +70,17 @@ exports.start = function startFteModule(app, module)
       shiftChangeTimer = null;
     }
 
-    var realCurrentShift = getCurrentShift();
+    const realCurrentShift = getCurrentShift();
 
     if (realCurrentShift.date > module.currentShift.date)
     {
       return changeShift();
     }
 
-    var nextShiftTime = getNextShiftTime();
-    var currentTime = Date.now();
-    var timeDiff = nextShiftTime - currentTime;
-    var delay = timeDiff > 300000 ? 300000 : timeDiff;
+    const nextShiftTime = getNextShiftTime();
+    const currentTime = Date.now();
+    const timeDiff = nextShiftTime - currentTime;
+    const delay = timeDiff > 300000 ? 300000 : timeDiff;
 
     shiftChangeTimer = setTimeout(checkShiftChange, delay);
   }
@@ -89,7 +89,7 @@ exports.start = function startFteModule(app, module)
   {
     module.currentShift = getCurrentShift();
 
-    module.debug("Changed to shift %d...", module.currentShift.no);
+    module.debug('Changed to shift %d...', module.currentShift.no);
 
     app.broker.publish('shiftChanged', module.currentShift);
 
@@ -98,9 +98,9 @@ exports.start = function startFteModule(app, module)
 
   function getCurrentShift()
   {
-    var date = moment().startOf('hour');
-    var hours = date.hours();
-    var no = 3;
+    const date = moment().startOf('hour');
+    const hours = date.hours();
+    let no = 3;
 
     if (hours >= 6 && hours < 14)
     {
@@ -130,8 +130,8 @@ exports.start = function startFteModule(app, module)
 
   function getNextShiftTime()
   {
-    var nextShiftMoment = moment(module.currentShift.date.getTime());
-    var currentShiftNo = module.currentShift.no;
+    const nextShiftMoment = moment(module.currentShift.date.getTime());
+    const currentShiftNo = module.currentShift.no;
 
     if (currentShiftNo === 1)
     {

@@ -2,27 +2,27 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
-var util = require('./util');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
+const util = require('./util');
 
 module.exports = function(mongoose, options, done)
 {
-  /*jshint validthis:true*/
+  /* jshint validthis:true*/
 
-  var PLAN = 0;
-  var REAL = 1;
-  var DATE_FORMAT = 'YYMMDD';
+  const PLAN = 0;
+  const REAL = 1;
+  const DATE_FORMAT = 'YYMMDD';
 
-  var ProdShift = mongoose.model('ProdShift');
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var ProdDowntime = mongoose.model('ProdDowntime');
-  var FteMasterEntry = mongoose.model('FteMasterEntry');
-  var FteLeaderEntry = mongoose.model('FteLeaderEntry');
-  var HourlyPlan = mongoose.model('HourlyPlan');
+  const ProdShift = mongoose.model('ProdShift');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const ProdDowntime = mongoose.model('ProdDowntime');
+  const FteMasterEntry = mongoose.model('FteMasterEntry');
+  const FteLeaderEntry = mongoose.model('FteLeaderEntry');
+  const HourlyPlan = mongoose.model('HourlyPlan');
 
-  var settings = _.defaults(options.settings, {
+  const settings = _.defaults(options.settings, {
     hoursCoeff: 8,
     totalVolumeProducedProdFlows: [],
     prodQualityInspectionPlan: 0,
@@ -65,7 +65,7 @@ module.exports = function(mongoose, options, done)
     realEfficiencyFormula: '0'
   });
 
-  var results = {
+  const results = {
     options: options.debug ? options : {
       fromTime: options.fromTime,
       toTime: options.toTime
@@ -75,21 +75,21 @@ module.exports = function(mongoose, options, done)
     groups: {}
   };
 
-  var fromDate = moment(options.fromTime).hours(6).toDate();
-  var toDate = moment(options.toTime).hours(6).toDate();
-  var shiftToActiveOrgUnits = {};
-  var prodLineToWorkingDays = {};
-  var orderToDowntimeForLine = {};
-  var orderToDowntimeForLabour = {};
-  var realTotalVolumeProducedPerShift = {};
-  var usedDays = {0: _.includes(options.days, '7')};
-  var usedShifts = {};
-  var usedDivisions = {};
-  var usedSubdivisionTypes = {};
-  var usedProdLines = {};
-  var usedProdFlows = _.isEmpty(options.prodFlows) ? null : options.prodFlows;
-  var usedSubdivisions = _.isEmpty(options.subdivisions) ? null : options.subdivisions;
-  var allProdLines = [];
+  const fromDate = moment(options.fromTime).hours(6).toDate();
+  const toDate = moment(options.toTime).hours(6).toDate();
+  const shiftToActiveOrgUnits = {};
+  const prodLineToWorkingDays = {};
+  const orderToDowntimeForLine = {};
+  const orderToDowntimeForLabour = {};
+  let realTotalVolumeProducedPerShift = {};
+  const usedDays = {0: _.includes(options.days, '7')};
+  const usedShifts = {};
+  const usedDivisions = {};
+  const usedSubdivisionTypes = {};
+  const usedProdLines = {};
+  const usedProdFlows = _.isEmpty(options.prodFlows) ? null : options.prodFlows;
+  const usedSubdivisions = _.isEmpty(options.subdivisions) ? null : options.subdivisions;
+  let allProdLines = [];
 
   _.forEach(options.days, function(k) { usedDays[k] = true; });
   _.forEach(options.shifts, function(k) { usedShifts[k] = true; });
@@ -98,25 +98,25 @@ module.exports = function(mongoose, options, done)
   _.forEach(options.prodLines, function(k) { usedProdLines[k] = true; });
   _.forEach(options.subdivisions, function(sdProdLines) { allProdLines = allProdLines.concat(sdProdLines); });
 
-  var USED_SHIFT_COUNT = _.size(usedShifts);
-  var IN_MINUTES = options.unit === 'm';
-  var UNIT_DIV = IN_MINUTES ? 1 : 60;
-  var UNIT_MUL = IN_MINUTES ? 60 : 1;
-  var UNPLANNED = options.unplanned / UNIT_DIV;
-  var BREAKS = options.breaks / UNIT_DIV;
-  var FAP0 = options.fap0 / UNIT_DIV;
-  var STARTUP = options.startup / UNIT_DIV;
-  var SHUTDOWN = options.shutdown / UNIT_DIV;
-  var MEETINGS = options.meetings / UNIT_DIV;
-  var SIX_S = options.sixS / UNIT_DIV;
-  var TPM = options.tpm / UNIT_DIV;
-  var TRAININGS = options.trainings / UNIT_DIV;
-  var CO_TIME = options.coTime / UNIT_DIV;
-  var DOWNTIME = options.downtime / 100;
-  var CALC_EFFICIENCY_PLAN = compileEfficiencyFormula(settings.efficiencyPlanFormula, PLAN);
-  var CALC_EFFICIENCY_REAL = compileEfficiencyFormula(settings.realEfficiencyFormula, REAL);
-  var REAL_SHUTDOWN_THRESHOLD = settings.realShutdownThreshold * 60 * 1000;
-  var DOWNTIME_REASONS = {
+  const USED_SHIFT_COUNT = _.size(usedShifts);
+  const IN_MINUTES = options.unit === 'm';
+  const UNIT_DIV = IN_MINUTES ? 1 : 60;
+  const UNIT_MUL = IN_MINUTES ? 60 : 1;
+  const UNPLANNED = options.unplanned / UNIT_DIV;
+  const BREAKS = options.breaks / UNIT_DIV;
+  const FAP0 = options.fap0 / UNIT_DIV;
+  const STARTUP = options.startup / UNIT_DIV;
+  const SHUTDOWN = options.shutdown / UNIT_DIV;
+  const MEETINGS = options.meetings / UNIT_DIV;
+  const SIX_S = options.sixS / UNIT_DIV;
+  const TPM = options.tpm / UNIT_DIV;
+  const TRAININGS = options.trainings / UNIT_DIV;
+  const CO_TIME = options.coTime / UNIT_DIV;
+  const DOWNTIME = options.downtime / 100;
+  const CALC_EFFICIENCY_PLAN = compileEfficiencyFormula(settings.efficiencyPlanFormula, PLAN);
+  const CALC_EFFICIENCY_REAL = compileEfficiencyFormula(settings.realEfficiencyFormula, REAL);
+  const REAL_SHUTDOWN_THRESHOLD = settings.realShutdownThreshold * 60 * 1000;
+  const DOWNTIME_REASONS = {
     total: {
       all: _.isEmpty(settings.totalDowntimeReasons)
     },
@@ -132,14 +132,14 @@ module.exports = function(mongoose, options, done)
     realTrainings: {},
     realCoTime: {}
   };
-  var PROD_TASKS = {
+  const PROD_TASKS = {
     realKitters: {},
     realProdTransport: {},
     realCycleCounting: {},
     realOtherWarehousing: {}
   };
-  var TOTAL_VOLUME_PRODUCED_PROD_FLOWS = {};
-  var PLAN_PROD_FLOWS = {};
+  const TOTAL_VOLUME_PRODUCED_PROD_FLOWS = {};
+  const PLAN_PROD_FLOWS = {};
 
   _.forEach(DOWNTIME_REASONS, function(downtimeReasons, prop)
   {
@@ -211,12 +211,12 @@ module.exports = function(mongoose, options, done)
         prodLineToWorkingDays[prodLineId] = Object.keys(workingDays).length;
       });
 
-      var sortedGroups = [];
-      var summary = results.summary;
+      const sortedGroups = [];
+      const summary = results.summary;
 
-      var currentGroupKey = moment(options.fromTime).startOf(options.interval);
-      var now = Date.now();
-      var lastGroupKey = options.toTime > now
+      const currentGroupKey = moment(options.fromTime).startOf(options.interval);
+      const now = Date.now();
+      let lastGroupKey = options.toTime > now
         ? moment(now).startOf(options.interval).add(1, options.interval)
         : moment(options.toTime).startOf(options.interval);
 
@@ -229,8 +229,8 @@ module.exports = function(mongoose, options, done)
 
       while (currentGroupKey.valueOf() < lastGroupKey)
       {
-        var groupKey = currentGroupKey.valueOf();
-        var group = results.groups[groupKey] || createDataGroup(groupKey);
+        const groupKey = currentGroupKey.valueOf();
+        const group = results.groups[groupKey] || createDataGroup(groupKey);
 
         sortedGroups.push(calcMetrics(group, null));
 
@@ -263,9 +263,9 @@ module.exports = function(mongoose, options, done)
 
   function countAllShiftsInGroup(groupKey)
   {
-    var date = moment(groupKey);
-    var toTime = moment(groupKey).add(1, options.interval);
-    var shiftCount = 0;
+    const date = moment(groupKey);
+    const toTime = moment(groupKey).add(1, options.interval);
+    let shiftCount = 0;
 
     while (date.valueOf() < toTime)
     {
@@ -290,7 +290,7 @@ module.exports = function(mongoose, options, done)
       ? _.size(group.workingDayCount)
       : _.reduce(groups, function(total, group) { return total + group.workingDayCount; }, 0);
 
-    var fteDays = usedDays.noWork ? group.allDayCount : group.workingDayCount;
+    const fteDays = usedDays.noWork ? group.allDayCount : group.workingDayCount;
 
     group.workingShiftCount = _.size(group.workingShiftCount);
     group.timeAvailablePerShift[PLAN] = calcTimeAvailablePerShiftPlan(group);
@@ -393,7 +393,7 @@ module.exports = function(mongoose, options, done)
 
   function getDataGroup(date)
   {
-    var key = createDataGroupKey(date);
+    const key = createDataGroupKey(date);
 
     if (!results.groups[key])
     {
@@ -405,8 +405,8 @@ module.exports = function(mongoose, options, done)
 
   function handleStream(Model, conditions, fields, handleDocument, done)
   {
-    var complete = _.once(done);
-    var stream = Model.find(conditions, fields).lean().cursor();
+    const complete = _.once(done);
+    const stream = Model.find(conditions, fields).lean().cursor();
 
     stream.on('error', complete);
     stream.on('end', complete);
@@ -415,7 +415,7 @@ module.exports = function(mongoose, options, done)
 
   function getActiveOrgUnits(done)
   {
-    var pipeline = [
+    const pipeline = [
       {$match: {
         startedAt: {$gte: fromDate, $lt: toDate}
       }},
@@ -437,14 +437,14 @@ module.exports = function(mongoose, options, done)
         return done(err);
       }
 
-      var divisions = {};
+      const divisions = {};
 
       _.forEach(results, function(result)
       {
-        var shiftKey = result._id.date.getTime().toString();
-        var divisionId = result._id.division;
-        var subdivisionId = result._id.subdivision;
-        var prodFlowId = result._id.prodFlow.toString();
+        const shiftKey = result._id.date.getTime().toString();
+        const divisionId = result._id.division;
+        const subdivisionId = result._id.subdivision;
+        const prodFlowId = result._id.prodFlow.toString();
 
         divisions[divisionId] = true;
 
@@ -457,7 +457,7 @@ module.exports = function(mongoose, options, done)
           };
         }
 
-        var shiftActiveOrgUnits = shiftToActiveOrgUnits[shiftKey];
+        const shiftActiveOrgUnits = shiftToActiveOrgUnits[shiftKey];
 
         if (!shiftActiveOrgUnits[divisionId])
         {
@@ -503,11 +503,11 @@ module.exports = function(mongoose, options, done)
 
   function countSelectedActiveProdLines(dateTime, allProdLines)
   {
-    var count = 0;
+    let count = 0;
 
-    for (var i = 0; i < allProdLines.length; ++i)
+    for (let i = 0; i < allProdLines.length; ++i)
     {
-      var deactivatedAt = options.deactivatedProdLines[allProdLines[i]];
+      const deactivatedAt = options.deactivatedProdLines[allProdLines[i]];
 
       if (!deactivatedAt || dateTime < deactivatedAt)
       {
@@ -520,20 +520,20 @@ module.exports = function(mongoose, options, done)
 
   function countActiveProdLines(shiftKey, orgUnitId)
   {
-    var activeProdFlows = shiftToActiveOrgUnits[shiftKey];
+    const activeProdFlows = shiftToActiveOrgUnits[shiftKey];
 
     return !activeProdFlows || !activeProdFlows[orgUnitId] ? 0 : activeProdFlows[orgUnitId].length;
   }
 
   function handleHourlyPlans(done)
   {
-    var conditions = {
+    const conditions = {
       date: {
         $gte: fromDate,
         $lt: toDate
       }
     };
-    var fields = {
+    const fields = {
       division: 1,
       date: 1,
       'flows.id': 1,
@@ -550,11 +550,11 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    var summary = results.summary;
-    var group = getDataGroup(hourlyPlan.date);
-    var shiftMoment = moment(hourlyPlan.date).startOf('day');
-    var dateTime = shiftMoment.valueOf();
-    var inc = function(count, selectedActiveProdLines, allActiveProdLines, changeTvp, changePlan)
+    const summary = results.summary;
+    const group = getDataGroup(hourlyPlan.date);
+    const shiftMoment = moment(hourlyPlan.date).startOf('day');
+    const dateTime = shiftMoment.valueOf();
+    const inc = function(count, selectedActiveProdLines, allActiveProdLines, changeTvp, changePlan)
     {
       if (count === 0)
       {
@@ -581,19 +581,19 @@ module.exports = function(mongoose, options, done)
       summary.plan[PLAN] += count;
     };
 
-    for (var i = 0; i < hourlyPlan.flows.length; ++i)
+    for (let i = 0; i < hourlyPlan.flows.length; ++i)
     {
-      var flow = hourlyPlan.flows[i];
-      var flowId = flow.id.toString();
-      var changeTvp = isTotalVolumeProducedProdFlow(flowId);
-      var changePlan = isPlanProdFlow(flowId);
+      const flow = hourlyPlan.flows[i];
+      const flowId = flow.id.toString();
+      const changeTvp = isTotalVolumeProducedProdFlow(flowId);
+      const changePlan = isPlanProdFlow(flowId);
 
       if (!changeTvp && !changePlan)
       {
         continue;
       }
 
-      var selectedActiveProdLines = usedProdFlows === null
+      const selectedActiveProdLines = usedProdFlows === null
         ? -1
         : options.prodFlows[flowId]
           ? countSelectedActiveProdLines(dateTime, options.prodFlows[flowId])
@@ -635,7 +635,7 @@ module.exports = function(mongoose, options, done)
 
   function handleProdShifts(done)
   {
-    var conditions = {
+    const conditions = {
       date: {
         $gte: fromDate,
         $lt: toDate
@@ -652,7 +652,7 @@ module.exports = function(mongoose, options, done)
       conditions.subdivision = {$in: Object.keys(options.subdivisions)};
     }
 
-    var fields = {
+    const fields = {
       subdivision: 1,
       prodFlow: 1,
       prodLine: 1,
@@ -671,8 +671,8 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    var summary = results.summary;
-    var group = getDataGroup(prodShift.date);
+    const summary = results.summary;
+    const group = getDataGroup(prodShift.date);
 
     if (prodShift.shutdown <= REAL_SHUTDOWN_THRESHOLD)
     {
@@ -682,9 +682,9 @@ module.exports = function(mongoose, options, done)
 
     if (isPlanProdFlow(prodShift.prodFlow) && isInSelectedOrgUnit(prodShift))
     {
-      var quantitiesDone = prodShift.quantitiesDone;
+      const quantitiesDone = prodShift.quantitiesDone;
 
-      for (var i = 0; i < 8; ++i)
+      for (let i = 0; i < 8; ++i)
       {
         summary.plan[REAL] += quantitiesDone[i].actual;
         group.plan[REAL] += quantitiesDone[i].actual;
@@ -694,7 +694,7 @@ module.exports = function(mongoose, options, done)
 
   function handleProdShiftOrders(done)
   {
-    var conditions = {
+    const conditions = {
       startedAt: {
         $gte: fromDate,
         $lt: toDate
@@ -702,7 +702,7 @@ module.exports = function(mongoose, options, done)
       shift: {$in: options.shifts}
     };
 
-    var fields = {
+    const fields = {
       division: 1,
       subdivision: 1,
       prodFlow: 1,
@@ -733,23 +733,23 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    var summary = results.summary;
-    var group = getDataGroup(prodShiftOrder.date);
-    var dateKey = moment(prodShiftOrder.date).format(DATE_FORMAT);
-    var shiftKey = prodShiftOrder.date.getTime().toString();
-    var divisionId = prodShiftOrder.division;
-    var prodLineId = prodShiftOrder.prodLine;
-    var inSelectedOrgUnit = isInSelectedOrgUnit(prodShiftOrder);
-    var planProdFlow = isPlanProdFlow(prodShiftOrder.prodFlow);
+    const summary = results.summary;
+    const group = getDataGroup(prodShiftOrder.date);
+    const dateKey = moment(prodShiftOrder.date).format(DATE_FORMAT);
+    const shiftKey = prodShiftOrder.date.getTime().toString();
+    const divisionId = prodShiftOrder.division;
+    const prodLineId = prodShiftOrder.prodLine;
+    const inSelectedOrgUnit = isInSelectedOrgUnit(prodShiftOrder);
+    const planProdFlow = isPlanProdFlow(prodShiftOrder.prodFlow);
 
     if (isTotalVolumeProducedOrder(prodShiftOrder))
     {
       groupOrderOperationQuantity(realTotalVolumeProducedPerShift, shiftKey, prodShiftOrder);
     }
 
-    var workerCount = prodShiftOrder.workerCount || 1;
-    var machineTime = prodShiftOrder.machineTime * UNIT_MUL / 100;
-    var labourTime = prodShiftOrder.laborTime * UNIT_MUL / 100;
+    const workerCount = prodShiftOrder.workerCount || 1;
+    const machineTime = prodShiftOrder.machineTime * UNIT_MUL / 100;
+    const labourTime = prodShiftOrder.laborTime * UNIT_MUL / 100;
 
     summary.averageRoutingTime += machineTime;
     group.averageRoutingTime += machineTime;
@@ -758,7 +758,7 @@ module.exports = function(mongoose, options, done)
 
     if (inSelectedOrgUnit)
     {
-      var routingTimeForLinePlan = prodShiftOrder.laborTime / workerCount * UNIT_MUL / 100;
+      const routingTimeForLinePlan = prodShiftOrder.laborTime / workerCount * UNIT_MUL / 100;
 
       summary.routingTimeForLine[PLAN] += routingTimeForLinePlan;
       group.routingTimeForLine[PLAN] += routingTimeForLinePlan;
@@ -767,18 +767,18 @@ module.exports = function(mongoose, options, done)
       summary.orderCountForLine += 1;
       group.orderCountForLine += 1;
 
-      var totalDuration = prodShiftOrder.totalDuration * UNIT_MUL;
-      var durationForLine = totalDuration - (orderToDowntimeForLine[prodShiftOrder._id] || 0);
-      var durationForLabour = totalDuration - (orderToDowntimeForLabour[prodShiftOrder._id] || 0);
-      var realRoutingTimeForLine = durationForLine / prodShiftOrder.quantityDone;
-      var realRoutingTimeForLabour = durationForLabour / prodShiftOrder.quantityDone * workerCount;
+      const totalDuration = prodShiftOrder.totalDuration * UNIT_MUL;
+      const durationForLine = totalDuration - (orderToDowntimeForLine[prodShiftOrder._id] || 0);
+      const durationForLabour = totalDuration - (orderToDowntimeForLabour[prodShiftOrder._id] || 0);
+      const realRoutingTimeForLine = durationForLine / prodShiftOrder.quantityDone;
+      const realRoutingTimeForLabour = durationForLabour / prodShiftOrder.quantityDone * workerCount;
 
       summary.routingTimeForLine[REAL] += realRoutingTimeForLine;
       group.routingTimeForLine[REAL] += realRoutingTimeForLine;
       summary.routingTimeForLabour[REAL] += realRoutingTimeForLabour;
       group.routingTimeForLabour[REAL] += realRoutingTimeForLabour;
 
-      var shiftCountKey = shiftKey + prodLineId;
+      const shiftCountKey = shiftKey + prodLineId;
 
       summary.allShiftCount[shiftCountKey] = true;
       group.allShiftCount[shiftCountKey] = true;
@@ -786,7 +786,7 @@ module.exports = function(mongoose, options, done)
       group.workingShiftCount[shiftCountKey] = true;
     }
 
-    var prodOperatorPlanNum = prodShiftOrder.laborTime / 100 * prodShiftOrder.quantityDone;
+    const prodOperatorPlanNum = prodShiftOrder.laborTime / 100 * prodShiftOrder.quantityDone;
 
     if (!summary.prodOperators[PLAN][prodLineId])
     {
@@ -822,7 +822,7 @@ module.exports = function(mongoose, options, done)
 
     prodLineToWorkingDays[prodLineId][dateKey] = true;
 
-    var shiftsPerDivision = summary.masters[PLAN].shiftsPerDivision;
+    let shiftsPerDivision = summary.masters[PLAN].shiftsPerDivision;
 
     if (!shiftsPerDivision[divisionId])
     {
@@ -845,14 +845,14 @@ module.exports = function(mongoose, options, done)
 
   function groupOrderOperationQuantity(group, shiftKey, prodShiftOrder)
   {
-    var orders = group[shiftKey];
+    let orders = group[shiftKey];
 
     if (!orders)
     {
       orders = group[shiftKey] = {};
     }
 
-    var order = orders[prodShiftOrder.orderId];
+    let order = orders[prodShiftOrder.orderId];
 
     if (!order)
     {
@@ -864,7 +864,7 @@ module.exports = function(mongoose, options, done)
 
   function handleProdDowntimes(done)
   {
-    var conditions = {
+    const conditions = {
       startedAt: {
         $gte: fromDate,
         $lt: toDate
@@ -872,7 +872,7 @@ module.exports = function(mongoose, options, done)
       shift: {$in: options.shifts}
     };
 
-    var fields = {
+    const fields = {
       division: 1,
       subdivision: 1,
       prodFlow: 1,
@@ -895,11 +895,11 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    var summary = results.summary;
-    var group = getDataGroup(prodDowntime.date);
-    var shiftKey = prodDowntime.date.getTime().toString();
-    var prodLineId = prodDowntime.prodLine;
-    var duration = (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
+    const summary = results.summary;
+    const group = getDataGroup(prodDowntime.date);
+    const shiftKey = prodDowntime.date.getTime().toString();
+    const prodLineId = prodDowntime.prodLine;
+    let duration = (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
 
     if (DOWNTIME_REASONS.realProdSetter[prodDowntime.reason])
     {
@@ -912,7 +912,7 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    var prodShiftOrderId = prodDowntime.prodShiftOrder;
+    const prodShiftOrderId = prodDowntime.prodShiftOrder;
 
     if (DOWNTIME_REASONS.realRoutingTimeForLine[prodDowntime.reason])
     {
@@ -1013,14 +1013,14 @@ module.exports = function(mongoose, options, done)
 
   function handleFteMasterEntries(done)
   {
-    var conditions = {
+    const conditions = {
       date: {
         $gte: fromDate,
         $lt: toDate
       },
       shift: {$in: options.shifts}
     };
-    var fields = {
+    const fields = {
       subdivision: 1,
       date: 1,
       tasks: 1
@@ -1036,8 +1036,8 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    var summary = results.summary;
-    var group = getDataGroup(fteEntry.date);
+    const summary = results.summary;
+    const group = getDataGroup(fteEntry.date);
 
     _.forEach(fteEntry.tasks, function(task)
     {
@@ -1048,14 +1048,14 @@ module.exports = function(mongoose, options, done)
 
       _.forEach(task.functions, function(taskFunction)
       {
-        var fte = 0;
+        let fte = 0;
 
         _.forEach(taskFunction.companies, function(taskCompany)
         {
           fte += taskCompany.count;
         });
 
-        var adjustedFte = fte;
+        const adjustedFte = fte;
 
         switch (taskFunction.id)
         {
@@ -1088,14 +1088,14 @@ module.exports = function(mongoose, options, done)
 
   function handleFteLeaderEntries(done)
   {
-    var conditions = {
+    const conditions = {
       date: {
         $gte: fromDate,
         $lt: toDate
       },
       shift: {$in: options.shifts}
     };
-    var fields = {
+    const fields = {
       subdivision: 1,
       date: 1,
       tasks: 1
@@ -1111,14 +1111,14 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    var subdivisionId = fteEntry.subdivision.toString();
-    var summary = results.summary;
-    var group = getDataGroup(fteEntry.date);
+    const subdivisionId = fteEntry.subdivision.toString();
+    const summary = results.summary;
+    const group = getDataGroup(fteEntry.date);
 
     _.forEach(fteEntry.tasks, function(task)
     {
-      var taskId = task.id.toString();
-      var fte = 0;
+      const taskId = task.id.toString();
+      let fte = 0;
 
       _.forEach(task.companies, countFte);
 
@@ -1221,7 +1221,7 @@ module.exports = function(mongoose, options, done)
 
   function countProdOperatorsPlan(data)
   {
-    var result = 0;
+    let result = 0;
 
     _.forEach(data, function(plan)
     {
@@ -1233,14 +1233,14 @@ module.exports = function(mongoose, options, done)
 
   function countProdBasedPlanners(group, type)
   {
-    var hoursCoeff = settings.hoursCoeff;
+    const hoursCoeff = settings.hoursCoeff;
 
     return util.round(group.prodBasedPlanners[type] / hoursCoeff);
   }
 
   function countProdSettersPlan(data)
   {
-    var result = 0;
+    let result = 0;
 
     _.forEach(data, function(plan)
     {
@@ -1252,8 +1252,8 @@ module.exports = function(mongoose, options, done)
 
   function countMastersPlan(data)
   {
-    var num = 0;
-    var den = Object.keys(data.days).length;
+    let num = 0;
+    const den = Object.keys(data.days).length;
 
     _.forEach(data.shiftsPerDivision, function(shifts)
     {
@@ -1265,9 +1265,9 @@ module.exports = function(mongoose, options, done)
 
   function calcKittersPlan(group)
   {
-    var prodOperators = group.prodOperators[PLAN];
-    var prodMaterialHandling = group.prodMaterialHandling[PLAN];
-    var result = ((prodOperators - prodMaterialHandling) * settings.kittersPlanCoeff1 - prodOperators)
+    const prodOperators = group.prodOperators[PLAN];
+    const prodMaterialHandling = group.prodMaterialHandling[PLAN];
+    const result = ((prodOperators - prodMaterialHandling) * settings.kittersPlanCoeff1 - prodOperators)
       * settings.kittersPlanCoeff2;
 
     return util.round(result);
@@ -1275,9 +1275,9 @@ module.exports = function(mongoose, options, done)
 
   function calcProdTransportPlan(group)
   {
-    var prodOperators = group.prodOperators[PLAN];
-    var prodMaterialHandling = group.prodMaterialHandling[PLAN];
-    var result = ((prodOperators - prodMaterialHandling) * settings.prodTransportPlanCoeff1 - prodOperators)
+    const prodOperators = group.prodOperators[PLAN];
+    const prodMaterialHandling = group.prodMaterialHandling[PLAN];
+    const result = ((prodOperators - prodMaterialHandling) * settings.prodTransportPlanCoeff1 - prodOperators)
       * settings.prodTransportPlanCoeff2;
 
     return util.round(result);
@@ -1285,9 +1285,9 @@ module.exports = function(mongoose, options, done)
 
   function calcCycleCountingPlan(group)
   {
-    var prodOperators = group.prodOperators[PLAN];
-    var prodMaterialHandling = group.prodMaterialHandling[PLAN];
-    var result = ((prodOperators - prodMaterialHandling) * settings.cycleCountingPlanCoeff1 - prodOperators)
+    const prodOperators = group.prodOperators[PLAN];
+    const prodMaterialHandling = group.prodMaterialHandling[PLAN];
+    const result = ((prodOperators - prodMaterialHandling) * settings.cycleCountingPlanCoeff1 - prodOperators)
       * settings.cycleCountingPlanCoeff2;
 
     return util.round(result);
@@ -1295,9 +1295,9 @@ module.exports = function(mongoose, options, done)
 
   function calcOtherWarehousingPlan(group)
   {
-    var prodOperators = group.prodOperators[PLAN];
-    var prodMaterialHandling = group.prodMaterialHandling[PLAN];
-    var result = ((prodOperators - prodMaterialHandling) * settings.otherWarehousingPlanCoeff1 - prodOperators)
+    const prodOperators = group.prodOperators[PLAN];
+    const prodMaterialHandling = group.prodMaterialHandling[PLAN];
+    const result = ((prodOperators - prodMaterialHandling) * settings.otherWarehousingPlanCoeff1 - prodOperators)
       * settings.otherWarehousingPlanCoeff2;
 
     return util.round(result);
@@ -1305,7 +1305,7 @@ module.exports = function(mongoose, options, done)
 
   function calcTimeAvailablePerShiftPlan(group)
   {
-    var shiftCount = usedDays.noWork ? group.allShiftCount : group.workingShiftCount;
+    const shiftCount = usedDays.noWork ? group.allShiftCount : group.workingShiftCount;
 
     return shiftCount * 8 * UNIT_MUL;
   }
@@ -1324,8 +1324,8 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    var date = moment(group.key);
-    var toTime = moment(group.key).add(1, options.interval);
+    const date = moment(group.key);
+    const toTime = moment(group.key).add(1, options.interval);
 
     group.allDayCount = 0;
 
@@ -1366,7 +1366,7 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    var groupMap = {};
+    const groupMap = {};
 
     _.forEach(groups, function(group)
     {
@@ -1375,13 +1375,13 @@ module.exports = function(mongoose, options, done)
 
     _.forEach(realTotalVolumeProducedPerShift, function(shiftTvp, shiftKey)
     {
-      var groupKey = createDataGroupKey(+shiftKey);
-      var group = groupMap[groupKey];
-      var tvp = 0;
+      const groupKey = createDataGroupKey(+shiftKey);
+      const group = groupMap[groupKey];
+      let tvp = 0;
 
       _.forEach(shiftTvp, function(orderTvp)
       {
-        var max = 0;
+        let max = 0;
 
         _.forEach(orderTvp, function(operationTvp)
         {
@@ -1403,10 +1403,10 @@ module.exports = function(mongoose, options, done)
 
   function compileEfficiencyFormula(formula, type)
   {
-    /*jshint -W061*/
+    /* jshint -W061*/
 
-    var suffix = '[' + type + ']';
-    var patterns = {
+    const suffix = '[' + type + ']';
+    const patterns = {
       TIME_AVAIL_PER_SHIFT: 'group.timeAvailablePerShift' + suffix,
       ROUTING_TIME_FOR_LINE: 'group.routingTimeForLine' + suffix,
       ROUTING_TIME_FOR_LABOUR: 'group.routingTimeForLabour' + suffix,
@@ -1422,14 +1422,14 @@ module.exports = function(mongoose, options, done)
       CO_TIME: 'group.coTime' + suffix,
       DOWNTIME: 'group.downtime' + suffix
     };
-    var code = formula;
+    let code = formula;
 
     _.forEach(patterns, function(replacement, pattern)
     {
       code = code.replace(new RegExp(pattern, 'g'), replacement);
     });
 
-    var calc = function() { return 0; };
+    const calc = function() { return 0; };
 
     try
     {

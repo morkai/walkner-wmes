@@ -31,7 +31,7 @@ for (let i = 1; i < rowCount; ++i)
 
   if (/^[0-9]{9}$/.test(no))
   {
-    var order = {
+    const order = {
       _id: no,
       nc12: cell('D', i, '').toString().trim().replace(/^0+/, ''),
       name: description.trim(),
@@ -46,7 +46,7 @@ for (let i = 1; i < rowCount; ++i)
     continue;
   }
 
-  var matches = description.match(/\s+([A-Z][A-Z0-9]{2})\s+/);
+  const matches = description.match(/\s+([A-Z][A-Z0-9]{2})\s+/);
 
   if (matches)
   {

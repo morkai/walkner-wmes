@@ -2,8 +2,8 @@
 
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = function importOrdersRoute(app, xiconfModule, req, res, next)
 {
@@ -14,15 +14,15 @@ module.exports = function importOrdersRoute(app, xiconfModule, req, res, next)
     return res.status(400).send('INVALID_CONTENT_TYPE');
   }
 
-  var timestamp = parseInt(req.query.timestamp, 10);
-  var step = parseInt(req.query.step, 10);
+  const timestamp = parseInt(req.query.timestamp, 10);
+  const step = parseInt(req.query.step, 10);
 
   if (isNaN(timestamp) || isNaN(step) || req.body.length < 256)
   {
     return res.status(400).send('INPUT');
   }
 
-  var importFile = xiconfModule.config.ordersImportFile
+  const importFile = xiconfModule.config.ordersImportFile
     .replace('{timestamp}', timestamp)
     .replace('{step}', step);
 

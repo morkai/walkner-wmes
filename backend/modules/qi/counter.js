@@ -132,7 +132,7 @@ module.exports = function setUpQiCounter(app, qiModule)
     {
       if (err)
       {
-        qiModule.error("Failed to reset counters: %s", err.message);
+        qiModule.error('Failed to reset counters: %s', err.message);
       }
     });
   }
@@ -143,7 +143,7 @@ module.exports = function setUpQiCounter(app, qiModule)
     {
       if (err)
       {
-        qiModule.error("Failed to reset counter for user [%s]: %s", userId, err.message);
+        qiModule.error('Failed to reset counter for user [%s]: %s', userId, err.message);
       }
       else
       {

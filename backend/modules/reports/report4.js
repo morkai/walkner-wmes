@@ -2,18 +2,18 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var util = require('./util');
+const _ = require('lodash');
+const step = require('h5.step');
+const util = require('./util');
 
 module.exports = function(mongoose, options, done)
 {
-  /*jshint validthis:true*/
+  /* jshint validthis:true*/
 
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var ProdDowntime = mongoose.model('ProdDowntime');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const ProdDowntime = mongoose.model('ProdDowntime');
 
-  var report4 = new Report4(options);
+  const report4 = new Report4(options);
 
   step(
     prepareResultsStep,
@@ -41,7 +41,7 @@ module.exports = function(mongoose, options, done)
 
   function prepareResultsStep()
   {
-    var conditions = {
+    const conditions = {
       subdivision: {$in: options.subdivisions},
       startedAt: {
         $gte: new Date(options.fromTime + 6 * 3600 * 1000),
@@ -49,7 +49,7 @@ module.exports = function(mongoose, options, done)
       }
     };
 
-    var orderFields = {
+    const orderFields = {
       laborTime: 1,
       quantityDone: 1,
       quantityLost: 1,
@@ -65,18 +65,18 @@ module.exports = function(mongoose, options, done)
       pressWorksheet: 1,
       notes: 1
     };
-    var orderStream = ProdShiftOrder
+    const orderStream = ProdShiftOrder
       .find(conditions, orderFields)
       .sort({subdivision: 1, startedAt: -1})
       .lean()
       .cursor();
-    var orderStreamDone = _.once(this.parallel());
+    const orderStreamDone = _.once(this.parallel());
 
     orderStream.on('error', orderStreamDone);
     orderStream.on('end', orderStreamDone);
     orderStream.on('data', report4.handleProdShiftOrder.bind(report4));
 
-    var downtimeFields = {
+    const downtimeFields = {
       _id: 0,
       prodLine: 1,
       shift: 1,
@@ -86,12 +86,12 @@ module.exports = function(mongoose, options, done)
       master: 1,
       operators: 1
     };
-    var downtimeStream = ProdDowntime
+    const downtimeStream = ProdDowntime
       .find(conditions, downtimeFields)
       .sort({subdivision: 1, startedAt: -1})
       .lean()
       .cursor();
-    var downtimeStreamDone = _.once(this.parallel());
+    const downtimeStreamDone = _.once(this.parallel());
 
     downtimeStream.on('error', downtimeStreamDone);
     downtimeStream.on('end', downtimeStreamDone);
@@ -183,14 +183,14 @@ Report4.prototype.toJSON = function()
 
 Report4.prototype.prepareUsers = function(options)
 {
-  var userList = options[options.mode];
+  const userList = options[options.mode];
 
   if (!Array.isArray(userList))
   {
     return null;
   }
 
-  var userMap = {};
+  const userMap = {};
 
   _.forEach(userList, function(user)
   {
@@ -202,9 +202,9 @@ Report4.prototype.prepareUsers = function(options)
 
 Report4.prototype.finalize = function(done)
 {
-  var report = this;
-  var machineTimes = report.results.machineTimes;
-  var machines = Object.keys(machineTimes);
+  const report = this;
+  const machineTimes = report.results.machineTimes;
+  const machines = Object.keys(machineTimes);
 
   report.results.notes.worksheets = Object.keys(report.results.notes.worksheets);
   report.results.workTimes.sap = report.results.workTimes.total - report.results.workTimes.otherWorks;
@@ -212,9 +212,9 @@ Report4.prototype.finalize = function(done)
   step(
     function calcOperatorAdjustingMedian()
     {
-      for (var i = 0, l = machines.length; i < l; ++i)
+      for (let i = 0, l = machines.length; i < l; ++i)
       {
-        var machine = machines[i];
+        const machine = machines[i];
 
         machineTimes[machine].operatorAdjustingMedian = report.calcMedian(report.operatorAdjustingDurations[machine]);
       }
@@ -223,9 +223,9 @@ Report4.prototype.finalize = function(done)
     },
     function calcMachineAdjustingMedian()
     {
-      for (var i = 0, l = machines.length; i < l; ++i)
+      for (let i = 0, l = machines.length; i < l; ++i)
       {
-        var machine = machines[i];
+        const machine = machines[i];
 
         machineTimes[machine].machineAdjustingMedian = report.calcMedian(report.machineAdjustingDurations[machine]);
       }
@@ -249,7 +249,7 @@ Report4.prototype.calcMedian = function(durations)
     return 0;
   }
 
-  var length = durations.length;
+  const length = durations.length;
 
   if (length === 1)
   {
@@ -265,8 +265,8 @@ Report4.prototype.calcMedian = function(durations)
 
   if (length % 2 === 0)
   {
-    var middle2 = length / 2;
-    var middle1 = middle2 - 1;
+    const middle2 = length / 2;
+    const middle1 = middle2 - 1;
 
     return (durations[middle1] + durations[middle2]) / 2;
   }
@@ -276,9 +276,9 @@ Report4.prototype.calcMedian = function(durations)
 
 Report4.prototype.finalizeEffAndProd = function()
 {
-  var createNextGroupKey = util.createCreateNextGroupKey(this.options.interval);
-  var groupKeys = Object.keys(this.effAndProd).map(Number).sort(function(a, b) { return a - b; });
-  var divisions = {};
+  const createNextGroupKey = util.createCreateNextGroupKey(this.options.interval);
+  const groupKeys = Object.keys(this.effAndProd).map(Number).sort(function(a, b) { return a - b; });
+  const divisions = {};
 
   this.results.effAndProd = {};
 
@@ -289,29 +289,29 @@ Report4.prototype.finalizeEffAndProd = function()
     return;
   }
 
-  var fromGroupKey = groupKeys[0];
-  var toGroupKey = groupKeys[groupKeys.length - 1];
+  let fromGroupKey = groupKeys[0];
+  const toGroupKey = groupKeys[groupKeys.length - 1];
 
   while (fromGroupKey <= toGroupKey)
   {
-    var groupKey = fromGroupKey.toString();
-    var groupData = this.effAndProd[groupKey];
-    var effAndProd = {};
+    const groupKey = fromGroupKey.toString();
+    const groupData = this.effAndProd[groupKey];
+    const effAndProd = {};
 
     if (groupData)
     {
-      var prodDen = Object.keys(groupData.prodDen).length;
-      var shifts = Object.keys(groupData.shifts).length;
+      const prodDen = Object.keys(groupData.prodDen).length;
+      const shifts = Object.keys(groupData.shifts).length;
 
       effAndProd.eff = groupData.effDen ? (groupData.effNum / groupData.effDen) : 0;
       effAndProd.prod = prodDen ? (groupData.effNum / (this.options.prodNumConstant * shifts) / prodDen) : 0;
 
-      var divisionIds = Object.keys(groupData.byDivision);
+      const divisionIds = Object.keys(groupData.byDivision);
 
-      for (var ii = 0, ll = divisionIds.length; ii < ll; ++ii)
+      for (let ii = 0, ll = divisionIds.length; ii < ll; ++ii)
       {
-        var divisionId = divisionIds[ii];
-        var divisionData = groupData.byDivision[divisionId];
+        const divisionId = divisionIds[ii];
+        const divisionData = groupData.byDivision[divisionId];
 
         divisions[divisionId] = true;
         effAndProd[divisionId] = divisionData.effNum / divisionData.effDen;
@@ -328,7 +328,7 @@ Report4.prototype.finalizeEffAndProd = function()
 
 Report4.prototype.handleProdShiftOrder = function(prodShiftOrder)
 {
-  var workerCount = this.countWorkers(prodShiftOrder);
+  const workerCount = this.countWorkers(prodShiftOrder);
 
   if (workerCount === null)
   {
@@ -352,18 +352,18 @@ Report4.prototype.handleProdShiftOrder = function(prodShiftOrder)
 
 Report4.prototype.handleProdDowntime = function(prodDowntime)
 {
-  var workerCount = this.countWorkers(prodDowntime);
+  const workerCount = this.countWorkers(prodDowntime);
 
   if (workerCount === null)
   {
     return;
   }
 
-  var match = workerCount.match > 0;
-  var machine = prodDowntime.prodLine;
-  var duration = (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
-  var reason = prodDowntime.reason;
-  var downtimeType = this.options.downtimeReasons[reason];
+  const match = workerCount.match > 0;
+  const machine = prodDowntime.prodLine;
+  const duration = (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
+  const reason = prodDowntime.reason;
+  const downtimeType = this.options.downtimeReasons[reason];
 
   if (downtimeType === 'adjusting')
   {
@@ -384,7 +384,7 @@ Report4.prototype.handleProdDowntime = function(prodDowntime)
 
   if (match)
   {
-    var downtimes = this.results.workTimes.downtimes;
+    const downtimes = this.results.workTimes.downtimes;
 
     if (downtimes[reason] === undefined)
     {
@@ -416,8 +416,8 @@ Report4.prototype.countWorkers = function(prodShiftOrder)
     return null;
   }
 
-  var operatorCount = prodShiftOrder.operators.length;
-  var workerCount = {
+  const operatorCount = prodShiftOrder.operators.length;
+  const workerCount = {
     total: operatorCount,
     match: 0,
     ratio: 0,
@@ -450,9 +450,9 @@ Report4.prototype.countWorkers = function(prodShiftOrder)
   {
     workerCount.operators = [];
 
-    for (var i = 0; i < operatorCount; ++i)
+    for (let i = 0; i < operatorCount; ++i)
     {
-      var operator = prodShiftOrder.operators[i];
+      const operator = prodShiftOrder.operators[i];
 
       if (operator && this.users[operator.id])
       {
@@ -469,8 +469,8 @@ Report4.prototype.countWorkers = function(prodShiftOrder)
 
 Report4.prototype.handleEffAndProd = function(prodShiftOrder, workerCount)
 {
-  var groupKey = util.createGroupKey(this.options.interval, prodShiftOrder.startedAt);
-  var groupData = this.effAndProd[groupKey];
+  const groupKey = util.createGroupKey(this.options.interval, prodShiftOrder.startedAt);
+  let groupData = this.effAndProd[groupKey];
 
   if (groupData === undefined)
   {
@@ -483,7 +483,7 @@ Report4.prototype.handleEffAndProd = function(prodShiftOrder, workerCount)
     };
   }
 
-  var byDivision = groupData.byDivision[prodShiftOrder.division];
+  let byDivision = groupData.byDivision[prodShiftOrder.division];
 
   if (byDivision === undefined)
   {
@@ -493,15 +493,15 @@ Report4.prototype.handleEffAndProd = function(prodShiftOrder, workerCount)
     };
   }
 
-  var totalQuantity = prodShiftOrder.quantityDone + prodShiftOrder.quantityLost;
+  const totalQuantity = prodShiftOrder.quantityDone + prodShiftOrder.quantityLost;
 
   if (workerCount.match)
   {
-    groupData.effNum +=
-      prodShiftOrder.laborTime / 100 * (totalQuantity * workerCount.ratio);
+    groupData.effNum
+      += prodShiftOrder.laborTime / 100 * (totalQuantity * workerCount.ratio);
     groupData.effDen += prodShiftOrder.workDuration * workerCount.match;
 
-    for (var i = 0, l = workerCount.operators.length; i < l; ++i)
+    for (let i = 0, l = workerCount.operators.length; i < l; ++i)
     {
       groupData.prodDen[workerCount.operators[i]] = true;
     }
@@ -532,12 +532,12 @@ Report4.prototype.handleLosses = function(losses, ratio)
     return;
   }
 
-  var lossReasons = this.lossReasons;
-  var quantities = this.results.quantities;
+  const lossReasons = this.lossReasons;
+  const quantities = this.results.quantities;
 
-  for (var i = 0, l = losses.length; i < l; ++i)
+  for (let i = 0, l = losses.length; i < l; ++i)
   {
-    var loss = losses[i];
+    const loss = losses[i];
 
     if (!loss)
     {

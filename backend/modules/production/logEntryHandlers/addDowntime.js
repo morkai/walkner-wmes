@@ -2,15 +2,15 @@
 
 'use strict';
 
-var step = require('h5.step');
-var util = require('./util');
+const step = require('h5.step');
+const util = require('./util');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var ProdDowntime = mongoose.model('ProdDowntime');
+  const mongoose = app[productionModule.config.mongooseId];
+  const ProdDowntime = mongoose.model('ProdDowntime');
 
-  var prodDowntime = new ProdDowntime(logEntry.data);
+  const prodDowntime = new ProdDowntime(logEntry.data);
 
   step(
     function findProdShiftOrderStep()
@@ -24,7 +24,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     {
       if (err)
       {
-        productionModule.error("Failed to find order for a new downtime [%s] (LOG=[%s]): %s",
+        productionModule.error('Failed to find order for a new downtime [%s] (LOG=[%s]): %s',
           logEntry.data._id,
           logEntry._id,
           err.stack
@@ -44,7 +44,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save a new downtime [%s] (LOG=[%s]): %s",
+          'Failed to save a new downtime [%s] (LOG=[%s]): %s',
           logEntry.data._id,
           logEntry._id,
           err.stack
@@ -64,7 +64,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to recalc durations for order [%s] after adding a downtime [%s] (LOG=[%s]): %s",
+          'Failed to recalc durations for order [%s] after adding a downtime [%s] (LOG=[%s]): %s',
           prodDowntime.prodShiftOrder,
           prodDowntime._id,
           logEntry._id,

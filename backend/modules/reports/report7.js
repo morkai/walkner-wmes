@@ -2,19 +2,19 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
-var util = require('./util');
-var report2 = require('./report2');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
+const util = require('./util');
+const report2 = require('./report2');
 
 module.exports = function(mongoose, options, done)
 {
-  /*jshint validthis:true*/
+  /* jshint validthis:true*/
 
-  var ProdDowntime = mongoose.model('ProdDowntime');
+  const ProdDowntime = mongoose.model('ProdDowntime');
 
-  var results = {
+  const results = {
     options: options,
     clip: []
   };
@@ -50,7 +50,7 @@ module.exports = function(mongoose, options, done)
 
   function countClip(mrpControllers, done)
   {
-    var clipOptions = {
+    const clipOptions = {
       fromTime: options.clipFromTime,
       toTime: options.clipToTime,
       interval: options.clipInterval,
@@ -69,9 +69,9 @@ module.exports = function(mongoose, options, done)
 
   function countDowntimes(options, done)
   {
-    /*globals interval,mrpControllers,specificAor,emit*/
+    /* globals interval,mrpControllers,specificAor,emit*/
 
-    var query = {
+    const query = {
       startedAt: {
         $gte: new Date(options.dtFromTime),
         $lt: new Date(options.dtToTime)
@@ -92,7 +92,7 @@ module.exports = function(mongoose, options, done)
 
     if (Array.isArray(options.aors))
     {
-      var aors = options.aors
+      const aors = options.aors
         .filter(function(aor) { return /^[a-f0-9]{24}$/.test(aor); })
         .map(function(aor) { return new mongoose.Types.ObjectId(aor); });
 
@@ -109,14 +109,14 @@ module.exports = function(mongoose, options, done)
     ProdDowntime.mapReduce({
       map: function()
       {
-        var inout = mrpControllers[this.mrpControllers[0]];
+        const inout = mrpControllers[this.mrpControllers[0]];
 
         if (inout === undefined || !this.finishedAt)
         {
           return;
         }
 
-        var key = {
+        const key = {
           io: inout,
           y: this.date.getFullYear(),
           m: this.date.getMonth()
@@ -167,7 +167,7 @@ module.exports = function(mongoose, options, done)
             break;
         }
 
-        var duration = Math.max(0, (this.finishedAt.getTime() - this.startedAt.getTime()) / 60000);
+        const duration = Math.max(0, (this.finishedAt.getTime() - this.startedAt.getTime()) / 60000);
 
         if (specificAor === this.aor.valueOf())
         {
@@ -194,7 +194,7 @@ module.exports = function(mongoose, options, done)
       },
       reduce: function(key, values)
       {
-        var result = {
+        const result = {
           count: 0,
           duration: 0,
           workerCount: 0,
@@ -203,9 +203,9 @@ module.exports = function(mongoose, options, done)
           specificWorkerCount: 0
         };
 
-        for (var i = 0, l = values.length; i < l; ++i)
+        for (let i = 0, l = values.length; i < l; ++i)
         {
-          var value = values[i];
+          const value = values[i];
 
           result.count += value.count;
           result.duration += value.duration;
@@ -231,12 +231,12 @@ module.exports = function(mongoose, options, done)
         return done(err);
       }
 
-      var groups = {};
+      const groups = {};
 
-      for (var i = 0; i < results.length; ++i)
+      for (let i = 0; i < results.length; ++i)
       {
-        var result = results[i];
-        var key = new Date(result._id.y, result._id.m, result._id.d, 0, 0, 0, 0).getTime();
+        const result = results[i];
+        const key = new Date(result._id.y, result._id.m, result._id.d, 0, 0, 0, 0).getTime();
 
         if (groups[key] === undefined)
         {
@@ -263,14 +263,14 @@ module.exports = function(mongoose, options, done)
         }
       }
 
-      var currentGroupKey = moment(query.startedAt.$gte).startOf(options.dtInterval);
-      var lastGroupKey = moment(Math.min(query.startedAt.$lt.getTime(), Date.now()))
+      const currentGroupKey = moment(query.startedAt.$gte).startOf(options.dtInterval);
+      const lastGroupKey = moment(Math.min(query.startedAt.$lt.getTime(), Date.now()))
         .startOf(options.dtInterval)
         .valueOf();
 
       while (currentGroupKey.valueOf() < lastGroupKey)
       {
-        var groupKey = currentGroupKey.valueOf();
+        const groupKey = currentGroupKey.valueOf();
 
         if (!groups[groupKey])
         {
@@ -280,7 +280,7 @@ module.exports = function(mongoose, options, done)
         currentGroupKey.add(1, options.dtInterval);
       }
 
-      var downtimes = _.values(groups).sort(function(a, b)
+      const downtimes = _.values(groups).sort(function(a, b)
       {
         return a.key - b.key;
       });

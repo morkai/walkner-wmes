@@ -2,26 +2,26 @@
 
 'use strict';
 
-var path = require('path');
-var _ = require('lodash');
-var step = require('h5.step');
-var JSZip = require('jszip');
-var fs = require('fs-extra');
+const path = require('path');
+const _ = require('lodash');
+const step = require('h5.step');
+const JSZip = require('jszip');
+const fs = require('fs-extra');
 
 module.exports = function setUpIcpoImporter(app, icpoModule)
 {
-  var licensesModule = app[icpoModule.config.licensesId];
-  var mongoose = app[icpoModule.config.mongooseId];
-  var IcpoResult = mongoose.model('IcpoResult');
+  const licensesModule = app[icpoModule.config.licensesId];
+  const mongoose = app[icpoModule.config.mongooseId];
+  const IcpoResult = mongoose.model('IcpoResult');
 
-  var RESULTS_BATCH_SIZE = 1000;
-  var FILTER_RE = /^(.*?)@[a-z0-9]{32}\.zip$/;
+  const RESULTS_BATCH_SIZE = 1000;
+  const FILTER_RE = /^(.*?)@[a-z0-9]{32}\.zip$/;
 
-  var importing = false;
-  var filePathCache = {};
-  var fileQueue = [];
-  var validEncryptedUuids = {};
-  var restarting = false;
+  let importing = false;
+  const filePathCache = {};
+  const fileQueue = [];
+  const validEncryptedUuids = {};
+  let restarting = false;
 
   app.broker.subscribe('updater.restarting', function()
   {
@@ -38,7 +38,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
       return false;
     }
 
-    var matches = fileInfo.fileName.match(FILTER_RE);
+    const matches = fileInfo.fileName.match(FILTER_RE);
 
     if (matches === null)
     {
@@ -56,7 +56,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
     fileQueue.push(fileInfo);
 
-    icpoModule.debug("Queued %s...", fileInfo.fileName);
+    icpoModule.debug('Queued %s...', fileInfo.fileName);
 
     importNextFile();
   }
@@ -68,7 +68,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
       return;
     }
 
-    var fileInfo = fileQueue.shift();
+    const fileInfo = fileQueue.shift();
 
     if (fileInfo)
     {
@@ -78,7 +78,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
   function importFile(fileInfo)
   {
-    icpoModule.debug("Importing %s...", fileInfo.fileName);
+    icpoModule.debug('Importing %s...', fileInfo.fileName);
 
     step(
       function()
@@ -96,12 +96,12 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
       {
         if (err)
         {
-          icpoModule.error("Failed to import file [%s]: %s", fileInfo.fileName, err.message);
+          icpoModule.error('Failed to import file [%s]: %s', fileInfo.fileName, err.message);
         }
         else
         {
           icpoModule.info(
-            "Imported file [%s] from [%s] (UUID=%s)!",
+            'Imported file [%s] from [%s] (UUID=%s)!',
             fileInfo.fileName,
             this.meta.id,
             this.meta.uuid
@@ -129,9 +129,9 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
   async function readArchiveFileStep()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    icpoModule.debug("Reading the archive...");
+    icpoModule.debug('Reading the archive...');
 
     const buf = fs.readFile(this.fileInfo.filePath);
     const zip = await new JSZip().loadAsync(buf);
@@ -143,21 +143,21 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
   function validateLicenseStep(err)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (err)
     {
       return this.skip(err);
     }
 
-    icpoModule.debug("Validating the meta file...");
+    icpoModule.debug('Validating the meta file...');
 
     if (!_.isPlainObject(this.meta))
     {
       return this.skip(new Error('INVALID_META_FILE'));
     }
 
-    var encryptedUuid = this.meta.uuid;
+    const encryptedUuid = this.meta.uuid;
 
     if (validEncryptedUuids[encryptedUuid])
     {
@@ -172,7 +172,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
     }
     catch (err)
     {
-      icpoModule.debug("Failed to decrypt the UUID: %s", err.message);
+      icpoModule.debug('Failed to decrypt the UUID: %s', err.message);
 
       return this.skip(new Error('INVALID_ENCRYPTED_UUID'));
     }
@@ -182,9 +182,9 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
   function parseModelsStep()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    icpoModule.debug("Parsing the models...");
+    icpoModule.debug('Parsing the models...');
 
     this.results = Array.isArray(this.results)
       ? this.results.map(prepareResult.bind(null, this.fileInfo, this.meta))
@@ -193,16 +193,16 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
   function updateModelsStep()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (!this.results.length)
     {
       return this.skip(new Error('NO_RESULTS'));
     }
 
-    icpoModule.debug("Updating the models...");
+    icpoModule.debug('Updating the models...');
 
-    for (var i = 0, l = Math.ceil(this.results.length / RESULTS_BATCH_SIZE); i < l; ++i)
+    for (let i = 0, l = Math.ceil(this.results.length / RESULTS_BATCH_SIZE); i < l; ++i)
     {
       IcpoResult.collection.insert(
         this.results.slice(i * RESULTS_BATCH_SIZE, i * RESULTS_BATCH_SIZE + RESULTS_BATCH_SIZE),
@@ -214,7 +214,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
   function prepareResult(fileInfo, meta, result)
   {
-    var log = null;
+    let log = null;
 
     try
     {
@@ -252,16 +252,16 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
   function saveFilesStep(err)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (err && err.code !== 11000)
     {
       return this.skip(err);
     }
 
-    icpoModule.debug("Saving %d file(s)...", this.files.length);
+    icpoModule.debug('Saving %d file(s)...', this.files.length);
 
-    var steps = [];
+    const steps = [];
 
     _.forEach(this.files, function(file)
     {
@@ -290,7 +290,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
       {
         if (err)
         {
-          icpoModule.error("Failed to rename a bad input file [%s]: %s", filePath, err.message);
+          icpoModule.error('Failed to rename a bad input file [%s]: %s', filePath, err.message);
         }
       });
     }
@@ -300,7 +300,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
       {
         if (err)
         {
-          icpoModule.error("Failed to remove an input file [%s]: %s", filePath, err.message);
+          icpoModule.error('Failed to remove an input file [%s]: %s', filePath, err.message);
         }
       });
     }

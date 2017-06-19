@@ -2,16 +2,16 @@
 
 'use strict';
 
-var path = require('path');
-var _ = require('lodash');
-var moment = require('moment');
-var step = require('h5.step');
-var fs = require('fs-extra');
-var parseSapTextTable = require('../../sap/util/parseSapTextTable');
-var parseSapNumber = require('../../sap/util/parseSapNumber');
-var parseSapString = require('../../sap/util/parseSapString');
-var parseSapDate = require('../../sap/util/parseSapDate');
-var parseSapTime = require('../../sap/util/parseSapTime');
+const path = require('path');
+const _ = require('lodash');
+const moment = require('moment');
+const step = require('h5.step');
+const fs = require('fs-extra');
+const parseSapTextTable = require('../../sap/util/parseSapTextTable');
+const parseSapNumber = require('../../sap/util/parseSapNumber');
+const parseSapString = require('../../sap/util/parseSapString');
+const parseSapDate = require('../../sap/util/parseSapDate');
+const parseSapTime = require('../../sap/util/parseSapTime');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -21,19 +21,19 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startOrderIntakeImporterModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("orders/importer/intake module requires the mongoose module!");
+    throw new Error('orders/importer/intake module requires the mongoose module!');
   }
 
-  var Order = mongoose.model('Order');
-  var OrderIntake = mongoose.model('OrderIntake');
+  const Order = mongoose.model('Order');
+  const OrderIntake = mongoose.model('OrderIntake');
 
-  var filePathCache = {};
-  var locked = false;
-  var queue = [];
+  const filePathCache = {};
+  let locked = false;
+  const queue = [];
 
   app.broker.subscribe('directoryWatcher.changed', queueFile).setFilter(filterFile);
 
@@ -44,7 +44,7 @@ exports.start = function startOrderIntakeImporterModule(app, module)
       return false;
     }
 
-    var matches = fileInfo.fileName.match(module.config.filterRe);
+    const matches = fileInfo.fileName.match(module.config.filterRe);
 
     if (matches === null)
     {
@@ -68,7 +68,7 @@ exports.start = function startOrderIntakeImporterModule(app, module)
 
     queue.push(fileInfo);
 
-    module.debug("[%s] Queued...", fileInfo.timeKey);
+    module.debug('[%s] Queued...', fileInfo.timeKey);
 
     setImmediate(importNext);
   }
@@ -80,7 +80,7 @@ exports.start = function startOrderIntakeImporterModule(app, module)
       return;
     }
 
-    var fileInfo = queue.shift();
+    const fileInfo = queue.shift();
 
     if (!fileInfo)
     {
@@ -89,9 +89,9 @@ exports.start = function startOrderIntakeImporterModule(app, module)
 
     locked = true;
 
-    var startTime = Date.now();
+    const startTime = Date.now();
 
-    module.debug("[%s] Importing...", fileInfo.timeKey);
+    module.debug('[%s] Importing...', fileInfo.timeKey);
 
     importFile(fileInfo, function(err, count)
     {
@@ -99,7 +99,7 @@ exports.start = function startOrderIntakeImporterModule(app, module)
 
       if (err)
       {
-        module.error("[%s] Failed to import: %s", fileInfo.timeKey, err.message);
+        module.error('[%s] Failed to import: %s', fileInfo.timeKey, err.message);
 
         app.broker.publish('orders.intake.syncFailed', {
           timestamp: fileInfo.timestamp,
@@ -109,7 +109,7 @@ exports.start = function startOrderIntakeImporterModule(app, module)
       }
       else
       {
-        module.debug("[%s] Imported %d in %d ms", fileInfo.timeKey, count, Date.now() - startTime);
+        module.debug('[%s] Imported %d in %d ms', fileInfo.timeKey, count, Date.now() - startTime);
 
         app.broker.publish('orders.intake.synced', {
           timestamp: fileInfo.timestamp,
@@ -138,35 +138,35 @@ exports.start = function startOrderIntakeImporterModule(app, module)
           return this.skip(err);
         }
 
-        module.debug("[%s] Parsing ~%d bytes...", fileInfo.timeKey, fileContents.length);
+        module.debug('[%s] Parsing ~%d bytes...', fileInfo.timeKey, fileContents.length);
 
-        var t = Date.now();
+        const t = Date.now();
 
         this.orderIntakes = parseOrderIntakeTable(fileContents);
 
-        module.debug("[%s] Parsed %d items in %d ms!", fileInfo.timeKey, this.orderIntakes.length, Date.now() - t);
+        module.debug('[%s] Parsed %d items in %d ms!', fileInfo.timeKey, this.orderIntakes.length, Date.now() - t);
 
         setImmediate(this.next());
       },
       function upsertOrderIntakesStep()
       {
-        module.debug("[%s] Upserting order intakes...", fileInfo.timeKey);
+        module.debug('[%s] Upserting order intakes...', fileInfo.timeKey);
 
-        var t = Date.now();
+        const t = Date.now();
 
         upsertNextOrderIntakesBatch(this.orderIntakes, 0, 10, this.next());
 
         function upsertNextOrderIntakesBatch(orderIntakes, batchNo, batchSize, done)
         {
-          var startIndex = batchNo * batchSize;
-          var endIndex = Math.min(startIndex + batchSize, orderIntakes.length);
+          const startIndex = batchNo * batchSize;
+          const endIndex = Math.min(startIndex + batchSize, orderIntakes.length);
 
           step(
             function()
             {
-              for (var i = startIndex; i < endIndex; ++i)
+              for (let i = startIndex; i < endIndex; ++i)
               {
-                var orderIntake = orderIntakes[i];
+                const orderIntake = orderIntakes[i];
 
                 OrderIntake.update({_id: orderIntake._id}, orderIntake, {upsert: true}, this.group());
               }
@@ -175,13 +175,13 @@ exports.start = function startOrderIntakeImporterModule(app, module)
             {
               if (err)
               {
-                module.error("Failed to upsert order intakes: %s", err.message);
+                module.error('Failed to upsert order intakes: %s', err.message);
               }
 
               if (endIndex === orderIntakes.length)
               {
                 module.debug(
-                  "[%s] Upserted %d order intakes in %d ms!", fileInfo.timeKey, orderIntakes.length, Date.now() - t
+                  '[%s] Upserted %d order intakes in %d ms!', fileInfo.timeKey, orderIntakes.length, Date.now() - t
                 );
 
                 return done();
@@ -194,7 +194,7 @@ exports.start = function startOrderIntakeImporterModule(app, module)
       },
       function updateOrdersStep()
       {
-        module.debug("[%s] Updating orders...", fileInfo.timeKey);
+        module.debug('[%s] Updating orders...', fileInfo.timeKey);
 
         upsertNextOrdersBatch(fileInfo, new Date(), this.orderIntakes, 0, 10, this.next());
       },
@@ -207,13 +207,13 @@ exports.start = function startOrderIntakeImporterModule(app, module)
 
   function upsertNextOrdersBatch(fileInfo, t, orderIntakes, batchNo, batchSize, done)
   {
-    var startIndex = batchNo * batchSize;
-    var endIndex = Math.min(startIndex + batchSize, orderIntakes.length);
+    const startIndex = batchNo * batchSize;
+    const endIndex = Math.min(startIndex + batchSize, orderIntakes.length);
 
     step(
       function()
       {
-        for (var i = startIndex; i < endIndex; ++i)
+        for (let i = startIndex; i < endIndex; ++i)
         {
           updateOrders(t, orderIntakes[i], this.group());
         }
@@ -222,12 +222,12 @@ exports.start = function startOrderIntakeImporterModule(app, module)
       {
         if (err)
         {
-          module.error("[%s] Failed to update orders: %s", fileInfo.timeKey, err.message);
+          module.error('[%s] Failed to update orders: %s', fileInfo.timeKey, err.message);
         }
 
         if (endIndex === orderIntakes.length)
         {
-          module.debug("[%s] Updated orders in %d ms!", fileInfo.timeKey, Date.now() - t.getTime());
+          module.debug('[%s] Updated orders in %d ms!', fileInfo.timeKey, Date.now() - t.getTime());
 
           return done();
         }
@@ -242,11 +242,11 @@ exports.start = function startOrderIntakeImporterModule(app, module)
     step(
       function findOrdersStep()
       {
-        var conditions = {
+        const conditions = {
           salesOrder: orderIntake._id.no,
           salesOrderItem: orderIntake._id.item
         };
-        var fields = {
+        const fields = {
           description: 1,
           soldToParty: 1,
           sapCreatedAt: 1
@@ -261,7 +261,7 @@ exports.start = function startOrderIntakeImporterModule(app, module)
           return this.skip(err);
         }
 
-        for (var i = 0; i < orders.length; ++i)
+        for (let i = 0; i < orders.length; ++i)
         {
           updateOrder(t, orders[i], orderIntake, this.group());
         }
@@ -272,22 +272,22 @@ exports.start = function startOrderIntakeImporterModule(app, module)
 
   function updateOrder(t, order, orderIntake, done)
   {
-    var changed = false;
-    var changes = {
+    let changed = false;
+    const changes = {
       time: t,
       user: null,
       oldValues: {},
       newValues: {},
       comment: ''
     };
-    var $set = {
+    const $set = {
       updatedAt: t
     };
 
     ['description', 'soldToParty', 'sapCreatedAt'].forEach(p =>
     {
-      var oldValue = order[p] || null;
-      var newValue = orderIntake[p] || null;
+      const oldValue = order[p] || null;
+      const newValue = orderIntake[p] || null;
 
       if (_.isEqual(oldValue, newValue))
       {
@@ -324,14 +324,14 @@ exports.start = function startOrderIntakeImporterModule(app, module)
 
   function moveFileInfoFile(oldFilePath)
   {
-    var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
+    const newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
     fs.move(oldFilePath, newFilePath, {overwrite: true}, function(err)
     {
       if (err)
       {
         module.error(
-          "Failed to rename file [%s] to [%s]: %s", oldFilePath, newFilePath, err.message
+          'Failed to rename file [%s] to [%s]: %s', oldFilePath, newFilePath, err.message
         );
       }
     });
@@ -343,7 +343,7 @@ exports.start = function startOrderIntakeImporterModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to delete file [%s]: %s", filePath, err.message);
+        module.error('Failed to delete file [%s]: %s', filePath, err.message);
       }
     });
   }

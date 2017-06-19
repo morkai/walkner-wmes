@@ -2,19 +2,19 @@
 
 'use strict';
 
-var cheerio = require('cheerio');
-var parseTextRowContents = require('./parseTextRowContents');
+const cheerio = require('cheerio');
+const parseTextRowContents = require('./parseTextRowContents');
 
 module.exports = function parseHtmlPoList(html, importedAt, purchaseOrders)
 {
-  var ctx = {
+  const ctx = {
     count: 0,
     lastOrder: null,
     lastItem: null,
     importedAt: importedAt,
     purchaseOrders: purchaseOrders
   };
-  var $ = cheerio.load(html);
+  const $ = cheerio.load(html);
 
   $('tr').each(function(i, row)
   {

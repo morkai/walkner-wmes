@@ -2,18 +2,18 @@
 
 'use strict';
 
-var helpers = require('./helpers');
-var report4 = require('../report4');
+const helpers = require('./helpers');
+const report4 = require('../report4');
 
 module.exports = function report4Route(app, reportsModule, req, res, next)
 {
-  var mongoose = app[reportsModule.config.mongooseId];
+  const mongoose = app[reportsModule.config.mongooseId];
 
-  var divisions = (typeof req.query.divisions === 'string' ? req.query.divisions : '')
+  const divisions = (typeof req.query.divisions === 'string' ? req.query.divisions : '')
     .split(',')
     .filter(function(divisionId) { return divisionId.length; });
 
-  var options = {
+  const options = {
     fromTime: helpers.getTime(req.query.from),
     toTime: helpers.getTime(req.query.to),
     interval: req.query.interval || 'day',

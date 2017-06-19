@@ -2,13 +2,13 @@
 
 'use strict';
 
-var validateOverlappingDowntimes = require('./validateOverlappingDowntimes');
-var addProdDowntime = require('./addProdDowntime');
-var editProdDowntime = require('./editProdDowntime');
-var deleteProdDowntime = require('./deleteProdDowntime');
-var setUpRoutes = require('./routes');
-var setUpCommands = require('./commands');
-var setUpAutoConfirmation = require('./autoConfirmation');
+const validateOverlappingDowntimes = require('./validateOverlappingDowntimes');
+const addProdDowntime = require('./addProdDowntime');
+const editProdDowntime = require('./editProdDowntime');
+const deleteProdDowntime = require('./deleteProdDowntime');
+const setUpRoutes = require('./routes');
+const setUpCommands = require('./commands');
+const setUpAutoConfirmation = require('./autoConfirmation');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -80,14 +80,14 @@ exports.start = function startProdDowntimesModule(app, module)
       return;
     }
 
-    var lastChange = partialProdDowntime.changes[partialProdDowntime.changes.length - 1];
+    const lastChange = partialProdDowntime.changes[partialProdDowntime.changes.length - 1];
 
     if (!lastChange || !lastChange.data || !lastChange.user || !lastChange.user.id)
     {
       return;
     }
 
-    var data = lastChange.data;
+    const data = lastChange.data;
 
     if (data.status && data.status[1] === 'confirmed')
     {

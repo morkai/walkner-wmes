@@ -4,12 +4,12 @@
 
 module.exports = function setUpDelayReasonsRoutes(app, delayReasonsModule, useDictionaryModel)
 {
-  var express = app[delayReasonsModule.config.expressId];
-  var auth = app[delayReasonsModule.config.userId].auth;
-  var DelayReason = app[delayReasonsModule.config.mongooseId].model('DelayReason');
+  const express = app[delayReasonsModule.config.expressId];
+  const auth = app[delayReasonsModule.config.userId].auth;
+  const DelayReason = app[delayReasonsModule.config.mongooseId].model('DelayReason');
 
-  var canView = auth('DICTIONARIES:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/delayReasons', express.crud.browseRoute.bind(null, app, DelayReason));
 

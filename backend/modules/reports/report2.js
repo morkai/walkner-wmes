@@ -2,17 +2,17 @@
 
 'use strict';
 
-var step = require('h5.step');
-var moment = require('moment');
-var util = require('./util');
+const step = require('h5.step');
+const moment = require('moment');
+const util = require('./util');
 
 module.exports = function(mongoose, options, done)
 {
-  /*jshint validthis:true*/
+  /* jshint validthis:true*/
 
-  var ClipOrderCount = mongoose.model('ClipOrderCount');
+  const ClipOrderCount = mongoose.model('ClipOrderCount');
 
-  var results = {
+  const results = {
     options: options,
     clip: []
   };
@@ -36,11 +36,11 @@ module.exports = function(mongoose, options, done)
 
   function countOrdersStep()
   {
-    var conditions = {
+    const conditions = {
       date: {$gte: new Date(options.fromTime), $lt: new Date(options.toTime)},
       mrp: {$in: options.mrpControllers}
     };
-    var groupOperator = getGroupOperator(options.interval);
+    const groupOperator = getGroupOperator(options.interval);
 
     ClipOrderCount.aggregate(
       {$match: conditions},
@@ -67,18 +67,18 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    var totalMap = {};
-    var productionMap = {};
-    var endToEndMap = {};
-    var from = options.toTime;
-    var to = options.fromTime;
-    var i;
-    var l;
-    var startTime;
+    const totalMap = {};
+    const productionMap = {};
+    const endToEndMap = {};
+    let from = options.toTime;
+    let to = options.fromTime;
+    let i;
+    let l;
+    let startTime;
 
     for (i = 0, l = clipResults.length; i < l; ++i)
     {
-      var result = clipResults[i];
+      const result = clipResults[i];
 
       startTime = getStartTimeFromGroupKey(options.interval, result._id);
 
@@ -108,15 +108,15 @@ module.exports = function(mongoose, options, done)
 
   function calcClipStep()
   {
-    var createNextGroupKey = util.createCreateNextGroupKey(options.interval);
+    const createNextGroupKey = util.createCreateNextGroupKey(options.interval);
 
     while (this.fromGroupKey <= this.toGroupKey)
     {
-      var groupKey = this.fromGroupKey.toString();
-      var orderCount = this.totalMap[groupKey];
-      var production = this.productionMap[groupKey] / orderCount;
-      var endToEnd = this.endToEndMap[groupKey] / orderCount;
-      var day = new Date(this.fromGroupKey).getDay();
+      const groupKey = this.fromGroupKey.toString();
+      const orderCount = this.totalMap[groupKey];
+      const production = this.productionMap[groupKey] / orderCount;
+      const endToEnd = this.endToEndMap[groupKey] / orderCount;
+      const day = new Date(this.fromGroupKey).getDay();
 
       if (options.interval !== 'day' || (day !== 0 && day !== 6))
       {
@@ -143,8 +143,8 @@ module.exports = function(mongoose, options, done)
 
 function getGroupOperator(interval)
 {
-  var operator = {};
-  var addTzOffsetMs = [{$add: ['$date', '$tzOffsetMs']}];
+  const operator = {};
+  const addTzOffsetMs = [{$add: ['$date', '$tzOffsetMs']}];
 
   operator.y = {$year: addTzOffsetMs};
 
@@ -167,7 +167,7 @@ function getGroupOperator(interval)
 
 function getStartTimeFromGroupKey(interval, groupKey)
 {
-  var startTimeStr = groupKey.y + '-';
+  let startTimeStr = groupKey.y + '-';
 
   if (interval === 'week')
   {
@@ -178,7 +178,7 @@ function getStartTimeFromGroupKey(interval, groupKey)
     startTimeStr += util.pad0(groupKey.m) + '-' + (interval === 'day' ? util.pad0(groupKey.d) : '01');
   }
 
-  var groupKeyMoment = moment(startTimeStr);
+  const groupKeyMoment = moment(startTimeStr);
 
   if (interval === 'quarter')
   {

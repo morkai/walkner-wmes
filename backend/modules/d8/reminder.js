@@ -54,7 +54,7 @@ module.exports = function setUpD8Reminder(app, module)
       {
         if (!businessDays.countInDay(new Date()))
         {
-          module.debug("[reminder] Skipping a non-business day.");
+          module.debug('[reminder] Skipping a non-business day.');
 
           this.skip();
         }
@@ -70,7 +70,7 @@ module.exports = function setUpD8Reminder(app, module)
           return this.skip(err);
         }
 
-        module.debug("[reminder] Found %d open entries.", entries.length);
+        module.debug('[reminder] Found %d open entries.', entries.length);
 
         this.entries = _.filter(entries, function(entry)
         {
@@ -148,7 +148,7 @@ module.exports = function setUpD8Reminder(app, module)
           userToEmailMap[user._id] = user.email;
         });
 
-        module.debug("[reminder] Sending reminders for %d entries.", this.entries.length);
+        module.debug('[reminder] Sending reminders for %d entries.', this.entries.length);
 
         _.forEach(this.entries, function(entry)
         {
@@ -161,7 +161,7 @@ module.exports = function setUpD8Reminder(app, module)
       {
         if (err)
         {
-          module.error("[reminder] %s", err.message);
+          module.error('[reminder] %s', err.message);
         }
 
         this.entries = null;
@@ -198,7 +198,7 @@ module.exports = function setUpD8Reminder(app, module)
       {
         if (err)
         {
-          module.error("[reminder] Failed to remind [%s]: %s", emails, err.message);
+          module.error('[reminder] Failed to remind [%s]: %s', emails, err.message);
         }
       }
     );

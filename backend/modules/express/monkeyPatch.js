@@ -2,26 +2,26 @@
 
 'use strict';
 
-var path = require('path');
+const path = require('path');
 
 module.exports = function monkeyPatch(app, module, options)
 {
   if (options.View)
   {
-    var originalLookup = options.View.prototype.lookup;
+    const originalLookup = options.View.prototype.lookup;
 
     options.View.prototype.lookup = function(name)
     {
-      var colonIndex = name.indexOf(':');
+      const colonIndex = name.indexOf(':');
 
       if (colonIndex === -1)
       {
         return originalLookup.call(this, name);
       }
 
-      var moduleName = name.substring(0, colonIndex);
-      var file = name.substring(colonIndex + 1);
-      var loc = app.pathTo('modules', moduleName, 'templates', file);
+      const moduleName = name.substring(0, colonIndex);
+      const file = name.substring(colonIndex + 1);
+      const loc = app.pathTo('modules', moduleName, 'templates', file);
 
       return this.resolve(path.dirname(loc), path.basename(loc));
     };

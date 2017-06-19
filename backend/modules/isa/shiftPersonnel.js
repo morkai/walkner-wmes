@@ -21,7 +21,7 @@ module.exports = function setUpIsaShiftPersonnel(app, isaModule)
     {
       if (err)
       {
-        isaModule.error("Failed to load the shift personnel: %s", err.message);
+        isaModule.error('Failed to load the shift personnel: %s', err.message);
       }
       else
       {
@@ -103,7 +103,7 @@ module.exports = function setUpIsaShiftPersonnel(app, isaModule)
     {
       if (err)
       {
-        isaModule.error("Failed to save event [%s]: %s", event.type, err.message);
+        isaModule.error('Failed to save event [%s]: %s', event.type, err.message);
       }
     });
   }

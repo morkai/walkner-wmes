@@ -17,7 +17,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     if (err)
     {
       productionModule.error(
-        "Failed to get the prod shift order [%s] to correct (LOG=[%s]): %s",
+        'Failed to get the prod shift order [%s] to correct (LOG=[%s]): %s',
         logEntry.prodShiftOrder,
         logEntry._id,
         err.stack
@@ -67,7 +67,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save prod shift order [%s] after correcting it (LOG=[%s]): %s",
+          'Failed to save prod shift order [%s] after correcting it (LOG=[%s]): %s',
           logEntry.prodShiftOrder,
           logEntry._id,
           err.stack
@@ -89,14 +89,14 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
   function correctProdDowntimes()
   {
-    var query = ProdDowntime.find({prodShiftOrder: logEntry.prodShiftOrder}, {_id: 1}).lean();
+    const query = ProdDowntime.find({prodShiftOrder: logEntry.prodShiftOrder}, {_id: 1}).lean();
 
     query.exec(function(err, prodDowntimes)
     {
       if (err)
       {
         productionModule.error(
-          "Failed to find prod downtimes after correcting prod shift order [%s] (LOG=[%s]): %s",
+          'Failed to find prod downtimes after correcting prod shift order [%s] (LOG=[%s]): %s',
           logEntry.prodShiftOrder,
           logEntry._id,
           err.stack
@@ -113,7 +113,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       step(
         function correctProdDowntimesStep()
         {
-          var step = this;
+          const step = this;
 
           _.forEach(prodDowntimes, function(prodDowntime)
           {
@@ -132,8 +132,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find prod downtime [%s] after correcting prod shift order [%s]"
-            + " (LOG=[%s]): %s",
+          'Failed to find prod downtime [%s] after correcting prod shift order [%s]'
+            + ' (LOG=[%s]): %s',
           prodDowntimeId,
           logEntry.prodShiftOrder,
           logEntry._id,
@@ -143,7 +143,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return done();
       }
 
-      var changes = {
+      const changes = {
         mechOrder: !!logEntry.data.mechOrder,
         orderId: logEntry.data.orderId,
         operationNo: logEntry.data.operationNo
@@ -155,8 +155,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save prod downtime [%s] after correcting prod shift order [%s]"
-              + " (LOG=[%s]): %s",
+            'Failed to save prod downtime [%s] after correcting prod shift order [%s]'
+              + ' (LOG=[%s]): %s',
             prodDowntimeId,
             logEntry.prodShiftOrder,
             logEntry._id,

@@ -2,17 +2,17 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var util = require('../reports/util');
+const _ = require('lodash');
+const step = require('h5.step');
+const util = require('../reports/util');
 
 module.exports = function(mongoose, options, done)
 {
-  var KaizenOrder = mongoose.model('KaizenOrder');
+  const KaizenOrder = mongoose.model('KaizenOrder');
 
-  var minGroupKey = Number.MAX_VALUE;
-  var maxGroupKey = Number.MIN_VALUE;
-  var results = {
+  let minGroupKey = Number.MAX_VALUE;
+  let maxGroupKey = Number.MIN_VALUE;
+  const results = {
     options: options,
     users: {},
     nearMissOwners: {},
@@ -31,7 +31,7 @@ module.exports = function(mongoose, options, done)
   step(
     function findKaizenOrdersStep()
     {
-      var conditions = {};
+      const conditions = {};
 
       if (options.fromTime)
       {
@@ -66,8 +66,8 @@ module.exports = function(mongoose, options, done)
         conditions['confirmer.id'] = {$in: options.confirmer};
       }
 
-      var stream = KaizenOrder.find(conditions, {changes: 0}).lean().cursor();
-      var next = _.once(this.next());
+      const stream = KaizenOrder.find(conditions, {changes: 0}).lean().cursor();
+      const next = _.once(this.next());
 
       stream.on('error', next);
       stream.on('end', next);
@@ -80,13 +80,13 @@ module.exports = function(mongoose, options, done)
         return this.skip(err);
       }
 
-      var createNextGroupKey = util.createCreateNextGroupKey('week');
-      var groupKey = minGroupKey;
-      var groups = [];
+      const createNextGroupKey = util.createCreateNextGroupKey('week');
+      let groupKey = minGroupKey;
+      const groups = [];
 
       while (groupKey <= maxGroupKey)
       {
-        var group = results.groups[groupKey] || createGroup(groupKey);
+        const group = results.groups[groupKey] || createGroup(groupKey);
 
         results.averageDuration += group.averageDuration;
         results.count.total += group.count.open + group.count.finished + group.count.cancelled;
@@ -117,8 +117,8 @@ module.exports = function(mongoose, options, done)
 
   function handleKaizenOrder(s)
   {
-    var groupKey = util.createGroupKey('week', s.eventDate, false);
-    var group = results.groups[groupKey];
+    const groupKey = util.createGroupKey('week', s.eventDate, false);
+    let group = results.groups[groupKey];
 
     if (!group)
     {
@@ -135,8 +135,8 @@ module.exports = function(mongoose, options, done)
       maxGroupKey = groupKey;
     }
 
-    var cancelled = s.status === 'cancelled';
-    var statusProperty = cancelled ? 'cancelled' : s.status === 'finished' ? 'finished' : 'open' ;
+    const cancelled = s.status === 'cancelled';
+    const statusProperty = cancelled ? 'cancelled' : s.status === 'finished' ? 'finished' : 'open';
 
     if (_.includes(s.types, 'nearMiss'))
     {
@@ -192,7 +192,7 @@ module.exports = function(mongoose, options, done)
 
   function sortOwners(unsorted)
   {
-    var sorted = [];
+    const sorted = [];
 
     _.forEach(unsorted, function(values, key)
     {

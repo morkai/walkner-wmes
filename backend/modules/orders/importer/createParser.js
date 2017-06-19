@@ -2,23 +2,23 @@
 
 'use strict';
 
-var path = require('path');
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
-var fs = require('fs-extra');
-var parseOrders = require('./parseOrders');
-var parseOperations = require('./parseOperations');
+const path = require('path');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
+const fs = require('fs-extra');
+const parseOrders = require('./parseOrders');
+const parseOperations = require('./parseOperations');
 
 module.exports = function createParser(app, importerModule, callback)
 {
-  var LATE_DATA_PARSE_DELAY = 20 * 60 * 1000;
-  var timeKeyToFileInfoMap = {};
-  var filePathCache = {};
-  var parseQueue = [];
-  var parseDataTimers = {};
-  var parseDataLock = false;
-  var restarting = false;
+  const LATE_DATA_PARSE_DELAY = 20 * 60 * 1000;
+  const timeKeyToFileInfoMap = {};
+  const filePathCache = {};
+  const parseQueue = [];
+  const parseDataTimers = {};
+  let parseDataLock = false;
+  let restarting = false;
 
   app.broker.subscribe('updater.restarting', function()
   {
@@ -34,7 +34,7 @@ module.exports = function createParser(app, importerModule, callback)
       return false;
     }
 
-    var matches = fileInfo.fileName.match(importerModule.config.filterRe);
+    const matches = fileInfo.fileName.match(importerModule.config.filterRe);
 
     if (matches === null)
     {
@@ -52,8 +52,8 @@ module.exports = function createParser(app, importerModule, callback)
   {
     filePathCache[fileInfo.filePath] = true;
 
-    var timeKey = fileInfo.timeKey;
-    var timeKeyFileInfo = timeKeyToFileInfoMap[timeKey];
+    const timeKey = fileInfo.timeKey;
+    let timeKeyFileInfo = timeKeyToFileInfoMap[timeKey];
 
     if (typeof timeKeyFileInfo === 'undefined')
     {
@@ -74,7 +74,7 @@ module.exports = function createParser(app, importerModule, callback)
       timeKeyFileInfo.operations = fileInfo;
     }
 
-    importerModule.debug("Handling %s for %s...", fileInfo.type, timeKey);
+    importerModule.debug('Handling %s for %s...', fileInfo.type, timeKey);
 
     if (timeKeyFileInfo.orders === null || timeKeyFileInfo.operations === null)
     {
@@ -84,7 +84,7 @@ module.exports = function createParser(app, importerModule, callback)
       }
 
       importerModule.debug(
-        "Delaying %s (orders=%s operations=%s)...",
+        'Delaying %s (orders=%s operations=%s)...',
         timeKey,
         timeKeyFileInfo.orders !== null,
         timeKeyFileInfo.operations !== null
@@ -108,11 +108,11 @@ module.exports = function createParser(app, importerModule, callback)
 
     if (delayed)
     {
-      importerModule.debug("Queued %s (delayed)...", timeKey);
+      importerModule.debug('Queued %s (delayed)...', timeKey);
     }
     else
     {
-      importerModule.debug("Queued %s...", timeKey);
+      importerModule.debug('Queued %s...', timeKey);
     }
 
     parseQueue.push(timeKey);
@@ -126,20 +126,20 @@ module.exports = function createParser(app, importerModule, callback)
       return;
     }
 
-    var timeKey = parseQueue.shift();
+    const timeKey = parseQueue.shift();
 
     if (typeof timeKey === 'undefined')
     {
       return;
     }
 
-    var startTime = Date.now();
+    const startTime = Date.now();
 
-    importerModule.debug("Parsing %s...", timeKey);
+    importerModule.debug('Parsing %s...', timeKey);
 
     parseDataLock = true;
 
-    var timeKeyFileInfo = timeKeyToFileInfoMap[timeKey];
+    const timeKeyFileInfo = timeKeyToFileInfoMap[timeKey];
 
     delete timeKeyToFileInfoMap[timeKey];
 
@@ -147,12 +147,12 @@ module.exports = function createParser(app, importerModule, callback)
     {
       parseDataLock = false;
 
-      var filePaths = collectFileInfoPaths(timeKeyFileInfo);
+      const filePaths = collectFileInfoPaths(timeKeyFileInfo);
 
       deleteFileInfoStepFiles(filePaths);
       setTimeout(removeFilePathsFromCache, 15000, filePaths);
 
-      importerModule.debug("Parsed %s in %d ms!", timeKey, Date.now() - startTime);
+      importerModule.debug('Parsed %s in %d ms!', timeKey, Date.now() - startTime);
 
       setImmediate(parseData);
 
@@ -162,8 +162,8 @@ module.exports = function createParser(app, importerModule, callback)
 
   function parseOrdersAndOperations(ordersFileInfo, operationsFileInfo, done)
   {
-    var orders = {};
-    var missingOrders = {};
+    const orders = {};
+    const missingOrders = {};
 
     step(
       function readOrdersFileStep()
@@ -181,7 +181,7 @@ module.exports = function createParser(app, importerModule, callback)
       {
         if (err)
         {
-          importerModule.error("Failed to read the orders input file: %s", err.message);
+          importerModule.error('Failed to read the orders input file: %s', err.message);
         }
         else if (ordersFileInfo)
         {
@@ -207,7 +207,7 @@ module.exports = function createParser(app, importerModule, callback)
       {
         if (err)
         {
-          importerModule.error("Failed to read the operations input file: %s", err.message);
+          importerModule.error('Failed to read the operations input file: %s', err.message);
         }
         else if (operationsFileInfo)
         {
@@ -233,7 +233,7 @@ module.exports = function createParser(app, importerModule, callback)
 
   function collectFileInfoPaths(timeKeyFileInfo)
   {
-    var filePaths = [];
+    const filePaths = [];
 
     if (timeKeyFileInfo.orders)
     {
@@ -265,14 +265,14 @@ module.exports = function createParser(app, importerModule, callback)
 
   function moveFileInfoStepFile(oldFilePath)
   {
-    var newFilePath = path.join(importerModule.config.parsedOutputDir, path.basename(oldFilePath));
+    const newFilePath = path.join(importerModule.config.parsedOutputDir, path.basename(oldFilePath));
 
     fs.move(oldFilePath, newFilePath, {overwrite: true}, function(err)
     {
       if (err)
       {
         importerModule.error(
-          "Failed to rename file [%s] to [%s]: %s", oldFilePath, newFilePath, err.message
+          'Failed to rename file [%s] to [%s]: %s', oldFilePath, newFilePath, err.message
         );
       }
     });
@@ -284,7 +284,7 @@ module.exports = function createParser(app, importerModule, callback)
     {
       if (err)
       {
-        importerModule.error("Failed to delete file [%s]: %s", filePath, err.message);
+        importerModule.error('Failed to delete file [%s]: %s', filePath, err.message);
       }
     });
   }

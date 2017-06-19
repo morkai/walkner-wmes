@@ -2,24 +2,24 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
 
 module.exports = function sendSurveyHtmlRoute(app, module, req, res, next)
 {
-  var express = app[module.config.expressId];
-  var mongoose = app[module.config.mongooseId];
-  var OpinionSurvey = mongoose.model('OpinionSurvey');
+  const express = app[module.config.expressId];
+  const mongoose = app[module.config.mongooseId];
+  const OpinionSurvey = mongoose.model('OpinionSurvey');
 
-  var template = req.query.template;
+  const template = req.query.template;
 
   if (!_.isString(template) || !/^[a-z0-9-]+$/i.test(template))
   {
     return next(express.createHttpError('INVALID_TEMPLATE', 400));
   }
 
-  var id = req.params.id;
+  const id = req.params.id;
 
   step(
     function()

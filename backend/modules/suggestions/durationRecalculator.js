@@ -2,13 +2,13 @@
 
 'use strict';
 
-var later = require('later');
+const later = require('later');
 
 module.exports = function setUpDurationRecalculator(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
-  var Suggestion = mongoose.model('Suggestion');
-  var inProgress = false;
+  const mongoose = app[module.config.mongooseId];
+  const Suggestion = mongoose.model('Suggestion');
+  let inProgress = false;
 
   app.broker.subscribe('app.started', recalcDurations).setLimit(1);
 
@@ -23,18 +23,18 @@ module.exports = function setUpDurationRecalculator(app, module)
       return;
     }
 
-    var startedAt = new Date();
+    const startedAt = new Date();
 
-    module.debug("[durationRecalculator] Started...");
+    module.debug('[durationRecalculator] Started...');
 
     inProgress = true;
 
-    var conditions = {
+    const conditions = {
       status: {
         $in: ['new', 'accepted', 'todo', 'inProgress', 'paused']
       }
     };
-    var fields = {
+    const fields = {
       rid: 1,
       status: 1,
       date: 1,
@@ -50,13 +50,13 @@ module.exports = function setUpDurationRecalculator(app, module)
       delete conditions.status;
     }
 
-    var stream = Suggestion.find(conditions, fields).lean().cursor();
+    const stream = Suggestion.find(conditions, fields).lean().cursor();
 
     stream.on('error', function(err)
     {
       inProgress = false;
 
-      module.error("[durationRecalculator] Failed to recalc suggestions: %s", err.message);
+      module.error('[durationRecalculator] Failed to recalc suggestions: %s', err.message);
     });
 
     stream.on('data', function(doc)
@@ -68,16 +68,16 @@ module.exports = function setUpDurationRecalculator(app, module)
     {
       inProgress = false;
 
-      module.debug("[durationRecalculator] Done in %d ms.", Date.now() - startedAt);
+      module.debug('[durationRecalculator] Done in %d ms.', Date.now() - startedAt);
     });
   }
 
   function recalcNext(doc, startedAt)
   {
-    var newKaizenDuration = Suggestion.recalcKaizenDuration(doc, startedAt);
-    var newFinishDuration = Suggestion.recalcFinishDuration(doc, startedAt);
-    var changed = false;
-    var changes = {};
+    const newKaizenDuration = Suggestion.recalcKaizenDuration(doc, startedAt);
+    const newFinishDuration = Suggestion.recalcFinishDuration(doc, startedAt);
+    let changed = false;
+    const changes = {};
 
     if (newKaizenDuration !== doc.kaizenDuration)
     {
@@ -100,7 +100,7 @@ module.exports = function setUpDurationRecalculator(app, module)
     {
       if (err)
       {
-        module.error("[durationRecalculator] Failed to recalc [%s]: %s", doc.rid, err.message);
+        module.error('[durationRecalculator] Failed to recalc [%s]: %s', doc.rid, err.message);
       }
     });
   }

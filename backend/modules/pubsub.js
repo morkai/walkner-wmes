@@ -2,8 +2,8 @@
 
 'use strict';
 
-var _ = require('lodash');
-var pubsub = require('h5.pubsub');
+const _ = require('lodash');
+const pubsub = require('h5.pubsub');
 
 exports.DEFAULT_CONFIG = {
   sioId: 'sio',
@@ -14,7 +14,7 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startPubsubModule(app, module)
 {
-  var stats = {
+  const stats = {
     publishedMessages: 0,
     receivedMessages: 0,
     sentMessages: 0,
@@ -28,27 +28,27 @@ exports.start = function startPubsubModule(app, module)
   /**
    * @type {number}
    */
-  var nextMessageId = 0;
+  let nextMessageId = 0;
 
   /**
    * @type {object.<string, Array>}
    */
-  var idToMessageMap = {};
+  let idToMessageMap = {};
 
   /**
    * @type {object.<string, object.<string, boolean>>}
    */
-  var socketIdToMessagesMap = {};
+  let socketIdToMessagesMap = {};
 
   /**
    * @type {RegExp}
    */
-  var invalidTopicRegExp = /^(\s*|\s*\.\s*)+$/;
+  const invalidTopicRegExp = /^(\s*|\s*\.\s*)+$/;
 
   /**
    * @type {function()}
    */
-  var scheduleSendMessages = _.debounce(sendMessages, module.config.republishMaxDelay, {
+  const scheduleSendMessages = _.debounce(sendMessages, module.config.republishMaxDelay, {
     trailing: true,
     leading: false
   });
@@ -120,7 +120,7 @@ exports.start = function startPubsubModule(app, module)
 
   function publishPubsubStats()
   {
-    var interval = module.config.statsPublishInterval;
+    const interval = module.config.statsPublishInterval;
 
     if (interval <= 0)
     {
@@ -134,9 +134,9 @@ exports.start = function startPubsubModule(app, module)
 
   function onSocketDisconnect()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    var socket = this;
+    const socket = this;
 
     delete socketIdToMessagesMap[socket.id];
 
@@ -151,27 +151,27 @@ exports.start = function startPubsubModule(app, module)
    */
   function onSocketSubscribe(topics, cb)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    var hasCb = typeof cb === 'function';
+    const hasCb = typeof cb === 'function';
 
     if (!Array.isArray(topics))
     {
       if (hasCb)
       {
-        cb("First argument must be an array of topics.");
+        cb('First argument must be an array of topics.');
       }
 
       return;
     }
 
-    var socket = this;
-    var pubsub = socket.pubsub;
-    var notAllowedTopics = [];
+    const socket = this;
+    const pubsub = socket.pubsub;
+    const notAllowedTopics = [];
 
-    for (var i = 0, l = topics.length; i < l; ++i)
+    for (let i = 0, l = topics.length; i < l; ++i)
     {
-      var topic = topics[i];
+      const topic = topics[i];
 
       if (isValidTopic(topic) && isSocketAllowedToSubscribe(socket, topic))
       {
@@ -194,19 +194,19 @@ exports.start = function startPubsubModule(app, module)
    */
   function onSocketUnsubscribe(topics)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (!Array.isArray(topics))
     {
       return;
     }
 
-    var socket = this;
-    var pubsub = socket.pubsub;
+    const socket = this;
+    const pubsub = socket.pubsub;
 
-    for (var i = 0, l = topics.length; i < l; ++i)
+    for (let i = 0, l = topics.length; i < l; ++i)
     {
-      var topic = topics[i];
+      const topic = topics[i];
 
       if (isValidTopic(topic))
       {
@@ -223,9 +223,9 @@ exports.start = function startPubsubModule(app, module)
    */
   function onSocketPublish(topic, message, meta, cb)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    var socket = this;
+    const socket = this;
 
     ++stats.receivedMessages;
 
@@ -254,7 +254,7 @@ exports.start = function startPubsubModule(app, module)
       return;
     }
 
-    var socketMessagesMap = socketIdToMessagesMap[socket.id];
+    let socketMessagesMap = socketIdToMessagesMap[socket.id];
 
     if (!socketMessagesMap)
     {
@@ -273,30 +273,30 @@ exports.start = function startPubsubModule(app, module)
 
   function sendMessages()
   {
-    /*jshint forin:false*/
+    /* jshint forin:false*/
 
-    var sockets =  app[module.config.sioId].sockets.connected;
-    var socketIds = Object.keys(socketIdToMessagesMap);
+    const sockets = app[module.config.sioId].sockets.connected;
+    const socketIds = Object.keys(socketIdToMessagesMap);
 
-    for (var i = 0, l = socketIds.length; i < l; ++i)
+    for (let i = 0, l = socketIds.length; i < l; ++i)
     {
-      var socketId = socketIds[i];
-      var socket = sockets[socketId];
+      const socketId = socketIds[i];
+      const socket = sockets[socketId];
 
       if (socket === undefined)
       {
         continue;
       }
 
-      var socketMessagesMap = socketIdToMessagesMap[socketId];
-      var messageIds = Object.keys(socketMessagesMap);
+      const socketMessagesMap = socketIdToMessagesMap[socketId];
+      const messageIds = Object.keys(socketMessagesMap);
 
-      for (var j = 0, m = messageIds.length; j < m; ++j)
+      for (let j = 0, m = messageIds.length; j < m; ++j)
       {
-        var message = idToMessageMap[messageIds[j]];
-        var topic = message[0];
-        var payload = message[1];
-        var meta = message[2];
+        const message = idToMessageMap[messageIds[j]];
+        const topic = message[0];
+        const payload = message[1];
+        const meta = message[2];
 
         if (!meta.json)
         {
@@ -332,7 +332,7 @@ exports.start = function startPubsubModule(app, module)
    */
   function isSocketAllowedToSubscribe(socket, topic)
   {
-    /*jshint unused:false*/
+    /* jshint unused:false*/
 
     return true;
   }

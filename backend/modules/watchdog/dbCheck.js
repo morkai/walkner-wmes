@@ -45,13 +45,13 @@ module.exports = function setUpDbCheck(app, watchdogModule)
   function notifyReconnect()
   {
     const subject = format(
-      "[%s:%s:dbCheck] Reconnected", app.options.id, watchdogModule.name
+      '[%s:%s:dbCheck] Reconnected', app.options.id, watchdogModule.name
     );
     const text = [
-      "Connection to the database was reestablished successfully!",
-      "",
-      "This message was generated automatically.",
-      "Sincerely, WMES Bot"
+      'Connection to the database was reestablished successfully!',
+      '',
+      'This message was generated automatically.',
+      'Sincerely, WMES Bot'
     ];
 
     mail(subject, text);
@@ -60,13 +60,13 @@ module.exports = function setUpDbCheck(app, watchdogModule)
   function notifyDisconnect()
   {
     const subject = format(
-      "[%s:%s:dbCheck] Disconnected", app.options.id, watchdogModule.name
+      '[%s:%s:dbCheck] Disconnected', app.options.id, watchdogModule.name
     );
     const text = [
-      "Connection to the database was lost!",
-      "",
-      "This message was generated automatically.",
-      "Sincerely, WMES Bot"
+      'Connection to the database was lost!',
+      '',
+      'This message was generated automatically.',
+      'Sincerely, WMES Bot'
     ];
 
     mail(subject, text);
@@ -79,7 +79,7 @@ module.exports = function setUpDbCheck(app, watchdogModule)
     {
       lastDisconnectCallAt = now;
 
-      call("Lost the database connection!");
+      call('Lost the database connection!');
     }
   }
 
@@ -106,11 +106,11 @@ module.exports = function setUpDbCheck(app, watchdogModule)
     {
       if (err)
       {
-        watchdogModule.error("[dbCheck] [mail] Failed to notify [%s]: %s", to, err.message);
+        watchdogModule.error('[dbCheck] [mail] Failed to notify [%s]: %s', to, err.message);
       }
       else
       {
-        watchdogModule.debug("[dbCheck] [mail] Notified: %s", to);
+        watchdogModule.debug('[dbCheck] [mail] Notified: %s', to);
       }
     });
   }
@@ -130,11 +130,11 @@ module.exports = function setUpDbCheck(app, watchdogModule)
     {
       if (err)
       {
-        watchdogModule.error("[dbCheck] [sms] Failed to notify [%s]: %s", to, err.message);
+        watchdogModule.error('[dbCheck] [sms] Failed to notify [%s]: %s', to, err.message);
       }
       else
       {
-        watchdogModule.debug("[dbCheck] [sms] Notified: %s", to);
+        watchdogModule.debug('[dbCheck] [sms] Notified: %s', to);
       }
     });
   }
@@ -159,11 +159,11 @@ module.exports = function setUpDbCheck(app, watchdogModule)
     {
       if (err)
       {
-        watchdogModule.error("[dbCheck] [call] Failed to notify [%s]: %s", sayOptions.to, err.message);
+        watchdogModule.error('[dbCheck] [call] Failed to notify [%s]: %s', sayOptions.to, err.message);
       }
       else
       {
-        watchdogModule.debug("[dbCheck] [call] Notified: %s", sayOptions.to);
+        watchdogModule.debug('[dbCheck] [call] Notified: %s', sayOptions.to);
       }
     });
   }

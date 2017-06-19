@@ -2,13 +2,13 @@
 
 'use strict';
 
-var setUpRoutes = require('./routes');
-var setUpCommands = require('./commands');
-var setUpNotifier = require('./notifier');
-var setUpReminder = require('./reminder');
-var setUpDurationRecalculator = require('./durationRecalculator');
-var setUpStats = require('./stats');
-var setUpObserverCleaner = require('./observerCleaner');
+const setUpRoutes = require('./routes');
+const setUpCommands = require('./commands');
+const setUpNotifier = require('./notifier');
+const setUpReminder = require('./reminder');
+const setUpDurationRecalculator = require('./durationRecalculator');
+const setUpStats = require('./stats');
+const setUpObserverCleaner = require('./observerCleaner');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',

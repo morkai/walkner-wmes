@@ -2,7 +2,7 @@
 
 'use strict';
 
-var step = require('h5.step');
+const step = require('h5.step');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
@@ -21,7 +21,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err && err.message !== 'ALREADY_USED')
       {
         productionModule.error(
-          "[checkSerialNumber] Failed to check SN [%s] (LOG=[%s]): %s",
+          '[checkSerialNumber] Failed to check SN [%s] (LOG=[%s]): %s',
           logEntry.data._id,
           logEntry._id,
           err.stack

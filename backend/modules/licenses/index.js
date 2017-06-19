@@ -2,8 +2,8 @@
 
 'use strict';
 
-var setUpRoutes = require('./routes');
-var generateLicenseKey = require('./generateLicenseKey');
+const setUpRoutes = require('./routes');
+const generateLicenseKey = require('./generateLicenseKey');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -17,13 +17,13 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startLicensesModule(app, module)
 {
-  var config = module.config;
+  const config = module.config;
 
   module.licenseEdKey = null;
 
   if (config.licenseEd.pem)
   {
-    var ursa = require('ursa');
+    const ursa = require('ursa');
 
     if (config.licenseEd.password)
     {

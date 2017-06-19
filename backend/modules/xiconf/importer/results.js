@@ -2,27 +2,27 @@
 
 'use strict';
 
-var path = require('path');
-var _ = require('lodash');
-var step = require('h5.step');
-var JSZip = require('jszip');
-var fs = require('fs-extra');
+const path = require('path');
+const _ = require('lodash');
+const step = require('h5.step');
+const JSZip = require('jszip');
+const fs = require('fs-extra');
 
 module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 {
-  var licensesModule = app[xiconfModule.config.licensesId];
-  var mongoose = app[xiconfModule.config.mongooseId];
-  var XiconfOrderResult = mongoose.model('XiconfOrderResult');
-  var XiconfResult = mongoose.model('XiconfResult');
+  const licensesModule = app[xiconfModule.config.licensesId];
+  const mongoose = app[xiconfModule.config.mongooseId];
+  const XiconfOrderResult = mongoose.model('XiconfOrderResult');
+  const XiconfResult = mongoose.model('XiconfResult');
 
-  var RESULTS_BATCH_SIZE = 1000;
-  var FILTER_RE = /^(.*?)@[a-z0-9]{32}\.zip$/;
+  const RESULTS_BATCH_SIZE = 1000;
+  const FILTER_RE = /^(.*?)@[a-z0-9]{32}\.zip$/;
 
-  var importing = false;
-  var filePathCache = {};
-  var fileQueue = [];
-  var validEncryptedUuids = {};
-  var restarting = false;
+  let importing = false;
+  const filePathCache = {};
+  const fileQueue = [];
+  const validEncryptedUuids = {};
+  let restarting = false;
 
   app.broker.subscribe('updater.restarting', function()
   {
@@ -38,7 +38,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
       return false;
     }
 
-    var matches = fileInfo.fileName.match(FILTER_RE);
+    const matches = fileInfo.fileName.match(FILTER_RE);
 
     if (matches === null)
     {
@@ -56,7 +56,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
     fileQueue.push(fileInfo);
 
-    xiconfModule.debug("Queued %s...", fileInfo.fileName);
+    xiconfModule.debug('Queued %s...', fileInfo.fileName);
 
     importNextFile();
   }
@@ -68,7 +68,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
       return;
     }
 
-    var fileInfo = fileQueue.shift();
+    const fileInfo = fileQueue.shift();
 
     if (fileInfo)
     {
@@ -78,7 +78,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
   function importFile(fileInfo)
   {
-    xiconfModule.debug("Importing %s...", fileInfo.fileName);
+    xiconfModule.debug('Importing %s...', fileInfo.fileName);
 
     step(
       function()
@@ -96,12 +96,12 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
       {
         if (err)
         {
-          xiconfModule.error("Failed to import file [%s]: %s", fileInfo.fileName, err.message);
+          xiconfModule.error('Failed to import file [%s]: %s', fileInfo.fileName, err.message);
         }
         else
         {
           xiconfModule.info(
-            "Imported file [%s] from [%s] (UUID=%s)!",
+            'Imported file [%s] from [%s] (UUID=%s)!',
             fileInfo.fileName,
             this.meta.id,
             this.meta.uuid
@@ -134,9 +134,9 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
   async function readArchiveFileStep()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    xiconfModule.debug("Reading the archive...");
+    xiconfModule.debug('Reading the archive...');
 
     const buf = fs.readFile(this.fileInfo.filePath);
     const zip = await new JSZip().loadAsync(buf);
@@ -149,14 +149,14 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
   function validateLicenseStep(err)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (err)
     {
       return this.skip(err);
     }
 
-    xiconfModule.debug("Validating the meta file...");
+    xiconfModule.debug('Validating the meta file...');
 
     if (!_.isPlainObject(this.meta))
     {
@@ -178,7 +178,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
     }
     catch (err)
     {
-      xiconfModule.debug("Failed to decrypt the UUID: %s", err.message);
+      xiconfModule.debug('Failed to decrypt the UUID: %s', err.message);
 
       return this.skip(new Error('INVALID_ENCRYPTED_UUID'));
     }
@@ -188,9 +188,9 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
   function parseModelsStep()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    xiconfModule.debug("Parsing the models...");
+    xiconfModule.debug('Parsing the models...');
 
     this.orders = Array.isArray(this.orders)
       ? this.orders.map(prepareOrder.bind(null, this.fileInfo, this.meta))
@@ -212,17 +212,17 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
   function updateModelsStep()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (!this.orders.length && !this.results.length)
     {
       return this.skip(new Error('NO_ORDERS_AND_RESULTS'));
     }
 
-    xiconfModule.debug("Updating the models (%d orders, %d results)...", this.orders.length, this.results.length);
+    xiconfModule.debug('Updating the models (%d orders, %d results)...', this.orders.length, this.results.length);
 
-    var i;
-    var l;
+    let i;
+    let l;
 
     for (i = 0, l = this.orders.length; i < l; ++i)
     {
@@ -261,7 +261,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
   function prepareResult(fileInfo, meta, orderIdToNo, result)
   {
-    var program = tryJsonParse(result.program);
+    const program = tryJsonParse(result.program);
 
     return {
       _id: result._id,
@@ -337,16 +337,16 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
   function saveFeatureFilesStep(err)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (err && err.code !== 11000)
     {
       return this.skip(err);
     }
 
-    xiconfModule.debug("Saving %d feature file(s)...", this.featureFiles.length);
+    xiconfModule.debug('Saving %d feature file(s)...', this.featureFiles.length);
 
-    var steps = [];
+    const steps = [];
 
     _.forEach(this.featureFiles, function(featureFile)
     {
@@ -375,7 +375,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
       {
         if (err)
         {
-          xiconfModule.error("Failed to rename a bad input file [%s]: %s", filePath, err.message);
+          xiconfModule.error('Failed to rename a bad input file [%s]: %s', filePath, err.message);
         }
       });
     }
@@ -385,7 +385,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
       {
         if (err)
         {
-          xiconfModule.error("Failed to remove an input file [%s]: %s", filePath, err.message);
+          xiconfModule.error('Failed to remove an input file [%s]: %s', filePath, err.message);
         }
       });
     }

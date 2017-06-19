@@ -2,10 +2,10 @@
 
 'use strict';
 
-var path = require('path');
-var moment = require('moment');
-var step = require('h5.step');
-var fs = require('fs-extra');
+const path = require('path');
+const moment = require('moment');
+const step = require('h5.step');
+const fs = require('fs-extra');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -15,18 +15,18 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startOrderZlf1ImporterModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("orders/importer/zlf1 module requires the mongoose module!");
+    throw new Error('orders/importer/zlf1 module requires the mongoose module!');
   }
 
-  var OrderZlf1 = mongoose.model('OrderZlf1');
+  const OrderZlf1 = mongoose.model('OrderZlf1');
 
-  var filePathCache = {};
-  var locked = false;
-  var queue = [];
+  const filePathCache = {};
+  let locked = false;
+  const queue = [];
 
   app.broker.subscribe('directoryWatcher.changed', queueFile).setFilter(filterFile);
 
@@ -53,7 +53,7 @@ exports.start = function startOrderZlf1ImporterModule(app, module)
 
     queue.push(fileInfo);
 
-    module.debug("[%s] Queued...", fileInfo.timeKey);
+    module.debug('[%s] Queued...', fileInfo.timeKey);
 
     setImmediate(importNext);
   }
@@ -65,7 +65,7 @@ exports.start = function startOrderZlf1ImporterModule(app, module)
       return;
     }
 
-    var fileInfo = queue.shift();
+    const fileInfo = queue.shift();
 
     if (!fileInfo)
     {
@@ -74,9 +74,9 @@ exports.start = function startOrderZlf1ImporterModule(app, module)
 
     locked = true;
 
-    var startTime = Date.now();
+    const startTime = Date.now();
 
-    module.debug("[%s] Importing...", fileInfo.timeKey);
+    module.debug('[%s] Importing...', fileInfo.timeKey);
 
     importFile(fileInfo, function(err, count)
     {
@@ -84,7 +84,7 @@ exports.start = function startOrderZlf1ImporterModule(app, module)
 
       if (err)
       {
-        module.error("[%s] Failed to import: %s", fileInfo.timeKey, err.message);
+        module.error('[%s] Failed to import: %s', fileInfo.timeKey, err.message);
 
         app.broker.publish('orders.zlf1.syncFailed', {
           timestamp: fileInfo.timestamp,
@@ -93,7 +93,7 @@ exports.start = function startOrderZlf1ImporterModule(app, module)
       }
       else
       {
-        module.debug("[%s] Imported %d in %d ms", fileInfo.timeKey, count, Date.now() - startTime);
+        module.debug('[%s] Imported %d in %d ms', fileInfo.timeKey, count, Date.now() - startTime);
 
         app.broker.publish('orders.zlf1.synced', {
           timestamp: fileInfo.timestamp,
@@ -121,9 +121,9 @@ exports.start = function startOrderZlf1ImporterModule(app, module)
           return this.skip(err);
         }
 
-        module.debug("[%s] Parsing ~%d bytes...", fileInfo.timeKey, fileContents.length);
+        module.debug('[%s] Parsing ~%d bytes...', fileInfo.timeKey, fileContents.length);
 
-        var t = Date.now();
+        const t = Date.now();
 
         try
         {
@@ -136,7 +136,7 @@ exports.start = function startOrderZlf1ImporterModule(app, module)
           return this.skip(err);
         }
 
-        module.debug("[%s] Parsed %d items in %d ms!", fileInfo.timeKey, this.orders.length, Date.now() - t);
+        module.debug('[%s] Parsed %d items in %d ms!', fileInfo.timeKey, this.orders.length, Date.now() - t);
 
         setImmediate(this.next());
       },
@@ -147,23 +147,23 @@ exports.start = function startOrderZlf1ImporterModule(app, module)
           return this.skip();
         }
 
-        module.debug("[%s] Upserting orders...", fileInfo.timeKey);
+        module.debug('[%s] Upserting orders...', fileInfo.timeKey);
 
-        var t = Date.now();
+        const t = Date.now();
 
         upsertNextOrderBatch(this.orders, 0, 10, this.next());
 
         function upsertNextOrderBatch(orders, batchNo, batchSize, done)
         {
-          var startIndex = batchNo * batchSize;
-          var endIndex = Math.min(startIndex + batchSize, orders.length);
+          const startIndex = batchNo * batchSize;
+          const endIndex = Math.min(startIndex + batchSize, orders.length);
 
           step(
             function()
             {
-              for (var i = startIndex; i < endIndex; ++i)
+              for (let i = startIndex; i < endIndex; ++i)
               {
-                var orderZlf1 = OrderZlf1.prepareForInsert(orders[i]);
+                const orderZlf1 = OrderZlf1.prepareForInsert(orders[i]);
 
                 if (!orderZlf1._id)
                 {
@@ -182,13 +182,13 @@ exports.start = function startOrderZlf1ImporterModule(app, module)
             {
               if (err)
               {
-                module.error("Failed to upsert order: %s", err.message);
+                module.error('Failed to upsert order: %s', err.message);
               }
 
               if (endIndex === orders.length)
               {
                 module.debug(
-                  "[%s] Upserted %d orders in %d ms!", fileInfo.timeKey, orders.length, Date.now() - t
+                  '[%s] Upserted %d orders in %d ms!', fileInfo.timeKey, orders.length, Date.now() - t
                 );
 
                 return done();
@@ -222,14 +222,14 @@ exports.start = function startOrderZlf1ImporterModule(app, module)
 
   function moveFileInfoFile(oldFilePath)
   {
-    var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
+    const newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
     fs.move(oldFilePath, newFilePath, {overwrite: true}, function(err)
     {
       if (err)
       {
         module.error(
-          "Failed to rename file [%s] to [%s]: %s", oldFilePath, newFilePath, err.message
+          'Failed to rename file [%s] to [%s]: %s', oldFilePath, newFilePath, err.message
         );
       }
     });
@@ -241,7 +241,7 @@ exports.start = function startOrderZlf1ImporterModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to delete file [%s]: %s", filePath, err.message);
+        module.error('Failed to delete file [%s]: %s', filePath, err.message);
       }
     });
   }

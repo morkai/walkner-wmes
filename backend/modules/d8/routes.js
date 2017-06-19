@@ -448,11 +448,11 @@ module.exports = function setUpD8Routes(app, module)
     {
       if (err)
       {
-        module.error("Failed to remove an unused attachment [%s]: %s", filePath, err.message);
+        module.error('Failed to remove an unused attachment [%s]: %s', filePath, err.message);
       }
       else
       {
-        module.debug("Removed an unused attachment: %s", filePath);
+        module.debug('Removed an unused attachment: %s', filePath);
       }
     });
   }

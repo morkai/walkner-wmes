@@ -9,7 +9,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     if (err)
     {
       productionModule.error(
-        "Failed to get a prod shift [%s] to change the quantities done (LOG=[%s]): %s",
+        'Failed to get a prod shift [%s] to change the quantities done (LOG=[%s]): %s',
         logEntry.prodShift,
         logEntry._id,
         err.stack
@@ -37,7 +37,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save prod shift [%s] after changing the quantities done (LOG=[%s]): %s",
+          'Failed to save prod shift [%s] after changing the quantities done (LOG=[%s]): %s',
           logEntry.prodShift,
           logEntry._id,
           err.stack

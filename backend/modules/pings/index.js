@@ -62,7 +62,7 @@ exports.start = function startPingsModule(app, module)
 
   function recordPing(data)
   {
-    var mongoose = app[module.config.mongooseId];
+    const mongoose = app[module.config.mongooseId];
 
     if (!mongoose)
     {

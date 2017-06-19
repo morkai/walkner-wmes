@@ -2,12 +2,12 @@
 
 'use strict';
 
-var format = require('util').format;
-var exec = require('child_process').exec;
-var fs = require('fs');
-var path = require('path');
-var _ = require('lodash');
-var step = require('h5.step');
+const format = require('util').format;
+const exec = require('child_process').exec;
+const fs = require('fs');
+const path = require('path');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function runZlf1Job(app, sapGuiModule, job, done)
 {
@@ -41,7 +41,7 @@ module.exports = function runZlf1Job(app, sapGuiModule, job, done)
     {
       if (err)
       {
-        return sapGuiModule.error("[zlf1] Failed to readdir: %s", err.message);
+        return sapGuiModule.error('[zlf1] Failed to readdir: %s', err.message);
       }
 
       if (_.isEmpty(files))
@@ -49,10 +49,10 @@ module.exports = function runZlf1Job(app, sapGuiModule, job, done)
         return;
       }
 
-      var orderDatFiles = files.filter(function(file) { return /^[0-9]{9}\.(DAT|TXT)$/i.test(file); });
-      var sourceDestination = job.sourceDestination.replace('*', '');
+      const orderDatFiles = files.filter(function(file) { return /^[0-9]{9}\.(DAT|TXT)$/i.test(file); });
+      const sourceDestination = job.sourceDestination.replace('*', '');
 
-      for (var i = 0; i < orderDatFiles.length; ++i)
+      for (let i = 0; i < orderDatFiles.length; ++i)
       {
         parseOrderDatFile(path.join(sourceDestination, orderDatFiles[i]), this.group());
       }
@@ -61,11 +61,11 @@ module.exports = function runZlf1Job(app, sapGuiModule, job, done)
     {
       if (err)
       {
-        return sapGuiModule.error("Failed to parse orders DAT files: %s", err.message);
+        return sapGuiModule.error('Failed to parse orders DAT files: %s', err.message);
       }
 
-      var filePath = path.join(job.outputPath, Math.floor(Date.now() / 1000) + '@' + job.outputFile);
-      var fileContents = JSON.stringify(orders || []);
+      const filePath = path.join(job.outputPath, Math.floor(Date.now() / 1000) + '@' + job.outputFile);
+      const fileContents = JSON.stringify(orders || []);
 
       fs.writeFile(filePath, fileContents, this.next());
     },
@@ -73,7 +73,7 @@ module.exports = function runZlf1Job(app, sapGuiModule, job, done)
     {
       if (err)
       {
-        sapGuiModule.error("[zlf1] Failed to write orders JSON file: %s", err.message);
+        sapGuiModule.error('[zlf1] Failed to write orders JSON file: %s', err.message);
       }
 
       if (this.empty)
@@ -81,12 +81,12 @@ module.exports = function runZlf1Job(app, sapGuiModule, job, done)
         return;
       }
 
-      var cmd = format('MOVE /Y "%s" "%s"', job.sourceDestination, job.targetDestination);
-      var output = this.output;
+      const cmd = format('MOVE /Y "%s" "%s"', job.sourceDestination, job.targetDestination);
+      const output = this.output;
 
       exec(cmd, function(err, stdout, stderr)
       {
-        done(err, format("%s\r\nMOVE (stdout):\r\n%s\r\nMOVE (stderr):\r\n", output, stdout, stderr));
+        done(err, format('%s\r\nMOVE (stdout):\r\n%s\r\nMOVE (stderr):\r\n', output, stdout, stderr));
       });
     },
     function(err, output)
@@ -105,13 +105,13 @@ function parseOrderDatFile(filePath, done)
       return done(err);
     }
 
-    var orderData = {};
+    const orderData = {};
 
     fileContents.split('\n').map(function(line)
     {
-      var parts = line.trim().split(':');
-      var key = parts.shift().trim().toLowerCase().replace(/\s+/g, '_');
-      var value = parts.join(':').trim();
+      const parts = line.trim().split(':');
+      const key = parts.shift().trim().toLowerCase().replace(/\s+/g, '_');
+      const value = parts.join(':').trim();
 
       orderData[key] = value;
     });

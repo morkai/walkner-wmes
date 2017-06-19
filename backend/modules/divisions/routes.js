@@ -4,12 +4,12 @@
 
 module.exports = function setUpDivisionsRoutes(app, divisionsModule, useDictionaryModel)
 {
-  var express = app[divisionsModule.config.expressId];
-  var auth = app[divisionsModule.config.userId].auth;
-  var Division = app[divisionsModule.config.mongooseId].model('Division');
+  const express = app[divisionsModule.config.expressId];
+  const auth = app[divisionsModule.config.userId].auth;
+  const Division = app[divisionsModule.config.mongooseId].model('Division');
 
-  var canView = auth('DICTIONARIES:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/divisions', canView, express.crud.browseRoute.bind(null, app, Division));
 

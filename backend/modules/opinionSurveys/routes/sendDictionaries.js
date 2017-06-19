@@ -2,15 +2,15 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function sendDictionariesRoute(app, module, req, res, next)
 {
-  var settings = app[module.config.settingsId];
-  var mongoose = app[module.config.mongooseId];
+  const settings = app[module.config.settingsId];
+  const mongoose = app[module.config.mongooseId];
 
-  var results = {};
+  const results = {};
 
   step(
     function findSettingsStep()
@@ -28,7 +28,7 @@ module.exports = function sendDictionariesRoute(app, module, req, res, next)
     },
     function findDictionariesStep()
     {
-      var step = this;
+      const step = this;
 
       _.forEach(module.DICTIONARIES, function(modelName)
       {

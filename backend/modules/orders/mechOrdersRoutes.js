@@ -2,19 +2,19 @@
 
 'use strict';
 
-var os = require('os');
-var fs = require('fs');
-var _ = require('lodash');
-var multer = require('multer');
-var csv = require('csv');
-var step = require('h5.step');
+const os = require('os');
+const fs = require('fs');
+const _ = require('lodash');
+const multer = require('multer');
+const csv = require('csv');
+const step = require('h5.step');
 
 module.exports = function setUpMechOrdersRoutes(app, ordersModule)
 {
-  var express = app[ordersModule.config.expressId];
-  var auth = app[ordersModule.config.userId].auth;
-  var MechOrder = app[ordersModule.config.mongooseId].model('MechOrder');
-  var importing = null;
+  const express = app[ordersModule.config.expressId];
+  const auth = app[ordersModule.config.userId].auth;
+  const MechOrder = app[ordersModule.config.mongooseId].model('MechOrder');
+  let importing = null;
 
   express.get('/mechOrders', express.crud.browseRoute.bind(null, app, MechOrder));
 
@@ -52,7 +52,7 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
       return res.sendStatus(400);
     }
 
-    var mechOrdersFile = req.file;
+    const mechOrdersFile = req.file;
 
     if (!mechOrdersFile || !/\.csv$/i.test(mechOrdersFile.originalname))
     {
@@ -63,11 +63,11 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
 
     importing = 0;
 
-    ordersModule.debug("Importing mech orders...");
+    ordersModule.debug('Importing mech orders...');
 
-    var importTs = new Date();
-    var mechOrders = {};
-    var nc12Queue = [];
+    const importTs = new Date();
+    const mechOrders = {};
+    const nc12Queue = [];
 
     step(
       function()
@@ -112,13 +112,13 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
         return;
       }
 
-      var nc12 = row[0];
+      const nc12 = row[0];
 
       if (typeof mechOrders[nc12] === 'undefined')
       {
         nc12Queue.push(nc12);
 
-        var mrp = row[11].trim();
+        let mrp = row[11].trim();
 
         if (mrp.length === 0 || mrp.toUpperCase() === 'BRAK')
         {
@@ -152,15 +152,15 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
       {
         app.broker.publish('mechOrders.synced', {count: importing});
 
-        ordersModule.info("Imported %d mech orders", importing);
+        ordersModule.info('Imported %d mech orders', importing);
 
         importing = null;
 
         return res.sendStatus(204);
       }
 
-      var mechOrder = mechOrders[nc12Queue.shift()];
-      var _id = mechOrder._id;
+      const mechOrder = mechOrders[nc12Queue.shift()];
+      const _id = mechOrder._id;
 
       delete mechOrder._id;
 
@@ -168,7 +168,7 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
       {
         if (err)
         {
-          ordersModule.warn("Failed to upsert mech order %s: %s", _id, err.message);
+          ordersModule.warn('Failed to upsert mech order %s: %s', _id, err.message);
         }
         else
         {

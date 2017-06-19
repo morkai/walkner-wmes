@@ -2,15 +2,15 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function saveSurveyPreviewRoute(app, module, req, res, next)
 {
-  var mongoose = app[module.config.mongooseId];
-  var OpinionSurvey = mongoose.model('OpinionSurvey');
+  const mongoose = app[module.config.mongooseId];
+  const OpinionSurvey = mongoose.model('OpinionSurvey');
 
-  var key = req.body._id = _.uniqueId('PREVIEW-' + Date.now().toString(36) + '-').toUpperCase();
-  var survey = new OpinionSurvey(req.body);
+  const key = req.body._id = _.uniqueId('PREVIEW-' + Date.now().toString(36) + '-').toUpperCase();
+  const survey = new OpinionSurvey(req.body);
 
   survey.validate(function(err)
   {

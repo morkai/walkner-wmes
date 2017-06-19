@@ -2,12 +2,12 @@
 
 'use strict';
 
-var path = require('path');
-var fs = require('fs');
-var tmpdir = require('os').tmpdir;
-var exec = require('child_process').exec;
+const path = require('path');
+const fs = require('fs');
+const tmpdir = require('os').tmpdir;
+const exec = require('child_process').exec;
 
-var DIACRITICS = {
+const DIACRITICS = {
   ę: 'e',
   ą: 'a',
   ś: 's',
@@ -28,10 +28,10 @@ var DIACRITICS = {
 
 module.exports = function exportRoute(reportsModule, req, res, next)
 {
-  /*jshint -W015*/
+  /* jshint -W015*/
 
-  var input = req.body;
-  var svg = input.svg;
+  const input = req.body;
+  const svg = input.svg;
 
   if (typeof svg !== 'string'
     || svg.length === 0
@@ -41,9 +41,9 @@ module.exports = function exportRoute(reportsModule, req, res, next)
     return res.sendStatus(400);
   }
 
-  var filename = typeof input.filename === 'string' ? cleanFilename(input.filename) : 'chart';
-  var typeArg = null;
-  var ext = null;
+  const filename = typeof input.filename === 'string' ? cleanFilename(input.filename) : 'chart';
+  let typeArg = null;
+  let ext = null;
 
   switch (input.type)
   {
@@ -70,19 +70,19 @@ module.exports = function exportRoute(reportsModule, req, res, next)
     return res.send(svg);
   }
 
-  var width = parseInt(input.width, 10);
+  let width = parseInt(input.width, 10);
 
   if (isNaN(width))
   {
     width = 0;
   }
 
-  var tmpDir = tmpdir();
-  var tmpFilename = (Date.now() + Math.random()).toString();
-  var tmpFile = path.join(tmpDir, tmpFilename) + '.svg';
-  var outFile = path.join(tmpDir, tmpFilename + '.' + ext);
+  const tmpDir = tmpdir();
+  const tmpFilename = (Date.now() + Math.random()).toString();
+  const tmpFile = path.join(tmpDir, tmpFilename) + '.svg';
+  const outFile = path.join(tmpDir, tmpFilename + '.' + ext);
 
-  var cmd = reportsModule.config.javaBatik + ' ' + typeArg + ' -d "' + outFile + '"';
+  let cmd = reportsModule.config.javaBatik + ' ' + typeArg + ' -d "' + outFile + '"';
 
   if (width > 0)
   {

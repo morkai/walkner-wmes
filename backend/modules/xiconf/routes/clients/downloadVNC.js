@@ -2,15 +2,15 @@
 
 'use strict';
 
-var fs = require('fs');
-var step = require('h5.step');
+const fs = require('fs');
+const step = require('h5.step');
 
 module.exports = function downloadVNCRoute(app, xiconfModule, req, res, next)
 {
-  var express = app[xiconfModule.config.expressId];
-  var sio = app[xiconfModule.config.sioId];
-  var mongoose = app[xiconfModule.config.mongooseId];
-  var XiconfClient = mongoose.model('XiconfClient');
+  const express = app[xiconfModule.config.expressId];
+  const sio = app[xiconfModule.config.sioId];
+  const mongoose = app[xiconfModule.config.mongooseId];
+  const XiconfClient = mongoose.model('XiconfClient');
 
   step(
     function()
@@ -30,8 +30,8 @@ module.exports = function downloadVNCRoute(app, xiconfModule, req, res, next)
         return next(express.createHttpError('CLIENT_NOT_FOUND', 404));
       }
 
-      var socket = sio.sockets.connected[xiconfClient.socket];
-      var remoteAddress;
+      const socket = sio.sockets.connected[xiconfClient.socket];
+      let remoteAddress;
 
       if (socket && socket.conn.remoteAddress !== '127.0.0.1')
       {
@@ -42,8 +42,8 @@ module.exports = function downloadVNCRoute(app, xiconfModule, req, res, next)
         remoteAddress = xiconfClient._id.split('-')[0];
       }
 
-      var vncFileName = req.params.id + '.vnc';
-      var vncFileContents = vncTemplate
+      const vncFileName = req.params.id + '.vnc';
+      const vncFileContents = vncTemplate
         .replace('{host}', remoteAddress)
         .trim();
 

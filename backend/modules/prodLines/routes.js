@@ -4,12 +4,12 @@
 
 module.exports = function setUpProdLinesRoutes(app, prodLinesModule, useDictionaryModel)
 {
-  var express = app[prodLinesModule.config.expressId];
-  var auth = app[prodLinesModule.config.userId].auth;
-  var ProdLine = app[prodLinesModule.config.mongooseId].model('ProdLine');
+  const express = app[prodLinesModule.config.expressId];
+  const auth = app[prodLinesModule.config.userId].auth;
+  const ProdLine = app[prodLinesModule.config.mongooseId].model('ProdLine');
 
-  var canView = auth('LOCAL', 'DICTIONARIES:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('LOCAL', 'DICTIONARIES:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/prodLines', canView, express.crud.browseRoute.bind(null, app, ProdLine));
 

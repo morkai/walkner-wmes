@@ -26,7 +26,7 @@ module.exports = function setUpQiNotifier(app, module)
     compileDebug: false,
     rmWhitespace: true
   });
-  var nameMaps = {
+  const nameMaps = {
     kind: {},
     errorCategory: {}
   };
@@ -80,7 +80,7 @@ module.exports = function setUpQiNotifier(app, module)
           return;
         }
 
-        var orgUnit = orgUnits.getByTypeAndId(nokOwner.orgUnitType, nokOwner.orgUnitId);
+        const orgUnit = orgUnits.getByTypeAndId(nokOwner.orgUnitType, nokOwner.orgUnitId);
 
         if (!orgUnit)
         {
@@ -126,11 +126,11 @@ module.exports = function setUpQiNotifier(app, module)
       {
         if (err)
         {
-          module.error("Failed to notify the NOK owner about a result [%d]: %s", result.rid, err.message);
+          module.error('Failed to notify the NOK owner about a result [%d]: %s', result.rid, err.message);
         }
         else if (this.mailOptions)
         {
-          module.info("Notified the NOK owner [%s] about a result: %d", this.mailOptions.to, result.rid);
+          module.info('Notified the NOK owner [%s] about a result: %d', this.mailOptions.to, result.rid);
         }
 
         this.mailOptions = null;
@@ -140,7 +140,7 @@ module.exports = function setUpQiNotifier(app, module)
 
   function prepareTemplateData(mode, result, done)
   {
-    var templateData = {
+    const templateData = {
       mode: mode,
       urlPrefix: EMAIL_URL_PREFIX,
       result: {
@@ -195,7 +195,7 @@ module.exports = function setUpQiNotifier(app, module)
 
     if (multiple)
     {
-      var names = [];
+      const names = [];
 
       _.forEach(id, function(id)
       {

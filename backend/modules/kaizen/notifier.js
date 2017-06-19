@@ -2,33 +2,33 @@
 
 'use strict';
 
-var fs = require('fs');
-var _ = require('lodash');
-var step = require('h5.step');
-var ejs = require('ejs');
-var moment = require('moment');
+const fs = require('fs');
+const _ = require('lodash');
+const step = require('h5.step');
+const ejs = require('ejs');
+const moment = require('moment');
 
 module.exports = function setUpKaizenNotifier(app, kaizenModule)
 {
-  var mailSender = app[kaizenModule.config.mailSenderId];
-  var mongoose = app[kaizenModule.config.mongooseId];
-  var User = mongoose.model('User');
-  var KaizenSection = mongoose.model('KaizenSection');
-  var KaizenArea = mongoose.model('KaizenArea');
-  var KaizenCategory = mongoose.model('KaizenCategory');
-  var KaizenCause = mongoose.model('KaizenCause');
-  var KaizenRisk = mongoose.model('KaizenRisk');
+  const mailSender = app[kaizenModule.config.mailSenderId];
+  const mongoose = app[kaizenModule.config.mongooseId];
+  const User = mongoose.model('User');
+  const KaizenSection = mongoose.model('KaizenSection');
+  const KaizenArea = mongoose.model('KaizenArea');
+  const KaizenCategory = mongoose.model('KaizenCategory');
+  const KaizenCause = mongoose.model('KaizenCause');
+  const KaizenRisk = mongoose.model('KaizenRisk');
 
-  var EMAIL_URL_PREFIX = kaizenModule.config.emailUrlPrefix;
+  const EMAIL_URL_PREFIX = kaizenModule.config.emailUrlPrefix;
 
-  var emailTemplateFile = __dirname + '/notifier.email.pl.ejs';
-  var renderEmail = ejs.compile(fs.readFileSync(emailTemplateFile, 'utf8'), {
+  const emailTemplateFile = __dirname + '/notifier.email.pl.ejs';
+  const renderEmail = ejs.compile(fs.readFileSync(emailTemplateFile, 'utf8'), {
     cache: true,
     filename: emailTemplateFile,
     compileDebug: false,
     rmWhitespace: true
   });
-  var nameMaps = {
+  const nameMaps = {
     status: {
       new: 'Nowe',
       accepted: 'Zaakceptowane',
@@ -61,7 +61,7 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
 
   function notifyAboutAdd(kaizenOrder)
   {
-    var recipients = [];
+    const recipients = [];
 
     _.forEach(kaizenOrder.observers, function(observer)
     {
@@ -88,7 +88,7 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
           return this.skip(err);
         }
 
-        var to = recipients
+        const to = recipients
           .filter(function(recipient) { return _.isString(recipient.email) && recipient.email.indexOf('@') !== -1; })
           .map(function(recipient) { return recipient.email; });
 
@@ -121,11 +121,11 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
       {
         if (err)
         {
-          kaizenModule.error("Failed to notify users about a new order [%d]: %s", kaizenOrder.rid, err.message);
+          kaizenModule.error('Failed to notify users about a new order [%d]: %s', kaizenOrder.rid, err.message);
         }
         else if (this.mailOptions)
         {
-          kaizenModule.info("Notified %d users about a new order: %d", this.mailOptions.to.length, kaizenOrder.rid);
+          kaizenModule.info('Notified %d users about a new order: %d', this.mailOptions.to.length, kaizenOrder.rid);
         }
 
         this.mailOptions = null;
@@ -135,7 +135,7 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
 
   function notifyAboutEdit(kaizenOrder, usersToNotify)
   {
-    var recipients = [];
+    const recipients = [];
 
     _.forEach(usersToNotify, function(changes, userId)
     {
@@ -159,7 +159,7 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
           return this.skip(err);
         }
 
-        var to = recipients
+        const to = recipients
           .filter(function(recipient) { return _.isString(recipient.email) && recipient.email.indexOf('@') !== -1; })
           .map(function(recipient) { return recipient.email; });
 
@@ -192,11 +192,11 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
       {
         if (err)
         {
-          kaizenModule.error("Failed to notify users about an order change [%d]: %s", kaizenOrder.rid, err.message);
+          kaizenModule.error('Failed to notify users about an order change [%d]: %s', kaizenOrder.rid, err.message);
         }
         else if (this.mailOptions)
         {
-          kaizenModule.info("Notified %d users about an order change: %d", this.mailOptions.to.length, kaizenOrder.rid);
+          kaizenModule.info('Notified %d users about an order change: %d', this.mailOptions.to.length, kaizenOrder.rid);
         }
 
         this.mailOptions = null;
@@ -206,7 +206,7 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
 
   function prepareTemplateData(mode, kaizenOrder, done)
   {
-    var templateData = {
+    const templateData = {
       mode: mode,
       urlPrefix: EMAIL_URL_PREFIX,
       nearMiss: {
@@ -261,13 +261,13 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
 
   function findName(Model, kaizenOrder, mapProperty, nameProperty, done)
   {
-    var id = kaizenOrder[mapProperty];
-    var nameMap = nameMaps[mapProperty];
-    var multiple = _.isArray(id);
+    const id = kaizenOrder[mapProperty];
+    const nameMap = nameMaps[mapProperty];
+    const multiple = _.isArray(id);
 
     if (multiple)
     {
-      var names = [];
+      const names = [];
 
       _.forEach(id, function(id)
       {
@@ -287,10 +287,10 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
       return setImmediate(done, null, nameMap[id]);
     }
 
-    var conditions = {
+    const conditions = {
       _id: multiple ? {$in: id} : id
     };
-    var fields = {};
+    const fields = {};
     fields[nameProperty] = 1;
 
     Model.find(conditions, fields).lean().exec(function(err, models)
@@ -307,11 +307,11 @@ module.exports = function setUpKaizenNotifier(app, kaizenModule)
 
       if (multiple)
       {
-        var names = [];
+        const names = [];
 
         _.forEach(models, function(model)
         {
-          var name = model[nameProperty];
+          const name = model[nameProperty];
 
           nameMap[model._id] = name;
 

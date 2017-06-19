@@ -2,9 +2,9 @@
 
 'use strict';
 
-var crypto = require('crypto');
-var _ = require('lodash');
-var step = require('h5.step');
+const crypto = require('crypto');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function unlockCommand(app, productionModule, socket, req, reply)
 {
@@ -18,18 +18,18 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
     return reply(new Error('INVALID_INPUT'));
   }
 
-  var userModule = app[productionModule.config.userId];
-  var orgUnits = app[productionModule.config.orgUnitsId];
-  var mongoose = app[productionModule.config.mongooseId];
-  var fteModule = app[productionModule.config.fteId];
-  var res = {
+  const userModule = app[productionModule.config.userId];
+  const orgUnits = app[productionModule.config.orgUnitsId];
+  const mongoose = app[productionModule.config.mongooseId];
+  const fteModule = app[productionModule.config.fteId];
+  const res = {
     prodLine: req.prodLine
   };
 
   step(
     function checkProdLineStep()
     {
-      var prodLine = orgUnits.getByTypeAndId('prodLine', req.prodLine);
+      const prodLine = orgUnits.getByTypeAndId('prodLine', req.prodLine);
 
       if (!prodLine)
       {
@@ -43,7 +43,7 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
 
       this.prodLine = prodLine;
 
-      var prodLineState = productionModule.getProdLineState(prodLine._id);
+      const prodLineState = productionModule.getProdLineState(prodLine._id);
 
       if (prodLineState && prodLineState.online)
       {
@@ -83,7 +83,7 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
     {
       if (err)
       {
-        productionModule.error("Failed to generate a secret key for %s: %s", this.prodLine._id, err.message);
+        productionModule.error('Failed to generate a secret key for %s: %s', this.prodLine._id, err.message);
 
         return this.done(reply, err);
       }
@@ -99,7 +99,7 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
     {
       if (err)
       {
-        productionModule.error("Failed to save a secret key for %s: %s", this.prodLine._id, err.message);
+        productionModule.error('Failed to save a secret key for %s: %s', this.prodLine._id, err.message);
 
         return this.done(reply, err);
       }
@@ -111,7 +111,7 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
           .lean()
           .exec(this.parallel());
 
-        var doneProdShiftOrder = this.parallel();
+        const doneProdShiftOrder = this.parallel();
 
         if (this.prodLine.prodShiftOrder)
         {
@@ -137,7 +137,7 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
     {
       if (err)
       {
-        productionModule.error("Failed to fetch prod data after unlock for %s: %s", this.prodLine._id, err.message);
+        productionModule.error('Failed to fetch prod data after unlock for %s: %s', this.prodLine._id, err.message);
 
         return this.done(reply, err);
       }
@@ -154,7 +154,7 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
 
       _.forEach(app.options.dictionaryModules, function(dictionaryName, moduleName)
       {
-        var models = app[moduleName].models;
+        const models = app[moduleName].models;
 
         res.dictionaries[dictionaryName] = _.invokeMap(
           models,

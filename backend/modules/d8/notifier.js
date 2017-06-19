@@ -100,11 +100,11 @@ module.exports = function setUpD8Notifier(app, module)
       {
         if (err)
         {
-          module.error("Failed to notify users about a new 8D entry [%d]: %s", entry.rid, err.message);
+          module.error('Failed to notify users about a new 8D entry [%d]: %s', entry.rid, err.message);
         }
         else if (this.mailOptions)
         {
-          module.info("Notified %d users about a new 8D entry: %d", this.mailOptions.to.length, entry.rid);
+          module.info('Notified %d users about a new 8D entry: %d', this.mailOptions.to.length, entry.rid);
         }
 
         this.mailOptions = null;
@@ -171,11 +171,11 @@ module.exports = function setUpD8Notifier(app, module)
       {
         if (err)
         {
-          module.error("Failed to notify users about a 8D entry change [%d]: %s", entry.rid, err.message);
+          module.error('Failed to notify users about a 8D entry change [%d]: %s', entry.rid, err.message);
         }
         else if (this.mailOptions)
         {
-          module.info("Notified %d users about a 8D entry change: %d", this.mailOptions.to.length, entry.rid);
+          module.info('Notified %d users about a 8D entry change: %d', this.mailOptions.to.length, entry.rid);
         }
 
         this.mailOptions = null;

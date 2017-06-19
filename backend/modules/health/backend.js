@@ -2,7 +2,7 @@
 
 'use strict';
 
-var os = require('os');
+const os = require('os');
 
 exports.DEFAULT_CONFIG = {
   modbusId: 'modbus'
@@ -10,8 +10,8 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startHealthBackendModule(app, module)
 {
-  var modbus;
-  var tagPrefix = 'health.' + app.options.id;
+  let modbus;
+  const tagPrefix = 'health.' + app.options.id;
 
   app.onModuleReady(module.config.modbusId, function()
   {

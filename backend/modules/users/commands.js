@@ -2,11 +2,11 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function setUpUsersCommands(app, usersModule)
 {
-  var sio = app[usersModule.config.sioId];
+  const sio = app[usersModule.config.sioId];
 
   sio.sockets.on('connection', function(socket)
   {
@@ -25,7 +25,7 @@ module.exports = function setUpUsersCommands(app, usersModule)
       return reply();
     }
 
-    var user = socket.handshake.user || {privileges: []};
+    const user = socket.handshake.user || {privileges: []};
 
     if (!user.super && user.privileges.indexOf('USERS:MANAGE') === -1)
     {

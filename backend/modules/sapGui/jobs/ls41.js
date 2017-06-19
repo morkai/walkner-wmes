@@ -2,11 +2,11 @@
 
 'use strict';
 
-var checkOutputFile = require('./checkOutputFile');
+const checkOutputFile = require('./checkOutputFile');
 
 module.exports = function runLs41Job(app, sapGuiModule, job, done)
 {
-  var args = [
+  const args = [
     '--output-file',
     Math.floor(Date.now() / 1000) + '@' + (job.outputFile || 'T_LS41.txt')
   ];

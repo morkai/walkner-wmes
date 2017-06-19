@@ -2,14 +2,14 @@
 
 'use strict';
 
-var later = require('later');
-var moment = require('moment');
+const later = require('later');
+const moment = require('moment');
 
 module.exports = function setUpDurationRecalculator(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
-  var KaizenOrder = mongoose.model('KaizenOrder');
-  var inProgress = false;
+  const mongoose = app[module.config.mongooseId];
+  const KaizenOrder = mongoose.model('KaizenOrder');
+  let inProgress = false;
 
   app.broker.subscribe('app.started', recalcDurations).setLimit(1);
 
@@ -24,19 +24,19 @@ module.exports = function setUpDurationRecalculator(app, module)
       return;
     }
 
-    var startedAt = Date.now();
-    var currentDate = moment().startOf('day').toDate();
+    const startedAt = Date.now();
+    const currentDate = moment().startOf('day').toDate();
 
-    module.debug("[durationRecalculator] Started...");
+    module.debug('[durationRecalculator] Started...');
 
     inProgress = true;
 
-    var conditions = {
+    const conditions = {
       status: {
         $in: ['new', 'accepted', 'todo', 'inProgress', 'paused']
       }
     };
-    var fields = {
+    const fields = {
       rid: 1,
       types: 1,
       status: 1,
@@ -53,13 +53,13 @@ module.exports = function setUpDurationRecalculator(app, module)
       delete conditions.status;
     }
 
-    var stream = KaizenOrder.find(conditions, fields).lean().cursor();
+    const stream = KaizenOrder.find(conditions, fields).lean().cursor();
 
     stream.on('error', function(err)
     {
       inProgress = false;
 
-      module.error("[durationRecalculator] Failed to recalc orders: %s", err.message);
+      module.error('[durationRecalculator] Failed to recalc orders: %s', err.message);
     });
 
     stream.on('data', function(doc)
@@ -71,16 +71,16 @@ module.exports = function setUpDurationRecalculator(app, module)
     {
       inProgress = false;
 
-      module.debug("[durationRecalculator] Done in %d ms.", Date.now() - startedAt);
+      module.debug('[durationRecalculator] Done in %d ms.', Date.now() - startedAt);
     });
   }
 
   function recalcNext(doc, currentDate)
   {
-    var newKaizenDuration = KaizenOrder.recalcKaizenDuration(doc, currentDate);
-    var newFinishDuration = KaizenOrder.recalcFinishDuration(doc, currentDate);
-    var changed = false;
-    var changes = {};
+    const newKaizenDuration = KaizenOrder.recalcKaizenDuration(doc, currentDate);
+    const newFinishDuration = KaizenOrder.recalcFinishDuration(doc, currentDate);
+    let changed = false;
+    const changes = {};
 
     if (newKaizenDuration !== doc.kaizenDuration)
     {
@@ -103,7 +103,7 @@ module.exports = function setUpDurationRecalculator(app, module)
     {
       if (err)
       {
-        module.error("[durationRecalculator] Failed to recalc [%s]: %s", doc.rid, err.message);
+        module.error('[durationRecalculator] Failed to recalc [%s]: %s', doc.rid, err.message);
       }
     });
   }

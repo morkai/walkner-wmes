@@ -2,30 +2,30 @@
 
 'use strict';
 
-var helpers = require('./helpers');
-var report2 = require('../report2');
+const helpers = require('./helpers');
+const report2 = require('../report2');
 
 module.exports = function report2Route(app, reportsModule, req, res, next)
 {
-  var orgUnitsModule = app[reportsModule.config.orgUnitsId];
-  var orgUnit = orgUnitsModule.getByTypeAndId(req.query.orgUnitType, req.query.orgUnitId);
+  const orgUnitsModule = app[reportsModule.config.orgUnitsId];
+  const orgUnit = orgUnitsModule.getByTypeAndId(req.query.orgUnitType, req.query.orgUnitId);
 
   if (orgUnit === null && (req.query.orgUnitType || req.query.orgUnitId))
   {
     return res.sendStatus(400);
   }
 
-  var division = orgUnit ? orgUnitsModule.getDivisionFor(orgUnit) : null;
+  const division = orgUnit ? orgUnitsModule.getDivisionFor(orgUnit) : null;
 
   if (orgUnit !== null && !division)
   {
     return res.sendStatus(400);
   }
 
-  var mrpControllers = orgUnitsModule.getAssemblyMrpControllersFor(req.query.orgUnitType, req.query.orgUnitId);
-  var subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;
+  const mrpControllers = orgUnitsModule.getAssemblyMrpControllersFor(req.query.orgUnitType, req.query.orgUnitId);
+  const subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;
 
-  var options = {
+  const options = {
     fromTime: helpers.getTime(req.query.from),
     toTime: helpers.getTime(req.query.to),
     interval: req.query.interval || 'day',

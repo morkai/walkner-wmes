@@ -2,22 +2,22 @@
 
 'use strict';
 
-var _ = require('lodash');
-var deepEqual = require('deep-equal');
-var step = require('h5.step');
-var logEntryHandlers = require('./logEntryHandlers');
+const _ = require('lodash');
+const deepEqual = require('deep-equal');
+const step = require('h5.step');
+const logEntryHandlers = require('./logEntryHandlers');
 
 module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 {
-  var MAX_ENTRIES_AT_ONCE = 25;
+  const MAX_ENTRIES_AT_ONCE = 25;
 
-  var mongoose = app[productionModule.config.mongooseId];
-  var ProdLine = mongoose.model('ProdLine');
-  var ProdLogEntry = mongoose.model('ProdLogEntry');
-  var prodLines = app[productionModule.config.prodLinesId];
+  const mongoose = app[productionModule.config.mongooseId];
+  const ProdLine = mongoose.model('ProdLine');
+  const ProdLogEntry = mongoose.model('ProdLogEntry');
+  const prodLines = app[productionModule.config.prodLinesId];
 
-  var handlingLogEntries = false;
-  var haveNewLogEntries = false;
+  let handlingLogEntries = false;
+  let haveNewLogEntries = false;
 
   productionModule.isHandlingLogEntries = function() { return handlingLogEntries; };
   productionModule.handleLogEntries = handleLogEntries;
@@ -48,64 +48,64 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
       .sort({prodLine: 1, createdAt: 1})
       .limit(MAX_ENTRIES_AT_ONCE + 1)
       .exec(function(err, logEntries)
-    {
-      if (err)
       {
-        handlingLogEntries = false;
-
-        productionModule.error("Failed to find log entries to handle: %s", err.stack);
-
-        return done(err);
-      }
-
-      if (logEntries.length > MAX_ENTRIES_AT_ONCE)
-      {
-        logEntries.pop();
-
-        haveNewLogEntries = true;
-      }
-
-      var groupedLogEntries = groupLogEntriesByProdLine(logEntries);
-
-      step(
-        function handleProdLineLogEntriesStep()
-        {
-          var step = this;
-
-          _.forEach(groupedLogEntries, function(logEntries, prodLineId)
-          {
-            var prodLine = prodLines.modelsById[prodLineId];
-
-            if (!prodLine)
-            {
-              prodLine = new ProdLine({_id: prodLineId});
-            }
-
-            handleProdLineLogEntries(prodLine, logEntries, step.parallel());
-          });
-        },
-        function finalizeLogEntryHandling(err)
+        if (err)
         {
           handlingLogEntries = false;
 
-          if (haveNewLogEntries)
-          {
-            setImmediate(handleLogEntries);
-          }
-          else
-          {
-            app.broker.publish('production.logEntries.handled', _.map(logEntries, '_id'));
-          }
+          productionModule.error('Failed to find log entries to handle: %s', err.stack);
 
-          done(err);
+          return done(err);
         }
-      );
-    });
+
+        if (logEntries.length > MAX_ENTRIES_AT_ONCE)
+        {
+          logEntries.pop();
+
+          haveNewLogEntries = true;
+        }
+
+        const groupedLogEntries = groupLogEntriesByProdLine(logEntries);
+
+        step(
+          function handleProdLineLogEntriesStep()
+          {
+            const step = this;
+
+            _.forEach(groupedLogEntries, function(logEntries, prodLineId)
+            {
+              let prodLine = prodLines.modelsById[prodLineId];
+
+              if (!prodLine)
+              {
+                prodLine = new ProdLine({_id: prodLineId});
+              }
+
+              handleProdLineLogEntries(prodLine, logEntries, step.parallel());
+            });
+          },
+          function finalizeLogEntryHandling(err)
+          {
+            handlingLogEntries = false;
+
+            if (haveNewLogEntries)
+            {
+              setImmediate(handleLogEntries);
+            }
+            else
+            {
+              app.broker.publish('production.logEntries.handled', _.map(logEntries, '_id'));
+            }
+
+            done(err);
+          }
+        );
+      });
   }
 
   function groupLogEntriesByProdLine(logEntries)
   {
-    var groupedLogEntries = {};
+    const groupedLogEntries = {};
 
     _.forEach(logEntries, function(logEntry)
     {
@@ -122,13 +122,13 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 
   function handleProdLineLogEntries(prodLine, logEntries, done)
   {
-    var oldProdData = productionModule.recreating || prodLine.isNew ? null : {
+    const oldProdData = productionModule.recreating || prodLine.isNew ? null : {
       prodShift: null,
       prodShiftOrder: null,
       prodDowntime: null
     };
-    var steps = [];
-    var handledLogEntries = [];
+    const steps = [];
+    const handledLogEntries = [];
 
     if (oldProdData !== null)
     {
@@ -173,16 +173,16 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
         return done(new Error('NO_ENTRIES_HANDLED'));
       }
 
-      var handledLogEntryIds = handledLogEntries.map(function(logEntry) { return logEntry._id; });
-      var cond = {_id: {$in: handledLogEntryIds}};
-      var update = {$set: {todo: false}};
+      const handledLogEntryIds = handledLogEntries.map(function(logEntry) { return logEntry._id; });
+      const cond = {_id: {$in: handledLogEntryIds}};
+      const update = {$set: {todo: false}};
 
       ProdLogEntry.update(cond, update, {multi: true}, function(err)
       {
         if (err)
         {
           productionModule.error(
-            "Failed to mark %d log entries for prod line [%s] as done: %s",
+            'Failed to mark %d log entries for prod line [%s] as done: %s',
             handledLogEntries.length,
             prodLine.get('_id'),
             err.stack
@@ -208,14 +208,14 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 
   function collectProdChanges(prodLine, logEntries, oldProdData, done)
   {
-    var types = {};
+    const types = {};
 
     _.forEach(logEntries, function(logEntry)
     {
       types[logEntry.type] = true;
     });
 
-    var changes = {
+    const changes = {
       prodLine: prodLine.get('_id'),
       types: Object.keys(types)
     };
@@ -265,7 +265,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 
   function applySingleChange(changes, logEntry)
   {
-    /*jshint -W015*/
+    /* jshint -W015*/
 
     if (changes.types.indexOf(logEntry.type) === -1)
     {
@@ -333,8 +333,8 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 
   function compareModels(oldModelData, newModelData)
   {
-    var changes = {};
-    var changed = false;
+    const changes = {};
+    let changed = false;
 
     _.forEach(Object.keys(newModelData), function(property)
     {

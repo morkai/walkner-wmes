@@ -2,9 +2,9 @@
 
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
-var step = require('h5.step');
+const _ = require('lodash');
+const moment = require('moment');
+const step = require('h5.step');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -14,16 +14,16 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startClipOrderCountModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("mongoose module is required!");
+    throw new Error('mongoose module is required!');
   }
 
-  var Order = mongoose.model('Order');
-  var MrpController = mongoose.model('MrpController');
-  var ClipOrderCount = mongoose.model('ClipOrderCount');
+  const Order = mongoose.model('Order');
+  const MrpController = mongoose.model('MrpController');
+  const ClipOrderCount = mongoose.model('ClipOrderCount');
 
   app.broker.subscribe('app.started', scheduleClipOrderCountCheck).setLimit(1);
 
@@ -45,15 +45,15 @@ exports.start = function startClipOrderCountModule(app, module)
 
   function scheduleClipOrderCountCheck()
   {
-    var now = new Date();
+    const now = new Date();
 
     if (now.getHours() > module.config.syncHour)
     {
       checkClipOrderCount();
     }
 
-    var nowTime = now.getTime();
-    var nextCheckMoment = moment(now)
+    const nowTime = now.getTime();
+    const nextCheckMoment = moment(now)
       .hours(module.config.syncHour + 1)
       .minutes(1)
       .seconds(0)
@@ -63,17 +63,17 @@ exports.start = function startClipOrderCountModule(app, module)
     setTimeout(scheduleClipOrderCountCheck, nextCheckMoment.diff(nowTime));
 
     module.debug(
-      "Scheduled the next CLIP order count check to be at [%s]",
+      'Scheduled the next CLIP order count check to be at [%s]',
       app.formatDateTime(nextCheckMoment.toDate())
     );
   }
 
   function checkClipOrderCount()
   {
-    var startDate = yesterday();
+    const startDate = yesterday();
 
     module.debug(
-      "Checking the CLIP order count for [%s]...", app.formatDate(startDate)
+      'Checking the CLIP order count for [%s]...', app.formatDate(startDate)
     );
 
     ClipOrderCount.count({date: startDate}, function(err, count)
@@ -81,7 +81,7 @@ exports.start = function startClipOrderCountModule(app, module)
       if (err)
       {
         return module.error(
-          "Failed to count ClipOrderCount for [%s]: %s", app.formatDate(startDate), err.message
+          'Failed to count ClipOrderCount for [%s]: %s', app.formatDate(startDate), err.message
         );
       }
 
@@ -99,7 +99,7 @@ exports.start = function startClipOrderCountModule(app, module)
       startDate = yesterday();
     }
 
-    module.debug("Preparing CLIP for [%s]...", app.formatDate(startDate));
+    module.debug('Preparing CLIP for [%s]...', app.formatDate(startDate));
 
     step(
       function()
@@ -116,17 +116,17 @@ exports.start = function startClipOrderCountModule(app, module)
       {
         if (err)
         {
-          return module.error("Failed to count all orders: %s", err.stack);
+          return module.error('Failed to count all orders: %s', err.stack);
         }
 
-        var replacedMrpMap = {};
+        const replacedMrpMap = {};
 
         _.forEach(mrpControllers, function(mrpController)
         {
           replacedMrpMap[mrpController._id] = mrpController.replacedBy;
         });
 
-        var mrpToCountMap = {};
+        const mrpToCountMap = {};
 
         _.forEach(results, function(result)
         {
@@ -157,13 +157,13 @@ exports.start = function startClipOrderCountModule(app, module)
       {
         if (err)
         {
-          return module.error("Failed to count orders by statuses: %s", err.stack);
+          return module.error('Failed to count orders by statuses: %s', err.stack);
         }
 
         _.forEach(results, function(result)
         {
-          var mrp = replacedMrpMap[result._id.mrp] || result._id.mrp;
-          var status = result._id.status.toLowerCase();
+          const mrp = replacedMrpMap[result._id.mrp] || result._id.mrp;
+          const status = result._id.status.toLowerCase();
 
           mrpToCountMap[mrp][status] = result.count;
         });
@@ -175,7 +175,7 @@ exports.start = function startClipOrderCountModule(app, module)
 
   function createClipOrderCounts(startDate, mrpToCountMap)
   {
-    var models = [];
+    const models = [];
 
     _.forEach(mrpToCountMap, function(count, mrp)
     {
@@ -194,14 +194,14 @@ exports.start = function startClipOrderCountModule(app, module)
       if (err)
       {
         return module.error(
-          "Failed to create %d ClipOrderCounts for [%s]: %s",
+          'Failed to create %d ClipOrderCounts for [%s]: %s',
           models.length,
           app.formatDate(startDate),
           err.stack
         );
       }
 
-      module.info("Created %d new ClipOrderCounts for [%s]", models.length, app.formatDate(startDate));
+      module.info('Created %d new ClipOrderCounts for [%s]', models.length, app.formatDate(startDate));
 
       app.broker.publish('clipOrderCount.created', {
         date: startDate,

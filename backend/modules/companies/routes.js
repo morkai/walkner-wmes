@@ -4,12 +4,12 @@
 
 module.exports = function setUpCompaniesRoutes(app, companiesModule, useDictionaryModel)
 {
-  var express = app[companiesModule.config.expressId];
-  var auth = app[companiesModule.config.userId].auth;
-  var Model = app[companiesModule.config.mongooseId].model('Company');
+  const express = app[companiesModule.config.expressId];
+  const auth = app[companiesModule.config.userId].auth;
+  const Model = app[companiesModule.config.mongooseId].model('Company');
 
-  var canView = auth('DICTIONARIES:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/companies', canView, express.crud.browseRoute.bind(null, app, Model));
 

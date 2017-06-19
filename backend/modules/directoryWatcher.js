@@ -2,8 +2,8 @@
 
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 exports.DEFAULT_CONFIG = {
   path: './',
@@ -13,11 +13,11 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startDirectoryWatcherModule(app, module)
 {
-  var FILE_NAME_RE = /^(?:([0-9]{10,})@)?(.*?)$/;
-  var timer = null;
-  var timerStartedAt = -1;
-  var readingDir = false;
-  var readDirAgain = false;
+  const FILE_NAME_RE = /^(?:([0-9]{10,})@)?(.*?)$/;
+  let timer = null;
+  let timerStartedAt = -1;
+  let readingDir = false;
+  let readDirAgain = false;
 
   app.broker.subscribe('app.started', onAppStart).setLimit(1);
 
@@ -35,7 +35,7 @@ exports.start = function startDirectoryWatcherModule(app, module)
     }
     catch (err)
     {
-      module.error("Failed to watch dir: %s", err.message);
+      module.error('Failed to watch dir: %s', err.message);
     }
   }
 
@@ -81,7 +81,7 @@ exports.start = function startDirectoryWatcherModule(app, module)
 
       if (err)
       {
-        module.error("Failed to read dir: %s", err.message);
+        module.error('Failed to read dir: %s', err.message);
       }
       else
       {
@@ -100,14 +100,14 @@ exports.start = function startDirectoryWatcherModule(app, module)
 
   function createFileInfo(fileName)
   {
-    var fileInfo = {
+    const fileInfo = {
       moduleId: module.name,
       timestamp: -1,
       fileName: fileName,
       filePath: path.resolve(module.config.path, fileName)
     };
 
-    var matches = fileName.match(FILE_NAME_RE);
+    const matches = fileName.match(FILE_NAME_RE);
 
     if (matches !== null)
     {

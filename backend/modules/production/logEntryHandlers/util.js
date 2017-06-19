@@ -2,13 +2,13 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var orderFinder = require('../orderFinder');
+const _ = require('lodash');
+const step = require('h5.step');
+const orderFinder = require('../orderFinder');
 
 exports.isOfflineEntry = function(logEntry)
 {
-  var orderData = logEntry.data.orderData;
+  const orderData = logEntry.data.orderData;
 
   return !orderData
     || !orderData.operations
@@ -47,7 +47,7 @@ exports.createRecalcShiftTimesStep = function(productionModule, logEntry)
       {
         if (err)
         {
-          productionModule.error("Failed to find prod shift to recalc [%s]: %s", logEntry.prodShift, err.message);
+          productionModule.error('Failed to find prod shift to recalc [%s]: %s', logEntry.prodShift, err.message);
         }
 
         if (prodShift)
@@ -59,7 +59,7 @@ exports.createRecalcShiftTimesStep = function(productionModule, logEntry)
       {
         if (err)
         {
-          productionModule.error("Failed to recalc prod shift [%s]: %s", logEntry.prodShift, err.message);
+          productionModule.error('Failed to recalc prod shift [%s]: %s', logEntry.prodShift, err.message);
         }
       },
       this.next()
@@ -69,16 +69,16 @@ exports.createRecalcShiftTimesStep = function(productionModule, logEntry)
 
 function fillMechOrderData(app, productionModule, logEntry, done)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var Order = mongoose.model('Order');
-  var MechOrder = mongoose.model('MechOrder');
+  const mongoose = app[productionModule.config.mongooseId];
+  const Order = mongoose.model('Order');
+  const MechOrder = mongoose.model('MechOrder');
 
   orderFinder.findOrdersByNc12(Order, MechOrder, logEntry.data.orderId, function(err, mechOrders)
   {
     if (err)
     {
       productionModule.error(
-        "Failed to find mech orders to fill order data (LOG=[%s]): %s",
+        'Failed to find mech orders to fill order data (LOG=[%s]): %s',
         logEntry._id,
         err.stack
       );
@@ -97,7 +97,7 @@ function fillMechOrderData(app, productionModule, logEntry, done)
       return done();
     }
 
-    var orderData = prepareOperations(mechOrders[0]);
+    const orderData = prepareOperations(mechOrders[0]);
 
     orderData.nc12 = orderData._id;
     orderData.no = null;
@@ -112,14 +112,14 @@ function fillMechOrderData(app, productionModule, logEntry, done)
 
 function fillProdOrderData(app, productionModule, logEntry, done)
 {
-  var Order = app[productionModule.config.mongooseId].model('Order');
+  const Order = app[productionModule.config.mongooseId].model('Order');
 
   orderFinder.findOrdersByNo(Order, logEntry.data.orderId, function(err, orders)
   {
     if (err)
     {
       productionModule.error(
-        "Failed to find prod orders to fill order data (LOG=[%s]): %s",
+        'Failed to find prod orders to fill order data (LOG=[%s]): %s',
         logEntry._id,
         err.stack
       );
@@ -138,7 +138,7 @@ function fillProdOrderData(app, productionModule, logEntry, done)
       return done();
     }
 
-    var orderData = prepareOperations(orders[0]);
+    const orderData = prepareOperations(orders[0]);
 
     orderData.no = orderData._id;
 
@@ -154,7 +154,7 @@ function prepareOperations(orderData)
 {
   if (Array.isArray(orderData.operations))
   {
-    var operations = {};
+    const operations = {};
 
     _.forEach(orderData.operations, function(operation)
     {

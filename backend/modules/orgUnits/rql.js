@@ -2,20 +2,20 @@
 
 'use strict';
 
-var rql = require('h5.rql');
+const rql = require('h5.rql');
 
 module.exports = function setUpOrgUnitsRql()
 {
   rql.specialTerms.orgUnit = function(query, name, args)
   {
-    var selectorName = query.selector.name;
+    const selectorName = query.selector.name;
 
     if (selectorName !== 'and' && selectorName !== 'or' && selectorName !== 'nor')
     {
       return;
     }
 
-    var orgUnitType = String(args.shift());
+    const orgUnitType = String(args.shift());
 
     if (args.length === 0)
     {

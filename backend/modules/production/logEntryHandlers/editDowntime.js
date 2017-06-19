@@ -2,14 +2,14 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var util = require('./util');
+const _ = require('lodash');
+const step = require('h5.step');
+const util = require('./util');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var changes = logEntry.data;
-  var prodDowntimeId = changes._id;
+  const changes = logEntry.data;
+  const prodDowntimeId = changes._id;
 
   function changeOrderIfNecessary(prodDowntime, done)
   {
@@ -26,7 +26,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to find old order [%s] while editing downtime [%s] (LOG=[%s]): %s",
+            'Failed to find old order [%s] while editing downtime [%s] (LOG=[%s]): %s',
             changes.prodShiftOrder,
             prodDowntimeId,
             logEntry._id,
@@ -39,7 +39,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (prodDowntime.prodShiftOrder && !oldProdShiftOrder)
         {
           productionModule.warn(
-            "Old order [%s] not found while editing downtime [%s] (LOG=[%s])",
+            'Old order [%s] not found while editing downtime [%s] (LOG=[%s])',
             changes.prodShiftOrder,
             prodDowntimeId,
             logEntry._id
@@ -59,7 +59,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to find all orders while editing downtime [%s] (LOG=[%s]): %s",
+            'Failed to find all orders while editing downtime [%s] (LOG=[%s]): %s',
             prodDowntimeId,
             logEntry._id,
             err.stack
@@ -70,12 +70,12 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
         allProdShiftOrders.sort(function(a, b) { return a.startedAt - b.startedAt; });
 
-        var now = new Date();
+        const now = new Date();
 
-        for (var i = 0, l = allProdShiftOrders.length; i < l; ++i)
+        for (let i = 0, l = allProdShiftOrders.length; i < l; ++i)
         {
-          var newProdShiftOrder = allProdShiftOrders[i];
-          var orderFinishedAt = newProdShiftOrder.finishedAt || now;
+          const newProdShiftOrder = allProdShiftOrders[i];
+          const orderFinishedAt = newProdShiftOrder.finishedAt || now;
 
           if (this.downtimeStartedAt >= newProdShiftOrder.startedAt && this.downtimeStartedAt <= orderFinishedAt)
           {
@@ -125,7 +125,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find downtime [%s] to edit (LOG=[%s]): %s",
+          'Failed to find downtime [%s] to edit (LOG=[%s]): %s',
           prodDowntimeId,
           logEntry._id,
           err.stack
@@ -134,7 +134,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return this.skip(err);
       }
 
-      var next = this.next();
+      const next = this.next();
 
       if (changes.startedAt || changes.finishedAt)
       {
@@ -150,7 +150,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find downtime [%s] to edit (LOG=[%s]): %s",
+          'Failed to find downtime [%s] to edit (LOG=[%s]): %s',
           prodDowntimeId,
           logEntry._id,
           err.stack
@@ -164,7 +164,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
       delete changes._id;
 
-      var newValues = _.pick(changes, [
+      const newValues = _.pick(changes, [
         'startedAt',
         'finishedAt',
         'master',
@@ -174,8 +174,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         'aor',
         'status'
       ]);
-      var changeData = {};
-      var comment = (changes.decisionComment || changes.reasonComment || '').trim();
+      const changeData = {};
+      const comment = (changes.decisionComment || changes.reasonComment || '').trim();
 
       _.forEach(newValues, function(newValue, property)
       {
@@ -201,7 +201,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to delete downtime [%s] (LOG=[%s]): %s",
+          'Failed to delete downtime [%s] (LOG=[%s]): %s',
           prodDowntimeId,
           logEntry._id,
           err.stack
@@ -225,7 +225,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to recalc order [%s/%s] durations after editing downtime [%s] (LOG=[%s]): %s",
+          'Failed to recalc order [%s/%s] durations after editing downtime [%s] (LOG=[%s]): %s',
           this.oldProdShiftOrder ? this.oldProdShiftOrder._id : '-',
           this.newProdShiftOrder ? this.newProdShiftOrder._id : '-',
           prodDowntimeId,

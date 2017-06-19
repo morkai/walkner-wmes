@@ -2,14 +2,14 @@
 
 'use strict';
 
-var path = require('path');
-var moment = require('moment');
-var step = require('h5.step');
-var deepEqual = require('deep-equal');
-var fs = require('fs-extra');
-var parseSapTextTable = require('../../sap/util/parseSapTextTable');
-var parseSapNumber = require('../../sap/util/parseSapNumber');
-var parseSapString = require('../../sap/util/parseSapString');
+const path = require('path');
+const moment = require('moment');
+const step = require('h5.step');
+const deepEqual = require('deep-equal');
+const fs = require('fs-extra');
+const parseSapTextTable = require('../../sap/util/parseSapTextTable');
+const parseSapNumber = require('../../sap/util/parseSapNumber');
+const parseSapString = require('../../sap/util/parseSapString');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -19,18 +19,18 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startOrderBomImporterModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("orders/importer/bom module requires the mongoose module!");
+    throw new Error('orders/importer/bom module requires the mongoose module!');
   }
 
-  var Order = mongoose.model('Order');
+  const Order = mongoose.model('Order');
 
-  var filePathCache = {};
-  var locked = false;
-  var queue = [];
+  const filePathCache = {};
+  let locked = false;
+  const queue = [];
 
   app.broker.subscribe('directoryWatcher.changed', queueFile).setFilter(filterFile);
 
@@ -57,7 +57,7 @@ exports.start = function startOrderBomImporterModule(app, module)
 
     queue.push(fileInfo);
 
-    module.debug("[%s] Queued...", fileInfo.timeKey);
+    module.debug('[%s] Queued...', fileInfo.timeKey);
 
     setImmediate(importNext);
   }
@@ -69,7 +69,7 @@ exports.start = function startOrderBomImporterModule(app, module)
       return;
     }
 
-    var fileInfo = queue.shift();
+    const fileInfo = queue.shift();
 
     if (!fileInfo)
     {
@@ -78,9 +78,9 @@ exports.start = function startOrderBomImporterModule(app, module)
 
     locked = true;
 
-    var startTime = Date.now();
+    const startTime = Date.now();
 
-    module.debug("[%s] Importing...", fileInfo.timeKey);
+    module.debug('[%s] Importing...', fileInfo.timeKey);
 
     importFile(fileInfo, function(err, count)
     {
@@ -88,7 +88,7 @@ exports.start = function startOrderBomImporterModule(app, module)
 
       if (err)
       {
-        module.error("[%s] Failed to import: %s", fileInfo.timeKey, err.message);
+        module.error('[%s] Failed to import: %s', fileInfo.timeKey, err.message);
 
         app.broker.publish('orders.bom.syncFailed', {
           timestamp: fileInfo.timestamp,
@@ -97,7 +97,7 @@ exports.start = function startOrderBomImporterModule(app, module)
       }
       else
       {
-        module.debug("[%s] Imported %d in %d ms", fileInfo.timeKey, count, Date.now() - startTime);
+        module.debug('[%s] Imported %d in %d ms', fileInfo.timeKey, count, Date.now() - startTime);
 
         app.broker.publish('orders.bom.synced', {
           timestamp: fileInfo.timestamp,
@@ -125,20 +125,20 @@ exports.start = function startOrderBomImporterModule(app, module)
           return this.skip(err);
         }
 
-        module.debug("[%s] Parsing ~%d bytes...", fileInfo.timeKey, fileContents.length);
+        module.debug('[%s] Parsing ~%d bytes...', fileInfo.timeKey, fileContents.length);
 
-        var bom = {};
-        var t = Date.now();
+        const bom = {};
+        const t = Date.now();
 
         this.count = parseOrderBomTable(fileContents, bom);
 
-        module.debug("[%s] Parsed %d items in %d ms!", fileInfo.timeKey, this.count, Date.now() - t);
+        module.debug('[%s] Parsed %d items in %d ms!', fileInfo.timeKey, this.count, Date.now() - t);
 
         setImmediate(this.next(), bom);
       },
       function updateOrdersStep(bom)
       {
-        module.debug("[%s] Updating orders...", fileInfo.timeKey);
+        module.debug('[%s] Updating orders...', fileInfo.timeKey);
 
         updateNextOrder(fileInfo, new Date(), Object.keys(bom), bom, this.next());
       },
@@ -151,9 +151,9 @@ exports.start = function startOrderBomImporterModule(app, module)
 
   function updateNextOrder(fileInfo, t, orderNos, bom, done)
   {
-    var orderNo = orderNos.shift();
-    var newBom = bom[orderNo];
-    var oldBom = null;
+    const orderNo = orderNos.shift();
+    const newBom = bom[orderNo];
+    let oldBom = null;
 
     delete bom[orderNo];
 
@@ -185,14 +185,14 @@ exports.start = function startOrderBomImporterModule(app, module)
       },
       function updateOrderStep()
       {
-        var changes = {
+        const changes = {
           time: t,
           user: null,
           oldValues: {bom: oldBom},
           newValues: {bom: newBom},
           comment: ''
         };
-        var $set = {
+        const $set = {
           bom: newBom,
           updatedAt: t
         };
@@ -203,7 +203,7 @@ exports.start = function startOrderBomImporterModule(app, module)
       {
         if (err)
         {
-          module.error("[%s] Failed update BOM of order [%s]: %s", fileInfo.timeKey, orderNo, err.message);
+          module.error('[%s] Failed update BOM of order [%s]: %s', fileInfo.timeKey, orderNo, err.message);
         }
 
         if (orderNos.length)
@@ -234,14 +234,14 @@ exports.start = function startOrderBomImporterModule(app, module)
 
   function moveFileInfoFile(oldFilePath)
   {
-    var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
+    const newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
     fs.move(oldFilePath, newFilePath, {overwrite: true}, function(err)
     {
       if (err)
       {
         module.error(
-          "Failed to rename file [%s] to [%s]: %s", oldFilePath, newFilePath, err.message
+          'Failed to rename file [%s] to [%s]: %s', oldFilePath, newFilePath, err.message
         );
       }
     });
@@ -253,7 +253,7 @@ exports.start = function startOrderBomImporterModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to delete file [%s]: %s", filePath, err.message);
+        module.error('Failed to delete file [%s]: %s', filePath, err.message);
       }
     });
   }
@@ -265,7 +265,7 @@ exports.start = function startOrderBomImporterModule(app, module)
 
   function parseOrderBomTable(input, bom)
   {
-    var count = 0;
+    let count = 0;
 
     parseSapTextTable(input, {
       columnMatchers: {

@@ -4,5 +4,5 @@
 
 module.exports = function setUpFactoryLayoutCommands(app, factoryLayoutModule)
 {
-  /*jshint unused:false*/
+  /* jshint unused:false*/
 };

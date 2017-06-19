@@ -2,21 +2,21 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function cancelPrintRoute(app, poModule, req, res, next)
 {
-  var express = app[poModule.config.expressId];
-  var userModule = app[poModule.config.userId];
-  var mongoose = app[poModule.config.mongooseId];
-  var PurchaseOrder = mongoose.model('PurchaseOrder');
-  var PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
+  const express = app[poModule.config.expressId];
+  const userModule = app[poModule.config.userId];
+  const mongoose = app[poModule.config.mongooseId];
+  const PurchaseOrder = mongoose.model('PurchaseOrder');
+  const PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
 
   step(
     function findPoPrintsStep()
     {
-      var conditions = {};
+      const conditions = {};
 
       conditions[req.params.printId.length === 32 ? 'key' : '_id'] = req.params.printId;
 
@@ -47,9 +47,9 @@ module.exports = function cancelPrintRoute(app, poModule, req, res, next)
 
       this.po = po;
 
-      var cancelled = !!req.body.cancelled;
-      var cancelledBy = userModule.createUserInfo(req.session.user, req);
-      var cancelledAt = new Date();
+      const cancelled = !!req.body.cancelled;
+      const cancelledBy = userModule.createUserInfo(req.session.user, req);
+      const cancelledAt = new Date();
 
       _.forEach(this.poPrints, poPrint =>
       {
@@ -82,8 +82,8 @@ module.exports = function cancelPrintRoute(app, poModule, req, res, next)
     },
     function publishMessageStep(err)
     {
-      var po = this.po;
-      var poPrints = this.poPrints;
+      const po = this.po;
+      const poPrints = this.poPrints;
 
       this.po = null;
       this.poPrints = null;
@@ -93,12 +93,12 @@ module.exports = function cancelPrintRoute(app, poModule, req, res, next)
         return this.done(next, err);
       }
 
-      var itemMap = {};
+      const itemMap = {};
 
       _.forEach(po.items, function(item) { itemMap[item._id] = item.printedQty; });
 
-      var changedItems = [];
-      var changedPrints = [];
+      const changedItems = [];
+      const changedPrints = [];
 
       _.forEach(poPrints, function(poPrint)
       {

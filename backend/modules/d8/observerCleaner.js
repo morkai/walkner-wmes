@@ -60,7 +60,7 @@ module.exports = function setUpObserverCleaner(app, module)
       {
         if (err)
         {
-          module.error("Failed to clean observers: %s", err.message);
+          module.error('Failed to clean observers: %s', err.message);
         }
       }
     );

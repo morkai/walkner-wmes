@@ -9,12 +9,12 @@ module.exports = function setUpPscsRoutes(app, pscsModule)
 {
   const express = app[pscsModule.config.expressId];
   const userModule = app[pscsModule.config.userId];
-  var mongoose = app[pscsModule.config.mongooseId];
-  var User = mongoose.model('User');
-  var PscsResult = mongoose.model('PscsResult');
+  const mongoose = app[pscsModule.config.mongooseId];
+  const User = mongoose.model('User');
+  const PscsResult = mongoose.model('PscsResult');
 
-  var canView = userModule.auth('PSCS:VIEW');
-  var canManage = userModule.auth('PSCS:MANAGE');
+  const canView = userModule.auth('PSCS:VIEW');
+  const canManage = userModule.auth('PSCS:MANAGE');
 
   express.get('/pscs', (req, res) => res.redirect('/#pscs'));
 
@@ -125,7 +125,7 @@ module.exports = function setUpPscsRoutes(app, pscsModule)
       'startedAt': app.formatDateTime(doc.startedAt),
       'finishedAt': doc.finishedAt ? app.formatDateTime(doc.finishedAt) : '',
       '#duration': Math.round(doc.duration / 1000),
-      '"creator': exportUserInfo(doc.creator),
+      '"creator': exportUserInfo(doc.creator)
     };
 
     doc.answers.forEach((answer, i) => obj['a' + (i + 1)] = answer);

@@ -2,18 +2,18 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function addProdDowntime(app, pdModule, user, userInfo, data, done)
 {
-  var mongoose = app[pdModule.config.mongooseId];
-  var orgUnitsModule = app[pdModule.config.orgUnitsId];
-  var productionModule = app[pdModule.config.productionId];
-  var ProdLogEntry = mongoose.model('ProdLogEntry');
-  var ProdChangeRequest = mongoose.model('ProdChangeRequest');
+  const mongoose = app[pdModule.config.mongooseId];
+  const orgUnitsModule = app[pdModule.config.orgUnitsId];
+  const productionModule = app[pdModule.config.productionId];
+  const ProdLogEntry = mongoose.model('ProdLogEntry');
+  const ProdChangeRequest = mongoose.model('ProdChangeRequest');
 
-  var isChangeRequest = !user.super && !_.includes(user.privileges, 'PROD_DATA:CHANGES:MANAGE');
+  const isChangeRequest = !user.super && !_.includes(user.privileges, 'PROD_DATA:CHANGES:MANAGE');
 
   step(
     function getProdDataStep()
@@ -59,14 +59,14 @@ module.exports = function addProdDowntime(app, pdModule, user, userInfo, data, d
         data[property] = prodShift[property];
       });
 
-      var logEntry = ProdLogEntry.addDowntime(prodShiftOrder, userInfo, data);
+      const logEntry = ProdLogEntry.addDowntime(prodShiftOrder, userInfo, data);
 
       if (!logEntry)
       {
         return this.skip(new Error('INPUT'), 400);
       }
 
-      var next = this.next();
+      const next = this.next();
 
       pdModule.validateOverlappingDowntimes({_id: null, prodShift: logEntry.prodShift}, logEntry.data, function(err)
       {
@@ -92,7 +92,7 @@ module.exports = function addProdDowntime(app, pdModule, user, userInfo, data, d
         return this.skip(err);
       }
 
-      var next = this.next();
+      const next = this.next();
 
       if (isChangeRequest)
       {

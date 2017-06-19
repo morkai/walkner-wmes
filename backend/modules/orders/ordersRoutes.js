@@ -2,25 +2,25 @@
 
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var _ = require('lodash');
-var step = require('h5.step');
-var ObjectId = require('mongoose').Types.ObjectId;
-var renderHtmlOrderRoute = require('./routes/renderHtmlOrder');
+const fs = require('fs');
+const path = require('path');
+const _ = require('lodash');
+const step = require('h5.step');
+const ObjectId = require('mongoose').Types.ObjectId;
+const renderHtmlOrderRoute = require('./routes/renderHtmlOrder');
 
 module.exports = function setUpOrdersRoutes(app, ordersModule)
 {
-  var express = app[ordersModule.config.expressId];
-  var userModule = app[ordersModule.config.userId];
-  var settings = app[ordersModule.config.settingsId];
-  var mongoose = app[ordersModule.config.mongooseId];
-  var Order = mongoose.model('Order');
-  var OrderZlf1 = mongoose.model('OrderZlf1');
+  const express = app[ordersModule.config.expressId];
+  const userModule = app[ordersModule.config.userId];
+  const settings = app[ordersModule.config.settingsId];
+  const mongoose = app[ordersModule.config.mongooseId];
+  const Order = mongoose.model('Order');
+  const OrderZlf1 = mongoose.model('OrderZlf1');
 
-  var canView = userModule.auth('ORDERS:VIEW');
-  var canPrint = userModule.auth('LOCAL', 'ORDERS:VIEW');
-  var canManage = userModule.auth('ORDERS:MANAGE');
+  const canView = userModule.auth('ORDERS:VIEW');
+  const canPrint = userModule.auth('LOCAL', 'ORDERS:VIEW');
+  const canManage = userModule.auth('ORDERS:MANAGE');
 
   express.post('/orders;import', importOrdersRoute);
 
@@ -55,7 +55,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
   function editOrderRoute(req, res, next)
   {
-    var data = _.pick(req.body, ['delayReason', 'comment']);
+    const data = _.pick(req.body, ['delayReason', 'comment']);
 
     if (_.isEmpty(data.delayReason))
     {
@@ -93,22 +93,22 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
           return this.skip(express.createHttpError('NOT_FOUND', 404));
         }
 
-        var oldDelayReason = order.delayReason ? order.delayReason.toString() : '';
-        var newDelayReason = data.delayReason;
+        let oldDelayReason = order.delayReason ? order.delayReason.toString() : '';
+        let newDelayReason = data.delayReason;
 
         if (oldDelayReason === newDelayReason && !data.comment.length)
         {
           return this.skip(express.createHttpError('INPUT', 400));
         }
 
-        var change = {
+        const change = {
           time: new Date(),
           user: userModule.createUserInfo(req.session.user, req),
           oldValues: {},
           newValues: {},
           comment: data.comment
         };
-        var update = {
+        const update = {
           $push: {changes: change}
         };
 
@@ -158,15 +158,15 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
       return res.status(400).send('INVALID_CONTENT_TYPE');
     }
 
-    var fileName = req.query.fileName;
-    var timestamp = parseInt(req.query.timestamp, 10);
+    const fileName = req.query.fileName;
+    const timestamp = parseInt(req.query.timestamp, 10);
 
     if (_.isEmpty(fileName) || !/\.txt$/.test(fileName) || isNaN(timestamp) || req.body.length < 256)
     {
       return res.status(400).send('INPUT');
     }
 
-    var importFile = timestamp + '@' + fileName;
+    const importFile = timestamp + '@' + fileName;
 
     fs.writeFile(path.join(ordersModule.config.importPath, importFile), req.body, function(err)
     {

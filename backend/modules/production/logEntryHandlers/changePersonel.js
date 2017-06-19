@@ -2,21 +2,21 @@
 
 'use strict';
 
-var step = require('h5.step');
+const step = require('h5.step');
 
 module.exports = function(personnelProperty)
 {
   return function(app, productionModule, prodLine, logEntry, done)
   {
-    var subdivisionsModule = app[productionModule.config.subdivisionsId];
-    var User = app[productionModule.config.mongooseId].model('User');
+    const subdivisionsModule = app[productionModule.config.subdivisionsId];
+    const User = app[productionModule.config.mongooseId].model('User');
 
     productionModule.getProdData('shift', logEntry.prodShift, function(err, prodShift)
     {
       if (err)
       {
         productionModule.error(
-          "Failed to get prod shift [%s] to change the %s (LOG=[%s]): %s",
+          'Failed to get prod shift [%s] to change the %s (LOG=[%s]): %s',
           logEntry.prodShift,
           personnelProperty,
           logEntry._id,
@@ -50,7 +50,7 @@ module.exports = function(personnelProperty)
 
     function fillUserData(prodShift)
     {
-      var personellId = logEntry.data.label;
+      const personellId = logEntry.data.label;
 
       if (typeof personellId !== 'string' || personellId.length === 0)
       {
@@ -67,7 +67,7 @@ module.exports = function(personnelProperty)
           if (err)
           {
             productionModule.error(
-              "Failed to find user [%s] to fill the %s info (LOG=[%s]): %s",
+              'Failed to find user [%s] to fill the %s info (LOG=[%s]): %s',
               personellId,
               personnelProperty,
               logEntry._id,
@@ -125,8 +125,8 @@ module.exports = function(personnelProperty)
         },
         function(err, prodShiftOrder, prodDowntime)
         {
-          var subdivision = subdivisionsModule.modelsById[prodShift.subdivision];
-          var assembly = subdivision && subdivision.type === 'assembly';
+          const subdivision = subdivisionsModule.modelsById[prodShift.subdivision];
+          const assembly = subdivision && subdivision.type === 'assembly';
 
           if (prodShiftOrder)
           {
@@ -151,7 +151,7 @@ module.exports = function(personnelProperty)
           if (err)
           {
             productionModule.error(
-              "Failed to save prod data after changing the %s (LOG=[%s]): %s",
+              'Failed to save prod data after changing the %s (LOG=[%s]): %s',
               personnelProperty,
               logEntry._id,
               err.stack

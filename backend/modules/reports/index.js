@@ -2,8 +2,8 @@
 
 'use strict';
 
-var setUpRoutes = require('./routes');
-var helpers = require('./routes/helpers');
+const setUpRoutes = require('./routes');
+const helpers = require('./routes/helpers');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -23,7 +23,7 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startReportsModule(app, module)
 {
-  var totalCountCache = {};
+  let totalCountCache = {};
 
   module.helpers = helpers;
   module.prodNumConstant = 8;
@@ -55,12 +55,12 @@ exports.start = function startReportsModule(app, module)
     {
       if (err)
       {
-        return module.error("Failed to find the prodNumConstant setting: %s", err.message);
+        return module.error('Failed to find the prodNumConstant setting: %s', err.message);
       }
 
       if (setting)
       {
-        var value = parseFloat(setting.value);
+        const value = parseFloat(setting.value);
 
         if (!isNaN(value) && value > 0)
         {

@@ -2,14 +2,14 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function(mongoose, options, done)
 {
-  var OpinionSurveyResponse = mongoose.model('OpinionSurveyResponse');
+  const OpinionSurveyResponse = mongoose.model('OpinionSurveyResponse');
 
-  var results = {
+  const results = {
     options: options,
     superiorToSurvey: {},
     usedSurveys: {},
@@ -28,7 +28,7 @@ module.exports = function(mongoose, options, done)
   step(
     function handleResponsesStep()
     {
-      var conditions = {};
+      const conditions = {};
 
       if (!_.isEmpty(options.surveys))
       {
@@ -50,8 +50,8 @@ module.exports = function(mongoose, options, done)
         conditions.employer = {$in: options.employers};
       }
 
-      var stream = OpinionSurveyResponse.find(conditions).sort({createdAt: 1}).lean().cursor();
-      var next = _.once(this.next());
+      const stream = OpinionSurveyResponse.find(conditions).sort({createdAt: 1}).lean().cursor();
+      const next = _.once(this.next());
 
       stream.on('error', next);
       stream.on('end', next);
@@ -64,7 +64,7 @@ module.exports = function(mongoose, options, done)
         return this.skip(err);
       }
 
-      var sortedDivisions = Object.keys(results.usedDivisions).sort(sortDivisions);
+      const sortedDivisions = Object.keys(results.usedDivisions).sort(sortDivisions);
 
       results.usedDivisions = {};
 
@@ -103,7 +103,7 @@ module.exports = function(mongoose, options, done)
 
   function countResponseTotal(res)
   {
-    var responseCount = results.responseCountTotal;
+    const responseCount = results.responseCountTotal;
 
     if (!responseCount[res.division])
     {
@@ -120,7 +120,7 @@ module.exports = function(mongoose, options, done)
 
   function countResponseBySurvey(res)
   {
-    var responseCount = results.responseCountBySurvey[res.survey];
+    let responseCount = results.responseCountBySurvey[res.survey];
 
     if (!responseCount)
     {
@@ -142,7 +142,7 @@ module.exports = function(mongoose, options, done)
 
   function countResponseBySuperior(res)
   {
-    var responseCount = results.responseCountBySuperior;
+    const responseCount = results.responseCountBySuperior;
 
     if (!responseCount[res.superior])
     {
@@ -163,7 +163,7 @@ module.exports = function(mongoose, options, done)
   {
     _.forEach(res.answers, function(a)
     {
-      var answer = a.answer === 'null' ? 'na' : a.answer;
+      const answer = a.answer === 'null' ? 'na' : a.answer;
 
       countAnswerTotal(a.question, answer);
       countAnswerBySurvey(res.survey, a.question, answer);
@@ -175,7 +175,7 @@ module.exports = function(mongoose, options, done)
 
   function countAnswerTotal(question, answer)
   {
-    var answerCount = results.answerCountTotal;
+    const answerCount = results.answerCountTotal;
 
     if (!answerCount[question])
     {
@@ -193,7 +193,7 @@ module.exports = function(mongoose, options, done)
 
   function countAnswerBySurvey(survey, question, answer)
   {
-    var answerCount = results.answerCountBySurvey;
+    const answerCount = results.answerCountBySurvey;
 
     if (!answerCount[survey])
     {
@@ -219,7 +219,7 @@ module.exports = function(mongoose, options, done)
 
   function countAnswerBySuperior(superior, question, answer)
   {
-    var answerCount = results.answerCountBySuperior;
+    const answerCount = results.answerCountBySuperior;
 
     if (!answerCount[superior])
     {
@@ -243,9 +243,9 @@ module.exports = function(mongoose, options, done)
     answerCount[superior][question][answer] += 1;
   }
 
-  function countPositiveAnswerBySurvey(survey,  employer, answer)
+  function countPositiveAnswerBySurvey(survey, employer, answer)
   {
-    var answerCount = results.positiveAnswerCountBySurvey;
+    const answerCount = results.positiveAnswerCountBySurvey;
 
     if (!answerCount[survey])
     {
@@ -265,7 +265,7 @@ module.exports = function(mongoose, options, done)
 
   function countPositiveAnswerByDivision(division, employer, answer)
   {
-    var answerCount = results.positiveAnswerCountByDivision;
+    const answerCount = results.positiveAnswerCountByDivision;
 
     if (!answerCount[division])
     {
@@ -290,8 +290,8 @@ module.exports = function(mongoose, options, done)
       return 0;
     }
 
-    var aMatches = a.match(/([a-z])$/);
-    var bMatches = b.match(/([a-z])$/);
+    const aMatches = a.match(/([a-z])$/);
+    const bMatches = b.match(/([a-z])$/);
 
     if (aMatches && !bMatches)
     {

@@ -42,12 +42,12 @@ module.exports = function setUpTwilioRoutes(app, twilioModule)
     {
       if (err)
       {
-        twilioModule.error("Failed to [%s]: %s\n%s", body.operation, err.message, JSON.stringify(body.options));
+        twilioModule.error('Failed to [%s]: %s\n%s', body.operation, err.message, JSON.stringify(body.options));
 
         return next(err);
       }
 
-      twilioModule.debug("Executed operation [%s]: %s", body.operation, JSON.stringify(body.options));
+      twilioModule.debug('Executed operation [%s]: %s', body.operation, JSON.stringify(body.options));
 
       res.sendStatus(204);
     });
@@ -81,7 +81,7 @@ module.exports = function setUpTwilioRoutes(app, twilioModule)
         if (err)
         {
           twilioModule.error(
-            "Failed to update a status of request [%s] to [requested]: %s", twilioRequest._id, err.message
+            'Failed to update a status of request [%s] to [requested]: %s', twilioRequest._id, err.message
           );
         }
       });
@@ -99,13 +99,13 @@ module.exports = function setUpTwilioRoutes(app, twilioModule)
         if (err)
         {
           twilioModule.error(
-            "Failed to update a status of request [%s] to [%s]: %s", req.params.id, req.body.CallStatus, err.message
+            'Failed to update a status of request [%s] to [%s]: %s', req.params.id, req.body.CallStatus, err.message
           );
         }
       });
     }
 
-    var twilioResponse = new TwilioResponse({
+    const twilioResponse = new TwilioResponse({
       request: req.params.id,
       createdAt: new Date(),
       payload: req.body
@@ -115,7 +115,7 @@ module.exports = function setUpTwilioRoutes(app, twilioModule)
     {
       if (err)
       {
-        twilioModule.error("Failed to save a response to request [%s]: %s", req.params.id, err.message);
+        twilioModule.error('Failed to save a response to request [%s]: %s', req.params.id, err.message);
       }
     });
   });

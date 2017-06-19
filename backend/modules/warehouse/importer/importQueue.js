@@ -8,11 +8,11 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startWarehouseImportQueueModule(app, module)
 {
-  /*jshint unused:false*/
+  /* jshint unused:false*/
 
-  var queue = [];
-  var working = false;
-  var nextTimer = null;
+  const queue = [];
+  let working = false;
+  let nextTimer = null;
 
   app.broker.subscribe('warehouse.importQueue.push', function(message)
   {
@@ -54,8 +54,8 @@ exports.start = function startWarehouseImportQueueModule(app, module)
     nextTimer = null;
     working = true;
 
-    var item = queue.shift();
-    var itemBroker = app.broker.sandbox();
+    const item = queue.shift();
+    const itemBroker = app.broker.sandbox();
 
     itemBroker.subscribe('warehouse.' + item.type + '.synced', done.bind(null, itemBroker));
     itemBroker.subscribe('warehouse.' + item.type + '.syncFailed', done.bind(null, itemBroker));

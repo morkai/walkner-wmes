@@ -2,35 +2,35 @@
 
 'use strict';
 
-var _ = require('lodash');
-var helpers = require('./helpers');
-var report1 = require('../report1');
+const _ = require('lodash');
+const helpers = require('./helpers');
+const report1 = require('../report1');
 
 module.exports = function report1Route(app, reportsModule, req, res, next)
 {
-  var orgUnitsModule = app[reportsModule.config.orgUnitsId];
-  var query = req.query;
-  var orgUnit = orgUnitsModule.getByTypeAndId(query.orgUnitType, query.orgUnitId);
+  const orgUnitsModule = app[reportsModule.config.orgUnitsId];
+  const query = req.query;
+  const orgUnit = orgUnitsModule.getByTypeAndId(query.orgUnitType, query.orgUnitId);
 
   if (orgUnit === null && (query.orgUnitType || query.orgUnitId))
   {
     return res.sendStatus(400);
   }
 
-  var division = orgUnit ? orgUnitsModule.getDivisionFor(orgUnit) : null;
+  const division = orgUnit ? orgUnitsModule.getDivisionFor(orgUnit) : null;
 
   if (orgUnit !== null && !division)
   {
     return res.sendStatus(400);
   }
 
-  var subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;
-  var subdivisionType = query.subdivisionType;
+  let subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;
+  let subdivisionType = query.subdivisionType;
 
   if (subdivisionType === 'prod' || subdivisionType === 'press')
   {
     subdivisions = filterSubdivisionByType(
-      orgUnitsModule, subdivisions, subdivisionType === 'press' ? 'press': 'assembly'
+      orgUnitsModule, subdivisions, subdivisionType === 'press' ? 'press' : 'assembly'
     );
   }
   else
@@ -38,14 +38,14 @@ module.exports = function report1Route(app, reportsModule, req, res, next)
     subdivisionType = null;
   }
 
-  var subdivisionTypes = {};
+  const subdivisionTypes = {};
 
   _.forEach(orgUnitsModule.getAllByType('subdivision'), function(subdivision)
   {
     subdivisionTypes[subdivision._id] = subdivision.type;
   });
 
-  var options = {
+  const options = {
     fromTime: helpers.getTime(query.from),
     toTime: helpers.getTime(query.to),
     interval: helpers.getInterval(query.interval, 'hour'),
@@ -97,7 +97,7 @@ function filterSubdivisionByType(orgUnitsModule, subdivisions, subdivisionType)
 
 function getDowntimeReasons(allDowntimeReasons)
 {
-  var downtimeReasons = {
+  const downtimeReasons = {
     breaks: {},
     schedule: {}
   };

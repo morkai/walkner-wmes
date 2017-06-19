@@ -2,16 +2,16 @@
 
 'use strict';
 
-var moment = require('moment');
-var _ = require('lodash');
-var canManage = require('./canManage');
+const moment = require('moment');
+const _ = require('lodash');
+const canManage = require('./canManage');
 
 module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 {
-  var mongoose = app[hourlyPlansModule.config.mongooseId];
-  var userModule = app[hourlyPlansModule.config.userId];
-  var divisionsModule = app[hourlyPlansModule.config.divisionsId];
-  var HourlyPlan = mongoose.model('HourlyPlan');
+  const mongoose = app[hourlyPlansModule.config.mongooseId];
+  const userModule = app[hourlyPlansModule.config.userId];
+  const divisionsModule = app[hourlyPlansModule.config.divisionsId];
+  const HourlyPlan = mongoose.model('HourlyPlan');
 
   app[hourlyPlansModule.config.sioId].sockets.on('connection', function(socket)
   {
@@ -28,7 +28,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       reply = function() {};
     }
 
-    var user = socket.handshake.user;
+    const user = socket.handshake.user;
 
     if (!canManage(user))
     {
@@ -40,7 +40,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       return reply(new Error('INPUT'));
     }
 
-    var shiftMoment = moment(data.date);
+    const shiftMoment = moment(data.date);
 
     if (!shiftMoment.isValid()
       || !_.isString(data.division)
@@ -72,7 +72,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       shiftMoment.hours(6);
     }
 
-    var condition = {
+    const condition = {
       division: data.division,
       date: shiftMoment.toDate(),
       shift: data.shift
@@ -90,7 +90,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
         return reply(canManage(user, hourlyPlan) ? null : new Error('AUTH'), hourlyPlan._id.toString());
       }
 
-      var creator = userModule.createUserInfo(user, socket);
+      const creator = userModule.createUserInfo(user, socket);
 
       HourlyPlan.createForShift(condition, creator, function(err, hourlyPlan)
       {
@@ -127,7 +127,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       return reply(new Error('INPUT'));
     }
 
-    var user = socket.handshake.user;
+    const user = socket.handshake.user;
 
     HourlyPlan.findById(data._id, {createdAt: 1}).lean().exec(function(err, hourlyPlan)
     {
@@ -146,11 +146,11 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
         return reply(new Error('AUTH'));
       }
 
-      var update = {$set: {
+      const update = {$set: {
         updatedAt: new Date(),
         updater: userModule.createUserInfo(user, socket)
       }};
-      var field = 'flows.' + data.flowIndex;
+      let field = 'flows.' + data.flowIndex;
 
       if (_.isNumber(data.hourIndex))
       {
@@ -192,7 +192,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       return reply(new Error('INPUT'));
     }
 
-    var user = socket.handshake.user;
+    const user = socket.handshake.user;
 
     if (!canManage(user))
     {
@@ -216,7 +216,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
         return reply(new Error('AUTH'));
       }
 
-      var update = {$set: {
+      const update = {$set: {
         updatedAt: new Date(),
         updater: userModule.createUserInfo(user, socket)
       }};
@@ -262,7 +262,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       return reply(new Error('INPUT'));
     }
 
-    var user = socket.handshake.user;
+    const user = socket.handshake.user;
 
     if (!canManage(user))
     {
@@ -286,16 +286,16 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
         return reply(new Error('AUTH'));
       }
 
-      var update = {$set: {
+      const update = {$set: {
         updatedAt: new Date(),
         updater: userModule.createUserInfo(user, socket)
       }};
 
-      var newValues = new Array(24);
+      const newValues = new Array(24);
 
-      for (var i = 0; i < 24; ++i)
+      for (let i = 0; i < 24; ++i)
       {
-        var newValue = data.newValues[i];
+        const newValue = data.newValues[i];
 
         newValues[i] = !_.isNumber(newValue) || newValue < 0 ? 0 : newValue;
       }

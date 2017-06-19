@@ -2,9 +2,9 @@
 
 'use strict';
 
-var setUpRoutes = require('./routes');
-var setUpServer = require('./server');
-var setUpClient = require('./client');
+const setUpRoutes = require('./routes');
+const setUpServer = require('./server');
+const setUpClient = require('./client');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',

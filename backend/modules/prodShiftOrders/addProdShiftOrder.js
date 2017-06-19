@@ -2,18 +2,18 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function addProdShiftOrder(app, psoModule, user, userInfo, data, done)
 {
-  var mongoose = app[psoModule.config.mongooseId];
-  var orgUnitsModule = app[psoModule.config.orgUnitsId];
-  var productionModule = app[psoModule.config.productionId];
-  var ProdLogEntry = mongoose.model('ProdLogEntry');
-  var ProdChangeRequest = mongoose.model('ProdChangeRequest');
+  const mongoose = app[psoModule.config.mongooseId];
+  const orgUnitsModule = app[psoModule.config.orgUnitsId];
+  const productionModule = app[psoModule.config.productionId];
+  const ProdLogEntry = mongoose.model('ProdLogEntry');
+  const ProdChangeRequest = mongoose.model('ProdChangeRequest');
 
-  var isChangeRequest = !user.super && !_.includes(user.privileges, 'PROD_DATA:CHANGES:MANAGE');
+  const isChangeRequest = !user.super && !_.includes(user.privileges, 'PROD_DATA:CHANGES:MANAGE');
 
   step(
     function getProdShiftStep()
@@ -40,14 +40,14 @@ module.exports = function addProdShiftOrder(app, psoModule, user, userInfo, data
         data[property] = prodShift[property];
       });
 
-      var logEntry = ProdLogEntry.addOrder(userInfo, data);
+      const logEntry = ProdLogEntry.addOrder(userInfo, data);
 
       if (!logEntry)
       {
         return this.skip(new Error('INPUT'), 400);
       }
 
-      var next = this.next();
+      const next = this.next();
 
       psoModule.validateOverlappingOrders({_id: null, prodShift: logEntry.prodShift}, logEntry.data, function(err)
       {
@@ -73,7 +73,7 @@ module.exports = function addProdShiftOrder(app, psoModule, user, userInfo, data
         return this.skip(err);
       }
 
-      var next = this.next();
+      const next = this.next();
 
       if (isChangeRequest)
       {

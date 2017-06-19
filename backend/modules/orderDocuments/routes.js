@@ -269,15 +269,15 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       return res.status(400).send('INVALID_CONTENT_TYPE');
     }
 
-    var timestamp = parseInt(req.query.timestamp, 10);
-    var step = parseInt(req.query.step, 10);
+    const timestamp = parseInt(req.query.timestamp, 10);
+    const step = parseInt(req.query.step, 10);
 
     if (isNaN(timestamp) || isNaN(step) || req.body.length < 256)
     {
       return res.status(400).send('INPUT');
     }
 
-    var importFile = module.config.importFile
+    const importFile = module.config.importFile
       .replace('{timestamp}', timestamp)
       .replace('{step}', step);
 
@@ -528,7 +528,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         order: order._id,
         components: _.map(order.bom, function(component)
         {
-          var qty = component.qty;
+          let qty = component.qty;
 
           if (component.nc12)
           {
@@ -583,8 +583,8 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
   function showIndexRoute(req, res)
   {
-    var sessionUser = req.session.user;
-    var locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
+    const sessionUser = req.session.user;
+    const locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
 
     res.format({
       'text/html': function()
@@ -632,7 +632,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           return this.skip(err);
         }
 
-        var prodLine = orgUnits.getByTypeAndId('prodLine', req.body.prodLineId);
+        const prodLine = orgUnits.getByTypeAndId('prodLine', req.body.prodLineId);
 
         if (!prodLine)
         {

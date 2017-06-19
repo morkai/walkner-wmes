@@ -2,15 +2,15 @@
 
 'use strict';
 
-var _ = require('lodash');
-var setUpRoutes = require('./routes');
-var setUpActionNotifier = require('./actionNotifier');
-var setUpCleanup = require('./cleanup');
-var setUpOmr = require('./omr');
-var buildSurveyPdf = require('./buildSurveyPdf');
-var deskewImage = require('./deskewImage');
-var decodeQrCode = require('./decodeQrCode');
-var recognizeMarks = require('./recognizeMarks');
+const _ = require('lodash');
+const setUpRoutes = require('./routes');
+const setUpActionNotifier = require('./actionNotifier');
+const setUpCleanup = require('./cleanup');
+const setUpOmr = require('./omr');
+const buildSurveyPdf = require('./buildSurveyPdf');
+const deskewImage = require('./deskewImage');
+const decodeQrCode = require('./decodeQrCode');
+const recognizeMarks = require('./recognizeMarks');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -57,7 +57,7 @@ exports.start = function startOpinionSurveysModule(app, module)
 
   module.generateId = function()
   {
-    var id = Date.now().toString(36).toUpperCase()
+    const id = Date.now().toString(36).toUpperCase()
       + Math.round(1000000000 + Math.random() * 8999999999).toString(36).toUpperCase();
 
     return _.padEnd(id, 15, 0);

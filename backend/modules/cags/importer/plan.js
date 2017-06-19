@@ -2,17 +2,17 @@
 
 'use strict';
 
-var fs = require('fs');
-var _ = require('lodash');
-var step = require('h5.step');
-var csv = require('csv');
+const fs = require('fs');
+const _ = require('lodash');
+const step = require('h5.step');
+const csv = require('csv');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   filterRe: /^CAGS_PLAN_(.*?)\.csv$/
 };
 
-var MONTHS = {
+const MONTHS = {
   jan: 0,
   feb: 1,
   mar: 2,
@@ -26,23 +26,23 @@ var MONTHS = {
   nov: 10,
   dec: 11
 };
-var MONTH_RE = new RegExp('^(' + Object.keys(MONTHS).join('|') + ')-([0-9]{2})$');
+const MONTH_RE = new RegExp('^(' + Object.keys(MONTHS).join('|') + ')-([0-9]{2})$');
 
 exports.start = function startCagPlanImporterModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("mongoose module is required!");
+    throw new Error('mongoose module is required!');
   }
 
-  var Cag = mongoose.model('Cag');
-  var CagPlan = mongoose.model('CagPlan');
+  const Cag = mongoose.model('Cag');
+  const CagPlan = mongoose.model('CagPlan');
 
-  var filePathCache = {};
-  var locked = false;
-  var queue = [];
+  const filePathCache = {};
+  let locked = false;
+  const queue = [];
 
   app.broker.subscribe('directoryWatcher.changed', queueFile).setFilter(filterFile);
 
@@ -57,7 +57,7 @@ exports.start = function startCagPlanImporterModule(app, module)
 
     queue.push(fileInfo);
 
-    module.debug("Queued...");
+    module.debug('Queued...');
 
     setImmediate(importNext);
   }
@@ -69,7 +69,7 @@ exports.start = function startCagPlanImporterModule(app, module)
       return;
     }
 
-    var fileInfo = queue.shift();
+    const fileInfo = queue.shift();
 
     if (!fileInfo)
     {
@@ -78,9 +78,9 @@ exports.start = function startCagPlanImporterModule(app, module)
 
     locked = true;
 
-    var startTime = Date.now();
+    const startTime = Date.now();
 
-    module.debug("Importing...");
+    module.debug('Importing...');
 
     importFile(fileInfo, function(err, count)
     {
@@ -88,7 +88,7 @@ exports.start = function startCagPlanImporterModule(app, module)
 
       if (err)
       {
-        module.error("Failed to import: %s", err.message);
+        module.error('Failed to import: %s', err.message);
 
         app.broker.publish('cags.plan.syncFailed', {
           error: err.message
@@ -96,7 +96,7 @@ exports.start = function startCagPlanImporterModule(app, module)
       }
       else
       {
-        module.debug("Imported %d in %d ms", count, Date.now() - startTime);
+        module.debug('Imported %d in %d ms', count, Date.now() - startTime);
 
         app.broker.publish('cags.plan.synced', {
           count: count
@@ -114,7 +114,7 @@ exports.start = function startCagPlanImporterModule(app, module)
     step(
       function parseFileStep()
       {
-        module.debug("Parsing [%s]...", fileInfo.filePath);
+        module.debug('Parsing [%s]...', fileInfo.filePath);
 
         this.t = Date.now();
         this.cags = {};
@@ -128,7 +128,7 @@ exports.start = function startCagPlanImporterModule(app, module)
           return this.skip(err);
         }
 
-        module.debug("Parsed %d items in %d ms!", cagPlans.length, Date.now() - this.t);
+        module.debug('Parsed %d items in %d ms!', cagPlans.length, Date.now() - this.t);
 
         this.count = cagPlans.length;
 
@@ -149,9 +149,9 @@ exports.start = function startCagPlanImporterModule(app, module)
     step(
       function()
       {
-        for (var i = 0, l = Math.min(10, cagPlans.length); i < l; ++i)
+        for (let i = 0, l = Math.min(10, cagPlans.length); i < l; ++i)
         {
-          var cagPlan = cagPlans.shift();
+          const cagPlan = cagPlans.shift();
 
           CagPlan.update(
             {_id: cagPlan._id},
@@ -165,7 +165,7 @@ exports.start = function startCagPlanImporterModule(app, module)
       {
         if (err)
         {
-          module.error("Failed to upsert CagPlans: %s", err.message);
+          module.error('Failed to upsert CagPlans: %s', err.message);
         }
 
         if (cagPlans.length === 0)
@@ -182,7 +182,7 @@ exports.start = function startCagPlanImporterModule(app, module)
 
   function insertCags(cags)
   {
-    var docs = _.map(cags, function(name, id) { return {_id: id, name: name}; });
+    const docs = _.map(cags, function(name, id) { return {_id: id, name: name}; });
 
     if (docs.length === 0)
     {
@@ -193,7 +193,7 @@ exports.start = function startCagPlanImporterModule(app, module)
     {
       if (err && err.code !== 11000)
       {
-        module.error("Failed to create CAGs: %s", err.message);
+        module.error('Failed to create CAGs: %s', err.message);
       }
     });
   }
@@ -210,7 +210,7 @@ exports.start = function startCagPlanImporterModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to delete file [%s]: %s", filePath, err.message);
+        module.error('Failed to delete file [%s]: %s', filePath, err.message);
       }
     });
   }
@@ -222,15 +222,15 @@ exports.start = function startCagPlanImporterModule(app, module)
 
   function parseInputCsv(inputFilePath, cags, done)
   {
-    var cagPlans = [];
-    var columns = {
+    const cagPlans = [];
+    const columns = {
       cagId: -1,
       name: -1,
       offset: -1,
       months: []
     };
-    var processedCount = 0;
-    var invalidCount = 0;
+    let processedCount = 0;
+    let invalidCount = 0;
 
     step(
       function()
@@ -272,21 +272,21 @@ exports.start = function startCagPlanImporterModule(app, module)
             return;
           }
 
-          var cagId = row[columns.cagId];
+          const cagId = row[columns.cagId];
 
           if (cagId.length !== 6)
           {
             return ++invalidCount;
           }
 
-          var cagName = row[columns.cagName];
+          const cagName = row[columns.cagName];
 
           if (!_.isEmpty(cagName))
           {
             cags[cagId] = cagName;
           }
 
-          var offset = row[columns.offset];
+          const offset = row[columns.offset];
 
           if (offset !== '11')
           {
@@ -295,7 +295,7 @@ exports.start = function startCagPlanImporterModule(app, module)
 
           _.forEach(columns.months, function(month)
           {
-            var value = parseInt((row[month.index] || '0').replace(/[^0-9]/g, ''), 10);
+            const value = parseInt((row[month.index] || '0').replace(/[^0-9]/g, ''), 10);
 
             if (value > 0)
             {
@@ -321,14 +321,14 @@ exports.start = function startCagPlanImporterModule(app, module)
 
   function findColumns(row, columns)
   {
-    var cagId = -1;
-    var cagName = -1;
-    var offset = -1;
-    var months = [];
+    let cagId = -1;
+    let cagName = -1;
+    let offset = -1;
+    const months = [];
 
-    for (var i = 0; i < row.length; ++i)
+    for (let i = 0; i < row.length; ++i)
     {
-      var cell = row[i].toLowerCase();
+      const cell = row[i].toLowerCase();
 
       if (cell === 'cag id')
       {
@@ -351,15 +351,15 @@ exports.start = function startCagPlanImporterModule(app, module)
         continue;
       }
 
-      var matches = cell.match(MONTH_RE);
+      const matches = cell.match(MONTH_RE);
 
       if (matches === null)
       {
         continue;
       }
 
-      var year = 2000 + parseInt(matches[2], 10);
-      var month = MONTHS[matches[1]];
+      const year = 2000 + parseInt(matches[2], 10);
+      const month = MONTHS[matches[1]];
 
       months.push({
         index: i,

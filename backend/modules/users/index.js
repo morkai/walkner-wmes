@@ -32,7 +32,7 @@ exports.start = function startUsersModule(app, module)
       return;
     }
 
-    module.info("Syncing...");
+    module.info('Syncing...');
 
     module.syncing = true;
 
@@ -42,13 +42,13 @@ exports.start = function startUsersModule(app, module)
 
       if (err)
       {
-        module.error("Failed to sync: %s", err.message);
+        module.error('Failed to sync: %s', err.message);
 
         app.broker.publish('users.syncFailed', {user: user, error: err.message});
       }
       else
       {
-        module.info("Synced: %s", JSON.stringify(stats));
+        module.info('Synced: %s', JSON.stringify(stats));
 
         app.broker.publish('users.synced', stats);
       }
@@ -94,7 +94,7 @@ exports.start = function startUsersModule(app, module)
   {
     const m = moment().add(30, 'seconds');
     const h = m.hours();
-    let s = moment().startOf('day');
+    const s = moment().startOf('day');
 
     if (h < 5)
     {

@@ -2,24 +2,24 @@
 
 'use strict';
 
-var fs = require('fs');
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
+const fs = require('fs');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
 
 module.exports = function(mongoose, options, done)
 {
-  /*jshint validthis:true*/
+  /* jshint validthis:true*/
 
-  var MONTHS_FUTURE = 4;
-  var MONTHS_PAST = 6;
+  const MONTHS_FUTURE = 4;
+  const MONTHS_PAST = 6;
 
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var Cag = mongoose.model('Cag');
-  var CagGroup = mongoose.model('CagGroup');
-  var CagPlan = mongoose.model('CagPlan');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const Cag = mongoose.model('Cag');
+  const CagGroup = mongoose.model('CagGroup');
+  const CagPlan = mongoose.model('CagPlan');
 
-  var results = {
+  const results = {
     options: options,
     months: _.map(new Array(MONTHS_FUTURE), function(unused, i)
     {
@@ -34,9 +34,9 @@ module.exports = function(mongoose, options, done)
   step(
     function findCagModelsStep()
     {
-      var currentMonth = moment().startOf('month');
+      const currentMonth = moment().startOf('month');
 
-      var conditions = {
+      const conditions = {
         '_id.month': {
           $gte: currentMonth.clone().toDate(),
           $lt: currentMonth.add(MONTHS_FUTURE, 'months').toDate()
@@ -54,7 +54,7 @@ module.exports = function(mongoose, options, done)
         return this.skip(err);
       }
 
-      var emptyPlan = _.map(results.months, function() { return 0; });
+      const emptyPlan = _.map(results.months, function() { return 0; });
 
       _.forEach(cags, function(cag)
       {
@@ -72,7 +72,7 @@ module.exports = function(mongoose, options, done)
 
         _.forEach(cagGroup.cags, function(cagId)
         {
-          var cag = results.cags[cagId];
+          const cag = results.cags[cagId];
 
           if (cag)
           {
@@ -83,7 +83,7 @@ module.exports = function(mongoose, options, done)
 
       _.forEach(cagPlans, function(cagPlan)
       {
-        var cag = results.cags[cagPlan._id.cag];
+        const cag = results.cags[cagPlan._id.cag];
 
         if (cag)
         {
@@ -117,20 +117,20 @@ module.exports = function(mongoose, options, done)
     },
     function handleProdShiftOrdersStep()
     {
-      var conditions = {
+      const conditions = {
         startedAt: {
           $gt: moment().startOf('month').subtract(MONTHS_PAST, 'months').toDate()
         },
         mechOrder: false
       };
-      var fields = {
+      const fields = {
         _id: 0,
         prodLine: 1,
         'orderData.nc12': 1,
         machineTime: 1
       };
-      var stream = ProdShiftOrder.find(conditions, fields).lean().cursor();
-      var next = _.once(this.next());
+      const stream = ProdShiftOrder.find(conditions, fields).lean().cursor();
+      const next = _.once(this.next());
 
       stream.on('error', next);
       stream.on('end', next);
@@ -156,7 +156,7 @@ module.exports = function(mongoose, options, done)
     },
     function sortLinesStep()
     {
-      var sortedLines = {};
+      const sortedLines = {};
 
       _.forEach(_.keys(results.lines).sort(function(a, b) { return a.localeCompare(b); }), function(line)
       {
@@ -190,8 +190,8 @@ module.exports = function(mongoose, options, done)
 
   function handleProdShiftOrder(nc12ToCags, prodShiftOrder)
   {
-    var cagId = nc12ToCags[prodShiftOrder.orderData.nc12];
-    var cag = results.cags[cagId];
+    const cagId = nc12ToCags[prodShiftOrder.orderData.nc12];
+    const cag = results.cags[cagId];
 
     if (!cag)
     {
@@ -200,16 +200,16 @@ module.exports = function(mongoose, options, done)
 
     results.orderCount++;
 
-    var prodLine = prodShiftOrder.prodLine.split('~')[0];
-    var machineTime = prodShiftOrder.machineTime;
-    var qPerShift = machineTime === 0 ? 0 : ((7.5 * 3600) / (machineTime * 3600 / 100));
+    const prodLine = prodShiftOrder.prodLine.split('~')[0];
+    const machineTime = prodShiftOrder.machineTime;
+    const qPerShift = machineTime === 0 ? 0 : ((7.5 * 3600) / (machineTime * 3600 / 100));
 
     if (!results.lines[prodLine])
     {
       results.lines[prodLine] = {};
     }
 
-    var prodLineCags = results.lines[prodLine];
+    const prodLineCags = results.lines[prodLine];
 
     if (!prodLineCags[cagId])
     {

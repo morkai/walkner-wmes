@@ -2,10 +2,10 @@
 
 'use strict';
 
-var path = require('path');
-var createHash = require('crypto').createHash;
-var step = require('h5.step');
-var fs = require('fs-extra');
+const path = require('path');
+const createHash = require('crypto').createHash;
+const step = require('h5.step');
+const fs = require('fs-extra');
 
 exports.DEFAULT_CONFIG = {
   messengerClientId: 'messenger/client',
@@ -17,15 +17,15 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startDacNodeModule(app, module)
 {
-  var client = app[module.config.messengerClientId];
+  const client = app[module.config.messengerClientId];
 
   if (!client)
   {
-    throw new Error("messenger/client module is required!");
+    throw new Error('messenger/client module is required!');
   }
 
-  var exporting = 0;
-  var buf = '';
+  let exporting = 0;
+  let buf = '';
 
   app.broker.subscribe('keyboard', onKeyUp);
 
@@ -47,17 +47,17 @@ exports.start = function startDacNodeModule(app, module)
 
   function handleCardScan(cardId, scanDate)
   {
-    var hash = createHash('md5')
+    const hash = createHash('md5')
       .update(cardId)
       .update(scanDate.getTime().toString())
       .update(Math.random().toString()).digest('hex');
-    var line = hash + ';' + cardId + ';' + scanDate.toISOString() + '\n';
+    const line = hash + ';' + cardId + ';' + scanDate.toISOString() + '\n';
 
     fs.appendFile(module.config.journalFile, line, function(err)
     {
       if (err)
       {
-        module.error("Failed to append a line to the journal: %s\nData:\n%s", err.message, line);
+        module.error('Failed to append a line to the journal: %s\nData:\n%s', err.message, line);
       }
       else
       {
@@ -92,7 +92,7 @@ exports.start = function startDacNodeModule(app, module)
 
   function exportData()
   {
-    var dataFile = path.join(
+    const dataFile = path.join(
       module.config.dataPath,
       Date.now() + Math.random().toString().replace(/^0\./, '') + '.csv'
     );
@@ -101,21 +101,19 @@ exports.start = function startDacNodeModule(app, module)
     {
       if (err && err.code !== 'ENOENT')
       {
-        module.error("Failed to move the journal file: %s", err.message);
+        module.error('Failed to move the journal file: %s', err.message);
       }
 
       fs.readdir(module.config.dataPath, function(err, files)
       {
         if (err)
         {
-          module.error("Failed to read the data dir: %s", err.message);
+          module.error('Failed to read the data dir: %s', err.message);
 
           return finishExporting();
         }
-        else
-        {
-          exportFiles(files);
-        }
+
+        exportFiles(files);
       });
     });
   }
@@ -138,7 +136,7 @@ exports.start = function startDacNodeModule(app, module)
     step(
       function()
       {
-        for (var i = 0, l = dataFiles.length; i < l; ++i)
+        for (let i = 0, l = dataFiles.length; i < l; ++i)
         {
           exportFile(dataFiles[i], this.parallel());
         }
@@ -149,18 +147,18 @@ exports.start = function startDacNodeModule(app, module)
 
   function exportFile(dataFile, done)
   {
-    var dataFilePath = path.join(module.config.dataPath, dataFile);
+    const dataFilePath = path.join(module.config.dataPath, dataFile);
 
     fs.readFile(dataFilePath, {encoding: 'utf8'}, function(err, data)
     {
       if (err)
       {
-        module.error("Failed to read data file [%s]: %s", dataFile, err.message);
+        module.error('Failed to read data file [%s]: %s', dataFile, err.message);
 
         return done();
       }
 
-      var req = {
+      const req = {
         nodeId: module.config.nodeId,
         data: data,
         time: Date.now()
@@ -170,7 +168,7 @@ exports.start = function startDacNodeModule(app, module)
       {
         if (err)
         {
-          module.error("Failed to export file [%s]: %s", dataFile, err.message || err);
+          module.error('Failed to export file [%s]: %s', dataFile, err.message || err);
 
           return done();
         }
@@ -179,7 +177,7 @@ exports.start = function startDacNodeModule(app, module)
         {
           if (err)
           {
-            module.error("Failed to remove file [%s]: %s", dataFile, err.message);
+            module.error('Failed to remove file [%s]: %s', dataFile, err.message);
           }
 
           return done();

@@ -37,7 +37,7 @@ module.exports = function setUpPing(app, watchdogModule)
       {
         if (err)
         {
-          watchdogModule.debug("[ping] Failed local request: %s", err.message);
+          watchdogModule.debug('[ping] Failed local request: %s', err.message);
 
           return this.skip();
         }
@@ -54,7 +54,7 @@ module.exports = function setUpPing(app, watchdogModule)
         else
         {
           watchdogModule.debug(
-            "[ping] Invalid local response (%d): %s",
+            '[ping] Invalid local response (%d): %s',
             res.statusCode,
             typeof body === 'string' ? body.substring(0, 100) : '-'
           );
@@ -64,11 +64,11 @@ module.exports = function setUpPing(app, watchdogModule)
       {
         if (err)
         {
-          watchdogModule.warn("[ping] Failed remote request: %s", err.message);
+          watchdogModule.warn('[ping] Failed remote request: %s', err.message);
         }
         else if (res && res.statusCode >= 300)
         {
-          watchdogModule.warn("[ping] Invalid remote response status code: %d", res.statusCode);
+          watchdogModule.warn('[ping] Invalid remote response status code: %d', res.statusCode);
         }
 
         setTimeout(ping, config.interval);
@@ -99,17 +99,17 @@ module.exports = function setUpPing(app, watchdogModule)
 
   function notify()
   {
-    watchdogModule.debug("[ping] Service unavailable: notifying!");
+    watchdogModule.debug('[ping] Service unavailable: notifying!');
 
     const subject = format(
-      "[%s:%s:ping] Service unavailable", app.options.id, watchdogModule.name
+      '[%s:%s:ping] Service unavailable', app.options.id, watchdogModule.name
     );
     const window = Math.round(config.window / 1000);
     const text = [
       `No ping request received in ${window}s: the Internet or the local HTTP server is down!`,
-      "",
-      "This message was generated automatically.",
-      "Sincerely, WMES Bot"
+      '',
+      'This message was generated automatically.',
+      'Sincerely, WMES Bot'
     ];
 
     mail(subject, text);
@@ -149,11 +149,11 @@ module.exports = function setUpPing(app, watchdogModule)
     {
       if (err)
       {
-        watchdogModule.error("[ping] [mail] Failed to notify [%s]: %s", to, err.message);
+        watchdogModule.error('[ping] [mail] Failed to notify [%s]: %s', to, err.message);
       }
       else
       {
-        watchdogModule.debug("[ping] [mail] Notified: %s", to);
+        watchdogModule.debug('[ping] [mail] Notified: %s', to);
       }
     });
   }
@@ -178,11 +178,11 @@ module.exports = function setUpPing(app, watchdogModule)
     {
       if (err)
       {
-        watchdogModule.error("[ping] [call] Failed to notify [%s]: %s", sayOptions.to, err.message);
+        watchdogModule.error('[ping] [call] Failed to notify [%s]: %s', sayOptions.to, err.message);
       }
       else
       {
-        watchdogModule.debug("[ping] [call] Notified: %s", sayOptions.to);
+        watchdogModule.debug('[ping] [call] Notified: %s', sayOptions.to);
       }
     });
   }

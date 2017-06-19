@@ -2,11 +2,11 @@
 
 'use strict';
 
-var path = require('path');
-var moment = require('moment');
-var step = require('h5.step');
-var fs = require('fs-extra');
-var parseSapTextTable = require('../../sap/util/parseSapTextTable');
+const path = require('path');
+const moment = require('moment');
+const step = require('h5.step');
+const fs = require('fs-extra');
+const parseSapTextTable = require('../../sap/util/parseSapTextTable');
 
 exports.DEFAULT_CONFIG = {
   filterRe: /^T_ZSE16D_MARA\.txt$/,
@@ -16,9 +16,9 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startCagNc12ImporterModule(app, module)
 {
-  var filePathCache = {};
-  var locked = false;
-  var queue = [];
+  const filePathCache = {};
+  let locked = false;
+  const queue = [];
 
   app.broker.subscribe('directoryWatcher.changed', queueFile).setFilter(filterFile);
 
@@ -45,7 +45,7 @@ exports.start = function startCagNc12ImporterModule(app, module)
 
     queue.push(fileInfo);
 
-    module.debug("[%s] Queued...", fileInfo.timeKey);
+    module.debug('[%s] Queued...', fileInfo.timeKey);
 
     setImmediate(importNext);
   }
@@ -57,7 +57,7 @@ exports.start = function startCagNc12ImporterModule(app, module)
       return;
     }
 
-    var fileInfo = queue.shift();
+    const fileInfo = queue.shift();
 
     if (!fileInfo)
     {
@@ -66,9 +66,9 @@ exports.start = function startCagNc12ImporterModule(app, module)
 
     locked = true;
 
-    var startTime = Date.now();
+    const startTime = Date.now();
 
-    module.debug("[%s] Importing...", fileInfo.timeKey);
+    module.debug('[%s] Importing...', fileInfo.timeKey);
 
     importFile(fileInfo, function(err, count)
     {
@@ -76,7 +76,7 @@ exports.start = function startCagNc12ImporterModule(app, module)
 
       if (err)
       {
-        module.error("[%s] Failed to import: %s", fileInfo.timeKey, err.message);
+        module.error('[%s] Failed to import: %s', fileInfo.timeKey, err.message);
 
         app.broker.publish('cags.nc12.syncFailed', {
           timestamp: fileInfo.timestamp,
@@ -85,7 +85,7 @@ exports.start = function startCagNc12ImporterModule(app, module)
       }
       else
       {
-        module.debug("[%s] Imported %d in %d ms", fileInfo.timeKey, count, Date.now() - startTime);
+        module.debug('[%s] Imported %d in %d ms', fileInfo.timeKey, count, Date.now() - startTime);
 
         app.broker.publish('cags.nc12.synced', {
           timestamp: fileInfo.timestamp,
@@ -113,14 +113,14 @@ exports.start = function startCagNc12ImporterModule(app, module)
           return this.skip(err);
         }
 
-        module.debug("[%s] Parsing ~%d bytes...", fileInfo.timeKey, fileContents.length);
+        module.debug('[%s] Parsing ~%d bytes...', fileInfo.timeKey, fileContents.length);
 
-        var nc12ToCag = {};
-        var t = Date.now();
+        const nc12ToCag = {};
+        const t = Date.now();
 
         this.count = parseNc12ToCagTable(fileContents, nc12ToCag);
 
-        module.debug("[%s] Parsed %d items in %d ms!", fileInfo.timeKey, this.count, Date.now() - t);
+        module.debug('[%s] Parsed %d items in %d ms!', fileInfo.timeKey, this.count, Date.now() - t);
 
         setImmediate(this.next(), nc12ToCag);
       },
@@ -151,14 +151,14 @@ exports.start = function startCagNc12ImporterModule(app, module)
 
   function moveFileInfoFile(oldFilePath)
   {
-    var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
+    const newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
     fs.move(oldFilePath, newFilePath, {overwrite: true}, function(err)
     {
       if (err)
       {
         module.error(
-          "Failed to rename file [%s] to [%s]: %s", oldFilePath, newFilePath, err.message
+          'Failed to rename file [%s] to [%s]: %s', oldFilePath, newFilePath, err.message
         );
       }
     });
@@ -170,7 +170,7 @@ exports.start = function startCagNc12ImporterModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to delete file [%s]: %s", filePath, err.message);
+        module.error('Failed to delete file [%s]: %s', filePath, err.message);
       }
     });
   }
@@ -182,7 +182,7 @@ exports.start = function startCagNc12ImporterModule(app, module)
 
   function parseNc12ToCagTable(input, nc12ToCag)
   {
-    var count = 0;
+    let count = 0;
 
     parseSapTextTable(input, {
       columnMatchers: {

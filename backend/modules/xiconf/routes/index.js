@@ -2,38 +2,38 @@
 
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var _ = require('lodash');
-var step = require('h5.step');
-var multer = require('multer');
-var importResultsRoute = require('./importResults');
-var importOrdersRoute = require('./importOrders');
-var downloadRoute = require('./download');
-var syncProgramsRoute = require('./programs/sync');
-var deleteProgramRoute = require('./programs/delete');
-var goToClientsPageRoute = require('./clients/goToPage');
-var downloadClientsVNCRoute = require('./clients/downloadVNC');
-var getClientsSettingsRoute = require('./clients/getSettings');
-var sendUpdateRoute = require('./sendUpdate');
+const fs = require('fs');
+const path = require('path');
+const _ = require('lodash');
+const step = require('h5.step');
+const multer = require('multer');
+const importResultsRoute = require('./importResults');
+const importOrdersRoute = require('./importOrders');
+const downloadRoute = require('./download');
+const syncProgramsRoute = require('./programs/sync');
+const deleteProgramRoute = require('./programs/delete');
+const goToClientsPageRoute = require('./clients/goToPage');
+const downloadClientsVNCRoute = require('./clients/downloadVNC');
+const getClientsSettingsRoute = require('./clients/getSettings');
+const sendUpdateRoute = require('./sendUpdate');
 
 module.exports = function setUpXiconfRoutes(app, xiconfModule)
 {
-  var express = app[xiconfModule.config.expressId];
-  var mongoose = app[xiconfModule.config.mongooseId];
-  var userModule = app[xiconfModule.config.userId];
-  var settings = app[xiconfModule.config.settingsId];
-  var Order = mongoose.model('Order');
-  var XiconfClient = mongoose.model('XiconfClient');
-  var XiconfResult = mongoose.model('XiconfResult');
-  var XiconfProgram = mongoose.model('XiconfProgram');
-  var XiconfHidLamp = mongoose.model('XiconfHidLamp');
-  var XiconfComponentWeight = mongoose.model('XiconfComponentWeight');
-  var XiconfOrder = mongoose.model('XiconfOrder');
+  const express = app[xiconfModule.config.expressId];
+  const mongoose = app[xiconfModule.config.mongooseId];
+  const userModule = app[xiconfModule.config.userId];
+  const settings = app[xiconfModule.config.settingsId];
+  const Order = mongoose.model('Order');
+  const XiconfClient = mongoose.model('XiconfClient');
+  const XiconfResult = mongoose.model('XiconfResult');
+  const XiconfProgram = mongoose.model('XiconfProgram');
+  const XiconfHidLamp = mongoose.model('XiconfHidLamp');
+  const XiconfComponentWeight = mongoose.model('XiconfComponentWeight');
+  const XiconfOrder = mongoose.model('XiconfOrder');
 
-  var canView = userModule.auth('XICONF:VIEW');
-  var canManage = userModule.auth('XICONF:MANAGE');
-  var remoteRequests = {};
+  const canView = userModule.auth('XICONF:VIEW');
+  const canManage = userModule.auth('XICONF:MANAGE');
+  const remoteRequests = {};
 
   //
   // Upload
@@ -70,8 +70,8 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   //
   express.post('/xiconf;execute', userModule.auth('LOCAL'), function(req, res, next)
   {
-    var rid = req.query.rid;
-    var action = req.query.action;
+    const rid = req.query.rid;
+    const action = req.query.action;
 
     if (_.isEmpty(rid)
       || !_.isString(rid)
@@ -82,7 +82,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
       return next(express.createHttpError('BAD_REQUEST', 400));
     }
 
-    var remoteRequest = remoteRequests[rid];
+    let remoteRequest = remoteRequests[rid];
 
     if (!remoteRequest)
     {
@@ -210,7 +210,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
       next();
     },
-    //populateOrder.bind(null, []),
+    // populateOrder.bind(null, []),
     express.crud.exportRoute.bind(null, {
       filename: 'WMES-XICONF-RESULTS',
       serializeRow: exportXiconfResult,
@@ -484,7 +484,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
       return done();
     }
 
-    var filePath = path.join(xiconfModule.config.featureDbPath, fileHash + '.xml');
+    const filePath = path.join(xiconfModule.config.featureDbPath, fileHash + '.xml');
 
     fs.readFile(filePath, 'utf8', function(err, contents)
     {
@@ -501,7 +501,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   function findDistinctSrcIds(totalCount, models, done)
   {
-    var result = {
+    const result = {
       totalCount: totalCount,
       collection: models,
       srcIds: null

@@ -2,31 +2,31 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function setUpFteCache(app, fteModule)
 {
-  var mongoose = app[fteModule.config.mongooseId];
-  var FteMasterEntry = mongoose.model('FteMasterEntry');
-  var FteLeaderEntry = mongoose.model('FteLeaderEntry');
+  const mongoose = app[fteModule.config.mongooseId];
+  const FteMasterEntry = mongoose.model('FteMasterEntry');
+  const FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
-  var idToFteLeaderEntryMapsMap = {};
-  var idToFteEntryMap = {};
-  var idToQueueMap = {};
+  const idToFteLeaderEntryMapsMap = {};
+  const idToFteEntryMap = {};
+  const idToQueueMap = {};
 
   app.broker.subscribe('fte.*.deleted', onFteEntryDeleted);
   app.broker.subscribe('shiftChanged', onShiftChanged);
 
   fteModule.getCachedEntry = function(type, _id, done)
   {
-    var cachedFteEntry = idToFteEntryMap[_id];
+    const cachedFteEntry = idToFteEntryMap[_id];
 
     if (cachedFteEntry)
     {
       return done(null, cachedFteEntry);
     }
 
-    var FteEntryModel = type === 'master' ? FteMasterEntry : FteLeaderEntry;
+    const FteEntryModel = type === 'master' ? FteMasterEntry : FteLeaderEntry;
 
     FteEntryModel.findById(_id).lean().exec(function(err, fteEntry)
     {
@@ -50,7 +50,7 @@ module.exports = function setUpFteCache(app, fteModule)
 
   fteModule.getCachedLeaderProdTaskMaps = function(_id, fteLeaderEntry)
   {
-    var cachedProdTaskMaps = idToFteLeaderEntryMapsMap[_id];
+    const cachedProdTaskMaps = idToFteLeaderEntryMapsMap[_id];
 
     if (cachedProdTaskMaps)
     {
@@ -74,7 +74,7 @@ module.exports = function setUpFteCache(app, fteModule)
 
   fteModule.acquireLock = function(_id, done)
   {
-    var queue = idToQueueMap[_id];
+    let queue = idToQueueMap[_id];
 
     if (queue)
     {
@@ -107,11 +107,11 @@ module.exports = function setUpFteCache(app, fteModule)
 
   function onShiftChanged()
   {
-    var oneHourAgo = Date.now() - 3600000;
+    const oneHourAgo = Date.now() - 3600000;
 
     _.forEach(idToFteEntryMap, function(fteEntry, _id)
     {
-      var updatedAt = (fteEntry.updatedAt || fteEntry.createdAt).getTime();
+      const updatedAt = (fteEntry.updatedAt || fteEntry.createdAt).getTime();
 
       if (updatedAt < oneHourAgo)
       {

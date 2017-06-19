@@ -2,11 +2,11 @@
 
 'use strict';
 
-var spawn = require('child_process').spawn;
+const spawn = require('child_process').spawn;
 
 module.exports = function sendQrCodeRoute(app, module, req, res, next)
 {
-  var express = app[module.config.expressId];
+  const express = app[module.config.expressId];
 
   if (!/^[A-Za-z0-9-_/]+$/.test(req.query.data))
   {
@@ -15,7 +15,7 @@ module.exports = function sendQrCodeRoute(app, module, req, res, next)
 
   res.type('png');
 
-  var args = [
+  const args = [
     '-b', 58,
     '--vers=5',
     '--scale=1.5',
@@ -23,7 +23,7 @@ module.exports = function sendQrCodeRoute(app, module, req, res, next)
     '--data=' + req.query.data
   ];
 
-  var p = spawn(module.config.zintExe, args);
+  const p = spawn(module.config.zintExe, args);
 
   p.on('error', next);
 

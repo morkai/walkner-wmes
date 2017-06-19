@@ -2,7 +2,7 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = require('../createDictionaryModule')(
   'ProdTask',
@@ -11,8 +11,8 @@ module.exports = require('../createDictionaryModule')(
   {
     app.broker.subscribe('prodTasks.edited', function(message)
     {
-      var prodTask = message.model;
-      var prodTaskId = prodTask._id.toString();
+      const prodTask = message.model;
+      const prodTaskId = prodTask._id.toString();
 
       _.forEach(module.models, function(childProdTask)
       {
@@ -28,7 +28,7 @@ module.exports = require('../createDictionaryModule')(
           if (err)
           {
             return module.error(
-              "Failed to update child task [%s] of [%s]: %s",
+              'Failed to update child task [%s] of [%s]: %s',
               childProdTask._id,
               prodTaskId,
               err.message

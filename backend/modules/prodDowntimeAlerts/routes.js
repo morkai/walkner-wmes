@@ -4,13 +4,13 @@
 
 module.exports = function setUpProdDowntimeAlertsRoutes(app, module)
 {
-  var express = app[module.config.expressId];
-  var userModule = app[module.config.userId];
-  var mongoose = app[module.config.mongooseId];
-  var ProdDowntimeAlert = mongoose.model('ProdDowntimeAlert');
+  const express = app[module.config.expressId];
+  const userModule = app[module.config.userId];
+  const mongoose = app[module.config.mongooseId];
+  const ProdDowntimeAlert = mongoose.model('ProdDowntimeAlert');
 
-  var canView = userModule.auth('PROD_DOWNTIME_ALERTS:VIEW');
-  var canManage = userModule.auth('PROD_DOWNTIME_ALERTS:MANAGE');
+  const canView = userModule.auth('PROD_DOWNTIME_ALERTS:VIEW');
+  const canManage = userModule.auth('PROD_DOWNTIME_ALERTS:MANAGE');
 
   express.get('/prodDowntimeAlerts', canView, express.crud.browseRoute.bind(null, app, ProdDowntimeAlert));
 

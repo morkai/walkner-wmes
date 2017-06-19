@@ -2,18 +2,18 @@
 
 'use strict';
 
-var _ = require('lodash');
-var report = require('../report');
+const _ = require('lodash');
+const report = require('../report');
 
 module.exports = function reportRoute(app, module, req, res, next)
 {
-  var reportsModule = app[module.config.reportsId];
+  const reportsModule = app[module.config.reportsId];
 
-  var options = {};
+  const options = {};
 
   _.forEach(['surveys', 'divisions', 'superiors', 'employers'], function(prop)
   {
-    var value = req.query[prop];
+    const value = req.query[prop];
 
     options[prop] = _.isString(value) && !_.isEmpty(value) ? value.split(',') : [];
   });

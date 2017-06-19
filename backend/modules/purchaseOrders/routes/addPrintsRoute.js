@@ -2,28 +2,28 @@
 
 'use strict';
 
-var createHash = require('crypto').createHash;
-var _ = require('lodash');
-var step = require('h5.step');
+const createHash = require('crypto').createHash;
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function addPrintsRoute(app, poModule, req, res, next)
 {
-  var express = app[poModule.config.expressId];
-  var userModule = app[poModule.config.userId];
-  var mongoose = app[poModule.config.mongooseId];
-  var PurchaseOrder = mongoose.model('PurchaseOrder');
-  var PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
+  const express = app[poModule.config.expressId];
+  const userModule = app[poModule.config.userId];
+  const mongoose = app[poModule.config.mongooseId];
+  const PurchaseOrder = mongoose.model('PurchaseOrder');
+  const PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
 
-  var orderId = req.params.orderId;
+  const orderId = req.params.orderId;
 
   if (poModule.lockedOrders[orderId])
   {
     return next(express.createHttpError('LOCKED'));
   }
 
-  var paper = req.body.paper;
-  var barcode = req.body.barcode;
-  var items = !Array.isArray(req.body.items) ? [] : req.body.items;
+  const paper = req.body.paper;
+  const barcode = req.body.barcode;
+  let items = !Array.isArray(req.body.items) ? [] : req.body.items;
 
   if (!PurchaseOrder.PAPERS[paper])
   {
@@ -50,12 +50,12 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
     return next(express.createHttpError('INVALID_ITEMS'));
   }
 
-  var shippingNo = _.isString(req.body.shippingNo)
+  const shippingNo = _.isString(req.body.shippingNo)
     ? req.body.shippingNo.substr(0, 30).replace(/[^a-zA-Z0-9\/\\\.\-_: ]+$/g, '')
     : '';
-  var printer = _.isString(req.body.printer) && req.body.printer.length ? req.body.printer : 'browser';
-  var currentDate = new Date();
-  var currentUserInfo = userModule.createUserInfo(req.session.user, req);
+  const printer = _.isString(req.body.printer) && req.body.printer.length ? req.body.printer : 'browser';
+  const currentDate = new Date();
+  const currentUserInfo = userModule.createUserInfo(req.session.user, req);
 
   poModule.lockedOrders[orderId] = true;
 
@@ -76,13 +76,13 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
         return this.skip(express.createHttpError('PO_NOT_FOUND'));
       }
 
-      var itemMap = {};
+      const itemMap = {};
 
       _.forEach(po.items, function(item) { itemMap[+item._id] = item; });
 
-      for (var i = 0, l = items.length; i < l; ++i)
+      for (let i = 0, l = items.length; i < l; ++i)
       {
-        var item = items[i];
+        const item = items[i];
 
         item.model = itemMap[+item._id];
 
@@ -127,7 +127,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
     {
       if (err)
       {
-        poModule.error("Failed to create prints for PO [%s]: %s", this.po._id, err.message);
+        poModule.error('Failed to create prints for PO [%s]: %s', this.po._id, err.message);
 
         return this.skip(err);
       }
@@ -141,7 +141,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
     {
       if (err)
       {
-        poModule.error("Failed to save PO [%s] after modifying printed quantities: %s", this.po._id, err.message);
+        poModule.error('Failed to save PO [%s] after modifying printed quantities: %s', this.po._id, err.message);
 
         return this.skip(err);
       }
@@ -153,7 +153,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
         return this.skip(err);
       }
 
-      var addedPrints = _.map(items, function(item) { return item.print.toJSON(); });
+      const addedPrints = _.map(items, function(item) { return item.print.toJSON(); });
 
       res.json({
         printKey: this.key,
@@ -168,7 +168,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
     {
       delete poModule.lockedOrders[orderId];
 
-      var po = this.po;
+      const po = this.po;
       this.po = null;
 
       if (err)
@@ -176,7 +176,7 @@ module.exports = function addPrintsRoute(app, poModule, req, res, next)
         return next(err);
       }
 
-      var changedItems = [];
+      const changedItems = [];
 
       _.forEach(items, function(item)
       {

@@ -2,26 +2,26 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var limitToVendor = require('./limitToVendor');
-var getLatestComponentQtyRoute = require('./getLatestComponentQtyRoute');
-var addPrintsRoute = require('./addPrintsRoute');
-var cancelPrintRoute = require('./cancelPrintRoute');
-var renderLabelRoute = require('./renderLabelRoute');
-var renderLabelHtmlRoute = require('./renderLabelHtmlRoute');
+const _ = require('lodash');
+const step = require('h5.step');
+const limitToVendor = require('./limitToVendor');
+const getLatestComponentQtyRoute = require('./getLatestComponentQtyRoute');
+const addPrintsRoute = require('./addPrintsRoute');
+const cancelPrintRoute = require('./cancelPrintRoute');
+const renderLabelRoute = require('./renderLabelRoute');
+const renderLabelHtmlRoute = require('./renderLabelHtmlRoute');
 
 module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
 {
-  var express = app[poModule.config.expressId];
-  var userModule = app[poModule.config.userId];
-  var mongoose = app[poModule.config.mongooseId];
-  var VendorNc12 = mongoose.model('VendorNc12');
-  var PurchaseOrder = mongoose.model('PurchaseOrder');
-  var PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
+  const express = app[poModule.config.expressId];
+  const userModule = app[poModule.config.userId];
+  const mongoose = app[poModule.config.mongooseId];
+  const VendorNc12 = mongoose.model('VendorNc12');
+  const PurchaseOrder = mongoose.model('PurchaseOrder');
+  const PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
 
-  var canView = userModule.auth('PURCHASE_ORDERS:VIEW');
-  var canManage = userModule.auth('PURCHASE_ORDERS:MANAGE');
+  const canView = userModule.auth('PURCHASE_ORDERS:VIEW');
+  const canManage = userModule.auth('PURCHASE_ORDERS:MANAGE');
 
   express.get(
     '/purchaseOrders',
@@ -58,7 +58,7 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
     limitToVendor,
     function limitToOrder(req, res, next)
     {
-      var orderTerm = _.find(req.rql.selector.args, function(term)
+      const orderTerm = _.find(req.rql.selector.args, function(term)
       {
         return term.name === 'eq' && term.args[0] === 'purchaseOrder';
       });
@@ -114,12 +114,12 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
 
     po.anyVendorNc12 = false;
 
-    var nc12Map = {};
+    const nc12Map = {};
 
-    for (var i = 0; i < po.items.length; ++i)
+    for (let i = 0; i < po.items.length; ++i)
     {
-      var item = po.items[i];
-      var nc12 = item.nc12;
+      const item = po.items[i];
+      const nc12 = item.nc12;
 
       if (!nc12)
       {
@@ -134,7 +134,7 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
       nc12Map[nc12].push(item);
     }
 
-    var nc12List = Object.keys(nc12Map);
+    const nc12List = Object.keys(nc12Map);
 
     if (!nc12List.length)
     {
@@ -155,14 +155,14 @@ module.exports = function setUpPurchaseOrdersRoutes(app, poModule)
 
         po.anyVendorNc12 = vendorNc12s.length > 0;
 
-        for (var i = 0; i < vendorNc12s.length; ++i)
+        for (let i = 0; i < vendorNc12s.length; ++i)
         {
-          var vendorNc12 = vendorNc12s[i];
-          var items = nc12Map[vendorNc12.nc12];
+          const vendorNc12 = vendorNc12s[i];
+          const items = nc12Map[vendorNc12.nc12];
 
           vendorNc12.nc12 = undefined;
 
-          for (var ii = 0; ii < items.length; ++ii)
+          for (let ii = 0; ii < items.length; ++ii)
           {
             items[ii].vendorNc12 = vendorNc12;
           }

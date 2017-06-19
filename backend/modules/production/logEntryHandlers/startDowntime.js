@@ -2,11 +2,11 @@
 
 'use strict';
 
-var step = require('h5.step');
+const step = require('h5.step');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var ProdDowntime = app[productionModule.config.mongooseId].model('ProdDowntime');
+  const ProdDowntime = app[productionModule.config.mongooseId].model('ProdDowntime');
 
   if (logEntry.data.date === undefined || logEntry.data.operators === undefined)
   {
@@ -15,7 +15,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to get prod shift [%s] to start a downtime (LOG=[%s]): %s",
+          'Failed to get prod shift [%s] to start a downtime (LOG=[%s]): %s',
           logEntry.prodShift,
           logEntry._id,
           err.stack
@@ -41,7 +41,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
   function createProdDowntime()
   {
-    var prodDowntime = new ProdDowntime(logEntry.data);
+    const prodDowntime = new ProdDowntime(logEntry.data);
 
     step(
       function findProdShiftOrderStep()
@@ -55,7 +55,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       {
         if (err)
         {
-          productionModule.error("Failed to find order of a new downtime (LOG=[%s]): %s", logEntry._id, err.stack);
+          productionModule.error('Failed to find order of a new downtime (LOG=[%s]): %s', logEntry._id, err.stack);
 
           return this.done(done, err);
         }
@@ -69,7 +69,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       {
         if (err && err.code !== 11000)
         {
-          productionModule.error("Failed to save a new prod downtime (LOG=[%s]): %s", logEntry._id, err.stack);
+          productionModule.error('Failed to save a new prod downtime (LOG=[%s]): %s', logEntry._id, err.stack);
 
           return this.done(done, err);
         }
@@ -93,7 +93,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save prod line [%s] after changing the prod downtime [%s] (LOG=[%s]): %s",
+            'Failed to save prod line [%s] after changing the prod downtime [%s] (LOG=[%s]): %s',
             prodLine._id,
             prodDowntime._id,
             logEntry._id,

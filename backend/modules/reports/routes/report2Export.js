@@ -2,29 +2,29 @@
 
 'use strict';
 
-var _ = require('lodash');
-var helpers = require('./helpers');
+const _ = require('lodash');
+const helpers = require('./helpers');
 
 module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
 {
-  var query = req.query;
-  var fromTime = helpers.getTime(query.from);
-  var toTime = helpers.getTime(query.to);
+  const query = req.query;
+  const fromTime = helpers.getTime(query.from);
+  const toTime = helpers.getTime(query.to);
 
   if (isNaN(fromTime) || isNaN(toTime))
   {
     return res.sendStatus(400);
   }
 
-  var orgUnitsModule = app[reportsModule.config.orgUnitsId];
-  var orgUnit = orgUnitsModule.getByTypeAndId(query.orgUnitType, query.orgUnitId);
+  const orgUnitsModule = app[reportsModule.config.orgUnitsId];
+  const orgUnit = orgUnitsModule.getByTypeAndId(query.orgUnitType, query.orgUnitId);
 
   if (orgUnit === null && (query.orgUnitType || query.orgUnitId))
   {
     return res.sendStatus(400);
   }
 
-  var mrpControllers = orgUnitsModule.getAssemblyMrpControllersFor(query.orgUnitType, query.orgUnitId);
+  const mrpControllers = orgUnitsModule.getAssemblyMrpControllersFor(query.orgUnitType, query.orgUnitId);
 
   if (_.isEmpty(mrpControllers))
   {
@@ -54,10 +54,10 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
     });
   }
 
-  var mongoose = app[reportsModule.config.mongooseId];
-  var Order = mongoose.model('Order');
-  var DelayReason = mongoose.model('DelayReason');
-  var exportOptions = {
+  const mongoose = app[reportsModule.config.mongooseId];
+  const Order = mongoose.model('Order');
+  const DelayReason = mongoose.model('DelayReason');
+  const exportOptions = {
     filename: 'WMES-CLIP_ORDERS',
     model: Order,
     serializeRow: function() {}
@@ -70,7 +70,7 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
       return next(err);
     }
 
-    var delayReasonMap = {};
+    const delayReasonMap = {};
 
     _.forEach(delayReasonList, function(delayReason)
     {
@@ -84,11 +84,11 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
 
   function exportOrder(delayReasonMap, order)
   {
-    var division = orgUnitsModule.getDivisionFor('mrpController', order.mrp);
-    var confirmed = '';
-    var confirmedAt = '';
-    var delivered = '';
-    var deliveredAt = '';
+    const division = orgUnitsModule.getDivisionFor('mrpController', order.mrp);
+    let confirmed = '';
+    let confirmedAt = '';
+    let delivered = '';
+    let deliveredAt = '';
 
     if (order.statusesSetAt.CNF)
     {

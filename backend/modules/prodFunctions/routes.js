@@ -4,12 +4,12 @@
 
 module.exports = function setUpProdFunctionsRoutes(app, prodFunctionsModule, useDictionaryModel)
 {
-  var express = app[prodFunctionsModule.config.expressId];
-  var auth = app[prodFunctionsModule.config.userId].auth;
-  var ProdFunction = app[prodFunctionsModule.config.mongooseId].model('ProdFunction');
+  const express = app[prodFunctionsModule.config.expressId];
+  const auth = app[prodFunctionsModule.config.userId].auth;
+  const ProdFunction = app[prodFunctionsModule.config.mongooseId].model('ProdFunction');
 
-  var canView = auth('DICTIONARIES:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/prodFunctions', canView, express.crud.browseRoute.bind(null, app, ProdFunction));
 

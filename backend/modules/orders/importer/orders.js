@@ -2,12 +2,12 @@
 
 'use strict';
 
-var fs = require('fs');
-var _ = require('lodash');
-var deepEqual = require('deep-equal');
-var step = require('h5.step');
-var createParser = require('./createParser');
-var parseOperationTimeCoeffs = require('../parseOperationTimeCoeffs');
+const fs = require('fs');
+const _ = require('lodash');
+const deepEqual = require('deep-equal');
+const step = require('h5.step');
+const createParser = require('./createParser');
+const parseOperationTimeCoeffs = require('../parseOperationTimeCoeffs');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -18,7 +18,7 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startOrdersImporterModule(app, module)
 {
-  var IGNORED_PROPERTIES = {
+  const IGNORED_PROPERTIES = {
     createdAt: true,
     updatedAt: true,
     tzOffsetMs: true,
@@ -32,28 +32,28 @@ exports.start = function startOrdersImporterModule(app, module)
     sapCreatedAt: true,
     qtyDone: true
   };
-  var ORDER_DOCUMENTS_FILE_PATH_PATTERN = module.config.orderDocumentsFilePathPattern;
+  const ORDER_DOCUMENTS_FILE_PATH_PATTERN = module.config.orderDocumentsFilePathPattern;
 
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("orders/importer/orders module requires the mongoose module!");
+    throw new Error('orders/importer/orders module requires the mongoose module!');
   }
 
-  var Order = mongoose.model('Order');
-  var OrderIntake = mongoose.model('OrderIntake');
-  var XiconfOrder = mongoose.model('XiconfOrder');
-  var DailyMrpPlan = mongoose.model('DailyMrpPlan');
-  var Setting = mongoose.model('Setting');
-  var queue = [];
-  var lock = false;
+  const Order = mongoose.model('Order');
+  const OrderIntake = mongoose.model('OrderIntake');
+  const XiconfOrder = mongoose.model('XiconfOrder');
+  const DailyMrpPlan = mongoose.model('DailyMrpPlan');
+  const Setting = mongoose.model('Setting');
+  const queue = [];
+  let lock = false;
 
   createParser(app, module, enqueueAndCompare);
 
   function enqueueAndCompare(err, orders, missingOrders)
   {
-    if (orders && missingOrders && (_.size(orders) || _.size(missingOrders)))
+    if (!err && orders && missingOrders && (_.size(orders) || _.size(missingOrders)))
     {
       queue.push(orders, missingOrders);
 
@@ -70,14 +70,14 @@ exports.start = function startOrdersImporterModule(app, module)
 
     lock = true;
 
-    var orders = queue.shift();
-    var missingOrders = queue.shift();
-    var orderIds = Object.keys(orders);
-    var missingOrderIds = Object.keys(missingOrders);
-    var allOrderIds = orderIds.concat(missingOrderIds);
-    var timestamp = (orders[allOrderIds[0]] || missingOrders[allOrderIds[0]]).importTs;
+    const orders = queue.shift();
+    const missingOrders = queue.shift();
+    const orderIds = Object.keys(orders);
+    const missingOrderIds = Object.keys(missingOrders);
+    const allOrderIds = orderIds.concat(missingOrderIds);
+    const timestamp = (orders[allOrderIds[0]] || missingOrders[allOrderIds[0]]).importTs;
 
-    module.debug("Comparing %d orders and %d missing orders...", orderIds.length, missingOrderIds.length);
+    module.debug(`Comparing ${orderIds.length} orders and ${missingOrderIds.length} missing orders...`);
 
     step(
       function()
@@ -86,6 +86,11 @@ exports.start = function startOrdersImporterModule(app, module)
       },
       function(err, setting)
       {
+        if (err)
+        {
+          module.error(`Failed to fetch settings: ${err.message}`);
+        }
+
         this.mrpToTimeCoeffs = setting ? parseOperationTimeCoeffs(setting.value) : {};
 
         Order.find({_id: {$in: allOrderIds}}).lean().exec(this.next());
@@ -94,16 +99,16 @@ exports.start = function startOrdersImporterModule(app, module)
       {
         if (err)
         {
-          module.error("Failed to fetch orders for comparison: %s", err.message);
+          module.error(`Failed to fetch orders for comparison: ${err.message}`);
 
           return unlock();
         }
 
-        var ts = new Date();
-        var insertList = [];
-        var updateList = [];
-        var ordersWithNewQty = [];
-        var ordersForDailyMrpPlans = {};
+        const ts = new Date();
+        const insertList = [];
+        const updateList = [];
+        const ordersWithNewQty = [];
+        const ordersForDailyMrpPlans = {};
 
         _.forEach(orderModels, compareOrder.bind(
           null,
@@ -146,7 +151,7 @@ exports.start = function startOrdersImporterModule(app, module)
     orderModel
   )
   {
-    var orderNo = orderModel._id;
+    const orderNo = orderModel._id;
 
     if (typeof orders[orderNo] === 'object')
     {
@@ -185,18 +190,18 @@ exports.start = function startOrdersImporterModule(app, module)
       return;
     }
 
-    var different = false;
-    var changes = {
+    const changes = {
       time: newOrderData.importTs,
       user: null,
       oldValues: {},
       newValues: {},
       comment: ''
     };
-    var $set = {
+    const $set = {
       updatedAt: ts,
       importTs: newOrderData.importTs
     };
+    let different = false;
 
     adjustOperationTimes(newOrderData.operations, mrpToTimeCoeffs[newOrderData.mrp]);
 
@@ -207,7 +212,7 @@ exports.start = function startOrdersImporterModule(app, module)
         return;
       }
 
-      var oldValue = orderModel[key];
+      let oldValue = orderModel[key];
 
       if (oldValue != null && typeof oldValue.toObject === 'function')
       {
@@ -288,35 +293,37 @@ exports.start = function startOrdersImporterModule(app, module)
 
     adjustOperationTimes(missingOrder.operations, mrpToTimeCoeffs[orderModel.mrp]);
 
-    var oldOperations = orderModel.operations;
+    let oldOperations = orderModel.operations;
 
     if (!Array.isArray(oldOperations))
     {
       oldOperations = [];
     }
 
-    if (!deepEqual(oldOperations, missingOrder.operations, {strict: true}))
+    if (deepEqual(oldOperations, missingOrder.operations, {strict: true}))
     {
-      updateList.push({
-        conditions: {_id: orderModel._id},
-        update: {
-          $set: {
-            updatedAt: ts,
-            operations: missingOrder.operations,
-            importTs: missingOrder.importTs
-          },
-          $push: {
-            changes: {
-              time: ts,
-              user: null,
-              oldValues: {operations: oldOperations},
-              newValues: {operations: missingOrder.operations},
-              comment: ''
-            }
+      return;
+    }
+
+    updateList.push({
+      conditions: {_id: orderModel._id},
+      update: {
+        $set: {
+          updatedAt: ts,
+          operations: missingOrder.operations,
+          importTs: missingOrder.importTs
+        },
+        $push: {
+          changes: {
+            time: ts,
+            user: null,
+            oldValues: {operations: oldOperations},
+            newValues: {operations: missingOrder.operations},
+            comment: ''
           }
         }
-      });
-    }
+      }
+    });
   }
 
   function adjustOperationTimes(operations, timeCoeffs)
@@ -326,10 +333,10 @@ exports.start = function startOrdersImporterModule(app, module)
       return;
     }
 
-    var laborCoeff = timeCoeffs.labor || 1;
-    var laborSetupCoeff = timeCoeffs.laborSetup || 1;
-    var machineCoeff = timeCoeffs.machine || 1;
-    var machineSetupCoeff = timeCoeffs.machineSetup || 1;
+    const laborCoeff = timeCoeffs.labor || 1;
+    const laborSetupCoeff = timeCoeffs.laborSetup || 1;
+    const machineCoeff = timeCoeffs.machine || 1;
+    const machineSetupCoeff = timeCoeffs.machineSetup || 1;
 
     _.forEach(operations, function(operation)
     {
@@ -355,18 +362,18 @@ exports.start = function startOrdersImporterModule(app, module)
 
   function prepareOrderIntakeSearch(insertList, updateList)
   {
-    var intakeKeyToIdMap = {};
-    var intakeKeyToOrderMap = {};
+    const intakeKeyToIdMap = {};
+    const intakeKeyToOrderMap = {};
 
-    for (var i = 0; i < insertList.length; ++i)
+    for (let i = 0; i < insertList.length; ++i)
     {
-      var order = insertList[i];
-      var salesOrder = order.salesOrder;
-      var salesOrderItem = order.salesOrderItem;
+      const order = insertList[i];
+      const salesOrder = order.salesOrder;
+      const salesOrderItem = order.salesOrderItem;
 
       if (salesOrder && salesOrderItem)
       {
-        var intakeKey = salesOrder + '/' + salesOrderItem;
+        const intakeKey = `${salesOrder}/${salesOrderItem}`;
 
         intakeKeyToIdMap[intakeKey] = {no: salesOrder, item: salesOrderItem};
 
@@ -400,7 +407,7 @@ exports.start = function startOrdersImporterModule(app, module)
       {
         if (err)
         {
-          module.error("Failed to find order intakes: %s", err.message);
+          module.error(`Failed to find order intakes: ${err.message}`);
 
           return this.skip();
         }
@@ -427,12 +434,12 @@ exports.start = function startOrdersImporterModule(app, module)
 
   function saveOrders(insertList, updateList)
   {
-    var createdOrdersCount = insertList.length;
-    var updatedOrdersCount = updateList.length;
-    var insertBatchCount = Math.ceil(createdOrdersCount / 100);
-    var steps = [];
+    const createdOrdersCount = insertList.length;
+    const updatedOrdersCount = updateList.length;
+    const insertBatchCount = Math.ceil(createdOrdersCount / 100);
+    const steps = [];
 
-    for (var i = 0; i < insertBatchCount; ++i)
+    for (let i = 0; i < insertBatchCount; ++i)
     {
       steps.push(_.partial(createOrdersStep, insertList.splice(0, 100)));
     }
@@ -446,12 +453,12 @@ exports.start = function startOrdersImporterModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to sync data: %s", err.message);
+        module.error(`Failed to sync data: ${err.message}`);
 
         return unlock();
       }
 
-      module.info("Synced %d new and %d existing orders", createdOrdersCount, updatedOrdersCount);
+      module.info(`Synced ${createdOrdersCount} new and ${updatedOrdersCount} existing orders`);
 
       app.broker.publish('orders.synced', {
         created: createdOrdersCount,
@@ -467,8 +474,6 @@ exports.start = function startOrdersImporterModule(app, module)
 
   function createOrdersStep(orders, err)
   {
-    /*jshint validthis:true*/
-
     if (err)
     {
       return this.skip(err);
@@ -479,8 +484,6 @@ exports.start = function startOrdersImporterModule(app, module)
 
   function updateOrderStep(update, err)
   {
-    /*jshint validthis:true*/
-
     if (err)
     {
       return this.skip(err);
@@ -499,7 +502,10 @@ exports.start = function startOrdersImporterModule(app, module)
     step(
       function()
       {
-        XiconfOrder.find({_id: {$in: ordersWithNewQty}, 'items.source': 'docs'}).lean().exec(this.next());
+        XiconfOrder
+          .find({_id: {$in: ordersWithNewQty}, 'items.source': 'docs'})
+          .lean()
+          .exec(this.next());
       },
       function(err, xiconfOrders)
       {
@@ -513,7 +519,10 @@ exports.start = function startOrdersImporterModule(app, module)
           return this.skip();
         }
 
-        Order.find({_id: {$in: _.map(xiconfOrders, '_id')}}, {documents: 1}).lean().exec(this.next());
+        Order
+          .find({_id: {$in: _.map(xiconfOrders, '_id')}}, {documents: 1})
+          .lean()
+          .exec(this.next());
       },
       function(err, orders)
       {
@@ -522,22 +531,22 @@ exports.start = function startOrdersImporterModule(app, module)
           return this.skip(err);
         }
 
-        var filePath = ORDER_DOCUMENTS_FILE_PATH_PATTERN.replace('{timestamp}', Math.ceil(timestamp / 1000));
-        var fileContents = [
+        const filePath = ORDER_DOCUMENTS_FILE_PATH_PATTERN.replace('{timestamp}', Math.ceil(timestamp / 1000));
+        const fileContents = [
           '-------------------------------------------------------------------------',
           '|Order    |Item|Document       |Description                             |',
           '-------------------------------------------------------------------------'
         ];
 
-        for (var i = 0; i < orders.length; ++i)
+        for (let i = 0; i < orders.length; ++i)
         {
-          var order = orders[i];
-          var documents = order.documents;
+          const order = orders[i];
+          const documents = order.documents;
 
-          for (var ii = 0; ii < documents.length; ++ii)
+          for (let ii = 0; ii < documents.length; ++ii)
           {
-            var document = documents[ii];
-            var row = [
+            const document = documents[ii];
+            const row = [
               '',
               order._id,
               document.item,
@@ -656,17 +665,17 @@ exports.start = function startOrdersImporterModule(app, module)
           return this.skip(err);
         }
 
-        remainingOrders.forEach(function(remainingOrder)
+        remainingOrders.forEach(remainingOrder =>
         {
-          this.orderToPlans[remainingOrder._id].forEach(function(planId)
+          this.orderToPlans[remainingOrder._id].forEach(planId =>
           {
             const planOrder = this.planToOrders[planId].map[remainingOrder._id];
 
             planOrder.qtyTodo = remainingOrder.qty;
             planOrder.qtyDone = remainingOrder.qtyDone ? remainingOrder.qtyDone.total : 0;
             planOrder.statuses = remainingOrder.statuses;
-          }, this);
-        }, this);
+          });
+        });
 
         setImmediate(this.next());
       },
@@ -675,7 +684,7 @@ exports.start = function startOrdersImporterModule(app, module)
         this.updatedAt = Date.now();
         this.planIds = Object.keys(this.planToOrders);
 
-        this.planIds.forEach(function(planId)
+        this.planIds.forEach(planId =>
         {
           DailyMrpPlan.collection.update(
             {_id: planId},
@@ -685,7 +694,7 @@ exports.start = function startOrdersImporterModule(app, module)
             }},
             this.group()
           );
-        }, this);
+        });
       },
       function(err)
       {

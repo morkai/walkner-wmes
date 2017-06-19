@@ -2,14 +2,14 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function setUpSuggestionsCommands(app, module)
 {
-  var userModule = app[module.config.userId];
-  var sio = app[module.config.sioId];
-  var mongoose = app[module.config.mongooseId];
-  var Suggestion = mongoose.model('Suggestion');
+  const userModule = app[module.config.userId];
+  const sio = app[module.config.sioId];
+  const mongoose = app[module.config.mongooseId];
+  const Suggestion = mongoose.model('Suggestion');
 
   sio.sockets.on('connection', function(socket)
   {
@@ -39,7 +39,7 @@ module.exports = function setUpSuggestionsCommands(app, module)
       return;
     }
 
-    var user = socket.handshake.user;
+    const user = socket.handshake.user;
 
     if (!_.isObject(req)
       || !_.isString(req._id)

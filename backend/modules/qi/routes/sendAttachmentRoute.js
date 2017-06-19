@@ -101,7 +101,7 @@ module.exports = function sendAttachmentRoute(app, qiModule, req, res, next)
       }
 
       qiModule.error(
-        "Failed to generate a min image of [%s] of [%s]: %s",
+        'Failed to generate a min image of [%s] of [%s]: %s',
         attachmentProperty,
         req.params.result,
         err.message

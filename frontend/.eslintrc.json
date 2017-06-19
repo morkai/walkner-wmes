@@ -13,6 +13,7 @@
         "parameters": 0,
         "body": 1
       }
-    }]
+    }],
+    "no-var": 0
 	}
 }

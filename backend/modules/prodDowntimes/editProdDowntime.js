@@ -2,18 +2,18 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function editProdDowntime(app, pdModule, user, userInfo, prodDowntimeId, data, done)
 {
-  var mongoose = app[pdModule.config.mongooseId];
-  var orgUnitsModule = app[pdModule.config.orgUnitsId];
-  var productionModule = app[pdModule.config.productionId];
-  var ProdLogEntry = mongoose.model('ProdLogEntry');
-  var ProdChangeRequest = mongoose.model('ProdChangeRequest');
+  const mongoose = app[pdModule.config.mongooseId];
+  const orgUnitsModule = app[pdModule.config.orgUnitsId];
+  const productionModule = app[pdModule.config.productionId];
+  const ProdLogEntry = mongoose.model('ProdLogEntry');
+  const ProdChangeRequest = mongoose.model('ProdChangeRequest');
 
-  var isChangeRequest = !user.super && !_.includes(user.privileges, 'PROD_DATA:CHANGES:MANAGE');
+  const isChangeRequest = !user.super && !_.includes(user.privileges, 'PROD_DATA:CHANGES:MANAGE');
 
   step(
     function getProdDataStep()
@@ -37,14 +37,14 @@ module.exports = function editProdDowntime(app, pdModule, user, userInfo, prodDo
         return this.skip(new Error('NOT_EDITABLE'), 400);
       }
 
-      var logEntry = ProdLogEntry.editDowntime(prodDowntime, userInfo, data);
+      const logEntry = ProdLogEntry.editDowntime(prodDowntime, userInfo, data);
 
       if (!logEntry)
       {
         return this.skip(new Error('INVALID_CHANGES'), 400);
       }
 
-      var next = this.next();
+      const next = this.next();
 
       pdModule.validateOverlappingDowntimes(prodDowntime, logEntry.data, function(err)
       {
@@ -70,7 +70,7 @@ module.exports = function editProdDowntime(app, pdModule, user, userInfo, prodDo
         return this.skip(err);
       }
 
-      var next = this.next();
+      const next = this.next();
 
       if (isChangeRequest)
       {

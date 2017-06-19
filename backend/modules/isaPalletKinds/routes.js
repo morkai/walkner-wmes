@@ -4,12 +4,12 @@
 
 module.exports = function setUpIsaPalletKindsRoutes(app, module, useDictionaryModel)
 {
-  var express = app[module.config.expressId];
-  var auth = app[module.config.userId].auth;
-  var IsaPalletKind = app[module.config.mongooseId].model('IsaPalletKind');
+  const express = app[module.config.expressId];
+  const auth = app[module.config.userId].auth;
+  const IsaPalletKind = app[module.config.mongooseId].model('IsaPalletKind');
 
-  var canView = auth('DICTIONARIES:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/isaPalletKinds', canView, express.crud.browseRoute.bind(null, app, IsaPalletKind));
 

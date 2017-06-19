@@ -7,9 +7,9 @@ module.exports = function patchNewSocket(newSocket, newEmit)
   // Modified https://github.com/Automattic/socket.io-client/blob/1.3.5/lib/socket.js#L244
   newSocket.onevent = function(packet)
   {
-    var args = packet.data || [];
+    const args = packet.data || [];
 
-    if (null != packet.id)
+    if (packet.id != null)
     {
       args.push(this.ack(packet.id));
     }
@@ -27,7 +27,7 @@ module.exports = function patchNewSocket(newSocket, newEmit)
   // Modified https://github.com/Automattic/socket.io-client/blob/1.3.5/lib/socket.js#L318
   newSocket.emitBuffered = function()
   {
-    var i;
+    let i;
 
     for (i = 0; i < this.receiveBuffer.length; i++)
     {

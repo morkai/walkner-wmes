@@ -2,7 +2,7 @@
 
 'use strict';
 
-var setUpRoutes = require('./routes');
+const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
   expressId: 'express'
@@ -10,7 +10,7 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startPermalinksModule(app, module)
 {
-  var config = module.config;
+  const config = module.config;
 
   app.onModuleReady(
     [

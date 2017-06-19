@@ -2,9 +2,9 @@
 
 'use strict';
 
-var fs = require('fs');
-var semver = require('semver');
-var step = require('h5.step');
+const fs = require('fs');
+const semver = require('semver');
+const step = require('h5.step');
 
 module.exports = function sendUpdateRoute(app, xiconfModule, req, res, next)
 {
@@ -20,21 +20,21 @@ module.exports = function sendUpdateRoute(app, xiconfModule, req, res, next)
         return this.skip(err);
       }
 
-      var updates = [];
-      var inputVersion = req.params.version;
+      const updates = [];
+      const inputVersion = req.params.version;
 
-      for (var i = 0; i < allUpdateFiles.length; ++i)
+      for (let i = 0; i < allUpdateFiles.length; ++i)
       {
-        var updateFile = allUpdateFiles[i];
-        var matches = updateFile.match(/^([0-9a-z.-]+)-([0-9a-z.-]+)\.zip$/);
+        const updateFile = allUpdateFiles[i];
+        const matches = updateFile.match(/^([0-9a-z.-]+)-([0-9a-z.-]+)\.zip$/);
 
         if (!matches)
         {
           continue;
         }
 
-        var fromVersion = matches[1];
-        var toVersion = matches[2];
+        const fromVersion = matches[1];
+        const toVersion = matches[2];
 
         try
         {
@@ -55,7 +55,7 @@ module.exports = function sendUpdateRoute(app, xiconfModule, req, res, next)
         return a.to === b.to ? 0 : semver.lt(a.to, b.to) ? -1 : 1;
       });
 
-      var update = updates.length ? updates[updates.length - 1] : null;
+      const update = updates.length ? updates[updates.length - 1] : null;
 
       this.updateFile = update && semver.gt(update.to, inputVersion) ? update.fileName : null;
     },

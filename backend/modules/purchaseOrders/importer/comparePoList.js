@@ -2,16 +2,16 @@
 
 'use strict';
 
-var _ = require('lodash');
-var deepEqual = require('deep-equal');
-var step = require('h5.step');
+const _ = require('lodash');
+const deepEqual = require('deep-equal');
+const step = require('h5.step');
 
 module.exports = function comparePoList(app, importerModule, purchaseOrders, done)
 {
-  var PurchaseOrder = app[importerModule.config.mongooseId].model('PurchaseOrder');
-  var orderIds = Object.keys(purchaseOrders);
+  const PurchaseOrder = app[importerModule.config.mongooseId].model('PurchaseOrder');
+  const orderIds = Object.keys(purchaseOrders);
 
-  importerModule.debug("Comparing %d POs...", orderIds.length);
+  importerModule.debug('Comparing %d POs...', orderIds.length);
 
   if (orderIds.length === 0)
   {
@@ -21,10 +21,10 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
   step(
     function findPosStep()
     {
-      var conditions = {
+      const conditions = {
         open: true
       };
-      var fields = {
+      const fields = {
         _id: 1,
         'importedAt': 1,
         'items._id': 1,
@@ -38,14 +38,14 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
     {
       if (err)
       {
-        importerModule.error("Failed to find POs for comparison: %s", err.message);
+        importerModule.error('Failed to find POs for comparison: %s', err.message);
 
         return this.done(done, err);
       }
 
       this.importedAt = purchaseOrders[orderIds[0]].importedAt;
 
-      var closedOrders = findClosedOrders(openOrders, purchaseOrders, this.importedAt);
+      const closedOrders = findClosedOrders(openOrders, purchaseOrders, this.importedAt);
 
       if (closedOrders.ids.length)
       {
@@ -57,12 +57,12 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
     },
     function(err)
     {
-      var closedOrderIds = this.closedOrderIds;
+      const closedOrderIds = this.closedOrderIds;
 
       if (err)
       {
         importerModule.error(
-          "Failed to close %d POs [%s]: %s",
+          'Failed to close %d POs [%s]: %s',
           closedOrderIds.length,
           closedOrderIds.join(', '),
           err.message
@@ -71,14 +71,14 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
       else if (closedOrderIds.length)
       {
         importerModule.info(
-          "Closed %d POs: %s",
+          'Closed %d POs: %s',
           closedOrderIds.length,
           closedOrderIds.join(', ')
         );
       }
 
-      var insertList = [];
-      var updateList = [];
+      const insertList = [];
+      const updateList = [];
 
       _.forEach(this.orderModels, function(orderModel)
       {
@@ -92,7 +92,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
           });
         }
 
-        var orderDoc = purchaseOrders[orderModel._id];
+        const orderDoc = purchaseOrders[orderModel._id];
 
         if (orderDoc)
         {
@@ -115,8 +115,8 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
     },
     function()
     {
-      var i;
-      var l = this.insertList.length;
+      let i;
+      let l = this.insertList.length;
 
       this.invalidInsert = 0;
       this.invalidUpdate = 0;
@@ -133,7 +133,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
           {
             ++this.invalidInsert;
 
-            importerModule.warn("Invalid order for insert: %s", JSON.stringify(this.insertList[i]));
+            importerModule.warn('Invalid order for insert: %s', JSON.stringify(this.insertList[i]));
           }
         }
       }
@@ -152,7 +152,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
           {
             ++this.invalidUpdate;
 
-            importerModule.warn("Invalid order for update: %s", JSON.stringify(this.updateList[i]));
+            importerModule.warn('Invalid order for update: %s', JSON.stringify(this.updateList[i]));
           }
         }
       }
@@ -162,17 +162,17 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
       if (err)
       {
         return importerModule.error(
-          "Failed to sync %d new and %d existing POs: %s",
+          'Failed to sync %d new and %d existing POs: %s',
           this.insertList.length,
           this.updateList.length,
           err.stack
         );
       }
 
-      var created = this.insertList.length - this.invalidInsert;
-      var updated = this.updateList.length - this.invalidUpdate;
+      const created = this.insertList.length - this.invalidInsert;
+      const updated = this.updateList.length - this.invalidUpdate;
 
-      importerModule.info("Synced %d new and %d existing POs", created, updated);
+      importerModule.info('Synced %d new and %d existing POs', created, updated);
 
       app.broker.publish('purchaseOrders.synced', {
         created: created,
@@ -191,14 +191,14 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
   function findClosedOrders(dbOpenOrders, sapOpenOrders, importedAt)
   {
-    var ids = [];
-    var oldImportedAt = [];
-    var items = [];
+    const ids = [];
+    const oldImportedAt = [];
+    const items = [];
 
-    for (var i = 0, l = dbOpenOrders.length; i < l; ++i)
+    for (let i = 0, l = dbOpenOrders.length; i < l; ++i)
     {
-      var dbOpenOrder = dbOpenOrders[i];
-      var sapOpenOrder = sapOpenOrders[dbOpenOrder._id];
+      const dbOpenOrder = dbOpenOrders[i];
+      const sapOpenOrder = sapOpenOrders[dbOpenOrder._id];
 
       if (sapOpenOrder === undefined && dbOpenOrder.importedAt < importedAt)
       {
@@ -217,11 +217,11 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
   function closeOpenOrders(closedOrders, importedAt, step)
   {
-    var updatedAt = new Date();
+    const updatedAt = new Date();
 
     _.forEach(closedOrders.ids, function(id, orderIndex)
     {
-      var update = {
+      const update = {
         $set: {
           open: false,
           updatedAt: updatedAt,
@@ -240,15 +240,15 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
         }
       };
 
-      var items = closedOrders.items[orderIndex];
+      const items = closedOrders.items[orderIndex];
 
-      for (var i = 0, l = items.length; i < l; ++i)
+      for (let i = 0, l = items.length; i < l; ++i)
       {
-        var item = items[i];
+        const item = items[i];
 
         if (!item.completed)
         {
-          var key = 'items/' + item._id + '/completed';
+          const key = 'items/' + item._id + '/completed';
 
           update.$set['items.' + i + '.completed'] = true;
           update.$push.changes.data[key] = [false, true];
@@ -266,7 +266,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
       return;
     }
 
-    var changes = {};
+    const changes = {};
 
     _.forEach([
       'pOrg',
@@ -277,8 +277,8 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
       'docDate'
     ], function(propertyName)
     {
-      var oldValue = orderModel[propertyName];
-      var newValue = orderDoc[propertyName];
+      const oldValue = orderModel[propertyName];
+      const newValue = orderDoc[propertyName];
 
       if (!deepEqual(newValue, oldValue))
       {
@@ -287,7 +287,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
       }
     });
 
-    var itemChanges = compareItems(orderModel.items, orderDoc.items, changes);
+    const itemChanges = compareItems(orderModel.items, orderDoc.items, changes);
 
     if (itemChanges)
     {
@@ -317,8 +317,8 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
   function compareItems(oldItems, newItems, changes)
   {
-    var changed = null;
-    var newItemMap = {};
+    let changed = null;
+    const newItemMap = {};
 
     _.forEach(newItems, function(newItem)
     {
@@ -351,14 +351,14 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
 
   function compareItem(oldItem, i, newItemMap, changes)
   {
-    var keyPrefix = 'items/' + oldItem._id;
-    var newItem = newItemMap[oldItem._id];
+    const keyPrefix = 'items/' + oldItem._id;
+    const newItem = newItemMap[oldItem._id];
 
     if (newItem)
     {
       delete newItemMap[oldItem._id];
 
-      var changed = false;
+      let changed = false;
 
       _.forEach([
         'qty',
@@ -368,8 +368,8 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
         'schedule'
       ], function(propertyName)
       {
-        var oldValue = oldItem[propertyName];
-        var newValue = newItem[propertyName];
+        let oldValue = oldItem[propertyName];
+        const newValue = newItem[propertyName];
 
         if (oldValue && typeof oldValue.toObject === 'function')
         {

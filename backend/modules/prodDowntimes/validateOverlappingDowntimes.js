@@ -2,21 +2,21 @@
 
 'use strict';
 
-var moment = require('moment');
+const moment = require('moment');
 
 module.exports = function validateOverlappingDowntimes(app, pdModule, prodDowntime, changes, done)
 {
-  var express = app[pdModule.config.expressId];
-  var mongoose = app[pdModule.config.mongooseId];
-  var ProdDowntime = mongoose.model('ProdDowntime');
+  const express = app[pdModule.config.expressId];
+  const mongoose = app[pdModule.config.mongooseId];
+  const ProdDowntime = mongoose.model('ProdDowntime');
 
   if (!changes.startedAt && !changes.finishedAt)
   {
     return done(null);
   }
 
-  var conditions = {prodShift: prodDowntime.prodShift};
-  var fields = {startedAt: 1, finishedAt: 1};
+  const conditions = {prodShift: prodDowntime.prodShift};
+  const fields = {startedAt: 1, finishedAt: 1};
 
   ProdDowntime.find(conditions, fields).lean().exec(function(err, prodDowntimes)
   {
@@ -25,22 +25,22 @@ module.exports = function validateOverlappingDowntimes(app, pdModule, prodDownti
       return done(err);
     }
 
-    var startedAt = changes.startedAt || prodDowntime.startedAt;
-    var finishedAt = changes.finishedAt || prodDowntime.finishedAt;
+    let startedAt = changes.startedAt || prodDowntime.startedAt;
+    let finishedAt = changes.finishedAt || prodDowntime.finishedAt;
 
-    for (var i = 0, l = prodDowntimes.length; i < l; ++i)
+    for (let i = 0, l = prodDowntimes.length; i < l; ++i)
     {
-      var pd = prodDowntimes[i];
+      const pd = prodDowntimes[i];
 
       if (pd._id === prodDowntime._id || startedAt >= pd.finishedAt || finishedAt <= pd.startedAt)
       {
         continue;
       }
 
-      var pdStartedAt = moment(pd.startedAt).milliseconds(0).valueOf();
-      var pdFinishedAt = moment(pd.finishedAt).milliseconds(0).valueOf();
-      var newStartedAt = moment(startedAt).milliseconds(0).valueOf();
-      var newFinishedAt = moment(finishedAt).milliseconds(0).valueOf();
+      const pdStartedAt = moment(pd.startedAt).milliseconds(0).valueOf();
+      const pdFinishedAt = moment(pd.finishedAt).milliseconds(0).valueOf();
+      const newStartedAt = moment(startedAt).milliseconds(0).valueOf();
+      const newFinishedAt = moment(finishedAt).milliseconds(0).valueOf();
 
       if (newStartedAt === pdFinishedAt)
       {

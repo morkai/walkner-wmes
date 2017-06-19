@@ -2,14 +2,14 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
-var helpers = require('./helpers');
-var report8 = require('../report8');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
+const helpers = require('./helpers');
+const report8 = require('../report8');
 
-var ARRAY_PROPS = ['days', 'shifts', 'divisions', 'subdivisionTypes', 'prodLines'];
-var NUMERIC_PROPS = [
+const ARRAY_PROPS = ['days', 'shifts', 'divisions', 'subdivisionTypes', 'prodLines'];
+const NUMERIC_PROPS = [
   'fap0',
   'startup',
   'shutdown',
@@ -25,11 +25,11 @@ var NUMERIC_PROPS = [
 
 module.exports = function report8Route(app, reportsModule, req, res, next)
 {
-  var express = app[reportsModule.config.expressId];
-  var orgUnitsModule = app[reportsModule.config.orgUnitsId];
-  var settingsModule = app[reportsModule.config.settingsId];
-  var query = req.query;
-  var options = {
+  const express = app[reportsModule.config.expressId];
+  const orgUnitsModule = app[reportsModule.config.orgUnitsId];
+  const settingsModule = app[reportsModule.config.settingsId];
+  const query = req.query;
+  const options = {
     debug: query.debug === '1',
     fromTime: helpers.getTime(query.from),
     toTime: helpers.getTime(query.to),
@@ -54,7 +54,7 @@ module.exports = function report8Route(app, reportsModule, req, res, next)
 
   options.fromTime = moment(options.fromTime).startOf(options.interval).valueOf();
 
-  var toMoment = moment(options.toTime).startOf(options.interval);
+  const toMoment = moment(options.toTime).startOf(options.interval);
 
   if (options.fromTime === toMoment.valueOf())
   {
@@ -65,36 +65,36 @@ module.exports = function report8Route(app, reportsModule, req, res, next)
 
   _.forEach(ARRAY_PROPS, function(prop)
   {
-    var value = query[prop];
+    const value = query[prop];
 
     options[prop] = _.isString(value) && !_.isEmpty(value) ? value.split(',') : [];
   });
 
   _.forEach(NUMERIC_PROPS, function(prop)
   {
-    var value = parseInt(query[prop], 10);
+    const value = parseInt(query[prop], 10);
 
     options[prop] = !isNaN(value) && value >= 0 ? value : 0;
   });
 
   if (options.prodLines.length)
   {
-    var divisions = {};
+    const divisions = {};
 
     _.forEach(options.prodLines, function(prodLineId)
     {
-      var prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
+      const prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
 
       if (!prodLine)
       {
         return;
       }
 
-      var prodFlows = orgUnitsModule.getProdFlowsFor(prodLine);
+      const prodFlows = orgUnitsModule.getProdFlowsFor(prodLine);
 
       _.forEach(prodFlows, function(prodFlow)
       {
-        var prodFlowId = prodFlow._id.toString();
+        const prodFlowId = prodFlow._id.toString();
 
         if (!options.prodFlows[prodFlowId])
         {
@@ -103,7 +103,7 @@ module.exports = function report8Route(app, reportsModule, req, res, next)
 
         options.prodFlows[prodFlowId].push(prodLineId);
 
-        var subdivision = orgUnitsModule.getSubdivisionFor(prodFlow);
+        const subdivision = orgUnitsModule.getSubdivisionFor(prodFlow);
 
         if (subdivision)
         {
@@ -130,11 +130,11 @@ module.exports = function report8Route(app, reportsModule, req, res, next)
   }
   else
   {
-    var prodDivisionCount = orgUnitsModule
+    const prodDivisionCount = orgUnitsModule
       .getAllByType('division')
       .filter(function(d) { return d.type === 'prod'; })
       .length;
-    var setProdFlows = options.divisions.length !== prodDivisionCount;
+    const setProdFlows = options.divisions.length !== prodDivisionCount;
 
     _.forEach(options.divisions, function(divisionId)
     {

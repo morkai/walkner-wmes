@@ -4,7 +4,7 @@
 
 module.exports = function parseSapTime(input)
 {
-  var matches = input.match(/^([0-9]{2}):?([0-9]{2})(?::?([0-9]{2}))?$/);
+  const matches = input.match(/^([0-9]{2}):?([0-9]{2})(?::?([0-9]{2}))?$/);
 
   return matches === null ? null : {
     h: +matches[1],

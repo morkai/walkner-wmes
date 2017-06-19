@@ -2,32 +2,32 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
-var ObjectId = require('mongoose').Types.ObjectId;
-var util = require('./util');
-var calcFte = require('./calcFte');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
+const ObjectId = require('mongoose').Types.ObjectId;
+const util = require('./util');
+const calcFte = require('./calcFte');
 
 module.exports = function report5(mongoose, options, done)
 {
-  /*jshint validthis:true*/
+  /* jshint validthis:true*/
 
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var FteMasterEntry = mongoose.model('FteMasterEntry');
-  var FteLeaderEntry = mongoose.model('FteLeaderEntry');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const FteMasterEntry = mongoose.model('FteMasterEntry');
+  const FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
-  var fromDate = moment(options.fromTime).hours(6).toDate();
-  var toDate = moment(options.toTime).hours(6).toDate();
+  const fromDate = moment(options.fromTime).hours(6).toDate();
+  const toDate = moment(options.toTime).hours(6).toDate();
 
-  var prodFlowMap = {};
+  const prodFlowMap = {};
 
   _.forEach(options.prodFlows || [], function(prodFlowId)
   {
     prodFlowMap[prodFlowId] = true;
   });
 
-  var results = {
+  const results = {
     options: options,
     days: {},
     data: {},
@@ -109,7 +109,7 @@ module.exports = function report5(mongoose, options, done)
       }
     });
 
-    var daysInGroups = {};
+    const daysInGroups = {};
 
     _.forEach(results.days, function(days, groupKey)
     {
@@ -123,7 +123,7 @@ module.exports = function report5(mongoose, options, done)
 
   function calcEfficiencyStep()
   {
-    var $match = {
+    const $match = {
       startedAt: {$gte: fromDate, $lt: toDate},
       laborTime: {$gt: 0},
       workerCount: {$gt: 0},
@@ -132,7 +132,7 @@ module.exports = function report5(mongoose, options, done)
 
     if (options.orgUnitType)
     {
-      var orgUnitProperty = options.orgUnitType === 'mrpController'
+      const orgUnitProperty = options.orgUnitType === 'mrpController'
         ? 'mrpControllers'
         : options.orgUnitType;
 
@@ -176,14 +176,14 @@ module.exports = function report5(mongoose, options, done)
       return this.done(done, err);
     }
 
-    var doc = docs.length === 1 ? docs[0] : {
+    const doc = docs.length === 1 ? docs[0] : {
       num: 0,
       eff: 0,
       qty: 0
     };
-    var dirIndir = results.dirIndir;
-    var effIneff = results.effIneff;
-    var fteResults = this.fteResults;
+    const dirIndir = results.dirIndir;
+    const effIneff = results.effIneff;
+    const fteResults = this.fteResults;
 
     dirIndir.storage = util.round(fteResults.totals.leader);
 
@@ -202,16 +202,16 @@ module.exports = function report5(mongoose, options, done)
 
   function fillAndSortDataStep()
   {
-    var sortedData = [];
-    var createNextGroupKey = util.createCreateNextGroupKey(options.interval);
-    var lastGroupKey = null;
-    var groupKeys = Object.keys(results.data).sort(function(a, b) { return a - b; });
-    var lastGroupIndex = groupKeys.length - 1;
-    var toTime = Math.min(options.toTime, Date.now());
+    const sortedData = [];
+    const createNextGroupKey = util.createCreateNextGroupKey(options.interval);
+    let lastGroupKey = null;
+    const groupKeys = Object.keys(results.data).sort(function(a, b) { return a - b; });
+    const lastGroupIndex = groupKeys.length - 1;
+    const toTime = Math.min(options.toTime, Date.now());
 
     _.forEach(groupKeys, function(key, i)
     {
-      var data = results.data[key];
+      const data = results.data[key];
 
       while (lastGroupKey !== null && lastGroupKey < data.key)
       {
@@ -249,7 +249,7 @@ module.exports = function report5(mongoose, options, done)
 
   function countFteMasterEntries(fteRatios, done)
   {
-    var conditions = {
+    const conditions = {
       date: {
         $gte: fromDate,
         $lt: toDate
@@ -262,18 +262,18 @@ module.exports = function report5(mongoose, options, done)
       conditions.subdivision = {$in: options.subdivisions};
     }
 
-    var fields = {
+    const fields = {
       _id: 0,
       date: 1,
       tasks: 1
     };
 
-    var stream = FteMasterEntry
+    const stream = FteMasterEntry
       .find(conditions, fields)
       .sort({date: 1})
       .lean()
       .cursor();
-    var complete = _.once(done);
+    const complete = _.once(done);
 
     stream.on('error', complete);
     stream.on('end', complete);
@@ -282,7 +282,7 @@ module.exports = function report5(mongoose, options, done)
 
   function countFteLeaderEntries(fteRatios, done)
   {
-    var subdivisionMap;
+    let subdivisionMap;
 
     if (Array.isArray(options.subdivisions))
     {
@@ -298,7 +298,7 @@ module.exports = function report5(mongoose, options, done)
       subdivisionMap = null;
     }
 
-    var conditions = {
+    const conditions = {
       date: {
         $gte: fromDate,
         $lt: toDate
@@ -306,19 +306,19 @@ module.exports = function report5(mongoose, options, done)
       'totals.overall': {$gt: 0}
     };
 
-    var fields = {
+    const fields = {
       _id: 0,
       subdivision: 1,
       date: 1,
       tasks: 1
     };
 
-    var stream = FteLeaderEntry
+    const stream = FteLeaderEntry
       .find(conditions, fields)
       .sort({date: 1})
       .lean()
       .cursor();
-    var complete = _.once(done);
+    const complete = _.once(done);
 
     stream.on('error', complete);
     stream.on('end', complete);
@@ -327,7 +327,7 @@ module.exports = function report5(mongoose, options, done)
 
   function findQuantityDone(done)
   {
-    var $match = {
+    const $match = {
       startedAt: {$gte: fromDate, $lt: toDate},
       workCenter: {$not: /^SPARE/},
       mechOrder: false,
@@ -339,7 +339,7 @@ module.exports = function report5(mongoose, options, done)
       $match[options.orgUnitType] = prepareOrgUnitId(options.orgUnitType, options.orgUnitId);
     }
 
-    var $sum = options.weekends ? '$quantityDone' : {
+    const $sum = options.weekends ? '$quantityDone' : {
       $cond: [
         {
           $or: [
@@ -372,14 +372,14 @@ module.exports = function report5(mongoose, options, done)
 
   function handleFteMasterEntry(fteRatios, fteMasterEntry)
   {
-    var dataEntry = getDataEntry(fteMasterEntry.date);
+    const dataEntry = getDataEntry(fteMasterEntry.date);
 
     if (dataEntry === null)
     {
       return;
     }
 
-    var ratios = fteRatios[fteMasterEntry.date.getTime()];
+    let ratios = fteRatios[fteMasterEntry.date.getTime()];
 
     if (!ratios || ratios.flows === -1)
     {
@@ -389,26 +389,26 @@ module.exports = function report5(mongoose, options, done)
       };
     }
 
-    var tasks = fteMasterEntry.tasks;
+    const tasks = fteMasterEntry.tasks;
 
-    for (var i = 0, l = tasks.length; i < l; ++i)
+    for (let i = 0, l = tasks.length; i < l; ++i)
     {
-      var task = tasks[i];
-      var isProdFlow = task.type === 'prodFlow';
-      var prodFunctions = task.functions;
-      var ratio = isProdFlow ? ratios.flows : ratios.tasks;
+      const task = tasks[i];
+      const isProdFlow = task.type === 'prodFlow';
+      const prodFunctions = task.functions;
+      const ratio = isProdFlow ? ratios.flows : ratios.tasks;
 
-      for (var ii = 0, ll = prodFunctions.length; ii < ll; ++ii)
+      for (let ii = 0, ll = prodFunctions.length; ii < ll; ++ii)
       {
-        var prodFunction = prodFunctions[ii];
-        var dirIndirRatio = options.directProdFunctions[prodFunction.id];
-        var directRatio = dirIndirRatio / 100;
-        var companies = prodFunction.companies;
+        const prodFunction = prodFunctions[ii];
+        const dirIndirRatio = options.directProdFunctions[prodFunction.id];
+        const directRatio = dirIndirRatio / 100;
+        const companies = prodFunction.companies;
 
-        for (var iii = 0, lll = companies.length; iii < lll; ++iii)
+        for (let iii = 0, lll = companies.length; iii < lll; ++iii)
         {
-          var company = companies[iii];
-          var count = company.count;
+          const company = companies[iii];
+          const count = company.count;
 
           if (count <= 0)
           {
@@ -440,13 +440,13 @@ module.exports = function report5(mongoose, options, done)
       dataEntry.dni[prodFunctionId][companyId] = [0, 0];
     }
 
-    var dirIndir = dataEntry.dni[prodFunctionId][companyId];
+    const dirIndir = dataEntry.dni[prodFunctionId][companyId];
 
     if (isProdFlow && directRatio > 0)
     {
       dirIndir[0] += count * directRatio;
 
-      var indirectRatio = 1 - directRatio;
+      const indirectRatio = 1 - directRatio;
 
       if (indirectRatio > 0)
       {
@@ -487,9 +487,9 @@ module.exports = function report5(mongoose, options, done)
   {
     if (isProdFlow && dirIndirRatio > 0)
     {
-      var dirRatio = dirIndirRatio / 100;
-      var indirRatio = 1 - dirRatio;
-      var dirCount = count * dirRatio;
+      const dirRatio = dirIndirRatio / 100;
+      const indirRatio = 1 - dirRatio;
+      const dirCount = count * dirRatio;
 
       dirIndir.direct += dirCount;
 
@@ -525,14 +525,14 @@ module.exports = function report5(mongoose, options, done)
       return;
     }
 
-    var dataEntry = getDataEntry(fteLeaderEntry.date);
+    const dataEntry = getDataEntry(fteLeaderEntry.date);
 
     if (dataEntry === null)
     {
       return;
     }
 
-    var ratios = fteRatios[fteLeaderEntry.date.getTime()];
+    let ratios = fteRatios[fteLeaderEntry.date.getTime()];
 
     if (!ratios || ratios.undivided === -1)
     {
@@ -542,12 +542,12 @@ module.exports = function report5(mongoose, options, done)
       };
     }
 
-    var tasks = fteLeaderEntry.tasks;
-    var matchingSubdivision = subdivisionMap === null || subdivisionMap[fteLeaderEntry.subdivision] === true;
+    const tasks = fteLeaderEntry.tasks;
+    const matchingSubdivision = subdivisionMap === null || subdivisionMap[fteLeaderEntry.subdivision] === true;
 
-    for (var i = 0, l = tasks.length; i < l; ++i)
+    for (let i = 0, l = tasks.length; i < l; ++i)
     {
-      var task = tasks[i];
+      const task = tasks[i];
 
       if (task.childCount > 0)
       {
@@ -564,9 +564,9 @@ module.exports = function report5(mongoose, options, done)
 
       if (Array.isArray(task.functions) && task.functions.length)
       {
-        for (var ii = 0, ll = task.functions.length; ii < ll; ++ii)
+        for (let ii = 0, ll = task.functions.length; ii < ll; ++ii)
         {
-          var taskFunction = task.functions[ii];
+          const taskFunction = task.functions[ii];
 
           if (matchingSubdivision)
           {
@@ -590,16 +590,16 @@ module.exports = function report5(mongoose, options, done)
 
   function countCompanyDirIndir(dataEntry, companies, prodFunctionId)
   {
-    for (var i = 0, l = companies.length; i < l; ++i)
+    for (let i = 0, l = companies.length; i < l; ++i)
     {
-      var company = companies[i];
-      var count = company.count;
+      const company = companies[i];
+      let count = company.count;
 
       if (Array.isArray(count))
       {
         count = 0;
 
-        for (var ii = 0, ll = company.count.length; ii < ll; ++ii)
+        for (let ii = 0, ll = company.count.length; ii < ll; ++ii)
         {
           count += company.count[ii].value;
         }
@@ -614,11 +614,11 @@ module.exports = function report5(mongoose, options, done)
 
   function countStorageByProdTasks(division, task, taskCompanies, ratios)
   {
-    for (var i = 0, l = taskCompanies.length; i < l; ++i)
+    for (let i = 0, l = taskCompanies.length; i < l; ++i)
     {
-      var company = taskCompanies[i];
-      var divided = Array.isArray(company.count);
-      var count = divided ? getDivisionCount(division, company.count) : company.count;
+      const company = taskCompanies[i];
+      const divided = Array.isArray(company.count);
+      const count = divided ? getDivisionCount(division, company.count) : company.count;
 
       addToProperty(
         results.dirIndir.storageByProdTasks,
@@ -630,9 +630,9 @@ module.exports = function report5(mongoose, options, done)
 
   function getDataEntry(date)
   {
-    var time = date.getTime();
-    var dayMoment = moment(time).hours(0);
-    var weekDay = dayMoment.day();
+    let time = date.getTime();
+    const dayMoment = moment(time).hours(0);
+    const weekDay = dayMoment.day();
 
     if (!options.weekends && (weekDay === 0 || weekDay === 6))
     {
@@ -641,14 +641,14 @@ module.exports = function report5(mongoose, options, done)
 
     if (options.interval !== 'shift')
     {
-      var dayTime = dayMoment.valueOf();
+      const dayTime = dayMoment.valueOf();
 
       time = dayMoment.startOf(options.interval).valueOf();
 
       increaseDayCount(time, dayTime);
     }
 
-    var key = time + '';
+    const key = time + '';
 
     if (results.data[key] === undefined)
     {
@@ -692,7 +692,7 @@ module.exports = function report5(mongoose, options, done)
       );
     }
 
-    var divisionCount = _.find(divisionsCount, function(divisionCount)
+    const divisionCount = _.find(divisionsCount, function(divisionCount)
     {
       return divisionCount.division === division;
     });

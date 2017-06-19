@@ -4,7 +4,7 @@
 
 module.exports = function setUpPermalinksRoutes(app, module)
 {
-  var express = app[module.config.expressId];
+  const express = app[module.config.expressId];
 
   express.get('/r/productionOrder/:orderNo', function(req, res)
   {

@@ -2,11 +2,11 @@
 
 'use strict';
 
-var path = require('path');
+const path = require('path');
 
 module.exports = function sendScanTemplateJpgRoute(app, module, req, res, next)
 {
-  var express = app[module.config.expressId];
+  const express = app[module.config.expressId];
 
   if (!/^[a-z0-9]+$/.test(req.params.id))
   {

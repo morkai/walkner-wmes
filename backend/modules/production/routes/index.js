@@ -2,25 +2,25 @@
 
 'use strict';
 
-var step = require('h5.step');
-var findOrdersRoute = require('./findOrdersRoute');
-var getProductionStateRoute = require('./getProductionStateRoute');
-var getProductionHistoryRoute = require('./getProductionHistoryRoute');
-var syncRoute = require('./syncRoute');
-var checkSerialNumberRoute = require('./checkSerialNumberRoute');
-var getRecentPersonnelRoute = require('./getRecentPersonnelRoute');
+const step = require('h5.step');
+const findOrdersRoute = require('./findOrdersRoute');
+const getProductionStateRoute = require('./getProductionStateRoute');
+const getProductionHistoryRoute = require('./getProductionHistoryRoute');
+const syncRoute = require('./syncRoute');
+const checkSerialNumberRoute = require('./checkSerialNumberRoute');
+const getRecentPersonnelRoute = require('./getRecentPersonnelRoute');
 
 module.exports = function setUpProductionRoutes(app, productionModule)
 {
-  var express = app[productionModule.config.expressId];
-  var settings = app[productionModule.config.settingsId];
-  var userModule = app[productionModule.config.userId];
-  var updaterModule = app[productionModule.config.updaterId];
+  const express = app[productionModule.config.expressId];
+  const settings = app[productionModule.config.settingsId];
+  const userModule = app[productionModule.config.userId];
+  const updaterModule = app[productionModule.config.updaterId];
 
   express.get('/operator', function(req, res)
   {
-    var sessionUser = req.session.user;
-    var locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
+    const sessionUser = req.session.user;
+    const locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
 
     res.format({
       'text/html': function()

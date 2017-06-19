@@ -4,11 +4,11 @@
 
 module.exports = function setUpEmptyOrdersRoutes(app, ordersModule)
 {
-  var express = app[ordersModule.config.expressId];
-  var auth = app[ordersModule.config.userId].auth;
-  var EmptyOrder = app[ordersModule.config.mongooseId].model('EmptyOrder');
+  const express = app[ordersModule.config.expressId];
+  const auth = app[ordersModule.config.userId].auth;
+  const EmptyOrder = app[ordersModule.config.mongooseId].model('EmptyOrder');
 
-  var canView = auth('ORDERS:VIEW');
+  const canView = auth('ORDERS:VIEW');
 
   express.get('/emptyOrders', canView, express.crud.browseRoute.bind(null, app, EmptyOrder));
 };

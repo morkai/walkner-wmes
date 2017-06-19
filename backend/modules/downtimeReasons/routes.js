@@ -4,12 +4,12 @@
 
 module.exports = function setUpDowntimeReasonsRoutes(app, downtimeReasonsModule, useDictionaryModel)
 {
-  var express = app[downtimeReasonsModule.config.expressId];
-  var auth = app[downtimeReasonsModule.config.userId].auth;
-  var DowntimeReason = app[downtimeReasonsModule.config.mongooseId].model('DowntimeReason');
+  const express = app[downtimeReasonsModule.config.expressId];
+  const auth = app[downtimeReasonsModule.config.userId].auth;
+  const DowntimeReason = app[downtimeReasonsModule.config.mongooseId].model('DowntimeReason');
 
-  var canView = auth('DICTIONARIES:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/downtimeReasons', canView, express.crud.browseRoute.bind(null, app, DowntimeReason));
 

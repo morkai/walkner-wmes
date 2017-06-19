@@ -4,7 +4,7 @@
 
 module.exports = function parseSapDate(input)
 {
-  var matches = input.match(/^([0-9]{2})[.\/-]?([0-9]{2})[.\/-]?([0-9]{4})$/);
+  let matches = input.match(/^([0-9]{2})[.\/-]?([0-9]{2})[.\/-]?([0-9]{4})$/);
 
   if (matches !== null)
   {

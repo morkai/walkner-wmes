@@ -2,12 +2,12 @@
 
 'use strict';
 
-var path = require('path');
-var _ = require('lodash');
-var step = require('h5.step');
-var fs = require('fs-extra');
-var comparePoList = require('./comparePoList');
-var parsers = {
+const path = require('path');
+const _ = require('lodash');
+const step = require('h5.step');
+const fs = require('fs-extra');
+const comparePoList = require('./comparePoList');
+const parsers = {
   html: require('./parseHtmlPoList'),
   text: require('./parseTextPoList'),
   json: require('./parseJsonPoList')
@@ -41,19 +41,19 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startPurchaseOrdersImporterModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("mongoose module is required!");
+    throw new Error('mongoose module is required!');
   }
 
-  var filePathCache = {};
-  var timeKeyToStepsMap = {};
-  var importQueue = [];
-  var importTimers = {};
-  var importLock = false;
-  var restarting = false;
+  const filePathCache = {};
+  const timeKeyToStepsMap = {};
+  const importQueue = [];
+  const importTimers = {};
+  let importLock = false;
+  let restarting = false;
 
   app.broker.subscribe('updater.restarting', function()
   {
@@ -69,19 +69,19 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
       return false;
     }
 
-    for (var i = 0, l = module.config.parsers.length; i < l; ++i)
+    for (let i = 0, l = module.config.parsers.length; i < l; ++i)
     {
-      var parserInfo = module.config.parsers[i];
-      var parser = parsers[parserInfo.type];
+      const parserInfo = module.config.parsers[i];
+      const parser = parsers[parserInfo.type];
 
       if (!parser)
       {
-        module.warn("Unknown parser: %s", parserInfo.type);
+        module.warn('Unknown parser: %s', parserInfo.type);
 
         continue;
       }
 
-      var matches = fileInfo.fileName.match(parserInfo.filterRe);
+      const matches = fileInfo.fileName.match(parserInfo.filterRe);
 
       if (matches !== null)
       {
@@ -100,9 +100,9 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
   function createTimeKey(timestamp, hourlyInterval)
   {
-    var date = new Date(timestamp);
-    var hours = Math.floor(date.getHours() / hourlyInterval) * hourlyInterval;
-    var timeKey = '';
+    const date = new Date(timestamp);
+    const hours = Math.floor(date.getHours() / hourlyInterval) * hourlyInterval;
+    let timeKey = '';
 
     timeKey += date.getFullYear();
     timeKey += (date.getMonth() < 9 ? '0' : '') + (date.getMonth() + 1);
@@ -116,10 +116,10 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
   {
     filePathCache[fileInfo.filePath] = true;
 
-    var timeKey = fileInfo.timeKey;
-    var step = fileInfo.step;
+    const timeKey = fileInfo.timeKey;
+    const step = fileInfo.step;
 
-    var stepsMap = timeKeyToStepsMap[timeKey];
+    let stepsMap = timeKeyToStepsMap[timeKey];
 
     if (stepsMap === undefined)
     {
@@ -133,7 +133,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
     stepsMap[step] = fileInfo;
 
-    module.debug("Handling %d step for %s...", step, timeKey);
+    module.debug('Handling %d step for %s...', step, timeKey);
 
     if (stepsMap.steps < fileInfo.stepCount)
     {
@@ -142,11 +142,11 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
         clearTimeout(importTimers[timeKey]);
       }
 
-      var delay = createTimeKey(Date.now(), fileInfo.hourlyInterval) === timeKey
+      const delay = createTimeKey(Date.now(), fileInfo.hourlyInterval) === timeKey
         ? module.config.lateDataDelay
         : 60000;
 
-      module.debug("Delaying %s by %d ms (steps=%d)...", timeKey, delay, stepsMap.steps);
+      module.debug('Delaying %s by %d ms (steps=%d)...', timeKey, delay, stepsMap.steps);
 
       importTimers[timeKey] = setTimeout(enqueueAndImport, delay, timeKey, true);
 
@@ -166,11 +166,11 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
     if (delayed)
     {
-      module.debug("Queued %s (delayed)...", timeKey);
+      module.debug('Queued %s (delayed)...', timeKey);
     }
     else
     {
-      module.debug("Queued %s...", timeKey);
+      module.debug('Queued %s...', timeKey);
     }
 
     importQueue.push(timeKey);
@@ -189,12 +189,12 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
     if (isWaitingForEarlierData(importQueue[0], Object.keys(importTimers)))
     {
-      return module.debug("Delayed %s: waiting for earlier data...", importQueue[0]);
+      return module.debug('Delayed %s: waiting for earlier data...', importQueue[0]);
     }
 
-    var startTime = Date.now();
-    var timeKey = importQueue.shift();
-    var stepsMap = timeKeyToStepsMap[timeKey];
+    const startTime = Date.now();
+    const timeKey = importQueue.shift();
+    const stepsMap = timeKeyToStepsMap[timeKey];
 
     if (!stepsMap)
     {
@@ -207,13 +207,13 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
     importSteps(stepsMap, function(purchaseOrders)
     {
-      var filePaths = collectFileInfoPaths(stepsMap);
+      const filePaths = collectFileInfoPaths(stepsMap);
 
       deleteFileInfoStepFiles(filePaths);
 
       setTimeout(removeFilePathsFromCache, 15000, filePaths);
 
-      module.debug("Imported %s in %d ms!", timeKey, Date.now() - startTime);
+      module.debug('Imported %s in %d ms!', timeKey, Date.now() - startTime);
 
       importLock = false;
 
@@ -225,15 +225,15 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
   function importSteps(stepsMap, done)
   {
-    var purchaseOrders = {};
-    var steps = [];
-    var stepCount = stepsMap[Object.keys(stepsMap)[0]].stepCount;
+    const purchaseOrders = {};
+    const steps = [];
+    const stepCount = stepsMap[Object.keys(stepsMap)[0]].stepCount;
 
-    for (var i = 1; i <= stepCount; ++i)
+    for (let i = 1; i <= stepCount; ++i)
     {
       if (stepsMap[i] === undefined)
       {
-        module.debug("Missing step %d :(", i);
+        module.debug('Missing step %d :(', i);
       }
       else
       {
@@ -258,21 +258,21 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
   {
     return function parseStep()
     {
-      var importedAt = new Date(fileInfo.timestamp);
+      const importedAt = new Date(fileInfo.timestamp);
 
       module.debug(
-        "Parsing step [%d] received at [%s]...",
+        'Parsing step [%d] received at [%s]...',
         fileInfo.step,
         app.formatDateTime(importedAt)
       );
 
-      var next = this.next();
+      const next = this.next();
 
       fs.readFile(fileInfo.filePath, 'utf8', function(err, contents)
       {
         if (err)
         {
-          module.error("Failed to read step file [%s]: %s", fileInfo.filePath, err.message);
+          module.error('Failed to read step file [%s]: %s', fileInfo.filePath, err.message);
         }
         else
         {
@@ -286,7 +286,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
   function collectFileInfoPaths(fileInfoMap)
   {
-    var filePaths = [];
+    const filePaths = [];
 
     _.forEach(fileInfoMap, function(fileInfo, key)
     {
@@ -316,14 +316,14 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
   function moveFileInfoStepFile(oldFilePath)
   {
-    var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
+    const newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
     fs.move(oldFilePath, newFilePath, {overwrite: true}, function(err)
     {
       if (err)
       {
         module.error(
-          "Failed to rename file [%s] to [%s]: %s", oldFilePath, newFilePath, err.message
+          'Failed to rename file [%s] to [%s]: %s', oldFilePath, newFilePath, err.message
         );
       }
     });
@@ -335,7 +335,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to delete file [%s]: %s", filePath, err.message);
+        module.error('Failed to delete file [%s]: %s', filePath, err.message);
       }
     });
   }
@@ -350,14 +350,14 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
   function createVendors(purchaseOrders)
   {
-    var vendorMap = {};
+    const vendorMap = {};
 
     _.forEach(purchaseOrders, function(po)
     {
       vendorMap[po.vendor] = po.vendorName;
     });
 
-    var vendorList = [];
+    const vendorList = [];
 
     _.forEach(vendorMap, function(vendorName, vendorId)
     {
@@ -377,7 +377,7 @@ exports.start = function startPurchaseOrdersImporterModule(app, module)
 
   function isWaitingForEarlierData(timeKey, waitingTimeKeys)
   {
-    for (var i = 0, l = waitingTimeKeys.length; i < l; ++i)
+    for (let i = 0, l = waitingTimeKeys.length; i < l; ++i)
     {
       if (waitingTimeKeys[i] < timeKey)
       {

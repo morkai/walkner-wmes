@@ -2,11 +2,11 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function syncCommand(app, productionModule, socket, logEntryStream, reply)
 {
-  var creator = app[productionModule.config.userId].createUserInfo(socket.handshake.user, socket);
+  const creator = app[productionModule.config.userId].createUserInfo(socket.handshake.user, socket);
 
   productionModule.syncLogEntryStream(creator, logEntryStream, function(err, lockLogEntry)
   {

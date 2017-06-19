@@ -2,23 +2,23 @@
 
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
-var step = require('h5.step');
-var canManage = require('../canManage');
+const _ = require('lodash');
+const moment = require('moment');
+const step = require('h5.step');
+const canManage = require('../canManage');
 
 module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, socket, data, reply)
 {
-  var userModule = app[fteModule.config.userId];
-  var subdivisionsModule = app[fteModule.config.subdivisionsId];
-  var settings = app[fteModule.config.settingsId];
+  const userModule = app[fteModule.config.userId];
+  const subdivisionsModule = app[fteModule.config.subdivisionsId];
+  const settings = app[fteModule.config.settingsId];
 
   if (!_.isFunction(reply))
   {
     reply = function() {};
   }
 
-  var user = socket.handshake.user;
+  const user = socket.handshake.user;
 
   if (!canManage(user, FteEntry))
   {
@@ -30,8 +30,8 @@ module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, socket,
     return reply(new Error('INPUT'));
   }
 
-  var shiftMoment = moment(data.date);
-  var subdivision = subdivisionsModule.modelsById[data.subdivision];
+  const shiftMoment = moment(data.date);
+  const subdivision = subdivisionsModule.modelsById[data.subdivision];
 
   if (!shiftMoment.isValid()
     || !subdivision
@@ -62,7 +62,7 @@ module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, socket,
     shiftMoment.hours(6);
   }
 
-  var condition = {
+  const condition = {
     subdivision: subdivision._id,
     date: shiftMoment.toDate()
   };
@@ -107,8 +107,8 @@ module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, socket,
     },
     function createFteEntryStep()
     {
-      var creator = userModule.createUserInfo(user, socket);
-      var options = {
+      const creator = userModule.createUserInfo(user, socket);
+      const options = {
         subdivision: condition.subdivision,
         subdivisionType: subdivision.type,
         date: condition.date,

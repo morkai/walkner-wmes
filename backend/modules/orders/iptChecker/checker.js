@@ -19,7 +19,7 @@ module.exports = function setUpNotifier(app, module)
 
   let checkInProgress = false;
   let checkCancelled = false;
-  let checkCallbacks = [];
+  const checkCallbacks = [];
 
   module.checkOrders = checkOrders;
 
@@ -343,7 +343,7 @@ module.exports = function setUpNotifier(app, module)
 
         _.forEach(this.emptyOrders, emptyOrder =>
         {
-          let invalidOrder = this.invalidOrders[emptyOrder._id];
+          const invalidOrder = this.invalidOrders[emptyOrder._id];
 
           if (!invalidOrder)
           {

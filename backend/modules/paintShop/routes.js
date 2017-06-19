@@ -49,7 +49,7 @@ module.exports = function setUpPaintShopRoutes(app, module)
         return;
       }
 
-      var date = term.args[1];
+      const date = term.args[1];
 
       if (date === 'current')
       {

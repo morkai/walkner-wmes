@@ -2,12 +2,12 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function setUpAlertsClient(app, module)
 {
-  var fte = app[module.config.fteId];
-  var messengerClient = app[module.config.messengerClientId];
+  const fte = app[module.config.fteId];
+  const messengerClient = app[module.config.messengerClientId];
 
   app.broker.subscribe('prodDowntimes.created.**', onDowntimeCreated);
   app.broker.subscribe('prodDowntimes.finished.**', onDowntimeFinished);
@@ -19,7 +19,7 @@ module.exports = function setUpAlertsClient(app, module)
   {
     if (_.isDate(prodDowntime.date) && prodDowntime.date.getTime() === fte.currentShift.date.getTime())
     {
-      var data = {
+      const data = {
         prodDowntimeId: prodDowntime._id
       };
 
@@ -36,13 +36,13 @@ module.exports = function setUpAlertsClient(app, module)
 
   function onDowntimeFinished(changes)
   {
-    var finishedAt = Date.parse(changes.finishedAt);
-    var shiftStartTime = fte.currentShift.date.getTime();
-    var shiftEndTime = shiftStartTime + 8 * 3600 * 1000;
+    const finishedAt = Date.parse(changes.finishedAt);
+    const shiftStartTime = fte.currentShift.date.getTime();
+    const shiftEndTime = shiftStartTime + 8 * 3600 * 1000;
 
     if (finishedAt >= shiftStartTime && finishedAt < shiftEndTime)
     {
-      var data = {
+      const data = {
         prodDowntimeId: changes._id
       };
 
@@ -59,7 +59,7 @@ module.exports = function setUpAlertsClient(app, module)
 
   function onAlertChanged(message)
   {
-    var data = {
+    const data = {
       prodDowntimeAlertId: message.model._id
     };
 

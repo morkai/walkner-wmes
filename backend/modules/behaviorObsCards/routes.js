@@ -125,8 +125,8 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
 
   function exportBehaviorObsCard(doc)
   {
-    var rows = [];
-    var date = app.formatDate(doc.date);
+    const rows = [];
+    const date = app.formatDate(doc.date);
 
     _.forEach(doc.observations, function(o)
     {
@@ -187,8 +187,8 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
 
   function countReportRoute(req, res, next)
   {
-    var query = req.query;
-    var options = {
+    const query = req.query;
+    const options = {
       fromTime: reportsModule.helpers.getTime(query.from) || null,
       toTime: reportsModule.helpers.getTime(query.to) || null,
       interval: query.interval || 'month',

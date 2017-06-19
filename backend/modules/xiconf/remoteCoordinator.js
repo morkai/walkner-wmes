@@ -2,44 +2,44 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
 
 module.exports = function setUpXiconfCommands(app, xiconfModule)
 {
-  var WORKING_ORDER_CHANGE_CHECK_DELAY = 15 * 60 * 1000;
-  var WORKING_ORDER_CHANGE_CHECK_NEAR_SHIFT_CHANGE_MINUTES = 15;
-  var FT_PROGRAM_ID = '__FT__';
+  let WORKING_ORDER_CHANGE_CHECK_DELAY = 15 * 60 * 1000;
+  const WORKING_ORDER_CHANGE_CHECK_NEAR_SHIFT_CHANGE_MINUTES = 15;
+  const FT_PROGRAM_ID = '__FT__';
 
-  var sio = app[xiconfModule.config.sioId];
-  var productionModule = app[xiconfModule.config.productionId];
-  var settingsModule = app[xiconfModule.config.settingsId];
-  var mongoose = app[xiconfModule.config.mongooseId];
-  var XiconfClient = mongoose.model('XiconfClient');
-  var XiconfResult = mongoose.model('XiconfResult');
-  var XiconfOrderResult = mongoose.model('XiconfOrderResult');
-  var XiconfOrder = mongoose.model('XiconfOrder');
-  var XiconfInvalidLed = mongoose.model('XiconfInvalidLed');
-  var XiconfHidLamp = mongoose.model('XiconfHidLamp');
-  var XiconfComponentWeight = mongoose.model('XiconfComponentWeight');
-  var Order = mongoose.model('Order');
-  var License = mongoose.model('License');
+  const sio = app[xiconfModule.config.sioId];
+  const productionModule = app[xiconfModule.config.productionId];
+  const settingsModule = app[xiconfModule.config.settingsId];
+  const mongoose = app[xiconfModule.config.mongooseId];
+  const XiconfClient = mongoose.model('XiconfClient');
+  const XiconfResult = mongoose.model('XiconfResult');
+  const XiconfOrderResult = mongoose.model('XiconfOrderResult');
+  const XiconfOrder = mongoose.model('XiconfOrder');
+  const XiconfInvalidLed = mongoose.model('XiconfInvalidLed');
+  const XiconfHidLamp = mongoose.model('XiconfHidLamp');
+  const XiconfComponentWeight = mongoose.model('XiconfComponentWeight');
+  const Order = mongoose.model('Order');
+  const License = mongoose.model('License');
 
-  var restarting = false;
+  let restarting = false;
 
-  var prodLinesToDataMap = {};
-  var ordersToDataMap = {};
-  var ordersToProdLinesMap = {};
-  var ordersToGetOrderDataQueueMap = {};
-  var ordersToOperationsQueueMap = {};
-  var ordersLocks = {};
-  var workingOrderChangeCheckTimers = {};
+  const prodLinesToDataMap = {};
+  let ordersToDataMap = {};
+  const ordersToProdLinesMap = {};
+  const ordersToGetOrderDataQueueMap = {};
+  const ordersToOperationsQueueMap = {};
+  const ordersLocks = {};
+  const workingOrderChangeCheckTimers = {};
 
-  var debugMode = false;
-  var orderResultsRecountLock = false;
-  var orderResultsToRecount = {};
-  var orderResultsRecountTimer = null;
+  let debugMode = false;
+  let orderResultsRecountLock = false;
+  let orderResultsToRecount = {};
+  let orderResultsRecountTimer = null;
 
   xiconfModule.remote = {
     checkSerialNumber: handleCheckSerialNumberRequest,
@@ -55,7 +55,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   {
     debugMode = enableDebugMode === true;
 
-    var cleanProdLinesToDataMap = {};
+    const cleanProdLinesToDataMap = {};
 
     _.forEach(prodLinesToDataMap, function(prodLineData, prodLineId)
     {
@@ -129,7 +129,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     {
       if (err)
       {
-        return xiconfModule.error("Failed to read the delay setting: %s", err.message);
+        return xiconfModule.error('Failed to read the delay setting: %s', err.message);
       }
 
       if (setting)
@@ -141,7 +141,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function onDelaySettingChanged(message)
   {
-    var delay = +message.value;
+    let delay = +message.value;
 
     if (isNaN(delay))
     {
@@ -196,15 +196,15 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function onProductionStateChanged(changes)
   {
-    var ps = changes.prodShift;
+    const ps = changes.prodShift;
 
     if (ps !== undefined && (ps === null || ps.leader !== undefined))
     {
       updateProdLinesLeader(changes._id, null);
     }
 
-    var pso = changes.prodShiftOrders;
-    var nextOrder = !!ps && ps.nextOrder !== undefined;
+    const pso = changes.prodShiftOrders;
+    const nextOrder = !!ps && ps.nextOrder !== undefined;
 
     if (!nextOrder && (pso === undefined || (_.isPlainObject(pso) && pso.orderId === undefined)))
     {
@@ -221,14 +221,14 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function onLicenseEdited(message)
   {
-    var licenseId = message.model._id;
-    var licenseKey = message.model.key;
+    const licenseId = message.model._id;
+    const licenseKey = message.model.key;
 
     XiconfClient.find({license: licenseId, socket: {$ne: null}}, {socket: 1}).lean().exec(function(err, xiconfClients)
     {
       if (err)
       {
-        return xiconfModule.error("Failed find a client on license edit: %s", err.message);
+        return xiconfModule.error('Failed find a client on license edit: %s', err.message);
       }
 
       if (!xiconfClients.length)
@@ -254,7 +254,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     step(
       function findOrdersStep()
       {
-        var condition = {
+        const condition = {
           _id: {$in: Object.keys(ordersToDataMap)}
         };
 
@@ -269,23 +269,23 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         this.orderNos = [];
 
-        for (var i = 0; i < orders.length; ++i)
+        for (let i = 0; i < orders.length; ++i)
         {
-          var order = orders[i];
-          var xiconfOrder = ordersToDataMap[order._id];
+          const order = orders[i];
+          const xiconfOrder = ordersToDataMap[order._id];
 
           if (!xiconfOrder || order.qty === xiconfOrder.quantityTodo)
           {
             continue;
           }
 
-          var $set = {
+          const $set = {
             quantityTodo: order.qty
           };
 
-          for (var ii = 0; ii < xiconfOrder.items.length; ++ii)
+          for (let ii = 0; ii < xiconfOrder.items.length; ++ii)
           {
-            var item = xiconfOrder.items[ii];
+            const item = xiconfOrder.items[ii];
 
             if (item.kind === 'test' || item.kind === 'weight')
             {
@@ -300,9 +300,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       },
       function recountOrdersStep()
       {
-        for (var i = 0; i < this.orderNos.length; ++i)
+        for (let i = 0; i < this.orderNos.length; ++i)
         {
-          var orderNo = this.orderNos[i];
+          const orderNo = this.orderNos[i];
 
           delete ordersToDataMap[orderNo];
 
@@ -314,7 +314,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         if (err)
         {
           return xiconfModule.error(
-            "Failed to update cached XiconfOrders data after Orders were synced: %s",
+            'Failed to update cached XiconfOrders data after Orders were synced: %s',
             err.message
           );
         }
@@ -327,7 +327,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     step(
       function findUpdatedXiconfOrdersStep()
       {
-        var condition = {
+        const condition = {
           _id: {$in: Object.keys(ordersToDataMap)},
           importedAt: new Date(message.timestamp)
         };
@@ -343,9 +343,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         this.orderNos = [];
 
-        for (var i = 0; i < updatedXiconfOrders.length; ++i)
+        for (let i = 0; i < updatedXiconfOrders.length; ++i)
         {
-          var orderNo = updatedXiconfOrders[i]._id;
+          const orderNo = updatedXiconfOrders[i]._id;
 
           delete ordersToDataMap[orderNo];
 
@@ -356,7 +356,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       },
       function recountOrdersStep()
       {
-        for (var i = 0; i < this.orderNos.length; ++i)
+        for (let i = 0; i < this.orderNos.length; ++i)
         {
           recountOrder({orderNo: this.orderNos[i]});
         }
@@ -366,7 +366,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         if (err)
         {
           return xiconfModule.error(
-            "Failed to remove cached XiconfOrder data after XiconfOrders were synced: %s",
+            'Failed to remove cached XiconfOrder data after XiconfOrders were synced: %s',
             err.message
           );
         }
@@ -376,14 +376,14 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function onXiconfResultsSynced(message)
   {
-    var orderResultIds = message.orders;
+    const orderResultIds = message.orders;
 
     if (!orderResultIds.length)
     {
       return;
     }
 
-    for (var i = 0; i < orderResultIds.length; ++i)
+    for (let i = 0; i < orderResultIds.length; ++i)
     {
       orderResultsToRecount[orderResultIds[i]] = true;
     }
@@ -425,7 +425,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return;
     }
 
-    var orderResultIds = Object.keys(orderResultsToRecount);
+    const orderResultIds = Object.keys(orderResultsToRecount);
 
     if (!orderResultIds.length)
     {
@@ -447,9 +447,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip(err);
         }
 
-        var orderNos = {};
+        const orderNos = {};
 
-        for (var i = 0; i < xiconfOrderResults.length; ++i)
+        for (let i = 0; i < xiconfOrderResults.length; ++i)
         {
           orderNos[xiconfOrderResults[i].no] = true;
         }
@@ -460,12 +460,12 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       },
       function findXiconfResultsStep()
       {
-        var conditions = {
+        const conditions = {
           orderNo: {$in: this.orderNos},
           serviceTag: null,
           result: 'success'
         };
-        var fields = {
+        const fields = {
           orderNo: 1,
           nc12: 1,
           workflow: 1,
@@ -487,10 +487,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip();
         }
 
-        for (var i = 0; i < xiconfResults.length; ++i)
+        for (let i = 0; i < xiconfResults.length; ++i)
         {
-          var xiconfResult = xiconfResults[i];
-          var input = {
+          const xiconfResult = xiconfResults[i];
+          const input = {
             serviceTag: null,
             orderNo: xiconfResult.orderNo,
             nc12: xiconfResult.nc12,
@@ -513,10 +513,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip(err);
         }
 
-        for (var i = 0; i < this.xiconfResults.length; ++i)
+        for (let i = 0; i < this.xiconfResults.length; ++i)
         {
-          var xiconfResult = this.xiconfResults[i];
-          var serviceTag = serviceTags[i];
+          const xiconfResult = this.xiconfResults[i];
+          const serviceTag = serviceTags[i];
 
           if (!serviceTag)
           {
@@ -533,7 +533,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip(err);
         }
 
-        for (var i = 0; i < this.orderNos.length; ++i)
+        for (let i = 0; i < this.orderNos.length; ++i)
         {
           recountOrder({orderNo: this.orderNos[i]}, this.group());
         }
@@ -542,7 +542,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       {
         if (err)
         {
-          xiconfModule.error("Failed to recount orders after results sync: %s", err.message);
+          xiconfModule.error('Failed to recount orders after results sync: %s', err.message);
         }
 
         orderResultsRecountLock = false;
@@ -554,9 +554,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function onClientsStateChanged(newState)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    var socket = this;
+    const socket = this;
 
     if (!socket.xiconf || !_.isPlainObject(newState))
     {
@@ -575,7 +575,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       if (err)
       {
         return xiconfModule.error(
-          "Failed to update client [%s] after changing state: %s",
+          'Failed to update client [%s] after changing state: %s',
           socket.xiconf.srcId,
           err.message
         );
@@ -592,9 +592,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleClientDisconnect()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    var socket = this;
+    const socket = this;
 
     if (!socket.xiconf)
     {
@@ -603,7 +603,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
     if (socket.xiconf.prodLineId !== null)
     {
-      var prodLineData = prodLinesToDataMap[socket.xiconf.prodLineId];
+      const prodLineData = prodLinesToDataMap[socket.xiconf.prodLineId];
 
       if (!prodLineData)
       {
@@ -618,13 +618,13 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       delete prodLineData.sockets[socket.id];
     }
 
-    var clientId = socket.xiconf.srcId;
+    const clientId = socket.xiconf.srcId;
 
-    xiconfModule.debug("[%s] disconnected from [%s] (socket=[%s])", clientId, socket.xiconf.prodLineId, socket.id);
+    xiconfModule.debug('[%s] disconnected from [%s] (socket=[%s])', clientId, socket.xiconf.prodLineId, socket.id);
 
     delete socket.xiconf;
 
-    var clientChanges = {
+    const clientChanges = {
       _id: clientId,
       connectedAt: null,
       disconnectedAt: new Date(),
@@ -635,7 +635,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     {
       if (err)
       {
-        xiconfModule.error("Failed to update client [%s] after disconnection: %s", clientId, err.message);
+        xiconfModule.error('Failed to update client [%s] after disconnection: %s', clientId, err.message);
       }
       else
       {
@@ -646,7 +646,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleClientConnect(data)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (!_.isObject(data) || !_.isString(data.srcId) || _.isEmpty(data.srcId))
     {
@@ -658,7 +658,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       data.prodLineId = null;
     }
 
-    var socket = this;
+    const socket = this;
 
     if (!socket.xiconf)
     {
@@ -668,7 +668,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       };
     }
 
-    var reconnected = false;
+    let reconnected = false;
 
     if (socket.xiconf.prodLineId !== null)
     {
@@ -677,7 +677,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         delete getProdLineData(socket.xiconf.prodLineId).sockets[socket.id];
 
         xiconfModule.warn(
-          "[%s] changed prod line from [%s] to [%s] (socket=[%s])",
+          '[%s] changed prod line from [%s] to [%s] (socket=[%s])',
           data.srcId,
           socket.xiconf.prodLineId,
           data.prodLineId,
@@ -691,7 +691,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     }
     else
     {
-      xiconfModule.info("[%s] connected to [%s] (socket=[%s])", data.srcId, data.prodLineId, socket.id);
+      xiconfModule.info('[%s] connected to [%s] (socket=[%s])', data.srcId, data.prodLineId, socket.id);
     }
 
     socket.xiconf.srcId = data.srcId;
@@ -699,7 +699,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
     if (data.prodLineId !== null)
     {
-      var prodLineData = getProdLineData(data.prodLineId);
+      const prodLineData = getProdLineData(data.prodLineId);
 
       prodLineData.sockets[socket.id] = socket;
 
@@ -712,7 +712,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return;
     }
 
-    var xiconfClient = {
+    const xiconfClient = {
       _id: data.srcId,
       connectedAt: new Date(),
       disconnectedAt: null,
@@ -732,7 +732,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     {
       if (err)
       {
-        xiconfModule.error("Failed to update client [%s] after connection: %s", xiconfClient._id, err.message);
+        xiconfModule.error('Failed to update client [%s] after connection: %s', xiconfClient._id, err.message);
       }
       else
       {
@@ -745,7 +745,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleCheckSerialNumberRequest(input, reply)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (!_.isFunction(reply))
     {
@@ -757,7 +757,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return reply(new Error('RESTARTING'));
     }
 
-    var socket = this;
+    const socket = this;
 
     if (socket.id && !socket.xiconf)
     {
@@ -777,7 +777,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleCheckHidLampRequest(input, reply)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (!_.isFunction(reply))
     {
@@ -789,7 +789,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return reply(new Error('RESTARTING'));
     }
 
-    var socket = this;
+    const socket = this;
 
     if (socket.id && !socket.xiconf)
     {
@@ -808,7 +808,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleCheckComponentWeightRequest(input, reply)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (!_.isFunction(reply))
     {
@@ -820,7 +820,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return reply(new Error('RESTARTING'));
     }
 
-    var socket = this;
+    const socket = this;
 
     if (socket.id && !socket.xiconf)
     {
@@ -840,7 +840,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleGenerateServiceTagRequest(input, reply)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (!_.isFunction(reply))
     {
@@ -852,7 +852,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return reply(new Error('RESTARTING'));
     }
 
-    var socket = this;
+    const socket = this;
 
     if (socket.id && !socket.xiconf)
     {
@@ -872,7 +872,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleAcquireServiceTagRequest(input, reply)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (!_.isFunction(reply))
     {
@@ -884,7 +884,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return reply(new Error('RESTARTING'));
     }
 
-    var socket = this;
+    const socket = this;
 
     if (socket.id && !socket.xiconf)
     {
@@ -925,14 +925,14 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleReleaseServiceTagRequest(input, reply)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (!_.isFunction(reply))
     {
       reply = function() {};
     }
 
-    var socket = this;
+    const socket = this;
 
     if (socket.id && !socket.xiconf)
     {
@@ -963,7 +963,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleRecordInvalidLedRequest(input, reply)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (!_.isFunction(reply))
     {
@@ -975,7 +975,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return reply(new Error('RESTARTING'));
     }
 
-    var socket = this;
+    const socket = this;
 
     if (socket.id && !socket.xiconf)
     {
@@ -1001,18 +1001,18 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       input.leds = [];
     }
 
-    for (var i = 0; i < input.leds.length; ++i)
+    for (let i = 0; i < input.leds.length; ++i)
     {
-      var led = input.leds[i];
+      const led = input.leds[i];
 
       if (!_.isObject(led) || !_.isString(led.nc12) || !_.isArray(led.serialNumbers) || !led.serialNumbers.length)
       {
         return false;
       }
 
-      for (var ii = 0; ii < led.serialNumbers.length; ++ii)
+      for (let ii = 0; ii < led.serialNumbers.length; ++ii)
       {
-        var serialNumber = led.serialNumbers[ii];
+        const serialNumber = led.serialNumbers[ii];
 
         if (!_.isString(serialNumber) || _.isEmpty(serialNumber))
         {
@@ -1031,9 +1031,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       input.hidLamps = [];
     }
 
-    for (var i = 0; i < input.hidLamps.length; ++i)
+    for (let i = 0; i < input.hidLamps.length; ++i)
     {
-      var hidLamp = input.hidLamps[i];
+      const hidLamp = input.hidLamps[i];
 
       if (!_.isObject(hidLamp)
         || !_.isString(hidLamp.nc12)
@@ -1043,9 +1043,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         return false;
       }
 
-      for (var ii = 0; ii < hidLamp.scanResults.length; ++ii)
+      for (let ii = 0; ii < hidLamp.scanResults.length; ++ii)
       {
-        var serialNumber = hidLamp.scanResults[ii];
+        const serialNumber = hidLamp.scanResults[ii];
 
         if (!_.isString(serialNumber) || _.isEmpty(serialNumber))
         {
@@ -1090,7 +1090,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         if (err)
         {
           xiconfModule.error(
-            "Failed to check serial number [%s] for order [%s] and 12NC [%s]: %s",
+            'Failed to check serial number [%s] for order [%s] and 12NC [%s]: %s',
             input.serialNumber,
             input.orderNo,
             input.nc12,
@@ -1123,7 +1123,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         if (err)
         {
           xiconfModule.error(
-            "Failed to check HID lamp [%s] for order [%s]: %s",
+            'Failed to check HID lamp [%s] for order [%s]: %s',
             input.scanResult,
             input.orderNo,
             err.message
@@ -1203,7 +1203,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         if (err)
         {
           xiconfModule.error(
-            "Failed to check serial number [%s] for order [%s] and 12NC [%s]: %s",
+            'Failed to check serial number [%s] for order [%s] and 12NC [%s]: %s',
             input.serialNumber,
             input.orderNo,
             input.nc12,
@@ -1293,8 +1293,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function queueOrderOperation(orderNo, operation, reply, data)
   {
-    var orderQueue = ordersToOperationsQueueMap[orderNo];
-    var queueItem = {
+    const orderQueue = ordersToOperationsQueueMap[orderNo];
+    const queueItem = {
       operation: operation,
       reply: reply || function() {},
       data: data
@@ -1317,14 +1317,14 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return;
     }
 
-    var orderQueue = ordersToOperationsQueueMap[orderNo];
+    const orderQueue = ordersToOperationsQueueMap[orderNo];
 
     if (!Array.isArray(orderQueue))
     {
       return;
     }
 
-    var queueItem = orderQueue.shift();
+    const queueItem = orderQueue.shift();
 
     if (!queueItem)
     {
@@ -1351,12 +1351,12 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       {
         getOrderData(data.orderNo, this.parallel());
 
-        var conditions = {
+        const conditions = {
           orderNo: data.orderNo,
           serviceTag: null,
           result: 'success'
         };
-        var fields = {
+        const fields = {
           nc12: 1,
           workflow: 1,
           program: 1
@@ -1379,15 +1379,15 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip(new Error('ORDER_NOT_FOUND'));
         }
 
-        var i;
-        var nc12ToResults = {};
-        var testResults = {};
+        let i;
+        const nc12ToResults = {};
+        const testResults = {};
 
         for (i = 0; i < xiconfResults.length; ++i)
         {
-          var xiconfResult = xiconfResults[i];
-          var program = xiconfResult.program;
-          var nc12Results = nc12ToResults[xiconfResult.nc12];
+          const xiconfResult = xiconfResults[i];
+          const program = xiconfResult.program;
+          let nc12Results = nc12ToResults[xiconfResult.nc12];
 
           if (!nc12Results)
           {
@@ -1420,26 +1420,26 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           }
         }
 
-        var quantityPerResult = 0;
-        var programQuantityDone = 0;
-        var ledQuantityDone = 0;
-        var hidQuantityDone = 0;
-        var weightQuantityDone = 0;
-        var testQuantityDone = 0;
-        var ftQuantityDone = 0;
-        var programItems = [];
-        var ledItems = [];
-        var hidItems = [];
-        var weightItems = [];
-        var testItems = {};
-        var ftItem = null;
-        var ftItemIndex = -1;
-        var itemChanges = [];
-        var newItems = [];
+        let quantityPerResult = 0;
+        let programQuantityDone = 0;
+        let ledQuantityDone = 0;
+        let hidQuantityDone = 0;
+        let weightQuantityDone = 0;
+        let testQuantityDone = 0;
+        let ftQuantityDone = 0;
+        const programItems = [];
+        const ledItems = [];
+        const hidItems = [];
+        const weightItems = [];
+        const testItems = {};
+        let ftItem = null;
+        let ftItemIndex = -1;
+        const itemChanges = [];
+        const newItems = [];
 
         for (i = 0; i < orderData.items.length; ++i)
         {
-          var item = orderData.items[i];
+          const item = orderData.items[i];
 
           if (item.kind === 'led')
           {
@@ -1468,7 +1468,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           }
         }
 
-        var nextItemIndex = orderData.items.length;
+        let nextItemIndex = orderData.items.length;
 
         _.forEach(testResults, function(testResult, programId)
         {
@@ -1500,7 +1500,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             return;
           }
 
-          var testItem = testItems[programId];
+          const testItem = testItems[programId];
 
           if (testItem)
           {
@@ -1547,16 +1547,16 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         for (i = 0; i < programItems.length; ++i)
         {
-          var programItem = programItems[i].item;
-          var programItemIndex = programItems[i].index;
-          var programItemQuantityDone = programItem.quantityDone;
-          var results = nc12ToResults[programItem.nc12];
+          const programItem = programItems[i].item;
+          const programItemIndex = programItems[i].index;
+          let programItemQuantityDone = programItem.quantityDone;
+          const results = nc12ToResults[programItem.nc12];
 
           quantityPerResult = programItem.quantityTodo / orderData.quantityTodo;
 
           if (results)
           {
-            var extraQuantityDone = results.single + results.multi * quantityPerResult;
+            const extraQuantityDone = results.single + results.multi * quantityPerResult;
 
             programItemQuantityDone += extraQuantityDone;
 
@@ -1579,7 +1579,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           ftQuantityDone = ftItem.quantityDone + ftItem.extraQuantityDone;
         }
 
-        var quantityDone = 0;
+        let quantityDone = 0;
 
         if (orderData.items.length === 0)
         {
@@ -1587,7 +1587,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         }
         else
         {
-          var quantitiesDone = [
+          const quantitiesDone = [
             programQuantityDone,
             ledQuantityDone,
             hidQuantityDone,
@@ -1595,7 +1595,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             ftQuantityDone,
             weightQuantityDone
           ].filter(function(qty) { return qty > 0; });
-          var totalQuantityDone = quantitiesDone.reduce(function(qty, total) { return qty + total; }, 0);
+          const totalQuantityDone = quantitiesDone.reduce(function(qty, total) { return qty + total; }, 0);
 
           quantityDone = Math.round(totalQuantityDone / quantitiesDone.length * 100) / 100;
         }
@@ -1605,7 +1605,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           quantityDone = 0;
         }
 
-        var changes = {
+        const changes = {
           quantityDone: quantityDone,
           status: quantityDone < orderData.quantityTodo ? -1 : quantityDone > orderData.quantityTodo ? 1 : 0
         };
@@ -1624,14 +1624,14 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           changes.finishedAt = null;
         }
 
-        var condition = {_id: data.orderNo};
-        var updates = {
+        const condition = {_id: data.orderNo};
+        const updates = {
           $set: _.clone(changes)
         };
 
         for (i = 0; i < itemChanges.length; ++i)
         {
-          var itemChange = itemChanges[i];
+          const itemChange = itemChanges[i];
 
           updates.$set['items.' + itemChange.index + '.extraQuantityDone'] = itemChange.extraQuantityDone;
         }
@@ -1657,9 +1657,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         _.assign(this.orderData, this.changes);
 
-        for (var i = 0; i < this.itemChanges.length; ++i)
+        for (let i = 0; i < this.itemChanges.length; ++i)
         {
-          var itemChange = this.itemChanges[i];
+          const itemChange = this.itemChanges[i];
 
           this.orderData.items[itemChange.index].extraQuantityDone = itemChange.extraQuantityDone;
         }
@@ -1673,7 +1673,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       {
         if (err)
         {
-          xiconfModule.error("Failed to recount order [%s]: %s", data.orderNo, err.message);
+          xiconfModule.error('Failed to recount order [%s]: %s', data.orderNo, err.message);
         }
         else
         {
@@ -1725,15 +1725,15 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip(new Error('NO_FREE_SERVICE_TAGS'));
         }
 
-        var $set = {
+        const $set = {
           serviceTagCounter: orderData.serviceTagCounter + 1
         };
-        var changes = [
+        const changes = [
           function(orderData) { orderData.serviceTagCounter = $set.serviceTagCounter; }
         ];
 
-        var condition = {_id: data.orderNo};
-        var updates = {$set: $set};
+        const condition = {_id: data.orderNo};
+        const updates = {$set: $set};
 
         XiconfOrder.collection.update(condition, updates, this.next());
 
@@ -1755,7 +1755,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       {
         if (err)
         {
-          xiconfModule.error("Failed to generate a new Service Tag for order [%s]: %s", data.orderNo, err.message);
+          xiconfModule.error('Failed to generate a new Service Tag for order [%s]: %s', data.orderNo, err.message);
 
           setImmediate(execNextOrderOperation, data.orderNo);
         }
@@ -1801,19 +1801,19 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip(new Error('NO_FREE_SERVICE_TAGS'));
         }
 
-        var programItem;
-        var programItemIndex = -1;
-        var testItem;
-        var testItemIndex = -1;
-        var ftItem;
-        var ftItemIndex = -1;
-        var ledItems = {};
-        var hidItems = {};
-        var weightItems = {};
+        let programItem;
+        let programItemIndex = -1;
+        let testItem;
+        let testItemIndex = -1;
+        let ftItem;
+        let ftItemIndex = -1;
+        const ledItems = {};
+        const hidItems = {};
+        const weightItems = {};
 
-        for (var i = 0; i < orderData.items.length; ++i)
+        for (let i = 0; i < orderData.items.length; ++i)
         {
-          var item = orderData.items[i];
+          const item = orderData.items[i];
 
           if (item.kind === 'led')
           {
@@ -1853,18 +1853,18 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           }
         }
 
-        var $addToSet = {};
-        var $set = {
+        const $addToSet = {};
+        const $set = {
           serviceTagCounter: orderData.serviceTagCounter + (data.serviceTag === null ? 1 : 0)
         };
-        var changes = [
+        const changes = [
           function(orderData) { orderData.serviceTagCounter = $set.serviceTagCounter; }
         ];
 
         if (programItemIndex !== -1)
         {
-          var quantityPerResult = data.multi ? (programItem.quantityTodo / orderData.quantityTodo) : 1;
-          var newProgramItemQuantityDone = programItem.quantityDone + quantityPerResult;
+          const quantityPerResult = data.multi ? (programItem.quantityTodo / orderData.quantityTodo) : 1;
+          const newProgramItemQuantityDone = programItem.quantityDone + quantityPerResult;
 
           $set['items.' + programItemIndex + '.quantityDone'] = newProgramItemQuantityDone;
 
@@ -1889,7 +1889,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         }
         else if (ftItemIndex !== -1)
         {
-          var ftItemQuantityDone = ftItem.quantityDone + 1;
+          const ftItemQuantityDone = ftItem.quantityDone + 1;
 
           $set['items.' + ftItemIndex + '.quantityDone'] = ftItemQuantityDone;
 
@@ -1913,7 +1913,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         }
         else if (testItemIndex !== -1)
         {
-          var testItemQuantityDone = testItem.quantityDone + 1;
+          const testItemQuantityDone = testItem.quantityDone + 1;
 
           $set['items.' + testItemIndex + '.quantityDone'] = testItemQuantityDone;
 
@@ -1922,7 +1922,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         _.forEach(data.leds, function(led)
         {
-          var ledItem = ledItems[led.nc12];
+          const ledItem = ledItems[led.nc12];
 
           if (!ledItem)
           {
@@ -1931,10 +1931,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
           delete ledItems[led.nc12];
 
-          var index = ledItem.index;
-          var item = ledItem.item;
+          const index = ledItem.index;
+          const item = ledItem.item;
 
-          var newLedItemQuantityDone = item.quantityDone + led.serialNumbers.length;
+          const newLedItemQuantityDone = item.quantityDone + led.serialNumbers.length;
 
           $set['items.' + index + '.quantityDone'] = newLedItemQuantityDone;
           $addToSet['items.' + index + '.serialNumbers'] = {$each: led.serialNumbers};
@@ -1944,7 +1944,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         _.forEach(data.hidLamps, function(hidLamp)
         {
-          var hidItem = hidItems[hidLamp.nc12];
+          const hidItem = hidItems[hidLamp.nc12];
 
           if (!hidItem)
           {
@@ -1953,10 +1953,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
           delete hidItems[hidLamp.nc12];
 
-          var index = hidItem.index;
-          var item = hidItem.item;
+          const index = hidItem.index;
+          const item = hidItem.item;
 
-          var newHidItemQuantityDone = item.quantityDone + hidLamp.scanResults.length;
+          const newHidItemQuantityDone = item.quantityDone + hidLamp.scanResults.length;
 
           $set['items.' + index + '.quantityDone'] = newHidItemQuantityDone;
           $addToSet['items.' + index + '.serialNumbers'] = {$each: hidLamp.scanResults};
@@ -1966,7 +1966,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         if (data.weight)
         {
-          var weightItem = weightItems[data.weight.nc12];
+          let weightItem = weightItems[data.weight.nc12];
 
           if (!weightItem)
           {
@@ -1998,8 +1998,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip(new Error('NO_CHANGES'));
         }
 
-        var condition = {_id: data.orderNo};
-        var updates = {$set: $set};
+        const condition = {_id: data.orderNo};
+        const updates = {$set: $set};
 
         if (!_.isEmpty($addToSet))
         {
@@ -2026,13 +2026,13 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         if (data.resultId)
         {
-          var next = this.next();
+          const next = this.next();
 
           XiconfResult.update({_id: data.resultId}, {$set: {cancelled: false}}, function(err)
           {
             if (err)
             {
-              xiconfModule.error("Failed to restore result [%s]: %s", data.resultId, err.message);
+              xiconfModule.error('Failed to restore result [%s]: %s', data.resultId, err.message);
             }
 
             next();
@@ -2043,7 +2043,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       {
         if (err)
         {
-          xiconfModule.error("Failed to acquire a new Service Tag for order [%s]: %s", data.orderNo, err.message);
+          xiconfModule.error('Failed to acquire a new Service Tag for order [%s]: %s', data.orderNo, err.message);
 
           setImmediate(execNextOrderOperation, data.orderNo);
         }
@@ -2106,26 +2106,26 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip(new Error('ORDER_NOT_FOUND'));
         }
 
-        var serviceTagCounter = +data.serviceTag.substr(-4);
+        const serviceTagCounter = +data.serviceTag.substr(-4);
 
         if (orderData.serviceTagCounter < serviceTagCounter)
         {
           return this.skip(new Error('SERVICE_TAG_NOT_ACQUIRED'));
         }
 
-        var programItem;
-        var programItemIndex = -1;
-        var testItem;
-        var testItemIndex = -1;
-        var ledItems = {};
-        var hidItems = {};
-        var weightItems = {};
-        var ftItem;
-        var ftItemIndex = -1;
+        let programItem;
+        let programItemIndex = -1;
+        let testItem;
+        let testItemIndex = -1;
+        const ledItems = {};
+        const hidItems = {};
+        const weightItems = {};
+        let ftItem;
+        let ftItemIndex = -1;
 
-        for (var i = 0; i < orderData.items.length; ++i)
+        for (let i = 0; i < orderData.items.length; ++i)
         {
-          var item = orderData.items[i];
+          const item = orderData.items[i];
 
           if (item.kind === 'led')
           {
@@ -2165,14 +2165,14 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           }
         }
 
-        var $pull = {};
-        var $set = {};
-        var changes = [];
+        const $pull = {};
+        const $set = {};
+        const changes = [];
 
         if (programItemIndex !== -1)
         {
-          var quantityPerResult = data.multi ? (programItem.quantityTodo / orderData.quantityTodo) : 1;
-          var newProgramItemQuantityDone = programItem.quantityDone - quantityPerResult;
+          const quantityPerResult = data.multi ? (programItem.quantityTodo / orderData.quantityTodo) : 1;
+          const newProgramItemQuantityDone = programItem.quantityDone - quantityPerResult;
 
           $set['items.' + programItemIndex + '.quantityDone'] = newProgramItemQuantityDone;
 
@@ -2181,7 +2181,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         if (testItemIndex !== -1)
         {
-          var newTestItemQuantityDone = testItem.quantityDone - 1;
+          const newTestItemQuantityDone = testItem.quantityDone - 1;
 
           $set['items.' + testItemIndex + '.quantityDone'] = newTestItemQuantityDone;
 
@@ -2190,7 +2190,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         if (ftItemIndex !== -1)
         {
-          var newFtItemQuantityDone = ftItem.quantityDone - 1;
+          const newFtItemQuantityDone = ftItem.quantityDone - 1;
 
           $set['items.' + ftItemIndex + '.quantityDone'] = newFtItemQuantityDone;
 
@@ -2199,7 +2199,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         _.forEach(data.leds, function(led)
         {
-          var ledItem = ledItems[led.nc12];
+          const ledItem = ledItems[led.nc12];
 
           if (!ledItem)
           {
@@ -2208,10 +2208,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
           delete ledItems[led.nc12];
 
-          var index = ledItem.index;
-          var item = ledItem.item;
+          const index = ledItem.index;
+          const item = ledItem.item;
 
-          var newLedItemQuantityDone = item.quantityDone - led.serialNumbers.length;
+          const newLedItemQuantityDone = item.quantityDone - led.serialNumbers.length;
 
           $set['items.' + index + '.quantityDone'] = newLedItemQuantityDone;
           $pull['items.' + index + '.serialNumbers'] = {$in: led.serialNumbers};
@@ -2221,7 +2221,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         _.forEach(data.hid, function(hidLamp)
         {
-          var hidItem = hidItems[hidLamp.nc12];
+          const hidItem = hidItems[hidLamp.nc12];
 
           if (!hidItem)
           {
@@ -2230,10 +2230,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
           delete hidItems[hidLamp.nc12];
 
-          var index = hidItem.index;
-          var item = hidItem.item;
+          const index = hidItem.index;
+          const item = hidItem.item;
 
-          var newHidItemQuantityDone = item.quantityDone + hidLamp.scanResults.length;
+          const newHidItemQuantityDone = item.quantityDone + hidLamp.scanResults.length;
 
           $set['items.' + index + '.quantityDone'] = newHidItemQuantityDone;
           $pull['items.' + index + '.serialNumbers'] = {$in: hidLamp.scanResults};
@@ -2243,7 +2243,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         if (data.weight && weightItems[data.weight.nc12])
         {
-          var weightItem = weightItems[data.weight.nc12];
+          const weightItem = weightItems[data.weight.nc12];
 
           $set['items.' + weightItem.index + '.quantityDone'] = weightItem.item.quantityDone - 1;
           $pull['items.' + weightItem.index + '.serialNumbers'] = data.weight.serialNumber;
@@ -2251,8 +2251,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           changes.push(applyItemQuantityDoneChange.bind(null, weightItem.item, weightItem.item.quantityDone - 1));
         }
 
-        var condition = {_id: data.orderNo};
-        var updates = {$set: $set};
+        const condition = {_id: data.orderNo};
+        const updates = {$set: $set};
 
         if (!_.isEmpty($pull))
         {
@@ -2277,13 +2277,13 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       {
         if (data.resultId)
         {
-          var next = this.next();
+          const next = this.next();
 
           XiconfResult.update({_id: data.resultId}, {$set: {cancelled: true}}, function(err)
           {
             if (err)
             {
-              xiconfModule.error("Failed to cancel result [%s]: %s", data.resultId, err.message);
+              xiconfModule.error('Failed to cancel result [%s]: %s', data.resultId, err.message);
             }
 
             next();
@@ -2295,7 +2295,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         if (err)
         {
           xiconfModule.error(
-            "Failed to release Service Tag [%s] for order [%s]: %s", data.serviceTag, data.orderNo, err.message
+            'Failed to release Service Tag [%s] for order [%s]: %s', data.serviceTag, data.orderNo, err.message
           );
 
           setImmediate(execNextOrderOperation, data.orderNo);
@@ -2328,13 +2328,13 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function recordNextInvalidLed(data, done)
   {
-    var invalidLed = new XiconfInvalidLed(data);
+    const invalidLed = new XiconfInvalidLed(data);
 
     invalidLed.save(function(err)
     {
       if (err)
       {
-        xiconfModule.error("Failed to record an invalid LED: %s", err.message);
+        xiconfModule.error('Failed to record an invalid LED: %s', err.message);
       }
       else
       {
@@ -2347,7 +2347,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function applyOrderDataChanges(orderData, changes)
   {
-    for (var i = 0; i < changes.length; ++i)
+    for (let i = 0; i < changes.length; ++i)
     {
       changes[i](orderData);
     }
@@ -2404,7 +2404,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           return this.skip(err, xiconfOrder);
         }
 
-        var fields = {
+        const fields = {
           nc12: 1,
           name: 1,
           startDate: 1,
@@ -2430,7 +2430,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         debug('[getOrderData] Creating XiconfOrder from Order: %s', orderNo);
 
-        var xiconfOrder = new XiconfOrder({
+        const xiconfOrder = new XiconfOrder({
           _id: orderNo,
           startDate: order.startDate,
           finishDate: order.finishDate,
@@ -2453,7 +2453,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       {
         if (err)
         {
-          xiconfModule.error("Failed to get data for order [%s]: %s", orderNo, err.message);
+          xiconfModule.error('Failed to get data for order [%s]: %s', orderNo, err.message);
 
           return sendGetOrderDataResults(orderNo, err, null);
         }
@@ -2470,7 +2470,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function sendGetOrderDataResults(orderNo, err, orderData)
   {
-    var queue = ordersToGetOrderDataQueueMap[orderNo];
+    const queue = ordersToGetOrderDataQueueMap[orderNo];
 
     if (!queue)
     {
@@ -2479,7 +2479,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
     delete ordersToGetOrderDataQueueMap[orderNo];
 
-    for (var i = 0; i < queue.length; ++i)
+    for (let i = 0; i < queue.length; ++i)
     {
       queue[i](err, orderData);
     }
@@ -2487,15 +2487,15 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function updateProdLinesLeader(prodLineId, optSocket)
   {
-    var prodLineData = prodLinesToDataMap[prodLineId];
+    const prodLineData = prodLinesToDataMap[prodLineId];
 
     if (!prodLineData)
     {
       return;
     }
 
-    var prodLineState = productionModule.getProdLineState(prodLineId);
-    var newLeader = prodLineState ? prodLineState.getCurrentLeader() : null;
+    const prodLineState = productionModule.getProdLineState(prodLineId);
+    let newLeader = prodLineState ? prodLineState.getCurrentLeader() : null;
 
     if (newLeader !== null)
     {
@@ -2534,36 +2534,36 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return;
     }
 
-    var prodLineState = productionModule.getProdLineState(prodLineId);
+    const prodLineState = productionModule.getProdLineState(prodLineId);
 
     if (prodLineState === null)
     {
       return emitEmptyRemoteDataForProdLineUpdate(prodLineId, optSocket);
     }
 
-    var prodShiftOrders = prodLineState.getOrders();
-    var prodShiftOrdersCount = prodShiftOrders.length;
+    const prodShiftOrders = prodLineState.getOrders();
+    const prodShiftOrdersCount = prodShiftOrders.length;
 
     if (!prodShiftOrdersCount)
     {
       return emitEmptyRemoteDataForProdLineUpdate(prodLineId, optSocket);
     }
 
-    var currentOrder = prodShiftOrders[prodShiftOrdersCount - 1];
+    const currentOrder = prodShiftOrders[prodShiftOrdersCount - 1];
 
     if (currentOrder.finishedAt !== null || !_.isString(currentOrder.orderData.no))
     {
       return emitEmptyRemoteDataForProdLineUpdate(prodLineId, optSocket);
     }
 
-    var currentOrderNo = currentOrder.orderData.no;
-    var nextOrders = prodLineState.getNextOrders();
-    var newOrdersNos = [currentOrderNo];
-    var now = Date.now();
+    const currentOrderNo = currentOrder.orderData.no;
+    const nextOrders = prodLineState.getNextOrders();
+    let newOrdersNos = [currentOrderNo];
+    const now = Date.now();
 
-    for (var i = prodShiftOrdersCount - 2; i >= 0; --i)
+    for (let i = prodShiftOrdersCount - 2; i >= 0; --i)
     {
-      var previousOrder = prodShiftOrders[i];
+      const previousOrder = prodShiftOrders[i];
 
       if ((now - previousOrder.finishedAt) > 3600000)
       {
@@ -2583,7 +2583,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     step(
       function getOrderDataStep()
       {
-        for (var i = 0; i < newOrdersNos.length; ++i)
+        for (let i = 0; i < newOrdersNos.length; ++i)
         {
           getOrderData(newOrdersNos[i], this.group());
         }
@@ -2610,7 +2610,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function emitRemoteDataForProdLineUpdate(prodLineId, optSocket, newOrdersNos, remoteData)
   {
-    var prodLineData = prodLinesToDataMap[prodLineId];
+    const prodLineData = prodLinesToDataMap[prodLineId];
 
     if (!prodLineData)
     {
@@ -2636,9 +2636,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function manageProdLinesOrders(prodLineData, newOrdersNos)
   {
-    var oldOrdersNos = prodLineData.orders;
-    var oldCurrentOrderNo = oldOrdersNos.length ? oldOrdersNos[0] : null;
-    var newCurrentOrderNo = newOrdersNos.length ? newOrdersNos[0] : null;
+    const oldOrdersNos = prodLineData.orders;
+    const oldCurrentOrderNo = oldOrdersNos.length ? oldOrdersNos[0] : null;
+    const newCurrentOrderNo = newOrdersNos.length ? newOrdersNos[0] : null;
 
     debug('[manageProdLinesOrders]', oldOrdersNos, newOrdersNos);
 
@@ -2649,10 +2649,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       scheduleWorkingOrderChangeCheck(oldCurrentOrderNo);
     }
 
-    for (var i = 0; i < oldOrdersNos.length; ++i)
+    for (let i = 0; i < oldOrdersNos.length; ++i)
     {
-      var oldOrderNo = oldOrdersNos[i];
-      var orderToProdLinesMap = ordersToProdLinesMap[oldOrderNo];
+      const oldOrderNo = oldOrdersNos[i];
+      const orderToProdLinesMap = ordersToProdLinesMap[oldOrderNo];
 
       if (orderToProdLinesMap)
       {
@@ -2660,9 +2660,9 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       }
     }
 
-    for (var j = 0; j < newOrdersNos.length; ++j)
+    for (let j = 0; j < newOrdersNos.length; ++j)
     {
-      var newOrderNo = newOrdersNos[j];
+      const newOrderNo = newOrdersNos[j];
 
       if (!ordersToProdLinesMap[newOrderNo])
       {
@@ -2679,17 +2679,17 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     {
       if (err)
       {
-        return xiconfModule.error("Failed to emit remote data to [%s] order workers: %s", orderNo, err.message);
+        return xiconfModule.error('Failed to emit remote data to [%s] order workers: %s', orderNo, err.message);
       }
 
-      var orderToProdLinesMap = ordersToProdLinesMap[orderNo];
+      const orderToProdLinesMap = ordersToProdLinesMap[orderNo];
 
       if (!orderToProdLinesMap)
       {
         return debug('[emitRemoteDataToOrderWorkers] NO_PROD_LINES_FOR_ORDER orderNo=%s', orderNo);
       }
 
-      var prodLineIds = Object.keys(orderToProdLinesMap);
+      const prodLineIds = Object.keys(orderToProdLinesMap);
 
       if (!prodLineIds.length)
       {
@@ -2698,7 +2698,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
       _.forEach(prodLineIds, function(prodLineId)
       {
-        var prodLineData = prodLinesToDataMap[prodLineId];
+        const prodLineData = prodLinesToDataMap[prodLineId];
 
         if (!prodLineData)
         {
@@ -2727,10 +2727,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       clearTimeout(workingOrderChangeCheckTimers[orderNo]);
     }
 
-    var now = moment();
-    var delay = moment();
-    var hours = now.hours();
-    var minutes = now.minutes();
+    const now = moment();
+    let delay = moment();
+    const hours = now.hours();
+    const minutes = now.minutes();
 
     if ([5, 13, 21].indexOf(hours) !== -1 && minutes > 45)
     {
@@ -2752,17 +2752,17 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   {
     delete workingOrderChangeCheckTimers[orderNo];
 
-    var orderToProdLines = ordersToProdLinesMap[orderNo];
+    const orderToProdLines = ordersToProdLinesMap[orderNo];
 
     if (!orderToProdLines)
     {
       return debug('[checkWorkingOrderChange] EMPTY orderNo=%s', orderNo);
     }
 
-    var prodLineIds = Object.keys(orderToProdLines);
-    var anyCurrent = false;
+    const prodLineIds = Object.keys(orderToProdLines);
+    let anyCurrent = false;
 
-    for (var i = 0; i < prodLineIds.length; ++i)
+    for (let i = 0; i < prodLineIds.length; ++i)
     {
       if (orderToProdLines[prodLineIds[i]] === 1)
       {
@@ -2797,18 +2797,18 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function createLedsFromXiconfResult(xiconfResultLeds)
   {
-    var ledList = [];
+    const ledList = [];
 
     if (!Array.isArray(xiconfResultLeds) || !xiconfResultLeds.length)
     {
       return ledList;
     }
 
-    var ledMap = {};
+    const ledMap = {};
 
-    for (var i = 0; i < xiconfResultLeds.length; ++i)
+    for (let i = 0; i < xiconfResultLeds.length; ++i)
     {
-      var xiconfResultLed = xiconfResultLeds[i];
+      const xiconfResultLed = xiconfResultLeds[i];
 
       if (!ledMap[xiconfResultLed.nc12])
       {
@@ -2831,12 +2831,12 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function cleanUpOrders()
   {
-    var orderIds = Object.keys(ordersToProdLinesMap);
+    const orderIds = Object.keys(ordersToProdLinesMap);
 
-    for (var i = 0; i < orderIds.length; ++i)
+    for (let i = 0; i < orderIds.length; ++i)
     {
-      var orderNo = orderIds[i];
-      var ordersProdLineCount = Object.keys(ordersToProdLinesMap[orderNo]).length;
+      const orderNo = orderIds[i];
+      const ordersProdLineCount = Object.keys(ordersToProdLinesMap[orderNo]).length;
 
       if (ordersProdLineCount === 0)
       {
@@ -2859,7 +2859,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     {
       if (err)
       {
-        return xiconfModule.error("Failed to find license [%s]: %s", licenseId, err.message);
+        return xiconfModule.error('Failed to find license [%s]: %s', licenseId, err.message);
       }
 
       if (!license || clientsLicenseKey === license.key)
@@ -2879,7 +2879,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function buildServiceTag(orderNo, counter)
   {
-    var serviceTag = _.padStart(counter.toString(), 4, '0');
+    let serviceTag = _.padStart(counter.toString(), 4, '0');
     serviceTag = _.padStart(orderNo.toString() + serviceTag, 17, '0');
     serviceTag = 'P' + serviceTag;
 

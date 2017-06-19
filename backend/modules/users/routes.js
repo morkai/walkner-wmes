@@ -2,23 +2,23 @@
 
 'use strict';
 
-var _ = require('lodash');
-var bcrypt = require('bcrypt');
-var crypto = require('crypto');
-var step = require('h5.step');
+const _ = require('lodash');
+const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const step = require('h5.step');
 
 module.exports = function setUpUsersRoutes(app, usersModule)
 {
-  var express = app[usersModule.config.expressId];
-  var userModule = app[usersModule.config.userId];
-  var settingsModule = app[usersModule.config.settingsId];
-  var mongoose = app[usersModule.config.mongooseId];
-  var User = mongoose.model('User');
-  var PasswordResetRequest = mongoose.model('PasswordResetRequest');
+  const express = app[usersModule.config.expressId];
+  const userModule = app[usersModule.config.userId];
+  const settingsModule = app[usersModule.config.settingsId];
+  const mongoose = app[usersModule.config.mongooseId];
+  const User = mongoose.model('User');
+  const PasswordResetRequest = mongoose.model('PasswordResetRequest');
 
-  var canView = userModule.auth('USERS:VIEW');
-  var canBrowse = userModule.auth.apply(userModule, usersModule.config.browsePrivileges);
-  var canManage = userModule.auth('USERS:MANAGE');
+  const canView = userModule.auth('USERS:VIEW');
+  const canBrowse = userModule.auth.apply(userModule, usersModule.config.browsePrivileges);
+  const canManage = userModule.auth('USERS:MANAGE');
 
   express.get(
     '/users/settings',
@@ -69,7 +69,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 
   function canEdit(req, res, next)
   {
-    var user = req.session.user;
+    const user = req.session.user;
 
     if (user && req.params.id === user._id)
     {
@@ -154,7 +154,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
         return next(err);
       }
 
-      var oldSessionId = req.sessionID;
+      const oldSessionId = req.sessionID;
 
       req.session.regenerate(function(err)
       {
@@ -195,11 +195,11 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 
   function logoutRoute(req, res, next)
   {
-    var user = _.isObject(req.session.user)
+    const user = _.isObject(req.session.user)
       ? req.session.user
       : null;
 
-    var oldSessionId = req.sessionID;
+    const oldSessionId = req.sessionID;
 
     req.session.regenerate(function(err)
     {
@@ -208,7 +208,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
         return next(err);
       }
 
-      var guestUser = _.assign({}, userModule.guest);
+      const guestUser = _.assign({}, userModule.guest);
       guestUser.loggedIn = false;
       guestUser.ipAddress = userModule.getRealIp({}, req);
       guestUser.local = userModule.isLocalIpAddress(guestUser.ipAddress);
@@ -241,14 +241,14 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 
   function requestPasswordResetRoute(req, res, next)
   {
-    var mailSender = app[usersModule.config.mailSenderId];
+    const mailSender = app[usersModule.config.mailSenderId];
 
     if (!mailSender)
     {
       return res.sendStatus(500);
     }
 
-    var body = req.body;
+    const body = req.body;
 
     if (!_.isString(body.subject)
       || !_.isString(body.text)
@@ -315,8 +315,8 @@ module.exports = function setUpUsersRoutes(app, usersModule)
           return this.skip(err);
         }
 
-        var subject = body.subject;
-        var text = body.text
+        const subject = body.subject;
+        const text = body.text
           .replace(/\{REQUEST_ID\}/g, this.passwordResetRequest._id)
           .replace(/\{LOGIN\}/g, this.user.login)
           .replace(/\{PASSWORD\}/g, body.passwordText);
@@ -404,14 +404,14 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 
         if (this.passwordResetRequest)
         {
-          var passwordResetRequest = this.passwordResetRequest;
+          const passwordResetRequest = this.passwordResetRequest;
 
           passwordResetRequest.remove(function(err)
           {
             if (err)
             {
               usersModule.error(
-                "Failed to remove the password reset request [%s]: %s",
+                'Failed to remove the password reset request [%s]: %s',
                 passwordResetRequest._id,
                 err.message
               );
@@ -435,7 +435,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
       return next();
     }
 
-    var password = req.body.password;
+    const password = req.body.password;
 
     if (!_.isString(password) || password.length === 0)
     {

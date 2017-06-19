@@ -2,7 +2,7 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function createDictionaryModule(modelName, setUpRoutes, customSetUp)
 {
@@ -14,14 +14,14 @@ module.exports = function createDictionaryModule(modelName, setUpRoutes, customS
     },
     start: function startDictionaryModule(app, module, done)
     {
-      var mongoose = app[module.config.mongooseId];
+      const mongoose = app[module.config.mongooseId];
 
       if (!mongoose)
       {
-        return done(new Error("mongoose module is required"));
+        return done(new Error('mongoose module is required'));
       }
 
-      var Model = mongoose.model(modelName);
+      const Model = mongoose.model(modelName);
 
       module.Model = Model;
       module.models = [];
@@ -73,7 +73,7 @@ module.exports = function createDictionaryModule(modelName, setUpRoutes, customS
 
       function fetchData(done)
       {
-        var query = Model.findForDictionary ? Model.findForDictionary() : Model.find();
+        const query = Model.findForDictionary ? Model.findForDictionary() : Model.find();
 
         query.exec(function(err, models)
         {

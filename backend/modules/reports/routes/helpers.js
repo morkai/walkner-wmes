@@ -2,15 +2,15 @@
 
 'use strict';
 
-var crypto = require('crypto');
-var _ = require('lodash');
-var util = require('../util');
+const crypto = require('crypto');
+const _ = require('lodash');
+const util = require('../util');
 
-var GENERATE_REQUEST_TIMEOUT = 4 * 60 * 1000;
-var LESS_THAN_DAY_IN_FUTURE_EXPIRATION = 2;
-var MORE_THAN_DAY_IN_FUTURE_EXPIRATION = 5;
-var IN_PAST_EXPIRATION = 15;
-var VALID_INTERVALS = {
+const GENERATE_REQUEST_TIMEOUT = 4 * 60 * 1000;
+const LESS_THAN_DAY_IN_FUTURE_EXPIRATION = 2;
+const MORE_THAN_DAY_IN_FUTURE_EXPIRATION = 5;
+const IN_PAST_EXPIRATION = 15;
+const VALID_INTERVALS = {
   year: true,
   quarter: true,
   month: true,
@@ -20,8 +20,8 @@ var VALID_INTERVALS = {
   hour: true
 };
 
-var cachedReports = {};
-var inProgress = null;
+let cachedReports = {};
+let inProgress = null;
 
 exports.clearCachedReports = function(ids)
 {
@@ -57,7 +57,7 @@ exports.sendCachedReport = function(id, req, res, next)
 
 exports.generateReport = function(app, reportsModule, report, reportId, reportHash, options, done)
 {
-  var messengerClient = app[reportsModule.config.messengerClientId];
+  const messengerClient = app[reportsModule.config.messengerClientId];
 
   if (inProgress === null)
   {
@@ -92,7 +92,7 @@ exports.generateReport = function(app, reportsModule, report, reportId, reportHa
     return report(app[reportsModule.config.mongooseId], options, broadcastReport.bind(null, reportId, reportHash));
   }
 
-  var req = {
+  const req = {
     _id: reportId,
     hash: reportHash,
     options: options
@@ -105,7 +105,7 @@ exports.generateReport = function(app, reportsModule, report, reportId, reportHa
 
 function broadcastReport(reportId, reportHash, err, report)
 {
-  var reportJson = err ? null : cacheReport(reportId, reportHash, report);
+  const reportJson = err ? null : cacheReport(reportId, reportHash, report);
 
   _.forEach(inProgress[reportHash], function(done)
   {
@@ -117,7 +117,7 @@ function broadcastReport(reportId, reportHash, err, report)
 
 function cacheReport(reportId, reportHash, report)
 {
-  var reportJson = JSON.stringify(report, null, process.env.NODE_ENV === 'development' ? 2 : 0);
+  const reportJson = JSON.stringify(report, null, process.env.NODE_ENV === 'development' ? 2 : 0);
 
   if (cachedReports[reportId] === undefined)
   {
@@ -133,12 +133,12 @@ function cacheReport(reportId, reportHash, report)
 
 function scheduleReportCacheExpiration(id, reportHash, fromTime, toTime)
 {
-  var timeRange = toTime - fromTime;
-  var currentShiftStartTime = util.getCurrentShiftStartDate().getTime();
-  var day = 24 * 3600 * 1000;
-  var inFuture = toTime > currentShiftStartTime;
-  var moreThanDay = timeRange > day;
-  var delay = inFuture
+  const timeRange = toTime - fromTime;
+  const currentShiftStartTime = util.getCurrentShiftStartDate().getTime();
+  const day = 24 * 3600 * 1000;
+  const inFuture = toTime > currentShiftStartTime;
+  const moreThanDay = timeRange > day;
+  const delay = inFuture
     ? (moreThanDay ? MORE_THAN_DAY_IN_FUTURE_EXPIRATION : LESS_THAN_DAY_IN_FUTURE_EXPIRATION)
     : IN_PAST_EXPIRATION;
 
@@ -156,7 +156,7 @@ function scheduleReportCacheExpiration(id, reportHash, fromTime, toTime)
 
 exports.getProdTasksWithTags = function(allProdTasks)
 {
-  var prodTasks = {};
+  const prodTasks = {};
 
   _.forEach(allProdTasks, function(prodTask)
   {
@@ -172,7 +172,7 @@ exports.getProdTasksWithTags = function(allProdTasks)
 
 exports.getDowntimeReasons = function(allDowntimeReasons, typesOnly)
 {
-  var downtimeReasons = {};
+  const downtimeReasons = {};
 
   _.forEach(allDowntimeReasons, function(downtimeReason)
   {
@@ -219,7 +219,7 @@ exports.getInterval = function(interval, defaultInterval)
 
 exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit, ignoredOrgUnits)
 {
-  var orgUnits = {
+  const orgUnits = {
     orgUnit: null,
     division: null,
     subdivision: null,
@@ -246,7 +246,7 @@ exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit, ignor
     return orgUnits;
   }
 
-  var division = orgUnitsModule.getDivisionFor(orgUnit);
+  const division = orgUnitsModule.getDivisionFor(orgUnit);
 
   if (division)
   {
@@ -256,7 +256,7 @@ exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit, ignor
     );
   }
 
-  var subdivision = orgUnitsModule.getSubdivisionFor(orgUnit);
+  const subdivision = orgUnitsModule.getSubdivisionFor(orgUnit);
 
   if (subdivision)
   {
@@ -271,7 +271,7 @@ exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit, ignor
     return orgUnits;
   }
 
-  var prodFlows = orgUnitsModule.getProdFlowsFor(orgUnit);
+  const prodFlows = orgUnitsModule.getProdFlowsFor(orgUnit);
 
   if (!prodFlows || !prodFlows.length)
   {
@@ -297,7 +297,7 @@ function ignoreProdLines(prodLines, ignoredOrgUnits)
 
 exports.decodeOrgUnits = function(orgUnitsModule, encodedOrgUnits)
 {
-  var orgUnits = {
+  const orgUnits = {
     empty: true,
     division: {},
     subdivision: {},
@@ -312,7 +312,7 @@ exports.decodeOrgUnits = function(orgUnitsModule, encodedOrgUnits)
     return orgUnits;
   }
 
-  var decodedOrgUnits = null;
+  let decodedOrgUnits = null;
 
   try
   {
@@ -340,7 +340,7 @@ exports.decodeOrgUnits = function(orgUnitsModule, encodedOrgUnits)
 
 function selectOrgUnits(orgUnitsModule, orgUnitType, orgUnitId, selectedOrgUnits)
 {
-  var orgUnit = orgUnitsModule.getByTypeAndId(orgUnitType, orgUnitId);
+  const orgUnit = orgUnitsModule.getByTypeAndId(orgUnitType, orgUnitId);
 
   selectedOrgUnits[orgUnitType][orgUnitId] = true;
 
@@ -349,7 +349,7 @@ function selectOrgUnits(orgUnitsModule, orgUnitType, orgUnitId, selectedOrgUnits
     return;
   }
 
-  var childOrgUnitType = orgUnitsModule.getChildType(orgUnitType);
+  const childOrgUnitType = orgUnitsModule.getChildType(orgUnitType);
 
   _.forEach(orgUnitsModule.getChildren(orgUnit), function(childOrgUnit)
   {

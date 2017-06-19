@@ -2,17 +2,17 @@
 
 'use strict';
 
-var ObjectId = require('mongoose').Types.ObjectId;
-var _ = require('lodash');
+const ObjectId = require('mongoose').Types.ObjectId;
+const _ = require('lodash');
 
 module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 {
-  var express = app[pressWorksheetsModule.config.expressId];
-  var userModule = app[pressWorksheetsModule.config.userId];
-  var PressWorksheet = app[pressWorksheetsModule.config.mongooseId].model('PressWorksheet');
+  const express = app[pressWorksheetsModule.config.expressId];
+  const userModule = app[pressWorksheetsModule.config.userId];
+  const PressWorksheet = app[pressWorksheetsModule.config.mongooseId].model('PressWorksheet');
 
-  var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW', 'PRESS_WORKSHEETS:VIEW');
-  var canManage = userModule.auth('PRESS_WORKSHEETS:MANAGE', 'PROD_DATA:MANAGE');
+  const canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW', 'PRESS_WORKSHEETS:VIEW');
+  const canManage = userModule.auth('PRESS_WORKSHEETS:MANAGE', 'PROD_DATA:MANAGE');
 
   express.get(
     '/pressWorksheets', canView, limitToMine, express.crud.browseRoute.bind(null, app, PressWorksheet)
@@ -42,7 +42,7 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 
   function findByRidRoute(req, res, next)
   {
-    var rid = parseInt(req.query.rid, 10);
+    const rid = parseInt(req.query.rid, 10);
 
     if (isNaN(rid) || rid <= 0)
     {
@@ -67,7 +67,7 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 
   function prepareDataForAdd(req, res, next)
   {
-    var date = new Date(req.body.date + ' 00:00:00');
+    const date = new Date(req.body.date + ' 00:00:00');
 
     if (req.body.shift === 1)
     {
@@ -91,7 +91,7 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 
   function prepareDataForEdit(req, res, next)
   {
-    var date = new Date(req.body.date + ' 00:00:00');
+    const date = new Date(req.body.date + ' 00:00:00');
 
     if (req.body.shift === 1)
     {
@@ -125,14 +125,14 @@ module.exports = function setUpPressWorksheetsRoutes(app, pressWorksheetsModule)
 
   function limitToMine(req, res, next)
   {
-    var selector = req.rql.selector;
+    const selector = req.rql.selector;
 
     if (!Array.isArray(selector.args) || !selector.args.length)
     {
       return next();
     }
 
-    var mineTerm = _.find(selector.args, function(term)
+    const mineTerm = _.find(selector.args, function(term)
     {
       return term.name === 'eq' && term.args[0] === 'mine';
     });

@@ -2,8 +2,8 @@
 
 'use strict';
 
-var _ = require('lodash');
-var axon = require('axon');
+const _ = require('lodash');
+const axon = require('axon');
 
 exports.DEFAULT_CONFIG = {
   pubHost: '127.0.0.1',
@@ -17,9 +17,9 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startMessengerClientModule(app, module, done)
 {
-  var subSocket;
-  var reqSocket;
-  var pushSocket = null;
+  let subSocket;
+  let reqSocket;
+  let pushSocket = null;
 
   createSubSocket();
   createReqSocket();
@@ -34,11 +34,11 @@ exports.start = function startMessengerClientModule(app, module, done)
 
     if (pushSocket === null)
     {
-      module.debug("push socket not used.");
+      module.debug('push socket not used.');
     }
     else
     {
-      module.debug("push socket listening on port %d...", module.config.pushPort);
+      module.debug('push socket listening on port %d...', module.config.pushPort);
     }
 
     setImmediate(done);
@@ -82,7 +82,7 @@ exports.start = function startMessengerClientModule(app, module, done)
    */
   function createSubSocket()
   {
-    var connected = false;
+    let connected = false;
 
     subSocket = axon.socket('sub');
 
@@ -91,14 +91,14 @@ exports.start = function startMessengerClientModule(app, module, done)
 
     subSocket.on('error', function(err)
     {
-      module.error("[sub] %s", err.message);
+      module.error('[sub] %s', err.message);
     });
 
     subSocket.on('connect', function()
     {
       connected = true;
 
-      module.debug("[sub] Connected on port %d...", module.config.pubPort);
+      module.debug('[sub] Connected on port %d...', module.config.pubPort);
 
       app.broker.publish('messenger.client.connected', {
         moduleName: module.name,
@@ -112,7 +112,7 @@ exports.start = function startMessengerClientModule(app, module, done)
     {
       if (connected)
       {
-        module.debug("[sub] Disconnected. Reconnecting...");
+        module.debug('[sub] Disconnected. Reconnecting...');
 
         connected = false;
       }
@@ -126,7 +126,7 @@ exports.start = function startMessengerClientModule(app, module, done)
    */
   function createReqSocket()
   {
-    var connected = false;
+    let connected = false;
 
     reqSocket = axon.socket('req');
 
@@ -135,14 +135,14 @@ exports.start = function startMessengerClientModule(app, module, done)
 
     reqSocket.on('error', function(err)
     {
-      module.error("[req] %s", err.message);
+      module.error('[req] %s', err.message);
     });
 
     reqSocket.on('connect', function()
     {
       connected = true;
 
-      module.debug("[req] Connected on port %d...", module.config.repPort);
+      module.debug('[req] Connected on port %d...', module.config.repPort);
 
       app.broker.publish('messenger.client.connected', {
         moduleName: module.name,
@@ -156,7 +156,7 @@ exports.start = function startMessengerClientModule(app, module, done)
     {
       if (connected)
       {
-        module.debug("[req] Disconnected. Reconnecting...");
+        module.debug('[req] Disconnected. Reconnecting...');
 
         connected = false;
 
@@ -181,7 +181,7 @@ exports.start = function startMessengerClientModule(app, module, done)
       return done(null, null);
     }
 
-    var push = axon.socket('req');
+    const push = axon.socket('req');
 
     push.set('hwm', 10);
     push.bind(module.config.pushPort, module.config.pushHost);
@@ -214,8 +214,8 @@ exports.start = function startMessengerClientModule(app, module, done)
       responseHandler = function() {};
     }
 
-    var timer = null;
-    var reply = null;
+    let timer = null;
+    let reply = null;
 
     reply = _.once(function(err)
     {
@@ -236,7 +236,7 @@ exports.start = function startMessengerClientModule(app, module, done)
     {
       return reply({
         code: 'NO_CONNECTION',
-        message: socket.type === 'client' ? "Not connected to the server." : "No clients connected."
+        message: socket.type === 'client' ? 'Not connected to the server.' : 'No clients connected.'
       });
     }
 
@@ -246,7 +246,7 @@ exports.start = function startMessengerClientModule(app, module, done)
     {
       timer = null;
 
-      reply({code: 'RESPONSE_TIMEOUT', message: "Response timeout."});
+      reply({code: 'RESPONSE_TIMEOUT', message: 'Response timeout.'});
     });
   }
 

@@ -2,16 +2,16 @@
 
 'use strict';
 
-var _ = require('lodash');
-var ObjectId = require('mongoose').Types.ObjectId;
+const _ = require('lodash');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 module.exports = function setUpFeedbackRoutes(app, feedbackModule)
 {
-  var express = app[feedbackModule.config.expressId];
-  var userModule = app[feedbackModule.config.userId];
-  var Feedback = app[feedbackModule.config.mongooseId].model('Feedback');
+  const express = app[feedbackModule.config.expressId];
+  const userModule = app[feedbackModule.config.userId];
+  const Feedback = app[feedbackModule.config.mongooseId].model('Feedback');
 
-  var canView = userModule.auth();
+  const canView = userModule.auth();
 
   express.get('/feedback', canView, express.crud.browseRoute.bind(null, app, Feedback));
 
@@ -21,8 +21,8 @@ module.exports = function setUpFeedbackRoutes(app, feedbackModule)
 
   function prepareBodyForAdd(req, res, next)
   {
-    var watch = !!req.body.watch;
-    var body = _.pick(req.body, ['type', 'summary', 'comment', 'page', 'navigator', 'versions']);
+    const watch = !!req.body.watch;
+    const body = _.pick(req.body, ['type', 'summary', 'comment', 'page', 'navigator', 'versions']);
 
     body.creator = new ObjectId(req.session.user._id);
     body.savedAt = new Date();

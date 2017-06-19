@@ -2,8 +2,8 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function lockCommand(app, productionModule, socket, req, reply)
 {
@@ -17,13 +17,13 @@ module.exports = function lockCommand(app, productionModule, socket, req, reply)
     return reply(new Error('INVALID_INPUT'));
   }
 
-  var userModule = app[productionModule.config.userId];
-  var orgUnits = app[productionModule.config.orgUnitsId];
+  const userModule = app[productionModule.config.userId];
+  const orgUnits = app[productionModule.config.orgUnitsId];
 
   step(
     function checkProdLineStep()
     {
-      var prodLine = orgUnits.getByTypeAndId('prodLine', req.prodLine);
+      const prodLine = orgUnits.getByTypeAndId('prodLine', req.prodLine);
 
       if (!prodLine)
       {
@@ -62,7 +62,7 @@ module.exports = function lockCommand(app, productionModule, socket, req, reply)
       if (productionModule.secretKeys[this.prodLine._id] !== req.secretKey)
       {
         productionModule.debug(
-          "Tried to lock prod line [%s] with a different secret key: %s vs %s",
+          'Tried to lock prod line [%s] with a different secret key: %s vs %s',
           this.prodLine._id,
           req.secretKey,
           productionModule.secretKeys[this.prodLine._id]
@@ -70,17 +70,15 @@ module.exports = function lockCommand(app, productionModule, socket, req, reply)
 
         return this.done(reply, null);
       }
-      else
-      {
-        this.prodLine.secretKey = null;
-        this.prodLine.save(this.next());
-      }
+
+      this.prodLine.secretKey = null;
+      this.prodLine.save(this.next());
     },
     function replyStep(err)
     {
       if (err)
       {
-        productionModule.error("Failed to reset a secret key for %s: %s", this.prodLine._id, err.message);
+        productionModule.error('Failed to reset a secret key for %s: %s', this.prodLine._id, err.message);
 
         return this.done(reply, err);
       }

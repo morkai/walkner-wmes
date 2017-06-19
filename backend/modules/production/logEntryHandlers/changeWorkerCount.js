@@ -2,7 +2,7 @@
 
 'use strict';
 
-var step = require('h5.step');
+const step = require('h5.step');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
@@ -16,7 +16,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to get prod shift order [%s] to change the worker count (LOG=[%s]): %s",
+          'Failed to get prod shift order [%s] to change the worker count (LOG=[%s]): %s',
           logEntry.prodShiftOrder,
           logEntry._id,
           err.stack
@@ -54,7 +54,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to get downtimes for order [%s] to change the worker count (LOG=[%s]): %s",
+          'Failed to get downtimes for order [%s] to change the worker count (LOG=[%s]): %s',
           logEntry.prodShiftOrder,
           logEntry._id,
           err.stack
@@ -65,9 +65,9 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
       this.prodShiftOrder.save(this.group());
 
-      for (var i = 0; i < prodDowntimes.length; ++i)
+      for (let i = 0; i < prodDowntimes.length; ++i)
       {
-        var prodDowntime = prodDowntimes[i];
+        const prodDowntime = prodDowntimes[i];
 
         prodDowntime.workerCount = this.prodShiftOrder.workerCount;
         prodDowntime.save(this.group());
@@ -78,7 +78,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save models after changing the worker count of order [%s] (LOG=[%s]): %s",
+          'Failed to save models after changing the worker count of order [%s] (LOG=[%s]): %s',
           logEntry.prodShiftOrder,
           logEntry._id,
           err.stack

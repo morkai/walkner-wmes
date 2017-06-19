@@ -2,11 +2,11 @@
 
 'use strict';
 
-var fs = require('fs');
-var _ = require('lodash');
-var step = require('h5.step');
-var ejs = require('ejs');
-var moment = require('moment');
+const fs = require('fs');
+const _ = require('lodash');
+const step = require('h5.step');
+const ejs = require('ejs');
+const moment = require('moment');
 
 module.exports = function setUpSuggestionsReminder(app, module)
 {
@@ -15,16 +15,16 @@ module.exports = function setUpSuggestionsReminder(app, module)
     return;
   }
 
-  var mailSender = app[module.config.mailSenderId];
-  var mongoose = app[module.config.mongooseId];
-  var User = mongoose.model('User');
-  var Suggestion = mongoose.model('Suggestion');
+  const mailSender = app[module.config.mailSenderId];
+  const mongoose = app[module.config.mongooseId];
+  const User = mongoose.model('User');
+  const Suggestion = mongoose.model('Suggestion');
 
-  var DAYS_AGO = module.config.remind;
-  var EMAIL_URL_PREFIX = module.config.emailUrlPrefix;
+  const DAYS_AGO = module.config.remind;
+  const EMAIL_URL_PREFIX = module.config.emailUrlPrefix;
 
-  var emailTemplateFile = __dirname + '/reminder.email.pl.ejs';
-  var renderEmail = ejs.compile(fs.readFileSync(emailTemplateFile, 'utf8'), {
+  const emailTemplateFile = __dirname + '/reminder.email.pl.ejs';
+  const renderEmail = ejs.compile(fs.readFileSync(emailTemplateFile, 'utf8'), {
     cache: true,
     filename: emailTemplateFile,
     compileDebug: false,
@@ -35,7 +35,7 @@ module.exports = function setUpSuggestionsReminder(app, module)
 
   function scheduleNextReminder()
   {
-    var delay = moment()
+    const delay = moment()
       .hours(12)
       .minutes(0)
       .seconds(0)
@@ -51,7 +51,7 @@ module.exports = function setUpSuggestionsReminder(app, module)
     step(
       function aggregateStep()
       {
-        var weekAgo = moment().subtract(DAYS_AGO, 'days').valueOf();
+        const weekAgo = moment().subtract(DAYS_AGO, 'days').valueOf();
 
         this.conditions = {
           status: {$in: ['new', 'accepted', 'todo', 'inProgress', 'paused']},
@@ -78,15 +78,15 @@ module.exports = function setUpSuggestionsReminder(app, module)
           return this.skip(err);
         }
 
-        var updatedAtStats = {};
+        const updatedAtStats = {};
 
         _.forEach(updatedAtResults, function(result)
         {
           updatedAtStats[result._id] = result;
         });
 
-        var userIds = [];
-        var userIdToStats = {};
+        const userIds = [];
+        const userIdToStats = {};
 
         _.forEach(remindedAtResults, function(result)
         {
@@ -96,8 +96,8 @@ module.exports = function setUpSuggestionsReminder(app, module)
 
         this.userIdToStats = userIdToStats;
 
-        var conditions = {_id: {$in: userIds}, email: {$ne: null}};
-        var fields = {firstName: 1, lastName: 1, email: 1, gender: 1};
+        const conditions = {_id: {$in: userIds}, email: {$ne: null}};
+        const fields = {firstName: 1, lastName: 1, email: 1, gender: 1};
 
         User.find(conditions, fields).exec(this.next());
       },
@@ -108,14 +108,14 @@ module.exports = function setUpSuggestionsReminder(app, module)
           return this.skip(err);
         }
 
-        for (var i = 0; i < users.length; ++i)
+        for (let i = 0; i < users.length; ++i)
         {
-          var user = users[i];
+          const user = users[i];
 
           sendReminderEmail(user, this.userIdToStats[user._id]);
         }
 
-        module.info("Reminded %d users about incomplete suggestions.", users.length);
+        module.info('Reminded %d users about incomplete suggestions.', users.length);
       },
       function updateUpdatedAtStep()
       {
@@ -125,12 +125,12 @@ module.exports = function setUpSuggestionsReminder(app, module)
       {
         if (err)
         {
-          module.error("[reminder] %s", err.message);
+          module.error('[reminder] %s', err.message);
         }
 
         this.conditions = null;
         this.userIdToStats = null;
-        
+
         scheduleNextReminder();
       }
     );
@@ -138,7 +138,7 @@ module.exports = function setUpSuggestionsReminder(app, module)
 
   function sendReminderEmail(user, stats)
   {
-    var mailOptions = {
+    const mailOptions = {
       to: user.email,
       replyTo: user.email,
       subject: '[WMES] Niezakończone zgłoszenia usprawnień',
@@ -150,11 +150,11 @@ module.exports = function setUpSuggestionsReminder(app, module)
       })
     };
 
-    mailSender.send(mailOptions, function (err)
+    mailSender.send(mailOptions, function(err)
     {
       if (err)
       {
-        module.error("Failed to remind [%s] about incomplete suggestions: %s", mailOptions.to, err.message);
+        module.error('Failed to remind [%s] about incomplete suggestions: %s', mailOptions.to, err.message);
       }
     });
   }

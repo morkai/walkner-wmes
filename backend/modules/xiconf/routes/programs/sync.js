@@ -2,8 +2,8 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function syncProgramsRoute(app, xiconfModule, req, res, next)
 {
@@ -12,8 +12,8 @@ module.exports = function syncProgramsRoute(app, xiconfModule, req, res, next)
     return next(new Error('INPUT'));
   }
 
-  var mongoose = app[xiconfModule.config.mongooseId];
-  var XiconfProgram = mongoose.model('XiconfProgram');
+  const mongoose = app[xiconfModule.config.mongooseId];
+  const XiconfProgram = mongoose.model('XiconfProgram');
 
   xiconfModule.programSyncQueue.push({req: req, res: res, next: next});
 
@@ -21,16 +21,16 @@ module.exports = function syncProgramsRoute(app, xiconfModule, req, res, next)
 
   function syncNext()
   {
-    var args = xiconfModule.programSyncQueue.shift();
+    const args = xiconfModule.programSyncQueue.shift();
 
     if (!args)
     {
       return;
     }
 
-    var req = args.req;
-    var res = args.res;
-    var next = args.next;
+    const req = args.req;
+    const res = args.res;
+    const next = args.next;
 
     step(
       function checkSocketStep()
@@ -75,7 +75,7 @@ module.exports = function syncProgramsRoute(app, xiconfModule, req, res, next)
           deleted: []
         };
 
-        var remoteProgramIds = Object.keys(this.remotePrograms);
+        const remoteProgramIds = Object.keys(this.remotePrograms);
 
         compareNextProgram(
           remoteProgramIds,
@@ -97,8 +97,8 @@ module.exports = function syncProgramsRoute(app, xiconfModule, req, res, next)
       },
       function applyChangesStep()
       {
-        var localChanges = this.localChanges;
-        var i;
+        const localChanges = this.localChanges;
+        let i;
 
         for (i = 0; i < localChanges.created.length; ++i)
         {
@@ -125,9 +125,9 @@ module.exports = function syncProgramsRoute(app, xiconfModule, req, res, next)
         {
           res.json(this.remoteChanges);
 
-          var user = req.session.user;
-          var localChanges = this.localChanges;
-          var i;
+          const user = req.session.user;
+          const localChanges = this.localChanges;
+          let i;
 
           for (i = 0; i < localChanges.created.length; ++i)
           {
@@ -178,7 +178,7 @@ module.exports = function syncProgramsRoute(app, xiconfModule, req, res, next)
 
   function programListToMap(programList)
   {
-    var programMap = {};
+    const programMap = {};
 
     _.forEach(programList, function(program)
     {
@@ -190,14 +190,14 @@ module.exports = function syncProgramsRoute(app, xiconfModule, req, res, next)
 
   function compareNextProgram(remoteProgramIds, remotePrograms, localPrograms, remoteChanges, localChanges, done)
   {
-    var remoteProgramId = remoteProgramIds.shift();
+    const remoteProgramId = remoteProgramIds.shift();
 
     if (!remoteProgramId)
     {
       return done();
     }
 
-    var remoteProgram = remotePrograms[remoteProgramId];
+    const remoteProgram = remotePrograms[remoteProgramId];
 
     delete remotePrograms[remoteProgram._id];
 
@@ -206,7 +206,7 @@ module.exports = function syncProgramsRoute(app, xiconfModule, req, res, next)
       remoteProgram.steps = tryJsonParseSteps(remoteProgram.steps);
     }
 
-    var localProgram = localPrograms[remoteProgram._id];
+    const localProgram = localPrograms[remoteProgram._id];
 
     if (!localProgram)
     {
@@ -228,7 +228,7 @@ module.exports = function syncProgramsRoute(app, xiconfModule, req, res, next)
 
     delete localPrograms[remoteProgram._id];
 
-    var localUpdatedAt = localProgram.updatedAt.getTime();
+    const localUpdatedAt = localProgram.updatedAt.getTime();
 
     if (remoteProgram.updatedAt > localUpdatedAt)
     {

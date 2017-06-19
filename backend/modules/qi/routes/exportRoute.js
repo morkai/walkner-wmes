@@ -67,10 +67,10 @@ exports.fetchDictionaries = function(app, qiModule, req, res, next)
 
 exports.serializeRow = function(app, qiModule, doc, req)
 {
-  var dict = req.qiDictionaries;
-  var kind = dict.kinds[doc.kind];
-  var errorCategory = dict.errorCategories[doc.errorCategory];
-  var row = {
+  const dict = req.qiDictionaries;
+  const kind = dict.kinds[doc.kind];
+  const errorCategory = dict.errorCategories[doc.errorCategory];
+  const row = {
     '#rid': doc.rid,
     '"12nc': doc.nc12,
     '"productName': doc.productName,
@@ -95,15 +95,15 @@ exports.serializeRow = function(app, qiModule, doc, req)
     '"rootCause': doc.rootCause || ''
   };
 
-  for (var i = 0; i < dict.maxActionCount; ++i)
+  for (let i = 0; i < dict.maxActionCount; ++i)
   {
-    var action = doc.correctiveActions[i] || {
+    const action = doc.correctiveActions[i] || {
       who: [],
       what: '',
       when: null,
       status: ''
     };
-    var suffix = i + 1;
+    const suffix = i + 1;
 
     row['"actionWho' + suffix] = action.who.map(d => d.label).join(', ');
     row['"actionWhat' + suffix] = action.what;

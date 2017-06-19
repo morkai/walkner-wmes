@@ -49,7 +49,7 @@ function buildRequireCache()
       requireCache[this.id] = {};
     }
 
-    var resolvedRequest = Module._resolveFilename(request, this);
+    const resolvedRequest = Module._resolveFilename(request, this);
 
     if (resolvedRequest[0] === '/' || resolvedRequest[0] === '\\' || resolvedRequest[1] === ':')
     {
@@ -69,11 +69,11 @@ function useRequireCache()
 
   Module._resolveFilename = function(request, parent)
   {
-    var parentRequireMap = requireCache[parent.id];
+    const parentRequireMap = requireCache[parent.id];
 
     if (parentRequireMap !== undefined)
     {
-      var resolvedRequest = parentRequireMap[request];
+      const resolvedRequest = parentRequireMap[request];
 
       if (resolvedRequest !== undefined)
       {

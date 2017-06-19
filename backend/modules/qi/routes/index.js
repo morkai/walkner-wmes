@@ -151,7 +151,7 @@ module.exports = function setUpQiRoutes(app, qiModule)
 
   function redirectRoute(req, res, next)
   {
-    var url = '/#qiResults';
+    let url = '/#qiResults';
 
     if (req.params.filter === 'all')
     {

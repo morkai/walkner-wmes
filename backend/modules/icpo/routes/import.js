@@ -2,11 +2,11 @@
 
 'use strict';
 
-var path = require('path');
-var crypto = require('crypto');
-var moment = require('moment');
-var step = require('h5.step');
-var fs = require('fs-extra');
+const path = require('path');
+const crypto = require('crypto');
+const moment = require('moment');
+const step = require('h5.step');
+const fs = require('fs-extra');
 
 module.exports = function importRoute(app, icpoModule, req, res, next)
 {
@@ -15,29 +15,29 @@ module.exports = function importRoute(app, icpoModule, req, res, next)
     return res.status(400).send('INVALID_CONTENT_TYPE');
   }
 
-  var uuid = req.query.uuid;
+  const uuid = req.query.uuid;
 
   if (!/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/.test(uuid))
   {
     return res.status(400).send('INVALID_UUID');
   }
 
-  var mongoose = app[icpoModule.config.mongooseId];
-  var License = mongoose.model('License');
-  var IcpoResult = mongoose.model('IcpoResult');
+  const mongoose = app[icpoModule.config.mongooseId];
+  const License = mongoose.model('License');
+  const IcpoResult = mongoose.model('IcpoResult');
 
-  var srcIp = req.socket.remoteAddress;
-  var zipFileHash = crypto.createHash('md5')
+  const srcIp = req.socket.remoteAddress;
+  const zipFileHash = crypto.createHash('md5')
     .update(uuid)
     .update(Math.random().toString())
     .digest('hex');
-  var zipFileName = Math.round(Date.now() / 1000).toString() + '@' + srcIp + '@' + zipFileHash;
-  var zipFilePath = path.join(icpoModule.config.zipStoragePath, zipFileName);
+  const zipFileName = Math.round(Date.now() / 1000).toString() + '@' + srcIp + '@' + zipFileHash;
+  const zipFilePath = path.join(icpoModule.config.zipStoragePath, zipFileName);
 
   step(
     function()
     {
-      var eightHoursAgo = moment().subtract(8, 'hours').toDate();
+      const eightHoursAgo = moment().subtract(8, 'hours').toDate();
 
       License.findById(uuid, {appId: 1})
         .lean()
@@ -66,7 +66,7 @@ module.exports = function importRoute(app, icpoModule, req, res, next)
         return this.skip('DUPLICATE_LICENSE', 400);
       }
 
-      var writeStream = fs.createWriteStream(zipFilePath);
+      const writeStream = fs.createWriteStream(zipFilePath);
 
       writeStream.once('finish', this.parallel());
       req.once('end', this.parallel());

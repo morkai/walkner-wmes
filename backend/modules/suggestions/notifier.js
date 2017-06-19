@@ -2,32 +2,32 @@
 
 'use strict';
 
-var fs = require('fs');
-var _ = require('lodash');
-var step = require('h5.step');
-var ejs = require('ejs');
-var moment = require('moment');
+const fs = require('fs');
+const _ = require('lodash');
+const step = require('h5.step');
+const ejs = require('ejs');
+const moment = require('moment');
 
 module.exports = function setUpSuggestionsNotifier(app, module)
 {
-  var mailSender = app[module.config.mailSenderId];
-  var mongoose = app[module.config.mongooseId];
-  var User = mongoose.model('User');
-  var KaizenSection = mongoose.model('KaizenSection');
-  var KaizenCategory = mongoose.model('KaizenCategory');
-  var KaizenProductFamily = mongoose.model('KaizenProductFamily');
-  var Suggestion = mongoose.model('Suggestion');
+  const mailSender = app[module.config.mailSenderId];
+  const mongoose = app[module.config.mongooseId];
+  const User = mongoose.model('User');
+  const KaizenSection = mongoose.model('KaizenSection');
+  const KaizenCategory = mongoose.model('KaizenCategory');
+  const KaizenProductFamily = mongoose.model('KaizenProductFamily');
+  const Suggestion = mongoose.model('Suggestion');
 
-  var EMAIL_URL_PREFIX = module.config.emailUrlPrefix;
+  const EMAIL_URL_PREFIX = module.config.emailUrlPrefix;
 
-  var emailTemplateFile = __dirname + '/notifier.email.pl.ejs';
-  var renderEmail = ejs.compile(fs.readFileSync(emailTemplateFile, 'utf8'), {
+  const emailTemplateFile = __dirname + '/notifier.email.pl.ejs';
+  const renderEmail = ejs.compile(fs.readFileSync(emailTemplateFile, 'utf8'), {
     cache: true,
     filename: emailTemplateFile,
     compileDebug: false,
     rmWhitespace: true
   });
-  var nameMaps = {
+  const nameMaps = {
     status: {
       new: 'Nowe',
       accepted: 'Zaakceptowane',
@@ -57,7 +57,7 @@ module.exports = function setUpSuggestionsNotifier(app, module)
 
   function notifyAboutAdd(suggestion)
   {
-    var recipients = [];
+    const recipients = [];
 
     _.forEach(suggestion.observers, function(observer)
     {
@@ -84,7 +84,7 @@ module.exports = function setUpSuggestionsNotifier(app, module)
           return this.skip(err);
         }
 
-        var to = recipients
+        const to = recipients
           .filter(function(recipient) { return _.isString(recipient.email) && recipient.email.indexOf('@') !== -1; })
           .map(function(recipient) { return recipient.email; });
 
@@ -117,11 +117,11 @@ module.exports = function setUpSuggestionsNotifier(app, module)
       {
         if (err)
         {
-          module.error("Failed to notify users about a new suggestion [%d]: %s", suggestion.rid, err.message);
+          module.error('Failed to notify users about a new suggestion [%d]: %s', suggestion.rid, err.message);
         }
         else if (this.mailOptions)
         {
-          module.info("Notified %d users about a new suggestion: %d", this.mailOptions.to.length, suggestion.rid);
+          module.info('Notified %d users about a new suggestion: %d', this.mailOptions.to.length, suggestion.rid);
         }
 
         this.mailOptions = null;
@@ -131,7 +131,7 @@ module.exports = function setUpSuggestionsNotifier(app, module)
 
   function notifyAboutEdit(suggestion, usersToNotify)
   {
-    var recipients = [];
+    const recipients = [];
 
     _.forEach(usersToNotify, function(changes, userId)
     {
@@ -155,7 +155,7 @@ module.exports = function setUpSuggestionsNotifier(app, module)
           return this.skip(err);
         }
 
-        var to = recipients
+        const to = recipients
           .filter(function(recipient) { return _.isString(recipient.email) && recipient.email.indexOf('@') !== -1; })
           .map(function(recipient) { return recipient.email; });
 
@@ -188,11 +188,11 @@ module.exports = function setUpSuggestionsNotifier(app, module)
       {
         if (err)
         {
-          module.error("Failed to notify users about a suggestion change [%d]: %s", suggestion.rid, err.message);
+          module.error('Failed to notify users about a suggestion change [%d]: %s', suggestion.rid, err.message);
         }
         else if (this.mailOptions)
         {
-          module.info("Notified %d users about a suggestion change: %d", this.mailOptions.to.length, suggestion.rid);
+          module.info('Notified %d users about a suggestion change: %d', this.mailOptions.to.length, suggestion.rid);
         }
 
         this.mailOptions = null;
@@ -202,7 +202,7 @@ module.exports = function setUpSuggestionsNotifier(app, module)
 
   function prepareTemplateData(mode, suggestion, done)
   {
-    var templateData = {
+    const templateData = {
       mode: mode,
       urlPrefix: EMAIL_URL_PREFIX,
       suggestion: {
@@ -247,13 +247,13 @@ module.exports = function setUpSuggestionsNotifier(app, module)
 
   function findName(Model, suggestion, mapProperty, nameProperty, done)
   {
-    var id = suggestion[mapProperty];
-    var nameMap = nameMaps[mapProperty];
-    var multiple = _.isArray(id);
+    const id = suggestion[mapProperty];
+    const nameMap = nameMaps[mapProperty];
+    const multiple = _.isArray(id);
 
     if (multiple)
     {
-      var names = [];
+      const names = [];
 
       _.forEach(id, function(id)
       {
@@ -273,10 +273,10 @@ module.exports = function setUpSuggestionsNotifier(app, module)
       return setImmediate(done, null, nameMap[id]);
     }
 
-    var conditions = {
+    const conditions = {
       _id: multiple ? {$in: id} : id
     };
-    var fields = {};
+    const fields = {};
     fields[nameProperty] = 1;
 
     Model.find(conditions, fields).lean().exec(function(err, models)
@@ -293,11 +293,11 @@ module.exports = function setUpSuggestionsNotifier(app, module)
 
       if (multiple)
       {
-        var names = [];
+        const names = [];
 
         _.forEach(models, function(model)
         {
-          var name = model[nameProperty];
+          const name = model[nameProperty];
 
           nameMap[model._id] = name;
 

@@ -2,16 +2,16 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var canManage = require('../canManage');
-var findOrCreate = require('./findOrCreate');
+const _ = require('lodash');
+const step = require('h5.step');
+const canManage = require('../canManage');
+const findOrCreate = require('./findOrCreate');
 
 module.exports = function setUpFteMasterCommands(app, fteModule)
 {
-  var mongoose = app[fteModule.config.mongooseId];
-  var userModule = app[fteModule.config.userId];
-  var FteMasterEntry = mongoose.model('FteMasterEntry');
+  const mongoose = app[fteModule.config.mongooseId];
+  const userModule = app[fteModule.config.userId];
+  const FteMasterEntry = mongoose.model('FteMasterEntry');
 
   return {
     findOrCreate: findOrCreate.bind(null, app, fteModule, FteMasterEntry),
@@ -55,34 +55,34 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
             return this.skip(new Error('UNKNOWN'));
           }
 
-          var user = socket.handshake.user;
+          const user = socket.handshake.user;
 
           if (!canManage(user, fteMasterEntry, FteMasterEntry.modelName))
           {
             return this.skip(new Error('AUTH'));
           }
 
-          var task = fteMasterEntry.tasks[data.taskIndex];
+          const task = fteMasterEntry.tasks[data.taskIndex];
 
           if (!task || !task.functions[data.functionIndex])
           {
             return this.skip(new Error('INPUT'));
           }
 
-          var taskCompany = task.functions[data.functionIndex].companies[data.companyIndex];
+          const taskCompany = task.functions[data.functionIndex].companies[data.companyIndex];
 
           if (!taskCompany)
           {
             return this.skip(new Error('INPUT'));
           }
 
-          var newTaskTotal = 0;
+          let newTaskTotal = 0;
 
-          for (var functionI = 0; functionI < task.functions.length; ++functionI)
+          for (let functionI = 0; functionI < task.functions.length; ++functionI)
           {
-            var taskFunctionCompanies = task.functions[functionI].companies;
+            const taskFunctionCompanies = task.functions[functionI].companies;
 
-            for (var companyI = 0; companyI < taskFunctionCompanies.length; ++companyI)
+            for (let companyI = 0; companyI < taskFunctionCompanies.length; ++companyI)
             {
               if (functionI === data.functionIndex && companyI === data.companyIndex)
               {
@@ -95,16 +95,16 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
             }
           }
 
-          var newOverallTotal = fteMasterEntry.total - task.total + newTaskTotal;
-          var update = {
+          const newOverallTotal = fteMasterEntry.total - task.total + newTaskTotal;
+          const update = {
             $set: {
               updatedAt: new Date(),
               updater: userModule.createUserInfo(user, socket),
               total: newOverallTotal
             }
           };
-          var taskTotalProperty = 'tasks.' + data.taskIndex + '.total';
-          var taskCountProperty = 'tasks.' + data.taskIndex
+          const taskTotalProperty = 'tasks.' + data.taskIndex + '.total';
+          const taskCountProperty = 'tasks.' + data.taskIndex
             + '.functions.' + data.functionIndex
             + '.companies.' + data.companyIndex
             + '.count';
@@ -132,7 +132,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
             return this.skip(err);
           }
 
-          var changes = this.changes;
+          const changes = this.changes;
 
           changes.entry.updatedAt = changes.updatedAt;
           changes.entry.updater = changes.updater;
@@ -197,21 +197,21 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
             return this.skip(new Error('UNKNOWN'));
           }
 
-          var user = socket.handshake.user;
+          const user = socket.handshake.user;
 
           if (!canManage(user, fteMasterEntry, FteMasterEntry.modelName))
           {
             return this.skip(new Error('AUTH'));
           }
 
-          var oldTask = fteMasterEntry.tasks[data.taskIndex];
+          const oldTask = fteMasterEntry.tasks[data.taskIndex];
 
           if (!oldTask)
           {
             return this.skip(new Error('INPUT'));
           }
 
-          var newTask = {
+          const newTask = {
             type: oldTask.type,
             id: oldTask.id,
             name: oldTask.name,
@@ -220,20 +220,20 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
             total: 0
           };
 
-          for (var functionI = 0; functionI < oldTask.functions.length; ++functionI)
+          for (let functionI = 0; functionI < oldTask.functions.length; ++functionI)
           {
-            var oldTaskFunction = oldTask.functions[functionI];
-            var newTaskFunction = {
+            const oldTaskFunction = oldTask.functions[functionI];
+            const newTaskFunction = {
               id: oldTaskFunction.id,
               companies: []
             };
-            var oldTaskFunctionCompanies = oldTaskFunction.companies;
+            const oldTaskFunctionCompanies = oldTaskFunction.companies;
 
             newTask.functions.push(newTaskFunction);
 
-            for (var companyI = 0; companyI < oldTaskFunctionCompanies.length; ++companyI)
+            for (let companyI = 0; companyI < oldTaskFunctionCompanies.length; ++companyI)
             {
-              var oldTaskFunctionCompany = oldTaskFunctionCompanies[companyI];
+              const oldTaskFunctionCompany = oldTaskFunctionCompanies[companyI];
 
               newTaskFunction.companies.push({
                 id: oldTaskFunctionCompany.id,
@@ -243,8 +243,8 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
             }
           }
 
-          var newOverallTotal = fteMasterEntry.total - oldTask.total;
-          var update = {
+          const newOverallTotal = fteMasterEntry.total - oldTask.total;
+          const update = {
             $set: {
               updatedAt: new Date(),
               updater: userModule.createUserInfo(user, socket),
@@ -270,7 +270,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
             return this.skip(err);
           }
 
-          var changes = this.changes;
+          const changes = this.changes;
 
           changes.entry.updatedAt = changes.updatedAt;
           changes.entry.updater = changes.updater;
@@ -314,14 +314,14 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
         return reply(new Error('INPUT'));
       }
 
-      var user = socket.handshake.user;
+      const user = socket.handshake.user;
 
       if (!canManage(user, FteMasterEntry))
       {
         return reply(new Error('AUTH'));
       }
 
-      var updater = userModule.createUserInfo(user, socket);
+      const updater = userModule.createUserInfo(user, socket);
 
       FteMasterEntry.addAbsentUser(data._id, data.user, updater, function(err)
       {
@@ -349,14 +349,14 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
         return reply(new Error('INPUT'));
       }
 
-      var user = socket.handshake.user;
+      const user = socket.handshake.user;
 
       if (!canManage(user, FteMasterEntry))
       {
         return reply(new Error('AUTH'));
       }
 
-      var updater = userModule.createUserInfo(user, socket);
+      const updater = userModule.createUserInfo(user, socket);
 
       FteMasterEntry.removeAbsentUser(data._id, data.userId, updater, function(err)
       {

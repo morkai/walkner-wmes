@@ -2,13 +2,13 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function exportFteMasterEntries(app, subdivisionsModule, queryStream, emitter)
 {
-  var docs = [];
-  var prodFunctionMap = {};
-  var prodFunctionList;
+  const docs = [];
+  const prodFunctionMap = {};
+  let prodFunctionList;
 
   queryStream.on('error', emitter.emit.bind(emitter, 'error'));
 
@@ -31,7 +31,7 @@ module.exports = function exportFteMasterEntries(app, subdivisionsModule, queryS
       task.companyTotals = {};
       task.prodFunctionTotals = {};
 
-      var taskFunctionMap = {};
+      const taskFunctionMap = {};
 
       _.forEach(task.functions, function(prodFunction)
       {
@@ -42,7 +42,7 @@ module.exports = function exportFteMasterEntries(app, subdivisionsModule, queryS
 
         taskFunctionMap[prodFunction.id] = prodFunction;
 
-        var taskCompanyMap = {};
+        const taskCompanyMap = {};
 
         _.forEach(prodFunction.companies, function(company)
         {
@@ -61,7 +61,7 @@ module.exports = function exportFteMasterEntries(app, subdivisionsModule, queryS
 
   function tryExportNext()
   {
-    var i = 0;
+    let i = 0;
 
     while (i++ < 25 && docs.length > 0)
     {
@@ -80,16 +80,16 @@ module.exports = function exportFteMasterEntries(app, subdivisionsModule, queryS
 
   function exportNext(doc)
   {
-    var date = app.formatDate(doc.date);
-    var subdivision = subdivisionsModule.modelsById[doc.subdivision];
-    var division = subdivision ? subdivision.division : '?';
+    const date = app.formatDate(doc.date);
+    let subdivision = subdivisionsModule.modelsById[doc.subdivision];
+    const division = subdivision ? subdivision.division : '?';
 
     subdivision = subdivision ? subdivision.name : doc.subdivision;
 
-    for (var i = 0, l = doc.tasks.length; i < l; ++i)
+    for (let i = 0, l = doc.tasks.length; i < l; ++i)
     {
-      var task = doc.tasks[i];
-      var row = {
+      const task = doc.tasks[i];
+      const row = {
         '"division': division,
         '"subdivision': subdivision,
         'date': date,
@@ -110,11 +110,11 @@ module.exports = function exportFteMasterEntries(app, subdivisionsModule, queryS
 
 function exportCountColumns(row, task, prodFunctionMap, prodFunctionList)
 {
-  for (var i = 0, l = prodFunctionList.length; i < l; ++i)
+  for (let i = 0, l = prodFunctionList.length; i < l; ++i)
   {
-    var prodFunctionId = prodFunctionList[i];
-    var prodFunctionCompanies = prodFunctionMap[prodFunctionId];
-    var prodFunctionData = task.functions[prodFunctionId];
+    const prodFunctionId = prodFunctionList[i];
+    const prodFunctionCompanies = prodFunctionMap[prodFunctionId];
+    const prodFunctionData = task.functions[prodFunctionId];
 
     if (prodFunctionData === undefined)
     {
@@ -131,7 +131,7 @@ function exportCountColumns(row, task, prodFunctionMap, prodFunctionList)
 
 function exportNoProdFunctionData(row, prodFunctionId, prodFunctionCompanies)
 {
-  for (var i = 0, l = prodFunctionCompanies.length; i < l; ++i)
+  for (let i = 0, l = prodFunctionCompanies.length; i < l; ++i)
   {
     row['#' + prodFunctionId + '[' + prodFunctionCompanies[i] + ']'] = 0;
   }
@@ -139,9 +139,9 @@ function exportNoProdFunctionData(row, prodFunctionId, prodFunctionCompanies)
 
 function exportProdFunctionData(row, prodFunctionId, prodFunctionCompanies, prodFunctionData)
 {
-  for (var i = 0, l = prodFunctionCompanies.length; i < l; ++i)
+  for (let i = 0, l = prodFunctionCompanies.length; i < l; ++i)
   {
-    var companyId = prodFunctionCompanies[i];
+    const companyId = prodFunctionCompanies[i];
 
     row['#' + prodFunctionId + '[' + companyId + ']'] = prodFunctionData[companyId] || 0;
   }

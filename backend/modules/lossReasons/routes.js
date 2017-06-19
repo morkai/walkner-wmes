@@ -4,12 +4,12 @@
 
 module.exports = function setUpLossReasonsRoutes(app, lossReasonsModule, useDictionaryModel)
 {
-  var express = app[lossReasonsModule.config.expressId];
-  var auth = app[lossReasonsModule.config.userId].auth;
-  var LossReason = app[lossReasonsModule.config.mongooseId].model('LossReason');
+  const express = app[lossReasonsModule.config.expressId];
+  const auth = app[lossReasonsModule.config.userId].auth;
+  const LossReason = app[lossReasonsModule.config.mongooseId].model('LossReason');
 
-  var canView = auth('DICTIONARIES:VIEW', 'PRESS_WORKSHEETS:MANAGE');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW', 'PRESS_WORKSHEETS:MANAGE');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/lossReasons', canView, express.crud.browseRoute.bind(null, app, LossReason));
 

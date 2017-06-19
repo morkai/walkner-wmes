@@ -2,10 +2,10 @@
 
 'use strict';
 
-var path = require('path');
-var fs = require('fs');
-var _ = require('lodash');
-var step = require('h5.step');
+const path = require('path');
+const fs = require('fs');
+const _ = require('lodash');
+const step = require('h5.step');
 
 exports.DEFAULT_CONFIG = {
   expressId: 'express',
@@ -15,7 +15,7 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startSmsSenderModule(app, module)
 {
-  var request;
+  let request;
 
   if (module.config.remoteSenderUrl)
   {
@@ -29,7 +29,7 @@ exports.start = function startSmsSenderModule(app, module)
    */
   module.send = function(to, text, done)
   {
-    var smsOptions;
+    let smsOptions;
 
     if (arguments.length > 2)
     {
@@ -51,7 +51,7 @@ exports.start = function startSmsSenderModule(app, module)
 
     if (!Array.isArray(smsOptions.to) || !smsOptions.to.length)
     {
-      return setImmediate(done, new Error("No recipients."));
+      return setImmediate(done, new Error('No recipients.'));
     }
 
     if (request)
@@ -64,7 +64,7 @@ exports.start = function startSmsSenderModule(app, module)
     }
     else
     {
-      module.debug("Not sending SMS: %s", JSON.stringify(smsOptions));
+      module.debug('Not sending SMS: %s', JSON.stringify(smsOptions));
 
       setImmediate(done);
     }
@@ -72,7 +72,7 @@ exports.start = function startSmsSenderModule(app, module)
 
   function sendThroughRemote(body, done)
   {
-    var options = {
+    const options = {
       url: module.config.remoteSenderUrl,
       method: 'POST',
       json: true,
@@ -100,7 +100,7 @@ exports.start = function startSmsSenderModule(app, module)
     step(
       function openFileStep()
       {
-        var smsFileName = 'WMES_'
+        const smsFileName = 'WMES_'
           + Math.round(Date.now() + Math.random() * 99999999).toString(36).toUpperCase()
           + '.sms';
 
@@ -115,13 +115,13 @@ exports.start = function startSmsSenderModule(app, module)
 
         this.fd = fd;
 
-        var contents = smsOptions.to.join('') + ',' + smsOptions.text;
+        const contents = smsOptions.to.join('') + ',' + smsOptions.text;
 
         fs.write(fd, contents, 0, 'utf8', this.next());
       },
       function closeFileStep(err)
       {
-        var fd = this.fd;
+        const fd = this.fd;
         this.fd = null;
 
         if (err)
@@ -138,7 +138,7 @@ exports.start = function startSmsSenderModule(app, module)
 
   app.onModuleReady(module.config.expressId, function()
   {
-    var express = app[module.config.expressId];
+    const express = app[module.config.expressId];
 
     express.options('/sms;send', function(req, res)
     {
@@ -161,12 +161,12 @@ exports.start = function startSmsSenderModule(app, module)
       {
         if (err)
         {
-          module.error("Failed to send SMS to [%s]: %s", req.body.to, err.message);
+          module.error('Failed to send SMS to [%s]: %s', req.body.to, err.message);
 
           return next(err);
         }
 
-        module.debug("Sent SMS to: %s", req.body.to);
+        module.debug('Sent SMS to: %s', req.body.to);
 
         res.sendStatus(204);
       });

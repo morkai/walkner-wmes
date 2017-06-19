@@ -4,10 +4,10 @@
 
 module.exports = function setUpFactoryLayoutRoutes(app, factoryLayoutModule)
 {
-  var express = app[factoryLayoutModule.config.expressId];
-  var settings = app[factoryLayoutModule.config.settingsId];
-  var FactoryLayout = app[factoryLayoutModule.config.mongooseId].model('FactoryLayout');
-  var canManage = app[factoryLayoutModule.config.userId].auth('FACTORY_LAYOUT:MANAGE');
+  const express = app[factoryLayoutModule.config.expressId];
+  const settings = app[factoryLayoutModule.config.settingsId];
+  const FactoryLayout = app[factoryLayoutModule.config.mongooseId].model('FactoryLayout');
+  const canManage = app[factoryLayoutModule.config.userId].auth('FACTORY_LAYOUT:MANAGE');
 
   express.get(
     '/factoryLayout/settings',

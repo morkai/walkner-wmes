@@ -2,18 +2,18 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function deleteProdShift(app, prodShiftsModule, user, userInfo, prodShiftId, data, done)
 {
-  var mongoose = app[prodShiftsModule.config.mongooseId];
-  var orgUnitsModule = app[prodShiftsModule.config.orgUnitsId];
-  var productionModule = app[prodShiftsModule.config.productionId];
-  var ProdLogEntry = mongoose.model('ProdLogEntry');
-  var ProdChangeRequest = mongoose.model('ProdChangeRequest');
+  const mongoose = app[prodShiftsModule.config.mongooseId];
+  const orgUnitsModule = app[prodShiftsModule.config.orgUnitsId];
+  const productionModule = app[prodShiftsModule.config.productionId];
+  const ProdLogEntry = mongoose.model('ProdLogEntry');
+  const ProdChangeRequest = mongoose.model('ProdChangeRequest');
 
-  var isChangeRequest = !user.super && !_.includes(user.privileges, 'PROD_DATA:CHANGES:MANAGE');
+  const isChangeRequest = !user.super && !_.includes(user.privileges, 'PROD_DATA:CHANGES:MANAGE');
 
   step(
     function getProdDataStep()
@@ -37,7 +37,7 @@ module.exports = function deleteProdShift(app, prodShiftsModule, user, userInfo,
         return this.skip(new Error('NOT_EDITABLE'), 400);
       }
 
-      var logEntry = ProdLogEntry.deleteShift(prodShift, userInfo);
+      const logEntry = ProdLogEntry.deleteShift(prodShift, userInfo);
 
       if (isChangeRequest)
       {
@@ -63,7 +63,7 @@ module.exports = function deleteProdShift(app, prodShiftsModule, user, userInfo,
         return this.skip(err);
       }
 
-      var next = this.next();
+      const next = this.next();
 
       if (isChangeRequest)
       {

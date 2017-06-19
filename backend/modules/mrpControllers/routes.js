@@ -4,12 +4,12 @@
 
 module.exports = function setUpMrpControllersRoutes(app, mrpControllersModule, useDictionaryModel)
 {
-  var express = app[mrpControllersModule.config.expressId];
-  var auth = app[mrpControllersModule.config.userId].auth;
-  var MrpController = app[mrpControllersModule.config.mongooseId].model('MrpController');
+  const express = app[mrpControllersModule.config.expressId];
+  const auth = app[mrpControllersModule.config.userId].auth;
+  const MrpController = app[mrpControllersModule.config.mongooseId].model('MrpController');
 
-  var canView = auth('DICTIONARIES:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/mrpControllers', canView, express.crud.browseRoute.bind(null, app, MrpController));
 

@@ -2,18 +2,18 @@
 
 'use strict';
 
-var _ = require('lodash');
-var setUpRoutes = require('./routes');
-var setUpCommands = require('./commands');
-var setUpLogEntryHandler = require('./logEntryHandler');
-var setUpActiveProdLines = require('./activeProdLines');
-var setUpProdData = require('./prodData');
-var setUpProdState = require('./prodState');
-var setUpAutoDowntimes = require('./autoDowntimes');
-var recreate = require('./recreate');
-var syncLogEntryStream = require('./syncLogEntryStream');
-var checkSerialNumber = require('./checkSerialNumber');
-var logEntryHandlers = require('./logEntryHandlers');
+const _ = require('lodash');
+const setUpRoutes = require('./routes');
+const setUpCommands = require('./commands');
+const setUpLogEntryHandler = require('./logEntryHandler');
+const setUpActiveProdLines = require('./activeProdLines');
+const setUpProdData = require('./prodData');
+const setUpProdState = require('./prodState');
+const setUpAutoDowntimes = require('./autoDowntimes');
+const recreate = require('./recreate');
+const syncLogEntryStream = require('./syncLogEntryStream');
+const checkSerialNumber = require('./checkSerialNumber');
+const logEntryHandlers = require('./logEntryHandlers');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -33,11 +33,11 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startProductionModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("mongoose module is required!");
+    throw new Error('mongoose module is required!');
   }
 
   module.secretKeys = {};
@@ -139,7 +139,7 @@ exports.start = function startProductionModule(app, module)
 
     _.forEach(app[module.config.orgUnitsId].getAllByType('prodLine'), function(prodLine)
     {
-      var secretKey = prodLine.secretKey;
+      const secretKey = prodLine.secretKey;
 
       if (secretKey)
       {

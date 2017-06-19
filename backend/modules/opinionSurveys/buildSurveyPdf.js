@@ -2,14 +2,14 @@
 
 'use strict';
 
-var spawn = require('child_process').spawn;
-var _ = require('lodash');
+const spawn = require('child_process').spawn;
+const _ = require('lodash');
 
-var inProgress = {};
+const inProgress = {};
 
 module.exports = function buildSurveyPdf(app, module, surveyId, outputFile, done)
 {
-  var complete = _.once(done);
+  const complete = _.once(done);
 
   if (inProgress[surveyId])
   {
@@ -18,10 +18,10 @@ module.exports = function buildSurveyPdf(app, module, surveyId, outputFile, done
 
   inProgress[surveyId] = [complete];
 
-  var httpServer = app[module.config.httpServerId];
-  var templateUrl = 'http://' + (httpServer.config.host === '0.0.0.0' ? '127.0.0.1' : httpServer.config.host)
+  const httpServer = app[module.config.httpServerId];
+  const templateUrl = 'http://' + (httpServer.config.host === '0.0.0.0' ? '127.0.0.1' : httpServer.config.host)
     + ':' + httpServer.config.port + '/opinionSurveys/' + surveyId + '.html?template=';
-  var args = [
+  const args = [
     '--quiet',
     '--dpi', '96',
     '--image-dpi', '600',
@@ -41,8 +41,8 @@ module.exports = function buildSurveyPdf(app, module, surveyId, outputFile, done
     templateUrl + 'print-survey',
     outputFile
   ];
-  var p = spawn(module.config.wkhtmltopdfExe, args);
-  var buffer = '';
+  const p = spawn(module.config.wkhtmltopdfExe, args);
+  let buffer = '';
 
   p.stderr.setEncoding('utf8');
   p.stderr.on('data', function(data) { buffer += data; });
@@ -50,7 +50,7 @@ module.exports = function buildSurveyPdf(app, module, surveyId, outputFile, done
   p.on('error', complete);
   p.on('exit', function(code)
   {
-    var err = code ? new Error("wkhtmltopdf exit with code: " + code + "\n" + buffer.trim()) : null;
+    const err = code ? new Error('wkhtmltopdf exit with code: ' + code + '\n' + buffer.trim()) : null;
 
     _.forEach(inProgress[surveyId], function(done) { done(err, outputFile); });
 

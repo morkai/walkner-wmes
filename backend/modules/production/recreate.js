@@ -2,8 +2,8 @@
 
 'use strict';
 
-var step = require('h5.step');
-var moment = require('moment');
+const step = require('h5.step');
+const moment = require('moment');
 
 module.exports = function(app, productionModule, done)
 {
@@ -14,15 +14,15 @@ module.exports = function(app, productionModule, done)
 
   productionModule.recreating = true;
 
-  var mongoose = app[productionModule.config.mongooseId];
-  var startTime = Date.now();
+  const mongoose = app[productionModule.config.mongooseId];
+  const startTime = Date.now();
 
-  productionModule.info("Recreating started...");
+  productionModule.info('Recreating started...');
 
   step(
     function removeCurrentDataStep()
     {
-      productionModule.info("Removing current data...");
+      productionModule.info('Removing current data...');
 
       mongoose.model('ProdShift').remove(null, this.parallel());
       mongoose.model('ProdShiftOrder').remove(null, this.parallel());
@@ -32,14 +32,14 @@ module.exports = function(app, productionModule, done)
     {
       if (err)
       {
-        productionModule.error("Failed to remove the current data :(");
+        productionModule.error('Failed to remove the current data :(');
 
         return this.skip(err);
       }
     },
     function resetTodoStep()
     {
-      productionModule.info("Resetting the todo flag...");
+      productionModule.info('Resetting the todo flag...');
 
       mongoose.model('ProdLogEntry')
         .update({todo: true}, {todo: false}, {multi: true}, this.next());
@@ -48,14 +48,14 @@ module.exports = function(app, productionModule, done)
     {
       if (err)
       {
-        productionModule.error("Failed to reset the todo flag :(");
+        productionModule.error('Failed to reset the todo flag :(');
 
         return this.skip(err);
       }
     },
     function resetIdCountersStep()
     {
-      productionModule.info("Resetting ID counters...");
+      productionModule.info('Resetting ID counters...');
 
       mongoose.model('IdentityCounter')
         .update({model: 'ProdDowntime', field: 'rid'}, {$set: {count: 0}}, this.next());
@@ -64,14 +64,14 @@ module.exports = function(app, productionModule, done)
     {
       if (err)
       {
-        productionModule.error("Failed to reset the ID counters :(");
+        productionModule.error('Failed to reset the ID counters :(');
 
         return this.skip(err);
       }
     },
     function countPressWorksheetsStep()
     {
-      productionModule.info("Counting the press worksheets...");
+      productionModule.info('Counting the press worksheets...');
 
       mongoose.model('PressWorksheet').count().exec(this.next());
     },
@@ -79,16 +79,16 @@ module.exports = function(app, productionModule, done)
     {
       if (err)
       {
-        productionModule.error("Failed to count the press worksheets :(");
+        productionModule.error('Failed to count the press worksheets :(');
 
         return this.skip(err);
       }
 
-      productionModule.info("Recreating the press worksheets...");
+      productionModule.info('Recreating the press worksheets...');
 
-      var donePressWorksheetCount = 0;
-      var stream = mongoose.model('PressWorksheet').find().cursor();
-      var nextStep = this.next();
+      let donePressWorksheetCount = 0;
+      const stream = mongoose.model('PressWorksheet').find().cursor();
+      const nextStep = this.next();
 
       stream.on('error', nextStep);
 
@@ -99,7 +99,7 @@ module.exports = function(app, productionModule, done)
           if (err)
           {
             productionModule.error(
-              "Failed to recreate the press worksheet [%s]: %s", pressWorksheet._id, err.stack
+              'Failed to recreate the press worksheet [%s]: %s', pressWorksheet._id, err.stack
             );
           }
 
@@ -116,16 +116,16 @@ module.exports = function(app, productionModule, done)
     {
       if (err)
       {
-        productionModule.error("Failed to recreate the press worksheets :(");
+        productionModule.error('Failed to recreate the press worksheets :(');
 
         return this.skip(err);
       }
     },
     function recreateProdLogEntryDataStep()
     {
-      productionModule.info("Recreating the prod log entries...");
+      productionModule.info('Recreating the prod log entries...');
 
-      var next = this.next();
+      const next = this.next();
 
       mongoose.model('ProdLogEntry').aggregate(
         {$group: {_id: null, max: {$max: '$createdAt'}, min: {$min: '$createdAt'}}},
@@ -141,21 +141,21 @@ module.exports = function(app, productionModule, done)
             return next();
           }
 
-          var fromMoment = moment(results[0].min).weekday(0);
-          var maxTime = moment(results[0].max).weekday(0).add(1, 'weeks').valueOf();
+          const fromMoment = moment(results[0].min).weekday(0);
+          const maxTime = moment(results[0].max).weekday(0).add(1, 'weeks').valueOf();
 
           productionModule.info(
-            "Recreating the prod log entries from %s to %s...",
+            'Recreating the prod log entries from %s to %s...',
             app.formatDate(fromMoment.toDate()),
             app.formatDate(maxTime)
           );
 
-          var steps = [];
+          const steps = [];
 
           while (fromMoment.valueOf() < maxTime)
           {
-            var from = new Date(fromMoment.valueOf());
-            var to = new Date(fromMoment.add(1, 'weeks').valueOf());
+            const from = new Date(fromMoment.valueOf());
+            const to = new Date(fromMoment.add(1, 'weeks').valueOf());
 
             steps.push(createHandleWeekOfLogEntriesStep(from, to));
           }
@@ -169,18 +169,18 @@ module.exports = function(app, productionModule, done)
     {
       if (err)
       {
-        productionModule.error("Failed to recreate the prod log entries :(");
+        productionModule.error('Failed to recreate the prod log entries :(');
 
         return this.skip(err);
       }
     },
     function recountPlannedQuantitiesStep()
     {
-      productionModule.info("Recounting the planned quantities...");
+      productionModule.info('Recounting the planned quantities...');
 
       productionModule.clearProdData();
 
-      var next = this.next();
+      const next = this.next();
 
       mongoose.model('HourlyPlan')
         .find()
@@ -195,7 +195,7 @@ module.exports = function(app, productionModule, done)
           step(
             function()
             {
-              for (var i = 0, l = hourlyPlans.length; i < l; ++i)
+              for (let i = 0, l = hourlyPlans.length; i < l; ++i)
               {
                 hourlyPlans[i].recountPlannedQuantities(this.parallel());
               }
@@ -210,12 +210,12 @@ module.exports = function(app, productionModule, done)
 
       if (err)
       {
-        productionModule.error("Failed to recreate the production data: %s", err.stack);
+        productionModule.error('Failed to recreate the production data: %s', err.stack);
       }
       else
       {
         productionModule.info(
-          "Finished recreating the production data in %ds!", (Date.now() - startTime) / 1000
+          'Finished recreating the production data in %ds!', (Date.now() - startTime) / 1000
         );
       }
 
@@ -232,20 +232,20 @@ module.exports = function(app, productionModule, done)
   {
     return function handleWeekOfLogEntriesStep()
     {
-      var week = app.formatDate(from);
+      const week = app.formatDate(from);
 
-      productionModule.info("Recreating week %s...", week);
+      productionModule.info('Recreating week %s...', week);
 
-      var next = this.next();
-      var conditions = {createdAt: {$gte: from, $lt: to}};
-      var update = {$set: {todo: true}};
+      const next = this.next();
+      const conditions = {createdAt: {$gte: from, $lt: to}};
+      const update = {$set: {todo: true}};
 
       mongoose.model('ProdLogEntry').update(conditions, update, {multi: true}, function(err)
       {
         if (err)
         {
           productionModule.error(
-            "Failed to reset todo flag of log entries for week %s: %s", week, err.stack
+            'Failed to reset todo flag of log entries for week %s: %s', week, err.stack
           );
 
           return next(err);
@@ -258,7 +258,7 @@ module.exports = function(app, productionModule, done)
           if (err)
           {
             productionModule.error(
-              "Failed to handle log entries for week %s: %s", week, err.stack
+              'Failed to handle log entries for week %s: %s', week, err.stack
             );
           }
 

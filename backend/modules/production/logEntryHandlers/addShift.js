@@ -4,17 +4,17 @@
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var ProdShift = mongoose.model('ProdShift');
+  const mongoose = app[productionModule.config.mongooseId];
+  const ProdShift = mongoose.model('ProdShift');
 
-  var prodShift = new ProdShift(logEntry.data);
+  const prodShift = new ProdShift(logEntry.data);
 
   prodShift.save(function(err)
   {
     if (err)
     {
       productionModule.error(
-        "Failed to save a new shift [%s] (LOG=[%s]): %s",
+        'Failed to save a new shift [%s] (LOG=[%s]): %s',
         logEntry.data._id,
         logEntry._id,
         err.stack

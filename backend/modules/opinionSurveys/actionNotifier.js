@@ -2,16 +2,16 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function setUpActionNotifier(app, module)
 {
-  var mailSender = app[module.config.mailSenderId];
-  var mongoose = app[module.config.mongooseId];
-  var User = mongoose.model('User');
+  const mailSender = app[module.config.mailSenderId];
+  const mongoose = app[module.config.mongooseId];
+  const User = mongoose.model('User');
 
-  var EMAIL_URL_PREFIX = module.config.emailUrlPrefix;
+  const EMAIL_URL_PREFIX = module.config.emailUrlPrefix;
 
   app.broker.subscribe('opinionSurveys.actions.added', function(message)
   {
@@ -25,9 +25,9 @@ module.exports = function setUpActionNotifier(app, module)
 
   function notifyAboutAdd(survey)
   {
-    var recipients = _.without(survey.participants, survey.creator.id);
-    var subject = 'Badanie Opinia - Nowa akcja naprawcza #' + survey.rid;
-    var text = [
+    const recipients = _.without(survey.participants, survey.creator.id);
+    const subject = 'Badanie Opinia - Nowa akcja naprawcza #' + survey.rid;
+    const text = [
       'Witaj!',
       '',
       'Nowa akcja naprawcza #' + survey.rid
@@ -44,9 +44,9 @@ module.exports = function setUpActionNotifier(app, module)
 
   function notifyAboutEdit(survey)
   {
-    var recipients = _.without(survey.participants, survey.updater.id);
-    var subject = 'Badanie Opinia - Edycja akcji naprawczej #' + survey.rid;
-    var text = [
+    const recipients = _.without(survey.participants, survey.updater.id);
+    const subject = 'Badanie Opinia - Edycja akcji naprawczej #' + survey.rid;
+    const text = [
       'Witaj!',
       '',
       'Akcja naprawcza #' + survey.rid
@@ -63,7 +63,7 @@ module.exports = function setUpActionNotifier(app, module)
 
   function sendMail(rid, recipients, subject, text)
   {
-    var userIds = recipients.map(function(userId) { return new mongoose.Types.ObjectId(userId); });
+    const userIds = recipients.map(function(userId) { return new mongoose.Types.ObjectId(userId); });
 
     step(
       function findUsersStep()
@@ -86,7 +86,7 @@ module.exports = function setUpActionNotifier(app, module)
           return this.skip(new Error('No valid recipients.'));
         }
 
-        var mailOptions = {
+        const mailOptions = {
           to: recipients,
           replyTo: recipients,
           subject: subject,
@@ -99,7 +99,7 @@ module.exports = function setUpActionNotifier(app, module)
       {
         if (err)
         {
-          module.error("Failed to notify users about action #%d: %s", rid, err.message);
+          module.error('Failed to notify users about action #%d: %s', rid, err.message);
         }
       }
     );

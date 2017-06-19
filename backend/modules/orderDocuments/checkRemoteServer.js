@@ -2,21 +2,21 @@
 
 'use strict';
 
-var path = require('path');
-var fs = require('fs');
-var url = require('url');
-var exec = require('child_process').exec;
-var _ = require('lodash');
-var step = require('h5.step');
-var request = require('request');
-var cheerio = require('cheerio');
+const path = require('path');
+const fs = require('fs');
+const url = require('url');
+const exec = require('child_process').exec;
+const _ = require('lodash');
+const step = require('h5.step');
+const request = require('request');
+const cheerio = require('cheerio');
 
-var CHECK_INTERVAL = 60 * 60 * 1000;
-var remoteChecks = {};
+const CHECK_INTERVAL = 60 * 60 * 1000;
+const remoteChecks = {};
 
 module.exports = function checkRemoteServer(app, docsModule, nc15)
 {
-  var remoteServer = docsModule.settings.remoteServer;
+  const remoteServer = docsModule.settings.remoteServer;
 
   if (_.isEmpty(remoteServer))
   {
@@ -31,7 +31,7 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
     };
   }
 
-  var remoteCheck = remoteChecks[nc15];
+  const remoteCheck = remoteChecks[nc15];
 
   if (remoteCheck.inProgress || (Date.now() - remoteCheck.lastCheckAt < CHECK_INTERVAL))
   {
@@ -40,10 +40,10 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
 
   remoteCheck.inProgress = Date.now();
 
-  docsModule.debug("Checking document [%s] on remote server [%s]...", nc15, remoteServer);
+  docsModule.debug('Checking document [%s] on remote server [%s]...', nc15, remoteServer);
 
-  var OrderDocumentStatus = app[docsModule.config.mongooseId].model('OrderDocumentStatus');
-  var remoteServerUrl = url.format({
+  const OrderDocumentStatus = app[docsModule.config.mongooseId].model('OrderDocumentStatus');
+  const remoteServerUrl = url.format({
     protocol: 'http',
     hostname: remoteServer,
     port: 80,
@@ -53,7 +53,7 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
   step(
     function requestDocumentsStep()
     {
-      var form = {
+      const form = {
         form_name: 'form_docsearch',
         query: nc15,
         tpd: 'ADT',
@@ -78,7 +78,7 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
 
       if (res.statusCode !== 200)
       {
-        return this.skip(new Error("Invalid response status code: " + res.statusCode));
+        return this.skip(new Error('Invalid response status code: ' + res.statusCode));
       }
 
       if (!_.isString(body))
@@ -86,23 +86,23 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
         body = String(body);
       }
 
-      var resultsStartIndex = body.indexOf('<div id=results>', 2048);
+      const resultsStartIndex = body.indexOf('<div id=results>', 2048);
 
       if (resultsStartIndex === -1)
       {
-        return this.skip(new Error("Invalid response body: missing `<div id=results>`!"));
+        return this.skip(new Error('Invalid response body: missing `<div id=results>`!'));
       }
 
-      var resultsEndIndex = body.indexOf('</div>', resultsStartIndex);
+      const resultsEndIndex = body.indexOf('</div>', resultsStartIndex);
 
       if (resultsEndIndex === -1)
       {
-        return this.skip(new Error("Invalid response body: missing `</div>`!"));
+        return this.skip(new Error('Invalid response body: missing `</div>`!'));
       }
 
-      var documents = [];
-      var maxStatusDate = 0;
-      var $ = cheerio.load(body.substring(resultsStartIndex, resultsEndIndex));
+      const documents = [];
+      let maxStatusDate = 0;
+      const $ = cheerio.load(body.substring(resultsStartIndex, resultsEndIndex));
 
       $('tr').each(function(i, row)
       {
@@ -111,10 +111,10 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
           return;
         }
 
-        var $td = $(row).children();
-        var href = $td.first().find('a').attr('href');
-        var statusDate = 0;
-        var matches = ($($td.get(4)).text() || '').match(/([0-9]{4})-([0-9]{2})-([0-9]{2})/);
+        const $td = $(row).children();
+        const href = $td.first().find('a').attr('href');
+        let statusDate = 0;
+        const matches = ($($td.get(4)).text() || '').match(/([0-9]{4})-([0-9]{2})-([0-9]{2})/);
 
         if (matches !== null)
         {
@@ -131,7 +131,7 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
         maxStatusDate = Math.max(maxStatusDate, statusDate);
       });
 
-      docsModule.debug("Found %d files for document [%s]", documents.length, nc15);
+      docsModule.debug('Found %d files for document [%s]', documents.length, nc15);
 
       if (!documents.length)
       {
@@ -152,7 +152,7 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
         return this.skip(err);
       }
 
-      var newFiles = this.newDocuments.map(function(document) { return document.file; });
+      const newFiles = this.newDocuments.map(function(document) { return document.file; });
 
       if (!orderDocumentStatus)
       {
@@ -165,7 +165,7 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
         {
           if (err)
           {
-            docsModule.error("Failed to save OrderDocumentStatus: %s", err.message);
+            docsModule.error('Failed to save OrderDocumentStatus: %s', err.message);
           }
         });
       }
@@ -184,17 +184,17 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
     },
     function downloadDocumentFilesStep()
     {
-      var documents = this.newDocuments;
+      const documents = this.newDocuments;
 
-      docsModule.debug("Downloading %d files of document [%s]...", documents.length, nc15);
+      docsModule.debug('Downloading %d files of document [%s]...', documents.length, nc15);
 
-      var isSingleFile = documents.length === 1;
+      const isSingleFile = documents.length === 1;
 
-      for (var i = 0; i < documents.length; ++i)
+      for (let i = 0; i < documents.length; ++i)
       {
-        var next = this.group();
-        var document = documents[i];
-        var fileName = nc15;
+        const next = this.group();
+        const document = documents[i];
+        let fileName = nc15;
 
         if (!isSingleFile)
         {
@@ -205,7 +205,7 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
 
         document.localFilePath = path.join(docsModule.config.cachedPath, fileName);
 
-        var writeStream = fs.createWriteStream(document.localFilePath);
+        const writeStream = fs.createWriteStream(document.localFilePath);
         writeStream.on('error', onWriteStreamError);
 
         request
@@ -222,16 +222,16 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
         return this.skip(err);
       }
 
-      var documents = this.newDocuments;
+      const documents = this.newDocuments;
 
       if (documents.length === 1)
       {
         return;
       }
 
-      docsModule.debug("Combining %d files into document [%s]", documents.length, nc15);
+      docsModule.debug('Combining %d files into document [%s]', documents.length, nc15);
 
-      var cmd = [
+      const cmd = [
         docsModule.config.sejdaConsolePath,
         'merge',
         '--overwrite',
@@ -239,7 +239,7 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
         '--files'
       ];
 
-      for (var i = 0; i < documents.length; ++i)
+      for (let i = 0; i < documents.length; ++i)
       {
         cmd.push('"' + documents[i].localFilePath + '"');
       }
@@ -262,14 +262,14 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
     {
       if (err)
       {
-        docsModule.error("Failed to check document [%s] on remote server [%s]: %s", nc15, remoteServer, err.message);
+        docsModule.error('Failed to check document [%s] on remote server [%s]: %s', nc15, remoteServer, err.message);
       }
       else
       {
         remoteCheck.lastCheckAt = Date.now();
 
         docsModule.debug(
-          "Checked document [%s] on remote server [%s] in %d s (%s)!",
+          'Checked document [%s] on remote server [%s] in %d s (%s)!',
           nc15,
           remoteServer,
           ((remoteCheck.lastCheckAt - remoteCheck.inProgress) / 1000).toFixed(3),
@@ -294,6 +294,6 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
 
   function onWriteStreamError(err)
   {
-    docsModule.error("Write stream error: %s", err.message);
+    docsModule.error('Write stream error: %s', err.message);
   }
 };

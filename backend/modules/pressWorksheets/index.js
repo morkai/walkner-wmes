@@ -2,8 +2,8 @@
 
 'use strict';
 
-var step = require('h5.step');
-var setUpRoutes = require('./routes');
+const step = require('h5.step');
+const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -31,14 +31,14 @@ exports.start = function startPressWorksheetsModule(app, module)
 
   function createOrdersAndDowntimes(message)
   {
-    var pressWorksheetId = message.model._id;
+    const pressWorksheetId = message.model._id;
 
     createRelatedModels(pressWorksheetId, function(err)
     {
       if (err)
       {
         return module.error(
-          "Failed to create orders and downtimes from [%s]: %s", pressWorksheetId, err.stack
+          'Failed to create orders and downtimes from [%s]: %s', pressWorksheetId, err.stack
         );
       }
     });
@@ -46,7 +46,7 @@ exports.start = function startPressWorksheetsModule(app, module)
 
   function recreateOrdersAndDowntimes(message)
   {
-    var pressWorksheetId = message.model._id;
+    const pressWorksheetId = message.model._id;
 
     removeRelatedModels(pressWorksheetId, function()
     {
@@ -55,7 +55,7 @@ exports.start = function startPressWorksheetsModule(app, module)
         if (err)
         {
           return module.error(
-            "Failed to recreate orders and downtimes from [%s]: %s", pressWorksheetId, err.stack
+            'Failed to recreate orders and downtimes from [%s]: %s', pressWorksheetId, err.stack
           );
         }
       });
@@ -69,7 +69,7 @@ exports.start = function startPressWorksheetsModule(app, module)
 
   function createRelatedModels(pressWorksheetId, done)
   {
-    var PressWorksheet = app[module.config.mongooseId].model('PressWorksheet');
+    const PressWorksheet = app[module.config.mongooseId].model('PressWorksheet');
 
     PressWorksheet.findById(pressWorksheetId, function(err, pressWorksheet)
     {
@@ -84,22 +84,22 @@ exports.start = function startPressWorksheetsModule(app, module)
 
   function removeRelatedModels(pressWorksheetId, done)
   {
-    var mongoose = app[module.config.mongooseId];
-    var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-    var ProdDowntime = mongoose.model('ProdDowntime');
+    const mongoose = app[module.config.mongooseId];
+    const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+    const ProdDowntime = mongoose.model('ProdDowntime');
 
     step(
       function removeRelatedModelsStep()
       {
-        var doneRemovingOrders = this.parallel();
-        var doneRemovingDowntimes = this.parallel();
+        const doneRemovingOrders = this.parallel();
+        const doneRemovingDowntimes = this.parallel();
 
         ProdShiftOrder.remove({pressWorksheet: pressWorksheetId}, function(err)
         {
           if (err)
           {
             return module.error(
-              "Failed to remove orders for press worksheet [%s]: %s", pressWorksheetId, err.stack
+              'Failed to remove orders for press worksheet [%s]: %s', pressWorksheetId, err.stack
             );
           }
 
@@ -111,7 +111,7 @@ exports.start = function startPressWorksheetsModule(app, module)
           if (err)
           {
             return module.error(
-              "Failed to remove downtimes for press worksheet [%s]: %s", pressWorksheetId, err.stack
+              'Failed to remove downtimes for press worksheet [%s]: %s', pressWorksheetId, err.stack
             );
           }
 

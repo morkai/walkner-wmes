@@ -2,12 +2,12 @@
 
 'use strict';
 
-var validateOverlappingOrders = require('./validateOverlappingOrders');
-var addProdShiftOrder = require('./addProdShiftOrder');
-var editProdShiftOrder = require('./editProdShiftOrder');
-var deleteProdShiftOrder = require('./deleteProdShiftOrder');
-var setUpRoutes = require('./routes');
-var setUpNoOperationsFix = require('./noOperationsFix');
+const validateOverlappingOrders = require('./validateOverlappingOrders');
+const addProdShiftOrder = require('./addProdShiftOrder');
+const editProdShiftOrder = require('./editProdShiftOrder');
+const deleteProdShiftOrder = require('./deleteProdShiftOrder');
+const setUpRoutes = require('./routes');
+const setUpNoOperationsFix = require('./noOperationsFix');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',

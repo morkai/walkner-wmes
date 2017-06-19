@@ -2,8 +2,8 @@
 
 'use strict';
 
-var path = require('path');
-var fs = require('fs-extra');
+const path = require('path');
+const fs = require('fs-extra');
 
 module.exports = function checkOutputFile(done, err, exitCode, output)
 {
@@ -12,9 +12,9 @@ module.exports = function checkOutputFile(done, err, exitCode, output)
     return done(err, exitCode, output);
   }
 
-  var outputPath = null;
-  var outputFile = null;
-  var matches;
+  let outputPath = null;
+  let outputFile = null;
+  let matches;
 
   matches = output.match(/--output-path=(.*?)$/m);
 

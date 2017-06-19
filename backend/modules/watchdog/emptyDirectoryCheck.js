@@ -2,14 +2,14 @@
 
 'use strict';
 
-var fs = require('fs');
-var format = require('util').format;
-var path = require('path');
-var _ = require('lodash');
+const fs = require('fs');
+const format = require('util').format;
+const path = require('path');
+const _ = require('lodash');
 
 module.exports = function setUpEmptyDirectoryCheck(app, watchdogModule)
 {
-  var lastResultMap = {};
+  const lastResultMap = {};
 
   app.broker.subscribe('app.started', createDirectoryWatchers).setLimit(1);
 
@@ -32,7 +32,7 @@ module.exports = function setUpEmptyDirectoryCheck(app, watchdogModule)
     {
       if (err)
       {
-        watchdogModule.error("[emptyDirectory] [%s] Failed to read dir: %s", config.id, err.message);
+        watchdogModule.error('[emptyDirectory] [%s] Failed to read dir: %s', config.id, err.message);
 
         return scheduleNextCheck(config);
       }
@@ -42,13 +42,13 @@ module.exports = function setUpEmptyDirectoryCheck(app, watchdogModule)
         return scheduleNextCheck(config);
       }
 
-      var lastResult = lastResultMap[config.path];
+      const lastResult = lastResultMap[config.path];
 
       if (_.isEmpty(lastResult))
       {
         lastResultMap[config.path] = files[0];
 
-        watchdogModule.debug("[emptyDirectory] [%s] Stored: %s", config.id, files[0]);
+        watchdogModule.debug('[emptyDirectory] [%s] Stored: %s', config.id, files[0]);
 
         return scheduleNextCheck(config);
       }
@@ -57,14 +57,14 @@ module.exports = function setUpEmptyDirectoryCheck(app, watchdogModule)
 
       if (_.includes(files, lastResult))
       {
-        watchdogModule.debug("[emptyDirectory] [%s] Not empty :(", config.id);
+        watchdogModule.debug('[emptyDirectory] [%s] Not empty :(', config.id);
 
         notify(config);
 
         return scheduleNextCheck(config, true);
       }
 
-      watchdogModule.debug("[emptyDirectory] [%s] Changing :)", config.id);
+      watchdogModule.debug('[emptyDirectory] [%s] Changing :)', config.id);
 
       return scheduleNextCheck(config);
     });
@@ -77,25 +77,25 @@ module.exports = function setUpEmptyDirectoryCheck(app, watchdogModule)
 
   function notify(config)
   {
-    var to = _.uniq([].concat(
+    const to = _.uniq([].concat(
       watchdogModule.config.recipients,
       config.emailRecipients || []
     ));
 
     if (to.length === 0 && _.isEmpty(config.callRecipient))
     {
-      return watchdogModule.warn("[emptyDirectory] [%s] Nobody to notify :(", config.id);
+      return watchdogModule.warn('[emptyDirectory] [%s] Nobody to notify :(', config.id);
     }
 
-    var subject = format("[%s:emptyDirectory] %s", app.options.id, config.id);
-    var text = [
+    const subject = format('[%s:emptyDirectory] %s', app.options.id, config.id);
+    const text = [
       "Directory '" + config.id + "' is not empty!",
-      "",
-      "This message was generated automatically.",
-      "Sincerely, WMES Bot"
+      '',
+      'This message was generated automatically.',
+      'Sincerely, WMES Bot'
     ].join('\r\n');
 
-    var mailSender = app[watchdogModule.config.mailSenderId];
+    const mailSender = app[watchdogModule.config.mailSenderId];
 
     if (mailSender && to.length)
     {
@@ -103,20 +103,20 @@ module.exports = function setUpEmptyDirectoryCheck(app, watchdogModule)
       {
         if (err)
         {
-          watchdogModule.error("[emptyDirectory] [%s] Failed to notify [%s]: %s", config.id, to, err.message);
+          watchdogModule.error('[emptyDirectory] [%s] Failed to notify [%s]: %s', config.id, to, err.message);
         }
         else
         {
-          watchdogModule.debug("[emptyDirectory] [%s] Notified [%s].", to, config.id);
+          watchdogModule.debug('[emptyDirectory] [%s] Notified [%s].', to, config.id);
         }
       });
     }
 
-    var twilio = app[watchdogModule.config.twilioId];
+    const twilio = app[watchdogModule.config.twilioId];
 
     if (twilio && config.callRecipient)
     {
-      var sayOptions = {
+      const sayOptions = {
         to: config.callRecipient,
         message: text,
         voice: 'alice',
@@ -128,12 +128,12 @@ module.exports = function setUpEmptyDirectoryCheck(app, watchdogModule)
         if (err)
         {
           watchdogModule.error(
-            "[emptyDirectory] [%s] Failed to notify [%s]: %s", config.id, sayOptions.to, err.message
+            '[emptyDirectory] [%s] Failed to notify [%s]: %s', config.id, sayOptions.to, err.message
           );
         }
         else
         {
-          watchdogModule.debug("[emptyDirectory] [%s] Notified [%s].", config.id, sayOptions.to);
+          watchdogModule.debug('[emptyDirectory] [%s] Notified [%s].', config.id, sayOptions.to);
         }
       });
     }

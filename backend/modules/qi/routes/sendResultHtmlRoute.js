@@ -2,13 +2,13 @@
 
 'use strict';
 
-var step = require('h5.step');
-var moment = require('moment');
+const step = require('h5.step');
+const moment = require('moment');
 
 module.exports = function sendResultHtmlRoute(app, qiModule, req, res, next)
 {
-  var mongoose = app[qiModule.config.mongooseId];
-  var QiResult = mongoose.model('QiResult');
+  const mongoose = app[qiModule.config.mongooseId];
+  const QiResult = mongoose.model('QiResult');
 
   step(
     function()

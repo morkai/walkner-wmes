@@ -2,11 +2,11 @@
 
 'use strict';
 
-var step = require('h5.step');
-var setUpRoutes = require('./routes');
-var setUpRemoteCoordinator = require('./remoteCoordinator');
-var setUpResultsImporter = require('./importer/results');
-var setUpNotifier = require('./notifier');
+const step = require('h5.step');
+const setUpRoutes = require('./routes');
+const setUpRemoteCoordinator = require('./remoteCoordinator');
+const setUpResultsImporter = require('./importer/results');
+const setUpNotifier = require('./notifier');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -27,7 +27,7 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startXiconfModule(app, module)
 {
-  var config = module.config;
+  const config = module.config;
 
   module.programSyncQueue = [];
 
@@ -80,7 +80,7 @@ exports.start = function startXiconfModule(app, module)
 
   function resetClientsLastSeenAt()
   {
-    var XiconfClient = app[config.mongooseId].model('XiconfClient');
+    const XiconfClient = app[config.mongooseId].model('XiconfClient');
 
     step(
       function findConnectedClientsStep()
@@ -94,10 +94,10 @@ exports.start = function startXiconfModule(app, module)
           return this.skip(err);
         }
 
-        for (var i = 0; i < xiconfClients.length; ++i)
+        for (let i = 0; i < xiconfClients.length; ++i)
         {
-          var xiconfClient = xiconfClients[i];
-          var update = {
+          const xiconfClient = xiconfClients[i];
+          const update = {
             connectedAt: null,
             disconnectedAt: xiconfClient.connectedAt
           };

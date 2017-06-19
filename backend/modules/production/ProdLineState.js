@@ -2,14 +2,14 @@
 
 'use strict';
 
-var inspect = require('util').inspect;
-var _ = require('lodash');
-var moment = require('moment');
-var step = require('h5.step');
+const inspect = require('util').inspect;
+const _ = require('lodash');
+const moment = require('moment');
+const step = require('h5.step');
 
 module.exports = ProdLineState;
 
-var HOUR_TO_INDEX = [
+const HOUR_TO_INDEX = [
   2, 3, 4, 5, 6, 7, 0, 1,
   2, 3, 4, 5, 6, 7, 0, 1,
   2, 3, 4, 5, 6, 7, 0, 1
@@ -36,7 +36,7 @@ function ProdLineState(app, productionModule, prodLine)
   this.changes = null;
   this.pendingChanges = [];
 
-  var now = new Date();
+  const now = new Date();
 
   this.v = now.getTime();
   this.state = null;
@@ -126,7 +126,7 @@ ProdLineState.prototype.getOrders = function()
  */
 ProdLineState.prototype.getCurrentOrderId = function()
 {
-  var currentProdShiftOrder = this.getCurrentOrder();
+  const currentProdShiftOrder = this.getCurrentOrder();
 
   return currentProdShiftOrder === null ? null : currentProdShiftOrder._id;
 };
@@ -141,7 +141,7 @@ ProdLineState.prototype.getCurrentOrder = function()
     return null;
   }
 
-  var recentProdShiftOrder = this.prodShiftOrders[this.prodShiftOrders.length - 1];
+  const recentProdShiftOrder = this.prodShiftOrders[this.prodShiftOrders.length - 1];
 
   if (recentProdShiftOrder.finishedAt !== null)
   {
@@ -162,9 +162,9 @@ ProdLineState.prototype.getLastOrderByNo = function(orderNo)
     return null;
   }
 
-  for (var i = this.prodShiftOrders.length - 1; i >= 0; --i)
+  for (let i = this.prodShiftOrders.length - 1; i >= 0; --i)
   {
-    var prodShiftOrder = this.prodShiftOrders[i];
+    const prodShiftOrder = this.prodShiftOrders[i];
 
     if (prodShiftOrder.orderId === orderNo)
     {
@@ -201,7 +201,7 @@ ProdLineState.prototype.getCurrentDowntimeId = function()
     return null;
   }
 
-  var recentProdDowntime = this.prodDowntimes[this.prodDowntimes.length - 1];
+  const recentProdDowntime = this.prodDowntimes[this.prodDowntimes.length - 1];
 
   if (recentProdDowntime.finishedAt !== null)
   {
@@ -216,21 +216,21 @@ ProdLineState.prototype.onClientJoin = function(socket, data)
   if (socket === this.socket)
   {
     this.productionModule.warn(
-      "The same client joined the prod line: %s",
+      'The same client joined the prod line: %s',
       this.prodLine._id
     );
   }
   else if (this.socket !== null)
   {
     this.productionModule.warn(
-      "A different client joined the prod line: %s",
+      'A different client joined the prod line: %s',
       this.prodLine._id
     );
   }
   else
   {
     this.productionModule.debug(
-      "Client joined the prod line: %s",
+      'Client joined the prod line: %s',
       this.prodLine._id
     );
   }
@@ -264,11 +264,11 @@ ProdLineState.prototype.onClientDisconnect = function()
  */
 ProdLineState.prototype.onClientLeave = function(socket, disconnected)
 {
-  var onlineDuration = Math.round((Date.now() - this.onlineAt) / 1000);
+  const onlineDuration = Math.round((Date.now() - this.onlineAt) / 1000);
 
   if (socket !== this.socket)
   {
-    this.productionModule.warn("A different client tried to leave the prod line%s (online for %ds): %s",
+    this.productionModule.warn('A different client tried to leave the prod line%s (online for %ds): %s',
       disconnected ? ' after disconnecting' : '',
       onlineDuration,
       this.prodLine._id
@@ -277,7 +277,7 @@ ProdLineState.prototype.onClientLeave = function(socket, disconnected)
   else
   {
     this.productionModule.debug(
-      "Client left the prod line%s (online for %ds): %s",
+      'Client left the prod line%s (online for %ds): %s',
       disconnected ? ' after disconnecting' : '',
       onlineDuration,
       this.prodLine._id
@@ -326,8 +326,8 @@ ProdLineState.prototype.update = function(newData, options)
     return this.pendingChanges.push(newData, options);
   }
 
-  var prodLineState = this;
-  var changes = this.changes = {};
+  const prodLineState = this;
+  const changes = this.changes = {};
 
   if (_.isBoolean(newData.online) && newData.online !== this.online)
   {
@@ -354,7 +354,7 @@ ProdLineState.prototype.update = function(newData, options)
       if (err)
       {
         prodLineState.productionModule.error(
-          "Failed to update the prod line state [%s]: %s", prodLineState.prodLine._id, err.stack
+          'Failed to update the prod line state [%s]: %s', prodLineState.prodLine._id, err.stack
         );
       }
       else
@@ -403,7 +403,7 @@ ProdLineState.prototype.checkExtendedDowntime = function()
     return;
   }
 
-  var delay = (this.stateChangedAt + this.productionModule.getExtendedDowntimeDelay() * 60 * 1000) - Date.now();
+  const delay = (this.stateChangedAt + this.productionModule.getExtendedDowntimeDelay() * 60 * 1000) - Date.now();
 
   if (delay < 0)
   {
@@ -447,7 +447,7 @@ ProdLineState.prototype.publishExtendedChange = function(newValue)
  */
 ProdLineState.prototype.updateProdShift = function(prodShiftData, done)
 {
-  var changes = this.changes;
+  const changes = this.changes;
 
   if (prodShiftData === null)
   {
@@ -467,7 +467,7 @@ ProdLineState.prototype.updateProdShift = function(prodShiftData, done)
   {
     if (this.prodShift === null)
     {
-      return done(new Error("Tried to do a partial update of a not available prod shift :("));
+      return done(new Error('Tried to do a partial update of a not available prod shift :('));
     }
 
     changes.prodShift = prodShiftData;
@@ -477,8 +477,8 @@ ProdLineState.prototype.updateProdShift = function(prodShiftData, done)
 
   if (this.prodShift === null || this.prodShift._id !== prodShiftData._id)
   {
-    var prodLineState = this;
-    var productionModule = this.productionModule;
+    const prodLineState = this;
+    const productionModule = this.productionModule;
 
     return step(
       function()
@@ -523,7 +523,7 @@ ProdLineState.prototype.updateProdShift = function(prodShiftData, done)
  */
 ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, options, done)
 {
-  var changes = this.changes;
+  const changes = this.changes;
 
   if (prodShiftOrderData === undefined || _.isArray(changes.prodShiftOrders))
   {
@@ -535,11 +535,11 @@ ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, opt
     return this.reloadProdShiftOrders(done);
   }
 
-  var isObject = _.isObject(prodShiftOrderData);
+  const isObject = _.isObject(prodShiftOrderData);
 
   if (isObject && _.isString(prodShiftOrderData._id))
   {
-    var prodShiftOrder = _.find(this.prodShiftOrders, function(prodShiftOrder)
+    const prodShiftOrder = _.find(this.prodShiftOrders, function(prodShiftOrder)
     {
       return prodShiftOrder._id === prodShiftOrderData._id;
     });
@@ -551,7 +551,7 @@ ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, opt
       return done(null);
     }
 
-    var prodLineState = this;
+    const prodLineState = this;
 
     return this.productionModule.getProdData('order', prodShiftOrderData._id, function(err, prodShiftOrder)
     {
@@ -584,7 +584,7 @@ ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, opt
     });
   }
 
-  var lastProdShiftOrder = this.prodShiftOrders[this.prodShiftOrders.length - 1];
+  const lastProdShiftOrder = this.prodShiftOrders[this.prodShiftOrders.length - 1];
 
   if (lastProdShiftOrder)
   {
@@ -615,7 +615,7 @@ ProdLineState.prototype.reloadProdShiftOrders = function(done)
     return done(null);
   }
 
-  var prodLineState = this;
+  const prodLineState = this;
 
   this.productionModule.getProdShiftOrders(this.prodShift._id, function(err, prodShiftOrders)
   {
@@ -638,7 +638,7 @@ ProdLineState.prototype.reloadProdShiftOrders = function(done)
  */
 ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options, done)
 {
-  var changes = this.changes;
+  const changes = this.changes;
 
   if (prodDowntimeData === undefined || _.isArray(changes.prodDowntimes))
   {
@@ -650,11 +650,11 @@ ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options
     return this.reloadProdDowntimes(done);
   }
 
-  var isObject = _.isObject(prodDowntimeData);
+  const isObject = _.isObject(prodDowntimeData);
 
   if (isObject && _.isString(prodDowntimeData._id))
   {
-    var prodDowntime = _.find(this.prodDowntimes, function(prodDowntime)
+    const prodDowntime = _.find(this.prodDowntimes, function(prodDowntime)
     {
       return prodDowntime._id === prodDowntimeData._id;
     });
@@ -666,7 +666,7 @@ ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options
       return done(null);
     }
 
-    var prodLineState = this;
+    const prodLineState = this;
 
     return this.productionModule.getProdData('downtime', prodDowntimeData._id, function(err, prodDowntime)
     {
@@ -699,7 +699,7 @@ ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options
     });
   }
 
-  var lastProdDowntime = this.prodDowntimes[this.prodDowntimes.length - 1];
+  const lastProdDowntime = this.prodDowntimes[this.prodDowntimes.length - 1];
 
   if (lastProdDowntime)
   {
@@ -730,7 +730,7 @@ ProdLineState.prototype.reloadProdDowntimes = function(done)
     return done(null);
   }
 
-  var prodLineState = this;
+  const prodLineState = this;
 
   this.productionModule.getProdDowntimes(this.prodShift._id, function(err, prodDowntimes)
   {
@@ -774,16 +774,16 @@ ProdLineState.prototype.updateMetrics = function()
  */
 ProdLineState.prototype.calculateCurrentShiftQuantitiesDone = function()
 {
-  var result = {planned: 0, actual: 0};
+  const result = {planned: 0, actual: 0};
 
   if (this.prodShift === null)
   {
     return result;
   }
 
-  for (var i = 0, l = HOUR_TO_INDEX[this.currentHour] + 1; i < l; ++i)
+  for (let i = 0, l = HOUR_TO_INDEX[this.currentHour] + 1; i < l; ++i)
   {
-    var quantitiesDone = this.prodShift.quantitiesDone[i];
+    const quantitiesDone = this.prodShift.quantitiesDone[i];
 
     result.planned += quantitiesDone.planned;
     result.actual += quantitiesDone.actual;
@@ -802,7 +802,7 @@ ProdLineState.prototype.calculatePrevDayMetrics = function()
     return;
   }
 
-  var quantitiesDone = {planned: 0, actual: 0};
+  const quantitiesDone = {planned: 0, actual: 0};
 
   if (this.prevPlannedQuantitiesDone[3] !== -1)
   {
@@ -818,20 +818,20 @@ ProdLineState.prototype.calculatePrevDayMetrics = function()
   }
   else
   {
-    var thirdShiftTime = this.getPrevShiftTime(this.getCurrentShiftTime());
-    var secondShiftTime = this.getPrevShiftTime(thirdShiftTime);
-    var shiftDates = [
+    const thirdShiftTime = this.getPrevShiftTime(this.getCurrentShiftTime());
+    const secondShiftTime = this.getPrevShiftTime(thirdShiftTime);
+    const shiftDates = [
       new Date(this.getPrevShiftTime(secondShiftTime)),
       new Date(secondShiftTime),
       new Date(thirdShiftTime)
     ];
-    var prodLineState = this;
+    const prodLineState = this;
 
     this.productionModule.getProdShiftQuantitiesDone(this.prodLine._id, shiftDates, function(err, prodShifts)
     {
       if (err)
       {
-        return prodLineState.productionModule.error("Failed to find previous prod shifts: %s", err.message);
+        return prodLineState.productionModule.error('Failed to find previous prod shifts: %s', err.message);
       }
 
       prodLineState.prevPlannedQuantitiesDone = [null, 0, 0, 0];
@@ -883,7 +883,7 @@ ProdLineState.prototype.updateSecondShiftMetrics = function()
   this.prevActualQuantitiesDone[2] = -1;
   this.prevActualQuantitiesDone[3] = -1;
 
-  var quantitiesDone = this.calculateCurrentShiftQuantitiesDone();
+  const quantitiesDone = this.calculateCurrentShiftQuantitiesDone();
 
   if (this.prevPlannedQuantitiesDone[1] !== -1)
   {
@@ -894,16 +894,16 @@ ProdLineState.prototype.updateSecondShiftMetrics = function()
   }
   else
   {
-    var shiftDates = [
+    const shiftDates = [
       new Date(this.getPrevShiftTime(this.getCurrentShiftTime()))
     ];
-    var prodLineState = this;
+    const prodLineState = this;
 
     this.productionModule.getProdShiftQuantitiesDone(this.prodLine._id, shiftDates, function(err, prodShifts)
     {
       if (err)
       {
-        return prodLineState.productionModule.error("Failed to find previous prod shifts: %s", err.message);
+        return prodLineState.productionModule.error('Failed to find previous prod shifts: %s', err.message);
       }
 
       prodLineState.prevPlannedQuantitiesDone[1] = 0;
@@ -932,7 +932,7 @@ ProdLineState.prototype.updateThirdShiftMetrics = function()
   this.prevPlannedQuantitiesDone[3] = -1;
   this.prevActualQuantitiesDone[3] = -1;
 
-  var quantitiesDone = this.calculateCurrentShiftQuantitiesDone();
+  const quantitiesDone = this.calculateCurrentShiftQuantitiesDone();
 
   if (this.prevPlannedQuantitiesDone[2] !== -1)
   {
@@ -943,18 +943,18 @@ ProdLineState.prototype.updateThirdShiftMetrics = function()
   }
   else
   {
-    var secondShiftTime = this.getPrevShiftTime(this.getCurrentShiftTime());
-    var shiftDates = [
+    const secondShiftTime = this.getPrevShiftTime(this.getCurrentShiftTime());
+    const shiftDates = [
       new Date(this.getPrevShiftTime(secondShiftTime)),
       new Date(secondShiftTime)
     ];
-    var prodLineState = this;
+    const prodLineState = this;
 
     this.productionModule.getProdShiftQuantitiesDone(this.prodLine._id, shiftDates, function(err, prodShifts)
     {
       if (err)
       {
-        return prodLineState.productionModule.error("Failed to find previous prod shifts: %s", err.message);
+        return prodLineState.productionModule.error('Failed to find previous prod shifts: %s', err.message);
       }
 
       prodLineState.prevPlannedQuantitiesDone[1] = 0;
@@ -978,10 +978,10 @@ ProdLineState.prototype.updateThirdShiftMetrics = function()
  */
 ProdLineState.prototype.addQuantitiesDone = function(prodShift)
 {
-  var shift = prodShift.shift;
-  var quantitiesDone = prodShift.quantitiesDone;
+  const shift = prodShift.shift;
+  const quantitiesDone = prodShift.quantitiesDone;
 
-  for (var i = 0; i < 8; ++i)
+  for (let i = 0; i < 8; ++i)
   {
     this.prevPlannedQuantitiesDone[shift] += quantitiesDone[i].planned;
     this.prevActualQuantitiesDone[shift] += quantitiesDone[i].actual;
@@ -1007,8 +1007,8 @@ ProdLineState.prototype.getCurrentShiftTime = function(real)
  */
 ProdLineState.prototype.getPrevShiftTime = function(shiftTime)
 {
-  var shiftMoment = moment(shiftTime);
-  var shiftHour = shiftMoment.hours();
+  const shiftMoment = moment(shiftTime);
+  const shiftHour = shiftMoment.hours();
 
   if (shiftHour === 6)
   {
@@ -1032,7 +1032,7 @@ ProdLineState.prototype.getPrevShiftTime = function(shiftTime)
  */
 ProdLineState.prototype.publishMetricsChanges = function(quantitiesDone)
 {
-  var changes = this.changes || {};
+  const changes = this.changes || {};
 
   if (quantitiesDone.planned !== this.plannedQuantityDone)
   {
@@ -1067,7 +1067,7 @@ ProdLineState.prototype.publishChanges = function(changes)
  */
 ProdLineState.prototype.updateState = function()
 {
-  var newState = null;
+  let newState = null;
 
   if (this.getCurrentDowntimeId() !== null)
   {
@@ -1104,7 +1104,7 @@ ProdLineState.prototype.checkIfClosed = function(ignoreState)
     return;
   }
 
-  var oldShift = this.prodShift.date.getTime() !== this.getCurrentShiftTime(true);
+  const oldShift = this.prodShift.date.getTime() !== this.getCurrentShiftTime(true);
 
   if (!oldShift)
   {

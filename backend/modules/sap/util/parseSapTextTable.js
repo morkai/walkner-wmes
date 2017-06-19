@@ -2,19 +2,19 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function parseSapTextTable(input, options)
 {
-  var result = [];
-  var pos = input.indexOf('|');
+  const result = [];
+  let pos = input.indexOf('|');
 
   if (pos === -1)
   {
     return result;
   }
 
-  var line = readLine();
+  let line = readLine();
 
   if (line === null)
   {
@@ -26,9 +26,9 @@ module.exports = function parseSapTextTable(input, options)
     options = {};
   }
 
-  var columnMatchers = options.columnMatchers || {};
-  var propertyToColumnIndex = {};
-  var usedColumnIndexes = {};
+  const columnMatchers = options.columnMatchers || {};
+  const propertyToColumnIndex = {};
+  const usedColumnIndexes = {};
 
   _.forEach(line.split('|'), function(columnName, columnIndex)
   {
@@ -36,8 +36,8 @@ module.exports = function parseSapTextTable(input, options)
 
     _.forEach(columnMatchers, function(columnRe, propertyName)
     {
-      if (!usedColumnIndexes[columnIndex] &&
-        propertyToColumnIndex[propertyName] === undefined
+      if (!usedColumnIndexes[columnIndex]
+        && propertyToColumnIndex[propertyName] === undefined
         && columnRe.test(columnName))
       {
         propertyToColumnIndex[propertyName] = columnIndex;
@@ -48,31 +48,31 @@ module.exports = function parseSapTextTable(input, options)
     });
   });
 
-  var propertyList = Object.keys(propertyToColumnIndex);
-  var propertyCount = propertyList.length;
+  const propertyList = Object.keys(propertyToColumnIndex);
+  const propertyCount = propertyList.length;
 
   if (Object.keys(columnMatchers).length !== 0)
   {
     return result;
   }
 
-  var valueParsers = options.valueParsers || {};
+  const valueParsers = options.valueParsers || {};
 
   while ((line = readLine()) !== null)
   {
-    var parts = line.split('|');
+    const parts = line.split('|');
 
     if (parts.length < propertyCount)
     {
       continue;
     }
 
-    var obj = {};
+    let obj = {};
 
-    for (var i = 0; i < propertyCount; ++i)
+    for (let i = 0; i < propertyCount; ++i)
     {
-      var propertyName = propertyList[i];
-      var value = parts[propertyToColumnIndex[propertyName]].trim();
+      const propertyName = propertyList[i];
+      const value = parts[propertyToColumnIndex[propertyName]].trim();
 
       obj[propertyName] = valueParsers[propertyName] === undefined ? value : valueParsers[propertyName](value);
     }
@@ -99,14 +99,14 @@ module.exports = function parseSapTextTable(input, options)
       return null;
     }
 
-    var eolPos = input.indexOf('|\r\n', pos);
+    const eolPos = input.indexOf('|\r\n', pos);
 
     if (eolPos === -1)
     {
       return null;
     }
 
-    var line = input.substring(pos + 1, eolPos);
+    const line = input.substring(pos + 1, eolPos);
 
     pos = input.indexOf('|', eolPos + 1);
 

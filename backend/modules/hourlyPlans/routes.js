@@ -2,22 +2,22 @@
 
 'use strict';
 
-var _ = require('lodash');
-var multer = require('multer');
-var moment = require('moment');
-var canManage = require('./canManage');
+const _ = require('lodash');
+const multer = require('multer');
+const moment = require('moment');
+const canManage = require('./canManage');
 
 module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
 {
-  var express = app[hourlyPlansModule.config.expressId];
-  var auth = app[hourlyPlansModule.config.userId].auth;
-  var mongoose = app[hourlyPlansModule.config.mongooseId];
-  var settings = app[hourlyPlansModule.config.settingsId];
-  var HourlyPlan = mongoose.model('HourlyPlan');
-  var DailyMrpPlan = mongoose.model('DailyMrpPlan');
+  const express = app[hourlyPlansModule.config.expressId];
+  const auth = app[hourlyPlansModule.config.userId].auth;
+  const mongoose = app[hourlyPlansModule.config.mongooseId];
+  const settings = app[hourlyPlansModule.config.settingsId];
+  const HourlyPlan = mongoose.model('HourlyPlan');
+  const DailyMrpPlan = mongoose.model('DailyMrpPlan');
 
-  var canView = auth('HOURLY_PLANS:VIEW');
-  var canManageDailyMrpPlans = auth('HOURLY_PLANS:MANAGE', 'PROD_DATA:MANAGE');
+  const canView = auth('HOURLY_PLANS:VIEW');
+  const canManageDailyMrpPlans = auth('HOURLY_PLANS:MANAGE', 'PROD_DATA:MANAGE');
 
   express.get(
     '/hourlyPlans/settings',
@@ -109,8 +109,8 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
 
   function exportHourlyPlan(doc)
   {
-    var rows = [];
-    var date = app.formatDate(doc.date);
+    const rows = [];
+    const date = app.formatDate(doc.date);
 
     _.forEach(doc.flows, function(flow)
     {
@@ -158,7 +158,7 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
     {
       if (term.args[0] === 'date' && typeof term.args[1] === 'string')
       {
-        var dateMoment = moment(term.args[1], 'YYYY-MM-DD');
+        const dateMoment = moment(term.args[1], 'YYYY-MM-DD');
 
         if (dateMoment.isValid())
         {

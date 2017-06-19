@@ -2,9 +2,9 @@
 
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
-var step = require('h5.step');
+const _ = require('lodash');
+const moment = require('moment');
+const step = require('h5.step');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -13,26 +13,26 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startWarehouseShiftMetricsModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("mongoose module is required!");
+    throw new Error('mongoose module is required!');
   }
 
-  var FTE_UPDATE_DELAY = 30000;
-  var COMPONENT_STORAGE_METRICS = [
+  const FTE_UPDATE_DELAY = 30000;
+  const COMPONENT_STORAGE_METRICS = [
     'inComp', 'coopComp', 'exStorage', 'fifo', 'staging', 'sm', 'paint', 'fixBin', 'compAbsence'
   ];
-  var FINISHED_GOODS_STORAGE_METRICS = [
+  const FINISHED_GOODS_STORAGE_METRICS = [
     'finGoodsIn', 'finGoodsOut', 'finGoodsAbsence'
   ];
 
-  var WhShiftMetrics = mongoose.model('WhShiftMetrics');
-  var WhTransferOrder = mongoose.model('WhTransferOrder');
-  var FteLeaderEntry = mongoose.model('FteLeaderEntry');
+  const WhShiftMetrics = mongoose.model('WhShiftMetrics');
+  const WhTransferOrder = mongoose.model('WhTransferOrder');
+  const FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
-  var timers = {};
+  const timers = {};
 
   app.broker.subscribe('warehouse.transferOrders.synced', queueShiftMetricsCalc);
   app.broker.subscribe('warehouse.importQueue.shiftMetrics', calcShiftsMetrics);
@@ -53,8 +53,8 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
   function calcShiftsMetrics(message)
   {
-    var t = Date.now();
-    var steps = [];
+    const t = Date.now();
+    const steps = [];
 
     steps.push(findSettingsStep);
     steps.push(prepareSettingsStep);
@@ -66,11 +66,11 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
     steps.push(function finalizeShiftMetricsStep(err)
     {
-      var duration = Date.now() - t;
+      const duration = Date.now() - t;
 
       if (err)
       {
-        module.error("Failed to calculate shift metrics for %s in %d ms: %s", message.date, duration, err.message);
+        module.error('Failed to calculate shift metrics for %s in %d ms: %s', message.date, duration, err.message);
 
         app.broker.publish('warehouse.shiftMetrics.syncFailed', {
           date: message.date,
@@ -79,7 +79,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
       }
       else
       {
-        module.info("Finished calculating shift metrics for %s in %d ms.", message.date, duration);
+        module.info('Finished calculating shift metrics for %s in %d ms.', message.date, duration);
 
         app.broker.publish('warehouse.shiftMetrics.synced', {
           date: message.date
@@ -92,10 +92,10 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
   function findSettingsStep()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    var settingsModule = app[module.config.settingsId];
-    var next = this.next();
+    const settingsModule = app[module.config.settingsId];
+    const next = this.next();
 
     if (settingsModule)
     {
@@ -109,7 +109,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
   function prepareSettingsStep(err, settings)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (err)
     {
@@ -129,7 +129,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
     _.forEach(COMPONENT_STORAGE_METRICS, (metric) =>
     {
-      var prodTaskId = settings[metric + '.prodTask'] || null;
+      const prodTaskId = settings[metric + '.prodTask'] || null;
 
       if (prodTaskId !== null)
       {
@@ -139,7 +139,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
     _.forEach(FINISHED_GOODS_STORAGE_METRICS, (metric) =>
     {
-      var prodTaskId = settings[metric + '.prodTask'] || null;
+      const prodTaskId = settings[metric + '.prodTask'] || null;
 
       if (prodTaskId !== null)
       {
@@ -158,14 +158,14 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
   function calcShiftMetrics(settings, shiftNo, shiftMoment, done)
   {
-    var shiftDate = shiftMoment.toDate();
+    const shiftDate = shiftMoment.toDate();
 
-    module.debug("Calculating metrics for shift [%s, %d]...", app.formatDate(shiftDate), shiftNo);
+    module.debug('Calculating metrics for shift [%s, %d]...', app.formatDate(shiftDate), shiftNo);
 
     step(
       function findModelsStep()
       {
-        var conditions = {
+        const conditions = {
           date: shiftDate,
           subdivision: {
             $in: [
@@ -174,7 +174,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
             ]
           }
         };
-        var fields = {
+        const fields = {
           subdivision: 1,
           'tasks.id': 1,
           'tasks.childCount': 1,
@@ -201,9 +201,9 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
         this.whShiftMetrics.resetFte();
 
-        for (var i = 0, l = fteLeaderEntries.length; i < l; ++i)
+        for (let i = 0, l = fteLeaderEntries.length; i < l; ++i)
         {
-          var fteLeaderEntry = fteLeaderEntries[i];
+          const fteLeaderEntry = fteLeaderEntries[i];
 
           if (fteLeaderEntry.subdivision.equals(settings.componentStorage._id))
           {
@@ -296,13 +296,13 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
           this.whShiftMetrics.resetCounts();
         }
 
-        var counts = results.length ? results[0] : {};
-        var metrics = Object.keys(counts);
+        const counts = results.length ? results[0] : {};
+        const metrics = Object.keys(counts);
 
-        for (var i = 0, l = metrics.length; i < l; ++i)
+        for (let i = 0, l = metrics.length; i < l; ++i)
         {
-          var metric = metrics[i];
-          var count = counts[metric];
+          const metric = metrics[i];
+          const count = counts[metric];
 
           if (count === null)
           {
@@ -330,14 +330,14 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
       return;
     }
 
-    var tasksProperty = subdivisionProperty + 'Tasks';
-    var totalFteProperty = subdivisionProperty + 'TotalFte';
+    const tasksProperty = subdivisionProperty + 'Tasks';
+    const totalFteProperty = subdivisionProperty + 'TotalFte';
 
-    for (var i = 0, l = tasks.length; i < l; ++i)
+    for (let i = 0, l = tasks.length; i < l; ++i)
     {
-      var task = tasks[i];
-      var metric = taskToMetric[task.id];
-      var fteProperty = metric + 'Fte';
+      const task = tasks[i];
+      const metric = taskToMetric[task.id];
+      const fteProperty = metric + 'Fte';
 
       if (!task.totals)
       {
@@ -401,7 +401,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
           return;
         }
 
-        var fields = {
+        const fields = {
           subdivision: 1,
           date: 1,
           'tasks.id': 1,
@@ -428,7 +428,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
           fteLeaderEntry = deletedFteLeaderEntry;
         }
 
-        var subdivisionId = String(fteLeaderEntry.subdivision);
+        const subdivisionId = String(fteLeaderEntry.subdivision);
 
         this.isComponentStorage = subdivisionId === String(this.settings.componentStorage._id);
         this.isFinishedGoodsStorage = subdivisionId === String(this.settings.finishedGoodsStorage._id);
@@ -456,7 +456,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
         whShiftMetrics.resetFte(this.isComponentStorage, this.isFinishedGoodsStorage);
 
-        var settings = this.settings;
+        const settings = this.settings;
 
         if (!deletedFteLeaderEntry)
         {
@@ -477,7 +477,7 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
         if (err)
         {
           return module.error(
-            "Failed to update shift FTE metrics after updating FTE leader entry [%s]: %s",
+            'Failed to update shift FTE metrics after updating FTE leader entry [%s]: %s',
             fteLeaderEntryId,
             err.message
           );

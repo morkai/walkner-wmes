@@ -2,25 +2,25 @@
 
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
+const _ = require('lodash');
+const moment = require('moment');
 
 module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 {
-  var express = app[pdModule.config.expressId];
-  var userModule = app[pdModule.config.userId];
-  var aorsModule = app[pdModule.config.aorsId];
-  var downtimeReasonsModule = app[pdModule.config.downtimeReasonsId];
-  var orgUnitsModule = app[pdModule.config.orgUnitsId];
-  var productionModule = app[pdModule.config.productionId];
-  var mongoose = app[pdModule.config.mongooseId];
-  var settings = app[pdModule.config.settingsId];
-  var ProdDowntime = mongoose.model('ProdDowntime');
+  const express = app[pdModule.config.expressId];
+  const userModule = app[pdModule.config.userId];
+  const aorsModule = app[pdModule.config.aorsId];
+  const downtimeReasonsModule = app[pdModule.config.downtimeReasonsId];
+  const orgUnitsModule = app[pdModule.config.orgUnitsId];
+  const productionModule = app[pdModule.config.productionId];
+  const mongoose = app[pdModule.config.mongooseId];
+  const settings = app[pdModule.config.settingsId];
+  const ProdDowntime = mongoose.model('ProdDowntime');
 
   const EMPTY_ORDER_DATA = ProdDowntime.getOrderData();
 
-  var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW');
-  var canManage = userModule.auth(
+  const canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW');
+  const canManage = userModule.auth(
     'PROD_DATA:MANAGE',
     'PROD_DATA:CHANGES:REQUEST',
     'PROD_DATA:CHANGES:MANAGE'
@@ -82,7 +82,7 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 
   function findByRidRoute(req, res, next)
   {
-    var rid = parseInt(req.query.rid, 10);
+    const rid = parseInt(req.query.rid, 10);
 
     if (isNaN(rid) || rid <= 0)
     {
@@ -107,9 +107,9 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 
   function limitOrgUnit(req, res, next)
   {
-    var user = req.session.user || {};
-    var selectors = req.rql.selector.args;
-    var orgUnitTerm = _.find(selectors, function(term)
+    const user = req.session.user || {};
+    const selectors = req.rql.selector.args;
+    let orgUnitTerm = _.find(selectors, function(term)
     {
       return term.name === 'eq'
         && ['division', 'subdivision', 'prodFlow'].indexOf(term.args[0]) !== -1;
@@ -127,7 +127,7 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
       selectors.push(orgUnitTerm);
     }
 
-    var orgUnitType = orgUnitTerm.args[0];
+    const orgUnitType = orgUnitTerm.args[0];
 
     orgUnitTerm.name = 'in';
     orgUnitTerm.args[0] = 'prodLine';
@@ -147,7 +147,7 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 
     if (orgUnitType === 'prodFlow')
     {
-      var prodFlowIds = {};
+      const prodFlowIds = {};
 
       prodFlowIds[orgUnitTerm.args[1]] = true;
 
@@ -156,7 +156,7 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
       return finalize();
     }
 
-    var getter = orgUnitType === 'division' ? 'getAllByDivisionId' : 'getAllBySubdivisionId';
+    const getter = orgUnitType === 'division' ? 'getAllByDivisionId' : 'getAllBySubdivisionId';
 
     mongoose.model('ProdFlow')[getter](orgUnitTerm.args[1], function(err, prodFlows)
     {
@@ -165,7 +165,7 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
         return next(err);
       }
 
-      var prodFlowIds = {};
+      const prodFlowIds = {};
 
       _.forEach(prodFlows, function(prodFlow) { prodFlowIds[prodFlow._id] = true; });
 
@@ -192,12 +192,12 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 
   function getProdLineIds(prodFlowIds)
   {
-    var prodLineIds = [];
-    var workCenterIds = {};
+    const prodLineIds = [];
+    const workCenterIds = {};
 
     _.forEach(orgUnitsModule.getAllByType('workCenter'), function(workCenter)
     {
-      var wcProdFlow = workCenter.get('prodFlow');
+      const wcProdFlow = workCenter.get('prodFlow');
 
       if (wcProdFlow && prodFlowIds[wcProdFlow])
       {
@@ -223,26 +223,26 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
       return;
     }
 
-    var startedAt = moment(doc.startedAt);
+    const startedAt = moment(doc.startedAt);
 
     if (startedAt.isBefore('2013-01-01'))
     {
       return;
     }
 
-    var finishedAt = moment(doc.finishedAt);
-    var duration = Math.round(finishedAt.diff(startedAt, 'ms') / 3600000 * 1000) / 1000;
+    const finishedAt = moment(doc.finishedAt);
+    const duration = Math.round(finishedAt.diff(startedAt, 'ms') / 3600000 * 1000) / 1000;
 
     if (duration < 0)
     {
       return;
     }
 
-    var aor = aorsModule.modelsById[doc.aor];
-    var reason = downtimeReasonsModule.modelsById[doc.reason];
-    var subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
-    var prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
-    var orderData = doc.orderData || EMPTY_ORDER_DATA;
+    const aor = aorsModule.modelsById[doc.aor];
+    const reason = downtimeReasonsModule.modelsById[doc.reason];
+    const subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
+    const prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
+    const orderData = doc.orderData || EMPTY_ORDER_DATA;
 
     return {
       '#rid': doc.rid,
@@ -304,8 +304,8 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 
   function addProdDowntimeRoute(req, res, next)
   {
-    var user = req.session.user;
-    var userInfo = userModule.createUserInfo(user, req);
+    const user = req.session.user;
+    const userInfo = userModule.createUserInfo(user, req);
 
     pdModule.addProdDowntime(user, userInfo, req.body, function(err, statusCode, logEntry)
     {
@@ -330,8 +330,8 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 
   function editProdDowntimeRoute(req, res, next)
   {
-    var user = req.session.user;
-    var userInfo = userModule.createUserInfo(user, req);
+    const user = req.session.user;
+    const userInfo = userModule.createUserInfo(user, req);
 
     pdModule.editProdDowntime(user, userInfo, req.params.id, req.body, function(err, statusCode, logEntry)
     {
@@ -361,8 +361,8 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 
   function deleteProdDowntimeRoute(req, res, next)
   {
-    var user = req.session.user;
-    var userInfo = userModule.createUserInfo(user, req);
+    const user = req.session.user;
+    const userInfo = userModule.createUserInfo(user, req);
 
     pdModule.deleteProdDowntime(user, userInfo, req.params.id, req.body, function(err, statusCode, logEntry)
     {
@@ -387,7 +387,7 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 
   function redirectToListRoute(req, res)
   {
-    var url = '/#prodDowntimes';
+    let url = '/#prodDowntimes';
 
     if (req.params.filter === 'alerts')
     {

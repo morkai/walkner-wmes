@@ -2,17 +2,17 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function editFteMasterEntry(app, fteModule, user, userInfo, fteMasterEntryId, data, done)
 {
-  var orgUnits = app[fteModule.config.orgUnitsId];
-  var mongoose = app[fteModule.config.mongooseId];
-  var ProdChangeRequest = mongoose.model('ProdChangeRequest');
-  var FteMasterEntry = mongoose.model('FteMasterEntry');
+  const orgUnits = app[fteModule.config.orgUnitsId];
+  const mongoose = app[fteModule.config.mongooseId];
+  const ProdChangeRequest = mongoose.model('ProdChangeRequest');
+  const FteMasterEntry = mongoose.model('FteMasterEntry');
 
-  var isChangeRequest = !user.super && !_.includes(user.privileges, 'PROD_DATA:CHANGES:MANAGE');
+  const isChangeRequest = !user.super && !_.includes(user.privileges, 'PROD_DATA:CHANGES:MANAGE');
 
   step(
     function getFteMasterEntryStep()
@@ -38,7 +38,7 @@ module.exports = function editFteMasterEntry(app, fteModule, user, userInfo, fte
 
       if (isChangeRequest)
       {
-        var subdivision = orgUnits.getByTypeAndId('subdivision', fteMasterEntry.subdivision);
+        const subdivision = orgUnits.getByTypeAndId('subdivision', fteMasterEntry.subdivision);
 
         if (!subdivision)
         {

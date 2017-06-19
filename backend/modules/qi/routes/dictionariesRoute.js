@@ -47,9 +47,9 @@ module.exports = function dictionariesRoute(app, qiModule, req, res, next)
         return this.done(next, err);
       }
 
-      var actualCount = dictionaries.pop();
-      var settings = dictionaries.pop();
-      var result = {
+      const actualCount = dictionaries.pop();
+      const settings = dictionaries.pop();
+      const result = {
         settings: settings,
         masters: dictionaries.pop(),
         inspectors: dictionaries.pop(),

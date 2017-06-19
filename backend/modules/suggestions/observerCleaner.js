@@ -2,13 +2,13 @@
 
 'use strict';
 
-var step = require('h5.step');
-var later = require('later');
+const step = require('h5.step');
+const later = require('later');
 
 module.exports = function setUpObserverCleaner(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
-  var Suggestion = mongoose.model('Suggestion');
+  const mongoose = app[module.config.mongooseId];
+  const Suggestion = mongoose.model('Suggestion');
 
   app.broker.subscribe('app.started', cleanUpObservers).setLimit(1);
 
@@ -19,7 +19,7 @@ module.exports = function setUpObserverCleaner(app, module)
     step(
       function()
       {
-        var conditions = {
+        const conditions = {
           status: {$in: ['finished', 'cancelled']},
           updatedAt: {
             $lt: new Date(Date.now() - 3 * 24 * 3600 * 1000)
@@ -36,14 +36,14 @@ module.exports = function setUpObserverCleaner(app, module)
           return this.skip(err);
         }
 
-        for (var i = 0; i < suggestions.length; ++i)
+        for (let i = 0; i < suggestions.length; ++i)
         {
-          var suggestion = suggestions[i];
-          var observers = suggestion.observers;
+          const suggestion = suggestions[i];
+          const observers = suggestion.observers;
 
-          for (var ii = 0; ii < observers.length; ++ii)
+          for (let ii = 0; ii < observers.length; ++ii)
           {
-            var observer = observers[ii];
+            const observer = observers[ii];
 
             observer.notify = false;
             observer.changes = {};
@@ -60,7 +60,7 @@ module.exports = function setUpObserverCleaner(app, module)
       {
         if (err)
         {
-          module.error("Failed to clean observers: %s", err.message);
+          module.error('Failed to clean observers: %s', err.message);
         }
       }
     );

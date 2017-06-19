@@ -2,9 +2,9 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var util = require('../reports/util');
+const _ = require('lodash');
+const step = require('h5.step');
+const util = require('../reports/util');
 
 module.exports = function(mongoose, options, done)
 {
@@ -56,7 +56,7 @@ module.exports = function(mongoose, options, done)
 
   function countNearMisses(options, done)
   {
-    var conditions = {
+    const conditions = {
       types: 'nearMiss'
     };
 
@@ -85,7 +85,7 @@ module.exports = function(mongoose, options, done)
       conditions.eventDate.$lt = new Date(options.toTime);
     }
 
-    var stream = KaizenOrder.find(conditions, {eventDate: 1, nearMissOwners: 1, section: 1}).lean().cursor();
+    const stream = KaizenOrder.find(conditions, {eventDate: 1, nearMissOwners: 1, section: 1}).lean().cursor();
 
     stream.on('error', done);
     stream.on('end', done);
@@ -94,7 +94,7 @@ module.exports = function(mongoose, options, done)
 
   function countSuggestions(options, done)
   {
-    var conditions = {
+    const conditions = {
       categories: 'BHP'
     };
 
@@ -123,7 +123,7 @@ module.exports = function(mongoose, options, done)
       conditions.date.$lt = new Date(options.toTime);
     }
 
-    var stream = Suggestion.find(conditions, {date: 1, owners: 1, section: 1}).lean().cursor();
+    const stream = Suggestion.find(conditions, {date: 1, owners: 1, section: 1}).lean().cursor();
 
     stream.on('error', done);
     stream.on('end', done);
@@ -220,14 +220,14 @@ module.exports = function(mongoose, options, done)
 
   function getGroup(key, owner, section)
   {
-    var group = results.groups[key];
+    let group = results.groups[key];
 
     if (!group)
     {
       group = results.groups[key] = {};
     }
 
-    var user = owner.label.replace(/[^A-Za-z]+/g, '').toLowerCase();
+    const user = owner.label.replace(/[^A-Za-z]+/g, '').toLowerCase();
 
     if (!results.users[user])
     {

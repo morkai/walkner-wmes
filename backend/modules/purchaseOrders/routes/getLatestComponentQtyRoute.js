@@ -2,11 +2,11 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function getLatestComponentQtyRoute(app, poModule, req, res, next)
 {
-  var nc12 = [].concat(req.query.nc12 || req.body.nc12).filter(function(nc12)
+  const nc12 = [].concat(req.query.nc12 || req.body.nc12).filter(function(nc12)
   {
     return typeof nc12 === 'string' && nc12.length === 12;
   });
@@ -16,8 +16,8 @@ module.exports = function getLatestComponentQtyRoute(app, poModule, req, res, ne
     return res.json({});
   }
 
-  var mongoose = app[poModule.config.mongooseId];
-  var PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
+  const mongoose = app[poModule.config.mongooseId];
+  const PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
 
   PurchaseOrderPrint.aggregate(
     {$match: {nc12: {$in: nc12}, componentQty: {$ne: 0}}},
@@ -30,7 +30,7 @@ module.exports = function getLatestComponentQtyRoute(app, poModule, req, res, ne
         return next(err);
       }
 
-      var latestComponentQty = {};
+      const latestComponentQty = {};
 
       _.forEach(results, function(result)
       {

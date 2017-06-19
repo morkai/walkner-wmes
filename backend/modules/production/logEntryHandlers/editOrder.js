@@ -2,15 +2,15 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var util = require('./util');
+const _ = require('lodash');
+const step = require('h5.step');
+const util = require('./util');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var Order = mongoose.model('Order');
-  var changes = logEntry.data;
+  const mongoose = app[productionModule.config.mongooseId];
+  const Order = mongoose.model('Order');
+  const changes = logEntry.data;
 
   step(
     function getModelsStep()
@@ -37,7 +37,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find order [%s] for edit (LOG=[%s]): %s",
+          'Failed to find order [%s] for edit (LOG=[%s]): %s',
           logEntry.prodShiftOrder,
           logEntry._id,
           err.stack
@@ -49,7 +49,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (!prodShiftOrder)
       {
         productionModule.warn(
-          "Order [%s] not found for edit (LOG=[%s])",
+          'Order [%s] not found for edit (LOG=[%s])',
           logEntry.prodShiftOrder,
           logEntry._id
         );
@@ -68,7 +68,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save order [%s] after editing (LOG=[%s]): %s",
+          'Failed to save order [%s] after editing (LOG=[%s]): %s',
           logEntry.prodShiftOrder,
           logEntry._id,
           err.stack
@@ -82,10 +82,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return;
       }
 
-      var l = this.prodDowntimes.length;
-      var i;
-      var prodDowntime;
-      var downtimeChanges;
+      let l = this.prodDowntimes.length;
+      let i;
+      let prodDowntime;
+      let downtimeChanges;
 
       if (!changes.startedAt && !changes.finishedAt)
       {
@@ -124,19 +124,19 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return;
       }
 
-      var prodShiftOrder = this.prodShiftOrder;
-      var orderStartedAt = prodShiftOrder.startedAt;
-      var orderFinishedAt = prodShiftOrder.finishedAt;
-      var orderDowntimes = [];
-      var idleDowntimes = [];
+      const prodShiftOrder = this.prodShiftOrder;
+      const orderStartedAt = prodShiftOrder.startedAt;
+      const orderFinishedAt = prodShiftOrder.finishedAt;
+      const orderDowntimes = [];
+      const idleDowntimes = [];
 
       for (i = 0; i < l; ++i)
       {
         prodDowntime = this.prodDowntimes[i];
 
-        var duringOrder = prodDowntime.startedAt >= orderStartedAt && prodDowntime.startedAt <= orderFinishedAt;
-        var sameOrder = prodDowntime.prodShiftOrder === prodShiftOrder._id;
-        var noOrder = prodDowntime.prodShiftOrder === null;
+        const duringOrder = prodDowntime.startedAt >= orderStartedAt && prodDowntime.startedAt <= orderFinishedAt;
+        const sameOrder = prodDowntime.prodShiftOrder === prodShiftOrder._id;
+        const noOrder = prodDowntime.prodShiftOrder === null;
 
         if (duringOrder && (sameOrder || noOrder))
         {
@@ -189,7 +189,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to save downtimes after editing order [%s] (LOG=[%s]): %s",
+          'Failed to save downtimes after editing order [%s] (LOG=[%s]): %s',
           logEntry.prodShiftOrder,
           logEntry._id,
           err.stack

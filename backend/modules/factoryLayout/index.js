@@ -2,8 +2,8 @@
 
 'use strict';
 
-var setUpRoutes = require('./routes');
-var setUpCommands = require('./commands');
+const setUpRoutes = require('./routes');
+const setUpCommands = require('./commands');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -15,11 +15,11 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startFactoryLayoutModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("mongoose module is required!");
+    throw new Error('mongoose module is required!');
   }
 
   app.onModuleReady(

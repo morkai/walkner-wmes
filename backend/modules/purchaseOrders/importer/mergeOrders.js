@@ -2,11 +2,11 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function mergeOrders(fromOrder, toOrder)
 {
-  var toItems = {};
+  const toItems = {};
 
   _.forEach(toOrder.items, function(toItem)
   {
@@ -15,14 +15,14 @@ module.exports = function mergeOrders(fromOrder, toOrder)
 
   _.forEach(fromOrder.items, function(fromItem)
   {
-    var toItem = toItems[fromItem._id];
+    const toItem = toItems[fromItem._id];
 
     if (!toItem)
     {
       return;
     }
 
-    var schedule = {};
+    const schedule = {};
 
     _.forEach(fromItem.schedule, function(fromSchedule)
     {

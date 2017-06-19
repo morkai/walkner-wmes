@@ -2,34 +2,34 @@
 
 'use strict';
 
-var util = require('util');
-var exec = require('child_process').exec;
-var path = require('path');
-var _ = require('lodash');
-var step = require('h5.step');
-var gm = require('gm');
-var fs = require('fs-extra');
+const util = require('util');
+const exec = require('child_process').exec;
+const path = require('path');
+const _ = require('lodash');
+const step = require('h5.step');
+const gm = require('gm');
+const fs = require('fs-extra');
 
 module.exports = function setUpOmr(app, module)
 {
-  var INPUT_DIR_CALM_PERIOD = app.options.env !== 'development' ? (30 * 1000) : (5 * 1000);
-  var MAX_PARALLEL_PROCESSING = app.options.env !== 'development' ? 1 : 3;
-  var SURVEY_PAGE_COUNT = 2;
-  var INPUT_FILE_RE = /^[0-9]+\.(?:jpe?g)$/i;
+  const INPUT_DIR_CALM_PERIOD = app.options.env !== 'development' ? (30 * 1000) : (5 * 1000);
+  const MAX_PARALLEL_PROCESSING = app.options.env !== 'development' ? 1 : 3;
+  const SURVEY_PAGE_COUNT = 2;
+  const INPUT_FILE_RE = /^[0-9]+\.(?:jpe?g)$/i;
 
-  var mongoose = app[module.config.mongooseId];
-  var OpinionSurvey = mongoose.model('OpinionSurvey');
-  var OpinionSurveyScanTemplate = mongoose.model('OpinionSurveyScanTemplate');
-  var OpinionSurveyOmrResult = mongoose.model('OpinionSurveyOmrResult');
-  var OpinionSurveyResponse = mongoose.model('OpinionSurveyResponse');
+  const mongoose = app[module.config.mongooseId];
+  const OpinionSurvey = mongoose.model('OpinionSurvey');
+  const OpinionSurveyScanTemplate = mongoose.model('OpinionSurveyScanTemplate');
+  const OpinionSurveyOmrResult = mongoose.model('OpinionSurveyOmrResult');
+  const OpinionSurveyResponse = mongoose.model('OpinionSurveyResponse');
 
-  var queuedInputDirs = {};
-  var inputDirQueue = [];
-  var currentInputDir = null;
-  var cachedSurveys = {};
-  var cachedScanTemplates = {};
-  var currentSurveyId = null;
-  var currentPageNumbers = [];
+  const queuedInputDirs = {};
+  const inputDirQueue = [];
+  let currentInputDir = null;
+  let cachedSurveys = {};
+  let cachedScanTemplates = {};
+  let currentSurveyId = null;
+  let currentPageNumbers = [];
 
   app.broker.subscribe('directoryWatcher.changed')
     .setFilter(function(fileInfo) { return fileInfo.moduleId === module.config.directoryWatcherId; })
@@ -51,7 +51,7 @@ module.exports = function setUpOmr(app, module)
       {
         if (err)
         {
-          return module.error("[omr] Failed to stat input dir [%s]: %s", fileInfo.fileName, err.message);
+          return module.error('[omr] Failed to stat input dir [%s]: %s', fileInfo.fileName, err.message);
         }
 
         if (stats.isDirectory())
@@ -60,7 +60,7 @@ module.exports = function setUpOmr(app, module)
 
           inputDirQueue.push(fileInfo);
 
-          module.debug("[omr] Queued a new input dir: %s", fileInfo.fileName);
+          module.debug('[omr] Queued a new input dir: %s', fileInfo.fileName);
 
           processNextInputDir();
         }
@@ -75,7 +75,7 @@ module.exports = function setUpOmr(app, module)
       return;
     }
 
-    var startedAt = Date.now();
+    const startedAt = Date.now();
 
     currentInputDir = inputDirQueue.shift();
 
@@ -87,7 +87,7 @@ module.exports = function setUpOmr(app, module)
     step(
       function calmDownStep()
       {
-        module.debug("[omr] Waiting for input dir to calm down: %s", currentInputDir.fileName);
+        module.debug('[omr] Waiting for input dir to calm down: %s', currentInputDir.fileName);
 
         waitForInputDirToCalmDown(currentInputDir.filePath, this.next());
       },
@@ -98,7 +98,7 @@ module.exports = function setUpOmr(app, module)
           return this.skip(err);
         }
 
-        module.debug("[omr] Reading input dir: %s", currentInputDir.fileName);
+        module.debug('[omr] Reading input dir: %s', currentInputDir.fileName);
 
         fs.readdir(currentInputDir.filePath, this.next());
       },
@@ -109,9 +109,9 @@ module.exports = function setUpOmr(app, module)
           return this.skip(err);
         }
 
-        module.debug("[omr] Reading config file...");
+        module.debug('[omr] Reading config file...');
 
-        var next = this.next();
+        const next = this.next();
 
         fs.readFile(path.join(currentInputDir.filePath, 'config.json'), 'utf8', function(err, config)
         {
@@ -131,10 +131,10 @@ module.exports = function setUpOmr(app, module)
           return this.skip(err);
         }
 
-        var surveyPageCount = config.surveyPageCount || SURVEY_PAGE_COUNT;
-        var inputFiles = files.filter(function(file) { return INPUT_FILE_RE.test(file); });
-        var inputScans = _.chunk(inputFiles, surveyPageCount);
-        var lastIndex = inputScans.length - 1;
+        const surveyPageCount = config.surveyPageCount || SURVEY_PAGE_COUNT;
+        const inputFiles = files.filter(function(file) { return INPUT_FILE_RE.test(file); });
+        const inputScans = _.chunk(inputFiles, surveyPageCount);
+        const lastIndex = inputScans.length - 1;
 
         if (lastIndex !== -1 && inputScans[lastIndex].length !== surveyPageCount)
         {
@@ -148,14 +148,14 @@ module.exports = function setUpOmr(app, module)
       },
       function processInputScansStep()
       {
-        for (var i = 0; i < MAX_PARALLEL_PROCESSING; ++i)
+        for (let i = 0; i < MAX_PARALLEL_PROCESSING; ++i)
         {
           processNextInputScan(this.inputScans, this.config, this.group());
         }
       },
       function readRemainingFilesStep()
       {
-        module.debug("[omr] Reading files remaining in input dir: %s", currentInputDir.fileName);
+        module.debug('[omr] Reading files remaining in input dir: %s', currentInputDir.fileName);
 
         fs.readdir(currentInputDir.filePath, this.next());
       },
@@ -170,7 +170,7 @@ module.exports = function setUpOmr(app, module)
 
         if (err || files.length)
         {
-          module.debug("[omr] Moving files remaining in input dir: %s", currentInputDir.fileName);
+          module.debug('[omr] Moving files remaining in input dir: %s', currentInputDir.fileName);
 
           moveDir(
             currentInputDir.filePath,
@@ -180,7 +180,7 @@ module.exports = function setUpOmr(app, module)
         }
         else
         {
-          module.debug("[omr] Removing input dir: %s", currentInputDir.fileName);
+          module.debug('[omr] Removing input dir: %s', currentInputDir.fileName);
 
           removeDir(currentInputDir.filePath, this.next());
         }
@@ -189,12 +189,12 @@ module.exports = function setUpOmr(app, module)
       {
         if (err)
         {
-          module.error("[omr] Failed to process input dir [%s]: %s", currentInputDir.fileName, err.message);
+          module.error('[omr] Failed to process input dir [%s]: %s', currentInputDir.fileName, err.message);
         }
         else
         {
           module.debug(
-            "[omr] Finished processing input dir [%s] in %ds",
+            '[omr] Finished processing input dir [%s] in %ds',
             currentInputDir.fileName,
             ((Date.now() - startedAt) / 1000).toFixed(3)
           );
@@ -238,7 +238,7 @@ module.exports = function setUpOmr(app, module)
 
   function moveDir(from, to, done)
   {
-    var cmd;
+    let cmd;
 
     if (process.platform === 'win32')
     {
@@ -259,22 +259,22 @@ module.exports = function setUpOmr(app, module)
 
   function processNextInputScan(inputScans, config, done)
   {
-    var inputScan = inputScans.shift();
+    const inputScan = inputScans.shift();
 
     if (!inputScan)
     {
       return setImmediate(done);
     }
 
-    var responseId = module.generateId();
-    var results = [];
-    var steps = [];
+    const responseId = module.generateId();
+    const results = [];
+    const steps = [];
 
     _.forEach(inputScan, function(inputFileName, scanIndex)
     {
       steps.push(function processInputFileStep()
       {
-        var next = this.next();
+        const next = this.next();
 
         processInputFile(inputFileName, scanIndex, responseId, config, function(err, result)
         {
@@ -303,15 +303,15 @@ module.exports = function setUpOmr(app, module)
 
   function processInputFile(inputFileName, scanIndex, responseId, config, done)
   {
-    var resultId = module.generateId();
-    var extName = path.extname(inputFileName);
-    var baseName = path.basename(inputFileName, extName);
-    var inputFilePath = path.join(currentInputDir.filePath, inputFileName);
-    var processingDirPath = path.join(module.config.processingPath, resultId);
-    var processingFilePath = path.join(processingDirPath, inputFileName);
-    var deskewedFilePath = path.join(processingDirPath, baseName + '.deskewed' + extName);
-    var resizedFilePath = path.join(processingDirPath, baseName + '.resized' + extName);
-    var result = {
+    const resultId = module.generateId();
+    const extName = path.extname(inputFileName);
+    const baseName = path.basename(inputFileName, extName);
+    const inputFilePath = path.join(currentInputDir.filePath, inputFileName);
+    const processingDirPath = path.join(module.config.processingPath, resultId);
+    const processingFilePath = path.join(processingDirPath, inputFileName);
+    const deskewedFilePath = path.join(processingDirPath, baseName + '.deskewed' + extName);
+    const resizedFilePath = path.join(processingDirPath, baseName + '.resized' + extName);
+    const result = {
       _id: resultId,
       inputDirName: currentInputDir.fileName,
       inputFileName: inputFileName,
@@ -331,7 +331,7 @@ module.exports = function setUpOmr(app, module)
       answers: {}
     };
 
-    module.debug("[omr] [%s] Processing input file: %s", responseId, inputFileName);
+    module.debug('[omr] [%s] Processing input file: %s', responseId, inputFileName);
 
     step(
       function createProcessingDirStep()
@@ -364,7 +364,7 @@ module.exports = function setUpOmr(app, module)
       },
       function decodeQrCodeStep()
       {
-        module.debug("[omr] [%s] Decoding the QR code: %s", responseId, inputFileName);
+        module.debug('[omr] [%s] Decoding the QR code: %s', responseId, inputFileName);
 
         module.decodeQrCode(processingFilePath, this.next());
       },
@@ -375,7 +375,7 @@ module.exports = function setUpOmr(app, module)
           result.qrCode = currentSurveyId + '/' + currentPageNumbers[scanIndex];
 
           module.debug(
-            "[omr] [%s] Failed to decode QR code for [%s]. Using the previous survey [%s] and page number [%d].",
+            '[omr] [%s] Failed to decode QR code for [%s]. Using the previous survey [%s] and page number [%d].',
             responseId,
             inputFileName,
             currentSurveyId,
@@ -403,7 +403,7 @@ module.exports = function setUpOmr(app, module)
           }
 
           result.errorCode = 'DECODE_QR_CODE_FAILURE';
-          result.errorMessage = "No QR codes detected.";
+          result.errorMessage = 'No QR codes detected.';
 
           return this.skip();
         }
@@ -412,12 +412,12 @@ module.exports = function setUpOmr(app, module)
       },
       function parseSurveyAndPageNumberStep()
       {
-        var matches = result.qrCode.replace(/[^a-z0-9-_/]+/ig, '').match(/(?:^http.*?\/r\/|^)(.*?)\/([0-9]+)/);
+        const matches = result.qrCode.replace(/[^a-z0-9-_/]+/ig, '').match(/(?:^http.*?\/r\/|^)(.*?)\/([0-9]+)/);
 
         if (matches === null)
         {
           module.debug(
-            "[omr] [%s] Invalid QR code for [%s]: %s. Using the previous survey [%s] and page number [%d].",
+            '[omr] [%s] Invalid QR code for [%s]: %s. Using the previous survey [%s] and page number [%d].',
             responseId,
             inputFileName,
             result.qrCode,
@@ -442,7 +442,7 @@ module.exports = function setUpOmr(app, module)
         if (!result.survey || !result.pageNumber)
         {
           result.errorCode = 'DECODE_QR_CODE_FAILURE';
-          result.errorMessage = "No survey ID and page number.";
+          result.errorMessage = 'No survey ID and page number.';
 
           return this.skip();
         }
@@ -454,7 +454,7 @@ module.exports = function setUpOmr(app, module)
           cachedScanTemplates[result.survey] = {};
         }
 
-        var surveyScanTemplates = cachedScanTemplates[result.survey];
+        const surveyScanTemplates = cachedScanTemplates[result.survey];
 
         if (surveyScanTemplates[result.pageNumber])
         {
@@ -481,14 +481,14 @@ module.exports = function setUpOmr(app, module)
         if (!scanTemplates.length)
         {
           result.errorCode = 'FIND_SCAN_TEMPLATES_FAILURE';
-          result.errorMessage = "No scan templates found for the detected survey and page.";
+          result.errorMessage = 'No scan templates found for the detected survey and page.';
 
           return this.skip();
         }
       },
       function deskewInputImageStep()
       {
-        module.debug("[omr] [%s] Deskewing the input image: %s", responseId, inputFileName);
+        module.debug('[omr] [%s] Deskewing the input image: %s', responseId, inputFileName);
 
         module.deskewImage(processingFilePath, deskewedFilePath, this.next());
       },
@@ -504,7 +504,7 @@ module.exports = function setUpOmr(app, module)
       },
       function resizeInputImageStep()
       {
-        module.debug("[omr] [%s] Resizing the input image: %s", responseId, inputFileName);
+        module.debug('[omr] [%s] Resizing the input image: %s', responseId, inputFileName);
 
         gm(deskewedFilePath)
           .autoOrient()
@@ -533,7 +533,7 @@ module.exports = function setUpOmr(app, module)
 
   function recognizeMarksUsingNextTemplate(result, inputFilePath, scanTemplates, done)
   {
-    var scanTemplate = scanTemplates.shift();
+    const scanTemplate = scanTemplates.shift();
 
     if (!scanTemplate)
     {
@@ -542,11 +542,11 @@ module.exports = function setUpOmr(app, module)
       return setImmediate(done);
     }
 
-    var scanTemplateId = scanTemplate._id.toString();
-    var omrInput = createOmrInput(result, inputFilePath, scanTemplate);
+    const scanTemplateId = scanTemplate._id.toString();
+    const omrInput = createOmrInput(result, inputFilePath, scanTemplate);
 
     module.debug(
-      "[omr] [%s] Recognizing marks using template [%s] in: %s",
+      '[omr] [%s] Recognizing marks using template [%s] in: %s',
       result.response,
       scanTemplateId,
       result.inputFileName
@@ -562,11 +562,11 @@ module.exports = function setUpOmr(app, module)
         return done();
       }
 
-      var answers = {};
-      var matchScore = calculateMatchScore(omrOutput, scanTemplate.regions, answers);
+      const answers = {};
+      const matchScore = calculateMatchScore(omrOutput, scanTemplate.regions, answers);
 
       module.debug(
-        "[omr] [%s] Recognized %d of %d options (%d%) using template [%s] in: %s",
+        '[omr] [%s] Recognized %d of %d options (%d%) using template [%s] in: %s',
         result.response,
         matchScore.actual,
         matchScore.required,
@@ -588,7 +588,7 @@ module.exports = function setUpOmr(app, module)
 
       if (matchScore.ratio === 1)
       {
-        var missingAnswers = [];
+        const missingAnswers = [];
 
         _.forEach(answers, function(answer, question)
         {
@@ -601,7 +601,7 @@ module.exports = function setUpOmr(app, module)
         if (missingAnswers.length)
         {
           result.errorCode = 'MISSING_ANSWERS';
-          result.errorMessage = "No answers for questions: " + missingAnswers.join(', ');
+          result.errorMessage = 'No answers for questions: ' + missingAnswers.join(', ');
 
           if (!scanTemplates.length)
           {
@@ -656,17 +656,17 @@ module.exports = function setUpOmr(app, module)
 
   function calculateMatchScore(omrRegions, templateRegions, answers)
   {
-    var requiredMatchCount = templateRegions.map(function(templateRegion)
+    const requiredMatchCount = templateRegions.map(function(templateRegion)
     {
       return templateRegion.question === 'comment' ? 1 : templateRegion.options.length;
     });
-    var actualMatchCount = [];
-    var questionToRegionIndexes = {};
+    const actualMatchCount = [];
+    const questionToRegionIndexes = {};
 
     _.forEach(omrRegions, function(omrRegion, regionIndex)
     {
-      var templateRegion = templateRegions[regionIndex];
-      var question = templateRegion.question;
+      const templateRegion = templateRegions[regionIndex];
+      const question = templateRegion.question;
 
       if (answers[question] === undefined)
       {
@@ -687,7 +687,7 @@ module.exports = function setUpOmr(app, module)
 
       if (omrRegion.type === 'circles')
       {
-        var marked = omrRegion.marked;
+        let marked = omrRegion.marked;
 
         if (marked.length > 1)
         {
@@ -707,7 +707,7 @@ module.exports = function setUpOmr(app, module)
 
         if (marked.length === 1)
         {
-          var answer = templateRegion.options[marked[0]];
+          const answer = templateRegion.options[marked[0]];
 
           if (answer)
           {
@@ -730,8 +730,8 @@ module.exports = function setUpOmr(app, module)
       });
     });
 
-    var matchScoreNum = 0;
-    var matchScoreDen = 0;
+    let matchScoreNum = 0;
+    let matchScoreDen = 0;
 
     _.forEach(requiredMatchCount, function(requiredCount, i)
     {
@@ -739,7 +739,7 @@ module.exports = function setUpOmr(app, module)
       matchScoreDen += requiredCount;
     });
 
-    var matchScore = matchScoreNum / matchScoreDen;
+    let matchScore = matchScoreNum / matchScoreDen;
 
     if (isNaN(matchScore) || matchScore > 1)
     {
@@ -755,7 +755,7 @@ module.exports = function setUpOmr(app, module)
 
   function ignoreWronglyMarkedCircles(circles, wronglyMarked)
   {
-    var markedCircles = [];
+    const markedCircles = [];
 
     _.forEach(circles, function(circle, i)
     {
@@ -773,9 +773,9 @@ module.exports = function setUpOmr(app, module)
       return b.ratio - a.ratio;
     });
 
-    var mostBlackRatio = markedCircles[0].ratio;
-    var secondMostBlackRatio = markedCircles[1].ratio;
-    var ratioDifference = mostBlackRatio - secondMostBlackRatio;
+    const mostBlackRatio = markedCircles[0].ratio;
+    const secondMostBlackRatio = markedCircles[1].ratio;
+    const ratioDifference = mostBlackRatio - secondMostBlackRatio;
 
     return ratioDifference >= 0.15 ? [markedCircles[0].index] : wronglyMarked;
   }
@@ -796,12 +796,12 @@ module.exports = function setUpOmr(app, module)
       {
         if (err)
         {
-          module.error("[omr] Failed to insert OMR results: %s", err.message);
+          module.error('[omr] Failed to insert OMR results: %s', err.message);
         }
       },
       function findSurveyStep()
       {
-        var surveyId = results[0].survey;
+        const surveyId = results[0].survey;
 
         if (!surveyId)
         {
@@ -819,7 +819,7 @@ module.exports = function setUpOmr(app, module)
       {
         if (err)
         {
-          return this.skip(new Error("[omr] Failed to find survey: " + err.message));
+          return this.skip(new Error('[omr] Failed to find survey: ' + err.message));
         }
 
         if (!survey)
@@ -831,8 +831,8 @@ module.exports = function setUpOmr(app, module)
       },
       function createResponseStep()
       {
-        var questions = this.survey.questions;
-        var response = {
+        const questions = this.survey.questions;
+        const response = {
           _id: results[0].response,
           survey: this.survey._id,
           createdAt: new Date(),
@@ -844,9 +844,9 @@ module.exports = function setUpOmr(app, module)
           answers: new Array(questions.length)
         };
 
-        for (var r = 0; r < results.length; ++r)
+        for (let r = 0; r < results.length; ++r)
         {
-          var answers = results[r].answers;
+          const answers = results[r].answers;
 
           if (!answers)
           {
@@ -863,9 +863,9 @@ module.exports = function setUpOmr(app, module)
             response.superior = answers.superior;
           }
 
-          for (var q = 0; q < questions.length; ++q)
+          for (let q = 0; q < questions.length; ++q)
           {
-            var question = questions[q];
+            const question = questions[q];
 
             if (!response.answers[q])
             {
@@ -882,7 +882,7 @@ module.exports = function setUpOmr(app, module)
           }
         }
 
-        var superior = _.find(this.survey.superiors, {_id: response.superior});
+        const superior = _.find(this.survey.superiors, {_id: response.superior});
 
         if (superior)
         {
@@ -896,14 +896,14 @@ module.exports = function setUpOmr(app, module)
         if (err)
         {
           module.error(
-            "[omr] [%s] Failed to insert a new response created from the OMR results: %s",
+            '[omr] [%s] Failed to insert a new response created from the OMR results: %s',
             results[0].response,
             err.message
           );
         }
         else if (response)
         {
-          module.debug("[omr] [%s] response created!", results[0].response);
+          module.debug('[omr] [%s] response created!', results[0].response);
 
           cleanUpProcessingFiles(results);
         }
@@ -920,14 +920,14 @@ module.exports = function setUpOmr(app, module)
       {
         this.processingDirPaths = [];
 
-        for (var i = 0; i < results.length; ++i)
+        for (let i = 0; i < results.length; ++i)
         {
-          var result = results[i];
-          var processingDirPath = path.join(module.config.processingPath, result._id);
-          var fromInputFilePath = result.omrOutput
+          const result = results[i];
+          const processingDirPath = path.join(module.config.processingPath, result._id);
+          const fromInputFilePath = result.omrOutput
             ? path.join(processingDirPath, result.scanTemplate._id.toString(), 'input.jpg')
             : path.join(processingDirPath, result.inputFileName);
-          var toInputFilePath = path.join(module.config.responsesPath, result._id + '.jpg');
+          const toInputFilePath = path.join(module.config.responsesPath, result._id + '.jpg');
 
           fs.move(fromInputFilePath, toInputFilePath, {overwrite: true}, this.group());
 
@@ -941,7 +941,7 @@ module.exports = function setUpOmr(app, module)
       {
         if (err)
         {
-          module.error("[omr] [%s] Failed to clean up the processing files: %s", results[0].response, err.message);
+          module.error('[omr] [%s] Failed to clean up the processing files: %s', results[0].response, err.message);
         }
 
         _.forEach(this.processingDirPaths, function(dirPath)

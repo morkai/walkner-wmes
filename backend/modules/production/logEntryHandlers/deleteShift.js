@@ -2,13 +2,13 @@
 
 'use strict';
 
-var step = require('h5.step');
+const step = require('h5.step');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var ProdDowntime = mongoose.model('ProdDowntime');
+  const mongoose = app[productionModule.config.mongooseId];
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const ProdDowntime = mongoose.model('ProdDowntime');
 
   step(
     function getProdDowntimeModelStep()
@@ -22,7 +22,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find models while deleting shift [%s] (LOG=[%s]): %s",
+          'Failed to find models while deleting shift [%s] (LOG=[%s]): %s',
           logEntry.prodShift,
           logEntry._id,
           err.stack
@@ -31,8 +31,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return this.skip(err);
       }
 
-      var cachedProdShiftOrders = [];
-      var cachedProdDowntimes = [];
+      const cachedProdShiftOrders = [];
+      const cachedProdDowntimes = [];
 
       if (Array.isArray(prodShiftOrders))
       {
@@ -54,8 +54,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
       prodShift.remove(this.parallel());
 
-      var i;
-      var l;
+      let i;
+      let l;
 
       for (i = 0, l = prodShiftOrders.length; i < l; ++i)
       {
@@ -72,7 +72,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to delete shift [%s] (LOG=[%s]): %s",
+          'Failed to delete shift [%s] (LOG=[%s]): %s',
           this.prodShift._id,
           logEntry._id,
           err.stack
@@ -90,12 +90,12 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           shift: this.prodShift.shift
         });
 
-        var i;
-        var l;
+        let i;
+        let l;
 
         for (i = 0, l = this.prodShiftOrders.length; i < l; ++i)
         {
-          var prodShiftOrder = this.prodShiftOrders[i];
+          const prodShiftOrder = this.prodShiftOrders[i];
 
           app.broker.publish('prodShiftOrders.deleted.' + prodShiftOrder._id, {
             _id: prodShiftOrder._id,
@@ -109,7 +109,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
         for (i = 0, l = this.prodDowntimes.length; i < l; ++i)
         {
-          var prodDowntime = this.prodDowntimes[i];
+          const prodDowntime = this.prodDowntimes[i];
 
           app.broker.publish('prodDowntimes.deleted.' + prodDowntime._id, {
             _id: prodDowntime._id,

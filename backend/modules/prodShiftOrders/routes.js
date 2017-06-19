@@ -2,19 +2,19 @@
 
 'use strict';
 
-var limitOrgUnit = require('../prodLines/limitOrgUnit');
+const limitOrgUnit = require('../prodLines/limitOrgUnit');
 
 module.exports = function setUpProdShiftOrdersRoutes(app, psoModule)
 {
-  var express = app[psoModule.config.expressId];
-  var userModule = app[psoModule.config.userId];
-  var mongoose = app[psoModule.config.mongooseId];
-  var orgUnitsModule = app[psoModule.config.orgUnitsId];
-  var productionModule = app[psoModule.config.productionId];
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const express = app[psoModule.config.expressId];
+  const userModule = app[psoModule.config.userId];
+  const mongoose = app[psoModule.config.mongooseId];
+  const orgUnitsModule = app[psoModule.config.orgUnitsId];
+  const productionModule = app[psoModule.config.productionId];
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
 
-  var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW');
-  var canManage = userModule.auth(
+  const canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW');
+  const canManage = userModule.auth(
     'PROD_DATA:MANAGE',
     'PROD_DATA:CHANGES:REQUEST',
     'PROD_DATA:CHANGES:MANAGE'
@@ -54,16 +54,16 @@ module.exports = function setUpProdShiftOrdersRoutes(app, psoModule)
       return;
     }
 
-    var orderData = doc.orderData;
+    const orderData = doc.orderData;
 
     if (!orderData.operations || !orderData.operations[doc.operationNo])
     {
       return;
     }
 
-    var operation = orderData.operations[doc.operationNo];
-    var subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
-    var prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
+    const operation = orderData.operations[doc.operationNo];
+    const subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
+    const prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
 
     return {
       '"orderNo': doc.mechOrder ? '' : doc.orderId,
@@ -123,8 +123,8 @@ module.exports = function setUpProdShiftOrdersRoutes(app, psoModule)
 
   function addProdShiftOrderRoute(req, res, next)
   {
-    var user = req.session.user;
-    var userInfo = userModule.createUserInfo(user, req);
+    const user = req.session.user;
+    const userInfo = userModule.createUserInfo(user, req);
 
     psoModule.addProdShiftOrder(user, userInfo, req.body, function(err, statusCode, logEntry)
     {
@@ -149,8 +149,8 @@ module.exports = function setUpProdShiftOrdersRoutes(app, psoModule)
 
   function editProdShiftOrderRoute(req, res, next)
   {
-    var user = req.session.user;
-    var userInfo = userModule.createUserInfo(user, req);
+    const user = req.session.user;
+    const userInfo = userModule.createUserInfo(user, req);
 
     psoModule.editProdShiftOrder(user, userInfo, req.params.id, req.body, function(err, statusCode, logEntry)
     {
@@ -180,8 +180,8 @@ module.exports = function setUpProdShiftOrdersRoutes(app, psoModule)
 
   function deleteProdShiftOrderRoute(req, res, next)
   {
-    var user = req.session.user;
-    var userInfo = userModule.createUserInfo(user, req);
+    const user = req.session.user;
+    const userInfo = userModule.createUserInfo(user, req);
 
     psoModule.deleteProdShiftOrder(user, userInfo, req.params.id, req.body, function(err, statusCode, logEntry)
     {

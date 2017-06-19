@@ -68,7 +68,7 @@ module.exports = function setUpPresenceChecker(app, module)
       {
         this.conn = new tedious.Connection(module.config.tediousConnection);
 
-        this.conn.on('error', err => module.error("[presence] %s", err.message));
+        this.conn.on('error', err => module.error('[presence] %s', err.message));
         this.conn.on('connect', this.next());
       },
       function(err)
@@ -79,7 +79,7 @@ module.exports = function setUpPresenceChecker(app, module)
         }
 
         const sql = `
-          SELECT TOP ${MAX_ROWS+1} PLR_ID, PLR_CARD_ID, PLR_DATE, PLR_INOUT, PLR_HARDWARE_ID
+          SELECT TOP ${MAX_ROWS + 1} PLR_ID, PLR_CARD_ID, PLR_DATE, PLR_INOUT, PLR_HARDWARE_ID
           FROM PL_REGISTRATIONS
           WHERE PLR_ID > ${this.lastRecord}
             AND PLR_HARDWARE_ID IN(${Object.keys(this.hardware)})

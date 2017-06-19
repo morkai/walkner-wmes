@@ -2,31 +2,31 @@
 
 'use strict';
 
-var os = require('os');
-var path = require('path');
-var _ = require('lodash');
-var multer = require('multer');
-var fs = require('fs-extra');
+const os = require('os');
+const path = require('path');
+const _ = require('lodash');
+const multer = require('multer');
+const fs = require('fs-extra');
 
 module.exports = function setUpCagsRoutes(app, module)
 {
-  var express = app[module.config.expressId];
-  var userModule = app[module.config.userId];
-  var mongoose = app[module.config.mongooseId];
-  var CagGroup = mongoose.model('CagGroup');
-  var Cag = mongoose.model('Cag');
+  const express = app[module.config.expressId];
+  const userModule = app[module.config.userId];
+  const mongoose = app[module.config.mongooseId];
+  const CagGroup = mongoose.model('CagGroup');
+  const Cag = mongoose.model('Cag');
 
-  var canView = userModule.auth('REPORTS:VIEW', 'REPORTS:9:VIEW');
-  var canManage = userModule.auth('REPORTS:MANAGE');
+  const canView = userModule.auth('REPORTS:VIEW', 'REPORTS:9:VIEW');
+  const canManage = userModule.auth('REPORTS:MANAGE');
 
   express.get('/cagGroups', canView, express.crud.browseRoute.bind(null, app, CagGroup));
-  express.post('/cagGroups', canManage,  express.crud.addRoute.bind(null, app, CagGroup));
+  express.post('/cagGroups', canManage, express.crud.addRoute.bind(null, app, CagGroup));
   express.get('/cagGroups/:id', canView, express.crud.readRoute.bind(null, app, CagGroup));
   express.put('/cagGroups/:id', canManage, express.crud.editRoute.bind(null, app, CagGroup));
   express.delete('/cagGroups/:id', canManage, express.crud.deleteRoute.bind(null, app, CagGroup));
 
   express.get('/cags', canView, express.crud.browseRoute.bind(null, app, Cag));
-  express.post('/cags', canManage,  express.crud.addRoute.bind(null, app, Cag));
+  express.post('/cags', canManage, express.crud.addRoute.bind(null, app, Cag));
   express.get('/cags/:id', canView, express.crud.readRoute.bind(null, app, Cag));
   express.put('/cags/:id', canManage, express.crud.editRoute.bind(null, app, Cag));
   express.delete('/cags/:id', canManage, express.crud.deleteRoute.bind(null, app, Cag));
@@ -46,7 +46,7 @@ module.exports = function setUpCagsRoutes(app, module)
 
   function importRoute(req, res, next)
   {
-    var planFile = req.file;
+    const planFile = req.file;
 
     if (!planFile || !/\.csv$/i.test(planFile.originalname))
     {
@@ -55,8 +55,8 @@ module.exports = function setUpCagsRoutes(app, module)
       return next(express.createHttpError('INVALID_FILE'));
     }
 
-    var oldPath = planFile.path;
-    var newPath = path.join(module.config.planUploadPath, 'CAGS_PLAN_' + Date.now() + '.csv');
+    const oldPath = planFile.path;
+    const newPath = path.join(module.config.planUploadPath, 'CAGS_PLAN_' + Date.now() + '.csv');
 
     fs.move(oldPath, newPath, {overwrite: true}, function(err)
     {

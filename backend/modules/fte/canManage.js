@@ -29,7 +29,7 @@ module.exports = function canManage(user, fteEntry, modelName)
     modelName = fteEntry.modelName || fteEntry.constructor.modelName;
   }
 
-  var privilegePrefix = modelName === 'FteMasterEntry'
+  const privilegePrefix = modelName === 'FteMasterEntry'
     ? 'FTE:MASTER'
     : 'FTE:LEADER';
 
@@ -43,7 +43,7 @@ module.exports = function canManage(user, fteEntry, modelName)
     return true;
   }
 
-  var now = Date.now();
+  const now = Date.now();
 
   return now < (fteEntry.createdAt.getTime() + 8 * 3600 * 1000)
     || now < (fteEntry.date.getTime() + 8 * 3600 * 1000);

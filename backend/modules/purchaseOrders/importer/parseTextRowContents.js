@@ -2,12 +2,12 @@
 
 'use strict';
 
-var parseSapNumber = require('../../sap/util/parseSapNumber');
+const parseSapNumber = require('../../sap/util/parseSapNumber');
 
-var ORDER_RE = /^ [0-9]+ /;
-var ITEM_RE = /^ [0-9]{5} + [0-9]{2}\.[0-9]{2}\.[0-9]{4} /;
-var ARRIVAL_RE = /^ [0-9]{2}\.[0-9]{2}\.[0-9]{4} /;
-var DATA_LENGTH = {
+const ORDER_RE = /^ [0-9]+ /;
+const ITEM_RE = /^ [0-9]{5} + [0-9]{2}\.[0-9]{2}\.[0-9]{4} /;
+const ARRIVAL_RE = /^ [0-9]{2}\.[0-9]{2}\.[0-9]{4} /;
+const DATA_LENGTH = {
   orderId: 'Purch.doc     '.length,
   pOrg: 'POrg   '.length,
   pGr: 'PGr   '.length,
@@ -30,7 +30,7 @@ var DATA_LENGTH = {
   nonMrpQty: 'Quantity (non MRP)     '.length,
   nonMrpConfCat: 'Conf.Cat. (non MRP)                               '.length
 };
-var DATA_START = {
+const DATA_START = {
   orderId: 1,
   itemId: 1,
   availDate: 1
@@ -74,7 +74,7 @@ function parseOrder(rowContents, ctx)
 {
   ctx.lastItem = null;
 
-  var orderId = rowContents.substr(DATA_START.orderId, DATA_LENGTH.orderId).trim();
+  const orderId = rowContents.substr(DATA_START.orderId, DATA_LENGTH.orderId).trim();
 
   if (ctx.purchaseOrders[orderId])
   {
@@ -116,7 +116,7 @@ function parseItem(rowContents, ctx)
     schedule: []
   };
 
-  var docDate = parseDate(rowContents.substr(DATA_START.docDate, DATA_LENGTH.docDate));
+  const docDate = parseDate(rowContents.substr(DATA_START.docDate, DATA_LENGTH.docDate));
 
   if (ctx.lastOrder.docDate === null)
   {
@@ -141,8 +141,8 @@ function parseArrival(rowContents, ctx)
 
 function parseDate(str)
 {
-  var parts = str.trim().split('.');
-  var date = new Date(Date.UTC(
+  const parts = str.trim().split('.');
+  const date = new Date(Date.UTC(
     parseInt(parts[2], 10),
     parseInt(parts[1], 10) - 1,
     parseInt(parts[0], 10)

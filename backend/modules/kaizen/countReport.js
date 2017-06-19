@@ -2,18 +2,18 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var util = require('../reports/util');
+const _ = require('lodash');
+const step = require('h5.step');
+const util = require('../reports/util');
 
 module.exports = function(mongoose, options, done)
 {
-  var KaizenOrder = mongoose.model('KaizenOrder');
+  const KaizenOrder = mongoose.model('KaizenOrder');
 
-  var groupProperty = 'eventDate';
-  var minGroupKey = Number.MAX_VALUE;
-  var maxGroupKey = Number.MIN_VALUE;
-  var results = {
+  const groupProperty = 'eventDate';
+  let minGroupKey = Number.MAX_VALUE;
+  let maxGroupKey = Number.MIN_VALUE;
+  const results = {
     options: options,
     users: {},
     totals: createGroup(),
@@ -23,8 +23,8 @@ module.exports = function(mongoose, options, done)
   step(
     function findKaizenOrdersStep()
     {
-      var conditions = {};
-      var sort = {};
+      const conditions = {};
+      const sort = {};
 
       sort[groupProperty] = 1;
 
@@ -52,8 +52,8 @@ module.exports = function(mongoose, options, done)
         conditions.section = {$in: options.sections};
       }
 
-      var stream = KaizenOrder.find(conditions, {changes: 0}).sort(sort).lean().cursor();
-      var next = _.once(this.next());
+      const stream = KaizenOrder.find(conditions, {changes: 0}).sort(sort).lean().cursor();
+      const next = _.once(this.next());
 
       stream.on('error', next);
       stream.on('end', next);
@@ -66,9 +66,9 @@ module.exports = function(mongoose, options, done)
         return this.skip(err);
       }
 
-      var createNextGroupKey = util.createCreateNextGroupKey(options.interval);
-      var groupKey = minGroupKey;
-      var groups = [];
+      const createNextGroupKey = util.createCreateNextGroupKey(options.interval);
+      let groupKey = minGroupKey;
+      const groups = [];
 
       while (groupKey <= maxGroupKey)
       {
@@ -122,9 +122,9 @@ module.exports = function(mongoose, options, done)
 
   function handleKaizenOrder(ko)
   {
-    var totals = results.totals;
-    var groupKey = util.createGroupKey(options.interval, ko[groupProperty], false);
-    var group = results.groups[groupKey];
+    const totals = results.totals;
+    const groupKey = util.createGroupKey(options.interval, ko[groupProperty], false);
+    let group = results.groups[groupKey];
 
     if (groupKey < minGroupKey)
     {
@@ -155,7 +155,7 @@ module.exports = function(mongoose, options, done)
     inc('nearMissCategory');
     inc('suggestionCategory');
 
-    var confirmer = ko.confirmer;
+    const confirmer = ko.confirmer;
 
     if (confirmer)
     {
@@ -213,8 +213,8 @@ module.exports = function(mongoose, options, done)
 
     function incOwners(type, owners)
     {
-      var totalsByOwner = totals.owner;
-      var groupByOwner = group.owner;
+      const totalsByOwner = totals.owner;
+      const groupByOwner = group.owner;
 
       _.forEach(owners, function(owner)
       {
@@ -241,7 +241,7 @@ module.exports = function(mongoose, options, done)
 
   function sortTotals(property)
   {
-    var totals = [];
+    const totals = [];
 
     _.forEach(results.totals[property], function(value, key)
     {
@@ -253,7 +253,7 @@ module.exports = function(mongoose, options, done)
 
   function sortOwnerTotals()
   {
-    var totals = [];
+    const totals = [];
 
     _.forEach(results.totals.owner, function(values, key)
     {

@@ -47,9 +47,9 @@ module.exports = function(mongoose, options, done)
 
       if (options.toTime)
       {
-        if (!conditions.inspectedAt )
+        if (!conditions.inspectedAt)
         {
-          conditions.inspectedAt  = {};
+          conditions.inspectedAt = {};
         }
 
         conditions.inspectedAt.$lt = new Date(options.toTime);
@@ -132,9 +132,9 @@ module.exports = function(mongoose, options, done)
     },
     function compactNokQtyPerDivisionStep()
     {
-      for (let group of results.groups)
+      for (const group of results.groups)
       {
-        for (let family of Object.keys(group.nokQtyPerFamily))
+        for (const family of Object.keys(group.nokQtyPerFamily))
         {
           const nokQtyPerFamily = group.nokQtyPerFamily[family];
           const divisions = Object.keys(nokQtyPerFamily.perDivision);

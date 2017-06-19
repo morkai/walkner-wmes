@@ -2,36 +2,36 @@
 
 'use strict';
 
-var _ = require('lodash');
-var helpers = require('./helpers');
-var report5 = require('../report5');
+const _ = require('lodash');
+const helpers = require('./helpers');
+const report5 = require('../report5');
 
 module.exports = function report5Route(app, reportsModule, req, res, next)
 {
-  var orgUnitsModule = app[reportsModule.config.orgUnitsId];
-  var orgUnit = orgUnitsModule.getByTypeAndId(req.query.orgUnitType, req.query.orgUnitId);
+  const orgUnitsModule = app[reportsModule.config.orgUnitsId];
+  const orgUnit = orgUnitsModule.getByTypeAndId(req.query.orgUnitType, req.query.orgUnitId);
 
   if (orgUnit === null && (req.query.orgUnitType || req.query.orgUnitId))
   {
     return res.sendStatus(400);
   }
 
-  var division = orgUnit ? orgUnitsModule.getDivisionFor(orgUnit) : null;
+  const division = orgUnit ? orgUnitsModule.getDivisionFor(orgUnit) : null;
 
   if (orgUnit !== null && !division)
   {
     return res.sendStatus(400);
   }
 
-  var subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;
-  var subdivisionTypes = {};
+  const subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;
+  const subdivisionTypes = {};
 
   _.forEach(orgUnitsModule.getAllByType('subdivision'), function(subdivision)
   {
     subdivisionTypes[subdivision._id] = subdivision.type;
   });
 
-  var options = {
+  const options = {
     fromTime: helpers.getTime(req.query.from),
     toTime: helpers.getTime(req.query.to),
     interval: req.query.interval || 'day',
@@ -67,7 +67,7 @@ module.exports = function report5Route(app, reportsModule, req, res, next)
 
 function getDirectProdFunctions(allProdFunctions)
 {
-  var prodFunctions = {};
+  const prodFunctions = {};
 
   _.forEach(allProdFunctions, function(prodFunction)
   {

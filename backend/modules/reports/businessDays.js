@@ -1,7 +1,7 @@
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
+const _ = require('lodash');
+const moment = require('moment');
 
 exports.holidays = {};
 
@@ -13,14 +13,14 @@ exports.months = {};
 
 exports.countBetweenDates = function(fromTime, toTime)
 {
-  var businessDays = 0;
+  let businessDays = 0;
 
   if (fromTime >= toTime)
   {
     return businessDays;
   }
 
-  var fromMoment = moment(fromTime);
+  const fromMoment = moment(fromTime);
 
   while (fromMoment.valueOf() < toTime)
   {
@@ -39,7 +39,7 @@ exports.countInDay = function(date)
     return 0;
   }
 
-  var weekDay = date.getDay();
+  const weekDay = date.getDay();
 
   return weekDay === 0 || weekDay === 6 ? 0 : 1;
 };
@@ -51,13 +51,13 @@ exports.countInWeek = function(date, currentShiftStartDate)
     return -1;
   }
 
-  var currentShiftStartTime = currentShiftStartDate.getTime();
-  var dateMoment = moment(date);
-  var businessDays = 0;
+  const currentShiftStartTime = currentShiftStartDate.getTime();
+  const dateMoment = moment(date);
+  let businessDays = 0;
 
-  for (var i = 0; i < 5; ++i)
+  for (let i = 0; i < 5; ++i)
   {
-    var time = dateMoment.valueOf();
+    const time = dateMoment.valueOf();
 
     if (time > currentShiftStartTime)
     {
@@ -82,21 +82,21 @@ exports.countInMonth = function(date, currentShiftStartDate)
     return -1;
   }
 
-  var currentDay = currentShiftStartDate.getDate();
-  var currentMonth = currentShiftStartDate.getMonth();
-  var currentYear = currentShiftStartDate.getFullYear();
-  var key = date.getTime().toString();
-  var businessDays = exports.months[key];
-  var weekDay;
+  const currentDay = currentShiftStartDate.getDate();
+  const currentMonth = currentShiftStartDate.getMonth();
+  const currentYear = currentShiftStartDate.getFullYear();
+  const key = date.getTime().toString();
+  let businessDays = exports.months[key];
+  let weekDay;
 
   if (!businessDays)
   {
     businessDays = 0;
 
-    var year = date.getFullYear();
-    var month = date.getMonth();
-    var day = date.getDate();
-    var sameMonth = year === currentYear && month === currentMonth;
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    let day = date.getDate();
+    const sameMonth = year === currentYear && month === currentMonth;
 
     while (date.getMonth() === month)
     {
@@ -146,8 +146,8 @@ exports.countInQuarter = function(date, currentShiftStartDate)
     return -1;
   }
 
-  var businessDays = exports.quarters[date.getTime()];
-  var quarterMoment = moment(date);
+  let businessDays = exports.quarters[date.getTime()];
+  const quarterMoment = moment(date);
 
   if (businessDays !== undefined
     && quarterMoment.year() !== currentShiftStartDate.getFullYear()
@@ -158,7 +158,7 @@ exports.countInQuarter = function(date, currentShiftStartDate)
 
   businessDays = 0;
 
-  for (var i = 0; i < 3; ++i)
+  for (let i = 0; i < 3; ++i)
   {
     businessDays += exports.countInMonth(quarterMoment.toDate(), currentShiftStartDate);
 
@@ -180,10 +180,10 @@ exports.countInYear = function(date, currentShiftStartDate)
     return exports.years[date.getTime()] || 250;
   }
 
-  var businessDays = 0;
-  var dateMoment = moment(date);
+  let businessDays = 0;
+  const dateMoment = moment(date);
 
-  for (var m = 0, month = currentShiftStartDate.getMonth(); m <= month; ++m)
+  for (let m = 0, month = currentShiftStartDate.getMonth(); m <= month; ++m)
   {
     businessDays += exports.countInMonth(
       dateMoment.clone().month(m).toDate(),
@@ -304,12 +304,12 @@ addYear(
 
 function addYear(year, months)
 {
-  var businessDaysInYear = 0;
-  var quarterKey;
+  let businessDaysInYear = 0;
+  let quarterKey;
 
   _.forEach(months, function(days, month)
   {
-    var businessDaysInMonth;
+    let businessDaysInMonth;
 
     if (typeof days === 'number')
     {
@@ -325,7 +325,7 @@ function addYear(year, months)
       });
     }
 
-    var monthKey = key(year, month, 1);
+    const monthKey = key(year, month, 1);
 
     exports.months[monthKey] = businessDaysInMonth;
 

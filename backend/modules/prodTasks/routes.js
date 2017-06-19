@@ -4,12 +4,12 @@
 
 module.exports = function setUpProdTasksRoutes(app, prodTasksModule, useDictionaryModel)
 {
-  var express = app[prodTasksModule.config.expressId];
-  var auth = app[prodTasksModule.config.userId].auth;
-  var ProdTask = app[prodTasksModule.config.mongooseId].model('ProdTask');
+  const express = app[prodTasksModule.config.expressId];
+  const auth = app[prodTasksModule.config.userId].auth;
+  const ProdTask = app[prodTasksModule.config.mongooseId].model('ProdTask');
 
-  var canView = auth('DICTIONARIES:VIEW', 'REPORTS:VIEW', 'REPORTS:MANAGE', 'REPORTS:5:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW', 'REPORTS:VIEW', 'REPORTS:MANAGE', 'REPORTS:5:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/prodTasks', canView, express.crud.browseRoute.bind(null, app, ProdTask));
 

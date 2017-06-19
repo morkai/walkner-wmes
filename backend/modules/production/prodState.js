@@ -2,13 +2,13 @@
 
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
-var ProdLineState = require('./ProdLineState');
+const _ = require('lodash');
+const moment = require('moment');
+const ProdLineState = require('./ProdLineState');
 
 module.exports = function setUpProdState(app, productionModule)
 {
-  var orgUnitsModule = app[productionModule.config.orgUnitsId];
+  const orgUnitsModule = app[productionModule.config.orgUnitsId];
 
   const CRUD_OPERATION_TYPES = {
     addOrder: true,
@@ -19,9 +19,9 @@ module.exports = function setUpProdState(app, productionModule)
     deleteDowntime: true
   };
 
-  var loaded = false;
-  var prodLineStateMap = {};
-  var extendedDowntimeDelay = 15;
+  let loaded = false;
+  const prodLineStateMap = {};
+  let extendedDowntimeDelay = 15;
 
   productionModule.getExtendedDowntimeDelay = function() { return extendedDowntimeDelay; };
 
@@ -55,8 +55,8 @@ module.exports = function setUpProdState(app, productionModule)
 
   app.broker.subscribe('prodLines.added', function(message)
   {
-    var prodLineId = message.model._id;
-    var prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
+    const prodLineId = message.model._id;
+    const prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
 
     if (prodLine)
     {
@@ -64,10 +64,10 @@ module.exports = function setUpProdState(app, productionModule)
     }
     else
     {
-      var startTime = Date.now();
+      const startTime = Date.now();
       var sub = app.broker.subscribe('prodLines.synced', function()
       {
-        var prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
+        const prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
 
         if (prodLine)
         {
@@ -84,8 +84,8 @@ module.exports = function setUpProdState(app, productionModule)
 
   app.broker.subscribe('prodLines.deleted', function(message)
   {
-    var prodLineId = message.model._id;
-    var prodLineState = prodLineStateMap[prodLineId];
+    const prodLineId = message.model._id;
+    let prodLineState = prodLineStateMap[prodLineId];
 
     if (prodLineState)
     {
@@ -109,7 +109,7 @@ module.exports = function setUpProdState(app, productionModule)
 
     if (!prodLineState)
     {
-      return productionModule.debug("Data synced but no state for prod line [%s]...", changes.prodLine);
+      return productionModule.debug('Data synced but no state for prod line [%s]...', changes.prodLine);
     }
 
     const operationTypes = {
@@ -142,7 +142,7 @@ module.exports = function setUpProdState(app, productionModule)
 
   app.broker.subscribe('hourlyPlans.quantitiesPlanned', function(data)
   {
-    var prodLineState = prodLineStateMap[data.prodLine];
+    const prodLineState = prodLineStateMap[data.prodLine];
 
     if (prodLineState && prodLineState.getCurrentShiftId() === data.prodShift)
     {
@@ -181,7 +181,7 @@ module.exports = function setUpProdState(app, productionModule)
 
   function createProdLineState(prodLine, notify)
   {
-    var prodLineState = new ProdLineState(app, productionModule, prodLine);
+    const prodLineState = new ProdLineState(app, productionModule, prodLine);
 
     prodLineStateMap[prodLine._id] = prodLineState;
 
@@ -193,8 +193,8 @@ module.exports = function setUpProdState(app, productionModule)
 
   function scheduleHourChange()
   {
-    var nextHourTime = moment().minutes(0).seconds(0).milliseconds(999).add(1, 'hours').valueOf();
-    var delay = nextHourTime - Date.now();
+    const nextHourTime = moment().minutes(0).seconds(0).milliseconds(999).add(1, 'hours').valueOf();
+    const delay = nextHourTime - Date.now();
 
     setTimeout(onHourChanged, delay);
   }
@@ -206,7 +206,7 @@ module.exports = function setUpProdState(app, productionModule)
       return app.broker.subscribe('production.stateLoaded', onHourChanged).setLimit(1);
     }
 
-    var currentHour = new Date().getHours();
+    const currentHour = new Date().getHours();
 
     _.forEach(prodLineStateMap, function(prodLineState)
     {

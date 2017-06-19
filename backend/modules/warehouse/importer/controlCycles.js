@@ -2,11 +2,11 @@
 
 'use strict';
 
-var path = require('path');
-var moment = require('moment');
-var step = require('h5.step');
-var fs = require('fs-extra');
-var parseControlCycles = require('./parseControlCycles');
+const path = require('path');
+const moment = require('moment');
+const step = require('h5.step');
+const fs = require('fs-extra');
+const parseControlCycles = require('./parseControlCycles');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -16,18 +16,18 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startControlCyclesImporterModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("mongoose module is required!");
+    throw new Error('mongoose module is required!');
   }
 
-  var WhTransferOrder = mongoose.model('WhTransferOrder');
-  var WhControlCycle = mongoose.model('WhControlCycle');
-  var WhControlCycleArchive = mongoose.model('WhControlCycleArchive');
+  const WhTransferOrder = mongoose.model('WhTransferOrder');
+  const WhControlCycle = mongoose.model('WhControlCycle');
+  const WhControlCycleArchive = mongoose.model('WhControlCycleArchive');
 
-  var filePathCache = {};
+  const filePathCache = {};
 
   app.broker.subscribe('directoryWatcher.changed', queueFile).setFilter(filterFile);
 
@@ -60,14 +60,14 @@ exports.start = function startControlCyclesImporterModule(app, module)
       data: fileInfo
     });
 
-    module.debug("Queued %s...", fileInfo.timeKey);
+    module.debug('Queued %s...', fileInfo.timeKey);
   }
 
   function importNext(fileInfo)
   {
-    var startTime = Date.now();
+    const startTime = Date.now();
 
-    module.debug("Importing %s...", fileInfo.timeKey);
+    module.debug('Importing %s...', fileInfo.timeKey);
 
     importFile(fileInfo, function(err, controlCycles)
     {
@@ -75,7 +75,7 @@ exports.start = function startControlCyclesImporterModule(app, module)
 
       if (err)
       {
-        module.error("Failed to import %s: %s", fileInfo.timeKey, err.message);
+        module.error('Failed to import %s: %s', fileInfo.timeKey, err.message);
 
         app.broker.publish('warehouse.controlCycles.syncFailed', {
           timestamp: fileInfo.timestamp,
@@ -84,7 +84,7 @@ exports.start = function startControlCyclesImporterModule(app, module)
       }
       else
       {
-        module.debug("Imported %d of %s in %d ms!", controlCycles.length, fileInfo.timeKey, Date.now() - startTime);
+        module.debug('Imported %d of %s in %d ms!', controlCycles.length, fileInfo.timeKey, Date.now() - startTime);
 
         app.broker.publish('warehouse.controlCycles.synced', {
           timestamp: fileInfo.timestamp,
@@ -108,24 +108,24 @@ exports.start = function startControlCyclesImporterModule(app, module)
           return this.skip(err);
         }
 
-        module.debug("Parsing ~%d bytes of %s...", fileContents.length, fileInfo.timeKey);
+        module.debug('Parsing ~%d bytes of %s...', fileContents.length, fileInfo.timeKey);
 
-        var t = Date.now();
+        const t = Date.now();
 
         this.controlCycles = parseControlCycles(fileContents, new Date(fileInfo.timestamp));
 
-        module.debug("Parsed %s in %d ms!", fileInfo.timeKey, Date.now() - t);
+        module.debug('Parsed %s in %d ms!', fileInfo.timeKey, Date.now() - t);
 
         setImmediate(this.next());
       },
       function createBatchesStep()
       {
-        var batchSize = 1000;
-        var batchCount = Math.ceil(this.controlCycles.length / batchSize);
+        const batchSize = 1000;
+        const batchCount = Math.ceil(this.controlCycles.length / batchSize);
 
         this.batches = [];
 
-        for (var i = 0; i < batchCount; ++i)
+        for (let i = 0; i < batchCount; ++i)
         {
           this.batches.push(this.controlCycles.slice(i * batchSize, i * batchSize + batchSize));
         }
@@ -134,7 +134,7 @@ exports.start = function startControlCyclesImporterModule(app, module)
       },
       function archiveControlCyclesStep()
       {
-        for (var i = 0, l = this.batches.length; i < l; ++i)
+        for (let i = 0, l = this.batches.length; i < l; ++i)
         {
           WhControlCycleArchive.collection.insert(this.batches[i], {ordered: false}, this.parallel());
         }
@@ -148,7 +148,7 @@ exports.start = function startControlCyclesImporterModule(app, module)
 
         if (err.err && !err.message)
         {
-          var code = err.code;
+          const code = err.code;
 
           err = new Error(err.err);
           err.name = 'MongoError';
@@ -159,10 +159,10 @@ exports.start = function startControlCyclesImporterModule(app, module)
       },
       function updateCurrentControlCyclesStep()
       {
-        var steps = [];
-        var minShiftDate = new Date(fileInfo.timestamp);
+        const steps = [];
+        const minShiftDate = new Date(fileInfo.timestamp);
 
-        for (var i = 0, l = this.batches.length; i < l; ++i)
+        for (let i = 0, l = this.batches.length; i < l; ++i)
         {
           steps.push(createUpdateCurrentControlCyclesBatchStep(this.batches[i], minShiftDate));
         }
@@ -182,12 +182,12 @@ exports.start = function startControlCyclesImporterModule(app, module)
   {
     return function updateCurrentControlCyclesBatchStep()
     {
-      var ccOptions = {upsert: true};
-      var toOptions = {multi: true};
+      const ccOptions = {upsert: true};
+      const toOptions = {multi: true};
 
-      for (var i = 0, l = controlCyclesArchive.length; i < l; ++i)
+      for (let i = 0, l = controlCyclesArchive.length; i < l; ++i)
       {
-        var controlCycle = controlCyclesArchive[i];
+        const controlCycle = controlCyclesArchive[i];
 
         controlCycle._id = controlCycle._id.nc12;
 
@@ -223,14 +223,14 @@ exports.start = function startControlCyclesImporterModule(app, module)
 
   function moveFileInfoFile(oldFilePath)
   {
-    var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
+    const newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
     fs.move(oldFilePath, newFilePath, {overwrite: true}, function(err)
     {
       if (err)
       {
         module.error(
-          "Failed to rename file [%s] to [%s]: %s", oldFilePath, newFilePath, err.message
+          'Failed to rename file [%s] to [%s]: %s', oldFilePath, newFilePath, err.message
         );
       }
     });
@@ -242,7 +242,7 @@ exports.start = function startControlCyclesImporterModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to delete file [%s]: %s", filePath, err.message);
+        module.error('Failed to delete file [%s]: %s', filePath, err.message);
       }
     });
   }

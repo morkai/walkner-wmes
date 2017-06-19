@@ -78,9 +78,9 @@ module.exports = function(mongoose, options, done)
         return this.skip(err);
       }
 
-      var createNextGroupKey = util.createCreateNextGroupKey(options.interval);
-      var groupKey = minGroupKey;
-      var groups = [];
+      const createNextGroupKey = util.createCreateNextGroupKey(options.interval);
+      let groupKey = minGroupKey;
+      const groups = [];
 
       while (groupKey <= maxGroupKey)
       {

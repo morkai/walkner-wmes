@@ -2,22 +2,22 @@
 
 'use strict';
 
-var step = require('h5.step');
-var moment = require('moment');
-var limitOrgUnit = require('../prodLines/limitOrgUnit');
+const step = require('h5.step');
+const moment = require('moment');
+const limitOrgUnit = require('../prodLines/limitOrgUnit');
 
 module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 {
-  var express = app[prodShiftsModule.config.expressId];
-  var settings = app[prodShiftsModule.config.settingsId];
-  var userModule = app[prodShiftsModule.config.userId];
-  var mongoose = app[prodShiftsModule.config.mongooseId];
-  var orgUnitsModule = app[prodShiftsModule.config.orgUnitsId];
-  var productionModule = app[prodShiftsModule.config.productionId];
-  var ProdShift = mongoose.model('ProdShift');
+  const express = app[prodShiftsModule.config.expressId];
+  const settings = app[prodShiftsModule.config.settingsId];
+  const userModule = app[prodShiftsModule.config.userId];
+  const mongoose = app[prodShiftsModule.config.mongooseId];
+  const orgUnitsModule = app[prodShiftsModule.config.orgUnitsId];
+  const productionModule = app[prodShiftsModule.config.productionId];
+  const ProdShift = mongoose.model('ProdShift');
 
-  var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW');
-  var canManage = userModule.auth(
+  const canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW');
+  const canManage = userModule.auth(
     'PROD_DATA:MANAGE',
     'PROD_DATA:CHANGES:REQUEST',
     'PROD_DATA:CHANGES:MANAGE'
@@ -56,8 +56,8 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
   function exportProdShift(doc)
   {
-    var subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
-    var prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
+    const subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
+    const prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
 
     return {
       'date': app.formatDate(doc.date),
@@ -95,7 +95,7 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
       {
         settings.findById('factoryLayout.extendedDowntimeDelay', this.parallel());
 
-        var conditions = {
+        const conditions = {
           date: {
             $gt: moment().subtract(2, 'days')
           },
@@ -111,7 +111,7 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
           return next(err);
         }
 
-        var result = prodShifts.length ? prodShifts[0] : {
+        const result = prodShifts.length ? prodShifts[0] : {
           _id: '?',
           prodLine: req.params.id
         };
@@ -125,8 +125,8 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
   function addProdShiftRoute(req, res, next)
   {
-    var user = req.session.user;
-    var userInfo = userModule.createUserInfo(user, req);
+    const user = req.session.user;
+    const userInfo = userModule.createUserInfo(user, req);
 
     prodShiftsModule.addProdShift(user, userInfo, req.body, function(err, statusCode, logEntry)
     {
@@ -151,8 +151,8 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
   function editProdShiftRoute(req, res, next)
   {
-    var user = req.session.user;
-    var userInfo = userModule.createUserInfo(user, req);
+    const user = req.session.user;
+    const userInfo = userModule.createUserInfo(user, req);
 
     prodShiftsModule.editProdShift(user, userInfo, req.params.id, req.body, function(err, statusCode, logEntry)
     {
@@ -182,8 +182,8 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
   function deleteProdShiftRoute(req, res, next)
   {
-    var user = req.session.user;
-    var userInfo = userModule.createUserInfo(user, req);
+    const user = req.session.user;
+    const userInfo = userModule.createUserInfo(user, req);
 
     prodShiftsModule.deleteProdShift(user, userInfo, req.params.id, req.body, function(err, statusCode, logEntry)
     {

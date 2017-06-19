@@ -2,7 +2,7 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function getPlannedQuantitiesCommand(app, productionModule, socket, prodShiftId, reply)
 {
@@ -23,7 +23,7 @@ module.exports = function getPlannedQuantitiesCommand(app, productionModule, soc
       return reply(new Error('UNKNOWN_PROD_SHIFT'));
     }
 
-    var plannedQuantities = prodShift.quantitiesDone.map(function(quantityDone)
+    const plannedQuantities = prodShift.quantitiesDone.map(function(quantityDone)
     {
       return quantityDone.planned;
     });

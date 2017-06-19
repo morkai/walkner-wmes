@@ -4,8 +4,8 @@
 
 module.exports = function setUpSettingsRoutes(app, settingsModule)
 {
-  var express = app[settingsModule.config.expressId];
-  var Setting = app[settingsModule.config.mongooseId].model('Setting');
+  const express = app[settingsModule.config.expressId];
+  const Setting = app[settingsModule.config.mongooseId].model('Setting');
 
   express.get('/settings', express.crud.browseRoute.bind(null, app, Setting));
 };

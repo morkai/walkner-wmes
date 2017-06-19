@@ -2,8 +2,8 @@
 
 'use strict';
 
-var _ = require('lodash');
-var createParser = require('./createParser');
+const _ = require('lodash');
+const createParser = require('./createParser');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -13,14 +13,14 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startEmptyOrdersImporterModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("orders/importer/emptyOrders module requires the mongoose module!");
+    throw new Error('orders/importer/emptyOrders module requires the mongoose module!');
   }
 
-  var EmptyOrder = mongoose.model('EmptyOrder');
+  const EmptyOrder = mongoose.model('EmptyOrder');
 
   createParser(app, module, handleParseResult);
 
@@ -31,7 +31,7 @@ exports.start = function startEmptyOrdersImporterModule(app, module)
       return;
     }
 
-    var emptyOrders = [];
+    const emptyOrders = [];
 
     _.forEach(orders, function(order)
     {
@@ -50,7 +50,7 @@ exports.start = function startEmptyOrdersImporterModule(app, module)
     {
       if (err)
       {
-        module.error("Error during insertion of empty orders: %s", err.message);
+        module.error('Error during insertion of empty orders: %s', err.message);
       }
 
       publishMessage(Array.isArray(docs) ? docs.length : 0);
@@ -59,7 +59,7 @@ exports.start = function startEmptyOrdersImporterModule(app, module)
 
   function publishMessage(count)
   {
-    module.info("Synced %d empty orders", count);
+    module.info('Synced %d empty orders', count);
 
     app.broker.publish('emptyOrders.synced', {count: count});
   }

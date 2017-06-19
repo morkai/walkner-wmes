@@ -2,14 +2,14 @@
 
 'use strict';
 
-var _ = require('lodash');
-var bcrypt = require('bcrypt');
-var transliterate = require('transliteration').transliterate;
-var step = require('h5.step');
+const _ = require('lodash');
+const bcrypt = require('bcrypt');
+const transliterate = require('transliteration').transliterate;
+const step = require('h5.step');
 
 module.exports = function syncUsers(app, usersModule, done)
 {
-  var tedious;
+  let tedious;
 
   try
   {
@@ -25,20 +25,20 @@ module.exports = function syncUsers(app, usersModule, done)
     return done(new Error('MODULE'));
   }
 
-  var companies = app[usersModule.config.companiesId];
-  var mongoose = app[usersModule.config.mongooseId];
-  var User = mongoose.model('User');
+  const companies = app[usersModule.config.companiesId];
+  const mongoose = app[usersModule.config.mongooseId];
+  const User = mongoose.model('User');
 
-  var conn = new tedious.Connection(usersModule.config.tediousConnection);
+  const conn = new tedious.Connection(usersModule.config.tediousConnection);
 
   conn.on('error', function(err)
   {
-    usersModule.error("[tedious] %s", err.message);
+    usersModule.error('[tedious] %s', err.message);
   });
 
   conn.on('connect', function(err)
   {
-    /*jshint multistr:true*/
+    /* jshint multistr:true*/
 
     if (err)
     {
@@ -50,9 +50,9 @@ module.exports = function syncUsers(app, usersModule, done)
 
   function createSelectUsersSql()
   {
-    /*jshint multistr:true*/
+    /* jshint multistr:true*/
 
-    var sql = "\
+    const sql = '\
       SELECT\
         [USERS].[US_ID],\
         [CARDS].[CA_NUMBER],\
@@ -63,29 +63,29 @@ module.exports = function syncUsers(app, usersModule, done)
         [USERS].[US_ACTIVE]\
       FROM [USERS]\
       LEFT JOIN [CARDS] ON [USERS].[US_CARD_ID]=[CARDS].[CA_ID]\
-    ";
-    var where = [];
+    ';
+    const where = [];
 
     _.forEach(companies.models, function(companyModel)
     {
-      var companyId = companyModel._id.replace(/'/g, "\\'");
+      const companyId = companyModel._id.replace(/'/g, "\\'");
 
       where.push("[USERS].[US_ADD_FIELDS] LIKE '10001&" + companyId + "&%'");
     });
 
-    return sql + " WHERE [USERS].[US_ACTIVE]=1 AND (" + where.join(" OR ") + ") ORDER BY [USERS].[US_ID]";
+    return sql + ' WHERE [USERS].[US_ACTIVE]=1 AND (' + where.join(' OR ') + ') ORDER BY [USERS].[US_ID]';
   }
 
   function queryUsers(conn)
   {
-    var stats = {
+    const stats = {
       created: 0,
       updated: 0,
       errors: 0
     };
-    var kdUsers = [];
+    const kdUsers = [];
 
-    var req = new tedious.Request(createSelectUsersSql(), function(err)
+    const req = new tedious.Request(createSelectUsersSql(), function(err)
     {
       conn.close();
 
@@ -101,7 +101,7 @@ module.exports = function syncUsers(app, usersModule, done)
 
     req.on('row', function(row)
     {
-      var addFields = parseAddFields(row[5].value);
+      const addFields = parseAddFields(row[5].value);
 
       kdUsers.push({
         kdId: +row[0].value,
@@ -126,7 +126,7 @@ module.exports = function syncUsers(app, usersModule, done)
       return setImmediate(done, null, stats);
     }
 
-    var kdUser = kdUsers[kdUserIndex];
+    const kdUser = kdUsers[kdUserIndex];
 
     step(
       function findUserModelStep()
@@ -143,14 +143,14 @@ module.exports = function syncUsers(app, usersModule, done)
       {
         if (err)
         {
-          usersModule.error("Failed to find a user by KD ID [%s]: %s", kdUser.kdId, err.message);
+          usersModule.error('Failed to find a user by KD ID [%s]: %s', kdUser.kdId, err.message);
 
           ++stats.errors;
 
           return this.skip();
         }
 
-        var user = loginUser || kdIdUser;
+        let user = loginUser || kdIdUser;
 
         this.isNew = false;
 
@@ -216,14 +216,14 @@ module.exports = function syncUsers(app, usersModule, done)
     {
       if (err)
       {
-        var error = err.message;
+        let error = err.message;
 
         if (err.name === 'ValidationError')
         {
           error += ':\n' + _.map(err.errors, function(e) { return e.toString(); }).join('\n');
         }
 
-        usersModule.error("Failed to save a user with KD ID [%s]: %s", userModel.kdId, error);
+        usersModule.error('Failed to save a user with KD ID [%s]: %s', userModel.kdId, error);
 
         if (err.code === 11000 && !isRetry)
         {
@@ -279,12 +279,12 @@ function parseAddFields(addFields)
     return {};
   }
 
-  var addFieldList = addFields.split('&');
-  var addFieldMap = {};
+  const addFieldList = addFields.split('&');
+  const addFieldMap = {};
 
-  for (var i = 0, l = addFieldList.length; i < l; i += 2)
+  for (let i = 0, l = addFieldList.length; i < l; i += 2)
   {
-    var key = addFieldList[i].trim();
+    const key = addFieldList[i].trim();
 
     if (key == null || key === '')
     {

@@ -2,19 +2,19 @@
 
 'use strict';
 
-var path = require('path');
-var fs = require('fs');
-var _ = require('lodash');
-var step = require('h5.step');
-var gm = require('gm');
+const path = require('path');
+const fs = require('fs');
+const _ = require('lodash');
+const step = require('h5.step');
+const gm = require('gm');
 
 module.exports = function saveScanTemplateJpgRoute(app, module, req, res, next)
 {
-  var express = app[module.config.expressId];
+  const express = app[module.config.expressId];
 
-  var file = req.file;
-  var imageId = Date.now().toString(36) + Math.round(1000000000 + Math.random() * 8999999999).toString(36);
-  var templatePath = path.join(module.config.templatesPath, imageId + '.jpg');
+  const file = req.file;
+  const imageId = Date.now().toString(36) + Math.round(1000000000 + Math.random() * 8999999999).toString(36);
+  const templatePath = path.join(module.config.templatesPath, imageId + '.jpg');
 
   step(
     function deskewStep()

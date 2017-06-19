@@ -2,36 +2,36 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function getProductionHistoryRoute(app, productionModule, req, res, next)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var ProdShift = mongoose.model('ProdShift');
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var ProdDowntime = mongoose.model('ProdDowntime');
+  const mongoose = app[productionModule.config.mongooseId];
+  const ProdShift = mongoose.model('ProdShift');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const ProdDowntime = mongoose.model('ProdDowntime');
 
-  var query = req.query;
-  var from = parseInt(query.from, 10);
-  var to = parseInt(query.to, 10);
-  var shifts = (query.shifts || '').split(',').map(Number).filter(function(val) { return val >= 1 && val <= 3; });
-  var orgUnitField = query.orgUnitType === 'mrpController' ? 'mrpControllers' : query.orgUnitType;
-  var orgUnitIds = (query.orgUnitIds || '').split(',');
+  const query = req.query;
+  const from = parseInt(query.from, 10);
+  const to = parseInt(query.to, 10);
+  const shifts = (query.shifts || '').split(',').map(Number).filter(function(val) { return val >= 1 && val <= 3; });
+  const orgUnitField = query.orgUnitType === 'mrpController' ? 'mrpControllers' : query.orgUnitType;
+  const orgUnitIds = (query.orgUnitIds || '').split(',');
 
-  var week = 7 * 24 * 3600 * 1000;
+  const week = 7 * 24 * 3600 * 1000;
 
   if (isNaN(from) || isNaN(to) || !orgUnitField || !orgUnitIds.length || from >= to || (to - from) > week)
   {
     return res.sendStatus(400);
   }
 
-  var prodLineStateMap = {};
+  const prodLineStateMap = {};
 
   step(
     function()
     {
-      var conditions = {
+      const conditions = {
         date: {$gt: new Date(from), $lt: new Date(to)}
       };
 
@@ -53,7 +53,7 @@ module.exports = function getProductionHistoryRoute(app, productionModule, req, 
         conditions.shift = {$in: shifts};
       }
 
-      var fields = {
+      const fields = {
         prodLine: 1,
         date: 1,
         shift: 1,
@@ -77,14 +77,14 @@ module.exports = function getProductionHistoryRoute(app, productionModule, req, 
         return;
       }
 
-      var now = Date.now();
+      const now = Date.now();
 
       _.forEach(prodShifts, function(prodShift)
       {
-        var plannedQuantityDone = 0;
-        var actualQuantityDone = 0;
+        let plannedQuantityDone = 0;
+        let actualQuantityDone = 0;
 
-        for (var h = 0; h < 8; ++h)
+        for (let h = 0; h < 8; ++h)
         {
           plannedQuantityDone += prodShift.quantitiesDone[h].planned;
           actualQuantityDone += prodShift.quantitiesDone[h].actual;
@@ -109,8 +109,8 @@ module.exports = function getProductionHistoryRoute(app, productionModule, req, 
     },
     function()
     {
-      var conditions = {prodShift: {$in: Object.keys(prodLineStateMap)}};
-      var orderFields = {
+      const conditions = {prodShift: {$in: Object.keys(prodLineStateMap)}};
+      const orderFields = {
         prodShift: 1,
         orderId: 1,
         operationNo: 1,
@@ -119,7 +119,7 @@ module.exports = function getProductionHistoryRoute(app, productionModule, req, 
         startedAt: 1,
         finishedAt: 1
       };
-      var downtimeFields = {
+      const downtimeFields = {
         prodShift: 1,
         prodShiftOrder: 1,
         aor: 1,

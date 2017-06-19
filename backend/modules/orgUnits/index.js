@@ -2,9 +2,9 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var setUpRql = require('./rql');
+const _ = require('lodash');
+const step = require('h5.step');
+const setUpRql = require('./rql');
 
 exports.DEFAULT_CONFIG = {
   divisionsId: 'divisions',
@@ -19,14 +19,14 @@ exports.start = function startOrgUnitsModule(app, module)
 {
   setUpRql();
 
-  var divisionsModule = app[module.config.divisionsId];
-  var subdivisionsModule = app[module.config.subdivisionsId];
-  var mrpControllersModule = app[module.config.mrpControllersId];
-  var prodFlowsModule = app[module.config.prodFlowsId];
-  var workCentersModule = app[module.config.workCentersId];
-  var prodLinesModule = app[module.config.prodLinesId];
+  const divisionsModule = app[module.config.divisionsId];
+  const subdivisionsModule = app[module.config.subdivisionsId];
+  const mrpControllersModule = app[module.config.mrpControllersId];
+  const prodFlowsModule = app[module.config.prodFlowsId];
+  const workCentersModule = app[module.config.workCentersId];
+  const prodLinesModule = app[module.config.prodLinesId];
 
-  var PARENT_TO_CHILD_MAP = {
+  const PARENT_TO_CHILD_MAP = {
     'division': 'subdivision',
     'subdivision': 'mrpController',
     'mrpController': 'prodFlow',
@@ -35,7 +35,7 @@ exports.start = function startOrgUnitsModule(app, module)
     'prodLine': null
   };
 
-  var CHILD_TO_PARENT_MAP = {
+  const CHILD_TO_PARENT_MAP = {
     'prodLine': 'workCenter',
     'workCenter': 'prodFlow',
     'prodFlow': 'mrpController',
@@ -44,7 +44,7 @@ exports.start = function startOrgUnitsModule(app, module)
     'division': null
   };
 
-  var TYPE_TO_MODULE_MAP = {
+  const TYPE_TO_MODULE_MAP = {
     'division': divisionsModule,
     'subdivision': subdivisionsModule,
     'mrpController': mrpControllersModule,
@@ -53,8 +53,8 @@ exports.start = function startOrgUnitsModule(app, module)
     'prodLine': prodLinesModule
   };
 
-  var cache = null;
-  var rebuildingCache = 0;
+  let cache = null;
+  let rebuildingCache = 0;
 
   app.broker.subscribe('app.started', rebuildCache).setLimit(1);
 
@@ -97,12 +97,12 @@ exports.start = function startOrgUnitsModule(app, module)
       return 'division';
     }
 
-    throw new Error("Unknown org unit type!");
+    throw new Error('Unknown org unit type!');
   };
 
   module.getByTypeAndId = function(type, id)
   {
-    var orgUnitsModule = TYPE_TO_MODULE_MAP[type];
+    const orgUnitsModule = TYPE_TO_MODULE_MAP[type];
 
     if (!orgUnitsModule)
     {
@@ -114,9 +114,9 @@ exports.start = function startOrgUnitsModule(app, module)
 
   module.getParent = function(childOrgUnit)
   {
-    var childOrgUnitType = this.getType(childOrgUnit);
-    var parentOrgUnitType = CHILD_TO_PARENT_MAP[childOrgUnitType];
-    var parentOrgUnitId = childOrgUnit.get(parentOrgUnitType);
+    const childOrgUnitType = this.getType(childOrgUnit);
+    const parentOrgUnitType = CHILD_TO_PARENT_MAP[childOrgUnitType];
+    const parentOrgUnitId = childOrgUnit.get(parentOrgUnitType);
 
     if (!parentOrgUnitId || (Array.isArray(parentOrgUnitId) && !parentOrgUnitId.length))
     {
@@ -131,14 +131,14 @@ exports.start = function startOrgUnitsModule(app, module)
 
   module.getAllByType = function(type)
   {
-    var orgUnitsModule = TYPE_TO_MODULE_MAP[type];
+    const orgUnitsModule = TYPE_TO_MODULE_MAP[type];
 
     return orgUnitsModule ? orgUnitsModule.models : [];
   };
 
   module.getDivisionFor = function(orgUnitType, orgUnitId)
   {
-    var orgUnit = arguments.length === 2
+    const orgUnit = arguments.length === 2
       ? this.getByTypeAndId(orgUnitType, orgUnitId)
       : orgUnitType;
 
@@ -152,7 +152,7 @@ exports.start = function startOrgUnitsModule(app, module)
       return orgUnit;
     }
 
-    var orgUnitCache = cache && cache[orgUnit._id];
+    const orgUnitCache = cache && cache[orgUnit._id];
 
     if (orgUnitCache)
     {
@@ -164,7 +164,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
   module.getSubdivisionsFor = function(orgUnitType, orgUnitId)
   {
-    var orgUnit = arguments.length === 2
+    const orgUnit = arguments.length === 2
       ? this.getByTypeAndId(orgUnitType, orgUnitId)
       : orgUnitType;
 
@@ -173,7 +173,7 @@ exports.start = function startOrgUnitsModule(app, module)
       return [];
     }
 
-    var orgUnitCache = cache && cache[orgUnit._id];
+    const orgUnitCache = cache && cache[orgUnit._id];
 
     if (orgUnitCache)
     {
@@ -208,7 +208,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
   module.getSubdivisionFor = function(orgUnitType, orgUnitId)
   {
-    var orgUnit = arguments.length === 2
+    const orgUnit = arguments.length === 2
       ? this.getByTypeAndId(orgUnitType, orgUnitId)
       : orgUnitType;
 
@@ -222,7 +222,7 @@ exports.start = function startOrgUnitsModule(app, module)
       return orgUnit;
     }
 
-    var orgUnitCache = cache && cache[orgUnit._id];
+    const orgUnitCache = cache && cache[orgUnit._id];
 
     if (orgUnitCache)
     {
@@ -234,7 +234,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
   module.getProdFlowsFor = function(orgUnitType, orgUnitId)
   {
-    var orgUnit = arguments.length === 2
+    const orgUnit = arguments.length === 2
       ? this.getByTypeAndId(orgUnitType, orgUnitId)
       : orgUnitType;
 
@@ -248,7 +248,7 @@ exports.start = function startOrgUnitsModule(app, module)
       return [orgUnit];
     }
 
-    var orgUnitCache = cache && cache[orgUnit._id];
+    const orgUnitCache = cache && cache[orgUnit._id];
 
     if (orgUnitCache)
     {
@@ -290,7 +290,7 @@ exports.start = function startOrgUnitsModule(app, module)
     if (orgUnit.constructor === divisionsModule.Model)
     {
       return subdivisionsModule.models
-        .filter(function(subdivision){ return subdivision.division === orgUnit._id; })
+        .filter(function(subdivision) { return subdivision.division === orgUnit._id; })
         .reduce(function(prodFlows, subdivision)
         {
           return prodFlows.concat(module.getProdFlowsFor(subdivision));
@@ -307,19 +307,19 @@ exports.start = function startOrgUnitsModule(app, module)
 
   module.getChildren = function(parentOrgUnit)
   {
-    var parentOrgUnitType = this.getType(parentOrgUnit);
-    var childOrgUnitType = this.getChildType(parentOrgUnitType);
+    const parentOrgUnitType = this.getType(parentOrgUnit);
+    const childOrgUnitType = this.getChildType(parentOrgUnitType);
 
-    var parentOrgUnitCache = cache && cache[parentOrgUnitType] && cache[parentOrgUnitType][parentOrgUnit._id];
+    const parentOrgUnitCache = cache && cache[parentOrgUnitType] && cache[parentOrgUnitType][parentOrgUnit._id];
 
     if (parentOrgUnitCache)
     {
-      var childOrgUnitCache = parentOrgUnitCache[childOrgUnitType];
+      const childOrgUnitCache = parentOrgUnitCache[childOrgUnitType];
 
       return childOrgUnitCache ? childOrgUnitCache.list.slice() : [];
     }
 
-    var childOrgUnitsModule = TYPE_TO_MODULE_MAP[childOrgUnitType];
+    const childOrgUnitsModule = TYPE_TO_MODULE_MAP[childOrgUnitType];
 
     return childOrgUnitsModule
       ? filterByParent(childOrgUnitsModule.models, parentOrgUnitType, parentOrgUnit)
@@ -398,7 +398,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
   module.getProdLinesFor = function(orgUnitType, orgUnitId)
   {
-    var orgUnit = arguments.length === 2
+    const orgUnit = arguments.length === 2
       ? this.getByTypeAndId(orgUnitType, orgUnitId)
       : orgUnitType;
 
@@ -412,7 +412,7 @@ exports.start = function startOrgUnitsModule(app, module)
       return [orgUnit];
     }
 
-    var orgUnitCache = cache && cache[orgUnitType] && cache[orgUnitType][orgUnitId];
+    const orgUnitCache = cache && cache[orgUnitType] && cache[orgUnitType][orgUnitId];
 
     if (orgUnitCache)
     {
@@ -424,7 +424,7 @@ exports.start = function startOrgUnitsModule(app, module)
       return filterByParent(prodLinesModule.models, 'workCenter', orgUnit);
     }
 
-    var workCenterIds = {};
+    let workCenterIds = {};
 
     if (orgUnit.constructor === prodFlowsModule.Model)
     {
@@ -435,15 +435,15 @@ exports.start = function startOrgUnitsModule(app, module)
     }
     else
     {
-      var prodFlows = this.getProdFlowsFor(orgUnit);
+      const prodFlows = this.getProdFlowsFor(orgUnit);
 
       workCenterIds = [];
 
-      for (var i = 0, l = prodFlows.length; i < l; ++i)
+      for (let i = 0, l = prodFlows.length; i < l; ++i)
       {
-        var workCenters = this.getChildren(prodFlows[i]);
+        const workCenters = this.getChildren(prodFlows[i]);
 
-        for (var ii = 0, ll = workCenters.length; ii < ll; ++ii)
+        for (let ii = 0, ll = workCenters.length; ii < ll; ++ii)
         {
           workCenterIds[workCenters[ii]._id] = true;
         }
@@ -487,7 +487,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
     orgUnits.prodLine = prodLine._id;
 
-    var prodLineCache = cache && cache.prodLine[orgUnits.prodLine];
+    const prodLineCache = cache && cache.prodLine[orgUnits.prodLine];
 
     if (prodLineCache)
     {
@@ -522,7 +522,7 @@ exports.start = function startOrgUnitsModule(app, module)
       return orgUnits;
     }
 
-    var workCenter = workCentersModule.modelsById[prodLine.workCenter];
+    const workCenter = workCentersModule.modelsById[prodLine.workCenter];
 
     if (!workCenter)
     {
@@ -531,7 +531,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
     orgUnits.workCenter = workCenter._id;
 
-    var prodFlow = prodFlowsModule.modelsById[workCenter.prodFlow];
+    const prodFlow = prodFlowsModule.modelsById[workCenter.prodFlow];
 
     if (!prodFlow)
     {
@@ -540,7 +540,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
     orgUnits.prodFlow = prodFlow._id;
 
-    var mrpController = prodFlow.mrpController;
+    let mrpController = prodFlow.mrpController;
 
     if (!Array.isArray(mrpController) || !mrpController.length)
     {
@@ -556,7 +556,7 @@ exports.start = function startOrgUnitsModule(app, module)
       return;
     }
 
-    var subdivision = subdivisionsModule.modelsById[mrpController.subdivision];
+    const subdivision = subdivisionsModule.modelsById[mrpController.subdivision];
 
     if (!subdivision)
     {
@@ -565,7 +565,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
     orgUnits.subdivision = subdivision._id;
 
-    var division = divisionsModule.modelsById[subdivision.division];
+    const division = divisionsModule.modelsById[subdivision.division];
 
     if (!division)
     {
@@ -584,7 +584,7 @@ exports.start = function startOrgUnitsModule(app, module)
       orgUnitsList = [];
     }
 
-    var orgUnitsMap = module.getAllForProdLine(prodLine, {});
+    const orgUnitsMap = module.getAllForProdLine(prodLine, {});
 
     if (orgUnitsMap.division)
     {
@@ -623,7 +623,7 @@ exports.start = function startOrgUnitsModule(app, module)
   {
     return orgUnits.filter(function(orgUnit)
     {
-      var parentOrgUnitId = orgUnit.get(parentProperty);
+      const parentOrgUnitId = orgUnit.get(parentProperty);
 
       if (!parentOrgUnitId)
       {
@@ -646,14 +646,14 @@ exports.start = function startOrgUnitsModule(app, module)
       return false;
     }
 
-    var mrpController = mrpControllersModule.modelsById[mrpControllerId];
+    const mrpController = mrpControllersModule.modelsById[mrpControllerId];
 
     if (!mrpController)
     {
       return false;
     }
 
-    var subdivision = subdivisionsModule.modelsById[mrpController.subdivision];
+    const subdivision = subdivisionsModule.modelsById[mrpController.subdivision];
 
     return subdivision && subdivision.type === 'assembly';
   }
@@ -668,11 +668,11 @@ exports.start = function startOrgUnitsModule(app, module)
       return;
     }
 
-    module.debug("Rebuilding cache...");
+    module.debug('Rebuilding cache...');
 
-    var t = Date.now();
+    let t = Date.now();
 
-    var workingCache = {
+    const workingCache = {
       division: {},
       subdivision: {},
       mrpController: {},
@@ -681,12 +681,12 @@ exports.start = function startOrgUnitsModule(app, module)
       prodLine: {}
     };
 
-    var prodLines = prodLinesModule.models;
-    var batchSize = 5;
-    var batchCount = Math.ceil(prodLines.length / batchSize);
-    var steps = [];
+    const prodLines = prodLinesModule.models;
+    const batchSize = 5;
+    const batchCount = Math.ceil(prodLines.length / batchSize);
+    const steps = [];
 
-    for (var i = 0; i < batchCount; ++i)
+    for (let i = 0; i < batchCount; ++i)
     {
       steps.push(createRebuildCacheStep(workingCache, prodLines.slice(i * batchSize, i * batchSize + batchSize)));
     }
@@ -700,7 +700,7 @@ exports.start = function startOrgUnitsModule(app, module)
 
         t = Date.now() - t;
 
-        module.debug("Rebuilt cache in %d ms.", t);
+        module.debug('Rebuilt cache in %d ms.', t);
       }
       else
       {
@@ -722,7 +722,7 @@ exports.start = function startOrgUnitsModule(app, module)
         return this.skip();
       }
 
-      for (var i = 0, l = prodLines.length; i < l; ++i)
+      for (let i = 0, l = prodLines.length; i < l; ++i)
       {
         rebuildCacheFromOrgUnits(workingCache, module.getAllForProdLine(prodLines[i]));
       }
@@ -760,7 +760,7 @@ exports.start = function startOrgUnitsModule(app, module)
       };
     }
 
-    var divisionCache = workingCache.division[orgUnits.division];
+    const divisionCache = workingCache.division[orgUnits.division];
 
     addToMapAndList(divisionCache, orgUnits, 'subdivision');
     addMrpControllersToMapAndList(divisionCache, orgUnits);
@@ -788,7 +788,7 @@ exports.start = function startOrgUnitsModule(app, module)
       };
     }
 
-    var subdivisionCache = workingCache.subdivision[orgUnits.subdivision];
+    const subdivisionCache = workingCache.subdivision[orgUnits.subdivision];
 
     subdivisionCache.division = divisionsModule.modelsById[orgUnits.division] || null;
 
@@ -805,18 +805,18 @@ exports.start = function startOrgUnitsModule(app, module)
       return;
     }
 
-    var mrpControllers = orgUnits.mrpControllers;
+    const mrpControllers = orgUnits.mrpControllers;
 
     if (mrpControllers === null)
     {
       return;
     }
 
-    var mrpControllerCount = mrpControllers.length;
+    const mrpControllerCount = mrpControllers.length;
 
-    for (var i = 0; i < mrpControllerCount; ++i)
+    for (let i = 0; i < mrpControllerCount; ++i)
     {
-      var mrpControllerId = mrpControllers[i];
+      const mrpControllerId = mrpControllers[i];
 
       if (workingCache.mrpController[mrpControllerId] === undefined)
       {
@@ -830,7 +830,7 @@ exports.start = function startOrgUnitsModule(app, module)
         };
       }
 
-      var mrpControllerCache = workingCache.mrpController[mrpControllerId];
+      const mrpControllerCache = workingCache.mrpController[mrpControllerId];
 
       mrpControllerCache.division = divisionsModule.modelsById[orgUnits.division] || null;
       mrpControllerCache.subdivision = subdivisionsModule.modelsById[orgUnits.subdivision] || null;
@@ -860,7 +860,7 @@ exports.start = function startOrgUnitsModule(app, module)
       };
     }
 
-    var prodFlowCache = workingCache.prodFlow[orgUnits.prodFlow];
+    const prodFlowCache = workingCache.prodFlow[orgUnits.prodFlow];
 
     prodFlowCache.division = divisionsModule.modelsById[orgUnits.division] || null;
     prodFlowCache.subdivision = subdivisionsModule.modelsById[orgUnits.subdivision] || null;
@@ -889,7 +889,7 @@ exports.start = function startOrgUnitsModule(app, module)
       };
     }
 
-    var workCenterCache = workingCache.workCenter[orgUnits.workCenter];
+    const workCenterCache = workingCache.workCenter[orgUnits.workCenter];
 
     workCenterCache.division = divisionsModule.modelsById[orgUnits.division] || null;
     workCenterCache.subdivision = subdivisionsModule.modelsById[orgUnits.subdivision] || null;
@@ -926,8 +926,8 @@ exports.start = function startOrgUnitsModule(app, module)
 
   function addToMapAndList(parentCache, orgUnits, childOrgUnitType)
   {
-    var childOrgUnitId = orgUnits[childOrgUnitType];
-    var childOrgUnit = TYPE_TO_MODULE_MAP[childOrgUnitType].modelsById[childOrgUnitId];
+    const childOrgUnitId = orgUnits[childOrgUnitType];
+    const childOrgUnit = TYPE_TO_MODULE_MAP[childOrgUnitType].modelsById[childOrgUnitId];
 
     if (childOrgUnit !== null && parentCache[childOrgUnitType].map[childOrgUnitId] === undefined)
     {
@@ -943,12 +943,12 @@ exports.start = function startOrgUnitsModule(app, module)
       return;
     }
 
-    var mrpControllerCount = orgUnits.mrpControllers.length;
+    const mrpControllerCount = orgUnits.mrpControllers.length;
 
-    for (var i = 0; i < mrpControllerCount; ++i)
+    for (let i = 0; i < mrpControllerCount; ++i)
     {
-      var mrpControllerId = orgUnits.mrpControllers[i];
-      var mrpController = mrpControllersModule.modelsById[mrpControllerId];
+      const mrpControllerId = orgUnits.mrpControllers[i];
+      const mrpController = mrpControllersModule.modelsById[mrpControllerId];
 
       if (mrpController !== undefined && parentCache.mrpController[mrpControllerId] === undefined)
       {
@@ -960,16 +960,16 @@ exports.start = function startOrgUnitsModule(app, module)
 
   function getParentMrpControllers(mrpControllerIds)
   {
-    var mrpControllers = [];
+    const mrpControllers = [];
 
     if (!Array.isArray(mrpControllerIds))
     {
       return mrpControllers;
     }
 
-    for (var i = 0, l = mrpControllerIds.length; i < l; ++i)
+    for (let i = 0, l = mrpControllerIds.length; i < l; ++i)
     {
-      var mrpController = mrpControllersModule.modelsById[mrpControllerIds[i]];
+      const mrpController = mrpControllersModule.modelsById[mrpControllerIds[i]];
 
       if (mrpController !== undefined)
       {

@@ -2,19 +2,19 @@
 
 'use strict';
 
-var path = require('path');
-var fs = require('fs');
-var step = require('h5.step');
+const path = require('path');
+const fs = require('fs');
+const step = require('h5.step');
 
 module.exports = function sendSurveyPdfRoute(app, module, req, res, next)
 {
-  var express = app[module.config.expressId];
+  const express = app[module.config.expressId];
 
-  var surveyId = req.params.id;
-  var surveyPdfFile = path.join(module.config.surveysPath, surveyId + '.pdf');
-  var customPdfFile = path.join(module.config.surveysPath, surveyId + '.custom.pdf');
-  var recreate = req.query.recreate;
-  var custom = req.query.custom;
+  const surveyId = req.params.id;
+  const surveyPdfFile = path.join(module.config.surveysPath, surveyId + '.pdf');
+  const customPdfFile = path.join(module.config.surveysPath, surveyId + '.custom.pdf');
+  const recreate = req.query.recreate;
+  const custom = req.query.custom;
 
   step(
     function statFileStep()
@@ -24,8 +24,8 @@ module.exports = function sendSurveyPdfRoute(app, module, req, res, next)
         return;
       }
 
-      var surveyDone = this.parallel();
-      var customDone = this.parallel();
+      const surveyDone = this.parallel();
+      const customDone = this.parallel();
 
       fs.stat(surveyPdfFile, function(err, stats) { surveyDone(null, stats); });
       fs.stat(customPdfFile, function(err, stats) { customDone(null, stats); });

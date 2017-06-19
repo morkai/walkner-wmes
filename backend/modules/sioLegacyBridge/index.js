@@ -2,8 +2,8 @@
 
 'use strict';
 
-var _ = require('lodash');
-var patchNewSocket = require('./patchNewSocket');
+const _ = require('lodash');
+const patchNewSocket = require('./patchNewSocket');
 
 exports.DEFAULT_CONFIG = {
   httpServerId: 'httpServer',
@@ -16,22 +16,22 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startSioLegacyBridgeModule(app, module)
 {
-  var httpServer = app[module.config.httpServerId];
+  const httpServer = app[module.config.httpServerId];
 
   if (!httpServer)
   {
-    throw new Error("The `httpServer` module is required!");
+    throw new Error('The `httpServer` module is required!');
   }
 
-  var newSocketIoClient = require(module.config.newClientPackage);
-  var oldSocketIoServer = require(module.config.oldServerPackage);
+  const newSocketIoClient = require(module.config.newClientPackage);
+  const oldSocketIoServer = require(module.config.oldServerPackage);
 
-  var DEFAULT_SERVER_OPTIONS = {
+  const DEFAULT_SERVER_OPTIONS = {
     log: false,
     resource: '/socket.io',
     'destroy upgrade': false
   };
-  var DEFAULT_CLIENT_OPTIONS = {
+  const DEFAULT_CLIENT_OPTIONS = {
     path: '/sio',
     transports: ['websocket'],
     autoConnect: true,
@@ -41,14 +41,14 @@ exports.start = function startSioLegacyBridgeModule(app, module)
     forceNew: true
   };
 
-  var serverOptions = _.assign(DEFAULT_SERVER_OPTIONS, module.config.oldSioServerOptions);
-  var oldServer = oldSocketIoServer.listen(httpServer.server, serverOptions);
+  const serverOptions = _.assign(DEFAULT_SERVER_OPTIONS, module.config.oldSioServerOptions);
+  const oldServer = oldSocketIoServer.listen(httpServer.server, serverOptions);
 
   oldServer.sockets.on('connection', onConnection);
 
   function onConnection(oldSocket)
   {
-    var newSocket = createNewClient(oldSocket);
+    let newSocket = createNewClient(oldSocket);
 
     oldSocket.$emit = function(eventName)
     {
@@ -72,8 +72,8 @@ exports.start = function startSioLegacyBridgeModule(app, module)
 
   function createNewClient(oldSocket)
   {
-    var clientOptions = _.assign({}, DEFAULT_CLIENT_OPTIONS, module.config.newSioClientOptions);
-    var newSocket = newSocketIoClient.connect(module.config.newSioServerUrl, clientOptions);
+    const clientOptions = _.assign({}, DEFAULT_CLIENT_OPTIONS, module.config.newSioClientOptions);
+    const newSocket = newSocketIoClient.connect(module.config.newSioServerUrl, clientOptions);
 
     patchNewSocket(newSocket, function(args)
     {

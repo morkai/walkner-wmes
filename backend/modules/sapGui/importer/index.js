@@ -2,8 +2,8 @@
 
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 exports.DEFAULT_CONFIG = {
   expressId: 'express',
@@ -32,16 +32,16 @@ exports.start = function startSapGuiImporterModule(app, module)
       return res.status(403).send('INVALID_SECRET_KEY');
     }
 
-    var fileName = req.query.fileName;
-    var timestamp = parseInt(req.query.timestamp, 10);
+    const fileName = req.query.fileName;
+    const timestamp = parseInt(req.query.timestamp, 10);
 
     if (!/^[a-zA-Z0-9_-]+\.(txt|json|html)$/.test(fileName) || isNaN(timestamp))
     {
       return res.status(400).send('INVALID_INPUT');
     }
 
-    var importFileName = timestamp + '@' + fileName;
-    var importFilePath = path.join(module.config.importPath, importFileName);
+    const importFileName = timestamp + '@' + fileName;
+    const importFilePath = path.join(module.config.importPath, importFileName);
 
     fs.writeFile(importFilePath, req.body, function(err)
     {
@@ -50,7 +50,7 @@ exports.start = function startSapGuiImporterModule(app, module)
         return next(err);
       }
 
-      module.debug("Imported: %s", importFileName);
+      module.debug('Imported: %s', importFileName);
 
       return res.sendStatus(204);
     });

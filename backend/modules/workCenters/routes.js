@@ -4,12 +4,12 @@
 
 module.exports = function setUpWorkCentersRoutes(app, workCentersModule, useDictionaryModel)
 {
-  var express = app[workCentersModule.config.expressId];
-  var auth = app[workCentersModule.config.userId].auth;
-  var WorkCenter = app[workCentersModule.config.mongooseId].model('WorkCenter');
+  const express = app[workCentersModule.config.expressId];
+  const auth = app[workCentersModule.config.userId].auth;
+  const WorkCenter = app[workCentersModule.config.mongooseId].model('WorkCenter');
 
-  var canView = auth('DICTIONARIES:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/workCenters', canView, express.crud.browseRoute.bind(null, app, WorkCenter));
 

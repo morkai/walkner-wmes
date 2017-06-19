@@ -2,27 +2,27 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
 
 module.exports = function addProdShift(app, prodShiftsModule, user, userInfo, data, done)
 {
-  var mongoose = app[prodShiftsModule.config.mongooseId];
-  var orgUnitsModule = app[prodShiftsModule.config.orgUnitsId];
-  var productionModule = app[prodShiftsModule.config.productionId];
-  var ProdShift = mongoose.model('ProdShift');
-  var ProdLogEntry = mongoose.model('ProdLogEntry');
-  var ProdChangeRequest = mongoose.model('ProdChangeRequest');
+  const mongoose = app[prodShiftsModule.config.mongooseId];
+  const orgUnitsModule = app[prodShiftsModule.config.orgUnitsId];
+  const productionModule = app[prodShiftsModule.config.productionId];
+  const ProdShift = mongoose.model('ProdShift');
+  const ProdLogEntry = mongoose.model('ProdLogEntry');
+  const ProdChangeRequest = mongoose.model('ProdChangeRequest');
 
-  var isChangeRequest = !user.super && !_.includes(user.privileges, 'PROD_DATA:CHANGES:MANAGE');
+  const isChangeRequest = !user.super && !_.includes(user.privileges, 'PROD_DATA:CHANGES:MANAGE');
 
   step(
     function validateInputStep()
     {
       data.shift = parseInt(data.shift, 10);
 
-      var dateMoment = moment(data.date);
+      const dateMoment = moment(data.date);
 
       orgUnitsModule.getAllForProdLine(data.prodLine, data);
 
@@ -69,7 +69,7 @@ module.exports = function addProdShift(app, prodShiftsModule, user, userInfo, da
         return this.skip(err);
       }
 
-      var logEntry = ProdLogEntry.addShift(userInfo, data);
+      const logEntry = ProdLogEntry.addShift(userInfo, data);
 
       if (!logEntry)
       {
@@ -92,7 +92,7 @@ module.exports = function addProdShift(app, prodShiftsModule, user, userInfo, da
         return this.skip(err);
       }
 
-      var next = this.next();
+      const next = this.next();
 
       if (isChangeRequest)
       {

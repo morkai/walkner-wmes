@@ -4,11 +4,11 @@
 
 module.exports = function setUpEventRoutes(app, eventsModule)
 {
-  var express = app[eventsModule.config.expressId];
-  var auth = app[eventsModule.config.userId].auth;
-  var Event = app[eventsModule.config.mongooseId].model('Event');
+  const express = app[eventsModule.config.expressId];
+  const auth = app[eventsModule.config.userId].auth;
+  const Event = app[eventsModule.config.mongooseId].model('Event');
 
-  var canView = auth('EVENTS:VIEW');
+  const canView = auth('EVENTS:VIEW');
 
   express.get('/events', canView, express.crud.browseRoute.bind(null, app, Event));
 
@@ -25,7 +25,7 @@ module.exports = function setUpEventRoutes(app, eventsModule)
    */
   function getTypesRoute(req, res)
   {
-    var types = Object.keys(eventsModule.types);
+    const types = Object.keys(eventsModule.types);
 
     types.sort();
 
@@ -49,11 +49,11 @@ module.exports = function setUpEventRoutes(app, eventsModule)
    */
   function insertPendingRoute(req, res)
   {
-    var beforeCount = eventsModule.getPendingEvents().length;
+    const beforeCount = eventsModule.getPendingEvents().length;
 
     eventsModule.insertEvents();
 
-    var afterCount = eventsModule.getPendingEvents().length;
+    const afterCount = eventsModule.getPendingEvents().length;
 
     res.send({
       beforeCount: beforeCount,

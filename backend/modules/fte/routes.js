@@ -2,24 +2,24 @@
 
 'use strict';
 
-var _ = require('lodash');
-var exportFteLeaderEntries = require('./exportFteLeaderEntries');
-var exportFteMasterEntries = require('./exportFteMasterEntries');
-var canManage = require('./canManage');
+const _ = require('lodash');
+const exportFteLeaderEntries = require('./exportFteLeaderEntries');
+const exportFteMasterEntries = require('./exportFteMasterEntries');
+const canManage = require('./canManage');
 
 module.exports = function setUpFteRoutes(app, fteModule)
 {
-  var express = app[fteModule.config.expressId];
-  var auth = app[fteModule.config.userId].auth;
-  var mongoose = app[fteModule.config.mongooseId];
-  var subdivisionsModule = app[fteModule.config.subdivisionsId];
-  var settings = app[fteModule.config.settingsId];
-  var FteMasterEntry = mongoose.model('FteMasterEntry');
-  var FteLeaderEntry = mongoose.model('FteLeaderEntry');
+  const express = app[fteModule.config.expressId];
+  const auth = app[fteModule.config.userId].auth;
+  const mongoose = app[fteModule.config.mongooseId];
+  const subdivisionsModule = app[fteModule.config.subdivisionsId];
+  const settings = app[fteModule.config.settingsId];
+  const FteMasterEntry = mongoose.model('FteMasterEntry');
+  const FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
-  var canViewLeader = auth('FTE:LEADER:VIEW');
-  var canViewMaster = auth('FTE:MASTER:VIEW');
-  var canManageSettings = auth('PROD_DATA:MANAGE');
+  const canViewLeader = auth('FTE:LEADER:VIEW');
+  const canViewMaster = auth('FTE:MASTER:VIEW');
+  const canManageSettings = auth('PROD_DATA:MANAGE');
 
   express.get(
     '/fte/settings',
@@ -107,14 +107,14 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
   function limitToDivision(req, res, next)
   {
-    var selector = req.rql.selector;
+    const selector = req.rql.selector;
 
     if (!Array.isArray(selector.args) || !selector.args.length)
     {
       return next();
     }
 
-    var divisionTerm = _.find(selector.args, function(term)
+    const divisionTerm = _.find(selector.args, function(term)
     {
       return term.name === 'eq' && term.args[0] === 'division';
     });
@@ -124,7 +124,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
       return next();
     }
 
-    var subdivisions = [];
+    const subdivisions = [];
 
     _.forEach(subdivisionsModule.models, function(subdivisionModel)
     {

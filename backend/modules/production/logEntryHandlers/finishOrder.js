@@ -9,7 +9,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     if (err)
     {
       productionModule.error(
-        "Failed to get the prod shift order [%s] to finish (LOG=[%s]): %s",
+        'Failed to get the prod shift order [%s] to finish (LOG=[%s]): %s',
         logEntry.data._id,
         logEntry._id,
         err.stack
@@ -33,7 +33,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       && prodShiftOrder.finishedAt <= Date.parse(logEntry.data.finishedAt))
     {
       productionModule.warn(
-        "Tried to finish an already finished prod shift order [%s] (LOG=[%s])",
+        'Tried to finish an already finished prod shift order [%s] (LOG=[%s])',
         logEntry.data._id,
         logEntry._id
       );
@@ -48,7 +48,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to recalculate durations of prod shift order [%s] (LOG=[%s]): %s",
+          'Failed to recalculate durations of prod shift order [%s] (LOG=[%s]): %s',
           prodShiftOrder._id,
           logEntry._id,
           err.stack
@@ -60,7 +60,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save prod shift order [%s] after changing the finish time (LOG=[%s]): %s",
+            'Failed to save prod shift order [%s] after changing the finish time (LOG=[%s]): %s',
             prodShiftOrder._id,
             logEntry._id,
             err.stack

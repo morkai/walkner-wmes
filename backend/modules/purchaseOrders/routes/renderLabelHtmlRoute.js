@@ -2,17 +2,17 @@
 
 'use strict';
 
-var format = require('util').format;
-var _ = require('lodash');
-var step = require('h5.step');
-var exec12 = require('../util/exec12').exec;
+const format = require('util').format;
+const _ = require('lodash');
+const step = require('h5.step');
+const exec12 = require('../util/exec12').exec;
 
 module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
 {
-  var express = app[poModule.config.expressId];
-  var mongoose = app[poModule.config.mongooseId];
-  var PurchaseOrder = mongoose.model('PurchaseOrder');
-  var PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
+  const express = app[poModule.config.expressId];
+  const mongoose = app[poModule.config.mongooseId];
+  const PurchaseOrder = mongoose.model('PurchaseOrder');
+  const PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
 
   step(
     function findPoPrintsStep()
@@ -56,9 +56,9 @@ module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
 
       _.forEach(poPrints, function(poPrint)
       {
-        var itemNo = String(+poPrint.item);
+        const itemNo = String(+poPrint.item);
 
-        for (var i = 0; i < poPrint.packageQty; ++i)
+        for (let i = 0; i < poPrint.packageQty; ++i)
         {
           req.query.orderNo.push(poPrint.purchaseOrder);
           req.query.nc12.push(poPrint.nc12);
@@ -86,7 +86,7 @@ module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
       this.barcodeType = PurchaseOrder.BARCODES[this.barcode];
       this.barcodeOptions = PurchaseOrder.PAPERS[this.paper][this.barcode];
 
-      var query = req.query;
+      const query = req.query;
 
       _.forEach(['orderNo', 'nc12', 'quantity', 'itemNo', 'vendorNo', 'shippingNo'], function(param)
       {
@@ -99,7 +99,7 @@ module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
       this.barcodeDataToPng = {};
       this.pages = _.map(query.orderNo, (orderNo, i) =>
       {
-        var page = {
+        const page = {
           orderNo: orderNo || '',
           nc12: query.nc12[i] || '',
           quantity: query.quantity[i] || '',
@@ -110,7 +110,7 @@ module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
           png: null
         };
 
-        var barcodeData = format('O%sP%sQ%sL%sS', page.orderNo, page.nc12, page.quantity, page.itemNo);
+        let barcodeData = format('O%sP%sQ%sL%sS', page.orderNo, page.nc12, page.quantity, page.itemNo);
 
         if (barcodeData.length + page.shippingNo.length > this.barcodeOptions.maxLength)
         {
@@ -133,7 +133,7 @@ module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
     },
     function generateBarcodesStep()
     {
-      for (var i = 0, l = this.uniqueBarcodes.length; i < l; ++i)
+      for (let i = 0, l = this.uniqueBarcodes.length; i < l; ++i)
       {
         generateBarcode(
           poModule.config.zintExe,
@@ -166,7 +166,7 @@ module.exports = function renderLabelHtmlRoute(app, poModule, req, res, next)
 
 function generateBarcode(zintExe, barcodeType, barcodeOptions, barcodeData, done)
 {
-  var cmd = format(
+  const cmd = format(
     '"%s" --barcode=%d %s --notext --directpng --data="%s"',
     zintExe,
     barcodeType,

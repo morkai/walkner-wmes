@@ -2,17 +2,17 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var ProdDowntime = mongoose.model('ProdDowntime');
+  const mongoose = app[productionModule.config.mongooseId];
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const ProdDowntime = mongoose.model('ProdDowntime');
 
-  var changes = logEntry.data;
-  var personnelChanged = changes.master !== undefined
+  const changes = logEntry.data;
+  const personnelChanged = changes.master !== undefined
     || changes.leader !== undefined
     || changes.operator !== undefined
     || changes.operators !== undefined;
@@ -33,7 +33,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find models while editing shift [%s] (LOG=[%s]): %s",
+          'Failed to find models while editing shift [%s] (LOG=[%s]): %s',
           logEntry.prodShift,
           logEntry._id,
           err.stack
@@ -42,8 +42,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return this.done(done, err);
       }
 
-      var cachedProdShiftOrders = [];
-      var cachedProdDowntimes = [];
+      const cachedProdShiftOrders = [];
+      const cachedProdDowntimes = [];
 
       if (Array.isArray(prodShiftOrders))
       {
@@ -64,7 +64,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
       if (personnelChanged)
       {
-        var personnelChanges = {};
+        const personnelChanges = {};
 
         _.forEach(['master', 'leader', 'operator', 'operators'], function(personnelProperty)
         {
@@ -74,7 +74,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           }
         });
 
-        var step = this;
+        const step = this;
 
         _.forEach(prodShiftOrders, function(prodShiftOrder)
         {

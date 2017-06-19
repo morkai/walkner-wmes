@@ -4,12 +4,12 @@
 
 module.exports = function setUpAorsRoutes(app, aorsModule, useDictionaryModel)
 {
-  var express = app[aorsModule.config.expressId];
-  var auth = app[aorsModule.config.userId].auth;
-  var Aor = app[aorsModule.config.mongooseId].model('Aor');
+  const express = app[aorsModule.config.expressId];
+  const auth = app[aorsModule.config.userId].auth;
+  const Aor = app[aorsModule.config.mongooseId].model('Aor');
 
-  var canView = auth('DICTIONARIES:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/aors', canView, express.crud.browseRoute.bind(null, app, Aor));
 

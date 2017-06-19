@@ -86,7 +86,7 @@ exports.start = function startOrderDocumentsModule(app, module)
       {
         if (err)
         {
-          return module.error("Failed to find settings: %s", err.message);
+          return module.error('Failed to find settings: %s', err.message);
         }
 
         module.settings.useCatalog = !!settings.useCatalog;
@@ -164,7 +164,7 @@ exports.start = function startOrderDocumentsModule(app, module)
 
     _.forEach(rawValue.split('\n'), function(line)
     {
-      var matches = line.match(/([0-9]{15})\s+(.*?)$/);
+      const matches = line.match(/([0-9]{15})\s+(.*?)$/);
 
       if (matches)
       {
@@ -236,7 +236,7 @@ exports.start = function startOrderDocumentsModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to remove old clients: %s", err.message);
+        module.error('Failed to remove old clients: %s', err.message);
       }
 
       setTimeout(removeOldClients, 24 * 3600 * 1000);

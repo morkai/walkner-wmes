@@ -2,10 +2,10 @@
 
 'use strict';
 
-var fs = require('fs');
-var zlib = require('zlib');
-var step = require('h5.step');
-var request = require('request');
+const fs = require('fs');
+const zlib = require('zlib');
+const step = require('h5.step');
+const request = require('request');
 
 exports.DEFAULT_CONFIG = {
   maxConcurrentUploads: 5,
@@ -15,8 +15,8 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startXiconfOrderExporterModule(app, module)
 {
-  var filePathCache = {};
-  var exportQueue = [];
+  const filePathCache = {};
+  const exportQueue = [];
 
   app.broker.subscribe('directoryWatcher.changed', exportFile).setFilter(filterFile);
 
@@ -27,7 +27,7 @@ exports.start = function startXiconfOrderExporterModule(app, module)
       return false;
     }
 
-    var matches = fileInfo.fileName.match(module.config.filterRe);
+    const matches = fileInfo.fileName.match(module.config.filterRe);
 
     if (matches === null)
     {
@@ -43,7 +43,7 @@ exports.start = function startXiconfOrderExporterModule(app, module)
   {
     if (Object.keys(filePathCache).length >= module.config.maxConcurrentUploads)
     {
-      module.debug("Delaying export of: %s", fileInfo.fileName);
+      module.debug('Delaying export of: %s', fileInfo.fileName);
 
       exportQueue.push(fileInfo);
 
@@ -52,7 +52,7 @@ exports.start = function startXiconfOrderExporterModule(app, module)
 
     filePathCache[fileInfo.filePath] = true;
 
-    module.debug("Exporting: %s", fileInfo.fileName);
+    module.debug('Exporting: %s', fileInfo.fileName);
 
     step(
       function readFileStep()
@@ -75,7 +75,7 @@ exports.start = function startXiconfOrderExporterModule(app, module)
           return this.skip(err);
         }
 
-        var requestOptions = {
+        const requestOptions = {
           url: module.config.uploadUrl,
           method: 'POST',
           headers: {
@@ -101,14 +101,14 @@ exports.start = function startXiconfOrderExporterModule(app, module)
 
         if (res.statusCode !== 204)
         {
-          return this.skip(new Error("Server returned status code " + res.statusCode + "."));
+          return this.skip(new Error('Server returned status code ' + res.statusCode + '.'));
         }
       },
       function cleanUpStep(err)
       {
         if (err)
         {
-          module.error("Failed to export [%s]: %s", fileInfo.fileName, err.message);
+          module.error('Failed to export [%s]: %s', fileInfo.fileName, err.message);
 
           delete filePathCache[fileInfo.filePath];
 
@@ -116,13 +116,13 @@ exports.start = function startXiconfOrderExporterModule(app, module)
         }
         else
         {
-          module.info("Exported: %s", fileInfo.fileName);
+          module.info('Exported: %s', fileInfo.fileName);
 
           fs.unlink(fileInfo.filePath, function(err)
           {
             if (err)
             {
-              module.error("Failed to delete file [%s]: %s", fileInfo.filePath, err.message);
+              module.error('Failed to delete file [%s]: %s', fileInfo.filePath, err.message);
             }
 
             delete filePathCache[fileInfo.filePath];
@@ -136,11 +136,11 @@ exports.start = function startXiconfOrderExporterModule(app, module)
 
   function exportNext()
   {
-    var currentUploadsCount = Object.keys(filePathCache).length;
-    var availableUploadsCount = module.config.maxConcurrentUploads - currentUploadsCount;
-    var toUploadCount = Math.min(availableUploadsCount, exportQueue.length);
+    const currentUploadsCount = Object.keys(filePathCache).length;
+    const availableUploadsCount = module.config.maxConcurrentUploads - currentUploadsCount;
+    const toUploadCount = Math.min(availableUploadsCount, exportQueue.length);
 
-    for (var i = 0; i < toUploadCount; ++i)
+    for (let i = 0; i < toUploadCount; ++i)
     {
       exportFile(exportQueue.shift());
     }

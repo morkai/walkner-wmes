@@ -2,29 +2,29 @@
 
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var _ = require('lodash');
-var step = require('h5.step');
-var multer = require('multer');
-var contentDisposition = require('content-disposition');
-var countReport = require('./countReport');
-var summaryReport = require('./summaryReport');
-var engagementReport = require('./engagementReport');
+const fs = require('fs');
+const path = require('path');
+const _ = require('lodash');
+const step = require('h5.step');
+const multer = require('multer');
+const contentDisposition = require('content-disposition');
+const countReport = require('./countReport');
+const summaryReport = require('./summaryReport');
+const engagementReport = require('./engagementReport');
 
 module.exports = function setUpSuggestionsRoutes(app, module)
 {
-  var express = app[module.config.expressId];
-  var userModule = app[module.config.userId];
-  var mongoose = app[module.config.mongooseId];
-  var reportsModule = app[module.config.reportsId];
-  var kaizenModule = app[module.config.kaizenId];
-  var Suggestion = mongoose.model('Suggestion');
+  const express = app[module.config.expressId];
+  const userModule = app[module.config.userId];
+  const mongoose = app[module.config.mongooseId];
+  const reportsModule = app[module.config.reportsId];
+  const kaizenModule = app[module.config.kaizenId];
+  const Suggestion = mongoose.model('Suggestion');
 
-  var tmpAttachments = {};
+  const tmpAttachments = {};
 
-  var canView = userModule.auth('LOCAL', 'USER');
-  var canManage = userModule.auth('USER');
+  const canView = userModule.auth('LOCAL', 'USER');
+  const canManage = userModule.auth('USER');
 
   express.get('/suggestions/stats', canView, statsRoute);
 
@@ -84,7 +84,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   function prepareObserverFilter(req, res, next)
   {
-    var observer = req.query['observers.user.id'];
+    const observer = req.query['observers.user.id'];
 
     if (observer !== 'mine' && observer !== 'unseen')
     {
@@ -120,7 +120,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   function prepareForAdd(req, res, next)
   {
-    var body = req.body;
+    const body = req.body;
 
     body.creator = userModule.createUserInfo(req.session.user, req);
     body.creator.id = body.creator.id.toString();
@@ -132,7 +132,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   function findByRidRoute(req, res, next)
   {
-    var rid = parseInt(req.query.rid, 10);
+    const rid = parseInt(req.query.rid, 10);
 
     if (isNaN(rid) || rid <= 0)
     {
@@ -157,7 +157,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   function redirectToListRoute(req, res)
   {
-    var url = '/#suggestions';
+    let url = '/#suggestions';
 
     if (req.params.filter === 'mine')
     {
@@ -195,23 +195,23 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   function editSuggestionRoute(req, res, next)
   {
-    var user = req.session.user;
-    var body = req.body;
+    const user = req.session.user;
+    let body = req.body;
 
     if (!user.loggedIn)
     {
       body = _.pick(body, 'comment');
     }
 
-    var newAttachmentList = prepareAttachments(body.attachments);
-    var newAttachmentMap = {};
+    const newAttachmentList = prepareAttachments(body.attachments);
+    const newAttachmentMap = {};
 
     _.forEach(newAttachmentList, function(attachment)
     {
       newAttachmentMap[attachment.description] = attachment;
     });
 
-    var updater = userModule.createUserInfo(user, req);
+    const updater = userModule.createUserInfo(user, req);
     updater.id = updater.id.toString();
 
     step(
@@ -268,11 +268,11 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   function uploadAttachmentsRoute(req, res)
   {
-    var attachments = [];
+    const attachments = [];
 
     _.forEach(req.files, function(file)
     {
-      var id = file.filename.replace(/\..*?$/, '');
+      const id = file.filename.replace(/\..*?$/, '');
 
       tmpAttachments[id] = {
         data: {
@@ -306,12 +306,12 @@ module.exports = function setUpSuggestionsRoutes(app, module)
         return res.sendStatus(404);
       }
 
-      var attachment;
-      var changeIndex = parseInt(req.query.change, 10);
+      let attachment;
+      const changeIndex = parseInt(req.query.change, 10);
 
       if (!isNaN(changeIndex))
       {
-        var change = suggestion.changes[Math.abs(changeIndex)];
+        const change = suggestion.changes[Math.abs(changeIndex)];
 
         if (change && change.data.attachments)
         {
@@ -334,7 +334,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
         return res.sendStatus(404);
       }
 
-      var disposition = req.query.download ? 'attachment' : 'inline';
+      const disposition = req.query.download ? 'attachment' : 'inline';
 
       res.type(attachment.type);
       res.append('Content-Disposition', contentDisposition(attachment.name, {disposition: disposition}));
@@ -344,11 +344,11 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   function mergeAttachments(suggestion, newAttachmentMap)
   {
-    var attachments = [];
+    const attachments = [];
 
     _.forEach(suggestion.attachments, function(oldAttachment)
     {
-      var newAttachment = newAttachmentMap[oldAttachment.description];
+      const newAttachment = newAttachmentMap[oldAttachment.description];
 
       if (newAttachment)
       {
@@ -367,7 +367,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
       attachments.push(newAttachment);
     });
 
-    var sortOrder = {
+    const sortOrder = {
       scan: 1,
       before: 2,
       after: 3
@@ -390,7 +390,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
         return null;
       }
 
-      var attachment = tmpAttachments[id];
+      const attachment = tmpAttachments[id];
 
       if (!attachment)
       {
@@ -403,10 +403,10 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
       return attachment.data;
     })
-    .filter(function(attachment)
-    {
-      return attachment !== null;
-    });
+      .filter(function(attachment)
+      {
+        return attachment !== null;
+      });
   }
 
   function removeAttachmentFile(filePath)
@@ -453,7 +453,7 @@ module.exports = function setUpSuggestionsRoutes(app, module)
     step(
       function findStep()
       {
-        var step = this;
+        const step = this;
 
         _.forEach(kaizenModule.DICTIONARIES, function(modelName)
         {
@@ -489,8 +489,8 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   function exportSuggestion(doc, req)
   {
-    var dict = req.kaizenDictionaries;
-    var result = {
+    const dict = req.kaizenDictionaries;
+    const result = {
       '#rid': doc.rid
     };
 
@@ -529,8 +529,8 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   function countReportRoute(req, res, next)
   {
-    var query = req.query;
-    var options = {
+    const query = req.query;
+    const options = {
       fromTime: reportsModule.helpers.getTime(query.from) || null,
       toTime: reportsModule.helpers.getTime(query.to) || null,
       interval: query.interval,
@@ -560,8 +560,8 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   function summaryReportRoute(req, res, next)
   {
-    var query = req.query;
-    var options = {
+    const query = req.query;
+    const options = {
       fromTime: reportsModule.helpers.getTime(query.from) || null,
       toTime: reportsModule.helpers.getTime(query.to) || null,
       section: _.isEmpty(query.section) ? [] : query.section.split(','),
@@ -591,8 +591,8 @@ module.exports = function setUpSuggestionsRoutes(app, module)
 
   function engagementReportRoute(req, res, next)
   {
-    var query = req.query;
-    var options = {
+    const query = req.query;
+    const options = {
       interval: query.interval || 'year',
       fromTime: reportsModule.helpers.getTime(query.from) || null,
       toTime: reportsModule.helpers.getTime(query.to) || null,

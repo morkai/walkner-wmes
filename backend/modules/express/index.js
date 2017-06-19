@@ -82,7 +82,7 @@ exports.start = function startExpressModule(app, expressModule, done)
 
   expressModule.createHttpError = function(message, statusCode)
   {
-    var httpError = new Error(message);
+    const httpError = new Error(message);
     httpError.status = statusCode || 400;
 
     return httpError;
@@ -190,7 +190,7 @@ exports.start = function startExpressModule(app, expressModule, done)
         expressApp.use(pmx.expressErrorHandler());
       }
 
-      var errorHandlerOptions = {
+      const errorHandlerOptions = {
         title: config.title,
         basePath: path.resolve(__dirname, '../../../')
       };

@@ -2,35 +2,35 @@
 
 'use strict';
 
-var format = require('util').format;
-var exec = require('child_process').exec;
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
-var resolveProductName = require('../../util/resolveProductName');
+const format = require('util').format;
+const exec = require('child_process').exec;
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
+const resolveProductName = require('../../util/resolveProductName');
 
 module.exports = function renderHtmlOrderRoute(app, ordersModule, req, res, next)
 {
-  var DATE_FORMAT = 'DD.MM.YYYY';
-  var EXTRA_ROWS = {
+  const DATE_FORMAT = 'DD.MM.YYYY';
+  const EXTRA_ROWS = {
     Firefox: 1,
     Edge: 1,
     Trident: 1,
     wkhtmltopdf: 19
   };
-  var USER_AGENT_RE = new RegExp('(' + _.keys(EXTRA_ROWS).join('|') + ')');
+  const USER_AGENT_RE = new RegExp('(' + _.keys(EXTRA_ROWS).join('|') + ')');
 
-  var express = app[ordersModule.config.expressId];
-  var Order = app[ordersModule.config.mongooseId].model('Order');
+  const express = app[ordersModule.config.expressId];
+  const Order = app[ordersModule.config.mongooseId].model('Order');
 
-  var orderNos = req.params.id.split(/[^0-9]/).filter(function(d) { return !!d.length; });
+  const orderNos = req.params.id.split(/[^0-9]/).filter(function(d) { return !!d.length; });
 
   if (!orderNos.length)
   {
     return next(express.createHttpError('INVALID_ORDER_NO'));
   }
 
-  var templateData = {
+  const templateData = {
     dateCreated: moment().format(DATE_FORMAT),
     orders: null
   };
@@ -52,14 +52,14 @@ module.exports = function renderHtmlOrderRoute(app, ordersModule, req, res, next
         return this.skip(express.createHttpError('ORDER_NOT_FOUND'), 404);
       }
 
-      var orderMap = {};
+      const orderMap = {};
 
       _.forEach(orders, function(order) { orderMap[order._id] = order; });
 
-      var userAgent = req.headers['user-agent'] || '';
-      var extraRows = EXTRA_ROWS[(userAgent.match(USER_AGENT_RE) || [null, 'Chrome'])[1]] || 0;
+      const userAgent = req.headers['user-agent'] || '';
+      const extraRows = EXTRA_ROWS[(userAgent.match(USER_AGENT_RE) || [null, 'Chrome'])[1]] || 0;
 
-      for (var i = 0; i < orderNos.length; ++i)
+      for (let i = 0; i < orderNos.length; ++i)
       {
         prepareOrderTemplateData(extraRows, orderMap[orderNos[i]], this.group());
       }
@@ -79,7 +79,7 @@ module.exports = function renderHtmlOrderRoute(app, ordersModule, req, res, next
 
   function prepareOrderTemplateData(extraRows, order, done)
   {
-    var orderTemplateData = {
+    const orderTemplateData = {
       qrCode: null,
       order: null,
       pages: null
@@ -88,7 +88,7 @@ module.exports = function renderHtmlOrderRoute(app, ordersModule, req, res, next
     step(
       function prepareTemplateDataStep()
       {
-        var operations = (order.operations || []).map(function(operation)
+        const operations = (order.operations || []).map(function(operation)
         {
           return {
             no: operation.no,
@@ -103,7 +103,7 @@ module.exports = function renderHtmlOrderRoute(app, ordersModule, req, res, next
           };
         });
 
-        var documents = (order.documents || []).map(function(document)
+        const documents = (order.documents || []).map(function(document)
         {
           return {
             no: document.item || '0000',
@@ -112,9 +112,9 @@ module.exports = function renderHtmlOrderRoute(app, ordersModule, req, res, next
           };
         });
 
-        var components = (order.bom || []).map(function(component)
+        const components = (order.bom || []).map(function(component)
         {
-          var qty = component.qty;
+          let qty = component.qty;
 
           if (component.nc12)
           {
@@ -151,7 +151,7 @@ module.exports = function renderHtmlOrderRoute(app, ordersModule, req, res, next
       },
       function generateBarcodesStep()
       {
-        var qrCodeData = format(
+        const qrCodeData = format(
           '%s %s %s %s',
           orderTemplateData.order.no,
           orderTemplateData.order.material,
@@ -165,7 +165,7 @@ module.exports = function renderHtmlOrderRoute(app, ordersModule, req, res, next
       {
         if (err)
         {
-          ordersModule.error("Failed to generate barcodes: %s", err.message);
+          ordersModule.error('Failed to generate barcodes: %s', err.message);
         }
 
         orderTemplateData.qrCode = qrCode || null;
@@ -190,9 +190,9 @@ function formatNumber(n)
     return [0, 0];
   }
 
-  var str = (Math.round(n * 1000) / 1000).toString().split('.');
-  var integer = str[0];
-  var decimals = str.length === 1 ? '000' : str[1];
+  const str = (Math.round(n * 1000) / 1000).toString().split('.');
+  const integer = str[0];
+  let decimals = str.length === 1 ? '000' : str[1];
 
   while (decimals.length < 3)
   {
@@ -204,17 +204,17 @@ function formatNumber(n)
 
 function buildPages(extraRows, remainingOperations, remainingDocuments, remainingComponents)
 {
-  var pages = [];
+  const pages = [];
 
   while (remainingOperations.length || remainingDocuments.length || remainingComponents.length)
   {
     pages.push(buildPage(pages.length + 1, extraRows, remainingOperations, remainingDocuments, remainingComponents));
   }
 
-  for (var p = 1; p < pages.length; ++p)
+  for (let p = 1; p < pages.length; ++p)
   {
-    var previousPage = pages[p - 1];
-    var currentPage = pages[p];
+    const previousPage = pages[p - 1];
+    const currentPage = pages[p];
 
     currentPage.continuation.operations = previousPage.operations.length > 0;
     currentPage.continuation.documents = previousPage.documents.length > 0;
@@ -226,7 +226,7 @@ function buildPages(extraRows, remainingOperations, remainingDocuments, remainin
 
 function buildPage(pageNo, extraRows, remainingOperations, remainingDocuments, remainingComponents)
 {
-  var page = {
+  const page = {
     no: pageNo,
     operations: [],
     documents: [],
@@ -237,15 +237,15 @@ function buildPage(pageNo, extraRows, remainingOperations, remainingDocuments, r
       components: false
     }
   };
-  var pageHeaderHeight   = 0  + 27 + 0;
-  var orderSummaryHeight = 10 + 80 + 10;
-  var orderExtraHeight   = 4  + 37 + 10;
-  var sectionTitleHeight = 20 + 16 + 6;
-  var sectionTheadHeight = 0  + 12 + 0;
-  var sectionRowHeight   = 6  + 12 + 0;
-  var minSectionHeight = sectionTitleHeight + sectionTheadHeight + sectionRowHeight;
-  var pageHeight = 960;
-  var remainingPageHeight = pageHeight - pageHeaderHeight - orderSummaryHeight + extraRows * sectionRowHeight;
+  const pageHeaderHeight = 0 + 27 + 0;
+  const orderSummaryHeight = 10 + 80 + 10;
+  const orderExtraHeight = 4 + 37 + 10;
+  const sectionTitleHeight = 20 + 16 + 6;
+  const sectionTheadHeight = 0 + 12 + 0;
+  const sectionRowHeight = 6 + 12 + 0;
+  const minSectionHeight = sectionTitleHeight + sectionTheadHeight + sectionRowHeight;
+  const pageHeight = 960;
+  let remainingPageHeight = pageHeight - pageHeaderHeight - orderSummaryHeight + extraRows * sectionRowHeight;
 
   if (pageNo === 1)
   {
@@ -293,7 +293,7 @@ function buildPage(pageNo, extraRows, remainingOperations, remainingDocuments, r
 
 function generateQrCode(zintExe, data, done)
 {
-  var cmd = format('"%s" --barcode=58 --vers=5 --scale=1 --notext --directpng --data="%s"', zintExe, data);
+  const cmd = format('"%s" --barcode=58 --vers=5 --scale=1 --notext --directpng --data="%s"', zintExe, data);
 
   exec(cmd, {encoding: 'buffer'}, function(err, stdout)
   {

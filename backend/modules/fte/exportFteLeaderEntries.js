@@ -2,17 +2,17 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function exportFteLeaderEntries(app, subdivisionsModule, queryStream, emitter)
 {
-  var docs = [];
-  var functionMap = {};
-  var functionList = [];
-  var companyMap = {};
-  var companyList = [];
-  var divisionMap = {};
-  var divisionList = [];
+  const docs = [];
+  let functionMap = {};
+  let functionList = [];
+  let companyMap = {};
+  let companyList = [];
+  let divisionMap = {};
+  let divisionList = [];
 
   queryStream.on('error', emitter.emit.bind(emitter, 'error'));
 
@@ -45,7 +45,7 @@ module.exports = function exportFteLeaderEntries(app, subdivisionsModule, queryS
 
   function handleTask(task)
   {
-    var taskFunctionMap = {};
+    const taskFunctionMap = {};
 
     if (Array.isArray(task.companies) && task.companies.length)
     {
@@ -68,7 +68,7 @@ module.exports = function exportFteLeaderEntries(app, subdivisionsModule, queryS
     functionMap[taskFunction.id] = true;
     taskFunctionMap[taskFunction.id] = taskFunction;
 
-    var taskCompanyMap = {};
+    const taskCompanyMap = {};
 
     taskFunction.total = 0;
 
@@ -85,7 +85,7 @@ module.exports = function exportFteLeaderEntries(app, subdivisionsModule, queryS
       {
         taskCompany.total = 0;
 
-        var taskDivisionMap = {};
+        const taskDivisionMap = {};
 
         _.forEach(taskCompany.count, function(taskDivision)
         {
@@ -104,7 +104,7 @@ module.exports = function exportFteLeaderEntries(app, subdivisionsModule, queryS
 
   function tryExportNext()
   {
-    var i = 0;
+    let i = 0;
 
     while (i++ < 25 && docs.length > 0)
     {
@@ -123,16 +123,16 @@ module.exports = function exportFteLeaderEntries(app, subdivisionsModule, queryS
 
   function exportNext(doc)
   {
-    var date = app.formatDate(doc.date);
-    var subdivision = subdivisionsModule.modelsById[doc.subdivision];
-    var division = subdivision ? subdivision.division : '?';
+    const date = app.formatDate(doc.date);
+    let subdivision = subdivisionsModule.modelsById[doc.subdivision];
+    const division = subdivision ? subdivision.division : '?';
 
     subdivision = subdivision ? subdivision.name : doc.subdivision;
 
-    for (var i = 0, l = doc.tasks.length; i < l; ++i)
+    for (let i = 0, l = doc.tasks.length; i < l; ++i)
     {
-      var task = doc.tasks[i];
-      var row = {
+      const task = doc.tasks[i];
+      const row = {
         '"division': division,
         '"subdivision': subdivision,
         'date': date,
@@ -152,39 +152,39 @@ module.exports = function exportFteLeaderEntries(app, subdivisionsModule, queryS
 
 function exportCountColumns(row, task, functionList, companyList, divisionList)
 {
-  var functionCount = functionList.length;
-  var companyCount = companyList.length;
-  var divisionCount = divisionList.length;
-  var taskFunction;
-  var functionId;
-  var companyId;
-  var divisionId;
+  const functionCount = functionList.length;
+  const companyCount = companyList.length;
+  const divisionCount = divisionList.length;
+  let taskFunction;
+  let functionId;
+  let companyId;
+  let divisionId;
 
-  for (var i = 0; i < functionCount; ++i)
+  for (let i = 0; i < functionCount; ++i)
   {
     functionId = functionList[i];
     taskFunction = task.functions[functionId];
 
-    var functionColumn = '#' + functionId;
+    const functionColumn = '#' + functionId;
 
     row[functionColumn] = taskFunction === undefined ? 0 : taskFunction.total;
 
-    for (var ii = 0; ii < companyCount; ++ii)
+    for (let ii = 0; ii < companyCount; ++ii)
     {
       companyId = companyList[ii];
 
-      var companyColumn = functionColumn + '[' + companyId + ']';
+      const companyColumn = functionColumn + '[' + companyId + ']';
 
-      row[companyColumn] =
-        taskFunction === undefined || taskFunction.companies[companyId] === undefined
+      row[companyColumn]
+        = taskFunction === undefined || taskFunction.companies[companyId] === undefined
           ? 0
           : taskFunction.companies[companyId].total;
 
-      for (var iii = 0; iii < divisionCount; ++iii)
+      for (let iii = 0; iii < divisionCount; ++iii)
       {
         divisionId = divisionList[iii];
 
-        var divisionColumn = companyColumn + '[' + divisionId + ']';
+        const divisionColumn = companyColumn + '[' + divisionId + ']';
 
         row[divisionColumn] = getDivisionCount(taskFunction, companyId, divisionId);
       }
@@ -199,7 +199,7 @@ function getDivisionCount(taskFunction, companyId, divisionId)
     return 0;
   }
 
-  var taskCompany = taskFunction.companies[companyId];
+  const taskCompany = taskFunction.companies[companyId];
 
   if (taskCompany === undefined)
   {

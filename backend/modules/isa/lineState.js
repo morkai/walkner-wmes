@@ -2,26 +2,26 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var uuid = require('uuid/v4');
+const _ = require('lodash');
+const step = require('h5.step');
+const uuid = require('uuid/v4');
 
 module.exports = function setUpIsaLineState(app, isaModule)
 {
-  var mongoose = app[isaModule.config.mongooseId];
-  var orgUnitsModule = app[isaModule.config.orgUnitsId];
-  var userModule = app[isaModule.config.userId];
+  const mongoose = app[isaModule.config.mongooseId];
+  const orgUnitsModule = app[isaModule.config.orgUnitsId];
+  const userModule = app[isaModule.config.userId];
 
-  var User = mongoose.model('User');
-  var IsaEvent = mongoose.model('IsaEvent');
-  var IsaRequest = mongoose.model('IsaRequest');
-  var IsaPalletKind = mongoose.model('IsaPalletKind');
+  const User = mongoose.model('User');
+  const IsaEvent = mongoose.model('IsaEvent');
+  const IsaRequest = mongoose.model('IsaRequest');
+  const IsaPalletKind = mongoose.model('IsaPalletKind');
 
-  var loaded = false;
-  var idToRequestMap = {};
-  var lineToRequestsMap = {};
-  var lockMap = {};
-  var actionHandlers = {};
+  let loaded = false;
+  const idToRequestMap = {};
+  const lineToRequestsMap = {};
+  const lockMap = {};
+  const actionHandlers = {};
 
   app.broker.subscribe('app.started', loadActiveRequests);
   app.broker.subscribe('isaRequests.created.**', mapNewRequest);
@@ -87,11 +87,11 @@ module.exports = function setUpIsaLineState(app, isaModule)
 
     return function()
     {
-      var callbacks = lockMap[key];
+      const callbacks = lockMap[key];
 
       lockMap[key] = null;
 
-      for (var i = 0; i < callbacks.length; ++i)
+      for (let i = 0; i < callbacks.length; ++i)
       {
         callbacks[i].apply(null, arguments);
       }
@@ -100,7 +100,7 @@ module.exports = function setUpIsaLineState(app, isaModule)
 
   function loadActiveRequests()
   {
-    var t = Date.now();
+    const t = Date.now();
 
     step(
       function()
@@ -115,7 +115,7 @@ module.exports = function setUpIsaLineState(app, isaModule)
 
         app.broker.publish('isaRequests.loaded');
 
-        isaModule.debug("Loaded in %d ms.", Date.now() - t);
+        isaModule.debug('Loaded in %d ms.', Date.now() - t);
       }
     );
   }
@@ -156,7 +156,7 @@ module.exports = function setUpIsaLineState(app, isaModule)
     {
       if (err)
       {
-        isaModule.error("Failed to save event [%s]: %s", event.type, err.message);
+        isaModule.error('Failed to save event [%s]: %s', event.type, err.message);
       }
     });
   }
@@ -170,7 +170,7 @@ module.exports = function setUpIsaLineState(app, isaModule)
       return setImmediate(done, app.createError('UNKNOWN_ACTION', 400));
     }
 
-    var releaseLock = acquireLock(
+    const releaseLock = acquireLock(
       prodLineId,
       updateActiveRequest.bind(null, prodLineId, action, parameters, userData, done),
       false
@@ -281,7 +281,7 @@ module.exports = function setUpIsaLineState(app, isaModule)
           return this.skip(app.createError('UNKNOWN_PALLET_KIND', 400));
         }
 
-        var data = {
+        const data = {
           qty: parameters.qty || 8,
           palletKind: {
             id: palletKind._id.toString(),
@@ -312,14 +312,14 @@ module.exports = function setUpIsaLineState(app, isaModule)
 
   actionHandlers.cancelRequest = function(prodLineId, parameters, userData, done)
   {
-    var request = idToRequestMap[parameters.requestId];
+    const request = idToRequestMap[parameters.requestId];
 
     if (!request)
     {
       return done(app.createError('UNKNOWN_REQUEST', 400));
     }
 
-    var prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
+    const prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
 
     if (!prodLine)
     {
@@ -386,7 +386,7 @@ module.exports = function setUpIsaLineState(app, isaModule)
       return done(app.createError('AUTH', 403));
     }
 
-    var request = idToRequestMap[parameters.requestId];
+    const request = idToRequestMap[parameters.requestId];
 
     if (!request)
     {
@@ -453,7 +453,7 @@ module.exports = function setUpIsaLineState(app, isaModule)
 
   actionHandlers.finishRequest = function(prodLineId, parameters, userData, done)
   {
-    var prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
+    const prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
 
     if (!prodLine)
     {
@@ -466,7 +466,7 @@ module.exports = function setUpIsaLineState(app, isaModule)
       return done(app.createError('AUTH', 403));
     }
 
-    var request = idToRequestMap[parameters.requestId];
+    const request = idToRequestMap[parameters.requestId];
 
     if (!request)
     {

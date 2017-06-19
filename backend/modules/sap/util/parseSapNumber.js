@@ -4,7 +4,7 @@
 
 module.exports = function parseSapNumber(input)
 {
-  var output = parseFloat(String(input).replace(/\./g, '').replace(/\s+/g, '').replace(',', '.'));
+  const output = parseFloat(String(input).replace(/\./g, '').replace(/\s+/g, '').replace(',', '.'));
 
   return isNaN(output) ? -1 : output;
 };

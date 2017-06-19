@@ -2,19 +2,19 @@
 
 'use strict';
 
-var step = require('h5.step');
+const step = require('h5.step');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var ProdShift = mongoose.model('ProdShift');
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var ProdDowntime = mongoose.model('ProdDowntime');
+  const mongoose = app[productionModule.config.mongooseId];
+  const ProdShift = mongoose.model('ProdShift');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const ProdDowntime = mongoose.model('ProdDowntime');
 
   step(
     function findOrdersAndDowntimesToFinishStep()
     {
-      var conditions = {
+      const conditions = {
         startedAt: {$gt: Date.now() - 7 * 24 * 3600 * 1000},
         prodLine: prodLine._id,
         finishedAt: null
@@ -28,7 +28,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         return productionModule.error(
-          "Failed to find unfinished orders and downtimes for prod line [%s] (LOG=[%s]): %s",
+          'Failed to find unfinished orders and downtimes for prod line [%s] (LOG=[%s]): %s',
           prodLine._id,
           logEntry._id,
           err.stack
@@ -41,8 +41,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       }
 
       productionModule.debug(
-        "Finishing %d bugged prod shift orders and %d bugged prod downtimes for prod line [%s]"
-          + " (LOG=[%s])...",
+        'Finishing %d bugged prod shift orders and %d bugged prod downtimes for prod line [%s]'
+          + ' (LOG=[%s])...',
         prodShiftOrders.length,
         prodDowntimes.length,
         prodLine._id,
@@ -52,14 +52,14 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       step(
         function()
         {
-          for (var i = 0, l = prodDowntimes.length; i < l; ++i)
+          for (let i = 0, l = prodDowntimes.length; i < l; ++i)
           {
             finishBugged('prod downtime', prodDowntimes[i], this.group());
           }
         },
         function()
         {
-          for (var i = 0, l = prodShiftOrders.length; i < l; ++i)
+          for (let i = 0, l = prodShiftOrders.length; i < l; ++i)
           {
             finishBugged('prod shift order', prodShiftOrders[i], this.group());
           }
@@ -76,18 +76,18 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         return productionModule.error(
-          "Failed to find shifts to recalc for prod line [%s] (LOG=[%s]): %s",
+          'Failed to find shifts to recalc for prod line [%s] (LOG=[%s]): %s',
           prodLine._id,
           logEntry._id,
           err.stack
         );
       }
 
-      var cachedProdShiftModels = [];
+      const cachedProdShiftModels = [];
 
       productionModule.swapToCachedProdData(prodShifts, cachedProdShiftModels);
 
-      for (var i = 0; i < cachedProdShiftModels.length; ++i)
+      for (let i = 0; i < cachedProdShiftModels.length; ++i)
       {
         cachedProdShiftModels[i].recalcTimes(this.group());
       }
@@ -97,14 +97,14 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to recalc shift times for prod line [%s] (LOG=[%s]): %s",
+          'Failed to recalc shift times for prod line [%s] (LOG=[%s]): %s',
           prodLine._id,
           logEntry._id,
           err.stack
         );
       }
 
-      var prodShift = new ProdShift(logEntry.data.startedProdShift);
+      const prodShift = new ProdShift(logEntry.data.startedProdShift);
 
       prodShift.save(this.next());
     },
@@ -113,7 +113,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err && err.code !== 11000)
       {
         productionModule.error(
-          "Failed to save a new prod shift [%s] for prod line [%s] (LOG=[%s]): %s",
+          'Failed to save a new prod shift [%s] for prod line [%s] (LOG=[%s]): %s',
           logEntry.prodShift,
           prodLine._id,
           logEntry._id,
@@ -144,7 +144,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (err)
         {
           productionModule.error(
-            "Failed to save prod line [%s] after changing the shift (LOG=[%s]): %s",
+            'Failed to save prod line [%s] after changing the shift (LOG=[%s]): %s',
             prodLine._id,
             logEntry._id,
             err.stack
@@ -158,7 +158,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
   function finishBugged(type, buggedProdModel, done)
   {
-    var _id = buggedProdModel._id;
+    const _id = buggedProdModel._id;
 
     productionModule.getProdData(null, _id, function(err, cachedProdModel)
     {
@@ -185,7 +185,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     if (err)
     {
       productionModule.error(
-        "Failed to save finished, bugged %s [%s] for prod line [%s] (LOG=[%s]): %s",
+        'Failed to save finished, bugged %s [%s] for prod line [%s] (LOG=[%s]): %s',
         type,
         prodModel._id,
         prodLine._id,
@@ -196,7 +196,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     else
     {
       productionModule.debug(
-        "Finished bugged %s [%s] in shift [%s] of prod line [%s] (LOG=[%s])",
+        'Finished bugged %s [%s] in shift [%s] of prod line [%s] (LOG=[%s])',
         type,
         prodModel._id,
         prodModel.prodShift,

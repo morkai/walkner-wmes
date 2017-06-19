@@ -2,21 +2,21 @@
 
 'use strict';
 
-var _ = require('lodash');
-var multer = require('multer');
-var helpers = require('./helpers');
-var exportRoute = require('./export');
+const _ = require('lodash');
+const multer = require('multer');
+const helpers = require('./helpers');
+const exportRoute = require('./export');
 
 module.exports = function setUpReportsRoutes(app, reportsModule)
 {
-  var express = app[reportsModule.config.expressId];
-  var userModule = app[reportsModule.config.userId];
-  var settings = app[reportsModule.config.settingsId];
+  const express = app[reportsModule.config.expressId];
+  const userModule = app[reportsModule.config.userId];
+  const settings = app[reportsModule.config.settingsId];
 
-  var downloads = {};
+  const downloads = {};
 
-  var canView = userModule.auth('REPORTS:*');
-  var canManage = userModule.auth('REPORTS:MANAGE');
+  const canView = userModule.auth('REPORTS:*');
+  const canManage = userModule.auth('REPORTS:MANAGE');
 
   if (_.includes(reportsModule.config.reports, '1'))
   {
@@ -30,7 +30,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
   if (_.includes(reportsModule.config.reports, '2'))
   {
-    var canViewReport2 = userModule.auth('REPORTS:VIEW', 'REPORTS:2:VIEW');
+    const canViewReport2 = userModule.auth('REPORTS:VIEW', 'REPORTS:2:VIEW');
 
     express.get(
       '/reports/2',
@@ -64,7 +64,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
   if (_.includes(reportsModule.config.reports, '4'))
   {
-    var canViewReport4 = userModule.auth('REPORTS:VIEW', 'REPORTS:4:VIEW');
+    const canViewReport4 = userModule.auth('REPORTS:VIEW', 'REPORTS:4:VIEW');
 
     express.get(
       '/reports/4',
@@ -165,7 +165,7 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
       return res.sendStatus(400);
     }
 
-    var key = (Date.now() + Math.random()).toString();
+    const key = (Date.now() + Math.random()).toString();
 
     downloads[key] = {
       filename: req.query.filename + '.csv',
@@ -178,14 +178,14 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
   express.get('/reports;download', function(req, res)
   {
-    var key = req.query.key;
+    const key = req.query.key;
 
     if (!key)
     {
       return res.sendStatus(400);
     }
 
-    var download = downloads[key];
+    const download = downloads[key];
 
     if (!download)
     {

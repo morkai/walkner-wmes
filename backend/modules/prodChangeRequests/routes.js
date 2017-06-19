@@ -2,24 +2,24 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
 {
-  var express = app[pcrModule.config.expressId];
-  var userModule = app[pcrModule.config.userId];
-  var mongoose = app[pcrModule.config.mongooseId];
-  var prodShiftsModule = app[pcrModule.config.prodShiftsId];
-  var prodShiftOrdersModule = app[pcrModule.config.prodShiftOrdersId];
-  var prodDowntimesModule = app[pcrModule.config.prodDowntimesId];
-  var fteModule = app[pcrModule.config.fteId];
-  var ProdShift = mongoose.model('ProdShift');
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var ProdDowntime = mongoose.model('ProdDowntime');
-  var ProdChangeRequest = mongoose.model('ProdChangeRequest');
+  const express = app[pcrModule.config.expressId];
+  const userModule = app[pcrModule.config.userId];
+  const mongoose = app[pcrModule.config.mongooseId];
+  const prodShiftsModule = app[pcrModule.config.prodShiftsId];
+  const prodShiftOrdersModule = app[pcrModule.config.prodShiftOrdersId];
+  const prodDowntimesModule = app[pcrModule.config.prodDowntimesId];
+  const fteModule = app[pcrModule.config.fteId];
+  const ProdShift = mongoose.model('ProdShift');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const ProdDowntime = mongoose.model('ProdDowntime');
+  const ProdChangeRequest = mongoose.model('ProdChangeRequest');
 
-  var TYPE_TO_OPERATION = {
+  const TYPE_TO_OPERATION = {
     shift: {
       add: prodShiftsModule.addProdShift,
       edit: prodShiftsModule.editProdShift,
@@ -43,9 +43,9 @@ module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
     }
   };
 
-  var canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW', 'PROD_DATA:CHANGES:REQUEST');
-  var canAdd = userModule.auth('PROD_DATA:CHANGES:REQUEST');
-  var canManage = userModule.auth('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:MANAGE');
+  const canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW', 'PROD_DATA:CHANGES:REQUEST');
+  const canAdd = userModule.auth('PROD_DATA:CHANGES:REQUEST');
+  const canManage = userModule.auth('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:MANAGE');
 
   express.get('/prodChangeRequests', canView, express.crud.browseRoute.bind(null, app, {
     model: ProdChangeRequest,
@@ -58,7 +58,7 @@ module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
 
   function prepareProdChangeRequests(totalCount, prodChangeRequests, done)
   {
-    var typeToProdData = {
+    const typeToProdData = {
       shift: {},
       order: {},
       downtime: {}
@@ -73,14 +73,14 @@ module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
         return;
       }
 
-      var modelIdToChangeRequestId = typeToProdData[prodChangeRequest.modelType];
+      const modelIdToChangeRequestId = typeToProdData[prodChangeRequest.modelType];
 
       if (!modelIdToChangeRequestId)
       {
         return;
       }
 
-      var modelId = prodChangeRequest.modelId;
+      const modelId = prodChangeRequest.modelId;
 
       if (!modelIdToChangeRequestId[modelId])
       {
@@ -93,9 +93,9 @@ module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
     step(
       function findRelatedModelsStep()
       {
-        var shiftIds = Object.keys(typeToProdData.shift);
-        var orderIds = Object.keys(typeToProdData.order);
-        var downtimeIds = Object.keys(typeToProdData.downtime);
+        const shiftIds = Object.keys(typeToProdData.shift);
+        const orderIds = Object.keys(typeToProdData.order);
+        const downtimeIds = Object.keys(typeToProdData.downtime);
 
         if (shiftIds.length)
         {
@@ -174,15 +174,15 @@ module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
 
   function confirmRoute(req, res, next)
   {
-    var newStatus = req.body.status;
+    const newStatus = req.body.status;
 
     if (newStatus !== 'accepted' && newStatus !== 'rejected')
     {
       return next(express.createHttpError('INPUT', 400));
     }
 
-    var user = req.session.user;
-    var userInfo = userModule.createUserInfo(user);
+    const user = req.session.user;
+    const userInfo = userModule.createUserInfo(user);
 
     step(
       function findProdChangeRequestStep()
@@ -208,7 +208,7 @@ module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
           return;
         }
 
-        var conditions = {
+        const conditions = {
           status: 'new',
           prodLine: prodChangeRequest.prodLine,
           createdAt: {$lt: prodChangeRequest.createdAt}
@@ -235,8 +235,8 @@ module.exports = function setUpProdChangeRequestsRoutes(app, pcrModule)
 
         if (newStatus === 'accepted')
         {
-          var prodChangeRequest = this.prodChangeRequest;
-          var executeOperation = TYPE_TO_OPERATION[prodChangeRequest.modelType][prodChangeRequest.operation];
+          const prodChangeRequest = this.prodChangeRequest;
+          const executeOperation = TYPE_TO_OPERATION[prodChangeRequest.modelType][prodChangeRequest.operation];
 
           if (!executeOperation)
           {

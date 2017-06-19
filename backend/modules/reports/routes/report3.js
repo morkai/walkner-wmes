@@ -2,13 +2,13 @@
 
 'use strict';
 
-var _ = require('lodash');
-var helpers = require('./helpers');
-var report3 = require('../report3');
+const _ = require('lodash');
+const helpers = require('./helpers');
+const report3 = require('../report3');
 
 module.exports = function report2Route(app, reportsModule, req, res, next)
 {
-  var options = {
+  const options = {
     fromTime: helpers.getTime(req.query.from),
     toTime: helpers.getTime(req.query.to),
     interval: req.query.interval || 'day',
@@ -36,11 +36,11 @@ module.exports = function report2Route(app, reportsModule, req, res, next)
 
 function getProdLinesInfo(orgUnitsModule)
 {
-  var prodLines = {};
+  const prodLines = {};
 
   _.forEach(orgUnitsModule.getAllByType('prodLine'), function(prodLine)
   {
-    var subdivision = orgUnitsModule.getSubdivisionFor(prodLine);
+    const subdivision = orgUnitsModule.getSubdivisionFor(prodLine);
 
     if (!subdivision)
     {

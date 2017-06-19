@@ -45,8 +45,8 @@ module.exports = function sendResultPdfRoute(app, module, req, res, next)
       p.on('error', next);
       p.on('exit', function(code)
       {
-        var err = code
-          ? new Error("wkhtmltopdf exit with code: " + code + "\n" + buffer.trim())
+        const err = code
+          ? new Error('wkhtmltopdf exit with code: ' + code + '\n' + buffer.trim())
           : null;
 
         next(err, outputFile);

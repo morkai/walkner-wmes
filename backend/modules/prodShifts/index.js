@@ -2,10 +2,10 @@
 
 'use strict';
 
-var addProdShift = require('./addProdShift');
-var editProdShift = require('./editProdShift');
-var deleteProdShift = require('./deleteProdShift');
-var setUpRoutes = require('./routes');
+const addProdShift = require('./addProdShift');
+const editProdShift = require('./editProdShift');
+const deleteProdShift = require('./deleteProdShift');
+const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',

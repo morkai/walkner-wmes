@@ -66,7 +66,7 @@ module.exports = function setUpAppStartedEventCheck(app, watchdogModule)
 
     _.forEach(events, function(event)
     {
-      var appId = event.data.id;
+      const appId = event.data.id;
 
       if (!restarts[appId])
       {

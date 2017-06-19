@@ -2,17 +2,17 @@
 
 'use strict';
 
-var exec = require('child_process').exec;
-var path = require('path');
-var fs = require('fs');
-var step = require('h5.step');
+const exec = require('child_process').exec;
+const path = require('path');
+const fs = require('fs');
+const step = require('h5.step');
 
 module.exports = function recognizeMarks(app, module, options, done)
 {
   step(
     function execOmrStep()
     {
-      var cmd = [
+      const cmd = [
         JSON.stringify(module.config.omrExe),
         '--dp', options.dp || 1,
         '--min-dist', options.minDist || 60,
@@ -53,13 +53,13 @@ module.exports = function recognizeMarks(app, module, options, done)
       {
         if (err.code === 'ENOENT')
         {
-          err.message = "Result JSON file not found.";
+          err.message = 'Result JSON file not found.';
         }
 
         return this.done(done, err);
       }
 
-      var result = null;
+      let result = null;
 
       try
       {
@@ -67,7 +67,7 @@ module.exports = function recognizeMarks(app, module, options, done)
       }
       catch (err)
       {
-        return this.done(done, new Error("Failed to parse the result JSON: " + err.message));
+        return this.done(done, new Error('Failed to parse the result JSON: ' + err.message));
       }
 
       return this.done(done, null, result);

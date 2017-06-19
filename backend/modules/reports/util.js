@@ -2,7 +2,7 @@
 
 'use strict';
 
-var moment = require('moment');
+const moment = require('moment');
 
 /**
  * @param {string} interval
@@ -10,7 +10,7 @@ var moment = require('moment');
  */
 exports.createCreateNextGroupKey = function(interval)
 {
-  var multiple = 1;
+  let multiple = 1;
 
   if (interval === 'shift')
   {
@@ -26,16 +26,16 @@ exports.createCreateNextGroupKey = function(interval)
 
 exports.createGroupKey = function(interval, date, useShifts)
 {
-  /*jshint -W015*/
+  /* jshint -W015*/
 
   if (useShifts !== false)
   {
     useShifts = true;
   }
 
-  var groupKey = moment(date);
-  var hours = groupKey.hours();
-  var dayOfMonth;
+  const groupKey = moment(date);
+  const hours = groupKey.hours();
+  let dayOfMonth;
 
   groupKey.minutes(0).seconds(0).milliseconds(0);
 
@@ -73,7 +73,7 @@ exports.createGroupKey = function(interval, date, useShifts)
     case 'week':
       if (useShifts)
       {
-        var weekday = groupKey.weekday();
+        const weekday = groupKey.weekday();
 
         if (weekday === 0 && hours < 6)
         {
@@ -133,8 +133,8 @@ exports.round = function round(num)
 
 exports.getCurrentShiftStartDate = function()
 {
-  var currentShiftStartMoment = moment().minutes(0).seconds(0).milliseconds(0);
-  var currentHour = currentShiftStartMoment.hours();
+  const currentShiftStartMoment = moment().minutes(0).seconds(0).milliseconds(0);
+  const currentHour = currentShiftStartMoment.hours();
 
   if (currentHour >= 6 && currentHour < 14)
   {

@@ -2,11 +2,11 @@
 
 'use strict';
 
-var parseSapTextTable = require('../../sap/util/parseSapTextTable');
+const parseSapTextTable = require('../../sap/util/parseSapTextTable');
 
 module.exports = function parseControlCycles(input, timestamp)
 {
-  var unique = {};
+  const unique = {};
 
   return parseSapTextTable(input, {
     columnMatchers: {
@@ -29,7 +29,7 @@ module.exports = function parseControlCycles(input, timestamp)
         return null;
       }
 
-      var uniqueObj = unique[obj.nc12];
+      const uniqueObj = unique[obj.nc12];
 
       if (uniqueObj === undefined)
       {

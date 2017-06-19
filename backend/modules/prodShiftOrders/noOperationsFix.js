@@ -2,16 +2,16 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
 
 module.exports = function setUpNoOperationsFix(app, psoModule)
 {
-  var fte = app[psoModule.config.fteId];
-  var mongoose = app[psoModule.config.mongooseId];
-  var Order = mongoose.model('Order');
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const fte = app[psoModule.config.fteId];
+  const mongoose = app[psoModule.config.mongooseId];
+  const Order = mongoose.model('Order');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
 
   app.broker.subscribe('shiftChanged', function()
   {
@@ -25,7 +25,7 @@ module.exports = function setUpNoOperationsFix(app, psoModule)
     step(
       function findProdShiftOrdersStep()
       {
-        var conditions = {
+        const conditions = {
           startedAt: {
             $gt: moment(fte.currentShift.date.getTime()).subtract(7, 'days').toDate(),
             $lt: fte.currentShift.date
@@ -47,7 +47,7 @@ module.exports = function setUpNoOperationsFix(app, psoModule)
           return this.skip();
         }
 
-        var orderIdToProdShiftOrders = {};
+        const orderIdToProdShiftOrders = {};
 
         _.forEach(prodShiftOrders, function(pso)
         {
@@ -61,7 +61,7 @@ module.exports = function setUpNoOperationsFix(app, psoModule)
           }
         });
 
-        var orderIds = Object.keys(orderIdToProdShiftOrders);
+        const orderIds = Object.keys(orderIdToProdShiftOrders);
 
         Order.find({_id: {$in: orderIds}}, {operations: 1}).lean().exec(this.next());
 
@@ -79,29 +79,29 @@ module.exports = function setUpNoOperationsFix(app, psoModule)
           return this.skip();
         }
 
-        for (var orderI = 0; orderI < orders.length; ++orderI)
+        for (let orderI = 0; orderI < orders.length; ++orderI)
         {
-          var order = orders[orderI];
-          var operationList = order.operations;
+          const order = orders[orderI];
+          const operationList = order.operations;
 
           if (!_.isArray(operationList))
           {
             continue;
           }
 
-          var operationMap = {};
-          var prodShiftOrders = this.orderIdToProdShiftOrders[order._id];
+          const operationMap = {};
+          const prodShiftOrders = this.orderIdToProdShiftOrders[order._id];
 
-          for (var operI = 0; operI < order.operations.length; ++operI)
+          for (let operI = 0; operI < order.operations.length; ++operI)
           {
-            var operation = order.operations[operI];
+            const operation = order.operations[operI];
 
             operationMap[operation.no] = operation;
           }
 
-          for (var psoI = 0; psoI < prodShiftOrders.length; ++psoI)
+          for (let psoI = 0; psoI < prodShiftOrders.length; ++psoI)
           {
-            var prodShiftOrder = prodShiftOrders[psoI];
+            const prodShiftOrder = prodShiftOrders[psoI];
 
             prodShiftOrder.orderData.operations = operationMap;
             prodShiftOrder.markModified('orderData');
@@ -113,11 +113,11 @@ module.exports = function setUpNoOperationsFix(app, psoModule)
       {
         if (err)
         {
-          psoModule.error("Failed to fix orders without operations: %s", err.message);
+          psoModule.error('Failed to fix orders without operations: %s', err.message);
         }
         else if (groups)
         {
-          psoModule.debug("Fixed %d orders without operations :)", groups.length);
+          psoModule.debug('Fixed %d orders without operations :)', groups.length);
         }
 
         this.orderIdToProdShiftOrders = null;

@@ -2,21 +2,21 @@
 
 'use strict';
 
-var step = require('h5.step');
-var moment = require('moment');
+const step = require('h5.step');
+const moment = require('moment');
 
 module.exports = function sendCurrentSurveyRoute(app, module, req, res, next)
 {
-  var mongoose = app[module.config.mongooseId];
-  var OpinionSurvey = mongoose.model('OpinionSurvey');
+  const mongoose = app[module.config.mongooseId];
+  const OpinionSurvey = mongoose.model('OpinionSurvey');
 
-  var currentDate = moment().startOf('day').toDate();
-  var currentSurvey = null;
+  const currentDate = moment().startOf('day').toDate();
+  let currentSurvey = null;
 
   step(
     function findCurrentSurveyStep()
     {
-      var conditions = {
+      const conditions = {
         startDate: {$lte: currentDate},
         endDate: {$gte: currentDate}
       };

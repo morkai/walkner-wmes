@@ -2,8 +2,8 @@
 
 'use strict';
 
-var _ = require('lodash');
-var axon = require('axon');
+const _ = require('lodash');
+const axon = require('axon');
 
 exports.DEFAULT_CONFIG = {
   pubHost: '0.0.0.0',
@@ -17,10 +17,10 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startMessengerServerModule(app, module, done)
 {
-  var requestHandlers = {};
-  var pubSocket = null;
-  var repSocket = null;
-  var pullSocket = null;
+  const requestHandlers = {};
+  let pubSocket = null;
+  let repSocket = null;
+  let pullSocket = null;
 
   _.forEach(module.config.broadcastTopics, function(broadcastTopic)
   {
@@ -41,7 +41,7 @@ exports.start = function startMessengerServerModule(app, module, done)
 
     pubSocket = socket;
 
-    module.debug("pub socket listening on port %d...", module.config.pubPort);
+    module.debug('pub socket listening on port %d...', module.config.pubPort);
 
     createRepSocket(function(err, socket)
     {
@@ -52,7 +52,7 @@ exports.start = function startMessengerServerModule(app, module, done)
 
       repSocket = socket;
 
-      module.debug("rep socket listening on port %d...", module.config.repPort);
+      module.debug('rep socket listening on port %d...', module.config.repPort);
 
       done();
     });
@@ -85,7 +85,7 @@ exports.start = function startMessengerServerModule(app, module, done)
    */
   function createPubSocket(done)
   {
-    var pub = axon.socket('pub');
+    const pub = axon.socket('pub');
 
     pub.set('hwm', 10);
     pub.bind(module.config.pubPort, module.config.pubHost);
@@ -106,7 +106,7 @@ exports.start = function startMessengerServerModule(app, module, done)
    */
   function createRepSocket(done)
   {
-    var rep = axon.socket('rep');
+    const rep = axon.socket('rep');
 
     rep.set('hwm', 10);
     rep.bind(module.config.repPort, module.config.repHost);
@@ -130,10 +130,10 @@ exports.start = function startMessengerServerModule(app, module, done)
   {
     if (!module.config.pullHost)
     {
-      return module.debug("pull socket not used.");
+      return module.debug('pull socket not used.');
     }
 
-    var connected = false;
+    let connected = false;
 
     pullSocket = axon.socket('rep');
 
@@ -142,14 +142,14 @@ exports.start = function startMessengerServerModule(app, module, done)
 
     pullSocket.on('error', function(err)
     {
-      module.error("[pull] %s", err.message);
+      module.error('[pull] %s', err.message);
     });
 
     pullSocket.on('connect', function()
     {
       connected = true;
 
-      module.debug("[pull] Connected on port %d...", module.config.pullPort);
+      module.debug('[pull] Connected on port %d...', module.config.pullPort);
 
       app.broker.publish('messenger.client.connected', {
         moduleName: module.name,
@@ -163,7 +163,7 @@ exports.start = function startMessengerServerModule(app, module, done)
     {
       if (connected)
       {
-        module.debug("[pull] Disconnected. Reconnecting...");
+        module.debug('[pull] Disconnected. Reconnecting...');
 
         connected = false;
       }
@@ -185,7 +185,7 @@ exports.start = function startMessengerServerModule(app, module, done)
       return;
     }
 
-    var requestHandler = requestHandlers[type];
+    const requestHandler = requestHandlers[type];
 
     if (!_.isFunction(requestHandler))
     {

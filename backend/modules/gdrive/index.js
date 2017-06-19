@@ -58,14 +58,14 @@ exports.start = function startGdriveModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to authorize: %s", err.message);
+        module.error('Failed to authorize: %s', err.message);
       }
       else
       {
-        module.debug("Authorized!");
+        module.debug('Authorized!');
       }
 
-      //setTimeout(downloadFile, 100, '1mlHdH1FV9FcKeoJRzuHnbSrvLuQF_eI9P1faJTuuUfk');
+      // setTimeout(downloadFile, 100, '1mlHdH1FV9FcKeoJRzuHnbSrvLuQF_eI9P1faJTuuUfk');
       setTimeout(listFiles, 100);
 
       setTimeout(getStartPageToken, 1000);
@@ -79,7 +79,7 @@ exports.start = function startGdriveModule(app, module)
     {
       if (err)
       {
-        return module.error("Failed to create file: authorize failure: %s", err.message);
+        return module.error('Failed to create file: authorize failure: %s', err.message);
       }
 
       const req = {
@@ -104,7 +104,7 @@ exports.start = function startGdriveModule(app, module)
       {
         if (err)
         {
-          return module.error("Failed to create file:", err);
+          return module.error('Failed to create file:', err);
         }
 
         console.log('File create:');
@@ -121,7 +121,7 @@ exports.start = function startGdriveModule(app, module)
     {
       if (err)
       {
-        return module.error("Failed to list revisions: authorize failure: %s", err.message);
+        return module.error('Failed to list revisions: authorize failure: %s', err.message);
       }
 
       const req = {
@@ -132,7 +132,7 @@ exports.start = function startGdriveModule(app, module)
       {
         if (err)
         {
-          return module.error("Failed to list revisions: %s", err.message);
+          return module.error('Failed to list revisions: %s', err.message);
         }
 
         console.log('Revision list');
@@ -149,7 +149,7 @@ exports.start = function startGdriveModule(app, module)
     {
       if (err)
       {
-        return module.error("Failed to publish revision: authorize failure: %s", err.message);
+        return module.error('Failed to publish revision: authorize failure: %s', err.message);
       }
 
       const req = {
@@ -166,7 +166,7 @@ exports.start = function startGdriveModule(app, module)
       {
         if (err)
         {
-          return module.error("Failed to publish revision: %s", err.message);
+          return module.error('Failed to publish revision: %s', err.message);
         }
 
         console.log('Revision update');
@@ -183,13 +183,13 @@ exports.start = function startGdriveModule(app, module)
     {
       if (err)
       {
-        return module.error("Failed to list files: authorize failure: %s", err.message);
+        return module.error('Failed to list files: authorize failure: %s', err.message);
       }
 
       const t2 = Date.now();
       const req = {
         pageSize: 1000,
-        fields: "files(id,name,mimeType,parents,version,modifiedTime)",
+        fields: 'files(id,name,mimeType,parents,version,modifiedTime)',
         orderBy: 'folder, name'
       };
 
@@ -197,7 +197,7 @@ exports.start = function startGdriveModule(app, module)
       {
         if (err)
         {
-          return module.error("Failed to list root folder: %s", err.message);
+          return module.error('Failed to list root folder: %s', err.message);
         }
 
         console.log('Listed files in %s (auth in %s ms, list in %s ms)', Date.now() - t1, t2 - t1, Date.now() - t2);
@@ -212,7 +212,7 @@ exports.start = function startGdriveModule(app, module)
     {
       if (err)
       {
-        return module.error("Failed to download file: authorize failure: %s", err.message);
+        return module.error('Failed to download file: authorize failure: %s', err.message);
       }
 
       const req = {
@@ -224,11 +224,11 @@ exports.start = function startGdriveModule(app, module)
       module.drive.files.export(req)
         .on('error', function(err)
         {
-          module.error("Failed to download file: %s", err.message);
+          module.error('Failed to download file: %s', err.message);
         })
         .on('end', function()
         {
-          module.debug("Downloaded file: %s", fileId);
+          module.debug('Downloaded file: %s', fileId);
         })
         .pipe(dest);
     });
@@ -240,17 +240,17 @@ exports.start = function startGdriveModule(app, module)
     {
       if (err)
       {
-        return module.error("Failed to get Start Page Token: authorize failure: %s", err.message);
+        return module.error('Failed to get Start Page Token: authorize failure: %s', err.message);
       }
 
       module.drive.changes.getStartPageToken({}, function(err, res)
       {
         if (err)
         {
-          return module.error("Failed to get Start Page Token: %s", err.message);
+          return module.error('Failed to get Start Page Token: %s', err.message);
         }
 
-        console.log(`Start Page Token:`, res);
+        console.log('Start Page Token:', res);
 
         startPageToken = res.startPageToken;
 
@@ -265,7 +265,7 @@ exports.start = function startGdriveModule(app, module)
     {
       if (err)
       {
-        return module.error("Failed to list changes: authorize failure: %s", err.message);
+        return module.error('Failed to list changes: authorize failure: %s', err.message);
       }
 
       const req = {
@@ -276,7 +276,7 @@ exports.start = function startGdriveModule(app, module)
       {
         if (err)
         {
-          return module.error("Failed to list changes: %s", err.message);
+          return module.error('Failed to list changes: %s', err.message);
         }
 
         console.log('Changes:', res.changes);

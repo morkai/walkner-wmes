@@ -2,23 +2,23 @@
 
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
-var step = require('h5.step');
-var later = require('later');
+const _ = require('lodash');
+const moment = require('moment');
+const step = require('h5.step');
+const later = require('later');
 
 module.exports = function setUpKaizenCommands(app, kaizenModule)
 {
-  var mongoose = app[kaizenModule.config.mongooseId];
-  var KaizenOrder = mongoose.model('KaizenOrder');
+  const mongoose = app[kaizenModule.config.mongooseId];
+  const KaizenOrder = mongoose.model('KaizenOrder');
 
-  var stats = {
+  const stats = {
     total: createEmptyStats(),
     users: {},
     currentTop10: [],
     previousTop10: []
   };
-  var recountTimer = null;
+  let recountTimer = null;
 
   app.broker.subscribe('app.started', recountStats).setLimit(1);
   app.broker.subscribe('kaizen.orders.added', scheduleRecountStats);
@@ -68,7 +68,7 @@ module.exports = function setUpKaizenCommands(app, kaizenModule)
 
   function recountStats()
   {
-    var t = Date.now();
+    const t = Date.now();
 
     if (recountTimer)
     {
@@ -85,11 +85,11 @@ module.exports = function setUpKaizenCommands(app, kaizenModule)
       {
         if (err)
         {
-          kaizenModule.error("[stats] Failed to recount: %s", err.message);
+          kaizenModule.error('[stats] Failed to recount: %s', err.message);
         }
         else
         {
-          kaizenModule.debug("[stats] Recounted in %d ms.", Date.now() - t);
+          kaizenModule.debug('[stats] Recounted in %d ms.', Date.now() - t);
 
           stats.users = {};
         }
@@ -117,9 +117,9 @@ module.exports = function setUpKaizenCommands(app, kaizenModule)
 
   function recountTop10(done)
   {
-    var currentMonth = moment().startOf('month').toDate();
-    var previousMonth = moment(currentMonth.getTime()).subtract(1, 'month').toDate();
-    var pipeline = [
+    const currentMonth = moment().startOf('month').toDate();
+    const previousMonth = moment(currentMonth.getTime()).subtract(1, 'month').toDate();
+    const pipeline = [
       {$match: {
         eventDate: {
           $gte: previousMonth
@@ -168,12 +168,12 @@ module.exports = function setUpKaizenCommands(app, kaizenModule)
         return done(err);
       }
 
-      var previousTop10 = [];
-      var currentTop10 = [];
+      const previousTop10 = [];
+      const currentTop10 = [];
 
-      for (var i = 0; i < results.length; ++i)
+      for (let i = 0; i < results.length; ++i)
       {
-        var result = results[i];
+        const result = results[i];
 
         if (result.previousCount)
         {
@@ -217,8 +217,8 @@ module.exports = function setUpKaizenCommands(app, kaizenModule)
 
     top10 = top10.slice(0, 10);
 
-    var lastPlace = 0;
-    var lastCount = 0;
+    let lastPlace = 0;
+    let lastCount = 0;
 
     _.forEach(top10, function(contender)
     {
@@ -245,7 +245,7 @@ module.exports = function setUpKaizenCommands(app, kaizenModule)
       return setImmediate(done, null, createEmptyStats());
     }
 
-    var userStats = stats.users[userId];
+    const userStats = stats.users[userId];
 
     if (userStats)
     {
@@ -272,7 +272,7 @@ module.exports = function setUpKaizenCommands(app, kaizenModule)
 
   function countEntries(userId, done)
   {
-    var pipeline = [];
+    const pipeline = [];
 
     if (!_.isEmpty(userId))
     {

@@ -2,14 +2,14 @@
 
 'use strict';
 
-var importRoute = require('./importRoute');
+const importRoute = require('./importRoute');
 
 module.exports = function setUpWarehouseRoutes(app, whModule)
 {
-  var express = app[whModule.config.expressId];
-  var userModule = app[whModule.config.userId];
-  var mongoose = app[whModule.config.mongooseId];
-  var WhTransferOrder = mongoose.model('WhTransferOrder');
+  const express = app[whModule.config.expressId];
+  const userModule = app[whModule.config.userId];
+  const mongoose = app[whModule.config.mongooseId];
+  const WhTransferOrder = mongoose.model('WhTransferOrder');
 
   express.post(
     '/warehouse;import',
@@ -34,7 +34,7 @@ module.exports = function setUpWarehouseRoutes(app, whModule)
 
   function exportWhTransferOrder(doc)
   {
-    var shiftHour = doc.shiftDate.getHours();
+    const shiftHour = doc.shiftDate.getHours();
 
     return {
       '"orderNo': doc._id.no,

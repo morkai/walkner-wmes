@@ -128,7 +128,7 @@ module.exports = function setUpOrderDocumentsTree(app, module)
 
   function addFile(orderDocumentFile, nc15ToFilesMap, idToFolderMap, user, done)
   {
-    var filesToAdd = nc15ToFilesMap[orderDocumentFile._id].filter(f => idToFolderMap[f.folder]);
+    const filesToAdd = nc15ToFilesMap[orderDocumentFile._id].filter(f => idToFolderMap[f.folder]);
 
     delete nc15ToFilesMap[orderDocumentFile._id];
 

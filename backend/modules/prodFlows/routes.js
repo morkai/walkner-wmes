@@ -4,12 +4,12 @@
 
 module.exports = function setUpProdFlowsRoutes(app, prodFlowsModule, useDictionaryModel)
 {
-  var express = app[prodFlowsModule.config.expressId];
-  var auth = app[prodFlowsModule.config.userId].auth;
-  var ProdFlow = app[prodFlowsModule.config.mongooseId].model('ProdFlow');
+  const express = app[prodFlowsModule.config.expressId];
+  const auth = app[prodFlowsModule.config.userId].auth;
+  const ProdFlow = app[prodFlowsModule.config.mongooseId].model('ProdFlow');
 
-  var canView = auth('DICTIONARIES:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/prodFlows', canView, express.crud.browseRoute.bind(null, app, ProdFlow));
 

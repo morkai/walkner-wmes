@@ -2,13 +2,13 @@
 
 'use strict';
 
-var exec = require('child_process').exec;
-var xml2js = require('xml2js');
+const exec = require('child_process').exec;
+const xml2js = require('xml2js');
 
 module.exports = function decodeQrCode(app, module, inputFile, done)
 {
-  var ZXING_EXE = module.config.decodeQrExe;
-  var ZBARIMG_EXE = module.config.zbarimgExe;
+  const ZXING_EXE = module.config.decodeQrExe;
+  const ZBARIMG_EXE = module.config.zbarimgExe;
 
   decodeQrCodeUsingZxing(inputFile, function(err, results)
   {
@@ -22,11 +22,11 @@ module.exports = function decodeQrCode(app, module, inputFile, done)
 
   function decodeQrCodeUsingZxing(inputFile, done)
   {
-    var cmd = ZXING_EXE + ' "' + inputFile + '"';
+    const cmd = ZXING_EXE + ' "' + inputFile + '"';
 
     exec(cmd, function(err, stdout, stderr)
     {
-      var results = [];
+      let results = [];
 
       if (err)
       {
@@ -51,8 +51,8 @@ module.exports = function decodeQrCode(app, module, inputFile, done)
 
   function decodeQrCodeUsingZbar(inputFile, done)
   {
-    var results = [];
-    var cmd = ZBARIMG_EXE + ' --xml -q -Sdisable -Sqr.enable "' + inputFile + '"';
+    const results = [];
+    const cmd = ZBARIMG_EXE + ' --xml -q -Sdisable -Sqr.enable "' + inputFile + '"';
 
     exec(cmd, function(err, stdout)
     {
@@ -68,29 +68,29 @@ module.exports = function decodeQrCode(app, module, inputFile, done)
           return done(err, results);
         }
 
-        var sources = xml.barcodes && Array.isArray(xml.barcodes.source) ? xml.barcodes.source : [];
+        const sources = xml.barcodes && Array.isArray(xml.barcodes.source) ? xml.barcodes.source : [];
 
-        for (var sourceI = 0; sourceI < sources.length; ++sourceI)
+        for (let sourceI = 0; sourceI < sources.length; ++sourceI)
         {
-          var indexes = sources[sourceI].index;
+          const indexes = sources[sourceI].index;
 
           if (!Array.isArray(indexes))
           {
             continue;
           }
 
-          for (var indexI = 0; indexI < indexes.length; ++indexI)
+          for (let indexI = 0; indexI < indexes.length; ++indexI)
           {
-            var symbols = indexes[indexI].symbol;
+            const symbols = indexes[indexI].symbol;
 
             if (!Array.isArray(symbols))
             {
               continue;
             }
 
-            for (var symbolI = 0; symbolI < symbols.length; ++symbolI)
+            for (let symbolI = 0; symbolI < symbols.length; ++symbolI)
             {
-              var data = symbols[symbolI].data;
+              const data = symbols[symbolI].data;
 
               if (Array.isArray(data) && data.length)
               {

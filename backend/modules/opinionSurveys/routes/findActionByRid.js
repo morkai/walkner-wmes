@@ -4,10 +4,10 @@
 
 module.exports = function findActionByRidRoute(app, module, req, res, next)
 {
-  var mongoose = app[module.config.mongooseId];
-  var OpinionSurveyAction = mongoose.model('OpinionSurveyAction');
+  const mongoose = app[module.config.mongooseId];
+  const OpinionSurveyAction = mongoose.model('OpinionSurveyAction');
 
-  var rid = parseInt(req.query.rid, 10);
+  const rid = parseInt(req.query.rid, 10);
 
   if (isNaN(rid) || rid <= 0)
   {

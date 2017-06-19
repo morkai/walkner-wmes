@@ -2,19 +2,19 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
-var util = require('./util');
-var calcFte = require('./calcFte');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
+const util = require('./util');
+const calcFte = require('./calcFte');
 
 module.exports = function(mongoose, options, done)
 {
-  var ProdShift = mongoose.model('ProdShift');
-  var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-  var ProdDowntime = mongoose.model('ProdDowntime');
+  const ProdShift = mongoose.model('ProdShift');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+  const ProdDowntime = mongoose.model('ProdDowntime');
 
-  var results = {
+  const results = {
     options: options,
     coeffs: {},
     downtimes: {
@@ -55,7 +55,7 @@ module.exports = function(mongoose, options, done)
 
   function createConditions()
   {
-    var conditions = {
+    const conditions = {
       startedAt: {
         $gte: options.fromTime,
         $lt: options.toTime
@@ -64,7 +64,7 @@ module.exports = function(mongoose, options, done)
 
     if (options.orgUnitType && options.orgUnitId)
     {
-      var orgUnitProperty = options.orgUnitType === 'mrpController'
+      const orgUnitProperty = options.orgUnitType === 'mrpController'
         ? 'mrpControllers'
         : options.orgUnitType;
 
@@ -81,9 +81,9 @@ module.exports = function(mongoose, options, done)
 
   function findProdShiftsStep()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    var conditions = {
+    const conditions = {
       date: {
         $gte: options.fromTime,
         $lt: options.toTime
@@ -92,7 +92,7 @@ module.exports = function(mongoose, options, done)
 
     if (options.orgUnitType && options.orgUnitId)
     {
-      var orgUnitProperty = options.orgUnitType === 'mrpController'
+      const orgUnitProperty = options.orgUnitType === 'mrpController'
         ? 'mrpControllers'
         : options.orgUnitType;
 
@@ -104,7 +104,7 @@ module.exports = function(mongoose, options, done)
       conditions.prodLine = {$nin: Object.keys(options.ignoredOrgUnits.prodLine)};
     }
 
-    var fields = {
+    const fields = {
       _id: 0,
       date: 1,
       'quantitiesDone.actual': 1
@@ -115,23 +115,23 @@ module.exports = function(mongoose, options, done)
 
   function groupQuantitiesDoneStep(err, prodShifts)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (err)
     {
       return this.done(done, err);
     }
 
-    var endTime = Math.min(moment().minutes(59).seconds(59).milliseconds(999).valueOf(), options.toTime);
-    var groupedQuantitiesDone = {};
+    const endTime = Math.min(moment().minutes(59).seconds(59).milliseconds(999).valueOf(), options.toTime);
+    const groupedQuantitiesDone = {};
 
     _.forEach(prodShifts, function(prodShift)
     {
-      var shiftStartTime = prodShift.date.getTime();
+      const shiftStartTime = prodShift.date.getTime();
 
       _.forEach(prodShift.quantitiesDone, function(quantityDone, i)
       {
-        var startedAt = shiftStartTime + 3600 * 1000 * i;
+        const startedAt = shiftStartTime + 3600 * 1000 * i;
 
         if (startedAt + 3599999 <= endTime)
         {
@@ -150,9 +150,9 @@ module.exports = function(mongoose, options, done)
 
   function calcQuantitiesDoneStep()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    var groupedQuantitiesDone = this.groupedQuantitiesDone;
+    const groupedQuantitiesDone = this.groupedQuantitiesDone;
 
     _.forEach(groupedQuantitiesDone, function(quantitiesDone, groupKey)
     {
@@ -179,14 +179,14 @@ module.exports = function(mongoose, options, done)
 
   function findProdDowntimesStep()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    var conditions = createConditions();
+    const conditions = createConditions();
 
     conditions.prodShiftOrder = {$ne: null};
     conditions.finishedAt = {$ne: null};
 
-    var fields = {
+    const fields = {
       _id: 1,
       prodShiftOrder: 1,
       aor: 1,
@@ -200,18 +200,18 @@ module.exports = function(mongoose, options, done)
 
   function groupDowntimesByOrdersStep(err, prodDowntimes)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (err)
     {
       return this.done(done, err);
     }
 
-    var orderToDowntimes = {};
+    const orderToDowntimes = {};
 
     _.forEach(prodDowntimes, function(prodDowntime)
     {
-      var duration = (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
+      const duration = (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
 
       if (duration <= 0)
       {
@@ -233,16 +233,16 @@ module.exports = function(mongoose, options, done)
 
   function findProdShiftOrdersStep()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    var conditions = createConditions();
+    const conditions = createConditions();
 
     conditions.workDuration = {$ne: 0};
     conditions.laborTime = {$ne: 0};
     conditions.workerCount = {$ne: 0};
     conditions.finishedAt = {$ne: null};
 
-    var fields = {
+    const fields = {
       division: 1,
       startedAt: 1,
       finishedAt: 1,
@@ -259,7 +259,7 @@ module.exports = function(mongoose, options, done)
 
   function groupProdShiftOrdersStep(err, prodShiftOrders)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (err)
     {
@@ -274,14 +274,14 @@ module.exports = function(mongoose, options, done)
 
   function calcDowntimeDurationsStep()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    var orderToDowntimes = this.orderToDowntimes;
-    var orderToWorkerCount = this.orderToWorkerCount;
+    const orderToDowntimes = this.orderToDowntimes;
+    const orderToWorkerCount = this.orderToWorkerCount;
 
     _.forEach(orderToDowntimes, function(prodDowntimes, key)
     {
-      var summary = {
+      const summary = {
         count: 0,
         duration: 0,
         breakCount: 0,
@@ -294,7 +294,7 @@ module.exports = function(mongoose, options, done)
 
       _.forEach(prodDowntimes, function(prodDowntime)
       {
-        var duration = (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
+        const duration = (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
 
         if (options.downtimeReasons.breaks[prodDowntime.reason])
         {
@@ -306,7 +306,7 @@ module.exports = function(mongoose, options, done)
           summary.count += 1;
           summary.duration += duration;
 
-          var schedule = options.downtimeReasons.schedule[prodDowntime.reason];
+          const schedule = options.downtimeReasons.schedule[prodDowntime.reason];
 
           if (schedule === true)
           {
@@ -319,7 +319,7 @@ module.exports = function(mongoose, options, done)
             summary.unscheduledDuration += duration;
           }
 
-          var workerCount = orderToWorkerCount[prodDowntime.prodShiftOrder];
+          const workerCount = orderToWorkerCount[prodDowntime.prodShiftOrder];
 
           if (typeof workerCount === 'number')
           {
@@ -354,7 +354,7 @@ module.exports = function(mongoose, options, done)
 
   function divDowntimeFte()
   {
-    var downtimes = results.downtimes;
+    const downtimes = results.downtimes;
 
     _.forEach(downtimes.byAor, function(fte, aor)
     {
@@ -369,23 +369,23 @@ module.exports = function(mongoose, options, done)
 
   function calcFteStep()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     calcFte(mongoose, options, this.next());
   }
 
   function calcCoeffsStep(err, fteResults)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
     if (err)
     {
       return this.done(done, err);
     }
 
-    var orderToDowntimes = this.orderToDowntimes;
-    var groupedProdShiftOrders = this.groupedProdShiftOrders;
-    var fteGroupedResults = fteResults.grouped;
+    const orderToDowntimes = this.orderToDowntimes;
+    const groupedProdShiftOrders = this.groupedProdShiftOrders;
+    const fteGroupedResults = fteResults.grouped;
 
     this.orderToDowntimes = null;
     this.groupedProdShiftOrders = null;
@@ -405,13 +405,13 @@ module.exports = function(mongoose, options, done)
 
   function sortCoeffsStep()
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    var coeffsMap = results.coeffs;
+    const coeffsMap = results.coeffs;
 
     results.coeffs = [];
 
-    var groupKeys = Object.keys(coeffsMap).map(Number).sort(function(a, b) { return a - b; });
+    const groupKeys = Object.keys(coeffsMap).map(Number).sort(function(a, b) { return a - b; });
 
     if (groupKeys.length === 0)
     {
@@ -425,8 +425,8 @@ module.exports = function(mongoose, options, done)
       });
     }
 
-    var createNextGroupKey = util.createCreateNextGroupKey(options.interval);
-    var lastGroupKey = util.createGroupKey(options.interval, options.fromTime);
+    const createNextGroupKey = util.createCreateNextGroupKey(options.interval);
+    let lastGroupKey = util.createGroupKey(options.interval, options.fromTime);
 
     if (groupKeys[0] !== lastGroupKey)
     {
@@ -447,7 +447,7 @@ module.exports = function(mongoose, options, done)
         pushEmptyCoeffs(lastGroupKey);
       }
 
-      var coeffs = coeffsMap[groupKey];
+      const coeffs = coeffsMap[groupKey];
 
       coeffs.key = new Date(groupKey).toISOString();
 
@@ -461,7 +461,7 @@ module.exports = function(mongoose, options, done)
 
   function groupProdShiftOrders(prodShiftOrders, orderToDowntimes, orderToWorkerCount)
   {
-    var groupedProdShiftOrders = {};
+    const groupedProdShiftOrders = {};
 
     _.forEach(prodShiftOrders, function(prodShiftOrder)
     {
@@ -482,8 +482,8 @@ module.exports = function(mongoose, options, done)
 
   function splitProdShiftOrder(groupedProdShiftOrders, order, orderToDowntimes)
   {
-    var startedAtHours = order.startedAt.getHours();
-    var finishedAtHours = order.finishedAt.getHours();
+    const startedAtHours = order.startedAt.getHours();
+    const finishedAtHours = order.finishedAt.getHours();
 
     if (startedAtHours === finishedAtHours)
     {
@@ -492,16 +492,16 @@ module.exports = function(mongoose, options, done)
 
     splitOrderDowntimes(order._id, orderToDowntimes);
 
-    var totalDuration = order.finishedAt.getTime() - order.startedAt.getTime();
-    var totalHours = countTotalHours(order, startedAtHours, finishedAtHours);
+    const totalDuration = order.finishedAt.getTime() - order.startedAt.getTime();
+    const totalHours = countTotalHours(order, startedAtHours, finishedAtHours);
 
-    var partDate = new Date(order.startedAt);
+    const partDate = new Date(order.startedAt);
 
-    for (var h = 0; h < totalHours; ++h)
+    for (let h = 0; h < totalHours; ++h)
     {
-      var partStartTime = partDate.getTime();
-      var partEndTime = -1;
-      var partHours = partDate.getHours();
+      const partStartTime = partDate.getTime();
+      let partEndTime = -1;
+      const partHours = partDate.getHours();
 
       if (partHours === finishedAtHours)
       {
@@ -517,7 +517,7 @@ module.exports = function(mongoose, options, done)
         partEndTime = partDate.getTime() - 1;
       }
 
-      var percent = (partEndTime - partStartTime) / totalDuration;
+      const percent = (partEndTime - partStartTime) / totalDuration;
 
       groupObjects(groupedProdShiftOrders, {
         _id: order._id + '@' + partHours,
@@ -536,7 +536,7 @@ module.exports = function(mongoose, options, done)
 
   function splitOrderDowntimes(orderId, orderToDowntimes)
   {
-    var orderDowntimes = orderToDowntimes[orderId];
+    const orderDowntimes = orderToDowntimes[orderId];
 
     if (!Array.isArray(orderDowntimes))
     {
@@ -547,22 +547,22 @@ module.exports = function(mongoose, options, done)
 
     _.forEach(orderDowntimes, function(downtime)
     {
-      var startedAtHours = downtime.startedAt.getHours();
-      var finishedAtHours = downtime.finishedAt.getHours();
+      const startedAtHours = downtime.startedAt.getHours();
+      const finishedAtHours = downtime.finishedAt.getHours();
 
       if (startedAtHours === finishedAtHours)
       {
         return pushDowntime(downtime);
       }
 
-      var totalHours = countTotalHours(downtime, startedAtHours, finishedAtHours);
-      var partDate = new Date(downtime.startedAt);
+      const totalHours = countTotalHours(downtime, startedAtHours, finishedAtHours);
+      const partDate = new Date(downtime.startedAt);
 
-      for (var h = 0; h < totalHours; ++h)
+      for (let h = 0; h < totalHours; ++h)
       {
-        var partStartTime = partDate.getTime();
-        var partEndTime = -1;
-        var partHours = partDate.getHours();
+        const partStartTime = partDate.getTime();
+        let partEndTime = -1;
+        const partHours = partDate.getHours();
 
         if (partHours === finishedAtHours)
         {
@@ -590,7 +590,7 @@ module.exports = function(mongoose, options, done)
 
     function pushDowntime(downtime)
     {
-      var newOrderId = orderId + '@' + downtime.startedAt.getHours();
+      const newOrderId = orderId + '@' + downtime.startedAt.getHours();
 
       if (!Array.isArray(orderToDowntimes[newOrderId]))
       {
@@ -603,7 +603,7 @@ module.exports = function(mongoose, options, done)
 
   function countTotalHours(obj, startedAtHours, finishedAtHours)
   {
-    var totalHours = -1;
+    let totalHours = -1;
 
     if (obj.startedAt.getDate() === obj.finishedAt.getDate())
     {
@@ -619,7 +619,7 @@ module.exports = function(mongoose, options, done)
 
   function groupObjects(groupedObjects, obj)
   {
-    var groupKey = util.createGroupKey(options.interval, obj.startedAt);
+    const groupKey = util.createGroupKey(options.interval, obj.startedAt);
 
     if (typeof groupedObjects[groupKey] === 'undefined')
     {
@@ -631,29 +631,29 @@ module.exports = function(mongoose, options, done)
 
   function calcCoeffs(groupKey, orders, fteGroupResult, orderToDowntimes)
   {
-    /*jshint validthis:true*/
+    /* jshint validthis:true*/
 
-    var orderCount = 0;
-    var downtimeCount = 0;
-    var breakCount = 0;
-    var scheduledCount = 0;
-    var unscheduledCount = 0;
-    var effNum = 0;
-    var effDen = 0;
-    var dtNum = 0;
-    var dtDen = 0;
-    var scheduledDtNum = 0;
-    var unscheduledDtNum = 0;
-    var lastOrderFinishedAt;
+    let orderCount = 0;
+    let downtimeCount = 0;
+    let breakCount = 0;
+    let scheduledCount = 0;
+    let unscheduledCount = 0;
+    let effNum = 0;
+    let effDen = 0;
+    let dtNum = 0;
+    let dtDen = 0;
+    let scheduledDtNum = 0;
+    let unscheduledDtNum = 0;
+    let lastOrderFinishedAt;
 
     _.forEach(orders, function(order)
     {
-      var workDuration = (order.finishedAt.getTime() - order.startedAt.getTime()) / 3600000;
-      var percent = typeof order.percent === 'number' ? order.percent : 1;
-      var workerCount = order.workerCount * percent;
-      var laborTime = order.laborTime * percent;
-      var totalQuantity = order.totalQuantity * percent;
-      var orderDowntime = orderToDowntimes[order._id];
+      let workDuration = (order.finishedAt.getTime() - order.startedAt.getTime()) / 3600000;
+      const percent = typeof order.percent === 'number' ? order.percent : 1;
+      const workerCount = order.workerCount * percent;
+      const laborTime = order.laborTime * percent;
+      const totalQuantity = order.totalQuantity * percent;
+      const orderDowntime = orderToDowntimes[order._id];
 
       if (typeof orderDowntime === 'object')
       {
@@ -683,7 +683,7 @@ module.exports = function(mongoose, options, done)
       return;
     }
 
-    var coeffs = typeof results.coeffs[groupKey] === 'undefined'
+    const coeffs = typeof results.coeffs[groupKey] === 'undefined'
       ? (results.coeffs[groupKey] = {})
       : results.coeffs[groupKey];
 
@@ -695,8 +695,8 @@ module.exports = function(mongoose, options, done)
 
       if (options.interval === 'hour')
       {
-        var startOfHour = parseInt(groupKey, 10);
-        var endOfHour = startOfHour + 3599999;
+        const startOfHour = parseInt(groupKey, 10);
+        const endOfHour = startOfHour + 3599999;
 
         coeffs.efficiency *= (lastOrderFinishedAt.getTime() - startOfHour) / (endOfHour - startOfHour);
       }

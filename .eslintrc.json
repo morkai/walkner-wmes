@@ -211,8 +211,8 @@
 		"constructor-super": 0,
 		"generator-star-spacing": [0, {"before": true, "after": false}],
 		"no-this-before-super": 0,
-		"no-var": 0,
+		"no-var": 2,
 		"object-shorthand": [0, "always"],
-		"prefer-const": 1
+		"prefer-const": 2
 	}
 }

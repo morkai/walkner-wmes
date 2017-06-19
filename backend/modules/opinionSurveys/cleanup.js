@@ -2,19 +2,19 @@
 
 'use strict';
 
-var util = require('util');
-var exec = require('child_process').exec;
-var path = require('path');
-var _ = require('lodash');
-var step = require('h5.step');
-var fs = require('fs-extra');
+const util = require('util');
+const exec = require('child_process').exec;
+const path = require('path');
+const _ = require('lodash');
+const step = require('h5.step');
+const fs = require('fs-extra');
 
 module.exports = function setUpCleanup(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
-  var OpinionSurveyOmrResult = mongoose.model('OpinionSurveyOmrResult');
+  const mongoose = app[module.config.mongooseId];
+  const OpinionSurveyOmrResult = mongoose.model('OpinionSurveyOmrResult');
 
-  var cleaningScanTemplates = false;
+  let cleaningScanTemplates = false;
 
   app.broker.subscribe('opinionSurveys.surveys.edited', function(message)
   {
@@ -56,7 +56,7 @@ module.exports = function setUpCleanup(app, module)
 
         this.usedImages = {};
 
-        for (var i = 0; i < images.length; ++i)
+        for (let i = 0; i < images.length; ++i)
         {
           this.usedImages[images[i] + '.jpg'] = true;
         }
@@ -72,9 +72,9 @@ module.exports = function setUpCleanup(app, module)
           return this.skip(err);
         }
 
-        for (var i = 0; i < files.length; ++i)
+        for (let i = 0; i < files.length; ++i)
         {
-          var file = files[i];
+          const file = files[i];
 
           if (!this.usedImages[file])
           {
@@ -94,9 +94,9 @@ module.exports = function setUpCleanup(app, module)
           return;
         }
 
-        for (var i = 0; i < filePaths.length; ++i)
+        for (let i = 0; i < filePaths.length; ++i)
         {
-          var filePath = filePaths[i];
+          const filePath = filePaths[i];
 
           if (filePath)
           {
@@ -108,7 +108,7 @@ module.exports = function setUpCleanup(app, module)
       {
         if (err)
         {
-          module.error("Failed to cleanup scan templates: %s", err.message);
+          module.error('Failed to cleanup scan templates: %s', err.message);
         }
       }
     );
@@ -116,7 +116,7 @@ module.exports = function setUpCleanup(app, module)
 
   function filterScanTemplate(file, done)
   {
-    var filePath = path.join(module.config.templatesPath, file);
+    const filePath = path.join(module.config.templatesPath, file);
 
     fs.stat(filePath, function(err, stats)
     {
@@ -131,7 +131,7 @@ module.exports = function setUpCleanup(app, module)
 
   function updateOmrResults(newStatus, message)
   {
-    var response = message.model;
+    const response = message.model;
 
     step(
       function()
@@ -145,7 +145,7 @@ module.exports = function setUpCleanup(app, module)
           return this.skip(err);
         }
 
-        for (var i = 0; i < omrResults.length; ++i)
+        for (let i = 0; i < omrResults.length; ++i)
         {
           omrResults[i].status = newStatus;
           omrResults[i].save(this.group());
@@ -156,7 +156,7 @@ module.exports = function setUpCleanup(app, module)
         if (err)
         {
           module.error(
-            "Failed to change status of OMR result to [%s] after response [%s] update: %s",
+            'Failed to change status of OMR result to [%s] after response [%s] update: %s',
             newStatus,
             response._id,
             err.message
@@ -180,11 +180,11 @@ module.exports = function setUpCleanup(app, module)
 
   function cleanUpProcessingFiles(result)
   {
-    var processingDirPath = path.join(module.config.processingPath, result._id);
-    var fromInputFilePath = result.omrOutput
+    const processingDirPath = path.join(module.config.processingPath, result._id);
+    const fromInputFilePath = result.omrOutput
       ? path.join(processingDirPath, result.scanTemplate._id.toString(), 'input.jpg')
       : path.join(processingDirPath, result.inputFileName);
-    var toInputFilePath = path.join(module.config.responsesPath, result._id + '.jpg');
+    const toInputFilePath = path.join(module.config.responsesPath, result._id + '.jpg');
 
     fs.move(fromInputFilePath, toInputFilePath, {overwrite: true}, function()
     {

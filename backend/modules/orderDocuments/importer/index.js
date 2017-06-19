@@ -2,13 +2,13 @@
 
 'use strict';
 
-var path = require('path');
-var _ = require('lodash');
-var deepEqual = require('deep-equal');
-var moment = require('moment');
-var step = require('h5.step');
-var fs = require('fs-extra');
-var parseOrderDocuments = require('./parseOrderDocuments');
+const path = require('path');
+const _ = require('lodash');
+const deepEqual = require('deep-equal');
+const moment = require('moment');
+const step = require('h5.step');
+const fs = require('fs-extra');
+const parseOrderDocuments = require('./parseOrderDocuments');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -20,24 +20,24 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startOrderDocumentsImporterModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("mongoose module is required!");
+    throw new Error('mongoose module is required!');
   }
 
-  var XICONF_PROGRAM_PATTERNS = module.config.xiconfProgramPatterns;
-  var XICONF_PROGRAM_FILE_PATH_PATTERN = module.config.xiconfProgramFilePathPattern;
+  const XICONF_PROGRAM_PATTERNS = module.config.xiconfProgramPatterns;
+  const XICONF_PROGRAM_FILE_PATH_PATTERN = module.config.xiconfProgramFilePathPattern;
 
-  var Order = mongoose.model('Order');
-  var XiconfOrder = mongoose.model('XiconfOrder');
+  const Order = mongoose.model('Order');
+  const XiconfOrder = mongoose.model('XiconfOrder');
 
-  var scheduleUpdateDocumentNames = _.debounce(updateDocumentNames, 30000);
+  const scheduleUpdateDocumentNames = _.debounce(updateDocumentNames, 30000);
 
-  var filePathCache = {};
-  var locked = false;
-  var queue = [];
+  const filePathCache = {};
+  let locked = false;
+  const queue = [];
 
   app.broker.subscribe('directoryWatcher.changed', queueFile).setFilter(filterFile);
 
@@ -64,7 +64,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
 
     queue.push(fileInfo);
 
-    module.debug("[%s] Queued...", fileInfo.timeKey);
+    module.debug('[%s] Queued...', fileInfo.timeKey);
 
     setImmediate(importNext);
   }
@@ -76,7 +76,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
       return;
     }
 
-    var fileInfo = queue.shift();
+    const fileInfo = queue.shift();
 
     if (!fileInfo)
     {
@@ -85,9 +85,9 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
 
     locked = true;
 
-    var startTime = Date.now();
+    const startTime = Date.now();
 
-    module.debug("[%s] Importing...", fileInfo.timeKey);
+    module.debug('[%s] Importing...', fileInfo.timeKey);
 
     importFile(fileInfo, function(err, summary)
     {
@@ -95,7 +95,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
 
       if (err)
       {
-        module.error("[%s] Failed to import: %s", fileInfo.timeKey, err.message);
+        module.error('[%s] Failed to import: %s', fileInfo.timeKey, err.message);
 
         app.broker.publish('orderDocuments.syncFailed', {
           timestamp: fileInfo.timestamp,
@@ -104,7 +104,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
       }
       else
       {
-        module.debug("[%s] Imported in %d ms: %s", fileInfo.timeKey, Date.now() - startTime, JSON.stringify(summary));
+        module.debug('[%s] Imported in %d ms: %s', fileInfo.timeKey, Date.now() - startTime, JSON.stringify(summary));
 
         app.broker.publish('orderDocuments.synced', {
           timestamp: fileInfo.timestamp,
@@ -132,14 +132,14 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
           return this.skip(err);
         }
 
-        module.debug("[%s] Parsing ~%d bytes...", fileInfo.timeKey, fileContents.length);
+        module.debug('[%s] Parsing ~%d bytes...', fileInfo.timeKey, fileContents.length);
 
-        var t = Date.now();
+        const t = Date.now();
 
         this.parsedOrderDocumentsList = parseOrderDocuments(fileContents);
 
         module.debug(
-          "[%s] Parsed %d in %d ms!",
+          '[%s] Parsed %d in %d ms!',
           fileInfo.timeKey,
           this.parsedOrderDocumentsList.length,
           Date.now() - t
@@ -154,12 +154,12 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
       },
       function mapParsedOrdersStep()
       {
-        var orderNoToDocumentsMap = {};
-        var orderNoToProgramMap = {};
+        const orderNoToDocumentsMap = {};
+        const orderNoToProgramMap = {};
 
-        for (var i = 0; i < this.parsedOrderDocumentsList.length; ++i)
+        for (let i = 0; i < this.parsedOrderDocumentsList.length; ++i)
         {
-          var orderDocument = this.parsedOrderDocumentsList[i];
+          const orderDocument = this.parsedOrderDocumentsList[i];
 
           if (orderNoToDocumentsMap[orderDocument.orderNo] === undefined)
           {
@@ -183,12 +183,12 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
       },
       function findExistingOrdersStep()
       {
-        var conditions = {
+        const conditions = {
           _id: {
             $in: Object.keys(this.orderNoToDocumentsMap)
           }
         };
-        var fields = {
+        const fields = {
           qty: 1,
           documents: 1
         };
@@ -202,15 +202,15 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
           return this.skip(err);
         }
 
-        var updateList = [];
-        var updatedAt = new Date();
+        const updateList = [];
+        const updatedAt = new Date();
 
-        for (var i = 0; i < orders.length; ++i)
+        for (let i = 0; i < orders.length; ++i)
         {
-          var order = orders[i];
-          var oldDocuments = order.documents || [];
-          var newDocuments = this.orderNoToDocumentsMap[order._id].sort(sortDocuments);
-          var program = this.orderNoToProgramMap[order._id];
+          const order = orders[i];
+          const oldDocuments = order.documents || [];
+          const newDocuments = this.orderNoToDocumentsMap[order._id].sort(sortDocuments);
+          const program = this.orderNoToProgramMap[order._id];
 
           if (program)
           {
@@ -249,14 +249,14 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
       },
       function updateOrdersStep()
       {
-        for (var i = 0; i < this.updateList.length; ++i)
+        for (let i = 0; i < this.updateList.length; ++i)
         {
           Order.collection.update(this.updateList[i].condition, this.updateList[i].update, this.group());
         }
       },
       function finalizeStep(err)
       {
-        var updateCount = this.updateList ? this.updateList.length : 0;
+        const updateCount = this.updateList ? this.updateList.length : 0;
 
         this.parsedOrderDocumentsList = null;
         this.orderNoToDocumentsMap = null;
@@ -273,7 +273,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
         // mongodb package bug workaround
         if (err.err && !err.message)
         {
-          var code = err.code;
+          const code = err.code;
 
           err = new Error(err.err);
           err.name = 'MongoError';
@@ -301,14 +301,14 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
 
   function moveFileInfoFile(oldFilePath)
   {
-    var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
+    const newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
     fs.move(oldFilePath, newFilePath, {overwrite: true}, function(err)
     {
       if (err)
       {
         module.error(
-          "Failed to rename file [%s] to [%s]: %s", oldFilePath, newFilePath, err.message
+          'Failed to rename file [%s] to [%s]: %s', oldFilePath, newFilePath, err.message
         );
       }
     });
@@ -320,7 +320,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to delete file [%s]: %s", filePath, err.message);
+        module.error('Failed to delete file [%s]: %s', filePath, err.message);
       }
     });
   }
@@ -347,9 +347,9 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
 
   function matchPrograms(orderDocument, orderNoToProgramMap)
   {
-    for (var i = 0; i < XICONF_PROGRAM_PATTERNS.length; ++i)
+    for (let i = 0; i < XICONF_PROGRAM_PATTERNS.length; ++i)
     {
-      var matches = orderDocument.name.match(XICONF_PROGRAM_PATTERNS[i]);
+      const matches = orderDocument.name.match(XICONF_PROGRAM_PATTERNS[i]);
 
       if (matches)
       {
@@ -371,7 +371,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
       return;
     }
 
-    var orderNos = Object.keys(orderNoToProgramMap);
+    const orderNos = Object.keys(orderNoToProgramMap);
 
     if (!orderNos.length)
     {
@@ -390,11 +390,11 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
           return this.skip(err);
         }
 
-        var xiconfOrderItems = [];
+        const xiconfOrderItems = [];
 
-        for (var i = 0; i < xiconfOrders.length; ++i)
+        for (let i = 0; i < xiconfOrders.length; ++i)
         {
-          var xiconfOrder = xiconfOrders[i];
+          const xiconfOrder = xiconfOrders[i];
 
           addXiconfOrderItems(
             xiconfOrder,
@@ -417,18 +417,18 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
           return this.skip();
         }
 
-        var filePath = XICONF_PROGRAM_FILE_PATH_PATTERN.replace('{timestamp}', Math.ceil(timestamp / 1000));
-        var fileContents = [
+        const filePath = XICONF_PROGRAM_FILE_PATH_PATTERN.replace('{timestamp}', Math.ceil(timestamp / 1000));
+        const fileContents = [
           'DOCS',
           '-----------------------------------------------------------------------------------------------------------',
           '|Order    |Material       |Reqmts qty|Material Description                             |Reqmt Date|Deleted|',
           '-----------------------------------------------------------------------------------------------------------'
         ];
 
-        for (var i = 0; i < xiconfOrderItems.length; ++i)
+        for (let i = 0; i < xiconfOrderItems.length; ++i)
         {
-          var item = xiconfOrderItems[i];
-          var row = [
+          const item = xiconfOrderItems[i];
+          const row = [
             '',
             item.orderNo,
             '000' + item.nc12,
@@ -450,7 +450,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
       {
         if (err)
         {
-          module.error("Failed to build Xiconf dump file: %s", err.message);
+          module.error('Failed to build Xiconf dump file: %s', err.message);
         }
       }
     );
@@ -458,18 +458,18 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
 
   function addXiconfOrderItems(xiconfOrder, newProgram, xiconfOrderItems)
   {
-    var programItem = null;
+    let programItem = null;
 
-    for (var i = 0; i < xiconfOrder.items.length; ++i)
+    for (let i = 0; i < xiconfOrder.items.length; ++i)
     {
-      var item = xiconfOrder.items[i];
+      const item = xiconfOrder.items[i];
 
       if (item.kind !== 'led' && item.kind !== 'gprs' && item.kind !== 'program')
       {
         continue;
       }
 
-      var xiconfOrderItem = {
+      const xiconfOrderItem = {
         orderNo: xiconfOrder._id,
         nc12: item.nc12,
         name: item.name,

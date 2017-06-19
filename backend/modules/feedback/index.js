@@ -2,7 +2,7 @@
 
 'use strict';
 
-var setUpRoutes = require('./routes');
+const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',

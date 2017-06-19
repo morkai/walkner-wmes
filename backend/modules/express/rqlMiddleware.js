@@ -2,14 +2,14 @@
 
 'use strict';
 
-var _ = require('lodash');
-var rql = require('h5.rql');
+const _ = require('lodash');
+const rql = require('h5.rql');
 
 module.exports = function createRqlMiddleware()
 {
   return function rqlMiddleware(req, res, next)
   {
-    var rqlQuery = null;
+    let rqlQuery = null;
 
     Object.defineProperty(req, 'rql', {
       configurable: false,
@@ -38,7 +38,7 @@ function getQueryString(req)
 
   if (_.isString(req.url))
   {
-    var queryPos = req.url.indexOf('?');
+    const queryPos = req.url.indexOf('?');
 
     if (queryPos !== -1)
     {

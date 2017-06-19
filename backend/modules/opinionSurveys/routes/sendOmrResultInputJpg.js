@@ -2,20 +2,20 @@
 
 'use strict';
 
-var path = require('path');
-var fs = require('fs');
-var step = require('h5.step');
+const path = require('path');
+const fs = require('fs');
+const step = require('h5.step');
 
 module.exports = function sendOmrResultInputJpgRoute(app, module, req, res, next)
 {
-  var express = app[module.config.expressId];
-  var mongoose = app[module.config.mongooseId];
-  var OpinionSurveyOmrResult = mongoose.model('OpinionSurveyOmrResult');
+  const express = app[module.config.expressId];
+  const mongoose = app[module.config.mongooseId];
+  const OpinionSurveyOmrResult = mongoose.model('OpinionSurveyOmrResult');
 
   step(
     function findOmrResultStep()
     {
-      var fields = {
+      const fields = {
         response: 1,
         inputFileName: 1,
         'scanTemplate._id': 1
@@ -53,7 +53,7 @@ module.exports = function sendOmrResultInputJpgRoute(app, module, req, res, next
     },
     function checkJpgFileExistenceStep()
     {
-      for (var i = 0; i < this.jpgFilePaths.length; ++i)
+      for (let i = 0; i < this.jpgFilePaths.length; ++i)
       {
         checkFileExistence(this.jpgFilePaths[i], this.group());
       }
@@ -65,9 +65,9 @@ module.exports = function sendOmrResultInputJpgRoute(app, module, req, res, next
         return this.skip(err);
       }
 
-      var next = this.next();
+      const next = this.next();
 
-      for (var i = 0; i < this.jpgFilePaths.length; ++i)
+      for (let i = 0; i < this.jpgFilePaths.length; ++i)
       {
         if (stats[i])
         {
@@ -93,6 +93,6 @@ function checkFileExistence(filePath, done)
 {
   fs.stat(filePath, function(err)
   {
-    done(null, err ? false : true);
+    done(null, !err);
   });
 }

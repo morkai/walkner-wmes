@@ -2,11 +2,11 @@
 
 'use strict';
 
-var spawn = require('child_process').spawn;
-var path = require('path');
-var later = require('later');
-var _ = require('lodash');
-var jobs = require('./jobs/index');
+const spawn = require('child_process').spawn;
+const path = require('path');
+const later = require('later');
+const _ = require('lodash');
+const jobs = require('./jobs/index');
 
 exports.DEFAULT_CONFIG = {
   mailSenderId: 'mail/sender',
@@ -17,7 +17,7 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startSapGuiModule(app, sapGuiModule)
 {
-  var lastJobRunTimes = {};
+  const lastJobRunTimes = {};
 
   sapGuiModule.jobCount = 0;
 
@@ -28,10 +28,10 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
   sapGuiModule.runScript = function(job, scriptFile, args, done)
   {
-    var file = path.join(sapGuiModule.config.scriptsPath, scriptFile);
-    var cp = spawn(file, args);
-    var output = '';
-    var timeoutTimer = !job.scriptTimeout ? null : setTimeout(
+    const file = path.join(sapGuiModule.config.scriptsPath, scriptFile);
+    let cp = spawn(file, args);
+    let output = '';
+    let timeoutTimer = !job.scriptTimeout ? null : setTimeout(
       function() { bail(new Error('SCRIPT_TIMEOUT'), null); },
       job.scriptTimeout
     );
@@ -53,7 +53,7 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
       {
         output += line + '\r\n';
 
-        sapGuiModule.error("[%s] %s", job.id, line);
+        sapGuiModule.error('[%s] %s', job.id, line);
       });
     });
 
@@ -64,7 +64,7 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
       {
         output += line + '\r\n';
 
-        sapGuiModule.debug("[%s] %s", job.id, line);
+        sapGuiModule.debug('[%s] %s', job.id, line);
       });
     });
 
@@ -89,13 +89,13 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
   function runJob(job, repeatCounter, done)
   {
-    var startedAt = Date.now();
-    var lastJobRunTime = lastJobRunTimes[job.key] || 0;
+    const startedAt = Date.now();
+    const lastJobRunTime = lastJobRunTimes[job.key] || 0;
 
     if (startedAt - lastJobRunTime < 5000)
     {
       return sapGuiModule.warn(
-        "Stopped a possible duplicate run of job [%s]. Previously run at %s.",
+        'Stopped a possible duplicate run of job [%s]. Previously run at %s.',
         job.key,
         new Date(lastJobRunTime)
       );
@@ -112,12 +112,12 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
     job.id = job.name + '#' + sapGuiModule.jobCount;
 
-    var jobDone = false;
+    let jobDone = false;
 
     sapGuiModule.debug(
-      "[%s] %s...",
+      '[%s] %s...',
       job.id,
-      repeatCounter === 0 ? "Starting" : ("Repeating #" + repeatCounter)
+      repeatCounter === 0 ? 'Starting' : ('Repeating #' + repeatCounter)
     );
 
     jobs[job.name](app, sapGuiModule, job, function(err, exitCode, output)
@@ -129,7 +129,7 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
       jobDone = true;
 
-      var failure = !!err || exitCode !== 0;
+      let failure = !!err || exitCode !== 0;
 
       if (isIgnoredResult(job, err, output))
       {
@@ -146,16 +146,16 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
       else if (!failure)
       {
         failure = true;
-        err = new Error("Unexpected result.");
+        err = new Error('Unexpected result.');
       }
 
       if (err)
       {
-        sapGuiModule.error("[%s] %s", job.id, err.message);
+        sapGuiModule.error('[%s] %s', job.id, err.message);
       }
       else
       {
-        sapGuiModule.debug("[%s] Finished with code %s in %ds", job.id, exitCode, (Date.now() - startedAt) / 1000);
+        sapGuiModule.debug('[%s] Finished with code %s in %ds', job.id, exitCode, (Date.now() - startedAt) / 1000);
       }
 
       if (!job.repeatOnFailure || !failure || job.repeatOnFailure === repeatCounter)
@@ -163,7 +163,7 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
         return handleJobResult(done, job, startedAt, err, exitCode, output);
       }
 
-      sapGuiModule.debug("[%s] Failed... will retry soon...", job.id);
+      sapGuiModule.debug('[%s] Failed... will retry soon...', job.id);
 
       setTimeout(
         function() { runJob(job, ++repeatCounter, done); },
@@ -199,23 +199,23 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
   function isMatchingResult(filterType, defaultResult, job, err, output)
   {
-    var patterns = job[filterType];
+    const patterns = job[filterType];
 
     if (!Array.isArray(patterns))
     {
       return defaultResult;
     }
 
-    var error = err && err.message ? err.message : '';
+    const error = err && err.message ? err.message : '';
 
     if (!_.isString(output))
     {
       output = '';
     }
 
-    for (var i = 0; i < patterns.length; ++i)
+    for (let i = 0; i < patterns.length; ++i)
     {
-      var pattern = patterns[i];
+      const pattern = patterns[i];
 
       if (_.isString(pattern) && (_.includes(error, pattern) || _.includes(output, pattern)))
       {
@@ -250,16 +250,16 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
       return;
     }
 
-    var mailSender = app[sapGuiModule.config.mailSenderId];
-    var job = message.job;
+    const mailSender = app[sapGuiModule.config.mailSenderId];
+    const job = message.job;
 
     if (!mailSender || !Array.isArray(job.failureRecipients) || !job.failureRecipients.length)
     {
       return;
     }
 
-    var subject = '[' + app.options.id + ':sapGui:jobFailed] ' + job.id;
-    var text = [
+    const subject = '[' + app.options.id + ':sapGui:jobFailed] ' + job.id;
+    const text = [
       'Job name: ' + job.name,
       'Started at: ' + new Date(message.startedAt),
       'Finished at: ' + new Date(message.finishedAt),
@@ -274,7 +274,7 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
     {
       if (err)
       {
-        sapGuiModule.error("Failed to send e-mail [%s] to [%s]: %s", subject, job.failureRecipients, err.message);
+        sapGuiModule.error('Failed to send e-mail [%s] to [%s]: %s', subject, job.failureRecipients, err.message);
       }
     });
   });

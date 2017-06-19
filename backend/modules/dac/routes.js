@@ -4,8 +4,8 @@
 
 module.exports = function setUpDacRoutes(app, dacServerModule)
 {
-  var express = app[dacServerModule.config.expressId];
-  var DacLogEntry = app[dacServerModule.config.mongooseId].model('DacLogEntry');
+  const express = app[dacServerModule.config.expressId];
+  const DacLogEntry = app[dacServerModule.config.mongooseId].model('DacLogEntry');
 
   express.get('/dacLogEntries', function(req, res, next)
   {

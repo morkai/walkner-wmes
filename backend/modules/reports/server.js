@@ -2,9 +2,9 @@
 
 'use strict';
 
-var crypto = require('crypto');
-var _ = require('lodash');
-var moment = require('moment');
+const crypto = require('crypto');
+const _ = require('lodash');
+const moment = require('moment');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -14,11 +14,11 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startReportsServerModule(app, module)
 {
-  var STATS_HEADERS = {r: 'Requests', t: 'T Total', a: 'T Avg', m: 'T Max'};
-  var STATS_GROUPS = [120, 60, 30, 10, 0];
-  var REPORTS = module.config.reports || {};
-  var inProgress = {};
-  var stats = {};
+  const STATS_HEADERS = {r: 'Requests', t: 'T Total', a: 'T Avg', m: 'T Max'};
+  const STATS_GROUPS = [120, 60, 30, 10, 0];
+  const REPORTS = module.config.reports || {};
+  const inProgress = {};
+  const stats = {};
 
   app.onModuleReady(
     [
@@ -32,7 +32,7 @@ exports.start = function startReportsServerModule(app, module)
 
   function setUpMessengerServer()
   {
-    var server = app[module.config.messengerServerId];
+    const server = app[module.config.messengerServerId];
 
     server.handle('reports.report', handleReportRequest);
   }
@@ -44,7 +44,7 @@ exports.start = function startReportsServerModule(app, module)
       return reply(new Error('UNKNOWN_REPORT'));
     }
 
-    var startedAt = Date.now();
+    const startedAt = Date.now();
 
     if (!req.hash)
     {
@@ -53,7 +53,7 @@ exports.start = function startReportsServerModule(app, module)
 
     if (inProgress[req.hash] !== undefined)
     {
-      module.debug("Report is already generating: %s:%s...", req._id, req.hash);
+      module.debug('Report is already generating: %s:%s...', req._id, req.hash);
 
       return inProgress[req.hash].push(reply);
     }
@@ -69,18 +69,18 @@ exports.start = function startReportsServerModule(app, module)
 
       delete inProgress[req.hash];
 
-      var duration = Date.now() - startedAt;
+      const duration = Date.now() - startedAt;
 
       if (err)
       {
-        module.error("Failed to generate report [%s] in %d ms: %s", req._id, duration, err.stack);
+        module.error('Failed to generate report [%s] in %d ms: %s', req._id, duration, err.stack);
       }
       else if (duration > 30000)
       {
-        var options = _.pickBy(req.options, value => !_.isObject(value));
+        const options = _.pickBy(req.options, value => !_.isObject(value));
 
         module.debug(
-          "Generated report [%s] using data from %d days in %ss: %s",
+          'Generated report [%s] using data from %d days in %ss: %s',
           req._id,
           moment.duration(options.toTime - options.fromTime).as('days'),
           (duration / 1000).toFixed(3),
@@ -115,8 +115,8 @@ exports.start = function startReportsServerModule(app, module)
 
   function incStats(reportId, duration)
   {
-    var reportStats = getStats(reportId);
-    var totalStats = getStats('T');
+    const reportStats = getStats(reportId);
+    const totalStats = getStats('T');
 
     totalStats.r += 1;
     reportStats.r += 1;
@@ -133,9 +133,9 @@ exports.start = function startReportsServerModule(app, module)
       reportStats.m = duration;
     }
 
-    for (var i = 0; i < STATS_GROUPS.length; ++i)
+    for (let i = 0; i < STATS_GROUPS.length; ++i)
     {
-      var group = STATS_GROUPS[i];
+      const group = STATS_GROUPS[i];
 
       if (duration >= group)
       {
@@ -166,17 +166,17 @@ exports.start = function startReportsServerModule(app, module)
 
   function dumpStats()
   {
-    var reportIds = Object.keys(stats).sort((a, b) => a === 'T' ? 1 : a.localeCompare(b));
+    const reportIds = Object.keys(stats).sort((a, b) => a === 'T' ? 1 : a.localeCompare(b));
 
     if (!reportIds.length)
     {
       return;
     }
 
-    module.debug("Stats:");
+    module.debug('Stats:');
 
-    var table = '';
-    var subHeader = '';
+    let table = '';
+    let subHeader = '';
 
     _.forEach(reportIds, function(reportId)
     {
@@ -188,7 +188,7 @@ exports.start = function startReportsServerModule(app, module)
       table += '|' + _.pad(header, subHeader.length - 1);
     });
 
-    var rowSeparator = '\n      |' + _.pad('', table.length - 1, '-') + '|\n';
+    const rowSeparator = '\n      |' + _.pad('', table.length - 1, '-') + '|\n';
 
     table = rowSeparator + '      ' + table + '|' + rowSeparator + '      ';
 
@@ -199,7 +199,7 @@ exports.start = function startReportsServerModule(app, module)
 
     table += '|' + rowSeparator;
 
-    var i = 0;
+    let i = 0;
 
     _.forEachRight(STATS_GROUPS, function(group)
     {
@@ -212,12 +212,12 @@ exports.start = function startReportsServerModule(app, module)
 
       _.forEach(STATS_HEADERS, function(header, headerKey)
       {
-        var avg = headerKey === 'a';
+        const avg = headerKey === 'a';
 
         _.forEach(reportIds, function(reportId)
         {
-          var reportStats = stats[reportId];
-          var value = avg ? reportStats['t' + group] / reportStats['r' + group] : reportStats[headerKey + group];
+          const reportStats = stats[reportId];
+          const value = avg ? reportStats['t' + group] / reportStats['r' + group] : reportStats[headerKey + group];
 
           table += '| ' + _.padStart(value ? Math.round(value) : 0, Math.max(reportId.length, 5)) + ' ';
         });
@@ -230,7 +230,7 @@ exports.start = function startReportsServerModule(app, module)
 
     _.forEach(STATS_HEADERS, function(header, headerKey)
     {
-      var value = headerKey === 'a' ? (stats.T.t / stats.T.r) : stats.T[headerKey];
+      const value = headerKey === 'a' ? (stats.T.t / stats.T.r) : stats.T[headerKey];
 
       table += '|' + _.pad(Math.round(value), subHeader.length - 1);
     });

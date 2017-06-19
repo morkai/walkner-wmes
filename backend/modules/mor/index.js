@@ -520,7 +520,7 @@ exports.start = function startMorModule(app, module, done)
       return done(app.createError('INVALID_SECTION'), 400);
     }
 
-    let mrp = section.mrps.find(m => m._id === params.mrp);
+    const mrp = section.mrps.find(m => m._id === params.mrp);
 
     if (mrp)
     {

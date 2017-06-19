@@ -2,10 +2,10 @@
 
 'use strict';
 
-var util = require('util');
-var https = require('https');
-var domain = require('domain');
-var fs = require('fs');
+const util = require('util');
+const https = require('https');
+const domain = require('domain');
+const fs = require('fs');
 
 exports.DEFAULT_CONFIG = {
   expressId: 'express',
@@ -22,27 +22,25 @@ exports.start = function startHttpServerModule(app, module, done)
     if (err.code === 'EADDRINUSE')
     {
       return done(new Error(util.format(
-        "port %d already in use?", module.config.port
+        'port %d already in use?', module.config.port
       )));
     }
-    else
-    {
-      return done(err);
-    }
+
+    return done(err);
   }
 
-  var serverDomain = domain.create();
+  const serverDomain = domain.create();
 
   serverDomain.run(function()
   {
-    var options = {
+    const options = {
       key: fs.readFileSync(module.config.key),
       cert: fs.readFileSync(module.config.cert)
     };
 
     module.server = https.createServer(options, function onRequest(req, res)
     {
-      var reqDomain = domain.create();
+      const reqDomain = domain.create();
 
       reqDomain.add(req);
       reqDomain.add(res);
@@ -67,7 +65,7 @@ exports.start = function startHttpServerModule(app, module, done)
         }
       });
 
-      var expressApp = app[module.config.expressId].app;
+      const expressApp = app[module.config.expressId].app;
 
       if (expressApp)
       {
@@ -86,7 +84,7 @@ exports.start = function startHttpServerModule(app, module, done)
     {
       module.server.removeListener('error', onFirstServerError);
 
-      module.debug("Listening on port %d...", module.config.port);
+      module.debug('Listening on port %d...', module.config.port);
 
       return done();
     });

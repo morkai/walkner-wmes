@@ -2,8 +2,8 @@
 
 'use strict';
 
-var setUpRoutes = require('./routes');
-var setUpImporter = require('./importer');
+const setUpRoutes = require('./routes');
+const setUpImporter = require('./importer');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -17,7 +17,7 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startIcpoModule(app, module)
 {
-  var config = module.config;
+  const config = module.config;
 
   app.onModuleReady(
     [

@@ -2,10 +2,10 @@
 
 'use strict';
 
-var parseSapTextTable = require('../../sap/util/parseSapTextTable');
-var parseSapString = require('../../sap/util/parseSapString');
-var parseSapNumber = require('../../sap/util/parseSapNumber');
-var parseSapDate = require('../../sap/util/parseSapDate');
+const parseSapTextTable = require('../../sap/util/parseSapTextTable');
+const parseSapString = require('../../sap/util/parseSapString');
+const parseSapNumber = require('../../sap/util/parseSapNumber');
+const parseSapDate = require('../../sap/util/parseSapDate');
 
 module.exports = function parseOrders(input, orders, importTs)
 {
@@ -45,8 +45,8 @@ module.exports = function parseOrders(input, orders, importTs)
     },
     itemDecorator: function(obj)
     {
-      var scheduledStart = obj.scheduledStartDate;
-      var scheduledFinish = obj.scheduledStartDate;
+      const scheduledStart = obj.scheduledStartDate;
+      const scheduledFinish = obj.scheduledStartDate;
 
       orders[obj.no] = {
         _id: obj.no,

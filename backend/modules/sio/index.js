@@ -2,11 +2,11 @@
 
 'use strict';
 
-var _ = require('lodash');
-var socketIo = require('socket.io');
-var SocketIoMultiServer = require('./SocketIoMultiServer');
-var setUpRoutes = require('./routes');
-var pmx = null;
+const _ = require('lodash');
+const socketIo = require('socket.io');
+const SocketIoMultiServer = require('./SocketIoMultiServer');
+const setUpRoutes = require('./routes');
+let pmx = null;
 
 try { pmx = require('pmx'); }
 catch (err) {} // eslint-disable-line no-empty
@@ -31,8 +31,8 @@ exports.start = function startSioModule(app, sioModule, done)
     serveClient: false
   });
 
-  var socketCount = 0;
-  var probes = {
+  let socketCount = 0;
+  const probes = {
     currentUsersCounter: null,
     totalConnectionTime: null,
     totalConnectionCount: null
@@ -40,14 +40,14 @@ exports.start = function startSioModule(app, sioModule, done)
 
   if (pmx)
   {
-    var pmxProbe = pmx.probe();
+    const pmxProbe = pmx.probe();
 
     probes.currentUsersCounter = pmxProbe.counter({name: 'sio:currentUsers'});
     probes.totalConnectionTime = pmxProbe.histogram({name: 'sio:totalConnectionTime', measurement: 'sum'});
     probes.totalConnectionCount = pmxProbe.histogram({name: 'sio:totalConnectionCount', measurement: 'sum'});
   }
 
-  var multiServer = new SocketIoMultiServer();
+  const multiServer = new SocketIoMultiServer();
 
   app.onModuleReady(sioModule.config.httpServerIds, function()
   {
@@ -62,7 +62,7 @@ exports.start = function startSioModule(app, sioModule, done)
 
   function startSocketIo()
   {
-    var sio = socketIo(multiServer, sioModule.config.socketIo);
+    const sio = socketIo(multiServer, sioModule.config.socketIo);
 
     sioModule = app[sioModule.name] = _.assign(sio, sioModule);
 

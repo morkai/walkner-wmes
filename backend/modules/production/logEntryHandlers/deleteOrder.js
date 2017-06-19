@@ -2,13 +2,13 @@
 
 'use strict';
 
-var step = require('h5.step');
-var util = require('./util');
+const step = require('h5.step');
+const util = require('./util');
 
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  var mongoose = app[productionModule.config.mongooseId];
-  var Order = mongoose.model('Order');
+  const mongoose = app[productionModule.config.mongooseId];
+  const Order = mongoose.model('Order');
 
   step(
     function getProdDowntimeModelStep()
@@ -21,7 +21,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to find models while deleting order [%s] (LOG=[%s]): %s",
+          'Failed to find models while deleting order [%s] (LOG=[%s]): %s',
           logEntry.data._id,
           logEntry._id,
           err.stack
@@ -33,7 +33,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (!prodShiftOrder)
       {
         productionModule.warn(
-          "Order [%s] not found for deletion (LOG=[%s]): %s",
+          'Order [%s] not found for deletion (LOG=[%s]): %s',
           logEntry.data._id,
           logEntry._id,
           err.stack
@@ -47,7 +47,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
       prodShiftOrder.remove(this.parallel());
 
-      for (var i = 0, l = prodDowntimes.length; i < l; ++i)
+      for (let i = 0, l = prodDowntimes.length; i < l; ++i)
       {
         prodDowntimes[i].set({
           orderId: null,
@@ -63,7 +63,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
       if (err)
       {
         productionModule.error(
-          "Failed to delete order [%s] (LOG=[%s]): %s",
+          'Failed to delete order [%s] (LOG=[%s]): %s',
           logEntry.data._id,
           logEntry._id,
           err.stack

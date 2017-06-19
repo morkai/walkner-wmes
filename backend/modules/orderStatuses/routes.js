@@ -4,12 +4,12 @@
 
 module.exports = function setUpOrderStatusesRoutes(app, orderStatusesModule, useDictionaryModel)
 {
-  var express = app[orderStatusesModule.config.expressId];
-  var auth = app[orderStatusesModule.config.userId].auth;
-  var Model = app[orderStatusesModule.config.mongooseId].model('OrderStatus');
+  const express = app[orderStatusesModule.config.expressId];
+  const auth = app[orderStatusesModule.config.userId].auth;
+  const Model = app[orderStatusesModule.config.mongooseId].model('OrderStatus');
 
-  var canView = auth('DICTIONARIES:VIEW');
-  var canManage = auth('DICTIONARIES:MANAGE');
+  const canView = auth('DICTIONARIES:VIEW');
+  const canManage = auth('DICTIONARIES:MANAGE');
 
   express.get('/orderStatuses', canView, express.crud.browseRoute.bind(null, app, Model));
 

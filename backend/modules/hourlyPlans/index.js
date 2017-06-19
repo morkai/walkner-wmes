@@ -2,10 +2,10 @@
 
 'use strict';
 
-var _ = require('lodash');
-var setUpRoutes = require('./routes');
-var setUpCommands = require('./commands');
-var setUpDailyMrpPlans = require('./dailyMrpPlans');
+const _ = require('lodash');
+const setUpRoutes = require('./routes');
+const setUpCommands = require('./commands');
+const setUpDailyMrpPlans = require('./dailyMrpPlans');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -21,7 +21,7 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startFteModule(app, module)
 {
-  var recountTimers = {};
+  const recountTimers = {};
 
   app.onModuleReady(
     [
@@ -94,7 +94,7 @@ exports.start = function startFteModule(app, module)
 
   function recountPlannedQuantities(shiftId, prodFlowId, activeProdLineIds)
   {
-    var division = app[module.config.orgUnitsId].getDivisionFor('prodFlow', prodFlowId);
+    const division = app[module.config.orgUnitsId].getDivisionFor('prodFlow', prodFlowId);
 
     if (!division)
     {
@@ -111,7 +111,7 @@ exports.start = function startFteModule(app, module)
         if (err)
         {
           return module.error(
-            "Failed to recount planned quantities for prod flow [%s]: %s", prodFlowId, err.stack
+            'Failed to recount planned quantities for prod flow [%s]: %s', prodFlowId, err.stack
           );
         }
 
@@ -153,14 +153,14 @@ exports.start = function startFteModule(app, module)
 
   function findAndRecountPlannedQuantities(hourlyPlanId)
   {
-    var HourlyPlan = app[module.config.mongooseId].model('HourlyPlan');
+    const HourlyPlan = app[module.config.mongooseId].model('HourlyPlan');
 
     HourlyPlan.findById(hourlyPlanId).exec(function(err, hourlyPlan)
     {
       if (err)
       {
         return module.error(
-          "Failed to find hourly plan [%s] to recount planned quantities: %s",
+          'Failed to find hourly plan [%s] to recount planned quantities: %s',
           hourlyPlanId,
           err.stack
         );

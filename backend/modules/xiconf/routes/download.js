@@ -2,7 +2,7 @@
 
 'use strict';
 
-var path = require('path');
+const path = require('path');
 
 module.exports = function downloadRoute(file, app, xiconfModule, XiconfResult, req, res, next)
 {
@@ -18,8 +18,8 @@ module.exports = function downloadRoute(file, app, xiconfModule, XiconfResult, r
       return res.sendStatus(404);
     }
 
-    var suffix = '_' + app.formatDate(xiconfResult.startedAt);
-    var startedAtHour = xiconfResult.startedAt.getHours();
+    let suffix = '_' + app.formatDate(xiconfResult.startedAt);
+    const startedAtHour = xiconfResult.startedAt.getHours();
 
     if (startedAtHour >= 6 && startedAtHour < 14)
     {
@@ -34,9 +34,9 @@ module.exports = function downloadRoute(file, app, xiconfModule, XiconfResult, r
       suffix += '_III';
     }
 
-    var type;
-    var filename;
-    var fileHash;
+    let type;
+    let filename;
+    let fileHash;
 
     if (file === 'feature')
     {

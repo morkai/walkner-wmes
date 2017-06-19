@@ -2,16 +2,16 @@
 
 'use strict';
 
-var moment = require('moment');
-var parseSapTextTable = require('../../sap/util/parseSapTextTable');
-var parseSapDate = require('../../sap/util/parseSapDate');
-var parseSapTime = require('../../sap/util/parseSapTime');
-var parseSapNumber = require('../../sap/util/parseSapNumber');
+const moment = require('moment');
+const parseSapTextTable = require('../../sap/util/parseSapTextTable');
+const parseSapDate = require('../../sap/util/parseSapDate');
+const parseSapTime = require('../../sap/util/parseSapTime');
+const parseSapNumber = require('../../sap/util/parseSapNumber');
 
 module.exports = function parseTransferOrders(input, timestamp, nc12ToS)
 {
-  var validTo = moment(timestamp).hours(6).minutes(0).seconds(0).milliseconds(0).valueOf();
-  var validFrom = moment(validTo).subtract(1, 'days').valueOf();
+  const validTo = moment(timestamp).hours(6).minutes(0).seconds(0).milliseconds(0).valueOf();
+  const validFrom = moment(validTo).subtract(1, 'days').valueOf();
 
   return parseSapTextTable(input, {
     columnMatchers: {
@@ -54,7 +54,7 @@ module.exports = function parseTransferOrders(input, timestamp, nc12ToS)
         return null;
       }
 
-      var confirmedAt = new Date(
+      const confirmedAt = new Date(
         obj.confDate.y, obj.confDate.m - 1, obj.confDate.d,
         obj.confTime.h, obj.confTime.m, obj.confTime.s
       );
@@ -96,8 +96,8 @@ function stripLeadingZeros(input)
 
 function getShiftDate(confirmedAt)
 {
-  var shiftDate = moment(confirmedAt).minutes(0).seconds(0).milliseconds(0);
-  var h = shiftDate.hours();
+  const shiftDate = moment(confirmedAt).minutes(0).seconds(0).milliseconds(0);
+  const h = shiftDate.hours();
 
   if (h >= 6 && h < 14)
   {

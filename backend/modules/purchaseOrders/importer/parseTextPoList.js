@@ -2,20 +2,20 @@
 
 'use strict';
 
-var parseTextRowContents = require('./parseTextRowContents');
+const parseTextRowContents = require('./parseTextRowContents');
 
 module.exports = function parseTextPoList(text, importedAt, purchaseOrders)
 {
-  var ctx = {
+  const ctx = {
     count: 0,
     lastOrder: null,
     lastItem: null,
     importedAt: importedAt,
     purchaseOrders: purchaseOrders
   };
-  var rows = text.split('\n');
+  const rows = text.split('\n');
 
-  for (var i = 0, l = rows.length; i < l; ++i)
+  for (let i = 0, l = rows.length; i < l; ++i)
   {
     parseTextRowContents(rows[i].replace(/^\s*\|/, '').replace(/\|\s*$/, ''), ctx);
   }

@@ -2,9 +2,9 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var setUpRoutes = require('./routes');
+const _ = require('lodash');
+const step = require('h5.step');
+const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -15,14 +15,14 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startSettingsModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("mongoose module is required!");
+    throw new Error('mongoose module is required!');
   }
 
-  var Setting = mongoose.model('Setting');
+  const Setting = mongoose.model('Setting');
 
   app.onModuleReady(module.config.expressId, setUpRoutes.bind(null, app, module));
 
@@ -57,11 +57,11 @@ exports.start = function startSettingsModule(app, module)
         return done(err, null);
       }
 
-      var result = {};
+      const result = {};
 
-      for (var i = 0, l = settings.length; i < l; ++i)
+      for (let i = 0, l = settings.length; i < l; ++i)
       {
-        var setting = settings[i];
+        const setting = settings[i];
 
         result[setting._id.replace(ns, '')] = setting.value;
       }
@@ -72,8 +72,8 @@ exports.start = function startSettingsModule(app, module)
 
   module.update = function(_id, newValue, updater, done)
   {
-    var updatedAt = new Date();
-    var update = {
+    const updatedAt = new Date();
+    const update = {
       $set: {
         value: newValue,
         updater: updater,
@@ -85,7 +85,7 @@ exports.start = function startSettingsModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to set the [%s] setting to [%s]: %s", _id, newValue, err.stack);
+        module.error('Failed to set the [%s] setting to [%s]: %s', _id, newValue, err.stack);
       }
       else
       {
@@ -106,7 +106,7 @@ exports.start = function startSettingsModule(app, module)
     step(
       function updateSettingsStep()
       {
-        var step = this;
+        const step = this;
 
         _.forEach(settings, function(_id)
         {
@@ -129,7 +129,7 @@ exports.start = function startSettingsModule(app, module)
       return next(new Error('MISSING_VALUE'));
     }
 
-    var userModule = app[module.config.userId];
+    const userModule = app[module.config.userId];
 
     module.update(
       req.body._id,

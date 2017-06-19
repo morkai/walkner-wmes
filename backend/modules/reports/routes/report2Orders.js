@@ -2,36 +2,36 @@
 
 'use strict';
 
-var createHash = require('crypto').createHash;
-var _ = require('lodash');
-var moment = require('moment');
-var helpers = require('./helpers');
+const createHash = require('crypto').createHash;
+const _ = require('lodash');
+const moment = require('moment');
+const helpers = require('./helpers');
 
-var MAP_REDUCE_CLEAR_DELAY = 10 * 60 * 1000;
+const MAP_REDUCE_CLEAR_DELAY = 10 * 60 * 1000;
 
 module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
 {
-  var query = req.query;
-  var orgUnitsModule = app[reportsModule.config.orgUnitsId];
-  var orgUnit = orgUnitsModule.getByTypeAndId(query.orgUnitType, query.orgUnitId);
+  const query = req.query;
+  const orgUnitsModule = app[reportsModule.config.orgUnitsId];
+  const orgUnit = orgUnitsModule.getByTypeAndId(query.orgUnitType, query.orgUnitId);
 
   if (orgUnit === null && (query.orgUnitType || query.orgUnitId))
   {
     return res.sendStatus(400);
   }
 
-  var mongoose = app[reportsModule.config.mongooseId];
-  var Order = mongoose.model('Order');
+  const mongoose = app[reportsModule.config.mongooseId];
+  const Order = mongoose.model('Order');
 
-  var fromTime = helpers.getTime(query.from);
-  var toTime = helpers.getTime(query.to);
-  var orderNo = (query.orderNo || '').replace(/[^0-9]+/g, '');
-  var hour = parseInt((query.hour || '').replace(/[^0-9]+/g, ''), 10);
+  const fromTime = helpers.getTime(query.from);
+  const toTime = helpers.getTime(query.to);
+  const orderNo = (query.orderNo || '').replace(/[^0-9]+/g, '');
+  let hour = parseInt((query.hour || '').replace(/[^0-9]+/g, ''), 10);
 
-  var mrpControllers = orgUnitsModule.getAssemblyMrpControllersFor(query.orgUnitType, query.orgUnitId)
+  const mrpControllers = orgUnitsModule.getAssemblyMrpControllersFor(query.orgUnitType, query.orgUnitId)
     .filter(function(id)
     {
-      var mrp = orgUnitsModule.getByTypeAndId('mrpController', id);
+      const mrp = orgUnitsModule.getByTypeAndId('mrpController', id);
 
       return !mrp.deactivatedAt || fromTime < mrp.deactivatedAt;
     })
@@ -68,7 +68,7 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
       && _.isString(query.statuses)
       && /^[A-Z,]+$/.test(query.statuses))
     {
-      var ors = [];
+      const ors = [];
 
       _.forEach(query.statuses.split(','), function(status)
       {
@@ -125,9 +125,9 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
       }];
     }
 
-    var cacheKey = createHash('md5').update(JSON.stringify(req.rql.selector.args)).digest('hex');
+    const cacheKey = createHash('md5').update(JSON.stringify(req.rql.selector.args)).digest('hex');
 
-    var browseOptions = {
+    const browseOptions = {
       model: Order,
       totalCount: reportsModule.getCachedTotalCount(cacheKey),
       prepareResult: function(totalCount, models, done)
@@ -146,9 +146,9 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
 
   function findOrdersWithHourFilter()
   {
-    /*globals emit,hourMode*/
+    /* globals emit,hourMode*/
 
-    var cacheKey = createHash('md5').update(JSON.stringify([
+    const cacheKey = createHash('md5').update(JSON.stringify([
       query.orgUnitType,
       query.orgUnitId,
       fromTime,
@@ -164,14 +164,14 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
       return sendCachedMapReduceResults(cacheKey);
     }
 
-    var maxTime = query.hourMode === 'finish'
+    let maxTime = query.hourMode === 'finish'
       ? null
       : moment(toTime).subtract(query.hourMode === 'exclusive' ? 1 : 0, 'days').hours(hour).valueOf();
-    var filter = _.isString(query.filter) && orderNo.length < 6 ? query.filter : '';
-    var statuses = _.isString(query.statuses)
+    const filter = _.isString(query.filter) && orderNo.length < 6 ? query.filter : '';
+    const statuses = _.isString(query.statuses)
       ? query.statuses.split(',').filter(function(status) { return status.length > 0; })
       : [];
-    var mapReduceQuery = orderNo.length > 6 ? {_id: new RegExp('^' + orderNo)} : {
+    const mapReduceQuery = orderNo.length > 6 ? {_id: new RegExp('^' + orderNo)} : {
       mrp: {$in: mrpControllers},
       startDate: {
         $gte: new Date(fromTime),
@@ -190,30 +190,30 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
             maxTime = this.finishDate.getTime();
           }
 
-          var statusesSetAt = {};
-          var changes = this.changes;
+          let statusesSetAt = {};
+          const changes = this.changes;
 
-          for (var i = 0; i < changes.length; ++i)
+          for (let i = 0; i < changes.length; ++i)
           {
-            var change = changes[i];
+            const change = changes[i];
 
             if (change.time.getTime() > maxTime)
             {
               break;
             }
 
-            var newStatuses = change.newValues.statuses;
+            const newStatuses = change.newValues.statuses;
 
             if (!newStatuses)
             {
               continue;
             }
 
-            var newStatusesSetAt = {};
+            const newStatusesSetAt = {};
 
-            for (var ii = 0; ii < newStatuses.length; ++ii)
+            for (let ii = 0; ii < newStatuses.length; ++ii)
             {
-              var newStatus = newStatuses[ii];
+              const newStatus = newStatuses[ii];
 
               newStatusesSetAt[newStatus] = statusesSetAt[newStatus] || change.time;
             }
@@ -221,8 +221,8 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
             statusesSetAt = newStatusesSetAt;
           }
 
-          var j;
-          var found;
+          let j;
+          let found;
 
           switch (filter)
           {
@@ -349,7 +349,7 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
 
   function sendCachedMapReduceResults(cacheKey)
   {
-    var mapReduceResult = reportsModule.mapReduceResults[cacheKey];
+    const mapReduceResult = reportsModule.mapReduceResults[cacheKey];
 
     if (!mapReduceResult)
     {
@@ -363,10 +363,10 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
 
     mapReduceResult.clearTimer = setTimeout(clearMapReduceResults, MAP_REDUCE_CLEAR_DELAY, cacheKey);
 
-    var conditions = {
+    const conditions = {
       '_id.c': cacheKey
     };
-    var queryOptions = {
+    const queryOptions = {
       fields: {_id: 0},
       sort: {'_id.c': 1, 'value.startDate': 1},
       limit: req.rql.limit || 10,
@@ -395,7 +395,7 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
     {
       if (err)
       {
-        reportsModule.error("Failed to remove cached CLIP orders [%s]: %s", cacheKey, err.message);
+        reportsModule.error('Failed to remove cached CLIP orders [%s]: %s', cacheKey, err.message);
       }
     });
   }

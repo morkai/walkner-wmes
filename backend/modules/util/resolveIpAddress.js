@@ -4,7 +4,7 @@
 
 module.exports = function resolveIpAddress(addressData)
 {
-  var ip = '';
+  let ip = '';
 
   if (addressData)
   {
@@ -33,8 +33,8 @@ module.exports = function resolveIpAddress(addressData)
 
 function hasRealIpFromProxyServer(addressData)
 {
-  var handshake = addressData.request;
-  var headers = handshake ? handshake.headers : addressData.headers;
+  const handshake = addressData.request;
+  const headers = handshake ? handshake.headers : addressData.headers;
 
   if (!headers || typeof headers['x-real-ip'] !== 'string')
   {

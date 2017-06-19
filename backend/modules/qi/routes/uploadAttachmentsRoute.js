@@ -11,7 +11,7 @@ module.exports = function uploadAttachmentsRoute(app, qiModule, req, res)
 
   _.forEach(req.files, function(file)
   {
-    var id = file.filename.replace(/\..*?$/, '');
+    const id = file.filename.replace(/\..*?$/, '');
 
     qiModule.tmpAttachments[id] = {
       data: {
@@ -37,11 +37,11 @@ module.exports = function uploadAttachmentsRoute(app, qiModule, req, res)
     {
       if (err && err.code !== 'ENOENT')
       {
-        qiModule.error("Failed to remove an unused attachment [%s]: %s", filePath, err.message);
+        qiModule.error('Failed to remove an unused attachment [%s]: %s', filePath, err.message);
       }
       else
       {
-        qiModule.debug("Removed an unused attachment: %s", filePath);
+        qiModule.debug('Removed an unused attachment: %s', filePath);
       }
     });
   }

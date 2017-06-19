@@ -2,13 +2,13 @@
 
 'use strict';
 
-var path = require('path');
-var _ = require('lodash');
-var moment = require('moment');
-var step = require('h5.step');
-var fs = require('fs-extra');
-var parseOrders = require('./parseOrders');
-var resolveProductName = require('../../util/resolveProductName');
+const path = require('path');
+const _ = require('lodash');
+const moment = require('moment');
+const step = require('h5.step');
+const fs = require('fs-extra');
+const parseOrders = require('./parseOrders');
+const resolveProductName = require('../../util/resolveProductName');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -18,26 +18,26 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startXiconfOrdersImporterModule(app, module)
 {
-  var mongoose = app[module.config.mongooseId];
+  const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error("mongoose module is required!");
+    throw new Error('mongoose module is required!');
   }
 
-  var IMPORT_KINDS = {
+  const IMPORT_KINDS = {
     program: true,
     led: true,
     gprs: true
   };
 
-  var Order = mongoose.model('Order');
-  var XiconfOrder = mongoose.model('XiconfOrder');
-  var XiconfHidLamp = mongoose.model('XiconfHidLamp');
+  const Order = mongoose.model('Order');
+  const XiconfOrder = mongoose.model('XiconfOrder');
+  const XiconfHidLamp = mongoose.model('XiconfHidLamp');
 
-  var filePathCache = {};
-  var locked = false;
-  var queue = [];
+  const filePathCache = {};
+  let locked = false;
+  const queue = [];
 
   app.broker.subscribe('directoryWatcher.changed', queueFile).setFilter(filterFile);
 
@@ -64,7 +64,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
     queue.push(fileInfo);
 
-    module.debug("[%s] Queued...", fileInfo.timeKey);
+    module.debug('[%s] Queued...', fileInfo.timeKey);
 
     setImmediate(importNext);
   }
@@ -76,7 +76,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       return;
     }
 
-    var fileInfo = queue.shift();
+    const fileInfo = queue.shift();
 
     if (!fileInfo)
     {
@@ -85,9 +85,9 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
     locked = true;
 
-    var startTime = Date.now();
+    const startTime = Date.now();
 
-    module.debug("[%s] Importing...", fileInfo.timeKey);
+    module.debug('[%s] Importing...', fileInfo.timeKey);
 
     importFile(fileInfo, function(err, summary)
     {
@@ -95,7 +95,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
       if (err)
       {
-        module.error("[%s] Failed to import: %s", fileInfo.timeKey, err.message);
+        module.error('[%s] Failed to import: %s', fileInfo.timeKey, err.message);
 
         app.broker.publish('xiconf.orders.syncFailed', {
           timestamp: fileInfo.timestamp,
@@ -104,7 +104,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       }
       else
       {
-        module.debug("[%s] Imported in %d ms: %s", fileInfo.timeKey, Date.now() - startTime, JSON.stringify(summary));
+        module.debug('[%s] Imported in %d ms: %s', fileInfo.timeKey, Date.now() - startTime, JSON.stringify(summary));
 
         app.broker.publish('xiconf.orders.synced', {
           timestamp: fileInfo.timestamp,
@@ -148,25 +148,25 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
           return this.skip(err);
         }
 
-        module.debug("[%s] Parsing ~%d bytes...", fileInfo.timeKey, fileContents.length);
+        module.debug('[%s] Parsing ~%d bytes...', fileInfo.timeKey, fileContents.length);
 
-        var t = Date.now();
+        const t = Date.now();
 
         this.parsedOrdersList = parseOrders(fileContents, this.hidLamps);
         this.hidLamps = null;
 
-        module.debug("[%s] Parsed %d orders in %d ms!", fileInfo.timeKey, this.parsedOrdersList.length, Date.now() - t);
+        module.debug('[%s] Parsed %d orders in %d ms!', fileInfo.timeKey, this.parsedOrdersList.length, Date.now() - t);
 
         setImmediate(this.next());
       },
       function mapParsedOrdersStep()
       {
-        var parsedOrdersMap = {};
+        const parsedOrdersMap = {};
 
-        for (var i = 0; i < this.parsedOrdersList.length; ++i)
+        for (let i = 0; i < this.parsedOrdersList.length; ++i)
         {
-          var parsedOrder = this.parsedOrdersList[i];
-          var parsedOrdersList = parsedOrdersMap[parsedOrder.no];
+          const parsedOrder = this.parsedOrdersList[i];
+          const parsedOrdersList = parsedOrdersMap[parsedOrder.no];
 
           if (parsedOrdersList === undefined)
           {
@@ -175,9 +175,9 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
             continue;
           }
 
-          var duplicate = null;
+          let duplicate = null;
 
-          for (var ii = 0; ii < parsedOrdersList.length; ++ii)
+          for (let ii = 0; ii < parsedOrdersList.length; ++ii)
           {
             if (parsedOrder.nc12 === parsedOrdersList[ii].nc12)
             {
@@ -202,8 +202,8 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       },
       function findExistingOrdersStep()
       {
-        var orderIds = Object.keys(this.parsedOrdersMap);
-        var fields = {
+        const orderIds = Object.keys(this.parsedOrdersMap);
+        const fields = {
           name: 1,
           description: 1,
           nc12: 1,
@@ -222,11 +222,11 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
           return this.skip(err);
         }
 
-        var xiconfOrdersMap = {};
+        const xiconfOrdersMap = {};
 
-        for (var j = 0; j < xiconfOrdersList.length; ++j)
+        for (let j = 0; j < xiconfOrdersList.length; ++j)
         {
-          var xiconfOrder = xiconfOrdersList[j];
+          const xiconfOrder = xiconfOrdersList[j];
 
           xiconfOrdersMap[xiconfOrder._id] = xiconfOrder;
         }
@@ -238,23 +238,23 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       },
       function compareOrdersStep()
       {
-        var insertsMap = {};
-        var updatesList = [];
-        var updateCount = 0;
-        var deletedItemsMap = {};
-        var importedAt = new Date(fileInfo.timestamp);
+        const insertsMap = {};
+        const updatesList = [];
+        let updateCount = 0;
+        const deletedItemsMap = {};
+        const importedAt = new Date(fileInfo.timestamp);
 
-        for (var i = 0; i < this.ordersList.length; ++i)
+        for (let i = 0; i < this.ordersList.length; ++i)
         {
-          var order = this.ordersList[i];
+          const order = this.ordersList[i];
 
           if (order.name === null || order.nc12 === null || order.qty === null)
           {
             continue;
           }
 
-          var xiconfOrder = this.xiconfOrdersMap[order._id];
-          var parsedOrders = this.parsedOrdersMap[order._id];
+          let xiconfOrder = this.xiconfOrdersMap[order._id];
+          const parsedOrders = this.parsedOrdersMap[order._id];
 
           if (xiconfOrder === undefined)
           {
@@ -283,9 +283,9 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       },
       function createBatchesStep()
       {
-        var batchSize = 250;
-        var batchCount = Math.ceil(this.insertsList.length / batchSize);
-        var i;
+        const batchSize = 250;
+        const batchCount = Math.ceil(this.insertsList.length / batchSize);
+        let i;
 
         this.batches = [];
 
@@ -298,7 +298,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       },
       function updateDbStep()
       {
-        var i;
+        let i;
 
         for (i = 0; i < this.batches.length; ++i)
         {
@@ -321,7 +321,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
           return this.skip(err);
         }
 
-        var orderIds = Object.keys(this.deletedItemsMap);
+        const orderIds = Object.keys(this.deletedItemsMap);
 
         if (!orderIds.length)
         {
@@ -337,24 +337,24 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
           return this.skip(err);
         }
 
-        for (var i = 0; i < xiconfOrders.length; ++i)
+        for (let i = 0; i < xiconfOrders.length; ++i)
         {
-          var order = xiconfOrders[i];
-          var allItems = order.items;
-          var deletedItems = this.deletedItemsMap[order._id];
-          var update = {
+          const order = xiconfOrders[i];
+          const allItems = order.items;
+          const deletedItems = this.deletedItemsMap[order._id];
+          const update = {
             nc12: [order.nc12[0]],
             items: []
           };
 
-          for (var ii = 0; ii < allItems.length; ++ii)
+          for (let ii = 0; ii < allItems.length; ++ii)
           {
             if (_.includes(deletedItems, ii))
             {
               continue;
             }
 
-            var item = allItems[ii];
+            const item = allItems[ii];
 
             update.nc12.push(item.nc12);
             update.items.push(item);
@@ -375,7 +375,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
         if (err.err && !err.message)
         {
-          var code = err.code;
+          const code = err.code;
 
           err = new Error(err.err);
           err.name = 'MongoError';
@@ -403,14 +403,14 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
   function moveFileInfoFile(oldFilePath)
   {
-    var newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
+    const newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
     fs.move(oldFilePath, newFilePath, {overwrite: true}, function(err)
     {
       if (err)
       {
         module.error(
-          "Failed to rename file [%s] to [%s]: %s", oldFilePath, newFilePath, err.message
+          'Failed to rename file [%s] to [%s]: %s', oldFilePath, newFilePath, err.message
         );
       }
     });
@@ -422,7 +422,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to delete file [%s]: %s", filePath, err.message);
+        module.error('Failed to delete file [%s]: %s', filePath, err.message);
       }
     });
   }
@@ -454,7 +454,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
   function addParsedOrdersToXiconfOrder(parsedOrders, xiconfOrder)
   {
-    var maxReqDate = 0;
+    let maxReqDate = 0;
 
     _.forEach(parsedOrders, function(parsedOrder)
     {
@@ -491,14 +491,14 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       return 0;
     }
 
-    var $set = {};
-    var $push = {};
+    const $set = {};
+    const $push = {};
 
     compareOrderToXiconfOrder($set, order, xiconfOrder);
     compareParsedOrdersToXiconfOrder($set, $push, deletedItemsMap, parsedOrders, xiconfOrder);
 
-    var emptySet = _.isEmpty($set);
-    var emptyPush = _.isEmpty($push);
+    const emptySet = _.isEmpty($set);
+    const emptyPush = _.isEmpty($push);
 
     if (emptySet && emptyPush)
     {
@@ -512,7 +512,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
     $set.importedAt = importedAt;
 
-    var condition = {_id: xiconfOrder._id};
+    const condition = {_id: xiconfOrder._id};
 
     updatesList.push({
       condition: condition,
@@ -562,9 +562,9 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
   function compareParsedOrdersToXiconfOrder($set, $push, deletedItemsMap, parsedOrdersList, xiconfOrder)
   {
-    var parsedOrdersMap = {};
-    var deletedItems = [];
-    var hasExistingProgramFromDocs = false;
+    const parsedOrdersMap = {};
+    const deletedItems = [];
+    let hasExistingProgramFromDocs = false;
 
     _.forEach(parsedOrdersList, function(parsedOrder)
     {
@@ -573,7 +573,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
     _.forEach(xiconfOrder.items, function(xiconfOrderItem, i)
     {
-      var itemExists = compareParsedOrderToXiconfOrderItem($set, parsedOrdersMap, xiconfOrderItem, i);
+      const itemExists = compareParsedOrderToXiconfOrderItem($set, parsedOrdersMap, xiconfOrderItem, i);
 
       if (!itemExists && IMPORT_KINDS[xiconfOrderItem.kind] && shouldDeleteItem(xiconfOrderItem))
       {
@@ -634,7 +634,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
   function compareParsedOrderToXiconfOrderItem($set, parsedOrdersMap, xiconfOrderItem, i)
   {
-    var parsedOrder = parsedOrdersMap[xiconfOrderItem.nc12];
+    const parsedOrder = parsedOrdersMap[xiconfOrderItem.nc12];
 
     if (!parsedOrder)
     {

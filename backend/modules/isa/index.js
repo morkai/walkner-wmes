@@ -2,9 +2,9 @@
 
 'use strict';
 
-var setUpLineState = require('./lineState');
-var setUpRoutes = require('./routes');
-var setUpIsaShiftPersonnel = require('./shiftPersonnel');
+const setUpLineState = require('./lineState');
+const setUpRoutes = require('./routes');
+const setUpIsaShiftPersonnel = require('./shiftPersonnel');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -16,7 +16,7 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startIsaModule(app, module)
 {
-  var config = module.config;
+  const config = module.config;
 
   app.onModuleReady(
     [

@@ -4,7 +4,7 @@
 
 module.exports = function syncRoute(app, productionModule, req, res)
 {
-  var creator = app[productionModule.config.userId].createUserInfo(req.session.user, req);
+  const creator = app[productionModule.config.userId].createUserInfo(req.session.user, req);
 
   productionModule.syncLogEntryStream(creator, req.body, function(err, lockLogEntry)
   {

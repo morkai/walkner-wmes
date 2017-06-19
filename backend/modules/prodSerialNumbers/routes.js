@@ -30,7 +30,7 @@ module.exports = function setUpProdSerialNumbersRoutes(app, module)
       '#cycleTime': Math.round(doc.taktTime / 1000),
       '#iptCycleTime': Math.round(doc.iptTaktTime / 1000) || '',
       'scanTs': app.formatDateTime(doc.scannedAt),
-      'iptTs': app.formatDateTime(doc.iptTaktTime),
+      'iptTs': app.formatDateTime(doc.iptTaktTime)
     };
   }
 };

@@ -2,7 +2,7 @@
 
 'use strict';
 
-var setUpRoutes = require('./routes');
+const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -30,7 +30,7 @@ exports.start = function startDacNodeModule(app, module)
 
   function setUpMessengerServer()
   {
-    var server = app[module.config.messengerServerId];
+    const server = app[module.config.messengerServerId];
 
     server.handle('dac.log', handleLogRequest);
   }
@@ -42,7 +42,7 @@ exports.start = function startDacNodeModule(app, module)
       if (err)
       {
         module.error(
-          "Failed to create log entries from data sent by node [%s]: %s", req.nodeId, err.message
+          'Failed to create log entries from data sent by node [%s]: %s', req.nodeId, err.message
         );
       }
       else

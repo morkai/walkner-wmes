@@ -2,17 +2,17 @@
 
 'use strict';
 
-var _ = require('lodash');
-var helpers = require('./helpers');
+const _ = require('lodash');
+const helpers = require('./helpers');
 
 module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
 {
-  var mongoose = app[reportsModule.config.mongooseId];
+  const mongoose = app[reportsModule.config.mongooseId];
 
-  var worksheetIds = Array.isArray(req.body.worksheets) ? req.body.worksheets : [];
-  var orderIds = Array.isArray(req.body.orders) ? req.body.orders : [];
-  var userIds = [];
-  var conditions = worksheetIds.length ? {_id: {$in: worksheetIds}} : {
+  const worksheetIds = Array.isArray(req.body.worksheets) ? req.body.worksheets : [];
+  const orderIds = Array.isArray(req.body.orders) ? req.body.orders : [];
+  let userIds = [];
+  const conditions = worksheetIds.length ? {_id: {$in: worksheetIds}} : {
     date: {
       $gte: new Date(helpers.getTime(req.query.from)),
       $lt: new Date(helpers.getTime(req.query.to))
@@ -23,7 +23,7 @@ module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
       }
     }
   };
-  var fields = {
+  const fields = {
     rid: 1,
     date: 1,
     shift: 1,
@@ -42,7 +42,7 @@ module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
     'orders.prodShiftOrder': 1
   };
 
-  var mode = req.query.mode;
+  const mode = req.query.mode;
 
   if (mode === 'shift')
   {
@@ -86,12 +86,12 @@ module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
       return next(err);
     }
 
-    var collection = [];
+    const collection = [];
 
-    for (var i = 0, l = pressWorksheets.length; i < l; ++i)
+    for (let i = 0, l = pressWorksheets.length; i < l; ++i)
     {
-      var pressWorksheet = pressWorksheets[i];
-      var orders = pressWorksheet.orders;
+      const pressWorksheet = pressWorksheets[i];
+      const orders = pressWorksheet.orders;
       var user;
 
       if (mode === 'shift')
@@ -107,9 +107,9 @@ module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
         user = getOperatorLabel(userIds, pressWorksheet.operators);
       }
 
-      for (var ii = 0, ll = orders.length; ii < ll; ++ii)
+      for (let ii = 0, ll = orders.length; ii < ll; ++ii)
       {
-        var order = orders[ii];
+        const order = orders[ii];
 
         if (!order.notes)
         {
@@ -142,7 +142,7 @@ module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
       totalCount: collection.length,
       collection: collection.sort(function(a, b)
       {
-        var result = a.pressWorksheet.user.localeCompare(b.pressWorksheet.user);
+        const result = a.pressWorksheet.user.localeCompare(b.pressWorksheet.user);
 
         if (result !== 0)
         {

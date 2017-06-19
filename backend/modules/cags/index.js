@@ -2,7 +2,7 @@
 
 'use strict';
 
-var setUpRoutes = require('./routes');
+const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
@@ -27,20 +27,20 @@ exports.start = function startCagsModule(app, module)
 
   function onCagGroupChanged(message)
   {
-    var mongoose = app[module.config.mongooseId];
+    const mongoose = app[module.config.mongooseId];
 
     if (!mongoose)
     {
       return;
     }
 
-    var CagGroup = mongoose.model('CagGroup');
-    var conditions = {
+    const CagGroup = mongoose.model('CagGroup');
+    const conditions = {
       _id: {
         $ne: message.model._id
       }
     };
-    var update = {
+    const update = {
       $pullAll: {
         cags: message.model.cags
       }
@@ -50,7 +50,7 @@ exports.start = function startCagsModule(app, module)
     {
       if (err)
       {
-        module.error("Failed to update CAGs in groups: %s", err.message);
+        module.error('Failed to update CAGs in groups: %s', err.message);
       }
     });
   }

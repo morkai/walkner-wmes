@@ -2,17 +2,17 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var helpers = require('./helpers');
-var report6 = require('../report6');
+const _ = require('lodash');
+const step = require('h5.step');
+const helpers = require('./helpers');
+const report6 = require('../report6');
 
 module.exports = function report6Route(app, reportsModule, req, res, next)
 {
-  var orgUnitsModule = app[reportsModule.config.orgUnitsId];
-  var prodTasksModule = app[reportsModule.config.prodTasksId];
+  const orgUnitsModule = app[reportsModule.config.orgUnitsId];
+  const prodTasksModule = app[reportsModule.config.prodTasksId];
 
-  var options = {
+  const options = {
     fromTime: helpers.getTime(req.query.from),
     toTime: helpers.getTime(req.query.to),
     interval: req.query.interval || 'shift',
@@ -37,8 +37,8 @@ module.exports = function report6Route(app, reportsModule, req, res, next)
         return this.skip(err);
       }
 
-      var compSubdivision = orgUnitsModule.getByTypeAndId('subdivision', settings['comp.id']);
-      var finGoodsSubdivision = orgUnitsModule.getByTypeAndId('subdivision', settings['finGoods.id']);
+      const compSubdivision = orgUnitsModule.getByTypeAndId('subdivision', settings['comp.id']);
+      const finGoodsSubdivision = orgUnitsModule.getByTypeAndId('subdivision', settings['finGoods.id']);
 
       options.prodTasks = prepareProdTasks(
         prodTasksModule.models,
@@ -64,12 +64,12 @@ module.exports = function report6Route(app, reportsModule, req, res, next)
 
 function prepareProdTasks(prodTasksList, compTags, finGoodsTags)
 {
-  var prodTasksMap = {};
+  const prodTasksMap = {};
 
   _.forEach(prodTasksList, function(prodTask)
   {
-    var inComp = _.intersection(prodTask.tags, compTags).length > 0;
-    var inFinGoods = _.intersection(prodTask.tags, finGoodsTags).length > 0;
+    const inComp = _.intersection(prodTask.tags, compTags).length > 0;
+    const inFinGoods = _.intersection(prodTask.tags, finGoodsTags).length > 0;
 
     if (!inComp && !inFinGoods)
     {

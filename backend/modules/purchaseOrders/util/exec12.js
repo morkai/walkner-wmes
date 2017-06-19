@@ -19,18 +19,18 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/*jshint unused:false*/
+/* jshint unused:false*/
 
 'use strict';
 
 // Extracted from https://github.com/joyent/node/blob/9b8837b3554cb38fe9412922f064529329f5fff7/lib/child_process.js
 
-var util = require('util');
-var spawn = require('child_process').spawn;
+const util = require('util');
+const spawn = require('child_process').spawn;
 
-function normalizeExecArgs(command /*, options, callback */)
+function normalizeExecArgs(command /* , options, callback */)
 {
-  var file, args, options, callback;
+  let file, args, options, callback;
 
   if (typeof arguments[1] === 'function')
   {
@@ -72,9 +72,9 @@ function normalizeExecArgs(command /*, options, callback */)
   };
 }
 
-exports.exec = function(command /*, options, callback */)
+exports.exec = function(command /* , options, callback */)
 {
-  var opts = normalizeExecArgs.apply(null, arguments);
+  const opts = normalizeExecArgs.apply(null, arguments);
   return exports.execFile(opts.file,
     opts.args,
     opts.options,
@@ -83,8 +83,8 @@ exports.exec = function(command /*, options, callback */)
 
 exports.execFile = function(file /* args, options, callback */)
 {
-  var args, callback;
-  var options = {
+  let args, callback;
+  let options = {
     encoding: 'utf8',
     timeout: 0,
     maxBuffer: 200 * 1024,
@@ -111,7 +111,7 @@ exports.execFile = function(file /* args, options, callback */)
     options = util._extend(options, arguments[1]);
   }
 
-  var child = spawn(file, args, {
+  const child = spawn(file, args, {
     cwd: options.cwd,
     env: options.env,
     gid: options.gid,
@@ -119,9 +119,9 @@ exports.execFile = function(file /* args, options, callback */)
     windowsVerbatimArguments: !!options.windowsVerbatimArguments
   });
 
-  var encoding;
-  var _stdout;
-  var _stderr;
+  let encoding;
+  let _stdout;
+  let _stderr;
   if (options.encoding !== 'buffer' && Buffer.isEncoding(options.encoding))
   {
     encoding = options.encoding;
@@ -134,13 +134,13 @@ exports.execFile = function(file /* args, options, callback */)
     _stderr = [];
     encoding = null;
   }
-  var stdoutLen = 0;
-  var stderrLen = 0;
-  var killed = false;
-  var exited = false;
-  var timeoutId;
+  let stdoutLen = 0;
+  let stderrLen = 0;
+  let killed = false;
+  let exited = false;
+  let timeoutId;
 
-  var ex = null;
+  let ex = null;
 
   function exithandler(code, signal)
   {
@@ -163,8 +163,8 @@ exports.execFile = function(file /* args, options, callback */)
     }
 
     // merge chunks
-    var stdout;
-    var stderr;
+    let stdout;
+    let stderr;
     if (!encoding)
     {
       stdout = Buffer.concat(_stdout);
@@ -182,7 +182,7 @@ exports.execFile = function(file /* args, options, callback */)
       return;
     }
 
-    var cmd = file;
+    let cmd = file;
     if (args.length !== 0)
     {
       cmd += ' ' + args.join(' ');
@@ -244,15 +244,13 @@ exports.execFile = function(file /* args, options, callback */)
       kill();
     }
     else
+    if (!encoding)
     {
-      if (!encoding)
-      {
-        _stdout.push(chunk);
-      }
-      else
-      {
-        _stdout += chunk;
-      }
+      _stdout.push(chunk);
+    }
+    else
+    {
+      _stdout += chunk;
     }
   });
 
@@ -266,15 +264,13 @@ exports.execFile = function(file /* args, options, callback */)
       kill();
     }
     else
+    if (!encoding)
     {
-      if (!encoding)
-      {
-        _stderr.push(chunk);
-      }
-      else
-      {
-        _stderr += chunk;
-      }
+      _stderr.push(chunk);
+    }
+    else
+    {
+      _stderr += chunk;
     }
   });
 
