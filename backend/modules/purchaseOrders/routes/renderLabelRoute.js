@@ -45,7 +45,7 @@ module.exports = function renderLabelRoute(app, poModule, req, res, next)
     },
     function findPoPrintStep(err, exists)
     {
-      if (exists)
+      if (!err && exists)
       {
         return this.skip();
       }

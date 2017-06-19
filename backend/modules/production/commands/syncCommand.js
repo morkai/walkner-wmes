@@ -10,6 +10,11 @@ module.exports = function syncCommand(app, productionModule, socket, logEntryStr
 
   productionModule.syncLogEntryStream(creator, logEntryStream, function(err, lockLogEntry)
   {
+    if (err)
+    {
+      productionModule.warn(`[sync] ${err.message}`);
+    }
+
     if (lockLogEntry)
     {
       socket.emit('production.locked', {

@@ -66,6 +66,7 @@ exports.start = function startMessengerClientModule(app, module, done)
    * @param {string} type
    * @param {*} [data]
    * @param {function} [responseHandler]
+   * @returns {undefined}
    */
   module.push = function(type, data, responseHandler)
   {
@@ -172,7 +173,8 @@ exports.start = function startMessengerClientModule(app, module, done)
 
   /**
    * @private
-   * @param {function(Error, object)} done
+   * @param {function(Error, Object)} done
+   * @returns {undefined}
    */
   function createPushSocket(done)
   {
@@ -198,10 +200,11 @@ exports.start = function startMessengerClientModule(app, module, done)
 
   /**
    * @private
-   * @param {object} socket
+   * @param {Object} socket
    * @param {string} type
    * @param {*} [data]
    * @param {function} [responseHandler]
+   * @returns {undefined}
    */
   function sendMessage(socket, type, data, responseHandler)
   {
@@ -253,7 +256,8 @@ exports.start = function startMessengerClientModule(app, module, done)
   /**
    * @private
    * @param {string} topic
-   * @param {object} message
+   * @param {Object} message
+   * @returns {undefined}
    */
   function handleBroadcastMessage(topic, message)
   {

@@ -9,8 +9,6 @@ const moment = require('moment');
 
 module.exports = function(mongoose, options, done)
 {
-  /* jshint validthis:true*/
-
   const MONTHS_FUTURE = 4;
   const MONTHS_PAST = 6;
 

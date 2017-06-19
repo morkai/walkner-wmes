@@ -113,13 +113,14 @@ module.exports = function setUpOmr(app, module)
 
         const next = this.next();
 
+        // eslint-disable-next-line handle-callback-err
         fs.readFile(path.join(currentInputDir.filePath, 'config.json'), 'utf8', function(err, config)
         {
           try
           {
             config = JSON.parse(config);
           }
-          catch (err) {}
+          catch (err) {} // eslint-disable-line no-empty
 
           next(null, config || {}, files);
         });
@@ -278,12 +279,15 @@ module.exports = function setUpOmr(app, module)
 
         processInputFile(inputFileName, scanIndex, responseId, config, function(err, result)
         {
-          results.push(result);
-
-          if (result.survey && result.pageNumber)
+          if (!err && result)
           {
-            currentSurveyId = result.survey;
-            currentPageNumbers[scanIndex] = result.pageNumber;
+            results.push(result);
+
+            if (result.survey && result.pageNumber)
+            {
+              currentSurveyId = result.survey;
+              currentPageNumbers[scanIndex] = result.pageNumber;
+            }
           }
 
           setImmediate(next);

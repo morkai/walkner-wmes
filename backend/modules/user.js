@@ -117,7 +117,7 @@ exports.start = function startUserModule(app, module)
   /**
    * @private
    * @param {string} ipAddress
-   * @returns {object}
+   * @returns {Object}
    */
   function createGuestData(ipAddress)
   {
@@ -168,7 +168,7 @@ exports.start = function startUserModule(app, module)
       const allPrivileges = anyPrivileges[i];
       let matches = 0;
 
-      for (var ii = 0, ll = allPrivileges.length; ii < ll; ++ii)
+      for (let ii = 0; ii < allPrivileges.length; ++ii)
       {
         const privilege = allPrivileges[ii];
 
@@ -186,7 +186,7 @@ exports.start = function startUserModule(app, module)
         }
       }
 
-      if (matches === ll)
+      if (matches === allPrivileges.length)
       {
         return true;
       }
@@ -265,7 +265,7 @@ exports.start = function startUserModule(app, module)
     {
       if (req.session)
       {
-        var user = req.session.user;
+        let user = req.session.user;
 
         if (!user)
         {
@@ -276,14 +276,14 @@ exports.start = function startUserModule(app, module)
         {
           return next();
         }
-      }
 
-      module.debug(
-        '[auth] %s (%s) tried to access [%s] without sufficient privileges :(',
-        user.login,
-        user.ipAddress,
-        req.url
-      );
+        module.debug(
+          '[auth] %s (%s) tried to access [%s] without sufficient privileges :(',
+          user.login,
+          user.ipAddress,
+          req.url
+        );
+      }
 
       return res.sendStatus(403);
     };
@@ -387,7 +387,7 @@ exports.start = function startUserModule(app, module)
     {
       userInfo.id = ObjectId.createFromHexString(String(userData._id || userData.id));
     }
-    catch (err) {}
+    catch (err) {} // eslint-disable-line no-empty
 
     if (typeof userData.label === 'string')
     {

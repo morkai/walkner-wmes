@@ -53,6 +53,7 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
   step(
     function requestDocumentsStep()
     {
+      /* eslint-disable camelcase */
       const form = {
         form_name: 'form_docsearch',
         query: nc15,
@@ -66,6 +67,7 @@ module.exports = function checkRemoteServer(app, docsModule, nc15)
         server: 'CENTRAL',
         dba: 'DEF'
       };
+      /* eslint-enable camelcase */
 
       request.post(remoteServerUrl, {form: form}, this.next());
     },

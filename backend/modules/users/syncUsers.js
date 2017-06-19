@@ -38,8 +38,6 @@ module.exports = function syncUsers(app, usersModule, done)
 
   conn.on('connect', function(err)
   {
-    /* jshint multistr:true*/
-
     if (err)
     {
       return done(err);
@@ -50,20 +48,18 @@ module.exports = function syncUsers(app, usersModule, done)
 
   function createSelectUsersSql()
   {
-    /* jshint multistr:true*/
-
-    const sql = '\
-      SELECT\
-        [USERS].[US_ID],\
-        [CARDS].[CA_NUMBER],\
-        [USERS].[US_NAME],\
-        [USERS].[US_SURNAME],\
-        [USERS].[US_PERSONELLID],\
-        [USERS].[US_ADD_FIELDS],\
-        [USERS].[US_ACTIVE]\
-      FROM [USERS]\
-      LEFT JOIN [CARDS] ON [USERS].[US_CARD_ID]=[CARDS].[CA_ID]\
-    ';
+    const sql = `
+      SELECT
+        [USERS].[US_ID],
+        [CARDS].[CA_NUMBER],
+        [USERS].[US_NAME],
+        [USERS].[US_SURNAME],
+        [USERS].[US_PERSONELLID],
+        [USERS].[US_ADD_FIELDS],
+        [USERS].[US_ACTIVE]
+      FROM [USERS]
+      LEFT JOIN [CARDS] ON [USERS].[US_CARD_ID]=[CARDS].[CA_ID]
+    `;
     const where = [];
 
     _.forEach(companies.models, function(companyModel)
@@ -185,6 +181,11 @@ module.exports = function syncUsers(app, usersModule, done)
       },
       function setPasswordHashStep(err, hash)
       {
+        if (err)
+        {
+          usersModule.warn(`[sync] Failed to hash password: ${err.message}`);
+        }
+
         if (hash)
         {
           this.userModel.password = hash;

@@ -4,43 +4,41 @@
 
 const _ = require('lodash');
 
-module.exports = require('../createDictionaryModule')(
-  'ProdTask',
-  require('./routes'),
-  function(app, module)
-  {
-    app.broker.subscribe('prodTasks.edited', function(message)
-    {
-      const prodTask = message.model;
-      const prodTaskId = prodTask._id.toString();
+module.exports = require('../createDictionaryModule')('ProdTask', require('./routes'), function(app, module)
+{
+  app.broker.subscribe('prodTasks.edited', onEdited);
 
-      _.forEach(module.models, function(childProdTask)
+  function onEdited(message)
+  {
+    const prodTask = message.model;
+    const prodTaskId = prodTask._id.toString();
+
+    _.forEach(module.models, function(childProdTask)
+    {
+      if (childProdTask.parent === null || childProdTask.parent.toString() !== prodTaskId)
       {
-        if (childProdTask.parent === null || childProdTask.parent.toString() !== prodTaskId)
+        return;
+      }
+
+      childProdTask.tags = prodTask.tags;
+
+      childProdTask.save(function(err)
+      {
+        if (err)
         {
-          return;
+          return module.error(
+            'Failed to update child task [%s] of [%s]: %s',
+            childProdTask._id,
+            prodTaskId,
+            err.message
+          );
         }
 
-        childProdTask.tags = prodTask.tags;
-
-        childProdTask.save(function(err)
-        {
-          if (err)
-          {
-            return module.error(
-              'Failed to update child task [%s] of [%s]: %s',
-              childProdTask._id,
-              prodTaskId,
-              err.message
-            );
-          }
-
-          app.broker.publish('prodTasks.edited', {
-            model: childProdTask,
-            user: message.user
-          });
+        app.broker.publish('prodTasks.edited', {
+          model: childProdTask,
+          user: message.user
         });
       });
     });
   }
-);
+});

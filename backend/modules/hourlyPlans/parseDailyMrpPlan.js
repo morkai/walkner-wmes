@@ -21,7 +21,7 @@ let date = null;
 
 for (let i = 1; i < rowCount; ++i)
 {
-  if (date === null && (date = findDate(i)) !== null)
+  if (date === null && (date = findDate(i)) !== null) // eslint-disable-line no-cond-assign
   {
     continue;
   }

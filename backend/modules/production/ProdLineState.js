@@ -17,9 +17,9 @@ const HOUR_TO_INDEX = [
 
 /**
  * @constructor
- * @param {object} app
- * @param {object} productionModule
- * @param {object} prodLine
+ * @param {Object} app
+ * @param {Object} productionModule
+ * @param {Object} prodLine
  */
 function ProdLineState(app, productionModule, prodLine)
 {
@@ -78,7 +78,7 @@ ProdLineState.prototype.destroy = function()
 };
 
 /**
- * @returns {object}
+ * @returns {Object}
  */
 ProdLineState.prototype.toJSON = function()
 {
@@ -98,7 +98,7 @@ ProdLineState.prototype.toJSON = function()
 };
 
 /**
- * @returns {object|null}
+ * @returns {(Object|null)}
  */
 ProdLineState.prototype.getCurrentLeader = function()
 {
@@ -106,7 +106,7 @@ ProdLineState.prototype.getCurrentLeader = function()
 };
 
 /**
- * @returns {string|null}
+ * @returns {(string|null)}
  */
 ProdLineState.prototype.getCurrentShiftId = function()
 {
@@ -114,7 +114,7 @@ ProdLineState.prototype.getCurrentShiftId = function()
 };
 
 /**
- * @returns {Array.<object>}
+ * @returns {Array.<Object>}
  */
 ProdLineState.prototype.getOrders = function()
 {
@@ -122,7 +122,7 @@ ProdLineState.prototype.getOrders = function()
 };
 
 /**
- * @returns {string|null}
+ * @returns {(string|null)}
  */
 ProdLineState.prototype.getCurrentOrderId = function()
 {
@@ -132,7 +132,7 @@ ProdLineState.prototype.getCurrentOrderId = function()
 };
 
 /**
- * @returns {object|null}
+ * @returns {(Object|null)}
  */
 ProdLineState.prototype.getCurrentOrder = function()
 {
@@ -153,7 +153,7 @@ ProdLineState.prototype.getCurrentOrder = function()
 
 /**
  * @param {string} orderNo
- * @returns {object|null}
+ * @returns {(Object|null)}
  */
 ProdLineState.prototype.getLastOrderByNo = function(orderNo)
 {
@@ -176,7 +176,7 @@ ProdLineState.prototype.getLastOrderByNo = function(orderNo)
 };
 
 /**
- * @returns {object|null}
+ * @returns {(Object|null)}
  */
 ProdLineState.prototype.getLastOrder = function()
 {
@@ -192,7 +192,7 @@ ProdLineState.prototype.getNextOrders = function()
 };
 
 /**
- * @returns {string|null}
+ * @returns {(string|null)}
  */
 ProdLineState.prototype.getCurrentDowntimeId = function()
 {
@@ -259,7 +259,7 @@ ProdLineState.prototype.onClientDisconnect = function()
 };
 
 /**
- * @param {object} socket
+ * @param {Object} socket
  * @param {boolean} [disconnected]
  */
 ProdLineState.prototype.onClientLeave = function(socket, disconnected)
@@ -444,6 +444,7 @@ ProdLineState.prototype.publishExtendedChange = function(newValue)
  * @private
  * @param {*} prodShiftData
  * @param {function} done
+ * @returns {undefined}
  */
 ProdLineState.prototype.updateProdShift = function(prodShiftData, done)
 {
@@ -517,9 +518,10 @@ ProdLineState.prototype.updateProdShift = function(prodShiftData, done)
 
 /**
  * @private
- * @param {object} prodShiftOrderData
- * @param {object} options
+ * @param {Object} prodShiftOrderData
+ * @param {Object} options
  * @param {function} done
+ * @returns {undefined}
  */
 ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, options, done)
 {
@@ -607,6 +609,7 @@ ProdLineState.prototype.updateProdShiftOrders = function(prodShiftOrderData, opt
 /**
  * @private
  * @param {function} done
+ * @returns {undefined}
  */
 ProdLineState.prototype.reloadProdShiftOrders = function(done)
 {
@@ -632,9 +635,10 @@ ProdLineState.prototype.reloadProdShiftOrders = function(done)
 
 /**
  * @private
- * @param {object} prodDowntimeData
- * @param {object} options
+ * @param {Object} prodDowntimeData
+ * @param {Object} options
  * @param {function} done
+ * @returns {undefined}
  */
 ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options, done)
 {
@@ -722,6 +726,7 @@ ProdLineState.prototype.updateProdDowntimes = function(prodDowntimeData, options
 /**
  * @private
  * @param {function} done
+ * @returns {undefined}
  */
 ProdLineState.prototype.reloadProdDowntimes = function(done)
 {
@@ -747,6 +752,7 @@ ProdLineState.prototype.reloadProdDowntimes = function(done)
 
 /**
  * @private
+ * @returns {undefined}
  */
 ProdLineState.prototype.updateMetrics = function()
 {
@@ -974,7 +980,7 @@ ProdLineState.prototype.updateThirdShiftMetrics = function()
 
 /**
  * @private
- * @param {{shift: number, quantitiesDone: object}} prodShift
+ * @param {{shift: number, quantitiesDone: Object}} prodShift
  */
 ProdLineState.prototype.addQuantitiesDone = function(prodShift)
 {
@@ -1052,7 +1058,7 @@ ProdLineState.prototype.publishMetricsChanges = function(quantitiesDone)
 
 /**
  * @private
- * @param {object} changes
+ * @param {Object} changes
  */
 ProdLineState.prototype.publishChanges = function(changes)
 {

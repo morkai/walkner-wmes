@@ -60,10 +60,11 @@ exports.start = function startMailSenderModule(app, module)
   setInterval(cleanRecentlySentFromFile, 30 * 60 * 1000);
 
   /**
-   * @param {string|Array.<string>} to
+   * @param {(string|Array.<string>)} to
    * @param {string} subject
    * @param {string} text
-   * @param {function(Error|null, object)} done
+   * @param {function((Error|null), Object)} done
+   * @returns {undefined}
    */
   module.send = function(to, subject, text, done)
   {

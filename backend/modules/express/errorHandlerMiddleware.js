@@ -12,10 +12,8 @@ module.exports = function createErrorHandlerMiddleware(expressModule, options)
   }
 
   // Based on https://github.com/expressjs/errorhandler
-  return function errorHandlerMiddleware(err, req, res, next)
+  return function errorHandlerMiddleware(err, req, res, next) // eslint-disable-line no-unused-vars
   {
-    /* jshint unused:false*/
-
     if (_.includes(expressModule.config.ignoredErrorCodes, err.code))
     {
       return;

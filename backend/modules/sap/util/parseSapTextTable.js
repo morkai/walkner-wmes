@@ -58,7 +58,7 @@ module.exports = function parseSapTextTable(input, options)
 
   const valueParsers = options.valueParsers || {};
 
-  while ((line = readLine()) !== null)
+  while ((line = readLine()) !== null) // eslint-disable-line no-cond-assign
   {
     const parts = line.split('|');
 

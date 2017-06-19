@@ -125,6 +125,16 @@ module.exports = function(personnelProperty)
         },
         function(err, prodShiftOrder, prodDowntime)
         {
+          if (err)
+          {
+            productionModule.error(
+              'Failed to get prod data while changing the %s (LOG=[%s]): %s',
+              personnelProperty,
+              logEntry._id,
+              err.stack
+            );
+          }
+
           const subdivision = subdivisionsModule.modelsById[prodShift.subdivision];
           const assembly = subdivision && subdivision.type === 'assembly';
 

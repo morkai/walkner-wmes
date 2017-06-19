@@ -19,7 +19,7 @@ exports.start = function startMessengerServerModule(app, module, done)
 {
   const requestHandlers = {};
   let pubSocket = null;
-  let repSocket = null;
+  let repSocket = null; // eslint-disable-line no-unused-vars
   let pullSocket = null;
 
   _.forEach(module.config.broadcastTopics, function(broadcastTopic)
@@ -69,7 +69,7 @@ exports.start = function startMessengerServerModule(app, module, done)
 
   /**
    * @param {string} topic
-   * @param {object} message
+   * @param {Object} message
    */
   module.broadcast = function(topic, message)
   {
@@ -125,6 +125,7 @@ exports.start = function startMessengerServerModule(app, module, done)
 
   /**
    * @private
+   * @returns {undefined}
    */
   function createPullSocket()
   {
@@ -175,7 +176,7 @@ exports.start = function startMessengerServerModule(app, module, done)
   /**
    * @private
    * @param {string} type
-   * @param {object} req
+   * @param {Object} req
    * @param {function} reply
    */
   function handleRequest(type, req, reply)

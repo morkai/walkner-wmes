@@ -141,6 +141,11 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
         },
         function setOldProdDataStep(err, prodShift, prodShiftOrder, prodDowntime)
         {
+          if (err)
+          {
+            productionModule.error(`Failed to fetch old prod data: ${err.message}`);
+          }
+
           oldProdData.prodShift = prodShift ? prodShift.toJSON() : null;
           oldProdData.prodShiftOrder = prodShiftOrder ? prodShiftOrder.toJSON() : null;
           oldProdData.prodDowntime = prodDowntime ? prodDowntime.toJSON() : null;
@@ -232,7 +237,12 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
       },
       function applyProdShiftChangesStep(err, newProdShift)
       {
-        applyChanges(changes, 'prodShift', oldProdData.prodShift, newProdShift);
+        if (err)
+        {
+          productionModule.error(`Failed to fetch prod shift data: ${err.message}`);
+        }
+
+        applyChanges(changes, 'prodShift', oldProdData.prodShift, newProdShift || null);
 
         setImmediate(this.next());
       },
@@ -242,7 +252,12 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
       },
       function applyProdShiftOrderChangesStep(err, newProdShiftOrder)
       {
-        applyChanges(changes, 'prodShiftOrder', oldProdData.prodShiftOrder, newProdShiftOrder);
+        if (err)
+        {
+          productionModule.error(`Failed to fetch prod shift order data: ${err.message}`);
+        }
+
+        applyChanges(changes, 'prodShiftOrder', oldProdData.prodShiftOrder, newProdShiftOrder || null);
 
         setImmediate(this.next());
       },
@@ -252,7 +267,12 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
       },
       function applyProdShiftChangesStep(err, newProdDowntime)
       {
-        applyChanges(changes, 'prodDowntime', oldProdData.prodDowntime, newProdDowntime);
+        if (err)
+        {
+          productionModule.error(`Failed to fetch prod downtime data: ${err.message}`);
+        }
+
+        applyChanges(changes, 'prodDowntime', oldProdData.prodDowntime, newProdDowntime || null);
 
         setImmediate(this.next());
       },
@@ -265,8 +285,6 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 
   function applySingleChange(changes, logEntry)
   {
-    /* jshint -W015*/
-
     if (changes.types.indexOf(logEntry.type) === -1)
     {
       changes.types.push(logEntry.type);

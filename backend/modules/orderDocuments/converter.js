@@ -61,7 +61,7 @@ module.exports = function setUpOrderDocumentsConverter(app, module)
       },
       function ensureDirStep(err, sourcePdfExists)
       {
-        if (!sourcePdfExists)
+        if (err || !sourcePdfExists)
         {
           return this.skip(null, true);
         }

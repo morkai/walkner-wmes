@@ -8,9 +8,9 @@ const moment = require('moment');
 
 module.exports = function setUpXiconfCommands(app, xiconfModule)
 {
-  let WORKING_ORDER_CHANGE_CHECK_DELAY = 15 * 60 * 1000;
-  const WORKING_ORDER_CHANGE_CHECK_NEAR_SHIFT_CHANGE_MINUTES = 15;
   const FT_PROGRAM_ID = '__FT__';
+  const WORKING_ORDER_CHANGE_CHECK_NEAR_SHIFT_CHANGE_MINUTES = 15;
+  let WORKING_ORDER_CHANGE_CHECK_DELAY = 15 * 60 * 1000;
 
   const sio = app[xiconfModule.config.sioId];
   const productionModule = app[xiconfModule.config.productionId];
@@ -26,16 +26,15 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   const Order = mongoose.model('Order');
   const License = mongoose.model('License');
 
-  let restarting = false;
-
   const prodLinesToDataMap = {};
-  let ordersToDataMap = {};
+  const ordersToDataMap = {};
   const ordersToProdLinesMap = {};
   const ordersToGetOrderDataQueueMap = {};
   const ordersToOperationsQueueMap = {};
   const ordersLocks = {};
   const workingOrderChangeCheckTimers = {};
 
+  let restarting = false;
   let debugMode = false;
   let orderResultsRecountLock = false;
   let orderResultsToRecount = {};
@@ -84,7 +83,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   {
     if (orderNo === 'all')
     {
-      ordersToDataMap = {};
+      Object.keys(ordersToDataMap).forEach(k => delete ordersToDataMap[k]);
     }
     else
     {
@@ -554,8 +553,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function onClientsStateChanged(newState)
   {
-    /* jshint validthis:true*/
-
     const socket = this;
 
     if (!socket.xiconf || !_.isPlainObject(newState))
@@ -592,8 +589,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleClientDisconnect()
   {
-    /* jshint validthis:true*/
-
     const socket = this;
 
     if (!socket.xiconf)
@@ -646,8 +641,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleClientConnect(data)
   {
-    /* jshint validthis:true*/
-
     if (!_.isObject(data) || !_.isString(data.srcId) || _.isEmpty(data.srcId))
     {
       return;
@@ -745,8 +738,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleCheckSerialNumberRequest(input, reply)
   {
-    /* jshint validthis:true*/
-
     if (!_.isFunction(reply))
     {
       reply = function() {};
@@ -777,8 +768,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleCheckHidLampRequest(input, reply)
   {
-    /* jshint validthis:true*/
-
     if (!_.isFunction(reply))
     {
       reply = function() {};
@@ -808,8 +797,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleCheckComponentWeightRequest(input, reply)
   {
-    /* jshint validthis:true*/
-
     if (!_.isFunction(reply))
     {
       reply = function() {};
@@ -840,8 +827,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleGenerateServiceTagRequest(input, reply)
   {
-    /* jshint validthis:true*/
-
     if (!_.isFunction(reply))
     {
       reply = function() {};
@@ -872,8 +857,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleAcquireServiceTagRequest(input, reply)
   {
-    /* jshint validthis:true*/
-
     if (!_.isFunction(reply))
     {
       reply = function() {};
@@ -925,8 +908,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleReleaseServiceTagRequest(input, reply)
   {
-    /* jshint validthis:true*/
-
     if (!_.isFunction(reply))
     {
       reply = function() {};
@@ -963,8 +944,6 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
   function handleRecordInvalidLedRequest(input, reply)
   {
-    /* jshint validthis:true*/
-
     if (!_.isFunction(reply))
     {
       reply = function() {};

@@ -109,6 +109,11 @@ module.exports = function setUpIsaLineState(app, isaModule)
       },
       function(err, requests)
       {
+        if (err)
+        {
+          isaModule.error(`Failed to load active requests: ${err.message}`);
+        }
+
         _.forEach(requests, mapNewRequest);
 
         loaded = true;

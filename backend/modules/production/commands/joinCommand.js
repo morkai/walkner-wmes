@@ -61,8 +61,8 @@ module.exports = function joinCommand(app, productionModule, socket, req, reply)
           function(done)
           {
             dictionaries[moduleName] = dictionary.models
-              .filter(m => !m.deactivatedAt)
-              .sort((a, b) => a._id.toString().localeCompare(b._id.toString()));
+              .filter(m => !m.deactivatedAt) // eslint-disable-line max-nested-callbacks
+              .sort((a, b) => a._id.toString().localeCompare(b._id.toString())); // eslint-disable-line max-nested-callbacks
 
             done();
           },
@@ -81,6 +81,11 @@ module.exports = function joinCommand(app, productionModule, socket, req, reply)
     },
     function replyStep(err, order, prodShift, prodDowntimes, settings, isaRequests)
     {
+      if (err)
+      {
+        productionModule.error(`Error while joining [${req.prodLineId}]: ${err.message}`);
+      }
+
       reply({
         totalQuantityDone: order && order.qtyDone ? order.qtyDone : {total: 0, byLine: {}},
         plannedQuantities: !prodShift ? undefined : prodShift.quantitiesDone.map(d => d.planned),

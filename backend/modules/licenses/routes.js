@@ -50,7 +50,7 @@ module.exports = function setUpLicensesRoutes(app, licensesModule)
     {
       decryptedUuid = licensesModule.licenseEdKey.decrypt(encryptedUuid, 'base64', 'utf8');
     }
-    catch (err) {}
+    catch (err) {} // eslint-disable-line no-empty
 
     if (decryptedUuid === null || uuid !== decryptedUuid)
     {

@@ -122,7 +122,7 @@ module.exports = function setUpIcpoRoutes(app, icpoModule)
         fs.readFile(path.join(fileStoragePath, icpoResult.inputFileHash || ''), 'utf8', this.parallel());
         fs.readFile(path.join(fileStoragePath, icpoResult.outputFileHash || ''), 'utf8', this.parallel());
       },
-      function(err, orderData, driverData, gprsData, inputData, outputData)
+      function(err, orderData, driverData, gprsData, inputData, outputData) // eslint-disable-line handle-callback-err
       {
         if (icpoResult.toJSON)
         {

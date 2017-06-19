@@ -47,7 +47,7 @@ module.exports = function sendUpdateRoute(app, xiconfModule, req, res, next)
             });
           }
         }
-        catch (err) {}
+        catch (err) {} // eslint-disable-line no-empty
       }
 
       updates.sort(function(a, b)

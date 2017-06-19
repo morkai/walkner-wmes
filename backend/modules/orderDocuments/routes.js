@@ -204,7 +204,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
         nc15ToFreshHeaders[nc15][orderNo] = {
           headers: _.pick(res._headers, ['etag', 'last-modified', 'cache-control']),
-          timer: setTimeout(() => delete nc15ToFreshHeaders[nc15][orderNo], 60 * 1000)
+          timer: setTimeout(() => delete nc15ToFreshHeaders[nc15][orderNo], 60 * 1000) // eslint-disable-line max-nested-callbacks
         };
       });
     });
@@ -361,7 +361,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           fs.readFile(this.filePath, 'utf8', this.parallel());
         }
       },
-      function(err, stats, metaJson)
+      function(err, stats, metaJson) // eslint-disable-line handle-callback-err
       {
         const meta = metaJson ? tryJsonParse(metaJson) : null;
 
@@ -431,7 +431,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           fs.readFile(
             path.join(convertedPath, 'meta.json'),
             'utf8',
-            (err, json) => convertedDone(null, json ? JSON.parse(json) : null)
+            (err, json) => convertedDone(null, json ? JSON.parse(json) : null) // eslint-disable-line handle-callback-err
           );
         }
 
@@ -571,6 +571,11 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
       fs.readFile(path.join(module.config.etoPath, order.nc12 + '.html'), 'utf8', function(err, etoTableHtml)
       {
+        if (err)
+        {
+          return next(err);
+        }
+
         res.render('orderDocuments:eto', {
           order: order._id,
           nc12: order.nc12,

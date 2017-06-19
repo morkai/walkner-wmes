@@ -129,8 +129,6 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
   async function readArchiveFileStep()
   {
-    /* jshint validthis:true*/
-
     icpoModule.debug('Reading the archive...');
 
     const buf = fs.readFile(this.fileInfo.filePath);
@@ -143,8 +141,6 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
   function validateLicenseStep(err)
   {
-    /* jshint validthis:true*/
-
     if (err)
     {
       return this.skip(err);
@@ -182,8 +178,6 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
   function parseModelsStep()
   {
-    /* jshint validthis:true*/
-
     icpoModule.debug('Parsing the models...');
 
     this.results = Array.isArray(this.results)
@@ -193,8 +187,6 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
   function updateModelsStep()
   {
-    /* jshint validthis:true*/
-
     if (!this.results.length)
     {
       return this.skip(new Error('NO_RESULTS'));
@@ -220,7 +212,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
     {
       log = JSON.parse(result.log);
     }
-    catch (err) {}
+    catch (err) {} // eslint-disable-line no-empty
 
     return {
       _id: result._id,
@@ -252,8 +244,6 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
   function saveFilesStep(err)
   {
-    /* jshint validthis:true*/
-
     if (err && err.code !== 11000)
     {
       return this.skip(err);

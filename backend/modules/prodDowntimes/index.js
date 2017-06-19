@@ -96,7 +96,7 @@ exports.start = function startProdDowntimesModule(app, module)
 
     app[module.config.productionId].getProdData('downtime', partialProdDowntime._id, function(err, prodDowntime)
     {
-      if (!prodDowntime || prodDowntime.status !== 'confirmed')
+      if (err || !prodDowntime || prodDowntime.status !== 'confirmed')
       {
         return;
       }

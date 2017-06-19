@@ -169,14 +169,7 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
       _.forEach(res.dictionaries, (models, dictionaryName) =>
       {
         setTimeout(
-          function(dictionaries, dictionaryName, done)
-          {
-            dictionaries[dictionaryName] = dictionaries[dictionaryName]
-              .filter(m => !m.deactivatedAt)
-              .sort((a, b) => a._id.toString().localeCompare(b._id.toString()));
-
-            done();
-          },
+          sortDictionary,
           Math.round(Math.random() * 20) + 1,
           res.dictionaries,
           dictionaryName,
@@ -195,4 +188,13 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
       return this.done(reply, null, res);
     }
   );
+
+  function sortDictionary(dictionaries, dictionaryName, done)
+  {
+    dictionaries[dictionaryName] = dictionaries[dictionaryName]
+      .filter(m => !m.deactivatedAt)
+      .sort((a, b) => a._id.toString().localeCompare(b._id.toString()));
+
+    done();
+  }
 };

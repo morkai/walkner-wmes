@@ -253,6 +253,7 @@ MongoStore.prototype.destruct = function()
 
 /**
  * @private
+ * @returns {Object}
  */
 MongoStore.prototype.collection = function()
 {

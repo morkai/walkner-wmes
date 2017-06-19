@@ -9,8 +9,6 @@ const util = require('./util');
 
 module.exports = function(mongoose, options, done)
 {
-  /* jshint validthis:true*/
-
   const PLAN = 0;
   const REAL = 1;
   const DATE_FORMAT = 'YYMMDD';
@@ -335,8 +333,8 @@ module.exports = function(mongoose, options, done)
     group.trainings[PLAN] = util.round(group.allShiftCount * TRAININGS);
     group.coTime[PLAN] = util.round(group.orderCountForLine * CO_TIME);
     group.downtime[PLAN] = util.round(group.timeAvailablePerShift[PLAN] * DOWNTIME);
-    group.efficiency[PLAN] = CALC_EFFICIENCY_PLAN(group) || 0;
-    group.efficiency[REAL] = CALC_EFFICIENCY_REAL(group) || 0;
+    group.efficiency[PLAN] = CALC_EFFICIENCY_PLAN(group) || 0; // eslint-disable-line new-cap
+    group.efficiency[REAL] = CALC_EFFICIENCY_REAL(group) || 0; // eslint-disable-line new-cap
 
     return group;
   }
@@ -598,14 +596,12 @@ module.exports = function(mongoose, options, done)
         : options.prodFlows[flowId]
           ? countSelectedActiveProdLines(dateTime, options.prodFlows[flowId])
           : 0;
-      var allActiveProdLines;
-      var h;
 
       if (usedShifts['1'])
       {
-        allActiveProdLines = countActiveProdLines(shiftMoment.hours(6).valueOf(), flowId);
+        const allActiveProdLines = countActiveProdLines(shiftMoment.hours(6).valueOf(), flowId);
 
-        for (h = 0; h < 8; ++h)
+        for (let h = 0; h < 8; ++h)
         {
           inc(flow.hours[h], selectedActiveProdLines, allActiveProdLines, changeTvp, changePlan);
         }
@@ -613,9 +609,9 @@ module.exports = function(mongoose, options, done)
 
       if (usedShifts['2'])
       {
-        allActiveProdLines = countActiveProdLines(shiftMoment.hours(14).valueOf(), flowId);
+        const allActiveProdLines = countActiveProdLines(shiftMoment.hours(14).valueOf(), flowId);
 
-        for (h = 8; h < 14; ++h)
+        for (let h = 8; h < 14; ++h)
         {
           inc(flow.hours[h], selectedActiveProdLines, allActiveProdLines, changeTvp, changePlan);
         }
@@ -623,9 +619,9 @@ module.exports = function(mongoose, options, done)
 
       if (usedShifts['3'])
       {
-        allActiveProdLines = countActiveProdLines(shiftMoment.hours(22).valueOf(), flowId);
+        const allActiveProdLines = countActiveProdLines(shiftMoment.hours(22).valueOf(), flowId);
 
-        for (h = 14; h < 24; ++h)
+        for (let h = 14; h < 24; ++h)
         {
           inc(flow.hours[h], selectedActiveProdLines, allActiveProdLines, changeTvp, changePlan);
         }
@@ -1403,8 +1399,6 @@ module.exports = function(mongoose, options, done)
 
   function compileEfficiencyFormula(formula, type)
   {
-    /* jshint -W061*/
-
     const suffix = '[' + type + ']';
     const patterns = {
       TIME_AVAIL_PER_SHIFT: 'group.timeAvailablePerShift' + suffix,
@@ -1433,7 +1427,7 @@ module.exports = function(mongoose, options, done)
 
     try
     {
-      eval('calc = function(group) { return ' + code + '; }');
+      eval('calc = function(group) { return ' + code + '; }'); // eslint-disable-line no-eval
     }
     catch (err)
     {

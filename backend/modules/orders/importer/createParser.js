@@ -152,7 +152,10 @@ module.exports = function createParser(app, importerModule, callback)
       deleteFileInfoStepFiles(filePaths);
       setTimeout(removeFilePathsFromCache, 15000, filePaths);
 
-      importerModule.debug('Parsed %s in %d ms!', timeKey, Date.now() - startTime);
+      if (!err)
+      {
+        importerModule.debug('Parsed %s in %d ms!', timeKey, Date.now() - startTime);
+      }
 
       setImmediate(parseData);
 

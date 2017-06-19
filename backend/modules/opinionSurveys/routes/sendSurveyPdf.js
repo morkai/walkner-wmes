@@ -27,10 +27,10 @@ module.exports = function sendSurveyPdfRoute(app, module, req, res, next)
       const surveyDone = this.parallel();
       const customDone = this.parallel();
 
-      fs.stat(surveyPdfFile, function(err, stats) { surveyDone(null, stats); });
-      fs.stat(customPdfFile, function(err, stats) { customDone(null, stats); });
+      fs.stat(surveyPdfFile, function(err, stats) { surveyDone(null, stats); }); // eslint-disable-line handle-callback-err
+      fs.stat(customPdfFile, function(err, stats) { customDone(null, stats); }); // eslint-disable-line handle-callback-err
     },
-    function checkExistenceStep(err, surveyStats, customStats)
+    function checkExistenceStep(err, surveyStats, customStats) // eslint-disable-line handle-callback-err
     {
       if (recreate === '1')
       {

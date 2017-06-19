@@ -318,7 +318,7 @@ exports.decodeOrgUnits = function(orgUnitsModule, encodedOrgUnits)
   {
     decodedOrgUnits = JSON.parse(new Buffer(encodedOrgUnits, 'base64').toString('binary'));
   }
-  catch (err) {}
+  catch (err) {} // eslint-disable-line no-empty
 
   if (_.isEmpty(decodedOrgUnits))
   {

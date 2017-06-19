@@ -134,8 +134,6 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
   async function readArchiveFileStep()
   {
-    /* jshint validthis:true*/
-
     xiconfModule.debug('Reading the archive...');
 
     const buf = fs.readFile(this.fileInfo.filePath);
@@ -149,8 +147,6 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
   function validateLicenseStep(err)
   {
-    /* jshint validthis:true*/
-
     if (err)
     {
       return this.skip(err);
@@ -188,8 +184,6 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
   function parseModelsStep()
   {
-    /* jshint validthis:true*/
-
     xiconfModule.debug('Parsing the models...');
 
     this.orders = Array.isArray(this.orders)
@@ -212,8 +206,6 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
   function updateModelsStep()
   {
-    /* jshint validthis:true*/
-
     if (!this.orders.length && !this.results.length)
     {
       return this.skip(new Error('NO_ORDERS_AND_RESULTS'));
@@ -337,8 +329,6 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
   function saveFeatureFilesStep(err)
   {
-    /* jshint validthis:true*/
-
     if (err && err.code !== 11000)
     {
       return this.skip(err);

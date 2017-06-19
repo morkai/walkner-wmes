@@ -92,8 +92,6 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
   function findSettingsStep()
   {
-    /* jshint validthis:true*/
-
     const settingsModule = app[module.config.settingsId];
     const next = this.next();
 
@@ -109,8 +107,6 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
 
   function prepareSettingsStep(err, settings)
   {
-    /* jshint validthis:true*/
-
     if (err)
     {
       return this.skip(err);

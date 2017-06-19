@@ -295,7 +295,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
     const re = /src="cid:(.*?)"/g;
     let match;
 
-    while ((match = re.exec(html)) !== null)
+    while ((match = re.exec(html)) !== null) // eslint-disable-line no-cond-assign
     {
       const pattern = match[0];
       const contentId = match[1];

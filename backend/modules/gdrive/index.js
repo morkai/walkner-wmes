@@ -72,7 +72,6 @@ exports.start = function startGdriveModule(app, module)
     });
   });
 
-  /* jshint -W098 */
   function createFile()
   {
     module.authorize(function(err)

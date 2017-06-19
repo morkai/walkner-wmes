@@ -37,8 +37,6 @@ module.exports = function setUpProdData(app, productionModule)
 
   productionModule.getProdData = function(type, _id, done)
   {
-    /* jshint -W015*/
-
     if (_id === null)
     {
       return done(null, null);
@@ -231,8 +229,6 @@ module.exports = function setUpProdData(app, productionModule)
 
   function getModelByType(type)
   {
-    /* jshint -W015*/
-
     switch (type)
     {
       case 'shift':

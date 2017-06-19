@@ -61,25 +61,25 @@ module.exports = function setUpProdState(app, productionModule)
     if (prodLine)
     {
       createProdLineState(prodLine, true);
+
+      return;
     }
-    else
+
+    const startTime = Date.now();
+    const sub = app.broker.subscribe('prodLines.synced', function()
     {
-      const startTime = Date.now();
-      var sub = app.broker.subscribe('prodLines.synced', function()
+      const prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
+
+      if (prodLine)
       {
-        const prodLine = orgUnitsModule.getByTypeAndId('prodLine', prodLineId);
+        createProdLineState(prodLine, true);
+      }
 
-        if (prodLine)
-        {
-          createProdLineState(prodLine, true);
-        }
-
-        if (prodLine || (Date.now() - startTime) > 10000)
-        {
-          sub.cancel();
-        }
-      });
-    }
+      if (prodLine || (Date.now() - startTime) > 10000)
+      {
+        sub.cancel();
+      }
+    });
   });
 
   app.broker.subscribe('prodLines.deleted', function(message)
@@ -168,7 +168,7 @@ module.exports = function setUpProdState(app, productionModule)
       .lean()
       .exec(function(err, setting)
       {
-        if (setting && setting.value > 0 && setting.value < 1440)
+        if (!err && setting && setting.value > 0 && setting.value < 1440)
         {
           extendedDowntimeDelay = setting.value;
         }

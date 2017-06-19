@@ -10,8 +10,6 @@ const businessDays = require('./businessDays');
 
 module.exports = function(mongoose, options, done)
 {
-  /* jshint validthis:true*/
-
   const ProdShiftOrder = mongoose.model('ProdShiftOrder');
   const ProdDowntime = mongoose.model('ProdDowntime');
 

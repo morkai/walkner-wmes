@@ -20,8 +20,8 @@ module.exports = function setUpEventRoutes(app, eventsModule)
 
   /**
    * @private
-   * @param {object} req
-   * @param {object} res
+   * @param {Object} req
+   * @param {Object} res
    */
   function getTypesRoute(req, res)
   {
@@ -34,8 +34,8 @@ module.exports = function setUpEventRoutes(app, eventsModule)
 
   /**
    * @private
-   * @param {object} req
-   * @param {object} res
+   * @param {Object} req
+   * @param {Object} res
    */
   function getPendingRoute(req, res)
   {
@@ -44,8 +44,8 @@ module.exports = function setUpEventRoutes(app, eventsModule)
 
   /**
    * @private
-   * @param {object} req
-   * @param {object} res
+   * @param {Object} req
+   * @param {Object} res
    */
   function insertPendingRoute(req, res)
   {

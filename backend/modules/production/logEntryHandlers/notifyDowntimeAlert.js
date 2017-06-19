@@ -41,10 +41,6 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return this.done(done);
       }
 
-      setImmediate(this.next(), null, prodDowntime);
-    },
-    function(err, prodDowntime)
-    {
       let alert = _.find(prodDowntime.alerts, '_id', logData.alertId);
 
       if (alert && !alert.active)

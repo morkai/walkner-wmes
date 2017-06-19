@@ -107,7 +107,7 @@ function parseOrderDatFile(filePath, done)
 
     const orderData = {};
 
-    fileContents.split('\n').map(function(line)
+    fileContents.split('\n').forEach(function(line)
     {
       const parts = line.trim().split(':');
       const key = parts.shift().trim().toLowerCase().replace(/\s+/g, '_');

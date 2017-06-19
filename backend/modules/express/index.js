@@ -57,7 +57,7 @@ exports.DEFAULT_CONFIG = {
   textBody: {},
   urlencodedBody: {},
   ignoredErrorCodes: ['ECONNRESET', 'ECONNABORTED'],
-  routes: (app, expressModule) => { /* jshint unused:false */ }
+  routes: (app, expressModule) => {} // eslint-disable-line no-unused-vars
 };
 
 exports.start = function startExpressModule(app, expressModule, done)
@@ -78,7 +78,7 @@ exports.start = function startExpressModule(app, expressModule, done)
     ? new MongoStore(mongoose.connection.db, config.sessionStore)
     : session ? new session.MemoryStore() : null;
 
-  expressModule.router = express.Router();
+  expressModule.router = express.Router(); // eslint-disable-line new-cap
 
   expressModule.createHttpError = function(message, statusCode)
   {
@@ -244,7 +244,7 @@ exports.start = function startExpressModule(app, expressModule, done)
 
   /**
    * @private
-   * @param {object} ejsAmdHelpers
+   * @param {Object} ejsAmdHelpers
    * @param {string} js
    * @returns {string}
    */

@@ -33,7 +33,6 @@ const rowCount = sheet['!ref'].match(/^[A-Z]+[0-9]+:[A-Z]+([0-9]+)/)[1];
 const orderCountMap = {};
 const groupList = [];
 let lastGroup = null;
-let prevParentOrderNo = null;
 let prevQueueNo = null;
 let emptyRows = 0;
 
@@ -131,7 +130,6 @@ for (let i = 1; i < rowCount; ++i)
 
     lastChildOrder.components.push(component);
 
-    prevParentOrderNo = parentOrderNo;
     prevQueueNo = queueNo;
   }
 }
@@ -152,7 +150,7 @@ groupList.forEach(function(group)
     const _id = [
       date.getTime(),
       paintShopOrder.order,
-      paintShopOrder.orders.map(o => [o.order, o.components.map(c => c.nc12)])
+      paintShopOrder.orders.map(o => [o.order, o.components.map(c => c.nc12)]) // eslint-disable-line max-nested-callbacks
     ];
 
     paintShopOrder._id = createHash('md5').update(JSON.stringify(_id)).digest('hex').toUpperCase();

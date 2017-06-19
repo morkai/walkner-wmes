@@ -9,9 +9,9 @@ module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
 {
   const mongoose = app[reportsModule.config.mongooseId];
 
+  let userIds = [];
   const worksheetIds = Array.isArray(req.body.worksheets) ? req.body.worksheets : [];
   const orderIds = Array.isArray(req.body.orders) ? req.body.orders : [];
-  let userIds = [];
   const conditions = worksheetIds.length ? {_id: {$in: worksheetIds}} : {
     date: {
       $gte: new Date(helpers.getTime(req.query.from)),
@@ -92,7 +92,7 @@ module.exports = function report4NotesRoute(app, reportsModule, req, res, next)
     {
       const pressWorksheet = pressWorksheets[i];
       const orders = pressWorksheet.orders;
-      var user;
+      let user;
 
       if (mode === 'shift')
       {

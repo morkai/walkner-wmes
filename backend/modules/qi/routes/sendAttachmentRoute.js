@@ -14,7 +14,7 @@ module.exports = function sendAttachmentRoute(app, qiModule, req, res, next)
   const QiResult = mongoose.model('QiResult');
 
   const fields = {};
-  const changeIndex = /^-?[0-9]+$/.test(req.query.change) ? parseInt(req.query.change) : null;
+  const changeIndex = /^-?[0-9]+$/.test(req.query.change) ? parseInt(req.query.change, 10) : null;
   let attachmentProperty = req.params.attachment;
 
   if (/NOK$/.test(attachmentProperty))

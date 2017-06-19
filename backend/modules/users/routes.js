@@ -425,9 +425,6 @@ module.exports = function setUpUsersRoutes(app, usersModule)
     );
   }
 
-  /**
-   * @private
-   */
   function hashPassword(req, res, next)
   {
     if (!_.isObject(req.body))

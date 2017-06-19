@@ -8,8 +8,6 @@ const util = require('./util');
 
 module.exports = function(mongoose, options, done)
 {
-  /* jshint validthis:true*/
-
   const ClipOrderCount = mongoose.model('ClipOrderCount');
 
   const results = {

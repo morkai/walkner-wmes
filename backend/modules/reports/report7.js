@@ -10,8 +10,6 @@ const report2 = require('./report2');
 
 module.exports = function(mongoose, options, done)
 {
-  /* jshint validthis:true*/
-
   const ProdDowntime = mongoose.model('ProdDowntime');
 
   const results = {

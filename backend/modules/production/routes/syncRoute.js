@@ -8,6 +8,11 @@ module.exports = function syncRoute(app, productionModule, req, res)
 
   productionModule.syncLogEntryStream(creator, req.body, function(err, lockLogEntry)
   {
+    if (err)
+    {
+      productionModule.warn(`[sync] ${err.message}`);
+    }
+
     if (lockLogEntry)
     {
       res.json({

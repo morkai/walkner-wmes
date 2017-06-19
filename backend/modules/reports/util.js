@@ -26,8 +26,6 @@ exports.createCreateNextGroupKey = function(interval)
 
 exports.createGroupKey = function(interval, date, useShifts)
 {
-  /* jshint -W015*/
-
   if (useShifts !== false)
   {
     useShifts = true;
@@ -35,13 +33,13 @@ exports.createGroupKey = function(interval, date, useShifts)
 
   const groupKey = moment(date);
   const hours = groupKey.hours();
-  let dayOfMonth;
 
   groupKey.minutes(0).seconds(0).milliseconds(0);
 
   switch (interval)
   {
     case 'shift':
+    {
       if (hours >= 6 && hours < 14)
       {
         groupKey.hours(6);
@@ -59,18 +57,24 @@ exports.createGroupKey = function(interval, date, useShifts)
           groupKey.date(groupKey.date() - 1);
         }
       }
+
       break;
+    }
 
     case 'day':
+    {
       if (useShifts && hours < 6)
       {
         groupKey.date(groupKey.date() - 1);
       }
 
       groupKey.hours(0);
+
       break;
+    }
 
     case 'week':
+    {
       if (useShifts)
       {
         const weekday = groupKey.weekday();
@@ -82,12 +86,15 @@ exports.createGroupKey = function(interval, date, useShifts)
       }
 
       groupKey.weekday(0).hours(0);
+
       break;
+    }
 
     case 'month':
+    {
       if (useShifts)
       {
-        dayOfMonth = groupKey.date();
+        const dayOfMonth = groupKey.date();
 
         if (dayOfMonth === 1 && hours < 6)
         {
@@ -96,12 +103,14 @@ exports.createGroupKey = function(interval, date, useShifts)
       }
 
       groupKey.date(1).hours(0);
+
       break;
+    }
 
     case 'quarter':
-      dayOfMonth = groupKey.date();
-
-      var month = groupKey.month();
+    {
+      const dayOfMonth = groupKey.date();
+      const month = groupKey.month();
 
       groupKey.startOf('quarter').hours(0);
 
@@ -109,7 +118,9 @@ exports.createGroupKey = function(interval, date, useShifts)
       {
         groupKey.subtract(1, 'days').startOf('quarter');
       }
+
       break;
+    }
 
     case 'year':
       groupKey.month(0).date(1).hours(0);

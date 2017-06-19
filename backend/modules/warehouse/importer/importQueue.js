@@ -6,10 +6,8 @@ exports.DEFAULT_CONFIG = {
 
 };
 
-exports.start = function startWarehouseImportQueueModule(app, module)
+exports.start = function startWarehouseImportQueueModule(app)
 {
-  /* jshint unused:false*/
-
   const queue = [];
   let working = false;
   let nextTimer = null;

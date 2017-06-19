@@ -11,8 +11,6 @@ const calcFte = require('./calcFte');
 
 module.exports = function report5(mongoose, options, done)
 {
-  /* jshint validthis:true*/
-
   const ProdShiftOrder = mongoose.model('ProdShiftOrder');
   const FteMasterEntry = mongoose.model('FteMasterEntry');
   const FteLeaderEntry = mongoose.model('FteLeaderEntry');

@@ -381,7 +381,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
       },
       function setEtoStep(err, stats)
       {
-        if (stats && stats.isFile())
+        if (!err && stats && stats.isFile())
         {
           this.order.hasEto = true;
         }

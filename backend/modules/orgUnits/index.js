@@ -351,7 +351,8 @@ exports.start = function startOrgUnitsModule(app, module)
           }, []);
 
       case 'subdivision':
-        var subdivision = subdivisionsModule.modelsById[orgUnitId];
+      {
+        const subdivision = subdivisionsModule.modelsById[orgUnitId];
 
         if (!subdivision)
         {
@@ -364,19 +365,18 @@ exports.start = function startOrgUnitsModule(app, module)
         }
 
         return mrpControllersModule.models
-          .filter(function(mrpController)
-          {
-            return mrpController.subdivision
-              && mrpController.subdivision.toString() === orgUnitId
-              && !/^KS/.test(mrpController._id);
-          })
-          .map(function(mrpController) { return mrpController._id; });
+          .filter(mrpController => mrpController.subdivision
+            && mrpController.subdivision.toString() === orgUnitId
+            && !/^KS/.test(mrpController._id))
+          .map(mrpController => mrpController._id);
+      }
 
       case 'mrpController':
         return [orgUnitId].filter(onlyAssemblyMrpControllers);
 
       case 'prodFlow':
-        var prodFlow = prodFlowsModule.modelsById[orgUnitId];
+      {
+        const prodFlow = prodFlowsModule.modelsById[orgUnitId];
 
         if (!prodFlow)
         {
@@ -384,6 +384,7 @@ exports.start = function startOrgUnitsModule(app, module)
         }
 
         return (prodFlow ? prodFlow.mrpController : []).filter(onlyAssemblyMrpControllers);
+      }
 
       case 'workCenter':
         return null;

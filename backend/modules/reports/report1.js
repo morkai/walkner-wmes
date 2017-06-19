@@ -81,8 +81,6 @@ module.exports = function(mongoose, options, done)
 
   function findProdShiftsStep()
   {
-    /* jshint validthis:true*/
-
     const conditions = {
       date: {
         $gte: options.fromTime,
@@ -115,8 +113,6 @@ module.exports = function(mongoose, options, done)
 
   function groupQuantitiesDoneStep(err, prodShifts)
   {
-    /* jshint validthis:true*/
-
     if (err)
     {
       return this.done(done, err);
@@ -150,8 +146,6 @@ module.exports = function(mongoose, options, done)
 
   function calcQuantitiesDoneStep()
   {
-    /* jshint validthis:true*/
-
     const groupedQuantitiesDone = this.groupedQuantitiesDone;
 
     _.forEach(groupedQuantitiesDone, function(quantitiesDone, groupKey)
@@ -179,8 +173,6 @@ module.exports = function(mongoose, options, done)
 
   function findProdDowntimesStep()
   {
-    /* jshint validthis:true*/
-
     const conditions = createConditions();
 
     conditions.prodShiftOrder = {$ne: null};
@@ -200,8 +192,6 @@ module.exports = function(mongoose, options, done)
 
   function groupDowntimesByOrdersStep(err, prodDowntimes)
   {
-    /* jshint validthis:true*/
-
     if (err)
     {
       return this.done(done, err);
@@ -233,8 +223,6 @@ module.exports = function(mongoose, options, done)
 
   function findProdShiftOrdersStep()
   {
-    /* jshint validthis:true*/
-
     const conditions = createConditions();
 
     conditions.workDuration = {$ne: 0};
@@ -259,8 +247,6 @@ module.exports = function(mongoose, options, done)
 
   function groupProdShiftOrdersStep(err, prodShiftOrders)
   {
-    /* jshint validthis:true*/
-
     if (err)
     {
       return this.done(done, err);
@@ -274,8 +260,6 @@ module.exports = function(mongoose, options, done)
 
   function calcDowntimeDurationsStep()
   {
-    /* jshint validthis:true*/
-
     const orderToDowntimes = this.orderToDowntimes;
     const orderToWorkerCount = this.orderToWorkerCount;
 
@@ -369,15 +353,11 @@ module.exports = function(mongoose, options, done)
 
   function calcFteStep()
   {
-    /* jshint validthis:true*/
-
     calcFte(mongoose, options, this.next());
   }
 
   function calcCoeffsStep(err, fteResults)
   {
-    /* jshint validthis:true*/
-
     if (err)
     {
       return this.done(done, err);
@@ -405,8 +385,6 @@ module.exports = function(mongoose, options, done)
 
   function sortCoeffsStep()
   {
-    /* jshint validthis:true*/
-
     const coeffsMap = results.coeffs;
 
     results.coeffs = [];
@@ -631,13 +609,9 @@ module.exports = function(mongoose, options, done)
 
   function calcCoeffs(groupKey, orders, fteGroupResult, orderToDowntimes)
   {
-    /* jshint validthis:true*/
-
     let orderCount = 0;
     let downtimeCount = 0;
     let breakCount = 0;
-    let scheduledCount = 0;
-    let unscheduledCount = 0;
     let effNum = 0;
     let effDen = 0;
     let dtNum = 0;
@@ -666,8 +640,6 @@ module.exports = function(mongoose, options, done)
 
         downtimeCount += orderDowntime.count;
         breakCount += orderDowntime.breakCount;
-        scheduledCount += orderDowntime.scheduledCount;
-        unscheduledCount += orderDowntime.unscheduledCount;
       }
 
       effNum += laborTime / 100 * totalQuantity;

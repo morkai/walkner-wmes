@@ -44,7 +44,7 @@ module.exports = function exportFteMasterEntries(app, subdivisionsModule, queryS
 
         const taskCompanyMap = {};
 
-        _.forEach(prodFunction.companies, function(company)
+        _.forEach(prodFunction.companies, function(company) // eslint-disable-line max-nested-callbacks
         {
           prodFunctionMap[prodFunction.id][company.id] = true;
           taskCompanyMap[company.id] = company.count;

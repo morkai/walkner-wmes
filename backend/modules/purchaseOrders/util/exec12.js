@@ -19,8 +19,6 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/* jshint unused:false*/
-
 'use strict';
 
 // Extracted from https://github.com/joyent/node/blob/9b8837b3554cb38fe9412922f064529329f5fff7/lib/child_process.js
@@ -30,7 +28,10 @@ const spawn = require('child_process').spawn;
 
 function normalizeExecArgs(command /* , options, callback */)
 {
-  let file, args, options, callback;
+  let file;
+  let args;
+  let options;
+  let callback;
 
   if (typeof arguments[1] === 'function')
   {
@@ -72,7 +73,7 @@ function normalizeExecArgs(command /* , options, callback */)
   };
 }
 
-exports.exec = function(command /* , options, callback */)
+exports.exec = function(command /* , options, callback */) // eslint-disable-line no-unused-vars
 {
   const opts = normalizeExecArgs.apply(null, arguments);
   return exports.execFile(opts.file,
@@ -83,7 +84,8 @@ exports.exec = function(command /* , options, callback */)
 
 exports.execFile = function(file /* args, options, callback */)
 {
-  let args, callback;
+  let args;
+  let callback;
   let options = {
     encoding: 'utf8',
     timeout: 0,

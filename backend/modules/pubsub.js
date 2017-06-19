@@ -134,8 +134,6 @@ exports.start = function startPubsubModule(app, module)
 
   function onSocketDisconnect()
   {
-    /* jshint validthis:true*/
-
     const socket = this;
 
     delete socketIdToMessagesMap[socket.id];
@@ -151,8 +149,6 @@ exports.start = function startPubsubModule(app, module)
    */
   function onSocketSubscribe(topics, cb)
   {
-    /* jshint validthis:true*/
-
     const hasCb = typeof cb === 'function';
 
     if (!Array.isArray(topics))
@@ -194,8 +190,6 @@ exports.start = function startPubsubModule(app, module)
    */
   function onSocketUnsubscribe(topics)
   {
-    /* jshint validthis:true*/
-
     if (!Array.isArray(topics))
     {
       return;
@@ -218,13 +212,11 @@ exports.start = function startPubsubModule(app, module)
   /**
    * @param {string} topic
    * @param {*} message
-   * @param {object} meta
+   * @param {Object} meta
    * @param {function} [cb]
    */
   function onSocketPublish(topic, message, meta, cb)
   {
-    /* jshint validthis:true*/
-
     const socket = this;
 
     ++stats.receivedMessages;
@@ -243,7 +235,7 @@ exports.start = function startPubsubModule(app, module)
    * @param {Socket} socket
    * @param {*} message
    * @param {string} topic
-   * @param {object} meta
+   * @param {Object} meta
    */
   function onSubscriptionMessage(socket, message, topic, meta)
   {
@@ -273,8 +265,6 @@ exports.start = function startPubsubModule(app, module)
 
   function sendMessages()
   {
-    /* jshint forin:false*/
-
     const sockets = app[module.config.sioId].sockets.connected;
     const socketIds = Object.keys(socketIdToMessagesMap);
 
@@ -330,10 +320,8 @@ exports.start = function startPubsubModule(app, module)
    * @param {string} topic
    * @returns {boolean}
    */
-  function isSocketAllowedToSubscribe(socket, topic)
+  function isSocketAllowedToSubscribe(socket, topic) // eslint-disable-line no-unused-vars
   {
-    /* jshint unused:false*/
-
     return true;
   }
 

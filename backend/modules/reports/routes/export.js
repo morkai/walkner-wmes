@@ -28,8 +28,6 @@ const DIACRITICS = {
 
 module.exports = function exportRoute(reportsModule, req, res, next)
 {
-  /* jshint -W015*/
-
   const input = req.body;
   const svg = input.svg;
 

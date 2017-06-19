@@ -23,9 +23,10 @@ exports.start = function startSmsSenderModule(app, module)
   }
 
   /**
-   * @param {string|Array.<string>} to
+   * @param {(string|Array.<string>)} to
    * @param {string} text
-   * @param {function(Error|null, object)} done
+   * @param {function((Error|null), Object)} done
+   * @returns {undefined}
    */
   module.send = function(to, text, done)
   {

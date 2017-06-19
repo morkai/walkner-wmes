@@ -221,7 +221,7 @@ exports.start = function startMorModule(app, module, done)
 
         mrp.prodFunctions.forEach(prodFunction =>
         {
-          prodFunction.users.forEach(u => userIds[u] = 1);
+          prodFunction.users.forEach(u => userIds[u] = 1); // eslint-disable-line max-nested-callbacks
         });
       });
     });
@@ -332,13 +332,13 @@ exports.start = function startMorModule(app, module, done)
       {
         mrp.prodFunctions.forEach(prodFunction =>
         {
-          if (prodFunction.users.some(u => u === deletedUserId))
+          if (prodFunction.users.some(u => u === deletedUserId)) // eslint-disable-line max-nested-callbacks
           {
             editMrp({
               division: division._id,
               mrp: mrp._id,
               prodFunction: prodFunction._id,
-              users: prodFunction.users.filter(u => u !== deletedUserId)
+              users: prodFunction.users.filter(u => u !== deletedUserId) // eslint-disable-line max-nested-callbacks
             });
           }
         });

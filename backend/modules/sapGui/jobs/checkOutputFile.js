@@ -37,6 +37,6 @@ module.exports = function checkOutputFile(done, err, exitCode, output)
 
   fs.pathExists(path.join(outputPath, outputFile), function(err, exists)
   {
-    done(exists ? null : new Error('MISSING_OUTPUT_FILE'), exitCode, output);
+    done(!err && exists ? null : new Error('MISSING_OUTPUT_FILE'), exitCode, output);
   });
 };

@@ -12,7 +12,7 @@ module.exports = function decodeQrCode(app, module, inputFile, done)
 
   decodeQrCodeUsingZxing(inputFile, function(err, results)
   {
-    if (results.length !== 0)
+    if (!err && results.length !== 0)
     {
       return done(null, results);
     }

@@ -285,8 +285,6 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
 
   function updateParentCount(parentId, totalsTemplate, fteDivCount, prodTaskMaps, update)
   {
-    /* jshint -W073*/
-
     const parentTask = prodTaskMaps.idToTask[parentId];
 
     if (!parentTask)

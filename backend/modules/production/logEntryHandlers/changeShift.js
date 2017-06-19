@@ -162,7 +162,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
     productionModule.getProdData(null, _id, function(err, cachedProdModel)
     {
-      if (cachedProdModel)
+      if (!err && cachedProdModel)
       {
         buggedProdModel = cachedProdModel;
       }
