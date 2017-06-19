@@ -1,4 +1,4 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 'use strict';
 
@@ -85,7 +85,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
         if (closedOrderIds.indexOf(orderModel._id) !== -1)
         {
           orderModel.open = false;
-          
+
           _.forEach(orderModel.items, function(item)
           {
             item.completed = true;

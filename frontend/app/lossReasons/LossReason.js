@@ -1,4 +1,4 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
   '../core/Model'
@@ -20,7 +20,7 @@ define([
     nlsDomain: 'lossReasons',
 
     labelAttribute: 'label',
-    
+
     defaults: {
       label: null,
       position: 0
