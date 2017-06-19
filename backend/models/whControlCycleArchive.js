@@ -4,7 +4,7 @@
 
 module.exports = function setupWhControlCycleArchiveModel(app, mongoose)
 {
-  var whControlCycleArchiveSchema = mongoose.Schema({
+  const whControlCycleArchiveSchema = new mongoose.Schema({
     _id: {
       ts: Date,
       nc12: String

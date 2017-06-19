@@ -4,7 +4,7 @@
 
 module.exports = function setupKaizenCauseModel(app, mongoose)
 {
-  var kaizenCauseSchema = mongoose.Schema({
+  const kaizenCauseSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

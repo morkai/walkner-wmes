@@ -2,12 +2,12 @@
 
 'use strict';
 
-var _ = require('lodash');
-var autoIncrement = require('mongoose-auto-increment');
+const _ = require('lodash');
+const autoIncrement = require('mongoose-auto-increment');
 
 module.exports = function setupOpinionSurveyActionModel(app, mongoose)
 {
-  var opinionSurveyActionSchema = mongoose.Schema({
+  const opinionSurveyActionSchema = new mongoose.Schema({
     survey: {
       type: String,
       required: true,
@@ -85,7 +85,7 @@ module.exports = function setupOpinionSurveyActionModel(app, mongoose)
 
   opinionSurveyActionSchema.methods.serializeParticipants = function()
   {
-    var participants = {};
+    const participants = {};
 
     if (this.superior)
     {

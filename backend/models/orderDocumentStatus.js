@@ -4,7 +4,7 @@
 
 module.exports = function setupOrderDocumentStatusModel(app, mongoose)
 {
-  var orderDocumentStatusModel = mongoose.Schema({
+  const orderDocumentStatusModel = new mongoose.Schema({
     _id: {
       type: String,
       required: true

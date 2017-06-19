@@ -2,12 +2,12 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function setupProdFlowModel(app, mongoose)
 {
-  var prodFlowSchema = mongoose.Schema({
+  const prodFlowSchema = new mongoose.Schema({
     mrpController: [{
       type: 'String',
       ref: 'MrpController'
@@ -36,18 +36,18 @@ module.exports = function setupProdFlowModel(app, mongoose)
       return done(new Error('MISSING_MODULE'));
     }
 
-    var ProdFlow = this;
-    var divisionProdFlows = [];
-    var steps = [];
+    const ProdFlow = this;
+    const steps = [];
+    let divisionProdFlows = [];
 
     _.forEach(app.subdivisions.models, function(subdivision)
     {
-      if (subdivision.get('division') !== divisionId)
+      if (subdivision.division !== divisionId)
       {
         return;
       }
 
-      var subdivisionId = subdivision.get('_id').toString();
+      const subdivisionId = subdivision._id.toString();
 
       steps.push(function getAllBySubdivisionIdStep(err)
       {
@@ -56,7 +56,7 @@ module.exports = function setupProdFlowModel(app, mongoose)
           return this.done(done, err);
         }
 
-        var next = this.next();
+        const next = this.next();
 
         ProdFlow.getAllBySubdivisionId(subdivisionId, function(err, subdivisionProdFlows)
         {
@@ -87,8 +87,8 @@ module.exports = function setupProdFlowModel(app, mongoose)
       return done(new Error('MISSING_MODULE'));
     }
 
-    var prodFlows = [];
-    var idMap = {};
+    const prodFlows = [];
+    const idMap = {};
 
     _.forEach(app.mrpControllers.models, function(mrpController)
     {
@@ -97,11 +97,11 @@ module.exports = function setupProdFlowModel(app, mongoose)
         return;
       }
 
-      var mrpControllerId = mrpController._id;
+      const mrpControllerId = mrpController._id;
 
       _.forEach(app.prodFlows.models, function(prodFlow)
       {
-        var mrpControllers = prodFlow.mrpController;
+        const mrpControllers = prodFlow.mrpController;
 
         if (Array.isArray(mrpControllers)
           && mrpControllers.indexOf(mrpControllerId) !== -1

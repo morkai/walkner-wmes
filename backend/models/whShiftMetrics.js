@@ -4,12 +4,12 @@
 
 module.exports = function setupWhShiftMetricsModel(app, mongoose)
 {
-  var metric = {
+  const metric = {
     type: Number,
     default: 0
   };
 
-  var whShiftMetricsSchema = mongoose.Schema({
+  const whShiftMetricsSchema = new mongoose.Schema({
     _id: {
       type: Date,
       required: true

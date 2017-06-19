@@ -4,7 +4,7 @@
 
 module.exports = function setupTwilioResponseModel(app, mongoose)
 {
-  var twilioResponseSchema = mongoose.Schema({
+  const twilioResponseSchema = new mongoose.Schema({
     request: String,
     createdAt: Date,
     payload: {}

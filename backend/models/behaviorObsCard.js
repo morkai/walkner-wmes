@@ -87,9 +87,9 @@ module.exports = function setupBehaviorObsCardModel(app, mongoose)
       this.updatedAt = new Date();
     }
 
-    var users = {};
+    const users = {};
 
-    [this.creator, this.updater, this.observer].forEach(function(user)
+    [this.creator, this.updater, this.observer].forEach(user =>
     {
       if (user)
       {

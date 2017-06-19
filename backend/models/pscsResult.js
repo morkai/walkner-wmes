@@ -6,7 +6,7 @@ const autoIncrement = require('mongoose-auto-increment');
 
 module.exports = function setupPscsResultModel(app, mongoose)
 {
-  const pscsResultSchema = mongoose.Schema({
+  const pscsResultSchema = new mongoose.Schema({
     startedAt: {
       type: Date,
       required: true
@@ -46,7 +46,6 @@ module.exports = function setupPscsResultModel(app, mongoose)
   pscsResultSchema.pre('save', function(next)
   {
     let incomplete = 0;
-    let valid = 0;
     let invalid = 0;
 
     for (let i = 0; i < this.answers.length; ++i)
@@ -55,11 +54,7 @@ module.exports = function setupPscsResultModel(app, mongoose)
       {
         ++incomplete;
       }
-      else if (this.validity[i])
-      {
-        ++valid;
-      }
-      else
+      else if (!this.validity[i])
       {
         ++invalid;
       }

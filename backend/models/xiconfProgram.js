@@ -4,7 +4,7 @@
 
 module.exports = function setupXiconfProgramModel(app, mongoose)
 {
-  var xiconfProgramSchema = mongoose.Schema({
+  const xiconfProgramSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

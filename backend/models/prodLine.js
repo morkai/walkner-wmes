@@ -4,7 +4,7 @@
 
 module.exports = function setupProdLineModel(app, mongoose)
 {
-  var prodLineSchema = mongoose.Schema({
+  const prodLineSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

@@ -4,7 +4,7 @@
 
 module.exports = function setupWorkCenterModel(app, mongoose)
 {
-  var workCenterSchema = mongoose.Schema({
+  const workCenterSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

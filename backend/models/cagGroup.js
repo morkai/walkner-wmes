@@ -4,7 +4,7 @@
 
 module.exports = function setupCagGroupModel(app, mongoose)
 {
-  var cagGroupSchema = mongoose.Schema({
+  const cagGroupSchema = new mongoose.Schema({
     name: {
       type: String,
       required: true,

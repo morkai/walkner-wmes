@@ -4,7 +4,7 @@
 
 module.exports = function setupXiconfHidLampModel(app, mongoose)
 {
-  var xiconfHidLamp = mongoose.Schema({
+  const xiconfHidLamp = new mongoose.Schema({
     _id: String,
     nc12: {
       type: String,

@@ -4,7 +4,7 @@
 
 module.exports = function setupOpinionSurveyEmployerModel(app, mongoose)
 {
-  var opinionSurveyEmployerSchema = mongoose.Schema({
+  const opinionSurveyEmployerSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true

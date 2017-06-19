@@ -4,7 +4,7 @@
 
 module.exports = function setupIsaPalletKindModel(app, mongoose)
 {
-  var isaPalletKind = mongoose.Schema({
+  const isaPalletKind = new mongoose.Schema({
     shortName: {
       type: String,
       required: true,

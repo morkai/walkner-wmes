@@ -4,7 +4,7 @@
 
 module.exports = function setupPurchaseOrderPrintModel(app, mongoose)
 {
-  var purchaseOrderPrintSchema = mongoose.Schema({
+  const purchaseOrderPrintSchema = new mongoose.Schema({
     key: {
       type: String,
       required: true

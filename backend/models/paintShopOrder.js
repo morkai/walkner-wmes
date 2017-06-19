@@ -4,7 +4,7 @@
 
 module.exports = function setupPaintShopOrderModel(app, mongoose)
 {
-  const changeSchema = mongoose.Schema({
+  const changeSchema = new mongoose.Schema({
     date: Date,
     user: {},
     data: {},

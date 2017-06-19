@@ -4,7 +4,7 @@
 
 module.exports = function setupSubdivisionModel(app, mongoose)
 {
-  var autoDowntimeTimeSchema = mongoose.Schema({
+  const autoDowntimeTimeSchema = new mongoose.Schema({
     h: {
       type: Number,
       min: 0,
@@ -25,7 +25,7 @@ module.exports = function setupSubdivisionModel(app, mongoose)
     _id: false
   });
 
-  var autoDowntimeSchema = mongoose.Schema({
+  const autoDowntimeSchema = new mongoose.Schema({
     reason: {
       type: String,
       ref: 'DowntimeReason',
@@ -41,7 +41,7 @@ module.exports = function setupSubdivisionModel(app, mongoose)
     _id: false
   });
 
-  var subdivisionSchema = mongoose.Schema({
+  const subdivisionSchema = new mongoose.Schema({
     division: {
       type: String,
       ref: 'Division',

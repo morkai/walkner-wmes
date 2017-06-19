@@ -4,7 +4,7 @@
 
 module.exports = function setupOrderIntakeModel(app, mongoose)
 {
-  var orderIntakeSchema = mongoose.Schema({
+  const orderIntakeSchema = new mongoose.Schema({
     _id: {
       no: String,
       item: String

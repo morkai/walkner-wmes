@@ -4,7 +4,7 @@
 
 module.exports = function setupPingModel(app, mongoose)
 {
-  var pingSchema = mongoose.Schema({
+  const pingSchema = new mongoose.Schema({
     _id: String,
     host: String,
     time: Date,

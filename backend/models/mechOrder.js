@@ -4,7 +4,7 @@
 
 module.exports = function setupMechOrderModel(app, mongoose)
 {
-  var operationSchema = mongoose.Schema({
+  const operationSchema = new mongoose.Schema({
     no: {
       type: String,
       trim: true
@@ -33,7 +33,7 @@ module.exports = function setupMechOrderModel(app, mongoose)
     _id: false
   });
 
-  var mechOrderSchema = mongoose.Schema({
+  const mechOrderSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

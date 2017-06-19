@@ -4,7 +4,7 @@
 
 module.exports = function setupCagPlanModel(app, mongoose)
 {
-  var cagPlanSchema = mongoose.Schema({
+  const cagPlanSchema = new mongoose.Schema({
     _id: {
       cag: {
         type: String,

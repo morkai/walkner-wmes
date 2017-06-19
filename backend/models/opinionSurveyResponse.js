@@ -4,7 +4,7 @@
 
 module.exports = function setupOpinionSurveyResponseModel(app, mongoose)
 {
-  var opinionSurveyAnswerSchema = mongoose.Schema({
+  const opinionSurveyAnswerSchema = new mongoose.Schema({
     question: {
       type: String,
       required: true,
@@ -19,7 +19,7 @@ module.exports = function setupOpinionSurveyResponseModel(app, mongoose)
     _id: false
   });
 
-  var opinionSurveyResponseSchema = mongoose.Schema({
+  const opinionSurveyResponseSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true

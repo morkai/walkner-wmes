@@ -2,17 +2,16 @@
 
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
-var autoIncrement = require('mongoose-auto-increment');
-var createOrderLossSchema = require('./createOrderLossSchema');
+const _ = require('lodash');
+const moment = require('moment');
+const autoIncrement = require('mongoose-auto-increment');
+const createOrderLossSchema = require('./createOrderLossSchema');
 
 module.exports = function setupPressWorksheetModel(app, mongoose)
 {
-  var TIME_RE =
-    /^([0-9]{2}:[0-9]{2}|[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z)$/;
+  const TIME_RE = /^([0-9]{2}:[0-9]{2}|[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z)$/;
 
-  var pressWorksheetDowntimeSchema = mongoose.Schema({
+  const pressWorksheetDowntimeSchema = new mongoose.Schema({
     prodDowntime: {
       type: String,
       ref: 'ProdDowntime',
@@ -37,7 +36,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
     _id: false
   });
 
-  var pressWorksheetOrderSchema = mongoose.Schema({
+  const pressWorksheetOrderSchema = new mongoose.Schema({
     prodShiftOrder: {
       type: String,
       ref: 'ProdShiftOrder',
@@ -99,7 +98,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
   pressWorksheetOrderSchema.methods.getDowntimeDuration = function()
   {
     return (this.get('downtimes') || []).reduce(
-      function(duration, downtime) { return duration + downtime.duration * 60 * 1000; },
+      (duration, downtime) => duration + downtime.duration * 60 * 1000,
       0
     );
   };
@@ -114,7 +113,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
     this.finishedAt = lastOrder ? lastOrderFinishedAt : startedAtMoment.toISOString();
   };
 
-  var pressWorksheetSchema = mongoose.Schema({
+  const pressWorksheetSchema = new mongoose.Schema({
     date: {
       type: Date,
       required: true
@@ -189,7 +188,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
   pressWorksheetSchema.methods.getTotalQuantityDone = function()
   {
     return this.get('orders').reduce(
-      function(total, order) { return total + order.quantityDone; },
+      (total, order) => total + order.quantityDone,
       0
     );
   };
@@ -197,22 +196,21 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
   pressWorksheetSchema.methods.getTotalDowntimeDuration = function()
   {
     return this.get('orders').reduce(
-      function(total, order) { return total + order.getDowntimeDuration(); },
+      (total, order) => total + order.getDowntimeDuration(),
       0
     );
   };
 
   pressWorksheetSchema.methods.calcOrdersTimes = function()
   {
-    var ordersStartedAt = getDateFromTimeString(this.date, this.startedAt, false);
-    var ordersFinishedAt = getDateFromTimeString(this.date, this.finishedAt, true);
-    var totalDuration = ordersFinishedAt.getTime() - ordersStartedAt.getTime();
-    var workDuration = totalDuration - this.getTotalDowntimeDuration();
-    var unitDuration = workDuration / this.getTotalQuantityDone();
-    var startedAtMoment = moment(ordersStartedAt);
-
-    var lastIndex = this.orders.length - 1;
-    var finishedAt = ordersFinishedAt.toISOString();
+    const ordersStartedAt = getDateFromTimeString(this.date, this.startedAt, false);
+    const ordersFinishedAt = getDateFromTimeString(this.date, this.finishedAt, true);
+    const totalDuration = ordersFinishedAt.getTime() - ordersStartedAt.getTime();
+    const workDuration = totalDuration - this.getTotalDowntimeDuration();
+    const unitDuration = workDuration / this.getTotalQuantityDone();
+    const startedAtMoment = moment(ordersStartedAt);
+    const lastIndex = this.orders.length - 1;
+    const finishedAt = ordersFinishedAt.toISOString();
 
     _.forEach(this.orders, function(order, i)
     {
@@ -222,37 +220,37 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
 
   pressWorksheetSchema.methods.createOrdersAndDowntimes = function(done)
   {
-    var pressWorksheet = this;
-    var operators = this.operators;
-    var workerCount = Array.isArray(operators) ? operators.length : 0;
-    var operator = this.operator;
+    const pressWorksheet = this;
+    const operators = this.operators;
+    const workerCount = Array.isArray(operators) ? operators.length : 0;
+    let operator = this.operator;
 
     if (!operator && workerCount)
     {
       operator = operators[0];
     }
 
-    var ProdLogEntry = mongoose.model('ProdLogEntry');
-    var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-    var ProdDowntime = mongoose.model('ProdDowntime');
-    var prodShiftOrders = [];
-    var prodDowntimes = [];
-    var updatedIds = 0;
-    var divisions = {};
-    var prodLines = {};
+    const ProdLogEntry = mongoose.model('ProdLogEntry');
+    const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+    const ProdDowntime = mongoose.model('ProdDowntime');
+    const prodShiftOrders = [];
+    const prodDowntimes = [];
+    const divisions = {};
+    const prodLines = {};
+    let updatedIds = 0;
 
     _.forEach(this.orders, function(order)
     {
-      var startedAt = getDateFromTimeString(pressWorksheet.date, order.startedAt, false);
-      var finishedAt = getDateFromTimeString(pressWorksheet.date, order.finishedAt, true);
+      const startedAt = getDateFromTimeString(pressWorksheet.date, order.startedAt, false);
+      const finishedAt = getDateFromTimeString(pressWorksheet.date, order.finishedAt, true);
 
       if (isNaN(startedAt.getTime()) || isNaN(finishedAt.getTime()))
       {
         return;
       }
 
-      var orderData = order.orderData;
-      var operations = {};
+      const orderData = order.orderData;
+      let operations = {};
 
       if (Array.isArray(orderData.operations))
       {
@@ -268,8 +266,8 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
 
       orderData.operations = operations;
 
-      var needsId = order.prodShiftOrder === null;
-      var prodShiftOrder = {
+      const needsId = order.prodShiftOrder === null;
+      const prodShiftOrder = {
         _id: needsId
           ? ProdLogEntry.generateId(startedAt, order.prodLine + order.nc12)
           : order.prodShiftOrder,
@@ -313,20 +311,20 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       divisions[order.division] = true;
       prodLines[order.prodLine] = true;
 
-      var downtimeStartTime = startedAt.getTime();
-      var orderDowntimes = [];
+      const orderDowntimes = [];
+      let downtimeStartTime = startedAt.getTime();
 
       _.forEach(order.downtimes || [], function(downtime)
       {
-        var startedAt = new Date(downtimeStartTime);
+        const downtimeStartedAt = new Date(downtimeStartTime);
 
-        downtimeStartTime = downtimeStartTime + downtime.duration * 60 * 1000;
+        downtimeStartTime += downtime.duration * 60 * 1000;
 
-        var finishedAt = new Date(downtimeStartTime);
-        var needsId = downtime.prodDowntime === null;
-        var prodDowntime = {
+        const finishedAt = new Date(downtimeStartTime);
+        const needsId = downtime.prodDowntime === null;
+        const prodDowntime = {
           _id: needsId
-            ? ProdLogEntry.generateId(startedAt, prodShiftOrder._id)
+            ? ProdLogEntry.generateId(downtimeStartedAt, prodShiftOrder._id)
             : downtime.prodDowntime,
           division: prodShiftOrder.division,
           subdivision: prodShiftOrder.subdivision,
@@ -344,7 +342,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
           reasonComment: '',
           decisionComment: '',
           status: 'confirmed',
-          startedAt: startedAt,
+          startedAt: downtimeStartedAt,
           finishedAt: finishedAt,
           corroborator: pressWorksheet.master,
           corroboratedAt: finishedAt,
@@ -438,7 +436,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       return date.getHours() < 6 ? new Date(date.getTime() + 24 * 3600 * 1000) : date;
     }
 
-    var isoMoment = moment(time);
+    const isoMoment = moment(time);
 
     if (!isoMoment.isValid())
     {
@@ -455,7 +453,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
 
   function getSubdivisionAor(subdivisionId)
   {
-    var subdivision = app.subdivisions.modelsById[subdivisionId];
+    const subdivision = app.subdivisions.modelsById[subdivisionId];
 
     if (!subdivision)
     {

@@ -4,7 +4,7 @@
 
 module.exports = function setupOrderDocumentClientModel(app, mongoose)
 {
-  var orderDocumentClientSchema = mongoose.Schema({
+  const orderDocumentClientSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true

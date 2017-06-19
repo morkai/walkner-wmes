@@ -70,7 +70,7 @@ module.exports = function setupMinutesForSafetyCardModel(app, mongoose)
       this.updatedAt = new Date();
     }
 
-    var users = {};
+    const users = {};
 
     [this.creator, this.updater, this.owner].concat(this.participants).forEach(function(user)
     {

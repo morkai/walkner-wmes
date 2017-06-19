@@ -4,7 +4,7 @@
 
 module.exports = function setupFactoryLayoutModel(app, mongoose)
 {
-  var factoryLayoutSchema = mongoose.Schema({
+  const factoryLayoutSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

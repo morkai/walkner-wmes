@@ -1,18 +1,18 @@
-/*jshint maxlen:999*/
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 'use strict';
 
-var moment = require('moment');
-var _ = require('lodash');
-var step = require('h5.step');
+const moment = require('moment');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function startFixRoutes(app, express)
 {
-  var inProgress = {};
+  const inProgress = {};
 
   function onlySuper(req, res, next)
   {
-    var user = req.session.user;
+    const user = req.session.user;
 
     if (user && user.super)
     {
@@ -56,7 +56,7 @@ module.exports = function startFixRoutes(app, express)
           return next(err);
         }
 
-        app.debug("[fix] Found %d ProdShiftOrders...", prodShiftOrders.length);
+        app.debug(`[fix] Found ${prodShiftOrders.length} ProdShiftOrders...`);
 
         recountNext(prodShiftOrders, 0);
       });
@@ -65,25 +65,30 @@ module.exports = function startFixRoutes(app, express)
     {
       if (i > 0 && i % 10000 === 0)
       {
-        app.debug("[fix] Recounted %d ProdShiftOrders... %d remaining...", i, prodShiftOrders.length);
+        app.debug(`[fix] Recounted ${i} ProdShiftOrders... ${prodShiftOrders.length} remaining...`);
       }
 
-      var prodShiftOrder = prodShiftOrders.shift();
+      const prodShiftOrder = prodShiftOrders.shift();
 
       if (!prodShiftOrder)
       {
         inProgress.fixProdShiftOrderDurations = false;
 
         res.type('txt');
-        res.send("ALL DONE!");
+        res.send('ALL DONE!');
 
         return;
       }
 
-      var next = recountNext.bind(null, prodShiftOrders, i + 1);
+      const next = recountNext.bind(null, prodShiftOrders, i + 1);
 
       app.production.getProdData(null, prodShiftOrder._id, function(err, cachedProdShiftOrder)
       {
+        if (err)
+        {
+          app.warn(`[fix] ${err.message}`);
+        }
+
         if (cachedProdShiftOrder)
         {
           cachedProdShiftOrder.recalcDurations(true, next);
@@ -98,39 +103,37 @@ module.exports = function startFixRoutes(app, express)
 
   function fixProdShiftOrderOperationTimes(req, res, next)
   {
-    app.mongoose.model('ProdShiftOrder')
-      .find({})
-      .exec(function(err, prodShiftOrders)
+    app.mongoose.model('ProdShiftOrder').find({}).exec(function(err, prodShiftOrders)
+    {
+      if (err)
       {
-        if (err)
-        {
-          return next(err);
-        }
+        return next(err);
+      }
 
-        var steps = [];
+      const steps = [];
 
-        _.forEach(prodShiftOrders, function(prodShiftOrder)
-        {
-          steps.push(function()
-          {
-            prodShiftOrder.save(this.next());
-          });
-        });
-
+      _.forEach(prodShiftOrders, function(prodShiftOrder)
+      {
         steps.push(function()
         {
-          res.type('txt');
-          res.send("ALL DONE!");
+          prodShiftOrder.save(this.next());
         });
-
-        step(steps);
       });
+
+      steps.push(function()
+      {
+        res.type('txt');
+        res.send('ALL DONE!');
+      });
+
+      step(steps);
+    });
   }
 
   function corroborateDowntimeLogEntries(req, res, next)
   {
-    var ProdLogEntry = app.mongoose.model('ProdLogEntry');
-    var conditions = {
+    const ProdLogEntry = app.mongoose.model('ProdLogEntry');
+    const conditions = {
       $or: [
         {status: {$ne: 'undecided'}},
         {reason: 'A'}
@@ -138,7 +141,7 @@ module.exports = function startFixRoutes(app, express)
       prodShift: {$ne: null},
       finishedAt: {$ne: null}
     };
-    var fields = {
+    const fields = {
       status: 1,
       decisionComment: 1,
       corroborator: 1,
@@ -155,77 +158,74 @@ module.exports = function startFixRoutes(app, express)
       prodShift: 1,
       prodShiftOrder: 1
     };
-    var buggedDowntimeDate = Date.parse('2013-12-01 06:00:00');
+    const buggedDowntimeDate = Date.parse('2013-12-01 06:00:00');
 
-    app.mongoose.model('ProdDowntime')
-      .find(conditions, fields)
-      .lean()
-      .exec(function(err, prodDowntimes)
+    app.mongoose.model('ProdDowntime').find(conditions, fields).lean().exec(function(err, prodDowntimes)
+    {
+      if (err)
       {
-        if (err)
+        return next(err);
+      }
+
+      step(
+        function()
         {
-          return next(err);
-        }
+          const step = this;
 
-        step(
-          function()
+          _.forEach(prodDowntimes, function(prodDowntime)
           {
-            var step = this;
-
-            _.forEach(prodDowntimes, function(prodDowntime)
+            if (prodDowntime.date < buggedDowntimeDate)
             {
-              if (prodDowntime.date < buggedDowntimeDate)
-              {
-                return;
-              }
+              return;
+            }
 
-              if (prodDowntime.reason === 'A')
-              {
-                prodDowntime.status = 'confirmed';
-                prodDowntime.decisionComment = '';
-                prodDowntime.corroboratedAt = new Date(prodDowntime.finishedAt.getTime() + 1);
-                prodDowntime.corroborator = {
-                  id: null,
-                  ip: '127.0.0.1',
-                  cname: 'LOCALHOST',
-                  label: 'System'
-                };
-              }
-
-              var prodLogEntry = {
-                _id: ProdLogEntry.generateId(prodDowntime.corroboratedAt, prodDowntime.prodShift),
-                type: 'corroborateDowntime',
-                data: {
-                  _id: prodDowntime._id,
-                  status: prodDowntime.status,
-                  corroborator: prodDowntime.corroborator,
-                  corroboratedAt: prodDowntime.corroboratedAt,
-                  decisionComment: prodDowntime.decisionComment
-                },
-                division: prodDowntime.division,
-                subdivision: prodDowntime.subdivision,
-                mrpControllers: prodDowntime.mrpControllers,
-                prodFlow: prodDowntime.prodFlow,
-                workCenter: prodDowntime.workCenter,
-                prodLine: prodDowntime.prodLine,
-                prodShift: prodDowntime.prodShift,
-                prodShiftOrder: prodDowntime.prodShiftOrder,
-                creator: prodDowntime.corroborator,
-                createdAt: prodDowntime.corroboratedAt,
-                savedAt: prodDowntime.corroboratedAt,
-                todo: false
+            if (prodDowntime.reason === 'A')
+            {
+              prodDowntime.status = 'confirmed';
+              prodDowntime.decisionComment = '';
+              prodDowntime.corroboratedAt = new Date(prodDowntime.finishedAt.getTime() + 1);
+              prodDowntime.corroborator = {
+                id: null,
+                ip: '127.0.0.1',
+                cname: 'LOCALHOST',
+                label: 'System'
               };
+            }
 
-              saveCorroborateDowntimeLogEntry(prodLogEntry, step.parallel());
-            });
-          },
-          function()
-          {
-            res.type('txt');
-            res.send("ALL DONE!");
-          }
-        );
-      });
+            const prodLogEntry = {
+              _id: ProdLogEntry.generateId(prodDowntime.corroboratedAt, prodDowntime.prodShift),
+              type: 'corroborateDowntime',
+              data: {
+                _id: prodDowntime._id,
+                status: prodDowntime.status,
+                corroborator: prodDowntime.corroborator,
+                corroboratedAt: prodDowntime.corroboratedAt,
+                decisionComment: prodDowntime.decisionComment
+              },
+              division: prodDowntime.division,
+              subdivision: prodDowntime.subdivision,
+              mrpControllers: prodDowntime.mrpControllers,
+              prodFlow: prodDowntime.prodFlow,
+              workCenter: prodDowntime.workCenter,
+              prodLine: prodDowntime.prodLine,
+              prodShift: prodDowntime.prodShift,
+              prodShiftOrder: prodDowntime.prodShiftOrder,
+              creator: prodDowntime.corroborator,
+              createdAt: prodDowntime.corroboratedAt,
+              savedAt: prodDowntime.corroboratedAt,
+              todo: false
+            };
+
+            saveCorroborateDowntimeLogEntry(prodLogEntry, step.parallel());
+          });
+        },
+        function()
+        {
+          res.type('txt');
+          res.send('ALL DONE!');
+        }
+      );
+    });
 
     function saveCorroborateDowntimeLogEntry(newProdLogEntry, done)
     {
@@ -261,15 +261,15 @@ module.exports = function startFixRoutes(app, express)
       }
 
       res.type('txt');
-      res.send("ALL DONE!");
+      res.send('ALL DONE!');
     });
   }
 
   function fixProdLogEntriesCorroboratedBeforeCreated(req, res, next)
   {
-    var ProdLogEntry = app.mongoose.model('ProdLogEntry');
-    var prodDowntimeIds = [];
-    var corroborateDowntimeMap = {};
+    const ProdLogEntry = app.mongoose.model('ProdLogEntry');
+    const prodDowntimeIds = [];
+    const corroborateDowntimeMap = {};
 
     ProdLogEntry.find({type: 'corroborateDowntime'}).exec(function(err, corroborateDowntimeEntries)
     {
@@ -285,18 +285,28 @@ module.exports = function startFixRoutes(app, express)
         corroborateDowntimeMap[corroborateDowntimeEntry.data._id] = corroborateDowntimeEntry;
       });
 
-      ProdLogEntry.find({type: 'finishDowntime', 'data._id': {$in: prodDowntimeIds}}, {createdAt: 1, savedAt: 1, 'data._id': 1}).exec(function(err, finishDowntimeEntries)
+      const conditions = {
+        type: 'finishDowntime',
+        'data._id': {$in: prodDowntimeIds}
+      };
+      const fields = {
+        createdAt: 1,
+        savedAt: 1,
+        'data._id': 1
+      };
+
+      ProdLogEntry.find(conditions, fields).exec(function(err, finishDowntimeEntries)
       {
         if (err)
         {
           return next(err);
         }
 
-        var updates = [];
+        const updates = [];
 
         _.forEach(finishDowntimeEntries, function(finishDowntimeEntry)
         {
-          var corroborateDowntimeEntry = corroborateDowntimeMap[finishDowntimeEntry.data._id];
+          const corroborateDowntimeEntry = corroborateDowntimeMap[finishDowntimeEntry.data._id];
 
           if (!corroborateDowntimeEntry)
           {
@@ -324,9 +334,9 @@ module.exports = function startFixRoutes(app, express)
         step(
           function()
           {
-            for (var i = 0, l = updates.length; i < l; ++i)
+            for (let i = 0, l = updates.length; i < l; ++i)
             {
-              ProdLogEntry.update({_id: updates[i]._id}, {$set: updates[i].$set}, this.parallel());
+              ProdLogEntry.update({_id: updates[i]._id}, {$set: updates[i].$set}, this.group());
             }
           },
           function(err)
@@ -337,7 +347,7 @@ module.exports = function startFixRoutes(app, express)
             }
 
             res.type('txt');
-            res.send("ALL DONE!");
+            res.send('ALL DONE!');
           }
         );
       });
@@ -346,36 +356,33 @@ module.exports = function startFixRoutes(app, express)
 
   function recountPlannedQuantities(req, res, next)
   {
-    app.mongoose.model('HourlyPlan')
-      .find()
-      .sort({date: 1, division: 1})
-      .exec(function(err, hourlyPlans)
+    app.mongoose.model('HourlyPlan').find().sort({date: 1, division: 1}).exec(function(err, hourlyPlans)
+    {
+      if (err)
       {
-        if (err)
+        return next(err);
+      }
+
+      step(
+        function()
         {
-          return next(err);
-        }
-
-        step(
-          function()
+          for (let i = 0, l = hourlyPlans.length; i < l; ++i)
           {
-            for (var i = 0, l = hourlyPlans.length; i < l; ++i)
-            {
-              hourlyPlans[i].recountPlannedQuantities(this.parallel());
-            }
-          },
-          function(err)
-          {
-            if (err)
-            {
-              return next(err);
-            }
-
-            res.type('txt');
-            res.send("ALL DONE!");
+            hourlyPlans[i].recountPlannedQuantities(this.parallel());
           }
-        );
-      });
+        },
+        function(err)
+        {
+          if (err)
+          {
+            return next(err);
+          }
+
+          res.type('txt');
+          res.send('ALL DONE!');
+        }
+      );
+    });
   }
 
   function recountFteMasterTotals(req, res, next)
@@ -389,7 +396,7 @@ module.exports = function startFixRoutes(app, express)
 
     const startedAt = Date.now();
 
-    app.debug("[fix] Recounting FTE Master totals...");
+    app.debug('[fix] Recounting FTE Master totals...');
 
     recountFteTotals('FteMasterEntry', moment('2013-12-01T05:00:00.000Z'), function(err)
     {
@@ -401,9 +408,9 @@ module.exports = function startFixRoutes(app, express)
       }
 
       res.type('txt');
-      res.send("ALL DONE!");
+      res.send('ALL DONE!');
 
-      app.debug("[fix] Finished recounting FTE Master totals in %ds", (Date.now() - startedAt) / 1000);
+      app.debug(`[fix] Finished recounting FTE Master totals in ${(Date.now() - startedAt) / 1000}s`);
     });
   }
 
@@ -418,7 +425,7 @@ module.exports = function startFixRoutes(app, express)
 
     const startedAt = Date.now();
 
-    app.debug("[fix] Recounting FTE Leader totals...");
+    app.debug('[fix] Recounting FTE Leader totals...');
 
     recountFteTotals('FteLeaderEntry', moment('2013-12-01T05:00:00.000Z'), function(err)
     {
@@ -430,15 +437,15 @@ module.exports = function startFixRoutes(app, express)
       }
 
       res.type('txt');
-      res.send("ALL DONE!");
+      res.send('ALL DONE!');
 
-      app.debug("[fix] Finished recounting FTE Leader totals in %ds", (Date.now() - startedAt) / 1000);
+      app.debug(`[fix] Finished recounting FTE Leader totals in ${(Date.now() - startedAt) / 1000}s`);
     });
   }
 
   function recountFteTotals(modelName, fromMoment, done)
   {
-    var conditions = {
+    const conditions = {
       date: {
         $gte: new Date(fromMoment.valueOf()),
         $lt: new Date(fromMoment.add(7, 'days').valueOf())
@@ -461,7 +468,7 @@ module.exports = function startFixRoutes(app, express)
 
       function calcNext()
       {
-        var fteEntries = allFteEntries.splice(0, 5);
+        const fteEntries = allFteEntries.splice(0, 5);
 
         if (fteEntries.length === 0)
         {
@@ -471,13 +478,11 @@ module.exports = function startFixRoutes(app, express)
         step(
           function()
           {
-            for (var i = 0, l = fteEntries.length; i < l; ++i)
+            for (let i = 0, l = fteEntries.length; i < l; ++i)
             {
               fteEntries[i].calcTotals();
-              fteEntries[i].save(this.parallel());
+              fteEntries[i].save(this.group());
             }
-
-            fteEntries = null;
           },
           function(err)
           {
@@ -497,10 +502,10 @@ module.exports = function startFixRoutes(app, express)
   {
     res.setTimeout(30 * 60 * 1000);
 
-    var PressWorksheet = app.mongoose.model('PressWorksheet');
-    var stream = PressWorksheet.find({division: null}, {'orders.prodLine': 1}).cursor();
-    var todo = 0;
-    var ended = false;
+    const PressWorksheet = app.mongoose.model('PressWorksheet');
+    const stream = PressWorksheet.find({division: null}, {'orders.prodLine': 1}).cursor();
+    let todo = 0;
+    let ended = false;
 
     stream.on('error', next);
 
@@ -518,13 +523,13 @@ module.exports = function startFixRoutes(app, express)
     {
       ++todo;
 
-      var divisions = {};
-      var prodLines = {};
-      var $set = {};
+      const divisions = {};
+      const prodLines = {};
+      const $set = {};
 
       _.forEach(pressWorksheet.orders, function(order, i)
       {
-        var division = app.orgUnits.getDivisionFor('prodLine', order.prodLine);
+        const division = app.orgUnits.getDivisionFor('prodLine', order.prodLine);
 
         prodLines[order.prodLine] = true;
 
@@ -533,7 +538,7 @@ module.exports = function startFixRoutes(app, express)
           divisions[division._id] = true;
         }
 
-        $set['orders.' + i + '.division'] = division ? division._id : null;
+        $set[`orders.${i}.division`] = division ? division._id : null;
       });
 
       $set.divisions = Object.keys(divisions);

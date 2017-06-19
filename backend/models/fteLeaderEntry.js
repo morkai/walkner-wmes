@@ -2,12 +2,12 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function setupFteLeaderEntryModel(app, mongoose)
 {
-  var fteLeaderTaskCompanySchema = mongoose.Schema({
+  const fteLeaderTaskCompanySchema = new mongoose.Schema({
     id: {
       type: String,
       required: true
@@ -41,7 +41,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     'INVALID_COUNT'
   );
 
-  var fteLeaderTaskFunctionSchema = mongoose.Schema({
+  const fteLeaderTaskFunctionSchema = new mongoose.Schema({
     id: {
       type: String,
       required: true
@@ -51,7 +51,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     _id: false
   });
 
-  var fteLeaderTaskSchema = mongoose.Schema({
+  const fteLeaderTaskSchema = new mongoose.Schema({
     id: mongoose.Schema.Types.ObjectId,
     parent: {
       type: mongoose.Schema.Types.ObjectId,
@@ -73,7 +73,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     _id: false
   });
 
-  var fteLeaderEntrySchema = mongoose.Schema({
+  const fteLeaderEntrySchema = new mongoose.Schema({
     subdivision: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Subdivision',
@@ -119,25 +119,25 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
   fteLeaderEntrySchema.statics.mapProdTasks = mapProdTasks;
 
   /**
-   * @param {object} options
+   * @param {Object} options
    * @param {ObjectId} options.subdivision
    * @param {string} options.subdivisionType
    * @param {Date} options.date
    * @param {number} options.shift
    * @param {boolean} options.copy
    * @param {Array.<{id: string, companies: Array.<string>}>} options.structure
-   * @param {object} creator
+   * @param {Object} creator
    * @param {function(Error, FteLeaderEntry)} done
    */
   fteLeaderEntrySchema.statics.createForShift = function(options, creator, done)
   {
-    var ProdTask = mongoose.model('ProdTask');
-    var FteLeaderEntry = mongoose.model('FteLeaderEntry');
-    var prodDivisions = app.divisions.models
+    const ProdTask = mongoose.model('ProdTask');
+    const FteLeaderEntry = mongoose.model('FteLeaderEntry');
+    const prodDivisions = app.divisions.models
       .filter(function(division) { return division.type === 'prod' && !division.deactivatedAt; })
       .map(function(division) { return division._id; })
       .sort();
-    var sortedCompanies = prepareSortedCompanies(options.structure);
+    const sortedCompanies = prepareSortedCompanies(options.structure);
 
     step(
       function prepareProdFunctionsStep()
@@ -156,7 +156,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
         if (options.copy)
         {
-          var conditions = {
+          const conditions = {
             subdivision: options.subdivision,
             date: {$lt: options.date},
             shift: options.shift
@@ -176,67 +176,19 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
           return this.done(done, err);
         }
 
-        var ctx = this;
-        var functions = this.functions;
+        const options = {
+          fteDiv: false,
+          functions: this.functions,
+          prodDivisions: prodDivisions,
+          prodTaskMaps: mapProdTasks(prodTasks),
+          prevEntryValues: mapPrevEntryValues(prevFteEntry)
+        };
 
-        var prodTaskMaps = mapProdTasks(prodTasks);
-        var prevEntryValues = mapPrevEntryValues(prevFteEntry);
+        this.tasks = prepareEntryTasks(prodTasks, options);
+        this.fteDiv = options.fteDiv;
 
-        this.tasks = _.map(prodTasks, function(prodTask)
-        {
-          ctx.fteDiv = ctx.fteDiv || prodTask.fteDiv;
-
-          return {
-            id: prodTask._id,
-            parent: prodTask.parent || null,
-            childCount: 0,
-            name: prodTask.name,
-            companies: [],
-            functions: _.map(functions, function(functionEntry)
-            {
-              return {
-                id: functionEntry.id,
-                companies: _.map(functionEntry.companies, function(companyEntry)
-                {
-                  var key = prodTask._id + ':' + functionEntry.id + ':' + companyEntry.id;
-                  var count;
-
-                  if (!prodTask.fteDiv && !isAnyChildFteDivided(prodTask, prodTaskMaps))
-                  {
-                    count = prevEntryValues[key] || 0;
-                  }
-                  else
-                  {
-                    var prevCountPerDivision = (prevEntryValues[key] || 0) / prodDivisions.length;
-
-                    count = _.map(prodDivisions, function(prodDivision)
-                    {
-                      var value = prevEntryValues[key + ':' + prodDivision];
-
-                      return {
-                        division: prodDivision,
-                        value: value === undefined ? prevCountPerDivision : value
-                      };
-                    });
-                  }
-
-                  return {
-                    id: companyEntry.id,
-                    name: companyEntry.name,
-                    count: count
-                  };
-                })
-              };
-            }),
-            totals: null
-          };
-        }).sort(function(a, b)
-        {
-          return a.name.localeCompare(b.name);
-        });
-
-        var idToTask = {};
-        var idToChildCount = {};
+        const idToTask = {};
+        const idToChildCount = {};
 
         _.forEach(this.tasks, function(task)
         {
@@ -262,7 +214,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       },
       function createFteLeaderEntryStep()
       {
-        var fteLeaderEntry = new FteLeaderEntry({
+        const fteLeaderEntry = new FteLeaderEntry({
           subdivision: options.subdivision,
           date: options.date,
           shift: options.shift,
@@ -282,99 +234,91 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
   fteLeaderEntrySchema.methods.calcTotals = function()
   {
-    var overallTotals = {
-      overall: 0
-    };
-    var fteDiv = this.fteDiv || [];
+    const overallTotals = {overall: 0};
+    const fteDiv = this.fteDiv || [];
 
-    _.forEach(fteDiv, function(divisionId)
-    {
-      overallTotals[divisionId] = 0;
-    });
+    _.forEach(fteDiv, divisionId => { overallTotals[divisionId] = 0; });
 
-    var keys = Object.keys(overallTotals);
+    const totalsKeys = Object.keys(overallTotals);
 
     _.forEach(this.tasks, function(task)
     {
       task.totals = {};
 
-      _.forEach(keys, function(key)
-      {
-        task.totals[key] = 0;
-      });
+      _.forEach(totalsKeys, key => { task.totals[key] = 0; });
 
       if (Array.isArray(task.functions) && task.functions.length)
       {
-        _.forEach(task.functions, function(taskFunction)
-        {
-          calcCompaniesTotals(taskFunction.companies, task.totals, overallTotals);
-        });
+        _.forEach(
+          task.functions,
+          taskFunction => calcCompaniesTotals(totalsKeys, taskFunction.companies, task.totals, overallTotals)
+        );
       }
       else
       {
-        calcCompaniesTotals(task.companies, task.totals, overallTotals);
+        calcCompaniesTotals(totalsKeys, task.companies, task.totals, overallTotals);
       }
     });
 
     this.totals = overallTotals;
-
-    function calcCompaniesTotals(taskCompanies, taskTotals, overallTotals)
-    {
-      _.forEach(taskCompanies, function(fteCompany)
-      {
-        var count = fteCompany.count;
-
-        if (Array.isArray(count))
-        {
-          _.forEach(count, function(divisionCount)
-          {
-            taskTotals.overall += divisionCount.value;
-            taskTotals[divisionCount.division] += divisionCount.value;
-            overallTotals.overall += divisionCount.value;
-            overallTotals[divisionCount.division] += divisionCount.value;
-          });
-        }
-        else if (typeof count === 'number')
-        {
-          _.forEach(keys, function(key)
-          {
-            taskTotals[key] += count;
-            overallTotals[key] += count;
-          });
-        }
-      });
-    }
   };
+
+  function calcCompaniesTotals(totalsKeys, taskCompanies, taskTotals, overallTotals)
+  {
+    _.forEach(taskCompanies, function(fteCompany)
+    {
+      const count = fteCompany.count;
+
+      if (Array.isArray(count))
+      {
+        _.forEach(count, function(divisionCount)
+        {
+          taskTotals.overall += divisionCount.value;
+          taskTotals[divisionCount.division] += divisionCount.value;
+          overallTotals.overall += divisionCount.value;
+          overallTotals[divisionCount.division] += divisionCount.value;
+        });
+      }
+      else if (typeof count === 'number')
+      {
+        _.forEach(totalsKeys, function(key)
+        {
+          taskTotals[key] += count;
+          overallTotals[key] += count;
+        });
+      }
+    });
+  }
 
   fteLeaderEntrySchema.methods.applyChangeRequest = function(changes, updater)
   {
-    var tasks = this.tasks;
-    var divisionModified = false;
+    const tasks = this.tasks;
+    let divisionModified = false;
 
     _.forEach(changes, function(change)
     {
-      var task = tasks[change.taskIndex];
+      const task = tasks[change.taskIndex];
 
       if (!task)
       {
         return;
       }
 
-      var func = task.functions[change.functionIndex];
+      const func = task.functions[change.functionIndex];
 
       if (!func)
       {
         return;
       }
 
-      var company = func.companies[change.companyIndex];
+      const company = func.companies[change.companyIndex];
 
       if (!company)
       {
         return;
       }
 
-      var newValue = change.newValue > 0 ? change.newValue : 0;
+      const newValue = change.newValue > 0 ? change.newValue : 0;
 
       if (_.isArray(company.count) && company.count[change.divisionIndex])
       {
@@ -399,9 +343,66 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     }
   };
 
+  function prepareEntryTasks(prodTasks, options)
+  {
+    return prodTasks
+      .map(prodTask => prepareEntryTask(prodTask, options))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  function prepareEntryTask(prodTask, options)
+  {
+    options.fteDiv = options.fteDiv || prodTask.fteDiv;
+
+    return {
+      id: prodTask._id,
+      parent: prodTask.parent || null,
+      childCount: 0,
+      name: prodTask.name,
+      companies: [],
+      functions: _.map(options.functions, function(functionEntry)
+      {
+        return {
+          id: functionEntry.id,
+          companies: _.map(functionEntry.companies, function(companyEntry)
+          {
+            const key = `${prodTask._id}:${functionEntry.id}:${companyEntry.id}`;
+            let count = 0;
+
+            if (!prodTask.fteDiv && !isAnyChildFteDivided(prodTask, options.prodTaskMaps))
+            {
+              count = options.prevEntryValues[key] || 0;
+            }
+            else
+            {
+              const prevCountPerDivision = (options.prevEntryValues[key] || 0) / options.prodDivisions.length;
+
+              count = _.map(options.prodDivisions, function(prodDivision)
+              {
+                const value = options.prevEntryValues[`${key}:${prodDivision}`];
+
+                return {
+                  division: prodDivision,
+                  value: value === undefined ? prevCountPerDivision : value
+                };
+              });
+            }
+
+            return {
+              id: companyEntry.id,
+              name: companyEntry.name,
+              count: count
+            };
+          })
+        };
+      }),
+      totals: null
+    };
+  }
+
   function getProdFunctionCompanyEntries(prodFunctionCompanies, sortedCompanies)
   {
-    var companies = [];
+    const companies = [];
 
     _.forEach(sortedCompanies, function(companyId)
     {
@@ -410,7 +411,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
         return;
       }
 
-      var company = app.companies.modelsById[companyId];
+      const company = app.companies.modelsById[companyId];
 
       if (company)
       {
@@ -427,13 +428,13 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
   function mapProdTasks(tasks)
   {
-    var idToTask = {};
-    var idToChildren = {};
-    var idToIndex = {};
+    const idToTask = {};
+    const idToChildren = {};
+    const idToIndex = {};
 
-    for (var i = 0; i < tasks.length; ++i)
+    for (let i = 0; i < tasks.length; ++i)
     {
-      var task = tasks[i];
+      const task = tasks[i];
 
       idToTask[task.id] = task;
       idToIndex[task.id] = i;
@@ -443,7 +444,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
         continue;
       }
 
-      var parentId = task.parent.toString();
+      const parentId = task.parent.toString();
 
       if (idToChildren[parentId])
       {
@@ -464,55 +465,64 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
   function mapPrevEntryValues(prevFteEntry)
   {
-    var prevEntryValues = {};
+    const prevEntryValues = {};
 
     if (!prevFteEntry)
     {
       return prevEntryValues;
     }
 
-    _.forEach(prevFteEntry.tasks, function(task)
-    {
-      _.forEach(task.functions, function(taskFunction)
-      {
-        _.forEach(taskFunction.companies, function(taskCompany)
-        {
-          var count = taskCompany.count;
-          var key = task.id + ':' + taskFunction.id + ':' + taskCompany.id;
-
-          if (Array.isArray(count))
-          {
-            prevEntryValues[key] = 0;
-
-            _.forEach(count, function(divisionCount)
-            {
-              prevEntryValues[key] += divisionCount.value;
-              prevEntryValues[key + ':' + divisionCount.division] = divisionCount.value;
-            });
-          }
-          else
-          {
-            prevEntryValues[key] = count;
-          }
-        });
-      });
-    });
+    _.forEach(prevFteEntry.tasks, task => mapPrevEntryTask(prevEntryValues, task));
 
     return prevEntryValues;
   }
 
+  function mapPrevEntryTask(prevEntryValues, task)
+  {
+    _.forEach(task.functions, taskFunction => mapPrevEntryTaskFunction(prevEntryValues, task, taskFunction));
+  }
+
+  function mapPrevEntryTaskFunction(prevEntryValues, task, taskFunction)
+  {
+    _.forEach(
+      taskFunction.companies,
+      taskCompany => mapPrevEntryTaskCompany(prevEntryValues, task, taskFunction, taskCompany)
+    );
+  }
+
+  function mapPrevEntryTaskCompany(prevEntryValues, task, taskFunction, taskCompany)
+  {
+    const count = taskCompany.count;
+    const key = `${task.id}:${taskFunction.id}:${taskCompany.id}`;
+
+    if (Array.isArray(count))
+    {
+      prevEntryValues[key] = 0;
+
+      _.forEach(count, function(divisionCount)
+      {
+        prevEntryValues[key] += divisionCount.value;
+        prevEntryValues[`${key}:${divisionCount.division}`] = divisionCount.value;
+      });
+    }
+    else
+    {
+      prevEntryValues[key] = count;
+    }
+  }
+
   function isAnyChildFteDivided(prodTask, prodTaskMaps)
   {
-    var childProdTasks = prodTaskMaps.idToChildren[prodTask._id];
+    const childProdTasks = prodTaskMaps.idToChildren[prodTask._id];
 
     if (!childProdTasks || !childProdTasks.length)
     {
       return false;
     }
 
-    for (var i = 0; i < childProdTasks.length; ++i)
+    for (let i = 0; i < childProdTasks.length; ++i)
     {
-      var childProdTask = childProdTasks[i];
+      const childProdTask = childProdTasks[i];
 
       if (childProdTask.fteDiv || isAnyChildFteDivided(childProdTask, prodTaskMaps))
       {
@@ -525,16 +535,13 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
   function prepareSortedCompanies(structure)
   {
-    var companies = {};
+    const companies = {};
 
     [].concat(structure)
-      .sort(function(a, b) { return b.companies.length - a.companies.length; })
+      .sort((a, b) => b.companies.length - a.companies.length)
       .forEach(function(prodFunction)
       {
-        _.forEach(prodFunction.companies, function(companyId)
-        {
-          companies[companyId] = true;
-        });
+        _.forEach(prodFunction.companies, companyId => { companies[companyId] = true; });
       });
 
     return Object.keys(companies);

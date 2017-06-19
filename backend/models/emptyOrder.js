@@ -4,7 +4,7 @@
 
 module.exports = function setupEmptyOrderModel(app, mongoose)
 {
-  var emptyOrderSchema = mongoose.Schema({
+  const emptyOrderSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,
@@ -33,8 +33,6 @@ module.exports = function setupEmptyOrderModel(app, mongoose)
 
   emptyOrderSchema.pre('save', function(next)
   {
-    /*jshint validthis:true*/
-
     if (this.isNew)
     {
       this.createdAt = new Date();

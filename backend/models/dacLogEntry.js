@@ -2,11 +2,11 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function setupDacLogEntryModel(app, mongoose)
 {
-  var dacLogEntrySchema = mongoose.Schema({
+  const dacLogEntrySchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true
@@ -47,14 +47,13 @@ module.exports = function setupDacLogEntryModel(app, mongoose)
       return done(new Error('INVALID_REQUEST_DATA'));
     }
 
-    var receivedAt = new Date();
-    var dacLogEntries = [];
+    const receivedAt = new Date();
+    const dacLogEntries = [];
 
     _.forEach(req.data.trim().split('\n'), function(line)
     {
-      var columns = line.split(';');
-
-      var dacLogEntry = {
+      const columns = line.split(';');
+      const dacLogEntry = {
         _id: columns[0],
         nodeId: req.nodeId,
         cardId: columns[1],

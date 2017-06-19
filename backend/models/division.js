@@ -4,7 +4,7 @@
 
 module.exports = function setupDivisionModel(app, mongoose)
 {
-  var divisionSchema = mongoose.Schema({
+  const divisionSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

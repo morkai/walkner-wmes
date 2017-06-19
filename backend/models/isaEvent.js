@@ -4,14 +4,14 @@
 
 module.exports = function setupIsaEventModel(app, mongoose)
 {
-  var orgUnitSchema = mongoose.Schema({
+  const orgUnitSchema = new mongoose.Schema({
     type: String,
     id: String
   }, {
     _id: false
   });
 
-  var isaEventSchema = mongoose.Schema({
+  const isaEventSchema = new mongoose.Schema({
     requestId: {
       type: String,
       default: null

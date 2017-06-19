@@ -2,12 +2,12 @@
 
 'use strict';
 
-var _ = require('lodash');
-var createOrderLossSchema = require('./createOrderLossSchema');
+const _ = require('lodash');
+const createOrderLossSchema = require('./createOrderLossSchema');
 
 module.exports = function setupProdShiftOrderModel(app, mongoose)
 {
-  var prodShiftOrderSchema = mongoose.Schema({
+  const prodShiftOrderSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,
@@ -210,11 +210,11 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
 
     if (doc._wasNew)
     {
-      app.broker.publish('prodShiftOrders.created.' + doc.prodLine, doc.toJSON());
+      app.broker.publish(`prodShiftOrders.created.${doc.prodLine}`, doc.toJSON());
     }
     else if (Array.isArray(doc._changes) && doc._changes.length)
     {
-      var changes = {_id: doc._id};
+      const changes = {_id: doc._id};
 
       _.forEach(doc._changes, function(modifiedPath)
       {
@@ -222,7 +222,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       });
       doc._changes = null;
 
-      app.broker.publish('prodShiftOrders.updated.' + doc._id, changes);
+      app.broker.publish(`prodShiftOrders.updated.${doc._id}`, changes);
     }
   });
 
@@ -234,8 +234,8 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
 
     _.forEach(prodDowntimes, function(prodDowntime)
     {
-      var reason = app.downtimeReasons.modelsById[prodDowntime.reason];
-      var property = reason && reason.type === 'break' ? 'breakDuration' : 'downtimeDuration';
+      const reason = app.downtimeReasons.modelsById[prodDowntime.reason];
+      const property = reason && reason.type === 'break' ? 'breakDuration' : 'downtimeDuration';
 
       prodShiftOrder[property] += (prodDowntime.finishedAt - prodDowntime.startedAt) / 3600000;
     });
@@ -255,14 +255,14 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       return;
     }
 
-    var operations = this.orderData.operations;
+    const operations = this.orderData.operations;
 
     if (!operations)
     {
       return;
     }
 
-    var operation = operations[this.operationNo];
+    const operation = operations[this.operationNo];
 
     this.laborTime = 0;
     this.laborSetupTime = 0;
@@ -318,16 +318,16 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       return save ? this.save(done) : done();
     }
 
-    var conditions = {
+    const conditions = {
       prodShiftOrder: this._id,
       finishedAt: {$ne: null}
     };
-    var fields = {
+    const fields = {
       reason: 1,
       startedAt: 1,
       finishedAt: 1
     };
-    var prodShiftOrder = this;
+    const prodShiftOrder = this;
 
     mongoose.model('ProdDowntime').find(conditions, fields).lean().exec(function(err, prodDowntimes)
     {

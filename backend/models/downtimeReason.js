@@ -4,7 +4,7 @@
 
 module.exports = function setupDowntimeReasonModel(app, mongoose)
 {
-  var downtimeReasonSchema = mongoose.Schema({
+  const downtimeReasonSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

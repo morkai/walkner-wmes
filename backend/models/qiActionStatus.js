@@ -4,7 +4,7 @@
 
 module.exports = function setupQiActionStatusModel(app, mongoose)
 {
-  var qiActionStatusSchema = mongoose.Schema({
+  const qiActionStatusSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

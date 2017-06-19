@@ -2,12 +2,12 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const step = require('h5.step');
 
 module.exports = function setupFteMasterEntryModel(app, mongoose)
 {
-  var fteMasterTaskCompanySchema = mongoose.Schema({
+  const fteMasterTaskCompanySchema = new mongoose.Schema({
     id: {
       type: String,
       required: true
@@ -25,7 +25,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     _id: false
   });
 
-  var fteMasterTaskFunctionSchema = mongoose.Schema({
+  const fteMasterTaskFunctionSchema = new mongoose.Schema({
     id: {
       type: String,
       required: true
@@ -35,7 +35,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     _id: false
   });
 
-  var fteMasterTaskSchema = mongoose.Schema({
+  const fteMasterTaskSchema = new mongoose.Schema({
     type: {
       type: String,
       enum: ['prodTask', 'prodFlow']
@@ -58,7 +58,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     _id: false
   });
 
-  var fteMasterAbsentUserSchema = mongoose.Schema({
+  const fteMasterAbsentUserSchema = new mongoose.Schema({
     id: mongoose.Schema.Types.ObjectId,
     name: {
       type: String,
@@ -69,7 +69,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     _id: false
   });
 
-  var fteMasterEntrySchema = mongoose.Schema({
+  const fteMasterEntrySchema = new mongoose.Schema({
     subdivision: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Subdivision',
@@ -111,21 +111,21 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
   fteMasterEntrySchema.index({date: -1, subdivision: 1});
 
   /**
-   * @param {object} options
+   * @param {Object} options
    * @param {ObjectId} options.subdivision
    * @param {string} options.subdivisionType
    * @param {Date} options.date
    * @param {number} options.shift
    * @param {boolean} options.copy
    * @param {Array.<{id: string, companies: Array.<string>}>} options.structure
-   * @param {object} creator
+   * @param {Object} creator
    * @param {function(Error, FteMasterEntry)} done
    */
   fteMasterEntrySchema.statics.createForShift = function(options, creator, done)
   {
-    var ProdTask = mongoose.model('ProdTask');
-    var FteMasterEntry = mongoose.model('FteMasterEntry');
-    var sortedCompanies = prepareSortedCompanies(options.structure);
+    const ProdTask = mongoose.model('ProdTask');
+    const FteMasterEntry = mongoose.model('FteMasterEntry');
+    const sortedCompanies = prepareSortedCompanies(options.structure);
 
     step(
       function prepareProdFunctionsStep()
@@ -146,7 +146,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
         if (options.copy)
         {
-          var conditions = {
+          const conditions = {
             subdivision: options.subdivision,
             date: {$lt: options.date},
             shift: options.shift
@@ -166,46 +166,22 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
           return this.done(done, err);
         }
 
-        var tasks = prodFlows;
-        var functions = this.functions;
-        var prevEntryValues = mapPrevEntryValues(prevFteEntry);
+        const functions = this.functions;
+        const tasks = prodFlows.concat(prodTasks.map(prodTask => ({
+          type: 'prodTask',
+          id: prodTask._id,
+          name: prodTask.name,
+          noPlan: false,
+          functions: functions,
+          total: null
+        })));
+        const prevEntryValues = mapPrevEntryValues(prevFteEntry);
 
-        _.forEach(prodTasks, function(prodTask)
-        {
-          tasks.push({
-            type: 'prodTask',
-            id: prodTask._id,
-            name: prodTask.name,
-            noPlan: false,
-            functions: functions,
-            total: null
-          });
-        });
-
-        this.tasks = _.map(tasks, function(task)
-        {
-          task.noPlan = prevEntryValues[task.id] === true;
-          task.functions = _.map(task.functions, function(taskFunction)
-          {
-            return {
-              id: taskFunction.id,
-              companies: _.map(taskFunction.companies, function(taskCompany)
-              {
-                return {
-                  id: taskCompany.id,
-                  name: taskCompany.name,
-                  count: prevEntryValues[task.id + ':' + taskFunction.id + ':' + taskCompany.id] || 0
-                };
-              })
-            };
-          });
-
-          return task;
-        });
+        this.tasks = prepareEntryTasks(tasks, prevEntryValues);
       },
       function createFteMasterEntryStep()
       {
-        var fteMasterEntry = new FteMasterEntry({
+        const fteMasterEntry = new FteMasterEntry({
           subdivision: options.subdivision,
           date: options.date,
           shift: options.shift,
@@ -225,7 +201,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
   fteMasterEntrySchema.statics.addAbsentUser = function(_id, absentUser, updater, done)
   {
-    var update = {
+    const update = {
       $set: {
         updatedAt: new Date(),
         updater: updater
@@ -240,7 +216,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
   fteMasterEntrySchema.statics.removeAbsentUser = function(_id, absentUserId, updater, done)
   {
-    var update = {
+    const update = {
       $set: {
         updatedAt: new Date(),
         updater: updater
@@ -255,51 +231,44 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
   fteMasterEntrySchema.methods.calcTotals = function()
   {
-    var overallTotal = 0;
+    let overallTotal = 0;
 
-    for (var i = 0, l = this.tasks.length; i < l; ++i)
+    this.tasks.forEach(task =>
     {
-      var task = this.tasks[i];
-
       task.total = 0;
 
-      for (var ii = 0, ll = task.functions.length; ii < ll; ++ii)
+      task.functions.forEach(taskFunction =>
       {
-        var taskFunction = task.functions[ii];
-
-        for (var iii = 0, lll = taskFunction.companies.length; iii < lll; ++iii)
-        {
-          task.total += taskFunction.companies[iii].count;
-        }
-      }
+        taskFunction.companies.forEach(taskCompany => { task.total += taskCompany.count; });
+      });
 
       overallTotal += task.total;
-    }
+    });
 
     this.total = overallTotal;
   };
 
   fteMasterEntrySchema.methods.applyChangeRequest = function(changes, updater)
   {
-    var tasks = this.tasks;
+    const tasks = this.tasks;
 
     _.forEach(changes, function(change)
     {
-      var task = tasks[change.taskIndex];
+      const task = tasks[change.taskIndex];
 
       if (!task)
       {
         return;
       }
 
-      var func = task.functions[change.functionIndex];
+      const func = task.functions[change.functionIndex];
 
       if (!func)
       {
         return;
       }
 
-      var company = func.companies[change.companyIndex];
+      const company = func.companies[change.companyIndex];
 
       if (!company)
       {
@@ -318,7 +287,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
   function getProdFunctionCompanyEntries(prodFunctionCompanies, sortedCompanies)
   {
-    var companies = [];
+    const companies = [];
 
     _.forEach(sortedCompanies, function(companyId)
     {
@@ -327,7 +296,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
         return;
       }
 
-      var company = app.companies.modelsById[companyId];
+      const company = app.companies.modelsById[companyId];
 
       if (company)
       {
@@ -342,6 +311,30 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     return companies;
   }
 
+  function prepareEntryTasks(tasks, prevEntryValues)
+  {
+    return _.map(tasks, function(task)
+    {
+      task.noPlan = prevEntryValues[task.id] === true;
+      task.functions = _.map(task.functions, function(taskFunction)
+      {
+        return {
+          id: taskFunction.id,
+          companies: _.map(taskFunction.companies, function(taskCompany)
+          {
+            return {
+              id: taskCompany.id,
+              name: taskCompany.name,
+              count: prevEntryValues[`${task.id}:${taskFunction.id}:${taskCompany.id}`] || 0
+            };
+          })
+        };
+      });
+
+      return task;
+    });
+  }
+
   function getProdFlowTasks(subdivisionId, functions, done)
   {
     mongoose.model('ProdFlow').getAllBySubdivisionId(subdivisionId, function(err, prodFlows)
@@ -351,7 +344,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
         return done(err);
       }
 
-      var result = [];
+      const result = [];
 
       _.forEach(prodFlows, function(prodFlow)
       {
@@ -368,10 +361,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
         });
       });
 
-      result.sort(function(a, b)
-      {
-        return a.name.localeCompare(b.name);
-      });
+      result.sort((a, b) => a.name.localeCompare(b.name));
 
       done(null, result);
     });
@@ -379,7 +369,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
   function mapPrevEntryValues(prevFteEntry)
   {
-    var prevEntryValues = {};
+    const prevEntryValues = {};
 
     if (!prevFteEntry)
     {
@@ -394,7 +384,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       {
         _.forEach(taskFunction.companies, function(taskCompany)
         {
-          prevEntryValues[task.id + ':' + taskFunction.id + ':' + taskCompany.id] = taskCompany.count;
+          prevEntryValues[`${task.id}:${taskFunction.id}:${taskCompany.id}`] = taskCompany.count;
         });
       });
     });
@@ -404,16 +394,13 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
   function prepareSortedCompanies(structure)
   {
-    var companies = {};
+    const companies = {};
 
     [].concat(structure)
-      .sort(function(a, b) { return b.companies.length - a.companies.length; })
+      .sort((a, b) => b.companies.length - a.companies.length)
       .forEach(function(prodFunction)
       {
-        _.forEach(prodFunction.companies, function(companyId)
-        {
-          companies[companyId] = true;
-        });
+        _.forEach(prodFunction.companies, companyId => { companies[companyId] = true; });
       });
 
     return Object.keys(companies);

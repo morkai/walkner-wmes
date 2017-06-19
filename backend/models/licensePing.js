@@ -4,7 +4,7 @@
 
 module.exports = function setupLicensePingModel(app, mongoose)
 {
-  var licensePingSchema = mongoose.Schema({
+  const licensePingSchema = new mongoose.Schema({
     uuid: {
       type: String,
       ref: 'License',

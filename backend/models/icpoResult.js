@@ -4,7 +4,7 @@
 
 module.exports = function setupIcpoResultModel(app, mongoose)
 {
-  var icpoResultSchema = mongoose.Schema({
+  const icpoResultSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

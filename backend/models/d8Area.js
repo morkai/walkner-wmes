@@ -4,7 +4,7 @@
 
 module.exports = function setupD8AreaModel(app, mongoose)
 {
-  var d8AreaSchema = mongoose.Schema({
+  const d8AreaSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

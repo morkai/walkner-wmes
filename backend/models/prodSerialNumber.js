@@ -65,7 +65,7 @@ module.exports = function setupProdSerialNumberModel(app, mongoose)
       return;
     }
 
-    app.broker.publish('prodSerialNumbers.created.' + doc.prodLine, doc.toJSON());
+    app.broker.publish(`prodSerialNumbers.created.${doc.prodLine}`, doc.toJSON());
   });
 
   mongoose.model('ProdSerialNumber', prodSerialNumberSchema);

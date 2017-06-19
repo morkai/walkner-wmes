@@ -13,7 +13,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     'closed'
   ];
 
-  const memberSchema = mongoose.Schema({
+  const memberSchema = new mongoose.Schema({
     id: String,
     label: String
   }, {
@@ -21,7 +21,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     minimize: false
   });
 
-  const stripSchema = mongoose.Schema({
+  const stripSchema = new mongoose.Schema({
     no: String,
     family: String
   }, {
@@ -29,7 +29,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     minimize: false
   });
 
-  const userInfoSchema = mongoose.Schema({
+  const userInfoSchema = new mongoose.Schema({
     id: {
       type: String,
       required: true
@@ -43,7 +43,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     minimize: false
   });
 
-  const attachmentSchema = mongoose.Schema({
+  const attachmentSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true
@@ -69,7 +69,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     minimize: false
   });
 
-  const observerSchema = mongoose.Schema({
+  const observerSchema = new mongoose.Schema({
     user: {},
     role: {
       type: String,
@@ -84,7 +84,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     minimize: false
   });
 
-  const changeSchema = mongoose.Schema({
+  const changeSchema = new mongoose.Schema({
     date: Date,
     user: {},
     data: {},
@@ -98,7 +98,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     minimize: false
   });
 
-  const d8EntrySchema = mongoose.Schema({
+  const d8EntrySchema = new mongoose.Schema({
     rid: {
       type: Number,
       required: true,
@@ -267,7 +267,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
           return done(err);
         }
 
-        app.broker.publish(D8Entry.TOPIC_PREFIX + '.seen.' + userId, {
+        app.broker.publish(`${D8Entry.TOPIC_PREFIX}.seen.${userId}`, {
           entryId: entryId,
           userId: userId
         });
@@ -344,7 +344,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
           return done(err);
         }
 
-        app.broker.publish(D8Entry.TOPIC_PREFIX + '.edited', {
+        app.broker.publish(`${D8Entry.TOPIC_PREFIX}.edited`, {
           model: entry,
           user: userInfo,
           notify: null
@@ -444,7 +444,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     // Owner
     if (this.owner)
     {
-      var owner = oldObserverMap[this.owner.id];
+      let owner = oldObserverMap[this.owner.id];
 
       if (!owner)
       {
@@ -471,7 +471,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     // Manager
     if (this.manager && !newObserverMap[this.manager.id])
     {
-      var manager = oldObserverMap[this.manager.id];
+      let manager = oldObserverMap[this.manager.id];
 
       if (!manager)
       {
@@ -503,7 +503,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
         return;
       }
 
-      var observer = oldObserverMap[member.id];
+      let observer = oldObserverMap[member.id];
 
       if (!observer)
       {
@@ -547,7 +547,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     });
 
     // Creator
-    var creator = newObserverMap[this.creator.id] = oldObserverMap[this.creator.id];
+    const creator = newObserverMap[this.creator.id] = oldObserverMap[this.creator.id];
 
     _.assign(creator.changes, changedPropertyMap);
 
@@ -558,7 +558,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
     }
 
     // New subscribers specified in the form
-    var subscribers = [];
+    const subscribers = [];
 
     _.forEach(newSubscribers, function(newSubscribers)
     {
@@ -636,7 +636,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
       return null;
     }
 
-    var usersToNotify = this.updateObservers(changedProperties, changes, input.subscribers);
+    const usersToNotify = this.updateObservers(changedProperties, changes, input.subscribers);
 
     if (!_.isEmpty(input.subscribers))
     {
@@ -663,7 +663,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
 
   d8EntrySchema.methods.compareProperties = function(input)
   {
-    var changes = {};
+    const changes = {};
 
     _.forEach(input, (value, key) => { this.compareProperty(key, input, changes); });
 

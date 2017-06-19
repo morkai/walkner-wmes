@@ -4,7 +4,7 @@
 
 module.exports = function setupFeedbackModel(app, mongoose)
 {
-  var feedbackChangeSchema = mongoose.Schema({
+  const feedbackChangeSchema = new mongoose.Schema({
     type: {
       type: String,
       required: true,
@@ -15,7 +15,7 @@ module.exports = function setupFeedbackModel(app, mongoose)
     _id: false
   });
 
-  var feedbackReplySchema = mongoose.Schema({
+  const feedbackReplySchema = new mongoose.Schema({
     savedAt: {
       type: Date,
       required: true
@@ -41,7 +41,7 @@ module.exports = function setupFeedbackModel(app, mongoose)
     _id: false
   });
 
-  var feedbackUnseenSchema = mongoose.Schema({
+  const feedbackUnseenSchema = new mongoose.Schema({
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -52,7 +52,7 @@ module.exports = function setupFeedbackModel(app, mongoose)
     _id: false
   });
 
-  var feedbackSchema = mongoose.Schema({
+  const feedbackSchema = new mongoose.Schema({
     project: {
       type: 'String',
       required: true
@@ -144,8 +144,6 @@ module.exports = function setupFeedbackModel(app, mongoose)
   }, {
     id: false
   });
-
-  //feedbackSchema.index({date: 1, mrp: 1}, {unique: true});
 
   feedbackSchema.statics.TOPIC_PREFIX = 'feedback';
 

@@ -4,7 +4,7 @@
 
 module.exports = function setupSettingModel(app, mongoose)
 {
-  var settingSchema = mongoose.Schema({
+  const settingSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

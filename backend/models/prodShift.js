@@ -2,13 +2,13 @@
 
 'use strict';
 
-var _ = require('lodash');
-var step = require('h5.step');
-var moment = require('moment');
+const _ = require('lodash');
+const step = require('h5.step');
+const moment = require('moment');
 
 module.exports = function setupProdShiftModel(app, mongoose)
 {
-  var quantitySchema = mongoose.Schema({
+  const quantitySchema = new mongoose.Schema({
     planned: {
       type: Number,
       default: 0,
@@ -23,7 +23,7 @@ module.exports = function setupProdShiftModel(app, mongoose)
     _id: false
   });
 
-  var prodShiftSchema = mongoose.Schema({
+  const prodShiftSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,
@@ -138,11 +138,11 @@ module.exports = function setupProdShiftModel(app, mongoose)
 
     if (doc._wasNew)
     {
-      app.broker.publish('prodShifts.created.' + doc.prodLine, doc.toJSON());
+      app.broker.publish(`prodShifts.created.${doc.prodLine}`, doc.toJSON());
     }
     else if (Array.isArray(doc._changes) && doc._changes.length)
     {
-      var changes = {_id: doc._id};
+      const changes = {_id: doc._id};
 
       _.forEach(doc._changes, function(modifiedPath)
       {
@@ -150,13 +150,13 @@ module.exports = function setupProdShiftModel(app, mongoose)
       });
       doc._changes = null;
 
-      app.broker.publish('prodShifts.updated.' + doc._id, changes);
+      app.broker.publish(`prodShifts.updated.${doc._id}`, changes);
     }
   });
 
   prodShiftSchema.statics.setPlannedQuantities = function(prodLineIds, date, plannedQuantities, done)
   {
-    var ProdShift = this;
+    const ProdShift = this;
 
     ProdShift
       .find({date: date, prodLine: {$in: prodLineIds}})
@@ -171,28 +171,28 @@ module.exports = function setupProdShiftModel(app, mongoose)
         if (prodLineIds.length !== prodShifts.length)
         {
           return done(new Error(
-            prodShifts.length + " prod shifts (" + date + ") were found for "
-              + prodLineIds.length + " prod lines: " + prodLineIds.join(', ')
+            `${prodShifts.length} prod shifts (${date}) were found for ${prodLineIds.length} prod lines: `
+            + prodLineIds.join(', ')
           ));
         }
 
-        var cachedProdShifts = [];
+        const cachedProdShifts = [];
 
         app.production.swapToCachedProdData(prodShifts, cachedProdShifts);
 
-        var prodLineCount = prodLineIds.length;
-        var dividedQuantities = prodLineIds.map(function() { return [0, 0, 0, 0, 0, 0, 0, 0]; });
+        const prodLineCount = prodLineIds.length;
+        const dividedQuantities = prodLineIds.map(function() { return [0, 0, 0, 0, 0, 0, 0, 0]; });
 
         _.forEach(plannedQuantities, function(plannedQuantity, hour)
         {
-          var quantityForProdLine = Math.floor(plannedQuantity / prodLineCount);
+          const quantityForProdLine = Math.floor(plannedQuantity / prodLineCount);
 
           _.forEach(dividedQuantities, function(quantitiesForProdLine)
           {
             quantitiesForProdLine[hour] = quantityForProdLine;
           });
 
-          for (var i = 0, l = plannedQuantity % prodLineCount; i < l; ++i)
+          for (let i = 0, l = plannedQuantity % prodLineCount; i < l; ++i)
           {
             dividedQuantities[hour % 2 ? (prodLineCount - 1 - i) : i][hour] += 1;
           }
@@ -201,12 +201,12 @@ module.exports = function setupProdShiftModel(app, mongoose)
         step(
           function()
           {
-            for (var i = 0, l = cachedProdShifts.length; i < l; ++i)
+            for (let i = 0; i < cachedProdShifts.length; ++i)
             {
-              var prodShift = cachedProdShifts[i];
-              var quantitiesDone = prodShift.quantitiesDone;
+              const prodShift = cachedProdShifts[i];
+              const quantitiesDone = prodShift.quantitiesDone;
 
-              for (var h = 0; h < 8; ++h)
+              for (let h = 0; h < 8; ++h)
               {
                 quantitiesDone[h].planned = dividedQuantities[i][h];
               }
@@ -230,8 +230,8 @@ module.exports = function setupProdShiftModel(app, mongoose)
 
   prodShiftSchema.methods.hasEnded = function()
   {
-    var prodShiftTime = this.date.getTime();
-    var currentShiftTime = app.fte.getCurrentShift().date.getTime();
+    const prodShiftTime = this.date.getTime();
+    const currentShiftTime = app.fte.getCurrentShift().date.getTime();
 
     return prodShiftTime < currentShiftTime;
   };
@@ -243,7 +243,7 @@ module.exports = function setupProdShiftModel(app, mongoose)
 
   prodShiftSchema.methods.recalcTimes = function(done)
   {
-    var shift = this;
+    const shift = this;
 
     step(
       function findOrdersAndDowntimesStep()
@@ -258,15 +258,15 @@ module.exports = function setupProdShiftModel(app, mongoose)
           return this.skip(err);
         }
 
-        var shiftStartTime = shift.date.getTime();
-        var shiftEndTime = moment(shiftStartTime).add(8, 'hours').valueOf();
-        var shiftStartedAt = Math.min(
+        const shiftStartTime = shift.date.getTime();
+        const shiftEndTime = moment(shiftStartTime).add(8, 'hours').valueOf();
+        const lastOrder = orders.length ? orders[orders.length - 1] : null;
+        const lastDowntime = downtimes.length ? downtimes[downtimes.length - 1] : null;
+        let shiftStartedAt = Math.min(
           orders.length ? orders[0].startedAt.getTime() : Number.MAX_VALUE,
           downtimes.length ? downtimes[0].startedAt.getTime() : Number.MAX_VALUE
         );
-        var lastOrder = orders.length ? orders[orders.length - 1] : null;
-        var lastDowntime = downtimes.length ? downtimes[downtimes.length - 1] : null;
-        var shiftFinishedAt = Math.max(
+        let shiftFinishedAt = Math.max(
           lastOrder && lastOrder.finishedAt ? lastOrder.finishedAt.getTime() : Number.MIN_VALUE,
           lastDowntime && lastDowntime.finishedAt ? lastDowntime.finishedAt.getTime() : Number.MIN_VALUE
         );
@@ -284,12 +284,12 @@ module.exports = function setupProdShiftModel(app, mongoose)
         shift.startup = Math.max(0, shiftStartedAt - shiftStartTime);
         shift.shutdown = Math.max(0, shiftEndTime - shiftFinishedAt);
 
-        var working = 0;
-        var downtime = 0;
+        let working = 0;
+        let downtime = 0;
 
-        for (var o = 0; o < orders.length; ++o)
+        for (let o = 0; o < orders.length; ++o)
         {
-          var order = orders[o];
+          const order = orders[o];
 
           if (order.finishedAt)
           {
@@ -297,13 +297,13 @@ module.exports = function setupProdShiftModel(app, mongoose)
           }
         }
 
-        for (var d = 0; d < downtimes.length; ++d)
+        for (let d = 0; d < downtimes.length; ++d)
         {
-          var dt = downtimes[d];
+          const dt = downtimes[d];
 
           if (dt.finishedAt)
           {
-            var duration = dt.finishedAt.getTime() - dt.startedAt.getTime();
+            const duration = dt.finishedAt.getTime() - dt.startedAt.getTime();
 
             working -= duration;
             downtime += duration;
@@ -322,7 +322,7 @@ module.exports = function setupProdShiftModel(app, mongoose)
 
   prodShiftSchema.methods.getNextOrders = function()
   {
-    var nextOrders = this.nextOrder;
+    const nextOrders = this.nextOrder;
 
     if (_.isEmpty(nextOrders))
     {

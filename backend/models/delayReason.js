@@ -4,7 +4,7 @@
 
 module.exports = function setupDelayReasonModel(app, mongoose)
 {
-  var delayReasonSchema = mongoose.Schema({
+  const delayReasonSchema = new mongoose.Schema({
     name: {
       type: String,
       trim: true

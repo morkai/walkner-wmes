@@ -14,11 +14,11 @@ module.exports = function setupOrderZlf1Model(app, mongoose)
 
   orderZlf1Schema.statics.prepareForInsert = function(data)
   {
-    var orderZlf1 = {};
+    const orderZlf1 = {};
 
     Object.keys(data).forEach(function(key)
     {
-      var value = data[key].trim();
+      let value = data[key].trim();
 
       key = key.toLowerCase().replace(/[^a-z0-9_]+/g, ' ').trim().replace(/(\s|_)+/g, '_');
 
@@ -26,7 +26,6 @@ module.exports = function setupOrderZlf1Model(app, mongoose)
       {
         return;
       }
-
 
       if (key === 'production_order_nr')
       {

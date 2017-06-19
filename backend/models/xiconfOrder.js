@@ -4,7 +4,7 @@
 
 module.exports = function setupXiconfOrderModel(app, mongoose)
 {
-  var xiconfOrderItemSchema = mongoose.Schema({
+  const xiconfOrderItemSchema = new mongoose.Schema({
     source: {
       type: String,
       enum: ['xiconf', 'docs'],
@@ -24,7 +24,7 @@ module.exports = function setupXiconfOrderModel(app, mongoose)
     _id: false
   });
 
-  var xiconfOrderSchema = mongoose.Schema({
+  const xiconfOrderSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

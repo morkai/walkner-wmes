@@ -4,7 +4,7 @@
 
 module.exports = function setupOpinionSurveyOmrResultModel(app, mongoose)
 {
-  var opinionSurveyOmrResultSchema = mongoose.Schema({
+  const opinionSurveyOmrResultSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true

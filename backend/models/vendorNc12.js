@@ -4,7 +4,7 @@
 
 module.exports = function setupVendorNc12Model(app, mongoose)
 {
-  var vendorNc12Schema = mongoose.Schema({
+  const vendorNc12Schema = new mongoose.Schema({
     vendor: {
       type: String,
       ref: 'Vendor',

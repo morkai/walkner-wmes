@@ -2,27 +2,27 @@
 
 'use strict';
 
-var path = require('path');
-var _ = require('lodash');
+const path = require('path');
+const _ = require('lodash');
 
 module.exports = function startCoreRoutes(app, express)
 {
-  var dev = app.options.env === 'development';
-  var updaterModule = app[app.options.updaterId || 'updater'];
-  var userModule = app[app.options.userId || 'user'];
-  var requirejsPaths;
-  var requirejsShim;
+  const dev = app.options.env === 'development';
+  const updaterModule = app[app.options.updaterId || 'updater'];
+  const userModule = app[app.options.userId || 'user'];
 
-  var ROOT_USER = JSON.stringify(_.omit(userModule.root, 'password'));
-  var GUEST_USER = JSON.stringify(userModule.guest);
-  var PRIVILEGES = JSON.stringify(userModule.config.privileges);
-  var MODULES = JSON.stringify(app.options.modules.map(m => m.id || m));
-  var DASHBOARD_URL_AFTER_LOG_IN = JSON.stringify(app.options.dashboardUrlAfterLogIn || '/');
+  const ROOT_USER = JSON.stringify(_.omit(userModule.root, 'password'));
+  const GUEST_USER = JSON.stringify(userModule.guest);
+  const PRIVILEGES = JSON.stringify(userModule.config.privileges);
+  const MODULES = JSON.stringify(app.options.modules.map(m => m.id || m));
+  const DASHBOARD_URL_AFTER_LOG_IN = JSON.stringify(app.options.dashboardUrlAfterLogIn || '/');
 
-  app.broker.subscribe('updater.newVersion', reloadRequirejsConfig).setFilter(function(message)
-  {
-    return message.service === app.options.id;
-  });
+  let requirejsPaths = null;
+  let requirejsShim = null;
+
+  app.broker
+    .subscribe('updater.newVersion', reloadRequirejsConfig)
+    .setFilter(message => message.service === app.options.id);
 
   reloadRequirejsConfig();
 
@@ -46,9 +46,9 @@ module.exports = function startCoreRoutes(app, express)
 
   function showIndex(req, res)
   {
-    var sessionUser = req.session.user;
-    var locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
-    var appData = {
+    const sessionUser = req.session.user;
+    const locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
+    const appData = {
       ENV: JSON.stringify(app.options.env),
       VERSIONS: JSON.stringify(updaterModule ? updaterModule.getVersions() : {}),
       TIME: JSON.stringify(Date.now()),
@@ -62,7 +62,7 @@ module.exports = function startCoreRoutes(app, express)
 
     _.forEach(app.options.dictionaryModules, function(appDataKey, moduleName)
     {
-      var models = app[moduleName].models;
+      const models = app[moduleName].models;
 
       if (models.length === 0)
       {
@@ -88,7 +88,7 @@ module.exports = function startCoreRoutes(app, express)
       );
     });
 
-    var appCacheManifest = '';
+    let appCacheManifest = '';
 
     if (!dev && app.updater)
     {
@@ -125,7 +125,7 @@ module.exports = function startCoreRoutes(app, express)
 
   function sendFavicon(req, res)
   {
-    var faviconPath = path.join(
+    const faviconPath = path.join(
       express.config[dev ? 'staticPath' : 'staticBuildPath'],
       app.options.faviconFile || 'favicon.ico'
     );
@@ -136,11 +136,11 @@ module.exports = function startCoreRoutes(app, express)
 
   function reloadRequirejsConfig()
   {
-    var configPath = require.resolve('../../config/require');
+    const configPath = require.resolve('../../config/require');
 
     delete require.cache[configPath];
 
-    var requirejsConfig = require(configPath);
+    const requirejsConfig = require(configPath);
 
     requirejsPaths = JSON.stringify(requirejsConfig.paths);
     requirejsShim = JSON.stringify(requirejsConfig.shim);
@@ -148,8 +148,8 @@ module.exports = function startCoreRoutes(app, express)
 
   function setUpFrontendVersionUpdater(topicPrefix)
   {
-    app.broker.subscribe(topicPrefix + '.added', updaterModule.updateFrontendVersion);
-    app.broker.subscribe(topicPrefix + '.edited', updaterModule.updateFrontendVersion);
-    app.broker.subscribe(topicPrefix + '.deleted', updaterModule.updateFrontendVersion);
+    app.broker.subscribe(`${topicPrefix}.added`, updaterModule.updateFrontendVersion);
+    app.broker.subscribe(`${topicPrefix}.edited`, updaterModule.updateFrontendVersion);
+    app.broker.subscribe(`${topicPrefix}.deleted`, updaterModule.updateFrontendVersion);
   }
 };

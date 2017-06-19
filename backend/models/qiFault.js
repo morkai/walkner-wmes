@@ -4,7 +4,7 @@
 
 module.exports = function setupQiFaultModel(app, mongoose)
 {
-  var qiFaultSchema = mongoose.Schema({
+  const qiFaultSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

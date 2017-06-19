@@ -107,14 +107,14 @@ module.exports = function setupIsaRequestModel(app, mongoose)
 
   isaRequestSchema.methods.getProdLineId = function()
   {
-    var lastOrgUnit = _.last(this.orgUnits);
+    const lastOrgUnit = _.last(this.orgUnits);
 
     if (lastOrgUnit.type === 'prodLine')
     {
       return lastOrgUnit.id;
     }
 
-    var prodLine = this.orgUnits.find(orgUnit => orgUnit.type === 'prodLine');
+    const prodLine = this.orgUnits.find(orgUnit => orgUnit.type === 'prodLine');
 
     return prodLine ? prodLine.id : null;
   };

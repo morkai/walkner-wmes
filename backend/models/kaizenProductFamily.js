@@ -4,7 +4,7 @@
 
 module.exports = function setupKaizenProductFamilyModel(app, mongoose)
 {
-  var kaizenProductFamilySchema = mongoose.Schema({
+  const kaizenProductFamilySchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

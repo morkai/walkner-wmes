@@ -2,11 +2,11 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function setupOpinionSurveyModel(app, mongoose)
 {
-  var opinionSurveyEmployerSchema = mongoose.Schema({
+  const opinionSurveyEmployerSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true
@@ -23,7 +23,7 @@ module.exports = function setupOpinionSurveyModel(app, mongoose)
     id: false
   });
 
-  var opinionSurveySuperiorSchema = mongoose.Schema({
+  const opinionSurveySuperiorSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true
@@ -44,7 +44,7 @@ module.exports = function setupOpinionSurveyModel(app, mongoose)
     id: false
   });
 
-  var opinionSurveyQuestionSchema = mongoose.Schema({
+  const opinionSurveyQuestionSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true
@@ -61,7 +61,7 @@ module.exports = function setupOpinionSurveyModel(app, mongoose)
     id: false
   });
 
-  var opinionSurveyEmployeeCountSchema = mongoose.Schema({
+  const opinionSurveyEmployeeCountSchema = new mongoose.Schema({
     division: {
       type: String,
       required: true
@@ -79,7 +79,7 @@ module.exports = function setupOpinionSurveyModel(app, mongoose)
     _id: false
   });
 
-  var opinionSurveySchema = mongoose.Schema({
+  const opinionSurveySchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true
@@ -122,15 +122,15 @@ module.exports = function setupOpinionSurveyModel(app, mongoose)
 
   opinionSurveySchema.methods.serializeEmployees = function()
   {
-    var oldValues = {};
-    var newValues = [];
+    const oldValues = {};
+    const newValues = [];
 
     _.forEach(this.employeeCount, function(employeeCount)
     {
       oldValues[employeeCount.division + employeeCount.employer] = employeeCount.count;
     });
 
-    var employers = this.employers;
+    const employers = this.employers;
 
     _.forEach(_.uniq(_.map(this.superiors, 'division')), function(divisionId)
     {

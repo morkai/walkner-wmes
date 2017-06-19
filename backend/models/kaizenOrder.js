@@ -2,21 +2,21 @@
 
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
-var deepEqual = require('deep-equal');
-var autoIncrement = require('mongoose-auto-increment');
-var businessDays = require('../modules/reports/businessDays');
+const _ = require('lodash');
+const moment = require('moment');
+const deepEqual = require('deep-equal');
+const autoIncrement = require('mongoose-auto-increment');
+const businessDays = require('../modules/reports/businessDays');
 
 module.exports = function setupKaizenOrderModel(app, mongoose)
 {
-  var TYPES = [
+  const TYPES = [
     'nearMiss',
     'suggestion',
     'kaizen'
   ];
 
-  var STATUSES = [
+  const STATUSES = [
     'new',
     'accepted',
     'todo',
@@ -26,7 +26,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     'cancelled'
   ];
 
-  var ownerSchema = mongoose.Schema({
+  const ownerSchema = new mongoose.Schema({
     id: String,
     label: String
   }, {
@@ -34,7 +34,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     minimize: false
   });
 
-  var observerSchema = mongoose.Schema({
+  const observerSchema = new mongoose.Schema({
     user: {},
     role: {
       type: String,
@@ -49,7 +49,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     minimize: false
   });
 
-  var attachmentSchema = mongoose.Schema({
+  const attachmentSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true
@@ -79,7 +79,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     minimize: false
   });
 
-  var changeSchema = mongoose.Schema({
+  const changeSchema = new mongoose.Schema({
     date: Date,
     user: {},
     data: {},
@@ -93,7 +93,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     minimize: false
   });
 
-  var kaizenOrderSchema = mongoose.Schema({
+  const kaizenOrderSchema = new mongoose.Schema({
     types: {
       type: [String],
       required: true
@@ -224,7 +224,9 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
 
   kaizenOrderSchema.path('types').validate(function(types)
   {
-    return Array.isArray(types) && types.length && types.every(function(type) { return TYPES.indexOf(type) !== -1; });
+    return Array.isArray(types)
+      && types.length
+      && types.every(type => TYPES.indexOf(type) !== -1);
   }, 'INVALID_TYPES');
 
   kaizenOrderSchema.index({
@@ -256,9 +258,9 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       this.createObservers();
     }
 
-    var eventDate = this.isModified('eventDate');
-    var statusModified = this.isModified('status');
-    var kaizenDateModified = this.isModified('kaizenFinishDate') || this.isModified('kaizenStartDate');
+    const eventDate = this.isModified('eventDate');
+    const statusModified = this.isModified('status');
+    const kaizenDateModified = this.isModified('kaizenFinishDate') || this.isModified('kaizenStartDate');
 
     if (statusModified)
     {
@@ -298,7 +300,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
 
   kaizenOrderSchema.statics.markAsSeen = function(orderId, userId, done)
   {
-    var KaizenOrder = this;
+    const KaizenOrder = this;
 
     KaizenOrder.findById(orderId, {_id: 1}).lean().exec(function(err, kaizenOrder)
     {
@@ -312,11 +314,11 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
         return done();
       }
 
-      var conditions = {
+      const conditions = {
         _id: kaizenOrder._id,
         'observers.user.id': userId
       };
-      var update = {
+      const update = {
         $set: {
           'observers.$.lastSeenAt': new Date(),
           'observers.$.notify': false,
@@ -331,7 +333,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
           return done(err);
         }
 
-        app.broker.publish('kaizen.orders.seen.' + userId, {
+        app.broker.publish(`kaizen.orders.seen.${userId}`, {
           orderId: orderId,
           userId: userId
         });
@@ -353,12 +355,9 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
         return done();
       }
 
-      var now = new Date();
-      var userId = userInfo.id.toString();
-      var observerIndex = _.findIndex(kaizenOrder.observers, function(observer)
-      {
-        return observer.user.id === userId;
-      });
+      const now = new Date();
+      const userId = userInfo.id.toString();
+      const observerIndex = _.findIndex(kaizenOrder.observers, observer => observer.user.id === userId);
 
       if (state)
       {
@@ -425,8 +424,8 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       return 0;
     }
 
-    var fromDate = doc.eventDate;
-    var toDate;
+    const fromDate = doc.eventDate;
+    let toDate;
 
     if (doc.kaizenFinishDate && _.includes(doc.types, 'kaizen'))
     {
@@ -448,8 +447,8 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
   {
     if (doc.kaizenStartDate && _.includes(doc.types, 'kaizen'))
     {
-      var fromDate = doc.kaizenStartDate;
-      var toDate = doc.kaizenFinishDate || currentDate || moment().startOf('day').toDate();
+      const fromDate = doc.kaizenStartDate;
+      const toDate = doc.kaizenFinishDate || currentDate || moment().startOf('day').toDate();
 
       return 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
     }
@@ -469,7 +468,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
 
   kaizenOrderSchema.methods.createObservers = function()
   {
-    var observers = {};
+    const observers = {};
 
     observers[this.creator.id] = {
       user: this.creator,
@@ -532,13 +531,13 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
 
   kaizenOrderSchema.methods.updateObservers = function(changedPropertyList, changes, newSubscribers)
   {
-    var changedPropertyMap = {};
+    const changedPropertyMap = {};
 
-    _.forEach(changedPropertyList, function(property) { changedPropertyMap[property] = true; });
+    _.forEach(changedPropertyList, property => { changedPropertyMap[property] = true; });
 
-    var usersToNotify = {};
-    var oldObserverMap = {};
-    var newObserverMap = {};
+    const usersToNotify = {};
+    const oldObserverMap = {};
+    const newObserverMap = {};
 
     // Old observers
     _.forEach(this.observers, function(observer)
@@ -560,7 +559,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     });
 
     // Creator
-    var creator = newObserverMap[this.creator.id] = oldObserverMap[this.creator.id];
+    const creator = newObserverMap[this.creator.id] = oldObserverMap[this.creator.id];
 
     _.assign(creator.changes, changedPropertyMap);
 
@@ -573,7 +572,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     // Confirmer
     if (this.confirmer && !newObserverMap[this.confirmer.id])
     {
-      var confirmer = oldObserverMap[this.confirmer.id];
+      let confirmer = oldObserverMap[this.confirmer.id];
 
       if (!confirmer)
       {
@@ -598,7 +597,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     }
 
     // Owners
-    var owners = [];
+    let owners = [];
 
     if (_.includes(this.types, 'nearMiss'))
     {
@@ -622,7 +621,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
         return;
       }
 
-      var observer = oldObserverMap[owner.id];
+      let observer = oldObserverMap[owner.id];
 
       if (!observer)
       {
@@ -647,7 +646,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     });
 
     // New subscribers specified in the form
-    var subscribers = [];
+    const subscribers = [];
 
     _.forEach(newSubscribers, function(newSubscribers)
     {
@@ -665,7 +664,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     }
 
     // Updater
-    var updater = newObserverMap[this.updater.id];
+    const updater = newObserverMap[this.updater.id];
 
     if (updater)
     {
@@ -689,7 +688,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
     this.updatedAt = new Date();
     this.remindedAt = this.updatedAt.getTime();
 
-    var changes = this.compareProperties(_.pick(input, [
+    const changes = this.compareProperties(_.pick(input, [
       'types',
       'confirmer',
       'status',
@@ -716,8 +715,8 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       'kaizenEffect',
       'attachments'
     ]));
-    var changedProperties = Object.keys(changes);
-    var comment = _.isEmpty(input.comment) || !_.isString(input.comment) ? '' : input.comment.trim();
+    const changedProperties = Object.keys(changes);
+    const comment = _.isEmpty(input.comment) || !_.isString(input.comment) ? '' : input.comment.trim();
 
     if (!_.isEmpty(input.comment))
     {
@@ -734,7 +733,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
       return null;
     }
 
-    var usersToNotify = this.updateObservers(changedProperties, changes, input.subscribers);
+    const usersToNotify = this.updateObservers(changedProperties, changes, input.subscribers);
 
     if (!_.isEmpty(input.subscribers))
     {
@@ -761,7 +760,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
 
   kaizenOrderSchema.methods.compareProperties = function(input)
   {
-    var changes = {};
+    const changes = {};
 
     _.forEach(input, (value, key) => { this.compareProperty(key, input, changes); });
 
@@ -770,8 +769,8 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
 
   kaizenOrderSchema.methods.compareProperty = function(property, input, changes)
   {
-    var oldValue = this[property];
-    var newValue = input[property];
+    let oldValue = this[property];
+    let newValue = input[property];
 
     if (/Date$/.test(property))
     {
@@ -804,14 +803,14 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
 
   kaizenOrderSchema.methods.updateOwners = function()
   {
-    var owners = {};
-    var kaizenOrder = this;
+    const owners = {};
+    const kaizenOrder = this;
 
     _.forEach(TYPES, function(type)
     {
       if (_.includes(kaizenOrder.types, type))
       {
-        _.forEach(kaizenOrder[type + 'Owners'], addOwner);
+        _.forEach(kaizenOrder[`${type}Owners`], addOwner);
       }
     });
 

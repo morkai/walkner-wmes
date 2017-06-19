@@ -4,7 +4,7 @@
 
 module.exports = function setupMrpControllerModel(app, mongoose)
 {
-  var mrpControllerSchema = mongoose.Schema({
+  const mrpControllerSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

@@ -4,7 +4,7 @@
 
 module.exports = function setupQiErrorCategoryModel(app, mongoose)
 {
-  var qiErrorCategorySchema = mongoose.Schema({
+  const qiErrorCategorySchema = new mongoose.Schema({
     name: {
       type: String,
       required: true,

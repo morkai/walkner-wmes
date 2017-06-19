@@ -4,7 +4,7 @@
 
 module.exports = function createOrderLossSchema(mongoose)
 {
-  return mongoose.Schema({
+  return new mongoose.Schema({
     reason: {
       type: String,
       ref: 'LossReason',

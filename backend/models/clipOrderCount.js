@@ -4,7 +4,7 @@
 
 module.exports = function setupClipOrderCountModel(app, mongoose)
 {
-  var clipOrderCountSchema = mongoose.Schema({
+  const clipOrderCountSchema = new mongoose.Schema({
     date: {
       type: Date,
       required: true

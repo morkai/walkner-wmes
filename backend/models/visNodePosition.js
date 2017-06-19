@@ -4,7 +4,7 @@
 
 module.exports = function setupVisNodePositionModel(app, mongoose)
 {
-  var visNodePositionSchema = new mongoose.Schema({
+  const visNodePositionSchema = new mongoose.Schema({
     _id: String,
     x: Number,
     y: Number

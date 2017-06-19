@@ -4,7 +4,7 @@
 
 module.exports = function setupKaizenAreaModel(app, mongoose)
 {
-  var kaizenAreaSchema = mongoose.Schema({
+  const kaizenAreaSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

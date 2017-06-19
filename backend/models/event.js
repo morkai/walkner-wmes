@@ -4,7 +4,7 @@
 
 module.exports = function setupEventModel(app, mongoose)
 {
-  var eventSchema = mongoose.Schema({
+  const eventSchema = new mongoose.Schema({
     type: {
       type: String,
       trim: true,

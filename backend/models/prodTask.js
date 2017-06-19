@@ -4,7 +4,7 @@
 
 module.exports = function setupProdTaskModel(app, mongoose)
 {
-  var prodTaskSchema = mongoose.Schema({
+  const prodTaskSchema = new mongoose.Schema({
     name: {
       type: String,
       required: true,
@@ -39,21 +39,24 @@ module.exports = function setupProdTaskModel(app, mongoose)
 
   prodTaskSchema.statics.getForSubdivision = function(subdivisionId, done)
   {
-    var subdivision = app.subdivisions.modelsById[subdivisionId];
+    const subdivision = app.subdivisions.modelsById[subdivisionId];
 
     if (!subdivision)
     {
       return done(null, []);
     }
 
-    var subdivisionTags = subdivision.prodTaskTags;
+    const subdivisionTags = subdivision.prodTaskTags;
 
     if (!Array.isArray(subdivisionTags) || !subdivisionTags.length)
     {
       return done(null, []);
     }
 
-    this.find({tags: {$in: subdivisionTags}}, {name: 1, fteDiv: 1, parent: 1}).sort({name: 1}).lean().exec(done);
+    this.find({tags: {$in: subdivisionTags}}, {name: 1, fteDiv: 1, parent: 1})
+      .sort({name: 1})
+      .lean()
+      .exec(done);
   };
 
   mongoose.model('ProdTask', prodTaskSchema);

@@ -4,7 +4,7 @@
 
 module.exports = function setupQiKindModel(app, mongoose)
 {
-  var qiKindSchema = mongoose.Schema({
+  const qiKindSchema = new mongoose.Schema({
     name: {
       type: String,
       required: true,

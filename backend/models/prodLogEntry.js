@@ -2,13 +2,13 @@
 
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
-var logEntryHandlers = require('../modules/production/logEntryHandlers');
+const _ = require('lodash');
+const moment = require('moment');
+const logEntryHandlers = require('../modules/production/logEntryHandlers');
 
 module.exports = function setupProdLogEntryModel(app, mongoose)
 {
-  var prodLogEntrySchema = mongoose.Schema({
+  const prodLogEntrySchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,
@@ -93,10 +93,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
       return null;
     }
 
-    data.quantitiesDone = data.quantitiesDone.map(function(quantityDone)
-    {
-      return _.pick(quantityDone, ['actual', 'planned']);
-    });
+    data.quantitiesDone = data.quantitiesDone.map(quantityDone => _.pick(quantityDone, ['actual', 'planned']));
 
     editPersonnel(data, data);
 
@@ -104,12 +101,10 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     data.createdAt = new Date();
     data._id = generateId(data.createdAt, data.prodLine);
 
-    var ProdShift = mongoose.model('ProdShift');
-    var prodShift = new ProdShift(data);
+    const ProdShift = mongoose.model('ProdShift');
+    const prodShift = new ProdShift(data);
 
-    return this.createFromProdModel(
-      prodShift, creator, 'addShift', prodShift.toJSON(), prodShift.createdAt
-    );
+    return this.createFromProdModel(prodShift, creator, 'addShift', prodShift.toJSON(), prodShift.createdAt);
   };
 
   prodLogEntrySchema.statics.editShift = function(prodShift, creator, changes)
@@ -119,8 +114,8 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
       return null;
     }
 
-    var data = {};
-    var modelData = prodShift.toJSON();
+    const data = {};
+    const modelData = prodShift.toJSON();
 
     if (validateQuantitiesDone(changes.quantitiesDone))
     {
@@ -157,17 +152,15 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     editNumericValue(data, data, null, 'workerCount', 1);
     editOrder(data, data);
 
-    var createdAt = new Date();
+    const createdAt = new Date();
 
     data.creator = creator;
     data._id = generateId(createdAt, data.prodLine);
 
-    var ProdShiftOrder = mongoose.model('ProdShiftOrder');
-    var prodShiftOrder = new ProdShiftOrder(data);
+    const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+    const prodShiftOrder = new ProdShiftOrder(data);
 
-    return this.createFromProdModel(
-      prodShiftOrder, creator, 'addOrder', prodShiftOrder.toJSON(), createdAt
-    );
+    return this.createFromProdModel(prodShiftOrder, creator, 'addOrder', prodShiftOrder.toJSON(), createdAt);
   };
 
   prodLogEntrySchema.statics.editOrder = function(prodShiftOrder, creator, changes)
@@ -177,8 +170,8 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
       return null;
     }
 
-    var data = {};
-    var modelData = prodShiftOrder.toJSON();
+    const data = {};
+    const modelData = prodShiftOrder.toJSON();
 
     editDateValue(data, changes, modelData, 'startedAt');
     editDateValue(data, changes, modelData, 'finishedAt');
@@ -206,8 +199,8 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     editDateValue(data, data, null, 'startedAt');
     editDateValue(data, data, null, 'finishedAt');
 
-    var min = prodShiftOrder ? prodShiftOrder.startedAt : data.date;
-    var max = prodShiftOrder ? prodShiftOrder.finishedAt : null;
+    const min = prodShiftOrder ? prodShiftOrder.startedAt : data.date;
+    const max = prodShiftOrder ? prodShiftOrder.finishedAt : null;
 
     if (!validateTimes(data.startedAt, data.finishedAt, min, max))
     {
@@ -219,7 +212,7 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     editStringValue(data, data, null, 'reasonComment');
     editStringValue(data, data, null, 'aor');
 
-    var createdAt = new Date();
+    const createdAt = new Date();
 
     if (data.status !== 'undecided')
     {
@@ -236,12 +229,10 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     data.creator = creator;
     data._id = generateId(createdAt, data.prodLine);
 
-    var ProdDowntime = mongoose.model('ProdDowntime');
-    var prodDowntime = new ProdDowntime(data);
+    const ProdDowntime = mongoose.model('ProdDowntime');
+    const prodDowntime = new ProdDowntime(data);
 
-    return this.createFromProdModel(
-      prodDowntime, creator, 'addDowntime', prodDowntime.toJSON(), createdAt
-    );
+    return this.createFromProdModel(prodDowntime, creator, 'addDowntime', prodDowntime.toJSON(), createdAt);
   };
 
   prodLogEntrySchema.statics.editDowntime = function(prodDowntime, creator, changes)
@@ -251,9 +242,9 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
       return null;
     }
 
-    var createdAt = new Date();
-    var data = {};
-    var modelData = prodDowntime.toJSON();
+    const createdAt = new Date();
+    const data = {};
+    const modelData = prodDowntime.toJSON();
 
     editDateValue(data, changes, modelData, 'startedAt');
     editDateValue(data, changes, modelData, 'finishedAt');
@@ -267,7 +258,6 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     editStringValue(data, changes, modelData, 'reason');
     editStringValue(data, changes, modelData, 'reasonComment');
     editStringValue(data, changes, modelData, 'aor');
-
 
     if (prodDowntime.status !== 'undecided')
     {
@@ -293,16 +283,12 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
 
   prodLogEntrySchema.statics.deleteDowntime = function(prodDowntime, creator)
   {
-    return this.createFromProdModel(
-      prodDowntime, creator, 'deleteDowntime', prodDowntime.toJSON()
-    );
+    return this.createFromProdModel(prodDowntime, creator, 'deleteDowntime', prodDowntime.toJSON());
   };
 
   prodLogEntrySchema.statics.deleteOrder = function(prodShiftOrder, creator)
   {
-    return this.createFromProdModel(
-      prodShiftOrder, creator, 'deleteOrder', prodShiftOrder.toJSON()
-    );
+    return this.createFromProdModel(prodShiftOrder, creator, 'deleteOrder', prodShiftOrder.toJSON());
   };
 
   prodLogEntrySchema.statics.deleteShift = function(prodShift, creator)
@@ -310,19 +296,18 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
     return this.createFromProdModel(prodShift, creator, 'deleteShift', {});
   };
 
-  prodLogEntrySchema.statics.createFromProdModel = function(
-    prodModel, creator, type, data, createdAt)
+  prodLogEntrySchema.statics.createFromProdModel = function(prodModel, creator, type, data, createdAt)
   {
-    var ProdLogEntry = this;
+    const ProdLogEntry = this;
 
     if (createdAt === undefined)
     {
       createdAt = new Date();
     }
 
-    var modelName = prodModel.constructor.modelName;
-    var prodShift;
-    var prodShiftOrder;
+    const modelName = prodModel.constructor.modelName;
+    let prodShift = null;
+    let prodShiftOrder = null;
 
     if (modelName === 'ProdShift')
     {
@@ -365,9 +350,9 @@ module.exports = function setupProdLogEntryModel(app, mongoose)
 // http://stackoverflow.com/a/7616484
 function hashCode(str)
 {
-  var hash = 0;
+  let hash = 0;
 
-  for (var i = 0, l = str.length; i < l; ++i)
+  for (let i = 0; i < str.length; ++i)
   {
     hash = (((hash << 5) - hash) + str.charCodeAt(i)) | 0;
   }
@@ -386,7 +371,7 @@ function editPersonnel(logEntryData, changes, modelData)
 {
   _.forEach(['master', 'leader', 'operator'], function(personnelProperty)
   {
-    var userInfo = changes[personnelProperty];
+    const userInfo = changes[personnelProperty];
 
     if (validateUserInfo(userInfo))
     {
@@ -417,7 +402,7 @@ function editPersonnel(logEntryData, changes, modelData)
 
 function editNumericValue(data, changes, modelData, numericProperty, minValue)
 {
-  var value = changes[numericProperty];
+  const value = changes[numericProperty];
 
   if (typeof value === 'number'
     && value >= minValue
@@ -429,7 +414,7 @@ function editNumericValue(data, changes, modelData, numericProperty, minValue)
 
 function editStringValue(data, changes, modelData, stringProperty)
 {
-  var value = changes[stringProperty];
+  const value = changes[stringProperty];
 
   if (typeof value === 'string' && (!modelData || value !== String(modelData[stringProperty])))
   {
@@ -439,7 +424,7 @@ function editStringValue(data, changes, modelData, stringProperty)
 
 function editDateValue(data, changes, modelData, dateProperty)
 {
-  var newValue = changes[dateProperty];
+  let newValue = changes[dateProperty];
 
   if (typeof newValue === 'string')
   {
@@ -451,15 +436,15 @@ function editDateValue(data, changes, modelData, dateProperty)
     return;
   }
 
-  var oldValue = modelData ? modelData[dateProperty] : new Date(0);
+  const oldValue = modelData ? modelData[dateProperty] : new Date(0);
 
   if (oldValue === newValue)
   {
     return;
   }
 
-  var oldTime = Math.floor(oldValue.getTime() / 1000);
-  var newTime = Math.floor(newValue / 1000);
+  const oldTime = Math.floor(oldValue.getTime() / 1000);
+  const newTime = Math.floor(newValue / 1000);
 
   if (oldValue === null || newTime !== oldTime)
   {
@@ -492,10 +477,7 @@ function validateQuantitiesDone(quantitiesDone)
 {
   return Array.isArray(quantitiesDone)
     && quantitiesDone.length === 8
-    && quantitiesDone.every(function(quantityDone)
-    {
-      return quantityDone.planned >= 0 && quantityDone.actual >= 0;
-    });
+    && quantitiesDone.every(quantityDone => quantityDone.planned >= 0 && quantityDone.actual >= 0);
 }
 
 function validateUserInfo(userInfo)

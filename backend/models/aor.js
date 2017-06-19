@@ -4,7 +4,7 @@
 
 module.exports = function setupAorModel(app, mongoose)
 {
-  var aorSchema = mongoose.Schema({
+  const aorSchema = new mongoose.Schema({
     name: {
       type: String,
       required: true,

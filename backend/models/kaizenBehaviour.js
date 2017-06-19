@@ -4,7 +4,7 @@
 
 module.exports = function setupKaizenBehaviourModel(app, mongoose)
 {
-  var kaizenBehaviourSchema = mongoose.Schema({
+  const kaizenBehaviourSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

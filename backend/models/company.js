@@ -4,7 +4,7 @@
 
 module.exports = function setupCompanyModel(app, mongoose)
 {
-  var companySchema = mongoose.Schema({
+  const companySchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

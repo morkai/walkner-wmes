@@ -14,9 +14,9 @@ exports.formatDate = function(date)
     date = new Date(date);
   }
 
-  var result = date.getFullYear() + '-';
-  var month = date.getMonth() + 1;
-  var day = date.getDate();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  let result = date.getFullYear() + '-';
 
   if (month < 10)
   {
@@ -51,10 +51,10 @@ exports.formatTime = function(date)
     date = new Date(date);
   }
 
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var seconds = date.getSeconds();
-  var result = hours < 10 ? ('0' + hours) : hours;
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  let result = hours < 10 ? ('0' + hours) : hours;
 
   if (minutes < 10)
   {
@@ -89,12 +89,12 @@ exports.formatDateTime = function(date)
     date = new Date(date);
   }
 
-  var result = date.getFullYear();
-  var month = date.getMonth() + 1;
-  var day = date.getDate();
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var seconds = date.getSeconds();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  let result = date.getFullYear();
 
   if (month < 10)
   {
@@ -152,7 +152,7 @@ exports.createError = function(message, code, statusCode)
     code = undefined;
   }
 
-  var error = new Error(message);
+  const error = new Error(message);
 
   error.code = code;
   error.status = statusCode;

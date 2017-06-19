@@ -2,11 +2,11 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function setupTwilioRequestModel(app, mongoose)
 {
-  var twilioRequestSchema = mongoose.Schema({
+  const twilioRequestSchema = new mongoose.Schema({
     _id: String,
     operation: String,
     options: {},

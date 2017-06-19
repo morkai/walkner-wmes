@@ -4,7 +4,7 @@
 
 module.exports = function setup8DProblemSourceModel(app, mongoose)
 {
-  var d8ProblemSourceSchema = mongoose.Schema({
+  const d8ProblemSourceSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

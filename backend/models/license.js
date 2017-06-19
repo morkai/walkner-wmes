@@ -4,7 +4,7 @@
 
 module.exports = function setupLicenseModel(app, mongoose)
 {
-  var licenseSchema = mongoose.Schema({
+  const licenseSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

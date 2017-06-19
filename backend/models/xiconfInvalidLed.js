@@ -4,7 +4,7 @@
 
 module.exports = function setupXiconfInvalidLedModel(app, mongoose)
 {
-  var xiconfInvalidLedSchema = mongoose.Schema({
+  const xiconfInvalidLedSchema = new mongoose.Schema({
     time: Date,
     orderNo: String,
     serialNo: String,

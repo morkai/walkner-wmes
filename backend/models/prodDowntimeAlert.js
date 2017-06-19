@@ -2,18 +2,18 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function setupProdDowntimeAlertModel(app, mongoose)
 {
-  var userInfoSchema = mongoose.Schema({
+  const userInfoSchema = new mongoose.Schema({
     id: String,
     label: String
   }, {
     _id: false
   });
 
-  var usedObjectSchema = mongoose.Schema({
+  const usedObjectSchema = new mongoose.Schema({
     type: String,
     id: String,
     label: String
@@ -21,7 +21,7 @@ module.exports = function setupProdDowntimeAlertModel(app, mongoose)
     _id: false
   });
 
-  var conditionSchema = mongoose.Schema({
+  const conditionSchema = new mongoose.Schema({
     mode: {
       type: 'String',
       required: true,
@@ -38,7 +38,7 @@ module.exports = function setupProdDowntimeAlertModel(app, mongoose)
     _id: false
   });
 
-  var actionSchema = mongoose.Schema({
+  const actionSchema = new mongoose.Schema({
     delay: Number,
     sendEmail: Boolean,
     sendSms: Boolean,
@@ -52,7 +52,7 @@ module.exports = function setupProdDowntimeAlertModel(app, mongoose)
     _id: false
   });
 
-  var prodDowntimeAlertSchema = mongoose.Schema({
+  const prodDowntimeAlertSchema = new mongoose.Schema({
     name: {
       type: String,
       required: true
@@ -81,8 +81,8 @@ module.exports = function setupProdDowntimeAlertModel(app, mongoose)
 
   prodDowntimeAlertSchema.methods.resetUsedObjects = function()
   {
-    var usedObjects = {};
-    var addUser = function(userInfo)
+    const usedObjects = {};
+    const addUser = function(userInfo)
     {
       usedObjects[userInfo.id] = {
         type: 'user',

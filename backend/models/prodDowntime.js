@@ -2,13 +2,13 @@
 
 'use strict';
 
-var _ = require('lodash');
-var autoIncrement = require('mongoose-auto-increment');
-var resolveProductName = require('../modules/util/resolveProductName');
+const _ = require('lodash');
+const autoIncrement = require('mongoose-auto-increment');
+const resolveProductName = require('../modules/util/resolveProductName');
 
 module.exports = function setupProdDowntimeModel(app, mongoose)
 {
-  var changeSchema = mongoose.Schema({
+  const changeSchema = new mongoose.Schema({
     date: Date,
     user: {},
     data: {},
@@ -18,7 +18,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     minimize: false
   });
 
-  var alertSchema = mongoose.Schema({
+  const alertSchema = new mongoose.Schema({
     _id: String,
     name: String,
     action: Number,
@@ -27,7 +27,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
     _id: false
   });
 
-  var prodDowntimeSchema = mongoose.Schema({
+  const prodDowntimeSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,
@@ -210,11 +210,11 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
 
     if (doc._wasNew)
     {
-      app.broker.publish('prodDowntimes.created.' + doc.prodLine, doc.toJSON());
+      app.broker.publish(`prodDowntimes.created.${doc.prodLine}`, doc.toJSON());
     }
     else if (Array.isArray(doc._changes) && doc._changes.length)
     {
-      var changes = {_id: doc._id};
+      const changes = {_id: doc._id};
 
       _.forEach(doc._changes, function(modifiedPath)
       {
@@ -222,7 +222,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
       });
       doc._changes = null;
 
-      app.broker.publish('prodDowntimes.updated.' + doc._id, changes);
+      app.broker.publish(`prodDowntimes.updated.${doc._id}`, changes);
     }
   });
 
@@ -287,7 +287,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
 
   prodDowntimeSchema.methods.increaseChangesCount = function(changes)
   {
-    var changed = false;
+    let changed = false;
 
     if (!this.changesCount)
     {

@@ -4,7 +4,7 @@
 
 module.exports = function setupVendorModel(app, mongoose)
 {
-  var vendorSchema = mongoose.Schema({
+  const vendorSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true

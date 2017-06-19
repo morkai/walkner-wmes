@@ -2,15 +2,15 @@
 
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function setupPurchaseOrderModel(app, mongoose)
 {
-  var BARCODES = {
+  const BARCODES = {
     qr: 58,
     code128: 20
   };
-  var PAPERS = {
+  const PAPERS = {
     'a4': {
       width: 210,
       height: 297,
@@ -71,14 +71,14 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     }
   };
 
-  var purchaseOrderItemScheduleSchema = mongoose.Schema({
+  const purchaseOrderItemScheduleSchema = new mongoose.Schema({
     date: Date,
     qty: Number
   }, {
     _id: false
   });
 
-  var purchaseOrderItemSchema = mongoose.Schema({
+  const purchaseOrderItemSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true
@@ -108,7 +108,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
       return -1;
     }
 
-    var scheduledAt = Number.MAX_VALUE;
+    let scheduledAt = Number.MAX_VALUE;
 
     _.forEach(this.schedule, function(schedule)
     {
@@ -118,7 +118,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     return scheduledAt;
   };
 
-  var changeSchema = mongoose.Schema({
+  const changeSchema = new mongoose.Schema({
     date: Date,
     user: {},
     data: {}
@@ -126,7 +126,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     _id: false
   });
 
-  var purchaseOrderSchema = mongoose.Schema({
+  const purchaseOrderSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true
@@ -194,8 +194,6 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
 
   purchaseOrderSchema.pre('save', function(next)
   {
-    /*jshint validthis:true*/
-
     if (this.isNew)
     {
       this.createdAt = new Date();
@@ -212,7 +210,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
     }
     else if (this.isModified('items'))
     {
-      var purchaseOrder = this;
+      const purchaseOrder = this;
 
       this.recountPrints(function(err)
       {
@@ -233,16 +231,16 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
 
   purchaseOrderSchema.methods.recountItems = function()
   {
-    var scheduledAt = Number.MAX_VALUE;
-    var totalQty = 0;
-    var totalPrintedQty = 0;
+    let scheduledAt = Number.MAX_VALUE;
+    let totalQty = 0;
+    let totalPrintedQty = 0;
 
     _.forEach(this.items, function(item)
     {
       totalQty += item.qty;
       totalPrintedQty += item.printedQty;
 
-      var itemScheduledAt = item.getScheduledAt();
+      const itemScheduledAt = item.getScheduledAt();
 
       if (itemScheduledAt !== -1 && itemScheduledAt < scheduledAt)
       {
@@ -257,8 +255,8 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
 
   purchaseOrderSchema.methods.recountPrints = function(done)
   {
-    var PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
-    var itemMap = {};
+    const PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
+    const itemMap = {};
 
     _.forEach(this.items, function(item)
     {
@@ -266,11 +264,11 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
       itemMap[item._id] = item;
     });
 
-    var conditions = {
+    const conditions = {
       purchaseOrder: this._id,
       cancelled: false
     };
-    var fields = {
+    const fields = {
       item: 1,
       totalQty: 1
     };
@@ -284,7 +282,7 @@ module.exports = function setupPurchaseOrderModel(app, mongoose)
 
       _.forEach(prints, function(print)
       {
-        var item = itemMap[print.item];
+        const item = itemMap[print.item];
 
         if (item)
         {

@@ -4,7 +4,7 @@
 
 module.exports = function setupWhTransferOrderModel(app, mongoose)
 {
-  var whTransferOrderSchema = mongoose.Schema({
+  const whTransferOrderSchema = new mongoose.Schema({
     _id: {
       no: String,
       item: Number

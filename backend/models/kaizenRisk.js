@@ -4,7 +4,7 @@
 
 module.exports = function setupKaizenRiskModel(app, mongoose)
 {
-  var kaizenRiskSchema = mongoose.Schema({
+  const kaizenRiskSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

@@ -2,15 +2,15 @@
 
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
-var deepEqual = require('deep-equal');
-var autoIncrement = require('mongoose-auto-increment');
-var businessDays = require('../modules/reports/businessDays');
+const _ = require('lodash');
+const moment = require('moment');
+const deepEqual = require('deep-equal');
+const autoIncrement = require('mongoose-auto-increment');
+const businessDays = require('../modules/reports/businessDays');
 
 module.exports = function setupSuggestionModel(app, mongoose)
 {
-  var STATUSES = [
+  const STATUSES = [
     'new',
     'accepted',
     'todo',
@@ -20,7 +20,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
     'cancelled'
   ];
 
-  var ownerSchema = mongoose.Schema({
+  const ownerSchema = new mongoose.Schema({
     id: String,
     label: String
   }, {
@@ -28,7 +28,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
     minimize: false
   });
 
-  var observerSchema = mongoose.Schema({
+  const observerSchema = new mongoose.Schema({
     user: {},
     role: {
       type: String,
@@ -43,7 +43,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
     minimize: false
   });
 
-  var attachmentSchema = mongoose.Schema({
+  const attachmentSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true
@@ -73,7 +73,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
     minimize: false
   });
 
-  var changeSchema = mongoose.Schema({
+  const changeSchema = new mongoose.Schema({
     date: Date,
     user: {},
     data: {},
@@ -87,7 +87,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
     minimize: false
   });
 
-  var suggestionSchema = mongoose.Schema({
+  const suggestionSchema = new mongoose.Schema({
     creator: {},
     createdAt: Date,
     updater: {},
@@ -207,9 +207,9 @@ module.exports = function setupSuggestionModel(app, mongoose)
       this.createObservers();
     }
 
-    var dateModified = this.isModified('date');
-    var statusModified = this.isModified('status');
-    var kaizenDateModified = this.isModified('kaizenFinishDate') || this.isModified('kaizenStartDate');
+    const dateModified = this.isModified('date');
+    const statusModified = this.isModified('status');
+    const kaizenDateModified = this.isModified('kaizenFinishDate') || this.isModified('kaizenStartDate');
 
     if (statusModified)
     {
@@ -249,7 +249,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
 
   suggestionSchema.statics.markAsSeen = function(orderId, userId, done)
   {
-    var Suggestion = this;
+    const Suggestion = this;
 
     Suggestion.findById(orderId, {_id: 1}).lean().exec(function(err, suggestion)
     {
@@ -263,11 +263,11 @@ module.exports = function setupSuggestionModel(app, mongoose)
         return done();
       }
 
-      var conditions = {
+      const conditions = {
         _id: suggestion._id,
         'observers.user.id': userId
       };
-      var update = {
+      const update = {
         $set: {
           'observers.$.lastSeenAt': new Date(),
           'observers.$.notify': false,
@@ -282,7 +282,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
           return done(err);
         }
 
-        app.broker.publish(Suggestion.TOPIC_PREFIX + '.seen.' + userId, {
+        app.broker.publish(`${Suggestion.TOPIC_PREFIX}.seen.${userId}`, {
           orderId: orderId,
           userId: userId
         });
@@ -292,7 +292,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
 
   suggestionSchema.statics.observe = function(orderId, state, userInfo, done)
   {
-    var Suggestion = this;
+    const Suggestion = this;
 
     Suggestion.findById(orderId, function(err, suggestion)
     {
@@ -306,12 +306,9 @@ module.exports = function setupSuggestionModel(app, mongoose)
         return done();
       }
 
-      var now = new Date();
-      var userId = userInfo.id.toString();
-      var observerIndex = _.findIndex(suggestion.observers, function(observer)
-      {
-        return observer.user.id === userId;
-      });
+      const now = new Date();
+      const userId = userInfo.id.toString();
+      const observerIndex = _.findIndex(suggestion.observers, observer => observer.user.id === userId);
 
       if (state)
       {
@@ -362,7 +359,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
           return done(err);
         }
 
-        app.broker.publish(Suggestion.TOPIC_PREFIX + '.edited', {
+        app.broker.publish(`${Suggestion.TOPIC_PREFIX}.edited`, {
           model: suggestion,
           user: userInfo,
           notify: null
@@ -378,8 +375,8 @@ module.exports = function setupSuggestionModel(app, mongoose)
       return 0;
     }
 
-    var fromDate = doc.date;
-    var toDate = doc.kaizenFinishDate || doc.finishedAt || currentDate || moment().startOf('day').toDate();
+    const fromDate = doc.date;
+    const toDate = doc.kaizenFinishDate || doc.finishedAt || currentDate || moment().startOf('day').toDate();
 
     return 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
   };
@@ -391,8 +388,8 @@ module.exports = function setupSuggestionModel(app, mongoose)
       return 0;
     }
 
-    var fromDate = doc.kaizenStartDate || doc.date;
-    var toDate = doc.kaizenFinishDate || currentDate || moment().startOf('day').toDate();
+    const fromDate = doc.kaizenStartDate || doc.date;
+    const toDate = doc.kaizenFinishDate || currentDate || moment().startOf('day').toDate();
 
     return 1 + businessDays.countBetweenDates(fromDate.getTime(), toDate.getTime());
   };
@@ -409,7 +406,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
 
   suggestionSchema.methods.createObservers = function()
   {
-    var observers = {};
+    const observers = {};
 
     observers[this.creator.id] = {
       user: this.creator,
@@ -464,13 +461,13 @@ module.exports = function setupSuggestionModel(app, mongoose)
 
   suggestionSchema.methods.updateObservers = function(changedPropertyList, changes, newSubscribers)
   {
-    var changedPropertyMap = {};
+    const changedPropertyMap = {};
 
-    _.forEach(changedPropertyList, function(property) { changedPropertyMap[property] = true; });
+    _.forEach(changedPropertyList, property => { changedPropertyMap[property] = true; });
 
-    var usersToNotify = {};
-    var oldObserverMap = {};
-    var newObserverMap = {};
+    const usersToNotify = {};
+    const oldObserverMap = {};
+    const newObserverMap = {};
 
     // Old observers
     _.forEach(this.observers, function(observer)
@@ -492,7 +489,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
     });
 
     // Creator
-    var creator = newObserverMap[this.creator.id] = oldObserverMap[this.creator.id];
+    const creator = newObserverMap[this.creator.id] = oldObserverMap[this.creator.id];
 
     _.assign(creator.changes, changedPropertyMap);
 
@@ -505,7 +502,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
     // Confirmer
     if (this.confirmer && !newObserverMap[this.confirmer.id])
     {
-      var confirmer = oldObserverMap[this.confirmer.id];
+      let confirmer = oldObserverMap[this.confirmer.id];
 
       if (!confirmer)
       {
@@ -530,7 +527,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
     }
 
     // Owners
-    var owners = [].concat(this.suggestionOwners);
+    let owners = [].concat(this.suggestionOwners);
 
     if (this.status !== 'new' && this.status !== 'cancelled')
     {
@@ -544,7 +541,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
         return;
       }
 
-      var observer = oldObserverMap[owner.id];
+      let observer = oldObserverMap[owner.id];
 
       if (!observer)
       {
@@ -569,7 +566,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
     });
 
     // New subscribers specified in the form
-    var subscribers = [];
+    const subscribers = [];
 
     _.forEach(newSubscribers, function(newSubscribers)
     {
@@ -587,7 +584,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
     }
 
     // Updater
-    var updater = newObserverMap[this.updater.id];
+    const updater = newObserverMap[this.updater.id];
 
     if (updater)
     {
@@ -611,7 +608,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
     this.updatedAt = new Date();
     this.remindedAt = this.updatedAt.getTime();
 
-    var changes = this.compareProperties(_.pick(input, [
+    const changes = this.compareProperties(_.pick(input, [
       'confirmer',
       'status',
       'subject',
@@ -630,8 +627,8 @@ module.exports = function setupSuggestionModel(app, mongoose)
       'kaizenEffect',
       'attachments'
     ]));
-    var changedProperties = Object.keys(changes);
-    var comment = _.isEmpty(input.comment) || !_.isString(input.comment) ? '' : input.comment.trim();
+    const changedProperties = Object.keys(changes);
+    const comment = _.isEmpty(input.comment) || !_.isString(input.comment) ? '' : input.comment.trim();
 
     if (!_.isEmpty(input.comment))
     {
@@ -648,7 +645,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
       return null;
     }
 
-    var usersToNotify = this.updateObservers(changedProperties, changes, input.subscribers);
+    const usersToNotify = this.updateObservers(changedProperties, changes, input.subscribers);
 
     if (!_.isEmpty(input.subscribers))
     {
@@ -675,7 +672,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
 
   suggestionSchema.methods.compareProperties = function(input)
   {
-    var changes = {};
+    const changes = {};
 
     _.forEach(input, (value, key) => { this.compareProperty(key, input, changes); });
 
@@ -684,8 +681,8 @@ module.exports = function setupSuggestionModel(app, mongoose)
 
   suggestionSchema.methods.compareProperty = function(property, input, changes)
   {
-    var oldValue = this[property];
-    var newValue = input[property];
+    let oldValue = this[property];
+    let newValue = input[property];
 
     if (/date$/i.test(property))
     {
@@ -718,8 +715,8 @@ module.exports = function setupSuggestionModel(app, mongoose)
 
   suggestionSchema.methods.updateOwners = function()
   {
-    var owners = {};
-    var suggestion = this;
+    const owners = {};
+    const suggestion = this;
 
     _.forEach(suggestion.suggestionOwners, addOwner);
 

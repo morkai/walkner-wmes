@@ -198,7 +198,7 @@ module.exports = function setupQiResultModel(app, mongoose)
 
   qiResultSchema.methods.collectUsers = function()
   {
-    var users = {};
+    const users = {};
 
     users[this.creator.id] = 1;
 

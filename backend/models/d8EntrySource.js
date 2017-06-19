@@ -4,7 +4,7 @@
 
 module.exports = function setup8DEntrySourceModel(app, mongoose)
 {
-  var d8EntrySourceSchema = mongoose.Schema({
+  const d8EntrySourceSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

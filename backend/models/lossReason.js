@@ -4,7 +4,7 @@
 
 module.exports = function setupLossReasonModel(app, mongoose)
 {
-  var lossReasonSchema = mongoose.Schema({
+  const lossReasonSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

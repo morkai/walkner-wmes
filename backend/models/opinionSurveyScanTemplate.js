@@ -4,7 +4,7 @@
 
 module.exports = function setupOpinionSurveyScanTemplateModel(app, mongoose)
 {
-  var scanTemplateRegionSchema = mongoose.Schema({
+  const scanTemplateRegionSchema = new mongoose.Schema({
     question: {
       type: String,
       required: true
@@ -30,7 +30,7 @@ module.exports = function setupOpinionSurveyScanTemplateModel(app, mongoose)
     _id: false
   });
 
-  var opinionSurveyScanTemplateSchema = mongoose.Schema({
+  const opinionSurveyScanTemplateSchema = new mongoose.Schema({
     survey: {
       type: String,
       required: true,

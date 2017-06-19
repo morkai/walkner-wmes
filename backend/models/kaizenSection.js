@@ -4,7 +4,7 @@
 
 module.exports = function setupKaizenSectionModel(app, mongoose)
 {
-  var kaizenSectionSchema = mongoose.Schema({
+  const kaizenSectionSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

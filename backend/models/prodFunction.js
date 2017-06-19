@@ -4,7 +4,7 @@
 
 module.exports = function setupProdFunctionModel(app, mongoose)
 {
-  var prodFunctionSchema = mongoose.Schema({
+  const prodFunctionSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true,

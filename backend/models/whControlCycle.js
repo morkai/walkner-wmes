@@ -4,7 +4,7 @@
 
 module.exports = function setupWhControlCycleModel(app, mongoose)
 {
-  var whControlCycleSchema = mongoose.Schema({
+  const whControlCycleSchema = new mongoose.Schema({
     _id: {
       type: String,
       required: true

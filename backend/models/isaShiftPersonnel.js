@@ -4,14 +4,14 @@
 
 module.exports = function setupIsaShiftPersonnelModel(app, mongoose)
 {
-  var userSchema = mongoose.Schema({
+  const userSchema = new mongoose.Schema({
     id: String,
     label: String
   }, {
     _id: false
   });
 
-  var isaShiftPersonnelSchema = mongoose.Schema({
+  const isaShiftPersonnelSchema = new mongoose.Schema({
     _id: Date,
     users: [userSchema],
     updatedAt: Date

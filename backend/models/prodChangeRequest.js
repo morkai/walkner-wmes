@@ -4,7 +4,7 @@
 
 module.exports = function setupProdChangeRequestModel(app, mongoose)
 {
-  var prodChangeRequestSchema = mongoose.Schema({
+  const prodChangeRequestSchema = new mongoose.Schema({
     status: {
       type: String,
       default: 'new',
@@ -78,14 +78,12 @@ module.exports = function setupProdChangeRequestModel(app, mongoose)
 
   prodChangeRequestSchema.post('save', function(doc)
   {
-    app.broker.publish('prodChangeRequests.' + (this._wasNew ? 'created' : 'updated'), doc.toJSON());
+    app.broker.publish(`prodChangeRequests.${this._wasNew ? 'created' : 'updated'}`, doc.toJSON());
   });
 
   prodChangeRequestSchema.statics.create = function(operation, modelType, modelId, creator, data, done)
   {
-    /*jshint -W040*/
-
-    var creatorComment = '';
+    let creatorComment = '';
 
     if (data.requestComment)
     {
@@ -94,7 +92,7 @@ module.exports = function setupProdChangeRequestModel(app, mongoose)
       delete data.requestComment;
     }
 
-    var changeRequest = new this({
+    const changeRequest = new this({
       createdAt: new Date(),
       creator: creator,
       creatorComment: creatorComment,

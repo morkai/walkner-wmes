@@ -2,13 +2,13 @@
 
 'use strict';
 
-var moment = require('moment');
-var _ = require('lodash');
-var step = require('h5.step');
+const _ = require('lodash');
+const moment = require('moment');
+const step = require('h5.step');
 
 module.exports = function setupHourlyPlanModel(app, mongoose)
 {
-  var hourlyPlanFlowSchema = mongoose.Schema({
+  const hourlyPlanFlowSchema = new mongoose.Schema({
     id: mongoose.Schema.Types.ObjectId,
     name: String,
     noPlan: {
@@ -25,7 +25,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
     _id: false
   });
 
-  var hourlyPlanSchema = mongoose.Schema({
+  const hourlyPlanSchema = new mongoose.Schema({
     division: {
       type: String,
       ref: 'Division',
@@ -75,25 +75,25 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
           return this.done(done, err);
         }
 
-        this.flows = prodFlows.filter(function(prodFlow) { return !prodFlow.deactivatedAt; }).map(function(prodFlow)
-        {
-          return {
-            id: prodFlow._id,
-            name: prodFlow.name,
-            hours: [
-              0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0
-            ]
-          };
-        }).sort(function(a, b)
-        {
-          return a.name.localeCompare(b.name);
-        });
+        this.flows = prodFlows
+          .filter(prodFlow => !prodFlow.deactivatedAt)
+          .map(prodFlow =>
+          {
+            return {
+              id: prodFlow._id,
+              name: prodFlow.name,
+              hours: [
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0
+              ]
+            };
+          })
+          .sort((a, b) => a.name.localeCompare(b.name));
       },
       function createHourlyPlanStep()
       {
-        var hourlyPlanData = {
+        const hourlyPlanData = {
           division: options.division,
           date: options.date,
           shift: options.shift,
@@ -112,7 +112,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
     step(
       function findHourlyPlanStep()
       {
-        var firstShiftDate = new Date(shiftId.date.getTime());
+        const firstShiftDate = new Date(shiftId.date.getTime());
 
         if (shiftId.no !== 1)
         {
@@ -136,19 +136,16 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
           return done(null, []);
         }
 
-        var flow = _.find(hourlyPlan.flows, function(flow)
-        {
-          return flow.id.toString() === prodFlowId.toString();
-        });
+        const flow = _.find(hourlyPlan.flows, flow => flow.id.toString() === prodFlowId.toString());
 
         if (!flow || flow.noPlan)
         {
           return done(null, []);
         }
 
-        var i = shiftId.no === 1 ? 0 : shiftId.no === 2 ? 8 : 16;
-        var l = i + 8;
-        var plannedQuantities = flow.hours.slice(i, l);
+        const i = shiftId.no === 1 ? 0 : shiftId.no === 2 ? 8 : 16;
+        const l = i + 8;
+        const plannedQuantities = flow.hours.slice(i, l);
 
         mongoose.model('ProdShift').setPlannedQuantities(activeProdLineIds, shiftId.date, plannedQuantities, done);
       }
@@ -157,32 +154,30 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
 
   hourlyPlanSchema.methods.recountPlannedQuantities = function(done)
   {
-    var flows = this.flows;
-    var division = this.division;
-    var date = this.date;
-    var shiftNo = this.shift;
+    const flows = this.flows;
+    const division = this.division;
+    const date = this.date;
+    const shiftNo = this.shift;
 
     step(
       function()
       {
-        for (var i = 0, l = flows.length; i < l; ++i)
+        flows.forEach(flow =>
         {
-          var flow = flows[i];
-
           if (flow.noPlan)
           {
-            continue;
+            return;
           }
 
-          var subdivisions = app.orgUnits.getSubdivisionsFor('prodFlow', flow.id);
+          const subdivisions = app.orgUnits.getSubdivisionsFor('prodFlow', flow.id);
 
           if (subdivisions.length !== 1 || subdivisions[0].type !== 'assembly')
           {
-            continue;
+            return;
           }
 
-          recountPlannedQuantitiesInFlow(division, date, shiftNo, flow, this.parallel());
-        }
+          recountPlannedQuantitiesInFlow(division, date, shiftNo, flow, this.group());
+        });
       },
       done || function() {}
     );
@@ -190,14 +185,14 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
 
   function recountPlannedQuantitiesInFlow(divisionId, date, shiftNo, flow, done)
   {
-    var shiftMoment = moment(date);
+    const shiftMoment = moment(date);
 
     step(
       function()
       {
-        for (var i = 1; i <= 3; ++i)
+        for (let i = 1; i <= 3; ++i)
         {
-          recountPlannedQuantitiesInShift(divisionId, new Date(shiftMoment.valueOf()), i, flow, this.parallel());
+          recountPlannedQuantitiesInShift(divisionId, new Date(shiftMoment.valueOf()), i, flow, this.group());
 
           shiftMoment.add(8, 'hours');
         }
@@ -218,10 +213,7 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
       if (err)
       {
         app.hourlyPlans.error(
-          "Failed to find active prod lines in prod flow [%s] for date [%s]: %s",
-          flow.id,
-          date,
-          err.message
+          `Failed to find active prod lines in prod flow [${flow.id}] for date [${date}]: ${err.message}`
         );
 
         return done();
@@ -232,37 +224,35 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
         return done();
       }
 
-      var i = shiftNo === 1 ? 0 : shiftNo === 2 ? 8 : 16;
-      var l = i + 8;
-      var plannedQuantities = flow.hours.slice(i, l);
+      const i = shiftNo === 1 ? 0 : shiftNo === 2 ? 8 : 16;
+      const l = i + 8;
+      const plannedQuantities = flow.hours.slice(i, l);
+      const ProdShift = mongoose.model('ProdShift');
 
-      mongoose.model('ProdShift')
-        .setPlannedQuantities(activeProdLineIds, date, plannedQuantities, function(err, prodShifts)
+      ProdShift.setPlannedQuantities(activeProdLineIds, date, plannedQuantities, function(err, prodShifts)
+      {
+        if (err)
         {
-          if (err)
-          {
-            app.hourlyPlans.error(
-              "Failed to set planned quantities for date [%s] for prod lines [%s]: %s",
-              date,
-              activeProdLineIds.join(', '),
-              err.message
-            );
-
-            return done();
-          }
-
-          _.forEach(prodShifts, function(prodShift)
-          {
-            app.broker.publish('hourlyPlans.quantitiesPlanned', {
-              prodLine: prodShift.prodLine,
-              prodShift: prodShift._id,
-              date: prodShift.date,
-              quantitiesDone: prodShift.toJSON().quantitiesDone
-            });
-          });
+          app.hourlyPlans.error(
+            `Failed to set planned quantities for date [${date}] for prod lines [${activeProdLineIds.join(', ')}]: `
+            + `${err.message}`,
+          );
 
           return done();
+        }
+
+        _.forEach(prodShifts, function(prodShift)
+        {
+          app.broker.publish('hourlyPlans.quantitiesPlanned', {
+            prodLine: prodShift.prodLine,
+            prodShift: prodShift._id,
+            date: prodShift.date,
+            quantitiesDone: prodShift.toJSON().quantitiesDone
+          });
         });
+
+        return done();
+      });
     });
   }
 
