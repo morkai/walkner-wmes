@@ -33,7 +33,7 @@ module.exports = function(grunt)
         './build'
       ]
     },
-    jshint: {
+    eslint: {
       backend: {
         src: [
           './backend/**/*.js'
@@ -144,9 +144,9 @@ module.exports = function(grunt)
 
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-ejs-amd');
+  grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-messageformat-amd');
   grunt.loadNpmTasks('grunt-run');
   grunt.loadNpmTasks('grunt-text-replace');
