@@ -1,4 +1,61 @@
 <div class="hidden">
+  <h1>v0.113.0</h1>
+  <h2><%- time.format('2017-06-11', 'LL') %></h2>
+  <h3>Matryca odpowiedzialności</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający edycję osób odpowiedzialnych dla funkcji, jeżeli dana funkcja nie miała jeszcze
+      przypisanych żadnych osób.</li>
+    <li>Zmieniono zarządzanie MRP tak, aby wymagało uprawnienia <em>Matryca odpowiedzialności: zarządzanie</em>.
+      Wcześniej zmieniać MRP mogli także kierownicy.</li>
+    <li>Zmieniono aktualizację dostępności osób odpowiedzialnych na podstawie bazy KD tak, aby brany był pod uwagę
+      czas użycia karty (niekiedy wcześniejsze użycia karty na niektórych czytnikach mogą pojawić się w bazie
+      z opóźnieniem i będą w takim wypadku ignorowane).</li>
+    <li>Dodano listę grup w prawym dolnym rogu w celu ułatwienia nawigacji między grupami.</li>
+    <li>Dodano przycisk 'Tryb edycji' do matrycy wyświetlanej w oknie dialogowym.</li>
+    <li>Dodano możliwość ukrycia chmurki z danymi użytkownika po kliknięciu na dowolny obszar.</li>
+    <li>Dodano uprawnienie: Matryca odpowiedzialności: edycja osób - użytkownicy mogą przypisywać osoby odpowiedzialne
+      do funkcji, ale nie mogą zmieniać struktury.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający dodawanie i edycję użytkowników przez formularz.</li>
+  </ul>
+  <h3>Obserwacje</h3>
+  <ul>
+    <li>Poprawiono filtr 'Trudne do zmiany zachowania' wybierający karty, które miały przynajmniej jedną bezpieczną
+      obserwację zachowań i żadnych ryzykownych, trudnych obserwacji.</li>
+    <li>Dodano do listy kolumny: Co zaobserwowano, Ryzykowne warunki w miejscu pracy, Trudne do zmiany zachowania oraz
+      Trudne do zmiany warunki pracy. W komórce tabeli wyświetla się pierwszy wpis danego typu, a po kliknięciu na nią
+      wyświetlana jest dodatkowa tabelka ze wszystkimi wpisami danego typu.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Zmieniono tryb pracy Formatki na wszystkich komputerach na dotykowy.</li>
+    <li>Zmieniono akcję żądania dostarczenia palet tak, aby można było wybrać ilość palet.</li>
+  </ul>
+  <h3>Pola odkładcze</h3>
+  <ul>
+    <li>Dodano wyświetlanie żądanej ilości palet do dostarczenia.</li>
+  </ul>
+  <h3>Dokumentacja > Dokumenty</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający wybranie pliku do edycji przez klinięcie <kbd>ALT+LPM</kbd>.</li>
+  </ul>
+  <h3>Pulpit</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że kliknięcie na osobę na liście 'Najaktywniejsi w miesiącu' ustawiało nieprawidłowy
+      filtr Od-Do na liście zgłoszeń.</li>
+  </ul>
+  <h3>Nieprawidłowe zlecenia IPT</h3>
+  <ul>
+    <li>Dodano nowy moduł.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zaktualizowano środowisko i pakiety zależne.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.112.0</h1>
   <h2><%- time.format('2017-06-04', 'LL') %></h2>
   <h3>Matryca odpowiedzialności</h3>

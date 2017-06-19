@@ -16,7 +16,12 @@ app/behaviorObsCards/assets/main.css
 app/behaviorObsCards/assets/./list.css
 app/behaviorObsCards/assets/./form.css
 app/behaviorObsCards/assets/./details.css
+app/behaviorObsCards/assets/./report.css
 app/behaviorObsCards/assets/main.css
+
+app/behaviorObsCards/assets/report.css
+----------------
+app/behaviorObsCards/assets/report.css
 
 app/changelog/assets/main.css
 ----------------
