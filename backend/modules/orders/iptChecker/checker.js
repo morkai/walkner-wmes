@@ -23,7 +23,9 @@ module.exports = function setUpNotifier(app, module)
 
   module.checkOrders = checkOrders;
 
-  app.broker.subscribe('orders.synced', () => checkOrders());
+  app.broker
+    .subscribe('orders.synced', () => checkOrders())
+    .setFilter(m => m.created || m.updated || m.removed);
 
   function cancelCheckOrders()
   {
@@ -190,6 +192,15 @@ module.exports = function setUpNotifier(app, module)
         results.forEach(result =>
         {
           operationCount[result.orderNo] = result.operationCount;
+        });
+
+        _.forEach(this.invalidOrders, io =>
+        {
+          if (!this.orders[io._id])
+          {
+            this.delayedOrders[io._id] = true;
+            this.notifyOrders[io._id] = true;
+          }
         });
 
         _.forEach(this.orders, o =>
