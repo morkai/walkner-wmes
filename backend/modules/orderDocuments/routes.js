@@ -569,13 +569,9 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         return res.sendStatus(204);
       }
 
+      // eslint-disable-next-line handle-callback-err
       fs.readFile(path.join(module.config.etoPath, order.nc12 + '.html'), 'utf8', function(err, etoTableHtml)
       {
-        if (err)
-        {
-          return next(err);
-        }
-
         res.render('orderDocuments:eto', {
           order: order._id,
           nc12: order.nc12,
