@@ -20,7 +20,7 @@ define([
     serializeColumns: function()
     {
       return [
-        {id: 'coloredId', label: t('orderStatuses', 'PROPERTY:_id')},
+        {id: 'coloredId', label: t('orderStatuses', 'PROPERTY:_id'), className: 'is-min'},
         {id: 'label', label: t('orderStatuses', 'PROPERTY:label')}
       ];
     },
