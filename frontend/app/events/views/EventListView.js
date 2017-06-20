@@ -64,8 +64,6 @@ define([
 
     prepareData: function(type, data)
     {
-      /*jshint -W015*/
-
       if (data.$prepared)
       {
         return data;
@@ -111,6 +109,10 @@ define([
 
         case 'purchaseOrders.synced':
           data.importedAt = time.format(data.importedAt, 'LLL');
+          break;
+
+        case 'orders.synced':
+          data.removed = data.removed || 0;
           break;
       }
 

@@ -25,6 +25,7 @@ exports.start = function startOrdersImporterModule(app, module)
     statusesSetAt: true,
     delayReason: true,
     documents: true,
+    bom: true,
     changes: true,
     importTs: true,
     description: true,
@@ -80,11 +81,53 @@ exports.start = function startOrdersImporterModule(app, module)
     module.debug(`Comparing ${orderIds.length} orders and ${missingOrderIds.length} missing orders...`);
 
     step(
-      function()
+      function findDelayedOrders()
       {
+        let minStartDate = Number.MAX_SAFE_INTEGER;
+        let maxStartDate = Number.MIN_SAFE_INTEGER;
+
+        orderIds.forEach(oId =>
+        {
+          const order = orders[oId];
+
+          if (order.startDate < minStartDate)
+          {
+            minStartDate = order.startDate;
+          }
+
+          if (order.startDate > maxStartDate)
+          {
+            maxStartDate = order.startDate;
+          }
+        });
+
+        const conditions = {
+          startDate: {
+            $gte: minStartDate,
+            $lte: maxStartDate
+          },
+          _id: {
+            $nin: allOrderIds
+          },
+          statuses: {
+            $nin: ['TECO', 'CNF', 'DLV']
+          }
+        };
+
+        Order.find(conditions, {_id: 1}).lean().exec(this.next());
+      },
+      function findSettingsStep(err, delayedOrders)
+      {
+        if (err)
+        {
+          module.error(`Failed to fetch delayed orders: ${err.message}`);
+        }
+
+        this.removeList = (delayedOrders || []).map(o => o._id);
+
         Setting.findById('orders.operations.timeCoeffs').lean().exec(this.next());
       },
-      function(err, setting)
+      function findOrdersStep(err, setting)
       {
         if (err)
         {
@@ -93,39 +136,128 @@ exports.start = function startOrdersImporterModule(app, module)
 
         this.mrpToTimeCoeffs = setting ? parseOperationTimeCoeffs(setting.value) : {};
 
-        Order.find({_id: {$in: allOrderIds}}).lean().exec(this.next());
+        Order.find({_id: {$in: allOrderIds}}, {documents: 0, bom: 0, changes: 0}).lean().exec(this.next());
       },
-      function(err, orderModels)
+      function compareOrdersStep(err, orderModels)
       {
         if (err)
         {
           module.error(`Failed to fetch orders for comparison: ${err.message}`);
 
-          return unlock();
+          return this.skip(err);
         }
 
         const ts = new Date();
-        const insertList = [];
-        const updateList = [];
-        const ordersWithNewQty = [];
-        const ordersForDailyMrpPlans = {};
+
+        this.insertList = [];
+        this.updateList = [];
+        this.ordersWithNewQty = [];
+        this.ordersForDailyMrpPlans = {};
 
         _.forEach(orderModels, compareOrder.bind(
           null,
           ts,
           this.mrpToTimeCoeffs,
-          updateList,
+          this.updateList,
           orders,
           missingOrders,
-          ordersWithNewQty,
-          ordersForDailyMrpPlans
+          this.ordersWithNewQty,
+          this.ordersForDailyMrpPlans
         ));
 
-        createOrdersForInsertion(ts, insertList, orders, missingOrders);
+        createOrdersForInsertion(ts, this.insertList, orders, missingOrders);
 
-        setImmediate(prepareOrderIntakeSearch, insertList, updateList);
-        setImmediate(updateXiconfOrderQty, timestamp, ordersWithNewQty);
-        setImmediate(updateDailyMrpPlans, ordersForDailyMrpPlans);
+        setImmediate(this.next());
+      },
+      function prepareOrderIntakeSearchStep()
+      {
+        const intakeKeyToIdMap = {};
+        const intakeKeyToOrderMap = {};
+
+        this.insertList.forEach(order =>
+        {
+          const salesOrder = order.salesOrder;
+          const salesOrderItem = order.salesOrderItem;
+
+          if (!salesOrder || !salesOrderItem)
+          {
+            return;
+          }
+
+          const intakeKey = `${salesOrder}/${salesOrderItem}`;
+
+          intakeKeyToIdMap[intakeKey] = {
+            no: salesOrder,
+            item: salesOrderItem
+          };
+
+          if (intakeKeyToOrderMap[intakeKey])
+          {
+            intakeKeyToOrderMap[intakeKey].push(order);
+          }
+          else
+          {
+            intakeKeyToOrderMap[intakeKey] = [order];
+          }
+        });
+
+        setImmediate(assignOrderIntakeData, _.values(intakeKeyToIdMap), intakeKeyToOrderMap, this.next());
+      },
+      function saveOrdersStep()
+      {
+        const createdOrdersCount = this.insertList.length;
+        const updatedOrdersCount = this.updateList.length;
+        const removedOrdersCount = this.removeList.length;
+        const insertBatchCount = Math.ceil(createdOrdersCount / 100);
+        const next = this.next();
+        const steps = [
+          _.partial(removeOrdersStep, this.removeList)
+        ];
+
+        for (let i = 0; i < insertBatchCount; ++i)
+        {
+          steps.push(_.partial(createOrdersStep, this.insertList.splice(0, 100)));
+        }
+
+        _.forEach(this.updateList, function(update)
+        {
+          steps.push(_.partial(updateOrderStep, update));
+        });
+
+        steps.push(function unlockStep(err)
+        {
+          if (err)
+          {
+            module.error(`Failed to sync data: ${err.message}`);
+          }
+          else
+          {
+            module.info(
+              `Created ${createdOrdersCount}, updated ${updatedOrdersCount} and removed ${removedOrdersCount} orders.`
+            );
+
+            app.broker.publish('orders.synced', {
+              created: createdOrdersCount,
+              updated: updatedOrdersCount,
+              removed: removedOrdersCount,
+              moduleName: module.name
+            });
+          }
+
+          next(err);
+        });
+
+        step(steps);
+      },
+      function(err)
+      {
+        if (!err)
+        {
+          setImmediate(updateXiconfOrderQty, timestamp, this.ordersWithNewQty);
+          setImmediate(updateDailyMrpPlans, this.ordersForDailyMrpPlans);
+        }
+
+        setImmediate(unlock);
       }
     );
   }
@@ -360,38 +492,7 @@ exports.start = function startOrdersImporterModule(app, module)
     });
   }
 
-  function prepareOrderIntakeSearch(insertList, updateList)
-  {
-    const intakeKeyToIdMap = {};
-    const intakeKeyToOrderMap = {};
-
-    for (let i = 0; i < insertList.length; ++i)
-    {
-      const order = insertList[i];
-      const salesOrder = order.salesOrder;
-      const salesOrderItem = order.salesOrderItem;
-
-      if (salesOrder && salesOrderItem)
-      {
-        const intakeKey = `${salesOrder}/${salesOrderItem}`;
-
-        intakeKeyToIdMap[intakeKey] = {no: salesOrder, item: salesOrderItem};
-
-        if (intakeKeyToOrderMap[intakeKey])
-        {
-          intakeKeyToOrderMap[intakeKey].push(order);
-        }
-        else
-        {
-          intakeKeyToOrderMap[intakeKey] = [order];
-        }
-      }
-    }
-
-    setImmediate(assignOrderIntakeData, _.values(intakeKeyToIdMap), intakeKeyToOrderMap, insertList, updateList);
-  }
-
-  function assignOrderIntakeData(intakeIds, intakeKeyToOrderMap, insertList, updateList)
+  function assignOrderIntakeData(intakeIds, intakeKeyToOrderMap, done)
   {
     step(
       function findOrderIntakesStep()
@@ -425,51 +526,24 @@ exports.start = function startOrdersImporterModule(app, module)
           });
         });
       },
-      function saveOrdersStep()
+      function()
       {
-        setImmediate(saveOrders, insertList, updateList);
+        setImmediate(done);
       }
     );
   }
 
-  function saveOrders(insertList, updateList)
+  function removeOrdersStep(orderIds, err)
   {
-    const createdOrdersCount = insertList.length;
-    const updatedOrdersCount = updateList.length;
-    const insertBatchCount = Math.ceil(createdOrdersCount / 100);
-    const steps = [];
-
-    for (let i = 0; i < insertBatchCount; ++i)
+    if (err)
     {
-      steps.push(_.partial(createOrdersStep, insertList.splice(0, 100)));
+      return this.skip(err);
     }
 
-    _.forEach(updateList, function(update)
+    if (orderIds.length)
     {
-      steps.push(_.partial(updateOrderStep, update));
-    });
-
-    steps.push(function unlockStep(err)
-    {
-      if (err)
-      {
-        module.error(`Failed to sync data: ${err.message}`);
-
-        return unlock();
-      }
-
-      module.info(`Synced ${createdOrdersCount} new and ${updatedOrdersCount} existing orders`);
-
-      app.broker.publish('orders.synced', {
-        created: createdOrdersCount,
-        updated: updatedOrdersCount,
-        moduleName: module.name
-      });
-
-      unlock();
-    });
-
-    step(steps);
+      Order.collection.remove({_id: {$in: orderIds}}, this.next());
+    }
   }
 
   function createOrdersStep(orders, err)

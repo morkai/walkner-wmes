@@ -38,7 +38,7 @@
   "TYPE:emptyOrders.synced": "Puste zlecenia: synchronizacja",
   "TEXT:emptyOrders.synced": "Dodano {count, plural, one{1 nowe puste zlecenie} few{# nowe puste zlecenia} other{# nowych pustych zleceń}}.",
   "TYPE:orders.synced": "Zlecenia reszty działów: synchronizacja",
-  "TEXT:orders.synced": "Dodano {created, plural, one{1 nowe} few{# nowe} other{# nowych}} i zmodyfikowano {updated, plural, one{1 istniejące zlecenie} few{# istniejące zlecenia} other{# istniejących zleceń}}{moduleName, select, currentDayOrderImporter{&nbsp;z aktualnego dnia} nextDayOrderImporter{&nbsp;z następnego dnia} prevDayOrderImporter{&nbsp;z poprzedniego dnia} other{}}.",
+  "TEXT:orders.synced": "Dodano {created}, zmodyfikowano {updated} i usunięto {removed, plural, one{1 zlecenie} few{# zlecenia} other{# zleceń}}{moduleName, select, currentDayOrderImporter{&nbsp;z aktualnego dnia} nextDayOrderImporter{&nbsp;z następnego dnia} prevDayOrderImporter{&nbsp;z poprzedniego dnia} other{}}.",
   "TYPE:purchaseOrders.synced": "Zamówienia: synchronizacja",
   "TEXT:purchaseOrders.synced": "Dodano {created, plural, one{1 nowe zamówienie} few{# nowe zamówienia} other{# nowych zamówień}}, zmodyfikowano {updated, plural, one{1 istniejące zamówienie} few{# istniejące zamówienia} other{# istniejących zamówień}} i zamknięto {closed, plural, one{1 zamówienie} few{# zamówienia} other{# zamówień}} z danych otrzymanych {importedAt}.",
   "TYPE:orderStatuses.added": "Statusy zleceń: dodanie",
