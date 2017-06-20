@@ -118,7 +118,8 @@ module.exports = function setUpNotifier(app, module)
           mrp: 1,
           statuses: 1,
           qty: 1,
-          'qtyDone.total': 1
+          'qtyDone.total': 1,
+          startDate: 1
         };
 
         Order.find(conditions, fields).lean().exec(this.parallel());
