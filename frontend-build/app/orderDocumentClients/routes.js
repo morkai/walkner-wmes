@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["../router","../viewport","../user"],function(e,n,t){"use strict";var r=t.auth("DOCUMENTS:VIEW");e.map("/orderDocuments/clients",r,function(e){n.loadPage(["app/orderDocumentClients/OrderDocumentClientCollection","app/orderDocumentClients/pages/OrderDocumentClientListPage","i18n!app/nls/orderDocumentClients"],function(n,t){return new t({collection:new n(null,{rqlQuery:e.rql})})})})});

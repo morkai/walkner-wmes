@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["underscore","../core/Collection","./OpinionSurvey"],function(e,t,r){"use strict";return t.extend({model:r,rqlQuery:"select(startDate,endDate,label)&limit(20)&sort(-startDate)",buildCacheMaps:function(){for(var e=0;e<this.models.length;++e)this.models[e].buildCacheMaps()},getSuperiors:function(){var t={};return this.forEach(function(r){e.forEach(r.get("superiors"),function(e){t[e._id]||(t[e._id]=e)})}),e.values(t)}})});

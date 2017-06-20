@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/data/views/renderOrgUnitPath","app/core/views/DetailsView","app/mrpControllers/templates/details"],function(e,i,t){"use strict";return i.extend({template:t,localTopics:{"divisions.synced":"render","subdivisions.synced":"render"},serialize:function(){var t=i.prototype.serialize.call(this);return t.orgUnitPath=e(this.model,!0),t}})});

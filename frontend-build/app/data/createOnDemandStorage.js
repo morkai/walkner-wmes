@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/time","app/broker","app/pubsub"],function(e,n,u){"use strict";return function(e){function n(){o=null,null!==i&&(t.destroy(),t=null,i=null)}function l(e,n){var u=n.getTopicPrefix();e.subscribe(u+".added",function(e){n.add(e.model)}),e.subscribe(u+".edited",function(e){var u=n.get(e.model._id);u?u.set(e.model):n.add(e.model)}),e.subscribe(u+".deleted",function(e){n.remove(e.model._id)})}var t=null,i=null,o=null;return{acquire:function(){return null!==o&&(clearTimeout(o),o=null),null===i&&(t=u.sandbox(),i=e(t),l(t,i)),i},release:function(){null!==o&&clearTimeout(o),o=setTimeout(n,3e4)}}}});

@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["../router","../viewport","../user","./PaintShopOrderCollection","./pages/PaintShopPage","i18n!app/nls/paintShop"],function(e,a,n,o,t){"use strict";e.map("/paintShop/:date",n.auth("LOCAL","PAINT_SHOP:VIEW"),function(e){a.showPage(new t({fullscreen:void 0!==e.query.fullscreen,model:{orders:o.forDate(e.params.date)}}))})});

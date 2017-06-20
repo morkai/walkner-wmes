@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/i18n","app/core/util/pageActions","app/core/pages/FilteredListPage","../views/IsaEventFilterView","../views/IsaEventListView"],function(e,i,t,n,s){"use strict";return t.extend({FilterView:n,ListView:s,breadcrumbs:function(){return[{label:e.bound("isa","BREADCRUMBS:base"),href:"#isa"},e.bound("isa","BREADCRUMBS:events")]},actions:function(e){return[i.export(e,this,this.collection)]}})});

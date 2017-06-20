@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["../router","../viewport","../user"],function(n,i,e){"use strict";var l=e.auth("XICONF:VIEW");n.map("/xiconf/clients",l,function(n){i.loadPage(["app/xiconfClients/XiconfClientCollection","app/xiconfClients/pages/XiconfClientListPage","i18n!app/nls/xiconfClients","i18n!app/nls/licenses"],function(i,e){return new e({collection:new i(null,{rqlQuery:n.rql})})})})});

@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["underscore","../time","../i18n","../core/Model","../data/orgUnits","../data/isaPalletKinds","app/core/templates/userInfo"],function(t,e,i,r){"use strict";function n(t){return["date","startedAt","finishedAt"].forEach(function(e){"string"==typeof t[e]&&(t[e]=new Date(t[e]))}),t}return r.extend({urlRoot:"/paintShop/orders",clientUrlRoot:"#paintShop/orders",topicPrefix:"paintShop.orders",privilegePrefix:"PAINT_SHOP",nlsDomain:"paintShop",parse:n,initialize:function(){},serialize:function(){var t=this.toJSON();return t},serializeRow:function(){var t=this.toJSON();return t}},{parse:n})});

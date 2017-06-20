@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["../core/Model","./util/decorateLogEntry"],function(t,e){"use strict";return t.extend({urlRoot:"/icpo/results",clientUrlRoot:"#icpo/results",privilegePrefix:"ICPO",nlsDomain:"icpo",getDecoratedLog:function(){var t=this.get("log");return Array.isArray(t)?t.map(e):[]},hasData:function(t){var e=this.get(t+"Data");return"string"==typeof e&&0!==e.length}})});

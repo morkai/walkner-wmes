@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/i18n","app/user","app/core/pages/FilteredListPage","app/core/util/pageActions","app/kaizenOrders/dictionaries","../views/MinutesForSafetyCardFilterView","../views/MinutesForSafetyCardListView"],function(e,t,i,r,n,o,a){"use strict";return i.extend({baseBreadcrumb:!0,FilterView:o,ListView:a,actions:function(){var i=this.collection;return[r.jump(this,i),{label:e.bound(i.getNlsDomain(),"PAGE_ACTION:add"),icon:"plus",href:i.genClientUrl("add"),privileges:function(){return t.isAllowedTo("KAIZEN:MANAGE","FN:leader")}}]},load:function(e){return e(this.collection.fetch({reset:!0}),n.load())},destroy:function(){i.prototype.destroy.call(this),n.unload()},afterRender:function(){i.prototype.afterRender.call(this),n.load()}})});

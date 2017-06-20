@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["jquery","app/i18n","app/viewport","app/core/View","app/paintShop/templates/queue","app/paintShop/templates/queueOrder"],function(e,t,i,r,n,p){"use strict";return r.extend({template:n,events:{},initialize:function(){},serialize:function(){return{idPrefix:this.idPrefix,orders:this.model.map(function(e){return e.toJSON()}),renderQueueOrder:p}},afterRender:function(){}})});

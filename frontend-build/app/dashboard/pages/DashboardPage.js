@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/i18n","app/user","app/core/View","app/users/views/LogInFormView","../views/DashboardView"],function(e,n,i,a,o){"use strict";return i.extend({layoutName:"page",pageId:"dashboard",breadcrumbs:function(){return n.isLoggedIn()?[]:[e.bound("dashboard","breadcrumbs:logIn")]},initialize:function(){this.view=n.isLoggedIn()?new o:new a},afterRender:function(){n.isLoggedIn()||this.$('input[name="login"]').focus()}})});

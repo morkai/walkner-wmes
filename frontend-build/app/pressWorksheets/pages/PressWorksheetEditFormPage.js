@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/core/pages/EditFormPage","app/lossReasons/LossReasonCollection","../views/PressWorksheetFormView"],function(e,s,o){"use strict";return e.extend({FormView:o,load:function(e){return this.model.lossReasons=new s(null,{rqlQuery:"select(label)&sort(position)&position>=0"}),e(this.model.fetch(),this.model.lossReasons.fetch({reset:!0}))}})});

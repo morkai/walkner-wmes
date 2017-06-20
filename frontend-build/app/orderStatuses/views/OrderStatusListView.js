@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["app/i18n","app/user","app/core/views/ListView","../util/renderOrderStatusLabel"],function(e,i,r,t){"use strict";return r.extend({className:"is-shrinked is-clickable",serializeColumns:function(){return[{id:"coloredId",label:e("orderStatuses","PROPERTY:_id")},{id:"label",label:e("orderStatuses","PROPERTY:label")}]},serializeRows:function(){return this.collection.toJSON().map(function(e){return e.coloredId=t(e),e})}})});
+define(["app/i18n","app/user","app/core/views/ListView","../util/renderOrderStatusLabel"],function(e,i,r,s){"use strict";return r.extend({className:"is-shrinked is-clickable",serializeColumns:function(){return[{id:"coloredId",label:e("orderStatuses","PROPERTY:_id"),className:"is-min"},{id:"label",label:e("orderStatuses","PROPERTY:label")}]},serializeRows:function(){return this.collection.toJSON().map(function(e){return e.coloredId=s(e),e})}})});

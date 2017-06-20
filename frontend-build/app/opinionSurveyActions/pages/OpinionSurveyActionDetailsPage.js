@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/core/util/pageActions","app/core/pages/DetailsPage","app/opinionSurveys/dictionaries","app/opinionSurveyActions/templates/details"],function(e,t,i,n){"use strict";return t.extend({detailsTemplate:n,baseBreadcrumb:!0,actions:function(){var t=this[this.modelProperty],i=[];return t.canEdit()&&i.push(e.edit(t,!1)),t.canDelete()&&i.push(e.delete(t,!1)),i},destroy:function(){t.prototype.destroy.call(this),i.unload()},load:function(e){return e(this.model.fetch(),i.load())},afterRender:function(){t.prototype.afterRender.call(this),i.load()}})});

@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["../router","../viewport","../data/orgUnits","../data/localStorage","../prodShifts/ProdShift","../production/pages/ProductionPage","i18n!app/nls/production","i18n!app/nls/isa","i18n!app/nls/users","i18n!app/nls/prodSerialNumbers"],function(o,n,e,i,t,r){"use strict";o.map("/",function(){n.showPage(new r({model:new t(e.getAllForProdLine(i.getItem(t.LINE_STORAGE_KEY)),{production:!0})}))})});

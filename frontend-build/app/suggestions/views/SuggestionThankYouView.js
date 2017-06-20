@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["jquery","app/core/View","app/suggestions/templates/thanks"],function(o,i,s){"use strict";return i.extend({template:s,initialize:function(){this.doCloseDialog=this.doCloseDialog.bind(this),o(window).on("mousedown.thanks",this.doCloseDialog).on("keydown.thanks",this.doCloseDialog),this.broker.subscribe("router.*",this.doCloseDialog).setLimit(1)},destroy:function(){o(window).off(".thanks")},onDialogShown:function(o){this.closeDialog=o.closeDialog.bind(o,null)},doCloseDialog:function(){this.closeDialog(),this.closeDialog=function(){}},closeDialog:function(){}})});

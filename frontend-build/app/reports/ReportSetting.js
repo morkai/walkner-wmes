@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["../settings/Setting"],function(t){"use strict";return t.extend({urlRoot:"/reports/settings",getType:function(){return/color$/.test(this.id)?"color":/coeff$/.test(this.id)?"coeff":/(id|prodTask)$/.test(this.id)?"id":"ref"},getMetricName:function(){var t=this.id.match(/^reports\.(.*?)\./);return t?t[1]:null},getOrgUnit:function(){var t=this.id.match(/^reports\..*?\.(.*?)$/);return t?t[1]:null}})});

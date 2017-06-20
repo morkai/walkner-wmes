@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["underscore","../user","../core/Model"],function(e,r,t){"use strict";return t.extend({urlRoot:"/isaShiftPersonnel",initialize:function(e,r){r.current&&(this.url=function(){return this.urlRoot+"/current"})},isEmpty:function(){return e.isEmpty(this.get("users"))},serializeUsers:function(t){var i=[],n={};if(t&&r.isLoggedIn()){var s=r.getInfo();i.push(s),n[s.id]=!0}return e.forEach(this.get("users"),function(e){n[e.id]||i.push(e)}),i}})});

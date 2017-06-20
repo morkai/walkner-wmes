@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/core/views/ListView"],function(e){"use strict";return e.extend({className:"is-clickable",serializeColumns:function(){return[{id:"survey",className:"is-min"},{id:"pageNumber",className:"is-min"},{id:"name"}]},serializeRows:function(){var e=this.opinionSurveys;return this.collection.map(function(i){var s=e.get(i.get("survey")),n=i.serialize(s);return n})}})});

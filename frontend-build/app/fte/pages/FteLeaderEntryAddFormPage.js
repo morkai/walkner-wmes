@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/i18n","app/core/View","../FteLeaderEntry","../views/FteEntryAddFormView"],function(e,t,i,r){"use strict";return t.extend({layoutName:"page",pageId:"fteLeaderEntryAddForm",breadcrumbs:[{label:e.bound("fte","BREADCRUMBS:leader:browse"),href:"#fte/leader"},e.bound("fte","BREADCRUMBS:addForm")],initialize:function(){this.view=new r({model:new i,divisionFilter:function(e){return e&&"prod"!==e.get("type")&&e.isActive()}}),this.listenTo(this.view,"editable",function(e){this.broker.publish("router.navigate",{url:e.genClientUrl("edit"),trigger:!0})}),this.listenTo(this.view,"uneditable",function(e){this.broker.publish("router.navigate",{url:e.genClientUrl(),trigger:!0})})}})});

@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/i18n","app/time"],function(e,t){"use strict";return function(r){var o,i=t.getMoment("number"==typeof r?r:r.x),u=(this.model.query?this.model.query.get("interval"):this.model.get("interval"))||"day";return"shift"===u?o={shift:e("core","SHIFT:"+(6===i.hours()?1:14===i.hours()?2:3))}:"quarter"===u&&(o={quarter:e("core","QUARTER:"+i.quarter())}),i.format(e("reports","tooltipHeaderFormat:"+u,o))}});

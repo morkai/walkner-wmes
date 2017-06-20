@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["underscore","app/core/views/DetailsView","app/pressWorksheets/templates/details","app/pressWorksheets/templates/ordersList"],function(e,s,t,r){"use strict";return s.extend({template:t,events:{"mouseover tbody > tr":function(e){this.toggleHovered(e.currentTarget,!0)},"mouseout tbody > tr":function(e){this.toggleHovered(e.currentTarget,!1)}},serialize:function(){return e.extend(s.prototype.serialize.call(this),{renderOrdersList:r,extended:!1})},toggleHovered:function(e,s){var t=this.$(e),r=t.hasClass("pressWorksheets-orders-notes")?t.prev():t.next(".pressWorksheets-orders-notes");t.toggleClass("is-hovered",s),r.toggleClass("is-hovered",s)}})});

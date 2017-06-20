@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["../time","../data/prodLines","../core/Collection","../core/util/matchesProdLine","../core/util/matchesEquals","./ProdShift"],function(e,t,r,i,o,s){"use strict";return r.extend({model:s,rqlQuery:function(t){return t.Query.fromObject({fields:{mrpControllers:1,prodFlow:1,prodLine:1,date:1,shift:1,createdAt:1,creator:1},sort:{createdAt:-1},limit:20,selector:{name:"and",args:[{name:"ge",args:["date",e.getMoment().subtract(1,"months").startOf("day").valueOf()]}]}})},hasOrMatches:function(e){return!!this.get(e._id)||i(this.rqlQuery,e.prodLine)&&o(this.rqlQuery,"shift",e.shift)}})});

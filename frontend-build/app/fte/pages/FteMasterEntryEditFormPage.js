@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/i18n","app/core/util/bindLoadingMessage","app/core/View","../FteMasterEntry","../views/FteMasterEntryEditFormView"],function(e,t,i,r,n){"use strict";return i.extend({layoutName:"page",pageId:"fteMasterEntryForm",breadcrumbs:function(){return[{label:e.bound("fte","BREADCRUMBS:master:browse"),href:this.model.genClientUrl("base")},{label:e.bound("fte","BREADCRUMBS:details"),href:this.model.genClientUrl()},e.bound("fte","BREADCRUMBS:editForm")]},initialize:function(){this.model=t(new r({_id:this.options.modelId}),this),this.view=new n({model:this.model}),this.listenTo(this.view,"remoteError",function(e){"AUTH"===e.message&&this.broker.publish("router.navigate",{url:this.model.genClientUrl(),trigger:!0,replace:!0})})},load:function(e){return e(this.model.fetch())}})});

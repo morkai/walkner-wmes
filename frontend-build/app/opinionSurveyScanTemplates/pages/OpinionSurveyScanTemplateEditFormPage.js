@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/core/pages/EditFormPage","app/core/util/bindLoadingMessage","app/opinionSurveys/dictionaries","app/opinionSurveys/OpinionSurveyCollection","../views/OpinionSurveyScanTemplateFormView"],function(e,t,o,i,n){"use strict";return e.extend({baseBreadcrumb:!0,FormView:n,defineModels:function(){e.prototype.defineModels.apply(this,arguments),this.model.surveys=t(new i(null,{rqlQuery:"sort(-startDate)"}),this),this.listenToOnce(this.model.surveys,"reset",function(){this.model.surveys.buildCacheMaps()})},load:function(e){return e(this.model.fetch(),this.model.surveys.fetch({reset:!0}),o.load())},destroy:function(){e.prototype.destroy.call(this),o.unload()},afterRender:function(){e.prototype.afterRender.call(this),o.load()}})});

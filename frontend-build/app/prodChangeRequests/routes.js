@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["../router","../viewport","../user","./ProdChangeRequestCollection"],function(e,n,p,r){"use strict";var s=p.auth("LOCAL","PROD_DATA:VIEW","PROD_DATA:CHANGES:REQUEST");e.map("/prodChangeRequests",s,function(e){n.loadPage(["app/prodChangeRequests/pages/ProdChangeRequestListPage","i18n!app/nls/prodShifts","i18n!app/nls/prodShiftOrders","i18n!app/nls/prodDowntimes","i18n!app/nls/fte","i18n!app/nls/prodChangeRequests"],function(n){return new n({collection:new r(null,{rqlQuery:e.rql})})})})});

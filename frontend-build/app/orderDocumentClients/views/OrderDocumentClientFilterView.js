@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/time","app/core/views/FilterView","app/orderDocumentClients/templates/filter"],function(e,t,n){"use strict";return t.extend({template:n,defaultFormData:function(){return{status:["online","offline"],prodLine:""}},termToForm:{connectedAt:function(e,t,n){n.status=["offline"]},disconnectedAt:function(e,t,n){n.status=["online"]},prodLine:function(e,t,n){n.prodLine=t.args[1]}},afterRender:function(){t.prototype.afterRender.call(this),this.toggleButtonGroup("status")},serializeFormToQuery:function(e){var t=this.getButtonGroupValue("status"),n=this.$id("prodLine").val().trim();1===t.length&&e.push({name:"eq",args:["online"===t[0]?"disconnectedAt":"connectedAt",null]}),n.length&&e.push({name:"regex",args:["prodLine",n,"i"]})}})});

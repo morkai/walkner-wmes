@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["../core/Model"],function(e){"use strict";return e.extend({urlRoot:"/kaizen/causes",clientUrlRoot:"#kaizenCauses",topicPrefix:"kaizen.causes",privilegePrefix:"KAIZEN:DICTIONARIES",nlsDomain:"kaizenCauses",labelAttribute:"name",defaults:{},serialize:function(){var e=this.toJSON();return e.description||(e.description="-"),e}})});

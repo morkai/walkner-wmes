@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/time","app/i18n","app/data/divisions","app/data/views/renderOrgUnitPath","app/core/util/bindLoadingMessage","app/core/View","../HourlyPlan","../views/HourlyPlanDetailsPrintableView"],function(i,t,e,n,a,o,d,r){"use strict";return o.extend({layoutName:"print",pageId:"hourlyPlanDetailsPrintable",hdLeft:function(){var i=e.get(this.model.get("division"));return t("hourlyPlans","print:hdLeft",{division:i?n(i,!1,!1):"?"})},hdRight:function(){return t("hourlyPlans","print:hdRight",{date:i.format(this.model.get("date"),"L"),shift:t("core","SHIFT:"+this.model.get("shift"))})},initialize:function(){this.model=a(new d({_id:this.options.modelId}),this),this.view=new r({model:this.model})},load:function(i){return i(this.model.fetch())}})});

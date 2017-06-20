@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/time","app/core/views/FormView","app/divisions/templates/form"],function(t,e,i){"use strict";return e.extend({template:i,afterRender:function(){e.prototype.afterRender.call(this),this.options.editMode&&this.$id("_id").attr("disabled",!0)},serializeToForm:function(){var i=e.prototype.serializeToForm.call(this);return i.deactivatedAt&&(i.deactivatedAt=t.format(i.deactivatedAt,"YYYY-MM-DD")),i},serializeForm:function(e){var i=t.getMoment(e.deactivatedAt||null);return e.deactivatedAt=i.isValid()?i.toISOString():null,e}})});

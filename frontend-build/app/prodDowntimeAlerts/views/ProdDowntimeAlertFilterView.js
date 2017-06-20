@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/core/views/FilterView","app/prodDowntimeAlerts/templates/filter"],function(e,t){"use strict";return e.extend({template:t,defaultFormData:function(){return{name:""}},termToForm:{name:function(e,t,r){r[e]=t.args[1].replace(/\\(.)/g,"$1")}},serializeFormToQuery:function(e){this.serializeRegexTerm(e,"name",-1,null,!0)}})});

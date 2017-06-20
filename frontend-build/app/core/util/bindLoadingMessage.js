@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/i18n","app/viewport"],function(e,o){"use strict";return function(r,n,t,s){function a(){o.msg.loaded()}function i(r){var n=r.statusText;if("abort"===n)return o.msg.loaded();var a=r.responseJSON;a&&a.error&&(a.error.code?n=a.error.code:a.error.message&&(n=a.error.message)),o.msg.loadingFailed(e(s,t,{code:n}))}return s||(s=r.nlsDomain?r.nlsDomain:r.model&&r.model.prototype.nlsDomain?r.model.prototype.nlsDomain:"core"),t||(t=r.model?"MSG:LOADING_FAILURE":"MSG:LOADING_SINGLE_FAILURE"),n.listenTo(r,"request",function(e,r,n){"read"===n.syncMethod&&(o.msg.loading(),r.done(a),r.fail(i))}),r}});

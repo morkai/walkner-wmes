@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["../router","../viewport","../user","../core/util/pageActions","../core/pages/FilteredListPage"],function(e,r,i,o,t){"use strict";var l=i.auth("LOCAL","PROD_DATA:VIEW");e.map("/prodSerialNumbers",l,function(e){r.loadPage(["app/prodSerialNumbers/ProdSerialNumberCollection","app/prodSerialNumbers/views/ProdSerialNumberFilterView","app/prodSerialNumbers/views/ProdSerialNumberListView","i18n!app/nls/prodSerialNumbers"],function(r,i,l){return new t({FilterView:i,ListView:l,actions:function(e){return[o.export(e,this,this.collection)]},collection:new r(null,{rqlQuery:e.rql})})})})});

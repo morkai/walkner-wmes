@@ -1,3 +1,3 @@
-// Part of <http://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define(["app/core/pages/DetailsPage","app/kaizenOrders/dictionaries","../views/BehaviorObsCardDetailsView"],function(e,t,a){"use strict";return e.extend({DetailsView:a,baseBreadcrumb:!0,destroy:function(){e.prototype.destroy.call(this),t.unload()},load:function(e){return e(this.model.fetch(),t.load())},afterRender:function(){e.prototype.afterRender.call(this),t.load()}})});
