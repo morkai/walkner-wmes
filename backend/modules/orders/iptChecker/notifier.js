@@ -82,6 +82,7 @@ module.exports = function setUpNotifier(app, module)
         }
 
         this.mrpToInvalidOrders = {};
+        this.etoInvalidOrders = [];
 
         orders.forEach(o =>
         {
@@ -99,7 +100,7 @@ module.exports = function setUpNotifier(app, module)
             this.mrpToInvalidOrders[o.mrp] = [];
           }
 
-          this.mrpToInvalidOrders[o.mrp].push({
+          const templateData = {
             no: o._id,
             nc12: o.nc12,
             qtyTodo: o.qty,
@@ -114,18 +115,36 @@ module.exports = function setUpNotifier(app, module)
             wmesInvalidOrdersUrl: module.config.emailUrlPrefix + '#invalidOrders',
             wmesOrderUrl: module.config.emailUrlPrefix + '#orders/' + o._id,
             iptCheckOrderUrl: module.config.iptUrl.replace('${order}', o._id)
-          });
+          };
+
+          this.mrpToInvalidOrders[o.mrp].push(templateData);
+
+          if (o.nc12.startsWith('8'))
+          {
+            this.etoInvalidOrders.push(templateData);
+          }
         });
 
-        if (_.isEmpty(this.mrpToInvalidOrders))
+        if (!_.isEmpty(this.etoInvalidOrders))
+        {
+          User.find({prodFunction: 'designer_eto'}, {email: 1}).lean().exec(this.next());
+        }
+        else if (_.isEmpty(this.mrpToInvalidOrders))
         {
           return this.skip();
         }
-
-        setImmediate(this.next());
       },
-      function()
+      function(err, etoDesigners)
       {
+        if (err)
+        {
+          module.error(`Failed to fetch ETO designers: ${err.message}`);
+        }
+
+        this.etoRecipients = (etoDesigners || [])
+          .filter(u => !!u.email)
+          .map(u => u.email);
+
         request.get(module.config.morUrl, {json: true, timeout: 10000}, this.next());
       },
       function(err, res, body)
@@ -161,11 +180,16 @@ module.exports = function setUpNotifier(app, module)
 
           mrps.forEach(mrp =>
           {
-            this.mrpToInvalidOrders[mrp].forEach(o => invalidOrders.push(o)); // eslint-disable-line max-nested-callbacks
+            this.mrpToInvalidOrders[mrp].forEach(o => invalidOrders.push(o));
           });
 
           notifyUser(recipient, invalidOrders, this.group());
         });
+
+        if (this.etoRecipients.length)
+        {
+          sendMail(this.etoRecipients, this.etoInvalidOrders, this.group());
+        }
       },
       function(err)
       {
@@ -196,30 +220,40 @@ module.exports = function setUpNotifier(app, module)
         return done();
       }
 
-      const mailOptions = {
-        to: user.email,
-        subject: '[WMES] Nieprawidłowe zlecenia IPT: ',
-        html: renderEmail({orders: orders})
-      };
+      sendMail(user.email, orders, done);
+    });
+  }
 
-      if (orders.length > 4)
+  function sendMail(to, orders, done)
+  {
+    const mailOptions = {
+      to: to,
+      subject: '[WMES] Nieprawidłowe zlecenia IPT: ',
+      html: renderEmail({orders: orders})
+    };
+
+    if (Array.isArray(to))
+    {
+      mailOptions.replyTo = to;
+    }
+
+    if (orders.length > 4)
+    {
+      mailOptions.subject += orders.slice(0, 3).map(o => o.no).join(', ') + '...';
+    }
+    else
+    {
+      mailOptions.subject += orders.map(o => o.no).join(', ');
+    }
+
+    mailSender.send(mailOptions, err =>
+    {
+      if (err)
       {
-        mailOptions.subject += orders.slice(0, 3).map(o => o.no).join(', ') + '...';
+        module.error(`Failed to send e-mail to ${mailOptions.to}: ${err.message}`);
       }
-      else
-      {
-        mailOptions.subject += orders.map(o => o.no).join(', ');
-      }
 
-      mailSender.send(mailOptions, err =>
-      {
-        if (err)
-        {
-          module.error(`Failed to send e-mail to ${mailOptions.to}: ${err.message}`);
-        }
-
-        done();
-      });
+      done();
     });
   }
 };
