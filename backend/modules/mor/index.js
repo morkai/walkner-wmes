@@ -353,6 +353,8 @@ exports.start = function startMorModule(app, module, done)
       if (userMap[userId])
       {
         userMap[userId].presence = presence;
+
+        module.debug(`Updated the presence of [${userId}] to [${presence}]`);
       }
     });
   }

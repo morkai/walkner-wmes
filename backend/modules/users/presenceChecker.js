@@ -212,6 +212,8 @@ module.exports = function setUpPresenceChecker(app, module)
         {
           if (!_.isEmpty(this.changes))
           {
+            module.debug('[presence]', this.changes);
+
             app.broker.publish('users.presence.updated', this.changes);
           }
 
