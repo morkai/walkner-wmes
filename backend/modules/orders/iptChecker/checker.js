@@ -11,21 +11,31 @@ const businessDays = require('../../reports/businessDays');
 
 module.exports = function setUpNotifier(app, module)
 {
+  const CHECK_HOUR_FROM = 5;
+  const CHECK_HOUR_TO = 20;
   const RESOLVED_STATUSES = {
     TECO: true,
     CNF: true,
     DLV: true
   };
 
+  const checkCallbacks = [];
   let checkInProgress = false;
   let checkCancelled = false;
-  const checkCallbacks = [];
 
   module.checkOrders = checkOrders;
 
-  app.broker
-    .subscribe('orders.synced', () => checkOrders())
-    .setFilter(m => m.created || m.updated || m.removed);
+  app.broker.subscribe('orders.synced', () => checkOrders()).setFilter(function(message)
+  {
+    if (!message.created && !message.updated && !message.removed)
+    {
+      return false;
+    }
+
+    const h = new Date().getHours();
+
+    return h >= CHECK_HOUR_FROM && h <= CHECK_HOUR_TO;
+  });
 
   function cancelCheckOrders()
   {
