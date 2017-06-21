@@ -34,7 +34,6 @@ module.exports = function(mongoose, options, done)
           $gte: new Date(options.fromTime),
           $lt: new Date(options.toTime)
         },
-        ok: false,
         division: {$in: Object.keys(results.divisionTotal)}
       };
 
