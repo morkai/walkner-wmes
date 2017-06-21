@@ -163,9 +163,11 @@ define([
           var divisionData = group[division._id] || {
             qtyNok: 0,
             qtyNokInspected: 0,
-            ratio: 0
+            qtyInspected: 0,
+            ratio: 0,
+            ratioInspected: 0
           };
-          var y = divisionData.ratio;
+          var y = divisionData.ratioInspected;
 
           series[i].data.push({
             x: group.key,

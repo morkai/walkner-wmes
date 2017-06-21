@@ -148,6 +148,7 @@
   "report:series:okRatioRef": "Cel",
   "report:series:nokRatioRef": "Cel",
   "report:series:nokRatio": "% wyrobów niezgodnych",
+  "report:series:qtyInspected": "Ilość skontrolowana",
   "report:series:qtyNok": "Ilość NOK",
   "report:series:qtyNokInspected": "Ilość NOK w spr.",
   "report:filenames:totalNokCount": "WMES_QI_IloscNok",

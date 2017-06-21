@@ -119,6 +119,11 @@ define([
               decimals: 0,
               name: t('qiResults', 'report:series:qtyNokInspected'),
               value: options.qtyNokInspected
+            }, {
+              color: '#000000',
+              decimals: 0,
+              name: t('qiResults', 'report:series:qtyInspected'),
+              value: options.qtyInspected
             });
           }
         },
@@ -167,13 +172,14 @@ define([
 
       _.forEach(this.model.get('total'), function(group)
       {
-        var y = group.ratio;
+        var y = group.ratioInspected;
 
         series[0].data.push({
           x: group.key,
           y: y,
           qtyNok: group.qtyNok,
-          qtyNokInspected: group.qtyNokInspected
+          qtyNokInspected: group.qtyNokInspected,
+          qtyInspected: group.qtyInspected
         });
 
         if (y < min)

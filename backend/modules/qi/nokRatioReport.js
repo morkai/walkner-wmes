@@ -19,11 +19,7 @@ module.exports = function(mongoose, options, done)
 
   options.divisions = options.divisions.filter(d => d.type === 'prod');
 
-  options.divisions.forEach(d => results.divisionTotal[d._id] = {
-    qtyNok: 0,
-    qtyNokInspected: 0,
-    ratio: 100
-  });
+  options.divisions.forEach(d => results.divisionTotal[d._id] = createEmptyGroup());
 
   let minTotalGroupKey = Number.MAX_VALUE;
   let maxTotalGroupKey = Number.MIN_VALUE;
@@ -50,6 +46,7 @@ module.exports = function(mongoose, options, done)
       const fields = {
         inspectedAt: 1,
         division: 1,
+        qtyInspected: 1,
         qtyNok: 1,
         qtyNokInspected: 1
       };
@@ -66,26 +63,26 @@ module.exports = function(mongoose, options, done)
       qiResults.forEach(function(qiResult)
       {
         const totalGroup = getTotalGroup(qiResult);
+        const qtyInspected = qiResult.qtyInspected;
         const qtyNok = qiResult.qtyNok;
         const qtyNokInspected = qiResult.qtyNokInspected || 0;
 
+        totalGroup.qtyInspected += qtyInspected;
         totalGroup.qtyNok += qtyNok;
         totalGroup.qtyNokInspected += qtyNokInspected;
 
         const divisionGroup = getDivisionGroup(qiResult);
 
+        divisionGroup.qtyInspected += qtyInspected;
         divisionGroup.qtyNok += qtyNok;
         divisionGroup.qtyNokInspected += qtyNokInspected;
 
         if (!results.divisionTotal[qiResult.division])
         {
-          results.divisionTotal[qiResult.division] = {
-            qtyNok: 0,
-            qtyNokInspected: 0,
-            ratio: 100
-          };
+          results.divisionTotal[qiResult.division] = createEmptyGroup();
         }
 
+        results.divisionTotal[qiResult.division].qtyInspected += qtyInspected;
         results.divisionTotal[qiResult.division].qtyNok += qtyNok;
         results.divisionTotal[qiResult.division].qtyNokInspected += qtyNokInspected;
       });
@@ -97,6 +94,7 @@ module.exports = function(mongoose, options, done)
       _.forEach(results.total, function(group)
       {
         group.ratio = Math.round((group.qtyNokInspected / group.qtyNok) * 10000) / 100;
+        group.ratioInspected = Math.round((group.qtyNokInspected / group.qtyInspected) * 10000) / 100;
       });
 
       _.forEach(results.division, function(group)
@@ -109,12 +107,14 @@ module.exports = function(mongoose, options, done)
           }
 
           division.ratio = Math.round((division.qtyNokInspected / division.qtyNok) * 10000) / 100;
+          division.ratioInspected = Math.round((division.qtyNokInspected / division.qtyInspected) * 10000) / 100;
         });
       });
 
       _.forEach(results.divisionTotal, function(division)
       {
         division.ratio = Math.round((division.qtyNokInspected / division.qtyNok) * 10000) / 100;
+        division.ratioInspected = Math.round((division.qtyNokInspected / division.qtyInspected) * 10000) / 100;
       });
 
       setImmediate(this.next());
@@ -135,12 +135,7 @@ module.exports = function(mongoose, options, done)
       while (groupKey <= maxTotalGroupKey)
       {
         const toTime = createNextTotalGroupKey(groupKey);
-        const group = results.total[groupKey] || {
-          key: groupKey,
-          qtyNok: 0,
-          qtyNokInspected: 0,
-          ratio: 0
-        };
+        const group = results.total[groupKey] || createEmptyGroup(groupKey);
 
         totalGroups.push(group);
 
@@ -188,12 +183,7 @@ module.exports = function(mongoose, options, done)
 
     if (!results.total[groupKey])
     {
-      results.total[groupKey] = {
-        key: groupKey,
-        qtyNok: 0,
-        qtyNokInspected: 0,
-        ratio: 0
-      };
+      results.total[groupKey] = createEmptyGroup(groupKey);
     }
 
     return results.total[groupKey];
@@ -222,13 +212,21 @@ module.exports = function(mongoose, options, done)
 
     if (!results.division[groupKey][qiResult.division])
     {
-      results.division[groupKey][qiResult.division] = {
-        qtyNok: 0,
-        qtyNokInspected: 0,
-        ratio: 0
-      };
+      results.division[groupKey][qiResult.division] = createEmptyGroup();
     }
 
     return results.division[groupKey][qiResult.division];
+  }
+
+  function createEmptyGroup(key)
+  {
+    return {
+      key,
+      qtyInspected: 0,
+      qtyNok: 0,
+      qtyNokInspected: 0,
+      ratio: 100,
+      ratioInspected: 100
+    };
   }
 };
