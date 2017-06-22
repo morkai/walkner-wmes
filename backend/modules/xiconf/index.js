@@ -37,7 +37,8 @@ exports.start = function startXiconfModule(app, module)
       config.userId,
       config.expressId,
       config.sioId,
-      config.settingsId
+      config.settingsId,
+      config.licensesId
     ],
     setUpRoutes.bind(null, app, module)
   );

@@ -15,6 +15,8 @@ const deleteProgramRoute = require('./programs/delete');
 const goToClientsPageRoute = require('./clients/goToPage');
 const downloadClientsVNCRoute = require('./clients/downloadVNC');
 const getClientsSettingsRoute = require('./clients/getSettings');
+const getClientLicensesRoute = require('./clients/getLicenses');
+const addClientLicenseRoute = require('./clients/addLicense');
 const sendUpdateRoute = require('./sendUpdate');
 
 module.exports = function setUpXiconfRoutes(app, xiconfModule)
@@ -25,6 +27,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   const settings = app[xiconfModule.config.settingsId];
   const Order = mongoose.model('Order');
   const XiconfClient = mongoose.model('XiconfClient');
+  const XiconfClientSettings = mongoose.model('XiconfClientSettings');
   const XiconfResult = mongoose.model('XiconfResult');
   const XiconfProgram = mongoose.model('XiconfProgram');
   const XiconfHidLamp = mongoose.model('XiconfHidLamp');
@@ -32,7 +35,9 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   const XiconfOrder = mongoose.model('XiconfOrder');
 
   const canView = userModule.auth('XICONF:VIEW');
+  const canViewLocal = userModule.auth('LOCAL', 'XICONF:VIEW');
   const canManage = userModule.auth('XICONF:MANAGE');
+  const canManageLocal = userModule.auth('LOCAL', 'XICONF:MANAGE');
   const remoteRequests = {};
 
   //
@@ -318,15 +323,38 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   //
   // Clients
   //
-  express.get('/xiconf/clients', canView, express.crud.browseRoute.bind(null, app, XiconfClient));
-
+  express.get(
+    '/xiconf/clients',
+    canViewLocal,
+    crossOrigin,
+    express.crud.browseRoute.bind(null, app, XiconfClient)
+  );
   express.get('/xiconf/clients;debug', canManage, getClientsDebugInfoRoute);
   express.get('/xiconf/clients;clear', canManage, clearOrderDataRoute);
   express.get('/xiconf/clients;update', canManage, updateRemoteDataRoute);
+  express.get(
+    '/xiconf/clients;settings',
+    canManageLocal,
+    crossOrigin,
+    express.crud.browseRoute.bind(null, app, XiconfClientSettings)
+  );
   express.post(
     '/xiconf/clients;settings',
-    userModule.auth('LOCAL'),
+    canManageLocal,
     getClientsSettingsRoute.bind(null, app, xiconfModule)
+  );
+  express.options('/xiconf/clients;licenses', crossOrigin, (req, res) => res.sendStatus(204));
+  express.get(
+    '/xiconf/clients;licenses',
+    canViewLocal,
+    crossOrigin,
+    getClientLicensesRoute.bind(null, app, xiconfModule)
+  );
+  express.post(
+    '/xiconf/clients;licenses',
+    canManageLocal,
+    crossOrigin,
+    addClientLicenseRoute.bind(null, app, xiconfModule)
   );
 
   express.get('/xiconf/clients/:id;goTo', canView, goToClientsPageRoute.bind(null, app, xiconfModule));
@@ -336,6 +364,15 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   express.delete('/xiconf/clients/:id', canManage, express.crud.deleteRoute.bind(null, app, XiconfClient));
 
   express.get('/xiconf/updates/:version', sendUpdateRoute.bind(null, app, xiconfModule));
+
+  function crossOrigin(req, res, next)
+  {
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, POST');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+
+    next();
+  }
 
   function getClientsDebugInfoRoute(req, res)
   {

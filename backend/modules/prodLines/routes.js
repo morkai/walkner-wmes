@@ -11,7 +11,7 @@ module.exports = function setUpProdLinesRoutes(app, prodLinesModule, useDictiona
   const canView = auth('LOCAL', 'DICTIONARIES:VIEW');
   const canManage = auth('DICTIONARIES:MANAGE');
 
-  express.get('/prodLines', canView, express.crud.browseRoute.bind(null, app, ProdLine));
+  express.get('/prodLines', canView, crossOrigin, express.crud.browseRoute.bind(null, app, ProdLine));
 
   express.post('/prodLines', canManage, express.crud.addRoute.bind(null, app, ProdLine));
 
@@ -33,6 +33,14 @@ module.exports = function setUpProdLinesRoutes(app, prodLinesModule, useDictiona
     denyIfDeactivated,
     express.crud.deleteRoute.bind(null, app, ProdLine)
   );
+
+  function crossOrigin(req, res, next)
+  {
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+
+    next();
+  }
 
   function prepareModelForEdit(req, res, next)
   {

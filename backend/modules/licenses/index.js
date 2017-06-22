@@ -12,7 +12,8 @@ exports.DEFAULT_CONFIG = {
   licenseEd: {
     pem: null,
     password: null
-  }
+  },
+  defaultLicensee: ''
 };
 
 exports.start = function startLicensesModule(app, module)
