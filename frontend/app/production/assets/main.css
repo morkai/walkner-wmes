@@ -518,6 +518,17 @@
   white-space: normal;
 }
 
+.production-newOrderPicker-row {
+  display: flex;
+}
+.production-newOrderPicker-row > .form-group:first-child {
+  margin-top: 0;
+  margin-right: 0;
+}
+.production-newOrderPicker-row > .form-group:last-child {
+  width: 200px;
+}
+
 .form-control.is-embedded[data-vkb~="alpha"]::-webkit-input-placeholder {
   font-family: Arial, "Helvetic Neue", Helvetica, sans-serif;
   font-size: 28px;

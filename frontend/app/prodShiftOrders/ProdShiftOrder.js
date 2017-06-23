@@ -79,7 +79,7 @@ define([
       this.clear();
     },
 
-    onOrderChanged: function(prodShift, orderData, operationNo)
+    onOrderChanged: function(prodShift, orderData, operationNo, workerCount)
     {
       this.prepareOperations(orderData);
 
@@ -106,7 +106,7 @@ define([
         orderId: orderData.no || orderData.nc12,
         operationNo: operationNo,
         orderData: orderData,
-        workerCount: 0,
+        workerCount: workerCount,
         totalQuantity: 0,
         quantityDone: 0,
         quantityLost: 0,
@@ -638,5 +638,4 @@ define([
     }
 
   });
-
 });

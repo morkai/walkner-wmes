@@ -70,6 +70,8 @@ define([
 
         this.$('.active[data-operation]').removeClass('active');
         e.currentTarget.classList.add('active');
+
+        this.updateNewWorkerCount();
       },
       'input #-order': function(e)
       {
@@ -490,7 +492,7 @@ define([
       }
       else
       {
-        this.model.changeOrder(orderInfo, operationNo);
+        this.model.changeOrder(orderInfo, operationNo, parseInt(this.$id('newWorkerCount').val(), 10));
       }
 
       this.closeDialog();
@@ -633,6 +635,8 @@ define([
           $active[0].scrollIntoView();
         }
 
+        view.updateNewWorkerCount();
+
         if (view.options.vkb)
         {
           view.options.vkb.reposition();
@@ -668,6 +672,34 @@ define([
       });
 
       return html.length ? html : ('<p>' + t('production', 'newOrderPicker:order:notFound') + '</p>');
+    },
+
+    updateNewWorkerCount: function()
+    {
+      var $newWorkerCount = this.$id('newWorkerCount').val('');
+
+      if (!$newWorkerCount.length)
+      {
+        return;
+      }
+
+      var orderNo = this.$id('order').val();
+      var operationNo = this.$id('operationGroup').find('.active').attr('data-operation');
+      var order = _.findWhere(this.lastOrders, {_id: orderNo});
+
+      if (!order)
+      {
+        return;
+      }
+
+      var operation = _.findWhere(order.operations, {no: operationNo});
+
+      if (!operation || operation.laborTime <= 0 || operation.machineTime <= 0)
+      {
+        return;
+      }
+
+      $newWorkerCount.val(Math.max(Math.round(operation.laborTime / operation.machineTime), 1));
     },
 
     checkMinMaxValidity: function(e)

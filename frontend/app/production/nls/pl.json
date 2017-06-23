@@ -167,6 +167,7 @@
   "newOrderPicker:checkData:warning": "Wybranie nowego zlecenia ukończy aktualnie wybrane zlecenie. Sprawdź czy pola <em>Ilość wykonana</em> i <em>Osoby pracujące</em> aktualnego zlecenia mają prawidłowe wartości, gdyż po wybraniu nowego zlecenia nie będzie można ich zmienić.",
   "newOrderPicker:quantityDone": "Ilość wykonana w kończonym zleceniu:",
   "newOrderPicker:workerCount": "Osoby pracujące przy kończonym zleceniu:",
+  "newOrderPicker:newWorkerCount": "Ilość osób:",
   "newOrderPicker:spigot:nc12": "12NC komponentu Spigot",
   "newOrderPicker:spigot:placeholder": "Zeskanuj kod kreskowy komponentu...",
   "newOrderPicker:spigot:invalid": "Nieprawidłowe 12NC komponentu!",

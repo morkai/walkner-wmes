@@ -26,10 +26,23 @@
   <p class="message message-inline message-info"><%- t('production', 'newOrderPicker:online:info:' + orderIdType) %></p>
   <% } %>
   <% } %>
+  <% if (correctingOrder || !embedded) { %>
   <div class="form-group">
     <label for="<%- idPrefix %>-order"><%- t('production', 'newOrderPicker:order:label:' + orderIdType) %></label>
     <input id="<%- idPrefix %>-order" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" placeholder="<%- orderPlaceholder %>" maxlength="<%- orderMaxLength %>" data-ignore-key="1" data-vkb="numeric" <%- embedded || offline ? 'required' : '' %>>
   </div>
+  <% } else { %>
+  <div class="production-newOrderPicker-row">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-order"><%- t('production', 'newOrderPicker:order:label:' + orderIdType) %></label>
+      <input id="<%- idPrefix %>-order" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" placeholder="<%- orderPlaceholder %>" maxlength="<%- orderMaxLength %>" data-ignore-key="1" data-vkb="numeric" <%- embedded || offline ? 'required' : '' %>>
+    </div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-newWorkerCount"><%- t('production', 'newOrderPicker:newWorkerCount') %></label>
+      <input id="<%- idPrefix %>-newWorkerCount" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" maxlength="2" min="1" max="15" data-ignore-key="1" data-vkb="numeric" required>
+    </div>
+  </div>
+  <% } %>
   <% if (!offline && embedded) { %>
   <div id="<%- idPrefix %>-operationGroup" class="production-form-btn-group">
     <label><%- t('production', 'newOrderPicker:operation:label:online') %></label>

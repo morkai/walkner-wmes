@@ -169,6 +169,7 @@
     "newOrderPicker:checkData:warning": "Starting a new order will finish the current order. Make sure that the <em>Quantity done</em> and <em>Worker count</em> of the current order have correct values, because after starting a new order, you won't be able to change them.",
     "newOrderPicker:quantityDone": "Quantity done in the finished order:",
     "newOrderPicker:workerCount": "Worker count in the finished order:",
+    "newOrderPicker:newWorkerCount": "Worker count:",
     "newOrderPicker:spigot:nc12": "Spigot component 12NC",
     "newOrderPicker:spigot:placeholder": "Scan the component's bar code...",
     "newOrderPicker:spigot:invalid": "Invalid component 12NC!",

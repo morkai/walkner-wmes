@@ -496,7 +496,7 @@ define([
       }
     },
 
-    changeOrder: function(orderInfo, operationNo)
+    changeOrder: function(orderInfo, operationNo, workerCount)
     {
       var createdAt = Date.now();
 
@@ -509,7 +509,7 @@ define([
 
       var prevOrderNo = this.prodShiftOrder.get('orderId');
 
-      this.prodShiftOrder.onOrderChanged(this, orderInfo, operationNo);
+      this.prodShiftOrder.onOrderChanged(this, orderInfo, operationNo, workerCount > 0 ? workerCount : 0);
 
       prodLog.record(this, 'changeOrder', this.prodShiftOrder.toJSON(), new Date(createdAt));
 
