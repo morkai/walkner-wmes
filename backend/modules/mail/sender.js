@@ -279,7 +279,7 @@ exports.start = function startMailSenderModule(app, module)
 
   function resendFromFile(fileInfo)
   {
-    delete recentlySentFromFile[fileInfo.filename];
+    delete recentlySentFromFile[fileInfo.fileName];
 
     sendFromFile(fileInfo);
   }
