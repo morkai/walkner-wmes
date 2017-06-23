@@ -174,8 +174,8 @@
     "newOrderPicker:spigot:placeholder": "Scan the component's bar code...",
     "newOrderPicker:spigot:invalid": "Invalid component 12NC!",
 
-    "error:min": "Value must be greater than or equal to {min}.",
-    "error:max": "Value must be less than or equal to {max}.",
+    "error:min": "Value cannot be less than {min}.",
+    "error:max": "Value cannot be greater than {max}.",
 
     "downtimePicker:title:start": "Starting a new downtime",
     "downtimePicker:title:edit": "Correcting a downtime",
@@ -236,8 +236,6 @@
     "isa:deliver:specific": "Delivery <span class='production-isa-selectedQty'>{qty}x</span><span class='production-isa-selectedPalletKind'>{palletKind}</span>",
     "isa:deliver:title": "Pallet delivery",
     "isa:deliver:qty": "Pallet quantity",
-    "isa:deliver:qty:min": "Value can not be less than {min}.",
-    "isa:deliver:qty:max": "Value can not be greater than {min}.",
     "isa:deliver:palletKind": "Pallet kind",
     "isa:deliver:submit": "Request delivery",
     "isa:deliver:cancel": "Cancel",

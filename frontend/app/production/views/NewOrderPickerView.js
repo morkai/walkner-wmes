@@ -712,11 +712,11 @@ define([
 
       if (val < min)
       {
-        err = t('production', 'newOrderPicker:min', {min: min});
+        err = t('production', 'error:min', {min: min});
       }
       else if (val > max)
       {
-        err = t('production', 'newOrderPicker:max', {max: max});
+        err = t('production', 'error:max', {max: max});
       }
 
       el.setCustomValidity(err);

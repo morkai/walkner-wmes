@@ -172,8 +172,8 @@
   "newOrderPicker:spigot:placeholder": "Zeskanuj kod kreskowy komponentu...",
   "newOrderPicker:spigot:invalid": "Nieprawidłowe 12NC komponentu!",
 
-  "error:min": "Wartość musi być równa lub większa od {min}.",
-  "error:max": "Wartość musi być równa lub mniejsza od {max}.",
+  "error:min": "Wartość nie może być mniejsza niż {min}.",
+  "error:max": "Wartość nie może być większa niż {max}.",
 
   "downtimePicker:title:start": "Rozpoczynanie przestoju",
   "downtimePicker:title:edit": "Poprawianie przestoju",
@@ -234,8 +234,6 @@
   "isa:deliver:specific": "Dostawa <span class='production-isa-selectedQty'>{qty}x</span><span class='production-isa-selectedPalletKind'>{palletKind}</span>",
   "isa:deliver:title": "Dostawa palety",
   "isa:deliver:qty": "Ilość palet",
-  "isa:deliver:qty:min": "Wartość nie może być mniejsza niż {min}.",
-  "isa:deliver:qty:max": "Wartość nie może być większa niż {max}.",
   "isa:deliver:palletKind": "Rodzaj palety",
   "isa:deliver:submit": "Dostawa palety",
   "isa:deliver:cancel": "Anuluj",

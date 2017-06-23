@@ -103,11 +103,11 @@ define([
 
       if (qty < min)
       {
-        error = t('production', 'isa:deliver:qty:min', {min: min});
+        error = t('production', 'error:min', {min: min});
       }
       else if (qty > max)
       {
-        error = t('production', 'isa:deliver:qty:max', {max: max});
+        error = t('production', 'error:max', {max: max});
       }
 
       $qty.val(qty || '')[0].setCustomValidity(error);
