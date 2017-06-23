@@ -733,6 +733,7 @@ define([
             vkb: view.options.vkb,
             property: 'workerCount',
             value: pso.getWorkerCountForEdit(),
+            min: 1,
             max: pso.getMaxWorkerCount(),
             getValue: function()
             {

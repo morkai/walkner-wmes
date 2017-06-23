@@ -63,6 +63,7 @@ define([
         idPrefix: this.idPrefix,
         property: this.options.property,
         value: this.options.value,
+        min: this.options.min || 0,
         max: this.options.max
       };
     },
