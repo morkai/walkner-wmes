@@ -25,7 +25,6 @@ define([
     'status',
     'section',
     'area',
-    'behaviour',
     'cause',
     'risk',
     'nearMissCategory'
@@ -34,7 +33,6 @@ define([
     section: 'sections',
     area: 'areas',
     cause: 'causes',
-    behaviour: 'behaviours',
     risk: 'risks',
     nearMissCategory: 'categories',
     suggestionCategory: 'categories'

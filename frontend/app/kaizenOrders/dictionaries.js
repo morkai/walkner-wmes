@@ -35,7 +35,6 @@ define([
     category: 'categories',
     cause: 'causes',
     risk: 'risks',
-    behaviour: 'behaviours',
     productFamily: 'productFamilies'
   };
 
@@ -53,7 +52,6 @@ define([
     categories: new KaizenCategoryCollection(),
     causes: new KaizenCauseCollection(),
     risks: new KaizenRiskCollection(),
-    behaviours: new KaizenBehaviourCollection(),
     productFamilies: new KaizenProductFamilyCollection(),
     loaded: false,
     load: function()
@@ -102,7 +100,6 @@ define([
       pubsubSandbox.subscribe('kaizen.causes.**', handleDictionaryMessage);
       pubsubSandbox.subscribe('kaizen.risks.**', handleDictionaryMessage);
       pubsubSandbox.subscribe('kaizen.productFamilies.**', handleDictionaryMessage);
-      pubsubSandbox.subscribe('kaizen.behaviours.**', handleDictionaryMessage);
 
       subToSeenMessages();
 
@@ -169,8 +166,7 @@ define([
       'categories',
       'causes',
       'risks',
-      'productFamilies',
-      'behaviours'
+      'productFamilies'
     ].forEach(function(prop)
     {
       dictionaries[prop].reset(data ? data[prop] : []);

@@ -383,14 +383,6 @@ define([
         formatResult: formatResult
       });
 
-      this.$id('behaviour').select2({
-        allowClear: true,
-        placeholder: ' ',
-        dropdownCssClass: 'is-bigdrop',
-        data: kaizenDictionaries.behaviours.map(idLabelAndDescription),
-        formatResult: formatResult
-      });
-
       buttonGroup.toggle(this.$id('status'));
 
       setUpUserSelect2(this.$id('subscribers'), {

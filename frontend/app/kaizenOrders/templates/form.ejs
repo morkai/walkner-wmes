@@ -65,14 +65,7 @@
             <label for="<%- idPrefix %>-causeText" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:causeText') %></label>
             <textarea id="<%- idPrefix %>-causeText" class="form-control" name="causeText" rows="3"></textarea>
           </div>
-          <div class="message message-inline message-info">
-            <p><%- t('kaizenOrders', 'FORM:MSG:categories', {gender: user.data.gender}) %></p>
-          </div>
           <div id="<%- idPrefix %>-causeCategoryRiskRow" class="row">
-            <div class="form-group col-md-3">
-              <label for="<%- idPrefix %>-behaviour" class="control-label"><%- t('kaizenOrders', 'PROPERTY:behaviour') %></label>
-              <input id="<%- idPrefix %>-behaviour" type="text" name="behaviour">
-            </div>
             <div class="form-group col-md-3">
               <label for="<%- idPrefix %>-cause" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:cause') %></label>
               <input id="<%- idPrefix %>-cause" type="text" name="cause">
@@ -81,7 +74,7 @@
               <label for="<%- idPrefix %>-risk" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:risk') %></label>
               <input id="<%- idPrefix %>-risk" type="text" name="risk">
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-6">
               <label for="<%- idPrefix %>-nearMissCategory" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:nearMissCategory') %></label>
               <input id="<%- idPrefix %>-nearMissCategory" type="text" name="nearMissCategory">
             </div>

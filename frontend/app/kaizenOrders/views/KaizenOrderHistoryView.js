@@ -102,7 +102,9 @@ define([
 
     serializeItems: function()
     {
-      var items = this.model.get('changes').map(this.serializeItem, this);
+      var items = this.model.get('changes')
+        .map(this.serializeItem, this)
+        .filter(function(item) { return item.comment.length || item.changes.length; });
 
       items.unshift(this.serializeItem({
         user: this.model.get('creator'),
@@ -128,12 +130,17 @@ define([
       {
         changes = _.map(change.data, function(values, property)
         {
+          if (property === 'behaviour')
+          {
+            return null;
+          }
+
           return {
             label: t('kaizenOrders', 'PROPERTY:' + property),
             oldValue: this.serializeItemValue(property, values[0], true, changeIndex),
             newValue: this.serializeItemValue(property, values[1], false, changeIndex)
           };
-        }, this);
+        }, this).filter(function(change) { return !!change; });
         comment = change.comment.trim();
       }
 
@@ -184,7 +191,6 @@ define([
         case 'area':
         case 'risk':
         case 'cause':
-        case 'behaviour':
         {
           var model = kaizenDictionaries[property + 's'].get(value);
 
