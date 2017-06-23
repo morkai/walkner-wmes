@@ -59,10 +59,8 @@ define([
       js2form(this.el, this.serializeToForm(false));
     },
 
-    serializeToForm: function(partial)
+    serializeToForm: function(partial) // eslint-disable-line no-unused-vars
     {
-      /*jshint unused:false*/
-
       return this.model.toJSON();
     },
 

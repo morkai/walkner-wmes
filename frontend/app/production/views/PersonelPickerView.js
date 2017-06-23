@@ -78,8 +78,7 @@ define([
 
             return;
           }
-          else
-          {
+
             var userData = this.$id('user').select2('data');
 
             if (userData)
@@ -87,7 +86,6 @@ define([
               userInfo.id = userData.id;
               userInfo.label = userData.text;
             }
-          }
         }
         else
         {

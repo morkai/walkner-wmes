@@ -58,12 +58,14 @@ define([
       width: 1,
       height: 1
     };
+    /* eslint-disable camelcase */
     var parameters = {
       jnlp_href: '/vendor/qz-print/qz-print_jnlp.jnlp',
       cache_option: 'plugin',
       disable_logging: 'false',
       initial_focus: 'false'
     };
+    /* eslint-enable camelcase */
 
     if (!deployJava.versionCheck('1.7+')
       && !deployJava.versionCheck('1.6.0_45+')
@@ -266,7 +268,7 @@ define([
     }
     else if (printJob !== null)
     {
-      console.log("Printing done!", printJob);
+      console.log('Printing done!', printJob);
 
       printJob.done();
     }

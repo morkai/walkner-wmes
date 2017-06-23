@@ -108,5 +108,4 @@ define([
       baseBreadcrumb: true
     })
   );
-
 });

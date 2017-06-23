@@ -102,7 +102,7 @@ define([
         {
           try
           {
-            new RegExp(pattern);
+            new RegExp(pattern); // eslint-disable-line no-new
           }
           catch (err)
           {
@@ -233,7 +233,7 @@ define([
         var matchCount = 0;
         var match;
 
-        while ((match = re.exec(line)) !== null)
+        while ((match = re.exec(line)) !== null) // eslint-disable-line no-cond-assign
         {
           wcCoeffs[match[1].toUpperCase()] = parseFloat(match[2].replace(',', '.'));
           remaining = remaining.replace(match[0], '');
@@ -287,7 +287,7 @@ define([
       {
         this.reset(JSON.parse(localStorage.getItem('PRODUCTION:SETTINGS')));
       }
-      catch (err) {}
+      catch (err) {} // eslint-disable-line no-empty
     },
 
     saveLocalData: function()

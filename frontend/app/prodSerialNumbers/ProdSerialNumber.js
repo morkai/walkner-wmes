@@ -28,7 +28,7 @@ define([
       o.className = o.taktTime > o.sapTaktTime * 1000 ? 'warning' : 'success';
       o.orderNo = '<a href="#prodShiftOrders/' + o.prodShiftOrder + '">' + o.orderNo + '</a>';
       o.scannedAt = time.format(o.scannedAt, 'L, LTS');
-      o.iptAt = o.iptAt  ? time.format(o.iptAt, 'L, LTS') : null;
+      o.iptAt = o.iptAt ? time.format(o.iptAt, 'L, LTS') : null;
       o.taktTime = time.toString(Math.round(o.taktTime / 1000));
       o.iptTaktTime = o.iptTaktTime ? time.toString(Math.round(o.iptTaktTime / 1000)) : '';
       o.sapTaktTime = o.sapTaktTime ? time.toString(o.sapTaktTime) : '';
@@ -37,5 +37,4 @@ define([
     }
 
   });
-
 });

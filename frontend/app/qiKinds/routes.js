@@ -108,5 +108,4 @@ define([
   router.map('/qi/kinds/:id;delete', canManage, _.partial(showDeleteFormPage, QiKind, _, _, {
     baseBreadcrumb: true
   }));
-
 });

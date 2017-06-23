@@ -37,7 +37,7 @@ define([
   /**
    * @constructor
    * @extends {app.core.View}
-   * @param {object} [options]
+   * @param {Object} [options]
    */
   var NavbarView = View.extend({
 
@@ -340,8 +340,6 @@ define([
    */
   NavbarView.prototype.getModuleNameFromLi = function(liEl, useAnchor, clientModule)
   {
-    /*jshint -W116*/
-
     var module = liEl.dataset[clientModule ? 'clientModule' : 'module'];
 
     if (module === undefined && !useAnchor)
@@ -637,8 +635,6 @@ define([
 
     this.$('li[data-online]').each(function()
     {
-      /*jshint -W015*/
-
       var $li = navbarView.$(this);
 
       if (typeof $li.attr('data-disabled') !== 'undefined')
@@ -844,7 +840,7 @@ define([
   /**
    * @private
    * @param {string} searchPhrase
-   * @returns {object}
+   * @returns {Object}
    */
   NavbarView.prototype.parseSearchPhrase = function(searchPhrase)
   {

@@ -78,7 +78,7 @@ define([
         return when(this.model.nodePositions.fetch({reset: true}));
       }
 
-      var deferred = $.Deferred();
+      var deferred = $.Deferred(); // eslint-disable-line new-cap
 
       require(['d3'], function()
       {

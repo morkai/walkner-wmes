@@ -254,7 +254,7 @@ define([
         taskName: task.name,
         functionIndex: functionIndex,
         functionId: func.id,
-        companyIndex : companyIndex,
+        companyIndex: companyIndex,
         companyId: company.id,
         oldValue: oldValue,
         newValue: newValue

@@ -82,12 +82,12 @@ define([
     {
       if (!options.settings)
       {
-        throw new Error("settings option is required!");
+        throw new Error('settings option is required!');
       }
 
       if (!options.prodTasks)
       {
-        throw new Error("prodTasks option is required!");
+        throw new Error('prodTasks option is required!');
       }
 
       this.settings = options.settings;

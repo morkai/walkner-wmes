@@ -79,5 +79,4 @@ define([
   });
 
   router.map('/licenses/:id;delete', canManage, showDeleteFormPage.bind(null, License));
-
 });

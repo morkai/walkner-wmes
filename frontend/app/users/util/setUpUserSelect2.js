@@ -15,7 +15,7 @@ define([
 ) {
   'use strict';
 
-  function formatText(user, name, query)
+  function formatText(user, name, query) // eslint-disable-line no-unused-vars
   {
     if (user.personellId)
     {

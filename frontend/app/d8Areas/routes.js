@@ -107,5 +107,4 @@ define([
   router.map('/d8/areas/:id;delete', canManage, _.partial(showDeleteFormPage, model, _, _, {
     baseBreadcrumb: true
   }));
-
 });

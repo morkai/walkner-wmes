@@ -11,6 +11,7 @@ define([
  * @param {function(new:h5.pubsub.MessageBroker)} MessageBroker
  * @param {h5.pubsub.Broker} broker
  * @param {Socket} socket
+ * @returns {h5.pubsub.Broker}
  */
 function(
   _,

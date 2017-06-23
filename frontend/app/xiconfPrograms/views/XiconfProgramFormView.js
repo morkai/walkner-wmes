@@ -284,7 +284,7 @@ define([
 
       if (!stepTemplate)
       {
-        throw new Error("Invalid step type: " + stepType);
+        throw new Error('Invalid step type: ' + stepType);
       }
 
       if (!programType)

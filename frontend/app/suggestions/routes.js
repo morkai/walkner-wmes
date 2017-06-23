@@ -153,7 +153,7 @@ define([
         {
           operator = JSON.parse(decodeURIComponent(atob(req.query.operator)));
         }
-        catch (err) {}
+        catch (err) {} // eslint-disable-line no-empty
 
         return new SuggestionAddFormPage({
           model: new Suggestion(),
@@ -184,5 +184,4 @@ define([
   router.map('/suggestions/:id;delete', canAccess, _.partial(showDeleteFormPage, Suggestion, _, _, {
     baseBreadcrumb: true
   }));
-
 });

@@ -204,5 +204,4 @@ define([
     ORDER_PROPERTIES: ['_id', 'nc12', 'name', 'description', 'qty', 'qtyDone.total', 'statuses', 'operations']
 
   });
-
 });

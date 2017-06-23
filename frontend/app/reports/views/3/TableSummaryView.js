@@ -259,7 +259,7 @@ define([
         language: {
           emptyTable: this.getEmptyTableMessage()
         }
-      }).DataTable();
+      }).DataTable(); // eslint-disable-line new-cap
 
       this.fixedColumns = new $.fn.dataTable.FixedColumns(this.dataTable, {
         leftColumns: 2,

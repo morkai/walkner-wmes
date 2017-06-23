@@ -107,5 +107,4 @@ define([
     canManage,
     _.partial(showDeleteFormPage, 'app/kaizenSections/KaizenSection', _, _, {baseBreadcrumb: true})
   );
-
 });

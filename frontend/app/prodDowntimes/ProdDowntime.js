@@ -147,7 +147,7 @@ define([
     },
 
     /**
-     * @param {object} options
+     * @param {Object} options
      * @param {function(string): boolean} options.hasAccessToAor
      * @param {boolean} options.canManageProdData
      * @param {boolean} options.canManageProdDowntimes
@@ -218,5 +218,4 @@ define([
     }
 
   });
-
 });

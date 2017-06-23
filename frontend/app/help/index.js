@@ -37,8 +37,6 @@ define([
 
   function handleKeyPress(ctrlKey)
   {
-    /* jshint unused:false */
-
     if (!socket.isConnected())
     {
       return showMessage('error', 3000, 'offline');

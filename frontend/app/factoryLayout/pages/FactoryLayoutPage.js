@@ -52,7 +52,7 @@ define([
         });
       }
 
-      actions.push(/*{
+      actions.push(/* {
         label: t.bound('factoryLayout', 'pa:layout:edit'),
         icon: 'edit',
         privileges: 'FACTORY_LAYOUT:MANAGE',

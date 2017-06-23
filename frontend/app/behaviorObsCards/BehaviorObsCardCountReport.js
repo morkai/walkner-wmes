@@ -5,15 +5,13 @@ define([
   '../i18n',
   '../time',
   '../core/Model',
-  '../data/colorFactory',
-  'app/kaizenOrders/dictionaries'
+  '../data/colorFactory'
 ], function(
   _,
   t,
   time,
   Model,
-  colorFactory,
-  kaizenDictionaries
+  colorFactory
 ) {
   'use strict';
 

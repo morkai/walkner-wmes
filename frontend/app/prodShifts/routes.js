@@ -76,5 +76,4 @@ define([
   });
 
   router.map('/prodShifts/:id;delete', canManage, createShowDeleteFormPage(ProdShift));
-
 });

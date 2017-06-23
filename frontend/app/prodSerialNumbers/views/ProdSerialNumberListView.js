@@ -14,7 +14,7 @@ define([
     className: 'is-colored',
 
     remoteTopics: {
-      'prodSerialNumbers.created.**': 'refreshCollection',
+      'prodSerialNumbers.created.**': 'refreshCollection'
     },
 
     serializeColumns: function()

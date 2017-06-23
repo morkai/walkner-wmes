@@ -19,7 +19,7 @@ define([
 
     nlsDomain: 'opinionSurveyQuestions',
 
-    labelAttribute: 'short',
+    labelAttribute: 'short'
 
   });
 });

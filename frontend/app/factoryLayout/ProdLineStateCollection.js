@@ -23,8 +23,8 @@ define([
     },
 
     /**
-     * @param {object} res
-     * @returns {Array.<object>}
+     * @param {Object} res
+     * @returns {Array.<Object>}
      */
     parse: function(res)
     {
@@ -44,7 +44,7 @@ define([
      * @param {string} orgUnitType
      * @param {Array.<string>} orgUnitIds
      * @param {function(string, string): boolean} [isBlacklisted]
-     * @returns {Array.<object>}
+     * @returns {Array.<Object>}
      */
     getByOrgUnit: function(orgUnitType, orgUnitIds, isBlacklisted)
     {
@@ -95,7 +95,7 @@ define([
 
     /**
      * @private
-     * @param {object} parentOrgUnit
+     * @param {Object} parentOrgUnit
      * @param {function} isBlacklisted
      * @param {boolean} useBlacklist
      * @param {function} callback

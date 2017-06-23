@@ -72,14 +72,14 @@ define([
           });
         }
       },
-      'mousedown .list-item[data-id]':  function(e)
+      'mousedown .list-item[data-id]': function(e)
       {
         if (!this.isNotClickable(e) && e.button === 1)
         {
           e.preventDefault();
         }
       },
-      'mouseup .list-item[data-id]':  function(e)
+      'mouseup .list-item[data-id]': function(e)
       {
         if (this.isNotClickable(e) || e.button !== 1)
         {

@@ -94,5 +94,4 @@ define([
       baseBreadcrumb: true
     })
   );
-
 });

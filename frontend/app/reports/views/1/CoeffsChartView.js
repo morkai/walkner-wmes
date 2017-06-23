@@ -169,8 +169,6 @@ define([
 
     updateExtremes: function(redraw)
     {
-      /*jshint eqnull:true*/
-
       if (this.displayOptions)
       {
         var useMax = !this.model.get('isParent') || this.model.get('extremes') === 'parent';
@@ -265,8 +263,6 @@ define([
 
     onSettingsUpdate: function(setting)
     {
-      /*jshint -W015*/
-
       switch (setting.getType())
       {
         case 'color':

@@ -5,6 +5,7 @@ define([
 ],
 /**
  * @param {function(new:h5.pubsub.MessageBroker)} MessageBroker
+ * @returns {h5.pubsub.MessageBroker}
  */
 function(
   MessageBroker

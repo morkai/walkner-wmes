@@ -109,5 +109,4 @@ define([
   router.map('/kaizenCategories/:id;delete', canManage, _.partial(showDeleteFormPage, KaizenCategory, _, _, {
     baseBreadcrumb: true
   }));
-
 });

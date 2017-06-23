@@ -78,5 +78,4 @@ define([
   });
 
   router.map('/orderStatuses/:id;delete', canManage, showDeleteFormPage.bind(null, OrderStatus));
-
 });

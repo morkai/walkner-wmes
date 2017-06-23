@@ -12,7 +12,6 @@ define([
   'use strict';
 
 
-
   return View.extend({
 
     template: template,

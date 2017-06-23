@@ -43,7 +43,7 @@ function(
   delete window.GUEST_USER;
 
   /**
-   * @param {object} userData
+   * @param {Object} userData
    */
   user.reload = function(userData)
   {
@@ -254,8 +254,6 @@ function(
 
   user.getDivision = function()
   {
-    /*jshint -W015*/
-
     var divisionId = null;
 
     switch (user.data.orgUnitType)

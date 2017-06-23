@@ -31,7 +31,7 @@ define([
     {
       var obj = this.toJSON();
 
-      obj.className = obj.status === 'failed' ? 'danger' : obj.status === 'passed' ? 'success': '';
+      obj.className = obj.status === 'failed' ? 'danger' : obj.status === 'passed' ? 'success' : '';
       obj.status = t('pscs', 'status:' + obj.status);
       obj.user = renderUserInfo({userInfo: obj.user});
       obj.creator = renderUserInfo({userInfo: obj.creator});

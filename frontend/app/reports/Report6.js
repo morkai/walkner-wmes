@@ -24,7 +24,7 @@ define([
     {
       if (!options.query)
       {
-        throw new Error("query option is required!");
+        throw new Error('query option is required!');
       }
 
       this.query = options.query;
@@ -181,7 +181,7 @@ define([
 
       attrs.category.exStorage.push(
         this.createCategoryPoint('exStorageIn', attrs.count.exStorageIn),
-        this.createCategoryPoint( 'exStorageOut', attrs.count.exStorageOut)
+        this.createCategoryPoint('exStorageOut', attrs.count.exStorageOut)
       );
 
       attrs.category.exTransactions.push(
@@ -367,16 +367,14 @@ define([
 
       _.forEach(fifoTasks, function(fifoTaskId)
       {
-        /*jshint -W116*/
-
         var fte = groupData.compTasks[fifoTaskId];
 
-        if (fte == undefined)
+        if (fte == null)
         {
           return;
         }
 
-        if (attrs.fte.fifo[fifoTaskId] === undefined)
+        if (attrs.fte.fifo[fifoTaskId] == null)
         {
           attrs.fte.fifo[fifoTaskId] = fte / fteDivisor;
         }
@@ -419,8 +417,6 @@ define([
 
       _.forEach(compAbsenceTasks, function(absenceTaskId)
       {
-        /*jshint -W116*/
-
         if (attrs.fte.totalAbsence[absenceTaskId] === undefined)
         {
           attrs.fte.totalAbsence[absenceTaskId] = 0;
@@ -439,8 +435,6 @@ define([
 
       _.forEach(finGoodsAbsenceTasks, function(absenceTaskId)
       {
-        /*jshint -W116*/
-
         if (attrs.fte.totalAbsence[absenceTaskId] === undefined)
         {
           attrs.fte.totalAbsence[absenceTaskId] = 0;

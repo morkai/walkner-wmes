@@ -11,8 +11,6 @@ define([
 
   function prepareTdAttrs(row)
   {
-    /*jshint validthis:true*/
-
     return row.observer && row.observer.notify && row.observer.changes && row.observer.changes[this.id]
       ? 'class="is-changed"'
       : '';

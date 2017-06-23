@@ -108,5 +108,4 @@ define([
     canManage,
     _.partial(showDeleteFormPage, 'app/kaizenProductFamilies/KaizenProductFamily', _, _, {baseBreadcrumb: true})
   );
-
 });

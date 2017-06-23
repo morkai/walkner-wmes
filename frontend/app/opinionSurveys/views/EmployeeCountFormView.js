@@ -46,8 +46,6 @@ define([
     afterRender: function()
     {
       FormView.prototype.afterRender.call(this);
-
-
     }
 
   });

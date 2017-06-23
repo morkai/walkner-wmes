@@ -325,7 +325,7 @@ define([
       var $aor = this.$id('aor');
       var $comment = this.$id('comment');
       var newStatus = buttonGroup.getValue(this.$id('status'));
-      var newReason =  !$reason.length || $reason.closest('.form-group').hasClass('hidden') ? null : $reason.val();
+      var newReason = !$reason.length || $reason.closest('.form-group').hasClass('hidden') ? null : $reason.val();
       var newAor = !$aor.length || $aor.closest('.form-group').hasClass('hidden') ? null : $aor.val();
       var comment = $comment.val().trim();
       var data = {};

@@ -43,7 +43,7 @@ define([
 
     loadStyles: function()
     {
-      var deferred = $.Deferred();
+      var deferred = $.Deferred(); // eslint-disable-line new-cap
       var $head = $('head');
 
       if ($head.find('link[href$="planning.css"]').length)

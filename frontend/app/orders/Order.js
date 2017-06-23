@@ -19,7 +19,7 @@ define([
     'startDate',
     'finishDate',
     'scheduledStartDate',
-    'scheduledFinishDate',
+    'scheduledFinishDate'
   ];
   var TIME_PROPS = [
     'sapCreatedAt',

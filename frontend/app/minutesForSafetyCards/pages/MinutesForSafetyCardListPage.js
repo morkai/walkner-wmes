@@ -35,7 +35,7 @@ define([
           label: t.bound(collection.getNlsDomain(), 'PAGE_ACTION:add'),
           icon: 'plus',
           href: collection.genClientUrl('add'),
-          privileges: function() { return user.isAllowedTo('KAIZEN:MANAGE', 'FN:leader'); },
+          privileges: function() { return user.isAllowedTo('KAIZEN:MANAGE', 'FN:leader'); }
         }
       ];
     },

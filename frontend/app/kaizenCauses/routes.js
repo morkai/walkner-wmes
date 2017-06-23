@@ -107,5 +107,4 @@ define([
     canManage,
     _.partial(showDeleteFormPage, 'app/kaizenCauses/KaizenCause', _, _, {baseBreadcrumb: true})
   );
-
 });

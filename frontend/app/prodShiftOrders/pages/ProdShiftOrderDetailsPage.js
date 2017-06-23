@@ -101,9 +101,9 @@ define([
 
       this.listenToOnce(this.prodShiftOrder, 'sync', this.onSync);
 
-      this.setView('#' + this.idPrefix +'-details', this.detailsView);
-      this.insertView('#' + this.idPrefix +'-downtimes', this.downtimesView);
-      this.insertView('#' + this.idPrefix +'-serialNumbers', this.serialNumbersView);
+      this.setView('#' + this.idPrefix + '-details', this.detailsView);
+      this.insertView('#' + this.idPrefix + '-downtimes', this.downtimesView);
+      this.insertView('#' + this.idPrefix + '-serialNumbers', this.serialNumbersView);
     },
 
     destroy: function()
@@ -209,12 +209,12 @@ define([
           laborSetupTime: prodShiftOrder.get('laborSetupTime'),
           laborTime: prodShiftOrder.get('laborTime'),
           machineSetupTime: prodShiftOrder.get('machineSetupTime'),
-          machineTime: prodShiftOrder.get('machineTime'),
+          machineTime: prodShiftOrder.get('machineTime')
         }
       });
 
-      this.setView('#' + this.idPrefix +'-order', this.orderDetailsView);
-      this.setView('#' + this.idPrefix +'-operations', this.operationListView);
+      this.setView('#' + this.idPrefix + '-order', this.orderDetailsView);
+      this.setView('#' + this.idPrefix + '-operations', this.operationListView);
     },
 
     prepareOrderData: function()

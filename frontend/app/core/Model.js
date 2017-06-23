@@ -27,7 +27,7 @@ define([
     {
       if (this.clientUrlRoot === null)
       {
-        throw new Error("`clientUrlRoot` was not specified");
+        throw new Error('`clientUrlRoot` was not specified');
       }
 
       var url = this.clientUrlRoot;

@@ -480,8 +480,6 @@ define([
 
     onRemoteEdit: function(message)
     {
-      /*jshint -W015*/
-
       if (message.socketId === this.socket.getId())
       {
         return;

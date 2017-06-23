@@ -177,8 +177,6 @@ define([
 
     onSettingsUpdate: function(setting)
     {
-      /*jshint -W015*/
-
       switch (setting.getType())
       {
         case 'color':

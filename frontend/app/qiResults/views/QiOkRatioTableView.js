@@ -84,8 +84,8 @@ define([
             {
               _.defer(hide);
             }
-          }).
-          css({
+          })
+          .css({
             position: 'absolute',
             width: '110px'
           })

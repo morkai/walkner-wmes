@@ -181,8 +181,6 @@ define([
 
       function onRequestCompleted()
       {
-        /*jshint validthis:true*/
-
         --requests;
 
         if (requests === 0)
@@ -214,7 +212,7 @@ define([
       this.headerView = this.createHeaderView();
       this.filterView = this.createFilterView();
       this.displayOptionsView = this.createDisplayOptionsView();
-      this.chartsViews = this.reports.map(function(report){ return this.createChartsView(report, false); }, this);
+      this.chartsViews = this.reports.map(function(report) { return this.createChartsView(report, false); }, this);
     },
 
     createHeaderView: function()
@@ -232,10 +230,8 @@ define([
       throw new Error();
     },
 
-    createChartsView: function(report, skipRenderCharts)
+    createChartsView: function(report, skipRenderCharts) // eslint-disable-line no-unused-vars
     {
-      /*jshint unused:false*/
-
       throw new Error();
     },
 
@@ -683,8 +679,9 @@ define([
     {
       var parentReport = this.getCurrentReport();
       var parentChartsView = this.getChartsViewByReport(parentReport);
-      var siblingChartsViews =
-        this.chartsViews.filter(function(chartsView) { return chartsView !== parentChartsView; });
+      var siblingChartsViews = this.chartsViews.filter(
+        function(chartsView) { return chartsView !== parentChartsView; }
+      );
       var childChartsViews = [];
 
       this.reports = this.createReports(parentReport, null);

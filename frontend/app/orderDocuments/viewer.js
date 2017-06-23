@@ -1,5 +1,5 @@
-/*global Viewer,PAGE_COUNT,NC15 */
-/*jshint -W097,-W101*/
+/* globals Viewer, PAGE_COUNT, NC15 */
+/* eslint-disable strict, operator-linebreak */
 
 'use strict';
 
@@ -118,7 +118,7 @@ window.onload = function()
 
   if (jumpFormEl)
   {
-    jumpFormEl.addEventListener('click', function (e)
+    jumpFormEl.addEventListener('click', function(e)
     {
       var key = e.target.dataset.key;
 
@@ -141,7 +141,7 @@ window.onload = function()
       }
     });
 
-    jumpFormEl.addEventListener('submit', function (e)
+    jumpFormEl.addEventListener('submit', function(e)
     {
       e.preventDefault();
 

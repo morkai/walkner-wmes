@@ -31,8 +31,6 @@ define([
     afterRender: function()
     {
       DetailsView.prototype.afterRender.call(this);
-
-
     }
 
   });

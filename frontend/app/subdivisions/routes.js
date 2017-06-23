@@ -84,5 +84,4 @@ define([
   });
 
   router.map('/subdivisions/:id;delete', canManage, showDeleteFormPage.bind(null, Subdivision));
-
 });

@@ -43,8 +43,6 @@ define([
 
       function reload()
       {
-        /*jshint validthis:true*/
-
         this.promised(this.model.fetch());
       }
     },

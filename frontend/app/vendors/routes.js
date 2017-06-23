@@ -75,5 +75,4 @@ define([
   });
 
   router.map('/vendors/:id;delete', canManage, showDeleteFormPage.bind(null, Vendor));
-
 });

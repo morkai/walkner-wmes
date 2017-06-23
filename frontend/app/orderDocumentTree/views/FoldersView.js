@@ -13,7 +13,7 @@ define([
   'app/orderDocumentTree/templates/folders',
   'app/orderDocumentTree/templates/folder',
   'app/orderDocumentTree/templates/foldersContextMenu',
-  'app/orderDocumentTree/templates/purgeFolderDialog',
+  'app/orderDocumentTree/templates/purgeFolderDialog'
 ], function(
   _,
   $,

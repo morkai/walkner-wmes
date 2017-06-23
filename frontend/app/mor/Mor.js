@@ -21,12 +21,12 @@ define([
 
   function resolved()
   {
-    return $.Deferred().resolve().promise();
+    return $.Deferred().resolve().promise(); // eslint-disable-line new-cap
   }
 
   function rejected()
   {
-    return $.Deferred().reject().promise();
+    return $.Deferred().reject().promise(); // eslint-disable-line new-cap
   }
 
   return Model.extend({
@@ -276,7 +276,7 @@ define([
       var old = [].concat(sections);
 
       sections.splice(sections.indexOf(sourceSection), 1);
-      sections.splice(sections.indexOf(targetSection) + (params.position === 'after' ? 1: 0), 0, sourceSection);
+      sections.splice(sections.indexOf(targetSection) + (params.position === 'after' ? 1 : 0), 0, sourceSection);
 
       mor.trigger('update');
 

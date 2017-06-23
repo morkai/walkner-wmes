@@ -164,7 +164,7 @@ define([
         {
           queryString = atob(this.options.queryString);
         }
-        catch (err) {}
+        catch (err) {} // eslint-disable-line no-empty
       }
 
       if (!queryString)

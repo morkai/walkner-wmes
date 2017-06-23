@@ -106,5 +106,4 @@ define([
   router.map('/d8/entrySources/:id;delete', canManage, _.partial(showDeleteFormPage, model, _, _, {
     baseBreadcrumb: true
   }));
-
 });

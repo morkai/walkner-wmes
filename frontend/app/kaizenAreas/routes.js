@@ -105,5 +105,4 @@ define([
   router.map('/kaizenAreas/:id;delete', canManage, _.partial(showDeleteFormPage, 'app/kaizenAreas/KaizenArea', _, _, {
     baseBreadcrumb: true
   }));
-
 });

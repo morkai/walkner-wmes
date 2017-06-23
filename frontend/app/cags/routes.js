@@ -83,5 +83,4 @@ define([
   });
 
   router.map('/cags/:id;delete', canManage, showDeleteFormPage.bind(null, Cag));
-
 });

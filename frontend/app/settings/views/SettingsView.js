@@ -20,15 +20,13 @@ define([
 
     clientUrl: '#settings',
     defaultTab: null,
-    shouldAutoUpdateSettingField: function(setting)
+    shouldAutoUpdateSettingField: function(setting) // eslint-disable-line no-unused-vars
     {
-      /*jshint unused:false*/
-
       return true;
     },
-    updateSettingField: function(setting)
+    updateSettingField: function(setting) // eslint-disable-line no-unused-vars
     {
-      /*jshint unused:false*/
+
     },
 
     events: {

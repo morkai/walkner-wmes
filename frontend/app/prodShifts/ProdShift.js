@@ -212,7 +212,7 @@ define([
         delete data.prodShiftOrder;
         delete data.prodDowntimes;
       }
-      catch (err) {}
+      catch (err) {} // eslint-disable-line no-empty
 
       if (!_.isEmpty(data))
       {
@@ -475,7 +475,7 @@ define([
 
       if (!quantitiesDone[hour])
       {
-        throw new Error("Invalid hour: " + hour);
+        throw new Error('Invalid hour: ' + hour);
       }
 
       if (quantitiesDone[hour].actual === newValue)
@@ -523,7 +523,7 @@ define([
     {
       if (!this.hasOrder())
       {
-        throw new Error("Cannot correct the order: no order is started!");
+        throw new Error('Cannot correct the order: no order is started!');
       }
 
       var changes = this.prodShiftOrder.onOrderCorrected(this, orderInfo, operationNo);
@@ -542,7 +542,7 @@ define([
     {
       if (!this.hasOrder())
       {
-        throw new Error("Cannot set the next order: no order is started!");
+        throw new Error('Cannot set the next order: no order is started!');
       }
 
       var oldNextOrders = this.get('nextOrder');
@@ -580,12 +580,12 @@ define([
     {
       if (this.hasOrder())
       {
-        throw new Error("Cannot continue the order: an order is already started!");
+        throw new Error('Cannot continue the order: an order is already started!');
       }
 
       if (!this.prodShiftOrder.hasOrderData())
       {
-        throw new Error("Cannot continue the order: no order data!");
+        throw new Error('Cannot continue the order: no order data!');
       }
 
       this.set('state', 'working');
@@ -599,7 +599,7 @@ define([
     {
       if (!this.hasOrder())
       {
-        throw new Error("Cannot change the quantity done: no prod shift order!");
+        throw new Error('Cannot change the quantity done: no prod shift order!');
       }
 
       if (typeof newValue !== 'number' || isNaN(newValue))
@@ -623,7 +623,7 @@ define([
     {
       if (!this.hasOrder())
       {
-        throw new Error("Cannot change the worker count: no prod shift order!");
+        throw new Error('Cannot change the worker count: no prod shift order!');
       }
 
       if (typeof newValue !== 'number' || isNaN(newValue))
@@ -902,7 +902,7 @@ define([
     },
 
     /**
-     * @return {moment}
+     * @returns {moment}
      */
     getCurrentShiftMoment: function()
     {
@@ -1125,7 +1125,7 @@ define([
 
     /**
      * @param {string|null} secretKey
-     * @param {object} [remoteData]
+     * @param {Object} [remoteData]
      * @param {boolean} [reload]
      */
     setSecretKey: function(secretKey, remoteData, reload)
@@ -1406,5 +1406,4 @@ define([
     }
 
   });
-
 });

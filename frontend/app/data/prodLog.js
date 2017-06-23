@@ -313,7 +313,7 @@ define([
 
       if (!enabled)
       {
-        throw new Error("Production log is disabled!");
+        throw new Error('Production log is disabled!');
       }
 
       var prodLogEntry = typeof typeOrLogEntry === 'object'

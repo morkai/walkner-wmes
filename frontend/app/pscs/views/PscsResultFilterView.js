@@ -32,7 +32,7 @@ define([
       'user.id': function(propertyName, term, formData)
       {
         formData.user = term.args[1];
-      },
+      }
     },
 
     serializeFormToQuery: function(selector)

@@ -13,8 +13,6 @@ define([
 
   function prepareTdAttrs(row, className)
   {
-    /*jshint validthis:true*/
-
     var classNames = '';
 
     if (className)

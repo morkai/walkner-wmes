@@ -89,8 +89,7 @@ define([
           }
         }
         else
-        {
-          if (this.withFunctions)
+        if (this.withFunctions)
           {
             this.focused.push(
               rowEl.querySelector(
@@ -112,7 +111,6 @@ define([
               '.fte-leaderEntry-column-division[data-column="' + dataset.company + ':' + dataset.division + '"]'
             ));
           }
-        }
 
         this.$(this.focused).addClass('is-focused');
 

@@ -91,5 +91,4 @@ define([
   router.map('/d8/entries/:id;delete', canView, _.partial(showDeleteFormPage, model, _, _, {
     baseBreadcrumb: true
   }));
-
 });

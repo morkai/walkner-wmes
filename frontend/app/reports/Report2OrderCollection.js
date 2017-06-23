@@ -32,7 +32,7 @@ define([
     {
       if (!options.query)
       {
-        throw new Error("query option is required!");
+        throw new Error('query option is required!');
       }
 
       this.query = options.query;

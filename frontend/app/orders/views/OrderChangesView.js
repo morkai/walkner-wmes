@@ -135,8 +135,6 @@ define([
 
     renderValueChange: function(valueChange, i, valueProperty)
     {
-      /*jshint -W015*/
-
       var value = valueChange[valueProperty];
 
       if (value == null || value.length === 0)

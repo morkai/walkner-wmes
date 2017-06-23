@@ -160,8 +160,6 @@ define([
 
     onSettingsUpdate: function(setting)
     {
-      /*jshint -W015*/
-
       switch (setting.getType())
       {
         case 'color':
@@ -317,10 +315,8 @@ define([
       return [{title: false, min: 0}];
     },
 
-    createSeries: function(chartData)
+    createSeries: function(chartData) // eslint-disable-line no-unused-vars
     {
-      /*jshint unused:false*/
-
       throw new Error();
     },
 

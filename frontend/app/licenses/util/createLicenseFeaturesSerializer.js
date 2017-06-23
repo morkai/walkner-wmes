@@ -44,6 +44,4 @@ define([
       return features.join(' ');
     };
   };
-
-
 });

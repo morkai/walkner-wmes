@@ -136,7 +136,7 @@ define([
   };
 
   /**
-   * @param {object} options
+   * @param {Object} options
    * @returns {jQuery}
    */
   MessagesView.prototype.show = function(options)
@@ -370,6 +370,7 @@ define([
 
   /**
    * @private
+   * @param {jQuery} $newMessage
    */
   MessagesView.prototype.moveDown = function($newMessage)
   {

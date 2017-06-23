@@ -88,5 +88,4 @@ define([
   });
 
   router.map('/divisions/:id;delete', canManage, showDeleteFormPage.bind(null, Division));
-
 });

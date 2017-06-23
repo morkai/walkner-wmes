@@ -236,8 +236,6 @@ define([
 
   function exportChart(type)
   {
-    /*jshint validthis:true*/
-
     var plotOptions = {
       dataLabels: {
         enabled: true,
@@ -269,8 +267,6 @@ define([
 
   function formatDataLabelForExport()
   {
-    /*jshint validthis:true*/
-
     var series = this.series;
     var chartOptions = series.chart.options;
     var chartType = chartOptions.chart.type;

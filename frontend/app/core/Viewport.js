@@ -140,7 +140,7 @@ define([
 
     if (!_.isObject(this.layouts[layoutName]))
     {
-      throw new Error("Unknown layout: `" + layoutName + "`");
+      throw new Error('Unknown layout: `' + layoutName + '`');
     }
 
     ++this.pageCounter;

@@ -217,5 +217,4 @@ define([
   });
 
   router.map('/hourlyPlans/:id;delete', canManage, showDeleteFormPage.bind(null, HourlyPlan));
-
 });

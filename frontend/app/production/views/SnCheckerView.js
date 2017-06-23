@@ -118,7 +118,6 @@ define([
               .addClass('message-success')
               .html(t('production', 'taktTime:check:notFound'));
           }
-
         });
 
         return false;

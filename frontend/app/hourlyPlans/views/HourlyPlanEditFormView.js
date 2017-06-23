@@ -314,8 +314,6 @@ define([
 
     onRemoteEdit: function(message)
     {
-      /*jshint -W015*/
-
       switch (message.type)
       {
         case 'plan':

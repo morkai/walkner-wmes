@@ -107,5 +107,4 @@ define([
   router.map('/qi/actionStatuses/:id;delete', canManage, _.partial(showDeleteFormPage, QiActionStatus, _, _, {
     baseBreadcrumb: true
   }));
-
 });

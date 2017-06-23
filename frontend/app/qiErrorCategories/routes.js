@@ -105,5 +105,4 @@ define([
   router.map('/qi/errorCategories/:id;delete', canManage, _.partial(showDeleteFormPage, QiErrorCategory, _, _, {
     baseBreadcrumb: true
   }));
-
 });

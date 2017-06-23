@@ -107,5 +107,4 @@ define([
   router.map('/qi/faults/:id;delete', canManage, _.partial(showDeleteFormPage, QiFault, _, _, {
     baseBreadcrumb: true
   }));
-
 });

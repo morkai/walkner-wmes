@@ -46,7 +46,7 @@ define([
 
   /**
    * @param {string} domain
-   * @param {object.<string, function>} keys
+   * @param {Object.<string, function>} keys
    * @param {string} [moduleId]
    */
   function register(domain, keys, moduleId)

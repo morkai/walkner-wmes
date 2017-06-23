@@ -21,8 +21,6 @@ define([
 
   return function(user)
   {
-    /*jshint -W015*/
-
     var obj = user.toJSON();
     var company = companies.get(obj.company);
 

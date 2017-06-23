@@ -157,7 +157,7 @@ define([
 
     loadStyles: function()
     {
-      var deferred = $.Deferred();
+      var deferred = $.Deferred(); // eslint-disable-line new-cap
       var $head = $('head');
 
       if ($head.find('link[href$="planning.css"]').length)
@@ -580,7 +580,7 @@ define([
 
             planToLines[plan._id][line._id] = {
               activeFrom: DailyMrpPlanLine.getActiveFromMoment(date, line.activeFrom).toDate(),
-              activeTo: DailyMrpPlanLine.getActiveToMoment(date, line.activeTo).toDate(),
+              activeTo: DailyMrpPlanLine.getActiveToMoment(date, line.activeTo).toDate()
             };
           });
         });
@@ -598,7 +598,7 @@ define([
               line: line,
               plan: plan,
               from: planToLines[plan][line].activeFrom,
-              to: planToLines[plan][line].activeTo,
+              to: planToLines[plan][line].activeTo
             };
           }));
         });

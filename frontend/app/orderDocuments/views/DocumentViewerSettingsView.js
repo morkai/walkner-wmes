@@ -27,7 +27,7 @@ define([
 
     template: template,
 
-    events :{
+    events: {
       'submit': function()
       {
         this.submitForm();

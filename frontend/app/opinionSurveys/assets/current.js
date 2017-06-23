@@ -1,5 +1,5 @@
-/* globals $,SURVEY,alert */
-/* jshint strict: global */
+/* globals $, SURVEY, alert */
+/* eslint-disable strict, no-alert */
 
 'use strict';
 

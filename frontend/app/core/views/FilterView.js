@@ -183,9 +183,9 @@ define([
       });
     },
 
-    serializeFormToQuery: function(selector, rqlQuery)
+    serializeFormToQuery: function(selector, rqlQuery) // eslint-disable-line no-unused-vars
     {
-      /*jshint unused:false*/
+
     },
 
     serializeRegexTerm: function(selector, property, maxLength, replaceRe, ignoreCase, startAnchor)

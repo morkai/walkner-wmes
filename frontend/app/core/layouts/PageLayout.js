@@ -168,10 +168,10 @@ define([
   };
 
   /**
-   * @param {function|object|string|Array.<object|string>} breadcrumbs
+   * @param {function|Object|string|Array.<Object|string>} breadcrumbs
    * @param {string|function} breadcrumbs.label
    * @param {string} [breadcrumbs.href]
-   * @param {object} [context]
+   * @param {Object} [context]
    * @returns {PageLayout}
    */
   PageLayout.prototype.setBreadcrumbs = function(breadcrumbs, context)
@@ -220,7 +220,7 @@ define([
 
   /**
    * @param {function|string|Array.<string>} title
-   * @param {object} [context]
+   * @param {Object} [context]
    * @returns {PageLayout}
    */
   PageLayout.prototype.setTitle = function(title, context)
@@ -248,13 +248,13 @@ define([
   };
 
   /**
-   * @param {function|object|string|Array.<object|string>} actions
+   * @param {function|Object|string|Array.<Object|string>} actions
    * @param {string} actions.label
    * @param {string} [actions.type]
    * @param {string} [actions.icon]
    * @param {string} [actions.href]
    * @param {function} [actions.callback]
-   * @param {object} [context]
+   * @param {Object} [context]
    * @returns {PageLayout}
    */
   PageLayout.prototype.setActions = function(actions, context)
@@ -300,7 +300,7 @@ define([
   /**
    * @private
    * @param {*} context
-   * @param {object} action
+   * @param {Object} action
    * @returns {*}
    */
   PageLayout.prototype.prepareAction = function(context, action)

@@ -652,8 +652,8 @@ define([
           {
             _.defer(hide);
           }
-        }).
-        css({
+        })
+        .css({
           position: 'absolute',
           width: $value.width() + 'px'
         })

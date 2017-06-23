@@ -162,7 +162,7 @@ define([
       var prevShiftNo = -1;
       var pages = [];
 
-      lines.map(function(line)
+      lines.forEach(function(line)
       {
         var bigPage = {
           pageNo: 1,

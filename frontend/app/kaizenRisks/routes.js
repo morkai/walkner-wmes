@@ -105,5 +105,4 @@ define([
   router.map('/kaizenRisks/:id;delete', canManage, _.partial(showDeleteFormPage, 'app/kaizenRisks/KaizenRisk', _, _, {
     baseBreadcrumb: true
   }));
-
 });

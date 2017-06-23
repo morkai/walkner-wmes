@@ -25,7 +25,7 @@ define([
 
     template: template,
 
-    events :{
+    events: {
       'submit': function()
       {
         this.submitForm();
@@ -215,21 +215,21 @@ define([
       }
       else if (key === 'BACKSPACE')
       {
-        start = start - 1;
+        start -= 1;
         value = value.substring(0, start) + value.substring(end);
       }
       else if (key === 'LEFT')
       {
-        start = start - 1;
+        start -= 1;
       }
       else if (key === 'RIGHT')
       {
-        start = start + 1;
+        start += 1;
       }
       else if (value.length < inputEl.maxLength)
       {
         value = value.substring(0, start) + key + value.substring(end);
-        start = start + 1;
+        start += 1;
       }
 
       inputEl.value = value;

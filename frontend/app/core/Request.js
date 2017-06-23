@@ -41,7 +41,7 @@ define([
     this.fragment = urlParts[3] || '';
 
     /**
-     * @type {object}
+     * @type {Object}
      */
     this.params = {};
 
@@ -51,7 +51,7 @@ define([
     this.query = {};
 
     /**
-     * @type {object}
+     * @type {Object}
      */
     this.rql = {};
 

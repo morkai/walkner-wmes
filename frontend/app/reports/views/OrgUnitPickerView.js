@@ -98,7 +98,7 @@ define([
       var $input = this.$id(type).val(this.model && this.model[type] || [].join(','));
       var data = [];
 
-      orgUnits.getAllByType(type).map(function(orgUnit)
+      orgUnits.getAllByType(type).forEach(function(orgUnit)
       {
         if (type === 'division' && orgUnit.get('type') !== 'prod')
         {

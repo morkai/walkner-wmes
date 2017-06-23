@@ -441,8 +441,8 @@ define([
       setUpUserSelect2(this.$id('suggestionOwners'), {multiple: true, textFormatter: formatUserSelect2Text})
         .select2('data', prepareOwners('suggestion', true));
 
-      setUpUserSelect2(this.$id('kaizenOwners'), {multiple: true, textFormatter: formatUserSelect2Text}).
-        select2('data', prepareOwners('kaizen', true));
+      setUpUserSelect2(this.$id('kaizenOwners'), {multiple: true, textFormatter: formatUserSelect2Text})
+        .select2('data', prepareOwners('kaizen', true));
 
       function prepareOwners(type, multi)
       {

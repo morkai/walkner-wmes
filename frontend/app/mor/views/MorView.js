@@ -820,7 +820,7 @@ define([
         trigger: 'manual',
         html: true,
         title: user.getLabel(),
-        content: this.getUserPopoverContent(user),
+        content: this.getUserPopoverContent(user)
       }).popover('show');
     },
 

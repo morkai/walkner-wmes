@@ -39,7 +39,7 @@ define([
     {
       if (!options.settings)
       {
-        throw new Error("settings option is required!");
+        throw new Error('settings option is required!');
       }
 
       this.settings = options.settings;

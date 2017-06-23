@@ -207,7 +207,7 @@ define([
     prepareTypeSeries: function()
     {
       var series = {
-        nearMiss:  {
+        nearMiss: {
           data: [],
           color: COLOR_NEAR_MISS
         }

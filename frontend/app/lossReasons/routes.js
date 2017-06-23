@@ -96,5 +96,4 @@ define([
   });
 
   router.map('/lossReasons/:id;delete', canManage, showDeleteFormPage.bind(null, LossReason));
-
 });

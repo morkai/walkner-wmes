@@ -1,5 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
+/* eslint-disable camelcase */
+
 define([
   'require',
   'underscore',
@@ -465,7 +467,7 @@ define([
 
       this.datum.forEach(function(datum)
       {
-        var last = datum.times.length -1;
+        var last = datum.times.length - 1;
 
         if (last > -1 && datum.times[last].ended === false)
         {
@@ -493,7 +495,7 @@ define([
           bottom: 0
         })
         .tickFormat({
-          format: d3.time.format("%H:%M"),
+          format: d3.time.format('%H:%M'),
           tickTime: d3.time.hours,
           tickNumber: 1,
           tickSize: 5

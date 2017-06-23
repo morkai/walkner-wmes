@@ -60,5 +60,4 @@ define([
   });
 
   router.map('/prodShiftOrders/:id;delete', canManage, createShowDeleteFormPage(ProdShiftOrder));
-
 });

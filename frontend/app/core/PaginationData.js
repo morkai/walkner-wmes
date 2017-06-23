@@ -56,7 +56,7 @@ define([
 
     sync: function()
     {
-      throw new Error("Not supported!");
+      throw new Error('Not supported!');
     },
 
     recalcAttrs: function()

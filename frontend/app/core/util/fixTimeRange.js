@@ -17,8 +17,6 @@ define([
 
   function fixEl($el, defaultTime, utc)
   {
-    /*jshint -W015*/
-
     var elMoment;
 
     if ($el.hasClass('form-group-datetime'))
@@ -48,7 +46,7 @@ define([
       {
         var parts = elValue.split(' ');
 
-        parts[0] = parts[0] + '-01';
+        parts[0] += '-01';
 
         elValue = parts.join(' ');
       }
@@ -154,7 +152,7 @@ define([
       utc: false
     });
 
-    var property = rqlQueryTerm.name === 'ge' ? 'from': 'to';
+    var property = rqlQueryTerm.name === 'ge' ? 'from' : 'to';
     var formMoment = (options.utc ? moment.utc : time.getMoment)(rqlQueryTerm.args[1]);
 
     if (type === 'date+time')

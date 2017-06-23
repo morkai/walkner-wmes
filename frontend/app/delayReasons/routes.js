@@ -75,5 +75,4 @@ define([
   });
 
   router.map('/delayReasons/:id;delete', canManage, showDeleteFormPage.bind(null, DelayReason));
-
 });

@@ -127,7 +127,7 @@ define([
         );
       }
 
-      var deferred = $.Deferred();
+      var deferred = $.Deferred(); // eslint-disable-line new-cap
       var next = function()
       {
         $.when(tree.folders.fetch({reset: true}), tree.files.fetch({reset: true}))

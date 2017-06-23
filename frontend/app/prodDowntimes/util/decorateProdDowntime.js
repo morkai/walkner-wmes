@@ -89,8 +89,8 @@ define([
 
     obj.subdivision = subdivision ? subdivision.getLabel() : '?';
     obj.prodFlow = prodFlow ? prodFlow.getLabel() : '?';
-    obj.mrpControllers =
-      Array.isArray(obj.mrpControllers) && obj.mrpControllers.length
+    obj.mrpControllers
+      = Array.isArray(obj.mrpControllers) && obj.mrpControllers.length
         ? obj.mrpControllers.join('; ')
         : '?';
 

@@ -378,7 +378,7 @@ define([
     {
       var rowEl = e.currentTarget;
 
-      while (true)
+      while (true) // eslint-disable-line no-constant-condition
       {
         rowEl = rowEl.previousElementSibling;
 
@@ -397,7 +397,7 @@ define([
 
       rowEl = e.currentTarget;
 
-      while (true)
+      while (true) // eslint-disable-line no-constant-condition
       {
         rowEl = rowEl.nextElementSibling;
 
@@ -432,8 +432,8 @@ define([
         };
       }).sort(function(a, b) { return a._id - b._id; });
 
-      var printersDeferred = $.Deferred();
-      var componentQtyDeferred = $.Deferred();
+      var printersDeferred = $.Deferred(); // eslint-disable-line new-cap
+      var componentQtyDeferred = $.Deferred(); // eslint-disable-line new-cap
 
       $.when(printersDeferred, componentQtyDeferred).done(function()
       {
@@ -448,7 +448,7 @@ define([
         viewport.showDialog(dialogView, t('purchaseOrders', 'printDialog:title'));
       });
 
-      qzPrint.findPrinters(function(err, printers)
+      qzPrint.findPrinters(function(error, printers)
       {
         view.printers = printers || [];
 
@@ -478,7 +478,7 @@ define([
 
           item.packageQty = Math.floor(item.remainingQty / componentQty);
           item.componentQty = componentQty;
-          item.remainingQty = item.remainingQty % componentQty;
+          item.remainingQty %= componentQty;
         });
 
         view.print.set({
@@ -513,7 +513,7 @@ define([
         };
       }).sort(function(a, b) { return a._id - b._id; });
 
-      qzPrint.findPrinters(function(err, printers)
+      qzPrint.findPrinters(function(error, printers)
       {
         var dialogView = new PurchaseOrderVendorPrintDialogView({
           model: selectedItems,

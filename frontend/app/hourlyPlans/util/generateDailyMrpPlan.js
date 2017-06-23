@@ -1,5 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
+/* eslint-disable curly */
+
 define([
   'underscore',
   'app/time',
@@ -22,8 +24,6 @@ define([
 
   return function generateDailyMrpPlan(plan, settings)
   {
-    /*jshint -W116*/
-
     if (generating)
     {
       if (debug) console.log('Already generating...', plan.id);
@@ -194,9 +194,8 @@ define([
 
       for (var lineCount = 2; lineCount <= availableLines.length; ++lineCount)
       {
-        /* jshint -W083 */
         var lines = [];
-        var candidates = splitTotalQty(qty, lineCount).map(function(partialQty, lineIndex)
+        var candidates = splitTotalQty(qty, lineCount).map(function(partialQty, lineIndex) // eslint-disable-line no-loop-func
         {
           var line = availableLines[lineIndex];
 
@@ -209,7 +208,7 @@ define([
         var incompleteOrderCount = 0;
         var rank = 0;
 
-        candidates.forEach(function(candidate)
+        candidates.forEach(function(candidate) // eslint-disable-line no-loop-func
         {
           allOrderCount += candidate.orders.length;
 
@@ -259,7 +258,6 @@ define([
 
           break;
         }
-        /* jshint +W083 */
       }
 
       all.sort(function(a, b)
@@ -431,10 +429,7 @@ define([
 
         orders.unshift(partialLineOrder);
       }
-      else
-      {
-        if (debug) console.log('no more room');
-      }
+      else if (debug) console.log('no more room');
     }
 
     function trySmallOrderOnLine(currentOrder, qty, line)

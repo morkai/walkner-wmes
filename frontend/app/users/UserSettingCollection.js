@@ -35,6 +35,8 @@ define([
             {
               return matches[1] + ':' + matches[2] + ' ' + matches[3];
             }
+
+            return null;
           })
           .filter(function(line) { return !!line; })
           .join('\n');

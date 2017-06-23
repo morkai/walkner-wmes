@@ -70,7 +70,7 @@ define([
     {
       if (!options.query)
       {
-        throw new Error("query option is required!");
+        throw new Error('query option is required!');
       }
 
       this.query = options.query;
@@ -155,8 +155,6 @@ define([
 
     parse: function(report)
     {
-      /*jshint maxdepth:999*/
-
       var attributes = {
         prodTasks: report.options.prodTasks,
         raw: report.data,

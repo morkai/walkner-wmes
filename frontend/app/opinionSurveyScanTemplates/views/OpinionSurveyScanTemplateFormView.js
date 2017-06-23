@@ -212,7 +212,7 @@ define([
           restrict: {
             restriction: 'parent',
             endOnly: false,
-            elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+            elementRect: {top: 0, left: 0, bottom: 1, right: 1}
           },
           onstart: function()
           {
@@ -599,6 +599,10 @@ define([
     },
 
     /**
+     * @param {number} x1
+     * @param {number} y1
+     * @param {number} x2
+     * @param {number} y2
      * @see http://stackoverflow.com/a/5912283
      */
     drawLine: function(x1, y1, x2, y2)

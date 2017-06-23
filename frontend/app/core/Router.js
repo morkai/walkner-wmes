@@ -85,9 +85,9 @@ define([
 
   /**
    * @param {string} url
-   * @param {object} [options]
-   * @param {Boolean=false} options.trigger
-   * @param {Boolean=false} options.replace
+   * @param {Object} [options]
+   * @param {boolean} [options.trigger=false]
+   * @param {boolean} [options.replace=false]
    */
   Router.prototype.navigate = function(url, options)
   {
@@ -258,8 +258,8 @@ define([
     var isRegExp = false;
     var patternRegExp = pattern.replace(escapeRegExp, '\\$&');
 
-    patternRegExp =
-      patternRegExp.replace(pathParamRegExp, function(match, op, param)
+    patternRegExp
+      = patternRegExp.replace(pathParamRegExp, function(match, op, param)
     {
       isRegExp = true;
 

@@ -198,7 +198,6 @@ define([
         {
           $easyNull.prop('checked', false);
         }
-
       }
       else if (/difficulties/.test(tbodyId))
       {

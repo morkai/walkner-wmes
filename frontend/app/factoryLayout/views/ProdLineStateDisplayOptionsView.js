@@ -115,7 +115,7 @@ define([
       return {
         statuses: this.model.get('statuses'),
         states: this.model.get('states'),
-        blacklisted: this.model.get('blacklisted') ? '1': '0',
+        blacklisted: this.model.get('blacklisted') ? '1' : '0',
         from: _.isNumber(from) ? time.format(from, 'YYYY-MM-DD') : '',
         to: _.isNumber(to) ? time.format(to, 'YYYY-MM-DD') : '',
         shifts: this.model.get('shifts')
@@ -164,7 +164,7 @@ define([
 
       if (shifts.length === 0)
       {
-        shifts = ['1', '2' , '3'];
+        shifts = ['1', '2', '3'];
 
         $shifts.find('input').prop('checked', true);
         buttonGroup.toggle($shifts);

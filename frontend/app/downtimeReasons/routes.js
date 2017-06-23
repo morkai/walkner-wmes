@@ -89,5 +89,4 @@ define([
   });
 
   router.map('/downtimeReasons/:id;delete', canManage, showDeleteFormPage.bind(null, DowntimeReason));
-
 });

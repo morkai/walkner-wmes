@@ -129,7 +129,7 @@ define([
 
       seconds = 0;
 
-      while ((match = re.exec(time)))
+      while ((match = re.exec(time)) !== null) // eslint-disable-line no-cond-assign
       {
         seconds += parseFloat(match[1]) * multipliers[match[2].toLowerCase()];
       }
@@ -157,7 +157,7 @@ define([
     if (hours > 0)
     {
       str += compact ? (rpad0(hours, 2) + ':') : (' ' + hours + 'h');
-      time = time % 3600;
+      time %= 3600;
     }
     else if (compact)
     {
@@ -169,7 +169,7 @@ define([
     if (minutes > 0)
     {
       str += compact ? (rpad0(minutes, 2) + ':') : (' ' + minutes + 'min');
-      time = time % 60;
+      time %= 60;
     }
     else if (compact)
     {

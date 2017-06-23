@@ -204,7 +204,7 @@ define([
         return 'division';
       }
 
-      throw new Error("Unknown org unit type!");
+      throw new Error('Unknown org unit type!');
     },
     getChildType: function(orgUnitType)
     {
@@ -320,7 +320,7 @@ define([
 
       var orgUnit = this.getByTypeAndId('prodLine', prodLineId);
 
-      do
+      do // eslint-disable-line no-constant-condition
       {
         var parent = this.getParent(orgUnit);
 

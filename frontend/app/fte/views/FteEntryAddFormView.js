@@ -105,8 +105,8 @@ define([
 
         view.oudView.selectValue(model, orgUnit);
 
-        view.readonlyDivision =
-          !user.isAllowedTo(view.model.getPrivilegePrefix() + ':ALL') && userDivision;
+        view.readonlyDivision
+          = !user.isAllowedTo(view.model.getPrivilegePrefix() + ':ALL') && userDivision;
 
         view.oudView.$id('division').select2('readonly', view.readonlyDivision);
         view.oudView.$id(view.readonlyDivision ? 'subdivision' : 'division').select2('focus');

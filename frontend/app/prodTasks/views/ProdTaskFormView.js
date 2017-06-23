@@ -109,7 +109,6 @@ define([
       {
         this.$id('tags').select2('enable', true);
       }
-
     }
 
   });

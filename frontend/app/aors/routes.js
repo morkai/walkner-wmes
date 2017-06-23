@@ -81,5 +81,4 @@ define([
   });
 
   router.map('/aors/:id;delete', canManage, showDeleteFormPage.bind(null, Aor));
-
 });

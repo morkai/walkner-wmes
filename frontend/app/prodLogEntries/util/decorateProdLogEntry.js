@@ -48,8 +48,6 @@ define([
 
   return function(prodLogEntryModel)
   {
-    /*jshint -W015*/
-
     var prodLogEntry = prodLogEntryModel.toJSON();
     var logData = prodLogEntry.data;
     var dataKey = 'data:' + prodLogEntry.type;
@@ -180,11 +178,10 @@ define([
 
     if (prodLogEntry.prodShiftOrder)
     {
-      prodLogEntry.prodShiftOrder =
-        '<a href="#prodShiftOrders/' + prodLogEntry.prodShiftOrder._id + '">'
-          + prodLogEntry.prodShiftOrder.orderId
-          + ', ' + prodLogEntry.prodShiftOrder.operationNo
-          + '</a>';
+      prodLogEntry.prodShiftOrder = '<a href="#prodShiftOrders/' + prodLogEntry.prodShiftOrder._id + '">'
+        + prodLogEntry.prodShiftOrder.orderId
+        + ', ' + prodLogEntry.prodShiftOrder.operationNo
+        + '</a>';
     }
     else
     {

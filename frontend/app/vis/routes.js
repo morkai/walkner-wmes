@@ -11,5 +11,4 @@ define([
   'use strict';
 
   router.map('/vis/structure', viewport.loadPage.bind(viewport, 'app/vis/pages/StructureVisPage'));
-
 });

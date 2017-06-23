@@ -74,5 +74,4 @@ define([
   });
 
   router.map('/vendorNc12s/:id;delete', canManage, showDeleteFormPage.bind(null, VendorNc12));
-
 });

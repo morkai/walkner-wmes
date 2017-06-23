@@ -239,7 +239,7 @@ define([
 
     setHourlyPlan: function(division, date, shift, prodFlowToPlan)
     {
-      var deferred = $.Deferred();
+      var deferred = $.Deferred(); // eslint-disable-line new-cap
       var data = {
         division: division,
         date: date,
@@ -270,7 +270,7 @@ define([
 
             if (newValues)
             {
-              var deferred2 = $.Deferred();
+              var deferred2 = $.Deferred(); // eslint-disable-line new-cap
 
                 data = {
                 type: 'counts',

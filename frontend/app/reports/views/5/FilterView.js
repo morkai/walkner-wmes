@@ -80,8 +80,6 @@ define([
 
     getFromTimeByInterval: function(interval)
     {
-      /*jshint -W015*/
-
       var fromMoment = time.getMoment().minutes(0).seconds(0).milliseconds(0);
 
       switch (interval)

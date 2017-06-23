@@ -141,8 +141,6 @@ define([
 
     onSettingsUpdate: function(setting)
     {
-      /*jshint -W015*/
-
       if (!this.chart)
       {
         return;

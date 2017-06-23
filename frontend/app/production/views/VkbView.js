@@ -186,21 +186,21 @@ define([
       }
       else if (key === 'BACKSPACE')
       {
-        start = start - 1;
+        start -= 1;
         value = value.substring(0, start) + value.substring(end);
       }
       else if (key === 'LEFT')
       {
-        start = start - 1;
+        start -= 1;
       }
       else if (key === 'RIGHT')
       {
-        start = start + 1;
+        start += 1;
       }
       else if (!fieldEl.maxLength || fieldEl.maxLength === -1 || value.length < fieldEl.maxLength)
       {
         value = value.substring(0, start) + key + value.substring(end);
-        start = start + 1;
+        start += 1;
       }
 
       var valueChanged = fieldEl.value !== value;

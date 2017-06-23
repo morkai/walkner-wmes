@@ -66,5 +66,4 @@ define([
   });
 
   router.map('/prodTasks/:id;delete', canManage, showDeleteFormPage.bind(null, ProdTask));
-
 });

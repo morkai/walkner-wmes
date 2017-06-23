@@ -87,7 +87,7 @@ define([
         var matches;
         var times = [];
 
-        while ((matches = re.exec(e.target.value)) !== null)
+        while ((matches = re.exec(e.target.value)) !== null) // eslint-disable-line no-cond-assign
         {
           var duration = +matches[1] || 0;
 

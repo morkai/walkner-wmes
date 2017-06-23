@@ -76,5 +76,4 @@ define([
   });
 
   router.map('/mrpControllers/:id;delete', canManage, showDeleteFormPage.bind(null, MrpController));
-
 });

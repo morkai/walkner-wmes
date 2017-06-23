@@ -155,7 +155,7 @@ define([
         {
           operator = JSON.parse(decodeURIComponent(atob(req.query.operator)));
         }
-        catch (err) {}
+        catch (err) {} // eslint-disable-line no-empty
 
         return new KaizenOrderAddFormPage({
           model: new KaizenOrder(),
@@ -185,5 +185,4 @@ define([
   router.map('/kaizenOrders/:id;delete', canAccess, _.partial(showDeleteFormPage, KaizenOrder, _, _, {
     baseBreadcrumb: true
   }));
-
 });

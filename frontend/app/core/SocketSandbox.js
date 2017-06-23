@@ -17,7 +17,7 @@ define([
 
     /**
      * @private
-     * @type {object}
+     * @type {Object}
      */
     this.listeners = {
       destroy: []

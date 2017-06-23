@@ -9,8 +9,6 @@ define([
 
   return function prepareDateRange(elOrDateRange, setTime)
   {
-    /*jshint -W015*/
-
     var dateRange = typeof elOrDateRange === 'string' ? elOrDateRange : elOrDateRange.getAttribute('data-range');
     var fromMoment = time.getMoment().minutes(0).seconds(0).milliseconds(0);
     var toMoment;

@@ -155,11 +155,11 @@ define([
     prepareTotalSeries: function()
     {
       return {
-        suggestion:  {
+        suggestion: {
           data: [],
           color: COLOR_SUGGESTION
         },
-        kaizen:  {
+        kaizen: {
           data: [],
           color: COLOR_KAIZEN
         }

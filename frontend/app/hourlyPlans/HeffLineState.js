@@ -16,5 +16,4 @@ define([
     topicPrefix: 'heffLineStates'
 
   });
-
 });

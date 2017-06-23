@@ -76,5 +76,4 @@ define([
   });
 
   router.map('/prodLines/:id;delete', canManage, showDeleteFormPage.bind(null, ProdLine));
-
 });

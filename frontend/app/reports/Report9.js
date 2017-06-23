@@ -66,7 +66,7 @@ define([
 
     parse: function(report)
     {
-      report.groups[null] = {
+      report.groups.null = {
         _id: null,
         name: '???',
         cags: [],

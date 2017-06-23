@@ -107,8 +107,6 @@ define([
 
     selectValue: function(model, orgUnit)
     {
-      /*jshint -W015*/
-
       var selectFirst = !orgUnit;
 
       switch (orgUnit || this.options.orgUnit)

@@ -30,8 +30,6 @@ define([
       },
       'click a[data-range]': function(e)
       {
-        /*jshint -W015*/
-
         var dateRange = prepareDateRange(e.target);
 
         this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
@@ -91,8 +89,6 @@ define([
 
     getFromMomentForSelectedInterval: function()
     {
-      /*jshint -W015*/
-
       var fromMoment = time.getMoment().minutes(0).seconds(0).milliseconds(0);
 
       switch (this.getSelectedInterval())

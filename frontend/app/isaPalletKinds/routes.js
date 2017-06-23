@@ -80,5 +80,4 @@ define([
   });
 
   router.map('/isaPalletKinds/:id;delete', canManage, showDeleteFormPage.bind(null, IsaPalletKind));
-
 });

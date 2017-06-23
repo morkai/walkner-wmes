@@ -278,13 +278,11 @@ define([
     },
 
     /**
-     * @param {object} data
+     * @param {Object} data
      * @returns {boolean}
      */
-    matchOrgUnit: function(data)
+    matchOrgUnit: function(data) // eslint-disable-line no-unused-vars
     {
-      /*jshint unused:false*/
-
       // TODO
       return true;
     },

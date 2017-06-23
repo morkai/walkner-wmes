@@ -148,7 +148,7 @@ define([
       'mousedown #-shutdown': function(e) { this.startActionTimer('shutdown', e); },
       'touchstart #-shutdown': function() { this.startActionTimer('shutdown'); },
       'mouseup #-shutdown': function() { this.stopActionTimer('shutdown'); },
-      'touchend #-shutdown': function() { this.stopActionTimer('shutdown'); },
+      'touchend #-shutdown': function() { this.stopActionTimer('shutdown'); }
     },
 
     breadcrumbs: function()
@@ -229,8 +229,8 @@ define([
       viewport.msg.loading();
 
       var page = this;
-      var enableDeferred = $.Deferred();
-      var loadDeferred = $.Deferred();
+      var enableDeferred = $.Deferred(); // eslint-disable-line new-cap
+      var loadDeferred = $.Deferred(); // eslint-disable-line new-cap
 
       enableDeferred.done(function()
       {

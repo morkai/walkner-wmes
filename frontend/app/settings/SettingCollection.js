@@ -61,7 +61,7 @@ define([
         return next ? next.call(context) : null;
       }
 
-      var deferred = $.Deferred();
+      var deferred = $.Deferred(); // eslint-disable-line new-cap
       var req = this.fetch({reset: true});
 
       if (!next)
@@ -88,7 +88,7 @@ define([
 
       if (newValue === undefined)
       {
-        return $.Deferred().reject().promise();
+        return $.Deferred().reject().promise(); // eslint-disable-line new-cap
       }
 
       var setting = this.get(id);
@@ -97,7 +97,7 @@ define([
       {
         if (_.isEqual(setting.getValue(), newValue))
         {
-          return $.Deferred().resolve().promise();
+          return $.Deferred().resolve().promise(); // eslint-disable-line new-cap
         }
       }
       else

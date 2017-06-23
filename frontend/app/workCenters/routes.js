@@ -76,5 +76,4 @@ define([
   });
 
   router.map('/workCenters/:id;delete', canManage, showDeleteFormPage.bind(null, WorkCenter));
-
 });

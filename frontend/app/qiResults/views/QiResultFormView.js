@@ -14,7 +14,7 @@ define([
   'app/qiResults/dictionaries',
   '../QiResult',
   'app/qiResults/templates/form',
-  'app/qiResults/templates/correctiveActionFormRow',
+  'app/qiResults/templates/correctiveActionFormRow'
 ], function(
   _,
   $,

@@ -79,5 +79,4 @@ define([
   });
 
   router.map('/companies/:id;delete', canManage, showDeleteFormPage.bind(null, Company));
-
 });

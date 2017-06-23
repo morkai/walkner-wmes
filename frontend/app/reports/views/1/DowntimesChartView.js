@@ -104,8 +104,6 @@ define([
 
     updateExtremes: function()
     {
-      /*jshint eqnull:true*/
-
       if (this.$el.hasClass('is-fullscreen'))
       {
         this.chart.yAxis[0].setExtremes(null, null, true, false);

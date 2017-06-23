@@ -102,9 +102,9 @@ define([
   };
 
   /**
-   * @param {function|object|string|Array.<object|string>} breadcrumbs
+   * @param {function|object|string|Array.<Object|string>} breadcrumbs
    * @param {string|function} breadcrumbs.label
-   * @param {object} [context]
+   * @param {Object} [context]
    * @returns {PrintLayout}
    */
   PrintLayout.prototype.setBreadcrumbs = function(breadcrumbs, context)

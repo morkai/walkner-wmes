@@ -55,7 +55,7 @@
 		"accessor-pairs": 2,
 		"array-callback-return": 2,
 		"block-scoped-var": 2,
-		"complexity": [1, 20],
+		"complexity": [0, 20],
 		"consistent-return": 0,
 		"curly": [2, "all"],
 		"default-case": 0,
@@ -164,12 +164,12 @@
 			"allowBlockEnd": true
 		}],
 		"linebreak-style": [2, "unix"],
-		"max-nested-callbacks": [2, 3],
+		"max-nested-callbacks": [0, 3],
 		"new-cap": [2, {
 			"newIsCap": true,
 			"capIsNew": true,
 			"newIsCapExceptions": [],
-			"capIsNewExceptions": []
+			"capIsNewExceptions": ["Deferred"]
 		}],
 		"new-parens": 2,
 		"newline-after-var": [0, "always"],

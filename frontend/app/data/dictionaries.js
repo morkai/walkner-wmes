@@ -53,6 +53,6 @@ define([
     workCenters: workCenters,
     WORK_CENTERS: workCenters,
     prodLines: prodLines,
-    PROD_LINES: prodLines,
+    PROD_LINES: prodLines
   };
 });

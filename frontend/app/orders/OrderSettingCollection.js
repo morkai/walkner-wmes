@@ -186,7 +186,7 @@ define([
         var matchCount = 0;
         var match;
 
-        while ((match = re.exec(line)) !== null)
+        while ((match = re.exec(line)) !== null) // eslint-disable-line no-cond-assign
         {
           times[match[1].toUpperCase()] = parseFloat(match[2].replace(',', '.'));
           remaining = remaining.replace(match[0], '');

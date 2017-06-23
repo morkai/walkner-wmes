@@ -24,7 +24,7 @@ define([
     actions: function(layout)
     {
       return [
-        pageActions.export(layout, this, this.collection, false),
+        pageActions.export(layout, this, this.collection, false)
       ];
     }
 

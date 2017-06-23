@@ -75,7 +75,7 @@ define([
 
       while (shortScanResult.length < 13)
       {
-        shortScanResult = shortScanResult + ' ';
+        shortScanResult += ' ';
       }
 
       if (this.options.shortenScanResult)

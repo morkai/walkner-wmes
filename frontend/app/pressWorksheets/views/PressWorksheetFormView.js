@@ -781,8 +781,7 @@ define([
         this.checkPaintShopValidity();
       }
       else
-      {
-        if (targetEl)
+      if (targetEl)
         {
           this.checkOrderTimesValidity(targetEl);
         }
@@ -795,7 +794,6 @@ define([
             view.checkOrderTimesValidity(this);
           });
         }
-      }
     },
 
     checkPaintShopValidity: function()
