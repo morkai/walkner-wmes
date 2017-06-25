@@ -4,6 +4,7 @@ define([
   'jquery',
   'underscore',
   'js2form',
+  'select2',
   'app/i18n',
   'app/data/orgUnits',
   'app/core/View',
@@ -12,6 +13,7 @@ define([
   $,
   _,
   js2form,
+  select2,
   t,
   orgUnits,
   View,
@@ -167,14 +169,15 @@ define([
 
           return text;
         },
-        formatResult: function(item)
+        formatResult: function(item, $container, query, e)
         {
-          if (item.deactivated)
-          {
-            return '<span style="text-decoration: line-through">' + _.escape(item.text) + '</span>';
-          }
+          var html = [];
 
-          return _.escape(item.text);
+          html.push('<span style="text-decoration: ' + (item.deactivated ? 'line-through' : 'initial') + '">');
+          select2.util.markMatch(item.selection || item.text, query.term, html, e);
+          html.push('</span>');
+
+          return html.join('');
         }
       });
     }
