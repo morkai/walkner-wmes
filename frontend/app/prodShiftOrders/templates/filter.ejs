@@ -30,10 +30,7 @@
     <label for="<%- idPrefix %>-mrp"><%- t('prodShiftOrders', 'filter:mrp') %></label>
     <input id="<%- idPrefix %>-mrp" name="mrp" type="text" data-placeholder=" ">
   </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-prodLine"><%- t('prodShiftOrders', 'PROPERTY:prodLine') %></label>
-    <input id="<%- idPrefix %>-prodLine" name="prodLine" type="text" data-placeholder=" ">
-  </div>
+  <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
     <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('prodShiftOrders', 'filter:submit') %></span></button>

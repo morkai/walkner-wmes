@@ -6,9 +6,9 @@ define([
   'select2',
   'app/user',
   'app/data/mrpControllers',
-  'app/data/prodLines',
   'app/core/views/FilterView',
   'app/core/util/fixTimeRange',
+  'app/orgUnits/views/OrgUnitPickerView',
   'app/prodShiftOrders/templates/filter'
 ], function(
   _,
@@ -16,9 +16,9 @@ define([
   select2,
   user,
   mrpControllers,
-  prodLines,
   FilterView,
   fixTimeRange,
+  OrgUnitPickerView,
   filterTemplate
 ) {
   'use strict';
@@ -31,7 +31,6 @@ define([
       from: '',
       to: '',
       mrp: '',
-      prodLine: null,
       type: null,
       shift: 0,
       orderId: '',
@@ -88,11 +87,10 @@ define([
         formData.bom = filter.trim();
       },
       'orderData.bom.item': 'orderData.bom.nc12',
-      'prodLine': function(propertyName, term, formData)
+      'shift': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
-      },
-      'shift': 'prodLine'
+      }
     },
 
     events: _.assign({
@@ -123,12 +121,21 @@ define([
 
     }, FilterView.prototype.events),
 
+    initialize: function()
+    {
+      FilterView.prototype.initialize.apply(this, arguments);
+
+      this.setView('#' + this.idPrefix + '-orgUnit', new OrgUnitPickerView({
+        filterView: this
+      }));
+    },
+
     afterRender: function()
     {
       FilterView.prototype.afterRender.apply(this, arguments);
 
       this.$id('mrp').select2({
-        width: '325px',
+        width: '300px',
         multiple: true,
         allowClear: true,
         data: this.getApplicableMrps(),
@@ -156,33 +163,6 @@ define([
           return item.id;
         }
       });
-
-      this.$id('prodLine').select2({
-        width: '175px',
-        allowClear: !user.getDivision(),
-        data: this.getApplicableProdLines(),
-        formatResult: function(item, $container, query, e)
-        {
-          if (!item.id)
-          {
-            return e(item.text);
-          }
-
-          var html = [];
-
-          html.push('<span style="text-decoration: ' + (item.deactivatedAt ? 'line-through' : 'initial') + '">');
-          select2.util.markMatch(item.text, query.term, html, e);
-          html.push('</span>');
-
-          return html.join('');
-        },
-        formatSelection: function(item)
-        {
-          return item.deactivatedAt
-            ? ('<span style="text-decoration: line-through">' + item.id + '</span>')
-            : item.id;
-        }
-      });
     },
 
     getApplicableMrps: function()
@@ -196,18 +176,6 @@ define([
             text: mrp.get('description')
           };
         });
-    },
-
-    getApplicableProdLines: function()
-    {
-      return prodLines.getForCurrentUser().map(function(prodLine)
-      {
-        return {
-          id: prodLine.id,
-          text: prodLine.getLabel(),
-          deactivatedAt: prodLine.get('deactivatedAt')
-        };
-      });
     },
 
     serializeOrderId: function(selector)
@@ -334,7 +302,6 @@ define([
     {
       var timeRange = fixTimeRange.fromView(this, {defaultTime: '06:00'});
       var mrp = this.$id('mrp').val();
-      var prodLine = this.$id('prodLine').val();
       var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
 
       this.serializeOrderId(selector);
@@ -343,11 +310,6 @@ define([
       if (mrp && mrp.length)
       {
         selector.push({name: 'in', args: ['orderData.mrp', mrp.split(',')]});
-      }
-
-      if (prodLine && prodLine.length)
-      {
-        selector.push({name: 'eq', args: ['prodLine', prodLine]});
       }
 
       if (shift)
