@@ -1,16 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'app/data/prodLines',
   'app/core/views/FilterView',
   'app/core/util/fixTimeRange',
-  'app/core/util/idAndLabel',
+  'app/orgUnits/views/OrgUnitPickerView',
   'app/prodSerialNumbers/templates/filter'
 ], function(
-  prodLines,
   FilterView,
   fixTimeRange,
-  idAndLabel,
+  OrgUnitPickerView,
   template
 ) {
   'use strict';
@@ -22,7 +20,6 @@ define([
     defaultFormData: {
       _id: '',
       orderNo: '',
-      prodLine: '',
       scannedAt: ''
     },
 
@@ -35,23 +32,20 @@ define([
       {
         formData[propertyName] = term.args[1];
       },
-      'prodLine': function(propertyName, term, formData)
+      'orderNo': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
-      },
-      'orderNo': 'prodLine'
+      }
     },
 
-    afterRender: function()
+    initialize: function()
     {
-      FilterView.prototype.afterRender.call(this);
+      FilterView.prototype.initialize.apply(this, arguments);
 
-      this.$id('prodLine').select2({
-        width: '275px',
-        allowClear: true,
-        placeholder: ' ',
-        data: prodLines.map(idAndLabel)
-      });
+      this.setView('#' + this.idPrefix + '-orgUnit', new OrgUnitPickerView({
+        orgUnitTypes: ['prodLine'],
+        filterView: this
+      }));
     },
 
     serializeFormToQuery: function(selector)
@@ -68,7 +62,7 @@ define([
         selector.push({name: 'lt', args: ['scannedAt', timeRange.to]});
       }
 
-      ['_id', 'orderNo', 'prodLine'].forEach(function(p)
+      ['_id', 'orderNo'].forEach(function(p)
       {
         var value = this.$id(p).val().trim();
 
