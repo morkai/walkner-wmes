@@ -43,6 +43,7 @@ define([
       {
         var dialogView = new OrgUnitPickerDialogView({
           model: {
+            orgUnitTypes: this.options.orgUnitTypes,
             orgUnitType: this.model.type,
             orgUnitIds: _.pluck(this.model.units, 'id')
           }
