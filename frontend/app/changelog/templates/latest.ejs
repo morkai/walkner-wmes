@@ -1,53 +1,49 @@
-<h1>v0.114.0</h1>
-<h2><%- time.format('2017-06-18', 'LL') %></h2>
-<h3>Obserwacje</h3>
-<ul>
-  <li>Zmieniono kolumny 'Co zaobserwowano' oraz 'Ryzykowne warunki w miejscu pracy' na liście kart tak,
-    aby preferowały wyświetlanie 'Trudnych' wpisów.</li>
-  <li>Zmieniono filtr 'Trudne do zmiany' tak, aby wyszukiwał karty wg wpisów w tabeli 'Trudności zmian',
-    a nie w 'Obserwacje zachowań' i 'Ryzykowne warunki w miejscu pracy'.</li>
-  <li>Dodano nowy raport.</li>
-</ul>
+<h1>v0.114.1</h1>
+<h2><%- time.format('2017-06-25', 'LL') %></h2>
 <h3>ZPW</h3>
-<h3>Usprawnienia</h3>
 <ul>
-  <li>Dodano okres czasu 'Ostatnie dwa tygodnie' do filtrów raportów.</li>
-  <li>Dodano filtr 'Działy' do raportu 'Zaangażowanie'.</li>
-  <li>Dodano kolumny 'Obserwacje zachowań' oraz 'Minuty dla Bezpieczeństwa' do raportu 'Zaangażowanie'.</li>
+  <li>Usunięto pole 'Kategoria zachowania'.</li>
 </ul>
 <h3>Inspekcja Jakości</h3>
 <ul>
-  <li>Zmieniono domyślny filtr raportu 'Ilości' tak, aby pobierane były dane z ostatnich 6 miesięcy.</li>
-  <li>Zmieniono raporty tak, aby dezaktywowane Wydziały nie były wyświetlane.</li>
+  <li>Zmieniono algorytm obliczania 'Jakości wyrobu gotowego'
+    z <code>Ilość_niezgodnych_w_skontrolowanych / Ilość_niezgodnych</code> tylko wyników NOK
+    na <code>Ilość_niezgodnych_w_skontrolowanych / Ilość_skontrolowana</code> wszystkich wyników.</li>
 </ul>
 <h3>Nieprawidłowe zlecenia IPT</h3>
 <ul>
-  <li>Zmieniono kolumnę 'Komentarz IPT' tak, aby była pusta, jeżeli zawiera taką samą wartość jak kolumna
-    'Status IPT'.</li>
-  <li>Zmieniono kolumnę 'Data startu' tak, aby kolor tła zmieniał się tylko dla zleceń ze statusem 'Błąd'.</li>
-  <li>Zmieniono sprawdzanie zleceń tak, aby błędne zlecenia były automatycznie rozwiązywane, jeżeli otrzymają
-    status 'TECO'.</li>
-  <li>Zmieniono sprawdzanie zleceń tak, aby błędne zlecenia, których data startu została zmieniona na datę poza
-    sprawdzanym zakresem, były usuwane.</li>
+  <li>Poprawiono błąd powodujący nieusuwanie zleceń, których data startu została zmieniona na datę poza
+    sprawdzanym zakresem.</li>
+  <li>Zmieniono sprawdzanie zleceń tak, aby nieprawidłowe zlecenia, dla których zlecenie reszty działów nie istnieje
+    było usuwane.</li>
+  <li>Zmieniono sprawdzanie zleceń tak, aby odbywało się pomiędzy 05:00 a 21:00.</li>
+  <li>Dodano powiadamianie wszystkich Konstruktorów ETO o nieprawidłowych zleceniach z 12NC zaczynającym
+    się na <code>8</code>.</li>
 </ul>
 <h3>Formatka operatora</h3>
 <ul>
-  <li>Dodano możliwość filtrowania listy przestojów i obszarów odpowiedzialności podczas rozpoczynania nowego
-    przestoju w trybie dotykowym.</li>
+  <li>Zmieniono rozpoczynanie nowego zlecenia tak, aby wymagane było podanie ilości osób.</li>
 </ul>
 <h3>Dane produkcyjne > Zlecenia</h3>
 <ul>
-  <li>Zmieniono filtr 'Nr/12NC zleceń' tak, aby można było wyszukać kilka zleceń na raz podając listę numerów zleceń
-    oddzielonych przecinkiem.</li>
-  <li>Dodano filtr 'Komponenty' umożliwiający wyszukiwanie zleceń wg numeru lub 12NC komponentów.</li>
+  <li>Zmieniono eksportowanie danych tak, aby zawierało dodatkowo: Datę zmiany, Numer zmiany oraz Wydajność.</li>
+  <li>Zmieniono filtr 'Linia produkcyjna' na uniwersalny filtr 'Jednostka organizacyjna'.</li>
 </ul>
-<h3>Użytkownicy</h3>
+<h3>Dane produkcyjne > Historia operacji</h3>
+<h3>Dane produkcyjne > Zmiany</h3>
+<h3>Dane produkcyjne > Przestoje</h3>
+<h3>Dane produkcyjne > Żądania zmian</h3>
+<h3>Dane produkcyjne > Numery seryjne</h3>
 <ul>
-  <li>Zmieniono przycisk kopiowania uprawnień użytkownika tak, aby działał nawet jak w przeglądarce nie ma technologii
-    Flash.</li>
+  <li>Zmieniono eksportowanie danych tak, aby zawierało dodatkowo: Datę zmiany, Numer zmiany oraz Wydajność.</li>
+  <li>Zmieniono filtr 'Linia produkcyjna' na uniwersalny filtr 'Jednostka organizacyjna'.</li>
 </ul>
-<h3>Inne</h3>
+<h3>Zlecenia reszty działów</h3>
 <ul>
-  <li>Poprawiono błąd w polach wyszukiwania użytkowników powodujący niepreferowanie użytkowników z firmy Philips,
-    w przypadku wykrycia zduplikowanego użytkownika.</li>
+  <li>Zmieniono importowanie zleceń tak, aby usuwane były zlecenia, które nie znajdują się już w aktualnym zrzucie
+    (bo data startu została zmieniona na datę poza importowanym zakresem).</li>
+</ul>
+<h3>Baza testów</h3>
+<ul>
+  <li>Dodano wsparcie dla importu ustawień klientów.</li>
 </ul>

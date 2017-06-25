@@ -312,6 +312,15 @@ app/orderStatuses/assets/main.css
 ----------------
 app/orderStatuses/assets/main.css
 
+app/orgUnits/assets/main.css
+----------------
+app/orgUnits/assets/./picker.css
+app/orgUnits/assets/main.css
+
+app/orgUnits/assets/picker.css
+----------------
+app/orgUnits/assets/picker.css
+
 app/paintShop/assets/main.css
 ----------------
 app/paintShop/assets/main.css
@@ -585,6 +594,7 @@ assets/../vendor/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.
 assets/../vendor/highlight/styles/monokai.css
 assets/./select2.css
 assets/../app/core/assets/main.css
+assets/../app/orgUnits/assets/main.css
 assets/../app/settings/assets/main.css
 assets/../app/dashboard/assets/main.css
 assets/../app/events/assets/main.css
@@ -801,7 +811,7 @@ app/data/companies.js
 app/prodFunctions/ProdFunction.js
 app/prodFunctions/ProdFunctionCollection.js
 app/data/prodFunctions.js
-app/data/views/renderOrgUnitPath.js
+app/orgUnits/util/renderOrgUnitPath.js
 app/users/util/decorateUser.js
 app/users/User.js
 app/users/UserCollection.js
@@ -929,6 +939,13 @@ app/core/util/buttonGroup.js
 app/core/templates/filterLimit.js
 app/core/views/FilterView.js
 app/core/util/fixTimeRange.js
+app/orgUnits/templates/pickerDialog.js
+app/orgUnits/views/OrgUnitPickerDialogView.js
+app/orgUnits/templates/pickerButton.js
+app/nls/orgUnits.js
+app/nls/pl/orgUnits.js
+i18n!app/nls/orgUnits
+app/orgUnits/views/OrgUnitPickerView.js
 app/prodDowntimes/templates/filter.js
 app/prodDowntimes/views/ProdDowntimeFilterView.js
 app/core/templates/listPage.js
@@ -1264,7 +1281,7 @@ app/core/util/matchesProdLine.js
 app/data/prodLog.js
 app/core/util/getShiftEndDate.js
 app/orders/util/resolveProductName.js
-app/data/views/renderOrgUnitPath.js
+app/orgUnits/util/renderOrgUnitPath.js
 app/core/util/getShiftStartInfo.js
 app/core/templates/userInfo.js
 app/prodShiftOrders/util/decorateProdShiftOrder.js
@@ -1392,7 +1409,7 @@ app/data/orgUnits.js
 app/core/util/getShiftStartInfo.js
 app/data/prodLog.js
 app/core/util/getShiftEndDate.js
-app/data/views/renderOrgUnitPath.js
+app/orgUnits/util/renderOrgUnitPath.js
 app/core/templates/userInfo.js
 app/orders/util/resolveProductName.js
 app/prodDowntimes/util/decorateProdDowntimeChange.js
@@ -1723,7 +1740,7 @@ app/data/companies.js
 app/prodFunctions/ProdFunction.js
 app/prodFunctions/ProdFunctionCollection.js
 app/data/prodFunctions.js
-app/data/views/renderOrgUnitPath.js
+app/orgUnits/util/renderOrgUnitPath.js
 app/users/util/decorateUser.js
 app/users/User.js
 app/users/UserCollection.js

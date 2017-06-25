@@ -1,4 +1,59 @@
 <div class="hidden">
+  <h1>v0.114.0</h1>
+  <h2><%- time.format('2017-06-18', 'LL') %></h2>
+  <h3>Obserwacje</h3>
+  <ul>
+    <li>Zmieniono kolumny 'Co zaobserwowano' oraz 'Ryzykowne warunki w miejscu pracy' na liście kart tak,
+      aby preferowały wyświetlanie 'Trudnych' wpisów.</li>
+    <li>Zmieniono filtr 'Trudne do zmiany' tak, aby wyszukiwał karty wg wpisów w tabeli 'Trudności zmian',
+      a nie w 'Obserwacje zachowań' i 'Ryzykowne warunki w miejscu pracy'.</li>
+    <li>Dodano nowy raport.</li>
+  </ul>
+  <h3>ZPW</h3>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Dodano okres czasu 'Ostatnie dwa tygodnie' do filtrów raportów.</li>
+    <li>Dodano filtr 'Działy' do raportu 'Zaangażowanie'.</li>
+    <li>Dodano kolumny 'Obserwacje zachowań' oraz 'Minuty dla Bezpieczeństwa' do raportu 'Zaangażowanie'.</li>
+  </ul>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Zmieniono domyślny filtr raportu 'Ilości' tak, aby pobierane były dane z ostatnich 6 miesięcy.</li>
+    <li>Zmieniono raporty tak, aby dezaktywowane Wydziały nie były wyświetlane.</li>
+  </ul>
+  <h3>Nieprawidłowe zlecenia IPT</h3>
+  <ul>
+    <li>Zmieniono kolumnę 'Komentarz IPT' tak, aby była pusta, jeżeli zawiera taką samą wartość jak kolumna
+      'Status IPT'.</li>
+    <li>Zmieniono kolumnę 'Data startu' tak, aby kolor tła zmieniał się tylko dla zleceń ze statusem 'Błąd'.</li>
+    <li>Zmieniono sprawdzanie zleceń tak, aby błędne zlecenia były automatycznie rozwiązywane, jeżeli otrzymają
+      status 'TECO'.</li>
+    <li>Zmieniono sprawdzanie zleceń tak, aby błędne zlecenia, których data startu została zmieniona na datę poza
+      sprawdzanym zakresem, były usuwane.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Dodano możliwość filtrowania listy przestojów i obszarów odpowiedzialności podczas rozpoczynania nowego
+      przestoju w trybie dotykowym.</li>
+  </ul>
+  <h3>Dane produkcyjne > Zlecenia</h3>
+  <ul>
+    <li>Zmieniono filtr 'Nr/12NC zleceń' tak, aby można było wyszukać kilka zleceń na raz podając listę numerów zleceń
+      oddzielonych przecinkiem.</li>
+    <li>Dodano filtr 'Komponenty' umożliwiający wyszukiwanie zleceń wg numeru lub 12NC komponentów.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Zmieniono przycisk kopiowania uprawnień użytkownika tak, aby działał nawet jak w przeglądarce nie ma technologii
+      Flash.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd w polach wyszukiwania użytkowników powodujący niepreferowanie użytkowników z firmy Philips,
+      w przypadku wykrycia zduplikowanego użytkownika.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.113.0</h1>
   <h2><%- time.format('2017-06-11', 'LL') %></h2>
   <h3>Matryca odpowiedzialności</h3>
