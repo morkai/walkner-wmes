@@ -1,0 +1,13 @@
+<form class="orgUnits-picker-dialog">
+  <% orgUnitTypes.forEach(function(orgUnitType) { %>
+  <div class="form-group">
+    <label class="radio-inline"><input type="radio" name="orgUnitType" value="<%- orgUnitType %>"> <%- t('core', 'ORG_UNIT:' + orgUnitType) %></label>
+    <input id="<%- idPrefix %>-<%- orgUnitType %>" class="orgUnits-picker-orgUnits" name="<%- orgUnitType %>" type="text">
+  </div>
+  <% }) %>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('orgUnits', 'picker:dialog:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+    <button id="<%- idPrefix %>-deactivated" type="button" class="btn btn-default orgUnits-picker-deactivated <%- deactivated ? 'active' : '' %>"><%- t('orgUnits', 'picker:dialog:deactivated') %></button>
+  </div>
+</form>

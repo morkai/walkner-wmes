@@ -7,6 +7,7 @@
 @import url("../vendor/highlight/styles/monokai.css");
 @import url("./select2.css");
 @import url("../app/core/assets/main.css");
+@import url("../app/orgUnits/assets/main.css");
 @import url("../app/settings/assets/main.css");
 @import url("../app/dashboard/assets/main.css");
 @import url("../app/events/assets/main.css");

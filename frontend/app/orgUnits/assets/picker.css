@@ -1,0 +1,16 @@
+.orgUnits-picker > .btn-group {
+  display: block;
+}
+.orgUnits-picker > .btn-group > .btn:first-child {
+  width: 235px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.orgUnits-picker-dialog > .form-actions {
+  display: flex;
+}
+.orgUnits-picker-deactivated {
+  margin-left: auto;
+}

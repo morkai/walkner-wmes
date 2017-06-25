@@ -161,6 +161,8 @@ define([
       this.copyPopulateTerms(selector);
       this.serializeFormToQuery(selector, rqlQuery);
 
+      this.trigger('filtering', selector, rqlQuery);
+
       rqlQuery.selector = {name: 'and', args: selector};
       rqlQuery.skip = 0;
 

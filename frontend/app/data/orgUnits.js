@@ -21,6 +21,7 @@ define([
     'division': 'subdivision',
     'subdivision': 'mrpController',
     'mrpController': 'prodFlow',
+    'mrpControllers': 'prodFlow',
     'prodFlow': 'workCenter',
     'workCenter': 'prodLine',
     'prodLine': null
@@ -31,6 +32,7 @@ define([
     'workCenter': 'prodFlow',
     'prodFlow': 'mrpController',
     'mrpController': 'subdivision',
+    'mrpControllers': 'subdivision',
     'subdivision': 'division',
     'division': null
   };
@@ -39,6 +41,7 @@ define([
     'division': divisions,
     'subdivision': subdivisions,
     'mrpController': mrpControllers,
+    'mrpControllers': mrpControllers,
     'prodFlow': prodFlows,
     'workCenter': workCenters,
     'prodLine': prodLines

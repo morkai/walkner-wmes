@@ -266,6 +266,7 @@
   "ORG_UNIT:division": "Wydział",
   "ORG_UNIT:subdivision": "Dział",
   "ORG_UNIT:mrpController": "Kontroler MRP",
+  "ORG_UNIT:mrpControllers": "Kontroler MRP",
   "ORG_UNIT:prodFlow": "Przepływ",
   "ORG_UNIT:workCenter": "WorkCenter",
   "ORG_UNIT:prodLine": "Linia montażowa",

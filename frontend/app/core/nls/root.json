@@ -260,6 +260,7 @@
     "ORG_UNIT:division": "Division",
     "ORG_UNIT:subdivision": "Subdivision",
     "ORG_UNIT:mrpController": "MRP Controller",
+    "ORG_UNIT:mrpControllers": "MRP Controller",
     "ORG_UNIT:prodFlow": "Production flow",
     "ORG_UNIT:workCenter": "WorkCenter",
     "ORG_UNIT:prodLine": "Production line",

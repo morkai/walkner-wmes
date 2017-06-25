@@ -2,15 +2,15 @@
 
 define([
   'app/user',
-  'app/data/prodLines',
   'app/core/views/FilterView',
   'app/core/util/fixTimeRange',
+  'app/orgUnits/views/OrgUnitPickerView',
   'app/prodShifts/templates/filter'
 ], function(
   user,
-  prodLines,
   FilterView,
   fixTimeRange,
+  OrgUnitPickerView,
   filterTemplate
 ) {
   'use strict';
@@ -20,8 +20,7 @@ define([
     template: filterTemplate,
 
     defaultFormData: {
-      createdAt: '',
-      prodLine: null,
+      date: '',
       shift: 0
     },
 
@@ -30,45 +29,25 @@ define([
       {
         fixTimeRange.toFormData(formData, term, 'date');
       },
-      'prodLine': function(propertyName, term, formData)
+      'shift': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
-      },
-      'shift': 'prodLine'
+      }
     },
 
-    afterRender: function()
+    initialize: function()
     {
-      FilterView.prototype.afterRender.call(this);
+      FilterView.prototype.initialize.apply(this, arguments);
 
-      this.$id('prodLine').select2({
-        width: '275px',
-        allowClear: !user.getDivision(),
-        data: this.getApplicableProdLines()
-      });
-    },
-
-    getApplicableProdLines: function()
-    {
-      return prodLines.getForCurrentUser().map(function(prodLine)
-      {
-        return {
-          id: prodLine.id,
-          text: prodLine.getLabel()
-        };
-      });
+      this.setView('#' + this.idPrefix + '-orgUnit', new OrgUnitPickerView({
+        filterView: this
+      }));
     },
 
     serializeFormToQuery: function(selector)
     {
       var timeRange = fixTimeRange.fromView(this);
-      var prodLine = this.$id('prodLine').val();
-      var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
-
-      if (prodLine && prodLine.length)
-      {
-        selector.push({name: 'eq', args: ['prodLine', prodLine]});
-      }
+      var shift = parseInt(this.$('input[name="shift"]:checked').val(), 10);
 
       if (shift)
       {

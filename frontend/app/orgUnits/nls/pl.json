@@ -1,0 +1,7 @@
+{
+  "picker:label": "Jednostka organizacyjna",
+  "picker:any": "Dowolne",
+  "picker:dialog:title": "Jednostki organizacyjne",
+  "picker:dialog:submit": "Wybierz jednostki organizacyjne",
+  "picker:dialog:deactivated": "Dezaktywowane"
+}
