@@ -8,6 +8,7 @@ define([
   'app/data/downtimeReasons',
   'app/core/views/FilterView',
   'app/core/util/fixTimeRange',
+  'app/orgUnits/views/OrgUnitPickerView',
   'app/prodDowntimes/templates/filter'
 ], function(
   _,
@@ -17,6 +18,7 @@ define([
   downtimeReasons,
   FilterView,
   fixTimeRange,
+  OrgUnitPickerView,
   filterTemplate
 ) {
   'use strict';
@@ -25,11 +27,11 @@ define([
 
     template: filterTemplate,
 
-    events: _.extend({}, FilterView.prototype.events, {
+    events: _.extend({
 
       'change #-alerts': 'toggleStatus'
 
-    }),
+    }, FilterView.prototype.events),
 
     defaultFormData: function()
     {
@@ -39,8 +41,7 @@ define([
         aorIn: true,
         reason: null,
         reasonIn: true,
-        status: null,
-        orgUnit: null
+        status: null
       };
     },
 
@@ -66,37 +67,25 @@ define([
       {
         formData.status = [].concat(term.args[1]);
       },
-      'division': function(propertyName, term, formData)
-      {
-        formData.orgUnit = term.args[1];
-      },
       'alerts.active': function(propertyName, term, formData)
       {
         formData.alerts = 1;
       },
-      'reason': 'aor',
-      'subdivision': 'division',
-      'prodFlow': 'division'
+      'reason': 'aor'
+    },
+
+    initialize: function()
+    {
+      FilterView.prototype.initialize.apply(this, arguments);
+
+      this.setView('#' + this.idPrefix + '-orgUnit', new OrgUnitPickerView({
+        filterView: this
+      }));
     },
 
     afterRender: function()
     {
       FilterView.prototype.afterRender.call(this);
-
-      this.$id('orgUnit').select2({
-        width: '256px',
-        allowClear: !user.getDivision() || user.isAllowedTo('PROD_DOWNTIMES:ALL'),
-        data: this.getApplicableOrgUnits(),
-        formatSelection: function(orgUnit)
-        {
-          if (orgUnit.type === 'subdivision')
-          {
-            return orgUnit.model.get('division') + ' \\ ' + orgUnit.text;
-          }
-
-          return orgUnit.text;
-        }
-      });
 
       this.$id('aor').select2({
         width: '256px',
@@ -137,86 +126,9 @@ define([
       this.toggleStatus();
     },
 
-    getApplicableOrgUnits: function()
-    {
-      var userOrgUnits = [];
-      var userDivision = user.getDivision();
-      var userSubdivision = user.getSubdivision();
-      var canAccessAll = user.isAllowedTo('PROD_DOWNTIMES:ALL');
-
-      if (!canAccessAll && userDivision)
-      {
-        userOrgUnits.push({
-          disabled: !!userSubdivision,
-          id: userDivision.id,
-          text: userDivision.getLabel(),
-          type: 'division',
-          model: userDivision,
-          css: 'prodDowntime-filter-division'
-        });
-      }
-
-      var view = this;
-
-      if (!canAccessAll && userSubdivision)
-      {
-        this.pushApplicableOrgUnitsForSubdivision(userOrgUnits, userSubdivision);
-      }
-      else if (!canAccessAll && userDivision)
-      {
-        orgUnits.getChildren(userDivision).forEach(function(subdivision)
-        {
-          view.pushApplicableOrgUnitsForSubdivision(userOrgUnits, subdivision);
-        });
-      }
-      else
-      {
-        orgUnits.getAllDivisions().forEach(function(division)
-        {
-          userOrgUnits.push({
-            id: division.id,
-            text: division.getLabel(),
-            type: 'division',
-            model: division,
-            css: 'prodDowntime-filter-division'
-          });
-
-          orgUnits.getChildren(division).forEach(function(subdivision)
-          {
-            view.pushApplicableOrgUnitsForSubdivision(userOrgUnits, subdivision);
-          });
-        });
-      }
-
-      return userOrgUnits;
-    },
-
-    pushApplicableOrgUnitsForSubdivision: function(userOrgUnits, subdivision)
-    {
-      userOrgUnits.push({
-        id: subdivision.id,
-        text: subdivision.getLabel(),
-        type: 'subdivision',
-        model: subdivision,
-        css: 'prodDowntime-filter-subdivision'
-      });
-
-      orgUnits.getProdFlowsForSubdivision(subdivision).forEach(function(prodFlow)
-      {
-        userOrgUnits.push({
-          id: prodFlow.id,
-          text: prodFlow.getLabel(),
-          type: 'prodFlow',
-          model: prodFlow,
-          css: 'prodDowntime-filter-prodFlow'
-        });
-      });
-    },
-
     serializeFormToQuery: function(selector)
     {
       var timeRange = fixTimeRange.fromView(this, {defaultTime: '06:00'});
-      var orgUnit = this.$id('orgUnit').select2('data');
       var aor = this.$id('aor').select2('val');
       var aorIn = this.$id('aorIn').prop('checked');
       var reason = this.$id('reason').select2('val');
@@ -263,11 +175,6 @@ define([
       else if (reason.length > 1)
       {
         selector.push({name: reasonIn ? 'in' : 'nin', args: ['reason', reason]});
-      }
-
-      if (orgUnit)
-      {
-        selector.push({name: 'eq', args: [orgUnit.type, orgUnit.id]});
       }
     },
 

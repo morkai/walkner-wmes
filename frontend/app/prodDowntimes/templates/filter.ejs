@@ -1,4 +1,4 @@
-<form class="well filter-form is-vertical">
+<form class="well filter-form is-vertical prodDowntimes-filter">
   <div class="form-group">
     <label for="<%- idPrefix %>-from-date"><%- t('core', 'filter:date:from') %></label>
     <div id="<%- idPrefix %>-from" class="form-group-datetime">
@@ -13,10 +13,7 @@
       <input id="<%- idPrefix %>-to-time" class="form-control" name="to-time" type="time" placeholder="hh:mm">
     </div>
   </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-orgUnit"><%- t('prodDowntimes', 'PROPERTY:orgUnit') %></label>
-    <input id="<%- idPrefix %>-orgUnit" name="orgUnit" type="text" data-placeholder="<%- t('prodDowntimes', 'filter:placeholder:orgUnit') %>">
-  </div>
+  <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>
   <div class="form-group">
     <label for="<%- idPrefix %>-aor">
       <input id="<%- idPrefix %>-aorIn" class="filter-inLabel" name="aorIn" type="checkbox" value="true" title="<%- t('prodDowntimes', 'filter:tooltip:in') %>">

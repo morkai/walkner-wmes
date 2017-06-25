@@ -1,11 +1,5 @@
-.prodDowntime-filter-division.select2-disabled {
-  background-color: transparent;
-}
-.prodDowntime-filter-subdivision {
-  padding-left: 15px;
-}
-.prodDowntime-filter-prodFlow {
-  padding-left: 30px;
+.prodDowntimes-filter .orgUnits-picker > .btn-group > .btn:first-child {
+  width: 214px;
 }
 .page[data-id="prodDowntimeList"] .filter-container {
   float: left;
