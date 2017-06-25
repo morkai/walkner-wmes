@@ -4,7 +4,7 @@ define([
   'app/time',
   'app/i18n',
   'app/data/divisions',
-  'app/data/views/renderOrgUnitPath',
+  'app/orgUnits/util/renderOrgUnitPath',
   'app/core/util/bindLoadingMessage',
   'app/core/View',
   '../HourlyPlan',

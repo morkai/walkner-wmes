@@ -8,7 +8,7 @@ define([
   'app/data/mrpControllers',
   'app/data/prodFlows',
   'app/data/prodLines',
-  'app/data/views/renderOrgUnitPath',
+  'app/orgUnits/util/renderOrgUnitPath',
   'app/core/util/getShiftStartInfo',
   'app/core/templates/userInfo',
   'app/orders/util/resolveProductName'

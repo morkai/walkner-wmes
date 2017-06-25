@@ -7,7 +7,7 @@ define([
   'app/time',
   'app/data/divisions',
   'app/data/subdivisions',
-  'app/data/views/OrgUnitDropdownsView',
+  'app/orgUnits/views/OrgUnitDropdownsView',
   'app/core/Model',
   'app/core/View',
   'app/core/util/getShiftStartInfo',

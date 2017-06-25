@@ -11,7 +11,7 @@ define([
   'app/data/prodFlows',
   'app/data/prodLines',
   'app/data/downtimeReasons',
-  'app/data/views/renderOrgUnitPath',
+  'app/orgUnits/util/renderOrgUnitPath',
   'app/core/templates/userInfo',
   'app/orders/util/resolveProductName',
   './decorateProdDowntimeChange'

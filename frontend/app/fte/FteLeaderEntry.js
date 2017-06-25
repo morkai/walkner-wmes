@@ -6,7 +6,7 @@ define([
   '../time',
   '../data/subdivisions',
   '../data/prodFunctions',
-  '../data/views/renderOrgUnitPath',
+  '../orgUnits/util/renderOrgUnitPath',
   '../core/Model',
   './util/isEditable'
 ], function(

@@ -6,7 +6,7 @@ define([
   'app/i18n',
   'app/highcharts',
   'app/core/View',
-  'app/data/views/renderOrgUnitPath',
+  'app/orgUnits/util/renderOrgUnitPath',
   'app/reports/util/formatTooltipHeader'
 ], function(
   _,

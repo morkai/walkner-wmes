@@ -5,7 +5,7 @@ define([
   'app/i18n',
   'app/user',
   'app/data/divisions',
-  'app/data/views/renderOrgUnitPath',
+  'app/orgUnits/util/renderOrgUnitPath',
   'app/core/views/ListView'
 ], function(
   time,

@@ -7,7 +7,7 @@ define([
   'app/data/prodFunctions',
   'app/data/divisions',
   'app/data/subdivisions',
-  'app/data/views/renderOrgUnitPath'
+  'app/orgUnits/util/renderOrgUnitPath'
 ], function(
   t,
   aors,

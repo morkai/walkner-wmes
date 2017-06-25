@@ -2,7 +2,7 @@
 
 define([
   'app/core/views/DetailsView',
-  'app/data/views/renderOrgUnitPath',
+  'app/orgUnits/util/renderOrgUnitPath',
   'app/subdivisions/templates/details'
 ], function(
   DetailsView,

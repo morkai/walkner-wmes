@@ -6,7 +6,7 @@ define([
   '../data/aors',
   '../data/downtimeReasons',
   '../data/orgUnits',
-  '../data/views/renderOrgUnitPath',
+  '../orgUnits/util/renderOrgUnitPath',
   '../core/Model'
 ], function(
   _,

@@ -5,7 +5,7 @@ define([
   'app/viewport',
   'app/core/views/ListView',
   'app/data/prodLines',
-  'app/data/views/renderOrgUnitPath'
+  'app/orgUnits/util/renderOrgUnitPath'
 ], function(
   user,
   viewport,

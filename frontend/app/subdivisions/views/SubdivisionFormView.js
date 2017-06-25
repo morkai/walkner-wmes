@@ -6,7 +6,7 @@ define([
   'app/time',
   'app/data/aors',
   'app/data/downtimeReasons',
-  'app/data/views/OrgUnitDropdownsView',
+  'app/orgUnits/views/OrgUnitDropdownsView',
   'app/core/views/FormView',
   'app/core/util/idAndLabel',
   'app/subdivisions/templates/form',

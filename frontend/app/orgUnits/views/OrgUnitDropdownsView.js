@@ -6,12 +6,12 @@ define([
   'app/i18n',
   'app/core/View',
   'app/core/util/idAndLabel',
-  '../divisions',
-  '../subdivisions',
-  '../mrpControllers',
-  '../prodFlows',
-  '../workCenters',
-  '../prodLines'
+  'app/data/divisions',
+  'app/data/subdivisions',
+  'app/data/mrpControllers',
+  'app/data/prodFlows',
+  'app/data/workCenters',
+  'app/data/prodLines'
 ], function(
   _,
   $,

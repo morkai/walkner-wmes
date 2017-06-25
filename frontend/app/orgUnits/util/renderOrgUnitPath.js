@@ -2,12 +2,12 @@
 
 define([
   'underscore',
-  '../divisions',
-  '../subdivisions',
-  '../mrpControllers',
-  '../workCenters',
-  '../prodFlows',
-  '../prodLines'
+  'app/data/divisions',
+  'app/data/subdivisions',
+  'app/data/mrpControllers',
+  'app/data/workCenters',
+  'app/data/prodFlows',
+  'app/data/prodLines'
 ], function(
   _,
   divisions,

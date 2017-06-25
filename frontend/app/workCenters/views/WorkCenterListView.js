@@ -3,7 +3,7 @@
 define([
   'app/user',
   'app/time',
-  'app/data/views/renderOrgUnitPath',
+  'app/orgUnits/util/renderOrgUnitPath',
   'app/core/views/ListView'
 ], function(
   user,

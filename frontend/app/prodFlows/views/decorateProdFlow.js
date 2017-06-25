@@ -4,7 +4,7 @@ define([
   'underscore',
   'app/time',
   'app/data/mrpControllers',
-  'app/data/views/renderOrgUnitPath'
+  'app/orgUnits/util/renderOrgUnitPath'
 ], function(
   _,
   time,

@@ -3,7 +3,7 @@
 define([
   'app/time',
   'app/data/mrpControllers',
-  'app/data/views/OrgUnitDropdownsView',
+  'app/orgUnits/views/OrgUnitDropdownsView',
   'app/core/views/FormView',
   'app/mrpControllers/templates/form'
 ], function(

@@ -24,7 +24,7 @@ define([
   router.map('/subdivisions', canView, function()
   {
     viewport.loadPage(
-      ['app/core/pages/ListPage', 'app/data/views/renderOrgUnitPath', nls],
+      ['app/core/pages/ListPage', 'app/orgUnits/util/renderOrgUnitPath', nls],
       function(ListPage, renderOrgUnitPath)
       {
         return new ListPage({

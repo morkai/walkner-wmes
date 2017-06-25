@@ -2,7 +2,7 @@
 
 define([
   'app/time',
-  'app/data/views/OrgUnitDropdownsView',
+  'app/orgUnits/views/OrgUnitDropdownsView',
   'app/core/views/FormView',
   'app/prodLines/templates/form'
 ], function(

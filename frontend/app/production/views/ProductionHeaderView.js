@@ -5,7 +5,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/data/prodLog',
-  'app/data/views/renderOrgUnitPath',
+  'app/orgUnits/util/renderOrgUnitPath',
   'app/users/UserCollection',
   './PersonelPickerView',
   'app/production/templates/header'

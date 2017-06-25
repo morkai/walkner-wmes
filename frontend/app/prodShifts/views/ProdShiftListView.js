@@ -3,7 +3,7 @@
 define([
   'app/core/views/ListView',
   'app/data/prodLines',
-  'app/data/views/renderOrgUnitPath'
+  'app/orgUnits/util/renderOrgUnitPath'
 ], function(
   ListView,
   prodLines,

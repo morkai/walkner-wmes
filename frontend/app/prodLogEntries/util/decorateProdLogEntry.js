@@ -7,7 +7,7 @@ define([
   'app/data/aors',
   'app/data/prodLines',
   'app/data/downtimeReasons',
-  'app/data/views/renderOrgUnitPath',
+  'app/orgUnits/util/renderOrgUnitPath',
   'app/core/templates/userInfo'
 ], function(
   _,

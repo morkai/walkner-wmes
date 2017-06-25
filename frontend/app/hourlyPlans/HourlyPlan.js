@@ -4,7 +4,7 @@ define([
   '../i18n',
   '../time',
   '../data/divisions',
-  '../data/views/renderOrgUnitPath',
+  '../orgUnits/util/renderOrgUnitPath',
   '../core/Model'
 ], function(
   t,

@@ -10,7 +10,7 @@ define([
   'app/core/Model',
   'app/core/views/FormView',
   'app/core/util/idAndLabel',
-  'app/data/views/OrgUnitDropdownsView',
+  'app/orgUnits/views/OrgUnitDropdownsView',
   'app/data/aors',
   'app/data/companies',
   'app/data/divisions',

@@ -3,7 +3,7 @@
 define([
   'app/i18n',
   'app/data/companies',
-  'app/data/views/renderOrgUnitPath',
+  'app/orgUnits/util/renderOrgUnitPath',
   './FteChartView'
 ], function(
   t,

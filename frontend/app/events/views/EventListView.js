@@ -6,7 +6,7 @@ define([
   'app/i18n',
   'app/data/divisions',
   'app/data/subdivisions',
-  'app/data/views/renderOrgUnitPath',
+  'app/orgUnits/util/renderOrgUnitPath',
   'app/core/views/ListView',
   'app/events/templates/list'
 ], function(
