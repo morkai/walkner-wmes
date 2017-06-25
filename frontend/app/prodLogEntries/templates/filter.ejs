@@ -13,10 +13,7 @@
       <input id="<%- idPrefix %>-to-time" class="form-control" name="to-time" type="time" placeholder="hh:mm">
     </div>
   </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-prodLine"><%- t('prodLogEntries', 'PROPERTY:prodLine') %></label>
-    <input id="<%- idPrefix %>-prodLine" name="prodLine" type="text" data-placeholder="<%- t('prodLogEntries', 'filter:placeholder:prodLine') %>">
-  </div>
+  <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>
   <div class="form-group">
     <label for="<%- idPrefix %>-type"><%- t('prodLogEntries', 'PROPERTY:type') %></label>
     <select id="<%- idPrefix %>-type" name="type" data-placeholder="<%- t('prodLogEntries', 'filter:placeholder:type') %>">

@@ -2,26 +2,25 @@
 
 define([
   'app/user',
-  'app/data/prodLines',
   'app/core/views/FilterView',
   'app/core/util/fixTimeRange',
+  'app/orgUnits/views/OrgUnitPickerView',
   'app/prodLogEntries/templates/filter'
 ], function(
   user,
-  prodLines,
   FilterView,
   fixTimeRange,
-  filterTemplate
+  OrgUnitPickerView,
+  template
 ) {
   'use strict';
 
   return FilterView.extend({
 
-    template: filterTemplate,
+    template: template,
 
     defaultFormData: {
       createdAt: '',
-      prodLine: null,
       type: null
     },
 
@@ -30,22 +29,24 @@ define([
       {
         fixTimeRange.toFormData(formData, term, 'date+time');
       },
-      'prodLine': function(propertyName, term, formData)
+      'type': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
-      },
-      'type': 'prodLine'
+      }
+    },
+
+    initialize: function()
+    {
+      FilterView.prototype.initialize.apply(this, arguments);
+
+      this.setView('#' + this.idPrefix + '-orgUnit', new OrgUnitPickerView({
+        filterView: this
+      }));
     },
 
     afterRender: function()
     {
       FilterView.prototype.afterRender.call(this);
-
-      this.$id('prodLine').select2({
-        width: '275px',
-        allowClear: true,
-        data: this.getApplicableProdLines()
-      });
 
       this.$id('type').select2({
         width: '275px',
@@ -53,27 +54,10 @@ define([
       });
     },
 
-    getApplicableProdLines: function()
-    {
-      return prodLines.getForCurrentUser().map(function(prodLine)
-      {
-        return {
-          id: prodLine.id,
-          text: prodLine.getLabel()
-        };
-      });
-    },
-
     serializeFormToQuery: function(selector)
     {
       var timeRange = fixTimeRange.fromView(this, {defaultTime: '06:00'});
-      var prodLine = this.$id('prodLine').val();
       var type = this.$id('type').val();
-
-      if (prodLine && prodLine.length)
-      {
-        selector.push({name: 'eq', args: ['prodLine', prodLine]});
-      }
 
       if (type && type.length)
       {
