@@ -44,7 +44,7 @@ define([
       },
       'orderData.mrp': function(propertyName, term, formData)
       {
-        formData[propertyName] = term.args[1].join(',');
+        formData.mrp = Array.isArray(term.args[1]) ? term.args[1].join(',') : '';
       },
       'orderId': function(propertyName, term, formData)
       {
