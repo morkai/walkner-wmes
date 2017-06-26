@@ -154,7 +154,7 @@ exports.events = {
     ]
   },
   blacklist: [
-    'pressWorksheets.added',
+    'pressWorksheets.added', 'pressWorksheets.edited',
     'kaizen.orders.added', 'kaizen.orders.edited',
     'suggestions.added', 'suggestions.edited',
     'opinionSurveys.responses.added',
