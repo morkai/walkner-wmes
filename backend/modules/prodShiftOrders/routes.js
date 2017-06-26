@@ -64,7 +64,11 @@ module.exports = function setUpProdShiftOrdersRoutes(app, psoModule)
     const operation = orderData.operations[doc.operationNo];
     const subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
     const prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
-    const efficiency = Math.round(doc.laborTime / 100 * doc.totalQuantity / doc.workDuration * doc.workerCount * 100);
+    const efficiency = Math.round(
+      (doc.laborTime / 100 * doc.totalQuantity)
+      / (doc.workDuration * doc.workerCount)
+      * 100
+    );
 
     return {
       '"orderNo': doc.mechOrder ? '' : doc.orderId,
