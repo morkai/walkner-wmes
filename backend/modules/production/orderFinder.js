@@ -115,7 +115,8 @@ function findMechOrderByNc12(MechOrder, nc12, done)
 
 function findOrdersStartingWithNc12(Order, MechOrder, nc12, done)
 {
-  /* globals emit:true*/
+  /* global emit */
+  /* eslint-disable no-var */
 
   const options = {
     query: {nc12: new RegExp('^' + nc12), finishDate: {$gte: getTwoWeeksAgo()}},
@@ -134,7 +135,7 @@ function findOrdersStartingWithNc12(Order, MechOrder, nc12, done)
     },
     reduce: function(key, orders)
     {
-      let latestOrder = null;
+      var latestOrder = null;
 
       orders.forEach(function(order)
       {
@@ -147,6 +148,8 @@ function findOrdersStartingWithNc12(Order, MechOrder, nc12, done)
       return latestOrder;
     }
   };
+
+  /* eslint-enable no-var */
 
   Order.mapReduce(options, function(err, results)
   {

@@ -67,7 +67,7 @@ module.exports = function(mongoose, options, done)
 
   function countDowntimes(options, done)
   {
-    /* globals interval,mrpControllers,specificAor,emit*/
+    /* global interval, mrpControllers, specificAor, emit */
 
     const query = {
       startedAt: {
@@ -104,17 +104,19 @@ module.exports = function(mongoose, options, done)
       }
     }
 
+    /* eslint-disable no-var */
+
     ProdDowntime.mapReduce({
       map: function()
       {
-        const inout = mrpControllers[this.mrpControllers[0]];
+        var inout = mrpControllers[this.mrpControllers[0]];
 
         if (inout === undefined || !this.finishedAt)
         {
           return;
         }
 
-        const key = {
+        var key = {
           io: inout,
           y: this.date.getFullYear(),
           m: this.date.getMonth()
@@ -165,7 +167,7 @@ module.exports = function(mongoose, options, done)
             break;
         }
 
-        const duration = Math.max(0, (this.finishedAt.getTime() - this.startedAt.getTime()) / 60000);
+        var duration = Math.max(0, (this.finishedAt.getTime() - this.startedAt.getTime()) / 60000);
 
         if (specificAor === this.aor.valueOf())
         {
@@ -192,7 +194,7 @@ module.exports = function(mongoose, options, done)
       },
       reduce: function(key, values)
       {
-        const result = {
+        var result = {
           count: 0,
           duration: 0,
           workerCount: 0,
@@ -201,9 +203,9 @@ module.exports = function(mongoose, options, done)
           specificWorkerCount: 0
         };
 
-        for (let i = 0, l = values.length; i < l; ++i)
+        for (var i = 0, l = values.length; i < l; ++i)
         {
-          const value = values[i];
+          var value = values[i];
 
           result.count += value.count;
           result.duration += value.duration;
@@ -241,23 +243,25 @@ module.exports = function(mongoose, options, done)
           groups[key] = createDataGroupEntry(key);
         }
 
+        const group = groups[key];
+
         if (result._id.io === 1)
         {
-          groups[key].indoorCount += result.value.count;
-          groups[key].indoorDuration += result.value.duration;
-          groups[key].indoorWorkerCount += result.value.workerCount;
-          groups[key].specificIndoorCount += result.value.specificCount;
-          groups[key].specificIndoorDuration += result.value.specificDuration;
-          groups[key].specificIndoorWorkerCount += result.value.specificWorkerCount;
+          group.indoorCount += result.value.count;
+          group.indoorDuration += result.value.duration;
+          group.indoorWorkerCount += result.value.workerCount;
+          group.specificIndoorCount += result.value.specificCount;
+          group.specificIndoorDuration += result.value.specificDuration;
+          group.specificIndoorWorkerCount += result.value.specificWorkerCount;
         }
         else
         {
-          groups[key].outdoorCount += result.value.count;
-          groups[key].outdoorDuration += result.value.duration;
-          groups[key].outdoorWorkerCount += result.value.workerCount;
-          groups[key].specificOutdoorCount += result.value.specificCount;
-          groups[key].specificOutdoorDuration += result.value.specificDuration;
-          groups[key].specificOutdoorWorkerCount += result.value.specificWorkerCount;
+          group.outdoorCount += result.value.count;
+          group.outdoorDuration += result.value.duration;
+          group.outdoorWorkerCount += result.value.workerCount;
+          group.specificOutdoorCount += result.value.specificCount;
+          group.specificOutdoorDuration += result.value.specificDuration;
+          group.specificOutdoorWorkerCount += result.value.specificWorkerCount;
         }
       }
 
@@ -293,6 +297,8 @@ module.exports = function(mongoose, options, done)
 
       return done(null, downtimes);
     });
+
+    /* eslint-enable no-var */
   }
 
   function createDataGroupEntry(key)

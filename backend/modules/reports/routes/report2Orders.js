@@ -146,7 +146,7 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
 
   function findOrdersWithHourFilter()
   {
-    /* globals emit,hourMode*/
+    /* global emit, hourMode */
 
     const cacheKey = createHash('md5').update(JSON.stringify([
       query.orgUnitType,
@@ -179,6 +179,8 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
       }
     };
 
+    /* eslint-disable no-var */
+
     Order.mapReduce(
       {
         map: function()
@@ -190,30 +192,30 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
             maxTime = this.finishDate.getTime();
           }
 
-          let statusesSetAt = {};
-          const changes = this.changes;
+          var statusesSetAt = {};
+          var changes = this.changes;
 
-          for (let i = 0; i < changes.length; ++i)
+          for (var i = 0; i < changes.length; ++i)
           {
-            const change = changes[i];
+            var change = changes[i];
 
             if (change.time.getTime() > maxTime)
             {
               break;
             }
 
-            const newStatuses = change.newValues.statuses;
+            var newStatuses = change.newValues.statuses;
 
             if (!newStatuses)
             {
               continue;
             }
 
-            const newStatusesSetAt = {};
+            var newStatusesSetAt = {};
 
-            for (let ii = 0; ii < newStatuses.length; ++ii)
+            for (var ii = 0; ii < newStatuses.length; ++ii)
             {
-              const newStatus = newStatuses[ii];
+              var newStatus = newStatuses[ii];
 
               newStatusesSetAt[newStatus] = statusesSetAt[newStatus] || change.time;
             }
@@ -221,8 +223,8 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
             statusesSetAt = newStatusesSetAt;
           }
 
-          let j;
-          let found;
+          var j;
+          var found;
 
           switch (filter)
           {
@@ -345,6 +347,8 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
         return sendCachedMapReduceResults(cacheKey);
       }
     );
+
+    /* eslint-enable no-var */
   }
 
   function sendCachedMapReduceResults(cacheKey)
