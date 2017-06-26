@@ -59,6 +59,8 @@ define([
     {
       FilterView.prototype.afterRender.apply(this, arguments);
 
+      this.toggleButtonGroup('shift');
+
       this.$id('orderMrp').select2({
         width: '300px',
         multiple: true,

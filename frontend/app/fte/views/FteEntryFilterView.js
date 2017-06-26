@@ -74,6 +74,8 @@ define([
     {
       FilterView.prototype.afterRender.call(this);
 
+      this.toggleButtonGroup('shift');
+
       this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', function()
       {
         var model = null;
