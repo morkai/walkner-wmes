@@ -21,6 +21,7 @@
 
     "filter:submit": "Filter shifts",
     "filter:placeholder:prodLine": "Any production line",
+    "filter:orderMrp": "Order MRP",
 
     "PROPERTY:mrpControllers": "MRP Controller",
     "PROPERTY:prodFlow": "Production flow",
@@ -39,6 +40,8 @@
     "PROPERTY:quantitiesDone:planned": "Planned",
     "PROPERTY:quantitiesDone:actual": "Actual",
     "PROPERTY:totalQuantityDone": "Quantity done",
+    "PROPERTY:efficiency": "Efficiency",
+    "PROPERTY:orderMrp": "Order MRP",
 
     "FORM:ACTION:add": "Add shift",
     "FORM:ACTION:edit": "Edit shift",
@@ -49,7 +52,7 @@
     "FORM:ERROR:NOT_EDITABLE": "The specified shift didn't end yet!",
     "FORM:ERROR:EXISTING": "The specified shift already exists!",
 
-    "totalQuantityDone": "{actual} of {planned}",
+    "totalQuantityDone": "{actual}/{planned}",
 
     "timeline:title": "Timeline",
     "timeline:action:addOrder": "Add order",

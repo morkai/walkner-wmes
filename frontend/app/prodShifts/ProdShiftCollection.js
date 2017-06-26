@@ -24,17 +24,9 @@ define([
     rqlQuery: function(rql)
     {
       return rql.Query.fromObject({
-        fields: {
-          mrpControllers: 1,
-          prodFlow: 1,
-          prodLine: 1,
-          date: 1,
-          shift: 1,
-          createdAt: 1,
-          creator: 1
-        },
+        fields: {},
         sort: {
-          createdAt: -1
+          date: -1
         },
         limit: 20,
         selector: {
@@ -53,7 +45,8 @@ define([
         return true;
       }
 
-      return matchesProdLine(this.rqlQuery, message.prodLine) && matchesEquals(this.rqlQuery, 'shift', message.shift);
+      return matchesProdLine(this.rqlQuery, message.prodLine)
+        && matchesEquals(this.rqlQuery, 'shift', message.shift);
     }
 
   });

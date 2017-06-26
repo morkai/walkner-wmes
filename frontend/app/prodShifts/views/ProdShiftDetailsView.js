@@ -22,24 +22,13 @@ define([
 
     serialize: function()
     {
-      var totalQuantityDone = {
-        planned: 0,
-        actual: 0
-      };
-
-      this.model.get('quantitiesDone').forEach(function(quantityDone)
-      {
-        totalQuantityDone.planned += quantityDone.planned;
-        totalQuantityDone.actual += quantityDone.actual;
-      });
-
       return {
         panelType: this.panelType,
         model: this.model.serialize({
           orgUnits: true,
-          personnel: true
-        }),
-        totalQuantityDone: totalQuantityDone
+          personnel: true,
+          totalQuantityDone: true
+        })
       };
     },
 

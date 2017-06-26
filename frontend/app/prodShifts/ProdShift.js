@@ -134,34 +134,63 @@ define([
 
     serialize: function(options)
     {
-      var prodShift = this.toJSON();
+      var d = this.toJSON();
 
-      prodShift.createdAt = time.format(prodShift.createdAt, 'LL, LTS');
-      prodShift.creator = renderUserInfo({userInfo: prodShift.creator});
+      d.createdAt = time.format(d.createdAt, 'LL, LTS');
+      d.creator = renderUserInfo({userInfo: d.creator});
 
-      prodShift.date = time.format(prodShift.date, 'L');
-      prodShift.shift = prodShift.shift ? t('core', 'SHIFT:' + prodShift.shift) : '?';
+      d.date = time.format(d.date, 'L');
+      d.shift = d.shift ? t('core', 'SHIFT:' + d.shift) : '?';
 
       if (options.orgUnits)
       {
-        var subdivision = subdivisions.get(prodShift.subdivision);
-        var prodFlow = prodFlows.get(prodShift.prodFlow);
+        var subdivision = subdivisions.get(d.subdivision);
+        var prodFlow = prodFlows.get(d.prodFlow);
+        var mrps = {};
 
-        prodShift.subdivision = subdivision ? subdivision.getLabel() : '?';
-        prodShift.prodFlow = prodFlow ? prodFlow.getLabel() : '?';
-        prodShift.mrpControllers = Array.isArray(prodShift.mrpControllers) && prodShift.mrpControllers.length
-          ? prodShift.mrpControllers.join('; ')
-          : '?';
+        _.forEach(d.orderMrp, function(mrp) { mrps[mrp] = 1; });
+        _.forEach(d.mrpControllers, function(mrp) { mrps[mrp] = 1; });
+
+        d.subdivision = subdivision ? subdivision.getLabel() : '?';
+        d.prodFlow = prodFlow ? prodFlow.getLabel() : '?';
+        d.mrpControllers = _.map(mrps, function(v, mrp)
+        {
+          if (!d.orderMrp || _.includes(d.orderMrp, mrp))
+          {
+            return mrp;
+          }
+
+          return '<span style="text-decoration: line-through">' + mrp + '</span>';
+        }).join('; ');
       }
 
       if (options.personnel)
       {
-        prodShift.master = renderUserInfo({userInfo: prodShift.master});
-        prodShift.leader = renderUserInfo({userInfo: prodShift.leader});
-        prodShift.operator = renderUserInfo({userInfo: prodShift.operator});
+        d.master = renderUserInfo({userInfo: d.master});
+        d.leader = renderUserInfo({userInfo: d.leader});
+        d.operator = renderUserInfo({userInfo: d.operator});
       }
 
-      return prodShift;
+      if (options.totalQuantityDone)
+      {
+        var totalQuantityDone = {
+          planned: 0,
+          actual: 0
+        };
+
+        _.forEach(d.quantitiesDone, function(quantityDone)
+        {
+          totalQuantityDone.planned += quantityDone.planned;
+          totalQuantityDone.actual += quantityDone.actual;
+        });
+
+        d.totalQuantityDone = t('prodShifts', 'totalQuantityDone', totalQuantityDone);
+      }
+
+      d.efficiency = Math.round(d.efficiency * 100) + '%';
+      d.orderMrp = Array.isArray(d.orderMrp) ? d.orderMrp.join('; ') : '';
+
+      return d;
     },
 
     startShiftChangeMonitor: function()

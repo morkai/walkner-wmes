@@ -66,11 +66,9 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     step(
       function()
       {
-        productionModule.getProdData('shift', logEntry.prodShift, this.parallel());
-        productionModule.getProdData('order', logEntry.prodShiftOrder, this.parallel());
         (new ProdShiftOrder(logEntry.data)).save(this.parallel());
       },
-      function(err, prodShift, oldProdShiftOrder, newProdShiftOrder)
+      function(err, newProdShiftOrder)
       {
         if (err && err.code !== 11000)
         {
@@ -79,7 +77,24 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
           return this.skip(err);
         }
 
-        const prodShiftOrder = newProdShiftOrder || oldProdShiftOrder;
+        productionModule.getProdData('shift', logEntry.prodShift, this.parallel());
+        productionModule.getProdShiftOrders(logEntry.prodShift, this.parallel());
+
+        if (newProdShiftOrder)
+        {
+          setImmediate(this.parallel(), null, newProdShiftOrder);
+        }
+        else
+        {
+          productionModule.getProdData('order', logEntry.prodShiftOrder, this.parallel());
+        }
+      },
+      function(err, prodShift, allProdShiftOrders, prodShiftOrder)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
 
         if (prodShiftOrder)
         {
@@ -97,8 +112,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         if (newNextOrders.length !== oldNextOrders.length)
         {
           prodShift.nextOrder = newNextOrders;
-          prodShift.save(this.group());
         }
+
+        prodShift.recalcOrderData(allProdShiftOrders);
+        prodShift.save(this.group());
 
         prodLine.set({
           prodShiftOrder: prodShiftOrder._id,

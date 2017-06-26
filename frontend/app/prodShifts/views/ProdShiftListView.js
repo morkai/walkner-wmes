@@ -27,13 +27,14 @@ define([
       {id: 'prodLine', className: 'is-min'},
       {id: 'date', className: 'is-min'},
       {id: 'shift', className: 'is-min'},
-      {id: 'createdAt', className: 'is-min'},
-      'creator'
+      {id: 'totalQuantityDone', className: 'is-min is-number'},
+      {id: 'efficiency', className: 'is-min is-number'},
+      {id: 'fill', label: '&nbsp;'}
     ],
 
     serializeRow: function(model)
     {
-      return model.serialize({orgUnits: true});
+      return model.serialize({orgUnits: true, totalQuantityDone: true});
     },
 
     serializeActions: function()

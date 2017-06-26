@@ -98,7 +98,12 @@ module.exports = function setupProdShiftModel(app, mongoose)
       type: Number,
       default: -1
     },
-    nextOrder: {}
+    nextOrder: {},
+    efficiency: {
+      type: Number,
+      default: 0
+    },
+    orderMrp: [String]
   }, {
     id: false
   });
@@ -120,6 +125,7 @@ module.exports = function setupProdShiftModel(app, mongoose)
   prodShiftSchema.index({prodLine: 1, date: -1});
   prodShiftSchema.index({shutdown: 1, prodLine: 1});
   prodShiftSchema.index({shutdown: 1, date: -1});
+  prodShiftSchema.index({orderMrp: 1, date: -1});
 
   prodShiftSchema.pre('save', function(next)
   {
@@ -241,6 +247,35 @@ module.exports = function setupProdShiftModel(app, mongoose)
     return this.hasEnded();
   };
 
+  prodShiftSchema.methods.recalcOrderData = function(orders)
+  {
+    let orderMrp = {};
+    let effNum = 0;
+    let effDen = 0;
+
+    orders.forEach(order =>
+    {
+      console.log(order._id)
+      if (order.orderData && order.orderData.mrp)
+      {
+        console.log(order.orderData.mrp);
+        orderMrp[order.orderData.mrp] = true;
+      }
+
+      if (order.laborTime && order.workDuration && order.workerCount)
+      {
+        effNum += order.laborTime / 100 * order.totalQuantity;
+        effDen += order.workDuration * order.workerCount;
+        console.log(effNum, effDen);
+      }
+    });
+
+    orderMrp = Object.keys(orderMrp);
+
+    this.efficiency = effDen ? (effNum / effDen) : 0;
+    this.orderMrp = orderMrp.length ? orderMrp : null;
+  };
+
   prodShiftSchema.methods.recalcTimes = function(done)
   {
     const shift = this;
@@ -313,6 +348,8 @@ module.exports = function setupProdShiftModel(app, mongoose)
         shift.idle = shiftEndTime - shiftStartTime - working - downtime;
         shift.working = working;
         shift.downtime = downtime;
+
+        shift.recalcOrderData(orders);
 
         shift.save(this.next());
       },

@@ -20,6 +20,7 @@
 
   "filter:submit": "Filtruj historię",
   "filter:placeholder:prodLine": "Dowolna linia produkcyjna",
+  "filter:orderMrp": "Kontroler MRP zlecenia",
 
   "PROPERTY:mrpControllers": "Kontroler MRP",
   "PROPERTY:prodFlow": "Przepływ",
@@ -38,6 +39,8 @@
   "PROPERTY:quantitiesDone:planned": "Plan",
   "PROPERTY:quantitiesDone:actual": "Wykonane",
   "PROPERTY:totalQuantityDone": "Wykonana ilość",
+  "PROPERTY:efficiency": "Wydajność",
+  "PROPERTY:orderMrp": "MRP zleceń",
 
   "FORM:ACTION:add": "Dodaj zmianę",
   "FORM:ACTION:edit": "Edytuj zmianę",
@@ -48,7 +51,7 @@
   "FORM:ERROR:NOT_EDITABLE": "Wybrana zmiana jeszcze się nie skończyła!",
   "FORM:ERROR:EXISTING": "Wybrana zmiana już istnieje!",
 
-  "totalQuantityDone": "{actual} z {planned}",
+  "totalQuantityDone": "{actual}/{planned}",
 
   "timeline:title": "Oś czasu",
   "timeline:action:addOrder": "Dodaj zlecenie",

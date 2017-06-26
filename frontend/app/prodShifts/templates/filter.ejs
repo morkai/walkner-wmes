@@ -18,6 +18,10 @@
       <% }) %>
     </div>
   </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-orderMrp"><%- t('prodShifts', 'filter:orderMrp') %></label>
+    <input id="<%- idPrefix %>-orderMrp" name="orderMrp" type="text" data-placeholder=" ">
+  </div>
   <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
