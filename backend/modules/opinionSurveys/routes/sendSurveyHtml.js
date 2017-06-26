@@ -45,6 +45,8 @@ module.exports = function sendSurveyHtmlRoute(app, module, req, res, next)
         return next(express.createHttpError('NOT_FOUND', 404));
       }
 
+      OpinionSurvey.prepareIntro(survey);
+
       res.render('opinionSurveys:' + template, {
         cache: false,
         moment: moment,

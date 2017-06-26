@@ -120,6 +120,18 @@ module.exports = function setupOpinionSurveyModel(app, mongoose)
     next();
   });
 
+  opinionSurveySchema.statics.prepareIntro = function(opinionSurvey)
+  {
+    let intro = opinionSurvey.intro.trim();
+
+    if (!/<p.*?>/.test(intro))
+    {
+      intro = intro.split('\n').map(line => `<p>${line.trim()}</p>`).join('\n');
+    }
+
+    opinionSurvey.intro = intro;
+  };
+
   opinionSurveySchema.methods.serializeEmployees = function()
   {
     const oldValues = {};

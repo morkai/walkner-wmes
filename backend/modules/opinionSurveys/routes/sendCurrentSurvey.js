@@ -62,6 +62,8 @@ module.exports = function sendCurrentSurveyRoute(app, module, req, res, next)
         {
           if (currentSurvey)
           {
+            OpinionSurvey.prepareIntro(currentSurvey);
+
             res.render('opinionSurveys:current', {
               cache: false,
               moment: moment,
