@@ -39,7 +39,7 @@
     <select id="<%- idPrefix %>-area" name="area" class="form-control" size="1">
       <option></option>
       <% areas.forEach(function(area) { %>
-      <option value="<%- area._id %>"><%= area._id %></option>
+      <option value="<%- area._id %>"><%= area.name %></option>
       <% }) %>
     </select>
   </div>
