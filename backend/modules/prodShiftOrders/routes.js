@@ -25,17 +25,50 @@ module.exports = function setUpProdShiftOrdersRoutes(app, psoModule)
   express.post('/prodShiftOrders', canManage, addProdShiftOrderRoute);
 
   express.get(
-    '/prodShiftOrders;export',
+    '/prodShiftOrders;export.:format?',
     canView,
     limitOrgUnit,
     function(req, res, next)
     {
+      req.rql.fields = {
+        creator: 0,
+        losses: 0,
+        'orderData.bom': 0,
+        'orderData.documents': 0
+      };
       req.rql.sort = {};
 
       return next();
     },
-    express.crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, app, {
       filename: 'WMES-ORDERS',
+      freezeRows: 1,
+      freezeColumns: 2,
+      columns: {
+        orderNo: {width: 9, position: 10},
+        nc12: {width: 12, position: 20},
+        orderDescription: {width: 35, position: 30},
+        orderMrp: {width: 5, position: 40},
+        startedAt: {type: 'datetime', position: 40},
+        efficiency: {type: 'percent', position: 50},
+        operationNo: 4,
+        date: 'date',
+        shift: {
+          type: 'integer',
+          width: 5
+        },
+        finishedAt: 'datetime',
+        totalDuration: 'decimal',
+        breakDuration: 'decimal',
+        downtimeDuration: 'decimal',
+        workDuration: 'decimal',
+        totalQuantity: 'integer',
+        quantityDone: 'integer',
+        quantityLost: 'integer',
+        workerCount: 'integer',
+        laborTime: 'decimal',
+        machineTime: 'decimal'
+      },
       serializeRow: exportProdShiftOrder,
       model: ProdShiftOrder
     })
@@ -64,48 +97,44 @@ module.exports = function setUpProdShiftOrdersRoutes(app, psoModule)
     const operation = orderData.operations[doc.operationNo];
     const subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
     const prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
-    const efficiency = Math.round(
-      (doc.laborTime / 100 * doc.totalQuantity)
-      / (doc.workDuration * doc.workerCount)
-      * 100
-    );
+    const efficiency = (doc.laborTime / 100 * doc.totalQuantity) / (doc.workDuration * doc.workerCount);
 
     return {
-      '"orderNo': doc.mechOrder ? '' : doc.orderId,
-      '"12nc': doc.mechOrder ? doc.orderId : orderData.nc12,
-      '"operationNo': doc.operationNo,
-      'shiftDate': app.formatDateTime(doc.date),
-      '#shiftNo': doc.shift,
-      'startedAt': app.formatDateTime(doc.startedAt),
-      'finishedAt': app.formatDateTime(doc.finishedAt),
-      '#totalDuration': doc.totalDuration,
-      '#breakDuration': doc.breakDuration,
-      '#downtimeDuration': doc.downtimeDuration,
-      '#workDuration': doc.workDuration,
-      '#totalQuantity': doc.totalQuantity,
-      '#quantityDone': doc.quantityDone,
-      '#quantityLost': doc.quantityLost,
-      '#workerCount': doc.workerCount,
-      '#laborTime': operation.laborTime === -1 ? 0 : operation.laborTime,
-      '#machineTime': operation.machineTime === -1 ? 0 : operation.machineTime,
-      '#efficiency': isNaN(efficiency) || !isFinite(efficiency) ? null : efficiency,
-      '"orderMrp': orderData.mrp || '',
-      '"orderName': (orderData.name || '').trim(),
-      '"orderDescription': (orderData.description || '').trim(),
-      '"operationName': (operation.name || '').trim(),
-      '"operationWorkCenter': operation.workCenter || '',
-      '"prodLine': doc.prodLine,
-      '"division': doc.division,
-      '"subdivision': subdivision ? subdivision.name : doc.subdivision,
-      '"mrp': Array.isArray(doc.mrpControllers) ? doc.mrpControllers.join(',') : [],
-      '"prodFlow': prodFlow ? prodFlow.name : doc.prodFlow,
-      '"workCenter': doc.workCenter,
-      '"master': exportUserInfo(doc.master),
-      '"leader': exportUserInfo(doc.leader),
-      '"operator': exportUserInfo(doc.operator),
-      '"operators': Array.isArray(doc.operators) ? doc.operators.map(exportUserInfo).join(';') : '',
-      '"orderId': doc._id,
-      '"shiftId': doc.prodShift || ''
+      orderNo: doc.mechOrder ? '' : doc.orderId,
+      nc12: doc.mechOrder ? doc.orderId : orderData.nc12,
+      operationNo: doc.operationNo,
+      date: doc.date,
+      shift: doc.shift,
+      startedAt: doc.startedAt,
+      finishedAt: doc.finishedAt,
+      totalDuration: doc.totalDuration,
+      breakDuration: doc.breakDuration,
+      downtimeDuration: doc.downtimeDuration,
+      workDuration: doc.workDuration,
+      totalQuantity: doc.totalQuantity,
+      quantityDone: doc.quantityDone,
+      quantityLost: doc.quantityLost,
+      workerCount: doc.workerCount,
+      laborTime: operation.laborTime === -1 ? null : operation.laborTime,
+      machineTime: operation.machineTime === -1 ? null : operation.machineTime,
+      efficiency: isNaN(efficiency) || !isFinite(efficiency) ? null : efficiency,
+      orderMrp: orderData.mrp || '',
+      orderName: (orderData.name || '').trim(),
+      orderDescription: (orderData.description || '').trim(),
+      operationName: (operation.name || '').trim(),
+      operationWorkCenter: operation.workCenter || '',
+      prodLine: doc.prodLine,
+      division: doc.division,
+      subdivision: subdivision ? subdivision.name : doc.subdivision,
+      mrp: Array.isArray(doc.mrpControllers) ? doc.mrpControllers.join(',') : [],
+      prodFlow: prodFlow ? prodFlow.name : doc.prodFlow,
+      workCenter: doc.workCenter,
+      master: exportUserInfo(doc.master),
+      leader: exportUserInfo(doc.leader),
+      operator: exportUserInfo(doc.operator),
+      operators: Array.isArray(doc.operators) ? doc.operators.map(exportUserInfo).join(';') : '',
+      orderId: doc._id,
+      shiftId: doc.prodShift || ''
     };
   }
 

@@ -5,13 +5,15 @@ define([
   'app/i18n',
   'app/viewport',
   '../views/ActionFormView',
-  'app/core/templates/jumpAction'
+  'app/core/templates/jumpAction',
+  'app/core/templates/exportAction'
 ], function(
   _,
   t,
   viewport,
   ActionFormView,
-  jumpActionTemplate
+  jumpActionTemplate,
+  exportActionTemplate
 ) {
   'use strict';
 
@@ -135,31 +137,53 @@ define([
     },
     export: function(layout, page, collection, privilege)
     {
-      page.listenTo(collection, 'sync', function()
-      {
-        var totalCount = getTotalCount(collection);
-        var $export = layout.$('.page-actions .export')
-          .attr('href', _.result(collection, 'url') + ';export?' + collection.rqlQuery)
-          .toggleClass('disabled', !totalCount)
-          .removeClass('btn-default btn-warning');
+      var options = {
+        layout: layout,
+        page: page,
+        collection: collection,
+        privilege: privilege
+      };
 
-        if (totalCount >= 10000)
+      if (arguments.length === 1)
+      {
+        options = layout;
+      }
+
+      var template = function()
+      {
+        var totalCount = getTotalCount(options.collection);
+        var url = _.result(options.collection, 'url') + ';export.${format}?' + options.collection.rqlQuery;
+        var formats = [
+          {
+            type: 'csv',
+            href: url.replace('${format}', 'csv')
+          }
+        ];
+
+        if (window.XLSX_EXPORT)
         {
-          $export.removeClass('btn-default').addClass('btn-warning');
+          formats.push({
+            type: 'xlsx',
+            href: url.replace('${format}', 'xlsx')
+          });
         }
-        else
-        {
-          $export.removeClass('btn-warning').addClass('btn-default');
-        }
+
+        return exportActionTemplate({
+          type: totalCount >= 30000 ? 'danger' : totalCount >= 15000 ? 'warning' : 'default',
+          formats: formats,
+          disabled: options.collection.length === 0,
+          label: options.label || t(options.collection.getNlsDomain(), 'PAGE_ACTION:export')
+        });
+      };
+
+      options.page.listenTo(options.collection, 'sync', function()
+      {
+        options.layout.$('.page-actions-export').replaceWith(template());
       });
 
       return {
-        label: t.bound(collection.getNlsDomain(), 'PAGE_ACTION:export'),
-        icon: 'download',
-        type: getTotalCount(collection) >= 10000 ? 'warning' : 'default',
-        href: _.result(collection, 'url') + ';export?' + collection.rqlQuery,
-        privileges: resolvePrivileges(collection, privilege, 'VIEW'),
-        className: 'export' + (collection.length ? '' : ' disabled')
+        template: template,
+        privileges: resolvePrivileges(options.collection, options.privilege, 'VIEW')
       };
     },
     jump: function(page, collection)

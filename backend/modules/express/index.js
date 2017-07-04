@@ -57,6 +57,7 @@ exports.DEFAULT_CONFIG = {
   textBody: {},
   urlencodedBody: {},
   ignoredErrorCodes: ['ECONNRESET', 'ECONNABORTED'],
+  jsonToXlsxExe: null,
   routes: (app, expressModule) => {} // eslint-disable-line no-unused-vars
 };
 

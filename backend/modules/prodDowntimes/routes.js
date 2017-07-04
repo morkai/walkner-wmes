@@ -54,18 +54,45 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
   express.get('/prodDowntimes;rid', canView, findByRidRoute);
 
   express.get(
-    '/prodDowntimes;export',
+    '/prodDowntimes;export.:format?',
     canView,
     limitOrgUnit,
     function(req, res, next)
     {
-      req.rql.fields = {};
+      req.rql.fields = {
+        changes: 0,
+        changesCount: 0,
+        alerts: 0
+      };
       req.rql.sort = {};
 
       next();
     },
-    express.crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, app, {
       filename: 'WMES-DOWNTIMES',
+      freezeRows: 1,
+      freezeColumns: 1,
+      columns: {
+        rid: 10,
+        reasonId: 5,
+        aor: 30,
+        orderNo: 10,
+        nc12: 15,
+        operationNo: 5,
+        family: 10,
+        product: 40,
+        qty: {type: 'integer', width: 7},
+        orderMrp: 5,
+        date: 'date',
+        shift: {
+          type: 'integer',
+          width: 5
+        },
+        startedAt: 'datetime',
+        finishedAt: 'datetime',
+        duration: 'decimal',
+        corroboratedAt: 'datetime'
+      },
       serializeRow: exportProdDowntime,
       model: ProdDowntime
     })
@@ -245,40 +272,40 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
     const orderData = doc.orderData || EMPTY_ORDER_DATA;
 
     return {
-      '#rid': doc.rid,
-      '"reasonId': doc.reason,
-      '"reason': reason ? reason.label : '?',
-      '"reasonComment': doc.reasonComment,
-      '"aor': aor ? aor.name : doc.aor,
-      '"orderNo': doc.mechOrder ? '' : doc.orderId,
-      '"12nc': doc.mechOrder ? doc.orderId : orderData.nc12,
-      '"operationNo': doc.operationNo,
-      '"family': orderData.family,
-      '"product': orderData.name,
-      '#qty': orderData.qty,
-      '"orderMrp': orderData.mrp,
-      'date': app.formatDate(doc.date),
-      '#shift': doc.shift,
-      'startedAt': app.formatDateTime(startedAt.toDate()),
-      'finishedAt': app.formatDateTime(finishedAt.toDate()),
-      '#duration': duration,
-      '"master': exportUserInfo(doc.master),
-      '"leader': exportUserInfo(doc.leader),
-      '"operator': exportUserInfo(doc.operator),
-      '"corroborator': exportUserInfo(doc.corroborator),
-      'corroboratedAt': doc.corroboratedAt ? app.formatDateTime(doc.corroboratedAt) : '',
-      '"status': doc.status,
-      '"decisionComment': doc.decisionComment,
-      '"division': doc.division,
-      '"subdivision': subdivision ? subdivision.name : doc.subdivision,
-      '"mrp': Array.isArray(doc.mrpControllers) ? doc.mrpControllers.join(',') : '',
-      '"prodFlow': prodFlow ? prodFlow.name : doc.prodFlow,
-      '"workCenter': doc.workCenter,
-      '"prodLine': doc.prodLine,
-      '"downtimeId': doc._id,
-      '"shiftId': doc.prodShift,
-      '"orderId': doc.prodShiftOrder,
-      '"worksheetId': doc.pressWorksheet
+      rid: doc.rid,
+      reasonId: doc.reason,
+      reason: reason ? reason.label : '?',
+      reasonComment: doc.reasonComment,
+      aor: aor ? aor.name : doc.aor,
+      orderNo: doc.mechOrder ? '' : doc.orderId,
+      nc12: doc.mechOrder ? doc.orderId : orderData.nc12,
+      operationNo: doc.operationNo,
+      family: orderData.family,
+      product: orderData.name,
+      qty: orderData.qty,
+      orderMrp: orderData.mrp,
+      date: doc.date,
+      shift: doc.shift,
+      startedAt: startedAt.toDate(),
+      finishedAt: finishedAt.toDate(),
+      duration: duration,
+      master: exportUserInfo(doc.master),
+      leader: exportUserInfo(doc.leader),
+      operator: exportUserInfo(doc.operator),
+      corroborator: exportUserInfo(doc.corroborator),
+      corroboratedAt: doc.corroboratedAt,
+      status: doc.status,
+      decisionComment: doc.decisionComment,
+      division: doc.division,
+      subdivision: subdivision ? subdivision.name : doc.subdivision,
+      mrp: Array.isArray(doc.mrpControllers) ? doc.mrpControllers.join(',') : '',
+      prodFlow: prodFlow ? prodFlow.name : doc.prodFlow,
+      workCenter: doc.workCenter,
+      prodLine: doc.prodLine,
+      downtimeId: doc._id,
+      shiftId: doc.prodShift,
+      orderId: doc.prodShiftOrder,
+      worksheetId: doc.pressWorksheet
     };
   }
 

@@ -80,7 +80,6 @@ module.exports = function exportFteMasterEntries(app, subdivisionsModule, queryS
 
   function exportNext(doc)
   {
-    const date = app.formatDate(doc.date);
     let subdivision = subdivisionsModule.modelsById[doc.subdivision];
     const division = subdivision ? subdivision.division : '?';
 
@@ -89,19 +88,24 @@ module.exports = function exportFteMasterEntries(app, subdivisionsModule, queryS
     for (let i = 0, l = doc.tasks.length; i < l; ++i)
     {
       const task = doc.tasks[i];
+
+      if (task.noPlan)
+      {
+        continue;
+      }
+
       const row = {
-        '"division': division,
-        '"subdivision': subdivision,
-        'date': date,
-        'shiftNo': doc.shift,
-        'type': task.type,
-        '"task': task.name,
-        'noPlan': task.noPlan ? 1 : 0
+        division: division,
+        subdivision: subdivision,
+        date: doc.date,
+        shift: doc.shift,
+        type: task.type,
+        task: task.name
       };
 
       exportCountColumns(row, task, prodFunctionMap, prodFunctionList);
 
-      row['"fteId'] = doc._id;
+      row.fteId = doc._id;
 
       emitter.emit('data', row);
     }
@@ -133,7 +137,7 @@ function exportNoProdFunctionData(row, prodFunctionId, prodFunctionCompanies)
 {
   for (let i = 0, l = prodFunctionCompanies.length; i < l; ++i)
   {
-    row['#' + prodFunctionId + '[' + prodFunctionCompanies[i] + ']'] = 0;
+    row['$' + prodFunctionId + '[' + prodFunctionCompanies[i] + ']'] = 0;
   }
 }
 
@@ -143,6 +147,6 @@ function exportProdFunctionData(row, prodFunctionId, prodFunctionCompanies, prod
   {
     const companyId = prodFunctionCompanies[i];
 
-    row['#' + prodFunctionId + '[' + companyId + ']'] = prodFunctionData[companyId] || 0;
+    row['$' + prodFunctionId + '[' + companyId + ']'] = prodFunctionData[companyId] || 0;
   }
 }

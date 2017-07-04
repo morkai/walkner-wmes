@@ -40,13 +40,13 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     );
 
     express.get(
-      '/reports/2;orders',
+      '/reports/2/orders',
       canViewReport2,
       require('./report2Orders').bind(null, app, reportsModule)
     );
 
     express.get(
-      '/reports/2;export',
+      '/reports/2/orders;export.:format?',
       canViewReport2,
       require('./report2Export').bind(null, app, reportsModule)
     );

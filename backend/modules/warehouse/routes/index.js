@@ -17,7 +17,7 @@ module.exports = function setUpWarehouseRoutes(app, whModule)
   );
 
   express.get(
-    '/warehouse/transferOrders;export',
+    '/warehouse/transferOrders;export.:format?',
     userModule.auth('REPORTS:VIEW'),
     function(req, res, next)
     {
@@ -25,10 +25,31 @@ module.exports = function setUpWarehouseRoutes(app, whModule)
 
       next();
     },
-    express.crud.exportRoute.bind(null, {
-      filename: 'WMES-TO_WAREHOUSE',
+    express.crud.exportRoute.bind(null, app, {
+      filename: 'WMES-WH_TO',
       serializeRow: exportWhTransferOrder,
-      model: WhTransferOrder
+      model: WhTransferOrder,
+      freezeRows: 1,
+      freezeColumns: 2,
+      columns: {
+        orderNo: 7,
+        itemNo: 4,
+        date: 'date',
+        shift: {type: 'integer', width: 4},
+        plant: 5,
+        confirmedAt: 'datetime',
+        nc12: 12,
+        name: 30,
+        srcType: 7,
+        srcBin: 10,
+        dstType: 7,
+        dstBin: 10,
+        srcTgtQty: {type: 'integer', width: 7},
+        unit: 4,
+        mvmtWm: 7,
+        mvmtIm: 7,
+        s: 2
+      }
     })
   );
 
@@ -37,24 +58,24 @@ module.exports = function setUpWarehouseRoutes(app, whModule)
     const shiftHour = doc.shiftDate.getHours();
 
     return {
-      '"orderNo': doc._id.no,
-      '"itemNo': doc._id.item,
-      'date': app.formatDate(doc.shiftDate),
-      'shiftNo': shiftHour === 6 ? 1 : shiftHour === 14 ? 2 : 3,
-      '"plant': doc.plant,
-      confirmedAt: app.formatDateTime(doc.confirmedAt),
-      '"nc12': doc.nc12,
-      '"name': doc.name,
-      '#srcType': doc.srcType,
-      '"srcBin': doc.srcBin,
-      '"reqNo': doc.reqNo,
-      '#dstType': doc.dstType,
-      '"dstBin': doc.dstBin,
-      '#srcTgtQty': doc.srcTgtQty,
-      '"unit': doc.unit,
-      '#mvmtWm': doc.mvmtWm,
-      '#mvmtIm': doc.mvmtIm,
-      '#s': doc.s
+      orderNo: doc._id.no,
+      itemNo: doc._id.item,
+      date: doc.shiftDate,
+      shift: shiftHour === 6 ? 1 : shiftHour === 14 ? 2 : 3,
+      plant: doc.plant,
+      confirmedAt: doc.confirmedAt,
+      nc12: doc.nc12,
+      name: doc.name,
+      srcType: doc.srcType,
+      srcBin: doc.srcBin,
+      reqNo: doc.reqNo,
+      dstType: doc.dstType,
+      dstBin: doc.dstBin,
+      srcTgtQty: doc.srcTgtQty,
+      unit: doc.unit,
+      mvmtWm: doc.mvmtWm,
+      mvmtIm: doc.mvmtIm,
+      s: doc.s
     };
   }
 };

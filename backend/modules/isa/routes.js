@@ -15,15 +15,45 @@ module.exports = function setUpIsaRoutes(app, isaModule)
   const canManage = userModule.auth('LOCAL', 'ISA:MANAGE');
 
   express.get('/isaEvents', canView, express.crud.browseRoute.bind(null, app, IsaEvent));
-  express.get('/isaEvents;export', canView, express.crud.exportRoute.bind(null, {
+  express.get('/isaEvents;export.:format?', canView, express.crud.exportRoute.bind(null, app, {
     filename: 'ISA-EVENTS',
+    freezeRows: 1,
+    columns: {
+      requestId: 15,
+      division: 10,
+      prodLine: 15,
+      action: 20,
+      time: 'datetime',
+      user: 20,
+      palletKind: 10,
+      whman: 20
+    },
     serializeRow: exportEvent,
     model: IsaEvent
   }));
 
   express.get('/isaRequests', canView, express.crud.browseRoute.bind(null, app, IsaRequest));
-  express.get('/isaRequests;export', canView, express.crud.exportRoute.bind(null, {
+  express.get('/isaRequests;export.:format?', canView, express.crud.exportRoute.bind(null, app, {
     filename: 'ISA-REQUESTS',
+    freezeRows: 1,
+    columns: {
+      id: 15,
+      division: 10,
+      prodLine: 15,
+      type: 10,
+      palletKind: 10,
+      status: 15,
+      requester: 20,
+      requestedAt: 'datetime',
+      whman: 20,
+      respondedAt: 'datetime',
+      finisher: 20,
+      finishedAt: 'datetime',
+      duration: {
+        type: 'decimal',
+        width: 10
+      }
+    },
     serializeRow: exportRequest,
     model: IsaRequest
   }));
@@ -142,33 +172,33 @@ module.exports = function setUpIsaRoutes(app, isaModule)
   function exportEvent(doc)
   {
     return {
-      'requestId': doc.requestId || '',
-      '"division': doc.orgUnits.length ? doc.orgUnits[0].id : '',
-      '"prodLine': doc.orgUnits.length ? doc.orgUnits[doc.orgUnits.length - 1].id : '',
-      '"action': doc.type,
-      'time': app.formatDateTime(doc.time),
-      '"user': doc.user.label,
-      '"palletKind': doc.data.palletKind ? doc.data.palletKind.label : '',
-      '"whman': doc.data.responder ? doc.data.responder.label : ''
+      requestId: doc.requestId || '',
+      division: doc.orgUnits.length ? doc.orgUnits[0].id : '',
+      prodLine: doc.orgUnits.length ? doc.orgUnits[doc.orgUnits.length - 1].id : '',
+      action: doc.type,
+      time: doc.time,
+      user: doc.user.label,
+      palletKind: doc.data.palletKind ? doc.data.palletKind.label : '',
+      whman: doc.data.responder ? doc.data.responder.label : ''
     };
   }
 
   function exportRequest(doc)
   {
     return {
-      'id': doc._id,
-      '"division': doc.orgUnits.length ? doc.orgUnits[0].id : '',
-      '"prodLine': doc.orgUnits.length ? doc.orgUnits[doc.orgUnits.length - 1].id : '',
-      '"type': doc.type,
-      '"palletKind': doc.data.palletKind ? doc.data.palletKind.label : '',
-      '"status': doc.status,
-      '"requester': doc.requester.label,
-      'requestedAt': app.formatDateTime(doc.requestedAt),
-      '"whman': doc.responder ? doc.responder.label : '',
-      'respondedAt': app.formatDateTime(doc.respondedAt),
-      '"finisher': doc.finisher ? doc.finisher.label : '',
-      'finishedAt': app.formatDateTime(doc.finishedAt),
-      '#duration': doc.status === 'finished' || doc.status === 'cancelled' ? doc.duration : 0
+      id: doc._id,
+      division: doc.orgUnits.length ? doc.orgUnits[0].id : '',
+      prodLine: doc.orgUnits.length ? doc.orgUnits[doc.orgUnits.length - 1].id : '',
+      type: doc.type,
+      palletKind: doc.data.palletKind ? doc.data.palletKind.label : '',
+      status: doc.status,
+      requester: doc.requester.label,
+      requestedAt: doc.requestedAt,
+      whman: doc.responder ? doc.responder.label : '',
+      respondedAt: doc.respondedAt,
+      finisher: doc.finisher ? doc.finisher.label : '',
+      finishedAt: doc.finishedAt,
+      duration: doc.status === 'finished' || doc.status === 'cancelled' ? doc.duration : 0
     };
   }
 };

@@ -29,7 +29,7 @@ module.exports = function setUpIcpoRoutes(app, icpoModule)
   );
 
   express.get(
-    '/icpo/results;export',
+    '/icpo/results;export.:format?',
     canView,
     function(req, res, next)
     {
@@ -38,8 +38,23 @@ module.exports = function setUpIcpoRoutes(app, icpoModule)
 
       next();
     },
-    express.crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, app, {
       filename: 'WMES-ICPO',
+      freezeRows: 1,
+      columns: {
+        srcId: 20,
+        srcTitle: 20,
+        serviceTag: 15,
+        driver: 15,
+        gprs: 15,
+        led: 15,
+        result: 10,
+        errorCode: 25,
+        exception: 30,
+        startedAt: 'datetime',
+        finishedAt: 'datetime',
+        duration: 'decimal'
+      },
       serializeRow: exportIcpoResult,
       model: IcpoResult
     })
@@ -87,20 +102,20 @@ module.exports = function setUpIcpoRoutes(app, icpoModule)
   function exportIcpoResult(doc)
   {
     return {
-      '"srcId': doc.srcId,
-      '"srcTitle': doc.srcTitle,
-      '"serviceTag': doc.serviceTag,
-      '"driver': doc.driver,
-      '"gprs': doc.gprs,
-      '"led': doc.led,
-      '"result': doc.result,
-      '"errorCode': doc.errorCode,
-      '"exception': doc.exception,
-      'startedAt': app.formatDateTime(doc.startedAt),
-      'finishedAt': app.formatDateTime(doc.finishedAt),
-      '#duration': (doc.finishedAt - doc.startedAt) / 1000,
-      '"srcIp': doc.srcIp,
-      '"srcUuid': doc.srcUuid
+      srcId: doc.srcId,
+      srcTitle: doc.srcTitle,
+      serviceTag: doc.serviceTag,
+      driver: doc.driver,
+      gprs: doc.gprs,
+      led: doc.led,
+      result: doc.result,
+      errorCode: doc.errorCode,
+      exception: doc.exception,
+      startedAt: doc.startedAt,
+      finishedAt: doc.finishedAt,
+      duration: (doc.finishedAt - doc.startedAt) / 1000,
+      srcIp: doc.srcIp,
+      srcUuid: doc.srcUuid
     };
   }
 

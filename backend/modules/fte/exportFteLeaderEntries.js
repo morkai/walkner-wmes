@@ -123,7 +123,6 @@ module.exports = function exportFteLeaderEntries(app, subdivisionsModule, queryS
 
   function exportNext(doc)
   {
-    const date = app.formatDate(doc.date);
     let subdivision = subdivisionsModule.modelsById[doc.subdivision];
     const division = subdivision ? subdivision.division : '?';
 
@@ -133,17 +132,17 @@ module.exports = function exportFteLeaderEntries(app, subdivisionsModule, queryS
     {
       const task = doc.tasks[i];
       const row = {
-        '"division': division,
-        '"subdivision': subdivision,
-        'date': date,
-        'shiftNo': doc.shift,
-        '"task': task.name,
-        'parent': task.parent ? 0 : 1
+        division: division,
+        subdivision: subdivision,
+        date: doc.date,
+        shift: doc.shift,
+        task: task.name,
+        parent: !!task.parent
       };
 
       exportCountColumns(row, task, functionList, companyList, divisionList);
 
-      row['"fteId'] = doc._id;
+      row.fteId = doc._id;
 
       emitter.emit('data', row);
     }
@@ -165,7 +164,7 @@ function exportCountColumns(row, task, functionList, companyList, divisionList)
     functionId = functionList[i];
     taskFunction = task.functions[functionId];
 
-    const functionColumn = '#' + functionId;
+    const functionColumn = '$' + functionId;
 
     row[functionColumn] = taskFunction === undefined ? 0 : taskFunction.total;
 

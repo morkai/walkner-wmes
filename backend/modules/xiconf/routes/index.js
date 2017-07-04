@@ -152,10 +152,26 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   //
   express.get('/xiconf/orders', canView, express.crud.browseRoute.bind(null, app, XiconfOrder));
 
-  express.get('/xiconf/orders;export', canView, express.crud.exportRoute.bind(null, {
+  express.get('/xiconf/orders;export.:format?', canView, express.crud.exportRoute.bind(null, app, {
     filename: 'WMES-XICONF-ORDERS',
     serializeRow: exportXiconfOrder,
-    model: XiconfOrder
+    model: XiconfOrder,
+    freezeRows: 1,
+    freezeColumns: 1,
+    columns: {
+      orderNo: 9,
+      nc12: 12,
+      name: 30,
+      quantityTodo: 'integer',
+      quantityDone: 'integer',
+      status: {type: 'integer', width: 5},
+      startDate: 'date',
+      finishDate: 'date',
+      reqDate: 'date',
+      startedAt: 'datetime',
+      finishedAt: 'datetime',
+      duration: 'integer'
+    }
   }));
 
   express.post('/xiconf/orders;import', importOrdersRoute.bind(null, app, xiconfModule));
@@ -185,7 +201,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   );
 
   express.get(
-    '/xiconf/results;export',
+    '/xiconf/results;export.:format?',
     canView,
     function(req, res, next)
     {
@@ -216,7 +232,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
       next();
     },
     // populateOrder.bind(null, []),
-    express.crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, app, {
       filename: 'WMES-XICONF-RESULTS',
       serializeRow: exportXiconfResult,
       model: XiconfResult
@@ -477,18 +493,18 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   function exportXiconfOrder(doc)
   {
     return {
-      '"orderNo': doc._id,
-      '"12nc': doc.nc12[0],
-      '"name': doc.name,
-      '#quantityTodo': doc.quantityTodo,
-      '#quantityDone': doc.quantityDone,
-      '"status': doc.status,
-      'startDate': app.formatDate(doc.startDate),
-      'finishDate': app.formatDate(doc.finishDate),
-      'reqDate': app.formatDate(doc.reqDate),
-      'startedAt': app.formatDateTime(doc.startedAt),
-      'finishedAt': app.formatDateTime(doc.finishedAt),
-      '#duration': doc.finishedAt ? ((doc.finishedAt - doc.startedAt) / 1000) : 0
+      orderNo: doc._id,
+      nc12: doc.nc12[0],
+      name: doc.name,
+      quantityTodo: doc.quantityTodo,
+      quantityDone: doc.quantityDone,
+      status: doc.status,
+      startDate: doc.startDate,
+      finishDate: doc.finishDate,
+      reqDate: doc.reqDate,
+      startedAt: doc.startedAt,
+      finishedAt: doc.finishedAt,
+      duration: doc.finishedAt ? ((doc.finishedAt - doc.startedAt) / 1000) : 0
     };
   }
 

@@ -28,7 +28,7 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
   express.post('/prodShifts', canManage, addProdShiftRoute);
 
   express.get(
-    '/prodShifts;export',
+    '/prodShifts;export.:format?',
     canView,
     limitOrgUnit,
     function overrideFields(req, res, next)
@@ -41,8 +41,25 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
       next();
     },
-    express.crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, app, {
       filename: 'WMES-SHIFTS',
+      freezeRows: 1,
+      freezeColumns: 3,
+      columns: {
+        date: 'date',
+        shift: {type: 'integer', width: 5},
+        efficiency: 'percent',
+        h1: {type: 'integer', width: 5},
+        h2: {type: 'integer', width: 5},
+        h3: {type: 'integer', width: 5},
+        h4: {type: 'integer', width: 5},
+        h5: {type: 'integer', width: 5},
+        h6: {type: 'integer', width: 5},
+        h7: {type: 'integer', width: 5},
+        h8: {type: 'integer', width: 5},
+        division: 10,
+        prodLine: 15
+      },
       serializeRow: exportProdShift,
       model: ProdShift
     })
@@ -56,32 +73,37 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 
   function exportProdShift(doc)
   {
+    if (!Array.isArray(doc.orderMrp) || !doc.orderMrp.length)
+    {
+      return;
+    }
+
     const subdivision = orgUnitsModule.getByTypeAndId('subdivision', doc.subdivision);
     const prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', doc.prodFlow);
 
     return {
-      'date': app.formatDate(doc.date),
-      'shiftNo': doc.shift,
-      'h1': doc.quantitiesDone[0].actual,
-      'h2': doc.quantitiesDone[1].actual,
-      'h3': doc.quantitiesDone[2].actual,
-      'h4': doc.quantitiesDone[3].actual,
-      'h5': doc.quantitiesDone[4].actual,
-      'h6': doc.quantitiesDone[5].actual,
-      'h7': doc.quantitiesDone[6].actual,
-      'h8': doc.quantitiesDone[7].actual,
-      '#efficiency': Math.round(doc.efficiency * 100),
-      '"master': doc.master ? doc.master.label : '',
-      '"leader': doc.leader ? doc.leader.label : '',
-      '"operator': doc.operator ? doc.operator.label : '',
-      '"division': doc.division,
-      '"subdivision': subdivision ? subdivision.name : doc.subdivision,
-      '"lineMrp': Array.isArray(doc.mrpControllers) ? doc.mrpControllers.join(',') : '',
-      '"orderMrp': Array.isArray(doc.orderMrp) ? doc.orderMrp.join(',') : '',
-      '"prodFlow': prodFlow ? prodFlow.name : doc.prodFlow,
-      '"workCenter': doc.workCenter,
-      '"prodLine': doc.prodLine,
-      '"shiftId': doc._id
+      date: doc.date,
+      shift: doc.shift,
+      prodLine: doc.prodLine,
+      h1: doc.quantitiesDone[0].actual,
+      h2: doc.quantitiesDone[1].actual,
+      h3: doc.quantitiesDone[2].actual,
+      h4: doc.quantitiesDone[3].actual,
+      h5: doc.quantitiesDone[4].actual,
+      h6: doc.quantitiesDone[5].actual,
+      h7: doc.quantitiesDone[6].actual,
+      h8: doc.quantitiesDone[7].actual,
+      efficiency: doc.efficiency,
+      master: doc.master ? doc.master.label : '',
+      leader: doc.leader ? doc.leader.label : '',
+      operator: doc.operator ? doc.operator.label : '',
+      division: doc.division,
+      subdivision: subdivision ? subdivision.name : doc.subdivision,
+      lineMrp: Array.isArray(doc.mrpControllers) ? doc.mrpControllers.join(',') : '',
+      orderMrp: Array.isArray(doc.orderMrp) ? doc.orderMrp.join(',') : '',
+      prodFlow: prodFlow ? prodFlow.name : doc.prodFlow,
+      workCenter: doc.workCenter,
+      shiftId: doc._id
     };
   }
 

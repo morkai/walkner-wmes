@@ -29,7 +29,7 @@ module.exports = function setUpPscsRoutes(app, pscsModule)
   express.delete('/pscs/results/:id', canManage, express.crud.deleteRoute.bind(null, app, PscsResult));
 
   express.get(
-    '/pscs/results;export',
+    '/pscs/results;export.:format?',
     canView,
     function(req, res, next)
     {
@@ -38,8 +38,18 @@ module.exports = function setUpPscsRoutes(app, pscsModule)
 
       next();
     },
-    express.crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, app, {
       filename: 'WMES-PSCS',
+      freezeRows: 1,
+      freezeColumns: 1,
+      columns: {
+        rid: 10,
+        status: 10,
+        personnelId: 10,
+        startedAt: 'datetime',
+        finishedAt: 'datetime',
+        duration: 'integer'
+      },
       serializeRow: exportPscsResult,
       model: PscsResult
     })
@@ -118,18 +128,18 @@ module.exports = function setUpPscsRoutes(app, pscsModule)
   function exportPscsResult(doc)
   {
     const obj = {
-      '#rid': doc.rid,
-      '"status': doc.status,
-      '"personnelId': doc.personnelId,
-      '"user': exportUserInfo(doc.user),
-      'startedAt': app.formatDateTime(doc.startedAt),
-      'finishedAt': doc.finishedAt ? app.formatDateTime(doc.finishedAt) : '',
-      '#duration': Math.round(doc.duration / 1000),
-      '"creator': exportUserInfo(doc.creator)
+      rid: doc.rid,
+      status: doc.status,
+      personnelId: doc.personnelId,
+      user: exportUserInfo(doc.user),
+      startedAt: doc.startedAt,
+      finishedAt: doc.finishedAt,
+      duration: Math.round(doc.duration / 1000),
+      creator: exportUserInfo(doc.creator)
     };
 
-    doc.answers.forEach((answer, i) => obj['a' + (i + 1)] = answer);
-    doc.validity.forEach((validity, i) => obj['v' + (i + 1)] = validity ? '1' : '0');
+    doc.answers.forEach((answer, i) => obj['#a' + (i + 1)] = answer);
+    doc.validity.forEach((validity, i) => obj['?v' + (i + 1)] = !!validity);
 
     return obj;
   }

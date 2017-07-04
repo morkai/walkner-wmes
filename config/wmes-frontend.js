@@ -97,7 +97,8 @@ exports.mainCssFile = '/assets/wmes-main.css';
 exports.faviconFile = 'assets/wmes-favicon.ico';
 
 exports.frontendAppData = {
-  KAIZEN_MULTI: false
+  KAIZEN_MULTI: false,
+  XLSX_EXPORT: process.platform === 'win32'
 };
 
 exports.dictionaryModules = {

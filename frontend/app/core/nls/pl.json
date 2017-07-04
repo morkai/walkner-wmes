@@ -10,6 +10,8 @@
   "MSG:LOG_OUT:SUCCESS": "Zostałeś wylogowany!",
 
   "PAGE_ACTION:filter": "Filtruj",
+  "PAGE_ACTION:export:csv": "Eksportuj do CSV",
+  "PAGE_ACTION:export:xlsx": "Eksportuj do XLSX",
 
   "LIST:COLUMN:actions": "Akcje",
   "LIST:NO_DATA": "Brak danych.",

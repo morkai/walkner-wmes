@@ -5,7 +5,7 @@
 const _ = require('lodash');
 const helpers = require('./helpers');
 
-module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
+module.exports = function report2ExportRoute(app, reportsModule, req, res, next)
 {
   const query = req.query;
   const fromTime = helpers.getTime(query.from);
@@ -60,7 +60,22 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
   const exportOptions = {
     filename: 'WMES-CLIP_ORDERS',
     model: Order,
-    serializeRow: function() {}
+    serializeRow: function() {},
+    freezeRows: 1,
+    freezeColumns: 1,
+    columns: {
+      orderNo: 9,
+      nc12: 12,
+      division: 10,
+      mrp: 7,
+      startDate: 'date',
+      finishDate: 'date',
+      qty: 'integer',
+      confirmed: 10,
+      delivered: 10,
+      confirmedAt: 'datetime',
+      deliveredAt: 'datetime'
+    }
   };
 
   DelayReason.find().lean().exec(function(err, delayReasonList)
@@ -79,52 +94,52 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
 
     exportOptions.serializeRow = exportOrder.bind(null, delayReasonMap);
 
-    app[reportsModule.config.expressId].crud.exportRoute(exportOptions, req, res, next);
+    app[reportsModule.config.expressId].crud.exportRoute(app, exportOptions, req, res, next);
   });
 
   function exportOrder(delayReasonMap, order)
   {
     const division = orgUnitsModule.getDivisionFor('mrpController', order.mrp);
     let confirmed = '';
-    let confirmedAt = '';
+    let confirmedAt = null;
     let delivered = '';
-    let deliveredAt = '';
+    let deliveredAt = null;
 
     if (order.statusesSetAt.CNF)
     {
       confirmed = 'CNF';
-      confirmedAt = app.formatDateTime(order.statusesSetAt.CNF);
+      confirmedAt = order.statusesSetAt.CNF;
     }
     else if (order.statusesSetAt.PCNF)
     {
       confirmed = 'PCNF';
-      confirmedAt = app.formatDateTime(order.statusesSetAt.PCNF);
+      confirmedAt = order.statusesSetAt.PCNF;
     }
 
     if (order.statusesSetAt.DLV)
     {
       delivered = 'DLV';
-      deliveredAt = app.formatDateTime(order.statusesSetAt.DLV);
+      deliveredAt = order.statusesSetAt.DLV;
     }
     else if (order.statusesSetAt.PDLV)
     {
       delivered = 'PDLV';
-      deliveredAt = app.formatDateTime(order.statusesSetAt.PDLV);
+      deliveredAt = order.statusesSetAt.PDLV;
     }
 
     return {
-      '"orderNo': order._id,
-      '"12nc': order.nc12,
-      '"division': division ? division._id : '',
-      '"mrp': order.mrp,
-      'startDate': app.formatDate(order.startDate),
-      'finishDate': app.formatDate(order.finishDate),
-      '#qty': order.qty,
-      '"confirmed': confirmed,
-      '"delivered': delivered,
-      'confirmedAt': confirmedAt,
-      'deliveredAt': deliveredAt,
-      '"delayReason': delayReasonMap[order.delayReason] || ''
+      orderNo: order._id,
+      nc12: order.nc12,
+      division: division ? division._id : '',
+      mrp: order.mrp,
+      startDate: order.startDate,
+      finishDate: order.finishDate,
+      qty: order.qty,
+      confirmed: confirmed,
+      delivered: delivered,
+      confirmedAt: confirmedAt,
+      deliveredAt: deliveredAt,
+      delayReason: delayReasonMap[order.delayReason] || ''
     };
   }
 };

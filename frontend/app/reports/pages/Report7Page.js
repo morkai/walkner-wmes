@@ -234,9 +234,11 @@ define([
 
     getExportUrls: function()
     {
+      var format = window.XLSX_EXPORT ? 'xlsx' : 'csv';
+
       return {
         clip: '#',
-        downtimes: '/prodDowntimes;export?' + this.prodDowntimes.rqlQuery,
+        downtimes: '/prodDowntimes;export.' + format + '?' + this.prodDowntimes.rqlQuery,
         downtimeTimes: '#',
         downtimeCounts: '#'
       };

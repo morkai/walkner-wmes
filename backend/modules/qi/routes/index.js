@@ -57,11 +57,29 @@ module.exports = function setUpQiRoutes(app, qiModule)
   express.get('/qi/results;order', canManageResults, findOrderRoute.bind(null, app, qiModule));
 
   express.get(
-    '/qi/results;export',
+    '/qi/results;export.:format?',
     canViewResults,
     exportRoute.fetchDictionaries.bind(null, app, qiModule),
-    express.crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, app, {
       filename: 'QI_RESULTS',
+      freezeRows: 1,
+      freezeColumns: 1,
+      columns: {
+        rid: 10,
+        nc12: 12,
+        productName: 30,
+        division: 10,
+        productFamily: 7,
+        orderNo: 9,
+        inspectedAt: 'date',
+        result: 5,
+        qtyOrder: 'integer',
+        qtyInspected: 'integer',
+        qtyNokInspected: 'integer',
+        qtyToFix: 'integer',
+        qtyNok: 'integer',
+        faultCode: 5
+      },
       serializeRow: exportRoute.serializeRow.bind(null, app, qiModule),
       cleanUp: exportRoute.cleanUp,
       model: QiResult

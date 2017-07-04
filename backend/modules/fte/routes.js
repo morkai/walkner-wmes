@@ -37,7 +37,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
   );
 
   express.get(
-    '/fte/master;export',
+    '/fte/master;export.:format?',
     canViewMaster,
     limitToDivision,
     function(req, res, next)
@@ -47,8 +47,20 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
       next();
     },
-    express.crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, app, {
       filename: 'WMES-FTE_PRODUCTION',
+      freezeRows: 1,
+      columns: {
+        division: 8,
+        subdivision: 10,
+        date: 'date',
+        shift: {
+          type: 'integer',
+          width: 5
+        },
+        type: 10,
+        task: 20
+      },
       serializeStream: exportFteMasterEntries.bind(null, app, subdivisionsModule),
       model: FteMasterEntry
     })
@@ -70,7 +82,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
   );
 
   express.get(
-    '/fte/leader;export',
+    '/fte/leader;export.:format?',
     auth('FTE:LEADER:VIEW', 'REPORTS:VIEW'),
     limitToDivision,
     function(req, res, next)
@@ -80,8 +92,20 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
       next();
     },
-    express.crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, app, {
       filename: 'WMES-FTE_WAREHOUSE',
+      freezeRows: 1,
+      columns: {
+        division: 8,
+        subdivision: 20,
+        date: 'date',
+        shift: {
+          type: 'integer',
+          width: 5
+        },
+        task: 40,
+        parent: 'boolean'
+      },
       serializeStream: exportFteLeaderEntries.bind(null, app, subdivisionsModule),
       model: FteLeaderEntry
     })

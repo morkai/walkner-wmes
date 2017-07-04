@@ -11,7 +11,9 @@ define([
 
   return OrderCollection.extend({
 
-    url: '/reports/2;orders',
+    nlsDomain: 'reports',
+
+    url: '/reports/2/orders',
 
     rqlQuery: function(rql)
     {

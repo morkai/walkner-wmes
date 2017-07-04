@@ -4,6 +4,7 @@ define([
   'underscore',
   'app/i18n',
   'app/core/util/bindLoadingMessage',
+  'app/core/util/pageActions',
   'app/delayReasons/storage',
   './DrillingReportPage',
   '../Report2OrderCollection',
@@ -19,6 +20,7 @@ define([
   _,
   t,
   bindLoadingMessage,
+  pageActions,
   delayReasonsStorage,
   DrillingReportPage,
   OrderCollection,
@@ -45,16 +47,17 @@ define([
       'orders.updated.*': 'onOrderUpdated'
     },
 
-    actions: function()
+    actions: function(layout)
     {
       var actions = DrillingReportPage.prototype.actions.call(this);
 
-      actions.unshift({
-        id: 'export',
-        label: t.bound('reports', 'PAGE_ACTION:2:export'),
-        icon: 'download',
-        href: '/reports/2;export?' + this.orders.rqlQuery
-      });
+      actions.unshift(pageActions.export({
+        layout: layout,
+        page: this,
+        collection: this.orders,
+        privilege: false,
+        label: t('reports', 'PAGE_ACTION:2:export')
+      }));
 
       return actions;
     },

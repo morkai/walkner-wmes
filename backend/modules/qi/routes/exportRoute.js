@@ -71,28 +71,28 @@ exports.serializeRow = function(app, qiModule, doc, req)
   const kind = dict.kinds[doc.kind];
   const errorCategory = dict.errorCategories[doc.errorCategory];
   const row = {
-    '#rid': doc.rid,
-    '"12nc': doc.nc12,
-    '"productName': doc.productName,
-    '"division': doc.division,
-    '"productFamily': doc.productFamily,
-    '"orderNo': doc.orderNo,
-    'inspectedAt': app.formatDate(doc.inspectedAt),
-    '"inspector': doc.inspector.label,
-    '"kind': kind || doc.kind,
-    '"result': doc.ok ? 'ok' : 'nok',
-    '#qtyOrder': doc.qtyOrder,
-    '#qtyInspected': doc.qtyInspected,
-    '#qtyNokInspected': doc.qtyNokInspected,
-    '#qtyToFix': doc.qtyToFix,
-    '#qtyNok': doc.qtyNok,
-    '"errorCategory': errorCategory || doc.errorCategory,
-    '"faultCode': doc.faultCode || '',
-    '"faultClassification': doc.faultDescription || '',
-    '"problem': doc.problem || '',
-    '"immediateActions': doc.immediateActions || '',
-    '"immediateResults': doc.immediateResults || '',
-    '"rootCause': doc.rootCause || ''
+    rid: doc.rid,
+    nc12: doc.nc12,
+    productName: doc.productName,
+    division: doc.division,
+    productFamily: doc.productFamily,
+    orderNo: doc.orderNo,
+    inspectedAt: doc.inspectedAt,
+    inspector: doc.inspector.label,
+    kind: kind || doc.kind,
+    result: doc.ok ? 'ok' : 'nok',
+    qtyOrder: doc.qtyOrder,
+    qtyInspected: doc.qtyInspected,
+    qtyNokInspected: doc.qtyNokInspected,
+    qtyToFix: doc.qtyToFix,
+    qtyNok: doc.qtyNok,
+    errorCategory: errorCategory || doc.errorCategory,
+    faultCode: doc.faultCode || '',
+    faultClassification: doc.faultDescription || '',
+    problem: doc.problem || '',
+    immediateActions: doc.immediateActions || '',
+    immediateResults: doc.immediateResults || '',
+    rootCause: doc.rootCause || ''
   };
 
   for (let i = 0; i < dict.maxActionCount; ++i)
@@ -105,10 +105,10 @@ exports.serializeRow = function(app, qiModule, doc, req)
     };
     const suffix = i + 1;
 
-    row['"actionWho' + suffix] = action.who.map(d => d.label).join(', ');
-    row['"actionWhat' + suffix] = action.what;
-    row['actionWhen' + suffix] = action.when ? app.formatDate(action.when) : '';
-    row['"actionStatus' + suffix] = action.status;
+    row[`actionWho${suffix}`] = action.who.map(d => d.label).join(', ');
+    row[`actionWhat${suffix}`] = action.what;
+    row[`-actionWhen${suffix}`] = action.when;
+    row[`actionStatus${suffix}`] = action.status;
   }
 
   return row;

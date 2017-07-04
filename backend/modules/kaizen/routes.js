@@ -39,8 +39,31 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
   express.put('/kaizen/orders/:id', canView, editKaizenOrderRoute);
   express.delete('/kaizen/orders/:id', canManage, express.crud.deleteRoute.bind(null, app, KaizenOrder));
 
-  express.get('/kaizen/orders;export', canView, fetchDictionaries, express.crud.exportRoute.bind(null, {
+  express.get('/kaizen/orders;export.:format?', canView, fetchDictionaries, express.crud.exportRoute.bind(null, app, {
     filename: 'KAIZEN_ORDERS',
+    freezeRows: 1,
+    freezeColumns: 1,
+    columns: {
+      rid: 10,
+      nearMiss: 'boolean',
+      suggestion: 'boolean',
+      kaizen: 'boolean',
+      kaizenStartDate: 'date',
+      kaizenFinishDate: 'date',
+      createdAt: 'datetime',
+      confirmedAt: 'datetime',
+      eventDate: 'date',
+      eventHour: {
+        type: 'integer',
+        width: 5
+      },
+      status: 10,
+      sectionId: 10,
+      areaId: 10,
+      nearMissCategoryId: 10,
+      causeId: 10,
+      riskId: 10
+    },
     serializeRow: exportKaizenOrder,
     cleanUp: cleanUpKaizenOrderExport,
     model: KaizenOrder
@@ -531,7 +554,7 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
     const multiType = kaizenModule.config.multiType;
     const dict = req.kaizenDictionaries;
     const result = {
-      '#rid': doc.rid
+      rid: doc.rid
     };
 
     if (multiType)
@@ -541,53 +564,50 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
       result.kaizen = _.includes(doc.types, 'kaizen') ? 1 : 0;
     }
 
-    result.createdAt = app.formatDateTime(doc.createdAt);
-    result['"creator'] = doc.creator.label;
+    result.createdAt = doc.createdAt;
+    result.creator = doc.creator.label;
     result.status = doc.status;
-    result['"subject'] = doc.subject;
-    result['"sectionId'] = doc.section;
-    result['"sectionName'] = dict.sections[doc.section] || doc.section;
-    result.confirmedAt = app.formatDateTime(doc.confirmedAt);
-    result['"confirmer'] = doc.confirmer ? doc.confirmer.label : '';
-    result.eventDate = app.formatDate(doc.eventDate);
+    result.subject = doc.subject;
+    result.sectionId = doc.section;
+    result.sectionName = dict.sections[doc.section] || doc.section;
+    result.confirmedAt = doc.confirmedAt;
+    result.confirmer = doc.confirmer ? doc.confirmer.label : '';
+    result.eventDate = doc.eventDate;
     result.eventHour = doc.eventDate ? doc.eventDate.getHours() : 0;
-    result['"areaId'] = doc.area;
-    result['"areaName'] = dict.areas[doc.area] || doc.area;
-    result['"description'] = doc.description;
-    result['"nearMissCategoryId'] = doc.nearMissCategory;
-    result['"nearMissCategoryName'] = dict.categories[doc.nearMissCategory] || doc.nearMissCategory;
-    result['"causeId'] = doc.cause;
-    result['"causeName'] = dict.causes[doc.cause] || doc.cause;
-    result['"causeText'] = doc.causeText;
-    result['"riskId'] = doc.risk;
-    result['"riskName'] = dict.risks[doc.risk] || doc.risk;
-    result['"correctiveMeasures'] = doc.correctiveMeasures;
-    result['"preventiveMeasures'] = doc.preventiveMeasures;
+    result.areaId = doc.area;
+    result.areaName = dict.areas[doc.area] || doc.area;
+    result.description = doc.description;
+    result.nearMissCategoryId = doc.nearMissCategory;
+    result.nearMissCategoryName = dict.categories[doc.nearMissCategory] || doc.nearMissCategory;
+    result.causeId = doc.cause;
+    result.causeName = dict.causes[doc.cause] || doc.cause;
+    result.causeText = doc.causeText;
+    result.riskId = doc.risk;
+    result.riskName = dict.risks[doc.risk] || doc.risk;
+    result.correctiveMeasures = doc.correctiveMeasures;
+    result.preventiveMeasures = doc.preventiveMeasures;
 
     if (multiType)
     {
-      result['"suggestion'] = doc.suggestion;
-      result['"suggestionCategoryId'] = doc.suggestionCategory;
-      result['"suggestionCategoryName'] = dict.categories[doc.suggestionCategory] || doc.suggestionCategory;
-      result.kaizenStartDate = app.formatDate(doc.kaizenStartDate);
-      result.kaizenFinishDate = app.formatDate(doc.kaizenFinishDate);
-      result['"kaizenImprovements'] = doc.kaizenImprovements;
-      result['"kaizenEffect'] = doc.kaizenEffect;
+      result.suggestion = doc.suggestion;
+      result.suggestionCategoryId = doc.suggestionCategory;
+      result.suggestionCategoryName = dict.categories[doc.suggestionCategory] || doc.suggestionCategory;
+      result.kaizenStartDate = doc.kaizenStartDate;
+      result.kaizenFinishDate = doc.kaizenFinishDate;
+      result.kaizenImprovements = doc.kaizenImprovements;
+      result.kaizenEffect = doc.kaizenEffect;
     }
 
     if (multiType)
     {
-      result['"nearMissOwners'] = result.nearMiss ? exportKaizenOrderOwners(doc.nearMissOwners) : '';
-      result['"suggestionOwners'] = result.suggestionOwners ? exportKaizenOrderOwners(doc.suggestionOwners) : '';
-      result['"kaizenOwners'] = result.kaizenOwners ? exportKaizenOrderOwners(doc.kaizenOwners) : '';
+      result.nearMissOwners = result.nearMiss ? exportKaizenOrderOwners(doc.nearMissOwners) : '';
+      result.suggestionOwners = result.suggestionOwners ? exportKaizenOrderOwners(doc.suggestionOwners) : '';
+      result.kaizenOwners = result.kaizenOwners ? exportKaizenOrderOwners(doc.kaizenOwners) : '';
     }
     else
     {
-      result['"nearMissOwners'] = exportKaizenOrderOwners(doc.nearMissOwners);
+      result.nearMissOwners = exportKaizenOrderOwners(doc.nearMissOwners);
     }
-
-    result['"behaviourId'] = doc.behaviour;
-    result['"behaviourName'] = dict.behaviours[doc.behaviour] || doc.behaviour;
 
     return result;
   }

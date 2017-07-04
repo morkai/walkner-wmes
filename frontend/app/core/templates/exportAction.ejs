@@ -1,0 +1,14 @@
+<% if (formats.length === 1) { %>
+<a class="btn btn-<%- type %> <%- disabled ? 'disabled' : '' %>" href="<%= formats[0].href %>"><i class="fa fa-download"></i><span><%- label %></span></a>
+<% } else { %>
+<div class="page-actions-export btn-group">
+  <button type="button" class="btn btn-<%- type %> dropdown-toggle" data-toggle="dropdown" <%- disabled ? 'disabled' : '' %>>
+    <i class="fa fa-download"></i><span><%- label %></span> <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right">
+    <% _.forEach(formats, function(format) { %>
+    <li><a href="<%= format.href %>"><%- t('core', 'PAGE_ACTION:export:' + format.type) %></a></li>
+    <% }) %>
+  </ul>
+</div>
+<% } %>

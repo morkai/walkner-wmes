@@ -330,10 +330,13 @@ define([
       var fromTime = time.getMoment(this.query.get('from')).hours(6).valueOf();
       var toTime = time.getMoment(this.query.get('to')).hours(6).valueOf();
       var subdivisions = [this.settings.getValue('wh.comp.id'), this.settings.getValue('wh.finGoods.id')];
+      var format = window.XLSX_EXPORT ? 'xlsx' : 'csv';
 
       return {
-        to: '/warehouse/transferOrders;export?sort(shiftDate)&shiftDate>=' + fromTime + '&shiftDate<' + toTime,
-        fte: '/fte/leader;export?sort(date)&date>=' + fromTime
+        to: '/warehouse/transferOrders;export.' + format
+          + '?sort(shiftDate)&shiftDate>=' + fromTime + '&shiftDate<' + toTime,
+        fte: '/fte/leader;export.' + format
+          + '?sort(date)&date>=' + fromTime
           + '&date<' + toTime
           + '&subdivision=in=(' + subdivisions + ')'
       };

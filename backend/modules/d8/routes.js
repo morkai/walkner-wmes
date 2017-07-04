@@ -29,8 +29,30 @@ module.exports = function setUpD8Routes(app, module)
 
   express.get('/d8/entries', canView, prepareObserverFilter, express.crud.browseRoute.bind(null, app, D8Entry));
   express.get('/d8/entries;rid', canView, findByRidRoute);
-  express.get('/d8/entries;export', canView, fetchDictionaries, express.crud.exportRoute.bind(null, {
+  express.get('/d8/entries;export.:format?', canView, fetchDictionaries, express.crud.exportRoute.bind(null, app, {
     filename: '8D',
+    freezeRows: 1,
+    freezeColumns: 1,
+    columns: {
+      rid: 10,
+      createdAt: 'datetime',
+      creator: 25,
+      status: 15,
+      subject: 30,
+      area: 20,
+      manager: 25,
+      owner: 25,
+      members: 30,
+      stripNo: 30,
+      stripKind: 30,
+      entrySource: 30,
+      problemSource: 30,
+      problemDescription: 30,
+      crsRegisterDate: 'date',
+      d5PlannedCloseDate: 'date',
+      d5CloseDate: 'date',
+      d8CloseDate: 'date'
+    },
     serializeRow: exportEntry,
     cleanUp: cleanUpExport,
     model: D8Entry
@@ -525,9 +547,6 @@ module.exports = function setUpD8Routes(app, module)
     const dict = req.dictionaries;
     const stripNos = [];
     const stripFamilies = [];
-    const result = {
-      '#rid': doc.rid
-    };
 
     _.forEach(doc.strips, function(strip)
     {
@@ -535,24 +554,25 @@ module.exports = function setUpD8Routes(app, module)
       stripFamilies.push(strip.family || '');
     });
 
-    result.createdAt = app.formatDateTime(doc.createdAt);
-    result['"creator'] = doc.creator.label;
-    result.status = doc.status;
-    result['"subject'] = doc.subject;
-    result['"area'] = doc.area;
-    result['"manager'] = doc.manager ? doc.manager.label : '';
-    result['"owner'] = doc.owner ? doc.owner.label : '';
-    result['"members'] = _.map(doc.members, member => member.label).join('; ');
-    result['"stripNo'] = stripNos.join('; ');
-    result['"stripKind'] = stripFamilies.join('; ');
-    result['"entrySource'] = dict.entrySources[doc.entrySource] || doc.entrySource;
-    result['"problemSource'] = dict.problemSources[doc.problemSource] || doc.problemSource;
-    result['"problemDescription'] = doc.problemDescription;
-    result.crsRegisterDate = app.formatDate(doc.crsRegisterDate);
-    result.d5PlannedCloseDate = app.formatDate(doc.d5PlannedCloseDate);
-    result.d5CloseDate = app.formatDate(doc.d5CloseDate);
-    result.d8CloseDate = app.formatDate(doc.d8CloseDate);
-
-    return result;
+    return {
+      rid: doc.rid,
+      createdAt: doc.createdAt,
+      creator: doc.creator.label,
+      status: doc.status,
+      subject: doc.subject,
+      area: dict.areas[doc.area] || doc.area,
+      manager: doc.manager ? doc.manager.label : '',
+      owner: doc.owner ? doc.owner.label : '',
+      members: _.map(doc.members, member => member.label).join(', '),
+      stripNo: stripNos.join(', '),
+      stripKind: stripFamilies.join(', '),
+      entrySource: dict.entrySources[doc.entrySource] || doc.entrySource,
+      problemSource: dict.problemSources[doc.problemSource] || doc.problemSource,
+      problemDescription: doc.problemDescription,
+      crsRegisterDate: doc.crsRegisterDate,
+      d5PlannedCloseDate: doc.d5PlannedCloseDate,
+      d5CloseDate: doc.d5CloseDate,
+      d8CloseDate: doc.d8CloseDate
+    };
   }
 };

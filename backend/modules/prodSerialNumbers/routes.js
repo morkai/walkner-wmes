@@ -13,8 +13,24 @@ module.exports = function setUpProdSerialNumbersRoutes(app, module)
 
   express.get('/prodSerialNumbers', canView, express.crud.browseRoute.bind(null, app, ProdSerialNumber));
 
-  express.get('/prodSerialNumbers;export', canView, express.crud.exportRoute.bind(null, {
+  express.get('/prodSerialNumbers;export.:format?', canView, express.crud.exportRoute.bind(null, app, {
     filename: 'WMES-SERIAL_NUMBERS',
+    freezeRows: 1,
+    freezeColumns: 1,
+    columns: {
+      sn: 19,
+      orderNo: 9,
+      itemNo: {
+        type: 'integer',
+        width: 5
+      },
+      prodLine: 10,
+      sapTaktTime: 'integer',
+      cycleTime: 'integer',
+      iptCycleTime: 'integer',
+      scanTs: 'datetime',
+      iptTs: 'datetime'
+    },
     serializeRow: exportSerialNumber,
     model: ProdSerialNumber
   }));
@@ -22,15 +38,15 @@ module.exports = function setUpProdSerialNumbersRoutes(app, module)
   function exportSerialNumber(doc)
   {
     return {
-      '"sn': doc._id,
-      '"orderNo': doc.orderNo,
-      '#itemNo': doc.serialNo,
-      '"prodLine': doc.prodLine,
-      '#sapTaktTime': doc.sapTaktTime || '',
-      '#cycleTime': Math.round(doc.taktTime / 1000),
-      '#iptCycleTime': Math.round(doc.iptTaktTime / 1000) || '',
-      'scanTs': app.formatDateTime(doc.scannedAt),
-      'iptTs': app.formatDateTime(doc.iptTaktTime)
+      sn: doc._id,
+      orderNo: doc.orderNo,
+      itemNo: doc.serialNo,
+      prodLine: doc.prodLine,
+      sapTaktTime: doc.sapTaktTime || '',
+      cycleTime: Math.round(doc.taktTime / 1000),
+      iptCycleTime: Math.round(doc.iptTaktTime / 1000) || '',
+      scanTs: doc.scannedAt,
+      iptTs: doc.iptAt
     };
   }
 };

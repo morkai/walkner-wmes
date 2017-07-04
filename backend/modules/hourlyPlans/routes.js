@@ -42,7 +42,7 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
   express.get('/hourlyPlans', canView, express.crud.browseRoute.bind(null, app, HourlyPlan));
 
   express.get(
-    '/hourlyPlans;export',
+    '/hourlyPlans;export.:format?',
     canView,
     function(req, res, next)
     {
@@ -51,8 +51,22 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
 
       next();
     },
-    express.crud.exportRoute.bind(null, {
+    express.crud.exportRoute.bind(null, app, {
       filename: 'WMES-HOURLY_PLANS',
+      freezeRows: 1,
+      columns: {
+        division: 8,
+        date: 'date',
+        shift: {
+          type: 'integer',
+          width: 5
+        },
+        prodFlow: 30,
+        level: {
+          type: 'integer',
+          width: 5
+        }
+      },
       serializeRow: exportHourlyPlan,
       model: HourlyPlan
     })
@@ -110,17 +124,20 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
   function exportHourlyPlan(doc)
   {
     const rows = [];
-    const date = app.formatDate(doc.date);
 
     _.forEach(doc.flows, function(flow)
     {
+      if (flow.noPlan)
+      {
+        return;
+      }
+
       rows.push({
-        '"division': doc.division,
-        'date': date,
-        'shiftNo': doc.shift,
-        '"prodFlow': flow.name,
-        'noPlan': flow.noPlan ? 1 : 0,
-        '#level': flow.level,
+        division: doc.division,
+        date: doc.date,
+        shift: doc.shift,
+        prodFlow: flow.name,
+        level: flow.level,
         '#h06': flow.hours[0],
         '#h07': flow.hours[1],
         '#h08': flow.hours[2],
@@ -145,7 +162,7 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
         '#h03': flow.hours[21],
         '#h04': flow.hours[22],
         '#h05': flow.hours[23],
-        '"planId': doc._id
+        planId: doc._id
       });
     });
 

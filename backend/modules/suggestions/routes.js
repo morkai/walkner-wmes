@@ -35,11 +35,27 @@ module.exports = function setUpSuggestionsRoutes(app, module)
   express.put('/suggestions/:id', canView, editSuggestionRoute);
   express.delete('/suggestions/:id', canManage, express.crud.deleteRoute.bind(null, app, Suggestion));
 
-  express.get('/suggestions;export', canView, fetchDictionaries, express.crud.exportRoute.bind(null, {
+  express.get('/suggestions;export.:format?', canView, fetchDictionaries, express.crud.exportRoute.bind(null, app, {
     filename: 'SUGGESTIONS',
     serializeRow: exportSuggestion,
     cleanUp: cleanUpSuggestionExport,
-    model: Suggestion
+    model: Suggestion,
+    freezeRows: 1,
+    freezeColumns: 1,
+    columns: {
+      rid: 10,
+      createdAt: 'datetime',
+      status: 10,
+      subject: 40,
+      sectionId: 10,
+      confirmedAt: 'datetime',
+      date: 'date',
+      productFamilyId: 10,
+      kaizenStartDate: 'date',
+      kaizenFinishDate: 'date',
+      implementationDays: 'integer',
+      kaizenDuration: 'integer'
+    }
   }));
 
   express.get('/suggestions/:order/attachments/:attachment', canView, sendAttachmentRoute);
@@ -490,36 +506,34 @@ module.exports = function setUpSuggestionsRoutes(app, module)
   function exportSuggestion(doc, req)
   {
     const dict = req.kaizenDictionaries;
-    const result = {
-      '#rid': doc.rid
+
+    return {
+      rid: doc.rid,
+      createdAt: doc.createdAt,
+      creator: doc.creator.label,
+      status: doc.status,
+      subject: doc.subject,
+      sectionId: doc.section,
+      sectionName: dict.sections[doc.section] || doc.section,
+      confirmedAt: doc.confirmedAt,
+      confirmer: doc.confirmer ? doc.confirmer.label : '',
+      date: doc.date,
+      categoryIds: doc.categories.join('; '),
+      categoryNames: doc.categories.map(function(c) { return dict.categories[c] || c; }).join('; '),
+      productFamilyId: doc.productFamily,
+      productFamilyName: dict.productFamilies[doc.productFamily] || doc.productFamily,
+      howItIs: doc.howItIs,
+      howItShouldBe: doc.howItShouldBe,
+      suggestion: doc.suggestion,
+      kaizenStartDate: doc.kaizenStartDate,
+      kaizenFinishDate: doc.kaizenFinishDate,
+      kaizenImprovements: doc.kaizenImprovements,
+      kaizenEffect: doc.kaizenEffect,
+      suggestionOwners: exportSuggestionOwners(doc.suggestionOwners),
+      kaizenOwners: exportSuggestionOwners(doc.kaizenOwners),
+      implementationDays: doc.finishDuration,
+      kaizenDuration: doc.kaizenDuration
     };
-
-    result.createdAt = app.formatDateTime(doc.createdAt);
-    result['"creator'] = doc.creator.label;
-    result.status = doc.status;
-    result['"subject'] = doc.subject;
-    result['"sectionId'] = doc.section;
-    result['"sectionName'] = dict.sections[doc.section] || doc.section;
-    result.confirmedAt = app.formatDateTime(doc.confirmedAt);
-    result['"confirmer'] = doc.confirmer ? doc.confirmer.label : '';
-    result.date = app.formatDate(doc.date);
-    result['"categoryIds'] = doc.categories.join('; ');
-    result['"categoryNames'] = doc.categories.map(function(c) { return dict.categories[c] || c; }).join('; ');
-    result['"productFamilyId'] = doc.productFamily;
-    result['"productFamilyName'] = dict.productFamilies[doc.productFamily] || doc.productFamily;
-    result['"howItIs'] = doc.howItIs;
-    result['"howItShouldBe'] = doc.howItShouldBe;
-    result['"suggestion'] = doc.suggestion;
-    result.kaizenStartDate = app.formatDate(doc.kaizenStartDate);
-    result.kaizenFinishDate = app.formatDate(doc.kaizenFinishDate);
-    result['"kaizenImprovements'] = doc.kaizenImprovements;
-    result['"kaizenEffect'] = doc.kaizenEffect;
-    result['"suggestionOwners'] = exportSuggestionOwners(doc.suggestionOwners);
-    result['"kaizenOwners'] = exportSuggestionOwners(doc.kaizenOwners);
-    result['#implementationDays'] = doc.finishDuration;
-    result['#kaizenDuration'] = doc.kaizenDuration;
-
-    return result;
   }
 
   function exportSuggestionOwners(owners)
