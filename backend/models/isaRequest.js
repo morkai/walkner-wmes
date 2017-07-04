@@ -10,7 +10,8 @@ module.exports = function setupIsaRequestModel(app, mongoose)
     type: String,
     id: String
   }, {
-    _id: false
+    _id: false,
+    retainKeyOrder: true
   });
 
   const isaRequestSchema = new mongoose.Schema({
@@ -61,7 +62,8 @@ module.exports = function setupIsaRequestModel(app, mongoose)
     }
   }, {
     id: false,
-    minimize: false
+    minimize: false,
+    retainKeyOrder: true
   });
 
   isaRequestSchema.statics.TOPIC_PREFIX = 'isaRequests';

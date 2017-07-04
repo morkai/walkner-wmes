@@ -15,11 +15,16 @@ module.exports = function setUpOrgUnitsRql()
       return;
     }
 
-    const orgUnitType = String(args.shift());
+    let orgUnitType = String(args.shift());
 
     if (args.length === 0)
     {
       return;
+    }
+
+    if (orgUnitType === 'mrpControllers')
+    {
+      orgUnitType = 'mrpController';
     }
 
     if (args.length === 1)
@@ -33,7 +38,10 @@ module.exports = function setUpOrgUnitsRql()
     {
       query.selector.args.push({
         name: 'in',
-        args: ['orgUnits', {type: orgUnitType, id: args.map(String)}]
+        args: [
+          'orgUnits',
+          args.map(orgUnitId => ({type: orgUnitType, id: String(orgUnitId)}))
+        ]
       });
     }
   };

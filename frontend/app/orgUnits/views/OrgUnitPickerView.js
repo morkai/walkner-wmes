@@ -117,25 +117,34 @@ define([
 
     getOrgUnitsFromRql: function()
     {
+      var array = this.options.mode === 'array';
       var type = null;
       var units = [];
 
       this.filterView.model.rqlQuery.selector.args.forEach(function(term)
       {
-        if (type || (term.name !== 'eq' && term.name !== 'in'))
+        if (type)
         {
           return;
         }
 
-        type = ORG_UNIT_TYPES[term.args[0]];
-        units = (Array.isArray(term.args[1]) ? term.args[1] : [term.args[1]])
-          .map(function(id) { return orgUnits.getByTypeAndId(type, id); })
-          .filter(function(unit) { return !!unit; });
+        if (!array && (term.name === 'eq' || term.name === 'in'))
+        {
+          type = ORG_UNIT_TYPES[term.args[0]];
+          units = Array.isArray(term.args[1]) ? term.args[1] : [term.args[1]];
+        }
+        else if (array && term.name === 'orgUnit')
+        {
+          units = [].concat(term.args);
+          type = ORG_UNIT_TYPES[units.shift()];
+        }
       });
 
       return {
         type: units.length ? type : null,
         units: units
+          .map(function(id) { return orgUnits.getByTypeAndId(type, id); })
+          .filter(function(unit) { return !!unit; })
       };
     },
 
@@ -148,13 +157,23 @@ define([
 
       var ids = _.pluck(this.model.units, 'id');
 
-      selector.push({
-        name: ids.length === 1 ? 'eq' : 'in',
-        args: [
-          this.model.type,
-          ids.length === 1 ? ids[0] : ids
-        ]
-      });
+      if (this.options.mode === 'array')
+      {
+        selector.push({
+          name: 'orgUnit',
+          args: [this.model.type].concat(ids)
+        });
+      }
+      else
+      {
+        selector.push({
+          name: ids.length === 1 ? 'eq' : 'in',
+          args: [
+            this.model.type,
+            ids.length === 1 ? ids[0] : ids
+          ]
+        });
+      }
     }
 
   });

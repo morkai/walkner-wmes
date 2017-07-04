@@ -5,12 +5,14 @@ define([
   'app/core/views/FilterView',
   'app/core/util/idAndLabel',
   'app/core/util/fixTimeRange',
+  'app/orgUnits/views/OrgUnitPickerView',
   'app/isa/templates/requestListFilter'
 ], function(
   orgUnits,
   FilterView,
   idAndLabel,
   fixTimeRange,
+  OrgUnitPickerView,
   template
 ) {
   'use strict';
@@ -20,44 +22,24 @@ define([
     template: template,
 
     defaultFormData: {
-      requestedAt: '',
-      line: null
+      requestedAt: ''
     },
 
     termToForm: {
       'requestedAt': function(propertyName, term, formData)
       {
         fixTimeRange.toFormData(formData, term, 'date+time');
-      },
-      'prodLine': function(propertyName, term, formData)
-      {
-        formData.line = term.args[1];
       }
     },
 
-    afterRender: function()
+    initialize: function()
     {
-      FilterView.prototype.afterRender.call(this);
+      FilterView.prototype.initialize.apply(this, arguments);
 
-      this.$id('line').select2({
-        width: '275px',
-        allowClear: true,
-        placeholder: ' ',
-        data: this.getApplicableProdLines()
-      });
-    },
-
-    getApplicableProdLines: function()
-    {
-      return orgUnits
-        .getAllByType('prodLine')
-        .filter(function(prodLine)
-        {
-          var subdivision = orgUnits.getSubdivisionFor(prodLine);
-
-          return !subdivision || subdivision.get('type') === 'assembly';
-        })
-        .map(idAndLabel);
+      this.setView('#' + this.idPrefix + '-orgUnit', new OrgUnitPickerView({
+        mode: 'array',
+        filterView: this
+      }));
     },
 
     serializeFormToQuery: function(selector)

@@ -149,12 +149,9 @@ exports.browseRoute = function(app, options, req, res, next)
 
       const totalCount = this.totalCount;
 
-      if (typeof Model.customizeLeanObject === 'function' && totalCount > 0)
+      if (totalCount > 0 && typeof Model.customizeLeanObject === 'function')
       {
-        models = models.map(function(leanModel)
-        {
-          return Model.customizeLeanObject(leanModel, queryOptions.fields);
-        });
+        models = models.map(leanModel => Model.customizeLeanObject(leanModel, queryOptions.fields));
       }
 
       if (typeof options.prepareResult === 'function')
