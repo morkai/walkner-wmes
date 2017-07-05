@@ -439,6 +439,11 @@ module.exports = function(mongoose, options, done)
 
       _.forEach(results, function(result)
       {
+        if (!result._id.prodFlow)
+        {
+          return;
+        }
+
         const shiftKey = result._id.date.getTime().toString();
         const divisionId = result._id.division;
         const subdivisionId = result._id.subdivision;
@@ -1423,7 +1428,7 @@ module.exports = function(mongoose, options, done)
       code = code.replace(new RegExp(pattern, 'g'), replacement);
     });
 
-    const calc = function() { return 0; };
+    let calc = function() { return 0; }; // eslint-disable-line prefer-const
 
     try
     {
