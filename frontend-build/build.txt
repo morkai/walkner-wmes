@@ -641,6 +641,7 @@ assets/../app/opinionSurveyOmrResults/assets/main.css
 assets/../app/prodDowntimeAlerts/assets/main.css
 assets/../app/changelog/assets/main.css
 assets/../app/isa/assets/main.css
+assets/../app/paintShop/assets/main.css
 assets/../app/qiResults/assets/main.css
 assets/../app/pscs/assets/main.css
 assets/../app/d8Entries/assets/main.css
@@ -927,6 +928,7 @@ app/data/prodLog.js
 app/prodDowntimes/ProdDowntimeCollection.js
 app/core/util/bindLoadingMessage.js
 app/core/templates/jumpAction.js
+app/core/templates/exportAction.js
 app/core/util/pageActions.js
 app/data/createSettings.js
 app/settings/Setting.js
@@ -1799,6 +1801,7 @@ app/purchaseOrders/views/PurchaseOrderFilterView.js
 app/core/templates/listPage.js
 app/purchaseOrders/pages/PurchaseOrderListPage.js
 app/core/templates/jumpAction.js
+app/core/templates/exportAction.js
 app/core/util/pageActions.js
 app/core/util/onModelDeleted.js
 app/core/views/DetailsView.js

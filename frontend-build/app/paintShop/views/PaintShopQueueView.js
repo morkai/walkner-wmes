@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["jquery","app/i18n","app/viewport","app/core/View","app/paintShop/templates/queue","app/paintShop/templates/queueOrder"],function(e,t,i,r,n,p){"use strict";return r.extend({template:n,events:{},initialize:function(){},serialize:function(){return{idPrefix:this.idPrefix,orders:this.model.map(function(e){return e.toJSON()}),renderQueueOrder:p}},afterRender:function(){}})});
+define(["jquery","app/i18n","app/viewport","app/core/View","app/paintShop/templates/queue","app/paintShop/templates/queueOrder"],function(e,i,t,r,n,p){"use strict";return r.extend({template:n,events:{},initialize:function(){this.listenTo(this.model,"sync",this.render)},serialize:function(){return{idPrefix:this.idPrefix,groups:this.model.serializeGroups(),renderQueueOrder:p}},afterRender:function(){}})});
