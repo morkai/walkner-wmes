@@ -6,6 +6,7 @@ define([
   '../core/Collection',
   '../core/util/matchesEquals',
   '../core/util/matchesProdLine',
+  '../orgUnits/util/limitOrgUnits',
   './ProdShiftOrder'
 ], function(
   time,
@@ -13,6 +14,7 @@ define([
   Collection,
   matchesEquals,
   matchesProdLine,
+  limitOrgUnits,
   ProdShiftOrder
 ) {
   'use strict';
@@ -23,6 +25,14 @@ define([
 
     rqlQuery: function(rql)
     {
+      var selector = [
+        {name: 'ge', args: ['startedAt', time.getMoment().subtract(1, 'months').valueOf()]}
+      ];
+
+      limitOrgUnits(selector, {
+        divisionType: 'prod'
+      });
+
       return rql.Query.fromObject({
         fields: {
           creator: 0,
@@ -36,9 +46,7 @@ define([
         limit: 20,
         selector: {
           name: 'and',
-          args: [
-            {name: 'ge', args: ['startedAt', time.getMoment().subtract(1, 'months').valueOf()]}
-          ]
+          args: selector
         }
       });
     },

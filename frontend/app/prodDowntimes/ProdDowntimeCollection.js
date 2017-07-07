@@ -6,6 +6,7 @@ define([
   '../user',
   '../data/prodLog',
   '../core/Collection',
+  '../orgUnits/util/limitOrgUnits',
   './ProdDowntime'
 ], function(
   _,
@@ -13,6 +14,7 @@ define([
   user,
   prodLog,
   Collection,
+  limitOrgUnits,
   ProdDowntime
 ) {
   'use strict';
@@ -37,38 +39,26 @@ define([
         },
         {
           name: 'ge',
-          args: ['startedAt', time.getMoment().subtract(1, 'week').startOf('day').hours(6).valueOf()]
+          args: ['startedAt', time.getMoment().subtract(2, 'weeks').startOf('day').hours(6).valueOf()]
         }
       ];
 
       if (!user.isAllowedTo('PROD_DOWNTIMES:ALL'))
       {
-        var userSubdivision = user.getSubdivision();
-
-        if (userSubdivision)
-        {
-          selector.push({name: 'eq', args: ['subdivision', userSubdivision.id]});
-        }
-        else
-        {
-          var userDivision = user.getDivision();
-
-          if (userDivision)
-          {
-            selector.push({name: 'eq', args: ['division', userDivision.id]});
-          }
-        }
+        limitOrgUnits(selector, {divisionType: 'prod'});
       }
 
-      if (Array.isArray(user.data.aors))
+      var userAors = user.data.aors;
+
+      if (Array.isArray(userAors))
       {
-        if (user.data.aors.length === 1)
+        if (userAors.length === 1)
         {
-          selector.push({name: 'eq', args: ['aor', user.data.aors[0]]});
+          selector.push({name: 'eq', args: ['aor', userAors[0]]});
         }
-        else if (user.data.aors.length > 1)
+        else if (userAors.length > 1)
         {
-          selector.push({name: 'in', args: ['aor', user.data.aors]});
+          selector.push({name: 'in', args: ['aor', userAors]});
         }
       }
 

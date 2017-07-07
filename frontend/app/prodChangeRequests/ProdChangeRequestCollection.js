@@ -4,11 +4,13 @@ define([
   'underscore',
   '../user',
   '../core/Collection',
+  '../orgUnits/util/limitOrgUnits',
   './ProdChangeRequest'
 ], function(
   _,
   user,
   Collection,
+  limitOrgUnits,
   ProdChangeRequest
 ) {
   'use strict';
@@ -23,12 +25,10 @@ define([
         {name: 'eq', args: ['status', 'new']}
       ];
 
-      var userDivision = user.getDivision();
-
-      if (userDivision)
-      {
-        selector.push({name: 'eq', args: ['division', userDivision.id]});
-      }
+      limitOrgUnits(selector, {
+        subdivision: false,
+        divisionType: 'prod'
+      });
 
       return rql.Query.fromObject({
         limit: 20,

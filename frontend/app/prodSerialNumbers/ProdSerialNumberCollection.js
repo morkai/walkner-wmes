@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  '../time',
   '../core/Collection',
   './ProdSerialNumber'
 ], function(
+  time,
   Collection,
   ProdSerialNumber
 ) {
@@ -13,7 +15,22 @@ define([
 
     model: ProdSerialNumber,
 
-    rqlQuery: 'sort(-scannedAt)&limit(20)'
+    rqlQuery: function(rql)
+    {
+      return rql.Query.fromObject({
+        fields: {},
+        sort: {
+          scannedAt: -1
+        },
+        limit: 20,
+        selector: {
+          name: 'and',
+          args: [
+            {name: 'ge', args: ['scannedAt', time.getMoment().subtract(1, 'week').startOf('day').valueOf()]}
+          ]
+        }
+      });
+    }
 
   });
 });

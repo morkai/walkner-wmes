@@ -4,7 +4,6 @@
 
 const step = require('h5.step');
 const moment = require('moment');
-const limitOrgUnit = require('../prodLines/limitOrgUnit');
 
 module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
 {
@@ -23,14 +22,13 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
     'PROD_DATA:CHANGES:MANAGE'
   );
 
-  express.get('/prodShifts', canView, limitOrgUnit, express.crud.browseRoute.bind(null, app, ProdShift));
+  express.get('/prodShifts', canView, express.crud.browseRoute.bind(null, app, ProdShift));
 
   express.post('/prodShifts', canManage, addProdShiftRoute);
 
   express.get(
     '/prodShifts;export.:format?',
     canView,
-    limitOrgUnit,
     function overrideFields(req, res, next)
     {
       req.rql.fields = {

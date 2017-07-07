@@ -2,8 +2,6 @@
 
 'use strict';
 
-const limitOrgUnit = require('../prodLines/limitOrgUnit');
-
 module.exports = function setUpProdShiftOrdersRoutes(app, psoModule)
 {
   const express = app[psoModule.config.expressId];
@@ -20,14 +18,13 @@ module.exports = function setUpProdShiftOrdersRoutes(app, psoModule)
     'PROD_DATA:CHANGES:MANAGE'
   );
 
-  express.get('/prodShiftOrders', canView, limitOrgUnit, express.crud.browseRoute.bind(null, app, ProdShiftOrder));
+  express.get('/prodShiftOrders', canView, express.crud.browseRoute.bind(null, app, ProdShiftOrder));
 
   express.post('/prodShiftOrders', canManage, addProdShiftOrderRoute);
 
   express.get(
     '/prodShiftOrders;export.:format?',
     canView,
-    limitOrgUnit,
     function(req, res, next)
     {
       req.rql.fields = {

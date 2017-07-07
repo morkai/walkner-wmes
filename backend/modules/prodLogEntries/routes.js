@@ -15,7 +15,6 @@ module.exports = function setUpProdLogEntriesRoutes(app, prodLogEntriesModule)
   express.get(
     '/prodLogEntries',
     canView,
-    limitOrgUnit,
     populate,
     express.crud.browseRoute.bind(null, app, ProdLogEntry)
   );
@@ -28,32 +27,5 @@ module.exports = function setUpProdLogEntriesRoutes(app, prodLogEntriesModule)
     );
 
     next();
-  }
-
-  function limitOrgUnit(req, res, next)
-  {
-    const user = req.session.user || {};
-    const selectors = req.rql.selector.args;
-    const hasProdLineTerm = selectors.some(function(term)
-    {
-      return term.name === 'eq' && term.args[0] === 'prodLine';
-    });
-
-    if (hasProdLineTerm || user.super || !user.orgUnitId)
-    {
-      return next();
-    }
-
-    const prodLineIds = orgUnitsModule.getProdLinesFor(user.orgUnitType, user.orgUnitId).map(function(prodLine)
-    {
-      return prodLine._id;
-    });
-
-    selectors.push({
-      name: 'in',
-      args: ['prodLine', prodLineIds]
-    });
-
-    return next();
   }
 };

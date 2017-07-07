@@ -2,15 +2,19 @@
 
 define([
   '../time',
+  '../user',
   '../core/Collection',
   '../core/util/matchesOperType',
   '../core/util/matchesProdLine',
+  '../orgUnits/util/limitOrgUnits',
   './ProdLogEntry'
 ], function(
   time,
+  user,
   Collection,
   matchesOperType,
   matchesProdLine,
+  limitOrgUnits,
   ProdLogEntry
 ) {
   'use strict';
@@ -21,6 +25,15 @@ define([
 
     rqlQuery: function(rql)
     {
+      var selector = [
+        {name: 'ge', args: ['createdAt', time.getMoment().startOf('day').subtract(1, 'week')]}
+      ];
+
+      limitOrgUnits(selector, {
+        divisionType: 'prod',
+        subdivisionType: 'assembly'
+      });
+
       return rql.Query.fromObject({
         sort: {
           createdAt: -1
@@ -28,9 +41,7 @@ define([
         limit: 20,
         selector: {
           name: 'and',
-          args: [
-            {name: 'ge', args: ['createdAt', time.getMoment().startOf('day').subtract(1, 'week')]}
-          ]
+          args: selector
         }
       });
     },

@@ -44,7 +44,6 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
 
   express.get(
     '/prodDowntimes',
-    limitOrgUnit,
     populateProdShiftOrder,
     express.crud.browseRoute.bind(null, app, ProdDowntime)
   );
@@ -56,7 +55,6 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
   express.get(
     '/prodDowntimes;export.:format?',
     canView,
-    limitOrgUnit,
     function(req, res, next)
     {
       req.rql.fields = {
@@ -129,76 +127,6 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
       }
 
       return res.sendStatus(404);
-    });
-  }
-
-  function limitOrgUnit(req, res, next)
-  {
-    const user = req.session.user || {};
-    const selectors = req.rql.selector.args;
-    let orgUnitTerm = _.find(selectors, function(term)
-    {
-      return term.name === 'eq'
-        && ['division', 'subdivision', 'prodFlow'].indexOf(term.args[0]) !== -1;
-    });
-
-    if (!orgUnitTerm)
-    {
-      if (user.super || !user.orgUnitId || user.privileges.indexOf('PROD_DOWNTIMES:ALL') !== -1)
-      {
-        return next();
-      }
-
-      orgUnitTerm = {name: 'eq', args: [user.orgUnitType, user.orgUnitId]};
-
-      selectors.push(orgUnitTerm);
-    }
-
-    const orgUnitType = orgUnitTerm.args[0];
-
-    orgUnitTerm.name = 'in';
-    orgUnitTerm.args[0] = 'prodLine';
-
-    function finalize()
-    {
-      if (orgUnitTerm.args[1].length)
-      {
-        return next();
-      }
-
-      return res.send({
-        totalCount: 0,
-        collection: []
-      });
-    }
-
-    if (orgUnitType === 'prodFlow')
-    {
-      const prodFlowIds = {};
-
-      prodFlowIds[orgUnitTerm.args[1]] = true;
-
-      orgUnitTerm.args[1] = getProdLineIds(prodFlowIds);
-
-      return finalize();
-    }
-
-    const getter = orgUnitType === 'division' ? 'getAllByDivisionId' : 'getAllBySubdivisionId';
-
-    mongoose.model('ProdFlow')[getter](orgUnitTerm.args[1], function(err, prodFlows)
-    {
-      if (err)
-      {
-        return next(err);
-      }
-
-      const prodFlowIds = {};
-
-      _.forEach(prodFlows, function(prodFlow) { prodFlowIds[prodFlow._id] = true; });
-
-      orgUnitTerm.args[1] = getProdLineIds(prodFlowIds);
-
-      return finalize();
     });
   }
 
