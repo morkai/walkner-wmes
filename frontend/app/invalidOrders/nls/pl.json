@@ -45,7 +45,6 @@
   "solution:STATUS": "CNF, DLV lub TECO.",
   "solution:OPERATIONS": "Pojawienie się operacji.",
 
-  "filter:ownMrps": "moje",
   "filter:submit": "Filtruj zlecenia",
 
   "LIST:ACTION:select": "Oznacz do powiadomienia",

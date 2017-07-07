@@ -4,11 +4,13 @@ define([
   'underscore',
   'app/core/util/fixTimeRange',
   'app/core/views/FilterView',
+  'app/users/ownMrps',
   'app/orders/templates/filter'
 ], function(
   _,
   fixTimeRange,
   FilterView,
+  ownMrps,
   filterTemplate
 ) {
   'use strict';
@@ -17,7 +19,7 @@ define([
 
     template: filterTemplate,
 
-    events: _.extend({}, FilterView.prototype.events, {
+    events: _.assign({
       'change #-from': function(e)
       {
         var $to = this.$id('to');
@@ -31,7 +33,7 @@ define([
       {
         e.target.setAttribute('data-changed', 'true');
       }
-    }),
+    }, ownMrps.events, FilterView.prototype.events),
 
     defaultFormData: {
       _id: '',
@@ -61,6 +63,13 @@ define([
       },
       'nc12': '_id',
       'finishDate': 'startDate'
+    },
+
+    serialize: function()
+    {
+      return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
+        showOwnMrps: ownMrps.hasAny()
+      });
     },
 
     afterRender: function()

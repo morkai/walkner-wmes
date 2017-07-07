@@ -18,7 +18,12 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-orderMrp"><%- t('prodShifts', 'filter:orderMrp') %></label>
+    <label for="<%- idPrefix %>-orderMrp">
+      <%- t('prodShifts', 'filter:orderMrp') %>
+      <% if (showOwnMrps) { %>
+      (<a id="<%- idPrefix %>-ownMrps" href="#"><%- t('orgUnits', 'filter:ownMrps') %></a>)
+      <% } %>
+    </label>
     <input id="<%- idPrefix %>-orderMrp" name="orderMrp" type="text" data-placeholder=" ">
   </div>
   <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>

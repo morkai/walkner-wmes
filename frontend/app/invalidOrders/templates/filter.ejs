@@ -14,8 +14,8 @@
   <div class="form-group">
     <label for="<%- idPrefix %>-mrp">
       <%- t('invalidOrders', 'PROPERTY:mrp') %>
-      <% if (mrps.length) { %>
-      (<a id="<%- idPrefix %>-ownMrps" href="#"><%- t('invalidOrders', 'filter:ownMrps') %></a>)
+      <% if (showOwnMrps) { %>
+      (<a id="<%- idPrefix %>-ownMrps" href="#"><%- t('orgUnits', 'filter:ownMrps') %></a>)
       <% } %>
     </label>
     <input id="<%- idPrefix %>-mrp" name="mrp" type="text">

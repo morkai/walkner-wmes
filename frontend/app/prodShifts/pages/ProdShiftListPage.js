@@ -4,12 +4,14 @@ define([
   'app/user',
   'app/core/util/pageActions',
   'app/core/pages/FilteredListPage',
+  'app/users/ownMrps',
   '../views/ProdShiftListView',
   '../views/ProdShiftFilterView'
 ], function(
   user,
   pageActions,
   FilteredListPage,
+  ownMrps,
   ProdShiftListView,
   ProdShiftFilterView
 ) {
@@ -29,6 +31,11 @@ define([
           user.isAllowedTo.bind(user, 'PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST')
         )
       ];
+    },
+
+    load: function(when)
+    {
+      return when(this.collection.fetch({reset: true}), ownMrps.load(this));
     }
 
   });

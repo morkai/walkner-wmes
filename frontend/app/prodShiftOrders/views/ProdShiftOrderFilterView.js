@@ -9,6 +9,7 @@ define([
   'app/core/views/FilterView',
   'app/core/util/fixTimeRange',
   'app/orgUnits/views/OrgUnitPickerView',
+  'app/users/ownMrps',
   'app/prodShiftOrders/templates/filter'
 ], function(
   _,
@@ -19,6 +20,7 @@ define([
   FilterView,
   fixTimeRange,
   OrgUnitPickerView,
+  ownMrps,
   filterTemplate
 ) {
   'use strict';
@@ -119,7 +121,7 @@ define([
         $input[0].disabled = true;
       }
 
-    }, FilterView.prototype.events),
+    }, ownMrps.events, FilterView.prototype.events),
 
     initialize: function()
     {
@@ -128,6 +130,13 @@ define([
       this.setView('#' + this.idPrefix + '-orgUnit', new OrgUnitPickerView({
         filterView: this
       }));
+    },
+
+    serialize: function()
+    {
+      return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
+        showOwnMrps: ownMrps.hasAny()
+      });
     },
 
     afterRender: function()
@@ -169,7 +178,7 @@ define([
 
     getApplicableMrps: function()
     {
-      return mrpControllers.getForCurrentUser()
+      return mrpControllers
         .filter(function(mrp) { return !mrp.get('deactivatedAt'); })
         .map(function(mrp)
         {

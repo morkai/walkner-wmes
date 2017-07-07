@@ -8,6 +8,7 @@ define([
   'app/core/View',
   'app/core/templates/jumpAction',
   'app/delayReasons/storage',
+  'app/users/ownMrps',
   '../OrderCollection',
   '../views/OrderListView',
   '../views/OrderFilterView',
@@ -21,6 +22,7 @@ define([
   View,
   jumpActionTemplate,
   delayReasonsStorage,
+  ownMrps,
   OrderCollection,
   OrderListView,
   OrderFilterView,
@@ -119,7 +121,8 @@ define([
     {
       return when(
         this.collection.fetch({reset: true}),
-        this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null
+        this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null,
+        ownMrps.load(this)
       );
     },
 

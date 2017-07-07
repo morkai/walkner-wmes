@@ -4,11 +4,13 @@ define([
   'underscore',
   'app/core/views/FilterView',
   'app/core/util/ExpandableSelect',
+  'app/users/ownMrps',
   'app/invalidOrders/templates/filter'
 ], function(
   _,
   FilterView,
   ExpandableSelect,
+  ownMrps,
   filterTemplate
 ) {
   'use strict';
@@ -19,20 +21,7 @@ define([
 
     events: _.assign({
 
-      'click #-ownMrps': function()
-      {
-        this.$id('mrp').select2('data', this.model.mrps.map(function(mrp)
-        {
-          return {
-            id: mrp,
-            text: mrp
-          };
-        }));
-
-        return false;
-      }
-
-    }, FilterView.prototype.events),
+    }, ownMrps.events, FilterView.prototype.events),
 
     defaultFormData: {
       status: [],
@@ -65,7 +54,7 @@ define([
     serialize: function()
     {
       return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
-        mrps: this.model.mrps
+        showOwnMrps: ownMrps.hasAny()
       });
     },
 

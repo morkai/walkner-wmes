@@ -6,6 +6,7 @@ define([
   'app/user',
   'app/core/pages/FilteredListPage',
   'app/core/views/ActionFormView',
+  'app/users/ownMrps',
   '../views/InvalidOrderFilterView',
   '../views/InvalidOrderListView'
 ], function(
@@ -14,6 +15,7 @@ define([
   user,
   FilteredListPage,
   ActionFormView,
+  ownMrps,
   InvalidOrderFilterView,
   InvalidOrderListView
 ) {
@@ -52,8 +54,6 @@ define([
 
     initialize: function()
     {
-      this.mrps = [];
-
       FilteredListPage.prototype.initialize.apply(this, arguments);
 
       this.listenTo(this.collection, 'selected', this.onSelected);
@@ -61,29 +61,14 @@ define([
 
     load: function(when)
     {
-      var page = this;
-      var req = page.ajax({url: '/mor/iptCheck'}).done(function(res)
-      {
-        page.mrps.splice(0, page.mrps.length);
-
-        _.forEach(res.mrpToRecipients, function(recipients, mrp)
-        {
-          if (_.includes(recipients, user.data._id))
-          {
-            page.mrps.push(mrp);
-          }
-        });
-      });
-
-      return when(page.collection.fetch({reset: true}), req);
+      return when(this.collection.fetch({reset: true}), ownMrps.load(this));
     },
 
     createFilterView: function()
     {
       return new InvalidOrderFilterView({
         model: {
-          rqlQuery: this.collection.rqlQuery,
-          mrps: this.mrps
+          rqlQuery: this.collection.rqlQuery
         }
       });
     },

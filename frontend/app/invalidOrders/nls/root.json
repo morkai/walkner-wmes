@@ -46,7 +46,6 @@
     "solution:STATUS": "CNF, DLV or TECO.",
     "solution:OPERATIONS": "Operations showed up.",
 
-    "filter:ownMrps": "mine",
     "filter:submit": "Filter orders",
 
     "LIST:ACTION:select": "Mark for notification",

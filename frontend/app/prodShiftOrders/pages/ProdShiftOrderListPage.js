@@ -6,6 +6,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
   'app/core/View',
+  'app/users/ownMrps',
   '../ProdShiftOrderCollection',
   '../views/ProdShiftOrderListView',
   '../views/ProdShiftOrderFilterView',
@@ -16,6 +17,7 @@ define([
   bindLoadingMessage,
   pageActions,
   View,
+  ownMrps,
   ProdShiftOrderCollection,
   ProdShiftOrderListView,
   ProdShiftOrderFilterView,
@@ -37,7 +39,7 @@ define([
 
     actions: function(layout)
     {
-      return [pageActions.export(layout, this, this.prodShiftOrderList)];
+      return [pageActions.export(layout, this, this.collection)];
     },
 
     initialize: function()
@@ -51,18 +53,18 @@ define([
 
     defineModels: function()
     {
-      this.prodShiftOrderList = bindLoadingMessage(
+      this.collection = bindLoadingMessage(
         new ProdShiftOrderCollection(null, {rqlQuery: this.options.rql}), this
       );
     },
 
     defineViews: function()
     {
-      this.listView = new ProdShiftOrderListView({collection: this.prodShiftOrderList});
+      this.listView = new ProdShiftOrderListView({collection: this.collection});
 
       this.filterView = new ProdShiftOrderFilterView({
         model: {
-          rqlQuery: this.prodShiftOrderList.rqlQuery
+          rqlQuery: this.collection.rqlQuery
         }
       });
 
@@ -71,17 +73,17 @@ define([
 
     load: function(when)
     {
-      return when(this.prodShiftOrderList.fetch({reset: true}));
+      return when(this.collection.fetch({reset: true}), ownMrps.load(this));
     },
 
     refreshList: function(newRqlQuery)
     {
-      this.prodShiftOrderList.rqlQuery = newRqlQuery;
+      this.collection.rqlQuery = newRqlQuery;
 
       this.listView.refreshCollectionNow();
 
       this.broker.publish('router.navigate', {
-        url: this.prodShiftOrderList.genClientUrl() + '?' + newRqlQuery,
+        url: this.collection.genClientUrl() + '?' + newRqlQuery,
         trigger: false,
         replace: true
       });

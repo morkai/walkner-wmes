@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   'select2',
   'app/user',
@@ -8,8 +9,10 @@ define([
   'app/core/views/FilterView',
   'app/core/util/fixTimeRange',
   'app/orgUnits/views/OrgUnitPickerView',
+  'app/users/ownMrps',
   'app/prodShifts/templates/filter'
 ], function(
+  _,
   $,
   select2,
   user,
@@ -17,6 +20,7 @@ define([
   FilterView,
   fixTimeRange,
   OrgUnitPickerView,
+  ownMrps,
   filterTemplate
 ) {
   'use strict';
@@ -24,6 +28,10 @@ define([
   return FilterView.extend({
 
     template: filterTemplate,
+
+    events: _.assign({
+
+    }, ownMrps.events, FilterView.prototype.events),
 
     defaultFormData: {
       date: '',
@@ -53,6 +61,13 @@ define([
       this.setView('#' + this.idPrefix + '-orgUnit', new OrgUnitPickerView({
         filterView: this
       }));
+    },
+
+    serialize: function()
+    {
+      return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
+        showOwnMrps: ownMrps.hasAny()
+      });
     },
 
     afterRender: function()
@@ -94,7 +109,7 @@ define([
 
     getApplicableMrps: function()
     {
-      return mrpControllers.getForCurrentUser()
+      return mrpControllers
         .filter(function(mrp) { return !mrp.get('deactivatedAt'); })
         .map(function(mrp)
         {
