@@ -488,18 +488,19 @@ define([
 
       if (!checkSpecial($li))
       {
-        $li.toggle(isEntryVisible($li) && hideChildEntries($li));
+        $li[0].style.display = isEntryVisible($li) && hideChildEntries($li) ? '' : 'none';
       }
     });
 
     dropdownHeaders.forEach(function($li)
     {
-      $li.toggle(navbarView.hasVisibleSiblings($li, 'next'));
+      $li[0].style.display = navbarView.hasVisibleSiblings($li, 'next') ? '' : 'none';
     });
 
     dividers.forEach(function($li)
     {
-      $li.toggle(navbarView.hasVisibleSiblings($li, 'prev') && navbarView.hasVisibleSiblings($li, 'next'));
+      $li[0].style.display = navbarView.hasVisibleSiblings($li, 'prev') && navbarView.hasVisibleSiblings($li, 'next')
+        ? '' : 'none';
     });
 
     this.$('.btn[data-privilege]').each(function()
@@ -524,7 +525,7 @@ define([
         {
           var entryVisible = isEntryVisible($li) && hideChildEntries($li);
 
-          $li.toggle(entryVisible);
+          $li[0].style.display = entryVisible ? '' : 'none';
 
           anyVisible = anyVisible || entryVisible;
         }
@@ -620,7 +621,7 @@ define([
 
       if (!visible)
       {
-        $dropdownMenu.parent().hide();
+        $dropdownMenu.parent()[0].style.display = 'none';
       }
     });
   };
@@ -645,11 +646,11 @@ define([
       switch ($li.attr('data-online'))
       {
         case 'show':
-          $li[online ? 'show' : 'hide']();
+          $li[0].style.display = online ? '' : 'none';
           break;
 
         case 'hide':
-          $li[online ? 'hide' : 'show']();
+          $li[0].style.display = online ? 'none' : '';
           break;
 
         default:

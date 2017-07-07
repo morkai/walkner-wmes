@@ -105,7 +105,7 @@ define([
 
     if (this.$header)
     {
-      this.$header.hide();
+      this.$header[0].style.display = 'none';
     }
 
     if (this.$breadcrumbs)
@@ -371,7 +371,7 @@ define([
     }
 
     this.$breadcrumbs.html(html);
-    this.$header.show();
+    this.$header[0].style.display = '';
 
     this.adjustBreadcrumbsPosition();
   };
@@ -459,7 +459,12 @@ define([
           html += '<i class="fa ' + action.icon + '"></i>';
         }
 
-        html += '<span>' + action.label + '</span>' + (action.href ? '</a>' : '</button>');
+        if (action.label)
+        {
+          html += '<span>' + action.label + '</span>';
+        }
+
+        html += action.href ? '</a>' : '</button>';
       }
     }
 
@@ -477,7 +482,7 @@ define([
       afterRender[i]($actions.filter('li[data-index="' + i + '"]'), actions[i]);
     });
 
-    this.$header.show();
+    this.$header[0].style.display = '';
   };
 
   /**
