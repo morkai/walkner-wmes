@@ -25,6 +25,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   const mongoose = app[xiconfModule.config.mongooseId];
   const userModule = app[xiconfModule.config.userId];
   const settings = app[xiconfModule.config.settingsId];
+  const sio = app[xiconfModule.config.sioId];
   const Order = mongoose.model('Order');
   const XiconfClient = mongoose.model('XiconfClient');
   const XiconfClientSettings = mongoose.model('XiconfClientSettings');
@@ -343,7 +344,10 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     '/xiconf/clients',
     canViewLocal,
     crossOrigin,
-    express.crud.browseRoute.bind(null, app, XiconfClient)
+    express.crud.browseRoute.bind(null, app, {
+      model: XiconfClient,
+      prepareResult: prepareXiconfClient
+    })
   );
   express.get('/xiconf/clients;debug', canManage, getClientsDebugInfoRoute);
   express.get('/xiconf/clients;clear', canManage, clearOrderDataRoute);
@@ -617,5 +621,20 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
         return done(null, xiconfOrder);
       }
     );
+  }
+
+  function prepareXiconfClient(totalCount, clients, formatResult)
+  {
+    clients.forEach(client =>
+    {
+      const socket = sio.sockets.connected[client.socket];
+
+      client.remoteAddress = socket ? socket.conn.remoteAddress : null;
+    });
+
+    formatResult(null, {
+      totalCount: totalCount,
+      collection: clients
+    });
   }
 };

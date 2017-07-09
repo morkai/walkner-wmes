@@ -17,6 +17,7 @@
     "PROPERTY:order": "Order",
     "PROPERTY:lastSeenAt": "Last seen at",
     "PROPERTY:status": "Status",
+    "PROPERTY:remoteAddress": "IP address",
 
     "status:online": "Online",
     "status:offline": "Offline",
