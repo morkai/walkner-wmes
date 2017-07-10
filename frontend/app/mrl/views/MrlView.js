@@ -193,8 +193,8 @@ define([
     updateTest: function(tag, status)
     {
       this.$('[data-tag="' + tag + '"]')
-        .removeClass('mor-off mor-active mor-success mor-failure')
-        .addClass('mor-' + TEST_STATUS[status || 0]);
+        .removeClass('mrl-off mrl-active mrl-success mrl-failure')
+        .addClass('mrl-' + TEST_STATUS[status || 0]);
     },
 
     updaters: {
