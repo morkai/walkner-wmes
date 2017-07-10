@@ -112,12 +112,19 @@ define([
     {
       this.listenTo(this.model, 'change', this.render);
 
-      this.activateTab(this.options.tab || 'log');
+      this.activateTab(this.options.tab);
     },
 
     activateTab: function(tab)
     {
-      this.$('.nav-tabs > li[data-tab="' + tab + '"] > a').tab('show');
+      if (!tab)
+      {
+        this.$('.nav-tabs > li:first-child > a').tab('show');
+      }
+      else
+      {
+        this.$('.nav-tabs > li[data-tab="' + tab + '"] > a').tab('show');
+      }
     },
 
     highlight: function(what)

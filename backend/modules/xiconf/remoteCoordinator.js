@@ -47,7 +47,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     generateServiceTag: handleGenerateServiceTagRequest,
     acquireServiceTag: handleAcquireServiceTagRequest,
     releaseServiceTag: handleReleaseServiceTagRequest,
-    recordInvalidLed: handleRecordInvalidLedRequest
+    recordInvalidLed: handleRecordInvalidLedRequest,
+    recordMrlResult: handleRecordMrlResultRequest
   };
 
   xiconfModule.getRemoteCoordinatorDebugInfo = function(enableDebugMode)
@@ -973,6 +974,35 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     recordInvalidLed(input, reply);
   }
 
+  function handleRecordMrlResultRequest(input, reply)
+  {
+    if (!_.isFunction(reply))
+    {
+      reply = function() {};
+    }
+
+    if (restarting)
+    {
+      return reply(new Error('RESTARTING'));
+    }
+
+    const socket = this;
+
+    if (socket.id && !socket.xiconf)
+    {
+      return reply(new Error('NOT_CONNECTED'));
+    }
+
+    if (!_.isObject(input)
+      || !_.isString(input._id)
+      || !_.isString(input.orderNo))
+    {
+      return reply(new Error('INPUT'));
+    }
+
+    recordMrlResult(input, reply);
+  }
+
   function validateInputLeds(input)
   {
     if (!_.isArray(input.leds))
@@ -1267,6 +1297,13 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       serialNo: input.serialNumber,
       requiredNc12: input.requiredNc12,
       actualNc12: input.actualNc12
+    });
+  }
+
+  function recordMrlResult(input, reply)
+  {
+    queueOrderOperation(input.orderNo, recordNextMrlResult, reply, {
+      result: input
     });
   }
 
@@ -2322,6 +2359,53 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
       done(err);
     });
+  }
+
+  function recordNextMrlResult(data, done)
+  {
+    step(
+      function()
+      {
+        this.xiconfResult = new XiconfResult(data.result);
+        this.xiconfResult.save(this.next());
+      },
+      function(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        getOrderData(this.xiconfResult.orderNo, this.next());
+      },
+      function(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (this.xiconfResult.result !== 'success')
+        {
+          return;
+        }
+
+        acquireNextServiceTag({
+          resultId: this.xiconfResult._id,
+          serviceTag: this.xiconfResult.serviceTag,
+          orderNo: this.xiconfResult.orderNo,
+          nc12: null,
+          multi: false,
+          programId: this.xiconfResult.program._id,
+          programName: this.xiconfResult.program.name,
+          leds: null,
+          hidLamps: null,
+          weight: null,
+          recount: true
+        }, this.next());
+      },
+      done
+    );
   }
 
   function applyOrderDataChanges(orderData, changes)

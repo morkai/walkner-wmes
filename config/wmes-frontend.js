@@ -2,8 +2,9 @@
 
 const DATA_PATH = __dirname + '/../data';
 
-const mongodb = require('./wmes-mongodb');
+const fs = require('fs');
 const later = require('later');
+const mongodb = require('./wmes-mongodb');
 
 later.date.localTime();
 
@@ -452,6 +453,13 @@ exports.updater = {
       path: '/heff/manifest.appcache',
       mainJsFile: '/wmes-heff.js',
       mainCssFile: '/assets/wmes-heff.css'
+    },
+    {
+      frontendVersionKey: 'mrl',
+      path: '/mrl/manifest.appcache',
+      mainJsFile: '/wmes-mrl.js',
+      mainCssFile: '/assets/wmes-mrl.css',
+      template: fs.readFileSync(__dirname + '/wmes-manifest-mrl.appcache', 'utf8')
     }
   ]
 };

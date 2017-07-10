@@ -20,7 +20,7 @@ define([
     rqlQuery: function(rql)
     {
       var weekAgo = time.getMoment()
-        .hours(0)
+        .hours(6)
         .minutes(0)
         .seconds(0)
         .milliseconds(0)
@@ -30,7 +30,8 @@ define([
         fields: {
           log: 0,
           metrics: 0,
-          leds: 0
+          leds: 0,
+          hidLamps: 0
         },
         sort: {
           startedAt: -1

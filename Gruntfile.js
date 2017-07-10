@@ -1,13 +1,9 @@
-// Copyright (c) 2014, Łukasz Walukiewicz <lukasz@walukiewicz.eu>. Some Rights Reserved.
-// Licensed under CC BY-NC-SA 4.0 <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
-// Part of the walkner-wmes project <http://lukasz.walukiewicz.eu/p/walkner-wmes>
-
-/*global module:false*/
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 'use strict';
 
-var requirejsConfig = require('./config/require');
-var scriptsHelpers = require('./scripts/installer-windows/helpers');
+const requirejsConfig = require('./config/require');
+const scriptsHelpers = require('./scripts/installer-windows/helpers');
 
 module.exports = function(grunt)
 {
@@ -100,11 +96,11 @@ module.exports = function(grunt)
           localeModulePrefix: 'app/nls/locale/',
           resolveLocaleAndDomain: function(jsonFile)
           {
-            var matches = jsonFile.match(/app\/(.*?)\/nls\/(.*?)\.json/);
+            const matches = jsonFile.match(/app\/(.*?)\/nls\/(.*?)\.json/);
 
             if (matches === null)
             {
-              throw new Error("Invalid MessageFormat JSON file: " + jsonFile);
+              throw new Error(`Invalid MessageFormat JSON file: ${jsonFile}`);
             }
 
             return {
@@ -123,7 +119,7 @@ module.exports = function(grunt)
           optimize: 'uglify2',
           uglify2: {
             compress: {
-              drop_console: true
+              drop_console: true // eslint-disable-line camelcase
             }
           },
           optimizeCss: 'standard',
@@ -132,6 +128,7 @@ module.exports = function(grunt)
             {name: 'wmes-docs'},
             {name: 'wmes-operator'},
             {name: 'wmes-heff'},
+            {name: 'wmes-mrl'},
             {name: 'pos-main'}
           ],
           paths: requirejsConfig.buildPaths,

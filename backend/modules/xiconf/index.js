@@ -18,6 +18,7 @@ exports.DEFAULT_CONFIG = {
   licensesId: 'licenses',
   mailSenderId: 'mail/sender',
   settingsId: 'settings',
+  updaterId: 'updater',
   featureDbPath: './',
   zipStoragePath: './',
   emailUrlPrefix: 'http://127.0.0.1/',

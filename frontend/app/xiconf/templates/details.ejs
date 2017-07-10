@@ -10,14 +10,18 @@
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:srcTitle') %></div>
           <div class="prop-value"><%- model.srcTitle || '-' %></div>
         </div>
+        <% if (model.srcIp) { %>
         <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:srcIp') %></div>
           <div class="prop-value"><%- model.srcIp %></div>
         </div>
+        <% } %>
+        <% if (model.srcUuid) { %>
         <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:srcUuid') %></div>
           <div class="prop-value"><%- model.srcUuid %></div>
         </div>
+        <% } %>
       </div>
     </div>
   </div>
@@ -66,26 +70,36 @@
     </div>
     <div class="panel-details">
       <div class="props first">
+        <% if (!_.isEmpty(model.prodLine)) { %>
         <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:prodLine') %></div>
-          <div class="prop-value"><%- model.prodLine || '-' %></div>
+          <div class="prop-value"><%- model.prodLine %></div>
         </div>
+        <% } %>
+        <% if (!_.isEmpty(model.serviceTag)) { %>
         <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:serviceTag') %></div>
-          <div class="prop-value"><%- model.serviceTag || '-' %></div>
+          <div class="prop-value"><%- model.serviceTag %></div>
         </div>
+        <% } %>
+        <% if (!_.isEmpty(model.nc12)) { %>
         <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:nc12') %></div>
-          <div class="prop-value"><%- model.nc12 || '-' %></div>
+          <div class="prop-value"><%- model.nc12 %></div>
         </div>
+        <% } %>
+        <% if (!_.isEmpty(model.gprsNc12)) { %>
         <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:gprsNc12') %></div>
-          <div class="prop-value"><%- model.gprsNc12 || '-' %></div>
+          <div class="prop-value"><%- model.gprsNc12 %></div>
         </div>
+        <% } %>
+        <% if (!_.isEmpty(model.program) || model.programName) { %>
         <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:programName') %></div>
           <div class="prop-value"><%= model.program ? model.program.name : (model.programName || '-') %></div>
         </div>
+        <% } %>
         <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:counter') %></div>
           <div class="prop-value"><%- model.counter %><%- model.order ? ('/' + model.order.quantity) : '' %></div>
@@ -102,57 +116,68 @@
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:duration') %></div>
           <div class="prop-value"><%- time.toString(model.duration / 1000, false, true) %></div>
         </div>
+        <% if (!_.isEmpty(model.errorCode)) { %>
         <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:errorCode') %></div>
-          <div class="prop-value"><%- model.errorCode ? t('xiconf', 'error:' + model.errorCode) : '-' %></div>
+          <div class="prop-value"><%- t('xiconf', 'error:' + model.errorCode) %></div>
         </div>
+        <% } %>
+        <% if (!_.isEmpty(model.exception)) { %>
         <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:exception') %></div>
-          <div class="prop-value"><%= model.exception || '-' %></div>
+          <div class="prop-value"><%= model.exception %></div>
         </div>
+        <% } %>
+        <% if (!_.isEmpty(model.workflowPath)) { %>
         <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:workflowFile') %></div>
-          <div class="prop-value"><%= model.workflowPath || '-' %></div>
+          <div class="prop-value"><%= model.workflowPath %></div>
         </div>
+        <% } %>
+        <% if (!_.isEmpty(model.featurePath)) { %>
         <div class="prop">
           <div class="prop-name"><%- t('xiconf', 'PROPERTY:featureFile') %></div>
-          <div class="prop-value"><%= model.featurePath || '-' %></div>
+          <div class="prop-value"><%= model.featurePath %></div>
         </div>
+        <% } %>
       </div>
     </div>
   </div>
   <div class="xiconf-tabs">
     <ul class="nav nav-tabs">
+      <% if (!_.isEmpty(model.log)) { %>
       <li data-tab="log"><a href="#<%- idPrefix %>-log" data-toggle="tab"><%- t('xiconf', 'tab:log') %></a></li>
-      <% if (model.output) { %>
+      <% } %>
+      <% if (!_.isEmpty(model.output)) { %>
       <li data-tab="output"><a href="#<%- idPrefix %>-output" data-toggle="tab"><%- t('xiconf', 'tab:output') %></a></li>
       <% } %>
-      <% if (model.gprsOrderFile) { %>
+      <% if (!_.isEmpty(model.gprsOrderFile)) { %>
       <li data-tab="gprsOrderFile"><a href="#<%- idPrefix %>-gprsOrderFile" data-toggle="tab"><%- t('xiconf', 'tab:gprsOrderFile') %></a></li>
       <% } %>
-      <% if (model.workflow) { %>
+      <% if (!_.isEmpty(model.workflow)) { %>
       <li data-tab="workflow"><a href="#<%- idPrefix %>-workflow" data-toggle="tab"><%- t('xiconf', 'tab:workflow') %></a></li>
       <% } %>
-      <% if (model.feature) { %>
+      <% if (!_.isEmpty(model.feature)) { %>
       <li data-tab="feature" data-highlight><a href="#<%- idPrefix %>-feature" data-toggle="tab"><%- t('xiconf', 'tab:feature') %></a></li>
       <% } %>
-      <% if (model.leds) { %>
+      <% if (!_.isEmpty(model.leds)) { %>
       <li data-tab="leds"><a href="#<%- idPrefix %>-leds" data-toggle="tab"><%- t('xiconf', 'tab:leds') %></a></li>
       <% } %>
-      <% if (model.hidLamps) { %>
+      <% if (!_.isEmpty(model.hidLamps)) { %>
       <li data-tab="hidLamps"><a href="#<%- idPrefix %>-hidLamps" data-toggle="tab"><%- t('xiconf', 'tab:hidLamps') %></a></li>
       <% } %>
-      <% if (model.gprsInputFile) { %>
+      <% if (!_.isEmpty(model.gprsInputFile)) { %>
       <li data-tab="gprsInputFile" data-highlight><a href="#<%- idPrefix %>-gprsInputFile" data-toggle="tab"><%- t('xiconf', 'tab:gprsInputFile') %></a></li>
       <% } %>
-      <% if (model.gprsOutputFile) { %>
+      <% if (!_.isEmpty(model.gprsOutputFile)) { %>
       <li data-tab="gprsOutputFile" data-highlight><a href="#<%- idPrefix %>-gprsOutputFile" data-toggle="tab"><%- t('xiconf', 'tab:gprsOutputFile') %></a></li>
       <% } %>
-      <% if (model.program) { %>
+      <% if (!_.isEmpty(model.program)) { %>
       <li data-tab="program"><a href="#<%- idPrefix %>-program" data-toggle="tab"><%- t('xiconf', 'tab:program') %></a></li>
       <% } %>
     </ul>
     <div class="tab-content">
+      <% if (!_.isEmpty(model.log)) { %>
       <div class="tab-pane" id="<%- idPrefix %>-log">
         <table class="table table-bordered xiconf-log">
           <tbody>
@@ -165,31 +190,32 @@
           </tbody>
         </table>
       </div>
-      <% if (model.output) { %>
+      <% } %>
+      <% if (!_.isEmpty(model.output)) { %>
       <div class="tab-pane" id="<%- idPrefix %>-output"><pre><code><%= model.output || '-' %></code></pre></div>
       <% } %>
-      <% if (model.gprsOrderFile) { %>
+      <% if (!_.isEmpty(model.gprsOrderFile)) { %>
       <div class="tab-pane" id="<%- idPrefix %>-gprsOrderFile"><pre><code><%= model.gprsOrderFile || '-' %></code></pre></div>
       <% } %>
-      <% if (model.workflow) { %>
+      <% if (!_.isEmpty(model.workflow)) { %>
       <div class="tab-pane" id="<%- idPrefix %>-workflow"><pre><code><%= model.workflow || '-' %></code></pre></div>
       <% } %>
-      <% if (model.feature) { %>
+      <% if (!_.isEmpty(model.feature)) { %>
       <div class="tab-pane" id="<%- idPrefix %>-feature"><pre><code class="xml"><%= model.feature || '-' %></code></pre></div>
       <% } %>
-      <% if (model.leds) { %>
+      <% if (!_.isEmpty(model.leds)) { %>
       <div class="tab-pane xiconf-details-leds" id="<%- idPrefix %>-leds"></div>
       <% } %>
-      <% if (model.hidLamps) { %>
+      <% if (!_.isEmpty(model.hidLamps)) { %>
       <div class="tab-pane xiconf-details-hidLamps" id="<%- idPrefix %>-hidLamps"></div>
       <% } %>
-      <% if (model.gprsInputFile) { %>
+      <% if (!_.isEmpty(model.gprsInputFile)) { %>
       <div class="tab-pane" id="<%- idPrefix %>-gprsInputFile"><pre><code class="json"><%= model.gprsInputFile || '-' %></code></pre></div>
       <% } %>
-      <% if (model.gprsOutputFile) { %>
+      <% if (!_.isEmpty(model.gprsOutputFile)) { %>
       <div class="tab-pane" id="<%- idPrefix %>-gprsOutputFile"><pre><code class="xml"><%= model.gprsOutputFile || '-' %></code></pre></div>
       <% } %>
-      <% if (model.program) { %>
+      <% if (!_.isEmpty(model.program)) { %>
       <div class="tab-pane" id="<%- idPrefix %>-program">
         <div class="xiconf-details-steps"></div>
         <div class="xiconf-details-metrics"></div>

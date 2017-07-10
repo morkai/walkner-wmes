@@ -41,6 +41,47 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   const canManageLocal = userModule.auth('LOCAL', 'XICONF:MANAGE');
   const remoteRequests = {};
 
+  setInterval(function()
+  {
+    const now = Date.now();
+
+    _.forEach(remoteRequests, (remoteRequest, k) =>
+    {
+      if (now - remoteRequest.timestamp >= 60000)
+      {
+        delete remoteRequests[k];
+      }
+    });
+  }, 60000);
+
+  //
+  // MRL
+  //
+  express.get('/mrl', function(req, res)
+  {
+    const updaterModule = app[xiconfModule.config.updaterId];
+    const sessionUser = req.session.user;
+    const locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
+
+    res.format({
+      'text/html': function()
+      {
+        res.render('index', {
+          appCacheManifest: app.options.env !== 'development' ? '/mrl/manifest.appcache' : '',
+          appData: {
+            ENV: JSON.stringify(app.options.env),
+            VERSIONS: JSON.stringify(updaterModule ? updaterModule.getVersions() : {}),
+            TIME: JSON.stringify(Date.now()),
+            LOCALE: JSON.stringify(locale),
+            FRONTEND_SERVICE: JSON.stringify('mrl')
+          },
+          mainJsFile: 'wmes-mrl.js',
+          mainCssFile: 'assets/wmes-mrl.css'
+        });
+      }
+    });
+  });
+
   //
   // Upload
   //
