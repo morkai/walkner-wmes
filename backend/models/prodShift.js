@@ -255,10 +255,8 @@ module.exports = function setupProdShiftModel(app, mongoose)
 
     orders.forEach(order =>
     {
-      console.log(order._id)
       if (order.orderData && order.orderData.mrp)
       {
-        console.log(order.orderData.mrp);
         orderMrp[order.orderData.mrp] = true;
       }
 
@@ -266,7 +264,6 @@ module.exports = function setupProdShiftModel(app, mongoose)
       {
         effNum += order.laborTime / 100 * order.totalQuantity;
         effDen += order.workDuration * order.workerCount;
-        console.log(effNum, effDen);
       }
     });
 
