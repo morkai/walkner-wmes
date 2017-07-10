@@ -159,12 +159,6 @@
 
     function doStartApp()
     {
-      if (startBroker !== null)
-      {
-        startBroker.destroy();
-        startBroker = null;
-      }
-
       var userReloadTimer = null;
 
       broker.subscribe('i18n.reloaded', function(message)
@@ -248,7 +242,7 @@
 
       domReady(function()
       {
-        $('#app-loading').fadeOut(function() { $(this).remove(); });
+        startBroker.subscribe('viewport.page.shown', reveal);
 
         if (window.ENV)
         {
@@ -261,6 +255,17 @@
           pushState: false
         });
       });
+    }
+
+    function reveal()
+    {
+      if (startBroker !== null)
+      {
+        startBroker.destroy();
+        startBroker = null;
+      }
+
+      $('#app-loading').remove();
     }
   }
 })();

@@ -1,0 +1,65 @@
+<div class="paintShop-orderDetails">
+  <h3><%- t('paintShop', 'orderDetails:order') %></h3>
+  <div class="paintShop-orderDetails-row">
+    <div class="form-group">
+      <label class="control-label"><%- t('paintShop', 'PROPERTY:no') %></label>
+      <p class="form-control-static"><%- model.no %></p>
+    </div>
+    <% if (model.followupNo) { %>
+    <div class="form-group">
+      <label class="control-label"><%- t('paintShop', 'PROPERTY:followupNo') %></label>
+      <p class="form-control-static"><%- model.followupNo %></p>
+    </div>
+    <% } %>
+    <div class="form-group">
+      <label class="control-label"><%- t('paintShop', 'PROPERTY:group') %></label>
+      <p class="form-control-static"><%= model.group %></p>
+    </div>
+  </div>
+  <div class="paintShop-orderDetails-row">
+    <div class="form-group">
+      <label class="control-label"><%- t('paintShop', 'PROPERTY:status') %></label>
+      <p class="form-control-static"><%- model.statusText %></p>
+    </div>
+    <div class="form-group">
+      <label class="control-label"><%- t('paintShop', 'PROPERTY:startedAt') %></label>
+      <p class="form-control-static"><%- model.startedAt || '-' %></p>
+    </div>
+    <div class="form-group">
+      <label class="control-label"><%- t('paintShop', 'PROPERTY:finishedAt') %></label>
+      <p class="form-control-static"><%= model.finishedAt || '-' %></p>
+    </div>
+  </div>
+  <div class="paintShop-orderDetails-row">
+    <div class="form-group">
+      <label class="control-label"><%- t('paintShop', 'PROPERTY:order') %></label>
+      <p class="form-control-static"><%- model.order %></p>
+    </div>
+    <div class="form-group">
+      <label class="control-label"><%- t('paintShop', 'PROPERTY:nc12') %></label>
+      <p class="form-control-static"><%- model.nc12 %></p>
+    </div>
+    <div class="form-group">
+      <label class="control-label"><%- t('paintShop', 'PROPERTY:name') %></label>
+      <p class="form-control-static"><%= model.name %></p>
+    </div>
+  </div>
+  <div class="paintShop-orderDetails-row">
+    <div class="form-group">
+      <label class="control-label"><%- t('paintShop', 'PROPERTY:qty') %></label>
+      <p class="form-control-static"><%- model.qty ? model.qty.toLocaleString() : '?' %> PCE</p>
+    </div>
+    <div class="form-group">
+      <label class="control-label"><%- t('paintShop', 'PROPERTY:mrp') %></label>
+      <p class="form-control-static"><%= model.mrp %></p>
+    </div>
+    <div class="form-group">
+      <label class="control-label"><%- t('paintShop', 'PROPERTY:paintType') %></label>
+      <p class="form-control-static"><%= model.paintType %></p>
+    </div>
+    <div class="form-group">
+      <label class="control-label"><%- t('paintShop', 'PROPERTY:placement') %></label>
+      <p class="form-control-static"><%= model.placement || '-' %></p>
+    </div>
+  </div>
+</div>

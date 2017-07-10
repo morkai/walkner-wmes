@@ -94,6 +94,8 @@ for (let i = 1; i < rowCount; ++i)
         followupNo: cell('K', i, 0),
         followupId: null,
         order: parentOrderNo,
+        nc12: '',
+        name: '',
         qty: cell('H', i, -1),
         mrp: cell('J', i, '').trim(),
         paintType: cell('I', i, '').trim(),
@@ -112,12 +114,15 @@ for (let i = 1; i < rowCount; ++i)
     const childOrder = {
       order: cell('C', i, '').toString().trim(),
       nc12: cell('D', i, '').toString().trim(),
+      name: '',
+      qty: '',
       components: []
     };
     const component = {
       nc12: cell('E', i, '').toString().trim(),
-      name: cell('F', i, '').toString().trim().replace(/\s+/g, ' '),
-      qty: round(cell('G', i, -1))
+      name: cell('F', i, '').toString().replace(/[^\u0000-\u007F]+/g, ' ').replace(/\s+/, ' ').trim(),
+      qty: round(cell('G', i, -1)),
+      unit: ''
     };
     let lastChildOrder = parentOrder.orders[parentOrder.orders.length - 1];
 

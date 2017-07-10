@@ -1,8 +1,18 @@
 <div class="paintShop-queue">
-  <% if (!orders.length) { %>
-  Brak zleceń dla wybranego dnia.
+  <% if (!groups.length) { %>
+  <p class="paintShop-queue-empty">Brak zleceń dla wybranego dnia.</p>
+  <% } else { %>
+  <table class="paintShop-groups" style="display: none">
+    <% groups.forEach(function(group) { %>
+    <tbody class="paintShop-group" data-group-id="<%- group._id %>">
+      <tr>
+        <td class="paintShop-group-hd" colspan="999"><%= group.name %></td>
+      </tr>
+    </tbody>
+    <% group.orders.forEach(function(order) { %>
+    <%- renderQueueOrder({groupId: group._id, order: order}) %>
+    <% }) %>
+    <% }) %>
+  </table>
   <% } %>
-  <% orders.forEach(function(order) { %>
-  <%- renderQueueOrder({order: order}) %>
-  <% }) %>
 </div>

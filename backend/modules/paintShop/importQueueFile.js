@@ -5,6 +5,7 @@
 const execFile = require('child_process').execFile;
 const _ = require('lodash');
 const step = require('h5.step');
+const resolveProductName = require('../util/resolveProductName');
 
 module.exports = function importQueueFile(app, module, filePath, date, user, done)
 {
@@ -20,7 +21,9 @@ module.exports = function importQueueFile(app, module, filePath, date, user, don
 
   module.importing = true;
 
-  const PaintShopOrder = app[module.config.mongooseId].model('PaintShopOrder');
+  const mongoose = app[module.config.mongooseId];
+  const Order = mongoose.model('Order');
+  const PaintShopOrder = mongoose.model('PaintShopOrder');
 
   step(
     function()
@@ -43,17 +46,34 @@ module.exports = function importQueueFile(app, module, filePath, date, user, don
         return this.skip(err);
       }
 
-      this.orders = {};
+      this.psOrders = {};
+      this.orderToPsOrders = {};
+      this.orderToChildPsOrders = {};
 
       try
       {
-        JSON.parse(json || []).forEach(o =>
+        JSON.parse(json || []).forEach(psOrder =>
         {
-          o.date = new Date(o.date);
+          psOrder.date = new Date(psOrder.date);
 
-          this.orders[o._id] = o;
+          this.psOrders[psOrder._id] = psOrder;
 
-          return o;
+          if (!this.orderToPsOrders[psOrder.order])
+          {
+            this.orderToPsOrders[psOrder.order] = [];
+          }
+
+          this.orderToPsOrders[psOrder.order].push(psOrder);
+
+          psOrder.orders.forEach(childPsOrder =>
+          {
+            if (!this.orderToChildPsOrders[childPsOrder.order])
+            {
+              this.orderToChildPsOrders[childPsOrder.order] = [];
+            }
+
+            this.orderToChildPsOrders[childPsOrder.order].push(childPsOrder);
+          });
         });
       }
       catch (err)
@@ -61,47 +81,121 @@ module.exports = function importQueueFile(app, module, filePath, date, user, don
         return this.skip(err);
       }
 
-      const orderIds = Object.keys(this.orders);
+      const paintShopOrderIds = Object.keys(this.psOrders);
 
-      if (!orderIds.length)
+      if (!paintShopOrderIds.length)
       {
         return this.skip(app.createError('EMPTY_FILE', 400));
       }
 
       PaintShopOrder
-        .find({_id: {$in: orderIds}})
+        .find({_id: {$in: paintShopOrderIds}})
         .lean()
-        .exec(this.next());
+        .exec(this.parallel());
+
+      Order
+        .find(
+          {_id: {$in: Object.keys(this.orderToPsOrders)}},
+          {nc12: 1, name: 1, description: 1}
+        )
+        .lean()
+        .exec(this.parallel());
+
+      Order
+        .find(
+          {_id: {$in: Object.keys(this.orderToChildPsOrders)}},
+          {name: 1, description: 1, qty: 1, 'bom.nc12': 1, 'bom.unit': 1}
+        )
+        .lean()
+        .exec(this.parallel());
     },
-    function(err, existingOrders)
+    function(err, existingPsOrders, orders, childOrders)
     {
       if (err)
       {
         return this.skip(err);
       }
 
+      this.existingPsOrders = existingPsOrders;
+      this.orders = orders;
+      this.childOrders = childOrders;
+
+      setImmediate(this.next());
+    },
+    function()
+    {
+      this.orders.forEach(order =>
+      {
+        const psOrders = this.orderToPsOrders[order._id];
+
+        if (!psOrders)
+        {
+          return;
+        }
+
+        psOrders.forEach(psOrder =>
+        {
+          psOrder.nc12 = order.nc12;
+          psOrder.name = resolveProductName(order);
+        });
+      });
+
+      setImmediate(this.next());
+    },
+    function()
+    {
+      this.childOrders.forEach(childOrder =>
+      {
+        const childPsOrders = this.orderToChildPsOrders[childOrder._id];
+
+        if (!childPsOrders)
+        {
+          return;
+        }
+
+        childPsOrders.forEach(childPsOrder =>
+        {
+          childPsOrder.name = resolveProductName(childOrder);
+          childPsOrder.qty = childOrder.qty;
+
+          childPsOrder.components.forEach(psComponent =>
+          {
+            const orderComponent = _.find(childOrder.bom, c => c.nc12 === psComponent.nc12);
+
+            if (orderComponent)
+            {
+              psComponent.unit = orderComponent.unit;
+            }
+          });
+        });
+      });
+
+      setImmediate(this.next());
+    },
+    function()
+    {
       const updates = [];
 
-      _.forEach(existingOrders, existingOrder =>
+      _.forEach(this.existingPsOrders, existingPsOrder =>
       {
-        const newOrder = this.orders[existingOrder._id];
+        const newPsOrder = this.psOrders[existingPsOrder._id];
 
-        this.date = newOrder.date;
+        this.date = newPsOrder.date;
 
-        delete this.orders[existingOrder._id];
+        delete this.psOrders[existingPsOrder._id];
 
-        if (newOrder && existingOrder.status === 'waiting')
+        if (newPsOrder && existingPsOrder.status === 'new')
         {
-          updates.push(newOrder);
+          updates.push(newPsOrder);
         }
       });
 
-      const inserts = _.values(this.orders);
+      const inserts = _.values(this.psOrders);
 
       this.updateCount = updates.length;
       this.insertCount = inserts.length;
 
-      _.forEach(updates, o => PaintShopOrder.collection.update({_id: o._id}, o, this.group()));
+      updates.forEach(o => PaintShopOrder.collection.update({_id: o._id}, o, this.group()));
 
       if (this.insertCount)
       {

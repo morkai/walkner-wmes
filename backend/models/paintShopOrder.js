@@ -21,7 +21,8 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
   const componentSchema = new mongoose.Schema({
     nc12: String,
     name: String,
-    qty: Number
+    qty: Number,
+    unit: String
   }, {
     _id: false,
     minimize: false
@@ -30,6 +31,8 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
   const childOrderSchema = new mongoose.Schema({
     order: String,
     nc12: String,
+    name: String,
+    qty: Number,
     components: [componentSchema]
   }, {
     _id: false,
@@ -52,6 +55,8 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
     followupNo: Number,
     followupId: String,
     order: String,
+    nc12: String,
+    name: String,
     qty: Number,
     mrp: String,
     paintType: String,
@@ -63,6 +68,7 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
   });
 
   paintShopOrderSchema.statics.TOPIC_PREFIX = 'paintShopOrders';
+  paintShopOrderSchema.statics.BROWSE_LIMIT = 0;
 
   paintShopOrderSchema.index({date: -1});
   paintShopOrderSchema.index({status: 1});

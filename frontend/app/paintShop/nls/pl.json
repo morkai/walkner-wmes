@@ -3,7 +3,27 @@
   "BREADCRUMBS:queue": "Kolejka zleceń",
 
   "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się :("
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się :(",
 
+  "PROPERTY:order": "Kod zlecenia",
+  "PROPERTY:nc12": "12NC wyrobu",
+  "PROPERTY:name": "Nazwa wyrobu",
+  "PROPERTY:qty": "Ilość",
+  "PROPERTY:mrp": "Przepływ",
+  "PROPERTY:paintType": "Rodzaj farby",
+  "PROPERTY:placement": "Położenie",
+  "PROPERTY:no": "Nr malowania",
+  "PROPERTY:followupNo": "Nr 2. malowania",
+  "PROPERTY:group": "Grupa",
+  "PROPERTY:status": "Status",
+  "PROPERTY:startedAt": "Czas rozpoczęcia",
+  "PROPERTY:finishedAt": "Czas zakończenia",
 
+  "status:new": "Do realizacji",
+  "status:started": "W realizacji",
+  "status:finished": "Zrealizowane",
+  "status:cancelled": "Anulowane",
+
+  "orderDetails:order": "Zlecenie wyrobu",
+  "orderDetails:childOrders": "Zlecenia podrzędne"
 }

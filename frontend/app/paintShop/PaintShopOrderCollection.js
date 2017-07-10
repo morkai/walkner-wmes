@@ -21,11 +21,16 @@ define([
 
     model: PaintShopOrder,
 
-    rqlQuery: 'sort(date)&limit(20)',
+    rqlQuery: 'sort(group,no)&limit(0)',
 
     parse: function(res)
     {
       return Collection.prototype.parse.call(this, res).map(PaintShopOrder.parse);
+    },
+
+    genClientUrl: function()
+    {
+      return '/paintShop/' + (this.isDateFilter('current') ? 'current' : this.getDateFilter());
     },
 
     isDateFilter: function(expected)
@@ -72,6 +77,33 @@ define([
           term.args[1] = newDate;
         }
       });
+    },
+
+    serializeGroups: function()
+    {
+      var groupList = [];
+      var groupMap = {};
+
+      this.forEach(function(order)
+      {
+        var groupId = order.get('group').replace(/[^A-Za-z0-9]+/g, '');
+        var group = groupMap[groupId];
+
+        if (!group)
+        {
+          group = groupMap[groupId] = {
+            _id: groupId,
+            name: order.get('group'),
+            orders: []
+          };
+
+          groupList.push(group);
+        }
+
+        group.orders.push(order.serialize());
+      });
+
+      return groupList;
     },
 
     act: function(reqData, done)
@@ -152,7 +184,7 @@ define([
 
     forDate: function(date)
     {
-      return new this(null, {rqlQuery: 'date=' + date});
+      return new this(null, {rqlQuery: 'sort(group,no)&limit(0)&date=' + date});
     }
 
   });

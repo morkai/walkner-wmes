@@ -44,7 +44,16 @@ define([
       ];
     },
 
-    actions: [],
+    actions: function()
+    {
+      return [
+        {
+          type: 'link',
+          icon: 'arrows-alt',
+          callback: this.toggleFullscreen.bind(this)
+        }
+      ];
+    },
 
     localTopics: {
       'socket.connected': function()
@@ -70,6 +79,8 @@ define([
 
     initialize: function()
     {
+      this.onResize = _.debounce(this.resize.bind(this), 30);
+
       this.defineModels();
       this.defineViews();
       this.defineBindings();
@@ -86,6 +97,7 @@ define([
     {
       document.body.style.overflow = '';
       document.body.classList.remove('paintShop-is-fullscreen');
+
       $(window).off('.' + this.idPrefix);
       $(document).off('.' + this.idPrefix);
     },
@@ -117,6 +129,9 @@ define([
         .on('dragleave.' + idPrefix, handleDragEvent)
         .on('dragover.' + idPrefix, handleDragEvent)
         .on('drop.' + idPrefix, page.onDrop.bind(page));
+
+      $(window)
+        .on('resize.' + this.idPrefix, this.onResize);
     },
 
     load: function(when)
@@ -181,13 +196,74 @@ define([
     serialize: function()
     {
       return {
-        idPrefix: this.idPrefix
+        idPrefix: this.idPrefix,
+        height: this.calcInitialHeight() + 'px'
       };
+    },
+
+    beforeRender: function()
+    {
+      document.body.style.overflow = 'hidden';
+      document.body.classList.toggle('paintShop-is-fullscreen', this.isFullscreen());
     },
 
     afterRender: function()
     {
+      this.resize();
 
+      var $groups = this.$('.paintShop-groups');
+
+      if ($groups.length)
+      {
+        $groups[0].style.display = '';
+      }
+    },
+
+    resize: function()
+    {
+      this.el.style.height = this.calcHeight() + 'px';
+    },
+
+    isFullscreen: function()
+    {
+      return this.options.fullscreen
+        || window.innerWidth <= 800
+        || (window.outerWidth === window.screen.width && window.outerHeight === window.screen.height);
+    },
+
+    calcInitialHeight: function()
+    {
+      var height = window.innerHeight - 15;
+
+      if (this.isFullscreen())
+      {
+        height -= 34 + 30;
+      }
+      else
+      {
+        height -= 87 + 64;
+      }
+
+      return height;
+    },
+
+    calcHeight: function()
+    {
+      var fullscreen = this.isFullscreen();
+      var height = window.innerHeight - 15;
+
+      document.body.classList.toggle('paintShop-is-fullscreen', fullscreen);
+
+      if (fullscreen)
+      {
+        height -= $('.hd').outerHeight(true) + 30;
+      }
+      else
+      {
+        height -= $('.hd').outerHeight(true) + $('.ft').outerHeight(true);
+      }
+
+      return height;
     },
 
     acceptRequest: function(request, responder)
@@ -294,7 +370,7 @@ define([
       this.options.fullscreen = !this.options.fullscreen;
 
       this.broker.publish('router.navigate', {
-        url: '#paintShop' + (this.options.fullscreen ? '?fullscreen=1' : ''),
+        url: this.genClientUrl(),
         replace: true,
         trigger: false
       });
@@ -367,6 +443,11 @@ define([
       });
     },
 
+    genClientUrl: function()
+    {
+      return this.orders.genClientUrl() + (this.options.fullscreen ? '?fullscreen=1' : '');
+    },
+
     onOrdersSync: function()
     {
       var page = this;
@@ -377,7 +458,7 @@ define([
       }
 
       page.broker.publish('router.navigate', {
-        url: '/paintShop/' + (page.orders.isDateFilter('current') ? 'current' : page.orders.getDateFilter()),
+        url: this.genClientUrl(),
         trigger: false,
         replace: true
       });
