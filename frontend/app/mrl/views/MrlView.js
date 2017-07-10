@@ -204,7 +204,7 @@ define([
     updateTest: function(tag, status)
     {
       this.$('[data-tag="' + tag + '"]')
-        .removeClass('mrl-off mrl-active mrl-success mrl-failure')
+        .removeClass('mrl-off mrl-progress mrl-success mrl-failure')
         .addClass('mrl-' + TEST_STATUS[status || 0]);
     },
 
