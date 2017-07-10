@@ -55,7 +55,7 @@ define(function()
   {
     delete remoteData[key];
 
-    window.parent.postMessage({type: 'localStorage', action: 'remoteItem', key: key}, '*');
+    window.parent.postMessage({type: 'localStorage', action: 'removeItem', key: key}, '*');
   }
 
   function clearRemoteData()
