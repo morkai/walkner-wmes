@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["jquery","app/i18n","app/viewport","app/core/View","app/paintShop/templates/orderDetails"],function(e,i,t,a,n){"use strict";return a.extend({template:n,dialogClassName:"paintShop-orderDetails-dialog",events:{},initialize:function(){},serialize:function(){return{idPrefix:this.idPrefix,model:this.model.serialize()}},afterRender:function(){}})});
