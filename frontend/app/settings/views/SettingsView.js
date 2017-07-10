@@ -161,7 +161,7 @@ define([
     changeTab: function(tab, subtab)
     {
       var $oldTab = this.$('.list-group-item.active');
-      var $newTab = this.$('.list-group-item[data-tab="' + tab + '"]');
+      var $newTab = this.$('.list-group-item[data-tab="' + tab + '"]').first();
 
       if ($newTab.hasClass('disabled'))
       {
@@ -190,6 +190,18 @@ define([
 
         $oldTab = $newTabPanel.find('.list-group-item.active');
         $newTab = $newTabPanel.find('.list-group-item[data-subtab="' + subtab + '"]');
+
+        if ($newTab.hasClass('disabled'))
+        {
+          if ($oldTab.length)
+          {
+            return;
+          }
+
+          $newTabPanel.find('.list-group-item').filter(':not(.disabled)').first().click();
+
+          return;
+        }
 
         $oldTab.removeClass('active');
         $newTab.addClass('active');

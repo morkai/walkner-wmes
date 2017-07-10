@@ -111,6 +111,7 @@
     "PRIVILEGE:PRESS_WORKSHEETS:MANAGE": "Worksheets: manage",
     "PRIVILEGE:PROD_DATA:VIEW": "Production data: view",
     "PRIVILEGE:PROD_DATA:MANAGE": "Production data: manage",
+    "PRIVILEGE:PROD_DATA:MANAGE:SPIGOT_ONLY": "Only change lines with spigot",
     "PRIVILEGE:PROD_DATA:CHANGES:REQUEST": "Production data changes: request",
     "PRIVILEGE:PROD_DATA:CHANGES:MANAGE": "Production data changes: manage",
     "PRIVILEGE:REPORTS:VIEW": "Reports: view all",

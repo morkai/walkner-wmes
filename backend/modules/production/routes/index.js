@@ -54,7 +54,11 @@ module.exports = function setUpProductionRoutes(app, productionModule)
     },
     express.crud.browseRoute.bind(null, app, settings.Setting)
   );
-  express.put('/production/settings/:id', userModule.auth('PROD_DATA:MANAGE'), settings.updateRoute);
+  express.put(
+    '/production/settings/:id',
+    userModule.auth('PROD_DATA:MANAGE', 'PROD_DATA:MANAGE:SPIGOT_ONLY'),
+    settings.updateRoute
+  );
 
   express.get('/production/orders', findOrdersRoute.bind(null, app, productionModule));
   express.get('/production/state', getProductionStateRoute.bind(null, app, productionModule));

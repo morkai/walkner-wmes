@@ -38,7 +38,7 @@ define([
     }));
   });
 
-  router.map('/production;settings', user.auth('PROD_DATA:MANAGE'), function(req)
+  router.map('/production;settings', user.auth('PROD_DATA:MANAGE', 'PROD_DATA:MANAGE:SPIGOT_ONLY'), function(req)
   {
     viewport.loadPage(['app/production/pages/ProductionSettingsPage'], function(ProductionSettingsPage)
     {

@@ -6,15 +6,12 @@
     <div class="panel-body has-subtabs" data-tab="operator">
       <div class="settings">
         <div class="list-group">
-          <% [
-            'taktTime',
-            'downtimes',
-            'spigot'
-            ].forEach(function(subtab) { %>
+          <% subtabs.forEach(function(subtab) { %>
           <a class="list-group-item" href="#production;settings?tab=operator&subtab=<%- subtab %>" data-tab="operator" data-subtab="<%- subtab %>"><%- t('production', 'settings:tab:' + subtab) %></a>
           <% }) %>
         </div>
         <div class="panel panel-primary">
+          <% if (_.includes(subtabs, 'taktTime')) { %>
           <div class="panel-body" data-subtab="taktTime">
             <div class="checkbox">
               <label class="control-label">
@@ -44,6 +41,8 @@
               <textarea id="<%- idPrefix %>-taktTime-coeffs" class="form-control text-mono" name="production.taktTime.coeffs" rows="5" data-keyup-delay="10000" data-change-delay="0"></textarea>
             </div>
           </div>
+          <% } %>
+          <% if (_.includes(subtabs, 'downtimes')) { %>
           <div class="panel-body" data-subtab="downtimes">
             <div class="form-group">
               <label for="<%- idPrefix %>-initialDowntimeWindow"><%- t('production', 'settings:initialDowntimeWindow') %></label>
@@ -79,10 +78,12 @@
               <tbody id="<%- idPrefix %>-lineAutoDowntimes-body"></tbody>
             </table>
           </div>
+          <% } %>
+          <% if (_.includes(subtabs, 'spigot')) { %>
           <div class="panel-body" data-subtab="spigot">
             <div class="form-group">
               <label for="<%- idPrefix %>-rearmDowntimeReason"><%- t('production', 'settings:rearmDowntimeReason') %></label>
-              <input id="<%- idPrefix %>-rearmDowntimeReason" name="production.rearmDowntimeReason" type="text" data-setting>
+              <input id="<%- idPrefix %>-rearmDowntimeReason" name="production.rearmDowntimeReason" type="text" data-setting <%- onlySpigot ? 'disabled' : '' %>>
             </div>
             <div class="form-group">
               <label for="<%- idPrefix %>-spigotLines"><%- t('production', 'settings:spigotLines') %></label>
@@ -90,23 +91,24 @@
             </div>
             <div class="checkbox">
               <label class="control-label">
-                <input id="<%- idPrefix %>-spigotFinish" name="production.spigotFinish" type="checkbox" value="true">
+                <input id="<%- idPrefix %>-spigotFinish" name="production.spigotFinish" type="checkbox" value="true" <%- onlySpigot ? 'disabled' : '' %>>
                 <%- t('production', 'settings:spigotFinish') %>
               </label>
             </div>
             <div class="form-group">
               <label for="<%- idPrefix %>-spigotPatterns"><%- t('production', 'settings:spigotPatterns') %></label>
-              <textarea id="<%- idPrefix %>-spigotPatterns" name="production.spigotPatterns" class="form-control text-mono" rows="4"></textarea>
+              <textarea id="<%- idPrefix %>-spigotPatterns" name="production.spigotPatterns" class="form-control text-mono" rows="4" <%- onlySpigot ? 'disabled' : '' %>></textarea>
             </div>
             <div class="form-group">
               <label for="<%- idPrefix %>-spigotNotPatterns"><%- t('production', 'settings:spigotNotPatterns') %></label>
-              <textarea id="<%- idPrefix %>-spigotNotPatterns" name="production.spigotNotPatterns" class="form-control text-mono" rows="4"></textarea>
+              <textarea id="<%- idPrefix %>-spigotNotPatterns" name="production.spigotNotPatterns" class="form-control text-mono" rows="4" <%- onlySpigot ? 'disabled' : '' %>></textarea>
             </div>
             <div class="form-group">
               <label for="<%- idPrefix %>-spigotGroups"><%- t('production', 'settings:spigotGroups') %></label>
-              <textarea id="<%- idPrefix %>-spigotGroups" name="production.spigotGroups" class="form-control text-mono" rows="7" data-keyup-delay="2000"></textarea>
+              <textarea id="<%- idPrefix %>-spigotGroups" name="production.spigotGroups" class="form-control text-mono" rows="7" data-keyup-delay="2000" <%- onlySpigot ? 'disabled' : '' %>></textarea>
             </div>
           </div>
+          <% } %>
         </div>
       </div>
     </div>

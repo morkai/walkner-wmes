@@ -3,6 +3,7 @@
 define([
   'underscore',
   'app/i18n',
+  'app/user',
   'app/core/util/idAndLabel',
   'app/core/util/formatResultWithDescription',
   'app/data/downtimeReasons',
@@ -13,6 +14,7 @@ define([
 ], function(
   _,
   t,
+  user,
   idAndLabel,
   formatResultWithDescription,
   downtimeReasons,
@@ -167,6 +169,20 @@ define([
       this.autoDowntimeIndex = 0;
 
       this.selectedAutoDowntimeGroup = null;
+    },
+
+    serialize: function()
+    {
+      var onlySpigot = !user.isAllowedTo('SUPER') && user.isAllowedTo('PROD_DATA:MANAGE:SPIGOT_ONLY');
+
+      return _.assign(SettingsView.prototype.serialize.apply(this, arguments), {
+        subtabs: onlySpigot ? ['spigot'] : [
+          'taktTime',
+          'downtimes',
+          'spigot'
+        ],
+        onlySpigot: onlySpigot
+      });
     },
 
     afterRender: function()
