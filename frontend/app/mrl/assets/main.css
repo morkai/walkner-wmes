@@ -19,19 +19,31 @@ h3 {
   width: 2em;
   height: 2em;
   border-radius: 1em;
+  box-shadow: 0 1px 3px #999;
 }
 .mrl-off {
-  background: #ccc;
+  background: #aaa;
 }
 .mrl-on,
 .mrl-success {
   background: #00af00;
+  background-image: radial-gradient(ellipse at center, #00ff00 10%, rgba(0,0,0,0.3) 100%);
 }
 .mrl-failure {
   background: #e00;
+  background-image: radial-gradient(ellipse at center, #ee0000 10%, rgba(0,0,0,0.3) 100%);
 }
-.mrl-active {
+.mrl-progress {
   background: #0af;
+  background-image: radial-gradient(ellipse at center, #00aaff 10%, rgba(0,0,0,0.3) 100%);
+}
+.probe.mrl-valid,
+body.mrl-valid {
+  background: #dff0d8;
+}
+.probe.mrl-invalid,
+body.mrl-invalid {
+  background: #f2dede;
 }
 th {
   padding: 0 0.5em;
@@ -70,7 +82,7 @@ td {
 }
 .core5 .probe td:nth-child(7),
 .core5 .probe td:nth-child(8),
-.inactive td {
+.mrl-inactive td {
   opacity: 0.33;
 }
 .mrl-props {

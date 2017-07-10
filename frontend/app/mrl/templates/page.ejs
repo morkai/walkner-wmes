@@ -53,7 +53,7 @@
     </table>
     <% }) %>
     <% [1, 2, 3, 4].forEach(function(n) { %>
-    <table id="probe<%- n %>" class="probes probe">
+    <table id="<%- idPrefix %>-probe<%- n %>" class="probes probe">
       <thead>
       <tr>
         <th colspan="8">

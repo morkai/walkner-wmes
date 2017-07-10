@@ -32,7 +32,7 @@ define([
   ];
   var TEST_STATUS = {
     0: 'off',
-    1: 'active',
+    1: 'progress',
     2: 'success',
     3: 'failure'
   };
@@ -149,14 +149,14 @@ define([
     {
       Object.assign(this.tags, changes);
 
-      this.update(Object.keys(changes));
+      this.update(changes);
     },
 
-    update: function(changedTags)
+    update: function(changes)
     {
       var view = this;
 
-      changedTags.forEach(function(tag)
+      Object.keys(changes).forEach(function(tag)
       {
         var value = view.tags[tag];
         var bits = toBits(value);
@@ -166,9 +166,20 @@ define([
 
         if (view.updaters[tag])
         {
-          view.updaters[tag].call(view, value, bits);
+          view.updaters[tag].call(view, value, bits, tag);
+        }
+
+        if (/^probe/.test(tag))
+        {
+          view.updateProbeValidity(tag);
         }
       });
+
+      if ((changes.pe !== undefined && changes.pe === 3)
+        || (changes.iso !== undefined && (changes.iso === 2 || changes.iso === 3)))
+      {
+        view.updateOverallValidity();
+      }
     },
 
     updateBits: function(tag, bits)
@@ -197,6 +208,59 @@ define([
         .addClass('mrl-' + TEST_STATUS[status || 0]);
     },
 
+    updateProbeValidity: function(tag)
+    {
+      var probeN = tag.match(/^probe([0-9]+)x?$/)[1];
+      var $probe = this.$id('probe' + probeN);
+      var requiredCount = this.$el.hasClass('core7') ? 7 : 5;
+      var actualCount = $probe.find('.mrl-on[data-tag="' + tag + '"]').length;
+
+      $probe
+        .find('tr[data-tag="' + tag + '"]')
+        .removeClass('mrl-valid mrl-invalid')
+        .addClass(actualCount === requiredCount ? 'mrl-valid' : 'mrl-invalid');
+
+      var valid = true;
+
+      $probe.find('tr[data-tag]').each(function()
+      {
+        if (this.classList.contains('mrl-inactive'))
+        {
+          return;
+        }
+
+        valid = valid && this.classList.contains('mrl-valid');
+      });
+
+      $probe.removeClass('mrl-invalid mrl-valid').addClass(valid ? 'mrl-valid' : 'mrl-invalid');
+    },
+
+    updateOverallValidity: function()
+    {
+      var view = this;
+
+      if (!view.timers.clearOverallValidity)
+      {
+        clearTimeout(view.timers.clearOverallValidity);
+      }
+
+      document.body.classList.remove('mrl-valid', 'mrl-invalid');
+
+      if (this.tags.pe === 2 && this.tags.iso === 2 && this.$('.probe.mrl-invalid').length === 0)
+      {
+        document.body.classList.add('mrl-valid');
+      }
+      else if (this.tags.pe === 3 || this.tags.iso === 3 || this.$('.probe.mrl-invalid').length !== 0)
+      {
+        document.body.classList.add('mrl-invalid');
+      }
+
+      view.timers.clearOverallValidity = setTimeout(
+        function() { document.body.classList.remove('mrl-valid', 'mrl-invalid'); },
+        5000
+      );
+    },
+
     updaters: {
 
       activeProbes: function(value, bits)
@@ -205,7 +269,11 @@ define([
 
         for (var i = 2; i <= 9; ++i)
         {
-          this.$('tr[data-tag="' + PROBES[i] + '"]').toggleClass('inactive', bits[i] === 0);
+          this.$('tr[data-tag="' + PROBES[i] + '"]')
+            .removeClass('mrl-inactive mrl-active')
+            .addClass(bits[i] === 0 ? 'mrl-inactive' : 'mrl-active');
+
+          this.updateProbeValidity(PROBES[i]);
         }
       },
 
