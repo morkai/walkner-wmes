@@ -367,6 +367,14 @@
   "error:WEIGHT:BAD_RESPONSE": "Nieprawidłowa odpowiedź z serwera zewnętrznego.",
   "error:WEIGHT:TIMEOUT": "Upłynięcie limitu czasu oczekiwania na zważenie komponentu.",
 
+  "log:MRL:STARTED": "Rozpoczynanie testu...",
+  "log:MRL:SUCCESS": "Pomyślnie ukończono test w ciągu <code>{duration}</code>.",
+  "log:MRL:FAILURE": "Zakończono test w ciągu <code>{duration}</code> z powodu błędu.",
+  "log:MRL:WIRING_TEST_STARTED": "Rozpoczynanie testu oprzewodowania...",
+  "log:MRL:WIRING_TEST:FINISHED": "Zakończono test oprzewodowania w ciągu <code>{duration}</code>...",
+  "log:MRL:ELECTRICAL_TEST:STARTED": "Rozpoczynanie testu elektrycznego...",
+  "log:MRL:ELECTRICAL_TEST:FINISHED": "Zakończono test elektryczny w ciągu <code>{duration}</code>...",
+
   "settings:tab:clients": "Klienci",
   "settings:tab:notifier": "Powiadomienia",
   "settings:appVersion": "Aktualna wersja aplikacji Walkner Xiconf",

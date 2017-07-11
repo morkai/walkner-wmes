@@ -368,6 +368,14 @@
     "hidLamps:error:NO_HID_LAMPS": "Order without HID lamps!",
     "hidLamps:error:INVALID_HID_LAMP": "Invalid HID lamp ID!",
 
+    "log:MRL:STARTED": "Starting a new test...",
+    "log:MRL:SUCCESS": "Successfully finished the test in <code>{duration}</code>.",
+    "log:MRL:FAILURE": "Unsuccessfully finished the test in <code>{duration}</code>.",
+    "log:MRL:WIRING_TEST:STARTED": "Starting the wiring test...",
+    "log:MRL:WIRING_TEST:FINISHED": "Finished the wiring test in <code>{duration}</code>...",
+    "log:MRL:ELECTRICAL_TEST:STARTED": "Starting the electrical test...",
+    "log:MRL:ELECTRICAL_TEST:FINISHED": "Finished the electrical test in <code>{duration}</code>...",
+
     "settings:tab:clients": "Clients",
     "settings:tab:notifier": "Notifications",
     "settings:appVersion": "Current version of the Walkner Xiconf app",

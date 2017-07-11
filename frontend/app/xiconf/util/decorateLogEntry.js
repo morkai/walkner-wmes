@@ -11,12 +11,12 @@ define([
 
   return function decorateLogEntry(logEntry)
   {
-    if (typeof logEntry.duration === 'number')
+    if (logEntry.duration)
     {
       logEntry.duration = time.toString(logEntry.duration / 1000, false, true);
     }
 
-    if (logEntry.errorCode !== undefined)
+    if (logEntry.errorCode)
     {
       logEntry.error = t('xiconf', 'error:' + logEntry.errorCode);
     }
