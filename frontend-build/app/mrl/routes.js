@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../i18n","../router","../viewport","../data/localStorage","../core/View","./views/MrlView","i18n!app/nls/mrl"],function(e,t,i,n,o,r){"use strict";t.map("/",function(){var t=n.getItem("MRL:LINE");t||n.setItem("MRL:LINE",t=window.prompt(e("mrl","linePrompt"))||""),i.showPage(new o({layoutName:"blank",view:new r({model:{prodLineId:t}})}))})});
+define(["../i18n","../router","../viewport","../data/localStorage","../core/View","./views/MrlView","i18n!app/nls/mrl"],function(e,t,r,i,n,o){"use strict";t.map("/",function(){var t=i.getItem("MRL:LINE");t||i.setItem("MRL:LINE",t=window.prompt(e("mrl","linePrompt"))||""),r.showPage(new n({layoutName:"blank",breadcrumbs:[e.bound("mrl","title")],view:new o({model:{prodLineId:t}})}))})});
