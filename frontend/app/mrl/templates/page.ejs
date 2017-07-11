@@ -1,6 +1,6 @@
 <div class="mrl">
   <div class="mrl-row">
-    <div class="mrl-props">
+    <div class="mrl-box mrl-props">
       <% ['order', 'action', 'result', 'sn'].forEach(function(prop) { %>
       <div class="mrl-prop">
         <h3 class="mrl-prop-name"><%- t('mrl', 'prop:' + prop) %></h3>
@@ -8,7 +8,7 @@
       </div>
       <% }) %>
     </div>
-    <div class="mrl-tests">
+    <div class="mrl-box mrl-tests">
       <div class="mrl-test">
         <span class="mrl-led mrl-off" data-tag="pe"></span> PE
       </div>
@@ -19,7 +19,7 @@
   </div>
   <div class="mrl-row">
     <% ['activeProbes', 'removeProbes'].forEach(function(tag) { %>
-    <table id="<%- idPrefix %>-<%- tag %>" class="probes">
+    <table id="<%- idPrefix %>-<%- tag %>" class="mrl-box probes">
       <thead>
       <tr>
         <th colspan="6">
@@ -53,7 +53,7 @@
     </table>
     <% }) %>
     <% [1, 2, 3, 4].forEach(function(n) { %>
-    <table id="<%- idPrefix %>-probe<%- n %>" class="probes probe">
+    <table id="<%- idPrefix %>-probe<%- n %>" class="mrl-box probes probe">
       <thead>
       <tr>
         <th colspan="8">
@@ -91,8 +91,12 @@
     <% }) %>
   </div>
   <i id="<%- idPrefix %>-connection" class="fa fa-signal"></i>
-  <% if (showParentControls) { %>
-  <div class="parentControls">
+  <% if (embedded) { %>
+  <div id="<%- idPrefix %>-buttons" class="mrl-buttons">
+    <button id="<%- idPrefix %>-start" class="btn btn-primary"><i class="fa fa-play"></i><span><%- t('mrl', 'button:start') %></span></button>
+    <button id="<%- idPrefix %>-reset" class="btn btn-danger"><i class="fa fa-undo"></i><span><%- t('mrl', 'button:reset') %></span></button>
+  </div>
+  <div class="mrl-parentControls">
     <button id="<%- idPrefix %>-switchApps" class="btn btn-default" title="<%- t('mrl', 'parent:switchApps') %>"><i class="fa fa-window-restore"></i></button>
     <button id="<%- idPrefix %>-reboot" class="btn btn-default" title="<%- t('mrl', 'parent:reboot') %>"><i class="fa fa-refresh"></i></button>
     <button id="<%- idPrefix %>-shutdown" class="btn btn-default" title="<%- t('mrl', 'parent:shutdown') %>"><i class="fa fa-power-off"></i></button>

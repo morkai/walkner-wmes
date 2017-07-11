@@ -1,4 +1,6 @@
 {
+  "title": "Wizualizacja MRL",
+
   "linePrompt": "ID linii MRL:",
 
   "source": "Źródło",
@@ -22,6 +24,9 @@
   "result:0": "-",
   "result:1": "Sukces",
   "result:2": "Porażka",
+
+  "button:start": "Start",
+  "button:reset": "Reset",
 
   "parent:switchApps": "Zmień aplikację/Konfiguruj po 3s",
   "parent:reboot": "Odśwież stronę/Restartuj komputer po 3s",

@@ -23,6 +23,7 @@ define([
 ) {
   'use strict';
 
+  var MRL_HOST = window.ENV === 'production' ? '192.168.21.110' : '192.168.1.250:1337';
   var PROBES = [
     null, null,
     'probe1', 'probe1x',
@@ -67,6 +68,20 @@ define([
         window.location.reload();
       },
 
+      'click #-start': function()
+      {
+        this.ws.send('start');
+
+        this.lockButtons();
+      },
+
+      'click #-reset': function()
+      {
+        this.ws.send('reset');
+
+        this.lockButtons();
+      },
+
       'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
       'touchstart #-switchApps': function() { this.startActionTimer('switchApps'); },
       'mouseup #-switchApps': function() { this.stopActionTimer('switchApps'); },
@@ -90,39 +105,46 @@ define([
         time: null
       };
       this.tags = {};
+
+      this.once('afterRender', function()
+      {
+        if (this.model.prodLineId)
+        {
+          this.setUpWebSocket();
+        }
+
+        if (window.parent !== window)
+        {
+          window.parent.postMessage({type: 'ready', app: 'mrl'}, '*');
+        }
+      });
     },
 
     destroy: function()
     {
       $(window).off('.' + this.idPrefix);
+
+      this.ws.close();
+      this.ws = null;
     },
 
     serialize: function()
     {
       return {
         idPrefix: this.idPrefix,
-        showParentControls: window.parent !== window
+        embedded: window.parent !== window
       };
     },
 
     afterRender: function()
     {
-      if (this.model.prodLineId)
-      {
-        this.setUpWebSocket();
-      }
 
-      if (window.parent !== window)
-      {
-        window.parent.postMessage({type: 'ready', app: 'mrl'}, '*');
-      }
     },
 
     setUpWebSocket: function()
     {
       var view = this;
-      var host = window.ENV === 'production' ? '192.168.21.110' : '192.168.1.250:1337';
-      var ws = new WebSocket('ws://' + host + '/vis?line=' + encodeURIComponent(view.model.prodLineId));
+      var ws = new WebSocket('ws://' + MRL_HOST + '/vis?line=' + encodeURIComponent(view.model.prodLineId));
       var $connection = view.$id('connection').addClass('offline');
 
       ws.onclose = function()
@@ -134,6 +156,8 @@ define([
           view.tags[tag] = null;
         });
 
+        view.render();
+
         setTimeout(view.setUpWebSocket.bind(view), 1000);
       };
 
@@ -143,6 +167,15 @@ define([
 
         view.change(JSON.parse(e.data));
       };
+
+      view.ws = ws;
+    },
+
+    lockButtons: function()
+    {
+      var $buttons = this.$id('buttons').find('.btn').prop('disabled', true);
+
+      setTimeout(function() { $buttons.prop('disabled', false); }, 2000);
     },
 
     change: function(changes)

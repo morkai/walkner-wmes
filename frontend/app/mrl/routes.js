@@ -29,6 +29,7 @@ define([
 
     viewport.showPage(new View({
       layoutName: 'blank',
+      breadcrumbs: [t.bound('mrl', 'title')],
       view: new MrlView({
         model: {
           prodLineId: prodLineId
