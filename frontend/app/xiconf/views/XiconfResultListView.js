@@ -24,7 +24,6 @@ define([
       {id: 'order', className: 'is-min', tdClassName: 'text-mono'},
       {id: 'serviceTag', className: 'is-min', tdClassName: 'text-mono'},
       {id: 'nc12', className: 'is-min', tdClassName: 'text-mono'},
-      {id: 'counter', className: 'is-min is-number'},
       {id: 'quantity', className: 'is-min is-number'},
       {id: 'startedAt', className: 'is-min'},
       {id: 'duration', className: 'is-min'},
@@ -41,6 +40,7 @@ define([
     serializeRow: function(model)
     {
       var order = model.get('order');
+      var orderNo = order ? order.no : model.get('orderNo');
       var program = model.get('program');
       var serviceTag = model.get('serviceTag');
       var className = ['xiconf-entry', model.get('result') === 'success' ? 'success' : 'danger'];
@@ -55,12 +55,11 @@ define([
         className: className.join(' '),
         srcId: model.get('srcId'),
         serviceTag: serviceTag ? ('...' + serviceTag.substr(-4)) : '',
-        order: model.get('orderNo'),
+        order: orderNo ? ('<a href="#xiconf/orders/' + orderNo + '">' + orderNo + '</a>') : '',
         programName: program ? program.name : (model.get('programName') || ''),
         programSteps: program ? buildStepLabels(program.steps, model.get('steps')) : '',
         prodLine: model.get('prodLine'),
         nc12: model.get('nc12'),
-        counter: model.get('counter'),
         quantity: order ? order.quantity : '',
         startedAt: time.format(model.get('startedAt'), 'L, LTS'),
         duration: time.toString(model.get('duration') / 1000, false, true)
