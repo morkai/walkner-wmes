@@ -291,6 +291,7 @@
   "error:GLP2:INVALID_RESPONSE": "GLP2: Nieprawidłowa odpowiedź testera.",
   "error:GLP2:NO_CONNECTION": "GLP2: Brak połączenia z testerem.",
   "error:GLP2:RESPONSE_TIMEOUT": "GLP2: Upłynął limit czasu oczekiwania na odpowiedź testera.",
+  "error:GLP2:START_TIMEOUT": "GLP2: Upłynął limit czasu oczekiwania na rozpoczęcie testu.",
   "error:GLP2:FAULT:1": "GLP2 (1): Styk bezpieczeństwa przerwany.",
   "error:GLP2:FAULT:2": "GLP2 (2): Uszkodzony bezpiecznik.",
   "error:GLP2:FAULT:3": "GLP2 (3): Brak zdefiniowanego kroku testowego.",

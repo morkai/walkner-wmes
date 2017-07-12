@@ -292,6 +292,7 @@
     "error:GLP2:INVALID_RESPONSE": "GLP2: Invalid response from the tester.",
     "error:GLP2:NO_CONNECTION": "GLP2: No connection to the tester.",
     "error:GLP2:RESPONSE_TIMEOUT": "GLP2: Response timed out.",
+    "error:GLP2:START_TIMEOUT": "GLP2: Start request timed out.",
     "error:GLP2:FAULT:1": "GLP2 (1): Safety contact interrupted.",
     "error:GLP2:FAULT:2": "GLP2 (2): Fuse defective.",
     "error:GLP2:FAULT:3": "GLP2 (3): No test step defined.",
