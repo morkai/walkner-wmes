@@ -1,6 +1,7 @@
 @import url(./programs.css);
 @import url(./leds.css);
 @import url(./hidLamps.css);
+@import url(./wiring.css);
 
 .xiconf-entry {
   cursor: pointer;

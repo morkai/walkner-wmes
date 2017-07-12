@@ -9,6 +9,7 @@ define([
   './LedsView',
   './HidLampsView',
   './ProgramStepsView',
+  './WiringView',
   'app/xiconf/templates/details'
 ], function(
   _,
@@ -19,13 +20,14 @@ define([
   LedsView,
   HidLampsView,
   ProgramStepsView,
-  detailsTemplate
+  WiringView,
+  template
 ) {
   'use strict';
 
   return View.extend({
 
-    template: detailsTemplate,
+    template: template,
 
     events: {
       'click .xiconf-tabs a': function(e)
@@ -68,9 +70,10 @@ define([
       };
       this.metricsChart = null;
 
-      this.setView('.xiconf-details-leds', new LedsView({model: this.model}));
-      this.setView('.xiconf-details-hidLamps', new HidLampsView({model: this.model}));
-      this.setView('.xiconf-details-steps', new ProgramStepsView({model: this.model}));
+      this.setView('#-leds', new LedsView({model: this.model}));
+      this.setView('#-hidLamps', new HidLampsView({model: this.model}));
+      this.setView('#-steps', new ProgramStepsView({model: this.model}));
+      this.setView('#-wiring', new WiringView({model: this.model}));
     },
 
     destroy: function()
@@ -153,7 +156,7 @@ define([
 
       var metrics = this.model.get('metrics');
 
-      if (!metrics)
+      if (!metrics || !metrics.uSet)
       {
         return;
       }
@@ -174,7 +177,7 @@ define([
 
       this.metricsChart = new Highcharts.Chart({
         chart: {
-          renderTo: this.el.querySelector('.xiconf-details-metrics'),
+          renderTo: this.$id('metrics')[0],
           zoomType: 'x',
           height: 400
         },

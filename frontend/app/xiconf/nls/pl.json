@@ -73,6 +73,7 @@
   "tab:feature": "Konfiguracja drivera",
   "tab:leds": "Płytki LED",
   "tab:hidLamps": "Lampy HID",
+  "tab:wiring": "Oprzewodowanie",
   "tab:program": "Program",
   "tab:gprsOrderFile": "Zlecenie",
   "tab:gprsInputFile": "Konfiguracja CityTouchIPT",
@@ -85,6 +86,11 @@
   "metrics:i": "Natężenie",
   "metrics:r": "Rezystancja",
   "metrics:p": "Moc",
+
+  "wiring:probe:1": "Sonda LED 1",
+  "wiring:probe:2": "Sonda LED 2",
+  "wiring:probe:3": "Sonda LED 3",
+  "wiring:probe:4": "Sonda żeńska",
 
   "leds:error:INVALID_NC12": "Nieprawidłowe 12NC:<br>{nc12}!",
   "leds:error:NO_CONNECTION": "Brak połączenia z<br>serwerem zewnętrznym!",

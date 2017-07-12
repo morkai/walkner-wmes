@@ -22,22 +22,36 @@ function(
 
   function View(options)
   {
-    this.idPrefix = _.uniqueId('v');
+    var view = this;
 
-    this.options = options || {};
+    view.idPrefix = _.uniqueId('v');
 
-    this.timers = {};
+    view.options = options || {};
 
-    this.promises = [];
+    view.timers = {};
 
-    util.defineSandboxedProperty(this, 'broker', broker);
-    util.defineSandboxedProperty(this, 'pubsub', pubsub);
-    util.defineSandboxedProperty(this, 'socket', socket);
+    view.promises = [];
 
-    Layout.call(this, options);
+    _.forEach(view.sections, function(selector, section)
+    {
+      if (typeof selector !== 'string' || selector === '#')
+      {
+        view.sections[section] = '#' + view.idPrefix + '-' + section;
+      }
+      else
+      {
+        view.sections[section] = selector.replace('#-', '#' + view.idPrefix + '-');
+      }
+    });
 
-    util.subscribeTopics(this, 'broker', this.localTopics, true);
-    util.subscribeTopics(this, 'pubsub', this.remoteTopics, true);
+    util.defineSandboxedProperty(view, 'broker', broker);
+    util.defineSandboxedProperty(view, 'pubsub', pubsub);
+    util.defineSandboxedProperty(view, 'socket', socket);
+
+    Layout.call(view, options);
+
+    util.subscribeTopics(view, 'broker', view.localTopics, true);
+    util.subscribeTopics(view, 'pubsub', view.remoteTopics, true);
   }
 
   util.inherits(View, Layout);
@@ -88,6 +102,16 @@ function(
         this.$el.on(eventName, selector, method.bind(this));
       }
     }, this);
+  };
+
+  View.prototype.setView = function(name, view, insert, insertOptions)
+  {
+    if (typeof name === 'string' && /^#-/.test(name))
+    {
+      name = name.replace('#-', '#' + this.idPrefix + '-');
+    }
+
+    return Layout.prototype.setView.call(this, name, view, insert, insertOptions);
   };
 
   View.prototype.cleanup = function()

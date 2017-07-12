@@ -74,6 +74,7 @@
     "tab:feature": "Driver config",
     "tab:leds": "LED boards",
     "tab:hidLamps": "HID lamps",
+    "tab:wiring": "Wiring",
     "tab:program": "Program",
     "tab:gprsOrderFile": "Order",
     "tab:gprsInputFile": "CityTouchIPT config",
@@ -86,6 +87,11 @@
     "metrics:i": "Current",
     "metrics:r": "Resistance",
     "metrics:p": "Power",
+
+    "wiring:probe:1": "LED probe 1",
+    "wiring:probe:2": "LED probe 2",
+    "wiring:probe:3": "LED probe 3",
+    "wiring:probe:4": "Female probe",
 
     "leds:error:INVALID_NC12": "Invalid 12NC:<br>{nc12}!",
     "leds:error:NO_CONNECTION": "No connection to<br>the remote server!",
