@@ -532,11 +532,16 @@ app/xiconf/assets/main.css
 app/xiconf/assets/./programs.css
 app/xiconf/assets/./leds.css
 app/xiconf/assets/./hidLamps.css
+app/xiconf/assets/./wiring.css
 app/xiconf/assets/main.css
 
 app/xiconf/assets/programs.css
 ----------------
 app/xiconf/assets/programs.css
+
+app/xiconf/assets/wiring.css
+----------------
+app/xiconf/assets/wiring.css
 
 app/xiconfClients/assets/main.css
 ----------------
