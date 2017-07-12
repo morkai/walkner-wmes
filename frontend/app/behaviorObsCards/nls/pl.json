@@ -86,9 +86,12 @@
   "report:title:safeBySection": "Ilość bezpiecznych zachowań",
   "report:title:riskyBySection": "Ilość ryzykownych zachowań",
   "report:title:categories": "Ilość ryzykownych zachowań wg kategorii",
+  "report:title:observers": "Ilość kart obserwacji wg obserwatorów",
   "report:series:total": "Suma",
+  "report:series:card": "Karty obserwacji",
   "report:filenames:countBySection": "OBS_Ilosc",
   "report:filenames:safeBySection": "OBS_IloscBezpZach",
   "report:filenames:riskyBySection": "OBS_IloscRyzykZach",
-  "report:filenames:categories": "OBS_IloscRyzykZachWgKategorii"
+  "report:filenames:categories": "OBS_IloscRyzykZachWgKategorii",
+  "report:filenames:observers": "OBS_IloscWgObserwatorow"
 }

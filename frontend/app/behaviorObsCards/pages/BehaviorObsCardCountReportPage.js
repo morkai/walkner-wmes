@@ -7,6 +7,7 @@ define([
   '../BehaviorObsCardCountReport',
   '../views/BehaviorObsCardCountReportFilterView',
   '../views/BehaviorObsCardTableAndChartView',
+  '../views/BehaviorObsCardCountPerUserChartView',
   'app/behaviorObsCards/templates/countReportPage'
 ], function(
   t,
@@ -15,6 +16,7 @@ define([
   BehaviorObsCardCountReport,
   BehaviorObsCardCountReportFilterView,
   BehaviorObsCardTableAndChartView,
+  BehaviorObsCardCountPerUserChartView,
   template
 ) {
   'use strict';
@@ -44,6 +46,11 @@ define([
         }));
       }, this);
 
+      this.setView('#-observers', new BehaviorObsCardCountPerUserChartView({
+        metric: 'observer',
+        model: this.model
+      }));
+
       this.listenTo(this.model, 'filtered', this.onFiltered);
     },
 
@@ -56,7 +63,7 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        metrics: BehaviorObsCardCountReport.TABLE_AND_CHART_METRICS
+        metrics: BehaviorObsCardCountReport.TABLE_AND_CHART_METRICS.concat('observers')
       };
     },
 

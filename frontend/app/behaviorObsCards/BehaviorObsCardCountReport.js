@@ -73,6 +73,10 @@ define([
         total: {
           rows: model.prepareTotalRows(totals),
           series: model.prepareTotalSeries()
+        },
+        observer: {
+          categories: this.prepareUserCategories(report.users, totals.observers),
+          series: this.prepareObserverSeries(totals.observers, report.groups)
         }
       };
 
@@ -203,6 +207,35 @@ define([
           y: group[metric] ? (group[metric][row.id] || null) : null
         });
       });
+    },
+
+    prepareUserCategories: function(users, totals)
+    {
+      return totals.map(function(total)
+      {
+        var userId = total[0];
+
+        return users[userId] || userId;
+      });
+    },
+
+    prepareObserverSeries: function(observerTotals)
+    {
+      var series = [
+        {
+          id: 'behaviorObsCards',
+          name: t.bound('behaviorObsCards', 'report:series:card'),
+          data: [],
+          color: '#5bc0de'
+        }
+      ];
+
+      _.forEach(observerTotals, function(totals)
+      {
+        series[0].data.push(totals[1]);
+      });
+
+      return series;
     }
 
   }, {

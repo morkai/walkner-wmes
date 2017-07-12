@@ -16,6 +16,7 @@ module.exports = function(mongoose, options, done)
     options: options,
     categories: {},
     sections: {},
+    users: {},
     totals: createGroup(),
     groups: {}
   };
@@ -36,6 +37,7 @@ module.exports = function(mongoose, options, done)
       };
       const fields = {
         date: 1,
+        observer: 1,
         section: 1,
         observations: 1
       };
@@ -95,7 +97,8 @@ module.exports = function(mongoose, options, done)
         'countBySection',
         'safeBySection',
         'riskyBySection',
-        'categories'
+        'categories',
+        'observers'
       ], sortTotals);
 
       return setImmediate(this.next());
@@ -117,7 +120,8 @@ module.exports = function(mongoose, options, done)
       risky: 0,
       riskyBySection: {},
       categories: {},
-      categoriesBySection: {}
+      categoriesBySection: {},
+      observers: {}
     };
   }
 
@@ -142,12 +146,27 @@ module.exports = function(mongoose, options, done)
       group = results.groups[groupKey] = createGroup(groupKey);
     }
 
+    if (!results.users[card.observer.id])
+    {
+      results.users[card.observer.id] = card.observer.label;
+      results.totals.observers[card.observer.id] = 0;
+    }
+
+    results.totals.observers[card.observer.id] += 1;
+
     if (!results.sections[card.section])
     {
       results.sections[card.section] = card.section;
     }
 
     inc('count');
+
+    if (!group.observers[card.observer.id])
+    {
+      group.observers[card.observer.id] = 0;
+    }
+
+    group.observers[card.observer.id] += 1;
 
     card.observations.forEach(o =>
     {
