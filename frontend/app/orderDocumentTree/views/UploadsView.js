@@ -217,6 +217,8 @@ define([
 
       clearTimeout(this.timers.fillNames);
       this.timers.fillNames = setTimeout(this.fillNames.bind(this), 1);
+
+      this.onFocus(upload);
     },
 
     fillNames: function()
