@@ -48,8 +48,7 @@
   "FORM:ERROR:addFailure": "Nie udało się dodać karty MdB :(",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować karty MdB :(",
   "FORM:ERROR:empty": "Podaj przynajmniej jedną obserwację.",
-  "FORM:MSG:observations": "Jeżeli zostały stwierdzone ryzykowne warunki w miejscu pracy zarejestruj je w bazie ZPW - <a href='#kaizenOrders;add'>Zgłoś ZPW</a>!",
-  "FORM:MSG:techPropositions": "Wymienione propozycje rozwiązań zarejestruj w bazie Usprawnień - <a href='#suggestions;add'>Zgłoś sugestię</a>!",
+  "FORM:MSG:propositions": "Wymienione propozycje rozwiązań zarejestruj w bazie Usprawnień - <a href='#suggestions;add'>Zgłoś sugestię</a>!",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia karty MdB",
   "ACTION_FORM:BUTTON:delete": "Usuń kartę MdB",
