@@ -66,6 +66,13 @@ define([
 
         return false;
       },
+      'click a[data-hash]': function(e)
+      {
+        if (e.altKey)
+        {
+          return false;
+        }
+      },
       'click .orderDocumentTree-files-file': function(e)
       {
         if (e.target.tagName === 'A' || window.getSelection().toString() !== '')
