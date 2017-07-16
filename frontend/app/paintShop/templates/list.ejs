@@ -1,0 +1,7 @@
+<div class="paintShop-list">
+  <% groups.forEach(function(group) { %>
+  <% group.orders.forEach(function(order) { %>
+  <div class="paintShop-list-item" data-order-id="<%- order._id %>" data-status="<%- order.status %>"><%- order.order %></div>
+  <% }) %>
+  <% }) %>
+</div>

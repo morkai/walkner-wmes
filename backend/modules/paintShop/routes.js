@@ -5,6 +5,7 @@
 const fs = require('fs');
 const multer = require('multer');
 const moment = require('moment');
+const step = require('h5.step');
 
 module.exports = function setUpPaintShopRoutes(app, module)
 {
@@ -13,9 +14,11 @@ module.exports = function setUpPaintShopRoutes(app, module)
   const userModule = app[module.config.userId];
   const mongoose = app[module.config.mongooseId];
   const PaintShopOrder = mongoose.model('PaintShopOrder');
+  const PaintShopEvent = mongoose.model('PaintShopEvent');
 
   const canView = userModule.auth('LOCAL', 'PAINT_SHOP:VIEW');
   const canManage = userModule.auth('LOCAL', 'PAINT_SHOP:MANAGE');
+  const canUpdate = userModule.auth('LOCAL', 'PAINT_SHOP:PAINTER', 'PAINT_SHOP:MANAGE');
 
   express.post(
     '/paintShop/orders;import',
@@ -39,6 +42,8 @@ module.exports = function setUpPaintShopRoutes(app, module)
   );
 
   express.get('/paintShop/orders/:id', canView, express.crud.readRoute.bind(null, app, PaintShopOrder));
+
+  express.patch('/paintShop/orders/:id', canUpdate, updatePaintShopOrderRoute);
 
   function prepareCurrentDate(req, res, next)
   {
@@ -86,5 +91,48 @@ module.exports = function setUpPaintShopRoutes(app, module)
 
       res.json(result);
     });
+  }
+
+  function updatePaintShopOrderRoute(req, res, next)
+  {
+    step(
+      function()
+      {
+        PaintShopOrder.findById(req.params.id).exec(this.next());
+      },
+      function(err, psOrder)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!psOrder)
+        {
+          return this.skip(app.createError('NOT_FOUND', 404));
+        }
+
+        psOrder.act(req.body.action, this.next());
+      },
+      function(err, changes)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.json(changes);
+
+        app.broker.publish(`paintShop.orders.updated.${req.params.id}`, changes);
+
+        PaintShopEvent.record({
+          type: req.body.action,
+          time: new Date(),
+          user: userModule.createUserInfo(req.session.user, req),
+          order: req.params.id,
+          data: {}
+        });
+      }
+    );
   }
 };

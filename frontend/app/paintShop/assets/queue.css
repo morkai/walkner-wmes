@@ -1,28 +1,13 @@
-.page[data-id="paintShop"] .page-actions .btn-link {
-  padding: 0;
-  width: 32px;
-  font-size: 32px;
-  line-height: 1;
-}
 .paintShop-queue-container {
-  display: flex;
-  height: 100%;
-}
-.paintShop-is-fullscreen {
-  margin: 0;
-  overflow: hidden;
-}
-.paintShop-is-fullscreen .navbar,
-.paintShop-is-fullscreen .ft {
-  display: none;
-}
-.paintShop-queue {
   flex: 1 1 auto;
-  overflow-y: scroll;
+  background: #fff;
   border: 1px solid #333;
   box-shadow: 0 6px 12px #666;
-  background: #fff;
   line-height: 1;
+}
+.paintShop-queue {
+  height: 100%;
+  overflow-y: scroll;
 }
 .paintShop-queue-empty {
   padding: 10px;
@@ -45,7 +30,7 @@
 
 }
 .paintShop-order {
-
+  cursor: pointer;
 }
 .paintShop-properties {
   font-size: 14px;

@@ -23,6 +23,13 @@ define([
 
     rqlQuery: 'sort(group,no)&limit(0)',
 
+    initialize: function()
+    {
+      this.groups = null;
+
+      this.on('request', function() { this.groups = null; });
+    },
+
     parse: function(res)
     {
       return Collection.prototype.parse.call(this, res).map(PaintShopOrder.parse);
@@ -41,6 +48,14 @@ define([
       });
     },
 
+    isDateCurrent: function()
+    {
+      return _.some(this.rqlQuery.selector.args, function(term)
+      {
+        return term.name === 'eq' && term.args[0] === 'date' && term.args[1] === 'current';
+      });
+    },
+
     getDateFilter: function(format)
     {
       var dateFilter;
@@ -55,7 +70,7 @@ define([
 
       if (!dateFilter)
       {
-        dateFilter = getShiftStartInfo(Date.now()).moment.format(format || 'YYYY-MM-DD');
+        dateFilter = this.constructor.getCurrentDate(format);
       }
 
       return dateFilter;
@@ -63,7 +78,7 @@ define([
 
     setDateFilter: function(newDate)
     {
-      var currentDate = getShiftStartInfo(Date.now()).moment.format('YYYY-MM-DD');
+      var currentDate = this.constructor.getCurrentDate();
 
       if (newDate === currentDate)
       {
@@ -79,8 +94,30 @@ define([
       });
     },
 
-    serializeGroups: function()
+    serializeGroups: function(filter)
     {
+      if (this.groups)
+      {
+        if (!filter)
+        {
+          return this.groups;
+        }
+
+        return this.groups
+          .map(function(group)
+          {
+            return {
+              _id: group._id,
+              name: group.name,
+              orders: group.orders.filter(filter)
+            };
+          })
+          .filter(function(group)
+          {
+            return group.orders.length > 0;
+          });
+      }
+
       var groupList = [];
       var groupMap = {};
 
@@ -103,7 +140,9 @@ define([
         group.orders.push(order.serialize());
       });
 
-      return groupList;
+      this.groups = groupList;
+
+      return this.serializeGroups(filter);
     },
 
     act: function(reqData, done)
@@ -111,9 +150,9 @@ define([
       var collection = this;
       var url = collection.url;
 
-      if (reqData.requestId)
+      if (reqData.orderId)
       {
-        url = '/isaActiveRequests/' + this.get(reqData.requestId).getProdLineId();
+        url = '/paintShop/orders/' + reqData.orderId;
       }
 
       var req = $.ajax({
@@ -148,34 +187,14 @@ define([
       });
 
       return req;
-    },
-
-    pickup: function(secretKey, done)
-    {
-      return this.act({action: 'requestPickup', secretKey: secretKey}, done);
-    },
-
-    deliver: function(palletKind, secretKey, done)
-    {
-      return this.act({action: 'requestDelivery', secretKey: secretKey, palletKind: palletKind}, done);
-    },
-
-    cancel: function(requestId, secretKey, done)
-    {
-      return this.act({action: 'cancelRequest', secretKey: secretKey, requestId: requestId}, done);
-    },
-
-    accept: function(requestId, responder, done)
-    {
-      return this.act({action: 'acceptRequest', responder: responder, requestId: requestId}, done);
-    },
-
-    finish: function(requestId, done)
-    {
-      return this.act({action: 'finishRequest', requestId: requestId}, done);
     }
 
   }, {
+
+    getCurrentDate: function(format)
+    {
+      return getShiftStartInfo(Date.now()).moment.format(format || 'YYYY-MM-DD');
+    },
 
     forCurrentDate: function()
     {

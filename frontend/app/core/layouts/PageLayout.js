@@ -360,7 +360,7 @@ define([
 
       html += '<li>';
 
-      if (i === l - 1 || !breadcrumb.href)
+      if (!breadcrumb.href)
       {
         html += breadcrumb.label;
       }
@@ -374,6 +374,8 @@ define([
     this.$header[0].style.display = '';
 
     this.adjustBreadcrumbsPosition();
+
+    this.trigger('afterRender:breadcrumbs');
   };
 
   /**
@@ -483,6 +485,8 @@ define([
     });
 
     this.$header[0].style.display = '';
+
+    this.trigger('afterRender:actions');
   };
 
   /**

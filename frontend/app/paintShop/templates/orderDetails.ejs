@@ -1,65 +1,39 @@
-<div class="paintShop-orderDetails">
-  <h3><%- t('paintShop', 'orderDetails:order') %></h3>
-  <div class="paintShop-orderDetails-row">
-    <div class="form-group">
-      <label class="control-label"><%- t('paintShop', 'PROPERTY:no') %></label>
-      <p class="form-control-static"><%- model.no %></p>
-    </div>
-    <% if (model.followupNo) { %>
-    <div class="form-group">
-      <label class="control-label"><%- t('paintShop', 'PROPERTY:followupNo') %></label>
-      <p class="form-control-static"><%- model.followupNo %></p>
-    </div>
-    <% } %>
-    <div class="form-group">
-      <label class="control-label"><%- t('paintShop', 'PROPERTY:group') %></label>
-      <p class="form-control-static"><%= model.group %></p>
-    </div>
-  </div>
-  <div class="paintShop-orderDetails-row">
-    <div class="form-group">
-      <label class="control-label"><%- t('paintShop', 'PROPERTY:status') %></label>
-      <p class="form-control-static"><%- model.statusText %></p>
-    </div>
-    <div class="form-group">
-      <label class="control-label"><%- t('paintShop', 'PROPERTY:startedAt') %></label>
-      <p class="form-control-static"><%- model.startedAt || '-' %></p>
-    </div>
-    <div class="form-group">
-      <label class="control-label"><%- t('paintShop', 'PROPERTY:finishedAt') %></label>
-      <p class="form-control-static"><%= model.finishedAt || '-' %></p>
-    </div>
-  </div>
-  <div class="paintShop-orderDetails-row">
-    <div class="form-group">
-      <label class="control-label"><%- t('paintShop', 'PROPERTY:order') %></label>
-      <p class="form-control-static"><%- model.order %></p>
-    </div>
-    <div class="form-group">
-      <label class="control-label"><%- t('paintShop', 'PROPERTY:nc12') %></label>
-      <p class="form-control-static"><%- model.nc12 %></p>
-    </div>
-    <div class="form-group">
-      <label class="control-label"><%- t('paintShop', 'PROPERTY:name') %></label>
-      <p class="form-control-static"><%= model.name %></p>
-    </div>
-  </div>
-  <div class="paintShop-orderDetails-row">
-    <div class="form-group">
-      <label class="control-label"><%- t('paintShop', 'PROPERTY:qty') %></label>
-      <p class="form-control-static"><%- model.qty ? model.qty.toLocaleString() : '?' %> PCE</p>
-    </div>
-    <div class="form-group">
-      <label class="control-label"><%- t('paintShop', 'PROPERTY:mrp') %></label>
-      <p class="form-control-static"><%= model.mrp %></p>
-    </div>
-    <div class="form-group">
-      <label class="control-label"><%- t('paintShop', 'PROPERTY:paintType') %></label>
-      <p class="form-control-static"><%= model.paintType %></p>
-    </div>
-    <div class="form-group">
-      <label class="control-label"><%- t('paintShop', 'PROPERTY:placement') %></label>
-      <p class="form-control-static"><%= model.placement || '-' %></p>
-    </div>
-  </div>
-</div>
+<table class="paintShop-orderDetails">
+  <thead>
+  <tr>
+    <th><%- t('paintShop', 'PROPERTY:no') %></th>
+    <th><%- t('paintShop', 'PROPERTY:order') %></th>
+    <th><%- t('paintShop', 'PROPERTY:nc12') %></th>
+    <th colspan="2"><%- t('paintShop', 'PROPERTY:qty') %></th>
+    <th colspan="3"><%- t('paintShop', 'PROPERTY:name') %></th>
+  </tr>
+  </thead>
+  <% if (canAct) { %>
+  <tfoot>
+  <tr>
+    <td colspan="8">
+      <div class="paintShop-orderDetails-actions">
+        <% if (order.status === 'new') { %>
+        <button class="btn btn-warning" type="button" data-action="start"><%- t('paintShop', 'action:start') %></button>
+        <% if (canResetIgnore) { %>
+        <button class="btn btn-danger" type="button" data-action="cancel"><%- t('paintShop', 'action:cancel') %></button>
+        <% } %>
+        <% } else if (order.status === 'started') { %>
+        <button class="btn btn-success" type="button" data-action="finish"><%- t('paintShop', 'action:finish') %></button>
+        <% } else if (canResetIgnore) { %>
+        <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
+        <% } %>
+      </div>
+    </td>
+  </tr>
+  </tfoot>
+  <% } %>
+  <%- renderQueueOrder({order: order}) %>
+  <% if (canAct) { %>
+  <tbody>
+  <tr>
+    <td id="<%- idPrefix %>-filler" class="paintShop-orderDetails-filler" colspan="8" style="height: <%- fillerHeight %>px"></td>
+  </tr>
+  </tbody>
+  <% } %>
+</table>

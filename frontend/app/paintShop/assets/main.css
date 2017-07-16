@@ -1,2 +1,24 @@
 @import "./queue.css";
+@import "./list.css";
 @import "./orderDetails.css";
+
+.page[data-id="paintShop"] .page-actions .btn-link {
+  padding: 0;
+  width: 32px;
+  font-size: 32px;
+  line-height: 1;
+}
+.paintShop-is-fullscreen {
+  margin: 0;
+  overflow: hidden;
+}
+.paintShop-is-fullscreen .navbar,
+.paintShop-is-fullscreen .ft {
+  display: none;
+}
+.paintShop-dateBreadcrumb {
+  font-weight: normal;
+}
+.paintShop {
+  display: flex;
+}

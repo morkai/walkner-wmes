@@ -161,6 +161,9 @@
   "PRIVILEGE:D8:DICTIONARIES:MANAGE": "8D: zarządzanie słownikami",
   "PRIVILEGE:MOR:MANAGE": "Matryca odpowiedzialności: zarządzanie",
   "PRIVILEGE:MOR:MANAGE:USERS": "Matryca odpowiedzialności: edycja osób",
+  "PRIVILEGE:PAINT_SHOP:VIEW": "Malarnia: przeglądanie",
+  "PRIVILEGE:PAINT_SHOP:MANAGE": "Malarnia: zarządzanie",
+  "PRIVILEGE:PAINT_SHOP:PAINTER": "Malarnia: malarz",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System",

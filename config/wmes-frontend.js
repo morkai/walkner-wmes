@@ -220,7 +220,7 @@ exports.pubsub = {
     'd8.**',
     'heff.**',
     'ping', 'sockets.connected', 'sockets.disconnected',
-    'paintShop.orders.imported', 'paintShop.orders.updated.**',
+    'paintShop.orders.imported', 'paintShop.orders.updated.**', 'paintShop.events.saved',
     'vis.**',
     'mor.**'
   ]
@@ -260,7 +260,7 @@ exports.mongoose = {
     'pscsResult',
     'd8Entry', 'd8Area', 'd8EntrySource', 'd8ProblemSource',
     'heffLineState',
-    'paintShopOrder',
+    'paintShopOrder', 'paintShopEvent',
     'behaviorObsCard', 'minutesForSafetyCard',
     'visNodePosition'
   ]
@@ -340,7 +340,8 @@ exports.user = {
     'QI:DICTIONARIES:VIEW', 'QI:DICTIONARIES:MANAGE',
     'PSCS:VIEW', 'PSCS:MANAGE',
     'D8:VIEW', 'D8:MANAGE', 'D8:LEADER', 'D8:DICTIONARIES:VIEW', 'D8:DICTIONARIES:MANAGE',
-    'MOR:MANAGE', 'MOR:MANAGE:USERS'
+    'MOR:MANAGE', 'MOR:MANAGE:USERS',
+    'PAINT_SHOP:VIEW', 'PAINT_SHOP:MANAGE', 'PAINT_SHOP:PAINTER'
   ]
 };
 

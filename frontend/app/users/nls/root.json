@@ -162,6 +162,9 @@
     "PRIVILEGE:D8:DICTIONARIES:MANAGE": "QI: manage dictionaries",
     "PRIVILEGE:MOR:MANAGE": "Matrix of responsibility: manage",
     "PRIVILEGE:MOR:MANAGE:USERS": "Matrix of responsibility: edit users",
+    "PRIVILEGE:PAINT_SHOP:VIEW": "Paint shop: view",
+    "PRIVILEGE:PAINT_SHOP:MANAGE": "Paint shop: manage",
+    "PRIVILEGE:PAINT_SHOP:PAINTER": "Paint shop: painter",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System",

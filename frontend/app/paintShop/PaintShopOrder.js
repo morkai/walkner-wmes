@@ -83,13 +83,6 @@ define([
       obj.statusText = t('paintShop', 'status:' + obj.status);
 
       return obj;
-    },
-
-    serializeRow: function()
-    {
-      var obj = this.toJSON();
-
-      return obj;
     }
 
   }, {

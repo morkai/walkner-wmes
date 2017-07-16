@@ -170,6 +170,7 @@ code.multiline {
   line-height: 1;
   font-weight: bold;
   font-size: 34px;
+  vertical-align: top;
 }
 .page-breadcrumbs li:after {
   content: "\0000a0\\\0000a0";

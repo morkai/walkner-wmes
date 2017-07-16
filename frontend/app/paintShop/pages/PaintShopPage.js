@@ -11,6 +11,7 @@ define([
   'app/core/util/getShiftStartInfo',
   '../PaintShopOrder',
   '../views/PaintShopQueueView',
+  '../views/PaintShopListView',
   'app/paintShop/templates/page'
 ], function(
   _,
@@ -23,6 +24,7 @@ define([
   getShiftStartInfo,
   PaintShopOrder,
   PaintShopQueueView,
+  PaintShopListView,
   template
 ) {
   'use strict';
@@ -40,19 +42,46 @@ define([
       return [
         t.bound('paintShop', 'BREADCRUMBS:base'),
         t.bound('paintShop', 'BREADCRUMBS:queue'),
-        this.orders.getDateFilter('L')
+        {
+          href: '#paintShop/' + this.orders.getDateFilter(),
+          label: this.orders.getDateFilter('L')
+        }
       ];
     },
 
     actions: function()
     {
-      return [
+      var actions = [
         {
+          type: 'link',
+          icon: 'filter',
+          className: 'disabled',
+          callback: function() {}
+        },
+        {
+          type: 'link',
+          icon: 'paint-brush',
+          className: 'disabled',
+          callback: function() {}
+        },
+        {
+          type: 'link',
+          icon: 'truck',
+          className: 'disabled',
+          callback: function() {}
+        }
+      ];
+
+      if (window.parent === window)
+      {
+        actions.push({
           type: 'link',
           icon: 'arrows-alt',
           callback: this.toggleFullscreen.bind(this)
-        }
-      ];
+        });
+      }
+
+      return actions;
     },
 
     localTopics: {
@@ -67,9 +96,31 @@ define([
     },
 
     remoteTopics: {
-      'paintShopOrders.updated.**': function(change)
+      'shiftChanged': function(newShift)
       {
-        console.log(arguments);
+        if (newShift.no === 1 && this.orders.isDateCurrent())
+        {
+          this.orders.fetch({reset: true});
+        }
+      },
+      'paintShop.orders.imported': function(message)
+      {
+        var currentDate = this.orders.getDateFilter();
+        var importedDate = time.format(message.date, 'YYYY-MM-DD');
+
+        if (importedDate === currentDate)
+        {
+          this.orders.fetch({reset: true});
+        }
+      },
+      'paintShop.orders.updated.**': function(changes)
+      {
+        var order = this.orders.get(changes._id);
+
+        if (order)
+        {
+          order.set(PaintShopOrder.parse(changes));
+        }
       }
     },
 
@@ -85,7 +136,8 @@ define([
       this.defineViews();
       this.defineBindings();
 
-      this.setView('#' + this.idPrefix + '-queue', this.queueView);
+      this.setView('#-queue', this.queueView);
+      this.setView('#-list', this.listView);
     },
 
     setUpLayout: function(layout)
@@ -97,6 +149,8 @@ define([
     {
       document.body.style.overflow = '';
       document.body.classList.remove('paintShop-is-fullscreen');
+
+      $('.modal').addClass('fade');
 
       $(window).off('.' + this.idPrefix);
       $(document).off('.' + this.idPrefix);
@@ -112,26 +166,29 @@ define([
       this.queueView = new PaintShopQueueView({
         model: this.orders
       });
+      this.listView = new PaintShopListView({
+        model: this.orders
+      });
     },
 
     defineBindings: function()
     {
       var page = this;
       var idPrefix = page.idPrefix;
-
-      page.listenTo(page.orders, 'sync', this.onOrdersSync);
-
       var handleDragEvent = page.handleDragEvent.bind(page);
+
+      page.listenTo(page.orders, 'reset', this.onOrdersReset);
 
       $(document)
         .on('dragstart.' + idPrefix, handleDragEvent)
         .on('dragenter.' + idPrefix, handleDragEvent)
         .on('dragleave.' + idPrefix, handleDragEvent)
         .on('dragover.' + idPrefix, handleDragEvent)
-        .on('drop.' + idPrefix, page.onDrop.bind(page));
+        .on('drop.' + idPrefix, page.onDrop.bind(page))
+        .on('click.' + idPrefix, '.page-breadcrumbs', this.onBreadcrumbsClick.bind(this));
 
       $(window)
-        .on('resize.' + this.idPrefix, this.onResize);
+        .on('resize.' + idPrefix, this.onResize);
     },
 
     load: function(when)
@@ -209,14 +266,9 @@ define([
 
     afterRender: function()
     {
+      $('.modal.fade').removeClass('fade');
+
       this.resize();
-
-      var $groups = this.$('.paintShop-groups');
-
-      if ($groups.length)
-      {
-        $groups[0].style.display = '';
-      }
     },
 
     resize: function()
@@ -226,7 +278,8 @@ define([
 
     isFullscreen: function()
     {
-      return this.options.fullscreen
+      return window.parent !== window
+        || this.options.fullscreen
         || window.innerWidth <= 800
         || (window.outerWidth === window.screen.width && window.outerHeight === window.screen.height);
     },
@@ -264,105 +317,6 @@ define([
       }
 
       return height;
-    },
-
-    acceptRequest: function(request, responder)
-    {
-      var page = this;
-
-      this.requests.accept(request.id, {id: responder.id, label: responder.getLabel()}, function(err)
-      {
-        if (err)
-        {
-          page.showMessage('error', 5000, acceptFailureMessage({
-            error: err.message
-          }));
-        }
-        else
-        {
-          page.showMessage('info', 10000, acceptSuccessMessage({
-            whman: responder.getLabel(),
-            requestType: request.get('type'),
-            orgUnit: request.get('orgUnit'),
-            palletKind: request.getFullPalletKind()
-          }));
-        }
-      });
-    },
-
-    finishResponse: function(request)
-    {
-      var page = this;
-      var requestType = request.get('type');
-
-      this.requests.finish(request.id, function(err)
-      {
-        if (err)
-        {
-          page.showMessage('error', 5000, finishFailureMessage({
-            error: err.message
-          }));
-        }
-        else
-        {
-          page.showMessage('success', 2500, finishSuccessMessage({
-            type: requestType,
-            line: request.getProdLineId()
-          }));
-        }
-      });
-    },
-
-    showMessage: function(type, time, message)
-    {
-      if (this.timers.hideMessage)
-      {
-        clearTimeout(this.timers.hideMessage);
-      }
-
-      var $overlay = this.$id('messageOverlay');
-      var $message = this.$id('message');
-
-      $overlay.css('display', 'block');
-      $message
-        .html(message).css({
-          display: 'block',
-          marginLeft: '-5000px'
-        })
-        .removeClass('message-error message-warning message-success message-info')
-        .addClass('message-' + type);
-
-      $message.css({
-        display: 'none',
-        marginTop: ($message.outerHeight() / 2 * -1) + 'px',
-        marginLeft: ($message.outerWidth() / 2 * -1) + 'px'
-      });
-
-      $message.fadeIn();
-
-      this.timers.hideMessage = setTimeout(this.hideMessage.bind(this), time);
-    },
-
-    hideMessage: function()
-    {
-      if (!this.timers.hideMessage)
-      {
-        return;
-      }
-
-      clearTimeout(this.timers.hideMessage);
-
-      var page = this;
-      var $overlay = page.$id('messageOverlay');
-      var $message = page.$id('message');
-
-      $message.fadeOut(function()
-      {
-        $overlay.css('display', 'none');
-        $message.css('display', 'none');
-
-        page.timers.hideMessage = null;
-      });
     },
 
     toggleFullscreen: function()
@@ -448,7 +402,7 @@ define([
       return this.orders.genClientUrl() + (this.options.fullscreen ? '?fullscreen=1' : '');
     },
 
-    onOrdersSync: function()
+    onOrdersReset: function()
     {
       var page = this;
 
@@ -462,6 +416,71 @@ define([
         trigger: false,
         replace: true
       });
+    },
+
+    onBreadcrumbsClick: function(e)
+    {
+      if (e.target.tagName !== 'A')
+      {
+        return;
+      }
+
+      var liEl = e.target.parentNode;
+
+      liEl.innerHTML = '';
+
+      var page = this;
+      var currentDate = page.orders.getDateFilter('YYYY-MM-DD');
+
+      var $date = $('<input type="date" class="form-control paintShop-dateBreadcrumb">')
+        .val(currentDate)
+        .appendTo(liEl)
+        .focus()
+        .on('keyup', function(e)
+        {
+          if (e.keyCode === 13)
+          {
+            saveAndHide($date.val());
+
+            return false;
+          }
+
+          if (e.keyCode === 27)
+          {
+            saveAndHide(null);
+
+            return false;
+          }
+        })
+        .on('blur', function() { saveAndHide($date.val()); });
+
+      return false;
+
+      function saveAndHide(newDate)
+      {
+        if (newDate === '')
+        {
+          newDate = getShiftStartInfo(Date.now()).moment.format('YYYY-MM-DD');
+        }
+
+        var newDateMoment = time.getMoment(newDate, 'YYYY-MM-DD');
+
+        $date.remove();
+
+        if (!newDateMoment.isValid() || newDate === currentDate)
+        {
+          newDate = currentDate;
+        }
+        else
+        {
+          page.orders.setDateFilter(newDate);
+          page.orders.fetch({reset: true});
+        }
+
+        liEl.innerHTML = '<a href="#paintShop/' + newDate + '">'
+          + time.getMoment(newDate, 'YYYY-MM-DD').format('L')
+          + '</a>';
+      }
     }
 
   });

@@ -54,7 +54,9 @@ define([
     {
       this.lastClickEvent = null;
 
-      this.listenTo(this.model, 'sync', this.render);
+      this.listenTo(this.model, 'reset', this.render);
+      this.listenTo(this.model, 'change', this.onChange);
+      this.listenTo(this.model, 'focus', this.onFocus);
     },
 
     serialize: function()
@@ -68,7 +70,17 @@ define([
 
     afterRender: function()
     {
+      var $groups = this.$('.paintShop-groups');
 
+      if ($groups.length)
+      {
+        $groups[0].style.display = '';
+      }
+    },
+
+    $order: function(orderId)
+    {
+      return this.$('.paintShop-order[data-order-id="' + orderId + '"]');
     },
 
     handleOrderClick: function(orderId)
@@ -78,15 +90,28 @@ define([
         return;
       }
 
-      var orderEl = this.$('.paintShop-order[data-order-id="' + orderId + '"]')[0];
+      var orderEl = this.$order(orderId)[0];
 
       this.$el.animate({scrollTop: orderEl.offsetTop + 1}, 200);
 
       var detailsView = new PaintShopOrderDetailsView({
-        model: this.model.get(orderId)
+        model: this.model.get(orderId),
+        height: orderEl.clientHeight
       });
 
       viewport.showDialog(detailsView);
+    },
+
+    onChange: function(order)
+    {
+      this.$order(order.id).replaceWith(queueOrderTemplate({
+        order: order.serialize()
+      }));
+    },
+
+    onFocus: function(orderId)
+    {
+      this.$el.animate({scrollTop: this.$order(orderId)[0].offsetTop + 1}, 200);
     }
 
   });

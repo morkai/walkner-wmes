@@ -9,26 +9,26 @@
     <td class="paintShop-property" data-property="unit">PCE</td>
     <td class="paintShop-property" data-property="name"><%- order.name %></td>
     <td class="paintShop-property" data-property="mrpPaintPlacement" rowspan="<%- order.rowSpan %>">
-      <span class="paintShop-property" data-property="mrp">
+      <span class="paintShop-property" data-property="mrp" title="<%- t('paintShop', 'PROPERTY:mrp') %>">
         <i class="fa fa-filter"></i><span><%- order.mrp %></span>
       </span>
-      <span class="paintShop-property" data-property="paintType">
+      <span class="paintShop-property" data-property="paintType" title="<%- t('paintShop', 'PROPERTY:paintType') %>">
       <i class="fa fa-paint-brush"></i><span><%- order.paintType %></span>
       </span>
       <% if (order.placement) { %>
-      <span class="paintShop-property" data-property="placement">
+      <span class="paintShop-property" data-property="placement" title="<%- t('paintShop', 'PROPERTY:placement') %>">
         <i class="fa fa-truck"></i><span><%- order.placement %></span>
       </span>
       <% } %>
     </td>
     <td class="paintShop-property" rowspan="<%- order.rowSpan %>">
       <% if (order.startedAt) { %>
-      <span class="paintShop-property" data-property="startedAt">
+      <span class="paintShop-property" data-property="startedAt" title="<%- t('paintShop', 'PROPERTY:startedAt') %>">
         <i class="fa fa-hourglass-start"></i><span><%- order.startedAt %></span>
       </span>
       <% } %>
       <% if (order.finishedAt) { %>
-      <span class="paintShop-property" data-property="finishedAt">
+      <span class="paintShop-property" data-property="finishedAt" title="<%- t('paintShop', 'PROPERTY:finishedAt') %>">
         <i class="fa fa-hourglass-end"></i><span><%- order.finishedAt %></span>
       </span>
       <% } %>
