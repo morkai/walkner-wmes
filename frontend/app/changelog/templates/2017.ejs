@@ -1,4 +1,108 @@
 <div class="hidden">
+  <h1>v0.114.2</h1>
+  <h2><%- time.format('2017-07-09', 'LL') %></h2>
+  <h3>Dane produkcyjne</h3>
+  <ul>
+    <li>Usunięto ograniczenie wyświetlania danych dla linii, które nie należały do jednostki organizacyjnej przypisanej
+      użytkownikowi. Od teraz w filtrze 'Jednostka organizacyjna' domyślnie ustawiany jest przypisany wydział
+      lub dział.</li>
+    <li>Dodano do wszystkich filtrów 'Kontroler MRP zlecenia' odnośnik '(moje)', po kliknięciu którego do pola
+      skopiowane zostaną MRP przypisane do użytkownika w Matrycy odpowiedzialności.</li>
+  </ul>
+  <h3>Dane produkcyjne > Zlecenia</h3>
+  <ul>
+    <li>Poprawiono błąd podczas liczenia wydajności dla eksportowanych zleceń.</li>
+    <li>Poprawiono błąd powodujący nieustawianie wartości filtra 'Kontroler MRP zlecenia' po załadowaniu strony.</li>
+  </ul>
+  <h3>Dane produkcyjne > Zmiany</h3>
+  <ul>
+    <li>Zmieniono kolumnę 'Kontroler MRP' tak, aby wyświetlał wszystkie MRP ze zleceń jakie były robione na danej
+      zmianie produkcyjnej. Przekreślone MRP oznacza, że jest to MRP będące jednostką organizacyjną w jakiej znajduje
+      się dana linia produkcyjna i nie było robionego żadego zlecenia z tym MRP.</li>
+    <li>Dodano filtr 'Kontroler MRP zlecenia'.</li>
+    <li>Dodano wartość 'Wydajność' obliczaną ze wszystkich zleceń robionych na danej zmianie produkcyjnej.</li>
+    <li>Dodano kolumnę 'Wykonana ilość' do listy zmian produkcyjnych.</li>
+  </ul>
+  <h3>Baza testów</h3>
+  <ul>
+    <li>Zmieniono domyślny filtr listy zleceń tak, aby domyślnie pokazywane były tylko zlecenia z ostatnich 7 dni.</li>
+    <li>Zmieniono listę klientów tak, aby była sortowana w porządku naturalnym po ID linii ('CT9' przed 'CT10').</li>
+    <li>Dodano do listy klientów kolumnę 'Adres IP'.</li>
+    <li>Dodano ekran wizualizacji dla linii 'LM-Maxos_T'.</li>
+  </ul>
+  <h3>Zdarzenia</h3>
+  <ul>
+    <li>Wyłączono rejestrowanie zdarzenia 'Karty pracy: edycja'.</li>
+  </ul>
+  <h3>Badanie Opinia</h3>
+  <ul>
+    <li>Zmieniono generowanie ankiet w formie elektronicznej i PDF tak, aby do treści wstępu automatycznie dodawane
+      były paragrafy (jeżeli nie istnieją) w miejscu nowych linii.</li>
+  </ul>
+  <h3>Pola odkładcze</h3>
+  <ul>
+    <li>Zmieniono filtr 'Linia produkcyjna' na listach 'Zdarzeń' i 'Żądań' na nowy filtr 'Jednostki organizacyjne'.</li>
+  </ul>
+  <h3>8D</h3>
+  <ul>
+    <li>Zmieniono filtr listy 'Obszar' tak, aby jako opcje wyświetlana była nazwa a nie ID obszaru.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Dodano możliwość eksportu danych do formatu XLSX.</li>
+  </ul>
+</div>
+<div class="hidden">
+  <h1>v0.114.1</h1>
+  <h2><%- time.format('2017-06-25', 'LL') %></h2>
+  <h3>ZPW</h3>
+  <ul>
+    <li>Usunięto pole 'Kategoria zachowania'.</li>
+  </ul>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Zmieniono algorytm obliczania 'Jakości wyrobu gotowego'
+      z <code>Ilość_niezgodnych_w_skontrolowanych / Ilość_niezgodnych</code> tylko wyników NOK
+      na <code>Ilość_niezgodnych_w_skontrolowanych / Ilość_skontrolowana</code> wszystkich wyników.</li>
+  </ul>
+  <h3>Nieprawidłowe zlecenia IPT</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieusuwanie zleceń, których data startu została zmieniona na datę poza
+      sprawdzanym zakresem.</li>
+    <li>Zmieniono sprawdzanie zleceń tak, aby nieprawidłowe zlecenia, dla których zlecenie reszty działów nie istnieje
+      było usuwane.</li>
+    <li>Zmieniono sprawdzanie zleceń tak, aby odbywało się pomiędzy 05:00 a 21:00.</li>
+    <li>Dodano powiadamianie wszystkich Konstruktorów ETO o nieprawidłowych zleceniach z 12NC zaczynającym
+      się na <code>8</code>.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Zmieniono rozpoczynanie nowego zlecenia tak, aby wymagane było podanie ilości osób.</li>
+  </ul>
+  <h3>Dane produkcyjne > Zlecenia</h3>
+  <ul>
+    <li>Zmieniono eksportowanie danych tak, aby zawierało dodatkowo: Datę zmiany, Numer zmiany oraz Wydajność.</li>
+    <li>Zmieniono filtr 'Linia produkcyjna' na uniwersalny filtr 'Jednostka organizacyjna'.</li>
+  </ul>
+  <h3>Dane produkcyjne > Historia operacji</h3>
+  <h3>Dane produkcyjne > Zmiany</h3>
+  <h3>Dane produkcyjne > Przestoje</h3>
+  <h3>Dane produkcyjne > Żądania zmian</h3>
+  <h3>Dane produkcyjne > Numery seryjne</h3>
+  <ul>
+    <li>Zmieniono filtr 'Linia produkcyjna' na uniwersalny filtr 'Jednostka organizacyjna'.</li>
+  </ul>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Zmieniono importowanie zleceń tak, aby usuwane były zlecenia, które nie znajdują się już w aktualnym zrzucie
+      (bo data startu została zmieniona na datę poza importowanym zakresem).</li>
+  </ul>
+  <h3>Baza testów</h3>
+  <ul>
+    <li>Dodano wsparcie dla importu ustawień klientów.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.114.0</h1>
   <h2><%- time.format('2017-06-18', 'LL') %></h2>
   <h3>Obserwacje</h3>

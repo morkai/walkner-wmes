@@ -1,48 +1,37 @@
-<h1>v0.114.1</h1>
-<h2><%- time.format('2017-06-25', 'LL') %></h2>
-<h3>ZPW</h3>
+<h1>v0.115.0</h1>
+<h2><%- time.format('2017-07-16', 'LL') %></h2>
+<h3>Baza testów</h3>
 <ul>
-  <li>Usunięto pole 'Kategoria zachowania'.</li>
-</ul>
-<h3>Inspekcja Jakości</h3>
-<ul>
-  <li>Zmieniono algorytm obliczania 'Jakości wyrobu gotowego'
-    z <code>Ilość_niezgodnych_w_skontrolowanych / Ilość_niezgodnych</code> tylko wyników NOK
-    na <code>Ilość_niezgodnych_w_skontrolowanych / Ilość_skontrolowana</code> wszystkich wyników.</li>
-</ul>
-<h3>Nieprawidłowe zlecenia IPT</h3>
-<ul>
-  <li>Poprawiono błąd powodujący nieusuwanie zleceń, których data startu została zmieniona na datę poza
-    sprawdzanym zakresem.</li>
-  <li>Zmieniono sprawdzanie zleceń tak, aby nieprawidłowe zlecenia, dla których zlecenie reszty działów nie istnieje
-    było usuwane.</li>
-  <li>Zmieniono sprawdzanie zleceń tak, aby odbywało się pomiędzy 05:00 a 21:00.</li>
-  <li>Dodano powiadamianie wszystkich Konstruktorów ETO o nieprawidłowych zleceniach z 12NC zaczynającym
-    się na <code>8</code>.</li>
+  <li>Usunięto kolumnę 'Licznik' z listy wyników.</li>
+  <li>Zmieniono kolumnę 'Zlecenie' na liście wyników, tak aby kliknięcie na nr zlecenia przeniosło użytkownika
+    do strony ze szczegółami danego zlecenia.</li>
+  <li>Zmieniono ekran wizualizacji linii 'LM-Maxos_T', tak aby kolor tła zmieniany był na zielony lub czerwony
+    w celu sygnalizacji powodzenia lub niepowodzenia testu.</li>
+  <li>Dodano przyciski 'Start' i 'Reset' do ekranu wizualizacji linii 'LM-Maxos_T'.</li>
+  <li>Dodano wsparcie dla rejestracji wyników z testów okablowania i elektrycznego na linii 'LM-Maxos_T'.</li>
 </ul>
 <h3>Formatka operatora</h3>
 <ul>
-  <li>Zmieniono rozpoczynanie nowego zlecenia tak, aby wymagane było podanie ilości osób.</li>
+  <li>Dodano uprawnienie 'Tylko zmiana linii ze spigotem' pozwalające na zmianę ustawienia
+    'Formatka operatora > Sprawdzanie Spigota > Linie ze sprawdzaniem Spigota'.</li>
 </ul>
-<h3>Dane produkcyjne > Zlecenia</h3>
+<h3>Obserwacje zachowań</h3>
 <ul>
-  <li>Zmieniono eksportowanie danych tak, aby zawierało dodatkowo: Datę zmiany, Numer zmiany oraz Wydajność.</li>
-  <li>Zmieniono filtr 'Linia produkcyjna' na uniwersalny filtr 'Jednostka organizacyjna'.</li>
+  <li>Dodano do raportu 'Obserwacje' wykres 'Ilość kart obserwacji wg obserwatorów'.</li>
 </ul>
-<h3>Dane produkcyjne > Historia operacji</h3>
-<h3>Dane produkcyjne > Zmiany</h3>
-<h3>Dane produkcyjne > Przestoje</h3>
-<h3>Dane produkcyjne > Żądania zmian</h3>
-<h3>Dane produkcyjne > Numery seryjne</h3>
+<h3>Minuty dla Bezpieczeństwa</h3>
 <ul>
-  <li>Zmieniono filtr 'Linia produkcyjna' na uniwersalny filtr 'Jednostka organizacyjna'.</li>
+  <li>Usunięto z formularza komunikat o dodawaniu ZPW na podstawie Obserwacji.</li>
 </ul>
-<h3>Zlecenia reszty działów</h3>
+<h3>Dokumentacja</h3>
 <ul>
-  <li>Zmieniono importowanie zleceń tak, aby usuwane były zlecenia, które nie znajdują się już w aktualnym zrzucie
-    (bo data startu została zmieniona na datę poza importowanym zakresem).</li>
+  <li>Poprawiono błąd w katalogu dokumentów powodujący próbę pobierania przez przeglądarkę pliku po kliknięciu na
+    datę dokumentu przytrzymując klawisz <kbd>ALT</kbd>.</li>
+  <li>Zmieniono dodawanie istniejących plików do listy plików do zmiany przez <kbd>ALT+LPM</kbd> tak, aby pole
+    z datą ostatnio dodanego pliku było automatycznie zaznaczane.</li>
 </ul>
-<h3>Baza testów</h3>
+<h3>Malarnia</h3>
 <ul>
-  <li>Dodano wsparcie dla importu ustawień klientów.</li>
+  <li>Dodano nowy moduł: Malarnia. Umożliwia załadowanie pliku z kolejką zleceń malarnii, wyświetlanie kolejki
+    oraz rozpoczynanie, kończenie i ignorowanie zleceń z kolejki na dany dzień.</li>
 </ul>
