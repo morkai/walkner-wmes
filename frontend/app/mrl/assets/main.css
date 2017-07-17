@@ -81,7 +81,7 @@ td {
   font-family: Consolas, monospace;
   font-weight: normal;
 }
-.core5 .probe td:nth-child(7),
+.core5 .probe td:nth-child(2),
 .core5 .probe td:nth-child(8),
 .mrl-inactive td {
   opacity: 0.33;

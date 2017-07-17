@@ -247,11 +247,14 @@ define([
       var $probe = this.$id('probe' + probeN);
       var $leds = $probe.find('.mrl-led[data-tag="' + tag + '"]');
       var requiredCount = this.$el.hasClass('core7') ? 7 : 5;
-      var actualCount = 0;
+      var actualCount = requiredCount === 7 ? $leds.filter('.mrl-on').length : 0;
 
-      for (var i = 0; i < requiredCount; ++i)
+      if (requiredCount === 5)
       {
-        actualCount += $leds[i].classList.contains('mrl-on') ? 1 : 0;
+        for (var i = 1; i < 6; ++i)
+        {
+          actualCount += $leds[i].classList.contains('mrl-on') ? 1 : 0;
+        }
       }
 
       $probe
