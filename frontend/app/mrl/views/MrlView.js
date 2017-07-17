@@ -245,8 +245,14 @@ define([
     {
       var probeN = tag.match(/^probe([0-9]+)x?$/)[1];
       var $probe = this.$id('probe' + probeN);
+      var $leds = $probe.find('.mrl-led[data-tag="' + tag + '"]');
       var requiredCount = this.$el.hasClass('core7') ? 7 : 5;
-      var actualCount = $probe.find('.mrl-on[data-tag="' + tag + '"]').length;
+      var actualCount = 0;
+
+      for (var i = 0; i < requiredCount; ++i)
+      {
+        actualCount += $leds[i].classList.contains('mrl-on') ? 1 : 0;
+      }
 
       $probe
         .find('tr[data-tag="' + tag + '"]')
