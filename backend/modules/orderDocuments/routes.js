@@ -204,7 +204,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
         nc15ToFreshHeaders[nc15][orderNo] = {
           headers: _.pick(res._headers, ['etag', 'last-modified', 'cache-control']),
-          timer: setTimeout(() => delete nc15ToFreshHeaders[nc15][orderNo], 60 * 1000) // eslint-disable-line max-nested-callbacks
+          timer: setTimeout(clearFreshHeader.bind(null, nc15, orderNo), 60 * 1000)
         };
       });
     });
@@ -255,7 +255,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
       nc15ToFreshHeaders[nc15][freshKey] = {
         headers: _.pick(res._headers, ['etag', 'last-modified', 'cache-control']),
-        timer: setTimeout(() => delete nc15ToFreshHeaders[nc15][freshKey], 60 * 1000)
+        timer: setTimeout(clearFreshHeader.bind(null, nc15, freshKey), 60 * 1000)
       };
     });
   });
@@ -291,6 +291,14 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       return res.sendStatus(204);
     });
   });
+
+  function clearFreshHeader(nc15, key)
+  {
+    if (nc15ToFreshHeaders[nc15] && nc15ToFreshHeaders[nc15][key])
+    {
+      delete nc15ToFreshHeaders[nc15][key];
+    }
+  }
 
   function findDocumentFilePath(nc15, options, done)
   {
