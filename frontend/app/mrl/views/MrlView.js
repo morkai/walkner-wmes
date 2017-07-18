@@ -192,17 +192,26 @@ define([
       Object.keys(changes).forEach(function(tag)
       {
         var value = view.tags[tag];
-        var bits = toBits(value);
+        var bits = null;
 
-        view.updateBits(tag, bits);
-        view.updateLeds(tag, bits);
+        if (typeof value === 'number')
+        {
+          bits = toBits(value);
+
+          view.updateBits(tag, bits);
+          view.updateLeds(tag, bits);
+        }
 
         if (view.updaters[tag])
         {
           view.updaters[tag].call(view, value, bits, tag);
         }
 
-        if (/^probe/.test(tag))
+        if (/^orderQty/.test(tag))
+        {
+          view.updateOrderQty();
+        }
+        else if (/^probe/.test(tag))
         {
           view.updateProbeValidity(tag);
         }
@@ -300,6 +309,15 @@ define([
       view.timers.clearOverallValidity = setTimeout(
         function() { document.body.classList.remove('mrl-valid', 'mrl-invalid'); },
         5000
+      );
+    },
+
+    updateOrderQty: function()
+    {
+      this.$('.mrl-prop-value[data-tag="orderQty"]').text(
+        (this.tags.orderQtyLineDone || '0')
+        + ' / ' + (this.tags.orderQtyTotalDone || '0')
+        + ' / ' + (this.tags.orderQtyTodo || '0')
       );
     },
 

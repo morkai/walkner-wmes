@@ -13,6 +13,7 @@
   "title:probe4": "Sonda żeńska",
 
   "prop:order": "Zlecenie",
+  "prop:orderQty": "Ilość",
   "prop:action": "Akcja",
   "prop:result": "Wynik akcji",
   "prop:sn": "Ostatni SN",
