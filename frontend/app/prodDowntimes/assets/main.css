@@ -21,7 +21,7 @@
 .prodDowntimes-list .label {
   font-size: 1em;
 }
-.prodDowntimes-list tr[data-id="prodFlow"] > .label {
+.prodDowntimes-list td[data-id="prodFlow"] > .label {
   font-family: Consolas, "Lucida Console", Monaco, monospace;
 }
 .prodDowntimes-list .action-corroborate {
