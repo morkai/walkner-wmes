@@ -92,7 +92,7 @@ define([
     serialize: function()
     {
       return _.extend(FormView.prototype.serialize.call(this), {
-        inspectedAtMin: '2014-01-01',
+        inspectedAtMin: time.getMoment(this.model.get('inspectedAt')).clone().subtract(14, 'days').format('YYYY-MM-DD'),
         inspectedAtMax: time.getMoment().startOf('day').add(1, 'days').format('YYYY-MM-DD'),
         kinds: qiDictionaries.kinds.map(idAndLabel),
         faults: qiDictionaries.faults.map(function(fault)
