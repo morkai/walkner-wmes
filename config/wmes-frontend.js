@@ -474,7 +474,7 @@ exports.reports = {
   reports: [
     '1', '2', '3', '4', '5', '6', '7', '8', '9',
     'qi/count', 'qi/okRatio', 'qi/nokRatio',
-    'kaizen/count', 'kaizen/summary',
+    'kaizen/count', 'kaizen/summary', 'kaizen/metrics',
     'suggestions/count', 'suggestions/summary', 'suggestions/engagement',
     'opinionSurvey',
     'behaviorObsCards/count'

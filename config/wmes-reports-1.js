@@ -98,6 +98,7 @@ exports['reports/server'] = {
     'qi/nokRatio': require('../backend/modules/qi/nokRatioReport'),
     'kaizen/count': require('../backend/modules/kaizen/countReport'),
     'kaizen/summary': require('../backend/modules/kaizen/summaryReport'),
+    'kaizen/metrics': require('../backend/modules/kaizen/metricsReport'),
     'suggestions/count': require('../backend/modules/suggestions/countReport'),
     'suggestions/summary': require('../backend/modules/suggestions/summaryReport'),
     'suggestions/engagement': require('../backend/modules/suggestions/engagementReport'),

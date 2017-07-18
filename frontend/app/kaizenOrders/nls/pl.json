@@ -205,5 +205,19 @@
   "report:filenames:summary:nearMissOwners": "ZPW_IloscWgPracownikow",
 
   "thanks:message": "Dziękujemy za zgłoszenie!",
-  "thanks:footnote": "(kliknij dowolny przycisk lub wciśnij dowolny klawisz, aby zamknąć ten komunikat)"
+  "thanks:footnote": "(kliknij dowolny przycisk lub wciśnij dowolny klawisz, aby zamknąć ten komunikat)",
+
+  "BREADCRUMBS:reports:metrics": "Wskaźniki",
+  "report:title:ipr": "Wskaźnik IPR wg działów",
+  "report:title:ips": "Wskaźnik IP Structure wg działów",
+  "report:title:ipc": "Wskaźnik IP Coverage wg działów",
+  "report:subtitle:ipr": "Całkowity wskaźnik IPR: {value}",
+  "report:subtitle:ips": "Całkowity wskaźnik IP Structure: {value}%",
+  "report:subtitle:ipc": "Całkowity wskaźnik IP Coverage: {value}%",
+  "report:series:ipr": "IPR",
+  "report:series:ips": "IPS",
+  "report:series:ipc": "IPC",
+  "report:filenames:ipr": "ZPW_IPR",
+  "report:filenames:ips": "ZPW_IPS",
+  "report:filenames:ipc": "ZPW_IPC"
 }

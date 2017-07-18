@@ -205,7 +205,21 @@
     "report:filenames:summary:nearMissOwners": "NR_CountByOwners",
 
     "thanks:message": "Thanks for the entry!",
-    "thanks:footnote": "(click any button or key to close this window)"
+    "thanks:footnote": "(click any button or key to close this window)",
+
+    "BREADCRUMBS:reports:metrics": "Metrics",
+    "report:title:ipr": "IPR by section",
+    "report:title:ips": "IP Structure by section",
+    "report:title:ipc": "IP Coverage by section",
+    "report:subtitle:ipr": "Total IPR: {value}",
+    "report:subtitle:ips": "Total IP Structure: {value}%",
+    "report:subtitle:ipc": "Total IP Coverage: {value}%",
+    "report:series:ipr": "IPR",
+    "report:series:ips": "IPS",
+    "report:series:ipc": "IPC",
+    "report:filenames:ipr": "NR_IPR",
+    "report:filenames:ips": "NR_IPS",
+    "report:filenames:ipc": "NR_IPC"
   },
   "pl": true
 }

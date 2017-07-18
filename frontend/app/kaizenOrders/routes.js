@@ -78,6 +78,25 @@ define([
     );
   });
 
+  router.map('/kaizenMetricsReport', canAccess, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/kaizenOrders/KaizenMetricsReport',
+        'app/kaizenOrders/pages/KaizenMetricsReportPage',
+        'i18n!app/nls/reports',
+        'i18n!app/nls/suggestions',
+        nls
+      ],
+      function(KaizenMetricsReport, KaizenMetricsReportPage)
+      {
+        return new KaizenMetricsReportPage({
+          model: KaizenMetricsReport.fromQuery(req.query)
+        });
+      }
+    );
+  });
+
   router.map('/kaizenHelp', function()
   {
     viewport.loadPage(['app/core/View', 'app/kaizenOrders/templates/help', nls], function(View, helpTemplate)

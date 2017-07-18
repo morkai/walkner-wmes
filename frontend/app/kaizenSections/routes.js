@@ -33,9 +33,10 @@ define([
           baseBreadcrumb: true,
           collection: new KaizenSectionCollection(null, {rqlQuery: req.rql}),
           columns: [
+            {id: 'position', className: 'is-min', tdClassName: 'is-number'},
             {id: '_id', className: 'is-min'},
-            'name',
-            {id: 'position', className: 'is-min'}
+            {id: 'name', className: 'is-min'},
+            {id: 'subdivisions'}
           ]
         });
       }

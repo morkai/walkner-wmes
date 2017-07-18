@@ -10,6 +10,7 @@ const multer = require('multer');
 const contentDisposition = require('content-disposition');
 const countReport = require('./countReport');
 const summaryReport = require('./summaryReport');
+const metricsReport = require('./metricsReport');
 
 module.exports = function setUpKaizenRoutes(app, kaizenModule)
 {
@@ -82,6 +83,12 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
     canView,
     reportsModule.helpers.sendCachedReport.bind(null, 'kaizen/summary'),
     summaryReportRoute
+  );
+  express.get(
+    '/kaizen/reports/metrics',
+    canView,
+    reportsModule.helpers.sendCachedReport.bind(null, 'kaizen/metrics'),
+    metricsReportRoute
   );
 
   express.get('/r/kaizens/:filter', redirectToListRoute);
@@ -662,6 +669,36 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
       reportsModule,
       summaryReport,
       'kaizen/summary',
+      req.reportHash,
+      options,
+      function(err, reportJson)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.type('json');
+        res.send(reportJson);
+      }
+    );
+  }
+
+  function metricsReportRoute(req, res, next)
+  {
+    const query = req.query;
+    const options = {
+      fromTime: reportsModule.helpers.getTime(query.from) || null,
+      toTime: reportsModule.helpers.getTime(query.to) || null,
+      status: _.isEmpty(query.status) ? [] : query.status.split(','),
+      sections: _.isEmpty(query.sections) ? [] : query.sections.split(',')
+    };
+
+    reportsModule.helpers.generateReport(
+      app,
+      reportsModule,
+      metricsReport,
+      'kaizen/metrics',
       req.reportHash,
       options,
       function(err, reportJson)

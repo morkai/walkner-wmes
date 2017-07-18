@@ -81,7 +81,7 @@ define([
   {
     viewport.showPage(new ErrorPage({
       model: {
-        code: message.xhr.status,
+        code: message.xhr ? message.xhr.status : 0,
         req: router.currentRequest,
         previousUrl: router.previousUrl,
         xhr: message.xhr

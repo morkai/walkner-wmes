@@ -139,7 +139,7 @@ exports.round = function round(num)
 {
   num = Math.round(num * 1000) / 1000;
 
-  return isNaN(num) ? 0 : num;
+  return isNaN(num) || !isFinite(num) ? 0 : num;
 };
 
 exports.getCurrentShiftStartDate = function()

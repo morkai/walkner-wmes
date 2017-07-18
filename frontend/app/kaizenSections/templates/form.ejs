@@ -15,6 +15,10 @@
         <label for="<%- idPrefix %>-position" class="control-label is-required"><%- t('kaizenSections', 'PROPERTY:position') %></label>
         <input id="<%- idPrefix %>-position" class="form-control" type="number" name="position" min="0" required>
       </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-subdivisions" class="control-label"><%- t('kaizenSections', 'PROPERTY:subdivisions') %></label>
+        <input id="<%- idPrefix %>-subdivisions" type="text" name="subdivisions">
+      </div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

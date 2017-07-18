@@ -123,15 +123,27 @@ define([
     var viewport = this;
     var pageCounter = ++this.pageCounter;
 
-    require([].concat(dependencies), function()
-    {
-      if (pageCounter === viewport.pageCounter)
+    require(
+      [].concat(dependencies),
+      function()
       {
-        viewport.showPage(createPage.apply(null, arguments));
-      }
+        if (pageCounter === viewport.pageCounter)
+        {
+          viewport.showPage(createPage.apply(null, arguments));
+        }
 
-      viewport.msg.loaded();
-    });
+        viewport.msg.loaded();
+      },
+      function()
+      {
+        if (pageCounter === viewport.pageCounter)
+        {
+          viewport.msg.loadingFailed();
+
+          viewport.broker.publish('viewport.page.loadingFailed', {page: null, xhr: null});
+        }
+      }
+    );
   };
 
   Viewport.prototype.showPage = function(page)

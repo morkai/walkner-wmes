@@ -18,7 +18,8 @@ module.exports = function setupKaizenSectionModel(app, mongoose)
     position: {
       type: Number,
       default: 0
-    }
+    },
+    subdivisions: [mongoose.Schema.Types.ObjectId]
   }, {
     id: false
   });

@@ -21,6 +21,7 @@
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
     "PROPERTY:position": "Position",
+    "PROPERTY:subdivision": "Subdivisions",
 
     "FORM:ACTION:add": "Add section",
     "FORM:ACTION:edit": "Edit section",
