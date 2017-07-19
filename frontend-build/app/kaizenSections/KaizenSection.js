@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../core/Model"],function(e){"use strict";return e.extend({urlRoot:"/kaizen/sections",clientUrlRoot:"#kaizenSections",topicPrefix:"kaizen.sections",privilegePrefix:"KAIZEN:DICTIONARIES",nlsDomain:"kaizenSections",labelAttribute:"name",defaults:{}})});
+define(["underscore","../core/Model","../data/orgUnits"],function(i,e,n){"use strict";return e.extend({urlRoot:"/kaizen/sections",clientUrlRoot:"#kaizenSections",topicPrefix:"kaizen.sections",privilegePrefix:"KAIZEN:DICTIONARIES",nlsDomain:"kaizenSections",labelAttribute:"name",defaults:{},serialize:function(){var e=this.toJSON();return e.subdivisions=i.map(e.subdivisions,function(i){return i=n.getByTypeAndId("subdivision",i),i?i.get("division")+" \\ "+i.get("name"):""}).filter(function(i){return!!i.length}).join("; "),e}})});
