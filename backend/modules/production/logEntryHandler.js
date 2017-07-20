@@ -22,9 +22,9 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
   productionModule.isHandlingLogEntries = function() { return handlingLogEntries; };
   productionModule.handleLogEntries = handleLogEntries;
 
-  app.broker.subscribe('production.logEntries.saved', handleLogEntries);
+  app.broker.subscribe('production.logEntries.saved', () => handleLogEntries());
 
-  app.broker.subscribe('app.started', handleLogEntries).setLimit(1);
+  app.broker.subscribe('app.started', () => handleLogEntries()).setLimit(1);
 
   function handleLogEntries(done)
   {
@@ -81,7 +81,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
                 prodLine = new ProdLine({_id: prodLineId});
               }
 
-              handleProdLineLogEntries(prodLine, logEntries, step.parallel());
+              handleProdLineLogEntries(prodLine, logEntries, step.group());
             });
           },
           function finalizeLogEntryHandling(err)
@@ -178,7 +178,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
         return done(new Error('NO_ENTRIES_HANDLED'));
       }
 
-      const handledLogEntryIds = handledLogEntries.map(function(logEntry) { return logEntry._id; });
+      const handledLogEntryIds = handledLogEntries.map(logEntry => logEntry._id);
       const cond = {_id: {$in: handledLogEntryIds}};
       const update = {$set: {todo: false}};
 
@@ -196,13 +196,13 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
 
         if (oldProdData !== null)
         {
-          collectProdChanges(prodLine, handledLogEntries, oldProdData, function(changes)
-          {
-            app.broker.publish('production.synced.' + changes.prodLine, changes);
-          });
+          collectProdChanges(
+            prodLine,
+            handledLogEntries,
+            oldProdData,
+            changes => app.broker.publish(`production.synced.${changes.prodLine}`, changes)
+          );
         }
-
-        handlingLogEntries = false;
 
         done();
       });

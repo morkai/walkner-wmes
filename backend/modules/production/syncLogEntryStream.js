@@ -143,7 +143,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
           'Error while saving %d log entries (step %d): %s\n%s',
           logEntryList.length,
           i,
-          err.stack || err.errmsg || err.err || err.message,
+          err.stack || err.message,
           JSON.stringify({
             first: logEntryList[0],
             last: logEntryList.length === 1 ? null : logEntryList[logEntryList.length - 1]
