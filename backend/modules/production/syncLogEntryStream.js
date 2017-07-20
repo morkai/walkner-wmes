@@ -27,15 +27,22 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
   }
 
   const logEntryList = [];
+  const logEntrySet = new Set();
   const savedAt = new Date();
-  let lastLogEntryWithInvalidSecretKey = null;
   const lastLogEntryIndex = logEntryStream.length - 1;
+  let lastLogEntryWithInvalidSecretKey = null;
 
   _.forEach(logEntryStream, function(logEntryJson, i)
   {
     try
     {
-      logEntryList.push(prepareProdLogEntry(logEntryJson, i, savedAt));
+      const logEntry = prepareProdLogEntry(logEntryJson, i, savedAt);
+
+      if (!logEntrySet.has(logEntry._id))
+      {
+        logEntryList.push(logEntry);
+        logEntrySet.add(logEntry._id);
+      }
     }
     catch (err)
     {
@@ -63,7 +70,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
       productionModule.error(
         'Error while saving %d log entries: %s\n%s',
         logEntryList.length,
-        err.stack || err.errmsg || err.err || err.message,
+        err.stack || err.message,
         JSON.stringify({
           first: logEntryList[0],
           last: logEntryList.length === 1 ? null : logEntryList[logEntryList.length - 1]
