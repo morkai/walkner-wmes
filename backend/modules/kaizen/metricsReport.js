@@ -140,17 +140,26 @@ module.exports = function(mongoose, options, done)
 
   function countFte(Model, totalProperty, options, done)
   {
-    const now = Date.now();
-    const to = !options.toTime || options.toTime > now ? now : options.toTime;
     const conditions = {
-      date: {
-        $gte: moment(to).subtract(12, 'months').toDate(),
-        $lt: new Date(to)
-      },
       subdivision: {
         $in: Object.keys(subdivisionToSections).map(id => new mongoose.Types.ObjectId(id))
       }
     };
+
+    if (options.fromTime)
+    {
+      conditions.date = {$gte: new Date(options.fromTime)};
+    }
+
+    if (options.toTime)
+    {
+      if (!conditions.date)
+      {
+        conditions.date = {};
+      }
+
+      conditions.date.$lt = new Date(options.toTime);
+    }
 
     const pipeline = [
       {$match: conditions},
