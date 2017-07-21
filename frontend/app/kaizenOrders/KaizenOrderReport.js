@@ -17,9 +17,6 @@ define([
 ) {
   'use strict';
 
-  var COLOR_NEAR_MISS = '#d9534f';
-  var COLOR_SUGGESTION = '#f0ad4e';
-  var COLOR_KAIZEN = '#5cb85c';
   var TABLE_AND_CHART_METRICS = [
     'type',
     'status',
@@ -166,7 +163,7 @@ define([
           id: 'nearMiss',
           abs: totals.type.nearMiss,
           rel: totals.type.nearMiss / totals.count,
-          color: COLOR_NEAR_MISS
+          color: kaizenDictionaries.colors.nearMiss
         }];
       }
 
@@ -187,19 +184,19 @@ define([
           id: 'nearMiss',
           abs: totals.type.nearMiss,
           rel: totals.type.nearMiss / multiTotalCount,
-          color: COLOR_NEAR_MISS
+          color: kaizenDictionaries.colors.nearMiss
         },
         {
           id: 'suggestion',
           abs: totals.type.suggestion,
           rel: totals.type.suggestion / multiTotalCount,
-          color: COLOR_SUGGESTION
+          color: kaizenDictionaries.colors.suggestion
         },
         {
           id: 'kaizen',
           abs: totals.type.kaizen,
           rel: totals.type.kaizen / multiTotalCount,
-          color: COLOR_KAIZEN
+          color: kaizenDictionaries.colors.kaizen
         }
       ];
     },
@@ -209,7 +206,7 @@ define([
       var series = {
         nearMiss: {
           data: [],
-          color: COLOR_NEAR_MISS
+          color: kaizenDictionaries.colors.nearMiss
         }
       };
 
@@ -217,11 +214,11 @@ define([
       {
         series.suggestion = {
           data: [],
-          color: COLOR_SUGGESTION
+          color: kaizenDictionaries.colors.suggestion
         };
         series.kaizen = {
           data: [],
-          color: COLOR_KAIZEN
+          color: kaizenDictionaries.colors.kaizen
         };
       }
 
@@ -283,7 +280,7 @@ define([
           id: 'nearMiss',
           name: t.bound('kaizenOrders', 'report:series:nearMiss'),
           data: [],
-          color: COLOR_NEAR_MISS
+          color: kaizenDictionaries.colors.nearMiss
         }
       ];
 
@@ -293,13 +290,13 @@ define([
           id: 'suggestion',
           name: t.bound('kaizenOrders', 'report:series:suggestion'),
           data: [],
-          color: COLOR_SUGGESTION
+          color: kaizenDictionaries.colors.suggestion
         });
         series.push({
           id: 'kaizen',
           name: t.bound('kaizenOrders', 'report:series:kaizen'),
           data: [],
-          color: COLOR_KAIZEN
+          color: kaizenDictionaries.colors.kaizen
         });
       }
 
@@ -323,7 +320,7 @@ define([
         {
           id: 'entry',
           name: t.bound('kaizenOrders', 'report:series:' + (kaizenDictionaries.multiType ? 'entry' : 'nearMiss')),
-          color: kaizenDictionaries.multiType ? null : COLOR_NEAR_MISS,
+          color: kaizenDictionaries.multiType ? null : kaizenDictionaries.colors.nearMiss,
           data: _.map(confirmerTotals, function(t) { return t[1]; })
         }
       ];

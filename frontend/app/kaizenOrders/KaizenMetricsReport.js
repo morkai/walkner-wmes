@@ -61,12 +61,23 @@ define([
       var attrs = {
         total: report.totals
       };
+
+      this.parseMetrics(report, attrs);
+      this.parseCount(report, attrs);
+      this.parseUsers(report, attrs);
+      this.parseFte(report, attrs);
+
+      return attrs;
+    },
+
+    parseMetrics: function(report, attrs)
+    {
       var sections = Object.keys(report.sections)
         .filter(function(sectionId)
         {
-          var group = report.bySection[sectionId];
+          var group = report.bySection[sectionId] || {};
 
-          return group && (group.ipr || group.ips || group.ipc);
+          return group.ipr || group.ips || group.ipc;
         })
         .sort(function(a, b) { return a.localeCompare(b); });
       var categories = sections.map(function(sectionId) { return report.sections[sectionId]; });
@@ -88,8 +99,93 @@ define([
           }]
         };
       });
+    },
 
-      return attrs;
+    parseFte: function(report, attrs)
+    {
+      var sections = Object.keys(report.sections)
+        .filter(function(sectionId)
+        {
+          var group = report.bySection[sectionId] || {fte: {avg: 0}};
+
+          return group.fte.avg > 0;
+        })
+        .sort(function(a, b) { return a.localeCompare(b); });
+      var categories = sections.map(function(sectionId) { return report.sections[sectionId]; });
+
+      attrs.fte = {
+        categories: categories,
+        series: [{
+          id: 'fte',
+          name: t.bound('kaizenOrders', 'report:series:fte'),
+          data: sections.map(function(sectionId)
+          {
+            return {
+              y: report.bySection[sectionId].fte.avg,
+              color: colorFactory.getColor('section', sectionId)
+            };
+          })
+        }]
+      };
+    },
+
+    parseCount: function(report, attrs)
+    {
+      var sections = Object.keys(report.sections)
+        .filter(function(sectionId)
+        {
+          var group = report.bySection[sectionId] || {};
+
+          return group.nearMissCount || group.suggestionCount || group.observationCount || group.minutesCount;
+        })
+        .sort(function(a, b) { return a.localeCompare(b); });
+      var categories = sections.map(function(sectionId) { return report.sections[sectionId]; });
+
+      attrs.count = {
+        categories: categories,
+        series: ['nearMiss', 'suggestion', 'observation', 'minutes'].map(function(id)
+        {
+          return {
+            id: id,
+            name: t.bound('kaizenOrders', 'report:series:' + id),
+            color: kaizenDictionaries.colors[id],
+            data: sections.map(function(sectionId)
+            {
+              return {
+                y: report.bySection[sectionId][id + 'Count']
+              };
+            })
+          };
+        })
+      };
+    },
+
+    parseUsers: function(report, attrs)
+    {
+      var sections = Object.keys(report.sections)
+        .filter(function(sectionId)
+        {
+          var group = report.bySection[sectionId] || {};
+
+          return group.userCount > 0;
+        })
+        .sort(function(a, b) { return a.localeCompare(b); });
+      var categories = sections.map(function(sectionId) { return report.sections[sectionId]; });
+
+      attrs.users = {
+        categories: categories,
+        series: [{
+          id: 'users',
+          name: t.bound('kaizenOrders', 'report:series:users'),
+          data: sections.map(function(sectionId)
+          {
+            return {
+              y: report.bySection[sectionId].userCount,
+              color: colorFactory.getColor('section', sectionId)
+            };
+          })
+        }]
+      };
     }
 
   }, {

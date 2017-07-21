@@ -45,6 +45,26 @@ define([
         }));
       }, this);
 
+      this.setView('#-count-report', new KaizenMetricsReportChartView({
+        metric: 'count',
+        model: this.model,
+        valueDecimals: 0,
+        dataLabels: false
+      }));
+
+      this.setView('#-users-report', new KaizenMetricsReportChartView({
+        metric: 'users',
+        model: this.model,
+        valueDecimals: 0,
+        dataLabels: false
+      }));
+
+      this.setView('#-fte-report', new KaizenMetricsReportChartView({
+        metric: 'fte',
+        model: this.model,
+        tooltipUnit: 'FTE'
+      }));
+
       this.listenTo(this.model, 'filtered', this.onFiltered);
       this.listenTo(this.model, 'change:total', this.updateSubtitles);
     },
@@ -95,12 +115,25 @@ define([
       var page = this;
       var total = page.model.get('total');
 
-      ['ipr', 'ips', 'ipc'].forEach(function(metric)
+      ['ipr', 'ips', 'ipc', 'fte'].forEach(function(metric)
       {
+        var value = metric === 'fte' ? total.fte.avg : total[metric];
+
         page.$id(metric + '-total').html(t('kaizenOrders', 'report:subtitle:' + metric, {
-          value: Highcharts.numberFormat(total[metric], 2)
+          value: Highcharts.numberFormat(value, 2)
         }));
       });
+
+      page.$id('users-total').html(t('kaizenOrders', 'report:subtitle:users', {
+        value: Highcharts.numberFormat(total.userCount, 0)
+      }));
+
+      page.$id('count-total').html(t('kaizenOrders', 'report:subtitle:count', {
+        nearMisses: Highcharts.numberFormat(total.nearMissCount, 0),
+        suggestions: Highcharts.numberFormat(total.suggestionCount, 0),
+        observations: Highcharts.numberFormat(total.observationCount, 0),
+        minutes: Highcharts.numberFormat(total.minutesCount, 0)
+      }));
     }
 
   });

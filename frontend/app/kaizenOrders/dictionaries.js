@@ -46,6 +46,13 @@ define([
   var suggestionSeenSub = null;
   var dictionaries = {
     multiType: !!window.KAIZEN_MULTI,
+    colors: {
+      nearMiss: '#d9534f',
+      suggestion: '#f0ad4e',
+      kaizen: '#5cb85c',
+      observation: '#31b0d5',
+      minutes: '#5cb85c'
+    },
     types: [],
     statuses: [],
     sections: new KaizenSectionCollection(),

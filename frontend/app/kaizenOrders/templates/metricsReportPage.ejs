@@ -1,6 +1,6 @@
 <div class="kaizenOrders-report">
   <div id="<%- idPrefix %>-filter" class="filter-container"></div>
-  <% ['ipr', 'ips', 'ipc'].forEach(function(metric) { %>
+  <% ['ipr', 'ips', 'ipc', 'count', 'users', 'fte'].forEach(function(metric) { %>
   <h3><%- t('kaizenOrders', 'report:title:' + metric) %></h3>
   <h4 id="<%- idPrefix %>-<%- metric %>-total"></h4>
   <div id="<%- idPrefix %>-<%- metric %>-report"></div>

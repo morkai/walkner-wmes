@@ -70,6 +70,7 @@ define([
       var nlsDomain = view.model.getNlsDomain();
       var metric = view.options.metric;
       var series = view.serializeSeries();
+      var valueDecimals = this.options.valueDecimals >= 0 ? this.options.valueDecimals : 2;
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -94,13 +95,13 @@ define([
           title: false,
           min: 0,
           labels: {
-            format: '{value}' + this.options.unit
+            format: '{value}' + (this.options.yAxisUnit || this.options.unit || '')
           }
         },
         tooltip: {
           shared: true,
-          valueDecimals: 2,
-          valueSuffix: this.options.unit
+          valueDecimals: valueDecimals,
+          valueSuffix: this.options.tooltipUnit || this.options.unit || ''
         },
         legend: {
           enabled: series.length > 1
@@ -108,8 +109,8 @@ define([
         plotOptions: {
           column: {
             dataLabels: {
-              enabled: true,
-              format: '{y:.2f}' + this.options.unit
+              enabled: this.options.dataLabels !== false,
+              format: '{y:.' + valueDecimals + 'f}' + (this.options.dataLabelUnit || this.options.unit || '')
             }
           }
         },
