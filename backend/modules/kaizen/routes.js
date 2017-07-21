@@ -690,7 +690,6 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
     const options = {
       fromTime: reportsModule.helpers.getTime(query.from) || null,
       toTime: reportsModule.helpers.getTime(query.to) || null,
-      status: _.isEmpty(query.status) ? [] : query.status.split(','),
       sections: _.isEmpty(query.sections) ? [] : query.sections.split(',')
     };
 

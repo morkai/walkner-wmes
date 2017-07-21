@@ -49,20 +49,12 @@ define([
       this.$('.is-expandable').expandableSelect('destroy');
     },
 
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix,
-        statuses: kaizenDictionaries.statuses
-      };
-    },
-
     afterRender: function()
     {
       js2form(this.el, this.serializeFormData());
 
       this.$id('sections').select2({
-        width: '350px',
+        width: '500px',
         allowClear: true,
         multiple: true,
         data: kaizenDictionaries.sections.map(idAndLabel)
@@ -80,7 +72,6 @@ define([
       return {
         from: from ? time.format(from, 'YYYY-MM-DD') : '',
         to: to ? time.format(to, 'YYYY-MM-DD') : '',
-        status: model.get('status').join(','),
         sections: model.get('sections').join(',')
       };
     },
@@ -90,7 +81,6 @@ define([
       var query = {
         from: time.getMoment(this.$id('from').val(), 'YYYY-MM-DD').valueOf(),
         to: time.getMoment(this.$id('to').val(), 'YYYY-MM-DD').valueOf(),
-        status: this.$id('status').val() || [],
         sections: this.$id('sections').val()
       };
 

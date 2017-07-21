@@ -207,11 +207,6 @@ module.exports = function(mongoose, options, done)
       types: 'nearMiss'
     };
 
-    if (Array.isArray(options.status) && !_.isEmpty(options.status))
-    {
-      conditions.status = {$in: options.status};
-    }
-
     if (Array.isArray(options.sections) && !_.isEmpty(options.sections))
     {
       conditions.section = {$in: options.sections};
@@ -274,11 +269,6 @@ module.exports = function(mongoose, options, done)
     const conditions = {
       categories: 'BHP'
     };
-
-    if (Array.isArray(options.status) && !_.isEmpty(options.status))
-    {
-      conditions.status = {$in: options.status};
-    }
 
     if (Array.isArray(options.sections) && !_.isEmpty(options.sections))
     {

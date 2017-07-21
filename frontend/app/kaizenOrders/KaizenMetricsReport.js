@@ -28,7 +28,6 @@ define([
       return {
         from: 0,
         to: 0,
-        status: [],
         sections: []
       };
     },
@@ -42,9 +41,8 @@ define([
 
       options.data = _.extend(
         options.data || {},
-        _.pick(this.attributes, ['from', 'to', 'status', 'sections'])
+        _.pick(this.attributes, ['from', 'to', 'sections'])
       );
-      options.data.status = options.data.status.join(',');
       options.data.sections = options.data.sections.join(',');
 
       return Model.prototype.fetch.call(this, options);
@@ -55,7 +53,6 @@ define([
       return '/kaizenMetricsReport'
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
-        + '&status=' + this.get('status')
         + '&sections=' + this.get('sections');
     },
 
@@ -107,7 +104,6 @@ define([
       return new this({
         from: +query.from || undefined,
         to: +query.to || undefined,
-        status: _.isEmpty(query.status) ? [] : query.status.split(','),
         sections: _.isEmpty(query.sections) ? [] : query.sections.split(',')
       });
     }
