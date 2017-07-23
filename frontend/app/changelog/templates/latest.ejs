@@ -1,37 +1,32 @@
-<h1>v0.115.0</h1>
-<h2><%- time.format('2017-07-16', 'LL') %></h2>
+<h1>v0.115.1</h1>
+<h2><%- time.format('2017-07-23', 'LL') %></h2>
 <h3>Baza testów</h3>
 <ul>
-  <li>Usunięto kolumnę 'Licznik' z listy wyników.</li>
-  <li>Zmieniono kolumnę 'Zlecenie' na liście wyników, tak aby kliknięcie na nr zlecenia przeniosło użytkownika
-    do strony ze szczegółami danego zlecenia.</li>
-  <li>Zmieniono ekran wizualizacji linii 'LM-Maxos_T', tak aby kolor tła zmieniany był na zielony lub czerwony
-    w celu sygnalizacji powodzenia lub niepowodzenia testu.</li>
-  <li>Dodano przyciski 'Start' i 'Reset' do ekranu wizualizacji linii 'LM-Maxos_T'.</li>
-  <li>Dodano wsparcie dla rejestracji wyników z testów okablowania i elektrycznego na linii 'LM-Maxos_T'.</li>
-</ul>
-<h3>Formatka operatora</h3>
-<ul>
-  <li>Dodano uprawnienie 'Tylko zmiana linii ze spigotem' pozwalające na zmianę ustawienia
-    'Formatka operatora > Sprawdzanie Spigota > Linie ze sprawdzaniem Spigota'.</li>
-</ul>
-<h3>Obserwacje zachowań</h3>
-<ul>
-  <li>Dodano do raportu 'Obserwacje' wykres 'Ilość kart obserwacji wg obserwatorów'.</li>
-</ul>
-<h3>Minuty dla Bezpieczeństwa</h3>
-<ul>
-  <li>Usunięto z formularza komunikat o dodawaniu ZPW na podstawie Obserwacji.</li>
+  <li>Usunięto z ekranu wizualizacji linii 'LM-Maxos_T' wyświetlanie wyniku ostatniej akcji.</li>
+  <li>Zmieniono ekran wizualizacji linii 'LM-Maxos_T', tak aby walidacja przewodu 5-żyłowego sprawdzała podłączenie
+    pinów 2, 3, 4, 5, i 6, a nie dowolnych pięciu.</li>
+  <li>Dodano do ekranu wizualizacji linii 'LM-Maxos_T' wyświetlanie ilości pomyślnych testów po danej stronie,
+    całkowitej ilości pomyślnych testów w zleceniu oraz wymaganą ilość testów do wykonania.</li>
 </ul>
 <h3>Dokumentacja</h3>
 <ul>
-  <li>Poprawiono błąd w katalogu dokumentów powodujący próbę pobierania przez przeglądarkę pliku po kliknięciu na
-    datę dokumentu przytrzymując klawisz <kbd>ALT</kbd>.</li>
-  <li>Zmieniono dodawanie istniejących plików do listy plików do zmiany przez <kbd>ALT+LPM</kbd> tak, aby pole
-    z datą ostatnio dodanego pliku było automatycznie zaznaczane.</li>
+  <li>Poprawiono błąd powodujący wywalenie się serwera, jeżeli zmodyfikowano plik dokumentu, który został wyświetlony
+    w ciągu ostatnich 60 sekund.</li>
 </ul>
-<h3>Malarnia</h3>
+<h3>Inspekcja Jakości</h3>
 <ul>
-  <li>Dodano nowy moduł: Malarnia. Umożliwia załadowanie pliku z kolejką zleceń malarnii, wyświetlanie kolejki
-    oraz rozpoczynanie, kończenie i ignorowanie zleceń z kolejki na dany dzień.</li>
+  <li>Zmieniono pole 'Data inspekcji' tak, aby można było wybrać datę maksymalnie dwa tygodnie w przeszłości.</li>
+</ul>
+<h3>Przestoje</h3>
+<ul>
+  <li>Zmieniono czcionkę etykiety z rodziną produktu na liście przestojów na czcionkę ze stałą szerokością znaków.</li>
+</ul>
+<h3>ZPW</h3>
+<ul>
+  <li>Dodano nowy raport: Wskaźniki.</li>
+</ul>
+<h3>Dane produkcyjne</h3>
+<ul>
+  <li>Poprawiono błąd podczas przetwarzania operacji z Formatki operatora mogący spowodować podwójne wykonywanie
+    operacji.</li>
 </ul>
