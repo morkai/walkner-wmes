@@ -368,6 +368,7 @@ module.exports = function setupPressWorksheetModel(app, mongoose)
       });
 
       ProdShiftOrder.calcDurations(prodShiftOrder, orderDowntimes);
+      ProdShiftOrder.copyOperationData(prodShiftOrder);
 
       prodShiftOrders.push(prodShiftOrder);
     });

@@ -219,8 +219,15 @@ exports.start = function startOrdersImporterModule(app, module)
           steps.push(_.partial(createOrdersStep, this.insertList.splice(0, 100)));
         }
 
-        _.forEach(this.updateList, function(update)
+        const ordersWithChangedOperations = [];
+
+        this.updateList.forEach(update =>
         {
+          if (update.update.$set.operations)
+          {
+            ordersWithChangedOperations.push(update.conditions._id);
+          }
+
           steps.push(_.partial(updateOrderStep, update));
         });
 
@@ -242,6 +249,13 @@ exports.start = function startOrdersImporterModule(app, module)
               removed: removedOrdersCount,
               moduleName: module.name
             });
+
+            if (ordersWithChangedOperations.length)
+            {
+              app.broker.publish('orders.operationsChanged', {
+                orders: ordersWithChangedOperations
+              });
+            }
           }
 
           next(err);
@@ -605,7 +619,7 @@ exports.start = function startOrdersImporterModule(app, module)
           return this.skip(err);
         }
 
-        const filePath = ORDER_DOCUMENTS_FILE_PATH_PATTERN.replace('{timestamp}', Math.ceil(timestamp / 1000));
+        const filePath = ORDER_DOCUMENTS_FILE_PATH_PATTERN.replace('{timestamp}', String(Math.ceil(timestamp / 1000)));
         const fileContents = [
           '-------------------------------------------------------------------------',
           '|Order    |Item|Document       |Description                             |',

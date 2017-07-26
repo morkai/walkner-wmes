@@ -168,9 +168,14 @@ module.exports = function setUpProdData(app, productionModule)
     });
   };
 
-  productionModule.getProdShiftOrders = function(prodShiftId, done)
+  productionModule.getProdShiftOrders = function(conditions, done)
   {
-    ProdShiftOrder.find({prodShift: prodShiftId}).sort({startedAt: 1}).exec(function(err, prodShiftOrders)
+    if (typeof conditions === 'string')
+    {
+      conditions = {prodShift: conditions};
+    }
+
+    ProdShiftOrder.find(conditions).sort({startedAt: 1}).exec(function(err, prodShiftOrders)
     {
       if (err)
       {
@@ -185,9 +190,14 @@ module.exports = function setUpProdData(app, productionModule)
     });
   };
 
-  productionModule.getProdDowntimes = function(prodShiftId, done)
+  productionModule.getProdDowntimes = function(conditions, done)
   {
-    ProdDowntime.find({prodShift: prodShiftId}).sort({startedAt: 1}).exec(function(err, prodDowntimes)
+    if (typeof conditions === 'string')
+    {
+      conditions = {prodShift: conditions};
+    }
+
+    ProdDowntime.find(conditions).sort({startedAt: 1}).exec(function(err, prodDowntimes)
     {
       if (err)
       {
@@ -204,19 +214,7 @@ module.exports = function setUpProdData(app, productionModule)
 
   productionModule.getOrderDowntimes = function(prodShiftOrderId, done)
   {
-    ProdDowntime.find({prodShiftOrder: prodShiftOrderId}).sort({startedAt: 1}).exec(function(err, prodDowntimes)
-    {
-      if (err)
-      {
-        return done(err);
-      }
-
-      const cachedProdDowntimes = [];
-
-      productionModule.swapToCachedProdData(prodDowntimes, cachedProdDowntimes);
-
-      return done(null, cachedProdDowntimes);
-    });
+    productionModule.getProdDowntimes({prodShiftOrder: prodShiftOrderId}, done);
   };
 
   productionModule.getProdShiftQuantitiesDone = function(prodLineId, shiftDates, done)

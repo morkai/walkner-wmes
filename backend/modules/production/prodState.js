@@ -3,12 +3,16 @@
 'use strict';
 
 const _ = require('lodash');
+const step = require('h5.step');
 const moment = require('moment');
 const ProdLineState = require('./ProdLineState');
 
 module.exports = function setUpProdState(app, productionModule)
 {
   const orgUnitsModule = app[productionModule.config.orgUnitsId];
+  const mongoose = app[productionModule.config.mongooseId];
+  const Setting = mongoose.model('Setting');
+  const Order = mongoose.model('Order');
 
   const CRUD_OPERATION_TYPES = {
     addOrder: true,
@@ -160,6 +164,8 @@ module.exports = function setUpProdState(app, productionModule)
     });
   });
 
+  app.broker.subscribe('orders.operationsChanged', message => copyNewOperationData(message.orders));
+
   app.broker.subscribe('app.started').setLimit(1).on('message', function()
   {
     app[productionModule.config.mongooseId]
@@ -214,5 +220,81 @@ module.exports = function setUpProdState(app, productionModule)
     });
 
     setImmediate(scheduleHourChange);
+  }
+
+  function copyNewOperationData(orderIds)
+  {
+    step(
+      function()
+      {
+        Order.find({_id: {$in: orderIds}}, {operations: 1}).lean().exec(this.parallel());
+
+        productionModule.getProdShiftOrders({orderId: {$in: orderIds}}, this.parallel());
+      },
+      function(err, orders, prodShiftOrders)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (prodShiftOrders.length === 0)
+        {
+          return this.skip();
+        }
+
+        const shiftsSet = new Set();
+        const ordersMap = new Map();
+
+        orders.forEach(order => ordersMap.set(order._id, order));
+
+        prodShiftOrders.forEach(prodShiftOrder =>
+        {
+          const order = ordersMap.get(prodShiftOrder.orderId);
+
+          if (!order)
+          {
+            return;
+          }
+
+          prodShiftOrder.copyOperationData(order.operations);
+          prodShiftOrder.save(this.group());
+
+          shiftsSet.add(prodShiftOrder.prodShift);
+        });
+
+        productionModule.getMultipleProdData('shift', Array.from(shiftsSet), this.group());
+      },
+      function(err, results)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        results.pop().forEach(prodShift => recalcShiftOrderData(prodShift, this.group()));
+      },
+      function(err)
+      {
+        if (err)
+        {
+          productionModule.error(`Failed to copy new operation data for [${orderIds}]: ${err.message}`);
+        }
+      }
+    );
+  }
+
+  function recalcShiftOrderData(prodShift, done)
+  {
+    productionModule.getProdShiftOrders(prodShift._id, (err, prodShiftOrders) =>
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      prodShift.recalcOrderData(prodShiftOrders);
+      prodShift.save(done);
+    });
   }
 };

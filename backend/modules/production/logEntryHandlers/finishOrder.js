@@ -2,73 +2,87 @@
 
 'use strict';
 
+const step = require('h5.step');
+
 module.exports = function(app, productionModule, prodLine, logEntry, done)
 {
-  productionModule.getProdData('order', logEntry.data._id, function(err, prodShiftOrder)
-  {
-    if (err)
+  const mongoose = app[productionModule.config.mongooseId];
+  const Order = mongoose.model('Order');
+  const ProdShiftOrder = mongoose.model('ProdShiftOrder');
+
+  step(
+    function()
     {
-      productionModule.error(
-        'Failed to get the prod shift order [%s] to finish (LOG=[%s]): %s',
-        logEntry.data._id,
-        logEntry._id,
-        err.stack
-      );
-
-      return done(err);
-    }
-
-    if (!prodShiftOrder)
+      productionModule.getProdData('order', logEntry.data._id, this.next());
+    },
+    function(err, prodShiftOrder)
     {
-      productionModule.warn(
-        "Couldn't find prod shift order [%s] to finish (LOG=[%s])",
-        logEntry.data._id,
-        logEntry._id
-      );
+      if (err)
+      {
+        productionModule.error(
+          'Failed to get the prod shift order [%s] to finish (LOG=[%s]): %s',
+          logEntry.data._id,
+          logEntry._id,
+          err.stack
+        );
 
-      return done();
-    }
+        return this.skip(err);
+      }
 
-    if (prodShiftOrder.finishedAt
-      && prodShiftOrder.finishedAt <= Date.parse(logEntry.data.finishedAt))
+      if (!prodShiftOrder)
+      {
+        productionModule.warn(
+          "Couldn't find prod shift order [%s] to finish (LOG=[%s])",
+          logEntry.data._id,
+          logEntry._id
+        );
+
+        return this.skip();
+      }
+
+      if (prodShiftOrder.finishedAt
+        && prodShiftOrder.finishedAt <= Date.parse(logEntry.data.finishedAt))
+      {
+        productionModule.warn(
+          'Tried to finish an already finished prod shift order [%s] (LOG=[%s])',
+          logEntry.data._id,
+          logEntry._id
+        );
+
+        return this.skip();
+      }
+
+      this.prodShiftOrder = prodShiftOrder;
+
+      Order.findById(prodShiftOrder.orderId, {operations: 1}).lean().exec(this.next());
+    },
+    function(err, order)
     {
-      productionModule.warn(
-        'Tried to finish an already finished prod shift order [%s] (LOG=[%s])',
-        logEntry.data._id,
-        logEntry._id
-      );
+      if (err)
+      {
+        return this.skip(err);
+      }
 
-      return done();
-    }
+      ProdShiftOrder.copyOperationData(this.prodShiftOrder, order.operations);
 
-    prodShiftOrder.finishedAt = logEntry.data.finishedAt;
+      this.prodShiftOrder.finishedAt = logEntry.data.finishedAt;
 
-    prodShiftOrder.recalcDurations(false, function(err)
+      this.prodShiftOrder.recalcDurations(false, this.next());
+    },
+    function(err)
     {
       if (err)
       {
         productionModule.error(
           'Failed to recalculate durations of prod shift order [%s] (LOG=[%s]): %s',
-          prodShiftOrder._id,
+          this.prodShiftOrder._id,
           logEntry._id,
           err.stack
         );
       }
 
-      prodShiftOrder.save(function(err)
-      {
-        if (err)
-        {
-          productionModule.error(
-            'Failed to save prod shift order [%s] after changing the finish time (LOG=[%s]): %s',
-            prodShiftOrder._id,
-            logEntry._id,
-            err.stack
-          );
-        }
-
-        return done(err);
-      });
-    });
-  });
+      this.prodShiftOrder.save(this.next());
+    },
+    done
+  );
 };

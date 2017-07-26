@@ -125,7 +125,8 @@ exports['messenger/server'] = {
   repPort: 60021,
   broadcastTopics: [
     'events.saved',
-    'orders.synced', 'orders.intake.synced', 'orders.bom.synced', 'orders.zlf1.synced', 'orders.invalid.synced',
+    'orders.synced', 'orders.operationsChanged',
+    'orders.intake.synced', 'orders.bom.synced', 'orders.zlf1.synced', 'orders.invalid.synced',
     'emptyOrders.synced',
     'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',
     'xiconf.orders.synced',

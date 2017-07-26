@@ -194,9 +194,12 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
       this.recountTotals();
     }
 
-    this._changes = this.modifiedPaths();
+    if (!this._wasNew && this.isModified('operationNo') || this.isModified('orderData'))
+    {
+      this.copyOperationData();
+    }
 
-    this.copyOperationData();
+    this._changes = this.modifiedPaths();
 
     next();
   });
@@ -216,7 +219,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     {
       const changes = {_id: doc._id};
 
-      _.forEach(doc._changes, function(modifiedPath)
+      doc._changes.forEach(modifiedPath =>
       {
         changes[modifiedPath] = doc.get(modifiedPath);
       });
@@ -243,31 +246,37 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
     prodShiftOrder.workDuration = prodShiftOrder.totalDuration - prodShiftOrder.breakDuration;
   };
 
-  prodShiftOrderSchema.methods.isEditable = function()
+  prodShiftOrderSchema.statics.copyOperationData = function(prodShiftOrder, operations)
   {
-    return this.finishedAt !== null && this.pressWorksheet === null;
-  };
+    prodShiftOrder.laborTime = 0;
+    prodShiftOrder.laborSetupTime = 0;
+    prodShiftOrder.machineTime = 0;
+    prodShiftOrder.machineSetupTime = 0;
 
-  prodShiftOrderSchema.methods.copyOperationData = function()
-  {
-    if (!this.operationNo || !this.orderData)
+    if (!prodShiftOrder.operationNo)
     {
       return;
     }
 
-    const operations = this.orderData.operations;
+    if (Array.isArray(operations))
+    {
+      const map = {};
+
+      operations.forEach(op => map[op.no] = op);
+
+      operations = map;
+    }
+    else if (!operations)
+    {
+      operations = prodShiftOrder.orderData ? prodShiftOrder.orderData.operations : null;
+    }
 
     if (!operations)
     {
       return;
     }
 
-    const operation = operations[this.operationNo];
-
-    this.laborTime = 0;
-    this.laborSetupTime = 0;
-    this.machineTime = 0;
-    this.machineSetupTime = 0;
+    const operation = operations[prodShiftOrder.operationNo];
 
     if (!operation)
     {
@@ -276,21 +285,31 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
 
     if (!app.orders || !app.orders.getGroupedOperations)
     {
-      this.laborTime = operation.laborTime > 0 ? operation.laborTime : 0;
-      this.laborSetupTime = operation.laborSetupTime > 0 ? operation.laborSetupTime : 0;
-      this.machineTime = operation.machineTime > 0 ? operation.machineTime : 0;
-      this.machineSetupTime = operation.machineSetupTime > 0 ? operation.machineSetupTime : 0;
+      prodShiftOrder.laborTime = operation.laborTime > 0 ? operation.laborTime : 0;
+      prodShiftOrder.laborSetupTime = operation.laborSetupTime > 0 ? operation.laborSetupTime : 0;
+      prodShiftOrder.machineTime = operation.machineTime > 0 ? operation.machineTime : 0;
+      prodShiftOrder.machineSetupTime = operation.machineSetupTime > 0 ? operation.machineSetupTime : 0;
 
       return;
     }
 
-    app.orders.getGroupedOperations(operations, this.operationNo).forEach(function(operation)
+    app.orders.getGroupedOperations(operations, prodShiftOrder.operationNo).forEach(operation =>
     {
-      this.laborTime += operation.laborTime > 0 ? operation.laborTime : 0;
-      this.laborSetupTime += operation.laborSetupTime > 0 ? operation.laborSetupTime : 0;
-      this.machineTime += operation.machineTime > 0 ? operation.machineTime : 0;
-      this.machineSetupTime += operation.machineSetupTime > 0 ? operation.machineSetupTime : 0;
-    }, this);
+      prodShiftOrder.laborTime += operation.laborTime > 0 ? operation.laborTime : 0;
+      prodShiftOrder.laborSetupTime += operation.laborSetupTime > 0 ? operation.laborSetupTime : 0;
+      prodShiftOrder.machineTime += operation.machineTime > 0 ? operation.machineTime : 0;
+      prodShiftOrder.machineSetupTime += operation.machineSetupTime > 0 ? operation.machineSetupTime : 0;
+    });
+  };
+
+  prodShiftOrderSchema.methods.isEditable = function()
+  {
+    return this.finishedAt !== null && this.pressWorksheet === null;
+  };
+
+  prodShiftOrderSchema.methods.copyOperationData = function(operations)
+  {
+    this.constructor.copyOperationData(this, operations);
   };
 
   prodShiftOrderSchema.methods.recountTotals = function()

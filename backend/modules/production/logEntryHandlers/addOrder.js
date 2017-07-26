@@ -15,6 +15,8 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     function addOrderStep()
     {
       const prodShiftOrder = new ProdShiftOrder(logEntry.data);
+
+      prodShiftOrder.copyOperationData();
       prodShiftOrder.save(this.parallel());
 
       productionModule.getProdDowntimes(prodShiftOrder.prodShift, this.parallel());

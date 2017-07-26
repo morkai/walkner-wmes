@@ -66,7 +66,10 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     step(
       function()
       {
-        (new ProdShiftOrder(logEntry.data)).save(this.parallel());
+        const newProdShiftOrder = new ProdShiftOrder(logEntry.data);
+
+        newProdShiftOrder.copyOperationData();
+        newProdShiftOrder.save(this.next());
       },
       function(err, newProdShiftOrder)
       {
