@@ -212,6 +212,13 @@ define([
         return null;
       }
 
+      var $select2 = this.$id(parentProperty);
+
+      if (!$select2.select2('container').hasClass('select2-container-multi'))
+      {
+        parentId = parentModel.id;
+      }
+
       this.$id(parentProperty)
         .select2('val', parentId)
         .trigger({type: 'change', val: parentId, selectFirst: selectFirst});
