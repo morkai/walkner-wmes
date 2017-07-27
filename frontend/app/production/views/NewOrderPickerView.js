@@ -8,6 +8,7 @@ define([
   'app/core/View',
   'app/orders/util/resolveProductName',
   '../util/orderPickerHelpers',
+  '../util/limitQuantityDone',
   'app/production/templates/newOrderPicker'
 ], function(
   _,
@@ -17,6 +18,7 @@ define([
   View,
   resolveProductName,
   orderPickerHelpers,
+  limitQuantityDone,
   template
 ) {
   'use strict';
@@ -222,6 +224,8 @@ define([
         else
         {
           this.selectNextOrder();
+
+          limitQuantityDone(this, 'quantityDone', this.model.prodShiftOrder.id);
         }
       }
       else if (this.options.correctingOrder)

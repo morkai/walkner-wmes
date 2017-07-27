@@ -4,11 +4,13 @@ define([
   'jquery',
   'app/i18n',
   'app/core/View',
+  '../util/limitQuantityDone',
   'app/production/templates/endWorkDialog'
 ], function(
   $,
   t,
   View,
+  limitQuantityDone,
   template
 ) {
   'use strict';
@@ -135,6 +137,11 @@ define([
         maxWorkerCount: order.getMaxWorkerCount(),
         embedded: this.options.embedded
       };
+    },
+
+    afterRender: function()
+    {
+      limitQuantityDone(this, 'quantityDone', this.model.prodShiftOrder.id);
     },
 
     onDialogShown: function(viewport)
