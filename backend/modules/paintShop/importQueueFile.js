@@ -34,7 +34,8 @@ module.exports = function importQueueFile(app, module, filePath, date, user, don
         date || '0000-00-00'
       ];
       const opts = {
-        timeout: 10000
+        timeout: 10000,
+        maxBuffer: 2 * 1024 * 1024
       };
 
       execFile(process.execPath, args, opts, this.next());
