@@ -22,6 +22,9 @@
   background: #333;
   border-bottom: 1px solid #333;
 }
+.paintShop-orderDetails .paintShop-order {
+  cursor: default;
+}
 @media (min-width: 768px) {
   .paintShop-orderDetails-dialog .modal-dialog {
     width: 838px;

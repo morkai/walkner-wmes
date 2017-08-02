@@ -4,6 +4,7 @@ define([
   'jquery',
   'app/i18n',
   'app/viewport',
+  'app/user',
   'app/core/View',
   'app/paintShop/templates/orderDetails',
   'app/paintShop/templates/queueOrder'
@@ -11,6 +12,7 @@ define([
   $,
   t,
   viewport,
+  user,
   View,
   template,
   queueOrderTemplate
@@ -44,6 +46,7 @@ define([
 
     serialize: function()
     {
+      var isEmbedded = window.parent !== window;
       var isLocal = user.isAllowedTo('LOCAL');
       var isPainter = user.isAllowedTo('PAINT_SHOP:PAINTER');
       var canManage = user.isAllowedTo('PAINT_SHOP:MANAGE');
@@ -53,7 +56,7 @@ define([
         order: this.model.serialize(),
         fillerHeight: this.calcFillerHeight(),
         renderQueueOrder: queueOrderTemplate,
-        canAct: isLocal || isPainter || canManage,
+        canAct: (isEmbedded && isLocal) || isPainter || canManage,
         canResetIgnore: canManage
       };
     },
