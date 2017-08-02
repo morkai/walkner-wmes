@@ -3,7 +3,6 @@
 'use strict';
 
 const setUpRoutes = require('./routes');
-const setUpImporter = require('./importer');
 const importQueueFile = require('./importQueueFile');
 
 exports.DEFAULT_CONFIG = {
@@ -11,7 +10,7 @@ exports.DEFAULT_CONFIG = {
   expressId: 'express',
   userId: 'user',
   fteId: 'fte',
-  directoryWatcherId: 'directoryWatcher'
+  settingsId: 'settings'
 };
 
 exports.start = function startPaintShopModule(app, module)
@@ -24,15 +23,6 @@ exports.start = function startPaintShopModule(app, module)
       module.config.expressId
     ],
     setUpRoutes.bind(null, app, module)
-  );
-
-  app.onModuleReady(
-    [
-      module.config.directoryWatcherId,
-      module.config.mongooseId,
-      module.config.fteId
-    ],
-    setUpImporter.bind(null, app, module)
   );
 
   module.importing = false;

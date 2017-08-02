@@ -548,12 +548,8 @@ exports['directoryWatcher:opinionSurveys'] = {
   maxDelay: 120 * 1000
 };
 
-exports['directoryWatcher:paintShop'] = {
-  path: DATA_PATH + '/paintshop'
-};
-
 exports.paintShop = {
-  directoryWatcherId: 'directoryWatcher:paintShop'
+
 };
 
 exports.prodDowntimeAlerts = {
