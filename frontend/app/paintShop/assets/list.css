@@ -6,6 +6,9 @@
   box-shadow: 0 6px 12px #666;
   line-height: 1;
 }
+.paintShop-is-fullscreen.paintShop-is-embedded .paintShop-list-container {
+  margin-bottom: 49px;
+}
 .paintShop-list {
   overflow-y: scroll;
   height: 100%;

@@ -29,6 +29,8 @@ define([
 ) {
   'use strict';
 
+  var IS_EMBEDDED = window.parent !== window;
+
   return View.extend({
 
     template: template,
@@ -72,7 +74,7 @@ define([
         }
       ];
 
-      if (window.parent === window)
+      if (!IS_EMBEDDED)
       {
         actions.push({
           type: 'link',
@@ -125,12 +127,30 @@ define([
     },
 
     events: {
+      'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
+      'touchstart #-switchApps': function() { this.startActionTimer('switchApps'); },
+      'mouseup #-switchApps': function() { this.stopActionTimer('switchApps'); },
+      'touchend #-switchApps': function() { this.stopActionTimer('switchApps'); },
 
+      'mousedown #-reboot': function(e) { this.startActionTimer('reboot', e); },
+      'touchstart #-reboot': function() { this.startActionTimer('reboot'); },
+      'mouseup #-reboot': function() { this.stopActionTimer('reboot'); },
+      'touchend #-reboot': function() { this.stopActionTimer('reboot'); },
+
+      'mousedown #-shutdown': function(e) { this.startActionTimer('shutdown', e); },
+      'touchstart #-shutdown': function() { this.startActionTimer('shutdown'); },
+      'mouseup #-shutdown': function() { this.stopActionTimer('shutdown'); },
+      'touchend #-shutdown': function() { this.stopActionTimer('shutdown'); }
     },
 
     initialize: function()
     {
       this.onResize = _.debounce(this.resize.bind(this), 30);
+
+      this.actionTimer = {
+        action: null,
+        time: null
+      };
 
       this.defineModels();
       this.defineViews();
@@ -147,10 +167,11 @@ define([
 
     destroy: function()
     {
-      document.body.style.overflow = '';
-      document.body.classList.remove('paintShop-is-fullscreen');
-
       $('.modal').addClass('fade');
+
+      $(document.body)
+        .css('overflow', '')
+        .removeClass('paintShop-is-fullscreen paintShop-is-embedded');
 
       $(window).off('.' + this.idPrefix);
       $(document).off('.' + this.idPrefix);
@@ -189,6 +210,11 @@ define([
 
       $(window)
         .on('resize.' + idPrefix, this.onResize);
+
+      if (IS_EMBEDDED)
+      {
+        page.once('afterRender', function() { window.parent.postMessage({type: 'ready', app: 'paintShop'}, '*'); });
+      }
     },
 
     load: function(when)
@@ -254,6 +280,7 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
+        embedded: IS_EMBEDDED,
         height: this.calcInitialHeight() + 'px'
       };
     },
@@ -262,6 +289,7 @@ define([
     {
       document.body.style.overflow = 'hidden';
       document.body.classList.toggle('paintShop-is-fullscreen', this.isFullscreen());
+      document.body.classList.toggle('paintShop-is-embedded', IS_EMBEDDED);
     },
 
     afterRender: function()
@@ -278,7 +306,7 @@ define([
 
     isFullscreen: function()
     {
-      return window.parent !== window
+      return IS_EMBEDDED
         || this.options.fullscreen
         || window.innerWidth <= 800
         || (window.outerWidth === window.screen.width && window.outerHeight === window.screen.height);
@@ -481,6 +509,57 @@ define([
           + time.getMoment(newDate, 'YYYY-MM-DD').format('L')
           + '</a>';
       }
+    },
+
+    startActionTimer: function(action, e)
+    {
+      this.actionTimer.action = action;
+      this.actionTimer.time = Date.now();
+
+      if (e)
+      {
+        e.preventDefault();
+      }
+    },
+
+    stopActionTimer: function(action)
+    {
+      if (this.actionTimer.action !== action)
+      {
+        return;
+      }
+
+      var long = (Date.now() - this.actionTimer.time) > 3000;
+
+      if (action === 'switchApps')
+      {
+        if (long)
+        {
+          window.parent.postMessage({type: 'config'}, '*');
+        }
+        else
+        {
+          window.parent.postMessage({type: 'switch', app: 'mrl'}, '*');
+        }
+      }
+      else if (action === 'reboot')
+      {
+        if (long)
+        {
+          window.parent.postMessage({type: 'reboot'}, '*');
+        }
+        else
+        {
+          window.parent.postMessage({type: 'refresh'}, '*');
+        }
+      }
+      else if (long && action === 'shutdown')
+      {
+        window.parent.postMessage({type: 'shutdown'}, '*');
+      }
+
+      this.actionTimer.action = null;
+      this.actionTimer.time = null;
     }
 
   });
