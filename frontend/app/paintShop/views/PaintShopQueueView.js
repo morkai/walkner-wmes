@@ -37,11 +37,12 @@ define([
           return;
         }
 
-        if (e.button === 0
+        if (window.parent === window
+          || (e.button === 0
           && lastE.offsetY === e.offsetY
           && lastE.offsetX === e.offsetX
           && lastE.screenX === e.screenX
-          && lastE.screenY === e.screenY)
+          && lastE.screenY === e.screenY))
         {
           this.handleOrderClick(e.currentTarget.dataset.orderId);
         }
