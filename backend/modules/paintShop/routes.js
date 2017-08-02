@@ -58,7 +58,7 @@ module.exports = function setUpPaintShopRoutes(app, module)
 
       if (date === 'current')
       {
-        term.args[1] = new Date(fteModule.currentShift.date.getTime());
+        term.args[1] = moment.utc(fteModule.currentShift.date.getTime()).startOf('day').toDate();
       }
       else if (/^[0-9]+-[0-9]+-[0-9]+$/.test(date))
       {
