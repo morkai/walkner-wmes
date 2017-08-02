@@ -1,6 +1,7 @@
 <div class="paintShop" style="height: <%- height %>">
+  <div id="<%- idPrefix %>-list-all" class="paintShop-list-container"></div>
   <div id="<%- idPrefix %>-queue" class="paintShop-queue-container"></div>
-  <div id="<%- idPrefix %>-list" class="paintShop-list-container"></div>
+  <div id="<%- idPrefix %>-list-work" class="paintShop-list-container"></div>
   <% if (embedded) { %>
   <div class="paintShop-parentControls">
     <button id="<%- idPrefix %>-switchApps" class="btn btn-default" title="<%- t('paintShop', 'parent:switchApps') %>"><i class="fa fa-window-restore"></i></button>

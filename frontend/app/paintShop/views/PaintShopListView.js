@@ -58,13 +58,31 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        groups: this.model.serializeGroups()
+        showTimes: this.options.showTimes,
+        orders: this.serializeOrders()
       };
     },
 
-    afterRender: function()
+    serializeOrders: function()
     {
+      var orders = [];
+      var filter = this.options.filter || function() { return true; };
+      var sort = this.options.sort;
 
+      this.model.serializeGroups(filter).forEach(function(group)
+      {
+        group.orders.forEach(function(order)
+        {
+          orders.push(order);
+        });
+      });
+
+      if (sort)
+      {
+        orders.sort(sort);
+      }
+
+      return orders;
     },
 
     $item: function(orderId)
@@ -74,12 +92,27 @@ define([
 
     handleItemClick: function(orderId)
     {
-      this.model.trigger('focus', orderId);
+      if (orderId)
+      {
+        this.model.trigger('focus', orderId);
+      }
     },
 
     onChange: function(order)
     {
-      this.$item(order.id).attr('data-status', order.get('status'));
+      var $item = this.$item(order.id);
+
+      if (!this.options.filter)
+      {
+        $item.attr('data-status', order.get('status'));
+
+        return;
+      }
+
+      if ($item.length || this.options.filter(order.serialize()))
+      {
+        this.render();
+      }
     }
 
   });

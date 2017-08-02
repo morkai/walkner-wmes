@@ -157,7 +157,8 @@ define([
       this.defineBindings();
 
       this.setView('#-queue', this.queueView);
-      this.setView('#-list', this.listView);
+      this.setView('#-list-all', this.allListView);
+      this.setView('#-list-work', this.workListView);
     },
 
     setUpLayout: function(layout)
@@ -187,8 +188,32 @@ define([
       this.queueView = new PaintShopQueueView({
         model: this.orders
       });
-      this.listView = new PaintShopListView({
-        model: this.orders
+      this.allListView = new PaintShopListView({
+        model: this.orders,
+        showTimes: false,
+        filter: null
+      });
+      this.workListView = new PaintShopListView({
+        model: this.orders,
+        showTimes: true,
+        filter: function(psOrder)
+        {
+          return psOrder.status === 'started' || psOrder.status === 'finished';
+        },
+        sort: function(a, b)
+        {
+          if (a.status === 'started')
+          {
+            if (a.status === b.status)
+            {
+              return a.startedAt - b.startedAt;
+            }
+
+            return -1;
+          }
+
+          return b.startedAt - a.startedAt;
+        }
       });
     },
 

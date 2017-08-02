@@ -24,12 +24,12 @@
     <td class="paintShop-property" rowspan="<%- order.rowSpan %>">
       <% if (order.startedAt) { %>
       <span class="paintShop-property" data-property="startedAt" title="<%- t('paintShop', 'PROPERTY:startedAt') %>">
-        <i class="fa fa-hourglass-start"></i><span><%- order.startedAt %></span>
+        <i class="fa fa-hourglass-start"></i><span><%- order.startedAtText %></span>
       </span>
       <% } %>
       <% if (order.finishedAt) { %>
       <span class="paintShop-property" data-property="finishedAt" title="<%- t('paintShop', 'PROPERTY:finishedAt') %>">
-        <i class="fa fa-hourglass-end"></i><span><%- order.finishedAt %></span>
+        <i class="fa fa-hourglass-end"></i><span><%- order.finishedAtText %></span>
       </span>
       <% } %>
     </td>

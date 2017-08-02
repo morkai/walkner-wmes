@@ -35,3 +35,13 @@
   height: 50px;
   font-size: 24px;
 }
+.paintShop-queue-container {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.paintShop-queue-container + .paintShop-list-container {
+  width: 480px;
+}
+.paintShop-is-fullscreen.paintShop-is-embedded .paintShop-queue-container + .paintShop-list-container {
+  margin-bottom: 49px;
+}

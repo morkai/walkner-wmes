@@ -1,7 +1,14 @@
-<div class="paintShop-list">
-  <% groups.forEach(function(group) { %>
-  <% group.orders.forEach(function(order) { %>
-  <div class="paintShop-list-item" data-order-id="<%- order._id %>" data-status="<%- order.status %>"><%- order.order %></div>
+<div class="paintShop-list <%- showTimes ? 'paintShop-list-with-times' : '' %>">
+  <% orders.forEach(function(order) { %>
+  <div class="paintShop-list-item" data-order-id="<%- order._id %>" data-status="<%- order.status %>">
+    <span class="paintShop-list-order"><%- order.order %></span>
+    <% if (showTimes && order.startedAtText) { %>
+    <span class="paintShop-list-time"><i class="fa fa-hourglass-start"></i> <%- order.startedAtText %></span>
+    <% } %>
+    <% if (showTimes && order.finishedAtText) { %>
+    <span class="paintShop-list-time"><i class="fa fa-hourglass-end"></i> <%- order.finishedAtText %></span>
+    <% } %>
+  </div>
   <% }) %>
-  <% }) %>
+  <div class="paintShop-list-item">&nbsp;</div>
 </div>

@@ -92,11 +92,14 @@ define([
 
       var orderEl = this.$order(orderId)[0];
 
-      this.$el.animate({scrollTop: orderEl.offsetTop + 1}, 200);
+      if (orderEl)
+      {
+        this.$el.animate({scrollTop: orderEl.offsetTop + 1}, 200);
+      }
 
       var detailsView = new PaintShopOrderDetailsView({
         model: this.model.get(orderId),
-        height: orderEl.clientHeight
+        height: orderEl ? orderEl.clientHeight : 0
       });
 
       viewport.showDialog(detailsView);
@@ -111,7 +114,16 @@ define([
 
     onFocus: function(orderId)
     {
-      this.$el.animate({scrollTop: this.$order(orderId)[0].offsetTop + 1}, 200);
+      var orderEl = this.$order(orderId)[0];
+
+      if (orderEl)
+      {
+        this.$el.animate({scrollTop: orderEl.offsetTop + 1}, 200);
+      }
+      else
+      {
+        this.handleOrderClick(orderId);
+      }
     }
 
   });

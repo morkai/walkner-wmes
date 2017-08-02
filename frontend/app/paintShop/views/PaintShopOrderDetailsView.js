@@ -61,6 +61,16 @@ define([
       };
     },
 
+    afterRender: function()
+    {
+      if (this.options.height === 0)
+      {
+        this.options.height = this.$('tbody')[0].clientHeight;
+
+        this.$id('filler').css('height', this.calcFillerHeight() + 'px');
+      }
+    },
+
     calcFillerHeight: function()
     {
       return Math.max(window.innerHeight - 30 * 2 - 25 - 75 - this.options.height, 0);

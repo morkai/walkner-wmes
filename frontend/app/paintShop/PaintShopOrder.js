@@ -72,12 +72,12 @@ define([
 
       if (obj.startedAt)
       {
-        obj.startedAt = time.format(obj.startedAt, 'HH:mm:ss');
+        obj.startedAtText = time.format(obj.startedAt, 'HH:mm:ss');
       }
 
       if (obj.finishedAt)
       {
-        obj.finishedAt = time.format(obj.finishedAt, 'HH:mm:ss');
+        obj.finishedAtText = time.format(obj.finishedAt, 'HH:mm:ss');
       }
 
       obj.statusText = t('paintShop', 'status:' + obj.status);
