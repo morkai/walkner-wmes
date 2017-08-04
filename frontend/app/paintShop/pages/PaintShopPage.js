@@ -9,9 +9,11 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/core/util/getShiftStartInfo',
+  'app/production/views/VkbView',
   '../PaintShopOrder',
   '../views/PaintShopQueueView',
   '../views/PaintShopListView',
+  '../views/PaintShopDatePickerView',
   'app/paintShop/templates/page'
 ], function(
   _,
@@ -22,9 +24,11 @@ define([
   View,
   bindLoadingMessage,
   getShiftStartInfo,
+  VkbView,
   PaintShopOrder,
   PaintShopQueueView,
   PaintShopListView,
+  PaintShopDatePickerView,
   template
 ) {
   'use strict';
@@ -159,6 +163,11 @@ define([
       this.setView('#-queue', this.queueView);
       this.setView('#-list-all', this.allListView);
       this.setView('#-list-work', this.workListView);
+
+      if (IS_EMBEDDED)
+      {
+        this.setView('#-vkb', this.vkbView);
+      }
     },
 
     setUpLayout: function(layout)
@@ -185,6 +194,7 @@ define([
 
     defineViews: function()
     {
+      this.vkbView = IS_EMBEDDED ? new VkbView() : null;
       this.queueView = new PaintShopQueueView({
         model: this.orders
       });
@@ -478,6 +488,13 @@ define([
         return;
       }
 
+      if (IS_EMBEDDED)
+      {
+        this.showDatePickerDialog();
+
+        return false;
+      }
+
       var liEl = e.target.parentNode;
 
       liEl.innerHTML = '';
@@ -534,6 +551,29 @@ define([
           + time.getMoment(newDate, 'YYYY-MM-DD').format('L')
           + '</a>';
       }
+    },
+
+    showDatePickerDialog: function()
+    {
+      var dialogView = new PaintShopDatePickerView({
+        model: {
+          date: this.orders.getDateFilter()
+        },
+        vkb: this.vkbView
+      });
+
+      this.listenTo(dialogView, 'picked', function(newDate)
+      {
+        viewport.closeDialog();
+
+        if (newDate !== this.orders.getDateFilter())
+        {
+          this.orders.setDateFilter(newDate);
+          this.orders.fetch({reset: true});
+        }
+      });
+
+      viewport.showDialog(dialogView);
     },
 
     startActionTimer: function(action, e)

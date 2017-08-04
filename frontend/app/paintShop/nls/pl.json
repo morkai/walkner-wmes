@@ -31,5 +31,16 @@
   "action:start": "Rozpocznij",
   "action:finish": "Zakończ",
   "action:cancel": "Ignoruj",
-  "action:reset": "Resetuj"
+  "action:reset": "Resetuj",
+
+  "datePicker:d0": "Dzisiaj",
+  "datePicker:d+1": "Jutro",
+  "datePicker:d+2": "Pojutrze",
+  "datePicker:d-1": "Wczoraj",
+  "datePicker:d-2": "Przedwczoraj",
+  "datePicker:submit": "Wybierz datę",
+  "datePicker:placeholder:day": "dd",
+  "datePicker:placeholder:month": "mm",
+  "datePicker:placeholder:year": "rrrr",
+  "datePicker:invalid": "Podaj prawidłową datę."
 }
