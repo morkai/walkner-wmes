@@ -4,7 +4,6 @@
 
 const _ = require('lodash');
 const step = require('h5.step');
-const moment = require('moment');
 const util = require('../reports/util');
 
 module.exports = function(mongoose, options, done)
@@ -99,7 +98,9 @@ module.exports = function(mongoose, options, done)
     group.fte.avg = util.round(group.fte.total / group.fte.days);
     group.fte.total = util.round(group.fte.total);
     group.ipr = util.round((group.nearMissCount + group.suggestionCount + group.observationCount) / group.fte.avg);
-    group.ips = util.round(group.observationCount / (group.nearMissCount + group.suggestionCount) * 100);
+    group.ips = util.round(
+      group.observationCount / (group.nearMissCount + group.suggestionCount + group.observationCount) * 100
+    );
     group.ipc = util.round(group.userCount / group.fte.avg * 100);
   }
 
