@@ -45,7 +45,7 @@ define([
           && lastE.screenX === e.screenX
           && lastE.screenY === e.screenY))
         {
-          this.handleOrderClick(e.currentTarget.dataset.orderId);
+          this.handleOrderClick(e.currentTarget.dataset.orderId, this.$(e.target).closest('td')[0].dataset.property);
         }
       }
     },
@@ -83,10 +83,26 @@ define([
       return this.$('.paintShop-order[data-order-id="' + orderId + '"]');
     },
 
-    handleOrderClick: function(orderId)
+    handleOrderClick: function(orderId, property)
     {
       if (viewport.currentDialog)
       {
+        return;
+      }
+
+      var order = this.model.get(orderId);
+
+      if (!order)
+      {
+        return;
+      }
+
+      var followupId = order.get('followupId');
+
+      if (followupId && (property === 'no' || property === 'order'))
+      {
+        this.onFocus(followupId);
+
         return;
       }
 
@@ -98,7 +114,7 @@ define([
       }
 
       var detailsView = new PaintShopOrderDetailsView({
-        model: this.model.get(orderId),
+        model: order,
         height: orderEl ? orderEl.clientHeight : 0
       });
 
