@@ -325,6 +325,10 @@ app/orgUnits/assets/picker.css
 ----------------
 app/orgUnits/assets/picker.css
 
+app/paintShop/assets/datePicker.css
+----------------
+app/paintShop/assets/datePicker.css
+
 app/paintShop/assets/list.css
 ----------------
 app/paintShop/assets/list.css
@@ -334,6 +338,8 @@ app/paintShop/assets/main.css
 app/paintShop/assets/./queue.css
 app/paintShop/assets/./list.css
 app/paintShop/assets/./orderDetails.css
+app/paintShop/assets/./datePicker.css
+app/paintShop/assets/./tabs.css
 app/paintShop/assets/main.css
 
 app/paintShop/assets/orderDetails.css
@@ -343,6 +349,10 @@ app/paintShop/assets/orderDetails.css
 app/paintShop/assets/queue.css
 ----------------
 app/paintShop/assets/queue.css
+
+app/paintShop/assets/tabs.css
+----------------
+app/paintShop/assets/tabs.css
 
 app/pressWorksheets/assets/main.css
 ----------------
@@ -1191,6 +1201,8 @@ app/paintShop/templates/queue.js
 app/paintShop/views/PaintShopQueueView.js
 app/paintShop/templates/list.js
 app/paintShop/views/PaintShopListView.js
+app/paintShop/templates/datePicker.js
+app/paintShop/views/PaintShopDatePickerView.js
 app/paintShop/templates/page.js
 app/paintShop/pages/PaintShopPage.js
 app/nls/paintShop.js
