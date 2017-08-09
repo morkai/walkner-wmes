@@ -45,7 +45,10 @@ define([
           && lastE.screenX === e.screenX
           && lastE.screenY === e.screenY))
         {
-          this.handleOrderClick(e.currentTarget.dataset.orderId, this.$(e.target).closest('td')[0].dataset.property);
+          this.handleOrderClick(
+            e.currentTarget.dataset.orderId,
+            this.$(e.target).closest('td')[0].dataset.property
+          );
         }
       }
     },
@@ -57,6 +60,7 @@ define([
       this.listenTo(this.model, 'reset', this.render);
       this.listenTo(this.model, 'change', this.onChange);
       this.listenTo(this.model, 'focus', this.onFocus);
+      this.listenTo(this.model, 'mrpSelected', this.onMrpSelected);
     },
 
     serialize: function()
@@ -64,6 +68,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         groups: this.model.serializeGroups(),
+        selectedMrp: this.model.selectedMrp,
         renderQueueOrder: queueOrderTemplate
       };
     },
@@ -140,6 +145,16 @@ define([
       {
         this.handleOrderClick(orderId);
       }
+    },
+
+    onMrpSelected: function()
+    {
+      var selectedMrp = this.model.selectedMrp;
+
+      this.$('.paintShop-order').each(function()
+      {
+        this.style.display = selectedMrp === 'all' || this.dataset.mrp === selectedMrp ? '' : 'none';
+      });
     }
 
   });

@@ -25,9 +25,15 @@ define([
 
     initialize: function()
     {
+      this.selectedMrp = 'all';
+      this.allMrps = [];
       this.groups = null;
 
-      this.on('request', function() { this.groups = null; });
+      this.on('request', function()
+      {
+        this.allMrps = [];
+        this.groups = null;
+      });
     },
 
     parse: function(res)
@@ -94,6 +100,13 @@ define([
       });
     },
 
+    selectMrp: function(newSelectedMrp)
+    {
+      this.selectedMrp = this.selectedMrp === newSelectedMrp ? 'all' : newSelectedMrp;
+
+      this.trigger('mrpSelected');
+    },
+
     serializeGroups: function(filter)
     {
       if (this.groups)
@@ -120,9 +133,12 @@ define([
 
       var groupList = [];
       var groupMap = {};
+      var mrpMap = {};
 
       this.forEach(function(order)
       {
+        mrpMap[order.get('mrp')] = 1;
+
         var groupId = order.get('group').replace(/[^A-Za-z0-9]+/g, '');
         var group = groupMap[groupId];
 
@@ -140,6 +156,12 @@ define([
         group.orders.push(order.serialize());
       });
 
+      if (!mrpMap[this.selectedMrp])
+      {
+        this.selectedMrp = 'all';
+      }
+
+      this.allMrps = Object.keys(mrpMap).sort();
       this.groups = groupList;
 
       return this.serializeGroups(filter);

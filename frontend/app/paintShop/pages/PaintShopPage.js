@@ -57,26 +57,7 @@ define([
 
     actions: function()
     {
-      var actions = [
-        {
-          type: 'link',
-          icon: 'filter',
-          className: 'disabled',
-          callback: function() {}
-        },
-        {
-          type: 'link',
-          icon: 'paint-brush',
-          className: 'disabled',
-          callback: function() {}
-        },
-        {
-          type: 'link',
-          icon: 'truck',
-          className: 'disabled',
-          callback: function() {}
-        }
-      ];
+      var actions = [];
 
       if (!IS_EMBEDDED)
       {
@@ -131,6 +112,18 @@ define([
     },
 
     events: {
+      'click .paintShop-tab[data-mrp]': function(e)
+      {
+        this.$('.paintShop-tab.is-active').removeClass('is-active');
+
+        this.orders.selectMrp(e.currentTarget.dataset.mrp);
+
+        if (this.orders.selectedMrp !== 'all')
+        {
+          this.$(e.currentTarget).addClass('is-active');
+        }
+      },
+
       'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
       'touchstart #-switchApps': function() { this.startActionTimer('switchApps'); },
       'mouseup #-switchApps': function() { this.stopActionTimer('switchApps'); },
@@ -316,8 +309,23 @@ define([
       return {
         idPrefix: this.idPrefix,
         embedded: IS_EMBEDDED,
-        height: this.calcInitialHeight() + 'px'
+        height: this.calcInitialHeight() + 'px',
+        tabs: this.serializeTabs()
       };
+    },
+
+    serializeTabs: function()
+    {
+      var orders = this.orders;
+
+      return orders.allMrps.map(function(mrp)
+      {
+        return {
+          mrp: mrp,
+          label: mrp,
+          active: orders.selectedMrp === mrp
+        };
+      });
     },
 
     beforeRender: function()
@@ -393,6 +401,22 @@ define([
       });
 
       this.resize();
+    },
+
+    renderTabs: function()
+    {
+      var html = '';
+
+      this.serializeTabs().forEach(function(tab)
+      {
+        html += '<div class="paintShop-tab ' + (tab.active ? 'is-active' : '') + '" data-mrp="' + tab.mrp + '">'
+          + tab.label
+          + '</div>';
+      });
+
+      html += '<div class="paintShop-tab"></div>';
+
+      this.$id('tabs').html(html);
     },
 
     handleDragEvent: function(e)
@@ -479,6 +503,8 @@ define([
         trigger: false,
         replace: true
       });
+
+      this.renderTabs();
     },
 
     onBreadcrumbsClick: function(e)

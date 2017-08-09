@@ -1,4 +1,4 @@
-<tbody class="paintShop-order" data-order-id="<%- order._id %>" data-status="<%- order.status %>">
+<tbody class="paintShop-order" data-order-id="<%- order._id %>" data-status="<%- order.status %>" data-mrp="<%= order.mrp %>" style="display: <%- visible ? 'table-row-group' : 'none' %>">
   <tr class="paintShop-properties paintShop-order-order">
     <td class="paintShop-property" data-property="no" rowspan="<%- order.rowSpan %>">
       <%- order.no %><% if (order.followupNo) { %><br><i class="fa fa-level-<%- order.no < order.followupNo ? 'down' : 'up' %>"></i><br><%- order.followupNo %><% } %>

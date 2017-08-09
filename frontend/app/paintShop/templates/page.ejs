@@ -2,6 +2,12 @@
   <div id="<%- idPrefix %>-list-all" class="paintShop-list-container"></div>
   <div id="<%- idPrefix %>-queue" class="paintShop-queue-container"></div>
   <div id="<%- idPrefix %>-list-work" class="paintShop-list-container"></div>
+  <div id="<%- idPrefix %>-tabs" class="paintShop-tabs">
+    <% tabs.forEach(function(tab) { %>
+    <div class="paintShop-tab <%- tab.active ? 'is-active' : '' %>" data-mrp="<%- tab.mrp %>"><%= tab.label %></div>
+    <% }) %>
+    <div class="paintShop-tab"></div>
+  </div>
   <% if (embedded) { %>
   <div class="paintShop-parentControls">
     <button id="<%- idPrefix %>-switchApps" class="btn btn-default" title="<%- t('paintShop', 'parent:switchApps') %>"><i class="fa fa-window-restore"></i></button>

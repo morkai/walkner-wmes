@@ -2,6 +2,7 @@
 @import "./list.css";
 @import "./orderDetails.css";
 @import "./datePicker.css";
+@import "./tabs.css";
 
 .page[data-id="paintShop"] .page-actions .btn-link {
   padding: 0;

@@ -1,0 +1,39 @@
+.paintShop-tabs {
+  position: absolute;
+  display: flex;
+  bottom: 64px;
+  left: 235px;
+  right: 515px;
+  height: 67px;
+  box-shadow: 0 6px 12px #666;
+  background: #fff;
+  border: 1px solid #333;
+  overflow-x: scroll;
+}
+.paintShop-is-fullscreen .paintShop-tabs {
+  bottom: 15px;
+}
+.paintShop-tab {
+  flex: 0 0 auto;
+  padding: 0 10px;
+  min-width: 100px;
+  line-height: 50px;
+  font-size: 28px;
+  text-align: center;
+  border-right: 1px solid #333;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+}
+.paintShop-tab:hover {
+  background: #ffffd6;
+}
+.paintShop-tab:last-child {
+  flex: 1 1 auto;
+  border-right: 0;
+  cursor: default;
+  background: #fff;
+}
+.paintShop-tab.is-active {
+  background: #333;
+  color: #fff;
+}

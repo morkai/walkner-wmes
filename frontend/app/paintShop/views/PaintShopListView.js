@@ -52,6 +52,7 @@ define([
 
       this.listenTo(this.model, 'reset', this.render);
       this.listenTo(this.model, 'change', this.onChange);
+      this.listenTo(this.model, 'mrpSelected', this.onMrpSelected);
     },
 
     serialize: function()
@@ -113,6 +114,16 @@ define([
       {
         this.render();
       }
+    },
+
+    onMrpSelected: function()
+    {
+      var selectedMrp = this.model.selectedMrp;
+
+      this.$('.paintShop-list-item').each(function()
+      {
+        this.style.display = selectedMrp === 'all' || this.dataset.mrp === selectedMrp ? '' : 'none';
+      });
     }
 
   });

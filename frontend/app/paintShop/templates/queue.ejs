@@ -10,9 +10,14 @@
       </tr>
     </tbody>
     <% group.orders.forEach(function(order) { %>
-    <%- renderQueueOrder({groupId: group._id, order: order}) %>
+    <%- renderQueueOrder({
+      groupId: group._id,
+      order: order,
+      visible: selectedMrp === 'all' || order.mrp === selectedMrp
+    }) %>
     <% }) %>
     <% }) %>
   </table>
+  <hr>
   <% } %>
 </div>

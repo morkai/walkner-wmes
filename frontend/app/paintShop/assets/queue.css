@@ -1,5 +1,6 @@
 .paintShop-queue-container {
   flex: 1 1 auto;
+  margin-bottom: 66px;
   background: #fff;
   border: 1px solid #333;
   box-shadow: 0 6px 12px #666;
@@ -8,6 +9,11 @@
 .paintShop-queue {
   height: 100%;
   overflow-y: scroll;
+}
+.paintShop-queue > hr {
+  margin-top: 0;
+  margin-bottom: 50px;
+  border-top: 1px solid #333;
 }
 .paintShop-queue-empty {
   padding: 10px;
@@ -103,6 +109,9 @@
 .paintShop-order-order > td[rowspan] {
   border-bottom: 1px solid #333;
 }
+.paintShop-order:last-child > .paintShop-order-order > td[rowspan] {
+  border-bottom: none;
+}
 td.paintShop-property {
   vertical-align: top;
   padding: 5px;
@@ -128,6 +137,9 @@ td.paintShop-property[data-property="nc12"] {
 }
 .is-last > td.paintShop-property[data-property="order"] {
   border-bottom: 1px solid #333;
+}
+.paintShop-order:last-child > .is-last > td.paintShop-property[data-property="order"] {
+  border-bottom: none;
 }
 td.paintShop-property[data-property="qty"] {
   padding-right: 0;

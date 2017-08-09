@@ -42,5 +42,7 @@
   "datePicker:placeholder:day": "dd",
   "datePicker:placeholder:month": "mm",
   "datePicker:placeholder:year": "rrrr",
-  "datePicker:invalid": "Podaj prawidłową datę."
+  "datePicker:invalid": "Podaj prawidłową datę.",
+
+  "tabs:all": "Wszystkie"
 }
