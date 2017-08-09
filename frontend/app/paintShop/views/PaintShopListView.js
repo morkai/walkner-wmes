@@ -28,14 +28,13 @@ define([
       {
         var lastE = this.lastClickEvent;
 
-        if (!lastE)
+        if (!lastE || e.button !== 0)
         {
           return;
         }
 
         if (window.parent === window
-          || (e.button === 0
-          && lastE.offsetY === e.offsetY
+          || (lastE.offsetY === e.offsetY
           && lastE.offsetX === e.offsetX
           && lastE.screenX === e.screenX
           && lastE.screenY === e.screenY))
