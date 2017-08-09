@@ -12,6 +12,7 @@
   height: 100%;
 }
 .paintShop-list-item {
+  flex: 0 0 auto;
   line-height: 50px;
   font-size: 32px;
   text-align: center;
