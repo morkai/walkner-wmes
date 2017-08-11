@@ -134,13 +134,19 @@ define([
 
         viewport.msg.loaded();
       },
-      function()
+      function(err)
       {
         if (pageCounter === viewport.pageCounter)
         {
           viewport.msg.loadingFailed();
 
-          viewport.broker.publish('viewport.page.loadingFailed', {page: null, xhr: null});
+          viewport.broker.publish('viewport.page.loadingFailed', {
+            page: null,
+            xhr: {
+              status: 0,
+              responseText: err.message
+            }
+          });
         }
       }
     );
