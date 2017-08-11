@@ -29,7 +29,7 @@ define([
 
         page.$id('notify').html('<i class="fa fa-spinner fa-spin"></i>');
 
-        page.trySendMail('/mail;senda', body, function(err)
+        page.trySendMail('/mail;send', body, function(err)
         {
           if (err)
           {
@@ -40,6 +40,12 @@ define([
             page.handleMailSent();
           }
         });
+
+        return false;
+      },
+      'click a[data-reload]': function()
+      {
+        window.location.reload();
 
         return false;
       }

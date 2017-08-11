@@ -30,7 +30,7 @@
     "ERROR:notify:failure": "Failed to notify the admin :(",
     "ERROR:notify:subject": "[WMES] Error {code} from {user}",
     "ERROR:0:title": "Error during loading",
-    "ERROR:0:message": "Unexpected error during the execution of the request. Check whether you have a connection to the network.",
+    "ERROR:0:message": "Unexpected error during the execution of the request. Check whether you have a connection to the network and <a href=# data-reload>reload the page</a>.",
     "ERROR:400:title": "Error 400: bad request",
     "ERROR:400:message": "The request cannot be fulfilled due to bad syntax.",
     "ERROR:403:title": "Error 403: forbidden",
