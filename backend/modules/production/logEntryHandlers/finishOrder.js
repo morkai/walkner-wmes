@@ -63,7 +63,19 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
         return this.skip(err);
       }
 
-      ProdShiftOrder.copyOperationData(this.prodShiftOrder, order.operations);
+      if (order)
+      {
+        ProdShiftOrder.copyOperationData(this.prodShiftOrder, order.operations);
+      }
+      else
+      {
+        productionModule.warn(
+          'Order [%s] for prod shift order [%s] not found (LOG=[%s])',
+          this.prodShiftOrder.orderId,
+          logEntry.data._id,
+          logEntry._id
+        );
+      }
 
       this.prodShiftOrder.finishedAt = logEntry.data.finishedAt;
 
