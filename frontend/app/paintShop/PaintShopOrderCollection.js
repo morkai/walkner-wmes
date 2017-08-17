@@ -107,6 +107,11 @@ define([
       this.trigger('mrpSelected');
     },
 
+    isVisible: function(order)
+    {
+      return this.selectedMrp === 'all' || order.get('mrp') === this.selectedMrp;
+    },
+
     serializeGroups: function(filter)
     {
       if (this.groups)

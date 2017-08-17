@@ -129,7 +129,8 @@ define([
     onChange: function(order)
     {
       this.$order(order.id).replaceWith(queueOrderTemplate({
-        order: order.serialize()
+        order: order.serialize(),
+        visible: this.model.isVisible(order)
       }));
     },
 
