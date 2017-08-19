@@ -2,7 +2,7 @@
 
 #include "_Errors.au3"
 
-Global $cancelButtonTexts[] = ["Cancel", "Anuluj", "No", "Nie", "OK", "Yes", "Tak"]
+Global $cancelButtonTexts[] = ["Cancel", "Anuluj", "No", "Nie", "&Cancel", "&Anuluj", "&No", "&Nie", "OK", "Yes", "Tak", "&OK", "&Yes", "&Tak"]
 
 Func ReadIni($section, $key, $default)
   return IniRead(@ScriptDir & "\SAP.ini", $section, $key, $default)
