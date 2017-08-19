@@ -32,5 +32,6 @@ module.exports = {
       connectTimeoutMS: 5000,
       socketTimeoutMS: 0
     }
-  }
+  },
+  promiseLibrary: global.Promise
 };

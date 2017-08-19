@@ -24,6 +24,8 @@ exports.start = function startDbModule(app, module, done)
 
   module = app[module.name] = _.assign(mongoose, module);
 
+  module.Promise = global.Promise;
+
   module.connection.on('connecting', () => module.debug('Connecting...'));
   module.connection.on('connected', () => module.debug('Connected.'));
   module.connection.on('open', () => module.warn('Open.'));
