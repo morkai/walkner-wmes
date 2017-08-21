@@ -54,7 +54,9 @@ exports.pubsub = {
 
 exports.mongoose = {
   uri: mongodb.uri,
-  options: mongodb,
+  options: Object.assign(mongodb.mongoClient, {
+    poolSize: 2
+  }),
   maxConnectTries: 0,
   connectAttemptDelay: 250,
   stopOnConnectError: false,
@@ -63,16 +65,6 @@ exports.mongoose = {
     'twilioRequest', 'twilioResponse'
   ]
 };
-
-if (mongodb.server)
-{
-  mongodb.server.poolSize = 2;
-}
-
-if (mongodb.replSet)
-{
-  mongodb.replSet.poolSize = 2;
-}
 
 exports['messenger/server'] = {
   pubHost: '127.0.0.1',

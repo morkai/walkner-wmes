@@ -30,7 +30,10 @@ exports.events = {
 
 exports.mongoose = {
   uri: mongodb.uri,
-  options: mongodb,
+  options: Object.assign(mongodb.mongoClient, {
+    poolSize: 10,
+    readPreference: 'secondaryPreferred'
+  }),
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   models: [
@@ -48,17 +51,6 @@ exports.mongoose = {
     'opinionSurveyResponse'
   ]
 };
-
-if (mongodb.server)
-{
-  mongodb.server.poolSize = 10;
-}
-
-if (mongodb.replSet)
-{
-  mongodb.replSet.poolSize = 10;
-  mongodb.db.readPreference = 'secondaryPreferred';
-}
 
 exports.updater = {
   expressId: null,

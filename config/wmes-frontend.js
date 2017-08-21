@@ -228,7 +228,9 @@ exports.pubsub = {
 
 exports.mongoose = {
   uri: mongodb.uri,
-  options: mongodb,
+  options: Object.assign(mongodb.mongoClient, {
+    poolSize: 15
+  }),
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   models: [
@@ -265,16 +267,6 @@ exports.mongoose = {
     'visNodePosition'
   ]
 };
-
-if (mongodb.server)
-{
-  mongodb.server.poolSize = 15;
-}
-
-if (mongodb.replSet)
-{
-  mongodb.replSet.poolSize = 15;
-}
 
 exports['mysql:ipt'] = {
   connection: {

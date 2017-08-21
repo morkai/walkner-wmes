@@ -11,7 +11,7 @@ exports.DEFAULT_CONFIG = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   uri: 'mongodb://localhost/test',
-  options: {},
+  mongoClient: {},
   models: null,
   keepAliveQueryInterval: 30000,
   stopOnConnectError: true
@@ -28,7 +28,7 @@ exports.start = function startDbModule(app, module, done)
 
   module.connection.on('connecting', () => module.debug('Connecting...'));
   module.connection.on('connected', () => module.debug('Connected.'));
-  module.connection.on('open', () => module.warn('Open.'));
+  module.connection.on('open', () => module.debug('Open.'));
   module.connection.on('reconnected', () => module.debug('Reconnected.'));
   module.connection.on('disconnecting', () => module.warn('Disconnecting...'));
   module.connection.on('disconnected', () => module.warn('Disconnected.'));
@@ -52,9 +52,12 @@ exports.start = function startDbModule(app, module, done)
       return;
     }
 
-    module.connect(module.config.uri, module.config.options, function(err)
-    {
-      if (err)
+    const uri = module.config.uri;
+    const options = Object.assign({useMongoClient: true}, module.config.mongoClient);
+
+    module.connect(uri, options)
+      .then(() => initialize())
+      .catch(err =>
       {
         if (i >= module.config.maxConnectTries)
         {
@@ -62,10 +65,7 @@ exports.start = function startDbModule(app, module, done)
         }
 
         return setTimeout(tryToConnect.bind(null, i + 1), module.config.connectAttemptDelay);
-      }
-
-      initialize();
-    });
+      });
   }
 
   function initialize(err)

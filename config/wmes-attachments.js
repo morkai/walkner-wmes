@@ -15,21 +15,13 @@ exports.modules = [
 
 exports.mongoose = {
   uri: mongodb.uri,
-  options: mongodb,
+  options: Object.assign(mongodb.mongoClient, {
+    poolSize: 2
+  }),
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   models: ['event']
 };
-
-if (mongodb.server)
-{
-  mongodb.server.poolSize = 2;
-}
-
-if (mongodb.replSet)
-{
-  mongodb.replSet.poolSize = 2;
-}
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },

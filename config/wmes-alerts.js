@@ -1,6 +1,6 @@
 'use strict';
 
-var mongodb = require('./wmes-mongodb');
+const mongodb = require('./wmes-mongodb');
 
 exports.id = 'wmes-alerts';
 
@@ -17,7 +17,9 @@ exports.modules = [
 
 exports.mongoose = {
   uri: mongodb.uri,
-  options: mongodb,
+  options: Object.assign(mongodb.mongoClient, {
+    poolSize: 3
+  }),
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   models: [
@@ -26,16 +28,6 @@ exports.mongoose = {
     'prodShiftOrder', 'prodDowntime', 'prodDowntimeAlert', 'prodLogEntry'
   ]
 };
-
-if (mongodb.server)
-{
-  mongodb.server.poolSize = 3;
-}
-
-if (mongodb.replSet)
-{
-  mongodb.replSet.poolSize = 3;
-}
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },

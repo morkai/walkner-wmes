@@ -1,14 +1,14 @@
 'use strict';
 
-var mongodb = require('./pos-mongodb');
+const mongodb = require('./pos-mongodb');
 
 try
 {
   require('pmx').init({
-    ignore_routes: [/socket\.io/]
+    ignore_routes: [/socket\.io/] // eslint-disable-line camelcase
   });
 }
-catch (err) {}
+catch (err) {} // eslint-disable-line no-empty
 
 exports.id = 'pos-frontend';
 
@@ -86,7 +86,9 @@ exports.pubsub = {
 
 exports.mongoose = {
   uri: mongodb.uri,
-  options: mongodb,
+  options: Object.assign(mongodb.mongoClient, {
+    poolSize: 6
+  }),
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   models: [
@@ -97,7 +99,6 @@ exports.mongoose = {
     'purchaseOrder', 'purchaseOrderPrint'
   ]
 };
-exports.mongoose.options.server.poolSize = 10;
 
 exports.express = {
   staticPath: __dirname + '/../frontend',

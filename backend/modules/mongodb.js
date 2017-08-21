@@ -6,8 +6,7 @@ const mongodb = require('mongodb');
 
 exports.DEFAULT_CONFIG = {
   uri: 'mongodb://127.0.0.1:27017/test',
-  server: {},
-  db: {},
+  mongoClient: {},
   keepAliveQueryInterval: 30000
 };
 
@@ -15,7 +14,7 @@ exports.start = function startMongodbModule(app, module, done)
 {
   let keepAliveFailed = false;
 
-  mongodb.MongoClient.connect(module.config.uri, module.config, onComplete);
+  mongodb.MongoClient.connect(module.config.uri, module.config.mongoClient, onComplete);
 
   function onComplete(err, db)
   {

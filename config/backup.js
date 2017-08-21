@@ -1,5 +1,3 @@
-/*jshint -W098*/
-
 'use strict';
 
 exports.dbName = 'walkner-wmes';
@@ -24,7 +22,7 @@ exports.gdriveParentId = '0000000000000000000000000000';
 
 exports.gdriveExecOptions = {};
 
-exports.excludeCollections = function(date)
+exports.excludeCollections = function(date) // eslint-disable-line no-unused-vars
 {
   return [];
 };
