@@ -11,7 +11,11 @@ define([
 
   return Collection.extend({
 
-    model: QiFault
+    model: QiFault,
+
+    rqlQuery: 'sort(_id)',
+
+    comparator: '_id'
 
   });
 });
