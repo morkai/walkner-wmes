@@ -21,6 +21,10 @@
     "PROPERTY:_id": "Fault code",
     "PROPERTY:name": "Classification",
     "PROPERTY:description": "Description",
+    "PROPERTY:active": "Active?",
+
+    "active:true": "Active",
+    "active:false": "Inactive",
 
     "FORM:ACTION:add": "Add fault",
     "FORM:ACTION:edit": "Edit fault",

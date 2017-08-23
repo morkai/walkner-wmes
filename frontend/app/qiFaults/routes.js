@@ -37,7 +37,8 @@ define([
           columns: [
             {id: '_id', className: 'is-min'},
             'name',
-            'description'
+            'description',
+            {id: 'active', className: 'is-min'}
           ]
         });
       }

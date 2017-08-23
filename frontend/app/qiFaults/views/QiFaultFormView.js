@@ -32,6 +32,15 @@ define([
       }
 
       return formData;
+    },
+
+    serializeToForm: function()
+    {
+      var formData = this.model.toJSON();
+
+      formData.direct += '';
+
+      return formData;
     }
 
   });

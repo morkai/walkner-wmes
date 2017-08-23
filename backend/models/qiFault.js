@@ -19,6 +19,10 @@ module.exports = function setupQiFaultModel(app, mongoose)
       type: String,
       trim: true,
       default: ''
+    },
+    active: {
+      type: Boolean,
+      default: true
     }
   }, {
     id: false

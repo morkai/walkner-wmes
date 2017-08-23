@@ -20,6 +20,10 @@
   "PROPERTY:_id": "Kod wady",
   "PROPERTY:name": "Klasyfikacja wady",
   "PROPERTY:description": "Opis wady",
+  "PROPERTY:active": "Aktywna?",
+
+  "active:true": "Aktywna",
+  "active:false": "Nieaktywna",
 
   "FORM:ACTION:add": "Dodaj wadę",
   "FORM:ACTION:edit": "Edytuj wadę",
