@@ -91,17 +91,24 @@ define([
 
     serialize: function()
     {
+      var faultCode = this.model.get('faultCode');
+
       return _.extend(FormView.prototype.serialize.call(this), {
         inspectedAtMin: time.getMoment(this.model.get('inspectedAt')).clone().subtract(14, 'days').format('YYYY-MM-DD'),
         inspectedAtMax: time.getMoment().startOf('day').add(1, 'days').format('YYYY-MM-DD'),
         kinds: qiDictionaries.kinds.map(idAndLabel),
-        faults: qiDictionaries.faults.map(function(fault)
-        {
-          return {
-            id: fault.id,
-            text: fault.id + ': ' + fault.get('name')
-          };
-        }),
+        faults: qiDictionaries.faults
+          .filter(function(fault)
+          {
+            return fault.id === faultCode || (fault.get('active') !== false);
+          })
+          .map(function(fault)
+          {
+            return {
+              id: fault.id,
+              text: fault.id + ': ' + fault.get('name')
+            };
+          }),
         errorCategories: qiDictionaries.errorCategories.map(idAndLabel),
         inspectors: this.serializeInspectors(),
         masters: this.serializeMasters(),
