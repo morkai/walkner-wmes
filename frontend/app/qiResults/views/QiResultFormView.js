@@ -49,8 +49,10 @@ define([
       'change #-faultCode': function()
       {
         var fault = qiDictionaries.faults.get(this.$id('faultCode').val());
+        var name = fault.get('name').trim();
+        var description = fault.get('description').trim();
 
-        this.$id('faultDescription').val(fault.get('description') || fault.get('name'));
+        this.$id('faultDescription').val(name + (description ? (':\n' + description) : ''));
       },
       'change #-kind': 'updateDivision',
       'click #-addAction': 'addEmptyAction',
