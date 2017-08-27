@@ -1,5 +1,12 @@
 <div class="panel panel-warning">
-  <div class="panel-heading"><%- t('behaviorObsCards', 'PANEL:TITLE:difficulties') %></div>
+  <div class="panel-heading is-with-actions">
+    <%- t('behaviorObsCards', 'PANEL:TITLE:difficulties') %>
+    <% if (model.suggestion) { %>
+    <div class="panel-actions">
+      <p><%- t('behaviorObsCards', 'PANEL:ACTION:suggestion') %> <a href="#suggestions/<%- model.suggestion %>">#<%- model.suggestion %></a></p>
+    </div>
+    <% } %>
+  </div>
   <table class="table table-bordered table-hover behaviorObsCards-details-difficulties">
     <thead>
     <tr>

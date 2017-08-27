@@ -1,5 +1,12 @@
 <div class="panel panel-danger">
-  <div class="panel-heading"><%- t('behaviorObsCards', 'PANEL:TITLE:risks') %></div>
+  <div class="panel-heading is-with-actions">
+    <%- t('behaviorObsCards', 'PANEL:TITLE:risks') %>
+    <% if (model.nearMiss) { %>
+    <div class="panel-actions">
+      <p><%- t('behaviorObsCards', 'PANEL:ACTION:nearMiss') %> <a href="#kaizenOrders/<%- model.nearMiss %>">#<%- model.nearMiss %></a></p>
+    </div>
+    <% } %>
+  </div>
   <table class="table table-bordered table-hover behaviorObsCards-details-risks">
     <thead>
     <tr>

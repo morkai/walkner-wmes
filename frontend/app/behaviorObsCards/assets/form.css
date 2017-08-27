@@ -6,7 +6,7 @@
 .behaviorObsCards-form-radio > input {
   cursor: pointer;
 }
-.behaviorObsCards-form input[tabindex="-1"] {
+.behaviorObsCards-form .table input[tabindex="-1"] {
   position: absolute;
   top: 0;
   left: -100px;
@@ -36,4 +36,10 @@
 }
 .behaviorObsCards-form .message + .table {
   margin-top: 15px;
+}
+.behaviorObsCards-form-rid-required {
+  position: absolute;
+  opacity: 0;
+  border: 0;
+  width: 1px
 }

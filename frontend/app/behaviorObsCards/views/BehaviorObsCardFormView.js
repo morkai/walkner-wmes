@@ -249,6 +249,7 @@ define([
         $a
           .popover('destroy')
           .closest('.message')
+          .find('.behaviorObsCards-form-rid-message')
           .html(t('behaviorObsCards', 'FORM:MSG:' + ridProperty + ':' + (newRid ? 'edit' : 'add'), {
             rid: newRid
           }));

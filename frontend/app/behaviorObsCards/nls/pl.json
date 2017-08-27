@@ -26,6 +26,8 @@
   "PANEL:TITLE:difficulties": "Trudności zmian",
   "PANEL:TITLE:addForm": "Formularz dodawania karty obserwacji",
   "PANEL:TITLE:editForm": "Formularz edycji karty obserwacji",
+  "PANEL:ACTION:nearMiss": "Przypisane ZPW:",
+  "PANEL:ACTION:suggestion": "Przypisane usprawnienie:",
 
   "PROPERTY:rid": "ID",
   "PROPERTY:date": "Data obserwacji",
