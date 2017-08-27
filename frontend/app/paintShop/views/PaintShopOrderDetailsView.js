@@ -93,8 +93,7 @@ define([
         order: this.model.serialize(),
         fillerHeight: this.calcFillerHeight(),
         renderQueueOrder: queueOrderTemplate,
-        canAct: (isEmbedded && isLocal) || isPainter || canManage,
-        canResetIgnore: canManage
+        canAct: (isEmbedded && isLocal) || isPainter || canManage
       };
     },
 

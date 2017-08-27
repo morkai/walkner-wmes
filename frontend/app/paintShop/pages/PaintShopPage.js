@@ -33,7 +33,7 @@ define([
 ) {
   'use strict';
 
-  var IS_EMBEDDED = true || window.parent !== window;
+  var IS_EMBEDDED = window.parent !== window;
 
   return View.extend({
 
