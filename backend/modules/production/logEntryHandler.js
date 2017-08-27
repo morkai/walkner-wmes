@@ -157,6 +157,11 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
     {
       steps.push(function handleNextLogEntryStep()
       {
+        if (!logEntryHandlers[logEntry.type])
+        {
+          return setImmediate(this.next(), new Error(`Unknown entry type: ${logEntry.type}`));
+        }
+
         logEntryHandlers[logEntry.type](app, productionModule, prodLine, logEntry, this.next());
       });
 
@@ -164,6 +169,8 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
       {
         if (err)
         {
+          productionModule.error(`Failed to handle next log entry: ${err.message}`);
+
           return this.skip();
         }
 
