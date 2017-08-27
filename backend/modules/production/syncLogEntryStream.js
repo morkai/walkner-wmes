@@ -6,10 +6,31 @@ const _ = require('lodash');
 const step = require('h5.step');
 const logEntryHandlers = require('./logEntryHandlers');
 
-const NEW_LINES = {
-  'MNL1': 'LM-1',
-  'MNL2': 'LM-2',
-  'MNL3': 'LM-3'
+const ORG_UNIT_FIXES = {
+  'LL500T-1': {
+    prodFlow: '5812e9e13d1eb2140c744b18',
+    workCenter: 'LL500T-1'
+  },
+  'LL500T-2': {
+    prodFlow: '5812e9e13d1eb2140c744b28',
+    workCenter: 'LL500T-2'
+  },
+  'CO1': {
+    prodFlow: '52a840d88f4c4f300100006d',
+    workCenter: 'INLED1-1'
+  },
+  'CO2': {
+    prodFlow: '52a840d88f4c4f300100007d',
+    workCenter: 'INLED1-2'
+  },
+  'CO3': {
+    prodFlow: '52a840d88f4c4f300100008d',
+    workCenter: 'INLED1-3'
+  },
+  'CO4': {
+    prodFlow: '52a840d88f4c4f300100009d',
+    workCenter: 'INLED1-4'
+  }
 };
 
 module.exports = function syncLogEntryStream(app, productionModule, creator, logEntryStream, done)
@@ -161,20 +182,22 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
 
   function fixOrgUnits(logEntry)
   {
-    const newLine = NEW_LINES[logEntry.prodLine];
+    const fix = ORG_UNIT_FIXES[logEntry.prodLine];
 
-    if (newLine)
+    if (!fix)
     {
-      logEntry.prodLine = newLine;
+      return;
+    }
 
-      if (logEntry.data.startedProdShift)
-      {
-        logEntry.data.startedProdShift.prodLine = newLine;
-      }
-      else if (logEntry.data.prodLine)
-      {
-        logEntry.data.prodLine = newLine;
-      }
+    Object.assign(logEntry, fix);
+
+    if (logEntry.data.startedProdShift)
+    {
+      Object.assign(logEntry.data.startedProdShift, fix);
+    }
+    else if (logEntry.data.prodLine)
+    {
+      Object.assign(logEntry.data, fix);
     }
 
     return logEntry;
