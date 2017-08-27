@@ -2,12 +2,14 @@
 
 define([
   'underscore',
+  '../broker',
   '../router',
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage'
 ], function(
   _,
+  broker,
   router,
   viewport,
   user,
@@ -70,7 +72,7 @@ define([
     );
   });
 
-  router.map('/behaviorObsCards;add', canAccess, function()
+  router.map('/behaviorObsCards;add', canAccess, function(req)
   {
     viewport.loadPage(
       [
@@ -80,10 +82,37 @@ define([
       ],
       function(BehaviorObsCard, BehaviorObsCardAddFormPage)
       {
+        var lastCard = {
+          observer: user.getInfo()
+        };
+
+        try { _.assign(lastCard, JSON.parse(localStorage.getItem('BOC_LAST'))); }
+        catch (err) {} // eslint-disable-line no-empty
+        finally { localStorage.removeItem('BOC_LAST'); }
+
+        if (req.query.nearMiss)
+        {
+          lastCard.nearMiss = +req.query.nearMiss;
+
+          broker.publish('router.navigate', {
+            url: '/behaviorObsCards;add',
+            trigger: false,
+            replace: true
+          });
+        }
+        else if (req.query.suggestion)
+        {
+          lastCard.suggestion = +req.query.suggestion;
+
+          broker.publish('router.navigate', {
+            url: '/behaviorObsCards;add',
+            trigger: false,
+            replace: true
+          });
+        }
+
         return new BehaviorObsCardAddFormPage({
-          model: new BehaviorObsCard({
-            observer: user.getInfo()
-          })
+          model: new BehaviorObsCard(lastCard)
         });
       }
     );
@@ -99,9 +128,47 @@ define([
       ],
       function(BehaviorObsCard, BehaviorObsCardEditFormPage)
       {
-        return new BehaviorObsCardEditFormPage({
-          model: new BehaviorObsCard({_id: req.params.id})
+        var model = new BehaviorObsCard({_id: req.params.id});
+        var lastCard = {};
+
+        try { _.assign(lastCard, JSON.parse(localStorage.getItem('BOC_LAST'))); }
+        catch (err) {} // eslint-disable-line no-empty
+        finally { localStorage.removeItem('BOC_LAST'); }
+
+        if (req.query.nearMiss)
+        {
+          lastCard.nearMiss = +req.query.nearMiss;
+
+          broker.publish('router.navigate', {
+            url: '/behaviorObsCards/' + req.params.id + ';edit',
+            trigger: false,
+            replace: true
+          });
+        }
+        else if (req.query.suggestion)
+        {
+          lastCard.suggestion = +req.query.suggestion;
+
+          broker.publish('router.navigate', {
+            url: '/behaviorObsCards/' + req.params.id + ';edit',
+            trigger: false,
+            replace: true
+          });
+        }
+
+        var page = new BehaviorObsCardEditFormPage({
+          model: model
         });
+
+        if (lastCard._id === req.params.id)
+        {
+          page.listenToOnce(model, 'sync', function()
+          {
+            _.assign(model.attributes, lastCard);
+          });
+        }
+
+        return page;
       }
     );
   });

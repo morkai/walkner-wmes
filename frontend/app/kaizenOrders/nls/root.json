@@ -121,6 +121,9 @@
 
     "FORM:ACTION:add": "Add entry",
     "FORM:ACTION:edit": "Save",
+    "FORM:backToBoc:cancel": "Cancel and go back to the observations card",
+    "FORM:backToBoc:add": "Add entry and go back to the observations card",
+    "FORM:backToBoc:edit": "Save and go back to the observations card",
     "FORM:ERROR:addFailure": "Failed to add the entry :(",
     "FORM:ERROR:editFailure": "Failed to edit the entry :(",
     "FORM:ERROR:onlyKaizen": "Kaizen requires a Near Miss or a Suggestion!",

@@ -120,6 +120,9 @@
 
   "FORM:ACTION:add": "Dodaj zgłoszenie",
   "FORM:ACTION:edit": "Zapisz",
+  "FORM:backToBoc:cancel": "Anuluj i wróć do karty obserwacji",
+  "FORM:backToBoc:add": "Dodaj zgłoszenie i wróć do karty obserwacji",
+  "FORM:backToBoc:edit": "Zapisz i wróć do karty obserwacji",
   "FORM:ERROR:addFailure": "Nie udało się dodać zgłoszenia :(",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zgłoszenia :(",
   "FORM:ERROR:onlyKaizen": "Kaizen wymaga ZPW lub Sugestii!",

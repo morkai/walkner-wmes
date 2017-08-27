@@ -158,10 +158,16 @@ define([
         });
       }
 
+      var lastBoc = JSON.parse(localStorage.getItem('BOC_LAST') || 'null');
+
       return _.extend(FormView.prototype.serialize.call(this), {
         today: time.format(new Date(), 'YYYY-MM-DD'),
         statuses: kaizenDictionaries.statuses,
-        attachments: attachments
+        attachments: attachments,
+        backToBoc: {
+          mode: lastBoc ? (lastBoc._id ? 'edit' : 'add') : 'none',
+          cancelUrl: '#behaviorObsCards' + (lastBoc && lastBoc._id ? ('/' + lastBoc._id + ';edit') : ';add')
+        }
       });
     },
 
@@ -223,12 +229,26 @@ define([
 
     handleSuccess: function()
     {
-      this.broker.publish('router.navigate', {
-        url: this.model.genClientUrl() + '?'
+      var lastBoc = JSON.parse(localStorage.getItem('BOC_LAST') || 'null');
+
+      if (!this.options.editMode && lastBoc)
+      {
+        this.broker.publish('router.navigate', {
+          url: '/behaviorObsCards'
+          + (lastBoc._id ? ('/' + lastBoc._id + ';edit') : ';add')
+          + '?nearMiss=' + this.model.get('rid'),
+          trigger: true
+        });
+      }
+      else
+      {
+        this.broker.publish('router.navigate', {
+          url: this.model.genClientUrl() + '?'
           + (this.options.editMode ? '' : '&thank=you')
           + (!this.options.standalone ? '' : '&standalone=1'),
-        trigger: true
-      });
+          trigger: true
+        });
+      }
     },
 
     serializeToForm: function()

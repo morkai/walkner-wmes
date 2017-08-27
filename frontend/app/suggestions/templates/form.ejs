@@ -137,8 +137,11 @@
     <div class="panel-footer">
       <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
         <i class="fa fa-spinner fa-spin"></i>
-        <span><%- formActionText %></span>
+        <span><%- backToBoc.mode === 'none' ? formActionText : t('suggestions', 'FORM:backToBoc:' + backToBoc.mode) %></span>
       </button>
+      <% if (backToBoc.mode !== 'none') { %>
+      <a class="btn btn-link" href="<%- backToBoc.cancelUrl %>"><%- t('suggestions', 'FORM:backToBoc:cancel') %></a>
+      <% } %>
     </div>
   </div>
 </form>

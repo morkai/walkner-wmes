@@ -31,7 +31,10 @@ module.exports = function setUpSuggestionsRoutes(app, module)
   express.get('/suggestions', canView, prepareObserverFilter, express.crud.browseRoute.bind(null, app, Suggestion));
   express.get('/suggestions;rid', canView, findByRidRoute);
   express.post('/suggestions', canView, prepareForAdd, express.crud.addRoute.bind(null, app, Suggestion));
-  express.get('/suggestions/:id', canView, express.crud.readRoute.bind(null, app, Suggestion));
+  express.get('/suggestions/:id', canView, express.crud.readRoute.bind(null, app, {
+    model: Suggestion,
+    idProperty: req => /^[0-9]+$/.test(req.params.id) ? 'rid' : '_id'
+  }));
   express.put('/suggestions/:id', canView, editSuggestionRoute);
   express.delete('/suggestions/:id', canManage, express.crud.deleteRoute.bind(null, app, Suggestion));
 

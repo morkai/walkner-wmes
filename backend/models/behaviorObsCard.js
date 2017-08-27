@@ -53,7 +53,15 @@ module.exports = function setupBehaviorObsCardModel(app, mongoose)
     difficulties: [difficultySchema],
     users: [String],
     anyHardObservations: Boolean,
-    anyHardRisks: Boolean
+    anyHardRisks: Boolean,
+    nearMiss: {
+      type: Number,
+      default: null
+    },
+    suggestion: {
+      type: Number,
+      default: null
+    }
   }, {
     id: false,
     minimize: false

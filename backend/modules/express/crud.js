@@ -247,8 +247,11 @@ exports.readRoute = function(app, options, req, res, next)
     options = {};
   }
 
+  const idProperty = options.idProperty
+    ? (typeof options.idProperty === 'function' ? options.idProperty(req) : options.idProperty)
+    : '_id';
   const queryOptions = mongoSerializer.fromQuery(req.rql);
-  const query = Model.findById(req.params.id, queryOptions.fields).lean();
+  const query = Model.findOne({[idProperty]: req.params.id}, queryOptions.fields).lean();
 
   try
   {

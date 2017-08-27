@@ -36,7 +36,10 @@ module.exports = function setUpKaizenRoutes(app, kaizenModule)
   express.get('/kaizen/orders', canView, prepareObserverFilter, express.crud.browseRoute.bind(null, app, KaizenOrder));
   express.get('/kaizen/orders;rid', canView, findByRidRoute);
   express.post('/kaizen/orders', canView, prepareForAdd, express.crud.addRoute.bind(null, app, KaizenOrder));
-  express.get('/kaizen/orders/:id', canView, express.crud.readRoute.bind(null, app, KaizenOrder));
+  express.get('/kaizen/orders/:id', canView, express.crud.readRoute.bind(null, app, {
+    model: KaizenOrder,
+    idProperty: req => /^[0-9]+$/.test(req.params.id) ? 'rid' : '_id'
+  }));
   express.put('/kaizen/orders/:id', canView, editKaizenOrderRoute);
   express.delete('/kaizen/orders/:id', canManage, express.crud.deleteRoute.bind(null, app, KaizenOrder));
 

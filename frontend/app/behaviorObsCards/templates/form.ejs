@@ -1,5 +1,7 @@
 <form class="behaviorObsCards-form" method="post" action="<%- formAction %>" autocomplete="off">
   <input type="hidden" name="_method" value="<%- formMethod %>">
+  <input type="hidden" name="nearMiss" value="">
+  <input type="hidden" name="suggestion" value="">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
@@ -50,7 +52,13 @@
       </button>
       <hr>
       <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:risks') %></h4>
-      <p class="message message-inline message-error"><%- t('behaviorObsCards', 'FORM:MSG:risks') %></p>
+      <p id="<%- idPrefix %>-nearMiss" class="message message-inline message-error">
+        <% if (model.nearMiss) { %>
+        <%- t('behaviorObsCards', 'FORM:MSG:nearMiss:edit', {rid: model.nearMiss}) %>
+        <% } else { %>
+        <%- t('behaviorObsCards', 'FORM:MSG:nearMiss:add') %>
+        <% } %>
+      </p>
       <table class="table table-bordered table-hover table-condensed">
         <thead>
         <tr>
@@ -77,7 +85,13 @@
       </div>
       <hr>
       <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:difficulties') %></h4>
-      <p class="message message-inline message-warning"><%- t('behaviorObsCards', 'FORM:MSG:difficulties') %></p>
+      <p id="<%- idPrefix %>-nearMiss" class="message message-inline message-warning">
+        <% if (model.suggestion) { %>
+        <%- t('behaviorObsCards', 'FORM:MSG:suggestion:edit', {rid: model.suggestion}) %>
+        <% } else { %>
+        <%- t('behaviorObsCards', 'FORM:MSG:suggestion:add') %>
+        <% } %>
+      </p>
       <table class="table table-bordered table-hover table-condensed">
         <thead>
         <tr>
