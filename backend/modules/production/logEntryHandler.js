@@ -169,7 +169,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
       {
         if (err)
         {
-          productionModule.error(`Failed to handle next log entry: ${err.message}`);
+          productionModule.error(`Failed to handle next log entry: ${err.message}\n${JSON.stringify(logEntry)}`);
 
           return this.skip();
         }
