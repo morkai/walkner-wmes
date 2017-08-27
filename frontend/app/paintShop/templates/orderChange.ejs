@@ -1,0 +1,11 @@
+<div class="paintShop-orderChanges-change">
+  <%- t('paintShop', 'orderChanges:change', {
+    type: change.type,
+    user: change.user,
+    timeLong: change.time.long,
+    timeAgo: change.time.human
+  }) %>
+  <% if (change.comment) { %>
+  <p class="text-lines"><%= change.comment %></p>
+  <% } %>
+</div>

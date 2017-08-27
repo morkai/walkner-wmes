@@ -138,6 +138,11 @@ define([
       this.onValueChange = null;
     },
 
+    isVisible: function()
+    {
+      return !this.$el.hasClass('hidden');
+    },
+
     enableKeys: function()
     {
       this.$('.btn[data-key][disabled]').each(function()

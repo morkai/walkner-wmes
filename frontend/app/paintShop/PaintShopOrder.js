@@ -4,10 +4,7 @@ define([
   'underscore',
   '../time',
   '../i18n',
-  '../core/Model',
-  '../data/orgUnits',
-  '../data/isaPalletKinds',
-  'app/core/templates/userInfo'
+  '../core/Model'
 ], function(
   _,
   time,
@@ -15,13 +12,6 @@ define([
   Model
 ) {
   'use strict';
-
-  var STATUS_TO_SEVERITY_CLASS_NAME = {
-    new: 'debug',
-    started: 'warning',
-    finished: 'success',
-    cancelled: 'danger'
-  };
 
   function parse(obj)
   {

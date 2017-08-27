@@ -13,7 +13,8 @@
     <%- renderQueueOrder({
       groupId: group._id,
       order: order,
-      visible: selectedMrp === 'all' || order.mrp === selectedMrp
+      visible: selectedMrp === 'all' || order.mrp === selectedMrp,
+      commentVisible: true
     }) %>
     <% }) %>
     <% }) %>

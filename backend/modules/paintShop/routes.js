@@ -13,12 +13,18 @@ module.exports = function setUpPaintShopRoutes(app, module)
   const express = app[module.config.expressId];
   const userModule = app[module.config.userId];
   const mongoose = app[module.config.mongooseId];
-  const PaintShopOrder = mongoose.model('PaintShopOrder');
   const PaintShopEvent = mongoose.model('PaintShopEvent');
+  const PaintShopOrder = mongoose.model('PaintShopOrder');
 
   const canView = userModule.auth('LOCAL', 'PAINT_SHOP:VIEW');
   const canManage = userModule.auth('LOCAL', 'PAINT_SHOP:MANAGE');
   const canUpdate = userModule.auth('LOCAL', 'PAINT_SHOP:PAINTER', 'PAINT_SHOP:MANAGE');
+
+  express.get(
+    '/paintShop/events',
+    canView,
+    express.crud.browseRoute.bind(null, app, PaintShopEvent)
+  );
 
   express.post(
     '/paintShop/orders;import',
@@ -112,7 +118,7 @@ module.exports = function setUpPaintShopRoutes(app, module)
           return this.skip(app.createError('NOT_FOUND', 404));
         }
 
-        psOrder.act(req.body.action, this.next());
+        psOrder.act(req.body.action, req.body.comment, this.next());
       },
       function(err, changes)
       {
@@ -130,7 +136,7 @@ module.exports = function setUpPaintShopRoutes(app, module)
           time: new Date(),
           user: userModule.createUserInfo(req.session.user, req),
           order: req.params.id,
-          data: {}
+          data: changes.comment ? {comment: changes.comment} : {}
         });
       }
     );

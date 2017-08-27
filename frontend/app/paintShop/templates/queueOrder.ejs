@@ -32,6 +32,11 @@
         <i class="fa fa-hourglass-end"></i><span><%- order.finishedAtText %></span>
       </span>
       <% } %>
+      <% if (commentVisible && order.comment) { %>
+      <span class="paintShop-property" data-property="comment" title="<%- t('paintShop', 'PROPERTY:comment') %>">
+        <i class="fa fa-comment"></i><span><%= order.comment %></span>
+      </span>
+      <% } %>
     </td>
   </tr>
   <% order.orders.forEach(function(childOrder) { %>

@@ -14,7 +14,7 @@
   display: flex;
 }
 .paintShop-orderDetails-actions > .btn {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   padding: 12px 0;
   font-size: 32px;
 }
@@ -24,6 +24,9 @@
 }
 .paintShop-orderDetails .paintShop-order {
   cursor: default;
+}
+.paintShop-orderDetails-dialog .modal-content {
+  background: #000;
 }
 @media (min-width: 768px) {
   .paintShop-orderDetails-dialog .modal-dialog {

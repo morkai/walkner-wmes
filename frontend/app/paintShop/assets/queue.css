@@ -166,3 +166,7 @@ span.paintShop-property > .fa {
   width: 14px;
   text-align: center;
 }
+.paintShop-property[data-property="comment"] {
+  white-space: normal;
+  line-height: 1.2;
+}

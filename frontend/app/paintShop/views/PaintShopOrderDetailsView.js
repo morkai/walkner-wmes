@@ -6,7 +6,10 @@ define([
   'app/viewport',
   'app/user',
   'app/core/View',
+  'app/paintShop/PaintShopEventCollection',
   'app/paintShop/templates/orderDetails',
+  'app/paintShop/templates/orderChanges',
+  'app/paintShop/templates/orderChange',
   'app/paintShop/templates/queueOrder'
 ], function(
   $,
@@ -14,14 +17,17 @@ define([
   viewport,
   user,
   View,
-  template,
+  PaintShopEventCollection,
+  orderDetailsTemplate,
+  orderChangesTemplate,
+  orderChangeTemplate,
   queueOrderTemplate
 ) {
   'use strict';
 
   return View.extend({
 
-    template: template,
+    template: orderDetailsTemplate,
 
     dialogClassName: 'paintShop-orderDetails-dialog',
 
@@ -29,17 +35,48 @@ define([
       'click .btn[data-action]': function(e)
       {
         var view = this;
+        var $comment = view.$changes.find('.paintShop-orderChanges-comment');
+        var comment = $comment.val().trim();
+        var action = e.currentTarget.dataset.action;
+
+        if (action === 'comment' && comment.length === 0)
+        {
+          $comment.focus();
+
+          return;
+        }
+
         var $actions = view.$('.btn').prop('disabled', true);
 
-        view.act(e.currentTarget.dataset.action)
+        view.act(action, comment)
           .fail(function() { $actions.prop('disabled', false); })
           .done(function() { view.closeDialog(); });
       }
     },
 
-    onDialogShown: function(viewport)
+    initialize: function()
     {
-      this.closeDialog = viewport.closeDialog.bind(viewport);
+      this.psEvents = PaintShopEventCollection.forOrder(this.model.id);
+
+      this.listenTo(this.model, 'change', this.reloadChanges.bind(this));
+
+      $(window).on('resize.' + this.idPrefix, this.onWindowResize.bind(this));
+    },
+
+    destroy: function()
+    {
+      $(window).off('.' + this.idPrefix);
+
+      if (this.options.vkb)
+      {
+        this.options.vkb.hide();
+      }
+
+      if (this.$changes)
+      {
+        this.$changes.remove();
+        this.$changes = null;
+      }
     },
 
     closeDialog: function() {},
@@ -61,6 +98,15 @@ define([
       };
     },
 
+    beforeRender: function()
+    {
+      if (this.$changes)
+      {
+        this.$changes.remove();
+        this.$changes = null;
+      }
+    },
+
     afterRender: function()
     {
       if (this.options.height === 0)
@@ -69,6 +115,77 @@ define([
 
         this.$id('filler').css('height', this.calcFillerHeight() + 'px');
       }
+
+      this.renderChanges();
+      this.reloadChanges();
+    },
+
+    renderChanges: function()
+    {
+      var view = this;
+      var $changes = $(orderChangesTemplate());
+
+      $changes.find('.paintShop-orderChanges-comment').on('focus', function()
+      {
+        if (view.options.vkb)
+        {
+          clearTimeout(view.timers.hideVkb);
+
+          view.options.vkb.show(this);
+          view.resizeChanges();
+        }
+      }).on('blur', function()
+      {
+        if (view.options.vkb)
+        {
+          view.scheduleHideVkb();
+        }
+      });
+
+      $changes.appendTo(this.$el.parent());
+
+      this.$changes = $changes;
+
+      this.resizeChanges();
+    },
+
+    reloadChanges: function()
+    {
+      var view = this;
+
+      view.promised(view.psEvents.fetch({reset: true})).done(function()
+      {
+        var html = view.psEvents.map(function(event)
+        {
+          return orderChangeTemplate({change: event.serialize()});
+        });
+
+        view.$changes
+          .find('.paintShop-orderChanges-changes')
+          .html(html)
+          .prop('scrollTop', 99999);
+      });
+    },
+
+    scheduleHideVkb: function()
+    {
+      var view = this;
+
+      clearTimeout(view.timers.hideVkb);
+
+      view.timers.hideVkb = setTimeout(function()
+      {
+        view.options.vkb.hide();
+        view.resizeChanges();
+      }, 500);
+    },
+
+    resizeChanges: function()
+    {
+      this.$changes
+        .css('height', this.calcChangesHeight() + 'px')
+        .find('.paintShop-orderChanges-changes')
+        .prop('scrollTop', 99999);
     },
 
     calcFillerHeight: function()
@@ -76,9 +193,27 @@ define([
       return Math.max(window.innerHeight - 30 * 2 - 25 - 75 - this.options.height, 0);
     },
 
-    act: function(action)
+    calcChangesHeight: function()
     {
-      return this.model.collection.act({action: action, orderId: this.model.id}, function(err)
+      var vkbHeight = this.options.vkb ? this.options.vkb.$el.outerHeight() : 0;
+
+      if (!vkbHeight)
+      {
+        vkbHeight = -30;
+      }
+
+      return Math.max(window.innerHeight - 2 - 30 * 2 - 30 - vkbHeight, 0);
+    },
+
+    act: function(action, comment)
+    {
+      var reqData = {
+        action: action,
+        orderId: this.model.id,
+        comment: comment
+      };
+
+      return this.model.collection.act(reqData, function(err)
       {
         if (err)
         {
@@ -89,6 +224,18 @@ define([
           });
         }
       });
+    },
+
+    onDialogShown: function(viewport)
+    {
+      this.closeDialog = viewport.closeDialog.bind(viewport);
+    },
+
+    onWindowResize: function()
+    {
+      this.$id('filler').css('height', this.calcFillerHeight() + 'px');
+
+      this.resizeChanges();
     }
 
   });

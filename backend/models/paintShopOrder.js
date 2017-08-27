@@ -4,20 +4,6 @@
 
 module.exports = function setupPaintShopOrderModel(app, mongoose)
 {
-  const changeSchema = new mongoose.Schema({
-    date: Date,
-    user: {},
-    data: {},
-    comment: {
-      type: String,
-      trim: true,
-      default: ''
-    }
-  }, {
-    _id: false,
-    minimize: false
-  });
-
   const componentSchema = new mongoose.Schema({
     nc12: String,
     name: String,
@@ -48,7 +34,7 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
     },
     startedAt: Date,
     finishedAt: Date,
-    changes: [changeSchema],
+    comment: String,
     date: Date,
     group: String,
     no: Number,
@@ -73,11 +59,16 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
   paintShopOrderSchema.index({date: -1});
   paintShopOrderSchema.index({status: 1});
 
-  paintShopOrderSchema.methods.act = function(action, done)
+  paintShopOrderSchema.methods.act = function(action, comment, done)
   {
     const changes = {
       _id: this._id
     };
+
+    if (typeof comment === 'string' && comment.length)
+    {
+      changes.comment = comment;
+    }
 
     switch (action)
     {
@@ -103,6 +94,12 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
         changes.startedAt = null;
         changes.finishedAt = null;
         break;
+
+      case 'comment':
+        break;
+
+      default:
+        return setImmediate(done, null, changes);
     }
 
     this.set(changes).save(err => done(err, changes));

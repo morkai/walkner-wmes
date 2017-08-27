@@ -22,6 +22,7 @@
   "PROPERTY:status": "Status",
   "PROPERTY:startedAt": "Czas rozpoczęcia",
   "PROPERTY:finishedAt": "Czas zakończenia",
+  "PROPERTY:comment": "Komentarz",
 
   "status:new": "Do realizacji",
   "status:started": "W realizacji",
@@ -32,6 +33,7 @@
   "action:finish": "Zakończ",
   "action:cancel": "Ignoruj",
   "action:reset": "Resetuj",
+  "action:comment": "Komentuj",
 
   "datePicker:d0": "Dzisiaj",
   "datePicker:d+1": "Jutro",
@@ -44,5 +46,7 @@
   "datePicker:placeholder:year": "rrrr",
   "datePicker:invalid": "Podaj prawidłową datę.",
 
-  "tabs:all": "Wszystkie"
+  "tabs:all": "Wszystkie",
+
+  "orderChanges:change": "{type, select, start{Rozpoczęto} finish{Zakończono} cancel{Zignorowano} reset{Zresetowano} comment{Skomentowano} other{Zmieniono}} <time title='{timeLong}'>{timeAgo}</time> przez {user}"
 }

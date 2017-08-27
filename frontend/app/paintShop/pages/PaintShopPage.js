@@ -33,7 +33,7 @@ define([
 ) {
   'use strict';
 
-  var IS_EMBEDDED = window.parent !== window;
+  var IS_EMBEDDED = true || window.parent !== window;
 
   return View.extend({
 
@@ -189,7 +189,8 @@ define([
     {
       this.vkbView = IS_EMBEDDED ? new VkbView() : null;
       this.queueView = new PaintShopQueueView({
-        model: this.orders
+        model: this.orders,
+        vkb: this.vkbView
       });
       this.allListView = new PaintShopListView({
         model: this.orders,

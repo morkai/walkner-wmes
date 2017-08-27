@@ -120,7 +120,8 @@ define([
 
       var detailsView = new PaintShopOrderDetailsView({
         model: order,
-        height: orderEl ? orderEl.clientHeight : 0
+        height: orderEl ? orderEl.clientHeight : 0,
+        vkb: this.options.vkb
       });
 
       viewport.showDialog(detailsView);
@@ -130,7 +131,8 @@ define([
     {
       this.$order(order.id).replaceWith(queueOrderTemplate({
         order: order.serialize(),
-        visible: this.model.isVisible(order)
+        visible: this.model.isVisible(order),
+        commentVisible: true
       }));
     },
 
