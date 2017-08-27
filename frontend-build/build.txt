@@ -338,9 +338,14 @@ app/paintShop/assets/main.css
 app/paintShop/assets/./queue.css
 app/paintShop/assets/./list.css
 app/paintShop/assets/./orderDetails.css
+app/paintShop/assets/./orderChanges.css
 app/paintShop/assets/./datePicker.css
 app/paintShop/assets/./tabs.css
 app/paintShop/assets/main.css
+
+app/paintShop/assets/orderChanges.css
+----------------
+app/paintShop/assets/orderChanges.css
 
 app/paintShop/assets/orderDetails.css
 ----------------
@@ -1194,7 +1199,11 @@ app/isa/pages/IsaLineStatePage.js
 app/isa/routes.js
 app/paintShop/PaintShopOrder.js
 app/paintShop/PaintShopOrderCollection.js
+app/paintShop/PaintShopEvent.js
+app/paintShop/PaintShopEventCollection.js
 app/paintShop/templates/orderDetails.js
+app/paintShop/templates/orderChanges.js
+app/paintShop/templates/orderChange.js
 app/paintShop/templates/queueOrder.js
 app/paintShop/views/PaintShopOrderDetailsView.js
 app/paintShop/templates/queue.js
