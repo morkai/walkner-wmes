@@ -135,7 +135,7 @@ define([
       {
         this.removeEmpty('difficulties', 'addDifficulty', 'problem');
       },
-      'click .message-inline > a': function()
+      'click .behaviorObsCards-form-rid-message > a': function()
       {
         localStorage.setItem(
           'BOC_LAST',
