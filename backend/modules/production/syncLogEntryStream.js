@@ -186,7 +186,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
 
     if (!fix)
     {
-      return;
+      return logEntry;
     }
 
     Object.assign(logEntry, fix);
