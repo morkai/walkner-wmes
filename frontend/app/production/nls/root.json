@@ -263,6 +263,7 @@
     "snMessage:orderNo": "Order no",
     "snMessage:serialNo": "Serial no",
     "snMessage:UNKNOWN_CODE": "The scanned code does not contain a serial number.",
+    "snMessage:INVALID_LINE_STATE": "Invalid production shift or order.",
     "snMessage:INVALID_STATE:idle": "Begin an order to enable the SN scanning.",
     "snMessage:INVALID_STATE:downtime": "Finish the downtime to enable SN scanningthe .",
     "snMessage:INVALID_ORDER": "Scanned SN from a wrong order.",
