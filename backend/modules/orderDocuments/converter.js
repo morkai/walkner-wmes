@@ -4,7 +4,7 @@
 
 const path = require('path');
 const fs = require('fs-extra');
-const exec = require('child_process').exec;
+const {exec, execFile} = require('child_process');
 const step = require('h5.step');
 
 module.exports = function setUpOrderDocumentsConverter(app, module)
@@ -92,6 +92,19 @@ module.exports = function setUpOrderDocumentsConverter(app, module)
         convertToWebp(
           this.targetDirPath,
           this.todo.nc15,
+          this.next()
+        );
+      },
+      function extractTextStep(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        extractText(
+          this.targetDirPath,
+          this.sourcePdfPath,
           this.next()
         );
       },
@@ -258,6 +271,60 @@ module.exports = function setUpOrderDocumentsConverter(app, module)
         }
 
         this.files.forEach(f => fs.unlink(f.jpeg, this.group()));
+      },
+      done
+    );
+  }
+
+  function extractText(targetPath, pdfPath, done)
+  {
+    step(
+      function()
+      {
+        fs.readFile(path.join(targetPath, '.meta.json'), 'utf8', this.next());
+      },
+      function(err, meta)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        try
+        {
+          this.meta = JSON.parse(meta);
+        }
+        catch (err)
+        {
+          return this.skip(err);
+        }
+
+        execFile(process.execPath, [path.join(__dirname, 'extractText.js'), pdfPath], this.next());
+      },
+      function(err, data)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        try
+        {
+          const json = JSON.parse(data);
+
+          if (!this.meta.title)
+          {
+            this.meta.title = json.meta.Title;
+          }
+
+          this.meta.pages = json.pages;
+        }
+        catch (err)
+        {
+          return this.skip(err);
+        }
+
+        fs.writeFile(path.join(targetPath, '.meta.json'), JSON.stringify(this.meta), this.next());
       },
       done
     );

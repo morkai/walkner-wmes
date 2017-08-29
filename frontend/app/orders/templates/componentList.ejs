@@ -18,7 +18,7 @@
     <tbody>
       <% _.forEach(bom, function(component) { %>
       <tr>
-        <td class="is-min is-number"><%- component.item %>
+        <td class="is-min is-number orders-bom-item"><%- component.item %>
         <td class="is-min is-number"><%- component.nc12 || '-' %>
         <td class="is-min"><%= component.name  %>
         <td class="is-min is-number"><%- component.qty.toLocaleString() %> <%- component.unit %>

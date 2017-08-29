@@ -51,6 +51,8 @@ Viewer.TEMPLATE =
     '<div class="viewer-player"></div>' +
     '</div>';
 
+var adjustMarksTimer = null;
+var adjustViewportAfterMarks = false;
 var viewer = new Viewer(document.getElementById('images'), {
   button: false,
   keyboard: false,
@@ -68,6 +70,17 @@ var viewer = new Viewer(document.getElementById('images'), {
     }
 
     renderPages(e.detail.index);
+  },
+  rendering: function()
+  {
+    document.getElementById('marks').style.display = 'none';
+  },
+  rendered: function()
+  {
+    clearTimeout(adjustMarksTimer);
+    adjustMarksTimer = setTimeout(adjustMarks, 300);
+
+    window.ready = true;
   }
 });
 
@@ -286,4 +299,146 @@ function generatePages(firstPageNr, lastPageNr, currentPage)
   }
 
   return pages;
+}
+
+function showMarks(marks)
+{
+  var anyMarksOnCurrentPage = false;
+  var currentPage = viewer.index + 1;
+
+  document.getElementById('marks').innerHTML = marks.map(function(mark)
+  {
+    if (!anyMarksOnCurrentPage && mark.p === currentPage)
+    {
+      anyMarksOnCurrentPage = true;
+    }
+
+    return '<div class="mark" style="display: none" data-x="' + mark.x
+      + '" data-y="' + mark.y
+      + '" data-w="' + mark.w
+      + '" data-h="' + mark.h
+      + '" data-p="' + mark.p + '"></div>';
+  }).join('\n');
+
+  adjustViewportAfterMarks = true;
+
+  if (anyMarksOnCurrentPage)
+  {
+    adjustMarks();
+  }
+  else
+  {
+    viewer.view(marks[0].p - 1);
+  }
+}
+
+function adjustMarks()
+{
+  var marksEl = document.getElementById('marks');
+
+  marksEl.style.cssText = viewer.image.style.cssText;
+
+  var markEls = marksEl.querySelectorAll('.mark');
+
+  for (var i = 0; i < markEls.length; ++i)
+  {
+    adjustMark(markEls[i]);
+  }
+
+  if (adjustViewportAfterMarks)
+  {
+    adjustViewportAfterMarks = false;
+
+    adjustViewport();
+  }
+}
+
+function adjustMark(markEl)
+{
+  var ratio = viewer.imageData.ratio;
+  var width = markEl.dataset.w * 2 * ratio;
+  var height = markEl.dataset.h * 2 * ratio;
+  var top = (markEl.dataset.y * 2 * ratio) - height;
+  var left = markEl.dataset.x * 2 * ratio;
+
+  markEl.style.display = +markEl.dataset.p === (viewer.index + 1) ? '' : 'none';
+  markEl.style.width = (width + 20 * ratio) + 'px';
+  markEl.style.height = (height + 10 * ratio) + 'px';
+  markEl.style.top = top + 'px';
+  markEl.style.left = (left - 10 * ratio) + 'px';
+}
+
+function adjustViewport()
+{
+  console.log('adjustViewport');
+
+  var markEls = document.querySelectorAll('.mark');
+  var visibleMarkCount = 0;
+  var top = Number.MAX_VALUE;
+  var bottom = 0;
+  var left = Number.MAX_VALUE;
+  var right = 0;
+
+  for (var i = 0; i < markEls.length; ++i)
+  {
+    var markEl = markEls[i];
+
+    if (markEl.style.display === 'none')
+    {
+      continue;
+    }
+
+    var rect = markEl.getBoundingClientRect();
+    var visible = rect.top >= 0
+      && rect.left >= 0
+      && rect.bottom <= window.innerHeight
+      && rect.right <= window.innerWidth;
+
+    visibleMarkCount += visible ? 1 : 0;
+
+    var markTop = parseInt(markEl.style.top, 10);
+    var markLeft = parseInt(markEl.style.left, 10);
+
+    top = Math.min(top, markTop);
+    bottom = Math.max(bottom, markTop + rect.height);
+    left = Math.min(left, markLeft);
+    right = Math.max(right, markLeft + rect.width);
+  }
+
+  var ratio = viewer.imageData.ratio;
+
+  if (viewer.imageData.ratio >= 0.4 && visibleMarkCount === markEls.length)
+  {
+    return;
+  }
+
+  top -= 20 * ratio;
+  bottom += 20 * ratio;
+  left -= 20 * ratio;
+  right += 20 * ratio;
+
+  top /= ratio;
+  bottom /= ratio;
+  left /= ratio;
+  right /= ratio;
+
+  var width = right - left;
+  var height = bottom - top;
+  var newRatio = Math.min(window.innerWidth / width, window.innerHeight / height, 1);
+  var newLeft = left * newRatio;
+  var newTop = top * newRatio;
+  var newWidth = width * newRatio;
+  var newHeight = height * newRatio;
+
+  var x1 = 0;
+  var y1 = 0;
+  var w1 = window.innerWidth;
+  var h1 = window.innerHeight;
+  var w2 = newWidth;
+  var h2 = newHeight;
+  var x2 = x1 + ((w1 / 2) - (w2 / 2));
+  var y2 = y1 + ((h1 / 2) - (h2 / 2));
+
+  viewer.zoomTo(newRatio, false);
+  viewer.moveTo(x2 - newLeft, y2 - newTop);
 }

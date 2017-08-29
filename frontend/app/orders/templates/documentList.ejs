@@ -11,7 +11,7 @@
     </thead>
     <tbody>
       <% documents.forEach(function(document) { %>
-      <tr>
+      <tr data-nc15="<%- document.nc15 %>">
         <td class="is-min is-number"><%= document.item || '' %>
         <td class="is-min is-number">
           <% if (canView) { %>

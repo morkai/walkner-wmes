@@ -104,6 +104,117 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     });
   });
 
+  express.get('/orders/:orderNo/documentContents', canViewLocal, function(req, res, next)
+  {
+    const orderNo = req.params.orderNo;
+
+    if (!_.isString(orderNo) || !/^[0-9]+$/.test(orderNo))
+    {
+      return next(app.createError('INPUT', 400));
+    }
+
+    step(
+      function()
+      {
+        module.findOrderData(orderNo, this.next());
+      },
+      function(err, orderData)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        this.results = {};
+
+        Object.keys(orderData.documents).forEach(nc15 =>
+        {
+          const done = this.group();
+          const opts = {
+            orderNo,
+            hash: null,
+            forcePdf: false,
+            includeName: true
+          };
+
+          findDocumentFilePath(nc15, opts, (err, results) => // eslint-disable-line handle-callback-err
+          {
+            (results && results.meta && results.meta.pages ? results.meta.pages : []).forEach(page =>
+            {
+              page.content.forEach(text =>
+              {
+                const item = text.s.padStart(4, '0');
+
+                text.p = page.info.num;
+
+                if (!this.results[item])
+                {
+                  this.results[item] = {};
+                }
+
+                if (!this.results[item][nc15])
+                {
+                  this.results[item][nc15] = [];
+                }
+
+                this.results[item][nc15].push(text);
+              });
+            });
+
+            done(null);
+          });
+        });
+      },
+      function(err)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.json(this.results);
+      }
+    );
+  });
+
+  express.get('/orderDocuments/:nc15/meta', canViewLocal, function(req, res, next)
+  {
+    const nc15 = req.params.nc15;
+
+    if (SPECIAL_DOCUMENTS[nc15])
+    {
+      return next(app.createError('NO_SPECIAL_NC15', 400));
+    }
+
+    const orderNo = /^[0-9]{9}$/.test(req.query.order) ? req.query.order : null;
+    const hash = /^[a-f0-9]{32}$/.test(req.query.hash) ? req.query.hash : null;
+
+    findDocumentFilePath(nc15, {orderNo, hash, forcePdf: false, includeName: true}, function(err, results)
+    {
+      if (err)
+      {
+        if (err.code === 'ENOENT')
+        {
+          return res.sendStatus(404);
+        }
+
+        return next(err);
+      }
+
+      if (!results)
+      {
+        return res.sendStatus(404);
+      }
+
+      if (!results.meta)
+      {
+        return next(app.createError('NO_META', 400));
+      }
+
+      res.json(results.meta);
+    });
+  });
+
   express.head('/orderDocuments/:nc15', canViewLocal, function(req, res, next)
   {
     const nc15 = req.params.nc15;

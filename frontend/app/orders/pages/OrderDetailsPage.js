@@ -100,7 +100,10 @@ define([
       });
       this.operationsView = new OperationListView({model: this.model});
       this.documentsView = new DocumentListView({model: this.model});
-      this.componentsView = new ComponentListView({model: this.model});
+      this.componentsView = new ComponentListView({
+        model: this.model,
+        linkDocuments: true
+      });
       this.paintComponentsView = new ComponentListView({
         model: this.paintOrder,
         paint: true
@@ -120,6 +123,9 @@ define([
       this.insertView(this.changesView);
 
       this.listenTo(this.paintOrders, 'reset', this.onPaintOrdersReset);
+      this.listenTo(this.documentsView, 'documentOpened', this.onDocumentOpened);
+      this.listenTo(this.documentsView, 'documentClosed', this.onDocumentClosed);
+      this.listenTo(this.componentsView, 'bestDocumentRequested', this.onBestDocumentRequested);
     },
 
     destroy: function()
@@ -180,6 +186,21 @@ define([
       });
 
       this.paintOrder.set('bom', bom);
+    },
+
+    onDocumentOpened: function(nc15, win)
+    {
+      this.componentsView.markDocument(nc15, win);
+    },
+
+    onDocumentClosed: function(nc15, win)
+    {
+      this.componentsView.unmarkDocument(nc15, win);
+    },
+
+    onBestDocumentRequested: function(item, contents)
+    {
+      this.documentsView.openBestDocument(item, contents);
     }
 
   });

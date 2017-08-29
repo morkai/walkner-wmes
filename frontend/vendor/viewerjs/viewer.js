@@ -65,6 +65,8 @@
   var EVENT_HIDDEN = 'hidden';
   var EVENT_VIEW = 'view';
   var EVENT_VIEWED = 'viewed';
+  var EVENT_RENDERING = 'rendering';
+  var EVENT_RENDERED = 'rendered';
 
   // RegExps
   var REGEXP_SUFFIX = /^(width|height|left|top|marginLeft|marginTop)$/;
@@ -780,6 +782,14 @@
         addListener(element, EVENT_VIEWED, options.viewed);
       }
 
+      if (isFunction(options.rendering)) {
+        addListener(element, EVENT_RENDERING, options.rendering);
+      }
+
+      if (isFunction(options.rendered)) {
+        addListener(element, EVENT_RENDERED, options.rendered);
+      }
+
       addListener(viewer, EVENT_CLICK, (_this._click = proxy(_this.click, _this)));
       addListener(viewer, EVENT_WHEEL, (_this._wheel = proxy(_this.wheel, _this)));
       addListener(_this.canvas, EVENT_MOUSEDOWN, (_this._mousedown = proxy(_this.mousedown, _this)));
@@ -801,6 +811,14 @@
 
       if (isFunction(options.viewed)) {
         removeListener(element, EVENT_VIEWED, options.viewed);
+      }
+
+      if (isFunction(options.rendering)) {
+        removeListener(element, EVENT_RENDERED, options.rendering);
+      }
+
+      if (isFunction(options.rendered)) {
+        removeListener(element, EVENT_RENDERED, options.rendered);
       }
 
       removeListener(viewer, EVENT_CLICK, _this._click);
@@ -1008,12 +1026,16 @@
         transform: transform
       });
 
-      if (isFunction(callback)) {
-        if (_this.transitioning) {
-          addListener(image, EVENT_TRANSITIONEND, callback, true);
-        } else {
-          callback();
-        }
+      dispatchEvent(_this.element, EVENT_RENDERING);
+
+      if (_this.transitioning) {
+        addListener(image, EVENT_TRANSITIONEND, function() {
+          if (isFunction(callback)) { callback(); }
+          dispatchEvent(_this.element, EVENT_RENDERED);
+        }, true);
+      } else {
+        if (isFunction(callback)) { callback(); }
+        dispatchEvent(_this.element, EVENT_RENDERED);
       }
     },
 
