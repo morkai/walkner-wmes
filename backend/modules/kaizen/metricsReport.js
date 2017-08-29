@@ -101,7 +101,7 @@ module.exports = function(mongoose, options, done)
     group.ips = util.round(
       group.observationCount / (group.nearMissCount + group.suggestionCount + group.observationCount) * 100
     );
-    group.ipc = Math.max(100, util.round(group.userCount / group.fte.avg * 100));
+    group.ipc = Math.min(100, util.round(group.userCount / group.fte.avg * 100));
   }
 
   function findSections(done)
