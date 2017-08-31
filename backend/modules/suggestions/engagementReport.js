@@ -185,7 +185,14 @@ module.exports = function(mongoose, options, done)
       conditions.date.$lt = new Date(options.toTime);
     }
 
-    const stream = MinutesForSafetyCard.find(conditions, {date: 1, owner: 1, section: 1}).lean().cursor();
+    const fields = {
+      date: 1,
+      owner: 1,
+      section: 1,
+      participants: 1
+    };
+
+    const stream = MinutesForSafetyCard.find(conditions, fields).lean().cursor();
 
     stream.on('error', done);
     stream.on('end', done);
@@ -194,17 +201,21 @@ module.exports = function(mongoose, options, done)
 
   function handleNearMiss(doc)
   {
-    _.forEach(doc.nearMissOwners, function(owner)
+    const groupKey = util.createGroupKey(options.interval, doc.eventDate, false);
+
+    _.forEach(doc.nearMissOwners, owner =>
     {
-      getGroup(util.createGroupKey(options.interval, doc.eventDate, false), owner, doc.section).nearMisses += 1;
+      getGroup(groupKey, owner, doc.section).nearMisses += 1;
     });
   }
 
   function handleSuggestion(doc)
   {
+    const groupKey = util.createGroupKey(options.interval, doc.date, false);
+
     _.forEach(doc.owners, function(owner)
     {
-      getGroup(util.createGroupKey(options.interval, doc.date, false), owner, doc.section).suggestions += 1;
+      getGroup(groupKey, owner, doc.section).suggestions += 1;
     });
   }
 
@@ -215,7 +226,14 @@ module.exports = function(mongoose, options, done)
 
   function handleMinutesForSafetyCard(doc)
   {
-    getGroup(util.createGroupKey(options.interval, doc.date, false), doc.owner, doc.section).minutesForSafety += 1;
+    const groupKey = util.createGroupKey(options.interval, doc.date, false);
+
+    getGroup(groupKey, doc.owner, doc.section).minutesForSafety += 1;
+
+    _.forEach(doc.participants, participant =>
+    {
+      getGroup(groupKey, participant, doc.section).minutesForSafety += 1;
+    });
   }
 
   function getGroup(key, owner, section)
