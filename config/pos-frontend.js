@@ -119,6 +119,7 @@ exports.express = {
 };
 
 exports.user = {
+  userInfoIdProperty: 'id',
   privileges: [
     'USERS:VIEW', 'USERS:MANAGE',
     'EVENTS:VIEW', 'EVENTS:MANAGE',

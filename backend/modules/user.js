@@ -21,7 +21,8 @@ exports.DEFAULT_CONFIG = {
   },
   guest: {},
   localAddresses: null,
-  loginFailureDelay: 1000
+  loginFailureDelay: 1000,
+  userInfoIdProperty: '_id'
 };
 
 exports.start = function startUserModule(app, module)
@@ -383,14 +384,14 @@ exports.start = function startUserModule(app, module)
      * @type {{id: string, ip: string, label: string}}
      */
     const userInfo = {
-      id: null,
+      [module.config.userInfoIdProperty]: null,
       ip: '',
       label: ''
     };
 
     try
     {
-      userInfo.id = ObjectId.createFromHexString(String(userData._id || userData.id));
+      userInfo[module.config.userInfoIdProperty] = ObjectId.createFromHexString(String(userData._id || userData.id));
     }
     catch (err) {} // eslint-disable-line no-empty
 

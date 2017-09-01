@@ -303,6 +303,7 @@ exports.express = {
 };
 
 exports.user = {
+  userInfoIdProperty: 'id',
   localAddresses: [/^192\.168\./, /^161\.87\./],
   privileges: [
     'USERS:VIEW', 'USERS:MANAGE',
