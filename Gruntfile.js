@@ -35,7 +35,7 @@ module.exports = function(grunt)
           './backend/**/*.js'
         ],
         options: {
-          jshintrc: '.jshintrc'
+          configFile: '.eslintrc.json'
         }
       },
       frontend: {
@@ -43,7 +43,7 @@ module.exports = function(grunt)
           './frontend/app/**/*.js'
         ],
         options: {
-          jshintrc: 'frontend/.jshintrc'
+          configFile: 'frontend/.eslintrc.json'
         }
       }
     },
@@ -150,8 +150,8 @@ module.exports = function(grunt)
 
   grunt.registerTask('default', [
     'clean',
-    'jshint:backend',
-    'jshint:frontend'
+    'eslint:backend',
+    'eslint:frontend'
   ]);
 
   grunt.registerTask('build-frontend', [
