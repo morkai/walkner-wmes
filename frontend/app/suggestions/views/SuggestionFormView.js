@@ -236,7 +236,7 @@ define([
         this.broker.publish('router.navigate', {
           url: '/behaviorObsCards'
           + (lastBoc._id ? ('/' + lastBoc._id + ';edit') : ';add')
-          + '?nearMiss=' + this.model.get('rid'),
+          + '?suggestion=' + this.model.get('rid'),
           trigger: true
         });
       }
