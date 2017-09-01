@@ -49,7 +49,14 @@ define([
 
     getLabel: function()
     {
-      return this.getProdLineId().substr(0, 10).toUpperCase().replace(/(_+|~.*?)$/, '').replace(/_/g, ' ');
+      var label = this.getProdLineId().toUpperCase().replace(/(_+|~.*?)$/, '').replace(/_/g, ' ');
+
+      if (label.length > 10)
+      {
+        label = label.replace(/ +/g, '');
+      }
+
+      return label;
     },
 
     getProdLineId: function()
