@@ -2,7 +2,7 @@
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-<%- model.ok ? 'success' : 'danger' %>">
     <div class="panel-heading"><%- panelTitleText %></div>
-    <div class="panel-body <%- model.ok ? 'has-lastElementRow' : '' %>">
+    <div class="panel-body <%- !editMode && model.ok ? 'has-lastElementRow' : '' %>">
       <div class="form-group">
         <div id="<%- idPrefix %>-result" class="btn-group" data-toggle="buttons">
           <label class="btn btn-default qiResults-filter-ok"><input id="<%- idPrefix %>-ok" type="radio" name="ok" value="true"> OK</label>
@@ -22,10 +22,12 @@
           <label for="<%- idPrefix %>-productFamily" class="control-label"><%- t('qiResults', 'PROPERTY:productFamily') %></label>
           <input id="<%- idPrefix %>-productFamily" name="productFamily" class="form-control" type="text" required readonly pattern="^[A-Z0-9]{6}$">
         </div>
-        <div class="col-lg-4 form-group">
+        <div class="col-lg-6 form-group">
           <label for="<%- idPrefix %>-productName" class="control-label"><%- t('qiResults', 'PROPERTY:productName') %></label>
           <input id="<%- idPrefix %>-productName" name="productName" class="form-control" type="text" required readonly>
         </div>
+      </div>
+      <div class="row">
         <div class="col-lg-2 form-group">
           <label for="<%- idPrefix %>-division" class="control-label"><%- t('qiResults', 'PROPERTY:division') %></label>
           <select id="<%- idPrefix %>-division" name="division" class="form-control" required data-role="inspector">
@@ -35,9 +37,35 @@
             <% }) %>
           </select>
         </div>
+        <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-line" class="control-label"><%- t('qiResults', 'PROPERTY:line') %></label>
+          <select id="<%- idPrefix %>-line" name="line" class="form-control" data-role="inspector">
+            <option></option>
+          </select>
+        </div>
+        <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-leader" class="control-label"><%- t('qiResults', 'PROPERTY:leader') %></label>
+          <select id="<%- idPrefix %>-leader" name="leader" class="form-control" data-role="inspector">
+            <option></option>
+            <% leaders.forEach(function(leader) { %>
+            <option value="<%- leader.id %>"><%= leader.text %></option>
+            <% }) %>
+          </select>
+        </div>
+        <% if (!model.ok) { %>
+        <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-nokOwner" class="control-label"><%- t('qiResults', 'PROPERTY:nokOwner') %></label>
+          <select id="<%- idPrefix %>-nokOwner" name="nokOwner" class="form-control" data-role="inspector">
+            <option></option>
+            <% masters.forEach(function(master) { %>
+            <option value="<%- master.id %>"><%= master.text %></option>
+            <% }) %>
+          </select>
+        </div>
+        <% } %>
       </div>
       <div class="row">
-        <div class="col-lg-4 form-group">
+        <div class="col-lg-2 form-group">
           <label for="<%- idPrefix %>-kind" class="control-label is-required"><%- t('qiResults', 'PROPERTY:kind') %></label>
           <select id="<%- idPrefix %>-kind" name="kind" class="form-control" required data-role="inspector">
             <% kinds.forEach(function(kind) { %>
@@ -54,15 +82,6 @@
           <select id="<%- idPrefix %>-inspector" name="inspector" class="form-control" required data-role="inspector">
             <% inspectors.forEach(function(inspector) { %>
             <option value="<%- inspector.id %>"><%= inspector.text %></option>
-            <% }) %>
-          </select>
-        </div>
-        <div class="col-lg-4 form-group">
-          <label for="<%- idPrefix %>-nokOwner" class="control-label"><%- t('qiResults', 'PROPERTY:nokOwner') %></label>
-          <select id="<%- idPrefix %>-nokOwner" name="nokOwner" class="form-control" data-role="inspector">
-            <option></option>
-            <% masters.forEach(function(master) { %>
-            <option value="<%- master.id %>"><%= master.text %></option>
             <% }) %>
           </select>
         </div>

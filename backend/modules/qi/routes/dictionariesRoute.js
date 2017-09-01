@@ -35,6 +35,12 @@ module.exports = function dictionariesRoute(app, qiModule, req, res, next)
         .lean()
         .exec(this.group());
 
+      User
+        .find({prodFunction: 'leader'}, {login: 1, firstName: 1, lastName: 1})
+        .sort({searchName: 1})
+        .lean()
+        .exec(this.group());
+
       settings
         .find({_id: /^qi/}, this.group());
 
@@ -51,6 +57,7 @@ module.exports = function dictionariesRoute(app, qiModule, req, res, next)
       const settings = dictionaries.pop();
       const result = {
         settings: settings,
+        leaders: dictionaries.pop(),
         masters: dictionaries.pop(),
         inspectors: dictionaries.pop(),
         counter: {

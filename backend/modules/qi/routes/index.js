@@ -69,6 +69,7 @@ module.exports = function setUpQiRoutes(app, qiModule)
         nc12: 12,
         productName: 30,
         division: 10,
+        line: 15,
         productFamily: 7,
         orderNo: 9,
         inspectedAt: 'date',

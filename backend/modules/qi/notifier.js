@@ -150,6 +150,8 @@ module.exports = function setUpQiNotifier(app, module)
         productFamily: result.productFamily,
         productName: result.productName,
         division: result.division,
+        line: result.line,
+        leader: result.leader ? result.leader.label : '',
         date: moment(result.date).format('LL'),
         inspector: result.inspector.label,
         nokOwner: result.nokOwner ? result.nokOwner.label : '',

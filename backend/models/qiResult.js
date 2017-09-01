@@ -67,6 +67,11 @@ module.exports = function setupQiResultModel(app, mongoose)
       type: String,
       required: true
     },
+    line: {
+      type: String,
+      required: false
+    },
+    leader: {},
     orderNo: {
       type: String,
       required: true
@@ -173,8 +178,10 @@ module.exports = function setupQiResultModel(app, mongoose)
   qiResultSchema.index({'users': 1});
   qiResultSchema.index({'inspector.id': 1});
   qiResultSchema.index({'nokOwner.id': 1});
+  qiResultSchema.index({'leader.id': 1});
   qiResultSchema.index({inspectedAt: -1});
   qiResultSchema.index({division: 1});
+  qiResultSchema.index({line: 1});
   qiResultSchema.index({orderNo: 1});
   qiResultSchema.index({nc12: 1});
   qiResultSchema.index({productFamily: 1});
@@ -217,6 +224,11 @@ module.exports = function setupQiResultModel(app, mongoose)
       users[this.nokOwner.id] = 1;
     }
 
+    if (this.leader)
+    {
+      users[this.leader.id] = 1;
+    }
+
     _.forEach(this.changes, function(change)
     {
       if (change.user)
@@ -247,6 +259,8 @@ module.exports = function setupQiResultModel(app, mongoose)
       'inspectedAt',
       'nokOwner',
       'division',
+      'line',
+      'leader',
       'orderNo',
       'nc12',
       'productName',

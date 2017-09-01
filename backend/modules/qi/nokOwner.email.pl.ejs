@@ -27,6 +27,18 @@
     <th align="left" style="white-space: nowrap">Centrum</th>
     <td>: <%= result.division %></td>
   </tr>
+  <% if (result.line) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Linia</th>
+    <td>: <%= result.line %></td>
+  </tr>
+  <% } %>
+  <% if (result.leader) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Lider</th>
+    <td>: <%= result.leader %></td>
+  </tr>
+  <% } %>
   <tr>
     <th align="left" style="white-space: nowrap">Rodzaj inspekcji</th>
     <td>: <%= result.kind %></td>

@@ -54,6 +54,9 @@ define([
     masters: new UserCollection(null, {
       rqlQuery: 'select(firstName,lastName,login)&prodFunction=master'
     }),
+    leaders: new UserCollection(null, {
+      rqlQuery: 'select(firstName,lastName,login)&prodFunction=leader'
+    }),
     productFamilies: [],
     settings: settings.acquire(),
     counter: {
@@ -149,6 +152,7 @@ define([
     dictionaries.settings.reset(data ? data.settings : []);
     dictionaries.inspectors.reset(data ? data.inspectors : []);
     dictionaries.masters.reset(data ? data.masters : []);
+    dictionaries.leaders.reset(data ? data.leaders : []);
     dictionaries.productFamilies = data ? data.productFamilies : [];
 
     dictionaries.counter = data && data.counter || {
@@ -261,6 +265,7 @@ define([
   {
     dictionaries.inspectors.fetch();
     dictionaries.masters.fetch();
+    dictionaries.leaders.fetch();
   }
 
   function reloadDictionaries()

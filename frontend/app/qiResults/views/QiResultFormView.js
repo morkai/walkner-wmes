@@ -86,6 +86,7 @@ define([
       FormView.prototype.initialize.apply(this, arguments);
 
       this.scheduleFindOrder = _.debounce(this.findOrder.bind(this), 250);
+      this.findOrderCount = 0;
       this.findOrderReq = null;
       this.statuses = null;
       this.actions = 0;
@@ -113,7 +114,8 @@ define([
           }),
         errorCategories: qiDictionaries.errorCategories.map(idAndLabel),
         inspectors: this.serializeInspectors(),
-        masters: this.serializeMasters(),
+        masters: this.serializeLeaders('masters', 'nokOwner'),
+        leaders: this.serializeLeaders('leaders', 'leader'),
         divisions: orgUnits.getAllByType('division'),
         isAndroid: IS_ANDROID,
         canEditAttachments: this.options.editMode
@@ -155,12 +157,12 @@ define([
       });
     },
 
-    serializeMasters: function()
+    serializeLeaders: function(dictionaryProperty, userProperty)
     {
       var map = {};
       var list = [];
 
-      qiDictionaries.masters.forEach(function(user)
+      qiDictionaries[dictionaryProperty].forEach(function(user)
       {
         var master = idAndLabel(user);
 
@@ -169,13 +171,13 @@ define([
         list.push(master);
       });
 
-      var nokOwner = this.model.get('nokOwner');
+      var user = this.model.get(userProperty);
 
-      if (nokOwner && !map[nokOwner.id])
+      if (user && !map[user.id])
       {
         list.unshift({
-          id: nokOwner.id,
-          text: nokOwner.label
+          id: user.id,
+          text: user.label
         });
       }
 
@@ -254,6 +256,7 @@ define([
 
       formData.inspector = formData.inspector ? formData.inspector.id : '';
       formData.nokOwner = formData.nokOwner ? formData.nokOwner.id : '';
+      formData.leader = formData.leader ? formData.leader.id : '';
       formData.inspectedAt = time.format(formData.inspectedAt, 'YYYY-MM-DD');
 
       _.forEach(formData.correctiveActions, function(correctiveAction)
@@ -278,33 +281,36 @@ define([
 
     serializeForm: function(formData)
     {
-      var inspectorOptionEl = this.$id('inspector')[0].selectedOptions[0];
+      var view = this;
 
-      formData.inspector = {
-        id: inspectorOptionEl.value,
-        label: inspectorOptionEl.label.trim()
-      };
-
-      var nokOwnerOptionEl = this.$id('nokOwner')[0].selectedOptions[0];
-
-      if (nokOwnerOptionEl.value)
+      ['inspector', 'nokOwner', 'leader'].forEach(function(prop)
       {
-        formData.nokOwner = {
-          id: nokOwnerOptionEl.value,
-          label: nokOwnerOptionEl.label.trim()
-        };
-      }
-      else
+        var optionEl = (view.$id(prop)[0] || {selectedOptions: []}).selectedOptions[0];
+
+        if (optionEl && optionEl.value)
+        {
+          formData[prop] = {
+            id: optionEl.value,
+            label: optionEl.label.trim()
+          };
+        }
+        else
+        {
+          formData[prop] = null;
+        }
+      });
+
+      if (!formData.line)
       {
-        formData.nokOwner = null;
+        formData.line = null;
       }
 
-      if (this.options.editMode)
+      if (view.options.editMode)
       {
         formData.updater = user.getInfo();
       }
 
-      this.$('textarea').each(function()
+      view.$('textarea').each(function()
       {
         if (!formData[this.name])
         {
@@ -312,7 +318,7 @@ define([
         }
       });
 
-      var $actions = this.$id('actions').children();
+      var $actions = view.$id('actions').children();
 
       formData.correctiveActions = _.map(formData.correctiveActions, function(action, i)
       {
@@ -354,7 +360,8 @@ define([
       }
 
       this.setUpInspectorSelect2();
-      this.setUpNokOwnerSelect2();
+      this.setUpLeaderSelect2('nokOwner');
+      this.setUpLeaderSelect2('leader');
       buttonGroup.toggle(this.$id('result'));
       this.findOrder();
       this.toggleRoleFields();
@@ -374,14 +381,14 @@ define([
         .addClass('has-required-select2');
     },
 
-    setUpNokOwnerSelect2: function()
+    setUpLeaderSelect2: function(userProperty)
     {
       if (IS_ANDROID)
       {
         return;
       }
 
-      this.$id('nokOwner').removeClass('form-control').select2({
+      this.$id(userProperty).removeClass('form-control').select2({
         placeholder: ' ',
         allowClear: true
       });
@@ -428,11 +435,16 @@ define([
       this.$id('productFamily').val('');
       this.$id('division').val('');
       this.$id('qtyOrder').val('');
+
+      this.updateLeaders([]);
+      this.updateLines([]);
     },
 
     findOrder: function()
     {
       var view = this;
+
+      view.findOrderCount += 1;
 
       if (view.findOrderReq)
       {
@@ -472,9 +484,11 @@ define([
         view.$id('division').val(data.division).attr('data-orders-division', data.division);
         view.$id('qtyOrder').val(data.quantity);
 
-        $orderNo[0].setCustomValidity('');
-
+        view.updateLines(data.lines);
+        view.updateLeaders(data.leaders);
         view.updateDivision();
+
+        $orderNo[0].setCustomValidity('');
       });
 
       view.findOrderReq = req;
@@ -545,6 +559,159 @@ define([
       var kindsDivision = kind.get('division');
 
       $division.val(kindsDivision || ordersDivision);
+    },
+
+    updateLines: function(orderLines)
+    {
+      var $line = this.$id('line');
+      var options = [];
+      var map = {};
+      var currentLine = this.model.get('line');
+
+      if (!IS_ANDROID)
+      {
+        options.push({id: '', text: ''});
+      }
+
+      orderLines.forEach(function(line)
+      {
+        options.push({
+          id: line,
+          text: line
+        });
+
+        map[line] = 1;
+      });
+
+      if (orderLines.length)
+      {
+        options.push({id: '', text: '', disabled: true});
+      }
+
+      options = options.concat(orgUnits.getAllByType('prodLine')
+        .filter(function(prodLine)
+        {
+          return !map[prodLine.id] && (!prodLine.get('deactivatedAt') || prodLine.id === currentLine);
+        })
+        .map(function(prodLine)
+        {
+          return {
+            id: prodLine.id,
+            text: prodLine.id
+          };
+        })
+        .sort(function(a, b)
+        {
+          return a.id.localeCompare(b.id, undefined, {numeric: true});
+        }));
+
+      $line.html(options.map(function(option)
+      {
+        return '<option value="' + option.id + '" ' + (option.disabled ? 'disabled' : '') + '>'
+          + _.escape(option.text) + '</option>';
+      }).join(''));
+
+      if (this.options.editMode && this.findOrderCount === 1)
+      {
+        $line.val(currentLine ? currentLine : '');
+      }
+      else
+      {
+        $line.val(currentLine ? currentLine : orderLines.length ? orderLines[0] : '');
+      }
+
+      if (!IS_ANDROID)
+      {
+        $line.removeClass('form-control').select2({
+          placeholder: ' ',
+          allowClear: true
+        });
+      }
+    },
+
+    updateLeaders: function(orderLeaders)
+    {
+      var $leader = this.$id('leader');
+      var options = [];
+      var map = {};
+      var currentLeader = this.model.get('leader');
+
+      if (!IS_ANDROID)
+      {
+        options.push({id: '', text: ''});
+      }
+
+      orderLeaders.forEach(function(leader)
+      {
+        var user = qiDictionaries.leaders.get(leader.id);
+        var text;
+
+        if (user)
+        {
+          text = user.getLabel();
+        }
+        else
+        {
+          var parts = leader.label.replace(/ \(.*?$/, '').split(' ');
+          var firstName = parts.shift();
+
+          text = parts.join(' ') + ' ' + firstName;
+        }
+
+        options.push({
+          id: leader.id,
+          text: text
+        });
+
+        map[leader.id] = 1;
+      });
+
+      if (orderLeaders.length)
+      {
+        options.push({id: '', text: '', disabled: true});
+      }
+
+      if (currentLeader && !map[currentLeader.id] && !qiDictionaries.leaders.get(currentLeader.id))
+      {
+        options.push({
+          id: currentLeader.id,
+          text: currentLeader.label
+        });
+      }
+
+      qiDictionaries.leaders.forEach(function(leader)
+      {
+        if (!map[leader.id])
+        {
+          options.push({
+            id: leader.id,
+            text: leader.getLabel()
+          });
+        }
+      });
+
+      $leader.html(options.map(function(option)
+      {
+        return '<option value="' + option.id + '" ' + (option.disabled ? 'disabled' : '') + '>'
+          + _.escape(option.text) + '</option>';
+      }).join(''));
+
+      if (this.options.editMode && this.findOrderCount === 1)
+      {
+        $leader.val(currentLeader ? currentLeader.id : '');
+      }
+      else
+      {
+        $leader.val(currentLeader ? currentLeader.id : orderLeaders.length ? orderLeaders[0].id : '');
+      }
+
+      if (!IS_ANDROID)
+      {
+        $leader.removeClass('form-control').select2({
+          placeholder: ' ',
+          allowClear: true
+        });
+      }
     }
 
   });

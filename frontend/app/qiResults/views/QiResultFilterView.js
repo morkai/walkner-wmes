@@ -25,12 +25,14 @@ define([
     'order',
     'productFamily',
     'division',
+    'line',
     'kind',
     'errorCategory',
     'faultCode',
     'status',
     'inspector',
     'nokOwner',
+    'leader',
     'limit'
   ];
   var FILTER_MAP = {
@@ -78,11 +80,13 @@ define([
         order: '',
         productFamily: '',
         division: '',
+        line: '',
         kind: '',
         errorCategory: '',
         faultCode: '',
         inspector: '',
         nokOwner: '',
+        leader: '',
         status: ''
       };
     },
@@ -111,12 +115,11 @@ define([
       },
       'inspector.id': function(propertyName, term, formData)
       {
-        formData.inspector = term.name === 'in' ? term.args[1].join(',') : term.args[1];
+        formData[propertyName.split('.')[0]] = term.name === 'in' ? term.args[1].join(',') : term.args[1];
       },
-      'nokOwner.id': function(propertyName, term, formData)
-      {
-        formData.nokOwner = term.name === 'in' ? term.args[1].join(',') : term.args[1];
-      },
+      'nokOwner.id': 'inspector.id',
+      'leader.id': 'inspector.id',
+      'line': 'inspector.id',
       'kind': 'division',
       'errorCategory': 'division',
       'faultCode': 'productFamily',
@@ -131,7 +134,9 @@ define([
       var order = this.$id('order').val().replace(/[^0-9A-Za-z]+/g, '').toUpperCase();
       var inspector = this.$id('inspector').val();
       var nokOwner = this.$id('nokOwner').val();
+      var leader = this.$id('leader').val();
       var productFamily = this.$id('productFamily').val();
+      var line = this.$id('line').val();
       var faultCode = this.$id('faultCode').val();
       var status = this.$id('status').val();
 
@@ -193,6 +198,30 @@ define([
         else
         {
           selector.push({name: 'in', args: ['nokOwner.id', nokOwner.split(',')]});
+        }
+      }
+
+      if (leader.length)
+      {
+        if (leader.indexOf(',') === -1)
+        {
+          selector.push({name: 'eq', args: ['leader.id', leader]});
+        }
+        else
+        {
+          selector.push({name: 'in', args: ['leader.id', leader.split(',')]});
+        }
+      }
+
+      if (line.length)
+      {
+        if (line.indexOf(',') === -1)
+        {
+          selector.push({name: 'eq', args: ['line', line]});
+        }
+        else
+        {
+          selector.push({name: 'in', args: ['line', line.split(',')]});
         }
       }
 
@@ -282,6 +311,16 @@ define([
           .map(idAndLabel)
       });
 
+      this.$id('line').select2({
+        width: '175px',
+        multiple: true,
+        allowClear: true,
+        placeholder: ' ',
+        data: orgUnits.getAllByType('prodLine')
+          .filter(function(d) { return !d.get('deactivatedAt'); })
+          .map(idAndLabel)
+      });
+
       this.$id('kind').select2({
         width: '200px',
         allowClear: true,
@@ -325,6 +364,14 @@ define([
         allowClear: true,
         placeholder: ' ',
         data: qiDictionaries.masters.map(idAndLabel)
+      });
+
+      this.$id('leader').select2({
+        width: '230px',
+        multiple: true,
+        allowClear: true,
+        placeholder: ' ',
+        data: qiDictionaries.leaders.map(idAndLabel)
       });
 
       this.toggleFilters();

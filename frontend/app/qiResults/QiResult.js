@@ -151,6 +151,7 @@ define([
       obj.inspectedAt = time.format(obj.inspectedAt, options.dateFormat || 'L');
       obj.inspector = renderUserInfo({userInfo: obj.inspector});
       obj.nokOwner = renderUserInfo({userInfo: obj.nokOwner});
+      obj.leader = renderUserInfo({userInfo: obj.leader});
       obj.kind = dictionaries.getLabel('kind', obj.kind);
       obj.qtyOrder = obj.qtyOrder ? obj.qtyOrder.toLocaleString() : '0';
       obj.qtyInspected = obj.qtyInspected.toLocaleString();
