@@ -310,13 +310,18 @@ exports.start = function startUserModule(app, module)
         }
         else
         {
+          const User = app[module.config.mongooseId].model('User');
           const property = /^.*?@.*?\.[a-zA-Z]+$/.test(credentials.login) ? 'email' : 'login';
           const conditions = {
-            [property]: new RegExp('^' + _.escapeRegExp(credentials.login) + '$', 'i'),
-            active: true
+            [property]: new RegExp('^' + _.escapeRegExp(credentials.login) + '$', 'i')
           };
 
-          app[module.config.mongooseId].model('User').findOne(conditions, next);
+          if (User.schema.path('active'))
+          {
+            conditions.active = true;
+          }
+
+          User.findOne(conditions, next);
         }
       },
       function checkUserDataStep(err, userData)
