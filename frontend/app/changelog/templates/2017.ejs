@@ -1,4 +1,52 @@
 <div class="hidden">
+  <h1>v0.116.0</h1>
+  <h2><%- time.format('2017-08-27', 'LL') %></h2>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Zmieniono listę wad tak, aby była sortowana po ID.</li>
+    <li>Zmieniono formularz wyniku tak, aby po wybraniu 'Kodu wady' do pola 'Klasyfikacja wady' kopiowana była wartość
+      'Klasyfikacja wady' i 'Opis wady', a nie tylko 'Opis wady'.</li>
+    <li>Dodano flagę 'Aktywna?' do słownika 'Wady'. Nieaktywne wady nie pokazują się w formularzu dodawania nowego
+      wyniku inspekcji.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Poprawiono błąd wywalający serwer podczas wykonywania operacji 'Zakończenie zlecenia', jeżeli kończone zlecenie
+      nie istnieje w 'Zleceniach reszty działów' (co oznacza, że zlecenie zostało rozpoczęte w trybie off-line i błędnie
+      wpisano nr zlecenia).</li>
+  </ul>
+  <h3>ZPW</h3>
+  <ul>
+    <li>Zmieniono wskaźnik 'IP Structure' w raporcie 'Wskaźniki' tak, aby do sumy w mianowniku dodawana była ilość
+      obserwacji z licznika.</li>
+  </ul>
+  <h3>Obserwacje</h3>
+  <ul>
+    <li>Zmieniono formularz obserwacji tak, aby kliknięcie 'Zgłoś ZPW' oraz 'Zgłość sugestię' zapisywało
+      aktualny stan formularza. Po dodaniu ZPW/usprawnienia użytkownik jest przenoszony z powrotem do wypełnionego
+      formularza obserwacji.</li>
+  </ul>
+  <h3>Malarnia</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający pobranie zleceń dla aktualnego dnia.</li>
+    <li>Poprawiono błąd uniemożliwiający import dużych arkuszy z kolejką zleceń.</li>
+    <li>Poprawiono błąd powodujący brak aktualizacji stanu kolejki po zmianie statusów zleceń.</li>
+    <li>Zmieniono uprawnienia do akcji 'Ignoruj' oraz 'Resetuj' tak, aby były zawsze dostępne w trybie dotykowym.</li>
+    <li>Zmieniono listę nr zleceń tak, aby wyświetlana była po lewej stronie od kolejki zleceń.</li>
+    <li>Zmieniono kolejkę zleceń tak, aby kliknięcie na obszarze kolumn z 'Nr' i 'Zlecenie' przewinęło listę
+      do powiązanego zlecenie (jeżeli jakieś zlecenie jest powiązane).</li>
+    <li>Dodano listę rozpoczętych i zakończonych zleceń po prawej stronie od kolejki zleceń.</li>
+    <li>Dodano wsparcie dla trybu dotykowego.</li>
+    <li>Dodano możliwość komentowania zleceń.</li>
+    <li>Dodano możliwość filtrowania zleceń po MRP.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zmieniono komunikat błędu ładowania danych tak, aby zawierał odnośnik do przeładowania aktualnej strony.</li>
+    <li>Zaktualizowano pakiety zależne.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.115.2</h1>
   <h2><%- time.format('2017-07-30', 'LL') %></h2>
   <h3>Formatka operatora</h3>
