@@ -27,7 +27,7 @@ define([
 
     serializeColumns: function()
     {
-      var columns = [
+      return [
         {id: 'mrpControllers', className: 'is-min'},
         'prodFlow',
         {id: 'prodLine', className: 'is-min'},
@@ -37,15 +37,9 @@ define([
         {id: 'startedAt', className: 'is-min'},
         {id: 'duration', className: 'is-min'},
         {id: 'quantityDone', className: 'is-min'},
-        {id: 'workerCount', className: 'is-min'}
+        {id: 'workerCount', className: 'is-min'},
+        (user.isAllowedTo('PROD_DATA:VIEW:EFF') ? {id: 'efficiency', className: 'is-min'} : null)
       ];
-
-      if (user.isAllowedTo('PROD_DATA:VIEW'))
-      {
-        columns.push({id: 'efficiency', className: 'is-min'});
-      }
-
-      return columns;
     },
 
     serializeRow: function(model)

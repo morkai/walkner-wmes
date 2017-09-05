@@ -28,7 +28,7 @@
             <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:workerCountSap') %></div>
             <div class="prop-value"><%- model.workerCount %> / <%- model.workerCountSap -%> [<%- t('prodShiftOrders', 'unit:workerCount') %>]</div>
           </div>
-          <% if (user.isAllowedTo('PROD_DATA:VIEW')) { %>
+          <% if (user.isAllowedTo('PROD_DATA:VIEW:EFF')) { %>
           <div class="prop">
             <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:taktTime') %></div>
             <div class="prop-value"><%- model.taktTime %> / <%- model.taktTimeSap %> [<%- t('prodShiftOrders', 'unit:taktTime') %>]

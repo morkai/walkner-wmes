@@ -33,7 +33,7 @@
       <th><%- t('prodShifts', 'timeline:popover:quantityDone') %></th>
       <td><%- quantityDone %></td>
     </tr>
-    <% if (user.isAllowedTo('PROD_DATA:MANAGE')) { %>
+    <% if (user.isAllowedTo('PROD_DATA:VIEW:EFF')) { %>
     <% if (sapTaktTime) { %>
     <tr>
       <th><%- t('prodShifts', 'timeline:popover:sapTaktTime') %></th>

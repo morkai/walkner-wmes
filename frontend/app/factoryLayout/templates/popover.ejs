@@ -15,7 +15,7 @@
   <tr>
     <th><%- t('factoryLayout', 'popover:quantityDone') %>
     <td><%- order.quantityDone %>
-  <% if (user.isAllowedTo('PROD_DATA:VIEW')) { %>
+  <% if (user.isAllowedTo('PROD_DATA:VIEW:EFF')) { %>
   <tr>
     <th><%- t('factoryLayout', 'popover:taktTime') %>
     <td><%- order.taktTime %>

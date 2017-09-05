@@ -1,10 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'app/user',
   'app/core/views/ListView',
   'app/data/prodLines',
   'app/orgUnits/util/renderOrgUnitPath'
 ], function(
+  user,
   ListView,
   prodLines,
   renderOrgUnitPath
@@ -21,16 +23,19 @@ define([
       'prodShifts.deleted.*': 'refreshIfMatches'
     },
 
-    columns: [
-      {id: 'mrpControllers', className: 'is-min'},
-      {id: 'prodFlow', className: 'is-min'},
-      {id: 'prodLine', className: 'is-min'},
-      {id: 'date', className: 'is-min'},
-      {id: 'shift', className: 'is-min'},
-      {id: 'totalQuantityDone', className: 'is-min is-number'},
-      {id: 'efficiency', className: 'is-min is-number'},
-      {id: 'fill', label: '&nbsp;'}
-    ],
+    serializeColumns: function()
+    {
+      return [
+        {id: 'mrpControllers', className: 'is-min'},
+        {id: 'prodFlow', className: 'is-min'},
+        {id: 'prodLine', className: 'is-min'},
+        {id: 'date', className: 'is-min'},
+        {id: 'shift', className: 'is-min'},
+        {id: 'totalQuantityDone', className: 'is-min is-number'},
+        (user.isAllowedTo('PROD_DATA:VIEW:EFF') ? {id: 'efficiency', className: 'is-min is-number'} : null),
+        {id: 'fill', label: '&nbsp;'}
+      ];
+    },
 
     serializeRow: function(model)
     {

@@ -166,6 +166,11 @@ define([
 
       return columns.map(function(column)
       {
+        if (!column)
+        {
+          return null;
+        }
+
         if (typeof column === 'string')
         {
           column = {id: column, label: t.bound(nlsDomain, 'PROPERTY:' + column)};
@@ -193,7 +198,7 @@ define([
         }
 
         return column;
-      });
+      }).filter(function(column) { return column !== null; });
     },
 
     serializeActions: function()
