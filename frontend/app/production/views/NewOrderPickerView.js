@@ -325,6 +325,8 @@ define([
 
       if (this.options.embedded)
       {
+        this.lastOrders = [order];
+
         $order.val(order.no || order.nc12);
 
         this.$id('operationGroup').find('div').html(
