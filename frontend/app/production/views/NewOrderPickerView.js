@@ -333,6 +333,8 @@ define([
           this.buildOrderOperationList(order, next.operationNo)
         );
 
+        this.updateNewWorkerCount();
+
         return;
       }
 
@@ -691,7 +693,8 @@ define([
 
       var orderNo = this.$id('order').val();
       var operationNo = this.$id('operationGroup').find('.active').attr('data-operation');
-      var order = _.findWhere(this.lastOrders, {_id: orderNo});
+      var order = _.findWhere(this.lastOrders, {_id: orderNo})
+        || _.findWhere(this.lastOrders, {no: orderNo});
 
       if (!order)
       {
