@@ -382,6 +382,7 @@ define([
           }
 
           view.appendAction('success', 'newOrder');
+          view.appendAction('success', 'nextOrder');
         },
         this
       );

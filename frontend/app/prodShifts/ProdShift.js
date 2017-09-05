@@ -569,11 +569,6 @@ define([
 
     setNextOrder: function(newNextOrders)
     {
-      if (!this.hasOrder())
-      {
-        throw new Error('Cannot set the next order: no order is started!');
-      }
-
       var oldNextOrders = this.get('nextOrder');
       var reset = _.isEmpty(newNextOrders);
 
