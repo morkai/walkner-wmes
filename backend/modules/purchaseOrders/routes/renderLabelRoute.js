@@ -5,7 +5,7 @@
 const format = require('util').format;
 const exec = require('child_process').exec;
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const step = require('h5.step');
 const renderLabelHtmlRoute = require('./renderLabelHtmlRoute');
 
