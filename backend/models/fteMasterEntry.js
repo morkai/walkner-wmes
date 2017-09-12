@@ -361,7 +361,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
         });
       });
 
-      result.sort((a, b) => a.name.localeCompare(b.name));
+      result.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
 
       done(null, result);
     });
