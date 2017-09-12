@@ -168,14 +168,19 @@ exports.start = function startOrderIntakeImporterModule(app, module)
               {
                 const orderIntake = orderIntakes[i];
 
-                OrderIntake.update({_id: orderIntake._id}, orderIntake, {upsert: true}, this.group());
+                OrderIntake.update(
+                  {_id: orderIntake._id},
+                  orderIntake,
+                  {upsert: true, strict: false},
+                  this.group()
+                );
               }
             },
             function(err)
             {
               if (err)
               {
-                module.error('Failed to upsert order intakes: %s', err.message);
+                module.error('Failed to upsert order intakes: %s', err.stack);
               }
 
               if (endIndex === orderIntakes.length)
