@@ -250,8 +250,11 @@ exports.readRoute = function(app, options, req, res, next)
   const idProperty = options.idProperty
     ? (typeof options.idProperty === 'function' ? options.idProperty(req) : options.idProperty)
     : '_id';
+  const conditions = typeof idProperty === 'string'
+    ? {[idProperty]: req.params.id}
+    : idProperty;
   const queryOptions = mongoSerializer.fromQuery(req.rql);
-  const query = Model.findOne({[idProperty]: req.params.id}, queryOptions.fields).lean();
+  const query = Model.findOne(conditions, queryOptions.fields).lean();
 
   try
   {
