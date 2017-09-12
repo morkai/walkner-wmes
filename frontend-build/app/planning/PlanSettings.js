@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["app/time","app/core/Model"],function(n,t){"use strict";return t.extend({urlRoot:"/planning/settings",clientUrlRoot:"#planning/settings",topicPrefix:"planning.settings",privilegePrefix:"PLANNING",nlsDomain:"planning",parse:function(t){return t._id=n.utc.format(this.id,"YYYY-MM-DD"),t},getLabel:function(){return n.utc.format(this.id,"LL")}})});

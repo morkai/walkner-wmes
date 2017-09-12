@@ -359,6 +359,15 @@ app/paintShop/assets/tabs.css
 ----------------
 app/paintShop/assets/tabs.css
 
+app/planning/assets/main.css
+----------------
+app/planning/assets/./settings.css
+app/planning/assets/main.css
+
+app/planning/assets/settings.css
+----------------
+app/planning/assets/settings.css
+
 app/pressWorksheets/assets/main.css
 ----------------
 app/pressWorksheets/assets/main.css
@@ -685,6 +694,7 @@ assets/../app/qiResults/assets/main.css
 assets/../app/pscs/assets/main.css
 assets/../app/d8Entries/assets/main.css
 assets/../app/mor/assets/main.css
+assets/../app/planning/assets/main.css
 assets/wmes-main.css
 
 assets/wmes-mrl.css
@@ -1237,6 +1247,7 @@ app/nls/mor.js
 app/nls/pl/mor.js
 i18n!app/nls/mor
 app/mor/routes.js
+app/planning/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js

@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["../router","../viewport","../user","../time"],function(n,a,i){"use strict";var e="i18n!app/nls/planning",t=i.auth("USER");n.map("/planning/settings/:id",t,function(n){a.loadPage(["app/planning/PlanSettings","app/planning/pages/PlanSettingsPage",e],function(a,i){return new i({model:new a({_id:n.params.id})})})})});

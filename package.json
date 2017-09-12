@@ -6,14 +6,14 @@
   "updater": {
     "wmes": {
       "backend": 301,
-      "frontend": 350,
+      "frontend": 351,
       "reports": 48,
       "attachments": 3,
-      "importer-sap": 40,
+      "importer-sap": 41,
       "importer-results": 12,
       "watchdog": 12,
       "mailer": 13,
-      "operator": 30,
+      "operator": 31,
       "docs": 9,
       "heff": 11,
       "mrl": 8
