@@ -19,36 +19,19 @@ define([
 
     template: filterTemplate,
 
-    events: _.assign({
-      'change #-from': function(e)
-      {
-        var $to = this.$id('to');
-
-        if ($to.attr('data-changed') !== 'true')
-        {
-          $to.val(e.target.value);
-        }
-      },
-      'change #-to': function(e)
-      {
-        e.target.setAttribute('data-changed', 'true');
-      }
-    }, ownMrps.events, FilterView.prototype.events),
+    events: _.assign({}, ownMrps.events, FilterView.prototype.events),
 
     defaultFormData: {
       _id: '',
       nc12: '',
-      date: 'finishDate',
       from: '',
       to: '',
       mrp: ''
     },
 
     termToForm: {
-      'startDate': function(propertyName, term, formData)
+      'scheduledStartDate': function(propertyName, term, formData)
       {
-        formData.date = propertyName;
-
         fixTimeRange.toFormData(formData, term, 'date');
       },
       '_id': function(propertyName, term, formData)
@@ -61,8 +44,7 @@ define([
       {
         formData[propertyName] = term.args[1].join(',');
       },
-      'nc12': '_id',
-      'finishDate': 'startDate'
+      'nc12': '_id'
     },
 
     serialize: function()
@@ -121,10 +103,9 @@ define([
       );
     },
 
-    serializeFormToQuery: function(selector, rqlQuery)
+    serializeFormToQuery: function(selector)
     {
       var timeRange = fixTimeRange.fromView(this);
-      var date = this.$('input[name=date]:checked').val();
       var mrp = this.$id('mrp').val();
 
       this.serializeRegexTerm(selector, '_id', 9, null, false, true);
@@ -132,20 +113,18 @@ define([
 
       if (timeRange.from)
       {
-        selector.push({name: 'ge', args: [date, timeRange.from]});
+        selector.push({name: 'ge', args: ['scheduledStartDate', timeRange.from]});
       }
 
       if (timeRange.to)
       {
-        selector.push({name: 'le', args: [date, timeRange.to]});
+        selector.push({name: 'lt', args: ['scheduledStartDate', timeRange.to]});
       }
 
       if (mrp.length)
       {
         selector.push({name: 'in', args: ['mrp', mrp.split(',')]});
       }
-
-      rqlQuery.sort = date === 'finishDate' ? {finishDate: 1} : {startDate: 1};
     }
 
   });

@@ -114,6 +114,7 @@ module.exports = function setupOrderModel(app, mongoose)
   orderSchema.index({mrp: 1, startDate: -1});
   orderSchema.index({salesOrder: 1, salesOrderItem: 1});
   orderSchema.index({leadingOrder: 1});
+  orderSchema.index({scheduledStartDate: -1, mrp: 1});
 
   orderSchema.statics.prepareForInsert = function(order, createdAt)
   {
@@ -155,6 +156,7 @@ module.exports = function setupOrderModel(app, mongoose)
       delayReason: null,
       operations: missingOrder.operations,
       documents: [],
+      bom: [],
       changes: [],
       importTs: missingOrder.importTs
     };

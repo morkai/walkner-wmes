@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  '../time',
   '../core/Collection',
   './Order'
 ], function(
+  time,
   Collection,
   Order
 ) {
@@ -15,11 +17,7 @@ define([
 
     rqlQuery: function(rql)
     {
-      var today = new Date();
-      today.setHours(0);
-      today.setMinutes(0);
-      today.setSeconds(0);
-      today.setMilliseconds(0);
+      var startDate = time.getMoment().startOf('day');
 
       return rql.Query.fromObject({
         fields: {
@@ -30,13 +28,13 @@ define([
         },
         limit: 20,
         sort: {
-          finishDate: 1
+          scheduledStartDate: -1
         },
         selector: {
           name: 'and',
           args: [
-            {name: 'ge', args: ['finishDate', today.getTime()]},
-            {name: 'le', args: ['finishDate', today.getTime()]}
+            {name: 'ge', args: ['scheduledStartDate', startDate.valueOf()]},
+            {name: 'le', args: ['scheduledStartDate', startDate.add(1, 'days').valueOf()]}
           ]
         }
       });

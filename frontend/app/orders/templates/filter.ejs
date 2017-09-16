@@ -1,28 +1,19 @@
 <form class="well filter-form">
   <div class="form-group">
+    <label for="<%- idPrefix %>-from"><%- t('core', 'filter:date:from') %></label>
+    <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-to"><%- t('core', 'filter:date:to') %></label>
+    <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
+  </div>
+  <div class="form-group">
     <label for="<%- idPrefix %>-_id"><%- t('orders', 'PROPERTY:_id') %></label>
     <input id="<%- idPrefix %>-_id" class="form-control orders-filter-_id" name="_id" type="text" maxlength="9" placeholder="<%- t('orders', 'filter:placeholder:_id') %>">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-nc12"><%- t('orders', 'PROPERTY:nc12') %></label>
     <input id="<%- idPrefix %>-nc12" class="form-control orders-filter-nc12" name="nc12" type="text" maxlength="12" placeholder="<%- t('orders', 'filter:placeholder:nc12') %>">
-  </div>
-  <div class="form-group form-group-dateRange">
-    <div>
-      <label class="radio-inline">
-        <input name="date" type="radio" value="startDate">
-        <%- t('orders', 'PROPERTY:startDate') %>
-      </label><label class="radio-inline">
-        <input name="date" type="radio" value="finishDate">
-        <%- t('orders', 'PROPERTY:finishDate') %>
-      </label>
-    </div>
-    <div>
-      <label for="<%- idPrefix %>-from"><%- t('core', 'filter:date:from') %></label>
-      <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
-      <label for="<%- idPrefix %>-to" class="control-label"><%- t('core', 'filter:date:to') %></label>
-      <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
-    </div>
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-mrp">

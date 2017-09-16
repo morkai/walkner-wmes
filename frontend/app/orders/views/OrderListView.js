@@ -56,8 +56,7 @@ define([
       {id: 'mrp', className: 'is-min'},
       {id: 'qtys', className: 'is-min is-number'},
       {id: 'sapCreatedAtText', label: t.bound('orders', 'PROPERTY:sapCreatedAt'), className: 'is-min'},
-      {id: 'startDateText', label: t.bound('orders', 'PROPERTY:startDate'), className: 'is-min'},
-      {id: 'finishDateText', label: t.bound('orders', 'PROPERTY:finishDate'), className: 'is-min'},
+      {id: 'scheduledStartDateText', label: t.bound('orders', 'PROPERTY:scheduledStartDate'), className: 'is-min'},
       {id: 'delayReason', className: 'is-min'},
       {id: 'statusLabels', label: t.bound('orders', 'PROPERTY:statuses')}
     ],
