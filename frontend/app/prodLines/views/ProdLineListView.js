@@ -89,9 +89,7 @@ define([
         })
         .sort(function(a, b)
         {
-          var cmp = a.orgUnits.localeCompare(b.orgUnits);
-
-          return cmp === 0 ? a._id.localeCompare(b._id) : cmp;
+          return a._id.localeCompare(b._id, undefined, {numeric: true});
         });
     },
 
