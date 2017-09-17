@@ -49,7 +49,7 @@ define([
 
     getLabel: function()
     {
-      var label = this.getProdLineId().toUpperCase().replace(/(_+|~.*?)$/, '').replace(/_/g, ' ');
+      var label = this.getProdLineId().toUpperCase().replace(/(_+|~.*?)$/, '').replace(/[_-]+/g, ' ');
 
       if (label.length > 10)
       {

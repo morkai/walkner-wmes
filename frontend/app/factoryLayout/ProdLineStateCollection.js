@@ -90,7 +90,10 @@ define([
         });
       }
 
-      return _.values(result);
+      return _.values(result).sort(function(a, b)
+      {
+        return a.id.localeCompare(b.id, undefined, {numeric: true});
+      });
     },
 
     /**
