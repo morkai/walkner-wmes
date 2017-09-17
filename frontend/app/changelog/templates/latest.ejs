@@ -1,10 +1,32 @@
-<h1>v0.116.1</h1>
-<h2><%- time.format('2017-09-03', 'LL') %></h2>
-<h3>Inspekcja Jakości</h3>
+<h1>v0.116.2</h1>
+<h2><%- time.format('2017-09-17', 'LL') %></h2>
+<h3>Zlecenia reszty działów</h3>
 <ul>
-  <li>Dodano nowe pola: Linia i Lider.</li>
+  <li>Poprawiono błąd uniemożliwiający aktualizację istniejących zleceń podczas importu zrzutu
+    SAP ZOIN (przyjęcia zleceń).</li>
+  <li>Zmieniono filtr 'Od-Do' tak, aby przeszukiwał po polu 'Data startu (plan.)'.</li>
+  <li>Zmieniono pole 'Do' tak, aby korzystało z warunku 'mniejsze niż' zamiast 'mniejsze lub równe'.
+    To znaczy, że filtr dla jednego dnia 17 września, to od '17.09.2017' do '18.09.2017'
+    (tak jak jest w reszcie systemu).</li>
 </ul>
-<h3>Monitoring</h3>
+<h3>Formatka operatora</h3>
 <ul>
-  <li>Zmieniono wyświetlanie nazw linii tak, aby z nazwy usuwane były spacje, jeżeli nazwa ma więcej niż 10 znaków.</li>
+  <li>Poprawiono błąd uniemożliwiający rozpoczęcie zlecenia z kolejki.</li>
+  <li>Zmieniono kolejkę zleceń tak, aby można było ją zdefiniować w stanie 'Bezczynności'.</li>
+  <li>Zmieniono rozpoczynanie nowego zlecenia z kolejki tak, aby domyśla wartość ilości osób była
+    automatycznie wyliczana.</li>
+</ul>
+<h3>Linie produkcyjne</h3>
+<ul>
+  <li>Zmieniono sortowanie listy linii na sortowanie naturalne (tzn. 'LM-9' przed 'LM-10').</li>
+</ul>
+<h3>FTE</h3>
+<ul>
+  <li>Zmieniono sortowanie listy przepływów podczas tworzenia nowego wpisu na sortowanie naturalne.</li>
+</ul>
+<h3>Użytkownicy</h3>
+<ul>
+  <li>Dodano nowe uprawnienie: Dane produkcyjne: wydajność - wymagane do wyświetlania wskaźnika wydajności w danych
+    produkcyjnych (wcześniej w niektórych miejscach wystarczyło być zalogowanym, w innych mieć uprawnienie
+    'Dane produkcyjne: wyświetlanie', a w jeszcze innych 'Dane produkcyjne: zarządzanie').</li>
 </ul>
