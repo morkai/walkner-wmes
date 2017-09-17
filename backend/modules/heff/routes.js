@@ -10,6 +10,7 @@ module.exports = function setUpHeffRoutes(app, module)
   const updaterModule = app[module.config.updaterId];
   const userModule = app[module.config.userId];
   const fteModule = app[module.config.fteId];
+  const orgUnits = app[module.config.orgUnitsId];
   const mongoose = app[module.config.mongooseId];
   const ProdShift = mongoose.model('ProdShift');
   const HeffLineState = mongoose.model('HeffLineState');
@@ -42,6 +43,8 @@ module.exports = function setUpHeffRoutes(app, module)
 
   express.get('/heff/:prodLine', function(req, res, next)
   {
+    req.params.prodLine = orgUnits.fix.prodLine(req.params.prodLine);
+
     step(
       function()
       {

@@ -74,7 +74,8 @@ exports.start = function startProductionModule(app, module)
       module.config.userId,
       module.config.expressId,
       module.config.settingsId,
-      module.config.fteId
+      module.config.fteId,
+      module.config.orgUnitsId
     ],
     setUpRoutes.bind(null, app, module)
   );

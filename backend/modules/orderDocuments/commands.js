@@ -11,6 +11,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 {
   const sio = app[module.config.sioId];
   const productionModule = app[module.config.productionId];
+  const orgUnits = app[module.config.orgUnitsId];
   const mongoose = app[module.config.mongooseId];
   const Order = mongoose.model('Order');
   const OrderDocumentClient = mongoose.model('OrderDocumentClient');
@@ -120,7 +121,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
   function handleJoinMessage(socket, message)
   {
     const newClientId = message.clientId;
-    const newProdLineId = message.prodLineId;
+    const newProdLineId = orgUnits.fix.prodLine(message.prodLineId);
 
     if (!_.isString(newClientId)
       || _.isEmpty(newClientId)

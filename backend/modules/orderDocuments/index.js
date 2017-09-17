@@ -57,7 +57,8 @@ exports.start = function startOrderDocumentsModule(app, module)
     [
       module.config.mongooseId,
       module.config.sioId,
-      module.config.productionId
+      module.config.productionId,
+      module.config.orgUnitsId
     ],
     setUpCommands.bind(null, app, module)
   );

@@ -5,6 +5,7 @@
 const _ = require('lodash');
 const step = require('h5.step');
 const setUpRql = require('./rql');
+const setUpFix = require('./fix');
 
 exports.DEFAULT_CONFIG = {
   divisionsId: 'divisions',
@@ -18,6 +19,7 @@ exports.DEFAULT_CONFIG = {
 exports.start = function startOrgUnitsModule(app, module)
 {
   setUpRql();
+  setUpFix(app, module);
 
   const divisionsModule = app[module.config.divisionsId];
   const subdivisionsModule = app[module.config.subdivisionsId];
@@ -702,6 +704,8 @@ exports.start = function startOrgUnitsModule(app, module)
         t = Date.now() - t;
 
         module.debug('Rebuilt cache in %d ms.', t);
+
+        app.broker.publish('orgUnits.rebuilt');
       }
       else
       {

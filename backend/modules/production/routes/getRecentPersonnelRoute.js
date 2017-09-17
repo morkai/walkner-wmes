@@ -17,12 +17,13 @@ module.exports = function getRecentPersonnelRoute(app, productionModule, req, re
     return next(app.createError('UNKNOWN_TYPE'));
   }
 
+  const orgUnits = app[productionModule.config.orgUnitsId];
   const mongoose = app[productionModule.config.mongooseId];
   const ProdShift = mongoose.model('ProdShift');
 
   const pipeline = [
     {$match: {
-      prodLine: req.query.prodLine,
+      prodLine: orgUnits.fix.prodLine(req.query.prodLine),
       date: {$gte: moment().subtract(14, 'days').toDate()},
       shift: parseInt(req.query.shift, 10)
     }},

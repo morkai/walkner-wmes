@@ -10,7 +10,8 @@ exports.DEFAULT_CONFIG = {
   updaterId: 'updater',
   mongooseId: 'mongoose',
   fteId: 'fte',
-  userId: 'user'
+  userId: 'user',
+  orgUnitsId: 'orgUnits'
 };
 
 exports.start = function startHeffModule(app, module)
@@ -21,7 +22,8 @@ exports.start = function startHeffModule(app, module)
       module.config.updaterId,
       module.config.mongooseId,
       module.config.fteId,
-      module.config.userId
+      module.config.userId,
+      module.config.orgUnitsId
     ],
     setUpRoutes.bind(null, app, module)
   );
@@ -31,17 +33,29 @@ exports.start = function startHeffModule(app, module)
     if (_.includes(message.types, 'changeQuantitiesDone')
       || _.includes(message.types, 'changeShift'))
     {
-      app.broker.publish('heff.reload.' + message.prodLine, {});
+      notifyReloadLine(message.prodLine);
     }
   });
 
   app.broker.subscribe('hourlyPlans.quantitiesPlanned', function(message)
   {
-    app.broker.publish('heff.reload.' + message.prodLine, {});
+    notifyReloadLine(message.prodLine);
   });
 
   app.broker.subscribe('heffLineStates.**', function(message)
   {
-    app.broker.publish('heff.reload.' + message.model._id, {});
+    notifyReloadLine(message.model._id);
   });
+
+  function notifyReloadLine(oldProdLine)
+  {
+    const newProdLine = app[module.config.orgUnitsId].fix.prodLine(oldProdLine);
+
+    app.broker.publish(`heff.reload.${oldProdLine}`, {});
+
+    if (newProdLine !== oldProdLine)
+    {
+      app.broker.publish(`heff.reload.${newProdLine}`, {});
+    }
+  }
 };

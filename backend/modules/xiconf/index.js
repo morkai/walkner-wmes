@@ -19,6 +19,7 @@ exports.DEFAULT_CONFIG = {
   mailSenderId: 'mail/sender',
   settingsId: 'settings',
   updaterId: 'updater',
+  orgUnitsId: 'orgUnits',
   featureDbPath: './',
   zipStoragePath: './',
   emailUrlPrefix: 'http://127.0.0.1/',
@@ -48,7 +49,8 @@ exports.start = function startXiconfModule(app, module)
     [
       config.mongooseId,
       config.directoryWatcherId,
-      config.licensesId
+      config.licensesId,
+      config.orgUnitsId
     ],
     setUpResultsImporter.bind(null, app, module)
   );
@@ -58,7 +60,8 @@ exports.start = function startXiconfModule(app, module)
       config.mongooseId,
       config.sioId,
       config.productionId,
-      config.settingsId
+      config.settingsId,
+      config.orgUnitsId
     ],
     setUpRemoteCoordinator.bind(null, app, module)
   );

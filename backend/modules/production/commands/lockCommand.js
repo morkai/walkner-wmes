@@ -20,6 +20,8 @@ module.exports = function lockCommand(app, productionModule, socket, req, reply)
   const userModule = app[productionModule.config.userId];
   const orgUnits = app[productionModule.config.orgUnitsId];
 
+  req.prodLine = orgUnits.fix.prodLine(req.prodLine);
+
   step(
     function checkProdLineStep()
     {

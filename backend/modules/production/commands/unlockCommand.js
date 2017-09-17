@@ -22,6 +22,9 @@ module.exports = function unlockCommand(app, productionModule, socket, req, repl
   const orgUnits = app[productionModule.config.orgUnitsId];
   const mongoose = app[productionModule.config.mongooseId];
   const fteModule = app[productionModule.config.fteId];
+
+  req.prodLine = orgUnits.fix.prodLine(req.prodLine);
+
   const res = {
     prodLine: req.prodLine
   };

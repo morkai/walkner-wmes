@@ -7,12 +7,13 @@ const step = require('h5.step');
 
 module.exports = function checkSerialNumberRoute(app, productionModule, req, res, next)
 {
+  const orgUnits = app[productionModule.config.orgUnitsId];
   const mongoose = app[productionModule.config.mongooseId];
   const ProdLogEntry = mongoose.model('ProdLogEntry');
-  const logEntry = new ProdLogEntry(_.assign(req.body, {
+  const logEntry = new ProdLogEntry(orgUnits.fix.prodLogEntry(_.assign(req.body, {
     savedAt: new Date(),
     todo: false
-  }));
+  })));
 
   step(
     function()

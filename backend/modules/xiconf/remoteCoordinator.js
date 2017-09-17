@@ -15,6 +15,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
   const sio = app[xiconfModule.config.sioId];
   const productionModule = app[xiconfModule.config.productionId];
   const settingsModule = app[xiconfModule.config.settingsId];
+  const orgUnits = app[xiconfModule.config.orgUnitsId];
   const mongoose = app[xiconfModule.config.mongooseId];
   const XiconfClient = mongoose.model('XiconfClient');
   const XiconfResult = mongoose.model('XiconfResult');
@@ -650,6 +651,10 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
     if (!_.isString(data.prodLineId) || _.isEmpty(data.prodLineId))
     {
       data.prodLineId = null;
+    }
+    else
+    {
+      data.prodLineId = orgUnits.fix.prodLine(data.prodLineId);
     }
 
     const socket = this;

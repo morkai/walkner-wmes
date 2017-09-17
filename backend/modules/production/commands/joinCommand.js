@@ -12,6 +12,8 @@ module.exports = function joinCommand(app, productionModule, socket, req, reply)
     return;
   }
 
+  req.prodLineId = app[productionModule.config.orgUnitsId].fix.prodLine(req.prodLineId);
+
   const prodLineState = productionModule.getProdLineState(req.prodLineId);
 
   if (!prodLineState)

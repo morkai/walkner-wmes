@@ -14,6 +14,7 @@ module.exports = function setUpProductionRoutes(app, productionModule)
 {
   const express = app[productionModule.config.expressId];
   const settings = app[productionModule.config.settingsId];
+  const orgUnits = app[productionModule.config.orgUnitsId];
   const userModule = app[productionModule.config.userId];
   const updaterModule = app[productionModule.config.updaterId];
 
@@ -69,7 +70,7 @@ module.exports = function setUpProductionRoutes(app, productionModule)
 
   express.get('/production/reloadLine/:line', userModule.auth('SUPER'), function(req, res, next)
   {
-    const lineState = productionModule.getProdLineState(req.params.line);
+    const lineState = productionModule.getProdLineState(orgUnits.fix.prodLine(req.params.line));
 
     if (!lineState)
     {
