@@ -5,3 +5,7 @@
 .orderStatus + .orderStatus {
   margin-left: 0.25em;
 }
+.select2-results .orderStatus {
+  display: inline-block;
+  min-width: 50px;
+}

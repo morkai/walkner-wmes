@@ -1,6 +1,7 @@
 'use strict';
 
-var mongodb = require('./wmes-mongodb');
+const ports = require('./wmes-ports');
+const mongodb = require('./wmes-mongodb');
 
 exports.id = 'wmes-importer-results';
 
@@ -44,31 +45,27 @@ exports.events = {
 exports.updater = {
   expressId: null,
   sioId: null,
-  packageJsonPath: __dirname + '/../package.json',
+  packageJsonPath: `${__dirname}/../package.json`,
   restartDelay: 10000,
   versionsKey: 'wmes',
   backendVersionKey: 'importer-results',
   frontendVersionKey: null
 };
 
-exports['messenger/server'] = {
-  pubHost: '127.0.0.1',
-  pubPort: 60030,
-  repHost: '127.0.0.1',
-  repPort: 60031,
+exports['messenger/server'] = Object.assign(ports[exports.id], {
   broadcastTopics: [
     'events.saved',
     'xiconf.results.synced',
     'icpo.results.synced'
   ]
-};
+});
 
 exports['directoryWatcher:xiconf'] = {
-  path: __dirname + '/../data/xiconf-input'
+  path: `${__dirname}/../data/xiconf-input`
 };
 
 exports['directoryWatcher:icpo'] = {
-  path: __dirname + '/../data/icpo-input'
+  path: `${__dirname}/../data/icpo-input`
 };
 
 exports.licenses = {
@@ -77,10 +74,10 @@ exports.licenses = {
 
 exports.xiconf = {
   directoryWatcherId: 'directoryWatcher:xiconf',
-  featureDbPath: __dirname + '/../data/xiconf-features'
+  featureDbPath: `${__dirname}/../data/xiconf-features`
 };
 
 exports.icpo = {
   directoryWatcherId: 'directoryWatcher:icpo',
-  fileStoragePath: __dirname + '/../data/icpo-files'
+  fileStoragePath: `${__dirname}/../data/icpo-files`
 };

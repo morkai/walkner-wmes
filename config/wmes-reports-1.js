@@ -1,6 +1,7 @@
 'use strict';
 
-var mongodb = require('./wmes-mongodb');
+const ports = require('./wmes-ports');
+const mongodb = require('./wmes-mongodb');
 
 exports.id = 'wmes-reports-1';
 
@@ -55,24 +56,18 @@ exports.mongoose = {
 exports.updater = {
   expressId: null,
   sioId: null,
-  packageJsonPath: __dirname + '/../package.json',
+  packageJsonPath: `${__dirname}/../package.json`,
   restartDelay: 1337,
   versionsKey: 'wmes',
   backendVersionKey: 'reports',
   frontendVersionKey: null
 };
 
-exports['messenger/server'] = {
-  pubHost: '127.0.0.1',
-  pubPort: 60050,
-  repHost: '127.0.0.1',
-  repPort: 60051,
-  pullHost: '127.0.0.1',
-  pullPort: 60052,
+exports['messenger/server'] = Object.assign(ports[exports.id], {
   broadcastTopics: [
     'events.saved'
   ]
-};
+});
 
 exports['reports/server'] = {
   reports: {

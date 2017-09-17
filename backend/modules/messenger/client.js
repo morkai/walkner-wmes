@@ -12,7 +12,8 @@ exports.DEFAULT_CONFIG = {
   repPort: 5051,
   pushHost: null,
   pushPort: 5052,
-  responseTimeout: 5000
+  responseTimeout: 5000,
+  broadcastTopics: []
 };
 
 exports.start = function startMessengerClientModule(app, module, done)
@@ -20,6 +21,18 @@ exports.start = function startMessengerClientModule(app, module, done)
   let subSocket;
   let reqSocket;
   let pushSocket = null;
+
+  _.forEach(module.config.broadcastTopics, function(broadcastTopic)
+  {
+    app.broker.subscribe(broadcastTopic, function(message, topic, meta)
+    {
+      module.request('@broadcast', {
+        topic: topic,
+        message: message,
+        meta: meta
+      });
+    });
+  });
 
   createSubSocket();
   createReqSocket();

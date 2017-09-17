@@ -1,7 +1,9 @@
 'use strict';
 
-var mongodb = require('./wmes-mongodb');
-var later = require('later');
+const ports = require('./wmes-ports');
+const mongodb = require('./wmes-mongodb');
+const later = require('later');
+
 later.date.localTime();
 
 exports.id = 'wmes-watchdog';
@@ -66,21 +68,17 @@ exports.mongoose = {
   ]
 };
 
-exports['messenger/server'] = {
-  pubHost: '127.0.0.1',
-  pubPort: 60070,
-  repHost: '127.0.0.1',
-  repPort: 60071,
+exports['messenger/server'] = Object.assign(ports[exports.id], {
   responseTimeout: 5000,
   broadcastTopics: [
     'events.saved'
   ]
-};
+});
 
 exports.updater = {
   expressId: null,
   sioId: null,
-  packageJsonPath: __dirname + '/../package.json',
+  packageJsonPath: `${__dirname}/../package.json`,
   restartDelay: 1337,
   versionsKey: 'wmes',
   backendVersionKey: 'watchdog',

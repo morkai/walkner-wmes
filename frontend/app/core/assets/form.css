@@ -174,3 +174,6 @@ input.no-controls[type="number"] {
   font-size: .8em;
   margin: 0;
 }
+label + .help-block {
+  margin-top: 0;
+}

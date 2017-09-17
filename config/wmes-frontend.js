@@ -1,9 +1,10 @@
 'use strict';
 
-const DATA_PATH = __dirname + '/../data';
+const DATA_PATH = `${__dirname}/../data`;
 
 const fs = require('fs');
 const later = require('later');
+const ports = require('./wmes-ports');
 const mongodb = require('./wmes-mongodb');
 
 later.date.localTime();
@@ -79,8 +80,8 @@ exports.modules = [
   'heff',
   'vis',
   'mor',
+  'planning',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
-  {id: 'directoryWatcher', name: 'directoryWatcher:paintShop'},
   'mail/sender',
   'messenger/server',
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-sap'},
@@ -89,6 +90,7 @@ exports.modules = [
   {id: 'messenger/client', name: 'messenger/client:wmes-reports-2'},
   {id: 'messenger/client', name: 'messenger/client:wmes-watchdog'},
   {id: 'messenger/client', name: 'messenger/client:wmes-alerts'},
+  {id: 'messenger/client', name: 'messenger/client:wmes-planning'},
   'httpServer',
   'sio'
 ];
@@ -179,8 +181,8 @@ exports.httpServer = {
 exports.httpsServer = {
   host: '0.0.0.0',
   port: 443,
-  key: __dirname + '/https.key',
-  cert: __dirname + '/https.crt'
+  key: `${__dirname}/https.key`,
+  cert: `${__dirname}/https.crt`
 };
 
 exports.sio = {
@@ -222,7 +224,8 @@ exports.pubsub = {
     'ping', 'sockets.connected', 'sockets.disconnected',
     'paintShop.orders.imported', 'paintShop.orders.updated.**', 'paintShop.events.saved',
     'vis.**',
-    'mor.**'
+    'mor.**',
+    'planning.**'
   ]
 };
 
@@ -264,7 +267,8 @@ exports.mongoose = {
     'heffLineState',
     'paintShopOrder', 'paintShopEvent',
     'behaviorObsCard', 'minutesForSafetyCard',
-    'visNodePosition'
+    'visNodePosition',
+    'planSettings', 'planChange', 'plan'
   ]
 };
 
@@ -282,8 +286,8 @@ exports['mysql:ipt'] = {
 };
 
 exports.express = {
-  staticPath: __dirname + '/../frontend',
-  staticBuildPath: __dirname + '/../frontend-build',
+  staticPath: `${__dirname}/../frontend`,
+  staticBuildPath: `${__dirname}/../frontend-build`,
   sessionCookieKey: 'wmes.sid',
   sessionCookie: {
     httpOnly: true,
@@ -346,82 +350,55 @@ exports.production = {
   mysqlId: 'mysql:ipt'
 };
 
-exports['messenger/server'] = {
-  pubHost: '127.0.0.1',
-  pubPort: 60000,
-  repHost: '127.0.0.1',
-  repPort: 60001,
+exports['messenger/server'] = Object.assign(ports[exports.id], {
   responseTimeout: 5000,
   broadcastTopics: [
     'fte.leader.**'
   ]
-};
+});
 
-exports['messenger/client:wmes-attachments'] = {
-  pubHost: '127.0.0.1',
-  pubPort: 60010,
-  repHost: '127.0.0.1',
-  repPort: 60011,
+exports['messenger/client:wmes-attachments'] = Object.assign(ports['wmes-attachments'], {
   responseTimeout: 5000
-};
+});
 
-exports['messenger/client:wmes-importer-sap'] = {
-  pubHost: '127.0.0.1',
-  pubPort: 60020,
-  repHost: '127.0.0.1',
-  repPort: 60021,
+exports['messenger/client:wmes-importer-sap'] = Object.assign(ports['wmes-importer-results'], {
   responseTimeout: 5000
-};
+});
 
-exports['messenger/client:wmes-importer-results'] = {
-  pubHost: '127.0.0.1',
-  pubPort: 60030,
-  repHost: '127.0.0.1',
-  repPort: 60031,
+exports['messenger/client:wmes-importer-results'] = Object.assign(ports['wmes-importer-results'], {
   responseTimeout: 5000
-};
+});
 
-exports['messenger/client:wmes-reports-1'] = {
-  pubHost: '127.0.0.1',
-  pubPort: 60050,
-  repHost: '127.0.0.1',
-  repPort: 60051,
-  pushHost: '127.0.0.1',
-  pushPort: 60052,
+exports['messenger/client:wmes-reports-1'] = Object.assign(ports['wmes-reports-1'], {
   responseTimeout: 4 * 60 * 1000 - 1000
-};
+});
 
-exports['messenger/client:wmes-reports-2'] = {
-  pubHost: '127.0.0.1',
-  pubPort: 60060,
-  repHost: '127.0.0.1',
-  repPort: 60061,
+exports['messenger/client:wmes-reports-2'] = Object.assign(ports['wmes-reports-2'], {
   responseTimeout: 4 * 60 * 1000 - 1000
-};
+});
 
-exports['messenger/client:wmes-watchdog'] = {
-  pubHost: '127.0.0.1',
-  pubPort: 60070,
-  repHost: '127.0.0.1',
-  repPort: 60071,
+exports['messenger/client:wmes-watchdog'] = Object.assign(ports['wmes-watchdog'], {
   responseTimeout: 5000
-};
+});
 
-exports['messenger/client:wmes-alerts'] = {
-  pubHost: '127.0.0.1',
-  pubPort: 60080,
-  repHost: '127.0.0.1',
-  repPort: 60081,
+exports['messenger/client:wmes-alerts'] = Object.assign(ports['wmes-alerts'], {
   responseTimeout: 5000
-};
+});
+
+exports['messenger/client:wmes-planning'] = Object.assign(ports['wmes-planning'], {
+  responseTimeout: 5000,
+  broadcastTopics: [
+    'planning.generator.requested'
+  ]
+});
 
 exports.updater = {
-  manifestPath: __dirname + '/wmes-manifest.appcache',
-  packageJsonPath: __dirname + '/../package.json',
+  manifestPath: `${__dirname}/wmes-manifest.appcache`,
+  packageJsonPath: `${__dirname}/../package.json`,
   restartDelay: 5000,
   pull: {
     exe: 'git.exe',
-    cwd: __dirname + '/../',
+    cwd: `${__dirname}/../`,
     timeout: 30000
   },
   versionsKey: 'wmes',
@@ -454,7 +431,7 @@ exports.updater = {
       path: '/mrl/manifest.appcache',
       mainJsFile: '/wmes-mrl.js',
       mainCssFile: '/assets/wmes-mrl.css',
-      template: fs.readFileSync(__dirname + '/wmes-manifest-mrl.appcache', 'utf8')
+      template: fs.readFileSync(`${__dirname}/wmes-manifest-mrl.appcache`, 'utf8')
     }
   ]
 };
@@ -463,7 +440,7 @@ exports.reports = {
   messengerClientId: 'messenger/client:wmes-reports-1',
   messengerType: 'push',
   javaBatik: 'java -jar c:/tools/batik/batik-rasterizer.jar',
-  nc12ToCagsJsonPath: __dirname + '/../data/12nc_to_cags.json',
+  nc12ToCagsJsonPath: `${__dirname}/../data/12nc_to_cags.json`,
   reports: [
     '1', '2', '3', '4', '5', '6', '7', '8', '9',
     'qi/count', 'qi/okRatio', 'qi/nokRatio',
@@ -476,19 +453,19 @@ exports.reports = {
 
 exports.xiconf = {
   directoryWatcherId: null,
-  zipStoragePath: DATA_PATH + '/xiconf-input',
-  featureDbPath: DATA_PATH + '/xiconf-features',
-  ordersImportPath: DATA_PATH + '/attachments-input',
-  updatesPath: DATA_PATH + '/xiconf-updates'
+  zipStoragePath: `${DATA_PATH}/xiconf-input`,
+  featureDbPath: `${DATA_PATH}/xiconf-features`,
+  ordersImportPath: `${DATA_PATH}/attachments-input`,
+  updatesPath: `${DATA_PATH}/xiconf-updates`
 };
 
 exports.icpo = {
-  zipStoragePath: DATA_PATH + '/icpo-input',
-  fileStoragePath: DATA_PATH + '/icpo-files'
+  zipStoragePath: `${DATA_PATH}/icpo-input`,
+  fileStoragePath: `${DATA_PATH}/icpo-files`
 };
 
 exports.warehouse = {
-  importPath: DATA_PATH + '/attachments-input'
+  importPath: `${DATA_PATH}/attachments-input`
 };
 
 exports['mail/sender'] = {
@@ -496,43 +473,43 @@ exports['mail/sender'] = {
 };
 
 exports.kaizen = {
-  attachmentsDest: DATA_PATH + '/kaizen-attachments',
+  attachmentsDest: `${DATA_PATH}/kaizen-attachments`,
   multiType: exports.frontendAppData.KAIZEN_MULTI
 };
 
 exports.suggestions = {
-  attachmentsDest: DATA_PATH + '/suggestions-attachments'
+  attachmentsDest: `${DATA_PATH}/suggestions-attachments`
 };
 
 exports.qi = {
-  attachmentsDest: DATA_PATH + '/qi-attachments'
+  attachmentsDest: `${DATA_PATH}/qi-attachments`
 };
 
 exports.orders = {
-  importPath: DATA_PATH + '/attachments-input',
+  importPath: `${DATA_PATH}/attachments-input`,
   iptCheckerClientId: 'messenger/client:wmes-importer-sap'
 };
 
 exports.d8 = {
-  attachmentsDest: DATA_PATH + '/d8-attachments'
+  attachmentsDest: `${DATA_PATH}/d8-attachments`
 };
 
 exports.orderDocuments = {
-  importPath: DATA_PATH + '/attachments-input',
-  cachedPath: DATA_PATH + '/order-documents/cached',
-  convertedPath: DATA_PATH + '/order-documents/converted',
-  uploadedPath: DATA_PATH + '/order-documents/uploaded',
-  etoPath: DATA_PATH + '/order-documents/eto',
+  importPath: `${DATA_PATH}/attachments-input`,
+  cachedPath: `${DATA_PATH}/order-documents/cached`,
+  convertedPath: `${DATA_PATH}/order-documents/converted`,
+  uploadedPath: `${DATA_PATH}/order-documents/uploaded`,
+  etoPath: `${DATA_PATH}/order-documents/eto`,
   sejdaConsolePath: 'sejda-console'
 };
 
 exports.opinionSurveys = {
   directoryWatcherId: 'directoryWatcher:opinionSurveys',
-  templatesPath: DATA_PATH + '/opinion/templates',
-  surveysPath: DATA_PATH + '/opinion/surveys',
-  inputPath: DATA_PATH + '/opinion/input',
-  processingPath: DATA_PATH + '/opinion/processing',
-  responsesPath: DATA_PATH + '/opinion/responses'
+  templatesPath: `${DATA_PATH}/opinion/templates`,
+  surveysPath: `${DATA_PATH}/opinion/surveys`,
+  inputPath: `${DATA_PATH}/opinion/input`,
+  processingPath: `${DATA_PATH}/opinion/processing`,
+  responsesPath: `${DATA_PATH}/opinion/responses`
 };
 
 exports['directoryWatcher:opinionSurveys'] = {
@@ -551,14 +528,18 @@ exports.prodDowntimeAlerts = {
 };
 
 exports.cags = {
-  planUploadPath: DATA_PATH + '/attachments-input'
+  planUploadPath: `${DATA_PATH}/attachments-input`
 };
 
 exports['sapGui/importer'] = {
-  importPath: DATA_PATH + '/attachments-input',
+  importPath: `${DATA_PATH}/attachments-input`,
   secretKey: ''
 };
 
 exports.mor = {
-  statePath: DATA_PATH + '/mor.json'
+  statePath: `${DATA_PATH}/mor.json`
+};
+
+exports.planning = {
+  generator: false
 };

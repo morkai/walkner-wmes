@@ -1,11 +1,12 @@
 'use strict';
 
-var frontend = require('./wmes-frontend');
-var mongodb = require('./wmes-mongodb');
+const frontend = require('./wmes-frontend');
+const ports = require('./wmes-ports');
+const mongodb = require('./wmes-mongodb');
 
-var IMPORT_INPUT_DIR = __dirname + '/../data/attachments-input';
-var IMPORT_OUTPUT_DIR = __dirname + '/../data/attachments-imported';
-var ETO_IMPORT_OUTPUT_DIR = __dirname + '/../data/documents-eto';
+const IMPORT_INPUT_DIR = `${__dirname}/../data/attachments-input`;
+const IMPORT_OUTPUT_DIR = `${__dirname}/../data/attachments-imported`;
+const ETO_IMPORT_OUTPUT_DIR = `${__dirname}/../data/documents-eto`;
 
 exports.id = 'wmes-importer-sap';
 
@@ -99,7 +100,7 @@ exports.events = {
 exports.updater = {
   expressId: null,
   sioId: null,
-  packageJsonPath: __dirname + '/../package.json',
+  packageJsonPath: `${__dirname}/../package.json`,
   restartDelay: 10000,
   versionsKey: 'wmes',
   backendVersionKey: 'importer-sap',
@@ -110,11 +111,7 @@ exports['mail/sender'] = {
   from: 'WMES Bot <wmes@localhost>'
 };
 
-exports['messenger/server'] = {
-  pubHost: '127.0.0.1',
-  pubPort: 60020,
-  repHost: '127.0.0.1',
-  repPort: 60021,
+exports['messenger/server'] = Object.assign(ports['wmes-importer-sap'], {
   broadcastTopics: [
     'events.saved',
     'orders.synced', 'orders.operationsChanged',
@@ -126,15 +123,11 @@ exports['messenger/server'] = {
     'cags.plan.synced', 'cags.plan.syncFailed',
     'dailyMrpPlans.ordersUpdated'
   ]
-};
+});
 
-exports['messenger/client'] = {
-  pubHost: '127.0.0.1',
-  pubPort: 60000,
-  repHost: '127.0.0.1',
-  repPort: 60001,
+exports['messenger/client'] = Object.assign(ports['wmes-frontend'], {
   responseTimeout: 5000
-};
+});
 
 exports.directoryWatcher = {
   path: IMPORT_INPUT_DIR
@@ -162,14 +155,14 @@ exports['xiconf/importer/orders'] = {
 exports['orders/importer/orders'] = {
   filterRe: /^(ORDERS(?:_OPERATIONS)?)\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR,
-  orderDocumentsFilePathPattern: IMPORT_INPUT_DIR + '/{timestamp}@ORDERS_DOCUMENTS.txt'
+  orderDocumentsFilePathPattern: `${IMPORT_INPUT_DIR}/{timestamp}@ORDERS_DOCUMENTS.txt`
 };
 
 exports['orderDocuments/importer'] = {
   filterRe: /^ORDERS_DOCUMENTS\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR,
   xiconfProgramPatterns: [],
-  xiconfProgramFilePathPattern: IMPORT_INPUT_DIR + '/{timestamp}@XICONF_ORDERS.txt'
+  xiconfProgramFilePathPattern: `${IMPORT_INPUT_DIR}/{timestamp}@XICONF_ORDERS.txt`
 };
 
 exports['orderDocuments/importer/eto'] = {
@@ -200,7 +193,7 @@ exports['orders/importer/intake'] = {
 
 exports['cags/importer/nc12'] = {
   filterRe: /^MARA\.txt$/,
-  resultFile: __dirname + '/../data/12nc_to_cags.json',
+  resultFile: `${__dirname}/../data/12nc_to_cags.json`,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 

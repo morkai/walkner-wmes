@@ -1,0 +1,9 @@
+.planning-settings-form .checkbox + .checkbox {
+  margin-top: 15px;
+}
+.planning-settings-form .select2-container-active {
+  z-index: 10001;
+}
+.row + hr {
+  margin-top: 0;
+}

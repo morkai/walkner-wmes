@@ -17,7 +17,15 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startMessengerServerModule(app, module, done)
 {
-  const requestHandlers = {};
+  const requestHandlers = {
+    '@broadcast': function(reqData, done)
+    {
+      app.broker.publish(reqData.topic, reqData.message, reqData.meta);
+
+      done();
+    }
+  };
+
   let pubSocket = null;
   let repSocket = null; // eslint-disable-line no-unused-vars
   let pullSocket = null;

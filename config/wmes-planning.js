@@ -3,26 +3,15 @@
 const ports = require('./wmes-ports');
 const mongodb = require('./wmes-mongodb');
 
-exports.id = 'wmes-attachments';
+exports.id = 'wmes-planning';
 
 exports.modules = [
   'mongoose',
   'events',
   'updater',
   'messenger/server',
-  'mail/listener',
-  'mail/downloader'
+  'planning'
 ];
-
-exports.mongoose = {
-  uri: mongodb.uri,
-  options: Object.assign(mongodb.mongoClient, {
-    poolSize: 2
-  }),
-  maxConnectTries: 10,
-  connectAttemptDelay: 500,
-  models: ['event']
-};
 
 exports.events = {
   collection: function(app) { return app.mongoose.model('Event').collection; },
@@ -40,31 +29,39 @@ exports.events = {
   }
 };
 
+exports.mongoose = {
+  uri: mongodb.uri,
+  options: Object.assign(mongodb.mongoClient, {
+    poolSize: 3,
+    readPreference: 'secondaryPreferred'
+  }),
+  maxConnectTries: 10,
+  connectAttemptDelay: 500,
+  models: [
+    'event', 'hourlyPlan', 'order', 'plan', 'planChange', 'planSettings'
+  ]
+};
+
 exports.updater = {
   expressId: null,
   sioId: null,
   packageJsonPath: `${__dirname}/../package.json`,
   restartDelay: 1337,
   versionsKey: 'wmes',
-  backendVersionKey: 'attachments',
+  backendVersionKey: 'reports',
   frontendVersionKey: null
 };
 
 exports['messenger/server'] = Object.assign(ports[exports.id], {
   broadcastTopics: [
-    'events.saved'
+    'events.saved',
+    'planning.plans.generating',
+    'planning.plans.generated',
+    'planning.plans.updated'
   ]
 });
 
-exports['mail/listener'] = {
-  username: 'someone@the.net',
-  password: '123456',
-  host: 'smtp.server.net',
-  port: 993,
-  tls: true
-};
-
-exports['mail/downloader'] = {
-  savePath: `${__dirname}/../data/attachments-input`,
-  timestamp: true
+exports.planning = {
+  expressId: null,
+  generator: true
 };
