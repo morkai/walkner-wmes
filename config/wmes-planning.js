@@ -48,7 +48,7 @@ exports.updater = {
   packageJsonPath: `${__dirname}/../package.json`,
   restartDelay: 1337,
   versionsKey: 'wmes',
-  backendVersionKey: 'reports',
+  backendVersionKey: 'planning',
   frontendVersionKey: null
 };
 

@@ -16,7 +16,8 @@
       "operator": 32,
       "docs": 10,
       "heff": 12,
-      "mrl": 8
+      "mrl": 8,
+      "planning": 1
     },
     "pos": {
       "backend": 80,
