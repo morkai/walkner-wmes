@@ -361,7 +361,7 @@ exports['messenger/client:wmes-attachments'] = Object.assign(ports['wmes-attachm
   responseTimeout: 5000
 });
 
-exports['messenger/client:wmes-importer-sap'] = Object.assign(ports['wmes-importer-results'], {
+exports['messenger/client:wmes-importer-sap'] = Object.assign(ports['wmes-importer-sap'], {
   responseTimeout: 5000
 });
 
