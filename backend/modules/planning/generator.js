@@ -420,7 +420,7 @@ module.exports = function setUpGenerator(app, module)
 
         sapOrders.forEach(sapOrder =>
         {
-          state.orders.set(sapOrder._id, preparePlanOrder(sapOrder));
+          state.orders.set(sapOrder._id, createPlanOrder(sapOrder));
         });
 
         setImmediate(this.next());
@@ -429,7 +429,7 @@ module.exports = function setUpGenerator(app, module)
     );
   }
 
-  function preparePlanOrder(sapOrder)
+  function createPlanOrder(sapOrder)
   {
     return {
       _id: sapOrder._id,
@@ -447,6 +447,22 @@ module.exports = function setUpGenerator(app, module)
       added: false,
       ignored: false
     };
+  }
+
+  function preparePlanOrder(planOrder, settings)
+  {
+    const quantityTodo = getQuantityTodo(planOrder, settings);
+    const operation = planOrder.operation;
+
+    if (planOrder.operation)
+    {
+      planOrder.manHours = Math.round((operation.laborTime / 100 * quantityTodo + operation.laborSetupTime) * 1000)
+        / 1000;
+    }
+
+    planOrder.kind = classifyPlanOrder(planOrder, settings);
+
+    return planOrder;
   }
 
   function loadPlan(state, done)
@@ -508,7 +524,7 @@ module.exports = function setUpGenerator(app, module)
         {
           state.plan.orders = Array.from(state.orders.values())
             .filter(order => filterPlanOrder(order, state.settings) === null)
-            .map(order => classifyPlanOrder(order, state.settings));
+            .map(order => preparePlanOrder(order, state.settings));
 
           state.changes.addedOrders = [].concat(state.plan.orders);
 
@@ -572,18 +588,15 @@ module.exports = function setUpGenerator(app, module)
   {
     if (isSmallOrder(planOrder, settings))
     {
-      planOrder.kind = 'small';
-    }
-    else if (isHardOrder(planOrder, settings))
-    {
-      planOrder.kind = 'hard';
-    }
-    else
-    {
-      planOrder.kind = 'easy';
+      return 'small';
     }
 
-    return planOrder;
+    if (isHardOrder(planOrder, settings))
+    {
+      return 'hard';
+    }
+
+    return 'easy';
   }
 
   function getQuantityTodo(planOrder, settings)
@@ -631,10 +644,6 @@ module.exports = function setUpGenerator(app, module)
       return false;
     }
 
-    const quantityTodo = getQuantityTodo(planOrder, settings);
-
-    planOrder.manHours = operation.laborTime / 100 * quantityTodo + operation.laborSetupTime;
-
     return planOrder.manHours >= hardOrderManHours;
   }
 
@@ -672,7 +681,7 @@ module.exports = function setUpGenerator(app, module)
     {
       if (filterPlanOrder(latestOrder, state.settings) === null)
       {
-        classifyPlanOrder(latestOrder, state.settings);
+        preparePlanOrder(latestOrder, state.settings);
 
         newPlanOrders.push(latestOrder);
 
@@ -704,7 +713,7 @@ module.exports = function setUpGenerator(app, module)
       return false;
     }
 
-    classifyPlanOrder(latestOrder, state.settings);
+    preparePlanOrder(latestOrder, state.settings);
 
     const changes = {};
     let changed = false;
