@@ -138,9 +138,12 @@ exports.start = function startPubsubModule(app, module)
 
     delete socketIdToMessagesMap[socket.id];
 
-    socket.pubsub.destroy();
-    socket.pubsub.onSubscriptionMessage = null;
-    socket.pubsub = null;
+    if (socket.pubsub)
+    {
+      socket.pubsub.destroy();
+      socket.pubsub.onSubscriptionMessage = null;
+      socket.pubsub = null;
+    }
   }
 
   /**
@@ -163,6 +166,12 @@ exports.start = function startPubsubModule(app, module)
 
     const socket = this;
     const pubsub = socket.pubsub;
+
+    if (!pubsub)
+    {
+      return;
+    }
+
     const notAllowedTopics = [];
 
     for (let i = 0, l = topics.length; i < l; ++i)
@@ -198,6 +207,11 @@ exports.start = function startPubsubModule(app, module)
     const socket = this;
     const pubsub = socket.pubsub;
 
+    if (!pubsub)
+    {
+      return;
+    }
+
     for (let i = 0, l = topics.length; i < l; ++i)
     {
       const topic = topics[i];
@@ -218,6 +232,16 @@ exports.start = function startPubsubModule(app, module)
   function onSocketPublish(topic, message, meta, cb)
   {
     const socket = this;
+
+    if (!socket.pubsub)
+    {
+      if (typeof cb === 'function')
+      {
+        cb();
+      }
+
+      return;
+    }
 
     ++stats.receivedMessages;
 
