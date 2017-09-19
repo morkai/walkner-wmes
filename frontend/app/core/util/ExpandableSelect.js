@@ -45,7 +45,7 @@ define([
 
     isExpanded: function()
     {
-      return this.$el.hasClass(this.options.isExpandedClassName);
+      return this.$el !== null && this.$el.hasClass(this.options.isExpandedClassName);
     },
 
     expand: function()
