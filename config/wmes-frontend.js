@@ -350,42 +350,42 @@ exports.production = {
   mysqlId: 'mysql:ipt'
 };
 
-exports['messenger/server'] = Object.assign(ports[exports.id], {
+exports['messenger/server'] = Object.assign({}, ports[exports.id], {
   responseTimeout: 5000,
   broadcastTopics: [
     'fte.leader.**'
   ]
 });
 
-exports['messenger/client:wmes-attachments'] = Object.assign(ports['wmes-attachments'], {
+exports['messenger/client:wmes-attachments'] = Object.assign({}, ports['wmes-attachments'], {
   responseTimeout: 5000
 });
 
-exports['messenger/client:wmes-importer-sap'] = Object.assign(ports['wmes-importer-sap'], {
+exports['messenger/client:wmes-importer-sap'] = Object.assign({}, ports['wmes-importer-sap'], {
   responseTimeout: 5000
 });
 
-exports['messenger/client:wmes-importer-results'] = Object.assign(ports['wmes-importer-results'], {
+exports['messenger/client:wmes-importer-results'] = Object.assign({}, ports['wmes-importer-results'], {
   responseTimeout: 5000
 });
 
-exports['messenger/client:wmes-reports-1'] = Object.assign(ports['wmes-reports-1'], {
+exports['messenger/client:wmes-reports-1'] = Object.assign({}, ports['wmes-reports-1'], {
   responseTimeout: 4 * 60 * 1000 - 1000
 });
 
-exports['messenger/client:wmes-reports-2'] = Object.assign(ports['wmes-reports-2'], {
+exports['messenger/client:wmes-reports-2'] = Object.assign({}, ports['wmes-reports-2'], {
   responseTimeout: 4 * 60 * 1000 - 1000
 });
 
-exports['messenger/client:wmes-watchdog'] = Object.assign(ports['wmes-watchdog'], {
+exports['messenger/client:wmes-watchdog'] = Object.assign({}, ports['wmes-watchdog'], {
   responseTimeout: 5000
 });
 
-exports['messenger/client:wmes-alerts'] = Object.assign(ports['wmes-alerts'], {
+exports['messenger/client:wmes-alerts'] = Object.assign({}, ports['wmes-alerts'], {
   responseTimeout: 5000
 });
 
-exports['messenger/client:wmes-planning'] = Object.assign(ports['wmes-planning'], {
+exports['messenger/client:wmes-planning'] = Object.assign({}, ports['wmes-planning'], {
   responseTimeout: 5000,
   broadcastTopics: [
     'planning.generator.requested'

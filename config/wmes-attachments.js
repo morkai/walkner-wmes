@@ -50,7 +50,7 @@ exports.updater = {
   frontendVersionKey: null
 };
 
-exports['messenger/server'] = Object.assign(ports[exports.id], {
+exports['messenger/server'] = Object.assign({}, ports[exports.id], {
   broadcastTopics: [
     'events.saved'
   ]

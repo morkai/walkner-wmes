@@ -68,7 +68,7 @@ exports.mongoose = {
   ]
 };
 
-exports['messenger/server'] = Object.assign(ports[exports.id], {
+exports['messenger/server'] = Object.assign({}, ports[exports.id], {
   responseTimeout: 5000,
   broadcastTopics: [
     'events.saved'

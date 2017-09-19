@@ -111,7 +111,7 @@ exports['mail/sender'] = {
   from: 'WMES Bot <wmes@localhost>'
 };
 
-exports['messenger/server'] = Object.assign(ports['wmes-importer-sap'], {
+exports['messenger/server'] = Object.assign({}, ports['wmes-importer-sap'], {
   broadcastTopics: [
     'events.saved',
     'orders.synced', 'orders.operationsChanged',
@@ -125,7 +125,7 @@ exports['messenger/server'] = Object.assign(ports['wmes-importer-sap'], {
   ]
 });
 
-exports['messenger/client'] = Object.assign(ports['wmes-frontend'], {
+exports['messenger/client'] = Object.assign({}, ports['wmes-frontend'], {
   responseTimeout: 5000
 });
 
