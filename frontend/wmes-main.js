@@ -65,6 +65,11 @@
 
     moment.locale(window.appLocale);
 
+    if (!window.PRODUCTION_DATA_START_DATE)
+    {
+      window.PRODUCTION_DATA_START_DATE = moment().format('YYYY-01-01');
+    }
+
     $.ajaxSetup({
       dataType: 'json',
       accepts: {

@@ -101,7 +101,8 @@ exports.faviconFile = 'assets/wmes-favicon.ico';
 
 exports.frontendAppData = {
   KAIZEN_MULTI: false,
-  XLSX_EXPORT: process.platform === 'win32'
+  XLSX_EXPORT: process.platform === 'win32',
+  PRODUCTION_DATA_START_DATE: '2017-01-01'
 };
 
 exports.dictionaryModules = {

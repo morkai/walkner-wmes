@@ -12,12 +12,12 @@
     </div><div>
       <label for="<%- idPrefix %>-from-date" class="control-label"><%- t('reports', 'filter:from') %></label>
       <div id="<%- idPrefix %>-from" class="form-group-datetime">
-        <input id="<%- idPrefix %>-from-date" class="form-control" name="from-date" type="date" placeholder="YYYY-MM-DD">
+        <input id="<%- idPrefix %>-from-date" class="form-control" name="from-date" type="date" placeholder="YYYY-MM-DD" min="<%- PRODUCTION_DATA_START_DATE %>">
         <input id="<%- idPrefix %>-from-time" class="form-control" name="from-time" type="time" placeholder="hh:mm">
       </div>
       <label for="<%- idPrefix %>-to-date" class="control-label"><%- t('reports', 'filter:to') %></label>
       <div id="<%- idPrefix %>-to" class="form-group-datetime">
-        <input id="<%- idPrefix %>-to-date" class="form-control" name="to-date" type="date" placeholder="YYYY-MM-DD">
+        <input id="<%- idPrefix %>-to-date" class="form-control" name="to-date" type="date" placeholder="YYYY-MM-DD" min="<%- PRODUCTION_DATA_START_DATE %>">
         <input id="<%- idPrefix %>-to-time" class="form-control" name="to-time" type="time" placeholder="hh:mm">
       </div>
     </div>

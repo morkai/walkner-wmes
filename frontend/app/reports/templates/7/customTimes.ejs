@@ -1,9 +1,9 @@
 <form>
   <div class="form-group reports-7-customTimes-fromTo">
     <label for="<%- idPrefix %>-clipFrom" class="control-label is-required"><%- t('reports', '7:customTimes:clip:date') %></label>
-    <input id="<%- idPrefix %>-clipFrom" class="form-control" name="clipFrom" type="date" placeholder="<%- t('core', 'placeholder:date') %>" required>
+    <input id="<%- idPrefix %>-clipFrom" class="form-control" name="clipFrom" type="date" placeholder="<%- t('core', 'placeholder:date') %>" required min="<%- PRODUCTION_DATA_START_DATE %>">
     -
-    <input id="<%- idPrefix %>-clipTo" class="form-control" name="clipTo" type="date" placeholder="<%- t('core', 'placeholder:date') %>" required>
+    <input id="<%- idPrefix %>-clipTo" class="form-control" name="clipTo" type="date" placeholder="<%- t('core', 'placeholder:date') %>" required min="<%- PRODUCTION_DATA_START_DATE %>">
   </div>
   <div class="form-group clearfix">
     <label for="<%- idPrefix %>-clipInterval-day" class="control-label is-required"><%- t('reports', '7:customTimes:clip:interval') %></label>
@@ -17,15 +17,15 @@
   </div>
   <div class="form-group reports-7-customTimes-fromTo reports-7-customTimes-separator">
     <label for="<%- idPrefix %>-dtlFrom" class="control-label is-required"><%- t('reports', '7:customTimes:dtl:date') %></label>
-    <input id="<%- idPrefix %>-dtlFrom" class="form-control" name="dtlFrom" type="date" placeholder="<%- t('core', 'placeholder:date') %>" required>
+    <input id="<%- idPrefix %>-dtlFrom" class="form-control" name="dtlFrom" type="date" placeholder="<%- t('core', 'placeholder:date') %>" required min="<%- PRODUCTION_DATA_START_DATE %>">
     -
-    <input class="form-control" name="dtlTo" type="date" placeholder="<%- t('core', 'placeholder:date') %>" required>
+    <input class="form-control" name="dtlTo" type="date" placeholder="<%- t('core', 'placeholder:date') %>" required min="<%- PRODUCTION_DATA_START_DATE %>">
   </div>
   <div class="form-group reports-7-customTimes-fromTo reports-7-customTimes-separator">
     <label for="<%- idPrefix %>-dtcFrom" class="control-label is-required"><%- t('reports', '7:customTimes:dtc:date') %></label>
-    <input id="<%- idPrefix %>-dtcFrom" class="form-control" name="dtcFrom" type="date" placeholder="<%- t('core', 'placeholder:date') %>" required>
+    <input id="<%- idPrefix %>-dtcFrom" class="form-control" name="dtcFrom" type="date" placeholder="<%- t('core', 'placeholder:date') %>" required min="<%- PRODUCTION_DATA_START_DATE %>">
     -
-    <input class="form-control" name="dtcTo" type="date" placeholder="<%- t('core', 'placeholder:date') %>" required>
+    <input class="form-control" name="dtcTo" type="date" placeholder="<%- t('core', 'placeholder:date') %>" required min="<%- PRODUCTION_DATA_START_DATE %>">
   </div>
   <div class="form-group clearfix">
     <label for="<%- idPrefix %>-dtcInterval-day" class="control-label is-required"><%- t('reports', '7:customTimes:dtc:interval') %></label>
