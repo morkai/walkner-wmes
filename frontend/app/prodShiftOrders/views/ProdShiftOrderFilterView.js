@@ -10,6 +10,7 @@ define([
   'app/core/util/fixTimeRange',
   'app/orgUnits/views/OrgUnitPickerView',
   'app/users/ownMrps',
+  'app/mrpControllers/util/setUpMrpSelect2',
   'app/prodShiftOrders/templates/filter'
 ], function(
   _,
@@ -21,6 +22,7 @@ define([
   fixTimeRange,
   OrgUnitPickerView,
   ownMrps,
+  setUpMrpSelect2,
   filterTemplate
 ) {
   'use strict';
@@ -145,48 +147,7 @@ define([
 
       this.toggleButtonGroup('shift');
 
-      this.$id('mrp').select2({
-        width: '300px',
-        multiple: true,
-        allowClear: true,
-        data: this.getApplicableMrps(),
-        matcher: function(term, text, option)
-        {
-          return $().select2.defaults.matcher(term, option.id) || $().select2.defaults.matcher(term, text);
-        },
-        formatResult: function(item, $container, query, e)
-        {
-          if (!item.id)
-          {
-            return e(item.text);
-          }
-
-          var html = [];
-
-          select2.util.markMatch(item.id, query.term, html, e);
-          html.push(': ');
-          select2.util.markMatch(item.text, query.term, html, e);
-
-          return html.join('');
-        },
-        formatSelection: function(item)
-        {
-          return item.id;
-        }
-      });
-    },
-
-    getApplicableMrps: function()
-    {
-      return mrpControllers
-        .filter(function(mrp) { return !mrp.get('deactivatedAt'); })
-        .map(function(mrp)
-        {
-          return {
-            id: mrp.id,
-            text: mrp.get('description')
-          };
-        });
+      setUpMrpSelect2(this.$id('mrp'));
     },
 
     serializeOrderId: function(selector)

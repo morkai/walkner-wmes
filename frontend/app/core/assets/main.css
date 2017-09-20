@@ -361,6 +361,9 @@ code.multiline {
 .text-lines {
   white-space: pre-line;
 }
+.text-small {
+  font-size: 12px;
+}
 .is-changed {
   color: #e00;
 }

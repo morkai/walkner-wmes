@@ -5,12 +5,14 @@ define([
   'app/core/util/fixTimeRange',
   'app/core/views/FilterView',
   'app/users/ownMrps',
+  'app/mrpControllers/util/setUpMrpSelect2',
   'app/orders/templates/filter'
 ], function(
   _,
   fixTimeRange,
   FilterView,
   ownMrps,
+  setUpMrpSelect2,
   filterTemplate
 ) {
   'use strict';
@@ -58,49 +60,7 @@ define([
     {
       FilterView.prototype.afterRender.call(this);
 
-      var $mrp = this.$id('mrp').select2({
-        width: '300px',
-        allowClear: true,
-        multiple: true,
-        data: [],
-        formatNoMatches: null,
-        minimumResultsForSearch: 1,
-        adaptDropdownCssClass: function() { return 'hidden'; },
-        tokenizer: function(input, selection, selectCallback)
-        {
-          var result = input;
-          var options = {};
-
-          selection.forEach(function(item)
-          {
-            options[item.id] = true;
-          });
-
-          (input.match(/[A-Z0-9]{3}/ig) || []).forEach(function(mrp)
-          {
-            result = result.replace(mrp, '');
-
-            mrp = mrp.toUpperCase();
-
-            if (!options[mrp])
-            {
-              selectCallback({id: mrp, text: mrp});
-              options[mrp] = true;
-            }
-          });
-
-          return input === result ? null : result.replace(/\s+/, ' ').trim();
-        }
-      });
-
-      $mrp.select2(
-        'data',
-        $mrp
-          .val()
-          .split(',')
-          .filter(function(mrp) { return mrp.length; })
-          .map(function(mrp) { return {id: mrp, text: mrp}; })
-      );
+      setUpMrpSelect2(this.$id('mrp'));
     },
 
     serializeFormToQuery: function(selector)
