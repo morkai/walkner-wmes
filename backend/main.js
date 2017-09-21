@@ -70,7 +70,7 @@ _.assign(app, require('./helpers'));
 
 blocked(function(ms)
 {
-  app.debug('Event loop blocked for %sms :(', ms);
+  app.debug(`[blocked] ${ms} ms`);
 });
 
 main(app, modules);

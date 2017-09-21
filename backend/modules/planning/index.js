@@ -38,9 +38,23 @@ exports.start = function startPlanningModule(app, module)
       const now = moment();
 
       app.broker.publish('planning.generator.requested', {
-        dayAfterTomorrow: (now.hours() === 16 && now.minutes() > 30) || now.hours() >= 17
+        forceDayAfterTomorrow: (now.hours() === 16 && now.minutes() > 30) || now.hours() >= 17
       });
     }
+  });
+
+  app.broker.subscribe('settings.updated.production.lineAutoDowntimes', () =>
+  {
+    app.broker.publish('planning.generator.requested', {
+      reloadAutoDowntimes: true
+    });
+  });
+
+  app.broker.subscribe('subdivisions.edited', () =>
+  {
+    app.broker.publish('planning.generator.requested', {
+      reloadAutoDowntimes: true
+    });
   });
 
   app.broker.subscribe('planning.settings.updated', m =>

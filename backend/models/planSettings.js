@@ -4,11 +4,9 @@
 
 module.exports = function setupPlanSettingsModel(app, mongoose)
 {
-  const lineSettingsSchema = new mongoose.Schema({
+  const mrpLineSettingsSchema = new mongoose.Schema({
     _id: String,
     workerCount: Number,
-    activeFrom: String,
-    activeTo: String,
     orderPriority: [String]
   }, {
     _id: false
@@ -20,14 +18,16 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     extraShiftSeconds: [Number],
     bigOrderQuantity: Number,
     hardOrderManHours: Number,
-    lines: [lineSettingsSchema]
+    lines: [mrpLineSettingsSchema]
   }, {
     _id: false
   });
 
-  const linePrioritySchema = new mongoose.Schema({
-    line: String,
-    mrps: [String]
+  const lineSchema = new mongoose.Schema({
+    _id: String,
+    mrpPriority: [String],
+    activeFrom: String,
+    activeTo: String
   }, {
     _id: false
   });
@@ -39,7 +39,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     requiredStatuses: [String],
     ignoredStatuses: [String],
     hardComponents: [String],
-    linePriorities: [linePrioritySchema],
+    lines: [lineSchema],
     mrps: [mrpSettingsSchema]
   }, {
     id: false
@@ -54,16 +54,16 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
 
     this.mrps.forEach(mrp => definedMrps.set(mrp._id, mrp));
 
-    this.linePriorities.forEach(linePriority =>
+    this.lines.forEach(line =>
     {
-      linePriority.mrps.forEach(mrpId =>
+      line.mrpPriority.forEach(mrpId =>
       {
         if (!listedMrps.has(mrpId))
         {
           listedMrps.set(mrpId, []);
         }
 
-        listedMrps.get(mrpId).push(linePriority.line);
+        listedMrps.get(mrpId).push(line._id);
       });
     });
 
@@ -91,8 +91,6 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
         return mrp.lines.find(line => line._id === lineId) || {
           _id: lineId,
           workerCount: 1,
-          activeFrom: '',
-          activeTo: '',
           orderPriority: ['small', 'easy', 'hard']
         };
       });
@@ -114,7 +112,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       requiredStatuses: ['REL'],
       ignoredStatuses: ['TECO', 'CNF', 'DLV', 'DLFL', 'DLT'],
       hardComponents: [],
-      linePriorities: [],
+      lines: [],
       mrps: []
     });
   };
@@ -128,15 +126,16 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       requiredStatuses: sourceSettings.requiredStatuses,
       ignoredStatuses: sourceSettings.ignoredStatuses,
       hardComponents: sourceSettings.hardComponents,
-      linePriorities: sourceSettings.linePriorities,
+      lines: sourceSettings.lines,
       mrps: sourceSettings.mrps
     });
   };
 
   planSettingsSchema.methods.toGenerator = function()
   {
-    const mrps = new Map();
     const lines = new Map();
+    const mrps = new Map();
+    const mrpLines = new Map();
     const ignoredStatuses = new Set();
 
     this.ignoredStatuses.forEach(status => ignoredStatuses.add(status));
@@ -148,6 +147,16 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       ignoredStatuses: ignoredStatuses,
       hardComponents: this.hardComponents,
       mrps: this.mrps.map(mrp => mrp._id),
+      lines: this.lines.map(line => line._id),
+      line: (lineId) =>
+      {
+        if (!lines.has(lineId))
+        {
+          lines.set(lineId, this.lines.find(line => line._id === lineId));
+        }
+
+        return lines.get(lineId);
+      },
       mrp: (mrpId) =>
       {
         if (!mrps.has(mrpId))
@@ -157,14 +166,14 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
 
         return mrps.get(mrpId);
       },
-      line: (mrpId, lineId) =>
+      mrpLine: (mrpId, lineId) =>
       {
-        if (!lines.has(lineId))
+        if (!mrpLines.has(lineId))
         {
-          lines.set(lineId, new Map());
+          mrpLines.set(lineId, new Map());
         }
 
-        const lineMrpMap = lines.get(lineId);
+        const lineMrpMap = mrpLines.get(lineId);
 
         if (!lineMrpMap.has(mrpId))
         {

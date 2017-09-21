@@ -8,6 +8,7 @@ const moment = require('moment');
 const deepEqual = require('deep-equal');
 const resolveProductName = require('../util/resolveProductName');
 const resolveBestOperation = require('../util/resolveBestOperation');
+const setUpAutoDowntimeCache = require('./autoDowntimeCache');
 
 const ORDER_USER_PROPERTIES = [
   'quantityPlan',
@@ -36,15 +37,21 @@ module.exports = function setUpGenerator(app, module)
   const PlanSettings = mongoose.model('PlanSettings');
   const PlanChange = mongoose.model('PlanChange');
 
+  const autoDowntimeCache = setUpAutoDowntimeCache(app, module);
   const inProgressState = new Map();
 
   app.broker.subscribe('planning.generator.requested', handleRequest);
 
   function handleRequest(message)
   {
+    if (message.reloadAutoDowntimes)
+    {
+      autoDowntimeCache.clear();
+    }
+
     if (!message.date)
     {
-      generateActivePlans(message.dayAfterTomorrow === true);
+      generateActivePlans(message.forceDayAfterTomorrow === true);
     }
     else
     {
@@ -57,11 +64,14 @@ module.exports = function setUpGenerator(app, module)
     const state = {
       key: key,
       date: date,
-      cancelled: false,
       doneCallbacks: [],
+      cancelled: false,
       settings: null,
+      autoDowntimes: null,
       orders: null,
       plan: null,
+      orderStateQueues: null,
+      lineStateQueue: [],
       changes: {
         addedOrders: [],
         removedOrders: [],
@@ -80,13 +90,15 @@ module.exports = function setUpGenerator(app, module)
     return state;
   }
 
-  function cancelGeneratePlan(state, reload, done)
+  function cancelGeneratePlan(state, done)
   {
     state.cancelled = true;
-    state.reload = state.reload || reload;
     state.settings = null;
+    state.autoDowntimes = null;
     state.orders = null;
     state.plan = null;
+    state.orderStateQueues = null;
+    state.lineStateQueue = [];
     state.changes = {
       addedOrders: [],
       removedOrders: [],
@@ -174,7 +186,7 @@ module.exports = function setUpGenerator(app, module)
       {
         loadSettings(state, this.next());
       },
-      function loadOrdersStep(err)
+      function loadAutoDowntimesStep(err)
       {
         if (state.cancelled)
         {
@@ -184,6 +196,20 @@ module.exports = function setUpGenerator(app, module)
         if (err)
         {
           return this.skip(new Error(`Failed to load settings: ${err.message}`));
+        }
+
+        loadAutoDowntimes(state, this.next());
+      },
+      function loadOrdersStep(err)
+      {
+        if (state.cancelled)
+        {
+          return this.skip();
+        }
+
+        if (err)
+        {
+          return this.skip(new Error(`Failed to load auto downtimes: ${err.message}`));
         }
 
         loadOrders(state, null, this.next());
@@ -232,6 +258,8 @@ module.exports = function setUpGenerator(app, module)
         if (state.cancelled)
         {
           state.log(`[generator] [${state.key}] Cancelled!`);
+
+          state.cancelled = false;
 
           return setImmediate(tryGeneratePlan, state);
         }
@@ -363,6 +391,23 @@ module.exports = function setUpGenerator(app, module)
     );
   }
 
+  function loadAutoDowntimes(state, done)
+  {
+    state.log('Loading auto downtimes...');
+
+    autoDowntimeCache.get(state.key, (err, autoDowntimes) =>
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      state.autoDowntimes = autoDowntimes;
+
+      setImmediate(done);
+    });
+  }
+
   function loadOrders(state, ids, done)
   {
     state.log(`Loading ${ids ? 'additional orders' : 'orders'}...`);
@@ -413,7 +458,7 @@ module.exports = function setUpGenerator(app, module)
 
         state.log(`Preparing ${sapOrders.length} ${ids ? 'additional orders' : 'orders'}...`);
 
-        if (!ids)
+        if (!state.orders)
         {
           state.orders = new Map();
         }
@@ -451,13 +496,14 @@ module.exports = function setUpGenerator(app, module)
 
   function preparePlanOrder(planOrder, settings)
   {
-    const quantityTodo = getQuantityTodo(planOrder, settings);
     const operation = planOrder.operation;
 
-    if (planOrder.operation)
+    if (operation)
     {
-      planOrder.manHours = Math.round((operation.laborTime / 100 * quantityTodo + operation.laborSetupTime) * 1000)
-        / 1000;
+      const quantityTodo = getQuantityTodo(planOrder, settings);
+      const manHours = operation.laborTime / 100 * quantityTodo + operation.laborSetupTime;
+
+      planOrder.manHours = Math.round(manHours * 1000) / 1000;
     }
 
     planOrder.kind = classifyPlanOrder(planOrder, settings);
@@ -747,6 +793,183 @@ module.exports = function setUpGenerator(app, module)
   {
     state.log('Generating...');
 
+    step(
+      function()
+      {
+        createOrderQueues(state, this.next());
+      },
+      function()
+      {
+        if (state.cancelled)
+        {
+          return this.skip();
+        }
+
+        createLineStates(state, this.next());
+      },
+      function()
+      {
+        if (state.cancelled)
+        {
+          return this.skip();
+        }
+
+        generatePlanForLines(state, this.next());
+      },
+      done
+    );
+  }
+
+  function createOrderQueues(state, done)
+  {
+    state.orderStateQueues = new Map();
+
+    state.plan.orders.forEach(order =>
+    {
+      if (!state.orderStateQueues.has(order.mrp))
+      {
+        state.orderStateQueues.set(order.mrp, {
+          small: [],
+          easy: [],
+          hard: []
+        });
+      }
+
+      state.orderStateQueues.get(order.mrp)[order.kind].push({
+        order: order,
+        quantityTodo: order.quantityTodo
+      });
+    });
+
+    for (const orderStateQueues of state.orderStateQueues.values())
+    {
+      orderStateQueues.small.sort(sortEasyOrders);
+      orderStateQueues.easy.sort(sortEasyOrders);
+      orderStateQueues.hard.sort(sortHardOrders);
+    }
+
     setImmediate(done);
+  }
+
+  function sortEasyOrders(a, b)
+  {
+    return b.order.manHours - a.order.manHours;
+  }
+
+  function sortHardOrders(a, b)
+  {
+    if (a.order.hardComponents && b.order.hardComponents)
+    {
+      return b.order.manHours - a.order.manHours;
+    }
+
+    if (a.order.hardComponents && !b.order.hardComponents)
+    {
+      return -1;
+    }
+
+    return 1;
+  }
+
+  function createLineStates(state, done)
+  {
+    state.settings.lines.forEach(lineId =>
+    {
+      const lineSettings = state.settings.line(lineId);
+      const lineState = {
+        _id: lineId,
+        completed: false,
+        activeFrom: null, // lineSettings.activeFrom
+        activeTo: null, // lineSettings.activeTo
+        autoDowntimes: state.autoDowntimes.get(lineId),
+        mrpQueue: lineSettings.mrpPriority.map(mrpId =>
+        {
+          const mrpSettings = state.settings.mrp(mrpId);
+          const mrpLineSettings = state.settings.mrpLine(mrpId, lineId);
+          const orderStateQueue = state.orderStateQueues.get(mrpId);
+
+          return {
+            mrp: mrpSettings,
+            line: mrpLineSettings,
+            orderPriorityQueue: [].concat(mrpLineSettings.orderPriority),
+            orderStateQueue: {
+              small: orderStateQueue ? [].concat(orderStateQueue.small) : [],
+              easy: orderStateQueue ? [].concat(orderStateQueue.easy) : [],
+              hard: orderStateQueue ? [].concat(orderStateQueue.hard) : []
+            },
+            nextOrderIndex: -1
+          };
+        })
+      };
+
+      state.lineStateQueue.push(lineState);
+    });
+
+    setImmediate(done);
+  }
+
+  function generatePlanForLines(state, done)
+  {
+    if (state.cancelled || !state.lineStateQueue.length)
+    {
+      return done();
+    }
+
+    generatePlanForLine(state, state.lineStateQueue.shift(), () => generatePlanForLines(state, done));
+  }
+
+  function generatePlanForLine(state, lineState, done)
+  {
+    state.log(`[${lineState._id}] Generating...`);
+
+    while (!lineState.completed)
+    {
+      const orderState = getNextOrderForLine(lineState);
+
+      if (!orderState)
+      {
+        console.log('completed');
+
+        lineState.completed = true;
+
+        continue;
+      }
+
+      const order = orderState.order;
+
+      console.log(`${order._id} ${order.kind} ${order.quantityTodo}`);
+    }
+
+    setImmediate(done);
+  }
+
+  function getNextOrderForLine(lineState)
+  {
+    while (lineState.mrpQueue.length)
+    {
+      const mrpState = lineState.mrpQueue[0];
+
+      while (mrpState.orderPriorityQueue.length)
+      {
+        const orderPriority = mrpState.orderPriorityQueue[0];
+        const orderStateQueue = mrpState.orderStateQueue[orderPriority];
+
+        while (orderStateQueue.length)
+        {
+          const orderState = orderStateQueue.shift();
+
+          if (orderState.quantityTodo > 0)
+          {
+            return orderState;
+          }
+        }
+
+        mrpState.orderPriorityQueue.shift();
+      }
+
+      lineState.mrpQueue.shift();
+    }
+
+    return null;
   }
 };

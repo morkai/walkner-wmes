@@ -32,11 +32,24 @@
         <p class="help-block"><%- t('planning', 'settings:hardComponents:help') %></p>
         <input id="<%- idPrefix %>-hardComponents" name="hardComponents" type="text" data-object="plan">
       </div>
+      <hr>
       <div class="form-group">
-        <label for="<%- idPrefix %>-linePriorities-line"><%- t('planning', 'settings:linePriorities') %></label>
-        <p class="help-block"><%- t('planning', 'settings:linePriorities:help') %></p>
-        <input id="<%- idPrefix %>-linePriorities-line" type="text">
-        <input id="<%- idPrefix %>-linePriorities-mrps" type="text">
+        <label for="<%- idPrefix %>-line"><%- t('planning', 'settings:line') %></label>
+        <input id="<%- idPrefix %>-line" type="text">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-mrpPriority"><%- t('planning', 'settings:mrpPriority') %></label>
+        <input id="<%- idPrefix %>-mrpPriority" type="text">
+      </div>
+      <div class="row">
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-activeFrom"><%- t('planning', 'settings:activeFrom') %></label>
+          <input id="<%- idPrefix %>-activeFrom" name="activeFrom" class="form-control" type="text" placeholder="hh:mm" pattern="^[0-9]{2}:[0-9]{2}$" data-object="line">
+        </div>
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-activeTo"><%- t('planning', 'settings:activeTo') %></label>
+          <input id="<%- idPrefix %>-activeTo" name="activeTo" class="form-control" type="text" placeholder="hh:mm" pattern="^[0-9]{2}:[0-9]{2}$" data-object="line">
+        </div>
       </div>
       <hr>
       <div class="form-group">
@@ -78,22 +91,14 @@
       </div>
       <hr>
       <div class="form-group">
-        <label for="<%- idPrefix %>-line"><%- t('planning', 'settings:line') %></label>
-        <p class="help-block"><%- t('planning', 'settings:line:help') %></p>
-        <input id="<%- idPrefix %>-line" type="text">
+        <label for="<%- idPrefix %>-mrpLine"><%- t('planning', 'settings:mrpLine') %></label>
+        <p class="help-block"><%- t('planning', 'settings:mrpLine:help') %></p>
+        <input id="<%- idPrefix %>-mrpLine" type="text">
       </div>
       <div class="row">
         <div class="col-md-3 form-group">
           <label for="<%- idPrefix %>-workerCount"><%- t('planning', 'settings:workerCount') %></label>
           <input id="<%- idPrefix %>-workerCount" name="workerCount" class="form-control" type="number" min="0" max="9999" step="1" data-object="line">
-        </div>
-        <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-activeFrom"><%- t('planning', 'settings:activeFrom') %></label>
-          <input id="<%- idPrefix %>-activeFrom" name="activeFrom" class="form-control" type="text" placeholder="hh:mm" pattern="^[0-9]{2}:[0-9]{2}$" data-object="line">
-        </div>
-        <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-activeTo"><%- t('planning', 'settings:activeTo') %></label>
-          <input id="<%- idPrefix %>-activeTo" name="activeTo" class="form-control" type="text" placeholder="hh:mm" pattern="^[0-9]{2}:[0-9]{2}$" data-object="line">
         </div>
       </div>
       <div class="form-group">
