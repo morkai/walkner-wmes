@@ -19,6 +19,7 @@
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie raportu nie powiodło się :(",
 
   "PAGE_ACTION:settings": "Zmień ustawienia",
+  "PAGE_ACTION:1:export": "Eksportuj wydajność",
   "PAGE_ACTION:2:export": "Eksportuj zlecenia",
   "PAGE_ACTION:3:exportTable": "Eksportuj tabelę",
   "PAGE_ACTION:6:export": "Eksportuj dane",

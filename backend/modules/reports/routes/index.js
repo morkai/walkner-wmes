@@ -20,11 +20,19 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
   if (_.includes(reportsModule.config.reports, '1'))
   {
+    const canViewReport1 = userModule.auth('REPORTS:VIEW', 'REPORTS:1:VIEW');
+
     express.get(
       '/reports/1',
-      userModule.auth('REPORTS:VIEW', 'REPORTS:1:VIEW'),
+      canViewReport1,
       helpers.sendCachedReport.bind(null, '1'),
       require('./report1').bind(null, app, reportsModule)
+    );
+
+    express.get(
+      '/reports/1;export.:format?',
+      canViewReport1,
+      require('./report1Export').bind(null, app, reportsModule)
     );
   }
 

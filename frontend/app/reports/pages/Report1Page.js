@@ -1,6 +1,9 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'app/i18n',
+  'app/core/Collection',
+  'app/core/util/pageActions',
   './DrillingReportPage',
   '../Report1Query',
   '../Report1DisplayOptions',
@@ -9,6 +12,9 @@ define([
   '../views/1/DisplayOptionsView',
   '../views/1/ChartsView'
 ], function(
+  t,
+  Collection,
+  pageActions,
   DrillingReportPage,
   Query,
   DisplayOptions,
@@ -24,6 +30,32 @@ define([
     rootBreadcrumbKey: 'BREADCRUMBS:1',
 
     pageId: 'report1',
+
+    actions: function(layout)
+    {
+      var actions = DrillingReportPage.prototype.actions.call(this);
+
+      actions.unshift(pageActions.export({
+        layout: layout,
+        page: this,
+        collection: this.exportCollection,
+        privilege: false,
+        label: t('reports', 'PAGE_ACTION:1:export')
+      }));
+
+      return actions;
+    },
+
+    initialize: function()
+    {
+      DrillingReportPage.prototype.initialize.apply(this, arguments);
+
+      this.exportCollection = new Collection(null, {
+        url: '/reports/1'
+      });
+      this.exportCollection.rqlQuery = this.query;
+      this.exportCollection.length = 1;
+    },
 
     createQuery: function()
     {
@@ -72,6 +104,13 @@ define([
       DrillingReportPage.prototype.afterRender.call(this);
 
       this.scheduleAutoRefresh();
+    },
+
+    onQueryChange: function()
+    {
+      DrillingReportPage.prototype.onQueryChange.apply(this, arguments);
+
+      this.exportCollection.trigger('sync');
     },
 
     refresh: function()

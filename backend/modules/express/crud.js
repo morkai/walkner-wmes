@@ -484,7 +484,6 @@ exports.deleteRoute = function(app, Model, req, res, next)
 exports.exportRoute = function(app, options, req, res, next)
 {
   const format = req.params.format === 'xlsx' && app.express.config.jsonToXlsxExe ? 'xlsx' : 'csv';
-  const queryOptions = mongoSerializer.fromQuery(req.rql);
   let headerWritten = false;
   let columns = null;
   let jsonToXlsx = null;
@@ -500,23 +499,32 @@ exports.exportRoute = function(app, options, req, res, next)
 
   function stream()
   {
-    const query = options.model
-      .find(queryOptions.selector, queryOptions.fields)
-      .sort(queryOptions.sort)
-      .lean();
-
-    try
+    if (options.cursor === undefined)
     {
-      populateQuery(query, req.rql);
+      const queryOptions = mongoSerializer.fromQuery(req.rql);
+      const query = options.model
+        .find(queryOptions.selector, queryOptions.fields)
+        .sort(queryOptions.sort)
+        .lean();
+
+      try
+      {
+        populateQuery(query, req.rql);
+      }
+      catch (err)
+      {
+        return next(err);
+      }
+
+      options.cursor = query.cursor();
     }
-    catch (err)
+
+    const cursor = options.cursor;
+
+    if (cursor && cursor.close)
     {
-      return next(err);
+      req.once('aborted', () => cursor.close());
     }
-
-    const cursor = query.cursor();
-
-    req.once('aborted', () => cursor.close());
 
     if (options.serializeStream)
     {
@@ -671,6 +679,7 @@ exports.exportRoute = function(app, options, req, res, next)
       sheetName: options.sheetName || options.filename,
       freezeRows: options.freezeRows || 0,
       freezeColumns: options.freezeColumns || 0,
+      headerHeight: options.headerHeight || 0,
       columns: columns
     };
 
@@ -786,6 +795,10 @@ function prepareExportColumns(format, options, columnNames)
     else if (option)
     {
       Object.assign(column, option);
+    }
+    else if (typeof options.prepareColumn === 'function')
+    {
+      options.prepareColumn(column);
     }
 
     if (!column.width)

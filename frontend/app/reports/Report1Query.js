@@ -165,6 +165,11 @@ define([
     isAutoMode: function()
     {
       return !this.get('from') && !this.get('to');
+    },
+
+    toString: function()
+    {
+      return this.serializeToString()
     }
 
   }, {

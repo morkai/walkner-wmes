@@ -21,6 +21,7 @@
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the report :(",
 
     "PAGE_ACTION:settings": "Change settings",
+    "PAGE_ACTION:1:export": "Export efficiency",
     "PAGE_ACTION:2:export": "Export orders",
     "PAGE_ACTION:3:exportTable": "Export table",
     "PAGE_ACTION:6:export": "Export data",
