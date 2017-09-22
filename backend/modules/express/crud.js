@@ -499,7 +499,9 @@ exports.exportRoute = function(app, options, req, res, next)
 
   function stream()
   {
-    if (options.cursor === undefined)
+    let cursor = options.cursor;
+
+    if (cursor === undefined)
     {
       const queryOptions = mongoSerializer.fromQuery(req.rql);
       const query = options.model
@@ -516,10 +518,8 @@ exports.exportRoute = function(app, options, req, res, next)
         return next(err);
       }
 
-      options.cursor = query.cursor();
+      cursor = query.cursor();
     }
-
-    const cursor = options.cursor;
 
     if (cursor && cursor.close)
     {
