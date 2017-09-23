@@ -189,11 +189,13 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
     }
 
     const orgUnits = results.prodLines[prodLines.shift()];
+    const subdivision = orgUnitsModule.getByTypeAndId('subdivision', orgUnits.subdivision);
+    const prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', orgUnits.prodFlow);
     const row = {
       division: orgUnits.division,
-      subdivision: orgUnitsModule.getByTypeAndId('subdivision', orgUnits.subdivision).name,
+      subdivision: subdivision ? subdivision.name : String(orgUnits.subdivision),
       mrpControllers: orgUnits.mrpControllers.join('; '),
-      prodFlow: orgUnitsModule.getByTypeAndId('prodFlow', orgUnits.prodFlow).name,
+      prodFlow: prodFlow ? prodFlow.name : String(orgUnits.prodFlow),
       workCenter: orgUnits.workCenter,
       prodLine: orgUnits.prodLine
     };
