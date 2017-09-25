@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["app/time","app/core/Model"],function(n,t){"use strict";return t.extend({urlRoot:"/planning/settings",clientUrlRoot:"#planning/settings",topicPrefix:"planning.settings",privilegePrefix:"PLANNING",nlsDomain:"planning",parse:function(t){return t._id=n.utc.format(this.id,"YYYY-MM-DD"),t},getLabel:function(){return n.utc.format(this.id,"LL")}})});
+define(["app/time","app/core/Model"],function(t,n){"use strict";return n.extend({urlRoot:"/planning/settings",clientUrlRoot:"#planning/settings",topicPrefix:"planning.settings",privilegePrefix:"PLANNING",nlsDomain:"planning",parse:function(n){return n._id=t.utc.format(n._id,"YYYY-MM-DD"),n},getLabel:function(){return t.utc.format(this.id,"LL")}},{forDate:function(n){var e=t.utc.getMoment().startOf("day");return/^-?[0-9]+d$/.test(n)&&(n=e.add(+n.replace("d",""),"days").format("YYYY-MM-DD")),new this({_id:n})}})});

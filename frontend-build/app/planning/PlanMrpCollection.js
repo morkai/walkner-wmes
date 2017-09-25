@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["underscore","app/core/Collection","app/data/orgUnits","./PlanMrp"],function(i,e,n,t){"use strict";return e.extend({model:t,initialize:function(i,e){this.plan=e.plan},cache:function(){var e=this.plan,r=[];e.settings.get("mrps").forEach(function(o){var d=n.getByTypeAndId("mrpController",o._id),s={_id:o._id,description:d?d.get("description"):"",lines:o.lines.map(function(t){var r=n.getByTypeAndId("prodLine",t._id),o=i.find(e.settings.get("lines"),{_id:t._id});return{_id:t._id,description:r?r.get("description"):"",workerCount:t.workerCount,activeFrom:o.activeFrom,activeTo:o.activeTo}})};r.push(new t(s,{plan:e}))}),this.reset(r)}})});

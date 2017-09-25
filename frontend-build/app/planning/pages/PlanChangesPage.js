@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["app/i18n","app/core/View"],function(n,e){"use strict";return e.extend({layoutName:"page",breadcrumbs:function(){return[{label:n.bound("planning","BREADCRUMBS:base"),href:"#planning/plans"},{label:this.collection.getDate("LL"),href:"#planning/plans/"+this.collection.getDate("YYYY-MM-DD")},{label:n.bound("planning","BREADCRUMBS:changes")}]},load:function(n){return n(this.collection.fetch({reset:!0}))},afterRender:function(){this.$el.html('<div class="well text-mono">'+this.collection.map(function(n){return JSON.stringify(n,null,2)}).join("<hr>")+"</div>")}})});

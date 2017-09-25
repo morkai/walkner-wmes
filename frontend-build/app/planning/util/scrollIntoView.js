@@ -1,0 +1,1 @@
+define([],function(){"use strict";return function(t){var e=t.parentElement;e.scrollWidth>e.offsetWidth&&(e.scrollLeft=t.offsetLeft-e.clientWidth/2)}});

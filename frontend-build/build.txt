@@ -359,10 +359,19 @@ app/paintShop/assets/tabs.css
 ----------------
 app/paintShop/assets/tabs.css
 
+app/planning/assets/list.css
+----------------
+app/planning/assets/list.css
+
 app/planning/assets/main.css
 ----------------
 app/planning/assets/./settings.css
+app/planning/assets/./list.css
 app/planning/assets/main.css
+
+app/planning/assets/plan.css
+----------------
+app/planning/assets/plan.css
 
 app/planning/assets/settings.css
 ----------------
