@@ -15,7 +15,7 @@ module.exports = function setupPlanModel(app, mongoose)
     name: String,
     statuses: [String],
     operation: {
-      item: String,
+      no: String,
       name: String,
       machineSetupTime: Number,
       laborSetupTime: Number,
@@ -23,10 +23,11 @@ module.exports = function setupPlanModel(app, mongoose)
       laborTime: Number
     },
     manHours: Number,
-    hardComponents: Boolean,
+    hardComponent: String,
     quantityTodo: Number,
     quantityDone: Number,
     quantityPlan: Number,
+    incomplete: Number,
     added: Boolean,
     ignored: Boolean
   }, {
@@ -39,7 +40,6 @@ module.exports = function setupPlanModel(app, mongoose)
     _id: String,
     orderNo: String,
     quantity: Number,
-    incomplete: Number,
     pceTime: Number,
     startAt: Date,
     finishAt: Date
@@ -49,19 +49,10 @@ module.exports = function setupPlanModel(app, mongoose)
     retainKeyOrder: true
   });
 
-  const autoDowntimeTimeSchema = new mongoose.Schema({
-    d: Number,
-    h: Number,
-    m: Number
-  }, {
-    _id: false,
-    minimize: false,
-    retainKeyOrder: true
-  });
-
   const autoDowntimeSchema = new mongoose.Schema({
     reason: String,
-    time: [autoDowntimeTimeSchema]
+    startAt: Date,
+    duration: Number
   }, {
     _id: false,
     minimize: false,
@@ -70,6 +61,7 @@ module.exports = function setupPlanModel(app, mongoose)
 
   const planLineSchema = new mongoose.Schema({
     _id: String,
+    version: Number,
     orders: [planLineOrderSchema],
     downtimes: [autoDowntimeSchema],
     totalQuantity: Number,

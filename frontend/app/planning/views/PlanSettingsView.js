@@ -56,9 +56,9 @@ define([
         {
           o = _.findWhere(o.mrps, {_id: this.$id('mrp').val()});
 
-          if (object === 'lineInMrp')
+          if (object === 'mrpLine')
           {
-            o = _.findWhere(o.lines, {_id: this.$id('line').val()});
+            o = _.findWhere(o.lines, {_id: this.$id('mrpLine').val()});
           }
         }
 
@@ -171,6 +171,8 @@ define([
       FormView.prototype.initialize.apply(this, arguments);
 
       this.sortables = [];
+
+      this.stopListening(this.model, 'change');
     },
 
     destroy: function()
@@ -401,7 +403,7 @@ define([
         {
           $mrpPriority.select2('onSortEnd').select2('focus');
 
-          view.saveLinePriority();
+          view.saveMrpPriority();
           view.selectMrp($(e.target).data('select2-data').id, $line.val() || null);
         }
       }));
@@ -473,6 +475,8 @@ define([
       });
 
       $mrpPriority.select2('enable', false);
+      view.$id('activeFrom').prop('disabled', true);
+      view.$id('activeTo').prop('disabled', true);
     },
 
     setUpMrpSelect2: function()

@@ -1,0 +1,24 @@
+<table data-item-type="line" data-item-id="<%- line._id %>">
+  <tbody>
+  <tr>
+    <th><%- t('planning', 'lines:division') %></th>
+    <td><span class="planning-mrp-popover-value"><%= line.division %></span></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'lines:prodFlow') %></th>
+    <td><span class="planning-mrp-popover-value"><%= line.prodFlow %></span></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'lines:prodLine') %></th>
+    <td><span class="planning-mrp-popover-value"><%= line.prodLine %></span></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'lines:workerCount') %></th>
+    <td><%= line.workerCount.toLocaleString() %></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'lines:activeTime') %></th>
+    <td><%= line.activeTime %></td>
+  </tr>
+  </tbody>
+</table>

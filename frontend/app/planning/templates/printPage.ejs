@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Plan dla linii <%= lines %> na dzień <%- time.format(date, 'LL') %></title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+      box-sizing: border-box;
+    }
+    body {
+      margin: 15px;
+      font-family: Verdana, sans-serif;
+      font-size: 12px;
+      text-rendering: optimizeLegibility;
+      color: #000;
+      background: #FFF;
+      text-align: center;
+    }
+    .page {
+      margin: auto;
+      text-align: left;
+      width: 21cm;
+      padding: 10mm;
+    }
+    header {
+      padding-bottom: 5mm;
+      margin-bottom: 5mm;
+      font-size: 32px;
+      font-weight: bold;
+      text-align: left;
+      border-bottom: 1px solid #000;
+    }
+    footer {
+      display: flex;
+      padding-top: 5mm;
+      margin-top: 5mm;
+      border-top: 1px solid #000;
+      font-size: 10px;
+    }
+    footer p:first-child {
+      margin-bottom: 3px;
+    }
+    footer > div:first-child {
+      flex: 1 1 auto;
+    }
+    footer > div:last-child {
+      flex: 1 1 auto;
+      text-align: right;
+    }
+    .props {
+      float: right;
+      display: flex;
+    }
+    .prop {
+      margin-left: 5mm;
+    }
+    .prop > span:first-child {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .prop > span:last-child {
+      display: block;
+      font-size: 16px;
+      font-weight: normal;
+    }
+    table {
+      width: 100%;
+      font-size: 12px;
+      border-collapse: collapse;
+    }
+    th {
+      text-align: left;
+      padding-right: 10px;
+      white-space: nowrap;
+    }
+    td {
+      padding-top: 8px;
+      padding-right: 10px;
+      white-space: nowrap;
+      width: 1%;
+    }
+    th:last-child,
+    td:last-child {
+      padding-right: 0;
+    }
+    .name {
+      width: auto;
+    }
+    .name > span {
+      display: block;
+      overflow: hidden;
+      max-width: <%- showTimes ? 340 : 400 %>px;
+    }
+    .qty {
+      text-align: right;
+    }
+    .nextShift {
+      padding-bottom: 10px;
+      border-bottom: 1px solid #000;
+    }
+    .nextShift + tr > td {
+      padding-top: 10px;
+    }
+    h2 {
+      margin-top: 5mm;
+      margin-bottom: 5mm;
+      padding-bottom: 5mm;
+      border-bottom: 1px solid #000;
+    }
+    .hourlyPlan th {
+      padding-left: 10px;
+      padding-right: 10px;
+      text-align: center;
+    }
+    .hourlyPlan td {
+      padding-left: 10px;
+      padding-right: 10px;
+      width: 1%;
+      text-align: center;
+    }
+    .hourlyPlan th:first-child,
+    .hourlyPlan td:first-child {
+      padding-left: 0;
+      text-align: left;
+    }
+    .hourlyPlan td:last-child {
+      width: auto;
+    }
+    @media print {
+      body {
+        margin: 0;
+      }
+      .page {
+        width: 100%;
+        padding: 0;
+      }
+      .page + .page {
+        page-break-before: always;
+      }
+      .bd {
+        height: 900px;
+      }
+    }
+  </style>
+</head>
+<body>
+<% pages.forEach(function(page) { %>
+<section class="page">
+  <header>
+    <div class="props">
+      <div class="prop">
+        <span>Data:</span>
+        <span><%= time.format(date, 'dd, LL') %></span>
+      </div>
+      <div class="prop">
+        <span>MRP:</span>
+        <span><%= page.mrp %> %></span>
+      </div>
+      <div class="prop">
+        <span>Linia:</span>
+        <span><%= page.line %></span>
+      </div>
+      <div class="prop">
+        <span>Obsada:</span>
+        <span><%- t('planning', 'print:workerCount', {workerCount: page.workerCount || 1}) %></span>
+      </div>
+    </div>
+    Plan dnia
+  </header>
+  <section class="bd">
+    <table>
+      <thead>
+        <th>Lp.</th>
+        <th>Nr zlecenia</th>
+        <th>12NC</th>
+        <th>Wyrób</th>
+        <th class="qty">Ilość</th>
+        <% if (showTimes) { %>
+        <th>Czas</th>
+        <% } %>
+      </thead>
+      <tbody>
+      <% page.orders.forEach(function(order) { %>
+      <% if (order.nextShift) { %>
+      <tr class="nextShift">
+        <td colspan="6"></td>
+      </tr>
+      <% } %>
+      <tr>
+        <td class="no"><%- order.no %>.</td>
+        <td class="orderNo"><%- order.orderNo %></td>
+        <td class="nc12"><%- order.nc12 %></td>
+        <td class="name"><span><%= order.name %></span></td>
+        <td class="qty"><%- order.qtyPlan %>/<%- order.qtyTodo %></td>
+        <% if (showTimes) { %>
+        <td class="time"><%- time.format(order.startAt, 'HH:mm') %>-<%- time.format(order.finishAt, 'HH:mm') %></td>
+        <% } %>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+    <% if (page.hourlyPlan) { %>
+    <h2>Plan godzinowy</h2>
+    <table class="hourlyPlan">
+      <thead>
+      <tr>
+        <th>Zmiana</th>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+        <th>5</th>
+        <th>6</th>
+        <th>7</th>
+        <th>8</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>I</td>
+        <% for (var h = 0; h < 8; ++h) { %>
+        <td><%- page.hourlyPlan[h] %></td>
+        <% } %>
+        <td></td>
+      </tr>
+      <tr>
+        <td>II</td>
+        <% for (var h = 8; h < 16; ++h) { %>
+        <td><%- page.hourlyPlan[h] %></td>
+        <% } %>
+        <td></td>
+      </tr>
+      <tr>
+        <td>III</td>
+        <% for (var h = 16; h < 24; ++h) { %>
+        <td><%- page.hourlyPlan[h] %></td>
+        <% } %>
+        <td></td>
+      </tr>
+      </tbody>
+    </table>
+    <% } %>
+  </section>
+  <footer>
+    <div>
+      <p>Plan dla linii <%= page.line %> na dzień <%- time.format(date, 'LL') %>.</p>
+      <p>Wydrukowano w <%- time.format(Date.now(), 'LLLL') %> przez <%= user.getLabel() %> za pomocą systemu WMES.</p>
+    </div>
+    <div>
+      Strona <%- page.pageNo %> z <%- page.pageCount %>
+    </div>
+  </footer>
+</section>
+<% }) %>
+</body>
+</html>

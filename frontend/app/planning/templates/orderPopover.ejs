@@ -1,0 +1,43 @@
+<table data-item-type="order" data-item-id="<%- order._id %>">
+  <tbody>
+  <tr>
+    <th><%- t('planning', 'orders:name') %></th>
+    <td><span class="planning-mrp-popover-value"><%= order.name %></span></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'orders:nc12') %></th>
+    <td><%= order.nc12 %></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'orders:qty') %></th>
+    <td>
+      <span class="<%- order.completed ? 'is-completed': '' %> <%- order.surplus ? 'is-surplus': '' %>">
+        <% if (order.quantityPlan) { %>
+        <%- (order.quantityDone || 0).toLocaleString() %>/<strike><%- order.quantityTodo.toLocaleString() %></strike>
+        <% } else { %>
+        <%- (order.quantityDone || 0).toLocaleString() %>/<%- order.quantityTodo.toLocaleString() %>
+        <% } %>
+      </span>
+      <% if (order.quantityPlan) { %>
+      <%- order.quantityPlan %>
+      <% } %>
+    </td>
+  </tr>
+  <% if (order.laborTime) { %>
+  <tr>
+    <th><%- t('planning', 'orders:laborTime') %></th>
+    <td data-property="laborTime"><%= order.laborTime.toLocaleString() %></td>
+  </tr>
+  <% } %>
+  <% if (order.manHours) { %>
+  <tr>
+    <th><%- t('planning', 'orders:manHours') %></th>
+    <td data-property="laborTime"><%= order.manHours.toLocaleString() %></td>
+  </tr>
+  <% } %>
+  <tr>
+    <th><%- t('planning', 'orders:statuses') %></th>
+    <td><span class="planning-mrp-popover-value"><%- order.statuses.join(' ') %></span></td>
+  </tr>
+  </tbody>
+</table>

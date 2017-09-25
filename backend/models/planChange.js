@@ -12,7 +12,8 @@ module.exports = function setupPlanChangeModel(app, mongoose)
   }, {
     id: false,
     minimize: false,
-    retainKeyOrder: true
+    retainKeyOrder: true,
+    versionKey: false
   });
 
   planChangeSchema.statics.TOPIC_PREFIX = 'planning.changes';

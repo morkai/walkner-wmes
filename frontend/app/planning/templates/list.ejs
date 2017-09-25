@@ -1,0 +1,24 @@
+<div class="planning-list-container">
+  <a class="planning-list-prev" href="<%- prevLink %>"><i class="fa fa-caret-left"></i></a>
+  <% rows.forEach(function(day) { %>
+  <div class="planning-list-day <%- day.mrps.length ? '' : 'is-empty' %>" data-id="<%- day.date %>">
+    <div class="planning-list-hd">
+      <%- day.moment.format('llll').replace(day.moment.format('LT'), '') %>
+    </div>
+    <% day.mrps.forEach(function(mrp) { %>
+    <div class="planning-list-mrp">
+      <span class="planning-list-mrp-id"><%- mrp._id %></span>
+      <span class="planning-list-mrp-lines">
+        <% mrp.lines.forEach(function(line) { %>
+        <span class="planning-list-mrp-line"><%- line._id %> (<%- line.workerCount %>)</span>
+        <% }) %>
+        <% if (!mrp.lines.length) { %>
+        &nbsp;
+        <% } %>
+      </span>
+    </div>
+    <% }) %>
+  </div>
+  <% }) %>
+  <a class="planning-list-next" href="<%- nextLink %>"><i class="fa fa-caret-right"></i></a>
+</div>

@@ -16,12 +16,22 @@ const ORDER_USER_PROPERTIES = [
   'ignored'
 ];
 const OPERATION_PROPERTIES = [
-  'item',
+  'no',
   'name',
   'machineSetupTime',
   'laborSetupTime',
   'machineTime',
   'laborTime'
+];
+const EMPTY_HOURLY_PLAN = [
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0
+];
+const HOUR_TO_INDEX = [
+  18, 19, 20, 21, 22, 23, 0, 1,
+  2, 3, 4, 5, 6, 7, 8, 9,
+  10, 11, 12, 13, 14, 15, 16, 17
 ];
 
 module.exports = function setUpGenerator(app, module)
@@ -39,6 +49,8 @@ module.exports = function setUpGenerator(app, module)
 
   const autoDowntimeCache = setUpAutoDowntimeCache(app, module);
   const inProgressState = new Map();
+
+app.broker.subscribe('app.started', () => generatePlan('2017-09-25'));
 
   app.broker.subscribe('planning.generator.requested', handleRequest);
 
@@ -71,11 +83,13 @@ module.exports = function setUpGenerator(app, module)
       orders: null,
       plan: null,
       orderStateQueues: null,
+      lineStates: null,
       lineStateQueue: [],
       changes: {
-        addedOrders: [],
-        removedOrders: [],
-        changedOrders: []
+        addedOrders: new Map(),
+        removedOrders: new Map(),
+        changedOrders: new Map(),
+        changedLines: new Map()
       },
       log: message => module.debug(`[generator] [${key}] ${message}`)
     };
@@ -98,11 +112,13 @@ module.exports = function setUpGenerator(app, module)
     state.orders = null;
     state.plan = null;
     state.orderStateQueues = null;
+    state.lineStates = null;
     state.lineStateQueue = [];
     state.changes = {
-      addedOrders: [],
-      removedOrders: [],
-      changedOrders: []
+      addedOrders: new Map(),
+      removedOrders: new Map(),
+      changedOrders: new Map(),
+      changedLines: new Map()
     };
 
     if (typeof done === 'function')
@@ -172,7 +188,9 @@ module.exports = function setUpGenerator(app, module)
       date: planKey
     });
 
-    tryGeneratePlan(createPlanGeneratorState(planKey, dateMoment.toDate(), done));
+    tryGeneratePlan(
+      createPlanGeneratorState(planKey, dateMoment.toDate(), done)
+    );
   }
 
   function tryGeneratePlan(state)
@@ -292,7 +310,7 @@ module.exports = function setUpGenerator(app, module)
 
     Object.keys(state.changes).forEach(key =>
     {
-      anyChanges = anyChanges || !_.isEmpty(state.changes[key]);
+      anyChanges = anyChanges || state.changes[key].size > 0;
     });
 
     if (!anyChanges)
@@ -300,11 +318,18 @@ module.exports = function setUpGenerator(app, module)
       return;
     }
 
+    const data = {};
+
+    Object.keys(state.changes).forEach(key =>
+    {
+      data[key] = Array.from(state.changes[key].values());
+    });
+
     const planChange = new PlanChange({
       plan: state.plan._id,
       date: state.plan.updatedAt,
       user: null,
-      data: state.changes
+      data
     });
 
     planChange.save(err =>
@@ -446,6 +471,7 @@ module.exports = function setUpGenerator(app, module)
 
         Order
           .find(conditions, projection)
+          .sort({_id: 1})
           .lean()
           .exec(this.next());
       },
@@ -485,10 +511,11 @@ module.exports = function setUpGenerator(app, module)
       statuses: sapOrder.statuses,
       operation: _.pick(resolveBestOperation(sapOrder.operations), OPERATION_PROPERTIES),
       manHours: 0,
-      hardComponents: Array.isArray(sapOrder.bom) && sapOrder.bom.length > 0,
+      hardComponent: Array.isArray(sapOrder.bom) && sapOrder.bom.length > 0 ? sapOrder.bom[0].nc12 : null,
       quantityTodo: sapOrder.qty,
       quantityDone: (sapOrder.qtyDone && sapOrder.qtyDone.total) || 0,
       quantityPlan: 0,
+      incomplete: 0,
       added: false,
       ignored: false
     };
@@ -501,12 +528,13 @@ module.exports = function setUpGenerator(app, module)
     if (operation)
     {
       const quantityTodo = getQuantityTodo(planOrder, settings);
-      const manHours = operation.laborTime / 100 * quantityTodo + operation.laborSetupTime;
+      const manHours = (operation.laborTime / 100 * quantityTodo) + operation.laborSetupTime;
 
       planOrder.manHours = Math.round(manHours * 1000) / 1000;
     }
 
     planOrder.kind = classifyPlanOrder(planOrder, settings);
+    planOrder.incomplete = 0;
 
     return planOrder;
   }
@@ -572,7 +600,7 @@ module.exports = function setUpGenerator(app, module)
             .filter(order => filterPlanOrder(order, state.settings) === null)
             .map(order => preparePlanOrder(order, state.settings));
 
-          state.changes.addedOrders = [].concat(state.plan.orders);
+          state.plan.orders.forEach(order => state.changes.addedOrders.set(order._id, order));
 
           state.log(`Classified ${state.plan.orders.length} new orders!`);
 
@@ -671,7 +699,7 @@ module.exports = function setUpGenerator(app, module)
   function isHardOrder(planOrder, settings)
   {
     // Has a hard component
-    if (planOrder.hardComponents)
+    if (planOrder.hardComponent !== null)
     {
       return true;
     }
@@ -707,7 +735,7 @@ module.exports = function setUpGenerator(app, module)
 
       if (!latestOrder)
       {
-        state.changes.removedOrders.push({
+        state.changes.removedOrders.set(oldOrder._id, {
           _id: oldOrder._id,
           reason: 'MISSING_ORDER'
         });
@@ -731,15 +759,15 @@ module.exports = function setUpGenerator(app, module)
 
         newPlanOrders.push(latestOrder);
 
-        state.changes.addedOrders.push(latestOrder);
+        state.changes.addedOrders.set(latestOrder._id, latestOrder);
       }
     });
 
     state.plan.orders = newPlanOrders;
 
-    const added = state.changes.addedOrders.length;
-    const changed = state.changes.changedOrders.length;
-    const removed = state.changes.removedOrders.length;
+    const added = state.changes.addedOrders.size;
+    const changed = state.changes.changedOrders.size;
+    const removed = state.changes.removedOrders.size;
 
     state.log(`Added ${added}, changed ${changed} and removed ${removed} orders!`);
 
@@ -754,7 +782,7 @@ module.exports = function setUpGenerator(app, module)
 
     if (removedOrder !== null)
     {
-      state.changes.removedOrders.push(removedOrder);
+      state.changes.removedOrders.set(removedOrder._id, removedOrder);
 
       return false;
     }
@@ -766,7 +794,7 @@ module.exports = function setUpGenerator(app, module)
 
     Object.keys(latestOrder).forEach(key =>
     {
-      const oldValue = oldOrder[key].toObject ? oldOrder[key].toObject() : oldOrder[key];
+      const oldValue = oldOrder[key] && oldOrder[key].toObject ? oldOrder[key].toObject() : oldOrder[key];
       const newValue = latestOrder[key];
 
       if (newValue === oldValue || deepEqual(newValue, oldValue))
@@ -780,7 +808,7 @@ module.exports = function setUpGenerator(app, module)
 
     if (changed)
     {
-      state.changes.changedOrders.push({
+      state.changes.changedOrders.set(oldOrder._id, {
         _id: oldOrder._id,
         changes
       });
@@ -796,7 +824,7 @@ module.exports = function setUpGenerator(app, module)
     step(
       function()
       {
-        createOrderQueues(state, this.next());
+        createOrderStateQueues(state, this.next());
       },
       function()
       {
@@ -820,7 +848,7 @@ module.exports = function setUpGenerator(app, module)
     );
   }
 
-  function createOrderQueues(state, done)
+  function createOrderStateQueues(state, done)
   {
     state.orderStateQueues = new Map();
 
@@ -837,7 +865,9 @@ module.exports = function setUpGenerator(app, module)
 
       state.orderStateQueues.get(order.mrp)[order.kind].push({
         order: order,
-        quantityTodo: order.quantityTodo
+        quantityTodo: getQuantityTodo(order, state.settings),
+        maxQuantityPerLine: 0,
+        firstStartAt: 0
       });
     });
 
@@ -858,12 +888,12 @@ module.exports = function setUpGenerator(app, module)
 
   function sortHardOrders(a, b)
   {
-    if (a.order.hardComponents && b.order.hardComponents)
+    if (a.order.hardComponent !== null && b.order.hardComponent !== null)
     {
       return b.order.manHours - a.order.manHours;
     }
 
-    if (a.order.hardComponents && !b.order.hardComponents)
+    if (a.order.hardComponent !== null && b.order.hardComponent === null)
     {
       return -1;
     }
@@ -873,39 +903,80 @@ module.exports = function setUpGenerator(app, module)
 
   function createLineStates(state, done)
   {
+    state.lineStates = new Map();
+
     state.settings.lines.forEach(lineId =>
     {
       const lineSettings = state.settings.line(lineId);
       const lineState = {
         _id: lineId,
         completed: false,
-        activeFrom: null, // lineSettings.activeFrom
-        activeTo: null, // lineSettings.activeTo
-        autoDowntimes: state.autoDowntimes.get(lineId),
-        mrpQueue: lineSettings.mrpPriority.map(mrpId =>
-        {
-          const mrpSettings = state.settings.mrp(mrpId);
-          const mrpLineSettings = state.settings.mrpLine(mrpId, lineId);
-          const orderStateQueue = state.orderStateQueues.get(mrpId);
-
-          return {
-            mrp: mrpSettings,
-            line: mrpLineSettings,
-            orderPriorityQueue: [].concat(mrpLineSettings.orderPriority),
-            orderStateQueue: {
-              small: orderStateQueue ? [].concat(orderStateQueue.small) : [],
-              easy: orderStateQueue ? [].concat(orderStateQueue.easy) : [],
-              hard: orderStateQueue ? [].concat(orderStateQueue.hard) : []
-            },
-            nextOrderIndex: -1
-          };
-        })
+        shiftNo: 1,
+        activeFrom: createMomentFromActiveTime(state.date.getTime(), lineSettings.activeFrom, true),
+        activeTo: createMomentFromActiveTime(state.date.getTime(), lineSettings.activeTo, false),
+        nextDowntime: state.autoDowntimes.get(lineId),
+        downtimes: [],
+        orderStateQueue: createLineOrderStateQueue(state, lineId, lineSettings.mrpPriority),
+        bigOrderStateQueue: [],
+        plannedOrdersSet: new Set(),
+        plannedOrdersList: [],
+        pceTimes: [],
+        hourlyPlan: EMPTY_HOURLY_PLAN.slice()
       };
+
+      lineState.shift = getShiftFromMoment(lineState.activeFrom);
+
+      state.lineStates.set(lineId, lineState);
 
       state.lineStateQueue.push(lineState);
     });
 
     setImmediate(done);
+  }
+
+  function createLineOrderStateQueue(state, lineId, mrpPriority)
+  {
+    let lineOrderStateQueue = [];
+
+    mrpPriority.forEach(mrpId =>
+    {
+      const mrpLineSettings = state.settings.mrpLine(mrpId, lineId);
+      const mrpOrderStateQueue = state.orderStateQueues.get(mrpId);
+
+      if (!mrpOrderStateQueue)
+      {
+        return;
+      }
+
+      mrpLineSettings.orderPriority.forEach(orderPriority =>
+      {
+        lineOrderStateQueue = lineOrderStateQueue.concat(mrpOrderStateQueue[orderPriority]);
+      });
+    });
+
+    return lineOrderStateQueue;
+  }
+
+  function createMomentFromActiveTime(planTime, activeTimeString, from)
+  {
+    const matches = activeTimeString.match(/([0-9]{1,2})(?:([0-9]{1,2}))?/);
+    const hours = matches && matches[1] < 24 ? +matches[1] : 6;
+    const minutes = matches && matches[2] < 60 ? +matches[2] : 0;
+    const activeTimeMoment = moment.utc(planTime);
+
+    if ((from && hours < 6) || (!from && hours <= 6 && minutes === 0))
+    {
+      activeTimeMoment.add(1, 'days');
+    }
+
+    return activeTimeMoment.hours(hours).minutes(minutes);
+  }
+
+  function getShiftFromMoment(moment)
+  {
+    const hours = moment.hours();
+
+    return hours >= 6 && hours < 14 ? 1 : hours >= 14 && hours < 22 ? 2 : 3;
   }
 
   function generatePlanForLines(state, done)
@@ -928,48 +999,385 @@ module.exports = function setUpGenerator(app, module)
 
       if (!orderState)
       {
-        console.log('completed');
-
-        lineState.completed = true;
-
-        continue;
+        break;
       }
 
-      const order = orderState.order;
+      if (orderState.order.kind === 'small')
+      {
+        handleSmallOrder(state, lineState, orderState);
+      }
+      else
+      {
+        handleBigOrder(state, lineState, orderState);
+      }
+    }
 
-      console.log(`${order._id} ${order.kind} ${order.quantityTodo}`);
+    setImmediate(completeLine, state, lineState, done);
+  }
+
+  function completeLine(state, lineState, done)
+  {
+    lineState.completed = true;
+
+    const oldPlanLine = state.plan.lines.find(planLine => planLine._id === lineState._id);
+    const newPlanLine = {
+      _id: lineState._id,
+      version: 1,
+      orders: lineState.plannedOrdersList,
+      downtimes: lineState.downtimes,
+      totalQuantity: lineState.pceTimes.length / 2,
+      hourlyPlan: lineState.hourlyPlan,
+      pceTimes: lineState.pceTimes
+    };
+
+    if (!oldPlanLine)
+    {
+      state.plan.lines.push(newPlanLine);
+
+      state.changes.changedLines.set(newPlanLine._id, {
+        _id: newPlanLine._id,
+        version: newPlanLine.version
+      });
+
+      console.log('        Completed: pushed new line!');
+    }
+    else if (!comparePlanLines(oldPlanLine, newPlanLine))
+    {
+      newPlanLine.version = oldPlanLine.version + 1;
+
+      Object.assign(oldPlanLine, newPlanLine);
+
+      state.changes.changedLines.set(oldPlanLine._id, {
+        _id: oldPlanLine._id,
+        version: oldPlanLine.version
+      });
+
+      console.log(`        Completed: changed existing line. New version: ${oldPlanLine.version}`);
+    }
+    else
+    {
+      console.log('        Completed: no changes!');
     }
 
     setImmediate(done);
   }
 
+  function comparePlanLines(oldPlanLine, newPlanLine)
+  {
+    if (newPlanLine.totalQuantity !== oldPlanLine.totalQuantity
+      || newPlanLine.orders.length !== oldPlanLine.orders.length
+      || newPlanLine.downtimes.length !== oldPlanLine.downtimes.length)
+    {
+      return false;
+    }
+
+    const h = oldPlanLine.pceTimes.length - 2;
+    const m = h + 1;
+
+    return oldPlanLine.pceTimes[h] === newPlanLine.pceTimes[h]
+      && oldPlanLine.pceTimes[m] === newPlanLine.pceTimes[m]
+      && _.isEqual(oldPlanLine.pceTimes, newPlanLine.pceTimes);
+  }
+
   function getNextOrderForLine(lineState)
   {
-    while (lineState.mrpQueue.length)
+    const activeFromTime = lineState.activeFrom.valueOf();
+
+    while (lineState.bigOrderStateQueue.length)
     {
-      const mrpState = lineState.mrpQueue[0];
+      const orderState = lineState.bigOrderStateQueue[0];
 
-      while (mrpState.orderPriorityQueue.length)
+      if (lineState.plannedOrdersSet.has(orderState.order._id))
       {
-        const orderPriority = mrpState.orderPriorityQueue[0];
-        const orderStateQueue = mrpState.orderStateQueue[orderPriority];
+        lineState.bigOrderStateQueue.shift();
 
-        while (orderStateQueue.length)
-        {
-          const orderState = orderStateQueue.shift();
-
-          if (orderState.quantityTodo > 0)
-          {
-            return orderState;
-          }
-        }
-
-        mrpState.orderPriorityQueue.shift();
+        continue;
       }
 
-      lineState.mrpQueue.shift();
+      const timeDiff = activeFromTime - orderState.firstStartAt;
+
+      if (timeDiff > -20 * 60 * 1000)
+      {
+        return lineState.bigOrderStateQueue.shift();
+      }
+
+      break;
+    }
+
+    while (lineState.orderStateQueue.length)
+    {
+      const orderState = lineState.orderStateQueue.shift();
+
+      if (lineState.plannedOrdersSet.has(orderState.order._id))
+      {
+        continue;
+      }
+
+      if (orderState.quantityTodo > 0)
+      {
+        return orderState;
+      }
     }
 
     return null;
+  }
+
+  function handleSmallOrder(state, lineState, orderState)
+  {
+    const order = orderState.order;
+    const orderId = order._id;
+    const lineId = lineState._id;
+    const mrpId = order.mrp;
+
+    const settings = state.settings;
+    const lineSettings = state.settings.line(lineId);
+    const mrpSettings = state.settings.mrp(mrpId);
+    const mrpLineSettings = state.settings.mrpLine(mrpId, lineId);
+
+    const maxQuantityPerLine = orderState.maxQuantityPerLine || 0;
+    const pceTime = getPceTime(order, mrpLineSettings.workerCount);
+    const activeTo = lineState.activeTo.valueOf();
+    let startAt = lineState.activeFrom.valueOf();
+    let finishAt = startAt + getOrderStartOverhead(state.settings, lineState, orderState);
+    let totalQuantityPlanned = 0;
+    let quantityPlanned = 0;
+    let quantityRemaining = 0;
+    let quantityTodo = orderState.quantityTodo;
+    let nextDowntime = lineState.nextDowntime;
+    let shiftNo = lineState.shiftNo;
+    let completed = false;
+    const plannedOrders = [];
+    const pceTimes = [];
+    const hourlyPlan = EMPTY_HOURLY_PLAN.slice();
+
+    console.log(
+      `        ${orderId} kind=${order.kind}`
+      + ` workerCount=${mrpLineSettings.workerCount}`
+      + ` laborTime=${order.operation.laborTime}`
+      + ` manHours=${order.manHours}`
+      + ` pceTime=${pceTime / 1000}`
+    );
+
+    while (quantityPlanned <= quantityTodo)
+    {
+      let newFinishAt = finishAt + pceTime;
+
+      while (nextDowntime)
+      {
+        if (nextDowntime.startTime <= newFinishAt)
+        {
+          lineState.downtimes.push({
+            reason: nextDowntime.reason,
+            startAt: new Date(nextDowntime.startTime),
+            duration: nextDowntime.duration
+          });
+
+          newFinishAt += nextDowntime.duration;
+          nextDowntime = nextDowntime.next;
+
+          continue;
+        }
+
+        break;
+      }
+
+      const newFinishMoment = moment.utc(newFinishAt);
+      const h = newFinishMoment.hours();
+
+      // End of 3rd shift
+      if (newFinishAt > activeTo || (shiftNo === 3 && h >= 6 && h < 22))
+      {
+        if (quantityPlanned > 0)
+        {
+          quantityRemaining = quantityTodo - quantityPlanned;
+
+          plannedOrders.push({
+            _id: getNextLineOrderId(orderId, shiftNo, lineState.plannedOrdersList, plannedOrders),
+            orderNo: orderId,
+            quantity: quantityPlanned,
+            pceTime: pceTime,
+            startAt: new Date(startAt),
+            finishAt: new Date(finishAt)
+          });
+        }
+
+        completed = true;
+
+        break;
+      }
+
+      // PCE crosses to 2nd or 3rd shift
+      if ((shiftNo === 1 && h >= 14) || (shiftNo === 2 && (h >= 22 || h < 6)))
+      {
+        // First PCE crosses to 2nd or 3rd shift
+        if (quantityPlanned === 0)
+        {
+          shiftNo += 1;
+          startAt = settings.shiftStartTimes[shiftNo - 1];
+          finishAt = startAt + mrpSettings.extraShiftSeconds[shiftNo - 1];
+        }
+        else
+        {
+          plannedOrders.push({
+            _id: getNextLineOrderId(orderId, shiftNo, lineState.plannedOrdersList, plannedOrders),
+            orderNo: orderId,
+            quantity: quantityPlanned,
+            pceTime: pceTime,
+            startAt: new Date(startAt),
+            finishAt: new Date(finishAt)
+          });
+
+          if (quantityTodo - quantityPlanned === 0)
+          {
+            break;
+          }
+
+          shiftNo += 1;
+          startAt = settings.shiftStartTimes[shiftNo - 1];
+          finishAt = startAt + mrpSettings.extraOrderSeconds;
+          quantityTodo -= quantityPlanned;
+          quantityPlanned = 0;
+        }
+
+        continue;
+      }
+
+      if (quantityPlanned === quantityTodo
+        || (maxQuantityPerLine > 0 && totalQuantityPlanned === maxQuantityPerLine))
+      {
+        plannedOrders.push({
+          _id: getNextLineOrderId(orderId, shiftNo, lineState.plannedOrdersList, plannedOrders),
+          orderNo: orderId,
+          quantity: quantityPlanned,
+          pceTime: pceTime,
+          startAt: new Date(startAt),
+          finishAt: new Date(finishAt)
+        });
+
+        break;
+      }
+
+      finishAt = newFinishAt;
+      quantityPlanned += 1;
+      totalQuantityPlanned += 1;
+
+      pceTimes.push(h, newFinishMoment.minutes());
+      hourlyPlan[HOUR_TO_INDEX[h]] += 1;
+    }
+
+    if (!plannedOrders.length)
+    {
+      return;
+    }
+
+    const initialQuantityTodo = orderState.quantityTodo;
+
+    orderState.quantityTodo -= totalQuantityPlanned;
+
+    if (orderState.firstStartAt === 0)
+    {
+      orderState.firstStartAt = plannedOrders[0].startAt.getTime();
+    }
+
+    lineState.completed = completed;
+    lineState.shiftNo = shiftNo;
+    lineState.activeFrom = moment.utc(_.last(plannedOrders).finishAt.getTime());
+    lineState.nextDowntime = nextDowntime;
+    lineState.plannedOrdersList = lineState.plannedOrdersList.concat(plannedOrders);
+    lineState.pceTimes = lineState.pceTimes.concat(pceTimes);
+
+    hourlyPlan.forEach((v, k) => lineState.hourlyPlan[k] += v);
+
+    order.incomplete = orderState.quantityTodo;
+
+    lineState.plannedOrdersSet.add(orderId);
+
+    console.log(
+      `                  todo=${initialQuantityTodo}`
+      + ` maxPerLine=${maxQuantityPerLine}`
+      + ` done=${initialQuantityTodo - quantityRemaining}`
+      + ` remaining=${quantityRemaining}`
+    );
+    plannedOrders.forEach(plannedOrder =>
+    {
+      console.log(
+        `                  done=${plannedOrder.quantity}`
+        + ` startAt=${moment.utc(plannedOrder.startAt).format('DD.MM HH:mm:ss')}`
+        + ` finishAt=${moment.utc(plannedOrder.finishAt).format('DD.MM HH:mm:ss')}`
+        + ` duration=${(plannedOrder.finishAt - plannedOrder.startAt) / 1000}`
+      );
+    });
+  }
+
+  function handleBigOrder(state, lineState, orderState)
+  {
+    const order = orderState.order;
+    const availableLines = getLinesForBigOrder(state, order.mrp, order.kind);
+
+    orderState.maxQuantityPerLine = Math.ceil(orderState.quantityTodo / availableLines.length);
+
+    availableLines.forEach(lineState =>
+    {
+      lineState.bigOrderStateQueue.push(orderState);
+    });
+
+    handleSmallOrder(state, lineState, orderState);
+  }
+
+  function getLinesForBigOrder(state, orderMrp, orderKind)
+  {
+    return state.settings.mrp(orderMrp).lines
+      .filter(line => line.orderPriority.includes(orderKind) && !state.lineStates.get(line._id).completed)
+      .map(line => state.lineStates.get(line._id));
+  }
+
+  function getNextLineOrderId(orderId, shiftNo, linePlannedOrders, newPlannedOrders)
+  {
+    return `${orderId}-${shiftNo}-${1 + linePlannedOrders.length + newPlannedOrders.length}`;
+  }
+
+  function getPceTime(order, workerCount)
+  {
+    return Math.floor(order.operation.laborTime / 100 / workerCount * 3600 * 1000);
+  }
+
+  function getOrderStartOverhead(settings, lineState, orderState)
+  {
+    const shiftStartTimes = settings.shiftStartTimes;
+    const {extraOrderSeconds, extraShiftSeconds} = settings.mrp(orderState.order.mrp);
+    const hours = lineState.activeFrom.hours();
+    const seconds = lineState.activeFrom.minutes() * 60;
+    let shiftStartTime = 0;
+    let extraShiftStartTime = 0;
+
+    if (hours === 6 && seconds < extraShiftSeconds[0])
+    {
+      shiftStartTime = shiftStartTimes[0];
+      extraShiftStartTime = extraShiftSeconds[0] * 1000;
+    }
+    else if (hours === 14 && seconds < extraShiftSeconds[1])
+    {
+      shiftStartTime = shiftStartTimes[1];
+      extraShiftStartTime = extraShiftSeconds[1] * 1000;
+    }
+    else if (hours === 22 && seconds < extraShiftSeconds[2])
+    {
+      shiftStartTime = shiftStartTimes[2];
+      extraShiftStartTime = extraShiftSeconds[2] * 1000;
+    }
+    else
+    {
+      return extraOrderSeconds * 1000;
+    }
+
+    const orderStartAt = lineState.activeFrom.valueOf();
+    const startDowntimeFinishAt = shiftStartTime + extraShiftStartTime;
+
+    if (orderStartAt >= startDowntimeFinishAt)
+    {
+      return extraOrderSeconds * 1000;
+    }
+
+    return extraShiftStartTime - (orderStartAt - shiftStartTime);
   }
 };

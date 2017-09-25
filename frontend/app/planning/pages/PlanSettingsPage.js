@@ -21,11 +21,11 @@ define([
       return [
         {
           label: t.bound('planning', 'BREADCRUMBS:base'),
-          href: '#planning'
+          href: '#planning/plans'
         },
         {
           label: this.model.getLabel(),
-          href: '#planning/' + this.model.id
+          href: '#planning/plans/' + this.model.id
         },
         {
           label: t.bound('planning', 'BREADCRUMBS:settings')

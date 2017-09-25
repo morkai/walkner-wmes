@@ -23,7 +23,7 @@ define([
 
     parse: function(res)
     {
-      res._id = time.utc.format(this.id, 'YYYY-MM-DD');
+      res._id = time.utc.format(res._id, 'YYYY-MM-DD');
 
       return res;
     },
@@ -31,6 +31,20 @@ define([
     getLabel: function()
     {
       return time.utc.format(this.id, 'LL');
+    }
+
+  }, {
+
+    forDate: function(date)
+    {
+      var current = time.utc.getMoment().startOf('day');
+
+      if (/^-?[0-9]+d$/.test(date))
+      {
+        date = current.add(+date.replace('d', ''), 'days').format('YYYY-MM-DD');
+      }
+
+      return new this({_id: date});
     }
 
   });

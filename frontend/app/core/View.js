@@ -104,6 +104,16 @@ function(
     }, this);
   };
 
+  View.prototype.getViews = function(fn)
+  {
+    if (typeof fn === 'string' && /^#-/.test(fn))
+    {
+      fn = fn.replace('#-', '#' + this.idPrefix + '-');
+    }
+
+    return Layout.prototype.getViews.call(this, fn);
+  };
+
   View.prototype.setView = function(name, view, insert, insertOptions)
   {
     if (typeof name === 'string' && /^#-/.test(name))

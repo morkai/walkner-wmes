@@ -2,6 +2,8 @@
 
 'use strict';
 
+const moment = require('moment');
+
 module.exports = function setupPlanSettingsModel(app, mongoose)
 {
   const mrpLineSettingsSchema = new mongoose.Schema({
@@ -140,48 +142,57 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
 
     this.ignoredStatuses.forEach(status => ignoredStatuses.add(status));
 
+    const line = (lineId) =>
+    {
+      if (!lines.has(lineId))
+      {
+        lines.set(lineId, this.lines.find(line => line._id === lineId));
+      }
+
+      return lines.get(lineId);
+    };
+    const mrp = (mrpId) =>
+    {
+      if (!mrps.has(mrpId))
+      {
+        mrps.set(mrpId, this.mrps.find(mrp => mrp._id === mrpId));
+      }
+
+      return mrps.get(mrpId);
+    };
+    const mrpLine = (mrpId, lineId) =>
+    {
+      if (!mrpLines.has(lineId))
+      {
+        mrpLines.set(lineId, new Map());
+      }
+
+      const lineMrpMap = mrpLines.get(lineId);
+
+      if (!lineMrpMap.has(mrpId))
+      {
+        lineMrpMap.set(mrpId, mrp(mrpId).lines.find(line => line._id === lineId));
+      }
+
+      return lineMrpMap.get(mrpId);
+    };
+
     return {
       useRemainingQuantity: this.useRemainingQuantity,
       ignoreCompleted: this.ignoreCompleted,
       requiredStatuses: this.requiredStatuses,
       ignoredStatuses: ignoredStatuses,
       hardComponents: this.hardComponents,
+      shiftStartTimes: [
+        moment.utc(this._id).clone().hours(6).valueOf(),
+        moment.utc(this._id).clone().hours(14).valueOf(),
+        moment.utc(this._id).clone().hours(22).valueOf()
+      ],
       mrps: this.mrps.map(mrp => mrp._id),
       lines: this.lines.map(line => line._id),
-      line: (lineId) =>
-      {
-        if (!lines.has(lineId))
-        {
-          lines.set(lineId, this.lines.find(line => line._id === lineId));
-        }
-
-        return lines.get(lineId);
-      },
-      mrp: (mrpId) =>
-      {
-        if (!mrps.has(mrpId))
-        {
-          mrps.set(mrpId, this.mrps.find(mrp => mrp._id === mrpId));
-        }
-
-        return mrps.get(mrpId);
-      },
-      mrpLine: (mrpId, lineId) =>
-      {
-        if (!mrpLines.has(lineId))
-        {
-          mrpLines.set(lineId, new Map());
-        }
-
-        const lineMrpMap = mrpLines.get(lineId);
-
-        if (!lineMrpMap.has(mrpId))
-        {
-          lineMrpMap.set(mrpId, mrps.get(mrpId).lines.find(line => line._id === lineId));
-        }
-
-        return lineMrpMap.get(mrpId);
-      }
+      line,
+      mrp,
+      mrpLine
     };
   };
 

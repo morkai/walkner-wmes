@@ -1,0 +1,34 @@
+<table>
+  <tbody>
+  <tr>
+    <th><%- t('planning', 'lineOrders:orderNo') %></th>
+    <td><%= lineOrder.orderNo %></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'lineOrders:qty:planned') %></th>
+    <td><%- lineOrder.quantityPlanned.toLocaleString() %></td>
+  </tr>
+  <% if (lineOrder.quantityRemaining) { %>
+  <tr>
+    <th><%- t('planning', 'lineOrders:qty:remaining') %></th>
+    <td><%- lineOrder.quantityRemaining.toLocaleString() %></td>
+  </tr>
+  <% } %>
+  <tr>
+    <th><%- t('planning', 'lineOrders:qty:total') %></th>
+    <td><%- lineOrder.quantityTotal.toLocaleString() %></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'lineOrders:pceTime') %></th>
+    <td><%- time.toString(lineOrder.pceTime) %></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'lineOrders:time') %></th>
+    <td><%= time.format(lineOrder.startAt, 'HH:mm:ss') %>-<%= time.format(lineOrder.finishAt, 'HH:mm:ss') %></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'lineOrders:duration') %></th>
+    <td><%- time.toString(lineOrder.duration) %></td>
+  </tr>
+  </tbody>
+</table>

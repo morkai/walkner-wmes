@@ -57,7 +57,10 @@ define([
     events: {
       'click #-ownMrps': function(e)
       {
-        this.$(e.target).closest('label').next().select2('data', getAsSelect2());
+        var $input = this.$(e.target).closest('label').next().next();
+
+        $input.select2('data', getAsSelect2());
+        $input.change();
 
         return false;
       }

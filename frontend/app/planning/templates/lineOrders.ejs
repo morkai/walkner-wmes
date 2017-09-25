@@ -1,0 +1,30 @@
+<div class="planning-mrp-lineOrders-container">
+  <% if (!shifts.length) { %>
+  <div class="planning-mrp-list-container planning-mrp-lineOrders">
+    <div class="planning-mrp-list-hd"><%= line %></div>
+    <div class="planning-mrp-lineOrders-shift"></div>
+    <div id="<%- idPrefix %>-list-0" class="planning-mrp-list"></div>
+  </div>
+  <% } %>
+  <% shifts.forEach(function(shift, i) { %>
+  <div class="planning-mrp-list-container planning-mrp-lineOrders">
+    <% if (i == 0) { %>
+    <div class="planning-mrp-list-hd"><%= line %></div>
+    <% } %>
+    <div class="planning-mrp-lineOrders-shift" data-shift="<%- shift.no %>"><%- t('core', 'SHIFT:' + shift.no) %></div>
+    <div id="<%- idPrefix %>-list-<%- shift.no %>" class="planning-mrp-list planning-mrp-lineOrders-list">
+      <% shift.orders.forEach(function(shiftOrder) { %>
+      <div class="planning-mrp-list-item is-lineOrder <%- shiftOrder.incomplete ? 'is-incomplete' : ''%> <%- shiftOrder.external ? 'is-external' : ''%>" data-id="<%- shiftOrder._id %>" style="width: <%- shiftOrder.width %>%; margin-left: <%- shiftOrder.margin %>%">
+        <div class="planning-mrp-list-item-inner">
+          <% if (shiftOrder.external) { %>
+          <%- shiftOrder.orderNo %>, <%- shiftOrder.quantity %> <%- t('planning', 'lineOrders:unit') %>, <%- shiftOrder.mrp %>
+          <% } else { %>
+          <%- shiftOrder.orderNo %>, <%- shiftOrder.quantity %> <%- t('planning', 'lineOrders:unit') %>
+          <% } %>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+  <% }) %>
+</div>

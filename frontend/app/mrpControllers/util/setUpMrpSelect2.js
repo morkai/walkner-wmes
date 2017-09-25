@@ -3,11 +3,13 @@
 define([
   'underscore',
   'select2',
+  'Sortable',
   'app/broker',
   'app/data/orgUnits'
 ], function(
   _,
   select2,
+  Sortable,
   broker,
   orgUnits
 ) {
@@ -109,6 +111,34 @@ define([
         return input === result ? null : result.replace(/\s+/, ' ').trim();
       }
     }, options));
+
+    if (options && options.sortable)
+    {
+      var sortable = new Sortable($input.select2('container').find('.select2-choices')[0], {
+        draggable: '.select2-search-choice',
+        filter: '.select2-search-choice-close',
+        onStart: function()
+        {
+          $input.select2('onSortStart');
+        },
+        onEnd: function()
+        {
+          $input.select2('onSortEnd').select2('focus');
+        }
+      });
+
+      if (options.view)
+      {
+        var destroy = options.view.destroy;
+
+        options.view.destroy = function()
+        {
+          destroy.apply(options.view, arguments);
+
+          sortable.destroy();
+        };
+      }
+    }
 
     $input.select2(
       'data',
