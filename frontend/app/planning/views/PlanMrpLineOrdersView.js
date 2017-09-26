@@ -84,7 +84,7 @@ define([
 
       line.orders.forEach(function(lineOrder)
       {
-        var order = planMrp.orders.get(lineOrder.get('orderNo'));
+        var order = planMrp.plan.orders.get(lineOrder.get('orderNo'));
         var mrp = order.get('mrp');
         var startAt = Date.parse(lineOrder.get('startAt'));
         var finishAt = Date.parse(lineOrder.get('finishAt'));
@@ -129,7 +129,7 @@ define([
     serializePopover: function(id)
     {
       var lineOrder = this.model.mrpLine.orders.get(id);
-      var order = this.model.planMrp.orders.get(lineOrder.get('orderNo'));
+      var order = this.model.planMrp.plan.orders.get(lineOrder.get('orderNo'));
       var startAt = Date.parse(lineOrder.get('startAt'));
       var finishAt = Date.parse(lineOrder.get('finishAt'));
 
