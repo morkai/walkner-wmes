@@ -50,7 +50,17 @@ module.exports = function setUpGenerator(app, module)
   const autoDowntimeCache = setUpAutoDowntimeCache(app, module);
   const inProgressState = new Map();
 
-  app.broker.subscribe('app.started', () => generateActivePlans(false)).setLimit(1);
+  app.broker.subscribe('app.started').setLimit(1).on('message', () =>
+  {
+    if (app.options.env === 'development')
+    {
+      generatePlan(moment.utc().startOf('day').add(1, 'days').format('YYYY-MM-DD'));
+    }
+    else
+    {
+      generateActivePlans(false);
+    }
+  });
 
   app.broker.subscribe('planning.generator.requested', handleRequest);
 
@@ -1081,34 +1091,42 @@ module.exports = function setUpGenerator(app, module)
 
   function getNextOrderForLine(lineState)
   {
-    const activeFromTime = lineState.activeFrom.valueOf();
+    const bigOrderIdSet = new Set();
 
-    while (lineState.bigOrderStateQueue.length)
+    if (lineState.bigOrderStateQueue.length)
     {
-      const orderState = lineState.bigOrderStateQueue[0];
+      const activeFromTime = lineState.activeFrom.valueOf();
+      const bigOrderStateQueue = [];
 
-      if (lineState.plannedOrdersSet.has(orderState.order._id))
+      lineState.bigOrderStateQueue.forEach(orderState =>
       {
-        lineState.bigOrderStateQueue.shift();
+        if (lineState.plannedOrdersSet.has(orderState.order._id))
+        {
+          return;
+        }
 
-        continue;
-      }
+        orderState.timeDiff = activeFromTime - orderState.firstStartAt;
 
-      const timeDiff = activeFromTime - orderState.firstStartAt;
+        bigOrderIdSet.add(orderState.order._id);
+        bigOrderStateQueue.push(orderState);
+      });
 
-      if (timeDiff > -20 * 60 * 1000)
+      bigOrderStateQueue.sort((a, b) => b.timeDiff - a.timeDiff);
+
+      lineState.bigOrderStateQueue = bigOrderStateQueue;
+
+      if (bigOrderStateQueue.length && bigOrderStateQueue[0].timeDiff > -20 * 60 * 1000)
       {
-        return lineState.bigOrderStateQueue.shift();
+        return bigOrderStateQueue.shift();
       }
-
-      break;
     }
 
     while (lineState.orderStateQueue.length)
     {
       const orderState = lineState.orderStateQueue.shift();
 
-      if (lineState.plannedOrdersSet.has(orderState.order._id))
+      if (lineState.plannedOrdersSet.has(orderState.order._id)
+        || bigOrderIdSet.has(orderState.order._id))
       {
         continue;
       }
@@ -1117,6 +1135,11 @@ module.exports = function setUpGenerator(app, module)
       {
         return orderState;
       }
+    }
+
+    if (lineState.bigOrderStateQueue.length)
+    {
+      return lineState.bigOrderStateQueue.shift();
     }
 
     return null;
@@ -1277,6 +1300,17 @@ module.exports = function setUpGenerator(app, module)
     if (orderState.firstStartAt === 0)
     {
       orderState.firstStartAt = plannedOrders[0].startAt.getTime();
+
+      if (orderState.quantityTodo > 0)
+      {
+        getLinesForBigOrder(state, order.mrp, order.kind).forEach(availableLineState =>
+        {
+          if (availableLineState !== lineState)
+          {
+            lineState.bigOrderStateQueue.push(orderState);
+          }
+        });
+      }
     }
 
     lineState.completed = completed;
@@ -1316,9 +1350,12 @@ module.exports = function setUpGenerator(app, module)
 
     orderState.maxQuantityPerLine = Math.ceil(orderState.quantityTodo / availableLines.length);
 
-    availableLines.forEach(lineState =>
+    availableLines.forEach(availableLineState =>
     {
-      lineState.bigOrderStateQueue.push(orderState);
+      if (availableLineState !== lineState)
+      {
+        availableLineState.bigOrderStateQueue.push(orderState);
+      }
     });
 
     handleSmallOrder(state, lineState, orderState);
