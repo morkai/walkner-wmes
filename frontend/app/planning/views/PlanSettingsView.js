@@ -10,6 +10,7 @@ define([
   'app/data/orgUnits',
   'app/data/orderStatuses',
   'app/core/views/FormView',
+  'app/mrpControllers/util/setUpMrpSelect2',
   'app/orderStatuses/util/renderOrderStatusLabel',
   'app/planning/templates/planSettings'
 ], function(
@@ -22,6 +23,7 @@ define([
   orgUnits,
   orderStatuses,
   FormView,
+  setUpMrpSelect2,
   renderOrderStatusLabel,
   template
 ) {
@@ -342,52 +344,9 @@ define([
         }
       });
 
-      $mrpPriority.select2({
-        placeholder: t('planning', 'settings:mrpPriority:placeholder'),
-        allowClear: true,
-        multiple: true,
-        data: mrps,
-        matcher: idAndTextMatcher,
-        formatSelection: function(item)
-        {
-          return _.escape(item.id);
-        },
-        formatResult: function(item)
-        {
-          var id = item.id;
-
-          while (id.length < maxMrpLength)
-          {
-            id += ' ';
-          }
-
-          return '<span class="text-mono">' + id.replace(/ /g, '&nbsp;') + '</span>: ' + item.text;
-        },
-        tokenizer: function(input, selection, selectCallback)
-        {
-          var result = input;
-          var options = {};
-
-          selection.forEach(function(item)
-          {
-            options[item.id] = true;
-          });
-
-          (input.match(/([A-Z]{2}[0-9]+)/ig) || []).forEach(function(mrp)
-          {
-            result = result.replace(mrp, '');
-
-            mrp = mrp.toUpperCase();
-
-            if (!options[mrp])
-            {
-              selectCallback({id: mrp, text: mrp});
-              options[mrp] = true;
-            }
-          });
-
-          return input === result ? null : result.replace(/\s+/, ' ').trim();
-        }
+      setUpMrpSelect2($mrpPriority, {
+        width: '100%',
+        placeholder: t('planning', 'settings:mrpPriority:placeholder')
       });
 
       var choicesEl = $mrpPriority.select2('container').find('.select2-choices')[0];
