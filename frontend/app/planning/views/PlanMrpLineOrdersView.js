@@ -101,6 +101,7 @@ define([
           orderNo: lineOrder.get('orderNo'),
           quantity: lineOrder.get('quantity'),
           incomplete: order.get('incomplete') > 0,
+          finishAt: finishAt,
           margin: (startAt - prevFinishedAt) * 100 / shiftUtil.SHIFT_DURATION,
           width: duration * 100 / shiftUtil.SHIFT_DURATION,
           mrp: mrp,
