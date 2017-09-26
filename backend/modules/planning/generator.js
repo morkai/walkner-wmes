@@ -50,7 +50,7 @@ module.exports = function setUpGenerator(app, module)
   const autoDowntimeCache = setUpAutoDowntimeCache(app, module);
   const inProgressState = new Map();
 
-app.broker.subscribe('app.started', () => generatePlan('2017-09-25'));
+  app.broker.subscribe('app.started', () => generateActivePlans(false)).setLimit(1);
 
   app.broker.subscribe('planning.generator.requested', handleRequest);
 
@@ -911,7 +911,7 @@ app.broker.subscribe('app.started', () => generatePlan('2017-09-25'));
       const lineState = {
         _id: lineId,
         completed: false,
-        shiftNo: 1,
+        shiftNo: -1,
         activeFrom: createMomentFromActiveTime(state.date.getTime(), lineSettings.activeFrom, true),
         activeTo: createMomentFromActiveTime(state.date.getTime(), lineSettings.activeTo, false),
         nextDowntime: state.autoDowntimes.get(lineId),
@@ -924,7 +924,7 @@ app.broker.subscribe('app.started', () => generatePlan('2017-09-25'));
         hourlyPlan: EMPTY_HOURLY_PLAN.slice()
       };
 
-      lineState.shift = getShiftFromMoment(lineState.activeFrom);
+      lineState.shiftNo = getShiftFromMoment(lineState.activeFrom);
 
       state.lineStates.set(lineId, lineState);
 
