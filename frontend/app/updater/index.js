@@ -153,7 +153,7 @@ define([
 
   function handleFrontendRestart()
   {
-    if (frontendRestarting)
+    if (frontendRestarting || backendRestarting)
     {
       return;
     }
