@@ -2,6 +2,7 @@
 
 define([
   'app/i18n',
+  'app/viewport',
   'app/core/Collection',
   'app/core/util/pageActions',
   './DrillingReportPage',
@@ -13,6 +14,7 @@ define([
   '../views/1/ChartsView'
 ], function(
   t,
+  viewport,
   Collection,
   pageActions,
   DrillingReportPage,
@@ -40,7 +42,8 @@ define([
         page: this,
         collection: this.exportCollection,
         privilege: false,
-        label: t('reports', 'PAGE_ACTION:1:export')
+        label: t('reports', 'PAGE_ACTION:1:export'),
+        callback: this.onExportClick.bind(this)
       }));
 
       return actions;
@@ -127,6 +130,20 @@ define([
       if (this.query.isAutoMode())
       {
         this.timers.autoRefresh = setTimeout(this.refresh.bind(this), 10 * 60 * 1000);
+      }
+    },
+
+    onExportClick: function()
+    {
+      if (this.reports[0].isEmpty())
+      {
+        viewport.msg.show({
+          type: 'warning',
+          time: 3000,
+          text: t('reports', 'MSG:1:export:empty')
+        });
+
+        return false;
       }
     }
 

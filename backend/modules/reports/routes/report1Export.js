@@ -26,6 +26,21 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
     return res.sendStatus(400);
   }
 
+  if (!query.from || !query.to)
+  {
+    const firstShiftMoment = moment();
+
+    if (firstShiftMoment.hours() >= 0 && firstShiftMoment.hours() < 6)
+    {
+      firstShiftMoment.subtract(1, 'days');
+    }
+
+    firstShiftMoment.hours(6).startOf('hour');
+
+    query.from = firstShiftMoment.toISOString();
+    query.to = firstShiftMoment.add(1, 'days').toISOString();
+  }
+
   const options = {
     orgUnitType: query.orgUnitType,
     orgUnitId: query.orgUnitId,

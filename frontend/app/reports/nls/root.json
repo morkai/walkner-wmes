@@ -19,6 +19,7 @@
 
     "MSG:LOADING_FAILURE": "Failed to load the report :(",
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the report :(",
+    "MSG:1:export:empty": "No data to export :(",
 
     "PAGE_ACTION:settings": "Change settings",
     "PAGE_ACTION:1:export": "Export efficiency",

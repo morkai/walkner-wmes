@@ -349,6 +349,11 @@ define([
       });
 
       return subdivisions.length ? subdivisions[0].id : null;
+    },
+
+    isEmpty: function()
+    {
+      return this.get('coeffs').efficiency.length === 0;
     }
 
   });

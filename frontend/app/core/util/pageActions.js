@@ -183,7 +183,8 @@ define([
 
       return {
         template: template,
-        privileges: resolvePrivileges(options.collection, options.privilege, 'VIEW')
+        privileges: resolvePrivileges(options.collection, options.privilege, 'VIEW'),
+        callback: options.callback
       };
     },
     jump: function(page, collection)
