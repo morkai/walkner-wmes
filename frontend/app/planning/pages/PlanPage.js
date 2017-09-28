@@ -55,7 +55,7 @@ define([
         {
           label: t.bound('planning', 'PAGE_ACTION:settings'),
           icon: 'cogs',
-          privileges: 'PLANNING:MANAGE',
+          privileges: 'PROD_DATA:MANAGE',
           href: '#planning/settings/' + this.plan.id
         }
       ];
