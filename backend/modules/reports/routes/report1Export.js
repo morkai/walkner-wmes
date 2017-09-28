@@ -81,6 +81,8 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
   }
 
   const fields = {
+    division: 1,
+    subdivision: 1,
     prodLine: 1,
     startedAt: 1,
     workDuration: 1,
@@ -98,8 +100,8 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
     headerHeight: options.interval === 'shift' ? 72 : 60,
     prepareColumn: column =>
     {
-      column.type = 'integer';
-      column.width = 4;
+      column.type = 'percent';
+      column.width = 5;
       column.headerRotation = 90;
       column.headerAlignmentH = 'Center';
       column.headerAlignmentV = 'Bottom';
@@ -126,15 +128,22 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
         caption: 'Work Center'
       },
       prodLine: {
-        width: 13,
+        width: 15,
         caption: 'Assembly line name - MES'
+      },
+      total: {
+        type: 'percent',
+        width: 5,
+        caption: 'Total'
       }
     },
     serializeStream: (cursor, emitter) =>
     {
       const results = {
         prodLines: {},
-        groups: {}
+        groups: {},
+        lastDivision: '',
+        lastSubdivision: ''
       };
 
       cursor.on('error', err => emitter.emit('error', err));
@@ -156,24 +165,86 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
 
     if (!results.prodLines[pso.prodLine])
     {
-      results.prodLines[pso.prodLine] = orgUnitsModule.getAllForProdLine(pso.prodLine);
+      const lineOrgUnits = orgUnitsModule.getAllForProdLine(pso.prodLine);
+      const subdivision = orgUnitsModule.getByTypeAndId('subdivision', lineOrgUnits.subdivision);
+      const prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', lineOrgUnits.prodFlow);
+
+      results.prodLines[pso.prodLine] = {
+        division: {
+          _id: lineOrgUnits.division,
+          label: lineOrgUnits.division
+        },
+        subdivision: {
+          _id: lineOrgUnits.subdivision,
+          label: subdivision ? subdivision.name : String(lineOrgUnits.subdivision)
+        },
+        mrpControllers: {
+          _id: lineOrgUnits.mrpControllers,
+          label: lineOrgUnits.mrpControllers.join('; ')
+        },
+        prodFlow: {
+          _id: lineOrgUnits.prodFlow,
+          label: prodFlow ? prodFlow.name : String(lineOrgUnits.prodFlow)
+        },
+        workCenter: {
+          _id: lineOrgUnits.workCenter,
+          label: lineOrgUnits.workCenter
+        },
+        prodLine: {
+          _id: lineOrgUnits.prodLine,
+          label: lineOrgUnits.prodLine
+        }
+      };
     }
 
-    if (!results.groups[groupKey][pso.prodLine])
+    const group = results.groups[groupKey];
+
+    if (!group[pso.division])
     {
-      results.groups[groupKey][pso.prodLine] = {
+      group[pso.division] = {
         effNum: 0,
         effDen: 0
       };
     }
 
-    results.groups[groupKey][pso.prodLine].effNum += pso.laborTime / 100 * pso.totalQuantity;
-    results.groups[groupKey][pso.prodLine].effDen += pso.workDuration * pso.workerCount;
+    if (!group[pso.subdivision])
+    {
+      group[pso.subdivision] = {
+        effNum: 0,
+        effDen: 0
+      };
+    }
+
+    if (!group[pso.prodLine])
+    {
+      group[pso.prodLine] = {
+        effNum: 0,
+        effDen: 0
+      };
+    }
+
+    if (!group[pso.prodLine])
+    {
+      group[pso.prodLine] = {
+        effNum: 0,
+        effDen: 0
+      };
+    }
+
+    const effNum = pso.laborTime / 100 * pso.totalQuantity;
+    const effDen = pso.workDuration * pso.workerCount;
+
+    group[pso.division].effNum += effNum;
+    group[pso.division].effDen += effDen;
+    group[pso.subdivision].effNum += effNum;
+    group[pso.subdivision].effDen += effDen;
+    group[pso.prodLine].effNum += effNum;
+    group[pso.prodLine].effDen += effDen;
   }
 
   function sendResults(results, emitter)
   {
-    const prodLines = Object.keys(results.prodLines).sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
+    const prodLines = Object.keys(results.prodLines);
     const groupKeys = Object.keys(results.groups).map(k => +k).sort();
     const groups = [];
     const shiftInterval = options.interval === 'shift';
@@ -193,7 +264,27 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
       currentGroupKey = createNextGroupKey(currentGroupKey);
     }
 
+    prodLines.sort((a, b) => sortLinesBy(
+      ['division', 'subdivision', 'prodLine'],
+      results.prodLines[a],
+      results.prodLines[b]
+    ));
+
     emitNextProdLine(prodLines, groups, results, emitter);
+  }
+
+  function sortLinesBy(properties, a, b)
+  {
+    const property = properties.shift();
+
+    if (property === null)
+    {
+      return 0;
+    }
+
+    const cmp = a[property].label.localeCompare(b[property].label, undefined, {numeric: true});
+
+    return cmp === 0 ? sortLinesBy(properties, a, b) : cmp;
   }
 
   function emitNextProdLine(prodLines, groups, results, emitter)
@@ -203,30 +294,61 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
       return emitter.emit('end');
     }
 
-    const orgUnits = results.prodLines[prodLines.shift()];
-    const subdivision = orgUnitsModule.getByTypeAndId('subdivision', orgUnits.subdivision);
-    const prodFlow = orgUnitsModule.getByTypeAndId('prodFlow', orgUnits.prodFlow);
+    const prodLine = prodLines.shift();
+    const lineOrgUnits = results.prodLines[prodLine];
+
+    if (lineOrgUnits.division._id !== results.lastDivision)
+    {
+      const divisionOrgUnits = {division: lineOrgUnits.division};
+
+      emitOrgUnitRow('division', divisionOrgUnits, groups, results, emitter);
+
+      results.lastDivision = lineOrgUnits.division._id;
+    }
+
+    if (lineOrgUnits.subdivision._id !== results.lastSubdivision)
+    {
+      const subdivisionOrgUnits = {division: lineOrgUnits.division, subdivision: lineOrgUnits.subdivision};
+
+      emitOrgUnitRow('subdivision', subdivisionOrgUnits, groups, results, emitter);
+
+      results.lastSubdivision = lineOrgUnits.subdivision._id;
+    }
+
+    emitOrgUnitRow('prodLine', lineOrgUnits, groups, results, emitter);
+
+    setImmediate(emitNextProdLine, prodLines, groups, results, emitter);
+  }
+
+  function emitOrgUnitRow(orgUnitType, orgUnits, groups, results, emitter)
+  {
     const row = {
-      division: orgUnits.division,
-      subdivision: subdivision ? subdivision.name : String(orgUnits.subdivision),
-      mrpControllers: orgUnits.mrpControllers.join('; '),
-      prodFlow: prodFlow ? prodFlow.name : String(orgUnits.prodFlow),
-      workCenter: orgUnits.workCenter,
-      prodLine: orgUnits.prodLine
+      division: orgUnits.division.label,
+      subdivision: orgUnits.subdivision ? orgUnits.subdivision.label : '',
+      mrpControllers: orgUnits.mrpControllers ? orgUnits.mrpControllers.label : '',
+      prodFlow: orgUnits.prodFlow ? orgUnits.prodFlow.label : '',
+      workCenter: orgUnits.workCenter ? orgUnits.workCenter.label : '',
+      prodLine: orgUnits.prodLine ? orgUnits.prodLine.label : ''
     };
+
+    let totalEffNum = 0;
+    let totalEffDen = 0;
 
     groups.forEach(group =>
     {
-      const data = (results.groups[group.key] || {})[orgUnits.prodLine] || {
+      const data = (results.groups[group.key] || {})[orgUnits[orgUnitType]._id] || {
         effNum: 0,
         effDen: 0
       };
 
-      row[group.label] = data.effDen > 0 ? Math.round(data.effNum / data.effDen * 100) : 0;
+      totalEffNum += data.effNum;
+      totalEffDen += data.effDen;
+
+      row[group.label] = data.effDen > 0 ? Math.round(data.effNum / data.effDen * 100) / 100 : 0;
     });
 
-    emitter.emit('data', row);
+    row.total = totalEffDen > 0 ? Math.round(totalEffNum / totalEffDen * 100) / 100 : 0;
 
-    setImmediate(emitNextProdLine, prodLines, groups, results, emitter);
+    emitter.emit('data', row);
   }
 };
