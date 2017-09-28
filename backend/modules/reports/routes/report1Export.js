@@ -31,7 +31,7 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
     orgUnitId: query.orgUnitId,
     fromTime: helpers.getTime(query.from),
     toTime: helpers.getTime(query.to),
-    interval: helpers.getInterval(query.interval, 'shift'),
+    interval: helpers.getInterval(query.interval === 'hour' ? 'day' : query.interval, 'day'),
     ignoredOrgUnits: helpers.decodeOrgUnits(orgUnitsModule, query.ignoredOrgUnits)
   };
 
