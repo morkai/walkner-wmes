@@ -76,6 +76,7 @@
   border-top: 0;
 }
 .dashboard-metricsAndList-list .table-responsive {
+  overflow: hidden;
   border-left: 0;
   border-right: 0;
 }
