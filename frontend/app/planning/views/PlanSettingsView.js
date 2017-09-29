@@ -273,15 +273,6 @@ define([
           return input === result ? null : result.replace(/\s+/, ' ').trim();
         }
       });
-
-      $input.select2(
-        'data',
-        $input
-          .val()
-          .split(',')
-          .filter(function(nc12) { return !!nc12.length; })
-          .map(function(nc12) { return {id: nc12, text: nc12}; })
-      );
     },
 
     setUpLine: function()
@@ -290,7 +281,6 @@ define([
       var $line = view.$id('line');
       var $mrpPriority = view.$id('mrpPriority');
       var maxLineLength = 0;
-      var maxMrpLength = 0;
       var lines = orgUnits.getAllByType('prodLine')
         .filter(function(prodLine) { return !prodLine.get('deactivatedAt'); })
         .map(function(prodLine)
@@ -303,21 +293,6 @@ define([
           return {
             id: prodLine.id,
             text: _.escape(prodLine.get('description'))
-          };
-        })
-        .sort(function(a, b) { return a.id.localeCompare(b.id, undefined, {numeric: true}); });
-      var mrps = orgUnits.getAllByType('mrpController')
-        .filter(function(mrp) { return mrp.id.indexOf('~') === -1; })
-        .map(function(mrp)
-        {
-          if (mrp.id.length > maxMrpLength)
-          {
-            maxMrpLength = mrp.id.length;
-          }
-
-          return {
-            id: mrp.id,
-            text: _.escape(mrp.get('description'))
           };
         })
         .sort(function(a, b) { return a.id.localeCompare(b.id, undefined, {numeric: true}); });
@@ -596,6 +571,7 @@ define([
           extraShiftSeconds: [0, 0, 0],
           bigOrderQuantity: 0,
           hardOrderManHours: 0,
+          hardComponents: [],
           lines: []
         };
 
@@ -623,6 +599,10 @@ define([
       view.$id('hardOrderManHours')
         .val(disabled ? '' : mrp.hardOrderManHours)
         .prop('disabled', disabled);
+
+      view.$id('hardComponents')
+        .select2('data', disabled ? [] : mrp.hardComponents.map(function(nc12) { return {id: nc12, text: nc12}; }))
+        .select2('enable', enabled);
 
       view.setUpMrpLineSelect2();
       view.selectMrpLine(mrp, lineId, disabled);

@@ -467,17 +467,9 @@ module.exports = function setUpGenerator(app, module)
           qty: 1,
           'qtyDone.total': 1,
           statuses: 1,
-          operations: 1
+          operations: 1,
+          'bom.nc12': 1
         };
-
-        if (state.settings.hardComponents.length)
-        {
-          projection.bom = {
-            $elemMatch: {
-              nc12: {$in: state.settings.hardComponents}
-            }
-          };
-        }
 
         Order
           .find(conditions, projection)
@@ -501,7 +493,7 @@ module.exports = function setUpGenerator(app, module)
 
         sapOrders.forEach(sapOrder =>
         {
-          state.orders.set(sapOrder._id, createPlanOrder(sapOrder));
+          state.orders.set(sapOrder._id, createPlanOrder(sapOrder, state.settings.mrp(sapOrder.mrp).hardComponents));
         });
 
         setImmediate(this.next());
@@ -510,8 +502,12 @@ module.exports = function setUpGenerator(app, module)
     );
   }
 
-  function createPlanOrder(sapOrder)
+  function createPlanOrder(sapOrder, hardComponents)
   {
+    const hardComponent = !Array.isArray(sapOrder.bom) || sapOrder.bom.length === 0
+      ? null
+      : sapOrder.bom.find(component => hardComponents.has(component.nc12));
+
     return {
       _id: sapOrder._id,
       kind: 'unclassified',
@@ -521,7 +517,7 @@ module.exports = function setUpGenerator(app, module)
       statuses: sapOrder.statuses,
       operation: _.pick(resolveBestOperation(sapOrder.operations), OPERATION_PROPERTIES),
       manHours: 0,
-      hardComponent: Array.isArray(sapOrder.bom) && sapOrder.bom.length > 0 ? sapOrder.bom[0].nc12 : null,
+      hardComponent: hardComponent ? hardComponent.nc12 : null,
       quantityTodo: sapOrder.qty,
       quantityDone: (sapOrder.qtyDone && sapOrder.qtyDone.total) || 0,
       quantityPlan: 0,

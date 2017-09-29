@@ -20,6 +20,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     extraShiftSeconds: [Number],
     bigOrderQuantity: Number,
     hardOrderManHours: Number,
+    hardComponents: [String],
     lines: [mrpLineSettingsSchema]
   }, {
     _id: false
@@ -40,7 +41,6 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     ignoreCompleted: Boolean,
     requiredStatuses: [String],
     ignoredStatuses: [String],
-    hardComponents: [String],
     lines: [lineSchema],
     mrps: [mrpSettingsSchema]
   }, {
@@ -85,6 +85,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
         extraShiftSeconds: [0, 0, 0],
         bigOrderQuantity: 70,
         hardOrderManHours: 0,
+        hardComponents: [],
         lines: []
       };
 
@@ -113,7 +114,6 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       ignoreCompleted: true,
       requiredStatuses: ['REL'],
       ignoredStatuses: ['TECO', 'CNF', 'DLV', 'DLFL', 'DLT'],
-      hardComponents: [],
       lines: [],
       mrps: []
     });
@@ -127,7 +127,6 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       ignoreCompleted: sourceSettings.ignoreCompleted,
       requiredStatuses: sourceSettings.requiredStatuses,
       ignoredStatuses: sourceSettings.ignoredStatuses,
-      hardComponents: sourceSettings.hardComponents,
       lines: sourceSettings.lines,
       mrps: sourceSettings.mrps
     });
@@ -139,8 +138,11 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     const mrps = new Map();
     const mrpLines = new Map();
     const ignoredStatuses = new Set();
+    const hardComponents = new Set();
 
     this.ignoredStatuses.forEach(status => ignoredStatuses.add(status));
+
+    this.mrps.forEach(mrp => mrp.hardComponents.forEach(nc12 => hardComponents.add(nc12)));
 
     const line = (lineId) =>
     {
@@ -155,7 +157,11 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     {
       if (!mrps.has(mrpId))
       {
-        mrps.set(mrpId, this.mrps.find(mrp => mrp._id === mrpId));
+        const mrp = this.mrps.find(mrp => mrp._id === mrpId);
+
+        mrps.set(mrpId, Object.assign(mrp.toObject(), {
+          hardComponents: new Set(mrp.hardComponents)
+        }));
       }
 
       return mrps.get(mrpId);
@@ -171,7 +177,9 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
 
       if (!lineMrpMap.has(mrpId))
       {
-        lineMrpMap.set(mrpId, mrp(mrpId).lines.find(line => line._id === lineId));
+        const line = mrp(mrpId).lines.find(line => line._id === lineId);
+
+        lineMrpMap.set(mrpId, line);
       }
 
       return lineMrpMap.get(mrpId);
@@ -182,7 +190,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       ignoreCompleted: this.ignoreCompleted,
       requiredStatuses: this.requiredStatuses,
       ignoredStatuses: ignoredStatuses,
-      hardComponents: this.hardComponents,
+      hardComponents: hardComponents,
       shiftStartTimes: [
         moment.utc(this._id).clone().hours(6).valueOf(),
         moment.utc(this._id).clone().hours(14).valueOf(),
