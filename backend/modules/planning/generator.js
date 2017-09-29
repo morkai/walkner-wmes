@@ -10,6 +10,9 @@ const resolveProductName = require('../util/resolveProductName');
 const resolveBestOperation = require('../util/resolveBestOperation');
 const setUpAutoDowntimeCache = require('./autoDowntimeCache');
 
+const ORDER_IGNORED_PROPERTIES = {
+  incomplete: true
+};
 const ORDER_USER_PROPERTIES = [
   'quantityPlan',
   'added',
@@ -800,6 +803,11 @@ module.exports = function setUpGenerator(app, module)
 
     Object.keys(latestOrder).forEach(key =>
     {
+      if (ORDER_IGNORED_PROPERTIES[key])
+      {
+        return;
+      }
+
       const oldValue = oldOrder[key] && oldOrder[key].toObject ? oldOrder[key].toObject() : oldOrder[key];
       const newValue = latestOrder[key];
 
@@ -860,6 +868,11 @@ module.exports = function setUpGenerator(app, module)
 
     state.plan.orders.forEach(order =>
     {
+      if (order.ignored)
+      {
+        return;
+      }
+
       if (!state.orderStateQueues.has(order.mrp))
       {
         state.orderStateQueues.set(order.mrp, {
