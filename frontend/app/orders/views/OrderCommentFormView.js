@@ -44,6 +44,11 @@ define([
 
     request: function(formData)
     {
+      if (!formData.delayReason)
+      {
+        formData.delayReason = '';
+      }
+
       return this.ajax({
         type: 'POST',
         url: '/orders/' + this.model.id,

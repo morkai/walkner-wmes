@@ -37,6 +37,7 @@
   "PROPERTY:mrp": "MRP",
   "PROPERTY:qtys": "Ilość",
   "PROPERTY:qty": "Ilość do zrobienia",
+  "PROPERTY:qtyMax": "Maks. ilość do zrobienia",
   "PROPERTY:qtyDone": "Ilość zrobiona",
   "PROPERTY:unit": "Jednostka",
   "PROPERTY:startDate": "Data startu (podst.)",
@@ -121,5 +122,7 @@
   "jumpList:documents": "Dokumenty",
   "jumpList:bom": "Komponenty",
   "jumpList:eto": "ETO",
-  "jumpList:changes": "Zmiany"
+  "jumpList:changes": "Zmiany",
+
+  "changeQtyMax:link": "zmień"
 }

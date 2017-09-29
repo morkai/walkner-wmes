@@ -72,12 +72,27 @@ define([
         }
       });
 
-      if (order.qty && order.unit)
+      if (!order.unit)
+      {
+        order.unit = 'PCE';
+      }
+
+      if (!order.qtyMax)
+      {
+        order.qtyMax = order.qty;
+      }
+
+      if (order.qty)
       {
         order.qtyUnit = order.qty + ' ' + order.unit;
       }
 
-      if (order.qtyDone && order.qtyDone.total >= 0 && order.unit)
+      if (order.qtyMax)
+      {
+        order.qtyMaxUnit = order.qtyMax + ' ' + order.unit;
+      }
+
+      if (order.qtyDone)
       {
         order.qtyDoneUnit = (order.qtyDone.total || 0) + ' ' + order.unit;
       }

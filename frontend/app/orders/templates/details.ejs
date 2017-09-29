@@ -43,14 +43,14 @@
           <div class="prop-name"><%- t('orders', 'PROPERTY:salesOrder') %></div>
           <div class="prop-value"><%- model.salesOrder || '-' %>/<%- model.salesOrderItem || '-' %></div>
         </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="props">
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:soldToParty') %></div>
           <div class="prop-value"><%= model.soldToParty || '-' %></div>
         </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="props">
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:mrp') %></div>
           <div class="prop-value"><%= model.mrp || '-' %></div>
@@ -59,6 +59,17 @@
           <div class="prop-name"><%- t('orders', 'PROPERTY:qty') %></div>
           <div class="prop-value"><%= model.qtyUnit || '-' %></div>
         </div>
+        <% if (showQtyMax) { %>
+        <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:qtyMax') %></div>
+          <div class="prop-value">
+            <span id="<%- idPrefix %>-qtyMax"><%= model.qtyMaxUnit || '-' %></span>
+            <% if (canChangeQtyMax) { %>
+            &nbsp;<a id="<%- idPrefix %>-changeQtyMax" href="#"><%- t('orders', 'changeQtyMax:link') %></a>
+            <% } %>
+          </div>
+        </div>
+        <% } %>
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:qtyDone') %></div>
           <div class="prop-value"><%= model.qtyDoneUnit || '-' %></div>

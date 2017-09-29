@@ -55,21 +55,16 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
   function editOrderRoute(req, res, next)
   {
-    const data = _.pick(req.body, ['delayReason', 'comment']);
-
-    if (_.isEmpty(data.delayReason))
-    {
-      data.delayReason = '';
-    }
+    const data = _.pick(req.body, ['delayReason', 'qtyMax', 'comment']);
 
     if (_.isEmpty(data.comment))
     {
       data.comment = '';
     }
 
-    if (!_.isString(data.delayReason)
-      || !_.isString(data.comment)
-      || (data.delayReason !== '' && !/^[a-f0-9]{24}$/.test(data.delayReason)))
+    if (!_.isString(data.comment)
+      || (data.delayReason !== undefined && data.delayReason !== '' && !/^[a-f0-9]{24}$/.test(data.delayReason))
+      || (data.qtyMax !== undefined && !(data.qtyMax >= 0 && data.qtyMax <= 9999)))
     {
       return next(express.createHttpError('INPUT', 400));
     }
@@ -79,7 +74,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
     step(
       function findOrderStep()
       {
-        Order.findById(req.params.id, {delayReason: 1}).lean().exec(this.next());
+        Order.findById(req.params.id, {qtyMax: 1, delayReason: 1}).lean().exec(this.next());
       },
       function editOrderStep(err, order)
       {
@@ -93,14 +88,6 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
           return this.skip(express.createHttpError('NOT_FOUND', 404));
         }
 
-        let oldDelayReason = order.delayReason ? order.delayReason.toString() : '';
-        let newDelayReason = data.delayReason;
-
-        if (oldDelayReason === newDelayReason && !data.comment.length)
-        {
-          return this.skip(express.createHttpError('INPUT', 400));
-        }
-
         const change = {
           time: new Date(),
           user: userModule.createUserInfo(req.session.user, req),
@@ -112,21 +99,48 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
           $push: {changes: change}
         };
 
-        if (oldDelayReason !== newDelayReason)
-        {
-          oldDelayReason = oldDelayReason === '' ? null : new ObjectId(oldDelayReason);
-          newDelayReason = newDelayReason === '' ? null : new ObjectId(newDelayReason);
+        const valuesToCheck = {
+          qtyMax: {
+            old: order.qtyMax || 0,
+            new: data.qtyMax,
+            prep: v => v
+          },
+          delayReason: {
+            old: order.delayReason ? order.delayReason.toString() : '',
+            new: data.delayReason,
+            prep: v => v === '' ? null : new ObjectId(v)
+          }
+        };
 
-          update.$set = {delayReason: newDelayReason};
-          change.oldValues = {delayReason: oldDelayReason};
-          change.newValues = {delayReason: newDelayReason};
-        }
-        else
+        Object.keys(valuesToCheck).forEach(k =>
         {
-          newDelayReason = oldDelayReason;
+          const values = valuesToCheck[k];
+
+          if (values.new === undefined)
+          {
+            return;
+          }
+
+          if (values.new === values.old)
+          {
+            return;
+          }
+
+          if (!update.$set)
+          {
+            update.$set = {};
+          }
+
+          update.$set[k] = values.prep(values.new);
+          change.oldValues[k] = values.prep(values.old);
+          change.newValues[k] = values.prep(values.new);
+        });
+
+        if (_.isEmpty(change.newValues) && !change.comment.length)
+        {
+          return this.skip(app.createError('INPUT', 400));
         }
 
-        this.newDelayReason = newDelayReason;
         this.change = change;
 
         Order.collection.update({_id: order._id}, update, this.next());
@@ -142,7 +156,6 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
         app.broker.publish('orders.updated.' + req.params.id, {
           _id: req.params.id,
-          delayReason: this.newDelayReason,
           change: this.change
         });
       }

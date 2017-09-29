@@ -77,6 +77,10 @@ module.exports = function setupOrderModel(app, mongoose)
     mrp: String,
     qty: Number,
     qtyDone: {},
+    qtyMax: {
+      type: Number,
+      default: 0
+    },
     unit: String,
     startDate: Date,
     finishDate: Date,
@@ -138,6 +142,7 @@ module.exports = function setupOrderModel(app, mongoose)
       mrp: null,
       qty: null,
       qtyDone: {},
+      qtyMax: 0,
       unit: null,
       startDate: null,
       finishDate: null,

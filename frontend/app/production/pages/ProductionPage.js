@@ -79,6 +79,7 @@ define([
         topics['production.taktTime.snChecked.' + prodLineId] = 'onSnChecked';
         topics['isaRequests.created.' + prodLineId + '.**'] = 'onIsaRequestUpdated';
         topics['isaRequests.updated.' + prodLineId + '.**'] = 'onIsaRequestUpdated';
+        topics['orders.updated.*'] = 'onOrderUpdated';
       }
 
       return topics;
@@ -539,6 +540,25 @@ define([
       {
         this.applyIsaChange(change);
       }
+    },
+
+    onOrderUpdated: function(message)
+    {
+      var pso = this.model.prodShiftOrder;
+
+      if (message._id !== pso.get('orderId'))
+      {
+        return;
+      }
+
+      var qtyMax = message.change.newValues.qtyMax;
+
+      if (qtyMax === undefined)
+      {
+        return;
+      }
+
+      pso.trigger('qtyMaxChanged', qtyMax);
     },
 
     applyIsaChange: function(change)

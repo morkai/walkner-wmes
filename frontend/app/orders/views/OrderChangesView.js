@@ -181,6 +181,9 @@ define([
         case 'sapCreatedAt':
           return time.format(value, 'LLL');
 
+        case 'qtyMax':
+          return typeof value === 'number' && value > 0 ? value.toLocaleString() : '-';
+
         default:
           return _.escape(String(value));
       }

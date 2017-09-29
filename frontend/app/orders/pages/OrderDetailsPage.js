@@ -56,11 +56,18 @@ define([
       };
     },
 
-    remoteTopics: {
-      'orders.updated.*': 'onOrderUpdated',
-      'orders.synced': 'onSynced',
-      'orders.*.synced': 'onSynced',
-      'orderDocuments.synced': 'onSynced'
+    remoteTopics: function()
+    {
+      var topics = {
+        'orders.updated.*': 'onOrderUpdated',
+        'orders.synced': 'onSynced',
+        'orders.*.synced': 'onSynced',
+        'orderDocuments.synced': 'onSynced'
+      };
+
+      topics['orders.quantityDone.' + this.model.id] = 'onQuantityDoneChanged';
+
+      return topics;
     },
 
     events: {
@@ -96,7 +103,8 @@ define([
 
       this.detailsView = new OrderDetailsView({
         model: this.model,
-        delayReasons: this.delayReasons
+        delayReasons: this.delayReasons,
+        showQtyMax: true
       });
       this.operationsView = new OperationListView({model: this.model});
       this.documentsView = new DocumentListView({model: this.model});
@@ -151,12 +159,17 @@ define([
 
     onOrderUpdated: function(message)
     {
-      if (this.model.id === message._id)
+      if (this.model.id === message._id && message.change)
       {
-        this.model.set('delayReason', message.delayReason);
+        this.model.set(message.change.newValues);
         this.model.get('changes').push(message.change);
         this.model.trigger('push:change', message.change);
       }
+    },
+
+    onQuantityDoneChanged: function(qtyDone)
+    {
+      this.model.set('qtyDone', qtyDone);
     },
 
     onSynced: function()

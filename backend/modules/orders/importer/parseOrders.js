@@ -57,6 +57,7 @@ module.exports = function parseOrders(input, orders, importTs)
         mrp: obj.mrp,
         qty: obj.qty,
         qtyDone: {},
+        qtyMax: 0,
         unit: obj.unit,
         startDate: new Date(obj.startDate.y, obj.startDate.m - 1, obj.startDate.d),
         finishDate: new Date(obj.finishDate.y, obj.finishDate.m - 1, obj.finishDate.d),

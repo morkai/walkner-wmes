@@ -163,6 +163,8 @@ define([
         this.lastOrders.push(this.model.prodShiftOrder.get('orderData'));
       }
 
+      this.listenTo(this.model.prodShiftOrder, 'qtyMaxChanged', this.limitQuantityDone.bind(this, true));
+
       $(window)
         .on('keydown.' + this.idPrefix, this.onKeyDown.bind(this))
         .on('keypress.' + this.idPrefix, this.onKeyPress.bind(this));
@@ -224,8 +226,7 @@ define([
         else
         {
           this.selectNextOrder();
-
-          limitQuantityDone(this, 'quantityDone', this.model.prodShiftOrder.id);
+          this.limitQuantityDone();
         }
       }
       else if (this.options.correctingOrder)
@@ -235,6 +236,11 @@ define([
       }
 
       this.focusFirstInput();
+    },
+
+    limitQuantityDone: function(forceValidate)
+    {
+      limitQuantityDone(this, forceValidate, this.model.prodShiftOrder);
     },
 
     onDialogShown: function(viewport)
