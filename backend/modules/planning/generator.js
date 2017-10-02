@@ -995,7 +995,7 @@ module.exports = function setUpGenerator(app, module)
 
   function createMomentFromActiveTime(planTime, activeTimeString, from)
   {
-    const matches = activeTimeString.match(/([0-9]{1,2})(?:([0-9]{1,2}))?/);
+    const matches = activeTimeString.match(/([0-9]{1,2})(?::([0-9]{1,2}))?/);
     const hours = matches && matches[1] < 24 ? +matches[1] : 6;
     const minutes = matches && matches[2] < 60 ? +matches[2] : 0;
     const activeTimeMoment = moment.utc(planTime);
