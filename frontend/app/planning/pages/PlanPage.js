@@ -1,26 +1,32 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   'app/i18n',
   'app/viewport',
+  'app/time',
   'app/core/Model',
   'app/core/View',
   'app/users/ownMrps',
   'app/planning/Plan',
   'app/planning/PlanSettings',
+  'app/planning/PlanDisplayOptions',
   'app/planning/views/PlanFilterView',
   'app/planning/views/PlanMrpView',
   'app/planning/templates/planPage'
 ], function(
+  _,
   $,
   t,
   viewport,
+  time,
   Model,
   View,
   ownMrps,
   Plan,
   PlanSettings,
+  PlanDisplayOptions,
   PlanFilterView,
   PlanMrpView,
   template
@@ -62,6 +68,10 @@ define([
     },
 
     remoteTopics: {
+      'planning.changes.created': function(planChange)
+      {
+        //this.plan.applyChange(planChange);
+      },
       'planning.generator.finished': function(message)
       {
         if (message.date === this.plan.id)
@@ -85,38 +95,41 @@ define([
 
     defineModels: function()
     {
-      this.planningOptions = new Model(JSON.parse(localStorage.getItem('PLANNING:OPTIONS') || '{}'));
-
-      this.settings = PlanSettings.forDate(this.options.date);
-
-      this.plan = new Plan({
-        _id: this.settings.id,
-        mrpFilter: this.options.mrpFilter
-      }, {
-        cache: true,
-        urlQuery: 'pceTimes=0&minMaxDates=1',
-        options: this.planningOptions,
-        settings: this.settings
+      this.plan = new Plan({_id: this.options.date}, {
+        displayOptions: PlanDisplayOptions.fromLocalStorage({
+          mrps: this.options.mrps
+        }),
+        settings: PlanSettings.fromDate(this.options.date),
+        minMaxDates: true,
+        pceTimes: false
       });
+
+window.plan = this.plan;
     },
 
     defineViews: function()
     {
-      this.filterView = new PlanFilterView({model: this.plan});
+      this.filterView = new PlanFilterView({plan: this.plan});
 
       this.setView('#-filter', this.filterView);
     },
 
     defineBindings: function()
     {
-      this.listenTo(this.planningOptions, 'change', function()
-      {
-        localStorage.setItem('PLANNING:OPTIONS', JSON.stringify(this.planningOptions.toJSON()));
-      });
+      var page = this;
+      var plan = page.plan;
+      var resetMrps = _.debounce(plan.mrps.reset.bind(plan.mrps), 1);
+      var renderMrps = _.after(_.debounce(page.renderMrps.bind(page), 1), 1);
 
-      this.listenTo(this.plan, 'change:_id', this.onDateFilterChanged);
-      this.listenTo(this.plan, 'change:mrpFilter', this.onMrpFilterChanged);
-      this.listenTo(this.plan, 'change:loading', this.onLoadingChanged);
+      page.listenTo(plan, 'change:loading', page.onLoadingChanged);
+      page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
+
+      page.listenTo(plan.displayOptions, 'change:mrps', page.onMrpsFilterChanged);
+
+      page.listenTo(plan.settings.mrps, 'add remove', resetMrps);
+      page.listenTo(plan.settings.lines, 'add remove', resetMrps);
+
+      page.listenTo(plan.mrps, 'reset', renderMrps);
     },
 
     load: function(when)
@@ -124,7 +137,7 @@ define([
       return when(
         ownMrps.load(this),
         this.loadStyles(),
-        this.settings.fetch(),
+        this.plan.settings.fetch(),
         this.plan.fetch()
       );
     },
@@ -160,7 +173,7 @@ define([
 
       plan.set('loading', true);
 
-      page.promised(page.settings.fetch()).then(
+      page.promised(plan.settings.fetch()).then(
         function()
         {
           page.promised(page.plan.fetch()).then(
@@ -181,10 +194,8 @@ define([
 
     updateUrl: function()
     {
-      var filter = this.plan.getFilter();
-
       this.broker.publish('router.navigate', {
-        url: '/planning/plans/' + filter.date + '?mrp=' + filter.mrp,
+        url: '/planning/plans/' + this.plan.id + '?mrps=' + this.plan.displayOptions.get('mrps'),
         replace: true,
         trigger: false
       });
@@ -193,18 +204,16 @@ define([
     renderMrps: function()
     {
       var page = this;
-
+console.log('renderMrps', this.plan.mrps.length);
       page.removeView('#-mrps');
 
-      page.plan.serializeMrps().forEach(function(planMrp)
+      page.plan.mrps.forEach(function(mrp)
       {
-        page.insertView('#-mrps', new PlanMrpView({model: planMrp})).render();
+        page.insertView('#-mrps', new PlanMrpView({plan: page.plan, mrp: mrp})).render();
       });
 
-      var anyMrps = this.$id('mrps')[0].childElementCount > 0;
-
-      this.$id('empty').toggleClass('hidden', anyMrps);
-      this.$id('mrps').toggleClass('hidden', !anyMrps);
+      this.$id('empty').toggleClass('hidden', page.plan.mrps.length > 0);
+      this.$id('mrps').toggleClass('hidden', page.plan.mrps.length === 0);
     },
 
     onDateFilterChanged: function()
@@ -219,7 +228,7 @@ define([
       this.reload();
     },
 
-    onMrpFilterChanged: function()
+    onMrpsFilterChanged: function()
     {
       this.updateUrl();
       this.renderMrps();

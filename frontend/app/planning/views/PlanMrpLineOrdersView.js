@@ -4,16 +4,20 @@ define([
   'underscore',
   'jquery',
   'app/core/View',
+  'app/data/downtimeReasons',
   'app/planning/util/shift',
   'app/planning/templates/lineOrders',
-  'app/planning/templates/lineOrderPopover'
+  'app/planning/templates/lineOrderPopover',
+  'app/planning/templates/lineDowntimePopover'
 ], function(
   _,
   $,
   View,
+  downtimeReasons,
   shiftUtil,
   lineOrdersTemplate,
-  lineOrderPopoverTemplate
+  lineOrderPopoverTemplate,
+  lineDowntimePopoverTemplate
 ) {
   'use strict';
 
@@ -37,7 +41,7 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        line: this.model.mrpLine.id,
+        line: this.line.id,
         shifts: this.serializeShifts()
       };
     },
@@ -52,7 +56,15 @@ define([
         trigger: 'hover',
         placement: 'top',
         html: true,
-        content: function() { return view.serializePopover(this.dataset.id); },
+        content: function()
+        {
+          if (this.classList.contains('is-downtime'))
+          {
+            return view.serializeDowntimePopover(this.dataset.id);
+          }
+
+          return view.serializeOrderPopover(this.dataset.id);
+        },
         template: '<div class="popover planning-mrp-popover">'
           + '<div class="arrow"></div>'
           + '<div class="popover-content"></div>'
@@ -67,36 +79,41 @@ define([
 
     serializeShifts: function()
     {
-      var planMrp = this.model.planMrp;
-      var line = this.model.mrpLine;
+      var plan = this.plan;
+      var planMrp = this.mrp;
+      var planLine = this.line;
       var shifts = [];
 
-      if (line.orders.length === 0)
+      if (planLine.orders.length === 0)
       {
         return shifts;
       }
 
-      var s = {
-        1: [],
-        2: [],
-        3: []
-      };
+      shifts.push(
+        null,
+        {no: 1, startTime: 0, orders: [], downtimes: []},
+        {no: 2, startTime: 0, orders: [], downtimes: []},
+        {no: 3, startTime: 0, orders: [], downtimes: []}
+      );
 
-      line.orders.forEach(function(lineOrder)
+      planLine.orders.forEach(function(lineOrder)
       {
-        var order = planMrp.plan.orders.get(lineOrder.get('orderNo'));
+        var order = plan.orders.get(lineOrder.get('orderNo'));
         var mrp = order.get('mrp');
         var startAt = Date.parse(lineOrder.get('startAt'));
         var finishAt = Date.parse(lineOrder.get('finishAt'));
         var duration = finishAt - startAt;
-        var shiftNo = shiftUtil.getShiftNo(startAt);
-        var shiftOrders = s[shiftNo];
-        var prevShiftOrder = shiftOrders[shiftOrders.length - 1];
-        var prevFinishedAt = prevShiftOrder
-          ? prevShiftOrder.finishAt
-          : shiftUtil.getShiftStartTime(startAt);
+        var shift = shifts[shiftUtil.getShiftNo(startAt)];
 
-        shiftOrders.push({
+        if (shift.startTime === 0)
+        {
+          shift.startTime = shiftUtil.getShiftStartTime(startAt);
+        }
+
+        var prevShiftOrder = shift.orders[shift.orders.length - 1];
+        var prevFinishedAt = prevShiftOrder ? prevShiftOrder.finishAt : shift.startTime;
+
+        shift.orders.push({
           _id: lineOrder.id,
           orderNo: lineOrder.get('orderNo'),
           quantity: lineOrder.get('quantity'),
@@ -105,32 +122,33 @@ define([
           margin: (startAt - prevFinishedAt) * 100 / shiftUtil.SHIFT_DURATION,
           width: duration * 100 / shiftUtil.SHIFT_DURATION,
           mrp: mrp,
-          external: mrp !== planMrp.mrp._id
+          external: mrp !== planMrp.id
         });
       });
 
-      if (s[1].length)
+      planLine.get('downtimes').forEach(function(downtime, i)
       {
-        shifts.push({no: 1, orders: s[1]});
-      }
+        var startAt = Date.parse(downtime.startAt);
+        var shift = shifts[shiftUtil.getShiftNo(startAt)];
 
-      if (s[2].length)
+        shift.downtimes.push({
+          _id: i,
+          reason: downtime.reason,
+          left: (startAt - shift.startTime) * 100 / shiftUtil.SHIFT_DURATION,
+          width: downtime.duration * 100 / shiftUtil.SHIFT_DURATION
+        });
+      });
+
+      return shifts.filter(function(shift)
       {
-        shifts.push({no: 2, orders: s[2]});
-      }
-
-      if (s[3].length)
-      {
-        shifts.push({no: 3, orders: s[3]});
-      }
-
-      return shifts;
+        return shift && shift.orders.length > 0;
+      });
     },
 
-    serializePopover: function(id)
+    serializeOrderPopover: function(id)
     {
-      var lineOrder = this.model.mrpLine.orders.get(id);
-      var order = this.model.planMrp.plan.orders.get(lineOrder.get('orderNo'));
+      var lineOrder = this.line.orders.get(id);
+      var order = this.plan.orders.get(lineOrder.get('orderNo'));
       var startAt = Date.parse(lineOrder.get('startAt'));
       var finishAt = Date.parse(lineOrder.get('finishAt'));
 
@@ -145,6 +163,23 @@ define([
           startAt: startAt,
           finishAt: finishAt,
           duration: (finishAt - startAt) / 1000
+        }
+      });
+    },
+
+    serializeDowntimePopover: function(id)
+    {
+      var downtime = this.line.get('downtimes')[id];
+      var startAt = Date.parse(downtime.startAt);
+      var finishAt = startAt + downtime.duration;
+      var downtimeReason = downtimeReasons.get(downtime.reason);
+
+      return lineDowntimePopoverTemplate({
+        lineDowntime: {
+          reason: downtimeReason ? downtimeReason.getLabel() : downtime.reason,
+          startAt: startAt,
+          finishAt: finishAt,
+          duration: downtime.duration / 1000
         }
       });
     }

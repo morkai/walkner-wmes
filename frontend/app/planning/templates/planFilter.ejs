@@ -4,12 +4,12 @@
     <input id="<%- idPrefix %>-date" name="date" class="form-control" type="date" value="<%- date %>" min="<%- minDate %>" max="<%- maxDate %>">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-mrp" class="control-label">
-      <%- t('planning', 'filter:mrp') %>
+    <label for="<%- idPrefix %>-mrps" class="control-label">
+      <%- t('planning', 'filter:mrps') %>
       <% if (showOwnMrps) { %>
       (<a id="<%- idPrefix %>-ownMrps" href="#"><%- t('orgUnits', 'filter:ownMrps') %></a>)
       <% } %>
     </label>
-    <input id="<%- idPrefix %>-mrp" name="mrp" value="<%- mrp %>">
+    <input id="<%- idPrefix %>-mrps" name="mrps" value="<%- mrps %>">
   </div>
 </form>

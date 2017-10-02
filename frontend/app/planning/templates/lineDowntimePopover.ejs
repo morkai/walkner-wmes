@@ -1,0 +1,16 @@
+<table>
+  <tbody>
+  <tr>
+    <th><%- t('planning', 'lineOrders:downtimeReason') %></th>
+    <td><%= lineDowntime.reason %></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'lineOrders:time') %></th>
+    <td><%= time.utc.format(lineDowntime.startAt, 'HH:mm:ss') %>-<%= time.utc.format(lineDowntime.finishAt, 'HH:mm:ss') %></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'lineOrders:duration') %></th>
+    <td><%- time.toString(lineDowntime.duration) %></td>
+  </tr>
+  </tbody>
+</table>

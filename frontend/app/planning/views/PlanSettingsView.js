@@ -47,20 +47,21 @@ define([
       {
         var object = e.currentTarget.dataset.object;
         var property = e.currentTarget.name;
-        var o = this.model.attributes;
+        var settings = this.model;
+        var o = settings;
         var v;
 
         if (object === 'line')
         {
-          o = _.findWhere(o.lines, {_id: this.$id('line').val()});
+          o = o.lines.get(this.$id('line').val());
         }
         else if (object !== 'plan')
         {
-          o = _.findWhere(o.mrps, {_id: this.$id('mrp').val()});
+          o = o.mrps.get(this.$id('mrp').val());
 
           if (object === 'mrpLine')
           {
-            o = _.findWhere(o.lines, {_id: this.$id('mrpLine').val()});
+            o = o.lines.get(this.$id('mrpLine').val());
           }
         }
 
@@ -122,7 +123,7 @@ define([
 
         if (v !== undefined)
         {
-          o[property] = v;
+          o.attributes[property] = v;
         }
       },
 
@@ -136,23 +137,20 @@ define([
           selectedLine = _.result(this.$id('line').select2('data'), 'id');
         }
 
-        var mrp = _.findWhere(this.model.get('mrps'), {_id: selectedMrp});
+        var mrp = this.model.mrps.get(selectedMrp);
 
         if (mrp)
         {
-          if (!_.findWhere(mrp.lines, {_id: selectedLine}))
+          if (!mrp.lines.get(selectedLine))
           {
-            selectedLine = _.result(mrp.lines[0], '_id');
+            selectedLine = _.result(mrp.lines.first(), 'id');
           }
         }
         else
         {
           selectedLine = _.result(
-            _.find(
-              this.model.get('lines'),
-              function(line) { return line.mrpPriority.indexOf(selectedMrp) >= 0; }
-            ),
-            '_id'
+            this.model.lines.find(function(line) { return _.includes(line.get('mrpPriority'), selectedMrp); }),
+            'id'
           );
         }
 
@@ -161,7 +159,7 @@ define([
 
       'change #-mrpLine': function(e)
       {
-        var mrp = _.findWhere(this.model.get('mrps'), {_id: this.$id('mrp').val()});
+        var mrp = this.model.mrps.get(this.$id('mrp').val());
 
         this.selectMrpLine(mrp, e.added ? e.added.id : null, false);
       }
@@ -344,7 +342,6 @@ define([
 
       $line.on('change', function(e)
       {
-        var lines = view.model.get('lines');
         var disabled = !e.added;
         var activeFrom = '';
         var activeTo = '';
@@ -352,21 +349,23 @@ define([
         if (!disabled)
         {
           var selectedLine = e.added.id;
-          var line = _.findWhere(lines, {_id: selectedLine});
+          var line = view.model.lines.get(selectedLine);
 
           $mrpPriority
             .select2('enable', true)
-            .select2('val', line ? line.mrpPriority : []);
+            .select2('val', line ? line.get('mrpPriority') : []);
 
           var selectedMrp = view.$id('mrp').select2('data');
 
-          if (line && line.mrpPriority.length)
+          if (line && line.get('mrpPriority').length)
           {
-            selectedMrp = selectedMrp && line.mrpPriority.indexOf(selectedMrp.id) >= 0
+            var mrpPriority = line.get('mrpPriority');
+
+            selectedMrp = selectedMrp && _.includes(mrpPriority, selectedMrp.id)
               ? selectedMrp.id
-              : line.mrpPriority[0];
-            activeFrom = line.activeFrom;
-            activeTo = line.activeTo;
+              : mrpPriority[0];
+            activeFrom = line.get('activeFrom');
+            activeTo = line.get('activeTo');
           }
           else
           {
@@ -418,9 +417,9 @@ define([
       var maxMrpLength = 0;
       var mrps = {};
 
-      this.model.get('lines').forEach(function(line)
+      this.model.lines.forEach(function(line)
       {
-        line.mrpPriority.forEach(function(mrpId)
+        line.get('mrpPriority').forEach(function(mrpId)
         {
           mrps[mrpId] = 1;
 
@@ -468,15 +467,15 @@ define([
       var maxLineLength = 0;
       var lines = {};
 
-      this.model.get('lines').forEach(function(line)
+      this.model.lines.forEach(function(line)
       {
-        if (mrp && line.mrpPriority.indexOf(mrp.id) >= 0)
+        if (mrp && _.includes(line.get('mrpPriority'), mrp.id))
         {
-          lines[line._id] = 1;
+          lines[line.id] = 1;
 
-          if (line._id.length > maxLineLength)
+          if (line.id.length > maxLineLength)
           {
-            maxLineLength = line._id.length;
+            maxLineLength = line.id.length;
           }
         }
       });
@@ -558,14 +557,14 @@ define([
 
       view.$id('mrp').select2('val', mrpId || '');
 
-      var mrps = view.model.get('mrps');
-      var mrp = _.findWhere(mrps, {_id: mrpId});
+      var mrps = view.model.mrps;
+      var mrp = mrps.get(mrpId);
       var enabled = !!view.$id('mrp').select2('data');
       var disabled = !enabled;
 
-      if (!mrp)
+      if (enabled && !mrp)
       {
-        mrp = {
+        mrp = mrps.add({
           _id: mrpId,
           extraOrderSeconds: 0,
           extraShiftSeconds: [0, 0, 0],
@@ -573,19 +572,14 @@ define([
           hardOrderManHours: 0,
           hardComponents: [],
           lines: []
-        };
-
-        if (enabled)
-        {
-          mrps.push(mrp);
-        }
+        }).get(mrpId);
       }
 
       view.$id('extraOrderSeconds')
-        .val(disabled ? '' : mrp.extraOrderSeconds)
+        .val(disabled ? '' : mrp.get('extraOrderSeconds'))
         .prop('disabled', disabled);
 
-      mrp.extraShiftSeconds.forEach(function(v, i)
+      (mrp ? mrp.get('extraShiftSeconds') : [0, 0, 0]).forEach(function(v, i)
       {
         view.$id('extraShiftSeconds-' + (i + 1))
           .val(disabled ? '' : v)
@@ -593,15 +587,18 @@ define([
       });
 
       view.$id('bigOrderQuantity')
-        .val(disabled ? '' : mrp.bigOrderQuantity)
+        .val(disabled ? '' : mrp.get('bigOrderQuantity'))
         .prop('disabled', disabled);
 
       view.$id('hardOrderManHours')
-        .val(disabled ? '' : mrp.hardOrderManHours)
+        .val(disabled ? '' : mrp.get('hardOrderManHours'))
         .prop('disabled', disabled);
 
       view.$id('hardComponents')
-        .select2('data', disabled ? [] : mrp.hardComponents.map(function(nc12) { return {id: nc12, text: nc12}; }))
+        .select2('data', disabled ? [] : (mrp.get('hardComponents') || []).map(function(nc12)
+        {
+          return {id: nc12, text: nc12};
+        }))
         .select2('enable', enabled);
 
       view.setUpMrpLineSelect2();
@@ -614,30 +611,25 @@ define([
 
       view.$id('mrpLine').select2('val', lineId || '').select2('enable', !disabled);
 
-      var line = _.findWhere(mrp.lines, {_id: lineId});
+      var line = mrp ? mrp.lines.get(lineId) : null;
 
       disabled = disabled || !view.$id('mrpLine').select2('data');
 
-      if (!line)
+      if (!disabled && !line)
       {
-        line = {
+        line = mrp.lines.add({
           _id: lineId,
           workerCount: 1,
           orderPriority: ['small', 'easy', 'hard']
-        };
-
-        if (!disabled)
-        {
-          mrp.lines.push(line);
-        }
+        }).get(lineId);
       }
 
       view.$id('workerCount')
-        .val(disabled ? '' : line.workerCount)
+        .val(disabled ? '' : line.get('workerCount'))
         .prop('disabled', disabled);
 
       view.$id('orderPriority')
-        .select2('val', disabled ? [] : line.orderPriority)
+        .select2('val', disabled ? [] : line.get('orderPriority'))
         .prop('disabled', disabled);
     },
 
@@ -645,18 +637,18 @@ define([
     {
       var selectedLine = this.$id('line').val();
       var mrpPriority = this.$id('mrpPriority').val();
-      var lines = this.model.get('lines');
-      var line = _.findWhere(lines, {_id: selectedLine});
+      var lines = this.model.lines;
+      var line = lines.get(selectedLine);
 
       if (mrpPriority.length)
       {
         if (line)
         {
-          line.mrpPriority = mrpPriority.split(',');
+          line.set('mrpPriority', mrpPriority.split(','));
         }
         else
         {
-          lines.push({
+          lines.add({
             _id: selectedLine,
             mrpPriority: mrpPriority.split(','),
             activeFrom: '',
@@ -666,11 +658,7 @@ define([
       }
       else if (line)
       {
-        this.model.set(
-          'lines',
-          lines.filter(function(line) { return line._id !== line; }),
-          {silent: true}
-        );
+        lines.remove(line);
       }
 
       this.setUpMrpSelect2();
@@ -678,10 +666,10 @@ define([
 
     saveOrderPriority: function()
     {
-      var mrp = _.findWhere(this.model.get('mrps'), {_id: this.$id('mrp').val()});
-      var mrpLine = _.findWhere(mrp.lines, {_id: this.$id('mrpLine').val()});
+      var mrp = this.model.mrps.get(this.$id('mrp').val());
+      var mrpLine = mrp.lines.get(this.$id('mrpLine').val());
 
-      mrpLine.orderPriority = _.pluck(this.$id('orderPriority').select2('data'), 'id');
+      mrpLine.set('orderPriority', _.pluck(this.$id('orderPriority').select2('data'), 'id'));
     },
 
     serializeToForm: function()
@@ -690,8 +678,6 @@ define([
 
       formData.requiredStatuses = formData.requiredStatuses.join(',');
       formData.ignoredStatuses = formData.ignoredStatuses.join(',');
-      formData.lines = undefined;
-      formData.mrps = undefined;
 
       return formData;
     },

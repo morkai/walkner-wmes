@@ -230,9 +230,9 @@
   margin-left: 3px;
 }
 .planning-mrp-orders .planning-mrp-list-item {
-  min-width: 73px;
   font-size: 12px;
   text-align: center;
+  white-space: nowrap;
 }
 .planning-mrp-lineOrders-container + .planning-mrp-lineOrders-container {
   margin-top: -1px;
@@ -253,10 +253,6 @@
 }
 .planning-mrp-list-item.is-lineOrder {
   overflow: hidden;
-  background-color: #DFF0D8;
-}
-.planning-mrp-list-item.is-lineOrder:hover {
-  background-color: #D0E9C6;
 }
 .planning-mrp-list-item.is-lineOrder.is-incomplete {
   background-color: #fcf8e3;
@@ -265,12 +261,21 @@
   background-color: #faf2cc;
 }
 .planning-mrp-list-item.is-lineOrder.is-external {
-  background-color: #D5DED2;
+  opacity: 0.75;
 }
-.planning-mrp-list-item.is-lineOrder.is-external:hover {
-  background-color: #CEDAC9;
+.planning-mrp-list-item.is-downtime {
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+  border-right: 0;
+  background-color: #FFE8E8;
+  opacity: 0.5;
 }
-.is-lineOrder > .planning-mrp-list-item-inner {
+.planning-mrp-list-item.is-downtime:hover {
+  background-color: #FFD1D1;
+}
+.is-lineOrder > .planning-mrp-list-item-inner,
+.is-downtime > .planning-mrp-list-item-inner {
   font-size: 12px;
   white-space: nowrap;
 }
@@ -341,6 +346,7 @@
   margin-left: 10px;
 }
 .planning-mrp-timeline {
+  position: relative;
   display: flex;
   margin-left: 131px;
   height: 7px;
@@ -357,6 +363,20 @@
   font-size: 12px;
   line-height: 18px;
   border-left: 1px solid #ccc;
+}
+.planning-mrp-timeline-time {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 100px;
+  text-align: center;
+  font-size: 12px;
+  background: linear-gradient(to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 1) 25%,
+    rgba(255, 255, 255, 1) 75%,
+    rgba(255, 255, 255, 0) 100%
+  );
 }
 .planning-mrp-crosshair {
   position: absolute;

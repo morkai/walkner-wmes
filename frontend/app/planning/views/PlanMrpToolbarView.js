@@ -35,7 +35,7 @@ define([
       },
       'click #-showTimes': function()
       {
-        this.model.togglePrintOrderTimes();
+        this.plan.displayOptions.togglePrintOrderTime();
 
         this.toggleShowTimes();
 
@@ -54,30 +54,30 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        lines: this.model.lines.map(function(line) { return line.id; })
+        lines: this.mrp.lines.map(function(line) { return line.id; })
       };
     },
 
     updatePrintAction: function()
     {
-      this.$id('printPlan').prop('disabled', !this.model.lines.length);
+      this.$id('printPlan').prop('disabled', !this.mrp.lines.length);
       this.$id('printList').html(toolbarPrintLineListTemplate(this.serialize()));
     },
 
     printLines: function(what)
     {
-      var planMrp = this.model;
+      var mrp = this.mrp;
       var lines = [];
 
       if (_.isString(what))
       {
         if (what === '__ALL__')
         {
-          lines = planMrp.lines;
+          lines = mrp.lines.models;
         }
         else
         {
-          var line = planMrp.lines.get('what');
+          var line = mrp.lines.get(what);
 
           if (line)
           {
@@ -89,7 +89,7 @@ define([
       {
         _.forEach(what, function(lineId)
         {
-          var line = planMrp.lines.get(lineId);
+          var line = mrp.lines.get(lineId);
 
           if (line)
           {
@@ -115,9 +115,9 @@ define([
       }
 
       win.document.body.innerHTML = printPageTemplate({
-        date: planMrp.date,
+        date: this.plan.id,
         lines: _.pluck(lines, 'id').join(', '),
-        showTimes: planMrp.isPrintOrderTimes(),
+        showTimes: this.plan.displayOptions.isOrderTimePrinted(),
         pages: this.serializePrintPages(lines)
       });
 
@@ -126,7 +126,7 @@ define([
 
     serializePrintPages: function(lines)
     {
-      var planMrp = this.model;
+      var plan = this.plan;
       var prevShiftNo = -1;
       var pages = [];
 
@@ -135,13 +135,13 @@ define([
         var bigPage = {
           pageNo: 1,
           pageCount: 1,
-          mrp: line.get('mrpPriority').join(' '),
+          mrp: line.settings.get('mrpPriority').join(' '),
           line: line.id,
           hourlyPlan: line.get('hourlyPlan'),
           workerCount: line.get('workerCount'),
           orders: line.orders.map(function(lineOrder, i)
           {
-            var order = planMrp.orders.get(lineOrder.get('orderNo'));
+            var order = plan.orders.get(lineOrder.get('orderNo'));
             var shiftNo = shiftUtil.getShiftNo(lineOrder.get('startAt'));
             var nextShift = prevShiftNo !== -1 && shiftNo !== prevShiftNo;
 
@@ -202,7 +202,7 @@ define([
         .blur()
         .find('.fa')
         .removeClass('fa-check fa-times')
-        .addClass(this.model.isPrintOrderTimes() ? 'fa-check' : 'fa-times');
+        .addClass(this.plan.displayOptions.isOrderTimePrinted() ? 'fa-check' : 'fa-times');
     }
 
   });

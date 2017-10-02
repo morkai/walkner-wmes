@@ -3,8 +3,7 @@
 define([
   '../router',
   '../viewport',
-  '../user',
-  '../time'
+  '../user'
 ], function(
   router,
   viewport,
@@ -84,7 +83,7 @@ define([
       {
         return new PlanPage({
           date: req.params.id,
-          mrpFilter: req.query.mrp === undefined ? null : req.query.mrp
+          mrps: req.query.mrps === undefined ? null : req.query.mrps
             .split(/[^A-Z0-9]+/)
             .filter(function(mrp) { return mrp.length > 0; })
         });

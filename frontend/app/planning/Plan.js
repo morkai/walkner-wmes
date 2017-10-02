@@ -5,70 +5,306 @@ define([
   '../time',
   '../core/Model',
   '../core/Collection',
-  '../data/orgUnits'
+  '../data/orgUnits',
+  './PlanOrder',
+  './PlanOrderCollection',
+  './PlanLineCollection',
+  './PlanMrpCollection'
 ], function(
   _,
   time,
   Model,
   Collection,
-  orgUnits
+  orgUnits,
+  PlanOrder,
+  PlanOrderCollection,
+  PlanLineCollection,
+  PlanMrpCollection
 ) {
   'use strict';
 
-  function PlanMrp(plan, mrpId)
-  {
-    var mrp = orgUnits.getByTypeAndId('mrpController', mrpId);
-    var mrpSettings = _.find(plan.settings.get('mrps'), {_id: mrpId});
+  var settingsChangeHandlers = {
 
-    this.plan = plan;
-
-    this.date = plan.id;
-
-    this.mrp = {
-      _id: mrpId,
-      description: mrp ? mrp.get('description') : ''
-    };
-
-    this.orders = new Collection(plan.orders.where({mrp: mrpId}), {
-      model: Model,
-      paginate: false
-    });
-
-    this.lines = new Collection(!mrpSettings ? [] : mrpSettings.lines.map(function(mrpLineSettings)
+    'change': function(plan, change)
     {
-      var lineId = mrpLineSettings._id;
-      var lineSettings = _.find(plan.settings.get('lines'), {_id: lineId});
-      var planLine = plan.lines.get(lineId);
-      var mrpLine = new Model({
-        _id: lineId,
-        activeFrom: lineSettings.activeFrom,
-        activeTo: lineSettings.activeTo,
-        mrpPriority: lineSettings.mrpPriority,
-        orderPriority: mrpLineSettings.orderPriority,
-        workerCount: mrpLineSettings.workerCount,
-        hourlyPlan: planLine ? planLine.get('hourlyPlan') : [],
+      plan.settings.set(change.property, change.newValue);
+    },
+
+    'lines:add': function(plan, change, changedObjects)
+    {
+      plan.settings.lines.add(change.line);
+
+      changedObjects.lines[change.line._id] = true;
+
+      change.line.mrpPriority.forEach(function(mrp)
+      {
+        changedObjects.mrps[mrp] = true;
       });
+    },
 
-      mrpLine.orders = new Collection(planLine ? planLine.get('orders') : [], {
-        model: Model,
-        paginate: false
-      });
+    'lines:remove': function(plan, change, changedObjects)
+    {
+      plan.settings.lines.remove(change.line._id);
 
-      return mrpLine;
-    }), {
-      model: Model,
-      paginate: false
-    });
-  }
+      changedObjects.lines[change.line._id] = true;
 
-  PlanMrp.prototype.isPrintOrderTimes = function()
-  {
-    return !!this.plan.options.get('printOrderTimes');
+      change.line.mrpPriority.forEach(function(mrp) { changedObjects.mrps[mrp] = true; });
+    },
+
+    'lines:change': function(plan, change, changedObjects)
+    {
+      var line = plan.settings.lines.get(change.line);
+
+      if (!line)
+      {
+        return;
+      }
+
+      changedObjects.lines[line.id] = true;
+
+      if (change.property === 'mrpPriority')
+      {
+        line.get('mrpPriority').forEach(function(mrp) { changedObjects.mrps[mrp] = true; });
+      }
+
+      line.set(change.property, change.newValue);
+
+      line.get('mrpPriority').forEach(function(mrp) { changedObjects.mrps[mrp] = true; });
+    },
+
+    'mrps:add': function(plan, change, changedObjects)
+    {
+      plan.settings.mrps.add(change.mrp);
+
+      changedObjects.mrps[change.mrp._id] = true;
+
+      change.mrp.lines.forEach(function(mrpLine) { changedObjects.lines[mrpLine._id] = true; });
+    },
+
+    'mrps:remove': function(plan, change, changedObjects)
+    {
+      plan.settings.mrps.remove(change.mrp._id);
+
+      changedObjects.mrps[change.mrp._id] = true;
+
+      change.mrp.lines.forEach(function(mrpLine) { changedObjects.lines[mrpLine._id] = true; });
+    },
+
+    'mrps:change': function(plan, change, changedObjects)
+    {
+      var mrp = plan.settings.mrps.get(change.mrp);
+
+      if (!mrp)
+      {
+        return;
+      }
+
+      mrp.set(change.property, change.newValue);
+
+      changedObjects.mrps[mrp.id] = true;
+
+      mrp.lines.forEach(function(mrpLine) { changedObjects.lines[mrpLine.id] = true; });
+    },
+
+    'mrpLines:add': function(plan, change, changedObjects)
+    {
+      var mrp = plan.settings.mrps.get(change.mrp);
+
+      if (!mrp)
+      {
+        return;
+      }
+
+      mrp.lines.add(change.line);
+
+      changedObjects.mrps[mrp.id] = true;
+      changedObjects.lines[change.line._id] = true;
+    },
+
+    'mrpLines:remove': function(plan, change, changedObjects)
+    {
+      var mrp = plan.settings.mrps.get(change.mrp);
+
+      if (!mrp)
+      {
+        return;
+      }
+
+      mrp.lines.remove(change.line._id);
+
+      changedObjects.mrps[mrp.id] = true;
+      changedObjects.lines[change.line._id] = true;
+    },
+
+    'mrpLines:change': function(plan, change, changedObjects)
+    {
+      var mrp = plan.settings.mrps.get(change.mrp);
+
+      if (!mrp)
+      {
+        return;
+      }
+
+      var line = mrp.lines.get(change.line._id);
+
+      if (!line)
+      {
+        return;
+      }
+
+      line.set(change.property, change.newValue);
+
+      changedObjects.mrps[mrp.id] = true;
+      changedObjects.lines[line.id] = true;
+    }
+
   };
+  var changeHandlers = {
 
-  PlanMrp.prototype.togglePrintOrderTimes = function()
-  {
-    this.plan.options.set('printOrderTimes', !this.plan.options.get('printOrderTimes'));
+    settings: function(plan, changes)
+    {
+      var changedObjects = {
+        lines: {},
+        mrps: {}
+      };
+
+      changes.forEach(function(change)
+      {
+        settingsChangeHandlers[change.type](plan, change, changedObjects);
+      });
+console.log('settings#changed', changedObjects);
+      plan.settings.trigger('changed', changedObjects);
+    },
+
+    addedOrders: function(plan, addedOrders)
+    {
+      var addedPlanOrders = [];
+      var mrpToAddedPlanOrders = {};
+
+      addedOrders.forEach(function(addedOrder)
+      {
+        var planOrder = new PlanOrder(addedOrder);
+
+        addedPlanOrders.push(planOrder);
+
+        if (!mrpToAddedPlanOrders[addedOrder.mrp])
+        {
+          mrpToAddedPlanOrders[addedOrder.mrp] = [];
+        }
+
+        mrpToAddedPlanOrders[addedOrder.mrp].push(planOrder);
+      });
+
+      plan.orders.add(addedPlanOrders);
+      plan.orders.trigger('added', addedPlanOrders);
+
+      Object.keys(mrpToAddedPlanOrders).forEach(function(mrp)
+      {
+        var planMrp = plan.mrps.get(mrp);
+
+        planMrp.orders.add(mrpToAddedPlanOrders[mrp]);
+        planMrp.orders.trigger('added', mrpToAddedPlanOrders[mrp]);
+      });
+    },
+
+    removedOrders: function(plan, removedOrders)
+    {
+      var removedPlanOrders = [];
+      var mrpToRemovedPlanOrders = {};
+
+      removedOrders.forEach(function(removedOrder)
+      {
+        var planOrder = plan.orders.get(removedOrder._id);
+
+        if (!planOrder)
+        {
+          return;
+        }
+
+        removedPlanOrders.push(planOrder);
+
+        var mrp = planOrder.get('mrp');
+
+        if (!mrpToRemovedPlanOrders[mrp])
+        {
+          mrpToRemovedPlanOrders[mrp] = [];
+        }
+
+        mrpToRemovedPlanOrders[mrp].push(planOrder);
+      });
+
+      Object.keys(mrpToRemovedPlanOrders).forEach(function(mrp)
+      {
+        var planMrp = plan.mrps.get(mrp);
+
+        planMrp.orders.remove(mrpToRemovedPlanOrders[planMrp.id]);
+        planMrp.orders.trigger('removed', mrpToRemovedPlanOrders[planMrp.id]);
+      });
+
+      plan.orders.remove(removedPlanOrders);
+      plan.orders.trigger('removed', removedPlanOrders);
+    },
+
+    changedOrders: function(plan, changedOrders)
+    {
+      var changedPlanOrders = [];
+      var mrpToChangedPlanOrders = {};
+      var mrpToRemovedPlanOrders = {};
+
+      changedOrders.forEach(function(changedOrder)
+      {
+        var planOrder = plan.orders.get(changedOrder._id);
+
+        if (!planOrder)
+        {
+          return;
+        }
+
+        changedPlanOrders.push(planOrder);
+
+        var oldMrp = plan.mrps.get(planOrder.get('mrp'));
+        var newMrp = plan.mrps.get(changedOrder.mrp) || oldMrp;
+
+        if (oldMrp.id !== newMrp.id)
+        {
+          if (!mrpToRemovedPlanOrders[oldMrp.id])
+          {
+            mrpToRemovedPlanOrders[oldMrp.id] = [];
+          }
+
+          mrpToRemovedPlanOrders[oldMrp.id].push(planOrder);
+
+          oldMrp.orders.remove(planOrder);
+        }
+
+        if (!mrpToChangedPlanOrders[newMrp.id])
+        {
+          mrpToChangedPlanOrders[newMrp.id] = [];
+        }
+
+        mrpToChangedPlanOrders[newMrp.id].push(planOrder);
+
+        planOrder.set(changedOrder);
+      });
+
+      Object.keys(mrpToRemovedPlanOrders).forEach(function(mrp)
+      {
+        plan.mrps.get(mrp).trigger('removed', mrpToRemovedPlanOrders[mrp]);
+      });
+
+      plan.orders.trigger('changed', changedPlanOrders);
+
+      Object.keys(mrpToChangedPlanOrders).forEach(function(mrp)
+      {
+        plan.mrps.get(mrp).orders.trigger('changed', mrpToChangedPlanOrders[mrp]);
+      });
+    },
+
+    changedLines: function(plan, data)
+    {
+      console.log('changedLines', data);
+    }
+
   };
 
   return Model.extend({
@@ -83,30 +319,51 @@ define([
 
     nlsDomain: 'planning',
 
-    initialize: function(attrs, options)
-    {
-      this.urlQuery = options && options.urlQuery || '';
-      this.options = options && options.options;
-      this.settings = options && options.settings;
-
-      if (this.attributes.mrpFilter === null)
-      {
-        this.attributes.mrpFilter = JSON.parse(localStorage.getItem('PLANNING:MRP_FILTER') || '[]');
-      }
-
-      if (options && options.cache)
-      {
-        this.orders = new Collection(this.attributes.orders, {model: Model, paginate: false});
-        this.lines = new Collection(this.attributes.lines, {model: Model, paginate: false});
-
-        this.on('sync', this.cache.bind(this));
-      }
+    defaults: {
+      loading: false
     },
 
-    cache: function()
+    initialize: function(attrs, options)
     {
-      this.orders.reset(this.attributes.orders);
-      this.lines.reset(this.attributes.lines);
+      options = _.defaults({}, options, {
+        displayOptions: null,
+        settings: null,
+        minMaxDates: false,
+        pceTimes: false
+      });
+
+      this.urlQuery = 'minMaxDates=' + (options.minMaxDates ? 1 : 0) + '&pceTimes=' + (options.pceTimes ? 1 : 0);
+      this.displayOptions = options.displayOptions;
+      this.settings = options.settings;
+
+      this.orders = new PlanOrderCollection(null, {
+        plan: this,
+        paginate: false
+      });
+      this.lines = new PlanLineCollection(null, {
+        plan: this,
+        paginate: false
+      });
+      this.mrps = new PlanMrpCollection(null, {
+        plan: this,
+        paginate: false
+      });
+
+      this.lines.on('reset', function() { this.mrps.reset(); }, this);
+
+      if (this.attributes.orders)
+      {
+        this.orders.reset(this.attributes.orders);
+
+        delete this.attributes.orders;
+      }
+
+      if (this.attributes.lines)
+      {
+        this.lines.reset(this.attributes.lines);
+
+        delete this.attributes.lines;
+      }
     },
 
     url: function()
@@ -116,9 +373,39 @@ define([
 
     parse: function(res)
     {
-      res._id = time.utc.format(this.id, 'YYYY-MM-DD');
+      var attrs = {};
 
-      return res;
+      if (res._id)
+      {
+        attrs._id = time.utc.format(res._id, 'YYYY-MM-DD');
+      }
+
+      if (res.createdAt)
+      {
+        attrs.createdAt = new Date(res.createdAt);
+      }
+
+      if (res.updatedAt)
+      {
+        attrs.updatedAt = new Date(res.updatedAt);
+      }
+
+      if (res.minDate || res.maxDate)
+      {
+        this.displayOptions.set(_.pick(res, ['minDate', 'maxDate']));
+      }
+
+      if (res.orders)
+      {
+        this.orders.reset(res.orders);
+      }
+
+      if (res.lines)
+      {
+        this.lines.reset(res.lines);
+      }
+
+      return attrs;
     },
 
     getLabel: function()
@@ -126,64 +413,24 @@ define([
       return time.utc.format(this.id, 'LL');
     },
 
-    getFilter: function()
+    applyChange: function(planChange)
     {
-      return {
-        date: time.utc.format(this.id, 'YYYY-MM-DD'),
-        mrp: this.get('mrpFilter').join(',')
-      };
-    },
+      var plan = this;
 
-    setFilter: function(newFilter)
-    {
-      var attrs = {};
-
-      if (newFilter.date)
+      if (time.utc.format(planChange.plan, 'YYYY-MM-DD') !== plan.id)
       {
-        attrs._id = newFilter.date;
-        attrs.createdAt = null;
-        attrs.updatedAt = null;
-        attrs.orders = [];
-        attrs.lines = [];
-
-        this.settings.set({
-          _id: newFilter.date
-        });
+        return;
       }
 
-      if (newFilter.mrp)
+      plan.set('updatedAt', new Date(planChange.date));
+
+      Object.keys(planChange.data).forEach(function(what)
       {
-        attrs.mrpFilter = newFilter.mrp;
-
-        localStorage.setItem('PLANNING:MRP_FILTER', JSON.stringify(newFilter.mrp));
-      }
-
-      this.set(attrs);
-    },
-
-    getOrderedMrps: function()
-    {
-      var mrpFilter = this.get('mrpFilter');
-
-      if (mrpFilter.length)
-      {
-        return mrpFilter.slice();
-      }
-
-      return this.settings.get('mrps').map(function(mrp) { return mrp._id; }).sort(function(a, b)
-      {
-        return a.localeCompare(b, undefined, {numeric: true});
+        if (changeHandlers[what])
+        {
+          changeHandlers[what](plan, planChange.data[what]);
+        }
       });
-    },
-
-    serializeMrps: function()
-    {
-      return this.getOrderedMrps().map(function(mrpId) { return this.serializeMrp(mrpId); }, this);
-    },
-
-    serializeMrp: function(mrpId)
-    {
-      return new PlanMrp(this, mrpId);
     }
 
   });

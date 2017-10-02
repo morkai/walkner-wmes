@@ -25,9 +25,11 @@ define([
 
     initialize: function()
     {
-      this.onResize = _.debounce(this.resize.bind(this), 16);
+      var resize = _.debounce(this.resize.bind(this), 16);
 
-      $(window).on('resize.' + this.idPrefix, this.onResize);
+      this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
+
+      $(window).on('resize.' + this.idPrefix, resize);
     },
 
     destroy: function()
@@ -42,11 +44,11 @@ define([
 
       return {
         idPrefix: view.idPrefix,
-        lines: view.model.lines.map(function(line)
+        lines: view.mrp.lines.map(function(line)
         {
           return {
             _id: line.id,
-            workerCount: line.get('workerCount'),
+            workerCount: line.mrpSettings(view.mrp.id).get('workerCount'),
             customTimes: view.serializeActiveTime(line, false)
           };
         })
@@ -95,20 +97,20 @@ define([
       return id ? this.$('.planning-mrp-list-item[data-id="' + id + '"]') : this.$('.planning-mrp-list-item');
     },
 
-    serializePopover: function(id)
+    serializePopover: function(lineId)
     {
-      var lineUnits = orgUnits.getAllForProdLine(id);
+      var lineUnits = orgUnits.getAllForProdLine(lineId);
       var prodFlow = orgUnits.getByTypeAndId('prodFlow', lineUnits.prodFlow);
       var prodLine = orgUnits.getByTypeAndId('prodLine', lineUnits.prodLine);
-      var line = this.model.lines.get(id);
+      var line = this.mrp.lines.get(lineId);
 
       return linePopoverTemplate({
         line: {
-          _id: id,
+          _id: lineId,
           division: lineUnits.division ? lineUnits.division : '?',
           prodFlow: prodFlow ? prodFlow.get('name') : '?',
           prodLine: prodLine ? prodLine.get('description') : '?',
-          workerCount: line.get('workerCount'),
+          workerCount: line.mrpSettings(this.mrp.id).get('workerCount'),
           activeTime: this.serializeActiveTime(line, true)
         }
       });
@@ -116,34 +118,20 @@ define([
 
     serializeActiveTime: function(line, force)
     {
-      var activeFrom = line.get('activeFrom');
-      var activeTo = line.get('activeTo');
+      var activeFrom = line.settings.get('activeFrom');
+      var activeTo = line.settings.get('activeTo');
 
       return force || activeFrom || activeTo
         ? ((activeFrom || '06:00') + '-' + (activeTo || '06:00'))
         : '';
     },
 
-    updateWorkerCount: function(line)
+    onSettingsChanged: function(changedObjects)
     {
-      var workerCount = line.get('workerCount');
-
-      this.$item(line.id)
-        .find('.planning-mrp-list-property[data-property="workerCount"]')
-        .toggleClass('is-invalid', !workerCount)
-        .find('span')
-        .text(workerCount);
-    },
-
-    updateCustomTimes: function(line)
-    {
-      var activeTime = this.serializeActiveTime(line, false);
-
-      this.$item(line.id)
-        .find('.planning-mrp-list-property[data-property="customTimes"]')
-        .toggleClass('hidden', activeTime === '')
-        .find('span')
-        .text(activeTime);
+      if (changedObjects.mrps[this.mrp.id])
+      {
+        this.render();
+      }
     }
 
   });

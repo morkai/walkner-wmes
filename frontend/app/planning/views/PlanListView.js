@@ -104,10 +104,24 @@ define([
       {
         var day = daysMap[Date.parse(planSettings.id)];
 
-        if (day)
+        if (!day)
         {
-          day.mrps = day.mrps.concat(planSettings.get('mrps'));
+          return;
         }
+
+        planSettings.mrps.forEach(function(mrpSettings)
+        {
+          day.mrps.push({
+            _id: mrpSettings.id,
+            lines: mrpSettings.lines.map(function(mrpLineSettings)
+            {
+              return {
+                _id: mrpLineSettings.id,
+                workerCount: mrpLineSettings.get('workerCount')
+              };
+            })
+          });
+        });
       });
 
       daysList.forEach(function(day)

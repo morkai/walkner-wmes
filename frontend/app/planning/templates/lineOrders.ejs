@@ -12,7 +12,7 @@
     <div class="planning-mrp-list-hd"><%= line %></div>
     <% } %>
     <div class="planning-mrp-lineOrders-shift" data-shift="<%- shift.no %>"><%- t('core', 'SHIFT:' + shift.no) %></div>
-    <div id="<%- idPrefix %>-list-<%- shift.no %>" class="planning-mrp-list planning-mrp-lineOrders-list">
+    <div id="<%- idPrefix %>-list-<%- shift.no %>" class="planning-mrp-list planning-mrp-lineOrders-list" data-shift-start-time="<%- shift.startTime %>">
       <% shift.orders.forEach(function(shiftOrder) { %>
       <div class="planning-mrp-list-item is-lineOrder <%- shiftOrder.incomplete ? 'is-incomplete' : ''%> <%- shiftOrder.external ? 'is-external' : ''%>" data-id="<%- shiftOrder._id %>" style="width: <%- shiftOrder.width %>%; margin-left: <%- shiftOrder.margin %>%">
         <div class="planning-mrp-list-item-inner">
@@ -22,6 +22,11 @@
           <%- shiftOrder.orderNo %>, <%- shiftOrder.quantity %> <%- t('planning', 'lineOrders:unit') %>
           <% } %>
         </div>
+      </div>
+      <% }) %>
+      <% shift.downtimes.forEach(function(shiftDowntime) { %>
+      <div class="planning-mrp-list-item is-downtime" data-id="<%- shiftDowntime._id %>" style="width: <%- shiftDowntime.width %>%; left: <%- shiftDowntime.left %>%">
+        <div class="planning-mrp-list-item-inner">&nbsp;</div>
       </div>
       <% }) %>
     </div>

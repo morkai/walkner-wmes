@@ -20,5 +20,21 @@ module.exports = function setupPlanChangeModel(app, mongoose)
 
   planChangeSchema.index({plan: 1});
 
+  planChangeSchema.methods.toCreatedMessage = function(plan)
+  {
+    const message = this.toJSON();
+
+    (message.data.changedLines || []).forEach(changedLine =>
+    {
+      const planLine = plan.lines.find(line => line._id === changedLine._id).toObject();
+
+      delete planLine.pceTimes;
+
+      Object.assign(changedLine, planLine);
+    });
+
+    return message;
+  };
+
   mongoose.model('PlanChange', planChangeSchema);
 };

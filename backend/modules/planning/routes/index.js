@@ -57,9 +57,19 @@ module.exports = function setUpPlanningRoutes(app, module)
           planSettings = new PlanSettings();
         }
 
-        planSettings.set(req.body).save(this.next());
+        const planChange = planSettings.applyChanges(
+          req.body,
+          userModule.createUserInfo(req.session.user, req)
+        );
+
+        planSettings.save(this.parallel());
+
+        if (planChange.data.settings.length)
+        {
+          new PlanChange(planChange).save(this.parallel());
+        }
       },
-      function(err, planSettings)
+      function(err, planSettings, planChange)
       {
         if (err)
         {
@@ -71,6 +81,11 @@ module.exports = function setUpPlanningRoutes(app, module)
         res.json(json);
 
         app.broker.publish('planning.settings.updated', json);
+
+        if (planChange)
+        {
+          app.broker.publish('planning.changes.created', planChange.toJSON());
+        }
       }
     );
   }

@@ -1,8 +1,8 @@
 <div class="planning-mrp">
   <div id="<%- idPrefix %>-toolbar"></div>
   <div class="planning-mrp-hd">
-    <span class="planning-mrp-hd-id"><%= mrp._id %>&nbsp;</span>
-    <span class="planning-mrp-hd-name"><%= mrp.name %></span>
+    <span class="planning-mrp-hd-id"><%= mrp.name %>&nbsp;</span>
+    <span class="planning-mrp-hd-name"><%= mrp.description %></span>
   </div>
   <div id="<%- idPrefix %>-messages" class="planning-mrp-messages"></div>
   <div id="<%- idPrefix %>-lines" class="planning-mrp-bd"></div>
@@ -17,6 +17,7 @@
     <div class="planning-mrp-timeline-h">6</div>
     <div class="planning-mrp-timeline-h">7</div>
     <div class="planning-mrp-timeline-h">8</div>
+    <div id="<%- idPrefix %>-time" class="planning-mrp-timeline-time">00:00:00</div>
   </div>
   <div id="<%- idPrefix %>-crosshair" class="planning-mrp-crosshair"></div>
 </div>

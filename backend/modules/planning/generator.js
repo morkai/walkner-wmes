@@ -335,7 +335,10 @@ module.exports = function setUpGenerator(app, module)
 
     Object.keys(state.changes).forEach(key =>
     {
-      data[key] = Array.from(state.changes[key].values());
+      if (state.changes[key].size)
+      {
+        data[key] = Array.from(state.changes[key].values());
+      }
     });
 
     const planChange = new PlanChange({
@@ -350,6 +353,10 @@ module.exports = function setUpGenerator(app, module)
       if (err)
       {
         module.error(`[generator] [${state.key}] Failed to save changes: ${err.message}`);
+      }
+      else
+      {
+        app.broker.publish('planning.changes.created', planChange.toCreatedMessage(state.plan));
       }
     });
   }
@@ -569,6 +576,11 @@ module.exports = function setUpGenerator(app, module)
           return this.skip(new Error(`Failed to load existing plan: ${err.message}`));
         }
 
+        if (existingPlan)
+        {
+          removeUnusedLines(existingPlan, state.settings);
+        }
+
         state.plan = existingPlan || new Plan({
           _id: state.date,
           createdAt: new Date(),
@@ -622,6 +634,11 @@ module.exports = function setUpGenerator(app, module)
       },
       done
     );
+  }
+
+  function removeUnusedLines(plan, settings)
+  {
+    plan.lines = plan.lines.filter(line => settings.lines.includes(line._id));
   }
 
   function filterPlanOrder(planOrder, settings)

@@ -11,7 +11,35 @@ define([
 
   return Collection.extend({
 
-    model: PlanLine
+    model: PlanLine,
+
+    initialize: function(models, options)
+    {
+      this.plan = options && options.plan;
+    },
+
+    getGroupedByMrp: function()
+    {
+      var plan = this.plan;
+      var mrpToLines = {};
+
+      this.forEach(function(line)
+      {
+        var lineSettings = plan.settings.lines.get(line.id);
+
+        lineSettings.get('mrpPriority').forEach(function(mrpId)
+        {
+          if (!mrpToLines[mrpId])
+          {
+            mrpToLines[mrpId] = [];
+          }
+
+          mrpToLines[mrpId].push(line);
+        });
+      });
+
+      return mrpToLines;
+    }
 
   });
 });

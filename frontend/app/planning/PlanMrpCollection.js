@@ -1,14 +1,10 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'underscore',
-  'app/core/Collection',
-  'app/data/orgUnits',
+  '../core/Collection',
   './PlanMrp'
 ], function(
-  _,
   Collection,
-  orgUnits,
   PlanMrp
 ) {
   'use strict';
@@ -19,39 +15,40 @@ define([
 
     initialize: function(models, options)
     {
-      this.plan = options.plan;
+      this.plan = options && options.plan;
     },
 
-    cache: function()
+    reset: function(models, options)
+    {
+      if (!models)
+      {
+        models = this.createModelsFromSettings();
+      }
+
+      return Collection.prototype.reset.call(this, models, options);
+    },
+
+    createModelsFromSettings: function()
     {
       var plan = this.plan;
-      var planMrps = [];
+      var mrpIds = plan.displayOptions.get('mrps');
 
-      plan.settings.get('mrps').forEach(function(mrpSettings)
+      if (!mrpIds.length)
       {
-        var mrp = orgUnits.getByTypeAndId('mrpController', mrpSettings._id);
-        var planMrp = {
-          _id: mrpSettings._id,
-          description: mrp ? mrp.get('description') : '',
-          lines: mrpSettings.lines.map(function(mrpLineSettings)
-          {
-            var line = orgUnits.getByTypeAndId('prodLine', mrpLineSettings._id);
-            var lineSettings = _.find(plan.settings.get('lines'), {_id: mrpLineSettings._id});
+        mrpIds = plan.settings.getDefinedMrpIds();
+      }
 
-            return {
-              _id: mrpLineSettings._id,
-              description: line ? line.get('description') : '',
-              workerCount: mrpLineSettings.workerCount,
-              activeFrom: lineSettings.activeFrom,
-              activeTo: lineSettings.activeTo
-            };
-          })
-        };
+      var ordersByMrp = plan.orders.getGroupedByMrp();
+      var linesByMrp = plan.lines.getGroupedByMrp();
 
-        planMrps.push(new PlanMrp(planMrp, {plan: plan}));
+      return mrpIds.map(function(mrpId)
+      {
+        return new PlanMrp({
+          _id: mrpId,
+          orders: ordersByMrp[mrpId] || [],
+          lines: linesByMrp[mrpId] || []
+        });
       });
-
-      this.reset(planMrps);
     }
 
   });

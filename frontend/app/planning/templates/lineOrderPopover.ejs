@@ -24,7 +24,7 @@
   </tr>
   <tr>
     <th><%- t('planning', 'lineOrders:time') %></th>
-    <td><%= time.format(lineOrder.startAt, 'HH:mm:ss') %>-<%= time.format(lineOrder.finishAt, 'HH:mm:ss') %></td>
+    <td><%= time.utc.format(lineOrder.startAt, 'HH:mm:ss') %>-<%= time.utc.format(lineOrder.finishAt, 'HH:mm:ss') %></td>
   </tr>
   <tr>
     <th><%- t('planning', 'lineOrders:duration') %></th>

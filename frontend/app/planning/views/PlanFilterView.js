@@ -27,14 +27,14 @@ define([
 
       'input #-date': 'changeFilter',
       'change #-date': 'changeFilter',
-      'change #-mrp': 'changeFilter'
+      'change #-mrps': 'changeFilter'
 
     }, ownMrps.events),
 
     initialize: function()
     {
-      this.listenTo(this.model, 'change:loading', this.onLoadingChanged);
-      this.listenTo(this.model, 'change:minDate change:maxDate', this.onMinMaxDateChanged);
+      this.listenTo(this.plan, 'change:loading', this.onLoadingChanged);
+      this.listenTo(this.plan.displayOptions, 'change:minDate change:maxDate', this.onMinMaxDateChanged);
     },
 
     serialize: function()
@@ -42,16 +42,18 @@ define([
       return _.assign({
         idPrefix: this.idPrefix,
         showOwnMrps: ownMrps.hasAny(),
-        minDate: this.model.get('minDate') || '2017-01-01',
-        maxDate: this.model.get('maxDate') || time.utc.getMoment().startOf('day').add(2, 'days').format('YYYY-MM-DD')
-      }, this.model.getFilter());
+        date: this.plan.id,
+        mrps: this.plan.displayOptions.get('mrps'),
+        minDate: this.plan.displayOptions.get('minDate'),
+        maxDate: this.plan.displayOptions.get('maxDate')
+      });
     },
 
     afterRender: function()
     {
-      setUpMrpSelect2(this.$id('mrp'), {
+      setUpMrpSelect2(this.$id('mrps'), {
         width: '600px',
-        placeholder: t('planning', 'filter:mrp:placeholder'),
+        placeholder: t('planning', 'filter:mrps:placeholder'),
         sortable: true,
         view: this
       });
@@ -61,7 +63,7 @@ define([
     {
       var date = this.$id('date').val();
       var newFilter = {
-        mrp: this.$id('mrp').val().split(',').filter(function(v) { return v.length > 0; })
+        mrps: this.$id('mrps').val().split(',').filter(function(v) { return v.length > 0; })
       };
 
       if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date))
@@ -69,21 +71,29 @@ define([
         newFilter.date = date;
       }
 
-      this.model.setFilter(newFilter);
+      if (!_.isEqual(newFilter.mrps, this.plan.displayOptions.get('mrps')))
+      {
+        this.plan.displayOptions.set('mrps', newFilter.mrps);
+      }
+
+      if (newFilter.date && newFilter.date !== this.plan.id)
+      {
+        this.plan.set('_id', newFilter.date);
+      }
     },
 
     onLoadingChanged: function()
     {
-      var disabled = !!this.model.get('loading');
+      var loading = this.plan.get('loading');
 
-      this.$id('date').prop('disabled', disabled);
-      this.$id('mrp').select2('enable', !disabled);
+      this.$id('date').prop('disabled', loading);
+      this.$id('mrps').select2('enable', !loading);
     },
 
     onMinMaxDateChanged: function()
     {
-      this.$id('date').prop('min', this.model.get('minDate'));
-      this.$id('date').prop('max', this.model.get('maxDate'));
+      this.$id('date').prop('min', this.plan.displayOptions.get('minDate'));
+      this.$id('date').prop('max', this.plan.displayOptions.get('maxDate'));
     }
 
   });

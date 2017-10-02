@@ -11,7 +11,31 @@ define([
 
   return Collection.extend({
 
-    model: PlanOrder
+    model: PlanOrder,
+
+    initialize: function(models, options)
+    {
+      this.plan = options && options.plan;
+    },
+
+    getGroupedByMrp: function()
+    {
+      var mrpToOrders = {};
+
+      this.forEach(function(order)
+      {
+        var mrpId = order.get('mrp');
+
+        if (!mrpToOrders[mrpId])
+        {
+          mrpToOrders[mrpId] = [];
+        }
+
+        mrpToOrders[mrpId].push(order);
+      });
+
+      return mrpToOrders;
+    }
 
   });
 });

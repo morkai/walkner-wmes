@@ -32,6 +32,9 @@ define([
     {
       this.onResize = _.debounce(this.resize.bind(this), 16);
 
+      this.listenTo(this.mrp.orders, 'added changed', this.render);
+      this.listenTo(this.mrp.orders, 'removed', this.onOrdersRemoved);
+
       $(window).on('resize.' + this.idPrefix, this.onResize);
     },
 
@@ -45,7 +48,7 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        orders: this.model.orders.map(function(order)
+        orders: this.mrp.orders.map(function(order)
         {
           return {
             _id: order.id,
@@ -107,7 +110,7 @@ define([
 
     serializePopover: function(id)
     {
-      var order = this.model.orders.get(id);
+      var order = this.plan.orders.get(id);
       var quantityTodo = order.get('quantityTodo');
       var quantityDone = order.get('quantityDone');
       var quantityPlan = order.get('quantityPlan');
@@ -129,6 +132,16 @@ define([
           manHours: order.get('manHours'),
           laborTime: operation && operation.laborTime ? operation.laborTime : 0
         }
+      });
+    },
+
+    onOrdersRemoved: function(removedOrders)
+    {
+      var view = this;
+
+      removedOrders.forEach(function(removedOrder)
+      {
+        view.$item(removedOrder.id).remove();
       });
     }
 

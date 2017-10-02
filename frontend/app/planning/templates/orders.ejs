@@ -9,7 +9,7 @@
       <div class="planning-mrp-list-item-inner <%- order.confirmed ? 'is-cnf' : '' %> <%- order.delivered ? 'is-dnf' : '' %>">
         <%= order._id %>
         <span class="planning-mrp-list-property" data-property="kind"><i class="fa fa-<%- order.kind === 'small' ? 'star-o' : order.kind === 'easy' ? 'star-half-full' : 'star' %>"></i></span>
-        <span class="planning-mrp-list-property <%- order.customQuantity ? '' : 'hidden' %>" data-property="qtyPlan"><i class="fa fa-sort-numeric-desc"></i></span>
+        <span class="planning-mrp-list-property <%- order.customQuantity ? '' : 'hidden' %>" data-property="quantityPlan"><i class="fa fa-sort-numeric-desc"></i></span>
       </div>
     </div>
     <% }) %>

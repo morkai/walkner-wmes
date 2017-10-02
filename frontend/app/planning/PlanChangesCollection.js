@@ -2,10 +2,12 @@
 
 define([
   'underscore',
+  '../time',
   '../core/Collection',
   './PlanChange'
 ], function(
   _,
+  time,
   Collection,
   PlanChange
 ) {
