@@ -1,13 +1,17 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  '../broker',
   '../router',
   '../viewport',
-  '../user'
+  '../user',
+  '../time'
 ], function(
+  broker,
   router,
   viewport,
-  user
+  user,
+  time
 ) {
   'use strict';
 
@@ -73,6 +77,20 @@ define([
 
   router.map('/planning/plans/:id', canView, function(req)
   {
+    if (/^[0-9]+d$/.test(req.params.id))
+    {
+      req.params.id = time.utc.getMoment()
+        .startOf('day')
+        .add(req.params.id.replace('d', ''), 'days')
+        .format('YYYY-MM-DD');
+
+      broker.publish('router.navigate', {
+        url: '/planning/plans/' + req.params.id,
+        replace: true,
+        trigger: false
+      });
+    }
+
     viewport.loadPage(
       [
         'app/planning/Plan',
