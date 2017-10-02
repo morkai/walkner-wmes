@@ -14,8 +14,8 @@ define([
 
   return function limitQuantityDone(view, forceValidate, prodShiftOrder)
   {
-    const prodShiftOrderId = prodShiftOrder.id;
-    const sapOrderId = prodShiftOrder.get('orderId');
+    var prodShiftOrderId = prodShiftOrder.id;
+    var sapOrderId = prodShiftOrder.get('orderId');
 
     if (!prodShiftOrderId)
     {
