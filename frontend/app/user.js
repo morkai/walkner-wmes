@@ -241,13 +241,16 @@ function(
       }
       else
       {
-        viewport.showPage(new ErrorPage({
-          model: {
-            code: 403,
-            req: req,
-            previousUrl: referer
-          }
-        }));
+        require(['app/core/pages/ErrorPage'], function(ErrorPage)
+        {
+          viewport.showPage(new ErrorPage({
+            model: {
+              code: 403,
+              req: req,
+              previousUrl: referer
+            }
+          }));
+        });
       }
     };
   };
