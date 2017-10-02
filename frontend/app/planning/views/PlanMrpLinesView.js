@@ -23,18 +23,17 @@ define([
 
     events: {},
 
+    localTopics: {
+      'planning.windowResized': 'resize'
+    },
+
     initialize: function()
     {
-      var resize = _.debounce(this.resize.bind(this), 16);
-
       this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
-
-      $(window).on('resize.' + this.idPrefix, resize);
     },
 
     destroy: function()
     {
-      $(window).off('.' + this.idPrefix);
       this.$el.popover('destroy');
     },
 
@@ -46,9 +45,11 @@ define([
         idPrefix: view.idPrefix,
         lines: view.mrp.lines.map(function(line)
         {
+          var lineMrpSettings = line.mrpSettings(view.mrp.id);
+
           return {
             _id: line.id,
-            workerCount: line.mrpSettings(view.mrp.id).get('workerCount'),
+            workerCount: lineMrpSettings ? lineMrpSettings.get('workerCount') : '?',
             customTimes: view.serializeActiveTime(line, false)
           };
         })
@@ -99,10 +100,17 @@ define([
 
     serializePopover: function(lineId)
     {
+      var line = this.mrp.lines.get(lineId);
+
+      if (!line)
+      {
+        return null;
+      }
+
       var lineUnits = orgUnits.getAllForProdLine(lineId);
       var prodFlow = orgUnits.getByTypeAndId('prodFlow', lineUnits.prodFlow);
       var prodLine = orgUnits.getByTypeAndId('prodLine', lineUnits.prodLine);
-      var line = this.mrp.lines.get(lineId);
+      var lineMrpSettings = line.mrpSettings(this.mrp.id);
 
       return linePopoverTemplate({
         line: {
@@ -110,7 +118,7 @@ define([
           division: lineUnits.division ? lineUnits.division : '?',
           prodFlow: prodFlow ? prodFlow.get('name') : '?',
           prodLine: prodLine ? prodLine.get('description') : '?',
-          workerCount: line.mrpSettings(this.mrp.id).get('workerCount'),
+          workerCount: lineMrpSettings ? lineMrpSettings.get('workerCount') : '?',
           activeTime: this.serializeActiveTime(line, true)
         }
       });
@@ -118,6 +126,11 @@ define([
 
     serializeActiveTime: function(line, force)
     {
+      if (!line.settings)
+      {
+        return '';
+      }
+
       var activeFrom = line.settings.get('activeFrom');
       var activeTo = line.settings.get('activeTo');
 
@@ -128,7 +141,7 @@ define([
 
     onSettingsChanged: function(changedObjects)
     {
-      if (changedObjects.mrps[this.mrp.id])
+      if (changedObjects.lines.any && changedObjects.mrps[this.mrp.id])
       {
         this.render();
       }

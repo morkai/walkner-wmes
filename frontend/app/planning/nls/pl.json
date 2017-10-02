@@ -16,6 +16,8 @@
 
   "print:workerCount": "{workerCount} {workerCount, plural, one{osoba} few{osoby} other{osób}}",
 
+  "empty": "Brak planu dla wybranych filtrów.",
+
   "lines:hd": "Linie",
   "lines:edit": "Ustaw dostępne linie",
   "lines:division": "Wydział",
@@ -38,6 +40,7 @@
   "orders:qty": "Ilość",
   "orders:statuses": "Status",
   "orders:ignored": "Ignorowane?",
+  "orders:incomplete": "(brak {qty})",
 
   "lineOrders:orderNo": "Nr zlecenia",
   "lineOrders:unit": "szt.",
@@ -56,6 +59,8 @@
   "orderPriority:hard": "Trudne",
 
   "settings:title": "Formularz edycji ustawień planu",
+  "settings:msg:success": "Ustawienia zostały zapisane.",
+  "settings:msg:failure": "Nie udało się zapisać ustawień!",
   "settings:submit": "Zapisz ustawienia",
   "settings:requiredStatuses": "Wymagane statusy",
   "settings:requiredStatuses:help": "Lista wszystkich statusów jakie zlecenie musi mieć, aby było brane pod uwagę podczas generowania planu.",

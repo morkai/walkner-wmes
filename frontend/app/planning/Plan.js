@@ -30,67 +30,104 @@ define([
       plan.settings.set(change.property, change.newValue);
     },
 
-    'lines:add': function(plan, change, changedObjects)
+    'lines:add': function(plan, change, changed)
     {
-      plan.settings.lines.add(change.line);
+      var lineId = change.line._id;
+      var planLineSettings = plan.settings.lines.add(change.line).get(lineId);
+      var planLine = plan.lines.add({_id: planLineSettings.id}).get(lineId);
 
-      changedObjects.lines[change.line._id] = true;
+      changed.lines[lineId] = true;
 
-      change.line.mrpPriority.forEach(function(mrp)
+      planLineSettings.get('mrpPriority').forEach(function(mrpId)
       {
-        changedObjects.mrps[mrp] = true;
+        var planMrp = plan.mrps.get(mrpId);
+
+        if (planMrp)
+        {
+          planMrp.lines.add(planLine);
+        }
+
+        changed.mrps[mrpId] = true;
       });
     },
 
-    'lines:remove': function(plan, change, changedObjects)
+    'lines:remove': function(plan, change, changed)
     {
-      plan.settings.lines.remove(change.line._id);
+      var lineId = change.line._id;
+      var planLineSettings = plan.settings.lines.get(lineId);
+      var planLine = plan.lines.get(lineId);
 
-      changedObjects.lines[change.line._id] = true;
-
-      change.line.mrpPriority.forEach(function(mrp) { changedObjects.mrps[mrp] = true; });
-    },
-
-    'lines:change': function(plan, change, changedObjects)
-    {
-      var line = plan.settings.lines.get(change.line);
-
-      if (!line)
+      if (!planLineSettings || !planLine)
       {
         return;
       }
 
-      changedObjects.lines[line.id] = true;
+      plan.settings.lines.remove(planLineSettings);
+
+      changed.lines[lineId] = true;
+
+      planLineSettings.get('mrpPriority').forEach(function(mrpId)
+      {
+        plan.mrps.get(mrpId).lines.remove(planLine);
+
+        changed.mrps[mrpId] = true;
+      });
+    },
+
+    'lines:change': function(plan, change, changed)
+    {
+      var planLineSettings = plan.settings.lines.get(change.line);
+
+      if (!planLineSettings)
+      {
+        return;
+      }
 
       if (change.property === 'mrpPriority')
       {
-        line.get('mrpPriority').forEach(function(mrp) { changedObjects.mrps[mrp] = true; });
+        planLineSettings.get('mrpPriority').forEach(function(mrpId) { changed.mrps[mrpId] = true; });
       }
 
-      line.set(change.property, change.newValue);
+      planLineSettings.set(change.property, change.newValue);
 
-      line.get('mrpPriority').forEach(function(mrp) { changedObjects.mrps[mrp] = true; });
+      planLineSettings.get('mrpPriority').forEach(function(mrpId) { changed.mrps[mrpId] = true; });
+
+      changed.lines[planLineSettings.id] = true;
     },
 
-    'mrps:add': function(plan, change, changedObjects)
+    'mrps:add': function(plan, change, changed)
     {
-      plan.settings.mrps.add(change.mrp);
+      var planMrpSettings = plan.settings.mrps.add(change.mrp).get(change.mrp._id);
 
-      changedObjects.mrps[change.mrp._id] = true;
+      changed.mrps[planMrpSettings.id] = true;
 
-      change.mrp.lines.forEach(function(mrpLine) { changedObjects.lines[mrpLine._id] = true; });
+      planMrpSettings.lines.forEach(function(planMrpLineSettings)
+      {
+        changed.lines[planMrpLineSettings.id] = true;
+      });
     },
 
-    'mrps:remove': function(plan, change, changedObjects)
+    'mrps:remove': function(plan, change, changed)
     {
-      plan.settings.mrps.remove(change.mrp._id);
+      var mrpId = change.mrp._id;
+      var planMrpSettings = plan.settings.mrps.get(mrpId);
 
-      changedObjects.mrps[change.mrp._id] = true;
+      if (!planMrpSettings)
+      {
+        return;
+      }
 
-      change.mrp.lines.forEach(function(mrpLine) { changedObjects.lines[mrpLine._id] = true; });
+      plan.settings.mrps.remove(planMrpSettings);
+
+      changed.mrps[mrpId] = true;
+
+      planMrpSettings.lines.forEach(function(planMrpLineSettings)
+      {
+        changed.lines[planMrpLineSettings.id] = true;
+      });
     },
 
-    'mrps:change': function(plan, change, changedObjects)
+    'mrps:change': function(plan, change, changed)
     {
       var mrp = plan.settings.mrps.get(change.mrp);
 
@@ -101,12 +138,12 @@ define([
 
       mrp.set(change.property, change.newValue);
 
-      changedObjects.mrps[mrp.id] = true;
+      changed.mrps[mrp.id] = true;
 
-      mrp.lines.forEach(function(mrpLine) { changedObjects.lines[mrpLine.id] = true; });
+      mrp.lines.forEach(function(mrpLine) { changed.lines[mrpLine.id] = true; });
     },
 
-    'mrpLines:add': function(plan, change, changedObjects)
+    'mrpLines:add': function(plan, change, changed)
     {
       var mrp = plan.settings.mrps.get(change.mrp);
 
@@ -117,11 +154,11 @@ define([
 
       mrp.lines.add(change.line);
 
-      changedObjects.mrps[mrp.id] = true;
-      changedObjects.lines[change.line._id] = true;
+      changed.mrps[mrp.id] = true;
+      changed.lines[change.line._id] = true;
     },
 
-    'mrpLines:remove': function(plan, change, changedObjects)
+    'mrpLines:remove': function(plan, change, changed)
     {
       var mrp = plan.settings.mrps.get(change.mrp);
 
@@ -132,11 +169,11 @@ define([
 
       mrp.lines.remove(change.line._id);
 
-      changedObjects.mrps[mrp.id] = true;
-      changedObjects.lines[change.line._id] = true;
+      changed.mrps[mrp.id] = true;
+      changed.lines[change.line._id] = true;
     },
 
-    'mrpLines:change': function(plan, change, changedObjects)
+    'mrpLines:change': function(plan, change, changed)
     {
       var mrp = plan.settings.mrps.get(change.mrp);
 
@@ -145,7 +182,7 @@ define([
         return;
       }
 
-      var line = mrp.lines.get(change.line._id);
+      var line = mrp.lines.get(change.line);
 
       if (!line)
       {
@@ -154,8 +191,8 @@ define([
 
       line.set(change.property, change.newValue);
 
-      changedObjects.mrps[mrp.id] = true;
-      changedObjects.lines[line.id] = true;
+      changed.mrps[mrp.id] = true;
+      changed.lines[line.id] = true;
     }
 
   };
@@ -163,17 +200,23 @@ define([
 
     settings: function(plan, changes)
     {
-      var changedObjects = {
+      var changed = {
+        reset: false,
         lines: {},
         mrps: {}
       };
 
       changes.forEach(function(change)
       {
-        settingsChangeHandlers[change.type](plan, change, changedObjects);
+        changed.reset = changed.reset || /add|remove/.test(change.type);
+
+        settingsChangeHandlers[change.type](plan, change, changed);
       });
-console.log('settings#changed', changedObjects);
-      plan.settings.trigger('changed', changedObjects);
+
+      changed.lines.any = Object.keys(changed.lines).length > 0;
+      changed.mrps.any = Object.keys(changed.mrps).length > 0;
+
+      plan.settings.trigger('changed', changed);
     },
 
     addedOrders: function(plan, addedOrders)
@@ -237,6 +280,11 @@ console.log('settings#changed', changedObjects);
       {
         var planMrp = plan.mrps.get(mrp);
 
+        if (!planMrp)
+        {
+          return;
+        }
+
         planMrp.orders.remove(mrpToRemovedPlanOrders[planMrp.id]);
         planMrp.orders.trigger('removed', mrpToRemovedPlanOrders[planMrp.id]);
       });
@@ -263,7 +311,7 @@ console.log('settings#changed', changedObjects);
         changedPlanOrders.push(planOrder);
 
         var oldMrp = plan.mrps.get(planOrder.get('mrp'));
-        var newMrp = plan.mrps.get(changedOrder.mrp) || oldMrp;
+        var newMrp = (changedOrder.changes.mrp ? plan.mrps.get(changedOrder.changes.mrp[1]) : null) || oldMrp;
 
         if (oldMrp.id !== newMrp.id)
         {
@@ -284,7 +332,14 @@ console.log('settings#changed', changedObjects);
 
         mrpToChangedPlanOrders[newMrp.id].push(planOrder);
 
-        planOrder.set(changedOrder);
+        var attrs = {};
+
+        Object.keys(changedOrder.changes).forEach(function(attrName)
+        {
+          attrs[attrName] = changedOrder.changes[attrName][1];
+        });
+
+        planOrder.set(attrs);
       });
 
       Object.keys(mrpToRemovedPlanOrders).forEach(function(mrp)
@@ -300,9 +355,51 @@ console.log('settings#changed', changedObjects);
       });
     },
 
-    changedLines: function(plan, data)
+    changedLines: function(plan, changedLines)
     {
-      console.log('changedLines', data);
+      var changedPlanLines = [];
+      var mrpToChangedPlanLines = {};
+
+      changedLines.forEach(function(changedLine)
+      {
+        var planLine = plan.lines.get(changedLine._id);
+
+        if (planLine.get('version') >= changedLine.version)
+        {
+          return;
+        }
+
+        planLine.set(_.omit(changedLine, 'orders'));
+
+        if (changedLine.orders)
+        {
+          planLine.orders.reset(changedLine.orders);
+        }
+
+        changedPlanLines.push(planLine);
+
+        if (!planLine.settings)
+        {
+          return;
+        }
+
+        planLine.settings.get('mrpPriority').forEach(function(mrpId)
+        {
+          if (!mrpToChangedPlanLines[mrpId])
+          {
+            mrpToChangedPlanLines[mrpId] = [];
+          }
+
+          mrpToChangedPlanLines[mrpId].push(planLine);
+        });
+      });
+
+      plan.lines.trigger('changed', changedPlanLines);
+
+      Object.keys(mrpToChangedPlanLines).forEach(function(mrp)
+      {
+        plan.mrps.get(mrp).lines.trigger('changed', mrpToChangedPlanLines[mrp]);
+      });
     }
 
   };

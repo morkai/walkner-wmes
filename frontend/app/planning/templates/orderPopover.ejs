@@ -21,6 +21,9 @@
       <% if (order.quantityPlan) { %>
       <%- order.quantityPlan %>
       <% } %>
+      <% if (order.incomplete) { %>
+      <span class="is-incomplete"><%- t('planning', 'orders:incomplete', {qty: order.incomplete}) %></span>
+      <% } %>
     </td>
   </tr>
   <% if (order.laborTime) { %>

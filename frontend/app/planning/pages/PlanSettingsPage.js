@@ -45,7 +45,8 @@ define([
         formAction: model.url(),
         formActionText: t(nlsDomain, 'settings:submit'),
         failureText: t(nlsDomain, 'settings:editFailure'),
-        panelTitleText: t(nlsDomain, 'settings:title')
+        panelTitleText: t(nlsDomain, 'settings:title'),
+        back: this.options.back
       };
     }
 

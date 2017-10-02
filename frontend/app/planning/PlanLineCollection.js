@@ -27,6 +27,11 @@ define([
       {
         var lineSettings = plan.settings.lines.get(line.id);
 
+        if (!lineSettings)
+        {
+          return;
+        }
+
         lineSettings.get('mrpPriority').forEach(function(mrpId)
         {
           if (!mrpToLines[mrpId])

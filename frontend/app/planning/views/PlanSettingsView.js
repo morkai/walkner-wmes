@@ -7,6 +7,7 @@ define([
   'app/i18n',
   'app/time',
   'app/user',
+  'app/viewport',
   'app/data/orgUnits',
   'app/data/orderStatuses',
   'app/core/views/FormView',
@@ -20,6 +21,7 @@ define([
   t,
   time,
   user,
+  viewport,
   orgUnits,
   orderStatuses,
   FormView,
@@ -166,6 +168,18 @@ define([
 
     }, FormView.prototype.events),
 
+    remoteTopics: {
+
+      'planning.generator.finished': function(message)
+      {
+        if (message.date === this.model.id)
+        {
+          this.onGeneratorFinished();
+        }
+      }
+
+    },
+
     initialize: function()
     {
       FormView.prototype.initialize.apply(this, arguments);
@@ -237,7 +251,7 @@ define([
 
     setUpHardComponentsSelect2: function()
     {
-      var $input = this.$id('hardComponents').select2({
+      this.$id('hardComponents').select2({
         placeholder: '12NC...',
         allowClear: true,
         multiple: true,
@@ -690,6 +704,55 @@ define([
     checkValidity: function()
     {
       return true;
+    },
+
+    submitRequest: function($submitEl, formData)
+    {
+      var req = this.request(formData);
+
+      req.done(this.handleSuccess.bind(this));
+      req.fail(this.handleFailure.bind(this));
+    },
+
+    handleSuccess: function()
+    {
+      this.timers.waitForGenerator = setTimeout(this.onGeneratorFinished.bind(this), 10000);
+
+      viewport.msg.show({
+        type: 'success',
+        time: 2500,
+        text: t('planning', 'settings:msg:success')
+      });
+    },
+
+    handleFailure: function()
+    {
+      FormView.prototype.handleFailure.apply(this, arguments);
+
+      this.$id('submit').prop('disabled', false);
+    },
+
+    getFailureText: function()
+    {
+      return t('planning', 'settings:msg:failure');
+    },
+
+    onGeneratorFinished: function()
+    {
+      clearTimeout(this.timers.waitForGenerator);
+
+      if (this.options.back)
+      {
+        this.broker.publish('router.navigate', {
+          url: '/planning/plans/' + this.model.id,
+          trigger: true,
+          replace: false
+        });
+      }
+      else
+      {
+        this.$id('submit').prop('disabled', false);
+      }
     }
 
   });

@@ -14,8 +14,8 @@ module.exports = function setUpPlanningRoutes(app, module)
   const PlanSettings = mongoose.model('PlanSettings');
   const PlanChange = mongoose.model('PlanChange');
 
-  const canView = userModule.auth('USER');
-  const canManage = userModule.auth('PLANNING:MANAGE');
+  const canView = userModule.auth('PLANNING:VIEW');
+  const canManage = userModule.auth('PLANNING:MANAGE', 'PLANNING:PLANNER');
 
   express.get('/planning/plans', canView, express.crud.browseRoute.bind(null, app, Plan));
   express.post('/planning/plans/:id;generate', canManage, generatePlanRoute);
@@ -23,7 +23,7 @@ module.exports = function setUpPlanningRoutes(app, module)
 
   express.get('/planning/settings', canView, express.crud.browseRoute.bind(null, app, PlanSettings));
   express.get('/planning/settings/:id', canView, express.crud.readRoute.bind(null, app, PlanSettings));
-  express.put('/planning/settings/:id', canView, editSettingsRoute);
+  express.put('/planning/settings/:id', canManage, editSettingsRoute);
 
   express.get('/planning/changes', canView, express.crud.browseRoute.bind(null, app, PlanChange));
   express.get('/planning/changes/:id', canView, express.crud.readRoute.bind(null, app, PlanChange));

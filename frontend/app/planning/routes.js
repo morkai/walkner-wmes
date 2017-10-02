@@ -16,9 +16,10 @@ define([
   'use strict';
 
   var nls = 'i18n!app/nls/planning';
-  var canView = user.auth('HOURLY_PLANS:VIEW', 'PROD_DATA:VIEW');
+  var canView = user.auth('PLANNING:VIEW');
+  var canManage = user.auth('PLANNING:MANAGE');
 
-  router.map('/planning/settings/:id', canView, function(req)
+  router.map('/planning/settings/:id', canManage, function(req)
   {
     viewport.loadPage(
       [
@@ -29,7 +30,8 @@ define([
       function(PlanSettings, PlanSettingsPage)
       {
         return new PlanSettingsPage({
-          model: new PlanSettings({_id: req.params.id})
+          model: new PlanSettings({_id: req.params.id}),
+          back: req.query.back === '1'
         });
       }
     );

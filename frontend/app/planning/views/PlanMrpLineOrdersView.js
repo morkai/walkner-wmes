@@ -29,7 +29,7 @@ define([
 
     initialize: function()
     {
-
+      this.listenTo(this.line.orders, 'reset', this.render);
     },
 
     destroy: function()
@@ -96,9 +96,24 @@ define([
         {no: 3, startTime: 0, orders: [], downtimes: []}
       );
 
+      var anyMissingOrder = false;
+
       planLine.orders.forEach(function(lineOrder)
       {
+        if (anyMissingOrder)
+        {
+          return;
+        }
+
         var order = plan.orders.get(lineOrder.get('orderNo'));
+
+        if (!order)
+        {
+          anyMissingOrder = true;
+
+          return;
+        }
+
         var mrp = order.get('mrp');
         var startAt = Date.parse(lineOrder.get('startAt'));
         var finishAt = Date.parse(lineOrder.get('finishAt'));
@@ -141,7 +156,7 @@ define([
 
       return shifts.filter(function(shift)
       {
-        return shift && shift.orders.length > 0;
+        return !anyMissingOrder && shift && shift.orders.length > 0;
       });
     },
 

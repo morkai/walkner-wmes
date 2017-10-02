@@ -98,6 +98,8 @@ module.exports = function setUpGenerator(app, module)
       orderStateQueues: null,
       lineStates: null,
       lineStateQueue: [],
+      oldIncompleteOrders: new Map(),
+      newIncompleteOrders: new Map(),
       changes: {
         addedOrders: new Map(),
         removedOrders: new Map(),
@@ -127,6 +129,8 @@ module.exports = function setUpGenerator(app, module)
     state.orderStateQueues = null;
     state.lineStates = null;
     state.lineStateQueue = [];
+    state.oldIncompleteOrders = new Map();
+    state.newIncompleteOrders = new Map();
     state.changes = {
       addedOrders: new Map(),
       removedOrders: new Map(),
@@ -272,6 +276,62 @@ module.exports = function setUpGenerator(app, module)
         }
 
         doGeneratePlan(state, this.next());
+      },
+      function markIncompleteOrdersStep(err)
+      {
+        if (state.cancelled || err)
+        {
+          return this.skip(err);
+        }
+
+        state.newIncompleteOrders.forEach((newValue, orderNo) =>
+        {
+          const oldValue = state.oldIncompleteOrders.get(orderNo) || 0;
+
+          state.oldIncompleteOrders.delete(orderNo);
+
+          if (newValue === oldValue)
+          {
+            return;
+          }
+
+          const changedOrder = state.changes.changedOrders.get(orderNo);
+
+          if (changedOrder)
+          {
+            changedOrder.changes.incomplete = [oldValue, newValue];
+          }
+          else
+          {
+            state.changes.changedOrders.set(orderNo, {
+              _id: orderNo,
+              changes: {
+                incomplete: [oldValue, newValue]
+              }
+            });
+          }
+        });
+
+        state.oldIncompleteOrders.forEach((oldValue, orderNo) =>
+        {
+          const changedOrder = state.changes.changedOrders.get(orderNo);
+
+          if (changedOrder)
+          {
+            changedOrder.changes.incomplete = [oldValue, 0];
+          }
+          else
+          {
+            state.changes.changedOrders.set(orderNo, {
+              _id: orderNo,
+              changes: {
+                incomplete: [oldValue, 0]
+              }
+            });
+          }
+        });
+
+        setImmediate(this.next());
       },
       function savePlanStep(err)
       {
@@ -537,20 +597,22 @@ module.exports = function setUpGenerator(app, module)
     };
   }
 
-  function preparePlanOrder(planOrder, settings)
+  function preparePlanOrder(planOrder, state)
   {
     const operation = planOrder.operation;
+    const quantityTodo = getQuantityTodo(planOrder, state.settings);
 
     if (operation)
     {
-      const quantityTodo = getQuantityTodo(planOrder, settings);
       const manHours = (operation.laborTime / 100 * quantityTodo) + operation.laborSetupTime;
 
       planOrder.manHours = Math.round(manHours * 1000) / 1000;
     }
 
-    planOrder.kind = classifyPlanOrder(planOrder, settings);
-    planOrder.incomplete = 0;
+    planOrder.kind = classifyPlanOrder(planOrder, state.settings);
+    planOrder.incomplete = quantityTodo;
+
+    state.newIncompleteOrders.set(planOrder._id, quantityTodo);
 
     return planOrder;
   }
@@ -619,7 +681,7 @@ module.exports = function setUpGenerator(app, module)
         {
           state.plan.orders = Array.from(state.orders.values())
             .filter(order => filterPlanOrder(order, state.settings) === null)
-            .map(order => preparePlanOrder(order, state.settings));
+            .map(order => preparePlanOrder(order, state));
 
           state.plan.orders.forEach(order => state.changes.addedOrders.set(order._id, order));
 
@@ -781,7 +843,7 @@ module.exports = function setUpGenerator(app, module)
     {
       if (filterPlanOrder(latestOrder, state.settings) === null)
       {
-        preparePlanOrder(latestOrder, state.settings);
+        preparePlanOrder(latestOrder, state);
 
         newPlanOrders.push(latestOrder);
 
@@ -813,7 +875,12 @@ module.exports = function setUpGenerator(app, module)
       return false;
     }
 
-    preparePlanOrder(latestOrder, state.settings);
+    if (oldOrder.incomplete)
+    {
+      state.oldIncompleteOrders.set(oldOrder._id, oldOrder.incomplete);
+    }
+
+    preparePlanOrder(latestOrder, state);
 
     const changes = {};
     let changed = false;
@@ -1354,6 +1421,15 @@ module.exports = function setUpGenerator(app, module)
     hourlyPlan.forEach((v, k) => lineState.hourlyPlan[k] += v);
 
     order.incomplete = orderState.quantityTodo;
+
+    if (order.incomplete)
+    {
+      state.newIncompleteOrders.set(orderId, order.incomplete);
+    }
+    else
+    {
+      state.newIncompleteOrders.delete(orderId);
+    }
 
     lineState.plannedOrdersSet.add(orderId);
 

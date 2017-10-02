@@ -19,28 +19,24 @@ define([
 ) {
   'use strict';
 
-  // TODO quantityPlan
-  // TODO ignored
-
   return View.extend({
 
     template: ordersTemplate,
 
     events: {},
 
+    localTopics: {
+      'planning.windowResized': 'resize'
+    },
+
     initialize: function()
     {
-      this.onResize = _.debounce(this.resize.bind(this), 16);
-
-      this.listenTo(this.mrp.orders, 'added changed', this.render);
+      this.listenTo(this.mrp.orders, 'added changed', this.onOrdersChanged);
       this.listenTo(this.mrp.orders, 'removed', this.onOrdersRemoved);
-
-      $(window).on('resize.' + this.idPrefix, this.onResize);
     },
 
     destroy: function()
     {
-      $(window).off('.' + this.idPrefix);
       this.$el.popover('destroy');
     },
 
@@ -111,6 +107,12 @@ define([
     serializePopover: function(id)
     {
       var order = this.plan.orders.get(id);
+
+      if (!order)
+      {
+        return null;
+      }
+
       var quantityTodo = order.get('quantityTodo');
       var quantityDone = order.get('quantityDone');
       var quantityPlan = order.get('quantityPlan');
@@ -122,6 +124,7 @@ define([
           nc12: order.get('nc12'),
           name: order.get('name'),
           kind: order.get('kind'),
+          incomplete: order.get('incomplete'),
           completed: quantityDone >= quantityTodo,
           surplus: quantityDone > quantityTodo,
           quantityTodo: quantityTodo,
@@ -133,6 +136,11 @@ define([
           laborTime: operation && operation.laborTime ? operation.laborTime : 0
         }
       });
+    },
+
+    onOrdersChanged: function()
+    {
+      this.render();
     },
 
     onOrdersRemoved: function(removedOrders)

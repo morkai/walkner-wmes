@@ -61,12 +61,13 @@ define([
 
     changeFilter: function()
     {
-      var date = this.$id('date').val();
+      var dateEl = this.$id('date')[0];
+      var date = dateEl.value;
       var newFilter = {
         mrps: this.$id('mrps').val().split(',').filter(function(v) { return v.length > 0; })
       };
 
-      if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date))
+      if (dateEl.checkValidity() && /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date))
       {
         newFilter.date = date;
       }

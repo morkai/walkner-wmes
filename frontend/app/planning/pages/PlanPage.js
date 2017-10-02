@@ -52,17 +52,32 @@ define([
 
     actions: function()
     {
+      var page = this;
+
       return [
         {
           label: t.bound('planning', 'PAGE_ACTION:changes'),
           icon: 'list-ol',
-          href: '#planning/changes?sort(-date)&plan=' + this.plan.id
+          href: '#planning/changes?sort(-date)&plan=' + page.plan.id
         },
         {
           label: t.bound('planning', 'PAGE_ACTION:settings'),
           icon: 'cogs',
-          privileges: 'PROD_DATA:MANAGE',
-          href: '#planning/settings/' + this.plan.id
+          privileges: 'PLANNING:MANAGE',
+          href: '#planning/settings/' + page.plan.id,
+          callback: function(e)
+          {
+            if (e.button === 0 && !e.ctrlKey)
+            {
+              page.broker.publish('router.navigate', {
+                url: '/planning/settings/' + page.plan.id + '?back=1',
+                trigger: true,
+                replace: false
+              });
+
+              return false;
+            }
+          }
         }
       ];
     },
@@ -70,13 +85,20 @@ define([
     remoteTopics: {
       'planning.changes.created': function(planChange)
       {
-        //this.plan.applyChange(planChange);
+        this.plan.applyChange(planChange);
+      },
+      'planning.generator.started': function(message)
+      {
+        if (message.date === this.plan.id)
+        {
+          viewport.msg.loading();
+        }
       },
       'planning.generator.finished': function(message)
       {
         if (message.date === this.plan.id)
         {
-          this.reload();
+          viewport.msg.loaded();
         }
       }
     },
@@ -118,18 +140,18 @@ window.plan = this.plan;
     {
       var page = this;
       var plan = page.plan;
-      var resetMrps = _.debounce(plan.mrps.reset.bind(plan.mrps), 1);
-      var renderMrps = _.after(_.debounce(page.renderMrps.bind(page), 1), 1);
+      var renderMrps = _.after(2, _.debounce(page.renderMrps.bind(page), 1));
 
       page.listenTo(plan, 'change:loading', page.onLoadingChanged);
       page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
 
       page.listenTo(plan.displayOptions, 'change:mrps', page.onMrpsFilterChanged);
 
-      page.listenTo(plan.settings.mrps, 'add remove', resetMrps);
-      page.listenTo(plan.settings.lines, 'add remove', resetMrps);
+      page.listenTo(plan.settings, 'changed', page.onSettingsChanged);
 
       page.listenTo(plan.mrps, 'reset', renderMrps);
+
+      $(window).on('resize.' + this.idPrefix, _.debounce(this.onWindowResize.bind(this), 16));
     },
 
     load: function(when)
@@ -173,10 +195,10 @@ window.plan = this.plan;
 
       plan.set('loading', true);
 
-      page.promised(plan.settings.fetch()).then(
+      page.promised(plan.settings.set('_id', plan.id).fetch()).then(
         function()
         {
-          page.promised(page.plan.fetch()).then(
+          page.promised(plan.fetch()).then(
             plan.set.bind(plan, 'loading', false),
             loadingFailed
           );
@@ -204,7 +226,7 @@ window.plan = this.plan;
     renderMrps: function()
     {
       var page = this;
-console.log('renderMrps', this.plan.mrps.length);
+
       page.removeView('#-mrps');
 
       page.plan.mrps.forEach(function(mrp)
@@ -231,7 +253,7 @@ console.log('renderMrps', this.plan.mrps.length);
     onMrpsFilterChanged: function()
     {
       this.updateUrl();
-      this.renderMrps();
+      this.plan.mrps.reset();
     },
 
     onLoadingChanged: function()
@@ -240,6 +262,19 @@ console.log('renderMrps', this.plan.mrps.length);
       {
         this.renderMrps();
       }
+    },
+
+    onSettingsChanged: function(changed)
+    {
+      if (changed.reset)
+      {
+        this.plan.mrps.reset();
+      }
+    },
+
+    onWindowResize: function(e)
+    {
+      this.broker.publish('planning.windowResized', e);
     }
 
   });

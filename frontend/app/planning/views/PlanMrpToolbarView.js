@@ -45,11 +45,6 @@ define([
 
     },
 
-    initialize: function()
-    {
-      // TODO update print action on lines changed
-    },
-
     serialize: function()
     {
       return {

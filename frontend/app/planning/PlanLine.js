@@ -11,6 +11,18 @@ define([
 
   return Model.extend({
 
+    defaults: function()
+    {
+      return {
+        version: 0,
+        orders: [],
+        downtimes: [],
+        totalQuantity: 0,
+        hourlyPlan: [],
+        pceTimes: []
+      };
+    },
+
     initialize: function()
     {
       this.orders = new PlanLineOrderCollection(null, {

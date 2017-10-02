@@ -1,4 +1,4 @@
-<li data-online data-privilege="HOURLY_PLANS:VIEW PROD_DATA:VIEW" data-module="hourlyPlans" class="dropdown">
+<li data-online data-privilege="HOURLY_PLANS:VIEW PROD_DATA:VIEW PLANNING:VIEW" data-module="hourlyPlans" class="dropdown">
   <a class="dropdown-toggle" data-toggle="dropdown">
     <%- t('core', 'NAVBAR:PLANNING:main') %>
     <b class="caret"></b>
@@ -25,8 +25,8 @@
     <li><a href="#dailyMrpPlans?date=2d" data-module="hourlyPlans"><%- t('core', 'NAVBAR:PLANNING:2d') %></a>
     <li class="divider">
     <li class="dropdown-header"><%- t('core', 'NAVBAR:PLANNING:daily:new') %>
-    <li><a href="#planning/plans" data-module="planning"><%- t('core', 'NAVBAR:PLANNING:all') %></a>
-    <li><a href="#planning/plans/0d" data-module="planning"><%- t('core', 'NAVBAR:PLANNING:0d') %></a>
-    <li><a href="#planning/plans/1d" data-module="planning"><%- t('core', 'NAVBAR:PLANNING:1d') %></a>
-    <li id="<%- idPrefix %>-planning-2d" title="<%- t('core', 'NAVBAR:PLANNING:2d:help') %>"><a href="#planning/plans/2d" data-module="planning"><%- t('core', 'NAVBAR:PLANNING:2d') %></a>
+    <li data-privilege="PLANNING:VIEW"><a href="#planning/plans" data-module="planning"><%- t('core', 'NAVBAR:PLANNING:all') %></a>
+    <li data-privilege="PLANNING:VIEW"><a href="#planning/plans/0d" data-module="planning"><%- t('core', 'NAVBAR:PLANNING:0d') %></a>
+    <li data-privilege="PLANNING:VIEW"><a href="#planning/plans/1d" data-module="planning"><%- t('core', 'NAVBAR:PLANNING:1d') %></a>
+    <li id="<%- idPrefix %>-planning-2d" data-privilege="PLANNING:VIEW" title="<%- t('core', 'NAVBAR:PLANNING:2d:help') %>"><a href="#planning/plans/2d" data-module="planning"><%- t('core', 'NAVBAR:PLANNING:2d') %></a>
   </ul>
