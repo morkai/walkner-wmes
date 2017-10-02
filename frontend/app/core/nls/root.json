@@ -92,6 +92,7 @@
     "NAVBAR:PLANNING:0d": "Today",
     "NAVBAR:PLANNING:1d": "Tomorrow",
     "NAVBAR:PLANNING:2d": "Day after tomorrow",
+    "NAVBAR:PLANNING:2d:help": "Plan available around 17:00.",
     "NAVBAR:FTE": "FTE",
     "NAVBAR:FTE:MASTER": "Production",
     "NAVBAR:FTE:LEADER": "Other",

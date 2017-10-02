@@ -98,6 +98,7 @@
   "NAVBAR:PLANNING:0d": "Na dzisiaj",
   "NAVBAR:PLANNING:1d": "Na jutro",
   "NAVBAR:PLANNING:2d": "Na pojutrze",
+  "NAVBAR:PLANNING:2d:help": "Plan dostępny około godziny 17:00.",
   "NAVBAR:FTE": "FTE",
   "NAVBAR:FTE:MASTER": "Produkcja",
   "NAVBAR:FTE:LEADER": "Inne",
