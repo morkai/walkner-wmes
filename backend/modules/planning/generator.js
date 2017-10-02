@@ -84,7 +84,7 @@ module.exports = function setUpGenerator(app, module)
     }
   }
 
-  function createPlanGeneratorState(key, date, reload, done)
+  function createPlanGeneratorState(key, date, done)
   {
     const state = {
       key: key,
@@ -1179,7 +1179,6 @@ module.exports = function setUpGenerator(app, module)
     const mrpId = order.mrp;
 
     const settings = state.settings;
-    const lineSettings = state.settings.line(lineId);
     const mrpSettings = state.settings.mrp(mrpId);
     const mrpLineSettings = state.settings.mrpLine(mrpId, lineId);
 
@@ -1195,6 +1194,7 @@ module.exports = function setUpGenerator(app, module)
     let nextDowntime = lineState.nextDowntime;
     let shiftNo = lineState.shiftNo;
     let completed = false;
+    let downtimes = [];
     const plannedOrders = [];
     const pceTimes = [];
     const hourlyPlan = EMPTY_HOURLY_PLAN.slice();
@@ -1210,19 +1210,21 @@ module.exports = function setUpGenerator(app, module)
     while (quantityPlanned <= quantityTodo)
     {
       let newFinishAt = finishAt + pceTime;
+      let newNextDowntime = nextDowntime;
+      const newDowntimes = [];
 
-      while (nextDowntime)
+      while (newNextDowntime)
       {
-        if (nextDowntime.startTime <= newFinishAt)
+        if (newNextDowntime.startTime <= newFinishAt)
         {
-          lineState.downtimes.push({
-            reason: nextDowntime.reason,
-            startAt: new Date(nextDowntime.startTime),
-            duration: nextDowntime.duration
+          newDowntimes.push({
+            reason: newNextDowntime.reason,
+            startAt: new Date(newNextDowntime.startTime),
+            duration: newNextDowntime.duration
           });
 
-          newFinishAt += nextDowntime.duration;
-          nextDowntime = nextDowntime.next;
+          newFinishAt += newNextDowntime.duration;
+          newNextDowntime = newNextDowntime.next;
 
           continue;
         }
@@ -1307,9 +1309,11 @@ module.exports = function setUpGenerator(app, module)
       }
 
       finishAt = newFinishAt;
+      nextDowntime = newNextDowntime;
       quantityPlanned += 1;
       totalQuantityPlanned += 1;
 
+      downtimes = downtimes.concat(newDowntimes);
       pceTimes.push(h, newFinishMoment.minutes());
       hourlyPlan[HOUR_TO_INDEX[h]] += 1;
     }
@@ -1344,6 +1348,7 @@ module.exports = function setUpGenerator(app, module)
     lineState.activeFrom = moment.utc(_.last(plannedOrders).finishAt.getTime());
     lineState.nextDowntime = nextDowntime;
     lineState.plannedOrdersList = lineState.plannedOrdersList.concat(plannedOrders);
+    lineState.downtimes = lineState.downtimes.concat(downtimes);
     lineState.pceTimes = lineState.pceTimes.concat(pceTimes);
 
     hourlyPlan.forEach((v, k) => lineState.hourlyPlan[k] += v);
@@ -1401,7 +1406,7 @@ module.exports = function setUpGenerator(app, module)
 
   function getPceTime(order, workerCount)
   {
-    return Math.floor(order.operation.laborTime / 100 / workerCount * 3600 * 1000);
+    return Math.ceil(order.operation.laborTime / 100 / workerCount * 3600) * 1000;
   }
 
   function getOrderStartOverhead(settings, lineState, orderState)
