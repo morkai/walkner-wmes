@@ -108,4 +108,18 @@ define([
       }
     );
   });
+
+  viewport.once('afterRender', toggleNavbarPlanning2D);
+
+  function toggleNavbarPlanning2D()
+  {
+    var navbarView = viewport.currentLayout.getView('.navbar');
+
+    if (navbarView)
+    {
+      navbarView.$id('planning-2d').toggleClass('disabled', time.getMoment().hours() < 17);
+    }
+
+    setTimeout(toggleNavbarPlanning2D, 60000);
+  }
 });

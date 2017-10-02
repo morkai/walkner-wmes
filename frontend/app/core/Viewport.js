@@ -362,6 +362,7 @@ define([
     this.currentLayout = createNewLayout();
 
     this.setView(selector, this.currentLayout);
+    this.trigger('layout:change', this.currentLayoutName, this.currentLayout);
 
     return this.currentLayout;
   };
