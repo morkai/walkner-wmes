@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define([],function(){"use strict";return function(t,n,i){t.ajax({url:"/prodSerialNumbers?limit(1)&prodShiftOrder="+i}).done(function(i){i&&i.totalCount&&t.$id(n).attr("min",i.totalCount.toString())})}});
+define(["underscore"],function(t){"use strict";function n(t){t.$id("quantityDone").trigger("input")}return function(e,o,i){const r=i.id,a=i.get("orderId");r&&(e.ajax({url:"/prodSerialNumbers?limit(1)&prodShiftOrder="+r}).done(function(t){t&&t.totalCount&&(e.$id("quantityDone").attr("min",t.totalCount.toString()),o&&n(e))}),a&&e.ajax({url:"/orders/"+a+"?select(qty,qtyMax,qtyDone)"}).done(function(r){var a=r.qty,u=r.qtyDone?r.qtyDone.total||0:0,y=r.qtyDone&&r.qtyDone.byLine?(t.findWhere(r.qtyDone.byLine,{_id:i.get("prodLine")})||{quantityDone:0}).quantityDone:0,d=i.get("quantityDone"),q=u-(y>=d?d:0),D=r.qtyMax||a,c=D-q;e.$id("quantityDone").attr("max",c),o&&n(e)}))}});

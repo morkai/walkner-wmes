@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["app/core/Model"],function(e){"use strict";return e.extend({})});
+define(["../core/Model","../data/orgUnits","./PlanOrderCollection","./PlanLineCollection"],function(t,e,i,s){"use strict";return t.extend({initialize:function(){var t=e.getByTypeAndId("mrpController",this.id);this.attributes.description=t?t.get("description"):"",this.orders=new i(null,{paginate:!1}),this.lines=new s(null,{paginate:!1}),this.attributes.orders&&(this.orders.reset(this.attributes.orders),delete this.attributes.orders),this.attributes.lines&&(this.lines.reset(this.attributes.lines),delete this.attributes.lines),Object.defineProperty(this,"plan",{get:function(){return this.collection.plan}}),Object.defineProperty(this,"settings",{get:function(){return this.plan.settings.mrps.get(this.id)}})}})});

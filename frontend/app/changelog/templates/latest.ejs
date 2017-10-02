@@ -1,32 +1,41 @@
-<h1>v0.116.2</h1>
-<h2><%- time.format('2017-09-17', 'LL') %></h2>
-<h3>Zlecenia reszty działów</h3>
+<h1>v0.116.3</h1>
+<h2><%- time.format('2017-10-01', 'LL') %></h2>
+<h3>Pulpit</h3>
 <ul>
-  <li>Poprawiono błąd uniemożliwiający aktualizację istniejących zleceń podczas importu zrzutu
-    SAP ZOIN (przyjęcia zleceń).</li>
-  <li>Zmieniono filtr 'Od-Do' tak, aby przeszukiwał po polu 'Data startu (plan.)'.</li>
-  <li>Zmieniono pole 'Do' tak, aby korzystało z warunku 'mniejsze niż' zamiast 'mniejsze lub równe'.
-    To znaczy, że filtr dla jednego dnia 17 września, to od '17.09.2017' do '18.09.2017'
-    (tak jak jest w reszcie systemu).</li>
+  <li>Poprawiono wyświetlanie tabelek 'Najaktywniejsi w miesiącu', jeżeli jakiś użytkownik miał 100 lub więcej
+    zarejestrowanych zgłoszeń.</li>
 </ul>
 <h3>Formatka operatora</h3>
 <ul>
-  <li>Poprawiono błąd uniemożliwiający rozpoczęcie zlecenia z kolejki.</li>
-  <li>Zmieniono kolejkę zleceń tak, aby można było ją zdefiniować w stanie 'Bezczynności'.</li>
-  <li>Zmieniono rozpoczynanie nowego zlecenia z kolejki tak, aby domyśla wartość ilości osób była
-    automatycznie wyliczana.</li>
+  <li>Zmieniono kończenie zlecenia tak, aby sprawdzana była zrobiona ilość. Od teraz każde zlecenie ma maksymalną
+    ilość do zrobienia ustawianą na stronie ze szczegółami 'Zlecenia reszty działów' (wymaga uprawnienia
+    'Zlecenia: zarządzanie' lub funkcję 'Mistrz' lub 'Lider'). Domyślnie maksymalna wartość
+    jest równa ilości do zrobienia. Przy kończeniu zlecenia na Formatce operatora, suma ilości zrobionych w zleceniach
+    produkcyjnych (generowanych przez Formatkę operatora) nie może przekraczać maksymalnej wartości.</li>
 </ul>
-<h3>Linie produkcyjne</h3>
+<h3>Raporty</h3>
 <ul>
-  <li>Zmieniono sortowanie listy linii na sortowanie naturalne (tzn. 'LM-9' przed 'LM-10').</li>
+  <li>Zmieniono filtry 'Od-Do' tak, aby najwcześniejszą datę jaką można wybrać był 1 grudnia 2013
+    (początek danych produkcyjnych w systemie).</li>
+  <li>Dodano do raportu 'Wskaźniki' eksport wydajności linii, działów i wydziałów. Dane eksportowane są dla aktualnie
+    wyświetlanej jednostki organizacyjnej.</li>
 </ul>
-<h3>FTE</h3>
+<h3>Zdarzenia</h3>
 <ul>
-  <li>Zmieniono sortowanie listy przepływów podczas tworzenia nowego wpisu na sortowanie naturalne.</li>
+  <li>Poprawiono błąd mogący wywalić serwer przez nieskończone dodawanie wpisu 'FTE: usunięcie'.</li>
 </ul>
-<h3>Użytkownicy</h3>
+<h3>Inne</h3>
 <ul>
-  <li>Dodano nowe uprawnienie: Dane produkcyjne: wydajność - wymagane do wyświetlania wskaźnika wydajności w danych
-    produkcyjnych (wcześniej w niektórych miejscach wystarczyło być zalogowanym, w innych mieć uprawnienie
-    'Dane produkcyjne: wyświetlanie', a w jeszcze innych 'Dane produkcyjne: zarządzanie').</li>
+  <li>Poprawiono błąd powodujący, że każda akcja eksportu danych działała tylko za pierwszym użyciem.</li>
+  <li>Zmieniono wszystkie filtry MRP zlecenia tak, aby wszędzie działały tak samo:
+    <ul>
+      <li>na liście pokazywane i przeszukiwane są ID oraz opis MRP,</li>
+      <li>na liście pokazywane są wszystkie MRP zdefiniowane w systemie (a nie tylko aktywne),</li>
+      <li>do filtra można dodać MRP, które nie znajduje się na liście wpisując je do pola i wciskając spację,</li>
+      <li>jeżeli użytkownik ma przypisane MRP w Matrycy odpowiedzialności to może kliknąć dodatkową akcję 'moje',
+        aby automatycznie wybrać przypisane do użytkownika MRP.</li>
+    </ul>
+  </li>
+  <li>Zmieniono wyświetlanie komunikatu o nowej wersji aplikacji tak, aby nie był pokazywany jeżeli w tym samym
+    czasie restartowany jest serwer.</li>
 </ul>

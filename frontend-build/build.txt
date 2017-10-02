@@ -731,9 +731,17 @@ vendor/bootstrap/css/bootstrap-theme.css
 ----------------
 vendor/bootstrap/css/bootstrap-theme.css
 
+vendor/bootstrap/css/bootstrap-theme.min.css
+----------------
+vendor/bootstrap/css/bootstrap-theme.min.css
+
 vendor/bootstrap/css/bootstrap.css
 ----------------
 vendor/bootstrap/css/bootstrap.css
+
+vendor/bootstrap/css/bootstrap.min.css
+----------------
+vendor/bootstrap/css/bootstrap.min.css
 
 vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css
 ----------------
