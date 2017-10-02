@@ -20,7 +20,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
   const canView = userModule.auth('ORDERS:VIEW');
   const canPrint = userModule.auth('LOCAL', 'ORDERS:VIEW');
-  const canManage = userModule.auth('ORDERS:MANAGE');
+  const canManage = userModule.auth('ORDERS:MANAGE', 'FN:master', 'FN:leader');
 
   express.post('/orders;import', importOrdersRoute);
 

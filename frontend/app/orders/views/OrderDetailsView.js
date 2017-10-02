@@ -147,7 +147,7 @@ define([
         panelTitle: this.options.panelTitle || t('orders', 'PANEL:TITLE:details'),
         linkOrderNo: !!this.options.linkOrderNo,
         showQtyMax: !!this.options.showQtyMax,
-        canChangeQtyMax: !!this.options.showQtyMax && user.isAllowedTo('PROD_DATA:MANAGE', 'FN:master', 'FN:leader')
+        canChangeQtyMax: !!this.options.showQtyMax && user.isAllowedTo('ORDERS:MANAGE', 'FN:master', 'FN:leader')
       };
     }
 
