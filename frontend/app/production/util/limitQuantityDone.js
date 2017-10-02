@@ -7,6 +7,20 @@ define([
 ) {
   'use strict';
 
+  var NO_MAX_CHECK_LINES = {
+    'W-1': true,
+    'W-2': true,
+    'W-3': true,
+    'WB-1': true,
+    'WB-2': true,
+    'WB-3': true,
+    'WB-4': true,
+    'AV1': true,
+    'AV1_P': true,
+    'AV2': true,
+    'AV2_P': true
+  };
+
   function validate(view)
   {
     view.$id('quantityDone').trigger('input');
@@ -35,7 +49,7 @@ define([
       }
     });
 
-    if (!sapOrderId)
+    if (!sapOrderId || NO_MAX_CHECK_LINES[prodShiftOrder.get('prodLine')])
     {
       return;
     }
