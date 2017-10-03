@@ -223,6 +223,11 @@ define([
       this.setUpMrpLineSelect2();
       this.setUpOrderPrioritySelect2();
       this.selectMrp(null);
+
+      if (!this.model.isEditable())
+      {
+        this.$id('submit').prop('disabled', true);
+      }
     },
 
     setUpOrderStatusSelect2: function(id)

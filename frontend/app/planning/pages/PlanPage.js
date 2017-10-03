@@ -67,9 +67,10 @@ define([
           icon: 'cogs',
           privileges: 'PLANNING:MANAGE',
           href: '#planning/settings/' + page.plan.id,
+          className: page.plan.isEditable() ? '' : 'disabled',
           callback: function(e)
           {
-            if (e.button === 0 && !e.ctrlKey)
+            if (e.button === 0 && !e.ctrlKey && page.plan.isEditable())
             {
               page.broker.publish('router.navigate', {
                 url: '/planning/settings/' + page.plan.id + '?back=1',

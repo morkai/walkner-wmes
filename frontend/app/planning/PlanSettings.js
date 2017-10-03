@@ -148,6 +148,11 @@ define([
       {
         return a.localeCompare(b, undefined, {numeric: true});
       });
+    },
+
+    isEditable: function()
+    {
+      return time.getMoment(this.id).hours(6).diff(Date.now()) > 300000;
     }
 
   }, {

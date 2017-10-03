@@ -510,6 +510,11 @@ define([
       return time.utc.format(this.id, 'LL');
     },
 
+    isEditable: function()
+    {
+      return this.settings.isEditable();
+    },
+
     applyChange: function(planChange)
     {
       var plan = this;
