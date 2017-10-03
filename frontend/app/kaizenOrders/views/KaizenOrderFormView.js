@@ -451,7 +451,7 @@ define([
       {
         currentUser = {
           id: user.data._id,
-          text: user.getLabel(true)
+          text: user.getLabel()
         };
       }
 
