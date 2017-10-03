@@ -3,6 +3,9 @@
   "BREADCRUMBS:settings": "Ustawienia",
   "BREADCRUMBS:changes": "Historia zmian",
 
+  "MSG:LOADING_PLAN_FAILURE": "Nie udało się załadować planu.",
+  "MSG:LOADING_SETTINGS_FAILURE": "Nie udało się załadować ustawień planu.",
+
   "PAGE_ACTION:changes": "Pokaż historię zmian",
   "PAGE_ACTION:settings": "Zmień ustawienia",
 

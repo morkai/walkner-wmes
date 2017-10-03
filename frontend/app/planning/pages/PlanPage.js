@@ -8,6 +8,7 @@ define([
   'app/time',
   'app/core/Model',
   'app/core/View',
+  'app/core/util/bindLoadingMessage',
   'app/users/ownMrps',
   'app/planning/Plan',
   'app/planning/PlanSettings',
@@ -23,6 +24,7 @@ define([
   time,
   Model,
   View,
+  bindLoadingMessage,
   ownMrps,
   Plan,
   PlanSettings,
@@ -126,7 +128,10 @@ define([
         pceTimes: false
       });
 
-window.plan = this.plan;
+      bindLoadingMessage(this.plan, this, 'MSG:LOADING_PLAN_FAILURE');
+      bindLoadingMessage(this.plan.settings, this, 'MSG:LOADING_SETTINGS_FAILURE');
+
+      window.plan = this.plan;
     },
 
     defineViews: function()
