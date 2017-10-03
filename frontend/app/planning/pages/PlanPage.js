@@ -113,6 +113,11 @@ define([
       this.defineBindings();
     },
 
+    destroy: function()
+    {
+      $(window).off('.' + this.idPrefix);
+    },
+
     setUpLayout: function(layout)
     {
       this.layout = layout;

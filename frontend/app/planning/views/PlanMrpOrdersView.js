@@ -23,7 +23,24 @@ define([
 
     template: ordersTemplate,
 
-    events: {},
+    events: {
+      'mouseenter .is-order': function(e)
+      {
+        this.mrp.orders.trigger('highlight', {
+          source: 'orders',
+          state: true,
+          orderNo: e.currentTarget.dataset.id
+        });
+      },
+      'mouseleave .is-order': function(e)
+      {
+        this.mrp.orders.trigger('highlight', {
+          source: 'orders',
+          state: false,
+          orderNo: e.currentTarget.dataset.id
+        });
+      }
+    },
 
     localTopics: {
       'planning.windowResized': 'resize'
@@ -33,6 +50,7 @@ define([
     {
       this.listenTo(this.mrp.orders, 'added changed', this.onOrdersChanged);
       this.listenTo(this.mrp.orders, 'removed', this.onOrdersRemoved);
+      this.listenTo(this.mrp.orders, 'highlight', this.onOrderHighlight);
     },
 
     destroy: function()
@@ -151,6 +169,11 @@ define([
       {
         view.$item(removedOrder.id).remove();
       });
+    },
+
+    onOrderHighlight: function(message)
+    {
+      this.$('.is-order[data-id^="' + message.orderNo + '"]').toggleClass('is-highlighted', message.state);
     }
 
   });

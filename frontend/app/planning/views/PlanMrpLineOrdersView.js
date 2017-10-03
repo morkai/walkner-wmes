@@ -25,11 +25,29 @@ define([
 
     template: lineOrdersTemplate,
 
-    events: {},
+    events: {
+      'mouseenter .is-lineOrder': function(e)
+      {
+        this.mrp.orders.trigger('highlight', {
+          source: 'lineOrders',
+          state: true,
+          orderNo: this.line.orders.get(e.currentTarget.dataset.id).get('orderNo')
+        });
+      },
+      'mouseleave .is-lineOrder': function(e)
+      {
+        this.mrp.orders.trigger('highlight', {
+          source: 'lineOrders',
+          state: false,
+          orderNo: this.line.orders.get(e.currentTarget.dataset.id).get('orderNo')
+        });
+      }
+    },
 
     initialize: function()
     {
       this.listenTo(this.line.orders, 'reset', this.render);
+      this.listenTo(this.mrp.orders, 'highlight', this.onOrderHighlight);
     },
 
     destroy: function()
@@ -197,6 +215,11 @@ define([
           duration: downtime.duration / 1000
         }
       });
+    },
+
+    onOrderHighlight: function(message)
+    {
+      this.$('.is-lineOrder[data-id^="' + message.orderNo + '"]').toggleClass('is-highlighted', message.state);
     }
 
   });

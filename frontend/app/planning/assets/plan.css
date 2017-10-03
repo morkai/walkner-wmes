@@ -229,6 +229,10 @@
 .planning-mrp-list-property > span {
   margin-left: 3px;
 }
+.planning-mrp-list-item.is-line:hover {
+  background-color: #FFFFA6;
+  color: #333;
+}
 .planning-mrp-orders .planning-mrp-list-item {
   font-size: 12px;
   text-align: center;
@@ -273,6 +277,7 @@
   opacity: 0.5;
 }
 .planning-mrp-list-item.is-downtime:hover {
+  opacity: 0.75;
   background-color: #FFD1D1;
 }
 .is-lineOrder > .planning-mrp-list-item-inner,
