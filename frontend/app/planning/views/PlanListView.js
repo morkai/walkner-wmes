@@ -29,6 +29,14 @@ define([
         {
           this.refreshCollection();
         }
+      },
+
+      'planning.generator.finished': function(message)
+      {
+        if (this.$('.is-empty[data-id="' + message.date + '"]').length)
+        {
+          this.refreshCollection();
+        }
       }
 
     },
