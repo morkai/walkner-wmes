@@ -112,6 +112,11 @@ exports.start = function startSapGuiModule(app, sapGuiModule)
 
     job.id = job.name + '#' + sapGuiModule.jobCount;
 
+    if (job.key !== job.name)
+    {
+      job.id = job.key + ':' + job.id;
+    }
+
     let jobDone = false;
 
     sapGuiModule.debug(
