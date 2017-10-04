@@ -48,6 +48,7 @@ define([
     {
       this.listenTo(this.line.orders, 'reset', this.render);
       this.listenTo(this.mrp.orders, 'highlight', this.onOrderHighlight);
+      this.listenTo(this.mrp.orders, 'change:incomplete', this.onIncompleteChange);
     },
 
     destroy: function()
@@ -220,6 +221,11 @@ define([
     onOrderHighlight: function(message)
     {
       this.$('.is-lineOrder[data-id^="' + message.orderNo + '"]').toggleClass('is-highlighted', message.state);
+    },
+
+    onIncompleteChange: function(model)
+    {
+      this.$('.is-lineOrder[data-id^="' + model.id + '"]').toggleClass('is-incomplete', model.get('incomplete') > 0);
     }
 
   });
