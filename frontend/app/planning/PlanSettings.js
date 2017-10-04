@@ -4,16 +4,27 @@ define([
   'underscore',
   '../time',
   '../core/Model',
-  '../core/Collection'
+  '../core/Collection',
+  './Plan'
 ], function(
   _,
   time,
   Model,
-  Collection
+  Collection,
+  Plan
 ) {
   'use strict';
 
   var PlanLineSettings = Model.extend({
+
+    defaults: function()
+    {
+      return {
+        mrpPriority: [],
+        activeFrom: '',
+        activeTo: ''
+      };
+    }
 
   });
 
@@ -24,6 +35,18 @@ define([
   });
 
   var PlanMrpSettings = Model.extend({
+
+    defaults: function()
+    {
+      return {
+        extraOrderSeconds: 0,
+        extraShiftSeconds: [0, 0, 0],
+        bigOrderQuantity: 0,
+        hardOrderManHours: 0,
+        hardComponents: [],
+        lines: []
+      };
+    },
 
     initialize: function()
     {
@@ -51,6 +74,14 @@ define([
   });
 
   var PlanMrpLineSettings = Model.extend({
+
+    defaults: function()
+    {
+      return {
+        workerCount: 1,
+        orderPriority: ['small', 'easy', 'hard']
+      };
+    }
 
   });
 
@@ -153,6 +184,11 @@ define([
     isEditable: function()
     {
       return time.getMoment(this.id).hours(6).diff(Date.now()) > 300000;
+    },
+
+    applyChanges: function(changes)
+    {
+      Plan.applySettingsChanges(this, changes);
     }
 
   }, {

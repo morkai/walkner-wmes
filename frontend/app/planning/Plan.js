@@ -57,7 +57,7 @@ define([
       var planLineSettings = plan.settings.lines.get(lineId);
       var planLine = plan.lines.get(lineId);
 
-      if (!planLineSettings || !planLine)
+      if (!planLineSettings)
       {
         return;
       }
@@ -68,7 +68,10 @@ define([
 
       planLineSettings.get('mrpPriority').forEach(function(mrpId)
       {
-        plan.mrps.get(mrpId).lines.remove(planLine);
+        if (planLine)
+        {
+          plan.mrps.get(mrpId).lines.remove(planLine);
+        }
 
         changed.mrps[mrpId] = true;
       });
@@ -129,70 +132,70 @@ define([
 
     'mrps:change': function(plan, change, changed)
     {
-      var mrp = plan.settings.mrps.get(change.mrp);
+      var planMrpSettings = plan.settings.mrps.get(change.mrp);
 
-      if (!mrp)
+      if (!planMrpSettings)
       {
         return;
       }
 
-      mrp.set(change.property, change.newValue);
+      planMrpSettings.set(change.property, change.newValue);
 
-      changed.mrps[mrp.id] = true;
+      changed.mrps[planMrpSettings.id] = true;
 
-      mrp.lines.forEach(function(mrpLine) { changed.lines[mrpLine.id] = true; });
+      planMrpSettings.lines.forEach(function(mrpLine) { changed.lines[mrpLine.id] = true; });
     },
 
     'mrpLines:add': function(plan, change, changed)
     {
-      var mrp = plan.settings.mrps.get(change.mrp);
+      var planMrpSettings = plan.settings.mrps.get(change.mrp);
 
-      if (!mrp)
+      if (!planMrpSettings)
       {
         return;
       }
 
-      mrp.lines.add(change.line);
+      planMrpSettings.lines.add(change.line);
 
-      changed.mrps[mrp.id] = true;
+      changed.mrps[planMrpSettings.id] = true;
       changed.lines[change.line._id] = true;
     },
 
     'mrpLines:remove': function(plan, change, changed)
     {
-      var mrp = plan.settings.mrps.get(change.mrp);
+      var planMrpSettings = plan.settings.mrps.get(change.mrp);
 
-      if (!mrp)
+      if (!planMrpSettings)
       {
         return;
       }
 
-      mrp.lines.remove(change.line._id);
+      planMrpSettings.lines.remove(change.line._id);
 
-      changed.mrps[mrp.id] = true;
+      changed.mrps[planMrpSettings.id] = true;
       changed.lines[change.line._id] = true;
     },
 
     'mrpLines:change': function(plan, change, changed)
     {
-      var mrp = plan.settings.mrps.get(change.mrp);
+      var planMrpSettings = plan.settings.mrps.get(change.mrp);
 
-      if (!mrp)
+      if (!planMrpSettings)
       {
         return;
       }
 
-      var line = mrp.lines.get(change.line);
+      var planMrpLineSettings = planMrpSettings.lines.get(change.line);
 
-      if (!line)
+      if (!planMrpLineSettings)
       {
         return;
       }
 
-      line.set(change.property, change.newValue);
+      planMrpLineSettings.set(change.property, change.newValue);
 
-      changed.mrps[mrp.id] = true;
-      changed.lines[line.id] = true;
+      changed.mrps[planMrpSettings.id] = true;
+      changed.lines[planMrpLineSettings.id] = true;
     }
 
   };
@@ -533,6 +536,16 @@ define([
           changeHandlers[what](plan, planChange.data[what]);
         }
       });
+    }
+
+  }, {
+
+    applySettingsChanges: function(settings, changes)
+    {
+      if (changes.length)
+      {
+        changeHandlers.settings(new this(null, {settings: settings}), changes);
+      }
     }
 
   });

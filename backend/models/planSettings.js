@@ -180,8 +180,9 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     };
   };
 
-  planSettingsSchema.methods.removeUnusedMrps = function()
+  planSettingsSchema.methods.removeUnused = function()
   {
+    const definedLines = new Set();
     const definedMrps = new Map();
     const listedMrps = new Map();
 
@@ -189,6 +190,11 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
 
     this.lines.forEach(line =>
     {
+      if (!line.mrpPriority.length)
+      {
+        return;
+      }
+
       line.mrpPriority.forEach(mrpId =>
       {
         if (!listedMrps.has(mrpId))
@@ -198,6 +204,8 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
 
         listedMrps.get(mrpId).push(line._id);
       });
+
+      definedLines.add(line);
     });
 
     for (const mrpId of definedMrps.keys())
@@ -232,6 +240,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       definedMrps.set(mrpId, mrp);
     }
 
+    this.lines = Array.from(definedLines.values());
     this.mrps = Array.from(definedMrps.values());
   };
 
@@ -250,13 +259,13 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     if (this.isNew)
     {
       this.set(input);
-      this.removeUnusedMrps();
+      this.removeUnused();
 
       return planChange;
     }
 
     input = new this.constructor(input);
-    input.removeUnusedMrps();
+    input.removeUnused();
 
     [
       'useRemainingQuantity',

@@ -4,6 +4,7 @@
 
 const moment = require('moment');
 const step = require('h5.step');
+const editSettingsRoute = require('./editSettings');
 
 module.exports = function setUpPlanningRoutes(app, module)
 {
@@ -23,7 +24,7 @@ module.exports = function setUpPlanningRoutes(app, module)
 
   express.get('/planning/settings', canView, express.crud.browseRoute.bind(null, app, PlanSettings));
   express.get('/planning/settings/:id', canView, express.crud.readRoute.bind(null, app, PlanSettings));
-  express.put('/planning/settings/:id', canManage, editSettingsRoute);
+  express.put('/planning/settings/:id', canManage, editSettingsRoute.bind(null, app, module));
 
   express.get('/planning/changes', canView, express.crud.browseRoute.bind(null, app, PlanChange));
   express.get('/planning/changes/:id', canView, express.crud.readRoute.bind(null, app, PlanChange));
@@ -36,58 +37,6 @@ module.exports = function setUpPlanningRoutes(app, module)
     });
 
     setTimeout(() => res.sendStatus(203), 333);
-  }
-
-  function editSettingsRoute(req, res, next)
-  {
-    step(
-      function()
-      {
-        PlanSettings.findById(req.params.id).exec(this.next());
-      },
-      function(err, planSettings)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (!planSettings)
-        {
-          planSettings = new PlanSettings();
-        }
-
-        const planChange = planSettings.applyChanges(
-          req.body,
-          userModule.createUserInfo(req.session.user, req)
-        );
-
-        planSettings.save(this.parallel());
-
-        if (planChange.data.settings.length)
-        {
-          new PlanChange(planChange).save(this.parallel());
-        }
-      },
-      function(err, planSettings, planChange)
-      {
-        if (err)
-        {
-          return next(err);
-        }
-
-        const json = planSettings.toJSON();
-
-        res.json(json);
-
-        app.broker.publish('planning.settings.updated', json);
-
-        if (planChange)
-        {
-          app.broker.publish('planning.changes.created', planChange.toJSON());
-        }
-      }
-    );
   }
 
   function readPlanRoute(req, res, next)

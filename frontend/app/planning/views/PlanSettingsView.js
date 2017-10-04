@@ -103,23 +103,7 @@ define([
 
           case 'activeFrom':
           case 'activeTo':
-            var parts = $property.val().split(':');
-            var hh = +parts[0];
-            var mm = +parts[1];
-
-            if (hh >= 0 && hh <= 24 && mm >= 0 && mm <= 59)
-            {
-              if (hh === 24)
-              {
-                hh = 0;
-              }
-
-              v = (hh < 10 ? '0' : '') + hh + ':' + (mm < 10 ? '0' : '') + mm;
-            }
-            else
-            {
-              v = '';
-            }
+            v = this.parseActiveTime($property);
             break;
         }
 
@@ -176,6 +160,20 @@ define([
         {
           this.onGeneratorFinished();
         }
+      },
+      'planning.settings.updated': function(message)
+      {
+        if (message.date === this.model.id)
+        {
+          if (message.changes.length === 0)
+          {
+            this.onGeneratorFinished();
+          }
+          else
+          {
+            this.model.applyChanges(message.changes);
+          }
+        }
       }
 
     },
@@ -187,6 +185,9 @@ define([
       this.sortables = [];
 
       this.stopListening(this.model, 'change');
+
+      this.listenTo(this.model, 'change', _.after(2, this.onSettingChange.bind(this)));
+      this.listenTo(this.model, 'changed', this.onSettingsChanged);
     },
 
     destroy: function()
@@ -202,13 +203,6 @@ define([
       }
 
       this.sortables = [];
-    },
-
-    serialize: function()
-    {
-      return _.extend(FormView.prototype.serialize.call(this), {
-
-      });
     },
 
     afterRender: function()
@@ -359,57 +353,14 @@ define([
         }
       }));
 
-      $line.on('change', function(e)
+      $line.on('change', function(e, added)
       {
-        var disabled = !e.added;
-        var activeFrom = '';
-        var activeTo = '';
-
-        if (!disabled)
+        if (added === undefined)
         {
-          var selectedLine = e.added.id;
-          var line = view.model.lines.get(selectedLine);
-
-          $mrpPriority
-            .select2('enable', true)
-            .select2('val', line ? line.get('mrpPriority') : []);
-
-          var selectedMrp = view.$id('mrp').select2('data');
-
-          if (line && line.get('mrpPriority').length)
-          {
-            var mrpPriority = line.get('mrpPriority');
-
-            selectedMrp = selectedMrp && _.includes(mrpPriority, selectedMrp.id)
-              ? selectedMrp.id
-              : mrpPriority[0];
-            activeFrom = line.get('activeFrom');
-            activeTo = line.get('activeTo');
-          }
-          else
-          {
-            selectedMrp = null;
-            selectedLine = null;
-          }
-
-          view.selectMrp(selectedMrp, selectedLine);
-        }
-        else
-        {
-          $mrpPriority
-            .select2('enable', false)
-            .select2('val', '');
-
-          view.selectMrp(null, null);
+          added = e.added;
         }
 
-        view.$id('activeFrom')
-          .val(activeFrom)
-          .prop('disabled', disabled);
-
-        view.$id('activeTo')
-          .val(activeTo)
-          .prop('disabled', disabled);
+        view.selectLine(added ? added.id : null);
       });
 
       $mrpPriority.on('change', function(e)
@@ -570,6 +521,66 @@ define([
       });
     },
 
+    selectLine: function(lineId)
+    {
+      var view = this;
+      var disabled = !lineId;
+      var activeFrom = '';
+      var activeTo = '';
+      var $mrpPriority = view.$id('mrpPriority');
+
+      if (!disabled)
+      {
+        var selectedLine = lineId;
+        var line = view.model.lines.get(selectedLine);
+
+        if (!line)
+        {
+          line = view.model.lines.add({_id: selectedLine}).get(selectedLine);
+        }
+
+        $mrpPriority
+          .select2('enable', true)
+          .select2('val', line ? line.get('mrpPriority') : []);
+
+        var selectedMrp = view.$id('mrp').select2('data');
+
+        if (line.get('mrpPriority').length)
+        {
+          var mrpPriority = line.get('mrpPriority');
+
+          selectedMrp = selectedMrp && _.includes(mrpPriority, selectedMrp.id)
+            ? selectedMrp.id
+            : mrpPriority[0];
+          activeFrom = line.get('activeFrom');
+          activeTo = line.get('activeTo');
+        }
+        else
+        {
+          selectedMrp = null;
+          selectedLine = null;
+        }
+
+        view.selectMrp(selectedMrp, selectedLine);
+      }
+      else
+      {
+        $mrpPriority
+          .select2('enable', false)
+          .select2('val', '');
+
+        view.selectMrp(null, null);
+      }
+
+      view.$id('activeFrom')
+        .val(activeFrom)
+        .prop('disabled', disabled);
+
+      view.$id('activeTo')
+        .val(activeTo)
+        .prop('disabled', disabled);
+    },
+
     selectMrp: function(mrpId, lineId)
     {
       var view = this;
@@ -583,15 +594,7 @@ define([
 
       if (enabled && !mrp)
       {
-        mrp = mrps.add({
-          _id: mrpId,
-          extraOrderSeconds: 0,
-          extraShiftSeconds: [0, 0, 0],
-          bigOrderQuantity: 0,
-          hardOrderManHours: 0,
-          hardComponents: [],
-          lines: []
-        }).get(mrpId);
+        mrp = mrps.add({_id: mrpId}).get(mrpId);
       }
 
       view.$id('extraOrderSeconds')
@@ -627,20 +630,15 @@ define([
     selectMrpLine: function(mrp, lineId, disabled)
     {
       var view = this;
+      var line = mrp ? mrp.lines.get(lineId) : null;
 
       view.$id('mrpLine').select2('val', lineId || '').select2('enable', !disabled);
-
-      var line = mrp ? mrp.lines.get(lineId) : null;
 
       disabled = disabled || !view.$id('mrpLine').select2('data');
 
       if (!disabled && !line)
       {
-        line = mrp.lines.add({
-          _id: lineId,
-          workerCount: 1,
-          orderPriority: ['small', 'easy', 'hard']
-        }).get(lineId);
+        line = mrp.lines.add({_id: lineId}).get(lineId);
       }
 
       view.$id('workerCount')
@@ -655,29 +653,22 @@ define([
     saveMrpPriority: function()
     {
       var selectedLine = this.$id('line').val();
-      var mrpPriority = this.$id('mrpPriority').val();
+      var mrpPriority = this.$id('mrpPriority').val().split(',').filter(function(mrpId) { return mrpId.length; });
       var lines = this.model.lines;
       var line = lines.get(selectedLine);
 
-      if (mrpPriority.length)
+      if (line)
       {
-        if (line)
-        {
-          line.set('mrpPriority', mrpPriority.split(','));
-        }
-        else
-        {
-          lines.add({
-            _id: selectedLine,
-            mrpPriority: mrpPriority.split(','),
-            activeFrom: '',
-            activeTo: ''
-          });
-        }
+        line.set('mrpPriority', mrpPriority);
       }
-      else if (line)
+      else
       {
-        lines.remove(line);
+        lines.add({
+          _id: selectedLine,
+          mrpPriority: mrpPriority,
+          activeFrom: this.parseActiveTime(this.$id('activeFrom')),
+          activeTo: this.parseActiveTime(this.$id('activeTo'))
+        });
       }
 
       this.setUpMrpSelect2();
@@ -689,6 +680,25 @@ define([
       var mrpLine = mrp.lines.get(this.$id('mrpLine').val());
 
       mrpLine.set('orderPriority', _.pluck(this.$id('orderPriority').select2('data'), 'id'));
+    },
+
+    parseActiveTime: function($property)
+    {
+      var parts = $property.val().split(':');
+      var hh = +parts[0];
+      var mm = +parts[1];
+
+      if (hh >= 0 && hh <= 24 && mm >= 0 && mm <= 59)
+      {
+        if (hh === 24)
+        {
+          hh = 0;
+        }
+
+        return (hh < 10 ? '0' : '') + hh + ':' + (mm < 10 ? '0' : '') + mm;
+      }
+
+      return '';
     },
 
     serializeToForm: function()
@@ -744,7 +754,13 @@ define([
 
     onGeneratorFinished: function()
     {
+      if (!this.timers.waitForGenerator)
+      {
+        return;
+      }
+
       clearTimeout(this.timers.waitForGenerator);
+      this.timers.waitForGenerator = null;
 
       if (this.options.back)
       {
@@ -757,6 +773,53 @@ define([
       else
       {
         this.$id('submit').prop('disabled', false);
+      }
+    },
+
+    onSettingChange: function()
+    {
+      var view = this;
+      var changed = view.model.changed;
+
+      Object.keys(changed).forEach(function(property)
+      {
+        var value = changed[property];
+
+        switch (property)
+        {
+          case 'ignoreCompleted':
+          case 'useRemainingQuantity':
+            view.$id(property).prop('checked', !!value);
+            break;
+
+          case 'requiredStatuses':
+          case 'ignoredStatuses':
+            view.$id(property).select2('val', value);
+            break;
+        }
+      });
+    },
+
+    onSettingsChanged: function(changed)
+    {
+      var activeEl = document.activeElement;
+      var selectedLine = this.$id('line').val();
+      var selectedMrp = this.$id('mrp').val();
+      var selectedMrpLine = this.$id('mrpLine').val();
+
+      if (changed.lines[selectedLine])
+      {
+        this.$id('line').select2('val', selectedLine).trigger('change', {id: selectedLine});
+      }
+
+      if (changed.mrps[selectedMrp])
+      {
+        this.selectMrp(selectedMrp, selectedMrpLine);
+      }
+
+      if (activeEl)
+      {
+        activeEl.focus();
       }
     }
 

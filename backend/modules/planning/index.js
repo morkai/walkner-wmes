@@ -59,8 +59,11 @@ exports.start = function startPlanningModule(app, module)
 
   app.broker.subscribe('planning.settings.updated', m =>
   {
-    app.broker.publish('planning.generator.requested', {
-      date: moment.utc(m._id).format('YYYY-MM-DD')
-    });
+    if (Array.isArray(m.changes) && m.changes.length)
+    {
+      app.broker.publish('planning.generator.requested', {
+        date: m.date
+      });
+    }
   });
 };
