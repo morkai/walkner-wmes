@@ -21,7 +21,17 @@ define([
 
     template: template,
 
-    remoteTopics: {},
+    remoteTopics: {
+
+      'planning.settings.updated': function(message)
+      {
+        if (this.collection.get(message.date))
+        {
+          this.refreshCollection();
+        }
+      }
+
+    },
 
     events: {
       'mousedown .planning-list-day': function(e)
