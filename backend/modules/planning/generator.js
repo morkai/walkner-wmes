@@ -310,6 +310,13 @@ module.exports = function setUpGenerator(app, module)
               }
             });
           }
+
+          const addedOrder = state.changes.addedOrders.get(orderNo);
+
+          if (addedOrder)
+          {
+            addedOrder.incomplete = [oldValue, newValue];
+          }
         });
 
         state.oldIncompleteOrders.forEach((oldValue, orderNo) =>
@@ -328,6 +335,13 @@ module.exports = function setUpGenerator(app, module)
                 incomplete: [oldValue, 0]
               }
             });
+          }
+
+          const addedOrder = state.changes.addedOrders.get(orderNo);
+
+          if (addedOrder)
+          {
+            addedOrder.incomplete = [oldValue, 0];
           }
         });
 
