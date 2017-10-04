@@ -1067,7 +1067,7 @@ module.exports = function setUpGenerator(app, module)
     const minutes = matches && matches[2] < 60 ? +matches[2] : 0;
     const activeTimeMoment = moment.utc(planTime);
 
-    if ((from && hours < 6) || (!from && hours <= 6 && minutes === 0))
+    if (hours < 6 || (!from && hours <= 6 && minutes === 0))
     {
       activeTimeMoment.add(1, 'days');
     }
@@ -1273,6 +1273,10 @@ module.exports = function setUpGenerator(app, module)
       + ` manHours=${order.manHours}`
       + ` pceTime=${pceTime / 1000}`
     );
+    console.log(
+      `                  activeFrom=${moment.utc(startAt).format('DD.MM HH:mm:ss')}`
+      + ` activeTo=${moment.utc(activeTo).format('DD.MM HH:mm:ss')}`
+    );
 
     while (quantityPlanned <= quantityTodo)
     {
@@ -1284,13 +1288,17 @@ module.exports = function setUpGenerator(app, module)
       {
         if (newNextDowntime.startTime <= newFinishAt)
         {
-          newDowntimes.push({
-            reason: newNextDowntime.reason,
-            startAt: new Date(newNextDowntime.startTime),
-            duration: newNextDowntime.duration
-          });
+          if (newNextDowntime.startTime >= startAt)
+          {
+            newDowntimes.push({
+              reason: newNextDowntime.reason,
+              startAt: new Date(newNextDowntime.startTime),
+              duration: newNextDowntime.duration
+            });
 
-          newFinishAt += newNextDowntime.duration;
+            newFinishAt += newNextDowntime.duration;
+          }
+
           newNextDowntime = newNextDowntime.next;
 
           continue;
