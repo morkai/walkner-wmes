@@ -21,7 +21,9 @@ define([
         minDate: '2017-01-01',
         maxDate: time.utc.getMoment().startOf('day').add(1, 'days').format('YYYY-MM-DD'),
         mrps: [],
-        printOrderTimes: false
+        printOrderTimes: false,
+        useLatestOrderData: true,
+        wrapLists: true
       };
     },
 
@@ -48,6 +50,26 @@ define([
     togglePrintOrderTime: function()
     {
       this.set('printOrderTimes', !this.attributes.printOrderTimes);
+    },
+
+    isLatestOrderDataUsed: function()
+    {
+      return this.attributes.useLatestOrderData;
+    },
+
+    toggleLatestOrderDataUse: function()
+    {
+      this.set('useLatestOrderData', !this.attributes.useLatestOrderData);
+    },
+
+    isListWrappingEnabled: function()
+    {
+      return this.attributes.wrapLists;
+    },
+
+    toggleListWrapping: function()
+    {
+      this.set('wrapLists', !this.attributes.wrapLists);
     }
 
   }, {

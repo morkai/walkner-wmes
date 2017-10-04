@@ -27,25 +27,43 @@ define([
 
       'input #-date': 'changeFilter',
       'change #-date': 'changeFilter',
-      'change #-mrps': 'changeFilter'
+      'change #-mrps': 'changeFilter',
+      'click #-wrapLists': function()
+      {
+        this.plan.displayOptions.toggleListWrapping();
+      },
+      'click #-useLatestOrderData': function()
+      {
+        this.plan.displayOptions.toggleLatestOrderDataUse();
+      }
 
     }, ownMrps.events),
 
     initialize: function()
     {
-      this.listenTo(this.plan, 'change:loading', this.onLoadingChanged);
-      this.listenTo(this.plan.displayOptions, 'change:minDate change:maxDate', this.onMinMaxDateChanged);
+      var plan = this.plan;
+      var displayOptions = plan.displayOptions;
+
+      this.listenTo(plan, 'change:loading', this.onLoadingChanged);
+      this.listenTo(displayOptions, 'change:minDate change:maxDate', this.onMinMaxDateChanged);
+      this.listenTo(displayOptions, 'change:wrapLists', this.updateToggles);
+      this.listenTo(displayOptions, 'change:useLatestOrderData', this.updateToggles);
     },
 
     serialize: function()
     {
+      var plan = this.plan;
+      var displayOptions = plan.displayOptions;
+
       return _.assign({
         idPrefix: this.idPrefix,
         showOwnMrps: ownMrps.hasAny(),
-        date: this.plan.id,
-        mrps: this.plan.displayOptions.get('mrps'),
-        minDate: this.plan.displayOptions.get('minDate'),
-        maxDate: this.plan.displayOptions.get('maxDate')
+        date: plan.id,
+        mrps: displayOptions.get('mrps'),
+        minDate: displayOptions.get('minDate'),
+        maxDate: displayOptions.get('maxDate'),
+        wrapLists: displayOptions.isListWrappingEnabled(),
+        useLatestOrderData: displayOptions.isLatestOrderDataUsed()
       });
     },
 
@@ -57,6 +75,14 @@ define([
         sortable: true,
         view: this
       });
+    },
+
+    updateToggles: function()
+    {
+      var displayOptions = this.plan.displayOptions;
+
+      this.$id('wrapLists').toggleClass('active', !displayOptions.isListWrappingEnabled());
+      this.$id('useLatestOrderData').toggleClass('active', displayOptions.isLatestOrderDataUsed());
     },
 
     changeFilter: function()

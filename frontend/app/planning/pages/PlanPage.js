@@ -103,6 +103,10 @@ define([
         {
           viewport.msg.loaded();
         }
+      },
+      'orders.synced': function()
+      {
+        this.plan.sapOrders.fetch({reset: true});
       }
     },
 
@@ -136,6 +140,7 @@ define([
 
       bindLoadingMessage(this.plan, this, 'MSG:LOADING_PLAN_FAILURE');
       bindLoadingMessage(this.plan.settings, this, 'MSG:LOADING_SETTINGS_FAILURE');
+      bindLoadingMessage(this.plan.sapOrders, this, 'MSG:LOADING_SAP_ORDERS_FAILURE');
 
       window.plan = this.plan;
     },
@@ -157,6 +162,8 @@ define([
       page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
 
       page.listenTo(plan.displayOptions, 'change:mrps', page.onMrpsFilterChanged);
+      page.listenTo(plan.displayOptions, 'change:wrapLists', page.onWrapListsChanged);
+      page.listenTo(plan.displayOptions, 'change:useLatestOrderData', page.updateUrl);
 
       page.listenTo(plan.settings, 'changed', page.onSettingsChanged);
 
@@ -171,6 +178,7 @@ define([
         ownMrps.load(this),
         this.loadStyles(),
         this.plan.settings.fetch(),
+        this.plan.sapOrders.fetch({reset: true}),
         this.plan.fetch()
       );
     },
@@ -194,6 +202,14 @@ define([
       return deferred.promise();
     },
 
+    serialize: function()
+    {
+      return {
+        idPrefix: this.idPrefix,
+        wrap: this.plan.displayOptions.isListWrappingEnabled()
+      };
+    },
+
     afterRender: function()
     {
       this.renderMrps();
@@ -209,7 +225,9 @@ define([
       page.promised(plan.settings.set('_id', plan.id).fetch()).then(
         function()
         {
-          page.promised(plan.fetch()).then(
+          var promise = $.when(plan.sapOrders.fetch({reset: true, reload: true}), plan.fetch());
+
+          page.promised(promise).then(
             plan.set.bind(plan, 'loading', false),
             loadingFailed
           );
@@ -227,8 +245,12 @@ define([
 
     updateUrl: function()
     {
+      var plan = this.plan;
+
       this.broker.publish('router.navigate', {
-        url: '/planning/plans/' + this.plan.id + '?mrps=' + this.plan.displayOptions.get('mrps'),
+        url: '/planning/plans/' + plan.id
+          + '?mrps=' + plan.displayOptions.get('mrps')
+          + '&sapOrders=' + (plan.displayOptions.isLatestOrderDataUsed() ? '1' : '0'),
         replace: true,
         trigger: false
       });
@@ -265,6 +287,11 @@ define([
     {
       this.updateUrl();
       this.plan.mrps.reset();
+    },
+
+    onWrapListsChanged: function()
+    {
+      this.$el.toggleClass('wrap', this.plan.displayOptions.isListWrappingEnabled());
     },
 
     onLoadingChanged: function()

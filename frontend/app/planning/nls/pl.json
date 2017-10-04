@@ -5,6 +5,7 @@
 
   "MSG:LOADING_PLAN_FAILURE": "Nie udało się załadować planu.",
   "MSG:LOADING_SETTINGS_FAILURE": "Nie udało się załadować ustawień planu.",
+  "MSG:LOADING_SAP_ORDERS_FAILURE": "Nie udało się załadować zleceń SAP.",
 
   "PAGE_ACTION:changes": "Pokaż historię zmian",
   "PAGE_ACTION:settings": "Zmień ustawienia",
@@ -12,6 +13,8 @@
   "filter:date": "Data planu",
   "filter:mrps": "Kontroler MRP",
   "filter:mrps:placeholder": "Wszystkie",
+  "filter:wrapLists": "Przewijanie list",
+  "filter:useLatestOrderData": "Najnowsze zlecenia",
 
   "toolbar:printPlan": "Drukuj plan linii",
   "toolbar:printPlan:all": "Wszystkie linie",
@@ -43,7 +46,7 @@
   "orders:qty": "Ilość",
   "orders:statuses": "Status",
   "orders:ignored": "Ignorowane?",
-  "orders:incomplete": "(brak {qty})",
+  "orders:incomplete": "({qty} nierozplanowane)",
 
   "lineOrders:orderNo": "Nr zlecenia",
   "lineOrders:unit": "szt.",

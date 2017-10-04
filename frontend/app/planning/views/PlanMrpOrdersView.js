@@ -6,6 +6,7 @@ define([
   'app/core/View',
   'app/data/orgUnits',
   'app/orderStatuses/util/renderOrderStatusLabel',
+  '../util/scrollIntoView',
   'app/planning/templates/orders',
   'app/planning/templates/orderPopover'
 ], function(
@@ -14,6 +15,7 @@ define([
   View,
   orgUnits,
   renderOrderStatusLabel,
+  scrollIntoView,
   ordersTemplate,
   orderPopoverTemplate
 ) {
@@ -48,9 +50,15 @@ define([
 
     initialize: function()
     {
-      this.listenTo(this.mrp.orders, 'added changed', this.onOrdersChanged);
-      this.listenTo(this.mrp.orders, 'removed', this.onOrdersRemoved);
-      this.listenTo(this.mrp.orders, 'highlight', this.onOrderHighlight);
+      var view = this;
+      var mrp = view.mrp;
+      var plan = view.plan;
+
+      view.listenTo(mrp.orders, 'added changed', view.onOrdersChanged);
+      view.listenTo(mrp.orders, 'removed', view.onOrdersRemoved);
+      view.listenTo(mrp.orders, 'highlight', view.onOrderHighlight);
+      view.listenTo(plan.displayOptions, 'change:useLatestOrderData', view.render);
+      view.listenTo(plan.sapOrders, 'reset', view.onSapOrdersReset);
     },
 
     destroy: function()
@@ -60,20 +68,24 @@ define([
 
     serialize: function()
     {
+      var plan = this.plan;
+
       return {
         idPrefix: this.idPrefix,
         orders: this.mrp.orders.map(function(order)
         {
+          var orderData = plan.getActualOrderData(order.id);
+
           return {
             _id: order.id,
             kind: order.get('kind'),
             incomplete: order.get('incomplete') > 0,
-            completed: order.get('quantityDone') >= order.get('quantityTodo'),
-            surplus: order.get('quantityDone') > order.get('quantityTodo'),
+            completed: orderData.quantityDone >= orderData.quantityTodo,
+            surplus: orderData.quantityDone > orderData.quantityTodo,
             invalid: false,
             ignored: order.get('ignored'),
-            confirmed: order.get('statuses').indexOf('CNF') !== -1,
-            delivered: order.get('statuses').indexOf('DLV') !== -1,
+            confirmed: orderData.statuses.indexOf('CNF') !== -1,
+            delivered: orderData.statuses.indexOf('DLV') !== -1,
             customQuantity: order.get('quantityPlan') > 0
           };
         })
@@ -131,9 +143,7 @@ define([
         return null;
       }
 
-      var quantityTodo = order.get('quantityTodo');
-      var quantityDone = order.get('quantityDone');
-      var quantityPlan = order.get('quantityPlan');
+      var orderData = this.plan.getActualOrderData(order.id);
       var operation = order.get('operation');
 
       return orderPopoverTemplate({
@@ -143,13 +153,13 @@ define([
           name: order.get('name'),
           kind: order.get('kind'),
           incomplete: order.get('incomplete'),
-          completed: quantityDone >= quantityTodo,
-          surplus: quantityDone > quantityTodo,
-          quantityTodo: quantityTodo,
-          quantityDone: quantityDone,
-          quantityPlan: quantityPlan,
+          completed: orderData.quantityDone >= orderData.quantityTodo,
+          surplus: orderData.quantityDone > orderData.quantityTodo,
+          quantityTodo: orderData.quantityTodo,
+          quantityDone: orderData.quantityDone,
+          quantityPlan: order.get('quantityPlan'),
           ignored: order.get('ignored'),
-          statuses: order.get('statuses').map(renderOrderStatusLabel),
+          statuses: orderData.statuses.map(renderOrderStatusLabel),
           manHours: order.get('manHours'),
           laborTime: operation && operation.laborTime ? operation.laborTime : 0
         }
@@ -173,7 +183,20 @@ define([
 
     onOrderHighlight: function(message)
     {
-      this.$('.is-order[data-id^="' + message.orderNo + '"]').toggleClass('is-highlighted', message.state);
+      var $item = this.$('.is-order[data-id^="' + message.orderNo + '"]').toggleClass('is-highlighted', message.state);
+
+      if (!this.plan.displayOptions.isListWrappingEnabled())
+      {
+        scrollIntoView($item[0]);
+      }
+    },
+
+    onSapOrdersReset: function(sapOrders, options)
+    {
+      if (!options.reload && this.plan.displayOptions.isLatestOrderDataUsed())
+      {
+        this.render();
+      }
     }
 
   });

@@ -105,12 +105,11 @@
 .planning-mrp-list-item.is-selectable {
   cursor: pointer;
 }
-.planning-mrp-list-item.is-completed {
-  background-color: #DFF0D8;
-  border-color: #999;
+.planning-mrp-list-item.is-incomplete {
+  background-color: #fcf8e3;
 }
-.planning-mrp-list-item.is-completed:hover {
-  background-color: #D0E9C6;
+.planning-mrp-list-item.is-incomplete:hover {
+  background-color: #faf2cc;
 }
 .planning-mrp-list-item.is-surplus {
   background-color: #FCF8E3;
@@ -119,17 +118,18 @@
 .planning-mrp-list-item.is-surplus:hover {
   background-color: #FAF2CC;
 }
+.planning-mrp-list-item.is-completed {
+  background-color: #DFF0D8;
+  border-color: #999;
+}
+.planning-mrp-list-item.is-completed:hover {
+  background-color: #D0E9C6;
+}
 .planning-mrp-list-item.is-invalid {
   background-color: #FFE8E8;
 }
 .planning-mrp-list-item.is-invalid:hover {
   background-color: #FFD1D1;
-}
-.planning-mrp-list-item.is-incomplete {
-   background-color: #fcf8e3;
- }
-.planning-mrp-list-item.is-incomplete:hover {
-  background-color: #faf2cc;
 }
 .planning-mrp-list-item.is-selected,
 .planning-mrp-list-item.is-selected:hover {
@@ -149,7 +149,7 @@
 }
 .planning-mrp-list-item-inner.is-cnf {
   line-height: 22px;
-  border-bottom: 2px solid #AA00FF;
+  border-top: 2px solid #AA00FF;
 }
 .planning-mrp-list-item-inner.is-dnf {
   line-height: 22px;
@@ -157,8 +157,6 @@
 }
 .planning-mrp-list-item-inner.is-cnf.is-dnf {
   line-height: 20px;
-  border-top: 2px solid #AA00FF;
-  border-bottom: 2px solid #FF007F;
 }
 .is-selected > .is-cnf,
 .is-selected > .is-dnf,
@@ -328,14 +326,14 @@
   display: block;
   max-width: 250px;
 }
+.planning-mrp-popover .is-incomplete {
+  color: darkorange;
+}
 .planning-mrp-popover .is-completed {
   color: #00AF00;
 }
 .planning-mrp-popover .is-surplus {
   color: #e00;
-}
-.planning-mrp-popover .is-incomplete {
-  color: darkorange;
 }
 .planning-mrp-popover .planning-mrp-popover-input {
   line-height: 1;

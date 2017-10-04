@@ -9,7 +9,8 @@ define([
   './PlanOrder',
   './PlanOrderCollection',
   './PlanLineCollection',
-  './PlanMrpCollection'
+  './PlanMrpCollection',
+  './PlanSapOrderCollection'
 ], function(
   _,
   time,
@@ -19,7 +20,8 @@ define([
   PlanOrder,
   PlanOrderCollection,
   PlanLineCollection,
-  PlanMrpCollection
+  PlanMrpCollection,
+  PlanSapOrderCollection
 ) {
   'use strict';
 
@@ -428,6 +430,7 @@ define([
       options = _.defaults({}, options, {
         displayOptions: null,
         settings: null,
+        sapOrders: null,
         minMaxDates: false,
         pceTimes: false
       });
@@ -436,6 +439,10 @@ define([
       this.displayOptions = options.displayOptions;
       this.settings = options.settings;
 
+      this.sapOrders = new PlanSapOrderCollection(null, {
+        plan: this,
+        paginate: false
+      });
       this.orders = new PlanOrderCollection(null, {
         plan: this,
         paginate: false
@@ -511,6 +518,16 @@ define([
     getLabel: function()
     {
       return time.utc.format(this.id, 'LL');
+    },
+
+    getActualOrderData: function(orderNo)
+    {
+      if (this.displayOptions.isLatestOrderDataUsed())
+      {
+        return (this.sapOrders.get(orderNo) || this.orders.get(orderNo)).getActualOrderData();
+      }
+
+      return this.orders.get(orderNo).getActualOrderData();
     },
 
     isEditable: function()

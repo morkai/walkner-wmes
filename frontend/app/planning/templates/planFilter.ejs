@@ -12,4 +12,16 @@
     </label>
     <input id="<%- idPrefix %>-mrps" name="mrps" value="<%- mrps %>">
   </div>
+  <div class="form-group filter-actions">
+    <div class="btn-group">
+      <button id="<%- idPrefix %>-wrapLists" type="button" class="btn btn-default <%- !wrapLists ? 'active' : '' %>">
+        <i class="fa fa-exchange"></i>
+        <span><%- t('planning', 'filter:wrapLists') %></span>
+      </button>
+      <button id="<%- idPrefix %>-useLatestOrderData" type="button" class="btn btn-default <%- useLatestOrderData ? 'active' : '' %>">
+        <i class="fa fa-refresh"></i>
+        <span><%- t('planning', 'filter:useLatestOrderData') %></span>
+      </button>
+    </div>
+  </div>
 </form>
