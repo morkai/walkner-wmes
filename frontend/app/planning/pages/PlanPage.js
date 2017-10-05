@@ -178,30 +178,10 @@ define([
     {
       return when(
         ownMrps.load(this),
-        this.loadStyles(),
         this.plan.settings.fetch(),
         this.plan.sapOrders.fetch({reset: true}),
         this.plan.fetch()
       );
-    },
-
-    loadStyles: function()
-    {
-      var deferred = $.Deferred(); // eslint-disable-line new-cap
-      var $head = $('head');
-
-      if ($head.find('link[href$="plan.css"]').length)
-      {
-        deferred.resolve();
-      }
-      else
-      {
-        $('<link rel="stylesheet" href="/app/planning/assets/plan.css">')
-          .on('load', function() { deferred.resolve(); })
-          .appendTo($head);
-      }
-
-      return deferred.promise();
     },
 
     serialize: function()
