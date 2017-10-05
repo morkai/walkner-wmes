@@ -185,7 +185,7 @@ define([
     {
       var $item = this.$('.is-order[data-id^="' + message.orderNo + '"]').toggleClass('is-highlighted', message.state);
 
-      if (!this.plan.displayOptions.isListWrappingEnabled())
+      if (message.source !== 'orders' && !this.plan.displayOptions.isListWrappingEnabled())
       {
         scrollIntoView($item[0]);
       }
