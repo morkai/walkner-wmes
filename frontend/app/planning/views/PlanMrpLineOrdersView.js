@@ -44,7 +44,19 @@ define([
       },
       'click .is-lineOrder': function(e)
       {
+        if (e.button !== 0)
+        {
+          return;
+        }
+
         var orderNo = this.line.orders.get(e.currentTarget.dataset.id).get('orderNo');
+
+        if (e.ctrlKey)
+        {
+          window.open('#orders/' + orderNo);
+
+          return;
+        }
 
         if (this.mrp.orders.get(orderNo))
         {

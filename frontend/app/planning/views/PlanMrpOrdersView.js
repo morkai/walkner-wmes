@@ -46,8 +46,17 @@ define([
       {
         if (e.button === 0)
         {
+          var orderNo = e.currentTarget.dataset.id;
+
+          if (e.ctrlKey)
+          {
+            window.open('#orders/' + orderNo);
+
+            return;
+          }
+
           this.mrp.orders.trigger('preview', {
-            orderNo: e.currentTarget.dataset.id
+            orderNo: orderNo
           });
         }
       }
