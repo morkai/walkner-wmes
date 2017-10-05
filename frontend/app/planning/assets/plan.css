@@ -305,6 +305,10 @@
   font-size: 12px;
   pointer-events: none;
 }
+.planning-mrp-popover-preview {
+  pointer-events: auto;
+  z-index: 1061;
+}
 .planning-mrp-popover-editable {
   pointer-events: auto;
 }

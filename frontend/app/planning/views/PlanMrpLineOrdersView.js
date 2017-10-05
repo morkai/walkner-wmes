@@ -41,6 +41,29 @@ define([
           state: false,
           orderNo: this.line.orders.get(e.currentTarget.dataset.id).get('orderNo')
         });
+      },
+      'click .is-lineOrder': function(e)
+      {
+        var orderNo = this.line.orders.get(e.currentTarget.dataset.id).get('orderNo');
+
+        if (this.mrp.orders.get(orderNo))
+        {
+          this.mrp.orders.trigger('preview', {
+            orderNo: orderNo
+          });
+        }
+        else
+        {
+          var externalMrp = this.plan.mrps.get(this.plan.orders.get(orderNo).get('mrp'));
+
+          if (externalMrp)
+          {
+            externalMrp.orders.trigger('preview', {
+              orderNo: orderNo,
+              scrollIntoView: true
+            });
+          }
+        }
       }
     },
 

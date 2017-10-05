@@ -41,11 +41,21 @@ define([
           state: false,
           orderNo: e.currentTarget.dataset.id
         });
+      },
+      'click .is-order': function(e)
+      {
+        if (e.button === 0)
+        {
+          this.mrp.orders.trigger('preview', {
+            orderNo: e.currentTarget.dataset.id
+          });
+        }
       }
     },
 
     localTopics: {
-      'planning.windowResized': 'resize'
+      'planning.windowResized': 'resize',
+      'planning.escapePressed': 'hidePreview'
     },
 
     initialize: function()
@@ -54,15 +64,24 @@ define([
       var mrp = view.mrp;
       var plan = view.plan;
 
+      view.$preview = null;
+
       view.listenTo(mrp.orders, 'added changed', view.onOrdersChanged);
       view.listenTo(mrp.orders, 'removed', view.onOrdersRemoved);
       view.listenTo(mrp.orders, 'highlight', view.onOrderHighlight);
+      view.listenTo(mrp.orders, 'preview', view.onOrderPreview);
       view.listenTo(plan.displayOptions, 'change:useLatestOrderData', view.render);
       view.listenTo(plan.sapOrders, 'reset', view.onSapOrdersReset);
     },
 
     destroy: function()
     {
+      if (this.$preview)
+      {
+        this.$preview.popover('destroy');
+        this.$preview = null;
+      }
+
       this.$el.popover('destroy');
     },
 
@@ -96,25 +115,42 @@ define([
     {
       var view = this;
 
-      view.$id('list').on('scroll', function(e)
-      {
-        view.$id('scrollIndicator').toggleClass('hidden', e.target.scrollLeft <= 40);
-      });
-
-      view.resize();
-
       view.$el.popover({
         container: view.el,
         selector: '.planning-mrp-list-item',
         trigger: 'hover',
         placement: 'top',
         html: true,
-        content: function() { return view.serializePopover(this.dataset.id); },
+        content: function()
+        {
+          if (view.$preview && view.$preview.data('orderNo') === this.dataset.id)
+          {
+            return;
+          }
+
+          return view.serializePopover(this.dataset.id);
+        },
         template: '<div class="popover planning-mrp-popover">'
-          + '<div class="arrow"></div>'
-          + '<div class="popover-content"></div>'
-          + '</div>'
+        + '<div class="arrow"></div>'
+        + '<div class="popover-content"></div>'
+        + '</div>'
       });
+
+      if (view.$popover)
+      {
+        var previewedOrderNo = view.$popover.data('orderNo');
+
+        view.hidePreview();
+        view.showPreview(previewedOrderNo);
+      }
+
+      view.$id('list').on('scroll', function(e)
+      {
+        view.$id('scrollIndicator').toggleClass('hidden', e.target.scrollLeft <= 40);
+        view.hidePreview();
+      });
+
+      view.resize();
     },
 
     resize: function()
@@ -127,6 +163,11 @@ define([
         top: (pos.top + 1) + 'px',
         left: ($edit.outerWidth() + pos.left) + 'px'
       });
+
+      if (this.$preview)
+      {
+        this.$preview.popover('show');
+      }
     },
 
     $item: function(id)
@@ -166,6 +207,45 @@ define([
       });
     },
 
+    hidePreview: function()
+    {
+      if (this.$preview)
+      {
+        this.$preview.popover('hide');
+        this.$preview = null;
+      }
+    },
+
+    showPreview: function(order)
+    {
+      var view = this;
+
+      view.$preview = view.$item(order.id).find('.planning-mrp-list-item-inner').data('orderNo', order.id).popover({
+        container: view.el,
+        trigger: 'manual',
+        placement: 'top',
+        html: true,
+        content: view.serializePopover(order.id),
+        template: '<div class="popover planning-mrp-popover planning-mrp-popover-preview">'
+        + '<div class="arrow"></div>'
+        + '<div class="popover-content"></div>'
+        + '</div>'
+      });
+
+      view.$preview.one('hidden.bs.popover', function()
+      {
+        if (view.$preview && view.$preview.data('orderNo') === order.id)
+        {
+          view.$preview.popover('destroy');
+          view.$preview = null;
+        }
+      });
+
+      view.$preview.data('bs.popover').tip().one('click', this.hidePreview.bind(this));
+
+      view.$preview.popover('show');
+    },
+
     onOrdersChanged: function()
     {
       this.render();
@@ -183,11 +263,46 @@ define([
 
     onOrderHighlight: function(message)
     {
-      var $item = this.$('.is-order[data-id^="' + message.orderNo + '"]').toggleClass('is-highlighted', message.state);
+      var $item = this.$('.is-order[data-id="' + message.orderNo + '"]').toggleClass('is-highlighted', message.state);
 
       if (message.source !== 'orders' && !this.plan.displayOptions.isListWrappingEnabled())
       {
+        this.hidePreview();
+
         scrollIntoView($item[0]);
+      }
+    },
+
+    onOrderPreview: function(message)
+    {
+      var order = this.mrp.orders.get(message.orderNo);
+
+      if (!order)
+      {
+        return;
+      }
+
+      if (this.$preview)
+      {
+        var previewedOrderNo = this.$preview.data('orderNo');
+
+        this.hidePreview();
+
+        if (order.id === previewedOrderNo)
+        {
+          return;
+        }
+      }
+
+      if (message.scrollIntoView)
+      {
+        var scrollTop = this.$el.position().top - 180;
+
+        $('html, body').animate({scrollTop: scrollTop}, 'fast', 'swing', this.showPreview.bind(this, order));
+      }
+      else
+      {
+        this.showPreview(order);
       }
     },
 

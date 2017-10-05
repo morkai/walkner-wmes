@@ -169,7 +169,9 @@ define([
 
       page.listenTo(plan.mrps, 'reset', renderMrps);
 
-      $(window).on('resize.' + this.idPrefix, _.debounce(this.onWindowResize.bind(this), 16));
+      $(window)
+        .on('resize.' + this.idPrefix, _.debounce(this.onWindowResize.bind(this), 16))
+        .on('keyup.' + this.idPrefix, this.onWindowKeyUp.bind(this));
     },
 
     load: function(when)
@@ -313,6 +315,14 @@ define([
     onWindowResize: function(e)
     {
       this.broker.publish('planning.windowResized', e);
+    },
+
+    onWindowKeyUp: function(e)
+    {
+      if (e.keyCode === 27)
+      {
+        this.broker.publish('planning.escapePressed');
+      }
     }
 
   });
