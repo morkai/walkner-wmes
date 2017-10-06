@@ -66,11 +66,13 @@ define([
 
     initialize: function()
     {
+      this.renderPropertyLabel = this.renderPropertyLabel.bind(this);
+      this.renderValueChange = this.renderValueChange.bind(this);
+
       this.$lastToggle = null;
       this.operationListView = null;
       this.documentListView = null;
       this.componentListView = null;
-      this.renderValueChange = this.renderValueChange.bind(this);
 
       this.setView('.orders-commentForm-container', new OrderCommentFormView({
         model: this.model,
@@ -96,6 +98,7 @@ define([
         showPanel: this.options.showPanel !== false,
         changes: this.serializeChanges(),
         renderChange: renderChange,
+        renderPropertyLabel: this.renderPropertyLabel,
         renderValueChange: this.renderValueChange
       };
     },
@@ -131,6 +134,18 @@ define([
     afterRender: function()
     {
       this.listenToOnce(this.model, 'change:changes', this.render);
+    },
+
+    renderPropertyLabel: function(valueChange)
+    {
+      switch (valueChange.property)
+      {
+        case 'qtyMax':
+          return t('orders', 'CHANGES:qtyMax', {operationNo: valueChange.newValue.operationNo});
+
+        default:
+          return t('orders', 'PROPERTY:' + valueChange.property);
+      }
     },
 
     renderValueChange: function(valueChange, i, valueProperty)
@@ -182,7 +197,7 @@ define([
           return time.format(value, 'LLL');
 
         case 'qtyMax':
-          return typeof value === 'number' && value > 0 ? value.toLocaleString() : '-';
+          return value.value.toLocaleString();
 
         default:
           return _.escape(String(value));
@@ -276,6 +291,7 @@ define([
     onChangePush: function(change)
     {
       var $change = $(renderChange({
+        renderPropertyLabel: this.renderPropertyLabel,
         renderValueChange: this.renderValueChange,
         change: this.serializeChange(change),
         i: this.model.get('changes').length

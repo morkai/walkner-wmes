@@ -1,17 +1,15 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-
+  './decimalSeparator'
 ], function(
-
+  decimalSeparator
 ) {
   'use strict';
 
-  var DECIMAL_SEPARATOR = (1.1).toLocaleString().substr(1, 1);
-
   return function parseNumber(value, noDecimals)
   {
-    var parts = String(value).split(DECIMAL_SEPARATOR);
+    var parts = String(value).split(decimalSeparator);
     var negative = parts[0].charAt(0) === '-' ? -1 : 1;
     var integer = parseInt(parts[0].replace(/[^0-9]+/g, ''), 10);
     var decimals = parts.length > 1 ? parseInt(parts[1].replace(/[^0-9]+/g, ''), 10) : 0;

@@ -103,10 +103,12 @@ define([
 
       this.detailsView = new OrderDetailsView({
         model: this.model,
-        delayReasons: this.delayReasons,
+        delayReasons: this.delayReasons
+      });
+      this.operationsView = new OperationListView({
+        model: this.model,
         showQtyMax: true
       });
-      this.operationsView = new OperationListView({model: this.model});
       this.documentsView = new DocumentListView({model: this.model});
       this.componentsView = new ComponentListView({
         model: this.model,
@@ -159,12 +161,32 @@ define([
 
     onOrderUpdated: function(message)
     {
-      if (this.model.id === message._id && message.change)
+      var order = this.model;
+
+      if (order.id !== message._id || !message.change)
       {
-        this.model.set(message.change.newValues);
-        this.model.get('changes').push(message.change);
-        this.model.trigger('push:change', message.change);
+        return;
       }
+
+      var attrs = {};
+
+      _.forEach(message.change.newValues, function(newValue, property)
+      {
+        if (property === 'qtyMax')
+        {
+          var newQtyMax = {};
+
+          newQtyMax[newValue.operationNo] = newValue.value;
+
+          newValue = _.defaults(newQtyMax, order.get('qtyMax'));
+        }
+
+        attrs[property] = newValue;
+      });
+
+      order.set(attrs);
+      order.get('changes').push(message.change);
+      order.trigger('push:change', message.change);
     },
 
     onQuantityDoneChanged: function(qtyDone)

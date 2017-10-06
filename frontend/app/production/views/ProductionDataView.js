@@ -307,19 +307,36 @@ define([
     updateTotalQuantityDone: function()
     {
       var html = '';
+      var shift = this.model;
+      var pso = shift.prodShiftOrder;
 
-      if (this.model.isIdle())
+      if (shift.isIdle())
       {
         html = '-';
       }
       else
       {
-        var totalQuantityTodo = (this.model.prodShiftOrder.get('orderData') || {}).qty;
-        var totalQuantityDone = this.model.prodShiftOrder.get('totalQuantityDone');
+        var operation = pso.getOperation();
+        var qtyDoneTotal = pso.get('totalQuantityDone') || {
+          total: 0,
+          byOperation: {}
+        };
+        var qtyTodo;
+        var qtyDone;
 
-        html += totalQuantityDone && totalQuantityDone.total >= 0 ? totalQuantityDone.total : '?';
+        if (operation)
+        {
+          qtyTodo = operation.qty;
+          qtyDone = qtyDoneTotal.byOperation ? qtyDoneTotal.byOperation[operation.no] : -1;
+        }
+        else
+        {
+          qtyTodo = (pso.get('orderData') || {}).qty || -1;
+        }
+
+        html += qtyDone >= 0 ? qtyDone.toLocaleString() : '?';
         html += '/';
-        html += totalQuantityTodo ? totalQuantityTodo : '?';
+        html += qtyTodo >= 0 ? qtyTodo.toLocaleString() : '?';
       }
 
       this.$property('totalQuantityDone').html(html);

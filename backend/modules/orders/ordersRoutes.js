@@ -55,7 +55,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
   function editOrderRoute(req, res, next)
   {
-    const data = _.pick(req.body, ['delayReason', 'qtyMax', 'comment']);
+    const data = _.pick(req.body, ['delayReason', 'operationNo', 'qtyMax', 'comment']);
 
     if (_.isEmpty(data.comment))
     {
@@ -64,7 +64,8 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
     if (!_.isString(data.comment)
       || (data.delayReason !== undefined && data.delayReason !== '' && !/^[a-f0-9]{24}$/.test(data.delayReason))
-      || (data.qtyMax !== undefined && !(data.qtyMax >= 0 && data.qtyMax <= 9999)))
+      || (data.qtyMax !== undefined
+        && (data.qtyMax < 0 || data.qtyMax > 9999 || !/^[0-9]{4}$/.test(data.operationNo))))
     {
       return next(express.createHttpError('INPUT', 400));
     }
@@ -101,14 +102,16 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
         const valuesToCheck = {
           qtyMax: {
-            old: order.qtyMax || 0,
+            old: order.qtyMax && order.qtyMax[data.operationNo] || 0,
             new: data.qtyMax,
-            prep: v => v
+            value: value => Object.assign({}, order.qtyMax || {}, {[data.operationNo]: value}),
+            change: value => ({operationNo: data.operationNo, value})
           },
           delayReason: {
             old: order.delayReason ? order.delayReason.toString() : '',
             new: data.delayReason,
-            prep: v => v === '' ? null : new ObjectId(v)
+            value: v => v === '' ? null : new ObjectId(v),
+            change: v => v === '' ? null : new ObjectId(v)
           }
         };
 
@@ -131,9 +134,9 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
             update.$set = {};
           }
 
-          update.$set[k] = values.prep(values.new);
-          change.oldValues[k] = values.prep(values.old);
-          change.newValues[k] = values.prep(values.new);
+          update.$set[k] = values.value(values.new);
+          change.oldValues[k] = values.change(values.old);
+          change.newValues[k] = values.change(values.new);
         });
 
         if (_.isEmpty(change.newValues) && !change.comment.length)

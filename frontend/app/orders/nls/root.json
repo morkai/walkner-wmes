@@ -38,7 +38,6 @@
     "PROPERTY:mrp": "MRP",
     "PROPERTY:qtys": "Quantity",
     "PROPERTY:qty": "Quantity todo",
-    "PROPERTY:qtyMax": "Max. quantity todo",
     "PROPERTY:qtyDone": "Quantity done",
     "PROPERTY:unit": "Unit",
     "PROPERTY:startDate": "Start date (basic)",
@@ -58,6 +57,7 @@
     "PROPERTY:operations.workCenter": "WorkCenter",
     "PROPERTY:operations.name": "Name",
     "PROPERTY:operations.qty": "Quantity",
+    "PROPERTY:operations.qtyMax": "Max.",
     "PROPERTY:operations.unit": "Unit",
     "PROPERTY:operations.machineSetupTime": "<em>Machine Setup</em> Time",
     "PROPERTY:operations.laborSetupTime": "<em>Labor Setup</em> Time",
@@ -89,6 +89,7 @@
     "CHANGES:property": "Property",
     "CHANGES:oldValue": "Old value",
     "CHANGES:newValue": "New value",
+    "CHANGES:qtyMax": "Max. quantity for <em>{operationNo}</em>",
 
     "filter:placeholder:_id": "Any order no",
     "filter:placeholder:nc12": "Any 12NC",

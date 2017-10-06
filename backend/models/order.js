@@ -77,10 +77,7 @@ module.exports = function setupOrderModel(app, mongoose)
     mrp: String,
     qty: Number,
     qtyDone: {},
-    qtyMax: {
-      type: Number,
-      default: 0
-    },
+    qtyMax: {},
     unit: String,
     startDate: Date,
     finishDate: Date,
@@ -226,57 +223,75 @@ module.exports = function setupOrderModel(app, mongoose)
 
   orderSchema.statics.recountQtyDone = function(orderNo, done)
   {
-    const totalQuantityDone = {
-      total: 0,
-      byLine: []
+    const qtyDone = {
+      total: Number.MAX_SAFE_INTEGER,
+      byLine: {},
+      byOperation: {}
     };
 
     step(
       function()
       {
-        const pipeline = [
-          {$match: {orderId: orderNo}},
-          {$group: {_id: '$prodLine', quantityDone: {$sum: '$quantityDone'}}}
-        ];
+        const conditions = {
+          orderId: orderNo
+        };
+        const fields = {
+          quantityDone: 1,
+          operationNo: 1,
+          prodLine: 1
+        };
 
-        mongoose.model('ProdShiftOrder').aggregate(pipeline, this.next());
+        mongoose.model('ProdShiftOrder').find(conditions, fields).lean().exec(this.next());
       },
-      function(err, docs)
+      function(err, psos)
       {
         if (err)
         {
           return this.skip(err);
         }
 
-        const byLine = {};
-
-        docs.forEach(function(doc)
+        psos.forEach(pso =>
         {
-          totalQuantityDone.total += doc.quantityDone;
-
-          if (!byLine[doc._id])
+          if (!qtyDone.byLine[pso.prodLine])
           {
-            byLine[doc._id] = 0;
+            qtyDone.byLine[pso.prodLine] = 0;
           }
 
-          byLine[doc._id] = doc.quantityDone;
+          qtyDone.byLine[pso.prodLine] += pso.quantityDone;
+
+          if (!qtyDone.byOperation[pso.operationNo])
+          {
+            qtyDone.byOperation[pso.operationNo] = 0;
+          }
+
+          qtyDone.byOperation[pso.operationNo] += pso.quantityDone;
         });
 
-        Object.keys(byLine).forEach(function(line)
+        Object.keys(qtyDone.byOperation).forEach(operationNo =>
         {
-          totalQuantityDone.byLine.push({_id: line, quantityDone: byLine[line]});
+          const operationQtyDone = qtyDone.byOperation[operationNo];
+
+          if (operationQtyDone > 0 && operationQtyDone < qtyDone.total)
+          {
+            qtyDone.total = operationQtyDone;
+          }
         });
 
-        mongoose.model('Order').update({_id: orderNo}, {$set: {qtyDone: totalQuantityDone}}, this.next());
+        if (qtyDone.total === Number.MAX_SAFE_INTEGER)
+        {
+          qtyDone.total = 0;
+        }
+
+        mongoose.model('Order').update({_id: orderNo}, {$set: {qtyDone: qtyDone}}, this.next());
       },
       function(err)
       {
         if (!err)
         {
-          app.broker.publish(`orders.quantityDone.${orderNo}`, totalQuantityDone);
+          app.broker.publish(`orders.quantityDone.${orderNo}`, qtyDone);
         }
 
-        done(err, totalQuantityDone);
+        done(err, qtyDone);
       }
     );
   };

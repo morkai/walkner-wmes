@@ -65,14 +65,39 @@ define([
 
     return view.ajax({url: url, timeout: 10000}).done(function(res)
     {
-      var qtyTodo = res.qty;
-      var totalQtyDone = res.qtyDone ? (res.qtyDone.total || 0) : 0;
-      var lineQtyDone = !res.qtyDone || !res.qtyDone.byLine
-        ? 0
-        : (_.findWhere(res.qtyDone.byLine, {_id: prodShiftOrder.get('prodLine')}) || {quantityDone: 0}).quantityDone;
-      var psoQtyDone = prodShiftOrder.get('quantityDone');
-      var qtyDone = totalQtyDone - (lineQtyDone >= psoQtyDone ? psoQtyDone : 0);
-      var qtyMax = res.qtyMax || qtyTodo;
+      var operation = prodShiftOrder.getOperation() || {
+        no: prodShiftOrder.get('operationNo'),
+        qty: res.qty
+      };
+
+      if (!res.qtyDone)
+      {
+        res.qtyDone = {
+          total: 0,
+          byLine: {},
+          byOperation: {}
+        };
+      }
+
+      if (!res.qtyDone.byOperation[operation.no])
+      {
+        res.qtyDone.byOperation[operation.no] = 0;
+      }
+
+      if (!res.qtyMax)
+      {
+        res.qtyMax = {};
+      }
+
+      if (!res.qtyMax[operation.no])
+      {
+        res.qtyMax[operation.no] = res.qty;
+      }
+
+      var qtyDoneInPso = prodShiftOrder.get('quantityDone');
+      var qtyDoneInOperation = res.qtyDone.byOperation[operation.no];
+      var qtyDone = qtyDoneInOperation - (qtyDoneInOperation >= qtyDoneInPso ? qtyDoneInPso : 0);
+      var qtyMax = res.qtyMax[operation.no];
       var qtyRemaining = Math.max(0, qtyMax - qtyDone);
 
       minMax(view, 0, qtyRemaining);

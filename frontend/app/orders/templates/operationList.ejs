@@ -8,6 +8,10 @@
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.workCenter') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.name') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.qty') %>
+        <% if (showQtyMax) { %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:operations.qtyMax') %>
+        <% } %>
+        <th class="is-min">
         <% if (user.isAllowedTo('PROD_DATA:VIEW', 'ORDERS:VIEW')) { %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.machineSetupTime') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:operations.laborSetupTime') %>
@@ -23,7 +27,22 @@
         <td class="is-min is-number"><%= operation.no || '-' %>
         <td class="is-min"><%= operation.workCenter || '-' %>
         <td class="is-min"><%= operation.name || '-' %>
-        <td class="is-min is-number"><%= operation.qtyUnit || '-' %>
+        <td class="is-min is-number">
+          <% if (showQtyMax) { %>
+          <%- operation.qtyDone.toLocaleString() %>/<%- operation.qty.toLocaleString() %>
+          <% } else { %>
+          <%- operation.qty.toLocaleString() %>
+          <% } %>
+        <% if (showQtyMax) { %>
+        <td class="is-min is-number" data-action="changeQtyMax">
+          <% if (canChangeQtyMax) { %>
+          <a href="#" data-operation-no="<%- operation.no %>" data-qty="<%- operation.qty %>" data-qty-max="<%- operation.qtyMax %>"><%= operation.qtyMax.toLocaleString() %></a>
+          <% } else { %>
+          <%- operation.qtyMax.toLocaleString() %>
+          <% } %>
+        </td>
+        <% } %>
+        <td class="is-min"><%= operation.unit %></td>
         <% if (user.isAllowedTo('PROD_DATA:VIEW', 'ORDERS:VIEW')) { %>
         <% timeProps.forEach(function(timeProp) { %>
         <td class="is-min is-number">

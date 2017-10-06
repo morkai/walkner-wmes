@@ -260,22 +260,30 @@ define([
       return resolveProductName(orderData) || '?';
     },
 
-    getOperationName: function()
+    getOperation: function()
     {
       var orderData = this.get('orderData');
       var operationNo = this.get('operationNo');
 
       if (!orderData || !operationNo)
       {
-        return '-';
+        return null;
       }
 
       if (!orderData.operations || !orderData.operations[operationNo])
       {
-        return operationNo;
+        return null;
       }
 
-      return orderData.operations[operationNo].name || operationNo;
+      return orderData.operations[operationNo];
+    },
+
+    getOperationName: function()
+    {
+      var operation = this.getOperation();
+      var operationNo = this.get('operationNo');
+
+      return (operation ? operation.name : '') || operationNo || '-';
     },
 
     getDurationString: function(currentTime, compact)

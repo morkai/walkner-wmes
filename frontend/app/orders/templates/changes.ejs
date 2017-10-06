@@ -30,6 +30,7 @@
     <% } %>
     <% changes.forEach(function(change, i) { %>
     <%- renderChange({
+      renderPropertyLabel: renderPropertyLabel,
       renderValueChange: renderValueChange,
       change: change,
       i: i

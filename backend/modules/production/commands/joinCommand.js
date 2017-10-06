@@ -89,7 +89,7 @@ module.exports = function joinCommand(app, productionModule, socket, req, reply)
       }
 
       reply({
-        totalQuantityDone: order && order.qtyDone ? order.qtyDone : {total: 0, byLine: {}},
+        totalQuantityDone: order && order.qtyDone || {total: 0, byLine: {}, byOperation: {}},
         plannedQuantities: !prodShift ? undefined : prodShift.quantitiesDone.map(d => d.planned),
         actualQuantities: !prodShift ? undefined : prodShift.quantitiesDone.map(d => d.actual),
         prodDowntimes: prodDowntimes || undefined,
