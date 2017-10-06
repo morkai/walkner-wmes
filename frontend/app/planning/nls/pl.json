@@ -33,6 +33,9 @@
   "lines:activeTo": "Aktywna do",
   "lines:activeTime": "Aktywność",
   "lines:workerCount": "Ilość osób",
+  "lines:menu:header": "Linia {line}",
+  "lines:menu:settings": "Zmień ustawienia linii",
+  "lines:menu:remove": "Usuń linię z MRP",
 
   "orders:hd": "Zlecenia",
   "orders:edit": "Ustaw kolejkę zleceń",

@@ -3,17 +3,21 @@
 define([
   'underscore',
   'jquery',
+  'app/i18n',
   'app/core/View',
   'app/data/orgUnits',
   'app/planning/templates/lines',
-  'app/planning/templates/linePopover'
+  'app/planning/templates/linePopover',
+  'app/planning/templates/contextMenu'
 ], function(
   _,
   $,
+  t,
   View,
   orgUnits,
   linesTemplate,
-  linePopoverTemplate
+  linePopoverTemplate,
+  contextMenuTemplate
 ) {
   'use strict';
 
@@ -21,20 +25,35 @@ define([
 
     template: linesTemplate,
 
-    events: {},
+    events: {
+      'contextmenu .is-line': function(e)
+      {
+        this.showMenu(e);
+
+        return false;
+      }
+    },
 
     localTopics: {
-      'planning.windowResized': 'resize'
+      'planning.windowResized': 'resize',
+      'planning.escapePressed': 'hideMenu'
     },
 
     initialize: function()
     {
+      this.hideMenu = this.hideMenu.bind(this);
+
+      this.$menu = null;
+
       this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
     },
 
     destroy: function()
     {
+      this.hideMenu();
       this.$el.popover('destroy');
+
+      $(document.body).off('.' + this.idPrefix);
     },
 
     serialize: function()
@@ -91,6 +110,8 @@ define([
         top: (pos.top + 1) + 'px',
         left: ($edit.outerWidth() + pos.left) + 'px'
       });
+
+      this.hideMenu();
     },
 
     $item: function(id)
@@ -137,6 +158,77 @@ define([
       return force || activeFrom || activeTo
         ? ((activeFrom || '06:00') + '-' + (activeTo || '06:00'))
         : '';
+    },
+
+    hideMenu: function()
+    {
+      var $menu = this.$menu;
+
+      if ($menu)
+      {
+        $(window).off('.menu.' + this.idPrefix);
+        $(document.body).off('.menu.' + this.idPrefix);
+
+        $menu.fadeOut('fast', function() { $menu.remove(); });
+
+        this.$menu = null;
+      }
+    },
+
+    showMenu: function(e)
+    {
+      var view = this;
+
+      if (!view.plan.isEditable())
+      {
+        return;
+      }
+
+      view.hideMenu();
+
+      var line = view.mrp.lines.get(view.$(e.currentTarget).attr('data-id'));
+
+      view.$menu = $(contextMenuTemplate({
+        header: t('planning', 'lines:menu:header', {line: line.id}),
+        prefix: 'lines',
+        actions: ['settings', 'remove']
+      }));
+
+      view.$menu.css({
+        top: e.pageY + 'px',
+        left: e.pageX + 'px'
+      });
+
+      view.$menu.on('mousedown', function(e)
+      {
+        if (e.which !== 1)
+        {
+          return false;
+        }
+
+        e.stopPropagation();
+      });
+      view.$menu.on('mouseup', function(e)
+      {
+        if (e.which !== 1)
+        {
+          return false;
+        }
+      });
+      view.$menu.on('contextmenu', false);
+      view.$menu.on('click', 'a[data-action]', this.onMenuClick.bind(this));
+
+      $(window).one('scroll.menu.' + this.idPrefix, view.hideMenu);
+      $(document.body).one('mousedown.menu.' + this.idPrefix, view.hideMenu);
+
+      view.$menu.appendTo(document.body);
+    },
+
+    onMenuClick: function(e)
+    {
+      this.hideMenu();
+
+      return false;
     },
 
     onSettingsChanged: function(changedObjects)

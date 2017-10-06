@@ -77,6 +77,10 @@ module.exports = function setupPlanModel(app, mongoose)
     _id: Date,
     createdAt: Date,
     updatedAt: Date,
+    frozen: {
+      type: Boolean,
+      default: false
+    },
     orders: [planOrderSchema],
     lines: [planLineSchema]
   }, {

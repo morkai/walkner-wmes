@@ -318,17 +318,23 @@
 .planning-mrp-popover th {
   padding-right: 5px;
   vertical-align: middle;
-  height: 24px;
+  height: 20px;
   white-space: nowrap;
 }
 .planning-mrp-popover td {
   padding-right: 5px;
   vertical-align: middle;
-  height: 24px;
+  height: 20px;
 }
 .planning-mrp-popover-value {
   display: block;
-  max-width: 250px;
+  max-width: 225px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.planning-mrp-popover-statuses {
+  white-space: normal;
 }
 .planning-mrp-popover .is-incomplete {
   color: darkorange;
@@ -396,4 +402,20 @@
   width: 1px;
   pointer-events: none;
   background: #E00;
+}
+.planning-menu {
+  display: block;
+  margin-top: -1px;
+}
+.planning-menu > .dropdown-header {
+  padding: 3px 10px;
+}
+.planning-menu > li > a {
+  padding: 3px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.planning-menu > li > a:hover {
+  background-color: #ffffa6;
+  color: #333;
 }

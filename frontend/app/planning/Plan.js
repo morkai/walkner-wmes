@@ -530,9 +530,14 @@ define([
       return this.orders.get(orderNo).getActualOrderData();
     },
 
+    isFrozen: function()
+    {
+      return this.attributes.frozen === true;
+    },
+
     isEditable: function()
     {
-      return this.settings.isEditable();
+      return !this.isFrozen() && this.settings.isEditable();
     },
 
     applyChange: function(planChange)
