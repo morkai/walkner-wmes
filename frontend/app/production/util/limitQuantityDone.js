@@ -1,9 +1,13 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'underscore'
+  'underscore',
+  'jquery',
+  'app/socket'
 ], function(
-  _
+  _,
+  $,
+  socket
 ) {
   'use strict';
 
@@ -21,40 +25,45 @@ define([
     'AV2_P': true
   };
 
-  function validate(view)
+  return function limitQuantityDone(view, prodShiftOrder)
   {
-    view.$id('quantityDone').trigger('input');
-  }
-
-  return function limitQuantityDone(view, forceValidate, prodShiftOrder)
-  {
-    var prodShiftOrderId = prodShiftOrder.id;
-    var sapOrderId = prodShiftOrder.get('orderId');
-
-    if (!prodShiftOrderId)
+    if (!prodShiftOrder.id || !socket.isConnected())
     {
       return;
     }
 
-    view.ajax({url: '/prodSerialNumbers?limit(1)&prodShiftOrder=' + prodShiftOrderId}).done(function(res)
+    var $submit = view.$id('submit').prop('disabled', true);
+    var requests = [requestMin(view, prodShiftOrder)];
+
+    if (prodShiftOrder.get('orderId') && !NO_MAX_CHECK_LINES[prodShiftOrder.get('prodLine')])
+    {
+      requests.push(requestMax(view, prodShiftOrder));
+    }
+
+    $.when.apply($, requests).always(function()
+    {
+      $submit.prop('disabled', false);
+    });
+  };
+
+  function requestMin(view, prodShiftOrder)
+  {
+    var url = '/prodSerialNumbers?limit(1)&prodShiftOrder=' + prodShiftOrder.id;
+
+    return view.ajax({url: url, timeout: 10000}).done(function(res)
     {
       if (res && res.totalCount)
       {
-        view.$id('quantityDone').attr('min', res.totalCount.toString());
-
-        if (forceValidate)
-        {
-          validate(view);
-        }
+        minMax(view, res.totalCount, null);
       }
     });
+  }
 
-    if (!sapOrderId || NO_MAX_CHECK_LINES[prodShiftOrder.get('prodLine')])
-    {
-      return;
-    }
+  function requestMax(view, prodShiftOrder)
+  {
+    var url = '/orders/' + prodShiftOrder.get('orderId') + '?select(qty,qtyMax,qtyDone)';
 
-    view.ajax({url: '/orders/' + sapOrderId + '?select(qty,qtyMax,qtyDone)'}).done(function(res)
+    return view.ajax({url: url, timeout: 10000}).done(function(res)
     {
       var qtyTodo = res.qty;
       var totalQtyDone = res.qtyDone ? (res.qtyDone.total || 0) : 0;
@@ -64,14 +73,26 @@ define([
       var psoQtyDone = prodShiftOrder.get('quantityDone');
       var qtyDone = totalQtyDone - (lineQtyDone >= psoQtyDone ? psoQtyDone : 0);
       var qtyMax = res.qtyMax || qtyTodo;
-      var qtyRemaining = qtyMax - qtyDone;
+      var qtyRemaining = Math.max(0, qtyMax - qtyDone);
 
-      view.$id('quantityDone').attr('max', qtyRemaining);
-
-      if (forceValidate)
-      {
-        validate(view);
-      }
+      minMax(view, 0, qtyRemaining);
     });
-  };
+  }
+
+  function minMax(view, min, max)
+  {
+    var $quantityDone = view.$id('quantityDone');
+
+    if (min !== null)
+    {
+      $quantityDone.attr('min', min);
+    }
+
+    if (max !== null)
+    {
+      $quantityDone.attr('max', max);
+    }
+
+    $quantityDone.trigger('input');
+  }
 });

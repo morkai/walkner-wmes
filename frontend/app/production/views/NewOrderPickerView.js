@@ -163,7 +163,7 @@ define([
         this.lastOrders.push(this.model.prodShiftOrder.get('orderData'));
       }
 
-      this.listenTo(this.model.prodShiftOrder, 'qtyMaxChanged', this.limitQuantityDone.bind(this, true));
+      this.listenTo(this.model.prodShiftOrder, 'qtyMaxChanged', this.limitQuantityDone);
 
       $(window)
         .on('keydown.' + this.idPrefix, this.onKeyDown.bind(this))
@@ -238,9 +238,9 @@ define([
       this.focusFirstInput();
     },
 
-    limitQuantityDone: function(forceValidate)
+    limitQuantityDone: function()
     {
-      limitQuantityDone(this, forceValidate, this.model.prodShiftOrder);
+      limitQuantityDone(this, this.model.prodShiftOrder);
     },
 
     onDialogShown: function(viewport)

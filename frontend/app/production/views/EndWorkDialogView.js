@@ -104,7 +104,7 @@ define([
 
       this.lastKeyPressAt = 0;
 
-      this.listenTo(this.model.prodShiftOrder, 'qtyMaxChanged', this.limitQuantityDone.bind(this, true));
+      this.listenTo(this.model.prodShiftOrder, 'qtyMaxChanged', this.limitQuantityDone);
 
       $(window)
         .on('keydown.' + this.idPrefix, this.onKeyDown.bind(this))
@@ -146,9 +146,9 @@ define([
       this.limitQuantityDone();
     },
 
-    limitQuantityDone: function(forceValidate)
+    limitQuantityDone: function()
     {
-      limitQuantityDone(this, forceValidate, this.model.prodShiftOrder);
+      limitQuantityDone(this, this.model.prodShiftOrder);
     },
 
     onDialogShown: function(viewport)
