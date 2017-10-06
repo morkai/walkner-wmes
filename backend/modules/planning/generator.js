@@ -157,6 +157,7 @@ module.exports = function setUpGenerator(app, module)
       }
 
       const now = moment();
+      const d = now.day();
       const h = now.hours();
       const m = now.minutes();
 
@@ -173,6 +174,11 @@ module.exports = function setUpGenerator(app, module)
       {
         // Day after tomorrow
         plansToGenerate[date.add(1, 'day').format('YYYY-MM-DD')] = true;
+
+        if (d === 4 || d === 5)
+        {
+          plansToGenerate[date.add(2, 'day').format('YYYY-MM-DD')] = true;
+        }
       }
 
       // Any additional plans
