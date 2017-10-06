@@ -250,7 +250,13 @@ define([
         }
       });
 
-      view.$preview.data('bs.popover').tip().one('click', this.hidePreview.bind(this));
+      view.$preview.data('bs.popover').tip().on('click', function()
+      {
+        if (window.getSelection().toString() === '')
+        {
+          view.hidePreview();
+        }
+      });
 
       view.$preview.popover('show');
     },
