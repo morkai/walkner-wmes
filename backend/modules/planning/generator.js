@@ -321,7 +321,7 @@ module.exports = function setUpGenerator(app, module)
 
           if (addedOrder)
           {
-            addedOrder.incomplete = [oldValue, newValue];
+            addedOrder.incomplete = newValue;
           }
         });
 
@@ -347,7 +347,7 @@ module.exports = function setUpGenerator(app, module)
 
           if (addedOrder)
           {
-            addedOrder.incomplete = [oldValue, 0];
+            addedOrder.incomplete = 0;
           }
         });
 
