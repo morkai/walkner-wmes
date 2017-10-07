@@ -36,6 +36,10 @@
   "lines:menu:header": "Linia {line}",
   "lines:menu:settings": "Zmień ustawienia linii",
   "lines:menu:remove": "Usuń linię z MRP",
+  "lines:menu:remove:title": "Usuwanie linii z MRP",
+  "lines:menu:remove:message": "<p>Czy na pewno chcesz usunąć przypisanie MRP <em>{mrp}</em> do linii <em>{line}</em>?</p><p>Zmiana będzie miała wpływ tylko na plan dla dnia {plan}.</p>",
+  "lines:menu:remove:yes": "Usuń przypisanie",
+  "lines:menu:remove:no": "Anuluj",
 
   "orders:hd": "Zlecenia",
   "orders:edit": "Ustaw kolejkę zleceń",

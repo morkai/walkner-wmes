@@ -166,6 +166,7 @@ define([
       page.listenTo(plan.displayOptions, 'change:useLatestOrderData', page.updateUrl);
 
       page.listenTo(plan.settings, 'changed', page.onSettingsChanged);
+      page.listenTo(plan.settings, 'errored', page.reload);
 
       page.listenTo(plan.mrps, 'reset', renderMrps);
 

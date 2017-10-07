@@ -64,7 +64,8 @@ define([
 
     localTopics: {
       'planning.windowResized': 'resize',
-      'planning.escapePressed': 'hidePreview'
+      'planning.escapePressed': 'hidePreview',
+      'planning.contextMenu.shown': 'hidePreview'
     },
 
     initialize: function()

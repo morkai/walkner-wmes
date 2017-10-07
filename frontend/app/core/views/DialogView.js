@@ -49,7 +49,9 @@ define([
     enableAnswers: function()
     {
       this.$('.btn[data-answer]').prop('disabled', false);
-    }
+    },
+
+    closeDialog: function() {}
 
   });
 });

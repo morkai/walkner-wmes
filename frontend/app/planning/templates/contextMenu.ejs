@@ -1,8 +1,11 @@
-<ul class="dropdown-menu planning-menu">
-  <% if (typeof header !== 'undefined') { %>
-  <li class="dropdown-header"><%- header %></li>
+<ul class="dropdown-menu planning-menu" style="top: <%- top %>px; left: <%- left %>px">
+  <% menu.forEach(function(item, i) { %>
+  <% if (item.type === 'header') { %>
+  <li class="dropdown-header"><%- item.label %></li>
+  <% } else if (item.type === 'divider') { %>
+  <li class="divider"></li>
+  <% } else { %>
+  <li><a data-action="<%- i %>"><%- item.label %></a></li>
   <% } %>
-  <% actions.forEach(function(action) { %>
-  <li><a data-action="<%- action %>"><%- t('planning', prefix + ':menu:' + action) %></a></li>
   <% }) %>
 </ul>

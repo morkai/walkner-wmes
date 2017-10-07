@@ -4,20 +4,28 @@ define([
   'underscore',
   'jquery',
   'app/i18n',
+  'app/viewport',
+  'app/user',
   'app/core/View',
+  'app/core/views/DialogView',
   'app/data/orgUnits',
+  '../util/contextMenu',
   'app/planning/templates/lines',
   'app/planning/templates/linePopover',
-  'app/planning/templates/contextMenu'
+  'app/planning/templates/lineRemoveDialog'
 ], function(
   _,
   $,
   t,
+  viewport,
+  user,
   View,
+  DialogView,
   orgUnits,
+  contextMenu,
   linesTemplate,
   linePopoverTemplate,
-  contextMenuTemplate
+  lineRemoveDialogTemplate
 ) {
   'use strict';
 
@@ -41,10 +49,6 @@ define([
 
     initialize: function()
     {
-      this.hideMenu = this.hideMenu.bind(this);
-
-      this.$menu = null;
-
       this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
     },
 
@@ -111,7 +115,7 @@ define([
         left: ($edit.outerWidth() + pos.left) + 'px'
       });
 
-      this.hideMenu();
+      contextMenu.hide(this);
     },
 
     $item: function(id)
@@ -162,73 +166,71 @@ define([
 
     hideMenu: function()
     {
-      var $menu = this.$menu;
-
-      if ($menu)
-      {
-        $(window).off('.menu.' + this.idPrefix);
-        $(document.body).off('.menu.' + this.idPrefix);
-
-        $menu.fadeOut('fast', function() { $menu.remove(); });
-
-        this.$menu = null;
-      }
+      contextMenu.hide(this);
     },
 
     showMenu: function(e)
     {
-      var view = this;
-
-      if (!view.plan.isEditable())
+      if (!this.plan.isEditable() || !user.isAllowedTo('PLANNING:PLANNER', 'PLANNING:MANAGE'))
       {
         return;
       }
 
-      view.hideMenu();
+      var line = this.mrp.lines.get(this.$(e.currentTarget).attr('data-id'));
 
-      var line = view.mrp.lines.get(view.$(e.currentTarget).attr('data-id'));
-
-      view.$menu = $(contextMenuTemplate({
-        header: t('planning', 'lines:menu:header', {line: line.id}),
-        prefix: 'lines',
-        actions: ['settings', 'remove']
-      }));
-
-      view.$menu.css({
-        top: e.pageY + 'px',
-        left: e.pageX + 'px'
-      });
-
-      view.$menu.on('mousedown', function(e)
-      {
-        if (e.which !== 1)
+      contextMenu.show(this, e.pageY, e.pageX, [
+        t('planning', 'lines:menu:header', {line: line.id}),
         {
-          return false;
-        }
-
-        e.stopPropagation();
-      });
-      view.$menu.on('mouseup', function(e)
-      {
-        if (e.which !== 1)
+          label: t('planning', 'lines:menu:settings'),
+          handler: this.handleSettingsAction.bind(this, line)
+        },
         {
-          return false;
+          label: t('planning', 'lines:menu:remove'),
+          handler: this.handleRemoveAction.bind(this, line)
         }
-      });
-      view.$menu.on('contextmenu', false);
-      view.$menu.on('click', 'a[data-action]', this.onMenuClick.bind(this));
-
-      $(window).one('scroll.menu.' + this.idPrefix, view.hideMenu);
-      $(document.body).one('mousedown.menu.' + this.idPrefix, view.hideMenu);
-
-      view.$menu.appendTo(document.body);
+      ]);
     },
 
-    onMenuClick: function(e)
+    handleSettingsAction: function(line)
     {
-      this.hideMenu();
+      console.log('handleSettingsAction', line.id);
+    },
 
-      return false;
+    handleRemoveAction: function(line)
+    {
+      var view = this;
+      var dialogView = new DialogView({
+        autoHide: false,
+        template: lineRemoveDialogTemplate,
+        model: {
+          plan: view.plan.getLabel(),
+          mrp: view.mrp.getLabel(),
+          line: line.getLabel()
+        }
+      });
+
+      view.listenTo(dialogView, 'answered', function()
+      {
+        var lineSettings = view.plan.settings.lines.get(line.id);
+
+        lineSettings.set('mrpPriority', _.without(lineSettings.get('mrpPriority'), view.mrp.id));
+
+        var req = view.promised(view.plan.settings.save());
+
+        req.done(dialogView.closeDialog);
+        req.fail(function()
+        {
+          viewport.msg.show({
+            type: 'error',
+            time: 3000,
+            text: t('planning', 'lines:menu:remove:failure')
+          });
+
+          view.plan.settings.trigger('errored');
+        });
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'lines:menu:remove:title'));
     },
 
     onSettingsChanged: function(changedObjects)
