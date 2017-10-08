@@ -1,0 +1,11 @@
+<div>
+  <%- t('planning', 'orders:menu:' + action + ':message', {
+    plan: plan,
+    mrp: mrp,
+    order: order
+  }) %>
+  <div class="form-actions">
+    <button class="btn btn-primary dialog-answer" type="button" autofocus data-answer="yes"><%- t('planning', 'orders:menu:' + action + ':yes') %></button>
+    <button class="btn btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</div>

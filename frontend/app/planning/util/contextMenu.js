@@ -38,7 +38,6 @@ define([
 
       var $menu = $(template({
         top: top,
-        left: left,
         menu: menu.map(function(item)
         {
           if (item === '-')
@@ -106,6 +105,13 @@ define([
         .one('mousedown.contextMenu.' + view.idPrefix, hideMenu)
         .append($backdrop)
         .append($menu);
+
+      if (left + $menu.outerWidth() >= document.body.clientWidth)
+      {
+        left -= (left + $menu.outerWidth()) - document.body.clientWidth + 5;
+      }
+
+      $menu.css('left', left + 'px');
 
       view.$contextMenu = $menu;
 

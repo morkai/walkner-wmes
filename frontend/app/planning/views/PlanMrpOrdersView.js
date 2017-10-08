@@ -3,21 +3,33 @@
 define([
   'underscore',
   'jquery',
+  'app/i18n',
+  'app/viewport',
+  'app/user',
   'app/core/View',
+  'app/core/views/DialogView',
   'app/data/orgUnits',
   'app/orderStatuses/util/renderOrderStatusLabel',
   '../util/scrollIntoView',
+  '../util/contextMenu',
   'app/planning/templates/orders',
-  'app/planning/templates/orderPopover'
+  'app/planning/templates/orderPopover',
+  'app/planning/templates/orderIgnoreDialog'
 ], function(
   _,
   $,
+  t,
+  viewport,
+  user,
   View,
+  DialogView,
   orgUnits,
   renderOrderStatusLabel,
   scrollIntoView,
+  contextMenu,
   ordersTemplate,
-  orderPopoverTemplate
+  orderPopoverTemplate,
+  orderIgnoreDialogTemplate
 ) {
   'use strict';
 
@@ -59,12 +71,22 @@ define([
             orderNo: orderNo
           });
         }
+      },
+      'contextmenu .is-order': function(e)
+      {
+        this.showMenu(e);
+
+        return false;
       }
     },
 
     localTopics: {
       'planning.windowResized': 'resize',
-      'planning.escapePressed': 'hidePreview',
+      'planning.escapePressed': function()
+      {
+        this.hidePreview();
+        this.hideMenu();
+      },
       'planning.contextMenu.shown': 'hidePreview'
     },
 
@@ -178,6 +200,8 @@ define([
       {
         this.$preview.popover('show');
       }
+
+      contextMenu.hide(this);
     },
 
     $item: function(id)
@@ -260,6 +284,79 @@ define([
       });
 
       view.$preview.popover('show');
+    },
+
+    hideMenu: function()
+    {
+      contextMenu.hide(this);
+    },
+
+    showMenu: function(e)
+    {
+      if (!this.plan.isEditable() || !user.isAllowedTo('PLANNING:PLANNER', 'PLANNING:MANAGE'))
+      {
+        return;
+      }
+
+      var order = this.mrp.orders.get(this.$(e.currentTarget).attr('data-id'));
+
+      contextMenu.show(this, e.pageY, e.pageX, [
+        {
+          label: t('planning', 'orders:menu:details'),
+          handler: this.handleDetailsAction.bind(this, order)
+        },
+        {
+          label: t('planning', 'orders:menu:' + (order.get('ignored') ? 'unignore' : 'ignore')),
+          handler: this.handleIgnoreAction.bind(this, order)
+        }
+      ]);
+    },
+
+    handleDetailsAction: function(order)
+    {
+      window.open('#orders/' + order.id);
+    },
+
+    handleIgnoreAction: function(order)
+    {
+      var view = this;
+      var dialogView = new DialogView({
+        autoHide: false,
+        template: orderIgnoreDialogTemplate,
+        model: {
+          action: order.get('ignored') ? 'unignore' : 'ignore',
+          plan: view.plan.getLabel(),
+          mrp: view.mrp.getLabel(),
+          order: order.getLabel()
+        }
+      });
+
+      view.listenTo(dialogView, 'answered', function()
+      {
+        var req = view.ajax({
+          method: 'POST',
+          url: '/planning/plans/' + this.plan.id + '/orders/' + order.id,
+          data: JSON.stringify({
+            ignored: !order.get('ignored')
+          })
+        });
+
+        req.done(dialogView.closeDialog);
+        req.fail(function()
+        {
+          viewport.msg.show({
+            type: 'error',
+            time: 3000,
+            text: t('planning', 'orders:menu:ignore:failure')
+          });
+
+          view.plan.settings.trigger('errored');
+
+          dialogView.enableAnswers();
+        });
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'orders:menu:ignore:title'));
     },
 
     onOrdersChanged: function()

@@ -1199,7 +1199,50 @@ module.exports = function setUpGenerator(app, module)
 
     return oldPlanLine.pceTimes[h] === newPlanLine.pceTimes[h]
       && oldPlanLine.pceTimes[m] === newPlanLine.pceTimes[m]
-      && _.isEqual(oldPlanLine.pceTimes, newPlanLine.pceTimes);
+      && comparePlanLineOrders(oldPlanLine.orders, newPlanLine.orders);
+  }
+
+  function comparePlanLineOrders(oldOrders, newOrders)
+  {
+    if (oldOrders.length === 0)
+    {
+      return true;
+    }
+
+    if (!comparePlanLineOrder(oldOrders[0], newOrders[0]))
+    {
+      return false;
+    }
+
+    const lastI = oldOrders.length - 1;
+
+    if (lastI === 0)
+    {
+      return true;
+    }
+
+    if (!comparePlanLineOrder(oldOrders[lastI], newOrders[lastI]))
+    {
+      return false;
+    }
+
+    for (let i = lastI - 1; i > 0; --i)
+    {
+      if (!comparePlanLineOrder(oldOrders[i], newOrders[i]))
+      {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  function comparePlanLineOrder(oldOrder, newOrder)
+  {
+    return newOrder._id === oldOrder._id
+      && newOrder.quantity === oldOrder.quantity
+      && newOrder.startAt.getTime() === oldOrder.startAt.getTime()
+      && newOrder.finishAt.getTime() === oldOrder.finishAt.getTime();
   }
 
   function getNextOrderForLine(lineState)

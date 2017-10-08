@@ -76,6 +76,14 @@ define([
             });
           }
         }
+      },
+      'contextmenu .is-lineOrder': function(e)
+      {
+        e.preventDefault();
+      },
+      'contextmenu .is-downtime': function(e)
+      {
+        e.preventDefault();
       }
     },
 

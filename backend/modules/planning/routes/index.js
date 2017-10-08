@@ -3,6 +3,7 @@
 'use strict';
 
 const readPlanRoute = require('./readPlan');
+const editPlanOrderRoute = require('./editPlanOrder');
 const browseSapOrdersRoute = require('./browseSapOrders');
 const editSettingsRoute = require('./editSettings');
 
@@ -21,6 +22,7 @@ module.exports = function setUpPlanningRoutes(app, module)
   express.get('/planning/plans', canView, express.crud.browseRoute.bind(null, app, Plan));
   express.post('/planning/plans/:id;generate', canManage, generatePlanRoute);
   express.get('/planning/plans/:id', canView, readPlanRoute.bind(null, app, module));
+  express.post('/planning/plans/:plan/orders/:order', canManage, editPlanOrderRoute.bind(null, app, module));
 
   express.get('/planning/sapOrders/:id', canView, browseSapOrdersRoute.bind(null, app, module));
 

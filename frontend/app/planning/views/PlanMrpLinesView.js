@@ -234,6 +234,8 @@ define([
           });
 
           view.plan.settings.trigger('errored');
+
+          dialogView.enableAnswers();
         });
       });
 
