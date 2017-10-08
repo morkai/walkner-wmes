@@ -12,6 +12,7 @@ define([
   'app/orderStatuses/util/renderOrderStatusLabel',
   '../util/scrollIntoView',
   '../util/contextMenu',
+  './PlanOrderQuantityDialogView',
   'app/planning/templates/orders',
   'app/planning/templates/orderPopover',
   'app/planning/templates/orderIgnoreDialog'
@@ -27,6 +28,7 @@ define([
   renderOrderStatusLabel,
   scrollIntoView,
   contextMenu,
+  PlanOrderQuantityDialogView,
   ordersTemplate,
   orderPopoverTemplate,
   orderIgnoreDialogTemplate
@@ -306,6 +308,10 @@ define([
           handler: this.handleDetailsAction.bind(this, order)
         },
         {
+          label: t('planning', 'orders:menu:quantity'),
+          handler: this.handleQuantityAction.bind(this, order)
+        },
+        {
           label: t('planning', 'orders:menu:' + (order.get('ignored') ? 'unignore' : 'ignore')),
           handler: this.handleIgnoreAction.bind(this, order)
         }
@@ -315,6 +321,17 @@ define([
     handleDetailsAction: function(order)
     {
       window.open('#orders/' + order.id);
+    },
+
+    handleQuantityAction: function(order)
+    {
+      var dialogView = new PlanOrderQuantityDialogView({
+        plan: this.plan,
+        mrp: this.mrp,
+        order: order
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'orders:menu:quantity:title'));
     },
 
     handleIgnoreAction: function(order)
@@ -335,7 +352,7 @@ define([
       {
         var req = view.ajax({
           method: 'POST',
-          url: '/planning/plans/' + this.plan.id + '/orders/' + order.id,
+          url: '/planning/plans/' + view.plan.id + '/orders/' + order.id,
           data: JSON.stringify({
             ignored: !order.get('ignored')
           })

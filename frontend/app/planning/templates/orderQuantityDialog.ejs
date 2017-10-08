@@ -1,0 +1,30 @@
+<form>
+  <div class="form-group">
+    <label class="control-label"><%- t('planning', 'orders:_id') %></label>
+    <p class="form-control-static"><%- orderNo %></p>
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- t('planning', 'orders:menu:quantity:quantityTodo') %></label>
+    <p class="form-control-static"><%- quantity.todo.toLocaleString() %></p>
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- t('planning', 'orders:menu:quantity:quantityDone') %></label>
+    <p class="form-control-static"><%- quantity.done.toLocaleString() %></p>
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- t('planning', 'orders:menu:quantity:quantityRemaining') %></label>
+    <p class="form-control-static"><%- quantity.remaining.toLocaleString() %></p>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-quantityPlan" class="control-label"><%- t('planning', 'orders:menu:quantity:quantityPlan') %></label>
+    <input id="<%- idPrefix %>-quantityPlan" name="quantityPlan" class="form-control" type="number" value="<%- quantity.plan %>" min="0" style="width: 125px">
+    <p class="help-block"><%- t('planning', 'orders:menu:quantity:help') %></p>
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+      <span class="fa fa-spinner fa-spin hidden"></span>
+      <span><%- t('planning', 'orders:menu:quantity:submit') %></span>
+    </button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

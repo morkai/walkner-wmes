@@ -5,10 +5,7 @@ define([
   'jquery',
   'Sortable',
   'app/i18n',
-  'app/time',
-  'app/user',
   'app/viewport',
-  'app/data/orgUnits',
   'app/core/View',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/planning/templates/lineSettingsDialog'
@@ -17,23 +14,12 @@ define([
   $,
   Sortable,
   t,
-  time,
-  user,
   viewport,
-  orgUnits,
   View,
   setUpMrpSelect2,
   template
 ) {
   'use strict';
-
-  function idAndTextMatcher(term, text, item)
-  {
-    term = term.toUpperCase();
-
-    return item.id.toUpperCase().indexOf(term) >= 0
-      || item.text.toUpperCase().indexOf(term) >= 0;
-  }
 
   return View.extend({
 
@@ -134,8 +120,6 @@ define([
 
       var settings = view.plan.settings;
       var lineSettings = view.line.settings;
-
-      var oldMrpPriority = lineSettings.get('mrpPriority');
 
       lineSettings.set({
         mrpPriority: view.$id('mrpPriority').val().split(','),
