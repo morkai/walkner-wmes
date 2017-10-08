@@ -403,7 +403,12 @@ define([
 
       Object.keys(mrpToChangedPlanLines).forEach(function(mrp)
       {
-        plan.mrps.get(mrp).lines.trigger('changed', mrpToChangedPlanLines[mrp]);
+        var planMrp = plan.mrps.get(mrp);
+
+        if (planMrp)
+        {
+          planMrp.lines.trigger('changed', mrpToChangedPlanLines[mrp]);
+        }
       });
     }
 

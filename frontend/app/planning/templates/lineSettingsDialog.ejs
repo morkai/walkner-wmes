@@ -1,0 +1,46 @@
+<form>
+  <div class="form-group">
+    <label class="control-label"><%- t('planning', 'lines:menu:settings:line') %></label>
+    <p class="form-control-static"><%= line %></p>
+  </div>
+  <div class="form-group has-required-select2">
+    <label for="<%- idPrefix %>-mrpPriority" class="control-label"><%- t('planning', 'settings:mrpPriority') %></label>
+    <input id="<%- idPrefix %>-mrpPriority" name="mrpPriority" type="text" value="<%- mrpPriority %>" required>
+    <p class="help-block"><%- t('planning', 'settings:mrpPriority:help') %></p>
+  </div>
+  <div class="form-row">
+    <div class="form-group" style="width: 125px">
+      <label for="<%- idPrefix %>-activeFrom" class="control-label"><%- t('planning', 'settings:activeFrom') %></label>
+      <input id="<%- idPrefix %>-activeFrom" name="activeFrom" class="form-control" type="text" value="<%- activeFrom %>" placeholder="06:00" pattern="^[0-9]{2}:[0-9]{2}$">
+    </div>
+    <div class="form-group" style="width: 125px">
+      <label for="<%- idPrefix %>-activeTo" class="control-label"><%- t('planning', 'settings:activeTo') %></label>
+      <input id="<%- idPrefix %>-activeTo" name="activeTo" class="form-control" type="text" value="<%- activeTo %>" placeholder="06:00" pattern="^[0-9]{2}:[0-9]{2}$">
+    </div>
+    <div class="col-md-6">
+      <p class="help-block"><%- t('planning', 'settings:activeTime:help') %></p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-workerCount" class="control-label"><%- t('planning', 'settings:workerCount') %></label>
+    <input id="<%- idPrefix %>-workerCount" name="workerCount" class="form-control" type="number" value="<%- workerCount %>" required min="1" max="20" style="width: 125px">
+  </div>
+  <div class="form-group has-required-select2">
+    <label for="<%- idPrefix %>-orderPriority" class="control-label"><%- t('planning', 'settings:orderPriority') %></label>
+    <input id="<%- idPrefix %>-orderPriority" name="orderPriority" type="text" value="<%- orderPriority %>" required>
+    <p class="help-block"><%- t('planning', 'settings:orderPriority:help') %></p>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input id="<%- idPrefix %>-workerCount" type="checkbox" value="1">
+      <%- t('planning', 'lines:menu:settings:applyToAllMrps', {line: line, mrp: mrp}) %>
+    </label>
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+      <span class="fa fa-spinner fa-spin hidden"></span>
+      <span><%- t('planning', 'lines:menu:settings:submit') %></span>
+    </button>
+    <button type="button" class="cancel btn btn-link"><%- t('planning', 'lines:menu:settings:cancel') %></button>
+  </div>
+</form>

@@ -10,6 +10,7 @@ define([
   'app/core/views/DialogView',
   'app/data/orgUnits',
   '../util/contextMenu',
+  './PlanLineSettingsDialogView',
   'app/planning/templates/lines',
   'app/planning/templates/linePopover',
   'app/planning/templates/lineRemoveDialog'
@@ -23,6 +24,7 @@ define([
   DialogView,
   orgUnits,
   contextMenu,
+  PlanLineSettingsDialogView,
   linesTemplate,
   linePopoverTemplate,
   lineRemoveDialogTemplate
@@ -179,7 +181,6 @@ define([
       var line = this.mrp.lines.get(this.$(e.currentTarget).attr('data-id'));
 
       contextMenu.show(this, e.pageY, e.pageX, [
-        t('planning', 'lines:menu:header', {line: line.id}),
         {
           label: t('planning', 'lines:menu:settings'),
           handler: this.handleSettingsAction.bind(this, line)
@@ -193,7 +194,13 @@ define([
 
     handleSettingsAction: function(line)
     {
-      console.log('handleSettingsAction', line.id);
+      var dialogView = new PlanLineSettingsDialogView({
+        plan: this.plan,
+        mrp: this.mrp,
+        line: line
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'lines:menu:settings:title'));
     },
 
     handleRemoveAction: function(line)
