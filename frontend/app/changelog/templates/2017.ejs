@@ -1,4 +1,47 @@
 <div class="hidden">
+  <h1>v0.116.3</h1>
+  <h2><%- time.format('2017-10-01', 'LL') %></h2>
+  <h3>Pulpit</h3>
+  <ul>
+    <li>Poprawiono wyświetlanie tabelek 'Najaktywniejsi w miesiącu', jeżeli jakiś użytkownik miał 100 lub więcej
+      zarejestrowanych zgłoszeń.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Zmieniono kończenie zlecenia tak, aby sprawdzana była zrobiona ilość. Od teraz każde zlecenie ma maksymalną
+      ilość do zrobienia ustawianą na stronie ze szczegółami 'Zlecenia reszty działów' (wymaga uprawnienia
+      'Zlecenia: zarządzanie' lub funkcję 'Mistrz' lub 'Lider'). Domyślnie maksymalna wartość
+      jest równa ilości do zrobienia. Przy kończeniu zlecenia na Formatce operatora, suma ilości zrobionych w zleceniach
+      produkcyjnych (generowanych przez Formatkę operatora) nie może przekraczać maksymalnej wartości.</li>
+  </ul>
+  <h3>Raporty</h3>
+  <ul>
+    <li>Zmieniono filtry 'Od-Do' tak, aby najwcześniejszą datę jaką można wybrać był 1 grudnia 2013
+      (początek danych produkcyjnych w systemie).</li>
+    <li>Dodano do raportu 'Wskaźniki' eksport wydajności linii, działów i wydziałów. Dane eksportowane są dla aktualnie
+      wyświetlanej jednostki organizacyjnej.</li>
+  </ul>
+  <h3>Zdarzenia</h3>
+  <ul>
+    <li>Poprawiono błąd mogący wywalić serwer przez nieskończone dodawanie wpisu 'FTE: usunięcie'.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że każda akcja eksportu danych działała tylko za pierwszym użyciem.</li>
+    <li>Zmieniono wszystkie filtry MRP zlecenia tak, aby wszędzie działały tak samo:
+      <ul>
+        <li>na liście pokazywane i przeszukiwane są ID oraz opis MRP,</li>
+        <li>na liście pokazywane są wszystkie MRP zdefiniowane w systemie (a nie tylko aktywne),</li>
+        <li>do filtra można dodać MRP, które nie znajduje się na liście wpisując je do pola i wciskając spację,</li>
+        <li>jeżeli użytkownik ma przypisane MRP w Matrycy odpowiedzialności to może kliknąć dodatkową akcję 'moje',
+          aby automatycznie wybrać przypisane do użytkownika MRP.</li>
+      </ul>
+    </li>
+    <li>Zmieniono wyświetlanie komunikatu o nowej wersji aplikacji tak, aby nie był pokazywany jeżeli w tym samym
+      czasie restartowany jest serwer.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.116.2</h1>
   <h2><%- time.format('2017-09-17', 'LL') %></h2>
   <h3>Zlecenia reszty działów</h3>

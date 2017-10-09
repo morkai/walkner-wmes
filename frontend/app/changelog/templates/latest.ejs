@@ -1,41 +1,27 @@
-<h1>v0.116.3</h1>
-<h2><%- time.format('2017-10-01', 'LL') %></h2>
-<h3>Pulpit</h3>
-<ul>
-  <li>Poprawiono wyświetlanie tabelek 'Najaktywniejsi w miesiącu', jeżeli jakiś użytkownik miał 100 lub więcej
-    zarejestrowanych zgłoszeń.</li>
-</ul>
+<h1>v0.116.4</h1>
+<h2><%- time.format('2017-10-08', 'LL') %></h2>
 <h3>Formatka operatora</h3>
 <ul>
-  <li>Zmieniono kończenie zlecenia tak, aby sprawdzana była zrobiona ilość. Od teraz każde zlecenie ma maksymalną
-    ilość do zrobienia ustawianą na stronie ze szczegółami 'Zlecenia reszty działów' (wymaga uprawnienia
-    'Zlecenia: zarządzanie' lub funkcję 'Mistrz' lub 'Lider'). Domyślnie maksymalna wartość
-    jest równa ilości do zrobienia. Przy kończeniu zlecenia na Formatce operatora, suma ilości zrobionych w zleceniach
-    produkcyjnych (generowanych przez Formatkę operatora) nie może przekraczać maksymalnej wartości.</li>
+  <li>Poprawiono błąd powodujący całkowite niedziałanie Formatki na starych wersjach przeglądarki Google Chrome.</li>
+  <li>Poprawiono błąd w formularzu 'Koniec pracy' powodujący niesprawdzanie 'Wykonanej ilość aktualnego zlecenia'
+    pod kątem minimalnej i maksymalnej wartości, jeżeli operator nie zaznaczył tego pola.</li>
+  <li>Zmieniono ograniczenie zrobionej ilości tak, aby pod uwagę brana była wykonywana aktualnie operacja.</li>
 </ul>
-<h3>Raporty</h3>
+<h3>Zlecenia reszty działów</h3>
 <ul>
-  <li>Zmieniono filtry 'Od-Do' tak, aby najwcześniejszą datę jaką można wybrać był 1 grudnia 2013
-    (początek danych produkcyjnych w systemie).</li>
-  <li>Dodano do raportu 'Wskaźniki' eksport wydajności linii, działów i wydziałów. Dane eksportowane są dla aktualnie
-    wyświetlanej jednostki organizacyjnej.</li>
+  <li>Usunięto 'Maksymalną ilość do zrobienia' w zleceniu.</li>
+  <li>Zmieniono obliczanie 'Ilości zrobionej'. Wcześnij była to suma 'Wykonanych ilości' ze zleceń spływających
+    z Formatki operatora. Teraz obliczana jest suma 'Wykonanych ilości' dla każdej operacji zlecenia, a następnie
+    wybierana jest najmniejsza wartość większa od 0.</li>
+  <li>Dodano możliwość definiowania 'Maksymalnej ilości do zrobienia' dla każdej operacji zlecenia.</li>
 </ul>
-<h3>Zdarzenia</h3>
+<h3>SAP GUI</h3>
 <ul>
-  <li>Poprawiono błąd mogący wywalić serwer przez nieskończone dodawanie wpisu 'FTE: usunięcie'.</li>
+  <li>Zmieniono zrzut dokumentów zlecenia tak, aby był robiony w trzech częściach (-2, +0 dni; +1 dzień; +2 dni).
+    Wcześnij zrzut robiony był w dwóch częściach (-2, +0 dni; +1, +2 dni), co sprawiało, że drugi zrzut trwał bardzo
+    długo lub bardzo często kończył się niepomyślnie.</li>
 </ul>
 <h3>Inne</h3>
 <ul>
-  <li>Poprawiono błąd powodujący, że każda akcja eksportu danych działała tylko za pierwszym użyciem.</li>
-  <li>Zmieniono wszystkie filtry MRP zlecenia tak, aby wszędzie działały tak samo:
-    <ul>
-      <li>na liście pokazywane i przeszukiwane są ID oraz opis MRP,</li>
-      <li>na liście pokazywane są wszystkie MRP zdefiniowane w systemie (a nie tylko aktywne),</li>
-      <li>do filtra można dodać MRP, które nie znajduje się na liście wpisując je do pola i wciskając spację,</li>
-      <li>jeżeli użytkownik ma przypisane MRP w Matrycy odpowiedzialności to może kliknąć dodatkową akcję 'moje',
-        aby automatycznie wybrać przypisane do użytkownika MRP.</li>
-    </ul>
-  </li>
-  <li>Zmieniono wyświetlanie komunikatu o nowej wersji aplikacji tak, aby nie był pokazywany jeżeli w tym samym
-    czasie restartowany jest serwer.</li>
+  <li>Zmieniono wyświetlanie nazwy użytkownika tak, aby zawsze nazwisko było pierwsze.</li>
 </ul>
