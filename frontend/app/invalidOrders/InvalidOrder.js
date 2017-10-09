@@ -39,6 +39,11 @@ define([
 
       if (o.order)
       {
+        if (!o.order.qtyDone)
+        {
+          o.order.qtyDone = {total: 0};
+        }
+
         o.nc12 = o.order.nc12;
         o.productName = resolveProductName(o.order);
         o.qty = (o.order.qtyDone.total ? o.order.qtyDone.total : '0') + '/' + o.order.qty;
