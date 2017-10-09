@@ -220,7 +220,7 @@ module.exports = function setUpNotifier(app, module)
             this.delayedOrders[o._id] = true;
             this.notifyOrders[o._id] = true;
           }
-          else if (o.qtyDone.total >= o.qty)
+          else if (o.qtyDone && o.qtyDone.total >= o.qty)
           {
             this.resolvedOrders[o._id] = 'DONE';
           }
