@@ -37,6 +37,8 @@ const HOUR_TO_INDEX = [
   10, 11, 12, 13, 14, 15, 16, 17
 ];
 
+const log = m => console.log(m);
+
 module.exports = function setUpGenerator(app, module)
 {
   if (!module.config.generator)
@@ -164,20 +166,20 @@ module.exports = function setUpGenerator(app, module)
       if (h < 5 || (h === 5 && m < 55))
       {
         // Today
-        plansToGenerate[date.format('YYYY-MM-DD')] = true;
+        plansToGenerate[now.format('YYYY-MM-DD')] = true;
       }
 
       // Tomorrow
-      plansToGenerate[date.add(1, 'day').format('YYYY-MM-DD')] = true;
+      plansToGenerate[now.add(1, 'day').format('YYYY-MM-DD')] = true;
 
       if (forceDayAfterTomorrow || h > 17)
       {
         // Day after tomorrow
-        plansToGenerate[date.add(1, 'day').format('YYYY-MM-DD')] = true;
+        plansToGenerate[now.add(1, 'day').format('YYYY-MM-DD')] = true;
 
         if (d === 4 || d === 5)
         {
-          plansToGenerate[date.add(2, 'day').format('YYYY-MM-DD')] = true;
+          plansToGenerate[now.add(2, 'day').format('YYYY-MM-DD')] = true;
         }
       }
 
@@ -194,7 +196,7 @@ module.exports = function setUpGenerator(app, module)
 
     if (!dateMoment.isValid())
     {
-      return done(app.createError('INVALID_DATE', 400));
+      return done && done(app.createError('INVALID_DATE', 400));
     }
 
     const planKey = dateMoment.format('YYYY-MM-DD');
@@ -1162,7 +1164,7 @@ module.exports = function setUpGenerator(app, module)
         version: newPlanLine.version
       });
 
-      console.log('        Completed: pushed new line!');
+      log('        Completed: pushed new line!');
     }
     else if (!comparePlanLines(oldPlanLine, newPlanLine))
     {
@@ -1175,11 +1177,11 @@ module.exports = function setUpGenerator(app, module)
         version: oldPlanLine.version
       });
 
-      console.log(`        Completed: changed existing line. New version: ${oldPlanLine.version}`);
+      log(`        Completed: changed existing line. New version: ${oldPlanLine.version}`);
     }
     else
     {
-      console.log('        Completed: no changes!');
+      log('        Completed: no changes!');
     }
 
     setImmediate(done);
@@ -1329,14 +1331,14 @@ module.exports = function setUpGenerator(app, module)
     const pceTimes = [];
     const hourlyPlan = EMPTY_HOURLY_PLAN.slice();
 
-    console.log(
+    log(
       `        ${orderId} kind=${order.kind}`
       + ` workerCount=${mrpLineSettings.workerCount}`
       + ` laborTime=${order.operation.laborTime}`
       + ` manHours=${order.manHours}`
       + ` pceTime=${pceTime / 1000}`
     );
-    console.log(
+    log(
       `                  activeFrom=${moment.utc(startAt).format('DD.MM HH:mm:ss')}`
       + ` activeTo=${moment.utc(activeTo).format('DD.MM HH:mm:ss')}`
     );
@@ -1504,7 +1506,7 @@ module.exports = function setUpGenerator(app, module)
 
     lineState.plannedOrdersSet.add(orderId);
 
-    console.log(
+    log(
       `                  todo=${initialQuantityTodo}`
       + ` maxPerLine=${maxQuantityPerLine}`
       + ` done=${initialQuantityTodo - quantityRemaining}`
@@ -1512,7 +1514,7 @@ module.exports = function setUpGenerator(app, module)
     );
     plannedOrders.forEach(plannedOrder =>
     {
-      console.log(
+      log(
         `                  done=${plannedOrder.quantity}`
         + ` startAt=${moment.utc(plannedOrder.startAt).format('DD.MM HH:mm:ss')}`
         + ` finishAt=${moment.utc(plannedOrder.finishAt).format('DD.MM HH:mm:ss')}`
