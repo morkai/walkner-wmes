@@ -98,6 +98,11 @@ define([
   {
     var $quantityDone = view.$id('quantityDone');
 
+    if ($quantityDone.attr('data-max-set') === '1')
+    {
+      return;
+    }
+
     if (min !== null)
     {
       $quantityDone.attr('min', min);
@@ -105,7 +110,7 @@ define([
 
     if (max !== null)
     {
-      $quantityDone.attr('max', max);
+      $quantityDone.attr('max', max).attr('data-max-set', '1');
     }
 
     $quantityDone.trigger('input');
