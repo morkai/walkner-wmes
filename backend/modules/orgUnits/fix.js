@@ -5,31 +5,7 @@
 module.exports = function setUpOrgUnitsFix(app, module)
 {
   const oldToNewProdLine = {
-    'CT1': 'CT1',
-    'CT2': 'CT2',
-    'CT3': 'CT3',
-    'CT4': 'CT4',
-    'CT5': 'CT5',
-    'CT6': 'CT6',
-    'CT7': 'CT7',
-    'CT8': 'CT8',
-    'CT9': 'CT9',
-    'CT10': 'CT10',
-    'W-1': 'W-1',
-    'W-2': 'W-2',
-    'W-3': 'W-3',
-    'W1_SM-12_1': 'WB-1',
-    'W1_SM-12_2': 'WB-2',
-    'W1_SM-12_3': 'WB-3',
-    'W1_SM-12_4': 'WB-4',
-    'W1_SM-13_1': 'WU-1',
-    'W1_SM-13_2': 'WU-2',
-    'OFC': 'OFC',
-    'CT11': 'MFP-11',
-    'CT12': 'MFP-12',
-    'CS': 'LM-9',
-    'PSP': 'PSP',
-    'PPS': 'PPS'
+
   };
   const prodLineToOrgUnits = new Map();
   const prodLineToPlainOrgUnits = new Map();
