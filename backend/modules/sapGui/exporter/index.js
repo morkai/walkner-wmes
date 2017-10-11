@@ -57,8 +57,17 @@ exports.start = function startSapGuiExporterModule(app, module)
     module.debug('Exporting: %s', fileInfo.fileName);
 
     step(
-      function readFileStep()
+      function waitToDownloadStep()
       {
+        waitToDownload(fileInfo.filePath, this.next());
+      },
+      function readFileStep(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
         fs.readFile(fileInfo.filePath, 'utf8', this.next());
       },
       function prepareBodyStep(err, fileContents)
@@ -146,5 +155,23 @@ exports.start = function startSapGuiExporterModule(app, module)
     {
       exportFile(exportQueue.shift());
     }
+  }
+
+  function waitToDownload(filePath, done)
+  {
+    fs.stat(filePath, (err, stats) =>
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      if ((Date.now() - stats.mtime) <= 15000)
+      {
+        return setTimeout(waitToDownload, 1000, filePath, done);
+      }
+
+      return done();
+    });
   }
 };
