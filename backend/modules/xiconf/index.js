@@ -49,8 +49,7 @@ exports.start = function startXiconfModule(app, module)
     [
       config.mongooseId,
       config.directoryWatcherId,
-      config.licensesId,
-      config.orgUnitsId
+      config.licensesId
     ],
     setUpResultsImporter.bind(null, app, module)
   );
