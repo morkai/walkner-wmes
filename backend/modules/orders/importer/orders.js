@@ -632,6 +632,11 @@ exports.start = function startOrdersImporterModule(app, module)
           const order = orders[i];
           const documents = order.documents;
 
+          if (!documents)
+          {
+            continue;
+          }
+
           for (let ii = 0; ii < documents.length; ++ii)
           {
             const document = documents[ii];
