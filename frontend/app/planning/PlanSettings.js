@@ -42,6 +42,8 @@ define([
         extraOrderSeconds: 0,
         extraShiftSeconds: [0, 0, 0],
         bigOrderQuantity: 0,
+        splitOrderQuantity: 0,
+        maxSplitLineCount: 0,
         hardOrderManHours: 0,
         hardComponents: [],
         lines: []

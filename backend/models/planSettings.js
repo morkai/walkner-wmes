@@ -31,6 +31,14 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       type: Number,
       default: 70
     },
+    splitOrderQuantity: {
+      type: Number,
+      default: 70
+    },
+    maxSplitLineCount: {
+      type: Number,
+      default: 0
+    },
     hardOrderManHours: {
       type: Number,
       default: 0
@@ -223,6 +231,8 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
         extraOrderSeconds: 0,
         extraShiftSeconds: [0, 0, 0],
         bigOrderQuantity: 70,
+        splitOrderQuantity: 70,
+        maxSplitLineCount: 0,
         hardOrderManHours: 0,
         hardComponents: [],
         lines: []

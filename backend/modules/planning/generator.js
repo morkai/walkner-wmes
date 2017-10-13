@@ -38,6 +38,7 @@ const HOUR_TO_INDEX = [
 ];
 
 const log = m => console.log(m);
+//const log = () => {};
 
 module.exports = function setUpGenerator(app, module)
 {
@@ -59,7 +60,8 @@ module.exports = function setUpGenerator(app, module)
   {
     if (app.options.env === 'development')
     {
-      generatePlan(moment.utc().startOf('day').add(1, 'days').format('YYYY-MM-DD'));
+      //generatePlan(moment.utc().startOf('day').add(1, 'days').format('YYYY-MM-DD'));
+      generatePlan('2017-10-16');
     }
     else
     {
@@ -1258,7 +1260,8 @@ module.exports = function setUpGenerator(app, module)
 
       lineState.bigOrderStateQueue.forEach(orderState =>
       {
-        if (lineState.plannedOrdersSet.has(orderState.order._id))
+        if (lineState.plannedOrdersSet.has(orderState.order._id)
+          || orderState.quantityTodo === 0)
         {
           return;
         }
@@ -1526,9 +1529,22 @@ module.exports = function setUpGenerator(app, module)
   function handleBigOrder(state, lineState, orderState)
   {
     const order = orderState.order;
-    const availableLines = getLinesForBigOrder(state, order.mrp, order.kind);
+    const {splitOrderQuantity, maxSplitLineCount} = state.settings.mrp(order.mrp);
 
-    orderState.maxQuantityPerLine = Math.ceil(orderState.quantityTodo / availableLines.length);
+    if (orderState.quantityTodo < splitOrderQuantity
+      || (maxSplitLineCount && orderState.maxQuantityPerLine > 0))
+    {
+      return handleSmallOrder(state, lineState, orderState);
+    }
+
+    const availableLines = getLinesForBigOrder(state, order.mrp, order.kind);
+    const splitLineCount = maxSplitLineCount > 0 && maxSplitLineCount < availableLines.length
+      ? maxSplitLineCount
+      : availableLines.length;
+
+    orderState.maxQuantityPerLine = splitLineCount === 0
+      ? orderState.quantityTodo
+      : Math.ceil(orderState.quantityTodo / splitLineCount);
 
     availableLines.forEach(availableLineState =>
     {

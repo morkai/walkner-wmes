@@ -85,6 +85,8 @@ define([
 
           case 'extraOrderSeconds':
           case 'bigOrderQuantity':
+          case 'splitOrderQuantity':
+          case 'maxSplitLineCount':
           case 'workerCount':
             v = Math.max(0, parseInt($property.val(), 10) || 0);
             break;
@@ -597,10 +599,6 @@ define([
         mrp = mrps.add({_id: mrpId}).get(mrpId);
       }
 
-      view.$id('extraOrderSeconds')
-        .val(disabled ? '' : mrp.get('extraOrderSeconds'))
-        .prop('disabled', disabled);
-
       (mrp ? mrp.get('extraShiftSeconds') : [0, 0, 0]).forEach(function(v, i)
       {
         view.$id('extraShiftSeconds-' + (i + 1))
@@ -608,13 +606,18 @@ define([
           .prop('disabled', disabled);
       });
 
-      view.$id('bigOrderQuantity')
-        .val(disabled ? '' : mrp.get('bigOrderQuantity'))
-        .prop('disabled', disabled);
-
-      view.$id('hardOrderManHours')
-        .val(disabled ? '' : mrp.get('hardOrderManHours'))
-        .prop('disabled', disabled);
+      [
+        'extraOrderSeconds',
+        'bigOrderQuantity',
+        'hardOrderManHours',
+        'splitOrderQuantity',
+        'maxSplitLineCount'
+      ].forEach(function(prop)
+      {
+        view.$id(prop)
+          .val(disabled ? '' : mrp.get(prop))
+          .prop('disabled', disabled);
+      });
 
       view.$id('hardComponents')
         .select2('data', disabled ? [] : (mrp.get('hardComponents') || []).map(function(nc12)
