@@ -8,7 +8,6 @@ define([
   'app/user',
   'app/core/View',
   'app/core/views/DialogView',
-  'app/data/orgUnits',
   'app/orderStatuses/util/renderOrderStatusLabel',
   '../util/scrollIntoView',
   '../util/contextMenu',
@@ -24,7 +23,6 @@ define([
   user,
   View,
   DialogView,
-  orgUnits,
   renderOrderStatusLabel,
   scrollIntoView,
   contextMenu,
@@ -121,28 +119,35 @@ define([
 
     serialize: function()
     {
-      var plan = this.plan;
-
       return {
         idPrefix: this.idPrefix,
-        orders: this.mrp.orders.map(function(order)
-        {
-          var orderData = plan.getActualOrderData(order.id);
-
-          return {
-            _id: order.id,
-            kind: order.get('kind'),
-            incomplete: order.get('incomplete') > 0,
-            completed: orderData.quantityDone >= orderData.quantityTodo,
-            surplus: orderData.quantityDone > orderData.quantityTodo,
-            invalid: false,
-            ignored: order.get('ignored'),
-            confirmed: orderData.statuses.indexOf('CNF') !== -1,
-            delivered: orderData.statuses.indexOf('DLV') !== -1,
-            customQuantity: order.get('quantityPlan') > 0
-          };
-        })
+        showEditButton: true,
+        hdLabel: t('planning', 'orders:hd'),
+        orders: this.serializeOrders()
       };
+    },
+
+    serializeOrders: function()
+    {
+      var plan = this.plan;
+
+      return this.mrp.orders.map(function(order)
+      {
+        var orderData = plan.getActualOrderData(order.id);
+
+        return {
+          _id: order.id,
+          kind: order.get('kind'),
+          incomplete: order.get('incomplete') > 0,
+          completed: orderData.quantityDone >= orderData.quantityTodo,
+          surplus: orderData.quantityDone > orderData.quantityTodo,
+          invalid: false,
+          ignored: order.get('ignored'),
+          confirmed: orderData.statuses.indexOf('CNF') !== -1,
+          delivered: orderData.statuses.indexOf('DLV') !== -1,
+          customQuantity: order.get('quantityPlan') > 0
+        };
+      });
     },
 
     afterRender: function()

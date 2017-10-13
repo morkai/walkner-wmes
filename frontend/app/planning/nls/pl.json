@@ -49,6 +49,8 @@
   "orders:hd": "Zlecenia",
   "orders:edit": "Ustaw kolejkę zleceń",
   "orders:_id": "Nr zlecenia",
+  "orders:date": "Data",
+  "orders:delayReason": "Powód",
   "orders:nc12": "12NC",
   "orders:name": "Wyrób",
   "orders:operation": "Operacja",
@@ -78,6 +80,8 @@
   "orders:menu:quantity:help": "Domyślnie, <em>Ilość do rozplanowania</em> równa jest <em>Ilości do zrobienia</em> lub <em>Ilości pozostałej do zrobienia</em>, jeżeli włączona jest opcja <em>Planuj wg ilości pozostałej do zrobienia</em>. W tym polu można nadpisać tę wartość.",
   "orders:menu:quantity:submit": "Zmień ilość",
   "orders:menu:quantity:failure": "Zmiana ilości nie powiodła się.",
+
+  "lateOrders:hd": "Opóźnione",
 
   "lineOrders:orderNo": "Nr zlecenia",
   "lineOrders:unit": "szt.",

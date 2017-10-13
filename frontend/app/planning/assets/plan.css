@@ -100,7 +100,7 @@
   border-bottom: 1px solid #ccc;
 }
 .planning-mrp-list-item:hover {
-  background: #eee;
+  background: #ffffa6;
 }
 .planning-mrp-list-item.is-selectable {
   cursor: pointer;
@@ -177,6 +177,7 @@
   width: 32px;
   padding: 0;
   line-height: 24px;
+  border: 1px solid #ccc;
 }
 .planning-mrp-list-action + .planning-mrp-list {
   border-left: 0;

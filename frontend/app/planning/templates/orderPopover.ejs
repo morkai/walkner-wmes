@@ -1,5 +1,17 @@
 <table data-item-type="order" data-item-id="<%- order._id %>">
   <tbody>
+  <% if (order.date) { %>
+  <tr>
+    <th><%- t('planning', 'orders:date') %></th>
+    <td><%= order.date %></td>
+  </tr>
+  <% } %>
+  <% if (order.delayReason) { %>
+  <tr>
+    <th><%- t('planning', 'orders:delayReason') %></th>
+    <td><%= order.delayReason %></td>
+  </tr>
+  <% } %>
   <tr>
     <th><%- t('planning', 'orders:name') %></th>
     <td><span class="planning-mrp-popover-value"><%= order.name %></span></td>
@@ -29,13 +41,13 @@
   <% if (order.laborTime) { %>
   <tr>
     <th><%- t('planning', 'orders:laborTime') %></th>
-    <td data-property="laborTime"><%= order.laborTime.toLocaleString() %></td>
+    <td><%= order.laborTime.toLocaleString() %></td>
   </tr>
   <% } %>
   <% if (order.manHours) { %>
   <tr>
     <th><%- t('planning', 'orders:manHours') %></th>
-    <td data-property="laborTime"><%= order.manHours.toLocaleString() %></td>
+    <td><%= order.manHours.toLocaleString() %></td>
   </tr>
   <% } %>
   <tr>

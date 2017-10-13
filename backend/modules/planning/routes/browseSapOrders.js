@@ -2,7 +2,6 @@
 
 'use strict';
 
-const moment = require('moment');
 const step = require('h5.step');
 
 module.exports = function browseSapOrdersRoute(app, module, req, res, next)

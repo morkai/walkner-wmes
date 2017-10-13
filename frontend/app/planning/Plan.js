@@ -8,7 +8,8 @@ define([
   './PlanOrderCollection',
   './PlanLineCollection',
   './PlanMrpCollection',
-  './PlanSapOrderCollection'
+  './PlanSapOrderCollection',
+  './PlanLateOrderCollection'
 ], function(
   _,
   time,
@@ -17,7 +18,8 @@ define([
   PlanOrderCollection,
   PlanLineCollection,
   PlanMrpCollection,
-  PlanSapOrderCollection
+  PlanSapOrderCollection,
+  PlanLateOrderCollection
 ) {
   'use strict';
 
@@ -51,6 +53,10 @@ define([
       this.displayOptions = options.displayOptions;
       this.settings = options.settings;
 
+      this.lateOrders = new PlanLateOrderCollection(null, {
+        plan: this,
+        paginate: false
+      });
       this.sapOrders = new PlanSapOrderCollection(null, {
         plan: this,
         paginate: false

@@ -10,6 +10,7 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/users/ownMrps',
+  'app/delayReasons/DelayReasonCollection',
   'app/planning/Plan',
   'app/planning/PlanSettings',
   'app/planning/PlanDisplayOptions',
@@ -26,6 +27,7 @@ define([
   View,
   bindLoadingMessage,
   ownMrps,
+  DelayReasonCollection,
   Plan,
   PlanSettings,
   PlanDisplayOptions,
@@ -106,7 +108,17 @@ define([
       },
       'orders.synced': function()
       {
-        this.plan.sapOrders.fetch({reset: true});
+        this.promised(this.plan.lateOrders.fetch({reset: true}));
+        this.promised(this.plan.sapOrders.fetch({reset: true}));
+      },
+      'orders.updated.*': function(message)
+      {
+        var lateOrder = this.plan.lateOrders.get(message._id);
+
+        if (lateOrder && typeof message.change.newValues.delayReason !== 'undefined')
+        {
+          lateOrder.set('delayReason', message.change.newValues.delayReason);
+        }
       }
     },
 
@@ -129,6 +141,7 @@ define([
 
     defineModels: function()
     {
+      this.delayReasons = new DelayReasonCollection();
       this.plan = new Plan({_id: this.options.date}, {
         displayOptions: PlanDisplayOptions.fromLocalStorage({
           mrps: this.options.mrps
@@ -179,8 +192,10 @@ define([
     {
       return when(
         ownMrps.load(this),
+        this.delayReasons.fetch({reset: true}),
         this.plan.settings.fetch(),
         this.plan.sapOrders.fetch({reset: true}),
+        this.plan.lateOrders.fetch({reset: true}),
         this.plan.fetch()
       );
     },
@@ -208,7 +223,11 @@ define([
       page.promised(plan.settings.set('_id', plan.id).fetch()).then(
         function()
         {
-          var promise = $.when(plan.sapOrders.fetch({reset: true, reload: true}), plan.fetch());
+          var promise = $.when(
+            plan.sapOrders.fetch({reset: true, reload: true}),
+            plan.lateOrders.fetch({reset: true, reload: true}),
+            plan.fetch()
+          );
 
           page.promised(promise).then(
             plan.set.bind(plan, 'loading', false),
@@ -247,7 +266,13 @@ define([
 
       page.plan.mrps.forEach(function(mrp)
       {
-        page.insertView('#-mrps', new PlanMrpView({plan: page.plan, mrp: mrp})).render();
+        var mrpView = new PlanMrpView({
+          delayReasons: page.delayReasons,
+          plan: page.plan,
+          mrp: mrp
+        });
+
+        page.insertView('#-mrps', mrpView).render();
       });
 
       this.$id('empty').toggleClass('hidden', page.plan.mrps.length > 0);

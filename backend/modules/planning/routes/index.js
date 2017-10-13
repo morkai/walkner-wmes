@@ -5,6 +5,7 @@
 const readPlanRoute = require('./readPlan');
 const editPlanOrderRoute = require('./editPlanOrder');
 const browseSapOrdersRoute = require('./browseSapOrders');
+const browseLateOrdersRoute = require('./browseLateOrders');
 const editSettingsRoute = require('./editSettings');
 
 module.exports = function setUpPlanningRoutes(app, module)
@@ -25,6 +26,8 @@ module.exports = function setUpPlanningRoutes(app, module)
   express.post('/planning/plans/:plan/orders/:order', canManage, editPlanOrderRoute.bind(null, app, module));
 
   express.get('/planning/sapOrders/:id', canView, browseSapOrdersRoute.bind(null, app, module));
+
+  express.get('/planning/lateOrders/:id', canView, browseLateOrdersRoute.bind(null, app, module));
 
   express.get('/planning/settings', canView, express.crud.browseRoute.bind(null, app, PlanSettings));
   express.get('/planning/settings/:id', canView, express.crud.readRoute.bind(null, app, PlanSettings));

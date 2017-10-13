@@ -10,6 +10,7 @@ define([
   './PlanMrpToolbarView',
   './PlanMrpLinesView',
   './PlanMrpOrdersView',
+  './PlanMrpLateOrdersView',
   './PlanMrpLineOrdersView',
   'app/planning/templates/planMrp'
 ], function(
@@ -22,6 +23,7 @@ define([
   PlanMrpToolbarView,
   PlanMrpLinesView,
   PlanMrpOrdersView,
+  PlanMrpLateOrdersView,
   PlanMrpLineOrdersView,
   template
 ) {
@@ -88,6 +90,11 @@ define([
         mrp: view.mrp
       }));
       view.setView('#-orders', new PlanMrpOrdersView({
+        plan: view.plan,
+        mrp: view.mrp
+      }));
+      view.setView('#-lateOrders', new PlanMrpLateOrdersView({
+        delayReasons: view.delayReasons,
         plan: view.plan,
         mrp: view.mrp
       }));
