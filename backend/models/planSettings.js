@@ -198,6 +198,8 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
 
     this.lines.forEach(line =>
     {
+      line.mrpPriority = line.mrpPriority.filter(mrpId => typeof mrpId === 'string' && mrpId.length > 0);
+
       if (!line.mrpPriority.length)
       {
         return;

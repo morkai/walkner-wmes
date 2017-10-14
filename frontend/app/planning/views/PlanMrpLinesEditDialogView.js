@@ -154,7 +154,7 @@ define([
       {
         var lineId = this.dataset.lineId;
         var lineSettings = settings.lines.get(lineId);
-        var mrpPriority = this.value.split(',');
+        var mrpPriority = this.value.length ? this.value.split(',') : [];
 
         if (lineSettings)
         {
