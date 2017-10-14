@@ -38,14 +38,16 @@ const HOUR_TO_INDEX = [
   10, 11, 12, 13, 14, 15, 16, 17
 ];
 
-const log = m => console.log(m);
-
 module.exports = function setUpGenerator(app, module)
 {
   if (!module.config.generator)
   {
     return;
   }
+
+  const log = app.options.env === 'development'
+    ? m => console.log(m)
+    : () => {};
 
   const mongoose = app[module.config.mongooseId];
   const Order = mongoose.model('Order');
@@ -54,13 +56,22 @@ module.exports = function setUpGenerator(app, module)
   const PlanChange = mongoose.model('PlanChange');
 
   const autoDowntimeCache = setUpAutoDowntimeCache(app, module);
-  const inProgressState = new Map();
+  const generatorQueue = [];
+  let generatorTimer = null;
+  let generatorState = null;
 
   app.broker.subscribe('app.started').setLimit(1).on('message', () =>
   {
     if (app.options.env === 'development')
     {
-      generatePlan(moment.utc().startOf('day').add(1, 'days').format('YYYY-MM-DD'));
+      const m = moment();
+
+      if (m.hours() < 6)
+      {
+        m.subtract(1, 'days');
+      }
+
+      generatePlan(m.startOf('day').add(1, 'days').format('YYYY-MM-DD'));
     }
     else
     {
@@ -87,12 +98,11 @@ module.exports = function setUpGenerator(app, module)
     }
   }
 
-  function createPlanGeneratorState(key, date, done)
+  function createPlanGeneratorState(key)
   {
-    const state = {
+    return {
       key: key,
-      date: date,
-      doneCallbacks: [],
+      date: moment.utc(key, 'YYYY-MM-DD').toDate(),
       cancelled: false,
       settings: null,
       autoDowntimes: null,
@@ -111,40 +121,6 @@ module.exports = function setUpGenerator(app, module)
       },
       log: message => module.debug(`[generator] [${key}] ${message}`)
     };
-
-    if (typeof done === 'function')
-    {
-      state.doneCallbacks.push(done);
-    }
-
-    inProgressState.set(key, state);
-
-    return state;
-  }
-
-  function cancelGeneratePlan(state, done)
-  {
-    state.cancelled = true;
-    state.settings = null;
-    state.autoDowntimes = null;
-    state.orders = null;
-    state.plan = null;
-    state.orderStateQueues = null;
-    state.lineStates = null;
-    state.lineStateQueue = [];
-    state.oldIncompleteOrders = new Map();
-    state.newIncompleteOrders = new Map();
-    state.changes = {
-      addedOrders: new Map(),
-      removedOrders: new Map(),
-      changedOrders: new Map(),
-      changedLines: new Map()
-    };
-
-    if (typeof done === 'function')
-    {
-      state.doneCallbacks.push(done);
-    }
   }
 
   function generateActivePlans(forceDayAfterTomorrow)
@@ -191,35 +167,69 @@ module.exports = function setUpGenerator(app, module)
     });
   }
 
-  function generatePlan(date, done)
+  function generatePlan(date)
   {
     const dateMoment = moment.utc(date, 'YYYY-MM-DD').startOf('day');
 
     if (!dateMoment.isValid())
     {
-      return done && done(app.createError('INVALID_DATE', 400));
+      return;
     }
 
     const planKey = dateMoment.format('YYYY-MM-DD');
-    const state = inProgressState.get(planKey);
 
-    if (state)
+    if (!generatorQueue.includes(planKey))
     {
-      module.debug(`[generator] [${state.key}] Cancelling...`);
+      generatorQueue.push(planKey);
 
-      return cancelGeneratePlan(state, done);
+      app.broker.publish('planning.generator.started', {
+        date: planKey
+      });
     }
 
-    app.broker.publish('planning.generator.started', {
-      date: planKey
-    });
+    if (generatorState !== null)
+    {
+      module.debug(`[generator] [${generatorState.key}] Cancelling...`);
 
-    tryGeneratePlan(
-      createPlanGeneratorState(planKey, dateMoment.toDate(), done)
-    );
+      generatorState.cancelled = true;
+
+      return;
+    }
+
+    if (generatorTimer !== null)
+    {
+      clearTimeout(generatorTimer);
+    }
+
+    generatorTimer = setTimeout(generateNextPlan, 1);
   }
 
-  function tryGeneratePlan(state)
+  function generateNextPlan()
+  {
+    const planKey = generatorQueue.sort((a, b) => a.localeCompare(b)).shift();
+
+    if (!planKey)
+    {
+      return;
+    }
+
+    generatorTimer = null;
+    generatorState = createPlanGeneratorState(planKey);
+
+    tryGeneratePlan(generatorState, () =>
+    {
+      if (generatorState.cancelled)
+      {
+        generatorQueue.push(planKey);
+      }
+
+      generatorState = null;
+
+      setImmediate(generateNextPlan);
+    });
+  }
+
+  function tryGeneratePlan(state, done)
   {
     const startedAt = Date.now();
 
@@ -373,9 +383,7 @@ module.exports = function setUpGenerator(app, module)
         {
           state.log(`[generator] [${state.key}] Cancelled!`);
 
-          state.cancelled = false;
-
-          return setImmediate(tryGeneratePlan, state);
+          return done();
         }
 
         if (err)
@@ -389,13 +397,11 @@ module.exports = function setUpGenerator(app, module)
           savePlanChanges(state);
         }
 
-        state.doneCallbacks.forEach(done => done(err));
-
-        inProgressState.delete(state.key);
-
         app.broker.publish('planning.generator.finished', {
           date: state.key
         });
+
+        done();
       }
     );
   }
