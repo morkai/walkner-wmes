@@ -3,6 +3,7 @@
 define([
   'underscore',
   '../time',
+  '../user',
   '../core/Model',
   './changeHandlers',
   './PlanOrderCollection',
@@ -13,6 +14,7 @@ define([
 ], function(
   _,
   time,
+  user,
   Model,
   changeHandlers,
   PlanOrderCollection,
@@ -156,6 +158,11 @@ define([
     isEditable: function()
     {
       return !this.isFrozen() && this.settings.isEditable();
+    },
+
+    canEditSettings: function()
+    {
+      return this.isEditable() && user.isAllowedTo('PLANNING:MANAGE', 'PLANNING:PLANNER');
     },
 
     applyChange: function(planChange)

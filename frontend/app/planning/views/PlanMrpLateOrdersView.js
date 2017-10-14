@@ -76,6 +76,8 @@ define([
 
     destroy: function()
     {
+      this.hideMenu();
+
       this.$el.popover('destroy');
     },
 

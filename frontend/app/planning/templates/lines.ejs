@@ -1,8 +1,12 @@
 <div class="planning-mrp-list-container planning-mrp-lines">
   <div class="planning-mrp-list-hd"><%- t('planning', 'lines:hd') %></div>
-  <button id="<%- idPrefix %>-edit" class="planning-mrp-list-action btn btn-default" title="<%- t('planning', 'lines:edit') %>" disabled>
+  <% if (showEditButton) { %>
+  <button id="<%- idPrefix %>-edit" class="planning-mrp-list-action btn btn-default" title="<%- t('planning', 'lines:edit') %>">
     <i class="fa fa-edit"></i>
   </button>
+  <% } else { %>
+  <span class="planning-mrp-list-action"></span>
+  <% } %>
   <div id="<%- idPrefix %>-list" class="planning-mrp-list">
     <% lines.forEach(function(line) { %>
     <div class="planning-mrp-list-item is-line" data-id="<%= line._id %>">

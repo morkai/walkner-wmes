@@ -1,0 +1,14 @@
+<form class="planning-linesEditDialog-form">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-line" class="control-label"><%- t('planning', 'lines:edit:line') %></label>
+    <input id="<%- idPrefix %>-line" type="text" placeholder="<%- t('planning', 'lines:edit:line:placeholder') %>">
+  </div>
+  <div id="<%- idPrefix %>-lines"></div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+      <span class="fa fa-spinner fa-spin hidden"></span>
+      <span><%- t('planning', 'lines:edit:submit') %></span>
+    </button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

@@ -108,6 +108,8 @@ define([
 
     destroy: function()
     {
+      this.hideMenu();
+
       if (this.$preview)
       {
         this.$preview.popover('destroy');
@@ -121,7 +123,7 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        showEditButton: true,
+        showEditButton: this.plan.canEditSettings(),
         hdLabel: t('planning', 'orders:hd'),
         orders: this.serializeOrders()
       };
@@ -308,7 +310,7 @@ define([
         }
       ];
 
-      if (this.plan.isEditable() && user.isAllowedTo('PLANNING:PLANNER', 'PLANNING:MANAGE'))
+      if (this.plan.canEditSettings())
       {
         menu.push({
           label: t('planning', 'orders:menu:quantity'),

@@ -45,6 +45,11 @@
   "lines:menu:settings:line": "Linia produkcyjna",
   "lines:menu:settings:applyToAllMrps": "Ustaw taką samą <em>Ilość pracowników</em> oraz <em>Priorytet zleceń</em> dla linii {line} we wszystkich przypisanych MRP, a nie tylko dla {mrp}.",
   "lines:menu:settings:failure": "Zmiana ustawień nie powiodła się.",
+  "lines:edit:title": "Ustawianie dostępnych linii",
+  "lines:edit:submit": "Ustaw priorytety MRP",
+  "lines:edit:failure": "Ustawianie linii nie powiodło się.",
+  "lines:edit:line": "Nowa linia",
+  "lines:edit:line:placeholder": "Wybierz linię produkcyjną...",
 
   "orders:hd": "Zlecenia",
   "orders:edit": "Ustaw kolejkę zleceń",

@@ -11,6 +11,7 @@ define([
   'app/data/orgUnits',
   '../util/contextMenu',
   './PlanLineSettingsDialogView',
+  './PlanMrpLinesEditDialogView',
   'app/planning/templates/lines',
   'app/planning/templates/linePopover',
   'app/planning/templates/lineRemoveDialog'
@@ -25,6 +26,7 @@ define([
   orgUnits,
   contextMenu,
   PlanLineSettingsDialogView,
+  PlanMrpLinesEditDialogView,
   linesTemplate,
   linePopoverTemplate,
   lineRemoveDialogTemplate
@@ -39,6 +41,14 @@ define([
       'contextmenu .is-line': function(e)
       {
         this.showMenu(e);
+
+        return false;
+      },
+      'click #-edit': function()
+      {
+        this.$id('edit').blur();
+
+        this.showEditDialog();
 
         return false;
       }
@@ -57,9 +67,8 @@ define([
     destroy: function()
     {
       this.hideMenu();
-      this.$el.popover('destroy');
 
-      $(document.body).off('.' + this.idPrefix);
+      this.$el.popover('destroy');
     },
 
     serialize: function()
@@ -68,6 +77,7 @@ define([
 
       return {
         idPrefix: view.idPrefix,
+        showEditButton: view.plan.canEditSettings(),
         lines: view.mrp.lines.map(function(line)
         {
           var lineMrpSettings = line.mrpSettings(view.mrp.id);
@@ -166,6 +176,16 @@ define([
         : '';
     },
 
+    showEditDialog: function()
+    {
+      var dialogView = new PlanMrpLinesEditDialogView({
+        plan: this.plan,
+        mrp: this.mrp
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'lines:edit:title'));
+    },
+
     hideMenu: function()
     {
       contextMenu.hide(this);
@@ -173,7 +193,7 @@ define([
 
     showMenu: function(e)
     {
-      if (!this.plan.isEditable() || !user.isAllowedTo('PLANNING:PLANNER', 'PLANNING:MANAGE'))
+      if (!this.plan.canEditSettings())
       {
         return;
       }
