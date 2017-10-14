@@ -2,6 +2,7 @@
 
 'use strict';
 
+const {createHash} = require('crypto');
 const _ = require('lodash');
 const step = require('h5.step');
 const moment = require('moment');
@@ -38,7 +39,6 @@ const HOUR_TO_INDEX = [
 ];
 
 const log = m => console.log(m);
-//const log = () => {};
 
 module.exports = function setUpGenerator(app, module)
 {
@@ -60,8 +60,7 @@ module.exports = function setUpGenerator(app, module)
   {
     if (app.options.env === 'development')
     {
-      //generatePlan(moment.utc().startOf('day').add(1, 'days').format('YYYY-MM-DD'));
-      generatePlan('2017-10-16');
+      generatePlan(moment.utc().startOf('day').add(1, 'days').format('YYYY-MM-DD'));
     }
     else
     {
@@ -1048,7 +1047,8 @@ module.exports = function setUpGenerator(app, module)
         plannedOrdersSet: new Set(),
         plannedOrdersList: [],
         pceTimes: [],
-        hourlyPlan: EMPTY_HOURLY_PLAN.slice()
+        hourlyPlan: EMPTY_HOURLY_PLAN.slice(),
+        hash: createHash('md5')
       };
 
       lineState.shiftNo = getShiftFromMoment(lineState.activeFrom);
@@ -1150,6 +1150,7 @@ module.exports = function setUpGenerator(app, module)
     const newPlanLine = {
       _id: lineState._id,
       version: 1,
+      hash: lineState.hash.digest('hex'),
       orders: lineState.plannedOrdersList,
       downtimes: lineState.downtimes,
       totalQuantity: lineState.pceTimes.length / 2,
@@ -1168,7 +1169,7 @@ module.exports = function setUpGenerator(app, module)
 
       log('        Completed: pushed new line!');
     }
-    else if (!comparePlanLines(oldPlanLine, newPlanLine))
+    else if (oldPlanLine.hash !== newPlanLine.hash)
     {
       newPlanLine.version = oldPlanLine.version + 1;
 
@@ -1187,66 +1188,6 @@ module.exports = function setUpGenerator(app, module)
     }
 
     setImmediate(done);
-  }
-
-  function comparePlanLines(oldPlanLine, newPlanLine)
-  {
-    if (newPlanLine.totalQuantity !== oldPlanLine.totalQuantity
-      || newPlanLine.orders.length !== oldPlanLine.orders.length
-      || newPlanLine.downtimes.length !== oldPlanLine.downtimes.length)
-    {
-      return false;
-    }
-
-    const h = oldPlanLine.pceTimes.length - 2;
-    const m = h + 1;
-
-    return oldPlanLine.pceTimes[h] === newPlanLine.pceTimes[h]
-      && oldPlanLine.pceTimes[m] === newPlanLine.pceTimes[m]
-      && comparePlanLineOrders(oldPlanLine.orders, newPlanLine.orders);
-  }
-
-  function comparePlanLineOrders(oldOrders, newOrders)
-  {
-    if (oldOrders.length === 0)
-    {
-      return true;
-    }
-
-    if (!comparePlanLineOrder(oldOrders[0], newOrders[0]))
-    {
-      return false;
-    }
-
-    const lastI = oldOrders.length - 1;
-
-    if (lastI === 0)
-    {
-      return true;
-    }
-
-    if (!comparePlanLineOrder(oldOrders[lastI], newOrders[lastI]))
-    {
-      return false;
-    }
-
-    for (let i = lastI - 1; i > 0; --i)
-    {
-      if (!comparePlanLineOrder(oldOrders[i], newOrders[i]))
-      {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  function comparePlanLineOrder(oldOrder, newOrder)
-  {
-    return newOrder._id === oldOrder._id
-      && newOrder.quantity === oldOrder.quantity
-      && newOrder.startAt.getTime() === oldOrder.startAt.getTime()
-      && newOrder.finishAt.getTime() === oldOrder.finishAt.getTime();
   }
 
   function getNextOrderForLine(lineState)
@@ -1485,6 +1426,17 @@ module.exports = function setUpGenerator(app, module)
         });
       }
     }
+
+    plannedOrders.forEach(lineOrder =>
+    {
+      lineState.hash.update(
+        lineOrder._id
+        + lineOrder.quantity
+        + lineOrder.pceTime
+        + lineOrder.startAt.getTime()
+        + lineOrder.finishAt.getTime()
+      );
+    });
 
     lineState.completed = completed;
     lineState.shiftNo = shiftNo;

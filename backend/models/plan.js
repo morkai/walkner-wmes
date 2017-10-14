@@ -62,6 +62,7 @@ module.exports = function setupPlanModel(app, mongoose)
   const planLineSchema = new mongoose.Schema({
     _id: String,
     version: Number,
+    hash: String,
     orders: [planLineOrderSchema],
     downtimes: [autoDowntimeSchema],
     totalQuantity: Number,
