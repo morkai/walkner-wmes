@@ -195,19 +195,20 @@ define([
 
     showMenu: function(e)
     {
-      if (!this.plan.isEditable() || !user.isAllowedTo('PLANNING:PLANNER', 'PLANNING:MANAGE'))
-      {
-        return;
-      }
-
       var order = this.plan.lateOrders.get(this.$(e.currentTarget).attr('data-id'));
-
-      contextMenu.show(this, e.pageY, e.pageX, [
+      var menu = [
         {
           label: t('planning', 'orders:menu:details'),
           handler: this.handleDetailsAction.bind(this, order)
         }
-      ]);
+      ];
+
+      if (this.plan.isEditable() && user.isAllowedTo('PLANNING:PLANNER', 'PLANNING:MANAGE'))
+      {
+
+      }
+
+      contextMenu.show(this, e.pageY, e.pageX, menu);
     },
 
     handleDetailsAction: function(order)

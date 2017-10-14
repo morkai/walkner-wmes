@@ -169,7 +169,6 @@ define([
     {
       var page = this;
       var plan = page.plan;
-      var renderMrps = _.after(2, _.debounce(page.renderMrps.bind(page), 1));
 
       page.listenTo(plan, 'change:loading', page.onLoadingChanged);
       page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
@@ -181,22 +180,24 @@ define([
       page.listenTo(plan.settings, 'changed', page.onSettingsChanged);
       page.listenTo(plan.settings, 'errored', page.reload);
 
-      page.listenTo(plan.mrps, 'reset', renderMrps);
+      page.listenTo(plan.mrps, 'reset', _.after(2, _.debounce(page.renderMrps.bind(page), 1)));
 
       $(window)
-        .on('resize.' + this.idPrefix, _.debounce(this.onWindowResize.bind(this), 16))
-        .on('keyup.' + this.idPrefix, this.onWindowKeyUp.bind(this));
+        .on('resize.' + page.idPrefix, _.debounce(page.onWindowResize.bind(page), 16))
+        .on('keyup.' + page.idPrefix, page.onWindowKeyUp.bind(page));
     },
 
     load: function(when)
     {
+      var plan = this.plan;
+
       return when(
         ownMrps.load(this),
         this.delayReasons.fetch({reset: true}),
-        this.plan.settings.fetch(),
-        this.plan.sapOrders.fetch({reset: true}),
-        this.plan.lateOrders.fetch({reset: true}),
-        this.plan.fetch()
+        plan.settings.fetch(),
+        plan.sapOrders.fetch({reset: true}),
+        plan.lateOrders.fetch({reset: true}),
+        plan.fetch()
       );
     },
 

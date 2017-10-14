@@ -300,27 +300,27 @@ define([
 
     showMenu: function(e)
     {
-      if (!this.plan.isEditable() || !user.isAllowedTo('PLANNING:PLANNER', 'PLANNING:MANAGE'))
-      {
-        return;
-      }
-
       var order = this.mrp.orders.get(this.$(e.currentTarget).attr('data-id'));
-
-      contextMenu.show(this, e.pageY, e.pageX, [
+      var menu = [
         {
           label: t('planning', 'orders:menu:details'),
           handler: this.handleDetailsAction.bind(this, order)
-        },
-        {
+        }
+      ];
+
+      if (this.plan.isEditable() && user.isAllowedTo('PLANNING:PLANNER', 'PLANNING:MANAGE'))
+      {
+        menu.push({
           label: t('planning', 'orders:menu:quantity'),
           handler: this.handleQuantityAction.bind(this, order)
         },
         {
           label: t('planning', 'orders:menu:' + (order.get('ignored') ? 'unignore' : 'ignore')),
           handler: this.handleIgnoreAction.bind(this, order)
-        }
-      ]);
+        });
+      }
+
+      contextMenu.show(this, e.pageY, e.pageX, menu);
     },
 
     handleDetailsAction: function(order)
