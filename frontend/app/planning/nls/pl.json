@@ -43,7 +43,7 @@
   "lines:menu:settings:title": "Zmiana ustawień linii w MRP",
   "lines:menu:settings:submit": "Zapisz ustawienia",
   "lines:menu:settings:line": "Linia produkcyjna",
-  "lines:menu:settings:applyToAllMrps": "Ustaw taką samą <em>Ilość osób</em> oraz <em>Priorytet zleceń</em> dla linii {line} we wszystkich przypisanych MRP, a nie tylko dla {mrp}.",
+  "lines:menu:settings:applyToAllMrps": "Ustaw taką samą <em>Ilość pracowników</em> oraz <em>Priorytet zleceń</em> dla linii {line} we wszystkich przypisanych MRP, a nie tylko dla {mrp}.",
   "lines:menu:settings:failure": "Zmiana ustawień nie powiodła się.",
 
   "orders:hd": "Zlecenia",

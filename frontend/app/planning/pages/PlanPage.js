@@ -108,8 +108,7 @@ define([
       },
       'orders.synced': function()
       {
-        this.promised(this.plan.lateOrders.fetch({reset: true}));
-        this.promised(this.plan.sapOrders.fetch({reset: true}));
+        this.reloadOrders();
       },
       'orders.updated.*': function(message)
       {
@@ -142,6 +141,7 @@ define([
     defineModels: function()
     {
       this.delayReasons = new DelayReasonCollection();
+
       this.plan = new Plan({_id: this.options.date}, {
         displayOptions: PlanDisplayOptions.fromLocalStorage({
           mrps: this.options.mrps
@@ -181,6 +181,8 @@ define([
       page.listenTo(plan.settings, 'errored', page.reload);
 
       page.listenTo(plan.mrps, 'reset', _.after(2, _.debounce(page.renderMrps.bind(page), 1)));
+
+      page.listenTo(plan.sapOrders, 'sync', page.onSapOrdersSynced);
 
       $(window)
         .on('resize.' + page.idPrefix, _.debounce(page.onWindowResize.bind(page), 16))
@@ -280,6 +282,12 @@ define([
       this.$id('mrps').toggleClass('hidden', page.plan.mrps.length === 0);
     },
 
+    reloadOrders: function()
+    {
+      this.promised(this.plan.lateOrders.fetch({reset: true}));
+      this.promised(this.plan.sapOrders.fetch({reset: true}));
+    },
+
     onDateFilterChanged: function()
     {
       if (this.layout)
@@ -317,6 +325,16 @@ define([
       {
         this.plan.mrps.reset();
       }
+    },
+
+    onSapOrdersSynced: function()
+    {
+      if (this.timers.reloadOrders)
+      {
+        clearTimeout(this.timers.reloadOrders);
+      }
+
+      this.timers.reloadOrders = setTimeout(this.reloadOrders.bind(this), 10 * 60 * 1000);
     },
 
     onWindowResize: function(e)
