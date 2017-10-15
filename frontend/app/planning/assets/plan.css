@@ -221,6 +221,8 @@
 }
 .planning-mrp-list-property {
   margin-left: 4px;
+  font-size: 14px;
+  line-height: 1;
 }
 .planning-mrp-list-property.is-invalid {
   color: #E00;

@@ -113,7 +113,9 @@ define([
             ignored: false,
             confirmed: false,
             delivered: false,
-            customQuantity: false
+            customQuantity: false,
+            urgent: false,
+            late: false
           };
         });
     },

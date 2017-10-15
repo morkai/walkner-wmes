@@ -12,6 +12,14 @@ define([
     getActualOrderData: function()
     {
       return this.pick(['quantityTodo', 'quantityDone', 'statuses']);
+    },
+
+    isContinuation: function()
+    {
+      return this.get('date') !== this.collection.plan.id
+        && this.get('quantityPlan') > 0
+        && this.get('urgent')
+        && !this.get('added');
     }
 
   });

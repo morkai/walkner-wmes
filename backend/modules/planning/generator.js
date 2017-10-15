@@ -17,7 +17,8 @@ const ORDER_IGNORED_PROPERTIES = {
 const ORDER_USER_PROPERTIES = [
   'quantityPlan',
   'added',
-  'ignored'
+  'ignored',
+  'urgent'
 ];
 const OPERATION_PROPERTIES = [
   'no',
@@ -113,6 +114,7 @@ module.exports = function setUpGenerator(app, module)
       lineStateQueue: [],
       oldIncompleteOrders: new Map(),
       newIncompleteOrders: new Map(),
+      incompleteOrders: new Map(),
       changes: {
         addedOrders: new Map(),
         removedOrders: new Map(),
@@ -154,7 +156,14 @@ module.exports = function setUpGenerator(app, module)
         // Day after tomorrow
         plansToGenerate[now.add(1, 'day').format('YYYY-MM-DD')] = true;
 
-        if (d === 4 || d === 5)
+        // Saturday & Sunday on Wednesday
+        if (d === 3)
+        {
+          plansToGenerate[now.add(1, 'day').format('YYYY-MM-DD')] = true;
+          plansToGenerate[now.add(1, 'day').format('YYYY-MM-DD')] = true;
+        }
+        // Monday on Thursday and Tuesday on Friday
+        else if (d === 4 || d === 5)
         {
           plansToGenerate[now.add(2, 'day').format('YYYY-MM-DD')] = true;
         }
@@ -218,14 +227,35 @@ module.exports = function setUpGenerator(app, module)
 
     tryGeneratePlan(generatorState, () =>
     {
-      if (generatorState.cancelled)
-      {
-        generatorQueue.push(planKey);
-      }
+      step(
+        function()
+        {
+          const nextPlanId = moment.utc(generatorState.date.getTime()).add(1, 'days').toDate();
 
-      generatorState = null;
+          Plan.findById(nextPlanId, {_id: 1}).lean().exec(this.next());
+        },
+        function(err, nextPlan)
+        {
+          if (err)
+          {
+            module.error(`[generator] Failed to find the next plan: ${err.message}`);
+          }
 
-      setImmediate(generateNextPlan);
+          if (generatorState.cancelled)
+          {
+            generatorQueue.push(planKey);
+          }
+
+          if (nextPlan)
+          {
+            generatorQueue.push(moment.utc(nextPlan._id).format('YYYY-MM-DD'));
+          }
+
+          generatorState = null;
+
+          setImmediate(generateNextPlan);
+        }
+      );
     });
   }
 
@@ -236,6 +266,20 @@ module.exports = function setUpGenerator(app, module)
     module.debug(`[generator] [${state.key}] Started...`);
 
     step(
+      function checkFrozenStep()
+      {
+        const currentDay = moment();
+
+        if (currentDay.hours() < 6)
+        {
+          currentDay.subtract(1, 'days');
+        }
+
+        if (state.date <= currentDay.toDate())
+        {
+          this.skip(new Error('Plan is frozen.'));
+        }
+      },
       function loadSettingsStep()
       {
         loadSettings(state, this.next());
@@ -559,6 +603,7 @@ module.exports = function setUpGenerator(app, module)
           mrp: {$in: state.settings.mrps}
         };
         const projection = {
+          scheduledStartDate: 1,
           mrp: 1,
           nc12: 1,
           name: 1,
@@ -592,7 +637,10 @@ module.exports = function setUpGenerator(app, module)
 
         sapOrders.forEach(sapOrder =>
         {
-          state.orders.set(sapOrder._id, createPlanOrder(sapOrder, state.settings.mrp(sapOrder.mrp).hardComponents));
+          const hardComponents = state.settings.mrp(sapOrder.mrp).hardComponents;
+          const planOrder = createPlanOrder(sapOrder, hardComponents);
+
+          state.orders.set(sapOrder._id, planOrder);
         });
 
         setImmediate(this.next());
@@ -610,6 +658,7 @@ module.exports = function setUpGenerator(app, module)
     return {
       _id: sapOrder._id,
       kind: 'unclassified',
+      date: moment(sapOrder.scheduledStartDate).format('YYYY-MM-DD'),
       mrp: sapOrder.mrp,
       nc12: sapOrder.nc12,
       name: resolveProductName(sapOrder),
@@ -618,18 +667,25 @@ module.exports = function setUpGenerator(app, module)
       manHours: 0,
       hardComponent: hardComponent ? hardComponent.nc12 : null,
       quantityTodo: sapOrder.qty,
-      quantityDone: (sapOrder.qtyDone && sapOrder.qtyDone.total) || 0,
+      quantityDone: sapOrder.qtyDone && sapOrder.qtyDone.total || 0,
       quantityPlan: 0,
       incomplete: 0,
       added: false,
-      ignored: false
+      ignored: false,
+      urgent: false
     };
   }
 
-  function preparePlanOrder(planOrder, state)
+  function preparePlanOrder(state, planOrder)
   {
+    if (state.incompleteOrders.has(planOrder._id))
+    {
+      planOrder.urgent = true;
+      planOrder.quantityPlan = state.incompleteOrders.get(planOrder._id);
+    }
+
     const operation = planOrder.operation;
-    const quantityTodo = getQuantityTodo(planOrder, state.settings);
+    const quantityTodo = getQuantityTodo(state, planOrder);
 
     if (operation)
     {
@@ -638,7 +694,7 @@ module.exports = function setUpGenerator(app, module)
       planOrder.manHours = Math.round(manHours * 1000) / 1000;
     }
 
-    planOrder.kind = classifyPlanOrder(planOrder, state.settings);
+    planOrder.kind = classifyPlanOrder(state, planOrder);
     planOrder.incomplete = quantityTodo;
 
     state.newIncompleteOrders.set(planOrder._id, quantityTodo);
@@ -680,6 +736,11 @@ module.exports = function setUpGenerator(app, module)
           lines: []
         });
 
+        if (state.plan.frozen)
+        {
+          return this.skip(new Error('Plan is frozen.'));
+        }
+
         setImmediate(this.next());
       },
       function loadAddedOrdersStep()
@@ -704,13 +765,17 @@ module.exports = function setUpGenerator(app, module)
           loadOrders(state, addedOrders, this.next());
         }
       },
+      function loadIncompleteOrdersStep()
+      {
+        loadIncompleteOrders(state, this.next());
+      },
       function compareOrdersStep()
       {
         if (state.plan.isNew)
         {
           state.plan.orders = Array.from(state.orders.values())
-            .filter(order => filterPlanOrder(order, state.settings) === null)
-            .map(order => preparePlanOrder(order, state));
+            .filter(order => filterPlanOrder(state, order) === null)
+            .map(order => preparePlanOrder(state, order));
 
           state.plan.orders.forEach(order => state.changes.addedOrders.set(order._id, order));
 
@@ -727,12 +792,45 @@ module.exports = function setUpGenerator(app, module)
     );
   }
 
+  function loadIncompleteOrders(state, done)
+  {
+    step(
+      function()
+      {
+        const prevPlanId = moment.utc(state.date.getTime()).subtract(1, 'days').toDate();
+        const pipeline = [
+          {$match: {_id: prevPlanId}},
+          {$unwind: '$orders'},
+          {$match: {'orders.incomplete': {$gt: 0}}},
+          {$project: {_id: '$orders._id', incomplete: '$orders.incomplete'}}
+        ];
+
+        Plan.aggregate(pipeline, this.next());
+      },
+      function(err, incompleteOrders)
+      {
+        if (err)
+        {
+          return this.skip(new Error(`Failed to find incomplete orders: ${err.message}`));
+        }
+
+        incompleteOrders.forEach(order =>
+        {
+          state.incompleteOrders.set(order._id, order.incomplete);
+        });
+
+        loadOrders(state, Array.from(state.incompleteOrders.keys()), this.next());
+      },
+      done
+    );
+  }
+
   function removeUnusedLines(plan, settings)
   {
     plan.lines = plan.lines.filter(line => settings.lines.includes(line._id));
   }
 
-  function filterPlanOrder(planOrder, settings)
+  function filterPlanOrder(state, planOrder)
   {
     const actualStatuses = new Set();
 
@@ -740,7 +838,7 @@ module.exports = function setUpGenerator(app, module)
     {
       const actualStatus = planOrder.statuses[i];
 
-      if (settings.ignoredStatuses.has(actualStatus))
+      if (state.settings.ignoredStatuses.has(actualStatus))
       {
         return {
           _id: planOrder._id,
@@ -755,9 +853,9 @@ module.exports = function setUpGenerator(app, module)
       actualStatuses.add(actualStatus);
     }
 
-    for (let i = 0; i < settings.requiredStatuses.length; ++i)
+    for (let i = 0; i < state.settings.requiredStatuses.length; ++i)
     {
-      const requiredStatus = settings.requiredStatuses[i];
+      const requiredStatus = state.settings.requiredStatuses[i];
 
       if (!actualStatuses.has(requiredStatus))
       {
@@ -775,14 +873,14 @@ module.exports = function setUpGenerator(app, module)
     return null;
   }
 
-  function classifyPlanOrder(planOrder, settings)
+  function classifyPlanOrder(state, planOrder)
   {
-    if (isSmallOrder(planOrder, settings))
+    if (isSmallOrder(state, planOrder))
     {
       return 'small';
     }
 
-    if (isHardOrder(planOrder, settings))
+    if (isHardOrder(state, planOrder))
     {
       return 'hard';
     }
@@ -790,14 +888,14 @@ module.exports = function setUpGenerator(app, module)
     return 'easy';
   }
 
-  function getQuantityTodo(planOrder, settings)
+  function getQuantityTodo(state, planOrder)
   {
     if (planOrder.quantityPlan > 0)
     {
       return planOrder.quantityPlan;
     }
 
-    if (settings.useRemainingQuantity)
+    if (state.settings.useRemainingQuantity)
     {
       return Math.max(planOrder.quantityTodo - planOrder.quantityDone, 0);
     }
@@ -805,15 +903,15 @@ module.exports = function setUpGenerator(app, module)
     return planOrder.quantityTodo;
   }
 
-  function isSmallOrder(planOrder, settings)
+  function isSmallOrder(state, planOrder)
   {
-    const quantityTodo = getQuantityTodo(planOrder, settings);
-    const bigOrderQuantity = settings.mrp(planOrder.mrp).bigOrderQuantity;
+    const quantityTodo = getQuantityTodo(state, planOrder);
+    const bigOrderQuantity = state.settings.mrp(planOrder.mrp).bigOrderQuantity;
 
     return quantityTodo < bigOrderQuantity;
   }
 
-  function isHardOrder(planOrder, settings)
+  function isHardOrder(state, planOrder)
   {
     // Has a hard component
     if (planOrder.hardComponent !== null)
@@ -828,7 +926,7 @@ module.exports = function setUpGenerator(app, module)
       return false;
     }
 
-    const hardOrderManHours = settings.mrp(planOrder.mrp).hardOrderManHours;
+    const hardOrderManHours = state.settings.mrp(planOrder.mrp).hardOrderManHours;
 
     if (hardOrderManHours <= 0)
     {
@@ -870,9 +968,9 @@ module.exports = function setUpGenerator(app, module)
 
     latestOrders.forEach(latestOrder =>
     {
-      if (filterPlanOrder(latestOrder, state.settings) === null)
+      if (filterPlanOrder(state, latestOrder) === null)
       {
-        preparePlanOrder(latestOrder, state);
+        preparePlanOrder(state, latestOrder);
 
         newPlanOrders.push(latestOrder);
 
@@ -895,7 +993,7 @@ module.exports = function setUpGenerator(app, module)
   {
     Object.assign(latestOrder, _.pick(oldOrder, ORDER_USER_PROPERTIES));
 
-    const removedOrder = filterPlanOrder(latestOrder, state.settings);
+    const removedOrder = filterPlanOrder(state, latestOrder);
 
     if (removedOrder !== null)
     {
@@ -909,7 +1007,7 @@ module.exports = function setUpGenerator(app, module)
       state.oldIncompleteOrders.set(oldOrder._id, oldOrder.incomplete);
     }
 
-    preparePlanOrder(latestOrder, state);
+    preparePlanOrder(state, latestOrder);
 
     const changes = {};
     let changed = false;
@@ -979,38 +1077,65 @@ module.exports = function setUpGenerator(app, module)
   {
     state.orderStateQueues = new Map();
 
-    state.plan.orders.forEach(order =>
+    state.plan.orders.forEach(planOrder =>
     {
-      if (order.ignored)
+      if (planOrder.ignored)
       {
         return;
       }
 
-      if (!state.orderStateQueues.has(order.mrp))
+      if (!state.orderStateQueues.has(planOrder.mrp))
       {
-        state.orderStateQueues.set(order.mrp, {
+        state.orderStateQueues.set(planOrder.mrp, {
+          urgent: [],
           small: [],
           easy: [],
           hard: []
         });
       }
 
-      state.orderStateQueues.get(order.mrp)[order.kind].push({
-        order: order,
-        quantityTodo: getQuantityTodo(order, state.settings),
+      const orderStateQueue = state.orderStateQueues.get(planOrder.mrp);
+      const orderState = {
+        order: planOrder,
+        quantityTodo: getQuantityTodo(state, planOrder),
         maxQuantityPerLine: 0,
         firstStartAt: 0
-      });
+      };
+
+      if (planOrder.urgent)
+      {
+        orderStateQueue.urgent.push(orderState);
+      }
+      else
+      {
+        orderStateQueue[planOrder.kind].push(orderState);
+      }
     });
 
     for (const orderStateQueues of state.orderStateQueues.values())
     {
+      orderStateQueues.urgent.sort(sortUrgentOrders);
       orderStateQueues.small.sort(sortEasyOrders);
       orderStateQueues.easy.sort(sortEasyOrders);
       orderStateQueues.hard.sort(sortHardOrders);
     }
 
     setImmediate(done);
+  }
+
+  function sortUrgentOrders(a, b)
+  {
+    if (a.order.quantityDone > 0 && b.order.quantityDone === 0)
+    {
+      return -1;
+    }
+
+    if (b.order.quantityDone > 0 && a.order.quantityDone === 0)
+    {
+      return 1;
+    }
+
+    return a.quantityTodo - b.quantityTodo;
   }
 
   function sortEasyOrders(a, b)
@@ -1080,6 +1205,14 @@ module.exports = function setUpGenerator(app, module)
       {
         return;
       }
+
+      mrpOrderStateQueue.urgent.forEach(orderState =>
+      {
+        if (mrpLineSettings.orderPriority.includes(orderState.order.kind))
+        {
+          lineOrderStateQueue.push(orderState);
+        }
+      });
 
       mrpLineSettings.orderPriority.forEach(orderPriority =>
       {

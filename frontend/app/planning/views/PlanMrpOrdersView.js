@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/user',
+  'app/time',
   'app/core/View',
   'app/core/views/DialogView',
   'app/orderStatuses/util/renderOrderStatusLabel',
@@ -21,6 +22,7 @@ define([
   t,
   viewport,
   user,
+  time,
   View,
   DialogView,
   renderOrderStatusLabel,
@@ -136,6 +138,10 @@ define([
       return this.mrp.orders.map(function(order)
       {
         var orderData = plan.getActualOrderData(order.id);
+        var added = order.get('added');
+        var urgent = order.get('urgent');
+        var customQuantity = order.get('quantityPlan') > 0;
+        var late = order.isContinuation();
 
         return {
           _id: order.id,
@@ -144,10 +150,13 @@ define([
           completed: orderData.quantityDone >= orderData.quantityTodo,
           surplus: orderData.quantityDone > orderData.quantityTodo,
           invalid: false,
+          added: added,
           ignored: order.get('ignored'),
           confirmed: orderData.statuses.indexOf('CNF') !== -1,
           delivered: orderData.statuses.indexOf('DLV') !== -1,
-          customQuantity: order.get('quantityPlan') > 0
+          customQuantity: customQuantity && !late,
+          urgent: urgent && !late,
+          late: late
         };
       });
     },
@@ -196,13 +205,13 @@ define([
 
     resize: function()
     {
-      var $edit = this.$id('edit');
+      var $action = this.$('.planning-mrp-list-action');
       var $scrollIndicator = this.$id('scrollIndicator');
-      var pos = $edit.position();
+      var pos = $action.position();
 
       $scrollIndicator.css({
         top: (pos.top + 1) + 'px',
-        left: ($edit.outerWidth() + pos.left) + 'px'
+        left: ($action.outerWidth() + pos.left) + 'px'
       });
 
       if (this.$preview)
@@ -233,6 +242,7 @@ define([
       return orderPopoverTemplate({
         order: {
           _id: order.id,
+          date: order.get('date') === this.plan.id ? null : time.utc.format(order.get('date'), 'LL'),
           nc12: order.get('nc12'),
           name: order.get('name'),
           kind: order.get('kind'),
@@ -310,7 +320,7 @@ define([
         }
       ];
 
-      if (this.plan.canEditSettings())
+      if (this.plan.canEditSettings() && !order.isContinuation())
       {
         menu.push({
           label: t('planning', 'orders:menu:quantity'),

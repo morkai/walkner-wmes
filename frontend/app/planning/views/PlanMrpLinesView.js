@@ -118,13 +118,13 @@ define([
 
     resize: function()
     {
-      var $edit = this.$id('edit');
+      var $action = this.$('.planning-mrp-list-action');
       var $scrollIndicator = this.$id('scrollIndicator');
-      var pos = $edit.position();
+      var pos = $action.position();
 
       $scrollIndicator.css({
         top: (pos.top + 1) + 'px',
-        left: ($edit.outerWidth() + pos.left) + 'px'
+        left: ($action.outerWidth() + pos.left) + 'px'
       });
 
       contextMenu.hide(this);

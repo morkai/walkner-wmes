@@ -10,6 +10,7 @@ module.exports = function setupPlanModel(app, mongoose)
       type: String,
       enum: ['unclassified', 'small', 'easy', 'hard']
     },
+    date: String,
     mrp: String,
     nc12: String,
     name: String,
@@ -29,7 +30,8 @@ module.exports = function setupPlanModel(app, mongoose)
     quantityPlan: Number,
     incomplete: Number,
     added: Boolean,
-    ignored: Boolean
+    ignored: Boolean,
+    urgent: Boolean
   }, {
     _id: false,
     minimize: false,

@@ -1,8 +1,8 @@
 <div class="planning-mrp-list-container planning-mrp-orders">
   <div class="planning-mrp-list-hd"><%- hdLabel %></div>
   <% if (showEditButton) { %>
-  <button id="<%- idPrefix %>-edit" class="planning-mrp-list-action btn btn-default" title="<%- t('planning', 'orders:edit') %>">
-    <i class="fa fa-edit"></i>
+  <button id="<%- idPrefix %>-edit" class="planning-mrp-list-action btn btn-default" title="<%- t('planning', 'orders:edit') %>" disabled>
+    <i class="fa fa-plus"></i>
   </button>
   <% } else { %>
   <span class="planning-mrp-list-action"></span>
@@ -13,9 +13,20 @@
       <div class="planning-mrp-list-item-inner <%- order.confirmed ? 'is-cnf' : '' %> <%- order.delivered ? 'is-dnf' : '' %>">
         <%= order._id %>
         <% if (order.kind) { %>
-        <span class="planning-mrp-list-property" data-property="kind"><i class="fa fa-<%- order.kind === 'small' ? 'star-o' : order.kind === 'easy' ? 'star-half-full' : 'star' %>"></i></span>
+        <span class="planning-mrp-list-property" data-property="kind" title="<%- t('planning', 'orderPriority:' + order.kind) %>"><i class="fa fa-<%- order.kind === 'small' ? 'star-o' : order.kind === 'easy' ? 'star-half-full' : 'star' %>"></i></span>
         <% } %>
-        <span class="planning-mrp-list-property <%- order.customQuantity ? '' : 'hidden' %>" data-property="quantityPlan"><i class="fa fa-sort-numeric-desc"></i></span>
+        <% if (order.customQuantity) { %>
+        <span class="planning-mrp-list-property" data-property="customQuantity" title="<%- t('planning', 'orders:customQuantity') %>"><i class="fa fa-sort-numeric-desc"></i></span>
+        <% } %>
+        <% if (order.late) { %>
+        <span class="planning-mrp-list-property" data-property="late" title="<%- t('planning', 'orders:late') %>"><i class="fa fa-hourglass-end"></i></span>
+        <% } %>
+        <% if (order.added) { %>
+        <span class="planning-mrp-list-property" data-property="added" title="<%- t('planning', 'orders:added') %>"><i class="fa fa-plus"></i></span>
+        <% } %>
+        <% if (order.urgent) { %>
+        <span class="planning-mrp-list-property" data-property="urgent" title="<%- t('planning', 'orders:urgent') %>"><i class="fa fa-exclamation"></i></span>
+        <% } %>
       </div>
     </div>
     <% }) %>
