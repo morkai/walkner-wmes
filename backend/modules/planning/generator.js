@@ -95,6 +95,7 @@ module.exports = function setUpGenerator(app, module)
       key: key,
       date: moment.utc(key, 'YYYY-MM-DD').toDate(),
       cancelled: false,
+      new: false,
       settings: null,
       autoDowntimes: null,
       orders: null,
@@ -442,11 +443,12 @@ module.exports = function setUpGenerator(app, module)
 
   function savePlanChanges(state)
   {
+    const changes = state.new ? _.pick(state.changes, ['addedOrders']) : state.changes;
     let anyChanges = false;
 
-    Object.keys(state.changes).forEach(key =>
+    Object.keys(changes).forEach(key =>
     {
-      anyChanges = anyChanges || state.changes[key].size > 0;
+      anyChanges = anyChanges || changes[key].size > 0;
     });
 
     if (!anyChanges)
@@ -456,11 +458,11 @@ module.exports = function setUpGenerator(app, module)
 
     const data = {};
 
-    Object.keys(state.changes).forEach(key =>
+    Object.keys(changes).forEach(key =>
     {
-      if (state.changes[key].size)
+      if (changes[key].size)
       {
-        data[key] = Array.from(state.changes[key].values());
+        data[key] = Array.from(changes[key].values());
       }
     });
 
@@ -678,6 +680,10 @@ module.exports = function setUpGenerator(app, module)
         {
           removeUnusedLines(existingPlan, state.settings);
         }
+        else
+        {
+          state.new = true;
+        }
 
         state.plan = existingPlan || new Plan({
           _id: state.date,
@@ -696,7 +702,7 @@ module.exports = function setUpGenerator(app, module)
       },
       function loadAddedOrdersStep()
       {
-        if (state.plan.isNew)
+        if (state.new)
         {
           return;
         }
@@ -722,7 +728,7 @@ module.exports = function setUpGenerator(app, module)
       },
       function compareOrdersStep()
       {
-        if (state.plan.isNew)
+        if (state.new)
         {
           state.plan.orders = Array.from(state.orders.values())
             .filter(order => filterPlanOrder(state, order) === null)
