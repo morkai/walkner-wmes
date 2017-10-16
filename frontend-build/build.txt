@@ -1266,6 +1266,7 @@ app/nls/pl/mor.js
 i18n!app/nls/mor
 app/mor/routes.js
 app/planning/PlanOrder.js
+app/planning/changeHandlers.js
 app/planning/PlanOrderCollection.js
 app/planning/PlanLineOrder.js
 app/planning/PlanLineOrderCollection.js
@@ -1275,6 +1276,8 @@ app/planning/PlanMrp.js
 app/planning/PlanMrpCollection.js
 app/planning/PlanSapOrder.js
 app/planning/PlanSapOrderCollection.js
+app/planning/PlanLateOrder.js
+app/planning/PlanLateOrderCollection.js
 app/planning/Plan.js
 app/planning/PlanSettings.js
 app/planning/PlanSettingsCollection.js
@@ -1294,6 +1297,8 @@ app/planning/templates/contextMenu.js
 app/planning/util/contextMenu.js
 app/planning/templates/lineSettingsDialog.js
 app/planning/views/PlanLineSettingsDialogView.js
+app/planning/templates/linesEditDialog.js
+app/planning/views/PlanMrpLinesEditDialogView.js
 app/planning/templates/lines.js
 app/planning/templates/linePopover.js
 app/planning/templates/lineRemoveDialog.js
@@ -1302,10 +1307,15 @@ app/orderStatuses/util/renderOrderStatusLabel.js
 app/planning/util/scrollIntoView.js
 app/planning/templates/orderQuantityDialog.js
 app/planning/views/PlanOrderQuantityDialogView.js
+app/planning/templates/orderAddDialog.js
+app/planning/templates/orderAddDetails.js
+app/planning/views/PlanOrderAddDialogView.js
 app/planning/templates/orders.js
 app/planning/templates/orderPopover.js
 app/planning/templates/orderIgnoreDialog.js
+app/planning/templates/orderRemoveDialog.js
 app/planning/views/PlanMrpOrdersView.js
+app/planning/views/PlanMrpLateOrdersView.js
 app/planning/templates/lineOrders.js
 app/planning/templates/lineOrderPopover.js
 app/planning/templates/lineDowntimePopover.js
