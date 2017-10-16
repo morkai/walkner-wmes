@@ -52,7 +52,7 @@ define([
       var $spinner = $submit.find('.fa-spinner').removeClass('hidden');
 
       var req = view.ajax({
-        method: 'POST',
+        method: 'PATCH',
         url: '/planning/plans/' + view.plan.id + '/orders/' + view.order.id,
         data: JSON.stringify({
           quantityPlan: Math.max(0, parseInt(view.$id('quantityPlan').val(), 10) || 0)

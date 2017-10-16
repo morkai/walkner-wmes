@@ -2,10 +2,9 @@
 
 'use strict';
 
-const _ = require('lodash');
 const step = require('h5.step');
 
-module.exports = function editPlanOrderRoute(app, module, req, res, next)
+module.exports = function removePlanOrderRoute(app, module, req, res, next)
 {
   const userModule = app[module.config.userId];
   const mongoose = app[module.config.mongooseId];
@@ -15,7 +14,10 @@ module.exports = function editPlanOrderRoute(app, module, req, res, next)
   step(
     function()
     {
-      Plan.findById(req.params.plan).exec(this.next());
+      Plan
+        .findOne({_id: req.params.plan, 'orders._id': req.params.order}, {orders: 1})
+        .lean()
+        .exec(this.parallel());
     },
     function(err, plan)
     {
@@ -26,51 +28,33 @@ module.exports = function editPlanOrderRoute(app, module, req, res, next)
 
       if (!plan)
       {
-        return this.skip(app.createError('PLAN_NOT_FOUND', 404));
+        return this.skip(app.createError('ORDER_NOT_FOUND', 404));
       }
 
       const planOrder = plan.orders.find(o => o._id === req.params.order);
 
-      if (!planOrder)
+      if (!planOrder.added)
       {
-        return this.skip(app.createError('ORDER_NOT_FOUND', 404));
+        return this.skip(app.createError('ORDER_NOT_ADDED', 400));
       }
-
-      const newData = _.pick(req.body, ['quantityPlan', 'ignored']);
-      const oldData = _.pick(planOrder, Object.keys(newData));
-
-      planOrder.set(newData);
-
-      if (!planOrder.isModified())
-      {
-        return this.skip();
-      }
-
-      const changes = {};
-
-      planOrder.modifiedPaths().forEach(property =>
-      {
-        changes[property] = [oldData[property], newData[property]];
-      });
 
       const planChange = new PlanChange({
         plan: plan._id,
         date: new Date(),
         user: userModule.createUserInfo(req.session.user, req),
         data: {
-          changedOrders: [
-            {
-              _id: planOrder._id,
-              changes: changes
-            }
-          ]
+          removedOrders: [{
+            _id: planOrder._id,
+            reason: 'REMOVED'
+          }]
         }
       });
 
-      plan.save(this.parallel());
       planChange.save(this.parallel());
+
+      Plan.update({_id: planChange.plan}, {$pull: {orders: {_id: planOrder._id}}}, this.parallel());
     },
-    function(err, plan, planChange)
+    function(err, planChange)
     {
       if (err)
       {
@@ -79,15 +63,10 @@ module.exports = function editPlanOrderRoute(app, module, req, res, next)
 
       res.sendStatus(204);
 
-      if (!planChange)
-      {
-        return;
-      }
-
       app.broker.publish('planning.changes.created', planChange.toJSON());
 
       app.broker.publish('planning.generator.requested', {
-        date: plan._id
+        date: planChange.plan
       });
     }
   );

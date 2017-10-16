@@ -13,9 +13,11 @@ define([
   '../util/scrollIntoView',
   '../util/contextMenu',
   './PlanOrderQuantityDialogView',
+  './PlanOrderAddDialogView',
   'app/planning/templates/orders',
   'app/planning/templates/orderPopover',
-  'app/planning/templates/orderIgnoreDialog'
+  'app/planning/templates/orderIgnoreDialog',
+  'app/planning/templates/orderRemoveDialog'
 ], function(
   _,
   $,
@@ -29,9 +31,11 @@ define([
   scrollIntoView,
   contextMenu,
   PlanOrderQuantityDialogView,
+  PlanOrderAddDialogView,
   ordersTemplate,
   orderPopoverTemplate,
-  orderIgnoreDialogTemplate
+  orderIgnoreDialogTemplate,
+  orderRemoveDialogTemplate
 ) {
   'use strict';
 
@@ -77,6 +81,15 @@ define([
       'contextmenu .is-order': function(e)
       {
         this.showMenu(e);
+
+        return false;
+      },
+      'click #-add': function()
+      {
+        this.$id('add').blur();
+
+        this.hidePreview();
+        this.showAddDialog();
 
         return false;
       }
@@ -305,6 +318,19 @@ define([
       view.$preview.popover('show');
     },
 
+    showAddDialog: function()
+    {
+      var dialogView = new PlanOrderAddDialogView({
+        plan: this.plan,
+        mrp: this.mrp,
+        model: {
+          orderNo: ''
+        }
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'orders:add:title'));
+    },
+
     hideMenu: function()
     {
       contextMenu.hide(this);
@@ -330,6 +356,14 @@ define([
           label: t('planning', 'orders:menu:' + (order.get('ignored') ? 'unignore' : 'ignore')),
           handler: this.handleIgnoreAction.bind(this, order)
         });
+
+        if (order.get('added'))
+        {
+          menu.push({
+            label: t('planning', 'orders:menu:remove'),
+            handler: this.handleRemoveAction.bind(this, order)
+          });
+        }
       }
 
       contextMenu.show(this, e.pageY, e.pageX, menu);
@@ -368,7 +402,7 @@ define([
       view.listenTo(dialogView, 'answered', function()
       {
         var req = view.ajax({
-          method: 'POST',
+          method: 'PATCH',
           url: '/planning/plans/' + view.plan.id + '/orders/' + order.id,
           data: JSON.stringify({
             ignored: !order.get('ignored')
@@ -391,6 +425,44 @@ define([
       });
 
       viewport.showDialog(dialogView, t('planning', 'orders:menu:ignore:title'));
+    },
+
+    handleRemoveAction: function(order)
+    {
+      var view = this;
+      var dialogView = new DialogView({
+        autoHide: false,
+        template: orderRemoveDialogTemplate,
+        model: {
+          plan: view.plan.getLabel(),
+          mrp: view.mrp.getLabel(),
+          order: order.getLabel()
+        }
+      });
+
+      view.listenTo(dialogView, 'answered', function()
+      {
+        var req = view.ajax({
+          method: 'DELETE',
+          url: '/planning/plans/' + view.plan.id + '/orders/' + order.id
+        });
+
+        req.done(dialogView.closeDialog);
+        req.fail(function()
+        {
+          viewport.msg.show({
+            type: 'error',
+            time: 3000,
+            text: t('planning', 'orders:menu:remove:failure')
+          });
+
+          view.plan.settings.trigger('errored');
+
+          dialogView.enableAnswers();
+        });
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'orders:menu:remove:title'));
     },
 
     onOrdersChanged: function()

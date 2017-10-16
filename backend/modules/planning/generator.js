@@ -7,8 +7,6 @@ const _ = require('lodash');
 const step = require('h5.step');
 const moment = require('moment');
 const deepEqual = require('deep-equal');
-const resolveProductName = require('../util/resolveProductName');
-const resolveBestOperation = require('../util/resolveBestOperation');
 const setUpAutoDowntimeCache = require('./autoDowntimeCache');
 
 const ORDER_IGNORED_PROPERTIES = {
@@ -19,14 +17,6 @@ const ORDER_USER_PROPERTIES = [
   'added',
   'ignored',
   'urgent'
-];
-const OPERATION_PROPERTIES = [
-  'no',
-  'name',
-  'machineSetupTime',
-  'laborSetupTime',
-  'machineTime',
-  'laborTime'
 ];
 const EMPTY_HOURLY_PLAN = [
   0, 0, 0, 0, 0, 0, 0, 0,
@@ -602,21 +592,9 @@ module.exports = function setUpGenerator(app, module)
           scheduledStartDate: moment(state.key, 'YYYY-MM-DD').toDate(),
           mrp: {$in: state.settings.mrps}
         };
-        const projection = {
-          scheduledStartDate: 1,
-          mrp: 1,
-          nc12: 1,
-          name: 1,
-          description: 1,
-          qty: 1,
-          'qtyDone.total': 1,
-          statuses: 1,
-          operations: 1,
-          'bom.nc12': 1
-        };
 
         Order
-          .find(conditions, projection)
+          .find(conditions, Plan.SAP_ORDER_FIELDS)
           .sort({_id: 1})
           .lean()
           .exec(this.next());
@@ -638,7 +616,7 @@ module.exports = function setUpGenerator(app, module)
         sapOrders.forEach(sapOrder =>
         {
           const hardComponents = state.settings.mrp(sapOrder.mrp).hardComponents;
-          const planOrder = createPlanOrder(sapOrder, hardComponents);
+          const planOrder = Plan.createPlanOrder(sapOrder, hardComponents);
 
           state.orders.set(sapOrder._id, planOrder);
         });
@@ -647,33 +625,6 @@ module.exports = function setUpGenerator(app, module)
       },
       done
     );
-  }
-
-  function createPlanOrder(sapOrder, hardComponents)
-  {
-    const hardComponent = !Array.isArray(sapOrder.bom) || sapOrder.bom.length === 0
-      ? null
-      : sapOrder.bom.find(component => hardComponents.has(component.nc12));
-
-    return {
-      _id: sapOrder._id,
-      kind: 'unclassified',
-      date: moment(sapOrder.scheduledStartDate).format('YYYY-MM-DD'),
-      mrp: sapOrder.mrp,
-      nc12: sapOrder.nc12,
-      name: resolveProductName(sapOrder),
-      statuses: sapOrder.statuses,
-      operation: _.pick(resolveBestOperation(sapOrder.operations), OPERATION_PROPERTIES),
-      manHours: 0,
-      hardComponent: hardComponent ? hardComponent.nc12 : null,
-      quantityTodo: sapOrder.qty,
-      quantityDone: sapOrder.qtyDone && sapOrder.qtyDone.total || 0,
-      quantityPlan: 0,
-      incomplete: 0,
-      added: false,
-      ignored: false,
-      urgent: false
-    };
   }
 
   function preparePlanOrder(state, planOrder)

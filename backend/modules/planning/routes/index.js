@@ -3,7 +3,10 @@
 'use strict';
 
 const readPlanRoute = require('./readPlan');
+const searchPlanOrderRoute = require('./searchPlanOrder');
+const addPlanOrderRoute = require('./addPlanOrder');
 const editPlanOrderRoute = require('./editPlanOrder');
+const removePlanOrderRoute = require('./removePlanOrder');
 const browseSapOrdersRoute = require('./browseSapOrders');
 const browseLateOrdersRoute = require('./browseLateOrders');
 const editSettingsRoute = require('./editSettings');
@@ -23,7 +26,11 @@ module.exports = function setUpPlanningRoutes(app, module)
   express.get('/planning/plans', canView, express.crud.browseRoute.bind(null, app, Plan));
   express.post('/planning/plans/:id;generate', canManage, generatePlanRoute);
   express.get('/planning/plans/:id', canView, readPlanRoute.bind(null, app, module));
-  express.post('/planning/plans/:plan/orders/:order', canManage, editPlanOrderRoute.bind(null, app, module));
+
+  express.get('/planning/plans/:plan/orders/:order', canManage, searchPlanOrderRoute.bind(null, app, module));
+  express.post('/planning/plans/:plan/orders/:order', canManage, addPlanOrderRoute.bind(null, app, module));
+  express.patch('/planning/plans/:plan/orders/:order', canManage, editPlanOrderRoute.bind(null, app, module));
+  express.delete('/planning/plans/:plan/orders/:order', canManage, removePlanOrderRoute.bind(null, app, module));
 
   express.get('/planning/sapOrders/:id', canView, browseSapOrdersRoute.bind(null, app, module));
 
@@ -42,6 +49,6 @@ module.exports = function setUpPlanningRoutes(app, module)
       date: req.params.id
     });
 
-    setTimeout(() => res.sendStatus(203), 333);
+    res.sendStatus(203);
   }
 };

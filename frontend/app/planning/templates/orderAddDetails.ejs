@@ -1,0 +1,30 @@
+<div class="form-group">
+  <label class="control-label"><%- t('planning', 'orders:date') %></label>
+  <p class="form-control-static"><%= time.format(order.date, 'LL') %></p>
+</div>
+<% if (plans.length) { %>
+<div class="form-group">
+  <label class="control-label"><%- t('planning', 'orders:add:plans') %></label>
+  <ul>
+    <% plans.forEach(function(plan) { %>
+    <li><%- time.format(plan, 'LL') %></li>
+    <% }) %>
+  </ul>
+</div>
+<% } %>
+<div class="form-group">
+  <label class="control-label"><%- t('planning', 'orders:name') %></label>
+  <p class="form-control-static"><%= order.name %></p>
+</div>
+<div class="form-group">
+  <label class="control-label"><%- t('planning', 'orders:nc12') %></label>
+  <p class="form-control-static"><%= order.nc12 %></p>
+</div>
+<div class="form-group">
+  <label class="control-label"><%- t('planning', 'orders:qty') %></label>
+  <p class="form-control-static"><%= order.quantityDone %>/<%= order.quantityTodo %></p>
+</div>
+<div class="form-group">
+  <label class="control-label"><%- t('planning', 'orders:statuses') %></label>
+  <p class="form-control-static"><%- order.statuses %></p>
+</div>

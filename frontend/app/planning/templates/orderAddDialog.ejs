@@ -1,0 +1,15 @@
+<form>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-orderNo" class="control-label"><%- t('planning', 'orders:add:orderNo') %></label>
+    <input id="<%- idPrefix %>-orderNo" class="form-control no-controls" type="number" value="<%- orderNo %>" min="100000000" max="999999999">
+  </div>
+  <div id="<%- idPrefix %>-message" class="message message-inline message-warning hidden"></div>
+  <div id="<%- idPrefix %>-details" class="planning-orderAddDialog-details hidden"></div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary" disabled>
+      <span class="fa fa-spinner fa-spin hidden"></span>
+      <span><%- t('planning', 'orders:add:submit') %></span>
+    </button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

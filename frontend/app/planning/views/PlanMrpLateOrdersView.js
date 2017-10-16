@@ -12,6 +12,7 @@ define([
   'app/orderStatuses/util/renderOrderStatusLabel',
   '../util/scrollIntoView',
   '../util/contextMenu',
+  './PlanOrderAddDialogView',
   'app/planning/templates/orders',
   'app/planning/templates/orderPopover'
 ], function(
@@ -26,6 +27,7 @@ define([
   renderOrderStatusLabel,
   scrollIntoView,
   contextMenu,
+  PlanOrderAddDialogView,
   ordersTemplate,
   orderPopoverTemplate
 ) {
@@ -209,7 +211,10 @@ define([
 
       if (this.plan.isEditable() && user.isAllowedTo('PLANNING:PLANNER', 'PLANNING:MANAGE'))
       {
-
+        menu.push({
+          label: t('planning', 'orders:menu:add'),
+          handler: this.handleAddAction.bind(this, order)
+        });
       }
 
       contextMenu.show(this, e.pageY, e.pageX, menu);
@@ -218,6 +223,19 @@ define([
     handleDetailsAction: function(order)
     {
       window.open('#orders/' + order.id);
+    },
+
+    handleAddAction: function(order)
+    {
+      var dialogView = new PlanOrderAddDialogView({
+        plan: this.plan,
+        mrp: this.mrp,
+        model: {
+          orderNo: order.id
+        }
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'orders:add:title'));
     }
 
   });

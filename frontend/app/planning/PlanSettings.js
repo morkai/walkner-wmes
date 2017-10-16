@@ -191,6 +191,18 @@ define([
     applyChanges: function(changes)
     {
       Plan.applySettingsChanges(this, changes);
+    },
+
+    hasAllRequiredStatuses: function(statuses)
+    {
+      var requiredStatuses = this.get('requiredStatuses');
+
+      return _.intersection(requiredStatuses, statuses).length === requiredStatuses.length;
+    },
+
+    hasAnyIgnoredStatus: function(statuses)
+    {
+      return _.intersection(this.get('ignoredStatuses'), statuses).length > 0;
     }
 
   }, {
