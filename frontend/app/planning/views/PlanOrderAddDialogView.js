@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'app/broker',
   'app/i18n',
   'app/viewport',
   'app/time',
@@ -9,6 +10,7 @@ define([
   'app/planning/templates/orderAddDialog',
   'app/planning/templates/orderAddDetails'
 ], function(
+  broker,
   t,
   viewport,
   time,
@@ -168,7 +170,12 @@ define([
         url: '/planning/plans/' + view.plan.id + '/orders/' + view.order._id
       });
 
-      req.done(viewport.closeDialog);
+      req.done(function()
+      {
+        broker.subscribe('viewport.dialog.hidden', view.previewAddedOrder.bind(view)).setLimit(1);
+
+        viewport.closeDialog();
+      });
       req.fail(function()
       {
         $spinner.addClass('hidden');
@@ -182,6 +189,19 @@ define([
 
         view.plan.settings.trigger('errored');
       });
+    },
+
+    previewAddedOrder: function()
+    {
+      var planMrp = this.plan.mrps.get(this.order.mrp);
+
+      if (planMrp)
+      {
+        planMrp.orders.trigger('preview', {
+          orderNo: this.order._id,
+          scrollIntoView: true
+        });
+      }
     },
 
     onDialogShown: function()
