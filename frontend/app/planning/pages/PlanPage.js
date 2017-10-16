@@ -96,14 +96,21 @@ define([
       {
         if (message.date === this.plan.id)
         {
-          viewport.msg.loading();
+          this.$msg = viewport.msg.show({
+            type: 'info',
+            text: t('planning', 'MSG:GENERATING')
+          });
         }
       },
       'planning.generator.finished': function(message)
       {
-        if (message.date === this.plan.id)
+        var $msg = this.$msg;
+
+        if ($msg && message.date === this.plan.id)
         {
-          viewport.msg.loaded();
+          viewport.msg.hide($msg);
+
+          this.$msg = null;
         }
       },
       'orders.synced': function()
@@ -123,6 +130,8 @@ define([
 
     initialize: function()
     {
+      this.$msg = null;
+
       this.defineModels();
       this.defineViews();
       this.defineBindings();
