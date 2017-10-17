@@ -359,6 +359,10 @@ app/paintShop/assets/tabs.css
 ----------------
 app/paintShop/assets/tabs.css
 
+app/planning/assets/changes.css
+----------------
+app/planning/assets/changes.css
+
 app/planning/assets/list.css
 ----------------
 app/planning/assets/list.css
@@ -368,6 +372,7 @@ app/planning/assets/main.css
 app/planning/assets/./settings.css
 app/planning/assets/./list.css
 app/planning/assets/./plan.css
+app/planning/assets/./changes.css
 app/planning/assets/main.css
 
 app/planning/assets/plan.css
@@ -1332,6 +1337,7 @@ app/planning/pages/PlanListPage.js
 app/planning/templates/planSettings.js
 app/planning/views/PlanSettingsView.js
 app/planning/pages/PlanSettingsPage.js
+app/planning/templates/change.js
 app/planning/pages/PlanChangesPage.js
 app/nls/planning.js
 app/nls/pl/planning.js
