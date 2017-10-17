@@ -164,11 +164,6 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
     socketToClient[socket.id] = newClientId;
     prodLineToClients[newProdLineId][newClientId] = true;
 
-    module.debug('Client %s:', currentClient ? 'rejoined' : 'joined', {
-      _id: newClient._id,
-      prodLine: newClient.prodLine
-    });
-
     updateProdLinesRemoteOrder(newProdLineId, socket);
 
     OrderDocumentClient.collection.update({_id: newClient._id}, newClient, {upsert: true}, function(err)
@@ -242,11 +237,6 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
     {
       delete prodLineToClients[client.prodLine][socket.id];
     }
-
-    module.debug('Client disconnected:', {
-      _id: clientId,
-      prodLine: client.prodLine
-    });
 
     const clientChanges = {
       _id: clientId,
