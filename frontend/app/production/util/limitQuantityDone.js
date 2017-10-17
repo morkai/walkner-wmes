@@ -60,7 +60,7 @@ define([
         qty: res.qty
       };
 
-      if (!res.qtyDone)
+      if (_.isEmpty(res.qtyDone))
       {
         res.qtyDone = {
           total: 0,
@@ -74,7 +74,7 @@ define([
         res.qtyDone.byOperation[operation.no] = 0;
       }
 
-      if (!res.qtyMax)
+      if (_.isEmpty(res.qtyMax))
       {
         res.qtyMax = {};
       }
