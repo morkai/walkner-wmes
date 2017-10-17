@@ -1,0 +1,19 @@
+<div class="planning-change" data-id="<%- id %>" tabindex="10">
+  <div class="planning-change-hd">
+    <i class="fa fa-chevron-right planning-change-icon"></i>
+    <i class="fa fa-chevron-down planning-change-icon"></i>
+    <%- hd %>
+  </div>
+  <div class="planning-change-bd">
+    <% what.forEach(function(d) { %>
+    <div class="planning-change-details" data-type="<%- d.type %>" tabindex="10">
+      <div class="planning-change-hd">
+        <i class="fa fa-chevron-right planning-change-icon"></i>
+        <i class="fa fa-chevron-down planning-change-icon"></i>
+        <%- d.label %>
+      </div>
+      <div class="planning-change-bd"></div>
+    </div>
+    <% }) %>
+  </div>
+</div>

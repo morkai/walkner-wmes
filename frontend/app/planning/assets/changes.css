@@ -1,0 +1,64 @@
+.planning-change {
+  border-top: 1px solid #ddd;
+}
+.planning-change:first-child {
+  border-top: 0;
+}
+.planning-change:nth-child(even) {
+  background: #f9f9f9;
+}
+.planning-change-hd {
+  padding: 7px;
+  font-size: 16px;
+}
+.planning-change-hd:hover {
+  cursor: pointer;
+  background: #ffffd6;
+}
+.planning-change-icon {
+  width: 14px;
+  font-size: 14px;
+}
+.planning-change .fa-chevron-down,
+.planning-change .is-expanded > .fa-chevron-right {
+  display: none;
+}
+.planning-change .is-expanded > .fa-chevron-down {
+  display: inline-block;
+}
+.planning-change-when,
+.planning-change-who {
+  margin-left: 0;
+  font-weight: bold;
+}
+.planning-change-bd {
+  display: none;
+  margin: 0;
+  padding-bottom: 7px;
+}
+.is-expanded >.planning-change-what {
+  display: none;
+}
+.is-expanded + .planning-change-bd {
+  display: block;
+}
+.planning-change-details .planning-change-hd {
+  padding-left: 32px;
+  font-size: 14px;
+}
+.planning-change-details .planning-change-bd {
+  padding-left: 50px;
+}
+.planning-change-bd > ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+.planning-change-bd .orderStatus {
+  margin-left: 0;
+  padding: 1px 3px;
+  font-size: 0.8em;
+  font-weight: normal;
+}
+.planning-change-bd .fa-arrow-right + .label {
+  margin-left: 0;
+}

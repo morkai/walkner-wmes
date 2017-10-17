@@ -62,7 +62,7 @@ define([
         {
           label: t.bound('planning', 'PAGE_ACTION:changes'),
           icon: 'list-ol',
-          href: '#planning/changes?sort(-date)&plan=' + page.plan.id
+          href: '#planning/changes?sort(date)&plan=' + page.plan.id
         },
         {
           label: t.bound('planning', 'PAGE_ACTION:settings'),
@@ -179,6 +179,7 @@ define([
       var page = this;
       var plan = page.plan;
 
+      page.listenTo(plan, 'sync', page.onPlanSynced);
       page.listenTo(plan, 'change:loading', page.onLoadingChanged);
       page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
 
@@ -318,6 +319,15 @@ define([
     onWrapListsChanged: function()
     {
       this.$el.toggleClass('wrap', this.plan.displayOptions.isListWrappingEnabled());
+    },
+
+    onPlanSynced: function()
+    {
+      if (this.layout)
+      {
+        this.layout.setBreadcrumbs(this.breadcrumbs, this);
+        this.layout.setActions(this.actions, this);
+      }
     },
 
     onLoadingChanged: function()

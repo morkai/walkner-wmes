@@ -194,9 +194,9 @@ define([
           return view.serializePopover(this.dataset.id);
         },
         template: '<div class="popover planning-mrp-popover">'
-        + '<div class="arrow"></div>'
-        + '<div class="popover-content"></div>'
-        + '</div>'
+          + '<div class="arrow"></div>'
+          + '<div class="popover-content"></div>'
+          + '</div>'
       });
 
       if (view.$popover)
@@ -293,9 +293,9 @@ define([
         html: true,
         content: view.serializePopover(order.id),
         template: '<div class="popover planning-mrp-popover planning-mrp-popover-preview">'
-        + '<div class="arrow"></div>'
-        + '<div class="popover-content"></div>'
-        + '</div>'
+          + '<div class="arrow"></div>'
+          + '<div class="popover-content"></div>'
+          + '</div>'
       });
 
       view.$preview.one('hidden.bs.popover', function()

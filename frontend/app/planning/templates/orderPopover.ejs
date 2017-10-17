@@ -34,7 +34,7 @@
       <%- order.quantityPlan %>
       <% } %>
       <% if (order.incomplete) { %>
-      <span class="is-incomplete"><%- t('planning', 'orders:incomplete', {qty: order.incomplete}) %></span>
+      <span class="is-incomplete"><%- t('planning', 'orders:qty:incomplete', {qty: order.incomplete}) %></span>
       <% } %>
     </td>
   </tr>

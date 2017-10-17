@@ -67,7 +67,8 @@ define([
   {
     if (/^[0-9]+d$/.test(req.params.id))
     {
-      req.params.id = time.utc.getMoment()
+      req.params.id = time.getMoment()
+        .subtract(time.getMoment().hours() < 6 ? 1 : 0, 'days')
         .startOf('day')
         .add(req.params.id.replace('d', ''), 'days')
         .format('YYYY-MM-DD');
