@@ -29,13 +29,12 @@ module.exports = function browseLateOrdersRoute(app, module, req, res, next)
         return this.skip(null, []);
       }
 
-      const planMoment = moment(req.params.id, 'YYYY-MM-DD');
-      const planTime = planMoment.valueOf();
+      const planTime = moment(req.params.id, 'YYYY-MM-DD').valueOf();
       const nowTime = Date.now();
       const toMoment = moment(Math.min(planTime, nowTime)).startOf('day');
-      const nearEndMoment = moment(req.params.id, 'YYYY-MM-DD').add(1, 'days').hours(5);
+      const nearEndMoment = toMoment.clone().startOf('day').hours(5);
 
-      if (toMoment.valueOf() === planTime && nearEndMoment.diff(nowTime) > 0)
+      if (nearEndMoment.diff(nowTime) > 0)
       {
         toMoment.subtract(1, 'days');
       }
