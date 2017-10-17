@@ -2,11 +2,13 @@
 
 define([
   'underscore',
+  '../i18n',
   '../time',
   '../core/Model',
   './dictionaries'
 ], function(
   _,
+  t,
   time,
   Model,
   dictionaries
@@ -31,6 +33,7 @@ define([
     {
       var obj = this.toJSON();
 
+      obj.template = t('opinionSurveys', 'templates:' + obj.template);
       obj.startDate = time.format(obj.startDate, 'LL');
       obj.endDate = time.format(obj.endDate, 'LL');
       obj.superiors = this.serializeSuperiors();

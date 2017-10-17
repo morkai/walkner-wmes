@@ -18,6 +18,16 @@
         <p class="help-block"><%- t('opinionSurveys', 'form:help:label') %></p>
       </div>
       <div class="form-group">
+        <label class="control-label"><%- t('opinionSurveys', 'PROPERTY:template') %></label>
+        <% ['ketrzyn', 'pila'].forEach(function(template) { %>
+        <div class="radio">
+          <label>
+            <input type="radio" name="template" value="<%- template %>"> <%- t('opinionSurveys', 'templates:' + template) %>
+          </label>
+        </div>
+        <% }) %>
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-startDate" class="control-label is-required"><%- t('opinionSurveys', 'PROPERTY:startDate') %></label>
         <input id="<%- idPrefix %>-startDate" class="form-control" type="date" name="startDate" required>
       </div>

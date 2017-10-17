@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>hd</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Verdana, sans-serif;
+      line-height: 1;
+      text-align: center;
+      text-rendering: geometricPrecision;
+    }
+    #container {
+      margin: 0 auto;
+      width: 718px;
+      text-align: left;
+    }
+    table {
+      width: 100%;
+      border-bottom: 2px solid #4a7ebb;
+      border-collapse: collapse;
+    }
+    td {
+      vertical-align: bottom;
+      padding-bottom: 10px;
+    }
+    #right {
+      width: 150px;
+    }
+    #title {
+      display: block;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    #date {
+      font-size: 13px;
+      font-weight: normal;
+    }
+    #company {
+      display: block;
+      margin-top: 5px;
+      font-size: 13px;
+      font-weight: normal;
+    }
+    #logo {
+      margin-bottom: -3px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+<div id="container">
+  <table>
+    <tr>
+      <td id="left">
+        <span id="title">Badanie OPINIA, <span id="date"><%- moment(survey.startDate).format('D MMMM') %>-<%- moment(survey.endDate).format('D MMMM') %></span></span>
+        <span id="company">Philips Lighting Lamp & LED Electronics Piła</span>
+      </td>
+      <td id="right"><img id="logo" src="/app/opinionSurveys/assets/ees.png" alt="EES"></td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>

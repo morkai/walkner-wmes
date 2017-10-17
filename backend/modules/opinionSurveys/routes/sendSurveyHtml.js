@@ -12,7 +12,7 @@ module.exports = function sendSurveyHtmlRoute(app, module, req, res, next)
   const mongoose = app[module.config.mongooseId];
   const OpinionSurvey = mongoose.model('OpinionSurvey');
 
-  const template = req.query.template;
+  let template = req.query.template;
 
   if (!_.isString(template) || !/^[a-z0-9-]+$/i.test(template))
   {
@@ -46,6 +46,11 @@ module.exports = function sendSurveyHtmlRoute(app, module, req, res, next)
       }
 
       OpinionSurvey.prepareIntro(survey);
+
+      if (survey.template)
+      {
+        template = survey.template + '/' + template;
+      }
 
       res.render('opinionSurveys:' + template, {
         cache: false,

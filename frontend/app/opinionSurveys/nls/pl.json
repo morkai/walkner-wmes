@@ -27,6 +27,7 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:label": "Etykieta",
+  "PROPERTY:template": "Szablon",
   "PROPERTY:startDate": "Data rozpoczęcia",
   "PROPERTY:endDate": "Data zakończenia",
   "PROPERTY:intro": "Wstęp",
@@ -65,6 +66,9 @@
   "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrane badanie?",
   "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć badanie <em>{label}</em>?",
   "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć badania :(",
+
+  "templates:ketrzyn": "Kętrzyn",
+  "templates:pila": "Piła",
 
   "report:filter:submit": "Filtruj raport",
   "report:filter:surveys": "Badania",

@@ -84,6 +84,11 @@ module.exports = function setupOpinionSurveyModel(app, mongoose)
       type: String,
       required: true
     },
+    template: {
+      type: String,
+      enum: ['ketrzyn', 'pila'],
+      default: 'ketrzyn'
+    },
     startDate: {
       type: Date,
       required: true
