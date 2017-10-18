@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["app/user","app/core/util/pageActions","app/core/pages/FilteredListPage","app/users/ownMrps","../views/ProdShiftListView","../views/ProdShiftFilterView"],function(e,i,t,o,s,r){"use strict";return t.extend({FilterView:r,ListView:s,actions:function(t){return[i.export(t,this,this.collection),i.add(this.collection,e.isAllowedTo.bind(e,"PROD_DATA:MANAGE","PROD_DATA:CHANGES:REQUEST"))]},load:function(e){return e(this.collection.fetch({reset:!0}),o.load(this))}})});
+define(["app/user","app/core/util/pageActions","app/core/pages/FilteredListPage","../views/ProdShiftListView","../views/ProdShiftFilterView"],function(i,e,t,o,s){"use strict";return t.extend({FilterView:s,ListView:o,actions:function(t){return[e.export(t,this,this.collection),e.add(this.collection,i.isAllowedTo.bind(i,"PROD_DATA:MANAGE","PROD_DATA:CHANGES:REQUEST"))]}})});
