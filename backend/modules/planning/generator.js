@@ -629,6 +629,16 @@ module.exports = function setUpGenerator(app, module)
     );
   }
 
+  function getManHours(operation, quantityTodo)
+  {
+    if (!operation)
+    {
+      return 0;
+    }
+
+    return Math.round(((operation.laborTime / 100 * quantityTodo) + operation.laborSetupTime) * 1000) / 1000;
+  }
+
   function preparePlanOrder(state, planOrder)
   {
     if (state.incompleteOrders.has(planOrder._id))
@@ -637,17 +647,10 @@ module.exports = function setUpGenerator(app, module)
       planOrder.quantityPlan = state.incompleteOrders.get(planOrder._id);
     }
 
-    const operation = planOrder.operation;
     const quantityTodo = getQuantityTodo(state, planOrder);
 
-    if (operation)
-    {
-      const manHours = (operation.laborTime / 100 * quantityTodo) + operation.laborSetupTime;
-
-      planOrder.manHours = Math.round(manHours * 1000) / 1000;
-    }
-
     planOrder.kind = classifyPlanOrder(state, planOrder);
+    planOrder.manHours = getManHours(planOrder.operation, quantityTodo);
     planOrder.incomplete = quantityTodo;
 
     state.newIncompleteOrders.set(planOrder._id, quantityTodo);
@@ -1249,13 +1252,15 @@ module.exports = function setUpGenerator(app, module)
       hash: lineState.hash.digest('hex'),
       orders: lineState.plannedOrdersList,
       downtimes: lineState.downtimes,
-      totalQuantity: lineState.pceTimes.length / 2,
       hourlyPlan: lineState.hourlyPlan,
-      pceTimes: lineState.pceTimes
+      pceTimes: lineState.pceTimes,
+      shiftData: null
     };
 
     if (!oldPlanLine)
     {
+      calculateShiftData(newPlanLine);
+
       state.plan.lines.push(newPlanLine);
 
       state.changes.changedLines.set(newPlanLine._id, {
@@ -1267,6 +1272,8 @@ module.exports = function setUpGenerator(app, module)
     }
     else if (oldPlanLine.hash !== newPlanLine.hash)
     {
+      calculateShiftData(newPlanLine);
+
       newPlanLine.version = oldPlanLine.version + 1;
 
       Object.assign(oldPlanLine, newPlanLine);
@@ -1284,6 +1291,32 @@ module.exports = function setUpGenerator(app, module)
     }
 
     setImmediate(done);
+  }
+
+  function calculateShiftData(planLine)
+  {
+    const shiftData = [
+      {manHours: 0, quantity: 0, orderCount: 0},
+      {manHours: 0, quantity: 0, orderCount: 0},
+      {manHours: 0, quantity: 0, orderCount: 0}
+    ];
+
+    planLine.orders.forEach(planLineOrder =>
+    {
+      const h = planLineOrder.startAt.getUTCHours();
+      const shift = shiftData[h >= 6 && h < 14 ? 0 : h >= 14 && h < 22 ? 1 : 2];
+
+      shift.manHours += planLineOrder.manHours;
+      shift.quantity += planLineOrder.quantity;
+      shift.orderCount += 1;
+    });
+
+    shiftData.forEach(shift =>
+    {
+      shift.manHours = Math.round(shift.manHours * 1000) / 1000;
+    });
+
+    planLine.shiftData = shiftData;
   }
 
   function getNextOrderForLine(lineState)
@@ -1430,6 +1463,7 @@ module.exports = function setUpGenerator(app, module)
             orderNo: orderId,
             quantity: quantityPlanned,
             pceTime: pceTime,
+            manHours: getManHours(order.operation, quantityPlanned),
             startAt: new Date(startAt),
             finishAt: new Date(finishAt)
           });
@@ -1457,6 +1491,7 @@ module.exports = function setUpGenerator(app, module)
             orderNo: orderId,
             quantity: quantityPlanned,
             pceTime: pceTime,
+            manHours: getManHours(order.operation, quantityPlanned),
             startAt: new Date(startAt),
             finishAt: new Date(finishAt)
           });
@@ -1484,6 +1519,7 @@ module.exports = function setUpGenerator(app, module)
           orderNo: orderId,
           quantity: quantityPlanned,
           pceTime: pceTime,
+          manHours: getManHours(order.operation, quantityPlanned),
           startAt: new Date(startAt),
           finishAt: new Date(finishAt)
         });
@@ -1535,8 +1571,8 @@ module.exports = function setUpGenerator(app, module)
     {
       lineState.hash.update(
         lineOrder._id
+        + 1
         + lineOrder.quantity
-        + lineOrder.pceTime
         + lineOrder.startAt.getTime()
         + lineOrder.finishAt.getTime()
       );

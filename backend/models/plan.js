@@ -57,6 +57,7 @@ module.exports = function setupPlanModel(app, mongoose)
     orderNo: String,
     quantity: Number,
     pceTime: Number,
+    manHours: Number,
     startAt: Date,
     finishAt: Date
   }, {
@@ -75,15 +76,25 @@ module.exports = function setupPlanModel(app, mongoose)
     retainKeyOrder: true
   });
 
+  const shiftDataSchema = new mongoose.Schema({
+    manHours: Number,
+    quantity: Number,
+    orderCount: Number
+  }, {
+    _id: false,
+    minimize: false,
+    retainKeyOrder: true
+  });
+
   const planLineSchema = new mongoose.Schema({
     _id: String,
     version: Number,
     hash: String,
     orders: [planLineOrderSchema],
     downtimes: [autoDowntimeSchema],
-    totalQuantity: Number,
     hourlyPlan: [Number],
-    pceTimes: [Number]
+    pceTimes: [Number],
+    shiftData: [shiftDataSchema]
   }, {
     _id: false,
     minimize: false,
@@ -122,6 +133,8 @@ module.exports = function setupPlanModel(app, mongoose)
     operations: 1,
     'bom.nc12': 1
   };
+
+  planSchema.statics.OPERATION_PROPERTIES = OPERATION_PROPERTIES;
 
   planSchema.pre('save', function(next)
   {

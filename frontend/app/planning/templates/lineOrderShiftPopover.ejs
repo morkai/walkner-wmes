@@ -1,0 +1,22 @@
+<table>
+  <tbody>
+  <tr>
+    <th><%- t('planning', 'stats:orderCount') %></th>
+    <td colspan="8"><%- stats.orderCount.toLocaleString() %></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'stats:quantity') %></th>
+    <td colspan="8"><%- stats.quantity.toLocaleString() %></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'stats:manHours') %></th>
+    <td colspan="8"><%- stats.manHours.toLocaleString() %></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'stats:hourlyPlan') %></th>
+    <% stats.hourlyPlan.forEach(function(v) { %>
+    <td class="is-number"><%- v %></td>
+    <% }) %>
+  </tr>
+  </tbody>
+</table>

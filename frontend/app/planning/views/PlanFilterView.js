@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'jquery',
   'app/i18n',
   'app/time',
   'app/core/View',
@@ -9,6 +10,7 @@ define([
   'app/planning/templates/planFilter'
 ], function(
   _,
+  $,
   t,
   time,
   View,
@@ -72,6 +74,44 @@ define([
         sortable: true,
         own: true,
         view: this
+      });
+    },
+
+    recountStats: function()
+    {
+      var stats = {
+        manHours: {
+          todo: 0,
+          done: 0,
+          late: 0
+        },
+        quantity: {
+          todo: 0,
+          done: 0,
+          late: 0
+        }
+      };
+
+      $('.planning-mrp-stats-bd').each(function()
+      {
+        $(this).find('td').each(function()
+        {
+          var value = this.dataset.value;
+
+          if (value > 0)
+          {
+            stats[this.dataset.group][this.dataset.subgroup] += parseFloat(value);
+          }
+        });
+      });
+
+      this.$('.planning-mrp-stats-bd td').each(function()
+      {
+        var group = this.dataset.group;
+        var decimals = group === 'manHours' ? 1000 : 1;
+        var value = Math.round(stats[group][this.dataset.subgroup] * decimals) / decimals;
+
+        this.textContent = value.toLocaleString();
       });
     },
 

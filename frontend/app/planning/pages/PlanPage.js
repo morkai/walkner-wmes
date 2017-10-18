@@ -126,6 +126,10 @@ define([
       }
     },
 
+    localTopics: {
+      'planning.mrpStatsRecounted': 'scheduleStatRecount'
+    },
+
     initialize: function()
     {
       this.$msg = null;
@@ -178,7 +182,6 @@ define([
       var plan = page.plan;
 
       page.listenTo(plan, 'sync', page.onPlanSynced);
-      page.listenTo(plan, 'change:loading', page.onLoadingChanged);
       page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
 
       page.listenTo(plan.displayOptions, 'change:mrps', page.onMrpsFilterChanged);
@@ -287,12 +290,31 @@ define([
 
       this.$id('empty').toggleClass('hidden', page.plan.mrps.length > 0);
       this.$id('mrps').toggleClass('hidden', page.plan.mrps.length === 0);
+
+      clearTimeout(this.timers.recountStats);
+
+      this.recountStats();
     },
 
     reloadOrders: function()
     {
       this.promised(this.plan.lateOrders.fetch({reset: true}));
       this.promised(this.plan.sapOrders.fetch({reset: true}));
+    },
+
+    scheduleStatRecount: function()
+    {
+      if (this.timers.recountStats)
+      {
+        clearTimeout(this.timers.recountStats);
+      }
+
+      this.timers.recountStats = setTimeout(this.recountStats.bind(this), 10);
+    },
+
+    recountStats: function()
+    {
+      this.filterView.recountStats();
     },
 
     onDateFilterChanged: function()
@@ -324,14 +346,6 @@ define([
       {
         this.layout.setBreadcrumbs(this.breadcrumbs, this);
         this.layout.setActions(this.actions, this);
-      }
-    },
-
-    onLoadingChanged: function()
-    {
-      if (!this.plan.get('loading'))
-      {
-        this.renderMrps();
       }
     },
 

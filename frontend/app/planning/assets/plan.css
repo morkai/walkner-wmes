@@ -425,3 +425,37 @@
 .planning-orderAddDialog-details {
   margin-top: 15px;
 }
+.planning-mrp-stats th {
+  padding: 0 0 5px 0;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+.planning-mrp-stats-bd th {
+  padding: 0;
+  text-align: right;
+  vertical-align: middle;
+}
+.planning-mrp-stats-bd td {
+  padding-left: 7px;
+  padding-right: 7px;
+  font-size: 16px;
+  text-align: right;
+  vertical-align: middle;
+  border-right: 1px solid #eee;
+}
+.planning-mrp-stats-bd td:last-child {
+  border-right: none;
+}
+.planning-mrp-stats-bd:last-child th,
+.planning-mrp-stats-bd:last-child td {
+  padding-top: 4px;
+}
+.planning-mrp-filter .planning-mrp-stats {
+  margin-top: 8px;
+}
+.planning-mrp-filter .planning-mrp-stats-bd td {
+  border-right-color: #ddd;
+}
+.planning-mrp-filter .planning-mrp-stats-bd td:last-child {
+  padding-right: 0;
+}

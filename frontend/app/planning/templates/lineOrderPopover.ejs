@@ -23,6 +23,10 @@
     <td><%- time.toString(lineOrder.pceTime) %></td>
   </tr>
   <tr>
+    <th><%- t('planning', 'lineOrders:manHours') %></th>
+    <td><%- lineOrder.manHours.toLocaleString() %></td>
+  </tr>
+  <tr>
     <th><%- t('planning', 'lineOrders:time') %></th>
     <td><%= time.utc.format(lineOrder.startAt, 'HH:mm:ss') %>-<%= time.utc.format(lineOrder.finishAt, 'HH:mm:ss') %></td>
   </tr>

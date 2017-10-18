@@ -150,6 +150,13 @@ define([
       return this.orders.get(orderNo).getActualOrderData();
     },
 
+    isAnythingLoading: function()
+    {
+      return this.get('loading')
+        || !!this.lateOrders.currentRequest
+        || !!this.sapOrders.currentRequest;
+    },
+
     isFrozen: function()
     {
       return this.attributes.frozen === true;

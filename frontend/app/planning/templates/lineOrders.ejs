@@ -9,12 +9,12 @@
   <% shifts.forEach(function(shift, i) { %>
   <div class="planning-mrp-list-container planning-mrp-lineOrders">
     <% if (i == 0) { %>
-    <div class="planning-mrp-list-hd"><%= line %></div>
+    <div class="planning-mrp-list-hd" data-popover-placement="right" data-popover-content="line"><%= line %></div>
     <% } %>
-    <div class="planning-mrp-lineOrders-shift" data-shift="<%- shift.no %>"><%- t('core', 'SHIFT:' + shift.no) %></div>
+    <div class="planning-mrp-lineOrders-shift" data-shift="<%- shift.no %>" data-popover-placement="right" data-popover-content="shift"><%- t('core', 'SHIFT:' + shift.no) %></div>
     <div id="<%- idPrefix %>-list-<%- shift.no %>" class="planning-mrp-list planning-mrp-lineOrders-list" data-shift-start-time="<%- shift.startTime %>">
       <% shift.orders.forEach(function(shiftOrder) { %>
-      <div class="planning-mrp-list-item is-lineOrder <%- shiftOrder.incomplete ? 'is-incomplete' : ''%> <%- shiftOrder.external ? 'is-external' : ''%>" data-id="<%- shiftOrder._id %>" style="width: <%- shiftOrder.width %>%; margin-left: <%- shiftOrder.margin %>%">
+      <div class="planning-mrp-list-item is-lineOrder <%- shiftOrder.incomplete ? 'is-incomplete' : ''%> <%- shiftOrder.external ? 'is-external' : ''%>" data-id="<%- shiftOrder._id %>" data-popover-content="lineOrder" style="width: <%- shiftOrder.width %>%; margin-left: <%- shiftOrder.margin %>%">
         <div class="planning-mrp-list-item-inner">
           <% if (shiftOrder.external) { %>
           <%- shiftOrder.orderNo %>, <%- shiftOrder.quantity %> <%- t('planning', 'lineOrders:unit') %>, <%- shiftOrder.mrp %>
@@ -25,7 +25,7 @@
       </div>
       <% }) %>
       <% shift.downtimes.forEach(function(shiftDowntime) { %>
-      <div class="planning-mrp-list-item is-downtime" data-id="<%- shiftDowntime._id %>" style="width: <%- shiftDowntime.width %>%; left: <%- shiftDowntime.left %>%">
+      <div class="planning-mrp-list-item is-downtime" data-id="<%- shiftDowntime._id %>" data-popover-content="downtime" style="width: <%- shiftDowntime.width %>%; left: <%- shiftDowntime.left %>%">
         <div class="planning-mrp-list-item-inner">&nbsp;</div>
       </div>
       <% }) %>

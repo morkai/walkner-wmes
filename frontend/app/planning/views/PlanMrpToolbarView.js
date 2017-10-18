@@ -45,18 +45,41 @@ define([
 
     },
 
+    initialize: function()
+    {
+      this.listenTo(this.plan.lateOrders, 'reset', this.scheduleRender);
+      this.listenTo(this.plan.sapOrders, 'reset', this.scheduleRender);
+      this.listenTo(this.mrp.orders, 'added removed changed reset', this.scheduleRender);
+      this.listenTo(this.mrp.lines, 'added removed changed reset', this.scheduleRender);
+    },
+
     serialize: function()
     {
       return {
         idPrefix: this.idPrefix,
-        lines: this.mrp.lines.map(function(line) { return line.id; })
+        lines: this.mrp.lines.map(function(line) { return line.id; }),
+        stats: this.mrp.getStats()
       };
     },
 
-    updatePrintAction: function()
+    afterRender: function()
     {
-      this.$id('printPlan').prop('disabled', !this.mrp.lines.length);
-      this.$id('printList').html(toolbarPrintLineListTemplate(this.serialize()));
+      this.broker.publish('planning.mrpStatsRecounted', {mrp: this.mrp});
+    },
+
+    scheduleRender: function()
+    {
+      if (this.timers.render)
+      {
+        clearTimeout(this.timers.render);
+      }
+
+      if (this.plan.isAnythingLoading())
+      {
+        return;
+      }
+
+      this.timers.render = setTimeout(this.render.bind(this), 1);
     },
 
     printLines: function(what)

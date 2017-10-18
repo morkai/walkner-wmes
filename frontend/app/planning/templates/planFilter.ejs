@@ -1,4 +1,4 @@
-<form class="well filter-form">
+<form class="well filter-form planning-mrp-filter">
   <div class="form-group">
     <label for="<%- idPrefix %>-date" class="control-label"><%- t('planning', 'filter:date') %></label>
     <input id="<%- idPrefix %>-date" name="date" class="form-control" type="date" value="<%- date %>" min="<%- minDate %>" max="<%- maxDate %>">
@@ -18,5 +18,20 @@
         <span><%- t('planning', 'filter:useLatestOrderData') %></span>
       </button>
     </div>
+  </div>
+  <div class="form-group" style="flex-grow: 1"></div>
+  <div class="form-group">
+    <table class="planning-mrp-stats">
+      <tbody>
+      <% ['manHours', 'quantity'].forEach(function(group) { %>
+      <tr class="planning-mrp-stats-bd">
+        <th><%- t('planning', 'filter:stats:' + group) %></th>
+        <% ['todo', 'late', 'done'].forEach(function(subgroup) { %>
+        <td data-group="<%- group %>" data-subgroup="<%- subgroup %>" title="<%- t('planning', 'filter:stats:tooltip:' + subgroup) %>">0</td>
+        <% }) %>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
   </div>
 </form>

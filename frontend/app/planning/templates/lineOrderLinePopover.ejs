@@ -1,0 +1,34 @@
+<table>
+  <tbody>
+  <tr>
+    <th><%- t('planning', 'stats:orderCount') %></th>
+    <td colspan="8"><%- stats.orderCount.toLocaleString() %></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'stats:quantity') %></th>
+    <td colspan="8"><%- stats.quantity.toLocaleString() %></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'stats:manHours') %></th>
+    <td colspan="8"><%- stats.manHours.toLocaleString() %></td>
+  </tr>
+  <tr>
+    <th><%- t('planning', 'stats:hourlyPlan') %></th>
+    <% for (var h = 0; h < 8; ++h) { %>
+    <td class="is-number"><%- stats.hourlyPlan[h] %></td>
+    <% } %>
+  </tr>
+  <tr>
+    <th></th>
+    <% for (var h = 8; h < 16; ++h) { %>
+    <td class="is-number"><%- stats.hourlyPlan[h] %></td>
+    <% } %>
+  </tr>
+  <tr>
+    <th></th>
+    <% for (var h = 16; h < 24; ++h) { %>
+    <td class="is-number"><%- stats.hourlyPlan[h] %></td>
+    <% } %>
+  </tr>
+  </tbody>
+</table>

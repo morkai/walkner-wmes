@@ -179,6 +179,7 @@ define([
       }
 
       var delayReason = this.delayReasons.get(order.get('delayReason'));
+      var operation = order.get('operation');
 
       return orderPopoverTemplate({
         order: {
@@ -189,7 +190,9 @@ define([
           quantityTodo: order.get('quantityTodo'),
           quantityDone: order.get('quantityDone'),
           statuses: order.get('statuses').map(renderOrderStatusLabel),
-          delayReason: delayReason ? delayReason.getLabel() : null
+          delayReason: delayReason ? delayReason.getLabel() : null,
+          manHours: order.get('manHours'),
+          laborTime: operation && operation.laborTime ? operation.laborTime : 0
         }
       });
     },

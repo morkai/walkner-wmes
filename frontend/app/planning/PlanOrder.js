@@ -20,6 +20,23 @@ define([
         && this.get('quantityPlan') > 0
         && this.get('urgent')
         && !this.get('added');
+    },
+
+    getQuantityTodo: function()
+    {
+      var quantityPlan = this.get('quantityPlan');
+
+      if (quantityPlan > 0)
+      {
+        return quantityPlan;
+      }
+
+      if (this.collection.plan.settings.attributes.useRemainingQuantity)
+      {
+        return Math.max(0, this.get('quantityTodo') - this.get('quantityDone'));
+      }
+
+      return this.get('quantityTodo');
     }
 
   });

@@ -12,6 +12,16 @@ define([
     getActualOrderData: function()
     {
       return this.pick(['quantityTodo', 'quantityDone', 'statuses']);
+    },
+
+    getQuantityTodo: function()
+    {
+      if (this.collection.plan.settings.attributes.useRemainingQuantity)
+      {
+        return Math.max(0, this.get('quantityTodo') - this.get('quantityDone'));
+      }
+
+      return this.get('quantityTodo');
     }
 
   });

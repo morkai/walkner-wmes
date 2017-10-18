@@ -8,7 +8,9 @@ define([
   'app/planning/util/shift',
   'app/planning/templates/lineOrders',
   'app/planning/templates/lineOrderPopover',
-  'app/planning/templates/lineDowntimePopover'
+  'app/planning/templates/lineOrderDowntimePopover',
+  'app/planning/templates/lineOrderShiftPopover',
+  'app/planning/templates/lineOrderLinePopover'
 ], function(
   _,
   $,
@@ -17,7 +19,9 @@ define([
   shiftUtil,
   lineOrdersTemplate,
   lineOrderPopoverTemplate,
-  lineDowntimePopoverTemplate
+  lineOrderDowntimePopoverTemplate,
+  lineOrderShiftPopoverTemplate,
+  lineOrderLinePopoverTemplate
 ) {
   'use strict';
 
@@ -114,18 +118,29 @@ define([
 
       view.$el.popover({
         container: view.el,
-        selector: '.planning-mrp-list-item',
+        selector: 'div[data-popover-content]',
         trigger: 'hover',
-        placement: 'top',
         html: true,
+        placement: function()
+        {
+          return this.$element.attr('data-popover-placement') || 'top';
+        },
         content: function()
         {
-          if (this.classList.contains('is-downtime'))
+          switch (this.dataset.popoverContent)
           {
-            return view.serializeDowntimePopover(this.dataset.id);
-          }
+            case 'lineOrder':
+              return view.serializeOrderPopover(this.dataset.id);
 
-          return view.serializeOrderPopover(this.dataset.id);
+            case 'downtime':
+              return view.serializeDowntimePopover(this.dataset.id);
+
+            case 'shift':
+              return view.serializeShiftPopover(this.dataset.shift - 1);
+
+            case 'line':
+              return view.serializeLinePopover();
+          }
         },
         template: '<div class="popover planning-mrp-popover">'
           + '<div class="arrow"></div>'
@@ -222,6 +237,45 @@ define([
       });
     },
 
+    serializeLinePopover: function()
+    {
+      var hourlyPlan = this.line.get('hourlyPlan');
+      var orderCount = 0;
+      var quantity = 0;
+      var manHours = 0;
+
+      (this.line.get('shiftData') || []).forEach(function(shift)
+      {
+        orderCount += shift.orderCount;
+        quantity += shift.quantity;
+        manHours += shift.manHours;
+      });
+
+      return lineOrderLinePopoverTemplate({
+        stats: {
+          orderCount: orderCount,
+          quantity: quantity,
+          manHours: manHours,
+          hourlyPlan: hourlyPlan
+        }
+      });
+    },
+
+    serializeShiftPopover: function(shiftI)
+    {
+      var hourlyPlan = this.line.get('hourlyPlan').slice(shiftI * 8, shiftI * 8 + 8);
+      var shiftData = (this.line.get('shiftData') || [])[shiftI] || {};
+
+      return lineOrderShiftPopoverTemplate({
+        stats: {
+          orderCount: shiftData.orderCount || 0,
+          quantity: shiftData.quantity || 0,
+          manHours: shiftData.manHours || 0,
+          hourlyPlan: hourlyPlan
+        }
+      });
+    },
+
     serializeOrderPopover: function(id)
     {
       var lineOrder = this.line.orders.get(id);
@@ -237,6 +291,7 @@ define([
           quantityRemaining: order.get('quantityTodo') - order.get('quantityDone'),
           quantityTotal: order.get('quantityTodo'),
           pceTime: lineOrder.get('pceTime') / 1000,
+          manHours: lineOrder.get('manHours') || 0,
           startAt: startAt,
           finishAt: finishAt,
           duration: (finishAt - startAt) / 1000
@@ -251,7 +306,7 @@ define([
       var finishAt = startAt + downtime.duration;
       var downtimeReason = downtimeReasons.get(downtime.reason);
 
-      return lineDowntimePopoverTemplate({
+      return lineOrderDowntimePopoverTemplate({
         lineDowntime: {
           reason: downtimeReason ? downtimeReason.getLabel() : downtime.reason,
           startAt: startAt,

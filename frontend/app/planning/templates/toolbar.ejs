@@ -1,5 +1,27 @@
 <div class="btn-toolbar planning-mrp-toolbar">
-  <div class="btn-group" role="group">
+  <div class="btn-group">
+    <table class="planning-mrp-stats">
+      <tbody>
+      <!--
+      <tr class="planning-mrp-stats-hd">
+        <td></td>
+        <th><%- t('planning', 'toolbar:stats:todo') %></th>
+        <th><%- t('planning', 'toolbar:stats:late') %></th>
+        <th><%- t('planning', 'toolbar:stats:done') %></th>
+      </tr>
+      //-->
+      <% ['manHours', 'quantity'].forEach(function(group) { %>
+      <tr class="planning-mrp-stats-bd">
+        <th><%- t('planning', 'toolbar:stats:' + group) %></th>
+        <% ['todo', 'late', 'done'].forEach(function(subgroup) { %>
+        <td data-group="<%- group %>" data-subgroup="<%- subgroup %>" data-value="<%- stats[group][subgroup] %>" title="<%- t('planning', 'toolbar:stats:tooltip:' + subgroup) %>"><%- stats[group][subgroup].toLocaleString() %></td>
+        <% }) %>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <div class="btn-group">
     <div id="<%- idPrefix %>-printDropdown" class="btn-group" role="group">
       <button id="<%- idPrefix %>-printPlan" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="<%- t('planning', 'toolbar:printPlan') %>" <%- lines.length ? '' : 'disabled' %>>
         <i class="fa fa-print"></i>
