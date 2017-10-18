@@ -11,7 +11,9 @@ define([
   'app/data/orgUnits',
   '../util/contextMenu',
   './PlanLineSettingsDialogView',
-  './PlanMrpLinesEditDialogView',
+  './PlanLinesMrpPriorityDialogView',
+  './PlanLinesWorkerCountDialogView',
+  './PlanLinesOrderPriorityDialogView',
   'app/planning/templates/lines',
   'app/planning/templates/linePopover',
   'app/planning/templates/lineRemoveDialog'
@@ -26,7 +28,9 @@ define([
   orgUnits,
   contextMenu,
   PlanLineSettingsDialogView,
-  PlanMrpLinesEditDialogView,
+  PlanLinesMrpPriorityDialogView,
+  PlanLinesWorkerCountDialogView,
+  PlanLinesOrderPriorityDialogView,
   linesTemplate,
   linePopoverTemplate,
   lineRemoveDialogTemplate
@@ -40,15 +44,15 @@ define([
     events: {
       'contextmenu .is-line': function(e)
       {
-        this.showMenu(e);
+        this.showLineMenu(e);
 
         return false;
       },
-      'click #-edit': function()
+      'click #-edit': function(e)
       {
         this.$id('edit').blur();
 
-        this.showEditDialog();
+        this.showLinesMenu(e);
 
         return false;
       }
@@ -149,12 +153,20 @@ define([
       var prodLine = orgUnits.getByTypeAndId('prodLine', lineUnits.prodLine);
       var lineMrpSettings = line.mrpSettings(this.mrp.id);
 
+      prodFlow = prodFlow ? prodFlow.get('name') : '';
+      prodLine = prodLine ? prodLine.get('description') : '';
+
+      if (prodFlow.replace(/[^A-Za-z0-9]+/g, '').indexOf(prodLine.replace(/[^A-Za-z0-9]+/g, '')) !== -1)
+      {
+        prodLine = '';
+      }
+
       return linePopoverTemplate({
         line: {
           _id: lineId,
           division: lineUnits.division ? lineUnits.division : '?',
-          prodFlow: prodFlow ? prodFlow.get('name') : '?',
-          prodLine: prodLine ? prodLine.get('description') : '?',
+          prodFlow: prodFlow,
+          prodLine: prodLine,
           activeTime: this.serializeActiveTime(line, true),
           workerCount: lineMrpSettings ? lineMrpSettings.get('workerCount') : '?',
           orderPriority: !lineMrpSettings
@@ -181,22 +193,38 @@ define([
         : '';
     },
 
-    showEditDialog: function()
-    {
-      var dialogView = new PlanMrpLinesEditDialogView({
-        plan: this.plan,
-        mrp: this.mrp
-      });
-
-      viewport.showDialog(dialogView, t('planning', 'lines:edit:title'));
-    },
-
     hideMenu: function()
     {
       contextMenu.hide(this);
     },
 
-    showMenu: function(e)
+    showLinesMenu: function()
+    {
+      if (!this.plan.canEditSettings())
+      {
+        return;
+      }
+
+      var $edit = this.$id('edit');
+      var pos = $edit.offset();
+
+      contextMenu.show(this, pos.top + $edit.outerHeight() / 2, pos.left + $edit.outerWidth() / 2, [
+        {
+          label: t('planning', 'lines:menu:mrpPriority'),
+          handler: this.handleMrpPriorityAction.bind(this)
+        },
+        {
+          label: t('planning', 'lines:menu:workerCount'),
+          handler: this.handleWorkerCountAction.bind(this)
+        },
+        {
+          label: t('planning', 'lines:menu:orderPriority'),
+          handler: this.handleOrderPriorityAction.bind(this)
+        }
+      ]);
+    },
+
+    showLineMenu: function(e)
     {
       if (!this.plan.canEditSettings())
       {
@@ -215,6 +243,36 @@ define([
           handler: this.handleRemoveAction.bind(this, line)
         }
       ]);
+    },
+
+    handleMrpPriorityAction: function()
+    {
+      var dialogView = new PlanLinesMrpPriorityDialogView({
+        plan: this.plan,
+        mrp: this.mrp
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'lines:menu:mrpPriority:title'));
+    },
+
+    handleWorkerCountAction: function()
+    {
+      var dialogView = new PlanLinesWorkerCountDialogView({
+        plan: this.plan,
+        mrp: this.mrp
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'lines:menu:workerCount:title'));
+    },
+
+    handleOrderPriorityAction: function()
+    {
+      var dialogView = new PlanLinesOrderPriorityDialogView({
+        plan: this.plan,
+        mrp: this.mrp
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'lines:menu:orderPriority:title'));
     },
 
     handleSettingsAction: function(line)

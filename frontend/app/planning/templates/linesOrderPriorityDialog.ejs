@@ -1,0 +1,15 @@
+<form>
+  <% lines.forEach(function(line, i) { %>
+  <div class="form-group has-required-select2">
+    <label for="<%- idPrefix %>-line-<%- i %>" class="control-label"><%= line._id %></label>
+    <input id="<%- idPrefix %>-line-<%- i %>" data-line-id="<%= line._id %>" required value="<%- line.orderPriority %>">
+  </div>
+  <% }) %>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+      <span class="fa fa-spinner fa-spin hidden"></span>
+      <span><%- t('planning', 'lines:menu:orderPriority:submit') %></span>
+    </button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

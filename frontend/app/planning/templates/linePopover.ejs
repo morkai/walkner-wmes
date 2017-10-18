@@ -8,10 +8,12 @@
     <th><%- t('planning', 'lines:prodFlow') %></th>
     <td><span class="planning-mrp-popover-value"><%= line.prodFlow %></span></td>
   </tr>
+  <% if (line.prodLine) { %>
   <tr>
     <th><%- t('planning', 'lines:prodLine') %></th>
     <td><span class="planning-mrp-popover-value"><%= line.prodLine %></span></td>
   </tr>
+  <% } %>
   <tr>
     <th><%- t('planning', 'lines:activeTime') %></th>
     <td><%= line.activeTime %></td>

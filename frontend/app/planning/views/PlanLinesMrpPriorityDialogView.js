@@ -8,7 +8,7 @@ define([
   'app/core/View',
   'app/data/orgUnits',
   'app/mrpControllers/util/setUpMrpSelect2',
-  'app/planning/templates/linesEditDialog'
+  'app/planning/templates/linesMrpPriorityDialog'
 ], function(
   _,
   $,
@@ -180,7 +180,7 @@ define([
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t('planning', 'lines:edit:failure')
+          text: t('planning', 'lines:menu:mrpPriority:failure')
         });
 
         view.plan.settings.trigger('errored');
