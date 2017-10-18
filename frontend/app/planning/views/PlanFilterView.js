@@ -6,7 +6,6 @@ define([
   'app/time',
   'app/core/View',
   'app/mrpControllers/util/setUpMrpSelect2',
-  'app/users/ownMrps',
   'app/planning/templates/planFilter'
 ], function(
   _,
@@ -14,7 +13,6 @@ define([
   time,
   View,
   setUpMrpSelect2,
-  ownMrps,
   template
 ) {
   'use strict';
@@ -23,7 +21,7 @@ define([
 
     template: template,
 
-    events: _.assign({
+    events: {
 
       'input #-date': 'changeFilter',
       'change #-date': 'changeFilter',
@@ -37,7 +35,7 @@ define([
         this.plan.displayOptions.toggleLatestOrderDataUse();
       }
 
-    }, ownMrps.events),
+    },
 
     initialize: function()
     {
@@ -57,7 +55,6 @@ define([
 
       return _.assign({
         idPrefix: this.idPrefix,
-        showOwnMrps: ownMrps.hasAny(),
         date: plan.id,
         mrps: displayOptions.get('mrps'),
         minDate: displayOptions.get('minDate'),
@@ -73,6 +70,7 @@ define([
         width: '600px',
         placeholder: t('planning', 'filter:mrps:placeholder'),
         sortable: true,
+        own: true,
         view: this
       });
     },

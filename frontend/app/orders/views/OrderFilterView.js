@@ -4,14 +4,12 @@ define([
   'underscore',
   'app/core/util/fixTimeRange',
   'app/core/views/FilterView',
-  'app/users/ownMrps',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/orders/templates/filter'
 ], function(
   _,
   fixTimeRange,
   FilterView,
-  ownMrps,
   setUpMrpSelect2,
   filterTemplate
 ) {
@@ -20,8 +18,6 @@ define([
   return FilterView.extend({
 
     template: filterTemplate,
-
-    events: _.assign({}, ownMrps.events, FilterView.prototype.events),
 
     defaultFormData: {
       _id: '',
@@ -49,18 +45,11 @@ define([
       'nc12': '_id'
     },
 
-    serialize: function()
-    {
-      return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
-        showOwnMrps: ownMrps.hasAny()
-      });
-    },
-
     afterRender: function()
     {
       FilterView.prototype.afterRender.call(this);
 
-      setUpMrpSelect2(this.$id('mrp'));
+      setUpMrpSelect2(this.$id('mrp'), {own: true, view: this});
     },
 
     serializeFormToQuery: function(selector)

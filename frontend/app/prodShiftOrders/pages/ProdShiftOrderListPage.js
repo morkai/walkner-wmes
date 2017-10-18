@@ -6,7 +6,6 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
   'app/core/View',
-  'app/users/ownMrps',
   '../ProdShiftOrderCollection',
   '../views/ProdShiftOrderListView',
   '../views/ProdShiftOrderFilterView',
@@ -17,7 +16,6 @@ define([
   bindLoadingMessage,
   pageActions,
   View,
-  ownMrps,
   ProdShiftOrderCollection,
   ProdShiftOrderListView,
   ProdShiftOrderFilterView,
@@ -69,11 +67,6 @@ define([
       });
 
       this.listenTo(this.filterView, 'filterChanged', this.refreshList);
-    },
-
-    load: function(when)
-    {
-      return when(this.collection.fetch({reset: true}), ownMrps.load(this));
     },
 
     refreshList: function(newRqlQuery)

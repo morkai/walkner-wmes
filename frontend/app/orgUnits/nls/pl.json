@@ -3,7 +3,5 @@
   "picker:any": "Dowolne",
   "picker:dialog:title": "Jednostki organizacyjne",
   "picker:dialog:submit": "Wybierz jednostki organizacyjne",
-  "picker:dialog:deactivated": "Dezaktywowane",
-
-  "filter:ownMrps": "moje"
+  "picker:dialog:deactivated": "Dezaktywowane"
 }

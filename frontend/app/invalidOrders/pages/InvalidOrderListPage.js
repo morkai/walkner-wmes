@@ -6,7 +6,6 @@ define([
   'app/user',
   'app/core/pages/FilteredListPage',
   'app/core/views/ActionFormView',
-  'app/users/ownMrps',
   '../views/InvalidOrderFilterView',
   '../views/InvalidOrderListView'
 ], function(
@@ -15,7 +14,6 @@ define([
   user,
   FilteredListPage,
   ActionFormView,
-  ownMrps,
   InvalidOrderFilterView,
   InvalidOrderListView
 ) {
@@ -57,11 +55,6 @@ define([
       FilteredListPage.prototype.initialize.apply(this, arguments);
 
       this.listenTo(this.collection, 'selected', this.onSelected);
-    },
-
-    load: function(when)
-    {
-      return when(this.collection.fetch({reset: true}), ownMrps.load(this));
     },
 
     createFilterView: function()

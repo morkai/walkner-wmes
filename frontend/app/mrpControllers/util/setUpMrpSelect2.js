@@ -5,13 +5,15 @@ define([
   'select2',
   'Sortable',
   'app/broker',
-  'app/data/orgUnits'
+  'app/data/orgUnits',
+  './ownMrps'
 ], function(
   _,
   select2,
   Sortable,
   broker,
-  orgUnits
+  orgUnits,
+  ownMrps
 ) {
   'use strict';
 
@@ -138,6 +140,11 @@ define([
           sortable.destroy();
         };
       }
+    }
+
+    if (options && options.own && options.view)
+    {
+      ownMrps.attach(options.view, $input);
     }
 
     $input.select2(

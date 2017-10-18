@@ -4,9 +4,7 @@
     "picker:any": "Any",
     "picker:dialog:title": "Organizational units",
     "picker:dialog:submit": "Choose organizational units",
-    "picker:dialog:deactivated": "Deactivated",
-
-    "filter:ownMrps": "mine"
+    "picker:dialog:deactivated": "Deactivated"
   },
   "pl": true
 }

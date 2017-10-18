@@ -9,7 +9,6 @@ define([
   'app/core/views/FilterView',
   'app/core/util/fixTimeRange',
   'app/orgUnits/views/OrgUnitPickerView',
-  'app/users/ownMrps',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/prodShifts/templates/filter'
 ], function(
@@ -21,7 +20,6 @@ define([
   FilterView,
   fixTimeRange,
   OrgUnitPickerView,
-  ownMrps,
   setUpMrpSelect2,
   filterTemplate
 ) {
@@ -30,10 +28,6 @@ define([
   return FilterView.extend({
 
     template: filterTemplate,
-
-    events: _.assign({
-
-    }, ownMrps.events, FilterView.prototype.events),
 
     defaultFormData: {
       date: '',
@@ -65,20 +59,13 @@ define([
       }));
     },
 
-    serialize: function()
-    {
-      return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
-        showOwnMrps: ownMrps.hasAny()
-      });
-    },
-
     afterRender: function()
     {
       FilterView.prototype.afterRender.apply(this, arguments);
 
       this.toggleButtonGroup('shift');
 
-      setUpMrpSelect2(this.$id('orderMrp'));
+      setUpMrpSelect2(this.$id('orderMrp'), {own: true, view: this});
     },
 
     serializeFormToQuery: function(selector)

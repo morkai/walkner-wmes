@@ -9,7 +9,6 @@ define([
   'app/core/views/FilterView',
   'app/core/util/fixTimeRange',
   'app/orgUnits/views/OrgUnitPickerView',
-  'app/users/ownMrps',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/prodShiftOrders/templates/filter'
 ], function(
@@ -21,7 +20,6 @@ define([
   FilterView,
   fixTimeRange,
   OrgUnitPickerView,
-  ownMrps,
   setUpMrpSelect2,
   filterTemplate
 ) {
@@ -97,7 +95,7 @@ define([
       }
     },
 
-    events: _.assign({
+    events: {
 
       'focus .prodShiftOrders-filter-orderId': function(e)
       {
@@ -123,7 +121,7 @@ define([
         $input[0].disabled = true;
       }
 
-    }, ownMrps.events, FilterView.prototype.events),
+    },
 
     initialize: function()
     {
@@ -134,20 +132,13 @@ define([
       }));
     },
 
-    serialize: function()
-    {
-      return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
-        showOwnMrps: ownMrps.hasAny()
-      });
-    },
-
     afterRender: function()
     {
       FilterView.prototype.afterRender.apply(this, arguments);
 
       this.toggleButtonGroup('shift');
 
-      setUpMrpSelect2(this.$id('mrp'));
+      setUpMrpSelect2(this.$id('mrp'), {own: true, view: this});
     },
 
     serializeOrderId: function(selector)

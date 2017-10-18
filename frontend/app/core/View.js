@@ -126,6 +126,8 @@ function(
 
   View.prototype.cleanup = function()
   {
+    this.trigger('cleanup', this);
+
     this.destroy();
     this.cleanupSelect2();
 

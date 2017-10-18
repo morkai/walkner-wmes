@@ -12,12 +12,7 @@
     <input id="<%- idPrefix %>-_id" class="form-control" name="_id" type="text">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-mrp">
-      <%- t('invalidOrders', 'PROPERTY:mrp') %>
-      <% if (showOwnMrps) { %>
-      (<a id="<%- idPrefix %>-ownMrps" href="#"><%- t('orgUnits', 'filter:ownMrps') %></a>)
-      <% } %>
-    </label>
+    <label for="<%- idPrefix %>-mrp"><%- t('invalidOrders', 'PROPERTY:mrp') %></label>
     <input id="<%- idPrefix %>-mrp" name="mrp" type="text">
   </div>
   <%- renderLimit() %>

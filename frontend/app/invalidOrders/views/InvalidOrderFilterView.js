@@ -4,14 +4,12 @@ define([
   'underscore',
   'app/core/views/FilterView',
   'app/core/util/ExpandableSelect',
-  'app/users/ownMrps',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/invalidOrders/templates/filter'
 ], function(
   _,
   FilterView,
   ExpandableSelect,
-  ownMrps,
   setUpMrpSelect2,
   filterTemplate
 ) {
@@ -20,10 +18,6 @@ define([
   return FilterView.extend({
 
     template: filterTemplate,
-
-    events: _.assign({
-
-    }, ownMrps.events, FilterView.prototype.events),
 
     defaultFormData: {
       status: [],
@@ -53,20 +47,13 @@ define([
       this.$('.is-expandable').expandableSelect('destroy');
     },
 
-    serialize: function()
-    {
-      return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
-        showOwnMrps: ownMrps.hasAny()
-      });
-    },
-
     afterRender: function()
     {
       FilterView.prototype.afterRender.call(this);
 
       this.$('.is-expandable').expandableSelect();
 
-      setUpMrpSelect2(this.$id('mrp'));
+      setUpMrpSelect2(this.$id('mrp'), {own: true, view: this});
     },
 
     serializeFormToQuery: function(selector)

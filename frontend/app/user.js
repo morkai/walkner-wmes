@@ -42,6 +42,8 @@ function(
 
   delete window.GUEST_USER;
 
+  user.noReload = false;
+
   /**
    * @param {Object} userData
    */
@@ -72,7 +74,14 @@ function(
 
     user.data.privilegesMap = null;
 
-    broker.publish('user.reloaded');
+    if (user.noReload)
+    {
+      user.noReload = false;
+    }
+    else
+    {
+      broker.publish('user.reloaded');
+    }
 
     if (wasLoggedIn && !user.isLoggedIn())
     {

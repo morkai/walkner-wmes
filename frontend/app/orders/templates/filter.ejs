@@ -16,12 +16,7 @@
     <input id="<%- idPrefix %>-nc12" class="form-control orders-filter-nc12" name="nc12" type="text" maxlength="12" placeholder="<%- t('orders', 'filter:placeholder:nc12') %>">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-mrp">
-      <%- t('orders', 'PROPERTY:mrp') %>
-      <% if (showOwnMrps) { %>
-      (<a id="<%- idPrefix %>-ownMrps" href="#"><%- t('orgUnits', 'filter:ownMrps') %></a>)
-      <% } %>
-    </label>
+    <label for="<%- idPrefix %>-mrp"><%- t('orders', 'PROPERTY:mrp') %></label>
     <input id="<%- idPrefix %>-mrp" class="orders-filter-mrp" name="mrp" type="text">
   </div>
   <%- renderLimit() %>

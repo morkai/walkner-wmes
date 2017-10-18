@@ -26,12 +26,7 @@
     <input id="<%- idPrefix %>-bom" class="form-control prodShiftOrders-filter-orderId" name="bom" type="text">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-mrp">
-      <%- t('prodShiftOrders', 'filter:mrp') %>
-      <% if (showOwnMrps) { %>
-      (<a id="<%- idPrefix %>-ownMrps" href="#"><%- t('orgUnits', 'filter:ownMrps') %></a>)
-      <% } %>
-    </label>
+    <label for="<%- idPrefix %>-mrp"><%- t('prodShiftOrders', 'filter:mrp') %></label>
     <input id="<%- idPrefix %>-mrp" name="mrp" type="text" data-placeholder=" ">
   </div>
   <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>

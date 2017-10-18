@@ -9,7 +9,6 @@ define([
   'app/core/Model',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
-  'app/users/ownMrps',
   'app/delayReasons/DelayReasonCollection',
   'app/planning/Plan',
   'app/planning/PlanSettings',
@@ -26,7 +25,6 @@ define([
   Model,
   View,
   bindLoadingMessage,
-  ownMrps,
   DelayReasonCollection,
   Plan,
   PlanSettings,
@@ -204,7 +202,6 @@ define([
       var plan = this.plan;
 
       return when(
-        ownMrps.load(this),
         this.delayReasons.fetch({reset: true}),
         plan.settings.fetch(),
         plan.sapOrders.fetch({reset: true}),
