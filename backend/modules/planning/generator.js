@@ -1354,7 +1354,7 @@ module.exports = function setUpGenerator(app, module)
     const mrpSettings = state.settings.mrp(mrpId);
     const mrpLineSettings = state.settings.mrpLine(mrpId, lineId);
 
-    const maxQuantityPerLine = orderState.maxQuantityPerLine || 0;
+    const maxQuantityPerLine = getMaxQuantityPerLine(state, orderState);
     const pceTime = getPceTime(order, mrpLineSettings.workerCount);
     const activeTo = lineState.activeTo.valueOf();
     let startAt = lineState.activeFrom.valueOf();
@@ -1660,5 +1660,19 @@ module.exports = function setUpGenerator(app, module)
     }
 
     return extraShiftStartTime - (orderStartAt - shiftStartTime);
+  }
+
+  function getMaxQuantityPerLine(state, orderState)
+  {
+    const {maxQuantityPerLine} = orderState;
+
+    if (maxQuantityPerLine === 0)
+    {
+      return 0;
+    }
+
+    const availableLines = getLinesForBigOrder(state, orderState.order.mrp, orderState.order.kind);
+
+    return availableLines.length > 1 ? orderState.maxQuantityPerLine : 0;
   }
 };
