@@ -89,7 +89,14 @@
             </div>
           </div>
         </div>
-        <% if (!accountMode) { %>
+        <% if (accountMode) { %>
+        <div class="col-lg-3">
+          <div class="form-group users-form-mrp">
+            <label for="<%- idPrefix %>-mrps" class="control-label"><%- t('users', 'PROPERTY:mrps') %></label>
+            <input id="<%- idPrefix %>-mrps" name="mrps">
+          </div>
+        </div>
+        <% } else { %>
         <div class="col-lg-3">
           <div class="form-group">
             <label for="<%- idPrefix %>-company" class="control-label"><%- t('users', 'PROPERTY:company') %></label>
@@ -111,8 +118,12 @@
               <option></option>
               <% aors.forEach(function(aor) { %>
               <option value="<%- aor._id %>"><%= aor.name %>
-              <% }) %>
+                <% }) %>
             </select>
+          </div>
+          <div class="form-group users-form-mrp">
+            <label for="<%- idPrefix %>-mrps" class="control-label"><%- t('users', 'PROPERTY:mrps') %></label>
+            <input id="<%- idPrefix %>-mrps" name="mrps">
           </div>
           <div class="form-group">
             <label for="<%- idPrefix %>-vendor" class="control-label"><%- t('users', 'PROPERTY:vendor') %></label>

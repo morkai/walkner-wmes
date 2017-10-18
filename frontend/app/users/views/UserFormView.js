@@ -19,6 +19,7 @@ define([
   'app/data/privileges',
   'app/data/loadedModules',
   'app/vendors/util/setUpVendorSelect2',
+  'app/mrpControllers/util/setUpMrpSelect2',
   'app/users/templates/formMobileList',
   'app/users/templates/form'
 ], function(
@@ -40,6 +41,7 @@ define([
   privileges,
   loadedModules,
   setUpVendorSelect2,
+  setUpMrpSelect2,
   formMobileListTemplate,
   formTemplate
 ) {
@@ -146,6 +148,10 @@ define([
 
         this.listenToOnce(this.orgUnitDropdownsView, 'afterRender', this.setUpOrgUnitDropdowns);
       }
+
+      setUpMrpSelect2(this.$id('mrps'), {
+        width: '100%'
+      });
 
       this.resizeColumns();
 
@@ -357,6 +363,7 @@ define([
       formData.active = (!!formData.active).toString();
       formData.privileges = (formData.privileges || []).join(',');
       formData.vendor = null;
+      formData.mrps = (formData.mrps || []).join(',');
 
       return formData;
     },
@@ -365,7 +372,8 @@ define([
     {
       formData = _.defaults(formData, {
         privileges: [],
-        aors: []
+        aors: [],
+        mrps: []
       });
 
       ['firstName', 'lastName', 'personellId', 'email'].forEach(function(prop)
@@ -384,15 +392,13 @@ define([
         }
       });
 
-      if (typeof formData.aors === 'string')
+      ['aors', 'mrps', 'privileges'].forEach(function(prop)
       {
-        formData.aors = formData.aors.split(',');
-      }
-
-      if (typeof formData.privileges === 'string')
-      {
-        formData.privileges = formData.privileges.split(',');
-      }
+        if (typeof formData[prop] === 'string')
+        {
+          formData[prop] = formData[prop].split(',');
+        }
+      });
 
       if (formData.subdivision)
       {

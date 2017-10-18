@@ -85,6 +85,10 @@
                 <% } %>
               </div>
             </div>
+            <div class="prop">
+              <div class="prop-name"><%- t('users', 'PROPERTY:mrps') %></div>
+              <div class="prop-value"><%= _.isEmpty(model.mrps) ? '-' : model.mrps.join(', ') %></div>
+            </div>
             <% if (loadedModules.isLoaded('vendors')) { %>
             <div class="prop">
               <div class="prop-name"><%- t('users', 'PROPERTY:vendor') %></div>

@@ -47,6 +47,7 @@ module.exports = function setupUserModel(app, mongoose)
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Aor'
     }],
+    mrps: [String],
     company: {
       type: String,
       ref: 'Company'
@@ -91,6 +92,7 @@ module.exports = function setupUserModel(app, mongoose)
     presenceAt: Date
   }, {
     id: false,
+    minimize: false,
     toJSON: {
       transform: function(alarm, ret)
       {

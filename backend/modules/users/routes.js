@@ -78,7 +78,8 @@ module.exports = function setUpUsersRoutes(app, usersModule)
         req.body = _.pick(req.body, [
           '_id',
           'login', 'email', 'password', 'password2',
-          'firstName', 'lastName', 'sex', 'mobile', 'personellId'
+          'firstName', 'lastName', 'sex', 'mobile', 'personellId',
+          'mrps'
         ]);
       }
 
