@@ -1354,7 +1354,10 @@ module.exports = function setUpGenerator(app, module)
     const mrpSettings = state.settings.mrp(mrpId);
     const mrpLineSettings = state.settings.mrpLine(mrpId, lineId);
 
-    const maxQuantityPerLine = getMaxQuantityPerLine(state, orderState);
+    const lastAvailableLine = getLinesForBigOrder(state, order.mrp, order.kind).length === 1;
+    const maxQuantityPerLine = orderState.maxQuantityPerLine === 0 || lastAvailableLine
+      ? orderState.quantityTodo
+      : orderState.maxQuantityPerLine;
     const pceTime = getPceTime(order, mrpLineSettings.workerCount);
     const activeTo = lineState.activeTo.valueOf();
     let startAt = lineState.activeFrom.valueOf();
@@ -1503,7 +1506,7 @@ module.exports = function setUpGenerator(app, module)
       return;
     }
 
-    if (maxQuantityPerLine > 0 && totalQuantityPlanned / maxQuantityPerLine < 0.80)
+    if (!lastAvailableLine && totalQuantityPlanned / maxQuantityPerLine < 0.80)
     {
       return;
     }
@@ -1665,19 +1668,5 @@ module.exports = function setUpGenerator(app, module)
     }
 
     return extraShiftStartTime - (orderStartAt - shiftStartTime);
-  }
-
-  function getMaxQuantityPerLine(state, orderState)
-  {
-    const {maxQuantityPerLine} = orderState;
-
-    if (maxQuantityPerLine === 0)
-    {
-      return orderState.quantityTodo;
-    }
-
-    const availableLines = getLinesForBigOrder(state, orderState.order.mrp, orderState.order.kind);
-
-    return availableLines.length > 1 ? maxQuantityPerLine : orderState.quantityTodo;
   }
 };
