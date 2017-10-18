@@ -155,8 +155,13 @@ define([
           division: lineUnits.division ? lineUnits.division : '?',
           prodFlow: prodFlow ? prodFlow.get('name') : '?',
           prodLine: prodLine ? prodLine.get('description') : '?',
+          activeTime: this.serializeActiveTime(line, true),
           workerCount: lineMrpSettings ? lineMrpSettings.get('workerCount') : '?',
-          activeTime: this.serializeActiveTime(line, true)
+          orderPriority: !lineMrpSettings
+            ? '?'
+            : lineMrpSettings.get('orderPriority')
+                .map(function(v) { return t('planning', 'orderPriority:' + v); })
+              .join(', ')
         }
       });
     },
