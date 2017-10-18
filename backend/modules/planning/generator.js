@@ -1503,6 +1503,11 @@ module.exports = function setUpGenerator(app, module)
       return;
     }
 
+    if (maxQuantityPerLine > 0 && totalQuantityPlanned / maxQuantityPerLine < 0.80)
+    {
+      return;
+    }
+
     const initialQuantityTodo = orderState.quantityTodo;
 
     orderState.quantityTodo -= totalQuantityPlanned;
@@ -1668,11 +1673,11 @@ module.exports = function setUpGenerator(app, module)
 
     if (maxQuantityPerLine === 0)
     {
-      return 0;
+      return orderState.quantityTodo;
     }
 
     const availableLines = getLinesForBigOrder(state, orderState.order.mrp, orderState.order.kind);
 
-    return availableLines.length > 1 ? orderState.maxQuantityPerLine : 0;
+    return availableLines.length > 1 ? maxQuantityPerLine : orderState.quantityTodo;
   }
 };
