@@ -234,6 +234,11 @@ define([
       {
         var planMrp = plan.mrps.get(mrp);
 
+        if (!planMrp)
+        {
+          return;
+        }
+
         planMrp.orders.add(mrpToAddedPlanOrders[mrp]);
         planMrp.orders.trigger('added', mrpToAddedPlanOrders[mrp]);
       });
@@ -302,7 +307,7 @@ define([
         var oldMrp = plan.mrps.get(planOrder.get('mrp'));
         var newMrp = (changedOrder.changes.mrp ? plan.mrps.get(changedOrder.changes.mrp[1]) : null) || oldMrp;
 
-        if (oldMrp.id !== newMrp.id)
+        if (oldMrp && oldMrp.id !== newMrp.id)
         {
           if (!mrpToRemovedPlanOrders[oldMrp.id])
           {
@@ -314,12 +319,15 @@ define([
           oldMrp.orders.remove(planOrder);
         }
 
-        if (!mrpToChangedPlanOrders[newMrp.id])
+        if (newMrp)
         {
-          mrpToChangedPlanOrders[newMrp.id] = [];
-        }
+          if (!mrpToChangedPlanOrders[newMrp.id])
+          {
+            mrpToChangedPlanOrders[newMrp.id] = [];
+          }
 
-        mrpToChangedPlanOrders[newMrp.id].push(planOrder);
+          mrpToChangedPlanOrders[newMrp.id].push(planOrder);
+        }
 
         var attrs = {};
 
@@ -353,7 +361,7 @@ define([
       {
         var planLine = plan.lines.get(changedLine._id);
 
-        if (planLine.get('version') >= changedLine.version)
+        if (!planLine || planLine.get('version') >= changedLine.version)
         {
           return;
         }
