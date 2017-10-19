@@ -169,10 +169,11 @@ define([
           prodLine: prodLine,
           activeTime: this.serializeActiveTime(line, true),
           workerCount: lineMrpSettings ? lineMrpSettings.get('workerCount') : '?',
+          mrpPriority: line.settings ? line.settings.get('mrpPriority').join(', ') : '?',
           orderPriority: !lineMrpSettings
             ? '?'
             : lineMrpSettings.get('orderPriority')
-                .map(function(v) { return t('planning', 'orderPriority:' + v); })
+              .map(function(v) { return t('planning', 'orderPriority:' + v); })
               .join(', ')
         }
       });
