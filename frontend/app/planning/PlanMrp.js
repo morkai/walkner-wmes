@@ -94,10 +94,6 @@ define([
         }
       });
 
-      stats.manHours.todo = Math.round(stats.manHours.todo * 1000) / 1000;
-      stats.manHours.done = Math.round(stats.manHours.done * 1000) / 1000;
-      stats.manHours.late = Math.round(stats.manHours.late * 1000) / 1000;
-
       return stats;
     }
 

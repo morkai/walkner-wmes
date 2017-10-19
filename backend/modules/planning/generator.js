@@ -631,12 +631,7 @@ module.exports = function setUpGenerator(app, module)
 
   function getManHours(operation, quantityTodo)
   {
-    if (!operation)
-    {
-      return 0;
-    }
-
-    return Math.round(((operation.laborTime / 100 * quantityTodo) + operation.laborSetupTime) * 1000) / 1000;
+    return operation ? ((operation.laborTime / 100 * quantityTodo) + operation.laborSetupTime) : 0;
   }
 
   function preparePlanOrder(state, planOrder)
@@ -1309,11 +1304,6 @@ module.exports = function setUpGenerator(app, module)
       shift.manHours += planLineOrder.manHours;
       shift.quantity += planLineOrder.quantity;
       shift.orderCount += 1;
-    });
-
-    shiftData.forEach(shift =>
-    {
-      shift.manHours = Math.round(shift.manHours * 1000) / 1000;
     });
 
     planLine.shiftData = shiftData;

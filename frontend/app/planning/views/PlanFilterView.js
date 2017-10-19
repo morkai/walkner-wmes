@@ -107,11 +107,7 @@ define([
 
       this.$('.planning-mrp-stats-bd td').each(function()
       {
-        var group = this.dataset.group;
-        var decimals = group === 'manHours' ? 1000 : 1;
-        var value = Math.round(stats[group][this.dataset.subgroup] * decimals) / decimals;
-
-        this.textContent = value.toLocaleString();
+        this.textContent = stats[this.dataset.group][this.dataset.subgroup].toLocaleString();
       });
     },
 
