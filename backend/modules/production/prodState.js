@@ -11,7 +11,6 @@ module.exports = function setUpProdState(app, productionModule)
 {
   const orgUnitsModule = app[productionModule.config.orgUnitsId];
   const mongoose = app[productionModule.config.mongooseId];
-  const Setting = mongoose.model('Setting');
   const Order = mongoose.model('Order');
 
   const CRUD_OPERATION_TYPES = {
@@ -49,10 +48,7 @@ module.exports = function setUpProdState(app, productionModule)
 
   _.forEach(orgUnitsModule.getAllByType('prodLine'), function(prodLine)
   {
-    if (!prodLine.deactivatedAt)
-    {
-      createProdLineState(prodLine, false);
-    }
+    createProdLineState(prodLine, false);
   });
 
   scheduleHourChange();
@@ -187,6 +183,18 @@ module.exports = function setUpProdState(app, productionModule)
 
   function createProdLineState(prodLine, notify)
   {
+    if (prodLine.deactivatedAt)
+    {
+      return;
+    }
+
+    const subdivision = orgUnitsModule.getSubdivisionFor(prodLine);
+
+    if (!subdivision || subdivision.type !== 'assembly')
+    {
+      return;
+    }
+
     const prodLineState = new ProdLineState(app, productionModule, prodLine);
 
     prodLineStateMap[prodLine._id] = prodLineState;
