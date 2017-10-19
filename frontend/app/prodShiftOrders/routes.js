@@ -5,13 +5,15 @@ define([
   '../viewport',
   '../user',
   '../prodChangeRequests/util/createShowDeleteFormPage',
-  './ProdShiftOrder'
+  './ProdShiftOrder',
+  './ProdShiftOrderCollection'
 ], function(
   router,
   viewport,
   user,
   createShowDeleteFormPage,
-  ProdShiftOrder
+  ProdShiftOrder,
+  ProdShiftOrderCollection
 ) {
   'use strict';
 
@@ -25,7 +27,11 @@ define([
       ['app/prodShiftOrders/pages/ProdShiftOrderListPage', nls],
       function(ProdShiftOrderListPage)
       {
-        return new ProdShiftOrderListPage({rql: req.rql});
+        return new ProdShiftOrderListPage({
+          collection: new ProdShiftOrderCollection(null, {
+            rqlQuery: req.rql
+          })
+        });
       }
     );
   });

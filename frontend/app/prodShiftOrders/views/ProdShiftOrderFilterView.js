@@ -95,7 +95,7 @@ define([
       }
     },
 
-    events: {
+    events: _.assign({
 
       'focus .prodShiftOrders-filter-orderId': function(e)
       {
@@ -121,13 +121,13 @@ define([
         $input[0].disabled = true;
       }
 
-    },
+    }, FilterView.prototype.events),
 
     initialize: function()
     {
       FilterView.prototype.initialize.apply(this, arguments);
 
-      this.setView('#' + this.idPrefix + '-orgUnit', new OrgUnitPickerView({
+      this.setView('#-orgUnit', new OrgUnitPickerView({
         filterView: this
       }));
     },

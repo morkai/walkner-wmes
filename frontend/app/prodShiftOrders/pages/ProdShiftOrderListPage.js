@@ -2,32 +2,23 @@
 
 define([
   'app/i18n',
-  'app/viewport',
-  'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
-  'app/core/View',
-  '../ProdShiftOrderCollection',
-  '../views/ProdShiftOrderListView',
+  'app/core/pages/FilteredListPage',
   '../views/ProdShiftOrderFilterView',
-  'app/core/templates/listPage'
+  '../views/ProdShiftOrderListView'
 ], function(
   t,
-  viewport,
-  bindLoadingMessage,
   pageActions,
-  View,
-  ProdShiftOrderCollection,
-  ProdShiftOrderListView,
+  FilteredListPage,
   ProdShiftOrderFilterView,
-  listPageTemplate
+  ProdShiftOrderListView
 ) {
   'use strict';
 
-  return View.extend({
+  return FilteredListPage.extend({
 
-    template: listPageTemplate,
-
-    layoutName: 'page',
+    FilterView: ProdShiftOrderFilterView,
+    ListView: ProdShiftOrderListView,
 
     pageId: 'prodShiftOrderList',
 
@@ -38,48 +29,6 @@ define([
     actions: function(layout)
     {
       return [pageActions.export(layout, this, this.collection)];
-    },
-
-    initialize: function()
-    {
-      this.defineModels();
-      this.defineViews();
-
-      this.setView('.filter-container', this.filterView);
-      this.setView('.list-container', this.listView);
-    },
-
-    defineModels: function()
-    {
-      this.collection = bindLoadingMessage(
-        new ProdShiftOrderCollection(null, {rqlQuery: this.options.rql}), this
-      );
-    },
-
-    defineViews: function()
-    {
-      this.listView = new ProdShiftOrderListView({collection: this.collection});
-
-      this.filterView = new ProdShiftOrderFilterView({
-        model: {
-          rqlQuery: this.collection.rqlQuery
-        }
-      });
-
-      this.listenTo(this.filterView, 'filterChanged', this.refreshList);
-    },
-
-    refreshList: function(newRqlQuery)
-    {
-      this.collection.rqlQuery = newRqlQuery;
-
-      this.listView.refreshCollectionNow();
-
-      this.broker.publish('router.navigate', {
-        url: this.collection.genClientUrl() + '?' + newRqlQuery,
-        trigger: false,
-        replace: true
-      });
     }
 
   });
