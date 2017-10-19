@@ -7,6 +7,7 @@ const _ = require('lodash');
 const step = require('h5.step');
 const moment = require('moment');
 const deepEqual = require('deep-equal');
+const levenSort = require('leven-sort');
 const setUpAutoDowntimeCache = require('./autoDowntimeCache');
 
 const ORDER_IGNORED_PROPERTIES = {
@@ -36,7 +37,7 @@ module.exports = function setUpGenerator(app, module)
     return;
   }
 
-  const log = app.options.env === 'development'
+  const log = 0 && app.options.env === 'development'
     ? m => console.log(m)
     : () => {};
 
@@ -46,6 +47,7 @@ module.exports = function setUpGenerator(app, module)
   const PlanSettings = mongoose.model('PlanSettings');
   const PlanChange = mongoose.model('PlanChange');
 
+  const orderNamePartsCache = new Map();
   const autoDowntimeCache = setUpAutoDowntimeCache(app, module);
   const generatorQueue = [];
   let generatorTimer = null;
@@ -1054,7 +1056,10 @@ module.exports = function setUpGenerator(app, module)
         order: planOrder,
         quantityTodo: getQuantityTodo(state, planOrder),
         maxQuantityPerLine: 0,
-        firstStartAt: 0
+        firstStartAt: 0,
+        name: planOrder.name,
+        nameParts: getOrderNameParts(planOrder),
+        nameRank: 0
       };
 
       if (planOrder.urgent)
@@ -1070,9 +1075,12 @@ module.exports = function setUpGenerator(app, module)
     for (const orderStateQueues of state.orderStateQueues.values())
     {
       orderStateQueues.urgent.sort(sortUrgentOrders);
-      orderStateQueues.small.sort(sortEasyOrders);
       orderStateQueues.easy.sort(sortEasyOrders);
       orderStateQueues.hard.sort(sortHardOrders);
+
+      orderStateQueues.small.sort(sortEasyOrders);
+      //sortSmallOrdersLevan(orderStateQueues);
+      //sortSmallOrdersParts(orderStateQueues);
     }
 
     setImmediate(done);
@@ -1091,6 +1099,109 @@ module.exports = function setUpGenerator(app, module)
     }
 
     return a.quantityTodo - b.quantityTodo;
+  }
+
+  function sortSmallOrdersLevan(orderStateQueues)
+  {
+    const smallOrderStateQueue = orderStateQueues.small;
+
+    if (smallOrderStateQueue.length <= 1)
+    {
+      return;
+    }
+
+    smallOrderStateQueue.sort(sortEasyOrders);
+
+    if (smallOrderStateQueue.length === 2)
+    {
+      return;
+    }
+
+    const sortedQueue = [
+      smallOrderStateQueue.shift()
+    ];
+
+    while (smallOrderStateQueue.length)
+    {
+      levenSort(smallOrderStateQueue, _.last(sortedQueue).name, 'name');
+
+      sortedQueue.push(smallOrderStateQueue.shift());
+    }
+
+    orderStateQueues.small = sortedQueue;
+  }
+
+  function sortSmallOrdersParts(orderStateQueues)
+  {
+    const smallOrderStateQueue = orderStateQueues.small;
+
+    if (smallOrderStateQueue.length <= 1)
+    {
+      return;
+    }
+
+    smallOrderStateQueue.sort(sortEasyOrders);
+
+    if (smallOrderStateQueue.length === 2)
+    {
+      return;
+    }
+
+    const sortedSmallOrderStateQueue = [
+      smallOrderStateQueue.shift()
+    ];
+
+    while (smallOrderStateQueue.length)
+    {
+      const lastNameParts = _.last(sortedSmallOrderStateQueue).nameParts;
+
+      for (let i = 0; i < smallOrderStateQueue.length; ++i)
+      {
+        rankSmallOrderName(smallOrderStateQueue[i], lastNameParts);
+      }
+
+      smallOrderStateQueue.sort(sortSmallOrdersByNameRank);
+
+      sortedSmallOrderStateQueue.push(smallOrderStateQueue.shift());
+    }
+
+    orderStateQueues.small = sortedSmallOrderStateQueue;
+  }
+
+  function sortSmallOrdersByNameRank(a, b)
+  {
+    return b.nameRank - a.nameRank;
+  }
+
+  function getOrderNameParts(order)
+  {
+    if (order.kind !== 'small')
+    {
+      return null;
+    }
+
+    if (!orderNamePartsCache.has(order.name))
+    {
+      orderNamePartsCache.set(order.name, {
+        family: order.name.substring(0, 6),
+        parts: order.name.substring(6).trim().split(' ')
+      });
+    }
+
+    return orderNamePartsCache.get(order.name);
+  }
+
+  function rankSmallOrderName(smallOrderState, lastNameParts)
+  {
+    smallOrderState.nameRank = smallOrderState.nameParts.family === lastNameParts.family ? 5 : 0;
+
+    lastNameParts.parts.forEach(namePart =>
+    {
+      if (smallOrderState.nameParts.parts.includes(namePart))
+      {
+        smallOrderState.nameRank += 1;
+      }
+    });
   }
 
   function sortEasyOrders(a, b)
@@ -1212,7 +1323,7 @@ module.exports = function setUpGenerator(app, module)
 
   function generatePlanForLine(state, lineState, done)
   {
-    state.log(`[${lineState._id}] Generating...`);
+    log(`[${lineState._id}] Generating...`);
 
     while (!lineState.completed)
     {
