@@ -1063,10 +1063,10 @@ app/prodLogEntries/routes.js
 app/prodShiftOrders/util/decorateProdShiftOrder.js
 app/prodShiftOrders/util/calcOrderEfficiency.js
 app/prodShiftOrders/ProdShiftOrder.js
-app/prodShiftOrders/routes.js
 app/core/util/matchesEquals.js
 app/core/util/matchesProdLine.js
 app/prodShiftOrders/ProdShiftOrderCollection.js
+app/prodShiftOrders/routes.js
 app/isaPalletKinds/IsaPalletKind.js
 app/isaPalletKinds/IsaPalletKindCollection.js
 app/data/isaPalletKinds.js
