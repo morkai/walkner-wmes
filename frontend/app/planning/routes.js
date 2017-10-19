@@ -96,7 +96,11 @@ define([
 
     if (navbarView)
     {
-      navbarView.$id('planning-2d').toggleClass('disabled', time.getMoment().hours() < 17);
+      var moment = time.getMoment();
+      var hours = moment.hours();
+      var day = moment.day();
+
+      navbarView.$id('planning-2d').toggleClass('disabled', (day === 1 || day === 2 || day === 3) && hours < 17);
     }
 
     setTimeout(toggleNavbarPlanning2D, 60000);
