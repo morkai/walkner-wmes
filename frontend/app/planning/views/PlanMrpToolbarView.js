@@ -2,22 +2,26 @@
 
 define([
   'underscore',
+  'jquery',
   'app/i18n',
   'app/time',
   'app/viewport',
   'app/core/View',
   '../util/shift',
   'app/planning/templates/toolbar',
+  'app/planning/templates/toolbarSetHourlyPlan',
   'app/planning/templates/toolbarPrintLineList',
   'app/planning/templates/printPage'
 ], function(
   _,
+  $,
   t,
   time,
   viewport,
   View,
   shiftUtil,
   toolbarTemplate,
+  toolbarSetHourlyPlanTemplate,
   toolbarPrintLineListTemplate,
   printPageTemplate
 ) {
@@ -29,6 +33,41 @@ define([
 
     events: {
 
+      'click #-setHourlyPlan': function()
+      {
+        var $popover = this.$popover;
+        var $btn = this.$id('setHourlyPlan');
+
+        this.hidePopover();
+
+        if ($popover && $popover[0] === $btn[0])
+        {
+          return;
+        }
+
+        this.$popover = this.$id('setHourlyPlan').popover({
+          container: this.el,
+          trigger: 'manual',
+          placement: 'left',
+          html: 1,
+          content: toolbarSetHourlyPlanTemplate({idPrefix: this.idPrefix}),
+          template: '<div class="popover planning-mrp-toolbar-setHourlyPlans">'
+            + '<div class="arrow"></div>'
+            + '<div class="popover-content"></div>'
+            + '</div>'
+        });
+
+        this.$popover.popover('show');
+      },
+      'click #-setHourlyPlan-yes': function()
+      {
+        this.hidePopover();
+        this.setHourlyPlan();
+      },
+      'click #-setHourlyPlan-no': function()
+      {
+        this.hidePopover();
+      },
       'click a[data-print-line]': function(e)
       {
         this.printLines(e.currentTarget.dataset.printLine);
@@ -45,12 +84,23 @@ define([
 
     },
 
+    localTopics: {
+
+      'planning.escapePressed': 'hidePopover'
+
+    },
+
     initialize: function()
     {
       this.listenTo(this.plan.lateOrders, 'reset', this.scheduleRender);
       this.listenTo(this.plan.sapOrders, 'reset', this.scheduleRender);
       this.listenTo(this.mrp.orders, 'added removed changed reset', this.scheduleRender);
       this.listenTo(this.mrp.lines, 'added removed changed reset', this.scheduleRender);
+    },
+
+    destroy: function()
+    {
+      this.hidePopover();
     },
 
     serialize: function()
@@ -80,6 +130,15 @@ define([
       }
 
       this.timers.render = setTimeout(this.render.bind(this), 1);
+    },
+
+    hidePopover: function()
+    {
+      if (this.$popover)
+      {
+        this.$popover.popover('destroy');
+        this.$popover = null;
+      }
     },
 
     printLines: function(what)
@@ -221,6 +280,34 @@ define([
         .find('.fa')
         .removeClass('fa-check fa-times')
         .addClass(this.plan.displayOptions.isOrderTimePrinted() ? 'fa-check' : 'fa-times');
+    },
+
+    setHourlyPlan: function()
+    {
+      var view = this;
+      var $btn = view.$id('setHourlyPlan').prop('disabled', true);
+
+      viewport.msg.saving();
+
+      var req = view.plan.setHourlyPlans(function(planLine)
+      {
+        return !!view.mrp.lines.get(planLine.id);
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.savingFailed();
+      });
+
+      req.done(function()
+      {
+        viewport.msg.saved();
+      });
+
+      req.always(function()
+      {
+        $btn.prop('disabled', false);
+      });
     }
 
   });

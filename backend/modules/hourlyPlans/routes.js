@@ -16,7 +16,7 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
   const HourlyPlan = mongoose.model('HourlyPlan');
   const DailyMrpPlan = mongoose.model('DailyMrpPlan');
 
-  const canView = auth('HOURLY_PLANS:VIEW');
+  const canView = auth('HOURLY_PLANS:VIEW', 'PLANNING:MANAGE', 'PLANNING:PLANNER');
   const canManageDailyMrpPlans = auth('HOURLY_PLANS:MANAGE', 'PROD_DATA:MANAGE');
 
   express.get(

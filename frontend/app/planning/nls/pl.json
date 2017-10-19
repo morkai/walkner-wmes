@@ -25,6 +25,8 @@
   "toolbar:printPlan": "Drukuj plan linii",
   "toolbar:printPlan:all": "Wszystkie linie",
   "toolbar:showTimes": "Pokazuj czasy",
+  "toolbar:setHourlyPlan": "Ustaw ilości godzinowe",
+  "toolbar:setHourlyPlan:cancel": "Anuluj",
   "toolbar:stats:quantity": "Sztuki:",
   "toolbar:stats:manHours": "RBH:",
   "toolbar:stats:todo": "Zlecenia:",

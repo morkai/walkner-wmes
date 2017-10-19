@@ -19,15 +19,8 @@ module.exports = function canManage(user, hourlyPlan) // eslint-disable-line no-
     return false;
   }
 
-  if (user.privileges.indexOf('PROD_DATA:MANAGE') !== -1)
-  {
-    return true;
-  }
-
-  if (user.privileges.indexOf('HOURLY_PLANS:MANAGE') === -1)
-  {
-    return false;
-  }
-
-  return true;
+  return user.privileges.includes('PROD_DATA:MANAGE')
+    || user.privileges.includes('HOURLY_PLANS:MANAGE')
+    || user.privileges.includes('PLANNING:MANAGE')
+    || user.privileges.includes('PLANNING:PLANNER');
 };

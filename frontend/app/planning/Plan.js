@@ -2,9 +2,13 @@
 
 define([
   'underscore',
+  'jquery',
   '../time',
   '../user',
+  '../socket',
   '../core/Model',
+  '../data/orgUnits',
+  './util/shift',
   './changeHandlers',
   './PlanOrderCollection',
   './PlanLineCollection',
@@ -13,9 +17,13 @@ define([
   './PlanLateOrderCollection'
 ], function(
   _,
+  $,
   time,
   user,
+  socket,
   Model,
+  orgUnits,
+  shiftUtil,
   changeHandlers,
   PlanOrderCollection,
   PlanLineCollection,
@@ -190,6 +198,135 @@ define([
           changeHandlers[what](plan, planChange.data[what]);
         }
       });
+    },
+
+    setHourlyPlans: function(lineFilter)
+    {
+      var plan = this;
+      var divisionToProdFlowToPlan = {};
+
+      plan.lines.forEach(function(planLine)
+      {
+        if (lineFilter && !lineFilter(planLine))
+        {
+          return;
+        }
+
+        var prodLine = orgUnits.getByTypeAndId('prodLine', planLine.id);
+
+        if (!prodLine)
+        {
+          return;
+        }
+
+        var ou = orgUnits.getAllForProdLine(prodLine);
+        var division = ou.division;
+        var prodFlow = ou.prodFlow;
+
+        if (!division || !prodFlow)
+        {
+          return;
+        }
+
+        var prodFlowToPlan = divisionToProdFlowToPlan[division];
+
+        if (!prodFlowToPlan)
+        {
+          prodFlowToPlan = divisionToProdFlowToPlan[division] = {};
+        }
+
+        var hourlyPlan = prodFlowToPlan[prodFlow];
+
+        if (!hourlyPlan)
+        {
+          hourlyPlan = prodFlowToPlan[prodFlow] = shiftUtil.EMPTY_HOURLY_PLAN.slice();
+        }
+
+        planLine.get('hourlyPlan').forEach(function(v, k)
+        {
+          hourlyPlan[k] += v;
+        });
+      });
+
+      var date = time.getMoment(plan.id, 'YYYY-MM-DD').toISOString();
+      var shift = 1;
+      var promises = [];
+
+      _.forEach(divisionToProdFlowToPlan, function(prodFlowToPlan, division)
+      {
+        promises.push(plan.setHourlyPlan(division, date, shift, prodFlowToPlan));
+      });
+
+      return $.when.apply($, promises);
+    },
+
+    setHourlyPlan: function(division, date, shift, prodFlowToPlan)
+    {
+      var deferred = $.Deferred(); // eslint-disable-line new-cap
+      var data = {
+        division: division,
+        date: date,
+        shift: shift
+      };
+
+      socket.emit('hourlyPlans.findOrCreate', data, function(err, hourlyPlanId)
+      {
+        if (err)
+        {
+          return deferred.reject(err);
+        }
+
+        var findHourlyPlanReq = $.ajax({url: '/hourlyPlans/' + hourlyPlanId});
+
+        findHourlyPlanReq.fail(function()
+        {
+          deferred.reject(new Error('FIND_HOURLY_PLAN_FAILURE'));
+        });
+
+        findHourlyPlanReq.done(function(hourlyPlan)
+        {
+          var promises = [];
+
+          hourlyPlan.flows.forEach(function(flow, flowIndex)
+          {
+            var newValues = prodFlowToPlan[flow.id];
+
+            if (newValues)
+            {
+              var deferred2 = $.Deferred(); // eslint-disable-line new-cap
+
+              data = {
+                type: 'counts',
+                socketId: socket.getId(),
+                _id: hourlyPlanId,
+                flowIndex: flowIndex,
+                newValues: newValues
+              };
+
+              socket.emit('hourlyPlans.updateCounts', data, function(err)
+              {
+                if (err)
+                {
+                  deferred2.reject(err);
+                }
+                else
+                {
+                  deferred.resolve();
+                }
+              });
+
+              promises.push(deferred2.promise());
+            }
+          });
+
+          $.when.apply($, promises).then(
+            function() { deferred.resolve(); },
+            function(err) { deferred.reject(err); }
+          );
+        });
+      });
+
+      return deferred.promise();
     }
 
   }, {

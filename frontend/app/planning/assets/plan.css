@@ -28,6 +28,10 @@
   margin-left: 10px;
   width: 14px;
 }
+.planning-mrp-toolbar-setHourlyPlans > .popover-content {
+  display: flex;
+  padding: 0;
+}
 .planning-mrp-hd {
   margin-top: 5px;
   margin-bottom: 5px;

@@ -2,14 +2,6 @@
   <div class="btn-group">
     <table class="planning-mrp-stats">
       <tbody>
-      <!--
-      <tr class="planning-mrp-stats-hd">
-        <td></td>
-        <th><%- t('planning', 'toolbar:stats:todo') %></th>
-        <th><%- t('planning', 'toolbar:stats:late') %></th>
-        <th><%- t('planning', 'toolbar:stats:done') %></th>
-      </tr>
-      //-->
       <% ['manHours', 'quantity'].forEach(function(group) { %>
       <tr class="planning-mrp-stats-bd">
         <th><%- t('planning', 'toolbar:stats:' + group) %></th>
@@ -22,6 +14,9 @@
     </table>
   </div>
   <div class="btn-group">
+    <% if (user.isAllowedTo('PLANNING:MANAGE', 'PLANNING:PLANNER')) { %>
+    <button id="<%- idPrefix %>-setHourlyPlan" type="button" class="btn btn-default" title="<%- t('planning', 'toolbar:setHourlyPlan') %>"><i class="fa fa-calendar"></i></button>
+    <% } %>
     <div id="<%- idPrefix %>-printDropdown" class="btn-group" role="group">
       <button id="<%- idPrefix %>-printPlan" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="<%- t('planning', 'toolbar:printPlan') %>" <%- lines.length ? '' : 'disabled' %>>
         <i class="fa fa-print"></i>
