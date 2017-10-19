@@ -20,7 +20,8 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
   const canView = userModule.auth('ORDERS:VIEW');
   const canPrint = userModule.auth('LOCAL', 'ORDERS:VIEW');
-  const canManage = userModule.auth('ORDERS:MANAGE', 'FN:master', 'FN:leader');
+  const canManage = userModule.auth('ORDERS:MANAGE');
+  const canEdit = userModule.auth('ORDERS:MANAGE', 'PLANNING:PLANNER', 'FN:master', 'FN:leader');
 
   express.post('/orders;import', importOrdersRoute);
 
@@ -51,7 +52,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
   express.get('/orders/:id', express.crud.readRoute.bind(null, app, Order));
 
-  express.post('/orders/:id', canManage, editOrderRoute);
+  express.post('/orders/:id', canEdit, editOrderRoute);
 
   function editOrderRoute(req, res, next)
   {
