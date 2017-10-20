@@ -7,6 +7,7 @@ define([
   'app/time',
   'app/viewport',
   'app/core/View',
+  'app/data/clipboard',
   '../util/shift',
   'app/planning/templates/toolbar',
   'app/planning/templates/toolbarSetHourlyPlan',
@@ -19,6 +20,7 @@ define([
   time,
   viewport,
   View,
+  clipboard,
   shiftUtil,
   toolbarTemplate,
   toolbarSetHourlyPlanTemplate,
@@ -68,9 +70,13 @@ define([
       {
         this.hidePopover();
       },
-      'click a[data-print-line]': function(e)
+      'click a[role="copyOrderList"]': function(e)
       {
-        this.printLines(e.currentTarget.dataset.printLine);
+        this.copyOrderList(+e.currentTarget.dataset.shift);
+      },
+      'click a[role="printLines"]': function(e)
+      {
+        this.printLines(e.currentTarget.dataset.line);
       },
       'click #-showTimes': function()
       {
@@ -80,7 +86,7 @@ define([
 
         return false;
       },
-      'show.bs.dropdown #-printDropdown': 'toggleShowTimes'
+      'show.bs.dropdown #-printLines': 'toggleShowTimes'
 
     },
 
@@ -139,6 +145,42 @@ define([
         this.$popover.popover('destroy');
         this.$popover = null;
       }
+    },
+
+    copyOrderList: function(shiftNo)
+    {
+      var view = this;
+      var orderList = view.plan.getOrderList(
+        function(planLine) { return !!view.mrp.lines.get(planLine.id); },
+        shiftNo
+      );
+
+      clipboard.copy(function(clipboardData)
+      {
+        if (!clipboardData)
+        {
+          return;
+        }
+
+        clipboardData.setData('text/plain', orderList.join('\r\n'));
+        clipboardData.setData('text/html', '<ul><li>' + orderList.join('</li><li>') + '</li></ul>');
+
+        var $btn = view.$id('copyOrderList').tooltip({
+          container: view.el,
+          trigger: 'manual',
+          placement: 'left',
+          title: t('planning', 'toolbar:copyOrderList:success')
+        });
+
+        $btn.tooltip('show').data('bs.tooltip').tip().addClass('result success');
+
+        if (view.timers.hideTooltip)
+        {
+          clearTimeout(view.timers.hideTooltip);
+        }
+
+        view.timers.hideTooltip = setTimeout(function() { $btn.tooltip('destroy'); }, 1337);
+      });
     },
 
     printLines: function(what)

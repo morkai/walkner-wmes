@@ -1,11 +1,12 @@
 <% if (lines.length > 1) { %>
-<li><a data-print-line="__ALL__" href="javascript:void(0)"><%= t('planning', 'toolbar:printPlan:all') %></a>
+<li><a role="printLines" data-line="__ALL__" href="javascript:void(0)"><%= t('planning', 'toolbar:printPlan:all') %></a></li>
 <% } %>
 <% lines.forEach(function(line) { %>
-<li><a data-print-line="<%= line %>" href="javascript:void(0)"><%= line %></a>
+<li><a role="printLines" data-line="<%= line %>" href="javascript:void(0)"><%= line %></a></li>
 <% }) %>
-<li class="divider">
+<li class="divider"></li>
 <li>
   <a id="<%- idPrefix %>-showTimes" class="planning-mrp-toolbar-showTimes" href="javascript:void(0)">
     <span><%- t('planning', 'toolbar:showTimes') %></span><span class="fa fa-check"></span>
   </a>
+</li>

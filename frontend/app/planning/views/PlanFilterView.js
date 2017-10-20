@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/time',
   'app/core/View',
+  'app/data/clipboard',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/planning/templates/planFilter'
 ], function(
@@ -14,6 +15,7 @@ define([
   t,
   time,
   View,
+  clipboard,
   setUpMrpSelect2,
   template
 ) {
@@ -35,6 +37,10 @@ define([
       'click #-useLatestOrderData': function()
       {
         this.plan.displayOptions.toggleLatestOrderDataUse();
+      },
+      'click a[role="copyOrderList"]': function(e)
+      {
+        this.copyOrderList(+e.currentTarget.dataset.shift);
       }
 
     },
@@ -74,6 +80,46 @@ define([
         sortable: true,
         own: true,
         view: this
+      });
+    },
+
+    copyOrderList: function(shiftNo)
+    {
+      var view = this;
+      var visibleLines = {};
+
+      $('.is-line[data-id]').each(function() { visibleLines[this.dataset.id] = true; });
+
+      var orderList = view.plan.getOrderList(
+        function(planLine) { return visibleLines[planLine.id] === true; },
+        shiftNo
+      );
+
+      clipboard.copy(function(clipboardData)
+      {
+        if (!clipboardData)
+        {
+          return;
+        }
+
+        clipboardData.setData('text/plain', orderList.join('\r\n'));
+        clipboardData.setData('text/html', '<ul><li>' + orderList.join('</li><li>') + '</li></ul>');
+
+        var $btn = view.$id('copyOrderList').tooltip({
+          container: view.el,
+          trigger: 'manual',
+          placement: 'bottom',
+          title: t('planning', 'toolbar:copyOrderList:success')
+        });
+
+        $btn.tooltip('show').data('bs.tooltip').tip().addClass('result success');
+
+        if (view.timers.hideTooltip)
+        {
+          clearTimeout(view.timers.hideTooltip);
+        }
+
+        view.timers.hideTooltip = setTimeout(function() { $btn.tooltip('destroy'); }, 1337);
       });
     },
 

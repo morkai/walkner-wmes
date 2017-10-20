@@ -22,9 +22,9 @@ define(['app/time'], function(time)
 
     getShiftNo: function(time)
     {
-      var h = new Date(this.getShiftStartTime(time)).getUTCHours();
+      var h = new Date(time).getUTCHours();
 
-      return h === 6 ? 1 : h === 14 ? 2 : 3;
+      return h >= 6 && h < 14 ? 1 : h >= 14 && h < 22 ? 2 : 3;
     },
 
     getShiftStartTime: function(time)

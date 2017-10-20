@@ -368,6 +368,23 @@ code.multiline {
   color: #e00;
 }
 
+.tooltip.in.result {
+  opacity: 1;
+}
+.tooltip.result > .tooltip-arrow {
+  display: none;
+}
+.tooltip.success > .tooltip-inner {
+  background-color: #BBDF8D;
+  color: #000;
+}
+.tooltip.left.result {
+  margin-left: 0;
+}
+.tooltip.bottom.result {
+  margin-top: 0;
+}
+
 @media (max-width: 767px) {
   .page-actions {
     float: none;

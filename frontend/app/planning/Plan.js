@@ -327,6 +327,31 @@ define([
       });
 
       return deferred.promise();
+    },
+
+    getOrderList: function(lineFilter, shiftNo)
+    {
+      var orderMap = {};
+
+      this.lines.forEach(function(line)
+      {
+        if (lineFilter && !lineFilter(line))
+        {
+          return;
+        }
+
+        line.orders.forEach(function(lineOrder)
+        {
+          if (shiftNo && lineOrder.getShiftNo() !== shiftNo)
+          {
+            return;
+          }
+
+          orderMap[lineOrder.get('orderNo')] = true;
+        });
+      });
+
+      return Object.keys(orderMap);
     }
 
   }, {

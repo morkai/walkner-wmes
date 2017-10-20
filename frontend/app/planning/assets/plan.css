@@ -1,3 +1,7 @@
+.planning-plan .dropdown-menu > li > a:hover {
+  color: #333;
+  background-color: #ffffa6;
+}
 .planning-mrp {
   margin-top: 20px;
   padding-top: 15px;
