@@ -112,6 +112,7 @@ define([
         trigger: 'hover',
         placement: 'top',
         html: true,
+        hasContent: true,
         content: function() { return view.serializePopover(this.dataset.id); },
         template: '<div class="popover planning-mrp-popover">'
           + '<div class="arrow"></div>'
@@ -145,7 +146,7 @@ define([
 
       if (!line)
       {
-        return null;
+        return '?';
       }
 
       var lineUnits = orgUnits.getAllForProdLine(lineId);

@@ -81,6 +81,9 @@
   box-shadow: inset -3px -3px 24px #ccc;
   overflow: hidden;
 }
+.planning-mrp-list-hd.is-offline {
+  opacity: 0.75;
+}
 .planning-mrp-list {
   position: relative;
   display: flex;
@@ -139,10 +142,8 @@
 .planning-mrp-list-item.is-invalid:hover {
   background-color: #FFD1D1;
 }
-.planning-mrp-list-item.is-selected,
-.planning-mrp-list-item.is-selected:hover {
-  background-color: #0AF!important;
-  color: #FFF;
+.planning-mrp-list-item.is-selected {
+  background-color: #d9edf7;
 }
 .planning-mrp-list-item.is-highlighted {
   background-color: #FFFFA6!important;
@@ -304,6 +305,18 @@
 }
 .planning-mrp-lineOrders-shift + .planning-mrp-list {
   border-left: 0;
+}
+.planning-mrp-lineOrders-shift[data-state="idle"] {
+  background: #000;
+  color: #fff;
+}
+.planning-mrp-lineOrders-shift[data-state="working"] {
+  background: #5cb85c;
+  color: #fff;
+}
+.planning-mrp-lineOrders-shift[data-state="downtime"] {
+  background: #d9534f;
+  color: #fff;
 }
 .planning-mrp-popover {
   max-width: none;

@@ -8,6 +8,12 @@
     <th><%- t('planning', 'lineOrders:qty:planned') %></th>
     <td><%- lineOrder.quantityPlanned.toLocaleString() %></td>
   </tr>
+  <% if (lineOrder.quantityDone >= 0) { %>
+  <tr>
+    <th><%- t('planning', 'lineOrders:qty:done') %></th>
+    <td><%- lineOrder.quantityDone.toLocaleString() %></td>
+  </tr>
+  <% } %>
   <% if (lineOrder.quantityRemaining) { %>
   <tr>
     <th><%- t('planning', 'lineOrders:qty:remaining') %></th>

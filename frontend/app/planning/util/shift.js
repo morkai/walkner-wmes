@@ -1,7 +1,10 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(['app/time'], function(time)
-{
+define([
+  'app/time'
+], function(
+  time
+) {
   'use strict';
 
   return {
@@ -19,6 +22,16 @@ define(['app/time'], function(time)
       2, 3, 4, 5, 6, 7, 8, 9,
       10, 11, 12, 13, 14, 15, 16, 17
     ],
+
+    isActive: function(planDate)
+    {
+      var planMoment = time.getMoment(planDate, 'YYYY-MM-DD');
+      var startTime = planMoment.hours(6).valueOf();
+      var endTime = planMoment.add(24, 'hours').valueOf();
+      var now = Date.now();
+
+      return now >= startTime && now < endTime;
+    },
 
     getShiftNo: function(time)
     {

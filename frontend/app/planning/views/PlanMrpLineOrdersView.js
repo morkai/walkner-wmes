@@ -95,11 +95,21 @@ define([
     {
       var view = this;
 
+      view.listenTo(view.plan, 'change:active', this.renderIfNotLoading);
+
+      view.listenTo(view.plan.displayOptions, 'change:useLatestOrderData', view.render);
+
+      view.listenTo(view.plan.sapOrders, 'reset', view.onSapOrdersReset);
+
       view.listenTo(view.line.orders, 'reset', view.render);
+
       view.listenTo(view.mrp.orders, 'highlight', view.onOrderHighlight);
       view.listenTo(view.mrp.orders, 'change:incomplete', view.onIncompleteChange);
-      view.listenTo(view.plan.displayOptions, 'change:useLatestOrderData', view.render);
-      view.listenTo(view.plan.sapOrders, 'reset', view.onSapOrdersReset);
+
+      view.listenTo(view.prodLineState, 'change:online', view.onOnlineChange);
+      view.listenTo(view.prodLineState, 'change:state', view.updateShiftState);
+      view.listenTo(view.prodLineState, 'change:prodShift', view.updateShiftState);
+      view.listenTo(view.prodLineState, 'change:prodShiftOrders', view.updateShiftState);
     },
 
     destroy: function()
@@ -109,10 +119,13 @@ define([
 
     serialize: function()
     {
+      var prodState = this.serializeProdState();
+
       return {
         idPrefix: this.idPrefix,
         line: this.line.id,
-        shifts: this.serializeShifts()
+        prodState: prodState,
+        shifts: this.serializeShifts(prodState)
       };
     },
 
@@ -129,6 +142,7 @@ define([
         {
           return this.$element.attr('data-popover-placement') || 'top';
         },
+        hasContent: true,
         content: function()
         {
           switch (this.dataset.popoverContent)
@@ -153,12 +167,44 @@ define([
       });
     },
 
+    renderIfNotLoading: function()
+    {
+      if (!this.plan.isAnythingLoading())
+      {
+        this.render();
+      }
+    },
+
     $item: function(id)
     {
       return id ? this.$('.planning-mrp-list-item[data-id="' + id + '"]') : this.$('.planning-mrp-list-item');
     },
 
-    serializeShifts: function()
+    serializeProdState: function()
+    {
+      if (!this.plan.isProdStateUsed())
+      {
+        return {
+          online: '',
+          shift: 0,
+          state: '',
+          orderNo: ''
+        };
+      }
+
+      var prodLineState = this.prodLineState;
+      var prodShift = prodLineState.get('prodShift');
+      var prodShiftOrder = prodLineState.getCurrentOrder();
+
+      return {
+        online: prodLineState.get('online') ? 'is-online' : 'is-offline',
+        state: prodLineState.get('state') || '',
+        shift: prodShift ? prodShift.get('shift') : 0,
+        orderNo: prodShiftOrder ? prodShiftOrder.get('orderId') : ''
+      };
+    },
+
+    serializeShifts: function(prodState)
     {
       var plan = this.plan;
       var planMrp = this.mrp;
@@ -170,12 +216,16 @@ define([
         return shifts;
       }
 
-      shifts.push(
-        null,
-        {no: 1, startTime: 0, orders: [], downtimes: []},
-        {no: 2, startTime: 0, orders: [], downtimes: []},
-        {no: 3, startTime: 0, orders: [], downtimes: []}
-      );
+      [0, 1, 2, 3].forEach(function(no)
+      {
+        shifts.push({
+          no: no,
+          state: prodState.shift === no ? prodState.state : '',
+          startTime: 0,
+          orders: [],
+          downtimes: []
+        });
+      });
 
       var anyMissingOrder = false;
 
@@ -218,6 +268,7 @@ define([
           completed: orderData.quantityDone >= orderData.quantityTodo,
           confirmed: orderData.statuses.indexOf('CNF') !== -1,
           delivered: orderData.statuses.indexOf('DLV') !== -1,
+          selected: shift.state && order.id === prodState.orderNo,
           finishAt: finishAt,
           margin: (startAt - prevFinishedAt) * 100 / shiftUtil.SHIFT_DURATION,
           width: duration * 100 / shiftUtil.SHIFT_DURATION,
@@ -288,16 +339,29 @@ define([
     {
       var lineOrder = this.line.orders.get(id);
       var order = this.plan.orders.get(lineOrder.get('orderNo'));
+      var orderData = this.plan.getActualOrderData(order.id);
       var startAt = Date.parse(lineOrder.get('startAt'));
       var finishAt = Date.parse(lineOrder.get('finishAt'));
+      var quantityDone = -1;
+
+      if (this.plan.isProdStateUsed())
+      {
+        var prodShiftOrder = this.prodLineState.getCurrentOrder();
+
+        if (prodShiftOrder && prodShiftOrder.get('orderId') === order.id)
+        {
+          quantityDone = prodShiftOrder.get('quantityDone');
+        }
+      }
 
       return lineOrderPopoverTemplate({
         lineOrder: {
           _id: lineOrder.id,
           orderNo: order.id,
           quantityPlanned: lineOrder.get('quantity'),
-          quantityRemaining: order.get('quantityTodo') - order.get('quantityDone'),
-          quantityTotal: order.get('quantityTodo'),
+          quantityRemaining: orderData.quantityTodo - orderData.quantityDone,
+          quantityTotal: orderData.quantityTodo,
+          quantityDone: quantityDone,
           pceTime: lineOrder.get('pceTime') / 1000,
           manHours: lineOrder.get('manHours') || 0,
           startAt: startAt,
@@ -324,14 +388,38 @@ define([
       });
     },
 
+    updateShiftState: function()
+    {
+      var prodState = this.serializeProdState();
+
+      var $shifts = this.$('.planning-mrp-lineOrders-shift').attr('data-state', '');
+      var $shift = $shifts.filter('[data-shift="' + prodState.shift + '"]');
+
+      if ($shift.length && prodState.state)
+      {
+        $shift.attr('data-state', prodState.state);
+      }
+
+      this.$('.is-selected').removeClass('is-selected');
+
+      if (prodState.shift && prodState.orderNo)
+      {
+        this.$id('list-' + prodState.shift)
+          .find('.is-lineOrder[data-order-no="' + prodState.orderNo + '"]')
+          .addClass('is-selected');
+      }
+    },
+
     onOrderHighlight: function(message)
     {
-      this.$('.is-lineOrder[data-id^="' + message.orderNo + '"]').toggleClass('is-highlighted', message.state);
+      this.$('.is-lineOrder[data-order-no="' + message.orderNo + '"]')
+        .toggleClass('is-highlighted', message.state);
     },
 
     onIncompleteChange: function(model)
     {
-      this.$('.is-lineOrder[data-id^="' + model.id + '"]').toggleClass('is-incomplete', model.get('incomplete') > 0);
+      this.$('.is-lineOrder[data-order-no="' + model.id + '"]')
+        .toggleClass('is-incomplete', model.get('incomplete') > 0);
     },
 
     onSapOrdersReset: function(sapOrders, options)
@@ -339,6 +427,16 @@ define([
       if (!options.reload && this.plan.displayOptions.isLatestOrderDataUsed())
       {
         this.render();
+      }
+    },
+
+    onOnlineChange: function()
+    {
+      var $hd = this.$('.planning-mrp-list-hd').removeClass('is-online is-offline');
+
+      if (this.plan.isProdStateUsed())
+      {
+        $hd.addClass('is-' + (this.prodLineState.get('online') ? 'online' : 'offline'));
       }
     }
 

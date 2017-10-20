@@ -10,6 +10,7 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/delayReasons/DelayReasonCollection',
+  'app/factoryLayout/productionState',
   'app/planning/Plan',
   'app/planning/PlanSettings',
   'app/planning/PlanDisplayOptions',
@@ -26,6 +27,7 @@ define([
   View,
   bindLoadingMessage,
   DelayReasonCollection,
+  productionState,
   Plan,
   PlanSettings,
   PlanDisplayOptions,
@@ -123,6 +125,10 @@ define([
         {
           lateOrder.set('delayReason', message.change.newValues.delayReason);
         }
+      },
+      'shiftChanged': function(newShift)
+      {
+        this.plan.set('active', time.format(newShift.date, 'YYYY-MM-DD') === this.plan.id);
       }
     },
 
@@ -142,6 +148,8 @@ define([
     destroy: function()
     {
       $(window).off('.' + this.idPrefix);
+
+      productionState.unload();
     },
 
     setUpLayout: function(layout)
@@ -205,6 +213,7 @@ define([
       var plan = this.plan;
 
       return when(
+        productionState.load(false),
         this.delayReasons.fetch({reset: true}),
         plan.settings.fetch(),
         plan.sapOrders.fetch({reset: true}),
@@ -223,6 +232,8 @@ define([
 
     afterRender: function()
     {
+      productionState.load(false);
+
       this.renderMrps();
     },
 
@@ -281,6 +292,7 @@ define([
       {
         var mrpView = new PlanMrpView({
           delayReasons: page.delayReasons,
+          prodLineStates: productionState.prodLineStates,
           plan: page.plan,
           mrp: mrp
         });

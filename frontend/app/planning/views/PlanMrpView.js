@@ -133,7 +133,8 @@ define([
         view.insertView('#-lineOrders', new PlanMrpLineOrdersView({
           plan: view.plan,
           mrp: view.mrp,
-          line: line
+          line: line,
+          prodLineState: view.prodLineStates.get(line.id)
         })).render();
       });
     }

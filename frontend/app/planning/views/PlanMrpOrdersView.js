@@ -291,6 +291,7 @@ define([
         trigger: 'manual',
         placement: 'top',
         html: true,
+        hasContent: true,
         content: view.serializePopover(order.id),
         template: '<div class="popover planning-mrp-popover planning-mrp-popover-preview">'
           + '<div class="arrow"></div>'

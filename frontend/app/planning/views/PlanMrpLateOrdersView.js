@@ -132,10 +132,8 @@ define([
         trigger: 'hover',
         placement: 'top',
         html: true,
-        content: function()
-        {
-          return view.serializePopover(this.dataset.id);
-        },
+        hasContent: true,
+        content: function() { return view.serializePopover(this.dataset.id); },
         template: '<div class="popover planning-mrp-popover">'
         + '<div class="arrow"></div>'
         + '<div class="popover-content"></div>'
@@ -175,7 +173,7 @@ define([
 
       if (!order)
       {
-        return null;
+        return '?';
       }
 
       var delayReason = this.delayReasons.get(order.get('delayReason'));

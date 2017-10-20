@@ -52,6 +52,7 @@ define([
           trigger: 'manual',
           placement: 'left',
           html: 1,
+          hasContent: true,
           content: toolbarSetHourlyPlanTemplate({idPrefix: this.idPrefix}),
           template: '<div class="popover planning-mrp-toolbar-setHourlyPlans">'
             + '<div class="arrow"></div>'

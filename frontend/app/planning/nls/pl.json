@@ -155,6 +155,7 @@
   "lineOrders:orderNo": "Nr zlecenia",
   "lineOrders:unit": "szt.",
   "lineOrders:qty:planned": "Ilość zaplanowana",
+  "lineOrders:qty:done": "Ilość zrobiona",
   "lineOrders:qty:remaining": "Ilość pozostała",
   "lineOrders:qty:total": "Ilość całkowita",
   "lineOrders:qty:incomplete": "Ilość brakująca",

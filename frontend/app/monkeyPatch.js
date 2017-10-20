@@ -51,6 +51,11 @@ function(
     this.scrollbarWidth = this.measureScrollbar();
   };
 
+  $.fn.popover.Constructor.prototype.hasContent = function()
+  {
+    return this.options.hasContent === true || !!this.getTitle() || !!this.getContent();
+  };
+
   var $body = $(document.body);
 
   $.fn.select2.defaults.dropdownContainer = function(select2)

@@ -46,6 +46,7 @@ define([
     nlsDomain: 'planning',
 
     defaults: {
+      active: false,
       loading: false
     },
 
@@ -125,6 +126,8 @@ define([
         attrs.updatedAt = new Date(res.updatedAt);
       }
 
+      attrs.active = shiftUtil.isActive(attrs._id || this.id);
+
       if (res.minDate || res.maxDate)
       {
         this.displayOptions.set(_.pick(res, ['minDate', 'maxDate']));
@@ -163,6 +166,16 @@ define([
       return this.get('loading')
         || !!this.lateOrders.currentRequest
         || !!this.sapOrders.currentRequest;
+    },
+
+    isProdStateUsed: function()
+    {
+      return this.isActive() && this.displayOptions.isLatestOrderDataUsed();
+    },
+
+    isActive: function()
+    {
+      return this.attributes.active === true;
     },
 
     isFrozen: function()
