@@ -390,7 +390,8 @@ exports['messenger/client:wmes-alerts'] = Object.assign({}, ports['wmes-alerts']
 exports['messenger/client:wmes-planning'] = Object.assign({}, ports['wmes-planning'], {
   responseTimeout: 5000,
   broadcastTopics: [
-    'planning.generator.requested'
+    'planning.generator.requested',
+    'settings.updated.orders.operations.groups'
   ]
 });
 

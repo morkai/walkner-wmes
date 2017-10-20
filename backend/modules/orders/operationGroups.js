@@ -21,9 +21,18 @@ module.exports = function setUpOperationGroups(app, ordersModule)
 
   function getGroupedOperations(allOperations, selectedOperationNo)
   {
-    const selectedOperation = allOperations[selectedOperationNo];
+    let operationMap = allOperations;
+
+    if (Array.isArray(operationMap))
+    {
+      operationMap = {};
+
+      allOperations.forEach(op => operationMap[op.no] = op);
+    }
+
+    const selectedOperation = operationMap[selectedOperationNo];
     const selectedOperationName = prepareOperationName(selectedOperation.name);
-    const allOperationsKeys = Object.keys(allOperations);
+    const allOperationsKeys = Object.keys(operationMap);
     let groupedOperations = null;
 
     groups.forEach(function(group)
@@ -49,7 +58,7 @@ module.exports = function setUpOperationGroups(app, ordersModule)
 
       allOperationsKeys.forEach(function(key)
       {
-        const operation = allOperations[key];
+        const operation = operationMap[key];
 
         if (operation === selectedOperation)
         {

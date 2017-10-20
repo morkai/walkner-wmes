@@ -10,6 +10,7 @@ exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   userId: 'user',
   expressId: 'express',
+  ordersId: 'orders',
   generator: true
 };
 

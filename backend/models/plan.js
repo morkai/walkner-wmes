@@ -148,6 +148,21 @@ module.exports = function setupPlanModel(app, mongoose)
     const hardComponent = !hardComponents || !Array.isArray(sapOrder.bom) || sapOrder.bom.length === 0
       ? null
       : sapOrder.bom.find(component => hardComponents.has(component.nc12));
+    const operation = _.pick(resolveBestOperation(sapOrder.operations), OPERATION_PROPERTIES);
+
+    if (operation && app.orders && app.orders.getGroupedOperations)
+    {
+      app.orders.getGroupedOperations(sapOrder.operations, operation.no).forEach(op =>
+      {
+        if (op.no !== operation.no)
+        {
+          operation.machineSetupTime += op.machineSetupTime;
+          operation.machineTime += op.machineTime;
+          operation.laborSetupTime += op.laborSetupTime;
+          operation.laborTime += op.laborTime;
+        }
+      });
+    }
 
     return {
       _id: sapOrder._id,
@@ -157,7 +172,7 @@ module.exports = function setupPlanModel(app, mongoose)
       nc12: sapOrder.nc12,
       name: resolveProductName(sapOrder),
       statuses: sapOrder.statuses,
-      operation: _.pick(resolveBestOperation(sapOrder.operations), OPERATION_PROPERTIES),
+      operation: operation,
       manHours: 0,
       hardComponent: hardComponent ? hardComponent.nc12 : null,
       quantityTodo: sapOrder.qty,

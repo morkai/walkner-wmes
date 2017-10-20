@@ -129,7 +129,7 @@ define([
           content += '<tr><th>' + t('planning', 'orders:' + property) + '</th>'
             + '<td>' + oldValue
             + ' <i class="fa fa-arrow-right"></i> '
-            + (property === 'statuses' ? '<br>' : '')
+            + (property === 'statuses' || property === 'operation' ? '<br>' : '')
             + newValue + '</td>'
             + '</tr>';
         });

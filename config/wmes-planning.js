@@ -6,10 +6,12 @@ const mongodb = require('./wmes-mongodb');
 exports.id = 'wmes-planning';
 
 exports.modules = [
-  'mongoose',
-  'events',
   'updater',
+  'mongoose',
+  'settings',
+  'events',
   'messenger/server',
+  'orders',
   'planning'
 ];
 
@@ -60,6 +62,15 @@ exports['messenger/server'] = Object.assign({}, ports[exports.id], {
     'planning.changes.created'
   ]
 });
+
+exports.settings = {
+  expressId: null
+};
+
+exports.orders = {
+  expressId: null,
+  userId: null
+};
 
 exports.planning = {
   expressId: null,
