@@ -93,9 +93,13 @@ define([
 
     initialize: function()
     {
-      this.listenTo(this.line.orders, 'reset', this.render);
-      this.listenTo(this.mrp.orders, 'highlight', this.onOrderHighlight);
-      this.listenTo(this.mrp.orders, 'change:incomplete', this.onIncompleteChange);
+      var view = this;
+
+      view.listenTo(view.line.orders, 'reset', view.render);
+      view.listenTo(view.mrp.orders, 'highlight', view.onOrderHighlight);
+      view.listenTo(view.mrp.orders, 'change:incomplete', view.onIncompleteChange);
+      view.listenTo(view.plan.displayOptions, 'change:useLatestOrderData', view.render);
+      view.listenTo(view.plan.sapOrders, 'reset', view.onSapOrdersReset);
     },
 
     destroy: function()
@@ -191,6 +195,7 @@ define([
           return;
         }
 
+        var orderData = plan.getActualOrderData(order.id);
         var mrp = order.get('mrp');
         var startAt = Date.parse(lineOrder.get('startAt'));
         var finishAt = Date.parse(lineOrder.get('finishAt'));
@@ -207,9 +212,12 @@ define([
 
         shift.orders.push({
           _id: lineOrder.id,
-          orderNo: lineOrder.get('orderNo'),
+          orderNo: order.id,
           quantity: lineOrder.get('quantity'),
           incomplete: order.get('incomplete') > 0,
+          completed: orderData.quantityDone >= orderData.quantityTodo,
+          confirmed: orderData.statuses.indexOf('CNF') !== -1,
+          delivered: orderData.statuses.indexOf('DLV') !== -1,
           finishAt: finishAt,
           margin: (startAt - prevFinishedAt) * 100 / shiftUtil.SHIFT_DURATION,
           width: duration * 100 / shiftUtil.SHIFT_DURATION,
@@ -324,6 +332,14 @@ define([
     onIncompleteChange: function(model)
     {
       this.$('.is-lineOrder[data-id^="' + model.id + '"]').toggleClass('is-incomplete', model.get('incomplete') > 0);
+    },
+
+    onSapOrdersReset: function(sapOrders, options)
+    {
+      if (!options.reload && this.plan.displayOptions.isLatestOrderDataUsed())
+      {
+        this.render();
+      }
     }
 
   });

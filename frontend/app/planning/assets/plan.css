@@ -156,19 +156,19 @@
   line-height: 24px;
 }
 .planning-mrp-list-item-inner.is-cnf {
-  line-height: 22px;
-  border-top: 2px solid #AA00FF;
+  line-height: 23px;
+  border-top: 1px solid #AA00FF;
 }
-.planning-mrp-list-item-inner.is-dnf {
-  line-height: 22px;
-  border-bottom: 2px solid #FF007F;
+.planning-mrp-list-item-inner.is-dlv {
+  line-height: 23px;
+  border-bottom: 1px solid #FF007F;
 }
-.planning-mrp-list-item-inner.is-cnf.is-dnf {
-  line-height: 20px;
+.planning-mrp-list-item-inner.is-cnf.is-dlv {
+  line-height: 22px;
 }
 .is-selected > .is-cnf,
-.is-selected > .is-dnf,
-.is-selected > .is-cnf.is-dnf {
+.is-selected > .is-dlv,
+.is-selected > .is-cnf.is-dlv {
   line-height: 24px;
   border-top: 0;
   border-bottom: 0;
@@ -268,13 +268,7 @@
 .planning-mrp-list-item.is-lineOrder {
   overflow: hidden;
 }
-.planning-mrp-list-item.is-lineOrder.is-incomplete {
-  background-color: #fcf8e3;
-}
-.planning-mrp-list-item.is-lineOrder.is-incomplete:hover {
-  background-color: #faf2cc;
-}
-.planning-mrp-list-item.is-lineOrder.is-external {
+.planning-mrp-list-item.is-external {
   opacity: 0.75;
 }
 .planning-mrp-list-item.is-downtime {

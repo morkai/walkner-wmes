@@ -10,7 +10,7 @@
   <div id="<%- idPrefix %>-list" class="planning-mrp-list">
     <% orders.forEach(function(order) { %>
     <div class="planning-mrp-list-item is-order <%- order.completed ? 'is-completed' : '' %> <%- order.surplus ? 'is-surplus' : '' %> <%- order.invalid ? 'is-invalid' : '' %> <%- order.ignored ? 'is-ignored' : '' %> <%- order.incomplete ? 'is-incomplete' : '' %>" data-id="<%= order._id %>">
-      <div class="planning-mrp-list-item-inner <%- order.confirmed ? 'is-cnf' : '' %> <%- order.delivered ? 'is-dnf' : '' %>">
+      <div class="planning-mrp-list-item-inner <%- order.confirmed ? 'is-cnf' : '' %> <%- order.delivered ? 'is-dlv' : '' %>">
         <%= order._id %>
         <% if (order.kind && order.kind !== 'unclassified') { %>
         <span class="planning-mrp-list-property" data-property="kind" title="<%- t('planning', 'orderPriority:' + order.kind) %>"><i class="fa fa-<%- order.kind === 'small' ? 'star-o' : order.kind === 'easy' ? 'star-half-full' : 'star' %>"></i></span>

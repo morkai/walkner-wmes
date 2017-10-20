@@ -54,7 +54,9 @@ define([
 
     mrpSettings: function(mrpId)
     {
-      return this.plan.settings.mrps.get(mrpId).lines.get(this.id);
+      var mrpSettings = this.plan.settings.mrps.get(mrpId);
+
+      return mrpSettings ? mrpSettings.lines.get(this.id) : null;
     }
 
   });
