@@ -99,9 +99,12 @@ define([
 
       view.listenTo(view.plan.displayOptions, 'change:useLatestOrderData', view.render);
 
+      view.listenTo(view.plan.shiftOrders, 'add', view.updateShiftOrder);
+      view.listenTo(view.plan.shiftOrders, 'change:quantityDone', view.updateShiftOrder);
+
       view.listenTo(view.plan.sapOrders, 'reset', view.onSapOrdersReset);
 
-      view.listenTo(view.line.orders, 'reset', view.render);
+      view.listenTo(view.line.orders, 'reset', view.renderIfNotLoading);
 
       view.listenTo(view.mrp.orders, 'highlight', view.onOrderHighlight);
       view.listenTo(view.mrp.orders, 'change:incomplete', view.onIncompleteChange);
@@ -260,12 +263,16 @@ define([
         var prevShiftOrder = shift.orders[shift.orders.length - 1];
         var prevFinishedAt = prevShiftOrder ? prevShiftOrder.finishAt : shift.startTime;
 
+        var quantityTodo = lineOrder.get('quantity');
+        var quantityDone = plan.shiftOrders.getTotalQuantityDone(planLine.id, shift.no, order.id);
+
         shift.orders.push({
           _id: lineOrder.id,
           orderNo: order.id,
           quantity: lineOrder.get('quantity'),
           incomplete: order.get('incomplete') > 0,
-          completed: orderData.quantityDone >= orderData.quantityTodo,
+          completed: shift.state && quantityDone >= quantityTodo,
+          started: shift.state && quantityDone > 0,
           confirmed: orderData.statuses.indexOf('CNF') !== -1,
           delivered: orderData.statuses.indexOf('DLV') !== -1,
           selected: shift.state && order.id === prodState.orderNo,
@@ -342,17 +349,9 @@ define([
       var orderData = this.plan.getActualOrderData(order.id);
       var startAt = Date.parse(lineOrder.get('startAt'));
       var finishAt = Date.parse(lineOrder.get('finishAt'));
-      var quantityDone = -1;
-
-      if (this.plan.isProdStateUsed())
-      {
-        var prodShiftOrder = this.prodLineState.getCurrentOrder();
-
-        if (prodShiftOrder && prodShiftOrder.get('orderId') === order.id)
-        {
-          quantityDone = prodShiftOrder.get('quantityDone');
-        }
-      }
+      var quantityDone = this.plan.isProdStateUsed()
+        ? this.plan.shiftOrders.getTotalQuantityDone(this.line.id, shiftUtil.getShiftNo(startAt), order.id)
+        : -1;
 
       return lineOrderPopoverTemplate({
         lineOrder: {
@@ -438,6 +437,32 @@ define([
       {
         $hd.addClass('is-' + (this.prodLineState.get('online') ? 'online' : 'offline'));
       }
+    },
+
+    updateShiftOrder: function(planShiftOrder)
+    {
+      if (!this.plan.isProdStateUsed() || planShiftOrder.get('prodLine') !== this.line.id)
+      {
+        return;
+      }
+
+      var prodShift = this.prodLineState.get('prodShift');
+
+      if (!prodShift)
+      {
+        return;
+      }
+
+      var shift = prodShift.get('shift');
+      var orderNo = planShiftOrder.get('orderId');
+      var $lineOrder = this.$id('list-' + shift).find('.is-lineOrder[data-order-no="' + orderNo + '"]');
+      var lineOrder = this.line.orders.get($lineOrder.attr('data-id'));
+      var quantityTodo = lineOrder.get('quantity');
+      var quantityDone = this.plan.shiftOrders.getTotalQuantityDone(this.line.id, shift, orderNo);
+
+      $lineOrder
+        .toggleClass('is-started', quantityDone > 0)
+        .toggleClass('is-completed', quantityDone >= quantityTodo);
     }
 
   });

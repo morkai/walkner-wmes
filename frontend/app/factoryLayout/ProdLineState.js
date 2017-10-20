@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   '../core/Model',
   '../prodShifts/ProdShift',
   '../prodShiftOrders/ProdShiftOrder',
@@ -8,6 +9,7 @@ define([
   '../prodDowntimes/ProdDowntime',
   '../prodDowntimes/ProdDowntimeCollection'
 ], function(
+  _,
   Model,
   ProdShift,
   ProdShiftOrder,
@@ -114,6 +116,8 @@ define([
 
     update: function(data)
     {
+      data = _.clone(data);
+
       var attrs = this.attributes;
       var prodShiftChanged = false;
       var prodShiftOrdersChanges = null;

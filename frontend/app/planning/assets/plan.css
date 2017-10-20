@@ -119,28 +119,15 @@
 .planning-mrp-list-item.is-incomplete {
   background-color: #fcf8e3;
 }
-.planning-mrp-list-item.is-incomplete:hover {
-  background-color: #faf2cc;
-}
-.planning-mrp-list-item.is-surplus {
-  background-color: #FCF8E3;
-  border-color: #999;
-}
-.planning-mrp-list-item.is-surplus:hover {
-  background-color: #FAF2CC;
+.planning-mrp-list-item.is-started {
+  background-color: #EEE;
 }
 .planning-mrp-list-item.is-completed {
   background-color: #DFF0D8;
   border-color: #999;
 }
-.planning-mrp-list-item.is-completed:hover {
-  background-color: #D0E9C6;
-}
 .planning-mrp-list-item.is-invalid {
   background-color: #FFE8E8;
-}
-.planning-mrp-list-item.is-invalid:hover {
-  background-color: #FFD1D1;
 }
 .planning-mrp-list-item.is-selected {
   background-color: #d9edf7;
@@ -149,12 +136,16 @@
   background-color: #FFFFA6!important;
   color: #333;
 }
-.planning-mrp-list-item.is-ignored {
-  opacity: 0.5;
+.is-ignored .planning-mrp-list-item-label {
+  text-decoration: line-through;
 }
 .planning-mrp-list-item-inner {
   padding: 0 5px;
   line-height: 24px;
+}
+.is-order > .planning-mrp-list-item-inner {
+  display: flex;
+  align-items: center;
 }
 .planning-mrp-list-item-inner.is-cnf {
   line-height: 23px;

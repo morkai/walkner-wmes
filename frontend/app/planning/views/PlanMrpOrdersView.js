@@ -161,6 +161,7 @@ define([
           kind: order.get('kind'),
           incomplete: order.get('incomplete') > 0,
           completed: orderData.quantityDone >= orderData.quantityTodo,
+          started: orderData.quantityDone > 0,
           surplus: orderData.quantityDone > orderData.quantityTodo,
           invalid: false,
           added: added,

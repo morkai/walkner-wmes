@@ -13,6 +13,7 @@ define([
   './PlanOrderCollection',
   './PlanLineCollection',
   './PlanMrpCollection',
+  './PlanShiftOrderCollection',
   './PlanSapOrderCollection',
   './PlanLateOrderCollection'
 ], function(
@@ -28,6 +29,7 @@ define([
   PlanOrderCollection,
   PlanLineCollection,
   PlanMrpCollection,
+  PlanShiftOrderCollection,
   PlanSapOrderCollection,
   PlanLateOrderCollection
 ) {
@@ -64,6 +66,10 @@ define([
       this.displayOptions = options.displayOptions;
       this.settings = options.settings;
 
+      this.shiftOrders = new PlanShiftOrderCollection(null, {
+        plan: this,
+        paginate: false
+      });
       this.lateOrders = new PlanLateOrderCollection(null, {
         plan: this,
         paginate: false

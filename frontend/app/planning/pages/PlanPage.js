@@ -11,11 +11,11 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/delayReasons/DelayReasonCollection',
   'app/factoryLayout/productionState',
-  'app/planning/Plan',
-  'app/planning/PlanSettings',
-  'app/planning/PlanDisplayOptions',
-  'app/planning/views/PlanFilterView',
-  'app/planning/views/PlanMrpView',
+  '../Plan',
+  '../PlanSettings',
+  '../PlanDisplayOptions',
+  '../views/PlanFilterView',
+  '../views/PlanMrpView',
   'app/planning/templates/planPage'
 ], function(
   _,
@@ -36,6 +36,8 @@ define([
   template
 ) {
   'use strict';
+
+  var reloadProdState = false;
 
   return View.extend({
 
@@ -129,10 +131,15 @@ define([
       'shiftChanged': function(newShift)
       {
         this.plan.set('active', time.format(newShift.date, 'YYYY-MM-DD') === this.plan.id);
+      },
+      'production.stateChanged.**': function(message)
+      {
+        this.plan.shiftOrders.update(message);
       }
     },
 
     localTopics: {
+      'socket.disconnected': function() { reloadProdState = true; },
       'planning.mrpStatsRecounted': 'scheduleStatRecount'
     },
 
@@ -211,11 +218,15 @@ define([
     load: function(when)
     {
       var plan = this.plan;
+      var forceReloadProdState = reloadProdState;
+
+      reloadProdState = false;
 
       return when(
-        productionState.load(false),
+        productionState.load(forceReloadProdState),
         this.delayReasons.fetch({reset: true}),
         plan.settings.fetch(),
+        plan.shiftOrders.fetch({reset: true}),
         plan.sapOrders.fetch({reset: true}),
         plan.lateOrders.fetch({reset: true}),
         plan.fetch()
@@ -248,6 +259,7 @@ define([
         function()
         {
           var promise = $.when(
+            plan.shiftOrders.fetch({reset: true, reload: true}),
             plan.sapOrders.fetch({reset: true, reload: true}),
             plan.lateOrders.fetch({reset: true, reload: true}),
             plan.fetch()
