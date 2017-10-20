@@ -1270,6 +1270,7 @@ app/nls/mor.js
 app/nls/pl/mor.js
 i18n!app/nls/mor
 app/mor/routes.js
+app/planning/util/shift.js
 app/planning/PlanOrder.js
 app/planning/changeHandlers.js
 app/planning/PlanOrderCollection.js
@@ -1289,6 +1290,7 @@ app/planning/PlanSettingsCollection.js
 app/planning/PlanChange.js
 app/planning/PlanChangesCollection.js
 app/planning/PlanDisplayOptions.js
+app/data/clipboard.js
 app/nls/mrpControllers.js
 app/nls/pl/mrpControllers.js
 i18n!app/nls/mrpControllers
@@ -1296,8 +1298,8 @@ app/mrpControllers/util/ownMrps.js
 app/mrpControllers/util/setUpMrpSelect2.js
 app/planning/templates/planFilter.js
 app/planning/views/PlanFilterView.js
-app/planning/util/shift.js
 app/planning/templates/toolbar.js
+app/planning/templates/toolbarSetHourlyPlan.js
 app/planning/templates/toolbarPrintLineList.js
 app/planning/templates/printPage.js
 app/planning/views/PlanMrpToolbarView.js
