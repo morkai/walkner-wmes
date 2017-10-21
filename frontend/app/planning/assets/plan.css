@@ -82,7 +82,7 @@
   overflow: hidden;
 }
 .planning-mrp-list-hd.is-offline {
-  opacity: 0.75;
+  opacity: 0.5;
 }
 .planning-mrp-list {
   position: relative;
