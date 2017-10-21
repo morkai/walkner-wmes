@@ -28,13 +28,19 @@ define([
       self.shiftStartTime = 0;
       self.shiftEndTime = 0;
 
-      self.cache = {};
+      self.cache = {
+        byLine: {},
+        byOrder: {}
+      };
 
       self.plan.on('change:_id', self.updateShiftTime.bind(self));
 
       self.on('reset', function()
       {
-        self.cache = {};
+        self.cache = {
+          byLine: {},
+          byOrder: {}
+        };
 
         self.forEach(self.cacheOrder, self);
       });
@@ -54,19 +60,26 @@ define([
         + '&startedAt=lt=' + this.shiftEndTime;
     },
 
-    getAll: function(line, shift, orderNo)
+    findOrders: function(orderNo, line, shift)
     {
-      var cache = this.cache;
+      var shiftOrders = this.cache.byOrder[orderNo] || [];
 
-      return cache[line]
-        && cache[line][shift]
-        && cache[line][shift][orderNo]
-        || [];
+      if (line)
+      {
+        shiftOrders = shiftOrders.filter(function(shiftOrder) { return shiftOrder.get('prodLine') === line; });
+      }
+
+      if (shift)
+      {
+        shiftOrders = shiftOrders.filter(function(shiftOrder) { return shiftOrder.get('shift') === shift; });
+      }
+
+      return shiftOrders;
     },
 
     getTotalQuantityDone: function(line, shift, orderNo)
     {
-      var cache = this.cache;
+      var cache = this.cache.byLine;
       var planShiftOrders = cache[line] && cache[line][shift] && cache[line][shift][orderNo];
 
       return planShiftOrders
@@ -126,27 +139,35 @@ define([
 
     cacheOrder: function(planShiftOrder)
     {
-      var cache = this.cache;
+      var byLine = this.cache.byLine;
+      var byOrder = this.cache.byOrder;
       var line = planShiftOrder.get('prodLine');
       var shift = planShiftOrder.get('shift');
       var orderNo = planShiftOrder.get('orderId');
 
-      if (!cache[line])
+      if (!byLine[line])
       {
-        cache[line] = {};
+        byLine[line] = {};
       }
 
-      if (!cache[line][shift])
+      if (!byLine[line][shift])
       {
-        cache[line][shift] = {};
+        byLine[line][shift] = {};
       }
 
-      if (!cache[line][shift][orderNo])
+      if (!byLine[line][shift][orderNo])
       {
-        cache[line][shift][orderNo] = [];
+        byLine[line][shift][orderNo] = [];
       }
 
-      cache[line][shift][orderNo].push(planShiftOrder);
+      byLine[line][shift][orderNo].push(planShiftOrder);
+
+      if (!byOrder[orderNo])
+      {
+        byOrder[orderNo] = [];
+      }
+
+      byOrder[orderNo].push(planShiftOrder);
     }
 
   });

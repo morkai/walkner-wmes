@@ -340,30 +340,39 @@ define([
 
     showMenu: function(e)
     {
-      var order = this.mrp.orders.get(this.$(e.currentTarget).attr('data-id'));
+      var planOrder = this.mrp.orders.get(this.$(e.currentTarget).attr('data-id'));
       var menu = [
         {
-          label: t('planning', 'orders:menu:details'),
-          handler: this.handleDetailsAction.bind(this, order)
+          label: t('planning', 'orders:menu:sapOrder'),
+          handler: this.handleSapOrderAction.bind(this, planOrder)
         }
       ];
 
-      if (this.plan.canEditSettings() && !order.isContinuation())
+      if (this.plan.shiftOrders.findOrders(planOrder.id).length
+        || this.plan.getActualOrderData(planOrder.id).quantityDone)
+      {
+        menu.push({
+          label: t('planning', 'orders:menu:shiftOrder'),
+          handler: this.handleShiftOrdersAction.bind(this, planOrder)
+        });
+      }
+
+      if (this.plan.canEditSettings() && !planOrder.isContinuation())
       {
         menu.push({
           label: t('planning', 'orders:menu:quantity'),
-          handler: this.handleQuantityAction.bind(this, order)
+          handler: this.handleQuantityAction.bind(this, planOrder)
         },
         {
-          label: t('planning', 'orders:menu:' + (order.get('ignored') ? 'unignore' : 'ignore')),
-          handler: this.handleIgnoreAction.bind(this, order)
+          label: t('planning', 'orders:menu:' + (planOrder.get('ignored') ? 'unignore' : 'ignore')),
+          handler: this.handleIgnoreAction.bind(this, planOrder)
         });
 
-        if (order.get('added'))
+        if (planOrder.get('added'))
         {
           menu.push({
             label: t('planning', 'orders:menu:remove'),
-            handler: this.handleRemoveAction.bind(this, order)
+            handler: this.handleRemoveAction.bind(this, planOrder)
           });
         }
       }
@@ -371,9 +380,26 @@ define([
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },
 
-    handleDetailsAction: function(order)
+    handleSapOrderAction: function(planOrder)
     {
-      window.open('#orders/' + order.id);
+      window.open('#orders/' + planOrder.id);
+    },
+
+    handleShiftOrdersAction: function(planOrder)
+    {
+      var planShiftOrders = this.plan.shiftOrders.findOrders(planOrder.id);
+      var url = '#prodShiftOrders';
+
+      if (planShiftOrders.length === 1)
+      {
+        url += '/' + planShiftOrders[0].id;
+      }
+      else
+      {
+        url += '?sort(startedAt)&limit(20)&orderId=' + planOrder.id;
+      }
+
+      window.open(url);
     },
 
     handleQuantityAction: function(order)

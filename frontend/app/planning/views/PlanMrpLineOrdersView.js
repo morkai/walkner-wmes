@@ -3,9 +3,11 @@
 define([
   'underscore',
   'jquery',
+  'app/i18n',
   'app/core/View',
   'app/data/downtimeReasons',
-  'app/planning/util/shift',
+  '../util/shift',
+  '../util/contextMenu',
   'app/planning/templates/lineOrders',
   'app/planning/templates/lineOrderPopover',
   'app/planning/templates/lineOrderDowntimePopover',
@@ -14,9 +16,11 @@ define([
 ], function(
   _,
   $,
+  t,
   View,
   downtimeReasons,
   shiftUtil,
+  contextMenu,
   lineOrdersTemplate,
   lineOrderPopoverTemplate,
   lineOrderDowntimePopoverTemplate,
@@ -83,7 +87,9 @@ define([
       },
       'contextmenu .is-lineOrder': function(e)
       {
-        e.preventDefault();
+        this.showLineOrderMenu(e);
+
+        return false;
       },
       'contextmenu .is-downtime': function(e)
       {
@@ -385,6 +391,87 @@ define([
           duration: downtime.duration / 1000
         }
       });
+    },
+
+    hideMenu: function()
+    {
+      contextMenu.hide(this);
+    },
+
+    showLineOrderMenu: function(e)
+    {
+      var lineOrder = this.line.orders.get(this.$(e.currentTarget).attr('data-id'));
+      var orderNo = lineOrder.get('orderNo');
+      var menu = [
+        {
+          label: t('planning', 'orders:menu:sapOrder'),
+          handler: this.handleSapOrderAction.bind(this, orderNo)
+        }
+      ];
+
+      if (this.plan.shiftOrders.findOrders(orderNo).length
+        || this.plan.getActualOrderData(orderNo).quantityDone)
+      {
+        menu.push({
+          label: t('planning', 'orders:menu:shiftOrder'),
+          handler: this.handleShiftOrdersAction.bind(this, lineOrder)
+        });
+      }
+
+      contextMenu.show(this, e.pageY, e.pageX, menu);
+    },
+
+    handleSapOrderAction: function(orderNo)
+    {
+      window.open('#orders/' + orderNo);
+    },
+
+    handleShiftOrdersAction: function(lineOrder)
+    {
+      var orderNo = lineOrder.get('orderNo');
+      var line = this.line.id;
+      var shift = shiftUtil.getShiftNo(lineOrder.get('startAt'));
+      var shiftOrders = this.plan.shiftOrders.findOrders(orderNo, line, shift);
+
+      if (shiftOrders.length === 1)
+      {
+        return window.open('#prodShiftOrders/' + shiftOrders[0].id);
+      }
+
+      if (shiftOrders.length)
+      {
+        return window.open(
+          '#prodShiftOrders?sort(startedAt)&limit(20)'
+            + '&orderId=' + orderNo
+            + '&prodLine=' + encodeURIComponent(line)
+            + '&shift=' + shift
+        );
+      }
+
+      shiftOrders = this.plan.shiftOrders.findOrders(orderNo, line);
+
+      if (shiftOrders.length === 1)
+      {
+        return window.open('#prodShiftOrders/' + shiftOrders[0].id);
+      }
+
+      if (shiftOrders.length)
+      {
+        return window.open(
+          '#prodShiftOrders?sort(startedAt)&limit(20)'
+            + '&orderId=' + orderNo
+            + '&prodLine=' + encodeURIComponent(line)
+        );
+      }
+
+      shiftOrders = this.plan.shiftOrders.findOrders(orderNo);
+
+      if (shiftOrders.length === 1)
+      {
+        return window.open('#prodShiftOrders/' + shiftOrders[0].id);
+      }
+
+      window.open('#prodShiftOrders?sort(startedAt)&limit(20)&orderId=' + orderNo);
     },
 
     updateShiftState: function()
