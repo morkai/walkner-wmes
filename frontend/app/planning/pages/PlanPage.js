@@ -166,22 +166,28 @@ define([
 
     defineModels: function()
     {
-      this.delayReasons = new DelayReasonCollection();
+      var page = this;
 
-      this.plan = new Plan({_id: this.options.date}, {
+      var plan = page.plan = new Plan({_id: page.options.date}, {
         displayOptions: PlanDisplayOptions.fromLocalStorage({
-          mrps: this.options.mrps
+          mrps: page.options.mrps
         }),
-        settings: PlanSettings.fromDate(this.options.date),
+        settings: PlanSettings.fromDate(page.options.date),
         minMaxDates: true,
         pceTimes: false
       });
 
-      bindLoadingMessage(this.plan, this, 'MSG:LOADING_PLAN_FAILURE');
-      bindLoadingMessage(this.plan.settings, this, 'MSG:LOADING_SETTINGS_FAILURE');
-      bindLoadingMessage(this.plan.sapOrders, this, 'MSG:LOADING_SAP_ORDERS_FAILURE');
+      page.delayReasons = new DelayReasonCollection();
 
-      window.plan = this.plan;
+      bindLoadingMessage(plan, page, 'MSG:LOADING_FAILURE:plan');
+      bindLoadingMessage(plan.settings, page, 'MSG:LOADING_FAILURE:settings');
+      bindLoadingMessage(plan.lateOrders, page, 'MSG:LOADING_FAILURE:lateOrders');
+      bindLoadingMessage(plan.sapOrders, page, 'MSG:LOADING_FAILURE:sapOrders');
+      bindLoadingMessage(plan.shiftOrders, page, 'MSG:LOADING_FAILURE:shiftOrders');
+      bindLoadingMessage(page.delayReasons, page, 'MSG:LOADING_FAILURE:delayReasons');
+      bindLoadingMessage(productionState, page, 'MSG:LOADING_FAILURE:productionState');
+
+      window.plan = plan;
     },
 
     defineViews: function()

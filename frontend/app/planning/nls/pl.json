@@ -3,9 +3,13 @@
   "BREADCRUMBS:settings": "Ustawienia",
   "BREADCRUMBS:changes": "Historia zmian",
 
-  "MSG:LOADING_PLAN_FAILURE": "Nie udało się załadować planu.",
-  "MSG:LOADING_SETTINGS_FAILURE": "Nie udało się załadować ustawień planu.",
-  "MSG:LOADING_SAP_ORDERS_FAILURE": "Nie udało się załadować zleceń SAP.",
+  "MSG:LOADING_FAILURE:plan": "Nie udało się załadować planu.",
+  "MSG:LOADING_FAILURE:settings": "Nie udało się załadować ustawień planu.",
+  "MSG:LOADING_FAILURE:sapOrders": "Nie udało się załadować zleceń SAP.",
+  "MSG:LOADING_FAILURE:lateOrders": "Nie udało się załadować opóźnionych zleceń.",
+  "MSG:LOADING_FAILURE:shiftOrders": "Nie udało się załadować zleceń z linii.",
+  "MSG:LOADING_FAILURE:delayReasons": "Nie udało się załadować powodów opóźnień.",
+  "MSG:LOADING_FAILURE:productionState": "Nie udało się załadować danych produkcyjnych.",
   "MSG:GENERATING": "<i class='fa fa-spinner fa-spin'></i><span>Generowanie planu...</span>",
 
   "PAGE_ACTION:changes": "Pokaż historię zmian",
