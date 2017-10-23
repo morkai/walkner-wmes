@@ -108,7 +108,7 @@ define([
 
       if (Array.isArray(data))
       {
-        data.forEach(pso => self.addOrder(pso));
+        data.forEach(function(pso) { self.addOrder(pso); });
 
         return;
       }
