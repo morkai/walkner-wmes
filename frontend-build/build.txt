@@ -1280,6 +1280,8 @@ app/planning/PlanLine.js
 app/planning/PlanLineCollection.js
 app/planning/PlanMrp.js
 app/planning/PlanMrpCollection.js
+app/planning/PlanShiftOrder.js
+app/planning/PlanShiftOrderCollection.js
 app/planning/PlanSapOrder.js
 app/planning/PlanSapOrderCollection.js
 app/planning/PlanLateOrder.js
@@ -1289,6 +1291,12 @@ app/planning/PlanSettings.js
 app/planning/PlanSettingsCollection.js
 app/planning/PlanChange.js
 app/planning/PlanChangesCollection.js
+app/factoryLayout/FactoryLayoutSetting.js
+app/factoryLayout/FactoryLayoutSettingCollection.js
+app/factoryLayout/ProdLineState.js
+app/factoryLayout/ProdLineStateCollection.js
+app/factoryLayout/FactoryLayout.js
+app/factoryLayout/productionState.js
 app/planning/PlanDisplayOptions.js
 app/data/clipboard.js
 app/nls/mrpControllers.js
