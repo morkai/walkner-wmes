@@ -33,6 +33,11 @@ define([
 
     events: _.extend({
 
+      'change input[data-setting]': function(e)
+      {
+        this.updateSetting(e.target.name, e.target.value);
+      },
+
       'change #-structure-subdivision': function(e)
       {
         if (e.removed)
@@ -125,6 +130,13 @@ define([
     {
       SettingsView.prototype.afterRender.call(this);
 
+      this.$id('general-absenceTasks').select2({
+        allowClear: true,
+        placeholder: ' ',
+        multiple: true,
+        data: this.prodTasks.serializeToSelect2()
+      });
+
       this.$id('structure-subdivision').select2({
         placeholder: t('fte', 'settings:structure:subdivision:placeholder'),
         data: orgUnits.getAllByType('subdivision').map(function(subdivision)
@@ -135,7 +147,7 @@ define([
           };
         }).sort(function(a, b)
         {
-          return a.text.localeCompare(b.text);
+          return a.text.localeCompare(b.text, undefined, {numeric: true});
         })
       });
 

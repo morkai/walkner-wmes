@@ -64,16 +64,34 @@ define([
 
     serializeWithTotals: function()
     {
-      var totalByCompany = {};
-      var totalByProdFunction = {};
+      var totals = {
+        demand: 0,
+        demandByCompany: {},
+        supply: 0,
+        supplyByCompany: {},
+        supplyByProdFunction: {},
+        shortage: 0,
+        shortageByCompany: {}
+      };
+      var supplyColumnCount = 0;
+      var task = this.get('tasks')[0];
 
-      if (this.get('tasks').length)
+      if (task)
       {
-        this.get('tasks')[0].functions.forEach(function(taskFunction)
+        _.forEach(task.demand, function(demand)
+        {
+          totals.demandByCompany[demand.id] = {
+            id: demand.id,
+            name: demand.name,
+            total: 0
+          };
+        });
+
+        task.functions.forEach(function(taskFunction)
         {
           var prodFunction = prodFunctions.get(taskFunction.id);
 
-          totalByProdFunction[taskFunction.id] = {
+          totals.supplyByProdFunction[taskFunction.id] = {
             prodFunction: prodFunction ? prodFunction.getLabel() : taskFunction.id,
             total: 0,
             companies: {}
@@ -81,69 +99,164 @@ define([
 
           taskFunction.companies.forEach(function(taskFunctionCompany)
           {
-            totalByProdFunction[taskFunction.id].companies[taskFunctionCompany.id] = 0;
+            totals.supplyByProdFunction[taskFunction.id].companies[taskFunctionCompany.id] = 0;
 
-            totalByCompany[taskFunctionCompany.id] = {
+            totals.supplyByCompany[taskFunctionCompany.id] = {
               name: taskFunctionCompany.name,
               total: 0
             };
+
+            supplyColumnCount += 1;
           });
+        });
+
+        _.forEach(task.shortage, function(shortage)
+        {
+          totals.shortageByCompany[shortage.id] = {
+            id: shortage.id,
+            name: shortage.name,
+            total: 0
+          };
         });
       }
 
-      var tasks = this.serializeTasks(totalByCompany, totalByProdFunction);
-      var total = 0;
+      var tasks = this.serializeTasks(totals);
 
-      Object.keys(totalByCompany).forEach(function(companyId)
+      Object.keys(totals.supplyByCompany).forEach(function(companyId)
       {
-        total += totalByCompany[companyId].total;
+        totals.supply += totals.supplyByCompany[companyId].total;
+        supplyColumnCount += 1;
+      });
+
+      _.forEach(totals.demandByCompany, function(demand)
+      {
+        totals.demand += demand.total;
+      });
+
+      _.forEach(totals.shortageByCompany, function(demand)
+      {
+        totals.shortage += demand.total;
+      });
+
+      var companyCount = Object.keys(totals.supplyByCompany).length;
+      var companyTotals = this.get('companyTotals');
+      var absenceByCompany = {};
+
+      Object.keys(totals.shortageByCompany).forEach(function(companyId)
+      {
+        absenceByCompany[companyId] = companyTotals[companyId] ? companyTotals[companyId].absence : 0;
       });
 
       return {
         subdivision: this.getSubdivisionPath(),
         date: time.format(this.get('date'), 'LL'),
         shift: t('core', 'SHIFT:' + this.get('shift')),
-        companyCount: Object.keys(totalByCompany).length,
-        totalByCompany: totalByCompany,
-        totalByProdFunction: totalByProdFunction,
-        total: total,
+        companyCount: companyCount,
+        demand: {
+          available: !_.isEmpty(totals.demandByCompany),
+          columnCount: companyCount + 1,
+          overallTotal: totals.demand,
+          totalByCompany: totals.demandByCompany
+        },
+        supply: {
+          columnCount: supplyColumnCount,
+          overallTotal: totals.supply,
+          totalByProdFunction: totals.supplyByProdFunction,
+          totalByCompany: totals.supplyByCompany
+        },
+        shortage: {
+          available: !_.isEmpty(totals.shortageByCompany),
+          columnCount: companyCount + 1,
+          overallTotal: totals.shortage,
+          totalByCompany: totals.shortageByCompany,
+          overallAbsence: companyTotals.total.absence,
+          absenceByCompany: absenceByCompany
+        },
         tasks: tasks,
-        absentUsers: (this.get('absentUsers') || []).filter(function(absentUser)
-        {
-          return !!absentUser;
-        })
+        absentUsers: (this.get('absentUsers') || []).filter(function(absentUser) { return !!absentUser; })
       };
     },
 
-    serializeTasks: function(totalByCompany, totalByProdFunction)
+    serializeTasks: function(totals)
     {
+      var absenceTasks = this.get('absenceTasks') || {};
+
       return this.get('tasks').map(function(task)
       {
+        task.totalDemand = 0;
+        task.totalShortage = 0;
         task.totalByCompany = {};
+
+        var shortageByCompany = {};
+
+        _.forEach(task.shortage, function(taskShortage)
+        {
+          taskShortage.count = 0;
+
+          shortageByCompany[taskShortage.id] = taskShortage;
+        });
+
+        _.forEach(task.demand, function(taskDemand)
+        {
+          var count = taskDemand.count;
+
+          task.totalDemand += count;
+          task.totalShortage += count;
+          totals.demandByCompany[taskDemand.id].total += count;
+          totals.shortageByCompany[taskDemand.id].total += count;
+          shortageByCompany[taskDemand.id].count = count;
+        });
+
+        var prodFlow = task.type === 'prodFlow';
+        var absenceTask = absenceTasks[task.id] >= 0;
 
         task.functions.forEach(function(prodFunction)
         {
           prodFunction.companies.forEach(function(company)
           {
+            var count = company.count;
+
+            task.totalShortage -= count;
+
+            if (prodFlow && totals.shortageByCompany[company.id])
+            {
+              totals.shortageByCompany[company.id].total -= count;
+            }
+
+            if (shortageByCompany[company.id])
+            {
+              shortageByCompany[company.id].count -= count;
+            }
+
             if (typeof task.totalByCompany[company.id] !== 'number')
             {
               task.totalByCompany[company.id] = 0;
             }
 
-            task.totalByCompany[company.id] += company.count;
+            task.totalByCompany[company.id] += count;
 
-            if (totalByCompany)
+            if (totals.supplyByCompany[company.id])
             {
-              totalByCompany[company.id].total += company.count;
+              totals.supplyByCompany[company.id].total += count;
             }
 
-            if (totalByProdFunction)
+            if (totals.supplyByProdFunction)
             {
-              totalByProdFunction[prodFunction.id].total += company.count;
-              totalByProdFunction[prodFunction.id].companies[company.id] += company.count;
+              totals.supplyByProdFunction[prodFunction.id].total += count;
+              totals.supplyByProdFunction[prodFunction.id].companies[company.id] += count;
             }
           });
         });
+
+        if (absenceTask && task.shortage)
+        {
+          task.totalShortage = Math.abs(task.totalShortage);
+
+          task.shortage.forEach(function(taskShortage)
+          {
+            taskShortage.count = Math.abs(taskShortage.count);
+          });
+        }
 
         return task;
       });
@@ -156,13 +269,9 @@ define([
 
     handleUpdateMessage: function(message, silent)
     {
-      if (message.type === 'count')
+      if (message.type === 'count' || message.type === 'plan')
       {
-        this.handleCountMessage(message, silent);
-      }
-      else if (message.type === 'plan')
-      {
-        this.handlePlanMessage(message, silent);
+        this.handleCountOrPlanMessage(message, silent);
       }
       else if (message.type === 'addAbsentUser')
       {
@@ -178,7 +287,7 @@ define([
       }
     },
 
-    handleCountMessage: function(message, silent)
+    handleCountOrPlanMessage: function(message, silent)
     {
       var tasks = this.get('tasks');
 
@@ -187,60 +296,16 @@ define([
         return;
       }
 
-      var task = tasks[message.taskIndex];
+      var taskIndex = _.findIndex(tasks, function(task) { return task.id === message.task.id; });
 
-      if (!task)
+      if (taskIndex === -1)
       {
         return;
       }
 
-      var prodFunction = task.functions[message.functionIndex];
+      tasks[taskIndex] = message.task;
 
-      if (!prodFunction)
-      {
-        return;
-      }
-
-      var company = prodFunction.companies[message.companyIndex];
-
-      if (!company)
-      {
-        return;
-      }
-
-      company.count = message.newCount;
-
-      if (!silent)
-      {
-        this.trigger('change:tasks');
-        this.trigger('change');
-      }
-    },
-
-    handlePlanMessage: function(message, silent)
-    {
-      var task = _.find(this.get('tasks'), function(task)
-      {
-        return task.id === message.taskId;
-      });
-
-      if (!task)
-      {
-        return;
-      }
-
-      task.noPlan = message.newValue;
-
-      if (task.noPlan)
-      {
-        task.functions.forEach(function(prodFunction)
-        {
-          prodFunction.companies.forEach(function(company)
-          {
-            company.count = 0;
-          });
-        });
-      }
+      this.set(message.data, {silent: !!silent});
 
       if (!silent)
       {
@@ -291,12 +356,14 @@ define([
 
     handleEditMessage: function(message, silent)
     {
-      var fteEntry = this;
+      var tasks = this.get('tasks');
 
-      _.forEach(message.changes, function(change)
+      message.tasks.forEach(function(task)
       {
-        fteEntry.handleCountMessage(change, true);
+        tasks[task.index] = task.data;
       });
+
+      this.set(message.data, {silent: silent});
 
       if (!silent)
       {

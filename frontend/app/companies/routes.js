@@ -30,6 +30,7 @@ define([
         columns: [
           {id: '_id', className: 'is-min'},
           {id: 'name', className: 'is-min'},
+          {id: 'shortName', className: 'is-min'},
           'color'
         ]
       });

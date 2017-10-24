@@ -54,6 +54,9 @@
     "masterEntry:column:task": "Production flow/<em>Production task</em>",
     "masterEntry:column:noPlan": "No plan?",
     "masterEntry:column:total": "Total",
+    "masterEntry:column:demand": "Demand",
+    "masterEntry:column:supply": "Supply",
+    "masterEntry:column:shortage": "Shortage",
 
     "print:hdLeft": "FTE allocated to {subdivision}",
     "print:hdRight": "{date}, {shift} shift",
@@ -64,12 +67,19 @@
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> FTE entry?",
     "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the FTE entry :-(",
 
-    "settings:tab:structure": "Strcuture",
+    "settings:tab:general": "General",
+    "settings:tab:structure": "Structure",
+    "settings:general:absenceTasks": "Tasks counted as absence",
     "settings:structure:subdivision:placeholder": "Select a subdivision to set its FTE entry structure",
     "settings:structure:prodFunction": "Function",
     "settings:structure:prodFunction:placeholder": "Select a function",
     "settings:structure:companies": "Employers",
-    "settings:structure:companies:placeholder": "Select a company"
+    "settings:structure:companies:placeholder": "Select a company",
+
+    "changeRequest:warning:edit": "You're in a production data change request mode. The FTE entry will be updated only after confirmation by the person responsible.",
+    "changeRequest:comment:placeholder": "Optional comment...",
+    "changeRequest:msg:success:edit": "FTE edit request created successfully.",
+    "changeRequest:msg:failure:edit": "Failed to create the FTE edit request."
   },
   "pl": true
 }

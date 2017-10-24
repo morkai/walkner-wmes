@@ -9,11 +9,16 @@ define(function()
     : 'toString';
 
   return {
-    parse: function(val)
+    parse: function(val, allowNegative)
     {
-      var num = parseFloat(val.replace(',', '.').replace(/[^0-9\.]+/g, ''));
+      if (!val)
+      {
+        return 0;
+      }
 
-      return isNaN(num) || num < 0 ? 0 : num;
+      var num = parseFloat(val.replace(',', '.').replace(/[^0-9.\-]+/g, ''));
+
+      return isNaN(num) || (!allowNegative && num < 0) ? 0 : num;
     },
     round: function(num)
     {

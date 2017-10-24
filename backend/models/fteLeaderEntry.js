@@ -417,7 +417,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       {
         companies.push({
           id: company._id,
-          name: company.name,
+          name: company.shortName || company.name,
           count: 0
         });
       }

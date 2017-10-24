@@ -18,11 +18,18 @@
           <td>
             <% if (value.division) { %>
             <%= value.function %> \ <%= value.company %> \ <%= value.division %>:
-            <% } else { %>
+            <% } else if (value.function) { %>
             <%= value.function %> \ <%= value.company %>:
+            <% } else { %>
+            <%= value.company %>:
             <% } %>
           </td>
-          <td><%- value.old %> <i class="fa fa-arrow-right"></i> <%- value.new %></td>
+          <td>
+            <%- value.old %> <i class="fa fa-arrow-right"></i> <%- value.new %>
+            <% if (value.kind) { %>
+            <small><%- t('prodChangeRequests', 'fte:' + value.kind) %></small>
+            <% } %>
+          </td>
         </tr>
         <% }) %>
         <% }) %>

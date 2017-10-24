@@ -474,6 +474,9 @@ define([
         var division = orgUnits.getByTypeAndId('division', change.divisionId);
 
         task.values.push({
+          kind: changeRequest.get('modelType') === 'fteMaster'
+            ? (change.demand ? 'demand' : 'supply')
+            : null,
           function: prodFunction ? prodFunction.getLabel() : change.functionId,
           company: company ? company.getLabel() : change.companyId,
           division: division ? division.getLabel() : null,

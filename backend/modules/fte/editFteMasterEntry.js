@@ -5,7 +5,7 @@
 const _ = require('lodash');
 const step = require('h5.step');
 
-module.exports = function editFteMasterEntry(app, fteModule, user, userInfo, fteMasterEntryId, data, done)
+module.exports = function editFteMasterEntry(app, fteModule, user, userInfo, entryId, data, done)
 {
   const orgUnits = app[fteModule.config.orgUnitsId];
   const mongoose = app[fteModule.config.mongooseId];
@@ -17,28 +17,28 @@ module.exports = function editFteMasterEntry(app, fteModule, user, userInfo, fte
   step(
     function getFteMasterEntryStep()
     {
-      fteModule.getCachedEntry('master', fteMasterEntryId, this.parallel());
+      fteModule.getCachedEntry('master', entryId, this.parallel());
 
       if (!isChangeRequest)
       {
-        this.releaseLock = fteModule.acquireLock(fteMasterEntryId, this.parallel());
+        this.releaseLock = fteModule.acquireLock(entryId, this.parallel());
       }
     },
-    function updateOrCreateChangeRequestStep(err, fteMasterEntry)
+    function updateOrCreateChangeRequestStep(err, entry)
     {
       if (err)
       {
         return this.skip(err);
       }
 
-      if (!fteMasterEntry)
+      if (!entry)
       {
         return this.skip(null, 404);
       }
 
       if (isChangeRequest)
       {
-        const subdivision = orgUnits.getByTypeAndId('subdivision', fteMasterEntry.subdivision);
+        const subdivision = orgUnits.getByTypeAndId('subdivision', entry.subdivision);
 
         if (!subdivision)
         {
@@ -46,21 +46,21 @@ module.exports = function editFteMasterEntry(app, fteModule, user, userInfo, fte
         }
 
         data.division = subdivision.division;
-        data.subdivision = fteMasterEntry.subdivision.toString();
+        data.subdivision = entry.subdivision.toString();
         data.prodLine = null;
-        data.date = fteMasterEntry.date;
+        data.date = entry.date;
 
-        ProdChangeRequest.create('edit', 'fteMaster', fteMasterEntry._id, userInfo, data, this.next());
+        ProdChangeRequest.create('edit', 'fteMaster', entry._id, userInfo, data, this.next());
       }
       else
       {
-        fteMasterEntry = FteMasterEntry.hydrate(fteMasterEntry);
-        fteMasterEntry.applyChangeRequest(data.changes, userInfo);
-        fteMasterEntry.calcTotals();
-        fteMasterEntry.save(this.next());
+        entry = FteMasterEntry.hydrate(entry);
+        entry.applyChangeRequest(data.changes, userInfo);
+        entry.calcTotals();
+        entry.save(this.next());
       }
     },
-    function handleSaveStep(err)
+    function handleSaveStep(err, entry)
     {
       if (err)
       {
@@ -69,28 +69,39 @@ module.exports = function editFteMasterEntry(app, fteModule, user, userInfo, fte
 
       if (!isChangeRequest)
       {
-        fteModule.cleanCachedEntry(fteMasterEntryId);
+        fteModule.cleanCachedEntry(entryId);
+
+        this.message = {
+          type: 'edit',
+          socketId: null,
+          tasks: data.changes.map(change =>
+          {
+            return {
+              index: change.taskIndex,
+              data: entry.tasks[change.taskIndex]
+            };
+          }),
+          data: _.pick(entry, [
+            'updatedAt',
+            'updater',
+            'companyTotals',
+            'totalDemand',
+            'total',
+            'totalShortage'
+          ])
+        };
       }
     },
     function finalizeStep(err, statusCode)
     {
       if (this.releaseLock)
       {
-        this.releaseLock();
-        this.releaseLock = null;
+        if (!err && !statusCode)
+        {
+          app.broker.publish(`fte.master.updated.${entryId}`, this.message);
+        }
 
-        app.broker.publish('fte.master.updated.' + fteMasterEntryId, {
-          type: 'edit',
-          changes: _.map(data.changes, function(change)
-          {
-            return {
-              taskIndex: change.taskIndex,
-              functionIndex: change.functionIndex,
-              companyIndex: change.companyIndex,
-              newCount: change.newValue
-            };
-          })
-        });
+        this.releaseLock();
       }
 
       setImmediate(done, err, statusCode);

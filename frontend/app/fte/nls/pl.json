@@ -8,8 +8,8 @@
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
   "BREADCRUMBS:settings": "Ustawienia",
 
-  "MSG:LOADING_FAILURE": "Ładowanie danych FTE nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych FTE nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie danych FTE nie powiodło się.",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych FTE nie powiodło się.",
   "MSG:DELETED": "Wpis FTE <em>{label}</em> został usunięty.",
 
   "PAGE_ACTION:print": "Pokaż wersję do druku",
@@ -30,7 +30,7 @@
   "addForm:panel:title": "Formularz wyszukiwania/tworzenia wpisu FTE",
   "addForm:copy": "Kopiuj wartości z poprzedniego wpisu wybranej zmiany",
   "addForm:submit": "Przydzielaj zasoby",
-  "addForm:msg:offline": "Nie można przydzielać zasobów: brak połączenia z serwerem :(",
+  "addForm:msg:offline": "Nie można przydzielać zasobów: brak połączenia z serwerem.",
   "addForm:msg:failure": "Nie udało się znaleźć/utworzyć wpisu do edycji: {error, select, AUTH{brak uprawnień!} INPUT{nieprawidłowe dane wejściowe!} other{{error}}}",
 
   "property:date": "Data",
@@ -53,6 +53,9 @@
   "masterEntry:column:task": "Przepływ/<em>Zadanie produkcyjne</em>",
   "masterEntry:column:noPlan": "Brak planu?",
   "masterEntry:column:total": "Suma",
+  "masterEntry:column:demand": "Zamówienie",
+  "masterEntry:column:supply": "Dostarczenie",
+  "masterEntry:column:shortage": "Braki",
 
   "print:hdLeft": "Zasoby przydzielone do {subdivision}",
   "print:hdRight": "{date}, {shift} zmiana",
@@ -61,9 +64,11 @@
   "ACTION_FORM:BUTTON:delete": "Usuń wpis FTE",
   "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany wpis FTE?",
   "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć wpis FTE <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć wpisu FTE :-(",
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć wpisu FTE.",
 
+  "settings:tab:general": "Ogólne",
   "settings:tab:structure": "Struktura",
+  "settings:general:absenceTasks": "Zadania produkcyjne zaliczane do absencji",
   "settings:structure:subdivision:placeholder": "Wybierz dział, dla którego chcesz ustalić strukturę wpisu FTE",
   "settings:structure:prodFunction": "Funkcja",
   "settings:structure:prodFunction:placeholder": "Wybierz funkcję",
@@ -73,5 +78,5 @@
   "changeRequest:warning:edit": "Jesteś w trybie tworzenia żądania zmiany danych produkcyjnych. Wpis FTE zostanie zaktualizowany dopiero po zaakceptowaniu dokonanych zmian przez osobę odpowiedzialną.",
   "changeRequest:comment:placeholder": "Opcjonalny komentarz do żądania zmiany...",
   "changeRequest:msg:success:edit": "Żądanie edycji wpisu FTE zostało utworzone.",
-  "changeRequest:msg:failure:edit": "Nie udało się stworzyć żądania edycji wpisu FTE :-("
+  "changeRequest:msg:failure:edit": "Nie udało się stworzyć żądania edycji wpisu FTE."
 }

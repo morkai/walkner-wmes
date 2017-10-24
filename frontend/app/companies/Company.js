@@ -24,7 +24,8 @@ define([
     labelAttribute: 'name',
 
     defaults: {
-      name: null,
+      name: '',
+      shortName: '',
       color: '#000000'
     },
 

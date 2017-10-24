@@ -70,21 +70,35 @@ module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, socket,
   step(
     function findStructureSettingStep()
     {
-      settings.findById('fte.structure.' + subdivision._id, this.next());
+      const conditions = {
+        _id: [
+          `fte.structure.${subdivision._id}`,
+          'fte.absenceTasks'
+        ]
+      };
+
+      settings.findValues(conditions, 'fte.', this.next());
     },
-    function handleStructureSettingResultStep(err, structureSetting)
+    function handleStructureSettingResultStep(err, settings)
     {
       if (err)
       {
         return this.skip(err);
       }
 
-      if (_.isEmpty(structureSetting))
+      const structure = settings[`structure.${subdivision._id}`];
+
+      if (_.isEmpty(structure))
       {
         return this.skip(new Error('STRUCTURE'));
       }
 
-      this.structure = structureSetting.value;
+      this.settings = {
+        structure,
+        absenceTasks: {}
+      };
+
+      _.forEach(settings.absenceTasks, id => this.settings.absenceTasks[id] = true);
     },
     function findFteEntryStep()
     {
@@ -114,7 +128,8 @@ module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, socket,
         date: condition.date,
         shift: data.shift,
         copy: !!data.copy,
-        structure: this.structure
+        structure: this.settings.structure,
+        absenceTasks: this.settings.absenceTasks
       };
 
       FteEntry.createForShift(options, creator, this.next());

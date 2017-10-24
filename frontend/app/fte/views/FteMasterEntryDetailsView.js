@@ -204,11 +204,25 @@ define([
 
     getCountByKey: function(changeKey)
     {
-      var indexes = changeKey.split(':').map(Number);
-      var task = +indexes[0];
-      var func = +indexes[1];
-      var company = +indexes[2];
+      var indexes = changeKey.split(':');
       var tasks = this.model.get('tasks');
+      var task;
+      var func;
+      var company;
+
+      if (indexes[0] === 'demand')
+      {
+        task = +indexes[1];
+        company = +indexes[2];
+
+        return tasks && tasks[task] && tasks[task].demand && tasks[task].demand[company]
+          ? tasks[task].demand[company].count
+          : 0;
+      }
+
+      task = +indexes[0];
+      func = +indexes[1];
+      company = +indexes[2];
 
       return tasks && tasks[task] && tasks[task].functions[func] && tasks[task].functions[func].companies[company]
         ? tasks[task].functions[func].companies[company].count
@@ -240,6 +254,37 @@ define([
     createPendingChange: function(oldValue, newValue)
     {
       var indexes = this.changeKey.split(':');
+
+      if (indexes[0] === 'demand')
+      {
+        return this.createPendingDemandChange(oldValue, newValue, indexes);
+      }
+
+      return this.createPendingSupplyChange(oldValue, newValue, indexes);
+    },
+
+    createPendingDemandChange: function(oldValue, newValue, indexes)
+    {
+      var taskIndex = +indexes[1];
+      var companyIndex = +indexes[2];
+      var tasks = this.model.get('tasks');
+      var task = tasks[taskIndex];
+      var demand = task.demand[companyIndex];
+
+      return {
+        demand: true,
+        taskIndex: taskIndex,
+        taskId: task.id,
+        taskName: task.name,
+        companyIndex: companyIndex,
+        companyId: demand.id,
+        oldValue: oldValue,
+        newValue: newValue
+      };
+    },
+
+    createPendingSupplyChange: function(oldValue, newValue, indexes)
+    {
       var taskIndex = +indexes[0];
       var functionIndex = +indexes[1];
       var companyIndex = +indexes[2];
@@ -249,6 +294,7 @@ define([
       var company = func.companies[companyIndex];
 
       return {
+        demand: false,
         taskIndex: taskIndex,
         taskId: task.id,
         taskName: task.name,

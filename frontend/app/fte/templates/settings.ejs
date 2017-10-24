@@ -1,8 +1,15 @@
 <form class="settings fte-settings">
   <div class="list-group">
+    <a class="list-group-item" href="#fte;settings?tab=general" data-tab="general"><%- t('fte', 'settings:tab:general') %></a>
     <a class="list-group-item" href="#fte;settings?tab=structure" data-tab="structure"><%- t('fte', 'settings:tab:structure') %></a>
   </div>
   <div class="panel panel-primary">
+    <div class="panel-body" data-tab="general">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-general-absenceTasks" class="control-label"><%- t('fte', 'settings:general:absenceTasks') %></label>
+        <input id="<%- idPrefix %>-general-absenceTasks" name="fte.absenceTasks" type="text" data-setting>
+      </div>
+    </div>
     <div class="panel-body" data-tab="structure">
       <div class="form-group">
         <input id="<%- idPrefix %>-structure-subdivision" type="text">

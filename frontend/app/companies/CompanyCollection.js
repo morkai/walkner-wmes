@@ -13,7 +13,7 @@ define([
 
     model: Company,
 
-    rqlQuery: 'select(name,color)&sort(_id)'
+    rqlQuery: 'sort(_id)'
 
   });
 });

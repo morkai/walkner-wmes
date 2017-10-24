@@ -14,6 +14,10 @@ module.exports = function setupCompanyModel(app, mongoose)
       type: String,
       trim: true
     },
+    shortName: {
+      type: String,
+      trim: true
+    },
     color: {
       type: String,
       default: '#000000'

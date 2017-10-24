@@ -18,6 +18,7 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
+  "PROPERTY:shortName": "Krótka nazwa",
   "PROPERTY:color": "Kolor",
 
   "FORM:ACTION:add": "Dodaj firmę",

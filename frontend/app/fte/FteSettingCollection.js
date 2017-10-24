@@ -26,6 +26,11 @@ define([
 
     prepareValue: function(id, newValue)
     {
+      if (/absenceTasks$/.test(id))
+      {
+        return newValue.split(',').filter(function(v) { return v.length > 0; });
+      }
+
       return newValue;
     }
 

@@ -19,6 +19,7 @@
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
+    "PROPERTY:shortName": "Short name",
     "PROPERTY:color": "Color",
 
     "FORM:ACTION:add": "Add company",

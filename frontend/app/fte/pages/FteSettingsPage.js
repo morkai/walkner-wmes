@@ -4,12 +4,14 @@ define([
   'app/i18n',
   'app/core/util/bindLoadingMessage',
   'app/core/View',
+  'app/prodTasks/ProdTaskCollection',
   '../settings',
   '../views/FteSettingsView'
 ], function(
   t,
   bindLoadingMessage,
   View,
+  ProdTaskCollection,
   settings,
   FteSettingsView
 ) {
@@ -43,13 +45,16 @@ define([
     defineModels: function()
     {
       this.model = bindLoadingMessage(settings.acquire(), this);
+
+      this.prodTasks = bindLoadingMessage(new ProdTaskCollection(), this);
     },
 
     defineViews: function()
     {
       this.view = new FteSettingsView({
         initialTab: this.options.initialTab,
-        settings: this.model
+        settings: this.model,
+        prodTasks: this.prodTasks
       });
     },
 
@@ -57,10 +62,13 @@ define([
     {
       if (this.model.isEmpty())
       {
-        return when(this.model.fetch({reset: true}));
+        return when(
+          this.model.fetch({reset: true}),
+          this.prodTasks.fetch({reset: true})
+        );
       }
 
-      return when();
+      return when(this.prodTasks.fetch({reset: true}));
     },
 
     afterRender: function()
