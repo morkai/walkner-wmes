@@ -179,13 +179,16 @@ define([
 
       page.delayReasons = new DelayReasonCollection();
 
-      bindLoadingMessage(plan, page, 'MSG:LOADING_FAILURE:plan');
-      bindLoadingMessage(plan.settings, page, 'MSG:LOADING_FAILURE:settings');
-      bindLoadingMessage(plan.lateOrders, page, 'MSG:LOADING_FAILURE:lateOrders');
-      bindLoadingMessage(plan.sapOrders, page, 'MSG:LOADING_FAILURE:sapOrders');
-      bindLoadingMessage(plan.shiftOrders, page, 'MSG:LOADING_FAILURE:shiftOrders');
-      bindLoadingMessage(page.delayReasons, page, 'MSG:LOADING_FAILURE:delayReasons');
-      bindLoadingMessage(productionState, page, 'MSG:LOADING_FAILURE:productionState');
+      var nlsPrefix = 'MSG:LOADING_FAILURE:';
+      var nlsDomain = 'planning';
+
+      bindLoadingMessage(plan, page, nlsPrefix + 'plan', nlsDomain);
+      bindLoadingMessage(plan.settings, page, nlsPrefix + 'settings', nlsDomain);
+      bindLoadingMessage(plan.lateOrders, page, nlsPrefix + 'lateOrders', nlsDomain);
+      bindLoadingMessage(plan.sapOrders, page, nlsPrefix + 'sapOrders', nlsDomain);
+      bindLoadingMessage(plan.shiftOrders, page, nlsPrefix + 'shiftOrders', nlsDomain);
+      bindLoadingMessage(page.delayReasons, page, nlsPrefix + 'delayReasons', nlsDomain);
+      bindLoadingMessage(productionState, page, nlsPrefix + 'productionState', nlsDomain);
 
       window.plan = plan;
     },
