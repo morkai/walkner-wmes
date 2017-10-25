@@ -283,6 +283,10 @@
     "hr:indirect:columns": "INDIRECT;Unit",
     "hr:indirDir:columns": "Metric;Unit",
     "hr:details:columns": "Position;Company;Unit;Average",
+    "hr:attendance:title": "Attendance",
+    "hr:attendance:series:present": "Present",
+    "hr:attendance:series:absent": "Absent",
+    "hr:attendance:filename": "WMES_HR_Attendance",
 
     "wh:eff": "Efficiency",
     "wh:fte": "FTE",

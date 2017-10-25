@@ -50,7 +50,8 @@ module.exports = function report5(mongoose, options, done)
       dirIndir: 0,
       prodFlow: 0,
       prodTasks: {}
-    }
+    },
+    attendance: {}
   };
 
   step(
@@ -263,7 +264,8 @@ module.exports = function report5(mongoose, options, done)
     const fields = {
       _id: 0,
       date: 1,
-      tasks: 1
+      tasks: 1,
+      companyTotals: 1
     };
 
     const stream = FteMasterEntry
@@ -424,6 +426,41 @@ module.exports = function report5(mongoose, options, done)
         }
       }
     }
+
+    countAttendance(fteMasterEntry.companyTotals);
+  }
+
+  function countAttendance(companyTotals)
+  {
+    if (!companyTotals)
+    {
+      return;
+    }
+
+    _.forEach(companyTotals, (totals, companyId) =>
+    {
+      if (companyId === 'total' || !totals.demand)
+      {
+        return;
+      }
+
+      let attendance = results.attendance[companyId];
+
+      if (!attendance)
+      {
+        attendance = results.attendance[companyId] = {
+          demand: 0,
+          supply: 0,
+          shortage: 0,
+          absence: 0
+        };
+      }
+
+      attendance.demand += totals.demand;
+      attendance.supply += totals.supply;
+      attendance.shortage += totals.shortage;
+      attendance.absence += totals.absence;
+    });
   }
 
   function addToEntrysDirIndir(dataEntry, isProdFlow, directRatio, prodFunctionId, companyId, count)

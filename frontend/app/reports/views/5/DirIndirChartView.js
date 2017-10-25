@@ -32,7 +32,7 @@ define([
 
     className: function()
     {
-      return 'reports-chart reports-2-dirIndir';
+      return 'reports-chart reports-5-dirIndir';
     },
 
     initialize: function()
@@ -145,7 +145,8 @@ define([
 
     updateExtremes: function(redraw)
     {
-      var useMax = !this.isFullscreen && (!this.model.get('isParent') || this.model.get('extremes') === 'parent');
+      var useMax = !this.isFullscreen
+        && (!this.model.get('isParent') || this.displayOptions.get('extremes') === 'parent');
       var maxDirIndirFte = null;
       var maxDirIndirPercent = null;
 

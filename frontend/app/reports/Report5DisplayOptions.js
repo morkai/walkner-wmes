@@ -143,7 +143,8 @@ define([
         maxDetailsFte: 0,
         maxDirIndirFte: null,
         maxDirIndirPercent: null,
-        maxResourceFte: null
+        maxResourceFte: null,
+        maxAttendance: null
       };
 
       var mode = this.get('extremes');
@@ -242,6 +243,11 @@ define([
           visibleSeries.effIneff ? Math.abs(effIneff.value) : 0,
           visibleProdTasks[absenceProdTaskId] && visibleReferences.absence ? report.getAbsenceRef(absenceRefCoeff) : 0,
           report.getMaxEffIneffProdTaskFte(visibleProdTasks)
+        );
+
+        extremes.maxAttendance = Math.max(
+          extremes.maxAttendance,
+          report.getMaxAttendance(visibleCompanies)
         );
       }
 

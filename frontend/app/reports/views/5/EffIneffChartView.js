@@ -31,7 +31,7 @@ define([
 
     className: function()
     {
-      return 'reports-chart reports-2-effIneff';
+      return 'reports-chart reports-5-effIneff';
     },
 
     initialize: function()
@@ -113,7 +113,7 @@ define([
     {
       var maxResourceFte = null;
 
-      if (!this.isFullscreen && (!this.model.get('isParent') || this.model.get('extremes') === 'parent'))
+      if (!this.isFullscreen && (!this.model.get('isParent') || this.displayOptions.get('extremes') === 'parent'))
       {
         maxResourceFte = this.displayOptions.get('maxResourceFte');
       }

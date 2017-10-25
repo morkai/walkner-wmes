@@ -62,7 +62,8 @@ define([
           dirIndir: 0,
           prodFlow: 0,
           prodTasks: {}
-        }
+        },
+        attendance: {}
       };
     },
 
@@ -177,7 +178,8 @@ define([
         maxDirIndir: 0,
         byCompanyAndProdFunction: {},
         dirIndir: null,
-        effIneff: null
+        effIneff: null,
+        attendance: report.attendance
       };
 
       this.parseDirIndir(report.dirIndir, attributes);
@@ -445,6 +447,27 @@ define([
       });
 
       return maxFte;
+    },
+
+    getMaxAttendance: function(visibleCompanies)
+    {
+      var max = 0;
+
+      _.forEach(this.get('attendance'), function(attendance, companyId)
+      {
+        if (!visibleCompanies[companyId])
+        {
+          return;
+        }
+
+        max = Math.max(
+          max,
+          attendance.demand,
+          attendance.absence
+        );
+      });
+
+      return max;
     }
 
   });

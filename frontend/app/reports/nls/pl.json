@@ -283,6 +283,10 @@
   "hr:indirect:columns": "INDIRECT;Jednostka",
   "hr:indirDir:columns": "Wskaźnik;Jednostka",
   "hr:details:columns": "Stanowisko;Firma;Jednostka;Średnia",
+  "hr:attendance:title": "Obecność",
+  "hr:attendance:series:present": "Ilość obecnych pracowników",
+  "hr:attendance:series:absent": "Ilość brakujących pracowników",
+  "hr:attendance:filename": "WMES_HR_Obecnosc",
 
   "wh:eff": "Wydajność",
   "wh:fte": "FTE",

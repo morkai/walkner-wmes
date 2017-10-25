@@ -9,6 +9,7 @@ define([
   './DetailsChartView',
   './DirIndirChartView',
   './EffIneffChartView',
+  './AttendanceChartView',
   'app/reports/templates/5/charts'
 ], function(
   View,
@@ -19,6 +20,7 @@ define([
   DetailsChartView,
   DirIndirChartView,
   EffIneffChartView,
+  AttendanceChartView,
   template
 ) {
   'use strict';
@@ -43,6 +45,7 @@ define([
       this.setView('.reports-5-details-container', new DetailsChartView(options));
       this.setView('.reports-5-dirIndir-container', new DirIndirChartView(options));
       this.setView('.reports-5-effIneff-container', new EffIneffChartView(options));
+      this.setView('.reports-5-attendance-container', new AttendanceChartView(options));
     },
 
     afterRender: function()
