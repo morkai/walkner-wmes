@@ -518,7 +518,7 @@ exports.exportRoute = function(app, options, req, res, next)
         return next(err);
       }
 
-      cursor = query.cursor();
+      cursor = query.cursor({batchSize: options.batchSize || 10});
     }
 
     if (cursor && cursor.close)
