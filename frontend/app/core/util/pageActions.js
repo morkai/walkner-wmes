@@ -160,7 +160,7 @@ define([
           }
         ];
 
-        if (window.XLSX_EXPORT)
+        if (window.XLSX_EXPORT && totalCount < 30000)
         {
           formats.push({
             type: 'xlsx',
@@ -171,7 +171,7 @@ define([
         return exportActionTemplate({
           type: totalCount >= 30000 ? 'danger' : totalCount >= 15000 ? 'warning' : 'default',
           formats: formats,
-          disabled: options.collection.length === 0,
+          disabled: totalCount >= 60000 || totalCount === 0,
           label: options.label || t(options.collection.getNlsDomain(), 'PAGE_ACTION:export')
         });
       };

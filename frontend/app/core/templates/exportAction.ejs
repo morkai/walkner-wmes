@@ -1,5 +1,5 @@
 <% if (formats.length === 1) { %>
-<a class="btn btn-<%- type %> <%- disabled ? 'disabled' : '' %>" href="<%= formats[0].href %>"><i class="fa fa-download"></i><span><%- label %></span></a>
+<a class="page-actions-export btn btn-<%- type %> <%- disabled ? 'disabled' : '' %>" href="<%= formats[0].href %>"><i class="fa fa-download"></i><span><%- label %></span></a>
 <% } else { %>
 <div class="page-actions-export btn-group">
   <button type="button" class="btn btn-<%- type %> dropdown-toggle" data-toggle="dropdown" <%- disabled ? 'disabled' : '' %>>
