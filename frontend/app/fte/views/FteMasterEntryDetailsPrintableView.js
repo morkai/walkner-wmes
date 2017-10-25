@@ -19,9 +19,12 @@ define([
 
     serialize: function()
     {
-      return _.extend(this.model.serializeWithTotals(), {
-        round: fractionsUtil.round
-      });
+      var templateData = this.model.serializeWithTotals();
+
+      templateData.round = fractionsUtil.round;
+      templateData.tasks = templateData.tasks.filter(function(task) { return !task.noPlan; });
+
+      return templateData;
     },
 
     afterRender: function()

@@ -2,43 +2,39 @@
   <thead>
   <tr>
     <th class="fte-masterEntry-column-task"><%- t('fte', 'masterEntry:column:task') %>
-    <th class="fte-masterEntry-column-noPlan"><%- t('fte', 'masterEntry:column:noPlan') %>
-    <th colspan="2"><%- t('fte', 'masterEntry:column:total') %></th>
-    <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
-    <th colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>"><%- totalByProdFunction[prodFunctionId].prodFunction %></th>
+    <th colspan="<%- companyCount %>"><%- t('fte', 'masterEntry:column:total') %></th>
+    <% Object.keys(supply.totalByProdFunction).forEach(function(prodFunctionId) { %>
+    <th colspan="<%- Object.keys(supply.totalByProdFunction[prodFunctionId].companies).length %>"><%- supply.totalByProdFunction[prodFunctionId].prodFunction %></th>
     <% }) %>
   <tr>
     <th>
-    <th>
-    <% Object.keys(totalByCompany).forEach(function(companyId) { %>
-    <th><%- totalByCompany[companyId].name %>
+    <% Object.keys(supply.totalByCompany).forEach(function(companyId) { %>
+    <th><%- supply.totalByCompany[companyId].name %>
     <% }) %>
-    <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
-    <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
-    <th><%= totalByCompany[companyId].name %>
+    <% Object.keys(supply.totalByProdFunction).forEach(function(prodFunctionId) { %>
+    <% Object.keys(supply.totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+    <th><%= supply.totalByCompany[companyId].name %>
     <% }) %>
     <% }) %>
   </thead>
   <tbody>
   <tr>
     <th>
-    <th>
-    <th colspan="<%- companyCount %>"><%- round(total) %>
-    <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
-    <th colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length %>"><%- round(totalByProdFunction[prodFunctionId].total) %>
+    <th colspan="<%- companyCount %>"><%- round(supply.overallTotal) %>
+    <% Object.keys(supply.totalByProdFunction).forEach(function(prodFunctionId) { %>
+    <th colspan="<%- Object.keys(supply.totalByProdFunction[prodFunctionId].companies).length %>"><%- round(supply.totalByProdFunction[prodFunctionId].total) %>
     <% }) %>
   <tr>
     <th>
-    <th>
-    <% Object.keys(totalByCompany).forEach(function(companyId) { %>
-    <th><%- round(totalByCompany[companyId].total) %>
+    <% Object.keys(supply.totalByCompany).forEach(function(companyId) { %>
+    <th><%- round(supply.totalByCompany[companyId].total) %>
     <% }) %>
-    <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId) { %>
-    <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
-    <th><%- round(totalByProdFunction[prodFunctionId].companies[companyId]) %>
+    <% Object.keys(supply.totalByProdFunction).forEach(function(prodFunctionId) { %>
+    <% Object.keys(supply.totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+    <th><%- round(supply.totalByProdFunction[prodFunctionId].companies[companyId]) %>
     <% }) %>
     <% }) %>
-  <% tasks.forEach(function(task, taskIndex) { %>
+  <% tasks.forEach(function(task) { %>
   <tr>
     <td class="fte-masterEntry-cell-task">
       <% if (task.type === 'prodFlow') { %>
@@ -46,28 +42,13 @@
       <% } else { %>
       <em><%= task.name %></em>
       <% } %>
-    <td><i class="fa fa-<%- task.noPlan ? 'check' : 'times' %>"></i>
     <% Object.keys(task.totalByCompany).forEach(function(companyId) { %>
     <td><%- round(task.totalByCompany[companyId]) %></td>
     <% }) %>
-    <% task.functions.forEach(function(prodFunction, functionIndex) { %>
-    <% prodFunction.companies.forEach(function(company, companyIndex) { %>
+    <% task.functions.forEach(function(prodFunction) { %>
+    <% prodFunction.companies.forEach(function(company) { %>
     <td><%- round(company.count) %>
     <% }) %>
     <% }) %>
   <% }) %>
-  <!--
-  <tr class="fte-masterEntry-print-absence-separator">
-    <td colspan="999">&nbsp;
-  <tr class="fte-masterEntry-print-absence-header">
-    <th colspan="999">Absencja personalna
-  <tr class="fte-masterEntry-print-absence-columns">
-    <th><%- t('users', 'PROPERTY:personellId') %>
-    <th colspan="999"><%- t('users', 'PROPERTY:name') %>
-  <% absentUsers.forEach(function(absentUser) { %>
-  <tr class="fte-masterEntry-print-absence-row">
-    <td><%- absentUser.personellId %>
-    <td colspan="999"><%- absentUser.name %>
-  <% }) %>
-  //-->
 </table>
