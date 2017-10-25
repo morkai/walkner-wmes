@@ -73,6 +73,10 @@ define([
         timeEl.innerHTML = time.toString(genericTimeMs / 1000, true)
           + '<br>'
           + time.utc.format(shiftTimeMs, 'HH:mm:ss');
+      },
+      'contextmenu': function()
+      {
+        return false;
       }
 
     },
