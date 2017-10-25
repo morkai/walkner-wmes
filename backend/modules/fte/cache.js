@@ -10,12 +10,18 @@ module.exports = function setUpFteCache(app, fteModule)
   const FteMasterEntry = mongoose.model('FteMasterEntry');
   const FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
-  const idToFteLeaderEntryMapsMap = {};
-  const idToFteEntryMap = {};
   const idToQueueMap = {};
+  let idToFteLeaderEntryMapsMap = {};
+  let idToFteEntryMap = {};
 
   app.broker.subscribe('fte.*.deleted', onFteEntryDeleted);
   app.broker.subscribe('shiftChanged', onShiftChanged);
+
+  fteModule.cleanCache = function()
+  {
+    idToFteLeaderEntryMapsMap = {};
+    idToFteEntryMap = {};
+  };
 
   fteModule.getCachedEntry = function(type, _id, done)
   {

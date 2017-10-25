@@ -322,22 +322,26 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     }
 
     const absenceTasks = entry.absenceTasks || {};
+    const makeTotals = () => ({
+      demand: 0,
+      supply: 0,
+      shortage: 0,
+      absence: 0
+    });
     const companyTotals = {
-      total: {
-        demand: 0,
-        supply: 0,
-        shortage: 0,
-        absence: 0
-      }
+      total: makeTotals()
     };
     let overallTotalDemand = 0;
     let overallTotalSupply = 0;
     let overallTotalShortage = 0;
 
-    _.forEach(entry.tasks[0].demand, demand =>
+    if (entry.tasks[0].shortage)
     {
-      companyTotals[demand.id] = _.clone(companyTotals.total);
-    });
+      _.forEach(entry.tasks[0].demand, demand =>
+      {
+        companyTotals[demand.id] = makeTotals();
+      });
+    }
 
     entry.tasks.forEach(task =>
     {
@@ -347,6 +351,12 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
 
       const prodFlow = task.type === 'prodFlow';
       const absenceTask = absenceTasks[task.id] >= 0;
+
+      if (_.isEmpty(task.shortage))
+      {
+        task.demand = [];
+        task.shortage = [];
+      }
 
       _.forEach(task.demand, taskDemand =>
       {
@@ -370,6 +380,11 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
           const {id, count} = taskCompany;
 
           task.total += count;
+
+          if (!companyTotals[id])
+          {
+            companyTotals[id] = makeTotals();
+          }
 
           companyTotals.total.supply += count;
           companyTotals[id].supply += count;

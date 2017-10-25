@@ -392,6 +392,8 @@ module.exports = function startFixRoutes(app, express)
       return next(app.createError('IN_PROGRESS', 400));
     }
 
+    req.setTimeout(0);
+
     inProgress.recountFteTotals = true;
 
     const startedAt = Date.now();
@@ -401,6 +403,8 @@ module.exports = function startFixRoutes(app, express)
     recountFteTotals('FteMasterEntry', moment('2013-12-01T05:00:00.000Z'), function(err)
     {
       inProgress.recountFteTotals = false;
+
+      app.fte.cleanCache();
 
       if (err)
       {
@@ -421,6 +425,8 @@ module.exports = function startFixRoutes(app, express)
       return next(app.createError('IN_PROGRESS', 400));
     }
 
+    req.setTimeout(0);
+
     inProgress.recountFteTotals = true;
 
     const startedAt = Date.now();
@@ -430,6 +436,8 @@ module.exports = function startFixRoutes(app, express)
     recountFteTotals('FteLeaderEntry', moment('2013-12-01T05:00:00.000Z'), function(err)
     {
       inProgress.recountFteTotals = false;
+
+      app.fte.cleanCache();
 
       if (err)
       {
@@ -472,7 +480,7 @@ module.exports = function startFixRoutes(app, express)
 
         if (fteEntries.length === 0)
         {
-          return setTimeout(recountFteTotals.bind(null, modelName, fromMoment, done), 30);
+          return setTimeout(recountFteTotals.bind(null, modelName, fromMoment, done), 1);
         }
 
         step(
@@ -491,7 +499,7 @@ module.exports = function startFixRoutes(app, express)
               return done(err);
             }
 
-            setTimeout(calcNext, 30);
+            setTimeout(calcNext, 1);
           }
         );
       }
