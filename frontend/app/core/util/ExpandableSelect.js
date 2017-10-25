@@ -135,7 +135,7 @@ define([
   $.fn[PLUGIN_NAME] = function()
   {
     var result;
-    var options = null;
+    var options = {};
     var methodName = null;
     var methodArgs = null;
 
@@ -146,7 +146,7 @@ define([
     }
     else
     {
-      options = _.defaults({}, arguments[0], $.fn[PLUGIN_NAME].defaults);
+      _.defaults(options, arguments[0]);
     }
 
     this.each(function()
@@ -171,7 +171,7 @@ define([
         expandableSelect.destroy();
       }
 
-      $el.data(PLUGIN_NAME, new ExpandableSelect($el, options));
+      $el.data(PLUGIN_NAME, new ExpandableSelect($el, _.defaults(options, $.fn[PLUGIN_NAME].defaults)));
     });
 
     return result === undefined ? this : result;
