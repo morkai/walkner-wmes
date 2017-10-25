@@ -240,8 +240,6 @@ define([
         showTimes: this.plan.displayOptions.isOrderTimePrinted(),
         pages: this.serializePrintPages(lines)
       });
-
-      win.print();
     },
 
     serializePrintPages: function(lines)
@@ -288,8 +286,6 @@ define([
             };
           })
         };
-
-        console.log(workerCounts);
 
         if (workerCounts.length === 0)
         {

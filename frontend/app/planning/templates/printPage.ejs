@@ -135,6 +135,17 @@
     .hourlyPlan td:last-child {
       width: auto;
     }
+    #info {
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 7px;
+      width: 100%;
+      background: #FFD1D1;
+      border-bottom: 1px solid #F8ACAC;
+      font-size: 28px;
+      text-align: center;
+    }
     @media print {
       body {
         margin: 0;
@@ -149,10 +160,16 @@
       .bd {
         height: 900px;
       }
+      #info {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
+<div id="info">
+  Wciśnij <kbd>Ctrl+P</kbd>, aby rozpocząć drukowanie.
+</div>
 <% pages.forEach(function(page) { %>
 <section class="page">
   <header>
