@@ -172,7 +172,7 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
       results.prodLines[pso.prodLine] = {
         division: {
           _id: lineOrgUnits.division,
-          label: lineOrgUnits.division
+          label: String(lineOrgUnits.division)
         },
         subdivision: {
           _id: lineOrgUnits.subdivision,
@@ -180,7 +180,7 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
         },
         mrpControllers: {
           _id: lineOrgUnits.mrpControllers,
-          label: lineOrgUnits.mrpControllers.join('; ')
+          label: lineOrgUnits.mrpControllers ? lineOrgUnits.mrpControllers.join('; ') : '?'
         },
         prodFlow: {
           _id: lineOrgUnits.prodFlow,
@@ -188,11 +188,11 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
         },
         workCenter: {
           _id: lineOrgUnits.workCenter,
-          label: lineOrgUnits.workCenter
+          label: String(lineOrgUnits.workCenter)
         },
         prodLine: {
-          _id: lineOrgUnits.prodLine,
-          label: lineOrgUnits.prodLine
+          _id: pso.prodLine,
+          label: pso.prodLine
         }
       };
     }
