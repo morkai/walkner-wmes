@@ -133,17 +133,21 @@ define([
     {
       backendRestarting = false;
 
-      if (restartMessageView !== null)
+      if (!restartMessageView)
       {
-        restartMessageView.$el.slideUp(function()
-        {
-          if (restartMessageView.options.type === 'backend')
-          {
-            restartMessageView.remove();
-            restartMessageView = null;
-          }
-        });
+        return;
       }
+
+      var oldRestartMessageView = restartMessageView;
+
+      oldRestartMessageView.$el.slideUp(function()
+      {
+        if (restartMessageView === oldRestartMessageView)
+        {
+          restartMessageView.remove();
+          restartMessageView = null;
+        }
+      });
 
       broker.publish('updater.backendRestarted');
     });
@@ -165,7 +169,12 @@ define([
 
     if (viewsEnabled)
     {
-      if (restartMessageView !== null)
+      if (restartMessageView)
+      {
+        restartMessageView.cancelAnimations(true, true);
+      }
+
+      if (restartMessageView)
       {
         restartMessageView.remove();
       }

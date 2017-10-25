@@ -210,6 +210,7 @@ function(
 
   View.prototype.cancelAnimations = function(clearQueue, jumpToEnd)
   {
+    this.$el.stop(clearQueue !== false, jumpToEnd !== false);
     this.$(':animated').stop(clearQueue !== false, jumpToEnd !== false);
   };
 

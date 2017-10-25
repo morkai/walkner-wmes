@@ -17,6 +17,15 @@ define([
     afterRender: function()
     {
       this.el.ownerDocument.body.style.marginBottom = (this.$el.outerHeight() + 15) + 'px';
+
+      if (this.rendered)
+      {
+        this.el.style.display = 'block';
+      }
+      else
+      {
+        this.rendered = true;
+      }
     }
 
   });
