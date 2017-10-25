@@ -1422,6 +1422,24 @@ module.exports = function setUpGenerator(app, module)
 
   function getNextOrderForLine(lineState)
   {
+    while (lineState.orderStateQueue.length)
+    {
+      if (!lineState.orderStateQueue[0].order.urgent)
+      {
+        break;
+      }
+
+      const urgentOrderState = lineState.orderStateQueue.shift();
+
+      if (lineState.plannedOrdersSet.has(urgentOrderState.order._id)
+        || urgentOrderState.quantityTodo === 0)
+      {
+        continue;
+      }
+
+      return urgentOrderState;
+    }
+
     const bigOrderIdSet = new Set();
 
     if (lineState.bigOrderStateQueue.length)
