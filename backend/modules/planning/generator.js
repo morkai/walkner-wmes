@@ -1078,8 +1078,8 @@ module.exports = function setUpGenerator(app, module)
       orderStateQueues.easy.sort(sortEasyOrders);
       orderStateQueues.hard.sort(sortHardOrders);
 
-      orderStateQueues.small.sort(sortEasyOrders);
-      //sortSmallOrdersLevan(orderStateQueues);
+      //orderStateQueues.small.sort(sortEasyOrders);
+      sortSmallOrdersLevan(orderStateQueues);
       //sortSmallOrdersParts(orderStateQueues);
     }
 
