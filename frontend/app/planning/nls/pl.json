@@ -47,7 +47,8 @@
   "toolbar:stats:tooltip:late": "Suma wszystkich\nopóźnionych zleceń\nw MRP",
   "toolbar:stats:tooltip:done": "Suma wszystkich zleceń\nrozplanowanych na liniach\nw MRP",
 
-  "print:workerCount": "{workerCount} {workerCount, plural, one{osoba} few{osoby} other{osób}}",
+  "print:workerCount": "{count} {count, plural, one{osoba} few{osoby} other{osób}}",
+  "print:workerCounts": "{from}-{to} {to, plural, one{osoba} few{osoby} other{osób}}",
 
   "empty": "Brak planu dla wybranych filtrów.",
 

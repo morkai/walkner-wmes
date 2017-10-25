@@ -252,13 +252,14 @@ define([
 
       lines.forEach(function(line)
       {
+        var workerCounts = [];
         var bigPage = {
           pageNo: 1,
           pageCount: 1,
           mrp: line.settings.get('mrpPriority').join(' '),
           line: line.id,
           hourlyPlan: line.get('hourlyPlan'),
-          workerCount: line.get('workerCount'),
+          workerCount: '?',
           orders: line.orders.map(function(lineOrder, i)
           {
             var order = plan.orders.get(lineOrder.get('orderNo'));
@@ -266,6 +267,13 @@ define([
             var nextShift = prevShiftNo !== -1 && shiftNo !== prevShiftNo;
 
             prevShiftNo = shiftNo;
+
+            var lineMrpSettings = line.mrpSettings(order.get('mrp'));
+
+            if (lineMrpSettings && !_.includes(workerCounts, lineMrpSettings.get('workerCount')))
+            {
+              workerCounts.push(lineMrpSettings.get('workerCount'));
+            }
 
             return {
               no: i + 1,
@@ -280,6 +288,27 @@ define([
             };
           })
         };
+
+        console.log(workerCounts);
+
+        if (workerCounts.length === 0)
+        {
+          workerCounts.push(1);
+        }
+
+        if (workerCounts.length === 1)
+        {
+          bigPage.workerCount = t('planning', 'print:workerCount', {count: workerCounts[0]});
+        }
+        else
+        {
+          workerCounts.sort();
+
+          bigPage.workerCount = t('planning', 'print:workerCounts', {
+            to: workerCounts.pop(),
+            from: workerCounts.join('-')
+          });
+        }
 
         var ordersPerPage = 42;
         var maxOrdersForHourlyPlan = 35;
