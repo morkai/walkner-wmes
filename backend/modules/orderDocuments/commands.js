@@ -363,10 +363,15 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
           no: order._id,
           nc12: order.nc12,
           name: order.name,
-          documents: prepareDocumentsMap(order.name, order.documents),
+          documents: prepareDocumentsMap(order.name, order.documents, {}),
           hasBom: !_.isEmpty(order.bom),
           hasEto: false
         };
+
+        if (!/^[0-9]+$/.test(order.nc12))
+        {
+          prepareDocumentsMap(order.nc12, [], this.order.documents);
+        }
 
         fs.stat(path.join(module.config.etoPath, order.nc12 + '.html'), this.next());
       },
@@ -383,10 +388,8 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
     );
   }
 
-  function prepareDocumentsMap(productName, documentsList)
+  function prepareDocumentsMap(productName, documentsList, documentsMap)
   {
-    const documentsMap = {};
-
     _.forEach(documentsList, function(document)
     {
       documentsMap[document.nc15] = document.name;
