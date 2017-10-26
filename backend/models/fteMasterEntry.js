@@ -18,7 +18,6 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     },
     count: {
       type: Number,
-      min: 0,
       default: 0
     }
   }, {
@@ -38,7 +37,6 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     },
     count: {
       type: Number,
-      min: 0,
       default: 0
     }
   }, {
@@ -58,7 +56,6 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     },
     count: {
       type: Number,
-      min: 0,
       default: 0
     }
   }, {
