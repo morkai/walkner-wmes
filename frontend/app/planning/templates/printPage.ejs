@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Plan dla linii <%= lines %> na dzień <%- time.format(date, 'LL') %></title>
+  <title>Plan dla linii <%= lines %> na dzień <%- time.utc.format(date, 'LL') %></title>
   <style>
     @page {
       size: A4 portrait;
@@ -219,7 +219,7 @@
         <td class="name"><span><%= order.name %></span></td>
         <td class="qty"><%- order.qtyPlan %>/<%- order.qtyTodo %></td>
         <% if (showTimes) { %>
-        <td class="time"><%- time.format(order.startAt, 'HH:mm') %>-<%- time.format(order.finishAt, 'HH:mm') %></td>
+        <td class="time"><%- time.utc.format(order.startAt, 'HH:mm') %>-<%- time.utc.format(order.finishAt, 'HH:mm') %></td>
         <% } %>
       </tr>
       <% }) %>
@@ -270,7 +270,7 @@
   </section>
   <footer>
     <div>
-      <p>Plan dla linii <%= page.line %> na dzień <%- time.format(date, 'LL') %>.</p>
+      <p>Plan dla linii <%= page.line %> na dzień <%- time.utc.format(date, 'LL') %>.</p>
       <p>Wydrukowano w <%- time.format(Date.now(), 'LLLL') %> przez <%= user.getLabel() %> za pomocą systemu WMES.</p>
     </div>
     <div>
