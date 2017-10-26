@@ -1,1 +1,1 @@
-define(["app/nls/locale/en"],function(e){return{root:{"BREADCRUMBS:browse":function(e){return"Production data change requests"},"MSG:LOADING_FAILURE":function(e){return"Failed to load the change requests :-("}},pl:!0}});
+define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMBS:browse":function(n){return"Production data change requests"},"MSG:LOADING_FAILURE":function(n){return"Failed to load the change requests :-("},"fte:demand":function(n){return"(demand)"},"fte:supply":function(n){return"(supply)"}},pl:!0}});
