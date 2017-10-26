@@ -15,7 +15,7 @@ module.exports = function setUpOmr(app, module)
   const INPUT_DIR_CALM_PERIOD = app.options.env !== 'development' ? (30 * 1000) : (5 * 1000);
   const MAX_PARALLEL_PROCESSING = app.options.env !== 'development' ? 1 : 3;
   const SURVEY_PAGE_COUNT = 2;
-  const INPUT_FILE_RE = /^[0-9]+\.(?:jpe?g)$/i;
+  const INPUT_FILE_RE = /[0-9]+\.(?:jpe?g)$/i;
 
   const mongoose = app[module.config.mongooseId];
   const OpinionSurvey = mongoose.model('OpinionSurvey');
