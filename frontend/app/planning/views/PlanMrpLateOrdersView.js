@@ -202,37 +202,34 @@ define([
 
     showMenu: function(e)
     {
-      var order = this.plan.lateOrders.get(this.$(e.currentTarget).attr('data-id'));
+      var lateOrder = this.plan.lateOrders.get(this.$(e.currentTarget).attr('data-id'));
       var menu = [
-        {
-          label: t('planning', 'orders:menu:sapOrder'),
-          handler: this.handleSapOrderAction.bind(this, order)
-        }
+        contextMenu.actions.sapOrder(lateOrder.id)
       ];
+
+      if (this.plan.canCommentOrders())
+      {
+        menu.push(contextMenu.actions.comment(lateOrder.id));
+      }
 
       if (this.plan.isEditable() && user.isAllowedTo('PLANNING:PLANNER', 'PLANNING:MANAGE'))
       {
         menu.push({
           label: t('planning', 'orders:menu:add'),
-          handler: this.handleAddAction.bind(this, order)
+          handler: this.handleAddAction.bind(this, lateOrder)
         });
       }
 
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },
 
-    handleSapOrderAction: function(order)
-    {
-      window.open('#orders/' + order.id);
-    },
-
-    handleAddAction: function(order)
+    handleAddAction: function(lateOrder)
     {
       var dialogView = new PlanOrderAddDialogView({
         plan: this.plan,
         mrp: this.mrp,
         model: {
-          orderNo: order.id
+          orderNo: lateOrder.id
         }
       });
 

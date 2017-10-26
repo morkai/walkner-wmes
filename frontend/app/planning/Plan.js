@@ -199,6 +199,11 @@ define([
       return this.isEditable() && user.isAllowedTo('PLANNING:MANAGE', 'PLANNING:PLANNER');
     },
 
+    canCommentOrders: function()
+    {
+      return user.isAllowedTo('ORDERS:MANAGE', 'PLANNING:PLANNER');
+    },
+
     applyChange: function(planChange)
     {
       var plan = this;

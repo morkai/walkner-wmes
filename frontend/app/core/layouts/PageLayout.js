@@ -70,7 +70,8 @@ define([
 
   PageLayout.prototype.serialize = function()
   {
-    return _.extend(View.prototype.serialize.call(this), {
+    return _.assign(View.prototype.serialize.call(this), {
+      hdHidden: !!this.options.hdHidden,
       version: this.options.version,
       changelogUrl: this.options.changelogUrl
     });

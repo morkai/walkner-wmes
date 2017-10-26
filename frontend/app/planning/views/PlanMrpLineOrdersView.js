@@ -402,10 +402,7 @@ define([
       var lineOrder = this.line.orders.get(this.$(e.currentTarget).attr('data-id'));
       var orderNo = lineOrder.get('orderNo');
       var menu = [
-        {
-          label: t('planning', 'orders:menu:sapOrder'),
-          handler: this.handleSapOrderAction.bind(this, orderNo)
-        }
+        contextMenu.actions.sapOrder(orderNo)
       ];
 
       if (this.plan.shiftOrders.findOrders(orderNo).length
@@ -413,19 +410,19 @@ define([
       {
         menu.push({
           label: t('planning', 'orders:menu:shiftOrder'),
-          handler: this.handleShiftOrdersAction.bind(this, lineOrder)
+          handler: this.handleShiftOrderAction.bind(this, lineOrder)
         });
+      }
+
+      if (this.plan.canCommentOrders())
+      {
+        menu.push(contextMenu.actions.comment(orderNo));
       }
 
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },
 
-    handleSapOrderAction: function(orderNo)
-    {
-      window.open('#orders/' + orderNo);
-    },
-
-    handleShiftOrdersAction: function(lineOrder)
+    handleShiftOrderAction: function(lineOrder)
     {
       var orderNo = lineOrder.get('orderNo');
       var line = this.line.id;
@@ -434,13 +431,13 @@ define([
 
       if (shiftOrders.length === 1)
       {
-        return window.open('#prodShiftOrders/' + shiftOrders[0].id);
+        return window.open('/#prodShiftOrders/' + shiftOrders[0].id);
       }
 
       if (shiftOrders.length)
       {
         return window.open(
-          '#prodShiftOrders?sort(startedAt)&limit(20)'
+          '/#prodShiftOrders?sort(startedAt)&limit(20)'
             + '&orderId=' + orderNo
             + '&prodLine=' + encodeURIComponent(line)
             + '&shift=' + shift
@@ -451,13 +448,13 @@ define([
 
       if (shiftOrders.length === 1)
       {
-        return window.open('#prodShiftOrders/' + shiftOrders[0].id);
+        return window.open('/#prodShiftOrders/' + shiftOrders[0].id);
       }
 
       if (shiftOrders.length)
       {
         return window.open(
-          '#prodShiftOrders?sort(startedAt)&limit(20)'
+          '/#prodShiftOrders?sort(startedAt)&limit(20)'
             + '&orderId=' + orderNo
             + '&prodLine=' + encodeURIComponent(line)
         );
@@ -467,10 +464,10 @@ define([
 
       if (shiftOrders.length === 1)
       {
-        return window.open('#prodShiftOrders/' + shiftOrders[0].id);
+        return window.open('/#prodShiftOrders/' + shiftOrders[0].id);
       }
 
-      window.open('#prodShiftOrders?sort(startedAt)&limit(20)&orderId=' + orderNo);
+      window.open('/#prodShiftOrders?sort(startedAt)&limit(20)&orderId=' + orderNo);
     },
 
     updateShiftState: function()

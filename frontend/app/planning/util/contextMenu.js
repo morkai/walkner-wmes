@@ -2,9 +2,11 @@
 
 define([
   'jquery',
+  'app/i18n',
   'app/planning/templates/contextMenu'
 ], function(
   $,
+  t,
   template
 ) {
   'use strict';
@@ -116,6 +118,48 @@ define([
       view.$contextMenu = $menu;
 
       view.broker.publish('planning.contextMenu.shown');
+    },
+
+    actions: {
+
+      sapOrder: function(orderNo)
+      {
+        return {
+          label: t.bound('planning', 'orders:menu:sapOrder'),
+          handler: function()
+          {
+            window.open('/#orders/' + orderNo);
+          }
+        };
+      },
+
+      comment: function(orderNo)
+      {
+        return {
+          label: t('planning', 'orders:menu:comment'),
+          handler: function()
+          {
+            var width = Math.min(window.screen.availWidth - 200, 1400);
+            var height = Math.min(window.screen.availHeight - 160, 800);
+            var left = window.screen.availWidth - width - 80;
+
+            var win = window.open(
+              '/?hd=0#orders/' + orderNo,
+              'WMES_PLANNING_COMMENT',
+              'top=80,left=' + left + ',width=' + width + ',height=' + height
+            );
+
+            win.onPageShown = function()
+            {
+              win.focus();
+              win.document.querySelector('textarea[name="comment"]').focus();
+
+              setTimeout(function() { win.scrollTo(0, win.document.body.scrollHeight); }, 1);
+            };
+          }
+        };
+      }
+
     }
 
   };

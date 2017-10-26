@@ -92,7 +92,8 @@
           '.navbar': createNavbarView()
         },
         version: updater.getCurrentVersionString(),
-        changelogUrl: '#changelog'
+        changelogUrl: '#changelog',
+        hdHidden: window.location.search.indexOf('hd=0') !== -1
       });
     });
 
@@ -244,6 +245,11 @@
           });
         }, 1);
       });
+
+      if (typeof window.onPageShown === 'function')
+      {
+        broker.subscribe('viewport.page.shown', window.onPageShown);
+      }
 
       domReady(function()
       {

@@ -20,7 +20,7 @@ define([
     events: _.extend({
       'change #-delayReason': function(e)
       {
-        var changingDelayReason = e.target.value !== this.model.get('delayReason');
+        var changingDelayReason = e.target.value !== (this.model.get('delayReason') || '');
 
         this.$id('submit-comment').toggleClass('hidden', changingDelayReason);
         this.$id('submit-edit').toggleClass('hidden', !changingDelayReason);

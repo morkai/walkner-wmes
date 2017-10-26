@@ -342,10 +342,7 @@ define([
     {
       var planOrder = this.mrp.orders.get(this.$(e.currentTarget).attr('data-id'));
       var menu = [
-        {
-          label: t('planning', 'orders:menu:sapOrder'),
-          handler: this.handleSapOrderAction.bind(this, planOrder)
-        }
+        contextMenu.actions.sapOrder(planOrder.id)
       ];
 
       if (this.plan.shiftOrders.findOrders(planOrder.id).length
@@ -353,8 +350,13 @@ define([
       {
         menu.push({
           label: t('planning', 'orders:menu:shiftOrder'),
-          handler: this.handleShiftOrdersAction.bind(this, planOrder)
+          handler: this.handleShiftOrderAction.bind(this, planOrder)
         });
+      }
+
+      if (this.plan.canCommentOrders())
+      {
+        menu.push(contextMenu.actions.comment(planOrder.id));
       }
 
       if (this.plan.canEditSettings() && !planOrder.isContinuation())
@@ -380,15 +382,10 @@ define([
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },
 
-    handleSapOrderAction: function(planOrder)
-    {
-      window.open('#orders/' + planOrder.id);
-    },
-
-    handleShiftOrdersAction: function(planOrder)
+    handleShiftOrderAction: function(planOrder)
     {
       var planShiftOrders = this.plan.shiftOrders.findOrders(planOrder.id);
-      var url = '#prodShiftOrders';
+      var url = '/#prodShiftOrders';
 
       if (planShiftOrders.length === 1)
       {
@@ -402,28 +399,28 @@ define([
       window.open(url);
     },
 
-    handleQuantityAction: function(order)
+    handleQuantityAction: function(planOrder)
     {
       var dialogView = new PlanOrderQuantityDialogView({
         plan: this.plan,
         mrp: this.mrp,
-        order: order
+        order: planOrder
       });
 
       viewport.showDialog(dialogView, t('planning', 'orders:menu:quantity:title'));
     },
 
-    handleIgnoreAction: function(order)
+    handleIgnoreAction: function(planOrder)
     {
       var view = this;
       var dialogView = new DialogView({
         autoHide: false,
         template: orderIgnoreDialogTemplate,
         model: {
-          action: order.get('ignored') ? 'unignore' : 'ignore',
+          action: planOrder.get('ignored') ? 'unignore' : 'ignore',
           plan: view.plan.getLabel(),
           mrp: view.mrp.getLabel(),
-          order: order.getLabel()
+          order: planOrder.getLabel()
         }
       });
 
@@ -431,9 +428,9 @@ define([
       {
         var req = view.ajax({
           method: 'PATCH',
-          url: '/planning/plans/' + view.plan.id + '/orders/' + order.id,
+          url: '/planning/plans/' + view.plan.id + '/orders/' + planOrder.id,
           data: JSON.stringify({
-            ignored: !order.get('ignored')
+            ignored: !planOrder.get('ignored')
           })
         });
 
@@ -455,7 +452,7 @@ define([
       viewport.showDialog(dialogView, t('planning', 'orders:menu:ignore:title'));
     },
 
-    handleRemoveAction: function(order)
+    handleRemoveAction: function(planOrder)
     {
       var view = this;
       var dialogView = new DialogView({
@@ -464,7 +461,7 @@ define([
         model: {
           plan: view.plan.getLabel(),
           mrp: view.mrp.getLabel(),
-          order: order.getLabel()
+          order: planOrder.getLabel()
         }
       });
 
@@ -472,7 +469,7 @@ define([
       {
         var req = view.ajax({
           method: 'DELETE',
-          url: '/planning/plans/' + view.plan.id + '/orders/' + order.id
+          url: '/planning/plans/' + view.plan.id + '/orders/' + planOrder.id
         });
 
         req.done(dialogView.closeDialog);
