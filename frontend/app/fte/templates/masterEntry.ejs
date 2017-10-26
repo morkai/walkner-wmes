@@ -23,7 +23,9 @@
       <thead>
       <tr>
         <th class="fte-masterEntry-column-task" rowspan="5"><%- t('fte', 'masterEntry:column:task') %></th>
+        <% if (editable) { %>
         <th class="fte-masterEntry-column-noPlan even" rowspan="5"><%- t('fte', 'masterEntry:column:noPlan') %></th>
+        <% } %>
         <% if (demand.available) { %>
         <th class="fte-masterEntry-demand fte-masterEntry-totalColumn" rowspan="3" colspan="<%- demand.columnCount %>"><%- t('fte', 'masterEntry:column:demand') %></th>
         <% } %>
@@ -113,6 +115,7 @@
       </thead>
       <tbody>
       <% tasks.forEach(function(task, taskIndex) { %>
+      <% if (!editable && (task.noPlan || (task.totalDemand === 0 && task.total === 0 && task.totalShortage === 0))) return %>
       <tr data-task-index="<%- taskIndex %>">
         <td class="fte-masterEntry-cell-task">
           <% if (task.type === 'prodFlow') { %>
@@ -121,13 +124,15 @@
           <em><%= task.name %></em>
           <% } %>
         </td>
-        <td class="even <% if (editable) { %>fte-masterEntry-noPlan-container<% } %>">
+        <% if (editable) { %>
+        <td class="even fte-masterEntry-noPlan-container">
           <% if (editable) { %>
           <input class="fte-masterEntry-noPlan" type="checkbox" data-taskId="<%- task.id %>" data-task="<%- taskIndex %>" <%- task.noPlan ? 'checked' : '' %>>
           <% } else { %>
           <i class="fa fa-<%- task.noPlan ? 'check' : 'times' %>"></i>
           <% } %>
         </td>
+        <% } %>
         <% if (demand.available) { %>
         <td class="fte-masterEntry-demand fte-masterEntry-total-demand-task" data-task-index="<%- taskIndex %>">
           <%- _.isEmpty(task.demand) ? '' : round(task.totalDemand) %>
