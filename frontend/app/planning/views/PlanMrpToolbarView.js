@@ -278,6 +278,7 @@ define([
               orderNo: order.id,
               nc12: order.get('nc12'),
               name: order.get('name'),
+              kind: order.get('kind'),
               qtyTodo: order.get('quantityTodo'),
               qtyPlan: lineOrder.get('quantity'),
               startAt: lineOrder.get('startAt'),
