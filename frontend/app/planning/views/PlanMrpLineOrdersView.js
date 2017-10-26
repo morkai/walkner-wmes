@@ -268,7 +268,6 @@ define([
 
         var prevShiftOrder = shift.orders[shift.orders.length - 1];
         var prevFinishedAt = prevShiftOrder ? prevShiftOrder.finishAt : shift.startTime;
-
         var quantityTodo = lineOrder.get('quantity');
         var quantityDone = plan.shiftOrders.getTotalQuantityDone(planLine.id, shift.no, order.id);
 
@@ -276,17 +275,17 @@ define([
           _id: lineOrder.id,
           orderNo: order.id,
           quantity: lineOrder.get('quantity'),
-          incomplete: order.get('incomplete') > 0,
-          completed: shift.state && quantityDone >= quantityTodo,
-          started: shift.state && quantityDone > 0,
-          confirmed: orderData.statuses.indexOf('CNF') !== -1,
-          delivered: orderData.statuses.indexOf('DLV') !== -1,
-          selected: shift.state && order.id === prodState.orderNo,
+          incomplete: order.get('incomplete') > 0 ? 'is-incomplete' : '',
+          completed: quantityDone >= quantityTodo ? 'is-completed' : '',
+          started: quantityDone > 0 && quantityDone < quantityTodo ? 'is-started' : '',
+          confirmed: orderData.statuses.indexOf('CNF') !== -1 ? 'is-cnf' : '',
+          delivered: orderData.statuses.indexOf('DLV') !== -1 ? 'is-dlv' : '',
+          selected: shift.state && order.id === prodState.orderNo ? 'is-selected' : '',
+          external: mrp !== planMrp.id ? 'is-external' : '',
           finishAt: finishAt,
           margin: (startAt - prevFinishedAt) * 100 / shiftUtil.SHIFT_DURATION,
           width: duration * 100 / shiftUtil.SHIFT_DURATION,
-          mrp: mrp,
-          external: mrp !== planMrp.id
+          mrp: mrp
         });
       });
 
@@ -543,6 +542,12 @@ define([
       var shift = prodShift.get('shift');
       var orderNo = planShiftOrder.get('orderId');
       var $lineOrder = this.$id('list-' + shift).find('.is-lineOrder[data-order-no="' + orderNo + '"]');
+
+      if (!$lineOrder.length)
+      {
+        return;
+      }
+
       var lineOrder = this.line.orders.get($lineOrder.attr('data-id'));
 
       if (!lineOrder)

@@ -9,13 +9,21 @@
   <% shifts.forEach(function(shift, i) { %>
   <div class="planning-mrp-list-container planning-mrp-lineOrders">
     <% if (i == 0) { %>
-    <div class="planning-mrp-list-hd <%- prodState.online %>" data-popover-placement="right" data-popover-content="line"><%= line %></div>
+    <div class="planning-mrp-list-hd <%- prodState.online %>" data-popover-placement="right" data-popover-content="line">
+      <%= line %>
+    </div>
     <% } %>
-    <div class="planning-mrp-lineOrders-shift" data-shift="<%- shift.no %>" data-state="<%- shift.state %>" data-popover-placement="right" data-popover-content="shift"><%- t('core', 'SHIFT:' + shift.no) %></div>
+    <div class="planning-mrp-lineOrders-shift" data-shift="<%- shift.no %>" data-state="<%- shift.state %>" data-popover-placement="right" data-popover-content="shift">
+      <%- t('core', 'SHIFT:' + shift.no) %>
+    </div>
     <div id="<%- idPrefix %>-list-<%- shift.no %>" class="planning-mrp-list planning-mrp-lineOrders-list" data-shift-start-time="<%- shift.startTime %>">
       <% shift.orders.forEach(function(shiftOrder) { %>
-      <div class="planning-mrp-list-item is-lineOrder <%- shiftOrder.incomplete ? 'is-incomplete' : ''%> <%- shiftOrder.started ? 'is-started' : '' %> <%- shiftOrder.completed ? 'is-completed' : '' %> <%- shiftOrder.surplus ? 'is-surplus' : '' %> <%- shiftOrder.external ? 'is-external' : ''%> <%- shiftOrder.selected ? 'is-selected' : '' %>" data-id="<%- shiftOrder._id %>" data-order-no="<%- shiftOrder.orderNo %>" data-popover-content="lineOrder" style="width: <%- shiftOrder.width %>%; margin-left: <%- shiftOrder.margin %>%">
-        <div class="planning-mrp-list-item-inner <%- shiftOrder.confirmed ? 'is-cnf' : '' %> <%- shiftOrder.delivered ? 'is-dlv' : '' %>">
+      <div class="planning-mrp-list-item is-lineOrder <%- shiftOrder.incomplete %> <%- shiftOrder.started %> <%- shiftOrder.completed %> <%- shiftOrder.external %> <%- shiftOrder.selected %>"
+           data-id="<%- shiftOrder._id %>"
+           data-order-no="<%- shiftOrder.orderNo %>"
+           data-popover-content="lineOrder"
+           style="width: <%- shiftOrder.width %>%; margin-left: <%- shiftOrder.margin %>%">
+        <div class="planning-mrp-list-item-inner <%- shiftOrder.confirmed %> <%- shiftOrder.delivered %>">
           <% if (shiftOrder.external) { %>
           <%- shiftOrder.orderNo %>, <%- shiftOrder.quantity %> <%- t('planning', 'lineOrders:unit') %>, <%- shiftOrder.mrp %>
           <% } else { %>
