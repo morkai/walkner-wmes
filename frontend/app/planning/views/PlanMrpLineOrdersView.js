@@ -544,6 +544,12 @@ define([
       var orderNo = planShiftOrder.get('orderId');
       var $lineOrder = this.$id('list-' + shift).find('.is-lineOrder[data-order-no="' + orderNo + '"]');
       var lineOrder = this.line.orders.get($lineOrder.attr('data-id'));
+
+      if (!lineOrder)
+      {
+        return;
+      }
+
       var quantityTodo = lineOrder.get('quantity');
       var quantityDone = this.plan.shiftOrders.getTotalQuantityDone(this.line.id, shift, orderNo);
 
