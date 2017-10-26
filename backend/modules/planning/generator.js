@@ -43,8 +43,8 @@ module.exports = function setUpGenerator(app, module)
   const UNFROZEN_PLANS = DEV ? [] : [];
   const LOG_LINES = null;
   const LOG = DEV;
-  const AUTO_GENERATE_NEXT = DEV && UNFROZEN_PLANS.length === 0;
-  const COMPARE_ORDERS = DEV && UNFROZEN_PLANS.length === 0;
+  const AUTO_GENERATE_NEXT = !DEV && UNFROZEN_PLANS.length === 0;
+  const COMPARE_ORDERS = !DEV && UNFROZEN_PLANS.length === 0;
   // sortSmallOrdersByManHours sortSmallOrdersByLeven sortSmallOrdersByParts
   const SMALL_ORDERS_SORTER = sortSmallOrdersByLeven;
 
