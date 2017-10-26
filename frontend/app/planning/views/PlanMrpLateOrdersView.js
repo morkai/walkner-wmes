@@ -221,7 +221,7 @@ define([
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },
 
-    handleDetailsAction: function(order)
+    handleSapOrderAction: function(order)
     {
       window.open('#orders/' + order.id);
     },
