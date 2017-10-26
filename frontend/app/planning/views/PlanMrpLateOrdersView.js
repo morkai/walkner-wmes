@@ -205,8 +205,8 @@ define([
       var order = this.plan.lateOrders.get(this.$(e.currentTarget).attr('data-id'));
       var menu = [
         {
-          label: t('planning', 'orders:menu:details'),
-          handler: this.handleDetailsAction.bind(this, order)
+          label: t('planning', 'orders:menu:sapOrder'),
+          handler: this.handleSapOrderAction.bind(this, order)
         }
       ];
 
