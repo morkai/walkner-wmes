@@ -244,7 +244,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       {
         return mrp.lines.find(line => line._id === lineId) || {
           _id: lineId,
-          workerCount: 1,
+          workerCount: 0,
           orderPriority: ['small', 'easy', 'hard']
         };
       });

@@ -80,7 +80,7 @@ define([
     defaults: function()
     {
       return {
-        workerCount: 1,
+        workerCount: 0,
         orderPriority: ['small', 'easy', 'hard']
       };
     }
