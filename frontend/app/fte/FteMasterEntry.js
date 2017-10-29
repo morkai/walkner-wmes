@@ -239,13 +239,13 @@ define([
               totals.supplyByProdFunction[taskFunction.id].companies[companyId] += count;
             }
 
-            if (task.shortage[companyIndexes[companyId]])
-            {
-              task.shortage[companyIndexes[companyId]].count -= count;
-            }
-
             if (absenceTask || task.totalDemand)
             {
+              if (task.shortage[companyIndexes[companyId]])
+              {
+                task.shortage[companyIndexes[companyId]].count -= count;
+              }
+
               task.totalShortage -= count;
             }
 

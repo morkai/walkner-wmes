@@ -390,13 +390,13 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
           companyTotals.total.supply += count;
           companyTotals[id].supply += count;
 
-          if (task.shortage[companyIndexes[id]])
-          {
-            task.shortage[companyIndexes[id]].count -= count;
-          }
-
           if (absenceTask || task.totalDemand)
           {
+            if (task.shortage[companyIndexes[id]])
+            {
+              task.shortage[companyIndexes[id]].count -= count;
+            }
+
             task.totalShortage -= count;
           }
 
