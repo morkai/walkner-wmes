@@ -5,7 +5,7 @@
 module.exports = function setUpOrgUnitsFix(app, module)
 {
   const oldToNewProdLine = {
-
+    'LM-19': 'LM-19'
   };
   const prodLineToOrgUnits = new Map();
   const prodLineToPlainOrgUnits = new Map();
