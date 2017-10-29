@@ -392,6 +392,12 @@ module.exports = function startFixRoutes(app, express)
       return next(app.createError('IN_PROGRESS', 400));
     }
 
+    if (req.query.date !== undefined
+      && (!_.isString(req.query.date) || !/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(req.query.date)))
+    {
+      return next(app.createError('INPUT', 400));
+    }
+
     req.setTimeout(0);
 
     inProgress.recountFteTotals = true;
@@ -400,7 +406,9 @@ module.exports = function startFixRoutes(app, express)
 
     app.debug('[fix] Recounting FTE Master totals...');
 
-    recountFteTotals('FteMasterEntry', moment('2013-12-01T05:00:00.000Z'), function(err)
+    const date = req.query.date || '2013-12-01';
+
+    recountFteTotals('FteMasterEntry', moment(`${date}T05:00:00.000Z`), function(err)
     {
       inProgress.recountFteTotals = false;
 
@@ -425,6 +433,12 @@ module.exports = function startFixRoutes(app, express)
       return next(app.createError('IN_PROGRESS', 400));
     }
 
+    if (req.query.date !== undefined
+      && (!_.isString(req.query.date) || !/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(req.query.date)))
+    {
+      return next(app.createError('INPUT', 400));
+    }
+
     req.setTimeout(0);
 
     inProgress.recountFteTotals = true;
@@ -433,7 +447,9 @@ module.exports = function startFixRoutes(app, express)
 
     app.debug('[fix] Recounting FTE Leader totals...');
 
-    recountFteTotals('FteLeaderEntry', moment('2013-12-01T05:00:00.000Z'), function(err)
+    const date = req.query.date || '2013-12-01';
+
+    recountFteTotals('FteLeaderEntry', moment(`${date}T05:00:00.000Z`), function(err)
     {
       inProgress.recountFteTotals = false;
 

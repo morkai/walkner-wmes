@@ -346,8 +346,8 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
       task.total = 0;
       task.totalShortage = 0;
 
-      const prodFlow = task.type === 'prodFlow';
       const absenceTask = absenceTasks[task.id] >= 0;
+      const companyIndexes = {};
 
       if (_.isEmpty(task.shortage))
       {
@@ -355,9 +355,13 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
         task.shortage = [];
       }
 
-      _.forEach(task.demand, taskDemand =>
+      _.forEach(task.demand, (taskDemand, i) =>
       {
         const {id, count} = taskDemand;
+
+        companyIndexes[id] = i;
+
+        task.shortage[i].count = count;
 
         task.totalDemand += count;
         task.totalShortage += count;
@@ -386,21 +390,36 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
           companyTotals.total.supply += count;
           companyTotals[id].supply += count;
 
-          if (prodFlow)
+          if (task.shortage[companyIndexes[id]])
+          {
+            task.shortage[companyIndexes[id]].count -= count;
+          }
+
+          if (absenceTask || task.totalDemand)
           {
             task.totalShortage -= count;
+          }
 
+          if (task.totalDemand)
+          {
             companyTotals.total.shortage -= count;
             companyTotals[id].shortage -= count;
           }
 
-          if (prodFlow || absenceTask)
+          if (absenceTask || task.totalDemand)
           {
             companyTotals.total.absence -= count;
             companyTotals[id].absence -= count;
           }
         });
       });
+
+      if (absenceTask)
+      {
+        task.totalShortage = Math.abs(task.totalShortage);
+
+        task.shortage.forEach(shortage => shortage.count = Math.abs(shortage.count));
+      }
 
       overallTotalDemand += task.totalDemand;
       overallTotalSupply += task.total;

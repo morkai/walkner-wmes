@@ -184,71 +184,79 @@ define([
       return this.get('tasks').map(function(task)
       {
         task.totalDemand = 0;
+        task.total = 0;
         task.totalShortage = 0;
         task.totalByCompany = {};
 
-        var shortageByCompany = {};
+        var absenceTask = absenceTasks[task.id] >= 0;
+        var companyIndexes = {};
 
-        _.forEach(task.shortage, function(taskShortage)
+        if (_.isEmpty(task.shortage))
         {
-          taskShortage.count = 0;
+          task.demand = [];
+          task.shortage = [];
+        }
 
-          shortageByCompany[taskShortage.id] = taskShortage;
-        });
-
-        _.forEach(task.demand, function(taskDemand)
+        _.forEach(task.demand, function(demand, i)
         {
-          var count = taskDemand.count;
+          var count = demand.count;
+
+          companyIndexes[demand.id] = i;
+
+          task.shortage[i].count = count;
 
           task.totalDemand += count;
           task.totalShortage += count;
-          totals.demandByCompany[taskDemand.id].total += count;
-          totals.shortageByCompany[taskDemand.id].total += count;
-          shortageByCompany[taskDemand.id].count = count;
+
+          totals.demandByCompany[demand.id].total += count;
+          totals.shortageByCompany[demand.id].total += count;
         });
 
-        var prodFlow = task.type === 'prodFlow';
-        var absenceTask = absenceTasks[task.id] >= 0;
-
-        task.functions.forEach(function(prodFunction)
+        task.functions.forEach(function(taskFunction)
         {
-          prodFunction.companies.forEach(function(company)
+          taskFunction.companies.forEach(function(taskCompany)
           {
-            var count = company.count;
+            var companyId = taskCompany.id;
+            var count = taskCompany.count;
 
-            task.totalShortage -= count;
+            task.total += count;
 
-            if (prodFlow && totals.shortageByCompany[company.id])
+            if (typeof task.totalByCompany[companyId] !== 'number')
             {
-              totals.shortageByCompany[company.id].total -= count;
+              task.totalByCompany[companyId] = 0;
             }
 
-            if (shortageByCompany[company.id])
-            {
-              shortageByCompany[company.id].count -= count;
-            }
+            task.totalByCompany[companyId] += count;
 
-            if (typeof task.totalByCompany[company.id] !== 'number')
+            if (totals.supplyByCompany[companyId])
             {
-              task.totalByCompany[company.id] = 0;
-            }
-
-            task.totalByCompany[company.id] += count;
-
-            if (totals.supplyByCompany[company.id])
-            {
-              totals.supplyByCompany[company.id].total += count;
+              totals.supplyByCompany[companyId].total += count;
             }
 
             if (totals.supplyByProdFunction)
             {
-              totals.supplyByProdFunction[prodFunction.id].total += count;
-              totals.supplyByProdFunction[prodFunction.id].companies[company.id] += count;
+              totals.supplyByProdFunction[taskFunction.id].total += count;
+              totals.supplyByProdFunction[taskFunction.id].companies[companyId] += count;
+            }
+
+            if (task.shortage[companyIndexes[companyId]])
+            {
+              task.shortage[companyIndexes[companyId]].count -= count;
+            }
+
+            if (absenceTask || task.totalDemand)
+            {
+              task.totalShortage -= count;
+            }
+
+            if (task.totalDemand)
+            {
+              totals.shortageByCompany[companyId].total -= count;
             }
           });
         });
 
-        if (absenceTask && task.shortage)
+        if (absenceTask)
         {
           task.totalShortage = Math.abs(task.totalShortage);
 
