@@ -483,7 +483,13 @@ exports.deleteRoute = function(app, Model, req, res, next)
 
 exports.exportRoute = function(app, options, req, res, next)
 {
+  app.debug('[express] Exporting: %s', JSON.stringify({
+    url: req.url,
+    user: app.user.createUserInfo(req.session.user, req)
+  }, null, 2));
+
   const format = req.params.format === 'xlsx' && app.express.config.jsonToXlsxExe ? 'xlsx' : 'csv';
+  let cursorClosed = false;
   let headerWritten = false;
   let columns = null;
   let jsonToXlsx = null;
@@ -530,17 +536,17 @@ exports.exportRoute = function(app, options, req, res, next)
     {
       const emitter = new EventEmitter();
 
-      handleExportStream(emitter, false, req, options.cleanUp);
+      handleExportStream(emitter, cursor, false, req, options.cleanUp);
 
       options.serializeStream(cursor, emitter);
     }
     else
     {
-      handleExportStream(cursor, true, req, options.cleanUp);
+      handleExportStream(cursor, cursor, true, req, options.cleanUp);
     }
   }
 
-  function handleExportStream(queryStream, serializeRow, req, cleanUp)
+  function handleExportStream(queryStream, cursor, serializeRow, req, cleanUp)
   {
     queryStream.on('error', function(err)
     {
@@ -554,15 +560,18 @@ exports.exportRoute = function(app, options, req, res, next)
 
     queryStream.on('end', function()
     {
-      writeHeader();
+      if (!cursorClosed)
+      {
+        writeHeader();
 
-      if (format === 'xlsx')
-      {
-        finalizeXlsx();
-      }
-      else if (format === 'csv')
-      {
-        finalizeCsv();
+        if (format === 'xlsx')
+        {
+          finalizeXlsx();
+        }
+        else if (format === 'csv')
+        {
+          finalizeCsv();
+        }
       }
 
       if (cleanUp)
@@ -573,6 +582,11 @@ exports.exportRoute = function(app, options, req, res, next)
 
     queryStream.on('data', function(doc)
     {
+      if (cursorClosed)
+      {
+        return;
+      }
+
       const row = serializeRow ? options.serializeRow(doc, req) : doc;
       const multiple = Array.isArray(row);
 
@@ -586,7 +600,12 @@ exports.exportRoute = function(app, options, req, res, next)
         columns = prepareExportColumns(format, options, Object.keys(multiple ? row[0] : row));
       }
 
-      writeHeader();
+      writeHeader(cursor);
+
+      if (cursorClosed)
+      {
+        return;
+      }
 
       if (multiple)
       {
@@ -599,7 +618,7 @@ exports.exportRoute = function(app, options, req, res, next)
     });
   }
 
-  function writeHeader()
+  function writeHeader(cursor)
   {
     if (headerWritten)
     {
@@ -611,6 +630,21 @@ exports.exportRoute = function(app, options, req, res, next)
     if (columns === null)
     {
       return res.sendStatus(204);
+    }
+
+    if (columns.length > 1100)
+    {
+      cursor.close();
+
+      cursorClosed = true;
+
+      app.debug('[express] Export killed: %s', JSON.stringify({
+        url: req.url,
+        user: app.user.createUserInfo(req.session.user, req),
+        columns: columns.length
+      }, null, 2));
+
+      return;
     }
 
     res.attachment(options.filename + '.' + format);
