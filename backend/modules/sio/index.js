@@ -3,6 +3,7 @@
 'use strict';
 
 const _ = require('lodash');
+const engineIo = require('engine.io');
 const socketIo = require('socket.io');
 const SocketIoMultiServer = require('./SocketIoMultiServer');
 const setUpRoutes = require('./routes');
@@ -10,6 +11,9 @@ let pmx = null;
 
 try { pmx = require('pmx'); }
 catch (err) {} // eslint-disable-line no-empty
+
+engineIo.Server.errors.SERVER_UNAVAILABLE = 503;
+engineIo.Server.errorMessages[503] = 'Server unavailable';
 
 exports.DEFAULT_CONFIG = {
   httpServerIds: ['httpServer'],
@@ -28,7 +32,8 @@ exports.start = function startSioModule(app, sioModule, done)
   sioModule.config.socketIo = _.assign({}, sioModule.config.socketIo, {
     path: sioModule.config.path,
     transports: ['websocket', 'xhr-polling'],
-    serveClient: false
+    serveClient: false,
+    allowRequest: checkRequest
   });
 
   let socketCount = 0;
@@ -59,6 +64,18 @@ exports.start = function startSioModule(app, sioModule, done)
     startSocketIo();
     done();
   });
+
+  function checkRequest(req, done)
+  {
+    const allServersAvailable = sioModule.config.httpServerIds.every(httpServerId => app[httpServerId].isAvailable());
+
+    if (!allServersAvailable)
+    {
+      return done(engineIo.Server.errors.SERVER_UNAVAILABLE, false);
+    }
+
+    return sioModule.checkRequest(req, done);
+  }
 
   function startSocketIo()
   {

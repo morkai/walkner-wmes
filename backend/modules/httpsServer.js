@@ -12,11 +12,24 @@ exports.DEFAULT_CONFIG = {
   host: '0.0.0.0',
   port: 443,
   key: 'privatekey.pem',
-  cert: 'certificate.pem'
+  cert: 'certificate.pem',
+  availabilityTopics: []
 };
 
 exports.start = function startHttpServerModule(app, module, done)
 {
+  let availabilityTopics = module.config.availabilityTopics.slice();
+
+  availabilityTopics.forEach(topic =>
+  {
+    app.broker.subscribe(topic).setLimit(1).on('message', () =>
+    {
+      availabilityTopics = availabilityTopics.filter(t => t !== topic);
+    });
+  });
+
+  module.isAvailable = () => availabilityTopics.length === 0;
+
   function onFirstServerError(err)
   {
     if (err.code === 'EADDRINUSE')
@@ -65,11 +78,11 @@ exports.start = function startHttpServerModule(app, module, done)
         }
       });
 
-      const expressApp = app[module.config.expressId].app;
+      const expressModule = app[module.config.expressId];
 
-      if (expressApp)
+      if (module.isAvailable() && expressModule)
       {
-        expressApp(req, res);
+        expressModule.app(req, res);
       }
       else
       {
