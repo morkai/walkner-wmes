@@ -55,6 +55,38 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
     return next(new Error('INVALID_TIME'));
   }
 
+  const {frontendAppData} = app.options;
+
+  if (frontendAppData && frontendAppData.PRODUCTION_DATA_START_DATE)
+  {
+    const startMoment = moment(frontendAppData.PRODUCTION_DATA_START_DATE, 'YYYY-MM-DD');
+    const fromMoment = moment(options.fromTime);
+
+    if (startMoment.valueOf() > fromMoment.valueOf())
+    {
+      fromMoment
+        .startOf('month')
+        .year(startMoment.year())
+        .month(startMoment.month())
+        .date(startMoment.date());
+
+      options.fromTime = fromMoment.valueOf();
+    }
+  }
+
+  const timeDiff = options.toTime - options.fromTime;
+  const year = 366 * 3600 * 24 * 1000;
+
+  if (timeDiff > year)
+  {
+    options.interval = 'day';
+
+    if (timeDiff > year * 3 && options.interval === 'day')
+    {
+      options.interval = 'week';
+    }
+  }
+
   const conditions = {
     startedAt: {
       $gte: options.fromTime,
