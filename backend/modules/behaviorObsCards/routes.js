@@ -32,6 +32,7 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
         rid: 10,
         date: 'date',
         observer: 30,
+        superior: 30,
         section: 20,
         line: 20,
         position: 20,
@@ -142,6 +143,7 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
   function exportBehaviorObsCard(doc)
   {
     const rows = [];
+    const superior = doc.superior ? doc.superior.label : '';
 
     _.forEach(doc.observations, function(o)
     {
@@ -149,6 +151,7 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
         rid: doc.rid,
         date: doc.date,
         observer: doc.observer.label,
+        superior,
         section: doc.section,
         line: doc.line,
         position: doc.position,
@@ -167,6 +170,7 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
         rid: doc.rid,
         date: doc.date,
         observer: doc.observer.label,
+        superior,
         section: doc.section,
         line: doc.line,
         position: doc.position,
@@ -185,6 +189,7 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
         rid: doc.rid,
         date: doc.date,
         observer: doc.observer.label,
+        superior,
         section: doc.section,
         line: doc.line,
         position: doc.position,
@@ -207,7 +212,8 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
       fromTime: reportsModule.helpers.getTime(query.from) || null,
       toTime: reportsModule.helpers.getTime(query.to) || null,
       interval: query.interval || 'month',
-      sections: _.isEmpty(query.sections) ? [] : query.sections.split(',')
+      sections: _.isEmpty(query.sections) ? [] : query.sections.split(','),
+      superior: _.isEmpty(query.superior) ? null : query.superior
     };
 
     reportsModule.helpers.generateReport(

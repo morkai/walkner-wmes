@@ -66,6 +66,11 @@ module.exports = function(mongoose, options, done)
         conditions.section = {$in: options.sections};
       }
 
+      if (options.superior)
+      {
+        conditions['superior.id'] = options.superior;
+      }
+
       const stream = BehaviorObsCard.find(conditions, fields).sort(sort).lean().cursor();
       const next = _.once(this.next());
 

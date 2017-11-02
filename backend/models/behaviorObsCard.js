@@ -43,6 +43,7 @@ module.exports = function setupBehaviorObsCardModel(app, mongoose)
     updater: {},
     updatedAt: Date,
     observer: {},
+    superior: {},
     position: String,
     section: String,
     line: String,
@@ -77,6 +78,7 @@ module.exports = function setupBehaviorObsCardModel(app, mongoose)
   behaviorObsCardSchema.index({date: -1});
   behaviorObsCardSchema.index({section: 1});
   behaviorObsCardSchema.index({'observer.id': 1});
+  behaviorObsCardSchema.index({'superior.id': 1});
   behaviorObsCardSchema.index({users: 1});
   behaviorObsCardSchema.index({anyHardObservations: 1});
   behaviorObsCardSchema.index({anyHardRisks: 1});
@@ -97,7 +99,7 @@ module.exports = function setupBehaviorObsCardModel(app, mongoose)
 
     const users = {};
 
-    [this.creator, this.updater, this.observer].forEach(user =>
+    [this.creator, this.updater, this.observer, this.superior].forEach(user =>
     {
       if (user)
       {

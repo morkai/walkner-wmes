@@ -7,6 +7,7 @@ define([
   'app/core/util/fixTimeRange',
   'app/core/util/buttonGroup',
   'app/core/util/idAndLabel',
+  'app/users/util/setUpUserSelect2',
   'app/reports/util/prepareDateRange',
   'app/kaizenOrders/dictionaries',
   'app/behaviorObsCards/templates/countReportFilter'
@@ -17,6 +18,7 @@ define([
   fixTimeRange,
   buttonGroup,
   idAndLabel,
+  setUpUserSelect2,
   prepareDateRange,
   kaizenDictionaries,
   template
@@ -57,6 +59,11 @@ define([
         multiple: true,
         data: kaizenDictionaries.sections.map(idAndLabel)
       });
+
+      setUpUserSelect2(this.$id('superior'), {
+        width: '300px',
+        view: this
+      });
     },
 
     serializeFormData: function()
@@ -69,7 +76,8 @@ define([
         interval: model.get('interval'),
         from: from ? time.format(from, 'YYYY-MM-DD') : '',
         to: to ? time.format(to, 'YYYY-MM-DD') : '',
-        sections: model.get('sections').join(',')
+        sections: model.get('sections').join(','),
+        superior: model.get('superior')
       };
     },
 
@@ -79,7 +87,8 @@ define([
         from: time.getMoment(this.$id('from').val(), 'YYYY-MM-DD').valueOf(),
         to: time.getMoment(this.$id('to').val(), 'YYYY-MM-DD').valueOf(),
         interval: buttonGroup.getValue(this.$id('interval')),
-        sections: this.$id('sections').val()
+        sections: this.$id('sections').val(),
+        superior: this.$id('superior').val()
       };
 
       if (!query.from || query.from < 0)

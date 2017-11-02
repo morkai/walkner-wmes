@@ -33,6 +33,7 @@
   "PROPERTY:date": "Data obserwacji",
   "PROPERTY:section": "Dział",
   "PROPERTY:observer": "Obserwator",
+  "PROPERTY:superior": "Mistrz",
   "PROPERTY:position": "Stanowisko",
   "PROPERTY:line": "Linia",
   "PROPERTY:creator": "Stworzone przez",
@@ -85,6 +86,7 @@
 
   "filter:user:mine": "Moje",
   "filter:user:observer": "Obserwator",
+  "filter:user:superior": "Mistrz",
   "filter:user:others": "Uczestnik",
   "filter:anyHard": "Trudne do zmiany",
   "filter:anyHard:observations": "zachowania",

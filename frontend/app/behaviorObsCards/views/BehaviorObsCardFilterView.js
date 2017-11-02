@@ -57,6 +57,11 @@ define([
         formData.userType = 'observer';
         formData.user = term.args[1];
       },
+      'superior.id': function(propertyName, term, formData)
+      {
+        formData.userType = 'superior';
+        formData.user = term.args[1];
+      },
       'users': function(propertyName, term, formData)
       {
         if (term.args[1] === 'mine')
@@ -124,9 +129,13 @@ define([
         selector.push({name: 'lt', args: ['date', toMoment.valueOf()]});
       }
 
-      if (userType === 'observer')
+      if (userType === 'observer' && user)
       {
         selector.push({name: 'eq', args: ['observer.id', user]});
+      }
+      else if (userType === 'superior' && user)
+      {
+        selector.push({name: 'eq', args: ['superior.id', user]});
       }
       else if (userType === 'mine')
       {
@@ -169,7 +178,7 @@ define([
       this.$('.is-expandable').expandableSelect();
 
       setUpUserSelect2(this.$id('user'), {
-        width: '300px',
+        width: '375px',
         view: this
       });
 
@@ -188,7 +197,7 @@ define([
     {
       var userType = this.$('input[name="userType"]:checked').val();
 
-      this.$id('user').select2('enable', userType === 'others' || userType === 'observer');
+      this.$id('user').select2('enable', userType !== 'mine');
     }
 
   });

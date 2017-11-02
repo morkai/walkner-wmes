@@ -35,7 +35,8 @@ define([
         from: 0,
         to: 0,
         interval: 'month',
-        sections: []
+        sections: [],
+        superior: ''
       };
     },
 
@@ -48,7 +49,7 @@ define([
 
       options.data = _.extend(
         options.data || {},
-        _.pick(this.attributes, ['from', 'to', 'interval', 'sections'])
+        _.pick(this.attributes, ['from', 'to', 'interval', 'sections', 'superior'])
       );
 
       options.data.sections = options.data.sections.join(',');
@@ -62,7 +63,8 @@ define([
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval')
-        + '&sections=' + this.get('sections');
+        + '&sections=' + this.get('sections')
+        + '&superior=' + this.get('superior');
     },
 
     parse: function(report)
@@ -253,7 +255,8 @@ define([
         from: +query.from || undefined,
         to: +query.to || undefined,
         interval: query.interval || undefined,
-        sections: _.isEmpty(query.sections) ? [] : query.sections.split(',')
+        sections: _.isEmpty(query.sections) ? [] : query.sections.split(','),
+        superior: query.superior || ''
       });
     }
 

@@ -8,7 +8,11 @@
           <label for="<%- idPrefix %>-observer" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:observer') %></label>
           <input id="<%- idPrefix %>-observer" type="text" name="observer" required>
         </div>
-        <div class="form-group col-lg-9">
+        <div class="form-group col-lg-3">
+          <label for="<%- idPrefix %>-superior" class="control-label"><%- t('behaviorObsCards', 'PROPERTY:superior') %></label>
+          <input id="<%- idPrefix %>-superior" type="text" name="superior">
+        </div>
+        <div class="form-group col-lg-6">
           <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:date') %></label>
           <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required min="2017-01-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
         </div>

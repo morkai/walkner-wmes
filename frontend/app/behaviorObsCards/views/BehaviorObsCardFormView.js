@@ -425,11 +425,16 @@ define([
     serializeForm: function(formData)
     {
       var observer = this.$id('observer').select2('data');
+      var superior = this.$id('superior').select2('data');
       var dateMoment = time.getMoment(formData.date, 'YYYY-MM-DD');
 
       formData.observer = {
         id: observer.id,
         label: observer.text
+      };
+      formData.superior = !superior ? null : {
+        id: superior.id,
+        label: superior.text
       };
       formData.date = dateMoment.isValid() ? dateMoment.toISOString() : null;
       formData.easyDiscussed = !!formData.easyDiscussed;
@@ -505,6 +510,7 @@ define([
       });
 
       this.setUpObserverSelect2();
+      this.setUpSuperiorSelect2();
       this.renderObservations();
       this.renderRisks();
       this.renderDifficulties();
@@ -529,6 +535,25 @@ define([
         $observer.select2('data', {
           id: observer.id,
           text: observer.label
+        });
+      }
+    },
+
+    setUpSuperiorSelect2: function()
+    {
+      var superior = this.model.get('superior');
+      var $superior = setUpUserSelect2(this.$id('superior'), {
+        textFormatter: function(user, name)
+        {
+          return name;
+        }
+      });
+
+      if (superior)
+      {
+        $superior.select2('data', {
+          id: superior.id,
+          text: superior.label
         });
       }
     },

@@ -19,7 +19,7 @@ define([
 
   var DATE_PROPERTIES = ['date'];
   var TIME_PROPERTIES = ['createdAt', 'updatedAt'];
-  var USER_INFO_PROPERTIES = ['creator', 'updater', 'observer'];
+  var USER_INFO_PROPERTIES = ['creator', 'updater', 'observer', 'superior'];
 
   return Model.extend({
 
