@@ -1,4 +1,33 @@
 <div class="hidden">
+  <h1>v0.116.4</h1>
+  <h2><%- time.format('2017-10-08', 'LL') %></h2>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący całkowite niedziałanie Formatki na starych wersjach przeglądarki Google Chrome.</li>
+    <li>Poprawiono błąd w formularzu 'Koniec pracy' powodujący niesprawdzanie 'Wykonanej ilość aktualnego zlecenia'
+      pod kątem minimalnej i maksymalnej wartości, jeżeli operator nie zaznaczył tego pola.</li>
+    <li>Zmieniono ograniczenie zrobionej ilości tak, aby pod uwagę brana była wykonywana aktualnie operacja.</li>
+  </ul>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Usunięto 'Maksymalną ilość do zrobienia' w zleceniu.</li>
+    <li>Zmieniono obliczanie 'Ilości zrobionej'. Wcześnij była to suma 'Wykonanych ilości' ze zleceń spływających
+      z Formatki operatora. Teraz obliczana jest suma 'Wykonanych ilości' dla każdej operacji zlecenia, a następnie
+      wybierana jest najmniejsza wartość większa od 0.</li>
+    <li>Dodano możliwość definiowania 'Maksymalnej ilości do zrobienia' dla każdej operacji zlecenia.</li>
+  </ul>
+  <h3>SAP GUI</h3>
+  <ul>
+    <li>Zmieniono zrzut dokumentów zlecenia tak, aby był robiony w trzech częściach (-2, +0 dni; +1 dzień; +2 dni).
+      Wcześnij zrzut robiony był w dwóch częściach (-2, +0 dni; +1, +2 dni), co sprawiało, że drugi zrzut trwał bardzo
+      długo lub bardzo często kończył się niepomyślnie.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zmieniono wyświetlanie nazwy użytkownika tak, aby zawsze nazwisko było pierwsze.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.116.3</h1>
   <h2><%- time.format('2017-10-01', 'LL') %></h2>
   <h3>Pulpit</h3>
