@@ -192,7 +192,7 @@ define([
           id: 'update',
           icon: 'forward',
           label: t.bound('xiconfClients', 'list:update'),
-          className: !connected || row.appVersionCmp !== -1 ? 'disabled' : ''
+          className: !connected || row.appVersionCmp !== -1 || /^rpi/.test(row._id) ? 'disabled' : ''
         }];
 
         if (canManage)
