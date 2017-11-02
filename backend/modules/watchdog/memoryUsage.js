@@ -19,6 +19,8 @@ exports.start = function startWatchdogMemoryUsageModule(app, module)
 {
   module.time = 0;
 
+  module.printTime = 0;
+
   module.notifyTime = 0;
 
   module.dumpTime = 0;
@@ -85,7 +87,7 @@ exports.start = function startWatchdogMemoryUsageModule(app, module)
       }
     });
 
-    if (now - module.time >= module.config.printInterval
+    if (now - module.printTime >= module.config.printInterval
       || module.diff.rss > 25 || module.diff.rss <= -100
       || module.diff.heapTotal > 25 || module.diff.heapTotal <= -100
       || module.diff.heapUsed > 25 || module.diff.heapUsed <= -100
@@ -97,6 +99,8 @@ exports.start = function startWatchdogMemoryUsageModule(app, module)
       printMemoryUsage('DIFF', module.diff);
       printMemoryUsage('MIN ', module.min);
       printMemoryUsage('MAX ', module.max);
+
+      module.printTime = now;
     }
 
     module.last = memoryUsage;
