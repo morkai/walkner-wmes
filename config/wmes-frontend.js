@@ -20,6 +20,7 @@ catch (err) {} // eslint-disable-line no-empty
 exports.id = 'wmes-frontend';
 
 exports.modules = [
+  'watchdog/memoryUsage',
   'updater',
   'mongoose',
   {id: 'mysql', name: 'mysql:ipt'},
