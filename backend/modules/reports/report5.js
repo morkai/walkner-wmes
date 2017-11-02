@@ -265,7 +265,7 @@ module.exports = function report5(mongoose, options, done)
       _id: 0,
       date: 1,
       tasks: 1,
-      companyTotals: 1
+      totals: 1
     };
 
     const stream = FteMasterEntry
@@ -427,19 +427,19 @@ module.exports = function report5(mongoose, options, done)
       }
     }
 
-    countAttendance(fteMasterEntry.companyTotals);
+    countAttendance(fteMasterEntry.totals);
   }
 
-  function countAttendance(companyTotals)
+  function countAttendance(totals)
   {
-    if (!companyTotals)
+    if (!totals || !totals.demand.total)
     {
       return;
     }
 
-    _.forEach(companyTotals, (totals, companyId) =>
+    _.forEach(totals.demand, (count, companyId) =>
     {
-      if (companyId === 'total' || !totals.demand)
+      if (companyId === 'total')
       {
         return;
       }
@@ -456,10 +456,10 @@ module.exports = function report5(mongoose, options, done)
         };
       }
 
-      attendance.demand += totals.demand;
-      attendance.supply += totals.supply;
-      attendance.shortage += totals.shortage;
-      attendance.absence += totals.absence;
+      attendance.demand += totals.demand[companyId];
+      attendance.supply += totals.supply[companyId];
+      attendance.shortage += totals.shortage[companyId];
+      attendance.absence += totals.absence[companyId];
     });
   }
 

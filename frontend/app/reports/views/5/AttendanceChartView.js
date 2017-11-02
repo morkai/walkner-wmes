@@ -68,6 +68,7 @@ define([
     {
       var chart = this.chart;
       var chartData = this.serializeChartData();
+      var isFullscreen = this.isFullscreen;
 
       chart.xAxis[0].setCategories(chartData.categories, false);
 
@@ -76,8 +77,16 @@ define([
         this.updateExtremes(false);
       }
 
-      chart.series[0].setData(chartData.present, false, false, false);
-      chart.series[1].setData(chartData.absent, false, false, false);
+      chartData.series.forEach(function(data, i)
+      {
+        chart.series[i].setData(data, false, false, false);
+        chart.series[i].update({stacking: isFullscreen ? 'normal' : null}, false);
+      });
+
+      chart.series[0].update(
+        {name: t('reports', 'hr:attendance:series:' + (isFullscreen ? 'present' : 'demand'))},
+        false
+      );
 
       if (redraw !== false)
       {
@@ -126,17 +135,14 @@ define([
     {
       var report = this.model;
       var attendance = report.get('attendance');
-      var categories = [];
-      var present = [];
-      var absent = [];
+      var chartData = {
+        categories: [],
+        series: [[], []]
+      };
 
       if (_.isEmpty(attendance))
       {
-        return {
-          categories: categories,
-          present: present,
-          absent: absent
-        };
+        return chartData;
       }
 
       var displayOptions = this.displayOptions;
@@ -153,27 +159,40 @@ define([
 
         if (company)
         {
-          categories.push(isFullscreen ? company.get('name') : (company.get('shortName') || company.get('name')));
+          chartData.categories.push(
+            isFullscreen ? company.get('name') : (company.get('shortName') || company.get('name'))
+          );
         }
         else
         {
-          categories.push(companyId);
+          chartData.categories.push(companyId);
         }
 
-        present.push({
-          y: companyAttendance.demand - companyAttendance.absence
-        });
+        if (isFullscreen)
+        {
+          chartData.series[0].push({
+            y: companyAttendance.demand - companyAttendance.absence,
+            color: '#0000EE'
+          });
 
-        absent.push({
-          y: companyAttendance.absence
-        });
+          chartData.series[1].push({
+            y: companyAttendance.absence
+          });
+        }
+        else
+        {
+          chartData.series[0].push({
+            y: companyAttendance.demand,
+            color: '#EEEE00'
+          });
+
+          chartData.series[1].push({
+            y: companyAttendance.absence
+          });
+        }
       });
 
-      return {
-        categories: categories,
-        present: present,
-        absent: absent
-      };
+      return chartData;
     },
 
     onFullscreen: function(isFullscreen)
@@ -245,23 +264,19 @@ define([
         legend: {enabled: false},
         series: [
           {
-            name: t('reports', 'hr:attendance:series:present'),
+            name: t('reports', 'hr:attendance:series:demand'),
             type: 'column',
-            color: '#00EE00',
-            data: []
+            data: [],
+            stacking: null
           },
           {
             name: t('reports', 'hr:attendance:series:absent'),
             type: 'column',
             color: '#EE0000',
-            data: []
+            data: [],
+            stacking: null
           }
-        ],
-        plotOptions: {
-          column: {
-            stacking: 'normal'
-          }
-        }
+        ]
       });
     }
 

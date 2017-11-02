@@ -313,15 +313,6 @@ module.exports = function setUpFteRoutes(app, fteModule)
         task: task.name
       };
 
-      req.dictionaries.companyList.forEach(companyId =>
-      {
-        const index = indexMap[companyId];
-
-        row[`$demand[${companyId}]`] = index === undefined || !task.demand || !task.demand[index]
-          ? 0
-          : task.demand[index].count;
-      });
-
       req.dictionaries.functionList.forEach(functionId =>
       {
         const functionIndex = indexMap[functionId];
@@ -351,15 +342,6 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
           row[column] = taskCompany ? taskCompany.count : 0;
         });
-      });
-
-      req.dictionaries.companyList.forEach(companyId =>
-      {
-        const index = indexMap[companyId];
-
-        row[`$shortage[${companyId}]`] = index === undefined || !task.shortage || !task.shortage[index]
-          ? 0
-          : task.shortage[index].count;
       });
 
       row.fteId = fteId;

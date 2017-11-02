@@ -57,6 +57,8 @@
   "masterEntry:column:supply": "Dostarczenie",
   "masterEntry:column:shortage": "Braki",
 
+  "showHidden": "Pokaż ukryte",
+
   "print:hdLeft": "Zasoby przydzielone do {subdivision}",
   "print:hdRight": "{date}, {shift} zmiana",
 

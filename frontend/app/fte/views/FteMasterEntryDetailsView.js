@@ -67,6 +67,7 @@ define([
       return _.extend(this.model.serializeWithTotals(), {
         idPrefix: this.idPrefix,
         editable: false,
+        changing: this.changing,
         renderAbsentUserRow: absentUserRowTemplate,
         round: fractionsUtil.round
       });
@@ -108,20 +109,17 @@ define([
 
     toggleCountEditing: function(state)
     {
-      var $comment = this.$id('comment');
-      var comment = $comment.val();
+      var comment = this.$id('comment').val();
       var pendingChanges = this.pendingChanges;
 
       this.pendingChanges = {};
       this.changing = state;
 
+      this.render();
+
       if (state)
       {
-        $comment.focus();
-      }
-      else
-      {
-        this.resetCountEditing();
+        this.$id('comment').focus();
       }
 
       return {
@@ -205,20 +203,16 @@ define([
     getCountByKey: function(changeKey)
     {
       var indexes = changeKey.split(':');
+
+      if (indexes[0] === 'demand')
+      {
+        return this.model.get('totals').demand[indexes[1]];
+      }
+
       var tasks = this.model.get('tasks');
       var task;
       var func;
       var company;
-
-      if (indexes[0] === 'demand')
-      {
-        task = +indexes[1];
-        company = +indexes[2];
-
-        return tasks && tasks[task] && tasks[task].demand && tasks[task].demand[company]
-          ? tasks[task].demand[company].count
-          : 0;
-      }
 
       task = +indexes[0];
       func = +indexes[1];
@@ -257,27 +251,17 @@ define([
 
       if (indexes[0] === 'demand')
       {
-        return this.createPendingDemandChange(oldValue, newValue, indexes);
+        return this.createPendingDemandChange(oldValue, newValue, indexes[1]);
       }
 
       return this.createPendingSupplyChange(oldValue, newValue, indexes);
     },
 
-    createPendingDemandChange: function(oldValue, newValue, indexes)
+    createPendingDemandChange: function(oldValue, newValue, companyId)
     {
-      var taskIndex = +indexes[1];
-      var companyIndex = +indexes[2];
-      var tasks = this.model.get('tasks');
-      var task = tasks[taskIndex];
-      var demand = task.demand[companyIndex];
-
       return {
-        demand: true,
-        taskIndex: taskIndex,
-        taskId: task.id,
-        taskName: task.name,
-        companyIndex: companyIndex,
-        companyId: demand.id,
+        kind: 'demand',
+        companyId: companyId,
         oldValue: oldValue,
         newValue: newValue
       };
@@ -294,7 +278,7 @@ define([
       var company = func.companies[companyIndex];
 
       return {
-        demand: false,
+        kind: 'supply',
         taskIndex: taskIndex,
         taskId: task.id,
         taskName: task.name,

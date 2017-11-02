@@ -74,7 +74,7 @@ module.exports = function editFteMasterEntry(app, fteModule, user, userInfo, ent
         this.message = {
           type: 'edit',
           socketId: null,
-          tasks: data.changes.map(change =>
+          tasks: data.changes.filter(change => !!entry.tasks[change.taskIndex]).map(change =>
           {
             return {
               index: change.taskIndex,
@@ -84,10 +84,8 @@ module.exports = function editFteMasterEntry(app, fteModule, user, userInfo, ent
           data: _.pick(entry, [
             'updatedAt',
             'updater',
-            'companyTotals',
-            'totalDemand',
-            'total',
-            'totalShortage'
+            'totals',
+            'total'
           ])
         };
       }

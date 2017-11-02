@@ -13,22 +13,18 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
   const userModule = app[fteModule.config.userId];
   const FteMasterEntry = mongoose.model('FteMasterEntry');
 
-  function updateDemandCount(updater, entry, task, data, done)
+  function updateDemandCount(updater, entry, data, done)
   {
-    const {taskIndex, companyIndex, newCount} = data;
+    const {companyId, newCount} = data;
 
-    if (!task.demand || !task.demand[companyIndex])
+    if (!_.isNumber(entry.totals.demand[companyId]))
     {
-      return this.skip(new Error('INPUT'));
+      return done(new Error('INPUT'));
     }
 
-    const taskDemand = task.demand[companyIndex];
-    const taskShortage = task.shortage[companyIndex];
+    entry.totals.demand[companyId] = newCount;
 
-    taskShortage.count += taskDemand.count - newCount;
-    taskDemand.count = newCount;
-
-    FteMasterEntry.calcTotals(entry);
+    FteMasterEntry.calcTotals(entry, true);
 
     entry.updatedAt = new Date();
     entry.updater = updater;
@@ -37,42 +33,33 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
       $set: {
         updatedAt: entry.updatedAt,
         updater: entry.updater,
-        companyTotals: entry.companyTotals,
-        totalDemand: entry.totalDemand,
-        totalShortage: entry.totalShortage,
-        [`tasks.${taskIndex}`]: entry.tasks[taskIndex]
+        totals: entry.totals
       }
     };
 
     FteMasterEntry.collection.update({_id: entry._id}, update, done);
   }
 
-  function updateSupplyCount(updater, entry, task, data, done)
+  function updateSupplyCount(updater, entry, data, done)
   {
     const {taskIndex, functionIndex, companyIndex, newCount} = data;
+    const task = entry.tasks[taskIndex];
 
-    if (!task.functions[functionIndex])
+    if (!task || !task.functions[functionIndex])
     {
-      return this.skip(new Error('INPUT'));
+      return done(new Error('INPUT'));
     }
 
     const taskCompany = task.functions[functionIndex].companies[companyIndex];
 
     if (!taskCompany)
     {
-      return this.skip(new Error('INPUT'));
-    }
-
-    const taskShortage = task.shortage[companyIndex];
-
-    if (taskShortage)
-    {
-      taskShortage.count -= taskCompany.count - newCount;
+      return done(new Error('INPUT'));
     }
 
     taskCompany.count = newCount;
 
-    FteMasterEntry.calcTotals(entry);
+    FteMasterEntry.calcTotals(entry, true);
 
     entry.updatedAt = new Date();
     entry.updater = updater;
@@ -81,9 +68,8 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
       $set: {
         updatedAt: entry.updatedAt,
         updater: entry.updater,
-        companyTotals: entry.companyTotals,
         total: entry.total,
-        totalShortage: entry.totalShortage,
+        totals: entry.totals,
         [`tasks.${taskIndex}`]: entry.tasks[taskIndex]
       }
     };
@@ -100,17 +86,12 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
         reply = function() {};
       }
 
-      if (!_.isObject(data)
-        || !_.isString(data._id)
-        || !_.isNumber(data.taskIndex)
-        || (!data.demand && !_.isNumber(data.functionIndex))
-        || !_.isNumber(data.companyIndex)
-        || !_.isNumber(data.newCount))
+      if (!_.isPlainObject(data))
       {
         return reply(new Error('INPUT'));
       }
 
-      data.newCount = Math.max(0, data.newCount);
+      data.newCount = Math.max(0, data.newCount || 0);
 
       step(
         function acquireLockStep()
@@ -141,22 +122,16 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
           }
 
           this.entry = fteMasterEntry;
-          this.task = this.entry.tasks[data.taskIndex];
-
-          if (!this.task)
-          {
-            return this.skip(new Error('INPUT'));
-          }
 
           const updater = userModule.createUserInfo(user, socket);
 
-          if (data.demand)
+          if (data.kind === 'demand')
           {
-            updateDemandCount(updater, this.entry, this.task, data);
+            updateDemandCount(updater, this.entry, data, this.next());
           }
           else
           {
-            updateSupplyCount(updater, this.entry, this.task, data);
+            updateSupplyCount(updater, this.entry, data, this.next());
           }
         },
         function sendResultStep(err)
@@ -169,17 +144,15 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
           {
             reply();
 
-            app.broker.publish('fte.master.updated.' + data._id, {
+            app.broker.publish(`fte.master.updated.${data._id}`, {
               type: 'count',
               socketId: data.socketId,
               task: this.entry.tasks[data.taskIndex],
               data: _.pick(this.entry, [
                 'updatedAt',
                 'updater',
-                'companyTotals',
-                'totalDemand',
-                'total',
-                'totalShortage'
+                'totals',
+                'total'
               ]),
               action: data
             });
@@ -242,9 +215,6 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
 
           task.noPlan = data.newValue;
 
-          _.forEach(task.demand, demand => demand.count = 0);
-          _.forEach(task.shortage, shortage => shortage.count = 0);
-
           task.functions.forEach(f =>
           {
             f.companies.forEach(c =>
@@ -262,9 +232,8 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
             $set: {
               updatedAt: entry.updatedAt,
               updater: entry.updater,
-              companyTotals: entry.companyTotals,
+              totals: entry.totals,
               total: entry.total,
-              totalShortage: entry.totalShortage,
               [`tasks.${data.taskIndex}`]: entry.tasks[data.taskIndex]
             }
           };
@@ -284,17 +253,15 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
           {
             reply();
 
-            app.broker.publish('fte.master.updated.' + data._id, {
+            app.broker.publish(`fte.master.updated.${data._id}`, {
               type: 'plan',
               socketId: data.socketId,
               task: this.entry.tasks[data.taskIndex],
               data: _.pick(this.entry, [
                 'updatedAt',
                 'updater',
-                'companyTotals',
-                'totalDemand',
-                'total',
-                'totalShortage'
+                'totals',
+                'total'
               ]),
               action: data
             });
@@ -339,7 +306,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
 
         reply();
 
-        app.broker.publish('fte.master.updated.' + data._id, data);
+        app.broker.publish(`fte.master.updated.${data._id}`, data);
       });
     },
     removeAbsentUser: function(socket, data, reply)
@@ -374,7 +341,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
 
         reply();
 
-        app.broker.publish('fte.master.updated.' + data._id, data);
+        app.broker.publish(`fte.master.updated.${data._id}`, data);
       });
     }
   };

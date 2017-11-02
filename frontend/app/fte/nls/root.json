@@ -58,6 +58,8 @@
     "masterEntry:column:supply": "Supply",
     "masterEntry:column:shortage": "Shortage",
 
+    "showHidden": "Show hidden",
+
     "print:hdLeft": "FTE allocated to {subdivision}",
     "print:hdRight": "{date}, {shift} shift",
 
