@@ -284,6 +284,7 @@
     "hr:indirDir:columns": "Metric;Unit",
     "hr:details:columns": "Position;Company;Unit;Average",
     "hr:attendance:title": "Attendance",
+    "hr:attendance:series:demand": "Demand",
     "hr:attendance:series:present": "Present",
     "hr:attendance:series:absent": "Absent",
     "hr:attendance:filename": "WMES_HR_Attendance",

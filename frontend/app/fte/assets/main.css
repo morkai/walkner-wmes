@@ -1,30 +1,11 @@
-
-.fte-masterEntry-demand {
-  background-color: #fcf8e3!important;
+.fte-masterEntry .fte-masterEntry-demand {
+  background-color: #fcf8e3;
 }
-tr:hover > .fte-masterEntry-demand,
-.fte-masterEntry-demand.fte-masterEntry-totalColumn,
-.fte-masterEntry-total-demand,
-.fte-masterEntry-total-demand-task {
-  background-color: #faf2cc!important;
+.fte-masterEntry .fte-masterEntry-supply {
+  background-color: #d9edf7;
 }
-.fte-masterEntry-supply {
-  background-color: #d9edf7!important;
-}
-tr:hover > .fte-masterEntry-supply,
-.fte-masterEntry-supply.fte-masterEntry-totalColumn,
-.fte-masterEntry-total-company,
-.fte-masterEntry-total-company-task {
-  background-color: #c4e3f3!important;
-}
-.fte-masterEntry-shortage {
-  background-color: #f2dede!important;
-}
-tr:hover > .fte-masterEntry-shortage,
-.fte-masterEntry-shortage.fte-masterEntry-totalColumn,
-.fte-masterEntry-total-shortage,
-.fte-masterEntry-total-shortage-task {
-  background-color: #ebcccc!important;
+.fte-masterEntry .fte-masterEntry-shortage {
+  background-color: #f2dede;
 }
 
 .fte-ntb {
@@ -180,6 +161,8 @@ th.fte-masterEntry-column-noPlan {
 }
 .fte-masterEntry-column-company,
 .fte-leaderEntry-column-company,
+.fte-masterEntry-total-demand,
+.fte-masterEntry-total-shortage,
 .fte-masterEntry-total-demand-task,
 .fte-masterEntry-total-shortage-task {
   width: 60px;
@@ -311,21 +294,46 @@ textarea.fte-leaderEntry-comment:focus {
   border-bottom: 0;
   box-shadow: inset 0 0 6px rgba(0, 0, 0, .25);
 }
+.fte-masterEntry.is-editing > thead > tr > th {
+  height: 23px;
+}
 .fte-masterEntry.is-editing > thead > tr > th,
 .fte-masterEntry.is-editing > tbody > tr > td {
   padding: 0;
   font-size: 12px;
   border-color: #888;
+  min-height: 23px;
+  vertical-align: middle;
+}
+.fte-masterEntry.is-editing > thead > tr:first-child > th {
+  vertical-align: bottom;
+}
+.fte-masterEntry.is-editing > thead > tr:first-child > .fte-masterEntry-supply {
+  vertical-align: middle;
 }
 .fte-masterEntry.is-editing .fte-masterEntry-cell-task {
   padding: 3px 6px;
   line-height: 14px;
 }
 .fte-masterEntry.is-editing th.fte-masterEntry-column-task {
+  position: relative;
   padding: 3px 6px;
 }
-.fte-masterEntry.is-editing th.fte-masterEntry-column-noPlan
-{
+.fte-masterEntry-noPlan-dropdown {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.fte-masterEntry-noPlan-dropdown > .btn {
+  padding: 0;
+  width: 60px;
+  height: 45px;
+  font-size: 32px;
+  border-color: #888;
+  border-right: 0;
+  border-bottom: 0;
+}
+.fte-masterEntry.is-editing th.fte-masterEntry-column-noPlan {
   padding: 3px;
 }
 .fte-masterEntry-count {

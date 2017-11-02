@@ -29,7 +29,10 @@ define([
     events: {
       'change .fte-masterEntry-count': 'updateCount',
       'keyup .fte-masterEntry-count': 'updateCount',
-      'change .fte-masterEntry-noPlan': 'updatePlan',
+      'change .fte-masterEntry-noPlan': function(e)
+      {
+        this.updatePlan(e.currentTarget);
+      },
       'click .fte-masterEntry-noPlan-container': function(e)
       {
         if (e.target.classList.contains('fte-masterEntry-noPlan-container'))
@@ -77,9 +80,14 @@ define([
 
         this.$(this.focused).addClass('is-focused');
       },
-      'blur .fte-masterEntry-count, .fte-masterEntry-noPlan': function()
+      'blur .fte-masterEntry-count, .fte-masterEntry-noPlan': function(e)
       {
         this.$(this.focused).removeClass('is-focused');
+
+        if (e.currentTarget.value === '0')
+        {
+          e.currentTarget.value = '';
+        }
       },
       'click .fte-count-container': function(e)
       {
@@ -87,6 +95,18 @@ define([
         {
           this.$(e.currentTarget).find('input').select();
         }
+      },
+      'click a[data-action="showHidden"]': function(e)
+      {
+        var noPlanEl = this.$('.fte-masterEntry-noPlan[data-task="' + e.currentTarget.dataset.task + '"]')[0];
+
+        noPlanEl.checked = false;
+
+        this.updatePlan(noPlanEl);
+
+        this.$(e.currentTarget).parent().remove();
+
+        return false;
       }
     },
 
@@ -131,6 +151,7 @@ define([
       this.setUpUserFinder();
       this.setUpStickyHeaders();
       this.cacheColumns();
+      this.updateNoPlanDropdown();
       this.focusFirstEnabledInput();
     },
 
@@ -139,6 +160,7 @@ define([
       return _.extend(this.model.serializeWithTotals(), {
         idPrefix: this.idPrefix,
         editable: true,
+        changing: false,
         renderAbsentUserRow: absentUserRowTemplate,
         round: fractionsUtil.round
       });
@@ -225,16 +247,15 @@ define([
 
     focusNextInput: function($current)
     {
-      var $nextCell = $current.closest('td').next('td');
-
-      while ($nextCell.hasClass('fte-masterEntry-total-company-task')
-        || $nextCell.hasClass('fte-masterEntry-shortage'))
-      {
-        $nextCell = $nextCell.next('td');
-      }
+      var $nextCell = $current.parent().next();
 
       if ($nextCell.length)
       {
+        if ($nextCell.hasClass('fte-masterEntry-total-shortage'))
+        {
+          return this.focusFirstEnabledInput(true);
+        }
+
         return $nextCell.find('input').select();
       }
 
@@ -248,8 +269,17 @@ define([
       this.focusNextEnabledInput($nextRow);
     },
 
-    focusFirstEnabledInput: function()
+    focusFirstEnabledInput: function(skipDemand)
     {
+      var $demand = this.$('.fte-masterEntry-total-demand-company').first();
+
+      if (!skipDemand && $demand.length)
+      {
+        $demand.find('input').select();
+
+        return;
+      }
+
       var noPlanEl = this.el.querySelector('.fte-masterEntry-noPlan:not(:checked)');
 
       if (noPlanEl)
@@ -291,6 +321,8 @@ define([
 
       this.recountAll($noPlanRow);
 
+      $noPlanRow[$noPlan[0].checked ? 'fadeOut' : 'fadeIn'](this.updateNoPlanDropdown.bind(this));
+
       if (!remote)
       {
         return $noPlanRow[0] === $lastRow[0]
@@ -306,18 +338,47 @@ define([
       }
     },
 
-    updatePlan: function(e)
+    updateNoPlanDropdown: function()
     {
+      var $dropdown = this.$('.fte-masterEntry-noPlan-dropdown');
+      var html = '';
+
+      this.$('tbody > tr').each(function()
+      {
+        if (this.style.display !== 'none')
+        {
+          return;
+        }
+
+        html += '<li><a href="#" data-action="showHidden" data-task="' + this.dataset.taskIndex + '">'
+          + this.children[0].textContent
+          + '</a></li>';
+      });
+
+      $dropdown.find('.dropdown-menu').html(html);
+
+      if (html.length)
+      {
+        $dropdown.fadeIn();
+      }
+      else
+      {
+        $dropdown.fadeOut();
+      }
+    },
+
+    updatePlan: function(noPlanEl)
+    {
+      var view = this;
       var data = {
         type: 'plan',
-        socketId: this.socket.getId(),
-        _id: this.model.id,
-        taskId: e.target.getAttribute('data-taskId'),
-        taskIndex: parseInt(e.target.getAttribute('data-task'), 10),
-        newValue: e.target.checked
+        socketId: view.socket.getId(),
+        _id: view.model.id,
+        taskId: noPlanEl.dataset.taskid,
+        taskIndex: +noPlanEl.dataset.task,
+        newValue: noPlanEl.checked
       };
-      var $noPlan = this.$(e.target);
-      var view = this;
+      var $noPlan = view.$(noPlanEl);
 
       this.toggleCountsInRow($noPlan);
 
@@ -325,7 +386,7 @@ define([
       {
         if (err)
         {
-          e.target.checked = !e.target.checked;
+          noPlanEl.checked = !noPlanEl.checked;
 
           view.toggleCountsInRow($noPlan);
 
@@ -349,9 +410,9 @@ define([
         return;
       }
 
-      var timerKey = e.target.getAttribute('data-task')
-        + ':' + e.target.getAttribute('data-function')
-        + ':' + e.target.getAttribute('data-company');
+      var timerKey = e.target.dataset.task
+        + ':' + e.target.dataset.function
+        + ':' + e.target.dataset.company;
 
       if (this.timers[timerKey])
       {
@@ -365,35 +426,42 @@ define([
 
     doUpdateCount: function(countEl, timerKey, oldCount, newCount)
     {
-      delete this.timers[timerKey];
-
-      var oldRemote = countEl.getAttribute('data-remote');
-      var functionIndex = parseInt(countEl.getAttribute('data-function'), 10);
-      var data = {
-        type: 'count',
-        socketId: this.socket.getId(),
-        _id: this.model.id,
-        newCount: newCount,
-        demand: isNaN(functionIndex),
-        taskIndex: parseInt(countEl.getAttribute('data-task'), 10),
-        functionIndex: isNaN(functionIndex) ? undefined : functionIndex,
-        companyIndex: parseInt(countEl.getAttribute('data-company'), 10)
-      };
-
-      countEl.setAttribute('data-value', data.newCount);
-      countEl.setAttribute('data-remote', 'false');
-
       var view = this;
 
-      this.socket.emit('fte.master.updateCount', data, function(err)
+      delete view.timers[timerKey];
+
+      var oldRemote = countEl.dataset.remote;
+      var data = {
+        type: 'count',
+        socketId: view.socket.getId(),
+        _id: view.model.id,
+        kind: countEl.dataset.kind,
+        newCount: newCount
+      };
+
+      if (data.kind === 'demand')
+      {
+        data.companyId = countEl.dataset.companyid;
+      }
+      else
+      {
+        data.taskIndex = +countEl.dataset.task;
+        data.functionIndex = +countEl.dataset.function;
+        data.companyIndex = +countEl.dataset.company;
+      }
+
+      countEl.dataset.value = data.newCount;
+      countEl.dataset.remote = 'false';
+
+      view.socket.emit('fte.master.updateCount', data, function(err)
       {
         if (err)
         {
-          if (countEl.getAttribute('data-remote') !== 'true')
+          if (countEl.dataset.remote !== 'true')
           {
             countEl.value = oldCount;
-            countEl.setAttribute('data-value', oldCount);
-            countEl.setAttribute('data-remote', oldRemote);
+            countEl.dataset.value = oldCount;
+            countEl.dataset.remote = oldRemote;
 
             view.recount(countEl);
           }
@@ -402,14 +470,14 @@ define([
         }
       });
 
-      this.recount(countEl);
+      view.recount(countEl);
     },
 
     recount: function(countEl)
     {
       if (countEl.parentNode.classList.contains('fte-masterEntry-demand'))
       {
-        this.recountDemand(countEl);
+        this.recountDemand();
       }
       else
       {
@@ -417,38 +485,21 @@ define([
       }
     },
 
-    recountDemand: function(countEl)
+    recountDemand: function()
     {
       var countSelector;
       var totalSelector;
       var total;
-      var $taskTr = this.$(countEl).closest('tr');
       var $thead = this.$('.tableFloatingHeaderOriginal');
-      var companyId = countEl.dataset.companyid;
-      var demand = '.fte-masterEntry-demand';
-
-      // Task total
-      total = 0;
-      countSelector = demand + ' > .fte-masterEntry-count';
-      totalSelector = demand + '.fte-masterEntry-total-demand-task';
-      $taskTr.find(countSelector).each(function() { total += fractionsUtil.parse(this.value); });
-      $taskTr.find(totalSelector).text(fractionsUtil.round(total));
-
-      // Company total
-      total = 0;
-      countSelector = demand + ' > .fte-masterEntry-count[data-companyId="' + companyId + '"]';
-      totalSelector = demand + '.fte-masterEntry-total-demand-company[data-companyId="' + companyId + '"]';
-      this.$(countSelector).each(function() { total += fractionsUtil.parse(this.value); });
-      $thead.find(totalSelector).text(fractionsUtil.round(total));
 
       // Overall total
       total = 0;
-      countSelector = demand + '.fte-masterEntry-total-demand-company';
-      totalSelector = demand + '.fte-masterEntry-total-demand';
-      $thead.find(countSelector).each(function() { total += fractionsUtil.parse(this.innerHTML); });
+      countSelector = '.fte-masterEntry-count[data-kind="demand"]';
+      totalSelector = '.fte-masterEntry-total-demand';
+      $thead.find(countSelector).each(function() { total += fractionsUtil.parse(this.value); });
       $thead.find(totalSelector).text(fractionsUtil.round(total));
 
-      this.recountShortage($taskTr, countEl);
+      this.recountShortage();
     },
 
     recountSupply: function(countEl)
@@ -460,21 +511,21 @@ define([
       var $thead = this.$('.tableFloatingHeaderOriginal');
       var functionId = countEl.dataset.functionid;
       var companyId = countEl.dataset.companyid;
-      var supply = '.fte-masterEntry-supply';
+      var prefix = '.fte-masterEntry-supply';
 
       // Task company total
       total = 0;
-      countSelector = supply + ' > .fte-masterEntry-count[data-companyId="' + companyId + '"]';
-      totalSelector = supply + '.fte-masterEntry-total-company-task[data-companyId="' + companyId + '"]';
+      countSelector = '.fte-masterEntry-count[data-companyId="' + companyId + '"]';
+      totalSelector = '.fte-masterEntry-total-company-task[data-companyId="' + companyId + '"]';
       $taskTr.find(countSelector).each(function() { total += fractionsUtil.parse(this.value); });
       $taskTr.find(totalSelector).text(fractionsUtil.round(total));
 
       // Prod function company total
       total = 0;
-      countSelector = supply + ' > .fte-masterEntry-count'
+      countSelector = prefix + ' > .fte-masterEntry-count'
         + '[data-functionId=' + functionId + ']'
         + '[data-companyId=' + companyId + ']';
-      totalSelector = supply + '.fte-masterEntry-total-prodFunction-company'
+      totalSelector = prefix + '.fte-masterEntry-total-prodFunction-company'
         + '[data-functionId=' + functionId + ']'
         + '[data-companyId=' + companyId + ']';
       this.$(countSelector).each(function()
@@ -488,83 +539,78 @@ define([
 
       // Company total
       total = 0;
-      countSelector = supply + '.fte-masterEntry-total-prodFunction-company'
+      countSelector = prefix + '.fte-masterEntry-total-prodFunction-company'
         + '[data-companyId="' + companyId + '"]';
-      totalSelector = supply + '.fte-masterEntry-total-company[data-companyId="' + companyId + '"]';
+      totalSelector = prefix + '.fte-masterEntry-total-company[data-companyId="' + companyId + '"]';
       $thead.find(countSelector).each(function() { total += fractionsUtil.parse(this.innerHTML); });
       $thead.find(totalSelector).text(fractionsUtil.round(total));
 
       // Prod function total
       total = 0;
-      countSelector = supply + '.fte-masterEntry-total-prodFunction-company'
+      countSelector = prefix + '.fte-masterEntry-total-prodFunction-company'
         + '[data-functionId="' + functionId + '"]';
-      totalSelector = supply + '.fte-masterEntry-total-prodFunction[data-functionId="' + functionId + '"]';
+      totalSelector = prefix + '.fte-masterEntry-total-prodFunction[data-functionId="' + functionId + '"]';
       $thead.find(countSelector).each(function() { total += fractionsUtil.parse(this.innerHTML); });
       $thead.find(totalSelector).text(fractionsUtil.round(total));
 
       // Overall total
       total = 0;
-      countSelector = supply + '.fte-masterEntry-total-company';
-      totalSelector = supply + '.fte-masterEntry-total';
+      countSelector = prefix + '.fte-masterEntry-total-company';
+      totalSelector = prefix + '.fte-masterEntry-total';
       $thead.find(countSelector).each(function() { total += fractionsUtil.parse(this.innerHTML); });
       $thead.find(totalSelector).text(fractionsUtil.round(total));
 
-      this.recountShortage($taskTr, countEl);
+      this.recountShortage();
     },
 
-    recountShortage: function($taskTr, countEl)
+    recountShortage: function()
     {
-      var taskI = +$taskTr[0].dataset.taskIndex;
-      var companyId = countEl.dataset.companyid;
-      var task = this.model.get('tasks')[taskI];
-      var prodTask = task.type === 'prodTask';
       var $thead = this.$('.tableFloatingHeaderOriginal');
-      var selector;
-      var value;
+      var demand = {
+        total: fractionsUtil.parse($thead.find('.fte-masterEntry-total-demand').text())
+      };
+      var supply = {
+        total: fractionsUtil.parse($thead.find('.fte-masterEntry-total').text())
+      };
 
-      // Task company shortage
-      selector = '.fte-masterEntry-demand > .fte-masterEntry-count[data-companyid="' + companyId + '"]';
-      value = fractionsUtil.parse($taskTr.find(selector).val());
-      selector = '.fte-masterEntry-total-company-task[data-companyid="' + companyId + '"]';
-      value -= fractionsUtil.parse($taskTr.find(selector).text());
-      selector = '.fte-masterEntry-shortage > .fte-count[data-company-id="' + companyId + '"]';
-      $taskTr.find(selector).text(fractionsUtil.round(prodTask ? Math.abs(value) : value));
+      $thead.find('.fte-masterEntry-total-shortage').text(
+        demand.total ? fractionsUtil.round(demand.total - supply.total) : 0
+      );
 
-      // Task total shortage
-      value = 0;
-      selector = '.fte-masterEntry-shortage > .fte-count';
-      $taskTr.find(selector).each(function() { value += fractionsUtil.parse(this.textContent, true); });
-      selector = '.fte-masterEntry-total-shortage-task';
-      $taskTr.find(selector).text(fractionsUtil.round(value));
+      $thead.find('.fte-masterEntry-count[data-kind="demand"]').each(function()
+      {
+        demand[this.dataset.companyid] = fractionsUtil.parse(this.value);
+      });
+      $thead.find('.fte-masterEntry-total-company').each(function()
+      {
+        var companyId = this.dataset.companyid;
 
-      // Total company shortage
-      value = 0;
-      selector = '.fte-masterEntry-shortage > .fte-count.is-prodFlow[data-company-id="' + companyId + '"]';
-      this.$(selector).each(function() { value += fractionsUtil.parse(this.textContent, true); });
-      selector = '.fte-masterEntry-total-shortage-company[data-companyid="' + companyId + '"]';
-      $thead.find(selector).text(fractionsUtil.round(value));
+        supply[companyId] = fractionsUtil.parse(this.textContent);
 
-      // Total shortage
-      value = 0;
-      selector = '.fte-masterEntry-total-shortage-company';
-      $thead.find(selector).each(function() { value += fractionsUtil.parse(this.textContent, true); });
-      selector = '.fte-masterEntry-total-shortage';
-      $thead.find(selector).text(fractionsUtil.round(value));
+        $thead.find('.fte-masterEntry-total-shortage-company[data-companyid="' + companyId + '"]').text(
+          demand.total ? fractionsUtil.round(demand[companyId] - supply[companyId]) : 0
+        );
+      });
 
-      // Company shortage diff
-      selector = '.fte-masterEntry-total-shortage-company[data-companyid="' + companyId + '"]';
-      value = fractionsUtil.parse($thead.find(selector).text(), true);
-      selector = '.fte-masterEntry-shortage > .fte-count.is-prodTask[data-company-id="' + companyId + '"]';
-      this.$(selector).each(function() { value -= fractionsUtil.parse(this.textContent, true); });
-      selector = '.fte-masterEntry-shortage-diff[data-company-id="' + companyId + '"]';
-      $thead.find(selector).text(fractionsUtil.round(value));
+      this.$('.fte-masterEntry-shortage.fte-masterEntry-total-company-task').each(function()
+      {
+        var companyId = this.dataset.companyid;
+        var count = fractionsUtil.parse(this.textContent);
 
-      // Total shortage diff
-      value = 0;
-      selector = '.fte-masterEntry-shortage-diff';
-      $thead.find(selector).each(function() { value += fractionsUtil.parse(this.textContent, true); });
-      selector = '.fte-masterEntry-shortage-diff-total';
-      $thead.find(selector).text(fractionsUtil.round(value));
+        supply.total += count;
+        supply[companyId] += count;
+      });
+
+      $thead.find('.fte-masterEntry-shortage-diff-total').text(
+        demand.total ? fractionsUtil.round(demand.total - supply.total) : 0
+      );
+
+      $thead.find('.fte-masterEntry-shortage-diff').each(function()
+      {
+        var companyId = this.dataset.companyid;
+
+        this.textContent = demand.total ? fractionsUtil.round(demand[companyId] - supply[companyId]) : 0;
+      });
     },
 
     recountAll: function($row)
@@ -573,7 +619,7 @@ define([
 
       $row.find('.fte-masterEntry-count').each(function()
       {
-        this.value = '0';
+        this.value = '';
         this.setAttribute('data-value', '0');
 
         view.recount(this);
@@ -679,7 +725,6 @@ define([
     handlePlanChange: function(message)
     {
       var selector = '.fte-masterEntry-noPlan[data-task="' + message.taskIndex + '"]';
-
       var $noPlan = this.$(selector);
 
       if (!$noPlan.length)
@@ -694,10 +739,19 @@ define([
 
     handleCountChange: function(message)
     {
-      var selector = (message.demand ? '.fte-masterEntry-demand' : '.fte-masterEntry-supply')
-        + ' > .fte-masterEntry-count[data-task=' + message.taskIndex + ']'
-        + (message.demand ? '' : ('[data-function=' + message.functionIndex + ']'))
-        + '[data-company=' + message.companyIndex + ']';
+      var selector;
+
+      if (message.kind === 'demand')
+      {
+        selector = '.fte-masterEntry-demand > .fte-masterEntry-count[data-companyid="' + message.companyId + '"]';
+      }
+      else
+      {
+        selector = '.fte-masterEntry-supply'
+          + ' > .fte-masterEntry-count[data-task="' + message.taskIndex + '"]'
+          + '[data-function="' + message.functionIndex + '"]'
+          + '[data-company="' + message.companyIndex + '"]';
+      }
 
       var $count = this.$(selector);
 
@@ -706,7 +760,7 @@ define([
         return;
       }
 
-      $count.val(message.newCount);
+      $count.val(message.newCount || '');
       $count.attr({
         'data-value': message.newCount,
         'data-remote': 'true'

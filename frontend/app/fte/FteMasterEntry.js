@@ -64,153 +64,89 @@ define([
 
     serializeWithTotals: function()
     {
-      var totals = {
-        demand: 0,
-        demandByCompany: {},
-        supply: 0,
-        supplyByCompany: {},
-        supplyByProdFunction: {},
-        shortage: 0,
-        shortageByCompany: {}
+      var companies = {};
+      var totalSupply = {
+        total: 0,
+        byCompany: {},
+        byProdFunction: {}
       };
       var supplyColumnCount = 0;
       var task = this.get('tasks')[0];
 
       if (task)
       {
-        _.forEach(task.demand, function(demand)
-        {
-          totals.demandByCompany[demand.id] = {
-            id: demand.id,
-            name: demand.name,
-            total: 0
-          };
-        });
-
         task.functions.forEach(function(taskFunction)
         {
           var prodFunction = prodFunctions.get(taskFunction.id);
 
-          totals.supplyByProdFunction[taskFunction.id] = {
-            prodFunction: prodFunction ? prodFunction.getLabel() : taskFunction.id,
+          totalSupply.byProdFunction[taskFunction.id] = {
+            name: prodFunction ? prodFunction.getLabel() : taskFunction.id,
             total: 0,
             companies: {}
           };
 
-          taskFunction.companies.forEach(function(taskFunctionCompany)
+          taskFunction.companies.forEach(function(taskCompany)
           {
-            totals.supplyByProdFunction[taskFunction.id].companies[taskFunctionCompany.id] = 0;
+            totalSupply.byProdFunction[taskFunction.id].companies[taskCompany.id] = 0;
 
-            totals.supplyByCompany[taskFunctionCompany.id] = {
-              name: taskFunctionCompany.name,
+            totalSupply.byCompany[taskCompany.id] = {
+              name: taskCompany.name,
               total: 0
             };
+
+            companies[taskCompany.id] = taskCompany.name;
 
             supplyColumnCount += 1;
           });
         });
-
-        _.forEach(task.shortage, function(shortage)
-        {
-          totals.shortageByCompany[shortage.id] = {
-            id: shortage.id,
-            name: shortage.name,
-            total: 0
-          };
-        });
       }
 
-      var tasks = this.serializeTasks(totals);
+      var tasks = this.serializeTasks(totalSupply);
+      var companyCount = Object.keys(companies).length;
+      var totals = this.get('totals');
 
-      Object.keys(totals.supplyByCompany).forEach(function(companyId)
-      {
-        totals.supply += totals.supplyByCompany[companyId].total;
-        supplyColumnCount += 1;
-      });
-
-      _.forEach(totals.demandByCompany, function(demand)
-      {
-        totals.demand += demand.total;
-      });
-
-      _.forEach(totals.shortageByCompany, function(demand)
-      {
-        totals.shortage += demand.total;
-      });
-
-      var companyCount = Object.keys(totals.supplyByCompany).length;
-      var companyTotals = this.get('companyTotals');
-      var absenceByCompany = {};
-
-      Object.keys(totals.shortageByCompany).forEach(function(companyId)
-      {
-        absenceByCompany[companyId] = companyTotals[companyId] ? companyTotals[companyId].absence : 0;
-      });
+      supplyColumnCount += companyCount;
 
       return {
         subdivision: this.getSubdivisionPath(),
         date: time.format(this.get('date'), 'LL'),
         shift: t('core', 'SHIFT:' + this.get('shift')),
         companyCount: companyCount,
+        companies: companies,
         demand: {
-          available: !_.isEmpty(totals.demandByCompany),
           columnCount: companyCount + 1,
-          overallTotal: totals.demand,
-          totalByCompany: totals.demandByCompany
+          overallTotal: totals.demand.total,
+          totalByCompany: totals.demand
         },
         supply: {
           columnCount: supplyColumnCount,
-          overallTotal: totals.supply,
-          totalByProdFunction: totals.supplyByProdFunction,
-          totalByCompany: totals.supplyByCompany
+          overallTotal: totalSupply.total,
+          totalByProdFunction: totalSupply.byProdFunction,
+          totalByCompany: totalSupply.byCompany
         },
         shortage: {
-          available: !_.isEmpty(totals.shortageByCompany),
           columnCount: companyCount + 1,
-          overallTotal: totals.shortage,
-          totalByCompany: totals.shortageByCompany,
-          overallAbsence: companyTotals.total.absence,
-          absenceByCompany: absenceByCompany
+          overallTotal: totals.shortage.total,
+          totalByCompany: totals.shortage
+        },
+        absence: {
+          available: !_.isEmpty(this.get('absenceTasks')),
+          overallTotal: totals.absence.total,
+          totalByCompany: totals.absence
         },
         tasks: tasks,
         absentUsers: (this.get('absentUsers') || []).filter(function(absentUser) { return !!absentUser; })
       };
     },
 
-    serializeTasks: function(totals)
+    serializeTasks: function(totalSupply)
     {
-      var absenceTasks = this.get('absenceTasks') || {};
+      var absenceTasks = this.get('absenceTasks');
 
       return this.get('tasks').map(function(task)
       {
-        task.totalDemand = 0;
-        task.total = 0;
-        task.totalShortage = 0;
+        task.absence = absenceTasks[task.id] >= 0;
         task.totalByCompany = {};
-
-        var absenceTask = absenceTasks[task.id] >= 0;
-        var companyIndexes = {};
-
-        if (_.isEmpty(task.shortage))
-        {
-          task.demand = [];
-          task.shortage = [];
-        }
-
-        _.forEach(task.demand, function(demand, i)
-        {
-          var count = demand.count;
-
-          companyIndexes[demand.id] = i;
-
-          task.shortage[i].count = count;
-
-          task.totalDemand += count;
-          task.totalShortage += count;
-
-          totals.demandByCompany[demand.id].total += count;
-          totals.shortageByCompany[demand.id].total += count;
-        });
 
         task.functions.forEach(function(taskFunction)
         {
@@ -219,52 +155,22 @@ define([
             var companyId = taskCompany.id;
             var count = taskCompany.count;
 
-            task.total += count;
-
-            if (typeof task.totalByCompany[companyId] !== 'number')
+            if (!task.totalByCompany[companyId])
             {
               task.totalByCompany[companyId] = 0;
             }
 
             task.totalByCompany[companyId] += count;
 
-            if (totals.supplyByCompany[companyId])
+            if (!task.absence)
             {
-              totals.supplyByCompany[companyId].total += count;
-            }
-
-            if (totals.supplyByProdFunction)
-            {
-              totals.supplyByProdFunction[taskFunction.id].total += count;
-              totals.supplyByProdFunction[taskFunction.id].companies[companyId] += count;
-            }
-
-            if (absenceTask || task.totalDemand)
-            {
-              if (task.shortage[companyIndexes[companyId]])
-              {
-                task.shortage[companyIndexes[companyId]].count -= count;
-              }
-
-              task.totalShortage -= count;
-            }
-
-            if (task.totalDemand)
-            {
-              totals.shortageByCompany[companyId].total -= count;
+              totalSupply.total += count;
+              totalSupply.byCompany[companyId].total += count;
+              totalSupply.byProdFunction[taskFunction.id].total += count;
+              totalSupply.byProdFunction[taskFunction.id].companies[companyId] += count;
             }
           });
         });
-
-        if (absenceTask)
-        {
-          task.totalShortage = Math.abs(task.totalShortage);
-
-          task.shortage.forEach(function(taskShortage)
-          {
-            taskShortage.count = Math.abs(taskShortage.count);
-          });
-        }
 
         return task;
       });
@@ -304,14 +210,17 @@ define([
         return;
       }
 
-      var taskIndex = _.findIndex(tasks, function(task) { return task.id === message.task.id; });
-
-      if (taskIndex === -1)
+      if (message.task)
       {
-        return;
-      }
+        var taskIndex = _.findIndex(tasks, function(task) { return task.id === message.task.id; });
 
-      tasks[taskIndex] = message.task;
+        if (taskIndex === -1)
+        {
+          return;
+        }
+
+        tasks[taskIndex] = message.task;
+      }
 
       this.set(message.data, {silent: !!silent});
 
