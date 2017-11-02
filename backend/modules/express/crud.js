@@ -564,6 +564,11 @@ exports.exportRoute = function(app, options, req, res, next)
       {
         writeHeader();
 
+        if (!columns || columns.length === 0)
+        {
+          return;
+        }
+
         if (format === 'xlsx')
         {
           finalizeXlsx();
@@ -627,9 +632,12 @@ exports.exportRoute = function(app, options, req, res, next)
 
     headerWritten = true;
 
-    if (columns === null)
+    if (!columns || columns.length === 0)
     {
-      return res.sendStatus(204);
+      res.attachment(options.filename + '.txt');
+      res.end('NO DATA\r\n');
+
+      return;
     }
 
     if (columns.length > 1100)
