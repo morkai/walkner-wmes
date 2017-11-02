@@ -94,7 +94,11 @@ define([
 
     updateAll: function(e)
     {
-      var $updateBtns = this.$('.action-update').filter(function() { return !this.classList.contains('disabled'); });
+      var page = this;
+      var $updateBtns = page.$('.action-update').filter(function()
+      {
+        return !this.classList.contains('disabled') && !/^rpi/.test(page.$(this).closest('tr').attr('data-id'));
+      });
 
       if (!$updateBtns.length)
       {
@@ -109,12 +113,11 @@ define([
 
       e.currentTarget.blur();
 
-      var page = this;
       var dialogView = new DialogView({
         template: updateAllDialogTemplate
       });
 
-      this.listenTo(dialogView, 'answered', function(answer)
+      page.listenTo(dialogView, 'answered', function(answer)
       {
         if (answer === 'yes')
         {
