@@ -72,6 +72,7 @@
   "FORM:MSG:suggestion:edit": "Proponowane rozwiązania zostały zarejestrowane w bazie Usprawnień - <a href='#suggestions/{rid}'>zgłoszenie #{rid}</a>! (<a href=# role=rid data-kind=suggestion>zmień</a>)",
   "FORM:BTN:add": "Dodaj nowe",
   "FORM:BTN:remove": "Usuń puste",
+  "FORM:superior": "Mistrz (przełożony obserwatora)",
   "FORM:ridEditor:rid": "ID zgłoszenia",
   "FORM:ridEditor:submit": "Zmień",
   "FORM:ridEditor:cancel": "Anuluj",
