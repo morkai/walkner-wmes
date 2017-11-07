@@ -91,7 +91,7 @@ exports.start = function startWatchdogMemoryUsageModule(app, module)
       || module.diff.rss > 25 || module.diff.rss <= -100
       || module.diff.heapTotal > 25 || module.diff.heapTotal <= -100
       || module.diff.heapUsed > 25 || module.diff.heapUsed <= -100
-      || module.diff.external > 5 || module.diff.external <= -5)
+      || module.diff.external > 25 || module.diff.external <= -50)
     {
       module.debug('');
       printMemoryUsage('NOW ', memoryUsage);
