@@ -332,8 +332,10 @@ define([
           pages.push({
             pageNo: pageNo,
             pageCount: pageCount,
+            mrp: bigPage.mrp,
             line: bigPage.line,
             hourlyPlan: pageNo === pageCount && orders.length <= maxOrdersForHourlyPlan ? bigPage.hourlyPlan : null,
+            workerCount: bigPage.workerCount,
             orders: orders
           });
         }
