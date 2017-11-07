@@ -230,7 +230,7 @@ module.exports = function setUpOrderDocumentsConverter(app, module)
         }
 
         exec(
-          `java -jar "${module.config.pdfboxAppJar}" PDFToImage -format png -dpi 144 -prefix "${nc15}_" "${pdfPath}"`,
+          `java -Xmx1000M -jar "${module.config.pdfboxAppJar}" PDFToImage -format png -dpi 144 -prefix "${nc15}_" "${pdfPath}"`,
           {cwd: targetPath},
           this.next()
         );
