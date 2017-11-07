@@ -89,7 +89,8 @@ define([
         idPrefix: this.idPrefix,
         showEditButton: false,
         hdLabel: t('planning', 'lateOrders:hd'),
-        orders: this.serializeOrders()
+        orders: this.serializeOrders(),
+        icons: false
       };
     },
 
@@ -108,13 +109,15 @@ define([
           return {
             _id: order.id,
             kind: null,
-            incomplete: false,
-            completed: false,
-            surplus: false,
-            invalid: false,
-            ignored: false,
-            confirmed: false,
-            delivered: false,
+            incomplete: '',
+            completed: '',
+            started: '',
+            surplus: '',
+            invalid: '',
+            added: false,
+            ignored: '',
+            confirmed: '',
+            delivered: '',
             customQuantity: false,
             urgent: false,
             late: false

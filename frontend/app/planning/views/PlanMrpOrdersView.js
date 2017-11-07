@@ -140,7 +140,8 @@ define([
         idPrefix: this.idPrefix,
         showEditButton: this.plan.canEditSettings(),
         hdLabel: t('planning', 'orders:hd'),
-        orders: this.serializeOrders()
+        orders: this.serializeOrders(),
+        icons: true
       };
     },
 
@@ -159,15 +160,15 @@ define([
         return {
           _id: order.id,
           kind: order.get('kind'),
-          incomplete: order.get('incomplete') > 0,
-          completed: orderData.quantityDone >= orderData.quantityTodo,
-          started: orderData.quantityDone > 0,
-          surplus: orderData.quantityDone > orderData.quantityTodo,
-          invalid: false,
+          incomplete: order.get('incomplete') > 0 ? 'is-incomplete' : '',
+          completed: orderData.quantityDone >= orderData.quantityTodo ? 'is-completed' : '',
+          started: orderData.quantityDone > 0 ? 'is-started' : '',
+          surplus: orderData.quantityDone > orderData.quantityTodo ? 'is-surplus' : '',
+          invalid: '',
           added: added,
-          ignored: order.get('ignored'),
-          confirmed: orderData.statuses.indexOf('CNF') !== -1,
-          delivered: orderData.statuses.indexOf('DLV') !== -1,
+          ignored: order.get('ignored') ? 'is-ignored' : '',
+          confirmed: orderData.statuses.indexOf('CNF') !== -1 ? 'is-cnf' : '',
+          delivered: orderData.statuses.indexOf('DLV') !== -1 ? 'is-dlv' : '',
           customQuantity: customQuantity && !late,
           urgent: urgent && !late,
           late: late

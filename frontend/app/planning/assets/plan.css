@@ -143,9 +143,16 @@
   padding: 0 5px;
   line-height: 24px;
 }
+.planning-mrp-list-item.is-order {
+  min-width: 72px;
+}
+.planning-mrp-list-item.is-order.with-icons {
+  min-width: 90px;
+}
 .is-order > .planning-mrp-list-item-inner {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 .planning-mrp-list-item-inner.is-cnf {
   line-height: 23px;
