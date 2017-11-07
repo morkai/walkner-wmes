@@ -149,7 +149,7 @@ define([
     {
       var plan = this.plan;
 
-      return this.mrp.orders.map(function(order)
+      return this.mrp.orders.sort().map(function(order)
       {
         var orderData = plan.getActualOrderData(order.id);
         var added = order.get('added');
