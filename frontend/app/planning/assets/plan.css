@@ -106,7 +106,7 @@
 }
 .planning-mrp-list-item {
   font-size: 14px;
-  background: #FFF;
+  background-color: #fff;
   border-right: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
 }
@@ -119,21 +119,24 @@
 .planning-mrp-list-item.is-incomplete {
   background-color: #fcf8e3;
 }
+.planning-mrp-list-item.is-unplanned {
+  background-color: #fbf2c0;
+}
 .planning-mrp-list-item.is-started {
-  background-color: #EEE;
+  background-color: #eee;
 }
 .planning-mrp-list-item.is-completed {
-  background-color: #DFF0D8;
+  background-color: #dff0d8;
   border-color: #999;
 }
 .planning-mrp-list-item.is-invalid {
-  background-color: #FFE8E8;
+  background-color: #ffe8e8;
 }
 .planning-mrp-list-item.is-selected {
   background-color: #d9edf7;
 }
 .planning-mrp-list-item.is-highlighted {
-  background-color: #FFFFA6!important;
+  background-color: #ffffa6!important;
   color: #333;
 }
 .is-ignored .planning-mrp-list-item-label {

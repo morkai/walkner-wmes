@@ -164,6 +164,7 @@ define([
           completed: orderData.quantityDone >= orderData.quantityTodo ? 'is-completed' : '',
           started: orderData.quantityDone > 0 ? 'is-started' : '',
           surplus: orderData.quantityDone > orderData.quantityTodo ? 'is-surplus' : '',
+          unplanned: order.get('incomplete') === order.getQuantityTodo() ? 'is-unplanned' : '',
           invalid: '',
           added: added,
           ignored: order.get('ignored') ? 'is-ignored' : '',
