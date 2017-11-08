@@ -98,10 +98,40 @@
     .name > span {
       display: block;
       overflow: hidden;
+      text-overflow: ellipsis;
       max-width: <%- showTimes ? 340 : 400 %>px;
     }
-    .qty {
+    .comment {
+      width: auto;
+    }
+    .comment > span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 535px;
+      line-height: 12px;
+    }
+    .is-done td {
+      vertical-align: top;
+      font-size: 10px;
+      line-height: 10px;
+      padding-bottom: 2px;
+    }
+    .is-done .comment {
+      padding-bottom: 0;
+    }
+    .qty,
+    .time {
       text-align: right;
+    }
+    .is-incomplete {
+      color: darkorange;
+    }
+    .is-completed {
+      color: green;
+    }
+    .is-surplus {
+      color: #E00;
     }
     .nextShift {
       padding-bottom: 10px;
@@ -132,8 +162,15 @@
       padding-left: 0;
       text-align: left;
     }
+    .hourlyPlan th:last-child,
     .hourlyPlan td:last-child {
       width: auto;
+      text-align: right;
+      font-weight: normal;
+    }
+    .with-quantityDone th,
+    .with-quantityDone td {
+      padding-right: 0;
     }
     #info {
       position: fixed;
@@ -235,14 +272,30 @@
         <td colspan="6"></td>
       </tr>
       <% } %>
-      <tr>
+      <tr class="<%- order.no ? '' : 'is-done' %>">
+        <% if (order.no) { %>
         <td class="no"><%- order.no %>.</td>
         <td class="orderNo"><%- order.orderNo %></td>
         <td class="nc12"><%- order.nc12 %></td>
         <td class="name"><span><i class="icon-<%- order.kind %>"></i> <%= order.name %></span></td>
-        <td class="qty"><%- order.qtyPlan %>/<%- order.qtyTodo %></td>
+        <% } else { %>
+        <td class="no">&nbsp;</td>
+        <td class="comment" colspan="3">
+          <span>
+            <%= order.delayReason %>
+            <i><%= order.comment %></i>
+          </span>
+        </td>
+        <% } %>
+        <td class="qty <%- order.qtyClass || '' %>"><%- order.qtyPlan %>/<%- order.qtyTodo %></td>
         <% if (showTimes) { %>
-        <td class="time"><%- time.utc.format(order.startAt, 'HH:mm') %>-<%- time.utc.format(order.finishAt, 'HH:mm') %></td>
+        <td class="time">
+          <% if (order.startAt) { %>
+          <%- time.utc.format(order.startAt, 'HH:mm') %>-<%- time.utc.format(order.finishAt, 'HH:mm') %>
+          <% } else { %>
+          --:--:--
+          <% } %>
+        </td>
         <% } %>
       </tr>
       <% }) %>
@@ -250,7 +303,7 @@
     </table>
     <% if (page.hourlyPlan) { %>
     <h2>Plan godzinowy</h2>
-    <table class="hourlyPlan">
+    <table class="hourlyPlan <%- done ? 'with-quantityDone' : '' %>">
       <thead>
       <tr>
         <th>Zmiana</th>
@@ -262,30 +315,65 @@
         <th>6</th>
         <th>7</th>
         <th>8</th>
-        <th></th>
+        <th>
+          <i class="icon-small"></i> małe&nbsp;&nbsp;
+          <i class="icon-easy"></i> łatwe&nbsp;&nbsp;
+          <i class="icon-hard"></i> trudne
+        </th>
       </tr>
       </thead>
       <tbody>
       <tr>
         <td>I</td>
         <% for (var h = 0; h < 8; ++h) { %>
-        <td><%- page.hourlyPlan[h] %></td>
+        <td>
+          <% if (page.quantityDone) { %>
+          <%- pad(page.quantityDone[h]) %>/<%- page.hourlyPlan[h] %>
+          <% } else { %>
+          <%- page.hourlyPlan[h] %>
+          <% } %>
+        </td>
         <% } %>
-        <td></td>
+        <td>
+          <% if (done) { %>
+          zlecenie nie robione na danej linii i zmianie,
+          <% } %>
+        </td>
       </tr>
       <tr>
         <td>II</td>
         <% for (var h = 8; h < 16; ++h) { %>
-        <td><%- page.hourlyPlan[h] %></td>
+        <td>
+          <% if (page.quantityDone) { %>
+          <%- pad(page.quantityDone[h]) %>/<%- page.hourlyPlan[h] %>
+          <% } else { %>
+          <%- page.hourlyPlan[h] %>
+          <% } %>
+        </td>
         <% } %>
-        <td></td>
+        <td>
+          <% if (done) { %>
+          <span class="is-incomplete">zlecenie rozpoczęte</span>,
+          <span class="is-completed">zlecenie zrobione</span>,
+          <% } %>
+        </td>
       </tr>
       <tr>
         <td>III</td>
         <% for (var h = 16; h < 24; ++h) { %>
-        <td><%- page.hourlyPlan[h] %></td>
+        <td>
+          <% if (page.quantityDone) { %>
+          <%- pad(page.quantityDone[h]) %>/<%- page.hourlyPlan[h] %>
+          <% } else { %>
+          <%- page.hourlyPlan[h] %>
+          <% } %>
+        </td>
         <% } %>
-        <td></td>
+        <td>
+          <% if (done) { %>
+          <span class="is-surplus">zlecenie z nadwyżką</span>
+          <% } %>
+        </td>
       </tr>
       </tbody>
     </table>

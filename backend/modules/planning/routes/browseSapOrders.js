@@ -2,6 +2,7 @@
 
 'use strict';
 
+const _ = require('lodash');
 const step = require('h5.step');
 
 module.exports = function browseSapOrdersRoute(app, module, req, res, next)
@@ -9,6 +10,8 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
   const mongoose = app[module.config.mongooseId];
   const Order = mongoose.model('Order');
   const Plan = mongoose.model('Plan');
+
+  const mrp = _.isString(req.query.mrp) && /^[A-Za-z0-9]{1,10}$/.test(req.query.mrp) ? req.query.mrp : null;
 
   step(
     function()
@@ -27,24 +30,73 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
         return this.skip(app.createError('NOT_FOUND', 404));
       }
 
-      const pipeline = [
-        {$match: {
-          _id: {$in: plan.orders.map(o => o._id)}
-        }},
-        {$project: {
-          quantityTodo: '$qty',
-          quantityDone: {$ifNull: ['$qtyDone.total', 0]},
-          statuses: 1
-        }}
-      ];
+      const $match = {
+        _id: {$in: plan.orders.map(o => o._id)}
+      };
 
-      Order.aggregate(pipeline, this.next());
+      if (mrp)
+      {
+        $match.mrp = mrp;
+      }
+
+      const $project = {
+        quantityTodo: '$qty',
+        quantityDone: {$ifNull: ['$qtyDone.total', 0]},
+        statuses: 1
+      };
+
+      if ($match.mrp)
+      {
+        $project.changes = {
+          $filter: {
+            input: '$changes',
+            cond: {
+              $or: [
+                {$ne: ['$$this.comment', '']},
+                {$eq: ['$$this.oldValues.delayReason', null]},
+                {$eq: ['$$this.newValues.delayReason', null]}
+              ]
+            }
+          }
+        };
+      }
+
+      Order.aggregate([{$match}, {$project}], this.next());
     },
     function(err, sapOrders)
     {
       if (err)
       {
         return next(err);
+      }
+
+      if (mrp)
+      {
+        sapOrders.forEach(order =>
+        {
+          order.delayReason = null;
+          order.comment = '';
+
+          order.changes.forEach(change =>
+          {
+            if (!order.comment && change.comment)
+            {
+              order.comment = change.comment;
+            }
+
+            if (!_.isUndefined(change.newValues.delayReason))
+            {
+              order.delayReason = change.newValues.delayReason;
+
+              if (change.comment)
+              {
+                order.comment = change.comment;
+              }
+            }
+          });
+
+          order.changes = undefined;
+        });
       }
 
       res.json({

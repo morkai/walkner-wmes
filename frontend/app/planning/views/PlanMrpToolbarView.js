@@ -8,7 +8,9 @@ define([
   'app/viewport',
   'app/core/View',
   'app/data/clipboard',
+  'app/prodShifts/ProdShiftCollection',
   '../util/shift',
+  '../PlanSapOrderCollection',
   'app/planning/templates/toolbar',
   'app/planning/templates/toolbarSetHourlyPlan',
   'app/planning/templates/toolbarPrintLineList',
@@ -21,7 +23,9 @@ define([
   viewport,
   View,
   clipboard,
+  ProdShiftCollection,
   shiftUtil,
+  PlanSapOrderCollection,
   toolbarTemplate,
   toolbarSetHourlyPlanTemplate,
   toolbarPrintLineListTemplate,
@@ -77,7 +81,54 @@ define([
       },
       'click a[role="printLines"]': function(e)
       {
-        this.printLines(e.currentTarget.dataset.line);
+        var view = this;
+        var what = e.currentTarget.dataset.line;
+        var lines = [];
+
+        if (_.isString(what))
+        {
+          if (what === '__ALL__')
+          {
+            lines = view.mrp.lines.models;
+          }
+          else
+          {
+            var line = view.mrp.lines.get(what);
+
+            if (line)
+            {
+              lines.push(line);
+            }
+          }
+        }
+        else
+        {
+          _.forEach(what, function(lineId)
+          {
+            var line = view.mrp.lines.get(lineId);
+
+            if (line)
+            {
+              lines.push(line);
+            }
+          });
+        }
+
+        if (!lines.length)
+        {
+          return;
+        }
+
+        var timeDiff = time.getMoment(this.plan.id + ' 06:00:00', 'YYYY-MM-DD HH:mm:ss').diff(Date.now(), 'minutes');
+
+        if (timeDiff > -23 * 60 || e.altKey)
+        {
+          this.printLines(lines);
+        }
+        else
+        {
+          this.loadAndPrintLines(lines);
+        }
       },
       'click #-showTimes': function()
       {
@@ -184,45 +235,79 @@ define([
       });
     },
 
-    printLines: function(what)
+    loadAndPrintLines: function(lines)
     {
-      var mrp = this.mrp;
-      var lines = [];
+      var view = this;
+      var $btn = view.$id('printLines').find('.btn').prop('disabled', true);
+      var $icon = $btn.find('.fa').removeClass('fa-print').addClass('fa-spinner fa-spin');
+      var shiftMoment = time.getMoment(view.plan.id + ' 06:00:00', 'YYYY-MM-DD HH:mm:ss');
+      var prodShifts = new ProdShiftCollection(null, {
+        url: '/prodShifts?select(prodLine,shift,quantitiesDone)&limit(0)'
+          + '&date=in=('
+          + [shiftMoment.valueOf(), shiftMoment.add(8, 'hours').valueOf(), shiftMoment.add(8, 'hours').valueOf()]
+          + ')'
+          + '&prodLine=in=(' + _.pluck(lines, 'id') + ')'
+      });
+      var sapOrders = new PlanSapOrderCollection(null, {
+        paginate: false,
+        plan: view.plan,
+        mrp: view.mrp.id
+      });
+      var shiftsReq = view.promised(prodShifts.fetch());
+      var ordersReq = view.promised(sapOrders.fetch());
+      var req = $.when(shiftsReq, ordersReq);
 
-      if (_.isString(what))
+      shiftsReq.fail(function()
       {
-        if (what === '__ALL__')
-        {
-          lines = mrp.lines.models;
-        }
-        else
-        {
-          var line = mrp.lines.get(what);
-
-          if (line)
-          {
-            lines.push(line);
-          }
-        }
-      }
-      else
-      {
-        _.forEach(what, function(lineId)
-        {
-          var line = mrp.lines.get(lineId);
-
-          if (line)
-          {
-            lines.push(line);
-          }
+        viewport.msg.show({
+          type: 'error',
+          time: 3000,
+          text: t('planning', 'MSG:LOADING_FAILURE:shifts')
         });
-      }
+      });
 
-      if (!lines.length)
+      ordersReq.fail(function()
       {
-        return;
-      }
+        viewport.msg.show({
+          type: 'error',
+          time: 3000,
+          text: t('planning', 'MSG:LOADING_FAILURE:sapOrders')
+        });
+      });
 
+      req.done(function()
+      {
+        var quantitiesDone = {};
+
+        prodShifts.forEach(function(prodShift)
+        {
+          var prodLine = prodShift.get('prodLine');
+
+          if (!quantitiesDone[prodLine])
+          {
+            quantitiesDone[prodLine] = shiftUtil.EMPTY_HOURLY_PLAN.slice();
+          }
+
+          var startIndex = (prodShift.get('shift') - 1) * 8;
+
+          prodShift.get('quantitiesDone').forEach(function(quantityDone, i)
+          {
+            quantitiesDone[prodLine][startIndex + i] += quantityDone.actual;
+          });
+        });
+
+        view.printLines(lines, sapOrders, quantitiesDone);
+      });
+
+      req.always(function()
+      {
+        $icon.removeClass('fa-spinner fa-spin').addClass('fa-print');
+        $btn.prop('disabled', false);
+      });
+    },
+
+    printLines: function(lines, sapOrders, quantitiesDone)
+    {
       var win = window.open(null, 'PLANNING:PLAN_PRINT');
 
       if (!win)
@@ -237,16 +322,29 @@ define([
       win.document.body.innerHTML = printPageTemplate({
         date: this.plan.id,
         lines: _.pluck(lines, 'id').join(', '),
-        showTimes: this.plan.displayOptions.isOrderTimePrinted(),
-        pages: this.serializePrintPages(lines)
+        showTimes: !!sapOrders || this.plan.displayOptions.isOrderTimePrinted(),
+        done: !!sapOrders,
+        pages: this.serializePrintPages(lines, sapOrders, quantitiesDone),
+        pad: function(v)
+        {
+          if (v < 10)
+          {
+            return '&nbsp;' + v;
+          }
+
+          return v;
+        }
       });
     },
 
-    serializePrintPages: function(lines)
+    serializePrintPages: function(lines, sapOrders, quantitiesDone)
     {
-      var plan = this.plan;
+      var view = this;
+      var done = !!sapOrders;
+      var plan = view.plan;
       var prevShiftNo = -1;
       var pages = [];
+      var doneOrders = {};
 
       lines.forEach(function(line)
       {
@@ -257,36 +355,106 @@ define([
           mrp: line.settings.get('mrpPriority').join(' '),
           line: line.id,
           hourlyPlan: line.get('hourlyPlan'),
+          quantityDone: done ? (quantitiesDone[line.id] || shiftUtil.EMPTY_HOURLY_PLAN.slice()) : null,
           workerCount: '?',
-          orders: line.orders.map(function(lineOrder, i)
+          orders: []
+        };
+
+        line.orders.forEach(function(lineOrder, i)
+        {
+          var order = plan.orders.get(lineOrder.get('orderNo'));
+          var shiftNo = shiftUtil.getShiftNo(lineOrder.get('startAt'));
+          var nextShift = prevShiftNo !== -1 && shiftNo !== prevShiftNo;
+
+          prevShiftNo = shiftNo;
+
+          var lineMrpSettings = line.mrpSettings(order.get('mrp'));
+
+          if (lineMrpSettings && !_.includes(workerCounts, lineMrpSettings.get('workerCount')))
           {
-            var order = plan.orders.get(lineOrder.get('orderNo'));
-            var shiftNo = shiftUtil.getShiftNo(lineOrder.get('startAt'));
-            var nextShift = prevShiftNo !== -1 && shiftNo !== prevShiftNo;
+            workerCounts.push(lineMrpSettings.get('workerCount'));
+          }
 
-            prevShiftNo = shiftNo;
+          var qtyPlan = lineOrder.get('quantity');
+          var qtyDone = done ? plan.shiftOrders.getTotalQuantityDone(line.id, shiftNo, order.id) : -1;
 
-            var lineMrpSettings = line.mrpSettings(order.get('mrp'));
+          var printOrder = {
+            no: i + 1,
+            orderNo: order.id,
+            nc12: order.get('nc12'),
+            name: order.get('name'),
+            kind: order.get('kind'),
+            qtyTodo: order.get('quantityTodo'),
+            qtyPlan: qtyPlan,
+            qtyClass: qtyDone === -1
+              ? ''
+              : qtyDone === qtyPlan
+                ? 'is-completed'
+                : qtyDone > qtyPlan ? 'is-surplus' : qtyDone > 0 ? 'is-incomplete' : '',
+            startAt: lineOrder.get('startAt'),
+            finishAt: lineOrder.get('finishAt'),
+            nextShift: nextShift
+          };
 
-            if (lineMrpSettings && !_.includes(workerCounts, lineMrpSettings.get('workerCount')))
+          bigPage.orders.push(printOrder);
+
+          if (done && !doneOrders[order.id])
+          {
+            var sapOrder = sapOrders.get(order.id);
+            var shiftOrders = plan.shiftOrders.findOrders(order.id, line.id).sort(function(a, b)
             {
-              workerCounts.push(lineMrpSettings.get('workerCount'));
+              return Date.parse(a.get('startedAt')) - Date.parse(b.get('startedAt'));
+            });
+            var delayReason = sapOrder ? view.delayReasons.get(sapOrder.get('delayReason')) : '';
+            var comment = sapOrder ? sapOrder.get('comment') : '';
+
+            if (delayReason)
+            {
+              delayReason = delayReason.getLabel();
+
+              if (comment)
+              {
+                delayReason += ':';
+              }
             }
 
-            return {
-              no: i + 1,
-              orderNo: order.id,
-              nc12: order.get('nc12'),
-              name: order.get('name'),
-              kind: order.get('kind'),
-              qtyTodo: order.get('quantityTodo'),
-              qtyPlan: lineOrder.get('quantity'),
-              startAt: lineOrder.get('startAt'),
-              finishAt: lineOrder.get('finishAt'),
-              nextShift: nextShift
-            };
-          })
-        };
+            shiftOrders.forEach(function(shiftOrder, i)
+            {
+              bigPage.orders.push({
+                no: null,
+                delayReason: i === 0 && delayReason ? delayReason : '',
+                comment: i === 0 ? comment : '',
+                qtyTodo: lineOrder.get('quantity'),
+                qtyPlan: shiftOrder.get('quantityDone'),
+                startAt: time.utc.getMoment(
+                  time.getMoment(shiftOrder.get('startedAt')).format('YYYY-MM-DD HH:mm:ss'),
+                  'YYYY-MM-DD HH:mm:ss'
+                ).valueOf(),
+                finishAt: time.utc.getMoment(
+                  time.getMoment(shiftOrder.get('finishedAt')).format('YYYY-MM-DD HH:mm:ss'),
+                  'YYYY-MM-DD HH:mm:ss'
+                ).valueOf(),
+                nextShift: false
+              });
+            });
+
+            if (!shiftOrders.length && (comment || delayReason))
+            {
+              bigPage.orders.push({
+                no: null,
+                delayReason: delayReason,
+                comment: comment,
+                qtyTodo: lineOrder.get('quantity'),
+                qtyDone: 0,
+                startAt: null,
+                finishAt: null,
+                nextShift: false
+              });
+            }
+
+            doneOrders[order.id] = true;
+          }
+        });
 
         if (workerCounts.length === 0)
         {
@@ -316,6 +484,7 @@ define([
           if (orderCount > maxOrdersForHourlyPlan)
           {
             bigPage.hourlyPlan = null;
+            bigPage.quantityDone = null;
           }
 
           pages.push(bigPage);
@@ -328,13 +497,15 @@ define([
         for (var pageNo = 1; pageNo <= pageCount; ++pageNo)
         {
           var orders = bigPage.orders.slice((pageNo - 1) * ordersPerPage, pageNo * ordersPerPage);
+          var lastPage = pageNo === pageCount && orders.length <= maxOrdersForHourlyPlan;
 
           pages.push({
             pageNo: pageNo,
             pageCount: pageCount,
             mrp: bigPage.mrp,
             line: bigPage.line,
-            hourlyPlan: pageNo === pageCount && orders.length <= maxOrdersForHourlyPlan ? bigPage.hourlyPlan : null,
+            hourlyPlan: lastPage ? bigPage.hourlyPlan : null,
+            quantityDone: lastPage ? bigPage.quantityDone : null,
             workerCount: bigPage.workerCount,
             orders: orders
           });

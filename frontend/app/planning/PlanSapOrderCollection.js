@@ -16,11 +16,19 @@ define([
     initialize: function(models, options)
     {
       this.plan = options && options.plan;
+      this.mrp = options && options.mrp;
     },
 
     url: function()
     {
-      return '/planning/sapOrders/' + this.plan.id;
+      var url = '/planning/sapOrders/' + this.plan.id;
+
+      if (this.mrp)
+      {
+        url += '?mrp=' + this.mrp;
+      }
+
+      return url;
     }
 
   });

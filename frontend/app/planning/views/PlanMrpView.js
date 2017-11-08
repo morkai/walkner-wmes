@@ -86,6 +86,7 @@ define([
       var view = this;
 
       view.setView('#-toolbar', new PlanMrpToolbarView({
+        delayReasons: view.delayReasons,
         plan: view.plan,
         mrp: view.mrp
       }));
