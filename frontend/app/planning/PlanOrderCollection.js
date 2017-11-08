@@ -37,12 +37,22 @@ define([
         return cmp;
       }
 
-      if ((a.urgent && !b.urgent) || (a.incomplete && !b.incomplete))
+      if (a.urgent && !b.urgent)
       {
         return -1;
       }
 
-      if ((!a.urgent && b.urgent) || (!a.incomplete && b.incomplete))
+      if (!a.urgent && b.urgent)
+      {
+        return 1;
+      }
+
+      if (a.incomplete && !b.incomplete)
+      {
+        return -1;
+      }
+
+      if (!a.incomplete && b.incomplete)
       {
         return 1;
       }
