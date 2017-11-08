@@ -1306,6 +1306,7 @@ app/mrpControllers/util/ownMrps.js
 app/mrpControllers/util/setUpMrpSelect2.js
 app/planning/templates/planFilter.js
 app/planning/views/PlanFilterView.js
+app/prodShifts/ProdShiftCollection.js
 app/planning/templates/toolbar.js
 app/planning/templates/toolbarSetHourlyPlan.js
 app/planning/templates/toolbarPrintLineList.js
