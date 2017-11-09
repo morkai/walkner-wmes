@@ -41,6 +41,7 @@ catch (err) { console.log('Failed to load MongoStore %s', err.message); }
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
+  userId: 'user',
   staticPath: 'public',
   staticBuildPath: 'public-build',
   sessionCookieKey: 'express.sid',
@@ -58,6 +59,7 @@ exports.DEFAULT_CONFIG = {
   urlencodedBody: {},
   ignoredErrorCodes: ['ECONNRESET', 'ECONNABORTED'],
   jsonToXlsxExe: null,
+  longRouteDuration: 0,
   routes: (app, expressModule) => {} // eslint-disable-line no-unused-vars
 };
 
@@ -161,6 +163,11 @@ exports.start = function startExpressModule(app, expressModule, done)
     });
   }
 
+  if (expressModule.config.longRouteDuration > 0)
+  {
+    expressApp.use(logLongRequest);
+  }
+
   app.broker.publish('express.beforeRouter', {
     module: expressModule
   });
@@ -252,5 +259,48 @@ exports.start = function startExpressModule(app, expressModule, done)
   function wrapEjsAmd(ejsAmdHelpers, js)
   {
     return wrapAmd('return ' + js, ejsAmdHelpers);
+  }
+
+  /**
+   * @private
+   * @param {Object} req
+   * @param {Object} res
+   * @param {function} next
+   */
+  function logLongRequest(req, res, next)
+  {
+    const complete = _.once(onRequestCompleted);
+
+    res.startTime = Date.now();
+
+    res.once('close', complete);
+    res.once('finish', complete);
+
+    next();
+  }
+
+  /**
+   * @private
+   */
+  function onRequestCompleted()
+  {
+    const endTime = Date.now();
+    const {startTime, req} = this;
+    const duration = endTime - startTime;
+
+    if (duration >= expressModule.config.longRouteDuration)
+    {
+      const user = app[expressModule.config.userId]
+        ? app[expressModule.config.userId].createUserInfo(req.session.user, req)
+        : req.session.user;
+
+      expressModule.debug('Long request: ' + JSON.stringify({
+        url: req.url,
+        user,
+        startTime,
+        endTime,
+        duration
+      }, null, 2));
+    }
   }
 };
