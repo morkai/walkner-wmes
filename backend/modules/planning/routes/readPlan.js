@@ -17,7 +17,7 @@ module.exports = function readPlanRoute(app, module, req, res, next)
 
       if (req.query.pceTimes === '0')
       {
-        fields['lines.pceTimes'] = 0;
+        fields['lines.orders.pceTimes'] = 0;
       }
 
       Plan.findById(req.params.id, fields).lean().exec(this.parallel());

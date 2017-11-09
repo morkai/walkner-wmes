@@ -59,7 +59,8 @@ module.exports = function setupPlanModel(app, mongoose)
     pceTime: Number,
     manHours: Number,
     startAt: Date,
-    finishAt: Date
+    finishAt: Date,
+    pceTimes: [Number]
   }, {
     _id: false,
     minimize: false,
@@ -93,7 +94,6 @@ module.exports = function setupPlanModel(app, mongoose)
     orders: [planLineOrderSchema],
     downtimes: [autoDowntimeSchema],
     hourlyPlan: [Number],
-    pceTimes: [Number],
     shiftData: [shiftDataSchema]
   }, {
     _id: false,

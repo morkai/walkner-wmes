@@ -28,7 +28,10 @@ module.exports = function setupPlanChangeModel(app, mongoose)
     {
       const planLine = plan.lines.find(line => line._id === changedLine._id).toObject();
 
-      delete planLine.pceTimes;
+      planLine.orders.forEach(planLineOrder =>
+      {
+        delete planLineOrder.pceTimes;
+      });
 
       Object.assign(changedLine, planLine);
     });
