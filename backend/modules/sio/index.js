@@ -63,8 +63,6 @@ exports.start = function startSioModule(app, sioModule, done)
       multiServer.addServer(app[httpServerId].server);
     });
 
-    setInterval(killZombies, 30 * 60 * 1000);
-
     startSocketIo();
 
     done();
