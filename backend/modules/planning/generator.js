@@ -45,6 +45,7 @@ module.exports = function setUpGenerator(app, module)
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = !DEV && UNFROZEN_PLANS.length === 0;
   const COMPARE_ORDERS = true || !DEV && UNFROZEN_PLANS.length === 0;
+  const RESIZE_ORDERS = false;
   // sortSmallOrdersByManHours sortSmallOrdersByLeven sortSmallOrdersByParts
   const SMALL_ORDERS_SORTER = sortSmallOrdersByLeven;
 
@@ -1123,7 +1124,10 @@ module.exports = function setUpGenerator(app, module)
       },
       function()
       {
-        resizeIncompletePlannedOrders(state, this.next());
+        if (RESIZE_ORDERS)
+        {
+          resizeIncompletePlannedOrders(state, this.next());
+        }
       },
       function()
       {
