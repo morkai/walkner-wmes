@@ -663,7 +663,6 @@ exports.start = function startOrgUnitsModule(app, module)
 
   function rebuildCache()
   {
-    cache = null;
     rebuildingCache += 1;
 
     if (rebuildingCache !== 1)
