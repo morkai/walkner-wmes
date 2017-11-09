@@ -148,6 +148,12 @@ define([
     loadData: function()
     {
       var view = this;
+
+      if (!view.model.prodLineId)
+      {
+        return;
+      }
+
       var url = '/heff/' + encodeURIComponent(view.model.prodLineId);
 
       clearTimeout(view.timers.loadData);

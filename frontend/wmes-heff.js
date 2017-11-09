@@ -64,8 +64,12 @@
     BlankLayout)
   {
     var startBroker = null;
+    var heffLine = localStorage.getItem('HEFF:LINE');
 
-    socket.connect();
+    if (heffLine)
+    {
+      socket.connect();
+    }
 
     moment.locale(window.appLocale);
 
@@ -96,7 +100,7 @@
       document.title = newTitle.reverse().join(' < ');
     });
 
-    if (navigator.onLine)
+    if (navigator.onLine && heffLine)
     {
       startBroker = broker.sandbox();
 
