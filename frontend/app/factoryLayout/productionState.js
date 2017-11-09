@@ -155,7 +155,10 @@ define([
   {
     broker.subscribe(orgUnitsType + '.synced', function()
     {
-      productionState.load(true);
+      if (loaded)
+      {
+        productionState.load(true);
+      }
     });
   });
 
