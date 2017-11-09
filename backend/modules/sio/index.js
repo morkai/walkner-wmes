@@ -194,8 +194,7 @@ exports.start = function startSioModule(app, sioModule, done)
   function netstat(done)
   {
     const win32 = process.platform === 'win32';
-    const cmd = sioModule.config.netstatCmd
-      || (win32 ? 'netstat -p tcp -n | grep ESTABLISHED' : 'netstat -ant | grep ESTABLISHED');
+    const cmd = sioModule.config.netstatCmd || (win32 ? 'netstat -p tcp -n' : 'netstat -ant | grep ESTABLISHED');
 
     exec(cmd, (err, stdout) =>
     {
