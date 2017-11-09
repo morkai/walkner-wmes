@@ -22,7 +22,7 @@ exports.DEFAULT_CONFIG = {
   pingsId: 'pings',
   path: '/sio',
   socketIo: {
-    pathInterval: 30000,
+    pingInterval: 30000,
     pingTimeout: 10000
   }
 };
