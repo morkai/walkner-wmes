@@ -88,9 +88,45 @@ module.exports = function setUpGenerator(app, module)
     {
       generateActivePlans(false);
     }
+
+    scheduleNextLastPlanGeneration();
   });
 
   app.broker.subscribe('planning.generator.requested', handleRequest);
+
+  function scheduleNextLastPlanGeneration()
+  {
+    const now = moment();
+
+    if (now.hours() === 5 && now.minutes() === 59)
+    {
+      generatePlan(now.format('YYYY-MM-DD'));
+
+      setTimeout(scheduleNextLastPlanGeneration, 23 * 3600 * 1000);
+
+      return;
+    }
+
+    const next = moment().startOf('day');
+
+    if (now.hours() >= 6)
+    {
+      next.add(1, 'day');
+    }
+
+    next.hours(5).minutes(59);
+
+    const delay = next.valueOf() - now.valueOf();
+
+    if (delay < 60000)
+    {
+      setTimeout(scheduleNextLastPlanGeneration, delay + 1000);
+    }
+    else
+    {
+      setTimeout(scheduleNextLastPlanGeneration, Math.round(delay * 0.9));
+    }
+  }
 
   function handleRequest(message)
   {
