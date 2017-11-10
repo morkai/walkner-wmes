@@ -37,6 +37,7 @@
       'app/viewport',
       'app/updater/index',
       'app/data/loadedModules',
+      'app/data/localStorage',
       'app/core/layouts/BlankLayout',
       'app/time',
       'app/wmes-heff-routes',
@@ -61,6 +62,7 @@
     viewport,
     updater,
     loadedModules,
+    localStorage,
     BlankLayout)
   {
     var startBroker = null;
