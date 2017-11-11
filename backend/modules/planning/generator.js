@@ -18,6 +18,12 @@ const ORDER_USER_PROPERTIES = [
   'ignored',
   'urgent'
 ];
+const ORDER_URGENT_SOURCE = {
+  plan: 1,
+  added: 2,
+  incomplete: 3,
+  late: 4
+};
 const EMPTY_HOURLY_PLAN = [
   0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0,
@@ -1202,6 +1208,13 @@ module.exports = function setUpGenerator(app, module)
 
   function sortUrgentOrders(a, b)
   {
+    const cmp = ORDER_URGENT_SOURCE[b.order.source] - ORDER_URGENT_SOURCE[a.order.source];
+
+    if (cmp !== 0)
+    {
+      return cmp;
+    }
+
     if (a.order.quantityDone > 0 && b.order.quantityDone === 0)
     {
       return -1;
