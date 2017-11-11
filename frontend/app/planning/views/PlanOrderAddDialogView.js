@@ -47,7 +47,8 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        orderNo: this.order ? this.order._id : (this.model.orderNo || '')
+        orderNo: this.order ? this.order._id : (this.model.orderNo || ''),
+        urgent: this.model.urgent
       };
     },
 
@@ -154,7 +155,9 @@ define([
 
     showDetails: function(data)
     {
+      data.idPrefix = this.idPrefix;
       data.order.statuses = data.order.statuses.map(renderOrderStatusLabel).join('');
+      data.urgent = data.order._id === this.model.orderNo && this.model.urgent;
 
       this.$id('details').html(orderAddDetailsTemplate(data)).removeClass('hidden');
     },
@@ -167,7 +170,10 @@ define([
 
       var req = view.ajax({
         method: 'POST',
-        url: '/planning/plans/' + view.plan.id + '/orders/' + view.order._id
+        url: '/planning/plans/' + view.plan.id + '/orders/' + view.order._id,
+        data: JSON.stringify({
+          urgent: this.$id('urgent').prop('checked')
+        })
       });
 
       req.done(function()

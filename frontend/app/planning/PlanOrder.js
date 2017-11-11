@@ -14,12 +14,9 @@ define([
       return this.pick(['quantityTodo', 'quantityDone', 'statuses']);
     },
 
-    isContinuation: function()
+    isAutoAdded: function()
     {
-      return this.get('date') !== this.collection.plan.id
-        && this.get('quantityPlan') > 0
-        && this.get('urgent')
-        && !this.get('added');
+      return this.attributes.source === 'incomplete' || this.attributes.source === 'late';
     },
 
     getQuantityTodo: function()

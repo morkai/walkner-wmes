@@ -15,7 +15,6 @@ const ORDER_IGNORED_PROPERTIES = {
 };
 const ORDER_USER_PROPERTIES = [
   'quantityPlan',
-  'added',
   'ignored',
   'urgent'
 ];
@@ -45,7 +44,7 @@ module.exports = function setUpGenerator(app, module)
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = !DEV && UNFROZEN_PLANS.length === 0;
   const COMPARE_ORDERS = true || !DEV && UNFROZEN_PLANS.length === 0;
-  const RESIZE_ORDERS = false;
+  const RESIZE_ORDERS = true;
   // sortSmallOrdersByManHours sortSmallOrdersByLeven sortSmallOrdersByParts
   const SMALL_ORDERS_SORTER = sortSmallOrdersByLeven;
 
@@ -367,7 +366,7 @@ module.exports = function setUpGenerator(app, module)
           return this.skip(new Error(`Failed to load auto downtimes: ${err.message}`));
         }
 
-        loadOrders(state, null, this.next());
+        loadOrders(state, 'plan', null, this.next());
       },
       function loadPlanStep(err)
       {
@@ -644,7 +643,7 @@ module.exports = function setUpGenerator(app, module)
     });
   }
 
-  function loadOrders(state, ids, done)
+  function loadOrders(state, source, ids, done)
   {
     state.log(`Loading ${ids ? 'additional orders' : 'orders'}...`);
 
@@ -684,7 +683,7 @@ module.exports = function setUpGenerator(app, module)
         sapOrders.forEach(sapOrder =>
         {
           const hardComponents = state.settings.mrp(sapOrder.mrp).hardComponents;
-          const planOrder = Plan.createPlanOrder(sapOrder, hardComponents);
+          const planOrder = Plan.createPlanOrder(source, sapOrder, hardComponents);
 
           state.orders.set(sapOrder._id, planOrder);
         });
@@ -702,7 +701,7 @@ module.exports = function setUpGenerator(app, module)
 
   function preparePlanOrder(state, planOrder)
   {
-    if (state.incompleteOrders.has(planOrder._id))
+    if (planOrder.source === 'incomplete')
     {
       planOrder.urgent = true;
       planOrder.quantityPlan = state.incompleteOrders.get(planOrder._id) - planOrder.quantityDone;
@@ -778,7 +777,7 @@ module.exports = function setUpGenerator(app, module)
 
         state.plan.orders.forEach(planOrder =>
         {
-          if (planOrder.added && !state.orders.has(planOrder._id))
+          if (planOrder.source === 'added' && !state.orders.has(planOrder._id))
           {
             addedOrders.push(planOrder._id);
           }
@@ -786,7 +785,7 @@ module.exports = function setUpGenerator(app, module)
 
         if (addedOrders.length)
         {
-          loadOrders(state, addedOrders, this.next());
+          loadOrders(state, 'added', addedOrders, this.next());
         }
       },
       function loadIncompleteOrdersStep()
@@ -843,7 +842,7 @@ module.exports = function setUpGenerator(app, module)
           state.incompleteOrders.set(order._id, order.incomplete);
         });
 
-        loadOrders(state, Array.from(state.incompleteOrders.keys()), this.next());
+        loadOrders(state, 'incomplete', Array.from(state.incompleteOrders.keys()), this.next());
       },
       done
     );
@@ -856,7 +855,7 @@ module.exports = function setUpGenerator(app, module)
 
   function filterPlanOrder(state, planOrder)
   {
-    if (planOrder.urgent && planOrder.quantityPlan <= 0)
+    if (planOrder.source === 'incomplete' && planOrder.quantityPlan <= 0)
     {
       state.newIncompleteOrders.delete(planOrder._id);
 

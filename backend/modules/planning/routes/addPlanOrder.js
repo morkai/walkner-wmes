@@ -53,9 +53,10 @@ module.exports = function addPlanOrderRoute(app, module, req, res, next)
       }
 
       const mrpSettings = settings.mrps.find(mrpSettings => mrpSettings._id === sapOrder.mrp);
-      const newPlanOrder = Plan.createPlanOrder(sapOrder, new Set(mrpSettings ? mrpSettings.hardComponents : []));
+      const hardComponents = new Set(mrpSettings ? mrpSettings.hardComponents : []);
+      const newPlanOrder = Plan.createPlanOrder('added', sapOrder, hardComponents);
 
-      newPlanOrder.added = true;
+      newPlanOrder.urgent = !!req.body.urgent;
 
       const planChange = new PlanChange({
         plan: settings._id,

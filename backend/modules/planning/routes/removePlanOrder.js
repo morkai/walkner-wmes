@@ -33,7 +33,7 @@ module.exports = function removePlanOrderRoute(app, module, req, res, next)
 
       const planOrder = plan.orders.find(o => o._id === req.params.order);
 
-      if (!planOrder.added)
+      if (planOrder.source !== 'added')
       {
         return this.skip(app.createError('ORDER_NOT_ADDED', 400));
       }

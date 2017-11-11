@@ -121,15 +121,17 @@
 }
 .planning-mrp-list-item.is-unplanned {
   background-color: #fbf2c0;
+  border-color: #999;
 }
 .planning-mrp-list-item.is-started {
   background-color: #eee;
+  border-color: #999;
 }
 .planning-mrp-list-item.is-completed {
   background-color: #dff0d8;
   border-color: #999;
 }
-.planning-mrp-list-item.is-invalid {
+.planning-mrp-list-item.is-surplus {
   background-color: #ffe8e8;
 }
 .planning-mrp-list-item.is-selected {
@@ -359,7 +361,7 @@
   color: darkorange;
 }
 .planning-mrp-popover .is-completed {
-  color: #00AF00;
+  color: #00af00;
 }
 .planning-mrp-popover .is-surplus {
   color: #e00;

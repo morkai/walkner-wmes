@@ -152,10 +152,10 @@ define([
       return this.mrp.orders.sort().map(function(order)
       {
         var orderData = plan.getActualOrderData(order.id);
-        var added = order.get('added');
+        var source = order.get('source');
         var urgent = order.get('urgent');
         var customQuantity = order.get('quantityPlan') > 0;
-        var late = order.isContinuation();
+        var autoAdded = order.isAutoAdded();
 
         return {
           _id: order.id,
@@ -165,16 +165,23 @@ define([
           started: orderData.quantityDone > 0 ? 'is-started' : '',
           surplus: orderData.quantityDone > orderData.quantityTodo ? 'is-surplus' : '',
           unplanned: order.get('incomplete') === order.getQuantityTodo() ? 'is-unplanned' : '',
-          invalid: '',
-          added: added,
-          ignored: order.get('ignored') ? 'is-ignored' : '',
+          source: source,
           confirmed: orderData.statuses.indexOf('CNF') !== -1 ? 'is-cnf' : '',
           delivered: orderData.statuses.indexOf('DLV') !== -1 ? 'is-dlv' : '',
-          customQuantity: customQuantity && !late,
-          urgent: urgent && !late,
-          late: late
+          customQuantity: customQuantity && source !== 'incomplete',
+          ignored: order.get('ignored') ? 'is-ignored' : '',
+          urgent: urgent && !autoAdded
         };
       });
+    },
+
+    beforeRender: function()
+    {
+      if (this.$preview)
+      {
+        this.$preview.popover('destroy');
+        this.$preview = null;
+      }
     },
 
     afterRender: function()
@@ -289,6 +296,11 @@ define([
     {
       var view = this;
 
+      if (!view.mrp.orders.get(order.id))
+      {
+        return;
+      }
+
       view.$preview = view.$item(order.id).find('.planning-mrp-list-item-inner').data('orderNo', order.id).popover({
         container: view.el,
         trigger: 'manual',
@@ -361,7 +373,7 @@ define([
         menu.push(contextMenu.actions.comment(planOrder.id));
       }
 
-      if (this.plan.canEditSettings() && !planOrder.isContinuation())
+      if (this.plan.canEditSettings() && !planOrder.isAutoAdded())
       {
         menu.push({
           label: t('planning', 'orders:menu:quantity'),
@@ -372,7 +384,7 @@ define([
           handler: this.handleIgnoreAction.bind(this, planOrder)
         });
 
-        if (planOrder.get('added'))
+        if (planOrder.get('source') === 'added')
         {
           menu.push({
             label: t('planning', 'orders:menu:remove'),

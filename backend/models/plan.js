@@ -43,9 +43,13 @@ module.exports = function setupPlanModel(app, mongoose)
     quantityDone: Number,
     quantityPlan: Number,
     incomplete: Number,
-    added: Boolean,
     ignored: Boolean,
-    urgent: Boolean
+    urgent: Boolean,
+    source: {
+      type: String,
+      enum: ['plan', 'added', 'incomplete', 'late'],
+      default: 'plan'
+    }
   }, {
     _id: false,
     minimize: false,
@@ -143,7 +147,7 @@ module.exports = function setupPlanModel(app, mongoose)
     next();
   });
 
-  planSchema.statics.createPlanOrder = function(sapOrder, hardComponents)
+  planSchema.statics.createPlanOrder = function(source, sapOrder, hardComponents)
   {
     const hardComponent = !hardComponents || !Array.isArray(sapOrder.bom) || sapOrder.bom.length === 0
       ? null
@@ -172,16 +176,16 @@ module.exports = function setupPlanModel(app, mongoose)
       nc12: sapOrder.nc12,
       name: resolveProductName(sapOrder),
       statuses: sapOrder.statuses,
-      operation: operation,
+      operation,
       manHours: 0,
       hardComponent: hardComponent ? hardComponent.nc12 : null,
       quantityTodo: sapOrder.qty,
       quantityDone: sapOrder.qtyDone && sapOrder.qtyDone.total || 0,
       quantityPlan: 0,
       incomplete: 0,
-      added: false,
       ignored: false,
-      urgent: false
+      urgent: false,
+      source
     };
   };
 

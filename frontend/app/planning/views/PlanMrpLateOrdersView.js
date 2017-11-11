@@ -232,7 +232,8 @@ define([
         plan: this.plan,
         mrp: this.mrp,
         model: {
-          orderNo: lateOrder.id
+          orderNo: lateOrder.id,
+          urgent: true
         }
       });
 
