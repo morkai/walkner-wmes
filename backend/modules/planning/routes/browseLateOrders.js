@@ -78,7 +78,7 @@ module.exports = function browseLateOrdersRoute(app, module, req, res, next)
       }
 
       const lateOrders = sapOrders
-        .filter(o => !o.qtyDone || o.qtyDone.total < o.qty)
+        .filter(o => !o.qtyDone || !o.qtyDone.total || o.qtyDone.total < o.qty)
         .map(o => {
           const operation = _.pick(resolveBestOperation(o.operations), Plan.OPERATION_PROPERTIES);
           const quantityTodo = o.qty;
