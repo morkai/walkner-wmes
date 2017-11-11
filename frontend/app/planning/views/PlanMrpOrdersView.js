@@ -380,6 +380,10 @@ define([
           handler: this.handleQuantityAction.bind(this, planOrder)
         },
         {
+          label: t('planning', 'orders:menu:' + (planOrder.get('urgent') ? 'unurgent' : 'urgent')),
+          handler: this.handleUrgentAction.bind(this, planOrder)
+        },
+        {
           label: t('planning', 'orders:menu:' + (planOrder.get('ignored') ? 'unignore' : 'ignore')),
           handler: this.handleIgnoreAction.bind(this, planOrder)
         });
@@ -422,6 +426,49 @@ define([
       });
 
       viewport.showDialog(dialogView, t('planning', 'orders:menu:quantity:title'));
+    },
+
+    handleUrgentAction: function(planOrder)
+    {
+      var view = this;
+      var urgent = planOrder.get('urgent');
+      var dialogView = new DialogView({
+        autoHide: false,
+        template: orderIgnoreDialogTemplate,
+        model: {
+          action: urgent ? 'unurgent' : 'urgent',
+          plan: view.plan.getLabel(),
+          mrp: view.mrp.getLabel(),
+          order: planOrder.getLabel()
+        }
+      });
+
+      view.listenTo(dialogView, 'answered', function()
+      {
+        var req = view.ajax({
+          method: 'PATCH',
+          url: '/planning/plans/' + view.plan.id + '/orders/' + planOrder.id,
+          data: JSON.stringify({
+            urgent: !urgent
+          })
+        });
+
+        req.done(dialogView.closeDialog);
+        req.fail(function()
+        {
+          viewport.msg.show({
+            type: 'error',
+            time: 3000,
+            text: t('planning', 'orders:menu:urgent:failure')
+          });
+
+          view.plan.settings.trigger('errored');
+
+          dialogView.enableAnswers();
+        });
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'orders:menu:urgent:title'));
     },
 
     handleIgnoreAction: function(planOrder)

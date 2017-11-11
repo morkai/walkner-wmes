@@ -36,7 +36,7 @@ module.exports = function editPlanOrderRoute(app, module, req, res, next)
         return this.skip(app.createError('ORDER_NOT_FOUND', 404));
       }
 
-      const newData = _.pick(req.body, ['quantityPlan', 'ignored']);
+      const newData = _.pick(req.body, ['quantityPlan', 'ignored', 'urgent']);
       const oldData = _.pick(planOrder, Object.keys(newData));
 
       planOrder.set(newData);
