@@ -165,6 +165,7 @@ module.exports = function setUpGenerator(app, module)
       lastMinute: now >= lastMinuteStartTime && now < lastMinuteEndTime,
       cancelled: false,
       new: false,
+      generateCallCount: 0,
       settings: null,
       autoDowntimes: null,
       orders: null,
@@ -1153,7 +1154,7 @@ module.exports = function setUpGenerator(app, module)
       {
         if (RESIZE_ORDERS)
         {
-          resizeIncompletePlannedOrders(state, this.next());
+          resizeAndFillLines(state, this.next());
         }
       },
       function()
@@ -1398,8 +1399,7 @@ module.exports = function setUpGenerator(app, module)
         plannedOrdersSet: new Set(),
         plannedOrdersList: [],
         hourlyPlan: EMPTY_HOURLY_PLAN.slice(),
-        /** @type {Hash} */
-        hash: createHash('md5')
+        hash: ''
       };
 
       lineState.shiftNo = getShiftFromMoment(lineState.activeFrom);
@@ -1472,6 +1472,8 @@ module.exports = function setUpGenerator(app, module)
       return done();
     }
 
+    state.generateCallCount += 1;
+
     generatePlanForLine(state, state.lineStateQueue.shift(), () => generatePlanForLines(state, done));
   }
 
@@ -1515,7 +1517,7 @@ module.exports = function setUpGenerator(app, module)
     const newPlanLine = {
       _id: lineState._id,
       version: 1,
-      hash: lineState.hash.digest('hex'),
+      hash: createHash('md5').update(lineState.hash).digest('hex'),
       orders: lineState.plannedOrdersList,
       downtimes: lineState.downtimes,
       hourlyPlan: lineState.hourlyPlan,
@@ -1718,7 +1720,7 @@ module.exports = function setUpGenerator(app, module)
 
       const bestCandidate = candidates[0];
 
-      if (!bestCandidate.lastAvailableLine && bestCandidate.completion < 0.80)
+      if (!bestCandidate.lastAvailableLine && bestCandidate.completion < 0.80 && state.generateCallCount === 1)
       {
         return;
       }
@@ -1758,13 +1760,11 @@ module.exports = function setUpGenerator(app, module)
 
     candidate.plannedOrders.forEach(lineOrder =>
     {
-      lineState.hash.update(
-        lineOrder._id
+      lineState.hash += lineOrder._id
         + 2
         + lineOrder.quantity
         + lineOrder.startAt.getTime()
-        + lineOrder.finishAt.getTime()
-      );
+        + lineOrder.finishAt.getTime();
     });
 
     lineState.completed = candidate.completed;
@@ -2126,7 +2126,32 @@ module.exports = function setUpGenerator(app, module)
     });
   }
 
-  function resizeIncompletePlannedOrders(state, done)
+  function resizeAndFillLines(state, done)
+  {
+    step(
+      function()
+      {
+        resizeLines(state, this.next());
+      },
+      function()
+      {
+        fillLines(state, this.next());
+      },
+      function(err, again) // eslint-disable-line handle-callback-err
+      {
+        if (again && !state.cancelled)
+        {
+          setImmediate(resizeAndFillLines, state, done);
+        }
+        else
+        {
+          setImmediate(done);
+        }
+      }
+    );
+  }
+
+  function resizeLines(state, done)
   {
     if (state.cancelled || !state.newIncompleteOrders.size)
     {
@@ -2191,14 +2216,11 @@ module.exports = function setUpGenerator(app, module)
     }
 
     const usedLines = new Set();
-    let anySkipped = false;
 
     incompletePlannedOrders.sort((a, b) => a.startAt - b.startAt).forEach(d =>
     {
       if (d.plannedLines.some(l => usedLines.has(l._id)))
       {
-        anySkipped = true;
-
         return;
       }
 
@@ -2213,14 +2235,7 @@ module.exports = function setUpGenerator(app, module)
       resizeIncompletePlannedOrder(state, d.order, d.plannedLines);
     });
 
-    if (anySkipped)
-    {
-      setImmediate(resizeIncompletePlannedOrders, state, done);
-    }
-    else
-    {
-      setImmediate(done);
-    }
+    setImmediate(done, null, usedLines);
   }
 
   function resizeIncompletePlannedOrder(state, order, lineStates)
@@ -2239,7 +2254,6 @@ module.exports = function setUpGenerator(app, module)
       const activeFromTime = plannedOrder.finishAt.getTime();
 
       lineState.completed = false;
-      lineState.hash = createHash('md5');
       lineState.activeFrom = moment.utc(activeFromTime);
       lineState.shiftNo = getShiftFromMoment(lineState.activeFrom);
 
@@ -2291,8 +2305,6 @@ module.exports = function setUpGenerator(app, module)
 
       lineState.resize = {
         plannedOrderIndex,
-        availableTime,
-        pceTime,
         maxPceCount
       };
     });
@@ -2329,6 +2341,147 @@ module.exports = function setUpGenerator(app, module)
 
       completeLine(state, lineState);
     }
+  }
+
+  function fillLines(state, done)
+  {
+    if (state.cancelled || !state.newIncompleteOrders.size)
+    {
+      return done();
+    }
+
+    log('Filling...');
+
+    const incompleteMrps = new Map();
+    const checkedMrps = new Set();
+
+    state.newIncompleteOrders.forEach((incomplete, orderNo) =>
+    {
+      if (incomplete <= 0)
+      {
+        return;
+      }
+
+      const mrp = state.orders.get(orderNo).mrp;
+
+      if (checkedMrps.has(mrp))
+      {
+        if (incompleteMrps.has(mrp))
+        {
+          incompleteMrps.get(mrp).push(orderNo);
+        }
+
+        return;
+      }
+
+      if (hasAnyLineWithRoomForOrder(state, orderNo))
+      {
+        incompleteMrps.set(mrp, [orderNo]);
+      }
+
+      checkedMrps.add(mrp);
+    });
+
+    if (!incompleteMrps.size)
+    {
+      log('...nothing to fill!');
+
+      return setImmediate(done, null, false);
+    }
+
+    const steps = [];
+
+    incompleteMrps.forEach((orderNos, mrp) =>
+    {
+      steps.push(function()
+      {
+        if (state.cancelled)
+        {
+          return this.skip();
+        }
+
+        fillMrpLines(state, mrp, orderNos, this.next());
+      });
+    });
+
+    steps.push(function() { generatePlanForLines(state, this.next()); });
+    steps.push(done.bind(null, null, true));
+
+    step(steps);
+  }
+
+  function fillMrpLines(state, mrp, orderNos, done)
+  {
+    log(`        ${mrp}...`);
+    log(`             Orders: ${orderNos.join(', ')}`);
+
+    const lineStatesToFill = [];
+
+    state.settings.mrp(mrp).lines.forEach(mrpLineSettings =>
+    {
+      const lineState = state.lineStates.get(mrpLineSettings._id);
+
+      lineState.orderStateQueue = [];
+
+      orderNos.forEach(orderNo =>
+      {
+        const orderState = state.orderStates.get(orderNo);
+
+        if (mrpLineSettings.orderPriority.includes(orderState.order.kind))
+        {
+          lineState.orderStateQueue.push(orderState);
+        }
+      });
+
+      lineState.orderStateQueue.sort((a, b) =>
+      {
+        const aStartTime = a.startTimes[0] || Number.MAX_SAFE_INTEGER;
+        const bStartTime = b.startTimes[0] || Number.MAX_SAFE_INTEGER;
+
+        return aStartTime === bStartTime
+          ? (a.quantityTodo - b.quantityTodo)
+          : (aStartTime - bStartTime);
+      });
+
+      if (lineState.orderStateQueue.length)
+      {
+        lineState.completed = false;
+
+        lineStatesToFill.push(lineState);
+      }
+    });
+
+    if (!lineStatesToFill.length)
+    {
+      return setImmediate(done);
+    }
+
+    lineStatesToFill.sort((a, b) => a.activeFrom.valueOf() - b.activeFrom.valueOf());
+
+    log(`             Lines: ${lineStatesToFill.map(l => l._id).join(', ')}`);
+
+    state.lineStateQueue = state.lineStateQueue.concat(lineStatesToFill);
+
+    return setImmediate(done);
+  }
+
+  function hasAnyLineWithRoomForOrder(state, orderNo)
+  {
+    const order = state.orders.get(orderNo);
+
+    return state.settings.mrp(order.mrp).lines.some(mrpLineSettings =>
+    {
+      if (!mrpLineSettings.orderPriority.includes(order.kind))
+      {
+        return false;
+      }
+
+      const lineState = state.lineStates.get(mrpLineSettings._id);
+      const availableTime = getRemainingAvailableTime(lineState);
+      const pceTime = getPceTime(order, mrpLineSettings.workerCount);
+
+      return availableTime >= pceTime;
+    });
   }
 
   function getRemainingAvailableTime(lineState)
