@@ -2315,6 +2315,8 @@ module.exports = function setUpGenerator(app, module)
 
         state.newIncompleteOrders.set(unplannedLineOrder.orderNo, newIncompleteQuantity);
 
+        state.orderToLines.get(unplannedLineOrder.orderNo).delete(lineState);
+
         const unplannedOrderState = state.orderStates.get(unplannedLineOrder.orderNo);
 
         unplannedOrderState.order.incomplete = newIncompleteQuantity;
