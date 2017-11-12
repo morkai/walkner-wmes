@@ -8,6 +8,7 @@ const step = require('h5.step');
 const moment = require('moment');
 const deepEqual = require('deep-equal');
 const levenSort = require('leven-sort');
+const businessDays = require('../reports/businessDays');
 const setUpAutoDowntimeCache = require('./autoDowntimeCache');
 
 const ORDER_IGNORED_PROPERTIES = {
@@ -45,10 +46,10 @@ module.exports = function setUpGenerator(app, module)
   }
 
   const DEV = 0 && app.options.env === 'development';
-  const UNFROZEN_PLANS = DEV ? ['2017-11-09'] : [];
-  const LOG_LINES = {'LM-8': true, 'LM-9': true, 'LM-10': true, 'LM-11': true, 'McL': true};
+  const UNFROZEN_PLANS = DEV ? ['2017-11-11'] : [];
+  const LOG_LINES = {};
   const LOG = DEV;
-  const AUTO_GENERATE_NEXT = !DEV && UNFROZEN_PLANS.length === 0;
+  const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
   const COMPARE_ORDERS = true || !DEV && UNFROZEN_PLANS.length === 0;
   const RESIZE_ORDERS = true;
   // sortSmallOrdersByManHours sortSmallOrdersByLeven sortSmallOrdersByParts
@@ -153,9 +154,15 @@ module.exports = function setUpGenerator(app, module)
 
   function createPlanGeneratorState(key)
   {
+    const lastMinute = moment(key, 'YYYY-MM-DD').hours(5).minutes(59);
+    const lastMinuteStartTime = lastMinute.valueOf();
+    const lastMinuteEndTime = lastMinuteStartTime + 60000;
+    const now = Date.now();
+
     return {
       key: key,
       date: moment.utc(key, 'YYYY-MM-DD').toDate(),
+      lastMinute: now >= lastMinuteStartTime && now < lastMinuteEndTime,
       cancelled: false,
       new: false,
       settings: null,
@@ -651,7 +658,7 @@ module.exports = function setUpGenerator(app, module)
 
   function loadOrders(state, source, ids, done)
   {
-    state.log(`Loading ${ids ? 'additional orders' : 'orders'}...`);
+    state.log(`Loading ${source} orders...`);
 
     if (!ids && !state.settings.mrps.length)
     {
@@ -710,7 +717,9 @@ module.exports = function setUpGenerator(app, module)
     if (planOrder.source === 'incomplete')
     {
       planOrder.urgent = true;
-      planOrder.quantityPlan = state.incompleteOrders.get(planOrder._id) - planOrder.quantityDone;
+      planOrder.quantityPlan = state.lastMinute
+        ? (planOrder.quantityTodo - planOrder.quantityDone)
+        : state.incompleteOrders.get(planOrder._id);
     }
 
     const quantityTodo = getQuantityTodo(state, planOrder);
@@ -823,12 +832,25 @@ module.exports = function setUpGenerator(app, module)
 
   function loadIncompleteOrders(state, done)
   {
+    const planLocalMoment = moment(state.key, 'YYYY-MM-DD');
+
+    if (businessDays.isHoliday(planLocalMoment.toDate()))
+    {
+      return done();
+    }
+
     step(
       function()
       {
-        const prevPlanId = moment.utc(state.date.getTime()).subtract(1, 'days').toDate();
+        const prevPlanId = planLocalMoment.subtract(1, 'days');
+
+        while (businessDays.isHoliday(prevPlanId.toDate()))
+        {
+          prevPlanId.subtract(1, 'days');
+        }
+
         const pipeline = [
-          {$match: {_id: prevPlanId}},
+          {$match: {_id: moment.utc(prevPlanId.format('YYYY-MM-DD'), 'YYYY-MM-DD').toDate()}},
           {$unwind: '$orders'},
           {$match: {'orders.incomplete': {$gt: 0}}},
           {$project: {_id: '$orders._id', incomplete: '$orders.incomplete'}}

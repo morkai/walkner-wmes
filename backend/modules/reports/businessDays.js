@@ -11,6 +11,11 @@ exports.quarters = {};
 
 exports.months = {};
 
+exports.isHoliday = function(date)
+{
+  return exports.holidays[date.getTime()] === true;
+};
+
 exports.countBetweenDates = function(fromTime, toTime)
 {
   let businessDays = 0;
