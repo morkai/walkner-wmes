@@ -477,3 +477,32 @@
 .planning-mrp-filter .planning-mrp-stats-bd td:last-child {
   padding-right: 0;
 }
+.planning-legend-popover {
+  position: fixed;
+  top: 4px!important;
+  left: auto!important;
+  right: 14px;
+  max-width: 550px;
+}
+.planning-legend {
+  padding: 0;
+}
+.planning-legend li {
+  margin-top: 5px;
+  list-style: none;
+}
+.planning-legend .fa {
+  width: 30px;
+  text-align: center;
+}
+.planning-legend-order {
+  display: inline-block;
+  width: 30px;
+  border: 1px solid #999;
+  background: #fff;
+  text-align: center;
+}
+.planning-legend-order > span {
+  display: inline-block;
+  width: 100%;
+}

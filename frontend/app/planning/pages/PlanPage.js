@@ -16,7 +16,8 @@ define([
   '../PlanDisplayOptions',
   '../views/PlanFilterView',
   '../views/PlanMrpView',
-  'app/planning/templates/planPage'
+  'app/planning/templates/planPage',
+  'app/planning/templates/planLegend'
 ], function(
   _,
   $,
@@ -33,7 +34,8 @@ define([
   PlanDisplayOptions,
   PlanFilterView,
   PlanMrpView,
-  template
+  pageTemplate,
+  legendTemplate
 ) {
   'use strict';
 
@@ -41,7 +43,7 @@ define([
 
   return View.extend({
 
-    template: template,
+    template: pageTemplate,
 
     layoutName: 'page',
 
@@ -61,6 +63,16 @@ define([
       var page = this;
 
       return [
+        {
+          label: t.bound('planning', 'PAGE_ACTION:legend'),
+          icon: 'question-circle',
+          callback: function()
+          {
+            page.toggleLegend(this.querySelector('.btn'));
+
+            return false;
+          }
+        },
         {
           label: t.bound('planning', 'PAGE_ACTION:changes'),
           icon: 'list-ol',
@@ -348,6 +360,36 @@ define([
     recountStats: function()
     {
       this.filterView.recountStats();
+    },
+
+    toggleLegend: function(btnEl)
+    {
+      if (this.$legendPopover)
+      {
+        this.$legendPopover.popover('destroy');
+        this.$legendPopover = null;
+
+        return;
+      }
+
+      this.$legendPopover = $(btnEl).popover({
+        trigger: 'manual',
+        placement: 'left',
+        html: true,
+        content: legendTemplate({}),
+        template: '<div class="popover planning-legend-popover">'
+          + '<div class="popover-content"></div>'
+          + '</div>'
+      });
+
+      this.$legendPopover.one('hide.bs.popover', function()
+      {
+        btnEl.classList.remove('active');
+      });
+
+      this.$legendPopover.popover('show');
+
+      btnEl.classList.add('active');
     },
 
     onDateFilterChanged: function()
