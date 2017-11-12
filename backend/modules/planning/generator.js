@@ -45,8 +45,8 @@ module.exports = function setUpGenerator(app, module)
     return;
   }
 
-  const DEV = 0 && app.options.env === 'development';
-  const UNFROZEN_PLANS = DEV ? ['2017-11-11', '2017-11-12'] : [];
+  const DEV = app.options.env === 'development';
+  const UNFROZEN_PLANS = true || DEV ? ['2017-11-11', '2017-11-12'] : [];
   const LOG_LINES = {};
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
