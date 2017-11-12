@@ -46,7 +46,7 @@ module.exports = function setUpGenerator(app, module)
   }
 
   const DEV = 0 && app.options.env === 'development';
-  const UNFROZEN_PLANS = DEV ? ['2017-11-11'] : [];
+  const UNFROZEN_PLANS = DEV ? ['2017-11-11', '2017-11-12'] : [];
   const LOG_LINES = {};
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
@@ -831,23 +831,72 @@ module.exports = function setUpGenerator(app, module)
     );
   }
 
+  function isWorkDay(state, date, done)
+  {
+    if (businessDays.isHoliday(date))
+    {
+      return done(null, false);
+    }
+
+    const conditions = {
+      scheduledStartDate: date,
+      statuses: {$in: state.settings.requiredStatuses}
+    };
+
+    Order.find(conditions, {_id: 1}).limit(1).exec((err, results) =>
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      done(null, results.length === 1);
+    });
+  }
+
+  function findPreviousWorkDay(state, planMoment, done)
+  {
+    const prevPlanId = planMoment.subtract(1, 'days').toDate();
+
+    isWorkDay(state, prevPlanId, (err, workDay) =>
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      if (workDay)
+      {
+        return done(null, planMoment);
+      }
+
+      findPreviousWorkDay(state, planMoment, done);
+    });
+  }
+
   function loadIncompleteOrders(state, done)
   {
     const planLocalMoment = moment(state.key, 'YYYY-MM-DD');
 
-    if (businessDays.isHoliday(planLocalMoment.toDate()))
-    {
-      return done();
-    }
-
     step(
       function()
       {
-        const prevPlanId = planLocalMoment.subtract(1, 'days');
-
-        while (businessDays.isHoliday(prevPlanId.toDate()))
+        isWorkDay(state, planLocalMoment.toDate(), this.next());
+      },
+      function(err, workDay)
+      {
+        if (err || !workDay)
         {
-          prevPlanId.subtract(1, 'days');
+          return this.skip(err);
+        }
+
+        findPreviousWorkDay(state, planLocalMoment, this.next());
+      },
+      function(err, prevPlanId)
+      {
+        if (err)
+        {
+          return this.skip(err);
         }
 
         const pipeline = [
