@@ -73,9 +73,12 @@ define([
             return;
           }
 
-          this.mrp.orders.trigger('preview', {
-            orderNo: orderNo
-          });
+          if (window.getSelection().toString() === '')
+          {
+            this.mrp.orders.trigger('preview', {
+              orderNo: orderNo
+            });
+          }
         }
       },
       'contextmenu .is-order': function(e)
