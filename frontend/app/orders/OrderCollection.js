@@ -34,7 +34,7 @@ define([
           name: 'and',
           args: [
             {name: 'ge', args: ['scheduledStartDate', startDate.valueOf()]},
-            {name: 'le', args: ['scheduledStartDate', startDate.add(1, 'days').valueOf()]}
+            {name: 'lt', args: ['scheduledStartDate', startDate.add(1, 'days').valueOf()]}
           ]
         }
       });
