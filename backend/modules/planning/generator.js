@@ -46,7 +46,7 @@ module.exports = function setUpGenerator(app, module)
   }
 
   const DEV = app.options.env === 'development';
-  const UNFROZEN_PLANS = DEV ? ['2017-11-11', '2017-11-12'] : [];
+  const UNFROZEN_PLANS = DEV ? [] : [];
   const LOG_LINES = {};
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
@@ -2180,11 +2180,15 @@ module.exports = function setUpGenerator(app, module)
     step(
       function()
       {
-        resizeLines(state, this.next());
+        resizeLinesMiddle(state, this.next());
       },
       function()
       {
         fillLines(state, this.next());
+      },
+      function()
+      {
+        resizeLinesEnd(state, this.next());
       },
       function(err, again) // eslint-disable-line handle-callback-err
       {
@@ -2200,7 +2204,7 @@ module.exports = function setUpGenerator(app, module)
     );
   }
 
-  function resizeLines(state, done)
+  function resizeLinesMiddle(state, done)
   {
     if (state.cancelled || !state.newIncompleteOrders.size)
     {
@@ -2228,7 +2232,7 @@ module.exports = function setUpGenerator(app, module)
 
       const plannedLines = Array.from(state.orderToLines.get(orderNo));
 
-      if (plannedLines.length === 1)
+      if (plannedLines.length === 1 && state.generateCallCount === 1)
       {
         const lastPlannedOrder = _.last(plannedLines[0].plannedOrdersList);
 
@@ -2285,6 +2289,11 @@ module.exports = function setUpGenerator(app, module)
     });
 
     setImmediate(done, null, usedLines);
+  }
+
+  function resizeLinesEnd(state, done)
+  {
+    setImmediate(done);
   }
 
   function resizeIncompletePlannedOrder(state, order, lineStates)
@@ -2360,11 +2369,17 @@ module.exports = function setUpGenerator(app, module)
       };
     });
 
-    lineStates.sort((a, b) => a.maxPceCount - b.maxPceCount);
+    lineStates.sort((a, b) => a.resize.maxPceCount - b.resize.maxPceCount);
 
     while (lineStates.length)
     {
       const lineState = lineStates.shift();
+
+      if (lineState.resize.maxPceCount === 0)
+      {
+        continue;
+      }
+
       const orderState = state.orderStates.get(order._id);
       const options = {
         continuation: true,
