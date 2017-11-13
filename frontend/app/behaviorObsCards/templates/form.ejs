@@ -9,7 +9,7 @@
           <input id="<%- idPrefix %>-observer" type="text" name="observer" required>
         </div>
         <div class="form-group col-lg-3 has-required-select2">
-          <label for="<%- idPrefix %>-superior" class="control-label"><%- t('behaviorObsCards', 'FORM:superior') %></label>
+          <label for="<%- idPrefix %>-superior" class="control-label is-required"><%- t('behaviorObsCards', 'FORM:superior') %></label>
           <input id="<%- idPrefix %>-superior" type="text" name="superior" required>
         </div>
         <div class="form-group col-lg-6">
@@ -67,7 +67,7 @@
       <table class="table table-bordered table-hover table-condensed">
         <thead>
         <tr>
-          <th class="behaviorObsCards-form-risk"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:risks:risk') %></label></th>
+          <th class="behaviorObsCards-form-risk"><label class="control-label"><%- t('behaviorObsCards', 'PROPERTY:risks:risk') %></label></th>
           <th><%- t('behaviorObsCards', 'PROPERTY:risks:cause') %></th>
           <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:risks:easy:true') %></label></th>
           <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:risks:easy:false') %></label></th>
@@ -103,7 +103,7 @@
       <table class="table table-bordered table-hover table-condensed">
         <thead>
         <tr>
-          <th class="behaviorObsCards-form-difficulty"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:difficulties:problem') %></label></th>
+          <th class="behaviorObsCards-form-difficulty"><label class="control-label"><%- t('behaviorObsCards', 'PROPERTY:difficulties:problem') %></label></th>
           <th><%- t('behaviorObsCards', 'PROPERTY:difficulties:solution') %></th>
           <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:true') %></label></th>
           <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:false') %></label></th>
