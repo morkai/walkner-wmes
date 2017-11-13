@@ -100,7 +100,7 @@ define([
 
       this.collapseDetails($expandedRow);
 
-      if ($rowToExpand[0] !== $expandedRow[0])
+      if ($rowToExpand[0] !== $expandedRow[0] || $expandedRow.attr('data-expanded-column-id') !== columnId)
       {
         this.expandDetails($rowToExpand, columnId);
       }
@@ -130,7 +130,7 @@ define([
       var $detailsRow = $(detailsRowTemplate(templateData));
 
       $detailsRow.insertAfter($rowToExpand);
-      $rowToExpand.addClass('is-expanded');
+      $rowToExpand.addClass('is-expanded').attr('data-expanded-column-id', columnId);
     }
 
   });
