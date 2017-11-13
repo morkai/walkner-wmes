@@ -79,7 +79,7 @@ define([
 
         if (!observation)
         {
-          observation = _.find(row.observation, function(o) { return !o.safe; });
+          observation = _.find(row.observations, function(o) { return !o.safe; });
         }
 
         row.observation = observation ? (observation.observation || observation.behavior) : '';
