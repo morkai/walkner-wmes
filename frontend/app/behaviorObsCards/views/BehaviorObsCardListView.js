@@ -62,7 +62,7 @@ define([
         {id: 'observer', className: 'is-min'},
         {id: 'section', className: 'is-min'},
         {id: 'line', className: 'is-min'},
-        {id: 'position', className: 'is-min'},
+        {id: 'position', className: 'is-min', tdDecorator: textDecorator},
         {id: 'observation', tdAttrs: textAttrs, tdDecorator: textDecorator},
         {id: 'risk', tdAttrs: textAttrs, tdDecorator: textDecorator},
         {id: 'hardBehavior', tdAttrs: textAttrs, tdDecorator: textDecorator},
