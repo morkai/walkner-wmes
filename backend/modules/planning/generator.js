@@ -46,7 +46,7 @@ module.exports = function setUpGenerator(app, module)
   }
 
   const DEV = app.options.env === 'development';
-  const UNFROZEN_PLANS = true || DEV ? ['2017-11-11', '2017-11-12'] : [];
+  const UNFROZEN_PLANS = DEV ? ['2017-11-11', '2017-11-12'] : [];
   const LOG_LINES = {};
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
@@ -2531,7 +2531,7 @@ module.exports = function setUpGenerator(app, module)
       const availableTime = getRemainingAvailableTime(lineState);
       const pceTime = getPceTime(order, mrpLineSettings.workerCount);
 
-      return availableTime >= pceTime;
+      return !lineState.plannedOrdersSet.has(order._id) && availableTime >= pceTime;
     });
   }
 
