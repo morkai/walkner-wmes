@@ -175,6 +175,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
         const prevEntryValues = mapPrevEntryValues(prevFteEntry);
 
         this.tasks = prepareEntryTasks(tasks, prevEntryValues);
+        this.totals = prevFteEntry ? prevFteEntry.totals : null;
       },
       function createFteMasterEntryStep()
       {
@@ -183,7 +184,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
           date: options.date,
           shift: options.shift,
           total: 0,
-          totals: null,
+          totals: this.totals,
           absenceTasks: prepareAbsenceTasks(options.absenceTasks, this.tasks),
           tasks: this.tasks,
           createdAt: new Date(),
