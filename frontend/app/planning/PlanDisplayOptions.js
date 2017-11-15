@@ -23,7 +23,8 @@ define([
         mrps: [],
         printOrderTimes: false,
         useLatestOrderData: true,
-        wrapLists: true
+        wrapLists: true,
+        lineOrdersList: false
       };
     },
 
@@ -64,12 +65,22 @@ define([
 
     isListWrappingEnabled: function()
     {
-      return this.attributes.wrapLists;
+      return true || this.attributes.wrapLists;
     },
 
     toggleListWrapping: function()
     {
       this.set('wrapLists', !this.attributes.wrapLists);
+    },
+
+    isLineOrdersListEnabled: function()
+    {
+      return this.attributes.lineOrdersList;
+    },
+
+    toggleLineOrdersList: function()
+    {
+      this.set('lineOrdersList', !this.attributes.lineOrdersList);
     }
 
   }, {

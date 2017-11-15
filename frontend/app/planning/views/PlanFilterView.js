@@ -30,6 +30,10 @@ define([
       'input #-date': 'changeFilter',
       'change #-date': 'changeFilter',
       'change #-mrps': 'changeFilter',
+      'click #-lineOrdersList': function()
+      {
+        this.plan.displayOptions.toggleLineOrdersList();
+      },
       'click #-wrapLists': function()
       {
         this.plan.displayOptions.toggleListWrapping();
@@ -52,8 +56,11 @@ define([
 
       this.listenTo(plan, 'change:loading', this.onLoadingChanged);
       this.listenTo(displayOptions, 'change:minDate change:maxDate', this.onMinMaxDateChanged);
-      this.listenTo(displayOptions, 'change:wrapLists', this.updateToggles);
-      this.listenTo(displayOptions, 'change:useLatestOrderData', this.updateToggles);
+      this.listenTo(
+        displayOptions,
+        'change:lineOrdersList change:wrapLists change:useLatestOrderData',
+        this.updateToggles
+      );
     },
 
     serialize: function()
@@ -67,6 +74,7 @@ define([
         mrps: displayOptions.get('mrps'),
         minDate: displayOptions.get('minDate'),
         maxDate: displayOptions.get('maxDate'),
+        lineOrdersList: displayOptions.isLineOrdersListEnabled(),
         wrapLists: displayOptions.isListWrappingEnabled(),
         useLatestOrderData: displayOptions.isLatestOrderDataUsed()
       });
@@ -161,6 +169,7 @@ define([
     {
       var displayOptions = this.plan.displayOptions;
 
+      this.$id('lineOrdersList').toggleClass('active', displayOptions.isLineOrdersListEnabled());
       this.$id('wrapLists').toggleClass('active', !displayOptions.isListWrappingEnabled());
       this.$id('useLatestOrderData').toggleClass('active', displayOptions.isLatestOrderDataUsed());
     },

@@ -12,6 +12,7 @@ define([
   './PlanMrpOrdersView',
   './PlanMrpLateOrdersView',
   './PlanMrpLineOrdersView',
+  './PlanMrpLineOrdersListView',
   'app/planning/templates/planMrp'
 ], function(
   _,
@@ -25,6 +26,7 @@ define([
   PlanMrpOrdersView,
   PlanMrpLateOrdersView,
   PlanMrpLineOrdersView,
+  PlanMrpLineOrdersListView,
   template
 ) {
   'use strict';
@@ -37,33 +39,44 @@ define([
 
       'mouseleave #-lineOrders': function()
       {
-        this.$crosshair.addClass('hidden');
-        this.$time.addClass('hidden');
+        if (!this.plan.displayOptions.isLineOrdersListEnabled())
+        {
+          this.$els.crosshair.addClass('hidden');
+          this.$els.time.addClass('hidden');
+        }
       },
 
       'mouseenter #-lineOrders': function()
       {
-        this.$crosshair.removeClass('hidden');
-        this.$time.removeClass('hidden');
+        if (!this.plan.displayOptions.isLineOrdersListEnabled())
+        {
+          this.$els.crosshair.removeClass('hidden');
+          this.$els.time.removeClass('hidden');
+        }
       },
 
       'mousemove .planning-mrp-lineOrders-list': function(e)
       {
+        if (this.plan.displayOptions.isLineOrdersListEnabled())
+        {
+          return;
+        }
+
         var shiftDurationMs = 8 * 3600 * 1000;
         var timeLeftOffsetPx = 132;
         var timeCenterOffsetPx = 50;
 
-        var crosshairEl = this.$crosshair[0];
-        var timeEl = this.$time[0];
-        var pos = this.$lineOrders.position();
-        var shiftWidthPx = this.$lineOrders.outerWidth() - timeLeftOffsetPx;
+        var crosshairEl = this.$els.crosshair[0];
+        var timeEl = this.$els.time[0];
+        var pos = this.$els.lineOrders.position();
+        var shiftWidthPx = this.$els.lineOrders.outerWidth() - timeLeftOffsetPx;
         var timeLeftPx = e.pageX - pos.left - timeLeftOffsetPx;
         var timeMultiplier = timeLeftPx / shiftWidthPx;
         var genericTimeMs = shiftDurationMs * timeMultiplier;
         var shiftTimeMs = +e.currentTarget.dataset.shiftStartTime + genericTimeMs;
         var maxTimeLeftPx = shiftWidthPx - timeCenterOffsetPx * 2 + 15;
 
-        crosshairEl.style.height = (this.$lineOrders.outerHeight() + 6) + 'px';
+        crosshairEl.style.height = (this.$els.lineOrders.outerHeight() + 6) + 'px';
         crosshairEl.style.top = pos.top + 'px';
         crosshairEl.style.left = e.pageX + 'px';
 
@@ -85,6 +98,15 @@ define([
     {
       var view = this;
 
+      view.$els = {
+        lineOrders: null,
+        timeline: null,
+        crosshair: null,
+        time: null
+      };
+
+      view.listenTo(view.plan.displayOptions, 'change:lineOrdersList', this.onLineOrdersListChanged);
+
       view.setView('#-toolbar', new PlanMrpToolbarView({
         delayReasons: view.delayReasons,
         plan: view.plan,
@@ -105,11 +127,17 @@ define([
       }));
     },
 
+    destroy: function()
+    {
+      this.$els = null;
+    },
+
     serialize: function()
     {
       return {
         idPrefix: this.idPrefix,
         mrp: {
+          _id: this.mrp.id,
           name: this.mrp.id,
           description: this.mrp.get('description')
         }
@@ -118,13 +146,19 @@ define([
 
     afterRender: function()
     {
-      this.$lineOrders = this.$id('lineOrders');
-      this.$crosshair = this.$id('crosshair');
-      this.$time = this.$id('time');
+      var view = this;
 
-      this.$id('timeline').toggleClass('hidden', this.mrp.lines.length === 0);
+      Object.keys(view.$els).forEach(function(k)
+      {
+        view.$els[k] = view.$id(k);
+      });
 
-      this.renderLineOrders();
+      view.$els.timeline.toggleClass(
+        'hidden',
+        view.mrp.lines.length === 0 || view.plan.displayOptions.isLineOrdersListEnabled()
+      );
+
+      view.renderLineOrders();
     },
 
     renderLineOrders: function()
@@ -132,6 +166,13 @@ define([
       var view = this;
 
       view.removeView('#-lineOrders');
+
+      if (view.plan.displayOptions.isLineOrdersListEnabled())
+      {
+        view.renderLineOrdersList();
+
+        return;
+      }
 
       view.mrp.lines.forEach(function(line)
       {
@@ -142,6 +183,23 @@ define([
           prodLineState: view.prodLineStates.get(line.id)
         })).render();
       });
+    },
+
+    renderLineOrdersList: function()
+    {
+      this.setView('#-lineOrders', new PlanMrpLineOrdersListView({
+        plan: this.plan,
+        mrp: this.mrp
+      })).render();
+    },
+
+    onLineOrdersListChanged: function()
+    {
+      this.$els.timeline.addClass('hidden');
+      this.$els.crosshair.addClass('hidden');
+      this.$els.time.addClass('hidden');
+
+      this.renderLineOrders();
     }
 
   });

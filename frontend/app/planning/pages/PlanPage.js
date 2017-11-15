@@ -392,6 +392,35 @@ define([
       btnEl.classList.add('active');
     },
 
+    toggleLineOrdersList: function()
+    {
+      var $mrps = this.$('.planning-mrp');
+      var oldScrollY = window.scrollY;
+      var scrollToMrpEl = null;
+
+      if ($mrps.length > 1 && oldScrollY > $mrps[0].offsetTop)
+      {
+        scrollToMrpEl = $mrps[$mrps.length - 1];
+
+        for (var i = 0; i < $mrps.length; ++i)
+        {
+          scrollToMrpEl = $mrps[i];
+
+          if (oldScrollY < scrollToMrpEl.offsetTop + 125)
+          {
+            break;
+          }
+        }
+      }
+
+      this.plan.displayOptions.toggleLineOrdersList();
+
+      if (scrollToMrpEl)
+      {
+        window.scrollTo(0, scrollToMrpEl.offsetTop - ($mrps[0] === scrollToMrpEl ? 10 : -1));
+      }
+    },
+
     onDateFilterChanged: function()
     {
       if (this.layout)
@@ -452,6 +481,10 @@ define([
       if (e.keyCode === 27)
       {
         this.broker.publish('planning.escapePressed');
+      }
+      else if ((e.keyCode === 79 || e.keyCode === 90) && e.target.tagName !== 'INPUT')
+      {
+        this.toggleLineOrdersList();
       }
     }
 

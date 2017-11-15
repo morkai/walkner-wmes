@@ -1,0 +1,34 @@
+<div class="planning-mrl-lineOrders-list">
+  <table class="planning-mrp-lineOrders-table">
+    <thead>
+      <tr>
+        <% ['no', 'shift', 'orderNo', 'nc12', 'name', 'qty:header', 'startTime', 'finishTime', 'lines'].forEach(function(prop) { %>
+        <th class="is-min"><%- t('planning', 'lineOrders:list:' + prop) %></th>
+        <% }) %>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% orders.forEach(function(order, i) { %>
+      <tr data-id="<%- order.orderNo %>" data-index="<%- i %>">
+        <td class="is-min text-right"><%- order.no %>.</td>
+        <td class="is-min"><%- t('core', 'SHIFT:' + order.shift) %></td>
+        <td class="is-min"><%- order.orderNo %></td>
+        <td class="is-min"><%= order.nc12 %></td>
+        <td class="is-min"><%= order.name %></td>
+        <td class="is-min text-right">
+          <% if (order.qtyPlan === order.qtyTodo) { %>
+          <%- order.qtyPlan.toLocaleString() %>
+          <% } else { %>
+          <%- t('planning', 'lineOrders:list:qty:value', {plan: order.qtyPlan, todo: order.qtyTodo}) %>
+          <% } %>
+        </td>
+        <td class="is-min text-right"><%- order.startTime %></td>
+        <td class="is-min text-right"><%- order.finishTime %></td>
+        <td class="is-min"><%= order.lines %></td>
+        <td></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
