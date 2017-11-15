@@ -5,7 +5,7 @@
         <% ['no', 'shift', 'orderNo', 'nc12', 'name', 'qty:header', 'startTime', 'finishTime', 'lines'].forEach(function(prop) { %>
         <th class="is-min"><%- t('planning', 'lineOrders:list:' + prop) %></th>
         <% }) %>
-        <th></th>
+        <th class="no-scroll"></th>
       </tr>
     </thead>
     <tbody>
@@ -26,7 +26,7 @@
         <td class="is-min text-right"><%- order.startTime %></td>
         <td class="is-min text-right"><%- order.finishTime %></td>
         <td class="is-min"><%= order.lines %></td>
-        <td></td>
+        <td class="no-scroll"></td>
       </tr>
       <% }) %>
     </tbody>

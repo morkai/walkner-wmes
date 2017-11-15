@@ -70,6 +70,19 @@ define([
 
           window.scrollBy(0, (e.clientY - trEl.getBoundingClientRect().top - offset) * -1);
         }
+      },
+      'wheel': function(e)
+      {
+        if (e.target.classList.contains('no-scroll') || this.el.classList.contains('is-expanded'))
+        {
+          window.scrollBy(e.originalEvent.deltaX, e.originalEvent.deltaY);
+        }
+        else
+        {
+          this.el.scrollBy(e.originalEvent.deltaX, e.originalEvent.deltaY);
+        }
+
+        return false;
       }
     },
 
