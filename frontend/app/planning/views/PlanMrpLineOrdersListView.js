@@ -58,7 +58,9 @@ define([
 
         this.$el.toggleClass('is-expanded');
 
-        if (this.$el.hasClass('is-expanded'))
+        this.expanded = this.$el.hasClass('is-expanded');
+
+        if (this.expanded)
         {
           window.scrollTo(0, window.scrollY + trEl.getBoundingClientRect().top - e.clientY + offset);
         }
@@ -73,7 +75,7 @@ define([
       },
       'wheel': function(e)
       {
-        if (e.target.classList.contains('no-scroll') || this.el.classList.contains('is-expanded'))
+        if (this.expanded || e.target.classList.contains('no-scroll'))
         {
           window.scrollBy(e.originalEvent.deltaX, e.originalEvent.deltaY);
         }
@@ -90,7 +92,9 @@ define([
     {
       var view = this;
 
-      view.listenTo(view.mrp.orders, 'reset changed', view.renderIfNotLoading);
+      view.expanded = false;
+
+      view.listenTo(view.mrp.lines, 'reset changed', view.renderIfNotLoading);
 
       view.listenTo(view.mrp.orders, 'highlight', view.onOrderHighlight);
     },
@@ -99,6 +103,7 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
+        expanded: this.expanded,
         orders: this.serializeOrders()
       };
     },
@@ -231,7 +236,7 @@ define([
 
       var trEl = this.$('tr[data-id="' + message.orderNo + '"]').toggleClass('is-highlighted', message.state)[0];
 
-      if (trEl && !this.el.classList.contains('is-expanded'))
+      if (trEl && !this.expanded)
       {
         this.el.scrollTop = trEl.offsetTop;
       }
