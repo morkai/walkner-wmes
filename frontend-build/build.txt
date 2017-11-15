@@ -1345,6 +1345,8 @@ app/planning/templates/lineOrderDowntimePopover.js
 app/planning/templates/lineOrderShiftPopover.js
 app/planning/templates/lineOrderLinePopover.js
 app/planning/views/PlanMrpLineOrdersView.js
+app/planning/templates/lineOrdersList.js
+app/planning/views/PlanMrpLineOrdersListView.js
 app/planning/templates/planMrp.js
 app/planning/views/PlanMrpView.js
 app/planning/templates/planPage.js
