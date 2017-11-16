@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/time',
   'app/core/View',
+  'app/data/clipboard',
   '../util/shift',
   '../util/contextMenu',
   'app/planning/templates/lineOrdersList'
@@ -15,6 +16,7 @@ define([
   t,
   time,
   View,
+  clipboard,
   shiftUtil,
   contextMenu,
   lineOrdersListTemplate
@@ -212,6 +214,11 @@ define([
         menu.push(contextMenu.actions.comment(orderNo));
       }
 
+      menu.push({
+        label: t('planning', 'lineOrders:menu:copy'),
+        handler: this.handleCopyAction.bind(this, e.currentTarget, e.pageY, e.pageX)
+      });
+
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },
 
@@ -225,6 +232,64 @@ define([
       }
 
       window.open('/#prodShiftOrders?sort(startedAt)&limit(20)&orderId=' + orderNo);
+    },
+
+    handleCopyAction: function(el, y, x)
+    {
+      var view = this;
+
+      clipboard.copy(function(clipboardData)
+      {
+        if (!clipboardData)
+        {
+          return;
+        }
+
+        var text = [
+          ['no', 'shift', 'orderNo', 'nc12', 'name', 'qtyPlan', 'qtyTodo', 'startTime', 'finishTime', 'lines']
+            .map(function(p) { return t('planning', 'lineOrders:list:' + p); })
+            .join('\t')
+        ];
+
+        view.serializeOrders().forEach(function(order)
+        {
+          var row = [
+            order.no,
+            order.shift,
+            order.orderNo,
+            order.nc12,
+            order.name,
+            order.qtyPlan,
+            order.qtyTodo,
+            order.startTime,
+            order.finishTime,
+            order.lines
+          ];
+
+          text.push(row.join('\t'));
+        });
+
+        clipboardData.setData('text/plain', text.join('\r\n'));
+
+        var $btn = view.$(el).tooltip({
+          container: view.el,
+          trigger: 'manual',
+          placement: 'bottom',
+          title: t('planning', 'lineOrders:menu:copy:success')
+        });
+
+        $btn.tooltip('show').data('bs.tooltip').tip().addClass('result success').css({
+          left: x + 'px',
+          top: y + 'px'
+        });
+
+        if (view.timers.hideTooltip)
+        {
+          clearTimeout(view.timers.hideTooltip);
+        }
+
+        view.timers.hideTooltip = setTimeout(function() { $btn.tooltip('destroy'); }, 1337);
+      });
     },
 
     onOrderHighlight: function(message)
