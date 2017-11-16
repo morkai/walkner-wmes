@@ -2,6 +2,7 @@
   <div class="list-group">
     <% [
       ['quantityDone', [1]],
+      ['manHours', [1]],
       ['efficiency', [1]],
       ['productivity', [1, 2]],
       ['productivityNoWh', [1, 2]],
@@ -22,6 +23,7 @@
   </div>
   <div class="panel panel-primary">
     <% include settings/quantityDone.ejs %>
+    <% include settings/manHours.ejs %>
     <% include settings/efficiency.ejs %>
     <% include settings/productivity.ejs %>
     <% include settings/productivityNoWh.ejs %>

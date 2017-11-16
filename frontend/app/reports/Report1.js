@@ -79,6 +79,11 @@ define([
       return Model.prototype.fetch.call(this, options);
     },
 
+    isPaintShop: function()
+    {
+      return this.get('orgUnitType') === 'subdivision' && this.get('orgUnit').get('type') === 'paintShop';
+    },
+
     parse: function(report)
     {
       var attributes = {
@@ -89,7 +94,9 @@ define([
           unscheduledDowntime: [],
           efficiency: [],
           productivity: [],
-          productivityNoWh: []
+          productivityNoWh: [],
+          lmh: [],
+          mmh: []
         },
         maxCoeffs: {
           quantityDone: 0,
@@ -130,6 +137,8 @@ define([
         pushPercentValue('efficiency', time, coeffs.efficiency);
         pushPercentValue('productivity', time, coeffs.productivity);
         pushPercentValue('productivityNoWh', time, coeffs.productivityNoWh);
+        pushValue('lmh', time, coeffs.lmh || 0);
+        pushValue('mmh', time, coeffs.mmh || 0);
       }
 
       function pushValue(coeff, time, value)

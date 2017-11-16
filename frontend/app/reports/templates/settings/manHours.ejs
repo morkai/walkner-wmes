@@ -1,0 +1,14 @@
+<div class="panel-body" data-tab="manHours">
+  <%- renderColorPicker({
+    idPrefix: idPrefix,
+    property: 'reports.lmh.color',
+    label: t('reports', 'settings:color:lmh'),
+    value: colors.lmh
+  }) %>
+  <%- renderColorPicker({
+    idPrefix: idPrefix,
+    property: 'reports.mmh.color',
+    label: t('reports', 'settings:color:mmh'),
+    value: colors.mmh
+  }) %>
+</div>

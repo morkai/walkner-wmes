@@ -84,12 +84,10 @@ define([
 
       this.updateExtremes(false);
 
-      series[0].update({marker: markerStyles}, false);
-      series[1].update({marker: markerStyles}, false);
-      series[2].update({marker: markerStyles}, false);
-      series[3].update({marker: markerStyles}, false);
-      series[4].update({marker: markerStyles}, false);
-      series[5].update({marker: markerStyles}, false);
+      series.forEach(function(s)
+      {
+        s.update({marker: markerStyles}, false);
+      });
 
       series[0].setData(chartData.quantityDone, false);
       series[1].setData(chartData.efficiency, false);
@@ -97,6 +95,12 @@ define([
       series[3].setData(chartData.productivityNoWh, false);
       series[4].setData(chartData.scheduledDowntime, false);
       series[5].setData(chartData.unscheduledDowntime, false);
+
+      if (this.model.isPaintShop())
+      {
+        series[6].setData(chartData.lmh, false);
+        series[7].setData(chartData.mmh, false);
+      }
 
       var hourlyInterval = this.model.query.get('interval') !== 'hour';
       var prodVisible = hourlyInterval && this.isSeriesVisible('productivity');
@@ -320,6 +324,140 @@ define([
     {
       var chartData = this.serializeChartData();
       var markerStyles = this.getMarkerStyles(chartData.quantityDone.length);
+      var paintShop = this.model.isPaintShop();
+      var series = [
+        {
+          id: 'quantityDone',
+          name: t.bound('reports', 'coeffs:quantityDone'),
+          color: this.getColor('quantityDone'),
+          type: 'area',
+          yAxis: 0,
+          data: chartData.quantityDone,
+          tooltip: {
+            valueSuffix: t('reports', 'quantitySuffix')
+          },
+          visible: !paintShop && this.isSeriesVisible('quantityDone'),
+          zIndex: 1
+        },
+        {
+          id: 'efficiency',
+          name: t.bound('reports', 'coeffs:efficiency'),
+          color: this.getColor('efficiency'),
+          type: 'line',
+          yAxis: 1,
+          data: chartData.efficiency,
+          tooltip: {
+            valueSuffix: '%'
+          },
+          events: {
+            show: this.updateReference.bind(this, 'efficiency'),
+            hide: this.updateReference.bind(this, 'efficiency')
+          },
+          visible: this.isSeriesVisible('efficiency'),
+          zIndex: 2
+        },
+        {
+          id: 'productivity',
+          name: t.bound('reports', 'coeffs:productivity'),
+          color: this.getColor('productivity'),
+          type: 'line',
+          yAxis: 1,
+          data: chartData.productivity,
+          tooltip: {
+            valueSuffix: '%'
+          },
+          visible: this.model.query.get('interval') !== 'hour' && this.isSeriesVisible('productivity'),
+          events: {
+            show: this.updateReference.bind(this, 'productivity'),
+            hide: this.updateReference.bind(this, 'productivity')
+          },
+          zIndex: 3
+        },
+        {
+          id: 'productivityNoWh',
+          name: t.bound('reports', 'coeffs:productivityNoWh'),
+          color: this.getColor('productivityNoWh'),
+          type: 'line',
+          yAxis: 1,
+          data: chartData.productivityNoWh,
+          tooltip: {
+            valueSuffix: '%'
+          },
+          visible: this.model.query.get('interval') !== 'hour' && this.isSeriesVisible('productivityNoWh'),
+          events: {
+            show: this.updateReference.bind(this, 'productivityNoWh'),
+            hide: this.updateReference.bind(this, 'productivityNoWh')
+          },
+          zIndex: 4
+        },
+        {
+          id: 'scheduledDowntime',
+          name: t.bound('reports', 'coeffs:scheduledDowntime'),
+          color: this.getColor('scheduledDowntime', 0.75),
+          borderWidth: 0,
+          type: 'column',
+          yAxis: 1,
+          data: chartData.scheduledDowntime,
+          tooltip: {
+            valueSuffix: '%'
+          },
+          visible: this.isSeriesVisible('scheduledDowntime'),
+          events: {
+            show: this.updateReference.bind(this, 'scheduledDowntime'),
+            hide: this.updateReference.bind(this, 'scheduledDowntime')
+          },
+          zIndex: 5
+        },
+        {
+          id: 'unscheduledDowntime',
+          name: t.bound('reports', 'coeffs:unscheduledDowntime'),
+          color: this.getColor('unscheduledDowntime', 0.75),
+          borderWidth: 0,
+          type: 'column',
+          yAxis: 1,
+          data: chartData.unscheduledDowntime,
+          tooltip: {
+            valueSuffix: '%'
+          },
+          visible: this.isSeriesVisible('unscheduledDowntime'),
+          events: {
+            show: this.updateReference.bind(this, 'unscheduledDowntime'),
+            hide: this.updateReference.bind(this, 'unscheduledDowntime')
+          },
+          zIndex: 6
+        }
+      ];
+
+      if (paintShop)
+      {
+        series.push({
+          id: 'lmh',
+          name: t.bound('reports', 'coeffs:lmh'),
+          color: this.getColor('lmh'),
+          borderWidth: 0,
+          type: 'line',
+          yAxis: 2,
+          data: chartData.lmh,
+          tooltip: {
+            valueSuffix: t.bound('reports', 'coeffs:mmh:unit')
+          },
+          visible: true,
+          zIndex: 1
+        }, {
+          id: 'mmh',
+          name: t.bound('reports', 'coeffs:mmh'),
+          color: this.getColor('mmh'),
+          borderWidth: 0,
+          type: 'line',
+          yAxis: 2,
+          data: chartData.mmh,
+          tooltip: {
+            valueSuffix: t.bound('reports', 'coeffs:mmh:unit')
+          },
+          visible: true,
+          zIndex: 1
+        });
+      }
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -348,6 +486,10 @@ define([
             labels: {
               format: '{value}%'
             }
+          },
+          {
+            title: false,
+            showEmpty: false
           }
         ],
         tooltip: {
@@ -373,108 +515,7 @@ define([
             marker: markerStyles
           }
         },
-        series: [
-          {
-            id: 'quantityDone',
-            name: t.bound('reports', 'coeffs:quantityDone'),
-            color: this.getColor('quantityDone'),
-            type: 'area',
-            yAxis: 0,
-            data: chartData.quantityDone,
-            tooltip: {
-              valueSuffix: t('reports', 'quantitySuffix')
-            },
-            visible: this.isSeriesVisible('quantityDone'),
-            zIndex: 1
-          },
-          {
-            id: 'efficiency',
-            name: t.bound('reports', 'coeffs:efficiency'),
-            color: this.getColor('efficiency'),
-            type: 'line',
-            yAxis: 1,
-            data: chartData.efficiency,
-            tooltip: {
-              valueSuffix: '%'
-            },
-            events: {
-              show: this.updateReference.bind(this, 'efficiency'),
-              hide: this.updateReference.bind(this, 'efficiency')
-            },
-            visible: this.isSeriesVisible('efficiency'),
-            zIndex: 2
-          },
-          {
-            id: 'productivity',
-            name: t.bound('reports', 'coeffs:productivity'),
-            color: this.getColor('productivity'),
-            type: 'line',
-            yAxis: 1,
-            data: chartData.productivity,
-            tooltip: {
-              valueSuffix: '%'
-            },
-            visible: this.model.query.get('interval') !== 'hour' && this.isSeriesVisible('productivity'),
-            events: {
-              show: this.updateReference.bind(this, 'productivity'),
-              hide: this.updateReference.bind(this, 'productivity')
-            },
-            zIndex: 3
-          },
-          {
-            id: 'productivityNoWh',
-            name: t.bound('reports', 'coeffs:productivityNoWh'),
-            color: this.getColor('productivityNoWh'),
-            type: 'line',
-            yAxis: 1,
-            data: chartData.productivityNoWh,
-            tooltip: {
-              valueSuffix: '%'
-            },
-            visible: this.model.query.get('interval') !== 'hour' && this.isSeriesVisible('productivityNoWh'),
-            events: {
-              show: this.updateReference.bind(this, 'productivityNoWh'),
-              hide: this.updateReference.bind(this, 'productivityNoWh')
-            },
-            zIndex: 4
-          },
-          {
-            id: 'scheduledDowntime',
-            name: t.bound('reports', 'coeffs:scheduledDowntime'),
-            color: this.getColor('scheduledDowntime', 0.75),
-            borderWidth: 0,
-            type: 'column',
-            yAxis: 1,
-            data: chartData.scheduledDowntime,
-            tooltip: {
-              valueSuffix: '%'
-            },
-            visible: this.isSeriesVisible('scheduledDowntime'),
-            events: {
-              show: this.updateReference.bind(this, 'scheduledDowntime'),
-              hide: this.updateReference.bind(this, 'scheduledDowntime')
-            },
-            zIndex: 5
-          },
-          {
-            id: 'unscheduledDowntime',
-            name: t.bound('reports', 'coeffs:unscheduledDowntime'),
-            color: this.getColor('unscheduledDowntime', 0.75),
-            borderWidth: 0,
-            type: 'column',
-            yAxis: 1,
-            data: chartData.unscheduledDowntime,
-            tooltip: {
-              valueSuffix: '%'
-            },
-            visible: this.isSeriesVisible('unscheduledDowntime'),
-            events: {
-              show: this.updateReference.bind(this, 'unscheduledDowntime'),
-              hide: this.updateReference.bind(this, 'unscheduledDowntime')
-            },
-            zIndex: 6
-          }
-        ]
+        series: series
       });
     }
 

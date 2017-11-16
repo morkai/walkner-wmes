@@ -126,6 +126,7 @@ define([
 
       [
         'quantityDone',
+        'lmh', 'mmh',
         'efficiency',
         'productivity', 'productivityNoWh',
         'scheduledDowntime', 'unscheduledDowntime',

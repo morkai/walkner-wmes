@@ -239,7 +239,9 @@ module.exports = function(mongoose, options, done)
       orderId: 1,
       workerCount: 1,
       totalQuantity: 1,
-      laborTime: 1
+      quantityDone: 1,
+      laborTime: 1,
+      machineTime: 1
     };
 
     ProdShiftOrder.find(conditions, fields).sort({startedAt: 1}).lean().exec(this.next());
@@ -506,7 +508,9 @@ module.exports = function(mongoose, options, done)
         orderId: order.orderId,
         workerCount: order.workerCount,
         totalQuantity: order.totalQuantity,
+        quantityDone: order.quantityDone,
         laborTime: order.laborTime,
+        machineTime: order.machineTime,
         percent: percent
       });
     }
@@ -616,6 +620,8 @@ module.exports = function(mongoose, options, done)
     let effDen = 0;
     let dtNum = 0;
     let dtDen = 0;
+    let lmh = 0;
+    let mmh = 0;
     let scheduledDtNum = 0;
     let unscheduledDtNum = 0;
     let lastOrderFinishedAt;
@@ -644,6 +650,9 @@ module.exports = function(mongoose, options, done)
 
       effNum += laborTime / 100 * totalQuantity;
       effDen += workDuration * workerCount;
+
+      lmh += laborTime / 100 * (order.quantityDone * percent);
+      mmh += (order.machineTime * percent) / 100 * (order.quantityDone * percent);
 
       orderCount += 1;
 
@@ -686,8 +695,8 @@ module.exports = function(mongoose, options, done)
       coeffs.productivity = util.round(effNum / options.prodNumConstant / fteGroupResult.prodDenTotal);
       coeffs.productivityNoWh = util.round(effNum / options.prodNumConstant / fteGroupResult.prodDenMaster);
       coeffs.prodNum = util.round(effNum / options.prodNumConstant);
-      coeffs.prodDenTotal = fteGroupResult.prodDenTotal;
-      coeffs.prodDenMaster = fteGroupResult.prodDenMaster;
+      coeffs.prodDenTotal = util.round(fteGroupResult.prodDenTotal);
+      coeffs.prodDenMaster = util.round(fteGroupResult.prodDenMaster);
     }
 
     coeffs.orderCount = orderCount;
@@ -701,5 +710,8 @@ module.exports = function(mongoose, options, done)
     {
       coeffs.breakCount = breakCount;
     }
+
+    coeffs.lmh = util.round(lmh);
+    coeffs.mmh = util.round(mmh);
   }
 };
