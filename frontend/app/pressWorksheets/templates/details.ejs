@@ -61,6 +61,7 @@
       <%- t('pressWorksheets', 'PANEL:TITLE:details:orders') %>
     </div>
     <%- renderOrdersList({
+      worksheet: model,
       losses: model.losses,
       orders: model.orders,
       extended: extended

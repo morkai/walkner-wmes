@@ -69,12 +69,31 @@ define([
       data.createdAt = data.createdAt ? time.format(data.createdAt, 'LLLL') : null;
       data.losses = this.hasAnyLosses();
 
-      if (data.type === 'paintShop' && data.orders)
+      data.laborManHours = 0;
+      data.machineManHours = 0;
+
+      if (data.orders)
       {
+        var paintShop = data.type === 'paintShop';
+
         data.orders = data.orders.map(function(order)
         {
-          order.startedAt = time.getMoment(order.startedAt).format('LTS');
-          order.finishedAt = time.getMoment(order.finishedAt).format('LTS');
+          if (paintShop)
+          {
+            order.startedAt = time.getMoment(order.startedAt).format('LTS');
+            order.finishedAt = time.getMoment(order.finishedAt).format('LTS');
+          }
+
+          var operation = order.orderData.operations[order.operationNo];
+
+          if (operation)
+          {
+            order.laborManHours = operation.laborTime / 100 * order.quantityDone;
+            order.machineManHours = operation.machineTime / 100 * order.quantityDone;
+
+            data.laborManHours += order.laborManHours;
+            data.machineManHours += order.machineManHours;
+          }
 
           return order;
         });

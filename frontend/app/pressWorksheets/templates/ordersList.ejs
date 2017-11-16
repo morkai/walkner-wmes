@@ -16,12 +16,26 @@
       <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.quantityDone') %></th>
       <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.startedAt') %></th>
       <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.finishedAt') %></th>
-      <% if (typeof losses === 'undefined' || losses) { %>
+      <% if (typeof worksheet !== 'undefined') { %>
+      <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.laborManHours') %></th>
+      <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.machineManHours') %></th>
+      <% } %>
+      <% if (typeof losses !== 'undefined' && losses) { %>
       <th><%- t('pressWorksheets', 'PROPERTY:order.losses') %></th>
       <% } %>
       <th><%- t('pressWorksheets', 'PROPERTY:order.downtimes') %></th>
     </tr>
   </thead>
+  <% if (typeof worksheet !== 'undefined') { %>
+  <tfoot>
+  <tr>
+    <td colspan="<%- extended ? 13 : 10 %>"></td>
+    <td class="is-min is-number"><%- worksheet.laborManHours.toLocaleString() %></td>
+    <td class="is-min is-number"><%- worksheet.machineManHours.toLocaleString() %></td>
+    <td colspan="<%- losses ? 2 : 1 %>"></td>
+  </tr>
+  </tfoot>
+  <% } %>
   <tbody>
     <% orders.forEach(function(order, i) { %>
     <tr class="<%- i % 2 !== 0 ? '' : 'is-odd' %>">
@@ -46,7 +60,11 @@
       <td class="is-min is-number"><%= order.quantityDone.toLocaleString() %></td>
       <td class="is-min"><%= order.startedAt %></td>
       <td class="is-min"><%= order.finishedAt %></td>
-      <% if (typeof losses === 'undefined' || losses) { %>
+      <% if (typeof worksheet !== 'undefined') { %>
+      <td class="is-min is-number"><%- (order.laborManHours || 0).toLocaleString() %></td>
+      <td class="is-min is-number"><%- (order.machineManHours || 0).toLocaleString() %></td>
+      <% } %>
+      <% if (typeof losses !== 'undefined' && losses) { %>
       <td class="prodWorksheets-orders-lossesTable">
         <% if (order.losses.length) { %>
         <table class="table table-bordered table-condensed">
