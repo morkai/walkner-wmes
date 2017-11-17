@@ -420,7 +420,7 @@ define([
 
       var tree = this.model;
       var selectedFolder = tree.getSelectedFolder();
-      var isTrash = selectedFolder.id === '__TRASH__';
+      var isTrash = selectedFolder && selectedFolder.id === '__TRASH__';
       var isInTrash = tree.isInTrash(selectedFolder);
 
       $preview
