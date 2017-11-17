@@ -26,7 +26,8 @@ exports.DEFAULT_CONFIG = {
   sejdaConsolePath: 'sejda-console',
   exiftoolExe: 'exiftool',
   pdfboxAppJar: 'pdfbox-app-2.0.3.jar',
-  cwebpExe: 'cwebp'
+  cwebpExe: 'cwebp',
+  maxJavaHeapSpace: '512m'
 };
 
 exports.start = function startOrderDocumentsModule(app, module)

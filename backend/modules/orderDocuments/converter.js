@@ -3,7 +3,6 @@
 'use strict';
 
 const path = require('path');
-const os = require('os');
 const fs = require('fs-extra');
 const {exec, execFile} = require('child_process');
 const step = require('h5.step');
@@ -12,7 +11,6 @@ module.exports = function setUpOrderDocumentsConverter(app, module)
 {
   const mongoose = app[module.config.mongooseId];
   const OrderDocumentUpload = mongoose.model('OrderDocumentUpload');
-  const maxHeapSpace = Math.floor(os.totalmem() / 1024 / 1024 * 0.5);
 
   let converting = false;
 
@@ -233,7 +231,7 @@ module.exports = function setUpOrderDocumentsConverter(app, module)
 
         const cmd = [
           'java',
-          `-Xmx${maxHeapSpace}M`,
+          `-Xmx${module.config.maxJavaHeapSpace}`,
           `-jar "${module.config.pdfboxAppJar}"`,
           'PDFToImage -format png -dpi 144',
           `-prefix "${nc15}_"`,
