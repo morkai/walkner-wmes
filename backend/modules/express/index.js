@@ -291,8 +291,8 @@ exports.start = function startExpressModule(app, expressModule, done)
     if (duration >= expressModule.config.longRouteDuration)
     {
       const user = app[expressModule.config.userId]
-        ? app[expressModule.config.userId].createUserInfo(req.session.user, req)
-        : req.session.user;
+        ? app[expressModule.config.userId].createUserInfo(req.session ? req.session.user : {}, req)
+        : (req.session ? req.session.user : {});
 
       expressModule.debug('Long request: ' + JSON.stringify({
         url: req.url,
