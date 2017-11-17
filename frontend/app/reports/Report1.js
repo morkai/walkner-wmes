@@ -81,7 +81,9 @@ define([
 
     isPaintShop: function()
     {
-      return this.get('orgUnitType') === 'subdivision' && this.get('orgUnit').get('type') === 'paintShop';
+      var subdivision = orgUnits.getSubdivisionFor(this.get('orgUnit'));
+
+      return !!subdivision && subdivision.get('type') === 'paintShop';
     },
 
     parse: function(report)
@@ -95,7 +97,6 @@ define([
           efficiency: [],
           productivity: [],
           productivityNoWh: [],
-          lmh: [],
           mmh: []
         },
         maxCoeffs: {
@@ -137,7 +138,6 @@ define([
         pushPercentValue('efficiency', time, coeffs.efficiency);
         pushPercentValue('productivity', time, coeffs.productivity);
         pushPercentValue('productivityNoWh', time, coeffs.productivityNoWh);
-        pushValue('lmh', time, coeffs.lmh || 0);
         pushValue('mmh', time, coeffs.mmh || 0);
       }
 

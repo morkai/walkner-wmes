@@ -98,8 +98,7 @@ define([
 
       if (this.model.isPaintShop())
       {
-        series[6].setData(chartData.lmh, false);
-        series[7].setData(chartData.mmh, false);
+        series[6].setData(chartData.mmh, false);
       }
 
       var hourlyInterval = this.model.query.get('interval') !== 'hour';
@@ -431,19 +430,6 @@ define([
       if (paintShop)
       {
         series.push({
-          id: 'lmh',
-          name: t.bound('reports', 'coeffs:lmh'),
-          color: this.getColor('lmh'),
-          borderWidth: 0,
-          type: 'line',
-          yAxis: 2,
-          data: chartData.lmh,
-          tooltip: {
-            valueSuffix: t.bound('reports', 'coeffs:mmh:unit')
-          },
-          visible: true,
-          zIndex: 1
-        }, {
           id: 'mmh',
           name: t.bound('reports', 'coeffs:mmh'),
           color: this.getColor('mmh'),

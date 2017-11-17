@@ -620,7 +620,6 @@ module.exports = function(mongoose, options, done)
     let effDen = 0;
     let dtNum = 0;
     let dtDen = 0;
-    let lmh = 0;
     let mmh = 0;
     let scheduledDtNum = 0;
     let unscheduledDtNum = 0;
@@ -651,7 +650,6 @@ module.exports = function(mongoose, options, done)
       effNum += laborTime / 100 * totalQuantity;
       effDen += workDuration * workerCount;
 
-      lmh += laborTime / 100 * (order.quantityDone * percent);
       mmh += (order.machineTime * percent) / 100 * (order.quantityDone * percent);
 
       orderCount += 1;
@@ -711,7 +709,6 @@ module.exports = function(mongoose, options, done)
       coeffs.breakCount = breakCount;
     }
 
-    coeffs.lmh = util.round(lmh);
     coeffs.mmh = util.round(mmh);
   }
 };
