@@ -69,7 +69,6 @@ define([
       data.createdAt = data.createdAt ? time.format(data.createdAt, 'LLLL') : null;
       data.losses = this.hasAnyLosses();
 
-      data.laborManHours = 0;
       data.machineManHours = 0;
 
       if (data.orders)
@@ -88,11 +87,7 @@ define([
 
           if (operation)
           {
-            order.laborManHours = operation.laborTime / 100 * order.quantityDone;
-            order.machineManHours = operation.machineTime / 100 * order.quantityDone;
-
-            data.laborManHours += order.laborManHours;
-            data.machineManHours += order.machineManHours;
+            data.machineManHours += order.machineManHours = operation.machineTime / 100 * order.quantityDone;
           }
 
           return order;

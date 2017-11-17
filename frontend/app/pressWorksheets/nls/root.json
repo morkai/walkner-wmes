@@ -65,8 +65,7 @@
     "PROPERTY:order.finishedAt": "Finished at",
     "PROPERTY:order.losses": "Losses [items]",
     "PROPERTY:order.downtimes": "Downtimes by master's instruction [minutes]",
-    "PROPERTY:order.laborManHours": "MH (LT)",
-    "PROPERTY:order.machineManHours": "MH (MT)",
+    "PROPERTY:order.machineManHours": "MH",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Worksheet deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete worksheet",
