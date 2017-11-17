@@ -243,6 +243,8 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
     _.forEach(this.tasks, function(task)
     {
+      const childTask = task.parent !== null;
+
       task.totals = {};
 
       _.forEach(totalsKeys, key => { task.totals[key] = 0; });
@@ -251,12 +253,14 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
       {
         _.forEach(
           task.functions,
-          taskFunction => calcCompaniesTotals(totalsKeys, taskFunction.companies, task.totals, overallTotals)
+          taskFunction => calcCompaniesTotals(
+            totalsKeys, taskFunction.companies, task.totals, childTask ? overallTotals : null
+          )
         );
       }
       else
       {
-        calcCompaniesTotals(totalsKeys, task.companies, task.totals, overallTotals);
+        calcCompaniesTotals(totalsKeys, task.companies, task.totals, childTask ? overallTotals : null);
       }
     });
 
@@ -275,8 +279,12 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
         {
           taskTotals.overall += divisionCount.value;
           taskTotals[divisionCount.division] += divisionCount.value;
-          overallTotals.overall += divisionCount.value;
-          overallTotals[divisionCount.division] += divisionCount.value;
+
+          if (overallTotals)
+          {
+            overallTotals.overall += divisionCount.value;
+            overallTotals[divisionCount.division] += divisionCount.value;
+          }
         });
       }
       else if (typeof count === 'number')
@@ -284,7 +292,11 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
         _.forEach(totalsKeys, function(key)
         {
           taskTotals[key] += count;
-          overallTotals[key] += count;
+
+          if (overallTotals)
+          {
+            overallTotals[key] += count;
+          }
         });
       }
     });
