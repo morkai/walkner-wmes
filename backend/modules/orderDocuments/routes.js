@@ -472,6 +472,12 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           file.hash,
           options.forcePdf ? `${nc15}.pdf` : 'meta.json'
         );
+        this.pdfFilePath = options.forcePdf ? null : path.join(
+          module.config.uploadedPath,
+          nc15,
+          file.hash,
+          `${nc15}.pdf`
+        );
 
         fs.stat(this.filePath, this.parallel());
 
@@ -479,15 +485,24 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         {
           fs.readFile(this.filePath, 'utf8', this.parallel());
         }
+        else
+        {
+          setImmediate(this.parallel(), null, null);
+        }
+
+        if (this.pdfFilePath)
+        {
+          fs.stat(this.pdfFilePath, this.parallel());
+        }
       },
-      function(err, stats, metaJson) // eslint-disable-line handle-callback-err
+      function(err, stats, metaJson, pdfStats) // eslint-disable-line handle-callback-err
       {
         const meta = metaJson ? tryJsonParse(metaJson) : null;
 
-        if (meta || (stats && stats.isFile()))
+        if (meta || (stats && stats.isFile()) || (pdfStats && pdfStats.isFile()))
         {
           return done(null, {
-            filePath: this.filePath,
+            filePath: stats ? this.filePath : this.pdfFilePath,
             source: 'remote',
             meta: options.forcePdf ? null : meta,
             name: this.name,
