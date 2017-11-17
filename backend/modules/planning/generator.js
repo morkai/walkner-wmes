@@ -53,7 +53,7 @@ module.exports = function setUpGenerator(app, module)
   const COMPARE_ORDERS = true || !DEV && UNFROZEN_PLANS.length === 0;
   const RESIZE_ORDERS = true;
   // sortSmallOrdersByManHours sortSmallOrdersByLeven sortSmallOrdersByParts
-  const SMALL_ORDERS_SORTER = sortSmallOrdersByLeven;
+  const SMALL_ORDERS_SORTER = sortSmallOrdersByParts;
 
   const log = LOG && DEV
     ? m => console.log(m)
@@ -1250,8 +1250,8 @@ module.exports = function setUpGenerator(app, module)
         startTimes: [],
         timeDiff: 0,
         name: planOrder.name, // eslint-disable-line comma-dangle
-        // nameParts: getOrderNameParts(planOrder),
-        // nameRank: 0
+        nameParts: getOrderNameParts(planOrder),
+        nameRank: 0
       };
 
       if (planOrder.urgent)
