@@ -1024,7 +1024,7 @@ module.exports = function setUpGenerator(app, module)
     const quantityTodo = getQuantityTodo(state, planOrder);
     const bigOrderQuantity = state.settings.mrp(planOrder.mrp).bigOrderQuantity;
 
-    return quantityTodo < bigOrderQuantity;
+    return bigOrderQuantity === 0 || quantityTodo < bigOrderQuantity;
   }
 
   function isHardOrder(state, planOrder)
