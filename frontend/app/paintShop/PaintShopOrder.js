@@ -42,7 +42,19 @@ define([
 
     serialize: function()
     {
-      var obj = this.toJSON();
+      var order = this;
+
+      if (order.collection && order.collection.serialized)
+      {
+        var serialized = _.find(order.collection.serialized, function(o) { return o._id === order.id; });
+
+        if (serialized)
+        {
+          return serialized;
+        }
+      }
+
+      var obj = order.toJSON();
       var childOrderCount = obj.childOrders.length;
       var lastChildOrderI = childOrderCount - 1;
 
