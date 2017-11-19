@@ -33,7 +33,15 @@ module.exports = function(app, module)
 
   app.broker.subscribe('paintShop.generator.requested', handleRequest);
 
-  app.broker.subscribe('planning.changes.created', change => generate(change.plan));
+  app.broker.subscribe('planning.changes.created', change =>
+  {
+    if (change.user !== null || (Object.keys(change.data).length === 1 && change.data.settings))
+    {
+      return;
+    }
+
+    generate(change.plan);
+  });
 
   function handleRequest(message)
   {
