@@ -1448,7 +1448,8 @@ module.exports = function setUpGenerator(app, module)
         plannedOrdersSet: new Set(),
         plannedOrdersList: [],
         hourlyPlan: EMPTY_HOURLY_PLAN.slice(),
-        hash: ''
+        hash: '',
+        initialHash: state.plan.lines.find(l => l._id === lineId).hash
       };
 
       lineState.shiftNo = getShiftFromMoment(lineState.activeFrom);
@@ -1586,30 +1587,42 @@ module.exports = function setUpGenerator(app, module)
 
       if (!LOG_LINES || LOG_LINES[lineState._id])
       {
-        log('Completed: pushed new line!');
+        log(`Completed: pushed new line: ${lineState._id}`);
       }
     }
     else if (oldPlanLine.hash !== newPlanLine.hash)
     {
       calculateShiftData(newPlanLine);
 
-      newPlanLine.version = oldPlanLine.version + 1;
+      if (lineState.initialHash === newPlanLine.hash)
+      {
+        state.changes.changedLines.delete(oldPlanLine._id);
+      }
+      else
+      {
+        newPlanLine.version = oldPlanLine.version + 1;
+
+        state.changes.changedLines.set(oldPlanLine._id, {
+          _id: oldPlanLine._id,
+          version: oldPlanLine.version
+        });
+      }
 
       Object.assign(oldPlanLine, newPlanLine);
 
-      state.changes.changedLines.set(oldPlanLine._id, {
-        _id: oldPlanLine._id,
-        version: oldPlanLine.version
-      });
+      if (!LOG_LINES || LOG_LINES[lineState._id])
+      {
+        log(`Completed: changed existing line: ${lineState._id}. New version: ${oldPlanLine.version}`);
+      }
+    }
+    else
+    {
+      state.changes.changedLines.delete(lineState._id);
 
       if (!LOG_LINES || LOG_LINES[lineState._id])
       {
-        log(`Completed: changed existing line. New version: ${oldPlanLine.version}`);
+        log(`Completed: no changes: ${lineState._id}!`);
       }
-    }
-    else if (!LOG_LINES || LOG_LINES[lineState._id])
-    {
-      log('Completed: no changes!');
     }
 
     if (done)
