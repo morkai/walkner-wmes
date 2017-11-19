@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   'app/i18n',
   'app/viewport',
@@ -9,6 +10,7 @@ define([
   'app/paintShop/templates/queue',
   'app/paintShop/templates/queueOrder'
 ], function(
+  _,
   $,
   t,
   viewport,
@@ -34,7 +36,7 @@ define([
 
         this.lastClickEvent = null;
 
-        if (!lastE || e.button !== 0)
+        if (!lastE || e.button !== 0 || window.getSelection().toString() !== '')
         {
           return;
         }
@@ -50,12 +52,15 @@ define([
             this.$(e.target).closest('td')[0].dataset.property
           );
         }
-      }
+      },
+      'scroll': 'onScroll'
     },
 
     initialize: function()
     {
       this.lastClickEvent = null;
+      this.lastFocusedOrder = null;
+      this.onScroll = _.debounce(this.onScroll.bind(this), 100, false);
 
       this.listenTo(this.model, 'reset', this.render);
       this.listenTo(this.model, 'change', this.onChange);
@@ -65,21 +70,56 @@ define([
 
     serialize: function()
     {
+      var first = null;
+      var last = null;
+      var selectedMrp = this.model.selectedMrp;
+      var orders = this.model.serialize().map(function(order)
+      {
+        order = {
+          order: order,
+          visible: selectedMrp === 'all' || order.mrp === selectedMrp,
+          first: false,
+          last: false,
+          commentVisible: true
+        };
+
+        if (order.visible)
+        {
+          if (!first)
+          {
+            first = order;
+          }
+
+          last = order;
+        }
+
+        return order;
+      });
+
+      if (first)
+      {
+        first.first = true;
+      }
+
+      if (last)
+      {
+        last.last = true;
+      }
+
       return {
         idPrefix: this.idPrefix,
-        groups: this.model.serializeGroups(),
-        selectedMrp: this.model.selectedMrp,
+        orders: orders,
         renderQueueOrder: queueOrderTemplate
       };
     },
 
     afterRender: function()
     {
-      var $groups = this.$('.paintShop-groups');
+      var $focused = this.$order(this.lastFocusedOrder);
 
-      if ($groups.length)
+      if ($focused.length)
       {
-        $groups[0].style.display = '';
+        this.el.scrollTop = $focused[0].offsetTop + 1;
       }
     },
 
@@ -102,11 +142,11 @@ define([
         return;
       }
 
-      var followupId = order.get('followupId');
+      var followups = order.get('followups');
 
-      if (followupId && (property === 'no' || property === 'order'))
+      if (followups.length && (property === 'no' || property === 'order'))
       {
-        this.onFocus(followupId);
+        this.onFocus(followups[0]);
 
         return;
       }
@@ -116,6 +156,8 @@ define([
       if (orderEl)
       {
         this.$el.animate({scrollTop: orderEl.offsetTop + 1}, 200);
+
+        this.lastFocusedOrder = orderId;
       }
 
       var detailsView = new PaintShopOrderDetailsView({
@@ -127,11 +169,46 @@ define([
       viewport.showDialog(detailsView);
     },
 
+    onScroll: function()
+    {
+      var $visible = this.$('.visible');
+
+      if (!$visible.length)
+      {
+        return;
+      }
+
+      this.lastFocusedOrder = $visible[0].dataset.orderId;
+
+      var scrollTop = this.el.scrollTop;
+
+      for (var i = 0; i < $visible.length; ++i)
+      {
+        var el = $visible[i];
+
+        if (el.offsetTop > scrollTop)
+        {
+          break;
+        }
+
+        this.lastFocusedOrder = el.dataset.orderId;
+
+        if (scrollTop > el.offsetTop + 26 && $visible[i + 1])
+        {
+          this.lastFocusedOrder = $visible[i + 1].dataset.orderId;
+        }
+      }
+    },
+
     onChange: function(order)
     {
-      this.$order(order.id).replaceWith(queueOrderTemplate({
+      var $order = this.$order(order.id);
+
+      $order.replaceWith(queueOrderTemplate({
         order: order.serialize(),
         visible: this.model.isVisible(order),
+        first: $order.hasClass('is-first'),
+        last: $order.hasClass('is-last'),
         commentVisible: true
       }));
     },
@@ -143,6 +220,8 @@ define([
       if (orderEl)
       {
         this.$el.animate({scrollTop: orderEl.offsetTop + 1}, 200);
+
+        this.lastFocusedOrder = orderId;
       }
       else
       {
@@ -153,11 +232,24 @@ define([
     onMrpSelected: function()
     {
       var selectedMrp = this.model.selectedMrp;
+      var specificMrp = selectedMrp !== 'all';
 
       this.$('.paintShop-order').each(function()
       {
-        this.style.display = selectedMrp === 'all' || this.dataset.mrp === selectedMrp ? '' : 'none';
+        var hidden = specificMrp && this.dataset.mrp !== selectedMrp;
+
+        this.classList.toggle('hidden', hidden);
+        this.classList.toggle('visible', !hidden);
       });
+
+      this.$('.paintShop-order.is-first, .paintShop-order.is-last').removeClass('is-first is-last');
+
+      var $visible = this.$('.visible');
+
+      $visible.first().addClass('is-first');
+      $visible.last().addClass('is-last');
+
+      this.el.scrollTop = 0;
     }
 
   });

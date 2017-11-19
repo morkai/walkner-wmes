@@ -3,14 +3,15 @@
 'use strict';
 
 const setUpRoutes = require('./routes');
-const importQueueFile = require('./importQueueFile');
+const setUpGenerator = require('./generator');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   expressId: 'express',
   userId: 'user',
   fteId: 'fte',
-  settingsId: 'settings'
+  settingsId: 'settings',
+  generator: false
 };
 
 exports.start = function startPaintShopModule(app, module)
@@ -25,7 +26,14 @@ exports.start = function startPaintShopModule(app, module)
     setUpRoutes.bind(null, app, module)
   );
 
-  module.importing = false;
-
-  module.importQueueFile = importQueueFile.bind(null, app, module);
+  if (module.config.generator)
+  {
+    app.onModuleReady(
+      [
+        module.config.mongooseId,
+        module.config.settingsId
+      ],
+      setUpGenerator.bind(null, app, module)
+    );
+  }
 };

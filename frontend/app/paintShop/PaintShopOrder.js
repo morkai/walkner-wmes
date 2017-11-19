@@ -40,25 +40,25 @@ define([
 
     parse: parse,
 
-    initialize: function()
-    {
-
-    },
-
     serialize: function()
     {
       var obj = this.toJSON();
-      var childOrderCount = obj.orders.length;
+      var childOrderCount = obj.childOrders.length;
       var lastChildOrderI = childOrderCount - 1;
 
       obj.rowSpan = childOrderCount + 1;
 
-      obj.orders.forEach(function(childOrder, i)
+      obj.childOrders.forEach(function(childOrder, i)
       {
         obj.rowSpan += childOrder.components.length;
         childOrder.rowSpan = childOrder.components.length + 1;
         childOrder.last = i === lastChildOrderI;
       });
+
+      if (obj.startTime)
+      {
+        obj.startTimeText = time.utc.format(obj.startTime, 'HH:mm:ss');
+      }
 
       if (obj.startedAt)
       {

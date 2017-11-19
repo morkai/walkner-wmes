@@ -1,20 +1,30 @@
-<tbody class="paintShop-order" data-order-id="<%- order._id %>" data-status="<%- order.status %>" data-mrp="<%= order.mrp %>" style="display: <%- visible ? 'table-row-group' : 'none' %>">
+<tbody class="paintShop-order <%- visible ? 'visible' : 'hidden' %> <%- first ? 'is-first' : '' %> <%- last ? 'is-last' : '' %>" data-order-id="<%- order._id %>" data-status="<%- order.status %>" data-mrp="<%= order.mrp %>">
   <tr class="paintShop-properties paintShop-order-order">
     <td class="paintShop-property" data-property="no" rowspan="<%- order.rowSpan %>">
-      <%- order.no %><% if (order.followupNo) { %><br><i class="fa fa-level-<%- order.no < order.followupNo ? 'down' : 'up' %>"></i><br><%- order.followupNo %><% } %>
+      <%- order.no %>
+      <% order.followups.forEach(function(followup) { %>
+      <br>
+      <span class="paintShop-order-followup" data-followup-id="<%- followup.id %>">
+        <i class="fa fa-level-<%- order.no < followup.no ? 'down' : 'up' %>"></i>
+        <br>
+        <%- followup.no %>
+        </span>
+      <% }) %>
     </td>
     <td class="paintShop-property" data-property="order"><%- order.order %></td>
     <td class="paintShop-property" data-property="nc12"><%- order.nc12 %></td>
     <td class="paintShop-property" data-property="qty"><%- order.qty.toLocaleString() %></td>
     <td class="paintShop-property" data-property="unit">PCE</td>
     <td class="paintShop-property" data-property="name"><%- order.name %></td>
-    <td class="paintShop-property" data-property="mrpPaintPlacement" rowspan="<%- order.rowSpan %>">
+    <td class="paintShop-property" data-property="mrpTimePlacement" rowspan="<%- order.rowSpan %>">
       <span class="paintShop-property" data-property="mrp" title="<%- t('paintShop', 'PROPERTY:mrp') %>">
         <i class="fa fa-filter"></i><span><%- order.mrp %></span>
       </span>
-      <span class="paintShop-property" data-property="paintType" title="<%- t('paintShop', 'PROPERTY:paintType') %>">
-      <i class="fa fa-paint-brush"></i><span><%- order.paintType %></span>
+      <% if (order.startTime) { %>
+      <span class="paintShop-property" data-property="startTime" title="<%- t('paintShop', 'PROPERTY:startTime') %>">
+      <i class="fa fa-clock-o"></i><span><%- order.startTimeText %></span>
       </span>
+      <% } %>
       <% if (order.placement) { %>
       <span class="paintShop-property" data-property="placement" title="<%- t('paintShop', 'PROPERTY:placement') %>">
         <i class="fa fa-truck"></i><span><%- order.placement %></span>
@@ -39,7 +49,7 @@
       <% } %>
     </td>
   </tr>
-  <% order.orders.forEach(function(childOrder) { %>
+  <% order.childOrders.forEach(function(childOrder) { %>
   <tr class="paintShop-properties paintShop-order-childOrder <%- childOrder.last ? 'is-last' : '' %>">
     <td class="paintShop-property" data-property="order" rowspan="<%- childOrder.rowSpan %>"><%- childOrder.order %></td>
     <td class="paintShop-property" data-property="nc12"><%- childOrder.nc12 %></td>

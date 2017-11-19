@@ -7,6 +7,7 @@
   line-height: 1;
 }
 .paintShop-list {
+  position: relative;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;

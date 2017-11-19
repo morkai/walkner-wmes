@@ -12,7 +12,8 @@ exports.modules = [
   'events',
   'messenger/server',
   'orders',
-  'planning'
+  'planning',
+  'paintShop'
 ];
 
 exports.events = {
@@ -40,7 +41,12 @@ exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   models: [
-    'event', 'setting', 'hourlyPlan', 'order', 'plan', 'planChange', 'planSettings'
+    'event',
+    'setting',
+    'hourlyPlan',
+    'order',
+    'paintShopOrder',
+    'plan', 'planChange', 'planSettings'
   ]
 };
 
@@ -59,7 +65,8 @@ exports['messenger/server'] = Object.assign({}, ports[exports.id], {
     'events.saved',
     'planning.generator.started',
     'planning.generator.finished',
-    'planning.changes.created'
+    'planning.changes.created',
+    'paintShop.orders.changed.*'
   ]
 });
 
@@ -74,5 +81,9 @@ exports.orders = {
 
 exports.planning = {
   expressId: null,
+  generator: true
+};
+
+exports.paintShop = {
   generator: true
 };

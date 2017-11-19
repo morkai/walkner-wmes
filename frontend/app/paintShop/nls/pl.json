@@ -14,11 +14,9 @@
   "PROPERTY:name": "Nazwa wyrobu/komponentu",
   "PROPERTY:qty": "Ilość",
   "PROPERTY:mrp": "Przepływ",
-  "PROPERTY:paintType": "Rodzaj farby",
+  "PROPERTY:startTime": "Początek montażu",
   "PROPERTY:placement": "Położenie",
   "PROPERTY:no": "Nr",
-  "PROPERTY:followupNo": "Nr 2. malowania",
-  "PROPERTY:group": "Grupa",
   "PROPERTY:status": "Status",
   "PROPERTY:startedAt": "Czas rozpoczęcia",
   "PROPERTY:finishedAt": "Czas zakończenia",
@@ -47,6 +45,8 @@
   "datePicker:invalid": "Podaj prawidłową datę.",
 
   "tabs:all": "Wszystkie",
+
+  "empty": "Brak zleceń dla wybranego dnia.",
 
   "orderChanges:change": "{type, select, start{Rozpoczęto} finish{Zakończono} cancel{Zignorowano} reset{Zresetowano} comment{Skomentowano} other{Zmieniono}} <time title='{timeLong}'>{timeAgo}</time> przez {user}"
 }

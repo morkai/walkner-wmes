@@ -2,8 +2,6 @@
 
 'use strict';
 
-const fs = require('fs');
-const multer = require('multer');
 const moment = require('moment');
 const step = require('h5.step');
 
@@ -17,27 +15,12 @@ module.exports = function setUpPaintShopRoutes(app, module)
   const PaintShopOrder = mongoose.model('PaintShopOrder');
 
   const canView = userModule.auth('LOCAL', 'PAINT_SHOP:VIEW');
-  const canManage = userModule.auth('LOCAL', 'PAINT_SHOP:MANAGE');
   const canUpdate = userModule.auth('LOCAL', 'PAINT_SHOP:PAINTER', 'PAINT_SHOP:MANAGE');
 
   express.get(
     '/paintShop/events',
     canView,
     express.crud.browseRoute.bind(null, app, PaintShopEvent)
-  );
-
-  express.post(
-    '/paintShop/orders;import',
-    canManage,
-    multer({
-      storage: multer.diskStorage({}),
-      fileFilter: function(req, file, done)
-      {
-        done(null, /vnd\.ms-excel\.sheet|spreadsheetml\.sheet/.test(file.mimetype)
-          && /\.xls[xm]$/.test(file.originalname));
-      }
-    }).single('queue'),
-    importOrdersQueue
   );
 
   express.get(
@@ -64,7 +47,18 @@ module.exports = function setUpPaintShopRoutes(app, module)
 
       if (date === 'current')
       {
-        term.args[1] = moment.utc(fteModule.currentShift.date.getTime()).startOf('day').toDate();
+        const m = moment();
+
+        if (m.hours() < 17)
+        {
+          m.startOf('day').subtract(1, 'days');
+        }
+        else
+        {
+          m.startOf('day').add(1, 'days');
+        }
+
+        term.args[1] = moment.utc(m.format('YYYY-MM-DD'), 'YYYY-MM-DD').toDate();
       }
       else if (/^[0-9]+-[0-9]+-[0-9]+$/.test(date))
       {
@@ -73,30 +67,6 @@ module.exports = function setUpPaintShopRoutes(app, module)
     });
 
     next();
-  }
-
-  function importOrdersQueue(req, res, next)
-  {
-    if (!req.file)
-    {
-      return next(app.createError('INVALID_FILE', 400));
-    }
-
-    const filePath = req.file.path;
-    const date = req.body.date || req.file.originalname;
-    const user = req.session.user || null;
-
-    module.importQueueFile(filePath, date, user, function(err, result)
-    {
-      fs.unlink(req.file.path, () => {});
-
-      if (err)
-      {
-        return next(err);
-      }
-
-      res.json(result);
-    });
   }
 
   function updatePaintShopOrderRoute(req, res, next)

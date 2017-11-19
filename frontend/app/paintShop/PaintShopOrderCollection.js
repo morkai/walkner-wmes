@@ -21,18 +21,17 @@ define([
 
     model: PaintShopOrder,
 
-    rqlQuery: 'sort(group,no)&limit(0)',
+    comparator: 'no',
 
     initialize: function()
     {
       this.selectedMrp = 'all';
-      this.allMrps = [];
-      this.groups = null;
+      this.allMrps = null;
+      this.serialized = null;
 
       this.on('request', function()
       {
-        this.allMrps = [];
-        this.groups = null;
+        this.serialized = null;
       });
     },
 
@@ -112,64 +111,43 @@ define([
       return this.selectedMrp === 'all' || order.get('mrp') === this.selectedMrp;
     },
 
-    serializeGroups: function(filter)
+    serialize: function()
     {
-      if (this.groups)
-      {
-        if (!filter)
-        {
-          return this.groups;
-        }
+      var orders = this;
 
-        return this.groups
-          .map(function(group)
-          {
-            return {
-              _id: group._id,
-              name: group.name,
-              orders: group.orders.filter(filter)
-            };
-          })
-          .filter(function(group)
-          {
-            return group.orders.length > 0;
-          });
+      if (orders.serialized)
+      {
+        return orders.serialized;
       }
 
-      var groupList = [];
-      var groupMap = {};
+      var serialized = [];
       var mrpMap = {};
 
-      this.forEach(function(order)
+      orders.forEach(function(order)
       {
-        mrpMap[order.get('mrp')] = 1;
-
-        var groupId = order.get('group').replace(/[^A-Za-z0-9]+/g, '');
-        var group = groupMap[groupId];
-
-        if (!group)
+        order = order.serialize();
+        order.followups = order.followups.map(function(followupId)
         {
-          group = groupMap[groupId] = {
-            _id: groupId,
-            name: order.get('group'),
-            orders: []
+          return {
+            id: followupId,
+            no: orders.get(followupId).get('no')
           };
+        });
 
-          groupList.push(group);
-        }
+        serialized.push(order);
 
-        group.orders.push(order.serialize());
+        mrpMap[order.mrp] = 1;
       });
 
-      if (!mrpMap[this.selectedMrp])
+      if (!mrpMap[orders.selectedMrp])
       {
-        this.selectedMrp = 'all';
+        orders.selectedMrp = 'all';
       }
 
-      this.allMrps = Object.keys(mrpMap).sort();
-      this.groups = groupList;
+      orders.serialized = serialized;
+      orders.allMrps = Object.keys(mrpMap).sort();
 
-      return this.serializeGroups(filter);
+      return serialized;
     },
 
     act: function(reqData, done)
@@ -214,13 +192,67 @@ define([
       });
 
       return req;
+    },
+
+    applyChanges: function(changes)
+    {
+      var orders = this;
+      var silent = changes.removed.length > 0 || changes.added.length > 0;
+
+      if (!silent)
+      {
+        for (var i = 0; i < changes.changed.length; ++i)
+        {
+          if (changes.changed[i].no > 0)
+          {
+            silent = true;
+
+            break;
+          }
+        }
+      }
+
+      orders.remove(changes.removed, {silent: silent});
+
+      changes.added.forEach(function(added)
+      {
+        orders.add(PaintShopOrder.parse(added), {silent: silent});
+      });
+
+      changes.changed.forEach(function(changed)
+      {
+        var order = orders.get(changed._id);
+
+        if (order)
+        {
+          order.set(PaintShopOrder.parse(changed), {silent: silent});
+        }
+      });
+
+      if (silent)
+      {
+        orders.serialized = null;
+
+        orders.trigger('reset', orders);
+      }
     }
 
   }, {
 
     getCurrentDate: function(format)
     {
-      return getShiftStartInfo(Date.now()).moment.format(format || 'YYYY-MM-DD');
+      var moment = time.getMoment();
+
+      if (moment.hours() < 17)
+      {
+        moment.startOf('day').subtract(1, 'days');
+      }
+      else
+      {
+        moment.startOf('day').add(1, 'days');
+      }
+
+      return time.utc.getMoment(moment.format('YYYY-MM-DD'), 'YYYY-MM-DD').format(format || 'YYYY-MM-DD');
     },
 
     forCurrentDate: function()
@@ -230,7 +262,7 @@ define([
 
     forDate: function(date)
     {
-      return new this(null, {rqlQuery: 'sort(group,no)&limit(0)&date=' + date});
+      return new this(null, {rqlQuery: 'sort(date,no)&limit(0)&date=' + date});
     }
 
   });

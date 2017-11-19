@@ -83,24 +83,17 @@ define([
     },
 
     remoteTopics: {
-      'shiftChanged': function(newShift)
-      {
-        if (newShift.no === 1 && this.orders.isDateCurrent())
-        {
-          this.orders.fetch({reset: true});
-        }
-      },
-      'paintShop.orders.imported': function(message)
+      'paintShop.orders.changed.*': function(message)
       {
         var currentDate = this.orders.getDateFilter();
-        var importedDate = time.format(message.date, 'YYYY-MM-DD');
+        var importedDate = time.utc.format(message.date, 'YYYY-MM-DD');
 
         if (importedDate === currentDate)
         {
-          this.orders.fetch({reset: true});
+          this.orders.applyChanges(message.changes);
         }
       },
-      'paintShop.orders.updated.**': function(changes)
+      'paintShop.orders.updated.*': function(changes)
       {
         var order = this.orders.get(changes._id);
 
@@ -225,16 +218,12 @@ define([
     {
       var page = this;
       var idPrefix = page.idPrefix;
-      var handleDragEvent = page.handleDragEvent.bind(page);
 
       page.listenTo(page.orders, 'reset', this.onOrdersReset);
 
+      page.listenTo(page.orders, 'mrpSelected', this.onMrpSelected);
+
       $(document)
-        .on('dragstart.' + idPrefix, handleDragEvent)
-        .on('dragenter.' + idPrefix, handleDragEvent)
-        .on('dragleave.' + idPrefix, handleDragEvent)
-        .on('dragover.' + idPrefix, handleDragEvent)
-        .on('drop.' + idPrefix, page.onDrop.bind(page))
         .on('click.' + idPrefix, '.page-breadcrumbs', this.onBreadcrumbsClick.bind(this));
 
       $(window)
@@ -250,58 +239,6 @@ define([
     {
       return when(
         this.orders.fetch({reset: true})
-      );
-    },
-
-    applyPendingChanges: function()
-    {
-      if (this.pendingChanges)
-      {
-        this.pendingChanges.forEach(this.applyChanges, this);
-        this.pendingChanges = null;
-      }
-    },
-
-    applyChanges: function(change)
-    {
-      if (change instanceof PaintShopOrder)
-      {
-        var newRequest = change;
-        var oldRequest = this.orders.get(newRequest.id);
-
-        if (!oldRequest)
-        {
-          this.requests.add(newRequest);
-        }
-        else if (newRequest.get('updatedAt') > oldRequest.get('updatedAt'))
-        {
-          oldRequest.set(newRequest.attributes);
-        }
-      }
-      else
-      {
-        var request = this.requests.get(change._id);
-
-        if (!request)
-        {
-          return this.scheduleOrdersReload();
-        }
-
-        if (change.updatedAt > request.get('updatedAt'))
-        {
-          request.set(change);
-        }
-      }
-    },
-
-    scheduleOrdersReload: function()
-    {
-      clearTimeout(this.timers.reloadOrders);
-
-      this.timers.reloadOrders = setTimeout(
-        function(page) { page.promised(page.orders.fetch({reset: true})); },
-        1,
-        this
       );
     },
 
@@ -339,6 +276,13 @@ define([
     afterRender: function()
     {
       $('.modal.fade').removeClass('fade');
+
+      if (this.options.selectedMrp)
+      {
+        this.$('.paintShop-tab[data-mrp="' + this.options.selectedMrp + '"]').click();
+
+        this.options.selectedMrp = null;
+      }
 
       this.resize();
     },
@@ -395,12 +339,7 @@ define([
     {
       this.options.fullscreen = !this.options.fullscreen;
 
-      this.broker.publish('router.navigate', {
-        url: this.genClientUrl(),
-        replace: true,
-        trigger: false
-      });
-
+      this.updateUrl();
       this.resize();
     },
 
@@ -420,74 +359,30 @@ define([
       this.$id('tabs').html(html);
     },
 
-    handleDragEvent: function(e)
+    updateUrl: function()
     {
-      e.preventDefault();
-      e.stopPropagation();
-    },
-
-    onDrop: function(e)
-    {
-      e = e.originalEvent;
-
-      e.preventDefault();
-      e.stopPropagation();
-
-      if (!e.dataTransfer.files.length)
-      {
-        return viewport.msg.show({
-          type: 'warning',
-          time: 3000,
-          text: t('paintShop', 'msg:filesOnly')
-        });
-      }
-
-      var file = _.find(e.dataTransfer.files, function(file)
-      {
-        return /vnd.ms-excel.sheet|spreadsheetml.sheet/.test(file.type) && /\.xls[xm]$/.test(file.name);
-      });
-
-      if (!file)
-      {
-        return viewport.msg.show({
-          type: 'warning',
-          time: 3000,
-          text: t('paintShop', 'msg:invalidFile')
-        });
-      }
-
-      viewport.msg.loading();
-
-      var formData = new FormData();
-
-      formData.append('queue', file);
-
-      var page = this;
-      var req = page.ajax({
-        type: 'POST',
-        url: '/paintShop/orders;import',
-        data: formData,
-        processData: false,
-        contentType: false
-      });
-
-      req.fail(function()
-      {
-        viewport.msg.loadingFailed();
-      });
-
-      req.done(function(res)
-      {
-        viewport.msg.loaded();
-
-        page.orders.setDateFilter(time.utc.format(res.date, 'YYYY-MM-DD'));
-        page.promised(page.orders.fetch({reset: true}));
+      this.broker.publish('router.navigate', {
+        url: this.genClientUrl(),
+        replace: true,
+        trigger: false
       });
     },
 
     genClientUrl: function()
     {
-      return this.orders.genClientUrl() + (this.options.fullscreen ? '?fullscreen=1' : '');
+      var query = [];
+
+      if (this.orders.selectedMrp !== 'all')
+      {
+        query.push('mrp=' + this.orders.selectedMrp);
+      }
+
+      if (this.options.fullscreen)
+      {
+        query.push('fullscreen=1');
+      }
+
+      return this.orders.genClientUrl() + '?' + query.join('&');
     },
 
     onOrdersReset: function()
@@ -508,6 +403,11 @@ define([
       this.renderTabs();
     },
 
+    onMrpSelected: function()
+    {
+      this.updateUrl();
+    },
+
     onBreadcrumbsClick: function(e)
     {
       if (e.target.tagName !== 'A')
@@ -515,69 +415,9 @@ define([
         return;
       }
 
-      if (IS_EMBEDDED)
-      {
-        this.showDatePickerDialog();
-
-        return false;
-      }
-
-      var liEl = e.target.parentNode;
-
-      liEl.innerHTML = '';
-
-      var page = this;
-      var currentDate = page.orders.getDateFilter('YYYY-MM-DD');
-
-      var $date = $('<input type="date" class="form-control paintShop-dateBreadcrumb">')
-        .val(currentDate)
-        .appendTo(liEl)
-        .focus()
-        .on('keyup', function(e)
-        {
-          if (e.keyCode === 13)
-          {
-            saveAndHide($date.val());
-
-            return false;
-          }
-
-          if (e.keyCode === 27)
-          {
-            saveAndHide(null);
-
-            return false;
-          }
-        })
-        .on('blur', function() { saveAndHide($date.val()); });
+      this.showDatePickerDialog();
 
       return false;
-
-      function saveAndHide(newDate)
-      {
-        if (newDate === '')
-        {
-          newDate = getShiftStartInfo(Date.now()).moment.format('YYYY-MM-DD');
-        }
-
-        var newDateMoment = time.getMoment(newDate, 'YYYY-MM-DD');
-
-        $date.remove();
-
-        if (!newDateMoment.isValid() || newDate === currentDate)
-        {
-          newDate = currentDate;
-        }
-        else
-        {
-          page.orders.setDateFilter(newDate);
-          page.orders.fetch({reset: true});
-        }
-
-        liEl.innerHTML = '<a href="#paintShop/' + newDate + '">'
-          + time.getMoment(newDate, 'YYYY-MM-DD').format('L')
-          + '</a>';
-      }
     },
 
     showDatePickerDialog: function()

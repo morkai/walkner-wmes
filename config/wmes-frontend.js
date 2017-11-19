@@ -200,6 +200,7 @@ exports.sio = {
 exports.pubsub = {
   statsPublishInterval: 60000,
   republishTopics: [
+    'ping', 'sockets.connected', 'sockets.disconnected',
     'events.saved', 'dictionaries.updated',
     '*.added', '*.edited', '*.deleted', '*.synced',
     'shiftChanged',
@@ -225,8 +226,7 @@ exports.pubsub = {
     'pscs.**',
     'd8.**',
     'heff.**',
-    'ping', 'sockets.connected', 'sockets.disconnected',
-    'paintShop.orders.imported', 'paintShop.orders.updated.**', 'paintShop.events.saved',
+    'paintShop.orders.changed.*', 'paintShop.orders.updated.*', 'paintShop.events.saved',
     'vis.**',
     'mor.**',
     'planning.**'
@@ -525,7 +525,7 @@ exports['directoryWatcher:opinionSurveys'] = {
 };
 
 exports.paintShop = {
-
+  generator: false
 };
 
 exports.prodDowntimeAlerts = {

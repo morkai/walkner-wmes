@@ -19,6 +19,7 @@ define([
   router.map('/paintShop/:date', user.auth('LOCAL', 'PAINT_SHOP:VIEW'), function(req)
   {
     viewport.showPage(new PaintShopPage({
+      selectedMrp: req.query.mrp,
       fullscreen: req.query.fullscreen !== undefined,
       model: {
         orders: PaintShopOrderCollection.forDate(req.params.date)

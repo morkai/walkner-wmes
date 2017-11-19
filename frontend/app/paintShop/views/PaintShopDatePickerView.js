@@ -44,7 +44,9 @@ define([
       },
       'submit': function()
       {
-        this.trigger('picked', this.getMoment().format('YYYY-MM-DD'));
+        var moment = this.getMoment();
+
+        this.trigger('picked', moment.isValid() ? moment.format('YYYY-MM-DD') : this.model.date);
 
         return false;
       }

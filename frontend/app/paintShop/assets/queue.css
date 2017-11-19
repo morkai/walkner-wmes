@@ -18,22 +18,8 @@
 .paintShop-queue-empty {
   padding: 10px;
 }
-.paintShop-groups {
-  width: 100%;
-}
-.paintShop-group-hd,
-.paintShop-order-order > td:last-child {
-  border-right: 1px solid #333;
-  width: auto;
-}
-.paintShop-group-hd {
-  padding: 7px;
-  font-size: 21px;
-  background: #333;
-  color: #fff;
-}
 .paintShop-orders {
-
+  width: 100%;
 }
 .paintShop-order {
   cursor: pointer;
@@ -45,6 +31,13 @@
   background-color: #ccc;
   border-top: 1px solid #333;
   border-bottom: 1px solid #bbb;
+}
+.paintShop-order-order > td:last-child {
+  border-right: 1px solid #333;
+  width: auto;
+}
+.paintShop-order.is-first > .paintShop-order-order {
+  border-top: none;
 }
 .paintShop-order-childOrder {
   background-color: #e6e6e6;
@@ -138,7 +131,8 @@ td.paintShop-property[data-property="nc12"] {
 .is-last > td.paintShop-property[data-property="order"] {
   border-bottom: 1px solid #333;
 }
-.paintShop-order:last-child > .is-last > td.paintShop-property[data-property="order"] {
+.paintShop-order.is-last > .paintShop-order-order > td.paintShop-property[rowspan],
+.paintShop-order.is-last > .is-last > td.paintShop-property[data-property="order"] {
   border-bottom: none;
 }
 td.paintShop-property[data-property="qty"] {
@@ -153,7 +147,7 @@ td.paintShop-property[data-property="unit"] {
 td.paintShop-property[data-property="name"] {
   width: 350px;
 }
-td.paintShop-property[data-property="mrpPaintPlacement"] {
+td.paintShop-property[data-property="mrpTimePlacement"] {
   width: 80px;
 }
 span.paintShop-property {

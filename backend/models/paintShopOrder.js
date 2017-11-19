@@ -35,19 +35,20 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
     startedAt: Date,
     finishedAt: Date,
     comment: String,
-    date: Date,
-    group: String,
-    no: Number,
-    followupNo: Number,
-    followupId: String,
     order: String,
+    followups: [String],
+    date: Date,
     nc12: String,
     name: String,
     qty: Number,
     mrp: String,
-    paintType: String,
     placement: String,
-    orders: [childOrderSchema]
+    startTime: Number,
+    paint: {
+      nc12: String,
+      name: String
+    },
+    childOrders: [childOrderSchema]
   }, {
     id: false,
     minimize: false
@@ -57,7 +58,7 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
   paintShopOrderSchema.statics.BROWSE_LIMIT = 0;
 
   paintShopOrderSchema.index({date: -1});
-  paintShopOrderSchema.index({status: 1});
+  paintShopOrderSchema.index({status: 1, date: -1});
 
   paintShopOrderSchema.methods.act = function(action, comment, done)
   {
