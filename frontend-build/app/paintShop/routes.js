@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../router","../viewport","../user","./PaintShopOrderCollection","./pages/PaintShopPage","i18n!app/nls/paintShop"],function(e,a,n,o,t){"use strict";e.map("/paintShop/:date",n.auth("LOCAL","PAINT_SHOP:VIEW"),function(e){a.showPage(new t({fullscreen:void 0!==e.query.fullscreen,model:{orders:o.forDate(e.params.date)}}))})});
+define(["../router","../viewport","../user","./PaintShopOrderCollection","./pages/PaintShopPage","i18n!app/nls/paintShop"],function(e,r,t,a,n){"use strict";e.map("/paintShop/:date",t.auth("LOCAL","PAINT_SHOP:VIEW"),function(e){r.showPage(new n({selectedMrp:e.query.mrp,fullscreen:void 0!==e.query.fullscreen,model:{orders:a.forDate(e.params.date)}}))})});

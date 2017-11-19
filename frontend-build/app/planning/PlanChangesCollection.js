@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["underscore","../time","../core/Collection","./PlanChange"],function(e,r,n,t){"use strict";return n.extend({model:t,rqlQuery:"sort(date)",getDate:function(n){var t=e.find(this.rqlQuery.selector.args,function(e){return"eq"===e.name&&"plan"===e.args[0]});return t?r.utc.format(t.args[1],n||"YYYY-MM-DD"):null}})});
+define(["underscore","../time","../core/Collection","./PlanChange"],function(e,r,t,n){"use strict";return t.extend({model:n,rqlQuery:"sort(date)&limit(0)",getDate:function(t){var n=e.find(this.rqlQuery.selector.args,function(e){return"eq"===e.name&&"plan"===e.args[0]});return n?r.utc.format(n.args[1],t||"YYYY-MM-DD"):null}})});
