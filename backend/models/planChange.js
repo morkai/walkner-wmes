@@ -17,6 +17,7 @@ module.exports = function setupPlanChangeModel(app, mongoose)
   });
 
   planChangeSchema.statics.TOPIC_PREFIX = 'planning.changes';
+  planChangeSchema.statics.BROWSE_LIMIT = 0;
 
   planChangeSchema.index({plan: 1});
 

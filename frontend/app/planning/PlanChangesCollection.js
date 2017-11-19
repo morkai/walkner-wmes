@@ -17,7 +17,7 @@ define([
 
     model: PlanChange,
 
-    rqlQuery: 'sort(date)',
+    rqlQuery: 'sort(date)&limit(0)',
 
     getDate: function(format)
     {
