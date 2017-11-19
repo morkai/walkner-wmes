@@ -394,6 +394,7 @@ exports['messenger/client:wmes-planning'] = Object.assign({}, ports['wmes-planni
   responseTimeout: 5000,
   broadcastTopics: [
     'planning.generator.requested',
+    'paintShop.generator.requested',
     'settings.updated.orders.operations.groups'
   ]
 });

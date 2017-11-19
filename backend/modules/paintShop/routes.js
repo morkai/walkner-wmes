@@ -16,6 +16,9 @@ module.exports = function setUpPaintShopRoutes(app, module)
 
   const canView = userModule.auth('LOCAL', 'PAINT_SHOP:VIEW');
   const canUpdate = userModule.auth('LOCAL', 'PAINT_SHOP:PAINTER', 'PAINT_SHOP:MANAGE');
+  const canManage = userModule.auth('PAINT_SHOP:MANAGE');
+
+  express.post('/paintShop/:id;generate', canManage, generateRoute);
 
   express.get(
     '/paintShop/events',
@@ -110,5 +113,14 @@ module.exports = function setUpPaintShopRoutes(app, module)
         });
       }
     );
+  }
+
+  function generateRoute(req, res)
+  {
+    app.broker.publish('paintShop.generator.requested', {
+      date: req.params.id
+    });
+
+    res.sendStatus(203);
   }
 };

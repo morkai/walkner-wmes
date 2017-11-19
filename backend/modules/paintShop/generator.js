@@ -31,7 +31,19 @@ module.exports = function(app, module)
   const PaintShopOrder = mongoose.model('PaintShopOrder');
   const Plan = mongoose.model('Plan');
 
+  app.broker.subscribe('paintShop.generator.requested', handleRequest);
+
   app.broker.subscribe('planning.changes.created', change => generate(change.plan));
+
+  function handleRequest(message)
+  {
+    const date = moment.utc(message.date, 'YYYY-MM-DD');
+
+    if (date.isValid())
+    {
+      generate(date.toDate());
+    }
+  }
 
   function generate(date)
   {
