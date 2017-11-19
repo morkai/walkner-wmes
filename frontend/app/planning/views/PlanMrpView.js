@@ -129,7 +129,12 @@ define([
 
     destroy: function()
     {
-      this.$els = null;
+      var view = this;
+
+      Object.keys(view.$els).forEach(function(k)
+      {
+        view.$els[k] = null;
+      });
     },
 
     serialize: function()

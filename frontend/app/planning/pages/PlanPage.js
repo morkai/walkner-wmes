@@ -134,10 +134,44 @@ define([
       'orders.updated.*': function(message)
       {
         var lateOrder = this.plan.lateOrders.get(message._id);
+        var change = message.change;
+        var delayReason = change.newValues.delayReason;
+        var comment = change.comment;
+        var newDelayReason = typeof delayReason !== 'undefined';
 
-        if (lateOrder && typeof message.change.newValues.delayReason !== 'undefined')
+        if (lateOrder && newDelayReason)
         {
-          lateOrder.set('delayReason', message.change.newValues.delayReason);
+          lateOrder.set('delayReason', delayReason);
+        }
+
+        var sapOrder = this.plan.sapOrders.get(message._id);
+
+        if (sapOrder && (comment || newDelayReason))
+        {
+          var attrs = {};
+
+          if (comment)
+          {
+            attrs.comments = [].concat(sapOrder.get('comments'), {
+              time: change.time,
+              user: change.user,
+              text: comment,
+              delayReason: delayReason
+            });
+          }
+
+          if (newDelayReason)
+          {
+            attrs.delayReason = delayReason;
+          }
+
+          if ((comment && newDelayReason)
+            || (comment && (!sapOrder.get('comment') || !sapOrder.get('delayReason'))))
+          {
+            attrs.comment = comment;
+          }
+
+          sapOrder.set(attrs);
         }
       },
       'shiftChanged': function(newShift)

@@ -554,3 +554,27 @@
 .planning-mrp-lineOrders-table > tbody > tr:last-child > td {
   border-bottom: none;
 }
+.planning-mrp-comment-popover {
+  max-width: 500px;
+}
+.planning-mrp-comment {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px dotted #eee;
+  font-size: 12px;
+  line-height: 12px;
+}
+.planning-mrp-comment:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+.planning-mrp-comment-hd {
+  color: #999;
+  font-size: 10px;
+  line-height: 1;
+}
+.planning-mrp-comment-bd {
+  margin-top: 3px;
+  white-space: pre-line;
+}

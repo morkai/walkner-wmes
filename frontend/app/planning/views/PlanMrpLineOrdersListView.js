@@ -9,7 +9,9 @@ define([
   'app/data/clipboard',
   '../util/shift',
   '../util/contextMenu',
-  'app/planning/templates/lineOrdersList'
+  'app/core/templates/userInfo',
+  'app/planning/templates/lineOrdersList',
+  'app/planning/templates/lineOrderComments'
 ], function(
   _,
   $,
@@ -19,7 +21,9 @@ define([
   clipboard,
   shiftUtil,
   contextMenu,
-  lineOrdersListTemplate
+  userInfoTemplate,
+  lineOrdersListTemplate,
+  lineOrderCommentsTemplate
 ) {
   'use strict';
 
@@ -28,7 +32,7 @@ define([
     template: lineOrdersListTemplate,
 
     events: {
-      'mouseenter tr': function(e)
+      'mouseenter tbody > tr': function(e)
       {
         this.mrp.orders.trigger('highlight', {
           source: 'lineOrders',
@@ -36,7 +40,7 @@ define([
           orderNo: e.currentTarget.dataset.id
         });
       },
-      'mouseleave tr': function(e)
+      'mouseleave tbody > tr': function(e)
       {
         this.mrp.orders.trigger('highlight', {
           source: 'lineOrders',
@@ -44,7 +48,7 @@ define([
           orderNo: e.currentTarget.dataset.id
         });
       },
-      'contextmenu tr': function(e)
+      'contextmenu tbody > tr': function(e)
       {
         this.showMenu(e);
 
@@ -87,6 +91,51 @@ define([
         }
 
         return false;
+      },
+      'mousedown td.no-scroll': function(e)
+      {
+        if (e.button !== 0)
+        {
+          return;
+        }
+
+        var sapOrder = this.plan.sapOrders.get(e.currentTarget.parentNode.dataset.id);
+
+        if (!sapOrder)
+        {
+          return;
+        }
+
+        var comments = sapOrder.get('comments');
+
+        if (!comments.length)
+        {
+          return;
+        }
+
+        this.$(e.currentTarget).popover({
+          trigger: 'manual',
+          placement: 'left',
+          html: true,
+          content: lineOrderCommentsTemplate({
+            comments: comments.map(function(comment)
+            {
+              return {
+                user: userInfoTemplate({noIp: true, userInfo: comment.user}),
+                time: time.toTagData(comment.time).human,
+                text: comment.text.trim()
+              };
+            })
+          }),
+          template: '<div class="popover planning-mrp-comment-popover">'
+            + '<div class="arrow"></div>'
+            + '<div class="popover-content"></div>'
+            + '</div>'
+        }).popover('show');
+      },
+      'mouseup td.no-scroll': function(e)
+      {
+        this.$(e.currentTarget).popover('destroy');
       }
     },
 
@@ -99,6 +148,8 @@ define([
       view.listenTo(view.mrp.lines, 'reset changed', view.renderIfNotLoading);
 
       view.listenTo(view.mrp.orders, 'highlight', view.onOrderHighlight);
+
+      view.listenTo(view.plan.sapOrders, 'change:comment', view.onCommentChange);
     },
 
     serialize: function()
@@ -120,6 +171,7 @@ define([
 
     serializeOrders: function()
     {
+      var sapOrders = this.plan.sapOrders;
       var mrp = this.mrp;
       var map = {};
 
@@ -135,6 +187,7 @@ define([
             return;
           }
 
+          var sapOrder = sapOrders.get(orderNo);
           var item = map[orderNo];
 
           if (!item)
@@ -147,7 +200,8 @@ define([
               finishTime: 0,
               qtyTodo: order.get('quantityTodo'),
               qtyPlan: 0,
-              lines: {}
+              lines: {},
+              comment: sapOrder ? sapOrder.get('comment') : ''
             };
           }
 
@@ -304,6 +358,14 @@ define([
       if (trEl && !this.expanded)
       {
         this.el.scrollTop = trEl.offsetTop;
+      }
+    },
+
+    onCommentChange: function(sapOrder)
+    {
+      if (this.mrp.orders.get(sapOrder.id))
+      {
+        this.$('tr[data-id="' + sapOrder.id + '"] > .no-scroll').text(sapOrder.get('comment'));
       }
     }
 

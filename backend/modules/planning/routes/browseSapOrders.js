@@ -42,12 +42,8 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
       const $project = {
         quantityTodo: '$qty',
         quantityDone: {$ifNull: ['$qtyDone.total', 0]},
-        statuses: 1
-      };
-
-      if ($match.mrp)
-      {
-        $project.changes = {
+        statuses: 1,
+        changes: {
           $filter: {
             input: '$changes',
             cond: {
@@ -58,8 +54,8 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
               ]
             }
           }
-        };
-      }
+        }
+      };
 
       Order.aggregate([{$match}, {$project}], this.next());
     },
@@ -70,34 +66,42 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
         return next(err);
       }
 
-      if (mrp)
+      sapOrders.forEach(order =>
       {
-        sapOrders.forEach(order =>
-        {
-          order.delayReason = null;
-          order.comment = '';
+        order.delayReason = null;
+        order.comment = '';
+        order.comments = [];
 
-          order.changes.forEach(change =>
+        order.changes.forEach(change =>
+        {
+          if (change.comment)
           {
-            if (!order.comment && change.comment)
+            order.comments.push({
+              time: change.time,
+              user: change.user,
+              text: change.comment,
+              delayReason: change.newValues.delayReason
+            });
+          }
+
+          if ((!order.comment || !order.delayReason) && change.comment)
+          {
+            order.comment = change.comment;
+          }
+
+          if (!_.isUndefined(change.newValues.delayReason))
+          {
+            order.delayReason = change.newValues.delayReason;
+
+            if (change.comment)
             {
               order.comment = change.comment;
             }
-
-            if (!_.isUndefined(change.newValues.delayReason))
-            {
-              order.delayReason = change.newValues.delayReason;
-
-              if (change.comment)
-              {
-                order.comment = change.comment;
-              }
-            }
-          });
-
-          order.changes = undefined;
+          }
         });
-      }
+
+        order.changes = undefined;
+      });
 
       res.json({
         totalCount: sapOrders.length,

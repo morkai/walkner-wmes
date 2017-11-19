@@ -1,0 +1,8 @@
+<div class="planning-mrp-comments">
+  <% comments.forEach(function(comment) { %>
+  <div class="planning-mrp-comment">
+    <div class="planning-mrp-comment-hd"><%- comment.user %>, <%- comment.time %>:</div>
+    <div class="planning-mrp-comment-bd"><%= comment.text %></div>
+  </div>
+  <% }) %>
+</div>
