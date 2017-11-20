@@ -696,8 +696,14 @@ module.exports = function setUpGenerator(app, module)
 
         sapOrders.forEach(sapOrder =>
         {
-          const hardComponents = state.settings.mrp(sapOrder.mrp).hardComponents;
-          const planOrder = Plan.createPlanOrder(source, sapOrder, hardComponents);
+          const mrpSettings = state.settings.mrp(sapOrder.mrp);
+
+          if (!mrpSettings)
+          {
+            return;
+          }
+
+          const planOrder = Plan.createPlanOrder(source, sapOrder, mrpSettings.hardComponents);
 
           state.orders.set(sapOrder._id, planOrder);
         });

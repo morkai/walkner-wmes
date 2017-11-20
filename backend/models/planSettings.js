@@ -143,6 +143,11 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       {
         const mrp = this.mrps.find(mrp => mrp._id === mrpId);
 
+        if (!mrp)
+        {
+          return null;
+        }
+
         mrps.set(mrpId, Object.assign(mrp.toObject(), {
           hardComponents: new Set(mrp.hardComponents)
         }));
