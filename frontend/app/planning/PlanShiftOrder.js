@@ -7,9 +7,5 @@ define([
 ) {
   'use strict';
 
-  return Model.extend({
-
-
-
-  });
+  return Model.extend({});
 });

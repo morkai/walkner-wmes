@@ -6,7 +6,6 @@ module.exports = function setUpProdLogEntriesRoutes(app, prodLogEntriesModule)
 {
   const express = app[prodLogEntriesModule.config.expressId];
   const userModule = app[prodLogEntriesModule.config.userId];
-  const orgUnitsModule = app[prodLogEntriesModule.config.orgUnitsId];
   const mongoose = app[prodLogEntriesModule.config.mongooseId];
   const ProdLogEntry = mongoose.model('ProdLogEntry');
 

@@ -7,7 +7,6 @@ const step = require('h5.step');
 
 module.exports = function setUpPaintShopRoutes(app, module)
 {
-  const fteModule = app[module.config.fteId];
   const express = app[module.config.expressId];
   const userModule = app[module.config.userId];
   const mongoose = app[module.config.mongooseId];

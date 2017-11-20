@@ -102,7 +102,7 @@ define([
   };
 
   /**
-   * @param {function|object|string|Array.<Object|string>} breadcrumbs
+   * @param {function|Object|string|Array.<Object|string>} breadcrumbs
    * @param {string|function} breadcrumbs.label
    * @param {Object} [context]
    * @returns {PrintLayout}

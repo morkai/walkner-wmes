@@ -301,7 +301,7 @@ function generatePages(firstPageNr, lastPageNr, currentPage)
   return pages;
 }
 
-function showMarks(marks)
+function showMarks(marks) // eslint-disable-line no-unused-vars
 {
   var anyMarksOnCurrentPage = false;
   var currentPage = viewer.index + 1;

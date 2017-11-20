@@ -169,7 +169,7 @@ define([
 
     toString: function()
     {
-      return this.serializeToString()
+      return this.serializeToString();
     }
 
   }, {

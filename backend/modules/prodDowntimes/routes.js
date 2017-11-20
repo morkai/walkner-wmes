@@ -145,32 +145,6 @@ module.exports = function setUpProdDowntimesRoutes(app, pdModule)
     return next();
   }
 
-  function getProdLineIds(prodFlowIds)
-  {
-    const prodLineIds = [];
-    const workCenterIds = {};
-
-    _.forEach(orgUnitsModule.getAllByType('workCenter'), function(workCenter)
-    {
-      const wcProdFlow = workCenter.get('prodFlow');
-
-      if (wcProdFlow && prodFlowIds[wcProdFlow])
-      {
-        workCenterIds[workCenter.get('_id')] = true;
-      }
-    });
-
-    _.forEach(orgUnitsModule.getAllByType('prodLine'), function(prodLine)
-    {
-      if (workCenterIds[prodLine.get('workCenter')])
-      {
-        prodLineIds.push(prodLine.get('_id'));
-      }
-    });
-
-    return prodLineIds;
-  }
-
   function exportProdDowntime(doc)
   {
     if (!doc.finishedAt)
