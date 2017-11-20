@@ -2448,7 +2448,12 @@ module.exports = function setUpGenerator(app, module)
         return;
       }
 
-      const mrp = state.orders.get(orderNo).mrp;
+      const {ignored, mrp} = state.orders.get(orderNo);
+
+      if (ignored)
+      {
+        return;
+      }
 
       if (checkedMrps.has(mrp))
       {
