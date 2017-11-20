@@ -4,6 +4,7 @@
 
 const _ = require('lodash');
 const step = require('h5.step');
+const moment = require('moment');
 
 module.exports = function editPlanOrderRoute(app, module, req, res, next)
 {
@@ -12,24 +13,33 @@ module.exports = function editPlanOrderRoute(app, module, req, res, next)
   const Plan = mongoose.model('Plan');
   const PlanChange = mongoose.model('PlanChange');
 
+  const planId = moment.utc(req.params.plan, 'YYYY-MM-DD').toDate();
+
   step(
     function()
     {
-      Plan.findById(req.params.plan).exec(this.next());
+      const pipeline = [
+        {$match: {_id: planId}},
+        {$unwind: '$orders'},
+        {$match: {'orders._id': req.params.order}},
+        {$project: {
+          _id: '$orders._id',
+          quantityPlan: '$orders.quantityPlan',
+          ignored: '$orders.ignored',
+          urgent: '$orders.urgent'
+        }}
+      ];
+
+      Plan.aggregate(pipeline, this.next());
     },
-    function(err, plan)
+    function(err, results)
     {
       if (err)
       {
         return this.skip(err);
       }
 
-      if (!plan)
-      {
-        return this.skip(app.createError('PLAN_NOT_FOUND', 404));
-      }
-
-      const planOrder = plan.orders.find(o => o._id === req.params.order);
+      const planOrder = results[0];
 
       if (!planOrder)
       {
@@ -37,24 +47,28 @@ module.exports = function editPlanOrderRoute(app, module, req, res, next)
       }
 
       const newData = _.pick(req.body, ['quantityPlan', 'ignored', 'urgent']);
-      const oldData = _.pick(planOrder, Object.keys(newData));
-
-      planOrder.set(newData);
-
-      if (!planOrder.isModified())
-      {
-        return this.skip();
-      }
+      const changedProps = Object.keys(newData);
+      const oldData = _.pick(planOrder, changedProps);
 
       const changes = {};
+      const update = {};
 
-      planOrder.modifiedPaths().forEach(property =>
+      changedProps.forEach(prop =>
       {
-        changes[property] = [oldData[property], newData[property]];
+        const oldValue = oldData[prop];
+        const newValue = newData[prop];
+
+        if (newValue !== oldValue)
+        {
+          changes[prop] = [oldValue, newValue];
+          update[`orders.$.${prop}`] = newValue;
+        }
       });
 
+      Plan.collection.update({_id: planId, 'orders._id': planOrder._id}, {$set: update}, this.parallel());
+
       const planChange = new PlanChange({
-        plan: plan._id,
+        plan: planId,
         date: new Date(),
         user: userModule.createUserInfo(req.session.user, req),
         data: {
@@ -67,7 +81,6 @@ module.exports = function editPlanOrderRoute(app, module, req, res, next)
         }
       });
 
-      plan.save(this.parallel());
       planChange.save(this.parallel());
     },
     function(err, plan, planChange)
@@ -87,7 +100,7 @@ module.exports = function editPlanOrderRoute(app, module, req, res, next)
       app.broker.publish('planning.changes.created', planChange.toJSON());
 
       app.broker.publish('planning.generator.requested', {
-        date: plan._id
+        date: planId
       });
     }
   );

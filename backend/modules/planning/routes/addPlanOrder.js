@@ -28,6 +28,7 @@ module.exports = function addPlanOrderRoute(app, module, req, res, next)
 
       PlanSettings
         .findById(req.params.plan)
+        .lean()
         .exec(this.parallel());
     },
     function(err, sapOrder, plan, settings)

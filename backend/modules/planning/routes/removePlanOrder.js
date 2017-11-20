@@ -15,7 +15,7 @@ module.exports = function removePlanOrderRoute(app, module, req, res, next)
     function()
     {
       Plan
-        .findOne({_id: req.params.plan, 'orders._id': req.params.order}, {orders: 1})
+        .findOne({_id: req.params.plan, 'orders._id': req.params.order}, {'orders._id': 1, 'orders.source': 1})
         .lean()
         .exec(this.parallel());
     },
