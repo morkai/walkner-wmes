@@ -26,24 +26,22 @@ define([
 
     actions: function(layout)
     {
-      var privileges = function()
-      {
-        return user.isAllowedTo('HOURLY_PLANS:MANAGE', 'PROD_DATA:MANAGE');
-      };
-
       return [
         {
           label: t.bound('hourlyPlans', 'PAGE_ACTION:add'),
           href: '#hourlyPlans;add',
           icon: 'plus',
-          privileges: privileges
+          privileges: function()
+          {
+            return user.isAllowedTo('HOURLY_PLANS:MANAGE', 'PROD_DATA:MANAGE');
+          }
         },
         pageActions.export(layout, this, this.collection),
         {
           label: t.bound('hourlyPlans', 'PAGE_ACTION:planning'),
-          href: '#dailyMrpPlans',
+          href: '#planning/plans',
           icon: 'calculator',
-          privileges: privileges
+          privileges: 'PLANNING:VIEW'
         }
       ];
     },

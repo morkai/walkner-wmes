@@ -80,61 +80,6 @@ define([
     });
   });
 
-  router.map('/hourlyPlans;planning', canManage, function(req)
-  {
-    broker.publish('router.navigate', {
-      url: '/dailyMrpPlans?' + req.rql,
-      replace: true,
-      trigger: true
-    });
-  });
-
-  router.map('/dailyMrpPlans;list', canManage, function(req)
-  {
-    viewport.loadPage(
-      [
-        'app/hourlyPlans/DailyMrpPlanCollection',
-        'app/hourlyPlans/pages/DailyMrpPlanListPage',
-        nls
-      ],
-      function(DailyMrpPlanCollection, DailyMrpPlanListPage)
-      {
-        return new DailyMrpPlanListPage({
-          collection: new DailyMrpPlanCollection(null, {
-            rqlQuery: req.rql,
-            paginate: false
-          })
-        });
-      }
-    );
-  });
-
-  router.map('/dailyMrpPlans', canManage, function(req)
-  {
-    viewport.loadPage(
-      [
-        'app/hourlyPlans/settings',
-        'app/hourlyPlans/DailyMrpPlanCollection',
-        'app/hourlyPlans/pages/PlanningPage',
-        nls
-      ],
-      function(settings, DailyMrpPlanCollection, PlanningPage)
-      {
-        return new PlanningPage({
-          model: new DailyMrpPlanCollection(null, {
-            settings: settings.acquire(),
-            rqlQuery: fixRelativeDateInRql(req.rql, {
-              property: 'date',
-              shift: true,
-              format: 'YYYY-MM-DD'
-            }),
-            paginate: false
-          })
-        });
-      }
-    );
-  });
-
   router.map('/hourlyPlans;add', canManage, function(req)
   {
     viewport.loadPage(['app/hourlyPlans/pages/HourlyPlanAddFormPage', nls], function(HourlyPlanAddFormPage)
