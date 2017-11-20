@@ -1435,6 +1435,7 @@ module.exports = function setUpGenerator(app, module)
     state.settings.lines.forEach(lineId =>
     {
       const lineSettings = state.settings.line(lineId);
+      const planLine = state.plan.lines.find(l => l._id === lineId);
       const lineState = {
         _id: lineId,
         completed: false,
@@ -1449,7 +1450,7 @@ module.exports = function setUpGenerator(app, module)
         plannedOrdersList: [],
         hourlyPlan: EMPTY_HOURLY_PLAN.slice(),
         hash: '',
-        initialHash: state.plan.lines.find(l => l._id === lineId).hash
+        initialHash: planLine ? planLine.hash : ''
       };
 
       lineState.shiftNo = getShiftFromMoment(lineState.activeFrom);
