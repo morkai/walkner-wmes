@@ -541,9 +541,17 @@ define([
           line = view.model.lines.add({_id: selectedLine}).get(selectedLine);
         }
 
+        var lineMrpPriority = line ? line.get('mrpPriority') : [];
+
         $mrpPriority
           .select2('enable', true)
-          .select2('val', line ? line.get('mrpPriority') : []);
+          .select2('data', lineMrpPriority.map(function(mrp)
+          {
+            return {
+              id: mrp,
+              text: mrp
+            };
+          }));
 
         var selectedMrp = view.$id('mrp').select2('data');
 
