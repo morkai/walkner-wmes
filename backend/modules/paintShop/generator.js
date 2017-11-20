@@ -228,12 +228,15 @@ module.exports = function(app, module)
       },
       function()
       {
+        this.multiColorOrders = new Set();
+
         const newOrders = Array.from(this.newOrders.values());
 
         this.newOrders.clear();
 
         newOrders.forEach(newOrder =>
         {
+          const originalNewOrder = newOrder;
           const {childOrders} = newOrder;
 
           if (!childOrders.length)
@@ -270,6 +273,8 @@ module.exports = function(app, module)
               });
 
               delete childOrder.paint;
+
+              this.multiColorOrders.add(newOrder);
             }
           });
 
@@ -277,7 +282,17 @@ module.exports = function(app, module)
 
           this.newOrders.set(newOrder._id, newOrder);
 
+          if (newOrder !== originalNewOrder)
+          {
+            this.multiColorOrders.add(newOrder);
+          }
+
           newOrderIds.push(newOrder._id);
+
+          if (newOrderIds.length === 1)
+          {
+            return;
+          }
 
           newOrderIds.forEach(newOrderId =>
           {
@@ -304,9 +319,17 @@ module.exports = function(app, module)
       },
       function()
       {
-        const newOrders = Array.from(this.newOrders.values());
+        const mainOrders = [];
 
-        newOrders.sort((a, b) =>
+        this.newOrders.forEach(newOrder =>
+        {
+          if (!this.multiColorOrders.has(newOrder))
+          {
+            mainOrders.push(newOrder);
+          }
+        });
+
+        mainOrders.sort((a, b) =>
         {
           const cmp = a.paint.nc12.localeCompare(b.paint.nc12);
 
@@ -315,23 +338,33 @@ module.exports = function(app, module)
             return cmp;
           }
 
-          if (a.startTime === b.startTime)
-          {
-            return 0;
-          }
-
-          if (a.startTime === 0 && b.startTime !== 0)
-          {
-            return 1;
-          }
-
-          if (a.startTime !== 0 && b.startTime === 0)
-          {
-            return -1;
-          }
-
-          return a.startTime - b.startTime;
+          return sortByStartTime(a, b);
         });
+
+        const newOrders = [];
+        const followups = new Set();
+        let lastPaint = null;
+
+        mainOrders.forEach(mainOrder =>
+        {
+          if (lastPaint !== null && lastPaint.nc12 !== mainOrder.paint.nc12)
+          {
+            Array.from(followups).sort(sortByStartTime).forEach(splitOrder => newOrders.push(splitOrder));
+
+            followups.clear();
+          }
+
+          newOrders.push(mainOrder);
+
+          mainOrder.followups.forEach(followupId =>
+          {
+            followups.add(this.newOrders.get(followupId));
+          });
+
+          lastPaint = mainOrder.paint;
+        });
+
+        Array.from(followups).sort(sortByStartTime).forEach(splitOrder => newOrders.push(splitOrder));
 
         newOrders.forEach((newOrder, i) =>
         {
@@ -421,6 +454,26 @@ module.exports = function(app, module)
         }
       }
     );
+  }
+
+  function sortByStartTime(a, b)
+  {
+    if (a.startTime === b.startTime)
+    {
+      return 0;
+    }
+
+    if (a.startTime === 0 && b.startTime !== 0)
+    {
+      return 1;
+    }
+
+    if (a.startTime !== 0 && b.startTime === 0)
+    {
+      return -1;
+    }
+
+    return a.startTime - b.startTime;
   }
 
   function compareOrders(oldOrder, newOrder)
