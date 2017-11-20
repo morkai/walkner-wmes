@@ -241,9 +241,9 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
 
     const totalsKeys = Object.keys(overallTotals);
 
-    _.forEach(this.tasks, function(task)
+    this.tasks.forEach(task =>
     {
-      const childTask = task.parent !== null;
+      const childTask = task.childCount === 0;
 
       task.totals = {};
 
