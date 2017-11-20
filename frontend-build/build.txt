@@ -152,10 +152,6 @@ app/hourlyPlans/assets/main.css
 ----------------
 app/hourlyPlans/assets/main.css
 
-app/hourlyPlans/assets/planning.css
-----------------
-app/hourlyPlans/assets/planning.css
-
 app/icpo/assets/main.css
 ----------------
 app/icpo/assets/main.css
@@ -1308,7 +1304,6 @@ app/planning/templates/planFilter.js
 app/planning/views/PlanFilterView.js
 app/prodShifts/ProdShiftCollection.js
 app/planning/templates/toolbar.js
-app/planning/templates/toolbarSetHourlyPlan.js
 app/planning/templates/toolbarPrintLineList.js
 app/planning/templates/printPage.js
 app/planning/views/PlanMrpToolbarView.js

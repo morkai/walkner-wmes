@@ -1,3 +1,0 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
-define(["underscore","jquery","../socket","../core/Collection","../data/orgUnits","./DailyMrpPlanLine"],function(e,n,i,t,r,a){"use strict";return t.extend({model:a,initialize:function(e,n){this.plan=n.plan},update:function(n){var i=this;if(!e.isEqual(i.pluck("_id"),n))return n=n.map(function(e){var n=i.get(e);if(!n){var t=r.getByTypeAndId("prodLine",e);n=new a({_id:t.id,name:t.get("description")})}return n}),this.reset(n),i.plan.saveLines()}})});
