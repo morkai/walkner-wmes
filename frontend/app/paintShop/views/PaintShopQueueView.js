@@ -213,7 +213,7 @@ define([
       }));
     },
 
-    onFocus: function(orderId)
+    onFocus: function(orderId, options)
     {
       var orderEl = this.$order(orderId)[0];
 
@@ -222,6 +222,11 @@ define([
         this.$el.animate({scrollTop: orderEl.offsetTop + 1}, 200);
 
         this.lastFocusedOrder = orderId;
+
+        if (options && options.showDetails)
+        {
+          this.handleOrderClick(orderId);
+        }
       }
       else
       {

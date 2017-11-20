@@ -191,7 +191,7 @@ define([
           view.model.selectMrp(order.get('mrp'));
         }
 
-        view.model.trigger('focus', order.id);
+        view.model.trigger('focus', order.id, {showDetails: true});
 
         return;
       }
@@ -226,7 +226,7 @@ define([
           if (view.model.selectedMrp !== order.mrp)
           {
             view.model.selectMrp(order.mrp);
-            view.model.trigger('focus', order._id);
+            view.model.trigger('focus', order._id, {showDetails: true});
           }
         });
       });
