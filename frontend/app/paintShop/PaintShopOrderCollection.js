@@ -111,6 +111,11 @@ define([
       return this.selectedMrp === 'all' || order.get('mrp') === this.selectedMrp;
     },
 
+    getFirstByOrderNo: function(orderNo)
+    {
+      return this.find(function(o) { return o.get('order') === orderNo; });
+    },
+
     serialize: function()
     {
       var orders = this;

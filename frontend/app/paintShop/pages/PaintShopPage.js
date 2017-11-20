@@ -33,7 +33,7 @@ define([
 ) {
   'use strict';
 
-  var IS_EMBEDDED = window.parent !== window;
+  var IS_EMBEDDED = true || window.parent !== window;
 
   return View.extend({
 
@@ -107,14 +107,7 @@ define([
     events: {
       'click .paintShop-tab[data-mrp]': function(e)
       {
-        this.$('.paintShop-tab.is-active').removeClass('is-active');
-
         this.orders.selectMrp(e.currentTarget.dataset.mrp);
-
-        if (this.orders.selectedMrp !== 'all')
-        {
-          this.$(e.currentTarget).addClass('is-active');
-        }
       },
 
       'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
@@ -188,11 +181,13 @@ define([
       this.allListView = new PaintShopListView({
         model: this.orders,
         showTimes: false,
-        filter: null
+        showSearch: true,
+        vkb: this.vkbView
       });
       this.workListView = new PaintShopListView({
         model: this.orders,
         showTimes: true,
+        showSearch: false,
         filter: function(psOrder)
         {
           return psOrder.status === 'started' || psOrder.status === 'finished';
@@ -406,6 +401,13 @@ define([
     onMrpSelected: function()
     {
       this.updateUrl();
+
+      this.$('.paintShop-tab.is-active').removeClass('is-active');
+
+      if (this.orders.selectedMrp !== 'all')
+      {
+        this.$('.paintShop-tab[data-mrp="' + this.orders.selectedMrp + '"]').addClass('is-active');
+      }
     },
 
     onBreadcrumbsClick: function(e)

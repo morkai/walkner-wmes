@@ -57,3 +57,26 @@
   width: 125px;
   font-size: 24px;
 }
+.paintShop-list-search {
+  position: fixed;
+  left: 15px;
+  bottom: 64px;
+  width: 182px;
+  height: 52px;
+  font-size: 32px;
+  text-align: center;
+  background-color: #fff;
+  border: 1px solid #333;
+}
+.paintShop-list-search:disabled {
+  background-color: #fcf8e3;
+}
+.paintShop-list-search.is-empty {
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+}
+.paintShop-is-fullscreen .paintShop-list-search {
+  bottom: 15px;
+}

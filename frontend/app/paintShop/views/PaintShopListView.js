@@ -4,6 +4,7 @@ define([
   'underscore',
   'jquery',
   'app/i18n',
+  'app/time',
   'app/viewport',
   'app/core/View',
   'app/paintShop/templates/list'
@@ -11,6 +12,7 @@ define([
   _,
   $,
   t,
+  time,
   viewport,
   View,
   listTemplate
@@ -46,7 +48,29 @@ define([
 
         this.lastClickEvent = null;
       },
-      'scroll': 'onScroll'
+      'scroll': 'onScroll',
+      'focus #-search': function(e)
+      {
+        if (this.options.vkb)
+        {
+          clearTimeout(this.timers.hideVkb);
+
+          this.options.vkb.show(e.target, this.onVkbValueChange);
+          this.options.vkb.$el.css({
+            left: '195px',
+            bottom: '67px',
+            marginLeft: '0'
+          });
+        }
+      },
+      'blur #-search': function()
+      {
+        if (this.options.vkb)
+        {
+          this.scheduleHideVkb();
+        }
+      },
+      'input #-search': 'onVkbValueChange'
     },
 
     initialize: function()
@@ -54,10 +78,19 @@ define([
       this.lastClickEvent = null;
       this.lastVisibleItem = null;
       this.onScroll = _.debounce(this.onScroll.bind(this), 100, false);
+      this.onVkbValueChange = this.onVkbValueChange.bind(this);
 
       this.listenTo(this.model, 'reset', this.render);
       this.listenTo(this.model, 'change', this.onChange);
       this.listenTo(this.model, 'mrpSelected', this.onMrpSelected);
+    },
+
+    destroy: function()
+    {
+      if (this.options.vkb)
+      {
+        this.options.vkb.hide();
+      }
     },
 
     serialize: function()
@@ -65,6 +98,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         showTimes: this.options.showTimes,
+        showSearch: this.options.showSearch,
         selectedMrp: this.model.selectedMrp,
         orders: this.serializeOrders()
       };
@@ -109,6 +143,131 @@ define([
       if (orderId)
       {
         this.model.trigger('focus', orderId);
+      }
+    },
+
+    scheduleHideVkb: function()
+    {
+      var view = this;
+
+      clearTimeout(view.timers.hideVkb);
+
+      if (!view.options.vkb.isVisible())
+      {
+        return;
+      }
+
+      view.timers.hideVkb = setTimeout(function()
+      {
+        view.options.vkb.hide();
+        view.options.vkb.$el.css({
+          left: '',
+          bottom: '',
+          marginLeft: ''
+        });
+
+        view.$id('search').val('').addClass('is-empty').css('background', '');
+      }, 250);
+    },
+
+    searchOrder: function(orderNo)
+    {
+      var view = this;
+
+      if (view.options.vkb)
+      {
+        view.options.vkb.hide();
+      }
+
+      var $search = view.$id('search').blur();
+      var order = view.model.getFirstByOrderNo(orderNo);
+
+      if (order)
+      {
+        $search.val('').addClass('is-empty').css('background', '');
+
+        if (order.get('mrp') !== view.model.selectedMrp)
+        {
+          view.model.selectMrp(order.get('mrp'));
+        }
+
+        view.model.trigger('focus', order.id);
+
+        return;
+      }
+
+      $search.prop('disabled', true);
+
+      viewport.msg.loading();
+
+      var req = this.ajax({
+        url: '/paintShop/orders?order=' + orderNo + '&select(date,mrp)&limit(1)'
+      });
+
+      req.fail(fail);
+
+      req.done(function(res)
+      {
+        if (res.totalCount === 0)
+        {
+          return fail();
+        }
+
+        var order = res.collection[0];
+
+        view.model.setDateFilter(time.utc.format(order.date, 'YYYY-MM-DD'));
+
+        var req = view.model.fetch({reset: true});
+
+        req.fail(fail);
+
+        req.done(function()
+        {
+          if (view.model.selectedMrp !== order.mrp)
+          {
+            view.model.selectMrp(order.mrp);
+            view.model.trigger('focus', order._id);
+          }
+        });
+      });
+
+      req.always(function()
+      {
+        viewport.msg.loaded();
+      });
+
+      function fail()
+      {
+        viewport.msg.show({
+          type: 'warning',
+          time: 2500,
+          text: t('paintShop', 'MSG:search:failure')
+        });
+
+        $search.css('background', '#f2dede');
+
+        setTimeout(function()
+        {
+          $search
+            .prop('disabled', false)
+            .val('')
+            .addClass('is-empty')
+            .css('background', '')
+            .focus();
+        }, 1337);
+      }
+    },
+
+    onVkbValueChange: function()
+    {
+      var $search = this.$id('search');
+      var orderNo = $search.val();
+
+      $search.toggleClass('is-empty', orderNo === '').css('background', /[^0-9]+/.test(orderNo) ? '#f2dede' : '');
+
+      if (/^[0-9]{9}$/.test(orderNo))
+      {
+        this.searchOrder(orderNo);
       }
     },
 

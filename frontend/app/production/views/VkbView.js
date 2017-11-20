@@ -105,22 +105,27 @@ define([
     {
       var view = this;
 
+      if (view.fieldEl === fieldEl && view.onValueChange === onValueChange)
+      {
+        return;
+      }
+
       Object.keys(this.mode).forEach(function(mode) { view.mode[mode] = false; });
 
       (fieldEl.dataset.vkb || '').split(' ').forEach(function(mode) { view.mode[mode] = true; });
 
-      this.render();
+      view.render();
 
-      this.$el.removeClass('is-repositioned hidden');
+      view.$el.removeClass('is-repositioned hidden');
 
       $('.is-vkb-focused').removeClass('is-vkb-focused');
 
       fieldEl.classList.add('is-vkb-focused');
 
-      this.fieldEl = fieldEl;
-      this.onValueChange = onValueChange;
+      view.fieldEl = fieldEl;
+      view.onValueChange = onValueChange;
 
-      this.reposition();
+      view.reposition();
     },
 
     hide: function()
