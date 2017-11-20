@@ -162,7 +162,7 @@ module.exports = function(app, module)
         {
           const leadingOrder = this.newOrders.get(childOrder.leadingOrder);
 
-          if (!leadingOrder || _.isEmpty(childOrder.bom))
+          if (!leadingOrder || _.isEmpty(childOrder.bom) || childOrder._id === leadingOrder._id)
           {
             return;
           }
