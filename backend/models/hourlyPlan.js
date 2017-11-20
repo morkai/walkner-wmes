@@ -8,6 +8,12 @@ const step = require('h5.step');
 
 module.exports = function setupHourlyPlanModel(app, mongoose)
 {
+  const HOUR_TO_INDEX = [
+    18, 19, 20, 21, 22, 23, 0, 1,
+    2, 3, 4, 5, 6, 7, 8, 9,
+    10, 11, 12, 13, 14, 15, 16, 17
+  ];
+
   const hourlyPlanFlowSchema = new mongoose.Schema({
     id: mongoose.Schema.Types.ObjectId,
     name: String,
@@ -60,6 +66,20 @@ module.exports = function setupHourlyPlanModel(app, mongoose)
   hourlyPlanSchema.index({division: 1});
 
   hourlyPlanSchema.statics.TOPIC_PREFIX = 'hourlyPlans';
+
+  hourlyPlanSchema.statics.createEmptyHourlyPlan = function()
+  {
+    return [
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0
+    ];
+  };
+
+  hourlyPlanSchema.statics.getIndexFromHour = function(h)
+  {
+    return HOUR_TO_INDEX[h];
+  };
 
   hourlyPlanSchema.statics.createForShift = function(options, creator, done)
   {

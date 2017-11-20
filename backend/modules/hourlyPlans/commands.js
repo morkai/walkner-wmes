@@ -98,12 +98,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
         {
           app.broker.publish('hourlyPlans.created', {
             user: user,
-            model: {
-              _id: hourlyPlan._id,
-              division: condition.division,
-              date: condition.date,
-              shift: condition.shift
-            }
+            model: _.pick(hourlyPlan, ['_id', 'division', 'date', 'shift'])
           });
         }
 

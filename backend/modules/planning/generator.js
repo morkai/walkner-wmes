@@ -560,7 +560,7 @@ module.exports = function setUpGenerator(app, module)
       }
       else
       {
-        app.broker.publish('planning.changes.created', planChange.toCreatedMessage(state.plan));
+        app.broker.publish('planning.changes.created', planChange.toCreatedMessage(state.plan, state.new));
       }
     });
   }

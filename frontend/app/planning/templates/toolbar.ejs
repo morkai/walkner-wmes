@@ -22,9 +22,6 @@
         <% }) %>
       </ul>
     </div>
-    <% if (user.isAllowedTo('PLANNING:MANAGE', 'PLANNING:PLANNER')) { %>
-    <button id="<%- idPrefix %>-setHourlyPlan" type="button" class="btn btn-default" title="<%- t('planning', 'toolbar:setHourlyPlan') %>"><i class="fa fa-calendar"></i></button>
-    <% } %>
     <div id="<%- idPrefix %>-printLines" class="btn-group" role="group">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="<%- t('planning', 'toolbar:printPlan') %>" <%- lines.length ? '' : 'disabled' %>><i class="fa fa-print"></i></button>
       <ul class="dropdown-menu dropdown-menu-right">

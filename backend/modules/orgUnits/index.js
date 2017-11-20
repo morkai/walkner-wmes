@@ -401,9 +401,18 @@ exports.start = function startOrgUnitsModule(app, module)
 
   module.getProdLinesFor = function(orgUnitType, orgUnitId)
   {
-    const orgUnit = arguments.length === 2
-      ? this.getByTypeAndId(orgUnitType, orgUnitId)
-      : orgUnitType;
+    let orgUnit = null;
+
+    if (arguments.length === 2)
+    {
+      orgUnit = this.getByTypeAndId(orgUnitType, orgUnitId);
+    }
+    else
+    {
+      orgUnit = orgUnitType;
+      orgUnitType = this.getType(orgUnit);
+      orgUnitId = orgUnit._id.toString();
+    }
 
     if (!orgUnit)
     {

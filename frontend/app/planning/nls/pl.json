@@ -33,8 +33,6 @@
   "toolbar:printPlan": "Drukuj plan linii",
   "toolbar:printPlan:all": "Wszystkie linie",
   "toolbar:showTimes": "Pokazuj czasy",
-  "toolbar:setHourlyPlan": "Ustaw ilości godzinowe",
-  "toolbar:setHourlyPlan:cancel": "Anuluj",
   "toolbar:copyOrderList": "Kopiuj listę zaplanowanych\nzleceń do schowka",
   "toolbar:copyOrderList:0": "Wszystkie zmiany",
   "toolbar:copyOrderList:1": "I zmiana",
