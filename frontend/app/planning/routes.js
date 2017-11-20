@@ -65,12 +65,12 @@ define([
 
   router.map('/planning/plans/:id', canView, function(req)
   {
-    if (/^[0-9]+d$/.test(req.params.id))
+    if (/^-?[0-9]+d$/.test(req.params.id))
     {
       req.params.id = time.getMoment()
         .subtract(time.getMoment().hours() < 6 ? 1 : 0, 'days')
         .startOf('day')
-        .add(req.params.id.replace('d', ''), 'days')
+        .add(+req.params.id.replace('d', ''), 'days')
         .format('YYYY-MM-DD');
 
       broker.publish('router.navigate', {
@@ -100,7 +100,7 @@ define([
       var hours = moment.hours();
       var day = moment.day();
 
-      navbarView.$id('planning-2d').toggleClass('disabled', (day === 1 || day === 2 || day === 3) && hours < 17);
+      navbarView.$('.planning-navbar-2d').toggleClass('disabled', (day === 1 || day === 2 || day === 3) && hours < 17);
     }
 
     setTimeout(toggleNavbarPlanning2D, 60000);
