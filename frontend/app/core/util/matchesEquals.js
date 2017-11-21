@@ -9,11 +9,26 @@ define([
 
   return function matchesEquals(rqlQuery, name, value)
   {
+    if (value === undefined)
+    {
+      return true;
+    }
+
     var term = _.find(rqlQuery.selector.args, function(term)
     {
-      return term.name === 'eq' && term.args[0] === name;
+      return (term.name === 'eq' || term.name === 'in') && term.args[0] === name;
     });
 
-    return !term || term.args[1] === value;
+    if (!term)
+    {
+      return true;
+    }
+
+    if (term.args[0] === 'eq')
+    {
+      return term.args[1] === value;
+    }
+
+    return term.args[1].indexOf(value) !== -1;
   };
 });

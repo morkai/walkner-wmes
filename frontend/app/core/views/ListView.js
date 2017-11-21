@@ -29,6 +29,8 @@ define([
 
     paginationOptions: {},
 
+    refreshDelay: 3000,
+
     remoteTopics: function()
     {
       var topics = {};
@@ -274,14 +276,14 @@ define([
 
       var now = Date.now();
 
-      if (now - this.lastRefreshAt > 3000)
+      if (now - this.lastRefreshAt > this.refreshDelay)
       {
         this.lastRefreshAt = now;
         this.refreshCollectionNow();
       }
       else
       {
-        this.timers.refreshCollection = setTimeout(this.refreshCollectionNow.bind(this), 3000);
+        this.timers.refreshCollection = setTimeout(this.refreshCollectionNow.bind(this), this.refreshDelay);
       }
     },
 

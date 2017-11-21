@@ -60,7 +60,7 @@ define([
 
       return matchesProdLine(this.rqlQuery, message.prodLine)
         && matchesEquals(this.rqlQuery, 'orderId', message.orderId)
-        && matchesEquals(this.rqlQuery, 'operationNo', message.operationNo)
+        && matchesEquals(this.rqlQuery, 'orderMrp', message.orderMrp)
         && matchesEquals(this.rqlQuery, 'shift', message.shift);
     }
 

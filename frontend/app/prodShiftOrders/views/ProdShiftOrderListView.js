@@ -1,12 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/user',
   'app/viewport',
   'app/core/views/ListView',
   'app/data/prodLines',
   'app/orgUnits/util/renderOrgUnitPath'
 ], function(
+  _,
   user,
   viewport,
   ListView,
@@ -18,6 +20,8 @@ define([
   return ListView.extend({
 
     className: 'is-clickable is-colored',
+
+    refreshDelay: 6000,
 
     remoteTopics: {
       'prodShiftOrders.created.*': 'refreshIfMatches',
@@ -78,12 +82,33 @@ define([
         });
     },
 
-    refreshIfMatches: function(message)
+    refreshIfMatches: function(message, topic)
     {
-      if (this.collection.hasOrMatches(message))
+      if (!this.collection.hasOrMatches(message))
       {
-        this.refreshCollection();
+        return;
       }
+
+      if (this.isQuantityDoneMessage(topic, message))
+      {
+        return;
+      }
+
+      this.refreshCollection();
+    },
+
+    isQuantityDoneMessage: function(topic, message)
+    {
+      if (!/updated/.test(topic))
+      {
+        return false;
+      }
+
+      return /updated/.test(topic)
+        && _.isNumber(message.quantityDone)
+        && _.isNumber(message.totalQuantity)
+        && _.isNumber(message.avgTaktTime)
+        && _.isNumber(message.lastTaktTime);
     }
 
   });
