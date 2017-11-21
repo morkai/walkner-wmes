@@ -73,12 +73,33 @@ define([
         });
     },
 
-    refreshIfMatches: function(message)
+    refreshIfMatches: function(message, topic)
     {
-      if (this.collection.hasOrMatches(message))
+      if (!this.collection.hasOrMatches(message))
       {
-        this.refreshCollection();
+        return;
       }
+
+      if (this.isQuantityDoneMessage(topic, message))
+      {
+        var prodShift = this.collection.get(message._id);
+
+        if (prodShift)
+        {
+          prodShift.set('quantitiesDone', message.quantitiesDone);
+        }
+
+        return;
+      }
+
+      this.refreshCollection();
+    },
+
+    isQuantityDoneMessage: function(topic, message)
+    {
+      return /updated/.test(topic)
+        && Array.isArray(message.quantitiesDone)
+        && Object.keys(message).length === 2;
     }
 
   });
