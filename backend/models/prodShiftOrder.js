@@ -222,7 +222,10 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
 
       doc._changes.forEach(modifiedPath =>
       {
-        changes[modifiedPath] = doc.get(modifiedPath);
+        if (!modifiedPath.includes('.'))
+        {
+          changes[modifiedPath] = doc.get(modifiedPath);
+        }
       });
       doc._changes = null;
 

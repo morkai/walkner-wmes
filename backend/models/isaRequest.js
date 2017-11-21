@@ -97,9 +97,12 @@ module.exports = function setupIsaRequestModel(app, mongoose)
     {
       const changes = {_id: doc._id};
 
-      _.forEach(doc._changes, function(modifiedPath)
+      doc._changes.forEach(modifiedPath =>
       {
-        changes[modifiedPath] = doc.get(modifiedPath);
+        if (!modifiedPath.includes('.'))
+        {
+          changes[modifiedPath] = doc.get(modifiedPath);
+        }
       });
       doc._changes = null;
 
