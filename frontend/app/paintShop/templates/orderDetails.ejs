@@ -14,12 +14,13 @@
     <td colspan="8">
       <div class="paintShop-orderDetails-actions">
         <% if (order.status === 'new') { %>
-        <button class="btn btn-warning" type="button" data-action="start"><%- t('paintShop', 'action:start') %></button>
+        <button class="btn btn-info" type="button" data-action="start"><%- t('paintShop', 'action:start') %></button>
         <button class="btn btn-danger" type="button" data-action="cancel"><%- t('paintShop', 'action:cancel') %></button>
         <% } else if (order.status === 'started') { %>
         <button class="btn btn-success" type="button" data-action="finish"><%- t('paintShop', 'action:finish') %></button>
         <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
         <% } else { %>
+        <button class="btn btn-info" type="button" data-action="continue"><%- t('paintShop', 'action:continue') %></button>
         <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
         <% } %>
         <button class="btn btn-primary" type="button" data-action="comment"><%- t('paintShop', 'action:comment') %></button>

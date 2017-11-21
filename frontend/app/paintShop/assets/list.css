@@ -24,14 +24,18 @@
   cursor: pointer;
 }
 .paintShop-list-item[data-status="started"] {
-  background-color: #F0AD4E;
+  background-color: #5bc0de;
+  color: #000;
+}
+.paintShop-list-item[data-status="partial"] {
+  background-color: #f0ad4e;
 }
 .paintShop-list-item[data-status="finished"] {
-  background-color: #449D44;
+  background-color: #449d44;
   color: #fff;
 }
 .paintShop-list-item[data-status="cancelled"] {
-  background-color: #D9534F;
+  background-color: #d9534f;
   color: #fff;
 }
 .paintShop-list-item:hover {

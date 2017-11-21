@@ -85,6 +85,11 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
         changes.finishedAt = new Date();
         break;
 
+      case 'continue':
+        changes.status = 'started';
+        changes.finishedAt = null;
+        break;
+
       case 'reset':
         changes.status = 'new';
         changes.startedAt = null;

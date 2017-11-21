@@ -32,6 +32,7 @@
   "action:finish": "Zakończ",
   "action:cancel": "Ignoruj",
   "action:reset": "Resetuj",
+  "action:continue": "Kontynuuj",
   "action:comment": "Komentuj",
 
   "datePicker:d0": "Dzisiaj",
