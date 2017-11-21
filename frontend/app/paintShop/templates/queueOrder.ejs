@@ -30,6 +30,11 @@
         <i class="fa fa-truck"></i><span><%- order.placement %></span>
       </span>
       <% } %>
+      <% if (order.qtyDone) { %>
+      <span class="paintShop-property" data-property="qtyDone" title="<%- t('paintShop', 'PROPERTY:qtyDone') %>">
+        <i class="fa fa-check"></i><span><%- order.qtyDone.toLocaleString() %></span>
+      </span>
+      <% } %>
     </td>
     <td class="paintShop-property" rowspan="<%- order.rowSpan %>">
       <% if (order.startedAt) { %>

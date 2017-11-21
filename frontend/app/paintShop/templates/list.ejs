@@ -8,8 +8,12 @@
     <% if (showTimes && order.startedAtText) { %>
     <span class="paintShop-list-time"><i class="fa fa-hourglass-start"></i> <%- order.startedAtText %></span>
     <% } %>
-    <% if (showTimes && order.finishedAtText) { %>
+    <% if (showTimes) { %>
+    <% if (order.status === 'partial') { %>
+    <span class="paintShop-list-time"><i class="fa fa-check"></i> <%- order.qtyDone.toLocaleString() %>/<%- order.qty.toLocaleString() %></span>
+    <% } else if (order.finishedAtText) { %>
     <span class="paintShop-list-time"><i class="fa fa-hourglass-end"></i> <%- order.finishedAtText %></span>
+    <% } %>
     <% } %>
   </div>
   <% }) %>

@@ -18,6 +18,22 @@
   padding: 12px 0;
   font-size: 32px;
 }
+.paintShop-orderDetails-qtyDone {
+  flex: 1 1 0;
+  display: flex;
+}
+.paintShop-orderDetails-qtyDone > .form-control {
+  flex: 1 1 0;
+  padding: 0;
+  font-size: 48px;
+  height: 71px;
+  text-align: center;
+  border: 5px solid #5cb85c;
+}
+.paintShop-orderDetails-qtyDone > .btn {
+  flex: 1 1 0;
+  font-size: 32px;
+}
 .paintShop-orderDetails-filler {
   background: #333;
   border-bottom: 1px solid #333;

@@ -110,6 +110,7 @@ module.exports = function(app, module)
             nc12: o.nc12,
             name: o.name,
             qty: o.qty,
+            qtyDone: 0,
             mrp: o.mrp,
             placement: '',
             startTime: 0,

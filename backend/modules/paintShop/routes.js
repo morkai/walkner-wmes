@@ -2,6 +2,7 @@
 
 'use strict';
 
+const _ = require('lodash');
 const moment = require('moment');
 const step = require('h5.step');
 
@@ -73,6 +74,8 @@ module.exports = function setUpPaintShopRoutes(app, module)
 
   function updatePaintShopOrderRoute(req, res, next)
   {
+    const {action, comment, qtyDone} = req.body;
+
     step(
       function()
       {
@@ -90,7 +93,7 @@ module.exports = function setUpPaintShopRoutes(app, module)
           return this.skip(app.createError('NOT_FOUND', 404));
         }
 
-        psOrder.act(req.body.action, req.body.comment, this.next());
+        psOrder.act(action, comment, qtyDone, this.next());
       },
       function(err, changes)
       {
@@ -104,11 +107,11 @@ module.exports = function setUpPaintShopRoutes(app, module)
         app.broker.publish(`paintShop.orders.updated.${req.params.id}`, changes);
 
         PaintShopEvent.record({
-          type: req.body.action,
+          type: action,
           time: new Date(),
           user: userModule.createUserInfo(req.session.user, req),
           order: req.params.id,
-          data: changes.comment ? {comment: changes.comment} : {}
+          data: _.pick(changes, ['comment', 'qtyDone'])
         });
       }
     );

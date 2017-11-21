@@ -32,12 +32,35 @@ define([
     dialogClassName: 'paintShop-orderDetails-dialog',
 
     events: {
+      'focus #-qtyDone': function(e)
+      {
+        if (!this.vkb)
+        {
+          return;
+        }
+
+        clearTimeout(this.timers.hideVkb);
+
+        if (!this.vkb.show(e.currentTarget))
+        {
+          return;
+        }
+
+        this.vkb.$el.css({
+          top: 'auto',
+          bottom: '30px'
+        });
+
+        this.resizeChanges();
+      },
+      'blur #-qtyDone': 'scheduleHideVkb',
       'click .btn[data-action]': function(e)
       {
         var view = this;
         var $comment = view.$changes.find('.paintShop-orderChanges-comment');
         var comment = $comment.val().trim();
         var action = e.currentTarget.dataset.action;
+        var qtyDone = Math.max(0, parseInt(view.$id('qtyDone').val(), 10) || 0);
 
         if (action === 'comment' && comment.length === 0)
         {
@@ -48,7 +71,7 @@ define([
 
         var $actions = view.$('.btn').prop('disabled', true);
 
-        view.act(action, comment)
+        view.act(action, comment, qtyDone)
           .fail(function() { $actions.prop('disabled', false); })
           .done(function() { view.closeDialog(); });
       }
@@ -56,6 +79,7 @@ define([
 
     initialize: function()
     {
+      this.vkb = this.options.vkb;
       this.psEvents = PaintShopEventCollection.forOrder(this.model.id);
 
       this.listenTo(this.model, 'change', this.reloadChanges.bind(this));
@@ -67,9 +91,9 @@ define([
     {
       $(window).off('.' + this.idPrefix);
 
-      if (this.options.vkb)
+      if (this.vkb)
       {
-        this.options.vkb.hide();
+        this.vkb.hide();
       }
 
       if (this.$changes)
@@ -168,15 +192,20 @@ define([
 
     scheduleHideVkb: function()
     {
-      var view = this;
+      clearTimeout(this.timers.hideVkb);
 
-      clearTimeout(view.timers.hideVkb);
+      this.timers.hideVkb = setTimeout(this.hideVkb.bind(this), 250);
+    },
 
-      view.timers.hideVkb = setTimeout(function()
+    hideVkb: function()
+    {
+      clearTimeout(this.timers.hideVkb);
+
+      if (this.vkb)
       {
-        view.options.vkb.hide();
-        view.resizeChanges();
-      }, 500);
+        this.vkb.hide();
+        this.resizeChanges();
+      }
     },
 
     resizeChanges: function()
@@ -194,7 +223,7 @@ define([
 
     calcChangesHeight: function()
     {
-      var vkbHeight = this.options.vkb ? this.options.vkb.$el.outerHeight() : 0;
+      var vkbHeight = this.vkb ? this.vkb.$el.outerHeight() : 0;
 
       if (!vkbHeight)
       {
@@ -204,12 +233,13 @@ define([
       return Math.max(window.innerHeight - 2 - 30 * 2 - 30 - vkbHeight, 0);
     },
 
-    act: function(action, comment)
+    act: function(action, comment, qtyDone)
     {
       var reqData = {
         action: action,
         orderId: this.model.id,
-        comment: comment
+        comment: comment,
+        qtyDone: qtyDone
       };
 
       return this.model.collection.act(reqData, function(err)

@@ -14,6 +14,7 @@
   "PROPERTY:nc12": "12NC wyrobu",
   "PROPERTY:name": "Nazwa wyrobu/komponentu",
   "PROPERTY:qty": "Ilość",
+  "PROPERTY:qtyDone": "Ilość pomalowana",
   "PROPERTY:mrp": "Przepływ",
   "PROPERTY:startTime": "Początek montażu",
   "PROPERTY:placement": "Położenie",
@@ -50,5 +51,9 @@
 
   "empty": "Brak zleceń dla wybranego dnia.",
 
-  "orderChanges:change": "{type, select, start{Rozpoczęto} finish{Zakończono} cancel{Zignorowano} reset{Zresetowano} comment{Skomentowano} other{Zmieniono}} <time title='{timeLong}'>{timeAgo}</time> przez {user}"
+  "orderChanges:change": "{type, select, start{Rozpoczęto} finish{Zakończono} cancel{Zignorowano} reset{Zresetowano} comment{Skomentowano} other{Zmieniono}} <time title='{timeLong}'>{timeAgo}</time> przez {user}",
+
+  "parent:switchApps": "Zmień aplikację/Konfiguruj po 3s",
+  "parent:reboot": "Odśwież stronę/Restartuj komputer po 3s",
+  "parent:shutdown": "Wyłącz komputer po 3s"
 }

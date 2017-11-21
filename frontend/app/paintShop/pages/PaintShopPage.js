@@ -190,7 +190,7 @@ define([
         showSearch: false,
         filter: function(psOrder)
         {
-          return psOrder.status === 'started' || psOrder.status === 'finished';
+          return psOrder.status === 'started' || psOrder.status === 'finished' || psOrder.status === 'partial';
         },
         sort: function(a, b)
         {
@@ -202,6 +202,16 @@ define([
             }
 
             return -1;
+          }
+
+          if (a.status === 'partial')
+          {
+            if (a.status === b.status)
+            {
+              return a.startedAt - b.startedAt;
+            }
+
+            return b.status === 'started' ? 1 : -1;
           }
 
           return b.startedAt - a.startedAt;

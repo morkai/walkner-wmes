@@ -107,7 +107,7 @@ define([
 
       if (view.fieldEl === fieldEl && view.onValueChange === onValueChange)
       {
-        return;
+        return false;
       }
 
       Object.keys(this.mode).forEach(function(mode) { view.mode[mode] = false; });
@@ -126,6 +126,8 @@ define([
       view.onValueChange = onValueChange;
 
       view.reposition();
+
+      return true;
     },
 
     hide: function()

@@ -313,7 +313,7 @@ define([
         return;
       }
 
-      if ($item.length || this.options.filter(order.serialize()))
+      if ($item.length)
       {
         this.render();
       }

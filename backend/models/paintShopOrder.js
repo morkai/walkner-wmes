@@ -29,7 +29,7 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
     _id: String,
     status: {
       type: String,
-      enum: ['new', 'started', 'finished', 'cancelled'],
+      enum: ['new', 'started', 'partial', 'finished', 'cancelled'],
       default: 'new'
     },
     startedAt: Date,
@@ -41,6 +41,7 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
     nc12: String,
     name: String,
     qty: Number,
+    qtyDone: Number,
     mrp: String,
     placement: String,
     startTime: Number,
@@ -61,7 +62,7 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
   paintShopOrderSchema.index({status: 1, date: -1});
   paintShopOrderSchema.index({order: 1});
 
-  paintShopOrderSchema.methods.act = function(action, comment, done)
+  paintShopOrderSchema.methods.act = function(action, comment, qtyDone, done)
   {
     const changes = {
       _id: this._id
@@ -81,8 +82,9 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
         break;
 
       case 'finish':
-        changes.status = 'finished';
         changes.finishedAt = new Date();
+        changes.qtyDone = qtyDone > 0 ? qtyDone : this.qty;
+        changes.status = changes.qtyDone >= this.qty ? 'finished' : 'partial';
         break;
 
       case 'continue':
@@ -94,6 +96,7 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
         changes.status = 'new';
         changes.startedAt = null;
         changes.finishedAt = null;
+        changes.qtyDone = 0;
         break;
 
       case 'cancel':
