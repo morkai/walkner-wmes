@@ -5,6 +5,7 @@ define([
   'select2',
   'Sortable',
   'app/broker',
+  'app/user',
   'app/data/orgUnits',
   './ownMrps'
 ], function(
@@ -12,6 +13,7 @@ define([
   select2,
   Sortable,
   broker,
+  user,
   orgUnits,
   ownMrps
 ) {
@@ -22,6 +24,16 @@ define([
 
   function reload()
   {
+    var userMrps = (user.data.mrps || [])
+      .filter(function(mrp) { return !orgUnits.getByTypeAndId('mrpController', mrp); })
+      .map(function(mrp)
+      {
+        return {
+          id: mrp,
+          text: ''
+        };
+      });
+
     maxMrpLength = 0;
     mrps = orgUnits.getAllByType('mrpController')
       .filter(function(mrp)
@@ -40,6 +52,7 @@ define([
           text: mrp.get('description')
         };
       })
+      .concat(userMrps)
       .sort(function(a, b)
       {
         return a.id.localeCompare(b.id, undefined, {numeric: true});
@@ -48,10 +61,13 @@ define([
 
   broker.subscribe('mrpControllers.synced', reload);
 
-  reload();
-
   return function setUpMrpSelect2($input, options)
   {
+    if (mrps === null)
+    {
+      reload();
+    }
+
     $input.select2(_.assign({
       width: '300px',
       allowClear: true,
@@ -81,9 +97,17 @@ define([
         var html = ['<span class="text-mono">'];
 
         select2.util.markMatch(id, query.term, html, e);
-        html.push('</span><span class="text-small">: ');
-        select2.util.markMatch(item.text, query.term, html, e);
-        html.push('</span>');
+
+        if (item.text === '')
+        {
+          html.push('</span>');
+        }
+        else
+        {
+          html.push('</span><span class="text-small">: ');
+          select2.util.markMatch(item.text, query.term, html, e);
+          html.push('</span>');
+        }
 
         return html.join('');
       },
