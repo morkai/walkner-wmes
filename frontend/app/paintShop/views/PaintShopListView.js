@@ -304,19 +304,25 @@ define([
 
     onChange: function(order)
     {
+      var filter = this.options.filter;
+      var sort = this.options.sort;
       var $item = this.$item(order.id);
 
-      if (!this.options.filter)
+      if (!filter && !sort)
       {
         $item.attr('data-status', order.get('status'));
 
         return;
       }
 
-      if ($item.length)
+      if ($item.length && !filter(order.serialize()))
       {
-        this.render();
+        $item.remove();
+
+        return;
       }
+
+      this.render();
     },
 
     onMrpSelected: function()

@@ -34,6 +34,11 @@ define([
   'use strict';
 
   var IS_EMBEDDED = window.parent !== window;
+  var STATUS_WEIGHTS = {
+    started: 1,
+    partial: 2,
+    finished: 3
+  };
 
   return View.extend({
 
@@ -182,7 +187,11 @@ define([
         model: this.orders,
         showTimes: false,
         showSearch: true,
-        vkb: this.vkbView
+        vkb: this.vkbView,
+        filter: function(psOrder)
+        {
+          return psOrder.status === 'new' || psOrder.status === 'cancelled';
+        }
       });
       this.workListView = new PaintShopListView({
         model: this.orders,
@@ -190,28 +199,19 @@ define([
         showSearch: false,
         filter: function(psOrder)
         {
-          return psOrder.status === 'started' || psOrder.status === 'finished' || psOrder.status === 'partial';
+          return STATUS_WEIGHTS[psOrder.status] >= 1;
         },
         sort: function(a, b)
         {
-          if (a.status === 'started')
+          if ((a.status === 'started' && b.status === 'started')
+            || (a.status === 'partial' && b.status === 'partial'))
           {
-            if (a.status === b.status)
-            {
-              return a.startedAt - b.startedAt;
-            }
-
-            return -1;
+            return a.startedAt - b.startedAt;
           }
 
-          if (a.status === 'partial')
+          if (a.status !== b.status)
           {
-            if (a.status === b.status)
-            {
-              return a.startedAt - b.startedAt;
-            }
-
-            return b.status === 'started' ? 1 : -1;
+            return STATUS_WEIGHTS[a.status] - STATUS_WEIGHTS[b.status];
           }
 
           return b.startedAt - a.startedAt;

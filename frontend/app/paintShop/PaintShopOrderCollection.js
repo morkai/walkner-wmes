@@ -27,11 +27,21 @@ define([
     {
       this.selectedMrp = 'all';
       this.allMrps = null;
-      this.serialized = null;
+      this.serializedList = null;
+      this.serializedMap = null;
 
       this.on('request', function()
       {
-        this.serialized = null;
+        this.serializedList = null;
+        this.serializedMap = null;
+      });
+
+      this.on('change', function(order)
+      {
+        if (this.serializedMap)
+        {
+          this.serializedMap[order.id] = order.serialize();
+        }
       });
     },
 
@@ -120,18 +130,20 @@ define([
     {
       var orders = this;
 
-      if (orders.serialized)
+      if (orders.serializedList)
       {
-        return orders.serialized;
+        return orders.serializedList;
       }
 
-      var serialized = [];
+      var serializedList = [];
+      var serializedMap = {};
       var mrpMap = {};
 
       orders.forEach(function(order)
       {
-        order = order.serialize();
-        order.followups = order.followups.map(function(followupId)
+        var serializedOrder = serializedMap[order.id] = order.serialize();
+
+        serializedOrder.followups = serializedOrder.followups.map(function(followupId)
         {
           return {
             id: followupId,
@@ -139,9 +151,9 @@ define([
           };
         });
 
-        serialized.push(order);
+        serializedList.push(serializedOrder);
 
-        mrpMap[order.mrp] = 1;
+        mrpMap[serializedOrder.mrp] = 1;
       });
 
       if (!mrpMap[orders.selectedMrp])
@@ -149,10 +161,11 @@ define([
         orders.selectedMrp = 'all';
       }
 
-      orders.serialized = serialized;
+      orders.serializedList = serializedList;
+      orders.serializedMap = serializedMap;
       orders.allMrps = Object.keys(mrpMap).sort();
 
-      return serialized;
+      return serializedList;
     },
 
     act: function(reqData, done)
@@ -236,7 +249,8 @@ define([
 
       if (silent)
       {
-        orders.serialized = null;
+        orders.serializedList = null;
+        orders.serializedMap = null;
 
         orders.trigger('reset', orders);
       }
