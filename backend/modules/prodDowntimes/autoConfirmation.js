@@ -88,6 +88,9 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
           prodLine: 1,
           prodShift: 1,
           prodShiftOrder: 1,
+          reason: 1,
+          aor: 1,
+          status: 1,
           changes: {$slice: [0, 1]}
         };
 
@@ -188,7 +191,7 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
     };
     const changes = prodDowntime.changes;
 
-    if (Array.isArray(changes) && changes.length)
+    if (prodDowntime.status === 'rejected' && Array.isArray(changes) && changes.length)
     {
       const initialData = changes[0].data;
       const originalReason = Array.isArray(initialData.reason) ? initialData.reason[1] : null;
