@@ -93,12 +93,7 @@ define([
           right: 0,
           bottom: 0
         })
-        .one('mousedown', function(e)
-        {
-          hideMenu();
-
-          document.elementFromPoint(e.clientX, e.clientY).click();
-        });
+        .one('mousedown', hideMenu);
 
       $menu.data('backdrop', $backdrop);
 
@@ -108,12 +103,23 @@ define([
         .append($backdrop)
         .append($menu);
 
-      if (left + $menu.outerWidth() >= document.body.clientWidth)
+      var width = $menu.outerWidth();
+      var height = $menu.outerHeight();
+
+      if (left + width >= document.body.clientWidth)
       {
-        left -= (left + $menu.outerWidth()) - document.body.clientWidth + 5;
+        left -= (left + width) - document.body.clientWidth + 5;
       }
 
-      $menu.css('left', left + 'px');
+      if (top + height >= window.innerHeight)
+      {
+        top -= (top + height) - window.innerHeight + 5;
+      }
+
+      $menu.css({
+        top: top + 'px',
+        left: left + 'px'
+      });
 
       view.$contextMenu = $menu;
 

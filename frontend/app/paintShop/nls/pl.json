@@ -53,6 +53,11 @@
 
   "orderChanges:change": "{type, select, start{Rozpoczęto} finish{Zakończono} cancel{Zignorowano} reset{Zresetowano} comment{Skomentowano} other{Zmieniono}} <time title='{timeLong}'>{timeAgo}</time> przez {user}",
 
+  "menu:copyOrders": "Kopiuj nr zleceń",
+  "menu:copyOrders:success": "Lista skopiowana do schowka.",
+  "menu:copyChildOrders": "Kopiuj nr podzleceń",
+  "menu:copyChildOrders:success": "Lista skopiowana do schowka.",
+
   "parent:switchApps": "Zmień aplikację/Konfiguruj po 3s",
   "parent:reboot": "Odśwież stronę/Restartuj komputer po 3s",
   "parent:shutdown": "Wyłącz komputer po 3s"

@@ -9,7 +9,9 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/core/util/getShiftStartInfo',
+  'app/data/clipboard',
   'app/production/views/VkbView',
+  'app/planning/util/contextMenu',
   '../PaintShopOrder',
   '../views/PaintShopQueueView',
   '../views/PaintShopListView',
@@ -24,7 +26,9 @@ define([
   View,
   bindLoadingMessage,
   getShiftStartInfo,
+  clipboard,
   VkbView,
+  contextMenu,
   PaintShopOrder,
   PaintShopQueueView,
   PaintShopListView,
@@ -114,6 +118,12 @@ define([
       {
         this.orders.selectMrp(e.currentTarget.dataset.mrp);
       },
+      'contextmenu .paintShop-tab': function(e)
+      {
+        this.showMrpMenu(e);
+
+        return false;
+      },
 
       'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
       'touchstart #-switchApps': function() { this.startActionTimer('switchApps'); },
@@ -161,6 +171,8 @@ define([
 
     destroy: function()
     {
+      this.hideMenu();
+
       $('.modal').addClass('fade');
 
       $(document.body)
@@ -388,6 +400,109 @@ define([
       }
 
       return this.orders.genClientUrl() + '?' + query.join('&');
+    },
+
+    showMrpMenu: function(e)
+    {
+      var mrp = e.currentTarget.dataset.mrp;
+      var menu = [
+        {
+          label: t('paintShop', 'menu:copyOrders'),
+          handler: this.handleCopyOrdersAction.bind(this, e, mrp)
+        },
+        {
+          label: t('paintShop', 'menu:copyChildOrders'),
+          handler: this.handleCopyChildOrdersAction.bind(this, e, mrp)
+        }
+      ];
+
+      contextMenu.show(this, e.pageY, e.pageX, menu);
+    },
+
+    hideMenu: function()
+    {
+      contextMenu.hide(this);
+    },
+
+    handleCopyOrdersAction: function(e, mrp)
+    {
+      var view = this;
+      var el = e.currentTarget;
+      var x = e.pageX;
+      var y = e.pageY;
+
+      clipboard.copy(function(clipboardData)
+      {
+        if (!clipboardData)
+        {
+          return;
+        }
+
+        var text = [];
+        var usedOrders = {};
+
+        view.orders.forEach(function(order)
+        {
+          if (mrp && order.get('mrp') !== mrp)
+          {
+            return;
+          }
+
+          var orderNo = order.get('order');
+
+          if (usedOrders[orderNo])
+          {
+            return;
+          }
+
+          text.push(orderNo);
+
+          usedOrders[orderNo] = true;
+        });
+
+        clipboardData.setData('text/plain', text.join('\r\n'));
+
+        clipboard.showTooltip(view, el, x, y, {
+          title: t('paintShop', 'menu:copyOrders:success')
+        });
+      });
+    },
+
+    handleCopyChildOrdersAction: function(e, mrp)
+    {
+      var view = this;
+      var el = e.currentTarget;
+      var x = e.pageX;
+      var y = e.pageY;
+
+      clipboard.copy(function(clipboardData)
+      {
+        if (!clipboardData)
+        {
+          return;
+        }
+
+        var text = [];
+
+        view.orders.forEach(function(order)
+        {
+          if (mrp && order.get('mrp') !== mrp)
+          {
+            return;
+          }
+
+          order.get('childOrders').forEach(function(childOrder)
+          {
+            text.push(childOrder.order);
+          });
+        });
+
+        clipboardData.setData('text/plain', text.join('\r\n'));
+
+        clipboard.showTooltip(view, el, x, y, {
+          title: t('paintShop', 'menu:copyChildOrders:success')
+        });
+      });
     },
 
     onOrdersReset: function()
