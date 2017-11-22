@@ -204,6 +204,7 @@ define([
 
       this.operationListView = new OperationListView({
         model: this.order,
+        showQty: !this.prodShiftOrder.get('mechOrder'),
         highlighted: prodShiftOrder.get('operationNo'),
         summedTimes: {
           laborSetupTime: prodShiftOrder.get('laborSetupTime'),

@@ -168,6 +168,7 @@ define([
         operations: this.serializeOperations(),
         highlighted: this.options.highlighted,
         timeProps: Object.keys(TIME_PROPS),
+        showQty: this.options.showQty !== false,
         showQtyMax: !!this.options.showQtyMax,
         canChangeQtyMax: !!this.options.showQtyMax && user.isAllowedTo('ORDERS:MANAGE', 'FN:master')
       };
@@ -189,14 +190,19 @@ define([
         .toJSON()
         .map(function(op)
         {
+          if (!op.qty)
+          {
+            op.qty = 0;
+          }
+
+          if (!op.unit)
+          {
+            op.unit = 'PCE';
+          }
+
           op.qtyDone = (qtyDone.byOperation || {})[op.no] || 0;
           op.qtyMax = qtyMax[op.no] || op.qty || 0;
-          op.qtyMaxUnit = op.qtyMax.toLocaleString();
-
-          if (op.unit)
-          {
-            op.qtyMaxUnit += ' ' + op.unit;
-          }
+          op.qtyMaxUnit = op.qtyMax.toLocaleString() + ' ' + op.unit;
 
           op.times = {
             actual: {},

@@ -120,15 +120,17 @@
     <table class="table table-bordered table-condensed table-hover">
       <thead>
         <tr>
-          <th>Powód</th>
-          <th>Ilość [sztuki]</th>
+          <th class="is-min"><%- t('prodShiftOrders', 'losses:reason') %></th>
+          <th class="is-min"><%- t('prodShiftOrders', 'losses:quantity') %></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <% model.losses.forEach(function(loss) { %>
         <tr>
-          <td><%= loss.label %></td>
-          <td><%= loss.count %></td>
+          <td class="is-min"><%= loss.label %></td>
+          <td class="is-number"><%= loss.count %></td>
+          <td></td>
         </tr>
         <% }) %>
       </tbody>

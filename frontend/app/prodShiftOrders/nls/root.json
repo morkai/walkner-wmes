@@ -67,6 +67,9 @@
     "PROPERTY:pressWorksheet": "Worksheet",
     "PROPERTY:efficiency": "Efficiency",
 
+    "losses:reason": "Reason",
+    "losses:quantity": "Quantity [PCE]",
+
     "unit:workerCount": "persons",
     "unit:taktTime": "s",
 

@@ -66,6 +66,9 @@
   "PROPERTY:pressWorksheet": "Karta pracy",
   "PROPERTY:efficiency": "Wydajność",
 
+  "losses:reason": "Powód",
+  "losses:quantity": "Ilość [szt]",
+
   "unit:workerCount": "osoby",
   "unit:taktTime": "s",
 

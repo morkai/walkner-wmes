@@ -30,7 +30,10 @@ define([
       this.model = bindLoadingMessage(new MechOrder({_id: this.options.modelId}), this);
 
       this.detailsView = new MechOrderDetailsView({model: this.model});
-      this.operationsView = new OperationListView({model: this.model});
+      this.operationsView = new OperationListView({
+        model: this.model,
+        showQty: false
+      });
 
       this.setView('.mechOrders-details-container', this.detailsView);
       this.setView('.mechOrders-operations-container', this.operationsView);
