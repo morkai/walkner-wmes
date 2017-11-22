@@ -29,6 +29,18 @@ define([
       }
 
       return url;
+    },
+
+    getPsStatus: function(orderNo)
+    {
+      var order = this.get(orderNo);
+
+      if (order)
+      {
+        return order.get('psStatus') || 'unknown';
+      }
+
+      return 'unknown';
     }
 
   });

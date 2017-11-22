@@ -65,7 +65,8 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
   paintShopOrderSchema.methods.act = function(action, comment, qtyDone, done)
   {
     const changes = {
-      _id: this._id
+      _id: this._id,
+      order: this.order
     };
 
     if (typeof comment === 'string' && comment.length)

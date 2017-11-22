@@ -120,7 +120,8 @@ define([
             delivered: '',
             customQuantity: false,
             urgent: false,
-            late: false
+            late: false,
+            psStatus: 'unknown'
           };
         });
     },

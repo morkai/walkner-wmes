@@ -181,6 +181,15 @@ define([
       'production.stateChanged.**': function(message)
       {
         this.plan.shiftOrders.update(message);
+      },
+      'paintShop.orders.updated.*': function(message)
+      {
+        var sapOrder = this.plan.sapOrders.get(message.order);
+
+        if (sapOrder && message.status)
+        {
+          sapOrder.set('psStatus', message.status);
+        }
       }
     },
 

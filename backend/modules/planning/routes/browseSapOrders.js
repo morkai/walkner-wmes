@@ -9,6 +9,7 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
 {
   const mongoose = app[module.config.mongooseId];
   const Order = mongoose.model('Order');
+  const PaintShopOrder = mongoose.model('PaintShopOrder');
   const Plan = mongoose.model('Plan');
 
   const mrp = _.isString(req.query.mrp) && /^[A-Za-z0-9]{1,10}$/.test(req.query.mrp) ? req.query.mrp : null;
@@ -30,8 +31,9 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
         return this.skip(app.createError('NOT_FOUND', 404));
       }
 
+      const orders = plan.orders.map(o => o._id);
       const $match = {
-        _id: {$in: plan.orders.map(o => o._id)}
+        _id: {$in: orders}
       };
 
       if (mrp)
@@ -57,17 +59,53 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
         }
       };
 
-      Order.aggregate([{$match}, {$project}], this.next());
+      Order.aggregate([{$match}, {$project}], this.parallel());
+
+      const conditions = {
+        order: {$in: orders}
+      };
+
+      if (mrp)
+      {
+        conditions.mrp = mrp;
+      }
+
+      PaintShopOrder
+        .find(conditions, {_id: 0, order: 1, status: 1})
+        .lean()
+        .exec(this.parallel());
     },
-    function(err, sapOrders)
+    function(err, sapOrders, psOrders)
     {
       if (err)
       {
         return next(err);
       }
 
+      const psStatuses = new Map();
+
+      psOrders.forEach(order =>
+      {
+        const lastStatus = psStatuses.get(order.order);
+
+        if (!lastStatus)
+        {
+          psStatuses.set(order.order, order.status);
+
+          return;
+        }
+
+        if (lastStatus !== 'finished' && order.status === 'finished')
+        {
+          return;
+        }
+
+        psStatuses.set(order.order, order.status);
+      });
+
       sapOrders.forEach(order =>
       {
+        order.psStatus = psStatuses.get(order._id);
         order.delayReason = null;
         order.comment = '';
         order.comments = [];

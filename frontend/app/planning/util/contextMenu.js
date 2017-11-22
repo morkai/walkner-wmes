@@ -111,9 +111,11 @@ define([
         left -= (left + width) - document.body.clientWidth + 5;
       }
 
-      if (top + height >= window.innerHeight)
+      var maxHeight = window.innerHeight + window.pageYOffset;
+
+      if (top + height >= maxHeight)
       {
-        top -= (top + height) - window.innerHeight + 5;
+        top -= (top + height) - maxHeight + 5;
       }
 
       $menu.css({

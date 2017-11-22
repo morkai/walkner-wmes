@@ -15,7 +15,7 @@ module.exports = function setUpPaintShopRoutes(app, module)
   const PaintShopOrder = mongoose.model('PaintShopOrder');
   const PaintShopDropZone = mongoose.model('PaintShopDropZone');
 
-  const canView = userModule.auth('LOCAL', 'PAINT_SHOP:VIEW');
+  const canView = userModule.auth('LOCAL', 'PAINT_SHOP:VIEW', 'PLANNING:VIEW');
   const canUpdate = userModule.auth('LOCAL', 'PAINT_SHOP:PAINTER', 'PAINT_SHOP:MANAGE');
   const canManage = userModule.auth('PAINT_SHOP:MANAGE');
   const canManageDropZones = userModule.auth('PAINT_SHOP:DROP_ZONES');

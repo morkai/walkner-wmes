@@ -122,6 +122,7 @@ define([
       view.listenTo(mrp.orders, 'preview', view.onOrderPreview);
       view.listenTo(plan.displayOptions, 'change:useLatestOrderData', view.render);
       view.listenTo(plan.sapOrders, 'reset', view.onSapOrdersReset);
+      view.listenTo(plan.sapOrders, 'change:psStatus', view.onPsStatusChanged);
     },
 
     destroy: function()
@@ -173,7 +174,8 @@ define([
           delivered: orderData.statuses.indexOf('DLV') !== -1 ? 'is-dlv' : '',
           customQuantity: customQuantity && source !== 'incomplete',
           ignored: order.get('ignored') ? 'is-ignored' : '',
-          urgent: urgent && !autoAdded
+          urgent: urgent && !autoAdded,
+          psStatus: plan.sapOrders.getPsStatus(order.id)
         };
       });
     },
@@ -619,6 +621,18 @@ define([
       if (!options.reload && this.plan.displayOptions.isLatestOrderDataUsed())
       {
         this.render();
+      }
+    },
+
+    onPsStatusChanged: function(sapOrder)
+    {
+      var $order = this.$item(sapOrder.id);
+
+      if ($order.length)
+      {
+        $order
+          .find('.planning-mrp-list-property-psStatus')
+          .attr('data-ps-status', sapOrder.get('psStatus') || 'unknown');
       }
     }
 
