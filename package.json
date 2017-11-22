@@ -5,8 +5,8 @@
   "version": "0.117.0",
   "updater": {
     "wmes": {
-      "backend": 336,
-      "frontend": 388,
+      "backend": 337,
+      "frontend": 389,
       "reports": 53,
       "attachments": 3,
       "importer-sap": 43,
@@ -17,7 +17,7 @@
       "docs": 10,
       "heff": 14,
       "mrl": 8,
-      "planning": 21
+      "planning": 22
     },
     "pos": {
       "backend": 80,

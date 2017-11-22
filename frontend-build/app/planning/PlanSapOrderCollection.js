@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../core/Collection","./PlanSapOrder"],function(n,i){"use strict";return n.extend({model:i,initialize:function(n,i){this.plan=i&&i.plan,this.mrp=i&&i.mrp},url:function(){var n="/planning/sapOrders/"+this.plan.id;return this.mrp&&(n+="?mrp="+this.mrp),n}})});
+define(["../core/Collection","./PlanSapOrder"],function(n,t){"use strict";return n.extend({model:t,initialize:function(n,t){this.plan=t&&t.plan,this.mrp=t&&t.mrp},url:function(){var n="/planning/sapOrders/"+this.plan.id;return this.mrp&&(n+="?mrp="+this.mrp),n},getPsStatus:function(n){var t=this.get(n);return t?t.get("psStatus")||"unknown":"unknown"}})});

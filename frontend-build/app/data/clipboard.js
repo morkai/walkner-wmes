@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["jquery"],function(n){"use strict";var e=null;return n(document).on("copy",function(n){null!==e&&(n.preventDefault(),e(n.originalEvent.clipboardData),e=null)}),{copy:function(n){e=n,document.execCommand("copy")}}});
+define(["underscore","jquery"],function(t,o){"use strict";var e=null;return o(document).on("copy",function(t){null!==e&&(t.preventDefault(),e(t.originalEvent.clipboardData),e=null)}),{copy:function(t){e=t,document.execCommand("copy")},showTooltip:function(o,e,n,i,l){var u=o.$(e).tooltip(t.assign({container:o.el,trigger:"manual",placement:"bottom"},l));u.tooltip("show").data("bs.tooltip").tip().addClass("result success").css({left:n+"px",top:i+"px"}),o.timers[t.uniqueId("hideTooltip")]=setTimeout(function(){u.tooltip("destroy")},1337)}}});
