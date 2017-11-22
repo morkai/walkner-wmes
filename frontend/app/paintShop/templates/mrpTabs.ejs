@@ -1,0 +1,7 @@
+<% tabs.forEach(function(tab) { %>
+<div class="paintShop-tab <%- tab.active ? 'is-active' : '' %> <%- tab.dropZone ? 'is-dropped' : '' %>" data-mrp="<%- tab.mrp %>">
+  <%= tab.label %>
+  <i class="fa fa-level-down"></i>
+</div>
+<% }) %>
+<div class="paintShop-tab"></div>

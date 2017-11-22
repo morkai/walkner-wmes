@@ -6,7 +6,6 @@ define([
   '../router',
   '../viewport',
   '../user',
-  './PaintShopOrderCollection',
   './pages/PaintShopPage',
   'i18n!app/nls/paintShop'
 ], function(
@@ -15,7 +14,6 @@ define([
   router,
   viewport,
   user,
-  PaintShopOrderCollection,
   PaintShopPage
 ) {
   'use strict';
@@ -38,11 +36,9 @@ define([
     }
 
     viewport.showPage(new PaintShopPage({
+      date: req.params.date,
       selectedMrp: req.query.mrp,
-      fullscreen: req.query.fullscreen !== undefined,
-      model: {
-        orders: PaintShopOrderCollection.forDate(req.params.date)
-      }
+      fullscreen: req.query.fullscreen !== undefined
     }));
   });
 });

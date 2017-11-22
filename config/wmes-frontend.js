@@ -138,8 +138,7 @@ exports.events = {
       'mechOrders.synced',
       'users.synced',
       'production.unlocked',
-      'production.locked',
-      'paintShop.orders.imported'
+      'production.locked'
     ],
     warning: [
       'users.loginFailure',
@@ -226,7 +225,9 @@ exports.pubsub = {
     'pscs.**',
     'd8.**',
     'heff.**',
-    'paintShop.orders.changed.*', 'paintShop.orders.updated.*', 'paintShop.events.saved',
+    'paintShop.events.saved',
+    'paintShop.orders.changed.*', 'paintShop.orders.updated.*',
+    'paintShop.dropZones.updated.*',
     'vis.**',
     'mor.**',
     'planning.**'
@@ -269,7 +270,7 @@ exports.mongoose = {
     'pscsResult',
     'd8Entry', 'd8Area', 'd8EntrySource', 'd8ProblemSource',
     'heffLineState',
-    'paintShopOrder', 'paintShopEvent',
+    'paintShopEvent', 'paintShopOrder', 'paintShopDropZone',
     'behaviorObsCard', 'minutesForSafetyCard',
     'visNodePosition',
     'planSettings', 'planChange', 'plan'
@@ -342,7 +343,7 @@ exports.user = {
     'PSCS:VIEW', 'PSCS:MANAGE',
     'D8:VIEW', 'D8:MANAGE', 'D8:LEADER', 'D8:DICTIONARIES:VIEW', 'D8:DICTIONARIES:MANAGE',
     'MOR:MANAGE', 'MOR:MANAGE:USERS',
-    'PAINT_SHOP:VIEW', 'PAINT_SHOP:MANAGE', 'PAINT_SHOP:PAINTER',
+    'PAINT_SHOP:VIEW', 'PAINT_SHOP:MANAGE', 'PAINT_SHOP:PAINTER', 'PAINT_SHOP:DROP_ZONES',
     'PLANNING:VIEW', 'PLANNING:MANAGE', 'PLANNING:PLANNER'
   ]
 };

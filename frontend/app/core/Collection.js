@@ -24,7 +24,7 @@ define([
 
     this.rqlQuery = this.createRqlQuery(options.rqlQuery || this.rqlQuery);
 
-    this.paginationData = options.paginate !== false ? new PaginationData() : null;
+    this.paginationData = options.paginate !== false && this.paginate !== false ? new PaginationData() : null;
 
     if (!this.url)
     {

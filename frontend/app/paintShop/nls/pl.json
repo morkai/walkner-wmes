@@ -4,6 +4,7 @@
 
   "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się.",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się.",
+  "MSG:LOADING_FAILURE:dropZones": "Ładowanie drop zone nie powiodło się.",
   "MSG:start:failure": "Nie udało się rozpocząć zlecenia.",
   "MSG:finish:failure": "Nie udało się zakończyć zlecenia.",
   "MSG:reset:failure": "Nie udało się zresetować zlecenia.",
@@ -48,6 +49,7 @@
   "datePicker:invalid": "Podaj prawidłową datę.",
 
   "tabs:all": "Wszystkie",
+  "tabs:dropZone": "Drop zone wywołany",
 
   "empty": "Brak zleceń dla wybranego dnia.",
 
@@ -57,6 +59,9 @@
   "menu:copyOrders:success": "Lista skopiowana do schowka.",
   "menu:copyChildOrders": "Kopiuj nr podzleceń",
   "menu:copyChildOrders:success": "Lista skopiowana do schowka.",
+  "menu:dropZone:true": "Odwołaj drop zone",
+  "menu:dropZone:false": "Wywołaj drop zone",
+  "menu:dropZone:failure": "Nie udało się zmienić drop zone.",
 
   "parent:switchApps": "Zmień aplikację/Konfiguruj po 3s",
   "parent:reboot": "Odśwież stronę/Restartuj komputer po 3s",

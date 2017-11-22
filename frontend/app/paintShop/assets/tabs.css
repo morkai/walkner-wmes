@@ -16,7 +16,7 @@
 .paintShop-tab {
   flex: 0 0 auto;
   padding: 0 10px;
-  min-width: 100px;
+  min-width: 110px;
   line-height: 50px;
   font-size: 28px;
   text-align: center;
@@ -36,4 +36,13 @@
 .paintShop-tab.is-active {
   background: #333;
   color: #fff;
+}
+.paintShop-tab > .fa {
+  display: none;
+}
+.paintShop-tab.is-dropped > .fa {
+  display: inline-block;
+}
+.paintShop-tab.is-loading > .fa {
+  font-size: 24px;
 }

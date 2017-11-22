@@ -5,6 +5,7 @@ define([
   'jquery',
   'app/i18n',
   'app/time',
+  'app/user',
   'app/viewport',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
@@ -13,15 +14,19 @@ define([
   'app/production/views/VkbView',
   'app/planning/util/contextMenu',
   '../PaintShopOrder',
+  '../PaintShopOrderCollection',
+  '../PaintShopDropZoneCollection',
   '../views/PaintShopQueueView',
   '../views/PaintShopListView',
   '../views/PaintShopDatePickerView',
-  'app/paintShop/templates/page'
+  'app/paintShop/templates/page',
+  'app/paintShop/templates/mrpTabs'
 ], function(
   _,
   $,
   t,
   time,
+  user,
   viewport,
   View,
   bindLoadingMessage,
@@ -30,10 +35,13 @@ define([
   VkbView,
   contextMenu,
   PaintShopOrder,
+  PaintShopOrderCollection,
+  PaintShopDropZoneCollection,
   PaintShopQueueView,
   PaintShopListView,
   PaintShopDatePickerView,
-  template
+  pageTemplate,
+  mrpTabsTemplate
 ) {
   'use strict';
 
@@ -46,7 +54,7 @@ define([
 
   return View.extend({
 
-    template: template,
+    template: pageTemplate,
 
     layoutName: 'page',
 
@@ -110,6 +118,10 @@ define([
         {
           order.set(PaintShopOrder.parse(changes));
         }
+      },
+      'paintShop.dropZones.updated.*': function(message)
+      {
+        this.dropZones.updated(message);
       }
     },
 
@@ -185,7 +197,12 @@ define([
 
     defineModels: function()
     {
-      this.orders = bindLoadingMessage(this.model.orders, this);
+      this.orders = bindLoadingMessage(PaintShopOrderCollection.forDate(this.options.date), this);
+      this.dropZones = bindLoadingMessage(
+        PaintShopDropZoneCollection.forDate(this.options.date),
+        this,
+        'MSG:LOADING_FAILURE:dropZones'
+      );
     },
 
     defineViews: function()
@@ -237,8 +254,10 @@ define([
       var idPrefix = page.idPrefix;
 
       page.listenTo(page.orders, 'reset', this.onOrdersReset);
-
       page.listenTo(page.orders, 'mrpSelected', this.onMrpSelected);
+
+      page.listenTo(page.dropZones, 'reset', this.renderTabs);
+      page.listenTo(page.dropZones, 'updated', this.onDropZoneUpdated);
 
       $(document)
         .on('click.' + idPrefix, '.page-breadcrumbs', this.onBreadcrumbsClick.bind(this));
@@ -255,7 +274,8 @@ define([
     load: function(when)
     {
       return when(
-        this.orders.fetch({reset: true})
+        this.orders.fetch({reset: true}),
+        this.dropZones.fetch({reset: true})
       );
     },
 
@@ -265,6 +285,7 @@ define([
         idPrefix: this.idPrefix,
         embedded: IS_EMBEDDED,
         height: this.calcInitialHeight() + 'px',
+        renderTabs: mrpTabsTemplate,
         tabs: this.serializeTabs()
       };
     },
@@ -272,13 +293,15 @@ define([
     serializeTabs: function()
     {
       var orders = this.orders;
+      var dropZones = this.dropZones;
 
-      return orders.allMrps.map(function(mrp)
+      return (orders.allMrps || []).map(function(mrp)
       {
         return {
           mrp: mrp,
           label: mrp,
-          active: orders.selectedMrp === mrp
+          active: orders.selectedMrp === mrp,
+          dropZone: dropZones.getState(mrp)
         };
       });
     },
@@ -362,18 +385,9 @@ define([
 
     renderTabs: function()
     {
-      var html = '';
-
-      this.serializeTabs().forEach(function(tab)
-      {
-        html += '<div class="paintShop-tab ' + (tab.active ? 'is-active' : '') + '" data-mrp="' + tab.mrp + '">'
-          + tab.label
-          + '</div>';
-      });
-
-      html += '<div class="paintShop-tab"></div>';
-
-      this.$id('tabs').html(html);
+      this.$id('tabs').html(mrpTabsTemplate({
+        tabs: this.serializeTabs()
+      }));
     },
 
     updateUrl: function()
@@ -415,6 +429,14 @@ define([
           handler: this.handleCopyChildOrdersAction.bind(this, e, mrp)
         }
       ];
+
+      if (mrp && user.isAllowedTo('PAINT_SHOP:DROP_ZONES'))
+      {
+        menu.push({
+          label: t('paintShop', 'menu:dropZone:' + this.dropZones.getState(mrp)),
+          handler: this.handleDropZoneAction.bind(this, mrp)
+        });
+      }
 
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },
@@ -505,6 +527,44 @@ define([
       });
     },
 
+    handleDropZoneAction: function(mrp)
+    {
+      var view = this;
+      var $tab = view.$('.paintShop-tab[data-mrp="' + mrp + '"]').addClass('is-loading');
+      var $icon = $tab.find('.fa').removeClass('fa-level-down').addClass('fa-spinner fa-spin');
+      var req = view.promised(view.dropZones.toggle(mrp));
+
+      req.fail(function()
+      {
+        $tab.toggleClass('is-dropped', view.dropZones.getState(mrp));
+
+        viewport.msg.show({
+          type: 'error',
+          time: 2500,
+          text: t('paintShop', 'menu:dropZone:failure')
+        });
+      });
+
+      req.done(function(res)
+      {
+        $tab.toggleClass('is-dropped', res.state);
+      });
+
+      req.always(function()
+      {
+        $icon.removeClass('fa-spinner fa-spin').addClass('fa-level-down');
+        $tab.removeClass('is-loading');
+      });
+
+      this.dropZones.updated({
+        _id: {
+          date: this.dropZones.date,
+          mrp: mrp
+        },
+        state: !this.dropZones.getState(mrp)
+      });
+    },
+
     onOrdersReset: function()
     {
       var page = this;
@@ -535,6 +595,12 @@ define([
       }
     },
 
+    onDropZoneUpdated: function(dropZone)
+    {
+      this.$('.paintShop-tab[data-mrp="' + dropZone.get('mrp') + '"]')
+        .toggleClass('is-dropped', dropZone.get('state'));
+    },
+
     onBreadcrumbsClick: function(e)
     {
       if (e.target.tagName !== 'A')
@@ -563,7 +629,10 @@ define([
         if (newDate !== this.orders.getDateFilter())
         {
           this.orders.setDateFilter(newDate);
-          this.orders.fetch({reset: true});
+          this.dropZones.setDate(this.orders.getDateFilter());
+
+          this.promised(this.orders.fetch({reset: true}));
+          this.promised(this.dropZones.fetch({reset: true}));
         }
       });
 
