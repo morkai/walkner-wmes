@@ -25,7 +25,7 @@ module.exports = function setupOrderDocumentFileModel(app, mongoose)
     id: false
   });
 
-  orderDocumentFileSchema.statics.BROWSE_LIMIT = 0;
+  orderDocumentFileSchema.statics.BROWSE_LIMIT = 2000;
 
   orderDocumentFileSchema.index({folders: 1});
 

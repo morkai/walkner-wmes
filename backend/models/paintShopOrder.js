@@ -56,7 +56,7 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
   });
 
   paintShopOrderSchema.statics.TOPIC_PREFIX = 'paintShop.orders';
-  paintShopOrderSchema.statics.BROWSE_LIMIT = 0;
+  paintShopOrderSchema.statics.BROWSE_LIMIT = 1000;
 
   paintShopOrderSchema.index({date: -1});
   paintShopOrderSchema.index({status: 1, date: -1});
