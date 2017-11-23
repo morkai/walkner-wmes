@@ -170,7 +170,7 @@ module.exports = function setupProdShiftOrderModel(app, mongoose)
   });
 
   prodShiftOrderSchema.statics.TOPIC_PREFIX = 'prodShiftOrders';
-  prodShiftOrderSchema.statics.BROWSE_LIMIT = 0;
+  prodShiftOrderSchema.statics.BROWSE_LIMIT = 2000;
 
   prodShiftOrderSchema.index({prodShift: 1});
   prodShiftOrderSchema.index({pressWorksheet: 1});
