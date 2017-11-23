@@ -9,6 +9,7 @@
     "MSG:SAVING_FAILURE": "Saving failed :(",
     "MSG:LOG_OUT:FAILURE": "Logging out failed :(",
     "MSG:LOG_OUT:SUCCESS": "You are now logged out!",
+    "MSG:POPUP_BLOCKED": "Popup window was blocked.",
 
     "PAGE_ACTION:filter": "Filter",
     "PAGE_ACTION:export:csv": "Export to CSV",

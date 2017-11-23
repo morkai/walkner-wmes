@@ -445,6 +445,7 @@
 }
 .planning-menu > .dropdown-header {
   padding: 3px 10px;
+  font-weight: bold;
 }
 .planning-menu > li > a {
   padding: 3px 10px;

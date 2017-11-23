@@ -4,8 +4,10 @@ define([
   'underscore',
   'jquery',
   'app/i18n',
+  'app/user',
   'app/viewport',
   'app/core/View',
+  'app/planning/util/contextMenu',
   './PaintShopOrderDetailsView',
   'app/paintShop/templates/queue',
   'app/paintShop/templates/queueOrder'
@@ -13,8 +15,10 @@ define([
   _,
   $,
   t,
+  user,
   viewport,
   View,
+  contextMenu,
   PaintShopOrderDetailsView,
   queueTemplate,
   queueOrderTemplate
@@ -53,7 +57,13 @@ define([
           );
         }
       },
-      'scroll': 'onScroll'
+      'scroll': 'onScroll',
+      'contextmenu .visible': function(e)
+      {
+        this.showMenu(e);
+
+        return false;
+      }
     },
 
     initialize: function()
@@ -62,18 +72,18 @@ define([
       this.lastFocusedOrder = null;
       this.onScroll = _.debounce(this.onScroll.bind(this), 100, false);
 
-      this.listenTo(this.model, 'reset', this.render);
-      this.listenTo(this.model, 'change', this.onChange);
-      this.listenTo(this.model, 'focus', this.onFocus);
-      this.listenTo(this.model, 'mrpSelected', this.onMrpSelected);
+      this.listenTo(this.orders, 'reset', this.render);
+      this.listenTo(this.orders, 'change', this.onChange);
+      this.listenTo(this.orders, 'focus', this.onFocus);
+      this.listenTo(this.orders, 'mrpSelected', this.onMrpSelected);
     },
 
     serialize: function()
     {
       var first = null;
       var last = null;
-      var selectedMrp = this.model.selectedMrp;
-      var orders = this.model.serialize().map(function(order)
+      var selectedMrp = this.orders.selectedMrp;
+      var orders = this.orders.serialize().map(function(order)
       {
         order = {
           order: order,
@@ -135,7 +145,7 @@ define([
         return;
       }
 
-      var order = this.model.get(orderId);
+      var order = this.orders.get(orderId);
 
       if (!order)
       {
@@ -167,6 +177,66 @@ define([
       });
 
       viewport.showDialog(detailsView);
+    },
+
+    showMenu: function(e)
+    {
+      var order = this.orders.get(e.currentTarget.dataset.orderId);
+      var orderNo = order.get('order');
+      var mrp = order.get('mrp');
+      var menu = [
+        order.get('order'),
+        {
+          label: t('paintShop', 'menu:printOrder'),
+          handler: this.trigger.bind(this, 'actionRequested', 'printOrders', 'order', orderNo)
+        },
+        '-',
+        t('paintShop', 'menu:header:mrp', {mrp: mrp}),
+        {
+          label: t('paintShop', 'menu:copyOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, mrp)
+        },
+        {
+          label: t('paintShop', 'menu:copyChildOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, mrp)
+        },
+        {
+          label: t('paintShop', 'menu:printOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'printOrders', 'mrp', mrp)
+        }
+      ];
+
+      if (user.isAllowedTo('PAINT_SHOP:DROP_ZONES'))
+      {
+        menu.push({
+          label: t('paintShop', 'menu:dropZone:' + this.dropZones.getState(mrp)),
+          handler: this.trigger.bind(this, 'actionRequested', 'dropZone', mrp)
+        });
+      }
+
+      menu.push(
+        '-',
+        t('paintShop', 'menu:header:all'),
+        {
+          label: t('paintShop', 'menu:copyOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, null)
+        },
+        {
+          label: t('paintShop', 'menu:copyChildOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, null)
+        },
+        {
+          label: t('paintShop', 'menu:printOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'printOrders')
+        }
+      );
+
+      contextMenu.show(this, e.pageY, e.pageX, menu);
+    },
+
+    hideMenu: function()
+    {
+      contextMenu.hide(this);
     },
 
     onScroll: function()
@@ -206,7 +276,7 @@ define([
 
       $order.replaceWith(queueOrderTemplate({
         order: order.serialize(),
-        visible: this.model.isVisible(order),
+        visible: this.orders.isVisible(order),
         first: $order.hasClass('is-first'),
         last: $order.hasClass('is-last'),
         commentVisible: true
@@ -236,7 +306,7 @@ define([
 
     onMrpSelected: function()
     {
-      var selectedMrp = this.model.selectedMrp;
+      var selectedMrp = this.orders.selectedMrp;
       var specificMrp = selectedMrp !== 'all';
 
       this.$('.paintShop-order').each(function()

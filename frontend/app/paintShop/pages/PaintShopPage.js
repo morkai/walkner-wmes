@@ -20,7 +20,8 @@ define([
   '../views/PaintShopListView',
   '../views/PaintShopDatePickerView',
   'app/paintShop/templates/page',
-  'app/paintShop/templates/mrpTabs'
+  'app/paintShop/templates/mrpTabs',
+  'app/paintShop/templates/printPage'
 ], function(
   _,
   $,
@@ -41,7 +42,8 @@ define([
   PaintShopListView,
   PaintShopDatePickerView,
   pageTemplate,
-  mrpTabsTemplate
+  mrpTabsTemplate,
+  printPageTemplate
 ) {
   'use strict';
 
@@ -209,7 +211,8 @@ define([
     {
       this.vkbView = IS_EMBEDDED ? new VkbView() : null;
       this.queueView = new PaintShopQueueView({
-        model: this.orders,
+        orders: this.orders,
+        dropZones: this.dropZones,
         vkb: this.vkbView
       });
       this.allListView = new PaintShopListView({
@@ -258,6 +261,8 @@ define([
 
       page.listenTo(page.dropZones, 'reset', this.renderTabs);
       page.listenTo(page.dropZones, 'updated', this.onDropZoneUpdated);
+
+      page.listenTo(page.queueView, 'actionRequested', this.onActionRequested);
 
       $(document)
         .on('click.' + idPrefix, '.page-breadcrumbs', this.onBreadcrumbsClick.bind(this));
@@ -420,6 +425,7 @@ define([
     {
       var mrp = e.currentTarget.dataset.mrp;
       var menu = [
+        t('paintShop', 'menu:header:' + (mrp ? 'mrp' : 'all'), {mrp: mrp}),
         {
           label: t('paintShop', 'menu:copyOrders'),
           handler: this.handleCopyOrdersAction.bind(this, e, mrp)
@@ -427,6 +433,10 @@ define([
         {
           label: t('paintShop', 'menu:copyChildOrders'),
           handler: this.handleCopyChildOrdersAction.bind(this, e, mrp)
+        },
+        {
+          label: t('paintShop', 'menu:printOrders'),
+          handler: this.handlePrintOrdersAction.bind(this, 'mrp', mrp)
         }
       ];
 
@@ -527,6 +537,46 @@ define([
       });
     },
 
+    handlePrintOrdersAction: function(filterProperty, filterValue)
+    {
+      var orders = this.orders.filter(function(order)
+      {
+        return !filterValue || order.get(filterProperty) === filterValue;
+      });
+
+      if (!orders.length)
+      {
+        return;
+      }
+
+      var win = window.open(null, 'PAINT_SHOP:PLAN_PRINT');
+
+      if (!win)
+      {
+        return viewport.msg.show({
+          type: 'error',
+          time: 5000,
+          text: t('core', 'MSG:POPUP_BLOCKED')
+        });
+      }
+
+      win.document.body.innerHTML = printPageTemplate({
+        date: +this.orders.getDateFilter('x'),
+        mrp: !filterValue ? null : filterProperty === 'order' ? orders[0].get('mrp') : filterValue,
+        orderNo: filterProperty === 'order' ? filterValue : null,
+        pages: this.serializePrintPages(orders),
+        pad: function(v)
+        {
+          if (v < 10)
+          {
+            return '&nbsp;' + v;
+          }
+
+          return v;
+        }
+      });
+    },
+
     handleDropZoneAction: function(mrp)
     {
       var view = this;
@@ -563,6 +613,95 @@ define([
         },
         state: !this.dropZones.getState(mrp)
       });
+    },
+
+    serializePrintPages: function(orders)
+    {
+      var pages = [{rows: []}];
+      var push = function(row)
+      {
+        var page = pages[pages.length - 1];
+
+        if (page.rows.length === 44)
+        {
+          pages.push({rows: [row]});
+        }
+        else
+        {
+          page.rows.push(row);
+        }
+      };
+
+      orders.forEach(function(order)
+      {
+        push({
+          type: 'order',
+          no: order.get('no') + '.',
+          order: order.get('order'),
+          nc12: order.get('nc12'),
+          qty: order.get('qty'),
+          unit: 'PCE',
+          name: order.get('name'),
+          mrp: order.get('mrp')
+        });
+
+        order.get('childOrders').forEach(function(childOrder)
+        {
+          push({
+            type: 'childOrder',
+            no: '',
+            order: childOrder.order,
+            nc12: childOrder.nc12,
+            qty: childOrder.qty,
+            unit: 'PCE',
+            name: childOrder.name,
+            mrp: ''
+          });
+
+          childOrder.components.forEach(function(component)
+          {
+            push({
+              type: 'component',
+              no: '',
+              order: '',
+              nc12: component.nc12,
+              qty: component.qty,
+              unit: component.unit,
+              name: childOrder.name,
+              mrp: ''
+            });
+          });
+        });
+      });
+
+      return pages;
+    },
+
+    onActionRequested: function(action)
+    {
+      switch (action)
+      {
+        case 'copyOrders':
+          action = this.handleCopyOrdersAction;
+          break;
+
+        case 'copyChildOrders':
+          action = this.handleCopyChildOrdersAction;
+          break;
+
+        case 'dropZone':
+          action = this.handleDropZoneAction;
+          break;
+
+        case 'printOrders':
+          action = this.handlePrintOrdersAction;
+          break;
+
+        default:
+          return;
+      }
+
+      action.apply(this, Array.prototype.splice.call(arguments, 1));
     },
 
     onOrdersReset: function()

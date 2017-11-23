@@ -257,7 +257,7 @@ define([
         return viewport.msg.show({
           type: 'error',
           time: 5000,
-          text: t('planning', 'toolbar:popups')
+          text: t('core', 'MSG:POPUP_BLOCKED')
         });
       }
 

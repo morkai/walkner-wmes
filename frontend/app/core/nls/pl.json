@@ -8,6 +8,7 @@
   "MSG:SAVING_FAILURE": "Zapisywanie nie powiodło się :(",
   "MSG:LOG_OUT:FAILURE": "Wylogowanie nie powiodło się :(",
   "MSG:LOG_OUT:SUCCESS": "Zostałeś wylogowany!",
+  "MSG:POPUP_BLOCKED": "Wyskakujące okienko zostało zablokowane.",
 
   "PAGE_ACTION:filter": "Filtruj",
   "PAGE_ACTION:export:csv": "Eksportuj do CSV",

@@ -55,10 +55,16 @@
 
   "orderChanges:change": "{type, select, start{Rozpoczęto} finish{Zakończono} cancel{Zignorowano} reset{Zresetowano} comment{Skomentowano} other{Zmieniono}} <time title='{timeLong}'>{timeAgo}</time> przez {user}",
 
+  "menu:header:mrp": "{mrp}",
+  "menu:header:all": "Wszystkie przepływy",
   "menu:copyOrders": "Kopiuj nr zleceń",
   "menu:copyOrders:success": "Lista skopiowana do schowka.",
   "menu:copyChildOrders": "Kopiuj nr podzleceń",
   "menu:copyChildOrders:success": "Lista skopiowana do schowka.",
+  "menu:printOrder": "Drukuj zlecenie",
+  "menu:printOrders": "Drukuj zlecenia",
+  "menu:printOrders:all": "Drukuj wszystkie zlecenia",
+  "menu:printOrders:mrp": "Drukuj zlecenia {mrp}",
   "menu:dropZone:true": "Odwołaj drop zone",
   "menu:dropZone:false": "Wywołaj drop zone",
   "menu:dropZone:failure": "Nie udało się zmienić drop zone.",

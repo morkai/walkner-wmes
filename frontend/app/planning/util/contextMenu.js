@@ -97,7 +97,9 @@ define([
 
       $menu.data('backdrop', $backdrop);
 
-      $(window).one('scroll.contextMenu.' + view.idPrefix, hideMenu);
+      $(window)
+        .one('scroll.contextMenu.' + view.idPrefix, hideMenu)
+        .one('resize.contextMenu.' + view.idPrefix, hideMenu);
       $(document.body)
         .one('mousedown.contextMenu.' + view.idPrefix, hideMenu)
         .append($backdrop)

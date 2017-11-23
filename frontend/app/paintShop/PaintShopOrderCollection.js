@@ -79,7 +79,7 @@ define([
       {
         if (term.name === 'eq' && term.args[0] === 'date' && term.args[1] !== 'current')
         {
-          dateFilter = time.getMoment(term.args[1], 'YYYY-MM-DD').format(format || 'YYYY-MM-DD');
+          dateFilter = time.utc.getMoment(term.args[1], 'YYYY-MM-DD').format(format || 'YYYY-MM-DD');
         }
       });
 
