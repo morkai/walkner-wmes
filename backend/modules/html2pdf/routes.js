@@ -55,9 +55,13 @@ module.exports = function setUpHtml2pdfRoutes(app, module)
 
         try
         {
-          module.pool.use(async browser => {
+          module.pool.use(async browser =>
+          {
             const page = await browser.newPage();
-            const status = await page.goto(`http://localhost/html2pdf/${hash}.html`, {waitUntil: 'networkidle2'});
+            const status = await page.goto(
+              module.config.fileUrl.replace('${hash}', hash).replace('${format}', 'html'),
+              {waitUntil: 'networkidle2'}
+            );
 
             if (!status.ok)
             {

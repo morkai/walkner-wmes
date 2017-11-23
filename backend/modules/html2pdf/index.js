@@ -7,6 +7,7 @@ const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
   expressId: 'express',
+  fileUrl: 'http://localhost/html2pdf/${hash}.${format}',
   storagePath: './data/html2pdf',
   poolOptions: {}
 };
