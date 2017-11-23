@@ -582,7 +582,7 @@ define([
 
       this.resolveProdShift(changeRequest, function(prodShift)
       {
-        if (!prodShift)
+        if (!prodShift || !prodShift.id)
         {
           return $timeline.removeClass('progress-bar-primary active').addClass('progress-bar-danger');
         }
