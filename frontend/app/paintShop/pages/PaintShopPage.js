@@ -549,7 +549,7 @@ define([
         return;
       }
 
-      var win = window.open(null, 'PAINT_SHOP:PLAN_PRINT');
+      var win = window.open('about:blank', 'PAINT_SHOP:PLAN_PRINT');
 
       if (!win)
       {
@@ -560,7 +560,7 @@ define([
         });
       }
 
-      win.document.body.innerHTML = printPageTemplate({
+      var html = printPageTemplate({
         date: +this.orders.getDateFilter('x'),
         mrp: !filterValue ? null : filterProperty === 'order' ? orders[0].get('mrp') : filterValue,
         orderNo: filterProperty === 'order' ? filterValue : null,
@@ -575,6 +575,9 @@ define([
           return v;
         }
       });
+
+      win.onload = function() { win.document.body.innerHTML = html; };
+      win.document.body.innerHTML = html;
     },
 
     handleDropZoneAction: function(mrp)

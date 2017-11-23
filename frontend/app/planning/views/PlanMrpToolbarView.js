@@ -250,7 +250,7 @@ define([
 
     printLines: function(lines, sapOrders, quantitiesDone)
     {
-      var win = window.open(null, 'PLANNING:PLAN_PRINT');
+      var win = window.open('about:blank', 'PLANNING:PLAN_PRINT');
 
       if (!win)
       {
@@ -261,7 +261,7 @@ define([
         });
       }
 
-      win.document.body.innerHTML = printPageTemplate({
+      var html = printPageTemplate({
         date: this.plan.id,
         lines: _.pluck(lines, 'id').join(', '),
         showTimes: !!sapOrders || this.plan.displayOptions.isOrderTimePrinted(),
@@ -277,6 +277,9 @@ define([
           return v;
         }
       });
+
+      win.onload = function() { win.document.body.innerHTML = html; };
+      win.document.body.innerHTML = html;
     },
 
     serializePrintPages: function(lines, sapOrders, quantitiesDone)
