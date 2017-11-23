@@ -665,7 +665,7 @@ define([
               no: '',
               order: '',
               nc12: component.nc12,
-              qty: component.qty,
+              qty: Math.ceil(component.qty),
               unit: component.unit,
               name: childOrder.name,
               mrp: ''

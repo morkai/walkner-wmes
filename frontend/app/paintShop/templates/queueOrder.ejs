@@ -65,7 +65,7 @@
   <% childOrder.components.forEach(function(component) { %>
   <tr class="paintShop-properties paintShop-order-component">
     <td class="paintShop-property" data-property="nc12"><%- component.nc12 %></td>
-    <td class="paintShop-property" data-property="qty"><%- component.qty.toLocaleString() %></td>
+    <td class="paintShop-property" data-property="qty"><%- Math.ceil(component.qty).toLocaleString() %></td>
     <td class="paintShop-property" data-property="unit"><%- component.unit %></td>
     <td class="paintShop-property" data-property="name"><%= component.name %></td>
   </tr>
