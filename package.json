@@ -82,6 +82,8 @@
     "node-ensure": "0.0.0",
     "nodemailer": "~4.0.1",
     "pdf.js-extract": "~0.0.5",
+    "puppeteer": "~0.13.0",
+    "puppeteer-pool": "~1.0.3",
     "request": "~2.81.0",
     "semver": "~5.4.1",
     "socket.io": "~1.7.4",

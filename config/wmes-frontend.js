@@ -82,6 +82,7 @@ exports.modules = [
   'vis',
   'mor',
   'planning',
+  'html2pdf',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
@@ -550,4 +551,8 @@ exports.mor = {
 
 exports.planning = {
   generator: false
+};
+
+exports.html2pdf = {
+  storagePath: `${DATA_PATH}/html2pdf/`
 };

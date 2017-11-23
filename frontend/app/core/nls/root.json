@@ -325,7 +325,10 @@
     "placeholder:month": "yyyy-mm",
 
     "PRINT_PAGE:FT:PAGE_NO": "Page <span class=print-page-no>?</span> of <span class=print-page-count>?</span>",
-    "PRINT_PAGE:FT:INFO": "Printout generated at <span class=print-page-date>?</span> by <span class=print-page-user>?</span>."
+    "PRINT_PAGE:FT:INFO": "Printout generated at <span class=print-page-date>?</span> by <span class=print-page-user>?</span>.",
+
+    "html2pdf:progress": "Generating the printout...",
+    "html2pdf:failure": "Printout generation failed."
   },
   "pl": true
 }
