@@ -7,6 +7,7 @@ define([
   'app/time',
   'app/viewport',
   'app/core/View',
+  'app/core/util/html2pdf',
   'app/data/clipboard',
   'app/prodShifts/ProdShiftCollection',
   '../util/shift',
@@ -21,6 +22,7 @@ define([
   time,
   viewport,
   View,
+  html2pdf,
   clipboard,
   ProdShiftCollection,
   shiftUtil,
@@ -250,18 +252,7 @@ define([
 
     printLines: function(lines, sapOrders, quantitiesDone)
     {
-      var win = window.open('about:blank', 'PLANNING:PLAN_PRINT');
-
-      if (!win)
-      {
-        return viewport.msg.show({
-          type: 'error',
-          time: 5000,
-          text: t('core', 'MSG:POPUP_BLOCKED')
-        });
-      }
-
-      var html = printPageTemplate({
+      html2pdf(printPageTemplate({
         date: this.plan.id,
         lines: _.pluck(lines, 'id').join(', '),
         showTimes: !!sapOrders || this.plan.displayOptions.isOrderTimePrinted(),
@@ -276,10 +267,7 @@ define([
 
           return v;
         }
-      });
-
-      win.onload = function() { win.document.body.innerHTML = html; };
-      win.document.body.innerHTML = html;
+      }));
     },
 
     serializePrintPages: function(lines, sapOrders, quantitiesDone)

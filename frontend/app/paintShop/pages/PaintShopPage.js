@@ -10,6 +10,7 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/core/util/getShiftStartInfo',
+  'app/core/util/html2pdf',
   'app/data/clipboard',
   'app/production/views/VkbView',
   'app/planning/util/contextMenu',
@@ -32,6 +33,7 @@ define([
   View,
   bindLoadingMessage,
   getShiftStartInfo,
+  html2pdf,
   clipboard,
   VkbView,
   contextMenu,
@@ -549,35 +551,12 @@ define([
         return;
       }
 
-      var win = window.open('about:blank', 'PAINT_SHOP:PLAN_PRINT');
-
-      if (!win)
-      {
-        return viewport.msg.show({
-          type: 'error',
-          time: 5000,
-          text: t('core', 'MSG:POPUP_BLOCKED')
-        });
-      }
-
-      var html = printPageTemplate({
+      html2pdf(printPageTemplate({
         date: +this.orders.getDateFilter('x'),
         mrp: !filterValue ? null : filterProperty === 'order' ? orders[0].get('mrp') : filterValue,
         orderNo: filterProperty === 'order' ? filterValue : null,
-        pages: this.serializePrintPages(orders),
-        pad: function(v)
-        {
-          if (v < 10)
-          {
-            return '&nbsp;' + v;
-          }
-
-          return v;
-        }
-      });
-
-      win.onload = function() { win.document.body.innerHTML = html; };
-      win.document.body.innerHTML = html;
+        pages: this.serializePrintPages(orders)
+      }));
     },
 
     handleDropZoneAction: function(mrp)

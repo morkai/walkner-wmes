@@ -3,10 +3,12 @@
 define([
   'jquery',
   'app/i18n',
+  'app/broker',
   'app/planning/templates/contextMenu'
 ], function(
   $,
   t,
+  broker,
   template
 ) {
   'use strict';
@@ -28,7 +30,7 @@ define([
 
         view.$contextMenu = null;
 
-        view.broker.publish('planning.contextMenu.hidden');
+        broker.publish('planning.contextMenu.hidden');
       }
     },
 
@@ -127,7 +129,7 @@ define([
 
       view.$contextMenu = $menu;
 
-      view.broker.publish('planning.contextMenu.shown');
+      broker.publish('planning.contextMenu.shown');
     },
 
     actions: {
