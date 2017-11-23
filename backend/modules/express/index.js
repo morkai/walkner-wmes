@@ -165,7 +165,7 @@ exports.start = function startExpressModule(app, expressModule, done)
 
   if (expressModule.config.longRouteDuration > 0)
   {
-    expressApp.use(logLongRequest);
+    expressApp.use(timeLongRequest);
   }
 
   app.broker.publish('express.beforeRouter', {
@@ -267,11 +267,11 @@ exports.start = function startExpressModule(app, expressModule, done)
    * @param {Object} res
    * @param {function} next
    */
-  function logLongRequest(req, res, next)
+  function timeLongRequest(req, res, next)
   {
-    const complete = _.once(onRequestCompleted);
+    const complete = () => clearTimeout(res.longRequestTimer);
 
-    res.startTime = Date.now();
+    res.longRequestTimer = setTimeout(logLongRequest, expressModule.config.longRouteDuration, req);
 
     res.once('close', complete);
     res.once('finish', complete);
@@ -281,26 +281,18 @@ exports.start = function startExpressModule(app, expressModule, done)
 
   /**
    * @private
+   * @param {Object} req
    */
-  function onRequestCompleted()
+  function logLongRequest(req)
   {
-    const endTime = Date.now();
-    const {startTime, req} = this;
-    const duration = endTime - startTime;
+    const session = req.session ? req.session.user : {};
+    const user = app[expressModule.config.userId]
+      ? app[expressModule.config.userId].createUserInfo(session, req)
+      : session;
 
-    if (duration >= expressModule.config.longRouteDuration)
-    {
-      const user = app[expressModule.config.userId]
-        ? app[expressModule.config.userId].createUserInfo(req.session ? req.session.user : {}, req)
-        : (req.session ? req.session.user : {});
-
-      expressModule.debug('Long request: ' + JSON.stringify({
-        url: req.url,
-        user,
-        startTime,
-        endTime,
-        duration
-      }, null, 2));
-    }
+    expressModule.debug('Long request: ' + JSON.stringify({
+      url: req.url,
+      user
+    }, null, 2));
   }
 };
