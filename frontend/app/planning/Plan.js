@@ -201,7 +201,7 @@ define([
 
     canCommentOrders: function()
     {
-      return user.isAllowedTo('ORDERS:MANAGE', 'PLANNING:PLANNER');
+      return user.isAllowedTo('ORDERS:MANAGE', 'PLANNING:PLANNER', 'FN:master', 'FN:leader');
     },
 
     applyChange: function(planChange)

@@ -18,7 +18,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
   const Order = mongoose.model('Order');
   const OrderZlf1 = mongoose.model('OrderZlf1');
 
-  const canView = userModule.auth('ORDERS:VIEW');
+  const canView = userModule.auth('LOCAL', 'ORDERS:VIEW');
   const canPrint = userModule.auth('LOCAL', 'ORDERS:VIEW');
   const canManage = userModule.auth('ORDERS:MANAGE');
   const canEdit = userModule.auth('ORDERS:MANAGE', 'PLANNING:PLANNER', 'FN:master', 'FN:leader');
