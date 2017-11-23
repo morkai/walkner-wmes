@@ -40,18 +40,16 @@ define([
 
     parse: parse,
 
-    serialize: function()
+    serialize: function(force)
     {
       var order = this;
 
-      if (order.collection && order.collection.serialized)
+      if (!force
+        && order.collection
+        && order.collection.serializedMap
+        && order.collection.serializedMap[this.id])
       {
-        var serialized = _.find(order.collection.serialized, function(o) { return o._id === order.id; });
-
-        if (serialized)
-        {
-          return serialized;
-        }
+        return order.collection.serializedMap[this.id];
       }
 
       var obj = order.toJSON();
@@ -60,11 +58,14 @@ define([
 
       obj.rowSpan = childOrderCount + 1;
 
-      obj.childOrders.forEach(function(childOrder, i)
+      obj.childOrders = obj.childOrders.map(function(childOrder, i)
       {
         obj.rowSpan += childOrder.components.length;
-        childOrder.rowSpan = childOrder.components.length + 1;
-        childOrder.last = i === lastChildOrderI;
+
+        return _.assign({
+          rowSpan: childOrder.components.length + 1,
+          last: i === lastChildOrderI
+        }, childOrder);
       });
 
       if (obj.startTime)

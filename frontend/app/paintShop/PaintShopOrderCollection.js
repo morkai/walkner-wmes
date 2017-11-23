@@ -38,9 +38,9 @@ define([
 
       this.on('change', function(order)
       {
-        if (this.serializedMap)
+        if (this.serializedMap && this.serializedMap[order.id])
         {
-          this.serializedMap[order.id] = order.serialize();
+          _.assign(this.serializedMap[order.id], order.serialize(true));
         }
       });
     },
@@ -141,7 +141,7 @@ define([
 
       orders.forEach(function(order)
       {
-        var serializedOrder = serializedMap[order.id] = order.serialize();
+        var serializedOrder = serializedMap[order.id] = order.serialize(true);
 
         serializedOrder.followups = serializedOrder.followups.map(function(followupId)
         {
