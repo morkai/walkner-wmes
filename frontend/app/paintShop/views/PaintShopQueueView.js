@@ -82,12 +82,12 @@ define([
     {
       var first = null;
       var last = null;
-      var selectedMrp = this.orders.selectedMrp;
-      var orders = this.orders.serialize().map(function(order)
+      var collection = this.orders;
+      var orders = collection.serialize().map(function(order)
       {
         order = {
           order: order,
-          visible: selectedMrp === 'all' || order.mrp === selectedMrp,
+          visible: collection.selectedMrp === 'all' || order.mrp === collection.selectedMrp,
           first: false,
           last: false,
           commentVisible: true

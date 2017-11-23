@@ -156,14 +156,14 @@ define([
         mrpMap[serializedOrder.mrp] = 1;
       });
 
-      if (!mrpMap[orders.selectedMrp])
-      {
-        orders.selectedMrp = 'all';
-      }
-
       orders.serializedList = serializedList;
       orders.serializedMap = serializedMap;
       orders.allMrps = Object.keys(mrpMap).sort();
+
+      if (orders.selectedMrp !== 'all' && !mrpMap[orders.selectedMrp])
+      {
+        orders.selectMrp('all');
+      }
 
       return serializedList;
     },
