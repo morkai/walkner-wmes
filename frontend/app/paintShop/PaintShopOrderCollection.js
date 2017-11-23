@@ -52,7 +52,7 @@ define([
 
     genClientUrl: function()
     {
-      return '/paintShop/' + (this.isDateFilter('current') ? 'current' : this.getDateFilter());
+      return '/paintShop/' + this.getDateFilter();
     },
 
     isDateFilter: function(expected)
@@ -63,43 +63,23 @@ define([
       });
     },
 
-    isDateCurrent: function()
-    {
-      return _.some(this.rqlQuery.selector.args, function(term)
-      {
-        return term.name === 'eq' && term.args[0] === 'date' && term.args[1] === 'current';
-      });
-    },
-
     getDateFilter: function(format)
     {
-      var dateFilter;
+      var dateFilter = null;
 
       this.rqlQuery.selector.args.forEach(function(term)
       {
-        if (term.name === 'eq' && term.args[0] === 'date' && term.args[1] !== 'current')
+        if (term.name === 'eq' && term.args[0] === 'date')
         {
           dateFilter = time.utc.getMoment(term.args[1], 'YYYY-MM-DD').format(format || 'YYYY-MM-DD');
         }
       });
-
-      if (!dateFilter)
-      {
-        dateFilter = this.constructor.getCurrentDate(format);
-      }
 
       return dateFilter;
     },
 
     setDateFilter: function(newDate)
     {
-      var currentDate = this.constructor.getCurrentDate();
-
-      if (newDate === currentDate)
-      {
-        newDate = 'current';
-      }
-
       this.rqlQuery.selector.args.forEach(function(term)
       {
         if (term.name === 'eq' && term.args[0] === 'date')
@@ -257,27 +237,6 @@ define([
     }
 
   }, {
-
-    getCurrentDate: function(format)
-    {
-      var moment = time.getMoment();
-
-      if (moment.hours() < 17)
-      {
-        moment.startOf('day').subtract(1, 'days');
-      }
-      else
-      {
-        moment.startOf('day').add(1, 'days');
-      }
-
-      return time.utc.getMoment(moment.format('YYYY-MM-DD'), 'YYYY-MM-DD').format(format || 'YYYY-MM-DD');
-    },
-
-    forCurrentDate: function()
-    {
-      return this.forDate('current');
-    },
 
     forDate: function(date)
     {

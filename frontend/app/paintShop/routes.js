@@ -20,6 +20,11 @@ define([
 
   router.map('/paintShop/:date', user.auth('LOCAL', 'PAINT_SHOP:VIEW'), function(req)
   {
+    if (req.params.date === 'current')
+    {
+      req.params.date = '0d';
+    }
+
     if (/^-?[0-9]+d$/.test(req.params.date))
     {
       req.params.date = time.getMoment()
