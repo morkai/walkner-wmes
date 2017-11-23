@@ -670,7 +670,7 @@ define([
               nc12: component.nc12,
               qty: Math.ceil(component.qty),
               unit: component.unit,
-              name: childOrder.name,
+              name: component.name,
               mrp: ''
             });
           });
