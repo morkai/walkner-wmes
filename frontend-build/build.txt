@@ -1226,6 +1226,7 @@ app/isa/templates/messages/acceptSuccess.js
 app/isa/templates/messages/finishSuccess.js
 app/isa/pages/IsaLineStatePage.js
 app/isa/routes.js
+app/core/util/html2pdf.js
 app/data/clipboard.js
 app/planning/templates/contextMenu.js
 app/planning/util/contextMenu.js
