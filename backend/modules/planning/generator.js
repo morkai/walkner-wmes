@@ -1158,6 +1158,13 @@ module.exports = function setUpGenerator(app, module)
       const oldValue = oldOrder[key] && oldOrder[key].toObject ? oldOrder[key].toObject() : oldOrder[key];
       const newValue = latestOrder[key];
 
+      if (key === 'operation' && !_.isEmpty(oldValue) && _.isEmpty(newValue))
+      {
+        latestOrder[key] = oldValue;
+
+        return;
+      }
+
       if (newValue === oldValue || deepEqual(newValue, oldValue))
       {
         return;
