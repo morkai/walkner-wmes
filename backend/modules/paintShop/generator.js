@@ -320,49 +320,86 @@ module.exports = function(app, module)
       },
       function()
       {
-        const mainOrders = [];
+        const paintToOrders = {};
+        const secondShiftTime = moment.utc(date).hours(14).valueOf();
 
         this.newOrders.forEach(newOrder =>
         {
+          if (this.multiColorOrders.has(newOrder))
+          {
+            return;
+          }
+
+          const paint = newOrder.paint.nc12;
+
+          if (!paintToOrders[paint])
+          {
+            paintToOrders[paint] = {
+              firstShiftOrderCount: 0,
+              firstShiftQuantity: 0,
+              orders: []
+            };
+          }
+
           if (!this.multiColorOrders.has(newOrder))
           {
-            mainOrders.push(newOrder);
+            paintToOrders[paint].orders.push(newOrder);
+          }
+
+          if (newOrder.startTime < secondShiftTime)
+          {
+            paintToOrders[paint].firstShiftOrderCount += 1;
+
+            newOrder.childOrders.forEach(childOrder =>
+            {
+              paintToOrders[paint].firstShiftQuantity += childOrder.qty;
+            });
           }
         });
 
-        mainOrders.sort((a, b) =>
-        {
-          const cmp = a.paint.nc12.localeCompare(b.paint.nc12);
+        _.forEach(paintToOrders, group => group.orders.sort(sortByStartTime));
 
-          if (cmp !== 0)
+        const groupedOrders = _.values(paintToOrders);
+
+        groupedOrders.sort((groupA, groupB) =>
+        {
+          if (groupA.firstShiftOrderCount !== groupB.firstShiftOrderCount)
           {
-            return cmp;
+            return groupB.firstShiftOrderCount - groupA.firstShiftOrderCount;
           }
 
-          return sortByStartTime(a, b);
+          if (groupA.firstShiftQuantity !== groupB.firstShiftQuantity)
+          {
+            return groupB.firstShiftQuantity - groupA.firstShiftQuantity;
+          }
+
+          return sortByStartTime(groupA.orders[0], groupB.orders[0]);
         });
 
         const newOrders = [];
         const followups = new Set();
         let lastPaint = null;
 
-        mainOrders.forEach(mainOrder =>
+        groupedOrders.forEach(group =>
         {
-          if (lastPaint !== null && lastPaint.nc12 !== mainOrder.paint.nc12)
+          group.orders.forEach(order =>
           {
-            Array.from(followups).sort(sortByStartTime).forEach(splitOrder => newOrders.push(splitOrder));
+            if (lastPaint !== null && lastPaint.nc12 !== order.paint.nc12)
+            {
+              Array.from(followups).sort(sortByStartTime).forEach(splitOrder => newOrders.push(splitOrder));
 
-            followups.clear();
-          }
+              followups.clear();
+            }
 
-          newOrders.push(mainOrder);
+            newOrders.push(order);
 
-          mainOrder.followups.forEach(followupId =>
-          {
-            followups.add(this.newOrders.get(followupId));
+            order.followups.forEach(followupId =>
+            {
+              followups.add(this.newOrders.get(followupId));
+            });
+
+            lastPaint = order.paint;
           });
-
-          lastPaint = mainOrder.paint;
         });
 
         Array.from(followups).sort(sortByStartTime).forEach(splitOrder => newOrders.push(splitOrder));
