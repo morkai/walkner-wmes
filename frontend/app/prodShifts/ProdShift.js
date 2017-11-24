@@ -337,21 +337,20 @@ define([
      */
     findExistingShift: function(newDate, done)
     {
-      var prodShift = this;
       var req = $.ajax({
         url: '/prodShifts?prodLine=' + this.get('prodLine') + '&date=' + newDate.getTime()
       });
 
       req.fail(function()
       {
-        prodShift.startNewShift(newDate);
+        done(null);
       });
 
       req.done(function(res)
       {
         if (!res || !res.totalCount || !Array.isArray(res.collection))
         {
-          return prodShift.startNewShift(newDate);
+          return done(null);
         }
 
         var prodShiftData = res.collection[0];
@@ -369,7 +368,7 @@ define([
 
         req.fail(function()
         {
-          prodShift.startNewShift(newDate);
+          done(null);
         });
 
         req.done(function(ordersArgs, downtimesArgs)

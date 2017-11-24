@@ -106,6 +106,12 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
 
       const prodShift = new ProdShift(logEntry.data.startedProdShift);
 
+      prodShift.idle = -1;
+      prodShift.working = -1;
+      prodShift.downtime = -1;
+      prodShift.startup = -1;
+      prodShift.shutdown = -1;
+
       prodShift.save(this.next());
     },
     function handleCreatedProdShiftStep(err, prodShift)
