@@ -229,9 +229,11 @@ define([
 
       if (silent)
       {
+        orders.allMrps = null;
         orders.serializedList = null;
         orders.serializedMap = null;
 
+        orders.sort({silent: true});
         orders.trigger('reset', orders);
       }
     }
