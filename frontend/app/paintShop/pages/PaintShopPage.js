@@ -71,7 +71,13 @@ define([
         t.bound('paintShop', 'BREADCRUMBS:queue'),
         {
           href: '#paintShop/' + this.orders.getDateFilter(),
-          label: this.orders.getDateFilter('L')
+          label: this.orders.getDateFilter('L'),
+          template: function(breadcrumb)
+          {
+            return '<span class="paintShop-breadcrumb"><a class="fa fa-chevron-left" data-action="prev"></a>'
+              + '<a href="' + breadcrumb.href + '" data-action="showPicker">' + breadcrumb.label + '</a>'
+              + '<a class="fa fa-chevron-right" data-action="next"></a></span>';
+          }
         }
       ];
     },
@@ -267,7 +273,7 @@ define([
       page.listenTo(page.queueView, 'actionRequested', this.onActionRequested);
 
       $(document)
-        .on('click.' + idPrefix, '.page-breadcrumbs', this.onBreadcrumbsClick.bind(this));
+        .on('click.' + idPrefix, '.paintShop-breadcrumb', this.onBreadcrumbsClick.bind(this));
 
       $(window)
         .on('resize.' + idPrefix, this.onResize);
@@ -729,9 +735,30 @@ define([
         return;
       }
 
-      this.showDatePickerDialog();
+      if (e.target.classList.contains('disabled'))
+      {
+        return false;
+      }
+
+      if (e.target.dataset.action === 'showPicker')
+      {
+        this.showDatePickerDialog();
+      }
+      else
+      {
+        this.selectNonEmptyDate(e.target.dataset.action);
+      }
 
       return false;
+    },
+
+    setDate: function(newDate)
+    {
+      this.orders.setDateFilter(newDate);
+      this.dropZones.setDate(this.orders.getDateFilter());
+
+      this.promised(this.orders.fetch({reset: true}));
+      this.promised(this.dropZones.fetch({reset: true}));
     },
 
     showDatePickerDialog: function()
@@ -749,15 +776,65 @@ define([
 
         if (newDate !== this.orders.getDateFilter())
         {
-          this.orders.setDateFilter(newDate);
-          this.dropZones.setDate(this.orders.getDateFilter());
-
-          this.promised(this.orders.fetch({reset: true}));
-          this.promised(this.dropZones.fetch({reset: true}));
+          this.setDate(newDate);
         }
       });
 
       viewport.showDialog(dialogView);
+    },
+
+    selectNonEmptyDate: function(dir)
+    {
+      $('.paintShop-breadcrumb').find('a').addClass('disabled');
+
+      var page = this;
+      var date = +page.orders.getDateFilter('x');
+      var month = 30 * 24 * 3600 * 1000;
+      var url = '/paintShop/orders?limit(1)&select(date)';
+
+      if (dir === 'prev')
+      {
+        url += '&sort(-date)&date<' + date + '&date>' + (date - month);
+      }
+      else
+      {
+        url += '&sort(date)&date>' + date + '&date<' + (date + month);
+      }
+
+      var req = page.ajax({url: url});
+
+      req.done(function(res)
+      {
+        if (res.collection)
+        {
+          page.setDate(time.utc.format(res.collection[0].date, 'YYYY-MM-DD'));
+        }
+        else
+        {
+          viewport.msg.show({
+            type: 'warning',
+            time: 2500,
+            text: t('paintShop', 'MSG:date:empty')
+          });
+        }
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.show({
+          type: 'error',
+          time: 2500,
+          text: t('paintShop', 'MSG:date:failure')
+        });
+      });
+
+      req.always(function()
+      {
+        if (page.layout)
+        {
+          page.layout.setBreadcrumbs(page.breadcrumbs, page);
+        }
+      });
     },
 
     startActionTimer: function(action, e)

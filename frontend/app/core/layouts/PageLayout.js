@@ -361,7 +361,11 @@ define([
 
       html += '<li>';
 
-      if (!breadcrumb.href)
+      if (typeof breadcrumb.template === 'function')
+      {
+        html += breadcrumb.template(breadcrumb, this);
+      }
+      else if (!breadcrumb.href)
       {
         html += breadcrumb.label;
       }
@@ -436,7 +440,7 @@ define([
 
       if (typeof action.template === 'function')
       {
-        html += action.template(action);
+        html += action.template(action, this);
       }
       else
       {

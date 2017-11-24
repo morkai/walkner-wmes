@@ -5,6 +5,8 @@
   "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się.",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się.",
   "MSG:LOADING_FAILURE:dropZones": "Ładowanie drop zone nie powiodło się.",
+  "MSG:date:failure": "Nie udało się znaleźć daty.",
+  "MSG:date:empty": "Brak zleceń.",
   "MSG:start:failure": "Nie udało się rozpocząć zlecenia.",
   "MSG:finish:failure": "Nie udało się zakończyć zlecenia.",
   "MSG:reset:failure": "Nie udało się zresetować zlecenia.",

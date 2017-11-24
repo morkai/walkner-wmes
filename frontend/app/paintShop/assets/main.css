@@ -19,8 +19,21 @@
 .paintShop-is-fullscreen .ft {
   display: none;
 }
-.paintShop-dateBreadcrumb {
+.paintShop-breadcrumb {
   font-weight: normal;
+}
+.paintShop-breadcrumb > a.disabled {
+  cursor: wait!important;
+  text-decoration: none!important;
+  color: inherit!important;
+}
+.paintShop-breadcrumb > .fa {
+  padding: 0 20px 0 0;
+  text-decoration: none!important;
+  cursor: pointer;
+}
+.paintShop-breadcrumb > .fa-chevron-right {
+  padding: 0 0 0 20px;
 }
 .paintShop {
   display: flex;
