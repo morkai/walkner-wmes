@@ -41,6 +41,11 @@ module.exports = function parseOperations(input, orders, missingOrders, importTs
 
       delete operation.order;
 
+      operation.sapMachineSetupTime = operation.machineSetupTime;
+      operation.sapLaborSetupTime = operation.laborSetupTime;
+      operation.sapMachineTime = operation.machineTime;
+      operation.sapLaborTime = operation.laborTime;
+
       if (order)
       {
         if (order.importTs < importTs)
@@ -52,11 +57,6 @@ module.exports = function parseOperations(input, orders, missingOrders, importTs
         {
           order.operations = [];
         }
-
-        operation.sapMachineSetupTime = operation.machineSetupTime;
-        operation.sapLaborSetupTime = operation.laborSetupTime;
-        operation.sapMachineTime = operation.machineTime;
-        operation.sapLaborTime = operation.laborTime;
 
         order.operations.push(operation);
       }
