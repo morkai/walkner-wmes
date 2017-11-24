@@ -26,7 +26,7 @@ define([
     rqlQuery: function(rql)
     {
       var selector = [
-        {name: 'ge', args: ['createdAt', time.getMoment().startOf('day').subtract(1, 'week')]}
+        {name: 'ge', args: ['createdAt', time.getMoment().startOf('day').subtract(1, 'week').valueOf()]}
       ];
 
       limitOrgUnits(selector, {
