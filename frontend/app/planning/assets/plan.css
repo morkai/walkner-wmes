@@ -144,6 +144,9 @@
 .is-ignored .planning-mrp-list-item-label {
   text-decoration: line-through;
 }
+.is-invalid .planning-mrp-list-item-label {
+  color: #E00;
+}
 .planning-mrp-list-item-inner {
   padding: 0 5px;
   line-height: 24px;
@@ -378,7 +381,8 @@
 .planning-mrp-popover .is-completed {
   color: #00af00;
 }
-.planning-mrp-popover .is-surplus {
+.planning-mrp-popover .is-surplus,
+.planning-mrp-popover .is-invalid {
   color: #e00;
 }
 .planning-mrp-popover .planning-mrp-popover-input {

@@ -716,7 +716,9 @@ module.exports = function setUpGenerator(app, module)
 
   function getManHours(operation, quantityTodo)
   {
-    return operation ? ((operation.laborTime / 100 * quantityTodo) + operation.laborSetupTime) : 0;
+    return operation.laborTime
+      ? ((operation.laborTime / 100 * quantityTodo) + operation.laborSetupTime)
+      : 0;
   }
 
   function preparePlanOrder(state, planOrder)
@@ -1041,9 +1043,7 @@ module.exports = function setUpGenerator(app, module)
       return true;
     }
 
-    const operation = planOrder.operation;
-
-    if (!operation)
+    if (!planOrder.operation.laborTime)
     {
       return false;
     }
@@ -1233,7 +1233,7 @@ module.exports = function setUpGenerator(app, module)
 
     state.plan.orders.forEach(planOrder =>
     {
-      if (planOrder.ignored || !planOrder.operation)
+      if (planOrder.ignored || !planOrder.operation.laborTime)
       {
         return;
       }
@@ -1908,7 +1908,7 @@ module.exports = function setUpGenerator(app, module)
       log(
         `        ${orderNo} kind=${order.kind}`
         + ` workerCount=${mrpLineSettings.workerCount}`
-        + ` laborTime=${order.operation ? order.operation.laborTime : '?'}`
+        + ` laborTime=${order.operation.laborTime || '?'}`
         + ` manHours=${order.manHours}`
         + ` pceTime=${pceTime / 1000}`
       );
@@ -2136,7 +2136,9 @@ module.exports = function setUpGenerator(app, module)
 
   function getPceTime(order, workerCount)
   {
-    return order.operation ? (Math.ceil(order.operation.laborTime / 100 / workerCount * 3600) * 1000) : 0;
+    return order.operation.laborTime
+      ? (Math.ceil(order.operation.laborTime / 100 / workerCount * 3600) * 1000)
+      : 0;
   }
 
   function getOrderStartOverhead(settings, lineState, orderState)
@@ -2448,9 +2450,9 @@ module.exports = function setUpGenerator(app, module)
         return;
       }
 
-      const {ignored, mrp} = state.orders.get(orderNo);
+      const {ignored, mrp, operation} = state.orders.get(orderNo);
 
-      if (ignored)
+      if (ignored || !operation.laborTime)
       {
         return;
       }

@@ -38,12 +38,10 @@
       <% } %>
     </td>
   </tr>
-  <% if (order.laborTime) { %>
-  <tr>
+  <tr class="<%- order.laborTime ? '' : 'is-invalid' %>">
     <th><%- t('planning', 'orders:laborTime') %></th>
     <td><%= order.laborTime.toLocaleString() %></td>
   </tr>
-  <% } %>
   <% if (order.manHours) { %>
   <tr>
     <th><%- t('planning', 'orders:manHours') %></th>

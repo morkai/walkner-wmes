@@ -149,12 +149,7 @@ module.exports = function setupPlanModel(app, mongoose)
 
   planSchema.statics.createPlanOrder = function(source, sapOrder, hardComponents)
   {
-    let operation = _.pick(resolveBestOperation(sapOrder.operations), OPERATION_PROPERTIES);
-
-    if (_.isEmpty(operation))
-    {
-      operation = null;
-    }
+    const operation = _.pick(resolveBestOperation(sapOrder.operations), OPERATION_PROPERTIES);
 
     if (operation && app.orders && app.orders.getGroupedOperations)
     {

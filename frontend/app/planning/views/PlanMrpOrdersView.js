@@ -175,6 +175,7 @@ define([
           customQuantity: customQuantity && source !== 'incomplete',
           ignored: order.get('ignored') ? 'is-ignored' : '',
           urgent: urgent && !autoAdded,
+          invalid: !order.get('operation').laborTime ? 'is-invalid' : '',
           psStatus: plan.sapOrders.getPsStatus(order.id)
         };
       });
