@@ -13,6 +13,10 @@ define([
 ) {
   'use strict';
 
+  var COMPONENT_BLACKLIST = {
+    '777777777777': true
+  };
+
   function parse(obj)
   {
     ['date', 'startedAt', 'finishedAt'].forEach(function(prop)
@@ -61,14 +65,23 @@ define([
 
       obj.childOrders = obj.childOrders.map(function(childOrder, i)
       {
+        var components = [];
+
         obj.paintCount = 0;
 
         childOrder.components.forEach(function(component)
         {
+          if (COMPONENT_BLACKLIST[component.nc12])
+          {
+            return;
+          }
+
           obj.paintCount += component.unit === 'G' || component === 'KG' ? 1 : 0;
+
+          components.push(component);
         });
 
-        var rowSpan = childOrder.components.length;
+        var rowSpan = components.length;
         var rowSpanDetails = rowSpan + (obj.paintCount > 1 ? 1 : 0);
 
         obj.rowSpan += rowSpan;
@@ -78,7 +91,9 @@ define([
           rowSpan: rowSpan + 1,
           rowSpanDetails: rowSpanDetails + 1,
           last: i === lastChildOrderI
-        }, childOrder);
+        }, childOrder, {
+          components: components
+        });
       });
 
       if (obj.startTime)
