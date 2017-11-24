@@ -73,7 +73,9 @@ module.exports = function(app, module)
             _id: '$orders._id',
             name: '$orders.name',
             nc12: '$orders.nc12',
-            qty: '$orders.quantityTodo',
+            qtyTodo: '$orders.quantityTodo',
+            qtyDone: '$orders.quantityDone',
+            qtyIncomplete: '$orders.incomplete',
             mrp: '$orders.mrp'
           }}
         ], this.parallel());
@@ -95,8 +97,15 @@ module.exports = function(app, module)
         this.settings = settings;
         this.newOrders = new Map();
 
+        const maybeCompletedOrders = new Set();
+
         orders.forEach(o =>
         {
+          if (o.qtyDone >= o.qtyTodo)
+          {
+            return;
+          }
+
           this.newOrders.set(o._id, {
             _id: o._id,
             status: 'new',
@@ -109,7 +118,7 @@ module.exports = function(app, module)
             date,
             nc12: o.nc12,
             name: o.name,
-            qty: o.qty,
+            qty: o.qtyTodo,
             qtyDone: 0,
             mrp: o.mrp,
             placement: '',
@@ -117,6 +126,11 @@ module.exports = function(app, module)
             paint: null,
             childOrders: []
           });
+
+          if (o.qtyIncomplete === 0)
+          {
+            maybeCompletedOrders.add(o._id);
+          }
         });
 
         startTimes.forEach(o =>
@@ -124,6 +138,14 @@ module.exports = function(app, module)
           if (this.newOrders.has(o._id))
           {
             this.newOrders.get(o._id).startTime = o.startAt.getTime();
+          }
+        });
+
+        maybeCompletedOrders.forEach(orderNo =>
+        {
+          if (!this.newOrders.get(orderNo).startTime)
+          {
+            this.newOrders.delete(orderNo);
           }
         });
 
