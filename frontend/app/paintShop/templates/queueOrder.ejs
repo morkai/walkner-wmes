@@ -1,6 +1,6 @@
 <tbody class="paintShop-order <%- visible ? 'visible' : 'hidden' %> <%- first ? 'is-first' : '' %> <%- last ? 'is-last' : '' %>" data-order-id="<%- order._id %>" data-status="<%- order.status %>" data-mrp="<%= order.mrp %>">
   <tr class="paintShop-properties paintShop-order-order">
-    <td class="paintShop-property" data-property="no" rowspan="<%- order.rowSpan %>">
+    <td class="paintShop-property" data-property="no" rowspan="<%- order[rowSpan] %>">
       <%- order.no %>
       <% order.followups.forEach(function(followup) { %>
       <br>
@@ -16,7 +16,7 @@
     <td class="paintShop-property" data-property="qty"><%- order.qty.toLocaleString() %></td>
     <td class="paintShop-property" data-property="unit">PCE</td>
     <td class="paintShop-property" data-property="name"><%- order.name %></td>
-    <td class="paintShop-property" data-property="mrpTimePlacement" rowspan="<%- order.rowSpan %>">
+    <td class="paintShop-property" data-property="mrpTimePlacement" rowspan="<%- order[rowSpan] %>">
       <span class="paintShop-property" data-property="mrp" title="<%- t('paintShop', 'PROPERTY:mrp') %>">
         <i class="fa fa-filter"></i><span><%- order.mrp %></span>
       </span>
@@ -36,7 +36,7 @@
       </span>
       <% } %>
     </td>
-    <td class="paintShop-property" rowspan="<%- order.rowSpan %>">
+    <td class="paintShop-property" rowspan="<%- order[rowSpan] %>">
       <% if (order.startedAt) { %>
       <span class="paintShop-property" data-property="startedAt" title="<%- t('paintShop', 'PROPERTY:startedAt') %>">
         <i class="fa fa-hourglass-start"></i><span><%- order.startedAtText %></span>
@@ -56,14 +56,21 @@
   </tr>
   <% order.childOrders.forEach(function(childOrder) { %>
   <tr class="paintShop-properties paintShop-order-childOrder <%- childOrder.last ? 'is-last' : '' %>">
-    <td class="paintShop-property" data-property="order" rowspan="<%- childOrder.rowSpan %>"><%- childOrder.order %></td>
+    <td class="paintShop-property" data-property="order" rowspan="<%- childOrder[rowSpan] %>"><%- childOrder.order %></td>
     <td class="paintShop-property" data-property="nc12"><%- childOrder.nc12 %></td>
     <td class="paintShop-property" data-property="qty"><%- childOrder.qty ? childOrder.qty.toLocaleString() : '?' %></td>
     <td class="paintShop-property">PCE</td>
     <td class="paintShop-property" data-property="name"><%= childOrder.name %></td>
   </tr>
-  <% childOrder.components.forEach(function(component) { %>
+  <% if (childOrder.paintCount > 1) { %>
   <tr class="paintShop-properties paintShop-order-component">
+    <td class="paintShop-property" colspan="4">
+      <span class="paintShop-orderDetails-multiPaint"><%- t('paintShop', 'multiPaint', {count: childOrder.paintCount}) %></span>
+    </td>
+  </tr>
+  <% } %>
+  <% childOrder.components.forEach(function(component) { %>
+  <tr class="paintShop-properties paintShop-order-component <%- component.unit === 'G' || component.unit === 'KG' ? 'is-paint' : '' %>">
     <td class="paintShop-property" data-property="nc12"><%- component.nc12 %></td>
     <td class="paintShop-property" data-property="qty"><%- Math.ceil(component.qty).toLocaleString() %></td>
     <td class="paintShop-property" data-property="unit"><%- component.unit %></td>

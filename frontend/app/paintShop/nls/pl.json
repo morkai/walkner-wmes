@@ -52,6 +52,7 @@
   "tabs:dropZone": "Drop zone wywołany",
 
   "empty": "Brak zleceń dla wybranego dnia.",
+  "multiPaint": "UWAGA! Zlecenie z {count, plural, one{jedną farbą} =2{dwiema farbami} other{{count} farbami}}.",
 
   "orderChanges:change": "{type, select, start{Rozpoczęto} finish{Zakończono} cancel{Zignorowano} reset{Zresetowano} comment{Skomentowano} other{Zmieniono}} <time title='{timeLong}'>{timeAgo}</time> przez {user}",
 

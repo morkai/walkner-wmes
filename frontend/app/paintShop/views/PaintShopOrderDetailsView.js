@@ -111,10 +111,21 @@ define([
       var isLocal = user.isAllowedTo('LOCAL');
       var isPainter = user.isAllowedTo('PAINT_SHOP:PAINTER');
       var canManage = user.isAllowedTo('PAINT_SHOP:MANAGE');
+      var order = this.model.serialize();
+
+      order.childOrders.forEach(function(childOrder)
+      {
+        childOrder.paintCount = 0;
+
+        childOrder.components.forEach(function(component)
+        {
+          childOrder.paintCount += component.unit === 'G' || component === 'KG' ? 1 : 0;
+        });
+      });
 
       return {
         idPrefix: this.idPrefix,
-        order: this.model.serialize(),
+        order: order,
         fillerHeight: this.calcFillerHeight(),
         renderQueueOrder: queueOrderTemplate,
         canAct: (isEmbedded && isLocal) || isPainter || canManage
@@ -132,7 +143,7 @@ define([
 
     afterRender: function()
     {
-      if (this.options.height === 0)
+      if (1 || this.options.height === 0)
       {
         this.options.height = this.$('tbody')[0].clientHeight;
 

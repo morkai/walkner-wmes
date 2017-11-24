@@ -57,13 +57,26 @@ define([
       var lastChildOrderI = childOrderCount - 1;
 
       obj.rowSpan = childOrderCount + 1;
+      obj.rowSpanDetails = obj.rowSpan;
 
       obj.childOrders = obj.childOrders.map(function(childOrder, i)
       {
-        obj.rowSpan += childOrder.components.length;
+        obj.paintCount = 0;
+
+        childOrder.components.forEach(function(component)
+        {
+          obj.paintCount += component.unit === 'G' || component === 'KG' ? 1 : 0;
+        });
+
+        var rowSpan = childOrder.components.length;
+        var rowSpanDetails = rowSpan + (obj.paintCount > 1 ? 1 : 0);
+
+        obj.rowSpan += rowSpan;
+        obj.rowSpanDetails += rowSpanDetails;
 
         return _.assign({
-          rowSpan: childOrder.components.length + 1,
+          rowSpan: rowSpan + 1,
+          rowSpanDetails: rowSpanDetails + 1,
           last: i === lastChildOrderI
         }, childOrder);
       });

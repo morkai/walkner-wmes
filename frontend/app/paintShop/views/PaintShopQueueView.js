@@ -90,7 +90,8 @@ define([
           visible: collection.selectedMrp === 'all' || order.mrp === collection.selectedMrp,
           first: false,
           last: false,
-          commentVisible: true
+          commentVisible: true,
+          rowSpan: 'rowSpan'
         };
 
         if (order.visible)
@@ -279,7 +280,8 @@ define([
         visible: this.orders.isVisible(order),
         first: $order.hasClass('is-first'),
         last: $order.hasClass('is-last'),
-        commentVisible: true
+        commentVisible: true,
+        rowSpan: 'rowSpan'
       }));
     },
 

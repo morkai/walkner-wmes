@@ -81,6 +81,7 @@
   background-color: #77d077;
   border-top-color: #55b055;
   border-bottom-color: #55b055;
+  color: #000;
 }
 .paintShop-order[data-status="finished"] .paintShop-order-component {
   background-color: #ddffdd;
@@ -126,6 +127,16 @@ td.paintShop-property {
 }
 .paintShop-order-component > td.paintShop-property {
   padding-top: 0;
+}
+.is-paint > td.paintShop-property {
+  font-weight: bold;
+}
+.paintShop-orderDetails-multiPaint {
+  display: block;
+  padding: 5px;
+  color: #fff;
+  background: #d9534f;
+  box-shadow: 0 1px 3px #666;
 }
 .paintShop-order-childOrder + .paintShop-order-component > td.paintShop-property {
   padding-top: 5px;
