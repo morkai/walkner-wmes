@@ -16,6 +16,7 @@ const ORDER_IGNORED_PROPERTIES = {
 };
 const ORDER_USER_PROPERTIES = [
   'quantityPlan',
+  'lines',
   'ignored',
   'urgent'
 ];
@@ -46,8 +47,8 @@ module.exports = function setUpGenerator(app, module)
   }
 
   const DEV = app.options.env === 'development';
-  const UNFROZEN_PLANS = DEV ? [] : [];
-  const LOG_LINES = {};
+  const UNFROZEN_PLANS = DEV ? ['2017-11-28'] : [];
+  const LOG_LINES = {CO2: true, CO3: true};
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
   const COMPARE_ORDERS = true || !DEV && UNFROZEN_PLANS.length === 0;
@@ -725,10 +726,13 @@ module.exports = function setUpGenerator(app, module)
   {
     if (planOrder.source === 'incomplete')
     {
+      const incompleteOrder = state.incompleteOrders.get(planOrder._id);
+
       planOrder.urgent = true;
       planOrder.quantityPlan = state.lastMinute
         ? (planOrder.quantityTodo - planOrder.quantityDone)
-        : state.incompleteOrders.get(planOrder._id);
+        : incompleteOrder.incomplete;
+      planOrder.lines = incompleteOrder.lines;
     }
 
     const quantityTodo = getQuantityTodo(state, planOrder);
@@ -907,8 +911,10 @@ module.exports = function setUpGenerator(app, module)
           return this.skip(err);
         }
 
+        this.prevPlanId = moment.utc(prevPlanId.format('YYYY-MM-DD'), 'YYYY-MM-DD').toDate();
+
         const pipeline = [
-          {$match: {_id: moment.utc(prevPlanId.format('YYYY-MM-DD'), 'YYYY-MM-DD').toDate()}},
+          {$match: {_id: this.prevPlanId}},
           {$unwind: '$orders'},
           {$match: {'orders.incomplete': {$gt: 0}}},
           {$project: {_id: '$orders._id', incomplete: '$orders.incomplete'}}
@@ -923,9 +929,43 @@ module.exports = function setUpGenerator(app, module)
           return this.skip(new Error(`Failed to find incomplete orders: ${err.message}`));
         }
 
+        if (!incompleteOrders.length)
+        {
+          return this.skip();
+        }
+
         incompleteOrders.forEach(order =>
         {
-          state.incompleteOrders.set(order._id, order.incomplete);
+          order.lines = [];
+
+          state.incompleteOrders.set(order._id, order);
+        });
+
+        const pipeline = [
+          {$match: {_id: this.prevPlanId}},
+          {$unwind: '$lines'},
+          {$unwind: '$lines.orders'},
+          {$match: {'lines.orders.orderNo': {$in: Array.from(state.incompleteOrders.keys())}}},
+          {$project: {
+            _id: '$lines.orders.orderNo',
+            line: '$lines._id',
+            quantity: '$lines.orders.quantity'
+          }},
+          {$sort: {quantity: -1}}
+        ];
+
+        Plan.aggregate(pipeline, this.next());
+      },
+      function(err, incompleteLineOrders)
+      {
+        if (err)
+        {
+          return this.skip(new Error(`Failed to find incomplete line orders: ${err.message}`));
+        }
+
+        incompleteLineOrders.forEach(order =>
+        {
+          state.incompleteOrders.get(order._id).lines.push(order.line);
         });
 
         loadOrders(state, 'incomplete', Array.from(state.incompleteOrders.keys()), this.next());
@@ -1156,7 +1196,7 @@ module.exports = function setUpGenerator(app, module)
       }
 
       const oldValue = oldOrder[key] && oldOrder[key].toObject ? oldOrder[key].toObject() : oldOrder[key];
-      const newValue = latestOrder[key];
+      const newValue = latestOrder[key] && latestOrder[key].toObject ? latestOrder[key].toObject() : latestOrder[key];
 
       if (key === 'operation' && !_.isEmpty(oldValue) && _.isEmpty(newValue))
       {
@@ -1258,6 +1298,7 @@ module.exports = function setUpGenerator(app, module)
       const orderStateQueue = state.orderStateQueues.get(planOrder.mrp);
       const orderState = {
         order: planOrder,
+        lines: getAvailablePinnedLines(state, planOrder),
         quantityTodo: getQuantityTodo(state, planOrder),
         maxQuantityPerLine: 0,
         startTimes: [],
@@ -1289,6 +1330,13 @@ module.exports = function setUpGenerator(app, module)
     }
 
     setImmediate(done);
+  }
+
+  function getAvailablePinnedLines(state, planOrder)
+  {
+    return planOrder.lines.length === 0
+      ? []
+      : _.intersection(planOrder.lines, state.settings.mrp(planOrder.mrp).lines.map(l => l._id));
   }
 
   function sortUrgentOrders(a, b)
