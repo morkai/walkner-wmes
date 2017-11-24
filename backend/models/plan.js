@@ -149,10 +149,12 @@ module.exports = function setupPlanModel(app, mongoose)
 
   planSchema.statics.createPlanOrder = function(source, sapOrder, hardComponents)
   {
-    const hardComponent = !hardComponents || !Array.isArray(sapOrder.bom) || sapOrder.bom.length === 0
-      ? null
-      : sapOrder.bom.find(component => hardComponents.has(component.nc12));
-    const operation = _.pick(resolveBestOperation(sapOrder.operations), OPERATION_PROPERTIES);
+    let operation = _.pick(resolveBestOperation(sapOrder.operations), OPERATION_PROPERTIES);
+
+    if (_.isEmpty(operation))
+    {
+      operation = null;
+    }
 
     if (operation && app.orders && app.orders.getGroupedOperations)
     {
@@ -167,6 +169,10 @@ module.exports = function setupPlanModel(app, mongoose)
         }
       });
     }
+
+    const hardComponent = !hardComponents || !Array.isArray(sapOrder.bom) || sapOrder.bom.length === 0
+      ? null
+      : sapOrder.bom.find(component => hardComponents.has(component.nc12));
 
     return {
       _id: sapOrder._id,

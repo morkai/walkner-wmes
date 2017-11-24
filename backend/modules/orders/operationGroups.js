@@ -2,6 +2,7 @@
 
 'use strict';
 
+const _ = require('lodash');
 const transliteration = require('transliteration');
 
 module.exports = function setUpOperationGroups(app, ordersModule)
@@ -21,6 +22,11 @@ module.exports = function setUpOperationGroups(app, ordersModule)
 
   function getGroupedOperations(allOperations, selectedOperationNo)
   {
+    if (_.isEmpty(allOperations) || _.isEmpty(selectedOperationNo))
+    {
+      return [];
+    }
+
     let operationMap = allOperations;
 
     if (Array.isArray(operationMap))

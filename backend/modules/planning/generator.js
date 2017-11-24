@@ -1233,7 +1233,7 @@ module.exports = function setUpGenerator(app, module)
 
     state.plan.orders.forEach(planOrder =>
     {
-      if (planOrder.ignored)
+      if (planOrder.ignored || !planOrder.operation)
       {
         return;
       }
@@ -1908,7 +1908,7 @@ module.exports = function setUpGenerator(app, module)
       log(
         `        ${orderNo} kind=${order.kind}`
         + ` workerCount=${mrpLineSettings.workerCount}`
-        + ` laborTime=${order.operation.laborTime}`
+        + ` laborTime=${order.operation ? order.operation.laborTime : '?'}`
         + ` manHours=${order.manHours}`
         + ` pceTime=${pceTime / 1000}`
       );
@@ -2136,7 +2136,7 @@ module.exports = function setUpGenerator(app, module)
 
   function getPceTime(order, workerCount)
   {
-    return Math.ceil(order.operation.laborTime / 100 / workerCount * 3600) * 1000;
+    return order.operation ? (Math.ceil(order.operation.laborTime / 100 / workerCount * 3600) * 1000) : 0;
   }
 
   function getOrderStartOverhead(settings, lineState, orderState)
