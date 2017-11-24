@@ -53,8 +53,7 @@ exports.mongoose = {
     'fteLeaderEntry',
     'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics',
     'xiconfOrder', 'xiconfHidLamp',
-    'cag', 'cagPlan',
-    'dailyMrpPlan'
+    'cag', 'cagPlan'
   ]
 };
 
@@ -120,8 +119,7 @@ exports['messenger/server'] = Object.assign({}, ports['wmes-importer-sap'], {
     'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',
     'xiconf.orders.synced',
     'orderDocuments.synced', 'orderDocuments.eto.synced',
-    'cags.plan.synced', 'cags.plan.syncFailed',
-    'dailyMrpPlans.ordersUpdated'
+    'cags.plan.synced', 'cags.plan.syncFailed'
   ]
 });
 
