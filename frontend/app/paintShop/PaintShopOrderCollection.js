@@ -123,13 +123,15 @@ define([
       {
         var serializedOrder = serializedMap[order.id] = order.serialize(true);
 
-        serializedOrder.followups = serializedOrder.followups.map(function(followupId)
-        {
-          return {
-            id: followupId,
-            no: orders.get(followupId).get('no')
-          };
-        });
+        serializedOrder.followups = serializedOrder.followups
+          .filter(function(followupId) { return !!orders.get(followupId); })
+          .map(function(followupId)
+          {
+            return {
+              id: followupId,
+              no: orders.get(followupId).get('no')
+            };
+          });
 
         serializedList.push(serializedOrder);
 

@@ -342,91 +342,15 @@ module.exports = function(app, module)
       },
       function()
       {
-        const paintToOrders = {};
         const secondShiftTime = moment.utc(date).hours(14).valueOf();
+        const groupedOrders = groupOrdersByPaint(this.newOrders, this.multiColorOrders, secondShiftTime);
 
-        this.newOrders.forEach(newOrder =>
-        {
-          if (this.multiColorOrders.has(newOrder))
-          {
-            return;
-          }
+        sortGroupedOrders(groupedOrders);
 
-          const paint = newOrder.paint.nc12;
+        const newOrders = listNewOrders(groupedOrders, this.newOrders);
+        const mergedNewOrders = mergeNewOrders(newOrders, this.newOrders);
 
-          if (!paintToOrders[paint])
-          {
-            paintToOrders[paint] = {
-              firstShiftOrderCount: 0,
-              firstShiftQuantity: 0,
-              orders: []
-            };
-          }
-
-          if (!this.multiColorOrders.has(newOrder))
-          {
-            paintToOrders[paint].orders.push(newOrder);
-          }
-
-          if (newOrder.startTime < secondShiftTime)
-          {
-            paintToOrders[paint].firstShiftOrderCount += 1;
-
-            newOrder.childOrders.forEach(childOrder =>
-            {
-              paintToOrders[paint].firstShiftQuantity += childOrder.qty;
-            });
-          }
-        });
-
-        _.forEach(paintToOrders, group => group.orders.sort(sortByStartTime));
-
-        const groupedOrders = _.values(paintToOrders);
-
-        groupedOrders.sort((groupA, groupB) =>
-        {
-          if (groupA.firstShiftOrderCount !== groupB.firstShiftOrderCount)
-          {
-            return groupB.firstShiftOrderCount - groupA.firstShiftOrderCount;
-          }
-
-          if (groupA.firstShiftQuantity !== groupB.firstShiftQuantity)
-          {
-            return groupB.firstShiftQuantity - groupA.firstShiftQuantity;
-          }
-
-          return sortByStartTime(groupA.orders[0], groupB.orders[0]);
-        });
-
-        const newOrders = [];
-        const followups = new Set();
-        let lastPaint = null;
-
-        groupedOrders.forEach(group =>
-        {
-          group.orders.forEach(order =>
-          {
-            if (lastPaint !== null && lastPaint.nc12 !== order.paint.nc12)
-            {
-              Array.from(followups).sort(sortByStartTime).forEach(splitOrder => newOrders.push(splitOrder));
-
-              followups.clear();
-            }
-
-            newOrders.push(order);
-
-            order.followups.forEach(followupId =>
-            {
-              followups.add(this.newOrders.get(followupId));
-            });
-
-            lastPaint = order.paint;
-          });
-        });
-
-        Array.from(followups).sort(sortByStartTime).forEach(splitOrder => newOrders.push(splitOrder));
-
-        newOrders.forEach((newOrder, i) =>
+        mergedNewOrders.forEach((newOrder, i) =>
         {
           newOrder.no = i + 1;
         });
@@ -514,6 +438,134 @@ module.exports = function(app, module)
         }
       }
     );
+  }
+
+  function groupOrdersByPaint(newOrders, multiColorOrders, secondShiftTime)
+  {
+    const paintToOrders = {};
+
+    newOrders.forEach(newOrder =>
+    {
+      if (multiColorOrders.has(newOrder))
+      {
+        return;
+      }
+
+      const paint = newOrder.paint.nc12;
+
+      if (!paintToOrders[paint])
+      {
+        paintToOrders[paint] = {
+          firstShiftOrderCount: 0,
+          firstShiftQuantity: 0,
+          orders: []
+        };
+      }
+
+      if (!multiColorOrders.has(newOrder))
+      {
+        paintToOrders[paint].orders.push(newOrder);
+      }
+
+      if (newOrder.startTime < secondShiftTime)
+      {
+        paintToOrders[paint].firstShiftOrderCount += 1;
+
+        newOrder.childOrders.forEach(childOrder =>
+        {
+          paintToOrders[paint].firstShiftQuantity += childOrder.qty;
+        });
+      }
+    });
+
+    return _.values(paintToOrders);
+  }
+
+  function sortGroupedOrders(groupedOrders)
+  {
+    groupedOrders.forEach(group => group.orders.sort(sortByStartTime));
+
+    groupedOrders.sort((groupA, groupB) =>
+    {
+      if (groupA.firstShiftOrderCount !== groupB.firstShiftOrderCount)
+      {
+        return groupB.firstShiftOrderCount - groupA.firstShiftOrderCount;
+      }
+
+      if (groupA.firstShiftQuantity !== groupB.firstShiftQuantity)
+      {
+        return groupB.firstShiftQuantity - groupA.firstShiftQuantity;
+      }
+
+      return sortByStartTime(groupA.orders[0], groupB.orders[0]);
+    });
+  }
+
+  function listNewOrders(groupedOrders, allOrders)
+  {
+    const newOrders = [];
+    const followups = new Set();
+    let lastPaint = null;
+
+    groupedOrders.forEach(group =>
+    {
+      group.orders.forEach(order =>
+      {
+        if (lastPaint !== null && lastPaint.nc12 !== order.paint.nc12)
+        {
+          Array.from(followups).sort(sortByStartTime).forEach(splitOrder => newOrders.push(splitOrder));
+
+          followups.clear();
+        }
+
+        newOrders.push(order);
+
+        order.followups.forEach(followupId =>
+        {
+          followups.add(allOrders.get(followupId));
+        });
+
+        lastPaint = order.paint;
+      });
+    });
+
+    Array.from(followups).sort(sortByStartTime).forEach(splitOrder => newOrders.push(splitOrder));
+
+    return newOrders;
+  }
+
+  function mergeNewOrders(newOrders, allOrders)
+  {
+    const mergedOrders = [newOrders[0]];
+
+    for (let i = newOrders.length - 1; i >= 1; --i)
+    {
+      const nextOrder = newOrders[i];
+      const prevOrder = newOrders[i - 1];
+
+      if (nextOrder.order !== prevOrder.order)
+      {
+        mergedOrders.unshift(nextOrder);
+
+        continue;
+      }
+
+      allOrders.delete(nextOrder._id);
+
+      prevOrder.childOrders.push.apply(prevOrder.childOrders, nextOrder.childOrders);
+
+      prevOrder.followups.forEach(followupId =>
+      {
+        const followup = allOrders.get(followupId);
+
+        if (followup)
+        {
+          followup.followups = _.without(followup.followups, prevOrder._id);
+        }
+      });
+    }
+
+    return mergedOrders;
   }
 
   function sortByStartTime(a, b)
