@@ -536,6 +536,11 @@ module.exports = function(app, module)
 
   function mergeNewOrders(newOrders, allOrders)
   {
+    if (!newOrders.length)
+    {
+      return [];
+    }
+
     const mergedOrders = [newOrders[0]];
 
     for (let i = newOrders.length - 1; i >= 1; --i)
