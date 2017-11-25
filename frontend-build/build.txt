@@ -1330,6 +1330,8 @@ app/orderStatuses/util/renderOrderStatusLabel.js
 app/planning/util/scrollIntoView.js
 app/planning/templates/orderQuantityDialog.js
 app/planning/views/PlanOrderQuantityDialogView.js
+app/planning/templates/orderLinesDialog.js
+app/planning/views/PlanOrderLinesDialogView.js
 app/planning/templates/orderAddDialog.js
 app/planning/templates/orderAddDetails.js
 app/planning/views/PlanOrderAddDialogView.js
