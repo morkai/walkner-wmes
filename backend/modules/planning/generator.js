@@ -963,12 +963,18 @@ module.exports = function setUpGenerator(app, module)
           {$unwind: '$lines'},
           {$unwind: '$lines.orders'},
           {$match: {'lines.orders.orderNo': {$in: this.incompleteOrderIds}}},
-          {$project: {
-            _id: '$lines.orders.orderNo',
-            line: '$lines._id',
-            quantity: '$lines.orders.quantity'
+          {$group: {
+            _id: {
+              line: '$lines._id',
+              orderNo: '$lines.orders.orderNo'
+            },
+            quantity: {$sum: '$lines.orders.quantity'}
           }},
-          {$sort: {quantity: -1}}
+          {$sort: {quantity: -1}},
+          {$project: {
+            _id: '$_id.orderNo',
+            line: '$_id.line'
+          }}
         ];
 
         Plan.aggregate(pipeline, this.next());
