@@ -121,6 +121,7 @@ define([
             customQuantity: false,
             urgent: false,
             late: false,
+            pinned: false,
             psStatus: 'unknown'
           };
         });
@@ -194,7 +195,8 @@ define([
           statuses: order.get('statuses').map(renderOrderStatusLabel),
           delayReason: delayReason ? delayReason.getLabel() : null,
           manHours: order.get('manHours'),
-          laborTime: operation && operation.laborTime ? operation.laborTime : 0
+          laborTime: operation && operation.laborTime ? operation.laborTime : 0,
+          lines: []
         }
       });
     },

@@ -25,6 +25,9 @@
         <% if (order.urgent) { %>
         <span class="planning-mrp-list-property" title="<%- t('planning', 'orders:urgent') %>"><i class="fa fa-exclamation"></i></span>
         <% } %>
+        <% if (order.pinned) { %>
+        <span class="planning-mrp-list-property" title="<%- t('planning', 'orders:pinned') %>"><i class="fa fa-thumb-tack"></i></span>
+        <% } %>
         <% if (order.customQuantity) { %>
         <span class="planning-mrp-list-property" title="<%- t('planning', 'orders:customQuantity') %>"><i class="fa fa-sort-numeric-desc"></i></span>
         <% } %>

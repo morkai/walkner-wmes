@@ -1,0 +1,25 @@
+<form>
+  <div class="form-group">
+    <label class="control-label"><%- t('planning', 'orders:_id') %></label>
+    <p class="form-control-static"><%- orderNo %></p>
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- t('planning', 'orders:mrp') %></label>
+    <p class="form-control-static"><%= mrp %></p>
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- t('planning', 'orders:kind') %></label>
+    <p class="form-control-static"><%- t('planning', 'orderPriority:' + kind) %></p>
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- t('planning', 'orders:lines') %></label>
+    <input id="<%- idPrefix %>-lines" name="lines" type="text" value="">
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+      <span class="fa fa-spinner fa-spin hidden"></span>
+      <span><%- t('planning', 'orders:menu:lines:submit') %></span>
+    </button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

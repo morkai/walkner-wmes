@@ -5,6 +5,7 @@
 const _ = require('lodash');
 const step = require('h5.step');
 const moment = require('moment');
+const deepEqual = require('deep-equal');
 
 module.exports = function editPlanOrderRoute(app, module, req, res, next)
 {
@@ -26,7 +27,8 @@ module.exports = function editPlanOrderRoute(app, module, req, res, next)
           _id: '$orders._id',
           quantityPlan: '$orders.quantityPlan',
           ignored: '$orders.ignored',
-          urgent: '$orders.urgent'
+          urgent: '$orders.urgent',
+          lines: '$orders.lines'
         }}
       ];
 
@@ -46,7 +48,7 @@ module.exports = function editPlanOrderRoute(app, module, req, res, next)
         return this.skip(app.createError('ORDER_NOT_FOUND', 404));
       }
 
-      const newData = _.pick(req.body, ['quantityPlan', 'ignored', 'urgent']);
+      const newData = _.pick(req.body, ['quantityPlan', 'ignored', 'urgent', 'lines']);
       const changedProps = Object.keys(newData);
       const oldData = _.pick(planOrder, changedProps);
 
@@ -58,12 +60,17 @@ module.exports = function editPlanOrderRoute(app, module, req, res, next)
         const oldValue = oldData[prop];
         const newValue = newData[prop];
 
-        if (newValue !== oldValue)
+        if (!deepEqual(newValue, oldValue))
         {
           changes[prop] = [oldValue, newValue];
           update[`orders.$.${prop}`] = newValue;
         }
       });
+
+      if (_.isEmpty(changes))
+      {
+        return this.skip();
+      }
 
       Plan.collection.update({_id: planId, 'orders._id': planOrder._id}, {$set: update}, this.parallel());
 

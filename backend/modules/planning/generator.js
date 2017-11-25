@@ -48,7 +48,7 @@ module.exports = function setUpGenerator(app, module)
 
   const DEV = app.options.env === 'development';
   const UNFROZEN_PLANS = DEV ? ['2017-11-28'] : [];
-  const LOG_LINES = {CO2: true, CO3: true};
+  const LOG_LINES = {};
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
   const COMPARE_ORDERS = true || !DEV && UNFROZEN_PLANS.length === 0;
@@ -74,6 +74,7 @@ module.exports = function setUpGenerator(app, module)
 
   app.broker.subscribe('app.started').setLimit(1).on('message', () =>
   {
+    return;
     if (DEV)
     {
       UNFROZEN_PLANS.forEach(generatePlan);
@@ -525,6 +526,19 @@ module.exports = function setUpGenerator(app, module)
   {
     const changes = state.new ? _.pick(state.changes, ['addedOrders']) : state.changes;
     let anyChanges = false;
+
+    if (!state.new)
+    {
+      changes.changedLines.forEach(changedLine =>
+      {
+        const lineState = state.lineStates.get(changedLine._id);
+
+        if (lineState.finalHash === lineState.initialHash)
+        {
+          changes.changedLines.delete(changedLine._id);
+        }
+      });
+    }
 
     Object.keys(changes).forEach(key =>
     {
@@ -1511,7 +1525,8 @@ module.exports = function setUpGenerator(app, module)
         plannedOrdersList: [],
         hourlyPlan: EMPTY_HOURLY_PLAN.slice(),
         hash: '',
-        initialHash: planLine ? planLine.hash : ''
+        initialHash: planLine ? planLine.hash : '',
+        finalHash: ''
       };
 
       lineState.shiftNo = getShiftFromMoment(lineState.activeFrom);
@@ -1623,6 +1638,11 @@ module.exports = function setUpGenerator(app, module)
 
   function completeLine(state, lineState, done)
   {
+    if (!done)
+    {
+      done = () => {};
+    }
+
     lineState.completed = true;
 
     const oldPlanLine = state.plan.lines.find(planLine => planLine._id === lineState._id);
@@ -1635,6 +1655,8 @@ module.exports = function setUpGenerator(app, module)
       hourlyPlan: lineState.hourlyPlan,
       shiftData: null
     };
+
+    lineState.finalHash = newPlanLine.hash;
 
     if (!oldPlanLine)
     {
@@ -1651,16 +1673,15 @@ module.exports = function setUpGenerator(app, module)
       {
         log(`Completed: pushed new line: ${lineState._id}`);
       }
+
+      return setImmediate(done);
     }
-    else if (oldPlanLine.hash !== newPlanLine.hash)
+
+    if (oldPlanLine.hash !== newPlanLine.hash)
     {
       calculateShiftData(newPlanLine);
 
-      if (lineState.initialHash === newPlanLine.hash)
-      {
-        state.changes.changedLines.delete(oldPlanLine._id);
-      }
-      else
+      if (lineState.initialHash !== newPlanLine.hash)
       {
         newPlanLine.version = oldPlanLine.version + 1;
 
@@ -1676,21 +1697,16 @@ module.exports = function setUpGenerator(app, module)
       {
         log(`Completed: changed existing line: ${lineState._id}. New version: ${oldPlanLine.version}`);
       }
-    }
-    else
-    {
-      state.changes.changedLines.delete(lineState._id);
 
-      if (!LOG_LINES || LOG_LINES[lineState._id])
-      {
-        log(`Completed: no changes: ${lineState._id}!`);
-      }
+      return setImmediate(done);
     }
 
-    if (done)
+    if (!LOG_LINES || LOG_LINES[lineState._id])
     {
-      setImmediate(done);
+      log(`Completed: no changes: ${lineState._id}!`);
     }
+
+    return setImmediate(done);
   }
 
   function calculateShiftData(planLine)
@@ -1714,6 +1730,16 @@ module.exports = function setUpGenerator(app, module)
     planLine.shiftData = shiftData;
   }
 
+  function isOrderPinnedToLine(orderState, lineState)
+  {
+    if (orderState.lines.length === 0)
+    {
+      return false;
+    }
+
+    return orderState.lines[0] !== lineState._id;
+  }
+
   function getNextOrderForLine(lineState)
   {
     while (lineState.orderStateQueue.length)
@@ -1726,7 +1752,8 @@ module.exports = function setUpGenerator(app, module)
       const urgentOrderState = lineState.orderStateQueue.shift();
 
       if (lineState.plannedOrdersSet.has(urgentOrderState.order._id)
-        || urgentOrderState.quantityTodo === 0)
+        || urgentOrderState.quantityTodo === 0
+        || isOrderPinnedToLine(urgentOrderState, lineState))
       {
         continue;
       }
@@ -1771,7 +1798,8 @@ module.exports = function setUpGenerator(app, module)
       const orderState = lineState.orderStateQueue.shift();
 
       if (lineState.plannedOrdersSet.has(orderState.order._id)
-        || bigOrderIdSet.has(orderState.order._id))
+        || bigOrderIdSet.has(orderState.order._id)
+        || isOrderPinnedToLine(orderState, lineState))
       {
         continue;
       }
@@ -2577,6 +2605,8 @@ module.exports = function setUpGenerator(app, module)
 
         if (mrpLineSettings.orderPriority.includes(orderState.order.kind))
         {
+          orderState.lines = [];
+
           lineState.orderStateQueue.push(orderState);
         }
       });

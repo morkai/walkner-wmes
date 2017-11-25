@@ -342,6 +342,9 @@ define([
         case 'requiredStatuses':
           return value.map(renderOrderStatusLabel).join(' ');
 
+        case 'lines':
+          return value.length === 0 ? '-' : value.join(', ');
+
         case 'operation':
           return value.no + '. ' + value.name + ' - ' + value.laborTime.toLocaleString();
 

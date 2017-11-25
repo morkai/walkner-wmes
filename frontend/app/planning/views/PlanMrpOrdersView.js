@@ -13,6 +13,7 @@ define([
   '../util/scrollIntoView',
   '../util/contextMenu',
   './PlanOrderQuantityDialogView',
+  './PlanOrderLinesDialogView',
   './PlanOrderAddDialogView',
   'app/planning/templates/orders',
   'app/planning/templates/orderPopover',
@@ -31,6 +32,7 @@ define([
   scrollIntoView,
   contextMenu,
   PlanOrderQuantityDialogView,
+  PlanOrderLinesDialogView,
   PlanOrderAddDialogView,
   ordersTemplate,
   orderPopoverTemplate,
@@ -176,6 +178,7 @@ define([
           ignored: order.get('ignored') ? 'is-ignored' : '',
           urgent: urgent && !autoAdded,
           invalid: !order.get('operation').laborTime ? 'is-invalid' : '',
+          pinned: !_.isEmpty(order.get('lines')),
           psStatus: plan.sapOrders.getPsStatus(order.id)
         };
       });
@@ -284,7 +287,8 @@ define([
           ignored: order.get('ignored'),
           statuses: orderData.statuses.map(renderOrderStatusLabel),
           manHours: order.get('manHours'),
-          laborTime: operation && operation.laborTime ? operation.laborTime : 0
+          laborTime: operation && operation.laborTime ? operation.laborTime : 0,
+          lines: order.get('lines') || []
         }
       });
     },
@@ -386,6 +390,10 @@ define([
           handler: this.handleQuantityAction.bind(this, planOrder)
         },
         {
+          label: t('planning', 'orders:menu:lines'),
+          handler: this.handleLinesAction.bind(this, planOrder)
+        },
+        {
           label: t('planning', 'orders:menu:' + (planOrder.get('urgent') ? 'unurgent' : 'urgent')),
           handler: this.handleUrgentAction.bind(this, planOrder)
         },
@@ -432,6 +440,17 @@ define([
       });
 
       viewport.showDialog(dialogView, t('planning', 'orders:menu:quantity:title'));
+    },
+
+    handleLinesAction: function(planOrder)
+    {
+      var dialogView = new PlanOrderLinesDialogView({
+        plan: this.plan,
+        mrp: this.mrp,
+        order: planOrder
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'orders:menu:lines:title'));
     },
 
     handleUrgentAction: function(planOrder)
