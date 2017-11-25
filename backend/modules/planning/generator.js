@@ -47,7 +47,7 @@ module.exports = function setUpGenerator(app, module)
   }
 
   const DEV = app.options.env === 'development';
-  const UNFROZEN_PLANS = DEV ? ['2017-11-28'] : [];
+  const UNFROZEN_PLANS = DEV ? [] : [];
   const LOG_LINES = {};
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
@@ -74,7 +74,6 @@ module.exports = function setUpGenerator(app, module)
 
   app.broker.subscribe('app.started').setLimit(1).on('message', () =>
   {
-    return;
     if (DEV)
     {
       UNFROZEN_PLANS.forEach(generatePlan);
@@ -1541,6 +1540,7 @@ module.exports = function setUpGenerator(app, module)
 
   function createLineOrderStateQueue(state, lineId, mrpPriority)
   {
+    const urgentOrderStates = [];
     let lineOrderStateQueue = [];
 
     mrpPriority.forEach(mrpId =>
@@ -1557,7 +1557,7 @@ module.exports = function setUpGenerator(app, module)
       {
         if (mrpLineSettings.orderPriority.includes(orderState.order.kind))
         {
-          lineOrderStateQueue.push(orderState);
+          urgentOrderStates.push(orderState);
         }
       });
 
@@ -1567,7 +1567,7 @@ module.exports = function setUpGenerator(app, module)
       });
     });
 
-    return lineOrderStateQueue;
+    return urgentOrderStates.concat(lineOrderStateQueue);
   }
 
   function createMomentFromActiveTime(planTime, activeTimeString, from)
