@@ -15,6 +15,12 @@
     <label class="control-label"><%- t('planning', 'orders:lines') %></label>
     <input id="<%- idPrefix %>-lines" name="lines" type="text" value="">
   </div>
+  <div class="checkbox">
+    <label class="control-label">
+      <input id="<%- idPrefix %>-urgent" type="checkbox" value="1" <%- urgent ? 'checked' : '' %>>
+      <%- t('planning', 'orders:menu:lines:urgent') %>
+    </label>
+  </div>
   <div class="form-actions">
     <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
       <span class="fa fa-spinner fa-spin hidden"></span>

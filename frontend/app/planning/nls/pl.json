@@ -160,6 +160,7 @@
   "orders:menu:lines:title": "Zmiana przypięcia do linii",
   "orders:menu:lines:submit": "Zmień przypięcie",
   "orders:menu:lines:failure": "Przypinanie nie powiodło się.",
+  "orders:menu:lines:urgent": "Pilne",
   "orders:menu:add": "Dodaj zlecenie",
   "orders:menu:remove": "Usuń zlecenie",
   "orders:menu:remove:title": "Usuwanie zlecenia",

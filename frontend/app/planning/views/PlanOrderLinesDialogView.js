@@ -38,7 +38,8 @@ define([
         idPrefix: this.idPrefix,
         orderNo: order.id,
         mrp: order.get('mrp'),
-        kind: order.get('kind')
+        kind: order.get('kind'),
+        urgent: order.get('urgent')
       };
     },
 
@@ -80,6 +81,7 @@ define([
         method: 'PATCH',
         url: '/planning/plans/' + view.plan.id + '/orders/' + view.order.id,
         data: JSON.stringify({
+          urgent: this.$id('urgent').prop('checked'),
           lines: this.$id('lines').val().split(',').filter(function(v) { return v.length > 0; })
         })
       });
