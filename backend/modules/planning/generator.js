@@ -947,8 +947,12 @@ module.exports = function setUpGenerator(app, module)
           return this.skip();
         }
 
+        this.incompleteOrderIds = [];
+
         incompleteOrders.forEach(order =>
         {
+          this.incompleteOrderIds.push(order._id);
+
           order.lines = [];
 
           state.incompleteOrders.set(order._id, order);
@@ -958,7 +962,7 @@ module.exports = function setUpGenerator(app, module)
           {$match: {_id: this.prevPlanId}},
           {$unwind: '$lines'},
           {$unwind: '$lines.orders'},
-          {$match: {'lines.orders.orderNo': {$in: Array.from(state.incompleteOrders.keys())}}},
+          {$match: {'lines.orders.orderNo': {$in: this.incompleteOrderIds}}},
           {$project: {
             _id: '$lines.orders.orderNo',
             line: '$lines._id',
@@ -981,7 +985,7 @@ module.exports = function setUpGenerator(app, module)
           state.incompleteOrders.get(order._id).lines.push(order.line);
         });
 
-        loadOrders(state, 'incomplete', Array.from(state.incompleteOrders.keys()), this.next());
+        loadOrders(state, 'incomplete', this.incompleteOrderIds, this.next());
       },
       done
     );
@@ -1913,7 +1917,7 @@ module.exports = function setUpGenerator(app, module)
     candidate.plannedOrders.forEach(lineOrder =>
     {
       lineState.hash += lineOrder._id
-        + 2
+        + 3
         + lineOrder.quantity
         + lineOrder.startAt.getTime()
         + lineOrder.finishAt.getTime();
