@@ -68,6 +68,7 @@
   "menu:printOrders": "Drukuj zlecenia",
   "menu:printOrders:all": "Drukuj wszystkie zlecenia",
   "menu:printOrders:mrp": "Drukuj zlecenia {mrp}",
+  "menu:exportOrders": "Eksportuj zlecenia",
   "menu:dropZone:true": "Odwołaj drop zone",
   "menu:dropZone:false": "Wywołaj drop zone",
   "menu:dropZone:failure": "Nie udało się zmienić drop zone.",

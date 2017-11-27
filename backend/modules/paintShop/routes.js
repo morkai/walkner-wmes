@@ -35,6 +35,33 @@ module.exports = function setUpPaintShopRoutes(app, module)
     express.crud.browseRoute.bind(null, app, PaintShopOrder)
   );
 
+  express.get(
+    '/paintShop/orders;export.:format?',
+    canView,
+    express.crud.exportRoute.bind(null, app, {
+      filename: 'WMES-PAINT_SHOP',
+      freezeRows: 1,
+      freezeColumns: 1,
+      columns: {
+        no: 7,
+        type: 11,
+        orderNo: 10,
+        status: 9,
+        nc12: 13,
+        name: 45,
+        quantity: {type: 'integer', width: 8},
+        unit: 4,
+        mrp: 4,
+        date: 'date+utc',
+        assemblyTime: {type: 'datetime+utc', width: 18},
+        startedAt: {type: 'datetime+utc', width: 18},
+        finishedAt: {type: 'datetime+utc', width: 18}
+      },
+      serializeRow: exportPaintShopOrder,
+      model: PaintShopOrder
+    })
+  );
+
   express.get('/paintShop/orders/:id', canView, express.crud.readRoute.bind(null, app, PaintShopOrder));
 
   express.patch('/paintShop/orders/:id', canUpdate, updatePaintShopOrderRoute);
@@ -163,5 +190,61 @@ module.exports = function setUpPaintShopRoutes(app, module)
 
       app.broker.publish(`paintShop.dropZones.updated.${date}`, dropZone);
     });
+  }
+
+  function exportPaintShopOrder(leadingOrder)
+  {
+    const rows = [{
+      no: `${leadingOrder.no}.`,
+      type: 'leading',
+      orderNo: leadingOrder.order,
+      status: leadingOrder.status,
+      nc12: leadingOrder.nc12,
+      quantity: leadingOrder.qty,
+      unit: 'PCE',
+      name: leadingOrder.name,
+      mrp: leadingOrder.mrp,
+      assemblyTime: new Date(leadingOrder.startTime),
+      startedAt: leadingOrder.startedAt,
+      finishedAt: leadingOrder.finishedAt
+    }];
+
+    leadingOrder.childOrders.forEach((childOrder, childOrderI) =>
+    {
+      rows.push({
+        no: `${leadingOrder.no}.${childOrderI + 1}.`,
+        type: 'child',
+        orderNo: childOrder.order,
+        status: leadingOrder.status,
+        nc12: childOrder.nc12,
+        quantity: childOrder.qty,
+        unit: 'PCE',
+        name: childOrder.name,
+        mrp: leadingOrder.mrp,
+        assemblyTime: new Date(leadingOrder.startTime),
+        startedAt: leadingOrder.startedAt,
+        finishedAt: leadingOrder.finishedAt
+      });
+
+      childOrder.components.forEach((component, componentI) =>
+      {
+        rows.push({
+          no: `${leadingOrder.no}.${childOrderI + 1}.${componentI + 1}.`,
+          type: 'component',
+          orderNo: childOrder.order,
+          status: leadingOrder.status,
+          nc12: component.nc12,
+          quantity: Math.ceil(component.qty),
+          unit: component.unit,
+          name: component.name,
+          mrp: leadingOrder.mrp,
+          assemblyTime: new Date(leadingOrder.startTime),
+          startedAt: leadingOrder.startedAt,
+          finishedAt: leadingOrder.finishedAt
+        });
+      });
+    });
+
+    return rows;
   }
 };

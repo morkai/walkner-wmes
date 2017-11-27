@@ -445,6 +445,10 @@ define([
         {
           label: t('paintShop', 'menu:printOrders'),
           handler: this.handlePrintOrdersAction.bind(this, 'mrp', mrp)
+        },
+        {
+          label: t('paintShop', 'menu:exportOrders'),
+          handler: this.handleExportOrdersAction.bind(this, mrp)
         }
       ];
 
@@ -565,6 +569,13 @@ define([
       }));
     },
 
+    handleExportOrdersAction: function(mrp)
+    {
+      window.location.href = '/paintShop/orders;export.xlsx?sort(date,no)&limit(0)'
+        + '&date=' + this.orders.getDateFilter()
+        + (mrp ? ('&mrp=' + mrp) : '');
+    },
+
     handleDropZoneAction: function(mrp)
     {
       var view = this;
@@ -683,6 +694,10 @@ define([
 
         case 'printOrders':
           action = this.handlePrintOrdersAction;
+          break;
+
+        case 'exportOrders':
+          action = this.handleExportOrdersAction;
           break;
 
         default:

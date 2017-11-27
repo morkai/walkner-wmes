@@ -51,6 +51,9 @@ const CSV_FORMATTERS = {
   'datetime': function(value) { return helpers.formatDateTime(value); },
   'date': function(value) { return helpers.formatDate(value); },
   'time': function(value) { return helpers.formatTime(value); },
+  'datetime+utc': function(value) { return helpers.formatDateTimeUtc(value); },
+  'date+utc': function(value) { return helpers.formatDateUtc(value); },
+  'time+utc': function(value) { return helpers.formatTimeUtc(value); },
   'boolean': function(value) { return value ? 1 : 0; }
 };
 const EXPORT_SHORT_TYPES = {
@@ -71,6 +74,9 @@ const EXPORT_TYPE_WIDTHS = {
   'datetime': 18,
   'date': 10,
   'time': 10,
+  'datetime+utc': 18,
+  'date+utc': 10,
+  'time+utc': 10,
   'boolean': 10
 };
 

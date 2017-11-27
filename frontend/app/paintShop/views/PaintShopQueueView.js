@@ -204,6 +204,10 @@ define([
         {
           label: t('paintShop', 'menu:printOrders'),
           handler: this.trigger.bind(this, 'actionRequested', 'printOrders', 'mrp', mrp)
+        },
+        {
+          label: t('paintShop', 'menu:exportOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'exportOrders', mrp)
         }
       ];
 
@@ -220,15 +224,19 @@ define([
         t('paintShop', 'menu:header:all'),
         {
           label: t('paintShop', 'menu:copyOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, null)
+          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e)
         },
         {
           label: t('paintShop', 'menu:copyChildOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, null)
+          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e)
         },
         {
           label: t('paintShop', 'menu:printOrders'),
           handler: this.trigger.bind(this, 'actionRequested', 'printOrders')
+        },
+        {
+          label: t('paintShop', 'menu:exportOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'exportOrders')
         }
       );
 
