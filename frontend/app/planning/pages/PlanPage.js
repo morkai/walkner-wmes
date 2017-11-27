@@ -445,13 +445,16 @@ define([
       {
         scrollToMrpEl = $mrps[$mrps.length - 1];
 
-        for (var i = 0; i < $mrps.length; ++i)
+        if (oldScrollY + window.innerHeight < document.scrollingElement.scrollHeight)
         {
-          scrollToMrpEl = $mrps[i];
-
-          if (oldScrollY < scrollToMrpEl.offsetTop + 125)
+          for (var i = 0; i < $mrps.length; ++i)
           {
-            break;
+            scrollToMrpEl = $mrps[i];
+
+            if (oldScrollY < scrollToMrpEl.offsetTop + 125)
+            {
+              break;
+            }
           }
         }
       }
