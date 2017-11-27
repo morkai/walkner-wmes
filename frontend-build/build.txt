@@ -369,7 +369,12 @@ app/planning/assets/./settings.css
 app/planning/assets/./list.css
 app/planning/assets/./plan.css
 app/planning/assets/./changes.css
+app/planning/assets/./menu.css
 app/planning/assets/main.css
+
+app/planning/assets/menu.css
+----------------
+app/planning/assets/menu.css
 
 app/planning/assets/plan.css
 ----------------
