@@ -443,23 +443,6 @@
   pointer-events: none;
   background: #E00;
 }
-.planning-menu {
-  display: block;
-  margin-top: -1px;
-}
-.planning-menu > .dropdown-header {
-  padding: 3px 10px;
-  font-weight: bold;
-}
-.planning-menu > li > a {
-  padding: 3px 10px;
-  font-size: 12px;
-  cursor: pointer;
-}
-.planning-menu > li > a:hover {
-  background-color: #ffffa6;
-  color: #333;
-}
 .planning-orderAddDialog-details {
   margin-top: 15px;
 }

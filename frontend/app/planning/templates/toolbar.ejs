@@ -15,7 +15,7 @@
   </div>
   <div class="btn-group">
     <div id="<%- idPrefix %>-copyOrderList" class="btn-group" role="group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="<%- t('planning', 'toolbar:copyOrderList') %>"><i class="fa fa-copy"></i></button>
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="<%- t('planning', 'toolbar:copyOrderList') %>"><i class="fa fa-clipboard"></i></button>
       <ul class="dropdown-menu dropdown-menu-right">
         <% [0, 1, 2, 3].forEach(function(shiftNo) { %>
         <li><a role="copyOrderList" data-shift="<%- shiftNo %>" href="javascript:void(0)"><%- t('planning', 'toolbar:copyOrderList:' + shiftNo) %></a></li>

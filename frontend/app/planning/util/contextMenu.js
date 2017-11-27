@@ -1,11 +1,13 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   'app/i18n',
   'app/broker',
   'app/planning/templates/contextMenu'
 ], function(
+  _,
   $,
   t,
   broker,
@@ -42,6 +44,7 @@ define([
 
       var $menu = $(template({
         top: top,
+        icons: _.some(menu, function(item) { return !!item.icon; }),
         menu: menu.map(function(item)
         {
           if (item === '-')
@@ -137,6 +140,7 @@ define([
       sapOrder: function(orderNo)
       {
         return {
+          icon: 'fa-file-o',
           label: t.bound('planning', 'orders:menu:sapOrder'),
           handler: function()
           {
@@ -148,6 +152,7 @@ define([
       comment: function(orderNo)
       {
         return {
+          icon: 'fa-comment-o',
           label: t('planning', 'orders:menu:comment'),
           handler: function()
           {

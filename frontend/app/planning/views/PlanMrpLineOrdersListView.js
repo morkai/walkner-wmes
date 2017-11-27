@@ -258,6 +258,7 @@ define([
         || this.plan.getActualOrderData(orderNo).quantityDone)
       {
         menu.push({
+          icon: 'fa-file-text-o',
           label: t('planning', 'orders:menu:shiftOrder'),
           handler: this.handleShiftOrderAction.bind(this, orderNo)
         });
@@ -269,6 +270,7 @@ define([
       }
 
       menu.push({
+        icon: 'fa-clipboard',
         label: t('planning', 'lineOrders:menu:copy'),
         handler: this.handleCopyAction.bind(this, e.currentTarget, e.pageY, e.pageX)
       });

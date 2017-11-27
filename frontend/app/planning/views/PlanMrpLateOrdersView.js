@@ -221,6 +221,7 @@ define([
       if (this.plan.isEditable() && user.isAllowedTo('PLANNING:PLANNER', 'PLANNING:MANAGE'))
       {
         menu.push({
+          icon: 'fa-plus',
           label: t('planning', 'orders:menu:add'),
           handler: this.handleAddAction.bind(this, lateOrder)
         });

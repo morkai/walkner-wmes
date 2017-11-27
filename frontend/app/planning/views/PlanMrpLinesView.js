@@ -212,14 +212,17 @@ define([
 
       contextMenu.show(this, pos.top + $edit.outerHeight() / 2, pos.left + $edit.outerWidth() / 2, [
         {
+          icon: 'fa-check',
           label: t('planning', 'lines:menu:mrpPriority'),
           handler: this.handleMrpPriorityAction.bind(this)
         },
         {
+          icon: 'fa-user',
           label: t('planning', 'lines:menu:workerCount'),
           handler: this.handleWorkerCountAction.bind(this)
         },
         {
+          icon: 'fa-star-half-o',
           label: t('planning', 'lines:menu:orderPriority'),
           handler: this.handleOrderPriorityAction.bind(this)
         }
@@ -237,10 +240,12 @@ define([
 
       contextMenu.show(this, e.pageY, e.pageX, [
         {
+          icon: 'fa-cogs',
           label: t('planning', 'lines:menu:settings'),
           handler: this.handleSettingsAction.bind(this, line)
         },
         {
+          icon: 'fa-times',
           label: t('planning', 'lines:menu:remove'),
           handler: this.handleRemoveAction.bind(this, line)
         }

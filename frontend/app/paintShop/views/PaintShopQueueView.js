@@ -188,24 +188,29 @@ define([
       var menu = [
         order.get('order'),
         {
+          icon: 'fa-print',
           label: t('paintShop', 'menu:printOrder'),
           handler: this.trigger.bind(this, 'actionRequested', 'printOrders', 'order', orderNo)
         },
         '-',
         t('paintShop', 'menu:header:mrp', {mrp: mrp}),
         {
+          icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyOrders'),
           handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, mrp)
         },
         {
+          icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyChildOrders'),
           handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, mrp)
         },
         {
+          icon: 'fa-print',
           label: t('paintShop', 'menu:printOrders'),
           handler: this.trigger.bind(this, 'actionRequested', 'printOrders', 'mrp', mrp)
         },
         {
+          icon: 'fa-download',
           label: t('paintShop', 'menu:exportOrders'),
           handler: this.trigger.bind(this, 'actionRequested', 'exportOrders', mrp)
         }
@@ -214,6 +219,7 @@ define([
       if (user.isAllowedTo('PAINT_SHOP:DROP_ZONES'))
       {
         menu.push({
+          icon: 'fa-level-down',
           label: t('paintShop', 'menu:dropZone:' + this.dropZones.getState(mrp)),
           handler: this.trigger.bind(this, 'actionRequested', 'dropZone', mrp)
         });
@@ -223,18 +229,22 @@ define([
         '-',
         t('paintShop', 'menu:header:all'),
         {
+          icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyOrders'),
           handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e)
         },
         {
+          icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyChildOrders'),
           handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e)
         },
         {
+          icon: 'fa-print',
           label: t('paintShop', 'menu:printOrders'),
           handler: this.trigger.bind(this, 'actionRequested', 'printOrders')
         },
         {
+          icon: 'fa-download',
           label: t('paintShop', 'menu:exportOrders'),
           handler: this.trigger.bind(this, 'actionRequested', 'exportOrders')
         }

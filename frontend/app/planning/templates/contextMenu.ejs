@@ -5,7 +5,15 @@
   <% } else if (item.type === 'divider') { %>
   <li class="divider"></li>
   <% } else { %>
-  <li><a data-action="<%- i %>"><%- item.label %></a></li>
+  <li>
+    <a data-action="<%- i %>">
+      <% if (icons) { %>
+      <i class="fa <%- item.icon || 'fa-blank' %>"></i><span><%- item.label %></span>
+      <% } else { %>
+      <%- item.label %>
+      <% } %>
+    </a>
+  </li>
   <% } %>
   <% }) %>
 </ul>

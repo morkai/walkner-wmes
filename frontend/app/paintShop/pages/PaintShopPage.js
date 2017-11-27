@@ -435,18 +435,22 @@ define([
       var menu = [
         t('paintShop', 'menu:header:' + (mrp ? 'mrp' : 'all'), {mrp: mrp}),
         {
+          icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyOrders'),
           handler: this.handleCopyOrdersAction.bind(this, e, mrp)
         },
         {
+          icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyChildOrders'),
           handler: this.handleCopyChildOrdersAction.bind(this, e, mrp)
         },
         {
+          icon: 'fa-print',
           label: t('paintShop', 'menu:printOrders'),
           handler: this.handlePrintOrdersAction.bind(this, 'mrp', mrp)
         },
         {
+          icon: 'fa-download',
           label: t('paintShop', 'menu:exportOrders'),
           handler: this.handleExportOrdersAction.bind(this, mrp)
         }
@@ -455,6 +459,7 @@ define([
       if (mrp && user.isAllowedTo('PAINT_SHOP:DROP_ZONES'))
       {
         menu.push({
+          icon: 'fa-level-down',
           label: t('paintShop', 'menu:dropZone:' + this.dropZones.getState(mrp)),
           handler: this.handleDropZoneAction.bind(this, mrp)
         });

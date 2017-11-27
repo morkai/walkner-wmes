@@ -409,6 +409,7 @@ define([
         || this.plan.getActualOrderData(orderNo).quantityDone)
       {
         menu.push({
+          icon: 'fa-file-text-o',
           label: t('planning', 'orders:menu:shiftOrder'),
           handler: this.handleShiftOrderAction.bind(this, lineOrder)
         });

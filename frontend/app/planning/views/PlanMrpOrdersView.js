@@ -373,6 +373,7 @@ define([
         || this.plan.getActualOrderData(planOrder.id).quantityDone)
       {
         menu.push({
+          icon: 'fa-file-text-o',
           label: t('planning', 'orders:menu:shiftOrder'),
           handler: this.handleShiftOrderAction.bind(this, planOrder)
         });
@@ -386,18 +387,22 @@ define([
       if (this.plan.canEditSettings() && !planOrder.isAutoAdded())
       {
         menu.push({
+          icon: 'fa-sort-numeric-desc',
           label: t('planning', 'orders:menu:quantity'),
           handler: this.handleQuantityAction.bind(this, planOrder)
         },
         {
+          icon: 'fa-thumb-tack',
           label: t('planning', 'orders:menu:lines'),
           handler: this.handleLinesAction.bind(this, planOrder)
         },
         {
+          icon: 'fa-exclamation',
           label: t('planning', 'orders:menu:' + (planOrder.get('urgent') ? 'unurgent' : 'urgent')),
           handler: this.handleUrgentAction.bind(this, planOrder)
         },
         {
+          icon: 'fa-ban',
           label: t('planning', 'orders:menu:' + (planOrder.get('ignored') ? 'unignore' : 'ignore')),
           handler: this.handleIgnoreAction.bind(this, planOrder)
         });
@@ -405,6 +410,7 @@ define([
         if (planOrder.get('source') === 'added')
         {
           menu.push({
+            icon: 'fa-times',
             label: t('planning', 'orders:menu:remove'),
             handler: this.handleRemoveAction.bind(this, planOrder)
           });
