@@ -201,7 +201,8 @@ define([
               qtyTodo: order.get('quantityTodo'),
               qtyPlan: 0,
               lines: {},
-              comment: sapOrder ? sapOrder.get('comment') : ''
+              comment: sapOrder ? sapOrder.get('comment') : '',
+              comments: sapOrder ? sapOrder.get('comments') : []
             };
           }
 
@@ -301,11 +302,20 @@ define([
           return;
         }
 
-        var text = [
-          ['no', 'shift', 'orderNo', 'nc12', 'name', 'qtyPlan', 'qtyTodo', 'startTime', 'finishTime', 'lines']
-            .map(function(p) { return t('planning', 'lineOrders:list:' + p); })
-            .join('\t')
+        var columns = [
+          'no',
+          'shift',
+          'orderNo',
+          'nc12',
+          'name',
+          'qtyPlan',
+          'qtyTodo',
+          'startTime',
+          'finishTime',
+          'lines',
+          'comment'
         ];
+        var text = [columns.map(function(p) { return t('planning', 'lineOrders:list:' + p); }).join('\t')];
 
         view.serializeOrders().forEach(function(order)
         {
@@ -319,7 +329,10 @@ define([
             order.qtyTodo,
             order.startTime,
             order.finishTime,
-            order.lines
+            order.lines,
+            '"' + order.comments
+              .map(function(comment) { return comment.user.label + ': ' + comment.text.replace(/"/g, "'"); })
+              .join('\r\n--\r\n') + '"'
           ];
 
           text.push(row.join('\t'));
