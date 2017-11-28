@@ -22,7 +22,7 @@
       </span>
       <% if (order.startTime) { %>
       <span class="paintShop-property" data-property="startTime" title="<%- t('paintShop', 'PROPERTY:startTime') %>">
-      <i class="fa fa-clock-o"></i><span><%- order.startTimeText %></span>
+      <i class="fa fa-clock-o"></i><span><%- order.startTimeTime %></span>
       </span>
       <% } %>
       <% if (order.placement) { %>
@@ -39,12 +39,12 @@
     <td class="paintShop-property" rowspan="<%- order[rowSpan] %>">
       <% if (order.startedAt) { %>
       <span class="paintShop-property" data-property="startedAt" title="<%- t('paintShop', 'PROPERTY:startedAt') %>">
-        <i class="fa fa-hourglass-start"></i><span><%- order.startedAtText %></span>
+        <i class="fa fa-hourglass-start"></i><span><%- order.startedAtDate %></span>
       </span>
       <% } %>
       <% if (order.finishedAt) { %>
       <span class="paintShop-property" data-property="finishedAt" title="<%- t('paintShop', 'PROPERTY:finishedAt') %>">
-        <i class="fa fa-hourglass-end"></i><span><%- order.finishedAtText %></span>
+        <i class="fa fa-hourglass-end"></i><span><%- order.finishedAtDate %></span>
       </span>
       <% } %>
       <% if (commentVisible && order.comment) { %>

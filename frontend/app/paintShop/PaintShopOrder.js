@@ -98,17 +98,23 @@ define([
 
       if (obj.startTime)
       {
-        obj.startTimeText = time.utc.format(obj.startTime, 'HH:mm:ss');
+        obj.startTimeTime = time.utc.format(obj.startTime, 'HH:mm:ss');
       }
 
       if (obj.startedAt)
       {
-        obj.startedAtText = time.format(obj.startedAt, 'HH:mm:ss');
+        var startedAt = time.getMoment(obj.startedAt);
+
+        obj.startedAtTime = startedAt.format('HH:mm:ss');
+        obj.startedAtDate = startedAt.format('DD.MM, HH:mm:ss');
       }
 
       if (obj.finishedAt)
       {
-        obj.finishedAtText = time.format(obj.finishedAt, 'HH:mm:ss');
+        var finishedAt = time.getMoment(obj.finishedAt);
+
+        obj.finishedAtTime = finishedAt.format('HH:mm:ss');
+        obj.finishedAtDate = finishedAt.format('DD.MM, HH:mm:ss');
       }
 
       obj.statusText = t('paintShop', 'status:' + obj.status);
