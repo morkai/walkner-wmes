@@ -84,6 +84,11 @@ define([
 
       this.listenTo(this.model, 'change', this.reloadChanges.bind(this));
 
+      if (this.vkb)
+      {
+        this.listenTo(this.vkb, 'keyFocused', this.onVkbFocused);
+      }
+
       $(window).on('resize.' + this.idPrefix, this.onWindowResize.bind(this));
     },
 
@@ -264,6 +269,11 @@ define([
           });
         }
       });
+    },
+
+    onVkbFocused: function()
+    {
+      clearTimeout(this.timers.hideVkb);
     },
 
     onDialogShown: function(viewport)

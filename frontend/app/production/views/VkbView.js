@@ -18,6 +18,10 @@ define([
     template: template,
 
     events: {
+      'focus .btn[data-key]': function(e)
+      {
+        this.trigger('keyFocused', e.currentTarget.dataset.key);
+      },
       'click .btn[data-key]': function(e)
       {
         this.pressKey(e.currentTarget.dataset.key);
