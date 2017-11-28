@@ -94,25 +94,40 @@ define([
     });
   }
 
-  function minMax(view, min, max)
+  function minMax(view, newMin, newMax)
   {
     var $quantityDone = view.$id('quantityDone');
+    var oldMin = parseInt($quantityDone.attr('min'), 10);
+    var oldMax = parseInt($quantityDone.attr('max'), 10);
 
-    if ($quantityDone.attr('data-max-set') === '1')
+    if (isNaN(oldMin))
     {
-      return;
+      oldMin = 0;
     }
 
-    if (min !== null)
+    if (isNaN(oldMax))
     {
-      $quantityDone.attr('min', min);
+      oldMax = 9999;
     }
 
-    if (max !== null)
+    if (newMax === null)
     {
-      $quantityDone.attr('max', max).attr('data-max-set', '1');
+      newMax = oldMax;
     }
 
-    $quantityDone.trigger('input');
+    if (newMin === null)
+    {
+      newMin = oldMin;
+    }
+
+    if (newMin > newMax)
+    {
+      newMin = newMax;
+    }
+
+    $quantityDone
+      .attr('min', newMin)
+      .attr('max', newMax)
+      .trigger('input');
   }
 });
