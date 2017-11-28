@@ -124,7 +124,12 @@ define([
 
   }, {
 
-    parse: parse
+    parse: parse,
+
+    isComponentBlacklisted: function(component)
+    {
+      return COMPONENT_BLACKLIST[component.nc12];
+    }
 
   });
 });

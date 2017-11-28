@@ -49,7 +49,7 @@ define([
 ) {
   'use strict';
 
-  var IS_EMBEDDED = true || window.parent !== window;
+  var IS_EMBEDDED = window.parent !== window;
   var STATUS_WEIGHTS = {
     started: 1,
     partial: 2,
@@ -664,6 +664,11 @@ define([
 
           childOrder.components.forEach(function(component)
           {
+            if (PaintShopOrder.isComponentBlacklisted(component))
+            {
+              return;
+            }
+
             push({
               type: 'component',
               no: '',
