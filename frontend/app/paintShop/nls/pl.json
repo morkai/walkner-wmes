@@ -18,6 +18,7 @@
   "PROPERTY:name": "Nazwa wyrobu/komponentu",
   "PROPERTY:qty": "Ilość",
   "PROPERTY:qtyDone": "Ilość pomalowana",
+  "PROPERTY:qtyPaint": "Ilość do pomalowania",
   "PROPERTY:mrp": "Przepływ",
   "PROPERTY:startTime": "Początek montażu",
   "PROPERTY:placement": "Położenie",

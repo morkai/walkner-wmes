@@ -42,6 +42,7 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
     name: String,
     qty: Number,
     qtyDone: Number,
+    qtyPaint: Number,
     mrp: String,
     placement: String,
     startTime: Number,

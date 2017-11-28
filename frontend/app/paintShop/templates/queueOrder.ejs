@@ -30,6 +30,11 @@
         <i class="fa fa-truck"></i><span><%- order.placement %></span>
       </span>
       <% } %>
+      <% if (order.qtyPaint) { %>
+      <span class="paintShop-property" data-property="qtyPaint" title="<%- t('paintShop', 'PROPERTY:qtyPaint') %>">
+        <i class="fa fa-paint-brush"></i><span><%- order.qtyPaint.toLocaleString() %></span>
+      </span>
+      <% } %>
       <% if (order.qtyDone) { %>
       <span class="paintShop-property" data-property="qtyDone" title="<%- t('paintShop', 'PROPERTY:qtyDone') %>">
         <i class="fa fa-check"></i><span><%- order.qtyDone.toLocaleString() %></span>

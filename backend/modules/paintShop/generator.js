@@ -16,6 +16,7 @@ const ORDER_COMPARE_PROPERTIES = [
   'nc12',
   'name',
   'qty',
+  'qtyPaint',
   'mrp',
   'placement',
   'startTime',
@@ -120,6 +121,7 @@ module.exports = function(app, module)
             name: o.name,
             qty: o.qtyTodo,
             qtyDone: 0,
+            qtyPaint: 0,
             mrp: o.mrp,
             placement: '',
             startTime: 0,
@@ -181,6 +183,8 @@ module.exports = function(app, module)
           return this.skip(new Error(`Failed to find child orders: ${err.message}`));
         }
 
+        this.childOrderPaintCounts = new Map();
+
         childOrders.forEach(childOrder =>
         {
           const leadingOrder = this.newOrders.get(childOrder.leadingOrder);
@@ -191,6 +195,7 @@ module.exports = function(app, module)
           }
 
           let paint = null;
+          let paintCount = 0;
 
           childOrder.bom.sort((a, b) =>
           {
@@ -204,12 +209,17 @@ module.exports = function(app, module)
 
           const components = childOrder.bom.map(component =>
           {
-            if (!paint && (component.unit === 'G' || component.unit === 'KG'))
+            if (component.unit === 'G' || component.unit === 'KG')
             {
-              paint = {
-                nc12: component.nc12,
-                name: component.name
-              };
+              paintCount += 1;
+
+              if (!paint)
+              {
+                paint = {
+                  nc12: component.nc12,
+                  name: component.name
+                };
+              }
             }
 
             return {
@@ -224,6 +234,8 @@ module.exports = function(app, module)
           {
             return;
           }
+
+          this.childOrderPaintCounts.add(childOrder._id, paintCount);
 
           leadingOrder.childOrders.push({
             order: childOrder._id,
@@ -353,6 +365,11 @@ module.exports = function(app, module)
         mergedNewOrders.forEach((newOrder, i) =>
         {
           newOrder.no = i + 1;
+
+          newOrder.childOrders.forEach(childOrder =>
+          {
+            newOrder.qtyPaint += childOrder.qty * this.childOrderPaintCounts.get(childOrder.order);
+          });
         });
 
         setImmediate(this.next());
