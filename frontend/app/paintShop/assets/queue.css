@@ -1,14 +1,5 @@
-.paintShop-queue-container {
-  flex: 1 1 auto;
-  margin-bottom: 66px;
-  background: #fff;
-  border: 1px solid #333;
-  box-shadow: 0 6px 12px #666;
-  line-height: 1;
-}
 .paintShop-queue {
-  height: 100%;
-  overflow-y: scroll;
+  line-height: 1;
 }
 .paintShop-queue > hr {
   margin-top: 0;

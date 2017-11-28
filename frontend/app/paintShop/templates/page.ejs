@@ -1,9 +1,19 @@
 <div class="paintShop" style="height: <%- height %>">
-  <div id="<%- idPrefix %>-list-all" class="paintShop-list-container"></div>
-  <div id="<%- idPrefix %>-queue" class="paintShop-queue-container"></div>
-  <div id="<%- idPrefix %>-list-work" class="paintShop-list-container"></div>
-  <div id="<%- idPrefix %>-tabs" class="paintShop-tabs">
-    <%- renderTabs({tabs: tabs}) %>
+  <div class="paintShop-left">
+    <div id="<%- idPrefix %>-todo" class="paintShop-list-container is-scrollable"></div>
+    <input id="<%- idPrefix %>-search" class="paintShop-search is-empty" data-vkb="numeric" maxlength="9" placeholder="&#xF002;">
+  </div>
+  <div class="paintShop-center">
+    <div id="<%- idPrefix %>-queue" class="paintShop-queue-container is-scrollable"></div>
+    <div id="<%- idPrefix %>-tabs" class="paintShop-tabs">
+      <%- renderTabs({tabs: tabs}) %>
+    </div>
+  </div>
+  <div class="paintShop-right">
+    <div id="<%- idPrefix %>-done" class="paintShop-list-container is-scrollable"></div>
+    <div id="<%- idPrefix %>-totals" class="paintShop-totals">
+      <%- renderTotals({totals: totals}) %>
+    </div>
   </div>
   <% if (embedded) { %>
   <div class="paintShop-parentControls">

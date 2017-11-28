@@ -29,6 +29,7 @@ define([
       this.allMrps = null;
       this.serializedList = null;
       this.serializedMap = null;
+      this.totalQuantities = {};
 
       this.on('request', function()
       {
@@ -118,6 +119,15 @@ define([
       var serializedList = [];
       var serializedMap = {};
       var mrpMap = {};
+      var totalQuantities = {
+        all: {
+          new: 0,
+          started: 0,
+          partial: 0,
+          finished: 0,
+          cancelled: 0
+        }
+      };
 
       orders.forEach(function(order)
       {
@@ -136,11 +146,26 @@ define([
         serializedList.push(serializedOrder);
 
         mrpMap[serializedOrder.mrp] = 1;
+
+        if (!totalQuantities[serializedOrder.mrp])
+        {
+          totalQuantities[serializedOrder.mrp] = {
+            new: 0,
+            started: 0,
+            partial: 0,
+            finished: 0,
+            cancelled: 0
+          };
+        }
+
+        totalQuantities.all[serializedOrder.status] += serializedOrder.qtyPaint;
+        totalQuantities[serializedOrder.mrp][serializedOrder.status] += serializedOrder.qtyPaint;
       });
 
       orders.serializedList = serializedList;
       orders.serializedMap = serializedMap;
       orders.allMrps = Object.keys(mrpMap).sort();
+      orders.totalQuantities = totalQuantities;
 
       if (orders.selectedMrp !== 'all' && !mrpMap[orders.selectedMrp])
       {
@@ -148,6 +173,44 @@ define([
       }
 
       return serializedList;
+    },
+
+    recountTotals: function()
+    {
+      var totalQuantities = {
+        all: {
+          new: 0,
+          started: 0,
+          partial: 0,
+          finished: 0,
+          cancelled: 0
+        }
+      };
+
+      this.forEach(function(order)
+      {
+        var mrp = order.get('mrp');
+        var status = order.get('status');
+        var qtyPaint = order.get('qtyPaint');
+
+        if (!totalQuantities[mrp])
+        {
+          totalQuantities[mrp] = {
+            new: 0,
+            started: 0,
+            partial: 0,
+            finished: 0,
+            cancelled: 0
+          };
+        }
+
+        totalQuantities.all[status] += qtyPaint;
+        totalQuantities[mrp][status] += qtyPaint;
+      });
+
+      this.totalQuantities = totalQuantities;
+
+      this.trigger('totalsRecounted');
     },
 
     act: function(reqData, done)
@@ -198,6 +261,7 @@ define([
     {
       var orders = this;
       var silent = changes.removed.length > 0 || changes.added.length > 0;
+      var recountTotals = silent;
 
       if (!silent)
       {
@@ -223,9 +287,16 @@ define([
       {
         var order = orders.get(changed._id);
 
-        if (order)
+        if (!order)
         {
-          order.set(PaintShopOrder.parse(changed), {silent: silent});
+          return;
+        }
+
+        order.set(PaintShopOrder.parse(changed), {silent: silent});
+
+        if (changed.qtyPaint || changed.status)
+        {
+          recountTotals = true;
         }
       });
 
@@ -237,6 +308,10 @@ define([
 
         orders.sort({silent: true});
         orders.trigger('reset', orders);
+      }
+      else if (recountTotals)
+      {
+        orders.recountTotals();
       }
     }
 

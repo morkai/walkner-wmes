@@ -1,17 +1,9 @@
 .paintShop-tabs {
-  position: absolute;
   display: flex;
-  bottom: 64px;
-  left: 235px;
-  right: 515px;
   height: 67px;
-  box-shadow: 0 6px 12px #666;
   background: #fff;
-  border: 1px solid #333;
+  border-top: 1px solid #333;
   overflow-x: scroll;
-}
-.paintShop-is-fullscreen .paintShop-tabs {
-  bottom: 15px;
 }
 .paintShop-tab {
   flex: 0 0 auto;

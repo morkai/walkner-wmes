@@ -1,18 +1,3 @@
-.paintShop-list-container {
-  flex: 0 0 auto;
-  width: 200px;
-  background: #fff;
-  border: 1px solid #333;
-  box-shadow: 0 6px 12px #666;
-  line-height: 1;
-}
-.paintShop-list {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow-y: scroll;
-  height: 100%;
-}
 .paintShop-list-item {
   flex: 0 0 auto;
   line-height: 50px;
@@ -45,6 +30,7 @@
 .paintShop-list-item:last-child {
   flex: 1 1 auto;
   border-bottom: 0;
+  border-right: 0;
   background-color: #fff;
   cursor: default;
 }
@@ -61,26 +47,4 @@
   width: 125px;
   font-size: 24px;
 }
-.paintShop-list-search {
-  position: fixed;
-  left: 15px;
-  bottom: 64px;
-  width: 182px;
-  height: 52px;
-  font-size: 32px;
-  text-align: center;
-  background-color: #fff;
-  border: 1px solid #333;
-}
-.paintShop-list-search:disabled {
-  background-color: #fcf8e3;
-}
-.paintShop-list-search.is-empty {
-  font-family: FontAwesome;
-  font-style: normal;
-  font-weight: normal;
-  text-decoration: inherit;
-}
-.paintShop-is-fullscreen .paintShop-list-search {
-  bottom: 15px;
-}
+

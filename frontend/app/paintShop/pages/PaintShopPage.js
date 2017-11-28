@@ -22,6 +22,7 @@ define([
   '../views/PaintShopDatePickerView',
   'app/paintShop/templates/page',
   'app/paintShop/templates/mrpTabs',
+  'app/paintShop/templates/totals',
   'app/paintShop/templates/printPage'
 ], function(
   _,
@@ -45,6 +46,7 @@ define([
   PaintShopDatePickerView,
   pageTemplate,
   mrpTabsTemplate,
+  totalsTemplate,
   printPageTemplate
 ) {
   'use strict';
@@ -127,6 +129,11 @@ define([
         if (order)
         {
           order.set(PaintShopOrder.parse(changes));
+
+          if (changes.qtyPaint || changes.status)
+          {
+            this.orders.recountTotals();
+          }
         }
       },
       'paintShop.dropZones.updated.*': function(message)
@@ -146,6 +153,28 @@ define([
 
         return false;
       },
+      'focus #-search': function(e)
+      {
+        if (this.vkbView)
+        {
+          clearTimeout(this.timers.hideVkb);
+
+          this.vkbView.show(e.target, this.onVkbValueChange);
+          this.vkbView.$el.css({
+            left: '195px',
+            bottom: '67px',
+            marginLeft: '0'
+          });
+        }
+      },
+      'blur #-search': function()
+      {
+        if (this.vkbView)
+        {
+          this.scheduleHideVkb();
+        }
+      },
+      'input #-search': 'onVkbValueChange',
 
       'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
       'touchstart #-switchApps': function() { this.startActionTimer('switchApps'); },
@@ -166,6 +195,7 @@ define([
     initialize: function()
     {
       this.onResize = _.debounce(this.resize.bind(this), 30);
+      this.onVkbValueChange = this.onVkbValueChange.bind(this);
 
       this.actionTimer = {
         action: null,
@@ -177,8 +207,8 @@ define([
       this.defineBindings();
 
       this.setView('#-queue', this.queueView);
-      this.setView('#-list-all', this.allListView);
-      this.setView('#-list-work', this.workListView);
+      this.setView('#-todo', this.todoView);
+      this.setView('#-done', this.doneView);
 
       if (IS_EMBEDDED)
       {
@@ -207,7 +237,9 @@ define([
 
     defineModels: function()
     {
-      this.orders = bindLoadingMessage(PaintShopOrderCollection.forDate(this.options.date), this);
+      this.orders = _.assign(bindLoadingMessage(PaintShopOrderCollection.forDate(this.options.date), this), {
+        selectedMrp: this.options.selectedMrp || 'all'
+      });
       this.dropZones = bindLoadingMessage(
         PaintShopDropZoneCollection.forDate(this.options.date),
         this,
@@ -223,20 +255,22 @@ define([
         dropZones: this.dropZones,
         vkb: this.vkbView
       });
-      this.allListView = new PaintShopListView({
+      this.todoView = new PaintShopListView({
         model: this.orders,
         showTimes: false,
         showSearch: true,
+        showTotals: false,
         vkb: this.vkbView,
         filter: function(psOrder)
         {
           return psOrder.status === 'new' || psOrder.status === 'cancelled';
         }
       });
-      this.workListView = new PaintShopListView({
+      this.doneView = new PaintShopListView({
         model: this.orders,
         showTimes: true,
         showSearch: false,
+        showTotals: true,
         filter: function(psOrder)
         {
           return STATUS_WEIGHTS[psOrder.status] >= 1;
@@ -266,6 +300,7 @@ define([
 
       page.listenTo(page.orders, 'reset', this.onOrdersReset);
       page.listenTo(page.orders, 'mrpSelected', this.onMrpSelected);
+      page.listenTo(page.orders, 'totalsRecounted', this.renderTotals);
 
       page.listenTo(page.dropZones, 'reset', this.renderTabs);
       page.listenTo(page.dropZones, 'updated', this.onDropZoneUpdated);
@@ -299,7 +334,9 @@ define([
         embedded: IS_EMBEDDED,
         height: this.calcInitialHeight() + 'px',
         renderTabs: mrpTabsTemplate,
-        tabs: this.serializeTabs()
+        renderTotals: totalsTemplate,
+        tabs: this.serializeTabs(),
+        totals: this.serializeTotals()
       };
     },
 
@@ -319,6 +356,11 @@ define([
       });
     },
 
+    serializeTotals: function()
+    {
+      return this.orders.totalQuantities[this.orders.selectedMrp];
+    },
+
     beforeRender: function()
     {
       document.body.style.overflow = 'hidden';
@@ -328,14 +370,11 @@ define([
 
     afterRender: function()
     {
+      this.$id('todo').on('scroll', this.todoView.onScroll.bind(this.todoView));
+      this.$id('queue').on('scroll', this.queueView.onScroll.bind(this.queueView));
+      this.$id('done').on('scroll', this.doneView.onScroll.bind(this.doneView));
+
       $('.modal.fade').removeClass('fade');
-
-      if (this.options.selectedMrp)
-      {
-        this.$('.paintShop-tab[data-mrp="' + this.options.selectedMrp + '"]').click();
-
-        this.options.selectedMrp = null;
-      }
 
       this.resize();
     },
@@ -403,6 +442,13 @@ define([
       }));
     },
 
+    renderTotals: function()
+    {
+      this.$id('totals').html(totalsTemplate({
+        totals: this.serializeTotals()
+      }));
+    },
+
     updateUrl: function()
     {
       this.broker.publish('router.navigate', {
@@ -426,7 +472,7 @@ define([
         query.push('fullscreen=1');
       }
 
-      return this.orders.genClientUrl() + '?' + query.join('&');
+      return this.orders.genClientUrl() + (query.length ? '?' : '') + query.join('&');
     },
 
     showMrpMenu: function(e)
@@ -686,6 +732,131 @@ define([
       return pages;
     },
 
+    scheduleHideVkb: function()
+    {
+      var page = this;
+
+      clearTimeout(page.timers.hideVkb);
+
+      if (!page.vkbView.isVisible())
+      {
+        return;
+      }
+
+      page.timers.hideVkb = setTimeout(function()
+      {
+        page.vkbView.hide();
+        page.vkbView.$el.css({
+          left: '',
+          bottom: '',
+          marginLeft: ''
+        });
+
+        page.$id('search').val('').addClass('is-empty').css('background', '');
+      }, 250);
+    },
+
+    searchOrder: function(orderNo)
+    {
+      var page = this;
+
+      if (page.vkbView)
+      {
+        page.vkbView.hide();
+      }
+
+      var $search = page.$id('search').blur();
+      var order = page.orders.getFirstByOrderNo(orderNo);
+
+      if (order)
+      {
+        $search.val('').addClass('is-empty').css('background', '');
+
+        if (order.get('mrp') !== page.orders.selectedMrp)
+        {
+          page.orders.selectMrp(order.get('mrp'));
+        }
+
+        page.orders.trigger('focus', order.id, {showDetails: true});
+
+        return;
+      }
+
+      $search.prop('disabled', true);
+
+      viewport.msg.loading();
+
+      var req = this.ajax({
+        url: '/paintShop/orders?order=' + orderNo + '&select(date,mrp)&limit(1)'
+      });
+
+      req.fail(fail);
+
+      req.done(function(res)
+      {
+        if (res.totalCount === 0)
+        {
+          return fail();
+        }
+
+        var order = res.collection[0];
+
+        page.orders.setDateFilter(time.utc.format(order.date, 'YYYY-MM-DD'));
+
+        var req = page.orders.fetch({reset: true});
+
+        req.fail(fail);
+
+        req.done(function()
+        {
+          if (page.orders.selectedMrp !== order.mrp)
+          {
+            page.orders.selectMrp(order.mrp);
+            page.orders.trigger('focus', order._id, {showDetails: true});
+          }
+        });
+      });
+
+      req.always(function()
+      {
+        viewport.msg.loaded();
+      });
+
+      function fail()
+      {
+        viewport.msg.show({
+          type: 'warning',
+          time: 2500,
+          text: t('paintShop', 'MSG:search:failure')
+        });
+
+        $search.css('background', '#f2dede');
+
+        setTimeout(function()
+        {
+          $search
+            .prop('disabled', false)
+            .val('')
+            .addClass('is-empty')
+            .css('background', '')
+            .focus();
+        }, 1337);
+      }
+    },
+
+    onVkbValueChange: function()
+    {
+      var $search = this.$id('search');
+      var orderNo = $search.val();
+
+      $search.toggleClass('is-empty', orderNo === '').css('background', /[^0-9]+/.test(orderNo) ? '#f2dede' : '');
+
+      if (/^[0-9]{9}$/.test(orderNo))
+      {
+        this.searchOrder(orderNo);
+      }
+    },
+
     onActionRequested: function(action)
     {
       switch (action)
@@ -733,11 +904,13 @@ define([
       });
 
       this.renderTabs();
+      this.renderTotals();
     },
 
     onMrpSelected: function()
     {
       this.updateUrl();
+      this.renderTotals();
 
       this.$('.paintShop-tab.is-active').removeClass('is-active');
 

@@ -57,7 +57,6 @@ define([
           );
         }
       },
-      'scroll': 'onScroll',
       'contextmenu .visible': function(e)
       {
         this.showMenu(e);
@@ -68,9 +67,10 @@ define([
 
     initialize: function()
     {
+      this.onScroll = _.debounce(this.onScroll.bind(this), 100, false);
+
       this.lastClickEvent = null;
       this.lastFocusedOrder = null;
-      this.onScroll = _.debounce(this.onScroll.bind(this), 100, false);
 
       this.listenTo(this.orders, 'reset', this.render);
       this.listenTo(this.orders, 'change', this.onChange);
@@ -130,7 +130,7 @@ define([
 
       if ($focused.length)
       {
-        this.el.scrollTop = $focused[0].offsetTop + 1;
+        this.el.parentNode.scrollTop = $focused[0].offsetTop + 1;
       }
     },
 
@@ -166,7 +166,7 @@ define([
 
       if (orderEl)
       {
-        this.$el.animate({scrollTop: orderEl.offsetTop + 1}, 200);
+        this.$el.parent().animate({scrollTop: orderEl.offsetTop + 1}, 200);
 
         this.lastFocusedOrder = orderId;
       }
@@ -269,7 +269,7 @@ define([
 
       this.lastFocusedOrder = $visible[0].dataset.orderId;
 
-      var scrollTop = this.el.scrollTop;
+      var scrollTop = this.el.parentNode.scrollTop;
 
       for (var i = 0; i < $visible.length; ++i)
       {
@@ -309,7 +309,7 @@ define([
 
       if (orderEl)
       {
-        this.$el.animate({scrollTop: orderEl.offsetTop + 1}, 200);
+        this.$el.parent().animate({scrollTop: orderEl.offsetTop + 1}, 200);
 
         this.lastFocusedOrder = orderId;
 
