@@ -98,9 +98,9 @@ define([
 
       var $users = setUpUsersSelect2(this.$id('users'), {
         width: 550,
-        multiple: true
+        multiple: true,
+        view: this
       });
-      $users.select2('data', this.model.getUsersForSelect2());
       $users.on('change', this.toggleSubmit.bind(this));
 
       this.toggleShift();
@@ -167,7 +167,8 @@ define([
         to: time.format(+this.model.get('to'), 'YYYY-MM-DD'),
         mode: this.model.get('mode'),
         shift: this.model.get('shift'),
-        divisions: this.model.get('divisions')
+        divisions: this.model.get('divisions'),
+        users: this.model.getUsersForSelect2().map(function(u) { return u.id; }).join('')
       };
     },
 
