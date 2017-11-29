@@ -787,7 +787,8 @@ define([
       viewport.msg.loading();
 
       var req = this.ajax({
-        url: '/paintShop/orders?order=' + orderNo + '&select(date,mrp)&limit(1)'
+        url: '/paintShop/orders?select(date,mrp)&limit(1)'
+          + '&or(eq(order,string:' + orderNo + '),eq(childOrders.order,string:' + orderNo + '))'
       });
 
       req.fail(fail);
@@ -812,8 +813,11 @@ define([
           if (page.orders.selectedMrp !== order.mrp)
           {
             page.orders.selectMrp(order.mrp);
-            page.orders.trigger('focus', order._id, {showDetails: true});
           }
+
+          page.orders.trigger('focus', order._id, {showDetails: true});
+
+          complete('#ddffdd');
         });
       });
 
@@ -830,7 +834,12 @@ define([
           text: t('paintShop', 'MSG:search:failure')
         });
 
-        $search.css('background', '#f2dede');
+        complete('#f2dede');
+      }
+
+      function complete(bgColor)
+      {
+        $search.css('background', bgColor);
 
         setTimeout(function()
         {

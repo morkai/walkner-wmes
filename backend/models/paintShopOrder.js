@@ -62,6 +62,7 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
   paintShopOrderSchema.index({date: -1});
   paintShopOrderSchema.index({status: 1, date: -1});
   paintShopOrderSchema.index({order: 1});
+  paintShopOrderSchema.index({'childOrders.order': 1});
 
   paintShopOrderSchema.methods.act = function(action, comment, qtyDone, done)
   {

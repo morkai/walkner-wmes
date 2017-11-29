@@ -104,7 +104,18 @@ define([
 
     getFirstByOrderNo: function(orderNo)
     {
-      return this.find(function(o) { return o.get('order') === orderNo; });
+      return this.find(function(o)
+      {
+        if (o.get('order') === orderNo)
+        {
+          return true;
+        }
+
+        return _.some(o.get('childOrders'), function(childOrder)
+        {
+          return childOrder.order === orderNo;
+        });
+      });
     },
 
     serialize: function()
