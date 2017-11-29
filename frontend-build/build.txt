@@ -1254,6 +1254,7 @@ app/paintShop/templates/datePicker.js
 app/paintShop/views/PaintShopDatePickerView.js
 app/paintShop/templates/page.js
 app/paintShop/templates/mrpTabs.js
+app/paintShop/templates/totals.js
 app/paintShop/templates/printPage.js
 app/paintShop/pages/PaintShopPage.js
 app/nls/paintShop.js
