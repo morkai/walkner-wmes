@@ -666,12 +666,15 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
 
   function prepareXiconfClient(totalCount, clients, formatResult)
   {
-    clients.forEach(client =>
+    if (Array.isArray(clients))
     {
-      const socket = sio.sockets.connected[client.socket];
+      clients.forEach(client =>
+      {
+        const socket = sio.sockets.connected[client.socket];
 
-      client.remoteAddress = socket ? socket.conn.remoteAddress : null;
-    });
+        client.remoteAddress = socket ? socket.conn.remoteAddress : null;
+      });
+    }
 
     formatResult(null, {
       totalCount: totalCount,
