@@ -28,7 +28,8 @@ define([
         shift: shiftStartInfo.shift,
         masters: undefined,
         operators: undefined,
-        divisions: []
+        divisions: [],
+        shifts: [1, 2, 3]
       };
     },
 
@@ -39,7 +40,8 @@ define([
         to: this.get('to'),
         interval: this.get('interval'),
         mode: this.get('mode'),
-        divisions: this.get('divisions').join(',')
+        divisions: this.get('divisions').join(','),
+        shifts: this.get('shifts').join(',')
       };
 
       if (obj.mode)
@@ -75,7 +77,7 @@ define([
         }
       }
 
-      str += '&divisions=' + attrs.divisions.join(',');
+      str += '&divisions=' + attrs.divisions.join(',') + '&shifts=' + attrs.shifts.join(',');
 
       return str;
     },
@@ -193,6 +195,11 @@ define([
       if (query.divisions)
       {
         attrs.divisions = query.divisions.split(',');
+      }
+
+      if (query.shifts)
+      {
+        attrs.shifts = query.shifts.split(',');
       }
 
       return new Report4Query(attrs);

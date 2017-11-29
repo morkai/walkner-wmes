@@ -112,6 +112,7 @@
     "filter:subdivisionType:press": "Press",
     "filter:subdivisionType:paintShop": "Paint shop",
     "filter:ignoredOrgUnits": "Ignored org. units",
+    "filter:shifts": "Shifts",
     "filter:submit": "Filter report",
     "filter:submit:currentShift": "Current shift",
     "filter:submit:prevShift": "Previous shift",

@@ -421,10 +421,11 @@ Report4.prototype.countWorkers = function(prodShiftOrder)
     ratio: 0,
     operators: null
   };
+  const shiftMatches = _.isEmpty(this.options.shifts) || this.options.shifts.includes(prodShiftOrder.shift);
 
   if (this.options.mode === 'shift')
   {
-    if (prodShiftOrder.shift === this.options.shift)
+    if (shiftMatches && prodShiftOrder.shift === this.options.shift)
     {
       workerCount.match = operatorCount;
       workerCount.operators = prodShiftOrder.operators.map(function(userInfo)
@@ -435,7 +436,7 @@ Report4.prototype.countWorkers = function(prodShiftOrder)
   }
   else if (this.options.mode === 'masters')
   {
-    if (prodShiftOrder.master && this.users[prodShiftOrder.master.id])
+    if (shiftMatches && prodShiftOrder.master && this.users[prodShiftOrder.master.id])
     {
       workerCount.match = operatorCount;
       workerCount.operators = prodShiftOrder.operators.map(function(userInfo)
@@ -452,7 +453,7 @@ Report4.prototype.countWorkers = function(prodShiftOrder)
     {
       const operator = prodShiftOrder.operators[i];
 
-      if (operator && this.users[operator.id])
+      if (shiftMatches && operator && this.users[operator.id])
       {
         workerCount.match += 1;
         workerCount.operators.push(operator.id);

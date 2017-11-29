@@ -16,8 +16,11 @@ module.exports = function report4Route(app, reportsModule, req, res, next)
   const options = {
     fromTime: helpers.getTime(req.query.from),
     toTime: helpers.getTime(req.query.to),
-    interval: req.query.interval || 'day',
+    interval: helpers.getInterval(req.query.interval, 'day'),
     mode: req.query.mode,
+    shifts: typeof req.query.shifts !== 'string'
+      ? []
+      : req.query.shifts.split(',').filter(v => v >= 1 && v <= 3).map(v => +v),
     downtimeReasons: helpers.getDowntimeReasons(app[reportsModule.config.downtimeReasonsId].models, true),
     subdivisions: getMachineSubdivisions(app[reportsModule.config.orgUnitsId], divisions),
     prodNumConstant: reportsModule.prodNumConstant

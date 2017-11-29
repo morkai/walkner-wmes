@@ -111,6 +111,7 @@
   "filter:subdivisionType:press": "Tłocznia",
   "filter:subdivisionType:paintShop": "Malarnia",
   "filter:ignoredOrgUnits": "Ignorowane jednostki org.",
+  "filter:shifts": "Zmiany",
   "filter:submit": "Filtruj raport",
   "filter:submit:currentShift": "Aktualna zmiana",
   "filter:submit:prevShift": "Poprzednia zmiana",

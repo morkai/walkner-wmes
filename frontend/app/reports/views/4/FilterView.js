@@ -60,6 +60,18 @@ define([
         });
 
         this.model.set('divisions', divisions.length === $divisions.length ? [] : divisions);
+      },
+      'change input[name="shifts[]"]': function()
+      {
+        var shifts = [];
+        var $shifts = this.$('input[name="shifts[]"]');
+
+        $shifts.filter(':checked').each(function()
+        {
+          shifts.push(+this.value);
+        });
+
+        this.model.set('shifts', shifts.length === $shifts.length ? [] : shifts);
       }
     },
 
@@ -106,6 +118,7 @@ define([
       this.toggleShift();
       this.toggleMode();
       this.toggleDivisions();
+      this.toggleShifts();
       this.toggleSubmit();
     },
 
@@ -140,14 +153,27 @@ define([
 
     toggleDivisions: function()
     {
-      var $divisions = this.$id('divisions');
+      var $group = this.$id('divisions');
 
-      buttonGroup.toggle($divisions);
+      buttonGroup.toggle($group);
 
-      if (!$divisions.find('> .active').length)
+      if (!$group.find('> .active').length)
       {
-        $divisions.find('> .btn').addClass('active');
-        $divisions.find('input').prop('checked', true);
+        $group.find('> .btn').addClass('active');
+        $group.find('input').prop('checked', true);
+      }
+    },
+
+    toggleShifts: function()
+    {
+      var $group = this.$id('shifts');
+
+      buttonGroup.toggle($group);
+
+      if (!$group.find('> .active').length)
+      {
+        $group.find('> .btn').addClass('active');
+        $group.find('input').prop('checked', true);
       }
     },
 
@@ -168,6 +194,7 @@ define([
         mode: this.model.get('mode'),
         shift: this.model.get('shift'),
         divisions: this.model.get('divisions'),
+        shifts: this.model.get('shifts'),
         users: this.model.getUsersForSelect2().map(function(u) { return u.id; }).join('')
       };
     },
