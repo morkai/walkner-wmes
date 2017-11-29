@@ -41,22 +41,24 @@ define([
     {
       var lineId = change.line._id;
       var planLineSettings = plan.settings.lines.get(lineId);
-      var planLine = plan.lines.get(lineId);
+
+      plan.settings.lines.remove(lineId);
+      plan.lines.remove(lineId);
+
+      changed.lines[lineId] = true;
 
       if (!planLineSettings)
       {
         return;
       }
 
-      plan.settings.lines.remove(planLineSettings);
-
-      changed.lines[lineId] = true;
-
       planLineSettings.get('mrpPriority').forEach(function(mrpId)
       {
-        if (planLine)
+        var planMrp = plan.mrps.get(mrpId);
+
+        if (planMrp)
         {
-          plan.mrps.get(mrpId).lines.remove(planLine);
+          planMrp.lines.remove(lineId);
         }
 
         changed.mrps[mrpId] = true;
@@ -101,14 +103,15 @@ define([
       var mrpId = change.mrp._id;
       var planMrpSettings = plan.settings.mrps.get(mrpId);
 
+      plan.settings.mrps.remove(mrpId);
+      plan.mrps.remove(mrpId);
+
+      changed.mrps[mrpId] = true;
+
       if (!planMrpSettings)
       {
         return;
       }
-
-      plan.settings.mrps.remove(planMrpSettings);
-
-      changed.mrps[mrpId] = true;
 
       planMrpSettings.lines.forEach(function(planMrpLineSettings)
       {
@@ -149,17 +152,24 @@ define([
 
     'mrpLines:remove': function(plan, change, changed)
     {
-      var planMrpSettings = plan.settings.mrps.get(change.mrp);
+      var mrpId = change.mrp;
+      var lineId = change.line._id;
+      var planMrpSettings = plan.settings.mrps.get(mrpId);
 
-      if (!planMrpSettings)
+      if (planMrpSettings)
       {
-        return;
+        planMrpSettings.lines.remove(lineId);
       }
 
-      planMrpSettings.lines.remove(change.line._id);
+      var planMrp = plan.mrps.get(mrpId);
 
-      changed.mrps[planMrpSettings.id] = true;
-      changed.lines[change.line._id] = true;
+      if (planMrp)
+      {
+        planMrp.lines.remove(lineId);
+      }
+
+      changed.mrps[mrpId] = true;
+      changed.lines[lineId] = true;
     },
 
     'mrpLines:change': function(plan, change, changed)
