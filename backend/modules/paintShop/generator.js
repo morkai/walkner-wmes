@@ -235,7 +235,7 @@ module.exports = function(app, module)
             return;
           }
 
-          this.childOrderPaintCounts.add(childOrder._id, paintCount);
+          this.childOrderPaintCounts.set(childOrder._id, paintCount);
 
           leadingOrder.childOrders.push({
             order: childOrder._id,
