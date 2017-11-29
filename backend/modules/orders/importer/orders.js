@@ -90,19 +90,19 @@ exports.start = function startOrdersImporterModule(app, module)
         {
           const order = orders[oId];
 
-          if (order.startDate < minStartDate)
+          if (order.scheduledStartDate < minStartDate)
           {
-            minStartDate = order.startDate;
+            minStartDate = order.scheduledStartDate;
           }
 
-          if (order.startDate > maxStartDate)
+          if (order.scheduledStartDate > maxStartDate)
           {
-            maxStartDate = order.startDate;
+            maxStartDate = order.scheduledStartDate;
           }
         });
 
         const conditions = {
-          startDate: {
+          scheduledStartDate: {
             $gte: minStartDate,
             $lte: maxStartDate
           },
