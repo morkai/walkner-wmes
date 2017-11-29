@@ -155,6 +155,11 @@ exports.browseRoute = function(app, options, req, res, next)
 
       const totalCount = this.totalCount;
 
+      if (!Array.isArray(models))
+      {
+        models = [];
+      }
+
       if (totalCount > 0 && typeof Model.customizeLeanObject === 'function')
       {
         models = models.map(leanModel => Model.customizeLeanObject(leanModel, queryOptions.fields));
