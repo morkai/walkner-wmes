@@ -3,7 +3,7 @@
     type: change.type,
     user: change.user,
     timeLong: change.time.long,
-    timeAgo: change.time.human
+    timeShort: time.format(change.time.iso, 'L LT')
   }) %>
   <% if (change.comment) { %>
   <p class="text-lines"><%= change.comment %></p>

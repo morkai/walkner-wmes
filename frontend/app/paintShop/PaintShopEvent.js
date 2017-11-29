@@ -30,7 +30,7 @@ define([
       var obj = this.toJSON();
 
       obj.time = time.toTagData(obj.time);
-      obj.user = renderUserInfo({userInfo: obj.user});
+      obj.user = renderUserInfo({userInfo: obj.user, noIp: true});
       obj.comment = obj.data && obj.data.comment || '';
 
       return obj;
