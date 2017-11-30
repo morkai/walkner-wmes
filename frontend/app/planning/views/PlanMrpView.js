@@ -200,9 +200,11 @@ define([
 
     onLineOrdersListChanged: function()
     {
-      this.$els.timeline.addClass('hidden');
-      this.$els.crosshair.addClass('hidden');
-      this.$els.time.addClass('hidden');
+      var hidden = this.plan.displayOptions.isLineOrdersListEnabled();
+
+      this.$els.timeline.toggleClass('hidden', hidden);
+      this.$els.crosshair.toggleClass('hidden', hidden);
+      this.$els.time.toggleClass('hidden', hidden);
 
       this.renderLineOrders();
     }
