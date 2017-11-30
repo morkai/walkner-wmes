@@ -146,10 +146,11 @@ define([
     copyOrderList: function(shiftNo)
     {
       var view = this;
-      var orderList = view.plan.getOrderList(
-        function(planLine) { return !!view.mrp.lines.get(planLine.id); },
-        shiftNo
-      );
+      var mrps = {};
+
+      mrps[this.mrp.id] = true;
+
+      var orderList = view.plan.getOrderList(mrps, shiftNo);
 
       clipboard.copy(function(clipboardData)
       {

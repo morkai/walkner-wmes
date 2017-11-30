@@ -94,14 +94,11 @@ define([
     copyOrderList: function(shiftNo)
     {
       var view = this;
-      var visibleLines = {};
+      var mrps = {};
 
-      $('.is-line[data-id]').each(function() { visibleLines[this.dataset.id] = true; });
+      $('.planning-mrp[data-id]').each(function() { mrps[this.dataset.id] = true; });
 
-      var orderList = view.plan.getOrderList(
-        function(planLine) { return visibleLines[planLine.id] === true; },
-        shiftNo
-      );
+      var orderList = view.plan.getOrderList(mrps, shiftNo);
 
       clipboard.copy(function(clipboardData)
       {

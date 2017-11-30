@@ -224,29 +224,68 @@ define([
       });
     },
 
-    getOrderList: function(lineFilter, shiftNo)
+    getOrderList: function(requiredMrps, requiredShiftNo)
     {
-      var orderMap = {};
+      var orderList = [];
 
-      this.lines.forEach(function(line)
+      this.mrps.forEach(function(mrp)
       {
-        if (lineFilter && !lineFilter(line))
+        if (!requiredMrps[mrp.id])
         {
           return;
         }
 
-        line.orders.forEach(function(lineOrder)
-        {
-          if (shiftNo && lineOrder.getShiftNo() !== shiftNo)
-          {
-            return;
-          }
+        var mrpOrderMap = {};
 
-          orderMap[lineOrder.get('orderNo')] = true;
+        mrp.lines.forEach(function(line)
+        {
+          line.orders.forEach(function(lineOrder)
+          {
+            var orderNo = lineOrder.get('orderNo');
+            var planOrder = mrp.orders.get(orderNo);
+
+            if (!planOrder)
+            {
+              return;
+            }
+
+            var order = mrpOrderMap[orderNo];
+
+            if (!order)
+            {
+              order = mrpOrderMap[orderNo] = {
+                orderNo: orderNo,
+                shiftNo: Number.MAX_VALUE,
+                startTime: Number.MAX_VALUE
+              };
+            }
+
+            var shiftNo = lineOrder.getShiftNo();
+
+            if (shiftNo < order.shiftNo)
+            {
+              order.shiftNo = shiftNo;
+            }
+
+            var startTime = Date.parse(lineOrder.get('startAt'));
+
+            if (startTime < order.startTime)
+            {
+              order.startTime = startTime;
+            }
+          });
+        });
+
+        _.values(mrpOrderMap).sort(function(a, b) { return a.startTime - b.startTime; }).forEach(function(o)
+        {
+          if (!requiredShiftNo || o.shiftNo === requiredShiftNo)
+          {
+            orderList.push(o.orderNo);
+          }
         });
       });
 
-      return Object.keys(orderMap);
+      return orderList;
     }
 
   }, {
