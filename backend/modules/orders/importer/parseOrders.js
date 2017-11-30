@@ -64,7 +64,7 @@ module.exports = function parseOrders(input, orders, importTs)
         tzOffsetMs: 0,
         scheduledStartDate: new Date(scheduledStart.y, scheduledStart.m - 1, scheduledStart.d),
         scheduledFinishDate: new Date(scheduledFinish.y, scheduledFinish.m - 1, scheduledFinish.d),
-        leadingOrder: obj.leadingOrder,
+        leadingOrder: obj.leadingOrder || null,
         salesOrder: obj.salesOrder || null,
         salesOrderItem: obj.salesOrderItem || null,
         priority: obj.priority,
