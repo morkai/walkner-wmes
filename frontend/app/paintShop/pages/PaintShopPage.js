@@ -1012,7 +1012,7 @@ define([
 
       req.done(function(res)
       {
-        if (res.collection)
+        if (res.totalCount)
         {
           page.setDate(time.utc.format(res.collection[0].date, 'YYYY-MM-DD'));
         }
