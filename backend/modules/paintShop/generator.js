@@ -155,13 +155,15 @@ module.exports = function(app, module)
       },
       function()
       {
-        const conditions = {
-          leadingOrder: {$in: Array.from(this.newOrders.keys())}
+        const workCenters = this.settings.workCenters;
+        const leadingOrders = Array.from(this.newOrders.keys());
+        const plannedConditions = {
+          leadingOrder: {$in: leadingOrders}
         };
 
-        if (!_.isEmpty(this.settings.workCenters))
+        if (!_.isEmpty(workCenters))
         {
-          conditions['operations.workCenter'] = {$in: this.settings.workCenters};
+          plannedConditions['operations.workCenter'] = {$in: workCenters};
         }
 
         const fields = {
@@ -174,7 +176,11 @@ module.exports = function(app, module)
           bom: 1
         };
 
-        Order.find(conditions, fields).sort({_id: 1}).lean().exec(this.parallel());
+        Order
+          .find(plannedConditions, fields)
+          .sort({_id: 1})
+          .lean()
+          .exec(this.parallel());
       },
       function(err, childOrders)
       {
@@ -417,7 +423,25 @@ module.exports = function(app, module)
 
         if (added.length)
         {
-          PaintShopOrder.collection.insertMany(added, {ordered: false}, this.group());
+          const next = this.group();
+
+          PaintShopOrder.collection.insertMany(
+            added,
+            {ordered: false},
+            (err, res) =>
+            {
+              if (res && res.hasWriteErrors && res.hasWriteErrors())
+              {
+                const notAdded = new Set();
+
+                res.getWriteErrors().forEach(writeError => notAdded.add(writeError.getOperation()._id));
+
+                this.changes.added = added.filter(o => !notAdded.has(o._id));
+              }
+
+              next(err && err.code === 11000 ? null : err);
+            }
+          );
         }
 
         if (removed.length)
