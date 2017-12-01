@@ -31,6 +31,7 @@ module.exports = function(app, module)
   const Order = mongoose.model('Order');
   const PaintShopOrder = mongoose.model('PaintShopOrder');
   const Plan = mongoose.model('Plan');
+  const PlanSettings = mongoose.model('PlanSettings');
 
   app.broker.subscribe('paintShop.generator.requested', handleRequest);
 
@@ -66,6 +67,11 @@ module.exports = function(app, module)
       {
         settingsModule.findValues({_id: /^paintShop/}, 'paintShop.', this.parallel());
 
+        PlanSettings
+          .findById(date, {requiredStatuses: 1, ignoredStatuses: 1})
+          .lean()
+          .exec(this.parallel());
+
         Plan.aggregate([
           {$match: {_id: date}},
           {$unwind: '$orders'},
@@ -88,14 +94,14 @@ module.exports = function(app, module)
           {$group: {_id: '$lines.orders.orderNo', startAt: {$min: '$lines.orders.startAt'}}}
         ], this.parallel());
       },
-      function(err, settings, orders, startTimes)
+      function(err, settings, planSettings, orders, startTimes)
       {
         if (err)
         {
           return this.skip(new Error(`Failed to find plan orders: ${err.message}`));
         }
 
-        this.settings = settings;
+        this.settings = Object.assign(settings, planSettings);
         this.newOrders = new Map();
 
         const maybeCompletedOrders = new Set();
@@ -160,10 +166,19 @@ module.exports = function(app, module)
         const plannedConditions = {
           leadingOrder: {$in: leadingOrders}
         };
+        const unplannedConditions = {
+          scheduledStartDate: moment(key, 'YYYY-MM-DD').toDate(),
+          leadingOrder: null,
+          statuses: {
+            $in: this.settings.requiredStatuses,
+            $nin: this.settings.ignoredStatuses
+          }
+        };
 
         if (!_.isEmpty(workCenters))
         {
           plannedConditions['operations.workCenter'] = {$in: workCenters};
+          unplannedConditions['operations.workCenter'] = {$in: workCenters};
         }
 
         const fields = {
@@ -181,8 +196,14 @@ module.exports = function(app, module)
           .sort({_id: 1})
           .lean()
           .exec(this.parallel());
+
+        Order
+          .find(unplannedConditions, fields)
+          .sort({_id: 1})
+          .lean()
+          .exec(this.parallel());
       },
-      function(err, childOrders)
+      function(err, childOrders, unplannedOrders)
       {
         if (err)
         {
@@ -190,12 +211,51 @@ module.exports = function(app, module)
         }
 
         this.childOrderPaintCounts = new Map();
+        this.unplannedOrders = new Set();
+
+        unplannedOrders.forEach(unplannedOrder =>
+        {
+          if (this.newOrders.has(unplannedOrder._id))
+          {
+            return;
+          }
+
+          unplannedOrder.leadingOrder = unplannedOrder._id;
+
+          childOrders.push(unplannedOrder);
+
+          this.newOrders.set(unplannedOrder._id, {
+            _id: unplannedOrder._id,
+            status: 'new',
+            startedAt: null,
+            finishedAt: null,
+            comment: '',
+            order: unplannedOrder._id,
+            followups: [],
+            no: 0,
+            date,
+            nc12: unplannedOrder.nc12,
+            name: unplannedOrder.name,
+            qty: unplannedOrder.qty,
+            qtyDone: 0,
+            qtyPaint: 0,
+            mrp: unplannedOrder.mrp,
+            placement: '',
+            startTime: 0,
+            paint: null,
+            childOrders: []
+          });
+
+          this.unplannedOrders.add(unplannedOrder._id);
+        });
 
         childOrders.forEach(childOrder =>
         {
           const leadingOrder = this.newOrders.get(childOrder.leadingOrder);
 
-          if (!leadingOrder || _.isEmpty(childOrder.bom) || childOrder._id === leadingOrder._id)
+          if (!leadingOrder
+            || _.isEmpty(childOrder.bom)
+            || (!this.unplannedOrders.has(childOrder._id) && childOrder._id === leadingOrder._id))
           {
             return;
           }
