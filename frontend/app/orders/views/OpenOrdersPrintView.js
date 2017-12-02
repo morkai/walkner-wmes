@@ -80,18 +80,7 @@ define([
           return;
         }
 
-        var url = '/orders/' + orders.join('+') + '.html?print';
-
-        view.$el.attr('action', url);
-
-        if (openOrderPrint(null, view.el))
-        {
-          window.location.href = url;
-        }
-        else
-        {
-          view.$id('orders').select();
-        }
+        openOrderPrint(orders);
       });
     }
 

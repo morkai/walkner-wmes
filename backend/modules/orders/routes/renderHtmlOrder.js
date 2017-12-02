@@ -244,7 +244,7 @@ function buildPage(pageNo, extraRows, remainingOperations, remainingDocuments, r
   const sectionTheadHeight = 0 + 12 + 0;
   const sectionRowHeight = 6 + 12 + 0;
   const minSectionHeight = sectionTitleHeight + sectionTheadHeight + sectionRowHeight;
-  const pageHeight = 960;
+  const pageHeight = 1045;
   let remainingPageHeight = pageHeight - pageHeaderHeight - orderSummaryHeight + extraRows * sectionRowHeight;
 
   if (pageNo === 1)

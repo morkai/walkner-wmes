@@ -44,7 +44,9 @@ define([
 
       'click .action-print': function(e)
       {
-        return openOrderPrint(e, e.currentTarget);
+        openOrderPrint([this.$(e.currentTarget).closest('tr').attr('data-id')]);
+
+        return false;
       }
 
     }, ListView.prototype.events),
