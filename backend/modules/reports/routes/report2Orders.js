@@ -112,8 +112,8 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
       }
 
       req.rql.selector.args = buildStatusSelector(query, [
-        {name: 'ge', args: ['startDate', fromTime]},
-        {name: 'lt', args: ['startDate', toTime]},
+        {name: 'ge', args: ['scheduledStartDate', fromTime]},
+        {name: 'lt', args: ['scheduledStartDate', toTime]},
         {name: 'in', args: ['mrp', mrpControllers]}
       ]);
     }
@@ -173,7 +173,7 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
       : [];
     const mapReduceQuery = orderNo.length > 6 ? {_id: new RegExp('^' + orderNo)} : {
       mrp: {$in: mrpControllers},
-      startDate: {
+      scheduledStartDate: {
         $gte: new Date(fromTime),
         $lt: new Date(toTime)
       }
@@ -187,9 +187,9 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
         {
           if (hourMode === 'finish')
           {
-            this.finishDate.setHours(hour);
+            this.scheduledFinishDate.setHours(hour);
 
-            maxTime = this.finishDate.getTime();
+            maxTime = this.scheduledFinishDate.getTime();
           }
 
           var statusesSetAt = {};
@@ -312,7 +312,7 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
             mrp: this.mrp,
             qty: this.qty,
             statusesSetAt: statusesSetAt,
-            startDate: this.startDate,
+            scheduledStartDate: this.scheduledStartDate,
             delayReason: this.delayReason,
             changes: changes
           });
@@ -372,7 +372,7 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
     };
     const queryOptions = {
       fields: {_id: 0},
-      sort: {'_id.c': 1, 'value.startDate': 1},
+      sort: {'_id.c': 1, 'value.scheduledStartDate': 1},
       limit: req.rql.limit || 10,
       skip: req.rql.skip || 0
     };

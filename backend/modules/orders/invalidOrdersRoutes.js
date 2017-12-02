@@ -43,7 +43,7 @@ module.exports = function setUpInvalidOrdersRoutes(app, module)
       description: 1,
       qty: 1,
       'qtyDone.total': 1,
-      startDate: 1
+      scheduledStartDate: 1
     };
 
     invalidOrders.forEach(o =>

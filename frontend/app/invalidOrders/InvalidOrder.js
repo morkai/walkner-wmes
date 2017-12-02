@@ -48,7 +48,7 @@ define([
         o.productName = resolveProductName(o.order);
         o.qty = (o.order.qtyDone.total ? o.order.qtyDone.total : '0') + '/' + o.order.qty;
 
-        var startMoment = time.getMoment(o.order.startDate);
+        var startMoment = time.getMoment(o.order.scheduledStartDate);
 
         o.startDate = startMoment.format('L');
 

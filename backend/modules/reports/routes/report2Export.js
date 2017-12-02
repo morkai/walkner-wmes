@@ -34,15 +34,15 @@ module.exports = function report2ExportRoute(app, reportsModule, req, res, next)
   req.rql.fields = {
     nc12: 1,
     mrp: 1,
-    startDate: 1,
-    finishDate: 1,
+    scheduledStartDate: 1,
+    scheduledFinishDate: 1,
     qty: 1,
     statusesSetAt: 1,
     delayReason: 1
   };
   req.rql.selector.args = [
-    {name: 'ge', args: ['startDate', fromTime]},
-    {name: 'lt', args: ['startDate', toTime]},
+    {name: 'ge', args: ['scheduledStartDate', fromTime]},
+    {name: 'lt', args: ['scheduledStartDate', toTime]},
     {name: 'in', args: ['mrp', mrpControllers]}
   ];
 
@@ -132,8 +132,8 @@ module.exports = function report2ExportRoute(app, reportsModule, req, res, next)
       nc12: order.nc12,
       division: division ? division._id : '',
       mrp: order.mrp,
-      startDate: order.startDate,
-      finishDate: order.finishDate,
+      startDate: order.scheduledStartDate,
+      finishDate: order.scheduledFinishDate,
       qty: order.qty,
       confirmed: confirmed,
       delivered: delivered,

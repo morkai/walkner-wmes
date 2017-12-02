@@ -107,7 +107,7 @@ exports.start = function startClipOrderCountModule(app, module)
         MrpController.find({replacedBy: {$ne: null}}, {replacedBy: 1}).lean().exec(this.parallel());
 
         Order.aggregate(
-          {$match: {startDate: startDate}},
+          {$match: {scheduledStartDate: startDate}},
           {$group: {_id: '$mrp', count: {$sum: 1}}},
           this.parallel()
         );
@@ -145,7 +145,7 @@ exports.start = function startClipOrderCountModule(app, module)
   function countOrdersByStatuses(startDate, replacedMrpMap, mrpToCountMap)
   {
     Order.aggregate(
-      {$match: {startDate: startDate}},
+      {$match: {scheduledStartDate: startDate}},
       {$project: {_id: 0, mrp: 1, statuses: 1}},
       {$unwind: '$statuses'},
       {$match: {statuses: {$in: ['CNF', 'DLV']}}},

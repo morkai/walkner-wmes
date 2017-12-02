@@ -115,6 +115,7 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
           if (change.comment)
           {
             order.comments.push({
+              source: change.source,
               time: change.time,
               user: change.user,
               text: change.comment,

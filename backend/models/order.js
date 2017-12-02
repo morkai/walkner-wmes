@@ -63,6 +63,11 @@ module.exports = function setupOrderModel(app, mongoose)
     comment: {
       type: String,
       default: ''
+    },
+    source: {
+      type: String,
+      default: 'system',
+      enum: ['system', 'other', 'ps', 'wh']
     }
   }, {
     _id: false
@@ -98,6 +103,9 @@ module.exports = function setupOrderModel(app, mongoose)
       ref: 'DelayReason',
       default: null
     },
+    whStatus: String,
+    whTime: Date,
+    whDropZone: String,
     operations: [operationSchema],
     documents: [documentSchema],
     bom: [componentSchema],
@@ -109,13 +117,11 @@ module.exports = function setupOrderModel(app, mongoose)
 
   orderSchema.statics.TOPIC_PREFIX = 'orders';
 
-  orderSchema.index({startDate: -1});
-  orderSchema.index({finishDate: -1});
-  orderSchema.index({nc12: -1, finishDate: -1});
-  orderSchema.index({mrp: 1, startDate: -1});
+  orderSchema.index({scheduledStartDate: -1});
+  orderSchema.index({nc12: 1, scheduledStartDate: -1});
+  orderSchema.index({mrp: 1, scheduledStartDate: -1});
   orderSchema.index({salesOrder: 1, salesOrderItem: 1});
   orderSchema.index({leadingOrder: 1});
-  orderSchema.index({scheduledStartDate: -1, mrp: 1});
 
   orderSchema.statics.prepareForInsert = function(order, createdAt)
   {
@@ -139,7 +145,7 @@ module.exports = function setupOrderModel(app, mongoose)
       mrp: null,
       qty: null,
       qtyDone: {},
-      qtyMax: 0,
+      qtyMax: {},
       unit: null,
       startDate: null,
       finishDate: null,
@@ -156,6 +162,9 @@ module.exports = function setupOrderModel(app, mongoose)
       statuses: [],
       statusesSetAt: {},
       delayReason: null,
+      whStatus: 'todo',
+      whTime: null,
+      whDropZone: '',
       operations: missingOrder.operations,
       documents: [],
       bom: [],
@@ -169,7 +178,7 @@ module.exports = function setupOrderModel(app, mongoose)
     $set.updatedAt = updatedAt;
     $set.importTs = newOrderData.importTs;
 
-    if ($set.startDate)
+    if ($set.scheduledStartDate)
     {
       $set.tzOffsetMs = $set.startDate.getTimezoneOffset() * 60 * 1000 * -1;
     }

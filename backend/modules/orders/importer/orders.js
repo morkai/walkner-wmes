@@ -32,7 +32,10 @@ exports.start = function startOrdersImporterModule(app, module)
     soldToParty: true,
     sapCreatedAt: true,
     qtyDone: true,
-    qtyMax: true
+    qtyMax: true,
+    whStatus: true,
+    whTime: true,
+    whDropZone: true
   };
   const ORDER_DOCUMENTS_FILE_PATH_PATTERN = module.config.orderDocumentsFilePathPattern;
 
@@ -335,7 +338,8 @@ exports.start = function startOrdersImporterModule(app, module)
       user: null,
       oldValues: {},
       newValues: {},
-      comment: ''
+      comment: '',
+      source: 'system'
     };
     const $set = {
       updatedAt: ts,
@@ -425,7 +429,8 @@ exports.start = function startOrdersImporterModule(app, module)
             user: null,
             oldValues: {operations: oldOperations},
             newValues: {operations: missingOrder.operations},
-            comment: ''
+            comment: '',
+            source: 'system'
           }
         }
       }

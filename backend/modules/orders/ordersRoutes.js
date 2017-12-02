@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
 const step = require('h5.step');
+const deepEqual = require('deep-equal');
 const ObjectId = require('mongoose').Types.ObjectId;
 const renderHtmlOrderRoute = require('./routes/renderHtmlOrder');
 
@@ -56,17 +57,14 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
   function editOrderRoute(req, res, next)
   {
-    const data = _.pick(req.body, ['delayReason', 'operationNo', 'qtyMax', 'comment']);
+    const data = req.body;
 
     if (_.isEmpty(data.comment))
     {
       data.comment = '';
     }
 
-    if (!_.isString(data.comment)
-      || (data.delayReason !== undefined && data.delayReason !== '' && !/^[a-f0-9]{24}$/.test(data.delayReason))
-      || (data.qtyMax !== undefined
-        && (data.qtyMax < 0 || data.qtyMax > 9999 || !/^[0-9]{4}$/.test(data.operationNo))))
+    if (!validateEditInput(data))
     {
       return next(express.createHttpError('INPUT', 400));
     }
@@ -76,7 +74,15 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
     step(
       function findOrderStep()
       {
-        Order.findById(req.params.id, {qtyMax: 1, delayReason: 1}).lean().exec(this.next());
+        const fields = {
+          qtyMax: 1,
+          delayReason: 1,
+          whStatus: 1,
+          whTime: 1,
+          whDropZone: 1
+        };
+
+        Order.findById(req.params.id, fields).lean().exec(this.next());
       },
       function editOrderStep(err, order)
       {
@@ -95,7 +101,8 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
           user: userModule.createUserInfo(req.session.user, req),
           oldValues: {},
           newValues: {},
-          comment: data.comment
+          comment: data.comment,
+          source: data.source || 'other'
         };
         const update = {
           $push: {changes: change}
@@ -113,6 +120,24 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
             new: data.delayReason,
             value: v => v === '' ? null : new ObjectId(v),
             change: v => v === '' ? null : new ObjectId(v)
+          },
+          whStatus: {
+            old: order.whStatus,
+            new: data.whStatus,
+            value: v => v,
+            change: v => v
+          },
+          whTime: {
+            old: order.whTime,
+            new: data.whTime ? new Date(data.whTime) : data.whTime,
+            value: v => v,
+            change: v => v
+          },
+          whDropZone: {
+            old: order.whDropZone,
+            new: data.whDropZone,
+            value: v => v,
+            change: v => v
           }
         };
 
@@ -120,12 +145,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
         {
           const values = valuesToCheck[k];
 
-          if (values.new === undefined)
-          {
-            return;
-          }
-
-          if (values.new === values.old)
+          if (values.new === undefined || deepEqual(values.new, values.old))
           {
             return;
           }
@@ -164,6 +184,46 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
         });
       }
     );
+  }
+
+  function validateEditInput(input)
+  {
+    const {comment, delayReason, qtyMax, operationNo, whStatus, whTime, whDropZone} = input;
+
+    if (!_.isString(comment))
+    {
+      return false;
+    }
+
+    if (delayReason !== undefined
+      && delayReason !== ''
+      && !/^[a-f0-9]{24}$/.test(delayReason))
+    {
+      return false;
+    }
+
+    if (qtyMax !== undefined
+      && (qtyMax < 0 || qtyMax > 9999 || !/^[0-9]{4}$/.test(operationNo)))
+    {
+      return false;
+    }
+
+    if (whStatus !== undefined && !_.isString(whStatus))
+    {
+      return false;
+    }
+
+    if (whTime !== undefined && isNaN(Date.parse(whTime)))
+    {
+      return false;
+    }
+
+    if (whDropZone !== undefined && !_.isString(whDropZone))
+    {
+      return false;
+    }
+
+    return true;
   }
 
   function importOrdersRoute(req, res, next)

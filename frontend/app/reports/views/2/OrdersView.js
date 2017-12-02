@@ -127,7 +127,7 @@ define([
       }
 
       var delayReason = this.delayReasons.get(order.get('delayReason'));
-      var startDate = order.get('startDate');
+      var startDate = order.get('scheduledStartDate');
 
       return {
         className: cnfClassName === 'none' || dlvClassName === 'none'

@@ -2476,7 +2476,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           nc12: 1,
           name: 1,
           startDate: 1,
-          finishDate: 1,
+          scheduledStartDate: 1,
+          scheduledFinishDate: 1,
           qty: 1
         };
 
@@ -2500,8 +2501,8 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
 
         const xiconfOrder = new XiconfOrder({
           _id: orderNo,
-          startDate: order.startDate,
-          finishDate: order.finishDate,
+          startDate: order.scheduledStartDate,
+          finishDate: order.scheduledFinishDate,
           reqDate: order.startDate,
           name: order.name,
           nc12: [order.nc12],

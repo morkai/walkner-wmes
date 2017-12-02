@@ -56,8 +56,12 @@ module.exports = function parseOrders(input, orders, importTs)
         name: obj.name,
         mrp: obj.mrp,
         qty: obj.qty,
-        qtyDone: {},
-        qtyMax: 0,
+        qtyDone: {
+          total: 0,
+          byLine: {},
+          byOperation: {}
+        },
+        qtyMax: {},
         unit: obj.unit,
         startDate: new Date(obj.startDate.y, obj.startDate.m - 1, obj.startDate.d),
         finishDate: new Date(obj.finishDate.y, obj.finishDate.m - 1, obj.finishDate.d),
@@ -74,8 +78,13 @@ module.exports = function parseOrders(input, orders, importTs)
         statuses: obj.statuses,
         statusesSetAt: {},
         delayReason: null,
-        operations: null,
-        changes: null,
+        whStatus: 'todo',
+        whTime: null,
+        whDropZone: '',
+        operations: [],
+        documents: [],
+        bom: [],
+        changes: [],
         importTs: importTs
       };
 

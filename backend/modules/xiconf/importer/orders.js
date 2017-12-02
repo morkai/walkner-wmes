@@ -208,7 +208,8 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
           description: 1,
           nc12: 1,
           startDate: 1,
-          finishDate: 1,
+          scheduledStartDate: 1,
+          scheduledFinishDate: 1,
           qty: 1
         };
 
@@ -436,8 +437,8 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
   {
     return {
       _id: order._id,
-      startDate: order.startDate,
-      finishDate: order.finishDate,
+      startDate: order.scheduledStartDate,
+      finishDate: order.scheduledFinishDate,
       reqDate: null,
       name: resolveProductName(order),
       nc12: [order.nc12],
@@ -544,14 +545,14 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
       $set.nc12 = true;
     }
 
-    if (!_.isEqual(order.startDate, xiconfOrder.startDate))
+    if (!_.isEqual(order.scheduledStartDate, xiconfOrder.startDate))
     {
-      $set.startDate = order.startDate;
+      $set.startDate = order.scheduledStartDate;
     }
 
-    if (!_.isEqual(order.finishDate, xiconfOrder.finishDate))
+    if (!_.isEqual(order.scheduledFinishDate, xiconfOrder.finishDate))
     {
-      $set.finishDate = order.finishDate;
+      $set.finishDate = order.scheduledFinishDate;
     }
 
     if (order.qty !== xiconfOrder.quantityTodo)

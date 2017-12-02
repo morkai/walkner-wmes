@@ -63,7 +63,7 @@ module.exports = function setUpNotifier(app, module)
           _id: {$in: _.keys(this.invalidOrders)}
         };
         const fields = {
-          startDate: 1,
+          scheduledStartDate: 1,
           mrp: 1,
           nc12: 1,
           name: 1,
@@ -106,7 +106,7 @@ module.exports = function setUpNotifier(app, module)
             qtyTodo: o.qty,
             qtyDone: o.qtyDone ? (o.qtyDone.total || 0) : 0,
             productName: resolveProductName(o),
-            startDate: moment(o.startDate).format('L'),
+            scheduledStartDate: moment(o.scheduledStartDate).format('L'),
             mrp: o.mrp,
             problem: PROBLEMS[invalidOrder.problem] || invalidOrder.problem,
             iptStatus: invalidOrder.iptStatus,

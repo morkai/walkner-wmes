@@ -116,7 +116,7 @@ module.exports = function setUpNotifier(app, module)
           mrp: {
             $in: this.settings.mrps
           },
-          startDate: {
+          scheduledStartDate: {
             $gte: from.toDate(),
             $lte: to.toDate()
           },
@@ -131,7 +131,7 @@ module.exports = function setUpNotifier(app, module)
           statuses: 1,
           qty: 1,
           'qtyDone.total': 1,
-          startDate: 1
+          scheduledStartDate: 1
         };
 
         Order.find(conditions, fields).lean().exec(this.parallel());
@@ -215,7 +215,7 @@ module.exports = function setUpNotifier(app, module)
 
         _.forEach(this.orders, o =>
         {
-          if (o.startDate > this.toTime)
+          if (o.scheduledStartDate > this.toTime)
           {
             this.delayedOrders[o._id] = true;
             this.notifyOrders[o._id] = true;

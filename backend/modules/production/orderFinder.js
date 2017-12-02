@@ -71,8 +71,8 @@ exports.findOrdersByNc12 = function(Order, MechOrder, nc12, done)
 function findOrderByNc12(Order, MechOrder, nc12, done)
 {
   const query = Order
-    .find({nc12: nc12, finishDate: {$gte: getTwoWeeksAgo()}}, MECH_ORDER_FIELDS)
-    .sort({finishDate: -1})
+    .find({nc12: nc12, scheduledStartDate: {$gte: getTwoWeeksAgo()}}, MECH_ORDER_FIELDS)
+    .sort({scheduledStartDate: -1})
     .limit(1)
     .lean();
 
@@ -119,7 +119,7 @@ function findOrdersStartingWithNc12(Order, MechOrder, nc12, done)
   /* eslint-disable no-var */
 
   const options = {
-    query: {nc12: new RegExp('^' + nc12), finishDate: {$gte: getTwoWeeksAgo()}},
+    query: {nc12: new RegExp('^' + nc12), scheduledStartDate: {$gte: getTwoWeeksAgo()}},
     out: {inline: 1},
     map: function()
     {
@@ -129,7 +129,7 @@ function findOrdersStartingWithNc12(Order, MechOrder, nc12, done)
           name: this.name,
           mrp: this.mrp,
           operations: this.operations,
-          finishDate: this.finishDate
+          scheduledStartDate: this.scheduledStartDate
         });
       }
     },
@@ -139,7 +139,7 @@ function findOrdersStartingWithNc12(Order, MechOrder, nc12, done)
 
       orders.forEach(function(order)
       {
-        if (latestOrder === null || order.finishDate > latestOrder.finishDate)
+        if (latestOrder === null || order.scheduledStartDate > latestOrder.scheduledStartDate)
         {
           latestOrder = order;
         }
@@ -166,7 +166,7 @@ function findOrdersStartingWithNc12(Order, MechOrder, nc12, done)
 
         order._id = result._id;
 
-        delete order.finishDate;
+        delete order.scheduledStartDate;
 
         return order;
       }), done);

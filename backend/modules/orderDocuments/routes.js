@@ -430,7 +430,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
         if (options.orderNo)
         {
-          Order.findById(options.orderNo, {sapCreatedAt: 1, startDate: 1}).lean().exec(this.parallel());
+          Order.findById(options.orderNo, {sapCreatedAt: 1, scheduledStartDate: 1}).lean().exec(this.parallel());
         }
       },
       function(err, orderDocumentFile, order)
@@ -445,8 +445,9 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           return this.skip();
         }
 
-        const orderDate = order && (order.sapCreatedAt || order.startDate)
-          ? moment.utc(moment(order.sapCreatedAt || order.startDate).format('YYYY-MM-DD'), 'YYYY-MM-DD').valueOf()
+        const orderDate = order ? (order.sapCreatedAt || order.scheduledStartDate) : null;
+        const orderTime = orderDate
+          ? moment.utc(moment(orderDate).format('YYYY-MM-DD'), 'YYYY-MM-DD').valueOf()
           : moment.utc().startOf('day').valueOf();
         let file = null;
 
@@ -456,7 +457,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         }
         else
         {
-          file = _.find(orderDocumentFile.files, f => orderDate >= f.date.getTime());
+          file = _.find(orderDocumentFile.files, f => orderTime >= f.date.getTime());
         }
 
         if (!file)
