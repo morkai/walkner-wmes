@@ -1,77 +1,99 @@
-<h1>v0.117.0</h1>
-<h2><%- time.format('2017-11-01', 'LL') %></h2>
-<h3>Nieprawidłowe zlecenia IPT</h3>
+<h1>v0.118.0</h1>
+<h2><%- time.format('2017-12-03', 'LL') %></h2>
+<h3>Baza testów</h3>
 <ul>
-  <li>Poprawiono błąd mogący spowodować wywalenie się serwera podczas sprawdzania zleceń bez ustawionej
-    wartości ilości zrobionej.</li>
+  <li>Poprawiono błąd powodujący wywalenie się serwera, jeżeli wyfiltrowano listę klientów tak, by była pusta.</li>
+  <li>Zmieniono aktualizację klientów tak, aby nie była dostępna dla klientów uruchomionych na Raspberry Pi.</li>
+</ul>
+<h3>Obserwacje</h3>
+<ul>
+  <li>Usunięto oznaczenie wymaganego pola z pól: 'Co zauważono?' oraz '"Trudne" do zmiany zachowania oraz warunki pracy'.</li>
+  <li>Poprawiono błąd powodujący niewyświetlanie wartości 'Co zaobserwowano' na liście, jeżeli dana karta ma same łatwe obserwacje.</li>
+  <li>Zmieniono listę obserwacji tak, aby kliknięcie na kolumnę pokazującą/ukrywającą szczegóły pokazywała szczegóły
+    zamiast je ukrywać, jeżeli wcześniej szczegóły były widoczne i kliknięto na inną kolumnę.</li>
+  <li>Dodano nowe pole: Mistrz (przełożony obserwatora).</li>
+</ul>
+<h3>Monitoring</h3>
+<ul>
+  <li>Poprawiono błąd powodujący niepotrzebne ładowanie danych produkcyjnych przez wszystkich użytkowników
+    po zmianach w strukturze organizacyjnej.</li>
+</ul>
+<h3>Wydajność godzinowa</h3>
+<ul>
+  <li>Zmieniono aplikację tak, aby nie łączyła się z serwerem, jeżeli nie wybrano linii produkcyjnej.</li>
 </ul>
 <h3>Zlecenia reszty działów</h3>
 <ul>
-  <li>Poprawiono błąd mogący spowodować wywalenie się serwera importu danych podczas importowania zleceń reszty działów.</li>
-</ul>
-<h3>Formatka operatora</h3>
-<ul>
-  <li>Poprawiono błąd powodujący nadpisywanie minimalnej wymaganej zrobionej ilości po ustaleniu wartości maksymalnej.</li>
-  <li>Poprawiono błąd powodujący zablokowanie przycisku wysyłającego formularz Nowego zlecenia/Końca pracy, jeżeli
-    aktualne zlecenie nie miało jeszcze zmienionej ilości wykonanej.</li>
-</ul>
-<h3>SAP GUI</h3>
-<ul>
-  <li>Zmieniono wysyłanie zrzutów do serwera WMES tak, aby rozpoczynało się po 20s od ostatniej zmiany pliku
-    ze zrzuconymi danymi, a nie po 2s.</li>
-  <li>Zmieniono zrzut dokumentów zlecenia tak, aby był robiony w trzech częściach (-2, +0 dni; +1 dzień; +2 dni).
-    Wcześnij zrzut robiony był w dwóch częściach (-2, +0 dni; +1, +2 dni), co sprawiało, że drugi zrzut trwał bardzo
-    długo lub bardzo często kończył się niepomyślnie.</li>
-</ul>
-<h3>Baza testów</h3>
-<ul>
-  <li>Poprawiono błąd uniemożliwiający import wyników od klientów.</li>
-</ul>
-<h3>Badanie Opinia</h3>
-<ul>
-  <li>Dodano możliwość wyboru szablonu ankiety: Kętrzyn lub Piła.</li>
-</ul>
-<h3>Użytkownicy</h3>
-<ul>
-  <li>Dodano nowe pole: Moje MRP. Wartość wykorzystywana jest we filtrach MRP zleceń.</li>
+  <li>Zmieniono domyślny filtr Od-Do listy na aktualny dzień zamiast aktualny i jutrzejszy.</li>
+  <li>Zmieniono drukowanie zleceń na generowanie pliku w formacie PDF a nie HTML.</li>
+  <li>Zmieniono importowanie zleceń tak, aby usuwanie przesuniętych zleceń odbywało się po dacie planowanego wykonania,
+    a nie podstawowej.</li>
+  <li>Dodano możliwość komentowania zleceń dla Mistrzów oraz Liderów.</li>
 </ul>
 <h3>FTE (produkcja)</h3>
 <ul>
-  <li>Zmieniono pole 'Brak planu?' w formularzu edycji wpisu tak, aby po jego zaznaczeniu dany przepływ/zadanie znikało z listy.
-    Ukryte przepływy/zadania znajdują się pod przyciskiem
-    <i class="fa fa-low-vision" title="Pokaż ukryte"></i> (pokaż ukryte).</li>
-  <li>Zmieniono formularz edycji wpisu tak, aby wartości FTE równe 0 były zamieniane na pustą wartość w celu
-    poprawy przejrzystości.</li>
-  <li>Dodano możliwość ustawiania wartości Zamówienia dla każdej firmy oraz automatyczne wyliczanie wartości Brakującej
-    ilości pracowników.</li>
+  <li>Dodano kopiowanie wartości Zamówienia z poprzednich wpisów.</li>
 </ul>
-<h3>Raporty > HR</h3>
+<h3>FTE (inne)</h3>
 <ul>
-  <li>Dodano nowy wykres: Obecność. Przedstawia 'Ilość zamówionych pracowników' (żółta) oraz
-    'Ilość brakujących pracowników' (czerwona), po
-    podwójnym kliknięciu, zamiast 'Ilość zamówionych pracowników' pokazywana jest wartość
-    'Ilość obecnych pracowników' (niebieska).</li>
+  <li>Poprawiono błąd powodujący podwójne liczenie wartości FTE dla zadań, które mają podzadania.</li>
+</ul>
+<h3>Karty pracy</h3>
+<ul>
+  <li>Dodano wyświetlanie wartości RBH (MT) dla wszystkich zleceń w karcie.</li>
 </ul>
 <h3>Raporty > Wskaźniki</h3>
 <ul>
-  <li>Poprawiono błąd mogący spowodować wywalenie się serwera podczas eksportu danych wydajności.</li>
-  <li>Zmieniono eksportowanie wydajności tak, aby data od ustawiana była na początkową datę danych produkcyjnych, gdy
-    data wybrana przez użytkownika jest wcześniej.</li>
-  <li>Zmieniono eksportowanie wydajności tak, aby podział czasu ustawiany był na dzień, jeżeli wybrano zmianę oraz
-    zakres czasu większy niż rok lub na tydzień, jeżeli wybrano dzień i zakres czasu większy niż 3 lata w celu
-    ograniczenia ilości eksportowanych kolumn.</li>
+  <li>Dodano wyświetlanie wartości RBH (MT) w pierwszym wykresie dla jednostek organizacyjnych w dziale typu Malarnia.</li>
 </ul>
-<h3>Dokumentacja</h3>
+<h3>Raporty > Operatorzy</h3>
 <ul>
-  <li>Zmieniono funkcjonalność dodatkowych dokumentów tak, aby wzorce dopasowywane były także po 12NC wyrobu (jeżeli
-    zawiera litery).</li>
+  <li>Poprawiono błąd powodujący wyświetlanie po odświeżeniu strony ID użytkownika w filtrze Mistrzowie/Operatorzy zamiast imienia i nazwiska.</li>
+  <li>Dodano filtr: Zmiany.</li>
+  <li>Dodano podział czasu: Zmiana</li>
+</ul>
+<h3>Dokumentacja > Dokumenty</h3>
+<ul>
+  <li>Poprawiono błąd uniemożliwiający zaznaczenie wyniku wyszukiwania.</li>
+  <li>Zmieniono serwowanie plików z katalogu tak, aby serwowany był źródłowy plik PDF, jeżeli dokument o danym 15NC
+    istnieje w katalogu, ale jego konwersja na obrazy się nie powiodła.</li>
+</ul>
+<h3>Dane produkcyjne > Zmiany</h3>
+<ul>
+  <li>Poprawiono błąd powodujący niewliczanie ostatniego zlecenia do wydajności zmiany w niektórych przypadkach.</li>
+  <li>Zmieniono listę zmian tak, aby nie była odświeżana po zeskanowaniu nr seryjnego na liniach produkcyjnych.</li>
+</ul>
+<h3>Dane produkcyjne > Zlecenia</h3>
+<ul>
+  <li>Zmieniono listę zleceń tak, aby nie była odświeżana po zeskanowaniu nr seryjnego na liniach produkcyjnych.</li>
+</ul>
+<h3>Przestoje</h3>
+<ul>
+  <li>Poprawiono błąd powodujący automatyczne przypisanie niezatwierdzonych przestojów do domyślnego obszaru odpowiedzialności
+    działu, w którym rozpoczęto przestój, zamiast do ostatnio przypisanego obszaru.</li>
+</ul>
+<h3>Planowanie</h3>
+<ul>
+  <li>Zmieniono moduł planowania tak, aby był generowany automatycznie na podstawie zleceń z SAP, a nie z ręcznie
+    importowanego arkusza z kolejką zleceń.</li>
+</ul>
+<h3>Malarnia</h3>
+<ul>
+  <li>Zmieniono moduł malarnii tak, aby kolejka zleceń była generowana automatycznie na podstawie planu danego dnia,
+    a nie z ręcznie importowanego arkusza z kolejką zleceń.</li>
+</ul>
+<h3>Żądania zmian danych produkcyjnych</h3>
+<ul>
+  <li>Poprawiono błąd mogący spowodować wywalenie się serwera z powodu braku pamięci podczas ładowania osi czasu
+    zmiany produkcyjnej.</li>
+</ul>
+<h3>Formatka operatora</h3>
+<ul>
+  <li>Zmieniono ograniczenie mininalnej wykonanej ilości w zleceniu z zera na ilość zeskanowanych nr seryjnych
+    (ale nie większą od maksymalnej ilości).</li>
 </ul>
 <h3>Inne</h3>
 <ul>
-  <li>Poprawiono błąd powodujący niepokazywanie się komunikatu o nowej wersji aplikacji, jeżeli wcześniej pokazywany
-    był komunikat o restarcie serwera.</li>
-  <li>Zmieniono eksportowanie danych tak, aby opcja eksportu do XLSX nie była dostępna, jeżeli wyeksportowanoby
-    więcej niż 30 000 rekordów, a CSV - więcej niż 100 000.</li>
-  <li>Zmieniono eksportowanie danych tak, aby było przerywane, jeżeli w eksportowanym pliku byłoby więcej niż
-    1100 kolumn.</li>
+  <li>Poprawiono błąd powodujący niewyświetlanie w filtrze 'MRP zlecenia' kontrolerów MRP, które nie istnieją w słowniku.</li>
+  <li>Dodano komunikat informujący o braku wsparcia dla przeglądarki Internet Explorer.</li>
 </ul>
