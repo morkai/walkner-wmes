@@ -281,7 +281,7 @@ module.exports = function setUpNotifier(app, module)
           return this.skip(err);
         }
 
-        ignoredOrders.forEach(o =>
+        _.forEach(ignoredOrders, o =>
         {
           delete this.missingOrders[o._id];
           delete this.emptyOrders[o._id];
