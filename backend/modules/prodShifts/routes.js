@@ -15,7 +15,7 @@ module.exports = function setUpProdShiftsRoutes(app, prodShiftsModule)
   const productionModule = app[prodShiftsModule.config.productionId];
   const ProdShift = mongoose.model('ProdShift');
 
-  const canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW');
+  const canView = userModule.auth('LOCAL', 'PROD_DATA:VIEW', 'PLANNING:VIEW');
   const canManage = userModule.auth(
     'PROD_DATA:MANAGE',
     'PROD_DATA:CHANGES:REQUEST',
