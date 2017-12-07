@@ -51,9 +51,16 @@ module.exports = function(mongoose, options, done)
         return this.skip(err);
       }
 
-      finalizeGroup(totals);
+      totals.fte.avg = 0;
 
-      Object.keys(results.bySection).forEach(section => finalizeGroup(results.bySection[section]));
+      Object.keys(results.bySection).forEach(section =>
+      {
+        finalizeGroup(results.bySection[section]);
+
+        totals.fte.avg += results.bySection[section].fte.avg;
+      });
+
+      finalizeGroup(totals);
 
       setImmediate(this.next());
     },
@@ -75,6 +82,7 @@ module.exports = function(mongoose, options, done)
       minutesCount: 0,
       userCount: new Set(),
       fte: {
+        avg: -1,
         total: 0,
         days: new Set()
       }
@@ -95,7 +103,12 @@ module.exports = function(mongoose, options, done)
   {
     group.userCount = group.userCount.size;
     group.fte.days = group.fte.days.size;
-    group.fte.avg = util.round(group.fte.total / group.fte.days);
+
+    if (group.fte.avg === -1)
+    {
+      group.fte.avg = util.round(group.fte.total / group.fte.days);
+    }
+
     group.fte.total = util.round(group.fte.total);
     group.ipr = util.round((group.nearMissCount + group.suggestionCount + group.observationCount) / group.fte.avg);
     group.ips = util.round(
@@ -412,10 +425,18 @@ module.exports = function(mongoose, options, done)
 
     const pipeline = [
       {$match: conditions},
+      {$unwind: '$participants'},
       {$group: {
         _id: '$section',
-        count: {$sum: 1},
-        users: {$addToSet: '$owner.id'}
+        count: {$addToSet: '$_id'},
+        owners: {$addToSet: '$owner.id'},
+        participants: {$addToSet: '$participants.id'}
+      }},
+      {$project: {
+        _id: '$_id',
+        count: {$size: '$count'},
+        owners: '$owners',
+        participants: '$participants'
       }}
     ];
 
@@ -433,7 +454,13 @@ module.exports = function(mongoose, options, done)
         totals.minutesCount += result.count;
         group.minutesCount += result.count;
 
-        result.users.forEach(userId =>
+        result.owners.forEach(userId =>
+        {
+          totals.userCount.add(userId);
+          group.userCount.add(userId);
+        });
+
+        result.participants.forEach(userId =>
         {
           totals.userCount.add(userId);
           group.userCount.add(userId);
