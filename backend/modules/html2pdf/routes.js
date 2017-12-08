@@ -63,7 +63,7 @@ module.exports = function setUpHtml2pdfRoutes(app, module)
               {waitUntil: 'networkidle2'}
             );
 
-            if (!status.ok)
+            if (!status || !status.ok)
             {
               throw app.createError('INVALID_STATUS', 500);
             }
