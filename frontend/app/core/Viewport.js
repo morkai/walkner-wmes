@@ -260,6 +260,7 @@ define([
       return this;
     }
 
+    var triggerEvent = true;
     var afterRender = dialogView.afterRender;
     var viewport = this;
 
@@ -272,7 +273,12 @@ define([
         $modalBody.empty().append(dialogView.el);
       }
 
-      viewport.$dialog.modal('show');
+      if (triggerEvent)
+      {
+        triggerEvent = false;
+
+        viewport.$dialog.modal('show');
+      }
 
       if (_.isFunction(afterRender))
       {
