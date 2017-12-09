@@ -6,8 +6,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the kinds :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the kind :(",
+    "MSG:LOADING_FAILURE": "Failed to load the kinds.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the kind.",
     "MSG:DELETED": "Kind <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add kind",
@@ -25,14 +25,14 @@
 
     "FORM:ACTION:add": "Add kind",
     "FORM:ACTION:edit": "Edit kind",
-    "FORM:ERROR:addFailure": "Failed to add the new kind :(",
-    "FORM:ERROR:editFailure": "Failed to edit the kind :(",
+    "FORM:ERROR:addFailure": "Failed to add the new kind.",
+    "FORM:ERROR:editFailure": "Failed to edit the kind.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Kind deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete kind",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen kind?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> kind?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the kind :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the kind."
   },
   "pl": true
 }

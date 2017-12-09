@@ -4,8 +4,8 @@
     "BREADCRUMBS:events": "Events",
     "BREADCRUMBS:requests": "Requests",
 
-    "MSG:LOADING_FAILURE": "Failed to load the ISAs :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the ISA :(",
+    "MSG:LOADING_FAILURE": "Failed to load the ISAs.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the ISA.",
 
     "PAGE_ACTION:export": "Export",
 
@@ -31,10 +31,10 @@
     "lineState:time": "Time",
     "lineState:whman": "Warehouseman",
 
-    "pickup:failure": "Failed to start the pickup request :(",
+    "pickup:failure": "Failed to start the pickup request.",
     "pickup:LOCKED": "Cannot create a new request so soon after the last one!",
 
-    "deliver:failure": "Failed to start the delivery request :(",
+    "deliver:failure": "Failed to start the delivery request.",
     "deliver:LOCKED": "Cannot create a new request so soon after the last one!",
 
     "cancel:action": "Cancel request",
@@ -42,21 +42,21 @@
     "cancel:message": "Are you sure you want to cancel the request?",
     "cancel:yes": "Cancel request",
     "cancel:no": "No, do not cancel",
-    "cancel:failure": "Failed to cancel the request :(",
+    "cancel:failure": "Failed to cancel the request.",
     "cancel:LOCKED": "Cannot cancel a request so soon after it was created!",
 
     "accept:action": "Accept request",
-    "accept:failure": "Failed to accept the request :(",
+    "accept:failure": "Failed to accept the request.",
     "accept:UNKNOWN_RESPONDER": "Failed to accept the request: unknown user.",
     "accept:INVALID_RESPONDER": "Failed to accept the request: invalid user.",
 
     "finish:action": "Finish request",
-    "finish:failure": "Failed to finish the request :(",
+    "finish:failure": "Failed to finish the request.",
 
     "shiftPersonnel:title": "Available personnel",
     "shiftPersonnel:message": "Select warehousemen working on the current work shift:",
     "shiftPersonnel:submit": "Save personnel",
-    "shiftPersonnel:msg:failure": "Failed to save the available personnel :(",
+    "shiftPersonnel:msg:failure": "Failed to save the available personnel.",
     "shiftPersonnel:msg:success": "Work shift personnel was saved!",
 
     "responderPicker:empty": "Shift personnel is not set!",
@@ -118,9 +118,9 @@
 
     "msg:whmanNotFound": "Warehouseman not found:<br>{personnelId}",
     "msg:noAction": "No action for warehouseman:<br>{whman}",
-    "msg:accept:failure": "Failed to accept the request :-(",
+    "msg:accept:failure": "Failed to accept the request.",
     "msg:accept:header": "{requestType, select, delivery{Pallet delivery} other{Pallet pickup}}",
-    "msg:finish:failure": "Failed to finish the request :-(",
+    "msg:finish:failure": "Failed to finish the request.",
     "msg:finish:success": "Finish a {type, select, delivery{delivery to} other{pickup from}}<br>{line}"
   },
   "pl": true

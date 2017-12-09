@@ -4,11 +4,11 @@
   "BREADCRUMBS:details": "Wynik",
   "BREADCRUMBS:settings": "Ustawienia",
 
-  "MSG:LOADING_FAILURE": "Ładowanie wyników programowania nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych wyniku programowania nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie wyników programowania nie powiodło się.",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych wyniku programowania nie powiodło się.",
   "MSG:drop:filesOnly": "Upuszczać można tylko pliki!",
   "MSG:drop:invalidFile": "Nieprawidłowy plik aktualizacji oprogramowania!",
-  "MSG:drop:upload:failure": "Nie udało się załadować pliku aktualizacji :(",
+  "MSG:drop:upload:failure": "Nie udało się załadować pliku aktualizacji.",
   "MSG:drop:upload:success": "Plik aktualizacji został załadowany :)",
 
   "PANEL:TITLE:details:order": "Szczegóły lokalnego zlecenia",

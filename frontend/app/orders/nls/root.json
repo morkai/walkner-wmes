@@ -3,9 +3,9 @@
     "BREADCRUMBS:browse": "Production orders",
     "BREADCRUMBS:settings": "Settings",
 
-    "MSG:LOADING_FAILURE": "Failed to load the orders :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order details :(",
-    "MSG:jump:404": "Couldn't find an order with no <em>{rid}</em> :(",
+    "MSG:LOADING_FAILURE": "Failed to load the orders.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order details.",
+    "MSG:jump:404": "Couldn't find an order with no <em>{rid}</em>.",
 
     "PAGE_ACTION:settings": "Change settings",
     "PAGE_ACTION:print": "Print order",
@@ -18,7 +18,7 @@
     "openOrdersPrint:title": "Order printing",
     "openOrdersPrint:orders": "Enter order numbers:",
     "openOrdersPrint:submit": "Print orders",
-    "openOrdersPrint:msg:findFailure": "Failed to find orders :-(",
+    "openOrdersPrint:msg:findFailure": "Failed to find orders.",
     "openOrdersPrint:msg:notFound": "{count, plural, one{Order {orders} doesn't exist.} other{Orders don't exist: {orders}}}",
 
     "PANEL:TITLE:details": "Order's details",

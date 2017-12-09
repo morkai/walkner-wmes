@@ -5,8 +5,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the WorkCenters :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the WorkCenter :(",
+    "MSG:LOADING_FAILURE": "Failed to load the WorkCenters.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the WorkCenter.",
     "MSG:DELETED": "WorkCenter <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add WorkCenter",
@@ -25,14 +25,14 @@
 
     "FORM:ACTION:add": "Add WorkCenter",
     "FORM:ACTION:edit": "Edit WorkCenter",
-    "FORM:ERROR:addFailure": "Failed to add the new WorkCenter :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the WorkCenter :-(",
+    "FORM:ERROR:addFailure": "Failed to add the new WorkCenter.",
+    "FORM:ERROR:editFailure": "Failed to edit the WorkCenter.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "WorkCenter deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete WorkCenter",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen WorkCenter?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> WorkCenter?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the WorkCenter :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the WorkCenter."
   },
   "pl": true
 }

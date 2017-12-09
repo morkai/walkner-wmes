@@ -4,8 +4,8 @@
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie historii zmian nie powiodło się :-(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych zmiany nie powiodło się :-(",
+  "MSG:LOADING_FAILURE": "Ładowanie historii zmian nie powiodło się.",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych zmiany nie powiodło się.",
   "MSG:DELETED": "Zmiana <em>{label}</em> została usunięta.",
 
   "PAGE_ACTION:prodLogEntries": "Pokaż historię operacji",
@@ -44,9 +44,9 @@
 
   "FORM:ACTION:add": "Dodaj zmianę",
   "FORM:ACTION:edit": "Edytuj zmianę",
-  "FORM:ERROR:addFailure": "Nie udało się dodać zmiany :-(",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zmiany :-(",
-  "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować zmiany produkcyjnej: nie wykryto żadnych poprawnych zmian :-(",
+  "FORM:ERROR:addFailure": "Nie udało się dodać zmiany.",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zmiany.",
+  "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować zmiany produkcyjnej: nie wykryto żadnych poprawnych zmian.",
   "FORM:ERROR:INPUT": "Nieprawidłowe dane wejściowe!",
   "FORM:ERROR:NOT_EDITABLE": "Wybrana zmiana jeszcze się nie skończyła!",
   "FORM:ERROR:EXISTING": "Wybrana zmiana już istnieje!",
@@ -85,7 +85,7 @@
   "ACTION_FORM:BUTTON:delete": "Usuń zmianę",
   "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną zmianę?",
   "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć zmianę <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć zmiany :-(",
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć zmiany.",
 
   "changeRequest:delete:messageText": "Jesteś w trybie tworzenia żądania zmiany danych produkcyjnych. <em>Zmiana produkcyjna</em> zostanie usunięta dopiero po zaakceptowaniu operacji przez osobę odpowiedzialną.<br><br>Czy na pewno chcesz utworzyć żądanie usunięcia wybranej zmiany produkcyjnej?",
   "changeRequest:delete:formActionText": "Utwórz żądanie usunięcia",
@@ -95,7 +95,7 @@
   "changeRequest:msg:success:add": "Żądanie dodania nowej zmiany produkcyjnej zostało utworzone.",
   "changeRequest:msg:success:edit": "Żądanie edycji zmiany produkcyjnej zostało utworzone.",
   "changeRequest:msg:success:delete": "Żądanie usunięcia zmiany produkcyjnej zostało utworzone.",
-  "changeRequest:msg:failure:add": "Nie udało się stworzyć żądania dodania nowej zmiany produkcyjnej :-(",
-  "changeRequest:msg:failure:edit": "Nie udało się stworzyć żądania edycji zmiany produkcyjnej :-(",
-  "changeRequest:msg:failure:delete": "Nie udało się stworzyć żądania usunięcia zmiany produkcyjnej :-("
+  "changeRequest:msg:failure:add": "Nie udało się stworzyć żądania dodania nowej zmiany produkcyjnej.",
+  "changeRequest:msg:failure:edit": "Nie udało się stworzyć żądania edycji zmiany produkcyjnej.",
+  "changeRequest:msg:failure:delete": "Nie udało się stworzyć żądania usunięcia zmiany produkcyjnej."
 }

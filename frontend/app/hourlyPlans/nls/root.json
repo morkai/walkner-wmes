@@ -8,8 +8,8 @@
     "BREADCRUMBS:settings": "Settings",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the hourly plans :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the hourly plan :(",
+    "MSG:LOADING_FAILURE": "Failed to load the hourly plans.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the hourly plan.",
     "MSG:DELETED": "Hourly plan <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:print": "Show printable version",
@@ -35,14 +35,14 @@
 
     "addForm:panel:title": "Hourly plan find/create form",
     "addForm:submit": "Plan",
-    "addForm:msg:offline": "Cannot plan: no connection to the server :(",
+    "addForm:msg:offline": "Cannot plan: no connection to the server.",
     "addForm:msg:failure": "Failed to find/create the hourly plan for editing: {error, select, AUTH{no privileges!} INPUT{invalid input data!} other{{error}}}",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Hourly plan deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete hourly plan",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen hourly plan?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> hourly plan?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the hourly plan :-(",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the hourly plan.",
 
     "heff:filter:division": "Division",
     "heff:filter:prodFlows": "Flows",

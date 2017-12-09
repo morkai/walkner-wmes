@@ -17,9 +17,9 @@
     "BREADCRUMBS:7": "Downtimes in AORs",
     "BREADCRUMBS:8": "Lean",
 
-    "MSG:LOADING_FAILURE": "Failed to load the report :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the report :(",
-    "MSG:1:export:empty": "No data to export :(",
+    "MSG:LOADING_FAILURE": "Failed to load the report.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the report.",
+    "MSG:1:export:empty": "No data to export.",
 
     "PAGE_ACTION:settings": "Change settings",
     "PAGE_ACTION:1:export": "Export efficiency",
@@ -228,7 +228,7 @@
     "settings:downtimesInAors:dtcDateRange": "Default time range of the downtimes charts",
 
     "oee:table:loading": "Loading...",
-    "oee:table:loadingFailed": "Loading failed :(",
+    "oee:table:loadingFailed": "Loading failed.",
     "oee:no": "#",
     "oee:division": "Division",
     "oee:prodLine": "Machine name",
@@ -583,9 +583,9 @@
     "9:planUpload:submit": "Upload file",
     "9:planUpload:cancel": "Cancel",
     "9:planUpload:success": "File was uploaded successfully :-)",
-    "9:planUpload:failure": "Failed to upload the file :-(",
+    "9:planUpload:failure": "Failed to upload the file.",
     "9:planUpload:synced": "A new plan was imported :-)",
-    "9:planUpload:syncFailed": "Failed to import a new plan :-(",
+    "9:planUpload:syncFailed": "Failed to import a new plan.",
     "9:cags:header": "CAG",
     "9:cags:id": "<br>ID",
     "9:cags:name": "<br>Name",

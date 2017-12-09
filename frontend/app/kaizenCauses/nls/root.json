@@ -6,8 +6,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the causes :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the cause :(",
+    "MSG:LOADING_FAILURE": "Failed to load the causes.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the cause.",
     "MSG:DELETED": "Cause <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add cause",
@@ -25,14 +25,14 @@
 
     "FORM:ACTION:add": "Add cause",
     "FORM:ACTION:edit": "Edit cause",
-    "FORM:ERROR:addFailure": "Failed to add the new cause :(",
-    "FORM:ERROR:editFailure": "Failed to edit the cause :(",
+    "FORM:ERROR:addFailure": "Failed to add the new cause.",
+    "FORM:ERROR:editFailure": "Failed to edit the cause.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Cause deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete cause",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen cause?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> cause?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the cause :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the cause."
   },
   "pl": true
 }

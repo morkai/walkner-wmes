@@ -5,8 +5,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the vendors :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the vendor :(",
+    "MSG:LOADING_FAILURE": "Failed to load the vendors.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the vendor.",
     "MSG:DELETED": "Vendor <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add vendor",
@@ -22,14 +22,14 @@
 
     "FORM:ACTION:add": "Add vendor",
     "FORM:ACTION:edit": "Edit vendor",
-    "FORM:ERROR:addFailure": "Failed to add the new vendor :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the vendor :-(",
+    "FORM:ERROR:addFailure": "Failed to add the new vendor.",
+    "FORM:ERROR:editFailure": "Failed to edit the vendor.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Vendor deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete vendor",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen vendor?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> vendor?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the vendor :-(",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the vendor.",
 
     "select2:placeholder": "Any vendor"
   },

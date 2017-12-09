@@ -5,8 +5,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the MRP Controllers :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the MRP Controller :(",
+    "MSG:LOADING_FAILURE": "Failed to load the MRP Controllers.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the MRP Controller.",
     "MSG:DELETED": "MRP Controller <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add MRP Controller",
@@ -32,14 +32,14 @@
 
     "FORM:ACTION:add": "Add MRP Controller",
     "FORM:ACTION:edit": "Edit MRP Controller",
-    "FORM:ERROR:addFailure": "Failed to add the new MRP Controller :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the MRP Controller :-(",
+    "FORM:ERROR:addFailure": "Failed to add the new MRP Controller.",
+    "FORM:ERROR:editFailure": "Failed to edit the MRP Controller.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "MRP Controller deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete MRP Controller",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen MRP Controller?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> MRP Controller?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the MRP Controller :-(",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the MRP Controller.",
 
     "ownMrps:trigger": "mine",
     "ownMrps:empty": "You don't have any MRPs assigned to your account.",

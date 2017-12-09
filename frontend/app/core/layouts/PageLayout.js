@@ -4,12 +4,14 @@ define([
   'underscore',
   'jquery',
   'app/user',
+  'app/i18n',
   '../View',
   'app/core/templates/pageLayout'
 ], function(
   _,
   $,
   user,
+  t,
   View,
   template
 ) {

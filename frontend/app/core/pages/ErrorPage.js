@@ -123,6 +123,7 @@ define([
           secretKey: this.secretKey,
           to: this.adminEmail,
           subject: t('core', 'ERROR:notify:subject', {
+            APP_NAME: t('core', 'APP_NAME'),
             code: this.model.code,
             user: user.getLabel()
           }),

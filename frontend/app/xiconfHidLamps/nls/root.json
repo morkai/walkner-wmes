@@ -6,8 +6,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the HID lamps :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the HID lamp :(",
+    "MSG:LOADING_FAILURE": "Failed to load the HID lamps.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the HID lamp.",
     "MSG:DELETED": "HID lamp <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add HID lamp",
@@ -26,14 +26,14 @@
 
     "FORM:ACTION:add": "Add HID lamp",
     "FORM:ACTION:edit": "Edit HID lamp",
-    "FORM:ERROR:addFailure": "Failed to add the HID lamp :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the HID lamp :-(",
+    "FORM:ERROR:addFailure": "Failed to add the HID lamp.",
+    "FORM:ERROR:editFailure": "Failed to edit the HID lamp.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "HID lamp deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete HID lamp",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the selected HID lamp?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> HID lamp?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the HID lamp :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the HID lamp."
   },
   "pl": true
 }

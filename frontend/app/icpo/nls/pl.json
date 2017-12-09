@@ -2,8 +2,8 @@
   "BREADCRUMBS:browse": "Wyniki ICPO",
   "BREADCRUMBS:details": "Wynik",
 
-  "MSG:LOADING_FAILURE": "Ładowanie wyników programowania nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych wyniku programowania nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie wyników programowania nie powiodło się.",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych wyniku programowania nie powiodło się.",
 
   "PANEL:TITLE:details": "Szczegóły programowania",
 

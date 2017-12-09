@@ -6,8 +6,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the faults :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the fault :(",
+    "MSG:LOADING_FAILURE": "Failed to load the faults.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the fault.",
     "MSG:DELETED": "Fault <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add fault",
@@ -28,14 +28,14 @@
 
     "FORM:ACTION:add": "Add fault",
     "FORM:ACTION:edit": "Edit fault",
-    "FORM:ERROR:addFailure": "Failed to add the new fault :(",
-    "FORM:ERROR:editFailure": "Failed to edit the fault :(",
+    "FORM:ERROR:addFailure": "Failed to add the new fault.",
+    "FORM:ERROR:editFailure": "Failed to edit the fault.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Fault deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete fault",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen fault?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> fault?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the fault :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the fault."
   },
   "pl": true
 }

@@ -2,7 +2,7 @@
   "root": {
     "BREADCRUMBS:browse": "Operation log",
 
-    "MSG:LOADING_FAILURE": "Failed to load the operation log :(",
+    "MSG:LOADING_FAILURE": "Failed to load the operation log.",
 
     "filter:submit": "Filter operations",
     "filter:placeholder:type": "Any type",

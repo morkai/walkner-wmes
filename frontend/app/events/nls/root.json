@@ -1,7 +1,7 @@
 {
   "root": {
-    "MSG:LOADING_FAILURE": "Failed to load the events :(",
-    "MSG:LOADING_TYPES_FAILURE": "Failed to load the event types :(",
+    "MSG:LOADING_FAILURE": "Failed to load the events.",
+    "MSG:LOADING_TYPES_FAILURE": "Failed to load the event types.",
 
     "BREADCRUMBS:browse": "Events",
 

@@ -6,8 +6,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the categories :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the category :(",
+    "MSG:LOADING_FAILURE": "Failed to load the categories.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the category.",
     "MSG:DELETED": "Category <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add category",
@@ -27,14 +27,14 @@
 
     "FORM:ACTION:add": "Add category",
     "FORM:ACTION:edit": "Edit category",
-    "FORM:ERROR:addFailure": "Failed to add the new category :(",
-    "FORM:ERROR:editFailure": "Failed to edit the category :(",
+    "FORM:ERROR:addFailure": "Failed to add the new category.",
+    "FORM:ERROR:editFailure": "Failed to edit the category.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Category deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete category",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen category?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> category?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the category :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the category."
   },
   "pl": true
 }

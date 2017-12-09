@@ -2,8 +2,8 @@
   "root": {
     "BREADCRUMBS:browse": "Licenses",
 
-    "MSG:LOADING_FAILURE": "Failed to load the licenses :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the licenses :(",
+    "MSG:LOADING_FAILURE": "Failed to load the licenses.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the licenses.",
     "MSG:DELETED": "License <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add license",
@@ -30,7 +30,7 @@
     "ACTION_FORM:BUTTON:delete": "Delete License",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen License?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> License?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the License :-(",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the License.",
 
     "error:NO_KEY": "No license key.",
     "error:INVALID_ED_PEM": "Invalid license decryption key.",

@@ -6,8 +6,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the areas :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the area :(",
+    "MSG:LOADING_FAILURE": "Failed to load the areas.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the area.",
     "MSG:DELETED": "Area <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add area",
@@ -24,14 +24,14 @@
 
     "FORM:ACTION:add": "Add area",
     "FORM:ACTION:edit": "Edit area",
-    "FORM:ERROR:addFailure": "Failed to add the new area :(",
-    "FORM:ERROR:editFailure": "Failed to edit the area :(",
+    "FORM:ERROR:addFailure": "Failed to add the new area.",
+    "FORM:ERROR:editFailure": "Failed to edit the area.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Area deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete area",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen area?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> area?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the area :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the area."
   },
   "pl": true
 }

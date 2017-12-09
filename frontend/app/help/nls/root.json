@@ -1,7 +1,7 @@
 {
   "root": {
-    "msg:offline": "No connection to the server :(",
-    "msg:undefined": "There's no help for this page yet :("
+    "msg:offline": "No connection to the server.",
+    "msg:undefined": "There's no help for this page yet."
   },
   "pl": true
 }

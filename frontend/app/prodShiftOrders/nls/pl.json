@@ -3,8 +3,8 @@
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie historii zleceń nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych zlecenia nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie historii zleceń nie powiodło się.",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych zlecenia nie powiodło się.",
   "MSG:DELETED": "Zlecenie <em>{label}</em> zostało usunięte.",
 
   "PAGE_ACTION:prodLogEntries": "Pokaż historię operacji",
@@ -28,14 +28,14 @@
 
   "FORM:ACTION:add": "Dodaj zlecenie",
   "FORM:ACTION:edit": "Edytuj zlecenie",
-  "FORM:ERROR:addFailure": "Nie udało się dodać zlecenia :-(",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zlecenia :-(",
+  "FORM:ERROR:addFailure": "Nie udało się dodać zlecenia.",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zlecenia.",
   "FORM:ERROR:order": "Zlecenie jest wymagane!",
   "FORM:ERROR:operation": "Operacja jest wymagana!",
   "FORM:ERROR:startedAt": "Czas rozpoczęcia musi mieścić się w ramach Zmiany produkcyjnej!",
   "FORM:ERROR:finishedAt": "Czas zakończenia musi mieścić się w ramach Zmiany produkcyjnej!",
   "FORM:ERROR:times": "Czas zakończenia musi być po Czasie rozpoczęcia!",
-  "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować zlecenia: nie wykryto żadnych poprawnych zmian :(",
+  "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować zlecenia: nie wykryto żadnych poprawnych zmian.",
   "FORM:ERROR:INPUT": "Nieprawidłowe dane wejściowe!",
   "FORM:ERROR:OVERLAPPING_ORDERS": "Zlecenie pokrywa się z innymi zleceniami!",
   "FORM:ERROR:NOT_EDITABLE": "Zlecenie jeszcze się nie skończyło!",
@@ -76,7 +76,7 @@
   "ACTION_FORM:BUTTON:delete": "Usuń zlecenie",
   "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrane zlecenie?",
   "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć zlecenie <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć zlecenia :-(",
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć zlecenia.",
 
   "changeRequest:delete:messageText": "Jesteś w trybie tworzenia żądania zmiany danych produkcyjnych. <em>Zlecenie produkcyjne</em> zostanie usunięte dopiero po zaakceptowaniu operacji przez osobę odpowiedzialną.<br><br>Czy na pewno chcesz utworzyć żądanie usunięcia wybranego zlecenia produkcyjnego?",
   "changeRequest:delete:formActionText": "Utwórz żądanie usunięcia",
@@ -86,7 +86,7 @@
   "changeRequest:msg:success:add": "Żądanie dodania nowego zlecenia produkcyjnego zostało utworzone.",
   "changeRequest:msg:success:edit": "Żądanie edycji zlecenia produkcyjnego zostało utworzone.",
   "changeRequest:msg:success:delete": "Żądanie usunięcia zlecenia produkcyjnego zostało utworzone.",
-  "changeRequest:msg:failure:add": "Nie udało się stworzyć żądania dodania nowego zlecenia produkcyjnego :-(",
-  "changeRequest:msg:failure:edit": "Nie udało się stworzyć żądania edycji zlecenia produkcyjnego :-(",
-  "changeRequest:msg:failure:delete": "Nie udało się stworzyć żądania usunięcia zlecenia produkcyjnego :-("
+  "changeRequest:msg:failure:add": "Nie udało się stworzyć żądania dodania nowego zlecenia produkcyjnego.",
+  "changeRequest:msg:failure:edit": "Nie udało się stworzyć żądania edycji zlecenia produkcyjnego.",
+  "changeRequest:msg:failure:delete": "Nie udało się stworzyć żądania usunięcia zlecenia produkcyjnego."
 }

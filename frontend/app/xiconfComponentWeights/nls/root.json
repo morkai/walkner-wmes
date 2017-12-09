@@ -6,8 +6,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the components :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the component :(",
+    "MSG:LOADING_FAILURE": "Failed to load the components.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the component.",
     "MSG:DELETED": "Component <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add component",
@@ -27,14 +27,14 @@
 
     "FORM:ACTION:add": "Add component",
     "FORM:ACTION:edit": "Edit component",
-    "FORM:ERROR:addFailure": "Failed to add the component :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the component :-(",
+    "FORM:ERROR:addFailure": "Failed to add the component.",
+    "FORM:ERROR:editFailure": "Failed to edit the component.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "component deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete component",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the selected component?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> component?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the component :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the component."
   },
   "pl": true
 }

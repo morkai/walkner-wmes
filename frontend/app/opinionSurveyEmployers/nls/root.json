@@ -6,8 +6,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the employers :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the employer :(",
+    "MSG:LOADING_FAILURE": "Failed to load the employers.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the employer.",
     "MSG:DELETED": "Employer <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add employer",
@@ -25,14 +25,14 @@
 
     "FORM:ACTION:add": "Add employer",
     "FORM:ACTION:edit": "Edit employer",
-    "FORM:ERROR:addFailure": "Failed to add the new employer :(",
-    "FORM:ERROR:editFailure": "Failed to edit the employer :(",
+    "FORM:ERROR:addFailure": "Failed to add the new employer.",
+    "FORM:ERROR:editFailure": "Failed to edit the employer.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Employer deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete employer",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen employer?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> employer?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the employer :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the employer."
   },
   "pl": true
 }

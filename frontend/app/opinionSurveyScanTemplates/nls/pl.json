@@ -6,8 +6,8 @@
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie szablonów nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie szablonu nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie szablonów nie powiodło się.",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie szablonu nie powiodło się.",
   "MSG:DELETED": "Szablon został usunięty.",
 
   "PAGE_ACTION:add": "Dodaj szablon",
@@ -33,8 +33,8 @@
 
   "FORM:ACTION:add": "Dodaj szablon",
   "FORM:ACTION:edit": "Edytuj szablon",
-  "FORM:ERROR:addFailure": "Nie udało się dodać szablonu :(",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować szablonu :(",
+  "FORM:ERROR:addFailure": "Nie udało się dodać szablonu.",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować szablonu.",
   "FORM:ERROR:noImage": "Wybierz obraz szablonu.",
   "FORM:ERROR:noRegions": "Zaznacz przynajmniej jeden obszar odpowiedzi.",
   "form:help:dp": "Odwrotny stosunek rozdzielczości akumulatora do rozdzielczości obrazu. Na przykład, 1 sprawi, że akumulator będzie miał taką samą rozdzielczość jak obraz wejściowy, a 2 - dwa razy mniejszą.",
@@ -50,7 +50,7 @@
   "ACTION_FORM:BUTTON:delete": "Usuń szablon",
   "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany szablon?",
   "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany szablon?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć szablonu :(",
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć szablonu.",
 
   "filter:submit": "Filtruj szablony",
 
@@ -67,7 +67,7 @@
   "imageEditForm:submit": "Zmień obraz",
   "imageEditForm:cancel": "Anuluj",
   "imageEditForm:msg:success": "Obraz został zmieniony pomyślnie!",
-  "imageEditForm:msg:failure": "Nie udało się zmienić obrazu :(",
+  "imageEditForm:msg:failure": "Nie udało się zmienić obrazu.",
 
   "regionEditForm:title": "Edycja obszaru odpowiedzi",
   "regionEditForm:question": "Pytanie",

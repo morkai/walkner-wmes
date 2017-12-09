@@ -15,9 +15,9 @@
   "BREADCRUMBS:7": "Przestoje w obszarach",
   "BREADCRUMBS:8": "Lean",
 
-  "MSG:LOADING_FAILURE": "Ładowanie raportu nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie raportu nie powiodło się :(",
-  "MSG:1:export:empty": "Brak danych do wyeksportowania :(",
+  "MSG:LOADING_FAILURE": "Ładowanie raportu nie powiodło się.",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie raportu nie powiodło się.",
+  "MSG:1:export:empty": "Brak danych do wyeksportowania.",
 
   "PAGE_ACTION:settings": "Zmień ustawienia",
   "PAGE_ACTION:1:export": "Eksportuj wydajność",
@@ -228,7 +228,7 @@
   "settings:downtimesInAors:dtcDateRange": "Domyślny zakres czasu dla wykresów przestojów",
 
   "oee:table:loading": "Ładowanie...",
-  "oee:table:loadingFailed": "Ładowanie nie powiodło się :(",
+  "oee:table:loadingFailed": "Ładowanie nie powiodło się.",
   "oee:no": "Lp.",
   "oee:division": "Wydział",
   "oee:prodLine": "Nazwa maszyny",
@@ -588,9 +588,9 @@
   "9:planUpload:submit": "Załaduj plik",
   "9:planUpload:cancel": "Anuluj",
   "9:planUpload:success": "Plik został załadowany pomyślnie :-)",
-  "9:planUpload:failure": "Nie udało się załadować pliku :-(",
+  "9:planUpload:failure": "Nie udało się załadować pliku.",
   "9:planUpload:synced": "Nowy plan został zaimportowany :-)",
-  "9:planUpload:syncFailed": "Nie udało się zaimportować nowego planu :-(",
+  "9:planUpload:syncFailed": "Nie udało się zaimportować nowego planu.",
   "9:cags:header": "CAG",
   "9:cags:id": "<br>ID",
   "9:cags:name": "<br>Nazwa",

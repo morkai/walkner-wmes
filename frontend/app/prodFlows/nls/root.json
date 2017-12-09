@@ -5,8 +5,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the production flows :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the production flow :(",
+    "MSG:LOADING_FAILURE": "Failed to load the production flows.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the production flow.",
     "MSG:DELETED": "Production flow <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add production flow",
@@ -26,14 +26,14 @@
 
     "FORM:ACTION:add": "Add production flow",
     "FORM:ACTION:edit": "Edit production flow",
-    "FORM:ERROR:addFailure": "Failed to add the new production flow :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the production flow :-(",
+    "FORM:ERROR:addFailure": "Failed to add the new production flow.",
+    "FORM:ERROR:editFailure": "Failed to edit the production flow.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Production flow deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete production flow",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen production flow?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> production flow?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the production flow :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the production flow."
   },
   "pl": true
 }

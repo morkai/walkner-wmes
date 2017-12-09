@@ -1,7 +1,7 @@
 {
   "BREADCRUMBS:browse": "Zlecenia działu mechanicznego",
 
-  "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się.",
 
   "PAGE_ACTION:import": "Importuj zlecenia",
 
@@ -24,10 +24,10 @@
   "import:submit": "Importuj zlecenia",
   "import:cancel": "Anuluj",
   "import:msg:success": "Importowanie zleceń przebiegło pomyślnie :)",
-  "import:msg:failure": "Nie udało się zaimportować zleceń :(",
+  "import:msg:failure": "Nie udało się zaimportować zleceń.",
 
   "list:mrp:set": "(wybierz kontroler MRP)",
   "list:mrp:edit": "(zmień kontroler MRP)",
   "list:mrp:placeholder": "Wybierz kontroler MRP...",
-  "list:mrp:failure": "Nie udało się zmienić kontrolera MRP dla zlecenia <em>{nc12}</em> :("
+  "list:mrp:failure": "Nie udało się zmienić kontrolera MRP dla zlecenia <em>{nc12}</em>."
 }

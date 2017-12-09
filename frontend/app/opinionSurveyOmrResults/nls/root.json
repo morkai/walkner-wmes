@@ -6,8 +6,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the OMR results :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the OMR result :(",
+    "MSG:LOADING_FAILURE": "Failed to load the OMR results.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the OMR result.",
     "MSG:DELETED": "OMR result <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add OMR result",
@@ -22,14 +22,14 @@
 
     "FORM:ACTION:add": "Add OMR result",
     "FORM:ACTION:edit": "Edit OMR result",
-    "FORM:ERROR:addFailure": "Failed to add the new OMR result :(",
-    "FORM:ERROR:editFailure": "Failed to edit the OMR result :(",
+    "FORM:ERROR:addFailure": "Failed to add the new OMR result.",
+    "FORM:ERROR:editFailure": "Failed to edit the OMR result.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "OMR result deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete OMR result",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen OMR result?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> OMR result?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the OMR result :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the OMR result."
   },
   "pl": true
 }

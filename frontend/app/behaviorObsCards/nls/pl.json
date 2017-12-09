@@ -6,10 +6,10 @@
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
   "BREADCRUMBS:reports:count": "Ilość obserwacji",
 
-  "MSG:LOADING_FAILURE": "Ładowanie kart obserwacji nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie karty obserwacji nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie kart obserwacji nie powiodło się.",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie karty obserwacji nie powiodło się.",
   "MSG:DELETED": "Karta obserwacji <em>{label}</em> została usunięta.",
-  "MSG:jump:404": "Nie znaleziono karty obserwacji o ID <em>{rid}</em> :(",
+  "MSG:jump:404": "Nie znaleziono karty obserwacji o ID <em>{rid}</em>.",
 
   "PAGE_ACTION:add": "Dodaj kartę",
   "PAGE_ACTION:edit": "Edytuj kartę",
@@ -63,8 +63,8 @@
 
   "FORM:ACTION:add": "Dodaj kartę obserwacji zachowań",
   "FORM:ACTION:edit": "Zapisz kartę obserwacji zachowań",
-  "FORM:ERROR:addFailure": "Nie udało się dodać karty obserwacji :(",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować karty obserwacji :(",
+  "FORM:ERROR:addFailure": "Nie udało się dodać karty obserwacji.",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować karty obserwacji.",
   "FORM:ERROR:empty": "Opisz przynajmniej jedną obserwację lub ryzykowne warunki w pracy.",
   "FORM:MSG:nearMiss:add": "Jeżeli stwierdziłeś ryzykowne warunki w miejscu prowadzenia obserwacji zarejestruj je w bazie ZPW - <a href='#kaizenOrders;add'>Zgłoś nowe ZPW</a> lub <a href=# role=rid data-kind=nearMiss>przypisz istniejące</a>!",
   "FORM:MSG:nearMiss:edit": "Stwierdzone ryzykowne warunki w miejscu prowadzenia obserwacji zostały zarejestrowane w bazie ZPW - <a href='#kaizenOrders/{rid}'>zgłoszenie #{rid}</a>! (<a href=# role=rid data-kind=nearMiss>zmień</a>)",
@@ -77,13 +77,13 @@
   "FORM:ridEditor:submit": "Zmień",
   "FORM:ridEditor:cancel": "Anuluj",
   "FORM:ridEditor:notFound": "Dane zgłoszenie nie istnieje!",
-  "FORM:ridEditor:failure": "Nie udało się sprawdzić zgłoszenia :-(",
+  "FORM:ridEditor:failure": "Nie udało się sprawdzić zgłoszenia.",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia karty obserwacji",
   "ACTION_FORM:BUTTON:delete": "Usuń kartę obserwacji",
   "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną kartę obserwacji zachowań?",
   "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć kartę obserwacji zachowań <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć karty obserwacji :(",
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć karty obserwacji.",
 
   "filter:user:mine": "Moje",
   "filter:user:observer": "Obserwator",

@@ -5,8 +5,8 @@
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie działów nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie działu nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie działów nie powiodło się.",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie działu nie powiodło się.",
   "MSG:DELETED": "Dział <em>{label}</em> został usunięty.",
 
   "PAGE_ACTION:add": "Dodaj dział",
@@ -24,12 +24,12 @@
 
   "FORM:ACTION:add": "Dodaj dział",
   "FORM:ACTION:edit": "Edytuj dział",
-  "FORM:ERROR:addFailure": "Nie udało się dodać działu :(",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować działu :(",
+  "FORM:ERROR:addFailure": "Nie udało się dodać działu.",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować działu.",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia działu",
   "ACTION_FORM:BUTTON:delete": "Usuń dział",
   "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany dział?",
   "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć dział <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć działu :("
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć działu."
 }

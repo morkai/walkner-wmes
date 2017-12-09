@@ -6,8 +6,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the questions :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the question :(",
+    "MSG:LOADING_FAILURE": "Failed to load the questions.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the question.",
     "MSG:DELETED": "Question <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add question",
@@ -24,14 +24,14 @@
 
     "FORM:ACTION:add": "Add question",
     "FORM:ACTION:edit": "Edit question",
-    "FORM:ERROR:addFailure": "Failed to add the new question :(",
-    "FORM:ERROR:editFailure": "Failed to edit the question :(",
+    "FORM:ERROR:addFailure": "Failed to add the new question.",
+    "FORM:ERROR:editFailure": "Failed to edit the question.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Question deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete question",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen question?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> question?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the question :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the question."
   },
   "pl": true
 }

@@ -98,8 +98,11 @@ define([
 
       if (this.resetting)
       {
-        data.subject = t('users', 'LOG_IN_FORM:RESET:SUBJECT');
+        data.subject = t('users', 'LOG_IN_FORM:RESET:SUBJECT', {
+          APP_NAME: t('core', 'APP_NAME')
+        });
         data.text = t('users', 'LOG_IN_FORM:RESET:TEXT', {
+          APP_NAME: t('core', 'APP_NAME'),
           appUrl: window.location.origin,
           resetUrl: window.location.origin + '/resetPassword/{REQUEST_ID}'
         });

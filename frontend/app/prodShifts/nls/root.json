@@ -5,8 +5,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the shifts :-(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the shift :-(",
+    "MSG:LOADING_FAILURE": "Failed to load the shifts.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the shift.",
     "MSG:DELETED": "Shift <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:prodLogEntries": "Show operation log",
@@ -45,9 +45,9 @@
 
     "FORM:ACTION:add": "Add shift",
     "FORM:ACTION:edit": "Edit shift",
-    "FORM:ERROR:addFailure": "Failed to add the shift :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the shift :-(",
-    "FORM:ERROR:INVALID_CHANGES": "Cannot edit the shift: no valid changes were detected :-(",
+    "FORM:ERROR:addFailure": "Failed to add the shift.",
+    "FORM:ERROR:editFailure": "Failed to edit the shift.",
+    "FORM:ERROR:INVALID_CHANGES": "Cannot edit the shift: no valid changes were detected.",
     "FORM:ERROR:INPUT": "Invalid input data!",
     "FORM:ERROR:NOT_EDITABLE": "The specified shift didn't end yet!",
     "FORM:ERROR:EXISTING": "The specified shift already exists!",
@@ -86,7 +86,7 @@
     "ACTION_FORM:BUTTON:delete": "Delete shift",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen shift?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> shift?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the shift :-(",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the shift.",
 
     "changeRequest:delete:messageText": "You're in a change request creation mode. The <em>Production shift</em> will be deleted only after it has been approved by the person responsible.<br><br>Are you sure you want to create the shift deletion request?",
     "changeRequest:delete:formActionText": "Create deletion request",
@@ -96,9 +96,9 @@
     "changeRequest:msg:success:add": "Production shift creation request was created successfully.",
     "changeRequest:msg:success:edit": "Production shift modification request was created successfully.",
     "changeRequest:msg:success:delete": "Production shift deletion request was created successfully.",
-    "changeRequest:msg:failure:add": "Failed to create a new production shift creation request :-(",
-    "changeRequest:msg:failure:edit": "Failed to create a new production shift modification request :-(",
-    "changeRequest:msg:failure:delete": "Failed to create a new production shift deletion request :-("
+    "changeRequest:msg:failure:add": "Failed to create a new production shift creation request.",
+    "changeRequest:msg:failure:edit": "Failed to create a new production shift modification request.",
+    "changeRequest:msg:failure:delete": "Failed to create a new production shift deletion request."
   },
   "pl": true
 }

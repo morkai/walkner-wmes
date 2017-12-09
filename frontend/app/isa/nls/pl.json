@@ -3,8 +3,8 @@
   "BREADCRUMBS:events": "Zdarzenia",
   "BREADCRUMBS:requests": "Żądania",
 
-  "MSG:LOADING_FAILURE": "Ładowanie pól odkładczych nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie pola odkładczego nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie pól odkładczych nie powiodło się.",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie pola odkładczego nie powiodło się.",
 
   "PAGE_ACTION:export": "Eksportuj",
 
@@ -30,10 +30,10 @@
   "lineState:time": "Czas",
   "lineState:whman": "Magazynier",
 
-  "pickup:failure": "Nie udało się rozpocząć odbioru palety :(",
+  "pickup:failure": "Nie udało się rozpocząć odbioru palety.",
   "pickup:LOCKED": "Nie można rozpocząć nowego żądania tak szybko po zakończeniu porzedniego!",
 
-  "deliver:failure": "Nie udało się rozpocząć dostawy palety :(",
+  "deliver:failure": "Nie udało się rozpocząć dostawy palety.",
   "deliver:LOCKED": "Nie można rozpocząć nowego żądania tak szybko po zakończeniu porzedniego!",
 
   "cancel:action": "Anuluj żądanie",
@@ -41,21 +41,21 @@
   "cancel:message": "Czy na pewno chcesz anulować wybrane żądanie?",
   "cancel:yes": "Anuluj żądanie",
   "cancel:no": "Nie anuluj żądania",
-  "cancel:failure": "Nie udało się anulować żądania :(",
+  "cancel:failure": "Nie udało się anulować żądania.",
   "cancel:LOCKED": "Nie można anulować żądania tak szybko po jego utworzeniu!",
 
   "accept:action": "Akceptuj żądanie",
-  "accept:failure": "Nie udało się zaakceptować żądania :(",
+  "accept:failure": "Nie udało się zaakceptować żądania.",
   "accept:UNKNOWN_RESPONDER": "Nie udało się zaakceptować żądania: nieistniejący użytkownik.",
   "accept:INVALID_RESPONDER": "Nie udało się zaakceptować żądania: nieprawidłowy użytkownik.",
 
   "finish:action": "Zakończ żądanie",
-  "finish:failure": "Nie udało się zakończyć żądania :(",
+  "finish:failure": "Nie udało się zakończyć żądania.",
 
   "shiftPersonnel:title": "Personel zmiany",
   "shiftPersonnel:message": "Wybierz magazynierów pracujących na aktualnej zmianie:",
   "shiftPersonnel:submit": "Zapisz personel",
-  "shiftPersonnel:msg:failure": "Nie udało się zapisać personelu zmiany :(",
+  "shiftPersonnel:msg:failure": "Nie udało się zapisać personelu zmiany.",
   "shiftPersonnel:msg:success": "Personel zmiany został zapisany!",
 
   "responderPicker:empty": "Nie ustawiono personelu zmiany!",
@@ -117,8 +117,8 @@
 
   "msg:whmanNotFound": "Nie znaleziono magazyniera:<br>{personnelId}",
   "msg:noAction": "Brak akcji dla magazyniera:<br>{whman}",
-  "msg:accept:failure": "Nie udało się zaakceptować żądania :-(",
+  "msg:accept:failure": "Nie udało się zaakceptować żądania.",
   "msg:accept:header": "{requestType, select, delivery{Dostawa palety} other{Odbiór palety}}",
-  "msg:finish:failure": "Nie udało się zakończyć żądania :-(",
+  "msg:finish:failure": "Nie udało się zakończyć żądania.",
   "msg:finish:success": "Zakończono żądanie {type, select, delivery{dostawy na linię} other{odbioru z linii}}<br>{line}"
 }

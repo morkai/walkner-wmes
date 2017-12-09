@@ -6,8 +6,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the programs :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Filed to load the program :(",
+    "MSG:LOADING_FAILURE": "Failed to load the programs.",
+    "MSG:LOADING_SINGLE_FAILURE": "Filed to load the program.",
     "MSG:DELETED": "Program <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add program",
@@ -125,8 +125,8 @@
 
     "FORM:ACTION:add": "Add program",
     "FORM:ACTION:edit": "Edit program",
-    "FORM:ERROR:addFailure": "Failed to add the program :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the program :-(",
+    "FORM:ERROR:addFailure": "Failed to add the program.",
+    "FORM:ERROR:editFailure": "Failed to edit the program.",
     "FORM:ERROR:minDuration": "Value cannot be lower than 1s.",
     "FORM:ERROR:minMaxDurations": "Max time to confirm must be longer than Time to confirmation.",
     "FORM:ERROR:requiredStep": "Select at least one step.",
@@ -138,7 +138,7 @@
     "ACTION_FORM:BUTTON:delete": "Delete program",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the selected program?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> program?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the program :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the program."
   },
   "pl": true
 }

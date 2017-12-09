@@ -5,8 +5,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the pallet kinds :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the pallet kind :(",
+    "MSG:LOADING_FAILURE": "Failed to load the pallet kinds.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the pallet kind.",
     "MSG:DELETED": "Pallet kind <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add pallet kind",
@@ -22,14 +22,14 @@
 
     "FORM:ACTION:add": "Add pallet kind",
     "FORM:ACTION:edit": "Edit pallet kind",
-    "FORM:ERROR:addFailure": "Failed to add the new pallet kind :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the pallet kind :-(",
+    "FORM:ERROR:addFailure": "Failed to add the new pallet kind.",
+    "FORM:ERROR:editFailure": "Failed to edit the pallet kind.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Pallet kind deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete pallet kind",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen pallet kind?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> pallet kind?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the pallet kind :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the pallet kind."
   },
   "pl": true
 }

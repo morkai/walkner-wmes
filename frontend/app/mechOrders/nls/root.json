@@ -2,7 +2,7 @@
   "root": {
     "BREADCRUMBS:browse": "Mechanical orders",
 
-    "MSG:LOADING_FAILURE": "Failed to load the orders :(",
+    "MSG:LOADING_FAILURE": "Failed to load the orders.",
 
     "PAGE_ACTION:import": "Import orders",
 
@@ -25,12 +25,12 @@
     "import:submit": "Import orders",
     "import:cancel": "Cancel",
     "import:msg:success": "Orders were imported successfully :)",
-    "import:msg:failure": "Failed to import the orders :(",
+    "import:msg:failure": "Failed to import the orders.",
 
     "list:mrp:set": "(choose MRP Controller)",
     "list:mrp:edit": "(change MRP Controller)",
     "list:mrp:placeholder": "Choose MRP Controller...",
-    "list:mrp:failure": "Failed to change the MRP Controller for the <em>{nc12}</em> order :("
+    "list:mrp:failure": "Failed to change the MRP Controller for the <em>{nc12}</em> order."
   },
   "pl": true
 }

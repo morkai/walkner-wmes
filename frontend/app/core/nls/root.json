@@ -1,13 +1,14 @@
 {
   "root": {
+    "APP_NAME": "WMES",
     "TITLE": "Wannabe MES",
 
     "MSG:LOADING": "Loading...",
-    "MSG:LOADING_FAILURE": "Loading failed :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Loading failed :(",
+    "MSG:LOADING_FAILURE": "Loading failed.",
+    "MSG:LOADING_SINGLE_FAILURE": "Loading failed.",
     "MSG:SAVING": "Saving...",
-    "MSG:SAVING_FAILURE": "Saving failed :(",
-    "MSG:LOG_OUT:FAILURE": "Logging out failed :(",
+    "MSG:SAVING_FAILURE": "Saving failed.",
+    "MSG:LOG_OUT:FAILURE": "Logging out failed.",
     "MSG:LOG_OUT:SUCCESS": "You are now logged out!",
     "MSG:POPUP_BLOCKED": "Popup window was blocked.",
 
@@ -28,8 +29,8 @@
 
     "ERROR:notify:message": "Click here to notify the admin about the error.",
     "ERROR:notify:success": "The admin was notified!",
-    "ERROR:notify:failure": "Failed to notify the admin :(",
-    "ERROR:notify:subject": "[WMES] Error {code} from {user}",
+    "ERROR:notify:failure": "Failed to notify the admin.",
+    "ERROR:notify:subject": "[{APP_NAME}] Error {code} from {user}",
     "ERROR:0:title": "Error during loading",
     "ERROR:0:message": "Unexpected error during the execution of the request. Check whether you have a connection to the network and <a href=# data-reload>reload the page</a>.",
     "ERROR:400:title": "Error 400: bad request",
@@ -261,7 +262,7 @@
     "ACTION_FORM:BUTTON:delete": "Delete",
     "ACTION_FORM:BUTTON:cancel": "Cancel",
     "ACTION_FORM:MESSAGE": "Are you sure you want to perform the requested action?",
-    "ACTION_FORM:MESSAGE:failure": "Action failed :(",
+    "ACTION_FORM:MESSAGE:failure": "Action failed.",
 
     "ORG_UNIT:division": "Division",
     "ORG_UNIT:subdivision": "Subdivision",
@@ -293,7 +294,7 @@
     "highcharts:printChart": "Print the chart",
     "highcharts:decimalPoint": ".",
     "highcharts:thousandsSep": ",",
-    "highcharts:noData": "No data :(",
+    "highcharts:noData": "No data.",
     "highcharts:resetZoom": "1:1",
     "highcharts:resetZoomTitle": "Reset the zoom level to 1:1",
     "highcharts:loading": "Loading...",
@@ -303,7 +304,7 @@
 
     "dataTables:emptyTable": "No data.",
     "dataTables:loadingRecords": "Loading...",
-    "dataTables:loadingFailed": "Loading failed :(",
+    "dataTables:loadingFailed": "Loading failed.",
 
     "feedback:button:text": "Feedback",
     "feedback:button:tooltip": "Report bugs, notes, opinions or ideas!",

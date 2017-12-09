@@ -2,7 +2,7 @@
   "root": {
     "BREADCRUMBS:browse": "Empty orders",
 
-    "MSG:LOADING_FAILURE": "Failed to load the empty orders :(",
+    "MSG:LOADING_FAILURE": "Failed to load the empty orders.",
 
     "PAGE_ACTION:print": "Show printable version",
 

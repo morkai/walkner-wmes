@@ -5,8 +5,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the production task :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the production task :(",
+    "MSG:LOADING_FAILURE": "Failed to load the production task.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the production task.",
     "MSG:DELETED": "Production task <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add production task",
@@ -27,14 +27,14 @@
 
     "FORM:ACTION:add": "Add production task",
     "FORM:ACTION:edit": "Edit production task",
-    "FORM:ERROR:addFailure": "Failed to add the new production task :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the production task :-(",
+    "FORM:ERROR:addFailure": "Failed to add the new production task.",
+    "FORM:ERROR:editFailure": "Failed to edit the production task.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Production task deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete production task",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen production task?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> production task?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the production task :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the production task."
   },
   "pl": true
 }

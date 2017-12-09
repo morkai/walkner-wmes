@@ -1,12 +1,13 @@
 {
+  "APP_NAME": "WMES",
   "TITLE": "Wannabe MES",
 
   "MSG:LOADING": "Ładowanie...",
-  "MSG:LOADING_FAILURE": "Ładowanie nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie nie powiodło się.",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie nie powiodło się.",
   "MSG:SAVING": "Zapisywanie...",
-  "MSG:SAVING_FAILURE": "Zapisywanie nie powiodło się :(",
-  "MSG:LOG_OUT:FAILURE": "Wylogowanie nie powiodło się :(",
+  "MSG:SAVING_FAILURE": "Zapisywanie nie powiodło się.",
+  "MSG:LOG_OUT:FAILURE": "Wylogowanie nie powiodło się.",
   "MSG:LOG_OUT:SUCCESS": "Zostałeś wylogowany!",
   "MSG:POPUP_BLOCKED": "Wyskakujące okienko zostało zablokowane.",
 
@@ -27,8 +28,8 @@
 
   "ERROR:notify:message": "Kliknij tutaj, aby poinformować administratora o błędzie.",
   "ERROR:notify:success": "Administrator został powiadomiony o błędzie!",
-  "ERROR:notify:failure": "Nie udało się powiadomić administratora :(",
-  "ERROR:notify:subject": "[WMES] Błąd {code} od {user}",
+  "ERROR:notify:failure": "Nie udało się powiadomić administratora.",
+  "ERROR:notify:subject": "[{APP_NAME}] Błąd {code} od {user}",
   "ERROR:0:title": "Błąd podczas ładowania",
   "ERROR:0:message": "Nieoczekiwany błąd podczas wykonywania żądania. Sprawdź, czy masz połączenie z siecią i <a href=# data-reload>załaduj ponownie stronę</a>.",
   "ERROR:400:title": "Błąd 400: nieprawidłowe zapytanie",
@@ -267,7 +268,7 @@
   "ACTION_FORM:BUTTON:delete": "Usuń",
   "ACTION_FORM:BUTTON:cancel": "Anuluj",
   "ACTION_FORM:MESSAGE": "Czy na pewno chcesz wykonać żądaną akcję?",
-  "ACTION_FORM:MESSAGE:failure": "Wykonywanie akcji nie powiodło się :(",
+  "ACTION_FORM:MESSAGE:failure": "Wykonywanie akcji nie powiodło się.",
 
   "ORG_UNIT:division": "Wydział",
   "ORG_UNIT:subdivision": "Dział",
@@ -299,7 +300,7 @@
   "highcharts:printChart": "Drukuj wykres",
   "highcharts:decimalPoint": ",",
   "highcharts:thousandsSep": " ",
-  "highcharts:noData": "Brak danych :(",
+  "highcharts:noData": "Brak danych.",
   "highcharts:resetZoom": "1:1",
   "highcharts:resetZoomTitle": "Zresetuj przybliżenie",
   "highcharts:loading": "Ładowanie...",
@@ -309,7 +310,7 @@
 
   "dataTables:emptyTable": "Brak danych.",
   "dataTables:loadingRecords": "Ładowanie danych...",
-  "dataTables:loadingFailed": "Ładowanie danych nie powiodło się :(",
+  "dataTables:loadingFailed": "Ładowanie danych nie powiodło się.",
 
   "feedback:button:text": "Feedback",
   "feedback:button:tooltip": "Zgłoś błędy, uwagi, opinie lub pomysły!",

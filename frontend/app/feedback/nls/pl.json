@@ -2,7 +2,7 @@
   "dialog:title": "Feedback",
 
   "form:submit": "Wyślij zgłoszenie",
-  "form:message:failure": "Nie udało się wysłać formularza :(",
+  "form:message:failure": "Nie udało się wysłać formularza.",
   "form:message:success": "Zgłoszenie zostało zapisane pomyślnie :)",
 
   "property:page:title": "Tytuł wyświetlanej strony",

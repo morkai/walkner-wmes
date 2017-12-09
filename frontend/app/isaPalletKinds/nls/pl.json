@@ -4,8 +4,8 @@
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie rodzajów palet nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie rodzaju palet nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie rodzajów palet nie powiodło się.",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie rodzaju palet nie powiodło się.",
   "MSG:DELETED": "Rodzaj palety <em>{label}</em> został usunięty.",
 
   "PAGE_ACTION:add": "Dodaj rodzaj palet",
@@ -21,12 +21,12 @@
 
   "FORM:ACTION:add": "Dodaj rodzaj palet",
   "FORM:ACTION:edit": "Edytuj rodzaj palet",
-  "FORM:ERROR:addFailure": "Nie udało się dodać rodzaju palet :-(",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować rodzaju palet :-(",
+  "FORM:ERROR:addFailure": "Nie udało się dodać rodzaju palet.",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować rodzaju palet.",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia rodzaju palet",
   "ACTION_FORM:BUTTON:delete": "Usuń rodzaj palet",
   "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany rodzaj palet?",
   "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć rodzaj palet <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć rodzaju palet :-("
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć rodzaju palet."
 }

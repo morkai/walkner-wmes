@@ -1,7 +1,7 @@
 {
   "BREADCRUMBS:browse": "Żądania zmian danych produkcyjnych",
 
-  "MSG:LOADING_FAILURE": "Ładowanie danych nie powiodło się :-(",
+  "MSG:LOADING_FAILURE": "Ładowanie danych nie powiodło się.",
 
   "LIST:ACTION:confirm": "Potwierdź żądanie zmiany",
 
@@ -39,7 +39,7 @@
   "confirm:success:accepted": "Dane produkcyjne zostały zmienione.",
   "confirm:success:rejected": "Żądanie zmian zostało odrzucone.",
   "confirm:error:WRONG_ORDER": "Najpierw należy zatwierdzić wcześniejsze żądania zmian dla wybranej linii!",
-  "confirm:error": "Nie udało się zatwierdzić żądania zmian :-(",
+  "confirm:error": "Nie udało się zatwierdzić żądania zmian.",
 
   "fte:demand": "(zamówienie)",
   "fte:supply": "(dostarczenie)"

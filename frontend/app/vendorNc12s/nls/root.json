@@ -5,8 +5,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the 12NC list :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the 12NC details :(",
+    "MSG:LOADING_FAILURE": "Failed to load the 12NC list.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the 12NC details.",
     "MSG:DELETED": "12NC <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add 12NC",
@@ -26,14 +26,14 @@
 
     "FORM:ACTION:add": "Add 12NC",
     "FORM:ACTION:edit": "Edit 12NC",
-    "FORM:ERROR:addFailure": "Failed to add the new 12NC :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the 12NC :-(",
+    "FORM:ERROR:addFailure": "Failed to add the new 12NC.",
+    "FORM:ERROR:editFailure": "Failed to edit the 12NC.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "12NC deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete 12NC",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen 12NC?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> 12NC?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the 12NC :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the 12NC."
   },
   "pl": true
 }

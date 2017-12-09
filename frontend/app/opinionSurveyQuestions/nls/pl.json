@@ -5,8 +5,8 @@
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie pytań nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie pytania nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie pytań nie powiodło się.",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie pytania nie powiodło się.",
   "MSG:DELETED": "Pytanie <em>{label}</em> zostało usunięte.",
 
   "PAGE_ACTION:add": "Dodaj pytanie",
@@ -23,12 +23,12 @@
 
   "FORM:ACTION:add": "Dodaj pytanie",
   "FORM:ACTION:edit": "Edytuj pytanie",
-  "FORM:ERROR:addFailure": "Nie udało się dodać pytania :(",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować pytania :(",
+  "FORM:ERROR:addFailure": "Nie udało się dodać pytania.",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować pytania.",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia pytania",
   "ACTION_FORM:BUTTON:delete": "Usuń pytanie",
   "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrane pytanie?",
   "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć pytanie <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć pytania :("
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć pytania."
 }

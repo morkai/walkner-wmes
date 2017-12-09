@@ -5,8 +5,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the functions :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the function :(",
+    "MSG:LOADING_FAILURE": "Failed to load the functions.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the function.",
     "MSG:DELETED": "Function <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add function",
@@ -28,14 +28,14 @@
 
     "FORM:ACTION:add": "Add function",
     "FORM:ACTION:edit": "Edit function",
-    "FORM:ERROR:addFailure": "Failed to add the new function :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the function :-(",
+    "FORM:ERROR:addFailure": "Failed to add the new function.",
+    "FORM:ERROR:editFailure": "Failed to edit the function.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Function deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete function",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen function?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> function?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the function :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the function."
   },
   "pl": true
 }

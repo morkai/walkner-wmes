@@ -10,7 +10,7 @@
 
   "top10:title": "Najaktywniejsi {month, plural, =1{w styczniu} =2{w lutym} =3{w marcu} =4{w kwietniu} =5{w maju} =6{w czerwcu} =7{w lipcu} =8{w sierpniu} =9{we wrześniu} =10{w październiku} =11{w listopadzie} =12{w grudniu} other{w miesiącu}}",
   "top10:loading": "Ładowanie danych...",
-  "top10:empty": "Brak zgłoszeń w danym miesiącu :(",
+  "top10:empty": "Brak zgłoszeń w danym miesiącu.",
 
   "addButton:nearMiss": "Zgłoś<br>ZPW!",
   "addButton:suggestion": "Zgłoś<br>sugestię!",
@@ -21,8 +21,8 @@
   "list:rid": "ID",
   "list:status": "Status",
   "list:subject": "Temat",
-  "list:noData:nearMiss": "Nie uczestniczysz w żadnych otwartych zgłoszeniach ZPW :(",
-  "list:noData:suggestion": "Nie uczestniczysz w żadnych otwartych zgłoszeniach usprawnień :(",
+  "list:noData:nearMiss": "Nie uczestniczysz w żadnych otwartych zgłoszeniach ZPW.",
+  "list:noData:suggestion": "Nie uczestniczysz w żadnych otwartych zgłoszeniach usprawnień.",
 
   "status:new": "Nowe",
   "status:accepted": "Zaakceptowane",

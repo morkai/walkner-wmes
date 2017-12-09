@@ -2,7 +2,7 @@
   "root": {
     "BREADCRUMBS:browse": "Invalid orders",
 
-    "MSG:LOADING_FAILURE": "Failed to load the invalid orders :(",
+    "MSG:LOADING_FAILURE": "Failed to load the invalid orders.",
 
     "PAGE_ACTION:check": "Check orders",
     "PAGE_ACTION:notify": "Notify responsible persons",
@@ -11,17 +11,17 @@
     "ACTION_FORM:DIALOG_TITLE:ignore": "Ignoring order",
     "ACTION_FORM:MESSAGE_SPECIFIC:ignore": "Are you sure you want to ignore the {label} order?",
     "ACTION_FORM:BUTTON:ignore": "Ignore order",
-    "ACTION_FORM:MESSAGE_FAILURE:ignore": "Failed to ignore the order :(",
+    "ACTION_FORM:MESSAGE_FAILURE:ignore": "Failed to ignore the order.",
 
     "ACTION_FORM:DIALOG_TITLE:notify": "Notifying responsible persons",
     "ACTION_FORM:MESSAGE_SPECIFIC:notify": "Are you sure you want to send notifications about the following orders: {orders}?",
     "ACTION_FORM:BUTTON:notify": "Send notifications",
-    "ACTION_FORM:MESSAGE_FAILURE:notify": "Failed to send notifications :(",
+    "ACTION_FORM:MESSAGE_FAILURE:notify": "Failed to send notifications.",
 
     "ACTION_FORM:DIALOG_TITLE:check": "Checking orders",
     "ACTION_FORM:MESSAGE_SPECIFIC:check": "Are you sure you want to re-check all orders?",
     "ACTION_FORM:BUTTON:check": "Check orders",
-    "ACTION_FORM:MESSAGE_FAILURE:check": "Failed to check orders :(",
+    "ACTION_FORM:MESSAGE_FAILURE:check": "Failed to check orders.",
 
     "PROPERTY:orderNo": "Order no",
     "PROPERTY:productName": "Product name",

@@ -1,8 +1,8 @@
 {
   "BREADCRUMBS:browse": "Zamówienia",
 
-  "MSG:LOADING_FAILURE": "Ładowanie zamówień nie powiodło się :(",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zamówienia nie powiodło się :(",
+  "MSG:LOADING_FAILURE": "Ładowanie zamówień nie powiodło się.",
+  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zamówienia nie powiodło się.",
 
   "panel:props": "Szczegóły zamówienia",
   "panel:items": "Pozycje zamówienia",
@@ -90,8 +90,8 @@
   "printDialog:items": "Wybrane pozycje",
   "printDialog:total": "Suma:",
   "printDialog:print": "Drukuj etykiety",
-  "printDialog:msg:failure": "Nie udało się wygenerować etykiet do druku :(",
-  "printDialog:msg:blocked": "<p>Nie udało się otworzyć nowego okna z etykietami do drukowania :(</p><p>Sprawdź, czy wyskakujące okienka nie są blokowane?</p>",
+  "printDialog:msg:failure": "Nie udało się wygenerować etykiet do druku.",
+  "printDialog:msg:blocked": "<p>Nie udało się otworzyć nowego okna z etykietami do drukowania.</p><p>Sprawdź, czy wyskakujące okienka nie są blokowane?</p>",
   "printDialog:msg:LOCKED": "<p>Etykiety do tego zamówienia są w tym momencie generowane przez innego użytkownika.</p><p>Sprawdź aktualną wydaną ilość lub spróbuj ponownie za chwilę.</p>",
 
   "vendorPrintDialog:title": "Drukowanie innych etykiet",
@@ -105,6 +105,6 @@
 
   "qzPrint:initWarning": "Nie udało się uruchomić wtyczki wspomagającej drukowanie etykiet. Kliknij tutaj, aby uzyskać więcej informacji.",
   "qzPrint:bc:help": "Wtyczka do drukowania etykiet",
-  "qzPrint:msg:rawPrintError": "Nie udało się rozpocząć drukowania bezpośredniego :(",
-  "qzPrint:msg:pdfPrintError": "Nie udało się rozpocząć drukowania PDF :("
+  "qzPrint:msg:rawPrintError": "Nie udało się rozpocząć drukowania bezpośredniego.",
+  "qzPrint:msg:pdfPrintError": "Nie udało się rozpocząć drukowania PDF."
 }

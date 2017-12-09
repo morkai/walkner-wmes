@@ -2,7 +2,7 @@
   "root": {
     "BREADCRUMBS:browse": "Purchase orders",
 
-    "MSG:LOADING_FAILURE": "Failed to load the purchase orders :("
+    "MSG:LOADING_FAILURE": "Failed to load the purchase orders."
   },
   "pl": true
 }

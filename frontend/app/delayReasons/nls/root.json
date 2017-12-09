@@ -5,8 +5,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the delay reasons :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the delay reason :(",
+    "MSG:LOADING_FAILURE": "Failed to load the delay reasons.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the delay reason.",
     "MSG:DELETED": "Delay reason <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add delay reason",
@@ -21,14 +21,14 @@
 
     "FORM:ACTION:add": "Add delay reason",
     "FORM:ACTION:edit": "Edit delay reason",
-    "FORM:ERROR:addFailure": "Failed to add the new delay reason :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the delay reason :-(",
+    "FORM:ERROR:addFailure": "Failed to add the new delay reason.",
+    "FORM:ERROR:editFailure": "Failed to edit the delay reason.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Delay reason deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete delay reason",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen delay reason?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> delay reason?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the delay reason :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the delay reason."
   },
   "pl": true
 }

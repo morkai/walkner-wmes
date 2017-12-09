@@ -39,10 +39,10 @@
   "options:loadHistory": "Pokaż historię",
   "options:resetHistory": "Pokaż aktualne dane",
 
-  "noProdLines": "Brak pasujących linii produkcyjnych :(",
+  "noProdLines": "Brak pasujących linii produkcyjnych.",
   "loadingHistoryData": "Ładowanie danych...",
 
-  "msg:historyDataRange": "Nie można pobrać danych z więcej niż siedmiu dni na raz :(",
+  "msg:historyDataRange": "Nie można pobrać danych z więcej niż siedmiu dni na raz.",
 
   "picker:title": "Wybieranie linii produkcyjnych",
   "picker:submit": "Wybierz",

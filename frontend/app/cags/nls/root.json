@@ -6,8 +6,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the CAGs :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the CAG :(",
+    "MSG:LOADING_FAILURE": "Failed to load the CAGs.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the CAG.",
     "MSG:DELETED": "Company <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add CAG",
@@ -23,14 +23,14 @@
 
     "FORM:ACTION:add": "Add CAG",
     "FORM:ACTION:edit": "Edit CAG",
-    "FORM:ERROR:addFailure": "Failed to add the new CAG :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the CAG :-(",
+    "FORM:ERROR:addFailure": "Failed to add the new CAG.",
+    "FORM:ERROR:editFailure": "Failed to edit the CAG.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Company deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete CAG",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen CAG?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> CAG?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the CAG :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the CAG."
   },
   "pl": true
 }

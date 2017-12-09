@@ -4,8 +4,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the orders :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order :(",
+    "MSG:LOADING_FAILURE": "Failed to load the orders.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order.",
     "MSG:DELETED": "Order <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:prodLogEntries": "Show operation log",
@@ -24,14 +24,14 @@
 
     "FORM:ACTION:add": "Add order",
     "FORM:ACTION:edit": "Edit order",
-    "FORM:ERROR:addFailure": "Failed to add the order :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the order :-(",
+    "FORM:ERROR:addFailure": "Failed to add the order.",
+    "FORM:ERROR:editFailure": "Failed to edit the order.",
     "FORM:ERROR:order": "Order is required!",
     "FORM:ERROR:operation": "Operation is required!",
     "FORM:ERROR:startedAt": "Started at must be between the shift's time boundries!",
     "FORM:ERROR:finishedAt": "Finished at must be between the shift's time boundries!",
     "FORM:ERROR:times": "Finished at must be after Started at!",
-    "FORM:ERROR:INVALID_CHANGES": "Cannot edit the order: no valid changes were detected :(",
+    "FORM:ERROR:INVALID_CHANGES": "Cannot edit the order: no valid changes were detected.",
     "FORM:ERROR:INPUT": "Invalid input data!",
     "FORM:ERROR:OVERLAPPING_ORDERS": "Order overlaps with other orders!",
     "FORM:ERROR:NOT_EDITABLE": "Order isn't finished yet!",
@@ -77,7 +77,7 @@
     "ACTION_FORM:BUTTON:delete": "Delete order",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen order?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> order?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the order :-(",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the order.",
 
     "changeRequest:delete:messageText": "You're in a change request creation mode. The <em>Order</em> will be deleted only after it has been approved by the person responsible.<br><br>Are you sure you want to create the order deletion request?",
     "changeRequest:delete:formActionText": "Create deletion request",
@@ -87,9 +87,9 @@
     "changeRequest:msg:success:add": "Order creation request was created successfully.",
     "changeRequest:msg:success:edit": "Order modification request was created successfully.",
     "changeRequest:msg:success:delete": "Order deletion request was created successfully.",
-    "changeRequest:msg:failure:add": "Failed to create a new order creation request :-(",
-    "changeRequest:msg:failure:edit": "Failed to create a new order modification request :-(",
-    "changeRequest:msg:failure:delete": "Failed to create a new order deletion request :-("
+    "changeRequest:msg:failure:add": "Failed to create a new order creation request.",
+    "changeRequest:msg:failure:edit": "Failed to create a new order modification request.",
+    "changeRequest:msg:failure:delete": "Failed to create a new order deletion request."
   },
   "pl": true
 }

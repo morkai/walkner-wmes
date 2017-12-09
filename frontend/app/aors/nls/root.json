@@ -5,8 +5,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the areas of responsibility :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the area of resposibility :(",
+    "MSG:LOADING_FAILURE": "Failed to load the areas of responsibility.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the area of resposibility.",
     "MSG:DELETED": "Area of resposibility <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add AOR",
@@ -26,14 +26,14 @@
 
     "FORM:ACTION:add": "Add AOR",
     "FORM:ACTION:edit": "Edit AOR",
-    "FORM:ERROR:addFailure": "Failed to add the new AOR :-(",
-    "FORM:ERROR:editFailure": "Failed to edit the new AOR :-(",
+    "FORM:ERROR:addFailure": "Failed to add the new AOR.",
+    "FORM:ERROR:editFailure": "Failed to edit the new AOR.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "AOR deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete AOR",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen AOR?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> AOR?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the AOR :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the AOR."
   },
   "pl": true
 }

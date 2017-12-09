@@ -6,8 +6,8 @@
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the scan templates :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the scan template :(",
+    "MSG:LOADING_FAILURE": "Failed to load the scan templates.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the scan template.",
     "MSG:DELETED": "Scan template <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:add": "Add scan template",
@@ -22,14 +22,14 @@
 
     "FORM:ACTION:add": "Add scan template",
     "FORM:ACTION:edit": "Edit scan template",
-    "FORM:ERROR:addFailure": "Failed to add the new scan template :(",
-    "FORM:ERROR:editFailure": "Failed to edit the scan template :(",
+    "FORM:ERROR:addFailure": "Failed to add the new scan template.",
+    "FORM:ERROR:editFailure": "Failed to edit the scan template.",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Scan template deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete scan template",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen scan template?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> scan template?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the scan template :-("
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the scan template."
   },
   "pl": true
 }

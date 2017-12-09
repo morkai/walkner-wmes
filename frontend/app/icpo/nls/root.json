@@ -3,8 +3,8 @@
     "BREADCRUMBS:browse": "ICPO results",
     "BREADCRUMBS:details": "Result",
 
-    "MSG:LOADING_FAILURE": "Failed to load the programming results :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the programming result :(",
+    "MSG:LOADING_FAILURE": "Failed to load the programming results.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the programming result.",
 
     "PANEL:TITLE:details": "Programming details",
 

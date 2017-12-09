@@ -57,7 +57,7 @@ $('#submit').on('keydown', function(e)
   {
     $('#submit').prop('disabled', false);
 
-    alert('Nie udało się wysłać ankiety :(');
+    alert('Nie udało się wysłać ankiety.');
   });
 
   req.done(function()

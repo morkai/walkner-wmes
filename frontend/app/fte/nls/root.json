@@ -9,8 +9,8 @@
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
     "BREADCRUMBS:settings": "Settings",
 
-    "MSG:LOADING_FAILURE": "Failed to load the FTE data :(",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the specific FTE data :(",
+    "MSG:LOADING_FAILURE": "Failed to load the FTE data.",
+    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the specific FTE data.",
     "MSG:DELETED": "FTE entry <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:print": "Show printable version",
@@ -31,7 +31,7 @@
     "addForm:panel:title": "FTE entry find/create form",
     "addForm:copy": "Copy the values from the previous entry for the specified shift.",
     "addForm:submit": "Allocate resources",
-    "addForm:msg:offline": "Cannot allocate FTE: no connection with the server :(",
+    "addForm:msg:offline": "Cannot allocate FTE: no connection with the server.",
     "addForm:msg:failure": "Failed to find/create the FTE entry for editing: {error, select, AUTH{no privileges!} INPUT{invalid input data!} other{{error}}}",
 
     "property:date": "Date",
@@ -67,7 +67,7 @@
     "ACTION_FORM:BUTTON:delete": "Delete FTE entry",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen FTE entry?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> FTE entry?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the FTE entry :-(",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the FTE entry.",
 
     "settings:tab:general": "General",
     "settings:tab:structure": "Structure",
