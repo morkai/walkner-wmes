@@ -125,6 +125,7 @@ module.exports = function setupPlanModel(app, mongoose)
   planSchema.index({'orders._id': -1});
 
   planSchema.statics.TOPIC_PREFIX = 'planning.plans';
+  planSchema.statics.BROWSE_LIMIT = 10;
 
   planSchema.statics.SAP_ORDER_FIELDS = {
     scheduledStartDate: 1,
