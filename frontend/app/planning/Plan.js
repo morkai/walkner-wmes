@@ -154,7 +154,12 @@ define([
 
     getLabel: function()
     {
-      return time.utc.format(this.id, 'LL');
+      return time.utc.format(this.id, 'L');
+    },
+
+    getMoment: function()
+    {
+      return time.utc.getMoment(this.id, 'YYYY-MM-DD');
     },
 
     getActualOrderData: function(orderNo)

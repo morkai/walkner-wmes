@@ -11,6 +11,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/delayReasons/DelayReasonCollection',
   'app/factoryLayout/productionState',
+  'app/paintShop/views/PaintShopDatePickerView',
   '../Plan',
   '../PlanSettings',
   '../PlanDisplayOptions',
@@ -29,6 +30,7 @@ define([
   bindLoadingMessage,
   DelayReasonCollection,
   productionState,
+  PaintShopDatePickerView,
   Plan,
   PlanSettings,
   PlanDisplayOptions,
@@ -54,7 +56,16 @@ define([
           href: '#planning/plans',
           label: t.bound('planning', 'BREADCRUMBS:base')
         },
-        this.plan.getLabel()
+        {
+          href: '#planning/plans/' + this.plan.id,
+          label: this.plan.getLabel(),
+          template: function(breadcrumb)
+          {
+            return '<span class="paintShop-breadcrumb"><a class="fa fa-chevron-left" data-action="prev"></a>'
+              + '<a href="' + breadcrumb.href + '" data-action="showPicker">' + breadcrumb.label + '</a>'
+              + '<a class="fa fa-chevron-right" data-action="next"></a></span>';
+          }
+        }
       ];
     },
 
@@ -209,6 +220,7 @@ define([
 
     destroy: function()
     {
+      $(document).off('.' + this.idPrefix);
       $(window).off('.' + this.idPrefix);
 
       productionState.unload();
@@ -273,6 +285,9 @@ define([
       page.listenTo(plan.mrps, 'reset', _.after(2, _.debounce(page.renderMrps.bind(page), 1)));
 
       page.listenTo(plan.sapOrders, 'sync', page.onSapOrdersSynced);
+
+      $(document)
+        .on('click.' + page.idPrefix, '.paintShop-breadcrumb', this.onBreadcrumbsClick.bind(this));
 
       $(window)
         .on('resize.' + page.idPrefix, _.debounce(page.onWindowResize.bind(page), 16))
@@ -465,6 +480,105 @@ define([
       {
         window.scrollTo(0, scrollToMrpEl.offsetTop - ($mrps[0] === scrollToMrpEl ? 10 : -1));
       }
+    },
+
+    onBreadcrumbsClick: function(e)
+    {
+      if (e.target.tagName !== 'A')
+      {
+        return;
+      }
+
+      if (e.target.classList.contains('disabled'))
+      {
+        return false;
+      }
+
+      if (e.target.dataset.action === 'showPicker')
+      {
+        this.showDatePickerDialog();
+      }
+      else
+      {
+        this.selectNonEmptyDate(e.target.dataset.action);
+      }
+
+      return false;
+    },
+
+    showDatePickerDialog: function()
+    {
+      var dialogView = new PaintShopDatePickerView({
+        model: {
+          date: this.plan.id
+        }
+      });
+
+      this.listenTo(dialogView, 'picked', function(newDate)
+      {
+        viewport.closeDialog();
+
+        if (newDate !== this.plan.id)
+        {
+          this.plan.set('_id', newDate);
+        }
+      });
+
+      viewport.showDialog(dialogView);
+    },
+
+    selectNonEmptyDate: function(dir)
+    {
+      $('.paintShop-breadcrumb').find('a').addClass('disabled');
+
+      var page = this;
+      var date = +page.plan.getMoment().valueOf();
+      var month = 30 * 24 * 3600 * 1000;
+      var url = '/planning/plans/?limit(1)&select(_id)&orders>()';
+
+      if (dir === 'prev')
+      {
+        url += '&sort(-_id)&_id<' + date + '&_id>' + (date - month);
+      }
+      else
+      {
+        url += '&sort(_id)&_id>' + date + '&_id<' + (date + month);
+      }
+
+      var req = page.ajax({url: url});
+
+      req.done(function(res)
+      {
+        if (res.totalCount)
+        {
+          page.plan.set('_id', time.utc.format(res.collection[0]._id, 'YYYY-MM-DD'));
+        }
+        else
+        {
+          viewport.msg.show({
+            type: 'warning',
+            time: 2500,
+            text: t('paintShop', 'MSG:date:empty')
+          });
+        }
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.show({
+          type: 'error',
+          time: 2500,
+          text: t('paintShop', 'MSG:date:failure')
+        });
+      });
+
+      req.always(function()
+      {
+        if (page.layout)
+        {
+          page.layout.setBreadcrumbs(page.breadcrumbs, page);
+        }
+      });
     },
 
     onDateFilterChanged: function()
