@@ -82,6 +82,26 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
     });
   });
 
+  express.get('/maxos', function(req, res, next)
+  {
+    settings.findById('maxos.address', (err, setting) =>
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (!setting || /^http$/.test(setting.value))
+      {
+        res.sendStatus(404);
+      }
+      else
+      {
+        res.redirect(setting.value);
+      }
+    });
+  });
+
   //
   // Upload
   //
