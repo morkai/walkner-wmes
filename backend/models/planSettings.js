@@ -80,6 +80,10 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     },
     requiredStatuses: [String],
     ignoredStatuses: [String],
+    schedulingRate: {
+      type: Number,
+      default: 1
+    },
     lines: [lineSchema],
     mrps: [mrpSettingsSchema]
   }, {
@@ -98,6 +102,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       ignoreCompleted: true,
       requiredStatuses: ['REL'],
       ignoredStatuses: ['TECO', 'CNF', 'DLV', 'DLFL', 'DLT'],
+      schedulingRate: 1,
       lines: [],
       mrps: []
     });
@@ -111,6 +116,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       ignoreCompleted: sourceSettings.ignoreCompleted,
       requiredStatuses: sourceSettings.requiredStatuses,
       ignoredStatuses: sourceSettings.ignoredStatuses,
+      schedulingRate: sourceSettings.schedulingRate,
       lines: sourceSettings.lines,
       mrps: sourceSettings.mrps
     });
@@ -179,6 +185,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       ignoreCompleted: this.ignoreCompleted,
       requiredStatuses: this.requiredStatuses,
       ignoredStatuses: ignoredStatuses,
+      schedulingRate: this.schedulingRate,
       hardComponents: hardComponents,
       shiftStartTimes: [
         moment.utc(this._id).clone().hours(6).valueOf(),
@@ -288,7 +295,8 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       'useRemainingQuantity',
       'ignoreCompleted',
       'requiredStatuses',
-      'ignoredStatuses'
+      'ignoredStatuses',
+      'schedulingRate'
     ].forEach(prop =>
     {
       const oldValue = this[prop].toObject ? this[prop].toObject() : this[prop];

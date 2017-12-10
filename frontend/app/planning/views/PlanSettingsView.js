@@ -78,6 +78,10 @@ define([
             v = $property.val().split(',').filter(function(v) { return v.length > 0; });
             break;
 
+          case 'schedulingRate':
+            v = Math.max(0, parseFloat($property.val().replace(',', '.')) || 0) || 1;
+            break;
+
           case 'ignoreCompleted':
           case 'useRemainingQuantity':
             v = $property.prop('checked');

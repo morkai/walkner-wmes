@@ -229,6 +229,7 @@
   "settings:msg:success": "Ustawienia zostały zapisane.",
   "settings:msg:failure": "Nie udało się zapisać ustawień!",
   "settings:submit": "Zapisz ustawienia",
+  "settings:schedulingRate": "Szybkość planowania",
   "settings:requiredStatuses": "Wymagane statusy",
   "settings:requiredStatuses:help": "Lista wszystkich statusów jakie zlecenie musi mieć, aby było brane pod uwagę podczas generowania planu.",
   "settings:ignoredStatuses": "Ignorowane statusy",

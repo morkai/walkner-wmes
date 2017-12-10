@@ -1971,7 +1971,7 @@ module.exports = function setUpGenerator(app, module)
     const mrpLineSettings = settings.mrpLine(mrpId, lineId);
 
     const lastAvailableLine = getLinesForBigOrder(state, order.mrp, order.kind).length === 1;
-    const pceTime = getPceTime(order, mrpLineSettings.workerCount);
+    const pceTime = getPceTime(order, mrpLineSettings.workerCount, settings.schedulingRate);
     const activeTo = lineState.activeTo.valueOf();
     let startAt = lineState.activeFrom.valueOf();
     let finishAt = startAt + getOrderStartOverhead(state.settings, lineState, orderState);
@@ -2227,10 +2227,10 @@ module.exports = function setUpGenerator(app, module)
     return `${orderId}-${shiftNo}-${1 + linePlannedOrders.length + newPlannedOrders.length}`;
   }
 
-  function getPceTime(order, workerCount)
+  function getPceTime(order, workerCount, schedulingRate)
   {
     return order.operation.laborTime
-      ? (Math.ceil(order.operation.laborTime / 100 / workerCount * 3600) * 1000)
+      ? (Math.ceil(order.operation.laborTime / 100 / workerCount * 3600 * schedulingRate) * 1000)
       : 0;
   }
 
@@ -2240,6 +2240,7 @@ module.exports = function setUpGenerator(app, module)
     const {extraOrderSeconds, extraShiftSeconds} = settings.mrp(orderState.order.mrp);
     const hours = lineState.activeFrom.hours();
     const seconds = lineState.activeFrom.minutes() * 60;
+    const laborSetupTime = orderState.order.operation.laborSetupTime * settings.schedulingRate;
     let shiftStartTime = 0;
     let extraShiftStartTime = 0;
 
@@ -2260,7 +2261,7 @@ module.exports = function setUpGenerator(app, module)
     }
     else
     {
-      return extraOrderSeconds * 1000;
+      return (extraOrderSeconds * 1000) + laborSetupTime;
     }
 
     const orderStartAt = lineState.activeFrom.valueOf();
@@ -2268,10 +2269,10 @@ module.exports = function setUpGenerator(app, module)
 
     if (orderStartAt >= startDowntimeFinishAt)
     {
-      return extraOrderSeconds * 1000;
+      return (extraOrderSeconds * 1000) + laborSetupTime;
     }
 
-    return extraShiftStartTime - (orderStartAt - shiftStartTime);
+    return (extraShiftStartTime - (orderStartAt - shiftStartTime)) + laborSetupTime;
   }
 
   function recountHourlyPlan(planLine)
@@ -2666,7 +2667,7 @@ module.exports = function setUpGenerator(app, module)
 
       const lineState = state.lineStates.get(mrpLineSettings._id);
       const availableTime = getRemainingAvailableTime(lineState);
-      const pceTime = getPceTime(order, mrpLineSettings.workerCount);
+      const pceTime = getPceTime(order, mrpLineSettings.workerCount, state.settings.schedulingRate);
 
       return !lineState.plannedOrdersSet.has(order._id) && availableTime >= pceTime;
     });

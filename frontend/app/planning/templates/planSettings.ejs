@@ -4,6 +4,10 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
+        <label for="<%- idPrefix %>-schedulingRate"><%- t('planning', 'settings:schedulingRate') %></label>
+        <input id="<%- idPrefix %>-schedulingRate" name="schedulingRate" class="form-control" type="text" required data-object="plan" style="width: 100px">
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-requiredStatuses"><%- t('planning', 'settings:requiredStatuses') %></label>
         <p class="help-block"><%- t('planning', 'settings:requiredStatuses:help') %></p>
         <input id="<%- idPrefix %>-requiredStatuses" name="requiredStatuses" type="text" data-object="plan">
