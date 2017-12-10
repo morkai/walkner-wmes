@@ -42,6 +42,10 @@ define([
       {
         this.plan.displayOptions.toggleLatestOrderDataUse();
       },
+      'click #-useDarkerTheme': function()
+      {
+        this.plan.displayOptions.toggleDarkerThemeUse();
+      },
       'click a[role="copyOrderList"]': function(e)
       {
         this.copyOrderList(+e.currentTarget.dataset.shift);
@@ -58,7 +62,7 @@ define([
       this.listenTo(displayOptions, 'change:minDate change:maxDate', this.onMinMaxDateChanged);
       this.listenTo(
         displayOptions,
-        'change:lineOrdersList change:wrapLists change:useLatestOrderData',
+        'change:lineOrdersList change:wrapLists change:useLatestOrderData change:useDarkerTheme',
         this.updateToggles
       );
     },
@@ -76,7 +80,8 @@ define([
         maxDate: displayOptions.get('maxDate'),
         lineOrdersList: displayOptions.isLineOrdersListEnabled(),
         wrapLists: displayOptions.isListWrappingEnabled(),
-        useLatestOrderData: displayOptions.isLatestOrderDataUsed()
+        useLatestOrderData: displayOptions.isLatestOrderDataUsed(),
+        useDarkerTheme: displayOptions.isDarkerThemeUsed()
       });
     },
 
@@ -169,6 +174,7 @@ define([
       this.$id('lineOrdersList').toggleClass('active', displayOptions.isLineOrdersListEnabled());
       this.$id('wrapLists').toggleClass('active', !displayOptions.isListWrappingEnabled());
       this.$id('useLatestOrderData').toggleClass('active', displayOptions.isLatestOrderDataUsed());
+      this.$id('useDarkerTheme').toggleClass('active', displayOptions.isDarkerThemeUsed());
     },
 
     changeFilter: function()

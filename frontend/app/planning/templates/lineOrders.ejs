@@ -23,7 +23,7 @@
            data-order-no="<%- shiftOrder.orderNo %>"
            data-popover-content="lineOrder"
            style="width: <%- shiftOrder.width %>%; margin-left: <%- shiftOrder.margin %>%">
-        <div class="planning-mrp-list-item-inner <%- shiftOrder.confirmed %> <%- shiftOrder.delivered %>">
+        <div class="planning-mrp-list-item-inner">
           <% if (shiftOrder.external) { %>
           <%- shiftOrder.orderNo %>, <%- shiftOrder.quantity %> <%- t('planning', 'lineOrders:unit') %>, <%- shiftOrder.mrp %>
           <% } else { %>

@@ -23,6 +23,7 @@
   "filter:wrapLists": "Przewijanie list",
   "filter:lineOrdersList": "Lista <u>z</u>leceń",
   "filter:useLatestOrderData": "Najnowsze zlecenia",
+  "filter:useDarkerTheme": "Ciemniejsze kolory",
   "filter:copyOrderList": "Kopiuj listę zleceń",
   "filter:stats:quantity": "Sztuki:",
   "filter:stats:manHours": "RBH:",

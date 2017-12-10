@@ -23,6 +23,7 @@ define([
         mrps: [],
         printOrderTimes: false,
         useLatestOrderData: true,
+        useDarkerTheme: false,
         wrapLists: true,
         lineOrdersList: false
       };
@@ -61,6 +62,16 @@ define([
     toggleLatestOrderDataUse: function()
     {
       this.set('useLatestOrderData', !this.attributes.useLatestOrderData);
+    },
+
+    isDarkerThemeUsed: function()
+    {
+      return this.attributes.useDarkerTheme;
+    },
+
+    toggleDarkerThemeUse: function()
+    {
+      this.set('useDarkerTheme', !this.attributes.useDarkerTheme);
     },
 
     isListWrappingEnabled: function()

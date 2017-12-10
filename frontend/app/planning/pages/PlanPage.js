@@ -277,6 +277,7 @@ define([
 
       page.listenTo(plan.displayOptions, 'change:mrps', page.onMrpsFilterChanged);
       page.listenTo(plan.displayOptions, 'change:wrapLists', page.onWrapListsChanged);
+      page.listenTo(plan.displayOptions, 'change:useDarkerTheme', page.onDarkerThemeChanged);
       page.listenTo(plan.displayOptions, 'change:useLatestOrderData', page.updateUrl);
 
       page.listenTo(plan.settings, 'changed', page.onSettingsChanged);
@@ -316,7 +317,8 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        wrap: this.plan.displayOptions.isListWrappingEnabled()
+        wrap: this.plan.displayOptions.isListWrappingEnabled(),
+        darker: this.plan.displayOptions.isDarkerThemeUsed()
       };
     },
 
@@ -602,6 +604,11 @@ define([
     onWrapListsChanged: function()
     {
       this.$el.toggleClass('wrap', this.plan.displayOptions.isListWrappingEnabled());
+    },
+
+    onDarkerThemeChanged: function()
+    {
+      this.$el.toggleClass('planning-darker', this.plan.displayOptions.isDarkerThemeUsed());
     },
 
     onPlanSynced: function()
