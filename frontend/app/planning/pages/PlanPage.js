@@ -378,6 +378,7 @@ define([
     renderMrps: function()
     {
       var page = this;
+      var loading = page.plan.isAnythingLoading();
 
       page.removeView('#-mrps');
 
@@ -390,7 +391,12 @@ define([
           mrp: mrp
         });
 
-        page.insertView('#-mrps', mrpView).render();
+        page.insertView('#-mrps', mrpView);
+
+        if (!loading)
+        {
+          mrpView.render();
+        }
       });
 
       this.$id('empty').toggleClass('hidden', page.plan.mrps.length > 0);

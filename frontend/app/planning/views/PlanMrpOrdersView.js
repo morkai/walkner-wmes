@@ -644,7 +644,7 @@ define([
 
     onSapOrdersReset: function(sapOrders, options)
     {
-      if (!options.reload && this.plan.displayOptions.isLatestOrderDataUsed())
+      if (!options.reload && this.plan.displayOptions.isLatestOrderDataUsed() && !this.plan.isAnythingLoading())
       {
         this.render();
       }

@@ -105,6 +105,7 @@ define([
         time: null
       };
 
+      view.listenTo(view.plan, 'change:loading', this.onLoadingChanged);
       view.listenTo(view.plan.displayOptions, 'change:lineOrdersList', this.onLineOrdersListChanged);
 
       view.setView('#-toolbar', new PlanMrpToolbarView({
@@ -196,6 +197,14 @@ define([
         plan: this.plan,
         mrp: this.mrp
       })).render();
+    },
+
+    onLoadingChanged: function()
+    {
+      if (!this.plan.isAnythingLoading())
+      {
+        this.render();
+      }
     },
 
     onLineOrdersListChanged: function()
