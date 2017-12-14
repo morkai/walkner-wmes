@@ -263,10 +263,13 @@ define([
         delayReasons: this.delayReasons,
         showPanel: false
       });
-      this.orderChangesView.render();
 
       $changesTd.append(this.orderChangesView.el);
-      $changesTr.insertAfter($orderTr).removeClass('hidden');
+      $changesTr.insertAfter($orderTr);
+
+      this.orderChangesView.render();
+
+      $changesTr.removeClass('hidden');
     },
 
     hideOrderChanges: function()
