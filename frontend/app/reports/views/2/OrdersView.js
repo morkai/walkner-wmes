@@ -228,9 +228,9 @@ define([
     filter: function()
     {
       var filterData = form2js(this.$id('filter')[0]);
-      var hour = (filterData.hour || '').split(':').map(function(v) { return +v; })[0];
+      var hour = (filterData.hour || '').split(':').map(function(v) { return parseInt(v, 10); })[0];
 
-      if (isNaN(hour) || hour < 0 || hour > 24)
+      if (hour === '' || isNaN(hour) || hour < 0 || hour > 24)
       {
         hour = '';
       }

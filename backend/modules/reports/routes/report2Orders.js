@@ -55,6 +55,11 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
 
   function buildStatusSelector(query, selector)
   {
+    selector.push({
+      name: 'nin',
+      args: ['statuses', ['TECO', 'DLT']]
+    });
+
     if (_.includes(['all', 'in', 'nin'], query.filter)
       && _.isString(query.statuses)
       && /^[A-Z,]+$/.test(query.statuses))
