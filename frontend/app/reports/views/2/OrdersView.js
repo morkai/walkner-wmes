@@ -200,11 +200,25 @@ define([
     setFilterFieldValues: function()
     {
       var query = this.collection.query;
+      var hour = parseInt(query.get('hour'), 10);
+
+      if (isNaN(hour) || hour < 0 || hour > 24)
+      {
+        hour = '';
+      }
+      else if (hour < 10)
+      {
+        hour = '0' + hour + ':00';
+      }
+      else
+      {
+        hour += ':00';
+      }
 
       js2form(this.$id('filter')[0], {
         orderNo: query.get('orderNo'),
         hourMode: query.get('hourMode'),
-        hour: query.get('hour'),
+        hour: hour,
         filter: query.get('filter'),
         statuses: query.get('statuses').split(','),
         limit: query.get('limit')
@@ -214,9 +228,15 @@ define([
     filter: function()
     {
       var filterData = form2js(this.$id('filter')[0]);
+      var hour = (filterData.hour || '').split(':').map(function(v) { return +v; })[0];
+
+      if (isNaN(hour) || hour < 0 || hour > 24)
+      {
+        hour = '';
+      }
 
       filterData.orderNo = (filterData.orderNo || '').length < 6 ? '' : filterData.orderNo;
-      filterData.hour = filterData.hour || '';
+      filterData.hour = hour.toString();
       filterData.statuses = Array.isArray(filterData.statuses) ? filterData.statuses.join(',') : '';
       filterData.skip = 0;
 

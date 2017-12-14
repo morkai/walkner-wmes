@@ -14,7 +14,7 @@
           </label>
         </div>
         <% }) %>
-        <input id="<%- idPrefix %>-hour" class="form-control" name="hour" type="number" min="0" max="24">
+        <input id="<%- idPrefix %>-hour" class="form-control" name="hour" type="text" placeholder="hh:mm">
       </div>
       <div id="<%- idPrefix %>-statusFormGroup" class="form-group">
         <% ['red', 'all', 'in', 'nin', 'wo'].forEach(function(filter) { %>
