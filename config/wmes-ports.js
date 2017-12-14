@@ -1,6 +1,13 @@
 'use strict';
 
-const reportsPushPort = 60000;
+if (process.env.WMES_PORTS)
+{
+  try { return module.exports = require(process.env.WMES_PORTS); }
+  catch (err) {} // eslint-disable-line no-empty
+}
+
+const REPORTS_PUSH_PORT = 60000;
+
 let nextPort = 60010;
 
 module.exports = {
@@ -35,30 +42,54 @@ module.exports = {
     repPort: nextPort++
   },
   'wmes-reports-1': {
-    pubHost: '127.0.0.1',
-    pubPort: nextPort++,
-    repHost: '127.0.0.1',
-    repPort: nextPort++,
-    pullHost: '127.0.0.1',
-    pullPort: reportsPushPort,
-    pushHost: '127.0.0.1',
-    pushPort: reportsPushPort
+    server: {
+      pubHost: '127.0.0.1',
+      pubPort: nextPort++,
+      repHost: '127.0.0.1',
+      repPort: nextPort++,
+      pullHost: '127.0.0.1',
+      pullPort: REPORTS_PUSH_PORT
+    },
+    client: {
+      pubHost: '127.0.0.1',
+      pubPort: nextPort - 2,
+      repHost: '127.0.0.1',
+      repPort: nextPort - 1,
+      pushHost: '127.0.0.1',
+      pushPort: REPORTS_PUSH_PORT
+    }
   },
   'wmes-reports-2': {
-    pubHost: '127.0.0.1',
-    pubPort: nextPort++,
-    repHost: '127.0.0.1',
-    repPort: nextPort++,
-    pullHost: '127.0.0.1',
-    pullPort: reportsPushPort
+    server: {
+      pubHost: '127.0.0.1',
+      pubPort: nextPort++,
+      repHost: '127.0.0.1',
+      repPort: nextPort++,
+      pullHost: '127.0.0.1',
+      pullPort: REPORTS_PUSH_PORT
+    },
+    client: {
+      pubHost: '127.0.0.1',
+      pubPort: nextPort - 2,
+      repHost: '127.0.0.1',
+      repPort: nextPort - 1
+    }
   },
   'wmes-reports-3': {
-    pubHost: '127.0.0.1',
-    pubPort: nextPort++,
-    repHost: '127.0.0.1',
-    repPort: nextPort++,
-    pullHost: '127.0.0.1',
-    pullPort: reportsPushPort
+    server: {
+      pubHost: '127.0.0.1',
+      pubPort: nextPort++,
+      repHost: '127.0.0.1',
+      repPort: nextPort++,
+      pullHost: '127.0.0.1',
+      pullPort: REPORTS_PUSH_PORT
+    },
+    client: {
+      pubHost: '127.0.0.1',
+      pubPort: nextPort - 2,
+      repHost: '127.0.0.1',
+      repPort: nextPort - 1
+    }
   },
   'wmes-alerts': {
     pubHost: '127.0.0.1',
@@ -71,5 +102,21 @@ module.exports = {
     pubPort: nextPort++,
     repHost: '127.0.0.1',
     repPort: nextPort++
+  },
+  'wmes-reports-4': {
+    server: {
+      pubHost: '127.0.0.1',
+      pubPort: nextPort++,
+      repHost: '127.0.0.1',
+      repPort: nextPort++,
+      pullHost: '127.0.0.1',
+      pullPort: REPORTS_PUSH_PORT
+    },
+    client: {
+      pubHost: '127.0.0.1',
+      pubPort: nextPort - 2,
+      repHost: '127.0.0.1',
+      repPort: nextPort - 1
+    }
   }
 };

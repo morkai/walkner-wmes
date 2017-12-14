@@ -32,7 +32,7 @@ exports.events = {
 exports.mongoose = {
   uri: mongodb.uri,
   options: Object.assign(mongodb.mongoClient, {
-    poolSize: 10,
+    poolSize: 8,
     readPreference: 'secondaryPreferred'
   }),
   maxConnectTries: 10,
@@ -63,7 +63,7 @@ exports.updater = {
   frontendVersionKey: null
 };
 
-exports['messenger/server'] = Object.assign({}, ports[exports.id], {
+exports['messenger/server'] = Object.assign({}, ports[exports.id].server, {
   broadcastTopics: [
     'events.saved'
   ]
