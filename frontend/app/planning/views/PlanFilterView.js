@@ -59,6 +59,7 @@ define([
       var displayOptions = plan.displayOptions;
 
       this.listenTo(plan, 'change:loading', this.onLoadingChanged);
+      this.listenTo(plan, 'change:_id', this.onDateChanged);
       this.listenTo(displayOptions, 'change:minDate change:maxDate', this.onMinMaxDateChanged);
       this.listenTo(
         displayOptions,
@@ -207,6 +208,11 @@ define([
 
       this.$id('date').prop('disabled', loading);
       this.$id('mrps').select2('enable', !loading);
+    },
+
+    onDateChanged: function()
+    {
+      this.$id('date').val(this.plan.id);
     },
 
     onMinMaxDateChanged: function()
