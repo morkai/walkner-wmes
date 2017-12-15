@@ -504,6 +504,7 @@ exports.exportRoute = function(app, options, req, res, next)
   let headerWritten = false;
   let columns = null;
   let jsonToXlsx = null;
+  let rowIndex = 0;
 
   if (format === 'xlsx')
   {
@@ -733,6 +734,7 @@ exports.exportRoute = function(app, options, req, res, next)
       freezeRows: options.freezeRows || 0,
       freezeColumns: options.freezeColumns || 0,
       headerHeight: options.headerHeight || 0,
+      subHeader: !!options.subHeader,
       columns: columns
     };
 
@@ -772,15 +774,19 @@ exports.exportRoute = function(app, options, req, res, next)
 
     res.write(new Buffer([0xEF, 0xBB, 0xBF]));
     res.write(line + CSV_ROW_SEPARATOR);
+
+    ++rowIndex;
   }
 
   function writeCsvRow(row)
   {
+    ++rowIndex;
+
     const line = columns
       .map(function(column)
       {
         const rawValue = row[column.name];
-        const formatter = CSV_FORMATTERS[column.type];
+        const formatter = CSV_FORMATTERS[options.subHeader && rowIndex === 2 ? 'string' : column.type];
 
         return formatter ? formatter(rawValue) : rawValue;
       })

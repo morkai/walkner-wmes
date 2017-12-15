@@ -2,9 +2,11 @@
 
 'use strict';
 
+const step = require('h5.step');
 const moment = require('moment');
 const util = require('../util');
 const helpers = require('./helpers');
+const calcFte = require('../calcFte');
 
 const HOUR_TO_SHIFT = {
   6: ' I',
@@ -15,6 +17,7 @@ const HOUR_TO_SHIFT = {
 module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
 {
   const orgUnitsModule = app[reportsModule.config.orgUnitsId];
+  const prodTasksModule = app[reportsModule.config.prodTasksId];
   const express = app[reportsModule.config.expressId];
   const mongoose = app[reportsModule.config.mongooseId];
   const ProdShiftOrder = mongoose.model('ProdShiftOrder');
@@ -25,6 +28,36 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
   {
     return res.sendStatus(400);
   }
+
+  const division = orgUnit ? orgUnitsModule.getDivisionFor(orgUnit) : null;
+
+  if (orgUnit !== null && !division)
+  {
+    return res.sendStatus(400);
+  }
+
+  let subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;
+  let subdivisionType = query.subdivisionType;
+
+  if (subdivisionType === 'prod' || subdivisionType === 'press')
+  {
+    subdivisions = filterSubdivisionByType(
+      orgUnitsModule,
+      subdivisions,
+      subdivisionType === 'press' ? 'press' : 'assembly'
+    );
+  }
+  else
+  {
+    subdivisionType = null;
+  }
+
+  const subdivisionTypes = {};
+
+  orgUnitsModule.getAllByType('subdivision').forEach(subdivision =>
+  {
+    subdivisionTypes[subdivision._id] = subdivision.type;
+  });
 
   if (!query.from || !query.to)
   {
@@ -44,10 +77,17 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
   const options = {
     orgUnitType: query.orgUnitType,
     orgUnitId: query.orgUnitId,
+    division: helpers.idToStr(division),
+    subdivisions: helpers.idToStr(subdivisions),
+    subdivisionTypes,
+    prodFlows: helpers.idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
+    orgUnits: helpers.getOrgUnitsForFte(orgUnitsModule, query.orgUnitType, orgUnit),
     fromTime: helpers.getTime(query.from),
     toTime: helpers.getTime(query.to),
     interval: helpers.getInterval(query.interval === 'hour' ? 'day' : query.interval, 'day'),
-    ignoredOrgUnits: helpers.decodeOrgUnits(orgUnitsModule, query.ignoredOrgUnits)
+    ignoredOrgUnits: helpers.decodeOrgUnits(orgUnitsModule, query.ignoredOrgUnits),
+    prodTasks: helpers.getProdTasksWithTags(prodTasksModule.models),
+    byOrgUnit: {}
   };
 
   if (isNaN(options.fromTime) || isNaN(options.toTime))
@@ -87,106 +127,242 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
     }
   }
 
-  const conditions = {
-    startedAt: {
-      $gte: options.fromTime,
-      $lt: options.toTime
-    },
-    workDuration: {$ne: 0},
-    laborTime: {$ne: 0},
-    workerCount: {$ne: 0},
-    finishedAt: {$ne: null}
-  };
-
-  if (query.orgUnitType && options.orgUnitId)
-  {
-    const orgUnitProperty = options.orgUnitType === 'mrpController'
-      ? 'mrpControllers'
-      : options.orgUnitType;
-
-    conditions[orgUnitProperty] = options.orgUnitId;
-  }
-
-  if (!options.ignoredOrgUnits.empty)
-  {
-    conditions.prodLine = {$nin: Object.keys(options.ignoredOrgUnits.prodLine)};
-  }
-
-  const fields = {
-    division: 1,
-    subdivision: 1,
-    prodLine: 1,
-    startedAt: 1,
-    workDuration: 1,
-    workerCount: 1,
-    totalQuantity: 1,
-    laborTime: 1
-  };
-
-  express.crud.exportRoute(app, {
-    cursor: ProdShiftOrder.find(conditions, fields).lean().cursor(),
-    serializeRow: () => {},
-    filename: 'WMES-LINE_EFFICIENCY',
-    freezeRows: 1,
-    freezeColumns: 6,
-    headerHeight: options.interval === 'shift' ? 72 : 60,
-    prepareColumn: column =>
+  step(
+    function()
     {
-      column.type = 'percent';
-      column.width = 5;
-      column.headerRotation = 90;
-      column.headerAlignmentH = 'Center';
-      column.headerAlignmentV = 'Bottom';
+      const cachedFte = helpers.getCachedReport('fte', req);
+      const nextStep = this.next();
+
+      if (cachedFte)
+      {
+        return setImmediate(nextStep, null, cachedFte);
+      }
+
+      const prodLines = orgUnit
+        ? orgUnitsModule.getProdLinesFor(orgUnit)
+        : [].concat(orgUnitsModule.getAllByType('prodLine'));
+
+      createNextOptionsByOrgUnit(prodLines, () =>
+      {
+        helpers.generateReport(app, reportsModule, calcFte, 'fte', req.reportHash, options, nextStep);
+      });
     },
-    columns: {
-      division: {
-        width: 12,
-        caption: 'Prod. center'
-      },
-      subdivision: {
-        width: 12,
-        caption: 'Prod. area'
-      },
-      mrpControllers: {
-        width: 10,
-        caption: 'MRP - MES'
-      },
-      prodFlow: {
-        width: 35,
-        caption: 'Product Segment'
-      },
-      workCenter: {
-        width: 15,
-        caption: 'Work Center'
-      },
-      prodLine: {
-        width: 15,
-        caption: 'Assembly line name - MES'
-      },
-      total: {
-        type: 'percent',
-        width: 5,
-        caption: 'Total'
+    function(err, cachedFte)
+    {
+      if (err)
+      {
+        return this.skip(err);
+      }
+
+      try
+      {
+        this.fteByOrgUnit = JSON.parse(cachedFte).byOrgUnit;
+      }
+      catch (err)
+      {
+        return this.skip(err);
       }
     },
-    serializeStream: (cursor, emitter) =>
+    function(err)
     {
-      const results = {
-        prodLines: {},
-        groups: {},
-        lastDivision: '',
-        lastSubdivision: ''
+      if (err)
+      {
+        return next(err);
+      }
+
+      const conditions = {
+        startedAt: {
+          $gte: options.fromTime,
+          $lt: options.toTime
+        },
+        workDuration: {$ne: 0},
+        laborTime: {$ne: 0},
+        workerCount: {$ne: 0},
+        finishedAt: {$ne: null}
       };
 
-      cursor.on('error', err => emitter.emit('error', err));
+      if (query.orgUnitType && options.orgUnitId)
+      {
+        const orgUnitProperty = options.orgUnitType === 'mrpController'
+          ? 'mrpControllers'
+          : options.orgUnitType;
 
-      cursor.on('end', sendResults.bind(null, results, emitter));
+        conditions[orgUnitProperty] = options.orgUnitId;
+      }
 
-      cursor.on('data', serializeRow.bind(null, results));
+      if (!options.ignoredOrgUnits.empty)
+      {
+        conditions.prodLine = {$nin: Object.keys(options.ignoredOrgUnits.prodLine)};
+      }
+
+      const fields = {
+        division: 1,
+        subdivision: 1,
+        prodLine: 1,
+        startedAt: 1,
+        workDuration: 1,
+        workerCount: 1,
+        totalQuantity: 1,
+        laborTime: 1
+      };
+
+      express.crud.exportRoute(app, {
+        cursor: ProdShiftOrder.find(conditions, fields).lean().cursor(),
+        serializeRow: () => {},
+        filename: 'WMES-LINE_EFFICIENCY',
+        freezeRows: 2,
+        freezeColumns: 6,
+        subHeader: true,
+        prepareColumn: column =>
+        {
+          column.type = 'percent';
+          column.width = 6;
+          column.headerAlignmentH = 'Center';
+          column.headerAlignmentV = 'Bottom';
+
+          const suffixIndex = column.caption.indexOf('$');
+
+          if (suffixIndex === -1)
+          {
+            return;
+          }
+
+          const suffix = column.caption.substring(suffixIndex);
+
+          column.caption = suffix === '$PROD' ? '' : column.caption.substring(0, suffixIndex);
+
+          if (suffix === '$EFF')
+          {
+            column.mergeH = 1;
+            column.fontColor = '#008000';
+          }
+          else
+          {
+            column.fontColor = '#E36B0A';
+          }
+        },
+        columns: {
+          division: {
+            width: 12,
+            caption: 'Prod. center',
+            mergeV: 1
+          },
+          subdivision: {
+            width: 12,
+            caption: 'Prod. area',
+            mergeV: 1
+          },
+          mrpControllers: {
+            width: 10,
+            caption: 'MRP - MES',
+            mergeV: 1
+          },
+          prodFlow: {
+            width: 35,
+            caption: 'Product Segment',
+            mergeV: 1
+          },
+          workCenter: {
+            width: 15,
+            caption: 'Work Center',
+            mergeV: 1
+          },
+          prodLine: {
+            width: 15,
+            caption: 'Assembly line name - MES',
+            mergeV: 1
+          },
+          total$EFF: {
+            type: 'percent',
+            width: 6,
+            caption: 'Total',
+            headerAlignmentH: 'Center',
+            mergeH: 1,
+            fontColor: '#008000'
+          },
+          total$PROD: {
+            type: 'percent',
+            width: 6,
+            caption: '',
+            fontColor: '#E36B0A'
+          }
+        },
+        serializeStream: (cursor, emitter) =>
+        {
+          const results = {
+            prodLines: {},
+            groups: {},
+            lastDivision: '',
+            lastSubdivision: ''
+          };
+
+          cursor.on('error', err => emitter.emit('error', err));
+
+          cursor.on('end', sendResults.bind(null, results, emitter));
+
+          cursor.on('data', serializeRow.bind(null, results, this.fteByOrgUnit));
+        }
+      }, req, res, next);
     }
-  }, req, res, next);
+  );
 
-  function serializeRow(results, pso)
+  function createNextOptionsByOrgUnit(prodLines, done)
+  {
+    const prodLine = prodLines.shift();
+
+    if (!prodLine)
+    {
+      return setImmediate(done);
+    }
+
+    const lineOrgUnits = orgUnitsModule.getAllForProdLine(prodLine);
+
+    createOptionsByOrgUnit('prodLine', prodLine._id);
+
+    if (lineOrgUnits.subdivision)
+    {
+      createOptionsByOrgUnit('subdivision', helpers.idToStr(lineOrgUnits.subdivision));
+    }
+
+    if (lineOrgUnits.subdivision)
+    {
+      createOptionsByOrgUnit('division', lineOrgUnits.division);
+    }
+
+    setImmediate(createNextOptionsByOrgUnit, prodLines, done);
+  }
+
+  function createOptionsByOrgUnit(orgUnitType, orgUnitId)
+  {
+    if (options.byOrgUnit[orgUnitId])
+    {
+      return;
+    }
+
+    const orgUnit = orgUnitsModule.getByTypeAndId(orgUnitType, orgUnitId);
+    const division = orgUnit ? orgUnitsModule.getDivisionFor(orgUnit) : null;
+    let subdivisions = orgUnit ? orgUnitsModule.getSubdivisionsFor(orgUnit) : null;
+
+    if (subdivisionType === 'prod' || subdivisionType === 'press')
+    {
+      subdivisions = filterSubdivisionByType(
+        orgUnitsModule,
+        subdivisions,
+        subdivisionType === 'press' ? 'press' : 'assembly'
+      );
+    }
+
+    options.byOrgUnit[orgUnitId] = {
+      orgUnitType: orgUnitType,
+      orgUnitId: orgUnitId,
+      division: helpers.idToStr(division),
+      subdivisions: helpers.idToStr(subdivisions),
+      prodFlows: helpers.idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),
+      orgUnits: helpers.getOrgUnitsForFte(orgUnitsModule, orgUnitType, orgUnit)
+    };
+  }
+
+  function serializeRow(results, fteByOrgUnit, pso)
   {
     const groupKey = util.createGroupKey(options.interval, pso.startedAt, true);
 
@@ -235,7 +411,8 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
     {
       group[pso.division] = {
         effNum: 0,
-        effDen: 0
+        effDen: 0,
+        prodDen: getProdDen(fteByOrgUnit, pso.division, groupKey)
       };
     }
 
@@ -243,7 +420,8 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
     {
       group[pso.subdivision] = {
         effNum: 0,
-        effDen: 0
+        effDen: 0,
+        prodDen: getProdDen(fteByOrgUnit, pso.subdivision, groupKey)
       };
     }
 
@@ -251,15 +429,8 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
     {
       group[pso.prodLine] = {
         effNum: 0,
-        effDen: 0
-      };
-    }
-
-    if (!group[pso.prodLine])
-    {
-      group[pso.prodLine] = {
-        effNum: 0,
-        effDen: 0
+        effDen: 0,
+        prodDen: getProdDen(fteByOrgUnit, pso.prodLine, groupKey)
       };
     }
 
@@ -272,6 +443,18 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
     group[pso.subdivision].effDen += effDen;
     group[pso.prodLine].effNum += effNum;
     group[pso.prodLine].effDen += effDen;
+  }
+
+  function getProdDen(fteByOrgUnit, orgUnitId, groupKey)
+  {
+    const fte = fteByOrgUnit[orgUnitId];
+
+    if (!fte || !fte.grouped[groupKey])
+    {
+      return 0;
+    }
+
+    return fte.grouped[groupKey].prodDenTotal;
   }
 
   function sendResults(results, emitter)
@@ -301,6 +484,26 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
       results.prodLines[a],
       results.prodLines[b]
     ));
+
+    const subHeader = {
+      division: '',
+      subdivision: '',
+      mrpControllers: '',
+      prodFlow: '',
+      workCenter: '',
+      prodLine: ''
+    };
+
+    groups.forEach(group =>
+    {
+      subHeader[group.label + '$EFF'] = 'Eff';
+      subHeader[group.label + '$PROD'] = 'Prod';
+    });
+
+    subHeader.total$EFF = 'Eff';
+    subHeader.total$PROD = 'Prod';
+
+    emitter.emit('data', subHeader);
 
     emitNextProdLine(prodLines, groups, results, emitter);
   }
@@ -354,6 +557,19 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
 
   function emitOrgUnitRow(orgUnitType, orgUnits, groups, results, emitter)
   {
+    if (options.orgUnitType && options.orgUnitType !== 'division')
+    {
+      if (options.orgUnitType === 'subdivision' && orgUnitType === 'division')
+      {
+        return;
+      }
+
+      if (options.orgUnitType !== 'subdivision' && orgUnitType !== 'prodLine')
+      {
+        return;
+      }
+    }
+
     const row = {
       division: orgUnits.division.label,
       subdivision: orgUnits.subdivision ? orgUnits.subdivision.label : '',
@@ -365,22 +581,50 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
 
     let totalEffNum = 0;
     let totalEffDen = 0;
+    let totalProdDen = 0;
 
     groups.forEach(group =>
     {
       const data = (results.groups[group.key] || {})[orgUnits[orgUnitType]._id] || {
         effNum: 0,
-        effDen: 0
+        effDen: 0,
+        prodDen: 0
       };
 
       totalEffNum += data.effNum;
       totalEffDen += data.effDen;
+      totalProdDen += data.prodDen;
 
-      row[group.label] = data.effDen > 0 ? Math.round(data.effNum / data.effDen * 100) / 100 : 0;
+      row[group.label + '$EFF'] = data.effDen > 0
+        ? Math.round(data.effNum / data.effDen * 100) / 100
+        : 0;
+      row[group.label + '$PROD'] = data.prodDen > 0
+        ? Math.round(data.effNum / reportsModule.prodNumConstant / data.prodDen * 100) / 100
+        : 0;
     });
 
-    row.total = totalEffDen > 0 ? Math.round(totalEffNum / totalEffDen * 100) / 100 : 0;
+    row.total$EFF = totalEffDen > 0
+      ? Math.round(totalEffNum / totalEffDen * 100) / 100
+      : 0;
+    row.total$PROD = totalProdDen > 0
+      ? Math.round(totalEffNum / reportsModule.prodNumConstant / totalProdDen * 100) / 100
+      : 0;
 
     emitter.emit('data', row);
+  }
+
+  function filterSubdivisionByType(orgUnitsModule, subdivisions, subdivisionType)
+  {
+    if (subdivisions === null)
+    {
+      subdivisions = orgUnitsModule.getAllByType('subdivision');
+    }
+
+    subdivisions = subdivisions.filter(function(subdivision)
+    {
+      return subdivision.type === subdivisionType;
+    });
+
+    return subdivisions;
   }
 };

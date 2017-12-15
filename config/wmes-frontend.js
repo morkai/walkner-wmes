@@ -452,6 +452,7 @@ exports.reports = {
   javaBatik: 'java -jar c:/tools/batik/batik-rasterizer.jar',
   nc12ToCagsJsonPath: `${__dirname}/../data/12nc_to_cags.json`,
   reports: [
+    'fte',
     '1', '2', '3', '4', '5', '6', '7', '8', '9',
     'qi/count', 'qi/okRatio', 'qi/nokRatio',
     'kaizen/count', 'kaizen/summary', 'kaizen/metrics',

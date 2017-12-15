@@ -39,14 +39,26 @@ exports.clearCachedReports = function(ids)
   }
 };
 
-exports.sendCachedReport = function(id, req, res, next)
+exports.getCachedReport = function(id, req)
 {
   req.reportHash = crypto.createHash('md5').update(req.url).digest('hex');
 
   if (cachedReports[id] && cachedReports[id][req.reportHash] && process.env.NODE_ENV !== 'development')
   {
+    return cachedReports[id][req.reportHash];
+  }
+
+  return null;
+};
+
+exports.sendCachedReport = function(id, req, res, next)
+{
+  const cachedReport = exports.getCachedReport(id, req);
+
+  if (cachedReport)
+  {
     res.type('json');
-    res.send(cachedReports[id][req.reportHash]);
+    res.send(cachedReport);
   }
   else
   {

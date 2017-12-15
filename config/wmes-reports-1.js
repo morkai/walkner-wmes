@@ -71,6 +71,7 @@ exports['messenger/server'] = Object.assign({}, ports[exports.id].server, {
 
 exports['reports/server'] = {
   reports: {
+    'fte': require('../backend/modules/reports/calcFte'),
     '1': require('../backend/modules/reports/report1'),
     '2': require('../backend/modules/reports/report2'),
     '3': require('../backend/modules/reports/report3'),
