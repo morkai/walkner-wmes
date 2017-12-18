@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../core/Model"],function(t){"use strict";return t.extend({getActualOrderData:function(){return this.pick(["quantityTodo","quantityDone","statuses"])}})});
+define(["underscore","../core/Model"],function(t,e){"use strict";function n(e){if(!e)return"";if(!e.text.replace(/[^A-Za-z0-9]+/g,"").length)return"";var n=t.escape(e.text.trim()),i=r[e.source];return i&&(n='<i class="fa '+i+'"></i> '+n),n}var r={ps:"fa-paint-brush",wh:"fa-truck"};return e.extend({getActualOrderData:function(){return this.pick(["quantityTodo","quantityDone","statuses"])},getCommentWithIcon:function(){return n(t.last(this.get("comments")))}},{formatCommentWithIcon:n})});

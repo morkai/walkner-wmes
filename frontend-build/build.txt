@@ -1333,6 +1333,8 @@ app/planning/templates/linesWorkerCountDialog.js
 app/planning/views/PlanLinesWorkerCountDialogView.js
 app/planning/templates/linesOrderPriorityDialog.js
 app/planning/views/PlanLinesOrderPriorityDialogView.js
+app/planning/templates/lineFreezeOrdersDialog.js
+app/planning/views/PlanLineFreezeOrdersDialogView.js
 app/planning/templates/lines.js
 app/planning/templates/linePopover.js
 app/planning/templates/lineRemoveDialog.js
