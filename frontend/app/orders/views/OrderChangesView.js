@@ -120,8 +120,17 @@ define([
           newValue: change.newValues[property]
         };
       });
-      change.comment = _.isEmpty(change.comment) ? '' : change.comment.trim();
+      change.comment = _.isEmpty(change.comment) ? '' : _.escape(change.comment.trim());
       change.rowSpan = change.values.length + (change.comment === '' ? 0 : 1);
+
+      if (change.source === 'ps')
+      {
+        change.comment = '<i class="fa fa-paint-brush"></i> ' + change.comment;
+      }
+      else if (change.source === 'wh')
+      {
+        change.comment = '<i class="fa fa-truck"></i> ' + change.comment;
+      }
 
       return change;
     },

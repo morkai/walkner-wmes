@@ -2131,11 +2131,6 @@ module.exports = function setUpGenerator(app, module)
       maxQuantityPerLine = lineState.frozenOrdersMap.get(orderNo);
     }
 
-    if (orderNo === '120242005')
-    {
-      console.log(lineState._id, maxQuantityPerLine, options, lineState.frozenOrdersMap);
-    }
-
     if (!LOG_LINES || LOG_LINES[lineState._id])
     {
       log(

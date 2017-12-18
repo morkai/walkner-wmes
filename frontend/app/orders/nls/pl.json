@@ -101,6 +101,10 @@
 
   "commentForm:delayReason": "Nowy powód opóźnienia",
   "commentForm:comment": "Komentarz",
+  "commentForm:source": "Źródło",
+  "commentForm:source:other": "Inne",
+  "commentForm:source:ps": "Malarnia",
+  "commentForm:source:wh": "Magazyn",
   "commentForm:submit:comment": "Komentuj",
   "commentForm:submit:edit": "Zmień powód opóźnienia",
 

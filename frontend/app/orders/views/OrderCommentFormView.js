@@ -2,11 +2,13 @@
 
 define([
   'underscore',
+  'app/user',
   'app/core/views/FormView',
   'app/core/util/idAndLabel',
   'app/orders/templates/commentForm'
 ], function(
   _,
+  user,
   FormView,
   idAndLabel,
   template
@@ -40,6 +42,12 @@ define([
         placeholder: ' ',
         data: this.delayReasons.map(idAndLabel)
       });
+
+      var painter = user.isAllowedTo('PAINT_SHOP:PAINTER');
+      var whman = user.isAllowedTo('PLANNING:WHMAN');
+      var source = (painter && whman) || (!painter && !whman) ? 'other' : whman ? 'wh' : 'ps';
+
+      this.$('input[name="source"][value="' + source + '"]').prop('checked', true);
     },
 
     request: function(formData)

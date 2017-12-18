@@ -9,6 +9,7 @@ define([
   'app/data/clipboard',
   '../util/shift',
   '../util/contextMenu',
+  '../PlanSapOrder',
   'app/core/templates/userInfo',
   'app/planning/templates/lineOrdersList',
   'app/planning/templates/lineOrderComments'
@@ -21,6 +22,7 @@ define([
   clipboard,
   shiftUtil,
   contextMenu,
+  PlanSapOrder,
   userInfoTemplate,
   lineOrdersListTemplate,
   lineOrderCommentsTemplate
@@ -110,7 +112,7 @@ define([
               return {
                 user: userInfoTemplate({noIp: true, userInfo: comment.user}),
                 time: time.toTagData(comment.time).human,
-                text: comment.text.trim()
+                text: PlanSapOrder.formatCommentWithIcon(comment)
               };
             })
           }),
@@ -136,7 +138,7 @@ define([
 
       view.listenTo(view.mrp.orders, 'highlight', view.onOrderHighlight);
 
-      view.listenTo(view.plan.sapOrders, 'change:comment', view.onCommentChange);
+      view.listenTo(view.plan.sapOrders, 'change:comments', view.onCommentChange);
     },
 
     serialize: function()
@@ -188,7 +190,7 @@ define([
               qtyTodo: order.get('quantityTodo'),
               qtyPlan: 0,
               lines: {},
-              comment: sapOrder ? sapOrder.get('comment') : '',
+              comment: sapOrder ? sapOrder.getCommentWithIcon() : '',
               comments: sapOrder ? sapOrder.get('comments') : []
             };
           }
@@ -367,7 +369,7 @@ define([
     {
       if (this.mrp.orders.get(sapOrder.id))
       {
-        this.$('tr[data-id="' + sapOrder.id + '"] > .no-scroll').text(sapOrder.get('comment'));
+        this.$('tr[data-id="' + sapOrder.id + '"] > .no-scroll').html(sapOrder.getCommentWithIcon());
       }
     }
 

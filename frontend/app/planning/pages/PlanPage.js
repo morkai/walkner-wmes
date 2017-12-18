@@ -164,6 +164,7 @@ define([
           if (comment)
           {
             attrs.comments = [].concat(sapOrder.get('comments'), {
+              source: change.source,
               time: change.time,
               user: change.user,
               text: comment,

@@ -101,6 +101,10 @@
     "details:opTimes:summed": "Grouped time",
 
     "commentForm:delayReason": "New delay reason",
+    "commentForm:source": "Source",
+    "commentForm:source:other": "Other",
+    "commentForm:source:ps": "Paint shop",
+    "commentForm:source:wh": "Warehouse",
     "commentForm:comment": "Comment",
     "commentForm:submit:comment": "Comment",
     "commentForm:submit:edit": "Change delay reason",

@@ -1,4 +1,13 @@
 <form class="orders-commentForm">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-source" class="control-label"><%- t('orders', 'commentForm:source') %></label>
+    <br>
+    <% ['other', 'ps', 'wh'].forEach(function(source) { %>
+    <label class="radio-inline">
+      <input type="radio" name="source" value="<%- source %>" required> <%- t('orders', 'commentForm:source:' + source) %>
+    </label>
+    <% }) %>
+  </div>
   <div class="form-group has-required-select2">
     <label for="<%- idPrefix %>-delayReason" class="control-label"><%- t('orders', 'commentForm:delayReason') %></label>
     <input id="<%- idPrefix %>-delayReason" type="text" name="delayReason">
