@@ -70,7 +70,7 @@ module.exports = function addPlanOrderRoute(app, module, req, res, next)
 
       planChange.save(this.parallel());
 
-      Plan.update({_id: planChange.plan}, {$push: {orders: newPlanOrder}}, this.parallel());
+      Plan.collection.update({_id: planChange.plan}, {$push: {orders: newPlanOrder}}, this.parallel());
     },
     function(err, planChange)
     {

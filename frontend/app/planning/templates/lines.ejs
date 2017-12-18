@@ -12,8 +12,9 @@
     <div class="planning-mrp-list-item is-line" data-id="<%= line._id %>">
       <div class="planning-mrp-list-item-inner">
         <%= line._id %>
-        <span class="planning-mrp-list-property <%- line.workerCount ? '' : 'is-invalid' %>" data-property="workerCount"><i class="fa fa-user"></i><span><%- line.workerCount %></span></span>
-        <span class="planning-mrp-list-property <%- line.customTimes ? '' : 'hidden' %>" data-property="customTimes"><i class="fa fa-clock-o"></i><span><%- line.customTimes %></span></span>
+        <span class="planning-mrp-list-property <%- line.frozenOrders ? '' : 'hidden' %>" data-property="frozenOrders" title="<%- t('planning', 'lines:frozenOrders') %>"><i class="fa fa-lock"></i><span><%- line.frozenOrders %></span></span>
+        <span class="planning-mrp-list-property <%- line.workerCount ? '' : 'is-invalid' %>" data-property="workerCount" title="<%- t('planning', 'lines:workerCount') %>"><i class="fa fa-user"></i><span><%- line.workerCount %></span></span>
+        <span class="planning-mrp-list-property <%- line.customTimes ? '' : 'hidden' %>" data-property="customTimes" title="<%- t('planning', 'lines:activeTime') %>"><i class="fa fa-clock-o"></i><span><%- line.customTimes %></span></span>
       </div>
     </div>
     <% }) %>

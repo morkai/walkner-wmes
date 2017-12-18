@@ -92,6 +92,15 @@ module.exports = function setupPlanModel(app, mongoose)
     retainKeyOrder: true
   });
 
+  const frozenOrderSchema = new mongoose.Schema({
+    orderNo: String,
+    quantity: Number
+  }, {
+    _id: false,
+    minimize: false,
+    retainKeyOrder: true
+  });
+
   const planLineSchema = new mongoose.Schema({
     _id: String,
     version: Number,
@@ -99,7 +108,8 @@ module.exports = function setupPlanModel(app, mongoose)
     orders: [planLineOrderSchema],
     downtimes: [autoDowntimeSchema],
     hourlyPlan: [Number],
-    shiftData: [shiftDataSchema]
+    shiftData: [shiftDataSchema],
+    frozenOrders: [frozenOrderSchema]
   }, {
     _id: false,
     minimize: false,

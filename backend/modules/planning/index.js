@@ -39,7 +39,8 @@ exports.start = function startPlanningModule(app, module)
       const now = moment();
 
       app.broker.publish('planning.generator.requested', {
-        forceDayAfterTomorrow: (now.hours() === 16 && now.minutes() > 30) || now.hours() >= 17
+        forceDayAfterTomorrow: (now.hours() === 16 && now.minutes() > 30) || now.hours() >= 17,
+        freezeFirstShiftOrders: (now.hours() === 4 && now.minutes() && 30) || now.hours() >= 5
       });
     }
   });

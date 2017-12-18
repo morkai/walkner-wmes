@@ -210,6 +210,21 @@ define([
       return user.isAllowedTo('ORDERS:MANAGE', 'PLANNING:PLANNER', 'FN:master', 'FN:leader');
     },
 
+    canFreezeOrders: function()
+    {
+      if (!this.canEditSettings())
+      {
+        return false;
+      }
+
+      if (Date.now() >= time.getMoment(this.id, 'YYYY-MM-DD').add(6 + 23, 'hours').valueOf())
+      {
+        return true;
+      }
+
+      return this.lines.some(function(line) { return line.get('frozenOrders').length > 0; });
+    },
+
     applyChange: function(planChange)
     {
       var plan = this;

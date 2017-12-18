@@ -1,0 +1,44 @@
+<form class="planning-freezeOrders">
+  <div class="form-group">
+    <label class="control-label"><%- t('planning', 'lines:menu:freezeOrders:line') %></label>
+    <p class="form-control-static"><%= line %></p>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-availableOrders" class="control-label"><%- t('planning', 'lines:menu:freezeOrders:availableOrders') %></label>
+    <input id="<%- idPrefix %>-availableOrders" type="text" value="">
+  </div>
+  <table class="table table-condensed table-hover">
+    <thead>
+    <tr>
+      <th class="is-min"><%- t('planning', 'lines:menu:freezeOrders:no') %></th>
+      <th><%- t('planning', 'lines:menu:freezeOrders:order') %></th>
+      <th class="is-min"><%- t('planning', 'lines:menu:freezeOrders:quantity') %></th>
+      <th class="is-min actions"><%- t('planning', 'lines:menu:freezeOrders:actions') %></th>
+    </tr>
+    </thead>
+    <tbody id="<%- idPrefix %>-frozenOrders">
+    <tr>
+      <td class="is-min text-right"></td>
+      <td class="planning-freezeOrders-order">
+        <input name="frozenOrders[].orderNo" type="hidden">
+        <span></span>
+      </td>
+      <td class="is-min"><input class="form-control no-controls planning-freezeOrders-quantity" name="frozenOrders[].quantity" type="number" min="1" max="999"></td>
+      <td class="actions">
+        <div class="actions-group">
+          <button data-action="up" class="btn btn-default" type="button"><i class="fa fa-arrow-up"></i></button>
+          <button data-action="down" class="btn btn-default" type="button"><i class="fa fa-arrow-down"></i></button>
+          <button data-action="remove" class="btn btn-default" type="button"><i class="fa fa-remove"></i></button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+      <span class="fa fa-spinner fa-spin hidden"></span>
+      <span><%- t('planning', 'lines:menu:freezeOrders:submit') %></span>
+    </button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

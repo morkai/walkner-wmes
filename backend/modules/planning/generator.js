@@ -47,7 +47,7 @@ module.exports = function setUpGenerator(app, module)
   }
 
   const DEV = app.options.env === 'development';
-  const UNFROZEN_PLANS = DEV ? [] : [];
+  const UNFROZEN_PLANS = DEV ? ['2017-12-19'] : [];
   const LOG_LINES = {};
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
@@ -68,6 +68,7 @@ module.exports = function setUpGenerator(app, module)
 
   const orderNamePartsCache = new Map();
   const autoDowntimeCache = setUpAutoDowntimeCache(app, module);
+  const generatorOptions = new Map();
   const generatorQueue = [];
   let generatorTimer = null;
   let generatorState = null;
@@ -94,7 +95,7 @@ module.exports = function setUpGenerator(app, module)
     }
     else
     {
-      generateActivePlans(false);
+      generateActivePlans();
     }
 
     scheduleNextLastPlanGeneration();
@@ -145,7 +146,7 @@ module.exports = function setUpGenerator(app, module)
 
     if (!message.date)
     {
-      generateActivePlans(message.forceDayAfterTomorrow === true);
+      generateActivePlans(!!message.forceDayAfterTomorrow, !!message.freezeFirstShiftOrders);
     }
     else
     {
@@ -155,15 +156,18 @@ module.exports = function setUpGenerator(app, module)
 
   function createPlanGeneratorState(key)
   {
+    const options = generatorOptions.get(key) || {};
     const lastMinute = moment(key, 'YYYY-MM-DD').hours(5).minutes(59);
     const lastMinuteStartTime = lastMinute.valueOf();
     const lastMinuteEndTime = lastMinuteStartTime + 60000;
+    const lastHourStartTime = lastMinute.startOf('hour').valueOf();
     const now = Date.now();
 
     return {
       key: key,
       date: moment.utc(key, 'YYYY-MM-DD').toDate(),
       lastMinute: now >= lastMinuteStartTime && now < lastMinuteEndTime,
+      freezeFirstShiftOrders: options.freezeFirstShiftOrders || now >= lastHourStartTime,
       cancelled: false,
       new: false,
       generateCallCount: 0,
@@ -191,7 +195,17 @@ module.exports = function setUpGenerator(app, module)
     };
   }
 
-  function generateActivePlans(forceDayAfterTomorrow)
+  function updateGeneratorOptions(planKey, options)
+  {
+    if (!generatorOptions.has(planKey))
+    {
+      generatorOptions.set(planKey, {});
+    }
+
+    Object.assign(generatorOptions.get(planKey), options);
+  }
+
+  function generateActivePlans(forceDayAfterTomorrow, freezeFirstShiftOrders)
   {
     const plansToGenerate = {};
     const date = moment.utc().startOf('day');
@@ -208,10 +222,14 @@ module.exports = function setUpGenerator(app, module)
       const h = now.hours();
       const m = now.minutes();
 
-      if (h < 5 || (h === 5 && m < 55))
+      if (h < 5 || (h === 5 && m < 59))
       {
+        const planKey = now.format('YYYY-MM-DD');
+
         // Today
-        plansToGenerate[now.format('YYYY-MM-DD')] = true;
+        plansToGenerate[planKey] = true;
+
+        updateGeneratorOptions(planKey, {freezeFirstShiftOrders});
       }
 
       // Tomorrow
@@ -312,6 +330,11 @@ module.exports = function setUpGenerator(app, module)
             generatorQueue.push(planKey);
           }
 
+          if (!generatorQueue.includes(planKey))
+          {
+            generatorOptions.delete(planKey);
+          }
+
           if (AUTO_GENERATE_NEXT && nextPlan)
           {
             const nextPlanKey = moment.utc(nextPlan._id).format('YYYY-MM-DD');
@@ -397,6 +420,23 @@ module.exports = function setUpGenerator(app, module)
 
         loadPlan(state, this.next());
       },
+      function freezeFirstShiftOrdersStep(err)
+      {
+        if (state.cancelled)
+        {
+          return this.skip();
+        }
+
+        if (err)
+        {
+          return this.skip(new Error(`Failed to load plan: ${err.message}`));
+        }
+
+        if (state.freezeFirstShiftOrders)
+        {
+          freezeFirstShiftOrders(state, this.next());
+        }
+      },
       function generatePlanStep(err)
       {
         if (state.cancelled)
@@ -406,7 +446,7 @@ module.exports = function setUpGenerator(app, module)
 
         if (err)
         {
-          return this.skip(new Error(`Failed to load orders: ${err.message}`));
+          return this.skip(new Error(`Failed to freeze first shift orders: ${err.message}`));
         }
 
         doGeneratePlan(state, this.next());
@@ -854,6 +894,62 @@ module.exports = function setUpGenerator(app, module)
       },
       done
     );
+  }
+
+  function freezeFirstShiftOrders(state, done)
+  {
+    const anyAlreadyFrozen = state.plan.lines.find(planLine => planLine.frozenOrders.length > 0);
+
+    if (!anyAlreadyFrozen)
+    {
+      state.log('Freezing first shift orders...');
+
+      state.plan.lines.forEach(freezeFirstShiftLineOrders);
+    }
+
+    setImmediate(done);
+  }
+
+  function freezeFirstShiftLineOrders(planLine)
+  {
+    planLine.frozenOrders = [];
+
+    let i = 0;
+
+    for (; i < planLine.orders.length; ++i)
+    {
+      const lineOrder = planLine.orders[i];
+      const startHour = lineOrder.startAt.getUTCHours();
+
+      if (startHour < 6 || startHour >= 14)
+      {
+        break;
+      }
+
+      planLine.frozenOrders.push({
+        orderNo: lineOrder.orderNo,
+        quantity: lineOrder.quantity
+      });
+    }
+
+    const lastFrozenOrder = _.last(planLine.frozenOrders);
+
+    if (!lastFrozenOrder)
+    {
+      return;
+    }
+
+    for (; i < planLine.orders.length; ++i)
+    {
+      const lineOrder = planLine.orders[i];
+
+      if (lineOrder.orderNo !== lastFrozenOrder.orderNo)
+      {
+        break;
+      }
+
+      lastFrozenOrder.quantity += lineOrder.quantity;
+    }
   }
 
   function isWorkDay(state, date, done)
@@ -1528,12 +1624,13 @@ module.exports = function setUpGenerator(app, module)
         activeTo: createMomentFromActiveTime(state.date.getTime(), lineSettings.activeTo, false),
         nextDowntime: state.autoDowntimes.get(lineId),
         downtimes: [],
-        orderStateQueue: createLineOrderStateQueue(state, lineId, lineSettings.mrpPriority),
+        orderStateQueue: createLineOrderStateQueue(state, lineId, lineSettings.mrpPriority, planLine.frozenOrders),
         bigOrderStateQueue: [],
         plannedOrdersSet: new Set(),
         plannedOrdersList: [],
+        frozenOrdersMap: new Map(planLine.frozenOrders.map(o => [o.orderNo, o.quantity])),
         hourlyPlan: EMPTY_HOURLY_PLAN.slice(),
-        hash: '',
+        hash: planLine.frozenOrders.map(o => `${o._id}:${o.quantity}`).join(':'),
         initialHash: planLine ? planLine.hash : '',
         finalHash: ''
       };
@@ -1548,7 +1645,7 @@ module.exports = function setUpGenerator(app, module)
     setImmediate(done);
   }
 
-  function createLineOrderStateQueue(state, lineId, mrpPriority)
+  function createLineOrderStateQueue(state, lineId, mrpPriority, frozenOrders)
   {
     const urgentOrderStates = [];
     let lineOrderStateQueue = [];
@@ -1575,6 +1672,16 @@ module.exports = function setUpGenerator(app, module)
       {
         lineOrderStateQueue = lineOrderStateQueue.concat(mrpOrderStateQueue[orderPriority]);
       });
+    });
+
+    frozenOrders.forEach(frozenOrder =>
+    {
+      const frozenOrderState = state.orderStates.get(frozenOrder.orderNo);
+
+      if (frozenOrderState && !frozenOrderState.order.urgent)
+      {
+        urgentOrderStates.push(frozenOrderState);
+      }
     });
 
     return urgentOrderStates.concat(lineOrderStateQueue);
@@ -1663,7 +1770,8 @@ module.exports = function setUpGenerator(app, module)
       orders: lineState.plannedOrdersList,
       downtimes: lineState.downtimes,
       hourlyPlan: lineState.hourlyPlan,
-      shiftData: null
+      shiftData: null,
+      frozenOrders: oldPlanLine ? oldPlanLine.frozenOrders : []
     };
 
     lineState.finalHash = newPlanLine.hash;
@@ -1752,6 +1860,7 @@ module.exports = function setUpGenerator(app, module)
 
   function getNextOrderForLine(lineState)
   {
+    // Urgent orders
     while (lineState.orderStateQueue.length)
     {
       if (!lineState.orderStateQueue[0].order.urgent)
@@ -1771,6 +1880,26 @@ module.exports = function setUpGenerator(app, module)
       return urgentOrderState;
     }
 
+    // Frozen orders
+    while (lineState.orderStateQueue.length)
+    {
+      if (!lineState.frozenOrdersMap.has(lineState.orderStateQueue[0].order._id))
+      {
+        break;
+      }
+
+      const frozenOrderState = lineState.orderStateQueue.shift();
+
+      if (lineState.plannedOrdersSet.has(frozenOrderState.order._id)
+        || frozenOrderState.quantityTodo === 0)
+      {
+        continue;
+      }
+
+      return frozenOrderState;
+    }
+
+    // Big order parts
     const bigOrderIdSet = new Set();
 
     if (lineState.bigOrderStateQueue.length)
@@ -1803,6 +1932,7 @@ module.exports = function setUpGenerator(app, module)
       }
     }
 
+    // Remaining orders already started big ones
     while (lineState.orderStateQueue.length)
     {
       const orderState = lineState.orderStateQueue.shift();
@@ -1820,6 +1950,7 @@ module.exports = function setUpGenerator(app, module)
       }
     }
 
+    // Remaining big orders
     if (lineState.bigOrderStateQueue.length)
     {
       return lineState.bigOrderStateQueue.shift();
@@ -1837,7 +1968,7 @@ module.exports = function setUpGenerator(app, module)
       return;
     }
 
-    if (candidate.quantityRemaining > 0)
+    if (!lineState.frozenOrdersMap.has(orderState.order._id) && candidate.quantityRemaining > 0)
     {
       const candidates = [candidate];
 
@@ -1994,6 +2125,15 @@ module.exports = function setUpGenerator(app, module)
     {
       finishAt = startAt;
       maxQuantityPerLine = options.maxQuantityPerLine;
+    }
+    else if (lineState.frozenOrdersMap.has(orderNo))
+    {
+      maxQuantityPerLine = lineState.frozenOrdersMap.get(orderNo);
+    }
+
+    if (orderNo === '120242005')
+    {
+      console.log(lineState._id, maxQuantityPerLine, options, lineState.frozenOrdersMap);
     }
 
     if (!LOG_LINES || LOG_LINES[lineState._id])

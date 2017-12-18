@@ -14,6 +14,7 @@ define([
   './PlanLinesMrpPriorityDialogView',
   './PlanLinesWorkerCountDialogView',
   './PlanLinesOrderPriorityDialogView',
+  './PlanLineFreezeOrdersDialogView',
   'app/planning/templates/lines',
   'app/planning/templates/linePopover',
   'app/planning/templates/lineRemoveDialog'
@@ -31,6 +32,7 @@ define([
   PlanLinesMrpPriorityDialogView,
   PlanLinesWorkerCountDialogView,
   PlanLinesOrderPriorityDialogView,
+  PlanLineFreezeOrdersDialogView,
   linesTemplate,
   linePopoverTemplate,
   lineRemoveDialogTemplate
@@ -66,6 +68,7 @@ define([
     initialize: function()
     {
       this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
+      this.listenTo(this.mrp.lines, 'change:frozenOrders', this.onFrozenOrdersChanged);
     },
 
     destroy: function()
@@ -89,7 +92,8 @@ define([
           return {
             _id: line.id,
             workerCount: lineMrpSettings ? lineMrpSettings.get('workerCount') : '?',
-            customTimes: view.serializeActiveTime(line, false)
+            customTimes: view.serializeActiveTime(line, false),
+            frozenOrders: line.get('frozenOrders').length
           };
         })
       };
@@ -237,8 +241,7 @@ define([
       }
 
       var line = this.mrp.lines.get(this.$(e.currentTarget).attr('data-id'));
-
-      contextMenu.show(this, e.pageY, e.pageX, [
+      var menu = [
         {
           icon: 'fa-cogs',
           label: t('planning', 'lines:menu:settings'),
@@ -249,7 +252,18 @@ define([
           label: t('planning', 'lines:menu:remove'),
           handler: this.handleRemoveAction.bind(this, line)
         }
-      ]);
+      ];
+
+      if (this.plan.canFreezeOrders())
+      {
+        menu.push({
+          icon: 'fa-lock',
+          label: t('planning', 'lines:menu:freezeOrders'),
+          handler: this.handleFreezeOrdersAction.bind(this, line)
+        });
+      }
+
+      contextMenu.show(this, e.pageY, e.pageX, menu);
     },
 
     handleMrpPriorityAction: function()
@@ -332,12 +346,34 @@ define([
       viewport.showDialog(dialogView, t('planning', 'lines:menu:remove:title'));
     },
 
+    handleFreezeOrdersAction: function(line)
+    {
+      var dialogView = new PlanLineFreezeOrdersDialogView({
+        plan: this.plan,
+        mrp: this.mrp,
+        line: line
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'lines:menu:freezeOrders:title'));
+    },
+
     onSettingsChanged: function(changedObjects)
     {
       if (changedObjects.lines.any && changedObjects.mrps[this.mrp.id])
       {
         this.render();
       }
+    },
+
+    onFrozenOrdersChanged: function(planLine)
+    {
+      var frozenOrders = planLine.get('frozenOrders').length;
+
+      this.$('.is-line[data-id="' + planLine.id + '"]')
+        .find('span[data-property="frozenOrders"]')
+        .toggleClass('hidden', frozenOrders === 0)
+        .find('span')
+        .text(frozenOrders);
     }
 
   });
