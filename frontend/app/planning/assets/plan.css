@@ -598,3 +598,6 @@
 .planning-freezeOrders-order small {
   font-size: 80%;
 }
+.planning-freezeOrders .col-md-8:last-child {
+  text-align: right;
+}

@@ -1,7 +1,18 @@
 <form class="planning-freezeOrders">
-  <div class="form-group">
-    <label class="control-label"><%- t('planning', 'lines:menu:freezeOrders:line') %></label>
-    <p class="form-control-static"><%= line %></p>
+  <div class="row">
+    <div class="col-md-4 form-group">
+      <label class="control-label"><%- t('planning', 'lines:menu:freezeOrders:line') %></label>
+      <p class="form-control-static"><%= line %></p>
+    </div>
+    <div class="col-md-8">
+      <div class="btn-group">
+        <% [1, 2, 3].forEach(function(shift) { %>
+        <button type="button" class="btn btn-default" data-shift="<%- shift %>">
+          <%- t('planning', 'lines:menu:freezeOrders:shift:' + shift) %>
+        </button>
+        <% }) %>
+      </div>
+    </div>
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-availableOrders" class="control-label"><%- t('planning', 'lines:menu:freezeOrders:availableOrders') %></label>

@@ -102,6 +102,9 @@
   "lines:menu:freezeOrders:actions": "Akcje",
   "lines:menu:freezeOrders:submit": "Zamroź zlecenia",
   "lines:menu:freezeOrders:failure": "Zamrażanie zleceń nie powiodło się.",
+  "lines:menu:freezeOrders:shift:1": "I zmiana",
+  "lines:menu:freezeOrders:shift:2": "I i II zmiana",
+  "lines:menu:freezeOrders:shift:3": "wszystkie zmiany",
 
   "orders:hd": "Zlecenia",
   "orders:edit": "Ustaw kolejkę zleceń",

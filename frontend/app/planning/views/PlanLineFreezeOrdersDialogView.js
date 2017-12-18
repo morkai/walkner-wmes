@@ -124,6 +124,40 @@ define([
         this.recountOrders();
 
         $btn.focus();
+      },
+
+      'click .btn[data-shift]': function(e)
+      {
+        var view = this;
+
+        view.$id('frozenOrders').html('');
+
+        var shift = +e.currentTarget.dataset.shift;
+        var frozenOrders = [];
+        var quantities = {};
+
+        view.line.orders.forEach(function(lineOrder)
+        {
+          var orderNo = lineOrder.get('orderNo');
+          var quantity = lineOrder.get('quantity');
+          var lineOrderShift = lineOrder.getShiftNo();
+
+          if (quantities[orderNo])
+          {
+            quantities[orderNo] += quantity;
+          }
+          else if (lineOrderShift <= shift)
+          {
+            frozenOrders.push(orderNo);
+
+            quantities[orderNo] = quantity;
+          }
+        });
+
+        frozenOrders.forEach(function(orderNo)
+        {
+          view.addOrder(orderNo, quantities[orderNo]);
+        });
       }
 
     },
