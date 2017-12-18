@@ -79,19 +79,6 @@ define([
           window.scrollBy(0, (e.clientY - trEl.getBoundingClientRect().top - offset) * -1);
         }
       },
-      'wheel': function(e)
-      {
-        if (this.expanded || e.target.classList.contains('no-scroll'))
-        {
-          window.scrollBy(e.originalEvent.deltaX, e.originalEvent.deltaY);
-        }
-        else
-        {
-          this.el.scrollBy(e.originalEvent.deltaX, e.originalEvent.deltaY);
-        }
-
-        return false;
-      },
       'mousedown td.no-scroll': function(e)
       {
         if (e.button !== 0)
