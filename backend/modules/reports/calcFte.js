@@ -345,7 +345,7 @@ module.exports = function(mongoose, options, done)
 
     createDefaultRatiosResult(results, key);
 
-    const allWorkingProdLines = activeOrgUnits.prodLine;
+    const allWorkingProdLines = activeOrgUnits ? activeOrgUnits.prodLine : [];
     const allProdLinesInOrgUnit = options.orgUnits.orgUnit;
     const allProdLinesInDivision = options.orgUnits[
       options.orgUnitType === 'division' ? 'orgUnit' : 'division'
