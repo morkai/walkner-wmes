@@ -454,7 +454,7 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
       return 0;
     }
 
-    return fte.grouped[groupKey].prodDenTotal;
+    return fte.grouped[groupKey].prodDenMaster;
   }
 
   function sendResults(results, emitter)
