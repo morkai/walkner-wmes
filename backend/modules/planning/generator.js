@@ -1460,19 +1460,32 @@ module.exports = function setUpGenerator(app, module)
 
   function sortUrgentOrders(a, b)
   {
-    const cmp = ORDER_URGENT_SOURCE[b.order.source] - ORDER_URGENT_SOURCE[a.order.source];
+    const aOrder = a.order;
+    const bOrder = b.order;
+
+    if (aOrder.lines.length && !bOrder.lines.length)
+    {
+      return -1;
+    }
+
+    if (bOrder.lines.length && !aOrder.lines.length)
+    {
+      return 1;
+    }
+
+    const cmp = ORDER_URGENT_SOURCE[bOrder.source] - ORDER_URGENT_SOURCE[aOrder.source];
 
     if (cmp !== 0)
     {
       return cmp;
     }
 
-    if (a.order.quantityDone > 0 && b.order.quantityDone === 0)
+    if (aOrder.quantityDone > 0 && bOrder.quantityDone === 0)
     {
       return -1;
     }
 
-    if (b.order.quantityDone > 0 && a.order.quantityDone === 0)
+    if (bOrder.quantityDone > 0 && aOrder.quantityDone === 0)
     {
       return 1;
     }
