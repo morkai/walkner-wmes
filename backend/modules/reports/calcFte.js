@@ -131,7 +131,7 @@ module.exports = function(mongoose, options, done)
 
       groupResults(interval, results);
 
-      byOrgUnit.forEach(orgUnitId => groupResults(interval, results.byOrgUnit[orgUnitId]));
+      byOrgUnit.forEach(orgUnitId => groupResults(interval, getResults(orgUnitId)));
     },
     function()
     {
