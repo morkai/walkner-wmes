@@ -1616,6 +1616,12 @@ module.exports = function setUpGenerator(app, module)
     {
       const lineSettings = state.settings.line(lineId);
       const planLine = state.plan.lines.find(l => l._id === lineId);
+      const frozenOrders = planLine.frozenOrders.filter(frozenOrder =>
+      {
+        const order = state.orders.get(frozenOrder.orderNo);
+
+        return order && lineSettings.mrpPriority.includes(order.mrp);
+      });
       const lineState = {
         _id: lineId,
         completed: false,
@@ -1624,13 +1630,13 @@ module.exports = function setUpGenerator(app, module)
         activeTo: createMomentFromActiveTime(state.date.getTime(), lineSettings.activeTo, false),
         nextDowntime: state.autoDowntimes.get(lineId),
         downtimes: [],
-        orderStateQueue: createLineOrderStateQueue(state, lineId, lineSettings.mrpPriority, planLine.frozenOrders),
+        orderStateQueue: createLineOrderStateQueue(state, lineId, lineSettings.mrpPriority, frozenOrders),
         bigOrderStateQueue: [],
         plannedOrdersSet: new Set(),
         plannedOrdersList: [],
-        frozenOrdersMap: new Map(planLine.frozenOrders.map(o => [o.orderNo, o.quantity])),
+        frozenOrdersMap: new Map(frozenOrders.map(o => [o.orderNo, o.quantity])),
         hourlyPlan: EMPTY_HOURLY_PLAN.slice(),
-        hash: planLine.frozenOrders.map(o => `${o._id}:${o.quantity}`).join(':'),
+        hash: frozenOrders.map(o => `${o._id}:${o.quantity}`).join(':'),
         initialHash: planLine ? planLine.hash : '',
         finalHash: ''
       };
