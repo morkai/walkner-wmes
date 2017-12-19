@@ -40,7 +40,7 @@ exports.start = function startPlanningModule(app, module)
 
       app.broker.publish('planning.generator.requested', {
         forceDayAfterTomorrow: (now.hours() === 16 && now.minutes() > 30) || now.hours() >= 17,
-        freezeFirstShiftOrders: (now.hours() === 4 && now.minutes() && 30) || now.hours() >= 5
+        freezeFirstShiftOrders: (now.hours() === 22 && now.minutes() && 30) || now.hours() >= 23 || now.hours < 6
       });
     }
   });

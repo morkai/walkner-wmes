@@ -160,7 +160,7 @@ module.exports = function setUpGenerator(app, module)
     const lastMinute = moment(key, 'YYYY-MM-DD').hours(5).minutes(59);
     const lastMinuteStartTime = lastMinute.valueOf();
     const lastMinuteEndTime = lastMinuteStartTime + 60000;
-    const lastHourStartTime = lastMinute.startOf('hour').valueOf();
+    const lastHourStartTime = lastMinute.startOf('hour').subtract(6, 'hours').valueOf();
     const now = Date.now();
 
     return {

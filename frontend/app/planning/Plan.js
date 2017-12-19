@@ -217,7 +217,7 @@ define([
         return false;
       }
 
-      if (Date.now() >= time.getMoment(this.id, 'YYYY-MM-DD').add(6 + 23, 'hours').valueOf())
+      if (Date.now() >= time.getMoment(this.id, 'YYYY-MM-DD').add(23, 'hours').valueOf())
       {
         return true;
       }
