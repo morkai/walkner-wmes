@@ -47,7 +47,7 @@ module.exports = function setUpGenerator(app, module)
   }
 
   const DEV = app.options.env === 'development';
-  const UNFROZEN_PLANS = DEV ? ['2017-12-19'] : [];
+  const UNFROZEN_PLANS = DEV ? [] : [];
   const LOG_LINES = {};
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
@@ -1369,7 +1369,7 @@ module.exports = function setUpGenerator(app, module)
           return this.skip();
         }
 
-        generatePlanForLines(state, this.next());
+        generatePlanForLines(1, state, this.next());
       },
       function()
       {
@@ -1616,7 +1616,7 @@ module.exports = function setUpGenerator(app, module)
     {
       const lineSettings = state.settings.line(lineId);
       const planLine = state.plan.lines.find(l => l._id === lineId);
-      const frozenOrders = planLine.frozenOrders.filter(frozenOrder =>
+      const frozenOrders = !planLine || !planLine.frozenOrders ? [] : planLine.frozenOrders.filter(frozenOrder =>
       {
         const order = state.orders.get(frozenOrder.orderNo);
 
@@ -1715,16 +1715,16 @@ module.exports = function setUpGenerator(app, module)
     return hours >= 6 && hours < 14 ? 1 : hours >= 14 && hours < 22 ? 2 : 3;
   }
 
-  function generatePlanForLines(state, done)
+  function generatePlanForLines(increment, state, done)
   {
     if (state.cancelled || !state.lineStateQueue.length)
     {
       return done();
     }
 
-    state.generateCallCount += 1;
+    state.generateCallCount += increment;
 
-    generatePlanForLine(state, state.lineStateQueue.shift(), () => generatePlanForLines(state, done));
+    generatePlanForLine(state, state.lineStateQueue.shift(), () => generatePlanForLines(0, state, done));
   }
 
   function generatePlanForLine(state, lineState, done)
@@ -1974,7 +1974,7 @@ module.exports = function setUpGenerator(app, module)
       return;
     }
 
-    if (!lineState.frozenOrdersMap.has(orderState.order._id) && candidate.quantityRemaining > 0)
+    if (candidate.quantityRemaining > 0)
     {
       const candidates = [candidate];
 
@@ -2018,15 +2018,34 @@ module.exports = function setUpGenerator(app, module)
       });
 
       const bestCandidate = candidates[0];
+      const completion = Math.ceil(bestCandidate.completion * 100);
 
-      if (!bestCandidate.lastAvailableLine && bestCandidate.completion < 0.80 && state.generateCallCount === 1)
+      if (state.generateCallCount === 1)
       {
-        return;
+        if (completion < 80 && !bestCandidate.lastAvailableLine)
+        {
+          if (!LOG_LINES || LOG_LINES[lineState._id])
+          {
+            log(`        IGNORED ${completion}%: ${bestCandidate.orderState.order._id}`);
+          }
+
+          return;
+        }
+
+        if (bestCandidate.totalQuantityPlanned === 1)
+        {
+          if (!LOG_LINES || LOG_LINES[lineState._id])
+          {
+            log(`        IGNORED 1 PCE: ${bestCandidate.orderState.order._id}`);
+          }
+
+          return;
+        }
       }
 
       if (!LOG_LINES || LOG_LINES[lineState._id])
       {
-        log(`        BEST: ${bestCandidate.orderState.order._id}`);
+        log(`        BEST ${completion}%: ${bestCandidate.orderState.order._id}`);
       }
 
       candidate = bestCandidate;
@@ -2132,7 +2151,7 @@ module.exports = function setUpGenerator(app, module)
       finishAt = startAt;
       maxQuantityPerLine = options.maxQuantityPerLine;
     }
-    else if (lineState.frozenOrdersMap.has(orderNo))
+    else if (state.generateCallCount === 1 && lineState.frozenOrdersMap.has(orderNo))
     {
       maxQuantityPerLine = lineState.frozenOrdersMap.get(orderNo);
     }
@@ -2732,7 +2751,7 @@ module.exports = function setUpGenerator(app, module)
       });
     });
 
-    steps.push(function() { generatePlanForLines(state, this.next()); });
+    steps.push(function() { generatePlanForLines(1, state, this.next()); });
     steps.push(done.bind(null, null, true));
 
     step(steps);
