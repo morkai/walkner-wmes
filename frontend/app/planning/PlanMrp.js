@@ -42,7 +42,7 @@ define([
       Object.defineProperty(this, 'plan', {
         get: function()
         {
-          return this.collection.plan;
+          return this.collection ? this.collection.plan : null;
         }
       });
 

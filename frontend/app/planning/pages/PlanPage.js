@@ -599,6 +599,12 @@ define([
       }
 
       this.updateUrl();
+
+      this.plan.lines.reset([]);
+      this.plan.shiftOrders.reset([]);
+      this.plan.lateOrders.reset([]);
+      this.plan.orders.reset([]);
+
       this.reload();
     },
 
