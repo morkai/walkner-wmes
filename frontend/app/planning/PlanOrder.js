@@ -28,7 +28,7 @@ define([
         return quantityPlan;
       }
 
-      if (this.collection.plan.settings.attributes.useRemainingQuantity)
+      if (!this.collection.plan || this.collection.plan.settings.attributes.useRemainingQuantity)
       {
         return Math.max(0, this.get('quantityTodo') - this.get('quantityDone'));
       }
