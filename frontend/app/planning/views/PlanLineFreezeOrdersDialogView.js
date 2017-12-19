@@ -184,12 +184,15 @@ define([
 
       view.line.settings.get('mrpPriority').forEach(function(mrpId)
       {
-        view.plan.mrps.get(mrpId).orders.forEach(function(order)
+        view.plan.orders.forEach(function(order)
         {
-          orders.push({
-            id: order.id,
-            text: order.get('name')
-          });
+          if (order.get('mrp') === mrpId)
+          {
+            orders.push({
+              id: order.id,
+              text: order.get('name')
+            });
+          }
         });
       });
 
