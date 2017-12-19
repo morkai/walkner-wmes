@@ -57,12 +57,8 @@
 .planning-darker .is-completed .planning-mrp-list-property-psStatus[data-ps-status="finished"] {
   color: greenyellow;
 }
-.planning-darker .planning-mrp-lineOrders:first-child > .planning-mrp-lineOrders-list,
-.planning-darker .planning-mrp-lineOrders:first-child > .planning-mrp-lineOrders-shift {
-  border-top-color: #333;
-}
 .planning-darker .planning-mrp-lineOrders .planning-mrp-list {
-  background-color: #888;
+  background-color: #333;
 }
 .planning-darker .planning-mrp-list-item.is-external {
   opacity: 1;
@@ -118,7 +114,10 @@
 .planning-legend-order {
   border-color: #999;
 }
-.planning-darker .planning-mrl-lineOrders-list {
+.planning-darker .planning-mrp-lineOrders-container > hr {
+  background: #333;
+}
+.planning-darker .planning-mrp-lineOrders-list {
   border-color: #333;
 }
 .planning-darker .planning-mrp-lineOrders-table > thead > tr > th {

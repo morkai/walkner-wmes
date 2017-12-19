@@ -55,7 +55,7 @@ define([
         }
       },
 
-      'mousemove .planning-mrp-lineOrders-list': function(e)
+      'mousemove .planning-mrp-lineOrders-container': function(e)
       {
         if (this.plan.displayOptions.isLineOrdersListEnabled())
         {
@@ -65,6 +65,7 @@ define([
         var shiftDurationMs = 8 * 3600 * 1000;
         var timeLeftOffsetPx = 132;
         var timeCenterOffsetPx = 50;
+        var offsetLeft = 15 + 100 + 32;
 
         var crosshairEl = this.$els.crosshair[0];
         var timeEl = this.$els.time[0];
@@ -73,19 +74,23 @@ define([
         var timeLeftPx = e.pageX - pos.left - timeLeftOffsetPx;
         var timeMultiplier = timeLeftPx / shiftWidthPx;
         var genericTimeMs = shiftDurationMs * timeMultiplier;
-        var shiftTimeMs = +e.currentTarget.dataset.shiftStartTime + genericTimeMs;
+        var shiftStartTime = +this.$(e.target).closest('.planning-mrp-lineOrders-list').attr('data-shift-start-time');
+        var shiftTimeMs = shiftStartTime + genericTimeMs;
         var maxTimeLeftPx = shiftWidthPx - timeCenterOffsetPx * 2 + 15;
 
         crosshairEl.style.height = (this.$els.lineOrders.outerHeight() + 6) + 'px';
         crosshairEl.style.top = pos.top + 'px';
-        crosshairEl.style.left = e.pageX + 'px';
+        crosshairEl.style.left = Math.max(offsetLeft, e.pageX) + 'px';
 
         timeLeftPx -= timeCenterOffsetPx;
 
         timeEl.style.left = Math.min(timeLeftPx, maxTimeLeftPx) + 'px';
         timeEl.innerHTML = time.toString(genericTimeMs / 1000, true)
           + '<br>'
-          + time.utc.format(shiftTimeMs, 'HH:mm:ss');
+          + (shiftTimeMs ? time.utc.format(shiftTimeMs, 'HH:mm:ss') : '');
+
+        crosshairEl.classList.toggle('hidden', !shiftTimeMs);
+        timeEl.classList.toggle('hidden', !shiftTimeMs);
       },
       'contextmenu': function()
       {

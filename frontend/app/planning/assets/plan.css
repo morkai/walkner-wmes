@@ -276,13 +276,18 @@
 .planning-mrp-lineOrders-container + .planning-mrp-lineOrders-container {
   margin-top: -1px;
 }
+.planning-mrp-lineOrders-container > hr {
+  margin: 0 0 0 100px;
+  height: 4px;
+  background: #ccc;
+  border: 0;
+}
+.planning-mrp-lineOrders-container:last-child > hr {
+  display: none;
+}
 .planning-mrp-lineOrders-container .planning-mrp-popover th,
 .planning-mrp-lineOrders-container .planning-mrp-popover td {
   height: 18px;
-}
-.planning-mrp-lineOrders:first-child > .planning-mrp-lineOrders-list,
-.planning-mrp-lineOrders:first-child > .planning-mrp-lineOrders-shift {
-  border-top-color: #999;
 }
 .planning-mrp-lineOrders .planning-mrp-list {
   width: 100%;
