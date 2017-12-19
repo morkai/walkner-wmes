@@ -1636,7 +1636,7 @@ module.exports = function setUpGenerator(app, module)
         plannedOrdersList: [],
         frozenOrdersMap: new Map(frozenOrders.map(o => [o.orderNo, o.quantity])),
         hourlyPlan: EMPTY_HOURLY_PLAN.slice(),
-        hash: frozenOrders.map(o => `${o._id}:${o.quantity}`).join(':'),
+        hash: frozenOrders.map(o => `${o.orderNo}:${o.quantity}`).join(':'),
         initialHash: planLine ? planLine.hash : '',
         finalHash: ''
       };
@@ -2487,7 +2487,7 @@ module.exports = function setUpGenerator(app, module)
       return done();
     }
 
-    log('Resizing...');
+    log('Resizing in the middle...');
 
     const incompletePlannedOrders = [];
 
@@ -2569,6 +2569,57 @@ module.exports = function setUpGenerator(app, module)
 
   function resizeLinesEnd(state, done)
   {
+    if (state.cancelled || !state.newIncompleteOrders.size)
+    {
+      return done();
+    }
+
+    log('Resizing at the end...');
+
+    const incompletePlannedOrders = [];
+
+    state.newIncompleteOrders.forEach((incomplete, orderNo) =>
+    {
+      if (state.resizedOrders.has(orderNo))
+      {
+        return;
+      }
+
+      const plannedLines = state.orderToLines.get(orderNo);
+
+      if (!plannedLines)
+      {
+        return;
+      }
+
+      const incompleteLines = [];
+
+      plannedLines.forEach(lineState =>
+      {
+        const lastPlannedOrder = _.last(lineState.plannedOrdersList);
+
+        if (lastPlannedOrder.orderNo === orderNo)
+        {
+          incompleteLines.push(lineState._id);
+        }
+      });
+
+      if (incompleteLines.length)
+      {
+        incompletePlannedOrders.push({
+          orderNo,
+          incompleteLines
+        });
+      }
+    });
+
+    if (!incompletePlannedOrders.length)
+    {
+      log('...nothing to resize!');
+
+      return setImmediate(done);
+    }
+
     setImmediate(done);
   }
 
@@ -2835,10 +2886,12 @@ module.exports = function setUpGenerator(app, module)
 
   function getRemainingAvailableTime(lineState)
   {
-    let remaining = lineState.activeTo.diff(lineState.activeFrom);
+    const activeTo = lineState.activeTo.valueOf();
+
+    let remaining = activeTo - lineState.activeFrom.valueOf();
     let nextDowntime = lineState.nextDowntime;
 
-    while (nextDowntime)
+    while (nextDowntime && nextDowntime.startTime < activeTo)
     {
       remaining -= nextDowntime.duration;
       nextDowntime = nextDowntime.next;
