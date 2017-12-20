@@ -1421,6 +1421,7 @@ module.exports = function setUpGenerator(app, module)
         quantityTodo: getQuantityTodo(state, planOrder),
         maxQuantityPerLine: 0,
         startTimes: [],
+        frozenOnLines: [],
         timeDiff: 0,
         name: planOrder.name, // eslint-disable-line comma-dangle
         nameParts: getOrderNameParts(planOrder),
@@ -1697,7 +1698,14 @@ module.exports = function setUpGenerator(app, module)
     {
       const frozenOrderState = state.orderStates.get(frozenOrder.orderNo);
 
-      if (frozenOrderState && !frozenOrderState.order.urgent)
+      if (!frozenOrderState)
+      {
+        return;
+      }
+
+      frozenOrderState.frozenOnLines.push(lineId);
+
+      if (!frozenOrderState.order.urgent)
       {
         urgentOrderStates.push(frozenOrderState);
       }
@@ -1749,7 +1757,7 @@ module.exports = function setUpGenerator(app, module)
 
     while (!lineState.completed)
     {
-      const orderState = getNextOrderForLine(lineState);
+      const orderState = getNextOrderForLine(state, lineState);
 
       if (!orderState)
       {
@@ -1877,7 +1885,7 @@ module.exports = function setUpGenerator(app, module)
     return orderState.lines[0] !== lineState._id;
   }
 
-  function getNextOrderForLine(lineState)
+  function getNextOrderForLine(state, lineState)
   {
     // Urgent orders
     while (lineState.orderStateQueue.length)
@@ -1951,14 +1959,17 @@ module.exports = function setUpGenerator(app, module)
       }
     }
 
-    // Remaining orders already started big ones
+    const firstPass = state.generateCallCount === 1;
+
+    // Remaining orders but already started big ones
     while (lineState.orderStateQueue.length)
     {
       const orderState = lineState.orderStateQueue.shift();
 
       if (lineState.plannedOrdersSet.has(orderState.order._id)
         || bigOrderIdSet.has(orderState.order._id)
-        || isOrderPinnedToLine(orderState, lineState))
+        || isOrderPinnedToLine(orderState, lineState)
+        || (firstPass && orderState.frozenOnLines.length && !orderState.frozenOnLines.includes(lineState._id)))
       {
         continue;
       }
@@ -1998,7 +2009,7 @@ module.exports = function setUpGenerator(app, module)
 
       while (true) // eslint-disable-line no-constant-condition
       {
-        const nextOrderState = getNextOrderForLine(lineState);
+        const nextOrderState = getNextOrderForLine(state, lineState);
 
         if (!nextOrderState)
         {
