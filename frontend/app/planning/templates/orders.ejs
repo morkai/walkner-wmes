@@ -13,7 +13,7 @@
       <div class="planning-mrp-list-item-inner <%- order.confirmed %> <%- order.delivered %>">
         <span class="planning-mrp-list-item-label"><%= order._id %></span>
         <% if (order.kind && order.kind !== 'unclassified') { %>
-        <span class="planning-mrp-list-property" title="<%- t('planning', 'orderPriority:' + order.kind) %>"><i class="fa fa-<%- order.kind === 'small' ? 'star-o' : order.kind === 'easy' ? 'star-half-full' : 'star' %>"></i></span>
+        <span class="planning-mrp-list-property" title="<%- t('planning', 'orderPriority:' + order.kind) %>"><i class="fa <%- order.kindIcon %>"></i></span>
         <% } %>
         <% if (order.source === 'late') { %>
         <span class="planning-mrp-list-property" title="<%- t('planning', 'orders:source:late') %>"><i class="fa fa-hourglass-end"></i></span>

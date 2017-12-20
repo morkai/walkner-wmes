@@ -57,6 +57,7 @@ define([
     getStats: function()
     {
       var orders = this.orders;
+      var plan = this.plan;
       var stats = {
         manHours: {
           todo: 0,
@@ -85,14 +86,17 @@ define([
         });
       });
 
-      this.plan.lateOrders.mrp(this.id).forEach(function(lateOrder)
+      if (plan)
       {
-        if (!orders.get(lateOrder.id))
+        plan.lateOrders.mrp(this.id).forEach(function(lateOrder)
         {
-          stats.manHours.late += lateOrder.get('manHours');
-          stats.quantity.late += lateOrder.getQuantityTodo();
-        }
-      });
+          if (!orders.get(lateOrder.id))
+          {
+            stats.manHours.late += lateOrder.get('manHours');
+            stats.quantity.late += lateOrder.getQuantityTodo();
+          }
+        });
+      }
 
       return stats;
     }

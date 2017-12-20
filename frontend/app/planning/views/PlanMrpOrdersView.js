@@ -160,12 +160,12 @@ define([
         var orderData = plan.getActualOrderData(order.id);
         var source = order.get('source');
         var urgent = order.get('urgent');
-        var customQuantity = order.get('quantityPlan') > 0;
         var autoAdded = order.isAutoAdded();
 
         return {
           _id: order.id,
           kind: order.get('kind'),
+          kindIcon: order.getKindIcon(),
           incomplete: order.get('incomplete') > 0 ? 'is-incomplete' : '',
           completed: orderData.quantityDone >= orderData.quantityTodo ? 'is-completed' : '',
           started: orderData.quantityDone > 0 ? 'is-started' : '',
@@ -174,11 +174,11 @@ define([
           source: source,
           confirmed: orderData.statuses.indexOf('CNF') !== -1 ? 'is-cnf' : '',
           delivered: orderData.statuses.indexOf('DLV') !== -1 ? 'is-dlv' : '',
-          customQuantity: customQuantity && source !== 'incomplete',
+          customQuantity: order.hasCustomQuantity(),
           ignored: order.get('ignored') ? 'is-ignored' : '',
           urgent: urgent && !autoAdded,
           invalid: !order.get('operation').laborTime ? 'is-invalid' : '',
-          pinned: !_.isEmpty(order.get('lines')),
+          pinned: order.isPinned(),
           psStatus: plan.sapOrders.getPsStatus(order.id)
         };
       });
@@ -584,7 +584,10 @@ define([
 
     onOrdersChanged: function()
     {
-      this.render();
+      if (!this.plan.isAnythingLoading())
+      {
+        this.render();
+      }
     },
 
     onOrdersRemoved: function(removedOrders)
@@ -656,9 +659,12 @@ define([
 
       if ($order.length)
       {
+        var psStatus = this.plan.sapOrders.getPsStatus(sapOrder.id);
+
         $order
           .find('.planning-mrp-list-property-psStatus')
-          .attr('data-ps-status', sapOrder.get('psStatus') || 'unknown');
+          .attr('title', t('planning', 'orders:psStatus:' + psStatus))
+          .attr('data-ps-status', psStatus);
       }
     }
 

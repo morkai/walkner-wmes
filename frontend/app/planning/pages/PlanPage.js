@@ -600,10 +600,12 @@ define([
 
       this.updateUrl();
 
-      this.plan.lines.reset([]);
+      this.plan.mrps.reset([]);
+      this.plan.sapOrders.reset([]);
       this.plan.shiftOrders.reset([]);
       this.plan.lateOrders.reset([]);
       this.plan.orders.reset([]);
+      this.plan.lines.reset([]);
 
       this.reload();
     },

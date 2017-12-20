@@ -118,15 +118,15 @@
 .planning-mrp-list-item.is-selectable {
   cursor: pointer;
 }
+.planning-mrp-list-item.is-started {
+  background-color: #eee;
+  border-color: #999;
+}
 .planning-mrp-list-item.is-incomplete {
   background-color: #fcf8e3;
 }
 .planning-mrp-list-item.is-unplanned {
   background-color: #fbf2c0;
-  border-color: #999;
-}
-.planning-mrp-list-item.is-started {
-  background-color: #eee;
   border-color: #999;
 }
 .planning-mrp-list-item.is-completed {
@@ -565,6 +565,31 @@
 }
 .planning-mrp-lineOrders-table > tbody > tr:last-child > td {
   border-bottom: none;
+}
+.planning-mrp-lineOrders-table .planning-mrp-list-property:first-child {
+  margin-left: 0;
+}
+.planning-mrp-list-property + .orderStatus {
+  margin-left: 0.25em;
+}
+.planning-mrp-lineOrders-table .orderStatus {
+  padding: 1px 3px;
+  font-weight: normal;
+}
+.planning-mrp-lineOrders-status[data-status="incomplete"] {
+  background-color: #fcf8e3;
+}
+.planning-mrp-lineOrders-status[data-status="unplanned"] {
+  background-color: #fbf2c0;
+}
+.planning-mrp-lineOrders-status[data-status="started"] {
+  background-color: #eee;
+}
+.planning-mrp-lineOrders-status[data-status="completed"] {
+  background-color: #dff0d8;
+}
+.planning-mrp-lineOrders-status[data-status="surplus"] {
+  background-color: #ffe8e8;
 }
 .planning-mrp-comment-popover {
   max-width: 500px;

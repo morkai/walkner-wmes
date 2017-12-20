@@ -174,10 +174,7 @@ define([
 
     isAnythingLoading: function()
     {
-      return this.get('loading')
-        || !!this.shiftOrders.currentRequest
-        || !!this.lateOrders.currentRequest
-        || !!this.sapOrders.currentRequest;
+      return this.get('loading');
     },
 
     isProdStateUsed: function()

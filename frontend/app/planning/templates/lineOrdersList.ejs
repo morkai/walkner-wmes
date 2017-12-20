@@ -2,7 +2,7 @@
   <table class="planning-mrp-lineOrders-table">
     <thead>
       <tr>
-        <% ['no', 'shift', 'orderNo', 'nc12', 'name', 'qty:header', 'startTime', 'finishTime', 'lines'].forEach(function(prop) { %>
+        <% ['no', 'shift', 'orderNo', 'status', 'nc12', 'name', 'qty:header', 'startTime', 'finishTime', 'lines'].forEach(function(prop) { %>
         <th class="is-min"><%- t('planning', 'lineOrders:list:' + prop) %></th>
         <% }) %>
         <th class="no-scroll"><%- t('planning', 'lineOrders:list:comment') %></th>
@@ -13,7 +13,8 @@
       <tr data-id="<%- order.orderNo %>" data-index="<%- i %>">
         <td class="is-min text-right"><%- order.no %>.</td>
         <td class="is-min"><%- t('core', 'SHIFT:' + order.shift) %></td>
-        <td class="is-min"><%- order.orderNo %></td>
+        <td class="is-min planning-mrp-lineOrders-status" data-status="<%- order.status %>"><%- order.orderNo %></td>
+        <td class="is-min planning-mrp-lineOrders-status" data-status="<%- order.status %>"><%- order.statuses %></td>
         <td class="is-min"><%= order.nc12 %></td>
         <td class="is-min"><%= order.name %></td>
         <td class="is-min text-right">

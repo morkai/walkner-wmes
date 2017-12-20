@@ -7,6 +7,7 @@ define([
   'app/time',
   'app/core/View',
   'app/data/clipboard',
+  'app/orderStatuses/util/renderOrderStatusLabel',
   '../util/shift',
   '../util/contextMenu',
   '../PlanSapOrder',
@@ -20,6 +21,7 @@ define([
   time,
   View,
   clipboard,
+  renderOrderStatusLabel,
   shiftUtil,
   contextMenu,
   PlanSapOrder,
@@ -134,11 +136,13 @@ define([
 
       view.expanded = false;
 
-      view.listenTo(view.mrp.lines, 'reset changed', view.renderIfNotLoading);
+      view.listenTo(view.mrp.lines, 'reset added changed removed', view.renderIfNotLoading);
 
       view.listenTo(view.mrp.orders, 'highlight', view.onOrderHighlight);
 
       view.listenTo(view.plan.sapOrders, 'change:comments', view.onCommentChange);
+      view.listenTo(view.plan.sapOrders, 'reset', view.onSapOrdersReset);
+      view.listenTo(view.plan.sapOrders, 'change:psStatus', view.onPsStatusChanged);
     },
 
     serialize: function()
@@ -160,8 +164,9 @@ define([
 
     serializeOrders: function()
     {
-      var sapOrders = this.plan.sapOrders;
-      var mrp = this.mrp;
+      var view = this;
+      var sapOrders = view.plan.sapOrders;
+      var mrp = view.mrp;
       var map = {};
 
       mrp.lines.forEach(function(line)
@@ -191,7 +196,9 @@ define([
               qtyPlan: 0,
               lines: {},
               comment: sapOrder ? sapOrder.getCommentWithIcon() : '',
-              comments: sapOrder ? sapOrder.get('comments') : []
+              comments: sapOrder ? sapOrder.get('comments') : [],
+              status: order.getStatus(),
+              statuses: view.serializeOrderStatuses(order)
             };
           }
 
@@ -230,6 +237,64 @@ define([
 
         return order;
       });
+    },
+
+    serializeOrderStatuses: function(planOrder)
+    {
+      var statuses = [];
+      var orderData = this.plan.getActualOrderData(planOrder.id);
+      var kindIcon = planOrder.getKindIcon();
+      var sourceIcon = planOrder.getSourceIcon();
+      var psStatus = this.plan.sapOrders.getPsStatus(planOrder.id);
+
+      if (planOrder.get('ignored'))
+      {
+        statuses.push(this.formatIcon(planOrder.getIcon('ignored'), 'orders:ignored'));
+      }
+
+      if (kindIcon)
+      {
+        statuses.push(this.formatIcon(kindIcon, 'orderPriority:' + planOrder.get('kind')));
+      }
+
+      if (sourceIcon)
+      {
+        statuses.push(this.formatIcon(sourceIcon, 'orders:source:' + planOrder.get('source')));
+      }
+
+      if (planOrder.get('urgent'))
+      {
+        statuses.push(this.formatIcon(planOrder.getIcon('urgent'), 'orders:urgent'));
+      }
+
+      if (planOrder.isPinned())
+      {
+        statuses.push(this.formatIcon(planOrder.getIcon('pinned'), 'orders:pinned'));
+      }
+
+      statuses.push('<span class="planning-mrp-list-property planning-mrp-list-property-psStatus" '
+        + 'title="' + t('planning', 'orders:psStatus:' + psStatus) + '" '
+        + 'data-ps-status="' + psStatus + '">'
+        + '<i class="fa ' + planOrder.getIcon('psStatus') + '"></i></span>');
+
+      if (orderData.statuses.indexOf('CNF') !== -1)
+      {
+        statuses.push(renderOrderStatusLabel('CNF'));
+      }
+
+      if (orderData.statuses.indexOf('DLV') !== -1)
+      {
+        statuses.push(renderOrderStatusLabel('DLV'));
+      }
+
+      return statuses.join('');
+    },
+
+    formatIcon: function(icon, title)
+    {
+      return '<span class="planning-mrp-list-property" title="' + _.escape(t('planning', title)) + '">'
+        + '<i class="fa ' + icon + '"></i>'
+        + '</span>';
     },
 
     hideMenu: function()
@@ -370,6 +435,29 @@ define([
       if (this.mrp.orders.get(sapOrder.id))
       {
         this.$('tr[data-id="' + sapOrder.id + '"] > .no-scroll').html(sapOrder.getCommentWithIcon());
+      }
+    },
+
+    onSapOrdersReset: function(sapOrders, options)
+    {
+      if (!options.reload && this.plan.displayOptions.isLatestOrderDataUsed() && !this.plan.isAnythingLoading())
+      {
+        this.render();
+      }
+    },
+
+    onPsStatusChanged: function(sapOrder)
+    {
+      var $order = this.$('tr[data-id="' + sapOrder.id + '"]');
+
+      if ($order.length)
+      {
+        var psStatus = this.plan.sapOrders.getPsStatus(sapOrder.id);
+
+        $order
+          .find('.planning-mrp-list-property-psStatus')
+          .attr('title', t('planning', 'orders:psStatus:' + psStatus))
+          .attr('data-ps-status', psStatus);
       }
     }
 
