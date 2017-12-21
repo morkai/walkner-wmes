@@ -371,7 +371,7 @@ define([
       {
         var planLine = plan.lines.get(changedLine._id);
 
-        if (!planLine || planLine.get('version') >= changedLine.version)
+        if (!planLine || planLine.get('hash') === changedLine.hash)
         {
           return;
         }
