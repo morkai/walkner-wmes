@@ -245,7 +245,12 @@ define([
           zoomType: null
         },
         exporting: {
-          filename: t('reports', 'hr:attendance:filename')
+          filename: t('reports', 'hr:attendance:filename'),
+          chartOptions: {
+            legend: {
+              enabled: true
+            }
+          }
         },
         title: {
           text: t('reports', 'hr:attendance:title')
@@ -266,6 +271,7 @@ define([
           {
             name: t('reports', 'hr:attendance:series:demand'),
             type: 'column',
+            color: this.isFullscreen ? '#0000EE' : '#EEEE00',
             data: [],
             stacking: null
           },
