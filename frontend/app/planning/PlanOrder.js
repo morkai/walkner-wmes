@@ -45,6 +45,20 @@ define([
       return this.attributes.quantityPlan > 0 && this.attributes.source !== 'incomplete';
     },
 
+    getManHours: function(quantity)
+    {
+      if (quantity === undefined)
+      {
+        quantity = this.getQuantityTodo();
+      }
+
+      var operation = this.attributes.operation;
+
+      return operation.laborTime
+        ? ((operation.laborTime / 100 * quantity) + operation.laborSetupTime)
+        : 0;
+    },
+
     getQuantityTodo: function()
     {
       var quantityPlan = this.get('quantityPlan');

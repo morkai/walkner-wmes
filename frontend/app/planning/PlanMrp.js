@@ -61,28 +61,35 @@ define([
       var stats = {
         manHours: {
           todo: 0,
-          done: 0,
-          late: 0
+          late: 0,
+          plan: 0,
+          remaining: 0
         },
         quantity: {
           todo: 0,
-          done: 0,
-          late: 0
+          late: 0,
+          plan: 0,
+          remaining: 0
         }
       };
 
       orders.forEach(function(order)
       {
+        var sapOrder = plan.sapOrders.get(order.id);
+        var quantityRemaining = sapOrder.get('quantityTodo') - sapOrder.get('quantityDone');
+
         stats.manHours.todo += order.get('manHours');
         stats.quantity.todo += order.getQuantityTodo();
+        stats.manHours.remaining += order.getManHours(quantityRemaining);
+        stats.quantity.remaining += quantityRemaining;
       });
 
       this.lines.forEach(function(line)
       {
         (line.get('shiftData') || []).forEach(function(shift)
         {
-          stats.manHours.done += shift.manHours;
-          stats.quantity.done += shift.quantity;
+          stats.manHours.plan += shift.manHours;
+          stats.quantity.plan += shift.quantity;
         });
       });
 

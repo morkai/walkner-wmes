@@ -139,13 +139,15 @@ define([
       var stats = {
         manHours: {
           todo: 0,
-          done: 0,
-          late: 0
+          late: 0,
+          plan: 0,
+          remaining: 0
         },
         quantity: {
           todo: 0,
-          done: 0,
-          late: 0
+          late: 0,
+          plan: 0,
+          remaining: 0
         }
       };
 

@@ -40,7 +40,7 @@
       <% ['manHours', 'quantity'].forEach(function(group) { %>
       <tr class="planning-mrp-stats-bd">
         <th><%- t('planning', 'filter:stats:' + group) %></th>
-        <% ['todo', 'late', 'done'].forEach(function(subgroup) { %>
+        <% ['todo', 'late', 'plan', 'remaining'].forEach(function(subgroup) { %>
         <td data-group="<%- group %>" data-subgroup="<%- subgroup %>" title="<%- t('planning', 'filter:stats:tooltip:' + subgroup) %>">0</td>
         <% }) %>
       </tr>

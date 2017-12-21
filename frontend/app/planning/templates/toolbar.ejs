@@ -5,7 +5,7 @@
       <% ['manHours', 'quantity'].forEach(function(group) { %>
       <tr class="planning-mrp-stats-bd">
         <th><%- t('planning', 'toolbar:stats:' + group) %></th>
-        <% ['todo', 'late', 'done'].forEach(function(subgroup) { %>
+        <% ['todo', 'late', 'plan', 'remaining'].forEach(function(subgroup) { %>
         <td data-group="<%- group %>" data-subgroup="<%- subgroup %>" data-value="<%- stats[group][subgroup] %>" title="<%- t('planning', 'toolbar:stats:tooltip:' + subgroup) %>"><%- stats[group][subgroup].toLocaleString() %></td>
         <% }) %>
       </tr>
