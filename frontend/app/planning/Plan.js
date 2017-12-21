@@ -194,7 +194,8 @@ define([
 
     isEditable: function()
     {
-      return !this.isFrozen() && this.settings.isEditable();
+      return (window.ENV === 'development' && user.isAllowedTo('SUPER'))
+        || (!this.isFrozen() && this.settings.isEditable());
     },
 
     canEditSettings: function()
@@ -209,6 +210,11 @@ define([
 
     canFreezeOrders: function()
     {
+      if (window.ENV === 'development' && user.isAllowedTo('SUPER'))
+      {
+        return true;
+      }
+
       if (!this.canEditSettings())
       {
         return false;
