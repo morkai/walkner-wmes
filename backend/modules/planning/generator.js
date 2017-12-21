@@ -1752,7 +1752,7 @@ module.exports = function setUpGenerator(app, module)
   {
     if (!LOG_LINES || LOG_LINES[lineState._id])
     {
-      log(`[${lineState._id}] Generating...`);
+      log(`[${lineState._id}] Generating (${state.generateCallCount})...`);
     }
 
     while (!lineState.completed)
@@ -2680,6 +2680,7 @@ module.exports = function setUpGenerator(app, module)
         const unplannedOrderState = state.orderStates.get(unplannedLineOrder.orderNo);
 
         unplannedOrderState.order.incomplete = newIncompleteQuantity;
+        unplannedOrderState.quantityTodo = newIncompleteQuantity;
 
         removeFirstItem(unplannedOrderState.startTimes, unplannedLineOrder.startAt.getTime());
 
