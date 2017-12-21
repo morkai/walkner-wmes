@@ -237,6 +237,7 @@
   "stats:manHours": "RBH",
   "stats:hourlyPlan": "Plan godzinowy",
 
+  "orderPriority:unclassified": "Niesklasyfikowane",
   "orderPriority:small": "Małe",
   "orderPriority:easy": "Łatwe",
   "orderPriority:hard": "Trudne",
