@@ -30,12 +30,9 @@ module.exports = function(mongoose, options, done)
 
   step(
     findProdShiftsStep,
-    groupQuantitiesDoneStep,
     calcQuantitiesDoneStep,
     findProdDowntimesStep,
-    groupDowntimesByOrdersStep,
     findProdShiftOrdersStep,
-    groupProdShiftOrdersStep,
     calcDowntimeDurationsStep,
     calcFteStep,
     calcCoeffsStep,
@@ -108,44 +105,40 @@ module.exports = function(mongoose, options, done)
       'quantitiesDone.actual': 1
     };
 
-    ProdShift.find(conditions, fields).sort({date: 1}).lean().exec(this.next());
+    const cursor = ProdShift.find(conditions, fields).lean().cursor();
+    const next = _.once(this.next());
+    const endTime = Math.min(moment().minutes(59).seconds(59).milliseconds(999).valueOf(), options.toTime);
+
+    this.groupedQuantitiesDone = {};
+
+    cursor.on('end', next);
+    cursor.on('error', next);
+    cursor.on('data', prodShift =>
+    {
+      const shiftStartTime = prodShift.date.getTime();
+
+      for (let ii = 0; ii < 8; ++ii)
+      {
+        const startedAt = shiftStartTime + 3600 * 1000 * ii;
+
+        if (startedAt + 3599999 <= endTime)
+        {
+          groupObjects(this.groupedQuantitiesDone, {
+            startedAt: new Date(startedAt),
+            count: prodShift.quantitiesDone[ii].actual
+          });
+        }
+      }
+    });
   }
 
-  function groupQuantitiesDoneStep(err, prodShifts)
+  function calcQuantitiesDoneStep(err)
   {
     if (err)
     {
       return this.done(done, err);
     }
 
-    const endTime = Math.min(moment().minutes(59).seconds(59).milliseconds(999).valueOf(), options.toTime);
-    const groupedQuantitiesDone = {};
-
-    _.forEach(prodShifts, function(prodShift)
-    {
-      const shiftStartTime = prodShift.date.getTime();
-
-      _.forEach(prodShift.quantitiesDone, function(quantityDone, i)
-      {
-        const startedAt = shiftStartTime + 3600 * 1000 * i;
-
-        if (startedAt + 3599999 <= endTime)
-        {
-          groupObjects(groupedQuantitiesDone, {
-            startedAt: new Date(startedAt),
-            count: quantityDone.actual
-          });
-        }
-      });
-    });
-
-    this.groupedQuantitiesDone = groupedQuantitiesDone;
-
-    setImmediate(this.next());
-  }
-
-  function calcQuantitiesDoneStep()
-  {
     const groupedQuantitiesDone = this.groupedQuantitiesDone;
 
     _.forEach(groupedQuantitiesDone, function(quantitiesDone, groupKey)
@@ -174,10 +167,6 @@ module.exports = function(mongoose, options, done)
   function findProdDowntimesStep()
   {
     const conditions = createConditions();
-
-    conditions.prodShiftOrder = {$ne: null};
-    conditions.finishedAt = {$ne: null};
-
     const fields = {
       _id: 1,
       prodShiftOrder: 1,
@@ -187,20 +176,20 @@ module.exports = function(mongoose, options, done)
       finishedAt: 1
     };
 
-    ProdDowntime.find(conditions, fields).lean().exec(this.next());
-  }
+    const cursor = ProdDowntime.find(conditions, fields).lean().cursor();
+    const next = _.once(this.next());
 
-  function groupDowntimesByOrdersStep(err, prodDowntimes)
-  {
-    if (err)
+    this.orderToDowntimes = {};
+
+    cursor.on('end', next);
+    cursor.on('error', next);
+    cursor.on('data', prodDowntime =>
     {
-      return this.done(done, err);
-    }
+      if (!prodDowntime.prodShiftOrder || !prodDowntime.finishedAt)
+      {
+        return;
+      }
 
-    const orderToDowntimes = {};
-
-    _.forEach(prodDowntimes, function(prodDowntime)
-    {
       const duration = (prodDowntime.finishedAt.getTime() - prodDowntime.startedAt.getTime()) / 3600000;
 
       if (duration <= 0)
@@ -208,27 +197,23 @@ module.exports = function(mongoose, options, done)
         return;
       }
 
-      if (typeof orderToDowntimes[prodDowntime.prodShiftOrder] === 'undefined')
+      if (typeof this.orderToDowntimes[prodDowntime.prodShiftOrder] === 'undefined')
       {
-        orderToDowntimes[prodDowntime.prodShiftOrder] = [];
+        this.orderToDowntimes[prodDowntime.prodShiftOrder] = [];
       }
 
-      orderToDowntimes[prodDowntime.prodShiftOrder].push(prodDowntime);
+      this.orderToDowntimes[prodDowntime.prodShiftOrder].push(prodDowntime);
     });
-
-    this.orderToDowntimes = orderToDowntimes;
-
-    setImmediate(this.next());
   }
 
-  function findProdShiftOrdersStep()
+  function findProdShiftOrdersStep(err)
   {
-    const conditions = createConditions();
+    if (err)
+    {
+      return this.done(done, err);
+    }
 
-    conditions.workDuration = {$ne: 0};
-    conditions.laborTime = {$ne: 0};
-    conditions.workerCount = {$ne: 0};
-    conditions.finishedAt = {$ne: null};
+    const conditions = createConditions();
 
     const fields = {
       division: 1,
@@ -244,24 +229,44 @@ module.exports = function(mongoose, options, done)
       machineTime: 1
     };
 
-    ProdShiftOrder.find(conditions, fields).sort({startedAt: 1}).lean().exec(this.next());
+    const cursor = ProdShiftOrder.find(conditions, fields).lean().cursor();
+    const next = _.once(this.next());
+
+    this.orderToWorkerCount = {};
+    this.groupedProdShiftOrders = {};
+
+    cursor.on('end', next);
+    cursor.on('error', next);
+    cursor.on('data', prodShiftOrder =>
+    {
+      if (prodShiftOrder.workDuration === 0
+        || prodShiftOrder.laborTime === 0
+        || prodShiftOrder.workerCount === 0
+        || prodShiftOrder.finishedAt === null)
+      {
+        return;
+      }
+
+      this.orderToWorkerCount[prodShiftOrder._id] = prodShiftOrder.workerCount;
+
+      if (options.interval === 'hour')
+      {
+        splitProdShiftOrder(this.groupedProdShiftOrders, prodShiftOrder, this.orderToDowntimes);
+      }
+      else
+      {
+        groupObjects(this.groupedProdShiftOrders, prodShiftOrder);
+      }
+    });
   }
 
-  function groupProdShiftOrdersStep(err, prodShiftOrders)
+  function calcDowntimeDurationsStep(err)
   {
     if (err)
     {
       return this.done(done, err);
     }
 
-    this.orderToWorkerCount = {};
-    this.groupedProdShiftOrders = groupProdShiftOrders(prodShiftOrders, this.orderToDowntimes, this.orderToWorkerCount);
-
-    setImmediate(this.next());
-  }
-
-  function calcDowntimeDurationsStep()
-  {
     const orderToDowntimes = this.orderToDowntimes;
     const orderToWorkerCount = this.orderToWorkerCount;
 
@@ -391,7 +396,7 @@ module.exports = function(mongoose, options, done)
 
     results.coeffs = [];
 
-    const groupKeys = Object.keys(coeffsMap).map(Number).sort(function(a, b) { return a - b; });
+    const groupKeys = Object.keys(coeffsMap).map(v => +v).sort(function(a, b) { return a - b; });
 
     if (groupKeys.length === 0)
     {
@@ -437,27 +442,6 @@ module.exports = function(mongoose, options, done)
     });
 
     setImmediate(this.next());
-  }
-
-  function groupProdShiftOrders(prodShiftOrders, orderToDowntimes, orderToWorkerCount)
-  {
-    const groupedProdShiftOrders = {};
-
-    _.forEach(prodShiftOrders, function(prodShiftOrder)
-    {
-      orderToWorkerCount[prodShiftOrder._id] = prodShiftOrder.workerCount;
-
-      if (options.interval === 'hour')
-      {
-        splitProdShiftOrder(groupedProdShiftOrders, prodShiftOrder, orderToDowntimes);
-      }
-      else
-      {
-        groupObjects(groupedProdShiftOrders, prodShiftOrder);
-      }
-    });
-
-    return groupedProdShiftOrders;
   }
 
   function splitProdShiftOrder(groupedProdShiftOrders, order, orderToDowntimes)
