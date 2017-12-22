@@ -321,7 +321,7 @@ module.exports = function report1ExportRoute(app, reportsModule, req, res, next)
 
     if (lineOrgUnits.subdivision)
     {
-      createOptionsByOrgUnit('subdivision', helpers.idToStr(lineOrgUnits.subdivision));
+      createOptionsByOrgUnit('subdivision', lineOrgUnits.subdivision.toString());
     }
 
     if (lineOrgUnits.subdivision)

@@ -20,18 +20,16 @@ module.exports = function(mongoose, options, done)
   options.fromTime = +options.fromTime;
   options.toTime = +options.toTime;
 
+  const overall = !options.orgUnitType;
   const ignoredProdTasks = {};
 
-  if (options.prodTasks)
+  _.forEach(options.prodTasks, (prodTask, id) =>
   {
-    _.forEach(Object.keys(options.prodTasks), function(id)
+    if (prodTask.inProd === false)
     {
-      if (options.prodTasks[id].inProd === false)
-      {
-        ignoredProdTasks[id] = true;
-      }
-    });
-  }
+      ignoredProdTasks[id] = true;
+    }
+  });
 
   const results = {
     options: options,
@@ -601,6 +599,13 @@ module.exports = function(mongoose, options, done)
 
   function handleFteMasterEntry(orgUnitId, options, key, dateToActiveOrgUnits, fteMasterEntry)
   {
+    if (overall
+      && Array.isArray(options.subdivisions)
+      && !options.subdivisions.includes(fteMasterEntry.subdivision.toString()))
+    {
+      return;
+    }
+
     const results = getResults(orgUnitId);
 
     createDefaultGroupedResult(results, key);
