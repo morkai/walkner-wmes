@@ -2,7 +2,7 @@
   <% lines.forEach(function(line, i) { %>
   <div class="form-group">
     <label for="<%- idPrefix %>-line-<%- i %>" class="control-label"><%= line._id %></label>
-    <input id="<%- idPrefix %>-line-<%- i %>" data-line-id="<%= line._id %>" class="form-control" type="number" min="1" max="20" value="<%- line.workerCount %>">
+    <input id="<%- idPrefix %>-line-<%- i %>" data-line-id="<%= line._id %>" class="form-control" type="number" min="0" max="20" value="<%- line.workerCount %>">
   </div>
   <% }) %>
   <div class="form-actions">
