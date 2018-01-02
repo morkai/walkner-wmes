@@ -196,15 +196,6 @@ exports.start = function startFteModule(app, module)
     step(
       function()
       {
-        if (changedLines.length)
-        {
-          setOrgUnitsForLines(changedLines, divisions, prodFlows, prodLines);
-
-          setImmediate(this.next());
-        }
-      },
-      function()
-      {
         const pipeline = [
           {$match: {_id: planDate}},
           {$unwind: '$lines'}
@@ -213,7 +204,7 @@ exports.start = function startFteModule(app, module)
         if (changedLines.length)
         {
           pipeline.push({$match: {
-            'lines._id': {$in: Object.keys(prodLines)}
+            'lines._id': {$in: changedLines.map(l => l._id)}
           }});
         }
 
@@ -369,17 +360,12 @@ exports.start = function startFteModule(app, module)
     });
   }
 
-  function setOrgUnitsForLines(lines, divisions, prodFlows, prodLines)
+  function setOrgUnitsForLines(lineIds, divisions, prodFlows, prodLines)
   {
     const orgUnits = app[module.config.orgUnitsId];
 
-    lines.forEach(lineId =>
+    lineIds.forEach(lineId =>
     {
-      if (typeof prodLines[lineId] !== 'undefined')
-      {
-        return;
-      }
-
       orgUnits.getProdFlowsFor('prodLine', lineId).forEach(prodFlow =>
       {
         const division = orgUnits.getDivisionFor(prodFlow);
@@ -392,11 +378,19 @@ exports.start = function startFteModule(app, module)
           };
         }
 
+        if (divisions[division._id].prodFlows.includes(prodFlow._id))
+        {
+          return;
+        }
+
         divisions[division._id].prodFlows.push(prodFlow._id);
 
         orgUnits.getProdLinesFor(prodFlow).forEach(prodLine =>
         {
-          prodLines[prodLine._id] = null;
+          if (!prodLines[prodLine._id])
+          {
+            prodLines[prodLine._id] = null;
+          }
 
           if (!prodFlows[prodFlow._id])
           {
