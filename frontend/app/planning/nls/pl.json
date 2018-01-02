@@ -13,9 +13,11 @@
   "MSG:LOADING_FAILURE:productionState": "Nie udało się załadować danych produkcyjnych.",
   "MSG:GENERATING": "<i class='fa fa-spinner fa-spin'></i><span>Generowanie planu...</span>",
 
-  "PAGE_ACTION:legend": "Pokaż legendę",
-  "PAGE_ACTION:changes": "Pokaż historię zmian",
-  "PAGE_ACTION:settings": "Zmień ustawienia",
+  "PAGE_ACTION:hourlyPlans": "Plany godzinowe",
+  "PAGE_ACTION:paintShop": "Kolejka malarnii",
+  "PAGE_ACTION:legend": "Legenda",
+  "PAGE_ACTION:changes": "Historia zmian",
+  "PAGE_ACTION:settings": "Ustawienia",
 
   "filter:date": "Data planu",
   "filter:mrps": "Kontroler MRP",

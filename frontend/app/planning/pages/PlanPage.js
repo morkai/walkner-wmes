@@ -72,17 +72,22 @@ define([
     actions: function()
     {
       var page = this;
+      var firstShiftMoment = time.getMoment(page.plan.id, 'YYYY-MM-DD').hours(6);
 
       return [
         {
-          label: t.bound('planning', 'PAGE_ACTION:legend'),
-          icon: 'question-circle',
-          callback: function()
-          {
-            page.toggleLegend(this.querySelector('.btn'));
-
-            return false;
-          }
+          label: t.bound('planning', 'PAGE_ACTION:hourlyPlans'),
+          icon: 'list-ol',
+          privileges: 'HOURLY_PLANS:VIEW',
+          href: '#hourlyPlans?sort(-date)&limit(20)'
+            + '&date=ge=' + firstShiftMoment.valueOf()
+            + '&date=lt=' + firstShiftMoment.add(1, 'days').valueOf()
+        },
+        {
+          label: t.bound('planning', 'PAGE_ACTION:paintShop'),
+          icon: 'list-ol',
+          privileges: 'PAINT_SHOP:VIEW',
+          href: '#paintShop/' + page.plan.id
         },
         {
           label: t.bound('planning', 'PAGE_ACTION:changes'),
@@ -107,6 +112,16 @@ define([
 
               return false;
             }
+          }
+        },
+        {
+          label: t.bound('planning', 'PAGE_ACTION:legend'),
+          icon: 'question-circle',
+          callback: function()
+          {
+            page.toggleLegend(this.querySelector('.btn'));
+
+            return false;
           }
         }
       ];
