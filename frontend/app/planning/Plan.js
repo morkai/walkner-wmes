@@ -225,7 +225,7 @@ define([
         return true;
       }
 
-      return this.lines.some(function(line) { return line.get('frozenOrders').length > 0; });
+      return this.lines.some(function(line) { return line.getFrozenOrderCount() > 0; });
     },
 
     applyChange: function(planChange)

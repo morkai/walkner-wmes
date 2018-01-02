@@ -93,7 +93,7 @@ define([
             _id: line.id,
             workerCount: lineMrpSettings ? lineMrpSettings.get('workerCount') : '?',
             customTimes: view.serializeActiveTime(line, false),
-            frozenOrders: line.get('frozenOrders').length
+            frozenOrders: line.getFrozenOrderCount()
           };
         })
       };
@@ -110,7 +110,7 @@ define([
 
       view.resize();
 
-      this.$el.popover({
+      view.$el.popover({
         container: this.el,
         selector: '.planning-mrp-list-item',
         trigger: 'hover',
@@ -128,6 +128,12 @@ define([
     resize: function()
     {
       var $action = this.$('.planning-mrp-list-action');
+
+      if (!$action.length)
+      {
+        return;
+      }
+
       var $scrollIndicator = this.$id('scrollIndicator');
       var pos = $action.position();
 
@@ -367,7 +373,7 @@ define([
 
     onFrozenOrdersChanged: function(planLine)
     {
-      var frozenOrders = planLine.get('frozenOrders').length;
+      var frozenOrders = planLine.getFrozenOrderCount();
 
       this.$('.is-line[data-id="' + planLine.id + '"]')
         .find('span[data-property="frozenOrders"]')

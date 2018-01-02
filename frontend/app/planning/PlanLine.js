@@ -57,6 +57,11 @@ define([
       var mrpSettings = this.plan.settings.mrps.get(mrpId);
 
       return mrpSettings ? mrpSettings.lines.get(this.id) : null;
+    },
+
+    getFrozenOrderCount: function()
+    {
+      return Array.isArray(this.attributes.frozenOrders) ? this.attributes.frozenOrders.length : 0;
     }
 
   });
