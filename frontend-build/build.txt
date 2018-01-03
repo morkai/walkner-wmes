@@ -1348,6 +1348,8 @@ app/planning/views/PlanOrderLinesDialogView.js
 app/planning/templates/orderAddDialog.js
 app/planning/templates/orderAddDetails.js
 app/planning/views/PlanOrderAddDialogView.js
+app/planning/templates/orderDropZoneDialog.js
+app/planning/views/PlanOrderDropZoneDialogView.js
 app/planning/templates/orders.js
 app/planning/templates/orderPopover.js
 app/planning/templates/orderIgnoreDialog.js
