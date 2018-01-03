@@ -626,6 +626,8 @@ define([
 
     onOrderHighlight: function(message)
     {
+      this.$('.is-highlighted').removeClass('is-highlighted');
+
       var $item = this.$('.is-order[data-id="' + message.orderNo + '"]').toggleClass('is-highlighted', message.state);
 
       if (message.source !== 'orders' && !this.plan.displayOptions.isListWrappingEnabled())
