@@ -77,7 +77,7 @@ define([
       return [
         {
           label: t.bound('planning', 'PAGE_ACTION:hourlyPlans'),
-          icon: 'list-ol',
+          icon: 'calendar',
           privileges: 'HOURLY_PLANS:VIEW',
           href: '#hourlyPlans?sort(-date)&limit(20)'
             + '&date=ge=' + firstShiftMoment.valueOf()
@@ -85,7 +85,7 @@ define([
         },
         {
           label: t.bound('planning', 'PAGE_ACTION:paintShop'),
-          icon: 'list-ol',
+          icon: 'paint-brush',
           privileges: 'PAINT_SHOP:VIEW',
           href: '#paintShop/' + page.plan.id
         },
@@ -161,45 +161,34 @@ define([
       {
         var lateOrder = this.plan.lateOrders.get(message._id);
         var change = message.change;
-        var delayReason = change.newValues.delayReason;
-        var comment = change.comment;
-        var newDelayReason = typeof delayReason !== 'undefined';
+        var newValues = change.newValues;
 
-        if (lateOrder && newDelayReason)
+        if (lateOrder && typeof newValues.delayReason !== 'undefined')
         {
-          lateOrder.set('delayReason', delayReason);
+          lateOrder.set('delayReason', newValues.delayReason);
         }
 
         var sapOrder = this.plan.sapOrders.get(message._id);
 
-        if (sapOrder && (comment || newDelayReason))
+        if (!sapOrder)
         {
-          var attrs = {};
-
-          if (comment)
-          {
-            attrs.comments = [].concat(sapOrder.get('comments'), {
-              source: change.source,
-              time: change.time,
-              user: change.user,
-              text: comment,
-              delayReason: delayReason
-            });
-          }
-
-          if (newDelayReason)
-          {
-            attrs.delayReason = delayReason;
-          }
-
-          if ((comment && newDelayReason)
-            || (comment && (!sapOrder.get('comment') || !sapOrder.get('delayReason'))))
-          {
-            attrs.comment = comment;
-          }
-
-          sapOrder.set(attrs);
+          return;
         }
+
+        var attrs = _.clone(newValues);
+
+        if (!_.isEmpty(change.comment))
+        {
+          attrs.comments = sapOrder.get('comments').concat({
+            source: change.source,
+            time: change.time,
+            user: change.user,
+            text: change.comment,
+            delayReason: newValues.delayReason
+          });
+        }
+
+        sapOrder.set(attrs);
       },
       'shiftChanged': function(newShift)
       {
@@ -679,7 +668,9 @@ define([
       {
         this.broker.publish('planning.escapePressed');
       }
-      else if ((e.keyCode === 79 || e.keyCode === 90) && e.target.tagName !== 'INPUT')
+      else if ((e.keyCode === 79 || e.keyCode === 90)
+        && e.target.tagName !== 'INPUT'
+        && e.target.tagName !== 'TEXTAREA')
       {
         this.toggleLineOrdersList();
       }

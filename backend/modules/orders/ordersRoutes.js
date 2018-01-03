@@ -22,7 +22,11 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
   const canView = userModule.auth('LOCAL', 'ORDERS:VIEW');
   const canPrint = userModule.auth('LOCAL', 'ORDERS:VIEW');
   const canManage = userModule.auth('ORDERS:MANAGE');
-  const canEdit = userModule.auth('ORDERS:MANAGE', 'PLANNING:PLANNER', 'FN:master', 'FN:leader');
+  const canEdit = userModule.auth(
+    'ORDERS:MANAGE',
+    'PLANNING:PLANNER', 'PLANNING:WHMAN',
+    'FN:master', 'FN:leader'
+  );
 
   express.post('/orders;import', importOrdersRoute);
 
@@ -49,6 +53,8 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
   express.get('/orders', express.crud.browseRoute.bind(null, app, Order));
 
+  express.post('/orders', canEdit, editOrdersRoute);
+
   express.get('/orders/:id.html', canPrint, renderHtmlOrderRoute.bind(null, app, ordersModule));
 
   express.get('/orders/:id', express.crud.readRoute.bind(null, app, Order));
@@ -57,8 +63,49 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
   function editOrderRoute(req, res, next)
   {
+    const orderNo = req.params.id;
     const data = req.body;
+    const userInfo = userModule.createUserInfo(req.session.user, req);
 
+    editOrder(orderNo, data, userInfo, (err, res) =>
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      res.sendStatus(204);
+    });
+  }
+
+  function editOrdersRoute(req, res, next)
+  {
+    if (!Array.isArray(req.body) || !req.body.length)
+    {
+      return next(app.createError('INPUT', 400));
+    }
+
+    const userInfo = userModule.createUserInfo(req.session.user, req);
+
+    step(
+      function()
+      {
+        req.body.forEach(data => editOrder(data._id, data, userInfo, this.group()));
+      },
+      function(err)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.sendStatus(204);
+      }
+    );
+  }
+
+  function editOrder(orderNo, data, userInfo, done)
+  {
     if (_.isEmpty(data.comment))
     {
       data.comment = '';
@@ -66,7 +113,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
     if (!validateEditInput(data))
     {
-      return next(express.createHttpError('INPUT', 400));
+      return done(app.createError('INPUT', 400));
     }
 
     data.comment = data.comment.trim();
@@ -82,7 +129,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
           whDropZone: 1
         };
 
-        Order.findById(req.params.id, fields).lean().exec(this.next());
+        Order.findById(orderNo, fields).lean().exec(this.next());
       },
       function editOrderStep(err, order)
       {
@@ -93,12 +140,12 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
         if (!order)
         {
-          return this.skip(express.createHttpError('NOT_FOUND', 404));
+          return this.skip(app.createError('NOT_FOUND', 404));
         }
 
         const change = {
           time: new Date(),
-          user: userModule.createUserInfo(req.session.user, req),
+          user: userInfo,
           oldValues: {},
           newValues: {},
           comment: data.comment,
@@ -162,7 +209,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
         if (_.isEmpty(change.newValues) && !change.comment.length)
         {
-          return this.skip(app.createError('INPUT', 400));
+          return this.skip();
         }
 
         this.change = change;
@@ -173,15 +220,18 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
       {
         if (err)
         {
-          return next(err);
+          return done(err);
         }
 
-        res.sendStatus(204);
+        if (this.change)
+        {
+          app.broker.publish(`orders.updated.${orderNo}`, {
+            _id: orderNo,
+            change: this.change
+          });
+        }
 
-        app.broker.publish('orders.updated.' + req.params.id, {
-          _id: req.params.id,
-          change: this.change
-        });
+        done();
       }
     );
   }
@@ -213,7 +263,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
       return false;
     }
 
-    if (whTime !== undefined && isNaN(Date.parse(whTime)))
+    if (whTime !== undefined && whTime !== null && isNaN(Date.parse(whTime)))
     {
       return false;
     }

@@ -23,13 +23,15 @@ define([
 
     $errorMessage: null,
 
+    updateOnChange: true,
+
     initialize: function()
     {
       this.$errorMessage = null;
 
       this.listenTo(this.model, 'change', function()
       {
-        if (this.isRendered())
+        if (this.isRendered() && this.updateOnChange)
         {
           js2form(this.el, this.serializeToForm(true), '.', null, false, false);
         }

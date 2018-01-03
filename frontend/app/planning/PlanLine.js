@@ -40,20 +40,25 @@ define([
       Object.defineProperty(this, 'plan', {
         get: function()
         {
-          return this.collection.plan;
+          return this.collection ? this.collection.plan : null;
         }
       });
 
       Object.defineProperty(this, 'settings', {
         get: function()
         {
-          return this.plan.settings.lines.get(this.id);
+          return this.plan ? this.plan.settings.lines.get(this.id) : null;
         }
       });
     },
 
     mrpSettings: function(mrpId)
     {
+      if (!this.plan)
+      {
+        return null;
+      }
+
       var mrpSettings = this.plan.settings.mrps.get(mrpId);
 
       return mrpSettings ? mrpSettings.lines.get(this.id) : null;

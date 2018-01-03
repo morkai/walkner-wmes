@@ -2,9 +2,13 @@
 
 define([
   'underscore',
+  '../i18n',
+  '../time',
   '../core/Model'
 ], function(
   _,
+  t,
+  time,
   Model
 ) {
   'use strict';
@@ -47,6 +51,22 @@ define([
     getCommentWithIcon: function()
     {
       return formatCommentWithIcon(_.last(this.get('comments')));
+    },
+
+    getDropZone: function()
+    {
+      var whDropZone = this.get('whDropZone');
+      var whTime = this.get('whTime');
+
+      if (_.isEmpty(whDropZone))
+      {
+        return '';
+      }
+
+      return t('planning', 'orders:dropZone', {
+        group: _.escape(whDropZone),
+        time: time.utc.format(whTime, 'HH:mm')
+      });
     }
 
   }, {

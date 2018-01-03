@@ -5,12 +5,14 @@ define([
   'jquery',
   'app/i18n',
   'app/time',
+  'app/viewport',
   'app/core/View',
   'app/data/clipboard',
   'app/orderStatuses/util/renderOrderStatusLabel',
   '../util/shift',
   '../util/contextMenu',
   '../PlanSapOrder',
+  './PlanOrderDropZoneDialogView',
   'app/core/templates/userInfo',
   'app/planning/templates/lineOrdersList',
   'app/planning/templates/lineOrderComments'
@@ -19,12 +21,14 @@ define([
   $,
   t,
   time,
+  viewport,
   View,
   clipboard,
   renderOrderStatusLabel,
   shiftUtil,
   contextMenu,
   PlanSapOrder,
+  PlanOrderDropZoneDialogView,
   userInfoTemplate,
   lineOrdersListTemplate,
   lineOrderCommentsTemplate
@@ -83,7 +87,7 @@ define([
           window.scrollBy(0, (e.clientY - trEl.getBoundingClientRect().top - offset) * -1);
         }
       },
-      'mousedown td.no-scroll': function(e)
+      'mousedown .planning-mrp-lineOrders-comment': function(e)
       {
         if (e.button !== 0)
         {
@@ -124,7 +128,7 @@ define([
             + '</div>'
         }).popover('show');
       },
-      'mouseup td.no-scroll': function(e)
+      'mouseup .planning-mrp-lineOrders-comment': function(e)
       {
         this.$(e.currentTarget).popover('destroy');
       }
@@ -143,6 +147,8 @@ define([
       view.listenTo(view.plan.sapOrders, 'change:comments', view.onCommentChange);
       view.listenTo(view.plan.sapOrders, 'reset', view.onSapOrdersReset);
       view.listenTo(view.plan.sapOrders, 'change:psStatus', view.onPsStatusChanged);
+      view.listenTo(view.plan.sapOrders, 'change:whStatus', view.onWhStatusChanged);
+      view.listenTo(view.plan.sapOrders, 'change:whDropZone change:whTime', view.onWhDropZoneChanged);
     },
 
     serialize: function()
@@ -198,7 +204,8 @@ define([
               comment: sapOrder ? sapOrder.getCommentWithIcon() : '',
               comments: sapOrder ? sapOrder.get('comments') : [],
               status: order.getStatus(),
-              statuses: view.serializeOrderStatuses(order)
+              statuses: view.serializeOrderStatuses(order),
+              dropZone: sapOrder ? sapOrder.getDropZone() : ''
             };
           }
 
@@ -246,6 +253,7 @@ define([
       var kindIcon = planOrder.getKindIcon();
       var sourceIcon = planOrder.getSourceIcon();
       var psStatus = this.plan.sapOrders.getPsStatus(planOrder.id);
+      var whStatus = this.plan.sapOrders.getWhStatus(planOrder.id);
 
       if (planOrder.get('ignored'))
       {
@@ -276,6 +284,11 @@ define([
         + 'title="' + t('planning', 'orders:psStatus:' + psStatus) + '" '
         + 'data-ps-status="' + psStatus + '">'
         + '<i class="fa ' + planOrder.getIcon('psStatus') + '"></i></span>');
+
+      statuses.push('<span class="planning-mrp-list-property planning-mrp-list-property-whStatus" '
+        + 'title="' + t('planning', 'orders:whStatus:' + whStatus) + '" '
+        + 'data-wh-status="' + whStatus + '">'
+        + '<i class="fa ' + planOrder.getIcon('whStatus') + '"></i></span>');
 
       if (orderData.statuses.indexOf('CNF') !== -1)
       {
@@ -329,6 +342,16 @@ define([
         label: t('planning', 'lineOrders:menu:copy'),
         handler: this.handleCopyAction.bind(this, e.currentTarget, e.pageY, e.pageX)
       });
+
+      if (this.plan.canChangeDropZone())
+      {
+        menu.push({
+          icon: 'fa-level-down',
+          label: t('planning', 'orders:menu:dropZone'),
+          handler: this.handleDropZoneAction.bind(this, orderNo)
+        });
+      }
+
 
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },
@@ -415,6 +438,17 @@ define([
       });
     },
 
+    handleDropZoneAction: function(orderNo)
+    {
+      var dialogView = new PlanOrderDropZoneDialogView({
+        plan: this.plan,
+        mrp: this.mrp,
+        order: this.plan.orders.get(orderNo)
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'orders:menu:dropZone:title'));
+    },
+
     onOrderHighlight: function(message)
     {
       if (message.source === 'lineOrders' || !this.mrp.orders.get(message.orderNo))
@@ -434,7 +468,9 @@ define([
     {
       if (this.mrp.orders.get(sapOrder.id))
       {
-        this.$('tr[data-id="' + sapOrder.id + '"] > .no-scroll').html(sapOrder.getCommentWithIcon());
+        this.$('tr[data-id="' + sapOrder.id + '"] > .planning-mrp-lineOrders-comment').html(
+          sapOrder.getCommentWithIcon()
+        );
       }
     },
 
@@ -458,6 +494,31 @@ define([
           .find('.planning-mrp-list-property-psStatus')
           .attr('title', t('planning', 'orders:psStatus:' + psStatus))
           .attr('data-ps-status', psStatus);
+      }
+    },
+
+    onWhStatusChanged: function(sapOrder)
+    {
+      var $order = this.$('tr[data-id="' + sapOrder.id + '"]');
+
+      if ($order.length)
+      {
+        var whStatus = this.plan.sapOrders.getWhStatus(sapOrder.id);
+
+        $order
+          .find('.planning-mrp-list-property-whStatus')
+          .attr('title', t('planning', 'orders:whStatus:' + whStatus))
+          .attr('data-wh-status', whStatus);
+      }
+    },
+
+    onWhDropZoneChanged: function(sapOrder)
+    {
+      var $order = this.$('tr[data-id="' + sapOrder.id + '"]');
+
+      if ($order.length)
+      {
+        $order.find('.planning-mrp-lineOrders-dropZone').html(sapOrder.getDropZone());
       }
     }
 

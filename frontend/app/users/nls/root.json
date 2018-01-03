@@ -106,6 +106,7 @@
     "PRIVILEGE:PLANNING:VIEW": "Daily plans: view",
     "PRIVILEGE:PLANNING:MANAGE": "Daily plans: manage",
     "PRIVILEGE:PLANNING:PLANNER": "Daily plans: planner",
+    "PRIVILEGE:PLANNING:WHMAN": "Daily plans: warehouseman",
     "PRIVILEGE:PROD_DOWNTIMES:VIEW": "Downtimes: view",
     "PRIVILEGE:PROD_DOWNTIMES:MANAGE": "Downtimes: corroboration",
     "PRIVILEGE:PROD_DOWNTIMES:ALL": "Downtimes: access to all divisions",

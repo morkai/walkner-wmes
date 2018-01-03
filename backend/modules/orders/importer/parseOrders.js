@@ -78,7 +78,7 @@ module.exports = function parseOrders(input, orders, importTs)
         statuses: obj.statuses,
         statusesSetAt: {},
         delayReason: null,
-        whStatus: 'todo',
+        whStatus: 'unknown',
         whTime: null,
         whDropZone: '',
         operations: [],

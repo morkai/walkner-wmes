@@ -162,7 +162,7 @@ module.exports = function setupOrderModel(app, mongoose)
       statuses: [],
       statusesSetAt: {},
       delayReason: null,
-      whStatus: 'todo',
+      whStatus: 'unknown',
       whTime: null,
       whDropZone: '',
       operations: missingOrder.operations,

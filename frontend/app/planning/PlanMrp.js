@@ -73,23 +73,6 @@ define([
         }
       };
 
-      orders.forEach(function(order)
-      {
-        var sapOrder = plan.sapOrders.get(order.id);
-
-        if (!sapOrder)
-        {
-          return;
-        }
-
-        var quantityRemaining = sapOrder.get('quantityTodo') - sapOrder.get('quantityDone');
-
-        stats.manHours.todo += order.get('manHours');
-        stats.quantity.todo += order.getQuantityTodo();
-        stats.manHours.remaining += order.getManHours(quantityRemaining);
-        stats.quantity.remaining += quantityRemaining;
-      });
-
       this.lines.forEach(function(line)
       {
         (line.get('shiftData') || []).forEach(function(shift)
@@ -101,6 +84,23 @@ define([
 
       if (plan)
       {
+        orders.forEach(function(order)
+        {
+          var sapOrder = plan.sapOrders.get(order.id);
+
+          if (!sapOrder)
+          {
+            return;
+          }
+
+          var quantityRemaining = sapOrder.get('quantityTodo') - sapOrder.get('quantityDone');
+
+          stats.manHours.todo += order.get('manHours');
+          stats.quantity.todo += order.getQuantityTodo();
+          stats.manHours.remaining += order.getManHours(quantityRemaining);
+          stats.quantity.remaining += quantityRemaining;
+        });
+
         plan.lateOrders.mrp(this.id).forEach(function(lateOrder)
         {
           if (!orders.get(lateOrder.id))

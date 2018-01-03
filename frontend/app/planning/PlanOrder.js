@@ -20,7 +20,8 @@ define([
     urgent: 'fa-exclamation',
     pinned: 'fa-thumb-tack',
     ignored: 'fa-ban',
-    psStatus: 'fa-paint-brush'
+    psStatus: 'fa-paint-brush',
+    whStatus: 'fa-truck'
   };
 
   return Model.extend({

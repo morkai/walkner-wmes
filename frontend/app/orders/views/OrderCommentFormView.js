@@ -19,6 +19,8 @@ define([
 
     template: template,
 
+    updateOnChange: false,
+
     events: _.extend({
       'change #-delayReason': function(e)
       {

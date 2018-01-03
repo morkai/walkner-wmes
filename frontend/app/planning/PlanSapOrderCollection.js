@@ -35,12 +35,14 @@ define([
     {
       var order = this.get(orderNo);
 
-      if (order)
-      {
-        return order.get('psStatus') || 'unknown';
-      }
+      return (order ? order.get('psStatus') : null) || 'unknown';
+    },
 
-      return 'unknown';
+    getWhStatus: function(orderNo)
+    {
+      var order = this.get(orderNo);
+
+      return (order ? order.get('whStatus') : null) || 'unknown';
     }
 
   });

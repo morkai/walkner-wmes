@@ -45,6 +45,9 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
         quantityTodo: '$qty',
         quantityDone: {$ifNull: ['$qtyDone.total', 0]},
         statuses: 1,
+        whStatus: 1,
+        whTime: 1,
+        whDropZone: 1,
         changes: {
           $filter: {
             input: '$changes',
@@ -107,7 +110,6 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
       {
         order.psStatus = psStatuses.get(order._id);
         order.delayReason = null;
-        order.comment = '';
         order.comments = [];
 
         order.changes.forEach(change =>
@@ -123,19 +125,9 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
             });
           }
 
-          if ((!order.comment || !order.delayReason) && change.comment)
-          {
-            order.comment = change.comment;
-          }
-
           if (!_.isUndefined(change.newValues.delayReason))
           {
             order.delayReason = change.newValues.delayReason;
-
-            if (change.comment)
-            {
-              order.comment = change.comment;
-            }
           }
         });
 

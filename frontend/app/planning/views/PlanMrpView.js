@@ -155,6 +155,11 @@ define([
       };
     },
 
+    beforeRender: function()
+    {
+      clearTimeout(this.timers.render);
+    },
+
     afterRender: function()
     {
       var view = this;
@@ -208,7 +213,7 @@ define([
     {
       if (!this.plan.isAnythingLoading())
       {
-        this.render();
+        this.timers.render = setTimeout(this.render.bind(this), 1);
       }
     },
 

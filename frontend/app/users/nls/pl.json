@@ -105,6 +105,7 @@
   "PRIVILEGE:PLANNING:VIEW": "Plany dzienne: przeglądanie",
   "PRIVILEGE:PLANNING:MANAGE": "Plany dzienne: zarządzanie",
   "PRIVILEGE:PLANNING:PLANNER": "Plany dzienne: planista",
+  "PRIVILEGE:PLANNING:WHMAN": "Plany dzienne: magazynier",
   "PRIVILEGE:PROD_DOWNTIMES:VIEW": "Przestoje: przeglądanie",
   "PRIVILEGE:PROD_DOWNTIMES:MANAGE": "Przestoje: potwierdzanie",
   "PRIVILEGE:PROD_DOWNTIME_ALERTS:VIEW": "Alarmy: przeglądanie",

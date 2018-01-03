@@ -15,6 +15,7 @@ define([
   './PlanOrderQuantityDialogView',
   './PlanOrderLinesDialogView',
   './PlanOrderAddDialogView',
+  './PlanOrderDropZoneDialogView',
   'app/planning/templates/orders',
   'app/planning/templates/orderPopover',
   'app/planning/templates/orderIgnoreDialog',
@@ -34,6 +35,7 @@ define([
   PlanOrderQuantityDialogView,
   PlanOrderLinesDialogView,
   PlanOrderAddDialogView,
+  PlanOrderDropZoneDialogView,
   ordersTemplate,
   orderPopoverTemplate,
   orderIgnoreDialogTemplate,
@@ -125,6 +127,7 @@ define([
       view.listenTo(plan.displayOptions, 'change:useLatestOrderData', view.render);
       view.listenTo(plan.sapOrders, 'reset', view.onSapOrdersReset);
       view.listenTo(plan.sapOrders, 'change:psStatus', view.onPsStatusChanged);
+      view.listenTo(plan.sapOrders, 'change:whStatus', view.onWhStatusChanged);
     },
 
     destroy: function()
@@ -179,7 +182,8 @@ define([
           urgent: urgent && !autoAdded,
           invalid: !order.get('operation').laborTime ? 'is-invalid' : '',
           pinned: order.isPinned(),
-          psStatus: plan.sapOrders.getPsStatus(order.id)
+          psStatus: plan.sapOrders.getPsStatus(order.id),
+          whStatus: plan.sapOrders.getWhStatus(order.id)
         };
       });
     },
@@ -417,6 +421,15 @@ define([
         }
       }
 
+      if (this.plan.canChangeDropZone())
+      {
+        menu.push({
+          icon: 'fa-level-down',
+          label: t('planning', 'orders:menu:dropZone'),
+          handler: this.handleDropZoneAction.bind(this, planOrder)
+        });
+      }
+
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },
 
@@ -582,6 +595,17 @@ define([
       viewport.showDialog(dialogView, t('planning', 'orders:menu:remove:title'));
     },
 
+    handleDropZoneAction: function(planOrder)
+    {
+      var dialogView = new PlanOrderDropZoneDialogView({
+        plan: this.plan,
+        mrp: this.mrp,
+        order: planOrder
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'orders:menu:dropZone:title'));
+    },
+
     onOrdersChanged: function()
     {
       if (!this.plan.isAnythingLoading())
@@ -665,6 +689,21 @@ define([
           .find('.planning-mrp-list-property-psStatus')
           .attr('title', t('planning', 'orders:psStatus:' + psStatus))
           .attr('data-ps-status', psStatus);
+      }
+    },
+
+    onWhStatusChanged: function(sapOrder)
+    {
+      var $order = this.$item(sapOrder.id);
+
+      if ($order.length)
+      {
+        var whStatus = this.plan.sapOrders.getWhStatus(sapOrder.id);
+
+        $order
+          .find('.planning-mrp-list-property-whStatus')
+          .attr('title', t('planning', 'orders:whStatus:' + whStatus))
+          .attr('data-wh-status', whStatus);
       }
     }
 

@@ -56,7 +56,9 @@
   color: #000;
 }
 .planning-darker .is-completed .planning-mrp-list-property-psStatus[data-ps-status="finished"],
-.planning-darker .planning-mrp-lineOrders-status[data-status="completed"] .planning-mrp-list-property-psStatus[data-ps-status="finished"] {
+.planning-darker .planning-mrp-lineOrders-status[data-status="completed"] .planning-mrp-list-property-psStatus[data-ps-status="finished"],
+.planning-darker .is-completed .planning-mrp-list-property-whStatus[data-wh-status="done"],
+.planning-darker .planning-mrp-lineOrders-status[data-status="completed"] .planning-mrp-list-property-whStatus[data-ps-status="done"] {
   color: greenyellow;
 }
 .planning-darker .planning-mrp-lineOrders .planning-mrp-list {
@@ -116,7 +118,7 @@
 .planning-legend-order {
   border-color: #999;
 }
-.planning-darker .planning-mrl-lineOrders-list {
+.planning-darker .planning-mrp-lineOrders-list {
   border-color: #333;
 }
 .planning-darker .planning-mrp-lineOrders-container > hr {

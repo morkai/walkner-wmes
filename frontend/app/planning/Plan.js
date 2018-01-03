@@ -205,7 +205,11 @@ define([
 
     canCommentOrders: function()
     {
-      return user.isAllowedTo('ORDERS:MANAGE', 'PLANNING:PLANNER', 'FN:master', 'FN:leader');
+      return user.isAllowedTo(
+        'ORDERS:MANAGE',
+        'PLANNING:PLANNER', 'PLANNING:WHMAN',
+        'FN:master', 'FN:leader'
+      );
     },
 
     canFreezeOrders: function()
@@ -226,6 +230,11 @@ define([
       }
 
       return this.lines.some(function(line) { return line.getFrozenOrderCount() > 0; });
+    },
+
+    canChangeDropZone: function()
+    {
+      return user.isAllowedTo('PLANNING:WHMAN');
     },
 
     applyChange: function(planChange)
