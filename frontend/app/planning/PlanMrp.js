@@ -76,6 +76,12 @@ define([
       orders.forEach(function(order)
       {
         var sapOrder = plan.sapOrders.get(order.id);
+
+        if (!sapOrder)
+        {
+          return;
+        }
+
         var quantityRemaining = sapOrder.get('quantityTodo') - sapOrder.get('quantityDone');
 
         stats.manHours.todo += order.get('manHours');
