@@ -122,7 +122,8 @@ define([
             urgent: false,
             late: false,
             pinned: false,
-            psStatus: 'unknown'
+            psStatus: 'unknown',
+            whStatus: 'unknown'
           };
         });
     },
