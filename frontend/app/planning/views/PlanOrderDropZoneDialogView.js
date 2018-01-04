@@ -67,7 +67,8 @@ define([
         time: sapOrder.get('whTime')
           ? time.utc.format(sapOrder.get('whTime'), 'HH:mm')
           : time.format(Date.now(), 'HH:mm'),
-        orders: orders.join(', ')
+        orders: orders.join(', '),
+        canChangeStatus: this.plan.canChangeWhStatus()
       };
     },
 
@@ -82,13 +83,14 @@ define([
       var $submit = view.$id('submit').prop('disabled', true);
       var $spinner = $submit.find('.fa-spinner').removeClass('hidden');
 
-      var whStatus = this.$('input[name="status"]:checked').val();
-      var whDropZone = this.$id('dropZone').val().trim();
-      var whTimeMoment = time.utc.getMoment('2000-01-01 ' + this.$id('time').val().trim(), 'YYYY-MM-DD HH:mm');
+      var canChangeStatus = view.plan.canChangeWhStatus();
+      var comment = canChangeStatus ? view.$id('comment').val().trim() : undefined;
+      var whStatus = canChangeStatus ? view.$('input[name="status"]:checked').val() : undefined;
+      var whDropZone = view.$id('dropZone').val().trim();
+      var whTimeMoment = time.utc.getMoment('2000-01-01 ' + view.$id('time').val().trim(), 'YYYY-MM-DD HH:mm');
       var whTime = whDropZone === '' || !whTimeMoment.isValid()
         ? null
         : whTimeMoment.toISOString();
-      var comment = this.$id('comment').val().trim();
 
       if (!whTime)
       {

@@ -234,6 +234,11 @@ define([
 
     canChangeDropZone: function()
     {
+      return this.canCommentOrders();
+    },
+
+    canChangeWhStatus: function()
+    {
       return user.isAllowedTo('PLANNING:WHMAN');
     },
 
