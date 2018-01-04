@@ -305,6 +305,12 @@
 .wrap .planning-mrp-lineOrders .planning-mrp-list {
   flex-wrap: nowrap;
 }
+.planning-mrp-lineOrders-dropZone {
+  cursor: pointer;
+}
+.planning-mrp-lineOrders-comment {
+  cursor: help;
+}
 .planning-mrp-list-item.is-lineOrder {
   overflow: hidden;
 }

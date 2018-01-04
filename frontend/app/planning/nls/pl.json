@@ -1,5 +1,6 @@
 {
   "BREADCRUMBS:base": "Planowanie",
+  "BREADCRUMBS:wh": "Magazyn",
   "BREADCRUMBS:settings": "Ustawienia",
   "BREADCRUMBS:changes": "Historia zmian",
 
@@ -14,7 +15,9 @@
   "MSG:GENERATING": "<i class='fa fa-spinner fa-spin'></i><span>Generowanie planu...</span>",
 
   "PAGE_ACTION:hourlyPlans": "Plany godzinowe",
-  "PAGE_ACTION:paintShop": "Kolejka malarnii",
+  "PAGE_ACTION:dailyPlan": "Plan dzienny",
+  "PAGE_ACTION:paintShop": "Malarnia",
+  "PAGE_ACTION:wh": "Magazyn",
   "PAGE_ACTION:legend": "Legenda",
   "PAGE_ACTION:changes": "Historia zmian",
   "PAGE_ACTION:settings": "Ustawienia",
@@ -243,7 +246,7 @@
   "lineOrders:list:status": "Status",
   "lineOrders:list:lines": "Linie",
   "lineOrders:list:dropZone": "Drop zone",
-  "lineOrders:list:comment": "Komentarz",
+  "lineOrders:list:comment": "Ostatni komentarz",
   "lineOrders:menu:copy": "Kopiuj listę zleceń",
   "lineOrders:menu:copy:success": "Lista zleceń została skopiowana do schowka.",
 

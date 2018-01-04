@@ -82,7 +82,9 @@ define([
         lineOrdersList: displayOptions.isLineOrdersListEnabled(),
         wrapLists: displayOptions.isListWrappingEnabled(),
         useLatestOrderData: displayOptions.isLatestOrderDataUsed(),
-        useDarkerTheme: displayOptions.isDarkerThemeUsed()
+        useDarkerTheme: displayOptions.isDarkerThemeUsed(),
+        showToggles: this.options.toggles !== false,
+        showStats: this.options.stats !== false
       });
     },
 
@@ -172,10 +174,14 @@ define([
 
     updateToggles: function()
     {
+      if (this.options.toggles === false)
+      {
+        return;
+      }
+
       var displayOptions = this.plan.displayOptions;
 
       this.$id('lineOrdersList').toggleClass('active', displayOptions.isLineOrdersListEnabled());
-      this.$id('wrapLists').toggleClass('active', !displayOptions.isListWrappingEnabled());
       this.$id('useLatestOrderData').toggleClass('active', displayOptions.isLatestOrderDataUsed());
       this.$id('useDarkerTheme').toggleClass('active', displayOptions.isDarkerThemeUsed());
     },

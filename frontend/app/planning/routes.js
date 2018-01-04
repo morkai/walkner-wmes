@@ -14,6 +14,7 @@ define([
   './pages/PlanListPage',
   './pages/PlanSettingsPage',
   './pages/PlanChangesPage',
+  './pages/WhPage',
   'i18n!app/nls/planning'
 ], function(
   broker,
@@ -28,7 +29,8 @@ define([
   PlanPage,
   PlanListPage,
   PlanSettingsPage,
-  PlanChangesPage
+  PlanChangesPage,
+  WhPage
 ) {
   'use strict';
 
@@ -81,6 +83,31 @@ define([
     }
 
     viewport.showPage(new PlanPage({
+      date: req.params.id,
+      mrps: req.query.mrps === undefined ? null : req.query.mrps
+        .split(/[^A-Z0-9]+/)
+        .filter(function(mrp) { return mrp.length > 0; })
+    }));
+  });
+
+  router.map('/planning/wh/:id', canView, function(req)
+  {
+    if (/^-?[0-9]+d$/.test(req.params.id))
+    {
+      req.params.id = time.getMoment()
+        .subtract(time.getMoment().hours() < 6 ? 1 : 0, 'days')
+        .startOf('day')
+        .add(+req.params.id.replace('d', ''), 'days')
+        .format('YYYY-MM-DD');
+
+      broker.publish('router.navigate', {
+        url: '/planning/wh/' + req.params.id,
+        replace: true,
+        trigger: false
+      });
+    }
+
+    viewport.showPage(new WhPage({
       date: req.params.id,
       mrps: req.query.mrps === undefined ? null : req.query.mrps
         .split(/[^A-Z0-9]+/)

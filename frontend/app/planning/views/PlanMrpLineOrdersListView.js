@@ -64,6 +64,11 @@ define([
       },
       'dblclick tr': function(e)
       {
+        if (this.options.mode === 'wh')
+        {
+          return;
+        }
+
         window.getSelection().removeAllRanges();
 
         var trEl = e.currentTarget;
@@ -131,6 +136,10 @@ define([
       'mouseup .planning-mrp-lineOrders-comment': function(e)
       {
         this.$(e.currentTarget).popover('destroy');
+      },
+      'click .planning-mrp-lineOrders-dropZone': function(e)
+      {
+        this.handleDropZoneAction(this.$(e.target).closest('tr').attr('data-id'));
       }
     },
 
@@ -138,7 +147,7 @@ define([
     {
       var view = this;
 
-      view.expanded = false;
+      view.expanded = this.options.mode === 'wh';
 
       view.listenTo(view.mrp.lines, 'reset added changed removed', view.renderIfNotLoading);
 
@@ -153,10 +162,16 @@ define([
 
     serialize: function()
     {
+      var whMode = this.options.mode === 'wh';
+
       return {
         idPrefix: this.idPrefix,
         expanded: this.expanded,
-        orders: this.serializeOrders()
+        orders: this.serializeOrders(),
+        hiddenColumns: {
+          finishTime: whMode,
+          lines: whMode
+        }
       };
     },
 
@@ -174,6 +189,7 @@ define([
       var sapOrders = view.plan.sapOrders;
       var mrp = view.mrp;
       var map = {};
+      var whMode = view.options.mode === 'wh';
 
       mrp.lines.forEach(function(line)
       {
@@ -205,7 +221,10 @@ define([
               comments: sapOrder ? sapOrder.get('comments') : [],
               status: order.getStatus(),
               statuses: view.serializeOrderStatuses(order),
-              dropZone: sapOrder ? sapOrder.getDropZone() : ''
+              dropZone: sapOrder ? sapOrder.getDropZone() : '',
+              rowClassName: whMode && sapOrder
+                ? (sapOrder.get('whStatus') === 'done' ? 'success' : '')
+                : ''
             };
           }
 
@@ -506,6 +525,7 @@ define([
         var whStatus = this.plan.sapOrders.getWhStatus(sapOrder.id);
 
         $order
+          .toggleClass('success', this.options.mode === 'wh' && whStatus === 'done')
           .find('.planning-mrp-list-property-whStatus')
           .attr('title', t('planning', 'orders:whStatus:' + whStatus))
           .attr('data-wh-status', whStatus);

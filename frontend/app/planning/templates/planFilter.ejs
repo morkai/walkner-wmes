@@ -7,6 +7,7 @@
     <label for="<%- idPrefix %>-mrps" class="control-label"><%- t('planning', 'filter:mrps') %></label>
     <input id="<%- idPrefix %>-mrps" name="mrps" value="<%- mrps %>">
   </div>
+  <% if (showToggles) { %>
   <div class="form-group filter-actions">
     <div class="btn-group">
       <button id="<%- idPrefix %>-lineOrdersList" type="button" class="btn btn-default <%- lineOrdersList ? 'active' : '' %>">
@@ -23,6 +24,7 @@
       </button>
     </div>
   </div>
+  <% } %>
   <div class="form-group filter-actions">
     <div id="<%- idPrefix %>-copyOrderList" class="btn-group" role="group">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-clipboard"></i><span><%- t('planning', 'filter:copyOrderList') %></span></button>
@@ -33,6 +35,7 @@
       </ul>
     </div>
   </div>
+  <% if (showStats) { %>
   <div class="form-group" style="flex-grow: 1"></div>
   <div class="form-group">
     <table class="planning-mrp-stats">
@@ -48,4 +51,5 @@
       </tbody>
     </table>
   </div>
+  <% } %>
 </form>

@@ -119,7 +119,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         lines: this.mrp.lines.map(function(line) { return line.id; }),
-        stats: this.mrp.getStats()
+        stats: this.options.stats === false ? null : this.mrp.getStats()
       };
     },
 

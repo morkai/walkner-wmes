@@ -16,8 +16,8 @@ define([
   '../PlanSettings',
   '../PlanDisplayOptions',
   '../views/PlanFilterView',
-  '../views/PlanMrpView',
-  'app/planning/templates/planPage',
+  '../views/WhMrpView',
+  'app/planning/templates/whPage',
   'app/planning/templates/planLegend'
 ], function(
   _,
@@ -35,7 +35,7 @@ define([
   PlanSettings,
   PlanDisplayOptions,
   PlanFilterView,
-  PlanMrpView,
+  WhMrpView,
   pageTemplate,
   legendTemplate
 ) {
@@ -53,11 +53,10 @@ define([
     {
       return [
         {
-          href: '#planning/plans',
-          label: t.bound('planning', 'BREADCRUMBS:base')
+          label: t.bound('planning', 'BREADCRUMBS:wh')
         },
         {
-          href: '#planning/plans/' + this.plan.id,
+          href: '#planning/wh/' + this.plan.id,
           label: this.plan.getLabel(),
           template: function(breadcrumb)
           {
@@ -72,53 +71,13 @@ define([
     actions: function()
     {
       var page = this;
-      var firstShiftMoment = time.getMoment(page.plan.id, 'YYYY-MM-DD').hours(6);
 
       return [
         {
-          label: t.bound('planning', 'PAGE_ACTION:hourlyPlans'),
-          icon: 'calendar',
-          privileges: 'HOURLY_PLANS:VIEW',
-          href: '#hourlyPlans?sort(-date)&limit(20)'
-            + '&date=ge=' + firstShiftMoment.valueOf()
-            + '&date=lt=' + firstShiftMoment.add(1, 'days').valueOf()
-        },
-        {
-          label: t.bound('planning', 'PAGE_ACTION:paintShop'),
-          icon: 'paint-brush',
-          privileges: 'PAINT_SHOP:VIEW',
-          href: '#paintShop/' + page.plan.id
-        },
-        {
-          label: t.bound('planning', 'PAGE_ACTION:wh'),
-          icon: 'truck',
+          label: t.bound('planning', 'PAGE_ACTION:dailyPlan'),
+          icon: 'calculator',
           privileges: 'PLANNING:VIEW',
-          href: '#planning/wh/' + page.plan.id
-        },
-        {
-          label: t.bound('planning', 'PAGE_ACTION:changes'),
-          icon: 'list-ol',
-          href: '#planning/changes?sort(date)&plan=' + page.plan.id
-        },
-        {
-          label: t.bound('planning', 'PAGE_ACTION:settings'),
-          icon: 'cogs',
-          privileges: 'PLANNING:MANAGE',
-          href: '#planning/settings/' + page.plan.id,
-          className: page.plan.isEditable() ? '' : 'disabled',
-          callback: function(e)
-          {
-            if (e.button === 0 && !e.ctrlKey && page.plan.isEditable())
-            {
-              page.broker.publish('router.navigate', {
-                url: '/planning/settings/' + page.plan.id + '?back=1',
-                trigger: true,
-                replace: false
-              });
-
-              return false;
-            }
-          }
+          href: '#planning/plans/' + page.plan.id
         },
         {
           label: t.bound('planning', 'PAGE_ACTION:legend'),
@@ -138,41 +97,14 @@ define([
       {
         this.plan.applyChange(planChange);
       },
-      'planning.generator.started': function(message)
-      {
-        if (message.date === this.plan.id)
-        {
-          this.$msg = viewport.msg.show({
-            type: 'info',
-            text: t('planning', 'MSG:GENERATING')
-          });
-        }
-      },
-      'planning.generator.finished': function(message)
-      {
-        var $msg = this.$msg;
-
-        if ($msg && message.date === this.plan.id)
-        {
-          viewport.msg.hide($msg);
-
-          this.$msg = null;
-        }
-      },
       'orders.synced': function()
       {
         this.reloadOrders();
       },
       'orders.updated.*': function(message)
       {
-        var lateOrder = this.plan.lateOrders.get(message._id);
         var change = message.change;
         var newValues = change.newValues;
-
-        if (lateOrder && typeof newValues.delayReason !== 'undefined')
-        {
-          lateOrder.set('delayReason', newValues.delayReason);
-        }
 
         var sapOrder = this.plan.sapOrders.get(message._id);
 
@@ -196,10 +128,6 @@ define([
 
         sapOrder.set(attrs);
       },
-      'shiftChanged': function(newShift)
-      {
-        this.plan.set('active', time.format(newShift.date, 'YYYY-MM-DD') === this.plan.id);
-      },
       'production.stateChanged.**': function(message)
       {
         this.plan.shiftOrders.update(message);
@@ -216,8 +144,7 @@ define([
     },
 
     localTopics: {
-      'socket.disconnected': function() { reloadProdState = true; },
-      'planning.mrpStatsRecounted': 'scheduleStatRecount'
+      'socket.disconnected': function() { reloadProdState = true; }
     },
 
     events: {
@@ -230,9 +157,7 @@ define([
 
     initialize: function()
     {
-      this.$msg = null;
       this.keysPressed = ['', '', ''];
-      this.lastKeyPressAt = 0;
 
       this.defineModels();
       this.defineViews();
@@ -272,7 +197,6 @@ define([
 
       bindLoadingMessage(plan, page, nlsPrefix + 'plan', nlsDomain);
       bindLoadingMessage(plan.settings, page, nlsPrefix + 'settings', nlsDomain);
-      bindLoadingMessage(plan.lateOrders, page, nlsPrefix + 'lateOrders', nlsDomain);
       bindLoadingMessage(plan.sapOrders, page, nlsPrefix + 'sapOrders', nlsDomain);
       bindLoadingMessage(plan.shiftOrders, page, nlsPrefix + 'shiftOrders', nlsDomain);
       bindLoadingMessage(page.delayReasons, page, nlsPrefix + 'delayReasons', nlsDomain);
@@ -283,7 +207,11 @@ define([
 
     defineViews: function()
     {
-      this.filterView = new PlanFilterView({plan: this.plan});
+      this.filterView = new PlanFilterView({
+        plan: this.plan,
+        toggles: false,
+        stats: false
+      });
 
       this.setView('#-filter', this.filterView);
     },
@@ -312,7 +240,6 @@ define([
         .on('click.' + page.idPrefix, '.paintShop-breadcrumb', this.onBreadcrumbsClick.bind(this));
 
       $(window)
-        .on('resize.' + page.idPrefix, _.debounce(page.onWindowResize.bind(page), 16))
         .on('keydown.' + page.idPrefix, page.onWindowKeyDown.bind(page))
         .on('keyup.' + page.idPrefix, page.onWindowKeyUp.bind(page));
     },
@@ -330,18 +257,8 @@ define([
         plan.settings.fetch(),
         plan.shiftOrders.fetch({reset: true}),
         plan.sapOrders.fetch({reset: true}),
-        plan.lateOrders.fetch({reset: true}),
         plan.fetch()
       );
-    },
-
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix,
-        wrap: this.plan.displayOptions.isListWrappingEnabled(),
-        darker: this.plan.displayOptions.isDarkerThemeUsed()
-      };
     },
 
     afterRender: function()
@@ -364,7 +281,6 @@ define([
           var promise = $.when(
             plan.shiftOrders.fetch({reset: true, reload: true}),
             plan.sapOrders.fetch({reset: true, reload: true}),
-            plan.lateOrders.fetch({reset: true, reload: true}),
             plan.fetch()
           );
 
@@ -389,9 +305,7 @@ define([
       var plan = this.plan;
 
       this.broker.publish('router.navigate', {
-        url: '/planning/plans/' + plan.id
-          + '?mrps=' + plan.displayOptions.get('mrps')
-          + '&sapOrders=' + (plan.displayOptions.isLatestOrderDataUsed() ? '1' : '0'),
+        url: '/planning/wh/' + plan.id + '?mrps=' + plan.displayOptions.get('mrps'),
         replace: true,
         trigger: false
       });
@@ -406,7 +320,7 @@ define([
 
       page.plan.mrps.forEach(function(mrp)
       {
-        var mrpView = new PlanMrpView({
+        var mrpView = new WhMrpView({
           delayReasons: page.delayReasons,
           prodLineStates: productionState.prodLineStates,
           plan: page.plan,
@@ -423,31 +337,11 @@ define([
 
       this.$id('empty').toggleClass('hidden', page.plan.mrps.length > 0);
       this.$id('mrps').toggleClass('hidden', page.plan.mrps.length === 0);
-
-      clearTimeout(this.timers.recountStats);
-
-      this.recountStats();
     },
 
     reloadOrders: function()
     {
-      this.promised(this.plan.lateOrders.fetch({reset: true}));
       this.promised(this.plan.sapOrders.fetch({reset: true}));
-    },
-
-    scheduleStatRecount: function()
-    {
-      if (this.timers.recountStats)
-      {
-        clearTimeout(this.timers.recountStats);
-      }
-
-      this.timers.recountStats = setTimeout(this.recountStats.bind(this), 10);
-    },
-
-    recountStats: function()
-    {
-      this.filterView.recountStats();
     },
 
     toggleLegend: function(btnEl)
@@ -466,8 +360,8 @@ define([
         html: true,
         content: legendTemplate({}),
         template: '<div class="popover planning-legend-popover">'
-          + '<div class="popover-content"></div>'
-          + '</div>'
+        + '<div class="popover-content"></div>'
+        + '</div>'
       });
 
       this.$legendPopover.one('hide.bs.popover', function()
@@ -478,38 +372,6 @@ define([
       this.$legendPopover.popover('show');
 
       btnEl.classList.add('active');
-    },
-
-    toggleLineOrdersList: function()
-    {
-      var $mrps = this.$('.planning-mrp');
-      var oldScrollY = window.scrollY;
-      var scrollToMrpEl = null;
-
-      if ($mrps.length > 1 && oldScrollY > $mrps[0].offsetTop)
-      {
-        scrollToMrpEl = $mrps[$mrps.length - 1];
-
-        if (oldScrollY + window.innerHeight < document.scrollingElement.scrollHeight)
-        {
-          for (var i = 0; i < $mrps.length; ++i)
-          {
-            scrollToMrpEl = $mrps[i];
-
-            if (oldScrollY < scrollToMrpEl.offsetTop + 125)
-            {
-              break;
-            }
-          }
-        }
-      }
-
-      this.plan.displayOptions.toggleLineOrdersList();
-
-      if (scrollToMrpEl)
-      {
-        window.scrollTo(0, scrollToMrpEl.offsetTop - ($mrps[0] === scrollToMrpEl ? 10 : -1));
-      }
     },
 
     onBreadcrumbsClick: function(e)
@@ -690,7 +552,6 @@ define([
       this.plan.mrps.reset([]);
       this.plan.sapOrders.reset([]);
       this.plan.shiftOrders.reset([]);
-      this.plan.lateOrders.reset([]);
       this.plan.orders.reset([]);
       this.plan.lines.reset([]);
 
@@ -701,16 +562,6 @@ define([
     {
       this.updateUrl();
       this.plan.mrps.reset();
-    },
-
-    onWrapListsChanged: function()
-    {
-      this.$el.toggleClass('wrap', this.plan.displayOptions.isListWrappingEnabled());
-    },
-
-    onDarkerThemeChanged: function()
-    {
-      this.$el.toggleClass('planning-darker', this.plan.displayOptions.isDarkerThemeUsed());
     },
 
     onPlanSynced: function()
@@ -740,11 +591,6 @@ define([
       this.timers.reloadOrders = setTimeout(this.reloadOrders.bind(this), 10 * 60 * 1000);
     },
 
-    onWindowResize: function(e)
-    {
-      this.broker.publish('planning.windowResized', e);
-    },
-
     onWindowKeyDown: function(e)
     {
       if (e.keyCode === 32
@@ -769,8 +615,6 @@ define([
         && e.target.tagName !== 'BUTTON'
         && e.target.tagName !== 'A')
       {
-        var skipToggleList = false;
-
         if (e.keyCode >= 48 && e.keyCode <= 90)
         {
           this.keysPressed.shift();
@@ -781,20 +625,10 @@ define([
           if (this.plan.mrps.get(mrpId))
           {
             this.scrollToMrp(mrpId);
-
-            skipToggleList = true;
-          }
-          else
-          {
-            skipToggleList = e.timeStamp - this.lastKeyPressAt <= 500;
           }
         }
 
-        if (!skipToggleList && (e.keyCode === 79 || e.keyCode === 90))
-        {
-          this.toggleLineOrdersList();
-        }
-        else if (e.keyCode === 32)
+        if (e.keyCode === 32)
         {
           if (this.$id('mrpSelector').hasClass('hidden'))
           {
@@ -810,8 +644,6 @@ define([
           this.$('.planning-mrpSelector-row > .btn[data-key="' + (e.keyCode - 48) + '"]').click();
         }
       }
-
-      this.lastKeyPressAt = e.timeStamp;
     }
 
   });

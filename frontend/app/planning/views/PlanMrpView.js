@@ -205,7 +205,8 @@ define([
     {
       this.setView('#-lineOrders', new PlanMrpLineOrdersListView({
         plan: this.plan,
-        mrp: this.mrp
+        mrp: this.mrp,
+        mode: 'plan'
       })).render();
     },
 

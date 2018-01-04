@@ -1,4 +1,5 @@
 <div class="btn-toolbar planning-mrp-toolbar">
+  <% if (stats) { %>
   <div class="btn-group">
     <table class="planning-mrp-stats">
       <tbody>
@@ -13,6 +14,7 @@
       </tbody>
     </table>
   </div>
+  <% } %>
   <div class="btn-group">
     <div id="<%- idPrefix %>-copyOrderList" class="btn-group" role="group">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="<%- t('planning', 'toolbar:copyOrderList') %>"><i class="fa fa-clipboard"></i></button>
