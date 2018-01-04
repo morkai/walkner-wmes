@@ -70,7 +70,6 @@ define([
     {
       return [
         t.bound('paintShop', 'BREADCRUMBS:base'),
-        t.bound('paintShop', 'BREADCRUMBS:queue'),
         {
           href: '#paintShop/' + this.orders.getDateFilter(),
           label: this.orders.getDateFilter('L'),
