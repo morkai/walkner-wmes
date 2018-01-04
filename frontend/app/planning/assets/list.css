@@ -39,12 +39,11 @@
 }
 .planning-list-next,
 .planning-list-prev {
-  padding: 100px 0 100px 15px;
-  font-size: 48px;
-  align-self: center;
+  padding: 100px 15px 100px 30px;
+  font-size: 62px;
 }
 .planning-list-prev {
-  padding: 100px 15px 100px 0;
+  padding: 100px 30px 100px 15px;
 }
 .planning-list-mrp-id {
   font-weight: bold;
