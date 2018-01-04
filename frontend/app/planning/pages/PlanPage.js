@@ -214,9 +214,19 @@ define([
       'planning.mrpStatsRecounted': 'scheduleStatRecount'
     },
 
+    events: {
+      'click #-mrpSelector': 'hideMrpSelector',
+      'click #-mrpSelector .btn': function(e)
+      {
+        this.scrollToMrp(e.currentTarget.dataset.mrp);
+      }
+    },
+
     initialize: function()
     {
       this.$msg = null;
+      this.keysPressed = ['', '', ''];
+      this.lastKeyPressAt = 0;
 
       this.defineModels();
       this.defineViews();
@@ -297,6 +307,7 @@ define([
 
       $(window)
         .on('resize.' + page.idPrefix, _.debounce(page.onWindowResize.bind(page), 16))
+        .on('keydown.' + page.idPrefix, page.onWindowKeyDown.bind(page))
         .on('keyup.' + page.idPrefix, page.onWindowKeyUp.bind(page));
     },
 
@@ -594,6 +605,72 @@ define([
       });
     },
 
+    showMrpSelector: function()
+    {
+      if (this.plan.mrps.length === 1)
+      {
+        return;
+      }
+
+      var grouped = {};
+
+      this.plan.mrps.forEach(function(mrp)
+      {
+        var prefix = mrp.id.substring(0, 2);
+
+        if (!grouped[prefix])
+        {
+          grouped[prefix] = [];
+        }
+
+        grouped[prefix].push(mrp.id);
+      });
+
+      var html = '';
+      var i = 0;
+
+      Object.keys(grouped).sort().forEach(function(prefix)
+      {
+        html += '<div class="planning-mrpSelector-row">';
+
+        grouped[prefix].sort().forEach(function(mrp)
+        {
+          ++i;
+
+          var key = i === 10 ? 0 : i < 10 ? i : -1;
+
+          html += '<button type="button" class="btn btn-default btn-lg" '
+            + 'data-mrp="' + mrp + '" data-key="' + key + '">'
+            + mrp
+            + (key >= 0 ? ('<kbd>' + key + '</kbd>') : '')
+            + '</button>';
+        });
+
+        html += '</div>';
+      });
+
+      this.$('.planning-mrpSelector-mrps').html(html);
+      this.$id('mrpSelector').removeClass('hidden');
+    },
+
+    hideMrpSelector: function()
+    {
+      this.$id('mrpSelector').addClass('hidden');
+    },
+
+    scrollToMrp: function(mrp)
+    {
+      var $mrp = this.$('.planning-mrp[data-id="' + mrp + '"]');
+      var y = $mrp.prop('offsetTop');
+
+      if (!$mrp.prev().length)
+      {
+        y -= 10;
+      }
+
+      $('html, body').animate({scrollTop: y}, 'fast', 'swing');
+    },
+
     onDateFilterChanged: function()
     {
       if (this.layout)
@@ -662,18 +739,73 @@ define([
       this.broker.publish('planning.windowResized', e);
     },
 
+    onWindowKeyDown: function(e)
+    {
+      if (e.keyCode === 32
+        && e.target.tagName !== 'INPUT'
+        && e.target.tagName !== 'TEXTAREA'
+        && e.target.tagName !== 'BUTTON'
+        && e.target.tagName !== 'A')
+      {
+        return false;
+      }
+    },
+
     onWindowKeyUp: function(e)
     {
       if (e.keyCode === 27)
       {
         this.broker.publish('planning.escapePressed');
+        this.hideMrpSelector();
       }
-      else if ((e.keyCode === 79 || e.keyCode === 90)
-        && e.target.tagName !== 'INPUT'
-        && e.target.tagName !== 'TEXTAREA')
+      else if (e.target.tagName !== 'INPUT'
+        && e.target.tagName !== 'TEXTAREA'
+        && e.target.tagName !== 'BUTTON'
+        && e.target.tagName !== 'A')
       {
-        this.toggleLineOrdersList();
+        var skipToggleList = false;
+
+        if (e.keyCode >= 48 && e.keyCode <= 90)
+        {
+          this.keysPressed.shift();
+          this.keysPressed.push(e.originalEvent.key);
+
+          var mrpId = this.keysPressed.join('').toUpperCase();
+
+          if (this.plan.mrps.get(mrpId))
+          {
+            this.scrollToMrp(mrpId);
+
+            skipToggleList = true;
+          }
+          else
+          {
+            skipToggleList = e.timeStamp - this.lastKeyPressAt <= 500;
+          }
+        }
+
+        if (!skipToggleList && (e.keyCode === 79 || e.keyCode === 90))
+        {
+          this.toggleLineOrdersList();
+        }
+        else if (e.keyCode === 32)
+        {
+          if (this.$id('mrpSelector').hasClass('hidden'))
+          {
+            this.showMrpSelector();
+          }
+          else
+          {
+            this.hideMrpSelector();
+          }
+        }
+        else if (e.keyCode >= 48 && e.keyCode <= 57 && !this.$id('mrpSelector').hasClass('hidden'))
+        {
+          this.$('.planning-mrpSelector-row > .btn[data-key="' + (e.keyCode - 48) + '"]').click();
+        }
       }
+
+      this.lastKeyPressAt = e.timeStamp;
     }
 
   });
