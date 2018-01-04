@@ -67,7 +67,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
     const data = req.body;
     const userInfo = userModule.createUserInfo(req.session.user, req);
 
-    editOrder(orderNo, data, userInfo, (err, res) =>
+    editOrder(orderNo, data, userInfo, err =>
     {
       if (err)
       {
