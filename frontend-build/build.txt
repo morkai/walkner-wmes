@@ -369,6 +369,7 @@ app/planning/assets/./settings.css
 app/planning/assets/./list.css
 app/planning/assets/./plan.css
 app/planning/assets/./plan.darker.css
+app/planning/assets/./wh.css
 app/planning/assets/./changes.css
 app/planning/assets/./menu.css
 app/planning/assets/main.css
@@ -388,6 +389,10 @@ app/planning/assets/plan.darker.css
 app/planning/assets/settings.css
 ----------------
 app/planning/assets/settings.css
+
+app/planning/assets/wh.css
+----------------
+app/planning/assets/wh.css
 
 app/pressWorksheets/assets/main.css
 ----------------
@@ -1380,6 +1385,10 @@ app/planning/views/PlanSettingsView.js
 app/planning/pages/PlanSettingsPage.js
 app/planning/templates/change.js
 app/planning/pages/PlanChangesPage.js
+app/planning/templates/whMrp.js
+app/planning/views/WhMrpView.js
+app/planning/templates/whPage.js
+app/planning/pages/WhPage.js
 app/nls/planning.js
 app/nls/pl/planning.js
 i18n!app/nls/planning
