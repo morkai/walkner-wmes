@@ -328,16 +328,16 @@ define([
 
       users.forEach(function(user)
       {
-        var label = user.firstName || '';
+        var label = user.lastName || '';
 
-        if (user.lastName.length)
+        if (user.firstName.length)
         {
           if (label.length)
           {
             label += ' ';
           }
 
-          label += user.lastName;
+          label += user.firstName;
         }
 
         if (user.personellId)
