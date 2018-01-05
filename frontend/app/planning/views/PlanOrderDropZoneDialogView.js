@@ -68,6 +68,7 @@ define([
           ? time.utc.format(sapOrder.get('whTime'), 'HH:mm')
           : time.format(Date.now(), 'HH:mm'),
         orders: orders.join(', '),
+        canChangeDropZone: this.plan.canChangeWhDropZone(),
         canChangeStatus: this.plan.canChangeWhStatus()
       };
     },
@@ -95,6 +96,12 @@ define([
       if (!whTime)
       {
         whDropZone = '';
+      }
+
+      if (!view.plan.canChangeWhDropZone())
+      {
+        whDropZone = undefined;
+        whTime = undefined;
       }
 
       var req = view.ajax({
@@ -140,7 +147,10 @@ define([
 
     onDialogShown: function()
     {
-      this.$id('dropZone').focus();
+      if (this.plan.canChangeWhDropZone())
+      {
+        this.$id('dropZone').focus();
+      }
     }
 
   });

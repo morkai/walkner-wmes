@@ -230,7 +230,20 @@ define([
 
     canChangeDropZone: function()
     {
-      return this.canCommentOrders();
+      return user.isAllowedTo(
+        'ORDERS:MANAGE',
+        'PLANNING:PLANNER', 'PLANNING:WHMAN',
+        'FN:master', 'FN:leader'
+      );
+    },
+
+    canChangeWhDropZone: function()
+    {
+      return user.isAllowedTo(
+        'ORDERS:MANAGE',
+        'PLANNING:PLANNER',
+        'FN:master', 'FN:leader'
+      );
     },
 
     canChangeWhStatus: function()
