@@ -115,10 +115,13 @@ define([
       view.listenTo(view.mrp.orders, 'highlight', view.onOrderHighlight);
       view.listenTo(view.mrp.orders, 'change:incomplete', view.onIncompleteChange);
 
-      view.listenTo(view.prodLineState, 'change:online', view.onOnlineChange);
-      view.listenTo(view.prodLineState, 'change:state', view.updateShiftState);
-      view.listenTo(view.prodLineState, 'change:prodShift', view.updateShiftState);
-      view.listenTo(view.prodLineState, 'change:prodShiftOrders', view.updateShiftState);
+      if (view.prodLineState)
+      {
+        view.listenTo(view.prodLineState, 'change:online', view.onOnlineChange);
+        view.listenTo(view.prodLineState, 'change:state', view.updateShiftState);
+        view.listenTo(view.prodLineState, 'change:prodShift', view.updateShiftState);
+        view.listenTo(view.prodLineState, 'change:prodShiftOrders', view.updateShiftState);
+      }
     },
 
     destroy: function()
