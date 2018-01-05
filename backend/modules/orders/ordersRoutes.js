@@ -24,7 +24,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
   const canManage = userModule.auth('ORDERS:MANAGE');
   const canEdit = userModule.auth(
     'ORDERS:MANAGE',
-    'PLANNING:PLANNER', 'PLANNING:WHMAN',
+    'PLANNING:PLANNER', 'PLANNING:WHMAN', 'PAINT_SHOP:PAINTER',
     'FN:master', 'FN:leader'
   );
 

@@ -205,11 +205,7 @@ define([
 
     canCommentOrders: function()
     {
-      return user.isAllowedTo(
-        'ORDERS:MANAGE',
-        'PLANNING:PLANNER', 'PLANNING:WHMAN',
-        'FN:master', 'FN:leader'
-      );
+      return user.can.commentOrders();
     },
 
     canFreezeOrders: function()

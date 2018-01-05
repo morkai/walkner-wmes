@@ -344,6 +344,17 @@ function(
     };
   };
 
+  user.can = {
+    commentOrders: function()
+    {
+      return user.isAllowedTo(
+        'ORDERS:MANAGE',
+        'PLANNING:PLANNER', 'PLANNING:WHMAN', 'PAINT_SHOP:PAINTER',
+        'FN:master', 'FN:leader'
+      );
+    }
+  };
+
   window.user = user;
 
   return user;

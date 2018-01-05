@@ -6,6 +6,7 @@ define([
   'app/time',
   'app/i18n',
   'app/viewport',
+  'app/user',
   'app/data/orderStatuses',
   'app/core/View',
   './OrderCommentFormView',
@@ -26,6 +27,7 @@ define([
   time,
   t,
   viewport,
+  user,
   orderStatuses,
   View,
   OrderCommentFormView,
@@ -99,7 +101,8 @@ define([
         changes: this.serializeChanges(),
         renderChange: renderChange,
         renderPropertyLabel: this.renderPropertyLabel,
-        renderValueChange: this.renderValueChange
+        renderValueChange: this.renderValueChange,
+        canComment: user.can.commentOrders()
       };
     },
 

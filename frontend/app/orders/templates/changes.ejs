@@ -14,7 +14,7 @@
         <th><%- t('orders', 'CHANGES:newValue') %>
       </tr>
     </thead>
-    <% if (user.isAllowedTo('ORDERS:MANAGE', 'PLANNING:PLANNER', 'FN:master', 'FN:leader')) { %>
+    <% if (canComment) { %>
     <tfoot>
       <tr>
         <td class="orders-commentForm-container" colspan="5"></td>
