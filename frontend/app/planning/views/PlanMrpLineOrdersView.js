@@ -194,7 +194,9 @@ define([
 
     serializeProdState: function()
     {
-      if (!this.plan.isProdStateUsed())
+      var prodLineState = this.prodLineState;
+
+      if (!prodLineState || !this.plan.isProdStateUsed())
       {
         return {
           online: '',
@@ -204,7 +206,6 @@ define([
         };
       }
 
-      var prodLineState = this.prodLineState;
       var prodShift = prodLineState.get('prodShift');
       var prodShiftOrder = prodLineState.getCurrentOrder();
 
@@ -520,7 +521,7 @@ define([
     {
       var $hd = this.$('.planning-mrp-list-hd').removeClass('is-online is-offline');
 
-      if (this.plan.isProdStateUsed())
+      if (this.prodLineState && this.plan.isProdStateUsed())
       {
         $hd.addClass('is-' + (this.prodLineState.get('online') ? 'online' : 'offline'));
       }
@@ -528,7 +529,7 @@ define([
 
     updateShiftOrder: function(planShiftOrder)
     {
-      if (!this.plan.isProdStateUsed() || planShiftOrder.get('prodLine') !== this.line.id)
+      if (!this.prodLineState || !this.plan.isProdStateUsed() || planShiftOrder.get('prodLine') !== this.line.id)
       {
         return;
       }
