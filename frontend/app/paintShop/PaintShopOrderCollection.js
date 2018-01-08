@@ -23,9 +23,11 @@ define([
 
     comparator: 'no',
 
-    initialize: function()
+    initialize: function(models, options)
     {
-      this.selectedMrp = 'all';
+      this.paints = options ? options.paints : null;
+      this.selectedMrp = options && options.selectedMrp ? options.selectedMrp : 'all';
+
       this.allMrps = null;
       this.serializedList = null;
       this.serializedMap = null;
@@ -118,11 +120,11 @@ define([
       });
     },
 
-    serialize: function()
+    serialize: function(force)
     {
       var orders = this;
 
-      if (orders.serializedList)
+      if (!force && orders.serializedList)
       {
         return orders.serializedList;
       }
@@ -142,7 +144,7 @@ define([
 
       orders.forEach(function(order)
       {
-        var serializedOrder = serializedMap[order.id] = order.serialize(true);
+        var serializedOrder = serializedMap[order.id] = order.serialize(true, orders.paints);
 
         serializedOrder.followups = serializedOrder.followups
           .filter(function(followupId) { return !!orders.get(followupId); })
@@ -328,9 +330,9 @@ define([
 
   }, {
 
-    forDate: function(date)
+    forDate: function(date, options)
     {
-      return new this(null, {rqlQuery: 'sort(date,no)&limit(0)&date=' + date});
+      return new this(null, _.assign({rqlQuery: 'sort(date,no)&limit(0)&date=' + date}, options));
     }
 
   });

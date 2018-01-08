@@ -57,7 +57,7 @@ define([
       this.lastClickEvent = null;
       this.lastVisibleItem = null;
 
-      this.listenTo(this.model, 'reset', this.render);
+      this.listenTo(this.model, 'reset', _.after(2, this.render));
       this.listenTo(this.model, 'change', this.onChange);
       this.listenTo(this.model, 'mrpSelected', this.onMrpSelected);
     },

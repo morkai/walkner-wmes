@@ -14,6 +14,7 @@ define([
   'app/data/clipboard',
   'app/production/views/VkbView',
   'app/planning/util/contextMenu',
+  'app/paintShopPaints/PaintShopPaintCollection',
   '../PaintShopOrder',
   '../PaintShopOrderCollection',
   '../PaintShopDropZoneCollection',
@@ -38,6 +39,7 @@ define([
   clipboard,
   VkbView,
   contextMenu,
+  PaintShopPaintCollection,
   PaintShopOrder,
   PaintShopOrderCollection,
   PaintShopDropZoneCollection,
@@ -93,6 +95,11 @@ define([
           type: 'link',
           icon: 'arrows-alt',
           callback: this.toggleFullscreen.bind(this)
+        }, {
+          icon: 'paint-brush',
+          href: '#paintShop/paints',
+          privileges: 'PAINT_SHOP:MANAGE',
+          label: t('paintShop', 'PAGE_ACTIONS:paints')
         });
       }
 
@@ -138,6 +145,23 @@ define([
       'paintShop.dropZones.updated.*': function(message)
       {
         this.dropZones.updated(message);
+      },
+      'paintShop.paints.added': function(message)
+      {
+        this.paints.add(message.model);
+      },
+      'paintShop.paints.edited': function(message)
+      {
+        var paint = this.paints.get(message.model._id);
+
+        if (paint)
+        {
+          paint.set(message.model);
+        }
+      },
+      'paintShop.paints.deleted': function(message)
+      {
+        this.paints.remove(message.model._id);
       }
     },
 
@@ -236,9 +260,15 @@ define([
 
     defineModels: function()
     {
-      this.orders = _.assign(bindLoadingMessage(PaintShopOrderCollection.forDate(this.options.date), this), {
-        selectedMrp: this.options.selectedMrp || 'all'
-      });
+      this.paints = bindLoadingMessage(
+        new PaintShopPaintCollection(null, {rqlQuery: 'limit(0)'}),
+        this,
+        'MSG:LOADING_FAILURE:paints'
+      );
+      this.orders = bindLoadingMessage(PaintShopOrderCollection.forDate(this.options.date, {
+        selectedMrp: this.options.selectedMrp || 'all',
+        paints: this.paints
+      }), this);
       this.dropZones = bindLoadingMessage(
         PaintShopDropZoneCollection.forDate(this.options.date),
         this,
@@ -297,12 +327,14 @@ define([
       var page = this;
       var idPrefix = page.idPrefix;
 
-      page.listenTo(page.orders, 'reset', this.onOrdersReset);
+      page.listenTo(page.orders, 'reset', _.after(2, this.onOrdersReset));
       page.listenTo(page.orders, 'mrpSelected', this.onMrpSelected);
       page.listenTo(page.orders, 'totalsRecounted', this.renderTotals);
 
-      page.listenTo(page.dropZones, 'reset', this.renderTabs);
+      page.listenTo(page.dropZones, 'reset', _.after(2, this.renderTabs));
       page.listenTo(page.dropZones, 'updated', this.onDropZoneUpdated);
+
+      page.listenTo(page.paints, 'add change remove', this.onPaintUpdated);
 
       page.listenTo(page.queueView, 'actionRequested', this.onActionRequested);
 
@@ -312,17 +344,23 @@ define([
       $(window)
         .on('resize.' + idPrefix, this.onResize);
 
-      if (IS_EMBEDDED)
+      page.once('afterRender', function()
       {
-        page.once('afterRender', function() { window.parent.postMessage({type: 'ready', app: 'paintShop'}, '*'); });
-      }
+        if (IS_EMBEDDED)
+        {
+          window.parent.postMessage({type: 'ready', app: 'paintShop'}, '*');
+        }
+
+        page.onOrdersReset();
+      });
     },
 
     load: function(when)
     {
       return when(
         this.orders.fetch({reset: true}),
-        this.dropZones.fetch({reset: true})
+        this.dropZones.fetch({reset: true}),
+        this.paints.fetch({reset: true})
       );
     },
 
@@ -932,6 +970,12 @@ define([
     {
       this.$('.paintShop-tab[data-mrp="' + dropZone.get('mrp') + '"]')
         .toggleClass('is-dropped', dropZone.get('state'));
+    },
+
+    onPaintUpdated: function()
+    {
+      this.orders.serialize(true);
+      this.orders.trigger('reset');
     },
 
     onBreadcrumbsClick: function(e)

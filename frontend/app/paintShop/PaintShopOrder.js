@@ -44,7 +44,7 @@ define([
 
     parse: parse,
 
-    serialize: function(force)
+    serialize: function(force, paints)
     {
       var order = this;
 
@@ -54,6 +54,11 @@ define([
         && order.collection.serializedMap[this.id])
       {
         return order.collection.serializedMap[this.id];
+      }
+
+      if (!paints && order.collection && order.collection.paints)
+      {
+        paints = order.collection.paints;
       }
 
       var obj = order.toJSON();
@@ -77,6 +82,18 @@ define([
           }
 
           obj.paintCount += component.unit === 'G' || component === 'KG' ? 1 : 0;
+
+          var paint = paints ? paints.get(component.nc12) : null;
+
+          if (paint)
+          {
+            component.name = paint.get('name');
+            component.placement = paint.get('shelf') + ', ' + paint.get('bin');
+          }
+          else
+          {
+            component.placement = '';
+          }
 
           components.push(component);
         });

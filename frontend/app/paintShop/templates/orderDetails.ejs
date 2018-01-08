@@ -5,13 +5,14 @@
     <th><%- t('paintShop', 'PROPERTY:order') %></th>
     <th><%- t('paintShop', 'PROPERTY:nc12') %></th>
     <th colspan="2"><%- t('paintShop', 'PROPERTY:qty') %></th>
-    <th colspan="3"><%- t('paintShop', 'PROPERTY:name') %></th>
+    <th><%- t('paintShop', 'PROPERTY:name') %></th>
+    <th colspan="3"><%- t('paintShop', 'PROPERTY:placement') %></th>
   </tr>
   </thead>
   <% if (canAct) { %>
   <tfoot>
   <tr>
-    <td colspan="8">
+    <td colspan="9">
       <div class="paintShop-orderDetails-actions">
         <% if (order.status === 'new') { %>
         <button class="btn btn-info" type="button" data-action="start"><%- t('paintShop', 'action:start') %></button>
@@ -45,7 +46,7 @@
   <% if (canAct) { %>
   <tbody>
   <tr>
-    <td id="<%- idPrefix %>-filler" class="paintShop-orderDetails-filler" colspan="8" style="height: <%- fillerHeight %>px"></td>
+    <td id="<%- idPrefix %>-filler" class="paintShop-orderDetails-filler" colspan="9" style="height: <%- fillerHeight %>px"></td>
   </tr>
   </tbody>
   <% } %>

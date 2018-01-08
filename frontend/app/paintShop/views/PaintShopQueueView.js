@@ -72,7 +72,7 @@ define([
       this.lastClickEvent = null;
       this.lastFocusedOrder = null;
 
-      this.listenTo(this.orders, 'reset', this.render);
+      this.listenTo(this.orders, 'reset', _.after(2, this.render));
       this.listenTo(this.orders, 'change', this.onChange);
       this.listenTo(this.orders, 'focus', this.onFocus);
       this.listenTo(this.orders, 'mrpSelected', this.onMrpSelected);

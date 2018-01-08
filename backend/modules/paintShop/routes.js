@@ -14,20 +14,24 @@ module.exports = function setUpPaintShopRoutes(app, module)
   const PaintShopEvent = mongoose.model('PaintShopEvent');
   const PaintShopOrder = mongoose.model('PaintShopOrder');
   const PaintShopDropZone = mongoose.model('PaintShopDropZone');
+  const PaintShopPaint = mongoose.model('PaintShopPaint');
 
   const canView = userModule.auth('LOCAL', 'PAINT_SHOP:VIEW', 'PLANNING:VIEW');
   const canUpdate = userModule.auth('LOCAL', 'PAINT_SHOP:PAINTER', 'PAINT_SHOP:MANAGE');
   const canManage = userModule.auth('PAINT_SHOP:MANAGE');
   const canManageDropZones = userModule.auth('PAINT_SHOP:DROP_ZONES');
 
+  // Queues
   express.post('/paintShop/:id;generate', canManage, generateRoute);
 
+  // Events
   express.get(
     '/paintShop/events',
     canView,
     express.crud.browseRoute.bind(null, app, PaintShopEvent)
   );
 
+  // Orders
   express.get(
     '/paintShop/orders',
     canView,
@@ -66,6 +70,7 @@ module.exports = function setUpPaintShopRoutes(app, module)
 
   express.patch('/paintShop/orders/:id', canUpdate, updatePaintShopOrderRoute);
 
+  // Drop zones
   express.get(
     '/paintShop/dropZones',
     canView,
@@ -73,6 +78,17 @@ module.exports = function setUpPaintShopRoutes(app, module)
   );
 
   express.post('/paintShop/dropZones/:date/:mrp', canManageDropZones, updateDropZoneRoute);
+
+  // Paints
+  express.get('/paintShop/paints', canView, express.crud.browseRoute.bind(null, app, PaintShopPaint));
+
+  express.post('/paintShop/paints', canManage, express.crud.addRoute.bind(null, app, PaintShopPaint));
+
+  express.get('/paintShop/paints/:id', canView, express.crud.readRoute.bind(null, app, PaintShopPaint));
+
+  express.put('/paintShop/paints/:id', canManage, express.crud.editRoute.bind(null, app, PaintShopPaint));
+
+  express.delete('/paintShop/paints/:id', canManage, express.crud.deleteRoute.bind(null, app, PaintShopPaint));
 
   function prepareCurrentDate(req, res, next)
   {

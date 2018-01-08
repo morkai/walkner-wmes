@@ -20,6 +20,24 @@ define([
 
   router.map('/paintShop/:date', user.auth('LOCAL', 'PAINT_SHOP:VIEW'), function(req)
   {
+    if (req.params.date === 'paints')
+    {
+      viewport.loadPage(
+        [
+          'app/paintShopPaints/PaintShopPaintCollection',
+          'app/paintShopPaints/pages/PaintShopPaintListPage'
+        ],
+        function(PaintShopPaintCollection, PaintShopPaintListPage)
+        {
+          return new PaintShopPaintListPage({
+            collection: new PaintShopPaintCollection(null, {rqlQuery: req.rql})
+          });
+        }
+      );
+
+      return;
+    }
+
     if (req.params.date === 'current')
     {
       req.params.date = '0d';

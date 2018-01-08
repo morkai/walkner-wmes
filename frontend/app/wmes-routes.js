@@ -69,6 +69,7 @@ define([
   './changelog/routes',
   './isaPalletKinds/routes',
   './isa/routes',
+  './paintShopPaints/routes',
   './paintShop/routes',
   './qiResults/routes',
   './qiKinds/routes',

@@ -154,7 +154,8 @@ exports.events = {
       'opinionSurveys.*.deleted',
       'qi.*.deleted',
       'd8.*.deleted',
-      'orderDocuments.tree.filePurged', 'orderDocuments.tree.folderPurged'
+      'orderDocuments.tree.filePurged', 'orderDocuments.tree.folderPurged',
+      'paintShop.paints.deleted'
     ],
     error: [
       '*.syncFailed',
@@ -230,7 +231,7 @@ exports.pubsub = {
     'heff.**',
     'paintShop.events.saved',
     'paintShop.orders.changed.*', 'paintShop.orders.updated.*',
-    'paintShop.dropZones.updated.*',
+    'paintShop.dropZones.updated.*', 'paintShop.paints.*',
     'vis.**',
     'mor.**',
     'planning.**'
@@ -273,7 +274,7 @@ exports.mongoose = {
     'pscsResult',
     'd8Entry', 'd8Area', 'd8EntrySource', 'd8ProblemSource',
     'heffLineState',
-    'paintShopEvent', 'paintShopOrder', 'paintShopDropZone',
+    'paintShopEvent', 'paintShopOrder', 'paintShopDropZone', 'paintShopPaint',
     'behaviorObsCard', 'minutesForSafetyCard',
     'visNodePosition',
     'planSettings', 'planChange', 'plan'

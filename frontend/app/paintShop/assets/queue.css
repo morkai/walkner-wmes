@@ -163,6 +163,9 @@ td.paintShop-property[data-property="unit"] {
 td.paintShop-property[data-property="name"] {
   width: 350px;
 }
+td.paintShop-property[data-property="placement"] {
+  width: 70px;
+}
 td.paintShop-property[data-property="mrpTimePlacement"] {
   width: 80px;
 }

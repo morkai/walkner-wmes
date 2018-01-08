@@ -45,9 +45,12 @@ define([
 
       this.view = new ListViewClass({
         collection: this.collection,
-        columns: this.options.columns || ListViewClass.prototype.columns,
-        serializeRow: this.options.serializeRow || ListViewClass.prototype.serializeRow,
-        className: this.options.listClassName || ListViewClass.prototype.className || 'is-clickable'
+        columns: this.options.columns || this.columns || ListViewClass.prototype.columns,
+        serializeRow: this.options.serializeRow || this.serializeRow || ListViewClass.prototype.serializeRow,
+        className: this.options.listClassName
+          || this.listClassName
+          || ListViewClass.prototype.className
+          || 'is-clickable'
       });
     },
 
