@@ -69,21 +69,48 @@ define([
 
     _.forEach(users, function(newUser)
     {
-      var mappedUser = map[newUser.searchName];
+      var searchName = newUser.searchName;
+      var mappedUser = map[searchName];
 
+      // First
       if (!mappedUser)
       {
-        map[newUser.searchName] = newUser;
+        map[searchName] = newUser;
 
         return;
       }
 
-      if (mappedUser.company === 'PHILIPS' || (mappedUser.email && !newUser.email))
+      // Prefer active users
+      if (mappedUser.active === false && newUser.active === true)
+      {
+        map[searchName] = newUser;
+
+        return;
+      }
+
+      if (mappedUser.active === true && newUser.active === false)
       {
         return;
       }
 
-      map[newUser.searchName] = newUser;
+      // Prefer users with e-mail
+      if (!mappedUser.email && newUser.email)
+      {
+        map[searchName] = newUser;
+
+        return;
+      }
+
+      if (mappedUser.email && !newUser.email)
+      {
+        return;
+      }
+
+      // Prefer users from PHILIPS
+      if (mappedUser.company !== 'PHILIPS' && newUser.company === 'PHILIPS')
+      {
+        map[searchName] = newUser;
+      }
     });
 
     return _.values(map);
