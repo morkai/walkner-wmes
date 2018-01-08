@@ -8,6 +8,7 @@ const util = require('../reports/util');
 
 module.exports = function(mongoose, options, done)
 {
+  const User = mongoose.model('User');
   const KaizenOrder = mongoose.model('KaizenOrder');
 
   let minGroupKey = Number.MAX_VALUE;
@@ -176,18 +177,20 @@ module.exports = function(mongoose, options, done)
 
   function incOwner(ownersProperty, statusProperty, owner)
   {
-    results.users[owner.id] = owner.label;
+    const id = User.transliterateName(owner.label);
 
-    if (!results[ownersProperty][owner.id])
+    results.users[id] = owner.label;
+
+    if (!results[ownersProperty][id])
     {
-      results[ownersProperty][owner.id] = {
+      results[ownersProperty][id] = {
         open: 0,
         finished: 0,
         cancelled: 0
       };
     }
 
-    results[ownersProperty][owner.id][statusProperty] += 1;
+    results[ownersProperty][id][statusProperty] += 1;
   }
 
   function sortOwners(unsorted)

@@ -13,7 +13,6 @@ module.exports = function(mongoose, options, done)
 
   const results = {
     options: options,
-    users: {},
     divisions: {},
     groups: {}
   };

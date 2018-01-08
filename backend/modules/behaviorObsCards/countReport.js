@@ -8,6 +8,7 @@ const util = require('../reports/util');
 
 module.exports = function(mongoose, options, done)
 {
+  const User = mongoose.model('User');
   const KaizenSection = mongoose.model('KaizenSection');
   const BehaviorObsCard = mongoose.model('BehaviorObsCard');
 
@@ -132,6 +133,7 @@ module.exports = function(mongoose, options, done)
 
   function handleBehaviorObsCard(card)
   {
+    const observer = User.transliterateName(card.observer.label);
     const totals = results.totals;
     const groupKey = util.createGroupKey(options.interval, card[groupProperty], false);
     let group = results.groups[groupKey];
@@ -151,13 +153,13 @@ module.exports = function(mongoose, options, done)
       group = results.groups[groupKey] = createGroup(groupKey);
     }
 
-    if (!results.users[card.observer.id])
+    if (!results.users[observer])
     {
-      results.users[card.observer.id] = card.observer.label;
-      results.totals.observers[card.observer.id] = 0;
+      results.users[observer] = card.observer.label;
+      results.totals.observers[observer] = 0;
     }
 
-    results.totals.observers[card.observer.id] += 1;
+    results.totals.observers[observer] += 1;
 
     if (!results.sections[card.section])
     {
@@ -166,12 +168,12 @@ module.exports = function(mongoose, options, done)
 
     inc('count');
 
-    if (!group.observers[card.observer.id])
+    if (!group.observers[observer])
     {
-      group.observers[card.observer.id] = 0;
+      group.observers[observer] = 0;
     }
 
-    group.observers[card.observer.id] += 1;
+    group.observers[observer] += 1;
 
     card.observations.forEach(o =>
     {

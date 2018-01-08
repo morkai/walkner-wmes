@@ -8,6 +8,7 @@ const util = require('../reports/util');
 
 module.exports = function(mongoose, options, done)
 {
+  const User = mongoose.model('User');
   const KaizenOrder = mongoose.model('KaizenOrder');
   const Suggestion = mongoose.model('Suggestion');
   const BehaviorObsCard = mongoose.model('BehaviorObsCard');
@@ -245,7 +246,7 @@ module.exports = function(mongoose, options, done)
       group = results.groups[key] = {};
     }
 
-    const user = owner.label.replace(/[^A-Za-z]+/g, '').toLowerCase();
+    const user = User.transliterateName(owner.label);
 
     if (!results.users[user])
     {

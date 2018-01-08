@@ -116,10 +116,7 @@ module.exports = function setupUserModel(app, mongoose)
 
   userSchema.pre('save', function(next)
   {
-    this.searchName = transliteration
-      .transliterate(this.lastName + this.firstName, {unknown: '?'})
-      .replace(/[^a-zA-Z]+/g, '')
-      .toUpperCase();
+    this.searchName = userSchema.statics.transliterateName(this.lastName + this.firstName);
 
     next();
   });
@@ -129,6 +126,14 @@ module.exports = function setupUserModel(app, mongoose)
     delete leanModel.password;
 
     return leanModel;
+  };
+
+  userSchema.statics.transliterateName = function(name)
+  {
+    return transliteration
+      .transliterate(name, {unknown: '?'})
+      .replace(/[^a-zA-Z]+/g, '')
+      .toUpperCase();
   };
 
   mongoose.model('User', userSchema);

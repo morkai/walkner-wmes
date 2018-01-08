@@ -8,6 +8,7 @@ const util = require('../reports/util');
 
 module.exports = function(mongoose, options, done)
 {
+  const User = mongoose.model('User');
   const Suggestion = mongoose.model('Suggestion');
 
   const groupProperty = 'date';
@@ -161,21 +162,23 @@ module.exports = function(mongoose, options, done)
 
     if (confirmer)
     {
-      results.users[confirmer.id] = confirmer.label;
+      const id = User.transliterateName(confirmer.label);
 
-      if (!totals.confirmer[confirmer.id])
+      results.users[id] = confirmer.label;
+
+      if (!totals.confirmer[id])
       {
-        totals.confirmer[confirmer.id] = 0;
+        totals.confirmer[id] = 0;
       }
 
-      totals.confirmer[confirmer.id] += 1;
+      totals.confirmer[id] += 1;
 
-      if (!group.confirmer[confirmer.id])
+      if (!group.confirmer[id])
       {
-        group.confirmer[confirmer.id] = 0;
+        group.confirmer[id] = 0;
       }
 
-      group.confirmer[confirmer.id] += 1;
+      group.confirmer[id] += 1;
     }
 
     incOwners('suggestion', s.suggestionOwners);
@@ -231,23 +234,25 @@ module.exports = function(mongoose, options, done)
 
       _.forEach(owners, function(owner)
       {
-        results.users[owner.id] = owner.label;
+        const id = User.transliterateName(owner.label);
 
-        if (!totalsByOwner[owner.id])
+        results.users[id] = owner.label;
+
+        if (!totalsByOwner[id])
         {
-          totalsByOwner[owner.id] = {total: 0};
+          totalsByOwner[id] = {total: 0};
         }
 
-        totalsByOwner[owner.id].total += 1;
-        totalsByOwner[owner.id][type] = (totalsByOwner[owner.id][type] || 0) + 1;
+        totalsByOwner[id].total += 1;
+        totalsByOwner[id][type] = (totalsByOwner[id][type] || 0) + 1;
 
-        if (!groupByOwner[owner.id])
+        if (!groupByOwner[id])
         {
-          groupByOwner[owner.id] = {total: 0};
+          groupByOwner[id] = {total: 0};
         }
 
-        groupByOwner[owner.id].total += 1;
-        groupByOwner[owner.id][type] = (groupByOwner[owner.id][type] || 0) + 1;
+        groupByOwner[id].total += 1;
+        groupByOwner[id][type] = (groupByOwner[id][type] || 0) + 1;
       });
     }
   }
