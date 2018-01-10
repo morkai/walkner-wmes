@@ -204,7 +204,7 @@ exports.start = function startFteModule(app, module)
         if (changedLines.length)
         {
           pipeline.push({$match: {
-            'lines._id': {$in: changedLines.map(l => l._id)}
+            'lines._id': {$in: changedLines}
           }});
         }
 
