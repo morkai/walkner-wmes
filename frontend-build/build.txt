@@ -1241,6 +1241,9 @@ app/isa/templates/messages/acceptSuccess.js
 app/isa/templates/messages/finishSuccess.js
 app/isa/pages/IsaLineStatePage.js
 app/isa/routes.js
+app/paintShopPaints/PaintShopPaint.js
+app/paintShopPaints/PaintShopPaintCollection.js
+app/paintShopPaints/routes.js
 app/core/util/html2pdf.js
 app/data/clipboard.js
 app/planning/templates/contextMenu.js

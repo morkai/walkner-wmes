@@ -1,99 +1,87 @@
-<h1>v0.118.0</h1>
-<h2><%- time.format('2017-12-03', 'LL') %></h2>
-<h3>Baza testów</h3>
+<h1>v0.119.0</h1>
+<h2><%- time.format('2018-01-10', 'LL') %></h2>
+<h3>Nieprawidłowe zlecenia IPT</h3>
 <ul>
-  <li>Poprawiono błąd powodujący wywalenie się serwera, jeżeli wyfiltrowano listę klientów tak, by była pusta.</li>
-  <li>Zmieniono aktualizację klientów tak, aby nie była dostępna dla klientów uruchomionych na Raspberry Pi.</li>
-</ul>
-<h3>Obserwacje</h3>
-<ul>
-  <li>Usunięto oznaczenie wymaganego pola z pól: 'Co zauważono?' oraz '"Trudne" do zmiany zachowania oraz warunki pracy'.</li>
-  <li>Poprawiono błąd powodujący niewyświetlanie wartości 'Co zaobserwowano' na liście, jeżeli dana karta ma same łatwe obserwacje.</li>
-  <li>Zmieniono listę obserwacji tak, aby kliknięcie na kolumnę pokazującą/ukrywającą szczegóły pokazywała szczegóły
-    zamiast je ukrywać, jeżeli wcześniej szczegóły były widoczne i kliknięto na inną kolumnę.</li>
-  <li>Dodano nowe pole: Mistrz (przełożony obserwatora).</li>
-</ul>
-<h3>Monitoring</h3>
-<ul>
-  <li>Poprawiono błąd powodujący niepotrzebne ładowanie danych produkcyjnych przez wszystkich użytkowników
-    po zmianach w strukturze organizacyjnej.</li>
-</ul>
-<h3>Wydajność godzinowa</h3>
-<ul>
-  <li>Zmieniono aplikację tak, aby nie łączyła się z serwerem, jeżeli nie wybrano linii produkcyjnej.</li>
-</ul>
-<h3>Zlecenia reszty działów</h3>
-<ul>
-  <li>Zmieniono domyślny filtr Od-Do listy na aktualny dzień zamiast aktualny i jutrzejszy.</li>
-  <li>Zmieniono drukowanie zleceń na generowanie pliku w formacie PDF a nie HTML.</li>
-  <li>Zmieniono importowanie zleceń tak, aby usuwanie przesuniętych zleceń odbywało się po dacie planowanego wykonania,
-    a nie podstawowej.</li>
-  <li>Dodano możliwość komentowania zleceń dla Mistrzów oraz Liderów.</li>
-</ul>
-<h3>FTE (produkcja)</h3>
-<ul>
-  <li>Dodano kopiowanie wartości Zamówienia z poprzednich wpisów.</li>
-</ul>
-<h3>FTE (inne)</h3>
-<ul>
-  <li>Poprawiono błąd powodujący podwójne liczenie wartości FTE dla zadań, które mają podzadania.</li>
-</ul>
-<h3>Karty pracy</h3>
-<ul>
-  <li>Dodano wyświetlanie wartości RBH (MT) dla wszystkich zleceń w karcie.</li>
-</ul>
-<h3>Raporty > Wskaźniki</h3>
-<ul>
-  <li>Dodano wyświetlanie wartości RBH (MT) w pierwszym wykresie dla jednostek organizacyjnych w dziale typu Malarnia.</li>
-</ul>
-<h3>Raporty > Operatorzy</h3>
-<ul>
-  <li>Poprawiono błąd powodujący wyświetlanie po odświeżeniu strony ID użytkownika w filtrze Mistrzowie/Operatorzy zamiast imienia i nazwiska.</li>
-  <li>Dodano filtr: Zmiany.</li>
-  <li>Dodano podział czasu: Zmiana</li>
-</ul>
-<h3>Dokumentacja > Dokumenty</h3>
-<ul>
-  <li>Poprawiono błąd uniemożliwiający zaznaczenie wyniku wyszukiwania.</li>
-  <li>Zmieniono serwowanie plików z katalogu tak, aby serwowany był źródłowy plik PDF, jeżeli dokument o danym 15NC
-    istnieje w katalogu, ale jego konwersja na obrazy się nie powiodła.</li>
-</ul>
-<h3>Dane produkcyjne > Zmiany</h3>
-<ul>
-  <li>Poprawiono błąd powodujący niewliczanie ostatniego zlecenia do wydajności zmiany w niektórych przypadkach.</li>
-  <li>Zmieniono listę zmian tak, aby nie była odświeżana po zeskanowaniu nr seryjnego na liniach produkcyjnych.</li>
-</ul>
-<h3>Dane produkcyjne > Zlecenia</h3>
-<ul>
-  <li>Zmieniono listę zleceń tak, aby nie była odświeżana po zeskanowaniu nr seryjnego na liniach produkcyjnych.</li>
-</ul>
-<h3>Przestoje</h3>
-<ul>
-  <li>Poprawiono błąd powodujący automatyczne przypisanie niezatwierdzonych przestojów do domyślnego obszaru odpowiedzialności
-    działu, w którym rozpoczęto przestój, zamiast do ostatnio przypisanego obszaru.</li>
+  <li>Poprawiono błąd mogący spowodować wywalenie się serwera importera zleceń.</li>
 </ul>
 <h3>Planowanie</h3>
 <ul>
-  <li>Zmieniono moduł planowania tak, aby był generowany automatycznie na podstawie zleceń z SAP, a nie z ręcznie
-    importowanego arkusza z kolejką zleceń.</li>
+  <li>Usunięto specjalne przewijania listy rozplanowanych zleceń w zależności od pozycji kursora na liście.</li>
+  <li>Poprawiono błąd uniemożliwiający załadowanie planu przez użytkowników z uprawnieniem 'Plany dzienne: przeglądanie',
+    ale bez uprawnienia 'Dane produkcyjne: przeglądanie'.</li>
+  <li>Poprawiono błąd mogący spowodować wyświetlanie nieaktualnego stanu planu dziennego, jeżeli poszczególne dane
+    zostały załadowane w nieprawidłowej kolejności.</li>
+  <li>Poprawiono błąd zatrzymujący wyświetlanie MRP planu dziennego, jeżeli do planu dodano maszynę (linia produkcyjna
+    z działu typu 'Tłocznia').</li>
+  <li>Poprawiono błąd podczas generowania planu polegający na ignorowanie wartości 'Linia aktywna do' podczas fazy
+    rozszerzania niekompletnego zlecenia.</li>
+  <li>Poprawiono błąd mogący spowodować brak odświeżenia aktualnego stanu planu po otrzymaniu od serwera informacji
+    o zmianach w planie.</li>
+  <li>Poprawiono błąd powodujący nietworzenie planów godzinowych z nowego planu dziennego, gdy dane plany godzinowe
+    wcześniej nie istniały.</li>
+  <li>Poprawiono błąd powodujący nieaktualizowanie istniejących planów godzinowych po zmianach w planie dziennym.</li>
+  <li>Zmieniono sortowanie wejściowej kolejki zleceń tak, aby zlecenia 'Pilne' i 'Przypięte' były brane pod uwagę
+    wcześniej od zleceń tylko 'Pilnych'.</li>
+  <li>Zmieniono edycję 'Ilości osób' na linii z poziomu planu tak, aby można było ustawić wartość 0.</li>
+  <li>Dodano funkcjonalność wybóru daty planu z poziomu 'okruszków' (jak w malarnii).</li>
+  <li>Dodano możliwość włączenia opcji wysokiego kontrastu dla widoku planu dziennego.</li>
+  <li>Dodano nowe ustawienie: Szybkość planowania.</li>
+  <li>Dodano funkcjonalność zamrażania zleceń. Zlecenia z pierwszej zmiany są automatycznie zamrażane po 23:00.</li>
+  <li>Dodano obliczanie wartości 'Sumy RBH do zrobienia' oraz 'Sumy ilości sztuk do zrobienia'.</li>
+  <li>Dodano specjalny widok zleceń dla Magazynu.</li>
+  <li>Dodano akcje 'Malarnia' oraz 'Magazyn' do strony planu dziennego.</li>
+  <li>Dodano możliwość ustawiania 'Grupy drop zone', 'Czasu wywołania', 'Statusu magazynu' oraz 'Komentarzu magazynu'
+    dla każdego zlecenia.</li>
+  <li>Dodano funkcjonalność skakania do MRP na stronie planu dziennego oraz magazynu za pomocą <kbd>Spacji</kbd>
+    lub wpisania na klawiaturze nazwy MRP.</li>
+  <li>Dodano słownik farb do Malarnii.</li>
 </ul>
-<h3>Malarnia</h3>
+<h3>ZPW</h3>
 <ul>
-  <li>Zmieniono moduł malarnii tak, aby kolejka zleceń była generowana automatycznie na podstawie planu danego dnia,
-    a nie z ręcznie importowanego arkusza z kolejką zleceń.</li>
+  <li>Zmieniono wartość 'Całkowite średnie dzienne FTE' w raporcie 'Wskaźniki' tak, aby była sumą wartości poszczególnych
+    działów, a nie ich średnią.</li>
+  <li>Zmieniono liczenie użytkowników w raporcie 'Wskaźniki', aby działało tak jak w raporcie 'Zaangażowanie'.</li>
+  <li>Zmieniono liczenie użytkowników we wszystkich raportach tak, aby grupowani byli po imieniu i nazwisku
+    zamiast po ID.</li>
 </ul>
-<h3>Żądania zmian danych produkcyjnych</h3>
+<h3>Inspekcja Jakości</h3>
 <ul>
-  <li>Poprawiono błąd mogący spowodować wywalenie się serwera z powodu braku pamięci podczas ładowania osi czasu
-    zmiany produkcyjnej.</li>
+  <li>Zmieniono filtr listy wyników tak, aby domyślny wyświetlane były wyniki z ostatnich 14 dni.</li>
+</ul>
+<h3>Raporty > CLIP</h3>
+<ul>
+  <li>Poprawiono błąd uniemożliwiający wybranie powodu opóźnienia z poziomu listy zleceń.</li>
+  <li>Zmieniono filtr 'Godzina' listy zleceń tak, aby akceptował wartość w formacie 'gg' lub 'gg:mm'.</li>
+  <li>Zmieniono nazwę kolumny 'Data ukończenia (podst.)' na 'Data ukończenia (plan.)'.</li>
+  <li>Zmieniono listę zleceń tak, aby ignorowane były zlecenia ze statusem 'TECO' lub 'DLT'.</li>
+</ul>
+<h3>Raporty > Wskaźniki</h3>
+<ul>
+  <li>Dodano 'Produktywność' do eksportowanych danych.</li>
+  <li>Zwiększono czas generowania raportu o 17%.</li>
+</ul>
+<h3>Raporty > HR</h3>
+<ul>
+  <li>Dodano legendę do eksportowanego wykresu 'Obecności'.</li>
+</ul>
+<h3>Zlecenie reszty działów</h3>
+<ul>
+  <li>Dodano możliwość wyboru źródła komentarza: Inne, Malarnia, Magazyn.</li>
+  <li>Dodano rejestrację komentarzy z malarnii w historii zlecenia.</li>
+</ul>
+<h3>Badanie Opinia</h3>
+<ul>
+  <li>Usunięto logo EES z szablonu dla Kętrzyna.</li>
 </ul>
 <h3>Formatka operatora</h3>
 <ul>
-  <li>Zmieniono ograniczenie mininalnej wykonanej ilości w zleceniu z zera na ilość zeskanowanych nr seryjnych
-    (ale nie większą od maksymalnej ilości).</li>
+  <li>Zmieniono kolejność nazwy personelu z 'Imię+Nazwisko' na 'Nazwisko+Imię'.</li>
 </ul>
 <h3>Inne</h3>
 <ul>
-  <li>Poprawiono błąd powodujący niewyświetlanie w filtrze 'MRP zlecenia' kontrolerów MRP, które nie istnieją w słowniku.</li>
-  <li>Dodano komunikat informujący o braku wsparcia dla przeglądarki Internet Explorer.</li>
+  <li>Poprawiono błąd mogący spowodować wywalenie się serwera podczas eksportu wydruku do PDF.</li>
+  <li>Zmieniono pole wyszukiwania użytkowników tak, aby w przypadku napotkania kilku użytkowników o takim samym
+    imieniu i nazwisku, najpierw preferowany był aktywny użytkowników, poźniej użytkownik mający przypisany adres
+    e-mail, a na końcu użytkownik przypisany do firmy 'PHILIPS'.</li>
+  <li>Uruchomiono dwa dodatkowe procesy do generowania raportów na oddzielnym serwerze.</li>
 </ul>
