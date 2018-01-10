@@ -25,6 +25,8 @@ exports.start = function startFteModule(app, module)
 {
   const recountTimers = {};
 
+  module.updateFromDailyPlan = updateHourlyPlansFromDailyPlan;
+
   app.onModuleReady(
     [
       module.config.mongooseId,
@@ -182,7 +184,7 @@ exports.start = function startFteModule(app, module)
     });
   }
 
-  function updateHourlyPlansFromDailyPlan(planDate, changedLines)
+  function updateHourlyPlansFromDailyPlan(planDate, changedLines, done)
   {
     const mongoose = app[module.config.mongooseId];
     const Plan = mongoose.model('Plan');
@@ -291,7 +293,12 @@ exports.start = function startFteModule(app, module)
       {
         if (err)
         {
-          return module.error(`Failed to update from plan [${dailyMoment.format('YYYY-MM-DD')}]: ${err.message}`);
+          module.error(`Failed to update from plan [${dailyMoment.format('YYYY-MM-DD')}]: ${err.message}`);
+        }
+
+        if (done)
+        {
+          done(err);
         }
       }
     );

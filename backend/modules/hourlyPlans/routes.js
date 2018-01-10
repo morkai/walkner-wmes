@@ -3,14 +3,15 @@
 'use strict';
 
 const _ = require('lodash');
+const moment = require('moment');
 const canManage = require('./canManage');
 
-module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
+module.exports = function setUpHourlyPlansRoutes(app, module)
 {
-  const express = app[hourlyPlansModule.config.expressId];
-  const auth = app[hourlyPlansModule.config.userId].auth;
-  const mongoose = app[hourlyPlansModule.config.mongooseId];
-  const settings = app[hourlyPlansModule.config.settingsId];
+  const express = app[module.config.expressId];
+  const auth = app[module.config.userId].auth;
+  const mongoose = app[module.config.mongooseId];
+  const settings = app[module.config.settingsId];
   const HourlyPlan = mongoose.model('HourlyPlan');
 
   const canView = auth('HOURLY_PLANS:VIEW', 'PLANNING:MANAGE', 'PLANNING:PLANNER');
@@ -71,6 +72,8 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
   express.get('/hourlyPlans/:id', canView, express.crud.readRoute.bind(null, app, HourlyPlan));
 
   express.delete('/hourlyPlans/:id', canDelete, express.crud.deleteRoute.bind(null, app, HourlyPlan));
+
+  express.post('/planning/plans/:date;hourlyPlan', auth('PLANNING:MANAGE'), updateFromDailyPlanRoute);
 
   function canDelete(req, res, next)
   {
@@ -138,5 +141,25 @@ module.exports = function setUpHourlyPlansRoutes(app, hourlyPlansModule)
     });
 
     return rows;
+  }
+
+  function updateFromDailyPlanRoute(req, res, next)
+  {
+    const dateMoment = moment.utc(req.params.date, 'YYYY-MM-DD');
+
+    if (!dateMoment.isValid())
+    {
+      return next(app.createError('INPUT', 400));
+    }
+
+    module.updateFromDailyPlan(dateMoment.toDate(), [], err =>
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      res.json({date: dateMoment.toISOString()});
+    });
   }
 };
