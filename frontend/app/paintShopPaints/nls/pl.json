@@ -12,6 +12,8 @@
   "PAGE_ACTION:add": "Dodaj farbę",
   "PAGE_ACTION:edit": "Edytuj farbę",
   "PAGE_ACTION:delete": "Usuń farbę",
+  "PAGE_ACTION:jump:title": "Skocz do farby po 12NC",
+  "PAGE_ACTION:jump:placeholder": "12NC farby...",
 
   "PANEL:TITLE:details": "Szczegóły farby",
   "PANEL:TITLE:addForm": "Formularz dodawania farby",

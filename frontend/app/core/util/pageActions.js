@@ -37,38 +37,33 @@ define([
     return collection.length;
   }
 
-  function onJumpFormSubmit(page, collection, $form)
+  function onJumpFormSubmit(page, collection, $form, options)
   {
-    var ridEl = $form[0].rid;
+    var phraseEl = $form[0].phrase;
 
-    if (ridEl.readOnly)
+    if (phraseEl.readOnly)
     {
       return false;
     }
 
-    var rid = parseInt(ridEl.value, 10);
+    var phrase = phraseEl.value;
 
-    if (isNaN(rid) || rid <= 0)
-    {
-      ridEl.value = '';
-
-      return false;
-    }
-
-    ridEl.readOnly = true;
-    ridEl.value = rid;
+    phraseEl.readOnly = true;
 
     var $iconEl = $form.find('.fa').removeClass('fa-search').addClass('fa-spinner fa-spin');
 
-    var req = page.ajax({
+    var req = page.ajax(options.mode === 'rid' ? {
       url: _.result(collection, 'url') + ';rid',
-      data: {rid: rid}
+      data: {rid: phrase}
+    } : {
+      method: 'HEAD',
+      url: _.result(collection, 'url') + '/' + phrase
     });
 
     req.done(function(modelId)
     {
       page.broker.publish('router.navigate', {
-        url: collection.genClientUrl() + '/' + modelId,
+        url: collection.genClientUrl() + '/' + (modelId || phrase),
         trigger: true
       });
     });
@@ -78,13 +73,13 @@ define([
       viewport.msg.show({
         type: 'error',
         time: 2000,
-        text: t(collection.getNlsDomain(), 'MSG:jump:404', {rid: rid})
+        text: t(collection.getNlsDomain(), 'MSG:jump:404', {rid: phrase})
       });
 
       $iconEl.removeClass('fa-spinner fa-spin').addClass('fa-search');
 
-      ridEl.readOnly = false;
-      ridEl.select();
+      phraseEl.readOnly = false;
+      phraseEl.select();
     });
 
     return false;
@@ -187,20 +182,27 @@ define([
         callback: options.callback
       };
     },
-    jump: function(page, collection)
+    jump: function(page, collection, options)
     {
+      options = _.assign({mode: 'rid', pattern: '^ *[0-9]+ *$', autoFocus: true}, options);
+
       return {
         template: function()
         {
+          var nlsDomain = collection.getNlsDomain();
+
           return jumpActionTemplate({
-            nlsDomain: collection.getNlsDomain()
+            title: options.title || t(nlsDomain, 'PAGE_ACTION:jump:title'),
+            placeholder: options.placeholder || t(nlsDomain, 'PAGE_ACTION:jump:placeholder'),
+            autoFocus: options.autoFocus,
+            pattern: options.pattern
           });
         },
         afterRender: function($action)
         {
           var $form = $action.find('form');
 
-          $form.submit(onJumpFormSubmit.bind(null, page, collection, $form));
+          $form.submit(onJumpFormSubmit.bind(null, page, collection, $form, options));
         }
       };
     }
