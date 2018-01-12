@@ -2,16 +2,19 @@
 
 define([
   'app/core/util/pageActions',
-  'app/core/pages/ListPage',
+  'app/core/pages/FilteredListPage',
+  'app/paintShopPaints/views/PaintShopPaintFilterView',
   'i18n!app/nls/paintShopPaints'
 ], function(
   pageActions,
-  ListPage
+  FilteredListPage,
+  PaintShopPaintFilterView
 ) {
   'use strict';
 
-  return ListPage.extend({
+  return FilteredListPage.extend({
 
+    FilterView: PaintShopPaintFilterView,
     baseBreadcrumb: true,
 
     actions: function()

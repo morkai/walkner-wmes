@@ -24,6 +24,8 @@
   "PROPERTY:bin": "Bin",
   "PROPERTY:name": "Nazwa",
 
+  "filter:submit": "Filtruj farby",
+
   "FORM:ACTION:add": "Dodaj farbę",
   "FORM:ACTION:edit": "Edytuj farbę",
   "FORM:ERROR:addFailure": "Nie udało się dodać farby.",
