@@ -160,14 +160,13 @@ module.exports = function setUpGenerator(app, module)
     const lastMinute = moment(key, 'YYYY-MM-DD').hours(5).minutes(59);
     const lastMinuteStartTime = lastMinute.valueOf();
     const lastMinuteEndTime = lastMinuteStartTime + 60000;
-    const lastHourStartTime = lastMinute.startOf('hour').subtract(6, 'hours').valueOf();
     const now = Date.now();
 
     return {
       key: key,
       date: moment.utc(key, 'YYYY-MM-DD').toDate(),
       lastMinute: now >= lastMinuteStartTime && now < lastMinuteEndTime,
-      freezeFirstShiftOrders: options.freezeFirstShiftOrders || now >= lastHourStartTime,
+      freezeFirstShiftOrders: options.freezeFirstShiftOrders,
       cancelled: false,
       new: false,
       generateCallCount: 0,
@@ -690,7 +689,12 @@ module.exports = function setUpGenerator(app, module)
 
         state.settings = settings.toGenerator();
       },
-      done
+      function(err)
+      {
+        state.freezeFirstShiftOrders = state.freezeFirstShiftOrders || state.settings.freezeFirstShiftOrders;
+
+        done(err);
+      }
     );
   }
 

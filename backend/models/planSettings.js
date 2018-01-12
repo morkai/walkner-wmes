@@ -84,6 +84,12 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       type: Number,
       default: 1
     },
+    freezeHour: {
+      type: Number,
+      min: 0,
+      max: 23,
+      default: 0
+    },
     lines: [lineSchema],
     mrps: [mrpSettingsSchema]
   }, {
@@ -103,6 +109,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       requiredStatuses: ['REL'],
       ignoredStatuses: ['TECO', 'CNF', 'DLV', 'DLFL', 'DLT'],
       schedulingRate: 1,
+      freezeHour: 0,
       lines: [],
       mrps: []
     });
@@ -117,6 +124,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       requiredStatuses: sourceSettings.requiredStatuses,
       ignoredStatuses: sourceSettings.ignoredStatuses,
       schedulingRate: sourceSettings.schedulingRate,
+      freezeHour: sourceSettings.freezeHour,
       lines: sourceSettings.lines,
       mrps: sourceSettings.mrps
     });
@@ -181,6 +189,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     };
 
     return {
+      freezeFirstShiftOrders: this.shouldFreezeFirstShiftOrders(),
       useRemainingQuantity: this.useRemainingQuantity,
       ignoreCompleted: this.ignoreCompleted,
       requiredStatuses: this.requiredStatuses,
@@ -296,7 +305,8 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       'ignoreCompleted',
       'requiredStatuses',
       'ignoredStatuses',
-      'schedulingRate'
+      'schedulingRate',
+      'freezeHour'
     ].forEach(prop =>
     {
       const oldValue = this[prop].toObject ? this[prop].toObject() : this[prop];
@@ -493,6 +503,25 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
         line: oldMrpLineMap[mrpLineId]
       });
     });
+  };
+
+  planSettingsSchema.methods.shouldFreezeFirstShiftOrders = function(offsetMin)
+  {
+    const freezeMoment = moment(moment.utc(this._id).format('YYYY-MM-DD'), 'YYYY-MM-DD');
+
+    if (this.freezeHour >= 6)
+    {
+      freezeMoment.subtract(1, 'days');
+    }
+
+    freezeMoment.hours(this.freezeHour);
+
+    if (offsetMin)
+    {
+      freezeMoment.subtract(offsetMin, 'minutes');
+    }
+
+    return Date.now() >= freezeMoment.valueOf();
   };
 
   mongoose.model('PlanSettings', planSettingsSchema);

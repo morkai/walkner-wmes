@@ -87,6 +87,7 @@ define([
             v = $property.prop('checked');
             break;
 
+          case 'freezeHour':
           case 'extraOrderSeconds':
           case 'bigOrderQuantity':
           case 'splitOrderQuantity':

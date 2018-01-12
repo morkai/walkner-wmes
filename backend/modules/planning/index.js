@@ -34,15 +34,33 @@ exports.start = function startPlanningModule(app, module)
 
   app.broker.subscribe('orders.synced', m =>
   {
-    if (m.created || m.updated || m.removed)
-    {
-      const now = moment();
+    const now = moment();
+    const planDate = moment.utc(now.format('YYYY-MM-DD'), 'YYYY-MM-DD');
 
-      app.broker.publish('planning.generator.requested', {
-        forceDayAfterTomorrow: (now.hours() === 16 && now.minutes() > 30) || now.hours() >= 17,
-        freezeFirstShiftOrders: (now.hours() === 22 && now.minutes() > 30) || now.hours() >= 23 || now.hours < 6
-      });
+    if (now.hours() >= 6)
+    {
+      planDate.add(1, 'days');
     }
+
+    app[module.config.mongooseId].find({_id: {$gte: planDate}}).sort({_id: 1}).limit(1).exec((err, plans) =>
+    {
+      if (err)
+      {
+        module.error(`Failed to find plan settings for generator request: ${err.message}`);
+      }
+
+      const freezeFirstShiftOrders = plans.length === 1 && plans[0].shouldFreezeFirstShiftOrders(30);
+
+      if (freezeFirstShiftOrders || m.created || m.updated || m.removed)
+      {
+        const now = moment();
+
+        app.broker.publish('planning.generator.requested', {
+          forceDayAfterTomorrow: (now.hours() === 16 && now.minutes() > 30) || now.hours() >= 17,
+          freezeFirstShiftOrders
+        });
+      }
+    });
   });
 
   app.broker.subscribe('settings.updated.production.lineAutoDowntimes', () =>

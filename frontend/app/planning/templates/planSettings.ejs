@@ -4,7 +4,13 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
+        <label for="<%- idPrefix %>-freezeHour"><%- t('planning', 'settings:freezeHour') %></label>
+        <p class="help-block"><%- t('planning', 'settings:freezeHour:help') %></p>
+        <input id="<%- idPrefix %>-freezeHour" name="freezeHour" class="form-control" type="text" required pattern="^(1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-schedulingRate"><%- t('planning', 'settings:schedulingRate') %></label>
+        <p class="help-block"><%- t('planning', 'settings:schedulingRate:help') %></p>
         <input id="<%- idPrefix %>-schedulingRate" name="schedulingRate" class="form-control" type="text" required data-object="plan" style="width: 100px">
       </div>
       <div class="form-group">
