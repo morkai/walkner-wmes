@@ -42,14 +42,16 @@ exports.start = function startPlanningModule(app, module)
       planDate.add(1, 'days');
     }
 
-    app[module.config.mongooseId].find({_id: {$gte: planDate}}).sort({_id: 1}).limit(1).exec((err, plans) =>
+    const PlanSettings = app[module.config.mongooseId].model('PlanSettings');
+
+    PlanSettings.find({_id: {$gte: planDate}}).sort({_id: 1}).limit(1).exec((err, settings) =>
     {
       if (err)
       {
         module.error(`Failed to find plan settings for generator request: ${err.message}`);
       }
 
-      const freezeFirstShiftOrders = plans.length === 1 && plans[0].shouldFreezeFirstShiftOrders(30);
+      const freezeFirstShiftOrders = settings.length === 1 && settings[0].shouldFreezeFirstShiftOrders(30);
 
       if (freezeFirstShiftOrders || m.created || m.updated || m.removed)
       {
