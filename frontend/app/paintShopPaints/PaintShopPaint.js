@@ -13,6 +13,8 @@ define([
 
     clientUrlRoot: '#paintShop/paints',
 
+    topicPrefix: 'paintShop.paints',
+
     privilegePrefix: 'PAINT_SHOP',
 
     nlsDomain: 'paintShopPaints'
