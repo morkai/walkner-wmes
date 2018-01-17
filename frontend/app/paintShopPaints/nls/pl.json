@@ -30,6 +30,7 @@
   "FORM:ACTION:edit": "Edytuj farbę",
   "FORM:ERROR:addFailure": "Nie udało się dodać farby.",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować farby.",
+  "FORM:ERROR:alreadyExists": "Farba o danym 12NC już istnieje.",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia farby",
   "ACTION_FORM:BUTTON:delete": "Usuń farbę",
