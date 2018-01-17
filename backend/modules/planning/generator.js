@@ -772,13 +772,6 @@ module.exports = function setUpGenerator(app, module)
     );
   }
 
-  function getManHours(operation, quantityTodo)
-  {
-    return operation.laborTime
-      ? ((operation.laborTime / 100 * quantityTodo) + operation.laborSetupTime)
-      : 0;
-  }
-
   function preparePlanOrder(state, planOrder)
   {
     if (planOrder.source === 'incomplete')
@@ -795,7 +788,7 @@ module.exports = function setUpGenerator(app, module)
     const quantityTodo = getQuantityTodo(state, planOrder);
 
     planOrder.kind = classifyPlanOrder(state, planOrder);
-    planOrder.manHours = getManHours(planOrder.operation, quantityTodo);
+    planOrder.manHours = getManHours(planOrder.operation, quantityTodo, state.settings.schedulingRate);
     planOrder.incomplete = quantityTodo;
 
     if (planOrder.quantityPlan >= 0)
@@ -2243,7 +2236,7 @@ module.exports = function setUpGenerator(app, module)
             orderNo: orderNo,
             quantity: quantityPlanned,
             pceTime,
-            manHours: getManHours(order.operation, quantityPlanned),
+            manHours: getManHours(order.operation, quantityPlanned, settings.schedulingRate),
             startAt: new Date(startAt),
             finishAt: new Date(finishAt),
             pceTimes
@@ -2274,7 +2267,7 @@ module.exports = function setUpGenerator(app, module)
             orderNo,
             quantity: quantityPlanned,
             pceTime,
-            manHours: getManHours(order.operation, quantityPlanned),
+            manHours: getManHours(order.operation, quantityPlanned, settings.schedulingRate),
             startAt: new Date(startAt),
             finishAt: new Date(finishAt),
             pceTimes
@@ -2305,7 +2298,7 @@ module.exports = function setUpGenerator(app, module)
           orderNo: orderNo,
           quantity: quantityPlanned,
           pceTime: pceTime,
-          manHours: getManHours(order.operation, quantityPlanned),
+          manHours: getManHours(order.operation, quantityPlanned, settings.schedulingRate),
           startAt: new Date(startAt),
           finishAt: new Date(finishAt),
           pceTimes
@@ -2419,6 +2412,13 @@ module.exports = function setUpGenerator(app, module)
   {
     return order.operation.laborTime
       ? (Math.ceil(order.operation.laborTime / 100 / workerCount * 3600 * schedulingRate) * 1000)
+      : 0;
+  }
+
+  function getManHours(operation, quantityTodo, schedulingRate)
+  {
+    return operation.laborTime
+      ? (((operation.laborTime / 100 * quantityTodo) + operation.laborSetupTime) * schedulingRate)
       : 0;
   }
 
