@@ -407,7 +407,9 @@
     "TYPE:behaviorObsCards.deleted": "Observations: deleted",
     "TEXT:behaviorObsCards.deleted": "Deleted observation: <em>{model->rid}</em>",
     "TYPE:minutesForSafety.deleted": "Minutes for safety: deleted",
-    "TEXT:minutesForSafety.deleted": "Deleted minutes for safety: <em>{model->rid}</em>"
+    "TEXT:minutesForSafety.deleted": "Deleted minutes for safety: <em>{model->rid}</em>",
+    "TYPE:paintShop.paints.deleted": "Paints: deleted",
+    "TEXT:paintShop.paints.deleted": "Deleted paint: <em>{model->_id}</em>"
   },
   "pl": true
 }

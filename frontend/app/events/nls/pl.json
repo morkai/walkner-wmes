@@ -406,5 +406,7 @@
   "TYPE:behaviorObsCards.deleted": "Obserwacje: usunięcie",
   "TEXT:behaviorObsCards.deleted": "Usunięto obserwację: <em>{model->rid}</em>",
   "TYPE:minutesForSafety.deleted": "Minuty dla bezpieczeństwa: usunięcie",
-  "TEXT:minutesForSafety.deleted": "Usunięto minuty dla bezpieczeństwa: <em>{model->rid}</em>"
+  "TEXT:minutesForSafety.deleted": "Usunięto minuty dla bezpieczeństwa: <em>{model->rid}</em>",
+  "TYPE:paintShop.paints.deleted": "Farby: usunięcie",
+  "TEXT:paintShop.paints.deleted": "Usunięto farbę: <em>{model->_id}</em>"
 }
