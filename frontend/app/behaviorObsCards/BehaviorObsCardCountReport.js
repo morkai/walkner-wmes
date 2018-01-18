@@ -17,6 +17,7 @@ define([
 
   var COLOR_BEHAVIOR_OBS_CARD = '#5bc0de';
   var TABLE_AND_CHART_METRICS = [
+    'total',
     'countBySection',
     'safeBySection',
     'riskyBySection',
@@ -84,6 +85,11 @@ define([
 
       _.forEach(TABLE_AND_CHART_METRICS, function(metric)
       {
+        if (attrs[metric])
+        {
+          return;
+        }
+
         if (metric === 'categories')
         {
           attrs[metric] = {
