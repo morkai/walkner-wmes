@@ -146,6 +146,7 @@ module.exports = function setUpQiNotifier(app, module)
       result: {
         rid: result.rid,
         orderNo: result.orderNo,
+        serialNumbers: result.serialNumbers ? result.serialNumbers.join(', ') : '',
         nc12: result.nc12,
         productFamily: result.productFamily,
         productName: result.productName,

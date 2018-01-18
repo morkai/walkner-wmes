@@ -11,6 +11,12 @@
     <th align="left" style="white-space: nowrap">Nr zlecenia</th>
     <td>: <%- result.orderNo %></td>
   </tr>
+  <% if (result.serialNumbers) { %>
+  <tr>
+    <th align="left" style="white-space: nowrap">Nr seryjny</th>
+    <td>: <%- result.serialNumbers %></td>
+  </tr>
+  <% } %>
   <tr>
     <th align="left" style="white-space: nowrap">12NC</th>
     <td>: <%- result.nc12 %></td>

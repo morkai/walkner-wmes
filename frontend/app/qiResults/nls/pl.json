@@ -70,6 +70,7 @@
   "PROPERTY:qtyToFix": "Ilość do selekcji",
   "PROPERTY:qtyNok": "Ilość niezgodnych",
   "PROPERTY:qtyNokInspected": "Ilość niezgodnych w skontrolowanych",
+  "PROPERTY:serialNumbers": "Numer seryjny",
   "PROPERTY:comment": "Komentarz",
   "PROPERTY:ok": "Wynik",
 
@@ -80,6 +81,7 @@
   "filter:result:ok": "OK",
   "filter:result:nok": "NOK",
   "filter:order": "Zlecenie/12NC",
+  "filter:serialNumbers": "Numer seryjny",
   "filter:productFamily": "Rodzina wyrobów",
   "filter:division": "Centrum",
   "filter:line": "Linia",

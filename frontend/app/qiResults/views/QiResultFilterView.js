@@ -23,6 +23,7 @@ define([
 
   var FILTER_LIST = [
     'order',
+    'serialNumbers',
     'productFamily',
     'division',
     'line',
@@ -78,6 +79,7 @@ define([
         to: '',
         result: '',
         order: '',
+        serialNumbers: '',
         productFamily: '',
         division: '',
         line: '',
@@ -104,7 +106,6 @@ define([
       {
         formData.order = term.args[1].replace(/[^A-Z0-9]+/g, '');
       },
-      'orderNo': 'nc12',
       'division': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
@@ -117,6 +118,8 @@ define([
       {
         formData[propertyName.split('.')[0]] = term.name === 'in' ? term.args[1].join(',') : term.args[1];
       },
+      'orderNo': 'nc12',
+      'serialNumbers': 'division',
       'nokOwner.id': 'inspector.id',
       'leader.id': 'inspector.id',
       'line': 'inspector.id',
@@ -132,6 +135,7 @@ define([
       var fromMoment = time.getMoment(this.$id('from').val(), 'YYYY-MM-DD');
       var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var order = this.$id('order').val().replace(/[^0-9A-Za-z]+/g, '').toUpperCase();
+      var serialNumbers = this.$id('serialNumbers').val().toUpperCase();
       var inspector = this.$id('inspector').val();
       var nokOwner = this.$id('nokOwner').val();
       var leader = this.$id('leader').val();
@@ -175,6 +179,11 @@ define([
       else if (order.length)
       {
         selector.push({name: 'regex', args: ['nc12', '^' + order]});
+      }
+
+      if (serialNumbers.length === 19)
+      {
+        selector.push({name: 'eq', args: ['serialNumbers', serialNumbers]});
       }
 
       if (inspector.length)

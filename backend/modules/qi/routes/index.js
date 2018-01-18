@@ -72,6 +72,7 @@ module.exports = function setUpQiRoutes(app, qiModule)
         line: 15,
         productFamily: 7,
         orderNo: 9,
+        serialNumbers: 20,
         inspectedAt: 'date',
         result: 5,
         qtyOrder: 'integer',

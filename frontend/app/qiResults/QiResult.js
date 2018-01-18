@@ -155,6 +155,7 @@ define([
       obj.kind = dictionaries.getLabel('kind', obj.kind);
       obj.qtyOrder = obj.qtyOrder ? obj.qtyOrder.toLocaleString() : '0';
       obj.qtyInspected = obj.qtyInspected.toLocaleString();
+      obj.serialNumbers = !Array.isArray(obj.serialNumbers) ? '' : obj.serialNumbers.join(', ');
 
       if (obj.ok)
       {

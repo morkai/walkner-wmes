@@ -77,6 +77,10 @@ define([
           ok: this.$id('ok').prop('checked')
         }), {silent: true});
         this.render();
+      },
+      'change #-serialNumbers': function(e)
+      {
+        e.target.value = this.parseSerialNumbers(e.target.value).join(', ');
       }
 
     }, FormView.prototype.events),
@@ -258,6 +262,7 @@ define([
       formData.nokOwner = formData.nokOwner ? formData.nokOwner.id : '';
       formData.leader = formData.leader ? formData.leader.id : '';
       formData.inspectedAt = time.format(formData.inspectedAt, 'YYYY-MM-DD');
+      formData.serialNumbers = formData.serialNumbers ? formData.serialNumbers.join(', ') : '';
 
       _.forEach(formData.correctiveActions, function(correctiveAction)
       {
@@ -317,6 +322,8 @@ define([
           formData[this.name] = '';
         }
       });
+
+      formData.serialNumbers = this.parseSerialNumbers(formData.serialNumbers);
 
       var $actions = view.$id('actions').children();
 
@@ -392,6 +399,34 @@ define([
         placeholder: ' ',
         allowClear: true
       });
+    },
+
+    parseSerialNumbers: function(sns)
+    {
+      var orderNo = this.$id('orderNo').val();
+
+      if (!/^[0-9]{9}$/.test(orderNo))
+      {
+        orderNo = '';
+      }
+
+      return sns
+        .split(/(\s+|,|;)/)
+        .filter(function(sn) { return /^[a-zA-Z0-9.]+$/.test(sn); })
+        .map(function(sn)
+        {
+          if (/^[0-9]{1,4}$/.test(sn) && orderNo)
+          {
+            while (sn.length < 4)
+            {
+              sn = '0' + sn;
+            }
+
+            return 'PL04.' + orderNo + '.' + sn;
+          }
+
+          return sn.toUpperCase();
+        });
     },
 
     toggleRoleFields: function()

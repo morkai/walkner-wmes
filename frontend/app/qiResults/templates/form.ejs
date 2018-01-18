@@ -109,6 +109,10 @@
           <input id="<%- idPrefix %>-qtyNok" name="qtyNok" class="form-control" type="number" required min="0" data-role="inspector">
         </div>
         <% } %>
+        <div class="col-lg-2 form-group">
+          <label for="<%- idPrefix %>-serialNumbers" class="control-label"><%- t('qiResults', 'PROPERTY:serialNumbers') %></label>
+          <input id="<%- idPrefix %>-serialNumbers" name="serialNumbers" class="form-control" type="text" data-role="inspector">
+        </div>
       </div>
       <% if (!model.ok) { %>
       <div class="row">

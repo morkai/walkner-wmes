@@ -148,6 +148,7 @@ module.exports = function setupQiResultModel(app, mongoose)
       default: 0,
       min: 0
     },
+    serialNumbers: [String],
     okFile: {
       type: {},
       default: null
@@ -189,6 +190,7 @@ module.exports = function setupQiResultModel(app, mongoose)
   qiResultSchema.index({faultCode: 1});
   qiResultSchema.index({errorCategory: 1});
   qiResultSchema.index({'correctiveActions.status': 1});
+  qiResultSchema.index({serialNumbers: 1});
 
   qiResultSchema.pre('save', function(next)
   {
@@ -279,6 +281,7 @@ module.exports = function setupQiResultModel(app, mongoose)
       'qtyToFix',
       'qtyNok',
       'qtyNokInspected',
+      'serialNumbers',
       'okFile',
       'nokFile'
     ]));
@@ -325,6 +328,16 @@ module.exports = function setupQiResultModel(app, mongoose)
     this[property] = input[property];
     let newValue = this[property];
 
+    if (oldValue && oldValue.toObject)
+    {
+      oldValue = oldValue.toObject();
+    }
+
+    if (newValue && newValue.toObject)
+    {
+      newValue = newValue.toObject();
+    }
+
     if (typeof oldValue === 'string')
     {
       oldValue = oldValue.trim();
@@ -335,24 +348,23 @@ module.exports = function setupQiResultModel(app, mongoose)
       newValue = newValue.trim();
     }
 
-    if (property === 'correctiveActions')
+    if (property === 'serialNumbers')
     {
-      oldValue = oldValue.toObject();
-
-      if (newValue && newValue.toObject)
+      if (!Array.isArray(oldValue))
       {
-        newValue = newValue.toObject();
+        oldValue = [];
       }
 
-      if (!deepEqual(newValue, oldValue, {strict: true}))
+      if (!Array.isArray(newValue))
       {
-        changes[property] = [oldValue, newValue];
+        newValue = [];
       }
 
-      return;
+      oldValue.sort();
+      newValue.sort();
     }
 
-    if (this.isModified(property))
+    if (!deepEqual(newValue, oldValue, {strict: true}))
     {
       changes[property] = [oldValue, newValue];
     }

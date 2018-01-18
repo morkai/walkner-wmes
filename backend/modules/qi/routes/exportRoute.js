@@ -78,6 +78,7 @@ exports.serializeRow = function(app, qiModule, doc, req)
     line: doc.line,
     productFamily: doc.productFamily,
     orderNo: doc.orderNo,
+    serialNumbers: doc.serialNumbers ? doc.serialNumbers.join(', ') : '',
     inspectedAt: doc.inspectedAt,
     inspector: doc.inspector.label,
     nokOwner: doc.nokOwner ? doc.nokOwner.label : '',

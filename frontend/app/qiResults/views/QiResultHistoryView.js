@@ -201,6 +201,9 @@ define([
             + t('qiResults', 'history:correctiveActions', {count: value.length})
             + '</a>';
 
+        case 'serialNumbers':
+          return value.join(', ');
+
         default:
           return value || '';
       }

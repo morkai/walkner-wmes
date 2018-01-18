@@ -71,6 +71,7 @@
     "PROPERTY:qtyToFix": "Quantity to fix",
     "PROPERTY:qtyNok": "NOK quantity",
     "PROPERTY:qtyNokInspected": "Inspected NOK quantity",
+    "PROPERTY:serialNumbers": "Serial number",
     "PROPERTY:comment": "Comment",
     "PROPERTY:ok": "Result",
 
@@ -81,6 +82,7 @@
     "filter:result:ok": "OK",
     "filter:result:nok": "NOK",
     "filter:order": "Order/12NC",
+    "filter:serialNumbers": "Serial number",
     "filter:productFamily": "Family",
     "filter:division": "Division",
     "filter:line": "Line",
