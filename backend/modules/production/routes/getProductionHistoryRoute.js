@@ -116,8 +116,14 @@ module.exports = function getProductionHistoryRoute(app, productionModule, req, 
         operationNo: 1,
         workerCount: 1,
         quantityDone: 1,
+        totalQuantity: 1,
         startedAt: 1,
-        finishedAt: 1
+        finishedAt: 1,
+        workDuration: 1,
+        laborTime: 1,
+        sapTaktTime: 1,
+        lastTaktTime: 1,
+        avgTaktTime: 1
       };
       const downtimeFields = {
         prodShift: 1,
