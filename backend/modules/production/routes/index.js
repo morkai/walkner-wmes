@@ -68,6 +68,19 @@ module.exports = function setUpProductionRoutes(app, productionModule)
   express.post('/production/checkSerialNumber', checkSerialNumberRoute.bind(null, app, productionModule));
   express.post('/prodLogEntries', syncRoute.bind(null, app, productionModule));
 
+  express.get('/production/orderQueue/:shift', (req, res, next) =>
+  {
+    productionModule.getOrderQueue(req.params.shift, (err, orderQueue) =>
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      res.json(orderQueue);
+    });
+  });
+
   express.get('/production/reloadLine/:line', userModule.auth('SUPER'), function(req, res, next)
   {
     const lineState = productionModule.getProdLineState(orgUnits.fix.prodLine(req.params.line));

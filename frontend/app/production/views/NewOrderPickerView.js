@@ -339,7 +339,7 @@ define([
           this.buildOrderOperationList(order, next.operationNo)
         );
 
-        this.updateNewWorkerCount();
+        this.updateNewWorkerCount(next.workerCount);
 
         return;
       }
@@ -688,12 +688,19 @@ define([
       return html.length ? html : ('<p>' + t('production', 'newOrderPicker:order:notFound') + '</p>');
     },
 
-    updateNewWorkerCount: function()
+    updateNewWorkerCount: function(newWorkerCount)
     {
       var $newWorkerCount = this.$id('newWorkerCount').val('');
 
       if (!$newWorkerCount.length)
       {
+        return;
+      }
+
+      if (newWorkerCount > 0)
+      {
+        $newWorkerCount.val(newWorkerCount.toString());
+
         return;
       }
 

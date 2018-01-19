@@ -576,12 +576,8 @@ define([
         return;
       }
 
-      var oldList = !oldNextOrders
-        ? []
-        : oldNextOrders.map(function(next) { return {orderNo: next.order.no, operationNo: next.operationNo}; });
-      var newList = !newNextOrders
-        ? []
-        : newNextOrders.map(function(next) { return {orderNo: next.order.no, operationNo: next.operationNo}; });
+      var oldList = !oldNextOrders ? [] : oldNextOrders.map(toList);
+      var newList = !newNextOrders ? [] : newNextOrders.map(toList);
 
       if (_.isEqual(newList, oldList))
       {
@@ -597,6 +593,15 @@ define([
       this.set('nextOrder', newNextOrders);
 
       prodLog.record(this, 'setNextOrder', {orders: newList});
+
+      function toList(next)
+      {
+        return {
+          orderNo: next.order.no,
+          operationNo: next.operationNo,
+          workerCount: next.workerCount || 0
+        };
+      }
     },
 
     continueOrder: function()
@@ -1079,6 +1084,11 @@ define([
       }
 
       return nextOrders;
+    },
+
+    hasOrderQueue: function()
+    {
+      return !_.isEmpty(this.get('nextOrder'));
     },
 
     hasEnded: function()

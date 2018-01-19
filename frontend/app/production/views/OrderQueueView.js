@@ -176,6 +176,10 @@ define([
     {
       this.orderCache[order.no] = order;
 
+      delete order.bom;
+      delete order.documents;
+      delete order.statusesSetAt;
+
       var $rows = this.$id('rows');
 
       $rows.append(renderQueueRow({

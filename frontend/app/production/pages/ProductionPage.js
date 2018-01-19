@@ -92,7 +92,7 @@ define([
       },
       'socket.disconnected': function()
       {
-        this.productionJoined = 0;
+        this.leaveProduction();
       },
       'updater.frontendReloading': function()
       {
@@ -382,7 +382,12 @@ define([
         }
       });
 
-      page.listenTo(model, 'change:_id', page.subscribeForShiftChanges);
+      page.listenTo(model, 'change:_id', function()
+      {
+        page.subscribeForShiftChanges();
+        page.loadOrderQueue();
+      });
+
       page.listenTo(model.prodShiftOrder, 'change:orderId', page.subscribeForQuantityDoneChanges);
 
       if (model.id)
@@ -623,7 +628,8 @@ define([
         prodShiftOrderId: model.prodShiftOrder.id || null,
         prodDowntimeId: unfinishedProdDowntime ? unfinishedProdDowntime.id : null,
         orderNo: model.prodShiftOrder.get('orderId') || null,
-        dictionaries: {}
+        dictionaries: {},
+        orderQueue: !model.hasOrderQueue()
       };
 
       _.forEach(dictionaries, function(collection, moduleName)
@@ -679,6 +685,11 @@ define([
             page.pendingIsaChanges.forEach(page.applyIsaChange, page);
             page.pendingIsaChanges = null;
           }
+        }
+
+        if (!_.isEmpty(res.orderQueue))
+        {
+          model.setNextOrder(res.orderQueue);
         }
 
         _.forEach(res.dictionaries, function(models, dictionaryName)
@@ -778,6 +789,24 @@ define([
         if (order && order._id === model.get('orderId'))
         {
           model.set('totalQuantityDone', order.qtyDone);
+        }
+      });
+    },
+
+    loadOrderQueue: function()
+    {
+      var page = this;
+
+      if (!page.productionJoined || page.model.hasOrderQueue() || !page.model.id)
+      {
+        return;
+      }
+
+      page.ajax({url: '/production/orderQueue/' + page.model.id}).done(function(orderQueue)
+      {
+        if (!_.isEmpty(orderQueue))
+        {
+          page.model.setNextOrder(orderQueue);
         }
       });
     },

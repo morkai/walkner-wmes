@@ -73,15 +73,28 @@ module.exports = function joinCommand(app, productionModule, socket, req, reply)
         );
       });
     },
-    function fetchDataStep()
+    function fetchOrderQueueStep()
     {
+      if (req.orderQueue)
+      {
+        productionModule.getOrderQueue(req.prodShiftId, this.next());
+      }
+    },
+    function fetchDataStep(err, orderQueue)
+    {
+      if (err)
+      {
+        return this.skip(err);
+      }
+
       Order.findOne({_id: req.orderNo}, {qtyDone: 1}).lean().exec(this.parallel());
       productionModule.getProdData('shift', req.prodShiftId, this.parallel());
       ProdDowntime.find({prodShift: req.prodShiftId}).limit(8).sort({startedAt: -1}).lean().exec(this.parallel());
       Setting.find({_id: /^production/}).lean().exec(this.parallel());
       isaModule.getLineActiveRequests(req.prodLineId, this.parallel());
+      setImmediate(this.parallel(), null, orderQueue);
     },
-    function replyStep(err, order, prodShift, prodDowntimes, settings, isaRequests)
+    function replyStep(err, order, prodShift, prodDowntimes, settings, isaRequests, orderQueue)
     {
       if (err)
       {
@@ -95,7 +108,8 @@ module.exports = function joinCommand(app, productionModule, socket, req, reply)
         prodDowntimes: prodDowntimes || undefined,
         settings: settings || undefined,
         isaRequests: isaRequests || undefined,
-        dictionaries: dictionaries
+        dictionaries,
+        orderQueue
       });
     }
   );

@@ -13,6 +13,7 @@ const setUpAutoDowntimes = require('./autoDowntimes');
 const recreate = require('./recreate');
 const syncLogEntryStream = require('./syncLogEntryStream');
 const checkSerialNumber = require('./checkSerialNumber');
+const getOrderQueue = require('./getOrderQueue');
 const logEntryHandlers = require('./logEntryHandlers');
 
 exports.DEFAULT_CONFIG = {
@@ -47,6 +48,7 @@ exports.start = function startProductionModule(app, module)
   module.recreate = recreate.bind(null, app, module);
   module.syncLogEntryStream = syncLogEntryStream.bind(null, app, module);
   module.checkSerialNumber = checkSerialNumber.bind(null, app, module);
+  module.getOrderQueue = getOrderQueue.bind(null, app, module);
   module.logEntryHandlers = logEntryHandlers;
 
   setUpProdData(app, module);
