@@ -23,6 +23,8 @@ define([
 
   return Model.extend({
 
+    TYPE: 'master',
+
     urlRoot: '/fte/master',
 
     clientUrlRoot: '#fte/master',
@@ -32,19 +34,6 @@ define([
     privilegePrefix: 'FTE:MASTER',
 
     nlsDomain: 'fte',
-
-    defaults: {
-      subdivision: null,
-      date: null,
-      shift: null,
-      flows: null,
-      tasks: null,
-      createdAt: null,
-      creator: null,
-      updatedAt: null,
-      updater: null,
-      absentUsers: null
-    },
 
     getLabel: function()
     {

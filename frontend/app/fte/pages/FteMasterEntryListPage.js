@@ -69,7 +69,8 @@ define([
     defineModels: function()
     {
       this.collection = bindLoadingMessage(
-        new FteMasterEntryCollection(null, {rqlQuery: this.options.rql}), this
+        this.collection || new FteMasterEntryCollection(null, {rqlQuery: this.options.rql}),
+        this
       );
     },
 

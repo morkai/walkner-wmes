@@ -38,12 +38,13 @@ define([
     {
       this.model = bindLoadingMessage(this.options.model, this);
 
+      var nlsDomain = this.model.getNlsDomain();
       var actionKey = this.options.actionKey;
 
       this.view = new ActionFormView(_.defaults({model: this.model}, this.options, {
-        formActionText: t.bound(this.model.getNlsDomain(), 'ACTION_FORM:BUTTON:' + actionKey),
-        messageText: t.bound(this.model.getNlsDomain(), 'ACTION_FORM:MESSAGE:' + actionKey),
-        failureText: t.bound(this.model.getNlsDomain(), 'ACTION_FORM:MESSAGE_FAILURE:' + actionKey),
+        formActionText: t.bound(nlsDomain, 'ACTION_FORM:BUTTON:' + actionKey),
+        messageText: t.bound(nlsDomain, 'ACTION_FORM:MESSAGE:' + actionKey),
+        failureText: t.bound(nlsDomain, 'ACTION_FORM:MESSAGE_FAILURE:' + actionKey),
         requestData: {action: actionKey}
       }));
     },

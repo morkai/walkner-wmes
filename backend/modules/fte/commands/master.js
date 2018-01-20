@@ -116,7 +116,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
 
           const user = socket.handshake.user;
 
-          if (!canManage(user, fteMasterEntry, FteMasterEntry.modelName))
+          if (!canManage(user, fteMasterEntry, 'MASTER'))
           {
             return this.skip(new Error('AUTH'));
           }
@@ -201,7 +201,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
 
           const user = socket.handshake.user;
 
-          if (!canManage(user, entry, FteMasterEntry.modelName))
+          if (!canManage(user, entry, 'MASTER'))
           {
             return this.skip(new Error('AUTH'));
           }
@@ -290,7 +290,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
 
       const user = socket.handshake.user;
 
-      if (!canManage(user, FteMasterEntry))
+      if (!canManage(user, FteMasterEntry, 'MASTER'))
       {
         return reply(new Error('AUTH'));
       }
@@ -325,7 +325,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
 
       const user = socket.handshake.user;
 
-      if (!canManage(user, FteMasterEntry))
+      if (!canManage(user, FteMasterEntry, 'MASTER'))
       {
         return reply(new Error('AUTH'));
       }

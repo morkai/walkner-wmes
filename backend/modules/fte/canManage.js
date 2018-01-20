@@ -2,7 +2,7 @@
 
 'use strict';
 
-module.exports = function canManage(user, fteEntry, modelName)
+module.exports = function canManage(user, fteEntry, entryType)
 {
   if (!user)
   {
@@ -19,26 +19,17 @@ module.exports = function canManage(user, fteEntry, modelName)
     return false;
   }
 
-  if (user.privileges.indexOf('PROD_DATA:MANAGE') !== -1)
+  if (!user.privileges.includes('PROD_DATA:MANAGE'))
   {
     return true;
   }
 
-  if (!modelName)
-  {
-    modelName = fteEntry.modelName || fteEntry.constructor.modelName;
-  }
-
-  const privilegePrefix = modelName === 'FteMasterEntry'
-    ? 'FTE:MASTER'
-    : 'FTE:LEADER';
-
-  if (user.privileges.indexOf(privilegePrefix + ':MANAGE') === -1)
+  if (!user.privileges.includes(`FTE:${entryType}:MANAGE`))
   {
     return false;
   }
 
-  if (typeof fteEntry.modelName === 'string')
+  if (!fteEntry.createdAt || !fteEntry.date)
   {
     return true;
   }

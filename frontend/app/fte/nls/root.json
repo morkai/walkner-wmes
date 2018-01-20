@@ -2,6 +2,7 @@
   "root": {
     "BREADCRUMBS:base": "FTE",
     "BREADCRUMBS:leader:browse": "FTE (other)",
+    "BREADCRUMBS:wh:browse": "FTE (warehouse)",
     "BREADCRUMBS:master:browse": "FTE (production)",
     "BREADCRUMBS:addForm": "Choosing",
     "BREADCRUMBS:editForm": "Editing",

@@ -46,7 +46,7 @@ define([
 
     initialize: function()
     {
-      this.model = bindLoadingMessage(new FteMasterEntry({_id: this.options.modelId}), this);
+      this.model = bindLoadingMessage(this.model || new FteMasterEntry({_id: this.options.modelId}), this);
 
       this.view = new FteMasterEntryDetailsPrintableView({model: this.model});
     },

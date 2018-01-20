@@ -99,6 +99,7 @@
     "NAVBAR:PLANNING:2d:help": "Plan available around 17:00.",
     "NAVBAR:FTE": "FTE",
     "NAVBAR:FTE:MASTER": "Production",
+    "NAVBAR:FTE:WH": "Warehouse",
     "NAVBAR:FTE:LEADER": "Other",
     "NAVBAR:FTE:SETTINGS": "Settings",
     "NAVBAR:VIS": "Visualization",

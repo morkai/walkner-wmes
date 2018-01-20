@@ -7,6 +7,8 @@ const mongoSerializer = require('h5.rql/lib/serializers/mongoSerializer');
 const exportFteLeaderEntries = require('./exportFteLeaderEntries');
 const canManage = require('./canManage');
 
+const WH_DIVISION = 'LD'; // TODO ???
+
 module.exports = function setUpFteRoutes(app, fteModule)
 {
   const express = app[fteModule.config.expressId];
@@ -17,10 +19,13 @@ module.exports = function setUpFteRoutes(app, fteModule)
   const FteMasterEntry = mongoose.model('FteMasterEntry');
   const FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
-  const canViewLeader = auth('FTE:LEADER:VIEW');
-  const canViewMaster = auth('FTE:MASTER:VIEW');
   const canManageSettings = auth('PROD_DATA:MANAGE');
+  const canViewMaster = auth('FTE:MASTER:VIEW');
+  const canViewLeader = auth('FTE:LEADER:VIEW');
+  const canViewWh = auth('FTE:WH:VIEW');
+  const canExportWh = auth('FTE:WH:VIEW', 'REPORTS:VIEW', 'REPORTS:6:VIEW');
 
+  // Settings
   express.get(
     '/fte/settings',
     canManageSettings,
@@ -29,17 +34,18 @@ module.exports = function setUpFteRoutes(app, fteModule)
   );
   express.put('/fte/settings/:id', canManageSettings, settings.updateRoute);
 
+  // Production
   express.get(
     '/fte/master',
     canViewMaster,
-    limitToDivision,
+    limitToDivision.bind(null, null),
     express.crud.browseRoute.bind(null, app, FteMasterEntry)
   );
 
   express.get(
     '/fte/master;export.:format?',
     canViewMaster,
-    limitToDivision,
+    limitToDivision.bind(null, null),
     prepareFteMasterEntryExport,
     express.crud.exportRoute.bind(null, app, {
       filename: 'WMES-FTE_PRODUCTION',
@@ -65,21 +71,68 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
   express.delete(
     '/fte/master/:id',
-    canDelete.bind(null, FteMasterEntry),
+    canDelete.bind(null, FteMasterEntry, 'MASTER'),
     express.crud.deleteRoute.bind(null, app, FteMasterEntry)
   );
 
+  // Other
   express.get(
     '/fte/leader',
-    canViewLeader,
-    limitToDivision,
+    canViewWh,
+    limitToDivision.bind(null, limitToOther),
     express.crud.browseRoute.bind(null, app, FteLeaderEntry)
   );
 
   express.get(
     '/fte/leader;export.:format?',
-    auth('FTE:LEADER:VIEW', 'REPORTS:VIEW'),
-    limitToDivision,
+    canViewLeader,
+    limitToDivision.bind(null, limitToOther),
+    function(req, res, next)
+    {
+      req.rql.fields = {};
+      req.rql.sort = {};
+
+      next();
+    },
+    express.crud.exportRoute.bind(null, app, {
+      filename: 'WMES-FTE_OTHER',
+      freezeRows: 1,
+      columns: {
+        division: 8,
+        subdivision: 20,
+        date: 'date',
+        shift: {
+          type: 'integer',
+          width: 5
+        },
+        task: 40,
+        parent: 'boolean'
+      },
+      serializeStream: exportFteLeaderEntries.bind(null, app, subdivisionsModule),
+      model: FteLeaderEntry
+    })
+  );
+
+  express.get('/fte/leader/:id', canViewLeader, readFteEntryRoute.bind(null, 'leader'));
+
+  express.delete(
+    '/fte/leader/:id',
+    canDelete.bind(null, FteLeaderEntry, 'LEADER'),
+    express.crud.deleteRoute.bind(null, app, FteLeaderEntry)
+  );
+
+  // Warehouse
+  express.get(
+    '/fte/wh',
+    canViewLeader,
+    limitToDivision.bind(null, limitToWarehouse),
+    express.crud.browseRoute.bind(null, app, FteLeaderEntry)
+  );
+
+  express.get(
+    '/fte/wh;export.:format?',
+    canExportWh,
+    limitToDivision.bind(null, limitToWarehouse),
     function(req, res, next)
     {
       req.rql.fields = {};
@@ -106,11 +159,11 @@ module.exports = function setUpFteRoutes(app, fteModule)
     })
   );
 
-  express.get('/fte/leader/:id', canViewLeader, readFteEntryRoute.bind(null, 'leader'));
+  express.get('/fte/wh/:id', canViewLeader, readFteEntryRoute.bind(null, 'leader'));
 
   express.delete(
-    '/fte/leader/:id',
-    canDelete.bind(null, FteLeaderEntry),
+    '/fte/wh/:id',
+    canDelete.bind(null, FteLeaderEntry, 'WH'),
     express.crud.deleteRoute.bind(null, app, FteLeaderEntry)
   );
 
@@ -124,42 +177,68 @@ module.exports = function setUpFteRoutes(app, fteModule)
     return next();
   }
 
-  function limitToDivision(req, res, next)
+  function limitToDivision(limitToSubdivisions, req, res, next)
   {
-    const selector = req.rql.selector;
-
-    if (!Array.isArray(selector.args) || !selector.args.length)
-    {
-      return next();
-    }
-
-    const divisionTerm = _.find(selector.args, function(term)
-    {
-      return term.name === 'eq' && term.args[0] === 'division';
-    });
-
-    if (!divisionTerm)
-    {
-      return next();
-    }
-
+    const selector = req.rql.selector.args;
+    const divisionTerm = _.find(selector, term => term.name === 'eq' && term.args[0] === 'division');
+    const subdivisionTerm = _.find(selector, term => term.name !== 'select' && term.args[0] === 'subdivision');
     const subdivisions = [];
 
-    _.forEach(subdivisionsModule.models, function(subdivisionModel)
+    if (divisionTerm)
     {
-      if (subdivisionModel.division === divisionTerm.args[1])
-      {
-        subdivisions.push(subdivisionModel._id.toString());
-      }
-    });
+      _.pull(selector, divisionTerm);
 
-    divisionTerm.name = 'in';
-    divisionTerm.args = ['subdivision', subdivisions];
+      _.forEach(subdivisionsModule.models, function(subdivisionModel)
+      {
+        if (subdivisionModel.division === divisionTerm.args[1])
+        {
+          subdivisions.push(subdivisionModel._id.toString());
+        }
+      });
+    }
+    else if (subdivisionTerm)
+    {
+      return next();
+    }
+    else if (limitToSubdivisions)
+    {
+      limitToSubdivisions(subdivisions);
+    }
+
+    if (subdivisions.length)
+    {
+      selector.push({
+        name: 'in',
+        args: ['subdivision', subdivisions]
+      });
+    }
 
     next();
   }
 
-  function canDelete(FteEntry, req, res, next)
+  function limitToOther(subdivisions)
+  {
+    subdivisionsModule.models.forEach(s =>
+    {
+      if (s.division !== WH_DIVISION)
+      {
+        subdivisions.push(s._id.toString());
+      }
+    });
+  }
+
+  function limitToWarehouse(subdivisions)
+  {
+    subdivisionsModule.models.forEach(s =>
+    {
+      if (s.division === WH_DIVISION)
+      {
+        subdivisions.push(s._id.toString());
+      }
+    });
+  }
+
+  function canDelete(FteEntry, entryType, req, res, next)
   {
     FteEntry.findById(req.params.id).exec(function(err, fteEntry)
     {
@@ -170,7 +249,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
 
       req.model = fteEntry;
 
-      if (fteEntry && !canManage(req.session.user, fteEntry))
+      if (fteEntry && !canManage(req.session.user, fteEntry, entryType))
       {
         return res.sendStatus(403);
       }

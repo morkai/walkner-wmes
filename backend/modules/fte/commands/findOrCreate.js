@@ -7,7 +7,7 @@ const moment = require('moment');
 const step = require('h5.step');
 const canManage = require('../canManage');
 
-module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, socket, data, reply)
+module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, entryType, socket, data, reply)
 {
   const userModule = app[fteModule.config.userId];
   const subdivisionsModule = app[fteModule.config.subdivisionsId];
@@ -20,7 +20,7 @@ module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, socket,
 
   const user = socket.handshake.user;
 
-  if (!canManage(user, FteEntry))
+  if (!canManage(user, FteEntry, entryType))
   {
     return reply(new Error('AUTH'));
   }
@@ -114,7 +114,7 @@ module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, socket,
       if (fteEntry)
       {
         return this.skip(
-          canManage(user, fteEntry) ? null : new Error('AUTH'),
+          canManage(user, fteEntry, entryType) ? null : new Error('AUTH'),
           fteEntry
         );
       }

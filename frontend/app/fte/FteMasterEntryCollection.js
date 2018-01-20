@@ -13,6 +13,8 @@ define([
 
   return Collection.extend({
 
+    TYPE: 'master',
+
     model: FteMasterEntry,
 
     rqlQuery: function(rql)

@@ -25,7 +25,7 @@ define([
     {
       return [
         {
-          label: t.bound('fte', 'BREADCRUMBS:leader:browse'),
+          label: t.bound('fte', 'BREADCRUMBS:' + this.model.TYPE + ':browse'),
           href: this.model.genClientUrl('base')
         },
         {
@@ -38,7 +38,7 @@ define([
 
     initialize: function()
     {
-      this.model = bindLoadingMessage(new FteLeaderEntry({_id: this.options.modelId}), this);
+      this.model = bindLoadingMessage(this.model, this);
 
       this.view = new FteLeaderEntryEditFormView({model: this.model});
 

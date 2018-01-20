@@ -102,6 +102,11 @@ define([
           orgUnit = ORG_UNIT.DIVISION;
           model = new Model({division: userDivision.id});
         }
+        else
+        {
+          orgUnit = ORG_UNIT.DIVISION;
+          model = new Model({division: view.oudView.$id('division').data('select2').opts.data[0].id});
+        }
 
         view.oudView.selectValue(model, orgUnit);
 

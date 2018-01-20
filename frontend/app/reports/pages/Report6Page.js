@@ -335,7 +335,7 @@ define([
       return {
         to: '/warehouse/transferOrders;export.' + format
           + '?sort(shiftDate)&shiftDate>=' + fromTime + '&shiftDate<' + toTime,
-        fte: '/fte/leader;export.' + format
+        fte: '/fte/wh;export.' + format
           + '?sort(date)&date>=' + fromTime
           + '&date<' + toTime
           + '&subdivision=in=(' + subdivisions + ')'

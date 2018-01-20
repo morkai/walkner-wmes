@@ -33,19 +33,6 @@ define([
 
     pageId: 'fteMasterEntryDetails',
 
-    breadcrumbs: [
-      {
-        label: t.bound('fte', 'BREADCRUMBS:master:browse'),
-        href: '#fte/master'
-      },
-      t.bound('fte', 'BREADCRUMBS:details')
-    ],
-
-    createModel: function()
-    {
-      return new FteMasterEntry({_id: this.options.modelId});
-    },
-
     createView: function()
     {
       return new FteMasterEntryDetailsView({model: this.model});

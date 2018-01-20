@@ -144,7 +144,7 @@ define([
             page: null,
             xhr: {
               status: 0,
-              responseText: err.message
+              responseText: err.stack || err.message
             }
           });
         }

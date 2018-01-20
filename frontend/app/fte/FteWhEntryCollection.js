@@ -2,29 +2,27 @@
 
 define([
   'app/user',
-  '../core/Collection',
-  './FteLeaderEntry',
+  './FteLeaderEntryCollection',
   './FteWhEntry'
 ], function(
   user,
-  Collection,
-  FteLeaderEntry,
+  FteLeaderEntryCollection,
   FteWhEntry
 ) {
   'use strict';
 
-  return Collection.extend({
+  return FteLeaderEntryCollection.extend({
 
-    TYPE: 'leader',
+    TYPE: 'wh',
 
-    model: FteLeaderEntry,
+    model: FteWhEntry,
 
     rqlQuery: function(rql)
     {
       var selector;
       var userDivision = user.getDivision();
 
-      if (userDivision && userDivision.get('type') !== 'prod' && userDivision.id !== FteWhEntry.WH_DIVISION)
+      if (userDivision && userDivision.id === FteWhEntry.WH_DIVISION)
       {
         selector = {
           name: 'and',

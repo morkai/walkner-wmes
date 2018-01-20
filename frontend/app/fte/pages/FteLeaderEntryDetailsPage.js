@@ -9,7 +9,6 @@ define([
   'app/core/util/pageActions',
   'app/core/View',
   'app/data/orgUnits',
-  '../FteLeaderEntry',
   '../views/FteLeaderEntryDetailsView'
 ], function(
   _,
@@ -20,7 +19,6 @@ define([
   pageActions,
   View,
   orgUnits,
-  FteLeaderEntry,
   FteLeaderEntryDetailsView
 ) {
   'use strict';
@@ -33,13 +31,16 @@ define([
 
     pageId: 'fteLeaderEntryDetails',
 
-    breadcrumbs: [
-      {
-        label: t.bound('fte', 'BREADCRUMBS:leader:browse'),
-        href: '#fte/leader'
-      },
-      t.bound('fte', 'BREADCRUMBS:details')
-    ],
+    breadcrumbs: function()
+    {
+      return [
+        {
+          label: t.bound('fte', 'BREADCRUMBS:' + this.model.TYPE + ':browse'),
+          href: this.model.genClientUrl('base')
+        },
+        t.bound('fte', 'BREADCRUMBS:details')
+      ];
+    },
 
     actions: function()
     {
@@ -94,13 +95,8 @@ define([
     initialize: function()
     {
       this.changing = this.options.change === '1';
-      this.model = bindLoadingMessage(this.createModel(), this);
+      this.model = bindLoadingMessage(this.model, this);
       this.view = this.createView();
-    },
-
-    createModel: function()
-    {
-      return new FteLeaderEntry({_id: this.options.modelId});
     },
 
     createView: function()

@@ -30,7 +30,7 @@ define([
     initialize: function()
     {
       this.view = new FteEntryAddFormView({
-        model: new FteMasterEntry(),
+        model: this.model || new FteMasterEntry(),
         divisionFilter: function(division)
         {
           return division && division.get('type') === 'prod' && division.isActive();

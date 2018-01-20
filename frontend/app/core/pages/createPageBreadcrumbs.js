@@ -1,8 +1,10 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/i18n'
 ], function(
+  _,
   t
 ) {
   'use strict';
@@ -36,10 +38,13 @@ define([
       });
     }
 
-    breadcrumbs.unshift({
-      label: t.bound(nlsDomain, 'BREADCRUMBS:browse'),
-      href: breadcrumbs.length ? modelOrCollection.genClientUrl('base') : null
-    });
+    if (page.browseBreadcrumb !== false)
+    {
+      breadcrumbs.unshift({
+        label: t.bound(nlsDomain, _.result(page, 'browseBreadcrumb') || 'BREADCRUMBS:browse'),
+        href: breadcrumbs.length ? modelOrCollection.genClientUrl('base') : null
+      });
+    }
 
     if (page.baseBreadcrumb === true)
     {

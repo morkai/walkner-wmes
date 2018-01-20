@@ -56,7 +56,7 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
 
           const user = socket.handshake.user;
 
-          if (!canManage(user, fteLeaderEntry, FteLeaderEntry.modelName))
+          if (!canManage(user, fteLeaderEntry, 'LEADER'))
           {
             return this.skip(new Error('AUTH'));
           }
@@ -217,7 +217,7 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
 
           const user = socket.handshake.user;
 
-          if (!canManage(user, fteLeaderEntry, FteLeaderEntry.modelName))
+          if (!canManage(user, fteLeaderEntry, 'LEADER'))
           {
             return this.skip(new Error('AUTH'));
           }

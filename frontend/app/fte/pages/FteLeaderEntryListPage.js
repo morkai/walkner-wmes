@@ -7,6 +7,7 @@ define([
   'app/core/util/pageActions',
   'app/core/View',
   '../FteLeaderEntryCollection',
+  '../FteWhEntry',
   '../views/FteLeaderEntryListView',
   '../views/FteEntryFilterView',
   'app/core/templates/listPage'
@@ -17,6 +18,7 @@ define([
   pageActions,
   View,
   FteLeaderEntryCollection,
+  FteWhEntry,
   FteLeaderEntryListView,
   FteEntryFilterView,
   listPageTemplate
@@ -31,23 +33,28 @@ define([
 
     pageId: 'fteLeaderEntryList',
 
-    breadcrumbs: [
-      t.bound('fte', 'BREADCRUMBS:leader:browse')
-    ],
+    breadcrumbs: function()
+    {
+      return [
+        t.bound('fte', 'BREADCRUMBS:' + this.collection.TYPE + ':browse')
+      ];
+    },
 
     actions: function(layout)
     {
+      var page = this;
+
       return [
         {
           label: t.bound('fte', 'PAGE_ACTION:add'),
-          href: '#fte/leader;add',
+          href: page.collection.genClientUrl('add'),
           icon: 'plus',
           privileges: function()
           {
-            return user.isAllowedTo('FTE:LEADER:MANAGE', 'PROD_DATA:MANAGE');
+            return user.isAllowedTo(page.collection.getPrivilegePrefix() + ':MANAGE', 'PROD_DATA:MANAGE');
           }
         },
-        pageActions.export(layout, this, this.collection),
+        pageActions.export(layout, page, page.collection),
         {
           label: t.bound('fte', 'PAGE_ACTION:settings'),
           icon: 'cogs',
@@ -68,26 +75,36 @@ define([
 
     defineModels: function()
     {
-      this.collection = bindLoadingMessage(
-        new FteLeaderEntryCollection(null, {rqlQuery: this.options.rql}), this
-      );
+      this.collection = bindLoadingMessage(this.collection, this);
     },
 
     defineViews: function()
     {
-      this.filterView = new FteEntryFilterView({
+      var page = this;
+
+      page.filterView = new FteEntryFilterView({
         model: {
-          rqlQuery: this.collection.rqlQuery
+          rqlQuery: page.collection.rqlQuery
         },
         divisionFilter: function(division)
         {
-          return division.get('type') !== 'prod';
+          if (!division)
+          {
+            return false;
+          }
+
+          if (page.collection.TYPE === 'wh')
+          {
+            return division.id === FteWhEntry.WH_DIVISION;
+          }
+
+          return division.get('type') !== 'prod' && division.id !== FteWhEntry.WH_DIVISION;
         }
       });
 
-      this.listView = new FteLeaderEntryListView({collection: this.collection});
+      page.listView = new FteLeaderEntryListView({collection: page.collection});
 
-      this.listenTo(this.filterView, 'filterChanged', this.refreshList);
+      page.listenTo(page.filterView, 'filterChanged', this.refreshList);
     },
 
     load: function(when)

@@ -3,12 +3,12 @@
 define([
   'app/i18n',
   'app/core/View',
-  '../FteLeaderEntry',
+  '../FteWhEntry',
   '../views/FteEntryAddFormView'
 ], function(
   t,
   View,
-  FteLeaderEntry,
+  FteWhEntry,
   FteEntryAddFormView
 ) {
   'use strict';
@@ -19,35 +19,50 @@ define([
 
     pageId: 'fteLeaderEntryAddForm',
 
-    breadcrumbs: [
-      {
-        label: t.bound('fte', 'BREADCRUMBS:leader:browse'),
-        href: '#fte/leader'
-      },
-      t.bound('fte', 'BREADCRUMBS:addForm')
-    ],
+    breadcrumbs: function()
+    {
+      return [
+        {
+          label: t.bound('fte', 'BREADCRUMBS:' + this.model.TYPE + ':browse'),
+          href: this.model.genClientUrl('base')
+        },
+        t.bound('fte', 'BREADCRUMBS:addForm')
+      ];
+    },
 
     initialize: function()
     {
-      this.view = new FteEntryAddFormView({
-        model: new FteLeaderEntry(),
+      var page = this;
+
+      page.view = new FteEntryAddFormView({
+        model: page.model,
         divisionFilter: function(division)
         {
-          return division && division.get('type') !== 'prod' && division.isActive();
+          if (!division || !division.isActive())
+          {
+            return false;
+          }
+
+          if (page.model.TYPE === 'wh')
+          {
+            return division.id === FteWhEntry.WH_DIVISION;
+          }
+
+          return division.get('type') !== 'prod' && division.id !== FteWhEntry.WH_DIVISION;
         }
       });
 
-      this.listenTo(this.view, 'editable', function(fteLeaderEntry)
+      page.listenTo(page.view, 'editable', function(fteLeaderEntry)
       {
-        this.broker.publish('router.navigate', {
+        page.broker.publish('router.navigate', {
           url: fteLeaderEntry.genClientUrl('edit'),
           trigger: true
         });
       });
 
-      this.listenTo(this.view, 'uneditable', function(fteLeaderEntry)
+      page.listenTo(page.view, 'uneditable', function(fteLeaderEntry)
       {
-        this.broker.publish('router.navigate', {
+        page.broker.publish('router.navigate', {
           url: fteLeaderEntry.genClientUrl(),
           trigger: true
         });
