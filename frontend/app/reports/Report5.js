@@ -179,7 +179,8 @@ define([
         byCompanyAndProdFunction: {},
         dirIndir: null,
         effIneff: null,
-        attendance: report.attendance
+        totalAttendance: report.attendance,
+        attendance: []
       };
 
       this.parseDirIndir(report.dirIndir, attributes);
@@ -209,6 +210,20 @@ define([
       var prodFunctionCount = prodFunctionIds.length;
       var companyId;
       var totalDayCount = 0;
+      var emptyAttendance = {};
+
+      companyIds.forEach(function(companyId)
+      {
+        if (report.attendance[companyId])
+        {
+          emptyAttendance[companyId] = {
+            demand: 0,
+            supply: 0,
+            shortage: 0,
+            absence: 0
+          };
+        }
+      });
 
       for (var i = 0, l = report.data.length; i < l; ++i)
       {
@@ -220,6 +235,7 @@ define([
         var byCompany = {};
         var directByCompany = {};
         var indirectByCompany = {};
+        var attendance = emptyAttendance;
         var x;
 
         if (typeof dataEntry === 'number')
@@ -278,6 +294,7 @@ define([
 
           quantityDone = dataEntry.qty;
           x = dataEntry.key;
+          attendance = dataEntry.attendance;
         }
 
         var dayCount = report.days[x] || 1;
@@ -298,6 +315,7 @@ define([
         totals.direct.push({x: x, y: direct});
         totals.indirect.push({x: x, y: indirect});
         attributes.indirDir.push({x: x, y: indirectDirect});
+        attributes.attendance.push({x: x, y: attendance});
 
         for (var j = 0; j < companyCount; ++j)
         {

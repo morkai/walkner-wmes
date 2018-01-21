@@ -24,7 +24,8 @@ exports.paths = {
   'd3': 'vendor/d3/d3.v3',
   'd3.timeline': 'vendor/d3/d3.timeline',
   'visibly': 'vendor/visibly',
-  'highcharts': 'vendor/highcharts-custom',
+  'highcharts': 'vendor/highcharts',
+  'highcharts.grouped-categories': 'vendor/highcharts.grouped-categories',
   'zeroclipboard': 'vendor/zeroclipboard/ZeroClipboard',
   'screenfull': 'vendor/screenfull',
   'datatables': 'vendor/datatables/media/js/jquery.dataTables',
@@ -63,6 +64,10 @@ exports.shim = {
   },
   'highcharts': {
     deps: ['jquery'],
+    exports: 'Highcharts'
+  },
+  'highcharts.grouped-categories': {
+    deps: ['highcharts'],
     exports: 'Highcharts'
   },
   'screenfull': {

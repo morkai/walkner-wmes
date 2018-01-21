@@ -449,23 +449,29 @@ module.exports = function report5(mongoose, options, done)
         return;
       }
 
-      let attendance = results.attendance[companyId];
-
-      if (!attendance)
-      {
-        attendance = results.attendance[companyId] = {
-          demand: 0,
-          supply: 0,
-          shortage: 0,
-          absence: 0
-        };
-      }
-
-      attendance.demand += totals.demand[companyId];
-      attendance.supply += totals.supply[companyId];
-      attendance.shortage += totals.shortage[companyId];
-      attendance.absence += totals.absence[companyId];
+      incAttendance(dataEntry, companyId, totals);
+      incAttendance(results, companyId, totals);
     });
+  }
+
+  function incAttendance(obj, companyId, totals)
+  {
+    let attendance = obj.attendance[companyId];
+
+    if (!attendance)
+    {
+      attendance = obj.attendance[companyId] = {
+        demand: 0,
+        supply: 0,
+        shortage: 0,
+        absence: 0
+      };
+    }
+
+    attendance.demand += totals.demand[companyId];
+    attendance.supply += totals.supply[companyId];
+    attendance.shortage += totals.shortage[companyId];
+    attendance.absence += totals.absence[companyId];
   }
 
   function addToEntrysDirIndir(dataEntry, isProdFlow, directRatio, prodFunctionId, companyId, count)
@@ -708,7 +714,10 @@ module.exports = function report5(mongoose, options, done)
     return {
       key: key,
       qty: 0,
-      dni: {}
+      dni: {},
+      attendance: {
+
+      }
     };
   }
 

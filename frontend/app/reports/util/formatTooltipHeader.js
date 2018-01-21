@@ -10,7 +10,7 @@ function(
 ) {
   'use strict';
 
-  return function formatTooltipHeader(ctx)
+  return function formatTooltipHeader(ctx, short)
   {
     var timeMoment = time.getMoment(typeof ctx === 'number' ? ctx : ctx.x);
     var interval = (this.model.query ? this.model.query.get('interval') : this.model.get('interval')) || 'day';
@@ -29,6 +29,6 @@ function(
       };
     }
 
-    return timeMoment.format(t('reports', 'tooltipHeaderFormat:' + interval, data));
+    return timeMoment.format(t('reports', 'tooltipHeaderFormat:' + (short ? 'short:' : '') + interval, data));
   };
 });

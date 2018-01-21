@@ -5,13 +5,16 @@ define([
   'app/highcharts',
   'app/i18n',
   'app/core/View',
-  'app/data/companies'
+  'app/data/companies',
+  'app/reports/util/formatTooltipHeader',
+  'highcharts.grouped-categories'
 ], function(
   _,
   Highcharts,
   t,
   View,
-  companies
+  companies,
+  formatTooltipHeader
 ) {
   'use strict';
 
@@ -80,14 +83,14 @@ define([
       chartData.series.forEach(function(data, i)
       {
         chart.series[i].setData(data, false, false, false);
-        chart.series[i].update({stacking: isFullscreen ? 'normal' : null}, false);
+        //chart.series[i].update({stacking: isFullscreen ? 'normal' : null}, false);
       });
-
+/*
       chart.series[0].update(
         {name: t('reports', 'hr:attendance:series:' + (isFullscreen ? 'present' : 'demand'))},
         false
       );
-
+*/
       if (redraw !== false)
       {
         chart.redraw(false);
@@ -103,7 +106,7 @@ define([
         maxAttendance = this.displayOptions.get('maxAttendance');
       }
 
-      this.chart.yAxis[0].setExtremes(0, maxAttendance, redraw, false);
+      this.chart.yAxis[0].setExtremes(null, maxAttendance, redraw, false);
     },
 
     onDisplayOptionsChange: function()
@@ -129,70 +132,6 @@ define([
       {
         this.chart.redraw(false);
       }
-    },
-
-    serializeChartData: function()
-    {
-      var report = this.model;
-      var attendance = report.get('attendance');
-      var chartData = {
-        categories: [],
-        series: [[], []]
-      };
-
-      if (_.isEmpty(attendance))
-      {
-        return chartData;
-      }
-
-      var displayOptions = this.displayOptions;
-      var isFullscreen = this.isFullscreen;
-
-      _.forEach(attendance, function(companyAttendance, companyId)
-      {
-        if (!displayOptions.isCompanyVisible(companyId))
-        {
-          return;
-        }
-
-        var company = companies.get(companyId);
-
-        if (company)
-        {
-          chartData.categories.push(
-            isFullscreen ? company.get('name') : (company.get('shortName') || company.get('name'))
-          );
-        }
-        else
-        {
-          chartData.categories.push(companyId);
-        }
-
-        if (isFullscreen)
-        {
-          chartData.series[0].push({
-            y: companyAttendance.demand - companyAttendance.absence,
-            color: '#0000EE'
-          });
-
-          chartData.series[1].push({
-            y: companyAttendance.absence
-          });
-        }
-        else
-        {
-          chartData.series[0].push({
-            y: companyAttendance.demand,
-            color: '#EEEE00'
-          });
-
-          chartData.series[1].push({
-            y: companyAttendance.absence
-          });
-        }
-      });
-
-      return chartData;
     },
 
     onFullscreen: function(isFullscreen)
@@ -257,6 +196,9 @@ define([
         },
         noData: {},
         xAxis: {
+          labels: {
+            rotation: 0
+          },
           categories: []
         },
         yAxis: {
@@ -267,23 +209,129 @@ define([
           valueDecimals: 1
         },
         legend: {enabled: false},
+        plotOptions: {
+          column: {
+            stacking: 'normal'
+          }
+        },
         series: [
           {
-            name: t('reports', 'hr:attendance:series:demand'),
+            name: t('reports', 'hr:attendance:series:present'),
             type: 'column',
-            color: this.isFullscreen ? '#0000EE' : '#EEEE00',
-            data: [],
-            stacking: null
+            color: '#0000EE',
+            data: []
           },
           {
             name: t('reports', 'hr:attendance:series:absent'),
             type: 'column',
             color: '#EE0000',
-            data: [],
-            stacking: null
+            data: []
           }
         ]
       });
+    },
+
+    serializeChartData: function()
+    {
+      if (this.isFullscreen)
+      {
+        return this.serializeFullscreenChartData();
+      }
+
+      var report = this.model;
+      var attendance = report.get('totalAttendance');
+      var chartData = {
+        categories: [],
+        series: [[], []]
+      };
+
+      if (_.isEmpty(attendance))
+      {
+        return chartData;
+      }
+
+      var displayOptions = this.displayOptions;
+
+      _.forEach(attendance, function(companyAttendance, companyId)
+      {
+        if (!displayOptions.isCompanyVisible(companyId))
+        {
+          return;
+        }
+
+        var company = companies.get(companyId);
+
+        if (company)
+        {
+          chartData.categories.push(company.get('shortName') || company.get('name'));
+        }
+        else
+        {
+          chartData.categories.push(companyId);
+        }
+
+        chartData.series[0].push({
+          y: companyAttendance.demand - companyAttendance.absence,
+          color: '#0000EE'
+        });
+
+        chartData.series[1].push({
+          y: companyAttendance.absence
+        });
+      });
+
+      return chartData;
+    },
+
+    serializeFullscreenChartData: function()
+    {
+      var view = this;
+      var report = view.model;
+      var attendance = report.get('attendance');
+      var chartData = {
+        categories: [],
+        series: [[], []]
+      };
+
+      if (_.isEmpty(attendance))
+      {
+        return chartData;
+      }
+
+      var displayOptions = view.displayOptions;
+
+      attendance.forEach(function(d)
+      {
+        var category = {
+          name: formatTooltipHeader.call(view, d.x, true),
+          categories: []
+        };
+
+        _.forEach(d.y, function(companyAttendance, companyId)
+        {
+          if (!displayOptions.isCompanyVisible(companyId))
+          {
+            return;
+          }
+
+          var company = companies.get(companyId);
+
+          category.categories.push(company ? (company.get('shortName') || company.get('name')) : companyId);
+
+          chartData.series[0].push({
+            y: companyAttendance.demand - companyAttendance.absence,
+            color: '#0000EE'
+          });
+
+          chartData.series[1].push({
+            y: companyAttendance.absence
+          });
+        });
+
+        chartData.categories.push(category);
+      });
+
+      return chartData;
     }
 
   });
