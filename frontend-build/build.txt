@@ -988,10 +988,6 @@ app/lossReasons/routes.js
 app/events/routes.js
 app/emptyOrders/routes.js
 app/invalidOrders/routes.js
-app/core/util/getShiftEndDate.js
-app/fte/util/isEditable.js
-app/fte/FteMasterEntry.js
-app/fte/FteLeaderEntry.js
 app/fte/routes.js
 app/core/util/getRelativeDateRange.js
 app/core/util/fixRelativeDateInRql.js
@@ -1012,6 +1008,7 @@ app/pressWorksheets/PressWorksheet.js
 app/pressWorksheets/routes.js
 app/prodChangeRequests/util/isChangeRequest.js
 app/prodChangeRequests/util/createShowDeleteFormPage.js
+app/core/util/getShiftEndDate.js
 app/orders/util/resolveProductName.js
 app/prodDowntimes/util/decorateProdDowntimeChange.js
 app/prodDowntimes/util/decorateProdDowntime.js

@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["app/i18n","app/time"],function(e,t){"use strict";return function(r){var o,i=t.getMoment("number"==typeof r?r:r.x),u=(this.model.query?this.model.query.get("interval"):this.model.get("interval"))||"day";return"shift"===u?o={shift:e("core","SHIFT:"+(6===i.hours()?1:14===i.hours()?2:3))}:"quarter"===u&&(o={quarter:e("core","QUARTER:"+i.quarter())}),i.format(e("reports","tooltipHeaderFormat:"+u,o))}});
+define(["app/i18n","app/time"],function(t,e){"use strict";return function(r,o){var i,u=e.getMoment("number"==typeof r?r:r.x),a=(this.model.query?this.model.query.get("interval"):this.model.get("interval"))||"day";return"shift"===a?i={shift:t("core","SHIFT:"+(6===u.hours()?1:14===u.hours()?2:3))}:"quarter"===a&&(i={quarter:t("core","QUARTER:"+u.quarter())}),u.format(t("reports","tooltipHeaderFormat:"+(o?"short:":"")+a,i))}});
