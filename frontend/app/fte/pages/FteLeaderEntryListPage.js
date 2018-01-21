@@ -118,10 +118,8 @@ define([
 
       this.listView.refreshCollectionNow();
 
-      var newRqlQueryStr = newRqlQuery.toString();
-
       this.broker.publish('router.navigate', {
-        url: this.collection.genClientUrl() + '?' + newRqlQueryStr,
+        url: this.collection.genClientUrl() + '?' + newRqlQuery,
         trigger: false,
         replace: true
       });

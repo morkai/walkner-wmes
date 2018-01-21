@@ -19,7 +19,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
 
     if (!_.isNumber(entry.totals.demand[companyId]))
     {
-      return done(new Error('INPUT'));
+      return done(app.createError('INPUT', 400));
     }
 
     entry.totals.demand[companyId] = newCount;
@@ -47,14 +47,14 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
 
     if (!task || !task.functions[functionIndex])
     {
-      return done(new Error('INPUT'));
+      return done(app.createError('INPUT', 400));
     }
 
     const taskCompany = task.functions[functionIndex].companies[companyIndex];
 
     if (!taskCompany)
     {
-      return done(new Error('INPUT'));
+      return done(app.createError('INPUT', 400));
     }
 
     taskCompany.count = newCount;
@@ -78,7 +78,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
   }
 
   return {
-    findOrCreate: findOrCreate.bind(null, app, fteModule, FteMasterEntry),
+    findOrCreate: findOrCreate.bind(null, app, fteModule, FteMasterEntry, 'MASTER'),
     updateCount: function(socket, data, reply)
     {
       if (!_.isFunction(reply))
@@ -88,7 +88,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
 
       if (!_.isPlainObject(data))
       {
-        return reply(new Error('INPUT'));
+        return reply(app.createError('INPUT', 400));
       }
 
       data.newCount = Math.max(0, data.newCount || 0);
@@ -111,14 +111,14 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
 
           if (!fteMasterEntry)
           {
-            return this.skip(new Error('UNKNOWN'));
+            return this.skip(app.createError('UNKNOWN', 404));
           }
 
           const user = socket.handshake.user;
 
           if (!canManage(user, fteMasterEntry, 'MASTER'))
           {
-            return this.skip(new Error('AUTH'));
+            return this.skip(app.createError('AUTH', 403));
           }
 
           this.entry = fteMasterEntry;
@@ -138,6 +138,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
         {
           if (err)
           {
+            fteModule.cleanCachedEntry(data._id);
             reply(err);
           }
           else
@@ -175,7 +176,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
         || !_.isBoolean(data.newValue)
         || !_.isNumber(data.taskIndex))
       {
-        return reply(new Error('INPUT'));
+        return reply(app.createError('INPUT', 400));
       }
 
       step(
@@ -196,21 +197,21 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
 
           if (!entry)
           {
-            return this.skip(new Error('UNKNOWN'));
+            return this.skip(app.createError('UNKNOWN', 404));
           }
 
           const user = socket.handshake.user;
 
           if (!canManage(user, entry, 'MASTER'))
           {
-            return this.skip(new Error('AUTH'));
+            return this.skip(app.createError('AUTH', 403));
           }
 
           const task = entry.tasks[data.taskIndex];
 
           if (!task)
           {
-            return this.skip(new Error('INPUT'));
+            return this.skip(app.createError('INPUT', 400));
           }
 
           task.noPlan = data.newValue;
@@ -285,14 +286,14 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
         || !_.isString(data.user.name)
         || !_.isString(data.user.personellId))
       {
-        return reply(new Error('INPUT'));
+        return reply(app.createError('INPUT', 400));
       }
 
       const user = socket.handshake.user;
 
       if (!canManage(user, FteMasterEntry, 'MASTER'))
       {
-        return reply(new Error('AUTH'));
+        return reply(app.createError('AUTH', 403));
       }
 
       const updater = userModule.createUserInfo(user, socket);
@@ -320,14 +321,14 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
         || !_.isString(data._id)
         || !_.isString(data.userId))
       {
-        return reply(new Error('INPUT'));
+        return reply(app.createError('INPUT', 400));
       }
 
       const user = socket.handshake.user;
 
       if (!canManage(user, FteMasterEntry, 'MASTER'))
       {
-        return reply(new Error('AUTH'));
+        return reply(app.createError('AUTH', 403));
       }
 
       const updater = userModule.createUserInfo(user, socket);

@@ -1,72 +1,150 @@
-<div class="table-responsive">
-<table class="table table-bordered table-condensed table-hover fte-leaderEntry <%- editable ? 'is-editable' : '' %>">
+<table class="table table-bordered table-condensed table-hover fte-leaderEntry <%- editable ? 'is-editing' : '' %>">
   <thead>
-    <tr>
-      <th class="fte-leaderEntry-column-task" rowspan="<%- divisions.length ? 6 : 4 %>"><%- t('fte', 'leaderEntry:column:task') %>
-      <th class="fte-leaderEntry-column-total even" colspan="<%- companyCount * (divisions.length || 1) %>"><%- t('fte', 'leaderEntry:column:taskTotal') %></th>
-      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
-      <th class="fte-leaderEntry-column-prodFunction <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length * (divisions.length || 1) %>" data-column="<%- functionIndex %>"><%- totalByProdFunction[prodFunctionId].prodFunction %></th>
-      <% }) %>
-      <% if (editable) { %>
-      <th rowspan="<%- divisions.length ? 6 : 4 %>"></th>
-      <% } %>
-    </tr>
-    <tr>
-      <th class="fte-leaderEntry-total even" colspan="<%- companyCount * (divisions.length || 1) %>"><%- round(total) %>
-      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
-      <th class="fte-leaderEntry-total-prodFunction <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- Object.keys(totalByProdFunction[prodFunctionId].companies).length * (divisions.length || 1) %>" data-column="<%- functionIndex %>"><%- round(totalByProdFunction[prodFunctionId].total) %>
-      <% }) %>
-    </tr>
-    <tr>
-      <% Object.keys(totalByCompany).forEach(function(companyId) { %>
-      <th class="fte-leaderEntry-column-company even" colspan="<%- divisions.length %>"><%- totalByCompany[companyId].name %>
-      <% }) %>
-      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
-      <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
-      <th class="fte-leaderEntry-column-company <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- divisions.length %>" data-column="<%- functionIndex %>:<%- totalByProdFunction[prodFunctionId].companies[companyId].index %>"><%= totalByCompany[companyId].name %>
-      <% }) %>
-      <% }) %>
-    </tr>
-    <tr>
-      <% Object.keys(totalByCompany).forEach(function(companyId) { %>
-      <th class="fte-leaderEntry-total-company even" colspan="<%- divisions.length %>" data-company="<%- totalByCompany[companyId].index %>"><%- round(totalByCompany[companyId].total) %>
-      <% }) %>
-      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
-      <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
-      <th class="fte-leaderEntry-total-prodFunction-company <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- divisions.length %>" data-function="<%- functionIndex %>" data-company="<%- totalByProdFunction[prodFunctionId].companies[companyId].index %>" data-column="<%- functionIndex %>:<%- totalByProdFunction[prodFunctionId].companies[companyId].index %>"><%- round(totalByProdFunction[prodFunctionId].companies[companyId].total) %>
-      <% }) %>
-      <% }) %>
-    </tr>
-    <% if (divisions.length) { %>
-    <tr>
-      <% Object.keys(totalByCompany).forEach(function(companyId) { %>
-      <% divisions.forEach(function(division) { %>
-      <th class="fte-leaderEntry-column-division even"><%- division %>
-      <% }) %>
-      <% }) %>
-      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
-      <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
-      <% divisions.forEach(function(division, divisionIndex) { %>
-      <th class="fte-leaderEntry-column-division <%- functionIndex % 2 ? 'even' : '' %>" data-column="<%- functionIndex %>:<%- totalByProdFunction[prodFunctionId].companies[companyId].index %>:<%- divisionIndex %>"><%- division %>
-      <% }) %>
-      <% }) %>
-      <% }) %>
-    </tr>
-    <tr>
-      <% Object.keys(totalByCompany).forEach(function(companyId) { %>
-      <% divisions.forEach(function(division, divisionIndex) { %>
-      <th class="fte-leaderEntry-total-division even" data-column="<%- totalByCompany[companyId].index %>:<%- divisionIndex %>" data-company="<%- totalByCompany[companyId].index %>" data-division="<%- divisionIndex %>"><%- round(totalByCompany[companyId].divisions[division]) %>
-      <% }) %>
-      <% }) %>
-      <% Object.keys(totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
-      <% Object.keys(totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
-      <% divisions.forEach(function(division, divisionIndex) { %>
-      <th class="fte-leaderEntry-total-prodFunction-division <%- functionIndex % 2 ? 'even' : '' %>" data-column="<%- functionIndex %>:<%- totalByProdFunction[prodFunctionId].companies[companyId].index %>:<%- divisionIndex %>" data-company="<%- totalByProdFunction[prodFunctionId].companies[companyId].index %>" data-division="<%- divisionIndex %>"><%- round(totalByProdFunction[prodFunctionId].companies[companyId].divisions[division]) %>
-      <% }) %>
-      <% }) %>
-      <% }) %>
-    </tr>
+  <tr>
+    <th class="fte-leaderEntry-column-task" rowspan="<%- divisions.length ? 7 : 5 %>">
+      <%- t('fte', 'leaderEntry:column:task') %>
+    </th>
+    <% if (absence.available) { %>
+    <th class="fte-leaderEntry-demand fte-leaderEntry-totalColumn" rowspan="3" colspan="<%- demand.columnCount %>">
+      <%- t('fte', 'masterEntry:column:demand') %>
+    </th>
+    <th class="fte-leaderEntry-shortage fte-leaderEntry-totalColumn" rowspan="2" colspan="<%- shortage.columnCount %>">
+      <%- t('fte', 'masterEntry:column:shortage') %>
+    </th>
     <% } %>
+    <th class="fte-leaderEntry-supply fte-leaderEntry-totalColumn" colspan="<%- supply.columnCount %>">
+      <%- t('fte', 'masterEntry:column:supply') %>
+    </th>
+    <% if (editable) { %>
+    <th rowspan="<%- divisions.length ? 7 : 5 %>"></th>
+    <% } %>
+  </tr>
+  <tr>
+    <th class="fte-leaderEntry-supply fte-leaderEntry-column-total" colspan="<%- companyCount * (divisions.length || 1) %>">
+      <%- t('fte', 'leaderEntry:column:taskTotal') %>
+    </th>
+    <% Object.keys(supply.totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+    <th class="fte-leaderEntry-supply fte-leaderEntry-column-prodFunction" colspan="<%- Object.keys(supply.totalByProdFunction[prodFunctionId].companies).length * (divisions.length || 1) %>" data-column="<%- functionIndex %>">
+      <%= supply.totalByProdFunction[prodFunctionId].name %>
+    </th>
+    <% }) %>
+  </tr>
+  <tr>
+    <% if (absence.available) { %>
+    <th class="fte-leaderEntry-shortage fte-leaderEntry-shortage-diff-total fte-leaderEntry-totalColumn"><%- round(absence.overallTotal) %></th>
+    <% _.forEach(companies, function(companyName, companyId) { %>
+    <th class="fte-leaderEntry-shortage fte-leaderEntry-shortage-diff" data-companyid="<%- companyId %>">
+      <%- round(absence.totalByCompany[companyId]) %>
+    </th>
+    <% }) %>
+    <% } %>
+
+    <th class="fte-leaderEntry-supply fte-leaderEntry-total" colspan="<%- companyCount * (divisions.length || 1) %>"><%- round(supply.overallTotal) %></th>
+    <% Object.keys(supply.totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+    <th class="fte-leaderEntry-supply fte-leaderEntry-total-prodFunction" colspan="<%- Object.keys(supply.totalByProdFunction[prodFunctionId].companies).length * (divisions.length || 1) %>" data-column="<%- functionIndex %>">
+      <%- round(supply.totalByProdFunction[prodFunctionId].total) %>
+    </th>
+    <% }) %>
+  </tr>
+  <tr>
+    <% if (absence.available) { %>
+    <th class="fte-leaderEntry-demand fte-leaderEntry-totalColumn"><%- t('fte', 'masterEntry:column:total') %></th>
+    <% _.forEach(companies, function(company) { %>
+    <th class="fte-leaderEntry-demand fte-leaderEntry-column-company"><%= company.name %></th>
+    <% }) %>
+    <th class="fte-leaderEntry-shortage fte-leaderEntry-totalColumn"><%- t('fte', 'masterEntry:column:total') %></th>
+    <% _.forEach(companies, function(company) { %>
+    <th class="fte-leaderEntry-shortage fte-leaderEntry-column-company"><%= company.name %></th>
+    <% }) %>
+    <% } %>
+
+    <% Object.keys(supply.totalByCompany).forEach(function(companyId) { %>
+    <th class="fte-leaderEntry-supply fte-leaderEntry-column-company" colspan="<%- divisions.length %>"><%- companies[companyId].name %></th>
+    <% }) %>
+    <% Object.keys(supply.totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+    <% Object.keys(supply.totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+    <th class="fte-leaderEntry-supply fte-leaderEntry-column-company" colspan="<%- divisions.length %>" data-column="<%- functionIndex %>:<%- companies[companyId].index %>">
+      <%= companies[companyId].name %>
+    </th>
+    <% }) %>
+    <% }) %>
+  </tr>
+  <tr>
+    <% if (absence.available) { %>
+    <th class="fte-leaderEntry-demand fte-leaderEntry-total-demand"><%- round(demand.overallTotal) %></th>
+    <% _.forEach(companies, function(companyName, companyId) { %>
+    <th class="fte-leaderEntry-demand fte-leaderEntry-total-demand-company fte-count-container" data-key="demand:<%- companyId %>" data-companyId="<%- companyId %>">
+      <% if (editable) { %>
+      <input
+        class="form-control no-controls fte-leaderEntry-count"
+        type="number"
+        min="0"
+        max="9999"
+        value="<%- demand.totalByCompany[companyId] || '' %>"
+        data-kind="demand"
+        data-value="<%- demand.totalByCompany[companyId] %>"
+        data-companyId="<%- companyId %>">
+      <% } else { %>
+      <span class="fte-count"><%- round(demand.totalByCompany[companyId]) %></span>
+      <% } %>
+    </th>
+    <% }) %>
+    <th class="fte-leaderEntry-shortage fte-leaderEntry-total-shortage"><%- round(shortage.overallTotal) %></th>
+    <% _.forEach(companies, function(company, companyId) { %>
+    <th class="fte-leaderEntry-shortage fte-leaderEntry-total-shortage-company" data-companyId="<%- companyId %>">
+      <%- round(shortage.totalByCompany[companyId]) %>
+    </th>
+    <% }) %>
+    <% } %>
+
+    <% Object.keys(supply.totalByCompany).forEach(function(companyId) { %>
+    <th class="fte-leaderEntry-supply fte-leaderEntry-total-company" colspan="<%- divisions.length %>" data-companyid="<%- companyId %>" data-company="<%- companies[companyId].index %>">
+      <%- round(supply.totalByCompany[companyId].total) %>
+    </th>
+    <% }) %>
+    <% Object.keys(supply.totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+    <% Object.keys(supply.totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+    <th class="fte-leaderEntry-supply fte-leaderEntry-total-prodFunction-company" colspan="<%- divisions.length %>" data-function="<%- functionIndex %>" data-company="<%- companies[companyId].index %>" data-column="<%- functionIndex %>:<%- companies[companyId].index %>">
+      <%- round(supply.totalByProdFunction[prodFunctionId].companies[companyId].total) %>
+    </th>
+    <% }) %>
+    <% }) %>
+  </tr>
+  <% if (divisions.length) { %>
+  <tr>
+    <% if (absence.available) { %>
+    <th colspan="<%- 1 + companyCount %>" rowspan="2"></th>
+    <th colspan="<%- 1 + companyCount %>" rowspan="2"></th>
+    <% } %>
+
+    <% Object.keys(supply.totalByCompany).forEach(function(companyId) { %>
+    <% divisions.forEach(function(division) { %>
+    <th class="fte-leaderEntry-supply fte-leaderEntry-column-division"><%- division %>
+    <% }) %>
+    <% }) %>
+    <% Object.keys(supply.totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+    <% Object.keys(supply.totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+    <% divisions.forEach(function(division, divisionIndex) { %>
+    <th class="fte-leaderEntry-supply fte-leaderEntry-column-division" data-column="<%- functionIndex %>:<%- companies[companyId].index %>:<%- divisionIndex %>"><%= division %>
+    <% }) %>
+    <% }) %>
+    <% }) %>
+  </tr>
+  <tr>
+    <% Object.keys(supply.totalByCompany).forEach(function(companyId) { %>
+    <% divisions.forEach(function(division, divisionIndex) { %>
+    <th class="fte-leaderEntry-supply fte-leaderEntry-total-division" data-column="<%- companies[companyId].index %>:<%- divisionIndex %>" data-company="<%- companies[companyId].index %>" data-division="<%- divisionIndex %>"><%- round(supply.totalByCompany[companyId].divisions[division]) %>
+    <% }) %>
+    <% }) %>
+    <% Object.keys(supply.totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
+    <% Object.keys(supply.totalByProdFunction[prodFunctionId].companies).forEach(function(companyId) { %>
+    <% divisions.forEach(function(division, divisionIndex) { %>
+    <th class="fte-leaderEntry-supply fte-leaderEntry-total-prodFunction-division" data-column="<%- functionIndex %>:<%- companies[companyId].index %>:<%- divisionIndex %>" data-company="<%- companies[companyId].index %>" data-division="<%- divisionIndex %>"><%- round(supply.totalByProdFunction[prodFunctionId].companies[companyId].divisions[division]) %>
+    <% }) %>
+    <% }) %>
+    <% }) %>
+  </tr>
+  <% } %>
   </thead>
   <tbody>
     <% tasks.forEach(function(task) { %>
@@ -75,7 +153,7 @@
         data-parent="<%- task.parent %>"
         data-level="<%- task.level %>"
         <% if (task.backgroundColor) { %>style="background-color: <%- task.backgroundColor %>"<% } %>>
-      <td class="fte-leaderEntry-cell-task" <% if (task.level) { %>style="padding-left: <%- task.level * 30 %>px;"<% } %>>
+      <td class="fte-leaderEntry-cell-task" <% if (task.level) { %>style="padding-left: <%- task.level * 30 %>px;"<% } %> colspan="<%- 1 + (absence.available ? (demand.columnCount + shortage.columnCount) : 0) %>">
         <%= task.name %>
         <% if (!editable && task.comment) { %>
         <span class="fte-leaderEntry-comment"><i class="fa fa-comment"></i> <%= task.comment %></span>
@@ -84,24 +162,30 @@
       <% Object.keys(task.totalByCompany).forEach(function(companyId) { %>
       <% if (task.fteDiv) { %>
       <% divisions.forEach(function(divisionId, divisionIndex) { %>
-      <td class="fte-leaderEntry-total-company-task even" data-companyId="<%- task.totalByCompany[companyId].index %>" data-company="<%- task.totalByCompany[companyId].index %>" data-divisionId="<%- divisionId %>" data-division="<%- divisionIndex %>"><%- round(task.totalByCompany[companyId].divisions[divisionId]) %></td>
+      <td class="fte-leaderEntry-total-company-task" <%- task.absence ? 'data-absence' : '' %> data-companyid="<%- companyId %>" data-company="<%- task.totalByCompany[companyId].index %>" data-divisionid="<%- divisionId %>" data-division="<%- divisionIndex %>">
+        <%- round(task.totalByCompany[companyId].divisions[divisionId]) %>
+      </td>
       <% }) %>
       <% } else { %>
-      <td class="fte-leaderEntry-total-company-task even" colspan="<%- divisions.length %>" data-company="<%- task.totalByCompany[companyId].index %>"><%- round(task.totalByCompany[companyId].total) %></td>
+      <td class="fte-leaderEntry-total-company-task" colspan="<%- divisions.length %>" <%- task.absence ? 'data-absence' : '' %> data-companyid="<%- companyId %>" data-company="<%- task.totalByCompany[companyId].index %>">
+        <%- round(task.totalByCompany[companyId].total) %>
+      </td>
       <% } %>
       <% }) %>
       <% task.functions.forEach(function(prodFunction, functionIndex) { %>
       <% prodFunction.companies.forEach(function(company, companyIndex) { %>
       <% if (task.fteDiv) { %>
       <% company.count.forEach(function(companyCount, divisionIndex) { %>
-      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : 'fte-count-container fte-leaderEntry-count-container' %> <%- functionIndex % 2 ? 'even' : '' %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>" data-division="<%- divisionIndex %>" data-level="<%- task.level %>" data-key="<%- task.index %>:<%- functionIndex %>:<%- companyIndex %>:<%- divisionIndex %>">
+      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : 'fte-count-container fte-leaderEntry-count-container' %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>" data-division="<%- divisionIndex %>" data-level="<%- task.level %>" data-key="<%- task.index %>:<%- functionIndex %>:<%- companyIndex %>:<%- divisionIndex %>">
         <% if (editable && !task.hasChildren) { %>
         <input
           class="form-control no-controls fte-leaderEntry-count"
           type="number"
           min="0"
           max="9999"
-          value="<%- companyCount.value %>"
+          value="<%- companyCount.value || '' %>"
+          data-kind="supply"
+          <%- task.absence ? 'data-absence' : '' %>
           data-value="<%- companyCount.value %>"
           data-task="<%- task.index %>"
           data-function="<%- functionIndex %>"
@@ -114,14 +198,16 @@
       </td>
       <% }) %>
       <% } else { %>
-      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : 'fte-count-container fte-leaderEntry-count-container' %> <%- functionIndex % 2 ? 'even' : '' %>" colspan="<%- divisions.length %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>" data-level="<%- task.level %>" data-key="<%- task.index %>:<%- functionIndex %>:<%- companyIndex %>">
+      <td class="<%- task.hasChildren ? 'fte-leaderEntry-parent-count' : 'fte-count-container fte-leaderEntry-count-container' %>" colspan="<%- divisions.length %>" data-function="<%- functionIndex %>" data-company="<%- company.index %>" data-level="<%- task.level %>" data-key="<%- task.index %>:<%- functionIndex %>:<%- companyIndex %>">
         <% if (editable && !task.hasChildren) { %>
         <input
           class="form-control no-controls fte-leaderEntry-count"
           type="number"
           min="0"
           max="9999"
-          value="<%- company.count %>"
+          value="<%- company.count || '' %>"
+          data-kind="supply"
+          <%- task.absence ? 'data-absence' : '' %>
           data-value="<%- company.count %>"
           data-task="<%- task.index %>"
           data-function="<%- functionIndex %>"
@@ -148,4 +234,3 @@
     <% }) %>
   </tbody>
 </table>
-</div>

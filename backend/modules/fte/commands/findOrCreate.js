@@ -18,13 +18,6 @@ module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, entryTy
     reply = function() {};
   }
 
-  const user = socket.handshake.user;
-
-  if (!canManage(user, FteEntry, entryType))
-  {
-    return reply(new Error('AUTH'));
-  }
-
   if (!_.isObject(data))
   {
     return reply(new Error('INPUT'));
@@ -45,6 +38,18 @@ module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, entryTy
   if (shiftMoment.valueOf() > moment().hours(0).minutes(0).seconds(0).milliseconds(0).valueOf())
   {
     return reply(new Error('INPUT'));
+  }
+
+  if (entryType === 'LEADER' && subdivision.division === 'LD')
+  {
+    entryType = 'WH';
+  }
+
+  const user = socket.handshake.user;
+
+  if (!canManage(user, FteEntry, entryType))
+  {
+    return reply(new Error('AUTH'));
   }
 
   if (data.shift === 3)
@@ -97,6 +102,11 @@ module.exports = function findOrCreateFteEntry(app, fteModule, FteEntry, entryTy
         structure,
         absenceTasks: {}
       };
+
+      if (entryType === 'LEADER')
+      {
+        return;
+      }
 
       _.forEach(settings.absenceTasks, id => this.settings.absenceTasks[id] = true);
     },

@@ -51,7 +51,9 @@
         </th>
       </tr>
       <tr>
-        <th class="fte-masterEntry-supply fte-masterEntry-totalColumn" colspan="<%- companyCount %>"><%- t('fte', 'masterEntry:column:total') %></th>
+        <th class="fte-masterEntry-supply fte-masterEntry-totalColumn" colspan="<%- companyCount %>">
+          <%- t('fte', 'masterEntry:column:total') %>
+        </th>
         <% Object.keys(supply.totalByProdFunction).forEach(function(prodFunctionId, functionIndex) { %>
         <th class="fte-masterEntry-supply fte-masterEntry-column-prodFunction" colspan="<%- Object.keys(supply.totalByProdFunction[prodFunctionId].companies).length %>" data-column="<%- functionIndex %>">
           <%- supply.totalByProdFunction[prodFunctionId].name %>

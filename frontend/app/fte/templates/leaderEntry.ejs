@@ -19,11 +19,8 @@
       <span class="fte-property-value"><%- shift %></span>
     </div>
   </div>
-  <div id="<%- idPrefix %>-entryPanel" class="panel panel-primary fte-entryPanel">
+  <div id="<%- idPrefix %>-entryPanel" class="panel panel-primary fte-entryPanel is-colored">
     <div class="panel-heading"><%- t('fte', 'leaderEntry:panel:title' + (editable ? ':editable': '')) %></div>
-    <% if (editable) { %>
-    <div class="message message-inline message-info"><%- t('fte', 'panel:info') %></div>
-    <% } %>
     <% if (withFunctions) { %>
     <% include leaderEntryTableWFunctions.ejs %>
     <% } else { %>

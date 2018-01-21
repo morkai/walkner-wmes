@@ -29,6 +29,15 @@ define([
     events: {
       'change .fte-masterEntry-count': 'updateCount',
       'keyup .fte-masterEntry-count': 'updateCount',
+      'keydown .fte-masterEntry-count': function(e)
+      {
+        if (e.which === 13)
+        {
+          this.focusNextInput(this.$(e.target));
+
+          return false;
+        }
+      },
       'change .fte-masterEntry-noPlan': function(e)
       {
         this.updatePlan(e.currentTarget);
@@ -397,12 +406,8 @@ define([
 
     updateCount: function(e)
     {
-      if (e.which === 13)
-      {
-        return this.focusNextInput(this.$(e.target));
-      }
-
-      var oldCount = fractionsUtil.parse(e.target.getAttribute('data-value'));
+      var dataset = e.target.dataset;
+      var oldCount = fractionsUtil.parse(dataset.value);
       var newCount = fractionsUtil.parse(e.target.value);
 
       if (oldCount === newCount)
@@ -410,9 +415,9 @@ define([
         return;
       }
 
-      var timerKey = e.target.dataset.task
-        + ':' + e.target.dataset.function
-        + ':' + e.target.dataset.company;
+      var timerKey = dataset.task
+        + ':' + dataset.function
+        + ':' + dataset.company;
 
       if (this.timers[timerKey])
       {
@@ -430,38 +435,39 @@ define([
 
       delete view.timers[timerKey];
 
-      var oldRemote = countEl.dataset.remote;
+      var dataset = countEl.dataset;
+      var oldRemote = dataset.remote;
       var data = {
         type: 'count',
         socketId: view.socket.getId(),
         _id: view.model.id,
-        kind: countEl.dataset.kind,
+        kind: dataset.kind,
         newCount: newCount
       };
 
       if (data.kind === 'demand')
       {
-        data.companyId = countEl.dataset.companyid;
+        data.companyId = dataset.companyid;
       }
       else
       {
-        data.taskIndex = +countEl.dataset.task;
-        data.functionIndex = +countEl.dataset.function;
-        data.companyIndex = +countEl.dataset.company;
+        data.taskIndex = +dataset.task;
+        data.functionIndex = +dataset.function;
+        data.companyIndex = +dataset.company;
       }
 
-      countEl.dataset.value = data.newCount;
-      countEl.dataset.remote = 'false';
+      dataset.value = data.newCount;
+      dataset.remote = 'false';
 
       view.socket.emit('fte.master.updateCount', data, function(err)
       {
         if (err)
         {
-          if (countEl.dataset.remote !== 'true')
+          if (dataset.remote !== 'true')
           {
             countEl.value = oldCount;
-            countEl.dataset.value = oldCount;
-            countEl.dataset.remote = oldRemote;
+            dataset.value = oldCount;
+            dataset.remote = oldRemote;
 
             view.recount(countEl);
           }
@@ -475,7 +481,7 @@ define([
 
     recount: function(countEl)
     {
-      if (countEl.parentNode.classList.contains('fte-masterEntry-demand'))
+      if (countEl.dataset.kind === 'demand')
       {
         this.recountDemand();
       }

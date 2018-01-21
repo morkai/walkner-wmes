@@ -252,8 +252,7 @@ module.exports = function report5(mongoose, options, done)
       date: {
         $gte: fromDate,
         $lt: toDate
-      },
-      total: {$gt: 0}
+      }
     };
 
     if (Array.isArray(options.subdivisions) && options.subdivisions.length)
@@ -282,13 +281,11 @@ module.exports = function report5(mongoose, options, done)
 
   function countFteLeaderEntries(fteRatios, done)
   {
-    let subdivisionMap;
+    let subdivisionMap = {};
 
     if (Array.isArray(options.subdivisions))
     {
-      subdivisionMap = {};
-
-      _.forEach(options.subdivisions, function(subdivisionId)
+      options.subdivisions.forEach(subdivisionId =>
       {
         subdivisionMap[subdivisionId] = true;
       });
@@ -302,15 +299,15 @@ module.exports = function report5(mongoose, options, done)
       date: {
         $gte: fromDate,
         $lt: toDate
-      },
-      'totals.overall': {$gt: 0}
+      }
     };
 
     const fields = {
       _id: 0,
       subdivision: 1,
       date: 1,
-      tasks: 1
+      tasks: 1,
+      totals: 1
     };
 
     const stream = FteLeaderEntry
@@ -372,6 +369,11 @@ module.exports = function report5(mongoose, options, done)
 
   function handleFteMasterEntry(fteRatios, fteMasterEntry)
   {
+    if (!fteMasterEntry.totals.supply.total)
+    {
+      return;
+    }
+
     const dataEntry = getDataEntry(fteMasterEntry.date);
 
     if (dataEntry === null)
@@ -427,10 +429,13 @@ module.exports = function report5(mongoose, options, done)
       }
     }
 
-    countAttendance(fteMasterEntry.totals);
+    if (options.divisionType !== 'dist')
+    {
+      countAttendance(dataEntry, fteMasterEntry.totals);
+    }
   }
 
-  function countAttendance(totals)
+  function countAttendance(dataEntry, totals)
   {
     if (!totals || !totals.demand.total)
     {
@@ -555,7 +560,7 @@ module.exports = function report5(mongoose, options, done)
 
   function handleFteLeaderEntry(subdivisionMap, fteRatios, fteLeaderEntry)
   {
-    if (options.subdivisionTypes[fteLeaderEntry.subdivision] === 'other')
+    if (!fteLeaderEntry.totals.supply.total || options.subdivisionTypes[fteLeaderEntry.subdivision] === 'other')
     {
       return;
     }
@@ -620,6 +625,11 @@ module.exports = function report5(mongoose, options, done)
 
         countStorageByProdTasks(options.division, task, task.companies, ratios);
       }
+    }
+
+    if (options.divisionType !== 'prod' && matchingSubdivision)
+    {
+      countAttendance(dataEntry, fteLeaderEntry.totals);
     }
   }
 

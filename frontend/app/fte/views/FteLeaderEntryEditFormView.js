@@ -128,9 +128,14 @@ define([
 
         this.showFocusInfoBar(inputEl);
       },
-      'blur .fte-leaderEntry-count, textarea.fte-leaderEntry-comment': function()
+      'blur .fte-leaderEntry-count, textarea.fte-leaderEntry-comment': function(e)
       {
         this.$(this.focused).removeClass('is-focused');
+
+        if (e.currentTarget.value === '0')
+        {
+          e.currentTarget.value = '';
+        }
 
         this.hideFocusInfoBar();
       },
@@ -225,11 +230,16 @@ define([
 
     focusNextInput: function($current)
     {
-      var $nextCell = $current.closest('td').next('td');
+      var $nextCell = $current.parent().next();
+
+      if ($nextCell.hasClass('fte-leaderEntry-total-shortage'))
+      {
+        return this.scrollIntoView(this.$('tbody .fte-leaderEntry-count').first().select()[0]);
+      }
 
       if ($nextCell.length && !$nextCell.hasClass('fte-leaderEntry-actions'))
       {
-        return this.scrollIntoView($nextCell.find('input').select()[0]);
+        return this.scrollIntoView($nextCell.find('.fte-leaderEntry-count').select()[0]);
       }
 
       var $nextRow = $current.closest('tr').next();
@@ -246,11 +256,7 @@ define([
         }
       }
 
-      var firstCountEl = this.el.querySelector('.fte-leaderEntry-count');
-
-      firstCountEl.select();
-
-      this.scrollIntoView(firstCountEl);
+      this.scrollIntoView(this.$('.fte-leaderEntry-count').first().select()[0]);
     },
 
     scrollIntoView: function(el)
@@ -268,53 +274,68 @@ define([
     updateCount: function(e)
     {
       var dataset = e.target.dataset;
-      var oldCount = fractionsUtil.parse(dataset.value) || 0;
-      var newCount = fractionsUtil.parse(e.target.value) || 0;
+      var oldCount = fractionsUtil.parse(dataset.value);
+      var newCount = fractionsUtil.parse(e.target.value);
 
       if (oldCount === newCount)
       {
         return;
       }
 
-      var timerKey = dataset.task + ':' + dataset.function + ':' + dataset.company + ':' + dataset.division;
+      var timerKey = dataset.task
+        + ':' + dataset.function
+        + ':' + dataset.company
+        + ':' + dataset.division;
 
       if (this.timers[timerKey])
       {
         clearTimeout(this.timers[timerKey]);
       }
 
-      this.timers[timerKey] = setTimeout(this.doUpdateCount.bind(this), 250, e.target, timerKey, oldCount, newCount);
+      this.timers[timerKey] = setTimeout(
+        this.doUpdateCount.bind(this), 250, e.target, timerKey, oldCount, newCount
+      );
     },
 
     doUpdateCount: function(countEl, timerKey, oldCount, newCount)
     {
-      delete this.timers[timerKey];
+      var view = this;
+
+      delete view.timers[timerKey];
 
       var dataset = countEl.dataset;
       var oldRemote = dataset.remote;
       var data = {
-        socketId: this.socket.getId(),
-        _id: this.model.id,
-        newCount: newCount,
-        taskIndex: parseInt(dataset.task, 10),
-        functionIndex: parseInt(dataset.function, 10) || 0,
-        companyIndex: parseInt(dataset.company, 10),
-        companyIndexServer: parseInt(dataset.companyServer, 10)
+        type: 'count',
+        socketId: view.socket.getId(),
+        _id: view.model.id,
+        kind: dataset.kind || 'supply',
+        newCount: newCount
       };
 
-      var divisionIndex = parseInt(dataset.division, 10);
-
-      if (!isNaN(divisionIndex))
+      if (data.kind === 'demand')
       {
-        data.divisionIndex = divisionIndex;
+        data.companyId = dataset.companyid;
+      }
+      else
+      {
+        var divisionIndex = +dataset.division;
+
+        if (!isNaN(divisionIndex))
+        {
+          data.divisionIndex = divisionIndex;
+        }
+
+        data.taskIndex = +dataset.task;
+        data.functionIndex = +dataset.function;
+        data.companyIndex = +dataset.company;
+        data.companyIndexServer = +dataset.companyServer;
       }
 
       dataset.value = data.newCount;
       dataset.remote = 'false';
 
-      var view = this;
-
-      this.socket.emit('fte.leader.updateCount', data, function(err)
+      view.socket.emit('fte.leader.updateCount', data, function(err)
       {
         if (err)
         {
@@ -325,19 +346,13 @@ define([
             dataset.remote = oldRemote;
 
             view.recount(countEl, data.taskIndex, data.functionIndex, data.companyIndex);
-
-            data.newCount = oldCount;
-
-            view.model.handleUpdateMessage(data, true);
           }
 
           view.trigger('remoteError', err);
         }
       });
 
-      this.recount(countEl, data.taskIndex, data.functionIndex, data.companyIndex);
-
-      this.model.handleUpdateMessage(data, true);
+      view.recount(countEl, data.taskIndex, data.functionIndex, data.companyIndex);
     },
 
     recount: function(countEl, taskIndex, functionIndex, companyIndex)
@@ -376,13 +391,94 @@ define([
       this.$('.fte-leaderEntry-total-overall').text(fractionsUtil.round(overallTotal));
     },
 
-    recountWithFunctions: function(countEl, taskIndex, functionIndex, companyIndex)
+    recountWithFunctions: function(countEl)
+    {
+      if (countEl.dataset.kind === 'demand')
+      {
+        this.recountDemand();
+      }
+      else
+      {
+        this.recountSupply(countEl);
+      }
+    },
+
+    recountDemand: function()
+    {
+      var countSelector;
+      var totalSelector;
+      var total;
+      var $thead = this.$('thead');
+
+      // Overall total
+      total = 0;
+      countSelector = '.fte-leaderEntry-count[data-kind="demand"]';
+      totalSelector = '.fte-leaderEntry-total-demand';
+      $thead.find(countSelector).each(function() { total += fractionsUtil.parse(this.value); });
+      $thead.find(totalSelector).text(fractionsUtil.round(total));
+
+      this.recountShortage();
+    },
+
+    recountShortage: function()
+    {
+      var $thead = this.$('thead');
+      var demand = {
+        total: fractionsUtil.parse($thead.find('.fte-leaderEntry-total-demand').text())
+      };
+      var supply = {
+        total: fractionsUtil.parse($thead.find('.fte-leaderEntry-total').text())
+      };
+
+      $thead.find('.fte-leaderEntry-total-shortage').text(
+        demand.total ? fractionsUtil.round(demand.total - supply.total) : 0
+      );
+
+      $thead.find('.fte-leaderEntry-count[data-kind="demand"]').each(function()
+      {
+        demand[this.dataset.companyid] = fractionsUtil.parse(this.value);
+      });
+      $thead.find('.fte-leaderEntry-total-company').each(function()
+      {
+        var companyId = this.dataset.companyid;
+
+        supply[companyId] = fractionsUtil.parse(this.textContent);
+
+        $thead.find('.fte-leaderEntry-total-shortage-company[data-companyid="' + companyId + '"]').text(
+          demand.total ? fractionsUtil.round(demand[companyId] - supply[companyId]) : 0
+        );
+      });
+
+      this.$('.fte-leaderEntry-total-company-task[data-absence]').each(function()
+      {
+        var companyId = this.dataset.companyid;
+        var count = fractionsUtil.parse(this.textContent);
+
+        supply.total += count;
+        supply[companyId] += count;
+      });
+
+      $thead.find('.fte-leaderEntry-shortage-diff-total').text(
+        demand.total ? fractionsUtil.round(demand.total - supply.total) : 0
+      );
+
+      $thead.find('.fte-leaderEntry-shortage-diff').each(function()
+      {
+        var companyId = this.dataset.companyid;
+
+        this.textContent = demand.total ? fractionsUtil.round(demand[companyId] - supply[companyId]) : 0;
+      });
+    },
+
+    recountSupply: function(countEl)
     {
       var $taskTr = this.$(countEl).closest('tr');
       var isChild = $taskTr.hasClass('is-child');
       var $parentTr = null;
       var $childTrs = [];
-      var divisionIndex = parseInt(countEl.dataset.division, 10);
+      var functionIndex = +countEl.dataset.function;
+      var companyIndex = +countEl.dataset.company;
+      var divisionIndex = +countEl.dataset.division;
 
       if (isNaN(divisionIndex))
       {
@@ -411,6 +507,7 @@ define([
 
       this.recalcCompanyTotals(functionIndex, companyIndex);
       this.recalcFunctionTotals(functionIndex);
+      this.recountShortage();
     },
 
     recalcTaskCompanyTotals: function(companyIndex, divisionIndex, $taskTr)
@@ -450,6 +547,11 @@ define([
 
       $childTrs.find(countElsSelector).each(function()
       {
+        if (this.dataset.absence !== undefined)
+        {
+          return;
+        }
+
         var count = fractionsUtil.parse(this.tagName === 'TD' ? this.textContent : this.value);
 
         if (this.dataset.division === undefined)
@@ -660,16 +762,28 @@ define([
 
     onRemoteEdit: function(message)
     {
+      this.model.handleUpdateMessage(message, true);
+
       if (message.socketId === this.socket.getId())
       {
         return;
       }
 
-      if (message.comment !== undefined)
+      switch (message.type)
       {
-        return this.onRemoteCommentEdit(message);
-      }
+        case 'count':
+          return this.handleCountChange(message.action);
 
+        case 'comment':
+          return this.handleCommentChange(message.action);
+
+        case 'edit':
+          return this.render();
+      }
+    },
+
+    handleCountChange: function(message)
+    {
       var selector = '.fte-leaderEntry-count'
         + '[data-company=' + message.companyIndex + ']'
         + '[data-task=' + message.taskIndex + ']';
@@ -698,11 +812,9 @@ define([
       });
 
       this.recount($count[0], message.taskIndex, message.functionIndex, message.companyIndex);
-
-      this.model.handleUpdateMessage(message, true);
     },
 
-    onRemoteCommentEdit: function(message)
+    handleCommentChange: function(message)
     {
       var $textarea = this.$('textarea.fte-leaderEntry-comment[data-task="' + message.taskIndex + '"]');
 
@@ -729,8 +841,6 @@ define([
         $taskTr.removeClass('has-invisible-comment').addClass('has-visible-comment');
         $commentBtnIcon.removeClass('fa-comment').addClass('fa-comment-o');
       }
-
-      this.model.handleUpdateMessage(message, true);
     },
 
     onModelDeleted: function(message)
@@ -744,6 +854,11 @@ define([
       {
         clearTimeout(this.timers.hideFocusInfoBar);
         this.timers.hideFocusInfoBar = null;
+      }
+
+      if (inputEl.dataset.kind === 'demand')
+      {
+        return this.hideFocusInfoBar();
       }
 
       var rowEl = inputEl.parentNode.parentNode;
@@ -845,6 +960,7 @@ define([
       }
 
       this.socket.emit('fte.leader.updateComment', {
+        type: 'comment',
         socketId: this.socket.getId(),
         _id: this.model.id,
         taskIndex: taskIndex,

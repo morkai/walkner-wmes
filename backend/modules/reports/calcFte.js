@@ -87,6 +87,7 @@ module.exports = function(mongoose, options, done)
           {
             subdivision: 1,
             date: 1,
+            absenceTasks: 1,
             'tasks.id': 1,
             'tasks.childCount': 1,
             'tasks.companies.count': 1,
@@ -112,6 +113,7 @@ module.exports = function(mongoose, options, done)
         .find(conditions, {
           subdivision: 1,
           date: 1,
+          absenceTasks: 1,
           'tasks.id': 1,
           'tasks.type': 1,
           'tasks.noPlan': 1,
@@ -496,7 +498,12 @@ module.exports = function(mongoose, options, done)
 
     for (let i = 0, l = fteLeaderEntry.tasks.length; i < l; ++i)
     {
-      countFteLeaderEntryTaskFte(fteLeaderEntry.tasks[i], options.division, fte);
+      const task = fteLeaderEntry.tasks[i];
+
+      if (!fteLeaderEntry.absenceTasks || fteLeaderEntry.absenceTasks[task.id] === undefined)
+      {
+        countFteLeaderEntryTaskFte(task, options.division, fte);
+      }
     }
 
     adjustToWorkingOrgUnitsInStorage(results, key, activeOrgUnits, options, fte);
@@ -618,7 +625,12 @@ module.exports = function(mongoose, options, done)
 
     for (let i = 0, l = fteMasterEntry.tasks.length; i < l; ++i)
     {
-      countFteMasterEntryTaskFte(options, fteMasterEntry.tasks[i], fte);
+      const task = fteMasterEntry.tasks[i];
+
+      if (!fteMasterEntry.absenceTasks || fteMasterEntry.absenceTasks[task.id] === undefined)
+      {
+        countFteMasterEntryTaskFte(options, task, fte);
+      }
     }
 
     if (options.orgUnitType

@@ -22,7 +22,19 @@ define(function()
     },
     round: function(num)
     {
-      return (Math.round(num * 10000) / 10000)[toString]();
+      if (!num)
+      {
+        return '0';
+      }
+
+      var str = (Math.round(num * 10000) / 10000)[toString]();
+
+      if (/[.,](999|001)$/.test(str))
+      {
+        return Math.round(num)[toString]();
+      }
+
+      return str;
     }
   };
 });

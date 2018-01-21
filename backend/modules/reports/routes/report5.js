@@ -38,6 +38,7 @@ module.exports = function report5Route(app, reportsModule, req, res, next)
     orgUnitType: orgUnit ? req.query.orgUnitType : null,
     orgUnitId: orgUnit ? req.query.orgUnitId : null,
     division: helpers.idToStr(division),
+    divisionType: division ? division.type : null,
     subdivisions: helpers.idToStr(subdivisions),
     subdivisionTypes: subdivisionTypes,
     prodFlows: helpers.idToStr(orgUnitsModule.getProdFlowsFor(orgUnit)),

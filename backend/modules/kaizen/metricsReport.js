@@ -37,8 +37,8 @@ module.exports = function(mongoose, options, done)
         return this.skip(err);
       }
 
-      countFte(FteMasterEntry, '$total', options, this.group());
-      countFte(FteLeaderEntry, '$totals.overall', options, this.group());
+      countFte(FteMasterEntry, options, this.group());
+      countFte(FteLeaderEntry, options, this.group());
       countNearMisses(options, this.group());
       countSuggestions(options, this.group());
       countBehaviorObsCards(options, this.group());
@@ -152,7 +152,7 @@ module.exports = function(mongoose, options, done)
     });
   }
 
-  function countFte(Model, totalProperty, options, done)
+  function countFte(Model, options, done)
   {
     const conditions = {
       subdivision: {
@@ -184,7 +184,7 @@ module.exports = function(mongoose, options, done)
           m: {$month: '$date'},
           d: {$dayOfMonth: '$date'}
         },
-        total: {$sum: totalProperty}
+        total: {$sum: '$totals.supply.total'}
       }}
     ];
 

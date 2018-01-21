@@ -1,10 +1,13 @@
-.fte-masterEntry .fte-masterEntry-demand {
+.fte-masterEntry .fte-masterEntry-demand,
+.fte-leaderEntry .fte-leaderEntry-demand {
   background-color: #fcf8e3;
 }
-.fte-masterEntry .fte-masterEntry-supply {
+.fte-masterEntry .fte-masterEntry-supply,
+.fte-leaderEntry .fte-leaderEntry-supply {
   background-color: #d9edf7;
 }
-.fte-masterEntry .fte-masterEntry-shortage {
+.fte-masterEntry .fte-masterEntry-shortage,
+.fte-leaderEntry .fte-leaderEntry-shortage {
   background-color: #f2dede;
 }
 
@@ -45,8 +48,6 @@ th.fte-leaderEntry-column-task {
 .fte-leaderEntry-total-overall,
 .fte-leaderEntry-total-company,
 .fte-leaderEntry-total-task {
-  width: 1%;
-  min-width: 100px;
   white-space: nowrap;
   text-align: center;
 }
@@ -56,17 +57,23 @@ th.fte-leaderEntry-column-task {
 .fte-leaderEntry-column-task,
 .fte-leaderEntry-total-overall,
 .fte-leaderEntry > thead > tr:last-child > th,
-.fte-leaderEntry.is-editable > thead > tr:first-child > th:last-child {
+.fte-leaderEntry.is-editing > thead > tr:first-child > th:last-child {
   border-bottom: 2px solid #888!important;
 }
-.fte-leaderEntry > tbody > tr > td {
-  border-color: #888;
+.fte-leaderEntry-column-prodFunction {
+  padding-left: 3px!important;
+  padding-right: 3px!important;
+  vertical-align: middle;
+}
+.fte-entryPanel th,
+.fte-entryPanel td {
+  border-color: #888!important;
 }
 .fte-leaderEntry-count {
+  height: auto;
+  padding: 2px;
   text-align: center;
-}
-.fte-leaderEntry-count[data-division] {
-  min-width: 5em;
+  font-size: 12px;
 }
 .fte-leaderEntry-cell-task {
   text-align: left;
@@ -74,8 +81,8 @@ th.fte-leaderEntry-column-task {
 .fte-leaderEntry .fte-leaderEntry-cell-task {
   min-width: 300px;
 }
-.panel > .table-responsive > .fte-masterEntry > tbody > tr:first-child > td,
-.panel > .table-responsive > .fte-leaderEntry > tbody > tr:first-child > td {
+.panel > .fte-masterEntry > tbody > tr:first-child > td,
+.panel > .fte-leaderEntry > tbody > tr:first-child > td {
   border-bottom: 1px solid #888;
 }
 tr.fte-leaderEntry-comment > td {
@@ -92,9 +99,6 @@ span.fte-leaderEntry-comment {
   text-align: left;
   overflow: auto;
   max-height: 7em;
-}
-.is-editable .fte-leaderEntry-total-division {
-  min-width: 60px;
 }
 .fte-leaderEntry-actions {
   width: 1px;
@@ -161,16 +165,27 @@ th.fte-masterEntry-column-noPlan {
 }
 .fte-masterEntry-column-company,
 .fte-leaderEntry-column-company,
+.fte-leaderEntry-column-division,
 .fte-masterEntry-total-demand,
+.fte-leaderEntry-total-demand,
 .fte-masterEntry-total-shortage,
+.fte-leaderEntry-total-shortage,
 .fte-masterEntry-total-demand-task,
 .fte-masterEntry-total-shortage-task {
   width: 60px;
 }
 .fte-masterEntry-count {
-  padding: 0;
+  font-size: 12px;
+  padding: 2px;
   height: auto;
   text-align: center;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.fte-masterEntry-count:focus {
+  background: transparent;
+  box-shadow: none;
 }
 .fte-masterEntry-absence {
   display: none;
@@ -228,17 +243,8 @@ th.fte-masterEntry-column-noPlan {
 .fte-focusInfoBar-prop:first-child {
   border-left: 0;
 }
-.fte-leaderEntry.is-editable > tbody > tr > td {
+.fte-leaderEntry.is-editing > tbody > tr > td {
   padding: 0;
-}
-.fte-leaderEntry.is-editable > tbody > tr > td.fte-leaderEntry-cell-task {
-  padding: 5px;
-}
-.is-editable > tbody > tr > .fte-leaderEntry-count-container {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, .25);
-  border-right: 0;
-  border-bottom: 0;
-  cursor: text;
 }
 .fte-leaderEntry .form-control {
   border: 0;
@@ -250,6 +256,8 @@ th.fte-masterEntry-column-noPlan {
 }
 .fte-leaderEntry-toggleComment {
   border: 0;
+  padding: 0 12px;
+  height: auto;
 }
 textarea.fte-leaderEntry-comment:focus {
   background-color: #ffffa6;
@@ -288,34 +296,38 @@ textarea.fte-leaderEntry-comment:focus {
   display: block;
 }
 
-.fte-masterEntry.is-editing .fte-count-container {
+.fte-entryPanel .is-editing .fte-count-container {
   cursor: text;
   border-right: 0;
   border-bottom: 0;
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, .25);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, .33);
 }
-.fte-masterEntry.is-editing > thead > tr > th {
+.fte-entryPanel .is-editing > thead > tr > th {
   height: 23px;
 }
-.fte-masterEntry.is-editing > thead > tr > th,
-.fte-masterEntry.is-editing > tbody > tr > td {
+.fte-entryPanel .is-editing > thead > tr > th,
+.fte-entryPanel .is-editing > tbody > tr > td {
   padding: 0;
   font-size: 12px;
   border-color: #888;
   min-height: 23px;
   vertical-align: middle;
+  line-height: 1;
 }
-.fte-masterEntry.is-editing > thead > tr:first-child > th {
+.fte-entryPanel .is-editing > thead > tr:first-child > th {
   vertical-align: bottom;
 }
-.fte-masterEntry.is-editing > thead > tr:first-child > .fte-masterEntry-supply {
+.fte-entryPanel .is-editing > thead > tr:first-child > .fte-masterEntry-supply,
+.fte-entryPanel .is-editing > thead > tr:first-child > .fte-leaderEntry-supply {
   vertical-align: middle;
 }
-.fte-masterEntry.is-editing .fte-masterEntry-cell-task {
+.fte-entryPanel .is-editing .fte-masterEntry-cell-task,
+.fte-entryPanel .is-editing .fte-leaderEntry-cell-task {
   padding: 3px 6px;
   line-height: 14px;
 }
-.fte-masterEntry.is-editing th.fte-masterEntry-column-task {
+.fte-masterEntry.is-editing th.fte-masterEntry-column-task,
+.fte-leaderEntry.is-editing th.fte-leaderEntry-column-task {
   position: relative;
   padding: 3px 6px;
 }
@@ -335,15 +347,4 @@ textarea.fte-leaderEntry-comment:focus {
 }
 .fte-masterEntry.is-editing th.fte-masterEntry-column-noPlan {
   padding: 3px;
-}
-.fte-masterEntry-count {
-  font-size: 12px;
-  padding: 2px;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-}
-.fte-masterEntry-count:focus {
-  background: transparent;
-  box-shadow: none;
 }

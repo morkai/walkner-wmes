@@ -13,8 +13,208 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
   const userModule = app[fteModule.config.userId];
   const FteLeaderEntry = mongoose.model('FteLeaderEntry');
 
+  function updateDemandCount(updater, entry, data, done)
+  {
+    const {companyId, newCount} = data;
+
+    if (!_.isNumber(entry.totals.demand[companyId]))
+    {
+      return done(app.createError('INPUT', 400));
+    }
+
+    entry.totals.demand[companyId] = newCount;
+
+    FteLeaderEntry.calcTotals(entry);
+
+    entry.updatedAt = new Date();
+    entry.updater = updater;
+
+    const update = {
+      $set: {
+        updatedAt: entry.updatedAt,
+        updater: entry.updater,
+        totals: entry.totals
+      }
+    };
+
+    FteLeaderEntry.collection.update({_id: entry._id}, update, done);
+  }
+
+  function updateSupplyCount(updater, entry, data, done)
+  {
+    const {taskIndex, functionIndex, divisionIndex, newCount} = data;
+    const task = entry.tasks[data.taskIndex];
+
+    if (!task)
+    {
+      return done(app.createError('INPUT', 400));
+    }
+
+    const companyIndex = typeof data.companyIndexServer === 'number'
+      ? data.companyIndexServer
+      : data.companyIndex;
+    let taskCompany = task.companies[companyIndex];
+
+    if (!taskCompany)
+    {
+      const taskFunction = task.functions[functionIndex];
+
+      if (!taskFunction)
+      {
+        return done(app.createError('INPUT', 400));
+      }
+
+      taskCompany = taskFunction.companies[companyIndex];
+
+      if (!taskCompany)
+      {
+        return done(app.createError('INPUT', 400));
+      }
+    }
+
+    if (typeof divisionIndex === 'number')
+    {
+      const taskDivision = taskCompany.count[divisionIndex];
+
+      if (!taskDivision)
+      {
+        return this.skip(app.createError('INPUT', 400));
+      }
+
+      taskDivision.value = newCount;
+    }
+    else if (Array.isArray(taskCompany.count))
+    {
+      return done(app.createError('INPUT', 400));
+    }
+    else
+    {
+      taskCompany.count = newCount;
+    }
+
+    const parentTasks = [];
+
+    if (task.parent)
+    {
+      const fteDivCount = Array.isArray(entry.fteDiv) ? entry.fteDiv.length : 0;
+      const prodTaskMaps = fteModule.getCachedLeaderProdTaskMaps(data._id, entry);
+
+      updateParentSupply(
+        task.parent.toString(),
+        fteDivCount,
+        prodTaskMaps,
+        entry.absenceTasks || {},
+        parentTasks
+      );
+    }
+
+    FteLeaderEntry.calcTotals(entry);
+
+    entry.updatedAt = new Date();
+    entry.updater = updater;
+
+    const update = {
+      $set: {
+        updatedAt: entry.updatedAt,
+        updater: entry.updater,
+        totals: entry.totals,
+        [`tasks.${taskIndex}`]: entry.tasks[taskIndex]
+      }
+    };
+
+    const changedTasks = [{
+      index: taskIndex,
+      data: entry.tasks[taskIndex]
+    }];
+
+    parentTasks.forEach(taskIndex =>
+    {
+      update.$set[`tasks.${taskIndex}`] = entry.tasks[taskIndex];
+
+      changedTasks.push({
+        index: taskIndex,
+        data: entry.tasks[taskIndex]
+      });
+    });
+
+    FteLeaderEntry.collection.update({_id: entry._id}, update, err =>
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      done(null, changedTasks);
+    });
+  }
+
+  function updateParentSupply(parentTaskId, fteDivCount, prodTaskMaps, absenceTasks, parentTasks)
+  {
+    const parentTaskIndex = prodTaskMaps.idToIndex[parentTaskId];
+    const parentTask = prodTaskMaps.idToTask[parentTaskId];
+    let divisionDivided = false;
+
+    parentTask.functions.forEach(taskFunction => taskFunction.companies.forEach(taskCompany =>
+    {
+      divisionDivided = divisionDivided || Array.isArray(taskCompany.count);
+
+      if (divisionDivided)
+      {
+        taskCompany.count.forEach(taskDivision => { taskDivision.value = 0; });
+      }
+      else
+      {
+        taskCompany.count = 0;
+      }
+    }));
+
+    prodTaskMaps.idToChildren[parentTaskId].forEach(childTask =>
+    {
+      if (absenceTasks[childTask.id] >= 0)
+      {
+        return;
+      }
+
+      childTask.functions.forEach((taskFunction, fI) =>
+      {
+        const parentTaskFunction = parentTask.functions[fI];
+
+        taskFunction.companies.forEach((taskCompany, cI) =>
+        {
+          const parentTaskCompany = parentTaskFunction.companies[cI];
+
+          if (Array.isArray(taskCompany.count))
+          {
+            taskCompany.count.forEach((taskDivision, dI) =>
+            {
+              parentTaskCompany.count[dI].value += taskDivision.value;
+            });
+          }
+          else if (divisionDivided)
+          {
+            parentTaskCompany.count.forEach(parentTaskDivision =>
+            {
+              parentTaskDivision.value += taskCompany.count / fteDivCount;
+            });
+          }
+          else
+          {
+            parentTaskCompany.count += taskCompany.count;
+          }
+        });
+      });
+    });
+
+    parentTasks.push(parentTaskIndex);
+
+    if (parentTask.parent)
+    {
+      updateParentSupply(parentTask.parent.toString(), fteDivCount, prodTaskMaps, parentTasks);
+    }
+  }
+
   return {
-    findOrCreate: findOrCreate.bind(null, app, fteModule, FteLeaderEntry),
+    findOrCreate: findOrCreate.bind(null, app, fteModule, FteLeaderEntry, 'LEADER'),
     updateCount: function(socket, data, reply)
     {
       if (!_.isFunction(reply))
@@ -22,16 +222,12 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
         reply = function() {};
       }
 
-      if (!_.isObject(data)
-        || !_.isString(data._id)
-        || !_.isNumber(data.taskIndex)
-        || !_.isNumber(data.companyIndex)
-        || !_.isNumber(data.newCount))
+      if (!_.isPlainObject(data))
       {
-        return reply(new Error('INPUT'));
+        return reply(app.createError('INPUT', 400));
       }
 
-      data.newCount = Math.max(0, data.newCount);
+      data.newCount = Math.max(0, data.newCount || 0);
 
       step(
         function acquireLockStep()
@@ -51,114 +247,30 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
 
           if (!fteLeaderEntry)
           {
-            return this.skip(new Error('UNKNOWN'));
+            return this.skip(app.createError('UNKNOWN', 404));
           }
 
           const user = socket.handshake.user;
 
           if (!canManage(user, fteLeaderEntry, 'LEADER'))
           {
-            return this.skip(new Error('AUTH'));
+            return this.skip(app.createError('AUTH', 403));
           }
 
-          const task = fteLeaderEntry.tasks[data.taskIndex];
+          this.entry = fteLeaderEntry;
 
-          if (!task || !task.functions[data.functionIndex])
+          const updater = userModule.createUserInfo(user, socket);
+
+          if (data.kind === 'demand')
           {
-            return this.skip(new Error('INPUT'));
-          }
-
-          const companyIndex = typeof data.companyIndexServer === 'number'
-            ? data.companyIndexServer
-            : data.companyIndex;
-          const taskCompany = task.functions[data.functionIndex].companies[companyIndex];
-
-          if (!taskCompany)
-          {
-            return this.skip(new Error('INPUT'));
-          }
-
-          let taskCountProperty = 'tasks.' + data.taskIndex
-            + '.functions.' + data.functionIndex
-            + '.companies.' + companyIndex;
-
-          if (typeof data.divisionIndex === 'number')
-          {
-            const taskDivision = taskCompany.count[data.divisionIndex];
-
-            if (!taskDivision)
-            {
-              return this.skip(new Error('INPUT'));
-            }
-
-            taskCountProperty += '.count.' + data.divisionIndex + '.value';
-
-            taskDivision.value = data.newCount;
-          }
-          else if (Array.isArray(taskCompany.count))
-          {
-            return this.skip(new Error('INPUT'));
+            updateDemandCount(updater, this.entry, data, this.next());
           }
           else
           {
-            taskCountProperty += '.count';
-
-            taskCompany.count = data.newCount;
+            updateSupplyCount(updater, this.entry, data, this.next());
           }
-
-          fteLeaderEntry.updatedAt = new Date();
-          fteLeaderEntry.updater = userModule.createUserInfo(user, socket);
-
-          const totalsTemplate = {overall: 0};
-
-          _.forEach(fteLeaderEntry.fteDiv, function(divisionId)
-          {
-            totalsTemplate[divisionId] = 0;
-          });
-
-          let rootTaskTotals = {
-            oldTotals: task.totals,
-            newTotals: _.clone(totalsTemplate)
-          };
-
-          task.totals = rootTaskTotals.newTotals;
-
-          updateTaskTotals(task);
-
-          const update = {
-            $set: {
-              updatedAt: fteLeaderEntry.updatedAt,
-              updater: fteLeaderEntry.updater
-            }
-          };
-
-          update.$set[taskCountProperty] = data.newCount;
-          update.$set['tasks.' + data.taskIndex + '.totals'] = task.totals;
-
-          if (task.parent)
-          {
-            const fteDivCount = Array.isArray(fteLeaderEntry.fteDiv) ? fteLeaderEntry.fteDiv.length : 0;
-            const prodTaskMaps = fteModule.getCachedLeaderProdTaskMaps(data._id, fteLeaderEntry);
-
-            rootTaskTotals = updateParentCount(
-              task.parent.toString(),
-              totalsTemplate,
-              fteDivCount,
-              prodTaskMaps,
-              update
-            );
-          }
-
-          _.forEach(fteLeaderEntry.totals, function(oldValue, key)
-          {
-            fteLeaderEntry.totals[key] += rootTaskTotals.newTotals[key] - rootTaskTotals.oldTotals[key];
-          });
-
-          update.$set.totals = fteLeaderEntry.totals;
-
-          FteLeaderEntry.collection.update({_id: fteLeaderEntry._id}, update, this.next());
         },
-        function sendResultStep(err)
+        function sendResultStep(err, changedTasks)
         {
           if (err)
           {
@@ -169,13 +281,20 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
           {
             reply();
 
-            app.broker.publish('fte.leader.updated.' + data._id, data);
+            app.broker.publish(`fte.leader.updated.${data._id}`, {
+              type: 'count',
+              socketId: data.socketId,
+              tasks: changedTasks || [],
+              data: _.pick(this.entry, [
+                'updatedAt',
+                'updater',
+                'totals'
+              ]),
+              action: data
+            });
           }
 
           setImmediate(this.releaseLock);
-
-          this.releaseLock = null;
-          this.changes = null;
         }
       );
     },
@@ -191,7 +310,7 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
         || !_.isNumber(data.taskIndex)
         || !_.isString(data.comment))
       {
-        return reply(new Error('INPUT'));
+        return reply(app.createError('INPUT', 400));
       }
 
       step(
@@ -212,21 +331,21 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
 
           if (!fteLeaderEntry)
           {
-            return this.skip(new Error('UNKNOWN'));
+            return this.skip(app.createError('UNKNOWN', 404));
           }
 
           const user = socket.handshake.user;
 
           if (!canManage(user, fteLeaderEntry, 'LEADER'))
           {
-            return this.skip(new Error('AUTH'));
+            return this.skip(app.createError('AUTH', 403));
           }
 
           const task = fteLeaderEntry.tasks[data.taskIndex];
 
           if (!task)
           {
-            return this.skip(new Error('INPUT'));
+            return this.skip(app.createError('INPUT', 400));
           }
 
           const update = {
@@ -235,7 +354,7 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
               updater: userModule.createUserInfo(user, socket)
             }
           };
-          const taskCommentProperty = 'tasks.' + data.taskIndex + '.comment';
+          const taskCommentProperty = `tasks.${data.taskIndex}.comment`;
           update.$set[taskCommentProperty] = data.comment.trim();
 
           FteLeaderEntry.collection.update({_id: fteLeaderEntry._id}, update, this.next());
@@ -271,159 +390,12 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
           {
             reply();
 
-            app.broker.publish('fte.leader.updated.' + data._id, data);
+            app.broker.publish(`fte.leader.updated.${data._id}`, data);
           }
 
           setImmediate(this.releaseLock);
-
-          this.releaseLock = null;
-          this.changes = null;
         }
       );
     }
   };
-
-  function updateParentCount(parentId, totalsTemplate, fteDivCount, prodTaskMaps, update)
-  {
-    const parentTask = prodTaskMaps.idToTask[parentId];
-
-    if (!parentTask)
-    {
-      return;
-    }
-
-    const oldTaskTotals = parentTask.totals;
-    const newTaskTotals = _.clone(totalsTemplate);
-
-    parentTask.totals = newTaskTotals;
-
-    const childTasks = prodTaskMaps.idToChildren[parentId];
-    const parentTaskIndex = prodTaskMaps.idToIndex[parentId];
-    const parentTaskFunctions = parentTask.functions;
-    const parentTotalsKeys = Object.keys(parentTask.totals);
-    const functionCount = parentTaskFunctions.length;
-
-    for (let taskIndex = 0; taskIndex < childTasks.length; ++taskIndex)
-    {
-      const childTask = childTasks[taskIndex];
-      const firstTask = taskIndex === 0;
-
-      for (let functionIndex = 0; functionIndex < functionCount; ++functionIndex)
-      {
-        const taskFunction = childTask.functions[functionIndex];
-
-        for (let companyIndex = 0; companyIndex < taskFunction.companies.length; ++companyIndex)
-        {
-          const taskCompany = taskFunction.companies[companyIndex];
-          const parentCompany = parentTaskFunctions[functionIndex].companies[companyIndex];
-          let count = taskCompany.count;
-
-          if (Array.isArray(count))
-          {
-            for (let divisionIndex = 0; divisionIndex < count.length; ++divisionIndex)
-            {
-              const divisionCount = count[divisionIndex];
-
-              if (firstTask)
-              {
-                parentCompany.count[divisionIndex].value = divisionCount.value;
-              }
-              else
-              {
-                parentCompany.count[divisionIndex].value += divisionCount.value;
-              }
-
-              parentTask.totals.overall += divisionCount.value;
-              parentTask.totals[divisionCount.division] += divisionCount.value;
-            }
-          }
-          else if (typeof parentCompany.count === 'number')
-          {
-            if (firstTask)
-            {
-              parentCompany.count = count;
-            }
-            else
-            {
-              parentCompany.count += count;
-            }
-
-            for (let keyI = 0; keyI < parentTotalsKeys.length; ++keyI)
-            {
-              parentTask.totals[parentTotalsKeys[keyI]] += count;
-            }
-          }
-          else if (fteDivCount > 0)
-          {
-            count = Math.round(count / fteDivCount * 1000) / 1000;
-
-            for (let i = 0; i < parentCompany.count.length; ++i)
-            {
-              const parentDivisionCount = parentCompany.count[i];
-
-              if (firstTask)
-              {
-                parentDivisionCount.value = count;
-              }
-              else
-              {
-                parentDivisionCount.value += count;
-              }
-
-              parentTask.totals.overall += count;
-              parentTask.totals[parentDivisionCount.division] += count;
-            }
-          }
-        }
-      }
-    }
-
-    update.$set['tasks.' + parentTaskIndex + '.totals'] = parentTask.totals;
-    update.$set['tasks.' + parentTaskIndex + '.functions'] = parentTask.functions;
-
-    if (parentTask.parent)
-    {
-      return updateParentCount(parentTask.parent.toString(), totalsTemplate, fteDivCount, prodTaskMaps, update);
-    }
-
-    return {
-      oldTotals: oldTaskTotals,
-      newTotals: newTaskTotals
-    };
-  }
-
-  function updateTaskTotals(task)
-  {
-    const totalsKeys = Object.keys(task.totals);
-
-    for (let functionI = 0; functionI < task.functions.length; ++functionI)
-    {
-      const taskFunction = task.functions[functionI];
-
-      for (let companyI = 0; companyI < taskFunction.companies.length; ++companyI)
-      {
-        const taskCompany = taskFunction.companies[companyI];
-
-        if (!Array.isArray(taskCompany.count))
-        {
-          for (let keyI = 0; keyI < totalsKeys.length; ++keyI)
-          {
-            task.totals[totalsKeys[keyI]] += taskCompany.count;
-          }
-
-          continue;
-        }
-
-        const taskDivisions = taskCompany.count;
-
-        for (let divisionI = 0; divisionI < taskDivisions.length; ++divisionI)
-        {
-          const taskDivision = taskDivisions[divisionI];
-
-          task.totals.overall += taskDivision.value;
-          task.totals[taskDivision.division] += taskDivision.value;
-        }
-      }
-    }
-  }
 };

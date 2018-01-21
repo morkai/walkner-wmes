@@ -104,95 +104,104 @@ define([
 
     serializeWithFunctions: function()
     {
-      var totalByCompany = {};
-      var totalByProdFunction = {};
+      var companies = {};
+      var totalSupply = {
+        total: 0,
+        byCompany: {},
+        byProdFunction: {}
+      };
+      var supplyColumnCount = 0;
+      var divisions = this.get('fteDiv') || [];
+      var task = this.get('tasks')[0];
 
-      this.prepareTotalsWithFunctions(totalByCompany, totalByProdFunction);
-
-      var tasks = this.serializeTasksWithFunctions(totalByCompany, totalByProdFunction);
-      var total = 0;
-
-      _.forEach(totalByCompany, function(totalByCompanyItem)
+      if (task)
       {
-        total += totalByCompanyItem.total;
-      });
+        task.functions.forEach(function(taskFunction)
+        {
+          var prodFunction = prodFunctions.get(taskFunction.id);
+
+          totalSupply.byProdFunction[taskFunction.id] = {
+            name: prodFunction ? prodFunction.getLabel() : taskFunction.id,
+            total: 0,
+            companies: {}
+          };
+
+          taskFunction.companies.forEach(function(taskCompany)
+          {
+            if (!companies[taskCompany.id])
+            {
+              companies[taskCompany.id] = {
+                index: Object.keys(companies).length,
+                name: taskCompany.name
+              };
+            }
+
+            totalSupply.byProdFunction[taskFunction.id].companies[taskCompany.id] = {
+              total: 0,
+              divisions: {}
+            };
+
+            totalSupply.byCompany[taskCompany.id] = {
+              total: 0,
+              divisions: {}
+            };
+
+            if (!divisions.length)
+            {
+              supplyColumnCount += 1;
+            }
+
+            divisions.forEach(function(divisionId)
+            {
+              totalSupply.byProdFunction[taskFunction.id].companies[taskCompany.id].divisions[divisionId] = 0;
+              totalSupply.byCompany[taskCompany.id].divisions[divisionId] = 0;
+
+              supplyColumnCount += 1;
+            });
+          });
+        });
+      }
+
+      var companyCount = Object.keys(companies).length;
+      var tasks = this.serializeTasksWithFunctions(totalSupply, companies);
+      var totals = this.get('totals');
 
       return {
         subdivision: this.getSubdivisionPath(),
         date: time.format(this.get('date'), 'LL'),
         shift: t('core', 'SHIFT:' + this.get('shift')),
-        divisions: this.get('fteDiv') || [],
-        companyCount: Object.keys(totalByCompany).length,
-        total: total,
-        totalByCompany: totalByCompany,
-        totalByProdFunction: totalByProdFunction,
+        divisions: divisions,
+        companyCount: companyCount,
+        companies: companies,
+        demand: {
+          columnCount: companyCount + 1,
+          overallTotal: totals.demand.total,
+          totalByCompany: totals.demand
+        },
+        supply: {
+          columnCount: supplyColumnCount + companyCount * (divisions.length || 1),
+          overallTotal: totalSupply.total,
+          totalByProdFunction: totalSupply.byProdFunction,
+          totalByCompany: totalSupply.byCompany
+        },
+        shortage: {
+          columnCount: companyCount + 1,
+          overallTotal: totals.shortage.total,
+          totalByCompany: totals.shortage
+        },
+        absence: {
+          available: !_.isEmpty(this.get('absenceTasks')),
+          overallTotal: totals.absence.total,
+          totalByCompany: totals.absence
+        },
         tasks: tasks
       };
     },
 
-    prepareTotalsWithFunctions: function(totalByCompany, totalByProdFunction)
+    serializeTasksWithFunctions: function(totalSupply, companies)
     {
-      var tasks = this.get('tasks');
-
-      if (!this.get('tasks').length)
-      {
-        return;
-      }
-
-      var companyToIndex = {};
       var fteDiv = this.get('fteDiv') || [];
-
-      _.forEach(tasks[0].functions, function(taskFunction)
-      {
-        _.forEach(taskFunction.companies, function(taskFunctionCompany)
-        {
-          if (companyToIndex[taskFunctionCompany.id] === undefined)
-          {
-            companyToIndex[taskFunctionCompany.id] = Object.keys(companyToIndex).length;
-          }
-        });
-      });
-
-      _.forEach(tasks[0].functions, function(taskFunction)
-      {
-        var prodFunction = prodFunctions.get(taskFunction.id);
-
-        totalByProdFunction[taskFunction.id] = {
-          prodFunction: prodFunction ? prodFunction.getLabel() : taskFunction.id,
-          total: 0,
-          companies: {}
-        };
-
-        _.forEach(taskFunction.companies, function(taskFunctionCompany)
-        {
-          var companyIndex = companyToIndex[taskFunctionCompany.id];
-
-          totalByProdFunction[taskFunction.id].companies[taskFunctionCompany.id] = {
-            index: companyIndex,
-            total: 0,
-            divisions: {}
-          };
-
-          totalByCompany[taskFunctionCompany.id] = {
-            index: companyIndex,
-            name: taskFunctionCompany.name,
-            total: 0,
-            divisions: {}
-          };
-
-          _.forEach(fteDiv, function(divisionId)
-          {
-            totalByProdFunction[taskFunction.id].companies[taskFunctionCompany.id].divisions[divisionId] = 0;
-            totalByCompany[taskFunctionCompany.id].divisions[divisionId] = 0;
-          });
-        });
-      });
-    },
-
-    serializeTasksWithFunctions: function(totalByCompany, totalByProdFunction)
-    {
-      var companies = Object.keys(totalByCompany);
-      var fteDiv = this.get('fteDiv') || [];
+      var absenceTasks = this.get('absenceTasks');
       var topLevelTasks = [];
       var idToTask = {};
       var idToChildren = {};
@@ -205,14 +214,15 @@ define([
         task.backgroundColor = null;
         task.level = 0;
         task.last = false;
+        task.absence = absenceTasks[task.id] >= 0;
 
-        var notParent = task.childCount === 0;
+        var isChildTask = task.childCount === 0;
 
         _.forEach(task.functions, function(prodFunction)
         {
           _.forEach(prodFunction.companies, function(company)
           {
-            company.index = companies.indexOf(company.id);
+            company.index = companies[company.id].index;
 
             if (task.totalByCompany[company.id] === undefined)
             {
@@ -241,10 +251,10 @@ define([
 
                 companyDivisionTotals[count.division] += count.value;
 
-                if (notParent)
+                if (isChildTask && !task.absence)
                 {
-                  totalByCompany[company.id].divisions[count.division] += count.value;
-                  totalByProdFunction[prodFunction.id].companies[company.id].divisions[count.division] += count.value;
+                  totalSupply.byCompany[company.id].divisions[count.division] += count.value;
+                  totalSupply.byProdFunction[prodFunction.id].companies[company.id].divisions[count.division] += count.value;
                 }
               });
             }
@@ -263,22 +273,22 @@ define([
 
                 companyDivisionTotals[divisionId] += divisionCount;
 
-                if (notParent)
+                if (isChildTask && !task.absence)
                 {
-                  totalByCompany[company.id].divisions[divisionId] += divisionCount;
-                  totalByProdFunction[prodFunction.id].companies[company.id].divisions[divisionId] += divisionCount;
+                  totalSupply.byCompany[company.id].divisions[divisionId] += divisionCount;
+                  totalSupply.byProdFunction[prodFunction.id].companies[company.id].divisions[divisionId] += divisionCount;
                 }
               });
             }
 
             task.totalByCompany[company.id].total += totalCount;
 
-            if (notParent)
+            if (isChildTask && !task.absence)
             {
-              totalByCompany[company.id].total += totalCount;
-
-              totalByProdFunction[prodFunction.id].total += totalCount;
-              totalByProdFunction[prodFunction.id].companies[company.id].total += totalCount;
+              totalSupply.total += totalCount;
+              totalSupply.byCompany[company.id].total += totalCount;
+              totalSupply.byProdFunction[prodFunction.id].total += totalCount;
+              totalSupply.byProdFunction[prodFunction.id].companies[company.id].total += totalCount;
             }
           });
         });
@@ -420,23 +430,21 @@ define([
 
     handleUpdateMessage: function(message, silent)
     {
-      if (message.type === 'edit')
+      if (message.type === 'count')
       {
-        _.forEach(message.changes, this.handleCountMessage.bind(this));
+        this.handleCountMessage(message, silent);
       }
-      else
+      else if (message.type === 'comment')
       {
-        this.handleCountMessage(message);
+        this.handleCommentMessage(message, silent);
       }
-
-      if (!silent)
+      else if (message.type === 'edit')
       {
-        this.trigger('change:tasks');
-        this.trigger('change');
+        this.handleEditMessage(message, silent);
       }
     },
 
-    handleCountMessage: function(message)
+    handleCountMessage: function(message, silent)
     {
       var tasks = this.get('tasks');
 
@@ -452,50 +460,65 @@ define([
         return;
       }
 
-      if (message.comment === undefined)
+      message.tasks.forEach(function(task, index)
       {
-        var company;
+        tasks[index] = task;
+      });
 
-        if (this.isWithFunctions())
-        {
-          var taskFunction = task.functions[message.functionIndex];
+      this.set(message.data, {silent: !!silent});
 
-          if (!taskFunction)
-          {
-            return;
-          }
-
-          company = taskFunction.companies[message.companyIndex];
-        }
-        else
-        {
-          company = task.companies[message.companyIndex];
-        }
-
-        if (!company)
-        {
-          return;
-        }
-
-        if (typeof message.divisionIndex === 'number')
-        {
-          var division = company.count[message.divisionIndex];
-
-          if (!division)
-          {
-            return;
-          }
-
-          division.value = message.newCount;
-        }
-        else
-        {
-          company.count = message.newCount;
-        }
+      if (!silent)
+      {
+        this.trigger('change:tasks');
+        this.trigger('change');
       }
-      else
+    },
+
+    handleCommentMessage: function(message, silent)
+    {
+      var tasks = this.get('tasks');
+
+      if (!tasks)
       {
-        task.comment = message.comment;
+        return;
+      }
+
+      var task = tasks[message.taskIndex];
+
+      if (!task || message.comment === undefined)
+      {
+        return;
+      }
+
+      task.comment = message.comment;
+
+      if (!silent)
+      {
+        this.trigger('change:tasks');
+        this.trigger('change');
+      }
+    },
+
+    handleEditMessage: function(message, silent)
+    {
+      var tasks = this.get('tasks');
+
+      if (!tasks)
+      {
+        return;
+      }
+
+      message.tasks.forEach(function(task)
+      {
+        tasks[task.index] = task.data;
+      });
+
+      this.set(message.data, {silent: silent});
+
+      if (!silent)
+      {
+        this.trigger('change:tasks');
+        this.trigger('change');
       }
     }
 

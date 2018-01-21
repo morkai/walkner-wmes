@@ -264,6 +264,11 @@ define([
     {
       var tasks = this.get('tasks');
 
+      if (!tasks)
+      {
+        return;
+      }
+
       message.tasks.forEach(function(task)
       {
         tasks[task.index] = task.data;
