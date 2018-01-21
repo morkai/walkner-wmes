@@ -511,7 +511,7 @@ define([
     {
       var $charts = this.$charts;
       var chartsContainerEl = $charts[0];
-      var scrollTop = chartsContainerEl.ownerDocument.body.scrollTop;
+      var scrollTop = chartsContainerEl.ownerDocument.scrollingElement.scrollTop;
 
       $charts.toggleClass('is-fullscreen');
 
@@ -544,7 +544,7 @@ define([
       if (!isFullscreen)
       {
         chartsContainerEl.scrollLeft = $charts.data('scrollLeft');
-        chartsContainerEl.ownerDocument.body.scrollTop = $charts.data('scrollTop');
+        chartsContainerEl.ownerDocument.scrollingElement.scrollTop = $charts.data('scrollTop');
       }
     },
 
