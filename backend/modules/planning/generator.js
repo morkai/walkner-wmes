@@ -909,10 +909,24 @@ module.exports = function setUpGenerator(app, module)
 
   function freezeLineOrders(planLine)
   {
-    planLine.frozenOrders = planLine.orders.map(lineOrder => ({
-      orderNo: lineOrder.orderNo,
-      quantity: lineOrder.quantity
-    }));
+    planLine.frozenOrders = [];
+
+    planLine.orders.forEach(lineOrder =>
+    {
+      const lastFrozenOrder = _.last(planLine.frozenOrders);
+
+      if (lastFrozenOrder && lineOrder.orderNo === lastFrozenOrder.orderNo)
+      {
+        lastFrozenOrder.quantity += lineOrder.quantity;
+      }
+      else
+      {
+        planLine.frozenOrders.push({
+          orderNo: lineOrder.orderNo,
+          quantity: lineOrder.quantity
+        });
+      }
+    });
   }
 
   function isWorkDay(state, date, done)
