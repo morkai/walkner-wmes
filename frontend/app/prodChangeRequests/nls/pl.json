@@ -32,6 +32,7 @@
   "operation:delete:order": "Usunięcie zlecenia: {extra}",
   "operation:delete:downtime": "Usunięcie przestoju: {extra}",
   "operation:edit:fteMaster": "Edycja FTE (produkcja): {extra}",
+  "operation:edit:fteWh": "Edycja FTE (magazyn): {extra}",
   "operation:edit:fteLeader": "Edycja FTE (inne): {extra}",
 
   "confirm:accept": "Akceptuj zmianę",

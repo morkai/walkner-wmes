@@ -128,18 +128,6 @@ define([
       };
     },
 
-    resetCountEditing: function()
-    {
-      this.hideCountEditor();
-
-      this.$('.fte-count.is-changed').removeClass('is-changed').each(function()
-      {
-        this.textContent = this.dataset.oldValue;
-      });
-
-      this.$id('comment').val('');
-    },
-
     showCountEditor: function(key)
     {
       if (!this.changing)

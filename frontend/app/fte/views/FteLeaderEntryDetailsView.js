@@ -95,38 +95,23 @@ define([
 
     toggleCountEditing: function(state)
     {
-      var $comment = this.$id('comment');
-      var comment = $comment.val();
+      var comment = this.$id('comment').val();
       var pendingChanges = this.pendingChanges;
 
       this.pendingChanges = {};
       this.changing = state;
 
+      this.render();
+
       if (state)
       {
-        $comment.focus();
-      }
-      else
-      {
-        this.resetCountEditing();
+        this.$id('comment').focus();
       }
 
       return {
         comment: comment,
         changes: _.values(pendingChanges)
       };
-    },
-
-    resetCountEditing: function()
-    {
-      this.hideCountEditor();
-
-      this.$('.fte-count.is-changed').removeClass('is-changed').each(function()
-      {
-        this.textContent = this.dataset.oldValue;
-      });
-
-      this.$id('comment').val('');
     },
 
     showCountEditor: function(key)
@@ -191,7 +176,13 @@ define([
 
     getCountByKey: function(changeKey)
     {
-      var indexes = changeKey.split(':').map(Number);
+      var indexes = changeKey.split(':');
+
+      if (indexes[0] === 'demand')
+      {
+        return this.model.get('totals').demand[indexes[1]];
+      }
+
       var taskIndex = +indexes[0];
       var functionIndex = +indexes[1];
       var companyIndex = +indexes[2];
@@ -258,6 +249,27 @@ define([
     createPendingChange: function(oldValue, newValue)
     {
       var indexes = this.changeKey.split(':');
+
+      if (indexes[0] === 'demand')
+      {
+        return this.createPendingDemandChange(oldValue, newValue, indexes[1]);
+      }
+
+      return this.createPendingSupplyChange(oldValue, newValue, indexes);
+    },
+
+    createPendingDemandChange: function(oldValue, newValue, companyId)
+    {
+      return {
+        kind: 'demand',
+        companyId: companyId,
+        oldValue: oldValue,
+        newValue: newValue
+      };
+    },
+
+    createPendingSupplyChange: function(oldValue, newValue, indexes)
+    {
       var taskIndex = +indexes[0];
       var functionIndex = +indexes[1];
       var companyIndex = +indexes[2];
@@ -269,6 +281,7 @@ define([
       var division = divisionIndex === -1 ? null : company.count[divisionIndex];
 
       return {
+        kind: 'supply',
         taskIndex: taskIndex,
         taskId: task.id,
         taskName: task.name,

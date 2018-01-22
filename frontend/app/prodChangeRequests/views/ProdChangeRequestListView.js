@@ -21,6 +21,7 @@ define([
   'app/prodDowntimes/ProdDowntimeCollection',
   'app/fte/FteMasterEntry',
   'app/fte/FteLeaderEntry',
+  'app/fte/FteWhEntry',
   'app/core/templates/userInfo',
   'app/prodChangeRequests/templates/detailsRow',
   'app/prodChangeRequests/templates/quantitiesDone'
@@ -45,6 +46,7 @@ define([
   ProdDowntimeCollection,
   FteMasterEntry,
   FteLeaderEntry,
+  FteWhEntry,
   renderUserInfo,
   renderDetailsRow,
   renderQuantitiesDone
@@ -264,6 +266,11 @@ define([
         }
       }
 
+      if (modelType === 'fteLeader' && changeRequest.get('division') === FteWhEntry.WH_DIVISION)
+      {
+        modelType = 'fteWh';
+      }
+
       var text = t('prodChangeRequests', 'operation:' + operation + ':' + modelType, {extra: extra});
 
       if (href)
@@ -474,9 +481,7 @@ define([
         var division = orgUnits.getByTypeAndId('division', change.divisionId);
 
         task.values.push({
-          kind: changeRequest.get('modelType') === 'fteMaster'
-            ? (change.kind || (change.demand ? 'demand' : 'supply'))
-            : null,
+          kind: change.kind || (change.demand ? 'demand' : 'supply'),
           function: prodFunction ? prodFunction.getLabel() : change.functionId,
           company: company ? company.getLabel() : change.companyId,
           division: division ? division.getLabel() : null,
