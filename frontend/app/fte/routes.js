@@ -244,7 +244,7 @@ define([
   );
 
   // Warehouse
-  router.map('/fte/wh', canViewLeader, function(req)
+  router.map('/fte/wh', canViewWh, function(req)
   {
     viewport.loadPage(
       [
@@ -322,7 +322,7 @@ define([
     );
   });
 
-  router.map('/fte/wh/:id;print', canViewLeader, function(req)
+  router.map('/fte/wh/:id;print', canViewWh, function(req)
   {
     viewport.loadPage(
       [

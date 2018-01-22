@@ -78,7 +78,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
   // Other
   express.get(
     '/fte/leader',
-    canViewWh,
+    canViewLeader,
     limitToDivision.bind(null, limitToOther),
     express.crud.browseRoute.bind(null, app, FteLeaderEntry)
   );
@@ -124,7 +124,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
   // Warehouse
   express.get(
     '/fte/wh',
-    canViewLeader,
+    canViewWh,
     limitToDivision.bind(null, limitToWarehouse),
     express.crud.browseRoute.bind(null, app, FteLeaderEntry)
   );
@@ -159,7 +159,7 @@ module.exports = function setUpFteRoutes(app, fteModule)
     })
   );
 
-  express.get('/fte/wh/:id', canViewLeader, readFteEntryRoute.bind(null, 'leader'));
+  express.get('/fte/wh/:id', canViewWh, readFteEntryRoute.bind(null, 'leader'));
 
   express.delete(
     '/fte/wh/:id',
