@@ -166,7 +166,7 @@ module.exports = function setUpGenerator(app, module)
       key: key,
       date: moment.utc(key, 'YYYY-MM-DD').toDate(),
       lastMinute: now >= lastMinuteStartTime && now < lastMinuteEndTime,
-      freezeFirstShiftOrders: options.freezeFirstShiftOrders,
+      freezeOrders: options.freezeOrders,
       cancelled: false,
       new: false,
       generateCallCount: 0,
@@ -204,7 +204,7 @@ module.exports = function setUpGenerator(app, module)
     Object.assign(generatorOptions.get(planKey), options);
   }
 
-  function generateActivePlans(forceDayAfterTomorrow, freezeFirstShiftOrders)
+  function generateActivePlans(forceDayAfterTomorrow, freezeOrders)
   {
     const plansToGenerate = {};
     const date = moment.utc().startOf('day');
@@ -228,7 +228,7 @@ module.exports = function setUpGenerator(app, module)
         // Today
         plansToGenerate[planKey] = true;
 
-        updateGeneratorOptions(planKey, {freezeFirstShiftOrders});
+        updateGeneratorOptions(planKey, {freezeOrders});
       }
 
       // Tomorrow
@@ -419,7 +419,7 @@ module.exports = function setUpGenerator(app, module)
 
         loadPlan(state, this.next());
       },
-      function freezeFirstShiftOrdersStep(err)
+      function freezeOrdersStep(err)
       {
         if (state.cancelled)
         {
@@ -431,9 +431,9 @@ module.exports = function setUpGenerator(app, module)
           return this.skip(new Error(`Failed to load plan: ${err.message}`));
         }
 
-        if (state.freezeFirstShiftOrders)
+        if (state.freezeOrders)
         {
-          freezeFirstShiftOrders(state, this.next());
+          freezeOrders(state, this.next());
         }
       },
       function generatePlanStep(err)
@@ -445,7 +445,7 @@ module.exports = function setUpGenerator(app, module)
 
         if (err)
         {
-          return this.skip(new Error(`Failed to freeze first shift orders: ${err.message}`));
+          return this.skip(new Error(`Failed to freeze orders: ${err.message}`));
         }
 
         doGeneratePlan(state, this.next());
@@ -691,7 +691,7 @@ module.exports = function setUpGenerator(app, module)
       },
       function(err)
       {
-        state.freezeFirstShiftOrders = state.freezeFirstShiftOrders || state.settings.freezeFirstShiftOrders;
+        state.freezeOrders = state.freezeOrders || state.settings.freezeOrders;
 
         done(err);
       }
@@ -893,7 +893,7 @@ module.exports = function setUpGenerator(app, module)
     );
   }
 
-  function freezeFirstShiftOrders(state, done)
+  function freezeOrders(state, done)
   {
     const anyAlreadyFrozen = state.plan.lines.find(planLine => planLine.frozenOrders.length > 0);
 
@@ -901,52 +901,18 @@ module.exports = function setUpGenerator(app, module)
     {
       state.log('Freezing first shift orders...');
 
-      state.plan.lines.forEach(freezeFirstShiftLineOrders);
+      state.plan.lines.forEach(freezeLineOrders);
     }
 
     setImmediate(done);
   }
 
-  function freezeFirstShiftLineOrders(planLine)
+  function freezeLineOrders(planLine)
   {
-    planLine.frozenOrders = [];
-
-    let i = 0;
-
-    for (; i < planLine.orders.length; ++i)
-    {
-      const lineOrder = planLine.orders[i];
-      const startHour = lineOrder.startAt.getUTCHours();
-
-      if (startHour < 6 || startHour >= 14)
-      {
-        break;
-      }
-
-      planLine.frozenOrders.push({
-        orderNo: lineOrder.orderNo,
-        quantity: lineOrder.quantity
-      });
-    }
-
-    const lastFrozenOrder = _.last(planLine.frozenOrders);
-
-    if (!lastFrozenOrder)
-    {
-      return;
-    }
-
-    for (; i < planLine.orders.length; ++i)
-    {
-      const lineOrder = planLine.orders[i];
-
-      if (lineOrder.orderNo !== lastFrozenOrder.orderNo)
-      {
-        break;
-      }
-
-      lastFrozenOrder.quantity += lineOrder.quantity;
-    }
+    planLine.frozenOrders = planLine.orders.map(lineOrder => ({
+      orderNo: lineOrder.orderNo,
+      quantity: lineOrder.quantity
+    }));
   }
 
   function isWorkDay(state, date, done)
