@@ -7,7 +7,7 @@
         </div>
         <div class="panel-details">
           <div class="props first">
-            <% ['orderNo', 'nc12', 'productFamily', 'productName', 'division', 'line', 'qtyOrder'].forEach(function(p) { %>
+            <% ['orderNo', 'serialNumbers', 'nc12', 'productFamily', 'productName', 'division', 'line', 'qtyOrder'].forEach(function(p) { %>
             <div class="prop">
               <div class="prop-name"><%- t('qiResults', 'PROPERTY:' + p) %></div>
               <div class="prop-value"><%= model[p] || '-' %></div>
@@ -64,10 +64,6 @@
               <div class="prop-value"><%- model.qtyNok %></div>
             </div>
             <% } %>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:serialNumbers') %></div>
-              <div class="prop-value"><%- model.serialNumbers || '-' %></div>
-            </div>
           </div>
         </div>
       </div>
