@@ -155,7 +155,9 @@
         </div>
       </div>
       <% if (model.okFile || model.nokFile) { %>
+      <% if (canEditAttachments) { %>
       <div class="message message-inline message-warning"><%- t('qiResults', 'FORM:attachments:update') %></div>
+      <% } %>
       <div class="row">
         <div class="col-lg-2 form-group">
           <label class="control-label"><%- t('qiResults', 'FORM:okFile:current') %></label>
@@ -213,9 +215,11 @@
           <tbody id="<%- idPrefix %>-actions"></tbody>
         </table>
       </div>
+      <% if (canAddActions) { %>
       <button id="<%- idPrefix %>-addAction" class="btn btn-default" type="button">
         <i class="fa fa-plus"></i><span><%- t('qiResults', 'correctiveActions:add') %></span>
       </button>
+      <% } %>
       <% } %>
       <% } %>
       <% if (editMode) { %>

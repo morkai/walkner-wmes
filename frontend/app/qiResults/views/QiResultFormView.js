@@ -122,12 +122,9 @@ define([
         leaders: this.serializeLeaders('leaders', 'leader'),
         divisions: orgUnits.getAllByType('division'),
         isAndroid: IS_ANDROID,
-        canEditAttachments: this.options.editMode
-          ? (this.model.isInspector() || user.isAllowedTo('QI:RESULTS:MANAGE'))
-          : user.isAllowedTo('QI:INSPECTOR', 'QI:RESULTS:MANAGE'),
-        canEditActions: this.options.editMode
-          ? (this.model.isNokOwner() || user.isAllowedTo('QI:SPECIALIST', 'QI:RESULTS:MANAGE'))
-          : user.isAllowedTo('QI:SPECIALIST', 'QI:RESULTS:MANAGE')
+        canEditAttachments: this.model.canEditAttachments(this.options.editMode),
+        canEditActions: this.model.canEditActions(this.options.editMode),
+        canAddActions: this.model.canAddActions()
       });
     },
 
@@ -299,7 +296,7 @@ define([
             label: optionEl.label.trim()
           };
         }
-        else
+        else if (optionEl)
         {
           formData[prop] = null;
         }
@@ -324,28 +321,30 @@ define([
       });
 
       formData.serialNumbers = this.parseSerialNumbers(formData.serialNumbers);
+      formData.correctiveActions = [];
 
-      var $actions = view.$id('actions').children();
-
-      formData.correctiveActions = _.map(formData.correctiveActions, function(action, i)
+      view.$id('actions').children().each(function()
       {
-        var when = time.getMoment(action.when);
+        var when = time.getMoment(this.querySelector('[name$="when"]').value);
+        var what = this.querySelector('[name$="what"]').value.trim();
 
-        return {
-          what: action.what || '',
+        if (what === '')
+        {
+          return;
+        }
+
+        formData.correctiveActions.push({
+          what: what,
           when: when.isValid() ? when.toDate() : null,
-          who: _.map($actions.eq(i).find('input[name$="who"]').select2('data'), function(user)
+          who: _.map($(this.querySelector('[name$="who"]')).select2('data'), function(user)
           {
             return {
               id: user.id,
               label: user.text
             };
           }),
-          status: action.status
-        };
-      }).filter(function(action)
-      {
-        return action.what.length > 0;
+          status: this.querySelector('[name$="status"]').value
+        });
       });
 
       return formData;
@@ -370,8 +369,8 @@ define([
       this.setUpLeaderSelect2('nokOwner');
       this.setUpLeaderSelect2('leader');
       buttonGroup.toggle(this.$id('result'));
-      this.findOrder();
       this.toggleRoleFields();
+      this.findOrder();
     },
 
     setUpInspectorSelect2: function()
@@ -410,7 +409,7 @@ define([
         orderNo = '';
       }
 
-      return sns
+      return (sns || '')
         .split(/(\s+|,|;)/)
         .filter(function(sn) { return /^[a-zA-Z0-9.]+$/.test(sn); })
         .map(function(sn)
@@ -435,6 +434,7 @@ define([
       var inspector = this.model.isInspector();
       var specialist = user.isAllowedTo('QI:SPECIALIST');
       var nokOwner = this.model.isNokOwner();
+      var leader = this.model.isLeader();
 
       this.$('[data-role]').each(function()
       {
@@ -449,7 +449,8 @@ define([
         {
           enabled = (inspector && role.indexOf('inspector') !== -1)
             || (specialist && role.indexOf('specialist') !== -1)
-            || (nokOwner && role.indexOf('nokOwner') !== -1);
+            || (nokOwner && role.indexOf('nokOwner') !== -1)
+            || (leader && role.indexOf('leader') !== -1);
         }
 
         this.disabled = !enabled;
@@ -478,6 +479,15 @@ define([
     findOrder: function()
     {
       var view = this;
+      var $orderNo = view.$id('orderNo');
+
+      if ($orderNo.prop('disabled'))
+      {
+        this.updateLines([]);
+        this.updateLeaders([]);
+
+        return;
+      }
 
       view.findOrderCount += 1;
 
@@ -486,8 +496,6 @@ define([
         view.findOrderReq.abort();
         view.findOrderReq = null;
       }
-
-      var $orderNo = view.$id('orderNo');
 
       $orderNo[0].setCustomValidity(t('qiResults', 'FORM:ERROR:orderNo'));
 
@@ -532,7 +540,7 @@ define([
     addEmptyAction: function()
     {
       this.addAction({
-        status: '',
+        status: 'new',
         when: '',
         who: [],
         what: ''
@@ -551,9 +559,19 @@ define([
       action.i = this.actions++;
       action.no = $actions.children().length + 1;
 
+      var canManage = user.isAllowedTo('QI:RESULTS:MANAGE', 'QI:SPECIALIST');
+      var isNokOwner = this.model.isNokOwner();
+      var isLeader = this.model.isLeader();
+      var isCorrector = _.some(action.who, function(who) { return who.id === user.data._id; });
+
       $actions.append(correctiveActionFormRowTemplate({
         statuses: this.statuses,
-        action: action
+        action: action,
+        canChangeStatus: canManage,
+        canChangeWhen: canManage || isNokOwner || isLeader || isCorrector,
+        canChangeWho: canManage || isNokOwner,
+        canChangeWhat: canManage || isNokOwner || isLeader || isCorrector,
+        canRemove: canManage || (isNokOwner && action.status === 'new')
       }));
 
       var $who = setUpUserSelect2($actions.children().last().find('[name$="who"]'), {

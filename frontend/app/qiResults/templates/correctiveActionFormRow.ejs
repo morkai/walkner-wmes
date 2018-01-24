@@ -1,14 +1,19 @@
 <tr>
   <td class="is-min"><%- action.no %></td>
   <td class="is-min">
-    <select class="form-control" name="correctiveActions[<%- action.i %>].status">
+    <select class="form-control" name="correctiveActions[<%- action.i %>].status" <%- canChangeStatus ? '' : 'disabled' %>>
       <% statuses.forEach(function(status) { %>
       <option value="<%- status.id %>" <%- status.id === action.status ? 'selected' : '' %>><%= status.text %></option>
       <% }) %>
     </select>
   </td>
-  <td><input class="form-control" name="correctiveActions[<%- action.i %>].when" type="date" min="2016-01-01" value="<%- action.when ? time.format(action.when, 'YYYY-MM-DD') : '' %>"></td>
-  <td><input name="correctiveActions[<%- action.i %>].who" type="text"></td>
-  <td><textarea class="form-control" name="correctiveActions[<%- action.i %>].what" type="text" rows="1"><%= action.what %></textarea></td>
-  <td class="is-min"><button class="btn btn-default" name="removeAction" type="button"><i class="fa fa-remove"></i></button></td>
+  <td><input class="form-control" name="correctiveActions[<%- action.i %>].when" type="date" min="2016-01-01" value="<%- action.when ? time.format(action.when, 'YYYY-MM-DD') : '' %>" <%- canChangeWhen ? '' : 'disabled' %>></td>
+  <td><input name="correctiveActions[<%- action.i %>].who" type="text" <%- canChangeWho ? '' : 'disabled' %>></td>
+  <td><textarea class="form-control" name="correctiveActions[<%- action.i %>].what" type="text" rows="1" <%- canChangeWhat ? '' : 'disabled' %>><%= action.what %></textarea></td>
+  <td class="is-min">
+    <% if (canRemove) { %>
+    <button class="btn btn-default" name="removeAction" type="button"><i class="fa fa-remove"></i>
+    <% } %>
+  </button>
+  </td>
 </tr>

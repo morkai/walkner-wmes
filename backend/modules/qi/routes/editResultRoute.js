@@ -79,6 +79,15 @@ module.exports = function editResultRoute(app, qiModule, req, res, next)
         return this.skip(app.createError('NOT_FOUND', 404));
       }
 
+      const corrector = (qiResult.correctiveActions || []).some(action => action.who.some(who => who.id === user._id));
+
+      if (corrector)
+      {
+        Object.assign(input, _.pick(req.body, [
+          'correctiveActions'
+        ]));
+      }
+
       const changed = qiResult.applyChanges(input, updater);
 
       if (changed)

@@ -74,27 +74,16 @@ define([
         return false;
       }
 
-      if (!attrs.ok && user.isAllowedTo('QI:SPECIALIST'))
+      if (!attrs.ok)
       {
-        return true;
+        return user.isAllowedTo('QI:SPECIALIST')
+          || this.isInspector()
+          || this.isNokOwner()
+          || this.isLeader()
+          || this.isCorrector();
       }
 
-      if (!attrs.ok && this.isNokOwner())
-      {
-        return true;
-      }
-
-      if (this.isCreator())
-      {
-        return true;
-      }
-
-      if (this.isInspector())
-      {
-        return true;
-      }
-
-      return false;
+      return this.isInspector();
     },
 
     canDelete: function()
@@ -112,32 +101,69 @@ define([
         return false;
       }
 
-      if (this.isCreator())
+      return this.isInspector() || this.isCreator();
+    },
+
+    canEditAttachments: function(editMode)
+    {
+      if (editMode)
       {
-        return true;
+        return user.isAllowedTo('QI:RESULTS:MANAGE')
+          || this.isInspector();
       }
 
-      if (this.isInspector())
+      return user.isAllowedTo('QI:INSPECTOR', 'QI:RESULTS:MANAGE');
+    },
+
+    canAddActions: function()
+    {
+      return user.isAllowedTo('QI:SPECIALIST', 'QI:RESULTS:MANAGE') || this.isNokOwner();
+    },
+
+    canEditActions: function(editMode)
+    {
+      if (editMode)
       {
-        return true;
+        return user.isAllowedTo('QI:SPECIALIST', 'QI:RESULTS:MANAGE')
+          || this.isNokOwner()
+          || this.isLeader()
+          || this.isCorrector();
       }
 
-      return false;
+      return user.isAllowedTo('QI:SPECIALIST', 'QI:RESULTS:MANAGE');
     },
 
     isCreator: function()
     {
-      return this.attributes.creator && this.attributes.creator.id === user.data._id;
+      return !!this.attributes.creator && this.attributes.creator.id === user.data._id;
     },
 
     isInspector: function()
     {
-      return this.attributes.inspector && this.attributes.inspector.id === user.data._id;
+      return !!this.attributes.inspector && this.attributes.inspector.id === user.data._id;
     },
 
     isNokOwner: function()
     {
-      return this.attributes.nokOwner && this.attributes.nokOwner.id === user.data._id;
+      return !!this.attributes.nokOwner && this.attributes.nokOwner.id === user.data._id;
+    },
+
+    isLeader: function()
+    {
+      return !!this.attributes.leader && this.attributes.leader.id === user.data._id;
+    },
+
+    isCorrector: function()
+    {
+      var attrs = this.attributes;
+
+      return !!attrs.users
+        && _.size(attrs.correctiveActions) > 0
+        && attrs.users.indexOf(user.data._id) !== -1
+        && _.some(attrs.correctiveActions, function(correctiveAction)
+        {
+          return _.some(correctiveAction.who, function(who) { return who.id === user.data._id; });
+        });
     },
 
     serialize: function(dictionaries, options)
