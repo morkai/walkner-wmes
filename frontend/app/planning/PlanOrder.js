@@ -54,7 +54,7 @@ define([
       }
 
       var operation = this.attributes.operation;
-      var schedulingRate = this.collection ? this.collection.plan.settings.attributes.schedulingRate : 1;
+      var schedulingRate = this.collection ? this.collection.plan.settings.getSchedulingRate(this.attributes.mrp) : 1;
 
       return operation.laborTime
         ? (((operation.laborTime / 100 * quantity) + operation.laborSetupTime) * schedulingRate)

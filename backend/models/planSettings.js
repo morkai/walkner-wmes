@@ -80,10 +80,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     },
     requiredStatuses: [String],
     ignoredStatuses: [String],
-    schedulingRate: {
-      type: Number,
-      default: 1
-    },
+    schedulingRate: {},
     freezeHour: {
       type: Number,
       min: 0,
@@ -108,7 +105,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       ignoreCompleted: true,
       requiredStatuses: ['REL'],
       ignoredStatuses: ['TECO', 'CNF', 'DLV', 'DLFL', 'DLT'],
-      schedulingRate: 1,
+      schedulingRate: {},
       freezeHour: 0,
       lines: [],
       mrps: []
@@ -163,7 +160,8 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
         }
 
         mrps.set(mrpId, Object.assign(mrp.toObject(), {
-          hardComponents: new Set(mrp.hardComponents)
+          hardComponents: new Set(mrp.hardComponents),
+          schedulingRate: this.schedulingRate[mrpId] || this.schedulingRate.ANY || 1
         }));
       }
 
@@ -194,7 +192,6 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       ignoreCompleted: this.ignoreCompleted,
       requiredStatuses: this.requiredStatuses,
       ignoredStatuses: ignoredStatuses,
-      schedulingRate: this.schedulingRate,
       hardComponents: hardComponents,
       shiftStartTimes: [
         moment.utc(this._id).clone().hours(6).valueOf(),

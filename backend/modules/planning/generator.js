@@ -786,9 +786,10 @@ module.exports = function setUpGenerator(app, module)
     }
 
     const quantityTodo = getQuantityTodo(state, planOrder);
+    const {schedulingRate} = state.settings.mrp(planOrder.mrp);
 
     planOrder.kind = classifyPlanOrder(state, planOrder);
-    planOrder.manHours = getManHours(planOrder.operation, quantityTodo, state.settings.schedulingRate);
+    planOrder.manHours = getManHours(planOrder.operation, quantityTodo, schedulingRate);
     planOrder.incomplete = quantityTodo;
 
     if (planOrder.quantityPlan >= 0)
@@ -2128,7 +2129,7 @@ module.exports = function setUpGenerator(app, module)
     const mrpLineSettings = settings.mrpLine(mrpId, lineId);
 
     const lastAvailableLine = getLinesForBigOrder(state, order.mrp, order.kind).length === 1;
-    const pceTime = getPceTime(order, mrpLineSettings.workerCount, settings.schedulingRate);
+    const pceTime = getPceTime(order, mrpLineSettings.workerCount, mrpSettings.schedulingRate);
     const activeTo = lineState.activeTo.valueOf();
     let startAt = lineState.activeFrom.valueOf();
     let finishAt = startAt + getOrderStartOverhead(state.settings, lineState, orderState);
@@ -2216,7 +2217,7 @@ module.exports = function setUpGenerator(app, module)
             orderNo: orderNo,
             quantity: quantityPlanned,
             pceTime,
-            manHours: getManHours(order.operation, quantityPlanned, settings.schedulingRate),
+            manHours: getManHours(order.operation, quantityPlanned, mrpSettings.schedulingRate),
             startAt: new Date(startAt),
             finishAt: new Date(finishAt),
             pceTimes
@@ -2247,7 +2248,7 @@ module.exports = function setUpGenerator(app, module)
             orderNo,
             quantity: quantityPlanned,
             pceTime,
-            manHours: getManHours(order.operation, quantityPlanned, settings.schedulingRate),
+            manHours: getManHours(order.operation, quantityPlanned, mrpSettings.schedulingRate),
             startAt: new Date(startAt),
             finishAt: new Date(finishAt),
             pceTimes
@@ -2278,7 +2279,7 @@ module.exports = function setUpGenerator(app, module)
           orderNo: orderNo,
           quantity: quantityPlanned,
           pceTime: pceTime,
-          manHours: getManHours(order.operation, quantityPlanned, settings.schedulingRate),
+          manHours: getManHours(order.operation, quantityPlanned, mrpSettings.schedulingRate),
           startAt: new Date(startAt),
           finishAt: new Date(finishAt),
           pceTimes
@@ -2405,10 +2406,10 @@ module.exports = function setUpGenerator(app, module)
   function getOrderStartOverhead(settings, lineState, orderState)
   {
     const shiftStartTimes = settings.shiftStartTimes;
-    const {extraOrderSeconds, extraShiftSeconds} = settings.mrp(orderState.order.mrp);
+    const {extraOrderSeconds, extraShiftSeconds, schedulingRate} = settings.mrp(orderState.order.mrp);
     const hours = lineState.activeFrom.hours();
     const seconds = lineState.activeFrom.minutes() * 60;
-    const laborSetupTime = orderState.order.operation.laborSetupTime * settings.schedulingRate;
+    const laborSetupTime = orderState.order.operation.laborSetupTime * schedulingRate;
     let shiftStartTime = 0;
     let extraShiftStartTime = 0;
 
@@ -2877,8 +2878,9 @@ module.exports = function setUpGenerator(app, module)
   function hasAnyLineWithRoomForOrder(state, orderNo)
   {
     const order = state.orders.get(orderNo);
+    const mrpSettings = state.settings.mrp(order.mrp);
 
-    return state.settings.mrp(order.mrp).lines.some(mrpLineSettings =>
+    return mrpSettings.lines.some(mrpLineSettings =>
     {
       if (!mrpLineSettings.orderPriority.includes(order.kind))
       {
@@ -2887,7 +2889,7 @@ module.exports = function setUpGenerator(app, module)
 
       const lineState = state.lineStates.get(mrpLineSettings._id);
       const availableTime = getRemainingAvailableTime(lineState);
-      const pceTime = getPceTime(order, mrpLineSettings.workerCount, state.settings.schedulingRate);
+      const pceTime = getPceTime(order, mrpLineSettings.workerCount, mrpSettings.schedulingRate);
 
       return !lineState.plannedOrdersSet.has(order._id) && availableTime >= pceTime;
     });

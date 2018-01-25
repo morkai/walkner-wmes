@@ -11,7 +11,7 @@
       <div class="form-group">
         <label for="<%- idPrefix %>-schedulingRate"><%- t('planning', 'settings:schedulingRate') %></label>
         <p class="help-block"><%- t('planning', 'settings:schedulingRate:help') %></p>
-        <input id="<%- idPrefix %>-schedulingRate" name="schedulingRate" class="form-control" type="text" required data-object="plan" style="width: 100px">
+        <textarea id="<%- idPrefix %>-schedulingRate" name="schedulingRate" class="form-control text-mono" required data-object="plan" rows="4"></textarea>
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-requiredStatuses"><%- t('planning', 'settings:requiredStatuses') %></label>

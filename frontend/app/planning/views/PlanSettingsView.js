@@ -11,6 +11,7 @@ define([
   'app/data/orgUnits',
   'app/data/orderStatuses',
   'app/core/views/FormView',
+  'app/core/util/decimalSeparator',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/orderStatuses/util/renderOrderStatusLabel',
   'app/planning/templates/planSettings'
@@ -25,6 +26,7 @@ define([
   orgUnits,
   orderStatuses,
   FormView,
+  decimalSeparator,
   setUpMrpSelect2,
   renderOrderStatusLabel,
   template
@@ -79,8 +81,30 @@ define([
             break;
 
           case 'schedulingRate':
-            v = Math.max(0, parseFloat($property.val().replace(',', '.')) || 0) || 1;
+          {
+            v = {ANY: 1};
+
+            $property.val().split('\n').forEach(function(line)
+            {
+              var matches = line.match(/([0-9,.]+)/);
+
+              if (!matches)
+              {
+                return;
+              }
+
+              var value = Math.max(0, parseFloat(matches[1].replace(',', '.')) || 0) || 1;
+
+              line.replace(matches[0], '').split(/[^A-Za-z0-9]/).forEach(function(mrp)
+              {
+                if (mrp.length >= 3)
+                {
+                  v[mrp.toUpperCase()] = value;
+                }
+              });
+            });
             break;
+          }
 
           case 'ignoreCompleted':
           case 'useRemainingQuantity':
@@ -155,6 +179,11 @@ define([
         var mrp = this.model.mrps.get(this.$id('mrp').val());
 
         this.selectMrpLine(mrp, e.added ? e.added.id : null, false);
+      },
+
+      'blur #-schedulingRate': function(e)
+      {
+        e.target.value = this.formatSchedulingRate(this.model.get('schedulingRate'));
       }
 
     }, FormView.prototype.events),
@@ -723,6 +752,7 @@ define([
 
       formData.requiredStatuses = formData.requiredStatuses.join(',');
       formData.ignoredStatuses = formData.ignoredStatuses.join(',');
+      formData.schedulingRate = this.formatSchedulingRate(formData.schedulingRate);
 
       return formData;
     },
@@ -766,6 +796,58 @@ define([
     getFailureText: function()
     {
       return t('planning', 'settings:msg:failure');
+    },
+
+    formatSchedulingRate: function(schedulingRate)
+    {
+      var view = this;
+      var formatted = [
+        view.formatSchedulingRateNumber(schedulingRate.ANY || 1) + ': ANY'
+      ];
+      var rateToMrp = {};
+
+      Object.keys(schedulingRate).forEach(function(mrp)
+      {
+        if (mrp === 'ANY')
+        {
+          return;
+        }
+
+        var rate = view.formatSchedulingRateNumber(schedulingRate[mrp]);
+
+        if (!rateToMrp[rate])
+        {
+          rateToMrp[rate] = [];
+        }
+
+        rateToMrp[rate].push(mrp);
+      });
+
+      Object.keys(rateToMrp).forEach(function(rate)
+      {
+        formatted.push(rate + ': ' + rateToMrp[rate].sort().join(', '));
+      });
+
+      return formatted.join('\n');
+    },
+
+    formatSchedulingRateNumber: function(n)
+    {
+      var str = n.toString();
+
+      if (str.indexOf('.') === -1)
+      {
+        str += '.0000';
+      }
+      else
+      {
+        while (str.length < 6)
+        {
+          str += '0';
+        }
+      }
+
+      return str.replace('.', decimalSeparator);
     },
 
     onGeneratorFinished: function()
@@ -812,6 +894,9 @@ define([
           case 'ignoredStatuses':
             view.$id(property).select2('val', value);
             break;
+
+          case 'schedulingRate':
+            view.$id(property).val(view.formatSchedulingRate(value));
         }
       });
     },

@@ -183,6 +183,11 @@ define([
       });
     },
 
+    getSchedulingRate: function(mrpId)
+    {
+      return this.attributes.schedulingRate[mrpId] || this.attributes.schedulingRate.ANY || 1;
+    },
+
     isEditable: function()
     {
       return time.getMoment(this.id).hours(6).diff(Date.now()) > 300000;
