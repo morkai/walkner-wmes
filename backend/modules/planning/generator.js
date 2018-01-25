@@ -1434,7 +1434,10 @@ module.exports = function setUpGenerator(app, module)
   {
     return planOrder.lines.length === 0
       ? []
-      : _.intersection(planOrder.lines, state.settings.mrp(planOrder.mrp).lines.map(l => l._id));
+      : _.intersection(
+        planOrder.lines,
+        state.settings.mrp(planOrder.mrp).lines.filter(l => l.workerCount > 0).map(l => l._id)
+      );
   }
 
   function sortUrgentOrders(a, b)
@@ -1733,19 +1736,33 @@ module.exports = function setUpGenerator(app, module)
       log(`[${lineState._id}] Generating (${state.generateCallCount})...`);
     }
 
-    while (!lineState.completed)
+    if (hasAnyWorkers(state, lineState))
     {
-      const orderState = getNextOrderForLine(state, lineState);
-
-      if (!orderState)
+      while (!lineState.completed)
       {
-        break;
-      }
+        const orderState = getNextOrderForLine(state, lineState);
 
-      handleOrderState(state, lineState, orderState, false);
+        if (!orderState)
+        {
+          break;
+        }
+
+        handleOrderState(state, lineState, orderState, false);
+      }
+    }
+    else if (!LOG_LINES || LOG_LINES[lineState._id])
+    {
+      log(`[${lineState._id}] No workers!`);
     }
 
     setImmediate(completeLine, state, lineState, done);
+  }
+
+  function hasAnyWorkers(state, lineState)
+  {
+    return state.settings.line(lineState._id).mrpPriority.some(
+      mrpId => state.settings.mrpLine(mrpId, lineState._id).workerCount > 0
+    );
   }
 
   function handleOrderState(state, lineState, orderState, trying)
@@ -2128,6 +2145,11 @@ module.exports = function setUpGenerator(app, module)
     const mrpSettings = settings.mrp(mrpId);
     const mrpLineSettings = settings.mrpLine(mrpId, lineId);
 
+    if (mrpLineSettings.workerCount === 0)
+    {
+      return null;
+    }
+
     const lastAvailableLine = getLinesForBigOrder(state, order.mrp, order.kind).length === 1;
     const pceTime = getPceTime(order, mrpLineSettings.workerCount, mrpSettings.schedulingRate);
     const activeTo = lineState.activeTo.valueOf();
@@ -2380,7 +2402,10 @@ module.exports = function setUpGenerator(app, module)
   function getLinesForBigOrder(state, orderMrp, orderKind)
   {
     return state.settings.mrp(orderMrp).lines
-      .filter(line => line.orderPriority.includes(orderKind) && !state.lineStates.get(line._id).completed)
+      .filter(mrpLine => mrpLine.workerCount > 0
+        && mrpLine.orderPriority.includes(orderKind)
+        && !state.lineStates.get(mrpLine._id).completed
+      )
       .map(line => state.lineStates.get(line._id));
   }
 
@@ -2882,7 +2907,7 @@ module.exports = function setUpGenerator(app, module)
 
     return mrpSettings.lines.some(mrpLineSettings =>
     {
-      if (!mrpLineSettings.orderPriority.includes(order.kind))
+      if (mrpLineSettings.workerCount === 0 || !mrpLineSettings.orderPriority.includes(order.kind))
       {
         return false;
       }
