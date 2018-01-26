@@ -5,17 +5,13 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  './PaintShopPaint',
-  './PaintShopPaintCollection'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  PaintShopPaint,
-  PaintShopPaintCollection
+  showDeleteFormPage
 ) {
   'use strict';
 
@@ -23,33 +19,19 @@ define([
   var canView = user.auth('PAINT_SHOP:VIEW');
   var canManage = user.auth('PAINT_SHOP:MANAGE');
 
-  router.map('/paintShop/paints', canView, function(req)
-  {
-    viewport.loadPage(
-      [
-        'app/paintShopPaints/pages/PaintShopPaintListPage'
-      ],
-      function(PaintShopPaintListPage)
-      {
-        return new PaintShopPaintListPage({
-          collection: new PaintShopPaintCollection(null, {rqlQuery: req.rql})
-        });
-      }
-    );
-  });
-
   router.map('/paintShop/paints/:id', canView, function(req)
   {
     viewport.loadPage(
       [
         'app/core/pages/DetailsPage',
+        'app/paintShopPaints/PaintShopPaint',
         'app/paintShopPaints/templates/details',
         nls
       ],
-      function(DetailsPage, detailsTemplate)
+      function(DetailsPage, PaintShopPaint, detailsTemplate)
       {
         return new DetailsPage({
-          baseBreadcrumb: true,
+          baseBreadcrumb: '#paintShop/' + (window.WMES_LAST_PAINT_SHOP_DATE || '0d'),
           model: new PaintShopPaint({_id: req.params.id}),
           detailsTemplate: detailsTemplate
         });
@@ -62,13 +44,14 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/AddFormPage',
+        'app/paintShopPaints/PaintShopPaint',
         'app/paintShopPaints/views/PaintShopPaintFormView',
         nls
       ],
-      function(AddFormPage, PaintShopPaintFormView)
+      function(AddFormPage, PaintShopPaint, PaintShopPaintFormView)
       {
         return new AddFormPage({
-          baseBreadcrumb: true,
+          baseBreadcrumb: '#paintShop/' + (window.WMES_LAST_PAINT_SHOP_DATE || '0d'),
           FormView: PaintShopPaintFormView,
           model: new PaintShopPaint()
         });
@@ -81,13 +64,14 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/EditFormPage',
+        'app/paintShopPaints/PaintShopPaint',
         'app/paintShopPaints/views/PaintShopPaintFormView',
         nls
       ],
-      function(EditFormPage, PaintShopPaintFormView)
+      function(EditFormPage, PaintShopPaint, PaintShopPaintFormView)
       {
         return new EditFormPage({
-          baseBreadcrumb: true,
+          baseBreadcrumb: '#paintShop/' + (window.WMES_LAST_PAINT_SHOP_DATE || '0d'),
           FormView: PaintShopPaintFormView,
           model: new PaintShopPaint({_id: req.params.id})
         });
@@ -95,7 +79,11 @@ define([
     );
   });
 
-  router.map('/paintShop/paints/:id;delete', canManage, _.partial(showDeleteFormPage, PaintShopPaint, _, _, {
-    baseBreadcrumb: true
-  }));
+  router.map(
+    '/paintShop/paints/:id;delete',
+    canManage,
+    _.partial(showDeleteFormPage, 'app/paintShopPaints/PaintShopPaint', _, _, {
+      baseBreadcrumb: true
+    })
+  );
 });

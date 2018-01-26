@@ -54,7 +54,7 @@ define([
     {
       breadcrumbs.unshift({
         label: t.bound(nlsDomain, 'BREADCRUMBS:base'),
-        href: page.baseBreadcrumb.toString()
+        href: String(_.result(page, 'baseBreadcrumb'))
       });
     }
 

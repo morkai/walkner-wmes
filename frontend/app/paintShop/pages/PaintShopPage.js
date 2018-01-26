@@ -87,6 +87,7 @@ define([
 
     actions: function()
     {
+      var view = this;
       var actions = [];
 
       if (!IS_EMBEDDED)
@@ -94,12 +95,16 @@ define([
         actions.push({
           type: 'link',
           icon: 'arrows-alt',
-          callback: this.toggleFullscreen.bind(this)
+          callback: this.toggleFullscreen.bind(view)
         }, {
           icon: 'paint-brush',
           href: '#paintShop/paints',
           privileges: 'PAINT_SHOP:MANAGE',
-          label: t('paintShop', 'PAGE_ACTIONS:paints')
+          label: t('paintShop', 'PAGE_ACTIONS:paints'),
+          callback: function()
+          {
+            window.WMES_LAST_PAINT_SHOP_DATE = view.orders.getDateFilter();
+          }
         });
       }
 

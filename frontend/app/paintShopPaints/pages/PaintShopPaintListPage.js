@@ -15,7 +15,11 @@ define([
   return FilteredListPage.extend({
 
     FilterView: PaintShopPaintFilterView,
-    baseBreadcrumb: true,
+
+    baseBreadcrumb: function()
+    {
+      return '#paintShop/' + (window.WMES_LAST_PAINT_SHOP_DATE || '0d');
+    },
 
     actions: function()
     {
