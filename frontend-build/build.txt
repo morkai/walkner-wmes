@@ -1238,13 +1238,13 @@ app/isa/templates/messages/acceptSuccess.js
 app/isa/templates/messages/finishSuccess.js
 app/isa/pages/IsaLineStatePage.js
 app/isa/routes.js
-app/paintShopPaints/PaintShopPaint.js
-app/paintShopPaints/PaintShopPaintCollection.js
 app/paintShopPaints/routes.js
 app/core/util/html2pdf.js
 app/data/clipboard.js
 app/planning/templates/contextMenu.js
 app/planning/util/contextMenu.js
+app/paintShopPaints/PaintShopPaint.js
+app/paintShopPaints/PaintShopPaintCollection.js
 app/paintShop/PaintShopOrder.js
 app/paintShop/PaintShopOrderCollection.js
 app/paintShop/PaintShopDropZone.js
@@ -1380,6 +1380,7 @@ app/planning/views/PlanListFilterView.js
 app/planning/templates/list.js
 app/planning/views/PlanListView.js
 app/planning/pages/PlanListPage.js
+app/core/util/decimalSeparator.js
 app/planning/templates/planSettings.js
 app/planning/views/PlanSettingsView.js
 app/planning/pages/PlanSettingsPage.js
