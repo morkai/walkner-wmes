@@ -76,7 +76,7 @@ define([
     {
       $(document.body)
         .css('overflow', '')
-        .removeClass('paintShop-is-embedded');
+        .removeClass('paintShopLoad-page paintShop-is-embedded');
     },
 
     defineModels: function()
@@ -125,6 +125,7 @@ define([
       }
 
       document.body.classList.toggle('paintShop-is-embedded', IS_EMBEDDED);
+      document.body.classList.add('paintShopLoad-page');
     },
 
     startActionTimer: function(action, e)
