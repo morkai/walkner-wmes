@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["jquery","./time","./router","./viewport","./user","./core/util/getShiftStartInfo","./paintShop/pages/PaintShopPage","i18n!app/nls/paintShop"],function(t,e,a,n,o,i,l){"use strict";a.map("/",o.auth("LOCAL","PAINT_SHOP:VIEW"),function(){var a=e.utc.getMoment(i(Date.now()).moment.subtract(1,"days").format("YYYY-MM-DD"),"YYYY-MM-DD"),o=t.ajax({url:"/paintShop/orders?select(date)&sort(date)&limit(1)&status=in=(new,started,partial)&date=ge="+a.valueOf(),timeout:5e3});o.done(function(t){t.collection&&t.collection.length&&(a=e.utc.getMoment(t.collection[0].date))}),o.always(function(){n.showPage(new l({date:a.format("YYYY-MM-DD"),selectedMrp:null,fullscreen:!0}))})})});

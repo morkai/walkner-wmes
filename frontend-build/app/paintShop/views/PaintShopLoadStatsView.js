@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["app/i18n","app/time","app/core/View","app/paintShop/templates/load/stats"],function(t,e,i,n){"use strict";return i.extend({template:n,localTopics:{"socket.connected":function(){this.promised(this.model.fetch())}},remoteTopics:{"paintShop.load.updated":function(t){this.model.set(t)}},initialize:function(){this.listenTo(this.model,"change",this.render)},destroy:function(){},serialize:function(){return{idPrefix:this.idPrefix,stats:this.model.attributes}}})});
