@@ -129,6 +129,8 @@ module.exports = function(grunt)
             {name: 'wmes-operator'},
             {name: 'wmes-heff'},
             {name: 'wmes-mrl'},
+            {name: 'wmes-ps-queue'},
+            {name: 'wmes-ps-load'},
             {name: 'pos-main'}
           ],
           paths: requirejsConfig.buildPaths,

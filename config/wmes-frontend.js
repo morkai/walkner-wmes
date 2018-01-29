@@ -232,6 +232,7 @@ exports.pubsub = {
     'paintShop.events.saved',
     'paintShop.orders.changed.*', 'paintShop.orders.updated.*',
     'paintShop.dropZones.updated.*', 'paintShop.paints.*',
+    'paintShop.load.updated',
     'vis.**',
     'mor.**',
     'planning.**'
@@ -274,7 +275,7 @@ exports.mongoose = {
     'pscsResult',
     'd8Entry', 'd8Area', 'd8EntrySource', 'd8ProblemSource',
     'heffLineState',
-    'paintShopEvent', 'paintShopOrder', 'paintShopDropZone', 'paintShopPaint',
+    'paintShopEvent', 'paintShopOrder', 'paintShopDropZone', 'paintShopPaint', 'paintShopLoad',
     'behaviorObsCard', 'minutesForSafetyCard',
     'visNodePosition',
     'planSettings', 'planChange', 'plan'
@@ -444,6 +445,20 @@ exports.updater = {
       mainJsFile: '/wmes-mrl.js',
       mainCssFile: '/assets/wmes-mrl.css',
       template: fs.readFileSync(`${__dirname}/wmes-manifest-mrl.appcache`, 'utf8')
+    },
+    {
+      frontendVersionKey: 'ps-queue',
+      path: '/ps-queue/manifest.appcache',
+      mainJsFile: '/wmes-ps-queue.js',
+      mainCssFile: '/assets/wmes-ps-queue.css',
+      template: fs.readFileSync(`${__dirname}/wmes-manifest-ps.appcache`, 'utf8')
+    },
+    {
+      frontendVersionKey: 'ps-load',
+      path: '/ps-load/manifest.appcache',
+      mainJsFile: '/wmes-ps-load.js',
+      mainCssFile: '/assets/wmes-ps-load.css',
+      template: fs.readFileSync(`${__dirname}/wmes-manifest-ps.appcache`, 'utf8')
     }
   ]
 };
@@ -460,7 +475,8 @@ exports.reports = {
     'kaizen/count', 'kaizen/summary', 'kaizen/metrics',
     'suggestions/count', 'suggestions/summary', 'suggestions/engagement',
     'opinionSurvey',
-    'behaviorObsCards/count'
+    'behaviorObsCards/count',
+    'paintShop/load'
   ]
 };
 
@@ -532,7 +548,8 @@ exports['directoryWatcher:opinionSurveys'] = {
 };
 
 exports.paintShop = {
-  generator: false
+  generator: false,
+  loadSecretKey: ''
 };
 
 exports.prodDowntimeAlerts = {

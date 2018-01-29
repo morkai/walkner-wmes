@@ -4,6 +4,7 @@
 @import "./orderChanges.css";
 @import "./datePicker.css";
 @import "./tabs.css";
+@import "./load.css";
 
 .page[data-id="paintShop"] .page-actions .btn-link {
   padding: 0;

@@ -40,7 +40,22 @@ exports.start = function startUpdaterModule(app, module)
 
   module.manifest = module.config.manifestPath ? fs.readFileSync(module.config.manifestPath, 'utf8') : null;
 
-  module.getVersions = function(clone)
+  module.config.manifests.forEach(manifest => _.defaults(manifest, {
+    frontendVersionKey: module.config.frontendVersionKey,
+    template: module.manifest
+  }));
+
+  module.getManifest = function(requiredFrontendVersionKey)
+  {
+    return module.config.manifests.find(manifest =>
+    {
+      const actualFrontendVersionKey = manifest.frontendVersionKey || module.config.frontendVersionKey;
+
+      return actualFrontendVersionKey === requiredFrontendVersionKey;
+    });
+  };
+
+  module.getVersions = clone =>
   {
     if (!module.package.updater)
     {
@@ -62,17 +77,17 @@ exports.start = function startUpdaterModule(app, module)
     return clone === false ? updater[versionsKey] : _.cloneDeep(updater[versionsKey]);
   };
 
-  module.getBackendVersion = function(backendVersionKey)
+  module.getBackendVersion = backendVersionKey =>
   {
     return module.getVersions(false)[backendVersionKey || module.config.backendVersionKey];
   };
 
-  module.getFrontendVersion = function(frontendVersionKey)
+  module.getFrontendVersion = frontendVersionKey =>
   {
     return module.getVersions(false)[frontendVersionKey || module.config.frontendVersionKey];
   };
 
-  module.updateFrontendVersion = function(frontendVersionKey)
+  module.updateFrontendVersion = frontendVersionKey =>
   {
     const versions = module.getVersions(false);
 
@@ -84,22 +99,19 @@ exports.start = function startUpdaterModule(app, module)
     versions[frontendVersionKey] = Date.now();
   };
 
-  app.broker
-    .subscribe('express.beforeMiddleware')
-    .setLimit(1)
-    .on('message', function(message)
-    {
-      const expressModule = message.module;
-      const expressApp = expressModule.app;
+  app.broker.subscribe('express.beforeMiddleware').setLimit(1).on('message', message =>
+  {
+    const expressModule = message.module;
+    const expressApp = expressModule.app;
 
-      expressApp.use(expressMiddleware.bind(null, app, module));
-    });
+    expressApp.use(expressMiddleware.bind(null, app, module));
+  });
 
   app.onModuleReady(module.config.expressId, setUpRoutes.bind(null, app, module));
 
   app.onModuleReady(module.config.sioId, setUpCommands.bind(null, app, module));
 
-  fs.watch(module.config.packageJsonPath, function()
+  fs.watch(module.config.packageJsonPath, () =>
   {
     if (reloadTimer !== null)
     {
@@ -158,7 +170,7 @@ exports.start = function startUpdaterModule(app, module)
       handleFrontendUpdate(oldFrontendVersion, newFrontendVersion);
     }
 
-    _.forEach(newVersions, function(newVersion, service)
+    _.forEach(newVersions, (newVersion, service) =>
     {
       const oldVersion = oldVersions[service] || 0;
 

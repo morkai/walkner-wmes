@@ -11,7 +11,10 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   fteId: 'fte',
   settingsId: 'settings',
-  generator: false
+  updaterId: 'updater',
+  reportsId: 'reports',
+  generator: false,
+  loadSecretKey: null
 };
 
 exports.start = function startPaintShopModule(app, module)
@@ -21,7 +24,10 @@ exports.start = function startPaintShopModule(app, module)
       module.config.mongooseId,
       module.config.fteId,
       module.config.userId,
-      module.config.expressId
+      module.config.expressId,
+      module.config.updaterId,
+      module.config.reportsId,
+      module.config.settingsId
     ],
     setUpRoutes.bind(null, app, module)
   );

@@ -49,7 +49,8 @@ exports.mongoose = {
     'suggestion',
     'behaviorObsCard',
     'minutesForSafetyCard',
-    'opinionSurveyResponse'
+    'opinionSurveyResponse',
+    'paintShopLoad'
   ]
 };
 
@@ -91,6 +92,7 @@ exports['reports/server'] = {
     'suggestions/summary': require('../backend/modules/suggestions/summaryReport'),
     'suggestions/engagement': require('../backend/modules/suggestions/engagementReport'),
     'opinionSurvey': require('../backend/modules/opinionSurveys/report'),
-    'behaviorObsCards/count': require('../backend/modules/behaviorObsCards/countReport')
+    'behaviorObsCards/count': require('../backend/modules/behaviorObsCards/countReport'),
+    'paintShop/load': require('../backend/modules/paintShop/loadReport')
   }
 };

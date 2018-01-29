@@ -5,9 +5,13 @@
 const _ = require('lodash');
 const moment = require('moment');
 const step = require('h5.step');
+const loadReport = require('./loadReport');
 
 module.exports = function setUpPaintShopRoutes(app, module)
 {
+  const updaterModule = app[module.config.updaterId];
+  const reportsModule = app[module.config.reportsId];
+  const settings = app[module.config.settingsId];
   const express = app[module.config.expressId];
   const userModule = app[module.config.userId];
   const mongoose = app[module.config.mongooseId];
@@ -15,11 +19,65 @@ module.exports = function setUpPaintShopRoutes(app, module)
   const PaintShopOrder = mongoose.model('PaintShopOrder');
   const PaintShopDropZone = mongoose.model('PaintShopDropZone');
   const PaintShopPaint = mongoose.model('PaintShopPaint');
+  const PaintShopLoad = mongoose.model('PaintShopLoad');
 
   const canView = userModule.auth('LOCAL', 'PAINT_SHOP:VIEW', 'PLANNING:VIEW');
   const canUpdate = userModule.auth('LOCAL', 'PAINT_SHOP:PAINTER', 'PAINT_SHOP:MANAGE');
   const canManage = userModule.auth('PAINT_SHOP:MANAGE');
   const canManageDropZones = userModule.auth('PAINT_SHOP:DROP_ZONES');
+
+  // Apps
+  ['ps-queue', 'ps-load'].forEach(appId =>
+  {
+    express.get(`/${appId}`, userModule.auth('LOCAL', 'PAINT_SHOP:VIEW'), (req, res, next) =>
+    {
+      const manifest = updaterModule.getManifest(appId);
+
+      if (!manifest)
+      {
+        return next(app.createError('NO_MANIFEST', 500));
+      }
+
+      const sessionUser = req.session.user;
+      const locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
+
+      res.format({
+        'text/html': function()
+        {
+          res.render('index', {
+            appCacheManifest: app.options.env === 'development' ? '' : manifest.path,
+            appData: {
+              ENV: JSON.stringify(app.options.env),
+              VERSIONS: JSON.stringify(updaterModule ? updaterModule.getVersions() : {}),
+              TIME: JSON.stringify(Date.now()),
+              LOCALE: JSON.stringify(locale),
+              FRONTEND_SERVICE: JSON.stringify(appId)
+            },
+            mainJsFile: manifest.mainJsFile,
+            mainCssFile: manifest.mainCssFile
+          });
+        }
+      });
+    });
+  });
+
+  // Settings
+  express.get(
+    '/paintShop/settings',
+    canView,
+    (req, res, next) =>
+    {
+      req.rql.selector = {
+        name: 'regex',
+        args: ['_id', '^paintShop\\.']
+      };
+
+      return next();
+    },
+    express.crud.browseRoute.bind(null, app, settings.Setting)
+  );
+
+  express.put('/paintShop/settings/:id', canManage, settings.updateRoute);
 
   // Queues
   express.post('/paintShop/:id;generate', canManage, generateRoute);
@@ -89,6 +147,18 @@ module.exports = function setUpPaintShopRoutes(app, module)
   express.put('/paintShop/paints/:id', canManage, express.crud.editRoute.bind(null, app, PaintShopPaint));
 
   express.delete('/paintShop/paints/:id', canManage, express.crud.deleteRoute.bind(null, app, PaintShopPaint));
+
+  // Load
+  express.post('/paintShop/load/update', updateLoadRoute);
+
+  express.get('/paintShop/load/stats', canView, getLoadStatsRoute);
+
+  express.get(
+    '/paintShop/load/report',
+    canView,
+    reportsModule.helpers.sendCachedReport.bind(null, 'paintShop/load'),
+    loadReportRoute
+  );
 
   function prepareCurrentDate(req, res, next)
   {
@@ -262,5 +332,98 @@ module.exports = function setUpPaintShopRoutes(app, module)
     });
 
     return rows;
+  }
+
+  function updateLoadRoute(req, res, next)
+  {
+    const {secretKey, items} = req.body;
+
+    if (secretKey !== module.config.loadSecretKey)
+    {
+      return next(app.createError('INVALID_SECRET_KEY', 400));
+    }
+
+    if (!Array.isArray(items) || !items.length)
+    {
+      return next(app.createError('INVALID_ITEMS', 400));
+    }
+
+    const docs = items
+      .map(item => ({_id: new Date(item._id), d: item.d}))
+      .filter(doc => !isNaN(doc._id.getTime()) && doc.d >= 0);
+
+    if (!docs.length)
+    {
+      return next(app.createError('INVALID_ITEMS', 400));
+    }
+
+    step(
+      function()
+      {
+        PaintShopLoad.collection.insertMany(docs, {ordered: false}, this.next());
+      },
+      function(err)
+      {
+        if (err)
+        {
+          module.warn(`Failed to update load: ${err.message}`);
+        }
+
+        PaintShopLoad.getStats(this.next());
+      },
+      function(err, stats)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.sendStatus(203);
+
+        app.broker.publish('paintShop.load.updated', stats);
+      }
+    );
+  }
+
+  function getLoadStatsRoute(req, res, next)
+  {
+    PaintShopLoad.getStats((err, stats) =>
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      res.json(stats);
+    });
+  }
+
+  function loadReportRoute(req, res, next)
+  {
+    const query = req.query;
+    const options = {
+      fromTime: reportsModule.helpers.getTime(query.from) || null,
+      toTime: reportsModule.helpers.getTime(query.to) || null,
+      interval: query.interval
+    };
+
+    reportsModule.helpers.generateReport(
+      app,
+      reportsModule,
+      loadReport,
+      'paintShop/load',
+      req.reportHash,
+      options,
+      function(err, reportJson)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.type('json');
+        res.send(reportJson);
+      }
+    );
   }
 };

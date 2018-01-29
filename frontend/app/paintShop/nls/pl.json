@@ -1,10 +1,12 @@
 {
   "BREADCRUMBS:base": "Malarnia",
+  "BREADCRUMBS:load": "Obciążenie",
 
   "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się.",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się.",
   "MSG:LOADING_FAILURE:dropZones": "Ładowanie drop zone nie powiodło się.",
   "MSG:LOADING_FAILURE:paints": "Ładowanie farb nie powiodło się.",
+  "MSG:LOADING_FAILURE:stats": "Ładowanie statystyk obciążenia nie powiodło się.",
   "MSG:date:failure": "Nie udało się znaleźć daty.",
   "MSG:date:empty": "Brak zleceń.",
   "MSG:start:failure": "Nie udało się rozpocząć zlecenia.",
@@ -13,6 +15,7 @@
   "MSG:cancel:failure": "Nie udało się zignorować zlecenia.",
   "MSG:search:failure": "Nie znaleziono zlecenia.",
 
+  "PAGE_ACTIONS:load": "Obciążenie",
   "PAGE_ACTIONS:paints": "Farby",
 
   "PROPERTY:order": "Zlecenie",

@@ -53,7 +53,8 @@ define([
 ) {
   'use strict';
 
-  var IS_EMBEDDED = window.parent !== window;
+  var APP_ID = window.location.pathname === '/' ? 'paintShop' : 'ps-queue';
+  var IS_EMBEDDED = window.parent !== window || window.location.pathname !== '/';
   var STATUS_WEIGHTS = {
     started: 1,
     partial: 2,
@@ -97,14 +98,17 @@ define([
           icon: 'arrows-alt',
           callback: this.toggleFullscreen.bind(view)
         }, {
+          icon: 'balance-scale',
+          href: '#paintShop/load',
+          privileges: 'PAINT_SHOP:VIEW',
+          label: t('paintShop', 'PAGE_ACTIONS:load'),
+          callback: function() { window.WMES_LAST_PAINT_SHOP_DATE = view.orders.getDateFilter(); }
+        }, {
           icon: 'paint-brush',
           href: '#paintShop/paints',
           privileges: 'PAINT_SHOP:MANAGE',
           label: t('paintShop', 'PAGE_ACTIONS:paints'),
-          callback: function()
-          {
-            window.WMES_LAST_PAINT_SHOP_DATE = view.orders.getDateFilter();
-          }
+          callback: function() { window.WMES_LAST_PAINT_SHOP_DATE = view.orders.getDateFilter(); }
         });
       }
 
@@ -353,7 +357,7 @@ define([
       {
         if (IS_EMBEDDED)
         {
-          window.parent.postMessage({type: 'ready', app: 'paintShop'}, '*');
+          window.parent.postMessage({type: 'ready', app: APP_ID}, '*');
         }
 
         page.onOrdersReset();
@@ -493,11 +497,14 @@ define([
 
     updateUrl: function()
     {
-      this.broker.publish('router.navigate', {
-        url: this.genClientUrl(),
-        replace: true,
-        trigger: false
-      });
+      if (!IS_EMBEDDED)
+      {
+        this.broker.publish('router.navigate', {
+          url: this.genClientUrl(),
+          trigger: false,
+          replace: true
+        });
+      }
     },
 
     genClientUrl: function()
@@ -948,12 +955,7 @@ define([
         page.layout.setBreadcrumbs(page.breadcrumbs, page);
       }
 
-      page.broker.publish('router.navigate', {
-        url: this.genClientUrl(),
-        trigger: false,
-        replace: true
-      });
-
+      this.updateUrl();
       this.renderTabs();
       this.renderTotals();
     },
@@ -1120,7 +1122,7 @@ define([
         }
         else
         {
-          window.parent.postMessage({type: 'switch', app: 'mrl'}, '*');
+          window.parent.postMessage({type: 'switch', app: APP_ID}, '*');
         }
       }
       else if (action === 'reboot')

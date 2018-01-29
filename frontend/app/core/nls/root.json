@@ -90,6 +90,7 @@
     "NAVBAR:PLANNING:hourly": "Hourly plans",
     "NAVBAR:PLANNING:daily": "Daily plans",
     "NAVBAR:PLANNING:paintShop": "Paint shop",
+    "NAVBAR:PLANNING:paintShop:load": "Load",
     "NAVBAR:PLANNING:wh": "Warehouse",
     "NAVBAR:PLANNING:all": "All",
     "NAVBAR:PLANNING:-1d": "Yesterday",

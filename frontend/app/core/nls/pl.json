@@ -96,6 +96,7 @@
   "NAVBAR:PLANNING:hourly": "Plany godzinowe",
   "NAVBAR:PLANNING:daily": "Plany dzienne",
   "NAVBAR:PLANNING:paintShop": "Malarnia",
+  "NAVBAR:PLANNING:paintShop:load": "Obciążenie",
   "NAVBAR:PLANNING:wh": "Magazyn",
   "NAVBAR:PLANNING:all": "Wszystkie",
   "NAVBAR:PLANNING:0d": "Na dzisiaj",

@@ -18,7 +18,11 @@ define([
 ) {
   'use strict';
 
-  router.map('/paintShop/:date', user.auth('LOCAL', 'PAINT_SHOP:VIEW'), function(req)
+  var canView = user.auth('PAINT_SHOP:VIEW');
+  var canViewLocal = user.auth('LOCAL', 'PAINT_SHOP:VIEW');
+  var canManage = user.auth('PAINT_SHOP:MANAGE');
+
+  router.map('/paintShop/:date', canViewLocal, function(req)
   {
     if (req.params.date === 'current')
     {
@@ -47,7 +51,7 @@ define([
     }));
   });
 
-  router.map('/paintShop/paints', user.auth('PAINT_SHOP:VIEW'), function(req)
+  router.map('/paintShop/paints', canView, function(req)
   {
     viewport.loadPage(
       [
@@ -62,5 +66,28 @@ define([
         });
       }
     );
+  });
+
+  router.map('/paintShop/load', canView, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/paintShop/pages/PaintShopLoadPage'
+      ],
+      function(PaintShopLoadPage)
+      {
+        return new PaintShopLoadPage({req: req});
+      }
+    );
+  });
+
+  router.map('/paintShop;settings', canManage, function(req)
+  {
+    viewport.loadPage(['app/paintShop/pages/PaintShopSettingsPage'], function(PaintShopSettingsPage)
+    {
+      return new PaintShopSettingsPage({
+        initialTab: req.query.tab
+      });
+    });
   });
 });
