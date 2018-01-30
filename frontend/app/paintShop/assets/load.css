@@ -1,4 +1,101 @@
-.paintShopLoad-page.paintShop-is-embedded {
-  background: #000;
-  margin: 30px;
+.paintShopLoad .paintShop-parentControls {
+  z-index: 3;
+}
+.paintShop-is-embedded .paintShopLoad-stats-container {
+   background: linear-gradient(to bottom, #333, #222);
+   text-shadow: 1px 1px 3px #000;
+}
+.paintShopLoad-report-container {
+  height: 400px;
+}
+.paintShopLoad-current {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 560px;
+  font-size: 560px;
+  text-align: center;
+  line-height: 1;
+}
+.paintShopLoad-current-duration {
+  min-width: 616px;
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+}
+.paintShopLoad-hr-h {
+  border-top: 1px dotted #ccc;
+}
+.paintShopLoad-hr-v {
+  border-right: 1px dotted #ccc;
+}
+.paintShopLoad-hr-h:last-child,
+.paintShopLoad-hr-v:last-child {
+  display: none;
+}
+.paintShop-is-embedded .paintShopLoad-hr-h {
+  display: block;
+  height: 3px;
+  border-top: 1px solid #111;
+  background: #222;
+  border-bottom: 1px solid #333;
+}
+.paintShop-is-embedded .paintShopLoad-hr-v {
+  width: 3px;
+  border-left: 1px solid #111;
+  background: #222;
+  border-right: 1px solid #333;
+}
+.paintShopLoad-stats {
+  margin-top: 45px;
+  padding-bottom: 45px;
+  display: flex;
+  justify-content: space-around;
+  line-height: 1;
+}
+.paintShopLoad-stat {
+  text-align: center;
+}
+.paintShopLoad-stat-label {
+  text-transform: uppercase;
+  font-size: 28px;
+  height: 28px;
+}
+.paintShop-is-embedded .paintShopLoad-stat-label {
+  color: #fff;
+}
+.paintShopLoad-stat-value {
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+  font-size: 112px;
+  height: 112px;
+}
+.paintShopLoad-stat-label + .paintShopLoad-stat-value {
+  margin-top: -5px;
+  margin-bottom: 3px;
+}
+.paintShop-is-embedded .paintShopLoad-stats-container {
+  position: relative;
+  z-index: 2;
+}
+.paintShopLoad-recent-container {
+  height: 174px;
+}
+.paintShop-is-embedded .paintShopLoad-recent-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 2560px;
+  z-index: 1;
+  background: #222;
+}
+.paintShopLoad-recent {
+  white-space: nowrap;
+  overflow: hidden;
+}
+.paintShopLoad-recent-item {
+  display: inline-block;
+  width: 1px;
+  height: 174px;
+  border-top: 1px solid #fff;
+}
+.paintShop-is-embedded .paintShopLoad-recent-item {
+  border-top-color: #222;
 }

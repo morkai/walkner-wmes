@@ -172,3 +172,54 @@ exports.isIgnoredOrgUnit = function(options, doc, orgUnitType)
 {
   return options.ignoredOrgUnits && options.ignoredOrgUnits[orgUnitType][doc[orgUnitType]] === true;
 };
+
+exports.getIntervalSize = function(interval)
+{
+  switch (interval)
+  {
+    case 'hour':
+      return 3600 * 1000;
+
+    case 'shift':
+      return 8 * 3600 * 1000;
+
+    case 'day':
+      return 24 * 3600 * 1000;
+
+    case 'week':
+      return 7 * 24 * 3600 * 1000;
+
+    case 'month':
+      return 31 * 24 * 3600 * 1000;
+
+    case 'quarter':
+      return 3 * 31 * 24 * 3600 * 1000;
+
+    case 'year':
+      return 366 * 24 * 3600 * 1000;
+  }
+};
+
+exports.getNextInterval = function(interval)
+{
+  switch (interval)
+  {
+    case 'hour':
+      return 'shift';
+
+    case 'shift':
+      return 'day';
+
+    case 'day':
+      return 'week';
+
+    case 'week':
+      return 'month';
+
+    case 'month':
+      return 'quarter';
+
+    default:
+      return 'year';
+  }
+};

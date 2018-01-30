@@ -153,6 +153,8 @@ module.exports = function setUpPaintShopRoutes(app, module)
 
   express.get('/paintShop/load/stats', canView, getLoadStatsRoute);
 
+  express.get('/paintShop/load/recent', canView, getRecentLoadRoute);
+
   express.get(
     '/paintShop/load/report',
     canView,
@@ -380,7 +382,10 @@ module.exports = function setUpPaintShopRoutes(app, module)
 
         res.sendStatus(203);
 
-        app.broker.publish('paintShop.load.updated', stats);
+        app.broker.publish('paintShop.load.updated', {
+          stats,
+          items: docs
+        });
       }
     );
   }
@@ -398,13 +403,31 @@ module.exports = function setUpPaintShopRoutes(app, module)
     });
   }
 
+  function getRecentLoadRoute(req, res, next)
+  {
+    const limit = Math.min(2560, Math.max(1, req.rql.limit || 100));
+
+    PaintShopLoad.find({}, {_id: 0, d: 1}).sort({_id: -1}).limit(limit).lean().exec((err, docs) =>
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      res.json({
+        totalCount: docs.length,
+        collection: docs.map(d => Math.round(d.d / 1000)).reverse()
+      });
+    });
+  }
+
   function loadReportRoute(req, res, next)
   {
     const query = req.query;
     const options = {
       fromTime: reportsModule.helpers.getTime(query.from) || null,
       toTime: reportsModule.helpers.getTime(query.to) || null,
-      interval: query.interval
+      interval: reportsModule.helpers.getInterval(query.interval, 'day')
     };
 
     reportsModule.helpers.generateReport(

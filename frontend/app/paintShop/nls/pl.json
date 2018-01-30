@@ -2,11 +2,6 @@
   "BREADCRUMBS:base": "Malarnia",
   "BREADCRUMBS:load": "Obciążenie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się.",
-  "MSG:LOADING_FAILURE:dropZones": "Ładowanie drop zone nie powiodło się.",
-  "MSG:LOADING_FAILURE:paints": "Ładowanie farb nie powiodło się.",
-  "MSG:LOADING_FAILURE:stats": "Ładowanie statystyk obciążenia nie powiodło się.",
   "MSG:date:failure": "Nie udało się znaleźć daty.",
   "MSG:date:empty": "Brak zleceń.",
   "MSG:start:failure": "Nie udało się rozpocząć zlecenia.",
@@ -82,5 +77,19 @@
 
   "parent:switchApps": "Zmień aplikację/Konfiguruj po 3s",
   "parent:reboot": "Odśwież stronę/Restartuj komputer po 3s",
-  "parent:shutdown": "Wyłącz komputer po 3s"
+  "parent:shutdown": "Wyłącz komputer po 3s",
+
+  "load:stats:last": "Ostatni",
+  "load:stats:current": "Aktualny",
+  "load:stats:10m": "10 minut",
+  "load:stats:1h": "Godzina",
+  "load:stats:shift": "Zmiana",
+  "load:stats:8h": "8 godzin",
+  "load:stats:1d": "24 godziny",
+  "load:stats:7d": "7 dni",
+  "load:stats:30d": "30 dni",
+  "load:report:filename": "WMES_ObciazenieMalarnii",
+  "load:report:title": "Obciążenie malarnii",
+  "paintShop:report:avgDuration": "Średni czas cyklu",
+  "paintShop:report:count": "Ilość"
 }

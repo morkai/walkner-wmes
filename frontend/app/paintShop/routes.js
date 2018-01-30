@@ -76,7 +76,7 @@ define([
       ],
       function(PaintShopLoadPage)
       {
-        return new PaintShopLoadPage({req: req});
+        return new PaintShopLoadPage({query: req.query});
       }
     );
   });
