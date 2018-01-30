@@ -1,6 +1,7 @@
 {
   "BREADCRUMBS:base": "Malarnia",
   "BREADCRUMBS:load": "Obciążenie",
+  "BREADCRUMBS:settings": "Ustawienia",
 
   "MSG:date:failure": "Nie udało się znaleźć daty.",
   "MSG:date:empty": "Brak zleceń.",
@@ -12,6 +13,7 @@
 
   "PAGE_ACTIONS:load": "Obciążenie",
   "PAGE_ACTIONS:paints": "Farby",
+  "PAGE_ACTIONS:settings": "Ustawienia",
 
   "PROPERTY:order": "Zlecenie",
   "PROPERTY:nc12": "12NC wyrobu",
@@ -90,6 +92,17 @@
   "load:stats:30d": "30 dni",
   "load:report:filename": "WMES_ObciazenieMalarnii",
   "load:report:title": "Obciążenie malarnii",
-  "paintShop:report:avgDuration": "Średni czas cyklu",
-  "paintShop:report:count": "Ilość"
+  "load:report:avgDuration": "Średni czas cyklu",
+  "load:report:count": "Ilość",
+
+  "settings:tab:planning": "Planowanie",
+  "settings:tab:load": "Obciążenie",
+  "settings:planning:workCenters": "WorkCentra",
+  "settings:planning:workCenters:help": "Lista WorkCenter wykorzystywana podczas generowania kolejki malarnii do pobierania zleceń malarnii podrzędnych do zaplanowanych zleceń produkcyjnych.",
+  "settings:load:statuses": "Statusy",
+  "settings:load:statuses:from": "Od [s]",
+  "settings:load:statuses:to": "Do [s]",
+  "settings:load:statuses:icon": "Ikona",
+  "settings:load:statuses:color": "Kolor",
+  "settings:load:statuses:add": "Dodaj status"
 }

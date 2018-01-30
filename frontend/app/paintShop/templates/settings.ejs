@@ -1,0 +1,37 @@
+<form class="settings paintShop-settings">
+  <div class="list-group">
+    <% ['planning', 'load'].forEach(function(tab) { %>
+    <a class="list-group-item" href="#paintShop;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t('paintShop', 'settings:tab:' + tab) %></a>
+    <% }) %>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="planning">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-planning-workCenters"><%- t('paintShop', 'settings:planning:workCenters') %></label>
+        <span class="help-block"><%- t('paintShop', 'settings:planning:workCenters:help') %></span>
+        <input id="<%- idPrefix %>-planning-workCenters" name="paintShop.workCenters" data-setting>
+      </div>
+    </div>
+    <div class="panel-body" data-tab="load">
+      <label><%- t('paintShop', 'settings:load:statuses') %></label>
+      <table class="table table-condensed table-with-tfoot">
+        <thead>
+        <tr>
+          <th class="is-min"><%- t('paintShop', 'settings:load:statuses:from') %></th>
+          <th class="is-min"><%- t('paintShop', 'settings:load:statuses:to') %></th>
+          <th class="is-min" colspan="2"><%- t('paintShop', 'settings:load:statuses:icon') %></th>
+          <th class="is-min"><%- t('paintShop', 'settings:load:statuses:color') %></th>
+          <th></th>
+          <th><%- t('core', 'LIST:COLUMN:actions') %></th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+          <td colspan="7"><button id="<%- idPrefix %>-load-addStatus" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- t('paintShop', 'settings:load:statuses:add') %></span></button></td>
+        </tr>
+        </tfoot>
+        <tbody id="<%- idPrefix %>-load-statuses"></tbody>
+      </table>
+    </div>
+  </div>
+</form>

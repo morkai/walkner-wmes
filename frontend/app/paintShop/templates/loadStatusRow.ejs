@@ -1,0 +1,32 @@
+<tr>
+  <td class="is-min"><input data-property="from" class="form-control" type="number" min="0" placeholder="0" value="<%- status.from %>"></td>
+  <td class="is-min"><input data-property="to" class="form-control" type="number" min="0" value="<%- status.to %>"></td>
+  <td class="is-min">
+    <select data-property="icon" class="form-control" style="width: 125px;">
+      <% [
+        'smile-o', 'meh-o', 'frown-o',
+        'thumbs-up', 'thumbs-down',
+        'bell-o', 'bolt',
+        'question', 'exclamation', 'info',
+        'check', 'times',
+        'level-up', 'level-down',
+        'star', 'star-o', 'star-half-o'
+      ].forEach(function(icon) { %>
+      <option value="<%- icon %>" <%- icon === status.icon ? 'selected' : '' %>><%- icon %></option>
+      <% }) %>
+    </select>
+  </td>
+  <td class="is-min"><i data-bg="light" class="fa fa-<%- status.icon %>" style="color: <%- status.color %>"></i>&nbsp;&nbsp;<i data-bg="dark" class="fa fa-<%- status.icon %>" style="color: <%- status.color %>"></i></td>
+  <td class="is-min">
+    <div class="input-group colorpicker-component" data-color="<%- status.color %>" data-color-format="hex">
+      <input class="form-control" data-property="color" type="text" value="<%- status.color %>">
+      <span class="input-group-addon"><i style="background-color: <%- status.color %>"></i></span>
+    </div>
+  </td>
+  <td></td>
+  <td class="actions">
+    <div class="actions-group">
+      <button data-status-action="remove" class="btn btn-default" type="button"><i class="fa fa-remove"></i></button>
+    </div>
+  </td>
+</tr>

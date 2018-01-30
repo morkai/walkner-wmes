@@ -109,6 +109,11 @@ define([
           privileges: 'PAINT_SHOP:MANAGE',
           label: t('paintShop', 'PAGE_ACTIONS:paints'),
           callback: function() { window.WMES_LAST_PAINT_SHOP_DATE = view.orders.getDateFilter(); }
+        }, {
+          href: '#paintShop;settings?tab=planning',
+          icon: 'cogs',
+          label: t.bound('paintShop', 'PAGE_ACTIONS:settings'),
+          privileges: 'PAINT_SHOP:MANAGE'
         });
       }
 

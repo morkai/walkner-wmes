@@ -28,7 +28,7 @@ define([
   PaintShopLoadReportView,
   PaintShopLoadStatsView,
   PaintShopLoadRecentView,
-  pageTemplate
+  template
 ) {
   'use strict';
 
@@ -37,7 +37,7 @@ define([
 
   return View.extend({
 
-    template: pageTemplate,
+    template: template,
 
     layoutName: IS_EMBEDDED ? 'blank' : 'page',
 
@@ -53,6 +53,15 @@ define([
         t.bound('paintShop', 'BREADCRUMBS:load')
       ];
     },
+
+    actions: [
+      {
+        href: '#paintShop;settings?tab=load',
+        icon: 'cogs',
+        label: t.bound('paintShop', 'PAGE_ACTIONS:settings'),
+        privileges: 'PAINT_SHOP:MANAGE'
+      }
+    ],
 
     events: {
       'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },

@@ -26,6 +26,11 @@ define([
 
     prepareValue: function(id, newValue)
     {
+      if (/workCenters$/.test(id))
+      {
+        return newValue.split(',').filter(function(wc) { return wc.length > 0; });
+      }
+
       if (/load.statuses$/.test(id))
       {
         return newValue;
