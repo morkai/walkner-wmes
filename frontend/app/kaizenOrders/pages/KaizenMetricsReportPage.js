@@ -32,6 +32,28 @@ define([
       t.bound('kaizenOrders', 'BREADCRUMBS:reports:metrics')
     ],
 
+    events: {
+      'click .kaizenOrders-report-grouping': function(e)
+      {
+        var $el = this.$(e.currentTarget);
+
+        if ($el.hasClass('active'))
+        {
+          return false;
+        }
+
+        var metric = $el[0].dataset.metric;
+        var grouping = $el[0].dataset.grouping;
+
+        this.$('.kaizenOrders-report-grouping[data-metric="' + metric + '"].active').removeClass('active');
+        $el.addClass('active');
+
+        this.model.setMetricGrouping(metric, grouping);
+
+        return false;
+      }
+    },
+
     initialize: function()
     {
       this.setView('#-filter', new KaizenMetricsReportFilterView({model: this.model}));
@@ -55,8 +77,7 @@ define([
       this.setView('#-users-report', new KaizenMetricsReportChartView({
         metric: 'users',
         model: this.model,
-        valueDecimals: 0,
-        dataLabels: false
+        valueDecimals: 0
       }));
 
       this.setView('#-fte-report', new KaizenMetricsReportChartView({
@@ -67,6 +88,7 @@ define([
 
       this.listenTo(this.model, 'filtered', this.onFiltered);
       this.listenTo(this.model, 'change:total', this.updateSubtitles);
+      this.listenTo(this.model, 'change:interval', this.updateGroupings);
     },
 
     destroy: function()
@@ -78,7 +100,13 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        metrics: KaizenMetricsReport.TABLE_AND_CHART_METRICS
+        metrics: KaizenMetricsReport.TABLE_AND_CHART_METRICS,
+        grouping: {
+          ipr: this.model.getMetricGrouping('ipr'),
+          ips: this.model.getMetricGrouping('ips'),
+          ipc: this.model.getMetricGrouping('ipc')
+        },
+        totalGroupingVisible: this.model.get('interval') !== 'none'
       };
     },
 
@@ -134,6 +162,22 @@ define([
         observations: Highcharts.numberFormat(total.observationCount, 0),
         minutes: Highcharts.numberFormat(total.minutesCount, 0)
       }));
+    },
+
+    updateGroupings: function()
+    {
+      var view = this;
+      var hidden = view.model.get('interval') === 'none';
+      var className = '.kaizenOrders-report-grouping';
+
+      view.$(className + '[data-grouping="total"]').toggleClass('hidden', hidden);
+
+      ['ipr', 'ips', 'ipc'].forEach(function(metric)
+      {
+        var grouping = view.model.getMetricGrouping(metric);
+
+        view.$(className + '[data-metric="' + metric + '"][data-grouping="' + grouping + '"]').click();
+      });
     }
 
   });

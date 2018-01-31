@@ -11,6 +11,7 @@ const LESS_THAN_DAY_IN_FUTURE_EXPIRATION = 2;
 const MORE_THAN_DAY_IN_FUTURE_EXPIRATION = 5;
 const IN_PAST_EXPIRATION = 15;
 const VALID_INTERVALS = {
+  none: true,
   year: true,
   quarter: true,
   month: true,
@@ -226,7 +227,17 @@ exports.getTime = function(date)
 
 exports.getInterval = function(interval, defaultInterval)
 {
-  return VALID_INTERVALS[interval] ? interval : (defaultInterval || 'month');
+  if (VALID_INTERVALS[interval])
+  {
+    return interval;
+  }
+
+  if (defaultInterval === null)
+  {
+    return null;
+  }
+
+  return defaultInterval || 'month';
 };
 
 exports.getOrgUnitsForFte = function(orgUnitsModule, orgUnitType, orgUnit, ignoredOrgUnits)

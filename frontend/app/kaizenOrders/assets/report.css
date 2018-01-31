@@ -40,3 +40,13 @@
   overflow-y: scroll;
   max-height: 200px;
 }
+.kaizenOrders-report-grouping + .kaizenOrders-report-grouping {
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: 1px dotted #ccc;
+}
+.kaizenOrders-report-grouping.active {
+  color: inherit;
+  cursor: default;
+  text-decoration: none!important;
+}

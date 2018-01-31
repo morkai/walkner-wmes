@@ -5,6 +5,7 @@ define([
   'app/time',
   'app/core/View',
   'app/core/util/fixTimeRange',
+  'app/core/util/buttonGroup',
   'app/core/util/idAndLabel',
   'app/core/util/ExpandableSelect',
   'app/reports/util/prepareDateRange',
@@ -15,6 +16,7 @@ define([
   time,
   View,
   fixTimeRange,
+  buttonGroup,
   idAndLabel,
   ExpandableSelect,
   prepareDateRange,
@@ -40,6 +42,7 @@ define([
 
         this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
         this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
+        this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
         this.$el.submit();
       }
     },
@@ -52,6 +55,8 @@ define([
     afterRender: function()
     {
       js2form(this.el, this.serializeFormData());
+
+      buttonGroup.toggle(this.$id('interval'));
 
       this.$id('sections').select2({
         width: '500px',
@@ -72,6 +77,7 @@ define([
       return {
         from: from ? time.format(from, 'YYYY-MM-DD') : '',
         to: to ? time.format(to, 'YYYY-MM-DD') : '',
+        interval: model.get('interval'),
         sections: model.get('sections').join(',')
       };
     },
@@ -81,6 +87,7 @@ define([
       var query = {
         from: time.getMoment(this.$id('from').val(), 'YYYY-MM-DD').valueOf(),
         to: time.getMoment(this.$id('to').val(), 'YYYY-MM-DD').valueOf(),
+        interval: buttonGroup.getValue(this.$id('interval')),
         sections: this.$id('sections').val()
       };
 

@@ -28,6 +28,7 @@ define([
       return {
         from: 0,
         to: 0,
+        interval: 'none',
         sections: []
       };
     },
@@ -41,7 +42,7 @@ define([
 
       options.data = _.extend(
         options.data || {},
-        _.pick(this.attributes, ['from', 'to', 'sections'])
+        _.pick(this.attributes, ['from', 'to', 'interval', 'sections'])
       );
       options.data.sections = options.data.sections.join(',');
 
@@ -53,7 +54,22 @@ define([
       return '/kaizenMetricsReport'
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
+        + '&interval=' + this.get('interval')
         + '&sections=' + this.get('sections');
+    },
+
+    getMetricGrouping: function(metric)
+    {
+      return this.get('interval') === 'none'
+        ? 'bySection'
+        : localStorage.getItem('WMES:KAIZEN:METRIC_GROUPING:' + metric) || 'bySection';
+    },
+
+    setMetricGrouping: function(metric, grouping)
+    {
+      localStorage.setItem('WMES:KAIZEN:METRIC_GROUPING:' + metric, grouping);
+
+      this.trigger('grouping:' + metric, grouping);
     },
 
     parse: function(report)
@@ -84,16 +100,58 @@ define([
 
       ['ipr', 'ips', 'ipc'].forEach(function(metric)
       {
+        if (!report.byInterval)
+        {
+          attrs[metric] = {
+            categories: categories,
+            series: [{
+              id: metric,
+              name: t.bound('kaizenOrders', 'report:series:' + metric),
+              data: sections.map(function(sectionId)
+              {
+                return {
+                  y: report.bySection[sectionId][metric],
+                  color: colorFactory.getColor('section', sectionId)
+                };
+              })
+            }]
+          };
+
+          return;
+        }
+
+        var series = [];
+
+        sections.forEach(function(sectionId)
+        {
+          series.push({
+            id: sectionId,
+            name: report.sections[sectionId],
+            color: colorFactory.getColor('section', sectionId),
+            data: report.byInterval.map(function(byInterval)
+            {
+              var bySection = byInterval.bySection[sectionId];
+
+              return {
+                x: byInterval.key,
+                y: bySection ? bySection[metric] : 0
+              };
+            })
+          });
+        });
+
         attrs[metric] = {
-          categories: categories,
-          series: [{
+          categories: null,
+          series: series,
+          seriesTotal: [{
             id: metric,
             name: t.bound('kaizenOrders', 'report:series:' + metric),
-            data: sections.map(function(sectionId)
+            color: colorFactory.getColor('kaizen:metric', metric),
+            data: report.byInterval.map(function(byInterval)
             {
               return {
-                y: report.bySection[sectionId][metric],
-                color: colorFactory.getColor('section', sectionId)
+                x: byInterval.key,
+                y: byInterval[metric]
               };
             })
           }]
@@ -200,6 +258,7 @@ define([
       return new this({
         from: +query.from || undefined,
         to: +query.to || undefined,
+        interval: query.interval,
         sections: _.isEmpty(query.sections) ? [] : query.sections.split(',')
       });
     }

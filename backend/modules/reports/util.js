@@ -10,6 +10,11 @@ const moment = require('moment');
  */
 exports.createCreateNextGroupKey = function(interval)
 {
+  if (interval === 'none')
+  {
+    return () => Number.MAX_SAFE_INTEGER;
+  }
+
   let multiple = 1;
 
   if (interval === 'shift')
@@ -18,10 +23,7 @@ exports.createCreateNextGroupKey = function(interval)
     multiple = 8;
   }
 
-  return function createNextGroupKey(groupKey)
-  {
-    return moment(groupKey).add(multiple, interval).valueOf();
-  };
+  return groupKey => moment(groupKey).add(multiple, interval).valueOf();
 };
 
 exports.createGroupKey = function(interval, date, useShifts)
@@ -125,6 +127,9 @@ exports.createGroupKey = function(interval, date, useShifts)
     case 'year':
       groupKey.month(0).date(1).hours(0);
       break;
+
+    case 'none':
+      return 0;
   }
 
   return groupKey.valueOf();
@@ -197,6 +202,9 @@ exports.getIntervalSize = function(interval)
 
     case 'year':
       return 366 * 24 * 3600 * 1000;
+
+    case 'none':
+      return Number.MAX_SAFE_INTEGER;
   }
 };
 

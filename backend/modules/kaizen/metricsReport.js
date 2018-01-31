@@ -4,6 +4,7 @@
 
 const _ = require('lodash');
 const step = require('h5.step');
+const moment = require('moment');
 const util = require('../reports/util');
 
 module.exports = function(mongoose, options, done)
@@ -20,7 +21,8 @@ module.exports = function(mongoose, options, done)
     options: options,
     sections: {},
     totals: createEmptyGroup(),
-    bySection: {}
+    bySection: {},
+    byInterval: {}
   };
   const totals = results.totals;
   const subdivisionToSections = {};
@@ -62,6 +64,34 @@ module.exports = function(mongoose, options, done)
 
       finalizeGroup(totals);
 
+      if (options.interval !== 'none')
+      {
+        const groupKeys = Object.keys(results.byInterval).sort().map(Number);
+        const lastGroupKey = _.last(groupKeys);
+        const createNextGroupKey = util.createCreateNextGroupKey(options.interval);
+        const groups = [];
+        let groupKey = groupKeys[0];
+
+        while (groupKey <= lastGroupKey)
+        {
+          const group = getIntervalGroup(groupKey);
+
+          finalizeGroup(group);
+
+          _.forEach(group.bySection, finalizeGroup);
+
+          groups.push(group);
+
+          groupKey = createNextGroupKey(groupKey);
+        }
+
+        results.byInterval = groups;
+      }
+      else
+      {
+        results.byInterval = null;
+      }
+
       setImmediate(this.next());
     },
     function sendResultsStep(err)
@@ -89,7 +119,7 @@ module.exports = function(mongoose, options, done)
     };
   }
 
-  function getGroup(section)
+  function getSectionGroup(section)
   {
     if (!results.bySection[section])
     {
@@ -97,6 +127,23 @@ module.exports = function(mongoose, options, done)
     }
 
     return results.bySection[section];
+  }
+
+  function getIntervalGroup(date, section)
+  {
+    const key = util.createGroupKey(options.interval, date, false);
+
+    if (!results.byInterval[key])
+    {
+      results.byInterval[key] = Object.assign(createEmptyGroup(), {key, bySection: {}});
+    }
+
+    if (section && !results.byInterval[key].bySection[section])
+    {
+      results.byInterval[key].bySection[section] = createEmptyGroup();
+    }
+
+    return results.byInterval[key];
   }
 
   function finalizeGroup(group)
@@ -197,17 +244,25 @@ module.exports = function(mongoose, options, done)
 
       results.forEach(result =>
       {
-        const date = `${result._id.y}-${result._id.m}-${result._id.d}`;
+        const day = `${result._id.y}-${result._id.m}-${result._id.d}`;
+        const date = moment(day, 'YYYY-MM-DD').toDate();
 
         totals.fte.total += result.total;
-        totals.fte.days.add(date);
+        totals.fte.days.add(day);
 
         subdivisionToSections[result._id.subdivision].forEach(sectionId =>
         {
-          const group = getGroup(sectionId);
+          const sectionGroup = getSectionGroup(sectionId);
+          const intervalGroup = getIntervalGroup(date, sectionId);
 
-          group.fte.total += result.total;
-          group.fte.days.add(date);
+          sectionGroup.fte.total += result.total;
+          sectionGroup.fte.days.add(day);
+
+          intervalGroup.fte.total += result.total;
+          intervalGroup.fte.days.add(day);
+
+          intervalGroup.bySection[sectionId].fte.total += result.total;
+          intervalGroup.bySection[sectionId].fte.days.add(day);
         });
       });
 
@@ -241,40 +296,31 @@ module.exports = function(mongoose, options, done)
       conditions.eventDate.$lt = new Date(options.toTime);
     }
 
-    const pipeline = [
-      {$match: conditions},
-      {$group: {
-        _id: '$section',
-        count: {$sum: 1},
-        users: {$addToSet: '$nearMissOwners.id'}
-      }}
-    ];
+    const cursor = KaizenOrder
+      .find(conditions, {eventDate: 1, section: 1, 'nearMissOwners.id': 1})
+      .lean()
+      .cursor();
+    const finalize = _.once(done);
 
-    KaizenOrder.aggregate(pipeline, (err, results) =>
+    cursor.on('error', finalize);
+    cursor.on('end', finalize);
+    cursor.on('data', kaizenOrder =>
     {
-      if (err)
+      const sectionGroup = getSectionGroup(kaizenOrder.section);
+      const intervalGroup = getIntervalGroup(kaizenOrder.eventDate, kaizenOrder.section);
+
+      totals.nearMissCount += 1;
+      sectionGroup.nearMissCount += 1;
+      intervalGroup.nearMissCount += 1;
+      intervalGroup.bySection[kaizenOrder.section].nearMissCount += 1;
+
+      kaizenOrder.nearMissOwners.forEach(owner =>
       {
-        return done(err);
-      }
-
-      results.forEach(result =>
-      {
-        const group = getGroup(result._id);
-
-        totals.nearMissCount += result.count;
-        group.nearMissCount += result.count;
-
-        result.users.forEach(userIds =>
-        {
-          userIds.forEach(userId =>
-          {
-            totals.userCount.add(userId);
-            group.userCount.add(userId);
-          });
-        });
+        totals.userCount.add(owner.id);
+        sectionGroup.userCount.add(owner.id);
+        intervalGroup.userCount.add(owner.id);
+        intervalGroup.bySection[kaizenOrder.section].userCount.add(owner.id);
       });
-
-      done();
     });
   }
 
@@ -304,40 +350,31 @@ module.exports = function(mongoose, options, done)
       conditions.date.$lt = new Date(options.toTime);
     }
 
-    const pipeline = [
-      {$match: conditions},
-      {$group: {
-        _id: '$section',
-        count: {$sum: 1},
-        users: {$addToSet: '$owners.id'}
-      }}
-    ];
+    const cursor = Suggestion
+      .find(conditions, {date: 1, section: 1, 'owners.id': 1})
+      .lean()
+      .cursor();
+    const finalize = _.once(done);
 
-    Suggestion.aggregate(pipeline, (err, results) =>
+    cursor.on('error', finalize);
+    cursor.on('end', finalize);
+    cursor.on('data', suggestion =>
     {
-      if (err)
+      const sectionGroup = getSectionGroup(suggestion.section);
+      const intervalGroup = getIntervalGroup(suggestion.date, suggestion.section);
+
+      totals.suggestionCount += 1;
+      sectionGroup.suggestionCount += 1;
+      intervalGroup.suggestionCount += 1;
+      intervalGroup.bySection[suggestion.section].suggestionCount += 1;
+
+      suggestion.owners.forEach(owner =>
       {
-        return done(err);
-      }
-
-      results.forEach(result =>
-      {
-        const group = getGroup(result._id);
-
-        totals.suggestionCount += result.count;
-        group.suggestionCount += result.count;
-
-        result.users.forEach(userIds =>
-        {
-          userIds.forEach(userId =>
-          {
-            totals.userCount.add(userId);
-            group.userCount.add(userId);
-          });
-        });
+        totals.userCount.add(owner.id);
+        sectionGroup.userCount.add(owner.id);
+        intervalGroup.userCount.add(owner.id);
+        intervalGroup.bySection[suggestion.section].userCount.add(owner.id);
       });
-
-      done();
     });
   }
 
@@ -365,37 +402,28 @@ module.exports = function(mongoose, options, done)
       conditions.date.$lt = new Date(options.toTime);
     }
 
-    const pipeline = [
-      {$match: conditions},
-      {$group: {
-        _id: '$section',
-        count: {$sum: 1},
-        users: {$addToSet: '$observer.id'}
-      }}
-    ];
+    const cursor = BehaviorObsCard
+      .find(conditions, {date: 1, section: 1, 'observer.id': 1})
+      .lean()
+      .cursor();
+    const finalize = _.once(done);
 
-    BehaviorObsCard.aggregate(pipeline, (err, results) =>
+    cursor.on('error', finalize);
+    cursor.on('end', finalize);
+    cursor.on('data', behaviorObsCard =>
     {
-      if (err)
-      {
-        return done(err);
-      }
+      const sectionGroup = getSectionGroup(behaviorObsCard.section);
+      const intervalGroup = getIntervalGroup(behaviorObsCard.date, behaviorObsCard.section);
 
-      results.forEach(result =>
-      {
-        const group = getGroup(result._id);
+      totals.observationCount += 1;
+      sectionGroup.observationCount += 1;
+      intervalGroup.observationCount += 1;
+      intervalGroup.bySection[behaviorObsCard.section].observationCount += 1;
 
-        totals.observationCount += result.count;
-        group.observationCount += result.count;
-
-        result.users.forEach(userId =>
-        {
-          totals.userCount.add(userId);
-          group.userCount.add(userId);
-        });
-      });
-
-      done();
+      totals.userCount.add(behaviorObsCard.observer.id);
+      sectionGroup.userCount.add(behaviorObsCard.observer.id);
+      intervalGroup.userCount.add(behaviorObsCard.observer.id);
+      intervalGroup.bySection[behaviorObsCard.section].userCount.add(behaviorObsCard.observer.id);
     });
   }
 
@@ -423,51 +451,39 @@ module.exports = function(mongoose, options, done)
       conditions.date.$lt = new Date(options.toTime);
     }
 
-    const pipeline = [
-      {$match: conditions},
-      {$unwind: '$participants'},
-      {$group: {
-        _id: '$section',
-        count: {$addToSet: '$_id'},
-        owners: {$addToSet: '$owner.id'},
-        participants: {$addToSet: '$participants.id'}
-      }},
-      {$project: {
-        _id: '$_id',
-        count: {$size: '$count'},
-        owners: '$owners',
-        participants: '$participants'
-      }}
-    ];
+    const cursor = MinutesForSafetyCard
+      .find(conditions, {date: 1, section: 1, 'owner.id': 1, 'participants.id': 1})
+      .lean()
+      .cursor();
+    const finalize = _.once(done);
 
-    MinutesForSafetyCard.aggregate(pipeline, (err, results) =>
+    cursor.on('error', finalize);
+    cursor.on('end', finalize);
+    cursor.on('data', minutesForSafetyCard =>
     {
-      if (err)
+      const sectionGroup = getSectionGroup(minutesForSafetyCard.section);
+      const intervalGroup = getIntervalGroup(minutesForSafetyCard.date, minutesForSafetyCard.section);
+
+      totals.minutesCount += 1;
+      sectionGroup.minutesCount += 1;
+      intervalGroup.minutesCount += 1;
+      intervalGroup.bySection[minutesForSafetyCard.section].minutesCount += 1;
+
+      if (minutesForSafetyCard.owner)
       {
-        return done(err);
+        totals.userCount.add(minutesForSafetyCard.owner.id);
+        sectionGroup.userCount.add(minutesForSafetyCard.owner.id);
+        intervalGroup.userCount.add(minutesForSafetyCard.owner.id);
+        intervalGroup.bySection[minutesForSafetyCard.section].userCount.add(minutesForSafetyCard.owner.id);
       }
 
-      results.forEach(result =>
+      minutesForSafetyCard.participants.forEach(participant =>
       {
-        const group = getGroup(result._id);
-
-        totals.minutesCount += result.count;
-        group.minutesCount += result.count;
-
-        result.owners.forEach(userId =>
-        {
-          totals.userCount.add(userId);
-          group.userCount.add(userId);
-        });
-
-        result.participants.forEach(userId =>
-        {
-          totals.userCount.add(userId);
-          group.userCount.add(userId);
-        });
+        totals.userCount.add(participant.id);
+        sectionGroup.userCount.add(participant.id);
+        intervalGroup.userCount.add(participant.id);
+        intervalGroup.bySection[minutesForSafetyCard.section].userCount.add(participant.id);
       });
-
-      done();
     });
   }
 };

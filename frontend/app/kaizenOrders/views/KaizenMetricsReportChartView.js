@@ -4,12 +4,14 @@ define([
   'underscore',
   'app/i18n',
   'app/highcharts',
-  'app/core/View'
+  'app/core/View',
+  'app/reports/util/formatTooltipHeader'
 ], function(
   _,
   t,
   Highcharts,
-  View
+  View,
+  formatTooltipHeader
 ) {
   'use strict';
 
@@ -24,6 +26,7 @@ define([
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
       this.listenTo(this.model, 'change:' + this.options.metric, this.render);
+      this.listenTo(this.model, 'grouping:' + this.options.metric, this.render);
     },
 
     destroy: function()
@@ -70,7 +73,22 @@ define([
       var nlsDomain = view.model.getNlsDomain();
       var metric = view.options.metric;
       var series = view.serializeSeries();
+      var categories = view.serializeCategories();
+      var unit = this.options.yAxisUnit || this.options.unit || '';
       var valueDecimals = this.options.valueDecimals >= 0 ? this.options.valueDecimals : 2;
+      var dataLabelsDecimals = valueDecimals;
+
+      if (unit && dataLabelsDecimals === 2)
+      {
+        if (series[0].data.length > 52)
+        {
+          dataLabelsDecimals = 0;
+        }
+        else if (series[0].data.length > 39)
+        {
+          dataLabelsDecimals = 1;
+        }
+      }
 
       this.chart = new Highcharts.Chart({
         chart: {
@@ -88,29 +106,31 @@ define([
         },
         title: false,
         noData: {},
-        xAxis: {
-          categories: view.serializeCategories()
-        },
+        xAxis: categories
+          ? {categories: categories}
+          : {type: 'datetime'},
         yAxis: {
           title: false,
           min: 0,
           labels: {
-            format: '{value}' + (this.options.yAxisUnit || this.options.unit || '')
+            format: '{value}' + unit
           }
         },
         tooltip: {
           shared: true,
           valueDecimals: valueDecimals,
-          valueSuffix: this.options.tooltipUnit || this.options.unit || ''
+          valueSuffix: unit,
+          headerFormatter: categories ? null : formatTooltipHeader.bind(this)
         },
         legend: {
           enabled: series.length > 1
         },
         plotOptions: {
           column: {
+            stacking: series.length > 10 ? 'normal' : null,
             dataLabels: {
-              enabled: this.options.dataLabels !== false,
-              format: '{y:.' + valueDecimals + 'f}' + (this.options.dataLabelUnit || this.options.unit || '')
+              enabled: (!!categories || series.length === 1) && this.options.dataLabels !== false,
+              format: '{y:.' + dataLabelsDecimals + 'f}'
             }
           }
         },
@@ -124,6 +144,12 @@ define([
       this.createChart();
     },
 
+    isTotalGrouping: function()
+    {
+      return !!this.model.get(this.options.metric).seriesTotal
+        && this.model.getMetricGrouping(this.options.metric) === 'total';
+    },
+
     serializeCategories: function()
     {
       return this.model.get(this.options.metric).categories;
@@ -131,7 +157,14 @@ define([
 
     serializeSeries: function()
     {
-      return this.model.get(this.options.metric).series;
+      var metric = this.model.get(this.options.metric);
+
+      if (metric.seriesTotal && this.model.getMetricGrouping(this.options.metric) === 'total')
+      {
+        return metric.seriesTotal;
+      }
+
+      return metric.series;
     },
 
     onModelLoading: function()
