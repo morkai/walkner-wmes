@@ -342,6 +342,7 @@ app/paintShop/assets/./orderChanges.css
 app/paintShop/assets/./datePicker.css
 app/paintShop/assets/./tabs.css
 app/paintShop/assets/./load.css
+app/paintShop/assets/./settings.css
 app/paintShop/assets/main.css
 
 app/paintShop/assets/orderChanges.css
@@ -355,6 +356,10 @@ app/paintShop/assets/orderDetails.css
 app/paintShop/assets/queue.css
 ----------------
 app/paintShop/assets/queue.css
+
+app/paintShop/assets/settings.css
+----------------
+app/paintShop/assets/settings.css
 
 app/paintShop/assets/tabs.css
 ----------------
@@ -2187,18 +2192,39 @@ app/core/layouts/PageLayout.js
 app/core/templates/blankLayout.js
 app/core/layouts/BlankLayout.js
 app/core/util/bindLoadingMessage.js
+app/settings/Setting.js
+app/settings/SettingCollection.js
+app/paintShop/PaintShopSetting.js
+app/paintShop/PaintShopSettingCollection.js
 app/paintShop/PaintShopLoadStats.js
+app/paintShop/PaintShopLoadRecent.js
+app/paintShop/PaintShopLoadReport.js
+vendor/js2form.js
+app/core/util/fixTimeRange.js
+app/core/util/buttonGroup.js
+app/reports/util/prepareDateRange.js
+app/paintShop/templates/load/filter.js
+app/paintShop/views/PaintShopLoadFilterView.js
+vendor/highcharts.js
+app/nls/core.js
+app/nls/pl/core.js
+i18n!app/nls/core
+app/highcharts.js
+app/reports/util/formatTooltipHeader.js
+app/paintShop/views/PaintShopLoadReportView.js
 app/paintShop/templates/load/stats.js
 app/paintShop/views/PaintShopLoadStatsView.js
+app/paintShop/templates/load/recent.js
+app/paintShop/views/PaintShopLoadRecentView.js
 app/paintShop/templates/load/page.js
+app/nls/reports.js
+app/nls/pl/reports.js
+i18n!app/nls/reports
 app/paintShop/pages/PaintShopLoadPage.js
 app/nls/paintShop.js
 app/nls/pl/paintShop.js
 i18n!app/nls/paintShop
 app/wmes-ps-load-routes.js
-app/nls/core.js
-app/nls/pl/core.js
-i18n!app/nls/core
 wmes-ps-load.js
 
 pos-main.js

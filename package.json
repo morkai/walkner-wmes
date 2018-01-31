@@ -5,9 +5,9 @@
   "version": "0.119.0",
   "updater": {
     "wmes": {
-      "backend": 352,
-      "frontend": 429,
-      "reports": 58,
+      "backend": 353,
+      "frontend": 430,
+      "reports": 59,
       "attachments": 3,
       "importer-sap": 46,
       "importer-results": 12,
@@ -19,7 +19,7 @@
       "mrl": 8,
       "planning": 35,
       "ps-queue": 2,
-      "ps-load": 2
+      "ps-load": 3
     },
     "pos": {
       "backend": 80,
@@ -64,7 +64,7 @@
     "gm": "~1.23.0",
     "h5.main": "git+http://github.com/morkai/h5.main.git#7fb51e2571",
     "h5.pubsub": "git+http://github.com/morkai/h5.pubsub.git#c1a899cb7e",
-    "h5.rql": "git+http://github.com/morkai/h5.rql.git#5622189665",
+    "h5.rql": "git+http://github.com/morkai/h5.rql.git#f7b3dbe926",
     "h5.step": "git+http://github.com/morkai/h5.step.git#14ea69a759",
     "heapdump": "~0.3.9",
     "jszip": "~3.1.3",

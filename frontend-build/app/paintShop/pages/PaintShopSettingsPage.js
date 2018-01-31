@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["app/i18n","app/core/util/bindLoadingMessage","app/core/View","../PaintShopSettingCollection","../views/PaintShopSettingsView"],function(i,e,n,t,s){"use strict";return n.extend({layoutName:"page",breadcrumbs:function(){return[{href:"#paintShop/"+(window.WMES_LAST_PAINT_SHOP_DATE||"0d"),label:i.bound("paintShop","BREADCRUMBS:base")},i.bound("paintShop","BREADCRUMBS:settings")]},initialize:function(){this.defineModels(),this.defineViews()},defineModels:function(){this.model=e(new t(null,{pubsub:this.pubsub}),this)},defineViews:function(){this.view=new s({initialTab:this.options.initialTab,settings:this.model})},load:function(i){return i(this.model.fetch({reset:!0}))}})});
