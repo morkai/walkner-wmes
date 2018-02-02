@@ -2,10 +2,12 @@
 
 define([
   'app/core/pages/DetailsPage',
+  'app/core/util/pageActions',
   'app/kaizenOrders/dictionaries',
   '../views/BehaviorObsCardDetailsView'
 ], function(
   DetailsPage,
+  pageActions,
   kaizenDictionaries,
   BehaviorObsCardDetailsView
 ) {
@@ -15,6 +17,24 @@ define([
 
     DetailsView: BehaviorObsCardDetailsView,
     baseBreadcrumb: true,
+
+    actions: function()
+    {
+      var model = this.model;
+      var actions = [];
+
+      if (model.canEdit())
+      {
+        actions.push(pageActions.edit(model, false));
+      }
+
+      if (model.canDelete())
+      {
+        actions.push(pageActions.delete(model, false));
+      }
+
+      return actions;
+    },
 
     destroy: function()
     {

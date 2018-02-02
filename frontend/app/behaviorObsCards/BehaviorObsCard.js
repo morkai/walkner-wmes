@@ -137,7 +137,7 @@ define([
         return false;
       }
 
-      return Date.now() - Date.parse(this.get('date')) < 24 * 3600 * 1000;
+      return Date.now() - Date.parse(this.get('updatedAt') || this.get('createdAt')) < 24 * 3600 * 1000;
     },
 
     canDelete: function()
@@ -152,7 +152,7 @@ define([
         return false;
       }
 
-      return Date.now() - Date.parse(this.get('date')) < 8 * 3600 * 1000;
+      return Date.now() - Date.parse(this.get('updatedAt') || this.get('createdAt')) < 8 * 3600 * 1000;
     },
 
     hasAnyEasy: function()
