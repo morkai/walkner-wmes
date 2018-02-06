@@ -19,7 +19,7 @@
       "mrl": 8,
       "planning": 35,
       "ps-queue": 2,
-      "ps-load": 3
+      "ps-load": 4
     },
     "pos": {
       "backend": 80,
