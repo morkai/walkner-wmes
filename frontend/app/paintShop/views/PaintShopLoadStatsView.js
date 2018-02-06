@@ -74,7 +74,9 @@ define([
     serializeCurrent: function()
     {
       var last = this.stats.get('last');
-      var duration = last ? Math.min(999, Math.floor((Date.now() - Date.parse(last._id)) / 1000)).toString() : '';
+      var duration = last
+        ? Math.max(0, Math.min(999, Math.floor((Date.now() - Date.parse(last._id)) / 1000))).toString()
+        : '';
 
       return _.assign(
         {duration: duration},
