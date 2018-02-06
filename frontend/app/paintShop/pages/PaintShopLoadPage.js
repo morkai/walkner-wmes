@@ -154,7 +154,8 @@ define([
       });
       this.recentView = new PaintShopLoadRecentView({
         settings: this.settings,
-        recent: this.recent
+        recent: this.recent,
+        embedded: IS_EMBEDDED
       });
     },
 

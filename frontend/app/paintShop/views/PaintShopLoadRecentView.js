@@ -46,10 +46,7 @@ define([
 
       view.listenTo(view.recent, 'update', this.update);
 
-      $(window).on('resize', function()
-      {
-        view.el.scrollLeft = 2560;
-      });
+      $(window).on('resize', view.resize.bind(view));
     },
 
     destroy: function()
@@ -59,6 +56,16 @@ define([
 
     afterRender: function()
     {
+      this.resize();
+    },
+
+    resize: function()
+    {
+      if (this.options.embedded)
+      {
+        this.el.parentNode.style.width = window.innerWidth + 'px';
+      }
+
       this.el.scrollLeft = 2560;
     },
 
@@ -79,9 +86,9 @@ define([
           + ' style="border-top-width: ' + item.padding + 'px; background: ' + item.color + '"></div>';
       });
 
-      view.$el.append(html);
+      view.$el.append(html.join(''));
 
-      view.el.scrollLeft = 2560;
+      view.resize();
     },
 
     serialize: function()
