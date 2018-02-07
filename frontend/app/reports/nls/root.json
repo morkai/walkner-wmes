@@ -92,6 +92,7 @@
     "filter:from": "From: ",
     "filter:to": "To: ",
     "filter:interval": "Interval",
+    "filter:interval:none": "none",
     "filter:interval:year": "year",
     "filter:interval:quarter": "quarter",
     "filter:interval:month": "month",

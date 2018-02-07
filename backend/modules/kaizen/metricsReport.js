@@ -9,6 +9,7 @@ const util = require('../reports/util');
 
 module.exports = function(mongoose, options, done)
 {
+  const Company = mongoose.model('Company');
   const KaizenOrder = mongoose.model('KaizenOrder');
   const Suggestion = mongoose.model('Suggestion');
   const BehaviorObsCard = mongoose.model('BehaviorObsCard');
@@ -20,6 +21,7 @@ module.exports = function(mongoose, options, done)
   const results = {
     options: options,
     sections: {},
+    companies: {},
     totals: createEmptyGroup(),
     bySection: {},
     byInterval: {}
@@ -30,7 +32,8 @@ module.exports = function(mongoose, options, done)
   step(
     function findStep()
     {
-      findSections(this.group());
+      findSections(this.parallel());
+      findCompanies(this.parallel());
     },
     function countStep(err)
     {
@@ -53,13 +56,30 @@ module.exports = function(mongoose, options, done)
         return this.skip(err);
       }
 
+      const companyIds = Object.keys(results.companies);
+
       totals.fte.avg = 0;
 
-      Object.keys(results.bySection).forEach(section =>
+      companyIds.forEach(companyId =>
       {
-        finalizeGroup(results.bySection[section]);
+        totals.fteByCompany[companyId].avg = 0;
+      });
 
-        totals.fte.avg += results.bySection[section].fte.avg;
+      Object.keys(results.bySection).forEach(sectionId =>
+      {
+        const sectionGroup = results.bySection[sectionId];
+
+        finalizeGroup(sectionGroup);
+
+        totals.fte.avg += sectionGroup.fte.avg;
+
+        companyIds.forEach(companyId =>
+        {
+          if (sectionGroup.fteByCompany[companyId])
+          {
+            totals.fteByCompany[companyId].avg += sectionGroup.fteByCompany[companyId].avg;
+          }
+        });
       });
 
       finalizeGroup(totals);
@@ -115,7 +135,8 @@ module.exports = function(mongoose, options, done)
         avg: -1,
         total: 0,
         days: new Set()
-      }
+      },
+      fteByCompany: {}
     };
   }
 
@@ -148,20 +169,31 @@ module.exports = function(mongoose, options, done)
 
   function finalizeGroup(group)
   {
+    finalizeFte(group.fte);
+    _.forEach(group.fteByCompany, finalizeFte);
+
     group.userCount = group.userCount.size;
-    group.fte.days = group.fte.days.size;
-
-    if (group.fte.avg === -1)
-    {
-      group.fte.avg = util.round(group.fte.total / group.fte.days);
-    }
-
-    group.fte.total = util.round(group.fte.total);
     group.ipr = util.round((group.nearMissCount + group.suggestionCount + group.observationCount) / group.fte.avg);
     group.ips = util.round(
       group.observationCount / (group.nearMissCount + group.suggestionCount + group.observationCount) * 100
     );
     group.ipc = Math.min(100, util.round(group.userCount / group.fte.avg * 100));
+  }
+
+  function finalizeFte(fte)
+  {
+    fte.days = fte.days.size;
+
+    if (fte.avg === -1)
+    {
+      fte.avg = fte.days > 0 ? util.round(fte.total / fte.days) : 0;
+    }
+    else
+    {
+      fte.avg = util.round(fte.avg);
+    }
+
+    fte.total = util.round(fte.total);
   }
 
   function findSections(done)
@@ -193,6 +225,24 @@ module.exports = function(mongoose, options, done)
 
           subdivisionToSections[subdivision].push(section._id);
         });
+      });
+
+      done();
+    });
+  }
+
+  function findCompanies(done)
+  {
+    Company.find({}, {__v: 0}).lean().exec((err, companies) =>
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      companies.forEach(company =>
+      {
+        results.companies[company._id] = company;
       });
 
       done();
@@ -235,6 +285,13 @@ module.exports = function(mongoose, options, done)
       }}
     ];
 
+    const companyIds = Object.keys(results.companies);
+
+    companyIds.forEach(companyId =>
+    {
+      pipeline[1].$group[companyId] = {$sum: `$totals.supply.${companyId}`};
+    });
+
     Model.aggregate(pipeline, (err, results) =>
     {
       if (err)
@@ -247,26 +304,41 @@ module.exports = function(mongoose, options, done)
         const day = `${result._id.y}-${result._id.m}-${result._id.d}`;
         const date = moment(day, 'YYYY-MM-DD').toDate();
 
-        totals.fte.total += result.total;
-        totals.fte.days.add(day);
+        incFte(companyIds, totals, day, result);
 
         subdivisionToSections[result._id.subdivision].forEach(sectionId =>
         {
           const sectionGroup = getSectionGroup(sectionId);
           const intervalGroup = getIntervalGroup(date, sectionId);
 
-          sectionGroup.fte.total += result.total;
-          sectionGroup.fte.days.add(day);
-
-          intervalGroup.fte.total += result.total;
-          intervalGroup.fte.days.add(day);
-
-          intervalGroup.bySection[sectionId].fte.total += result.total;
-          intervalGroup.bySection[sectionId].fte.days.add(day);
+          incFte(companyIds, sectionGroup, day, result);
+          incFte(companyIds, intervalGroup, day, result);
+          incFte(companyIds, intervalGroup.bySection[sectionId], day, result);
         });
       });
 
       done();
+    });
+  }
+
+  function incFte(companyIds, group, day, result)
+  {
+    group.fte.total += result.total;
+    group.fte.days.add(day);
+
+    companyIds.forEach(companyId =>
+    {
+      if (!group.fteByCompany[companyId])
+      {
+        group.fteByCompany[companyId] = {
+          avg: -1,
+          total: 0,
+          days: new Set()
+        };
+      }
+
+      group.fteByCompany[companyId].total += result[companyId];
+      group.fteByCompany[companyId].days.add(day);
     });
   }
 

@@ -60,9 +60,14 @@ define([
 
     getMetricGrouping: function(metric)
     {
-      return this.get('interval') === 'none'
-        ? 'bySection'
-        : localStorage.getItem('WMES:KAIZEN:METRIC_GROUPING:' + metric) || 'bySection';
+      var grouping = localStorage.getItem('WMES:KAIZEN:METRIC_GROUPING:' + metric);
+
+      if (metric === 'fte')
+      {
+        return grouping || 'byCompany';
+      }
+
+      return (this.get('interval') === 'none' ? null : grouping) || 'bySection';
     },
 
     setMetricGrouping: function(metric, grouping)
@@ -75,7 +80,8 @@ define([
     parse: function(report)
     {
       var attrs = {
-        total: report.totals
+        total: report.totals,
+        companies: report.companies
       };
 
       this.parseMetrics(report, attrs);
@@ -162,18 +168,30 @@ define([
     parseFte: function(report, attrs)
     {
       var sections = Object.keys(report.sections)
-        .filter(function(sectionId)
-        {
-          var group = report.bySection[sectionId] || {fte: {avg: 0}};
-
-          return group.fte.avg > 0;
-        })
+        .filter(function(sectionId) { return (report.bySection[sectionId] || {fte: {avg: 0}}).fte.avg > 0; })
+        .sort(function(a, b) { return a.localeCompare(b); });
+      var companies = Object.keys(report.companies)
+        .filter(function(companyId) { return (report.totals.fteByCompany[companyId] || {total: 0}).total > 0; })
         .sort(function(a, b) { return a.localeCompare(b); });
       var categories = sections.map(function(sectionId) { return report.sections[sectionId]; });
 
       attrs.fte = {
         categories: categories,
-        series: [{
+        series: companies.map(function(companyId)
+        {
+          return {
+            id: companyId,
+            name: report.companies[companyId].name,
+            data: sections.map(function(sectionId)
+            {
+              return {
+                y: report.bySection[sectionId].fteByCompany[companyId].avg
+              };
+            }),
+            color: report.companies[companyId].color
+          };
+        }),
+        seriesTotal: [{
           id: 'fte',
           name: t.bound('kaizenOrders', 'report:series:fte'),
           data: sections.map(function(sectionId)

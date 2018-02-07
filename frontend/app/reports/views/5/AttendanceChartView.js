@@ -83,14 +83,8 @@ define([
       chartData.series.forEach(function(data, i)
       {
         chart.series[i].setData(data, false, false, false);
-        //chart.series[i].update({stacking: isFullscreen ? 'normal' : null}, false);
       });
-/*
-      chart.series[0].update(
-        {name: t('reports', 'hr:attendance:series:' + (isFullscreen ? 'present' : 'demand'))},
-        false
-      );
-*/
+
       if (redraw !== false)
       {
         chart.redraw(false);

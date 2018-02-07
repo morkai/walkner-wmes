@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/i18n',
   'app/highcharts',
   'app/core/View',
@@ -10,6 +11,7 @@ define([
   '../views/KaizenMetricsReportChartView',
   'app/kaizenOrders/templates/metricsReportPage'
 ], function(
+  _,
   t,
   Highcharts,
   View,
@@ -104,7 +106,8 @@ define([
         grouping: {
           ipr: this.model.getMetricGrouping('ipr'),
           ips: this.model.getMetricGrouping('ips'),
-          ipc: this.model.getMetricGrouping('ipc')
+          ipc: this.model.getMetricGrouping('ipc'),
+          fte: this.model.getMetricGrouping('fte')
         },
         totalGroupingVisible: this.model.get('interval') !== 'none'
       };
@@ -161,6 +164,21 @@ define([
         suggestions: Highcharts.numberFormat(total.suggestionCount, 0),
         observations: Highcharts.numberFormat(total.observationCount, 0),
         minutes: Highcharts.numberFormat(total.minutesCount, 0)
+      }));
+
+      var companies = page.model.get('companies');
+      var fteSubtitle = [Highcharts.numberFormat(total.fte.avg, 2)];
+
+      _.forEach(total.fteByCompany, function(fte, companyId)
+      {
+        if (fte.total > 0)
+        {
+          fteSubtitle.push(companies[companyId].name + ': ' + Highcharts.numberFormat(fte.avg, 2));
+        }
+      });
+
+      page.$id('fte-total').html(t('kaizenOrders', 'report:subtitle:fte', {
+        value: fteSubtitle.join('; ')
       }));
     },
 

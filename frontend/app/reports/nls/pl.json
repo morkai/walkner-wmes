@@ -99,6 +99,7 @@
   "filter:from": "Od: ",
   "filter:to": "Do: ",
   "filter:interval": "Podział czasu",
+  "filter:interval:none": "brak",
   "filter:interval:year": "rok",
   "filter:interval:quarter": "kw",
   "filter:interval:month": "mc",

@@ -4,14 +4,21 @@
   <h3>
     <%- t('kaizenOrders', 'report:title:' + metric) %>
     <a class="kaizenOrders-report-grouping <%- grouping[metric] === 'bySection' ? 'active' : '' %>" data-metric="<%- metric %>" data-grouping="bySection" href="#"><%- t('kaizenOrders', 'report:title:grouping:bySection') %></a><a
-      class="kaizenOrders-report-grouping <%- totalGroupingVisible ? '' : 'hidden' %> <%- grouping[metric] === 'total' ? 'active' : '' %>" data-metric="<%- metric %>" data-grouping="total" href="#"><%- t('kaizenOrders', 'report:title:grouping:total') %></a>
+      class="kaizenOrders-report-grouping <%- totalGroupingVisible ? '' : 'hidden' %> <%- grouping[metric] === 'total' ? 'active' : '' %>" data-metric="<%- metric %>" data-grouping="total" href="#"><%- t('kaizenOrders', 'report:title:grouping:total', {metric: metric}) %></a>
   </h3>
   <h4 id="<%- idPrefix %>-<%- metric %>-total"></h4>
   <div id="<%- idPrefix %>-<%- metric %>-report"></div>
   <% }) %>
-  <% ['count', 'users', 'fte'].forEach(function(metric) { %>
+  <% ['count', 'users'].forEach(function(metric) { %>
   <h3><%- t('kaizenOrders', 'report:title:' + metric) %></h3>
   <h4 id="<%- idPrefix %>-<%- metric %>-total"></h4>
   <div id="<%- idPrefix %>-<%- metric %>-report"></div>
   <% }) %>
+  <h3>
+    <%- t('kaizenOrders', 'report:title:fte') %>
+    <a class="kaizenOrders-report-grouping <%- grouping.fte === 'byCompany' ? 'active' : '' %>" data-metric="fte" data-grouping="byCompany" href="#"><%- t('kaizenOrders', 'report:title:grouping:byCompany') %></a><a
+      class="kaizenOrders-report-grouping <%- grouping.fte === 'total' ? 'active' : '' %>" data-metric="fte" data-grouping="total" href="#"><%- t('kaizenOrders', 'report:title:grouping:total', {metric: 'fte'}) %></a>
+  </h3>
+  <h4 id="<%- idPrefix %>-fte-total"></h4>
+  <div id="<%- idPrefix %>-fte-report"></div>
 </div>
