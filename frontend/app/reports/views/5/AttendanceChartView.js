@@ -264,13 +264,15 @@ define([
           chartData.categories.push(companyId);
         }
 
+        var absence = Math.max(0, companyAttendance.absence);
+
         chartData.series[0].push({
-          y: companyAttendance.demand - companyAttendance.absence,
+          y: companyAttendance.demand - absence,
           color: '#0000EE'
         });
 
         chartData.series[1].push({
-          y: companyAttendance.absence
+          y: absence
         });
       });
 
@@ -312,13 +314,15 @@ define([
 
           category.categories.push(company ? (company.get('shortName') || company.get('name')) : companyId);
 
+          var absence = Math.max(0, companyAttendance.absence);
+
           chartData.series[0].push({
-            y: companyAttendance.demand - companyAttendance.absence,
+            y: companyAttendance.demand - absence,
             color: '#0000EE'
           });
 
           chartData.series[1].push({
-            y: companyAttendance.absence
+            y: absence
           });
         });
 

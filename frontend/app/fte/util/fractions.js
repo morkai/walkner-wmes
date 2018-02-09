@@ -22,7 +22,7 @@ define(function()
     },
     round: function(num)
     {
-      if (!num)
+      if (!num || num < 0)
       {
         return '0';
       }
