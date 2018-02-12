@@ -53,8 +53,8 @@ module.exports = function setUpGenerator(app, module)
   const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
   const COMPARE_ORDERS = true || !DEV && UNFROZEN_PLANS.length === 0;
   const RESIZE_ORDERS = true;
-  // sortSmallOrdersByManHours sortSmallOrdersByLeven sortSmallOrdersByParts
-  const SMALL_ORDERS_SORTER = sortSmallOrdersByParts;
+  // sortSmallOrdersByManHours sortSmallOrdersByLeven sortOrdersByNameParts
+  const ORDERS_SORTER = sortOrdersByNameParts;
 
   const log = LOG && DEV
     ? m => console.log(m)
@@ -1421,10 +1421,10 @@ module.exports = function setUpGenerator(app, module)
     for (const orderStateQueues of state.orderStateQueues.values())
     {
       orderStateQueues.urgent.sort(sortUrgentOrders);
-      orderStateQueues.easy.sort(sortEasyOrders);
       orderStateQueues.hard.sort(sortHardOrders);
 
-      SMALL_ORDERS_SORTER(orderStateQueues);
+      ORDERS_SORTER(orderStateQueues, 'small', null);
+      ORDERS_SORTER(orderStateQueues, 'easy', _.last(orderStateQueues.small));
     }
 
     setImmediate(done);
@@ -1475,110 +1475,128 @@ module.exports = function setUpGenerator(app, module)
     return a.quantityTodo - b.quantityTodo;
   }
 
-  function sortSmallOrdersByManHours(orderStateQueues) // eslint-disable-line no-unused-vars
+  function sortOrdersByManHours(orderStateQueues, kind) // eslint-disable-line no-unused-vars
   {
-    orderStateQueues.small.sort(sortEasyOrders);
+    orderStateQueues[kind].sort(sortEasyOrders);
   }
 
-  function sortSmallOrdersByLeven(orderStateQueues) // eslint-disable-line no-unused-vars
+  function sortOrdersByLeven(orderStateQueues, kind) // eslint-disable-line no-unused-vars
   {
-    const smallOrderStateQueue = orderStateQueues.small;
+    const unsortedQueue = orderStateQueues[kind];
 
-    if (smallOrderStateQueue.length <= 1)
+    if (unsortedQueue.length <= 1)
     {
       return;
     }
 
-    smallOrderStateQueue.sort(sortEasyOrders);
+    unsortedQueue.sort(sortEasyOrders);
 
-    if (smallOrderStateQueue.length === 2)
+    if (unsortedQueue.length === 2)
     {
       return;
     }
 
     const sortedQueue = [
-      smallOrderStateQueue.shift()
+      unsortedQueue.shift()
     ];
 
-    while (smallOrderStateQueue.length)
+    while (unsortedQueue.length)
     {
-      levenSort(smallOrderStateQueue, _.last(sortedQueue).name, 'name');
+      levenSort(unsortedQueue, _.last(sortedQueue).name, 'name');
 
-      sortedQueue.push(smallOrderStateQueue.shift());
+      sortedQueue.push(unsortedQueue.shift());
     }
 
-    orderStateQueues.small = sortedQueue;
+    orderStateQueues[kind] = sortedQueue;
   }
 
-  function sortSmallOrdersByParts(orderStateQueues) // eslint-disable-line no-unused-vars
+  function sortOrdersByNameParts(orderStateQueues, kind, lastPrevKind) // eslint-disable-line no-unused-vars
   {
-    const smallOrderStateQueue = orderStateQueues.small;
+    const unsortedQueue = orderStateQueues[kind];
 
-    if (smallOrderStateQueue.length <= 1)
+    if (unsortedQueue.length <= 1)
     {
       return;
     }
 
-    smallOrderStateQueue.sort(sortEasyOrders);
+    unsortedQueue.sort(sortEasyOrders);
 
-    if (smallOrderStateQueue.length === 2)
+    if (unsortedQueue.length === 2)
     {
       return;
     }
 
-    const sortedSmallOrderStateQueue = [
-      smallOrderStateQueue.shift()
-    ];
+    const sortedQueue = [];
 
-    while (smallOrderStateQueue.length)
+    if (!lastPrevKind)
     {
-      const lastNameParts = _.last(sortedSmallOrderStateQueue).nameParts;
+      sortedQueue.push(unsortedQueue.shift());
+    }
 
-      for (let i = 0; i < smallOrderStateQueue.length; ++i)
+    while (unsortedQueue.length)
+    {
+      const lastNameParts = sortedQueue.length === 0 ? lastPrevKind.nameParts : _.last(sortedQueue).nameParts;
+
+      for (let i = 0; i < unsortedQueue.length; ++i)
       {
-        rankSmallOrderName(smallOrderStateQueue[i], lastNameParts);
+        rankOrderName(unsortedQueue[i], lastNameParts);
       }
 
-      smallOrderStateQueue.sort(sortSmallOrdersByNameRank);
+      unsortedQueue.sort(sortOrdersByNameRank);
 
-      sortedSmallOrderStateQueue.push(smallOrderStateQueue.shift());
+      sortedQueue.push(unsortedQueue.shift());
     }
 
-    orderStateQueues.small = sortedSmallOrderStateQueue;
+    orderStateQueues[kind] = sortedQueue;
   }
 
-  function sortSmallOrdersByNameRank(a, b)
+  function sortOrdersByNameRank(a, b)
   {
     return b.nameRank - a.nameRank;
   }
 
   function getOrderNameParts(order) // eslint-disable-line no-unused-vars
   {
-    if (order.kind !== 'small')
-    {
-      return null;
-    }
-
     if (!orderNamePartsCache.has(order.name))
     {
-      orderNamePartsCache.set(order.name, {
+      const orderNameParts = {
         family: order.name.substring(0, 6),
-        parts: order.name.substring(6).trim().split(' ')
+        dimensions: null,
+        parts: []
+      };
+
+      order.name.substring(6).trim().split(' ').forEach(part =>
+      {
+        if (/^W[0-9]+L[0-9]+$/.test(part))
+        {
+          orderNameParts.dimensions = part;
+        }
+        else
+        {
+          orderNameParts.parts.push(part);
+        }
       });
+
+      orderNamePartsCache.set(order.name, orderNameParts);
     }
 
     return orderNamePartsCache.get(order.name);
   }
 
-  function rankSmallOrderName(smallOrderState, lastNameParts)
+  function rankOrderName(orderState, lastNameParts)
   {
-    smallOrderState.nameRank = smallOrderState.nameParts.family === lastNameParts.family ? 5 : 0;
+    orderState.nameRank = orderState.nameParts.family === lastNameParts.family ? 6 : 0;
+
+    if (orderState.nameParts.dimensions !== null || lastNameParts.dimensions !== null)
+    {
+      orderState.nameRank += orderState.nameParts.dimensions === lastNameParts.dimensions ? 4 : 0;
+    }
 
     lastNameParts.parts.forEach(namePart =>
     {
-      if (smallOrderState.nameParts.parts.includes(namePart))
+      if (orderState.nameParts.parts.includes(namePart))
       {
-        smallOrderState.nameRank += 1;
+        orderState.nameRank += 1;
       }
     });
   }
@@ -1590,7 +1608,7 @@ module.exports = function setUpGenerator(app, module)
 
   function sortHardOrders(a, b)
   {
-    if (a.order.hardComponent !== null && b.order.hardComponent !== null)
+    if (a.order.hardComponent === b.order.hardComponent)
     {
       return b.order.manHours - a.order.manHours;
     }
