@@ -25,13 +25,14 @@ define([
     {
       var view = this;
 
+      view.maxDuration = -1;
       view.colorCache = {};
 
       view.listenTo(view.settings, 'change', function()
       {
         if (view.isRendered())
         {
-          view.colorCache = {};
+          view.reset();
           view.render();
         }
       });
@@ -57,6 +58,14 @@ define([
     afterRender: function()
     {
       this.resize();
+    },
+
+    reset: function()
+    {
+      this.maxDuration = ([].concat(this.settings.getValue('load.statuses'))
+        .sort(function(a, b) { return b.from - a.from; })[0] || {from: 100}).from;
+
+      this.colorCache = {};
     },
 
     resize: function()
@@ -93,6 +102,11 @@ define([
 
     serialize: function()
     {
+      if (this.maxDuration === -1)
+      {
+        this.reset();
+      }
+
       return {
         idPrefix: this.idPrefix,
         items: this.recent.get('collection').map(this.serializeItem, this)
@@ -108,8 +122,15 @@ define([
         color = this.colorCache[d] = this.settings.getLoadStatus(d).color;
       }
 
+      var padding = 0;
+
+      if (d < this.maxDuration)
+      {
+        padding = 174 - 174 * (d / this.maxDuration);
+      }
+
       return {
-        padding: 174 - d * 3,
+        padding: padding,
         duration: d,
         color: color
       };
