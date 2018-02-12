@@ -215,14 +215,16 @@ module.exports = function(app, module)
 
         unplannedOrders.forEach(unplannedOrder =>
         {
+          unplannedOrder.leadingOrder = unplannedOrder._id;
+
+          childOrders.push(unplannedOrder);
+
+          this.unplannedOrders.add(unplannedOrder._id);
+
           if (this.newOrders.has(unplannedOrder._id))
           {
             return;
           }
-
-          unplannedOrder.leadingOrder = unplannedOrder._id;
-
-          childOrders.push(unplannedOrder);
 
           this.newOrders.set(unplannedOrder._id, {
             _id: unplannedOrder._id,
@@ -245,8 +247,6 @@ module.exports = function(app, module)
             paint: null,
             childOrders: []
           });
-
-          this.unplannedOrders.add(unplannedOrder._id);
         });
 
         childOrders.forEach(childOrder =>
