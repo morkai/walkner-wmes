@@ -23,6 +23,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
   const OrderDocumentFolder = mongoose.model('OrderDocumentFolder');
   const OrderDocumentName = mongoose.model('OrderDocumentName');
   const OrderDocumentClient = mongoose.model('OrderDocumentClient');
+  const OrderDocumentUpload = mongoose.model('OrderDocumentUpload');
   const License = mongoose.model('License');
 
   const SPECIAL_DOCUMENTS = {
@@ -278,6 +279,11 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           return res.sendStatus(404);
         }
 
+        if (err.code === 'CONVERTING')
+        {
+          return res.render('orderDocuments:converting', {error: err.message, nc15, hash});
+        }
+
         return next(err);
       }
 
@@ -502,7 +508,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
         if (meta || (stats && stats.isFile()) || (pdfStats && pdfStats.isFile()))
         {
-          return done(null, {
+          return this.done(done, null, {
             filePath: stats ? this.filePath : this.pdfFilePath,
             source: 'remote',
             meta: options.forcePdf ? null : meta,
@@ -511,9 +517,49 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
           });
         }
 
-        return findLegacyDocumentFilePath(nc15, options, done);
+        if (options.forcePdf && options.hash)
+        {
+          OrderDocumentUpload.findById(options.hash, this.next());
+        }
+      },
+      function(err, upload)
+      {
+        if (!err && upload)
+        {
+          handleUploadInProgress(upload, done);
+        }
+        else
+        {
+          findLegacyDocumentFilePath(nc15, options, done);
+        }
       }
     );
+  }
+
+  function handleUploadInProgress(upload, done)
+  {
+    if (upload.count >= 2)
+    {
+      upload.count = 0;
+
+      upload.save(err =>
+      {
+        if (err)
+        {
+          done(err);
+        }
+        else
+        {
+          app.broker.publish('orderDocuments.tree.filesUploaded');
+
+          done(app.createError(`Converting ${upload.nc15}/${upload._id} (again)...`, 'CONVERTING', 400));
+        }
+      });
+    }
+    else
+    {
+      done(app.createError(`Converting ${upload.nc15}/${upload._id}...`, 'CONVERTING', 400));
+    }
   }
 
   function tryJsonParse(json)
