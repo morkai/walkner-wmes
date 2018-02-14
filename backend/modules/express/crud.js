@@ -197,6 +197,11 @@ exports.browseRoute = function(app, options, req, res, next)
 
 exports.addRoute = function(app, Model, req, res, next)
 {
+  if (req.body.__v)
+  {
+    delete req.body.__v;
+  }
+
   const model = req.model || new Model(req.body);
 
   model.save(function(err)
@@ -328,6 +333,11 @@ exports.readRoute = function(app, options, req, res, next)
 
 exports.editRoute = function(app, options, req, res, next)
 {
+  if (req.body.__v)
+  {
+    delete req.body.__v;
+  }
+
   let Model;
 
   if (options.model && options.model.model)
