@@ -1,0 +1,89 @@
+<div class="hidden">
+  <h1>v0.119.0</h1>
+  <h2><%- time.format('2018-01-10', 'LL') %></h2>
+  <h3>Nieprawidłowe zlecenia IPT</h3>
+  <ul>
+    <li>Poprawiono błąd mogący spowodować wywalenie się serwera importera zleceń.</li>
+  </ul>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Usunięto specjalne przewijania listy rozplanowanych zleceń w zależności od pozycji kursora na liście.</li>
+    <li>Poprawiono błąd uniemożliwiający załadowanie planu przez użytkowników z uprawnieniem 'Plany dzienne: przeglądanie',
+      ale bez uprawnienia 'Dane produkcyjne: przeglądanie'.</li>
+    <li>Poprawiono błąd mogący spowodować wyświetlanie nieaktualnego stanu planu dziennego, jeżeli poszczególne dane
+      zostały załadowane w nieprawidłowej kolejności.</li>
+    <li>Poprawiono błąd zatrzymujący wyświetlanie MRP planu dziennego, jeżeli do planu dodano maszynę (linia produkcyjna
+      z działu typu 'Tłocznia').</li>
+    <li>Poprawiono błąd podczas generowania planu polegający na ignorowanie wartości 'Linia aktywna do' podczas fazy
+      rozszerzania niekompletnego zlecenia.</li>
+    <li>Poprawiono błąd mogący spowodować brak odświeżenia aktualnego stanu planu po otrzymaniu od serwera informacji
+      o zmianach w planie.</li>
+    <li>Poprawiono błąd powodujący nietworzenie planów godzinowych z nowego planu dziennego, gdy dane plany godzinowe
+      wcześniej nie istniały.</li>
+    <li>Poprawiono błąd powodujący nieaktualizowanie istniejących planów godzinowych po zmianach w planie dziennym.</li>
+    <li>Zmieniono sortowanie wejściowej kolejki zleceń tak, aby zlecenia 'Pilne' i 'Przypięte' były brane pod uwagę
+      wcześniej od zleceń tylko 'Pilnych'.</li>
+    <li>Zmieniono edycję 'Ilości osób' na linii z poziomu planu tak, aby można było ustawić wartość 0.</li>
+    <li>Dodano funkcjonalność wybóru daty planu z poziomu 'okruszków' (jak w malarnii).</li>
+    <li>Dodano możliwość włączenia opcji wysokiego kontrastu dla widoku planu dziennego.</li>
+    <li>Dodano nowe ustawienie: Szybkość planowania.</li>
+    <li>Dodano funkcjonalność zamrażania zleceń. Zlecenia z pierwszej zmiany są automatycznie zamrażane po 23:00.</li>
+    <li>Dodano obliczanie wartości 'Sumy RBH do zrobienia' oraz 'Sumy ilości sztuk do zrobienia'.</li>
+    <li>Dodano specjalny widok zleceń dla Magazynu.</li>
+    <li>Dodano akcje 'Malarnia' oraz 'Magazyn' do strony planu dziennego.</li>
+    <li>Dodano możliwość ustawiania 'Grupy drop zone', 'Czasu wywołania', 'Statusu magazynu' oraz 'Komentarzu magazynu'
+      dla każdego zlecenia.</li>
+    <li>Dodano funkcjonalność skakania do MRP na stronie planu dziennego oraz magazynu za pomocą <kbd>Spacji</kbd>
+      lub wpisania na klawiaturze nazwy MRP.</li>
+    <li>Dodano słownik farb do Malarnii.</li>
+  </ul>
+  <h3>ZPW</h3>
+  <ul>
+    <li>Zmieniono wartość 'Całkowite średnie dzienne FTE' w raporcie 'Wskaźniki' tak, aby była sumą wartości poszczególnych
+      działów, a nie ich średnią.</li>
+    <li>Zmieniono liczenie użytkowników w raporcie 'Wskaźniki', aby działało tak jak w raporcie 'Zaangażowanie'.</li>
+    <li>Zmieniono liczenie użytkowników we wszystkich raportach tak, aby grupowani byli po imieniu i nazwisku
+      zamiast po ID.</li>
+  </ul>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Zmieniono filtr listy wyników tak, aby domyślny wyświetlane były wyniki z ostatnich 14 dni.</li>
+  </ul>
+  <h3>Raporty > CLIP</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający wybranie powodu opóźnienia z poziomu listy zleceń.</li>
+    <li>Zmieniono filtr 'Godzina' listy zleceń tak, aby akceptował wartość w formacie 'gg' lub 'gg:mm'.</li>
+    <li>Zmieniono nazwę kolumny 'Data ukończenia (podst.)' na 'Data ukończenia (plan.)'.</li>
+    <li>Zmieniono listę zleceń tak, aby ignorowane były zlecenia ze statusem 'TECO' lub 'DLT'.</li>
+  </ul>
+  <h3>Raporty > Wskaźniki</h3>
+  <ul>
+    <li>Dodano 'Produktywność' do eksportowanych danych.</li>
+    <li>Zwiększono czas generowania raportu o 17%.</li>
+  </ul>
+  <h3>Raporty > HR</h3>
+  <ul>
+    <li>Dodano legendę do eksportowanego wykresu 'Obecności'.</li>
+  </ul>
+  <h3>Zlecenie reszty działów</h3>
+  <ul>
+    <li>Dodano możliwość wyboru źródła komentarza: Inne, Malarnia, Magazyn.</li>
+    <li>Dodano rejestrację komentarzy z malarnii w historii zlecenia.</li>
+  </ul>
+  <h3>Badanie Opinia</h3>
+  <ul>
+    <li>Usunięto logo EES z szablonu dla Kętrzyna.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Zmieniono kolejność nazwy personelu z 'Imię+Nazwisko' na 'Nazwisko+Imię'.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd mogący spowodować wywalenie się serwera podczas eksportu wydruku do PDF.</li>
+    <li>Zmieniono pole wyszukiwania użytkowników tak, aby w przypadku napotkania kilku użytkowników o takim samym
+      imieniu i nazwisku, najpierw preferowany był aktywny użytkowników, poźniej użytkownik mający przypisany adres
+      e-mail, a na końcu użytkownik przypisany do firmy 'PHILIPS'.</li>
+    <li>Uruchomiono dwa dodatkowe procesy do generowania raportów na oddzielnym serwerze.</li>
+  </ul>
+</div>

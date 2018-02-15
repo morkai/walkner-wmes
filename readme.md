@@ -4,7 +4,7 @@
 
 ### node.js
 
-  * __Version__: 6
+  * __Version__: 8
   * __Website__: https://nodejs.org/
 
 ### MongoDB

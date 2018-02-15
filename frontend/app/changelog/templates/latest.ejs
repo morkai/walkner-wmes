@@ -1,87 +1,74 @@
-<h1>v0.119.0</h1>
-<h2><%- time.format('2018-01-10', 'LL') %></h2>
-<h3>Nieprawidłowe zlecenia IPT</h3>
+<h1>v0.120.0</h1>
+<h2><%- time.format('2018-02-15', 'LL') %></h2>
+<h3>Malarnia</h3>
 <ul>
-  <li>Poprawiono błąd mogący spowodować wywalenie się serwera importera zleceń.</li>
+  <li>Poprawiono błąd powodujący brak odświeżania danych na stronach listy i szczegółów farb.</li>
+  <li>Poprawiono błąd powodujący niedodawanie do planu malarnii zleceń malarnii niemających zlecenia nadrzędnego
+    jeżeli ich MRP zostało zdefiniowane w module planowania.</li>
+  <li>Zmieniono odnośnik do malarnii w 'okruszkach' na podstronach modułu tak, aby przekierowywał do planu malarnii,
+    z którego użytkownik wszedł na podstronę.</li>
+  <li>Dodano filtr do listy farb.</li>
+  <li>Dodano komunikat o istnieniu farby o danym 12NC podczas dodawania nowej farby.</li>
+  <li>Dodano nową aplikację: Zliczanie obciążenia malarnii.</li>
 </ul>
 <h3>Planowanie</h3>
 <ul>
-  <li>Usunięto specjalne przewijania listy rozplanowanych zleceń w zależności od pozycji kursora na liście.</li>
-  <li>Poprawiono błąd uniemożliwiający załadowanie planu przez użytkowników z uprawnieniem 'Plany dzienne: przeglądanie',
-    ale bez uprawnienia 'Dane produkcyjne: przeglądanie'.</li>
-  <li>Poprawiono błąd mogący spowodować wyświetlanie nieaktualnego stanu planu dziennego, jeżeli poszczególne dane
-    zostały załadowane w nieprawidłowej kolejności.</li>
-  <li>Poprawiono błąd zatrzymujący wyświetlanie MRP planu dziennego, jeżeli do planu dodano maszynę (linia produkcyjna
-    z działu typu 'Tłocznia').</li>
-  <li>Poprawiono błąd podczas generowania planu polegający na ignorowanie wartości 'Linia aktywna do' podczas fazy
-    rozszerzania niekompletnego zlecenia.</li>
-  <li>Poprawiono błąd mogący spowodować brak odświeżenia aktualnego stanu planu po otrzymaniu od serwera informacji
-    o zmianach w planie.</li>
-  <li>Poprawiono błąd powodujący nietworzenie planów godzinowych z nowego planu dziennego, gdy dane plany godzinowe
-    wcześniej nie istniały.</li>
-  <li>Poprawiono błąd powodujący nieaktualizowanie istniejących planów godzinowych po zmianach w planie dziennym.</li>
-  <li>Zmieniono sortowanie wejściowej kolejki zleceń tak, aby zlecenia 'Pilne' i 'Przypięte' były brane pod uwagę
-    wcześniej od zleceń tylko 'Pilnych'.</li>
-  <li>Zmieniono edycję 'Ilości osób' na linii z poziomu planu tak, aby można było ustawić wartość 0.</li>
-  <li>Dodano funkcjonalność wybóru daty planu z poziomu 'okruszków' (jak w malarnii).</li>
-  <li>Dodano możliwość włączenia opcji wysokiego kontrastu dla widoku planu dziennego.</li>
-  <li>Dodano nowe ustawienie: Szybkość planowania.</li>
-  <li>Dodano funkcjonalność zamrażania zleceń. Zlecenia z pierwszej zmiany są automatycznie zamrażane po 23:00.</li>
-  <li>Dodano obliczanie wartości 'Sumy RBH do zrobienia' oraz 'Sumy ilości sztuk do zrobienia'.</li>
-  <li>Dodano specjalny widok zleceń dla Magazynu.</li>
-  <li>Dodano akcje 'Malarnia' oraz 'Magazyn' do strony planu dziennego.</li>
-  <li>Dodano możliwość ustawiania 'Grupy drop zone', 'Czasu wywołania', 'Statusu magazynu' oraz 'Komentarzu magazynu'
-    dla każdego zlecenia.</li>
-  <li>Dodano funkcjonalność skakania do MRP na stronie planu dziennego oraz magazynu za pomocą <kbd>Spacji</kbd>
-    lub wpisania na klawiaturze nazwy MRP.</li>
-  <li>Dodano słownik farb do Malarnii.</li>
-</ul>
-<h3>ZPW</h3>
-<ul>
-  <li>Zmieniono wartość 'Całkowite średnie dzienne FTE' w raporcie 'Wskaźniki' tak, aby była sumą wartości poszczególnych
-    działów, a nie ich średnią.</li>
-  <li>Zmieniono liczenie użytkowników w raporcie 'Wskaźniki', aby działało tak jak w raporcie 'Zaangażowanie'.</li>
-  <li>Zmieniono liczenie użytkowników we wszystkich raportach tak, aby grupowani byli po imieniu i nazwisku
-    zamiast po ID.</li>
+  <li>Zmieniono obliczanie roboczogodzin tak, aby pod uwagę brana była 'Szybkość planowania'.</li>
+  <li>Zmieniono zamrażanie planu tak, aby zamrażane były wszystkie zlecenia, a nie tylko zlecenia z pierwszej zmiany.</li>
+  <li>Zmieniono ustawienie 'Szybkość planowania' tak, aby można było ustawić inną wartość dla każdego MRP.</li>
+  <li>Zmieniono sortowanie małych zleceń tak, aby rodzina produktu (pierwsze 6 znaków nazwy) miały wagę 6 zamiast 5 oraz
+    wymiary produktu 'WnLm' (jeżeli występują w nazwie) miały wagę 4 zamiast 1.</li>
+  <li>Zmieniono sortowanie łatwych zleceń tak, aby były sortowane jak małe zlecenia (wcześniej sortowane były po RBH).</li>
+  <li>Zmieniono kopiowanie listy zleceń do schowka tak, aby kolumna 'Drop zone' także była kopiowana.</li>
+  <li>Dodano nowe ustawienie: godzina zamrożenia planu.</li>
 </ul>
 <h3>Inspekcja Jakości</h3>
 <ul>
-  <li>Zmieniono filtr listy wyników tak, aby domyślny wyświetlane były wyniki z ostatnich 14 dni.</li>
+  <li>Poprawiono uprawnienia edycji wyników tak, aby dostęp dodatkowo miieli wybrany lider, właściciel niezgodności oraz
+    osoby przypisane do akcji korekcyjnych.</li>
+  <li>Dodano nowe pole: Numer seryjny.</li>
 </ul>
-<h3>Raporty > CLIP</h3>
+<h3>ZPW</h3>
 <ul>
-  <li>Poprawiono błąd uniemożliwiający wybranie powodu opóźnienia z poziomu listy zleceń.</li>
-  <li>Zmieniono filtr 'Godzina' listy zleceń tak, aby akceptował wartość w formacie 'gg' lub 'gg:mm'.</li>
-  <li>Zmieniono nazwę kolumny 'Data ukończenia (podst.)' na 'Data ukończenia (plan.)'.</li>
-  <li>Zmieniono listę zleceń tak, aby ignorowane były zlecenia ze statusem 'TECO' lub 'DLT'.</li>
+  <li>Zmieniono wykresy wskaźników IPR, IPS oraz IPC tak, aby można było zmienić grupowanie danych na całkowite
+    lub według działów (tylko jak wybrano podział czasu).</li>
+  <li>Zmieniono wykres 'Średnie dzienne FTE' tak, aby można było zmienić grupowanie danych na całkowite lub
+    według firm.</li>
+  <li>Dodano filtr 'Podział czasu' do raportu 'Wskaźniki'.</li>
 </ul>
-<h3>Raporty > Wskaźniki</h3>
+<h3>Obserwacje</h3>
 <ul>
-  <li>Dodano 'Produktywność' do eksportowanych danych.</li>
-  <li>Zwiększono czas generowania raportu o 17%.</li>
+  <li>Dodano do raportu tabelę i wykres 'Ilość przeprowadzonych obserwacji'.</li>
 </ul>
-<h3>Raporty > HR</h3>
+<h3>Monitoring</h3>
 <ul>
-  <li>Dodano legendę do eksportowanego wykresu 'Obecności'.</li>
-</ul>
-<h3>Zlecenie reszty działów</h3>
-<ul>
-  <li>Dodano możliwość wyboru źródła komentarza: Inne, Malarnia, Magazyn.</li>
-  <li>Dodano rejestrację komentarzy z malarnii w historii zlecenia.</li>
-</ul>
-<h3>Badanie Opinia</h3>
-<ul>
-  <li>Usunięto logo EES z szablonu dla Kętrzyna.</li>
+  <li>Zmieniono listę linii produkcyjnych tak, aby wydajność oraz czas cyklu widoczne były w trybie historii.</li>
 </ul>
 <h3>Formatka operatora</h3>
 <ul>
-  <li>Zmieniono kolejność nazwy personelu z 'Imię+Nazwisko' na 'Nazwisko+Imię'.</li>
+  <li>Dodano automatyczne ładowanie kolejki zleceń dla aktualnej zmiany na podstawie planu na dany dzień.</li>
 </ul>
-<h3>Inne</h3>
+<h3>FTE</h3>
 <ul>
-  <li>Poprawiono błąd mogący spowodować wywalenie się serwera podczas eksportu wydruku do PDF.</li>
-  <li>Zmieniono pole wyszukiwania użytkowników tak, aby w przypadku napotkania kilku użytkowników o takim samym
-    imieniu i nazwisku, najpierw preferowany był aktywny użytkowników, poźniej użytkownik mający przypisany adres
-    e-mail, a na końcu użytkownik przypisany do firmy 'PHILIPS'.</li>
-  <li>Uruchomiono dwa dodatkowe procesy do generowania raportów na oddzielnym serwerze.</li>
+  <li>Zmieniono wyświetlanie wartości FTE tak, aby zamiast wartości ujemnych były wyświetlane zera.</li>
+  <li>Zmieniono FTE (inne) tak, aby dostępne były wydziały typu 'Inny' oraz nie będące wydziałem o ID 'LD'.</li>
+  <li>Dodano FTE (magazyn), w którym dostępne są działy z wydziału 'LD'. We wpisach FTE (magazyn) dostępna jest także
+    funkcjonalność 'Zamówienie/Dostarczenie/Braki'.</li>
+</ul>
+<h3>Raporty</h3>
+<ul>
+  <li>Poprawiono błąd powodujący brak powrotu do początkowej pozycji paska przewijania po wyjściu z trybu
+    pełnoekranowego wykresu.</li>
+  <li>Zmieniono wykres 'Obecność' w raporcie HR tak, aby pokazywał 'Ilośc obecnych pracowników' oraz
+    'Ilość brakujących pracowników' w trybie domyślnym oraz pełnoekranowym.</li>
+  <li>Zmieniono wykres 'Obecność' w raporcie HR tak, aby w trybie pełnoekranowym dane były dodatkowo grupowane
+    po dacie.</li>
+</ul>
+<h3>Dokumentacja</h3>
+<ul>
+  <li>Poprawiono błąd podczas konwertowania dokumentów mogący spowodować niepowodzenie, jeżeli w pliku PDF zastosowano
+    nieznane czcionki.</li>
+  <li>Zmieniono komunikat wyświetlany podczas otwarcia pliku, który nie został jeszcze przekonwertowany
+    z 'Nie znaleziono' na 'W trakcje konwertowania'. Strona jest automatycznie odświeżana co 30 sekund, aż do momentu
+    otwarcia pliku.</li>
 </ul>
