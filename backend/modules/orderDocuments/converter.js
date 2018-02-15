@@ -139,7 +139,7 @@ module.exports = function setUpOrderDocumentsConverter(app, module)
             () => fs.copy(this.sourcePdfPath, this.targetPdfPath, () => {})
           );
 
-          module.error(`[converter] Failed to convert: ${err.message}`);
+          module.error(`[converter] Failed to convert: ${err.stack}`);
 
           converting = false;
 
@@ -326,7 +326,7 @@ module.exports = function setUpOrderDocumentsConverter(app, module)
         }
         catch (err)
         {
-          return this.skip(err);
+          return this.skip(app.createError(`${err.message}\n${data}`));
         }
 
         fs.writeFile(path.join(targetPath, '.meta.json'), JSON.stringify(this.meta), this.next());
