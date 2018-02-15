@@ -188,7 +188,7 @@ define([
       var hidden = view.model.get('interval') === 'none';
       var className = '.kaizenOrders-report-grouping';
 
-      view.$(className + '[data-grouping="total"]').toggleClass('hidden', hidden);
+      view.$(className + '[data-grouping="total"][data-metric^="ip"]').toggleClass('hidden', hidden);
 
       ['ipr', 'ips', 'ipc'].forEach(function(metric)
       {
