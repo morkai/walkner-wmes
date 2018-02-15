@@ -4,8 +4,21 @@ const PDFExtract = require('pdf.js-extract').PDFExtract;
 
 const pdfExtract = new PDFExtract();
 
+const oldConsole = {};
+
+Object.keys(console).forEach(k =>
+{
+  if (typeof console[k] === 'function')
+  {
+    oldConsole[k] = console[k];
+    console[k] = () => {};
+  }
+});
+
 pdfExtract.extract(process.argv[2], {}, function(err, data)
 {
+  Object.keys(oldConsole).forEach(k => console[k] = oldConsole[k]);
+
   if (err)
   {
     console.error(err.stack);
