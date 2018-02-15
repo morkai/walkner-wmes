@@ -408,6 +408,7 @@ define([
           'qtyTodo',
           'startTime',
           'finishTime',
+          'dropZone',
           'lines',
           'comment'
         ];
@@ -425,6 +426,7 @@ define([
             order.qtyTodo,
             order.startTime,
             order.finishTime,
+            order.dropZone,
             order.lines,
             '"' + order.comments
               .map(function(comment) { return comment.user.label + ': ' + comment.text.replace(/"/g, "'"); })
