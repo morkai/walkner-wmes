@@ -15,6 +15,13 @@ module.exports = function getOrderQueue(app, productionModule, prodShiftId, done
   step(
     function()
     {
+      const prodLine = app[productionModule.config.orgUnitsId].getByTypeAndId('prodLine', prodShiftId);
+
+      if (prodLine)
+      {
+        prodShiftId = productionModule.getProdLineState(prodLine._id).getCurrentShiftId();
+      }
+
       productionModule.getProdData('shift', prodShiftId, this.next());
     },
     function(err, prodShift)

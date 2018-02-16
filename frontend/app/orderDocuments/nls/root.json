@@ -53,6 +53,8 @@
     "preview:msg:loading:failure": "Failed to load the document.",
 
     "localOrderPicker:title": "Order/document search",
+    "localOrderPicker:plannedOrders": "Planned orders",
+    "localOrderPicker:lastOrders": "Last orders",
     "localOrderPicker:orderNo": "Order/document number",
     "localOrderPicker:submit": "Find order/document",
     "localOrderPicker:submit:order": "Find order",

@@ -52,6 +52,8 @@
   "preview:msg:loading:failure": "Nie udało się załadować dokumentu.",
 
   "localOrderPicker:title": "Wyszukiwanie zlecenia/dokumentu",
+  "localOrderPicker:plannedOrders": "Planowane zlecenia",
+  "localOrderPicker:lastOrders": "Ostatnie zlecenia",
   "localOrderPicker:orderNo": "Numer zlecenia/dokumentu",
   "localOrderPicker:submit": "Znajdź zlecenie/dokument",
   "localOrderPicker:submit:order": "Znajdź zlecenie",

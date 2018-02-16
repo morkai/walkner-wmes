@@ -6,7 +6,6 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
-  'app/prodShiftOrders/ProdShiftOrderCollection',
   './LocalOrderPickerView',
   './DocumentViewerSettingsView',
   'app/orderDocuments/templates/documentListItem',
@@ -17,7 +16,6 @@ define([
   t,
   viewport,
   View,
-  ProdShiftOrderCollection,
   LocalOrderPickerView,
   DocumentViewerSettingsView,
   renderDocumentListItem,
@@ -639,9 +637,6 @@ define([
     openLocalOrderDialog: function()
     {
       var localOrderPickerDialog = new LocalOrderPickerView({
-        collection: new ProdShiftOrderCollection(null, {
-          rqlQuery: 'select(orderId)&sort(-startedAt)&limit(10)&prodLine=' + this.model.get('prodLine')._id
-        }),
         model: this.model
       });
 

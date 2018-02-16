@@ -312,16 +312,24 @@
 .orderDocuments-settings input[name="prefixFilter"] {
   margin-top: 5px;
 }
+@media (min-width: 768px) {
+  .orderDocuments-localOrderPicker-dialog .modal-dialog {
+    width: 700px;
+  }
+}
 .orderDocuments-localOrderPicker .form-control {
   font-family: Consolas, "Lucida Console", Monaco, monospace;
   font-size: 1.8em;
   height: auto;
 }
-.orderDocuments-localOrderPicker-lastOrders {
-  padding-left: 7px;
-}
 .orderDocuments-localOrderPicker-numpad {
   padding-right: 7px;
+}
+.orderDocuments-localOrderPicker-plannedOrders {
+  padding: 0 7px;
+}
+.orderDocuments-localOrderPicker-lastOrders {
+  padding-left: 7px;
 }
 .orderDocuments-numpad {
   display: flex;
@@ -331,9 +339,16 @@
   flex: 1 1 33%;
   margin: 0;
   width: 33%;
+  height: 60px;
   font-family: Consolas, "Lucida Console", Monaco, monospace;
   font-size: 1.8em;
 }
-.is-touch .orderDocuments-numpad > .btn {
-  height: 60px;
+.orderDocuments-localOrderPicker .btn-block {
+  margin-top: -1px;
+  height: 56px;
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+  font-size: 1.8em;
+}
+.orderDocuments-localOrderPicker .btn-block:first-child {
+  margin-top: 0;
 }

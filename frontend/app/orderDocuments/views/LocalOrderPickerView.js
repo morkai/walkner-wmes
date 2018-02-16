@@ -8,6 +8,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/prodShiftOrders/ProdShiftOrderCollection',
   'app/orderDocuments/templates/localOrderPicker'
 ], function(
   _,
@@ -17,11 +18,14 @@ define([
   t,
   viewport,
   View,
+  ProdShiftOrderCollection,
   template
 ) {
   'use strict';
 
   return View.extend({
+
+    dialogClassName: 'orderDocuments-localOrderPicker-dialog',
 
     template: template,
 
@@ -37,19 +41,28 @@ define([
         this.pressNumpadKey(e.currentTarget.dataset.key);
         this.toggleSubmit();
       },
+      'click #-plannedOrders > .btn': function(e)
+      {
+        this.selectOrderNo(e.currentTarget.dataset.order);
+        this.toggleSubmit();
+      },
       'click #-lastOrders > .btn': function(e)
       {
         this.selectOrderNo(e.currentTarget.dataset.order);
+        this.toggleSubmit();
       },
       'input #-orderNo': 'toggleSubmit'
     },
 
     initialize: function()
     {
-      if (this.collection)
-      {
-        this.listenTo(this.collection, 'sync', this.renderLastOrders);
-      }
+      this.plannedOrders = null;
+
+      this.lastOrders = new ProdShiftOrderCollection(null, {
+        rqlQuery: 'select(orderId)&sort(-startedAt)&limit(10)&prodLine=' + this.model.get('prodLine')._id
+      });
+
+      this.listenTo(this.lastOrders, 'sync', this.renderLastOrders);
     },
 
     serialize: function()
@@ -66,14 +79,27 @@ define([
         orderNo: ''
       });
 
-      if (this.collection)
+      this.lastOrders.fetch({reset: true});
+
+      this.fetchPlannedOrders();
+    },
+
+    fetchPlannedOrders: function()
+    {
+      var view = this;
+      var req = $.ajax({url: '/production/orderQueue/' + view.model.get('prodLine')._id});
+
+      req.fail(function()
       {
-        this.collection.fetch({reset: true});
-      }
-      else
+        view.plannedOrders = [];
+      });
+
+      req.done(function(res)
       {
-        this.$id('lastOrders').html('');
-      }
+        view.plannedOrders = res.map(function(result) { return result.order.no; });
+      });
+
+      req.always(view.renderPlannedOrders.bind(view));
     },
 
     renderLastOrders: function()
@@ -82,7 +108,7 @@ define([
       var usedOrdersCount = 0;
       var html = [];
 
-      this.collection.forEach(function(pso)
+      this.lastOrders.forEach(function(pso)
       {
         var orderNo = pso.get('orderId');
 
@@ -103,7 +129,25 @@ define([
         );
       });
 
-      this.$id('lastOrders').html(html.join(''));
+      this.$id('lastOrders').find('.fa-spinner').replaceWith(html.join(''));
+    },
+
+    renderPlannedOrders: function()
+    {
+      var html = [];
+
+      this.plannedOrders.forEach(function(orderNo)
+      {
+        html.push(
+          '<button type="button" class="btn btn-default btn-block" tabindex="-1" data-order="',
+          orderNo,
+          '">',
+          orderNo,
+          '</button>'
+        );
+      });
+
+      this.$id('plannedOrders').find('.fa-spinner').replaceWith(html.join(''));
     },
 
     submitForm: function()

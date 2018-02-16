@@ -7,7 +7,12 @@
     <div class="col-md-6 orderDocuments-localOrderPicker-numpad">
       <% include _numpad.ejs %>
     </div>
-    <div id="<%- idPrefix %>-lastOrders" class="col-md-6 orderDocuments-localOrderPicker-lastOrders">
+    <div id="<%- idPrefix %>-plannedOrders" class="col-md-3 orderDocuments-localOrderPicker-plannedOrders">
+      <label class="control-label"><%- t('orderDocuments', 'localOrderPicker:plannedOrders') %></label>
+      <i class="fa fa-spinner fa-spin"></i>
+    </div>
+    <div id="<%- idPrefix %>-lastOrders" class="col-md-3 orderDocuments-localOrderPicker-lastOrders">
+      <label class="control-label"><%- t('orderDocuments', 'localOrderPicker:lastOrders') %></label>
       <i class="fa fa-spinner fa-spin"></i>
     </div>
   </div>
