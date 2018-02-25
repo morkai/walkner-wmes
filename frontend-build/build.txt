@@ -1422,6 +1422,7 @@ app/nls/planning.js
 app/nls/pl/planning.js
 i18n!app/nls/planning
 app/planning/routes.js
+app/sapLaborTimeFixer/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
@@ -1511,6 +1512,8 @@ app/core/templates/blankLayout.js
 app/core/layouts/BlankLayout.js
 app/orderDocuments/DocumentViewerState.js
 vendor/hammer.js
+vendor/js2form.js
+vendor/form2js.js
 app/mrpControllers/MrpController.js
 app/mrpControllers/MrpControllerCollection.js
 app/data/mrpControllers.js
@@ -1536,8 +1539,6 @@ app/prodShiftOrders/util/decorateProdShiftOrder.js
 app/prodShiftOrders/util/calcOrderEfficiency.js
 app/prodShiftOrders/ProdShiftOrder.js
 app/prodShiftOrders/ProdShiftOrderCollection.js
-vendor/js2form.js
-vendor/form2js.js
 app/orderDocuments/templates/localOrderPicker.js
 app/orderDocuments/views/LocalOrderPickerView.js
 app/orderDocuments/templates/settings.js
