@@ -1,0 +1,17 @@
+<li data-online class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown">
+    <%- t('core', 'NAVBAR:TOOLS') %>
+    <b class="caret"></b>
+  </a>
+  <ul class="dropdown-menu">
+    <li data-privilege="ORDERS:VIEW" data-module="orders"><a href="#invalidOrders"><%- t('core', 'NAVBAR:INVALID_ORDERS') %></a></li>
+    <li data-privilege="ORDERS:VIEW" data-module="orders" class="disabled"><a href="#sapLaborTimeFixer"><%- t('core', 'NAVBAR:SAP_LABOR_TIME_FIXER') %></a></li>
+    <li data-privilege="ORDERS:VIEW" data-module="orders">
+      <a href="http://pww.ket.lighting.philips.com/php/ipt-check/" target="_blank">
+        <%- t('core', 'NAVBAR:IPT_CHECK') %>
+        &nbsp;
+        <i class="fa fa-external-link"></i>
+      </a>
+    </li>
+  </ul>
+</li>
