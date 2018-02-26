@@ -70,6 +70,8 @@ module.exports = function setUpProductionRoutes(app, productionModule)
 
   express.get('/production/orderQueue/:shift', (req, res, next) =>
   {
+    return res.json([]);
+
     productionModule.getOrderQueue(req.params.shift, (err, orderQueue) =>
     {
       if (err)
