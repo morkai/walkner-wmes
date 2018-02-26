@@ -80,7 +80,8 @@ define([
           if (window.getSelection().toString() === '')
           {
             this.mrp.orders.trigger('preview', {
-              orderNo: orderNo
+              orderNo: orderNo,
+              source: 'orders'
             });
           }
         }
@@ -214,7 +215,7 @@ define([
             return;
           }
 
-          return view.serializePopover(this.dataset.id);
+          return view.serializePopover(this.dataset.id, true);
         },
         template: '<div class="popover planning-mrp-popover">'
           + '<div class="arrow"></div>'
@@ -222,9 +223,9 @@ define([
           + '</div>'
       });
 
-      if (view.$popover)
+      if (view.$preview)
       {
-        var previewedOrderNo = view.$popover.data('orderNo');
+        var previewedOrderNo = view.$preview.data('orderNo');
 
         view.hidePreview();
         view.showPreview(previewedOrderNo);
@@ -263,36 +264,38 @@ define([
       return id ? this.$('.planning-mrp-list-item[data-id="' + id + '"]') : this.$('.planning-mrp-list-item');
     },
 
-    serializePopover: function(id)
+    serializePopover: function(id, comment)
     {
-      var order = this.plan.orders.get(id);
+      var planOrder = this.plan.orders.get(id);
 
-      if (!order)
+      if (!planOrder)
       {
         return null;
       }
 
-      var orderData = this.plan.getActualOrderData(order.id);
-      var operation = order.get('operation');
+      var sapOrder = this.plan.sapOrders.get(planOrder.id);
+      var orderData = this.plan.getActualOrderData(planOrder.id);
+      var operation = planOrder.get('operation');
 
       return orderPopoverTemplate({
         order: {
-          _id: order.id,
-          date: order.get('date') === this.plan.id ? null : time.utc.format(order.get('date'), 'LL'),
-          nc12: order.get('nc12'),
-          name: order.get('name'),
-          kind: order.get('kind'),
-          incomplete: order.get('incomplete'),
+          _id: planOrder.id,
+          date: planOrder.get('date') === this.plan.id ? null : time.utc.format(planOrder.get('date'), 'LL'),
+          nc12: planOrder.get('nc12'),
+          name: planOrder.get('name'),
+          kind: planOrder.get('kind'),
+          incomplete: planOrder.get('incomplete'),
           completed: orderData.quantityDone >= orderData.quantityTodo,
           surplus: orderData.quantityDone > orderData.quantityTodo,
           quantityTodo: orderData.quantityTodo,
           quantityDone: orderData.quantityDone,
-          quantityPlan: order.get('quantityPlan'),
-          ignored: order.get('ignored'),
+          quantityPlan: planOrder.get('quantityPlan'),
+          ignored: planOrder.get('ignored'),
           statuses: orderData.statuses.map(renderOrderStatusLabel),
-          manHours: order.get('manHours'),
+          manHours: planOrder.get('manHours'),
           laborTime: operation && operation.laborTime ? operation.laborTime : 0,
-          lines: order.get('lines') || []
+          lines: planOrder.get('lines') || [],
+          comment: comment && sapOrder ? sapOrder.getCommentWithIcon() : ''
         }
       });
     },
@@ -306,7 +309,7 @@ define([
       }
     },
 
-    showPreview: function(order)
+    showPreview: function(order, showComment)
     {
       var view = this;
 
@@ -321,7 +324,7 @@ define([
         placement: 'top',
         html: true,
         hasContent: true,
-        content: view.serializePopover(order.id),
+        content: view.serializePopover(order.id, showComment !== false),
         template: '<div class="popover planning-mrp-popover planning-mrp-popover-preview">'
           + '<div class="arrow"></div>'
           + '<div class="popover-content"></div>'
@@ -667,7 +670,7 @@ define([
       }
       else
       {
-        this.showPreview(order);
+        this.showPreview(order, message.source !== 'lineOrders');
       }
     },
 

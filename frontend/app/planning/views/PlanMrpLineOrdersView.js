@@ -69,7 +69,8 @@ define([
         if (this.mrp.orders.get(orderNo))
         {
           this.mrp.orders.trigger('preview', {
-            orderNo: orderNo
+            orderNo: orderNo,
+            source: 'lineOrders'
           });
         }
         else
@@ -80,7 +81,8 @@ define([
           {
             externalMrp.orders.trigger('preview', {
               orderNo: orderNo,
-              scrollIntoView: true
+              scrollIntoView: true,
+              source: 'lineOrders'
             });
           }
         }
@@ -354,18 +356,19 @@ define([
     serializeOrderPopover: function(id)
     {
       var lineOrder = this.line.orders.get(id);
-      var order = this.plan.orders.get(lineOrder.get('orderNo'));
-      var orderData = this.plan.getActualOrderData(order.id);
+      var planOrder = this.plan.orders.get(lineOrder.get('orderNo'));
+      var sapOrder = this.plan.sapOrders.get(planOrder.id);
+      var orderData = this.plan.getActualOrderData(planOrder.id);
       var startAt = Date.parse(lineOrder.get('startAt'));
       var finishAt = Date.parse(lineOrder.get('finishAt'));
       var quantityDone = this.plan.isProdStateUsed()
-        ? this.plan.shiftOrders.getTotalQuantityDone(this.line.id, shiftUtil.getShiftNo(startAt), order.id)
+        ? this.plan.shiftOrders.getTotalQuantityDone(this.line.id, shiftUtil.getShiftNo(startAt), planOrder.id)
         : -1;
 
       return lineOrderPopoverTemplate({
         lineOrder: {
           _id: lineOrder.id,
-          orderNo: order.id,
+          orderNo: planOrder.id,
           quantityPlanned: lineOrder.get('quantity'),
           quantityRemaining: orderData.quantityTodo - orderData.quantityDone,
           quantityTotal: orderData.quantityTodo,
@@ -374,7 +377,8 @@ define([
           manHours: lineOrder.get('manHours') || 0,
           startAt: startAt,
           finishAt: finishAt,
-          duration: (finishAt - startAt) / 1000
+          duration: (finishAt - startAt) / 1000,
+          comment: sapOrder ? sapOrder.getCommentWithIcon() : ''
         }
       });
     },

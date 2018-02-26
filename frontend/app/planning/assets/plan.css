@@ -378,16 +378,19 @@
 .planning-mrp-popover .popover-content {
   padding: 5px 10px;
 }
-.planning-mrp-popover th {
-  padding-right: 5px;
-  vertical-align: middle;
-  height: 20px;
-  white-space: nowrap;
-}
+.planning-mrp-popover th,
 .planning-mrp-popover td {
-  padding-right: 5px;
+  padding: 2px 5px 1px 0;
   vertical-align: middle;
-  height: 20px;
+  border-top: 1px solid #eee;
+}
+.planning-mrp-popover tr:first-child th,
+.planning-mrp-popover tr:first-child td {
+  padding-top: 0;
+  border-top: 0;
+}
+.planning-mrp-popover th {
+  white-space: nowrap;
 }
 .planning-mrp-popover-value {
   display: block;

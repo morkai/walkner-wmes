@@ -59,4 +59,11 @@
   </tr>
   <% } %>
   </tbody>
+  <% if (order.comment) { %>
+  <tr>
+    <th style="vertical-align: top"><%- t('planning', 'orders:comment') %></th>
+    <td style="vertical-align: top; max-width: 200px;"><%- order.comment %></td>
+  </tr>
+  <% } %>
+  </tbody>
 </table>

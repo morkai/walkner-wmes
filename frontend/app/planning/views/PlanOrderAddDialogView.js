@@ -205,7 +205,8 @@ define([
       {
         planMrp.orders.trigger('preview', {
           orderNo: this.order._id,
-          scrollIntoView: true
+          scrollIntoView: true,
+          source: 'orderAddDialog'
         });
       }
     },
