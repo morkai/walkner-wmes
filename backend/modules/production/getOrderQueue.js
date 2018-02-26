@@ -12,6 +12,11 @@ module.exports = function getOrderQueue(app, productionModule, prodShiftId, done
   const Plan = mongoose.model('Plan');
   const Order = mongoose.model('Order');
 
+  if (!prodShiftId)
+  {
+    return done(null, []);
+  }
+
   step(
     function()
     {
@@ -44,7 +49,14 @@ module.exports = function getOrderQueue(app, productionModule, prodShiftId, done
         productionModule.getProdData('shift', prodShiftId, this.parallel());
       }
 
-      productionModule.getProdShiftOrders(prodShiftId, this.parallel());
+      if (prodShiftId)
+      {
+        productionModule.getProdShiftOrders(prodShiftId, this.parallel());
+      }
+      else
+      {
+        setImmediate(this.parallel(), null, []);
+      }
     },
     function(err, prodShift, prodShiftOrders)
     {

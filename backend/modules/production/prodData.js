@@ -175,7 +175,12 @@ module.exports = function setUpProdData(app, productionModule)
       conditions = {prodShift: conditions};
     }
 
-    ProdShiftOrder.find(conditions).sort({startedAt: 1}).exec(function(err, prodShiftOrders)
+    if (_.isEmpty(conditions))
+    {
+      return done(null, []);
+    }
+
+    ProdShiftOrder.find(conditions).sort({startedAt: 1}).limit(100).exec(function(err, prodShiftOrders)
     {
       if (err)
       {
@@ -197,7 +202,12 @@ module.exports = function setUpProdData(app, productionModule)
       conditions = {prodShift: conditions};
     }
 
-    ProdDowntime.find(conditions).sort({startedAt: 1}).exec(function(err, prodDowntimes)
+    if (_.isEmpty(conditions))
+    {
+      return done(null, []);
+    }
+
+    ProdDowntime.find(conditions).sort({startedAt: 1}).limit(100).exec(function(err, prodDowntimes)
     {
       if (err)
       {
