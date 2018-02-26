@@ -322,6 +322,11 @@ module.exports = function setUpOrderDocumentsConverter(app, module)
             this.meta.title = json.meta.Title;
           }
 
+          if (!this.meta.pageCount)
+          {
+            this.meta.pageCount = json.pages.length;
+          }
+
           this.meta.pages = json.pages;
         }
         catch (err)
