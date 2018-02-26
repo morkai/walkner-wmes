@@ -13,7 +13,7 @@ define([
 
     model: XData,
 
-    rqlQuery: 'sort(-createdAt)'
+    rqlQuery: 'exclude(data)&sort(-createdAt)&limit(15)'
 
   });
 });

@@ -83,6 +83,7 @@ exports.modules = [
   'mor',
   'planning',
   'html2pdf',
+  'sapLaborTimeFixer',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
@@ -235,7 +236,8 @@ exports.pubsub = {
     'paintShop.load.updated',
     'vis.**',
     'mor.**',
-    'planning.**'
+    'planning.**',
+    'sapLaborTimeFixer.**'
   ]
 };
 
@@ -577,4 +579,8 @@ exports.planning = {
 
 exports.html2pdf = {
   storagePath: `${DATA_PATH}/html2pdf/`
+};
+
+exports.sapLaborTimeFixer = {
+
 };

@@ -7,6 +7,7 @@ define([
   'app/broker',
   'app/socket',
   'app/pubsub',
+  'app/i18n',
   './util'
 ],
 function(
@@ -16,6 +17,7 @@ function(
   broker,
   socket,
   pubsub,
+  t,
   util
 ) {
   'use strict';
@@ -224,6 +226,27 @@ function(
     }
 
     return $(id + idSuffix);
+  };
+
+  View.prototype.t = function(domain, key, data)
+  {
+    if (typeof key === 'string' || data)
+    {
+      return t(domain, key, data);
+    }
+
+    var defaultDomain = this.model && this.model.nlsDomain
+      ? this.model.nlsDomain
+      : this.collection && this.collection.nlsDomain
+        ? this.collection.nlsDomain
+        : 'core';
+
+    if (typeof key === 'object')
+    {
+      return t(defaultDomain, domain, key);
+    }
+
+    return t(defaultDomain, domain);
   };
 
   return View;

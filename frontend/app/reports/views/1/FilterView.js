@@ -47,13 +47,16 @@ define([
         this.$id('to-time').val(dateRange.toMoment.format('HH:mm'));
         this.$id('mode-date').click();
         this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
+        this.checkDateIntervalValidity();
         this.$el.submit();
       },
       'click #-showDisplayOptions': function()
       {
         this.trigger('showDisplayOptions');
       },
-      'click #-ignoredOrgUnits': 'showIgnoredOrgUnitsDialog'
+      'click #-ignoredOrgUnits': 'showIgnoredOrgUnitsDialog',
+      'change input[name="interval"]': 'checkDateIntervalValidity',
+      'change input[type="date"]': 'checkDateIntervalValidity'
     },
 
     initialize: function()
@@ -108,6 +111,8 @@ define([
       {
         this.$id('from').select();
       }
+
+      this.checkDateIntervalValidity();
     },
 
     serializeFormData: function()
@@ -177,7 +182,7 @@ define([
 
     getSelectedInterval: function()
     {
-      return this.$id('intervals').find('.active').attr('data-interval');
+      return this.$('input[name="interval"]:checked').val();
     },
 
     getFromMomentForSelectedInterval: function()
@@ -213,6 +218,15 @@ define([
       });
 
       viewport.showDialog(dialogView, t('reports', 'filter:ignoredOrgUnits'));
+    },
+
+    checkDateIntervalValidity: function()
+    {
+      var mode = this.getSelectedMode();
+      var interval = this.getSelectedInterval();
+      var timeRange = fixTimeRange.fromView(this, {defaultTime: '06:00'});
+
+      console.log(mode, interval, timeRange);
     }
 
   });

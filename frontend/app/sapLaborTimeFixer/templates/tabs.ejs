@@ -1,0 +1,16 @@
+<div class="sapLaborTimeFixer-xData-tabs">
+  <div id="<%- idPrefix %>-workCenters" class="sapLaborTimeFixer-xData-tabs-workCenters">
+    <ul class="nav nav-tabs">
+      <% workCenters.forEach(function(workCenter) { %>
+      <li class="<%- workCenter.active %>"><a href="#" data-work-center="<%= workCenter._id %>"><%= workCenter.label %></a></li>
+      <% }) %>
+    </ul>
+  </div>
+  <div id="<%- idPrefix %>-deps" class="sapLaborTimeFixer-xData-tabs-deps <%- deps.length ? '' : 'hidden'%>">
+    <ul class="nav nav-pills">
+      <% deps.forEach(function(dep) { %>
+      <li class="<%- dep.active %>"><a href="#" data-deps="<%= dep._id %>"><%= dep.label %></a></li>
+      <% }) %>
+    </ul>
+  </div>
+</div>

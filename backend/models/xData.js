@@ -7,6 +7,7 @@ module.exports = function setupXDataModel(app, mongoose)
   const xDataSchema = new mongoose.Schema({
     _id: String,
     createdAt: Date,
+    creator: {},
     title: String,
     data: {}
   }, {

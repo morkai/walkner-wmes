@@ -525,6 +525,10 @@ app/reports/assets/report9.css
 ----------------
 app/reports/assets/report9.css
 
+app/sapLaborTimeFixer/assets/main.css
+----------------
+app/sapLaborTimeFixer/assets/main.css
+
 app/settings/assets/main.css
 ----------------
 app/settings/assets/main.css
@@ -731,6 +735,7 @@ assets/../app/pscs/assets/main.css
 assets/../app/d8Entries/assets/main.css
 assets/../app/mor/assets/main.css
 assets/../app/planning/assets/main.css
+assets/../app/sapLaborTimeFixer/assets/main.css
 assets/wmes-main.css
 
 assets/wmes-mrl.css
