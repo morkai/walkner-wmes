@@ -74,6 +74,13 @@
     "PROPERTY:bom.qty": "Quantity",
     "PROPERTY:bom.unit": "Unit",
     "PROPERTY:bom.unloadingPoint": "Unloading point",
+    "PROPERTY:whTime": "Drop zone time",
+    "PROPERTY:whDropZone": "Drop zone group",
+    "PROPERTY:whStatus": "WH status",
+
+    "whStatus:unknown": "Unknown",
+    "whStatus:todo": "Todo",
+    "whStatus:done": "Done",
 
     "OPERATIONS:NO_DATA": "Order does not have any operations.",
     "DOCUMENTS:NO_DATA": "Order does not have any linked documents.",

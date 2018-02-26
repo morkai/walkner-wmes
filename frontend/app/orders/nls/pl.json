@@ -73,6 +73,13 @@
   "PROPERTY:bom.qty": "Ilość",
   "PROPERTY:bom.unit": "Jednostka",
   "PROPERTY:bom.unloadingPoint": "Punkt rozładunku",
+  "PROPERTY:whTime": "Czas drop zone",
+  "PROPERTY:whDropZone": "Grupa drop zone",
+  "PROPERTY:whStatus": "Status magazynu",
+
+  "whStatus:unknown": "Nieokreślony",
+  "whStatus:todo": "Do zrobienia",
+  "whStatus:done": "Zrobione",
 
   "OPERATIONS:NO_DATA": "Zlecenie nie ma zdefiniowanych żadnych operacji.",
   "DOCUMENTS:NO_DATA": "Zlecenie nie ma dołączonych żadnych dokumentów.",

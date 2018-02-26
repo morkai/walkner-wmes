@@ -124,7 +124,6 @@ define([
         };
       });
       change.comment = _.isEmpty(change.comment) ? '' : _.escape(change.comment.trim());
-      change.rowSpan = change.values.length + (change.comment === '' ? 0 : 1);
 
       if (change.source === 'ps')
       {
@@ -134,6 +133,8 @@ define([
       {
         change.comment = '<i class="fa fa-truck"></i> ' + change.comment;
       }
+
+      change.rowSpan = change.values.length + (change.comment === '' ? 0 : 1);
 
       return change;
     },
@@ -207,6 +208,12 @@ define([
 
         case 'sapCreatedAt':
           return time.format(value, 'LLL');
+
+        case 'whTime':
+          return time.format(value, 'HH:mm');
+
+        case 'whStatus':
+          return t('orders', 'whStatus:' + value);
 
         case 'qtyMax':
           return value.value.toLocaleString();
