@@ -113,6 +113,8 @@ define([
 
     serializeChange: function(change)
     {
+      change = _.clone(change);
+
       change.timeText = time.format(change.time, 'L<br>LTS');
       change.userText = renderUserInfo({userInfo: change.user});
       change.values = Object.keys(change.oldValues || {}).map(function(property)
