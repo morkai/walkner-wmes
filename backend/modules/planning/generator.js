@@ -2104,7 +2104,7 @@ module.exports = function setUpGenerator(app, module)
 
     if (plannedOrderState.startTimes.length === 1 && plannedOrderState.quantityTodo > 0)
     {
-      getLinesForBigOrder(state, order.mrp, order.kind).forEach(availableLineState =>
+      getLinesForBigOrder(state, order).forEach(availableLineState =>
       {
         if (availableLineState !== lineState)
         {
@@ -2168,7 +2168,7 @@ module.exports = function setUpGenerator(app, module)
       return null;
     }
 
-    const lastAvailableLine = getLinesForBigOrder(state, order.mrp, order.kind).length === 1;
+    const lastAvailableLine = getLinesForBigOrder(state, order).length === 1;
     const pceTime = getPceTime(order, mrpLineSettings.workerCount, mrpSettings.schedulingRate);
     const activeTo = lineState.activeTo.valueOf();
     let startAt = lineState.activeFrom.valueOf();
@@ -2206,6 +2206,7 @@ module.exports = function setUpGenerator(app, module)
         + ` laborTime=${order.operation.laborTime || '?'}`
         + ` manHours=${order.manHours}`
         + ` pceTime=${pceTime / 1000}`
+        + ` maxPerLine=${maxQuantityPerLine}`
       );
       log(
         `                  activeFrom=${moment.utc(startAt).format('DD.MM HH:mm:ss')}`
@@ -2397,7 +2398,7 @@ module.exports = function setUpGenerator(app, module)
       return (trying ? trySmallOrder : handleSmallOrder)(state, lineState, orderState);
     }
 
-    const availableLines = getLinesForBigOrder(state, order.mrp, order.kind);
+    const availableLines = getLinesForBigOrder(state, order);
     const splitLineCount = maxSplitLineCount > 0 && maxSplitLineCount < availableLines.length
       ? maxSplitLineCount
       : availableLines.length;
@@ -2417,13 +2418,27 @@ module.exports = function setUpGenerator(app, module)
     return (trying ? trySmallOrder : handleSmallOrder)(state, lineState, orderState);
   }
 
-  function getLinesForBigOrder(state, orderMrp, orderKind)
+  function getLinesForBigOrder(state, order)
   {
-    return state.settings.mrp(orderMrp).lines
-      .filter(mrpLine => mrpLine.workerCount > 0
-        && mrpLine.orderPriority.includes(orderKind)
-        && !state.lineStates.get(mrpLine._id).completed
-      )
+    const mrpSettings = state.settings.mrp(order.mrp);
+
+    return state.settings.mrp(order.mrp).lines
+      .filter(mrpLineSettings =>
+      {
+        const lineState = state.lineStates.get(mrpLineSettings._id);
+
+        if (!mrpLineSettings.workerCount
+          || !mrpLineSettings.orderPriority.includes(order.kind)
+          || lineState.completed)
+        {
+          return false;
+        }
+
+        const availableTime = getRemainingAvailableTime(lineState);
+        const pceTime = getPceTime(order, mrpLineSettings.workerCount, mrpSettings.schedulingRate);
+
+        return availableTime >= pceTime;
+      })
       .map(line => state.lineStates.get(line._id));
   }
 
@@ -2672,6 +2687,8 @@ module.exports = function setUpGenerator(app, module)
       return setImmediate(done);
     }
 
+    log(incompletePlannedOrders);
+
     setImmediate(done);
   }
 
@@ -2881,6 +2898,7 @@ module.exports = function setUpGenerator(app, module)
         if (mrpLineSettings.orderPriority.includes(orderState.order.kind))
         {
           orderState.lines = [];
+          orderState.maxQuantityPerLine = 0;
 
           lineState.orderStateQueue.push(orderState);
         }
