@@ -62,7 +62,10 @@ module.exports = function(mongoose, options, done)
 
       companyIds.forEach(companyId =>
       {
-        totals.fteByCompany[companyId].avg = 0;
+        if (totals.fteByCompany[companyId])
+        {
+          totals.fteByCompany[companyId].avg = 0;
+        }
       });
 
       Object.keys(results.bySection).forEach(sectionId =>
