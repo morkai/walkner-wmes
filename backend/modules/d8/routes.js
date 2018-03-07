@@ -58,7 +58,10 @@ module.exports = function setUpD8Routes(app, module)
     model: D8Entry
   }));
   express.post('/d8/entries', canManage, prepareForAdd, express.crud.addRoute.bind(null, app, D8Entry));
-  express.get('/d8/entries/:id', canView, express.crud.readRoute.bind(null, app, D8Entry));
+  express.get('/d8/entries/:id', canView, express.crud.readRoute.bind(null, app, {
+    model: D8Entry,
+    idProperty: req => /^[0-9]+$/.test(req.params.id) ? 'rid' : '_id'
+  }));
   express.put('/d8/entries/:id', canView, editRoute);
   express.delete('/d8/entries/:id', canDelete, express.crud.deleteRoute.bind(null, app, D8Entry));
 

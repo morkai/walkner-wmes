@@ -851,6 +851,7 @@ define([
       fullNc12: null,
       partialNc12: null,
       fullNc15: null,
+      entryId: null,
       year: null,
       month: null,
       day: null,
@@ -920,9 +921,10 @@ define([
     }
 
     // Date
-    matches = searchPhrase.match(/[^0-9]([0-9]{1,4})[^0-9]([0-9]{1,2})(?:[^0-9]([0-9]{1,4}))?[^0-9]/);
+    matches = searchPhrase.match(/[^0-9]([0-9]{1,4})[^0-9]([0-9]{1,4})(?:[^0-9]([0-9]{1,4}))?[^0-9]/);
 
     var moment = null;
+    var interval = 'days';
 
     if (matches)
     {
@@ -930,8 +932,16 @@ define([
 
       if (matches[1].length === 4)
       {
+        interval = 'months';
         results.year = +matches[1];
         results.day = +matches[3] || 1;
+      }
+      else if (!matches[3] && matches[2].length === 4)
+      {
+        interval = 'months';
+        results.year = +matches[2];
+        results.month = +matches[1];
+        results.day = 1;
       }
       else if (matches[3] && matches[3].length === 4)
       {
@@ -949,7 +959,7 @@ define([
         results.year = parseInt(matches[3], 10) + 2000;
       }
 
-      searchPhrase = searchPhrase.replace(/[0-9]{1,4}[^0-9][0-9]{1,2}([^0-9][0-9]{1,4})?/g, '');
+      searchPhrase = searchPhrase.replace(/[0-9]{1,4}[^0-9][0-9]{1,4}([^0-9][0-9]{1,4})?/g, '');
 
       moment = time.getMoment(results.year + '-' + results.month + '-' + results.day, 'YYYY-MM-DD');
     }
@@ -967,7 +977,7 @@ define([
       results.from = moment.valueOf();
       results.fromShift = moment.hours(6).valueOf();
       results.shiftStart = results.fromShift + 8 * 3600 * 1000 * ((results.shift || 1) - 1);
-      results.toShift = moment.add(1, 'days').valueOf();
+      results.toShift = moment.add(1, interval).valueOf();
       results.shiftEnd = results.shift ? (results.shiftStart + 8 * 3600 * 1000) : results.toShift;
       results.to = moment.startOf('day').valueOf();
     }
@@ -986,6 +996,11 @@ define([
       if (/^1[0-9]*$/.test(matches[1]) && matches[1].length < 9)
       {
         results.partialOrderNo = matches[1];
+      }
+
+      if (/^[0-9]{1,6}$/.test(matches[1]))
+      {
+        results.entryId = matches[1];
       }
 
       if (matches[1].length < 12)

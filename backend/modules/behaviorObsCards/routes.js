@@ -57,7 +57,10 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
     express.crud.addRoute.bind(null, app, BehaviorObsCard)
   );
 
-  express.get('/behaviorObsCards/:id', canView, express.crud.readRoute.bind(null, app, BehaviorObsCard));
+  express.get('/behaviorObsCards/:id', canView, express.crud.readRoute.bind(null, app, {
+    model: BehaviorObsCard,
+    idProperty: req => /^[0-9]+$/.test(req.params.id) ? 'rid' : '_id'
+  }));
 
   express.put(
     '/behaviorObsCards/:id',

@@ -31,7 +31,10 @@ module.exports = function setUpMinutesForSafetyCardsRoutes(app, module)
   express.get(
     '/minutesForSafetyCards/:id',
     canView,
-    express.crud.readRoute.bind(null, app, MinutesForSafetyCard)
+    express.crud.readRoute.bind(null, app, {
+      model: MinutesForSafetyCard,
+      idProperty: req => /^[0-9]+$/.test(req.params.id) ? 'rid' : '_id'
+    })
   );
 
   express.put(
