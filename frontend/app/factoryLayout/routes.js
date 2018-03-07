@@ -12,12 +12,15 @@ define([
 ) {
   'use strict';
 
+  var canView = user.auth('PROD_DATA:VIEW');
+  var canManage = user.auth('FACTORY_LAYOUT:MANAGE');
+
   router.map('/factoryLayout', function()
   {
     router.replace('/factoryLayout/default');
   });
 
-  router.map('/factoryLayout/:id', function()
+  router.map('/factoryLayout/:id', canView, function()
   {
     viewport.loadPage(
       ['app/factoryLayout/productionState', 'app/factoryLayout/pages/FactoryLayoutPage'],
@@ -30,7 +33,7 @@ define([
     );
   });
 
-  router.map('/factoryLayout/:id;edit', function(req)
+  router.map('/factoryLayout/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
       ['app/factoryLayout/FactoryLayout', 'app/factoryLayout/pages/FactoryLayoutEditPage'],
@@ -41,7 +44,7 @@ define([
     );
   });
 
-  router.map('/factoryLayout;list', function(req)
+  router.map('/factoryLayout;list', canView, function(req)
   {
     viewport.loadPage(
       [
@@ -60,7 +63,7 @@ define([
     );
   });
 
-  router.map('/factoryLayout;settings', user.auth('FACTORY_LAYOUT:MANAGE'), function(req)
+  router.map('/factoryLayout;settings', canManage, function(req)
   {
     viewport.loadPage(
       [

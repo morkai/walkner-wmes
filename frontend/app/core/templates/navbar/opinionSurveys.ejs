@@ -7,7 +7,7 @@
     <li data-module="opinionSurveys"><a href="/opinion" target="_blank"><%- t('core', 'NAVBAR:OPINION:current') %></a>
     <li data-module="opinionSurveys"><a href="#opinionSurveyReport"><%- t('core', 'NAVBAR:OPINION:report') %></a>
     <li data-module="opinionSurveys"><a href="#opinionSurveyActions"><%- t('core', 'NAVBAR:OPINION:actions') %></a>
-    <li data-module="opinionSurveys"><a href="#opinionSurveyResponses"><%- t('core', 'NAVBAR:OPINION:responses') %></a>
+    <li data-privilege="OPINION_SURVEYS:MANAGE" data-module="opinionSurveys"><a href="#opinionSurveyResponses"><%- t('core', 'NAVBAR:OPINION:responses') %></a>
     <li class="divider">
     <li class="dropdown-header"><%- t('core', 'NAVBAR:OPINION:scanning') %>
     <li data-privilege="OPINION_SURVEYS:MANAGE" data-module="opinionSurveys"><a href="#opinionSurveyScanTemplates"><%- t('core', 'NAVBAR:OPINION:scanTemplates') %></a>

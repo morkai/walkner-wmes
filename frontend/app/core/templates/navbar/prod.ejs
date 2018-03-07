@@ -5,19 +5,19 @@
   </a>
   <ul class="dropdown-menu">
     <li class="dropdown-header"><%- t('core', 'NAVBAR:MONITORING') %>
-    <li data-privilege="LOCAL PROD_DATA:VIEW" data-module><a href="#factoryLayout/default"><%- t('core', 'NAVBAR:MONITORING:LAYOUT') %></a>
-    <li data-privilege="LOCAL PROD_DATA:VIEW" data-module><a href="#factoryLayout;list"><%- t('core', 'NAVBAR:MONITORING:LIST') %></a>
-    <li data-privilege="LOCAL ISA:VIEW" data-module><a href="#isa"><%- t('core', 'NAVBAR:ISA') %></a>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#factoryLayout/default"><%- t('core', 'NAVBAR:MONITORING:LAYOUT') %></a>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#factoryLayout;list"><%- t('core', 'NAVBAR:MONITORING:LIST') %></a>
+    <li data-privilege="PROD_DATA:VIEW ISA:VIEW" data-module><a href="#isa"><%- t('core', 'NAVBAR:ISA') %></a>
     <li class="divider">
     <li class="dropdown-header"><%- t('core', 'NAVBAR:PROD:DATA') %>
-    <li data-privilege="LOCAL PROD_DATA:VIEW PRESS_WORKSHEETS:VIEW" data-module class="navbar-with-button"><a href="#pressWorksheets"><%- t('core', 'NAVBAR:PRESS_WORKSHEETS') %></a><button class="btn btn-default" data-privilege="PRESS_WORKSHEETS:MANAGE" data-href="#pressWorksheets;add"><i class="fa fa-plus"></i></button>
-    <li data-privilege="LOCAL PROD_DATA:VIEW" data-module><a href="#prodLogEntries"><%- t('core', 'NAVBAR:PROD:LOG_ENTRIES') %></a>
-    <li data-privilege="LOCAL PROD_DATA:VIEW" data-module><a href="#prodShifts"><%- t('core', 'NAVBAR:PROD:SHIFTS') %></a>
-    <li data-privilege="LOCAL PROD_DATA:VIEW" data-module><a href="#prodShiftOrders"><%- t('core', 'NAVBAR:PROD:SHIFT_ORDERS') %></a>
-    <li data-privilege="LOCAL PROD_DATA:VIEW PROD_DOWNTIMES:VIEW" data-module><a href="#prodDowntimes"><%- t('core', 'NAVBAR:PROD:DOWNTIMES') %></a>
-    <li data-privilege="LOCAL PROD_DATA:VIEW PROD_DOWNTIMES:VIEW" data-module="prodDowntimes" data-client-module="prodDowntimeAlerts"><a href="#prodDowntimes;alerts"><%- t('core', 'NAVBAR:PROD:ALERTS') %></a>
-    <li data-privilege="LOCAL PROD_DATA:VIEW" data-module><a href="#prodChangeRequests"><%- t('core', 'NAVBAR:PROD:CHANGE_REQUESTS') %></a>
-    <li data-privilege="LOCAL PROD_DATA:VIEW" data-module><a href="#prodSerialNumbers"><%- t('core', 'NAVBAR:PROD:SERIAL_NUMBERS') %></a>
+    <li data-privilege="PROD_DATA:VIEW PRESS_WORKSHEETS:VIEW" data-module class="navbar-with-button"><a href="#pressWorksheets"><%- t('core', 'NAVBAR:PRESS_WORKSHEETS') %></a><button class="btn btn-default" data-privilege="PRESS_WORKSHEETS:MANAGE" data-href="#pressWorksheets;add"><i class="fa fa-plus"></i></button>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodLogEntries"><%- t('core', 'NAVBAR:PROD:LOG_ENTRIES') %></a>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodShifts"><%- t('core', 'NAVBAR:PROD:SHIFTS') %></a>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodShiftOrders"><%- t('core', 'NAVBAR:PROD:SHIFT_ORDERS') %></a>
+    <li data-privilege="PROD_DATA:VIEW PROD_DOWNTIMES:VIEW" data-module><a href="#prodDowntimes"><%- t('core', 'NAVBAR:PROD:DOWNTIMES') %></a>
+    <li data-privilege="PROD_DATA:VIEW PROD_DOWNTIMES:VIEW" data-module="prodDowntimes" data-client-module="prodDowntimeAlerts"><a href="#prodDowntimes;alerts"><%- t('core', 'NAVBAR:PROD:ALERTS') %></a>
+    <li data-privilege="PROD_DATA_CHANGES:*" data-module><a href="#prodChangeRequests"><%- t('core', 'NAVBAR:PROD:CHANGE_REQUESTS') %></a>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodSerialNumbers"><%- t('core', 'NAVBAR:PROD:SERIAL_NUMBERS') %></a>
     <li data-privilege="PROD_DATA:MANAGE PROD_DATA:MANAGE:SPIGOT_ONLY" data-module><a href="#production;settings"><%- t('core', 'NAVBAR:PROD:SETTINGS') %></a>
     <li class="divider">
     <li class="dropdown-header"><%- t('core', 'NAVBAR:DOCUMENTS') %>

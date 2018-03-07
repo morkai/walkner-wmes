@@ -16,7 +16,7 @@ define([
   'use strict';
 
   var nls = 'i18n!app/nls/pressWorksheets';
-  var canView = user.auth('LOCAL', 'PROD_DATA:VIEW', 'PRESS_WORKSHEETS:VIEW');
+  var canView = user.auth('PROD_DATA:VIEW', 'PRESS_WORKSHEETS:VIEW');
   var canManage = user.auth('PRESS_WORKSHEETS:MANAGE');
 
   router.map('/pressWorksheets', canView, function(req)
