@@ -374,6 +374,13 @@ module.exports = function setUpOmr(app, module)
       },
       function handleDecodeQrCodeResultStep(err, qrCodes)
       {
+        if (config.qrCode)
+        {
+          result.qrCode = config.qrCode;
+
+          return;
+        }
+
         if ((!Array.isArray(qrCodes) || !qrCodes.length) && currentSurveyId && currentPageNumbers[scanIndex])
         {
           result.qrCode = currentSurveyId + '/' + currentPageNumbers[scanIndex];
@@ -399,13 +406,6 @@ module.exports = function setUpOmr(app, module)
 
         if (!qrCodes.length)
         {
-          if (config.qrCode)
-          {
-            result.qrCode = config.qrCode;
-
-            return;
-          }
-
           result.errorCode = 'DECODE_QR_CODE_FAILURE';
           result.errorMessage = 'No QR codes detected.';
 
