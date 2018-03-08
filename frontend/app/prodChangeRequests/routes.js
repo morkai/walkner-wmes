@@ -13,7 +13,7 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('PROD_DATA_CHANGES:*');
+  var canView = user.auth('PROD_DATA:CHANGES:*');
 
   router.map('/prodChangeRequests', canView, function(req)
   {
