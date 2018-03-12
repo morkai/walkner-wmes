@@ -172,37 +172,49 @@ define([
 
     createReports: function(parentReport, childReport)
     {
+      var page = this;
       var requests = 0;
 
-      function onRequestStarted()
+      function onRequestStarted(i)
       {
         ++requests;
+
+        if (requests === 1)
+        {
+          page.trigger('loading:starting');
+        }
+
+        page.trigger('loading:started', i);
       }
 
-      function onRequestCompleted()
+      function onRequestCompleted(i)
       {
         --requests;
 
+        page.trigger('loading:completed', i);
+
         if (requests === 0)
         {
-          this.updateExtremes();
+          page.updateExtremes();
+          page.toggleDeactivatedOrgUnits(true);
+          page.trigger('loading:finishing');
         }
       }
 
-      var reports = this.query.createReports(parentReport, childReport, {
-        query: this.query,
-        settings: this.settings
+      var reports = page.query.createReports(parentReport, childReport, {
+        query: page.query,
+        settings: page.settings
       });
 
-      reports.forEach(function bindReportRequest(report)
+      reports.forEach(function bindReportRequest(report, i)
       {
-        this.stopListening(report, 'request');
-        this.stopListening(report, 'error');
-        this.stopListening(report, 'sync');
-        this.listenTo(report, 'request', onRequestStarted);
-        this.listenTo(report, 'error', onRequestCompleted);
-        this.listenTo(report, 'sync', onRequestCompleted);
-      }, this);
+        page.stopListening(report, 'request');
+        page.stopListening(report, 'error');
+        page.stopListening(report, 'sync');
+        page.listenTo(report, 'request', onRequestStarted.bind(page, i));
+        page.listenTo(report, 'error', onRequestCompleted.bind(page, i));
+        page.listenTo(report, 'sync', onRequestCompleted.bind(page, i));
+      });
 
       return reports;
     },
@@ -469,16 +481,14 @@ define([
 
     getCurrentReport: function(previous)
     {
-      var orgUnit = orgUnits.getByTypeAndId(
-        this.query[previous ? 'previous' : 'get']('orgUnitType'),
-        this.query[previous ? 'previous' : 'get']('orgUnitId')
-      );
+      var orgUnitId = this.query[previous ? 'previous' : 'get']('orgUnitId');
 
       for (var i = 0, l = this.reports.length; i < l; ++i)
       {
         var report = this.reports[i];
+        var reportOrgUnit = report.get('orgUnit');
 
-        if (report.get('orgUnit') === orgUnit)
+        if (reportOrgUnit && reportOrgUnit.id === orgUnitId)
         {
           return report;
         }
@@ -663,14 +673,17 @@ define([
 
       if (relationType === orgUnits.RELATION_TYPES.CHILD)
       {
+        this.trigger('operation:started', 'drillingDown');
         this.drillDown(refresh);
       }
       else if (relationType === orgUnits.RELATION_TYPES.PARENT)
       {
+        this.trigger('operation:started', 'drillingUp');
         this.drillUp(refresh);
       }
       else
       {
+        this.trigger('operation:started', 'replacing');
         this.replace();
       }
     },
@@ -818,12 +831,14 @@ define([
         $(elsToShow).css('opacity', '');
         page.$el.removeClass('is-changing');
         page.toggleDeactivatedOrgUnits();
+        page.trigger('operation:completed', operation);
       });
     },
 
-    toggleDeactivatedOrgUnits: function()
+    toggleDeactivatedOrgUnits: function(hideEmpty)
     {
-      var from = this.query.get('from');
+      var page = this;
+      var from = page.query.get('from');
 
       if (!from)
       {
@@ -837,14 +852,25 @@ define([
         from = firstShiftMoment.hours(6).startOf('hour').valueOf();
       }
 
-      for (var i = 1, l = this.reports.length; i < l; ++i)
+      page.reports.forEach(function(report, i)
       {
-        var report = this.reports[i];
+        if (i === 0)
+        {
+          return;
+        }
+
         var orgUnit = report.get('orgUnit');
         var deactivatedAt = Date.parse(orgUnit.get('deactivatedAt')) || Number.MAX_VALUE;
+        var deactivated = from >= deactivatedAt;
+        var empty = !!hideEmpty && !!report.isEmpty && report.isEmpty();
+        var fadeOut = deactivated || empty;
+        var $el = page.chartsViews[i].$el;
 
-        this.chartsViews[i].$el[from >= deactivatedAt ? 'fadeOut' : 'fadeIn']();
-      }
+        $el[fadeOut ? 'fadeOut' : 'fadeIn']('fast', function()
+        {
+          $el.css('display', fadeOut ? 'none' : '');
+        });
+      });
     }
 
   });

@@ -71,7 +71,6 @@ define([
     {
       var chart = this.chart;
       var chartData = this.serializeChartData();
-      var isFullscreen = this.isFullscreen;
 
       chart.xAxis[0].setCategories(chartData.categories, false);
 

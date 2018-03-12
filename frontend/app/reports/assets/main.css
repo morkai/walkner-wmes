@@ -2,11 +2,13 @@
 
 .page[data-id="report1"] > .ft,
 .page[data-id="report2"] > .ft,
+.page[data-id="clipReport"] > .ft,
 .page[data-id="report6"] > .ft {
   display: none;
 }
 .page[data-id="report1"] > .bd,
 .page[data-id="report2"] > .bd,
+.page[data-id="clipReport"] > .bd,
 .page[data-id="report6"] > .bd {
   margin-bottom: 0;
 }
@@ -82,7 +84,8 @@
 .is-moving.reports-drillingCharts-container {
   overflow-x: hidden;
 }
-.page[data-id="report2"] .reports-drillingCharts-container {
+.page[data-id="report2"] .reports-drillingCharts-container,
+.page[data-id="clipReport"] .reports-drillingCharts-container {
   min-height: 248px;
 }
 .reports-drillingCharts-container.is-fullscreen,

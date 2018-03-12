@@ -19,11 +19,11 @@ define([
 
     topicSuffix: 'reports.**',
 
-    getValue: function(suffix)
+    getValue: function(suffix, defaultValue)
     {
       var setting = this.get('reports.' + suffix);
 
-      return setting ? setting.getValue() : null;
+      return setting ? setting.getValue() : (defaultValue === undefined ? null : defaultValue);
     },
 
     getColor: function(metric, opacity)
@@ -126,6 +126,11 @@ define([
         return this.prepareLeanValue(id, newValue);
       }
 
+      if (/\.clip\./.test(id))
+      {
+        return this.prepareClipValue(id, newValue);
+      }
+
       return this.prepare100PercentValue(newValue);
     },
 
@@ -142,6 +147,31 @@ define([
       }
 
       return newValue;
+    },
+
+    prepareClipValue: function(id, newValue)
+    {
+      if (/(Property|FilterMode)/.test(id) && typeof newValue === 'string')
+      {
+        return newValue;
+      }
+
+      if (/dataHoursOffset/.test(id))
+      {
+        return parseInt(newValue, 10) || 0;
+      }
+
+      if (/ignoreDone/.test(id))
+      {
+        return !!newValue;
+      }
+
+      if (/(Mrps|Statuses)/.test(id))
+      {
+        return newValue.split(',').filter(function(v) { return v.length > 1; });
+      }
+
+      return undefined;
     },
 
     prepare100PercentValue: function(value)

@@ -1,0 +1,25 @@
+<div class="well">
+  <form class="filter-form">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-series"><%- t('reports', 'options:series') %></label>
+      <select id="<%- idPrefix %>-series" name="series[]" class="form-control is-expandable" size="1" multiple>
+        <option value="clipOrderCount"><%- t('reports', 'metrics:clip:orderCount') %></option>
+        <option value="clipProductionCount"><%- t('reports', 'metrics:clip:productionCount') %></option>
+        <option value="clipEndToEndCount"><%- t('reports', 'metrics:clip:endToEndCount') %></option>
+        <option value="clipProduction"><%- t('reports', 'metrics:clip:production') %></option>
+        <option value="clipEndToEnd"><%- t('reports', 'metrics:clip:endToEnd') %></option>
+      </select>
+    </div><div class="form-group">
+      <label for="<%- idPrefix %>-extremes"><%- t('reports', 'options:extremes') %></label>
+      <div id="<%- idPrefix %>-extremes" class="btn-group filter-btn-group" data-toggle="buttons">
+        <% ['none', 'siblings', 'parent'].forEach(function(extremes) { %>
+        <label class="btn btn-default">
+          <input type="radio" name="extremes" value="<%- extremes %>"> <%- t('reports', 'options:extremes:' + extremes) %>
+        </label>
+        <% }) %>
+      </div>
+    </div><div class="form-group filter-actions">
+      <hr><button id="<%- idPrefix %>-showFilter" type="button" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'options:filter') %></span></button>
+    </div>
+  </form>
+</div>

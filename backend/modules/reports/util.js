@@ -4,11 +4,7 @@
 
 const moment = require('moment');
 
-/**
- * @param {string} interval
- * @returns {function(number): number}
- */
-exports.createCreateNextGroupKey = function(interval)
+function createCreateNextGroupKey(moment, interval)
 {
   if (interval === 'none')
   {
@@ -24,9 +20,9 @@ exports.createCreateNextGroupKey = function(interval)
   }
 
   return groupKey => moment(groupKey).add(multiple, interval).valueOf();
-};
+}
 
-exports.createGroupKey = function(interval, date, useShifts)
+function createGroupKey(moment, interval, date, useShifts)
 {
   if (useShifts !== false)
   {
@@ -133,6 +129,31 @@ exports.createGroupKey = function(interval, date, useShifts)
   }
 
   return groupKey.valueOf();
+}
+
+/**
+ * @param {string} interval
+ * @returns {function(number): number}
+ */
+exports.createCreateNextGroupKey = function(interval)
+{
+  return createCreateNextGroupKey(moment, interval);
+};
+
+exports.createGroupKey = function(interval, date, useShifts)
+{
+  return createGroupKey(moment, interval, date, useShifts);
+};
+
+exports.utc = {
+  createCreateNextGroupKey: function(interval)
+  {
+    return createCreateNextGroupKey(moment.utc, interval);
+  },
+  createGroupKey: function(interval, date, useShifts)
+  {
+    return createGroupKey(moment.utc, interval, date, useShifts);
+  }
 };
 
 exports.pad0 = function(num)

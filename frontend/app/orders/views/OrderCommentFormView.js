@@ -50,6 +50,7 @@ define([
       var source = (painter && whman) || (!painter && !whman) ? 'other' : whman ? 'wh' : 'ps';
 
       this.$('input[name="source"][value="' + source + '"]').prop('checked', true);
+      this.$id('comment').val('');
     },
 
     request: function(formData)

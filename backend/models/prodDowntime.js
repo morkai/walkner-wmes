@@ -2,7 +2,6 @@
 
 'use strict';
 
-const _ = require('lodash');
 const autoIncrement = require('mongoose-auto-increment');
 const resolveProductName = require('../modules/util/resolveProductName');
 

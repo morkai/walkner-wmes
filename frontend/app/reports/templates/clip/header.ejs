@@ -1,0 +1,25 @@
+<div class="reports-drillingHeader">
+  <h1>
+    <% if (overallQuery) { %>
+    <a href="#reports/clip?<%- overallQuery %>"><%- t('reports', '2:pageTitle') %></a>
+    <% } else { %>
+    <%- t('reports', '2:pageTitle') %>
+    <% } %>
+  </h1>
+  <ul class="reports-drillingHeader-orgUnits">
+    <% orgUnitPath.forEach(function(orgUnit) { %>
+    <li class="reports-drillingHeader-orgUnit">
+      <span class="reports-drillingHeader-orgUnit-label"><%- orgUnit.label %></span>
+      <span class="reports-drillingHeader-orgUnit-value">
+        <% orgUnit.value.forEach(function(value, i) { %>
+          <% if (orgUnit.query[i]) { %>
+          <a href="#reports/clip?<%- orgUnit.query[i] %>"><%= value %></a><%- i === orgUnit.lastI ? '' : ';' %>
+          <% } else { %>
+          <%= value %><%- i === orgUnit.lastI ? '' : ';' %>
+          <% } %>
+        <% }) %>
+      </span>
+    </li>
+    <% }) %>
+  </ul>
+</div>

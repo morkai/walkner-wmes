@@ -31,6 +31,7 @@ module.exports = function startFixRoutes(app, express)
   express.get('/fix/fteMasterEntries/recount-totals', onlySuper, recountFteMasterTotals);
   express.get('/fix/fteLeaderEntries/recount-totals', onlySuper, recountFteLeaderTotals);
   express.get('/fix/pressWorksheets/org-units', onlySuper, setPressWorksheetOrgUnits);
+  express.get('/fix/clip/count-daily-mrp', onlySuper, countDailyMrp);
 
   function fixProdShiftOrderDurations(req, res, next)
   {
@@ -577,6 +578,41 @@ module.exports = function startFixRoutes(app, express)
           res.end();
         }
       });
+    });
+  }
+
+  function countDailyMrp(req, res, next)
+  {
+    const from = req.query.from ? moment.utc(req.query.from, 'YYYY-MM-DD') : moment.utc().startOf('day');
+    const to = req.query.to ? moment.utc(req.query.to, 'YYYY-MM-DD') : moment.utc().startOf('day').add(1, 'days');
+
+    if (!from.isValid() || !to.isValid())
+    {
+      return next(app.createError('INPUT', 400));
+    }
+
+    app.debug(`[fix] Counting daily MRP from [${from.format('YYYY-MM-DD')}] to [${to.format('YYYY-MM-DD')}]...`);
+
+    countNextDailyMrp(from, to.valueOf(), res, next);
+  }
+
+  function countNextDailyMrp(from, to, res, next)
+  {
+    if (from.valueOf() >= to)
+    {
+      app.debug('[fix] Finished counting daily MRP!');
+
+      return res.end();
+    }
+
+    app.mongoose.model('DailyMrpCount').recount(from.toDate(), err =>
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      setImmediate(countNextDailyMrp, from.add(1, 'days'), to, res, next);
     });
   }
 };

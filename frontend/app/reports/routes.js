@@ -59,6 +59,16 @@ define([
     loadReportPage(2, req, ['i18n!app/nls/orders']);
   });
 
+  router.map('/reports/clip', auth(2), function(req)
+  {
+    if (viewport.currentPage && viewport.currentPage.pageId === 'clipReport')
+    {
+      return viewport.currentPage.query.reset(req.query);
+    }
+
+    loadReportPage('Clip', req, ['i18n!app/nls/orders']);
+  });
+
   router.map('/reports/3', auth(3), function(req)
   {
     loadReportPage(3, req);

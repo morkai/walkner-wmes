@@ -7,6 +7,7 @@ define([
   'app/data/orgUnits',
   'app/data/aors',
   'app/data/downtimeReasons',
+  'app/data/orderStatuses',
   'app/settings/views/SettingsView',
   'app/reports/templates/settings'
 ], function(
@@ -16,6 +17,7 @@ define([
   orgUnits,
   aors,
   downtimeReasons,
+  orderStatuses,
   SettingsView,
   template
 ) {
@@ -44,6 +46,7 @@ define([
       'change [name$="DowntimeReasons"]': 'updateSettingOnInputChange',
       'change [name$="ProdTasks"]': 'updateSettingOnInputChange',
       'change [name$="ProdFlows"]': 'updateSettingOnInputChange',
+      'change [data-select2-setting]': 'updateSettingOnInputChange',
       'change [name="downtimesInAorsType"]': function(e)
       {
         var aors = e.target.value === 'own' ? 'own' : '';
@@ -189,14 +192,37 @@ define([
       });
 
       this.setUpLeanSettings();
+      this.setUpClipSettings();
 
       this.onSettingsChange(this.settings.get('reports.downtimesInAors.statuses'));
+      this.onSettingsChange(this.settings.get('reports.clip.ignoredMrps'));
       this.toggleDowntimesInAors(this.settings.getValue('downtimesInAors.aors'));
+    },
+
+    shouldAutoUpdateSettingField: function(setting)
+    {
+      if (setting.id === 'reports.clip.ignoredMrps')
+      {
+        return false;
+      }
+
+      return true;
     },
 
     updateSettingField: function(setting)
     {
       var $el = this.$('input[name="' + setting.id + '"]');
+
+      if (setting.id === 'reports.clip.ignoredMrps')
+      {
+        return $el.select2('data', setting.getValue().map(function(mrp)
+        {
+          return {
+            id: mrp,
+            text: mrp
+          };
+        }));
+      }
 
       if ($el.hasClass('select2-offscreen'))
       {
@@ -325,6 +351,65 @@ define([
 
             return item.divisionId + ': ' + prodFlowLabel;
           }
+        });
+      });
+    },
+
+    setUpClipSettings: function()
+    {
+      var view = this;
+
+      view.$id('clip-ignoredMrps').select2({
+        width: '100%',
+        allowClear: true,
+        placeholder: ' ',
+        multiple: true,
+        minimumResultsForSearch: -1,
+        dropdownCssClass: 'hidden',
+        data: [],
+        tokenizer: function(input, selection, selectCallback)
+        {
+          var result = input;
+          var options = {};
+
+          selection.forEach(function(item)
+          {
+            options[item.id] = true;
+          });
+
+          (input.match(/[A-Z0-9]{3,}[^A-Z0-9]/ig) || []).forEach(function(mrp)
+          {
+            result = result.replace(mrp, '');
+
+            mrp = mrp.toUpperCase().replace(/[^A-Z0-9]+/g, '');
+
+            if (!options[mrp])
+            {
+              selectCallback({id: mrp, text: mrp});
+              options[mrp] = true;
+            }
+          });
+
+          return input === result ? null : result.replace(/\s+/, ' ').trim();
+        }
+      });
+
+      var statuses = orderStatuses.map(idAndLabel);
+
+      [
+        'ignoredStatuses',
+        'requiredStatuses',
+        'productionStatuses',
+        'endToEndStatuses',
+        'orderFilterStatuses'
+      ].forEach(function(setting)
+      {
+        view.$id('clip-' + setting).select2({
+          width: '100%',
+          allowClear: true,
+          placeholder: ' ',
+          multiple: true,
+          data: statuses
         });
       });
     },

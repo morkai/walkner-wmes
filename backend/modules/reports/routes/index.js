@@ -60,6 +60,36 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
     );
   }
 
+  if (_.includes(reportsModule.config.reports, 'clip'))
+  {
+    const canViewReport2 = userModule.auth('REPORTS:VIEW', 'REPORTS:2:VIEW');
+
+    express.get(
+      '/reports/clip',
+      canViewReport2,
+      helpers.sendCachedReport.bind(null, 'clip'),
+      require('./clip').bind(null, app, reportsModule)
+    );
+
+    express.get(
+      '/reports/clip/orders',
+      canViewReport2,
+      require('./clipOrders').bind(null, app, reportsModule)
+    );
+
+    express.get(
+      '/reports/clip/orders;export.:format?',
+      canViewReport2,
+      require('./clipExport').bind(null, app, reportsModule)
+    );
+
+    express.get(
+      '/reports/clip/planners',
+      canViewReport2,
+      require('./clipPlanners').bind(null, app, reportsModule)
+    );
+  }
+
   if (_.includes(reportsModule.config.reports, '3'))
   {
     express.get(

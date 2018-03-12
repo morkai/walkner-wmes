@@ -59,6 +59,7 @@ exports.modules = [
   'prodDowntimeAlerts',
   'prodSerialNumbers',
   'reports',
+  'reports/dailyMrpCount',
   'xiconf',
   'warehouse',
   'licenses',
@@ -253,7 +254,7 @@ exports.mongoose = {
     'division', 'subdivision', 'mrpController', 'workCenter', 'prodFlow', 'prodLine',
     'company', 'vendor', 'prodFunction', 'aor',
     'orderStatus', 'delayReason', 'downtimeReason', 'lossReason', 'prodTask',
-    'order', 'mechOrder', 'emptyOrder', 'clipOrderCount', 'orderZlf1', 'invalidOrder',
+    'order', 'mechOrder', 'emptyOrder', 'orderZlf1', 'invalidOrder',
     'orderDocumentClient', 'orderDocumentStatus', 'orderDocumentName',
     'orderDocumentFile', 'orderDocumentFolder', 'orderDocumentUpload',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
@@ -281,7 +282,8 @@ exports.mongoose = {
     'behaviorObsCard', 'minutesForSafetyCard',
     'visNodePosition',
     'planSettings', 'planChange', 'plan',
-    'xData'
+    'xData',
+    'dailyMrpCount', 'clipOrderCache', 'clipOrderCount'
   ]
 };
 
@@ -368,7 +370,8 @@ exports.production = {
 exports['messenger/server'] = Object.assign({}, ports[exports.id], {
   responseTimeout: 5000,
   broadcastTopics: [
-    'fte.leader.**'
+    'fte.leader.**',
+    'shiftChanged'
   ]
 });
 
@@ -473,7 +476,7 @@ exports.reports = {
   nc12ToCagsJsonPath: `${__dirname}/../data/12nc_to_cags.json`,
   reports: [
     'fte',
-    '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    '1', '2', 'clip', '3', '4', '5', '6', '7', '8', '9',
     'qi/count', 'qi/okRatio', 'qi/nokRatio',
     'kaizen/count', 'kaizen/summary', 'kaizen/metrics',
     'suggestions/count', 'suggestions/summary', 'suggestions/engagement',
@@ -481,6 +484,10 @@ exports.reports = {
     'behaviorObsCards/count',
     'paintShop/load'
   ]
+};
+
+exports['reports/dailyMrpCount'] = {
+
 };
 
 exports.xiconf = {

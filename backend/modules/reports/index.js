@@ -14,6 +14,7 @@ exports.DEFAULT_CONFIG = {
   prodTasksId: 'prodTasks',
   downtimeReasonsId: 'downtimeReasons',
   prodFunctionsId: 'prodFunctions',
+  morId: 'mor',
   messengerClientId: null,
   messengerType: 'request',
   javaBatik: null,
@@ -83,6 +84,11 @@ exports.start = function startReportsModule(app, module)
   app.broker.subscribe('settings.updated.reports.lean.**', function()
   {
     helpers.clearCachedReports('8');
+  });
+
+  app.broker.subscribe('settings.updated.reports.clip.**', function()
+  {
+    helpers.clearCachedReports('clip');
   });
 
   app.broker.subscribe('warehouse.shiftMetrics.updated', function()

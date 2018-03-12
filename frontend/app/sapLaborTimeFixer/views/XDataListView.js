@@ -40,7 +40,7 @@ define([
 
         return actions;
       };
-    },
+    }
 
   });
 });

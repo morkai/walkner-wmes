@@ -1,0 +1,20 @@
+<tr class="<%- order.className %>" data-id="<%- order.no %>">
+  <td class="is-min">
+    <% if (canViewOrders) { %>
+    <a href="#orders/<%- order.no %>"><%- order.no %></a>
+    <% } else { %>
+    <%- order.no %>
+    <% } %>
+  </td>
+  <td class="is-min reports-2-orders-name"><%= order.name %></td>
+  <td class="is-min"><%- order.mrp %></td>
+  <td class="is-min is-number"><%- order.qty %></td>
+  <td class="is-min reports-2-confirm reports-2-confirm-<%- order.cnfClassName %>"><%- order.cnfStatus %></td>
+  <td class="is-min reports-2-confirm reports-2-confirm-<%- order.dlvClassName %>"><%- order.dlvStatus %></td>
+  <td class="is-min"><%- order.date %></td>
+  <td class="is-min"><%- order.cnfTime %></td>
+  <td class="is-min"><%- order.dlvTime %></td>
+  <td class="is-min"><%- order.planner %></td>
+  <td class="is-min reports-2-orders-delayReason"><%- order.delayReason %></td>
+  <td class="reports-2-orders-comment"><%- order.comment %></td>
+</tr>
