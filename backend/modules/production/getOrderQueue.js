@@ -24,7 +24,9 @@ module.exports = function getOrderQueue(app, productionModule, prodShiftId, done
 
       if (prodLine)
       {
-        prodShiftId = productionModule.getProdLineState(prodLine._id).getCurrentShiftId();
+        const prodLineState = productionModule.getProdLineState(prodLine._id);
+
+        prodShiftId = prodLineState ? prodLineState.getCurrentShiftId() : null;
       }
 
       productionModule.getProdData('shift', prodShiftId, this.next());
