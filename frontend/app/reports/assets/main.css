@@ -86,7 +86,7 @@
 }
 .page[data-id="report2"] .reports-drillingCharts-container,
 .page[data-id="clipReport"] .reports-drillingCharts-container {
-  min-height: 248px;
+  min-height: 496px;
 }
 .reports-drillingCharts-container.is-fullscreen,
 .reports-6-container.is-fullscreen {

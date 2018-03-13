@@ -3,10 +3,12 @@
 define([
   'app/core/View',
   './ClipChartView',
+  './DelayReasonsChartView',
   'app/reports/templates/clip/charts'
 ], function(
   View,
   ClipChartView,
+  DelayReasonsChartView,
   template
 ) {
   'use strict';
@@ -18,11 +20,21 @@ define([
     initialize: function()
     {
       this.setView(
-        '.reports-2-clip-container',
+        '#-clip',
         new ClipChartView({
           model: this.model,
           settings: this.settings,
           displayOptions: this.displayOptions,
+          skipRenderChart: this.options.skipRenderCharts
+        })
+      );
+      this.setView(
+        '#-delayReasons',
+        new DelayReasonsChartView({
+          model: this.model,
+          settings: this.settings,
+          displayOptions: this.displayOptions,
+          delayReasons: this.delayReasons,
           skipRenderChart: this.options.skipRenderCharts
         })
       );

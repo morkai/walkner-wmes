@@ -2,18 +2,18 @@
 
 define([
   'underscore',
-  '../data/aors',
-  '../data/downtimeReasons',
-  '../core/Model'
+  '../core/Model',
+  '../data/colorFactory'
 ], function(
   _,
-  aors,
-  downtimeReasons,
-  Model
+  Model,
+  colorFactory
 ) {
   'use strict';
 
   return Model.extend({
+
+    nlsDomain: 'reports',
 
     urlRoot: '/reports/clip',
 
@@ -33,11 +33,13 @@ define([
           endToEnd: [],
           endToEndCount: []
         },
+        delayReasons: [],
         maxClip: {
           orderCount: 0,
           production: 0,
           endToEnd: 0
-        }
+        },
+        maxDelayReasons: 0
       };
     },
 
@@ -49,6 +51,7 @@ define([
       }
 
       this.query = options.query;
+      this.delayReasons = options.delayReasons;
     },
 
     fetch: function(options)
@@ -74,10 +77,13 @@ define([
         parent: report.parent,
         children: report.children,
         clip: null,
-        maxClip: null
+        delayReasons: null,
+        maxClip: null,
+        maxDelayReasons: null
       };
 
       this.parseClip(report.groups, attributes);
+      this.parseDelayReasons(report.delayReasons, attributes);
 
       return attributes;
     },
@@ -119,6 +125,27 @@ define([
 
       attributes.clip = clip;
       attributes.maxClip = maxClip;
+    },
+
+    parseDelayReasons: function(delayReasons, attributes)
+    {
+      var report = this;
+
+      attributes.maxDelayReasons = 0;
+      attributes.delayReasons = [];
+
+      delayReasons.forEach(function(delayReason)
+      {
+        var reason = report.delayReasons && report.delayReasons.get(delayReason._id);
+
+        attributes.delayReasons.push({
+          name: reason ? reason.getLabel() : delayReason._id,
+          y: delayReason.count,
+          color: colorFactory.getColor('delayReasons', delayReason._id)
+        });
+
+        attributes.maxDelayReasons = Math.max(attributes.maxDelayReasons, delayReason.count);
+      });
     },
 
     isEmpty: function()

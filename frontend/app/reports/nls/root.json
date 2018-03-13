@@ -377,6 +377,10 @@
     "filenames:7:downtimeTimes": "WMES_AORDowntimes_Times",
     "filenames:7:downtimeCounts": "WMES_AORDowntimes_Counts",
 
+    "delayReasons:title": "Delay reasons",
+    "delayReasons:filename": "WMES_CLIP_DelayReasons",
+    "delayReasons:metric": "Count",
+
     "orders:empty": "No matching orders found.",
     "orders:qty": "Quantity",
     "orders:startDate": "Start date <br>(basic)",

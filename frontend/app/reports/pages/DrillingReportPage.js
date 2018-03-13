@@ -201,10 +201,7 @@ define([
         }
       }
 
-      var reports = page.query.createReports(parentReport, childReport, {
-        query: page.query,
-        settings: page.settings
-      });
+      var reports = page.query.createReports(parentReport, childReport, page.createReportOptions());
 
       reports.forEach(function bindReportRequest(report, i)
       {
@@ -245,6 +242,14 @@ define([
     createChartsView: function(report, skipRenderCharts) // eslint-disable-line no-unused-vars
     {
       throw new Error();
+    },
+
+    createReportOptions: function()
+    {
+      return {
+        query: this.query,
+        settings: this.settings
+      };
     },
 
     defineBindings: function()

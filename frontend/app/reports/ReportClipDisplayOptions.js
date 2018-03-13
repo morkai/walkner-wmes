@@ -35,7 +35,8 @@ define([
         series: {},
         extremes: 'none',
         maxClipOrderCount: null,
-        maxClipPercent: null
+        maxClipPercent: null,
+        maxDelayReasonsCount: null
       };
 
       SERIES.forEach(function(series)
@@ -65,7 +66,8 @@ define([
     {
       var extremes = {
         maxClipOrderCount: null,
-        maxClipPercent: null
+        maxClipPercent: null,
+        maxDelayReasonsCount: null
       };
 
       var mode = this.get('extremes');
@@ -81,6 +83,7 @@ define([
       {
         var report = reports[i];
         var maxClip = report.get('maxClip');
+        var maxDelayReasons = report.get('maxDelayReasons');
 
         extremes.maxClipOrderCount = Math.max(
           extremes.maxClipOrderCount,
@@ -93,6 +96,11 @@ define([
           extremes.maxClipPercent,
           visibleSeries.clipProduction ? maxClip.production : 0,
           visibleSeries.clipEndToEnd ? maxClip.endToEnd : 0
+        );
+
+        extremes.maxDelayReasonsCount = Math.max(
+          extremes.maxDelayReasonsCount,
+          maxDelayReasons
         );
       }
 

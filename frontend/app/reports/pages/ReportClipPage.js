@@ -75,7 +75,7 @@ define([
     {
       DrillingReportPage.prototype.initialize.call(this);
 
-      this.setView('.reports-2-orders-container', this.ordersView);
+      this.setView('#-orders', this.ordersView);
     },
 
     destroy: function()
@@ -292,7 +292,15 @@ define([
         model: report,
         settings: this.settings,
         displayOptions: this.displayOptions,
+        delayReasons: this.delayReasons,
         skipRenderCharts: !!skipRenderCharts
+      });
+    },
+
+    createReportOptions: function()
+    {
+      return _.assign(DrillingReportPage.prototype.createReportOptions.apply(this, arguments), {
+        delayReasons: delayReasonsStorage.acquire()
       });
     },
 

@@ -390,6 +390,10 @@
   "filenames:7:downtimeTimes": "WMES_PrzestojeObszary_Czasy",
   "filenames:7:downtimeCounts": "WMES_PrzestojeObszary_Ilosci",
 
+  "delayReasons:title": "Powody opóźnień",
+  "delayReasons:filename": "WMES_CLIP_PowodyOpoznien",
+  "delayReasons:metric": "Ilość",
+
   "orders:empty": "Nie znaleziono żadnych pasujących zleceń.",
   "orders:qty": "Ilość",
   "orders:startDate": "Data rozp. <br>(podst.)",

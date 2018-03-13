@@ -38,6 +38,7 @@ module.exports = function(mongoose, options, done)
     children: {},
     mrps: {},
     groups: {},
+    delayReasons: {},
     orders: []
   };
   const fromLocal = moment(options.fromTime);
@@ -250,6 +251,16 @@ module.exports = function(mongoose, options, done)
         order.description = undefined;
         order.changes = undefined;
 
+        if (order.delayReason)
+        {
+          if (!results.delayReasons[order.delayReason])
+          {
+            results.delayReasons[order.delayReason] = 0;
+          }
+
+          results.delayReasons[order.delayReason] += 1;
+        }
+
         const group = getGroup(order[options.findDateProperty]);
 
         group.orderCount += 1;
@@ -327,6 +338,11 @@ module.exports = function(mongoose, options, done)
       {
         results.children = results.mrps;
       }
+
+      results.delayReasons = Object
+        .keys(results.delayReasons)
+        .sort((a, b) => results.delayReasons[b] - results.delayReasons[a])
+        .map(k => ({_id: k, count: results.delayReasons[k]}));
 
       results.orderHash = options.hash;
       results.orderCount = results.orders.length;
