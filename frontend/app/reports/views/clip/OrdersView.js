@@ -171,17 +171,17 @@ define([
         return view.renderOrderChanges(order, $orderTr);
       }
 
-      var req = view.ajax({url: '/orders/' + orderNo + '?select(changes)'});
+      view.req = view.ajax({url: '/orders/' + orderNo + '?select(changes)'});
 
       view.$el.css('cursor', 'wait');
 
-      req.done(function(res)
+      view.req.done(function(res)
       {
         order.set('changes', res.changes);
         view.renderOrderChanges(order, $orderTr);
       });
 
-      req.always(function()
+      view.req.always(function()
       {
         view.$el.css('cursor', '');
       });
@@ -208,6 +208,12 @@ define([
 
     hideOrderChanges: function()
     {
+      if (this.req)
+      {
+        this.req.abort();
+        this.req = null;
+      }
+
       if (this.orderChangesView !== null)
       {
         var $changesTr = this.orderChangesView.$el.closest('.reports-2-changes');
