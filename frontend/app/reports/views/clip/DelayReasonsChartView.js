@@ -171,8 +171,7 @@ define([
           valueDecimals: 0
         },
         xAxis: {
-          type: 'category',
-          categories: chartData.map(c => c.name)
+          type: 'category'
         },
         yAxis: [
           {
@@ -183,7 +182,7 @@ define([
           {
             id: 'delayReasons',
             name: this.t('delayReasons:metric'),
-            data: chartData.map(c => c.y)
+            data: chartData
           }
         ]
       });
