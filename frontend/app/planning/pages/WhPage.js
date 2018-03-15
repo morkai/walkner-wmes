@@ -16,7 +16,7 @@ define([
   '../PlanSettings',
   '../PlanDisplayOptions',
   '../views/PlanFilterView',
-  '../views/WhMrpView',
+  '../views/WhListView',
   'app/planning/templates/whPage',
   'app/planning/templates/planLegend'
 ], function(
@@ -35,7 +35,7 @@ define([
   PlanSettings,
   PlanDisplayOptions,
   PlanFilterView,
-  WhMrpView,
+  WhListView,
   pageTemplate,
   legendTemplate
 ) {
@@ -147,18 +147,8 @@ define([
       'socket.disconnected': function() { reloadProdState = true; }
     },
 
-    events: {
-      'click #-mrpSelector': 'hideMrpSelector',
-      'click #-mrpSelector .btn': function(e)
-      {
-        this.scrollToMrp(e.currentTarget.dataset.mrp);
-      }
-    },
-
     initialize: function()
     {
-      this.keysPressed = ['', '', ''];
-
       this.defineModels();
       this.defineViews();
       this.defineBindings();
@@ -213,7 +203,14 @@ define([
         stats: false
       });
 
+      this.listView = new WhListView({
+        delayReasons: this.delayReasons,
+        prodLineStates: productionState.prodLineStates,
+        plan: this.plan
+      });
+
       this.setView('#-filter', this.filterView);
+      this.setView('#-list', this.listView);
     },
 
     defineBindings: function()
@@ -225,23 +222,16 @@ define([
       page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
 
       page.listenTo(plan.displayOptions, 'change:mrps', page.onMrpsFilterChanged);
-      page.listenTo(plan.displayOptions, 'change:wrapLists', page.onWrapListsChanged);
-      page.listenTo(plan.displayOptions, 'change:useDarkerTheme', page.onDarkerThemeChanged);
-      page.listenTo(plan.displayOptions, 'change:useLatestOrderData', page.updateUrl);
 
       page.listenTo(plan.settings, 'changed', page.onSettingsChanged);
       page.listenTo(plan.settings, 'errored', page.reload);
 
-      page.listenTo(plan.mrps, 'reset', _.after(2, _.debounce(page.renderMrps.bind(page), 1)));
+      page.listenTo(plan.mrps, 'reset', _.after(2, _.debounce(page.listView.render.bind(page.listView), 1)));
 
       page.listenTo(plan.sapOrders, 'sync', page.onSapOrdersSynced);
 
       $(document)
         .on('click.' + page.idPrefix, '.paintShop-breadcrumb', this.onBreadcrumbsClick.bind(this));
-
-      $(window)
-        .on('keydown.' + page.idPrefix, page.onWindowKeyDown.bind(page))
-        .on('keyup.' + page.idPrefix, page.onWindowKeyUp.bind(page));
     },
 
     load: function(when)
@@ -264,8 +254,6 @@ define([
     afterRender: function()
     {
       productionState.load(false);
-
-      this.renderMrps();
     },
 
     reload: function()
@@ -302,41 +290,11 @@ define([
 
     updateUrl: function()
     {
-      var plan = this.plan;
-
       this.broker.publish('router.navigate', {
-        url: '/planning/wh/' + plan.id + '?mrps=' + plan.displayOptions.get('mrps'),
+        url: '/planning/wh/' + this.plan.id + '?mrps=' + this.plan.displayOptions.get('mrps'),
         replace: true,
         trigger: false
       });
-    },
-
-    renderMrps: function()
-    {
-      var page = this;
-      var loading = page.plan.isAnythingLoading();
-
-      page.removeView('#-mrps');
-
-      page.plan.mrps.forEach(function(mrp)
-      {
-        var mrpView = new WhMrpView({
-          delayReasons: page.delayReasons,
-          prodLineStates: productionState.prodLineStates,
-          plan: page.plan,
-          mrp: mrp
-        });
-
-        page.insertView('#-mrps', mrpView);
-
-        if (!loading)
-        {
-          mrpView.render();
-        }
-      });
-
-      this.$id('empty').toggleClass('hidden', page.plan.mrps.length > 0);
-      this.$id('mrps').toggleClass('hidden', page.plan.mrps.length === 0);
     },
 
     reloadOrders: function()
@@ -473,72 +431,6 @@ define([
       });
     },
 
-    showMrpSelector: function()
-    {
-      if (this.plan.mrps.length === 1)
-      {
-        return;
-      }
-
-      var grouped = {};
-
-      this.plan.mrps.forEach(function(mrp)
-      {
-        var prefix = mrp.id.substring(0, 2);
-
-        if (!grouped[prefix])
-        {
-          grouped[prefix] = [];
-        }
-
-        grouped[prefix].push(mrp.id);
-      });
-
-      var html = '';
-      var i = 0;
-
-      Object.keys(grouped).sort().forEach(function(prefix)
-      {
-        html += '<div class="planning-mrpSelector-row">';
-
-        grouped[prefix].sort().forEach(function(mrp)
-        {
-          ++i;
-
-          var key = i === 10 ? 0 : i < 10 ? i : -1;
-
-          html += '<button type="button" class="btn btn-default btn-lg" '
-            + 'data-mrp="' + mrp + '" data-key="' + key + '">'
-            + mrp
-            + (key >= 0 ? ('<kbd>' + key + '</kbd>') : '')
-            + '</button>';
-        });
-
-        html += '</div>';
-      });
-
-      this.$('.planning-mrpSelector-mrps').html(html);
-      this.$id('mrpSelector').removeClass('hidden');
-    },
-
-    hideMrpSelector: function()
-    {
-      this.$id('mrpSelector').addClass('hidden');
-    },
-
-    scrollToMrp: function(mrp)
-    {
-      var $mrp = this.$('.planning-mrp[data-id="' + mrp + '"]');
-      var y = $mrp.prop('offsetTop');
-
-      if (!$mrp.prev().length)
-      {
-        y -= 10;
-      }
-
-      $('html, body').animate({scrollTop: y}, 'fast', 'swing');
-    },
-
     onDateFilterChanged: function()
     {
       if (this.layout)
@@ -589,61 +481,6 @@ define([
       }
 
       this.timers.reloadOrders = setTimeout(this.reloadOrders.bind(this), 10 * 60 * 1000);
-    },
-
-    onWindowKeyDown: function(e)
-    {
-      if (e.keyCode === 32
-        && e.target.tagName !== 'INPUT'
-        && e.target.tagName !== 'TEXTAREA'
-        && e.target.tagName !== 'BUTTON'
-        && e.target.tagName !== 'A')
-      {
-        return false;
-      }
-    },
-
-    onWindowKeyUp: function(e)
-    {
-      if (e.keyCode === 27)
-      {
-        this.broker.publish('planning.escapePressed');
-        this.hideMrpSelector();
-      }
-      else if (e.target.tagName !== 'INPUT'
-        && e.target.tagName !== 'TEXTAREA'
-        && e.target.tagName !== 'BUTTON'
-        && e.target.tagName !== 'A')
-      {
-        if (e.keyCode >= 48 && e.keyCode <= 90)
-        {
-          this.keysPressed.shift();
-          this.keysPressed.push(e.originalEvent.key);
-
-          var mrpId = this.keysPressed.join('').toUpperCase();
-
-          if (this.plan.mrps.get(mrpId))
-          {
-            this.scrollToMrp(mrpId);
-          }
-        }
-
-        if (e.keyCode === 32)
-        {
-          if (this.$id('mrpSelector').hasClass('hidden'))
-          {
-            this.showMrpSelector();
-          }
-          else
-          {
-            this.hideMrpSelector();
-          }
-        }
-        else if (e.keyCode >= 48 && e.keyCode <= 57 && !this.$id('mrpSelector').hasClass('hidden'))
-        {
-          this.$('.planning-mrpSelector-row > .btn[data-key="' + (e.keyCode - 48) + '"]').click();
-        }
-      }
     }
 
   });

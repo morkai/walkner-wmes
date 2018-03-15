@@ -1,12 +1,15 @@
-.planning-wh-mrp .planning-mrp-bd {
+.planning-wh-list .planning-mrp-bd {
   margin-top: 10px;
 }
-.planning-wh-mrp .planning-mrp-lineOrders-list {
+.planning-wh-list .planning-mrp-lineOrders-list {
   overflow-y: hidden;
 }
 .planning-mrp-lineOrders-table .success {
   background: #dff0d8;
 }
-.planning-wh-mrp .planning-mrp-lineOrders-table > tbody > tr > td {
+.planning-wh-list .planning-mrp-lineOrders-table > tbody > tr > td {
   border-color: #ccc;
+}
+.planning-wh-list {
+  border: 1px solid #ccc;
 }
