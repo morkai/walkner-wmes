@@ -1419,8 +1419,8 @@ app/planning/views/PlanSettingsView.js
 app/planning/pages/PlanSettingsPage.js
 app/planning/templates/change.js
 app/planning/pages/PlanChangesPage.js
-app/planning/templates/whMrp.js
-app/planning/views/WhMrpView.js
+app/planning/templates/whList.js
+app/planning/views/WhListView.js
 app/planning/templates/whPage.js
 app/planning/pages/WhPage.js
 app/nls/planning.js
