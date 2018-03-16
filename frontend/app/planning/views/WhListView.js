@@ -377,6 +377,7 @@ define([
         var columns = [
           'no',
           'shift',
+          'mrp',
           'orderNo',
           'nc12',
           'name',
@@ -385,7 +386,7 @@ define([
           'startTime',
           'finishTime',
           'dropZone',
-          'lines',
+          'line',
           'comment'
         ];
         var text = [columns.map(function(p) { return t('planning', 'lineOrders:list:' + p); }).join('\t')];
@@ -395,6 +396,7 @@ define([
           var row = [
             order.no,
             order.shift,
+            order.mrp,
             order.orderNo,
             order.nc12,
             order.name,
@@ -403,7 +405,7 @@ define([
             order.startTime,
             order.finishTime,
             order.dropZone,
-            order.lines,
+            order.line,
             '"' + order.comments
               .map(function(comment) { return comment.user.label + ': ' + comment.text.replace(/"/g, "'"); })
               .join('\r\n--\r\n') + '"'
