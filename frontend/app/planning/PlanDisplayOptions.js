@@ -11,8 +11,6 @@ define([
 ) {
   'use strict';
 
-  var STORAGE_KEY = 'PLANNING:DISPLAY_OPTIONS';
-
   return Model.extend({
 
     defaults: function()
@@ -21,6 +19,7 @@ define([
         minDate: '2017-01-01',
         maxDate: time.utc.getMoment().startOf('day').add(1, 'days').format('YYYY-MM-DD'),
         mrps: [],
+        exclude: false,
         printOrderTimes: false,
         useLatestOrderData: true,
         useDarkerTheme: false,
@@ -29,19 +28,21 @@ define([
       };
     },
 
-    initialize: function()
+    initialize: function(attrs, options)
     {
+      this.storageKey = options && options.storageKey || 'PLANNING:DISPLAY_OPTIONS';
+
       this.on('change', this.saveToLocalStorage);
     },
 
     saveToLocalStorage: function()
     {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.attributes));
+      localStorage.setItem(this.storageKey, JSON.stringify(this.attributes));
     },
 
     readFromLocalStorage: function()
     {
-      this.set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'));
+      this.set(JSON.parse(localStorage.getItem(this.storageKey) || '{}'));
     },
 
     isOrderTimePrinted: function()
@@ -96,15 +97,27 @@ define([
 
   }, {
 
-    fromLocalStorage: function(attrs)
+    fromLocalStorage: function(attrs, options)
     {
-      var displayOptions = new this();
+      var displayOptions = new this(null, options);
 
       displayOptions.readFromLocalStorage();
+
+      if (attrs.exclude
+        && _.isEmpty(displayOptions.get('mrps'))
+        && !displayOptions.get('exclude'))
+      {
+        attrs.mrps = 'KS0,KS00,KS1,KS2,KS3,KS4,KS5,KS6,KS7,KS9,KSH,KSA,KSB,KSC,KSD'.split(',');
+      }
 
       if (Array.isArray(attrs.mrps))
       {
         displayOptions.set('mrps', attrs.mrps);
+      }
+
+      if (typeof attrs.exclude === 'boolean')
+      {
+        displayOptions.set('exclude', attrs.exclude);
       }
 
       return displayOptions;

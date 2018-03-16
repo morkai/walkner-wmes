@@ -23,7 +23,8 @@
   "PAGE_ACTION:settings": "Ustawienia",
 
   "filter:date": "Data planu",
-  "filter:mrps": "Kontroler MRP",
+  "filter:mrps": "Wybrane MRP",
+  "filter:mrps:exclude": "Ignorowane MRP",
   "filter:mrps:placeholder": "Wszystkie",
   "filter:wrapLists": "Przewijanie list",
   "filter:lineOrdersList": "Lista <u>z</u>leceń",

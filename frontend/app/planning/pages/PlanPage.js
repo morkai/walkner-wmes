@@ -258,7 +258,8 @@ define([
 
       var plan = page.plan = new Plan({_id: page.options.date}, {
         displayOptions: PlanDisplayOptions.fromLocalStorage({
-          mrps: page.options.mrps
+          mrps: page.options.mrps,
+          exclude: false
         }),
         settings: PlanSettings.fromDate(page.options.date),
         minMaxDates: true,
@@ -296,7 +297,7 @@ define([
       page.listenTo(plan, 'sync', page.onPlanSynced);
       page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
 
-      page.listenTo(plan.displayOptions, 'change:mrps', page.onMrpsFilterChanged);
+      page.listenTo(plan.displayOptions, 'change:mrps change:exclude', page.onMrpsFilterChanged);
       page.listenTo(plan.displayOptions, 'change:wrapLists', page.onWrapListsChanged);
       page.listenTo(plan.displayOptions, 'change:useDarkerTheme', page.onDarkerThemeChanged);
       page.listenTo(plan.displayOptions, 'change:useLatestOrderData', page.updateUrl);
@@ -391,7 +392,8 @@ define([
       this.broker.publish('router.navigate', {
         url: '/planning/plans/' + plan.id
           + '?mrps=' + plan.displayOptions.get('mrps')
-          + '&sapOrders=' + (plan.displayOptions.isLatestOrderDataUsed() ? '1' : '0'),
+          + '&exclude=' + (plan.displayOptions.get('exclude') ? 1 : 0)
+          + '&sapOrders=' + (plan.displayOptions.isLatestOrderDataUsed() ? 1 : 0),
         replace: true,
         trigger: false
       });

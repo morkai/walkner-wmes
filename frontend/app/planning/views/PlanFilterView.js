@@ -81,7 +81,7 @@ define([
     afterRender: function()
     {
       setUpMrpSelect2(this.$id('mrps'), {
-        width: '350px',
+        width: '600px',
         placeholder: t('planning', 'filter:mrps:placeholder'),
         sortable: true,
         own: true,

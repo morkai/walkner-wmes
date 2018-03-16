@@ -15,7 +15,7 @@ define([
   '../Plan',
   '../PlanSettings',
   '../PlanDisplayOptions',
-  '../views/PlanFilterView',
+  '../views/WhFilterView',
   '../views/WhListView',
   'app/planning/templates/whPage',
   'app/planning/templates/planLegend'
@@ -34,7 +34,7 @@ define([
   Plan,
   PlanSettings,
   PlanDisplayOptions,
-  PlanFilterView,
+  WhFilterView,
   WhListView,
   pageTemplate,
   legendTemplate
@@ -173,7 +173,10 @@ define([
 
       var plan = page.plan = new Plan({_id: page.options.date}, {
         displayOptions: PlanDisplayOptions.fromLocalStorage({
-          mrps: page.options.mrps
+          mrps: page.options.mrps,
+          exclude: true
+        }, {
+          storageKey: 'PLANNING:DISPLAY_OPTIONS:WH'
         }),
         settings: PlanSettings.fromDate(page.options.date),
         minMaxDates: true,
@@ -197,10 +200,8 @@ define([
 
     defineViews: function()
     {
-      this.filterView = new PlanFilterView({
-        plan: this.plan,
-        toggles: false,
-        stats: false
+      this.filterView = new WhFilterView({
+        plan: this.plan
       });
 
       this.listView = new WhListView({
@@ -290,8 +291,11 @@ define([
 
     updateUrl: function()
     {
+      var plan = this.plan;
+
       this.broker.publish('router.navigate', {
-        url: '/planning/wh/' + this.plan.id + '?mrps=' + this.plan.displayOptions.get('mrps'),
+        url: '/planning/wh/' + plan.id
+          + '?mrps=' + plan.displayOptions.get('mrps'),
         replace: true,
         trigger: false
       });

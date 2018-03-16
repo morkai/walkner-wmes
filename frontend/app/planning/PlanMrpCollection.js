@@ -32,23 +32,34 @@ define([
     {
       var plan = this.plan;
       var mrpIds = plan.displayOptions.get('mrps');
-
-      if (!mrpIds.length)
-      {
-        mrpIds = plan.settings.getDefinedMrpIds();
-      }
+      var exclude = plan.displayOptions.get('exclude');
 
       var ordersByMrp = plan.orders.getGroupedByMrp();
       var linesByMrp = plan.lines.getGroupedByMrp();
 
-      return mrpIds.map(function(mrpId)
-      {
-        return new PlanMrp({
-          _id: mrpId,
-          orders: ordersByMrp[mrpId] || [],
-          lines: linesByMrp[mrpId] || []
+      return plan.settings.getDefinedMrpIds()
+        .filter(function(mrpId)
+        {
+          if (mrpIds.length === 0)
+          {
+            return true;
+          }
+
+          if (exclude)
+          {
+            return mrpIds.indexOf(mrpId) === -1;
+          }
+
+          return mrpIds.indexOf(mrpId) !== -1;
+        })
+        .map(function(mrpId)
+        {
+          return new PlanMrp({
+            _id: mrpId,
+            orders: ordersByMrp[mrpId] || [],
+            lines: linesByMrp[mrpId] || []
+          });
         });
-      });
     }
 
   });
