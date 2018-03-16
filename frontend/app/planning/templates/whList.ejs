@@ -18,9 +18,7 @@
         <td class="is-min planning-mrp-lineOrders-status" data-status="<%- order.status %>"><%- order.statuses %></td>
         <td class="is-min"><%= order.nc12 %></td>
         <td class="is-min"><%= order.name %></td>
-        <td class="is-min text-right">
-          <%- order.qtyPlan.toLocaleString() %>
-        </td>
+        <td class="is-min text-right"><%- order.qtyPlan.toLocaleString() %>/<%- order.qtyTodo.toLocaleString() %></td>
         <td class="is-min text-right"><%- order.startTime %></td>
         <td class="is-min text-right"><%- order.finishTime %></td>
         <td class="is-min planning-mrp-lineOrders-dropZone"><%- order.dropZone %></td>
