@@ -56,7 +56,7 @@ define([
 
     isLatestOrderDataUsed: function()
     {
-      return this.attributes.useLatestOrderData;
+      return true || this.attributes.useLatestOrderData;
     },
 
     toggleLatestOrderDataUse: function()

@@ -34,14 +34,6 @@ define([
       {
         this.plan.displayOptions.toggleLineOrdersList();
       },
-      'click #-wrapLists': function()
-      {
-        this.plan.displayOptions.toggleListWrapping();
-      },
-      'click #-useLatestOrderData': function()
-      {
-        this.plan.displayOptions.toggleLatestOrderDataUse();
-      },
       'click #-useDarkerTheme': function()
       {
         this.plan.displayOptions.toggleDarkerThemeUse();
@@ -63,7 +55,7 @@ define([
       this.listenTo(displayOptions, 'change:minDate change:maxDate', this.onMinMaxDateChanged);
       this.listenTo(
         displayOptions,
-        'change:lineOrdersList change:wrapLists change:useLatestOrderData change:useDarkerTheme',
+        'change:lineOrdersList change:useDarkerTheme',
         this.updateToggles
       );
     },
@@ -80,8 +72,6 @@ define([
         minDate: displayOptions.get('minDate'),
         maxDate: displayOptions.get('maxDate'),
         lineOrdersList: displayOptions.isLineOrdersListEnabled(),
-        wrapLists: displayOptions.isListWrappingEnabled(),
-        useLatestOrderData: displayOptions.isLatestOrderDataUsed(),
         useDarkerTheme: displayOptions.isDarkerThemeUsed(),
         showToggles: this.options.toggles !== false,
         showStats: this.options.stats !== false
@@ -182,7 +172,6 @@ define([
       var displayOptions = this.plan.displayOptions;
 
       this.$id('lineOrdersList').toggleClass('active', displayOptions.isLineOrdersListEnabled());
-      this.$id('useLatestOrderData').toggleClass('active', displayOptions.isLatestOrderDataUsed());
       this.$id('useDarkerTheme').toggleClass('active', displayOptions.isDarkerThemeUsed());
     },
 
@@ -225,8 +214,9 @@ define([
 
     onMinMaxDateChanged: function()
     {
-      this.$id('date').prop('min', this.plan.displayOptions.get('minDate'));
-      this.$id('date').prop('max', this.plan.displayOptions.get('maxDate'));
+      this.$id('date')
+        .prop('min', this.plan.displayOptions.get('minDate'))
+        .prop('max', this.plan.displayOptions.get('maxDate'));
     }
 
   });
