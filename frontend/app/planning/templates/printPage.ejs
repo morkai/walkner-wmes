@@ -254,6 +254,7 @@
     Plan dnia
   </header>
   <section class="bd">
+    <% if (page.orders.length) { %>
     <table>
       <thead>
         <th>Lp.</th>
@@ -301,6 +302,7 @@
       <% }) %>
       </tbody>
     </table>
+    <% } %>
     <% if (page.hourlyPlan) { %>
     <h2>Plan godzinowy</h2>
     <table class="hourlyPlan <%- done ? 'with-quantityDone' : '' %>">

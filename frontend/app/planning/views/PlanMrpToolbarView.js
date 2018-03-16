@@ -413,37 +413,57 @@ define([
         var maxOrdersForHourlyPlan = 35;
         var orderCount = bigPage.orders.length;
 
-        if (orderCount <= ordersPerPage)
+        if (orderCount <= maxOrdersForHourlyPlan)
         {
-          if (orderCount > maxOrdersForHourlyPlan)
-          {
-            bigPage.hourlyPlan = null;
-            bigPage.quantityDone = null;
-          }
-
           pages.push(bigPage);
 
           return;
         }
 
         var pageCount = Math.ceil(orderCount / ordersPerPage);
+        var pageNo;
 
-        for (var pageNo = 1; pageNo <= pageCount; ++pageNo)
+        for (pageNo = 1; pageNo <= pageCount; ++pageNo)
         {
-          var orders = bigPage.orders.slice((pageNo - 1) * ordersPerPage, pageNo * ordersPerPage);
-          var lastPage = pageNo === pageCount && orders.length <= maxOrdersForHourlyPlan;
-
           pages.push({
             pageNo: pageNo,
             pageCount: pageCount,
             mrp: bigPage.mrp,
             line: bigPage.line,
-            hourlyPlan: lastPage ? bigPage.hourlyPlan : null,
-            quantityDone: lastPage ? bigPage.quantityDone : null,
+            hourlyPlan: null,
+            quantityDone: null,
             workerCount: bigPage.workerCount,
-            orders: orders
+            orders: bigPage.orders.slice((pageNo - 1) * ordersPerPage, pageNo * ordersPerPage)
           });
         }
+
+        var lastPage = _.last(pages);
+
+        if (lastPage.orders.length <= maxOrdersForHourlyPlan)
+        {
+          lastPage.hourlyPlan = bigPage.hourlyPlan;
+          lastPage.quantityDone = bigPage.quantityDone;
+
+          return;
+        }
+
+        pageCount += 1;
+
+        pages.forEach(function(page)
+        {
+          page.pageCount = pageCount;
+        });
+
+        pages.push({
+          pageNo: lastPage.pageNo + 1,
+          pageCount: pageCount,
+          mrp: bigPage.mrp,
+          line: bigPage.line,
+          hourlyPlan: bigPage.hourlyPlan,
+          quantityDone: bigPage.quantityDone,
+          workerCount: bigPage.workerCount,
+          orders: []
+        });
       });
 
       return pages;
