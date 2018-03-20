@@ -327,7 +327,8 @@ define([
                 : qtyDone > qtyPlan ? 'is-surplus' : qtyDone > 0 ? 'is-incomplete' : '',
             startAt: lineOrder.get('startAt'),
             finishAt: lineOrder.get('finishAt'),
-            nextShift: nextShift
+            nextShift: nextShift,
+            psStatus: plan.sapOrders.getPsStatus(order.id)
           };
 
           bigPage.orders.push(printOrder);
@@ -368,7 +369,8 @@ define([
                   time.getMoment(shiftOrder.get('finishedAt')).format('YYYY-MM-DD HH:mm:ss'),
                   'YYYY-MM-DD HH:mm:ss'
                 ).valueOf(),
-                nextShift: false
+                nextShift: false,
+                psStatus: 'unknown'
               });
             });
 
@@ -382,7 +384,8 @@ define([
                 qtyDone: 0,
                 startAt: null,
                 finishAt: null,
-                nextShift: false
+                nextShift: false,
+                psStatus: 'unknown'
               });
             }
 
