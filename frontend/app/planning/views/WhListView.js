@@ -35,7 +35,7 @@ define([
 ) {
   'use strict';
 
-  var WH_TIME_WINDOW = 2 * 3600 * 1000;
+  var WH_TIME_WINDOW = 4 * 3600 * 1000;
 
   return View.extend({
 
@@ -151,6 +151,9 @@ define([
       var plan = view.plan;
       var list = [];
 
+      view.groupDuration = view.settings.getWhGroupDuration();
+      view.groupTimeWindow = view.groupDuration * 3600 * 1000;
+
       plan.lines.forEach(function(planLine)
       {
         for (var i = 0; i < planLine.orders.length; ++i)
@@ -184,9 +187,10 @@ define([
             name: order.get('name'),
             startTime: startTime,
             finishTime: finishTime,
+            group: view.getOrderGroup(startTime),
             duration: duration,
             pceTime: pceTime,
-            maxQty: Math.floor(WH_TIME_WINDOW / pceTime),
+            maxQty: Math.floor(view.groupTimeWindow / pceTime),
             qtyTodo: order.get('quantityTodo'),
             qtyPlan: qtyPlan,
             line: planLine.id,
@@ -198,7 +202,7 @@ define([
             rowClassName: sapOrder ? (sapOrder.get('whStatus') === 'done' ? 'success' : '') : ''
           };
 
-          if (item.finishTime - item.startTime > WH_TIME_WINDOW)
+          if (item.finishTime - item.startTime > view.groupTimeWindow)
           {
             view.splitOrder(item, list);
           }
@@ -209,20 +213,51 @@ define([
         }
       });
 
-      return list.sort(function(a, b) { return a.startTime - b.startTime; }).map(function(order, i)
-      {
-        order.no = i + 1;
-        order.shift = shiftUtil.getShiftNo(order.startTime);
-        order.startTime = time.utc.format(order.startTime, 'HH:mm:ss');
-        order.finishTime = time.utc.format(order.finishTime, 'HH:mm:ss');
+      return list
+        .sort(function(a, b)
+        {
+          if (a.group !== b.group)
+          {
+            return a.group - b.group;
+          }
 
-        return order;
-      });
+          if (a.line !== b.line)
+          {
+            return a.line.localeCompare(b.line);
+          }
+
+          return a.startTime - b.startTime;
+        })
+        .map(function(order, i)
+        {
+          order.no = i + 1;
+          order.shift = shiftUtil.getShiftNo(order.startTime);
+          order.startTime = time.utc.format(order.startTime, 'HH:mm:ss');
+          order.finishTime = time.utc.format(order.finishTime, 'HH:mm:ss');
+
+          return order;
+        });
+    },
+
+    getOrderGroup: function(startTime)
+    {
+      var startHour = new Date(startTime).getUTCHours();
+
+      if (startHour < 6)
+      {
+        startHour = 18 + startHour;
+      }
+      else
+      {
+        startHour -= 6;
+      }
+
+      return Math.floor(startHour / this.groupDuration) + 1;
     },
 
     splitOrder: function(bigItem, list)
     {
-      var partCount = Math.ceil(bigItem.duration / (2 * 3600 * 1000));
+      var partCount = Math.ceil(bigItem.duration / this.groupTimeWindow);
       var qtyPlan = bigItem.qtyPlan;
       var startTime = bigItem.startTime;
 
@@ -231,6 +266,7 @@ define([
         var item = _.assign({}, bigItem, {
           startTime: startTime,
           finishTime: 0,
+          group: this.getOrderGroup(startTime),
           qtyPlan: Math.min(qtyPlan, bigItem.maxQty)
         });
 
@@ -375,6 +411,7 @@ define([
         }
 
         var columns = [
+          'group',
           'no',
           'shift',
           'mrp',
@@ -394,6 +431,7 @@ define([
         view.serializeOrders().forEach(function(order)
         {
           var row = [
+            order.group + 1,
             order.no,
             order.shift,
             order.mrp,

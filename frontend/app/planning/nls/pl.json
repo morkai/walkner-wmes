@@ -235,6 +235,7 @@
   "lineOrders:incomplete": "({qty} {qty, plural, one{brakująca} few{brakujące} other{brakujących}})",
   "lineOrders:downtimeReason": "Powód przestoju",
   "lineOrders:comment": "Ostatni komentarz",
+  "lineOrders:list:group": "Gr.",
   "lineOrders:list:no": "Lp.",
   "lineOrders:list:shift": "Zm.",
   "lineOrders:list:mrp": "MRP",

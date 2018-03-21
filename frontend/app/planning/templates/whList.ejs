@@ -2,15 +2,22 @@
   <table class="planning-mrp-lineOrders-table">
     <thead>
       <tr>
-        <% ['no', 'shift', 'mrp', 'orderNo', 'status', 'nc12', 'name', 'qty:header', 'startTime', 'finishTime', 'dropZone', 'line'].forEach(function(prop) { %>
+        <% ['group', 'no', 'shift', 'mrp', 'orderNo', 'status', 'nc12', 'name', 'qty:header', 'startTime', 'finishTime', 'dropZone', 'line'].forEach(function(prop) { %>
         <th class="is-min"><%- t('planning', 'lineOrders:list:' + prop) %></th>
         <% }) %>
         <th><%- t('planning', 'lineOrders:list:comment') %></th>
       </tr>
     </thead>
     <tbody>
+      <% var lastGroup = -1 %>
       <% orders.forEach(function(order, i) { %>
+      <% if (lastGroup !== -1 && order.group !== lastGroup) { %>
+      <tr>
+        <td colspan="999" style="background: #ccc"></td>
+      </tr>
+      <% } %>
       <tr class="<%- order.rowClassName %>" data-id="<%- order.orderNo %>" data-index="<%- i %>">
+        <td class="is-min text-right"><%- order.group %>.</td>
         <td class="is-min text-right"><%- order.no %>.</td>
         <td class="is-min"><%- t('core', 'SHIFT:' + order.shift) %></td>
         <td class="is-min"><%- order.mrp %></td>
@@ -25,6 +32,7 @@
         <td class="is-min"><%= order.line %></td>
         <td class="planning-mrp-lineOrders-comment"><%- order.comment %></td>
       </tr>
+      <% lastGroup = order.group %>
       <% }) %>
     </tbody>
   </table>

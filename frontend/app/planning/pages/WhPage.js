@@ -12,6 +12,7 @@ define([
   'app/delayReasons/DelayReasonCollection',
   'app/factoryLayout/productionState',
   'app/paintShop/views/PaintShopDatePickerView',
+  '../settings',
   '../Plan',
   '../PlanSettings',
   '../PlanDisplayOptions',
@@ -31,6 +32,7 @@ define([
   DelayReasonCollection,
   productionState,
   PaintShopDatePickerView,
+  settings,
   Plan,
   PlanSettings,
   PlanDisplayOptions,
@@ -160,6 +162,7 @@ define([
       $(window).off('.' + this.idPrefix);
 
       productionState.unload();
+      settings.release();
     },
 
     setUpLayout: function(layout)
@@ -185,6 +188,8 @@ define([
 
       page.delayReasons = new DelayReasonCollection();
 
+      page.settings = bindLoadingMessage(settings.acquire(), this);
+
       var nlsPrefix = 'MSG:LOADING_FAILURE:';
       var nlsDomain = 'planning';
 
@@ -205,6 +210,7 @@ define([
       });
 
       this.listView = new WhListView({
+        settings: this.settings,
         delayReasons: this.delayReasons,
         prodLineStates: productionState.prodLineStates,
         plan: this.plan
@@ -243,6 +249,7 @@ define([
       reloadProdState = false;
 
       return when(
+        this.settings.isEmpty() ? this.settings.fetch({reset: true}) : null,
         productionState.load(forceReloadProdState),
         this.delayReasons.fetch({reset: true}),
         plan.settings.fetch(),
@@ -255,6 +262,7 @@ define([
     afterRender: function()
     {
       productionState.load(false);
+      settings.acquire();
     },
 
     reload: function()
