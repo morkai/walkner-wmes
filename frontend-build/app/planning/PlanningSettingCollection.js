@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["jquery","../user","../settings/SettingCollection","./PlanningSetting"],function(n,t,e,u){"use strict";return e.extend({model:u,topicSuffix:"planning.**",getValue:function(n){var t=this.get("planning."+n);return t?t.getValue():null},prepareValue:function(n,t){if(/wh.groupDuration$/.test(n))return t=Math.round(parseInt(t,10)),isNaN(t)||t<0?0:t},getWhGroupDuration:function(){return 4}})});

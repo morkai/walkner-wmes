@@ -1419,6 +1419,9 @@ app/planning/views/PlanSettingsView.js
 app/planning/pages/PlanSettingsPage.js
 app/planning/templates/change.js
 app/planning/pages/PlanChangesPage.js
+app/planning/PlanningSetting.js
+app/planning/PlanningSettingCollection.js
+app/planning/settings.js
 app/planning/templates/whFilter.js
 app/planning/views/WhFilterView.js
 app/planning/templates/whList.js
