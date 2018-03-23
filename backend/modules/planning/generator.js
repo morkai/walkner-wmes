@@ -691,7 +691,10 @@ module.exports = function setUpGenerator(app, module)
       },
       function(err)
       {
-        state.freezeOrders = state.freezeOrders || state.settings.freezeFirstShiftOrders;
+        if (state.settings)
+        {
+          state.freezeOrders = state.settings.freezeFirstShiftOrders;
+        }
 
         done(err);
       }
