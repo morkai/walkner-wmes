@@ -263,6 +263,11 @@ exports.readRoute = function(app, options, req, res, next)
     options = {};
   }
 
+  if (req.model)
+  {
+    return handleModel(null, req.model);
+  }
+
   const idProperty = options.idProperty
     ? (typeof options.idProperty === 'function' ? options.idProperty(req) : options.idProperty)
     : '_id';
@@ -281,7 +286,9 @@ exports.readRoute = function(app, options, req, res, next)
     return next(err);
   }
 
-  query.exec(function(err, model)
+  query.exec(handleModel);
+
+  function handleModel(err, model)
   {
     if (err)
     {
@@ -306,7 +313,7 @@ exports.readRoute = function(app, options, req, res, next)
     {
       formatResult(null, model);
     }
-  });
+  }
 
   function formatResult(err, result)
   {
