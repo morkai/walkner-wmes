@@ -16,6 +16,7 @@ module.exports = function setUpPlanningRoutes(app, module)
 {
   const express = app[module.config.expressId];
   const userModule = app[module.config.userId];
+  const settingsModule = app[module.config.settingsId];
   const mongoose = app[module.config.mongooseId];
   const Plan = mongoose.model('Plan');
   const PlanSettings = mongoose.model('PlanSettings');
@@ -40,7 +41,10 @@ module.exports = function setUpPlanningRoutes(app, module)
   express.get('/planning/lateOrders/:id', canView, browseLateOrdersRoute.bind(null, app, module));
 
   express.get('/planning/settings', canView, express.crud.browseRoute.bind(null, app, PlanSettings));
-  express.get('/planning/settings/:id', canView, express.crud.readRoute.bind(null, app, PlanSettings));
+  express.get('/planning/settings/:id', canView, beforeSettingsRead, express.crud.readRoute.bind(null, app, {
+    model: PlanSettings,
+    prepareResult: getGlobalSettings
+  }));
   express.put('/planning/settings/:id', canManage, editSettingsRoute.bind(null, app, module));
 
   express.get('/planning/changes', canView, express.crud.browseRoute.bind(null, app, PlanChange));
@@ -53,5 +57,32 @@ module.exports = function setUpPlanningRoutes(app, module)
     });
 
     res.sendStatus(203);
+  }
+
+  function beforeSettingsRead(req, res, next)
+  {
+    if (req.params.id === '0000-00-00')
+    {
+      req.model = {
+        _id: '0000-00-00'
+      };
+    }
+
+    return next();
+  }
+
+  function getGlobalSettings(planSettings, done)
+  {
+    settingsModule.findValues('planning.', (err, globalSettings) =>
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      planSettings.global = globalSettings;
+
+      done(null, planSettings);
+    });
   }
 };

@@ -8,7 +8,14 @@ const step = require('h5.step');
 module.exports = function editSettingsRoute(app, module, req, res, next)
 {
   const userModule = app[module.config.userId];
+  const settingsModule = app[module.config.settingsId];
   const mongoose = app[module.config.mongooseId];
+
+  if (!/^[0-9]+-[0-9]+-[0-9]+$/.test(req.params.id))
+  {
+    return settingsModule.updateRoute(req, res, next);
+  }
+
   const PlanSettings = mongoose.model('PlanSettings');
   const PlanChange = mongoose.model('PlanChange');
 

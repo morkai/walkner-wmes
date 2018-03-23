@@ -44,6 +44,7 @@ define([
           }
 
           options.pubsub = pubsubSandbox = pubsub.sandbox();
+          options.paginate = false;
           settingsCollection = new SettingsCollection(null, options);
         }
 

@@ -11,6 +11,7 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   expressId: 'express',
   ordersId: 'orders',
+  settingsId: 'settings',
   generator: true
 };
 
@@ -20,7 +21,8 @@ exports.start = function startPlanningModule(app, module)
     [
       module.config.mongooseId,
       module.config.userId,
-      module.config.expressId
+      module.config.expressId,
+      module.config.settingsId
     ],
     setUpRoutes.bind(null, app, module)
   );
