@@ -9,11 +9,14 @@
       </tr>
     </thead>
     <tbody>
-      <% var lastGroup = -1 %>
       <% orders.forEach(function(order, i) { %>
-      <% if (lastGroup !== -1 && order.group !== lastGroup) { %>
+      <% if (order.newGroup) { %>
       <tr>
-        <td colspan="999" style="background: #ccc"></td>
+        <td class="planning-wh-newGroup" colspan="999">&nbsp;</td>
+      </tr>
+      <% } else if (order.newLine) { %>
+      <tr>
+        <td class="planning-wh-newLine" colspan="999"></td>
       </tr>
       <% } %>
       <tr class="<%- order.rowClassName %>" data-id="<%- order.orderNo %>" data-index="<%- i %>">
@@ -32,7 +35,6 @@
         <td class="is-min"><%= order.line %></td>
         <td class="planning-mrp-lineOrders-comment"><%- order.comment %></td>
       </tr>
-      <% lastGroup = order.group %>
       <% }) %>
     </tbody>
   </table>

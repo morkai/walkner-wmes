@@ -35,14 +35,12 @@ define([
 ) {
   'use strict';
 
-  var WH_TIME_WINDOW = 4 * 3600 * 1000;
-
   return View.extend({
 
     template: whListTemplate,
 
     events: {
-      'contextmenu tbody > tr': function(e)
+      'contextmenu tbody > tr[data-id]': function(e)
       {
         this.showMenu(e);
 
@@ -199,7 +197,9 @@ define([
             status: order.getStatus(),
             statuses: view.serializeOrderStatuses(order),
             dropZone: sapOrder ? sapOrder.getDropZone() : '',
-            rowClassName: sapOrder ? (sapOrder.get('whStatus') === 'done' ? 'success' : '') : ''
+            rowClassName: sapOrder ? (sapOrder.get('whStatus') === 'done' ? 'success' : '') : '',
+            newGroup: false,
+            newLine: false
           };
 
           if (item.finishTime - item.startTime > view.groupTimeWindow)
@@ -213,30 +213,40 @@ define([
         }
       });
 
-      return list
-        .sort(function(a, b)
+      list.sort(function(a, b)
+      {
+        if (a.group !== b.group)
         {
-          if (a.group !== b.group)
-          {
-            return a.group - b.group;
-          }
+          return a.group - b.group;
+        }
 
-          if (a.line !== b.line)
-          {
-            return a.line.localeCompare(b.line);
-          }
-
-          return a.startTime - b.startTime;
-        })
-        .map(function(order, i)
+        if (a.line !== b.line)
         {
-          order.no = i + 1;
-          order.shift = shiftUtil.getShiftNo(order.startTime);
-          order.startTime = time.utc.format(order.startTime, 'HH:mm:ss');
-          order.finishTime = time.utc.format(order.finishTime, 'HH:mm:ss');
+          return a.line.localeCompare(b.line);
+        }
 
-          return order;
-        });
+        return a.startTime - b.startTime;
+      });
+
+      var prev = null;
+
+      return list.map(function(order, i)
+      {
+        order.no = i + 1;
+        order.shift = shiftUtil.getShiftNo(order.startTime);
+        order.startTime = time.utc.format(order.startTime, 'HH:mm:ss');
+        order.finishTime = time.utc.format(order.finishTime, 'HH:mm:ss');
+
+        if (prev)
+        {
+          order.newGroup = order.group !== prev.group;
+          order.newLine = order.line !== prev.line;
+        }
+
+        prev = order;
+
+        return order;
+      });
     },
 
     getOrderGroup: function(startTime)

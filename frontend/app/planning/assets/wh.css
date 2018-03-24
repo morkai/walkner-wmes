@@ -13,3 +13,11 @@
 .planning-wh-list {
   border: 1px solid #ccc;
 }
+.planning-wh-newGroup {
+  background: #ccc!important;
+}
+.planning-wh-newLine {
+  padding: 0!important;
+  height: 3px;
+  background: #ccc!important;
+}
