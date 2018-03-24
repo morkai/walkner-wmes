@@ -27,7 +27,11 @@ define([
 
       'input #-date': 'changeFilter',
       'change #-date': 'changeFilter',
-      'change #-mrps': 'changeFilter'
+      'change #-mrps': 'changeFilter',
+      'click #-useDarkerTheme': function()
+      {
+        this.plan.displayOptions.toggleDarkerThemeUse();
+      }
 
     },
 
@@ -39,6 +43,7 @@ define([
       this.listenTo(plan, 'change:loading', this.onLoadingChanged);
       this.listenTo(plan, 'change:_id', this.onDateChanged);
       this.listenTo(displayOptions, 'change:minDate change:maxDate', this.onMinMaxDateChanged);
+      this.listenTo(displayOptions, 'change:useDarkerTheme', this.updateToggles);
     },
 
     serialize: function()
@@ -51,7 +56,8 @@ define([
         date: plan.id,
         mrps: displayOptions.get('mrps'),
         minDate: displayOptions.get('minDate'),
-        maxDate: displayOptions.get('maxDate')
+        maxDate: displayOptions.get('maxDate'),
+        useDarkerTheme: displayOptions.isDarkerThemeUsed()
       });
     },
 
@@ -64,6 +70,11 @@ define([
         own: false,
         view: this
       });
+    },
+
+    updateToggles: function()
+    {
+      this.$id('useDarkerTheme').toggleClass('active', this.plan.displayOptions.isDarkerThemeUsed());
     },
 
     changeFilter: function()

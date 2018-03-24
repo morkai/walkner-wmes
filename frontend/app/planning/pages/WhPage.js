@@ -229,6 +229,7 @@ define([
       page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
 
       page.listenTo(plan.displayOptions, 'change:mrps', page.onMrpsFilterChanged);
+      page.listenTo(plan.displayOptions, 'change:useDarkerTheme', page.onDarkerThemeChanged);
 
       page.listenTo(plan.settings, 'changed', page.onSettingsChanged);
       page.listenTo(plan.settings, 'errored', page.reload);
@@ -257,6 +258,14 @@ define([
         plan.sapOrders.fetch({reset: true}),
         plan.fetch()
       );
+    },
+
+    serialize: function()
+    {
+      return {
+        idPrefix: this.idPrefix,
+        darker: this.plan.displayOptions.isDarkerThemeUsed()
+      };
     },
 
     afterRender: function()
@@ -466,6 +475,11 @@ define([
     {
       this.updateUrl();
       this.plan.mrps.reset();
+    },
+
+    onDarkerThemeChanged: function()
+    {
+      this.$el.toggleClass('planning-darker', this.plan.displayOptions.isDarkerThemeUsed());
     },
 
     onPlanSynced: function()

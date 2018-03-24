@@ -21,3 +21,14 @@
   height: 3px;
   background: #ccc!important;
 }
+.planning-darker .planning-wh-list,
+.planning-darker .planning-wh-list .planning-mrp-lineOrders-table > tbody > tr > td {
+  border-color: #000;
+}
+.planning-darker .planning-wh-newGroup,
+.planning-darker .planning-wh-newLine {
+  background: #000!important;
+}
+.planning-darker .planning-mrp-lineOrders-table .success {
+  background: #00e600;
+}
