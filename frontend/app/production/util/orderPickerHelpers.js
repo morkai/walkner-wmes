@@ -248,6 +248,11 @@ define([
             rank += 2;
           }
 
+          if (/g..wn/i.test(op.name))
+          {
+            rank += 1;
+          }
+
           if (/pak/i.test(op.name))
           {
             rank += 1;
