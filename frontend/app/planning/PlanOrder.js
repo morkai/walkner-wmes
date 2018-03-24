@@ -21,7 +21,7 @@ define([
     pinned: 'fa-thumb-tack',
     ignored: 'fa-ban',
     psStatus: 'fa-paint-brush',
-    whStatus: 'fa-truck'
+    whStatus: 'fa-level-down'
   };
 
   return Model.extend({
