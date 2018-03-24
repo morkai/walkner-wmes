@@ -341,7 +341,7 @@ define([
           _id: prodFunction._id,
           common: prodFunction.common || prodFunction.global,
           users: users,
-          rowspan: (prodFunction.common || prodFunction.global) && first ? mrpCount : 0
+          rowspan: (prodFunction.common || prodFunction.global) && first ? mrpCount : 1
         };
       }).filter(function(viewProdFunction)
       {
@@ -352,6 +352,25 @@ define([
     serializeUser: function(availability, userId, i)
     {
       var user = this.model.users.get(userId);
+
+      availability = availability && availability.from && availability.to && availability.from !== availability.to
+        ? (availability.from + '-' + availability.to)
+        : '';
+
+      if (!user)
+      {
+        return {
+          _id: userId,
+          no: (i + 1) + '. ',
+          label: userId,
+          prodFunction: '?',
+          email: '?',
+          mobile: '?',
+          presence: false,
+          availability: availability
+        };
+      }
+
       var prodFunction = prodFunctions.get(user.get('prodFunction'));
 
       return {
@@ -362,9 +381,7 @@ define([
         email: user.get('email') || '?',
         mobile: user.getMobile() || '?',
         presence: user.get('presence'),
-        availability: availability && availability.from && availability.to && availability.from !== availability.to
-          ? (availability.from + '-' + availability.to)
-          : ''
+        availability: availability
       };
     },
 
