@@ -369,6 +369,10 @@ app/planning/assets/changes.css
 ----------------
 app/planning/assets/changes.css
 
+app/planning/assets/icons.css
+----------------
+app/planning/assets/icons.css
+
 app/planning/assets/list.css
 ----------------
 app/planning/assets/list.css
@@ -378,6 +382,7 @@ app/planning/assets/main.css
 app/planning/assets/./settings.css
 app/planning/assets/./list.css
 app/planning/assets/./plan.css
+app/planning/assets/./icons.css
 app/planning/assets/./plan.darker.css
 app/planning/assets/./wh.css
 app/planning/assets/./changes.css
@@ -781,17 +786,9 @@ vendor/bootstrap/css/bootstrap-theme.css
 ----------------
 vendor/bootstrap/css/bootstrap-theme.css
 
-vendor/bootstrap/css/bootstrap-theme.min.css
-----------------
-vendor/bootstrap/css/bootstrap-theme.min.css
-
 vendor/bootstrap/css/bootstrap.css
 ----------------
 vendor/bootstrap/css/bootstrap.css
-
-vendor/bootstrap/css/bootstrap.min.css
-----------------
-vendor/bootstrap/css/bootstrap.min.css
 
 vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css
 ----------------
@@ -1340,6 +1337,9 @@ app/planning/PlanSapOrderCollection.js
 app/planning/PlanLateOrder.js
 app/planning/PlanLateOrderCollection.js
 app/planning/Plan.js
+app/planning/PlanningSetting.js
+app/planning/PlanningSettingCollection.js
+app/planning/settings.js
 app/planning/PlanSettings.js
 app/planning/PlanSettingsCollection.js
 app/planning/PlanChange.js
@@ -1362,6 +1362,8 @@ app/prodShifts/ProdShiftCollection.js
 app/planning/templates/toolbar.js
 app/planning/templates/toolbarPrintLineList.js
 app/planning/templates/printPage.js
+app/orderStatuses/util/renderOrderStatusLabel.js
+app/planning/templates/orderStatusIcons.js
 app/planning/views/PlanMrpToolbarView.js
 app/planning/templates/lineSettingsDialog.js
 app/planning/views/PlanLineSettingsDialogView.js
@@ -1377,7 +1379,6 @@ app/planning/templates/lines.js
 app/planning/templates/linePopover.js
 app/planning/templates/lineRemoveDialog.js
 app/planning/views/PlanMrpLinesView.js
-app/orderStatuses/util/renderOrderStatusLabel.js
 app/planning/util/scrollIntoView.js
 app/planning/templates/orderQuantityDialog.js
 app/planning/views/PlanOrderQuantityDialogView.js
@@ -1419,9 +1420,6 @@ app/planning/views/PlanSettingsView.js
 app/planning/pages/PlanSettingsPage.js
 app/planning/templates/change.js
 app/planning/pages/PlanChangesPage.js
-app/planning/PlanningSetting.js
-app/planning/PlanningSettingCollection.js
-app/planning/settings.js
 app/planning/templates/whFilter.js
 app/planning/views/WhFilterView.js
 app/planning/templates/whList.js
