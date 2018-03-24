@@ -19,7 +19,7 @@
         <td class="planning-wh-newLine" colspan="999"></td>
       </tr>
       <% } %>
-      <tr class="<%- order.rowClassName %>" data-id="<%- order.orderNo %>" data-index="<%- i %>">
+      <tr class="<%- order.rowClassName %>" data-id="<%- order.orderNo %>" data-index="<%- i %>" data-group="<%- order.group %>" data-line="<%= order.line %>">
         <td class="is-min text-right"><%- order.group %>.</td>
         <td class="is-min text-right"><%- order.no %>.</td>
         <td class="is-min"><%- t('core', 'SHIFT:' + order.shift) %></td>

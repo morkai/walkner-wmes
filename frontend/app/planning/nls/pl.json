@@ -254,6 +254,7 @@
   "lineOrders:list:dropZone": "Drop zone",
   "lineOrders:list:comment": "Ostatni komentarz",
   "lineOrders:menu:copy": "Kopiuj listę zleceń",
+  "lineOrders:menu:copy:lineGroup": "Kopiuj listę zleceń <em>{group}. {line}</em>",
   "lineOrders:menu:copy:success": "Lista zleceń została skopiowana do schowka.",
 
   "stats:orderCount": "Ilość zleceń",

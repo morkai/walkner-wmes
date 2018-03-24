@@ -14,7 +14,8 @@ define([
   '../PlanSapOrderCollection',
   'app/planning/templates/toolbar',
   'app/planning/templates/toolbarPrintLineList',
-  'app/planning/templates/printPage'
+  'app/planning/templates/printPage',
+  'app/planning/templates/orderStatusIcons'
 ], function(
   _,
   $,
@@ -29,7 +30,8 @@ define([
   PlanSapOrderCollection,
   toolbarTemplate,
   toolbarPrintLineListTemplate,
-  printPageTemplate
+  printPageTemplate,
+  orderStatusIconsTemplate
 ) {
   'use strict';
 
@@ -328,7 +330,7 @@ define([
             startAt: lineOrder.get('startAt'),
             finishAt: lineOrder.get('finishAt'),
             nextShift: nextShift,
-            psStatus: plan.sapOrders.getPsStatus(order.id)
+            icons: orderStatusIconsTemplate(plan, order.id)
           };
 
           bigPage.orders.push(printOrder);
