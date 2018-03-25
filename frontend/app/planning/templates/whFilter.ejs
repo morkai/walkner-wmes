@@ -4,8 +4,8 @@
     <input id="<%- idPrefix %>-date" name="date" class="form-control" type="date" value="<%- date %>" min="<%- minDate %>" max="<%- maxDate %>">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-mrps" class="control-label"><%- t('planning', 'filter:mrps:exclude') %></label>
-    <input id="<%- idPrefix %>-mrps" name="mrps" value="<%- mrps %>">
+    <div class="filter-radioLabels"><% ['1', '0', 'mine', 'wh'].forEach(function(mode) { %><label><input name="mrpMode" type="radio" value="<%- mode %>" <%- mode === mrpMode ? 'checked' : '' %>> <%- t('planning', 'filter:mrps:' + mode) %></label><% }) %></div>
+    <input id="<%- idPrefix %>-mrps" name="mrps" type="text" value="<%- mrps %>">
   </div>
   <div class="form-group filter-actions">
     <div class="btn-group">

@@ -182,8 +182,7 @@ define([
 
       var plan = page.model = page.plan = new Plan({_id: page.options.date}, {
         displayOptions: PlanDisplayOptions.fromLocalStorage({
-          mrps: page.options.mrps,
-          exclude: true
+          mrps: page.options.mrps
         }, {
           storageKey: 'PLANNING:DISPLAY_OPTIONS:WH'
         }),
@@ -505,6 +504,16 @@ define([
 
     onGlobalSettingChanged: function(setting)
     {
+      if (/ignoredMrps/.test(setting.id))
+      {
+        if (_.first(this.plan.displayOptions.get('mrps')) === 'wh')
+        {
+          this.plan.mrps.reset();
+        }
+
+        return;
+      }
+
       if (/.wh./.test(setting.id))
       {
         this.listView.render();

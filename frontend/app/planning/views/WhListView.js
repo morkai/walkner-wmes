@@ -325,15 +325,23 @@ define([
       menu.push({
         icon: 'fa-clipboard',
         label: t('planning', 'lineOrders:menu:copy'),
-        handler: this.handleCopyAction.bind(this, el, e.pageY, e.pageX, false)
+        handler: this.handleCopyAction.bind(this, el, e.pageY, e.pageX)
       });
 
       menu.push({
-        label: t('planning', 'lineOrders:menu:copy:lineGroup', {
+        label: t('planning', 'wh:menu:copy:lineGroup', {
           group: el.dataset.group,
           line: el.dataset.line
         }),
         handler: this.handleCopyAction.bind(this, el, e.pageY, e.pageX, true)
+      });
+
+      menu.push({
+        label: t('planning', 'wh:menu:copy:lineGroupNo', {
+          group: el.dataset.group,
+          line: el.dataset.line
+        }),
+        handler: this.handleCopyAction.bind(this, el, e.pageY, e.pageX, true, true)
       });
 
       if (this.plan.canChangeDropZone())
@@ -361,7 +369,7 @@ define([
       window.open('/#prodShiftOrders?sort(startedAt)&limit(20)&orderId=' + orderNo);
     },
 
-    handleCopyAction: function(el, y, x, lineGroup)
+    handleCopyAction: function(el, y, x, lineGroupOnly, orderNoOnly)
     {
       var view = this;
 
@@ -388,14 +396,23 @@ define([
           'line',
           'comment'
         ];
-        var text = [columns.map(function(p) { return t('planning', 'lineOrders:list:' + p); }).join('\t')];
+        var text = orderNoOnly
+          ? []
+          : [columns.map(function(p) { return t('planning', 'lineOrders:list:' + p); }).join('\t')];
         var line = el.dataset.line;
         var group = +el.dataset.group;
 
         view.serializeOrders().forEach(function(order)
         {
-          if (lineGroup && (order.line !== line || order.group !== group))
+          if (lineGroupOnly && (order.line !== line || order.group !== group))
           {
+            return;
+          }
+
+          if (orderNoOnly)
+          {
+            text.push(order.orderNo);
+
             return;
           }
 
@@ -420,6 +437,11 @@ define([
 
           text.push(row.join('\t'));
         });
+
+        if (orderNoOnly)
+        {
+          text = _.uniq(text);
+        }
 
         clipboardData.setData('text/plain', text.join('\r\n'));
 

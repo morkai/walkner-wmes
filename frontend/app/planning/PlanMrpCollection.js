@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  '../user',
   '../core/Collection',
   './PlanMrp'
 ], function(
+  user,
   Collection,
   PlanMrp
 ) {
@@ -31,8 +33,28 @@ define([
     createModelsFromSettings: function()
     {
       var plan = this.plan;
-      var mrpIds = plan.displayOptions.get('mrps');
-      var exclude = plan.displayOptions.get('exclude');
+      var mrpIds = [].concat(plan.displayOptions.get('mrps'));
+      var exclude = false;
+
+      if (mrpIds[0] === '1')
+      {
+        mrpIds.shift();
+      }
+      else if (mrpIds[0] === '0')
+      {
+        exclude = true;
+
+        mrpIds.shift();
+      }
+      else if (mrpIds[0] === 'wh')
+      {
+        exclude = true;
+        mrpIds = plan.settings.global.getValue('wh.ignoredMrps', []);
+      }
+      else if (mrpIds[0] === 'mine')
+      {
+        mrpIds = user.data.mrps || [];
+      }
 
       var ordersByMrp = plan.orders.getGroupedByMrp();
       var linesByMrp = plan.lines.getGroupedByMrp();

@@ -75,7 +75,7 @@
   "PROPERTY:bom.unloadingPoint": "Punkt rozładunku",
   "PROPERTY:whTime": "Czas drop zone",
   "PROPERTY:whDropZone": "Grupa drop zone",
-  "PROPERTY:whStatus": "Status magazynu",
+  "PROPERTY:whStatus": "Status drop zone",
 
   "whStatus:unknown": "Nieokreślony",
   "whStatus:todo": "Do zrobienia",

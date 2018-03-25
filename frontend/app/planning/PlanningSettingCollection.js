@@ -82,6 +82,11 @@ define([
       {
         return !!newValue;
       }
+
+      if (/ignoredMrps/.test(id))
+      {
+        return newValue.split(',').filter(function(mrp) { return !!mrp.length; });
+      }
     },
 
     getWhGroupDuration: function()

@@ -85,7 +85,7 @@ define([
     viewport.showPage(new PlanPage({
       date: req.params.id,
       mrps: req.query.mrps === undefined ? null : req.query.mrps
-        .split(/[^A-Z0-9]+/)
+        .split(/[^A-Z0-9]+/i)
         .filter(function(mrp) { return mrp.length > 0; })
     }));
   });
@@ -110,7 +110,7 @@ define([
     viewport.showPage(new WhPage({
       date: req.params.id,
       mrps: req.query.mrps === undefined ? null : req.query.mrps
-        .split(/[^A-Z0-9]+/)
+        .split(/[^A-Z0-9]+/i)
         .filter(function(mrp) { return mrp.length > 0; })
     }));
   });

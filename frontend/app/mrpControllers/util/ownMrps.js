@@ -103,14 +103,19 @@ define([
   return {
     attach: function(view, $input)
     {
-      if (view.$id('ownMrps').length)
+      var $ownMrps = view.$id('ownMrps');
+
+      if ($ownMrps.attr('data-input-id'))
       {
         return;
       }
 
-      $($input[0].labels[0]).append(
-        ' (<a id="' + view.idPrefix + '-ownMrps" href="#">' + t('mrpControllers', 'ownMrps:trigger') + '</a>)'
-      );
+      if (!$ownMrps.length)
+      {
+        $($input[0].labels[0]).append(
+          ' (<a id="' + view.idPrefix + '-ownMrps" href="#">' + t('mrpControllers', 'ownMrps:trigger') + '</a>)'
+        );
+      }
 
       view.$id('ownMrps').attr('data-input-id', $input.prop('id')).on('click', function(e)
       {

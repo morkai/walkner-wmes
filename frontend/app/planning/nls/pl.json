@@ -23,8 +23,10 @@
   "PAGE_ACTION:settings": "Ustawienia",
 
   "filter:date": "Data planu",
-  "filter:mrps": "Wybrane MRP",
-  "filter:mrps:exclude": "Ignorowane MRP",
+  "filter:mrps:1": "Wybrane MRP",
+  "filter:mrps:0": "Ignorowane MRP",
+  "filter:mrps:mine": "Moje",
+  "filter:mrps:wh": "Magazyn",
   "filter:mrps:placeholder": "Wszystkie",
   "filter:wrapLists": "Przewijanie list",
   "filter:lineOrdersList": "Lista <u>z</u>leceń",
@@ -254,8 +256,10 @@
   "lineOrders:list:dropZone": "Drop zone",
   "lineOrders:list:comment": "Ostatni komentarz",
   "lineOrders:menu:copy": "Kopiuj listę zleceń",
-  "lineOrders:menu:copy:lineGroup": "Kopiuj listę zleceń <em>{group}. {line}</em>",
   "lineOrders:menu:copy:success": "Lista zleceń została skopiowana do schowka.",
+
+  "wh:menu:copy:lineGroup": "Kopiuj listę zleceń <em>{group}. {line}</em>",
+  "wh:menu:copy:lineGroupNo": "Kopiuj nry zleceń <em>{group}. {line}</em>",
 
   "stats:orderCount": "Ilość zleceń",
   "stats:quantity": "Ilość sztuk",

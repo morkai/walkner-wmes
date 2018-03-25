@@ -76,7 +76,7 @@
     "PROPERTY:bom.unloadingPoint": "Unloading point",
     "PROPERTY:whTime": "Drop zone time",
     "PROPERTY:whDropZone": "Drop zone group",
-    "PROPERTY:whStatus": "WH status",
+    "PROPERTY:whStatus": "Drop zone status",
 
     "whStatus:unknown": "Unknown",
     "whStatus:todo": "Todo",

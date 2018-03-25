@@ -31,6 +31,11 @@ define([
       'click #-useDarkerTheme': function()
       {
         this.plan.displayOptions.toggleDarkerThemeUse();
+      },
+      'change input[name="mrpMode"]': function()
+      {
+        this.toggleMrpsSelect2();
+        this.changeFilter();
       }
 
     },
@@ -50,11 +55,32 @@ define([
     {
       var plan = this.plan;
       var displayOptions = plan.displayOptions;
+      var mrpMode = '1';
+      var mrps = [].concat(displayOptions.get('mrps'));
+
+      switch (mrps[0])
+      {
+        case '1':
+          mrps.shift();
+          break;
+
+        case '0':
+          mrpMode = '0';
+          mrps.shift();
+          break;
+
+        case 'mine':
+        case 'wh':
+          mrpMode = mrps[0];
+          mrps = [];
+          break;
+      }
 
       return _.assign({
         idPrefix: this.idPrefix,
         date: plan.id,
-        mrps: displayOptions.get('mrps'),
+        mrps: mrps,
+        mrpMode: mrpMode,
         minDate: displayOptions.get('minDate'),
         maxDate: displayOptions.get('maxDate'),
         useDarkerTheme: displayOptions.isDarkerThemeUsed()
@@ -70,6 +96,8 @@ define([
         own: false,
         view: this
       });
+
+      this.toggleMrpsSelect2();
     },
 
     updateToggles: function()
@@ -77,27 +105,59 @@ define([
       this.$id('useDarkerTheme').toggleClass('active', this.plan.displayOptions.isDarkerThemeUsed());
     },
 
+    toggleMrpsSelect2: function()
+    {
+      var mrpMode = this.$('[name="mrpMode"]:checked').val();
+      var enabled = mrpMode === '1' || mrpMode === '0';
+      var $mrps = this.$id('mrps').select2('enable', enabled);
+
+      if (!enabled)
+      {
+        $mrps.attr('placeholder', t('planning', 'filter:mrps:' + mrpMode)).select2('val', '');
+      }
+      else
+      {
+        $mrps.attr('placeholder', t('planning', 'filter:mrps:placeholder'));
+
+        if ($mrps.val() === '')
+        {
+          $mrps.select2('val', '');
+        }
+      }
+    },
+
     changeFilter: function()
     {
-      var dateEl = this.$id('date')[0];
-      var date = dateEl.value;
-      var newFilter = {
-        mrps: this.$id('mrps').val().split(',').filter(function(v) { return v.length > 0; })
-      };
+      var date = this.$id('date').val();
+      var mrps = this.$id('mrps').val().split(',').filter(function(v) { return v.length > 0; });
 
-      if (dateEl.checkValidity() && /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date))
+      switch (this.$('[name="mrpMode"]:checked').val())
       {
-        newFilter.date = date;
+        case '1':
+          mrps.unshift('1');
+          break;
+
+        case '0':
+          mrps.unshift('0');
+          break;
+
+        case 'mine':
+          mrps = ['mine'];
+          break;
+
+        case 'wh':
+          mrps = ['wh'];
+          break;
       }
 
-      if (!_.isEqual(newFilter.mrps, this.plan.displayOptions.get('mrps')))
+      if (!_.isEqual(mrps, this.plan.displayOptions.get('mrps')))
       {
-        this.plan.displayOptions.set('mrps', newFilter.mrps);
+        this.plan.displayOptions.set({mrps: mrps});
       }
 
-      if (newFilter.date && newFilter.date !== this.plan.id)
+      if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date) && date !== this.plan.id)
       {
-        this.plan.set('_id', newFilter.date);
+        this.plan.set('_id', date);
       }
     },
 
