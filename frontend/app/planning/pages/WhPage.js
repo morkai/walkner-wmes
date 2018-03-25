@@ -76,13 +76,19 @@ define([
 
       return [
         {
-          label: t.bound('planning', 'PAGE_ACTION:dailyPlan'),
+          label: page.t('PAGE_ACTION:dailyPlan'),
           icon: 'calculator',
           privileges: 'PLANNING:VIEW',
           href: '#planning/plans/' + page.plan.id
         },
         {
-          label: t.bound('planning', 'PAGE_ACTION:legend'),
+          label: page.t('PAGE_ACTION:settings'),
+          icon: 'cogs',
+          privileges: 'PLANNING:MANAGE',
+          href: '#planning/settings?tab=wh'
+        },
+        {
+          label: page.t('PAGE_ACTION:legend'),
           icon: 'question-circle',
           callback: function()
           {
@@ -174,7 +180,7 @@ define([
     {
       var page = this;
 
-      var plan = page.plan = new Plan({_id: page.options.date}, {
+      var plan = page.model = page.plan = new Plan({_id: page.options.date}, {
         displayOptions: PlanDisplayOptions.fromLocalStorage({
           mrps: page.options.mrps,
           exclude: true
@@ -187,8 +193,6 @@ define([
       });
 
       page.delayReasons = new DelayReasonCollection();
-
-      page.settings = bindLoadingMessage(settings.acquire(), this);
 
       var nlsPrefix = 'MSG:LOADING_FAILURE:';
       var nlsDomain = 'planning';
@@ -210,7 +214,6 @@ define([
       });
 
       this.listView = new WhListView({
-        settings: this.settings,
         delayReasons: this.delayReasons,
         prodLineStates: productionState.prodLineStates,
         plan: this.plan
@@ -234,6 +237,8 @@ define([
       page.listenTo(plan.settings, 'changed', page.onSettingsChanged);
       page.listenTo(plan.settings, 'errored', page.reload);
 
+      page.listenTo(plan.settings.global, 'change', page.onGlobalSettingChanged);
+
       page.listenTo(plan.mrps, 'reset', _.after(2, _.debounce(page.listView.render.bind(page.listView), 1)));
 
       page.listenTo(plan.sapOrders, 'sync', page.onSapOrdersSynced);
@@ -250,7 +255,6 @@ define([
       reloadProdState = false;
 
       return when(
-        this.settings.isEmpty() ? this.settings.fetch({reset: true}) : null,
         productionState.load(forceReloadProdState),
         this.delayReasons.fetch({reset: true}),
         plan.settings.fetch(),
@@ -496,6 +500,14 @@ define([
       if (changed.reset)
       {
         this.plan.mrps.reset();
+      }
+    },
+
+    onGlobalSettingChanged: function(setting)
+    {
+      if (/.wh./.test(setting.id))
+      {
+        this.listView.render();
       }
     },
 

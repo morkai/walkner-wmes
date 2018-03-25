@@ -9,6 +9,8 @@ define([
 
   return Setting.extend({
 
+    nlsDomain: 'planning',
+
     urlRoot: '/planning/settings'
 
   });

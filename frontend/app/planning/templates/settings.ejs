@@ -1,0 +1,19 @@
+<form class="settings planning-settings">
+  <div class="list-group">
+    <a class="list-group-item" href="#planning/settings?tab=wh" data-tab="wh"><%- t('planning', 'settings:tab:wh') %></a>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="wh">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-wh-groupDuration"><%- t('planning', 'settings:wh:groupDuration') %></label>
+        <input id="<%- idPrefix %>-wh-groupDuration" class="form-control" name="planning.wh.groupDuration" type="number" step="1" min="1" max="24">
+      </div>
+      <div class="checkbox">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-wh-sortByLines" name="planning.wh.sortByLines" type="checkbox" value="true">
+            <%- t('planning', 'settings:wh:sortByLines') %>
+        </label>
+      </div>
+    </div>
+  </div>
+</form>

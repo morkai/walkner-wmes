@@ -149,7 +149,7 @@ define([
       var plan = view.plan;
       var list = [];
 
-      view.groupDuration = view.settings.getWhGroupDuration();
+      view.groupDuration = plan.settings.global.getWhGroupDuration();
       view.groupTimeWindow = view.groupDuration * 3600 * 1000;
 
       plan.lines.forEach(function(planLine)
@@ -213,6 +213,8 @@ define([
         }
       });
 
+      var sortByLines = plan.settings.global.getValue('wh.sortByLines', false);
+
       list.sort(function(a, b)
       {
         if (a.group !== b.group)
@@ -220,7 +222,7 @@ define([
           return a.group - b.group;
         }
 
-        if (a.line !== b.line)
+        if (sortByLines && a.line !== b.line)
         {
           return a.line.localeCompare(b.line);
         }
@@ -240,7 +242,7 @@ define([
         if (prev)
         {
           order.newGroup = order.group !== prev.group;
-          order.newLine = order.line !== prev.line;
+          order.newLine = sortByLines && order.line !== prev.line;
         }
 
         prev = order;
@@ -327,7 +329,6 @@ define([
       });
 
       menu.push({
-        icon: 'fa-clipboard',
         label: t('planning', 'lineOrders:menu:copy:lineGroup', {
           group: el.dataset.group,
           line: el.dataset.line

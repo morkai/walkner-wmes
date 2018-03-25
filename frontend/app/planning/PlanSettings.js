@@ -5,13 +5,15 @@ define([
   '../time',
   '../core/Model',
   '../core/Collection',
-  './Plan'
+  './Plan',
+  './settings'
 ], function(
   _,
   time,
   Model,
   Collection,
-  Plan
+  Plan,
+  globalSettings
 ) {
   'use strict';
 
@@ -111,6 +113,8 @@ define([
 
       this.mrps = new PlanMrpSettingsCollection(null, {paginate: false});
 
+      this.global = globalSettings.acquire();
+
       if (this.attributes.lines)
       {
         this.lines.reset(this.attributes.lines);
@@ -123,6 +127,13 @@ define([
         this.mrps.reset(this.attributes.mrps);
 
         delete this.attributes.mrps;
+      }
+
+      if (this.attributes.global)
+      {
+        this.global.reset(this.global.parse(this.attributes));
+
+        delete this.attributes.global;
       }
     },
 
@@ -159,6 +170,18 @@ define([
         }
       }
 
+      if (res.global)
+      {
+        if (this.global)
+        {
+          this.global.reset(this.global.parse(res));
+        }
+        else
+        {
+          attrs.global = res.global;
+        }
+      }
+
       return attrs;
     },
 
@@ -166,7 +189,8 @@ define([
     {
       return _.assign({
         lines: this.lines.toJSON(),
-        mrps: this.mrps.toJSON()
+        mrps: this.mrps.toJSON(),
+        global: this.global.toJSON()
       }, this.attributes);
     },
 

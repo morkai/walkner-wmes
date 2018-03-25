@@ -19,6 +19,23 @@ define([
 
     topicSuffix: 'planning.**',
 
+    sync: function(method, model, options)
+    {
+      if (!options)
+      {
+        options = {};
+      }
+
+      if (!options.headers)
+      {
+        options.headers = {};
+      }
+
+      options.headers['X-Global'] = '1';
+
+      return SettingCollection.prototype.sync.call(this, method, model, options);
+    },
+
     parse: function(res)
     {
       if (res.totalCount || res.collection)
@@ -49,7 +66,7 @@ define([
 
     prepareValue: function(id, newValue)
     {
-      if (/wh.groupDuration$/.test(id))
+      if (/groupDuration/.test(id))
       {
         newValue = Math.round(parseInt(newValue, 10));
 
@@ -59,6 +76,11 @@ define([
         }
 
         return newValue;
+      }
+
+      if (/sortByLines/.test(id))
+      {
+        return !!newValue;
       }
     },
 

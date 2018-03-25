@@ -317,6 +317,11 @@
   "settings:orderPriority": "Priorytet zleceń",
   "settings:orderPriority:help": "Kolejność wykonywania zleceń na danej linii wg klasyfikacji: małe, łatwe, trudne. Łatwe i trudne zlecenia są jednocześnie duże.",
 
+  "settings:tab:wh": "Magazyn",
+  "settings:wh:groupDuration": "Czas trwania grupy zleceń [h]",
+  "settings:wh:sortByLines": "Sortuj zlecenia w grupach wg linii",
+  "settings:wh:ignoredMrps": "Ignorowane MRP",
+
   "changes:hd": "<span class='planning-change-when'>{when}</span> przez <span class='planning-change-who'>{who}</span>: <span class='planning-change-what'>{what}</span>",
   "changes:what:settings": "{count} {count, plural, one{zmiana} few{zmiany} other{zmian}} ustawień",
   "changes:what:addedOrders": "{count} {count, plural, one{dodane zlecenie} few{dodane zlecenia} other{dodanych zleceń}}",

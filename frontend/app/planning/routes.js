@@ -115,6 +115,16 @@ define([
     }));
   });
 
+  router.map('/planning/settings', canManage, function(req)
+  {
+    viewport.loadPage('app/planning/pages/PlanningSettingsPage', function(PlanningSettingsPage)
+    {
+      return new PlanningSettingsPage({
+        initialTab: req.query.tab
+      });
+    });
+  });
+
   viewport.once('afterRender', toggleNavbarPlanning2D);
 
   function toggleNavbarPlanning2D()

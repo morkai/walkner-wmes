@@ -235,11 +235,10 @@ function(
       return t(domain, key, data);
     }
 
-    var defaultDomain = this.model && this.model.nlsDomain
-      ? this.model.nlsDomain
-      : this.collection && this.collection.nlsDomain
-        ? this.collection.nlsDomain
-        : 'core';
+    var model = this.model || this.collection;
+    var defaultDomain = model.getNlsDomain
+      ? model.getNlsDomain()
+      : (model.nlsDomain || 'core');
 
     if (typeof key === 'object')
     {

@@ -40,7 +40,7 @@ module.exports = function setUpPlanningRoutes(app, module)
 
   express.get('/planning/lateOrders/:id', canView, browseLateOrdersRoute.bind(null, app, module));
 
-  express.get('/planning/settings', canView, express.crud.browseRoute.bind(null, app, PlanSettings));
+  express.get('/planning/settings', canView, browseSettingsRoute);
   express.get('/planning/settings/:id', canView, beforeSettingsRead, express.crud.readRoute.bind(null, app, {
     model: PlanSettings,
     prepareResult: getGlobalSettings
@@ -57,6 +57,23 @@ module.exports = function setUpPlanningRoutes(app, module)
     });
 
     res.sendStatus(203);
+  }
+
+  function browseSettingsRoute(req, res, next)
+  {
+    if (req.headers['x-global'] === '1')
+    {
+      req.rql.selector = {
+        name: 'regex',
+        args: ['_id', '^planning\\.']
+      };
+
+      express.crud.browseRoute(app, settingsModule.Setting, req, res, next);
+    }
+    else
+    {
+      express.crud.browseRoute(app, PlanSettings, req, res, next);
+    }
   }
 
   function beforeSettingsRead(req, res, next)
