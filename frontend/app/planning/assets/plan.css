@@ -93,6 +93,8 @@
 }
 .wrap .planning-mrp-list {
   flex-wrap: wrap;
+  max-height: 130px;
+  overflow-y: auto;
 }
 .wrap .planning-mrp-list-action {
   border-right: 0;
@@ -100,9 +102,6 @@
 }
 .wrap .planning-mrp-list-action + .planning-mrp-list {
   border-left: 1px solid #ccc;
-}
-.planning-mrp-list::-webkit-scrollbar {
-  display: none;
 }
 .planning-mrp-list-item {
   height: 25px;
