@@ -13,7 +13,7 @@ module.exports = function setUpAppStartedEventCheck(app, watchdogModule)
   let lastAppStartedCheckAt = -1;
   let consecutiveChecks = 0;
 
-  app.broker.subscribe('app.started', checkAppStartedEvents).setLimit(1);
+  app.broker.subscribe('app.started', () => setTimeout(checkAppStartedEvents, 10000)).setLimit(1);
 
   function checkAppStartedEvents()
   {
