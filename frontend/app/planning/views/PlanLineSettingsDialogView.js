@@ -121,10 +121,13 @@ define([
       var settings = view.plan.settings;
       var lineSettings = view.line.settings;
 
+      var activeFrom = view.$id('activeFrom').val();
+      var activeTo = view.$id('activeTo').val();
+
       lineSettings.set({
         mrpPriority: view.$id('mrpPriority').val().split(','),
-        activeFrom: view.$id('activeFrom').val(),
-        activeTo: view.$id('activeTo').val()
+        activeFrom: activeFrom === '06:00' ? '' : activeFrom,
+        activeTo: activeTo === '06:00' ? '' : activeTo
       });
 
       var newMrpPriority = lineSettings.get('mrpPriority');
