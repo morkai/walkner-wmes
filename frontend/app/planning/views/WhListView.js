@@ -353,7 +353,6 @@ define([
         });
       }
 
-
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },
 

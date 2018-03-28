@@ -2,7 +2,7 @@
   <table class="planning-mrp-lineOrders-table">
     <thead>
       <tr>
-        <% ['group', 'no', 'shift', 'mrp', 'orderNo', 'status', 'nc12', 'name', 'qty:header', 'startTime', 'finishTime', 'dropZone', 'line'].forEach(function(prop) { %>
+        <% ['group', 'no', 'shift', 'mrp', 'orderNo', 'status', 'nc12', 'name', 'qty:header', 'startTime', 'finishTime', 'line'].forEach(function(prop) { %>
         <th class="is-min"><%- t('planning', 'lineOrders:list:' + prop) %></th>
         <% }) %>
         <th><%- t('planning', 'lineOrders:list:comment') %></th>
@@ -31,7 +31,6 @@
         <td class="is-min text-right"><%- order.qtyPlan.toLocaleString() %>/<%- order.qtyTodo.toLocaleString() %></td>
         <td class="is-min text-right"><%- order.startTime %></td>
         <td class="is-min text-right"><%- order.finishTime %></td>
-        <td class="is-min planning-mrp-lineOrders-dropZone"><%- order.dropZone %></td>
         <td class="is-min"><%= order.line %></td>
         <td class="planning-mrp-lineOrders-comment"><%- order.comment %></td>
       </tr>

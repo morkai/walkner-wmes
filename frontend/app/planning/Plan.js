@@ -230,7 +230,7 @@ define([
 
     canChangeDropZone: function()
     {
-      return user.isAllowedTo(
+      return false && user.isAllowedTo(
         'ORDERS:MANAGE',
         'PLANNING:PLANNER', 'PLANNING:WHMAN',
         'FN:master', 'FN:leader'
@@ -239,7 +239,7 @@ define([
 
     canChangeWhDropZone: function()
     {
-      return user.isAllowedTo(
+      return false && user.isAllowedTo(
         'ORDERS:MANAGE',
         'PLANNING:PLANNER',
         'FN:master', 'FN:leader'
@@ -248,7 +248,7 @@ define([
 
     canChangeWhStatus: function()
     {
-      return user.isAllowedTo('PLANNING:WHMAN');
+      return false && user.isAllowedTo('PLANNING:WHMAN');
     },
 
     applyChange: function(planChange)
