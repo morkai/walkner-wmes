@@ -16,6 +16,7 @@ define([
   '../Plan',
   '../PlanSettings',
   '../PlanDisplayOptions',
+  '../WhOrderStatus',
   '../views/WhFilterView',
   '../views/WhListView',
   'app/planning/templates/whPage',
@@ -36,6 +37,7 @@ define([
   Plan,
   PlanSettings,
   PlanDisplayOptions,
+  WhOrderStatus,
   WhFilterView,
   WhListView,
   pageTemplate,
@@ -148,6 +150,13 @@ define([
         {
           sapOrder.set('psStatus', message.status);
         }
+      },
+      'planning.whOrderStatuses.updated.*': function(message)
+      {
+        if (message.plan === this.plan.id)
+        {
+          this.whOrderStatuses.setOrderStatus(message.key, message.value);
+        }
       }
     },
 
@@ -193,6 +202,8 @@ define([
 
       page.delayReasons = new DelayReasonCollection();
 
+      page.whOrderStatuses = bindLoadingMessage(new WhOrderStatus({_id: plan.id}), page);
+
       var nlsPrefix = 'MSG:LOADING_FAILURE:';
       var nlsDomain = 'planning';
 
@@ -215,6 +226,7 @@ define([
       this.listView = new WhListView({
         delayReasons: this.delayReasons,
         prodLineStates: productionState.prodLineStates,
+        whOrderStatuses: this.whOrderStatuses,
         plan: this.plan
       });
 
@@ -238,7 +250,7 @@ define([
 
       page.listenTo(plan.settings.global, 'change', page.onGlobalSettingChanged);
 
-      page.listenTo(plan.mrps, 'reset', _.after(2, _.debounce(page.listView.render.bind(page.listView), 1)));
+      page.listenTo(plan.mrps, 'reset', page.onMrpsReset);
 
       page.listenTo(plan.sapOrders, 'sync', page.onSapOrdersSynced);
 
@@ -256,6 +268,7 @@ define([
       return when(
         productionState.load(forceReloadProdState),
         this.delayReasons.fetch({reset: true}),
+        this.whOrderStatuses.fetch(),
         plan.settings.fetch(),
         plan.shiftOrders.fetch({reset: true}),
         plan.sapOrders.fetch({reset: true}),
@@ -284,10 +297,13 @@ define([
 
       plan.set('loading', true);
 
+      page.whOrderStatuses.set('_id', plan.id);
+
       page.promised(plan.settings.set('_id', plan.id).fetch()).then(
         function()
         {
           var promise = $.when(
+            page.whOrderStatuses.fetch(),
             plan.shiftOrders.fetch({reset: true, reload: true}),
             plan.sapOrders.fetch({reset: true, reload: true}),
             plan.fetch()
@@ -528,6 +544,14 @@ define([
       }
 
       this.timers.reloadOrders = setTimeout(this.reloadOrders.bind(this), 10 * 60 * 1000);
+    },
+
+    onMrpsReset: function()
+    {
+      if (!this.plan.isAnythingLoading())
+      {
+        this.listView.render();
+      }
     }
 
   });

@@ -254,12 +254,17 @@
   "lineOrders:list:lines": "Linie",
   "lineOrders:list:line": "Linia",
   "lineOrders:list:dropZone": "Drop zone",
+  "lineOrders:list:whStatus": "Etap",
   "lineOrders:list:comment": "Ostatni komentarz",
   "lineOrders:menu:copy": "Kopiuj listę zleceń",
   "lineOrders:menu:copy:success": "Lista zleceń została skopiowana do schowka.",
 
   "wh:menu:copy:lineGroup": "Kopiuj listę zleceń <em>{group}. {line}</em>",
   "wh:menu:copy:lineGroupNo": "Kopiuj nry zleceń <em>{group}. {line}</em>",
+  "wh:status:0": "Nieokreślony",
+  "wh:status:1": "Lista",
+  "wh:status:2": "Kompletacja",
+  "wh:status:3": "Wysyłka",
 
   "stats:orderCount": "Ilość zleceń",
   "stats:quantity": "Ilość sztuk",

@@ -13,6 +13,17 @@
 .planning-wh-list {
   border: 1px solid #ccc;
 }
+.planning-wh-list .is-clickable {
+  cursor: pointer;
+}
+.planning-wh-status[data-status="0"] {
+  color: transparent;
+}
+.planning-wh-statusPicker {
+  position: absolute;
+  z-index: 1;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+}
 .planning-wh-newGroup {
   background: #ccc!important;
 }

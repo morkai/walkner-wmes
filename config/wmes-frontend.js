@@ -281,7 +281,7 @@ exports.mongoose = {
     'paintShopEvent', 'paintShopOrder', 'paintShopDropZone', 'paintShopPaint', 'paintShopLoad',
     'behaviorObsCard', 'minutesForSafetyCard',
     'visNodePosition',
-    'planSettings', 'planChange', 'plan',
+    'planSettings', 'planChange', 'plan', 'whOrderStatus',
     'xData',
     'dailyMrpCount', 'clipOrderCache', 'clipOrderCount'
   ]

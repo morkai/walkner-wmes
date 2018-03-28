@@ -11,6 +11,8 @@ const editPlanLineRoute = require('./editPlanLine');
 const browseSapOrdersRoute = require('./browseSapOrders');
 const browseLateOrdersRoute = require('./browseLateOrders');
 const editSettingsRoute = require('./editSettings');
+const readWhOrderStatusRoute = require('./readWhOrderStatus');
+const editWhOrderStatusRoute = require('./editWhOrderStatus');
 
 module.exports = function setUpPlanningRoutes(app, module)
 {
@@ -49,6 +51,13 @@ module.exports = function setUpPlanningRoutes(app, module)
 
   express.get('/planning/changes', canView, express.crud.browseRoute.bind(null, app, PlanChange));
   express.get('/planning/changes/:id', canView, express.crud.readRoute.bind(null, app, PlanChange));
+
+  express.get('/planning/whOrderStatuses/:id', canView, readWhOrderStatusRoute.bind(null, app, module));
+  express.post(
+    '/planning/whOrderStatuses/:id',
+    userModule.auth('PLANNING:WHMAN'),
+    editWhOrderStatusRoute.bind(null, app, module)
+  );
 
   function generatePlanRoute(req, res)
   {

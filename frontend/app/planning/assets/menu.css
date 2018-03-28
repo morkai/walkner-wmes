@@ -10,6 +10,7 @@
   padding: 3px 10px;
   font-size: 12px;
   cursor: pointer;
+  line-height: 18px;
 }
 .planning-menu > li > a:hover {
   background-color: #ffffa6;

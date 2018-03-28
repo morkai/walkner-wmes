@@ -248,7 +248,7 @@ define([
 
     canChangeWhStatus: function()
     {
-      return false && user.isAllowedTo('PLANNING:WHMAN');
+      return user.isAllowedTo('PLANNING:WHMAN');
     },
 
     applyChange: function(planChange)

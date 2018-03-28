@@ -5,6 +5,7 @@ define([
   'jquery',
   'app/i18n',
   'app/time',
+  'app/user',
   'app/viewport',
   'app/core/View',
   'app/data/clipboard',
@@ -21,6 +22,7 @@ define([
   $,
   t,
   time,
+  user,
   viewport,
   View,
   clipboard,
@@ -94,6 +96,10 @@ define([
       'click .planning-mrp-lineOrders-dropZone': function(e)
       {
         this.handleDropZoneAction(this.$(e.target).closest('tr').attr('data-id'));
+      },
+      'click .planning-wh-status': function(e)
+      {
+        this.handleWhStatusAction(this.$(e.target).closest('tr').attr('data-key'), e.pageY, e.pageX);
       }
     },
 
@@ -110,12 +116,15 @@ define([
       view.listenTo(sapOrders, 'change:psStatus', view.onPsStatusChanged);
       view.listenTo(sapOrders, 'change:whStatus', view.onWhStatusChanged);
       view.listenTo(sapOrders, 'change:whDropZone change:whTime', view.onWhDropZoneChanged);
+
+      view.listenTo(view.whOrderStatuses, 'change:orders', view.onWhOrderStatusChanged);
     },
 
     serialize: function()
     {
       return {
         idPrefix: this.idPrefix,
+        canChangeStatus: this.plan.canChangeWhStatus(),
         orders: this.serializeOrders()
       };
     },
@@ -192,6 +201,7 @@ define([
             qtyTodo: order.get('quantityTodo'),
             qtyPlan: qtyPlan,
             line: planLine.id,
+            whStatus: null,
             comment: sapOrder ? sapOrder.getCommentWithIcon() : '',
             comments: sapOrder ? sapOrder.get('comments') : [],
             status: order.getStatus(),
@@ -238,6 +248,8 @@ define([
         order.shift = shiftUtil.getShiftNo(order.startTime);
         order.startTime = time.utc.format(order.startTime, 'HH:mm:ss');
         order.finishTime = time.utc.format(order.finishTime, 'HH:mm:ss');
+        order.key = order.orderNo + ':' + order.startTime + ':' + order.line;
+        order.whStatus = view.whOrderStatuses.getOrderStatus(order.key);
 
         if (prev)
         {
@@ -391,8 +403,8 @@ define([
           'qtyTodo',
           'startTime',
           'finishTime',
-          'dropZone',
           'line',
+          'whStatus',
           'comment'
         ];
         var text = orderNoOnly
@@ -427,8 +439,8 @@ define([
             order.qtyTodo,
             order.startTime,
             order.finishTime,
-            order.dropZone,
             order.line,
+            order.whStatus.status,
             '"' + order.comments
               .map(function(comment) { return comment.user.label + ': ' + comment.text.replace(/"/g, "'"); })
               .join('\r\n--\r\n') + '"'
@@ -473,6 +485,68 @@ define([
       });
 
       viewport.showDialog(dialogView, t('planning', 'orders:menu:dropZone:title'));
+    },
+
+    handleWhStatusAction: function(orderKey, y, x)
+    {
+      var view = this;
+
+      if (!view.plan.canChangeWhStatus())
+      {
+        return;
+      }
+
+      var current = view.whOrderStatuses.getOrderStatus(orderKey).status;
+
+      if (current < 3)
+      {
+        y -= 5 + 12 + 24 * (current + 1);
+        x -= 10;
+      }
+
+      contextMenu.show(view, y, x, [0, 1, 2, 3].map(function(status)
+      {
+        return {
+          label: t('planning', 'wh:status:' + status),
+          handler: view.handleChangeWhStatusAction.bind(view, orderKey, status)
+        };
+      }));
+    },
+
+    handleChangeWhStatusAction: function(orderKey, status)
+    {
+      viewport.msg.saving();
+
+      var view = this;
+      var oldValue = view.whOrderStatuses.getOrderStatus(orderKey);
+      var newValue = {
+        status: status,
+        updatedAt: new Date(),
+        updater: user.getInfo()
+      };
+
+      view.whOrderStatuses.setOrderStatus(orderKey, newValue);
+
+      var req = view.ajax({
+        method: 'POST',
+        url: '/planning/whOrderStatuses/' + view.plan.id,
+        data: JSON.stringify({key: orderKey, status: status})
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.savingFailed();
+
+        if (view.whOrderStatuses.getOrderStatus(orderKey) === newValue)
+        {
+          view.whOrderStatuses.setOrderStatus(orderKey, oldValue);
+        }
+      });
+
+      req.done(function()
+      {
+        viewport.msg.saved();
+      });
     },
 
     onCommentChange: function(sapOrder)
@@ -531,6 +605,19 @@ define([
       if ($order.length)
       {
         $order.find('.planning-mrp-lineOrders-dropZone').html(sapOrder.getDropZone());
+      }
+    },
+
+    onWhOrderStatusChanged: function(key, value)
+    {
+      var $order = this.$('tr[data-key="' + key + '"]');
+
+      if ($order.length)
+      {
+        $order
+          .find('.planning-wh-status')
+          .attr('data-status', value.status)
+          .html(t('planning', 'wh:status:' + value.status));
       }
     }
 
