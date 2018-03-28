@@ -43,7 +43,7 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
 
       const $project = {
         quantityTodo: '$qty',
-        quantityDone: {$ifNull: ['$qtyDone.total', 0]},
+        quantityDone: '$qtyDone',
         statuses: 1,
         whStatus: 1,
         whTime: 1,
@@ -108,6 +108,14 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
 
       sapOrders.forEach(order =>
       {
+        if (_.isEmpty(order.quantityDone))
+        {
+          order.quantityDone = {
+            total: 0,
+            byOperation: {}
+          };
+        }
+
         order.psStatus = psStatuses.get(order._id);
         order.delayReason = null;
         order.comments = [];

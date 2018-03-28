@@ -45,7 +45,11 @@ define([
 
     getActualOrderData: function()
     {
-      return this.pick(['quantityTodo', 'quantityDone', 'statuses']);
+      var orderData = this.pick(['quantityTodo', 'statuses']);
+
+      orderData.quantityDone = this.getQuantityDone();
+
+      return orderData;
     },
 
     getCommentWithIcon: function()
@@ -67,6 +71,21 @@ define([
         group: _.escape(whDropZone),
         time: time.utc.format(whTime, 'HH:mm')
       });
+    },
+
+    getQuantityDone: function()
+    {
+      var quantityDone = this.get('quantityDone');
+      var operation = this.collection && this.collection.plan
+        ? this.collection.plan.orders.get(this.id).get('operation')
+        : null;
+
+      if (operation)
+      {
+        return quantityDone.byOperation[operation.no] || 0;
+      }
+
+      return quantityDone.total;
     }
 
   }, {

@@ -84,20 +84,20 @@ define([
 
       if (plan)
       {
-        orders.forEach(function(order)
+        orders.forEach(function(planOrder)
         {
-          var sapOrder = plan.sapOrders.get(order.id);
+          var sapOrder = plan.sapOrders.get(planOrder.id);
 
           if (!sapOrder)
           {
             return;
           }
 
-          var quantityRemaining = sapOrder.get('quantityTodo') - sapOrder.get('quantityDone');
+          var quantityRemaining = sapOrder.get('quantityTodo') - sapOrder.getQuantityDone();
 
-          stats.manHours.todo += order.get('manHours');
-          stats.quantity.todo += order.getQuantityTodo();
-          stats.manHours.remaining += order.getManHours(quantityRemaining);
+          stats.manHours.todo += planOrder.get('manHours');
+          stats.quantity.todo += planOrder.getQuantityTodo();
+          stats.manHours.remaining += planOrder.getManHours(quantityRemaining);
           stats.quantity.remaining += quantityRemaining;
         });
 

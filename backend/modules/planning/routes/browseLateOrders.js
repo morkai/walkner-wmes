@@ -62,6 +62,7 @@ module.exports = function browseLateOrdersRoute(app, module, req, res, next)
         description: 1,
         qty: 1,
         'qtyDone.total': 1,
+        'qtyDone.byOperation': 1,
         statuses: 1,
         delayReason: 1,
         scheduledStartDate: 1,
@@ -82,7 +83,20 @@ module.exports = function browseLateOrdersRoute(app, module, req, res, next)
         .map(o => {
           const operation = _.pick(resolveBestOperation(o.operations), Plan.OPERATION_PROPERTIES);
           const quantityTodo = o.qty;
-          const quantityDone = o.qtyDone && o.qtyDone.total || 0;
+          let quantityDone = 0;
+
+          if (o.qtyDone)
+          {
+            if (operation && o.qtyDone.byOperation)
+            {
+              quantityDone = o.qtyDone.byOperation[operation.no] || 0;
+            }
+            else if (o.total)
+            {
+              quantityDone = o.total;
+            }
+          }
+
           const quantityRemaining = this.useRemainingQuantity ? Math.max(0, quantityTodo - quantityDone) : quantityTodo;
           const manHours = operation
             ? ((operation.laborTime / 100 * quantityRemaining) + operation.laborSetupTime)

@@ -145,6 +145,7 @@ module.exports = function setupPlanModel(app, mongoose)
     description: 1,
     qty: 1,
     'qtyDone.total': 1,
+    'qtyDone.byOperation': 1,
     statuses: 1,
     operations: 1,
     'bom.nc12': 1
@@ -180,6 +181,19 @@ module.exports = function setupPlanModel(app, mongoose)
     const hardComponent = !hardComponents || !Array.isArray(sapOrder.bom) || sapOrder.bom.length === 0
       ? null
       : sapOrder.bom.find(component => hardComponents.has(component.nc12));
+    let quantityDone = 0;
+
+    if (sapOrder.qtyDone)
+    {
+      if (operation && sapOrder.qtyDone.byOperation)
+      {
+        quantityDone = sapOrder.qtyDone.byOperation[operation.no] || 0;
+      }
+      else if (sapOrder.total)
+      {
+        quantityDone = sapOrder.total;
+      }
+    }
 
     return {
       _id: sapOrder._id,
@@ -193,7 +207,7 @@ module.exports = function setupPlanModel(app, mongoose)
       manHours: 0,
       hardComponent: hardComponent ? hardComponent.nc12 : null,
       quantityTodo: sapOrder.qty,
-      quantityDone: sapOrder.qtyDone && sapOrder.qtyDone.total || 0,
+      quantityDone,
       quantityPlan: 0,
       lines: [],
       incomplete: 0,
