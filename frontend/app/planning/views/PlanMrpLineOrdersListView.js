@@ -8,14 +8,14 @@ define([
   'app/viewport',
   'app/core/View',
   'app/data/clipboard',
-  'app/orderStatuses/util/renderOrderStatusLabel',
   '../util/shift',
   '../util/contextMenu',
   '../PlanSapOrder',
   './PlanOrderDropZoneDialogView',
   'app/core/templates/userInfo',
   'app/planning/templates/lineOrdersList',
-  'app/planning/templates/lineOrderComments'
+  'app/planning/templates/lineOrderComments',
+  'app/planning/templates/orderStatusIcons'
 ], function(
   _,
   $,
@@ -24,14 +24,14 @@ define([
   viewport,
   View,
   clipboard,
-  renderOrderStatusLabel,
   shiftUtil,
   contextMenu,
   PlanSapOrder,
   PlanOrderDropZoneDialogView,
   userInfoTemplate,
   lineOrdersListTemplate,
-  lineOrderCommentsTemplate
+  lineOrderCommentsTemplate,
+  orderStatusIconsTemplate
 ) {
   'use strict';
 
@@ -267,59 +267,7 @@ define([
 
     serializeOrderStatuses: function(planOrder)
     {
-      var statuses = [];
-      var orderData = this.plan.getActualOrderData(planOrder.id);
-      var kindIcon = planOrder.getKindIcon();
-      var sourceIcon = planOrder.getSourceIcon();
-      var psStatus = this.plan.sapOrders.getPsStatus(planOrder.id);
-      var whStatus = this.plan.sapOrders.getWhStatus(planOrder.id);
-
-      if (planOrder.get('ignored'))
-      {
-        statuses.push(this.formatIcon(planOrder.getIcon('ignored'), 'orders:ignored'));
-      }
-
-      if (kindIcon)
-      {
-        statuses.push(this.formatIcon(kindIcon, 'orderPriority:' + planOrder.get('kind')));
-      }
-
-      if (sourceIcon)
-      {
-        statuses.push(this.formatIcon(sourceIcon, 'orders:source:' + planOrder.get('source')));
-      }
-
-      if (planOrder.get('urgent'))
-      {
-        statuses.push(this.formatIcon(planOrder.getIcon('urgent'), 'orders:urgent'));
-      }
-
-      if (planOrder.isPinned())
-      {
-        statuses.push(this.formatIcon(planOrder.getIcon('pinned'), 'orders:pinned'));
-      }
-
-      statuses.push('<span class="planning-mrp-list-property planning-mrp-list-property-psStatus" '
-        + 'title="' + t('planning', 'orders:psStatus:' + psStatus) + '" '
-        + 'data-ps-status="' + psStatus + '">'
-        + '<i class="fa ' + planOrder.getIcon('psStatus') + '"></i></span>');
-
-      statuses.push('<span class="planning-mrp-list-property planning-mrp-list-property-whStatus" '
-        + 'title="' + t('planning', 'orders:whStatus:' + whStatus) + '" '
-        + 'data-wh-status="' + whStatus + '">'
-        + '<i class="fa ' + planOrder.getIcon('whStatus') + '"></i></span>');
-
-      if (orderData.statuses.indexOf('CNF') !== -1)
-      {
-        statuses.push(renderOrderStatusLabel('CNF'));
-      }
-
-      if (orderData.statuses.indexOf('DLV') !== -1)
-      {
-        statuses.push(renderOrderStatusLabel('DLV'));
-      }
-
-      return statuses.join('');
+      return orderStatusIconsTemplate(this.plan, planOrder.id);
     },
 
     formatIcon: function(icon, title)
@@ -370,7 +318,6 @@ define([
           handler: this.handleDropZoneAction.bind(this, orderNo)
         });
       }
-
 
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },

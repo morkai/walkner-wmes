@@ -11,6 +11,8 @@ define([
 ) {
   'use strict';
 
+  var SAP_STATUSES = ['CNF', 'DLV', 'TECO'];
+
   function formatIcon(icon, title)
   {
     return '<span class="planning-mrp-list-property" title="' + _.escape(t('planning', title)) + '">'
@@ -63,15 +65,13 @@ define([
       + 'data-wh-status="' + whStatus + '">'
       + '<i class="fa ' + planOrder.getIcon('whStatus') + '"></i></span>');
 
-    if (orderData.statuses.indexOf('CNF') !== -1)
+    SAP_STATUSES.forEach(function(sapStatus)
     {
-      statuses.push(renderOrderStatusLabel('CNF'));
-    }
-
-    if (orderData.statuses.indexOf('DLV') !== -1)
-    {
-      statuses.push(renderOrderStatusLabel('DLV'));
-    }
+      if (orderData.statuses.indexOf(sapStatus) !== -1)
+      {
+        statuses.push(renderOrderStatusLabel(sapStatus));
+      }
+    });
 
     return statuses.join('');
   };

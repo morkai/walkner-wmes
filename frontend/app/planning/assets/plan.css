@@ -135,6 +135,10 @@
 .planning-mrp-list-item.is-surplus {
   background-color: #ffe8e8;
 }
+.planning-mrp-list-item.is-teco {
+  background: #333;
+  color: #fff;
+}
 .planning-mrp-list-item.is-selected {
   background-color: #d9edf7;
 }

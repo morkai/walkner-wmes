@@ -178,6 +178,7 @@ define([
           source: source,
           confirmed: orderData.statuses.indexOf('CNF') !== -1 ? 'is-cnf' : '',
           delivered: orderData.statuses.indexOf('DLV') !== -1 ? 'is-dlv' : '',
+          deleted: orderData.statuses.indexOf('TECO') !== -1 ? 'is-teco' : '',
           customQuantity: order.hasCustomQuantity(),
           ignored: order.get('ignored') ? 'is-ignored' : '',
           urgent: urgent && !autoAdded,
