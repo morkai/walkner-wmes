@@ -132,8 +132,7 @@ define([
             v = Math.max(0, parseFloat($property.val()) || 0);
             break;
 
-          case 'activeFrom':
-          case 'activeTo':
+          case 'activeTime':
             v = this.parseActiveTime($property);
             break;
         }
@@ -414,8 +413,7 @@ define([
       });
 
       $mrpPriority.select2('enable', false);
-      view.$id('activeFrom').prop('disabled', true);
-      view.$id('activeTo').prop('disabled', true);
+      view.$id('activeTime').prop('disabled', true);
     },
 
     setUpMrpSelect2: function()
@@ -561,8 +559,7 @@ define([
     {
       var view = this;
       var disabled = !lineId;
-      var activeFrom = '';
-      var activeTo = '';
+      var activeTime = '';
       var $mrpPriority = view.$id('mrpPriority');
 
       if (!disabled)
@@ -596,8 +593,7 @@ define([
           selectedMrp = selectedMrp && _.includes(mrpPriority, selectedMrp.id)
             ? selectedMrp.id
             : mrpPriority[0];
-          activeFrom = line.get('activeFrom');
-          activeTo = line.get('activeTo');
+          activeTime = view.buildActiveTime(line.get('activeTime'));
         }
         else
         {
@@ -616,12 +612,8 @@ define([
         view.selectMrp(null, null);
       }
 
-      view.$id('activeFrom')
-        .val(activeFrom)
-        .prop('disabled', disabled);
-
-      view.$id('activeTo')
-        .val(activeTo)
+      view.$id('activeTime')
+        .val(activeTime)
         .prop('disabled', disabled);
     },
 
@@ -711,8 +703,7 @@ define([
         lines.add({
           _id: selectedLine,
           mrpPriority: mrpPriority,
-          activeFrom: this.parseActiveTime(this.$id('activeFrom')),
-          activeTo: this.parseActiveTime(this.$id('activeTo'))
+          activeTime: this.parseActiveTime(this.$id('activeTime'))
         });
       }
 
@@ -727,23 +718,50 @@ define([
       mrpLine.set('orderPriority', _.pluck(this.$id('orderPriority').select2('data'), 'id'));
     },
 
+    buildActiveTime: function(activeTimes)
+    {
+      return activeTimes
+        .map(function(activeTime) { return activeTime.from + '-' + activeTime.to; })
+        .join(', ');
+    },
+
     parseActiveTime: function($property)
     {
-      var parts = $property.val().split(':');
-      var hh = +parts[0];
-      var mm = +parts[1];
-
-      if (hh >= 0 && hh <= 24 && mm >= 0 && mm <= 59)
+      var activeTimes = $property.val().split(',').map(function(activeTime)
       {
-        if (hh === 24)
+        var parts = activeTime.trim().split('-');
+
+        return {
+          from: parseTime(parts[0]),
+          to: parseTime(parts[1])
+        };
+      }).filter(function(activeTime)
+      {
+        return !!activeTime.from && !!activeTime.to;
+      });
+
+      $property.val(this.buildActiveTime(activeTimes));
+
+      return activeTimes;
+
+      function parseTime(input)
+      {
+        var parts = input.split(':');
+        var hh = +parts[0];
+        var mm = +parts[1];
+
+        if (hh >= 0 && hh <= 24 && mm >= 0 && mm <= 59)
         {
-          hh = 0;
+          if (hh === 24)
+          {
+            hh = 0;
+          }
+
+          return (hh < 10 ? '0' : '') + hh + ':' + (mm < 10 ? '0' : '') + mm;
         }
 
-        return (hh < 10 ? '0' : '') + hh + ':' + (mm < 10 ? '0' : '') + mm;
+        return '';
       }
-
-      return '';
     },
 
     serializeToForm: function()

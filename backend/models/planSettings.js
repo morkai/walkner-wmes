@@ -51,17 +51,19 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     retainKeyOrder: true
   });
 
+  const lineActiveTimeSchema = new mongoose.Schema({
+    from: String,
+    to: String
+  }, {
+    _id: false,
+    minimize: false,
+    retainKeyOrder: true
+  });
+
   const lineSchema = new mongoose.Schema({
     _id: String,
     mrpPriority: [String],
-    activeFrom: {
-      type: String,
-      default: ''
-    },
-    activeTo: {
-      type: String,
-      default: ''
-    }
+    activeTime: [lineActiveTimeSchema]
   }, {
     _id: false,
     minimize: false,

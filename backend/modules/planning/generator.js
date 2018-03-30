@@ -48,7 +48,7 @@ module.exports = function setUpGenerator(app, module)
 
   const DEV = app.options.env === 'development';
   const UNFROZEN_PLANS = DEV ? [] : [];
-  const LOG_LINES = {};
+  const LOG_LINES = {'LM-18': true};
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
   const COMPARE_ORDERS = true || !DEV && UNFROZEN_PLANS.length === 0;
@@ -1638,16 +1638,21 @@ module.exports = function setUpGenerator(app, module)
 
         return order && lineSettings.mrpPriority.includes(order.mrp);
       });
+      const activeTimes = createActiveTimes(state.date.getTime(), lineSettings.activeTime);
+      const activeTime = activeTimes.shift();
       const lineState = {
         _id: lineId,
         completed: false,
         shiftNo: -1,
-        activeFrom: createMomentFromActiveTime(state.date.getTime(), lineSettings.activeFrom, true),
-        activeTo: createMomentFromActiveTime(state.date.getTime(), lineSettings.activeTo, false),
+        activeTimes,
+        activeFrom: activeTime.from,
+        activeTo: activeTime.to,
         nextDowntime: state.autoDowntimes.get(lineId),
         downtimes: [],
         orderStateQueue: createLineOrderStateQueue(state, lineId, lineSettings.mrpPriority, frozenOrders),
         bigOrderStateQueue: [],
+        triedOrdersSet: new Set(),
+        unresizablePlannedOrdersSet: new Set(),
         plannedOrdersSet: new Set(),
         plannedOrdersList: [],
         frozenOrdersMap: new Map(frozenOrders.map(o => [o.orderNo, o.quantity])),
@@ -1714,6 +1719,19 @@ module.exports = function setUpGenerator(app, module)
     });
 
     return urgentOrderStates.concat(lineOrderStateQueue);
+  }
+
+  function createActiveTimes(planTime, rawActiveTimes)
+  {
+    if (_.isEmpty(rawActiveTimes))
+    {
+      rawActiveTimes = [{from: '06:00', to: '06:00'}];
+    }
+
+    return rawActiveTimes.map(rawActiveTime => ({
+      from: createMomentFromActiveTime(planTime, rawActiveTime.from, true),
+      to: createMomentFromActiveTime(planTime, rawActiveTime.to, false)
+    }));
   }
 
   function createMomentFromActiveTime(planTime, activeTimeString, from)
@@ -1788,6 +1806,8 @@ module.exports = function setUpGenerator(app, module)
 
   function handleOrderState(state, lineState, orderState, trying)
   {
+    lineState.triedOrdersSet.add(orderState.order._id);
+
     if (orderState.order.kind === 'small')
     {
       return (trying ? trySmallOrder : handleSmallOrder)(state, lineState, orderState);
@@ -1801,6 +1821,48 @@ module.exports = function setUpGenerator(app, module)
     if (!done)
     {
       done = () => {};
+    }
+
+    if (lineState.activeTimes.length)
+    {
+      const nextActiveTime = lineState.activeTimes.shift();
+
+      lineState.activeFrom = nextActiveTime.from;
+      lineState.activeTo = nextActiveTime.to;
+
+      lineState.triedOrdersSet.forEach(triedOrderNo =>
+      {
+        if (lineState.plannedOrdersSet.has(triedOrderNo))
+        {
+          return;
+        }
+
+        const triedOrderState = state.orderStates.get(triedOrderNo);
+
+        if (triedOrderState.quantityTodo > 0)
+        {
+          lineState.orderStateQueue.unshift(triedOrderState);
+        }
+      });
+
+      if (lineState.plannedOrdersList.length)
+      {
+        lineState.unresizablePlannedOrdersSet.add(_.last(lineState.plannedOrdersList).orderNo);
+      }
+
+      if (lineState.orderStateQueue.length)
+      {
+        lineState.completed = false;
+
+        state.lineStateQueue.unshift(lineState);
+
+        if (!LOG_LINES || LOG_LINES[lineState._id])
+        {
+          log(`Continuing ${lineState._id} from ${lineState.activeFrom.format('HH:mm:ss')}...`);
+        }
+
+        return setImmediate(done);
+      }
     }
 
     lineState.completed = true;
@@ -2590,19 +2652,31 @@ module.exports = function setUpGenerator(app, module)
 
       let startAt = Number.MAX_SAFE_INTEGER;
 
-      plannedLines.forEach(plannedLineState =>
+      const resizeablePlannedLines = plannedLines.filter(plannedLineState =>
       {
+        if (plannedLineState.unresizablePlannedOrdersSet.has(orderNo))
+        {
+          return false;
+        }
+
         const plannedOrder = plannedLineState.plannedOrdersList.find(o => o.orderNo === orderNo);
 
         if (plannedOrder.startAt < startAt)
         {
           startAt = plannedOrder.startAt.getTime();
         }
+
+        return true;
       });
+
+      if (!resizeablePlannedLines.length)
+      {
+        return;
+      }
 
       incompletePlannedOrders.push({
         order,
-        plannedLines,
+        plannedLines: resizeablePlannedLines,
         startAt
       });
     });

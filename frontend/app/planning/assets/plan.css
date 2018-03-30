@@ -93,6 +93,9 @@
 }
 .wrap .planning-mrp-list {
   flex-wrap: wrap;
+  overflow: hidden;
+}
+.wrap .planning-mrp-orders .planning-mrp-list {
   max-height: 130px;
   overflow-y: auto;
 }

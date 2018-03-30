@@ -197,12 +197,16 @@ define([
         return '';
       }
 
-      var activeFrom = line.settings.get('activeFrom');
-      var activeTo = line.settings.get('activeTo');
+      var activeTimes = line.settings.get('activeTime')
+        .map(function(activeTime) { return activeTime.from + '-' + activeTime.to; })
+        .join(', ');
 
-      return force || activeFrom || activeTo
-        ? ((activeFrom || '06:00') + '-' + (activeTo || '06:00'))
-        : '';
+      if (!activeTimes || activeTimes === '06:00-06:00')
+      {
+        return force ? '06:00-06:00' : '';
+      }
+
+      return activeTimes;
     },
 
     hideMenu: function()

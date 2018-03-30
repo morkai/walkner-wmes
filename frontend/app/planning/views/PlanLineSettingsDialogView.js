@@ -32,6 +32,12 @@ define([
         this.submitForm();
 
         return false;
+      },
+
+      'change #-activeTime': function()
+      {
+        var $activeTime = this.$id('activeTime');
+        var activeTime = $activeTime.val();
       }
 
     },
@@ -63,8 +69,9 @@ define([
         mrp: this.mrp.getLabel(),
         line: this.line.getLabel(),
         mrpPriority: lineSettings.get('mrpPriority').join(','),
-        activeFrom: lineSettings.get('activeFrom'),
-        activeTo: lineSettings.get('activeTo'),
+        activeTime: lineSettings.get('activeTime')
+          .map(function(activeTime) { return activeTime.from + '-' + activeTime.to; })
+          .join(', '),
         workerCount: mrpLineSettings.get('workerCount'),
         orderPriority: mrpLineSettings.get('orderPriority').join(',')
       };
@@ -121,13 +128,20 @@ define([
       var settings = view.plan.settings;
       var lineSettings = view.line.settings;
 
-      var activeFrom = view.$id('activeFrom').val();
-      var activeTo = view.$id('activeTo').val();
-
       lineSettings.set({
         mrpPriority: view.$id('mrpPriority').val().split(','),
-        activeFrom: activeFrom === '06:00' ? '' : activeFrom,
-        activeTo: activeTo === '06:00' ? '' : activeTo
+        activeTime: view.$id('activeTime').val().split(',').map(function(activeTime)
+        {
+          var parts = activeTime.trim().split('-');
+
+          return {
+            from: parts[0],
+            to: parts[1]
+          };
+        }).filter(function(activeTime)
+        {
+          return !!activeTime.from && !!activeTime.to;
+        })
       });
 
       var newMrpPriority = lineSettings.get('mrpPriority');
