@@ -128,7 +128,7 @@ module.exports = function(app, productionModule, done)
       const next = this.next();
 
       mongoose.model('ProdLogEntry').aggregate(
-        {$group: {_id: null, max: {$max: '$createdAt'}, min: {$min: '$createdAt'}}},
+        [{$group: {_id: null, max: {$max: '$createdAt'}, min: {$min: '$createdAt'}}}],
         function(err, results)
         {
           if (err)

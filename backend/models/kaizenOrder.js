@@ -5,7 +5,7 @@
 const _ = require('lodash');
 const moment = require('moment');
 const deepEqual = require('deep-equal');
-const autoIncrement = require('mongoose-auto-increment');
+const autoIncrement = require('mongoose-plugin-autoinc');
 const businessDays = require('../modules/reports/businessDays');
 
 module.exports = function setupKaizenOrderModel(app, mongoose)

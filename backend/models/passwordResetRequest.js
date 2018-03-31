@@ -8,7 +8,6 @@ module.exports = function setUpPasswordResetRequestModel(app, mongoose)
     _id: {
       type: String,
       required: true,
-      unique: true,
       trim: true
     },
     createdAt: {

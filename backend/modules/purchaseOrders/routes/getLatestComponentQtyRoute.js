@@ -19,25 +19,26 @@ module.exports = function getLatestComponentQtyRoute(app, poModule, req, res, ne
   const mongoose = app[poModule.config.mongooseId];
   const PurchaseOrderPrint = mongoose.model('PurchaseOrderPrint');
 
-  PurchaseOrderPrint.aggregate(
+  const pipeline = [
     {$match: {nc12: {$in: nc12}, componentQty: {$ne: 0}}},
     {$sort: {nc12: 1, printedAt: 1}},
-    {$group: {_id: '$nc12', componentQty: {$last: '$componentQty'}}},
-    function(err, results)
+    {$group: {_id: '$nc12', componentQty: {$last: '$componentQty'}}}
+  ];
+
+  PurchaseOrderPrint.aggregate(pipeline, (err, results) =>
+  {
+    if (err)
     {
-      if (err)
-      {
-        return next(err);
-      }
-
-      const latestComponentQty = {};
-
-      _.forEach(results, function(result)
-      {
-        latestComponentQty[result._id] = result.componentQty;
-      });
-
-      res.json(latestComponentQty);
+      return next(err);
     }
-  );
+
+    const latestComponentQty = {};
+
+    _.forEach(results, result =>
+    {
+      latestComponentQty[result._id] = result.componentQty;
+    });
+
+    res.json(latestComponentQty);
+  });
 };

@@ -151,7 +151,7 @@ function findOrdersStartingWithNc12(Order, MechOrder, nc12, done)
 
   /* eslint-enable no-var */
 
-  Order.mapReduce(options, function(err, results)
+  Order.mapReduce(options, function(err, {results})
   {
     if (err)
     {

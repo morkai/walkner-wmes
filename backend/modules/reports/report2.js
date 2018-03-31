@@ -41,14 +41,16 @@ module.exports = function(mongoose, options, done)
     const groupOperator = getGroupOperator(options.interval);
 
     ClipOrderCount.aggregate(
-      {$match: conditions},
-      {$group: {
-        _id: groupOperator,
-        all: {$sum: '$all'},
-        cnf: {$sum: '$cnf'},
-        dlv: {$sum: '$dlv'}
-      }},
-      {$sort: {_id: 1}},
+      [
+        {$match: conditions},
+        {$group: {
+          _id: groupOperator,
+          all: {$sum: '$all'},
+          cnf: {$sum: '$cnf'},
+          dlv: {$sum: '$dlv'}
+        }},
+        {$sort: {_id: 1}}
+      ],
       this.parallel()
     );
   }

@@ -58,12 +58,12 @@ module.exports = function setUpHtml2pdfRoutes(app, module)
           module.pool.use(async browser =>
           {
             const page = await browser.newPage();
-            const status = await page.goto(
+            const res = await page.goto(
               module.config.fileUrl.replace('${hash}', hash).replace('${format}', 'html'),
               {waitUntil: 'networkidle2'}
             );
 
-            if (!status || !status.ok)
+            if (!res || !res.ok())
             {
               throw app.createError('INVALID_STATUS', 500);
             }

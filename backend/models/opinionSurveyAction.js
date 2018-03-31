@@ -3,7 +3,7 @@
 'use strict';
 
 const _ = require('lodash');
-const autoIncrement = require('mongoose-auto-increment');
+const autoIncrement = require('mongoose-plugin-autoinc');
 
 module.exports = function setupOpinionSurveyActionModel(app, mongoose)
 {

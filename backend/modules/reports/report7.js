@@ -224,7 +224,7 @@ module.exports = function(mongoose, options, done)
         specificAor: options.specificAor,
         mrpControllers: options.inoutMrpControllers || {}
       }
-    }, function(err, results)
+    }, function(err, {results})
     {
       if (err)
       {

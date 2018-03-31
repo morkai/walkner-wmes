@@ -4,7 +4,7 @@
 
 const _ = require('lodash');
 const mongoose = require('mongoose');
-const autoIncrement = require('mongoose-auto-increment');
+const autoIncrement = require('mongoose-plugin-autoinc');
 const expressMiddleware = require('./expressMiddleware');
 
 exports.DEFAULT_CONFIG = {
@@ -52,10 +52,7 @@ exports.start = function startDbModule(app, module, done)
       return;
     }
 
-    const uri = module.config.uri;
-    const options = Object.assign({useMongoClient: true}, module.config.mongoClient);
-
-    module.connect(uri, options)
+    module.connect(module.config.uri, module.config.mongoClient)
       .then(() => initialize())
       .catch(err =>
       {
@@ -86,7 +83,6 @@ exports.start = function startDbModule(app, module, done)
     {
       initialized = true;
 
-      initializeAutoIncrement();
       setUpKeepAliveQuery();
       loadModels();
     }
@@ -101,14 +97,6 @@ exports.start = function startDbModule(app, module, done)
     const modelsList = module.config.models || require(app.pathTo('models', 'index'));
 
     app.loadFiles(modelsDir, modelsList, [app, module], done);
-  }
-
-  /**
-   * @private
-   */
-  function initializeAutoIncrement()
-  {
-    autoIncrement.initialize(module.connection);
   }
 
   function setUpKeepAliveQuery()

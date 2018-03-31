@@ -88,8 +88,10 @@ module.exports = function setUpActiveProdLines(app, productionModule)
     }
 
     mongoose.model('ProdShiftOrder').aggregate(
-      {$match: conditions},
-      {$group: {_id: '$prodFlow', prodLines: {$addToSet: '$prodLine'}}},
+      [
+        {$match: conditions},
+        {$group: {_id: '$prodFlow', prodLines: {$addToSet: '$prodLine'}}}
+      ],
       function(err, results)
       {
         if (err)

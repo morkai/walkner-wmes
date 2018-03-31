@@ -215,8 +215,8 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
       },
       function aggregateTransferOrderCountsStep()
       {
-        WhTransferOrder.aggregate(
-          {$match: {shiftDate: shiftDate}},
+        const pipeline = [
+          {$match: {shiftDate}},
           {$group: {
             _id: null,
             inComp: createCondSumOp({$and: [
@@ -276,9 +276,10 @@ exports.start = function startWarehouseShiftMetricsModule(app, module)
               {$eq: ['$dstType', 916]},
               {$eq: ['$mvmtIm', 601]}
             ]})
-          }},
-          this.next()
-        );
+          }}
+        ];
+
+        WhTransferOrder.aggregate(pipeline, this.next());
       },
       function calcMetricsStep(err, results)
       {

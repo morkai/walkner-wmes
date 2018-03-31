@@ -4,7 +4,7 @@
 
 const _ = require('lodash');
 const deepEqual = require('deep-equal');
-const autoIncrement = require('mongoose-auto-increment');
+const autoIncrement = require('mongoose-plugin-autoinc');
 
 module.exports = function setupQiResultModel(app, mongoose)
 {

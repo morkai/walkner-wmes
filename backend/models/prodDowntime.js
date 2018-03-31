@@ -2,7 +2,7 @@
 
 'use strict';
 
-const autoIncrement = require('mongoose-auto-increment');
+const autoIncrement = require('mongoose-plugin-autoinc');
 const resolveProductName = require('../modules/util/resolveProductName');
 
 module.exports = function setupProdDowntimeModel(app, mongoose)

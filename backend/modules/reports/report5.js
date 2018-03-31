@@ -350,19 +350,21 @@ module.exports = function report5(mongoose, options, done)
     };
 
     ProdShiftOrder.aggregate(
-      {$match: $match},
-      {$group: {
-        _id: {date: '$date', order: '$orderId', operation: '$operationNo'},
-        qty: {$sum: $sum}
-      }},
-      {$group: {
-        _id: {date: '$_id.date', order: '$_id.order'},
-        qty: {$max: '$qty'}
-      }},
-      {$group: {
-        _id: '$_id.date',
-        qty: {$sum: '$qty'}
-      }},
+      [
+        {$match: $match},
+        {$group: {
+          _id: {date: '$date', order: '$orderId', operation: '$operationNo'},
+          qty: {$sum: $sum}
+        }},
+        {$group: {
+          _id: {date: '$_id.date', order: '$_id.order'},
+          qty: {$max: '$qty'}
+        }},
+        {$group: {
+          _id: '$_id.date',
+          qty: {$sum: '$qty'}
+        }}
+      ],
       done
     );
   }

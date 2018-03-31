@@ -9,7 +9,7 @@
 
 ### MongoDB
 
-  * __Version__: 3.2
+  * __Version__: 3.6
   * __Website__: https://www.mongodb.org/
 
 ## Installation
