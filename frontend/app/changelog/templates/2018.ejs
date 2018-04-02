@@ -1,4 +1,80 @@
 <div class="hidden">
+  <h1>v0.120.0</h1>
+  <h2><%- time.format('2018-02-15', 'LL') %></h2>
+  <h3>Malarnia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący brak odświeżania danych na stronach listy i szczegółów farb.</li>
+    <li>Poprawiono błąd powodujący niedodawanie do planu malarnii zleceń malarnii niemających zlecenia nadrzędnego
+      jeżeli ich MRP zostało zdefiniowane w module planowania.</li>
+    <li>Zmieniono odnośnik do malarnii w 'okruszkach' na podstronach modułu tak, aby przekierowywał do planu malarnii,
+      z którego użytkownik wszedł na podstronę.</li>
+    <li>Dodano filtr do listy farb.</li>
+    <li>Dodano komunikat o istnieniu farby o danym 12NC podczas dodawania nowej farby.</li>
+    <li>Dodano nową aplikację: Zliczanie obciążenia malarnii.</li>
+  </ul>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Zmieniono obliczanie roboczogodzin tak, aby pod uwagę brana była 'Szybkość planowania'.</li>
+    <li>Zmieniono zamrażanie planu tak, aby zamrażane były wszystkie zlecenia, a nie tylko zlecenia z pierwszej zmiany.</li>
+    <li>Zmieniono ustawienie 'Szybkość planowania' tak, aby można było ustawić inną wartość dla każdego MRP.</li>
+    <li>Zmieniono sortowanie małych zleceń tak, aby rodzina produktu (pierwsze 6 znaków nazwy) miały wagę 6 zamiast 5 oraz
+      wymiary produktu 'WnLm' (jeżeli występują w nazwie) miały wagę 4 zamiast 1.</li>
+    <li>Zmieniono sortowanie łatwych zleceń tak, aby były sortowane jak małe zlecenia (wcześniej sortowane były po RBH).</li>
+    <li>Zmieniono kopiowanie listy zleceń do schowka tak, aby kolumna 'Drop zone' także była kopiowana.</li>
+    <li>Dodano nowe ustawienie: godzina zamrożenia planu.</li>
+  </ul>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Poprawiono uprawnienia edycji wyników tak, aby dostęp dodatkowo miieli wybrany lider, właściciel niezgodności oraz
+      osoby przypisane do akcji korekcyjnych.</li>
+    <li>Dodano nowe pole: Numer seryjny.</li>
+  </ul>
+  <h3>ZPW</h3>
+  <ul>
+    <li>Zmieniono wykresy wskaźników IPR, IPS oraz IPC tak, aby można było zmienić grupowanie danych na całkowite
+      lub według działów (tylko jak wybrano podział czasu).</li>
+    <li>Zmieniono wykres 'Średnie dzienne FTE' tak, aby można było zmienić grupowanie danych na całkowite lub
+      według firm.</li>
+    <li>Dodano filtr 'Podział czasu' do raportu 'Wskaźniki'.</li>
+  </ul>
+  <h3>Obserwacje</h3>
+  <ul>
+    <li>Dodano do raportu tabelę i wykres 'Ilość przeprowadzonych obserwacji'.</li>
+  </ul>
+  <h3>Monitoring</h3>
+  <ul>
+    <li>Zmieniono listę linii produkcyjnych tak, aby wydajność oraz czas cyklu widoczne były w trybie historii.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Dodano automatyczne ładowanie kolejki zleceń dla aktualnej zmiany na podstawie planu na dany dzień.</li>
+  </ul>
+  <h3>FTE</h3>
+  <ul>
+    <li>Zmieniono wyświetlanie wartości FTE tak, aby zamiast wartości ujemnych były wyświetlane zera.</li>
+    <li>Zmieniono FTE (inne) tak, aby dostępne były wydziały typu 'Inny' oraz nie będące wydziałem o ID 'LD'.</li>
+    <li>Dodano FTE (magazyn), w którym dostępne są działy z wydziału 'LD'. We wpisach FTE (magazyn) dostępna jest także
+      funkcjonalność 'Zamówienie/Dostarczenie/Braki'.</li>
+  </ul>
+  <h3>Raporty</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący brak powrotu do początkowej pozycji paska przewijania po wyjściu z trybu
+      pełnoekranowego wykresu.</li>
+    <li>Zmieniono wykres 'Obecność' w raporcie HR tak, aby pokazywał 'Ilośc obecnych pracowników' oraz
+      'Ilość brakujących pracowników' w trybie domyślnym oraz pełnoekranowym.</li>
+    <li>Zmieniono wykres 'Obecność' w raporcie HR tak, aby w trybie pełnoekranowym dane były dodatkowo grupowane
+      po dacie.</li>
+  </ul>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Poprawiono błąd podczas konwertowania dokumentów mogący spowodować niepowodzenie, jeżeli w pliku PDF zastosowano
+      nieznane czcionki.</li>
+    <li>Zmieniono komunikat wyświetlany podczas otwarcia pliku, który nie został jeszcze przekonwertowany
+      z 'Nie znaleziono' na 'W trakcje konwertowania'. Strona jest automatycznie odświeżana co 30 sekund, aż do momentu
+      otwarcia pliku.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.119.0</h1>
   <h2><%- time.format('2018-01-10', 'LL') %></h2>
   <h3>Nieprawidłowe zlecenia IPT</h3>

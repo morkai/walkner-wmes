@@ -1,74 +1,49 @@
-<h1>v0.120.0</h1>
-<h2><%- time.format('2018-02-15', 'LL') %></h2>
-<h3>Malarnia</h3>
-<ul>
-  <li>Poprawiono błąd powodujący brak odświeżania danych na stronach listy i szczegółów farb.</li>
-  <li>Poprawiono błąd powodujący niedodawanie do planu malarnii zleceń malarnii niemających zlecenia nadrzędnego
-    jeżeli ich MRP zostało zdefiniowane w module planowania.</li>
-  <li>Zmieniono odnośnik do malarnii w 'okruszkach' na podstronach modułu tak, aby przekierowywał do planu malarnii,
-    z którego użytkownik wszedł na podstronę.</li>
-  <li>Dodano filtr do listy farb.</li>
-  <li>Dodano komunikat o istnieniu farby o danym 12NC podczas dodawania nowej farby.</li>
-  <li>Dodano nową aplikację: Zliczanie obciążenia malarnii.</li>
-</ul>
+<h1>v0.121.0</h1>
+<h2><%- time.format('2018-03-31', 'LL') %></h2>
 <h3>Planowanie</h3>
 <ul>
-  <li>Zmieniono obliczanie roboczogodzin tak, aby pod uwagę brana była 'Szybkość planowania'.</li>
-  <li>Zmieniono zamrażanie planu tak, aby zamrażane były wszystkie zlecenia, a nie tylko zlecenia z pierwszej zmiany.</li>
-  <li>Zmieniono ustawienie 'Szybkość planowania' tak, aby można było ustawić inną wartość dla każdego MRP.</li>
-  <li>Zmieniono sortowanie małych zleceń tak, aby rodzina produktu (pierwsze 6 znaków nazwy) miały wagę 6 zamiast 5 oraz
-    wymiary produktu 'WnLm' (jeżeli występują w nazwie) miały wagę 4 zamiast 1.</li>
-  <li>Zmieniono sortowanie łatwych zleceń tak, aby były sortowane jak małe zlecenia (wcześniej sortowane były po RBH).</li>
-  <li>Zmieniono kopiowanie listy zleceń do schowka tak, aby kolumna 'Drop zone' także była kopiowana.</li>
-  <li>Dodano nowe ustawienie: godzina zamrożenia planu.</li>
-</ul>
-<h3>Inspekcja Jakości</h3>
-<ul>
-  <li>Poprawiono uprawnienia edycji wyników tak, aby dostęp dodatkowo miieli wybrany lider, właściciel niezgodności oraz
-    osoby przypisane do akcji korekcyjnych.</li>
-  <li>Dodano nowe pole: Numer seryjny.</li>
-</ul>
-<h3>ZPW</h3>
-<ul>
-  <li>Zmieniono wykresy wskaźników IPR, IPS oraz IPC tak, aby można było zmienić grupowanie danych na całkowite
-    lub według działów (tylko jak wybrano podział czasu).</li>
-  <li>Zmieniono wykres 'Średnie dzienne FTE' tak, aby można było zmienić grupowanie danych na całkowite lub
-    według firm.</li>
-  <li>Dodano filtr 'Podział czasu' do raportu 'Wskaźniki'.</li>
-</ul>
-<h3>Obserwacje</h3>
-<ul>
-  <li>Dodano do raportu tabelę i wykres 'Ilość przeprowadzonych obserwacji'.</li>
-</ul>
-<h3>Monitoring</h3>
-<ul>
-  <li>Zmieniono listę linii produkcyjnych tak, aby wydajność oraz czas cyklu widoczne były w trybie historii.</li>
-</ul>
-<h3>Formatka operatora</h3>
-<ul>
-  <li>Dodano automatyczne ładowanie kolejki zleceń dla aktualnej zmiany na podstawie planu na dany dzień.</li>
-</ul>
-<h3>FTE</h3>
-<ul>
-  <li>Zmieniono wyświetlanie wartości FTE tak, aby zamiast wartości ujemnych były wyświetlane zera.</li>
-  <li>Zmieniono FTE (inne) tak, aby dostępne były wydziały typu 'Inny' oraz nie będące wydziałem o ID 'LD'.</li>
-  <li>Dodano FTE (magazyn), w którym dostępne są działy z wydziału 'LD'. We wpisach FTE (magazyn) dostępna jest także
-    funkcjonalność 'Zamówienie/Dostarczenie/Braki'.</li>
-</ul>
-<h3>Raporty</h3>
-<ul>
-  <li>Poprawiono błąd powodujący brak powrotu do początkowej pozycji paska przewijania po wyjściu z trybu
-    pełnoekranowego wykresu.</li>
-  <li>Zmieniono wykres 'Obecność' w raporcie HR tak, aby pokazywał 'Ilośc obecnych pracowników' oraz
-    'Ilość brakujących pracowników' w trybie domyślnym oraz pełnoekranowym.</li>
-  <li>Zmieniono wykres 'Obecność' w raporcie HR tak, aby w trybie pełnoekranowym dane były dodatkowo grupowane
-    po dacie.</li>
+  <li>Usunięto możliwość wyłączania najnowszych danych w planie produkcji.</li>
+  <li>Usunięto funkcjonalność Drop zone.</li>
+  <li>Zmieniono generator planu tak, aby wybieranie linii do podziału dużych zleceń brało pod uwagę pozostały
+    dostępny czas na linii.</li>
+  <li>Zmieniono 'Zrobioną ilość' zleceń w planie tak, aby ich wartość brana była z ilośći wykonanej dla operacji
+    wybranej do planowania, a nie z całkowitej zrobionej ilości zlecenia SAP.
+  <li>Zmieniono plan linii w wersji do wydruku tak, aby plan godzinowy był zawsze widoczny, a nie tylko wtedy, gdy
+    jest wolne miejsce na ostatniej stronie.</li>
+  <li>Zmieniono plan linii w wersji do wydruku tak, aby do każdego zlecenia wyświetlane były wszystkie ikony
+    statusów.</li>
+  <li>Zmieniono plan magazynu tak, aby wyświetlał jedną listę zleceń dla wybranych MRP.</li>
+  <li>Zmieniono filtr 'Wybrane MRP' w planie magazynu na filtr 'Wybrane MRP/Ignorowane MRP/Moje/Magazyn'. MRP magazynu
+    można wybrać w ustawiniach.</li>
+  <li>Zmieniono listy zleceń do rozplanowania oraz zleceń opóźnionych tak, aby miały maksymalną wysokość. Po osiągnięciu
+    maksymalnej wysokości lista robi się przewijalna.</li>
+  <li>Dodano wyświetlanie ostatniego komentarza zlecenia w dymkach zleceń do rozplanowania i zleceń rozplanowanych.</li>
+  <li>Dodano możliwość dzielenia zleceń dłuższych od określonej ilości godzin na dodatkowe części.</li>
+  <li>Dodano możliwość włączenia trybu wysokiego kontrastu w planie magazynu.</li>
+  <li>Dodano możliwość wyboru etapu na jakim znajduje się każde zlecenie w planie magazynu.</li>
+  <li>Dodano oznaczanie zleceń ze statusem 'TECO'.</li>
+  <li>Dodano możliwość ustawiania kilku zakresów aktywności dla każdej linii.</li>
 </ul>
 <h3>Dokumentacja</h3>
 <ul>
-  <li>Poprawiono błąd podczas konwertowania dokumentów mogący spowodować niepowodzenie, jeżeli w pliku PDF zastosowano
-    nieznane czcionki.</li>
-  <li>Zmieniono komunikat wyświetlany podczas otwarcia pliku, który nie został jeszcze przekonwertowany
-    z 'Nie znaleziono' na 'W trakcje konwertowania'. Strona jest automatycznie odświeżana co 30 sekund, aż do momentu
-    otwarcia pliku.</li>
+  <li>Poprawiono sposób odczytywania ilości stron w dokumentach PDF konwertowanych na obrazy.</li>
+  <li>Dodano listę zaplanowanych zleceń do formularza wybierania zlecenia/dokumentu.</li>
+</ul>
+<h3>Dane produkcyjne</h3>
+<ul>
+  <li>Zmieniono uprawnienia wymagane do wyświetlania danych produkcyjnych.</li>
+</ul>
+<h3>Raporty > CLIP</h3>
+<ul>
+  <li>Dodano nową wersję raportu.</li>
+</ul>
+<h3>Matryca odpowiedzialności</h3>
+<ul>
+  <li>Poprawiono błędne wyświetlanie tabel w matrycy podczas korzystania z najnowszej wersji przeglądarki Chrome.</li>
+</ul>
+<h3>Inne</h3>
+<ul>
+  <li>Dodano wyszukiwanie po ID wyników inspekcji, ZPW, usprawnień, obserwacji, minutek i 8D.</li>
+  <li>Dodano do wyszukiwarki odnośniki do planu produkcji, magazynu i malarnii po wpisaniu daty.</li>
+  <li>Zaktualizowano pakiety zależne</li>
 </ul>
