@@ -89,23 +89,29 @@ module.exports = function setUpQiNotifier(app, module)
 
         const division = nokOwner.orgUnitType === 'subdivision' ? orgUnit.division : orgUnit._id;
 
-        User.findOne({prodFunction: 'manager', orgUnitId: division}).lean().exec(this.next());
+        User
+          .find({prodFunction: 'manager', orgUnitId: division}, {email: 1})
+          .lean()
+          .exec(this.next());
       },
-      function prepareTemplateDataStep(err, manager)
+      function prepareTemplateDataStep(err, managers)
       {
         if (err)
         {
           return this.skip(err);
         }
 
-        if (manager && manager.email)
+        managers.forEach(manager =>
         {
-          this.recipients.push(manager.email);
-        }
+          if (manager.email)
+          {
+            this.recipients.push(manager.email);
+          }
+        });
 
         this.mailOptions = {
           to: this.recipients,
-          subject: '[WMES] Przypisanie do wyniku inspekcji: ' + result.rid,
+          subject: `[WMES] Przypisanie do wyniku inspekcji: ${result.rid}`,
           html: ''
         };
 
