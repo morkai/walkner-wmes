@@ -248,7 +248,7 @@ define([
         order.shift = shiftUtil.getShiftNo(order.startTime);
         order.startTime = time.utc.format(order.startTime, 'HH:mm:ss');
         order.finishTime = time.utc.format(order.finishTime, 'HH:mm:ss');
-        order.key = order.orderNo + ':' + order.startTime + ':' + order.line;
+        order.key = order.orderNo + ':' + order.group + ':' + order.line;
         order.whStatus = view.whOrderStatuses.getOrderStatus(order.key);
 
         if (prev)
