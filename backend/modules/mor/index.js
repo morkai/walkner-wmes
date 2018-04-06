@@ -63,6 +63,8 @@ exports.start = function startMorModule(app, module, done)
 
   module.reloadUsers = reloadUsers;
 
+  module.getUser = userId => userMap[userId] || null;
+
   app.onModuleReady(
     [
       module.config.mongooseId,

@@ -15,6 +15,7 @@ exports.DEFAULT_CONFIG = {
   reportsId: 'reports',
   orgUnitsId: 'orgUnits',
   mailSenderId: 'mail/sender',
+  morId: 'mor',
   wkhtmltopdfExe: 'wkhtmltopdf',
   attachmentsDest: null,
   emailUrlPrefix: 'http://127.0.0.1/'
@@ -54,7 +55,8 @@ exports.start = function startQiModule(app, qiModule)
     [
       qiModule.config.mongooseId,
       qiModule.config.orgUnitsId,
-      qiModule.config.mailSenderId
+      qiModule.config.mailSenderId,
+      qiModule.config.morId
     ],
     setUpNotifier.bind(null, app, qiModule)
   );

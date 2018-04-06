@@ -13,6 +13,8 @@ module.exports = function setUpQiNotifier(app, module)
   const mailSender = app[module.config.mailSenderId];
   const mongoose = app[module.config.mongooseId];
   const orgUnits = app[module.config.orgUnitsId];
+  const mor = app[module.config.morId];
+  const Order = mongoose.model('Order');
   const User = mongoose.model('User');
   const QiKind = mongoose.model('QiKind');
   const QiErrorCategory = mongoose.model('QiErrorCategory');
@@ -59,40 +61,65 @@ module.exports = function setUpQiNotifier(app, module)
     step(
       function findNokOwnerStep()
       {
-        User.findById(result.nokOwner.id).lean().exec(this.next());
+        User.findById(result.nokOwner.id).lean().exec(this.parallel());
+
+        Order.findById(result.orderNo, {mrp: 1}).lean().exec(this.parallel());
       },
-      function findManagerStep(err, nokOwner)
+      function findManagerStep(err, nokOwner, order)
       {
         if (err)
         {
           return this.skip(err);
         }
 
-        if (!nokOwner || !nokOwner.email)
+        this.recipients = [];
+
+        if (nokOwner && nokOwner.email)
         {
-          return this.skip();
+          this.recipients.push(nokOwner.email);
         }
 
-        this.recipients = [nokOwner.email];
-
-        if (!nokOwner.orgUnitId)
+        mor.state.sections.forEach(section =>
         {
-          return;
+          if (!section.mrps.some(mrp => mrp._id === order.mrp))
+          {
+            return;
+          }
+
+          section.watch.forEach(watch =>
+          {
+            const user = mor.getUser(watch.user);
+
+            if (user && user.email && user.prodFunction === 'manager')
+            {
+              this.recipients.push(user.email);
+            }
+          });
+        });
+
+        let division = orgUnits.getByTypeAndId('division', result.division);
+
+        if (division)
+        {
+          division = division._id;
+        }
+        else if (nokOwner.orgUnitId)
+        {
+          const orgUnit = orgUnits.getByTypeAndId(nokOwner.orgUnitType, nokOwner.orgUnitId);
+
+          if (orgUnit)
+          {
+            division = nokOwner.orgUnitType === 'subdivision' ? orgUnit.division : orgUnit._id;
+          }
         }
 
-        const orgUnit = orgUnits.getByTypeAndId(nokOwner.orgUnitType, nokOwner.orgUnitId);
-
-        if (!orgUnit)
+        if (division)
         {
-          return;
+          User
+            .find({prodFunction: 'manager', orgUnitId: division}, {email: 1})
+            .lean()
+            .exec(this.next());
         }
-
-        const division = nokOwner.orgUnitType === 'subdivision' ? orgUnit.division : orgUnit._id;
-
-        User
-          .find({prodFunction: 'manager', orgUnitId: division}, {email: 1})
-          .lean()
-          .exec(this.next());
       },
       function prepareTemplateDataStep(err, managers)
       {
@@ -101,7 +128,7 @@ module.exports = function setUpQiNotifier(app, module)
           return this.skip(err);
         }
 
-        managers.forEach(manager =>
+        (managers || []).forEach(manager =>
         {
           if (manager.email)
           {
@@ -110,7 +137,7 @@ module.exports = function setUpQiNotifier(app, module)
         });
 
         this.mailOptions = {
-          to: this.recipients,
+          to: _.uniq(this.recipients),
           subject: `[WMES] Przypisanie do wyniku inspekcji: ${result.rid}`,
           html: ''
         };
