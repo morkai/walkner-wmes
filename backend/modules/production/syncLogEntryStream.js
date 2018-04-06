@@ -59,7 +59,7 @@ module.exports = function syncLogEntryStream(app, productionModule, creator, log
 
   insertSteps.push(function finalizeStep(err)
   {
-    if (err)
+    if (err && err.code !== 11000)
     {
       productionModule.error(
         'Error while saving %d log entries: %s\n%s',
