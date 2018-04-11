@@ -28,22 +28,20 @@ module.exports = function parseOrders(input, orders, importTs)
       leadingOrder: /^Lead.*?Ord/
     },
     valueParsers: {
-      nc12: function(input) { return input.replace(/^0+/, ''); },
+      nc12: input => input.replace(/^0+/, ''),
       name: parseSapString,
       qty: parseSapNumber,
       startDate: parseSapDate,
       finishDate: parseSapDate,
       scheduledStartDate: parseSapDate,
       scheduledFinishDate: parseSapDate,
-      statuses: function(input)
-      {
-        return input
-          .replace(/\s+/g, ' ')
-          .split(' ')
-          .map(function(status) { return status.replace(/\*/g, ''); });
-      }
+      statuses: input => input
+        .replace(/\s+/g, ' ')
+        .split(' ')
+        .map(status => status.replace(/\*/g, ''))
+        .filter(status => status.length > 0)
     },
-    itemDecorator: function(obj)
+    itemDecorator: obj =>
     {
       const scheduledStart = obj.scheduledStartDate;
       const scheduledFinish = obj.scheduledStartDate;
