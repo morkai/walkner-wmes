@@ -284,13 +284,14 @@ define([
       var partCount = Math.ceil(bigItem.duration / this.groupTimeWindow);
       var qtyPlan = bigItem.qtyPlan;
       var startTime = bigItem.startTime;
+      var group = this.getOrderGroup(startTime);
 
       for (var i = 0; i < partCount; ++i)
       {
         var item = _.assign({}, bigItem, {
           startTime: startTime,
           finishTime: 0,
-          group: this.getOrderGroup(startTime),
+          group: group++,
           qtyPlan: Math.min(qtyPlan, bigItem.maxQty)
         });
 
