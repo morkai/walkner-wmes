@@ -63,7 +63,7 @@
   <% if (model.observations.length) { %>
   <% include observationsPanel.ejs %>
   <% } %>
-  <% if (model.risks.length) { %>
+  <% if (model.risks.length || model.nearMiss) { %>
   <% include risksPanel.ejs %>
   <% } %>
   <% if (showEasyDiscussed) { %>
@@ -71,7 +71,7 @@
     <i class="fa fa-thumbs-<%- model.easyDiscussed ? 'up' : 'down' %>"></i> <%- t('behaviorObsCards', 'PROPERTY:easyDiscussed') %>
   </p>
   <% } %>
-  <% if (model.difficulties.length) { %>
+  <% if (model.difficulties.length || model.suggestion) { %>
   <% include difficultiesPanel.ejs %>
   <% } %>
 </div>

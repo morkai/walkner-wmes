@@ -8,6 +8,7 @@
     <% } %>
   </div>
   <table class="table table-bordered table-hover behaviorObsCards-details-difficulties">
+    <% if (model.difficulties.length) { %>
     <thead>
     <tr>
       <th><%- t('behaviorObsCards', 'PROPERTY:difficulties:problem') %></th>
@@ -19,7 +20,13 @@
       </th>
     </tr>
     </thead>
+    <% } %>
     <tbody>
+    <% if (!model.difficulties.length) { %>
+    <tr>
+      <td colspan="3"><%- t('core', 'LIST:NO_DATA') %></td>
+    </tr>
+    <% } %>
     <% model.difficulties.forEach(function(difficulty) { %>
     <tr>
       <td class="text-lines"><%= difficulty.problem %></td>

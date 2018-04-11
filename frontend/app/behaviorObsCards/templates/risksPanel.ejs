@@ -8,6 +8,7 @@
     <% } %>
   </div>
   <table class="table table-bordered table-hover behaviorObsCards-details-risks">
+    <% if (model.risks.length) { %>
     <thead>
     <tr>
       <th><%- t('behaviorObsCards', 'PROPERTY:risks:risk') %></th>
@@ -19,7 +20,13 @@
       </th>
     </tr>
     </thead>
+    <% } %>
     <tbody>
+    <% if (!model.risks.length) { %>
+    <tr>
+      <td colspan="3"><%- t('core', 'LIST:NO_DATA') %></td>
+    </tr>
+    <% } %>
     <% model.risks.forEach(function(risk) { %>
     <tr>
       <td class="text-lines"><%= risk.risk %></td>
