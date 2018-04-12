@@ -89,6 +89,12 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       max: 23,
       default: 0
     },
+    lateHour: {
+      type: Number,
+      min: 0,
+      max: 23,
+      default: 6
+    },
     lines: [lineSchema],
     mrps: [mrpSettingsSchema]
   }, {
@@ -109,6 +115,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       ignoredStatuses: ['TECO', 'CNF', 'DLV', 'DLFL', 'DLT'],
       schedulingRate: {},
       freezeHour: 0,
+      lateHour: 6,
       lines: [],
       mrps: []
     });
@@ -124,6 +131,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       ignoredStatuses: sourceSettings.ignoredStatuses,
       schedulingRate: sourceSettings.schedulingRate,
       freezeHour: sourceSettings.freezeHour,
+      lateHour: sourceSettings.lateHour,
       lines: sourceSettings.lines,
       mrps: sourceSettings.mrps
     });
@@ -190,6 +198,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
 
     return {
       freezeFirstShiftOrders: this.shouldFreezeFirstShiftOrders(),
+      lateHour: this.lateHour < 6 ? (this.lateHour + 18) : (this.lateHour - 6),
       useRemainingQuantity: this.useRemainingQuantity,
       ignoreCompleted: this.ignoreCompleted,
       requiredStatuses: this.requiredStatuses,
@@ -305,7 +314,8 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       'requiredStatuses',
       'ignoredStatuses',
       'schedulingRate',
-      'freezeHour'
+      'freezeHour',
+      'lateHour'
     ].forEach(prop =>
     {
       const oldValue = this[prop].toObject ? this[prop].toObject() : this[prop];

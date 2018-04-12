@@ -112,6 +112,7 @@ define([
             break;
 
           case 'freezeHour':
+          case 'lateHour':
           case 'extraOrderSeconds':
           case 'bigOrderQuantity':
           case 'splitOrderQuantity':

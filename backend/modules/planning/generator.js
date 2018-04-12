@@ -48,7 +48,7 @@ module.exports = function setUpGenerator(app, module)
 
   const DEV = app.options.env === 'development';
   const UNFROZEN_PLANS = DEV ? [] : [];
-  const LOG_LINES = {'LM-18': true};
+  const LOG_LINES = {};
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
   const COMPARE_ORDERS = true || !DEV && UNFROZEN_PLANS.length === 0;
@@ -1649,6 +1649,7 @@ module.exports = function setUpGenerator(app, module)
         activeTo: activeTime.to,
         nextDowntime: state.autoDowntimes.get(lineId),
         downtimes: [],
+        skippedLateOrders: [],
         orderStateQueue: createLineOrderStateQueue(state, lineId, lineSettings.mrpPriority, frozenOrders),
         bigOrderStateQueue: [],
         triedOrdersSet: new Set(),
@@ -1966,14 +1967,29 @@ module.exports = function setUpGenerator(app, module)
   function getNextOrderForLine(state, lineState)
   {
     // Urgent orders
+    const timeForLateOrders = isTimeForLateOrders(state, lineState);
+
+    if (timeForLateOrders && lineState.skippedLateOrders.length)
+    {
+      lineState.orderStateQueue = lineState.skippedLateOrders.concat(lineState.orderStateQueue);
+      lineState.skippedLateOrders = [];
+    }
+
     while (lineState.orderStateQueue.length)
     {
-      if (!lineState.orderStateQueue[0].order.urgent)
+      if (!timeForLateOrders || !lineState.orderStateQueue[0].order.urgent)
       {
         break;
       }
 
       const urgentOrderState = lineState.orderStateQueue.shift();
+
+      if (!timeForLateOrders && urgentOrderState.order.source === 'added')
+      {
+        lineState.skippedLateOrders.push(urgentOrderState);
+
+        continue;
+      }
 
       if (lineState.plannedOrdersSet.has(urgentOrderState.order._id)
         || urgentOrderState.quantityTodo === 0
@@ -2043,12 +2059,20 @@ module.exports = function setUpGenerator(app, module)
     while (lineState.orderStateQueue.length)
     {
       const orderState = lineState.orderStateQueue.shift();
+      const {order} = orderState;
 
-      if (lineState.plannedOrdersSet.has(orderState.order._id)
-        || bigOrderIdSet.has(orderState.order._id)
+      if (lineState.plannedOrdersSet.has(order._id)
+        || bigOrderIdSet.has(order._id)
         || isOrderPinnedToLine(orderState, lineState)
         || (firstPass && orderState.frozenOnLines.length && !orderState.frozenOnLines.includes(lineState._id)))
       {
+        continue;
+      }
+
+      if (!timeForLateOrders && order.urgent && order.source === 'added')
+      {
+        lineState.skippedLateOrders.push(orderState);
+
         continue;
       }
 
@@ -2065,6 +2089,22 @@ module.exports = function setUpGenerator(app, module)
     }
 
     return null;
+  }
+
+  function isTimeForLateOrders(state, lineState)
+  {
+    let activeFromHour = lineState.activeFrom.hours();
+
+    if (activeFromHour < 6)
+    {
+      activeFromHour += 18;
+    }
+    else
+    {
+      activeFromHour -= 6;
+    }
+
+    return activeFromHour >= state.settings.lateHour;
   }
 
   function handleSmallOrder(state, lineState, orderState)
