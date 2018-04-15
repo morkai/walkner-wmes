@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["jquery","app/core/views/FormView","app/printers/templates/form"],function(e,t,n){"use strict";return t.extend({template:n,afterRender:function(){t.prototype.afterRender.call(this),this.options.editMode?(this.$id("name").attr("readonly",!0),this.$id("label").focus()):this.loadSystemPrinters()},loadSystemPrinters:function(){var e=this;e.ajax({url:"/printing/systemPrinters"}).done(function(t){e.$id("name").removeClass("form-control").select2({width:"100%",placeholder:" ",data:t.collection.map(function(e){return{id:e.name,text:e.name===e.caption?e.name:e.caption+" ("+e.name+")"}})})})}})});

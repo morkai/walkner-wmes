@@ -1273,6 +1273,8 @@ app/core/util/html2pdf.js
 app/data/clipboard.js
 app/planning/templates/contextMenu.js
 app/planning/util/contextMenu.js
+app/printers/templates/form.js
+app/printers/views/PrinterPickerView.js
 app/paintShopPaints/PaintShopPaint.js
 app/paintShopPaints/PaintShopPaintCollection.js
 app/paintShop/PaintShopOrder.js
@@ -1432,6 +1434,11 @@ app/nls/pl/planning.js
 i18n!app/nls/planning
 app/planning/routes.js
 app/sapLaborTimeFixer/routes.js
+app/printers/Printer.js
+app/nls/printers.js
+app/nls/pl/printers.js
+i18n!app/nls/printers
+app/printers/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
@@ -2084,6 +2091,8 @@ app/production/templates/vkb.js
 app/production/views/VkbView.js
 app/planning/templates/contextMenu.js
 app/planning/util/contextMenu.js
+app/printers/templates/form.js
+app/printers/views/PrinterPickerView.js
 app/paintShopPaints/PaintShopPaint.js
 app/paintShopPaints/PaintShopPaintCollection.js
 app/paintShop/PaintShopOrder.js
