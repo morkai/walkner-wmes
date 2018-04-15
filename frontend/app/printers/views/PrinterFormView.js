@@ -43,9 +43,9 @@ define([
           {
             return {
               id: printer.name,
-              text: printer.name === printer.caption
+              text: !printer.comment.trim() || printer.name === printer.comment
                 ? printer.name
-                : (printer.caption + ' (' + printer.name + ')')
+                : (printer.comment + ' (' + printer.name + ')')
             };
           })
         });
