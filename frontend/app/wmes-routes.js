@@ -83,7 +83,8 @@ define([
   './d8ProblemSources/routes',
   './mor/routes',
   './planning/routes',
-  './sapLaborTimeFixer/routes'
+  './sapLaborTimeFixer/routes',
+  './printers/routes'
 ], function()
 {
   'use strict';

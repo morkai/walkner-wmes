@@ -5,15 +5,20 @@
 const {createHash} = require('crypto');
 const {join} = require('path');
 const {stat, writeFile} = require('fs');
+const {exec} = require('child_process');
 const step = require('h5.step');
 
 module.exports = function setUpHtml2pdfRoutes(app, module)
 {
   const express = app[module.config.expressId];
+  const mongoose = app[module.config.mongooseId];
+  const Printer = mongoose.model('Printer');
 
   express.get('/html2pdf/:id.(:format)', readFileRoute);
 
   express.post('/html2pdf', generatePdfRoute);
+
+  express.post('/html2pdf;print', printPdfRoute);
 
   function readFileRoute(req, res, next)
   {
@@ -101,6 +106,46 @@ module.exports = function setUpHtml2pdfRoutes(app, module)
         }
 
         res.json({hash});
+      }
+    );
+  }
+
+  function printPdfRoute(req, res, next)
+  {
+    const {hash, printer} = req.body;
+    const pdfFilePath = join(module.config.storagePath, `${hash}.pdf`);
+
+    step(
+      function()
+      {
+        stat(pdfFilePath, this.parallel());
+
+        Printer.findById(printer).lean().exec(this.parallel());
+      },
+      function(err, stats, printer)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!stats || !stats.isFile())
+        {
+          return this.skip(app.createError('INVALID_HASH', 400));
+        }
+
+        const cmd = `"${module.config.sumatraExe}" -print-to "${printer.name}" -print-settings "fit" "${pdfFilePath}"`;
+
+        exec(cmd, this.next());
+      },
+      function(err)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.sendStatus(204);
       }
     );
   }

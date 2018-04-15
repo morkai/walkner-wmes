@@ -39,6 +39,7 @@ define([
     show: function(view, top, left, menu)
     {
       var hideMenu = this.hide.bind(this, view);
+      var showMenu = this.show.bind(this, view, top, left, menu);
 
       hideMenu();
 
@@ -80,13 +81,41 @@ define([
       $menu.on('contextmenu', false);
       $menu.on('click', 'a[data-action]', function(e)
       {
-        var item = menu[e.currentTarget.dataset.action];
+        var el = e.currentTarget;
 
-        hideMenu();
+        if (el.classList.contains('disabled'))
+        {
+          return;
+        }
+
+        var action = el.dataset.action;
+        var item = menu[action];
+
+        $menu.find('a').addClass('disabled');
+
+        e.contextMenu = {
+          hide: true,
+          action: action,
+          item: item,
+          view: view,
+          top: top,
+          left: left,
+          menu: menu,
+          restore: showMenu
+        };
 
         if (item && item.handler)
         {
-          item.handler();
+          item.handler(e);
+        }
+
+        if (e.contextMenu.hide)
+        {
+          hideMenu();
+        }
+        else
+        {
+          $menu.find(el).find('.fa').attr('class', 'fa fa-spinner fa-spin');
         }
       });
 

@@ -7,9 +7,11 @@ const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
   expressId: 'express',
+  mongooseId: 'mongoose',
   fileUrl: 'http://localhost/html2pdf/${hash}.${format}',
   storagePath: './data/html2pdf',
-  poolOptions: {}
+  poolOptions: {},
+  sumatraExe: 'SumatraPDF.exe'
 };
 
 exports.start = function startHtml2pdfModule(app, module)
@@ -24,7 +26,8 @@ exports.start = function startHtml2pdfModule(app, module)
 
   app.onModuleReady(
     [
-      module.config.expressId
+      module.config.expressId,
+      module.config.mongooseId
     ],
     setUpRoutes.bind(null, app, module)
   );

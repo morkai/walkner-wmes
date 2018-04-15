@@ -153,6 +153,7 @@
     "NAVBAR:INVALID_ORDERS": "Invalid IPT orders",
     "NAVBAR:IPT_CHECK": "IPT orders checker",
     "NAVBAR:SAP_LABOR_TIME_FIXER": "Labor Time fixer",
+    "NAVBAR:PRINTERS": "Printers",
 
     "NAVBAR:OPINION:main": "Opinion survey",
     "NAVBAR:OPINION:current": "Current survey",
@@ -347,7 +348,10 @@
     "PRINT_PAGE:FT:INFO": "Printout generated at <span class=print-page-date>?</span> by <span class=print-page-user>?</span>.",
 
     "html2pdf:progress": "Generating the printout...",
-    "html2pdf:failure": "Printout generation failed."
+    "html2pdf:failure": "Printout generation failed.",
+    "html2pdf:printing": "Sending the printout to the printer...",
+    "html2pdf:printing:success": "Printout was successfully sent to the printer.",
+    "html2pdf:printing:failure": "Sending the printout to the printer failed."
   },
   "pl": true
 }

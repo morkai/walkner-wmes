@@ -84,6 +84,7 @@ exports.modules = [
   'mor',
   'planning',
   'html2pdf',
+  'printing',
   'sapLaborTimeFixer',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
@@ -250,7 +251,7 @@ exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   models: [
-    'setting', 'event', 'user', 'passwordResetRequest', 'ping',
+    'setting', 'event', 'user', 'passwordResetRequest', 'ping', 'printer',
     'division', 'subdivision', 'mrpController', 'workCenter', 'prodFlow', 'prodLine',
     'company', 'vendor', 'prodFunction', 'aor',
     'orderStatus', 'delayReason', 'downtimeReason', 'lossReason', 'prodTask',

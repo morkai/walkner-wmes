@@ -13,6 +13,7 @@ define([
   'app/core/util/html2pdf',
   'app/data/clipboard',
   'app/production/views/VkbView',
+  'app/printers/views/PrinterPickerView',
   'app/planning/util/contextMenu',
   'app/paintShopPaints/PaintShopPaintCollection',
   '../PaintShopOrder',
@@ -38,6 +39,7 @@ define([
   html2pdf,
   clipboard,
   VkbView,
+  PrinterPickerView,
   contextMenu,
   PaintShopPaintCollection,
   PaintShopOrder,
@@ -654,24 +656,31 @@ define([
       });
     },
 
-    handlePrintOrdersAction: function(filterProperty, filterValue)
+    handlePrintOrdersAction: function(filterProperty, filterValue, e)
     {
-      var orders = this.orders.filter(function(order)
+      var page = this;
+
+      PrinterPickerView.contextMenu(e, function(printer)
       {
-        return !filterValue || order.get(filterProperty) === filterValue;
+        var orders = page.orders.filter(function(order)
+        {
+          return !filterValue || order.get(filterProperty) === filterValue;
+        });
+
+        if (!orders.length)
+        {
+          return;
+        }
+
+        var html = printPageTemplate({
+          date: +page.orders.getDateFilter('x'),
+          mrp: !filterValue ? null : filterProperty === 'order' ? orders[0].get('mrp') : filterValue,
+          orderNo: filterProperty === 'order' ? filterValue : null,
+          pages: page.serializePrintPages(orders)
+        });
+
+        html2pdf(html, printer);
       });
-
-      if (!orders.length)
-      {
-        return;
-      }
-
-      html2pdf(printPageTemplate({
-        date: +this.orders.getDateFilter('x'),
-        mrp: !filterValue ? null : filterProperty === 'order' ? orders[0].get('mrp') : filterValue,
-        orderNo: filterProperty === 'order' ? filterValue : null,
-        pages: this.serializePrintPages(orders)
-      }));
     },
 
     handleExportOrdersAction: function(mrp)

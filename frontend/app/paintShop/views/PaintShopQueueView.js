@@ -241,7 +241,7 @@ define([
         {
           icon: 'fa-print',
           label: t('paintShop', 'menu:printOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'printOrders')
+          handler: this.trigger.bind(this, 'actionRequested', 'printOrders', null, null)
         },
         {
           icon: 'fa-download',
