@@ -33,7 +33,6 @@ module.exports = function editResultRoute(app, qiModule, req, res, next)
     {
       Object.assign(input, _.omit(req.body, [
         'errorCategory',
-        'rootCause',
         'correctiveActions'
       ]));
       prepareAttachments(qiModule.tmpAttachments, input);
