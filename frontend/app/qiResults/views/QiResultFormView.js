@@ -561,16 +561,17 @@ define([
 
       var canManage = user.isAllowedTo('QI:RESULTS:MANAGE', 'QI:SPECIALIST');
       var isNokOwner = this.model.isNokOwner();
-      var isLeader = this.model.isLeader();
+      var isResultLeader = this.model.isLeader();
+      var isShiftLeader = user.isAllowedTo('FN:master', 'FN:leader');
       var isCorrector = _.some(action.who, function(who) { return who.id === user.data._id; });
 
       $actions.append(correctiveActionFormRowTemplate({
         statuses: this.statuses,
         action: action,
         canChangeStatus: canManage,
-        canChangeWhen: canManage || isNokOwner || isLeader || isCorrector,
-        canChangeWho: canManage || isNokOwner,
-        canChangeWhat: canManage || isNokOwner || isLeader || isCorrector,
+        canChangeWhen: canManage || isNokOwner || isResultLeader || isCorrector || isShiftLeader,
+        canChangeWho: canManage || isNokOwner || isShiftLeader,
+        canChangeWhat: canManage || isNokOwner || isResultLeader || isCorrector || isShiftLeader,
         canRemove: canManage || (isNokOwner && action.status === 'new')
       }));
 
