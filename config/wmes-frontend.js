@@ -239,7 +239,8 @@ exports.pubsub = {
     'vis.**',
     'mor.**',
     'planning.**',
-    'sapLaborTimeFixer.**'
+    'sapLaborTimeFixer.**',
+    'printing.**'
   ]
 };
 
