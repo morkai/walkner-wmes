@@ -7,6 +7,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/pages/DetailsPage',
   'app/delayReasons/storage',
+  'app/printers/views/PrinterPickerView',
   '../Order',
   '../OrderCollection',
   '../ComponentCollection',
@@ -25,6 +26,7 @@ define([
   bindLoadingMessage,
   DetailsPage,
   delayReasonsStorage,
+  PrinterPickerView,
   Order,
   OrderCollection,
   ComponentCollection,
@@ -45,15 +47,13 @@ define([
 
     actions: function()
     {
-      return {
-        label: t.bound('orders', 'PAGE_ACTION:print'),
-        icon: 'print',
-        href: '/orders/' + this.model.id + '.html?print',
-        callback: function(e)
-        {
-          return openOrderPrint(e, this.querySelector('a'));
-        }
-      };
+      var page = this;
+      var orderNo = page.model.id;
+
+      return [PrinterPickerView.pageAction({view: page}, function(printer)
+      {
+        openOrderPrint([orderNo], printer);
+      })];
     },
 
     remoteTopics: function()

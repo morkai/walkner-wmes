@@ -6,18 +6,20 @@ define([
   'app/i18n',
   'app/broker',
   'app/pubsub',
+  'app/viewport',
   'app/core/View',
   'app/planning/util/contextMenu',
-  'app/printers/templates/form'
+  'app/printers/templates/pageAction'
 ], function(
   _,
   $,
   t,
   broker,
   pubsub,
+  viewport,
   View,
   contextMenu,
-  template
+  pageActionTemplate
 ) {
   'use strict';
 
@@ -98,13 +100,6 @@ define([
 
   return View.extend({
 
-    template: template,
-
-    afterRender: function()
-    {
-
-    }
-
   }, {
 
     contextMenu: function(e, done)
@@ -112,15 +107,21 @@ define([
       e.contextMenu.hide = false;
 
       var sandbox = broker.sandbox();
-      var cancelled = false;
 
-      sandbox.subscribe('planning.contextMenu.hidden', function() { cancelled = true; });
+      sandbox.subscribe('planning.contextMenu.hidden', function()
+      {
+        sandbox.destroy();
+        sandbox = null;
+
+        if (e.contextMenu.onCancel)
+        {
+          e.contextMenu.onCancel();
+        }
+      });
 
       getPrinters(function(printers)
       {
-        sandbox.destroy();
-
-        if (cancelled)
+        if (!sandbox)
         {
           return;
         }
@@ -146,6 +147,102 @@ define([
 
         contextMenu.show(e.contextMenu.view, e.pageY - (5 + 23 + 24 / 2), e.pageX - 15, menu);
       });
+    },
+
+    listAction: function(e, done)
+    {
+      var $action = $(e.currentTarget).addClass('disabled').prop('disabled', true);
+
+      e.contextMenu = e.listAction;
+      e.contextMenu.onCancel = function() { $action.removeClass('disabled').prop('disabled', false); };
+
+      this.contextMenu(e, function(printer)
+      {
+        e.contextMenu.onCancel();
+
+        done(printer);
+      });
+    },
+
+    pageAction: function(options, done)
+    {
+      var model = options.view.model || options.view.collection;
+      var nlsDomain = model.getNlsDomain
+        ? model.getNlsDomain()
+        : (model.nlsDomain || 'core');
+      var nlsKey = 'PAGE_ACTION:print';
+      var label = options.label || (t.has(nlsDomain, nlsKey) ? t(nlsDomain, nlsKey) : t('core', nlsKey));
+
+      if (cache === null || cache.length === 0)
+      {
+        return {
+          label: label,
+          icon: 'print',
+          callback: function(e)
+          {
+            if (cache && cache.length === 0)
+            {
+              return done(null);
+            }
+
+            var $btn = $(e.currentTarget).find('.btn').addClass('disabled').prop('disabled', true);
+            var $fa = $btn.find('.fa').removeClass('fa-print').addClass('fa-spinner fa-spin');
+            var sandbox = options.view.broker.sandbox();
+
+            sandbox.subscribe('router.dispatching', unlock);
+
+            getPrinters(function(printers)
+            {
+              if (!sandbox)
+              {
+                return;
+              }
+
+              if (!printers.length)
+              {
+                return done(null);
+              }
+
+              viewport.currentLayout.setActions(options.view.actions, options.view);
+              viewport.currentLayout.$('.page-actions-printers').find('.btn').click();
+            });
+
+            function unlock()
+            {
+              sandbox.destroy();
+              sandbox = null;
+
+              $fa.removeClass('fa-spinner fa-spin').addClass('fa-print');
+              $btn.prop('disabled', false).removeClass('disabled');
+            }
+          }
+        };
+      }
+
+      return {
+        template: function()
+        {
+          return pageActionTemplate({
+            label: label,
+            printers: cache
+          });
+        },
+        callback: function(e)
+        {
+          var $action = $(e.currentTarget);
+
+          if ($action.data('printers-bound'))
+          {
+            return;
+          }
+
+          $action.data('printers-bound', true);
+          $action.find('.dropdown-menu').on('click', 'a', function(e)
+          {
+            done(e.currentTarget.dataset.printerId || null);
+          });
+        }
+      };
     }
 
   });

@@ -7,6 +7,7 @@ define([
   'app/core/views/ListView',
   'app/data/orderStatuses',
   'app/orderStatuses/util/renderOrderStatusLabel',
+  'app/printers/views/PrinterPickerView',
   '../util/openOrderPrint',
   '../util/resolveProductName'
 ], function(
@@ -16,6 +17,7 @@ define([
   ListView,
   orderStatuses,
   renderOrderStatusLabel,
+  PrinterPickerView,
   openOrderPrint,
   resolveProductName
 ) {
@@ -44,7 +46,16 @@ define([
 
       'click .action-print': function(e)
       {
-        openOrderPrint([this.$(e.currentTarget).closest('tr').attr('data-id')]);
+        var orderNo = this.$(e.currentTarget).closest('tr').attr('data-id');
+
+        e.listAction = {
+          view: this
+        };
+
+        PrinterPickerView.listAction(e, function(printer)
+        {
+          openOrderPrint([orderNo], printer);
+        });
 
         return false;
       }
