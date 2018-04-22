@@ -1273,7 +1273,7 @@ app/core/util/html2pdf.js
 app/data/clipboard.js
 app/planning/templates/contextMenu.js
 app/planning/util/contextMenu.js
-app/printers/templates/form.js
+app/printers/templates/pageAction.js
 app/printers/views/PrinterPickerView.js
 app/paintShopPaints/PaintShopPaint.js
 app/paintShopPaints/PaintShopPaintCollection.js
@@ -2091,7 +2091,7 @@ app/production/templates/vkb.js
 app/production/views/VkbView.js
 app/planning/templates/contextMenu.js
 app/planning/util/contextMenu.js
-app/printers/templates/form.js
+app/printers/templates/pageAction.js
 app/printers/views/PrinterPickerView.js
 app/paintShopPaints/PaintShopPaint.js
 app/paintShopPaints/PaintShopPaintCollection.js
