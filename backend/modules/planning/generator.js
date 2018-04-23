@@ -2093,6 +2093,11 @@ module.exports = function setUpGenerator(app, module)
 
   function isTimeForLateOrders(state, lineState)
   {
+    if (state.generateCallCount > 1)
+    {
+      return true;
+    }
+
     let activeFromHour = lineState.activeFrom.hours();
 
     if (activeFromHour < 6)
