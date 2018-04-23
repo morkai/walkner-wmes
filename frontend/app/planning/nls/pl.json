@@ -222,6 +222,11 @@
   "orders:add:plans": "Zaplanowane w dniach",
 
   "lateOrders:hd": "Opóźnione",
+  "lateOrders:action": "Dodaj opóźnione zlecenia",
+  "lateOrders:add:title": "Dodawanie opóźnionych zleceń",
+  "lateOrders:add:failure": "Dodawanie zleceń nie powiodło się.",
+  "lateOrders:add:orders": "Opóźnione zlecenia:",
+  "lateOrders:add:submit": "Dodaj opóźnione zlecenia",
 
   "lineOrders:orderNo": "Nr zlecenia",
   "lineOrders:unit": "szt.",

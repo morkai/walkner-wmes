@@ -149,6 +149,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         showEditButton: this.plan.canEditSettings(),
+        actionLabel: t('planning', 'orders:add'),
         hdLabel: t('planning', 'orders:hd'),
         orders: this.serializeOrders(),
         icons: true

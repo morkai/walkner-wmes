@@ -1,0 +1,12 @@
+<form>
+  <div class="form-group has-required-select2">
+    <label for="<%- idPrefix %>-orders" class="control-label"><%- t('planning', 'lateOrders:add:orders') %></label>
+    <input id="<%- idPrefix %>-orders" type="text" required>
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+      <span><%- t('planning', 'lateOrders:add:submit') %></span>
+    </button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

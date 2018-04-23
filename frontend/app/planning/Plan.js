@@ -251,6 +251,11 @@ define([
       return user.isAllowedTo('PLANNING:WHMAN');
     },
 
+    canAddLateOrders: function()
+    {
+      return this.isEditable() && user.isAllowedTo('PLANNING:PLANNER', 'PLANNING:MANAGE');
+    },
+
     applyChange: function(planChange)
     {
       var plan = this;

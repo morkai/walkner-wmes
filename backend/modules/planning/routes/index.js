@@ -4,6 +4,7 @@
 
 const readPlanRoute = require('./readPlan');
 const searchPlanOrderRoute = require('./searchPlanOrder');
+const addPlanOrdersRoute = require('./addPlanOrders');
 const addPlanOrderRoute = require('./addPlanOrder');
 const editPlanOrderRoute = require('./editPlanOrder');
 const removePlanOrderRoute = require('./removePlanOrder');
@@ -31,6 +32,7 @@ module.exports = function setUpPlanningRoutes(app, module)
   express.post('/planning/plans/:id;generate', canManage, generatePlanRoute);
   express.get('/planning/plans/:id', canView, readPlanRoute.bind(null, app, module));
 
+  express.post('/planning/plans/:plan/orders', canManage, addPlanOrdersRoute.bind(null, app, module));
   express.get('/planning/plans/:plan/orders/:order', canManage, searchPlanOrderRoute.bind(null, app, module));
   express.post('/planning/plans/:plan/orders/:order', canManage, addPlanOrderRoute.bind(null, app, module));
   express.patch('/planning/plans/:plan/orders/:order', canManage, editPlanOrderRoute.bind(null, app, module));

@@ -13,6 +13,7 @@ define([
   '../util/scrollIntoView',
   '../util/contextMenu',
   './PlanOrderAddDialogView',
+  './PlanLateOrderAddDialogView',
   'app/planning/templates/orders',
   'app/planning/templates/orderPopover'
 ], function(
@@ -28,6 +29,7 @@ define([
   scrollIntoView,
   contextMenu,
   PlanOrderAddDialogView,
+  PlanLateOrderAddDialogView,
   ordersTemplate,
   orderPopoverTemplate
 ) {
@@ -53,6 +55,14 @@ define([
       'contextmenu .is-order': function(e)
       {
         this.showMenu(e);
+
+        return false;
+      },
+      'click #-add': function()
+      {
+        this.$id('add').blur();
+
+        this.showAddDialog();
 
         return false;
       }
@@ -87,7 +97,8 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        showEditButton: false,
+        showEditButton: this.plan.canAddLateOrders(),
+        actionLabel: t('planning', 'lateOrders:action'),
         hdLabel: t('planning', 'lateOrders:hd'),
         orders: this.serializeOrders(),
         icons: false
@@ -202,6 +213,16 @@ define([
       });
     },
 
+    showAddDialog: function()
+    {
+      var dialogView = new PlanLateOrderAddDialogView({
+        plan: this.plan,
+        mrp: this.mrp
+      });
+
+      viewport.showDialog(dialogView, t('planning', 'lateOrders:add:title'));
+    },
+
     hideMenu: function()
     {
       contextMenu.hide(this);
@@ -219,7 +240,7 @@ define([
         menu.push(contextMenu.actions.comment(lateOrder.id));
       }
 
-      if (this.plan.isEditable() && user.isAllowedTo('PLANNING:PLANNER', 'PLANNING:MANAGE'))
+      if (this.plan.canAddLateOrders())
       {
         menu.push({
           icon: 'fa-plus',
