@@ -9,11 +9,11 @@ define([
 ) {
   'use strict';
 
-  return function openOrderPrint(orders)
+  return function openOrderPrint(orders, printer)
   {
     $.ajax({url: '/orders/' + orders.join('+') + '.html', dataType: 'html'}).done(function(html)
     {
-      html2pdf(html);
+      html2pdf(html, printer);
     });
   };
 });

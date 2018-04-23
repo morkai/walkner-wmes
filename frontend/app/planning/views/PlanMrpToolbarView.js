@@ -9,6 +9,7 @@ define([
   'app/core/View',
   'app/core/util/html2pdf',
   'app/data/clipboard',
+  'app/printers/views/PrinterPickerView',
   'app/prodShifts/ProdShiftCollection',
   '../util/shift',
   '../PlanSapOrderCollection',
@@ -25,6 +26,7 @@ define([
   View,
   html2pdf,
   clipboard,
+  PrinterPickerView,
   ProdShiftCollection,
   shiftUtil,
   PlanSapOrderCollection,
@@ -89,11 +91,11 @@ define([
 
         if (timeDiff > -23 * 60 || e.altKey)
         {
-          this.printLines(lines);
+          this.printLines(e, lines);
         }
         else
         {
-          this.loadAndPrintLines(lines);
+          this.loadAndPrintLines(e, lines);
         }
       },
       'click #-showTimes': function()
@@ -182,7 +184,7 @@ define([
       });
     },
 
-    loadAndPrintLines: function(lines)
+    loadAndPrintLines: function(e, lines)
     {
       var view = this;
       var $btn = view.$id('printLines').find('.btn').prop('disabled', true);
@@ -243,7 +245,7 @@ define([
           });
         });
 
-        view.printLines(lines, sapOrders, quantitiesDone);
+        view.printLines(e, lines, sapOrders, quantitiesDone);
       });
 
       req.always(function()
@@ -253,24 +255,35 @@ define([
       });
     },
 
-    printLines: function(lines, sapOrders, quantitiesDone)
+    printLines: function(e, lines, sapOrders, quantitiesDone)
     {
-      html2pdf(printPageTemplate({
-        date: this.plan.id,
-        lines: _.pluck(lines, 'id').join(', '),
-        showTimes: !!sapOrders || this.plan.displayOptions.isOrderTimePrinted(),
-        done: !!sapOrders,
-        pages: this.serializePrintPages(lines, sapOrders, quantitiesDone),
-        pad: function(v)
-        {
-          if (v < 10)
-          {
-            return '&nbsp;' + v;
-          }
+      var view = this;
 
-          return v;
-        }
-      }));
+      e.contextMenu = {
+        view: view
+      };
+
+      PrinterPickerView.contextMenu(e, function(printer)
+      {
+        var html = printPageTemplate({
+          date: view.plan.id,
+          lines: _.pluck(lines, 'id').join(', '),
+          showTimes: !!sapOrders || view.plan.displayOptions.isOrderTimePrinted(),
+          done: !!sapOrders,
+          pages: view.serializePrintPages(lines, sapOrders, quantitiesDone),
+          pad: function(v)
+          {
+            if (v < 10)
+            {
+              return '&nbsp;' + v;
+            }
+
+            return v;
+          }
+        });
+
+        html2pdf(html, printer);
+      });
     },
 
     serializePrintPages: function(lines, sapOrders, quantitiesDone)
