@@ -134,6 +134,13 @@ module.exports = function setUpHtml2pdfRoutes(app, module)
           return this.skip(app.createError('INVALID_HASH', 400));
         }
 
+        if (!printer)
+        {
+          module.warn(`Can't print [${pdfFilePath}]: invalid printer: ${printer}`);
+
+          return this.skip(app.createError('INVALID_PRINTER', 400));
+        }
+
         const cmd = `"${module.config.sumatraExe}" -print-to "${printer.name}" -print-settings "fit" "${pdfFilePath}"`;
 
         exec(cmd, this.next());
