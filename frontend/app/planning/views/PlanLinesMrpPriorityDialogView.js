@@ -4,6 +4,7 @@ define([
   'underscore',
   'jquery',
   'app/i18n',
+  'app/user',
   'app/viewport',
   'app/core/View',
   'app/data/orgUnits',
@@ -13,6 +14,7 @@ define([
   _,
   $,
   t,
+  user,
   viewport,
   View,
   orgUnits,
@@ -38,8 +40,13 @@ define([
       {
         this.removeEmptyLines();
         this.addLine(e.added.id);
-
         this.$id('line').select2('val', '');
+        this.toggleSubmit();
+      },
+
+      'change input[data-line-id]': function()
+      {
+        this.toggleSubmit();
       }
 
     },
@@ -49,6 +56,20 @@ define([
       this.setUpLineSelect2();
 
       this.mrp.lines.forEach(function(mrpLine) { this.addLine(mrpLine.id); }, this);
+
+      this.toggleSubmit();
+    },
+
+    toggleSubmit: function()
+    {
+      var hasAnyMrp = false;
+
+      this.$('input[data-line-id]').each(function()
+      {
+        hasAnyMrp = hasAnyMrp || this.value.length;
+      });
+
+      this.$id('submit').prop('disabled', !hasAnyMrp);
     },
 
     setUpLineSelect2: function()
@@ -147,7 +168,6 @@ define([
       var view = this;
       var $submit = view.$id('submit').prop('disabled', true);
       var $spinner = $submit.find('.fa-spinner').removeClass('hidden');
-
       var settings = view.plan.settings;
 
       view.$('input[data-line-id]').each(function()

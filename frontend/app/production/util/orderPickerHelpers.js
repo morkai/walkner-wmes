@@ -133,7 +133,7 @@ define([
 
       $operation.removeClass('form-control').select2(_.extend({
         width: '100%',
-        placeholder: t('production', 'newOrderPicker:online:operation:placeholder'),
+        placeholder: ' ',
         openOnEnter: null,
         allowClear: false,
         minimumResultsForSearch: -1,
