@@ -33,7 +33,7 @@ define([
 
     req.done(function(res)
     {
-      if (printer)
+      if (typeof printer === 'string' && /^[a-f0-9]{24}$/.test(printer))
       {
         printInPrinter(msg, printer, res.hash);
       }
