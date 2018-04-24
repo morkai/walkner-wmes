@@ -5,28 +5,36 @@
 const step = require('h5.step');
 const moment = require('moment');
 
-module.exports = function getOrderQueue(app, productionModule, prodShiftId, done)
+module.exports = function getOrderQueue(app, productionModule, id, done)
 {
   const mongoose = app[productionModule.config.mongooseId];
   const PlanSettings = mongoose.model('PlanSettings');
   const Plan = mongoose.model('Plan');
   const Order = mongoose.model('Order');
 
-  if (!prodShiftId)
+  if (!id)
   {
     return done(null, []);
   }
 
+  let prodShiftId = null;
+  let prodLineId = null;
+
   step(
     function()
     {
-      const prodLine = app[productionModule.config.orgUnitsId].getByTypeAndId('prodLine', prodShiftId);
+      const prodLine = app[productionModule.config.orgUnitsId].getByTypeAndId('prodLine', id);
 
       if (prodLine)
       {
         const prodLineState = productionModule.getProdLineState(prodLine._id);
 
         prodShiftId = prodLineState ? prodLineState.getCurrentShiftId() : null;
+        prodLineId = prodLine._id;
+      }
+      else
+      {
+        prodShiftId = id;
       }
 
       productionModule.getProdData('shift', prodShiftId, this.next());
@@ -187,7 +195,7 @@ module.exports = function getOrderQueue(app, productionModule, prodShiftId, done
     {
       if (err)
       {
-        productionModule.error(`Failed to get order queue for [${prodShiftId}]: ${err.message}`);
+        productionModule.error(`Failed to get order queue for [${prodShiftId || prodLineId}]: ${err.message}`);
       }
 
       done(null, orderQueue || []);
