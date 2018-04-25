@@ -43,12 +43,7 @@ define([
       {
         var model = collection.get(row._id);
         var actions = [
-          ListView.actions.viewDetails(model),
-          {
-            icon: 'print',
-            label: t('core', 'LIST:ACTION:print'),
-            href: model.genClientUrl('print')
-          }
+          ListView.actions.viewDetails(model)
         ];
 
         var editable = model.isEditable(user);

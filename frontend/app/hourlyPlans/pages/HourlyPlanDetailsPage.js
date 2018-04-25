@@ -3,19 +3,25 @@
 define([
   'app/i18n',
   'app/user',
+  'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
-  'app/core/View',
+  'app/core/util/html2pdf',
+  'app/printers/views/PrinterPickerView',
   '../HourlyPlan',
-  '../views/HourlyPlanDetailsView'
+  '../views/HourlyPlanDetailsView',
+  'app/hourlyPlans/templates/printableEntry'
 ], function(
   t,
   user,
+  View,
   bindLoadingMessage,
   pageActions,
-  View,
+  html2pdf,
+  PrinterPickerView,
   HourlyPlan,
-  HourlyPlanDetailsView
+  HourlyPlanDetailsView,
+  printableEntryTemplate
 ) {
   'use strict';
 
@@ -38,17 +44,19 @@ define([
 
     actions: function()
     {
-      var actions = [{
-        label: t.bound('hourlyPlans', 'PAGE_ACTION:print'),
-        icon: 'print',
-        href: this.model.genClientUrl('print')
-      }];
+      var page = this;
+      var actions = [
+        PrinterPickerView.pageAction({view: page, tag: 'hourlyPlans'}, function(printer)
+        {
+          html2pdf(printableEntryTemplate(page.model.serializeToPrint()), printer);
+        })
+      ];
 
-      if (this.model.isEditable(user))
+      if (page.model.isEditable(user))
       {
         actions.push(
-          pageActions.edit(this.model),
-          pageActions.delete(this.model)
+          pageActions.edit(page.model),
+          pageActions.delete(page.model)
         );
       }
 
@@ -57,8 +65,7 @@ define([
 
     initialize: function()
     {
-      this.model = bindLoadingMessage(new HourlyPlan({_id: this.options.modelId}), this);
-
+      this.model = bindLoadingMessage(this.model, this);
       this.view = new HourlyPlanDetailsView({model: this.model});
     },
 

@@ -25,19 +25,32 @@ define([
 
   var cache = null;
 
-  function getPrinters(done)
+  function getPrinters(tag, done)
   {
     if (cache === null)
     {
-      loadPrinters(done);
+      loadPrinters(tag, done);
     }
     else
     {
-      setTimeout(done, 1, cache);
+      setTimeout(done, 1, filterPrinters(tag));
     }
   }
 
-  function loadPrinters(done)
+  function filterPrinters(tag)
+  {
+    if (!tag || !cache)
+    {
+      return cache || [];
+    }
+
+    return cache.filter(function(printer)
+    {
+      return _.isEmpty(printer.tags) || _.includes(printer.tags, tag);
+    });
+  }
+
+  function loadPrinters(tag, done)
   {
     var req = $.ajax({url: '/printing/printers'});
 
@@ -86,7 +99,7 @@ define([
     {
       cache = res.collection || [];
 
-      done(cache);
+      done(filterPrinters(tag));
     });
   }
 
@@ -119,7 +132,7 @@ define([
         }
       });
 
-      getPrinters(function(printers)
+      getPrinters(e.contextMenu.tag, function(printers)
       {
         if (!sandbox)
         {
@@ -172,15 +185,16 @@ define([
         : (model.nlsDomain || 'core');
       var nlsKey = 'PAGE_ACTION:print';
       var label = options.label || (t.has(nlsDomain, nlsKey) ? t(nlsDomain, nlsKey) : t('core', nlsKey));
+      var printers = filterPrinters(options.tag);
 
-      if (cache === null || cache.length === 0)
+      if (printers.length === 0)
       {
         return {
           label: label,
           icon: 'print',
           callback: function(e)
           {
-            if (cache && cache.length === 0)
+            if (cache && filterPrinters(options.tag).length === 0)
             {
               return done(null);
             }
@@ -191,7 +205,7 @@ define([
 
             sandbox.subscribe('router.dispatching', unlock);
 
-            getPrinters(function(printers)
+            getPrinters(options.tag, function(printers)
             {
               if (!sandbox)
               {
@@ -224,7 +238,7 @@ define([
         {
           return pageActionTemplate({
             label: label,
-            printers: cache
+            printers: printers
           });
         },
         callback: function(e)
@@ -243,6 +257,84 @@ define([
           });
         }
       };
+    },
+
+    selectField: function(view, options)
+    {
+      options = _.assign({id: 'printer', label: t('printers', 'select:label')}, options);
+
+      var $formGroup = view.$id(options.id || 'printer');
+
+      if (!$formGroup.length)
+      {
+        var $formActions = view.$('.form-actions');
+
+        if (!$formActions.length)
+        {
+          return;
+        }
+
+        $formGroup = $('<div></div>').insertBefore($formActions);
+      }
+
+      $formGroup.prop('id', '').addClass('form-group');
+
+      $formGroup.append('<label for="' + view.idPrefix + '-' + options.id + '">' + options.label + '</label>');
+
+      $formGroup.append(
+        '<input class="form-control" value="" readonly'
+        + ' id="' + view.idPrefix + '-' + options.id + '"'
+        + ' placeholder="' + t('printers', 'select:browser') + '"'
+        + '>'
+      );
+
+      if (cache && cache.length === 0)
+      {
+        $formGroup.remove();
+
+        return;
+      }
+
+      if (cache === null)
+      {
+        getPrinters(options.tag, function(printers)
+        {
+          var $input = view.$id(options.id);
+
+          if ($input.length === 0)
+          {
+            return;
+          }
+
+          if (printers.length === 0)
+          {
+            $formGroup.remove();
+
+            return;
+          }
+
+          $formGroup.addClass('has-required-select2');
+          $input
+            .removeClass('form-control')
+            .prop('placeholder', t('printers', 'select:placeholder'))
+            .prop('readonly', false)
+            .prop('required', true)
+            .select2({
+              width: '100%',
+              data: [{id: 'browser', text: t('printers', 'select:browser')}].concat(printers.map(function(printer)
+              {
+                return {
+                  id: printer._id,
+                  text: printer.label
+                };
+              }))
+            });
+        });
+
+        return;
+      }
+
+      console.warn('TODO');
     }
 
   });

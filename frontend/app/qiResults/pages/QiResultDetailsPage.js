@@ -4,6 +4,8 @@ define([
   'app/i18n',
   'app/core/pages/DetailsPage',
   'app/core/util/pageActions',
+  'app/core/util/html2pdf',
+  'app/printers/views/PrinterPickerView',
   '../dictionaries',
   '../views/QiResultDetailsView',
   '../views/QiResultHistoryView',
@@ -12,6 +14,8 @@ define([
   t,
   DetailsPage,
   pageActions,
+  html2pdf,
+  PrinterPickerView,
   qiDictionaries,
   QiResultDetailsView,
   QiResultHistoryView,
@@ -27,37 +31,19 @@ define([
 
     actions: function()
     {
-      var model = this.model;
+      var view = this;
+      var model = view.model;
       var actions = [];
 
       if (!model.get('ok'))
       {
-        var pdfUrl = model.url() + '.pdf';
-
-        actions.push({
-          id: 'print',
-          icon: 'print',
-          label: t(model.getNlsDomain(), 'PAGE_ACTION:print'),
-          href: pdfUrl,
-          callback: function(e)
+        actions.push(PrinterPickerView.pageAction({view: view, tag: 'qi'}, function(printer)
+        {
+          view.ajax({url: model.url() + '.html', dataType: 'html'}).done(function(html)
           {
-            if (e.button !== 0)
-            {
-              return;
-            }
-
-            var win = window.open(pdfUrl);
-
-            if (win)
-            {
-              win.onload = win.print.bind(win);
-
-              return false;
-            }
-
-            window.location.href = pdfUrl;
-          }
-        });
+            html2pdf(html, {orientation: 'landscape'}, printer);
+          });
+        }));
       }
 
       if (model.canEdit())
@@ -77,8 +63,8 @@ define([
     {
       DetailsPage.prototype.initialize.apply(this, arguments);
 
-      this.setView('.qiResults-detailsPage-properties', this.detailsView);
-      this.setView('.qiResults-detailsPage-history', this.historyView);
+      this.setView('#-properties', this.detailsView);
+      this.setView('#-history', this.historyView);
     },
 
     destroy: function()

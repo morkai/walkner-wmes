@@ -38,7 +38,7 @@ define([
 
     initialize: function()
     {
-      this.model = bindLoadingMessage(new HourlyPlan({_id: this.options.modelId}), this);
+      this.model = bindLoadingMessage(this.model, this);
 
       this.view = new HourlyPlanEditFormView({model: this.model});
 

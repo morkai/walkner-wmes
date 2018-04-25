@@ -5,6 +5,8 @@ define([
   'app/i18n',
   'app/time',
   'app/core/views/ListView',
+  'app/core/util/html2pdf',
+  'app/printers/views/PrinterPickerView',
   '../dictionaries',
   'app/qiResults/templates/correctiveActionsTable'
 ], function(
@@ -12,6 +14,8 @@ define([
   t,
   time,
   ListView,
+  html2pdf,
+  PrinterPickerView,
   qiDictionaries,
   renderCorrectiveActionsTable
 ) {
@@ -23,26 +27,27 @@ define([
 
     className: 'qiResults-list is-clickable is-colored',
 
-    events: _.extend({
+    events: _.assign({
 
       'click .action-print': function(e)
       {
-        if (e.button !== 0)
+        var view = this;
+        var model = view.collection.get(this.$(e.target).closest('tr').attr('data-id'));
+
+        e.listAction = {
+          view: view,
+          tag: 'qi'
+        };
+
+        PrinterPickerView.listAction(e, function(printer)
         {
-          return;
-        }
+          view.ajax({url: model.url() + '.html', dataType: 'html'}).done(function(html)
+          {
+            html2pdf(html, {orientation: 'landscape'}, printer);
+          });
+        });
 
-        var url = e.currentTarget.href;
-        var win = window.open(url);
-
-        if (win)
-        {
-          win.onload = win.print.bind(win);
-
-          return false;
-        }
-
-        window.location.href = url;
+        return false;
       },
 
       'click .is-filter': function(e)

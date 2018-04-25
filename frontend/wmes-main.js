@@ -74,7 +74,8 @@
       dataType: 'json',
       accepts: {
         json: 'application/json',
-        text: 'text/plain'
+        text: 'text/plain',
+        html: 'text/html'
       },
       contentType: 'application/json'
     });

@@ -55,6 +55,51 @@ define([
       };
     },
 
+    serializeToPrint: function()
+    {
+      var division = divisions.get(this.get('division'));
+      var flows = this.get('flows').filter(function(flow)
+      {
+        if (flow.noPlan)
+        {
+          return false;
+        }
+
+        if (flow.level > 0)
+        {
+          return true;
+        }
+
+        for (var i = 0; i < 23; ++i)
+        {
+          if (flow.hours[i] > 0)
+          {
+            return true;
+          }
+        }
+
+        return false;
+      });
+
+      var pages = [{flows: []}];
+
+      while (flows.length)
+      {
+        if (pages[pages.length - 1].flows.length === 30)
+        {
+          pages.push({flows: []});
+        }
+
+        pages[pages.length - 1].flows.push(flows.shift());
+      }
+
+      return {
+        division: division ? renderOrgUnitPath(division, false, false) : '?',
+        date: time.format(this.get('date'), 'LL'),
+        pages: pages
+      };
+    },
+
     isEditable: function(user)
     {
       if (user.isAllowedTo('PROD_DATA:MANAGE'))

@@ -3,10 +3,12 @@
 define([
   'jquery',
   'app/core/views/FormView',
+  '../tags',
   'app/printers/templates/form'
 ], function(
   $,
   FormView,
+  tags,
   formTemplate
 ) {
   'use strict';
@@ -28,15 +30,25 @@ define([
       {
         this.loadSystemPrinters();
       }
+
+      this.$id('tags').select2({
+        width: '100%',
+        placeholder: ' ',
+        allowClear: true,
+        multiple: true,
+        data: tags.toSelect2()
+      });
     },
 
     loadSystemPrinters: function()
     {
       var view = this;
 
+      view.$id('name').prop('readonly', true);
+
       view.ajax({url: '/printing/systemPrinters'}).done(function(res)
       {
-        view.$id('name').removeClass('form-control').select2({
+        view.$id('name').prop('readonly', false).removeClass('form-control').select2({
           width: '100%',
           placeholder: ' ',
           data: res.collection.map(function(printer)
@@ -50,6 +62,22 @@ define([
           })
         });
       });
+    },
+
+    serializeToForm: function()
+    {
+      var formData = this.model.toJSON();
+
+      formData.tags = (formData.tags || []).join(',');
+
+      return formData;
+    },
+
+    serializeForm: function(formData)
+    {
+      formData.tags = (formData.tags || '').split(',').filter(function(tag) { return tag.length > 0; });
+
+      return formData;
     }
 
   });

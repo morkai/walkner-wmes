@@ -63,30 +63,21 @@ define([
           callback: this.cancelChangeRequest.bind(this)
         });
       }
-      else
+      else if (editable === 'yes')
+      {
+        actions.push(
+          pageActions.edit(model),
+          pageActions.delete(model)
+        );
+      }
+      else if (editable === 'request')
       {
         actions.push({
-          label: t.bound('fte', 'PAGE_ACTION:print'),
-          icon: 'print',
-          href: model.genClientUrl('print')
+          id: 'requestChange',
+          icon: 'edit',
+          label: t('fte', 'PAGE_ACTION:edit'),
+          callback: this.toggleChangeRequest.bind(this)
         });
-
-        if (editable === 'yes')
-        {
-          actions.push(
-            pageActions.edit(model),
-            pageActions.delete(model)
-          );
-        }
-        else if (editable === 'request')
-        {
-          actions.push({
-            id: 'requestChange',
-            icon: 'edit',
-            label: t('fte', 'PAGE_ACTION:edit'),
-            callback: this.toggleChangeRequest.bind(this)
-          });
-        }
       }
 
       return actions;

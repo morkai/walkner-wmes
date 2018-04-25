@@ -49,7 +49,8 @@ define([
         var orderNo = this.$(e.currentTarget).closest('tr').attr('data-id');
 
         e.listAction = {
-          view: this
+          view: this,
+          tag: 'orders'
         };
 
         PrinterPickerView.listAction(e, function(printer)

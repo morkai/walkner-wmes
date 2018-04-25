@@ -33,12 +33,11 @@ define([
   {
     viewport.loadPage(
       [
-        'app/hourlyPlans/HourlyPlanCollection',
         'app/hourlyPlans/pages/HourlyPlanListPage',
         'i18n!app/nls/fte',
         nls
       ],
-      function(HourlyPlanCollection, HourlyPlanListPage)
+      function(HourlyPlanListPage)
       {
         return new HourlyPlanListPage({
           collection: new HourlyPlanCollection(null, {
@@ -72,9 +71,9 @@ define([
 
   router.map('/hourlyPlans;settings', user.auth('PROD_DATA:MANAGE'), function(req)
   {
-    viewport.loadPage(['app/hourlyPlans/pages/PlanningSettingsPage', nls], function(QiSettingsPage)
+    viewport.loadPage(['app/hourlyPlans/pages/PlanningSettingsPage', nls], function(PlanningSettingsPage)
     {
-      return new QiSettingsPage({
+      return new PlanningSettingsPage({
         initialTab: req.query.tab
       });
     });
@@ -138,7 +137,9 @@ define([
   {
     viewport.loadPage(['app/hourlyPlans/pages/HourlyPlanDetailsPage', nls], function(HourlyPlanDetailsPage)
     {
-      return new HourlyPlanDetailsPage({modelId: req.params.id});
+      return new HourlyPlanDetailsPage({
+        model: new HourlyPlan({_id: req.params.id})
+      });
     });
   });
 
@@ -146,19 +147,10 @@ define([
   {
     viewport.loadPage(['app/hourlyPlans/pages/HourlyPlanEditFormPage', nls], function(HourlyPlanEditFormPage)
     {
-      return new HourlyPlanEditFormPage({modelId: req.params.id});
+      return new HourlyPlanEditFormPage({
+        model: new HourlyPlan({_id: req.params.id})
+      });
     });
-  });
-
-  router.map('/hourlyPlans/:id;print', canView, function(req)
-  {
-    viewport.loadPage(
-      ['app/hourlyPlans/pages/HourlyPlanDetailsPrintablePage', nls],
-      function(HourlyPlanDetailsPrintablePage)
-      {
-        return new HourlyPlanDetailsPrintablePage({modelId: req.params.id});
-      }
-    );
   });
 
   router.map('/hourlyPlans/:id;delete', canManage, showDeleteFormPage.bind(null, HourlyPlan));

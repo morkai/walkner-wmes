@@ -32,7 +32,8 @@ define([
           collection: new PrinterCollection(null, {rqlQuery: req.rql}),
           columns: [
             {id: 'name', className: 'is-min'},
-            'label'
+            {id: 'label', className: 'is-min'},
+            'tags'
           ]
         });
       }

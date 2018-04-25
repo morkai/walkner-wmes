@@ -16,6 +16,7 @@
 
   "PROPERTY:name": "Nazwa systemowa",
   "PROPERTY:label": "Opis",
+  "PROPERTY:tags": "Tagi",
 
   "FORM:ACTION:add": "Dodaj drukarkę",
   "FORM:ACTION:edit": "Edytuj drukarkę",
@@ -29,5 +30,18 @@
   "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć drukarki.",
 
   "menu:header": "Drukarki",
-  "menu:browser": "Przez przeglądarkę..."
+  "menu:browser": "Przez przeglądarkę...",
+
+  "select:label": "Drukarka",
+  "select:placeholder": "Wybierz drukarkę...",
+  "select:browser": "Przez przeglądarkę...",
+
+  "tags:orders": "Zlecenia reszty działów",
+  "tags:qi": "Inspekcja jakości",
+  "tags:planning": "Plany dzienne",
+  "tags:hourlyPlans": "Plany godzinowe",
+  "tags:paintShop": "Malarnia",
+  "tags:fte/production": "FTE (produkcja)",
+  "tags:fte/warehouse": " FTE (magazyn)",
+  "tags:fte/other": "FTE (inne)"
 }

@@ -17,6 +17,7 @@
 
     "PROPERTY:name": "Name",
     "PROPERTY:label": "Label",
+    "PROPERTY:tags": "Tags",
 
     "FORM:ACTION:add": "Add printer",
     "FORM:ACTION:edit": "Edit printer",
@@ -30,7 +31,20 @@
     "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the printer.",
 
     "menu:header": "Printers",
-    "menu:browser": "In the browser..."
+    "menu:browser": "In the browser...",
+
+    "select:label": "Printer",
+    "select:placeholder": "Choose a printer...",
+    "select:browser": "In the browser...",
+
+    "tags:orders": "Orders",
+    "tags:qi": "QI",
+    "tags:planning": "Daily plans",
+    "tags:hourlyPlans": "Hourly plans",
+    "tags:paintShop": "Paint-shop",
+    "tags:fte/production": "FTE (production)",
+    "tags:fte/warehouse": " FTE (warehouse)",
+    "tags:fte/other": "FTE (other)"
   },
   "pl": true
 }

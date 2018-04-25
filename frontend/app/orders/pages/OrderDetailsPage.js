@@ -50,7 +50,7 @@ define([
       var page = this;
       var orderNo = page.model.id;
 
-      return [PrinterPickerView.pageAction({view: page}, function(printer)
+      return [PrinterPickerView.pageAction({view: page, tag: 'orders'}, function(printer)
       {
         openOrderPrint([orderNo], printer);
       })];

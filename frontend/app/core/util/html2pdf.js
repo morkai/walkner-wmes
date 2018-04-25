@@ -1,23 +1,27 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   'app/i18n',
   'app/viewport'
 ], function(
+  _,
   $,
   t,
   viewport
 ) {
   'use strict';
 
-  return function html2pdf(html, windowOptions, printer)
+  return function html2pdf(html, options, printer)
   {
-    if (typeof windowOptions === 'string')
+    if (typeof options === 'string')
     {
-      printer = windowOptions;
-      windowOptions = null;
+      printer = options;
+      options = null;
     }
+
+    options = _.assign({format: 'A4', orientation: 'portrait'}, options);
 
     var msg = viewport.msg.show({
       type: 'info',
@@ -26,7 +30,7 @@ define([
 
     var req = $.ajax({
       method: 'POST',
-      url: '/html2pdf',
+      url: '/html2pdf?format=' + options.format + '&orientation=' + options.orientation,
       contentType: 'text/plain',
       data: html
     });
@@ -39,7 +43,7 @@ define([
       }
       else
       {
-        printInBrowser(msg, windowOptions, res.hash);
+        printInBrowser(msg, options, res.hash);
       }
     });
 
@@ -56,17 +60,14 @@ define([
 
   function printInBrowser(msg, windowOptions, hash)
   {
-    if (!windowOptions)
-    {
-      var width = Math.min(window.screen.availWidth - 200, 1400);
+    var width = Math.min(window.screen.availWidth - 200, 1400);
 
-      windowOptions = {
-        top: 80,
-        width: width,
-        height: Math.min(window.screen.availHeight - 160, 800),
-        left: window.screen.availWidth - width - 80
-      };
-    }
+    windowOptions = _.assign({
+      top: 80,
+      width: width,
+      height: Math.min(window.screen.availHeight - 160, 800),
+      left: window.screen.availWidth - width - 80
+    }, _.pick(windowOptions, ['top', 'left', 'width', 'height']));
 
     var features = [];
 

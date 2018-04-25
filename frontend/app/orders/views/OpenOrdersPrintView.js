@@ -5,6 +5,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/printers/views/PrinterPickerView',
   '../util/openOrderPrint',
   'app/orders/templates/openOrdersPrint'
 ], function(
@@ -12,6 +13,7 @@ define([
   t,
   viewport,
   View,
+  PrinterPickerView,
   openOrderPrint,
   template
 ) {
@@ -36,6 +38,11 @@ define([
 
         return false;
       }
+    },
+
+    afterRender: function()
+    {
+      PrinterPickerView.selectField(this, {tag: 'orders'});
     },
 
     onDialogShown: function()
@@ -80,7 +87,7 @@ define([
           return;
         }
 
-        openOrderPrint(orders);
+        openOrderPrint(orders, view.$id('printer').val() || null);
       });
     }
 

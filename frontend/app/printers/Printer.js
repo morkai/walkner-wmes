@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  '../core/Model'
+  '../core/Model',
+  './tags'
 ], function(
-  Model
+  Model,
+  tags
 ) {
   'use strict';
 
@@ -19,7 +21,16 @@ define([
 
     nlsDomain: 'printers',
 
-    labelAttribute: 'label'
+    labelAttribute: 'label',
+
+    serialize: function()
+    {
+      var obj = this.toJSON();
+
+      obj.tags = tags.toString(obj.tags);
+
+      return obj;
+    }
 
   });
 });

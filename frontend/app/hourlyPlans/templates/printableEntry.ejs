@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Plan godzinowy na dzień <%- date %> dla wydziału <%- division %></title>
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 10mm;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+      box-sizing: border-box;
+    }
+    body {
+      margin: 15px;
+      font-family: Verdana, sans-serif;
+      font-size: 12px;
+      text-rendering: optimizeLegibility;
+      color: #000;
+      background: #FFF;
+      text-align: center;
+    }
+    .page {
+      margin: auto;
+      text-align: left;
+      width: 21cm;
+      padding: 10mm;
+    }
+    header {
+      padding-bottom: 5mm;
+      margin-bottom: 5mm;
+      font-size: 32px;
+      font-weight: bold;
+      text-align: left;
+      border-bottom: 1px solid #000;
+    }
+    footer {
+      display: flex;
+      padding-top: 5mm;
+      margin-top: 5mm;
+      border-top: 1px solid #000;
+      font-size: 10px;
+    }
+    footer p:first-child {
+      margin-bottom: 3px;
+    }
+    footer > div:first-child {
+      flex: 1 1 auto;
+    }
+    footer > div:last-child {
+      flex: 1 1 auto;
+      text-align: right;
+    }
+    .props {
+      float: right;
+      display: flex;
+    }
+    .prop {
+      margin-left: 5mm;
+    }
+    .prop > span:first-child {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .prop > span:last-child {
+      display: block;
+      font-size: 16px;
+      font-weight: normal;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th {
+      font-size: 12px;
+      text-align: left;
+      padding: 0 10px 4px 0;
+      white-space: nowrap;
+    }
+    td {
+      font-size: 10px;
+      padding: 4px 10px 4px 0;
+      white-space: nowrap;
+      width: 1%;
+    }
+    th:last-child,
+    td:last-child {
+      padding-right: 0;
+    }
+    .flow {
+      width: auto;
+    }
+    .flow > span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 250px;
+    }
+    .level,
+    .hour {
+      text-align: center;
+    }
+    td {
+      border-top: 1px solid #ccc;
+    }
+    @media print {
+      body {
+        margin: 0;
+      }
+      .page {
+        width: 100%;
+        padding: 0;
+      }
+      .page + .page {
+        page-break-before: always;
+      }
+      .bd {
+        height: 586px;
+      }
+    }
+  </style>
+</head>
+<body>
+<% pages.forEach(function(page, i) { %>
+<section class="page">
+  <header>
+    <div class="props">
+      <div class="prop">
+        <span>Data:</span>
+        <span><%- date %></span>
+      </div>
+      <div class="prop">
+        <span>Wydział:</span>
+        <span><%- division %></span>
+      </div>
+    </div>
+    Plan godzinowy
+  </header>
+  <section class="bd">
+    <table>
+      <thead>
+        <th class="flow"><%- t('hourlyPlans', 'column:flow') %></th>
+        <th class="level"><%- t('hourlyPlans', 'column:level') %></th>
+        <% '06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 00 01 02 03 04 05'.split(' ').forEach(function(h) { %>
+        <th class="hour"><%- h %></th>
+        <% }) %>
+      </thead>
+      <tbody>
+      <% page.flows.forEach(function(flow) { %>
+      <tr>
+        <td class="flow"><span><%= flow.name %></span></td>
+        <td class="level"><%- flow.level %></td>
+        <% flow.hours.forEach(function(h) { %>
+        <td class="hour"><%- h || '' %></td>
+        <% }) %>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </section>
+  <footer>
+    <div>
+      <p>Plan godzinowy na dzień <%- date %> dla wydziału <%- division %>.</p>
+      <p>Wydrukowano w <%- time.format(Date.now(), 'LLLL') %> przez <%= user.getLabel() %> za pomocą systemu WMES.</p>
+    </div>
+    <div>
+      Strona <%- i + 1 %> z <%- pages.length %>
+    </div>
+  </footer>
+</section>
+<% }) %>
+</body>
+</html>

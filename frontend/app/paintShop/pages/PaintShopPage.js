@@ -660,6 +660,8 @@ define([
     {
       var page = this;
 
+      e.contextMenu.tag = 'paintShop';
+
       PrinterPickerView.contextMenu(e, function(printer)
       {
         var orders = page.orders.filter(function(order)

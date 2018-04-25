@@ -260,7 +260,8 @@ define([
       var view = this;
 
       e.contextMenu = {
-        view: view
+        view: view,
+        tag: 'planning'
       };
 
       PrinterPickerView.contextMenu(e, function(printer)

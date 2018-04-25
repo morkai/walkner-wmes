@@ -1,19 +1,27 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/time',
   'app/i18n',
   'app/user',
   'app/data/divisions',
   'app/orgUnits/util/renderOrgUnitPath',
-  'app/core/views/ListView'
+  'app/core/views/ListView',
+  'app/core/util/html2pdf',
+  'app/printers/views/PrinterPickerView',
+  'app/hourlyPlans/templates/printableEntry'
 ], function(
+  _,
   time,
   t,
   user,
   divisions,
   renderOrgUnitPath,
-  ListView
+  ListView,
+  html2pdf,
+  PrinterPickerView,
+  printableEntryTemplate
 ) {
   'use strict';
 
@@ -26,6 +34,28 @@ define([
       'hourlyPlans.deleted': 'onModelDeleted'
     },
 
+    events: _.assign({
+
+      'click .action-print': function(e)
+      {
+        var model = this.collection.get(this.$(e.currentTarget).closest('tr').attr('data-id'));
+
+        e.listAction = {
+          view: this,
+          tag: 'hourlyPlans'
+        };
+
+        PrinterPickerView.listAction(e, function(printer)
+        {
+          model.fetch().done(function()
+          {
+            html2pdf(printableEntryTemplate(model.serializeToPrint()), printer);
+          });
+        });
+      }
+
+    }, ListView.prototype.events),
+
     serializeColumns: function()
     {
       return [
@@ -37,6 +67,7 @@ define([
 
     serializeActions: function()
     {
+      var view = this;
       var collection = this.collection;
 
       return function(row)
@@ -45,9 +76,9 @@ define([
         var actions = [
           ListView.actions.viewDetails(model),
           {
+            id: 'print',
             icon: 'print',
-            label: t('core', 'LIST:ACTION:print'),
-            href: model.genClientUrl('print')
+            label: t('core', 'LIST:ACTION:print')
           }
         ];
 

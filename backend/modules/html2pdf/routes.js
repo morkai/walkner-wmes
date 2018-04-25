@@ -79,9 +79,9 @@ module.exports = function setUpHtml2pdfRoutes(app, module)
               scale: 1,
               displayHeaderFooter: false,
               printBackground: true,
-              landscape: false,
+              landscape: req.query.orientation === 'landscape',
               pageRanges: '',
-              format: 'A4',
+              format: req.query.format || 'A4',
               margin: {
                 top: '0mm',
                 right: '0mm',

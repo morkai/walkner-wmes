@@ -11,11 +11,11 @@
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie planu godzinowego nie powiodło się.",
   "MSG:DELETED": "Plan godzinowy <em>{label}</em> został usunięty.",
 
-  "PAGE_ACTION:print": "Pokaż wersję do druku",
+  "PAGE_ACTION:print": "Drukuj plan",
   "PAGE_ACTION:add": "Planuj",
   "PAGE_ACTION:edit": "Edytuj plan",
   "PAGE_ACTION:delete": "Usuń plan",
-  "PAGE_ACTION:export": "Eksportuj plany godzinowe",
+  "PAGE_ACTION:export": "Eksportuj plany",
   "PAGE_ACTION:heff": "Wydajność godzinowa",
   "PAGE_ACTION:planning": "Planowanie",
   "PAGE_ACTION:settings": "Zmień ustawienia",
