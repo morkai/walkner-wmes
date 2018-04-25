@@ -44,23 +44,24 @@ define([
 
       return [
         {id: 'rid', className: 'is-min is-number'},
-        {id: 'statusText', tdAttrs: minTdAttrs, label: t('d8Entries', 'PROPERTY:status')},
+        {id: 'statusText', tdAttrs: minTdAttrs, label: this.t('PROPERTY:status')},
         {id: 'entrySource', tdAttrs: minTdAttrs},
-        {id: 'stripNos', tdAttrs: stripsTdAttrs, label: t('d8Entries', 'PROPERTY:strips.no')},
-        {id: 'stripFamilies', tdAttrs: stripsTdAttrs, label: t('d8Entries', 'PROPERTY:strips.family')},
+        {id: 'stripNos', tdAttrs: stripsTdAttrs, label: this.t('PROPERTY:strips.no')},
+        {id: 'stripFamilies', tdAttrs: stripsTdAttrs, label: this.t('PROPERTY:strips.family')},
         {id: 'subject', tdAttrs: prepareTdAttrs},
         {id: 'problemSource', tdAttrs: prepareTdAttrs},
         {id: 'team', tdAttrs: _.partial(prepareTdAttrs, _, null, 'owner', 'members')},
-        {id: 'crsRegisterDate', tdAttrs: minTdAttrs, label: t('d8Entries', 'LIST:crsRegisterDate')},
-        {id: 'd5PlannedCloseDate', tdAttrs: minTdAttrs, label: t('d8Entries', 'LIST:d5PlannedCloseDate')},
-        {id: 'd5CloseDate', tdAttrs: minTdAttrs, label: t('d8Entries', 'LIST:d5CloseDate')},
-        {id: 'd8CloseDate', tdAttrs: minTdAttrs, label: t('d8Entries', 'LIST:d8CloseDate')}
+        {id: 'crsRegisterDate', tdAttrs: minTdAttrs, label: this.t('LIST:crsRegisterDate')},
+        {id: 'd5PlannedCloseDate', tdAttrs: minTdAttrs, label: this.t('LIST:d5PlannedCloseDate')},
+        {id: 'd5CloseDate', tdAttrs: minTdAttrs, label: this.t('LIST:d5CloseDate')},
+        {id: 'd8CloseDate', tdAttrs: minTdAttrs, label: this.t('LIST:d8CloseDate')}
       ];
     },
 
     serializeActions: function()
     {
-      var collection = this.collection;
+      var view = this;
+      var collection = view.collection;
 
       return function(row)
       {
@@ -69,7 +70,7 @@ define([
         var actions = [ListView.actions.viewDetails(model), {
           id: 'download',
           icon: 'download',
-          label: t('d8', 'LIST:ACTION:download'),
+          label: view.t('LIST:ACTION:download'),
           href: attachment ? ('/d8/' + model.id + '/attachments/' + attachment._id + '?download=1') : '/',
           disabled: !!attachment
         }];
