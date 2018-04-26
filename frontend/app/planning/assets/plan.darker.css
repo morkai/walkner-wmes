@@ -32,6 +32,9 @@
 .planning-darker .planning-mrp-list-item.is-surplus {
   background-color: #f00;
 }
+.planning-darker .planning-mrp-list-item.is-teco {
+  background-color: #000;
+}
 .planning-darker .planning-mrp-list-item.is-selected {
   background-color: #0af;
 }
