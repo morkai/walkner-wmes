@@ -309,7 +309,7 @@ define([
       page.listenTo(plan.sapOrders, 'sync', page.onSapOrdersSynced);
 
       $(document)
-        .on('click.' + page.idPrefix, '.paintShop-breadcrumb', this.onBreadcrumbsClick.bind(this));
+        .on('click.' + page.idPrefix, '.paintShop-breadcrumb', page.onBreadcrumbsClick.bind(page));
 
       $(window)
         .on('resize.' + page.idPrefix, _.debounce(page.onWindowResize.bind(page), 16))
@@ -319,20 +319,34 @@ define([
 
     load: function(when)
     {
-      var plan = this.plan;
+      var page = this;
+      var plan = page.plan;
       var forceReloadProdState = reloadProdState;
+      var deferred = $.Deferred();
 
       reloadProdState = false;
 
-      return when(
-        productionState.load(forceReloadProdState),
-        this.delayReasons.fetch({reset: true}),
-        plan.settings.fetch(),
-        plan.shiftOrders.fetch({reset: true}),
-        plan.sapOrders.fetch({reset: true}),
-        plan.lateOrders.fetch({reset: true}),
-        plan.fetch()
+      var load1 = $.when(
+        page.promised(productionState.load(forceReloadProdState)),
+        page.promised(page.delayReasons.fetch({reset: true})),
+        page.promised(plan.settings.fetch()),
+        page.promised(plan.shiftOrders.fetch({reset: true})),
+        page.promised(plan.sapOrders.fetch({reset: true})),
+        page.promised(plan.lateOrders.fetch({reset: true}))
       );
+
+      load1.fail(function() { deferred.reject.apply(deferred, arguments); });
+
+      load1.done(function()
+      {
+        var load2 = page.promised(plan.fetch());
+
+        load2.fail(function() { deferred.reject.apply(deferred, arguments); });
+
+        load2.done(function() { deferred.resolve(); });
+      });
+
+      return when(deferred.promise());
     },
 
     serialize: function()
