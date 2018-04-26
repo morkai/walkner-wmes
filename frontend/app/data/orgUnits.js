@@ -47,6 +47,16 @@ define([
     'prodLine': prodLines
   };
 
+  var TYPES = {
+    'division': true,
+    'subdivision': true,
+    'mrpController': true,
+    'mrpControllers': true,
+    'prodFlow': true,
+    'workCenter': true,
+    'prodLine': true
+  };
+
   function filterByParent(orgUnits, parentProperty, parentOrgUnit)
   {
     return orgUnits.filter(function(orgUnit)
@@ -68,6 +78,7 @@ define([
   }
 
   return {
+    TYPES: TYPES,
     getProdFlowsForSubdivision: function(subdivision)
     {
       if (typeof subdivision === 'string')
@@ -339,7 +350,7 @@ define([
 
         orgUnit = parent;
       }
-      while (true);
+      while (true); // eslint-disable-line no-constant-condition
     }
   };
 });

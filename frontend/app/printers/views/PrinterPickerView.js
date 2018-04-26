@@ -288,7 +288,9 @@ define([
         + '>'
       );
 
-      if (cache && cache.length === 0)
+      var filteredPrinters = filterPrinters(options.tag);
+
+      if (cache && filteredPrinters.length === 0)
       {
         $formGroup.remove();
 
@@ -313,28 +315,34 @@ define([
             return;
           }
 
-          $formGroup.addClass('has-required-select2');
-          $input
-            .removeClass('form-control')
-            .prop('placeholder', t('printers', 'select:placeholder'))
-            .prop('readonly', false)
-            .prop('required', true)
-            .select2({
-              width: '100%',
-              data: [{id: 'browser', text: t('printers', 'select:browser')}].concat(printers.map(function(printer)
-              {
-                return {
-                  id: printer._id,
-                  text: printer.label
-                };
-              }))
-            });
+          setUpSelect2(printers);
         });
-
-        return;
+      }
+      else
+      {
+        setUpSelect2(filteredPrinters);
       }
 
-      console.warn('TODO');
+      function setUpSelect2(printers)
+      {
+        $formGroup.addClass('has-required-select2');
+
+        view.$id(options.id)
+          .removeClass('form-control')
+          .prop('placeholder', t('printers', 'select:placeholder'))
+          .prop('readonly', false)
+          .prop('required', true)
+          .select2({
+            width: '100%',
+            data: [{id: 'browser', text: t('printers', 'select:browser')}].concat(printers.map(function(printer)
+            {
+              return {
+                id: printer._id,
+                text: printer.label
+              };
+            }))
+          });
+      }
     }
 
   });

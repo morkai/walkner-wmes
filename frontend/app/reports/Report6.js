@@ -334,7 +334,6 @@ define([
       attrs.count.paint += groupData.paintCount;
       attrs.count.fixBin += groupData.fixBinCount;
 
-      // TODO
       var toCount = groupData.stagingCount + groupData.fifoCount + groupData.paintCount + groupData.fixBinCount;
       var toFte = groupData.stagingFte + groupData.fifoFte + groupData.paintFte + groupData.fixBinFte;
       var totalFte = toFte;

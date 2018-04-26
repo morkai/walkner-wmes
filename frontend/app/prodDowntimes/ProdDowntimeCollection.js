@@ -6,6 +6,7 @@ define([
   '../user',
   '../data/prodLog',
   '../core/Collection',
+  '../data/orgUnits',
   '../orgUnits/util/limitOrgUnits',
   './ProdDowntime'
 ], function(
@@ -14,6 +15,7 @@ define([
   user,
   prodLog,
   Collection,
+  orgUnits,
   limitOrgUnits,
   ProdDowntime
 ) {
@@ -174,7 +176,9 @@ define([
       return this.matchStatus(data)
         && this.matchAor(data)
         && this.matchReason(data)
-        && this.matchOrgUnit(data);
+        && this.matchOrgUnit(data)
+        && this.matchProdShift(data)
+        && this.matchProdShiftOrder(data);
     },
 
     matchStatus: function(data)
@@ -273,8 +277,61 @@ define([
      */
     matchOrgUnit: function(data) // eslint-disable-line no-unused-vars
     {
-      // TODO
+      var orgUnitTerm = _.find(this.rqlQuery.selector.args, function(term)
+      {
+        return orgUnits.TYPES[term.args[0]] && VALID_TERM_NAMES[term.name];
+      });
+
+      if (!orgUnitTerm)
+      {
+        return true;
+      }
+
+      var orgUnitType = orgUnitTerm.args[0];
+      var requiredId = orgUnitTerm.args[1];
+      var actualId = data[orgUnitType];
+
+      if (orgUnitTerm.name === 'eq')
+      {
+        return actualId === requiredId;
+      }
+
+      if (orgUnitTerm.name === 'ne')
+      {
+        return actualId !== requiredId;
+      }
+
+      if (orgUnitTerm.name === 'in')
+      {
+        return requiredId.indexOf(actualId) !== -1;
+      }
+
+      if (orgUnitTerm.name === 'nin')
+      {
+        return requiredId.indexOf(actualId) === -1;
+      }
+
       return true;
+    },
+
+    matchProdShift: function(data)
+    {
+      var term = _.find(this.rqlQuery.selector.args, function(term)
+      {
+        return term.name === 'eq' && term.args[0] === 'prodShift';
+      });
+
+      return !term || data.prodShift === term.args[1];
+    },
+
+    matchProdShiftOrder: function(data)
+    {
+      var term = _.find(this.rqlQuery.selector.args, function(term)
+      {
+        return term.name === 'eq' && term.args[0] === 'prodShiftOrder';
+      });
+
+      return !term || data.prodShiftOrder === term.args[1];
     },
 
     refresh: function(newDowntimes)

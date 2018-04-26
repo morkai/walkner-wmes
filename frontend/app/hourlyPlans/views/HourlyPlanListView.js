@@ -67,7 +67,6 @@ define([
 
     serializeActions: function()
     {
-      var view = this;
       var collection = this.collection;
 
       return function(row)

@@ -4,7 +4,6 @@
 
 const _ = require('lodash');
 const mongoose = require('mongoose');
-const autoIncrement = require('mongoose-plugin-autoinc');
 const expressMiddleware = require('./expressMiddleware');
 
 exports.DEFAULT_CONFIG = {

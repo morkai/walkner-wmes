@@ -56,12 +56,6 @@ define([
         multiple: true,
         data: qiDictionaries.kinds.map(idAndLabel)
       });
-
-      // TODO: remove
-      if (!updater.versions.reports || updater.versions.reports <= 38)
-      {
-        this.$id('kinds').select2('disable');
-      }
     },
 
     serializeFormData: function()

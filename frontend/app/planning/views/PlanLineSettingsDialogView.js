@@ -32,12 +32,6 @@ define([
         this.submitForm();
 
         return false;
-      },
-
-      'change #-activeTime': function()
-      {
-        var $activeTime = this.$id('activeTime');
-        var activeTime = $activeTime.val();
       }
 
     },
