@@ -1007,7 +1007,11 @@ module.exports = function setUpGenerator(app, module)
           {$match: {_id: this.prevPlanId}},
           {$unwind: '$orders'},
           {$match: {'orders.incomplete': {$gt: 0}}},
-          {$project: {_id: '$orders._id', incomplete: '$orders.incomplete'}}
+          {$project: {
+            _id: '$orders._id',
+            incomplete: '$orders.incomplete',
+            date: '$orders.date'
+          }}
         ];
 
         Plan.aggregate(pipeline, this.next());
@@ -1019,21 +1023,26 @@ module.exports = function setUpGenerator(app, module)
           return this.skip(new Error(`Failed to find incomplete orders: ${err.message}`));
         }
 
-        if (!incompleteOrders.length)
-        {
-          return this.skip();
-        }
-
         this.incompleteOrderIds = [];
 
         incompleteOrders.forEach(order =>
         {
+          if (moment(order.date, 'YYYY-MM-DD').diff(planLocalMoment, 'days') < -6)
+          {
+            return;
+          }
+
           this.incompleteOrderIds.push(order._id);
 
           order.lines = [];
 
           state.incompleteOrders.set(order._id, order);
         });
+
+        if (!this.incompleteOrderIds.length)
+        {
+          return this.skip();
+        }
 
         const pipeline = [
           {$match: {_id: this.prevPlanId}},
