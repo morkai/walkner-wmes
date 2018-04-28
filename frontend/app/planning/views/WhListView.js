@@ -402,7 +402,7 @@ define([
       menu.push({
         icon: 'fa-clipboard',
         label: t('planning', 'lineOrders:menu:copy'),
-        handler: this.handleCopyAction.bind(this, el, e.pageY, e.pageX)
+        handler: this.handleCopyAction.bind(this, el, e.pageY, e.pageX, false, false)
       });
 
       menu.push({
@@ -410,7 +410,7 @@ define([
           group: el.dataset.group,
           line: el.dataset.line
         }),
-        handler: this.handleCopyAction.bind(this, el, e.pageY, e.pageX, true)
+        handler: this.handleCopyAction.bind(this, el, e.pageY, e.pageX, true, false)
       });
 
       menu.push({
