@@ -138,7 +138,7 @@ define([
     {
       clearTimeout(this.timers.render);
 
-      if (!this.plan.isAnythingLoading())
+      if (!this.plan.isAnythingLoading() && this.isRendered())
       {
         this.timers.render = setTimeout(this.renderIfNotLoading.bind(this), 1);
       }
@@ -160,6 +160,7 @@ define([
 
       view.groupDuration = plan.settings.global.getWhGroupDuration();
       view.groupTimeWindow = view.groupDuration * 3600 * 1000;
+      view.groupExtraItems = plan.settings.global.getWhGroupExtraItems();
 
       plan.lines.forEach(function(planLine)
       {
@@ -186,7 +187,6 @@ define([
           var finishTime = Date.parse(lineOrder.get('finishAt'));
           var duration = finishTime - startTime;
           var qtyPlan = lineOrder.get('quantity');
-          var pceTime = Math.ceil(duration / qtyPlan);
           var item = {
             orderNo: orderNo,
             mrp: mrp,
@@ -196,8 +196,7 @@ define([
             finishTime: finishTime,
             group: view.getOrderGroup(startTime),
             duration: duration,
-            pceTime: pceTime,
-            maxQty: Math.floor(view.groupTimeWindow / pceTime),
+            pceTime: Math.ceil(duration / qtyPlan),
             qtyTodo: order.get('quantityTodo'),
             qtyPlan: qtyPlan,
             line: planLine.id,
@@ -220,6 +219,8 @@ define([
           {
             list.push(item);
           }
+
+          view.combineOrder(list);
         }
       });
 
@@ -279,26 +280,89 @@ define([
       return Math.floor(startHour / this.groupDuration) + 1;
     },
 
+    getGroupStartTime: function(group, itemStartTime)
+    {
+      var groupStartTime = time.utc.getMoment(itemStartTime).startOf('day');
+
+      groupStartTime.add(6 + (group - 1) * this.groupDuration, 'hours');
+
+      return groupStartTime.valueOf();
+    },
+
     splitOrder: function(bigItem, list)
     {
       var partCount = Math.ceil(bigItem.duration / this.groupTimeWindow);
       var qtyPlan = bigItem.qtyPlan;
       var startTime = bigItem.startTime;
       var group = this.getOrderGroup(startTime);
+      var groupStartTime = this.getGroupStartTime(group, startTime);
+      var groupFinishTime = groupStartTime + this.groupTimeWindow;
 
       for (var i = 0; i < partCount; ++i)
       {
+        var availableTime = groupFinishTime - startTime;
+        var maxQty = Math.floor(availableTime / bigItem.pceTime);
         var item = _.assign({}, bigItem, {
           startTime: startTime,
           finishTime: 0,
           group: group++,
-          qtyPlan: Math.min(qtyPlan, bigItem.maxQty)
+          qtyPlan: Math.min(qtyPlan, maxQty)
         });
 
         list.push(item);
 
-        qtyPlan -= bigItem.maxQty;
+        qtyPlan -= item.qtyPlan;
         startTime = item.finishTime = startTime + bigItem.pceTime * item.qtyPlan;
+        groupFinishTime += this.groupTimeWindow;
+      }
+    },
+
+    combineOrder: function(list)
+    {
+      var prevPart = list[list.length - 2];
+
+      if (!prevPart)
+      {
+        return;
+      }
+
+      var lastPart = list[list.length - 1];
+
+      if (lastPart.orderNo !== prevPart.orderNo)
+      {
+        return;
+      }
+
+      if (lastPart.qtyPlan <= this.groupExtraItems)
+      {
+        prevPart.finishTime = lastPart.finishTime;
+        prevPart.qtyPlan += lastPart.qtyPlan;
+
+        list.pop();
+      }
+
+      var firstPartI = -1;
+
+      for (var i = list.length - 1; i >= 0; --i)
+      {
+        if (list[i].orderNo !== lastPart.orderNo)
+        {
+          break;
+        }
+
+        firstPartI = i;
+      }
+
+      var firstPart = list[firstPartI];
+
+      if (firstPart.qtyPlan <= this.groupExtraItems)
+      {
+        var nextPart = list[firstPartI + 1];
+
+        nextPart.startTime = firstPart.startTime;
+        nextPart.qtyPlan += firstPart.qtyPlan;
+
+        list.splice(firstPartI, 1);
       }
     },
 
@@ -562,9 +626,9 @@ define([
 
     onSapOrdersReset: function(sapOrders, options)
     {
-      if (!options.reload && this.plan.displayOptions.isLatestOrderDataUsed() && !this.plan.isAnythingLoading())
+      if (!options.reload && this.plan.displayOptions.isLatestOrderDataUsed())
       {
-        this.render();
+        this.scheduleRender();
       }
     },
 

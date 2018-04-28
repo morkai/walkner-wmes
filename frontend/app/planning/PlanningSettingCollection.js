@@ -66,7 +66,7 @@ define([
 
     prepareValue: function(id, newValue)
     {
-      if (/groupDuration/.test(id))
+      if (/group(Duration|ExtraItems)/.test(id))
       {
         newValue = Math.round(parseInt(newValue, 10));
 
@@ -92,6 +92,11 @@ define([
     getWhGroupDuration: function()
     {
       return Math.min(24, Math.max(1, this.getValue('wh.groupDuration') || 4));
+    },
+
+    getWhGroupExtraItems: function()
+    {
+      return this.getValue('wh.groupExtraItems') || 0;
     }
 
   });

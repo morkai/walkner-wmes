@@ -532,7 +532,7 @@ define([
 
       if (/.wh./.test(setting.id))
       {
-        this.listView.render();
+        this.listView.scheduleRender();
       }
     },
 
@@ -548,10 +548,7 @@ define([
 
     onMrpsReset: function()
     {
-      if (!this.plan.isAnythingLoading())
-      {
-        this.listView.render();
-      }
+      this.listView.scheduleRender();
     }
 
   });

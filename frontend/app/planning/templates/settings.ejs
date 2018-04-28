@@ -8,6 +8,11 @@
         <label for="<%- idPrefix %>-wh-groupDuration"><%- t('planning', 'settings:wh:groupDuration') %></label>
         <input id="<%- idPrefix %>-wh-groupDuration" class="form-control" name="planning.wh.groupDuration" type="number" step="1" min="1" max="24">
       </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-wh-groupExtraItems"><%- t('planning', 'settings:wh:groupExtraItems') %></label>
+        <span class="help-block"><%- t('planning', 'settings:wh:groupExtraItems:help') %></span>
+        <input id="<%- idPrefix %>-wh-groupExtraItems" class="form-control" name="planning.wh.groupExtraItems" type="number" step="1" min="0" max="100">
+      </div>
       <div class="checkbox">
         <label class="control-label">
           <input id="<%- idPrefix %>-wh-sortByLines" name="planning.wh.sortByLines" type="checkbox" value="true">
