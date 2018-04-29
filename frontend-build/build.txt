@@ -786,9 +786,17 @@ vendor/bootstrap/css/bootstrap-theme.css
 ----------------
 vendor/bootstrap/css/bootstrap-theme.css
 
+vendor/bootstrap/css/bootstrap-theme.min.css
+----------------
+vendor/bootstrap/css/bootstrap-theme.min.css
+
 vendor/bootstrap/css/bootstrap.css
 ----------------
 vendor/bootstrap/css/bootstrap.css
+
+vendor/bootstrap/css/bootstrap.min.css
+----------------
+vendor/bootstrap/css/bootstrap.min.css
 
 vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css
 ----------------
@@ -1396,6 +1404,8 @@ app/planning/templates/orderPopover.js
 app/planning/templates/orderIgnoreDialog.js
 app/planning/templates/orderRemoveDialog.js
 app/planning/views/PlanMrpOrdersView.js
+app/planning/templates/lateOrderAddDialog.js
+app/planning/views/PlanLateOrderAddDialogView.js
 app/planning/views/PlanMrpLateOrdersView.js
 app/planning/templates/lineOrders.js
 app/planning/templates/lineOrderPopover.js
@@ -1418,6 +1428,7 @@ app/planning/views/PlanListView.js
 app/planning/pages/PlanListPage.js
 app/core/util/decimalSeparator.js
 app/planning/templates/planSettings.js
+app/planning/templates/planSettingsGroup.js
 app/planning/views/PlanSettingsView.js
 app/planning/pages/PlanSettingsPage.js
 app/planning/templates/change.js
@@ -1434,6 +1445,7 @@ app/nls/pl/planning.js
 i18n!app/nls/planning
 app/planning/routes.js
 app/sapLaborTimeFixer/routes.js
+app/printers/tags.js
 app/printers/Printer.js
 app/nls/printers.js
 app/nls/pl/printers.js

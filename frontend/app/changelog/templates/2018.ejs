@@ -1,4 +1,55 @@
 <div class="hidden">
+  <h1>v0.121.0</h1>
+  <h2><%- time.format('2018-03-31', 'LL') %></h2>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Usunięto możliwość wyłączania najnowszych danych w planie produkcji.</li>
+    <li>Usunięto funkcjonalność Drop zone.</li>
+    <li>Zmieniono generator planu tak, aby wybieranie linii do podziału dużych zleceń brało pod uwagę pozostały
+      dostępny czas na linii.</li>
+    <li>Zmieniono 'Zrobioną ilość' zleceń w planie tak, aby ich wartość brana była z ilośći wykonanej dla operacji
+      wybranej do planowania, a nie z całkowitej zrobionej ilości zlecenia SAP.
+    <li>Zmieniono plan linii w wersji do wydruku tak, aby plan godzinowy był zawsze widoczny, a nie tylko wtedy, gdy
+      jest wolne miejsce na ostatniej stronie.</li>
+    <li>Zmieniono plan linii w wersji do wydruku tak, aby do każdego zlecenia wyświetlane były wszystkie ikony
+      statusów.</li>
+    <li>Zmieniono plan magazynu tak, aby wyświetlał jedną listę zleceń dla wybranych MRP.</li>
+    <li>Zmieniono filtr 'Wybrane MRP' w planie magazynu na filtr 'Wybrane MRP/Ignorowane MRP/Moje/Magazyn'. MRP magazynu
+      można wybrać w ustawiniach.</li>
+    <li>Zmieniono listy zleceń do rozplanowania oraz zleceń opóźnionych tak, aby miały maksymalną wysokość. Po osiągnięciu
+      maksymalnej wysokości lista robi się przewijalna.</li>
+    <li>Dodano wyświetlanie ostatniego komentarza zlecenia w dymkach zleceń do rozplanowania i zleceń rozplanowanych.</li>
+    <li>Dodano możliwość dzielenia zleceń dłuższych od określonej ilości godzin na dodatkowe części.</li>
+    <li>Dodano możliwość włączenia trybu wysokiego kontrastu w planie magazynu.</li>
+    <li>Dodano możliwość wyboru etapu na jakim znajduje się każde zlecenie w planie magazynu.</li>
+    <li>Dodano oznaczanie zleceń ze statusem 'TECO'.</li>
+    <li>Dodano możliwość ustawiania kilku zakresów aktywności dla każdej linii.</li>
+  </ul>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Poprawiono sposób odczytywania ilości stron w dokumentach PDF konwertowanych na obrazy.</li>
+    <li>Dodano listę zaplanowanych zleceń do formularza wybierania zlecenia/dokumentu.</li>
+  </ul>
+  <h3>Dane produkcyjne</h3>
+  <ul>
+    <li>Zmieniono uprawnienia wymagane do wyświetlania danych produkcyjnych.</li>
+  </ul>
+  <h3>Raporty > CLIP</h3>
+  <ul>
+    <li>Dodano nową wersję raportu.</li>
+  </ul>
+  <h3>Matryca odpowiedzialności</h3>
+  <ul>
+    <li>Poprawiono błędne wyświetlanie tabel w matrycy podczas korzystania z najnowszej wersji przeglądarki Chrome.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Dodano wyszukiwanie po ID wyników inspekcji, ZPW, usprawnień, obserwacji, minutek i 8D.</li>
+    <li>Dodano do wyszukiwarki odnośniki do planu produkcji, magazynu i malarnii po wpisaniu daty.</li>
+    <li>Zaktualizowano pakiety zależne</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.120.0</h1>
   <h2><%- time.format('2018-02-15', 'LL') %></h2>
   <h3>Malarnia</h3>

@@ -1,49 +1,47 @@
-<h1>v0.121.0</h1>
-<h2><%- time.format('2018-03-31', 'LL') %></h2>
-<h3>Planowanie</h3>
+<h1>v0.122.0</h1>
+<h2><%- time.format('2018-04-29', 'LL') %></h2>
+<h3>Plany dzienne</h3>
 <ul>
-  <li>Usunięto możliwość wyłączania najnowszych danych w planie produkcji.</li>
-  <li>Usunięto funkcjonalność Drop zone.</li>
-  <li>Zmieniono generator planu tak, aby wybieranie linii do podziału dużych zleceń brało pod uwagę pozostały
-    dostępny czas na linii.</li>
-  <li>Zmieniono 'Zrobioną ilość' zleceń w planie tak, aby ich wartość brana była z ilośći wykonanej dla operacji
-    wybranej do planowania, a nie z całkowitej zrobionej ilości zlecenia SAP.
-  <li>Zmieniono plan linii w wersji do wydruku tak, aby plan godzinowy był zawsze widoczny, a nie tylko wtedy, gdy
-    jest wolne miejsce na ostatniej stronie.</li>
-  <li>Zmieniono plan linii w wersji do wydruku tak, aby do każdego zlecenia wyświetlane były wszystkie ikony
-    statusów.</li>
-  <li>Zmieniono plan magazynu tak, aby wyświetlał jedną listę zleceń dla wybranych MRP.</li>
-  <li>Zmieniono filtr 'Wybrane MRP' w planie magazynu na filtr 'Wybrane MRP/Ignorowane MRP/Moje/Magazyn'. MRP magazynu
-    można wybrać w ustawiniach.</li>
-  <li>Zmieniono listy zleceń do rozplanowania oraz zleceń opóźnionych tak, aby miały maksymalną wysokość. Po osiągnięciu
-    maksymalnej wysokości lista robi się przewijalna.</li>
-  <li>Dodano wyświetlanie ostatniego komentarza zlecenia w dymkach zleceń do rozplanowania i zleceń rozplanowanych.</li>
-  <li>Dodano możliwość dzielenia zleceń dłuższych od określonej ilości godzin na dodatkowe części.</li>
-  <li>Dodano możliwość włączenia trybu wysokiego kontrastu w planie magazynu.</li>
-  <li>Dodano możliwość wyboru etapu na jakim znajduje się każde zlecenie w planie magazynu.</li>
-  <li>Dodano oznaczanie zleceń ze statusem 'TECO'.</li>
-  <li>Dodano możliwość ustawiania kilku zakresów aktywności dla każdej linii.</li>
+  <li>Poprawiono błąd powodujący wyświetlanie komunikatu o pustym planie, jeżeli dane planu zostały pobrane przed
+    ustawieniami.</li>
+  <li>Poprawiono nieprawidłowy kolor tła zleceń usuniętych (TECO) w trybie wysokiego kontrastu.</li>
+  <li>Zmieniono formularz 'Ustawianie dostępnych linii' na stronie planu tak, aby nie można było usunąć wszystkich linii
+    z danego MRP (co skutkowałoby usunięciem MRP z planu). Od teraz MRP można usunąć tylko z poziomu ustawień planu.</li>
+  <li>Zmieniono pobieranie niekompletnych zleceń z poprzedniego dnia tak, aby ignorowane były zlecenia, dla których
+    różnica między datą zlecenia a datą planu jest większa od 7 dni.</li>
+  <li>Dodano nowe ustawienie: Godzina rozpoczęcia opóźnionych zleceń (godzina, od której rozplanowywane są ręcznie
+    dodane, pilne zlecenia (opóźnione)).</li>
+  <li>Dodano możliwość dodawania do kolejki zleceń MRP wielu opóźnionych zleceń na raz.</li>
+  <li>Dodano możliwość grupowania linii wg komponentów zlecenia.</li>
 </ul>
-<h3>Dokumentacja</h3>
+<h3>Plany magazynu</h3>
 <ul>
-  <li>Poprawiono sposób odczytywania ilości stron w dokumentach PDF konwertowanych na obrazy.</li>
-  <li>Dodano listę zaplanowanych zleceń do formularza wybierania zlecenia/dokumentu.</li>
+  <li>Poprawiono błąd podczas dzielenia zleceń na grupy powodujący, że niektóre części zlecenia mogły należeć do tej
+    samej grupy.</li>
+  <li>Poprawiono błąd podczas dzielenia zleceń na grupy powodujący, że niektóre części zlecenia mogłby zaczynać się
+    w jednej grupie i kończyć w drugiej (zamiast zaczynać i kończyć się w jednej grupie, a w drugiej następna
+    część).</li>
+  <li>Zmieniono przypisywanie etapu dla zlecenia do kombinacji wartości
+    <code>nr zlecenia+nr grupy+linia</code> (było <code>nr zlecenia+czas startu+linia</code>),
+    aby zminimalizować szansę utraty ustawionego etapu po zmianie planu.</li>
+  <li>Dodano nowe ustawienie: Minimalna ilość sztuk w grupie (jeżeli ilość sztuk zlecenia
+    w pierwszej/ostatniej grupie danej linii będzie mniejsza lub równa podanej wartości, to grupa ta zostanie
+    scalona z następną/poprzednią grupą).</li>
 </ul>
-<h3>Dane produkcyjne</h3>
+<h3>Inspekcja jakości</h3>
 <ul>
-  <li>Zmieniono uprawnienia wymagane do wyświetlania danych produkcyjnych.</li>
+  <li>Zmieniono wysyłanie powiadomień o wynikach inspekcji tak, aby powiadamiani byli wszyscy kierownicy mający
+    przypisany dany wydział w bazie użytkowników oraz w matrycy odpowiedzialności.</li>
+  <li>Zmieniono formularz edycji tak, aby Inspektorzy mogli zmieniać wartość 'Przyczyna źródłowa'.</li>
+  <li>Zmieniono formularz edycji tak, aby wszyscy Mistrzowie i Liderzy mogli zmieniać 'Akcje korygujące'.</li>
 </ul>
-<h3>Raporty > CLIP</h3>
+<h3>Obserwacje</h3>
 <ul>
-  <li>Dodano nową wersję raportu.</li>
+  <li>Zmieniono stronę szczegółów karty obserwacji tak, aby panele 'Ryzykowne warunki w miejscu pracy/Trudności zmian'
+  były widoczne nawet jak są puste, ale do karty przypisane zostało ZPW/Usprawnienie.</li>
 </ul>
-<h3>Matryca odpowiedzialności</h3>
+<h3>Drukarki</h3>
 <ul>
-  <li>Poprawiono błędne wyświetlanie tabel w matrycy podczas korzystania z najnowszej wersji przeglądarki Chrome.</li>
-</ul>
-<h3>Inne</h3>
-<ul>
-  <li>Dodano wyszukiwanie po ID wyników inspekcji, ZPW, usprawnień, obserwacji, minutek i 8D.</li>
-  <li>Dodano do wyszukiwarki odnośniki do planu produkcji, magazynu i malarnii po wpisaniu daty.</li>
-  <li>Zaktualizowano pakiety zależne</li>
+  <li>Dodano nowy słownik: Drukarki - po dodaniu do WMES drukarek zdefiniowanych w systemie operacyjnym, można wysyłać
+    wydruki generowane w WMES bezpośrednio na wybraną drukarkę (zamiast otwierać PDF w przeglądarce).</li>
 </ul>
