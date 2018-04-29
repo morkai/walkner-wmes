@@ -343,10 +343,19 @@ define([
           return value.map(renderOrderStatusLabel).join(' ');
 
         case 'lines':
+        case 'extraShiftSeconds':
           return value.length === 0 ? '-' : value.join(', ');
 
         case 'operation':
           return value.no + '. ' + value.name + ' - ' + value.laborTime.toLocaleString();
+
+        case 'groups':
+          return value.length;
+
+        case 'activeTime':
+          return value.length === 0 ? '06:00-06:00' : value
+            .map(function(activeTime) { return activeTime.from + '-' + activeTime.to; })
+            .join(', ');
 
         default:
           return String(value);

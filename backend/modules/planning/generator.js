@@ -47,7 +47,7 @@ module.exports = function setUpGenerator(app, module)
   }
 
   const DEV = app.options.env === 'development';
-  const UNFROZEN_PLANS = DEV ? [] : [];
+  const UNFROZEN_PLANS = DEV ? ['2018-05-04'] : [];
   const LOG_LINES = {};
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
@@ -173,6 +173,7 @@ module.exports = function setUpGenerator(app, module)
       settings: null,
       autoDowntimes: null,
       orders: null,
+      sapOrders: new Map(),
       plan: null,
       orderStates: new Map(),
       orderStateQueues: null,
@@ -184,6 +185,10 @@ module.exports = function setUpGenerator(app, module)
       orderToLines: new Map(),
       resizedOrders: new Set(),
       hourlyPlanRecount: new Set(),
+      grouping: {
+        orderToGroups: new Map(),
+        lineToGroups: new Map()
+      },
       changes: {
         addedOrders: new Map(),
         removedOrders: new Map(),
@@ -694,12 +699,37 @@ module.exports = function setUpGenerator(app, module)
       },
       function(err)
       {
-        if (state.settings)
+        if (state.cancelled || err)
         {
-          state.freezeOrders = state.settings.freezeFirstShiftOrders;
+          return done(err);
         }
 
-        done(err);
+        state.freezeOrders = state.settings.freezeFirstShiftOrders;
+
+        state.settings.mrps.forEach(mrpId =>
+        {
+          state.settings.mrp(mrpId).groups.forEach(group =>
+          {
+            group.lines.forEach(lineId =>
+            {
+              const lineSettings = state.settings.line(lineId);
+
+              if (!lineSettings || !lineSettings.mrpPriority.includes(mrpId))
+              {
+                return;
+              }
+
+              if (!state.grouping.lineToGroups.has(lineId))
+              {
+                state.grouping.lineToGroups.set(lineId, []);
+              }
+
+              state.grouping.lineToGroups.get(lineId).push(group);
+            });
+          });
+        });
+
+        done();
       }
     );
   }
@@ -768,8 +798,14 @@ module.exports = function setUpGenerator(app, module)
           }
 
           const planOrder = Plan.createPlanOrder(source, sapOrder, mrpSettings.hardComponents);
+          const bom = new Set();
+
+          (sapOrder.bom || []).forEach(component => bom.add(component.nc12));
+
+          sapOrder.bom = bom;
 
           state.orders.set(sapOrder._id, planOrder);
+          state.sapOrders.set(sapOrder._id, sapOrder);
         });
 
         setImmediate(this.next());
@@ -792,15 +828,31 @@ module.exports = function setUpGenerator(app, module)
     }
 
     const quantityTodo = getQuantityTodo(state, planOrder);
-    const {schedulingRate} = state.settings.mrp(planOrder.mrp);
+    const mrpSettings = state.settings.mrp(planOrder.mrp);
 
     planOrder.kind = classifyPlanOrder(state, planOrder);
-    planOrder.manHours = getManHours(planOrder.operation, quantityTodo, schedulingRate);
+    planOrder.manHours = getManHours(planOrder.operation, quantityTodo, mrpSettings.schedulingRate);
     planOrder.incomplete = quantityTodo;
 
     if (planOrder.quantityPlan >= 0)
     {
       state.newIncompleteOrders.set(planOrder._id, quantityTodo);
+    }
+
+    state.grouping.orderToGroups.set(planOrder._id, []);
+
+    if (mrpSettings.groups.length)
+    {
+      const orderGroups = state.grouping.orderToGroups.get(planOrder._id);
+      const sapOrder = state.sapOrders.get(planOrder._id);
+
+      mrpSettings.groups.forEach(group =>
+      {
+        if (group.components.find(nc12 => sapOrder.bom.has(nc12)))
+        {
+          orderGroups.push(group);
+        }
+      });
     }
 
     return planOrder;
@@ -1418,7 +1470,8 @@ module.exports = function setUpGenerator(app, module)
         timeDiff: 0,
         name: planOrder.name, // eslint-disable-line comma-dangle
         nameParts: getOrderNameParts(planOrder),
-        nameRank: 0
+        nameRank: 0,
+        group: null
       };
 
       if (planOrder.urgent)
@@ -1731,7 +1784,24 @@ module.exports = function setUpGenerator(app, module)
       }
     });
 
-    return urgentOrderStates.concat(lineOrderStateQueue);
+    const lineGroups = state.grouping.lineToGroups.get(lineId);
+
+    return urgentOrderStates.concat(lineOrderStateQueue).filter(orderState =>
+    {
+      const orderGroups = state.grouping.orderToGroups.get(orderState.order._id);
+
+      if (!orderGroups.length)
+      {
+        return !lineGroups;
+      }
+
+      if (!lineGroups)
+      {
+        return false;
+      }
+
+      return !!orderGroups.find(group => lineGroups.includes(group));
+    });
   }
 
   function createActiveTimes(planTime, rawActiveTimes)
@@ -1821,7 +1891,21 @@ module.exports = function setUpGenerator(app, module)
   {
     lineState.triedOrdersSet.add(orderState.order._id);
 
-    if (orderState.order.kind === 'small')
+    if (!orderState.group)
+    {
+      const orderGroups = state.grouping.orderToGroups.get(orderState.order._id);
+
+      orderState.group = orderGroups.find(
+        group => group.lines.includes(lineState._id)
+      );
+
+      if (orderGroups.length && !orderState.group)
+      {
+        return null;
+      }
+    }
+
+    if (!orderState.group && orderState.order.kind === 'small')
     {
       return (trying ? trySmallOrder : handleSmallOrder)(state, lineState, orderState);
     }
@@ -2221,17 +2305,30 @@ module.exports = function setUpGenerator(app, module)
     plannedOrderState.quantityTodo -= candidate.totalQuantityPlanned;
 
     plannedOrderState.startTimes.push(candidate.plannedOrders[0].startAt.getTime());
-
     plannedOrderState.startTimes.sort((a, b) => a - b);
+
+    if (!plannedOrderState.group)
+    {
+      plannedOrderState.group = state.grouping.orderToGroups.get(order._id).find(
+        group => group.lines.includes(lineState._id)
+      );
+    }
 
     if (plannedOrderState.startTimes.length === 1 && plannedOrderState.quantityTodo > 0)
     {
       getLinesForBigOrder(state, order).forEach(availableLineState =>
       {
-        if (availableLineState !== lineState)
+        if (availableLineState === lineState)
         {
-          lineState.bigOrderStateQueue.push(plannedOrderState);
+          return;
         }
+
+        if (plannedOrderState.group && !plannedOrderState.group.lines.includes(availableLineState._id))
+        {
+          return;
+        }
+
+        lineState.bigOrderStateQueue.push(plannedOrderState);
       });
     }
 
@@ -2511,8 +2608,21 @@ module.exports = function setUpGenerator(app, module)
 
   function handleBigOrder(state, lineState, orderState, trying)
   {
-    const order = orderState.order;
-    const {splitOrderQuantity, maxSplitLineCount} = state.settings.mrp(order.mrp);
+    const {order} = orderState;
+    let {splitOrderQuantity, maxSplitLineCount} = state.settings.mrp(order.mrp);
+
+    if (!orderState.group)
+    {
+      orderState.group = state.grouping.orderToGroups.get(order._id).find(
+        group => group.lines.includes(lineState._id)
+      );
+    }
+
+    if (orderState.group)
+    {
+      splitOrderQuantity = orderState.group.splitOrderQuantity;
+      maxSplitLineCount = 0;
+    }
 
     if (orderState.quantityTodo < splitOrderQuantity
       || (maxSplitLineCount && orderState.maxQuantityPerLine > 0))
@@ -2520,7 +2630,9 @@ module.exports = function setUpGenerator(app, module)
       return (trying ? trySmallOrder : handleSmallOrder)(state, lineState, orderState);
     }
 
-    const availableLines = getLinesForBigOrder(state, order);
+    const availableLines = getLinesForBigOrder(state, order).filter(
+      lineState => !orderState.group || orderState.group.lines.includes(lineState._id)
+    );
     const splitLineCount = maxSplitLineCount > 0 && maxSplitLineCount < availableLines.length
       ? maxSplitLineCount
       : availableLines.length;
@@ -3029,13 +3141,20 @@ module.exports = function setUpGenerator(app, module)
       {
         const orderState = state.orderStates.get(orderNo);
 
-        if (mrpLineSettings.orderPriority.includes(orderState.order.kind))
+        if (orderState.group && !orderState.group.lines.includes(lineState._id))
         {
-          orderState.lines = [];
-          orderState.maxQuantityPerLine = 0;
-
-          lineState.orderStateQueue.push(orderState);
+          return;
         }
+
+        if (!mrpLineSettings.orderPriority.includes(orderState.order.kind))
+        {
+          return;
+        }
+
+        orderState.lines = [];
+        orderState.maxQuantityPerLine = 0;
+
+        lineState.orderStateQueue.push(orderState);
       });
 
       lineState.orderStateQueue.sort((a, b) =>

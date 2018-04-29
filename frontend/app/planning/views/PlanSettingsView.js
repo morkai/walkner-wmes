@@ -14,7 +14,8 @@ define([
   'app/core/util/decimalSeparator',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/orderStatuses/util/renderOrderStatusLabel',
-  'app/planning/templates/planSettings'
+  'app/planning/templates/planSettings',
+  'app/planning/templates/planSettingsGroup'
 ], function(
   _,
   $,
@@ -29,7 +30,8 @@ define([
   decimalSeparator,
   setUpMrpSelect2,
   renderOrderStatusLabel,
-  template
+  template,
+  groupTemplate
 ) {
   'use strict';
 
@@ -51,97 +53,8 @@ define([
       {
         var object = e.currentTarget.dataset.object;
         var property = e.currentTarget.name;
-        var settings = this.model;
-        var o = settings;
-        var v;
 
-        if (object === 'line')
-        {
-          o = o.lines.get(this.$id('line').val());
-        }
-        else if (object !== 'plan')
-        {
-          o = o.mrps.get(this.$id('mrp').val());
-
-          if (object === 'mrpLine')
-          {
-            o = o.lines.get(this.$id('mrpLine').val());
-          }
-        }
-
-        var $property = this.$id(property);
-
-        switch (property)
-        {
-          case 'requiredStatuses':
-          case 'ignoredStatuses':
-          case 'hardComponents':
-          case 'orderPriority':
-            v = $property.val().split(',').filter(function(v) { return v.length > 0; });
-            break;
-
-          case 'schedulingRate':
-          {
-            v = {ANY: 1};
-
-            $property.val().split('\n').forEach(function(line)
-            {
-              var matches = line.match(/([0-9,.]+)/);
-
-              if (!matches)
-              {
-                return;
-              }
-
-              var value = Math.max(0, parseFloat(matches[1].replace(',', '.')) || 0) || 1;
-
-              line.replace(matches[0], '').split(/[^A-Za-z0-9]/).forEach(function(mrp)
-              {
-                if (mrp.length >= 3)
-                {
-                  v[mrp.toUpperCase()] = value;
-                }
-              });
-            });
-            break;
-          }
-
-          case 'ignoreCompleted':
-          case 'useRemainingQuantity':
-            v = $property.prop('checked');
-            break;
-
-          case 'freezeHour':
-          case 'lateHour':
-          case 'extraOrderSeconds':
-          case 'bigOrderQuantity':
-          case 'splitOrderQuantity':
-          case 'maxSplitLineCount':
-          case 'workerCount':
-            v = Math.max(0, parseInt($property.val(), 10) || 0);
-            break;
-
-          case 'extraShiftSeconds':
-            v = [
-              Math.max(0, parseInt(this.$id(property + '-1').val(), 10) || 0),
-              Math.max(0, parseInt(this.$id(property + '-2').val(), 10) || 0),
-              Math.max(0, parseInt(this.$id(property + '-3').val(), 10) || 0)
-            ];
-            break;
-
-          case 'hardOrderManHours':
-            v = Math.max(0, parseFloat($property.val()) || 0);
-            break;
-
-          case 'activeTime':
-            v = this.parseActiveTime($property);
-            break;
-        }
-
-        if (v !== undefined)
-        {
-          o.attributes[property] = v;
-        }
+        this.updateProperty(object, property);
       },
 
       'change #-mrp': function(e)
@@ -184,6 +97,30 @@ define([
       'blur #-schedulingRate': function(e)
       {
         e.target.value = this.formatSchedulingRate(this.model.get('schedulingRate'));
+      },
+
+      'click #-addGroup': function()
+      {
+        this.addGroup({
+          splitOrderQuantity: 0,
+          lines: [],
+          components: []
+        });
+      },
+
+      'click .btn[name="removeGroup"]': function(e)
+      {
+        var view = this;
+        var $group = view.$(e.currentTarget).closest('tr');
+
+        $group.fadeOut('fast', function()
+        {
+          $group.find('[name="group.lines"]').select2('destroy');
+          $group.find('[name="group.components"]').select2('destroy');
+          $group.remove();
+
+          view.updateProperty('mrp', 'group');
+        });
       }
 
     }, FormView.prototype.events),
@@ -216,22 +153,36 @@ define([
 
     initialize: function()
     {
-      FormView.prototype.initialize.apply(this, arguments);
+      var view = this;
 
-      this.sortables = [];
+      FormView.prototype.initialize.apply(view, arguments);
 
-      this.stopListening(this.model, 'change');
+      view.sortables = [];
 
-      this.listenTo(this.model, 'change', _.after(2, this.onSettingChange.bind(this)));
-      this.listenTo(this.model, 'changed', this.onSettingsChanged);
+      view.maxLineLength = 0;
+      view.lines = orgUnits.getAllByType('prodLine')
+        .filter(function(prodLine) { return !prodLine.get('deactivatedAt'); })
+        .map(function(prodLine)
+        {
+          if (prodLine.id.length > view.maxLineLength)
+          {
+            view.maxLineLength = prodLine.id.length;
+          }
+
+          return {
+            id: prodLine.id,
+            text: _.escape(prodLine.get('description'))
+          };
+        })
+        .sort(function(a, b) { return a.id.localeCompare(b.id, undefined, {numeric: true}); });
+
+      view.stopListening(view.model, 'change');
+
+      view.listenTo(view.model, 'change', _.after(2, view.onSettingChange.bind(view)));
+      view.listenTo(view.model, 'changed', view.onSettingsChanged);
     },
 
     destroy: function()
-    {
-      this.destroySortables();
-    },
-
-    destroySortables: function()
     {
       for (var i = 0, l = this.sortables.length; i < l; ++i)
       {
@@ -247,7 +198,7 @@ define([
 
       this.setUpOrderStatusSelect2('requiredStatuses');
       this.setUpOrderStatusSelect2('ignoredStatuses');
-      this.setUpHardComponentsSelect2();
+      this.setUpComponentsSelect2(this.$id('hardComponents'));
       this.setUpLine();
       this.setUpMrpSelect2();
       this.setUpMrpLineSelect2();
@@ -284,9 +235,10 @@ define([
       });
     },
 
-    setUpHardComponentsSelect2: function()
+    setUpComponentsSelect2: function($input)
     {
-      this.$id('hardComponents').select2({
+      $input.select2({
+        width: '100%',
         placeholder: '12NC...',
         allowClear: true,
         multiple: true,
@@ -327,27 +279,12 @@ define([
       var view = this;
       var $line = view.$id('line');
       var $mrpPriority = view.$id('mrpPriority');
-      var maxLineLength = 0;
-      var lines = orgUnits.getAllByType('prodLine')
-        .filter(function(prodLine) { return !prodLine.get('deactivatedAt'); })
-        .map(function(prodLine)
-        {
-          if (prodLine.id.length > maxLineLength)
-          {
-            maxLineLength = prodLine.id.length;
-          }
-
-          return {
-            id: prodLine.id,
-            text: _.escape(prodLine.get('description'))
-          };
-        })
-        .sort(function(a, b) { return a.id.localeCompare(b.id, undefined, {numeric: true}); });
 
       $line.select2({
+        width: '100%',
         placeholder: t('planning', 'settings:line:placeholder'),
         allowClear: true,
-        data: lines,
+        data: this.lines,
         matcher: idAndTextMatcher,
         formatSelection: function(item)
         {
@@ -357,7 +294,7 @@ define([
         {
           var id = item.id;
 
-          while (id.length < maxLineLength)
+          while (id.length < view.maxLineLength)
           {
             id += ' ';
           }
@@ -436,6 +373,7 @@ define([
       });
 
       this.$id('mrp').select2({
+        width: '100%',
         placeholder: t('planning', 'settings:mrp:placeholder'),
         allowClear: true,
         data: Object.keys(mrps).map(function(mrpId)
@@ -496,6 +434,7 @@ define([
       });
 
       var $mrpLine = this.$id('mrpLine').select2({
+        width: '100%',
         placeholder: t('planning', 'settings:mrpLine:placeholder'),
         allowClear: true,
         data: data,
@@ -661,6 +600,15 @@ define([
         }))
         .select2('enable', enabled);
 
+      view.removeGroups();
+
+      if (mrp)
+      {
+        mrp.get('groups').forEach(view.addGroup, view);
+      }
+
+      view.$id('addGroup').prop('disabled', disabled);
+
       view.setUpMrpLineSelect2();
       view.selectMrpLine(mrp, lineId, disabled);
     },
@@ -784,6 +732,200 @@ define([
     checkValidity: function()
     {
       return true;
+    },
+
+    addGroup: function(group)
+    {
+      var view = this;
+      var $groups = view.$id('groups');
+
+      $groups.append(groupTemplate({
+        group: _.assign({no: $groups.children().length + 1}, group)
+      }));
+
+      var $group = $groups.children().last();
+
+      $group.find('[name="group.lines"]').select2({
+        width: '500px',
+        allowClear: true,
+        multiple: true,
+        data: this.lines,
+        matcher: idAndTextMatcher,
+        formatSelection: function(item) { return _.escape(item.id); },
+        formatResult: function(item)
+        {
+          var id = item.id;
+
+          while (id.length < view.maxLineLength)
+          {
+            id += ' ';
+          }
+
+          return '<small><span class="text-mono">' + id.replace(/ /g, '&nbsp;') + '</span>: ' + item.text + '</small>';
+        }
+      });
+
+      var $components = $group.find('[name="group.components"]').val('');
+
+      view.setUpComponentsSelect2($components);
+
+      $components.select2('data', group.components.map(function(c)
+      {
+        return {
+          id: c,
+          text: c
+        };
+      }));
+    },
+
+    removeGroups: function()
+    {
+      var $groups = this.$id('groups');
+
+      $groups.find('.select2-container + input').select2('destroy');
+      $groups.html('');
+    },
+
+    serializeGroups: function()
+    {
+      var view = this;
+      var groups = [];
+
+      view.$id('groups').find('tr').each(function(i)
+      {
+        var $group = view.$(this);
+
+        $group.find('td').first().text((i + 1) + '.');
+
+        var group = {
+          splitOrderQuantity: Math.max(0, $group.find('[name="group.splitOrderQuantity"]').val() || 0),
+          lines: $group.find('[name="group.lines"]')
+            .val()
+            .split(',')
+            .filter(function(v) { return !!v.length; }),
+          components: $group.find('[name="group.components"]')
+            .val()
+            .split(',')
+            .filter(function(v) { return !!v.length; })
+        };
+
+        if (group.lines.length)
+        {
+          groups.push(group);
+        }
+      });
+
+      return groups;
+    },
+
+    updateProperty: function(object, property)
+    {
+      var o = this.model;
+      var v;
+
+      if (object === 'line')
+      {
+        o = o.lines.get(this.$id('line').val());
+      }
+      else if (object !== 'plan')
+      {
+        o = o.mrps.get(this.$id('mrp').val());
+
+        if (object === 'mrpLine')
+        {
+          o = o.lines.get(this.$id('mrpLine').val());
+        }
+      }
+
+      if (!o)
+      {
+        return;
+      }
+
+      var $property = this.$id(property);
+
+      switch (property)
+      {
+        case 'requiredStatuses':
+        case 'ignoredStatuses':
+        case 'hardComponents':
+        case 'orderPriority':
+          v = $property.val().split(',').filter(function(v) { return v.length > 0; });
+          break;
+
+        case 'schedulingRate':
+        {
+          v = {ANY: 1};
+
+          $property.val().split('\n').forEach(function(line)
+          {
+            var matches = line.match(/([0-9,.]+)/);
+
+            if (!matches)
+            {
+              return;
+            }
+
+            var value = Math.max(0, parseFloat(matches[1].replace(',', '.')) || 0) || 1;
+
+            line.replace(matches[0], '').split(/[^A-Za-z0-9]/).forEach(function(mrp)
+            {
+              if (mrp.length >= 3)
+              {
+                v[mrp.toUpperCase()] = value;
+              }
+            });
+          });
+          break;
+        }
+
+        case 'ignoreCompleted':
+        case 'useRemainingQuantity':
+          v = $property.prop('checked');
+          break;
+
+        case 'freezeHour':
+        case 'lateHour':
+        case 'extraOrderSeconds':
+        case 'bigOrderQuantity':
+        case 'splitOrderQuantity':
+        case 'maxSplitLineCount':
+        case 'workerCount':
+          v = Math.max(0, parseInt($property.val(), 10) || 0);
+          break;
+
+        case 'extraShiftSeconds':
+          v = [
+            Math.max(0, parseInt(this.$id(property + '-1').val(), 10) || 0),
+            Math.max(0, parseInt(this.$id(property + '-2').val(), 10) || 0),
+            Math.max(0, parseInt(this.$id(property + '-3').val(), 10) || 0)
+          ];
+          break;
+
+        case 'hardOrderManHours':
+          v = Math.max(0, parseFloat($property.val()) || 0);
+          break;
+
+        case 'activeTime':
+          v = this.parseActiveTime($property);
+          break;
+
+        default:
+        {
+          if (/^group/.test(property))
+          {
+            property = 'groups';
+            v = this.serializeGroups();
+          }
+
+          break;
+        }
+      }
+
+      if (v !== undefined)
+      {
+        o.attributes[property] = v;
+      }
     },
 
     submitRequest: function($submitEl, formData)

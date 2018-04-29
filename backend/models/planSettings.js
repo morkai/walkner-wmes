@@ -20,6 +20,16 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     retainKeyOrder: true
   });
 
+  const mrpGroupSettingsSchema = new mongoose.Schema({
+    splitOrderQuantity: Number,
+    lines: [String],
+    components: [String]
+  }, {
+    _id: false,
+    minimize: false,
+    retainKeyOrder: true
+  });
+
   const mrpSettingsSchema = new mongoose.Schema({
     _id: String,
     extraOrderSeconds: {
@@ -44,7 +54,8 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       default: 0
     },
     hardComponents: [String],
-    lines: [mrpLineSettingsSchema]
+    lines: [mrpLineSettingsSchema],
+    groups: [mrpGroupSettingsSchema]
   }, {
     _id: false,
     minimize: false,
@@ -144,10 +155,27 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     const mrpLines = new Map();
     const ignoredStatuses = new Set();
     const hardComponents = new Set();
+    const groupComponents = new Map();
 
     this.ignoredStatuses.forEach(status => ignoredStatuses.add(status));
 
-    this.mrps.forEach(mrp => mrp.hardComponents.forEach(nc12 => hardComponents.add(nc12)));
+    this.mrps.forEach(mrp =>
+    {
+      mrp.hardComponents.forEach(nc12 => hardComponents.add(nc12));
+
+      mrp.groups.forEach(group =>
+      {
+        group.components.forEach(nc12 =>
+        {
+          if (!groupComponents.has(nc12))
+          {
+            groupComponents.set(nc12, new Set());
+          }
+
+          groupComponents.get(nc12).add(group);
+        });
+      });
+    });
 
     const line = (lineId) =>
     {
@@ -196,18 +224,21 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       return lineMrpMap.get(mrpId);
     };
 
+    const idMoment = moment.utc(this._id);
+
     return {
       freezeFirstShiftOrders: this.shouldFreezeFirstShiftOrders(),
       lateHour: this.lateHour < 6 ? (this.lateHour + 18) : (this.lateHour - 6),
       useRemainingQuantity: this.useRemainingQuantity,
       ignoreCompleted: this.ignoreCompleted,
       requiredStatuses: this.requiredStatuses,
-      ignoredStatuses: ignoredStatuses,
-      hardComponents: hardComponents,
+      ignoredStatuses,
+      hardComponents,
+      groupComponents,
       shiftStartTimes: [
-        moment.utc(this._id).clone().hours(6).valueOf(),
-        moment.utc(this._id).clone().hours(14).valueOf(),
-        moment.utc(this._id).clone().hours(22).valueOf()
+        idMoment.clone().hours(6).valueOf(),
+        idMoment.clone().hours(14).valueOf(),
+        idMoment.clone().hours(22).valueOf()
       ],
       mrps: this.mrps.map(mrp => mrp._id),
       lines: this.lines.map(line => line._id),
@@ -266,7 +297,8 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
         maxSplitLineCount: 0,
         hardOrderManHours: 0,
         hardComponents: [],
-        lines: []
+        lines: [],
+        groups: []
       };
 
       mrp.lines = lineIds.map(lineId =>
