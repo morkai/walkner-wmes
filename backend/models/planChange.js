@@ -21,9 +21,12 @@ module.exports = function setupPlanChangeModel(app, mongoose)
 
   planChangeSchema.index({plan: 1});
 
-  planChangeSchema.methods.toCreatedMessage = function(plan, isNew)
+  planChangeSchema.methods.toCreatedMessage = function(plan, isNew, message)
   {
-    const message = this.toJSON();
+    if (!message)
+    {
+      message = this.toJSON();
+    }
 
     message.isNew = isNew;
 

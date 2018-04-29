@@ -529,7 +529,9 @@ module.exports = function setUpGenerator(app, module)
 
         state.log('Saving...');
 
-        state.plan.save(this.next());
+        state.plan.updatedAt = new Date();
+
+        Plan.collection.update({_id: state.plan._id}, state.plan.toJSON(), {upsert: true}, this.next());
       },
       function finalizeStep(err)
       {
@@ -604,8 +606,9 @@ module.exports = function setUpGenerator(app, module)
       user: null,
       data
     });
+    const json = planChange.toJSON();
 
-    planChange.save(err =>
+    PlanChange.collection.insert(json, err =>
     {
       if (err)
       {
@@ -613,7 +616,7 @@ module.exports = function setUpGenerator(app, module)
       }
       else
       {
-        app.broker.publish('planning.changes.created', planChange.toCreatedMessage(state.plan, state.new));
+        app.broker.publish('planning.changes.created', planChange.toCreatedMessage(state.plan, state.new, json));
       }
     });
   }
