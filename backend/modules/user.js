@@ -34,7 +34,7 @@ exports.start = function startUserModule(app, module)
     super: true,
     _id: '52a33b8bfb955dac8a92261b',
     login: 'root',
-    privileges: []
+    privileges: ['SUPER']
   });
 
   module.guest = _.assign({privileges: []}, module.config.guest, {

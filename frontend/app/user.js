@@ -114,6 +114,11 @@ function(
 
     if (user.data.lastName && user.data.firstName)
     {
+      if (user.data.lastName === user.data.firstName)
+      {
+        return user.data.lastName;
+      }
+
       if (firstNameFirst)
       {
         return user.data.firstName + ' ' + user.data.lastName;
@@ -140,6 +145,11 @@ function(
 
   user.isAllowedTo = function(privilege)
   {
+    if (user.data.active === false)
+    {
+      return false;
+    }
+
     if (user.data.super)
     {
       return true;

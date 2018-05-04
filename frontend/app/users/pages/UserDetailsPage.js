@@ -3,15 +3,21 @@
 define([
   'app/i18n',
   'app/user',
+  'app/viewport',
   'app/core/util/pageActions',
   'app/core/pages/DetailsPage',
-  '../views/UserDetailsView'
+  'app/core/views/DialogView',
+  '../views/UserDetailsView',
+  'app/users/templates/anonymizeDialog'
 ], function(
   t,
   user,
+  viewport,
   pageActions,
   DetailsPage,
-  UserDetailsView
+  DialogView,
+  UserDetailsView,
+  anonymizeDialogTemplate
 ) {
   'use strict';
 
@@ -41,6 +47,15 @@ define([
           pageActions.edit(model, false),
           pageActions.delete(model, false)
         );
+
+        if (user.isAllowedTo('SUPER'))
+        {
+          actions.push({
+            label: t.bound('users', 'PAGE_ACTION:anonymize'),
+            icon: 'user-secret',
+            callback: this.handleAnonymizeAction.bind(this)
+          });
+        }
       }
       else if (user.data._id === model.id)
       {
@@ -52,6 +67,32 @@ define([
       }
 
       return actions;
+    },
+
+    handleAnonymizeAction: function()
+    {
+      var page = this;
+      var dialogView = new DialogView({
+        template: anonymizeDialogTemplate
+      });
+
+      page.listenToOnce(dialogView, 'answered', function(answer)
+      {
+        if (answer !== 'yes')
+        {
+          return;
+        }
+
+        page.ajax({method: 'POST', url: '/users/' + page.model.id + '/anonymize'});
+
+        viewport.msg.show({
+          type: 'warning',
+          time: 3000,
+          text: page.t('anonymize:started')
+        });
+      });
+
+      viewport.showDialog(dialogView, page.t('anonymize:title'));
     }
 
   });

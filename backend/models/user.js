@@ -2,6 +2,7 @@
 
 'use strict';
 
+const step = require('h5.step');
 const transliteration = require('transliteration');
 
 module.exports = function setupUserModel(app, mongoose)
@@ -134,6 +135,63 @@ module.exports = function setupUserModel(app, mongoose)
       .transliterate(name, {unknown: '?'})
       .replace(/[^a-zA-Z]+/g, '')
       .toUpperCase();
+  };
+
+  userSchema.statics.anonymize = function(userId, done)
+  {
+    const User = this;
+
+    step(
+      function()
+      {
+        User.findById(userId, this.next());
+      },
+      function(err, user)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!user)
+        {
+          return this.skip(app.createError('NOT_FOUND', 400));
+        }
+
+        user.set(User.anonymizeData(userId));
+        user.save(this.next());
+      },
+      done
+    );
+  };
+
+  userSchema.statics.anonymizeData = function(userId)
+  {
+    return {
+      login: `?${userId}?`,
+      password: ']:->',
+      active: false,
+      firstName: '?',
+      lastName: '?',
+      email: '',
+      prodFunction: null,
+      privileges: [],
+      aors: [],
+      mrps: [],
+      company: null,
+      orgUnitType: 'unspecified',
+      orgUnitId: null,
+      personellId: '',
+      card: '',
+      searchName: ']:->',
+      kdPosition: '',
+      kdDivision: '',
+      kdId: -1,
+      vendor: null,
+      mobile: [],
+      presence: false,
+      gender: 'female'
+    };
   };
 
   mongoose.model('User', userSchema);

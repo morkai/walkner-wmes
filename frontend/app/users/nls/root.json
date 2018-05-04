@@ -20,6 +20,7 @@
     "PAGE_ACTION:delete": "Delete user",
     "PAGE_ACTION:sync": "Synchronize with the AC database",
     "PAGE_ACTION:settings": "Settings",
+    "PAGE_ACTION:anonymize": "Anonymize",
 
     "PANEL:TITLE:details:basic": "Basic information",
     "PANEL:TITLE:details:contact": "Concat information",
@@ -86,6 +87,7 @@
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> user?",
     "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the user.",
 
+    "PRIVILEGE:SUPER": "Super admin",
     "PRIVILEGE:ORDERS:VIEW": "Orders: view",
     "PRIVILEGE:ORDERS:MANAGE": "Orders: manage",
     "PRIVILEGE:EVENTS:VIEW": "Events: view",
@@ -196,7 +198,13 @@
     "LOG_IN_FORM:RESET:MSG:SUCCESS": "Check your e-mail!",
 
     "settings:tab:presence": "Access control",
-    "settings:presence:hardware": "Hardware"
+    "settings:presence:hardware": "Hardware",
+
+    "anonymize:title": "User anonymization",
+    "anonymize:message": "<p>Are you sure you want to anonimyze the chosen user?</p><p>User's account will be deactivated and identification data removed from the database.</p><p><strong>This operation is irreversible!</strong></p>",
+    "anonymize:yes": "Anonymize user",
+    "anonymize:no": "Cancel",
+    "anonymize:started": "User anonymization started..."
   },
   "pl": true
 }

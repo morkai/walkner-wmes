@@ -327,6 +327,7 @@ exports.user = {
   userInfoIdProperty: 'id',
   localAddresses: [/^192\.168\./, /^161\.87\./],
   privileges: [
+    'SUPER',
     'USERS:VIEW', 'USERS:MANAGE',
     'ORDERS:VIEW', 'ORDERS:MANAGE',
     'EVENTS:VIEW', 'EVENTS:MANAGE',
