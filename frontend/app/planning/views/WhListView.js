@@ -359,10 +359,13 @@ define([
       {
         var nextPart = list[firstPartI + 1];
 
-        nextPart.startTime = firstPart.startTime;
-        nextPart.qtyPlan += firstPart.qtyPlan;
+        if (nextPart)
+        {
+          nextPart.startTime = firstPart.startTime;
+          nextPart.qtyPlan += firstPart.qtyPlan;
 
-        list.splice(firstPartI, 1);
+          list.splice(firstPartI, 1);
+        }
       }
     },
 
