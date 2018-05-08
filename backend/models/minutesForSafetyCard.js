@@ -6,6 +6,16 @@ const autoIncrement = require('mongoose-plugin-autoinc');
 
 module.exports = function setupMinutesForSafetyCardModel(app, mongoose)
 {
+  const STATUSES = [
+    'new',
+    'accepted',
+    'todo',
+    'inProgress',
+    'paused',
+    'finished',
+    'cancelled'
+  ];
+
   const observationSchema = new mongoose.Schema({
     what: String,
     why: String
@@ -30,6 +40,11 @@ module.exports = function setupMinutesForSafetyCardModel(app, mongoose)
     updatedAt: Date,
     owner: {},
     section: String,
+    status: {
+      type: 'String',
+      required: true,
+      enum: STATUSES
+    },
     date: Date,
     subject: String,
     observations: [observationSchema],

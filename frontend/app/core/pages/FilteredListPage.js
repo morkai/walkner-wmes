@@ -34,7 +34,7 @@ define([
 
     actions: function()
     {
-      return [pageActions.add(this.collection || this.model)];
+      return [pageActions.add(this.getDefaultModel())];
     },
 
     initialize: function()
@@ -48,7 +48,7 @@ define([
 
     defineModels: function()
     {
-      this[this.collection ? 'collection' : 'model'] = bindLoadingMessage(this.collection || this.model, this);
+      this[this.collection ? 'collection' : 'model'] = bindLoadingMessage(this.getDefaultModel(), this);
     },
 
     defineViews: function()
@@ -66,7 +66,7 @@ define([
 
       return new ListViewClass({
         collection: this.collection,
-        model: this.model,
+        model: this[this.modelProperty] || this.model,
         columns: this.options.columns || this.columns || ListViewClass.prototype.columns,
         serializeRow: this.options.serializeRow || this.serializeRow || ListViewClass.prototype.serializeRow,
         className: this.options.listClassName
@@ -81,20 +81,18 @@ define([
       var FilterViewClass = this.FilterView || this.options.FilterView;
 
       return new FilterViewClass({
-        model: {
-          rqlQuery: (this.collection || this.model).rqlQuery
-        }
+        model: this.getDefaultModel()
       });
     },
 
     load: function(when)
     {
-      return when((this.collection || this.model).fetch({reset: true}));
+      return when(this.getDefaultModel().fetch({reset: true}));
     },
 
     onFilterChanged: function(newRqlQuery)
     {
-      (this.collection || this.model).rqlQuery = newRqlQuery;
+      this.getDefaultModel().rqlQuery = newRqlQuery;
 
       this.refreshCollection();
     },
@@ -107,7 +105,7 @@ define([
 
     updateClientUrl: function()
     {
-      var model = this.collection || this.model;
+      var model = this.getDefaultModel();
 
       this.broker.publish('router.navigate', {
         url: model.genClientUrl() + '?' + model.rqlQuery,

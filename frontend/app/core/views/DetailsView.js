@@ -22,10 +22,9 @@ define([
       return topics;
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         model: this.serializeDetails(this.model)
       };
     },

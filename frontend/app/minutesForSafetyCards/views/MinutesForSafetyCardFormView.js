@@ -7,6 +7,7 @@ define([
   'app/time',
   'app/user',
   'app/core/util/idAndLabel',
+  'app/core/util/buttonGroup',
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
   'app/data/prodLines',
@@ -22,6 +23,7 @@ define([
   time,
   user,
   idAndLabel,
+  buttonGroup,
   FormView,
   setUpUserSelect2,
   prodLines,
@@ -90,11 +92,11 @@ define([
       this.rowIndex = 0;
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      return _.extend(FormView.prototype.serialize.call(this), {
-
-      });
+      return {
+        statuses: kaizenDictionaries.statuses
+      };
     },
 
     checkValidity: function(formData)
@@ -184,6 +186,8 @@ define([
       this.$id('section').select2({
         data: kaizenDictionaries.sections.map(idAndLabel)
       });
+
+      buttonGroup.toggle(this.$id('status'));
 
       this.setUpOwnerSelect2();
       this.setUpParticipantsSelect2();

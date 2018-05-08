@@ -161,7 +161,23 @@ function(
 
   View.prototype.serialize = function()
   {
-    return {idPrefix: this.idPrefix};
+    return _.assign({
+      idPrefix: this.idPrefix,
+      helpers: this.getTemplateHelpers()
+    }, this.getTemplateData());
+  };
+
+  View.prototype.getTemplateData = function()
+  {
+    return {};
+  };
+
+  View.prototype.getTemplateHelpers = function()
+  {
+    return {
+      t: this.t.bind(this),
+      props: this.props.bind(this)
+    };
   };
 
   View.prototype.afterRender = function() {};
@@ -228,17 +244,26 @@ function(
     return $(id + idSuffix);
   };
 
+  View.prototype.getDefaultModel = function()
+  {
+    return this[this.modelProperty] || this.model || this.collection;
+  };
+
+  View.prototype.getDefaultNlsDomain = function()
+  {
+    var model = this.getDefaultModel();
+
+    return model.getNlsDomain ? model.getNlsDomain() : (model.nlsDomain || 'core');
+  };
+
   View.prototype.t = function(domain, key, data)
   {
-    if (typeof key === 'string' || data)
+    if (data || typeof key === 'string')
     {
       return t(domain, key, data);
     }
 
-    var model = this.model || this.collection;
-    var defaultDomain = model.getNlsDomain
-      ? model.getNlsDomain()
-      : (model.nlsDomain || 'core');
+    var defaultDomain = this.getDefaultNlsDomain();
 
     if (typeof key === 'object')
     {
@@ -246,6 +271,42 @@ function(
     }
 
     return t(defaultDomain, domain);
+  };
+
+  View.prototype.props = function(data, options)
+  {
+    var view = this;
+
+    if (!options)
+    {
+      options = data;
+      data = options.data;
+    }
+
+    var html = '<div class="props ' + (options.first ? 'first' : '') + '">';
+    var defaultNlsDomain = view.getDefaultNlsDomain();
+
+    [].concat(_.isArray(options) ? options : options.props).forEach(function(prop)
+    {
+      if (typeof prop === 'string')
+      {
+        prop = {id: prop};
+      }
+
+      var escape = prop.id.charAt(0) !== '!';
+      var id = escape ? prop.id : prop.id.substring(1);
+      var className = prop.className || '';
+      var nlsDomain = prop.nlsDomain || options.nlsDomain || defaultNlsDomain;
+      var label = prop.label || t(nlsDomain, 'PROPERTY:' + id);
+      var value = escape ? _.escape(data[id]) : data[id];
+
+      html += '<div class="prop ' + className + '" data-prop="' + id + '">'
+        + '<div class="prop-name">' + label + '</div>'
+        + '<div class="prop-value">' + value + '</div>'
+        + '</div>';
+    });
+
+    return html + '</div>';
   };
 
   return View;

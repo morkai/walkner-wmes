@@ -42,6 +42,7 @@
   "PROPERTY:safeBehavior": "Jak muszą się zachować, aby nic się nie stało?",
   "PROPERTY:behaviorRules": "Reguły zachowania",
   "PROPERTY:participants": "Uczestnicy spotkania",
+  "PROPERTY:status": "Status",
 
   "FORM:ACTION:add": "Dodaj kartę MdB",
   "FORM:ACTION:edit": "Zapisz kartę MdB",
@@ -59,5 +60,14 @@
   "filter:user:mine": "Moje",
   "filter:user:owner": "Rejestrujący",
   "filter:user:others": "Uczestnik",
-  "filter:submit": "Filtruj"
+  "filter:submit": "Filtruj",
+
+  "status:new": "Nowe",
+  "status:accepted": "Zaakceptowane",
+  "status:todo": "Do realizacji",
+  "status:inProgress": "W realizacji",
+  "status:cancelled": "Anulowane",
+  "status:finished": "Zakończone",
+  "status:paused": "Wstrzymane",
+  "status:open": "Otwarte"
 }

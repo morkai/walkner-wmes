@@ -22,7 +22,7 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
       'change input[name="userType"]': 'toggleUserSelect2',
       'keyup select': function(e)
       {
@@ -42,6 +42,7 @@ define([
     defaultFormData: function()
     {
       return {
+        status: [],
         section: [],
         userType: 'others',
         user: null,
@@ -76,14 +77,19 @@ define([
       'section': function(propertyName, term, formData)
       {
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
+      },
+      'status': function(propertyName, term, formData)
+      {
+        formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      return _.extend(FilterView.prototype.serialize.call(this), {
+      return {
+        statuses: kaizenDictionaries.statuses,
         sections: kaizenDictionaries.sections.toJSON()
-      });
+      };
     },
 
     serializeFormToQuery: function(selector)
@@ -121,7 +127,7 @@ define([
         selector.push({name: 'eq', args: ['users', user]});
       }
 
-      ['section'].forEach(function(property)
+      ['status', 'section'].forEach(function(property)
       {
         var values = (this.$id(property).val() || []).filter(function(v) { return !_.isEmpty(v); });
 

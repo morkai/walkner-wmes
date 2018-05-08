@@ -48,8 +48,7 @@ define([
     {
       var view = this;
 
-      return {
-        idPrefix: this.idPrefix,
+      return _.assign(View.prototype.serialize.apply(view, arguments), {
         renderLimit: function()
         {
           return filterLimitTemplate({
@@ -58,7 +57,7 @@ define([
             max: view.maxLimit
           });
         }
-      };
+      });
     },
 
     toggleButtonGroup: function(groupName)

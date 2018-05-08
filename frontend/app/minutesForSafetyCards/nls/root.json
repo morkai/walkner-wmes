@@ -4,7 +4,16 @@
     "BREADCRUMBS:browse": "Cards",
     "BREADCRUMBS:addForm": "Add",
     "BREADCRUMBS:editForm": "Edit",
-    "BREADCRUMBS:ACTION_FORM:delete": "Delete"
+    "BREADCRUMBS:ACTION_FORM:delete": "Delete",
+
+    "status:new": "New",
+    "status:accepted": "Accepted",
+    "status:todo": "To do",
+    "status:inProgress": "In progress",
+    "status:cancelled": "Cancelled",
+    "status:finished": "Finished",
+    "status:paused": "Paused",
+    "status:open": "Open"
   },
   "pl": true
 }

@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  '../i18n',
   '../time',
   '../user',
   '../core/Model',
@@ -9,6 +10,7 @@ define([
   'app/core/templates/userInfo'
 ], function(
   _,
+  t,
   time,
   user,
   Model,
@@ -38,6 +40,7 @@ define([
     defaults: function()
     {
       return {
+        status: 'new',
         date: new Date(),
         owner: user.getInfo()
       };
@@ -50,6 +53,7 @@ define([
       var timeFormat = longDateTime ? 'LLLL' : 'L, LTS';
       var obj = this.toJSON();
 
+      obj.status = t(this.nlsDomain, 'status:' + obj.status);
       obj.section = kaizenDictionaries.sections.getLabel(obj.section);
 
       DATE_PROPERTIES.forEach(function(dateProperty)
@@ -92,9 +96,19 @@ define([
 
     canEdit: function()
     {
-      return user.isAllowedTo(this.privilegePrefix + ':MANAGE')
-        || this.isCreator()
-        || this.isOwner();
+      if (user.isAllowedTo(this.privilegePrefix + ':MANAGE'))
+      {
+        return true;
+      }
+
+      var attrs = this.attributes;
+
+      if (attrs.status === 'finished' || attrs.status === 'cancelled')
+      {
+        return false;
+      }
+
+      return this.isCreator() || this.isOwner();
     },
 
     canDelete: function()
@@ -104,12 +118,7 @@ define([
         return true;
       }
 
-      if (!this.isCreator() && !this.isOwner())
-      {
-        return false;
-      }
-
-      return Date.now() - Date.parse(this.get('date')) < 24 * 3600 * 1000;
+      return this.get('status') === 'new' && (this.isCreator() || this.isOwner());
     }
 
   });

@@ -1,65 +1,30 @@
 <div class="minutesForSafetyCards-details">
   <div class="panel panel-success">
     <div class="panel-heading">
-      <%- t('minutesForSafetyCards', 'PANEL:TITLE:details') %>
+      <%- helpers.t('PANEL:TITLE:details') %>
     </div>
     <div class="panel-details">
       <div class="row">
         <div class="col-md-4">
-          <div class="props first">
-            <div class="prop">
-              <div class="prop-name"><%- t('minutesForSafetyCards', 'PROPERTY:section') %></div>
-              <div class="prop-value"><%= model.section %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('minutesForSafetyCards', 'PROPERTY:subject') %></div>
-              <div class="prop-value"><%= model.subject %></div>
-            </div>
-          </div>
+          <%- helpers.props(model, {first: true, props: ['status', 'section', 'subject']}) %>
         </div>
         <div class="col-md-4">
-          <div class="props">
-            <div class="prop">
-              <div class="prop-name"><%- t('minutesForSafetyCards', 'PROPERTY:owner') %></div>
-              <div class="prop-value"><%- model.owner %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('minutesForSafetyCards', 'PROPERTY:creator') %></div>
-              <div class="prop-value"><%- model.creator %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('minutesForSafetyCards', 'PROPERTY:updater') %></div>
-              <div class="prop-value"><%- model.updater %></div>
-            </div>
-          </div>
+          <%- helpers.props(model, ['!owner', '!creator', '!updater']) %>
         </div>
         <div class="col-md-4">
-          <div class="props">
-            <div class="prop">
-              <div class="prop-name"><%- t('minutesForSafetyCards', 'PROPERTY:date') %></div>
-              <div class="prop-value"><%- model.date %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('minutesForSafetyCards', 'PROPERTY:createdAt') %></div>
-              <div class="prop-value"><%- model.createdAt %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('minutesForSafetyCards', 'PROPERTY:updatedAt') %></div>
-              <div class="prop-value"><%- model.updatedAt %></div>
-            </div>
-          </div>
+          <%- helpers.props(model, ['date', 'createdAt', 'updatedAt']) %>
         </div>
       </div>
     </div>
   </div>
   <% if (model.observations.length) { %>
   <div class="panel panel-default">
-    <div class="panel-heading"><%- t('minutesForSafetyCards', 'PROPERTY:observations') %></div>
+    <div class="panel-heading"><%- helpers.t('PROPERTY:observations') %></div>
     <table class="table table-bordered table-hover">
       <thead>
       <tr>
-        <th class="minutesForSafetyCards-half"><%- t('minutesForSafetyCards', 'PROPERTY:observations:what') %></th>
-        <th class="minutesForSafetyCards-half"><%- t('minutesForSafetyCards', 'PROPERTY:observations:why') %></th>
+        <th class="minutesForSafetyCards-half"><%- helpers.t('PROPERTY:observations:what') %></th>
+        <th class="minutesForSafetyCards-half"><%- helpers.t('PROPERTY:observations:why') %></th>
       </tr>
       </thead>
       <tbody>
@@ -75,7 +40,7 @@
   <% } %>
   <% if (model.safeBehavior) { %>
   <div class="panel panel-default">
-    <div class="panel-heading"><%- t('minutesForSafetyCards', 'PROPERTY:safeBehavior') %></div>
+    <div class="panel-heading"><%- helpers.t('PROPERTY:safeBehavior') %></div>
     <div class="panel-body">
       <p class="text-lines"><%= model.safeBehavior %></p>
     </div>
@@ -83,11 +48,11 @@
   <% } %>
   <% if (model.orgPropositions.length) { %>
   <div class="panel panel-default">
-    <div class="panel-heading"><%- t('minutesForSafetyCards', 'PROPERTY:orgPropositions') %></div>
+    <div class="panel-heading"><%- helpers.t('PROPERTY:orgPropositions') %></div>
     <table class="table table-bordered table-hover">
       <thead>
       <tr>
-        <th><%- t('minutesForSafetyCards', 'PROPERTY:propositions:what') %></th>
+        <th><%- helpers.t('PROPERTY:propositions:what') %></th>
       </tr>
       </thead>
       <tbody>
@@ -102,11 +67,11 @@
   <% } %>
   <% if (model.techPropositions.length) { %>
   <div class="panel panel-default">
-    <div class="panel-heading"><%- t('minutesForSafetyCards', 'PROPERTY:techPropositions') %></div>
+    <div class="panel-heading"><%- helpers.t('PROPERTY:techPropositions') %></div>
     <table class="table table-bordered table-hover">
       <thead>
       <tr>
-        <th><%- t('minutesForSafetyCards', 'PROPERTY:propositions:what') %></th>
+        <th><%- helpers.t('PROPERTY:propositions:what') %></th>
       </tr>
       </thead>
       <tbody>
@@ -121,7 +86,7 @@
   <% } %>
   <% if (model.behaviorRules) { %>
   <div class="panel panel-default">
-    <div class="panel-heading"><%- t('minutesForSafetyCards', 'PROPERTY:behaviorRules') %></div>
+    <div class="panel-heading"><%- helpers.t('PROPERTY:behaviorRules') %></div>
     <div class="panel-body">
       <p class="text-lines"><%= model.behaviorRules %></p>
     </div>
@@ -129,7 +94,7 @@
   <% } %>
   <% if (model.participants.length) { %>
   <div class="panel panel-default">
-    <div class="panel-heading"><%- t('minutesForSafetyCards', 'PROPERTY:participants') %></div>
+    <div class="panel-heading"><%- helpers.t('PROPERTY:participants') %></div>
     <div class="panel-body">
       <p class="text-lines"><%= model.participants.map(function(p) { return p.label }).join(', ') %></p>
     </div>

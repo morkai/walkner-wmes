@@ -32,7 +32,7 @@ define([
       return [
         pageActions.jump(this, collection),
         {
-          label: t.bound(collection.getNlsDomain(), 'PAGE_ACTION:add'),
+          label: this.t('PAGE_ACTION:add'),
           icon: 'plus',
           href: collection.genClientUrl('add'),
           privileges: function() { return user.isAllowedTo('KAIZEN:MANAGE', 'FN:leader'); }

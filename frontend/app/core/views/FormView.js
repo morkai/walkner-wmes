@@ -45,15 +45,16 @@ define([
 
     serialize: function()
     {
-      return {
-        editMode: !!this.options.editMode,
-        idPrefix: this.idPrefix,
-        formMethod: this.options.formMethod,
-        formAction: this.options.formAction,
-        formActionText: this.options.formActionText,
-        panelTitleText: this.options.panelTitleText,
+      var options = this.options;
+
+      return _.assign(View.prototype.serialize.apply(this, arguments), {
+        editMode: !!options.editMode,
+        formMethod: options.formMethod,
+        formAction: options.formAction,
+        formActionText: options.formActionText,
+        panelTitleText: options.panelTitleText,
         model: this.model.toJSON()
-      };
+      });
     },
 
     afterRender: function()

@@ -123,7 +123,7 @@ define([
 
         if (!user.isAllowedTo('SUGGESTIONS:MANAGE') && daysAbs > 60)
         {
-          e.target.setCustomValidity(t('suggestions', 'FORM:ERROR:date', {days: 60}));
+          e.target.setCustomValidity(this.t('FORM:ERROR:date', {days: 60}));
         }
 
         if (!$help.length)
@@ -131,7 +131,7 @@ define([
           $help = $('<p class="help-block"></p>');
         }
 
-        $help.text(t('suggestions', 'FORM:help:date:diff', {
+        $help.text(this.t('FORM:help:date:diff', {
           dir: days > 0 ? 'future' : 'past',
           days: daysAbs
         })).appendTo($group);

@@ -7,3 +7,6 @@
 .minutesForSafetyCards-form-who {
   width: 500px;
 }
+.minutesForSafetyCards-form-statusBtnGroup {
+  display: block;
+}

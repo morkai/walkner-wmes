@@ -155,8 +155,6 @@ define([
     {
       FilterView.prototype.afterRender.call(this);
 
-      this.prevStatus = _.pluck(this.$id('status')[0].selectedOptions, 'value');
-
       this.$('.is-expandable').expandableSelect();
 
       setUpUserSelect2(this.$id('user'), {
