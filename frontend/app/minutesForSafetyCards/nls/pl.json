@@ -39,8 +39,7 @@
   "PROPERTY:observations": "Obserwacje",
   "PROPERTY:orgPropositions": "Propozycje rozwiązań organizacyjnych",
   "PROPERTY:techPropositions": "Propozycje rozwiązań technicznych",
-  "PROPERTY:safeBehavior": "Jak muszą się zachować, aby nic się nie stało?",
-  "PROPERTY:behaviorRules": "Reguły zachowania",
+  "PROPERTY:safeBehavior": "Prawidłowe zachowanie/Reguły zachowania",
   "PROPERTY:participants": "Uczestnicy spotkania",
   "PROPERTY:status": "Status",
 
