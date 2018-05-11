@@ -109,12 +109,15 @@
     }
   };
 
-  if (!navigator.onLine || !document.getElementsByTagName('html')[0].hasAttribute('manifest'))
+  var appCache = window.applicationCache;
+
+  if (!appCache
+    || !navigator.onLine
+    || !document.getElementsByTagName('html')[0].hasAttribute('manifest'))
   {
     return window.requireApp();
   }
 
-  var appCache = window.applicationCache;
   var reload = location.reload.bind(location);
   var reloadTimer = setTimeout(reload, 60000);
 
