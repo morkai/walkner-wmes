@@ -192,7 +192,7 @@ exports.httpsServer = {
   port: 443,
   key: `${__dirname}/https.key`,
   cert: `${__dirname}/https.crt`,
-  availabilityTopics: exports.httpServer
+  availabilityTopics: exports.httpServer.availabilityTopics
 };
 
 exports.sio = {
