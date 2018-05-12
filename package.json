@@ -5,21 +5,21 @@
   "version": "0.122.0",
   "updater": {
     "wmes": {
-      "backend": 363,
-      "frontend": 458,
+      "backend": 364,
+      "frontend": 459,
       "reports": 62,
       "attachments": 3,
       "importer-sap": 46,
       "importer-results": 12,
       "watchdog": 13,
       "mailer": 13,
-      "operator": 44,
-      "docs": 11,
-      "heff": 14,
-      "mrl": 8,
-      "planning": 38,
-      "ps-queue": 3,
-      "ps-load": 5
+      "operator": 45,
+      "docs": 12,
+      "heff": 15,
+      "mrl": 9,
+      "planning": 39,
+      "ps-queue": 4,
+      "ps-load": 6
     },
     "pos": {
       "backend": 80,

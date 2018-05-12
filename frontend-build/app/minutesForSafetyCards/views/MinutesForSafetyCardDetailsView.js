@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["underscore","app/core/views/DetailsView","app/kaizenOrders/dictionaries","app/minutesForSafetyCards/templates/details"],function(e,t,r,i){"use strict";return t.extend({template:i,events:e.extend({},t.prototype.events),serialize:function(){return e.extend(t.prototype.serialize.call(this),{})},afterRender:function(){t.prototype.afterRender.call(this)}})});
+define(["app/core/views/DetailsView","app/minutesForSafetyCards/templates/details"],function(e,t){"use strict";return e.extend({template:t})});
