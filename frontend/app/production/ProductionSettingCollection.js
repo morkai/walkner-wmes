@@ -172,9 +172,7 @@ define([
       }
       else
       {
-        var lines = this.getValue('taktTime.lines') || [];
-
-        enabled = lines.length === 0 || lines.indexOf(prodLine) !== -1;
+        enabled = !_.includes(this.getValue('taktTime.ignoredLines').split(','), prodLine);
       }
 
       this.cache.taktTimeEnabled[prodLine] = enabled;

@@ -207,7 +207,7 @@ define([
         data: activeLines
       });
 
-      this.$id('taktTime-lines').select2({
+      this.$id('taktTime-ignoredLines').select2({
         allowClear: true,
         placeholder: ' ',
         multiple: true,

@@ -299,7 +299,7 @@
   "settings:spigotFinish": "Wymuś sprawdzanie Spigota na koniec zlecenia",
   "settings:spigotGroups": "Grupy 12NC",
   "settings:taktTime:enabled": "Skanowanie numerów seryjnych",
-  "settings:taktTime:lines": "Ogranicz skanowanie do następujących linii:",
+  "settings:taktTime:ignoredLines": "Wyłącz skanowanie na następujących liniach:",
   "settings:taktTime:ignoredDowntimes": "Ignoruj czas trwania następujących przestojów:",
   "settings:taktTime:last": "Pokazuj czas cyklu dla ostatniej sztuki",
   "settings:taktTime:avg": "Pokazuj średni czas cyklu dla aktualnego zlecenia",
