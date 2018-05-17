@@ -601,7 +601,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
           usersModule.info(`[anonymize] [${userId}] Finished!`);
         }
 
-        res.sendStatus(203);
+        res.sendStatus(204);
       }
     );
   }

@@ -248,7 +248,7 @@ module.exports = function setUpPaintShopRoutes(app, module)
       date: req.params.id
     });
 
-    res.sendStatus(203);
+    res.sendStatus(204);
   }
 
   function updateDropZoneRoute(req, res, next)
@@ -380,7 +380,7 @@ module.exports = function setUpPaintShopRoutes(app, module)
           return next(err);
         }
 
-        res.sendStatus(203);
+        res.sendStatus(204);
 
         app.broker.publish('paintShop.load.updated', {
           stats,

@@ -71,7 +71,7 @@ module.exports = function setUpPlanningRoutes(app, module)
       date: req.params.id
     });
 
-    res.sendStatus(203);
+    res.sendStatus(204);
   }
 
   function browseSettingsRoute(req, res, next)
