@@ -42,6 +42,11 @@ exports.start = function startUsersModule(app, module)
 
       if (err)
       {
+        if (err.message === 'MODULE')
+        {
+          return;
+        }
+
         module.error('Failed to sync: %s', err.message);
 
         app.broker.publish('users.syncFailed', {user: user, error: err.message});
