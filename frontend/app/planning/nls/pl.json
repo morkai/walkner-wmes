@@ -59,6 +59,8 @@
   "print:workerCount": "{count} {count, plural, one{osoba} few{osoby} other{osób}}",
   "print:workerCounts": "{from}-{to} {to, plural, one{osoba} few{osoby} other{osób}}",
 
+  "list:generate": "Wymuś<br>utworzenie<br>planu",
+
   "empty": "Brak planu dla wybranych filtrów.",
 
   "lines:hd": "Linie",

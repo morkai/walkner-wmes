@@ -68,6 +68,20 @@ define([
         }
 
         return false;
+      },
+      'click .btn-primary': function(e)
+      {
+        var $btn = this.$(e.currentTarget).prop('disabled', true);
+        var date = $btn.closest('.planning-list-day').attr('data-id');
+        var req = this.ajax({
+          method: 'POST',
+          url: '/planning/plans/' + date + ';generate'
+        });
+
+        req.fail(function()
+        {
+          $btn.prop('disabled', false);
+        });
       }
     },
 

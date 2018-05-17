@@ -13,6 +13,7 @@
 }
 .planning-list-day.is-empty {
   cursor: default;
+  text-align: center;
 }
 .planning-list-day.is-empty:hover {
   background: #fff;
@@ -52,4 +53,11 @@
   display: block;
   font-size: 12px;
   line-height: 1;
+}
+.planning-list-day > .btn {
+  display: none;
+  margin-top: 15px;
+}
+.planning-list-day:hover > .btn {
+  display: inline-block;
 }

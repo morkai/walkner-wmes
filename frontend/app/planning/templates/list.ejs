@@ -18,6 +18,11 @@
       </span>
     </div>
     <% }) %>
+    <% if (!day.mrps.length && user.isAllowedTo('SUPER')) { %>
+    <button type="button" class="btn btn-primary btn-lg">
+      <%- t('planning', 'list:generate') %>
+    </button>
+    <% } %>
   </div>
   <% }) %>
   <a class="planning-list-next" href="<%- nextLink %>"><i class="fa fa-caret-right"></i></a>
