@@ -3,20 +3,26 @@
 'use strict';
 
 const step = require('h5.step');
-const moment = require('moment');
 
 module.exports = function editWhOrderStatusRoute(app, module, req, res, next)
 {
   const userModule = app[module.config.userId];
+  const ordersModule = app[module.config.ordersId];
   const mongoose = app[module.config.mongooseId];
   const WhOrderStatus = mongoose.model('WhOrderStatus');
 
-  const planId = moment.utc(req.params.id, 'YYYY-MM-DD').toDate();
+  const {body} = req;
+  const _id = {
+    date: new Date(body.date),
+    line: body.line,
+    orderNo: body.orderNo,
+    groupNo: body.groupNo
+  };
 
   step(
     function()
     {
-      WhOrderStatus.findById(planId, {_id: 1}).lean().exec(this.next());
+      WhOrderStatus.findById(_id).exec(this.next());
     },
     function(err, whOrderStatus)
     {
@@ -27,34 +33,19 @@ module.exports = function editWhOrderStatusRoute(app, module, req, res, next)
 
       if (!whOrderStatus)
       {
-        whOrderStatus = new WhOrderStatus({
-          _id: planId,
-          orders: {}
-        });
-        whOrderStatus.save(this.next());
-      }
-      else
-      {
-        setImmediate(this.next());
-      }
-    },
-    function(err)
-    {
-      if (err && err.code !== 11000)
-      {
-        return next(err);
+        whOrderStatus = new WhOrderStatus({_id, qtySent: 0});
       }
 
-      this.key = req.body.key;
-      this.value = {
-        status: req.body.status,
+      whOrderStatus.set({
         updatedAt: new Date(),
-        updater: userModule.createUserInfo(req.session.user, req)
-      };
-
-      WhOrderStatus.collection.update({_id: planId}, {$set: {[`orders.${this.key}`]: this.value}}, this.next());
+        updater: userModule.createUserInfo(req.session.user, req),
+        status: body.status,
+        qtySent: Math.max(0, body.status === 3 ? (whOrderStatus.qtySent + body.qtySent) : 0),
+        pceTime: body.pceTime
+      });
+      whOrderStatus.save(this.next());
     },
-    function(err)
+    function(err, whOrderStatus)
     {
       if (err)
       {
@@ -63,11 +54,28 @@ module.exports = function editWhOrderStatusRoute(app, module, req, res, next)
 
       res.sendStatus(204);
 
-      app.broker.publish(`planning.whOrderStatuses.updated.${planId}`, {
-        plan: req.params.id,
-        key: this.key,
-        value: this.value
-      });
+      app.broker.publish('planning.whOrderStatuses.updated', whOrderStatus.toJSON());
+
+      if (!body.comment)
+      {
+        return;
+      }
+
+      ordersModule.editOrder(
+        whOrderStatus._id.orderNo,
+        {
+          source: 'wh',
+          comment: body.comment
+        },
+        whOrderStatus.updater,
+        err =>
+        {
+          if (err)
+          {
+            ordersModule.error(`Failed to comment WH order [${whOrderStatus._id.orderNo}]: ${err.message}`);
+          }
+        }
+      );
     }
   );
 };

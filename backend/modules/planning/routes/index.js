@@ -12,7 +12,6 @@ const editPlanLineRoute = require('./editPlanLine');
 const browseSapOrdersRoute = require('./browseSapOrders');
 const browseLateOrdersRoute = require('./browseLateOrders');
 const editSettingsRoute = require('./editSettings');
-const readWhOrderStatusRoute = require('./readWhOrderStatus');
 const editWhOrderStatusRoute = require('./editWhOrderStatus');
 
 module.exports = function setUpPlanningRoutes(app, module)
@@ -24,6 +23,7 @@ module.exports = function setUpPlanningRoutes(app, module)
   const Plan = mongoose.model('Plan');
   const PlanSettings = mongoose.model('PlanSettings');
   const PlanChange = mongoose.model('PlanChange');
+  const WhOrderStatus = mongoose.model('WhOrderStatus');
 
   const canView = userModule.auth('PLANNING:VIEW');
   const canManage = userModule.auth('PLANNING:MANAGE', 'PLANNING:PLANNER');
@@ -54,9 +54,13 @@ module.exports = function setUpPlanningRoutes(app, module)
   express.get('/planning/changes', canView, express.crud.browseRoute.bind(null, app, PlanChange));
   express.get('/planning/changes/:id', canView, express.crud.readRoute.bind(null, app, PlanChange));
 
-  express.get('/planning/whOrderStatuses/:id', canView, readWhOrderStatusRoute.bind(null, app, module));
+  express.get(
+    '/planning/whOrderStatuses',
+    canView,
+    express.crud.browseRoute.bind(null, app, WhOrderStatus)
+  );
   express.post(
-    '/planning/whOrderStatuses/:id',
+    '/planning/whOrderStatuses',
     userModule.auth('PLANNING:WHMAN'),
     editWhOrderStatusRoute.bind(null, app, module)
   );

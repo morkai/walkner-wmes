@@ -4,6 +4,7 @@
 
 const _ = require('lodash');
 const step = require('h5.step');
+const editOrder = require('./editOrder');
 const setUpOrdersRoutes = require('./ordersRoutes');
 const setUpMechOrdersRoutes = require('./mechOrdersRoutes');
 const setUpEmptyOrdersRoutes = require('./emptyOrdersRoutes');
@@ -22,6 +23,8 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startOrdersModule(app, module)
 {
+  module.editOrder = editOrder.bind(null, app, module);
+
   app.onModuleReady(
     [
       module.config.mongooseId,

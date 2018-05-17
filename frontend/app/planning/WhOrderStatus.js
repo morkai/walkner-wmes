@@ -1,17 +1,13 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  '../i18n',
   '../core/Model'
 ], function(
+  t,
   Model
 ) {
   'use strict';
-
-  var DEFAULT_WH_ORDER_STATUS = {
-    status: 0,
-    updatedAt: new Date(),
-    updater: null
-  };
 
   return Model.extend({
 
@@ -23,23 +19,14 @@ define([
 
     nlsDomain: 'planning',
 
-    defaults: function()
+    serialize: function()
     {
       return {
-        orders: {}
+        status: this.get('status'),
+        label: t('planning', 'wh:status:' + this.get('status'), {
+          qtySent: this.get('qtySent')
+        })
       };
-    },
-
-    setOrderStatus: function(key, value)
-    {
-      this.attributes.orders[key] = value;
-
-      this.trigger('change:orders', key, value);
-    },
-
-    getOrderStatus: function(key)
-    {
-      return this.attributes.orders[key] || DEFAULT_WH_ORDER_STATUS;
     }
 
   });

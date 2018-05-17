@@ -36,10 +36,21 @@ define([
       }
     },
 
-    show: function(view, top, left, menu)
+    show: function(view, top, left, options)
     {
       var hideMenu = this.hide.bind(this, view);
-      var showMenu = this.show.bind(this, view, top, left, menu);
+      var showMenu = this.show.bind(this, view, top, left, options);
+      var menu;
+
+      if (options.menu)
+      {
+        menu = options.menu;
+      }
+      else
+      {
+        options = {menu: options};
+        menu = options.menu;
+      }
 
       hideMenu();
 
@@ -135,7 +146,13 @@ define([
         .one('scroll.contextMenu.' + view.idPrefix, hideMenu)
         .one('resize.contextMenu.' + view.idPrefix, hideMenu);
       $(document.body)
-        .one('mousedown.contextMenu.' + view.idPrefix, hideMenu)
+        .one('mousedown.contextMenu.' + view.idPrefix, function(e)
+        {
+          if (!options.hideFilter || options.hideFilter(e))
+          {
+            hideMenu();
+          }
+        })
         .append($backdrop)
         .append($menu);
 

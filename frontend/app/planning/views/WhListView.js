@@ -100,6 +100,26 @@ define([
       'click .planning-wh-status': function(e)
       {
         this.handleWhStatusAction(this.$(e.target).closest('tr').attr('data-key'), e.pageY, e.pageX);
+      },
+      'submit #-qtySent-form': function(e)
+      {
+        this.hideMenu();
+
+        var qtySent = +this.$id('qtySent-value').val();
+
+        if (qtySent !== 0)
+        {
+          this.saveStatus(e.currentTarget.dataset.orderKey, 3, qtySent);
+        }
+
+        return false;
+      }
+    },
+
+    localTopics: {
+      'planning.contextMenu.hidden': function()
+      {
+        this.$id('qtySent-form').addClass('hidden');
       }
     },
 
@@ -117,7 +137,7 @@ define([
       view.listenTo(sapOrders, 'change:whStatus', view.onWhStatusChanged);
       view.listenTo(sapOrders, 'change:whDropZone change:whTime', view.onWhDropZoneChanged);
 
-      view.listenTo(view.whOrderStatuses, 'change:orders', view.onWhOrderStatusChanged);
+      view.listenTo(view.whOrderStatuses, 'add change', view.onWhOrderStatusChanged);
     },
 
     serialize: function()
@@ -250,7 +270,7 @@ define([
         order.startTime = time.utc.format(order.startTime, 'HH:mm:ss');
         order.finishTime = time.utc.format(order.finishTime, 'HH:mm:ss');
         order.key = order.orderNo + ':' + order.group + ':' + order.line;
-        order.whStatus = view.whOrderStatuses.getOrderStatus(order.key);
+        order.whStatus = view.whOrderStatuses.serialize(order.key);
 
         if (prev)
         {
@@ -564,51 +584,93 @@ define([
         return;
       }
 
-      var current = view.whOrderStatuses.getOrderStatus(orderKey).status;
+      var current = view.whOrderStatuses.get(orderKey);
 
-      if (current < 3)
+      if (current && current.get('status') < 3)
       {
-        y -= 5 + 12 + 24 * (current + 1);
+        y -= 5 + 12 + 24 * (current.get('status') + 1);
         x -= 10;
       }
 
-      contextMenu.show(view, y, x, [0, 1, 2, 3].map(function(status)
-      {
-        return {
-          label: t('planning', 'wh:status:' + status),
-          handler: view.handleChangeWhStatusAction.bind(view, orderKey, status)
-        };
-      }));
+      var options = {
+        menu: [0, 1, 2, 3].map(function(status)
+        {
+          return {
+            label: t('planning', 'wh:status:' + status, {qtySent: 0}),
+            handler: view.handleChangeWhStatusAction.bind(view, orderKey, status)
+          };
+        }),
+        hideFilter: function(e)
+        {
+          return $(e.target).closest('.planning-wh-qtySent').length !== 1;
+        }
+      };
+
+      contextMenu.show(view, y, x, options);
     },
 
-    handleChangeWhStatusAction: function(orderKey, status)
+    handleChangeWhStatusAction: function(orderKey, status, e)
+    {
+      if (status === 3)
+      {
+        this.showQtySentDialog(orderKey, status, e);
+      }
+      else
+      {
+        this.saveStatus(orderKey, status, 0);
+      }
+    },
+
+    showQtySentDialog: function(orderKey, status, e)
+    {
+      e.contextMenu.hide = false;
+
+      this.$id('qtySent-form')
+        .attr('data-order-key', orderKey)
+        .css({
+          top: (e.pageY - 25) + 'px',
+          left: (e.pageX - 206 + 20) + 'px'
+        })
+        .removeClass('hidden');
+
+      this.$id('qtySent-value').val('').focus();
+    },
+
+    saveStatus: function(orderKey, status, qtySent)
     {
       viewport.msg.saving();
 
       var view = this;
-      var oldValue = view.whOrderStatuses.getOrderStatus(orderKey);
-      var newValue = {
+      var dataset = view.$('tr[data-key="' + orderKey + '"]')[0].dataset;
+      var data = {
+        date: time.utc.getMoment(view.plan.id, 'YYYY-MM-DD').valueOf(),
+        line: dataset.line,
+        orderNo: dataset.id,
+        groupNo: +dataset.group,
         status: status,
-        updatedAt: new Date(),
-        updater: user.getInfo()
+        qtySent: qtySent,
+        pceTime: +dataset.pceTime,
+        comment: null
       };
 
-      view.whOrderStatuses.setOrderStatus(orderKey, newValue);
+      if (data.status === 3 && data.qtySent !== 0)
+      {
+        data.comment = t('planning', 'wh:sent:comment', {
+          qtySent: data.qtySent,
+          line: data.line,
+          time: time.format(Date.now(), 'HH:mm')
+        });
+      }
 
       var req = view.ajax({
         method: 'POST',
-        url: '/planning/whOrderStatuses/' + view.plan.id,
-        data: JSON.stringify({key: orderKey, status: status})
+        url: '/planning/whOrderStatuses',
+        data: JSON.stringify(data)
       });
 
       req.fail(function()
       {
         viewport.msg.savingFailed();
-
-        if (view.whOrderStatuses.getOrderStatus(orderKey) === newValue)
-        {
-          view.whOrderStatuses.setOrderStatus(orderKey, oldValue);
-        }
       });
 
       req.done(function()
@@ -676,16 +738,16 @@ define([
       }
     },
 
-    onWhOrderStatusChanged: function(key, value)
+    onWhOrderStatusChanged: function(whOrderStatus)
     {
-      var $order = this.$('tr[data-key="' + key + '"]');
+      var $order = this.$('tr[data-key="' + whOrderStatus.id + '"]');
 
       if ($order.length)
       {
         $order
           .find('.planning-wh-status')
-          .attr('data-status', value.status)
-          .html(t('planning', 'wh:status:' + value.status));
+          .attr('data-status', whOrderStatus.get('status'))
+          .html(this.whOrderStatuses.serialize(whOrderStatus.id).label);
       }
     }
 

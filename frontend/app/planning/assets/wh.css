@@ -32,6 +32,23 @@
   height: 3px;
   background: #ccc!important;
 }
+.planning-wh-qtySent {
+  position: absolute;
+  z-index: 1001;
+  display: flex;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: #fff;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+}
+.planning-wh-qtySent > label {
+  margin: 5px 5px 5px 10px;
+  text-align: right;
+}
+.planning-wh-qtySent > .form-control {
+  margin: 5px 5px 5px 5px;
+  width: 75px;
+  height: 40px;
+}
 .planning-darker .planning-wh-list,
 .planning-darker .planning-wh-list .planning-mrp-lineOrders-table > tbody > tr > td {
   border-color: #000;
