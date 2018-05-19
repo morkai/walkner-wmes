@@ -18,7 +18,14 @@ module.exports = function createRqlMiddleware()
       {
         if (rqlQuery === null)
         {
-          rqlQuery = rql.parse(getQueryString(req));
+          try
+          {
+            rqlQuery = rql.parse(getQueryString(req));
+          }
+          catch (err)
+          {
+            rqlQuery = rql.parse('');
+          }
         }
 
         return rqlQuery;
