@@ -786,17 +786,9 @@ vendor/bootstrap/css/bootstrap-theme.css
 ----------------
 vendor/bootstrap/css/bootstrap-theme.css
 
-vendor/bootstrap/css/bootstrap-theme.min.css
-----------------
-vendor/bootstrap/css/bootstrap-theme.min.css
-
 vendor/bootstrap/css/bootstrap.css
 ----------------
 vendor/bootstrap/css/bootstrap.css
-
-vendor/bootstrap/css/bootstrap.min.css
-----------------
-vendor/bootstrap/css/bootstrap.min.css
 
 vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css
 ----------------
@@ -1434,6 +1426,7 @@ app/planning/pages/PlanSettingsPage.js
 app/planning/templates/change.js
 app/planning/pages/PlanChangesPage.js
 app/planning/WhOrderStatus.js
+app/planning/WhOrderStatusCollection.js
 app/planning/templates/whFilter.js
 app/planning/views/WhFilterView.js
 app/planning/templates/whList.js
