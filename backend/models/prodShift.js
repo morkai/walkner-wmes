@@ -116,6 +116,12 @@ module.exports = function setupProdShiftModel(app, mongoose)
     2, 3, 4, 5, 6, 7, 0, 1
   ];
 
+  prodShiftSchema.statics.NO_TO_START_HOUR = {
+    1: 6,
+    2: 14,
+    3: 22
+  };
+
   prodShiftSchema.index({date: -1});
   prodShiftSchema.index({division: 1, date: -1});
   prodShiftSchema.index({subdivision: 1, date: -1});

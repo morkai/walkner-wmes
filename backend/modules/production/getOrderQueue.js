@@ -11,6 +11,7 @@ module.exports = function getOrderQueue(app, productionModule, id, done)
   const PlanSettings = mongoose.model('PlanSettings');
   const Plan = mongoose.model('Plan');
   const Order = mongoose.model('Order');
+  const ProdShift = mongoose.model('ProdShift');
 
   if (!id)
   {
@@ -100,6 +101,8 @@ module.exports = function getOrderQueue(app, productionModule, id, done)
         {$project: {_id: 0, mrp: '$mrps._id', workerCount: '$mrps.lines.workerCount'}}
       ], this.parallel());
 
+      const shiftMoment = moment.utc(this.planId.getTime()).hours(ProdShift.NO_TO_START_HOUR[prodShift.shift]);
+
       Plan.aggregate([
         {$match: {_id: this.planId}},
         {$unwind: '$lines'},
@@ -107,13 +110,13 @@ module.exports = function getOrderQueue(app, productionModule, id, done)
         {$unwind: '$lines.orders'},
         {$project: {
           _id: '$lines.orders.orderNo',
-          startAt: {$hour: '$lines.orders.startAt'},
+          startAt: '$lines.orders.startAt',
           workerCount: '$lines.workerCount'
         }},
         {$match: {
           startAt: {
-            $gte: prodShift.date.getHours(),
-            $lt: prodShift.date.getHours() + 8
+            $gte: shiftMoment.clone().toDate(),
+            $lt: shiftMoment.add(8, 'hours').toDate()
           }
         }}
       ], this.parallel());
