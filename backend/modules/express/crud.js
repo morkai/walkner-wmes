@@ -712,6 +712,11 @@ exports.exportRoute = function(app, options, req, res, next)
   {
     const complete = _.once(err =>
     {
+      if (err)
+      {
+        cursorClosed = true;
+      }
+
       jsonToXlsx.kill();
       jsonToXlsx = null;
 

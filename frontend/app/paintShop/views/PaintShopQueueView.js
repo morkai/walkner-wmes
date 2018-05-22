@@ -246,7 +246,7 @@ define([
         {
           icon: 'fa-download',
           label: t('paintShop', 'menu:exportOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'exportOrders')
+          handler: this.trigger.bind(this, 'actionRequested', 'exportOrders', null)
         }
       );
 

@@ -78,7 +78,7 @@ module.exports = function createErrorHandlerMiddleware(expressModule, options)
       );
     }
 
-    if (!res.connection || !res.connection.writable)
+    if (!res.connection || !res.connection.writable || res.headersSent)
     {
       return;
     }
