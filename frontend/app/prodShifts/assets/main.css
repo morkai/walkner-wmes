@@ -138,3 +138,20 @@
     background: #fff;
   }
 }
+.prodShifts-timeline-text {
+  pointer-events: none;
+}
+.prodShifts-timeline-text > span {
+  display: block;
+  color: white;
+  overflow: hidden;
+  text-align: left;
+  text-shadow: 1px 1px 1px #333;
+}
+.prodShifts-timeline-text[data-type="working"] > span {
+
+}
+.prodShifts-timeline-text[data-type="downtime"] > span {
+  margin-top: -1px;
+  margin-left: 1px;
+}
