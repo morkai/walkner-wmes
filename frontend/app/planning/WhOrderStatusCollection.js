@@ -35,6 +35,13 @@ define([
 
     initialize: function(models, options)
     {
+      options = _.assign({
+        date: time.utc.getMoment(Date.now())
+          .startOf('day')
+          .subtract(time.getMoment().hours() < 6 ? 1 : 0, 'days')
+          .format('YYYY-MM-DD')
+      }, options);
+
       this.date = options.date;
     },
 
@@ -46,6 +53,16 @@ define([
     parse: function(res)
     {
       return (res.collection || []).map(parse);
+    },
+
+    setUpPubsub: function(pubsub)
+    {
+      var whOrderStatuses = this;
+
+      pubsub.subscribe('planning.whOrderStatuses.updated', function(message)
+      {
+        whOrderStatuses.update(message);
+      });
     },
 
     update: function(data)
