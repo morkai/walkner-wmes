@@ -5,6 +5,7 @@ define([
   '../pubsub',
   '../core/Model',
   'app/production/ProductionSettingCollection',
+  'app/planning/WhOrderStatusCollection',
   './FactoryLayoutSettingCollection',
   './ProdLineState',
   './ProdLineStateCollection',
@@ -14,11 +15,12 @@ define([
   pubsub,
   Model,
   ProductionSettingCollection,
+  WhOrderStatusCollection,
   FactoryLayoutSettingCollection,
   ProdLineState,
   ProdLineStateCollection,
-  FactoryLayout)
-{
+  FactoryLayout
+) {
   'use strict';
 
   var UNLOAD_DELAY = 60000;
@@ -44,6 +46,7 @@ define([
   productionState.historyData = new ProdLineStateCollection(null, {
     settings: productionState.settings
   });
+  productionState.whOrderStatuses = new WhOrderStatusCollection();
 
   productionState.isLoading = function() { return loading; };
 
@@ -63,6 +66,11 @@ define([
     if (data.factoryLayout)
     {
       this.factoryLayout.set(data.factoryLayout);
+    }
+
+    if (data.whOrderStatuses)
+    {
+      this.whOrderStatuses.reset(data.whOrderStatuses);
     }
 
     return {};
@@ -87,6 +95,7 @@ define([
       productionState.pubsub.subscribe('production.stateChanged.**', handleStateChangedMessage);
       productionState.settings.factoryLayout.setUpPubsub(productionState.pubsub);
       productionState.settings.production.setUpPubsub(productionState.pubsub);
+      productionState.whOrderStatuses.setUpPubsub(productionState.pubsub);
     }
 
     return productionState.fetch();

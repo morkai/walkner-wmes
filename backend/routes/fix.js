@@ -5,6 +5,7 @@
 const moment = require('moment');
 const _ = require('lodash');
 const step = require('h5.step');
+const mongoSerializer = require('h5.rql/lib/serializers/mongoSerializer');
 
 module.exports = function startFixRoutes(app, express)
 {
@@ -22,6 +23,7 @@ module.exports = function startFixRoutes(app, express)
     return res.sendStatus(403);
   }
 
+  express.get('/fix/prodShifts/durations', onlySuper, fixProdShiftDurations);
   express.get('/fix/prodShiftOrders/durations', onlySuper, fixProdShiftOrderDurations);
   express.get('/fix/prodShiftOrders/operation-times', onlySuper, fixProdShiftOrderOperationTimes);
   express.get('/fix/prodLogEntries/corroborated-before-created', onlySuper, fixProdLogEntriesCorroboratedBeforeCreated);
@@ -33,6 +35,68 @@ module.exports = function startFixRoutes(app, express)
   express.get('/fix/pressWorksheets/org-units', onlySuper, setPressWorksheetOrgUnits);
   express.get('/fix/clip/count-daily-mrp', onlySuper, countDailyMrp);
 
+  function fixProdShiftDurations(req, res, next)
+  {
+    if (inProgress.fixProdShiftDurations)
+    {
+      return next(new Error('IN_PROGRESS'));
+    }
+
+    inProgress.fixProdShiftDurations = true;
+
+    res.setTimeout(0);
+
+    app.debug('[fix] Recounting ProdShift durations...');
+
+    app.mongoose.model('ProdShift')
+      .find(mongoSerializer.fromQuery(req.rql).selector)
+      .exec(function(err, prodShifts)
+      {
+        if (err)
+        {
+          inProgress.fixProdShiftDurations = false;
+
+          return next(err);
+        }
+
+        app.debug(`[fix] Found ${prodShifts.length} ProdShifts...`);
+
+        recountNext(prodShifts, 0);
+      });
+
+    function recountNext(prodShifts, i)
+    {
+      if (i > 0 && i % 10000 === 0)
+      {
+        app.debug(`[fix] Recounted ${i} ProdShifts... ${prodShifts.length} remaining...`);
+      }
+
+      const prodShift = prodShifts.shift();
+
+      if (!prodShift)
+      {
+        inProgress.fixProdShiftDurations = false;
+
+        res.type('txt');
+        res.send('ALL DONE!');
+
+        return;
+      }
+
+      const next = recountNext.bind(null, prodShifts, i + 1);
+
+      app.production.getProdData(null, prodShift._id, function(err, cachedProdShift)
+      {
+        if (err)
+        {
+          app.warn(`[fix] ${err.message}`);
+        }
+
+        (cachedProdShift || prodShift).recalcTimes(next);
+      });
+    }
+  }
+
   function fixProdShiftOrderDurations(req, res, next)
   {
     if (inProgress.fixProdShiftOrderDurations)
@@ -42,12 +106,12 @@ module.exports = function startFixRoutes(app, express)
 
     inProgress.fixProdShiftOrderDurations = true;
 
-    res.setTimeout(30 * 60 * 1000);
+    res.setTimeout(0);
 
     app.debug("[fix] Recounting ProdShiftOrders' durations...");
 
     app.mongoose.model('ProdShiftOrder')
-      .find({finishedAt: {$ne: null}}, {startedAt: 1, finishedAt: 1})
+      .find(mongoSerializer.fromQuery(req.rql).selector)
       .exec(function(err, prodShiftOrders)
       {
         if (err)
@@ -90,14 +154,7 @@ module.exports = function startFixRoutes(app, express)
           app.warn(`[fix] ${err.message}`);
         }
 
-        if (cachedProdShiftOrder)
-        {
-          cachedProdShiftOrder.recalcDurations(true, next);
-        }
-        else
-        {
-          prodShiftOrder.recalcDurations(true, next);
-        }
+        (cachedProdShiftOrder || prodShiftOrder).recalcDurations(true, next);
       });
     }
   }

@@ -7,6 +7,7 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/core/templates/listPage',
+  'app/planning/WhOrderStatusCollection',
   '../views/ProdLineStateDisplayOptionsView',
   '../views/ProdLineStateListView'
 ], function(
@@ -16,6 +17,7 @@ define([
   View,
   bindLoadingMessage,
   listPageTemplate,
+  WhOrderStatusCollection,
   ProdLineStateDisplayOptionsView,
   ProdLineStateListView
 ) {

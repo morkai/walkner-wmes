@@ -362,7 +362,8 @@ define([
           ended: !isNaN(endingTime),
           taktTimeOk: prodShiftOrder.isTaktTimeOk(),
           data: prodShiftOrder.toJSON(),
-          model: prodShiftOrder
+          model: prodShiftOrder,
+          text: prodShiftOrder.get('orderId')
         });
       });
 
@@ -382,7 +383,8 @@ define([
           ending_time: endingTime || -1,
           ended: !isNaN(endingTime),
           data: prodDowntime.toJSON(),
-          model: prodDowntime
+          model: prodDowntime,
+          text: prodDowntime.get('reason')
         });
       });
 
@@ -482,7 +484,7 @@ define([
       var canManage = this.options.editable !== false
         && user.isAllowedTo('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST');
       var itemHeight = this.options.itemHeight || 60;
-      var downtimeHeight = Math.round(itemHeight * 0.833);
+      var downtimeHeight = Math.round(itemHeight * 0.5);
 
       this.chart = timeline()
         .beginning(this.beginning)
@@ -522,6 +524,19 @@ define([
           if (item.type === 'downtime' && item.data.prodShiftOrder)
           {
             this.setAttribute('height', downtimeHeight);
+          }
+
+          if (item.text)
+          {
+            d3.select(this.parentNode).append('foreignObject')
+              .attr({
+                width: Math.max(0, parseInt(this.getAttribute('width'), 10) - 5),
+                x: parseInt(this.getAttribute('x'), 10) + 3,
+                y: parseInt(this.getAttribute('y'), 10) + parseInt(this.getAttribute('height'), 10) - 19,
+                class: 'prodShifts-timeline-text',
+                'data-type': item.type
+              })
+              .html('<span>' + item.text + '</span>');
           }
         })
         .mouseover(function(item)

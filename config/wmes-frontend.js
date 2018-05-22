@@ -319,7 +319,7 @@ exports.express = {
   ejsAmdHelpers: {
     t: 'app/i18n'
   },
-  textBody: {limit: '15mb'},
+  textBody: {limit: '30mb'},
   jsonBody: {limit: '4mb'}
 };
 
