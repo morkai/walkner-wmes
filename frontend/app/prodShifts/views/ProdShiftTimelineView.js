@@ -502,7 +502,7 @@ define([
         type: 'wh',
         times: [{
           type: 'wh',
-          text: qtyRemaining >= 0
+          text: qtyRemaining >= 1
             ? ('~' + time.toString(qtyRemaining * data.pceTime / 1000))
             : '',
           data: {
