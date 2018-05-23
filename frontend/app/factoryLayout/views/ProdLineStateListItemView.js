@@ -262,9 +262,11 @@ define([
     afterRender: function()
     {
       this.timelineView = new ProdShiftTimelineView({
+        prodLineId: this.model.id,
         prodShift: this.model.get('prodShift'),
         prodShiftOrders: this.model.get('prodShiftOrders'),
         prodDowntimes: this.model.get('prodDowntimes'),
+        whOrderStatuses: this.whOrderStatuses,
         editable: false,
         resizable: false,
         itemHeight: 40,

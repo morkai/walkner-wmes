@@ -20,7 +20,8 @@ define([
   'app/prodShiftOrders/util/calcOrderEfficiency',
   'app/prodShifts/templates/timelineIdlePopover',
   'app/prodShifts/templates/timelineWorkingPopover',
-  'app/prodShifts/templates/timelineDowntimePopover'
+  'app/prodShifts/templates/timelineDowntimePopover',
+  'app/prodShifts/templates/timelineWhPopover'
 ], function(
   require,
   _,
@@ -39,7 +40,8 @@ define([
   calcOrderEfficiency,
   renderTimelineIdlePopover,
   renderTimelineWorkingPopover,
-  renderTimelineDowntimePopover
+  renderTimelineDowntimePopover,
+  renderTimelineWhPopover
 ) {
   'use strict';
 
@@ -113,6 +115,12 @@ define([
       this.listenTo(this.prodShiftOrders, 'reset', reset);
       this.listenTo(this.prodDowntimes, 'add remove change', render);
       this.listenTo(this.prodDowntimes, 'reset', reset);
+
+      if (this.whOrderStatuses)
+      {
+        this.listenTo(this.whOrderStatuses, 'add remove change', render);
+        this.listenTo(this.whOrderStatuses, 'reset', reset);
+      }
     },
 
     destroy: function()
@@ -152,6 +160,12 @@ define([
       for (var i = 0, l = this.datum.length; i < l; ++i)
       {
         var datum = this.datum[i];
+
+        if (datum.type === 'wh')
+        {
+          continue;
+        }
+
         var last = datum.times[datum.times.length - 1];
 
         if (!last)
@@ -442,6 +456,11 @@ define([
         {type: 'downtime', times: endDatum(downtimes)}
       ];
 
+      if (this.whOrderStatuses)
+      {
+        this.datum.push(this.createWhDatum());
+      }
+
       function endDatum(list)
       {
         if (list.length && list[list.length - 1].ending_time === -1)
@@ -452,6 +471,50 @@ define([
 
         return list;
       }
+    },
+
+    createWhDatum: function()
+    {
+      var startingTime = this.beginning;
+
+      for (var i = 0; i < 3; ++i)
+      {
+        var datum = this.datum[i];
+
+        if (datum.times.length)
+        {
+          startingTime = Math.max(startingTime, _.last(datum.times).ending_time);
+        }
+      }
+
+      var currentOrder = _.last(this.datum[1].times);
+
+      if (!currentOrder)
+      {
+        return {type: 'wh', times: []};
+      }
+
+      var data = this.whOrderStatuses.getTimelineData(this.prodLineId, currentOrder.model);
+      var qtyDone = currentOrder.model.get('quantityDone');
+      var qtyRemaining = data.qtySent - qtyDone;
+
+      return {
+        type: 'wh',
+        times: [{
+          type: 'wh',
+          text: qtyRemaining >= 0
+            ? ('~' + time.toString(qtyRemaining * data.pceTime / 1000))
+            : '',
+          data: {
+            qtyDone: qtyDone,
+            qtySent: data.qtySent,
+            pceTime: data.pceTime
+          },
+          model: {},
+          starting_time: startingTime,
+          ending_time: this.beginning + 8 * 3600 * 1000
+        }]
+      };
     },
 
     extendDatum: function()
@@ -467,15 +530,22 @@ define([
         endingTime = shiftEndTime;
       }
 
+      var newEndingTime = null;
+
       this.datum.forEach(function(datum)
       {
         var last = datum.times.length - 1;
 
         if (last > -1 && datum.times[last].ended === false)
         {
-          datum.times[last].ending_time = endingTime;
+          datum.times[last].ending_time = newEndingTime = endingTime;
         }
       });
+
+      if (newEndingTime && this.datum[3] && this.datum[3].times.length)
+      {
+        this.datum[3].times[0].starting_time = newEndingTime;
+      }
     },
 
     createChart: function()
@@ -669,6 +739,18 @@ define([
         templateData.hasOrder = !!data.prodShiftOrder;
 
         return renderTimelineDowntimePopover(templateData);
+      }
+
+      if (type === 'wh')
+      {
+        templateData.currentQty = data.qtySent - data.qtyDone;
+        templateData.currentTime = time.toString(
+          templateData.currentQty > 0 ? (templateData.currentQty * data.pceTime / 1000) : 0
+        );
+        templateData.nextQty = '0';
+        templateData.nextTime = '0s';
+
+        return renderTimelineWhPopover(templateData);
       }
     },
 

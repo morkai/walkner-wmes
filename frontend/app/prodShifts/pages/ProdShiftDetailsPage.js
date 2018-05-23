@@ -182,7 +182,8 @@ define([
       this.timelineView = new ProdShiftTimelineView({
         prodShift: this.prodShift,
         prodShiftOrders: this.prodShiftOrders,
-        prodDowntimes: this.prodDowntimes
+        prodDowntimes: this.prodDowntimes,
+        itemHeight: 40
       });
 
       this.quantitiesDoneChartView = new QuantitiesDoneChartView({model: this.prodShift});

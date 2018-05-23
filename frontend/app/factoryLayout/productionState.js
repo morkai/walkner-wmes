@@ -68,9 +68,9 @@ define([
       this.factoryLayout.set(data.factoryLayout);
     }
 
-    if (data.whOrderStatuses)
+    if (Array.isArray(data.whOrderStatuses))
     {
-      this.whOrderStatuses.reset(data.whOrderStatuses);
+      this.whOrderStatuses.reset(this.whOrderStatuses.parse({collection: data.whOrderStatuses}));
     }
 
     return {};
@@ -93,10 +93,13 @@ define([
     {
       productionState.pubsub = pubsub.sandbox();
       productionState.pubsub.subscribe('production.stateChanged.**', handleStateChangedMessage);
+      productionState.pubsub.subscribe('shiftChanged', handleShiftChangedMessage);
       productionState.settings.factoryLayout.setUpPubsub(productionState.pubsub);
       productionState.settings.production.setUpPubsub(productionState.pubsub);
       productionState.whOrderStatuses.setUpPubsub(productionState.pubsub);
     }
+
+    productionState.whOrderStatuses.setCurrentDate();
 
     return productionState.fetch();
   };
@@ -124,6 +127,7 @@ define([
       productionState.prodLineStates.reset([]);
       productionState.settings.factoryLayout.reset([]);
       productionState.settings.production.reset([]);
+      productionState.whOrderStatuses.reset([]);
 
       unloadTimer = null;
       loaded = false;
@@ -184,6 +188,27 @@ define([
     {
       prodLineState.update(message);
     }
+  }
+
+  function handleShiftChangedMessage()
+  {
+    if (!loaded)
+    {
+      return;
+    }
+
+    setTimeout(reloadWhOrderStatuses, 10000);
+  }
+
+  function reloadWhOrderStatuses()
+  {
+    if (!loaded)
+    {
+      return;
+    }
+
+    productionState.whOrderStatuses.setCurrentDate();
+    productionState.whOrderStatuses.fetch({reset: true});
   }
 
   return productionState;

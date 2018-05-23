@@ -106,7 +106,8 @@ define([
       var listItemView = new ProdLineStateListItemView({
         keep: false,
         model: prodLineState,
-        displayOptions: this.displayOptions
+        displayOptions: this.displayOptions,
+        whOrderStatuses: this.displayOptions.isHistoryData() ? null : this.model.whOrderStatuses
       });
 
       this.insertView(listItemView).render();

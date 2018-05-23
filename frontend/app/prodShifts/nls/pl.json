@@ -75,6 +75,10 @@
   "timeline:popover:efficiency": "Wydajność",
   "timeline:popover:sapTaktTime": "Czas taktu",
   "timeline:popover:avgTaktTime": "Śr. czas cyklu",
+  "timeline:popover:wh": "Magazyn",
+  "timeline:popover:wh:current": "Aktualne zlecenie",
+  "timeline:popover:wh:next": "Następne zlecenia",
+  "timeline:popover:wh:qtyUnit": "szt.",
 
   "charts:quantitiesDone:title": "Wykonane ilości w przedziałach godzinowych",
   "charts:quantitiesDone:unit": " szt.",

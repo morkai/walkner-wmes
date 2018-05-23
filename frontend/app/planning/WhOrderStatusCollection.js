@@ -27,6 +27,14 @@ define([
     return status;
   }
 
+  function getCurrentDate()
+  {
+    return time.utc.getMoment(Date.now())
+      .startOf('day')
+      .subtract(time.getMoment().hours() < 6 ? 1 : 0, 'days')
+      .format('YYYY-MM-DD');
+  }
+
   return Collection.extend({
 
     model: WhOrderStatus,
@@ -36,13 +44,22 @@ define([
     initialize: function(models, options)
     {
       options = _.assign({
-        date: time.utc.getMoment(Date.now())
-          .startOf('day')
-          .subtract(time.getMoment().hours() < 6 ? 1 : 0, 'days')
-          .format('YYYY-MM-DD')
+        date: getCurrentDate()
       }, options);
 
       this.date = options.date;
+
+      this.timelineCache = null;
+
+      this.on('reset change add', function()
+      {
+        this.timelineCache = null;
+      });
+    },
+
+    setCurrentDate: function()
+    {
+      this.date = getCurrentDate();
     },
 
     url: function()
@@ -99,6 +116,52 @@ define([
       }
 
       return status.serialize();
+    },
+
+    getTimelineData: function(line, currentProdShiftOrder)
+    {
+      if (!this.timelineCache)
+      {
+        this.cacheTimelineData();
+      }
+
+      var lineCache = this.timelineCache[line] || {};
+
+      return lineCache[currentProdShiftOrder.get('orderId')] || {
+        qtySent: 0,
+        pceTime: 0
+      };
+    },
+
+    cacheTimelineData: function()
+    {
+      var cache = this.timelineCache = {};
+
+      this.forEach(function(whOrderStatus)
+      {
+        if (whOrderStatus.get('status') !== 3)
+        {
+          return;
+        }
+
+        var line = whOrderStatus.get('line');
+        var orderNo = whOrderStatus.get('orderNo');
+
+        if (!cache[line])
+        {
+          cache[line] = {};
+        }
+
+        if (!cache[line][orderNo])
+        {
+          cache[line][orderNo] = {
+            qtySent: 0,
+            pceTime: whOrderStatus.get('pceTime')
+          };
+        }
+
+        cache[line][orderNo].qtySent += whOrderStatus.get('qtySent');
+      });
     }
 
   });
