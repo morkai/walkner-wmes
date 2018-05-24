@@ -326,6 +326,12 @@ define([
         }
 
         order.set(attrs);
+
+        if (!Array.isArray(order.get('changes')))
+        {
+          order.set('changes', [], {silent: true});
+        }
+
         order.get('changes').push(change);
         order.trigger('push:change', change);
         this.orders.trigger('push:change', change);
