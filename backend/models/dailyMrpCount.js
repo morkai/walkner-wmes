@@ -170,6 +170,7 @@ module.exports = function setupDailyMrpCountModel(app, mongoose)
       },
       function()
       {
+        this.dailyMrpCount.markModified('count');
         this.dailyMrpCount.save(this.next());
       },
       function(err)
