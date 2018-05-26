@@ -16,14 +16,15 @@ exports.start = function startMongodbModule(app, module, done)
 
   mongodb.MongoClient.connect(module.config.uri, module.config.mongoClient, onComplete);
 
-  function onComplete(err, db)
+  function onComplete(err, client)
   {
     if (err)
     {
       return done(err);
     }
 
-    module.db = db;
+    module.client = client;
+    module.db = client.db;
 
     setUpEventListeners();
     setUpKeepAliveQuery();
@@ -35,12 +36,12 @@ exports.start = function startMongodbModule(app, module, done)
 
   function setUpEventListeners()
   {
-    module.db.on('error', (err) => module.error(err.stack));
-    module.db.on('parseError', (err) => module.error(err.stack));
-    module.db.on('timeout', () => module.warn('Timeout.'));
-    module.db.on('close', () => module.warn('Closed.'));
-    module.db.on('reconnect', () => module.debug('Reconnected.'));
-    module.db.on('authenticated', () => module.debug('Authenticated.'));
+    module.client.on('error', (err) => module.error(err.stack));
+    module.client.on('parseError', (err) => module.error(err.stack));
+    module.client.on('timeout', () => module.warn('Timeout.'));
+    module.client.on('close', () => module.warn('Closed.'));
+    module.client.on('reconnect', () => module.debug('Reconnected.'));
+    module.client.on('authenticated', () => module.debug('Authenticated.'));
   }
 
   function setUpKeepAliveQuery()
