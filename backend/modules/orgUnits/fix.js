@@ -7,7 +7,8 @@ module.exports = function setUpOrgUnitsFix(app, module)
   const oldToNewProdLine = {
     'MAXOS_T_NZP': 'MAXOS_T_NZP',
     'PSR': 'LM-28',
-    'HCS': 'LM-24'
+    'HCS': 'LM-24',
+    'GS': 'LM-27'
   };
   const prodLineToOrgUnits = new Map();
   const prodLineToPlainOrgUnits = new Map();
