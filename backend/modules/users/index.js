@@ -69,8 +69,7 @@ exports.start = function startUsersModule(app, module)
     [
       module.config.mongooseId,
       module.config.userId,
-      module.config.expressId,
-      module.config.settingsId
+      module.config.expressId
     ],
     setUpRoutes.bind(null, app, module)
   );

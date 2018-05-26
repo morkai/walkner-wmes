@@ -21,21 +21,24 @@ module.exports = function setUpUsersRoutes(app, usersModule)
   const canBrowse = userModule.auth.apply(userModule, usersModule.config.browsePrivileges);
   const canManage = userModule.auth('USERS:MANAGE');
 
-  express.get(
-    '/users/settings',
-    canBrowse,
-    function limitToUsersSettings(req, res, next)
-    {
-      req.rql.selector = {
-        name: 'regex',
-        args: ['_id', '^users\\.']
-      };
+  if (settingsModule)
+  {
+    express.get(
+      '/users/settings',
+      canBrowse,
+      function limitToUsersSettings(req, res, next)
+      {
+        req.rql.selector = {
+          name: 'regex',
+          args: ['_id', '^users\\.']
+        };
 
-      return next();
-    },
-    express.crud.browseRoute.bind(null, app, settingsModule.Setting)
-  );
-  express.put('/users/settings/:id', canManage, settingsModule.updateRoute);
+        return next();
+      },
+      express.crud.browseRoute.bind(null, app, settingsModule.Setting)
+    );
+    express.put('/users/settings/:id', canManage, settingsModule.updateRoute);
+  }
 
   express.get('/users', canBrowse, express.crud.browseRoute.bind(null, app, User));
   express.post('/users', canManage, checkLogin, hashPassword, express.crud.addRoute.bind(null, app, User));
