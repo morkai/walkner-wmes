@@ -51,6 +51,14 @@ module.exports = function setupMinutesForSafetyCardModel(app, mongoose)
     safeBehavior: String,
     orgPropositions: [propositionSchema],
     techPropositions: [propositionSchema],
+    nearMiss: {
+      type: Number,
+      default: null
+    },
+    suggestion: {
+      type: Number,
+      default: null
+    },
     participants: {},
     users: [String]
   }, {

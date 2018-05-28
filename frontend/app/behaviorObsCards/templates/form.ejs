@@ -5,117 +5,117 @@
     <div class="panel-body">
       <div class="row">
         <div class="form-group col-lg-3 has-required-select2">
-          <label for="<%- idPrefix %>-observer" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:observer') %></label>
+          <label for="<%- idPrefix %>-observer" class="control-label is-required"><%- helpers.t('PROPERTY:observer') %></label>
           <input id="<%- idPrefix %>-observer" type="text" name="observer" required>
         </div>
         <div class="form-group col-lg-3 has-required-select2">
-          <label for="<%- idPrefix %>-superior" class="control-label is-required"><%- t('behaviorObsCards', 'FORM:superior') %></label>
+          <label for="<%- idPrefix %>-superior" class="control-label is-required"><%- helpers.t('FORM:superior') %></label>
           <input id="<%- idPrefix %>-superior" type="text" name="superior" required>
         </div>
         <div class="form-group col-lg-6">
-          <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:date') %></label>
+          <label for="<%- idPrefix %>-date" class="control-label is-required"><%- helpers.t('PROPERTY:date') %></label>
           <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required min="2017-01-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
         </div>
       </div>
       <hr style="margin-top: 5px">
-      <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:where') %></h4>
+      <h4 class="control-label"><%- helpers.t('PANEL:TITLE:where') %></h4>
       <div class="row">
         <div class="form-group col-lg-3 has-required-select2">
-          <label for="<%- idPrefix %>-section" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:section') %></label>
+          <label for="<%- idPrefix %>-section" class="control-label is-required"><%- helpers.t('PROPERTY:section') %></label>
           <input id="<%- idPrefix %>-section" type="text" name="section" required>
         </div>
         <div class="form-group col-lg-3">
-          <label for="<%- idPrefix %>-line" class="control-label"><%- t('behaviorObsCards', 'PROPERTY:line') %></label>
+          <label for="<%- idPrefix %>-line" class="control-label"><%- helpers.t('PROPERTY:line') %></label>
           <input id="<%- idPrefix %>-line" type="text" name="line">
         </div>
         <div class="form-group col-lg-6">
-          <label for="<%- idPrefix %>-position" class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:position') %></label>
+          <label for="<%- idPrefix %>-position" class="control-label is-required"><%- helpers.t('PROPERTY:position') %></label>
           <input id="<%- idPrefix %>-position" class="form-control" type="text" name="position" required>
         </div>
       </div>
       <hr style="margin-top: 5px">
-      <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:observations') %></h4>
+      <h4 class="control-label"><%- helpers.t('PANEL:TITLE:observations') %></h4>
       <table class="table table-bordered table-hover table-condensed behaviorObsCards-form-observations">
         <thead>
         <tr>
-          <th class="is-min"><%- t('behaviorObsCards', 'PROPERTY:observations:category') %></th>
-          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:safe:true') %></th>
-          <th class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:observations:safe:false') %></th>
-          <th class="behaviorObsCards-form-half"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:observations:observation') %></label></th>
-          <th class="behaviorObsCards-form-half"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:observations:cause') %></label></th>
-          <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:true') %></label></th>
-          <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:observations:easy:false') %></label></th>
+          <th class="is-min"><%- helpers.t('PROPERTY:observations:category') %></th>
+          <th class="is-min text-center"><%- helpers.t('PROPERTY:observations:safe:true') %></th>
+          <th class="is-min text-center"><%- helpers.t('PROPERTY:observations:safe:false') %></th>
+          <th class="behaviorObsCards-form-half"><label class="control-label is-required"><%- helpers.t('PROPERTY:observations:observation') %></label></th>
+          <th class="behaviorObsCards-form-half"><label class="control-label is-required"><%- helpers.t('PROPERTY:observations:cause') %></label></th>
+          <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:observations:easy:true') %></label></th>
+          <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:observations:easy:false') %></label></th>
         </tr>
         </thead>
         <tbody id="<%- idPrefix %>-observations"></tbody>
       </table>
       <button id="<%- idPrefix %>-addObservation" class="btn btn-default behaviorObsCards-form-button" type="button">
-        <i class="fa fa-plus"></i><span><%- t('behaviorObsCards', 'FORM:BTN:add') %></span>
+        <i class="fa fa-plus"></i><span><%- helpers.t('FORM:BTN:add') %></span>
       </button>
       <hr>
-      <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:risks') %></h4>
+      <h4 class="control-label"><%- helpers.t('PANEL:TITLE:risks') %></h4>
       <p id="<%- idPrefix %>-nearMiss" class="message message-inline message-error">
         <input class="behaviorObsCards-form-rid-required" name="nearMiss" type="text" tabindex="-1">
         <span class="behaviorObsCards-form-rid-message">
           <% if (model.nearMiss) { %>
-          <%- t('behaviorObsCards', 'FORM:MSG:nearMiss:edit', {rid: model.nearMiss}) %>
+          <%- helpers.t('FORM:MSG:nearMiss:edit', {rid: model.nearMiss}) %>
           <% } else { %>
-          <%- t('behaviorObsCards', 'FORM:MSG:nearMiss:add') %>
+          <%- helpers.t('FORM:MSG:nearMiss:add') %>
           <% } %>
         </span>
       </p>
       <table class="table table-bordered table-hover table-condensed">
         <thead>
         <tr>
-          <th class="behaviorObsCards-form-risk"><label class="control-label"><%- t('behaviorObsCards', 'PROPERTY:risks:risk') %></label></th>
-          <th><%- t('behaviorObsCards', 'PROPERTY:risks:cause') %></th>
-          <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:risks:easy:true') %></label></th>
-          <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:risks:easy:false') %></label></th>
+          <th class="behaviorObsCards-form-risk"><label class="control-label"><%- helpers.t('PROPERTY:risks:risk') %></label></th>
+          <th><%- helpers.t('PROPERTY:risks:cause') %></th>
+          <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:risks:easy:true') %></label></th>
+          <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:risks:easy:false') %></label></th>
         </tr>
         </thead>
         <tbody id="<%- idPrefix %>-risks"></tbody>
       </table>
       <button id="<%- idPrefix %>-addRisk" class="btn btn-default behaviorObsCards-form-button" type="button">
-        <i class="fa fa-plus"></i><span><%- t('behaviorObsCards', 'FORM:BTN:add') %></span>
+        <i class="fa fa-plus"></i><span><%- helpers.t('FORM:BTN:add') %></span>
       </button><!--
       //--><button id="<%- idPrefix %>-removeRisk" class="btn btn-default behaviorObsCards-form-button" type="button">
-        <i class="fa fa-remove"></i><span><%- t('behaviorObsCards', 'FORM:BTN:remove') %></span>
+        <i class="fa fa-remove"></i><span><%- helpers.t('FORM:BTN:remove') %></span>
       </button>
       <hr>
       <div class="checkbox">
         <label class="control-label">
           <input type="checkbox" name="easyDiscussed" value="true" required>
-          <%- t('behaviorObsCards', 'PROPERTY:easyDiscussed') %>
+          <%- helpers.t('PROPERTY:easyDiscussed') %>
         </label>
       </div>
       <hr>
-      <h4 class="control-label"><%- t('behaviorObsCards', 'PANEL:TITLE:difficulties') %></h4>
+      <h4 class="control-label"><%- helpers.t('PANEL:TITLE:difficulties') %></h4>
       <p id="<%- idPrefix %>-nearMiss" class="message message-inline message-warning">
         <input class="behaviorObsCards-form-rid-required" name="suggestion" type="text" tabindex="-1">
         <span class="behaviorObsCards-form-rid-message">
           <% if (model.suggestion) { %>
-          <%- t('behaviorObsCards', 'FORM:MSG:suggestion:edit', {rid: model.suggestion}) %>
+          <%- helpers.t('FORM:MSG:suggestion:edit', {rid: model.suggestion}) %>
           <% } else { %>
-          <%- t('behaviorObsCards', 'FORM:MSG:suggestion:add') %>
+          <%- helpers.t('FORM:MSG:suggestion:add') %>
           <% } %>
         </span>
       </p>
       <table class="table table-bordered table-hover table-condensed">
         <thead>
         <tr>
-          <th class="behaviorObsCards-form-difficulty"><label class="control-label"><%- t('behaviorObsCards', 'PROPERTY:difficulties:problem') %></label></th>
-          <th><%- t('behaviorObsCards', 'PROPERTY:difficulties:solution') %></th>
-          <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:true') %></label></th>
-          <th class="is-min text-center"><label class="control-label is-required"><%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:false') %></label></th>
+          <th class="behaviorObsCards-form-difficulty"><label class="control-label"><%- helpers.t('PROPERTY:difficulties:problem') %></label></th>
+          <th><%- helpers.t('PROPERTY:difficulties:solution') %></th>
+          <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:difficulties:behavior:true') %></label></th>
+          <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:difficulties:behavior:false') %></label></th>
         </tr>
         </thead>
         <tbody id="<%- idPrefix %>-difficulties"></tbody>
       </table>
       <button id="<%- idPrefix %>-addDifficulty" class="btn btn-default behaviorObsCards-form-button" type="button">
-        <i class="fa fa-plus"></i><span><%- t('behaviorObsCards', 'FORM:BTN:add') %></span>
+        <i class="fa fa-plus"></i><span><%- helpers.t('FORM:BTN:add') %></span>
       </button><!--
       //--><button id="<%- idPrefix %>-removeDifficulty" class="btn btn-default behaviorObsCards-form-button" type="button">
-        <i class="fa fa-remove"></i><span><%- t('behaviorObsCards', 'FORM:BTN:remove') %></span>
+        <i class="fa fa-remove"></i><span><%- helpers.t('FORM:BTN:remove') %></span>
       </button>
     </div>
     <div class="panel-footer">

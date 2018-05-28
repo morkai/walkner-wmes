@@ -1,9 +1,9 @@
 <div class="panel panel-warning">
   <div class="panel-heading is-with-actions">
-    <%- t('behaviorObsCards', 'PANEL:TITLE:difficulties') %>
+    <%- helpers.t('PANEL:TITLE:difficulties') %>
     <% if (model.suggestion) { %>
     <div class="panel-actions">
-      <p><%- t('behaviorObsCards', 'PANEL:ACTION:suggestion') %> <a href="#suggestions/<%- model.suggestion %>">#<%- model.suggestion %></a></p>
+      <p><%- helpers.t('PANEL:ACTION:suggestion') %> <a href="#suggestions/<%- model.suggestion %>">#<%- model.suggestion %></a></p>
     </div>
     <% } %>
   </div>
@@ -11,12 +11,12 @@
     <% if (model.difficulties.length) { %>
     <thead>
     <tr>
-      <th><%- t('behaviorObsCards', 'PROPERTY:difficulties:problem') %></th>
-      <th><%- t('behaviorObsCards', 'PROPERTY:difficulties:solution') %></th>
+      <th><%- helpers.t('PROPERTY:difficulties:problem') %></th>
+      <th><%- helpers.t('PROPERTY:difficulties:solution') %></th>
       <th class="is-min text-center">
-        <%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:true') %>
+        <%- helpers.t('PROPERTY:difficulties:behavior:true') %>
         /<br>
-        <%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:false') %>
+        <%- helpers.t('PROPERTY:difficulties:behavior:false') %>
       </th>
     </tr>
     </thead>
@@ -31,7 +31,7 @@
     <tr>
       <td class="text-lines"><%= difficulty.problem %></td>
       <td class="text-lines"><%= difficulty.solution %></td>
-      <td class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:difficulties:behavior:' + difficulty.behavior) %></td>
+      <td class="is-min text-center"><%- helpers.t('PROPERTY:difficulties:behavior:' + difficulty.behavior) %></td>
     </tr>
     <% }) %>
     </tbody>

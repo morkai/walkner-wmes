@@ -17,9 +17,16 @@
       </div>
     </div>
   </div>
-  <% if (model.observations.length) { %>
+  <% if (model.observations.length || model.nearMiss) { %>
   <div class="panel panel-default">
-    <div class="panel-heading"><%- helpers.t('PROPERTY:observations') %></div>
+    <div class="panel-heading is-with-actions">
+      <%- helpers.t('PROPERTY:observations') %>
+      <% if (model.nearMiss) { %>
+      <div class="panel-actions">
+        <p><%- helpers.t('PANEL:ACTION:nearMiss') %> <a href="#kaizenOrders/<%- model.nearMiss %>">#<%- model.nearMiss %></a></p>
+      </div>
+      <% } %>
+    </div>
     <table class="table table-bordered table-hover">
       <thead>
       <tr>
@@ -28,6 +35,11 @@
       </tr>
       </thead>
       <tbody>
+      <% if (!model.observations.length) { %>
+      <tr>
+        <td colspan="2"><%- t('core', 'LIST:NO_DATA') %></td>
+      </tr>
+      <% } %>
       <% model.observations.forEach(function(observation) { %>
       <tr>
         <td class="text-lines"><%= observation.what %></td>
@@ -46,9 +58,16 @@
     </div>
   </div>
   <% } %>
-  <% if (model.orgPropositions.length) { %>
+  <% if (model.orgPropositions.length || model.suggestion) { %>
   <div class="panel panel-default">
-    <div class="panel-heading"><%- helpers.t('PROPERTY:orgPropositions') %></div>
+    <div class="panel-heading is-with-actions">
+      <%- helpers.t('PROPERTY:orgPropositions') %>
+      <% if (model.suggestion) { %>
+      <div class="panel-actions">
+        <p><%- helpers.t('PANEL:ACTION:suggestion') %> <a href="#suggestions/<%- model.suggestion %>">#<%- model.suggestion %></a></p>
+      </div>
+      <% } %>
+    </div>
     <table class="table table-bordered table-hover">
       <thead>
       <tr>
@@ -56,6 +75,11 @@
       </tr>
       </thead>
       <tbody>
+      <% if (!model.orgPropositions.length) { %>
+      <tr>
+        <td><%- t('core', 'LIST:NO_DATA') %></td>
+      </tr>
+      <% } %>
       <% model.orgPropositions.forEach(function(proposition) { %>
       <tr>
         <td class="text-lines"><%= proposition.what %></td>

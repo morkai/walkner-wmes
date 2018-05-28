@@ -186,10 +186,10 @@
     <div class="panel-footer">
       <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
         <i class="fa fa-spinner fa-spin"></i>
-        <span><%- backToBoc.mode === 'none' ? formActionText : t('kaizenOrders', 'FORM:backToBoc:' + backToBoc.mode) %></span>
+        <span><%- backTo ? backTo.submitLabel : formActionText %></span>
       </button>
-      <% if (backToBoc.mode !== 'none') { %>
-      <a class="btn btn-link" href="<%- backToBoc.cancelUrl %>"><%- t('kaizenOrders', 'FORM:backToBoc:cancel') %></a>
+      <% if (backTo) { %>
+      <a class="btn btn-link" href="<%- backTo.cancelUrl %>"><%- backTo.cancelLabel %></a>
       <% } %>
     </div>
   </div>

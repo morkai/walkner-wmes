@@ -156,110 +156,6 @@ define([
 
     }, FormView.prototype.events),
 
-    showRidEditor: function(ridProperty, aEl)
-    {
-      var view = this;
-      var $a = view.$(aEl);
-
-      if ($a.next('.popover').length)
-      {
-        $a.popover('destroy');
-
-        return;
-      }
-
-      $a.popover({
-        placement: 'auto top',
-        html: true,
-        trigger: 'manual',
-        content: renderRidEditor({
-          property: ridProperty,
-          rid: this.model.get(ridProperty) || ''
-        })
-      }).popover('show');
-
-      var $popover = $a.next('.popover');
-      var $input = $popover.find('.form-control').select();
-      var $submit = $popover.find('.btn-default');
-      var $cancel = $popover.find('.btn-link');
-
-      $cancel.on('click', function()
-      {
-        $a.popover('destroy');
-      });
-
-      $input.on('keydown', function(e)
-      {
-        if (e.keyCode === 13)
-        {
-          return false;
-        }
-      });
-
-      $input.on('keyup', function(e)
-      {
-        if (e.keyCode === 13)
-        {
-          $submit.click();
-
-          return false;
-        }
-      });
-
-      $submit.on('click', function()
-      {
-        $input.prop('disabled', true);
-        $submit.prop('disabled', true);
-        $cancel.prop('disabled', true);
-
-        var rid = parseInt($input.val(), 10) || 0;
-
-        if (rid <= 0)
-        {
-          return updateRid(null);
-        }
-
-        var url = (ridProperty === 'nearMiss' ? '/kaizen/orders' : '/suggestions') + '/' + rid;
-        var req = view.ajax({url: url});
-
-        req.fail(function(jqXhr)
-        {
-          view.showErrorMessage(t(
-            'behaviorObsCards',
-            'FORM:ridEditor:' + (jqXhr.status === 404 ? 'notFound' : 'failure')
-          ));
-
-          $input.prop('disabled', false);
-          $submit.prop('disabled', false);
-          $cancel.prop('disabled', false);
-
-          (jqXhr.status === 404 ? $input : $submit).focus();
-        });
-
-        req.done(function()
-        {
-          updateRid(rid);
-        });
-
-        return false;
-      });
-
-      function updateRid(newRid)
-      {
-        $a
-          .popover('destroy')
-          .closest('.message')
-          .find('.behaviorObsCards-form-rid-message')
-          .html(t('behaviorObsCards', 'FORM:MSG:' + ridProperty + ':' + (newRid ? 'edit' : 'add'), {
-            rid: newRid
-          }));
-
-        view.model.attributes[ridProperty] = newRid;
-
-        view.$('input[name=' + ridProperty + ']').val(newRid || '');
-      }
-    },
-
     initialize: function()
     {
       FormView.prototype.initialize.apply(this, arguments);
@@ -347,7 +243,7 @@ define([
       this.toggleDifficulties();
 
       this.$('input[name="observations[1].safe"]')[0].setCustomValidity(
-        this.hasAnyObservation() || this.hasAnyRisk() ? '' : t('behaviorObsCards', 'FORM:ERROR:empty')
+        this.hasAnyObservation() || this.hasAnyRisk() ? '' : this.t('FORM:ERROR:empty')
       );
     },
 
@@ -705,6 +601,112 @@ define([
       localStorage.removeItem('BOC_LAST');
 
       return FormView.prototype.handleSuccess.apply(this, arguments);
+    },
+
+    showRidEditor: function(ridProperty, aEl)
+    {
+      var view = this;
+      var $a = view.$(aEl);
+
+      if ($a.next('.popover').length)
+      {
+        $a.popover('destroy');
+
+        return;
+      }
+
+      $a.popover({
+        placement: 'auto top',
+        html: true,
+        trigger: 'manual',
+        content: renderRidEditor({
+          idPrefix: this.idPrefix,
+          helpers: this.getTemplateHelpers(),
+          property: ridProperty,
+          rid: this.model.get(ridProperty) || ''
+        })
+      }).popover('show');
+
+      var $popover = $a.next('.popover');
+      var $input = $popover.find('.form-control').select();
+      var $submit = $popover.find('.btn-default');
+      var $cancel = $popover.find('.btn-link');
+
+      $cancel.on('click', function()
+      {
+        $a.popover('destroy');
+      });
+
+      $input.on('keydown', function(e)
+      {
+        if (e.keyCode === 13)
+        {
+          return false;
+        }
+      });
+
+      $input.on('keyup', function(e)
+      {
+        if (e.keyCode === 13)
+        {
+          $submit.click();
+
+          return false;
+        }
+      });
+
+      $submit.on('click', function()
+      {
+        $input.prop('disabled', true);
+        $submit.prop('disabled', true);
+        $cancel.prop('disabled', true);
+
+        var rid = parseInt($input.val(), 10) || 0;
+
+        if (rid <= 0)
+        {
+          return updateRid(null);
+        }
+
+        var url = (ridProperty === 'nearMiss' ? '/kaizen/orders' : '/suggestions') + '/' + rid;
+        var req = view.ajax({url: url});
+
+        req.fail(function(jqXhr)
+        {
+          view.showErrorMessage(t(
+            'behaviorObsCards',
+            'FORM:ridEditor:' + (jqXhr.status === 404 ? 'notFound' : 'failure')
+          ));
+
+          $input.prop('disabled', false);
+          $submit.prop('disabled', false);
+          $cancel.prop('disabled', false);
+
+          (jqXhr.status === 404 ? $input : $submit).focus();
+        });
+
+        req.done(function()
+        {
+          updateRid(rid);
+        });
+
+        return false;
+      });
+
+      function updateRid(newRid)
+      {
+        $a
+          .popover('destroy')
+          .closest('.message')
+          .find('.behaviorObsCards-form-rid-message')
+          .html(view.t('FORM:MSG:' + ridProperty + ':' + (newRid ? 'edit' : 'add'), {
+            rid: newRid
+          }));
+
+        view.model.attributes[ridProperty] = newRid;
+
+        view.$('input[name=' + ridProperty + ']').val(newRid || '');
+      }
     }
 
   });

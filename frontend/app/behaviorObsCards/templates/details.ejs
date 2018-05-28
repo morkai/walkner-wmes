@@ -1,22 +1,22 @@
 <div class="behaviorObsCards-details">
   <div class="panel panel-info behaviorObsCards-details-props">
     <div class="panel-heading">
-      <%- t('behaviorObsCards', 'PANEL:TITLE:details') %>
+      <%- helpers.t('PANEL:TITLE:details') %>
     </div>
     <div class="panel-details">
       <div class="row">
         <div class="col-md-4">
           <div class="props first">
             <div class="prop">
-              <div class="prop-name"><%- t('behaviorObsCards', 'PROPERTY:section') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:section') %></div>
               <div class="prop-value"><%= model.section %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('behaviorObsCards', 'PROPERTY:line') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:line') %></div>
               <div class="prop-value"><%= model.line || '-' %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('behaviorObsCards', 'PROPERTY:position') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:position') %></div>
               <div class="prop-value"><%= model.position || '-' %></div>
             </div>
           </div>
@@ -24,19 +24,19 @@
         <div class="col-md-4">
           <div class="props">
             <div class="prop">
-              <div class="prop-name"><%- t('behaviorObsCards', 'PROPERTY:observer') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:observer') %></div>
               <div class="prop-value"><%- model.observer %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('behaviorObsCards', 'PROPERTY:superior') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:superior') %></div>
               <div class="prop-value"><%- model.superior %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('behaviorObsCards', 'PROPERTY:creator') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:creator') %></div>
               <div class="prop-value"><%- model.creator %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('behaviorObsCards', 'PROPERTY:updater') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:updater') %></div>
               <div class="prop-value"><%- model.updater %></div>
             </div>
           </div>
@@ -44,15 +44,15 @@
         <div class="col-md-4">
           <div class="props">
             <div class="prop">
-              <div class="prop-name"><%- t('behaviorObsCards', 'PROPERTY:date') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:date') %></div>
               <div class="prop-value"><%- model.date %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('behaviorObsCards', 'PROPERTY:createdAt') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:createdAt') %></div>
               <div class="prop-value"><%- model.createdAt %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('behaviorObsCards', 'PROPERTY:updatedAt') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:updatedAt') %></div>
               <div class="prop-value"><%- model.updatedAt %></div>
             </div>
           </div>
@@ -68,7 +68,7 @@
   <% } %>
   <% if (showEasyDiscussed) { %>
   <p class="message message-inline message-<%- model.easyDiscussed ? 'info' : 'default' %>">
-    <i class="fa fa-thumbs-<%- model.easyDiscussed ? 'up' : 'down' %>"></i> <%- t('behaviorObsCards', 'PROPERTY:easyDiscussed') %>
+    <i class="fa fa-thumbs-<%- model.easyDiscussed ? 'up' : 'down' %>"></i> <%- helpers.t('PROPERTY:easyDiscussed') %>
   </p>
   <% } %>
   <% if (model.difficulties.length || model.suggestion) { %>

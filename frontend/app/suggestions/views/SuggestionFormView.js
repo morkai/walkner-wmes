@@ -158,17 +158,36 @@ define([
         });
       }
 
-      var lastBoc = JSON.parse(localStorage.getItem('BOC_LAST') || 'null');
-
       return _.extend(FormView.prototype.serialize.call(this), {
         today: time.format(new Date(), 'YYYY-MM-DD'),
         statuses: kaizenDictionaries.statuses,
         attachments: attachments,
-        backToBoc: {
-          mode: lastBoc ? (lastBoc._id ? 'edit' : 'add') : 'none',
-          cancelUrl: '#behaviorObsCards' + (lastBoc && lastBoc._id ? ('/' + lastBoc._id + ';edit') : ';add')
-        }
+        backTo: this.serializeBackTo()
       });
+    },
+
+    serializeBackTo: function()
+    {
+      var type = 'behaviorObsCards';
+      var data = JSON.parse(localStorage.getItem('BOC_LAST') || 'null');
+
+      if (!data)
+      {
+        data = JSON.parse(localStorage.getItem('MFS_LAST') || 'null');
+
+        if (!data)
+        {
+          return null;
+        }
+
+        type = 'minutesForSafetyCards';
+      }
+
+      return {
+        submitLabel: this.t('FORM:backTo:' + type + ':' + (data._id ? 'edit' : 'add')),
+        cancelLabel: this.t('FORM:backTo:' + type + ':cancel'),
+        cancelUrl: '#' + type + (data._id ? ('/' + data._id + ';edit') : ';add')
+      };
     },
 
     checkValidity: function()
@@ -230,13 +249,16 @@ define([
     handleSuccess: function()
     {
       var lastBoc = JSON.parse(localStorage.getItem('BOC_LAST') || 'null');
+      var lastMfs = JSON.parse(localStorage.getItem('MFS_LAST') || 'null');
+      var type = lastBoc ? 'behaviorObsCards' : lastMfs ? 'minutesForSafetyCards' : null;
+      var data = lastBoc || lastMfs;
 
-      if (!this.options.editMode && lastBoc)
+      if (!this.options.editMode && type)
       {
         this.broker.publish('router.navigate', {
-          url: '/behaviorObsCards'
-          + (lastBoc._id ? ('/' + lastBoc._id + ';edit') : ';add')
-          + '?suggestion=' + this.model.get('rid'),
+          url: '/' + type
+            + (data._id ? ('/' + data._id + ';edit') : ';add')
+            + '?suggestion=' + this.model.get('rid'),
           trigger: true
         });
       }
@@ -244,8 +266,8 @@ define([
       {
         this.broker.publish('router.navigate', {
           url: this.model.genClientUrl() + '?'
-          + (this.options.editMode ? '' : '&thank=you')
-          + (!this.options.standalone ? '' : '&standalone=1'),
+            + (this.options.editMode ? '' : '&thank=you')
+            + (!this.options.standalone ? '' : '&standalone=1'),
           trigger: true
         });
       }

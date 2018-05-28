@@ -2,12 +2,14 @@
 
 define([
   'underscore',
+  '../broker',
   '../router',
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage'
 ], function(
   _,
+  broker,
   router,
   viewport,
   user,
@@ -52,7 +54,7 @@ define([
     );
   });
 
-  router.map('/minutesForSafetyCards;add', canAccess, function()
+  router.map('/minutesForSafetyCards;add', canAccess, function(req)
   {
     viewport.loadPage(
       [
@@ -62,6 +64,35 @@ define([
       ],
       function(MinutesForSafetyCard, MinutesForSafetyCardAddFormPage)
       {
+        var lastCard = {
+          owner: user.getInfo()
+        };
+
+        try { _.assign(lastCard, JSON.parse(localStorage.getItem('MFS_LAST'))); }
+        catch (err) {} // eslint-disable-line no-empty
+        finally { localStorage.removeItem('MFS_LAST'); }
+
+        if (req.query.nearMiss)
+        {
+          lastCard.nearMiss = +req.query.nearMiss;
+
+          broker.publish('router.navigate', {
+            url: '/minutesForSafetyCards;add',
+            trigger: false,
+            replace: true
+          });
+        }
+        else if (req.query.suggestion)
+        {
+          lastCard.suggestion = +req.query.suggestion;
+
+          broker.publish('router.navigate', {
+            url: '/minutesForSafetyCards;add',
+            trigger: false,
+            replace: true
+          });
+        }
+
         return new MinutesForSafetyCardAddFormPage({
           model: new MinutesForSafetyCard()
         });
@@ -79,9 +110,47 @@ define([
       ],
       function(MinutesForSafetyCard, MinutesForSafetyCardEditFormPage)
       {
-        return new MinutesForSafetyCardEditFormPage({
-          model: new MinutesForSafetyCard({_id: req.params.id})
+        var model = new MinutesForSafetyCard({_id: req.params.id});
+        var lastCard = {};
+
+        try { _.assign(lastCard, JSON.parse(localStorage.getItem('MFS_LAST'))); }
+        catch (err) {} // eslint-disable-line no-empty
+        finally { localStorage.removeItem('MFS_LAST'); }
+
+        if (req.query.nearMiss)
+        {
+          lastCard.nearMiss = +req.query.nearMiss;
+
+          broker.publish('router.navigate', {
+            url: '/minutesForSafetyCards/' + req.params.id + ';edit',
+            trigger: false,
+            replace: true
+          });
+        }
+        else if (req.query.suggestion)
+        {
+          lastCard.suggestion = +req.query.suggestion;
+
+          broker.publish('router.navigate', {
+            url: '/minutesForSafetyCards/' + req.params.id + ';edit',
+            trigger: false,
+            replace: true
+          });
+        }
+
+        var page = new MinutesForSafetyCardEditFormPage({
+          model: model
         });
+
+        if (lastCard._id === req.params.id)
+        {
+          page.listenToOnce(model, 'sync', function()
+          {
+            _.assign(model.attributes, lastCard);
+          });
+        }
+
+        return page;
       }
     );
   });

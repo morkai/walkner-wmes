@@ -1,9 +1,9 @@
 <div class="panel panel-danger">
   <div class="panel-heading is-with-actions">
-    <%- t('behaviorObsCards', 'PANEL:TITLE:risks') %>
+    <%- helpers.t('PANEL:TITLE:risks') %>
     <% if (model.nearMiss) { %>
     <div class="panel-actions">
-      <p><%- t('behaviorObsCards', 'PANEL:ACTION:nearMiss') %> <a href="#kaizenOrders/<%- model.nearMiss %>">#<%- model.nearMiss %></a></p>
+      <p><%- helpers.t('PANEL:ACTION:nearMiss') %> <a href="#kaizenOrders/<%- model.nearMiss %>">#<%- model.nearMiss %></a></p>
     </div>
     <% } %>
   </div>
@@ -11,12 +11,12 @@
     <% if (model.risks.length) { %>
     <thead>
     <tr>
-      <th><%- t('behaviorObsCards', 'PROPERTY:risks:risk') %></th>
-      <th><%- t('behaviorObsCards', 'PROPERTY:risks:cause') %></th>
+      <th><%- helpers.t('PROPERTY:risks:risk') %></th>
+      <th><%- helpers.t('PROPERTY:risks:cause') %></th>
       <th class="is-min text-center">
-        <%- t('behaviorObsCards', 'PROPERTY:risks:easy:true') %>
+        <%- helpers.t('PROPERTY:risks:easy:true') %>
         /<br>
-        <%- t('behaviorObsCards', 'PROPERTY:risks:easy:false') %>
+        <%- helpers.t('PROPERTY:risks:easy:false') %>
       </th>
     </tr>
     </thead>
@@ -31,7 +31,7 @@
     <tr>
       <td class="text-lines"><%= risk.risk %></td>
       <td class="text-lines"><%= risk.cause %></td>
-      <td class="is-min text-center"><%- t('behaviorObsCards', 'PROPERTY:risks:easy:' + risk.easy) %></td>
+      <td class="is-min text-center"><%- helpers.t('PROPERTY:risks:easy:' + risk.easy) %></td>
     </tr>
     <% }) %>
     </tbody>

@@ -11,22 +11,22 @@
     <div class="filter-radioLabels">
       <label>
         <input name="userType" type="radio" value="mine">
-        <%- t('behaviorObsCards', 'filter:user:mine') %>
+        <%- helpers.t('filter:user:mine') %>
       </label><label>
         <input name="userType" type="radio" value="observer">
-        <%- t('behaviorObsCards', 'filter:user:observer') %>
+        <%- helpers.t('filter:user:observer') %>
       </label><label>
         <input name="userType" type="radio" value="superior">
-        <%- t('behaviorObsCards', 'filter:user:superior') %>
+        <%- helpers.t('filter:user:superior') %>
       </label><label>
         <input name="userType" type="radio" value="others">
-        <%- t('behaviorObsCards', 'filter:user:others') %>
+        <%- helpers.t('filter:user:others') %>
       </label>
     </div>
     <input id="<%- idPrefix %>-user" name="user" type="text">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-section"><%- t('behaviorObsCards', 'PROPERTY:section') %></label>
+    <label for="<%- idPrefix %>-section"><%- helpers.t('PROPERTY:section') %></label>
     <select id="<%- idPrefix %>-section" name="section[]" class="form-control is-expandable" multiple size="1" data-expanded-length="15">
       <% sections.forEach(function(section) { %>
       <option value="<%- section._id %>"><%= section.name %></option>
@@ -34,18 +34,18 @@
     </select>
   </div>
   <div class="form-group">
-    <label><%- t('behaviorObsCards', 'filter:anyHard') %></label>
+    <label><%- helpers.t('filter:anyHard') %></label>
     <div id="<%- idPrefix %>-anyHard" class="btn-group filter-btn-group" data-toggle="buttons">
       <label class="btn btn-default">
-        <input type="checkbox" name="anyHard[]" value="observations"> <%- t('behaviorObsCards', 'filter:anyHard:observations') %>
+        <input type="checkbox" name="anyHard[]" value="observations"> <%- helpers.t('filter:anyHard:observations') %>
       </label>
       <label class="btn btn-default">
-        <input type="checkbox" name="anyHard[]" value="risks"> <%- t('behaviorObsCards', 'filter:anyHard:risks') %>
+        <input type="checkbox" name="anyHard[]" value="risks"> <%- helpers.t('filter:anyHard:risks') %>
       </label>
     </div>
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('behaviorObsCards', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>
