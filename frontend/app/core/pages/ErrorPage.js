@@ -25,7 +25,7 @@ define([
       'click #-notify > a': function()
       {
         var page = this;
-        var body = this.buildMail();
+        var body = page.buildMail();
 
         page.$id('notify').html('<i class="fa fa-spinner fa-spin"></i>');
 
@@ -68,7 +68,7 @@ define([
         page.adminEmail = atob(window.ADMIN_EMAIL);
         page.senderUrl = atob(window.REMOTE_MAIL_SENDER_URL);
         page.secretKey = atob(window.REMOTE_MAIL_SECRET_KEY);
-        page.notify = true;
+        page.notify = code !== 0;
       }
       catch (err)
       {
