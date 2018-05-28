@@ -2,10 +2,14 @@
 
 'use strict';
 
+const _ = require('lodash');
+const countReport = require('./countReport');
+
 module.exports = function setUpMinutesForSafetyCardsRoutes(app, module)
 {
   const express = app[module.config.expressId];
   const userModule = app[module.config.userId];
+  const reportsModule = app[module.config.reportsId];
   const mongoose = app[module.config.mongooseId];
   const MinutesForSafetyCard = mongoose.model('MinutesForSafetyCard');
 
@@ -48,6 +52,13 @@ module.exports = function setUpMinutesForSafetyCardsRoutes(app, module)
     '/minutesForSafetyCards/:id',
     canManage,
     express.crud.deleteRoute.bind(null, app, MinutesForSafetyCard)
+  );
+
+  express.get(
+    '/minutesForSafetyCards/reports/count',
+    canView,
+    reportsModule.helpers.sendCachedReport.bind(null, 'minutesForSafetyCards/count'),
+    countReportRoute
   );
 
   function prepareForBrowse(req, res, next)
@@ -113,5 +124,36 @@ module.exports = function setUpMinutesForSafetyCardsRoutes(app, module)
 
       return res.sendStatus(404);
     });
+  }
+
+  function countReportRoute(req, res, next)
+  {
+    const query = req.query;
+    const options = {
+      fromTime: reportsModule.helpers.getTime(query.from) || null,
+      toTime: reportsModule.helpers.getTime(query.to) || null,
+      interval: reportsModule.helpers.getInterval(query.interval, 'month'),
+      sections: _.isEmpty(query.sections) ? [] : query.sections.split(','),
+      owner: _.isEmpty(query.owner) ? null : query.owner
+    };
+
+    reportsModule.helpers.generateReport(
+      app,
+      reportsModule,
+      countReport,
+      'minutesForSafetyCards/count',
+      req.reportHash,
+      options,
+      function(err, reportJson)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        res.type('json');
+        res.send(reportJson);
+      }
+    );
   }
 };

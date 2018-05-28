@@ -485,6 +485,7 @@ exports.reports = {
     'suggestions/count', 'suggestions/summary', 'suggestions/engagement',
     'opinionSurvey',
     'behaviorObsCards/count',
+    'minutesForSafetyCards/count',
     'paintShop/load'
   ]
 };

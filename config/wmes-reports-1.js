@@ -95,6 +95,7 @@ exports['reports/server'] = {
     'suggestions/engagement': require('../backend/modules/suggestions/engagementReport'),
     'opinionSurvey': require('../backend/modules/opinionSurveys/report'),
     'behaviorObsCards/count': require('../backend/modules/behaviorObsCards/countReport'),
+    'minutesForSafetyCards/count': require('../backend/modules/minutesForSafetyCards/countReport'),
     'paintShop/load': require('../backend/modules/paintShop/loadReport')
   }
 };

@@ -4,6 +4,7 @@
   "BREADCRUMBS:addForm": "Dodawanie",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
+  "BREADCRUMBS:reports:count": "Ilość minutek",
 
   "MSG:LOADING_FAILURE": "Ładowanie kart MdB nie powiodło się.",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie karty MdB nie powiodło się.",
@@ -78,5 +79,19 @@
   "status:cancelled": "Anulowane",
   "status:finished": "Zakończone",
   "status:paused": "Wstrzymane",
-  "status:open": "Otwarte"
+  "status:open": "Otwarte",
+
+  "report:title:total": "Ilość przeprowadzonych spotkań",
+  "report:title:countBySection": "Ilość przeprowadzonych spotkań wg działów",
+  "report:title:owners": "Ilość przeprowadzonych spotkań wg osób rejestrujących",
+  "report:title:participants": "Ilość przeprowadzonych spotkań wg osób uczestniczących",
+  "report:title:engaged": "Ilość przeprowadzonych spotkań wg osób zaangażowanych",
+  "report:series:minutesForSafetyCard": "Karty minutek",
+  "report:series:total": "Suma",
+  "report:series:card": "Karty minutek",
+  "report:filenames:total": "MdB_Ilosc",
+  "report:filenames:countBySection": "MdB_IloscWgDzialow",
+  "report:filenames:owners": "MdB_IloscWgRejestrujacych",
+  "report:filenames:participants": "MdB_IloscWgUczestniczacych",
+  "report:filenames:engaged": "MdB_IloscWgZaangazowanych"
 }

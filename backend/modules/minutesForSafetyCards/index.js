@@ -7,7 +7,8 @@ const setUpRoutes = require('./routes');
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   expressId: 'express',
-  userId: 'user'
+  userId: 'user',
+  reportsId: 'reports'
 };
 
 exports.start = function startMinutesForSafetyCardsModule(app, module)
@@ -16,7 +17,8 @@ exports.start = function startMinutesForSafetyCardsModule(app, module)
     [
       module.config.mongooseId,
       module.config.expressId,
-      module.config.userId
+      module.config.userId,
+      module.config.reportsId
     ],
     setUpRoutes.bind(null, app, module)
   );

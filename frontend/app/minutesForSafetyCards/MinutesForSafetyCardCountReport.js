@@ -15,20 +15,25 @@ define([
 ) {
   'use strict';
 
-  var COLOR_BEHAVIOR_OBS_CARD = '#5bc0de';
+  var COLOR_MINUTES_FOR_SAFETY_CARD = '#5cb85c';
   var TABLE_AND_CHART_METRICS = [
     'total',
     'countBySection',
-    'safeBySection',
-    'riskyBySection',
-    'categories'
+    'owners',
+    'participants',
+    'engaged'
   ];
+  var USERS_METRICS = {
+    owners: true,
+    participants: true,
+    engaged: true
+  };
 
   return Model.extend({
 
-    urlRoot: '/behaviorObsCards/reports/count',
+    urlRoot: '/minutesForSafetyCards/reports/count',
 
-    nlsDomain: 'behaviorObsCards',
+    nlsDomain: 'minutesForSafetyCards',
 
     defaults: function()
     {
@@ -37,7 +42,7 @@ define([
         to: 0,
         interval: 'month',
         sections: [],
-        superior: ''
+        owner: ''
       };
     },
 
@@ -50,7 +55,7 @@ define([
 
       options.data = _.extend(
         options.data || {},
-        _.pick(this.attributes, ['from', 'to', 'interval', 'sections', 'superior'])
+        _.pick(this.attributes, ['from', 'to', 'interval', 'sections', 'owner'])
       );
 
       options.data.sections = options.data.sections.join(',');
@@ -60,12 +65,12 @@ define([
 
     genClientUrl: function()
     {
-      return '/behaviorObsCardCountReport'
+      return '/minutesForSafetyCardCountReport'
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval')
         + '&sections=' + this.get('sections')
-        + '&superior=' + this.get('superior');
+        + '&owner=' + this.get('owner');
     },
 
     parse: function(report)
@@ -76,10 +81,6 @@ define([
         total: {
           rows: model.prepareTotalRows(totals),
           series: model.prepareTotalSeries()
-        },
-        observer: {
-          categories: this.prepareUserCategories(report.users, totals.observers),
-          series: this.prepareObserverSeries(totals.observers, report.groups)
         }
       };
 
@@ -90,30 +91,25 @@ define([
           return;
         }
 
-        if (metric === 'categories')
+        if (USERS_METRICS[metric])
         {
           attrs[metric] = {
-            rows: model.prepareRows(
-              totals.risky,
-              totals.categories,
-              'categories',
-              report.categories
-            ),
-            series: {}
+            categories: model.prepareUserCategories(report.users, totals[metric]),
+            series: model.prepareOwnerSeries(totals[metric], report.groups)
           };
+
+          return;
         }
-        else
-        {
-          attrs[metric] = {
-            rows: model.prepareRows(
-              totals[metric.replace('BySection', '')],
-              totals[metric],
-              'sections',
-              report.sections
-            ),
-            series: {}
-          };
-        }
+
+        attrs[metric] = {
+          rows: model.prepareRows(
+            totals[metric.replace('BySection', '')],
+            totals[metric],
+            'sections',
+            report.sections
+          ),
+          series: {}
+        };
       });
 
       _.forEach(report.groups, function(group)
@@ -135,7 +131,7 @@ define([
 
         var totalSeries = attrs.total.series;
 
-        totalSeries.behaviorObsCard.data.push({x: x, y: group.count || null});
+        totalSeries.minutesForSafetyCard.data.push({x: x, y: group.count || null});
 
         _.forEach(TABLE_AND_CHART_METRICS, function(metric)
         {
@@ -150,10 +146,10 @@ define([
     {
       return [
         {
-          id: 'behaviorObsCard',
+          id: 'minutesForSafetyCard',
           abs: totals.count,
           rel: 1,
-          color: COLOR_BEHAVIOR_OBS_CARD
+          color: COLOR_MINUTES_FOR_SAFETY_CARD
         }
       ];
     },
@@ -161,9 +157,9 @@ define([
     prepareTotalSeries: function()
     {
       return {
-        behaviorObsCard: {
+        minutesForSafetyCard: {
           data: [],
-          color: COLOR_BEHAVIOR_OBS_CARD
+          color: COLOR_MINUTES_FOR_SAFETY_CARD
         }
       };
     },
@@ -175,7 +171,7 @@ define([
         abs: 0,
         rel: 1,
         color: '#DDD',
-        label: t('behaviorObsCards', 'report:series:total')
+        label: t('minutesForSafetyCards', 'report:series:total')
       };
       var rows = values.map(function(value)
       {
@@ -185,7 +181,7 @@ define([
           id: value[0],
           abs: value[1],
           rel: value[1] / totalCount,
-          color: colorFactory.getColor('behaviorObsCards/count/' + type, value[0]),
+          color: colorFactory.getColor('minutesForSafetyCards/count/' + type, value[0]),
           label: labels[value[0]]
         };
       });
@@ -227,14 +223,14 @@ define([
       });
     },
 
-    prepareObserverSeries: function(observerTotals)
+    prepareOwnerSeries: function(observerTotals)
     {
       var series = [
         {
-          id: 'behaviorObsCards',
-          name: t.bound('behaviorObsCards', 'report:series:card'),
+          id: 'minutesForSafetyCards',
+          name: t.bound('minutesForSafetyCards', 'report:series:card'),
           data: [],
-          color: COLOR_BEHAVIOR_OBS_CARD
+          color: COLOR_MINUTES_FOR_SAFETY_CARD
         }
       ];
 
@@ -249,6 +245,7 @@ define([
   }, {
 
     TABLE_AND_CHART_METRICS: TABLE_AND_CHART_METRICS,
+    USERS_METRICS: USERS_METRICS,
 
     fromQuery: function(query)
     {
@@ -262,7 +259,7 @@ define([
         to: +query.to || undefined,
         interval: query.interval || undefined,
         sections: _.isEmpty(query.sections) ? [] : query.sections.split(','),
-        superior: query.superior || ''
+        owner: query.owner || ''
       });
     }
 

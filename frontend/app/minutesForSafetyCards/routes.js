@@ -20,6 +20,24 @@ define([
   var nls = 'i18n!app/nls/minutesForSafetyCards';
   var canAccess = user.auth();
 
+  router.map('/minutesForSafetyCardCountReport', canAccess, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/minutesForSafetyCards/MinutesForSafetyCardCountReport',
+        'app/minutesForSafetyCards/pages/MinutesForSafetyCardCountReportPage',
+        'i18n!app/nls/reports',
+        nls
+      ],
+      function(MinutesForSafetyCardCountReport, MinutesForSafetyCardCountReportPage)
+      {
+        return new MinutesForSafetyCardCountReportPage({
+          model: MinutesForSafetyCardCountReport.fromQuery(req.query)
+        });
+      }
+    );
+  });
+
   router.map('/minutesForSafetyCards', canAccess, function(req)
   {
     viewport.loadPage(
