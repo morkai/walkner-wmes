@@ -223,7 +223,12 @@ app/minutesForSafetyCards/assets/main.css
 app/minutesForSafetyCards/assets/./list.css
 app/minutesForSafetyCards/assets/./form.css
 app/minutesForSafetyCards/assets/./details.css
+app/minutesForSafetyCards/assets/./report.css
 app/minutesForSafetyCards/assets/main.css
+
+app/minutesForSafetyCards/assets/report.css
+----------------
+app/minutesForSafetyCards/assets/report.css
 
 app/mor/assets/main.css
 ----------------
