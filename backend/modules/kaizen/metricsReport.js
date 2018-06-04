@@ -68,22 +68,7 @@ module.exports = function(mongoose, options, done)
         }
       });
 
-      Object.keys(results.bySection).forEach(sectionId =>
-      {
-        const sectionGroup = results.bySection[sectionId];
-
-        finalizeGroup(sectionGroup);
-
-        totals.fte.avg += sectionGroup.fte.avg;
-
-        companyIds.forEach(companyId =>
-        {
-          if (sectionGroup.fteByCompany[companyId])
-          {
-            totals.fteByCompany[companyId].avg += sectionGroup.fteByCompany[companyId].avg;
-          }
-        });
-      });
+      _.forEach(results.bySection, finalizeGroup);
 
       finalizeGroup(totals);
 
@@ -186,16 +171,7 @@ module.exports = function(mongoose, options, done)
   function finalizeFte(fte)
   {
     fte.days = fte.days.size;
-
-    if (fte.avg === -1)
-    {
-      fte.avg = fte.days > 0 ? util.round(fte.total / fte.days) : 0;
-    }
-    else
-    {
-      fte.avg = util.round(fte.avg);
-    }
-
+    fte.avg = fte.days > 0 ? util.round(fte.total / fte.days) : 0;
     fte.total = util.round(fte.total);
   }
 
