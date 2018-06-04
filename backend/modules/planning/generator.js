@@ -47,7 +47,7 @@ module.exports = function setUpGenerator(app, module)
   }
 
   const DEV = app.options.env === 'development';
-  const UNFROZEN_PLANS = DEV ? ['2018-05-04'] : [];
+  const UNFROZEN_PLANS = DEV ? [] : [];
   const LOG_LINES = {};
   const LOG = DEV;
   const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
@@ -848,11 +848,13 @@ module.exports = function setUpGenerator(app, module)
 
       mrpSettings.groups.forEach(group =>
       {
-        if (group.components.find(nc12 => sapOrder.bom.has(nc12)))
+        if (!group.components.length || group.components.find(nc12 => sapOrder.bom.has(nc12)))
         {
           orderGroups.push(group);
         }
       });
+
+      orderGroups.sort((a, b) => b.components.length - a.components.length);
     }
 
     return planOrder;
@@ -1891,13 +1893,18 @@ module.exports = function setUpGenerator(app, module)
   {
     lineState.triedOrdersSet.add(orderState.order._id);
 
-    if (!orderState.group)
+    if (orderState.group)
+    {
+      if (!orderState.group.lines.includes(lineState._id))
+      {
+        return null;
+      }
+    }
+    else
     {
       const orderGroups = state.grouping.orderToGroups.get(orderState.order._id);
 
-      orderState.group = orderGroups.find(
-        group => group.lines.includes(lineState._id)
-      );
+      orderState.group = orderGroups.find(group => group.lines.includes(lineState._id)) || null;
 
       if (orderGroups.length && !orderState.group)
       {
@@ -2292,6 +2299,12 @@ module.exports = function setUpGenerator(app, module)
       }
 
       candidate = bestCandidate;
+
+      // Reset the assigned groups, so the orders can be picked up by other lines
+      for (let i = 1; i < candidates.length; ++i)
+      {
+        candidates[i].orderState.group = null;
+      }
     }
 
     mergeOrderCandidate(state, lineState, candidate);
@@ -2610,13 +2623,6 @@ module.exports = function setUpGenerator(app, module)
   {
     const {order} = orderState;
     let {splitOrderQuantity, maxSplitLineCount} = state.settings.mrp(order.mrp);
-
-    if (!orderState.group)
-    {
-      orderState.group = state.grouping.orderToGroups.get(order._id).find(
-        group => group.lines.includes(lineState._id)
-      );
-    }
 
     if (orderState.group)
     {
@@ -2942,6 +2948,7 @@ module.exports = function setUpGenerator(app, module)
   {
     log(`        ${order._id}... incomplete=${state.newIncompleteOrders.get(order._id)}`);
 
+    const unplannedGroupedOrderStates = new Set();
     let minPceCount = Number.MAX_SAFE_INTEGER;
 
     lineStates.forEach(lineState =>
@@ -2963,10 +2970,11 @@ module.exports = function setUpGenerator(app, module)
 
         const oldIncompleteQuantity = state.newIncompleteOrders.get(unplannedLineOrder.orderNo) || 0;
         const newIncompleteQuantity = oldIncompleteQuantity + unplannedLineOrder.quantity;
+        const orderToLines = state.orderToLines.get(unplannedLineOrder.orderNo);
 
         state.newIncompleteOrders.set(unplannedLineOrder.orderNo, newIncompleteQuantity);
 
-        state.orderToLines.get(unplannedLineOrder.orderNo).delete(lineState);
+        orderToLines.delete(lineState);
 
         const unplannedOrderState = state.orderStates.get(unplannedLineOrder.orderNo);
 
@@ -2974,6 +2982,11 @@ module.exports = function setUpGenerator(app, module)
         unplannedOrderState.quantityTodo = newIncompleteQuantity;
 
         removeFirstItem(unplannedOrderState.startTimes, unplannedLineOrder.startAt.getTime());
+
+        if (unplannedOrderState.group)
+        {
+          unplannedGroupedOrderStates.add(unplannedOrderState);
+        }
 
         log(`                       removed: ${unplannedLineOrder.orderNo}`);
       });
@@ -3010,6 +3023,15 @@ module.exports = function setUpGenerator(app, module)
         plannedOrderIndex,
         maxPceCount
       };
+    });
+
+    unplannedGroupedOrderStates.forEach(orderState =>
+    {
+      if (state.orderToLines.get(orderState.order._id).size === 0)
+      {
+        orderState.maxQuantityPerLine = 0;
+        orderState.group = null;
+      }
     });
 
     lineStates.sort((a, b) => a.resize.maxPceCount - b.resize.maxPceCount);
