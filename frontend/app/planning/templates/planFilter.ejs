@@ -36,12 +36,15 @@
   <div class="form-group">
     <table class="planning-mrp-stats">
       <tbody>
-      <% ['manHours', 'quantity'].forEach(function(group) { %>
+      <% ['manHours', 'quantity'].forEach(function(group, i) { %>
       <tr class="planning-mrp-stats-bd">
         <th><%- t('planning', 'filter:stats:' + group) %></th>
         <% ['todo', 'late', 'plan', 'remaining'].forEach(function(subgroup) { %>
         <td data-group="<%- group %>" data-subgroup="<%- subgroup %>" title="<%- t('planning', 'filter:stats:tooltip:' + subgroup) %>">0</td>
         <% }) %>
+        <% if (i === 0) { %>
+        <td rowspan="2" data-group="execution" data-subgroup="percent" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent') %>">0%</td>
+        <% } %>
       </tr>
       <% }) %>
       </tbody>

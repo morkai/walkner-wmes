@@ -55,6 +55,7 @@
   "toolbar:stats:tooltip:late": "Suma wszystkich\nopóźnionych zleceń\nw MRP",
   "toolbar:stats:tooltip:plan": "Suma wszystkich zleceń\nrozplanowanych na liniach\nw MRP",
   "toolbar:stats:tooltip:remaining": "Suma do zrobienia\nw MRP",
+  "toolbar:stats:tooltip:execution:percent": "Procent realizacji\nzaplanowanej sekwencji",
 
   "print:workerCount": "{count} {count, plural, one{osoba} few{osoby} other{osób}}",
   "print:workerCounts": "{from}-{to} {to, plural, one{osoba} few{osoby} other{osób}}",

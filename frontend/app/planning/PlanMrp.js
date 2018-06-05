@@ -4,12 +4,14 @@ define([
   '../core/Model',
   '../data/orgUnits',
   './PlanOrderCollection',
-  './PlanLineCollection'
+  './PlanLineCollection',
+  './util/shift'
 ], function(
   Model,
   orgUnits,
   PlanOrderCollection,
-  PlanLineCollection
+  PlanLineCollection,
+  shiftUtil
 ) {
   'use strict';
 
@@ -70,6 +72,11 @@ define([
           late: 0,
           plan: 0,
           remaining: 0
+        },
+        execution: {
+          plan: 0,
+          done: 0,
+          percent: 0
         }
       };
 
@@ -80,7 +87,22 @@ define([
           stats.manHours.plan += shift.manHours;
           stats.quantity.plan += shift.quantity;
         });
+
+        line.orders.forEach(function(lineOrder)
+        {
+          var startAt = Date.parse(lineOrder.get('startAt'));
+          var shiftNo = shiftUtil.getShiftNo(startAt);
+          var quantityDone = plan.shiftOrders.getTotalQuantityDone(line.id, shiftNo, lineOrder.get('orderNo'));
+          var quantityTodo = lineOrder.get('quantity');
+
+          stats.execution.plan += 1;
+          stats.execution.done += quantityDone >= quantityTodo ? 1 : 0;
+        });
       });
+
+      stats.execution.percent = stats.execution.plan
+        ? Math.round(stats.execution.done / stats.execution.plan * 100)
+        : 100;
 
       if (plan)
       {

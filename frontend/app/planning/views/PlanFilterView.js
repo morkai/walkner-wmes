@@ -140,6 +140,11 @@ define([
           late: 0,
           plan: 0,
           remaining: 0
+        },
+        execution: {
+          plan: 0,
+          done: 0,
+          percent: 0
         }
       };
 
@@ -147,6 +152,14 @@ define([
       {
         $(this).find('td').each(function()
         {
+          if (this.dataset.plan)
+          {
+            stats.execution.plan += parseInt(this.dataset.plan, 10);
+            stats.execution.done += parseInt(this.dataset.done, 10);
+
+            return;
+          }
+
           var value = this.dataset.value;
 
           if (value > 0)
@@ -155,6 +168,10 @@ define([
           }
         });
       });
+
+      stats.execution.percent = stats.execution.plan
+        ? Math.round(stats.execution.done / stats.execution.plan * 100)
+        : 0;
 
       this.$('.planning-mrp-stats-bd td').each(function()
       {
