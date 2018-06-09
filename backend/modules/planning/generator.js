@@ -303,6 +303,11 @@ module.exports = function setUpGenerator(app, module)
 
   function generateNextPlan()
   {
+    if (generatorState)
+    {
+      return;
+    }
+
     const planKey = generatorQueue.sort((a, b) => a.localeCompare(b)).shift();
 
     if (!planKey)
@@ -351,7 +356,12 @@ module.exports = function setUpGenerator(app, module)
 
           generatorState = null;
 
-          setImmediate(generateNextPlan);
+          if (generatorTimer !== null)
+          {
+            clearTimeout(generatorTimer);
+          }
+
+          generatorTimer = setTimeout(generateNextPlan, 1);
         }
       );
     });
