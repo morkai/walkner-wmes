@@ -8,6 +8,11 @@ const parseSapNumber = require('../../sap/util/parseSapNumber');
 
 module.exports = function parseOperations(input, orders, missingOrders, importTs)
 {
+  if (!input.trim().endsWith('----------'))
+  {
+    return;
+  }
+
   function parseStdValue(input)
   {
     return input === '' || input === '0' ? 0 : parseSapNumber(input);

@@ -9,6 +9,11 @@ const parseSapDate = require('../../sap/util/parseSapDate');
 
 module.exports = function parseOrders(input, orders, importTs)
 {
+  if (!input.trim().endsWith('----------'))
+  {
+    return;
+  }
+
   return parseSapTextTable(input, {
     columnMatchers: {
       no: /^Order$/,
