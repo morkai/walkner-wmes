@@ -4,7 +4,7 @@
   </div>
   <div class="paintShop-paintPicker-paints">
     <% paints.forEach(function(paint) { %>
-    <button class="btn btn-default paintShop-paintPicker-paint" type="button" value="<%- paint.nc12 %>">
+    <button class="btn btn-<%- paint.className %> paintShop-paintPicker-paint" type="button" value="<%- paint.nc12 %>">
       <span class="paintShop-paintPicker-nc12"><%- paint.nc12 %></span>
       <span class="paintShop-paintPicker-name"><%= paint.name %></span>
       <% if (paint.dropped) { %>

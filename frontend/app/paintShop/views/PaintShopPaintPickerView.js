@@ -89,11 +89,13 @@ define([
         }
 
         var paint = orders.paints.get(nc12);
+        var totals = orders.totalQuantities[nc12];
 
         paints.push({
           nc12: nc12,
           name: paint ? paint.get('name') : '',
-          dropped: dropZones.getState(nc12)
+          dropped: dropZones.getState(nc12),
+          className: !totals || (totals.new + totals.started + totals.partial) === 0 ? 'success' : 'default'
         });
       });
 
