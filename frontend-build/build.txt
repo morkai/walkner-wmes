@@ -198,6 +198,10 @@ app/kaizenOrders/assets/report.css
 ----------------
 app/kaizenOrders/assets/report.css
 
+app/kanban/assets/main.css
+----------------
+app/kanban/assets/main.css
+
 app/licenses/assets/main.css
 ----------------
 app/licenses/assets/main.css
@@ -345,6 +349,7 @@ app/paintShop/assets/./list.css
 app/paintShop/assets/./orderDetails.css
 app/paintShop/assets/./orderChanges.css
 app/paintShop/assets/./datePicker.css
+app/paintShop/assets/./paintPicker.css
 app/paintShop/assets/./tabs.css
 app/paintShop/assets/./load.css
 app/paintShop/assets/./settings.css
@@ -357,6 +362,10 @@ app/paintShop/assets/orderChanges.css
 app/paintShop/assets/orderDetails.css
 ----------------
 app/paintShop/assets/orderDetails.css
+
+app/paintShop/assets/paintPicker.css
+----------------
+app/paintShop/assets/paintPicker.css
 
 app/paintShop/assets/queue.css
 ----------------
@@ -746,6 +755,7 @@ assets/../app/d8Entries/assets/main.css
 assets/../app/mor/assets/main.css
 assets/../app/planning/assets/main.css
 assets/../app/sapLaborTimeFixer/assets/main.css
+assets/../app/kanban/assets/main.css
 assets/wmes-main.css
 
 assets/wmes-mrl.css
@@ -785,23 +795,16 @@ assets/../vendor/font-awesome/css/font-awesome.css
 assets/../app/core/assets/main.css
 assets/../app/updater/assets/main.css
 assets/../app/paintShop/assets/main.css
+assets/../app/production/assets/vkb.css
 assets/wmes-ps-queue.css
 
 vendor/bootstrap/css/bootstrap-theme.css
 ----------------
 vendor/bootstrap/css/bootstrap-theme.css
 
-vendor/bootstrap/css/bootstrap-theme.min.css
-----------------
-vendor/bootstrap/css/bootstrap-theme.min.css
-
 vendor/bootstrap/css/bootstrap.css
 ----------------
 vendor/bootstrap/css/bootstrap.css
-
-vendor/bootstrap/css/bootstrap.min.css
-----------------
-vendor/bootstrap/css/bootstrap.min.css
 
 vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css
 ----------------
@@ -1294,6 +1297,8 @@ app/paintShop/PaintShopOrder.js
 app/paintShop/PaintShopOrderCollection.js
 app/paintShop/PaintShopDropZone.js
 app/paintShop/PaintShopDropZoneCollection.js
+app/paintShop/PaintShopSetting.js
+app/paintShop/PaintShopSettingCollection.js
 app/paintShop/PaintShopEvent.js
 app/paintShop/PaintShopEventCollection.js
 app/paintShop/templates/orderDetails.js
@@ -1307,6 +1312,8 @@ app/paintShop/templates/list.js
 app/paintShop/views/PaintShopListView.js
 app/paintShop/templates/datePicker.js
 app/paintShop/views/PaintShopDatePickerView.js
+app/paintShop/templates/paintPicker.js
+app/paintShop/views/PaintShopPaintPickerView.js
 app/paintShop/templates/page.js
 app/paintShop/templates/mrpTabs.js
 app/paintShop/templates/totals.js
@@ -1457,6 +1464,7 @@ app/nls/printers.js
 app/nls/pl/printers.js
 i18n!app/nls/printers
 app/printers/routes.js
+app/kanban/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
@@ -2117,6 +2125,10 @@ app/paintShop/PaintShopOrder.js
 app/paintShop/PaintShopOrderCollection.js
 app/paintShop/PaintShopDropZone.js
 app/paintShop/PaintShopDropZoneCollection.js
+app/settings/Setting.js
+app/settings/SettingCollection.js
+app/paintShop/PaintShopSetting.js
+app/paintShop/PaintShopSettingCollection.js
 app/core/templates/userInfo.js
 app/paintShop/PaintShopEvent.js
 app/paintShop/PaintShopEventCollection.js
@@ -2131,6 +2143,8 @@ app/paintShop/templates/list.js
 app/paintShop/views/PaintShopListView.js
 app/paintShop/templates/datePicker.js
 app/paintShop/views/PaintShopDatePickerView.js
+app/paintShop/templates/paintPicker.js
+app/paintShop/views/PaintShopPaintPickerView.js
 app/paintShop/templates/page.js
 app/paintShop/templates/mrpTabs.js
 app/paintShop/templates/totals.js
