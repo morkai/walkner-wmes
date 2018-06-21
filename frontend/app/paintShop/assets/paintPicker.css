@@ -19,6 +19,7 @@
   border: 1px solid #ccc;
 }
 .paintShop-paintPicker-paint {
+  position: relative;
   display: block;
   width: 100%;
   border-top: 0;
@@ -47,4 +48,10 @@
   flex: 1 1 auto;
   width: 33%;
   font-size: 32px;
+}
+.paintShop-paintPicker-paint .fa-level-down {
+  position: absolute;
+  top: 3px;
+  right: 10px;
+  font-size: 48px;
 }

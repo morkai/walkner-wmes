@@ -66,7 +66,8 @@ define([
 
     getTemplateData: function()
     {
-      var orders = this.model;
+      var orders = this.orders;
+      var dropZones = this.dropZones;
       var nc12s = {};
       var paints = [];
 
@@ -78,13 +79,21 @@ define([
         });
       });
 
+      var mspPaints = orders.settings.getValue('mspPaints') || [];
+
       Object.keys(nc12s).forEach(function(nc12)
       {
+        if (mspPaints.indexOf(nc12) !== -1)
+        {
+          return;
+        }
+
         var paint = orders.paints.get(nc12);
 
         paints.push({
           nc12: nc12,
-          name: paint ? paint.get('name') : ''
+          name: paint ? paint.get('name') : '',
+          dropped: dropZones.getState(nc12)
         });
       });
 
@@ -94,13 +103,14 @@ define([
       });
 
       return {
-        paints: paints
+        paints: paints,
+        mspDropped: dropZones.getState('msp')
       };
     },
 
     afterRender: function()
     {
-      var $paint = this.$('.paintShop-paintPicker-paint[value="' + this.model.selectedPaint + '"]');
+      var $paint = this.$('.paintShop-paintPicker-paint[value="' + this.orders.selectedPaint + '"]');
 
       if (!$paint.length)
       {

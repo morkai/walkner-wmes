@@ -250,6 +250,15 @@ define([
         }
       );
 
+      if (user.isAllowedTo('PAINT_SHOP:DROP_ZONES') && this.orders.selectedPaint !== 'all')
+      {
+        menu.push({
+          icon: 'fa-level-down',
+          label: t('paintShop', 'menu:dropZone:' + this.dropZones.getState(this.orders.selectedPaint)),
+          handler: this.trigger.bind(this, 'actionRequested', 'dropZone', this.orders.selectedPaint, true)
+        });
+      }
+
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },
 

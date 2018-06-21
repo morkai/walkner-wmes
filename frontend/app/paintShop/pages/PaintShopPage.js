@@ -193,10 +193,7 @@ define([
       },
       'contextmenu .paintShop-tab': function(e)
       {
-        if (!e.currentTarget.dataset.paint)
-        {
-          this.showMrpMenu(e);
-        }
+        this.showMrpMenu(e);
 
         return false;
       },
@@ -403,7 +400,10 @@ define([
         renderTotals: totalsTemplate,
         tabs: this.serializeTabs(),
         totals: this.serializeTotals(),
-        selectedPaint: this.getSelectedPaintLabel()
+        selectedPaint: {
+          label: this.getSelectedPaintLabel(),
+          dropped: this.isSelectedPaintDropped()
+        }
       };
     },
 
@@ -577,13 +577,24 @@ define([
         }
       ];
 
-      if (mrp && user.isAllowedTo('PAINT_SHOP:DROP_ZONES'))
+      if (user.isAllowedTo('PAINT_SHOP:DROP_ZONES'))
       {
-        menu.push({
-          icon: 'fa-level-down',
-          label: t('paintShop', 'menu:dropZone:' + this.dropZones.getState(mrp)),
-          handler: this.handleDropZoneAction.bind(this, mrp)
-        });
+        if (mrp)
+        {
+          menu.push({
+            icon: 'fa-level-down',
+            label: t('paintShop', 'menu:dropZone:' + this.dropZones.getState(mrp)),
+            handler: this.handleDropZoneAction.bind(this, mrp)
+          });
+        }
+        else if (this.orders.selectedPaint !== 'all')
+        {
+          menu.push({
+            icon: 'fa-level-down',
+            label: t('paintShop', 'menu:dropZone:' + this.dropZones.getState(this.orders.selectedPaint)),
+            handler: this.handleDropZoneAction.bind(this, this.orders.selectedPaint, true)
+          });
+        }
       }
 
       contextMenu.show(this, e.pageY, e.pageX, menu);
@@ -713,11 +724,23 @@ define([
         + (mrp ? ('&mrp=' + mrp) : '');
     },
 
-    handleDropZoneAction: function(mrp)
+    handleDropZoneAction: function(mrp, isPaint)
     {
       var view = this;
-      var $tab = view.$('.paintShop-tab[data-mrp="' + mrp + '"]').addClass('is-loading');
-      var $icon = $tab.find('.fa').removeClass('fa-level-down').addClass('fa-spinner fa-spin');
+      var $tab;
+      var $icon;
+
+      if (isPaint)
+      {
+        $tab = view.$('.paintShop-tab-paint');
+        $icon = $tab.find('.fa-paint-brush').first().removeClass('fa-paint-brush').addClass('fa-spinner fa-spin');
+      }
+      else
+      {
+        $tab = view.$('.paintShop-tab[data-mrp="' + mrp + '"]').addClass('is-loading');
+        $icon = $tab.find('.fa').removeClass('fa-level-down').addClass('fa-spinner fa-spin');
+      }
+
       var req = view.promised(view.dropZones.toggle(mrp));
 
       req.fail(function()
@@ -738,7 +761,7 @@ define([
 
       req.always(function()
       {
-        $icon.removeClass('fa-spinner fa-spin').addClass('fa-level-down');
+        $icon.removeClass('fa-spinner fa-spin').addClass(isPaint ? 'fa-paint-brush' : 'fa-level-down');
         $tab.removeClass('is-loading');
       });
 
@@ -756,6 +779,11 @@ define([
       var paint = this.orders.selectedPaint;
 
       return t.has('paintShop', 'tabs:paint:' + paint) ? t('paintShop', 'tabs:paint:' + paint) : paint;
+    },
+
+    isSelectedPaintDropped: function()
+    {
+      return this.dropZones.getState(this.orders.selectedPaint);
     },
 
     serializePrintPages: function(orders)
@@ -1029,7 +1057,11 @@ define([
     {
       this.updateUrl();
       this.renderTotals();
-      this.$id('selectedPaint').text(this.getSelectedPaintLabel());
+
+      this.$id('selectedPaint')
+        .toggleClass('is-dropped', this.isSelectedPaintDropped())
+        .find('span')
+        .text(this.getSelectedPaintLabel());
     },
 
     onDropZoneUpdated: function(dropZone)
@@ -1102,7 +1134,8 @@ define([
     showPaintPickerDialog: function()
     {
       var dialogView = new PaintShopPaintPickerView({
-        model: this.orders,
+        orders: this.orders,
+        dropZones: this.dropZones,
         vkb: this.vkbView
       });
 

@@ -7,12 +7,17 @@
     <button class="btn btn-default paintShop-paintPicker-paint" type="button" value="<%- paint.nc12 %>">
       <span class="paintShop-paintPicker-nc12"><%- paint.nc12 %></span>
       <span class="paintShop-paintPicker-name"><%= paint.name %></span>
+      <% if (paint.dropped) { %>
+      <i class="fa fa-level-down"></i>
+      <% } %>
     </button>
     <% }) %>
   </div>
   <div class="paintShop-paintPicker-buttons">
     <button id="<%- idPrefix %>-select" class="btn btn-primary" type="button"><%- t('paintShop', 'paintPicker:select') %></button>
-    <button id="<%- idPrefix %>-msp" class="btn btn-warning" type="button"><%- t('paintShop', 'paintPicker:msp') %></button>
+    <button id="<%- idPrefix %>-msp" class="btn btn-warning" type="button">
+      <span><%- t('paintShop', 'paintPicker:msp') %></span><%- mspDropped ? ' <i class="fa fa-level-down"></i>' : '' %>
+    </button>
     <button id="<%- idPrefix %>-all" class="btn btn-danger" type="button"><%- t('paintShop', 'paintPicker:all') %></button>
   </div>
 </form>

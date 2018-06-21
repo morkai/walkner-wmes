@@ -6,9 +6,11 @@
   <div class="paintShop-center">
     <div id="<%- idPrefix %>-queue" class="paintShop-queue-container is-scrollable"></div>
     <div class="paintShop-tabs-container">
-      <div class="paintShop-tab paintShop-tab-paint">
+      <div id="<%- idPrefix %>-selectedPaint" class="paintShop-tab paintShop-tab-paint <%- selectedPaint.dropped ? 'is-dropped' : '' %>">
         <div class="paintShop-tab-paint-inner">
-          <i class="fa fa-paint-brush"></i><span id="<%- idPrefix %>-selectedPaint"><%= selectedPaint %></span>
+          <i class="fa fa-paint-brush"></i>
+          <span><%= selectedPaint.label %></span>
+          <i class="fa fa-level-down"></i>
         </div>
       </div>
       <div id="<%- idPrefix %>-tabs" class="paintShop-tabs">

@@ -30,18 +30,18 @@
   background: #333;
   color: #fff;
 }
-.paintShop-tab[data-mrp] > .fa {
+.paintShop-tab .fa-level-down {
   display: none;
 }
-.paintShop-tab.is-dropped > .fa {
+.paintShop-tab.is-dropped .fa-level-down {
   display: inline-block;
 }
-.paintShop-tab.is-loading > .fa {
+.paintShop-tab.is-loading .fa-spinner {
   font-size: 24px;
 }
 .paintShop-tab-paint {
   padding: 0;
-  min-width: 260px;
+  min-width: 270px;
   height: 67px;
   text-align: left;
   border-top: 1px solid #333;
@@ -49,7 +49,15 @@
   border-right-style: dotted;
 }
 .paintShop-tab-paint-inner {
+  display: flex;
+  align-items: baseline;
   padding: 0 10px;
   height: 49px;
   border-bottom: 1px solid #333;
+}
+.paintShop-tab-paint-inner > .fa {
+  flex: 0 0 auto;
+}
+.paintShop-tab-paint-inner > span {
+  flex: 1 1 auto;
 }
