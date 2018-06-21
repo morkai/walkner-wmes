@@ -5,8 +5,15 @@
   </div>
   <div class="paintShop-center">
     <div id="<%- idPrefix %>-queue" class="paintShop-queue-container is-scrollable"></div>
-    <div id="<%- idPrefix %>-tabs" class="paintShop-tabs">
-      <%- renderTabs({tabs: tabs}) %>
+    <div class="paintShop-tabs-container">
+      <div class="paintShop-tab paintShop-tab-paint">
+        <div class="paintShop-tab-paint-inner">
+          <i class="fa fa-paint-brush"></i><span id="<%- idPrefix %>-selectedPaint"><%= selectedPaint %></span>
+        </div>
+      </div>
+      <div id="<%- idPrefix %>-tabs" class="paintShop-tabs">
+        <%- renderTabs({tabs: tabs}) %>
+      </div>
     </div>
   </div>
   <div class="paintShop-right">

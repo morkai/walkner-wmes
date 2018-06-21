@@ -3,6 +3,7 @@
 @import "./orderDetails.css";
 @import "./orderChanges.css";
 @import "./datePicker.css";
+@import "./paintPicker.css";
 @import "./tabs.css";
 @import "./load.css";
 @import "./settings.css";
@@ -80,8 +81,12 @@
   flex: 1 1 auto;
   overflow-y: scroll;
 }
-.paintShop-tabs {
+.paintShop-tabs-container {
+  display: flex;
   flex: 0 0 auto;
+}
+.paintShop-tabs {
+  flex: 1 1 auto;
 }
 .paintShop-search {
   flex: 0 0 auto;

@@ -51,9 +51,9 @@ define([
       if (!force
         && order.collection
         && order.collection.serializedMap
-        && order.collection.serializedMap[this.id])
+        && order.collection.serializedMap[order.id])
       {
-        return order.collection.serializedMap[this.id];
+        return order.collection.serializedMap[order.id];
       }
 
       if (!paints && order.collection && order.collection.paints)
@@ -67,6 +67,7 @@ define([
 
       obj.rowSpan = childOrderCount + 1;
       obj.rowSpanDetails = obj.rowSpan;
+      obj.paints = {};
 
       obj.childOrders = obj.childOrders.map(function(childOrder, i)
       {
@@ -81,7 +82,17 @@ define([
             return;
           }
 
-          obj.paintCount += component.unit === 'G' || component === 'KG' ? 1 : 0;
+          if (component.unit === 'G' || component.unit === 'KG')
+          {
+            obj.paintCount += 1;
+
+            if (!obj.paints[component.nc12])
+            {
+              obj.paints[component.nc12] = 0;
+            }
+
+            obj.paints[component.nc12] += childOrder.qty;
+          }
 
           var paint = paints ? paints.get(component.nc12) : null;
 

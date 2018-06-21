@@ -59,7 +59,7 @@ define([
 
       this.listenTo(this.model, 'reset', _.after(2, this.render));
       this.listenTo(this.model, 'change', this.onChange);
-      this.listenTo(this.model, 'mrpSelected', this.onMrpSelected);
+      this.listenTo(this.model, 'mrpSelected paintSelected', this.toggleVisibility);
     },
 
     serialize: function()
@@ -67,7 +67,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         showTimes: this.options.showTimes,
-        selectedMrp: this.model.selectedMrp,
+        isVisible: this.model.isVisible.bind(this.model),
         orders: this.serializeOrders()
       };
     },
@@ -168,17 +168,17 @@ define([
       this.render();
     },
 
-    onMrpSelected: function()
+    toggleVisibility: function()
     {
-      var selectedMrp = this.model.selectedMrp;
-      var specificMrp = selectedMrp !== 'all';
+      var orders = this.model;
 
       this.$('.paintShop-list-item').each(function()
       {
-        var hidden = specificMrp && this.dataset.mrp !== selectedMrp;
-
         if (this.nextElementSibling)
         {
+          var orderData = orders.get(this.dataset.orderId).serialize();
+          var hidden = !orders.isVisible(orderData);
+
           this.classList.toggle('hidden', hidden);
           this.classList.toggle('visible', !hidden);
         }

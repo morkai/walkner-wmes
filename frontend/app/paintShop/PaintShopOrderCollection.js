@@ -17,6 +17,17 @@ define([
 ) {
   'use strict';
 
+  function createEmptyTotals()
+  {
+    return {
+      new: 0,
+      started: 0,
+      partial: 0,
+      finished: 0,
+      cancelled: 0
+    };
+  }
+
   return Collection.extend({
 
     model: PaintShopOrder,
@@ -25,8 +36,10 @@ define([
 
     initialize: function(models, options)
     {
+      this.settings = options ? options.settings : null;
       this.paints = options ? options.paints : null;
       this.selectedMrp = options && options.selectedMrp ? options.selectedMrp : 'all';
+      this.selectedPaint = options && options.selectedPaint ? options.selectedPaint : 'all';
 
       this.allMrps = null;
       this.serializedList = null;
@@ -99,9 +112,56 @@ define([
       this.trigger('mrpSelected');
     },
 
-    isVisible: function(order)
+    selectPaint: function(newSelectedPaint)
     {
-      return this.selectedMrp === 'all' || order.get('mrp') === this.selectedMrp;
+      if (newSelectedPaint === this.selectedPaint)
+      {
+        return;
+      }
+
+      this.selectedPaint = this.selectedPaint === newSelectedPaint ? 'all' : newSelectedPaint;
+
+      this.trigger('paintSelected');
+    },
+
+    isVisible: function(serializedOrder)
+    {
+      return this.isMrpVisible(serializedOrder) && this.isPaintVisible(serializedOrder);
+    },
+
+    isMrpVisible: function(serializedOrder)
+    {
+      return this.selectedMrp === 'all' || serializedOrder.mrp === this.selectedMrp;
+    },
+
+    isPaintVisible: function(serializedOrder)
+    {
+      if (this.selectedPaint === 'all')
+      {
+        return true;
+      }
+
+      if (this.selectedPaint !== 'msp')
+      {
+        return serializedOrder.paints[this.selectedPaint] > 0;
+      }
+
+      var mspPaints = this.settings.getValue('mspPaints');
+
+      if (!mspPaints && !mspPaints.length)
+      {
+        return false;
+      }
+
+      for (var i = 0; i < mspPaints.length; ++i)
+      {
+        if (serializedOrder.paints[mspPaints[i]] > 0)
+        {
+          return true;
+        }
+      }
+
+      return false;
     },
 
     getFirstByOrderNo: function(orderNo)
@@ -133,13 +193,7 @@ define([
       var serializedMap = {};
       var mrpMap = {};
       var totalQuantities = {
-        all: {
-          new: 0,
-          started: 0,
-          partial: 0,
-          finished: 0,
-          cancelled: 0
-        }
+        all: createEmptyTotals()
       };
 
       orders.forEach(function(order)
@@ -160,19 +214,7 @@ define([
 
         mrpMap[serializedOrder.mrp] = 1;
 
-        if (!totalQuantities[serializedOrder.mrp])
-        {
-          totalQuantities[serializedOrder.mrp] = {
-            new: 0,
-            started: 0,
-            partial: 0,
-            finished: 0,
-            cancelled: 0
-          };
-        }
-
-        totalQuantities.all[serializedOrder.status] += serializedOrder.qtyPaint;
-        totalQuantities[serializedOrder.mrp][serializedOrder.status] += serializedOrder.qtyPaint;
+        orders.recountOrder(totalQuantities, serializedOrder);
       });
 
       orders.serializedList = serializedList;
@@ -188,42 +230,101 @@ define([
       return serializedList;
     },
 
-    recountTotals: function()
+    serializeTotals: function()
     {
-      var totalQuantities = {
-        all: {
-          new: 0,
-          started: 0,
-          partial: 0,
-          finished: 0,
-          cancelled: 0
-        }
-      };
-
-      this.forEach(function(order)
+      if (this.selectedPaint === 'all')
       {
-        var mrp = order.get('mrp');
-        var status = order.get('status');
-        var qtyPaint = order.get('qtyPaint');
+        return this.totalQuantities[this.selectedMrp];
+      }
 
-        if (!totalQuantities[mrp])
+      if (this.selectedPaint === 'msp')
+      {
+        return this.serializeMspTotals();
+      }
+
+      if (this.selectedMrp === 'all')
+      {
+        return this.totalQuantities[this.selectedPaint] || createEmptyTotals();
+      }
+
+      return this.totalQuantities[this.selectedMrp + this.selectedPaint] || createEmptyTotals();
+    },
+
+    serializeMspTotals: function()
+    {
+      var orders = this;
+      var mspTotals = createEmptyTotals();
+      var mspPaints = orders.settings.getValue('mspPaints') || [];
+
+      if (mspPaints.length === 0)
+      {
+        return mspTotals;
+      }
+
+      var mrp = orders.selectedMrp === 'all' ? '' : orders.selectedMrp;
+      var keys = Object.keys(mspTotals);
+
+      mspPaints.forEach(function(paint)
+      {
+        var paintTotals = orders.totalQuantities[mrp + paint];
+
+        if (!paintTotals)
         {
-          totalQuantities[mrp] = {
-            new: 0,
-            started: 0,
-            partial: 0,
-            finished: 0,
-            cancelled: 0
-          };
+          return;
         }
 
-        totalQuantities.all[status] += qtyPaint;
-        totalQuantities[mrp][status] += qtyPaint;
+        keys.forEach(function(k)
+        {
+          mspTotals[k] += paintTotals[k];
+        });
       });
 
-      this.totalQuantities = totalQuantities;
+      return mspTotals;
+    },
+
+    recountTotals: function()
+    {
+      this.totalQuantities = {
+        all: createEmptyTotals()
+      };
+
+      this.serializedList.forEach(this.recountOrder.bind(this, this.totalQuantities));
 
       this.trigger('totalsRecounted');
+    },
+
+    recountOrder: function(totalQuantities, order)
+    {
+      var mrp = order.mrp;
+      var status = order.status;
+      var qtyPaint = order.qtyPaint;
+
+      if (!totalQuantities[mrp])
+      {
+        totalQuantities[mrp] = createEmptyTotals();
+      }
+
+      totalQuantities.all[status] += qtyPaint;
+      totalQuantities[mrp][status] += qtyPaint;
+
+      Object.keys(order.paints).forEach(function(paint)
+      {
+        var qtyPaint = order.paints[paint];
+        var mrpPaint = mrp + paint;
+
+        if (!totalQuantities[paint])
+        {
+          totalQuantities[paint] = createEmptyTotals();
+        }
+
+        if (!totalQuantities[mrpPaint])
+        {
+          totalQuantities[mrpPaint] = createEmptyTotals();
+        }
+
+        totalQuantities[paint][status] += qtyPaint;
+        totalQuantities[mrpPaint][status] += qtyPaint;
+      });
     },
 
     act: function(reqData, done)

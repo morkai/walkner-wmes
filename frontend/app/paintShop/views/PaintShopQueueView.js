@@ -75,7 +75,7 @@ define([
       this.listenTo(this.orders, 'reset', _.after(2, this.render));
       this.listenTo(this.orders, 'change', this.onChange);
       this.listenTo(this.orders, 'focus', this.onFocus);
-      this.listenTo(this.orders, 'mrpSelected', this.onMrpSelected);
+      this.listenTo(this.orders, 'mrpSelected paintSelected', this.toggleVisibility);
     },
 
     serialize: function()
@@ -87,7 +87,7 @@ define([
       {
         order = {
           order: order,
-          visible: collection.selectedMrp === 'all' || order.mrp === collection.selectedMrp,
+          visible: collection.isVisible(order),
           first: false,
           last: false,
           commentVisible: true,
@@ -292,10 +292,11 @@ define([
     onChange: function(order)
     {
       var $order = this.$order(order.id);
+      var orderData = order.serialize();
 
       $order.replaceWith(queueOrderTemplate({
-        order: order.serialize(),
-        visible: this.orders.isVisible(order),
+        order: orderData,
+        visible: this.orders.isVisible(orderData),
         first: $order.hasClass('is-first'),
         last: $order.hasClass('is-last'),
         commentVisible: true,
@@ -324,14 +325,14 @@ define([
       }
     },
 
-    onMrpSelected: function()
+    toggleVisibility: function()
     {
-      var selectedMrp = this.orders.selectedMrp;
-      var specificMrp = selectedMrp !== 'all';
+      var orders = this.orders;
 
       this.$('.paintShop-order').each(function()
       {
-        var hidden = specificMrp && this.dataset.mrp !== selectedMrp;
+        var orderData = orders.get(this.dataset.orderId).serialize();
+        var hidden = !orders.isVisible(orderData);
 
         this.classList.toggle('hidden', hidden);
         this.classList.toggle('visible', !hidden);

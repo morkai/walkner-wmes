@@ -47,6 +47,7 @@ define([
     viewport.showPage(new PaintShopPage({
       date: req.params.date,
       selectedMrp: req.query.mrp,
+      selectedPaint: req.query.paint,
       fullscreen: req.query.fullscreen !== undefined
     }));
   });

@@ -4,12 +4,14 @@ define([
   'app/i18n',
   'app/core/util/bindLoadingMessage',
   'app/core/View',
+  'app/paintShopPaints/PaintShopPaintCollection',
   '../PaintShopSettingCollection',
   '../views/PaintShopSettingsView'
 ], function(
   t,
   bindLoadingMessage,
   View,
+  PaintShopPaintCollection,
   PaintShopSettingCollection,
   PaintShopSettingsView
 ) {
@@ -38,20 +40,28 @@ define([
 
     defineModels: function()
     {
-      this.model = bindLoadingMessage(new PaintShopSettingCollection(null, {pubsub: this.pubsub}), this);
+      this.settings = bindLoadingMessage(new PaintShopSettingCollection(null, {pubsub: this.pubsub}), this);
+
+      this.paints = bindLoadingMessage(new PaintShopPaintCollection(null, {
+        rqlQuery: 'select(name)'
+      }), this);
     },
 
     defineViews: function()
     {
       this.view = new PaintShopSettingsView({
         initialTab: this.options.initialTab,
-        settings: this.model
+        settings: this.settings,
+        paints: this.paints
       });
     },
 
     load: function(when)
     {
-      return when(this.model.fetch({reset: true}));
+      return when(
+        this.settings.fetch({reset: true}),
+        this.paints.fetch({reset: true})
+      );
     }
 
   });

@@ -88,6 +88,7 @@ define([
       SettingsView.prototype.afterRender.apply(this, arguments);
 
       this.setUpWorkCenters();
+      this.setUpMspPaints();
       this.setUpLoadStatuses();
     },
 
@@ -103,6 +104,18 @@ define([
       });
 
       this.updateSettingField(this.settings.get('paintShop.workCenters'));
+    },
+
+    setUpMspPaints: function()
+    {
+      this.$id('planning-mspPaints').select2({
+        width: '100%',
+        allowClear: true,
+        multiple: true,
+        data: this.paints.map(idAndLabel)
+      });
+
+      this.updateSettingField(this.settings.get('paintShop.mspPaints'));
     },
 
     setUpLoadStatuses: function()
@@ -175,6 +188,7 @@ define([
     shouldAutoUpdateSettingField: function(setting)
     {
       return setting.id !== 'paintShop.workCenters'
+        && setting.id !== 'paintShop.mspPaints'
         && setting.id !== 'paintShop.load.statuses';
     },
 
@@ -192,6 +206,17 @@ define([
           return {
             id: workCenter,
             text: workCenter
+          };
+        }));
+      }
+
+      if (setting.id === 'paintShop.mspPaints')
+      {
+        return this.$id('planning-mspPaints').select2('data', setting.getValue().map(function(nc12)
+        {
+          return {
+            id: nc12,
+            text: nc12
           };
         }));
       }

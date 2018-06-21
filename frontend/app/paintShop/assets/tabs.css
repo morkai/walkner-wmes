@@ -1,4 +1,5 @@
 .paintShop-tabs {
+  position: relative;
   display: flex;
   height: 67px;
   background: #fff;
@@ -29,7 +30,7 @@
   background: #333;
   color: #fff;
 }
-.paintShop-tab > .fa {
+.paintShop-tab[data-mrp] > .fa {
   display: none;
 }
 .paintShop-tab.is-dropped > .fa {
@@ -37,4 +38,18 @@
 }
 .paintShop-tab.is-loading > .fa {
   font-size: 24px;
+}
+.paintShop-tab-paint {
+  padding: 0;
+  min-width: 260px;
+  height: 67px;
+  text-align: left;
+  border-top: 1px solid #333;
+  border-bottom: 17px solid #f1f1f1;
+  border-right-style: dotted;
+}
+.paintShop-tab-paint-inner {
+  padding: 0 10px;
+  height: 49px;
+  border-bottom: 1px solid #333;
 }

@@ -26,9 +26,9 @@ define([
 
     prepareValue: function(id, newValue)
     {
-      if (/workCenters$/.test(id))
+      if (/(workCenters|mspPaints)$/.test(id))
       {
-        return newValue.split(',').filter(function(wc) { return wc.length > 0; });
+        return newValue.split(',').filter(function(v) { return v.length > 0; });
       }
 
       if (/load.statuses$/.test(id))
