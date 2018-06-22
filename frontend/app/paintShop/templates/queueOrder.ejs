@@ -5,7 +5,7 @@
       <% order.followups.forEach(function(followup) { %>
       <br>
       <span class="paintShop-order-followup" data-followup-id="<%- followup.id %>">
-        <i class="fa fa-level-<%- order.no < followup.no ? 'down' : 'up' %>"></i>
+        <i class="fa fa-long-arrow-<%- order.no < followup.no ? 'down' : 'up' %>"></i>
         <br>
         <%- followup.no %>
         </span>
@@ -18,8 +18,8 @@
     <td class="paintShop-property" data-property="name"><%- order.name %></td>
     <td class="paintShop-property"></td>
     <td class="paintShop-property" data-property="mrpTimePlacement" rowspan="<%- order[rowSpan] %>">
-      <span class="paintShop-property" data-property="mrp" title="<%- t('paintShop', 'PROPERTY:mrp') %>">
-        <i class="fa fa-filter"></i><span><%- order.mrp %></span>
+      <span class="paintShop-property paintShop-property-mrp <%- mrpDropped ? 'is-dropped' : '' %>" data-property="mrp" data-mrp="<%- order.mrp %>" title="<%- t('paintShop', 'PROPERTY:mrp') %>">
+        <i class="fa fa-filter"></i><span><%- order.mrp %></span><i class="fa fa-level-down"></i>
       </span>
       <% if (order.startTime) { %>
       <span class="paintShop-property" data-property="startTime" title="<%- t('paintShop', 'PROPERTY:startTime') %>">
@@ -60,9 +60,12 @@
       <% } %>
     </td>
   </tr>
-  <% order.childOrders.forEach(function(childOrder) { %>
+  <% order.childOrders.forEach(function(childOrder, i) { %>
   <tr class="paintShop-properties paintShop-order-childOrder <%- childOrder.last ? 'is-last' : '' %>">
-    <td class="paintShop-property" data-property="order" rowspan="<%- childOrder[rowSpan] %>"><%- childOrder.order %></td>
+    <td class="paintShop-property" data-property="order" rowspan="<%- childOrder[rowSpan] %>">
+      <%- childOrder.order %>
+      <span class="paintShop-childOrder-dropZone <%- getChildOrderDropZoneClass(childOrder) %>" data-order-id="<%- order._id %>" data-child-order-index="<%- i %>"><i class="fa fa-level-down"></i></span>
+    </td>
     <td class="paintShop-property" data-property="nc12"><%- childOrder.nc12 %></td>
     <td class="paintShop-property" data-property="qty"><%- childOrder.qty ? childOrder.qty.toLocaleString() : '?' %></td>
     <td class="paintShop-property">PCE</td>

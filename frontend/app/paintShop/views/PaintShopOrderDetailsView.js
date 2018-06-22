@@ -133,7 +133,9 @@ define([
         order: order,
         fillerHeight: this.calcFillerHeight(),
         renderQueueOrder: queueOrderTemplate,
-        canAct: (isEmbedded && isLocal) || isPainter || canManage
+        canAct: (isEmbedded && isLocal) || isPainter || canManage,
+        mrpDropped: this.dropZones.getState(order.mrp),
+        getChildOrderDropZoneClass: this.orders.getChildOrderDropZoneClass.bind(this.orders)
       };
     },
 

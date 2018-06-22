@@ -38,6 +38,7 @@ define([
     {
       this.settings = options ? options.settings : null;
       this.paints = options ? options.paints : null;
+      this.dropZones = options ? options.dropZones : null;
       this.selectedMrp = options && options.selectedMrp ? options.selectedMrp : 'all';
       this.selectedPaint = options && options.selectedPaint ? options.selectedPaint : 'all';
 
@@ -56,7 +57,7 @@ define([
       {
         if (this.serializedMap && this.serializedMap[order.id])
         {
-          _.assign(this.serializedMap[order.id], order.serialize(true));
+          this.serializedMap[order.id] = order.serialize(true, this.paints, this);
         }
       });
     },
@@ -155,7 +156,7 @@ define([
 
       for (var i = 0; i < mspPaints.length; ++i)
       {
-        if (serializedOrder.paints[mspPaints[i]] > 0)
+        if (serializedOrder.paints[mspPaints[i]])
         {
           return true;
         }
@@ -180,6 +181,59 @@ define([
       });
     },
 
+    getChildOrderDropZoneClass: function(childOrder)
+    {
+      if (!this.dropZones || !this.settings)
+      {
+        return '';
+      }
+
+      var selectedPaint = this.selectedPaint;
+
+      if (selectedPaint === 'all')
+      {
+        for (var i = 0; i < childOrder.paintList.length; ++i)
+        {
+          if (this.dropZones.getState(childOrder.paintList[i]))
+          {
+            return 'is-dropped';
+          }
+        }
+
+        return '';
+      }
+
+      if (selectedPaint === 'msp')
+      {
+        var mspPaints = this.settings.getValue('mspPaints');
+        var hasMspPaint = false;
+
+        for (var j = 0; j < mspPaints.length; ++j)
+        {
+          if (childOrder.paints[mspPaints[j]])
+          {
+            hasMspPaint = true;
+
+            break;
+          }
+        }
+
+        if (hasMspPaint)
+        {
+          return this.dropZones.getState('msp') ? 'is-dropped' : 'is-droppable';
+        }
+
+        return 'is-undroppable';
+      }
+
+      if (childOrder.paints[selectedPaint])
+      {
+        return this.dropZones.getState(selectedPaint) ? 'is-dropped' : 'is-droppable';
+      }
+
+      return 'is-undroppable';
+    },
+
     serialize: function(force)
     {
       var orders = this;
@@ -198,17 +252,7 @@ define([
 
       orders.forEach(function(order)
       {
-        var serializedOrder = serializedMap[order.id] = order.serialize(true, orders.paints);
-
-        serializedOrder.followups = serializedOrder.followups
-          .filter(function(followupId) { return !!orders.get(followupId); })
-          .map(function(followupId)
-          {
-            return {
-              id: followupId,
-              no: orders.get(followupId).get('no')
-            };
-          });
+        var serializedOrder = serializedMap[order.id] = order.serialize(true, orders.paints, orders);
 
         serializedList.push(serializedOrder);
 

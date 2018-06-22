@@ -44,21 +44,28 @@ define([
 
     parse: parse,
 
-    serialize: function(force, paints)
+    serialize: function(force, paints, orders)
     {
       var order = this;
 
-      if (!force
-        && order.collection
-        && order.collection.serializedMap
-        && order.collection.serializedMap[order.id])
+      if (!orders)
       {
-        return order.collection.serializedMap[order.id];
+        orders = order.collection;
       }
 
-      if (!paints && order.collection && order.collection.paints)
+      if (!force
+        && orders
+        && orders.serializedMap
+        && orders.serializedMap[order.id])
       {
-        paints = order.collection.paints;
+        return orders.serializedMap[order.id];
+      }
+
+      if (!paints
+        && orders
+        && orders.paints)
+      {
+        paints = orders.paints;
       }
 
       var obj = order.toJSON();
@@ -75,6 +82,7 @@ define([
 
         obj.paintCount = 0;
         childOrder.paints = {};
+        childOrder.paintList = [];
 
         childOrder.components.forEach(function(component)
         {
@@ -95,6 +103,7 @@ define([
             if (!childOrder.paints[component.nc12])
             {
               childOrder.paints[component.nc12] = 0;
+              childOrder.paintList.push(component.nc12);
             }
 
             obj.paints[component.nc12] += childOrder.qty;
@@ -121,6 +130,26 @@ define([
 
         obj.rowSpan += rowSpan;
         obj.rowSpanDetails += rowSpanDetails;
+
+        if (orders && obj.followups.length)
+        {
+          var followupIds = obj.followups;
+
+          obj.followups = [];
+
+          followupIds.forEach(function(followupId)
+          {
+            var followupOrder = orders.get(followupId);
+
+            if (followupOrder)
+            {
+              obj.followups.push({
+                id: followupId,
+                no: followupOrder.get('no')
+              });
+            }
+          });
+        }
 
         return _.assign({
           rowSpan: rowSpan + 1,

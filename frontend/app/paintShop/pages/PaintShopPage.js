@@ -286,26 +286,22 @@ define([
         new PaintShopPaintCollection(null, {rqlQuery: 'limit(0)'}),
         this
       );
-      this.orders = bindLoadingMessage(PaintShopOrderCollection.forDate(this.options.date, {
-        selectedMrp: this.options.selectedMrp || 'all',
-        selectedPaint: this.options.selectedPaint || 'all',
-        paints: this.paints,
-        settings: this.settings
-      }), this);
       this.dropZones = bindLoadingMessage(
         PaintShopDropZoneCollection.forDate(this.options.date),
         this
       );
+      this.orders = bindLoadingMessage(PaintShopOrderCollection.forDate(this.options.date, {
+        selectedMrp: this.options.selectedMrp || 'all',
+        selectedPaint: this.options.selectedPaint || 'all',
+        settings: this.settings,
+        paints: this.paints,
+        dropZones: this.dropZones
+      }), this);
     },
 
     defineViews: function()
     {
       this.vkbView = IS_EMBEDDED ? new VkbView() : null;
-      this.queueView = new PaintShopQueueView({
-        orders: this.orders,
-        dropZones: this.dropZones,
-        vkb: this.vkbView
-      });
       this.todoView = new PaintShopListView({
         model: this.orders,
         showTimes: false,
@@ -341,6 +337,11 @@ define([
 
           return b.startedAt - a.startedAt;
         }
+      });
+      this.queueView = new PaintShopQueueView({
+        orders: this.orders,
+        dropZones: this.dropZones,
+        vkb: this.vkbView
       });
     },
 
@@ -584,7 +585,7 @@ define([
           menu.push({
             icon: 'fa-level-down',
             label: t('paintShop', 'menu:dropZone:' + this.dropZones.getState(mrp)),
-            handler: this.handleDropZoneAction.bind(this, mrp)
+            handler: this.handleDropZoneAction.bind(this, mrp, false)
           });
         }
         else if (this.orders.selectedPaint !== 'all')
@@ -622,14 +623,14 @@ define([
         var text = [];
         var usedOrders = {};
 
-        view.orders.forEach(function(order)
+        view.orders.serialize().forEach(function(order)
         {
-          if ((mrp && order.get('mrp') !== mrp) || !view.orders.isPaintVisible(order.serialize()))
+          if ((mrp && order.mrp !== mrp) || !view.orders.isPaintVisible(order))
           {
             return;
           }
 
-          var orderNo = order.get('order');
+          var orderNo = order.order;
 
           if (usedOrders[orderNo])
           {
@@ -664,21 +665,17 @@ define([
         }
 
         var text = [];
-        var paint = view.orders.selectedPaint;
-        var specificPaint = view.orders.selectedPaint !== 'all';
 
-        view.orders.forEach(function(order)
+        view.orders.serialize().forEach(function(order)
         {
-          if (mrp && order.get('mrp') !== mrp)
+          if (mrp && order.mrp !== mrp)
           {
             return;
           }
 
-          var orderData = order.serialize();
-
-          orderData.childOrders.forEach(function(childOrder)
+          order.childOrders.forEach(function(childOrder)
           {
-            if (!specificPaint || childOrder.paints[paint] > 0)
+            if (view.orders.isPaintVisible(childOrder))
             {
               text.push(childOrder.order);
             }
@@ -1073,8 +1070,12 @@ define([
 
     onDropZoneUpdated: function(dropZone)
     {
-      this.$('.paintShop-tab[data-mrp="' + dropZone.get('mrp') + '"]')
-        .toggleClass('is-dropped', dropZone.get('state'));
+      var mrp = dropZone.get('mrp');
+      var selector = mrp === this.orders.selectedPaint
+        ? '.paintShop-tab-paint'
+        : '.paintShop-tab[data-mrp="' + mrp + '"]';
+
+      this.$(selector).toggleClass('is-dropped', dropZone.get('state'));
     },
 
     onPaintUpdated: function()

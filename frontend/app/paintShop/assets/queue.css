@@ -183,3 +183,29 @@ span.paintShop-property > .fa {
   white-space: normal;
   line-height: 1.2;
 }
+.paintShop-property-mrp > .fa-level-down {
+  display: none;
+  margin-left: 3px;
+}
+.paintShop-property-mrp.is-dropped > .fa-level-down {
+  display: inline;
+}
+.paintShop-childOrder-dropZone {
+  display: none;
+  margin-top: 4px;
+  text-align: right;
+  font-size: 21px;
+  text-shadow: 1px 1px 0 #000;
+}
+.paintShop-childOrder-dropZone.is-droppable {
+  display: block;
+  color: #0af;
+}
+.paintShop-childOrder-dropZone.is-undroppable {
+  display: block;
+  color: #f00;
+}
+.paintShop-childOrder-dropZone.is-dropped {
+  display: block;
+  color: #0f0;
+}

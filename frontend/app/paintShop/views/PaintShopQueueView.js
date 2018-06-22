@@ -76,22 +76,28 @@ define([
       this.listenTo(this.orders, 'change', this.onChange);
       this.listenTo(this.orders, 'focus', this.onFocus);
       this.listenTo(this.orders, 'mrpSelected paintSelected', this.toggleVisibility);
+      this.listenTo(this.orders, 'paintSelected', this.toggleChildOrderDropZones);
+
+      this.listenTo(this.dropZones, 'updated', this.onDropZoneUpdated);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
+      var view = this;
       var first = null;
       var last = null;
-      var collection = this.orders;
-      var orders = collection.serialize().map(function(order)
+      var getChildOrderDropZoneClass = view.orders.getChildOrderDropZoneClass.bind(view.orders);
+      var orders = view.orders.serialize().map(function(order)
       {
         order = {
           order: order,
-          visible: collection.isVisible(order),
+          visible: view.orders.isVisible(order),
           first: false,
           last: false,
           commentVisible: true,
-          rowSpan: 'rowSpan'
+          rowSpan: 'rowSpan',
+          mrpDropped: view.dropZones.getState(order.mrp),
+          getChildOrderDropZoneClass: getChildOrderDropZoneClass
         };
 
         if (order.visible)
@@ -118,7 +124,6 @@ define([
       }
 
       return {
-        idPrefix: this.idPrefix,
         orders: orders,
         renderQueueOrder: queueOrderTemplate
       };
@@ -173,6 +178,8 @@ define([
 
       var detailsView = new PaintShopOrderDetailsView({
         model: order,
+        orders: this.orders,
+        dropZones: this.dropZones,
         height: orderEl ? orderEl.clientHeight : 0,
         vkb: this.options.vkb
       });
@@ -221,7 +228,7 @@ define([
         menu.push({
           icon: 'fa-level-down',
           label: t('paintShop', 'menu:dropZone:' + this.dropZones.getState(mrp)),
-          handler: this.trigger.bind(this, 'actionRequested', 'dropZone', mrp)
+          handler: this.trigger.bind(this, 'actionRequested', 'dropZone', mrp, false)
         });
       }
 
@@ -231,12 +238,12 @@ define([
         {
           icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e)
+          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, null)
         },
         {
           icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyChildOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e)
+          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, null)
         },
         {
           icon: 'fa-print',
@@ -265,6 +272,60 @@ define([
     hideMenu: function()
     {
       contextMenu.hide(this);
+    },
+
+    toggleVisibility: function()
+    {
+      var orders = this.orders;
+
+      this.$('.paintShop-order').each(function()
+      {
+        var orderData = orders.get(this.dataset.orderId).serialize();
+        var hidden = !orders.isVisible(orderData);
+
+        this.classList.toggle('hidden', hidden);
+        this.classList.toggle('visible', !hidden);
+      });
+
+      this.$('.paintShop-order.is-first, .paintShop-order.is-last').removeClass('is-first is-last');
+
+      var $visible = this.$('.visible');
+
+      $visible.first().addClass('is-first');
+      $visible.last().addClass('is-last');
+
+      this.el.scrollTop = 0;
+    },
+
+    toggleChildOrderDropZones: function()
+    {
+      var view = this;
+
+      view.$('.paintShop-childOrder-dropZone').each(function()
+      {
+        this.classList.remove('is-dropped', 'is-undroppable', 'is-droppable');
+
+        var order = view.orders.get(this.dataset.orderId);
+
+        if (!order)
+        {
+          return;
+        }
+
+        var childOrder = order.serialize().childOrders[this.dataset.childOrderIndex];
+
+        if (!childOrder)
+        {
+          return;
+        }
+
+        var dropZoneClass = view.orders.getChildOrderDropZoneClass(childOrder);
+
+        if (dropZoneClass)
+        {
+          this.classList.add(dropZoneClass);
+        }
+      });
     },
 
     onScroll: function()
@@ -300,16 +361,19 @@ define([
 
     onChange: function(order)
     {
-      var $order = this.$order(order.id);
+      var view = this;
+      var $order = view.$order(order.id);
       var orderData = order.serialize();
 
       $order.replaceWith(queueOrderTemplate({
         order: orderData,
-        visible: this.orders.isVisible(orderData),
+        visible: view.orders.isVisible(orderData),
         first: $order.hasClass('is-first'),
         last: $order.hasClass('is-last'),
         commentVisible: true,
-        rowSpan: 'rowSpan'
+        rowSpan: 'rowSpan',
+        mrpDropped: view.dropZones.getState(orderData.mrp),
+        getChildOrderDropZoneClass: view.orders.getChildOrderDropZoneClass.bind(view.orders)
       }));
     },
 
@@ -334,27 +398,20 @@ define([
       }
     },
 
-    toggleVisibility: function()
+    onDropZoneUpdated: function(dropZone)
     {
-      var orders = this.orders;
+      var mrpOrPaint = dropZone.get('mrp');
+      var state = dropZone.get('state');
+      var $mrp = this.$('.paintShop-property-mrp[data-mrp="' + mrpOrPaint + '"]');
 
-      this.$('.paintShop-order').each(function()
+      if ($mrp.length)
       {
-        var orderData = orders.get(this.dataset.orderId).serialize();
-        var hidden = !orders.isVisible(orderData);
-
-        this.classList.toggle('hidden', hidden);
-        this.classList.toggle('visible', !hidden);
-      });
-
-      this.$('.paintShop-order.is-first, .paintShop-order.is-last').removeClass('is-first is-last');
-
-      var $visible = this.$('.visible');
-
-      $visible.first().addClass('is-first');
-      $visible.last().addClass('is-last');
-
-      this.el.scrollTop = 0;
+        $mrp.toggleClass('is-dropped', state);
+      }
+      else
+      {
+        this.toggleChildOrderDropZones();
+      }
     }
 
   });
