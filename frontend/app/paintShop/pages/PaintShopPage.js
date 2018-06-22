@@ -664,17 +664,24 @@ define([
         }
 
         var text = [];
+        var paint = view.orders.selectedPaint;
+        var specificPaint = view.orders.selectedPaint !== 'all';
 
         view.orders.forEach(function(order)
         {
-          if ((mrp && order.get('mrp') !== mrp) || !view.orders.isPaintVisible(order.serialize()))
+          if (mrp && order.get('mrp') !== mrp)
           {
             return;
           }
 
-          order.get('childOrders').forEach(function(childOrder)
+          var orderData = order.serialize();
+
+          orderData.childOrders.forEach(function(childOrder)
           {
-            text.push(childOrder.order);
+            if (!specificPaint || childOrder.paints[paint] > 0)
+            {
+              text.push(childOrder.order);
+            }
           });
         });
 

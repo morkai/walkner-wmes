@@ -74,6 +74,7 @@ define([
         var components = [];
 
         obj.paintCount = 0;
+        childOrder.paints = {};
 
         childOrder.components.forEach(function(component)
         {
@@ -91,7 +92,13 @@ define([
               obj.paints[component.nc12] = 0;
             }
 
+            if (!childOrder.paints[component.nc12])
+            {
+              childOrder.paints[component.nc12] = 0;
+            }
+
             obj.paints[component.nc12] += childOrder.qty;
+            childOrder.paints[component.nc12] = true;
           }
 
           var paint = paints ? paints.get(component.nc12) : null;
