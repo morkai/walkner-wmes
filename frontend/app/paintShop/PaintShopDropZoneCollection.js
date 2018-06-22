@@ -65,6 +65,11 @@ define([
 
       if (dropZone)
       {
+        if (dropZone.get('state') === message.state)
+        {
+          return;
+        }
+
         dropZone.set('state', message.state);
       }
       else
