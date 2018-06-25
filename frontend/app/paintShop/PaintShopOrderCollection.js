@@ -57,7 +57,7 @@ define([
       {
         if (this.serializedMap && this.serializedMap[order.id])
         {
-          this.serializedMap[order.id] = order.serialize(true, this.paints, this);
+          _.assign(this.serializedMap[order.id], order.serialize(true, this.paints, this));
         }
       });
     },
