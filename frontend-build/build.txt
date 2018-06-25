@@ -1465,6 +1465,7 @@ app/nls/pl/printers.js
 i18n!app/nls/printers
 app/printers/routes.js
 app/kanban/routes.js
+app/kanbanComponents/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
