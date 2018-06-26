@@ -164,7 +164,11 @@ module.exports = function(app, module)
         const workCenters = this.settings.workCenters;
         const leadingOrders = Array.from(this.newOrders.keys());
         const plannedConditions = {
-          leadingOrder: {$in: leadingOrders}
+          leadingOrder: {$in: leadingOrders},
+          statuses: {
+            $in: this.settings.requiredStatuses,
+            $nin: this.settings.ignoredStatuses
+          }
         };
         const unplannedConditions = {
           scheduledStartDate: moment(key, 'YYYY-MM-DD').toDate(),
