@@ -40,7 +40,7 @@
 
   "PROPERTY:rid": "ID",
   "PROPERTY:creator": "Stworzone przez",
-  "PROPERTY:createdAt": "Czas stworzenia",
+  "PROPERTY:createdAt": "Czas utworzenia",
   "PROPERTY:updater": "Ostatnio zmienione przez",
   "PROPERTY:updatedAt": "Czas ostatniej zmiany",
   "PROPERTY:inspector": "Inspektor",

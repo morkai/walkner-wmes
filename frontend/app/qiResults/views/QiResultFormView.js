@@ -135,6 +135,11 @@ define([
 
       qiDictionaries.inspectors.forEach(function(user)
       {
+        if (!user.get('active'))
+        {
+          return;
+        }
+
         var inspector = idAndLabel(user);
 
         map[inspector.id] = true;
@@ -165,6 +170,11 @@ define([
 
       qiDictionaries[dictionaryProperty].forEach(function(user)
       {
+        if (!user.get('active'))
+        {
+          return;
+        }
+
         var master = idAndLabel(user);
 
         map[master.id] = true;

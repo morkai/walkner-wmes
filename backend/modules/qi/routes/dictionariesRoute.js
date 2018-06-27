@@ -24,19 +24,19 @@ module.exports = function dictionariesRoute(app, qiModule, req, res, next)
         .distinct('productFamily', this.group());
 
       User
-        .find({privileges: 'QI:INSPECTOR'}, {login: 1, firstName: 1, lastName: 1})
+        .find({privileges: 'QI:INSPECTOR'}, {login: 1, firstName: 1, lastName: 1, active: 1})
         .sort({searchName: 1})
         .lean()
         .exec(this.group());
 
       User
-        .find({prodFunction: 'master'}, {login: 1, firstName: 1, lastName: 1})
+        .find({prodFunction: 'master'}, {login: 1, firstName: 1, lastName: 1, active: 1})
         .sort({searchName: 1})
         .lean()
         .exec(this.group());
 
       User
-        .find({prodFunction: 'leader'}, {login: 1, firstName: 1, lastName: 1})
+        .find({prodFunction: 'leader'}, {login: 1, firstName: 1, lastName: 1, active: 1})
         .sort({searchName: 1})
         .lean()
         .exec(this.group());

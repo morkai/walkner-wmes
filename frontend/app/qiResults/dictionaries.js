@@ -49,13 +49,13 @@ define([
   var settings = createSettings(QiSettingCollection);
   var dictionaries = {
     inspectors: new UserCollection(null, {
-      rqlQuery: 'select(firstName,lastName,login)&privileges=QI%3AINSPECTOR'
+      rqlQuery: 'select(firstName,lastName,login,active)&privileges=QI%3AINSPECTOR'
     }),
     masters: new UserCollection(null, {
-      rqlQuery: 'select(firstName,lastName,login)&prodFunction=master'
+      rqlQuery: 'select(firstName,lastName,login,active)&prodFunction=master'
     }),
     leaders: new UserCollection(null, {
-      rqlQuery: 'select(firstName,lastName,login)&prodFunction=leader'
+      rqlQuery: 'select(firstName,lastName,login,active)&prodFunction=leader'
     }),
     productFamilies: [],
     settings: settings.acquire(),
