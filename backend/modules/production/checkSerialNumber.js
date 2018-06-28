@@ -125,6 +125,21 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
       {
         findIptSn(this.sn._id, this.next());
       }
+
+      if (previousScannedAt < 946684800000 || this.sn.taktTime > 3600000)
+      {
+        productionModule.warn(`[checkSerialNumber] Potentially invalid takt time [${this.sn._id}]:`, JSON.stringify({
+          pso: {
+            _id: pso._id,
+            startedAt: pso.startedAt
+          },
+          previousSn,
+          currentSn: this.sn,
+          previousScannedAt,
+          latestScannedAt,
+          ignoredDuration
+        }));
+      }
     },
     function(err, iptSn)
     {
