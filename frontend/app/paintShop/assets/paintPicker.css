@@ -34,11 +34,13 @@
   font-family: monospace;
   font-size: 28px;
   line-height: 1;
+  padding-left: 57px;
 }
 .paintShop-paintPicker-name {
   display: block;
   font-size: 14px;
   line-height: 1;
+  padding-left: 57px;
 }
 .paintShop-paintPicker-buttons {
   flex: 0 0 auto;
@@ -54,4 +56,13 @@
   top: 3px;
   right: 10px;
   font-size: 48px;
+}
+.paintShop-paintPicker-no {
+  position: absolute;
+  font-size: 28px;
+  line-height: 43px;
+  width: 43px;
+  text-align: center;
+  border-right: 1px dotted #ccc;
+  padding-right: 12px;
 }

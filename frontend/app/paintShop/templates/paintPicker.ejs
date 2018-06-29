@@ -3,8 +3,9 @@
     <input id="<%- idPrefix %>-filter" type="text" class="form-control" data-vkb="numeric">
   </div>
   <div class="paintShop-paintPicker-paints">
-    <% paints.forEach(function(paint) { %>
+    <% paints.forEach(function(paint, i) { %>
     <button class="btn btn-<%- paint.className %> paintShop-paintPicker-paint" type="button" value="<%- paint.nc12 %>">
+      <span class="paintShop-paintPicker-no"><%- i + 1 %></span>
       <span class="paintShop-paintPicker-nc12"><%- paint.nc12 %></span>
       <span class="paintShop-paintPicker-name"><%= paint.name %></span>
       <% if (paint.dropped) { %>

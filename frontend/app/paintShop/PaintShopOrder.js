@@ -107,7 +107,7 @@ define([
             }
 
             obj.paints[component.nc12] += childOrder.qty;
-            childOrder.paints[component.nc12] = true;
+            childOrder.paints[component.nc12] += childOrder.qty;
           }
 
           var paint = paints ? paints.get(component.nc12) : null;
