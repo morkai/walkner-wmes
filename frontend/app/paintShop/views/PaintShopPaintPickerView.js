@@ -121,8 +121,6 @@ define([
 
       $paint.click().focus();
 
-      this.$id('filter').focus();
-
       var height = window.innerHeight
         - this.$('.paintShop-paintPicker-filter').outerHeight()
         - this.$('.paintShop-paintPicker-buttons').outerHeight()
@@ -130,6 +128,8 @@ define([
         - 60;
 
       this.$('.paintShop-paintPicker-paints').css('height', height + 'px');
+
+      this.$id('filter').focus();
     },
 
     onVkbValueChange: function()
