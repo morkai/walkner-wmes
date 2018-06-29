@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["../time","../core/Model","app/core/templates/userInfo"],function(e,t,n){"use strict";return t.extend({urlRoot:"/kanban/components",clientUrlRoot:"#kanban/components",topicPrefix:"kanban.components",privilegePrefix:"KANBAN",nlsDomain:"kanbanComponents",serialize:function(){var t=this.toJSON();return t.createdAt=e.format(t.createdAt,"LLLL"),t.updatedAt=e.format(t.updatedAt,"LLLL"),t.updater=n({userInfo:t.updater}),t}})});

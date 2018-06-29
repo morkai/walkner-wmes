@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["app/core/views/FilterView","app/kanbanComponents/templates/filter"],function(e,i){"use strict";return e.extend({template:i,defaultFormData:{_id:"",description:""},termToForm:{_id:function(e,i,t){"regex"===i.name&&(t[e]=this.unescapeRegExp(i.args[1]))},description:"_id"},serializeFormToQuery:function(e){var i=this;["_id","description"].forEach(function(t){i.serializeRegexTerm(e,t,-1,null,!0,!1)})}})});

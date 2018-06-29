@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["../core/Collection","./KanbanSupplyArea"],function(e,s){"use strict";return e.extend({model:s,rqlQuery:"sort(_id)&limit(20)",setUpPubsub:function(e){e.subscribe("kanban.supplyAreas.*",this.handleMessage.bind(this))},handleMessage:function(e,s){var a=this.get(e.model._id);switch(s){case"kanban.supplyAreas.deleted":this.remove(a);break;case"kanban.supplyAreas.added":case"kanban.supplyAreas.edited":a?a.set(e.model):this.add(e.model)}}})});
