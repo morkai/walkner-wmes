@@ -15,6 +15,36 @@ define([
 ) {
   'use strict';
 
+  function focusPrev(e)
+  {
+    var items = $(e.currentTarget).closest('.planning-menu').find('[tabindex]:not(.planning-menu-disabled)').toArray();
+    var index = items.indexOf(e.currentTarget) - 1;
+
+    if (index === -1)
+    {
+      index = items.length - 1;
+    }
+
+    items[index].focus();
+
+    return false;
+  }
+
+  function focusNext(e)
+  {
+    var items = $(e.currentTarget).closest('.planning-menu').find('[tabindex]:not(.planning-menu-disabled)').toArray();
+    var index = items.indexOf(e.currentTarget) + 1;
+
+    if (index >= items.length)
+    {
+      index = 0;
+    }
+
+    items[index].focus();
+
+    return false;
+  }
+
   return {
 
     hide: function(view)
@@ -23,12 +53,23 @@ define([
 
       if ($menu)
       {
+        var options = $menu.data('options');
+
         $(window).off('.contextMenu.' + view.idPrefix);
         $(document.body).off('.contextMenu.' + view.idPrefix);
 
-        $menu.fadeOut('fast', function() { $menu.remove(); });
         $menu.data('backdrop').remove();
         $menu.removeData('backdrop');
+        $menu.removeData('options');
+
+        if (options.animate === false)
+        {
+          $menu.remove();
+        }
+        else
+        {
+          $menu.fadeOut('fast', function() { $menu.remove(); });
+        }
 
         view.$contextMenu = null;
 
@@ -94,7 +135,8 @@ define([
       {
         var el = e.currentTarget;
 
-        if (el.classList.contains('disabled'))
+        if (el.classList.contains('planning-menu-disabled')
+          || el.classList.contains('planning-menu-loading'))
         {
           return;
         }
@@ -102,15 +144,15 @@ define([
         var action = el.dataset.action;
         var item = menu[action];
 
-        $menu.find('a').addClass('disabled');
+        $menu.find('a').addClass('planning-menu-loading');
 
         e.contextMenu = {
           hide: true,
           action: action,
           item: item,
           view: view,
-          top: top,
-          left: left,
+          top: options.top,
+          left: options.left,
           menu: menu,
           restore: showMenu
         };
@@ -129,6 +171,39 @@ define([
           $menu.find(el).find('.fa').attr('class', 'fa fa-spinner fa-spin');
         }
       });
+      $menu.on('keydown', '[tabindex]', function(e)
+      {
+        switch (e.originalEvent.key)
+        {
+          case 'ArrowUp':
+            return focusPrev(e);
+
+          case 'ArrowDown':
+            return focusNext(e);
+
+          case 'Tab':
+            return e.shiftKey ? focusPrev(e) : focusNext(e);
+
+          case 'Enter':
+          {
+            var click = new $.Event('click');
+
+            click.pageY = options.top;
+            click.pageX = options.left;
+
+            $(e.currentTarget).trigger(click);
+
+            return false;
+          }
+
+          case 'Escape':
+          {
+            hideMenu();
+
+            return false;
+          }
+        }
+      });
 
       var $backdrop = $('<div></div>')
         .css({
@@ -141,6 +216,7 @@ define([
         .one('mousedown', hideMenu);
 
       $menu.data('backdrop', $backdrop);
+      $menu.data('options', options);
 
       $(window)
         .one('scroll.contextMenu.' + view.idPrefix, hideMenu)
@@ -156,6 +232,26 @@ define([
         .append($backdrop)
         .append($menu);
 
+      view.$contextMenu = $menu;
+
+      this.position(view, top, left);
+
+      if (options.autoFocus !== false)
+      {
+        $menu.find('[tabindex]:not(.planning-menu-disabled)').first().focus();
+      }
+
+      broker.publish('planning.contextMenu.shown');
+    },
+
+    position: function(view, top, left)
+    {
+      if (!view.$contextMenu)
+      {
+        return;
+      }
+
+      var $menu = view.$contextMenu;
       var width = $menu.outerWidth();
       var height = $menu.outerHeight();
 
@@ -176,9 +272,10 @@ define([
         left: left + 'px'
       });
 
-      view.$contextMenu = $menu;
-
-      broker.publish('planning.contextMenu.shown');
+      _.assign($menu.data('options'), {
+        top: top,
+        left: left
+      });
     },
 
     actions: {

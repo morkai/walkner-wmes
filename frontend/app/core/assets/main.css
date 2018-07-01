@@ -24,6 +24,9 @@ body {
 body.no-overflow {
   overflow: hidden;
 }
+body.no-ft .ft {
+  display: none;
+}
 body.modal-open {
   overflow-y: hidden;
 }

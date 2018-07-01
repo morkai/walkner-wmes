@@ -58,4 +58,4 @@ If Not $session.IsBusy Then
   $session.findById("wnd[0]/tbar[0]/btn[80]").press
 EndIf
 
-#include "_Unlock.au3"
+Unlock()

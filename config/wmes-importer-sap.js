@@ -35,7 +35,8 @@ exports.modules = [
   'orderDocuments/importer/eto',
   'reports/clipOrderCount',
   'cags/importer/nc12',
-  'cags/importer/plan'
+  'cags/importer/plan',
+  'kanban/importer'
 ];
 
 exports.mongoose = {
@@ -53,7 +54,8 @@ exports.mongoose = {
     'fteLeaderEntry',
     'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics',
     'xiconfOrder', 'xiconfHidLamp',
-    'cag', 'cagPlan'
+    'cag', 'cagPlan',
+    'kanbanEntry', 'kanbanComponent'
   ]
 };
 
@@ -70,27 +72,23 @@ exports.events = {
       'events.**',
       'orders.synced',
       'emptyOrders.synced',
-      'orders.intake.synced',
-      'orders.bom.synced',
-      'orders.zlf1.synced',
+      'orders.*.synced',
       'clipOrderCount.created',
       'warehouse.*.synced',
       'xiconf.orders.synced',
       'orderDocuments.synced',
       'orderDocuments.eto.synced',
-      'cags.nc12.synced',
-      'cags.plan.synced'
+      'cags.*.synced',
+      'kanban.import.success'
     ],
     error: [
-      'orders.intake.syncFailed',
-      'orders.bom.syncFailed',
-      'orders.zlf1.syncFailed',
+      'orders.*.syncFailed',
       'warehouse.*.syncFailed',
       'xiconf.orders.syncFailed',
       'orderDocuments.syncFailed',
       'orderDocuments.eto.syncFailed',
-      'cags.nc12.syncFailed',
-      'cags.plan.syncFailed',
+      'cags.*.syncFailed',
+      'kanban.import.failure',
       'app.started'
     ]
   }
@@ -113,13 +111,13 @@ exports['mail/sender'] = {
 exports['messenger/server'] = Object.assign({}, ports['wmes-importer-sap'], {
   broadcastTopics: [
     'events.saved',
-    'orders.synced', 'orders.operationsChanged',
-    'orders.intake.synced', 'orders.bom.synced', 'orders.zlf1.synced', 'orders.invalid.synced',
+    'orders.synced', 'orders.operationsChanged', 'orders.*.synced',
     'emptyOrders.synced',
     'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',
     'xiconf.orders.synced',
     'orderDocuments.synced', 'orderDocuments.eto.synced',
-    'cags.plan.synced', 'cags.plan.syncFailed'
+    'cags.plan.synced', 'cags.plan.syncFailed',
+    'kanban.import.*'
   ]
 });
 
@@ -192,6 +190,11 @@ exports['orders/importer/intake'] = {
 exports['cags/importer/nc12'] = {
   filterRe: /^MARA\.txt$/,
   resultFile: `${__dirname}/../data/12nc_to_cags.json`,
+  parsedOutputDir: IMPORT_OUTPUT_DIR
+};
+
+exports['kanban/importer'] = {
+  filterRe: /^KANBAN\.json$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 

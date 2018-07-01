@@ -235,6 +235,8 @@
     "NAVBAR:D8:entrySources": "Entry sources",
     "NAVBAR:D8:problemSources": "Problem sources",
 
+    "NAVBAR:kanban": "Kanban DB",
+
     "NAVBAR:SEARCH:help": "Search by order no, 12NC or date.",
     "NAVBAR:SEARCH:empty": "No results.",
     "NAVBAR:SEARCH:fullOrderNo": "Order no {orderNo}",

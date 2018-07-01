@@ -73,6 +73,7 @@ exports.modules = [
   'opinionSurveys',
   'cags',
   'sapGui/importer',
+  'sapGui',
   'isaPalletKinds',
   'isa',
   'paintShop',
@@ -86,6 +87,7 @@ exports.modules = [
   'html2pdf',
   'printing',
   'sapLaborTimeFixer',
+  'kanban',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
@@ -240,7 +242,8 @@ exports.pubsub = {
     'mor.**',
     'planning.**',
     'sapLaborTimeFixer.**',
-    'printing.**'
+    'printing.**',
+    'kanban.**'
   ]
 };
 
@@ -285,7 +288,8 @@ exports.mongoose = {
     'visNodePosition',
     'planSettings', 'planChange', 'plan', 'whOrderStatus',
     'xData',
-    'dailyMrpCount', 'clipOrderCache', 'clipOrderCount'
+    'dailyMrpCount', 'clipOrderCache', 'clipOrderCount',
+    'kanbanEntry', 'kanbanComponent', 'kanbanSupplyArea', 'kanbanTableView'
   ]
 };
 
@@ -358,7 +362,8 @@ exports.user = {
     'D8:VIEW', 'D8:MANAGE', 'D8:LEADER', 'D8:DICTIONARIES:VIEW', 'D8:DICTIONARIES:MANAGE',
     'MOR:MANAGE', 'MOR:MANAGE:USERS',
     'PAINT_SHOP:VIEW', 'PAINT_SHOP:MANAGE', 'PAINT_SHOP:PAINTER', 'PAINT_SHOP:DROP_ZONES',
-    'PLANNING:VIEW', 'PLANNING:MANAGE', 'PLANNING:PLANNER', 'PLANNING:WHMAN'
+    'PLANNING:VIEW', 'PLANNING:MANAGE', 'PLANNING:PLANNER', 'PLANNING:WHMAN',
+    'KANBAN:VIEW', 'KANBAN:MANAGE'
   ]
 };
 
@@ -580,6 +585,14 @@ exports['sapGui/importer'] = {
   secretKey: ''
 };
 
+exports.sapGui = {
+  expressId: null,
+  mailSenderId: null,
+  scriptsPath: null,
+  remoteUrl: 'http://localhost/',
+  secretKey: null
+};
+
 exports.mor = {
   statePath: `${DATA_PATH}/mor.json`
 };
@@ -593,5 +606,9 @@ exports.html2pdf = {
 };
 
 exports.sapLaborTimeFixer = {
+
+};
+
+exports.kanban = {
 
 };

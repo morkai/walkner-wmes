@@ -94,7 +94,7 @@ If IsObj($wrapper) Then
   EndIf
 EndIf
 
-#include "_Unlock.au3"
+Unlock()
 
 LogDebug("CHECKING_SESSION_1")
 
@@ -214,7 +214,7 @@ If WinExists($SAP_LOGIN_FORM_WINDOW_TITLE) Then
   TryToLogIn()
 EndIf
 
-#include "_Unlock.au3"
+Unlock()
 
 LogDebug("SEARCHING_FREE_SESSION")
 

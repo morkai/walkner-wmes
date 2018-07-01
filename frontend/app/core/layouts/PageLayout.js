@@ -447,6 +447,12 @@ define([
       else
       {
         var className = 'btn btn-' + (action.type || 'default') + ' ' + _.result(action, 'className');
+
+        if (action.disabled)
+        {
+          className += ' disabled';
+        }
+
         var id = _.result(action, 'id');
 
         if (id && id.charAt(0) === '-')

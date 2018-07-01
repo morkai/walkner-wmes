@@ -1,0 +1,16 @@
+<tr id="<%- idPrefix %>-<%- entry._id %>" data-model-id="<%- entry._id %>" data-model-index="<%- modelIndex %>" class="<%- modelIndex % 2 ? 'kanban-is-even' : 'kanban-is-odd' %> <%- entry.rowClassName %>">
+  <% columns.list.forEach(function(column) { %>
+  <% if (Array.isArray(entry[column._id])) { %>
+  <% entry[column._id].forEach(function(value, i) { %>
+  <td class="kanban-td <%- column.tdClassName(value, column, i, entry) %>" data-column-id="<%- column._id %>" data-array-index="<%- i %>" tabindex="0">
+    <span class="kanban-td-value <%- column.valueClassName(value, column, i, entry) %>"><%- column.renderValue(value, column, i, entry) %></span>
+  </td>
+  <% }) %>
+  <% } else { %>
+  <td class="kanban-td <%- column.tdClassName(entry[column._id], column, -1, entry) %>" data-column-id="<%- column._id %>" tabindex="0">
+    <span class="kanban-td-value <%- column.valueClassName(entry[column._id], column, -1, entry) %>"><%- column.renderValue(entry[column._id], column, -1, entry) %></span>
+  </td>
+  <% } %>
+  <% }) %>
+  <td class="kanban-td" data-column-id="filler2" colspan="2"></td>
+</tr>

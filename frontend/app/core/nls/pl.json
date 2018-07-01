@@ -241,6 +241,8 @@
   "NAVBAR:D8:entrySources": "Źródła zgłoszeń",
   "NAVBAR:D8:problemSources": "Źródła problemów",
 
+  "NAVBAR:kanban": "Baza Kanban",
+
   "NAVBAR:SEARCH:help": "Szukaj wg nr zlecenia, 12NC, zgłoszenia lub daty.",
   "NAVBAR:SEARCH:empty": "Brak wyników.",
   "NAVBAR:SEARCH:fullOrderNo": "Zlecenie nr {orderNo}",

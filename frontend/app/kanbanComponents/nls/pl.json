@@ -1,0 +1,21 @@
+{
+  "BREADCRUMBS:base": "Baza Kanban",
+  "BREADCRUMBS:browse": "Komponenty",
+
+  "PAGE_ACTION:jump:title": "Skocz do komponentu po 12NC",
+  "PAGE_ACTION:jump:placeholder": "12NC komponentu...",
+
+  "PANEL:TITLE:details": "Szczegóły komponentu",
+
+  "PROPERTY:_id": "12NC",
+  "PROPERTY:description": "Nazwa komponentu",
+  "PROPERTY:storageBin": "Lokalizacja magazynowa",
+  "PROPERTY:maxBinQty": "Maks. ilość w binie",
+  "PROPERTY:minBinQty": "Min. ilość w binie",
+  "PROPERTY:replenQty": "Ilość uzupełnienia",
+  "PROPERTY:createdAt": "Czas utworzenia",
+  "PROPERTY:updatedAt": "Czas ostatniej zmiany",
+  "PROPERTY:updater": "Ostatnio zmienione przez",
+
+  "filter:submit": "Filtruj komponenty"
+}

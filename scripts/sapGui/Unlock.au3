@@ -48,6 +48,6 @@ If Not IsObj($session) Then
   LogError("ERR_NO_SESSION", $ERR_NO_SESSION)
 EndIf
 
-#include "_Unlock.au3"
+Unlock()
 
 LogDebug("DONE")

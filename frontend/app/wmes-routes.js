@@ -84,7 +84,10 @@ define([
   './mor/routes',
   './planning/routes',
   './sapLaborTimeFixer/routes',
-  './printers/routes'
+  './printers/routes',
+  './kanban/routes',
+  './kanbanComponents/routes',
+  './kanbanSupplyAreas/routes'
 ], function()
 {
   'use strict';

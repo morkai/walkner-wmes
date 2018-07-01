@@ -11,5 +11,6 @@ module.exports = {
   zlf1: require('./zlf1'),
   zoin: require('./zoin'),
   genericList: require('./genericList'),
-  zse16d: require('./zse16d')
+  zse16d: require('./zse16d'),
+  kanban: require('./kanban')
 };

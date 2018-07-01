@@ -178,7 +178,7 @@ define([
           column = {id: column, label: t.bound(nlsDomain, 'PROPERTY:' + column)};
         }
 
-        if (!column.label)
+        if (!column.label && column.label !== '')
         {
           column.label = t.bound(nlsDomain, 'PROPERTY:' + column.id);
         }

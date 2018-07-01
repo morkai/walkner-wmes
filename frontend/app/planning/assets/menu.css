@@ -21,8 +21,16 @@
   font-size: 14px;
   text-align: center;
 }
-.planning-menu > li > .disabled {
-  cursor: wait;
+.planning-menu-disabled {
+  cursor: default!important;
   color: #777!important;
   background-color: #fff!important;
+}
+.planning-menu-loading {
+  cursor: wait!important;
+  color: #777!important;
+  background-color: #fff!important;
+}
+.planning-menu .divider {
+  margin: 5px 0;
 }
