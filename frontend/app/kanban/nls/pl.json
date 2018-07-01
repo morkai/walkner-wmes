@@ -7,6 +7,7 @@
   "msg:clipboard:table": "Tabela skopiowana do schowka.",
   "msg:import:started": "Rozpoczęto importowanie...",
   "msg:import:failure": "Importowanie nie powiodło się.",
+  "msg:import:success": "Pomyślnie zaimportowane dane z SAP.",
   "msg:import:IN_PROGRESS": "Importowanie w toku...",
   "msg:import:DISABLED": "Importowanie wyłączone.",
 
