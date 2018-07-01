@@ -162,7 +162,7 @@ define([
       }
 
       var entries = this;
-      var updatedAt = Date.parse(message.timestamp);
+      var updatedAt = message.timestamp;
       var reqs = [
         message.entryCount ? $.ajax({url: '/kanban/entries?exclude(changes)&updatedAt=' + updatedAt}) : null,
         message.componentCount ? $.ajax({url: '/kanban/components?exclude(changes)&updatedAt=' + updatedAt}) : null
