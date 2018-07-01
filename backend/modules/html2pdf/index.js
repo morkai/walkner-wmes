@@ -2,6 +2,7 @@
 
 'use strict';
 
+const _ = require('lodash');
 const createPuppeteerPool = require('puppeteer-pool');
 const setUpRoutes = require('./routes');
 
@@ -16,7 +17,7 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startHtml2pdfModule(app, module)
 {
-  module.pool = createPuppeteerPool(Object.assign({}, module.config.poolOptions, {
+  module.pool = createPuppeteerPool(_.defaults({}, module.config.poolOptions, {
     min: 2,
     max: 5,
     idleTimeoutMillis: 30000,
