@@ -53,7 +53,7 @@
   "PROPERTY:status": "Status",
   "PROPERTY:creator": "Stworzone przez",
   "PROPERTY:updater": "Ostatnio zmienione przez",
-  "PROPERTY:createdAt": "Czas stworzenia",
+  "PROPERTY:createdAt": "Czas utworzenia",
   "PROPERTY:updatedAt": "Czas ostatniej zmiany",
   "PROPERTY:comment": "Komentarz",
   "PROPERTY:subscribers": "Obserwatorzy zgłoszenia",

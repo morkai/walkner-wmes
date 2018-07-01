@@ -1,4 +1,52 @@
 <div class="hidden">
+  <h1>v0.123.0</h1>
+  <h2><%- time.format('2018-05-20', 'LL') %></h2>
+  <h3>Plany magazynu</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący niewyświetlanie planu magazynu po zmianie ustawienia
+      <em>Minimalna ilość sztuk w grupie</em>.</li>
+    <li>Zmieniono ustawianie <em>Etapu</em> tak, aby ustawienie <em>Wysyłki</em> wymagało podania
+      <em>Wysyłanej ilości</em>.</li>
+    <li>Dodano automatyczne dodawanie komentarza do zlecenia po ustawieniu <em>Etapu</em> danego zlecenia
+      na <em>Wysyłka</em>.</li>
+  </ul>
+  <h3>Plany dzienne</h3>
+  <ul>
+    <li>Dodano akcję <em>Wymuś utworzenie planu</em> na liście planów, umożliwiającą stworzenie planu na przyszły dzień.
+      Akcja dostępna tylko dla Super administratorów.</li>
+  </ul>
+  <h3>Minuty dla Bezpieczeństwa</h3>
+  <ul>
+    <li>Usunięto pole: Reguły zachowania.</li>
+    <li>Zmieniono pole <em>Jak muszą się zachować, aby nic się nie stało?</em>
+      na <em>Prawidłowe zachowanie/Reguły zachowania</em>.</li>
+    <li>Dodano nowe pole: Status.</li>
+    <li>Dodano nowy raport: Ilość minutek.</li>
+    <li>Dodano możliwość przypisywania ZPW oraz Usprawnień do Minutek.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Dodano nowe uprawnienie: Super administrator - użytkownik z tym uprawnieniem ma dostęp do wszystkich funkcji.</li>
+    <li>Dodano funkcjonalność anonimizacji danych użytkownika - podczas anonimizacji wszystkie dane na koncie użytkownika
+      są usuwane, a imię i nazwisko zapisane w bazach danych różnych modułów zamieniane jest na <code>?</code>.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Zmieniono ustawienie <em>Ogranicz skanowanie numerów seryjnych do następujących linii</em> na
+      <em>Wyłącz skanowanie na następujących liniach</em>. Od teraz skanowanie jest domyślnie włączone na wszystkich
+      liniach.</li>
+  </ul>
+  <h3>Raporty > CLIP</h3>
+  <ul>
+    <li>Poprawiono błąd mogący spowodować niezapisanie się danych o wykonywanych MRP we wszystkich jednostkach
+      organizacyjnych w poprzednim dniu.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd przy eksporcie danych do formatu XLSX powodujący niewyświetlanie dat w niektórych przypadkach.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.122.0</h1>
   <h2><%- time.format('2018-04-29', 'LL') %></h2>
   <h3>Plany dzienne</h3>

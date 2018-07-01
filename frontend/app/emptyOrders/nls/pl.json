@@ -10,7 +10,7 @@
   "PRINT_PAGE:HD:LEFT:finishDate": "Zlecenia bez żadnych operacji kończące się {date}",
 
   "PROPERTY:_id": "Nr zlecenia",
-  "PROPERTY:createdAt": "Czas stworzenia",
+  "PROPERTY:createdAt": "Czas utworzenia",
   "PROPERTY:nc12": "12NC",
   "PROPERTY:mrp": "MRP",
   "PROPERTY:startDate": "Data startu",

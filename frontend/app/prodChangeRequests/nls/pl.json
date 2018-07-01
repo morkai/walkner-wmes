@@ -10,7 +10,7 @@
   "PROPERTY:orgUnit": "Dział/Linia",
   "PROPERTY:prodLine": "Linia produkcyjna",
   "PROPERTY:operation": "Operacja",
-  "PROPERTY:createdAt": "Czas stworzenia",
+  "PROPERTY:createdAt": "Czas utworzenia",
   "PROPERTY:creator": "Stworzone przez",
   "PROPERTY:creatorComment": "Komentarz żądania",
   "PROPERTY:confirmedAt": "Czas potwierdzenia",
