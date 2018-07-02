@@ -66,3 +66,37 @@
   border-right: 1px dotted #ccc;
   padding-right: 12px;
 }
+.paintShop-paintPicker-totals {
+  display: inline-flex;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 14px;
+  vertical-align: top;
+  margin-top: 2px;
+}
+.paintShop-paintPicker-total {
+  width: 44px;
+  text-align: center;
+  color: #000;
+  background-color: #ccc;
+  line-height: 24px;
+}
+.paintShop-paintPicker-total[data-status="new"] {
+  text-shadow: none;
+}
+.paintShop-paintPicker-total[data-status="started"] {
+  background-color: #5bc0de;
+  text-shadow: none;
+}
+.paintShop-paintPicker-total[data-status="partial"] {
+  background-color: #f0ad4e;
+  text-shadow: none;
+}
+.paintShop-paintPicker-total[data-status="finished"] {
+  background-color: #449d44;
+  color: #fff;
+}
+.paintShop-paintPicker-total[data-status="cancelled"] {
+  background-color: #d9534f;
+  color: #fff;
+  text-shadow: none;
+}
