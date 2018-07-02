@@ -33,7 +33,7 @@ define([
       if (this.tableView)
       {
         this.tableView.on('change:filterMode', this.onFilterModeChange, this);
-        this.tableView.on('change:filter', this.onFilterChange, this);
+        this.tableView.on('change:filter sync', this.onFilterChange, this);
         this.tableView.on('change:sort', this.onSortChange, this);
 
         this.supplyAreas.on('add change remove', this.onSupplyAreaUpdate, this);
@@ -52,6 +52,29 @@ define([
       pubsub.subscribe('kanban.import.success', this.onImport.bind(this));
 
       pubsub.subscribe('kanban.entries.updated', this.onUpdated.bind(this));
+    },
+
+    getSupplyAreas: function()
+    {
+      var supplyAreas = {};
+
+      this.forEach(function(entry)
+      {
+        supplyAreas[entry.get('supplyArea')] = 1;
+      });
+
+      this.supplyAreas.forEach(function(supplyArea)
+      {
+        supplyAreas[supplyArea.id] = 1;
+      });
+
+      return Object.keys(supplyAreas).sort().map(function(supplyArea)
+      {
+        return {
+          id: supplyArea,
+          text: supplyArea
+        };
+      });
     },
 
     onFilterModeChange: function()

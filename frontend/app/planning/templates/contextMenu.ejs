@@ -5,7 +5,10 @@
   <% } else if (item.type === 'divider') { %>
   <li class="divider"></li>
   <% } else { %>
-  <li>
+  <li data-action="<%- i %>">
+    <% if (item.template) { %>
+    <%- item.template({i: i, item: item}) %>
+    <% } else { %>
     <a data-action="<%- i %>" class="<%- item.disabled ? 'planning-menu-disabled' : '' %>" <%- item.disabled ? '' : 'tabindex="100000"' %>>
       <% if (icons) { %>
       <i class="fa <%- item.icon || 'fa-blank' %>"></i><span><%- item.label %></span>
@@ -13,6 +16,7 @@
       <%- item.label %>
       <% } %>
     </a>
+    <% } %>
   </li>
   <% } %>
   <% }) %>

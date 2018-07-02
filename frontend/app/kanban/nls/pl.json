@@ -64,5 +64,13 @@
 
   "kind:kk:short": "KK",
   "kind:pk:short": "PK",
-  "kind:null:short": ""
+  "kind:null:short": "",
+
+  "filters:submit": "Filtruj",
+  "filters:clear": "Wyczyść",
+  "filters:noValue": "Brak wartości",
+  "filters:value:empty": "Brak wartości",
+  "filters:value:valid": "Prawidłowe wartości",
+  "filters:value:invalid": "Nieprawidłowe wartości",
+  "filters:invalid": "Nieprawidłowy filtr."
 }

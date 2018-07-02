@@ -77,10 +77,23 @@ define([
       }
 
       entry.workstationsTotal = 0;
+      entry.invalidWorkstations = false;
+      entry.invalidLocations = false;
 
-      for (var w = 0; w < 6; ++w)
+      for (var i = 0; i < 6; ++i)
       {
-        entry.workstationsTotal += entry.workstations[w];
+        var workstations = entry.workstations[i];
+        var location = entry.locations[i];
+
+        entry.workstationsTotal += workstations;
+        entry.invalidWorkstations = entry.invalidWorkstations || (!workstations && !!location);
+        entry.invalidLocations = entry.invalidLocations || (!location && !!workstations);
+      }
+
+      if (!entry.workstationsTotal)
+      {
+        entry.invalidWorkstations = true;
+        entry.invalidLocations = true;
       }
 
       entry.kanbanQtyUser = entry.workstationsTotal * 2;

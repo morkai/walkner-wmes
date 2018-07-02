@@ -5,23 +5,31 @@ define([
   'jquery',
   'app/viewport',
   'app/core/View',
+  'app/core/util/idAndLabel',
   'app/data/clipboard',
   'app/planning/util/contextMenu',
   'app/kanban/templates/entryList',
   'app/kanban/templates/entryListColumns',
   'app/kanban/templates/entryListRow',
-  'app/kanban/templates/inputEditor'
+  'app/kanban/templates/inputEditor',
+  'app/kanban/templates/filters/numeric',
+  'app/kanban/templates/filters/text',
+  'app/kanban/templates/filters/select'
 ], function(
   _,
   $,
   viewport,
   View,
+  idAndLabel,
   clipboard,
   contextMenu,
   template,
   columnsTemplate,
   rowTemplate,
-  inputEditorTemplate
+  inputEditorTemplate,
+  numericFilterTemplate,
+  textFilterTemplate,
+  selectFilterTemplate
 ) {
   'use strict';
 
@@ -106,6 +114,7 @@ define([
     {
       this.editing = null;
       this.focusedCell = null;
+      this.prevFocusedCell = null;
       this.lastKeyPressAt = {};
 
       this.listenTo(this.model.tableView, 'change:filter change:order', this.onSortableChange);
@@ -186,7 +195,7 @@ define([
       return view.rowCache[entry.id];
     },
 
-    renderRows: function()
+    renderRows: function(newPosition, newIndex)
     {
       console.log('renderRows: start');
       console.time('renderRows');
@@ -200,11 +209,44 @@ define([
         return;
       }
 
+      if (typeof newPosition !== 'number')
+      {
+        newPosition = -1;
+      }
+
+      if (typeof newIndex !== 'number')
+      {
+        newIndex = -1;
+      }
+
       var entries = view.model.entries.filtered;
       var tbody = view.$tbody[0];
       var visibleAreaHeight = view.$tbodyOuter.outerHeight() - SCROLLBAR_HEIGHT;
       var visibleRowCount = Math.ceil(visibleAreaHeight / ROW_HEIGHT);
+      var rowCount = view.model.entries.filtered.length;
+      var totalHeight = ROW_HEIGHT * (rowCount + 1);
       var scrollTop = view.$tbodyInner[0].scrollTop;
+
+      if (newIndex >= 0)
+      {
+        newPosition = newIndex * ROW_HEIGHT;
+
+        if (newPosition >= scrollTop
+          && newPosition < (scrollTop + visibleAreaHeight - ROW_HEIGHT * 2))
+        {
+          newPosition = -1;
+        }
+        else if ((newIndex + visibleRowCount) * ROW_HEIGHT >= totalHeight)
+        {
+          newPosition = totalHeight - visibleRowCount * ROW_HEIGHT;
+        }
+      }
+
+      if (newPosition >= 0)
+      {
+        scrollTop = newPosition;
+      }
+
       var startIndex = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT));
       var endIndex = startIndex + visibleRowCount;
       var lastIndex = endIndex - 1;
@@ -217,8 +259,6 @@ define([
         currentLastIndex = +tbody.lastElementChild.dataset.modelIndex;
       }
 
-      var rowCount = view.model.entries.filtered.length;
-      var totalHeight = ROW_HEIGHT * (rowCount + 1);
       var optimize = null;
 
       if (view.rowCache === null)
@@ -235,14 +275,25 @@ define([
       }
       else if (startIndex === currentStartIndex && lastIndex === currentLastIndex)
       {
-        return view.finalizeRenderRows();
+        optimize = 'same';
       }
-
-      var fragment = document.createDocumentFragment();
 
       view.$table.css('top', scrollTop + 'px');
       view.$scroller.css('height', totalHeight + 'px');
 
+      if (newPosition >= 0)
+      {
+        view.$tbodyInner[0].scrollTop = scrollTop;
+      }
+
+      console.log('optimize=', optimize, 'scrollTop=', scrollTop);
+
+      if (optimize === 'same')
+      {
+        return view.finalizeRenderRows();
+      }
+
+      var fragment = document.createDocumentFragment();
       var addCount, removeCount, addI, removeI, modelIndex, entry; // eslint-disable-line one-var
 
       if (optimize === 'down')
@@ -309,11 +360,6 @@ define([
       console.log('            start=', startIndex, 'end=', endIndex, 'focusedCell=', view.focusedCell);
     },
 
-    renderRowsUp: function()
-    {
-
-    },
-
     finalizeRenderRows: function()
     {
       var view = this;
@@ -321,11 +367,13 @@ define([
 
       if (view.afterRenderRows)
       {
+        console.log('finalizeRenderRows afterRenderRows');
         view.afterRenderRows.call(view);
         view.afterRenderRows = null;
       }
       else if (view.focusedCell)
       {
+        console.log('finalizeRenderRows focusedCell=', view.focusedCell.modelId, view.focusedCell.columnId);
         var modelId = view.focusedCell.modelId;
         var columnId = view.focusedCell.columnId;
         var arrayIndex = view.focusedCell.arrayIndex;
@@ -357,7 +405,38 @@ define([
       }
       else if ($tbody[0].childElementCount)
       {
-        $tbody[0].children[0].children[0].focus();
+        console.log('finalizeRenderRows focus');
+        if (view.prevFocusedCell)
+        {
+          var modelIndex = view.prevFocusedCell.modelIndex;
+          var firstModelIndex = +$tbody[0].firstElementChild.dataset.modelIndex;
+          var lastModelIndex = +$tbody[0].lastElementChild.dataset.modelIndex;
+
+          if (view.prevFocusedCell.modelIndex < firstModelIndex)
+          {
+            modelIndex = firstModelIndex;
+          }
+          else if (view.prevFocusedCell.modelIndex > lastModelIndex)
+          {
+            modelIndex = lastModelIndex;
+          }
+
+          var $row = $tbody.find('tr[data-model-index="' + modelIndex + '"]');
+          var $cell = $row.find('td[data-column-id="' + view.prevFocusedCell.columnId + '"]');
+
+          if ($cell.length)
+          {
+            $cell.focus();
+          }
+          else
+          {
+            $row[0].children[0].focus();
+          }
+        }
+        else
+        {
+          $tbody[0].children[0].children[0].focus();
+        }
       }
 
       if (view.editing && view.editorPositioners[view.editing.columnId])
@@ -458,7 +537,7 @@ define([
         left = rect.left;
       }
 
-      var column = view.columns.map[cell.columnId];
+      var column = cell.column;
       var tableView = view.model.tableView;
       var sortOrder = tableView.getSortOrder(cell.columnId);
       var options = {
@@ -508,6 +587,26 @@ define([
           }
         ]
       };
+
+      var filter = view.filters[cell.columnId];
+
+      if (typeof filter === 'string')
+      {
+        filter = view.filters[filter];
+      }
+
+      if (filter)
+      {
+        options.menu.push({
+          template: function(templateData)
+          {
+            templateData.columnId = cell.columnId;
+
+            return filter.template(templateData);
+          },
+          handler: filter.handler.bind(view, cell)
+        });
+      }
 
       contextMenu.show(view, top, left, options);
     },
@@ -597,11 +696,16 @@ define([
       }
 
       console.log('onFilter 1');
+
+      this.filtered = true;
     },
 
     onSort: function()
     {
       var view = this;
+      var filtered = view.filtered;
+
+      view.filtered = false;
 
       if (!view.$tbodyInner)
       {
@@ -626,25 +730,35 @@ define([
         var entryInVisibleArea = newPosition >= tbodyInner.scrollTop
           && newPosition < (tbodyInner.scrollTop + visibleAreaHeight - ROW_HEIGHT * 2);
 
-        if (entryInVisibleArea)
+        if (entryInVisibleArea || filtered)
         {
-          view.renderRows();
+          console.log('onSort 2');
+          view.renderRows(-1, newIndex);
         }
         else
         {
+          console.log('onSort 3');
           tbodyInner.scrollTop = newPosition;
         }
       }
       else
       {
+        view.prevFocusedCell = view.focusedCell;
         view.focusedCell = null;
 
         if (tbodyInner.scrollTop === 0)
         {
-          view.renderRows();
+          console.log('onSort 4');
+          view.renderRows(0);
+        }
+        else if (filtered && view.prevFocusedCell)
+        {
+          console.log('onSort 5');
+          view.renderRows(tbodyInner.scrollTop);
         }
         else
         {
+          console.log('onSort 6');
           tbodyInner.scrollTop = 0;
         }
       }
@@ -1320,6 +1434,280 @@ define([
       locations: function()
       {
         this.editorPositioners.inputEditor.apply(this, arguments);
+      }
+
+    },
+
+    handleFilterValue: function(columnId, type, data)
+    {
+      contextMenu.hide(this);
+
+      var newFilter = null;
+
+      if (type && data)
+      {
+        newFilter = {
+          type: type,
+          data: data
+        };
+      }
+
+      this.model.tableView.setFilter(columnId, newFilter);
+
+      return false;
+    },
+
+    filters: {
+
+      numeric: {
+        template: numericFilterTemplate,
+        handler: function(cell, $filter)
+        {
+          var view = this;
+          var $data = $filter.find('.form-control');
+          var oldData = (view.model.tableView.getFilter(cell.columnId) || {data: ''}).data;
+
+          $data.val(oldData).on('input', function()
+          {
+            this.setCustomValidity('');
+          });
+
+          $filter.find('.btn[data-action="clear"]').on('click', function()
+          {
+            view.handleFilterValue(cell.columnId);
+          });
+
+          $filter.find('form').on('submit', function()
+          {
+            var newData = $data.val()
+              .trim()
+              .replace(/and/ig, '&&')
+              .replace(/or/ig, '||')
+              .replace(/=+/g, '=');
+
+            if (newData === '')
+            {
+              return view.handleFilterValue(cell.columnId);
+            }
+
+            if (/^[0-9]+$/.test(newData))
+            {
+              return view.handleFilterValue(cell.columnId, 'numeric', newData);
+            }
+
+            var code = newData;
+
+            if (newData.indexOf('$') === -1)
+            {
+              code = '$' + code;
+            }
+
+            code = code
+              .replace(/([^<>])=/g, '$1==')
+              .replace(/<>/g, '!=');
+
+            try
+            {
+              var result = eval('(function($) { return ' + code + '; })(666);'); // eslint-disable-line no-eval
+
+              if (typeof result !== 'boolean')
+              {
+                throw new Error('Invalid result type. Expected boolean, got ' + typeof result + '.');
+              }
+            }
+            catch (err)
+            {
+              $data[0].setCustomValidity(view.t('filters:invalid'));
+
+              view.timers.revalidate = setTimeout(function() { $filter.find('.btn-primary').click(); }, 1);
+
+              return false;
+            }
+
+            return view.handleFilterValue(cell.columnId, 'numeric', newData);
+          });
+        }
+      },
+      text: {
+        template: textFilterTemplate,
+        handler: function(cell, $filter)
+        {
+          var view = this;
+          var $data = $filter.find('.form-control');
+          var oldData = (view.model.tableView.getFilter(cell.columnId) || {data: ''}).data;
+
+          $data.val(oldData).on('input', function()
+          {
+            this.setCustomValidity('');
+          });
+
+          $filter.find('.btn[data-action="clear"]').on('click', function()
+          {
+            view.handleFilterValue(cell.columnId);
+          });
+
+          $filter.find('form').on('submit', function()
+          {
+            var newData = $data.val().trim();
+
+            if (newData === '')
+            {
+              return view.handleFilterValue(cell.columnId, 'text', null);
+            }
+
+            if (!/^\/.*?\/$/.test(newData))
+            {
+              if (!newData.replace(/[^A-Za-z0-9]+/g, '').length)
+              {
+                $data[0].setCustomValidity(view.t('filters:invalid'));
+
+                view.timers.revalidate = setTimeout(function() { $filter.find('.btn-primary').click(); }, 1);
+
+                return false;
+              }
+
+              return view.handleFilterValue(cell.columnId, 'text', newData);
+            }
+
+            var code = newData + 'i.test($)';
+
+            try
+            {
+              var result = eval('(function($) { return ' + code + '; })("abc");'); // eslint-disable-line no-eval
+
+              if (typeof result !== 'boolean')
+              {
+                throw new Error('Invalid result type. Expected boolean, got ' + typeof result + '.');
+              }
+            }
+            catch (err)
+            {
+              $data[0].setCustomValidity(view.t('filters:invalid'));
+
+              view.timers.revalidate = setTimeout(function() { $filter.find('.btn-primary').click(); }, 1);
+
+              return false;
+            }
+
+            return view.handleFilterValue(cell.columnId, 'text', newData);
+          });
+        }
+      },
+      select: function(cell, $filter, options, multiple)
+      {
+        var view = this;
+        var $data = $filter.find('.form-control').prop('multiple', multiple !== false);
+        var oldData = (view.model.tableView.getFilter(cell.columnId) || {data: []}).data;
+
+        $filter.find('select').html(options.map(function(option)
+        {
+          return '<option value="' + option.id + '" ' + (_.includes(oldData, option.id) ? 'selected' : '') + '>'
+            + _.escape(option.text)
+            + '</option>';
+        }).join(''));
+
+        $filter.find('.btn[data-action="clear"]').on('click', function()
+        {
+          view.handleFilterValue(cell.columnId);
+        });
+
+        $filter.find('form').on('submit', function()
+        {
+          var newData = $data.val();
+
+          if (!Array.isArray(newData))
+          {
+            newData = [newData];
+          }
+
+          return view.handleFilterValue(
+            cell.columnId,
+            'select',
+            newData.length === 0 ? null : newData
+          );
+        });
+      },
+      _id: 'numeric',
+      kanbanQtyUser: 'numeric',
+      componentQty: 'numeric',
+      kanbanIdEmpty: 'numeric',
+      kanbanIdFull: 'numeric',
+      lineCount: 'numeric',
+      emptyFullCount: 'numeric',
+      stock: 'numeric',
+      maxBinQty: 'numeric',
+      minBinQty: 'numeric',
+      replenQty: 'numeric',
+      nc12: 'text',
+      description: 'text',
+      storageBin: 'text',
+      supplyArea: {
+        template: selectFilterTemplate,
+        handler: function(cell, $filter)
+        {
+          this.filters.select.call(this, cell, $filter, this.model.entries.getSupplyAreas());
+        }
+      },
+      family: {
+        template: selectFilterTemplate,
+        handler: function(cell, $filter)
+        {
+          this.filters.select.call(
+            this,
+            cell,
+            $filter,
+            [{id: '', text: this.t('filters:value:empty')}].concat(this.model.supplyAreas.getFamilies())
+          );
+        }
+      },
+      kind: {
+        template: selectFilterTemplate,
+        handler: function(cell, $filter)
+        {
+          this.filters.select.call(
+            this,
+            cell,
+            $filter,
+            [
+              {id: '', text: this.t('filters:value:empty')},
+              {id: 'kk', text: this.t('kind:kk')},
+              {id: 'pk', text: this.t('kind:pk')}
+            ]
+          );
+        }
+      },
+      workstations: {
+        template: selectFilterTemplate,
+        handler: function(cell, $filter)
+        {
+          this.filters.select.call(
+            this,
+            cell,
+            $filter,
+            [
+              {id: 'valid', text: this.t('filters:value:valid')},
+              {id: 'invalid', text: this.t('filters:value:invalid')}
+            ],
+            false
+          );
+        }
+      },
+      locations: 'workstations',
+      discontinued: {
+        template: selectFilterTemplate,
+        handler: function(cell, $filter)
+        {
+          this.filters.select.call(
+            this,
+            cell,
+            $filter,
+            [
+              {id: 'true', text: this.t('core', 'BOOL:true')},
+              {id: 'false', text: this.t('core', 'BOOL:false')}
+            ],
+            false
+          );
+        }
       }
 
     }

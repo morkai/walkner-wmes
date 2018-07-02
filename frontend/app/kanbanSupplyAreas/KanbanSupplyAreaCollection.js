@@ -20,6 +20,24 @@ define([
       pubsub.subscribe('kanban.supplyAreas.*', this.handleMessage.bind(this));
     },
 
+    getFamilies: function()
+    {
+      var families = {};
+
+      this.forEach(function(supplyArea)
+      {
+        families[supplyArea.get('name')] = 1;
+      });
+
+      return Object.keys(families).sort().map(function(family)
+      {
+        return {
+          id: family,
+          text: family
+        };
+      });
+    },
+
     handleMessage: function(message, topic)
     {
       var supplyArea = this.get(message.model._id);

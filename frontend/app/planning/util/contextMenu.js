@@ -173,27 +173,36 @@ define([
       });
       $menu.on('keydown', '[tabindex]', function(e)
       {
+        var tagName = e.currentTarget.tagName;
+        var upDown = tagName !== 'SELECT' && tagName !== 'TEXTAREA';
+        var enter = upDown && tagName !== 'INPUT';
+
         switch (e.originalEvent.key)
         {
           case 'ArrowUp':
-            return focusPrev(e);
+            return upDown ? focusPrev(e) : undefined;
 
           case 'ArrowDown':
-            return focusNext(e);
+            return upDown ? focusNext(e) : undefined;
 
           case 'Tab':
             return e.shiftKey ? focusPrev(e) : focusNext(e);
 
           case 'Enter':
           {
-            var click = new $.Event('click');
+            if (enter)
+            {
+              var click = new $.Event('click');
 
-            click.pageY = options.top;
-            click.pageX = options.left;
+              click.pageY = options.top;
+              click.pageX = options.left;
 
-            $(e.currentTarget).trigger(click);
+              $(e.currentTarget).trigger(click);
 
-            return false;
+              return false;
+            }
+
+            break;
           }
 
           case 'Escape':
@@ -236,9 +245,24 @@ define([
 
       this.position(view, top, left);
 
+      menu.forEach(function(item, i)
+      {
+        if (item.template && item.handler)
+        {
+          item.handler($menu.find('li[data-action="' + i + '"]'));
+        }
+      });
+
       if (options.autoFocus !== false)
       {
-        $menu.find('[tabindex]:not(.planning-menu-disabled)').first().focus();
+        if ($menu.find('[autofocus]').length)
+        {
+          $menu.find('[autofocus]').first().focus().select();
+        }
+        else
+        {
+          $menu.find('[tabindex]:not(.planning-menu-disabled)').first().focus();
+        }
       }
 
       broker.publish('planning.contextMenu.shown');

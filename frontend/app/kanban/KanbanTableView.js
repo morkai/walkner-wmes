@@ -4,12 +4,14 @@ define([
   'underscore',
   '../i18n',
   '../user',
-  '../core/Model'
+  '../core/Model',
+  '../core/util/transliterate'
 ], function(
   _,
   t,
   user,
-  Model
+  Model,
+  transliterate
 ) {
   'use strict';
 
@@ -52,13 +54,12 @@ define([
   var defaultTdValueRenderer = function(value) { return value; };
   var invalidTdClassName = function(value) { return value ? '' : 'kanban-is-invalid'; };
 
+  var VALIDATION_FILTER_PROPERTIES = {
+    workstations: 'invalidWorkstations',
+    locations: 'invalidLocations'
+  };
   var COLUMNS = {
-    _id: {
-      exportValue: function(value)
-      {
-        return '"' + value + '"';
-      }
-    },
+    _id: {},
     nc12: {
       renderValue: function(value, column, arrayIndex, entry)
       {
@@ -68,10 +69,6 @@ define([
         }
 
         return '<a href="#kanban/components/' + value + '" target="_blank">' + value + '</a>';
-      },
-      exportValue: function(value)
-      {
-        return '"' + value + '"';
       }
     },
     description: {
@@ -301,11 +298,42 @@ define([
 
     setFilter: function(columnId, filter)
     {
-      this.attributes.filters[columnId] = filter;
+      if (filter)
+      {
+        this.attributes.filters[columnId] = filter;
+      }
+      else
+      {
+        delete this.attributes.filters[columnId];
+      }
 
       this.trigger('change:filter', this, columnId, {});
       this.trigger('change:filters', this, this.attributes.filters, {});
       this.trigger('change', this, {save: true});
+    },
+
+    setFilters: function(newFilters)
+    {
+      var tableView = this;
+      var oldFilters = tableView.attributes.filters;
+
+      tableView.attributes.filters = newFilters;
+
+      Object.keys(oldFilters).forEach(function(columnId)
+      {
+        if (!newFilters[columnId])
+        {
+          tableView.trigger('change:filter', tableView, columnId, {});
+        }
+      });
+
+      Object.keys(newFilters).forEach(function(columnId)
+      {
+        tableView.trigger('change:filter', tableView, columnId, {});
+      });
+
+      tableView.trigger('change:filters', tableView, tableView.attributes.filters, {});
+      tableView.trigger('change', tableView, {save: true});
     },
 
     clearFilters: function()
@@ -488,15 +516,162 @@ define([
 
     createFilter: function(options)
     {
-      var filterMode = this.get('filterMode');
-      var filters = this.get('filters');
+      var all = this.get('filterMode') === 'and';
+      var filters = this.compileFilters(this.get('filters'));
+
+      if (filters.length === 0)
+      {
+        return function() { return true; };
+      }
 
       return function(a)
       {
         a = a.serialize(options);
 
-        return true;
+        var i;
+        var filter;
+
+        if (all)
+        {
+          for (i = 0; i < filters.length; ++i)
+          {
+            filter = filters[i];
+
+            if (!filter.check(a[filter.columnId], a))
+            {
+              return false;
+            }
+          }
+
+          return true;
+        }
+
+        for (i = 0; i < filters.length; ++i)
+        {
+          filter = filters[i];
+
+          if (filter.check(a[filter.columnId], a))
+          {
+            return true;
+          }
+        }
+
+        return false;
       };
+    },
+
+    compileFilters: function(filterMap)
+    {
+      var tableView = this;
+      var filterList = [];
+
+      _.forEach(filterMap, function(filter, columnId)
+      {
+        filterList.push({
+          columnId: columnId,
+          check: tableView.compileFilter(columnId, filter)
+        });
+      });
+
+      return filterList;
+    },
+
+    compileFilter: function(columnId, filter)
+    {
+      if (!filter.check)
+      {
+        filter.check = this.filterCompilers[filter.type](filter.data, columnId);
+      }
+
+      return filter.check;
+    },
+
+    filterCompilers: {
+      numeric: function(code)
+      {
+        var numericFilter = function() { return true; };
+
+        if (/^[0-9]+$/.test(code))
+        {
+          code = '=' + code;
+        }
+
+        if (code.indexOf('$') === -1)
+        {
+          code = '$' + code;
+        }
+
+        code = code
+          .replace(/([^<>])=/g, '$1==')
+          .replace(/<>/g, '!=');
+
+        try
+        {
+          eval('numericFilter = function($, $$) { return ' + code + '; }'); // eslint-disable-line no-eval
+        }
+        catch (err)
+        {
+          console.warn('Invalid numeric filter:', code);
+        }
+
+        return numericFilter;
+      },
+      text: function(code)
+      {
+        var textFilter = function() { return true; };
+
+        if (/^\/.*?\/$/.test(code))
+        {
+          code = 'return ' + code + 'i.test($)';
+        }
+        else
+        {
+          var words = transliterate(code)
+            .replace(/[^A-Za-z0-9 ]+/g, '')
+            .toUpperCase()
+            .split(' ')
+            .filter(function(word) { return word.length > 0; });
+
+          if (!words.length)
+          {
+            return textFilter;
+          }
+
+          code = '$ = String($).replace(/[^A-Za-z0-9]+/g, "").toUpperCase(); return ' + words
+            .map(function(word) { return '$.indexOf(' + JSON.stringify(word) + ') !== -1'; })
+            .join(' && ');
+        }
+
+        try
+        {
+          eval('textFilter = function($, $$) { ' + code + '; }'); // eslint-disable-line no-eval
+        }
+        catch (err)
+        {
+          console.warn('Invalid text filter:', code);
+        }
+
+        return textFilter;
+      },
+      select: function(data, columnId)
+      {
+        var validationProperty = VALIDATION_FILTER_PROPERTIES[columnId];
+
+        if (validationProperty)
+        {
+          var requiredValue = data[0] === 'invalid';
+
+          return function($, $$)
+          {
+            return $$[validationProperty] === requiredValue;
+          };
+        }
+
+        return function($)
+        {
+          return data.indexOf($ == undefined ? '' : String($)) !== -1; // eslint-disable-line eqeqeq
+        };
+      }
     },
 
     handleEditMessage: function(data)
