@@ -345,6 +345,10 @@
   "TEXT:orders.bom.synced": "Zaimportowano <em>{count}</em> {count, plural, one{komponent} few{komponenty} other{komponentów}} z danych pobranych <em>{timestamp}</em>.",
   "TYPE:orders.bom.syncFailed": "Zlecenia reszty działów: nieudana synchronizacja komponentów",
   "TEXT:orders.bom.syncFailed": "Nie udało się zaimportować komponentów zleceń z <em>{timestamp}</em>: {error}",
+  "TYPE:orders.invalid.synced": "Nieprawidłowe zlecenia IPT: synchronizacja",
+  "TEXT:orders.invalid.synced": "Zaimportowano <em>{count}</em> {count, plural, one{zlecenie} few{zlecenia} other{zleceń}} z danych pobranych <em>{timestamp}</em>.",
+  "TYPE:orders.invalid.syncFailed": "Nieprawidłowe zlecenia IPT: nieudana synchronizacja",
+  "TEXT:orders.invalid.syncFailed": "Nie udało się zaimportować nieprawidłowych zleceń IPT z <em>{timestamp}</em>: {error}",
   "TYPE:isaPalletKinds.added": "Rodzaje palet: dodanie",
   "TEXT:isaPalletKinds.added": "Dodano rodzaj palet: <a href='\\#isaPalletKinds/{model->_id}'>{model->shortName}</a>",
   "TYPE:isaPalletKinds.edited": "Rodzaje palet: edycja",
@@ -408,5 +412,9 @@
   "TYPE:minutesForSafety.deleted": "Minuty dla bezpieczeństwa: usunięcie",
   "TEXT:minutesForSafety.deleted": "Usunięto minuty dla bezpieczeństwa: <em>{model->rid}</em>",
   "TYPE:paintShop.paints.deleted": "Farby: usunięcie",
-  "TEXT:paintShop.paints.deleted": "Usunięto farbę: <em>{model->_id}</em>"
+  "TEXT:paintShop.paints.deleted": "Usunięto farbę: <em>{model->_id}</em>",
+  "TYPE:kanban.import.success": "Baza Kanban: synchronizacja",
+  "TEXT:kanban.import.success": "Pomyślnie zaimportowano {entryCount} {count, plural, one{kanban} few{kanbany} other{kanbanów}} i {componentCount} {componentCount, plural, one{komponent} few{komponenty} other{komponentów}} z danych pobranych <em>{timestamp}</em>.",
+  "TYPE:kanban.import.failure": "Baza Kanban: nieudana synchronizacja",
+  "TEXT:kanban.import.failure": "Nie udało się zaimportować danych z SAP pobranych <em>{timestamp}</em>: {error}"
 }
