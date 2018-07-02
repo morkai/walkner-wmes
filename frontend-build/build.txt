@@ -198,8 +198,13 @@ app/kaizenOrders/assets/report.css
 ----------------
 app/kaizenOrders/assets/report.css
 
+app/kanban/assets/filters.css
+----------------
+app/kanban/assets/filters.css
+
 app/kanban/assets/main.css
 ----------------
+app/kanban/assets/./filters.css
 app/kanban/assets/main.css
 
 app/licenses/assets/main.css
