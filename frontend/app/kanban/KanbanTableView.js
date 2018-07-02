@@ -429,47 +429,60 @@ define([
 
     createSort: function(options)
     {
-      // TODO always also sort by _id
-      var sortProperty = Object.keys(this.attributes.sort)[0];
-      var sortOrder = this.attributes.sort[sortProperty];
+      var sortProperties = _.keys(this.attributes.sort);
+      var sortOrders = _.values(this.attributes.sort);
 
-      return function(a, b)
+      if (!_.includes(sortProperties, '_id'))
       {
-        a = a.serialize(options)[sortProperty];
-        b = b.serialize(options)[sortProperty];
+        sortProperties.push('_id');
+        sortOrders.push(1);
+      }
 
-        if (a === null)
-        {
-          if (b === null)
-          {
-            return 0;
-          }
-
-          return sortOrder === 1 ? -1 : 1;
-        }
-        else if (b === null)
-        {
-          return sortOrder === 1 ? 1 : -1;
-        }
-
-        var type = typeof a;
-
-        if (type === 'object')
+      function sort(i, aObj, bObj)
+      {
+        if (i === sortProperties.length)
         {
           return 0;
         }
 
+        var sortProperty = sortProperties[i];
+        var sortOrder = sortOrders[i];
+
+        var aVal = aObj[sortProperty];
+        var bVal = bObj[sortProperty];
+
+        if (aVal === null)
+        {
+          if (bVal === null)
+          {
+            return sort(i + 1, aObj, bObj);
+          }
+
+          return sortOrder === 1 ? -1 : 1;
+        }
+        else if (bVal === null)
+        {
+          return sortOrder === 1 ? 1 : -1;
+        }
+
+        var type = typeof aVal;
+        var cmp = 0;
+
         if (type === 'number')
         {
-          return sortOrder === 1 ? (a - b) : (b - a);
+          cmp = sortOrder === 1 ? (aVal - bVal) : (bVal - aVal);
         }
-
-        if (type === 'string')
+        else if (type === 'string')
         {
-          return sortOrder === 1 ? a.localeCompare(b || '') : (b || '').localeCompare(a);
+          cmp = sortOrder === 1 ? aVal.localeCompare(bVal || '') : (bVal || '').localeCompare(aVal);
         }
 
-        return 0;
+        return cmp === 0 ? sort(i + 1, aObj, bObj) : cmp;
+      }
+
+      return function(a, b)
+      {
+        return sort(0, a.serialize(options), b.serialize(options));
       };
     },
 
@@ -488,6 +501,7 @@ define([
 
     handleEditMessage: function(data)
     {
+      // TODO
       console.log('TableView edited:', data);
     }
 
