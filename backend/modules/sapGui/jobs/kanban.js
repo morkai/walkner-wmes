@@ -120,6 +120,11 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
         },
         itemDecorator: obj =>
         {
+          if (!obj._id)
+          {
+            return null;
+          }
+
           const kanban = [
             obj._id,
             obj.nc12,
@@ -129,7 +134,7 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
             0
           ];
 
-          this.components.set(obj.nc12, {});
+          this.components.set(obj.nc12, []);
           this.kanbans.set(obj._id, kanban);
 
           return null;
@@ -184,6 +189,11 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
         },
         itemDecorator: obj =>
         {
+          if (!obj._id)
+          {
+            return null;
+          }
+
           this.components.set(obj._id, [
             obj._id,
             obj.description,
@@ -298,6 +308,11 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
         },
         itemDecorator: obj =>
         {
+          if (!obj._id)
+          {
+            return null;
+          }
+
           if (!this.components.has(obj._id))
           {
             this.components.set(obj._id, [
