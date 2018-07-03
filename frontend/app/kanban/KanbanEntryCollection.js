@@ -179,6 +179,7 @@ define([
 
     onImport: function(message)
     {
+      console.log('onImport', message);
       if (!message.entryCount && !message.componentCount)
       {
         return;
@@ -195,14 +196,29 @@ define([
       {
         if (res2 && res2[0].totalCount)
         {
-          entries.components.set(res2[0].collection, {remove: false, silent: true});
+          var updatedComponentList = res2[0].collection;
+          var updatedNc12Map = {};
+
+          updatedComponentList.forEach(function(d) { updatedNc12Map[d._id] = true; });
+
+          entries.components.set(updatedComponentList, {remove: false, silent: true});
+
+          entries.forEach(function(entry)
+          {
+            if (updatedNc12Map[entry.get('nc12')])
+            {
+              entry.serialized = null;
+            }
+          });
         }
 
         if (res1 && res1[0].totalCount)
         {
-          entries.set(res1[0].collection, {remove: false, silent: true});
+          var updatedEntryList = res1[0].collection;
 
-          res1[0].collection.forEach(function(d)
+          entries.set(updatedEntryList, {remove: false, silent: true});
+
+          updatedEntryList.forEach(function(d)
           {
             entries.get(d._id).serialized = null;
           });
