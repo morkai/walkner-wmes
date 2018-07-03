@@ -134,7 +134,7 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
             0
           ];
 
-          this.components.set(obj.nc12, []);
+          this.components.set(obj.nc12, null);
           this.kanbans.set(obj._id, kanban);
 
           return null;
@@ -327,7 +327,7 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
             return null;
           }
 
-          if (!this.components.has(obj._id))
+          if (!this.components.get(obj._id))
           {
             this.components.set(obj._id, [
               obj._id,
