@@ -157,7 +157,7 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
         '--table', 'MAKT',
         '--layout', 'WMES_MAKT',
         '--criteria', `F,1,${files.materials.path},${files.materials.file}`,
-        '--criteria', `f,2,${job.maktLanguage || 'PL'}`
+        '--criteria', `m,2,${job.maktLanguage || 'PL'}`
       ];
 
       sapGuiModule.runScript(job, 'T_ZSE16D.exe', args, checkOutputFile.bind(null, this.next()));
@@ -181,11 +181,13 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
       parseSapTextTable(makt, {
         columnMatchers: {
           _id: /^Material$/,
-          description: /^Material description$/
+          description: /^Material description$/,
+          lang: /^Lang/
         },
         valueParsers: {
           _id: input => input.replace(/^0+/, ''),
-          description: parseSapString
+          description: parseSapString,
+          lang: parseSapString
         },
         itemDecorator: obj =>
         {
@@ -194,14 +196,26 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
             return null;
           }
 
-          this.components.set(obj._id, [
-            obj._id,
-            obj.description,
-            '',
-            0,
-            0,
-            0
-          ]);
+          const oldComponent = this.components.get(obj._id);
+
+          if (oldComponent)
+          {
+            if (oldComponent[1] === '' || (obj.description !== '' && obj.lang === 'PL'))
+            {
+              oldComponent[1] = obj.description;
+            }
+          }
+          else
+          {
+            this.components.set(obj._id, [
+              obj._id,
+              obj.description,
+              '',
+              0,
+              0,
+              0
+            ]);
+          }
 
           return null;
         }
