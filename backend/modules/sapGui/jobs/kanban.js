@@ -59,7 +59,87 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
           rows: []
         }
       };
+    },
+    function()
+    {
+      const args = [
+        '--output-path', files.mlgt.path,
+        '--output-file', files.mlgt.file,
+        '--table', 'MLGT',
+        '--layout', 'WMES_MLGT',
+        '--criteria', `f,2,${job.mlgtWarehouseNo || 'KZ1'}`,
+        '--criteria', `f,3,${job.mlgtStorageType || '851'}`
+      ];
 
+      sapGuiModule.runScript(job, 'T_ZSE16D.exe', args, checkOutputFile.bind(null, this.next()));
+    },
+    function(err, exitCode, output)
+    {
+      if (err)
+      {
+        return this.skip(app.createError(err.message, 'MLGT_TRANSACTION_FAILURE'), exitCode, output);
+      }
+
+      fs.readFile(files.mlgt.full, {encoding: 'utf8'}, this.next());
+    },
+    function(err, mlgt)
+    {
+      if (err)
+      {
+        return this.skip(app.createError(err.message, 'MLGT_READ_FAILURE'));
+      }
+
+      this.components = new Map();
+
+      parseSapTextTable(mlgt, {
+        columnMatchers: {
+          _id: /^Material$/,
+          storageBin: /^Stor.*?Bin/,
+          maxBinQty: /Max.*?qty/i,
+          minBinQty: /Min.*?qty/i,
+          replenQty: /Rep.*?qty/i
+        },
+        valueParsers: {
+          _id: input => input.replace(/^0+/, ''),
+          storageBin: parseSapString,
+          maxBinQty: parseSapNumber,
+          minBinQty: parseSapNumber,
+          replenQty: parseSapNumber
+        },
+        itemDecorator: obj =>
+        {
+          if (!obj._id)
+          {
+            return null;
+          }
+
+          if (!this.components.get(obj._id))
+          {
+            this.components.set(obj._id, [
+              obj._id,
+              '',
+              '',
+              0,
+              0,
+              0
+            ]);
+          }
+
+          const component = this.components.get(obj._id);
+
+          component[2] = obj.storageBin;
+          component[3] = Math.max(0, obj.maxBinQty);
+          component[4] = Math.max(0, obj.minBinQty);
+          component[5] = Math.max(0, obj.replenQty);
+
+          return null;
+        }
+      });
+
+      setImmediate(this.next());
+    },
+    function()
+    {
       fs.writeFile(
         files.supplyAreas.full,
         this.result.supplyAreas.join('\r\n').trim(),
@@ -100,7 +180,6 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
         return this.skip(app.createError(err.message, 'PKHD_READ_FAILURE'));
       }
 
-      this.components = new Map();
       this.kanbans = new Map();
 
       parseSapTextTable(pkhd, {
@@ -134,7 +213,11 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
             0
           ];
 
-          this.components.set(obj.nc12, null);
+          if (!this.components.has(obj.nc12))
+          {
+            this.components.set(obj.nc12, null);
+          }
+
           this.kanbans.set(obj._id, kanban);
 
           return null;
@@ -196,13 +279,13 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
             return null;
           }
 
-          const oldComponent = this.components.get(obj._id);
+          const component = this.components.get(obj._id);
 
-          if (oldComponent)
+          if (component)
           {
-            if (oldComponent[1] === '' || (obj.description !== '' && obj.lang === 'PL'))
+            if (component[1] === '' || (obj.description !== '' && obj.lang === 'PL'))
             {
-              oldComponent[1] = obj.description;
+              component[1] = obj.description;
             }
           }
           else
@@ -269,82 +352,6 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
           {
             kanban[5] = obj.kanbanId < 0 ? 0 : obj.kanbanId;
           }
-
-          return null;
-        }
-      });
-
-      setImmediate(this.next());
-    },
-    function()
-    {
-      const args = [
-        '--output-path', files.mlgt.path,
-        '--output-file', files.mlgt.file,
-        '--table', 'MLGT',
-        '--layout', 'WMES_MLGT',
-        '--criteria', `f,2,${job.mlgtWarehouseNo || 'KZ1'}`,
-        '--criteria', `f,3,${job.mlgtStorageType || '851'}`
-      ];
-
-      sapGuiModule.runScript(job, 'T_ZSE16D.exe', args, checkOutputFile.bind(null, this.next()));
-    },
-    function(err, exitCode, output)
-    {
-      if (err)
-      {
-        return this.skip(app.createError(err.message, 'MLGT_TRANSACTION_FAILURE'), exitCode, output);
-      }
-
-      fs.readFile(files.mlgt.full, {encoding: 'utf8'}, this.next());
-    },
-    function(err, mlgt)
-    {
-      if (err)
-      {
-        return this.skip(app.createError(err.message, 'MLGT_READ_FAILURE'));
-      }
-
-      parseSapTextTable(mlgt, {
-        columnMatchers: {
-          _id: /^Material$/,
-          storageBin: /^Stor.*?Bin/,
-          maxBinQty: /Max.*?qty/i,
-          minBinQty: /Min.*?qty/i,
-          replenQty: /Rep.*?qty/i
-        },
-        valueParsers: {
-          _id: input => input.replace(/^0+/, ''),
-          storageBin: parseSapString,
-          maxBinQty: parseSapNumber,
-          minBinQty: parseSapNumber,
-          replenQty: parseSapNumber
-        },
-        itemDecorator: obj =>
-        {
-          if (!obj._id)
-          {
-            return null;
-          }
-
-          if (!this.components.get(obj._id))
-          {
-            this.components.set(obj._id, [
-              obj._id,
-              '',
-              '',
-              0,
-              0,
-              0
-            ]);
-          }
-
-          const component = this.components.get(obj._id);
-
-          component[2] = obj.storageBin;
-          component[3] = Math.max(0, obj.maxBinQty);
-          component[4] = Math.max(0, obj.minBinQty);
-          component[5] = Math.max(0, obj.replenQty);
 
           return null;
         }
