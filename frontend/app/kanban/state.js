@@ -175,7 +175,8 @@ define([
     kanbanState.auth = {
       view: user.isAllowedTo('KANBAN:VIEW'),
       manage: user.isAllowedTo('KANBAN:MANAGE'),
-      processEngineer: user.isAllowedTo('FN:process-engineer')
+      processEngineer: user.isAllowedTo('FN:process-engineer'),
+      leader: user.isAllowedTo('FN:leader')
     };
   }
 

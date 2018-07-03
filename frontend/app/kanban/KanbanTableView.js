@@ -191,7 +191,7 @@ define([
       {
         var className = !entry.workstationsTotal || (!value && entry.workstations[i]) ? 'kanban-is-invalid' : '';
 
-        if (this.state.auth.manage || this.state.auth.processEngineer)
+        if (this.state.auth.manage || this.state.auth.processEngineer || this.state.auth.leader)
         {
           className += ' kanban-is-editable';
         }
