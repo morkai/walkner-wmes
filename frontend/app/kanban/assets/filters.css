@@ -7,7 +7,13 @@
 .kanban-filter-buttons {
   margin-top: 5px;
   display: flex;
-  justify-content: flex-end;
+}
+.kanban-filter-help {
+  font-size: 28px;
+  align-self: center;
+}
+.kanban-filter-help + .btn {
+  margin-left: auto;
 }
 .kanban-filter-buttons .btn {
   flex: 0 0 auto;

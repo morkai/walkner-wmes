@@ -604,7 +604,19 @@ define([
 
             return filter.template(templateData);
           },
-          handler: filter.handler.bind(view, cell)
+          handler: function($filter)
+          {
+            filter.handler.call(view, cell, $filter);
+
+            $filter.find('.kanban-filter-help').popover({
+              container: 'body',
+              trigger: 'hover',
+              placement: 'auto bottom',
+              html: true,
+              title: view.t('filters:help:title:' + filter.type),
+              content: view.t('filters:help:content:' + filter.type)
+            });
+          }
         });
       }
 
@@ -1461,6 +1473,7 @@ define([
     filters: {
 
       numeric: {
+        type: 'numeric',
         template: numericFilterTemplate,
         handler: function(cell, $filter)
         {
@@ -1535,6 +1548,7 @@ define([
         }
       },
       text: {
+        type: 'text',
         template: textFilterTemplate,
         handler: function(cell, $filter)
         {
@@ -1653,6 +1667,7 @@ define([
       description: 'text',
       storageBin: 'text',
       supplyArea: {
+        type: 'select-multi',
         template: selectFilterTemplate,
         handler: function(cell, $filter)
         {
@@ -1660,6 +1675,7 @@ define([
         }
       },
       family: {
+        type: 'select-multi',
         template: selectFilterTemplate,
         handler: function(cell, $filter)
         {
@@ -1672,6 +1688,7 @@ define([
         }
       },
       kind: {
+        type: 'select-multi',
         template: selectFilterTemplate,
         handler: function(cell, $filter)
         {
@@ -1688,6 +1705,7 @@ define([
         }
       },
       workstations: {
+        type: 'select-one',
         template: selectFilterTemplate,
         handler: function(cell, $filter)
         {
@@ -1705,6 +1723,7 @@ define([
       },
       locations: 'workstations',
       discontinued: {
+        type: 'select-one',
         template: selectFilterTemplate,
         handler: function(cell, $filter)
         {
