@@ -1395,7 +1395,7 @@ define([
 
       workstations: function(cell)
       {
-        this.editors.input.call(this, cell, 3, '^([0-9]|[1-9][0-9]|[0-9].[0-9])$');
+        this.editors.input.call(this, cell, 3, '^([0-9]|[1-9][0-9]|[0-9](\.|,)5)$');
       },
 
       locations: function(cell)
