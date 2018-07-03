@@ -1,6 +1,7 @@
 .idea
 /node_modules
 /node_modules_min
+/node_modules_dev
 /frontend/files
 /frontend-build/files
 /build

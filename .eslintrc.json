@@ -195,7 +195,7 @@
 		"operator-linebreak": [2, "before"],
 		"padded-blocks": [2, "never"],
 		"quote-props": [0, "as-needed"],
-		"quotes": [2, "single", "avoid-escape"],
+		"quotes": [0, "single", "avoid-escape"],
 		"semi-spacing": [2, {"before": false, "after": true}],
 		"semi": [2, "always"],
 		"sort-vars": 0,
