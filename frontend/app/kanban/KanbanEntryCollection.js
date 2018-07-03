@@ -193,6 +193,11 @@ define([
 
       $.when.apply($, reqs).done(function(res1, res2)
       {
+        if (res2 && res2[0].totalCount)
+        {
+          entries.components.set(res2[0].collection, {remove: false, silent: true});
+        }
+
         if (res1 && res1[0].totalCount)
         {
           entries.set(res1[0].collection, {remove: false, silent: true});
@@ -201,11 +206,6 @@ define([
           {
             entries.get(d._id).serialized = null;
           });
-        }
-
-        if (res2 && res2[0].totalCount)
-        {
-          entries.components.set(res2[0].collection, {remove: false, silent: true});
         }
 
         entries.onFilterChange();
