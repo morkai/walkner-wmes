@@ -1294,7 +1294,7 @@ define([
 
     editors: {
 
-      input: function(cell, maxLength, pattern)
+      input: function(cell, maxLength, pattern, placeholder)
       {
         var view = this;
         var rect = cell.td.getBoundingClientRect();
@@ -1305,6 +1305,7 @@ define([
           columnId: cell.columnId,
           maxLength: maxLength,
           pattern: pattern,
+          placeholder: placeholder,
           value: cell.column.editorValue(
             cell.arrayIndex >= 0 ? entry[cell.columnId][cell.arrayIndex] : entry[cell.columnId],
             cell.column,
@@ -1382,12 +1383,12 @@ define([
 
       workstations: function(cell)
       {
-        this.editors.input.call(this, cell, 2, '^([0-9]|[1-9][0-9])$');
+        this.editors.input.call(this, cell, 3, '^([0-9]|[1-9][0-9]|[0-9].[0-9])$');
       },
 
       locations: function(cell)
       {
-        this.editors.input.call(this, cell, 3, '^[A-Za-z]([0-9][0-9])$');
+        this.editors.input.call(this, cell, 3, '^[A-Za-z]([0-9][0-9])$', 'X00');
       }
 
     },

@@ -202,13 +202,13 @@ tr:hover > .kanban-is-invalid,
   width: 30px;
 }
 .kanban-td[data-column-id="workstations"] {
-  width: 30px;
+  width: 35px;
 }
 .kanban-thead-table .kanban-td[data-column-id="workstations"] {
   height: 72px;
 }
 .kanban-td[data-column-id="workstations"][colspan] {
-  width: 180px;
+  width: 210px;
   height: 73px;
   border-bottom-width: 1px;
 }
@@ -259,7 +259,7 @@ tr:hover > .kanban-is-invalid,
   box-shadow: inset 0 0 4px #000;
 }
 .kanban-editor-form[data-column-id="workstations"] {
-  width: 30px;
+  width: 35px;
 }
 .kanban-editor-form[data-column-id="locations"] {
   width: 40px;

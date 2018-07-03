@@ -5,13 +5,15 @@ define([
   '../i18n',
   '../user',
   '../core/Model',
-  '../core/util/transliterate'
+  '../core/util/transliterate',
+  '../core/util/parseNumber'
 ], function(
   _,
   t,
   user,
   Model,
-  transliterate
+  transliterate,
+  parseNumber
 ) {
   'use strict';
 
@@ -90,7 +92,11 @@ define([
       tdClassName: invalidTdClassName
     },
     kanbanQtyUser: {
-      rotated: true
+      rotated: true,
+      renderValue: function(value)
+      {
+        return value.toLocaleString().replace(/\s+/g, '');
+      }
     },
     componentQty: {
       rotated: true,
@@ -164,9 +170,17 @@ define([
 
         return className;
       },
+      renderValue: function(value)
+      {
+        return value.toLocaleString();
+      },
+      editorValue: function(value)
+      {
+        return value.toLocaleString().replace(/\s+/g, '');
+      },
       parseValue: function(value)
       {
-        return Math.min(99, Math.max(0, parseInt(value, 10) || 0));
+        return Math.min(99, Math.max(0, parseNumber(value)));
       }
     },
     locations: {
