@@ -158,6 +158,11 @@ module.exports = function setUpKanbanRoutes(app, module)
   {
     const user = userModule.createUserInfo(req.session.user, req);
 
+    if (user.id)
+    {
+      user.id = user.id.toString();
+    }
+
     step(
       function()
       {
