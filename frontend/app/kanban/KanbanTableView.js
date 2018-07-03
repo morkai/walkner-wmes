@@ -601,8 +601,20 @@ define([
     },
 
     filterCompilers: {
+      empty: function()
+      {
+        return function($)
+        {
+          return $ === undefined || $ === null || $ === 0 || $ === '';
+        };
+      },
       numeric: function(code)
       {
+        if (code === '?')
+        {
+          return this.empty();
+        }
+
         var numericFilter = function() { return true; };
 
         if (/^[0-9]+$/.test(code))
@@ -632,6 +644,11 @@ define([
       },
       text: function(code)
       {
+        if (code === '?')
+        {
+          return this.empty();
+        }
+
         var textFilter = function() { return true; };
 
         if (/^\/.*?\/$/.test(code))

@@ -1445,7 +1445,7 @@ define([
 
       var newFilter = null;
 
-      if (type && data)
+      if (type)
       {
         newFilter = {
           type: type,
@@ -1489,6 +1489,11 @@ define([
             if (newData === '')
             {
               return view.handleFilterValue(cell.columnId);
+            }
+
+            if (newData === '?')
+            {
+              return view.handleFilterValue(cell.columnId, 'empty', '?');
             }
 
             if (/^[0-9]+$/.test(newData))
@@ -1553,7 +1558,12 @@ define([
 
             if (newData === '')
             {
-              return view.handleFilterValue(cell.columnId, 'text', null);
+              return view.handleFilterValue(cell.columnId);
+            }
+
+            if (newData === '?')
+            {
+              return view.handleFilterValue(cell.columnId, 'empty', '?');
             }
 
             if (!/^\/.*?\/$/.test(newData))
