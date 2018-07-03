@@ -11,9 +11,9 @@ module.exports = function startCoreRoutes(app, express)
   const updaterModule = app[app.options.updaterId || 'updater'];
   const userModule = app[app.options.userId || 'user'];
 
-  const ROOT_USER = JSON.stringify(_.omit(userModule.root, 'password'));
-  const GUEST_USER = JSON.stringify(userModule.guest);
-  const PRIVILEGES = JSON.stringify(userModule.config.privileges);
+  const ROOT_USER = userModule ? JSON.stringify(_.omit(userModule.root, 'password')) : '{}';
+  const GUEST_USER = userModule ? JSON.stringify(userModule.guest) : '{}';
+  const PRIVILEGES = userModule ? JSON.stringify(userModule.config.privileges) : '[]';
   const MODULES = JSON.stringify(app.options.modules.map(m => m.id || m));
   const DASHBOARD_URL_AFTER_LOG_IN = JSON.stringify(app.options.dashboardUrlAfterLogIn || '/');
 
