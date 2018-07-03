@@ -10,7 +10,8 @@ exports.DEFAULT_CONFIG = {
   expressId: 'express',
   userId: 'user',
   sapGuiId: 'sapGui',
-  settingsId: 'settings'
+  settingsId: 'settings',
+  sapImporterMessengerId: 'messenger/client'
 };
 
 exports.start = function startKanbanModule(app, module)

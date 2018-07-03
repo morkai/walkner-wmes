@@ -44,6 +44,15 @@ module.exports = function setUpKanbanState(app, module)
     }
   });
 
+  app.broker.subscribe('messenger.client.connected', message =>
+  {
+    if (message.socketType === 'sub' && message.moduleName === module.config.sapImporterMessengerId)
+    {
+      lists.components = null;
+      lists.entries = null;
+    }
+  });
+
   function load(done)
   {
     step(

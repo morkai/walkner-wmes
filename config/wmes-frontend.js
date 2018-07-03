@@ -610,5 +610,5 @@ exports.sapLaborTimeFixer = {
 };
 
 exports.kanban = {
-
+  sapImporterMessengerId: 'messenger/client:wmes-importer-sap'
 };
