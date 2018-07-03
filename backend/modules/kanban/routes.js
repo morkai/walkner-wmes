@@ -156,7 +156,7 @@ module.exports = function setUpKanbanRoutes(app, module)
 
   function readUsersTableViewRoute(req, res, next)
   {
-    const user = userModule.createUserInfo();
+    const user = userModule.createUserInfo(req.session.user, req);
 
     step(
       function()
