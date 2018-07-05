@@ -1,0 +1,19 @@
+.kanban-search-dialog .modal-dialog {
+  top: 50%;
+  margin-top: -40px;
+}
+.kanban-search-dialog .modal-body {
+  padding: 0;
+}
+.kanban-search-dialog .form-control {
+  height: auto;
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+  font-size: 56px;
+  line-height: 1;
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .kanban-search-dialog .modal-dialog {
+    width: 400px;
+  }
+}

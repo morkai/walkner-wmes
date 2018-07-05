@@ -8,6 +8,7 @@ define([
   'app/core/util/idAndLabel',
   'app/data/clipboard',
   'app/planning/util/contextMenu',
+  './KanbanSearchDialog',
   'app/kanban/templates/entryList',
   'app/kanban/templates/entryListColumns',
   'app/kanban/templates/entryListRow',
@@ -23,6 +24,7 @@ define([
   idAndLabel,
   clipboard,
   contextMenu,
+  KanbanSearchDialog,
   template,
   columnsTemplate,
   rowTemplate,
@@ -410,16 +412,17 @@ define([
 
           var $td = $tr.find(tdSelector);
 
-          if ($td[0] !== document.activeElement)
+          if ($td[0] === document.activeElement)
           {
-            if (document.hasFocus())
-            {
-              $td.focus();
-            }
-            else
-            {
-              view.focusCell();
-            }
+            view.focusCell();
+          }
+          else if (document.hasFocus())
+          {
+            $td.focus();
+          }
+          else
+          {
+            view.focusCell();
           }
         }
       }
@@ -848,6 +851,8 @@ define([
 
       if (!cell)
       {
+        console.log('focusCell NOPE');
+
         return;
       }
 
@@ -865,6 +870,8 @@ define([
       }
 
       this.$(tdSelector).addClass('kanban-is-selected');
+
+      console.log('focusCell YEPP', !!cell.td);
     },
 
     onSortableChange: function(tableView, columnId)
@@ -1379,6 +1386,72 @@ define([
         {
           this.lastKeyPressAt.CtrlA = e.timeStamp;
         }
+      },
+      F: function(e)
+      {
+        if (!e.ctrlKey || viewport.currentDialog)
+        {
+          return;
+        }
+
+        var view = this;
+        var searchDialog = new KanbanSearchDialog({model: view.model});
+
+        view.editing = view.focusedCell;
+
+        viewport.showDialog(searchDialog);
+
+        view.listenToOnce(searchDialog, 'found', function(type, model)
+        {
+          if (type === 'component')
+          {
+            view.model.tableView.setFilters({
+              nc12: {
+                type: 'text',
+                data: model.id
+              }
+            });
+          }
+          else if (type === 'entry')
+          {
+            var $tr = view.$tbody.find('tr[data-model-id="' + model.id + '"]');
+
+            if ($tr.length)
+            {
+              return $tr[0].firstElementChild.focus();
+            }
+
+            if (!view.model.entries.filteredMap[model.id])
+            {
+              view.model.tableView.clearFilters();
+            }
+
+            $tr = view.$tbody.find('tr[data-model-id="' + model.id + '"]');
+
+            if ($tr.length)
+            {
+              return $tr[0].firstElementChild.focus();
+            }
+
+            view.afterRenderRows = function()
+            {
+              view.$tbody.find('tr[data-model-id="' + model.id + '"]')[0].firstElementChild.focus();
+            };
+
+            view.$tbodyInner[0].scrollTop = view.model.entries.filtered.indexOf(model) * ROW_HEIGHT;
+          }
+        });
+
+        $('.viewport-dialog').removeClass('fade');
+
+        view.broker.subscribe('viewport.dialog.hidden').setLimit(1).on('message', function()
+        {
+          view.editing = null;
+
+          $('.viewport-dialog').addClass('fade');
+        });
+
+        return false;
       }
     },
 

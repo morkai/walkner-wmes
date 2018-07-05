@@ -1,4 +1,5 @@
 @import "./filters.css";
+@import "./search.css";
 
 .kanban-entries {
   border: 1px solid #bbb;
