@@ -3,6 +3,7 @@
 define([
   'jquery',
   'app/i18n',
+  'app/user',
   'app/viewport',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
@@ -11,6 +12,7 @@ define([
 ], function(
   $,
   t,
+  user,
   viewport,
   View,
   bindLoadingMessage,
@@ -62,7 +64,7 @@ define([
         id: '-import',
         label: t.bound('kanban', 'pa:import'),
         icon: 'download',
-        privileges: 'KANBAN:MANAGE',
+        privileges: function() { return user.isAllowedTo('KANBAN:MANAGE', 'FN:process-engineer'); },
         callback: this.import.bind(this)
       }];
     },
