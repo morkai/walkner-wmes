@@ -61,11 +61,20 @@
 .kanban-tbody-table .kanban-is-discontinued > .kanban-td {
   background-color: #f2dede;
 }
-.kanban-tbody-table .kanban-is-selected > .kanban-td {
+.kanban-tbody-table .kanban-is-selected > .kanban-td,
+.kanban-tbody-table .kanban-td.kanban-is-selected,
+.kanban-thead-table .kanban-td.kanban-is-selected {
   background-color: #d9edf7;
+  color: #000;
 }
-.kanban-tbody-table tr:hover > .kanban-td {
+.kanban-tbody-table tr:hover > .kanban-td,
+.kanban-tbody-table tr > .kanban-td.kanban-is-hovered[tabindex],
+.kanban-thead-table tr > .kanban-td.kanban-is-hovered {
   background-color: #ffffd6;
+}
+.kanban-thead-table td[data-column-id="filler1"],
+.kanban-thead-table td[data-column-id="filler2"] {
+  background-color: #fff!important;
 }
 .kanban-tbody-table .kanban-td:hover {
   background-color: #ffffa6!important;
@@ -112,7 +121,8 @@ tr:hover > .kanban-is-invalid,
   cursor: pointer;
 }
 .kanban-is-with-menu:hover {
-  background-color: #ffffa6;
+  background-color: #ffffa6!important;
+  color: #000;
 }
 .kanban-is-with-menu:before,
 .kanban-is-asc:before,

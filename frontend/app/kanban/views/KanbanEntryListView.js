@@ -72,12 +72,6 @@ define([
           return;
         }
 
-        this.$tbody.find('.kanban-is-selected').removeClass('kanban-is-selected');
-        this.$tbody.find('.kanban-is-focused').removeClass('kanban-is-focused');
-
-        newCell.td.classList.add('kanban-is-focused');
-        newCell.tr.classList.add('kanban-is-selected');
-
         var oldCell = this.focusedCell;
 
         if (oldCell
@@ -89,6 +83,8 @@ define([
         }
 
         this.focusedCell = newCell;
+
+        this.focusCell();
       },
       'click .kanban-is-editable': function(e)
       {
@@ -107,6 +103,24 @@ define([
       'click .kanban-is-with-menu': function(e)
       {
         this.showColumnMenu(this.idCell(e), e.pageY, e.pageX);
+      },
+      'mouseenter .kanban-td': function(e)
+      {
+        this.$('.kanban-is-hovered').removeClass('kanban-is-hovered');
+
+        var td = e.currentTarget;
+        var tdSelector = '.kanban-td[data-column-id="' + td.dataset.columnId + '"]';
+
+        if (td.dataset.arrayIndex)
+        {
+          tdSelector += '[data-array-index="' + td.dataset.arrayIndex + '"]';
+        }
+
+        this.$(tdSelector).addClass('kanban-is-hovered');
+      },
+      'mouseleave .kanban-td': function()
+      {
+        this.$('.kanban-is-hovered').removeClass('kanban-is-hovered');
       }
     },
 
@@ -370,6 +384,8 @@ define([
         console.log('finalizeRenderRows afterRenderRows');
         view.afterRenderRows.call(view);
         view.afterRenderRows = null;
+
+        view.focusCell();
       }
       else if (view.focusedCell)
       {
@@ -378,28 +394,32 @@ define([
         var columnId = view.focusedCell.columnId;
         var arrayIndex = view.focusedCell.arrayIndex;
         var $tr = $tbody.find('tr[data-model-id="' + modelId + '"]');
-        var tdSelector = 'td[data-column-id="' + columnId + '"]';
 
-        if (arrayIndex >= 0)
+        if (!$tr.length)
         {
-          tdSelector += '[data-array-index="' + arrayIndex + '"]';
+          view.focusCell();
         }
-
-        var $td = $tr.find(tdSelector);
-
-        if ($td[0] !== document.activeElement)
+        else
         {
-          if (document.hasFocus())
-          {
-            $td.focus();
-          }
-          else
-          {
-            view.$tbody.find('.kanban-is-selected').removeClass('kanban-is-selected');
-            view.$tbody.find('.kanban-is-focused').removeClass('kanban-is-focused');
+          var tdSelector = 'td[data-column-id="' + columnId + '"]';
 
-            $tr.addClass('kanban-is-selected');
-            $td.addClass('kanban-is-focused');
+          if (arrayIndex >= 0)
+          {
+            tdSelector += '[data-array-index="' + arrayIndex + '"]';
+          }
+
+          var $td = $tr.find(tdSelector);
+
+          if ($td[0] !== document.activeElement)
+          {
+            if (document.hasFocus())
+            {
+              $td.focus();
+            }
+            else
+            {
+              view.focusCell();
+            }
           }
         }
       }
@@ -815,12 +835,36 @@ define([
           clicks: this.focusedCell.clicks
         });
 
-        this.$tbody.find('.kanban-is-selected').removeClass('kanban-is-selected');
-        this.$tbody.find('.kanban-is-focused').removeClass('kanban-is-focused');
-
-        $tr.addClass('kanban-is-selected');
-        $td.addClass('kanban-is-focused');
+        this.focusCell();
       }
+    },
+
+    focusCell: function()
+    {
+      this.$('.kanban-is-selected').removeClass('kanban-is-selected');
+      this.$tbody.find('.kanban-is-focused').removeClass('kanban-is-focused');
+
+      var cell = this.focusedCell;
+
+      if (!cell)
+      {
+        return;
+      }
+
+      if (cell.td)
+      {
+        cell.td.parentNode.classList.add('kanban-is-selected');
+        cell.td.classList.add('kanban-is-focused');
+      }
+
+      var tdSelector = '.kanban-td[data-column-id="' + cell.columnId + '"]';
+
+      if (cell.arrayIndex >= 0)
+      {
+        tdSelector += '[data-array-index="' + cell.arrayIndex + '"]';
+      }
+
+      this.$(tdSelector).addClass('kanban-is-selected');
     },
 
     onSortableChange: function(tableView, columnId)
