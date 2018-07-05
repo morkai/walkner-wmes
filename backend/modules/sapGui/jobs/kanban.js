@@ -313,8 +313,7 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
         '--output-file', files.pkps.file,
         '--table', 'PKPS',
         '--layout', 'WMES_PKPS',
-        '--criteria', `F,2,${files.controlCycles.path},${files.controlCycles.file}`,
-        '--criteria', 'f,3,1'
+        '--criteria', `F,2,${files.controlCycles.path},${files.controlCycles.file}`
       ];
 
       sapGuiModule.runScript(job, 'T_ZSE16D.exe', args, checkOutputFile.bind(null, this.next()));
