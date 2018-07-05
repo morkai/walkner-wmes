@@ -18,7 +18,7 @@ module.exports = function setUpKanbanRoutes(app, module)
 
   const canView = userModule.auth('USER');
   const canManage = userModule.auth('KANBAN:MANAGE');
-  const canUpdate = userModule.auth('KANBAN:MANAGE', 'FN:process-engineer');
+  const canUpdate = userModule.auth('KANBAN:MANAGE', 'FN:process-engineer', 'FN:leader');
 
   const updateLocks = new Map();
 
