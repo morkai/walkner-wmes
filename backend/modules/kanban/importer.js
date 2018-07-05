@@ -300,7 +300,7 @@ exports.start = function startKanbanImporterModule(app, module)
   function compareDocs(oldDoc, newDoc, columns, updatedAt, updates)
   {
     const update = {
-      $set: {},
+      $set: {updatedAt},
       $push: {
         changes: {
           date: updatedAt,
@@ -329,7 +329,7 @@ exports.start = function startKanbanImporterModule(app, module)
       update.$push.changes.data[column] = [oldValue, newValue];
     });
 
-    if (!Object.keys(update.$set).length)
+    if (Object.keys(update.$set).length > 1)
     {
       return;
     }
