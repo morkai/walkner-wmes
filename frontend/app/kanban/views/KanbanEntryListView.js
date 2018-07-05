@@ -1312,6 +1312,23 @@ define([
 
         if (e.timeStamp - view.lastKeyPressAt.CtrlA < 1000)
         {
+          lines.push(view.columns.list.map(function(column)
+          {
+            if (!column.arrayIndex)
+            {
+              return view.model.tableView.getColumnText(column._id);
+            }
+
+            var columns = [];
+
+            for (var n = 1; n <= column.arrayIndex; ++n)
+            {
+              columns.push(view.t('export:' + column._id, {n: n}));
+            }
+
+            return columns.join('\t');
+          }).join('\t'));
+
           view.model.entries.filtered.forEach(exportEntry);
 
           msg = 'table';

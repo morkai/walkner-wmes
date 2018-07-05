@@ -58,6 +58,9 @@
   "column:discontinued": "Wycofane?",
   "column:discontinued:title": "Wycofane?",
 
+  "export:workstations": "Stanowisko {n}",
+  "export:locations": "Lokalizacja {n}",
+
   "kind:kk": "Karta Kanbanowa",
   "kind:pk": "Pojemnik Kanban",
   "kind:null": "Nieokreślony",

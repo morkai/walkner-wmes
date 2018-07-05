@@ -158,6 +158,7 @@ define([
     workstations: {
       rowSpan: 1,
       colSpan: 6,
+      arrayIndex: 6,
       sortable: false,
       tdClassName: function(value, column, i, entry)
       {
@@ -178,6 +179,10 @@ define([
       {
         return value.toLocaleString().replace(/\s+/g, '');
       },
+      exportValue: function(value)
+      {
+        return this.editorValue(value);
+      },
       parseValue: function(value)
       {
         return Math.min(99, Math.max(0, parseNumber(value)));
@@ -186,6 +191,7 @@ define([
     locations: {
       rowSpan: 1,
       colSpan: 6,
+      arrayIndex: 6,
       sortable: false,
       tdClassName: function(value, column, i, entry)
       {
@@ -435,6 +441,7 @@ define([
           labelClassName: '',
           tdClassName: defaultTdClassName,
           valueClassName: defaultTdClassName,
+          arrayIndex: 0,
           rowSpan: 2,
           colSpan: 1,
           visible: this.getVisibility(columnId),
