@@ -11,6 +11,7 @@ module.exports = function sendSurveyHtmlRoute(app, module, req, res, next)
   const express = app[module.config.expressId];
   const mongoose = app[module.config.mongooseId];
   const OpinionSurvey = mongoose.model('OpinionSurvey');
+  const OpinionSurveyDivision = mongoose.model('OpinionSurveyDivision');
 
   let template = req.query.template;
 
@@ -26,14 +27,16 @@ module.exports = function sendSurveyHtmlRoute(app, module, req, res, next)
     {
       if (/^PREVIEW/.test(id))
       {
-        setImmediate(this.next(), null, module.surveyPreviews[id]);
+        setImmediate(this.parallel(), null, module.surveyPreviews[id]);
       }
       else
       {
-        OpinionSurvey.findById(req.params.id).lean().exec(this.next());
+        OpinionSurvey.findById(req.params.id).lean().exec(this.parallel());
       }
+
+      OpinionSurveyDivision.find({}, {short: 1}).lean().exec(this.parallel());
     },
-    function(err, survey)
+    function(err, survey, divisions)
     {
       if (err)
       {
@@ -51,6 +54,16 @@ module.exports = function sendSurveyHtmlRoute(app, module, req, res, next)
       {
         template = survey.template + '/' + template;
       }
+
+      survey.superiors.forEach(superior =>
+      {
+        const division = divisions.find(d => d._id === superior.division);
+
+        if (division)
+        {
+          superior.division = division.short;
+        }
+      });
 
       res.render('opinionSurveys:' + template, {
         cache: false,

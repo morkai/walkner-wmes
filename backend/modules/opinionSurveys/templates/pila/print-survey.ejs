@@ -75,6 +75,7 @@
       vertical-align: top;
     }
     .answer {
+      padding: 6px 4px;
       width: 92px;
       text-align: center;
     }
@@ -120,7 +121,7 @@
   <div id="superiors">
     <ol class="circles">
       <% survey.superiors.forEach(function(superior, i) { %>
-      <% if (i && i % 8 === 0) { %>
+      <% if (i === Math.round(survey.superiors.length / 2)) { %>
     </ol>
     <ol class="circles">
       <% } %>
