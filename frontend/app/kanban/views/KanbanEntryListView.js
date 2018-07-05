@@ -1093,23 +1093,144 @@ define([
       },
       Tab: function(e, cell)
       {
-        // TODO
+        var view = this;
+
+        if (e.shiftKey)
+        {
+          return view.keyHandlers.ShiftTab.call(view, e, cell);
+        }
+
+        if (cell.td.nextElementSibling.tabIndex !== -1)
+        {
+          return cell.td.nextElementSibling.focus();
+        }
+
+        if (+cell.tr.dataset.modelIndex === (view.model.entries.filtered.length - 1))
+        {
+          view.lastKeyPressAt.Home = e.timeStamp;
+
+          return view.keyHandlers.Home.call(view, e, cell);
+        }
+
+        cell.tr.firstElementChild.focus();
+
+        view.keyHandlers.ArrowDown.call(view, e, view.focusedCell);
+      },
+      ShiftTab: function(e, cell)
+      {
+        var view = this;
+
+        if (cell.tr.firstElementChild !== cell.td)
+        {
+          return cell.td.previousElementSibling.focus();
+        }
+
+        if (cell.tr.dataset.modelIndex === '0')
+        {
+          view.lastKeyPressAt.End = e.timeStamp;
+
+          return view.keyHandlers.End.call(view, e, cell);
+        }
+
+        cell.tr.lastElementChild.previousElementSibling.focus();
+
+        view.keyHandlers.ArrowUp.call(view, e, view.focusedCell);
       },
       PageUp: function(e, cell)
       {
-        // TODO
+        var view = this;
+        var visibleAreaHeight = view.$tbodyOuter.outerHeight() - SCROLLBAR_HEIGHT;
+        var visibleRowCount = Math.ceil(visibleAreaHeight / ROW_HEIGHT);
+        var prevModelIndex = Math.max(0, cell.modelIndex - visibleRowCount);
+        var $tr = view.$tbody.find('tr[data-model-index="' + prevModelIndex + '"]');
+
+        if ($tr.length)
+        {
+          return $tr.find('td[data-column-id="' + cell.columnId + '"]').focus();
+        }
+
+        view.afterRenderRows = function()
+        {
+          var rows = view.$tbody[0].rows;
+          var row = rows[cell.rowIndex] || rows[0];
+
+          row.cells[cell.td.cellIndex].focus();
+        };
+
+        view.$tbodyInner[0].scrollTop -= visibleRowCount * ROW_HEIGHT;
       },
       PageDown: function(e, cell)
       {
-        // TODO
+        var view = this;
+        var visibleAreaHeight = view.$tbodyOuter.outerHeight() - SCROLLBAR_HEIGHT;
+        var visibleRowCount = Math.ceil(visibleAreaHeight / ROW_HEIGHT);
+        var nextModelIndex = Math.min(view.model.entries.filtered.length - 1, cell.modelIndex + visibleRowCount);
+        var $tr = view.$tbody.find('tr[data-model-index="' + nextModelIndex + '"]');
+
+        if ($tr.length)
+        {
+          return $tr.find('td[data-column-id="' + cell.columnId + '"]').focus();
+        }
+
+        view.afterRenderRows = function()
+        {
+          var rows = view.$tbody[0].rows;
+          var row = rows[cell.rowIndex] || rows[rows.length - 1];
+
+          row.cells[cell.td.cellIndex].focus();
+        };
+
+        view.$tbodyInner[0].scrollTop += visibleRowCount * ROW_HEIGHT;
       },
       Home: function(e, cell)
       {
-        // TODO
+        var view = this;
+
+        if (e.timeStamp - view.lastKeyPressAt.Home < 500)
+        {
+          if (view.$tbody[0].firstElementChild.dataset.modelIndex === '0')
+          {
+            view.$tbody[0].firstElementChild.firstElementChild.focus();
+
+            return;
+          }
+
+          view.afterRenderRows = function()
+          {
+            view.$tbody[0].firstElementChild.firstElementChild.focus();
+          };
+
+          view.$tbodyInner[0].scrollTop = 0;
+        }
+        else
+        {
+          cell.tr.firstElementChild.focus();
+        }
       },
       End: function(e, cell)
       {
-        // TODO
+        var view = this;
+
+        if (e.timeStamp - view.lastKeyPressAt.End < 500)
+        {
+          if (view.$tbody[0].lastElementChild.dataset.modelIndex === (view.model.entries.filtered.length - 1))
+          {
+            view.$tbody[0].lastElementChild.lastElementChild.previousElementSibling.focus();
+
+            return;
+          }
+
+          view.afterRenderRows = function()
+          {
+            view.$tbody[0].lastElementChild.lastElementChild.previousElementSibling.focus();
+          };
+
+          view.$tbodyInner[0].scrollTop = view.$tbodyInner[0].scrollHeight;
+        }
+        else
+        {
+          cell.tr.lastElementChild.previousElementSibling.focus();
+        }
       },
       Escape: function()
       {
