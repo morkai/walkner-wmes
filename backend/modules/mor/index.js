@@ -311,6 +311,17 @@ exports.start = function startMorModule(app, module, done)
     {
       _.assign(morUser, _.pick(editedUser, _.keys(USER_FIELDS)));
     }
+
+    if (editedUser.prodFunction === 'manager')
+    {
+      reloadUsers(err =>
+      {
+        if (err)
+        {
+          module.error(`Failed to reload users after manager edit: ${err.message}`);
+        }
+      });
+    }
   }
 
   function handleUserDeleted(message)

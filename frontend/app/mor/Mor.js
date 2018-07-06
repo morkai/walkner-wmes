@@ -47,7 +47,7 @@ define([
 
       this.users = new UserCollection(this.attributes.users, {paginate: false});
 
-      this.on('change:users', function()
+      this.on('reset change:users', function()
       {
         this.users.reset(this.attributes.users);
       });
@@ -60,11 +60,14 @@ define([
 
     subscribe: function(pubsub)
     {
-      pubsub.subscribe('mor.updated', this.onMorUpdated.bind(this));
-      pubsub.subscribe('users.edited', this.onUserEdited.bind(this));
-      pubsub.subscribe('users.deleted', this.onUserDeleted.bind(this));
-      pubsub.subscribe('users.presence.updated', this.onPresenceUpdated.bind(this));
-      pubsub.subscribe('settings.updated.mor.**', this.onSettingUpdated.bind(this));
+      var mor = this;
+
+      pubsub.subscribe('mor.updated', mor.onMorUpdated.bind(mor));
+      pubsub.subscribe('users.added', mor.onUserEdited.bind(mor));
+      pubsub.subscribe('users.edited', mor.onUserEdited.bind(mor));
+      pubsub.subscribe('users.deleted', mor.onUserDeleted.bind(mor));
+      pubsub.subscribe('users.presence.updated', mor.onPresenceUpdated.bind(mor));
+      pubsub.subscribe('settings.updated.mor.**', mor.onSettingUpdated.bind(mor));
     },
 
     getSection: function(sectionId)
@@ -613,6 +616,11 @@ define([
 
         this.trigger('update');
       }
+
+      if (message.model.prodFunction === 'manager')
+      {
+        this.reload();
+      }
     },
 
     onUserDeleted: function(message)
@@ -624,6 +632,11 @@ define([
         this.users.remove(user);
 
         this.trigger('update');
+      }
+
+      if (message.model.prodFunction === 'manager')
+      {
+        this.reload();
       }
     },
 
