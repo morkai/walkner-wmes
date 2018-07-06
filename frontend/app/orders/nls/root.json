@@ -99,8 +99,8 @@
     "CHANGES:newValue": "New value",
     "CHANGES:qtyMax": "Max. quantity for <em>{operationNo}</em>",
 
-    "filter:placeholder:_id": "Any order no",
-    "filter:placeholder:nc12": "Any 12NC",
+    "filter:statuses:in": "Required statuses",
+    "filter:statuses:nin": "Ignored statuses",
     "filter:submit": "Filter orders",
 
     "details:showMoreLink": "Show more order details",

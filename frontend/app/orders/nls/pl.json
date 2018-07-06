@@ -98,8 +98,8 @@
   "CHANGES:newValue": "Nowa wartość",
   "CHANGES:qtyMax": "Maks. ilość dla <em>{operationNo}</em>",
 
-  "filter:placeholder:_id": "Dowolny nr",
-  "filter:placeholder:nc12": "Dowolne 12NC",
+  "filter:statuses:in": "Wymagane statusy",
+  "filter:statuses:nin": "Ignorowane statusy",
   "filter:submit": "Filtruj zlecenia",
 
   "details:showMoreLink": "Pokaż więcej szczegołów zlecenia",
