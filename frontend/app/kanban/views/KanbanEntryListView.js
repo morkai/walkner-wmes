@@ -210,10 +210,22 @@ define([
     renderRow: function(entry, modelIndex)
     {
       var view = this;
+      var row = view.rowCache[entry.id];
 
-      if (!view.rowCache[entry.id])
+      if (row)
       {
-        view.rowCache[entry.id] = $.parseHTML(rowTemplate({
+        row.classList.remove('kanban-is-selected');
+
+        var cells = row.querySelectorAll('.kanban-is-hovered, .kanban-is-selected');
+
+        for (var i = 0; i < cells.length; ++i)
+        {
+          cells[i].classList.remove('kanban-is-hovered', 'kanban-is-selected');
+        }
+      }
+      else
+      {
+        row = view.rowCache[entry.id] = $.parseHTML(rowTemplate({
           idPrefix: view.idPrefix,
           modelIndex: modelIndex,
           columns: view.columns,
