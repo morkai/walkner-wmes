@@ -6,6 +6,7 @@
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się.",
   "MSG:jump:404": "Nie znaleziono zlecenia o nr <em>{rid}</em>.",
 
+  "PAGE_ACTION:export": "Eksportuj zlecenia",
   "PAGE_ACTION:settings": "Zmień ustawienia",
   "PAGE_ACTION:print": "Drukuj zlecenie",
   "PAGE_ACTION:openOrdersPrint": "Drukuj zlecenia",

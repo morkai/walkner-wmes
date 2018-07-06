@@ -7,6 +7,7 @@
     "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order details.",
     "MSG:jump:404": "Couldn't find an order with no <em>{rid}</em>.",
 
+    "PAGE_ACTION:export": "Export orders",
     "PAGE_ACTION:settings": "Change settings",
     "PAGE_ACTION:print": "Print order",
     "PAGE_ACTION:openOrdersPrint": "Print orders",

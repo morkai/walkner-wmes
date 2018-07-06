@@ -39,19 +39,23 @@ define([
       t.bound('orders', 'BREADCRUMBS:browse')
     ],
 
-    actions: function()
+    actions: function(layout)
     {
+      var page = this;
+
       return [
-        pageActions.jump(this, this.collection, {mode: 'id'}),
+        pageActions.jump(page, page.collection, {mode: 'id'}),
+        pageActions.export(layout, page, page.collection),
         {
-          label: t.bound('orders', 'PAGE_ACTION:openOrdersPrint'),
+          label: page.t('PAGE_ACTION:openOrdersPrint'),
           icon: 'print',
           callback: function()
           {
-            viewport.showDialog(new OpenOrdersPrintView(), t.bound('orders', 'openOrdersPrint:title'));
+            viewport.showDialog(new OpenOrdersPrintView(), page.t('openOrdersPrint:title'));
           }
-        }, {
-          label: t.bound('orders', 'PAGE_ACTION:settings'),
+        },
+        {
+          label: page.t('PAGE_ACTION:settings'),
           icon: 'cogs',
           privileges: 'ORDERS:MANAGE',
           href: '#orders;settings'

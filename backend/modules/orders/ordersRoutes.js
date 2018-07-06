@@ -16,6 +16,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
   const mongoose = app[ordersModule.config.mongooseId];
   const Order = mongoose.model('Order');
   const OrderZlf1 = mongoose.model('OrderZlf1');
+  const DelayReason = mongoose.model('DelayReason');
 
   const canView = userModule.auth('LOCAL', 'ORDERS:VIEW');
   const canPrint = userModule.auth('LOCAL', 'ORDERS:VIEW');
@@ -49,13 +50,63 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
   express.get('/orders/zlf1/:id', canPrint, express.crud.readRoute.bind(null, app, OrderZlf1));
 
-  express.get('/orders', express.crud.browseRoute.bind(null, app, Order));
+  express.get('/orders', canView, express.crud.browseRoute.bind(null, app, Order));
+
+  express.get(
+    '/orders;export.:format?',
+    canView,
+    prepareExportDictionaries,
+    function(req, res, next)
+    {
+      req.rql.fields = {
+        bom: 0,
+        changes: 0,
+        documents: 0,
+        operations: 0,
+        qtyMax: 0,
+        statusesSetAt: 0
+      };
+      req.rql.sort = {};
+
+      next();
+    },
+    express.crud.exportRoute.bind(null, app, {
+      filename: 'WMES-ORDERS',
+      freezeRows: 1,
+      freezeColumns: 1,
+      columns: {
+        orderNo: 10,
+        nc12: 15,
+        name: 40,
+        description: 20,
+        mrp: 5,
+        todo: {type: 'integer', width: 5},
+        done: {type: 'integer', width: 5},
+        sapCreatedAt: 'datetime',
+        leadingOrder: 12,
+        salesOrder: 8,
+        salesOrderItem: 5,
+        soldToParty: 11,
+        priority: 3,
+        status: 40,
+        delayReason: 15,
+        startDate: 'date',
+        finishDate: 'date',
+        scheduledStartDate: 'date',
+        scheduledFinishDate: 'date',
+        importedAt: 'datetime',
+        updatedAt: 'datetime'
+      },
+      serializeRow: exportOrder,
+      model: Order
+    })
+  );
 
   express.post('/orders', canEdit, editOrdersRoute);
 
   express.get('/orders/:id.html', canPrint, renderHtmlOrderRoute.bind(null, app, ordersModule));
 
-  express.get('/orders/:id', express.crud.readRoute.bind(null, app, Order));
+  express.get('/orders/:id', canView, express.crud.readRoute.bind(null, app, Order));
 
   express.post('/orders/:id', canEdit, editOrderRoute);
 
@@ -130,5 +181,49 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
       return res.sendStatus(204);
     });
+  }
+
+  function prepareExportDictionaries(req, res, next)
+  {
+    req.delayReasons = new Map();
+
+    DelayReason.find().lean().exec((err, delayReasons) =>
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      delayReasons.forEach(delayReason => req.delayReasons[delayReason._id] = delayReason.name);
+
+      next();
+    });
+  }
+
+  function exportOrder(doc, req)
+  {
+    return {
+      orderNo: doc._id,
+      nc12: doc.nc12,
+      name: doc.name,
+      description: doc.name === doc.description ? '' : doc.description,
+      mrp: doc.mrp,
+      todo: doc.qty,
+      done: doc.qtyDone && doc.qtyDone.total || 0,
+      sapCreatedAt: doc.sapCreatedAt,
+      leadingOrder: doc.leadingOrder,
+      salesOrder: doc.salesOrder,
+      salesOrderItem: doc.salesOrderItem,
+      soldToParty: doc.soldToParty,
+      priority: doc.priority,
+      status: doc.statuses.join(' '),
+      delayReason: req.delayReasons[doc.delayReason] || doc.delayReason || '',
+      startDate: doc.startDate,
+      finishDate: doc.finishDate,
+      scheduledStartDate: doc.scheduledStartDate,
+      scheduledFinishDate: doc.scheduledFinishDate,
+      importedAt: doc.createdAt,
+      updatedAt: doc.updatedAt
+    };
   }
 };
