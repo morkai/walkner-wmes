@@ -347,7 +347,6 @@ module.exports = function(mongoose, options, done)
       results.orderHash = options.hash;
       results.orderCount = results.orders.length;
       results.orders = undefined;
-      results.mrps = undefined;
       options.hash = undefined;
 
       setImmediate(this.next());

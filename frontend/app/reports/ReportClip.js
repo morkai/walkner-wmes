@@ -26,6 +26,7 @@ define([
         orderCount: 0,
         parent: null,
         children: [],
+        mrps: [],
         clip: {
           orderCount: [],
           production: [],
@@ -76,6 +77,7 @@ define([
         orderCount: report.orderCount,
         parent: report.parent,
         children: report.children,
+        mrps: report.mrps,
         clip: null,
         delayReasons: null,
         maxClip: null,

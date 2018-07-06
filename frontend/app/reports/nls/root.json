@@ -416,6 +416,8 @@
     "orders:filter:status:DLV": "Delivered (DLV)",
     "orders:filter:status:PDLV": "Partially delivered (PDLV)",
 
+    "clip:exportOrders": "Export orders",
+
     "7:filter:statuses": "Downtime statuses on the list",
     "7:filter:specificAor": "Specific AOR",
     "7:filter:aors": "Areas of responsibility",

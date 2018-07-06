@@ -456,6 +456,8 @@
   "settings:clip:orderFilterMode:none": "Żadne z wybranych statusów - <span style='font-weight: normal'>tylko zlecenia, które nie mają wszystkich wybranych statusów naraz.</span>",
   "settings:clip:orderFilterMode:without": "Bez wybranego statusu - <span style='font-weight: normal'>tylko zlecenia, które nie mają jednego z wybranych statusów.</span>",
 
+  "clip:exportOrders": "Eksportuj zlecenia",
+
   "7:filter:statuses": "Status przestojów na liście",
   "7:filter:specificAor": "Wyszczególniony obszar odp.",
   "7:filter:aors": "Inne obszary odpowiedzialności",

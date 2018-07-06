@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'jquery',
   'app/i18n',
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
@@ -20,6 +21,7 @@ define([
   'app/reports/templates/clip/page'
 ], function(
   _,
+  $,
   t,
   bindLoadingMessage,
   pageActions,
@@ -133,6 +135,7 @@ define([
       page.listenTo(page.query, 'change', function()
       {
         page.layout.setActions(page.actions, page);
+        page.repositionExportAction();
       });
 
       page.listenTo(page.query, 'change:skip', function()
@@ -246,6 +249,7 @@ define([
 
       delayReasonsStorage.acquire();
 
+      this.repositionExportAction();
       this.loadMrpsIfNecessary();
     },
 
@@ -362,6 +366,15 @@ define([
 
         this.removeExtraChart = false;
       }
+    },
+
+    repositionExportAction: function()
+    {
+      $('.page-actions-export').parent().css({
+        position: 'absolute',
+        right: '24px',
+        top: (this.$id('orders')[0].getBoundingClientRect().top + 9) + 'px'
+      });
     }
 
   });

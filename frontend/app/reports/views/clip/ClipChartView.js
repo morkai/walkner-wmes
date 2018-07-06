@@ -261,7 +261,17 @@ define([
           zoomType: null
         },
         exporting: {
-          filename: t('reports', 'filenames:2:clip')
+          filename: t('reports', 'filenames:2:clip'),
+          buttons: {
+            contextButton: {
+              menuItems: Highcharts.getDefaultMenuItems().concat([
+                {
+                  text: t('reports', 'clip:exportOrders'),
+                  onclick: this.exportOrders.bind(this)
+                }
+              ])
+            }
+          }
         },
         title: {
           text: this.getTitle()
@@ -381,6 +391,36 @@ define([
       }
 
       return lines.join('\r\n');
+    },
+
+    exportOrders: function()
+    {
+      var findDateProperty = this.settings.getValue('clip.findDateProperty');
+      var requiredStatuses = this.settings.getValue('clip.requiredStatuses');
+      var ignoredStatuses = this.settings.getValue('clip.ignoredStatuses');
+      var mrps = this.model.get('mrps');
+      var from = this.model.query.get('from');
+      var to = this.model.query.get('to');
+      var url = '/orders;export.xlsx'
+        + '?' + findDateProperty + '>=' + from
+        + '&' + findDateProperty + '<' + to;
+
+      if (!_.isEmpty(requiredStatuses))
+      {
+        url += '&statuses=in=(' + requiredStatuses.join(',') + ')';
+      }
+
+      if (!_.isEmpty(ignoredStatuses))
+      {
+        url += '&statuses=nin=(' + ignoredStatuses.join(',') + ')';
+      }
+
+      if (!_.isEmpty(mrps))
+      {
+        url += '&mrp=in=(' + mrps.join(',') + ')';
+      }
+
+      window.open(url);
     }
 
   });
