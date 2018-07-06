@@ -671,7 +671,10 @@ exports.exportRoute = function(app, options, req, res, next)
 
     if (columns.length > 1100)
     {
-      cursor.close();
+      if (cursor)
+      {
+        cursor.close();
+      }
 
       cursorClosed = true;
 

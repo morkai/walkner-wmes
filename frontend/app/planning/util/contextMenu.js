@@ -47,7 +47,7 @@ define([
 
   return {
 
-    hide: function(view)
+    hide: function(view, animate)
     {
       var $menu = view.$contextMenu;
 
@@ -62,7 +62,7 @@ define([
         $menu.removeData('backdrop');
         $menu.removeData('options');
 
-        if (options.animate === false)
+        if (options.animate === false || animate === false)
         {
           $menu.remove();
         }
@@ -93,7 +93,7 @@ define([
         menu = options.menu;
       }
 
-      hideMenu();
+      hideMenu(false);
 
       var $menu = $(template({
         top: top,

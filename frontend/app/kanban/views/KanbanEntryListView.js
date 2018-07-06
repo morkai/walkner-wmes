@@ -43,8 +43,21 @@ define([
     template: template,
 
     events: {
-      'contextmenu': function()
+      'contextmenu': function(e)
       {
+        return false;
+      },
+      'contextmenu .kanban-td': function(e)
+      {
+        if (e.currentTarget.classList.contains('kanban-is-with-menu'))
+        {
+          this.showColumnMenu(this.idCell(e), e.pageY, e.pageX);
+        }
+        else
+        {
+          this.showCellMenu(this.idCell(e), e.pageY, e.pageX);
+        }
+
         return false;
       },
       'mousedown': function(e)
@@ -646,6 +659,156 @@ define([
       contextMenu.show(view, top, left, options);
     },
 
+    showCellMenu: function(cell, top, left)
+    {
+      if (!cell.model)
+      {
+        return;
+      }
+
+      var view = this;
+      var options = {
+        menu: [
+          {
+            icon: 'fa-download',
+            label: view.t('menu:export'),
+            handler: view.handleExportTable.bind(view)
+          },
+          {
+            icon: 'fa-clipboard',
+            label: view.t('menu:copy:table'),
+            handler: view.handleCopyTable.bind(view)
+          },
+          {
+            label: view.t('menu:copy:row'),
+            handler: view.handleCopyRow.bind(view, cell.modelId)
+          },
+          {
+            label: view.t('menu:copy:cell'),
+            handler: view.handleCopyCell.bind(view, cell.modelId, cell.columnId, cell.arrayIndex)
+          }
+        ]
+      };
+
+      if (cell.td.classList.contains('kanban-is-editable'))
+      {
+        options.menu.unshift({
+          icon: 'fa-pencil',
+          label: view.t('menu:edit'),
+          handler: function()
+          {
+            view.broker
+              .subscribe('planning.contextMenu.hidden', view.showCellEditor.bind(view, view.focusedCell))
+              .setLimit(1);
+          }
+        });
+      }
+
+      cell.td.focus();
+
+      if (!top && !left)
+      {
+        var rect = cell.td.getBoundingClientRect();
+
+        top = rect.top + rect.height / 2;
+        left = rect.left + rect.width / 2;
+      }
+
+      contextMenu.show(view, top, left, options);
+    },
+
+    handleCopyTable: function()
+    {
+      var view = this;
+      var lines = [view.columns.list.map(function(column)
+      {
+        if (!column.arrayIndex)
+        {
+          return view.model.tableView.getColumnText(column._id);
+        }
+
+        var columns = [];
+
+        for (var i = 0; i < column.arrayIndex; ++i)
+        {
+          columns.push(view.model.tableView.getColumnText(column._id, i));
+        }
+
+        return columns.join('\t');
+      }).join('\t')];
+
+      view.model.entries.filtered.forEach(function(entry)
+      {
+        lines.push(view.exportEntry(entry));
+      });
+
+      this.handleCopy('table', lines);
+    },
+
+    handleCopyRow: function(entryId)
+    {
+      this.handleCopy('row', [this.exportEntry(this.model.entries.get(entryId))]);
+    },
+
+    handleCopyCell: function(entryId, columnId, arrayIndex)
+    {
+      var column = this.columns.map[columnId];
+      var entry = this.model.entries.get(entryId).serialize(this.model);
+      var value = entry[columnId];
+
+      if (arrayIndex >= 0)
+      {
+        value = value[arrayIndex];
+      }
+
+      this.handleCopy('cell', [column.exportValue(value, column, arrayIndex, entry)]);
+    },
+
+    handleCopy: function(type, lines)
+    {
+      var view = this;
+
+      clipboard.copy(function(clipboardData)
+      {
+        clipboardData.setData('text/plain', lines.join('\r\n'));
+
+        if (view.$clipboardMsg)
+        {
+          viewport.msg.hide(view.$clipboardMsg, true);
+        }
+
+        view.$clipboardMsg = viewport.msg.show({
+          type: 'info',
+          time: 1500,
+          text: view.t('msg:clipboard:' + type)
+        });
+      });
+    },
+
+    exportEntry: function(entry)
+    {
+      entry = entry.serialize();
+
+      var line = [];
+
+      this.columns.list.forEach(function(column)
+      {
+        if (Array.isArray(entry[column._id]))
+        {
+          entry[column._id].forEach(function(value, arrayIndex)
+          {
+            line.push(column.exportValue(value, column, arrayIndex, entry));
+          });
+        }
+        else
+        {
+          line.push(column.exportValue(entry[column._id], column, -1, entry));
+        }
+      });
+
+      return line.join('\t');
+    },
+
     showCellEditor: function(cell)
     {
       if (this.editors[cell.columnId])
@@ -712,6 +875,109 @@ define([
     handleHideColumn: function(columnId)
     {
       this.model.tableView.setVisibility(columnId, false);
+    },
+
+    handleExportTable: function()
+    {
+      var view = this;
+
+      view.$exportMsg = viewport.msg.show({
+        type: 'info',
+        text: view.t('export:progress')
+      });
+
+      var tableView = view.model.tableView;
+      var entries = view.model.entries.filtered;
+      var columns = {};
+      var data = [];
+
+      view.columns.list.forEach(function(column)
+      {
+        if (!column.arrayIndex)
+        {
+          columns[column._id] = {
+            type: column.type,
+            width: column.width,
+            headerRotation: column.rotated ? 90 : 0,
+            headerAlignmentH: 'Center',
+            headerAlignmentV: 'Center',
+            caption: tableView.getColumnText(column._id, -1, false).replace(/<br>/g, '\r\n')
+          };
+
+          return;
+        }
+
+        for (var i = 0; i < column.arrayIndex; ++i)
+        {
+          columns[column._id + i] = {
+            type: column.type,
+            width: column.width,
+            headerRotation: 90,
+            headerAlignmentH: 'Center',
+            headerAlignmentV: 'Center',
+            caption: tableView.getColumnText(column._id, i, false).replace(/<br>/g, '\r\n')
+          };
+        }
+      });
+
+      entries.forEach(function(entry)
+      {
+        entry = entry.serialize(view.model);
+
+        var row = {};
+
+        view.columns.list.forEach(function(column)
+        {
+          if (!column.arrayIndex)
+          {
+            row[column._id] = column.exportValue(entry[column._id], column, -1, entry);
+
+            return;
+          }
+
+          for (var i = 0; i < column.arrayIndex; ++i)
+          {
+            row[column._id + i] = column.exportValue(entry[column._id][i], column, i, entry);
+          }
+        });
+
+        data.push(row);
+      });
+
+      var req = view.ajax({
+        type: 'POST',
+        url: '/xlsxExporter',
+        data: JSON.stringify({
+          filename: view.t('export:fileName'),
+          sheetName: view.t('export:sheetName'),
+          freezeRows: 1,
+          freezeColumns: 1
+            + (tableView.getVisibility('nc12') ? 1 : 0)
+            + (tableView.getVisibility('description') ? 1 : 0),
+          headerHeight: 100,
+          subHeader: false,
+          columns: columns,
+          data: data
+        })
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.hide(view.$exportMsg, true);
+
+        viewport.msg.show({
+          type: 'error',
+          time: 2500,
+          text: view.t('export:failure')
+        });
+      });
+
+      req.done(function(id)
+      {
+        window.open('/xlsxExporter/' + id);
+
+        viewport.msg.hide(view.$exportMsg, true);
+      });
     },
 
     clearCache: function()
@@ -1293,7 +1559,12 @@ define([
       },
       Enter: function(e, cell)
       {
-        if (cell.td.classList.contains('kanban-is-editable'))
+        if (e.altKey)
+        {
+          this.showCellMenu(cell);
+        }
+
+        if (!e.altKey && cell.td.classList.contains('kanban-is-editable'))
         {
           this.showCellEditor(cell);
         }
@@ -1306,95 +1577,25 @@ define([
         }
 
         var view = this;
-        var lines = [];
-        var line;
-        var msg = 'cell';
 
         if (e.timeStamp - view.lastKeyPressAt.CtrlA < 1000)
         {
-          lines.push(view.columns.list.map(function(column)
-          {
-            if (!column.arrayIndex)
-            {
-              return view.model.tableView.getColumnText(column._id);
-            }
-
-            var columns = [];
-
-            for (var n = 1; n <= column.arrayIndex; ++n)
-            {
-              columns.push(view.t('export:' + column._id, {n: n}));
-            }
-
-            return columns.join('\t');
-          }).join('\t'));
-
-          view.model.entries.filtered.forEach(exportEntry);
-
-          msg = 'table';
+          view.handleCopyTable();
         }
         else if (e.timeStamp - view.lastKeyPressAt.C < 500)
         {
-          exportEntry(cell.model);
-
-          msg = 'row';
-        }
-        else if (cell.arrayIndex >= 0)
-        {
-          lines.push(cell.column.exportValue(
-            cell.model.serialize()[cell.columnId][cell.arrayIndex],
-            cell.column,
-            cell.arrayIndex,
-            cell.model.serialize()
-          ));
+          view.handleCopyRow(cell.modelId);
         }
         else
         {
-          lines.push(cell.column.exportValue(
-            cell.model.serialize()[cell.columnId],
-            cell.column,
-            -1,
-            cell.model.serialize()
-          ));
+          view.handleCopyCell(cell.modelId, cell.columnId, cell.arrayIndex);
         }
-
-        clipboard.copy(function(clipboardData)
+      },
+      S: function(e)
+      {
+        if (e.ctrlKey)
         {
-          clipboardData.setData('text/plain', lines.join('\r\n'));
-
-          if (view.$clipboardMsg)
-          {
-            viewport.msg.hide(view.$clipboardMsg, true);
-          }
-
-          view.$clipboardMsg = viewport.msg.show({
-            type: 'info',
-            time: 1500,
-            text: view.t('msg:clipboard:' + msg)
-          });
-        });
-
-        function exportEntry(entry)
-        {
-          entry = entry.serialize();
-          line = [];
-
-          view.columns.list.forEach(function(column)
-          {
-            if (Array.isArray(entry[column._id]))
-            {
-              entry[column._id].forEach(function(value, arrayIndex)
-              {
-                line.push(column.exportValue(value, column, arrayIndex, entry));
-              });
-            }
-            else
-            {
-              line.push(column.exportValue(entry[column._id], column, -1, entry));
-            }
-          });
-
-          lines.push(line.join('\t'));
+          this.handleExportTable();
         }
       },
       A: function(e)

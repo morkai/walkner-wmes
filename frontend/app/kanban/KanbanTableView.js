@@ -61,8 +61,11 @@ define([
     locations: 'invalidLocations'
   };
   var COLUMNS = {
-    _id: {},
+    _id: {
+      width: 7
+    },
     nc12: {
+      width: 13,
       renderValue: function(value, column, arrayIndex, entry)
       {
         if (!entry.description)
@@ -74,9 +77,11 @@ define([
       }
     },
     description: {
+      width: 45,
       tdClassName: invalidTdClassName
     },
     supplyArea: {
+      width: 12,
       tdClassName: invalidTdClassName,
       renderValue: function(value, column, arrayIndex, entry)
       {
@@ -89,9 +94,12 @@ define([
       }
     },
     family: {
+      width: 10,
       tdClassName: invalidTdClassName
     },
     kanbanQtyUser: {
+      type: 'integer',
+      width: 6,
       rotated: true,
       renderValue: function(value)
       {
@@ -99,41 +107,59 @@ define([
       }
     },
     componentQty: {
+      type: 'integer',
+      width: 9,
       rotated: true,
       tdClassName: invalidTdClassName
     },
     storageBin: {
+      width: 10,
       rotated: true,
       tdClassName: invalidTdClassName
     },
     kanbanIdEmpty: {
+      width: 7,
       tdClassName: invalidTdClassName
     },
     kanbanIdFull: {
+      width: 7,
       tdClassName: invalidTdClassName
     },
     lineCount: {
+      type: 'integer',
+      width: 3,
       rotated: true
     },
     emptyFullCount: {
+      type: 'integer',
+      width: 7,
       rotated: true
     },
     stock: {
+      type: 'integer',
+      width: 7,
       rotated: true
     },
     maxBinQty: {
+      type: 'integer',
+      width: 7,
       rotated: true,
       tdClassName: invalidTdClassName
     },
     minBinQty: {
+      type: 'integer',
+      width: 7,
       rotated: true,
       tdClassName: invalidTdClassName
     },
     replenQty: {
+      type: 'integer',
+      width: 7,
       rotated: true,
       tdClassName: invalidTdClassName
     },
     kind: {
+      width: 3,
       rotated: true,
       tdClassName: function(value)
       {
@@ -156,6 +182,8 @@ define([
       }
     },
     workstations: {
+      width: 5,
+      type: 'decimal',
       rowSpan: 1,
       colSpan: 6,
       arrayIndex: 6,
@@ -189,6 +217,7 @@ define([
       }
     },
     locations: {
+      width: 4,
       rowSpan: 1,
       colSpan: 6,
       arrayIndex: 6,
@@ -212,6 +241,7 @@ define([
       }
     },
     discontinued: {
+      width: 3,
       rotated: true,
       tdClassName: function()
       {
@@ -220,6 +250,10 @@ define([
       renderValue: function(value)
       {
         return '<i class="fa fa-' + (value ? 'check' : 'times') + '"></i>';
+      },
+      exportValue: function(value)
+      {
+        return value ? '1' : '0';
       }
     }
   };
@@ -396,14 +430,22 @@ define([
       tableView.trigger('change', tableView, {save: true});
     },
 
-    getColumnText: function(columnId)
+    getColumnText: function(columnId, arrayIndex, stripBr)
     {
-      var text = t.has('kanban', 'column:' + columnId + ':title')
-        ? t('kanban', 'column:' + columnId + ':title')
-        : t('kanban', 'column:' + columnId);
+      var n = 0;
 
-      return text
-        .replace(/\n/g, ' ')
+      if (arrayIndex >= 0)
+      {
+        n = arrayIndex;
+        columnId += 'N';
+      }
+
+      var text = stripBr !== false && t.has('kanban', 'column:' + columnId + ':title')
+        ? t('kanban', 'column:' + columnId + ':title', {n: n})
+        : t('kanban', 'column:' + columnId, {n: n});
+
+      return stripBr === false ? text : text
+        .replace(/\n/g, '<br>')
         .replace(/<br>/g, ' ')
         .replace(/\s+/, ' ');
     },
@@ -437,6 +479,7 @@ define([
         {
           state: this.state,
           _id: columnId,
+          type: 'string',
           thClassName: '',
           labelClassName: '',
           tdClassName: defaultTdClassName,

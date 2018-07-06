@@ -88,6 +88,7 @@ exports.modules = [
   'printing',
   'sapLaborTimeFixer',
   'kanban',
+  'xlsxExporter',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
