@@ -31,6 +31,7 @@ module.exports = function setUpKanbanRoutes(app, module)
 
   // Entries
   express.get('/kanban/entries', canView, express.crud.browseRoute.bind(null, app, KanbanEntry));
+  express.get('/kanban/entries/:id', canView, express.crud.readRoute.bind(null, app, KanbanEntry));
   express.put('/kanban/entries/:id', canManage, express.crud.editRoute.bind(null, app, KanbanEntry));
   express.patch('/kanban/entries/:id', canUpdate, updateEntryRoute);
 

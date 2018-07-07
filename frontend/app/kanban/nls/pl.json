@@ -64,6 +64,7 @@
   "column:locationsN": "Lokalizacja {n}",
   "column:discontinued": "Wycofane?",
   "column:discontinued:title": "Wycofane?",
+  "column:comment": "Komentarz",
 
   "export:fileName": "WMES_KANBAN",
   "export:sheetName": "Baza Kanban",

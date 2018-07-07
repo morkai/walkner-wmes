@@ -255,6 +255,24 @@ define([
       {
         return value ? '1' : '0';
       }
+    },
+    comment: {
+      width: 40,
+      sortable: false,
+      tdClassName: function()
+      {
+        return this.state.auth.manage || this.state.auth.processEngineer || this.state.auth.leader
+          ? 'kanban-is-editable'
+          : '';
+      },
+      renderValue: function(value)
+      {
+        return value === '' ? value : ('<span class="kanban-comment">' + _.escape(value) + '</span>');
+      },
+      parseValue: function(value)
+      {
+        return String(value).trim();
+      }
     }
   };
 

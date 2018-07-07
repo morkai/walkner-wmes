@@ -18,6 +18,7 @@ module.exports = function setupKanbanEntryModel(app, mongoose)
     workstations: [Number],
     locations: [String],
     discontinued: Boolean,
+    comment: String,
     updates: {},
     changes: {}
   }, {
@@ -49,6 +50,7 @@ module.exports = function setupKanbanEntryModel(app, mongoose)
       workstations: [0, 0, 0, 0, 0, 0],
       locations: ['', '', '', '', '', ''],
       discontinued: false,
+      comment: '',
       updates: {},
       changes: []
     };

@@ -13,6 +13,7 @@ define([
   'app/kanban/templates/entryListColumns',
   'app/kanban/templates/entryListRow',
   'app/kanban/templates/inputEditor',
+  'app/kanban/templates/textAreaEditor',
   'app/kanban/templates/filters/numeric',
   'app/kanban/templates/filters/text',
   'app/kanban/templates/filters/select'
@@ -29,6 +30,7 @@ define([
   columnsTemplate,
   rowTemplate,
   inputEditorTemplate,
+  textAreaEditorTemplate,
   numericFilterTemplate,
   textFilterTemplate,
   selectFilterTemplate
@@ -43,7 +45,7 @@ define([
     template: template,
 
     events: {
-      'contextmenu': function(e)
+      'contextmenu': function()
       {
         return false;
       },
@@ -487,9 +489,19 @@ define([
         }
       }
 
-      if (view.editing && view.editorPositioners[view.editing.columnId])
+      if (view.editing)
       {
-        view.editorPositioners[view.editing.columnId].call(view, view.editing);
+        var editorPositioner = view.editorPositioners[view.editing.columnId];
+
+        if (typeof editorPositioner === 'string')
+        {
+          editorPositioner = view.editorPositioners[editorPositioner];
+        }
+
+        if (editorPositioner)
+        {
+          editorPositioner.call(view, view.editing);
+        }
       }
 
       console.timeEnd('renderRows');
@@ -1359,7 +1371,7 @@ define([
 
         if (cell.tr.parentNode)
         {
-          if (nextTd.dataset.columnId !== 'filler')
+          if (nextTd.dataset.columnId !== 'filler2')
           {
             nextTd.focus();
           }
@@ -1380,7 +1392,7 @@ define([
 
           var td = tr.cells[cellIndex];
 
-          if (td.dataset.columnId === 'filler')
+          if (td.dataset.columnId === 'filler2')
           {
             td.previousElementSibling.focus();
           }
@@ -1777,7 +1789,6 @@ define([
       input: function(cell, maxLength, pattern, placeholder)
       {
         var view = this;
-        var rect = cell.td.getBoundingClientRect();
         var entry = cell.model.serialize();
 
         $(document.body).append(inputEditorTemplate({
@@ -1795,11 +1806,10 @@ define([
         }));
 
         view.$id('editor-backdrop').one('click', hide);
-        view.$id('editor-form').on('submit', submit).css({
-          top: rect.top + 'px',
-          left: rect.left + 'px'
-        });
+        view.$id('editor-form').on('submit', submit);
         view.$id('editor-input').on('blur', hide).on('keydown', keyDown).select();
+
+        view.editorPositioners.input.call(view, cell);
 
         function submit()
         {
@@ -1828,6 +1838,82 @@ define([
         function keyDown(e)
         {
           if (e.originalEvent.key === 'Escape')
+          {
+            hide();
+          }
+        }
+      },
+
+      textArea: function(cell)
+      {
+        var view = this;
+        var entry = cell.model.serialize();
+
+        $(document.body).append(textAreaEditorTemplate({
+          idPrefix: view.idPrefix,
+          columnId: cell.columnId,
+          value: cell.column.editorValue(
+            cell.arrayIndex >= 0 ? entry[cell.columnId][cell.arrayIndex] : entry[cell.columnId],
+            cell.column,
+            cell.arrayIndex,
+            entry
+          )
+        }));
+
+        view.$id('editor-backdrop').one('click', hide);
+        view.$id('editor-input').on('blur', hide).on('keydown', keyDown).select();
+
+        view.editorPositioners.textArea.call(view, cell);
+
+        function submit()
+        {
+          var newValue = cell.column.parseValue(
+            view.$id('editor-input').val(),
+            cell.column,
+            cell.arrayIndex,
+            cell.model.serialize()
+          );
+
+          view.handleEditorValue(cell.modelId, cell.columnId, cell.arrayIndex, newValue);
+
+          hide();
+
+          return false;
+        }
+
+        function hide()
+        {
+          view.$id('editor-backdrop').remove();
+          view.$id('editor-form').remove();
+
+          view.afterEdit();
+        }
+
+        function keyDown(e)
+        {
+          if (e.key === 'Enter')
+          {
+            if (e.shiftKey || e.ctrlKey || e.altKey)
+            {
+              var inputEl = view.$id('editor-input')[0];
+              var selectionStart = inputEl.selectionStart;
+
+              inputEl.value = inputEl.value.substring(0, selectionStart)
+                + '\n'
+                + inputEl.value.substring(inputEl.selectionEnd);
+
+              inputEl.selectionStart = selectionStart + 1;
+              inputEl.selectionEnd = selectionStart + 1;
+
+              return false;
+            }
+            else
+            {
+              return submit();
+            }
+          }
+
+          if (e.key === 'Escape')
           {
             hide();
           }
@@ -1869,6 +1955,11 @@ define([
       locations: function(cell)
       {
         this.editors.input.call(this, cell, 3, '^[A-Za-z]([0-9][0-9])$', 'X00');
+      },
+
+      comment: function(cell)
+      {
+        this.editors.textArea.call(this, cell);
       }
 
     },
@@ -1887,7 +1978,7 @@ define([
         }
       },
 
-      inputEditor: function(editingCell)
+      input: function(editingCell)
       {
         var cell = this.resolveCell(editingCell);
 
@@ -1902,20 +1993,30 @@ define([
         }
       },
 
-      kind: function()
+      textArea: function(editingCell)
       {
-        this.editorPositioners.contextMenu.apply(this, arguments);
+        var cell = this.resolveCell(editingCell);
+
+        if (!cell)
+        {
+          return;
+        }
+
+        // TODO
+        var rect = cell.td.getBoundingClientRect();
+        var top = rect.top;
+        var left = rect.left;
+
+        this.$id('editor-form').css({
+          top: top + 'px',
+          left: left + 'px'
+        });
       },
 
-      workstations: function()
-      {
-        this.editorPositioners.inputEditor.apply(this, arguments);
-      },
-
-      locations: function()
-      {
-        this.editorPositioners.inputEditor.apply(this, arguments);
-      }
+      kind: 'contextMenu',
+      workstations: 'input',
+      locations: 'input',
+      comment: 'textArea'
 
     },
 
