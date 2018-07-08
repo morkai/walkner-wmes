@@ -8,7 +8,8 @@ module.exports = function setUpOrgUnitsFix(app, module)
     'MAXOS_T_NZP': 'MAXOS_T_NZP',
     'PSR': 'LM-28',
     'HCS': 'LM-24',
-    'GS': 'LM-27'
+    'GS': 'LM-27',
+    'IR3': 'LM-26'
   };
   const prodLineToOrgUnits = new Map();
   const prodLineToPlainOrgUnits = new Map();
