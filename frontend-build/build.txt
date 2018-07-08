@@ -205,7 +205,12 @@ app/kanban/assets/filters.css
 app/kanban/assets/main.css
 ----------------
 app/kanban/assets/./filters.css
+app/kanban/assets/./search.css
 app/kanban/assets/main.css
+
+app/kanban/assets/search.css
+----------------
+app/kanban/assets/search.css
 
 app/licenses/assets/main.css
 ----------------
