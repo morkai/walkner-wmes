@@ -267,7 +267,7 @@ define([
       },
       renderValue: function(value)
       {
-        return value === '' ? value : ('<span class="kanban-comment">' + _.escape(value) + '</span>');
+        return _.escape(value);
       },
       parseValue: function(value)
       {

@@ -2002,10 +2002,20 @@ define([
           return;
         }
 
-        // TODO
         var rect = cell.td.getBoundingClientRect();
         var top = rect.top;
         var left = rect.left;
+        var height = this.$id('editor-input').outerHeight();
+
+        if (top + height >= window.innerHeight - 15)
+        {
+          top += window.innerHeight - (top + height) - 15;
+        }
+
+        if (left + rect.width >= window.innerWidth - 15)
+        {
+          left += window.innerWidth - (left + rect.width) - 15;
+        }
 
         this.$id('editor-form').css({
           top: top + 'px',
