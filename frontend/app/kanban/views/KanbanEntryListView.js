@@ -134,10 +134,17 @@ define([
         }
 
         this.$(tdSelector).addClass('kanban-is-hovered');
+
+        if (td.dataset.columnId === 'comment')
+        {
+          this.expandTdValue(td);
+        }
       },
-      'mouseleave .kanban-td': function()
+      'mouseleave .kanban-td': function(e)
       {
         this.$('.kanban-is-hovered').removeClass('kanban-is-hovered');
+
+        this.collapseTdValue();
       }
     },
 
@@ -1861,7 +1868,12 @@ define([
         }));
 
         view.$id('editor-backdrop').one('click', hide);
-        view.$id('editor-input').on('blur', hide).on('keydown', keyDown).select();
+
+        var inputEl = view.$id('editor-input').on('blur', hide).on('keydown', keyDown)[0];
+
+        inputEl.selectionStart = inputEl.value.length;
+        inputEl.selectionEnd = inputEl.value.length;
+        inputEl.focus();
 
         view.editorPositioners.textArea.call(view, cell);
 
@@ -1907,10 +1919,8 @@ define([
 
               return false;
             }
-            else
-            {
-              return submit();
-            }
+
+            return submit();
           }
 
           if (e.key === 'Escape')
@@ -2047,6 +2057,62 @@ define([
       this.model.tableView.setFilter(columnId, newFilter);
 
       return false;
+    },
+
+    expandTdValue: function(td)
+    {
+      var comment = td.textContent.trim();
+
+      if (!comment.length)
+      {
+        return;
+      }
+
+      var value = td.querySelector('.kanban-td-value');
+
+      if (!value)
+      {
+        return;
+      }
+
+      var tdRect = td.getBoundingClientRect();
+      var valueRect = value.getBoundingClientRect();
+      var windowWidth = window.innerWidth - 15 - SCROLLBAR_HEIGHT;
+      var windowHeight = window.innerHeight - 15 - SCROLLBAR_HEIGHT;
+
+      if (valueRect.left + valueRect.width < windowWidth && valueRect.width <= tdRect.width)
+      {
+        return;
+      }
+
+      if (tdRect.left + tdRect.width > windowWidth)
+      {
+        value.style.left = (windowWidth - (tdRect.left + tdRect.width)) + 'px';
+      }
+
+      td.classList.add('kanban-is-expanded');
+
+      valueRect = value.getBoundingClientRect();
+
+      if (valueRect.top + valueRect.height > windowHeight)
+      {
+        value.style.top = (windowHeight - (valueRect.top + valueRect.height)) + 'px';
+      }
+    },
+
+    collapseTdValue: function()
+    {
+      var $expanded = this.$tbody.find('.kanban-is-expanded');
+
+      if (!$expanded.length)
+      {
+        return;
+      }
+
+      $expanded.removeClass('kanban-is-expanded').find('.kanban-td-value').css({
+        top: '',
+        left: ''
+      });
     },
 
     filters: {

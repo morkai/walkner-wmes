@@ -83,6 +83,23 @@
 .kanban-td-value {
   font-family: Consolas, "Lucida Console", Monaco, monospace;
 }
+.kanban-is-expanded {
+  overflow: visible!important;
+}
+.kanban-is-expanded .kanban-td-value {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 6px 4px;
+  pointer-events: none;
+  width: 100%;
+  height: auto;
+  line-height: 14px;
+  white-space: pre-line;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 1px 3px #666;
+}
 .kanban-is-rotated {
   position: absolute;
   top: 50%;
@@ -239,16 +256,14 @@ tr:hover > .kanban-is-invalid,
 }
 .kanban-td[data-column-id="comment"] {
   width: 400px;
+  text-align: left;
+  overflow: hidden;
 }
 .kanban-td[data-column-id="comment"] .kanban-td-value {
   display: inline-block;
-  width: 392px;
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   font-size: 12px;
-  text-align: left;
-  vertical-align: top;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  vertical-align: middle;
 }
 .kanban-td[data-column-id="filler1"] {
   width: 100px;
