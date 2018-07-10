@@ -329,7 +329,7 @@ exports.start = function startKanbanImporterModule(app, module)
       update.$push.changes.data[column] = [oldValue, newValue];
     });
 
-    if (Object.keys(update.$set).length > 1)
+    if (Object.keys(update.$set).length === 1)
     {
       return;
     }
