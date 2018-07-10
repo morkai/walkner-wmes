@@ -1571,7 +1571,7 @@ define([
 
         if (e.timeStamp - view.lastKeyPressAt.End < 500)
         {
-          if (view.$tbody[0].lastElementChild.dataset.modelIndex === (view.model.entries.filtered.length - 1))
+          if (+view.$tbody[0].lastElementChild.dataset.modelIndex === (view.model.entries.filtered.length - 1))
           {
             view.$tbody[0].lastElementChild.lastElementChild.previousElementSibling.focus();
 
