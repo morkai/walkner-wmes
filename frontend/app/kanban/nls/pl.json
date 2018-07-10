@@ -12,6 +12,7 @@
   "msg:import:DISABLED": "Importowanie wyłączone.",
 
   "pa:import": "Importuj z SAP",
+  "pa:import:title": "Ostatnia aktualizacja:\n{importedAt}",
   "pa:components": "Komponenty",
   "pa:supplyAreas": "Obszary zaopatrzenia",
   "pa:settings": "Ustawienia",

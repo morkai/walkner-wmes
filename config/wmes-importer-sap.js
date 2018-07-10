@@ -111,6 +111,7 @@ exports['mail/sender'] = {
 exports['messenger/server'] = Object.assign({}, ports['wmes-importer-sap'], {
   broadcastTopics: [
     'events.saved',
+    'settings.updated.**',
     'orders.synced', 'orders.operationsChanged', 'orders.*.synced',
     'emptyOrders.synced',
     'warehouse.*.synced', 'warehouse.*.syncFailed', 'warehouse.shiftMetrics.updated',

@@ -3,6 +3,7 @@
 define([
   'jquery',
   'app/i18n',
+  'app/time',
   'app/user',
   'app/viewport',
   'app/core/View',
@@ -12,6 +13,7 @@ define([
 ], function(
   $,
   t,
+  time,
   user,
   viewport,
   View,
@@ -65,7 +67,8 @@ define([
         label: t.bound('kanban', 'pa:import'),
         icon: 'download',
         privileges: function() { return user.isAllowedTo('KANBAN:MANAGE', 'FN:process-engineer'); },
-        callback: this.import.bind(this)
+        callback: this.import.bind(this),
+        afterRender: this.updateImportedAt.bind(this)
       }];
     },
 
@@ -99,6 +102,8 @@ define([
     defineBindings: function()
     {
       this.listenTo(this.model.tableView, 'change', this.onTableViewChanged);
+
+      this.listenTo(this.model.settings, 'change', this.onSettingChanged);
     },
 
     load: function(when)
@@ -118,6 +123,14 @@ define([
       if (options.save)
       {
         this.promised(tableView.save());
+      }
+    },
+
+    onSettingChanged: function(setting)
+    {
+      if (setting.id === 'kanban.import.importedAt')
+      {
+        this.updateImportedAt();
       }
     },
 
@@ -161,6 +174,13 @@ define([
           text: page.t('msg:import:started')
         });
       });
+    },
+
+    updateImportedAt: function()
+    {
+      this.$id('import').prop('title', this.t('pa:import:title', {
+        importedAt: time.format(this.model.settings.getValue('import.importedAt'), 'LLLL')
+      }));
     }
 
   });

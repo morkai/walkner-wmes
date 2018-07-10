@@ -10,6 +10,7 @@ const deepEqual = require('deep-equal');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
+  settingsId: 'settings',
   filterRe: /^KANBAN\.json$/,
   parsedOutputDir: null
 };
@@ -23,6 +24,7 @@ const UPDATER = {
 exports.start = function startKanbanImporterModule(app, module)
 {
   const mongoose = app[module.config.mongooseId];
+  const settingsModule = app[module.config.settingsId];
   const KanbanComponent = mongoose.model('KanbanComponent');
   const KanbanEntry = mongoose.model('KanbanEntry');
 
@@ -162,6 +164,15 @@ exports.start = function startKanbanImporterModule(app, module)
         }
 
         importDocs(KanbanEntry, this.input.kanbans, this.t, this.next());
+      },
+      function updateImportedAtStep(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        settingsModule.update('kanban.import.importedAt', this.t, null, this.next());
       },
       function finalizeStep(err)
       {

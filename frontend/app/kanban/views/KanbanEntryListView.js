@@ -105,6 +105,11 @@ define([
       },
       'click .kanban-is-editable': function(e)
       {
+        if (e.shiftKey || e.ctrlKey || e.altKey)
+        {
+          return;
+        }
+
         if (!this.focusedCell || this.focusedCell.td !== e.currentTarget)
         {
           this.focusedCell = this.idCell(e);
@@ -119,6 +124,11 @@ define([
       },
       'click .kanban-is-with-menu': function(e)
       {
+        if (e.shiftKey || e.ctrlKey || e.altKey)
+        {
+          return;
+        }
+
         this.showColumnMenu(this.idCell(e), e.pageY, e.pageX);
       },
       'mouseenter .kanban-td': function(e)
@@ -140,7 +150,7 @@ define([
           this.expandTdValue(td);
         }
       },
-      'mouseleave .kanban-td': function(e)
+      'mouseleave .kanban-td': function()
       {
         this.$('.kanban-is-hovered').removeClass('kanban-is-hovered');
 
@@ -1602,7 +1612,7 @@ define([
       },
       C: function(e, cell)
       {
-        if (!e.ctrlKey)
+        if (!e.ctrlKey || window.getSelection().toString() !== '')
         {
           return;
         }
