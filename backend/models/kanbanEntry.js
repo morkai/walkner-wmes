@@ -14,7 +14,7 @@ module.exports = function setupKanbanEntryModel(app, mongoose)
     supplyArea: String,
     kanbanQtySap: Number,
     componentQty: Number,
-    kanbanId: Number,
+    kanbanId: [Number],
     workstations: [Number],
     locations: [String],
     discontinued: Boolean,

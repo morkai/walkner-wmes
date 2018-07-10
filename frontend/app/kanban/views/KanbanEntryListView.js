@@ -145,7 +145,9 @@ define([
 
         this.$(tdSelector).addClass('kanban-is-hovered');
 
-        if (td.dataset.columnId === 'comment')
+        var column = this.columns.map[td.dataset.columnId];
+
+        if (column && td.parentNode.dataset.modelId && column.expand >= 0)
         {
           this.expandTdValue(td);
         }
@@ -834,7 +836,7 @@ define([
 
       this.columns.list.forEach(function(column)
       {
-        if (Array.isArray(entry[column._id]))
+        if (column.arrayIndex)
         {
           entry[column._id].forEach(function(value, arrayIndex)
           {
@@ -2069,44 +2071,43 @@ define([
       return false;
     },
 
-    expandTdValue: function(td)
+    expandTdValue: function(tdEl)
     {
-      var comment = td.textContent.trim();
+      var valueEl = tdEl.firstElementChild;
+      var innerEl = valueEl.firstElementChild;
+      var text = tdEl.textContent.trim();
 
-      if (!comment.length)
+      if (!text.length)
       {
         return;
       }
 
-      var value = td.querySelector('.kanban-td-value');
-
-      if (!value)
-      {
-        return;
-      }
-
-      var tdRect = td.getBoundingClientRect();
-      var valueRect = value.getBoundingClientRect();
+      var tdRect = tdEl.getBoundingClientRect();
+      var innerRect = innerEl.getBoundingClientRect();
       var windowWidth = window.innerWidth - 15 - SCROLLBAR_HEIGHT;
       var windowHeight = window.innerHeight - 15 - SCROLLBAR_HEIGHT;
 
-      if (valueRect.left + valueRect.width < windowWidth && valueRect.width <= tdRect.width)
+      if (innerRect.left + innerRect.width < windowWidth && innerRect.width <= tdRect.width)
       {
         return;
       }
 
-      if (tdRect.left + tdRect.width > windowWidth)
+      var width = this.columns.map[tdEl.dataset.columnId].expand || tdRect.width;
+
+      valueEl.style.width = width + 'px';
+
+      if (tdRect.left + width > windowWidth)
       {
-        value.style.left = (windowWidth - (tdRect.left + tdRect.width)) + 'px';
+        valueEl.style.left = (windowWidth - (tdRect.left + width)) + 'px';
       }
 
-      td.classList.add('kanban-is-expanded');
+      tdEl.classList.add('kanban-is-expanded');
 
-      valueRect = value.getBoundingClientRect();
+      innerRect = valueEl.getBoundingClientRect();
 
-      if (valueRect.top + valueRect.height > windowHeight)
+      if (innerRect.top + innerRect.height > windowHeight)
       {
-        value.style.top = (windowHeight - (valueRect.top + valueRect.height)) + 'px';
+        valueEl.style.top = (windowHeight - (innerRect.top + innerRect.height)) + 'px';
       }
     },
 
@@ -2121,7 +2122,8 @@ define([
 
       $expanded.removeClass('kanban-is-expanded').find('.kanban-td-value').css({
         top: '',
-        left: ''
+        left: '',
+        width: ''
       });
     },
 

@@ -81,6 +81,8 @@
   background-color: #ffffa6!important;
 }
 .kanban-td-value {
+  display: block;
+  overflow: hidden;
   font-family: Consolas, "Lucida Console", Monaco, monospace;
 }
 .kanban-is-expanded {
@@ -90,7 +92,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  padding: 6px 4px;
+  padding: 5px 4px;
   pointer-events: none;
   width: 100%;
   height: auto;
@@ -99,6 +101,9 @@
   z-index: 1;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 1px 3px #666;
+}
+.kanban-is-expanded[data-column-id="comment"] .kanban-td-value {
+  padding: 6px 4px;
 }
 .kanban-is-rotated {
   position: absolute;
@@ -202,11 +207,9 @@ tr:hover > .kanban-is-invalid,
   width: 80px;
   text-align: left;
 }
-.kanban-td[data-column-id="kanbanIdEmpty"] {
-  width: 60px;
-}
-.kanban-td[data-column-id="kanbanIdFull"] {
-  width: 60px;
+.kanban-td[data-column-id="kanbanId"] {
+  width: 70px;
+  text-align: left;
 }
 .kanban-td[data-column-id="lineCount"] {
   width: 30px;

@@ -210,7 +210,7 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
             obj.supplyArea,
             Math.max(0, obj.kanbanQtySap),
             Math.max(0, obj.componentQty),
-            0
+            []
           ];
 
           if (!this.components.has(obj.nc12))
@@ -347,14 +347,20 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
         {
           const kanban = this.kanbans.get(obj.controlCycleId);
 
-          if (kanban && (!kanban[5] || obj.kanbanId < kanban[5]))
+          if (kanban && obj.kanbanId > 0)
           {
-            kanban[5] = obj.kanbanId < 0 ? 0 : obj.kanbanId;
+            kanban[5].push(obj.kanbanId);
           }
 
           return null;
         }
       });
+
+      setImmediate(this.next());
+    },
+    function()
+    {
+      this.kanbans.forEach(kanban => kanban[5].sort());
 
       setImmediate(this.next());
     },

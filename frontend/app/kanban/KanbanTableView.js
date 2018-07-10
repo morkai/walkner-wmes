@@ -117,13 +117,21 @@ define([
       rotated: true,
       tdClassName: invalidTdClassName
     },
-    kanbanIdEmpty: {
-      width: 7,
-      tdClassName: invalidTdClassName
-    },
-    kanbanIdFull: {
-      width: 7,
-      tdClassName: invalidTdClassName
+    kanbanId: {
+      width: 10,
+      expand: 186,
+      tdClassName: function(value)
+      {
+        return value.length === 0;
+      },
+      renderValue: function(value)
+      {
+        return value.join(' ');
+      },
+      exportValue: function(value)
+      {
+        return value.join(',');
+      }
     },
     lineCount: {
       type: 'integer',
@@ -259,6 +267,7 @@ define([
     comment: {
       width: 40,
       sortable: false,
+      expand: 0,
       tdClassName: function()
       {
         return this.state.auth.manage || this.state.auth.processEngineer || this.state.auth.leader
