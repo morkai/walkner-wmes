@@ -179,14 +179,13 @@ define([
 
     onImport: function(message)
     {
-      console.log('onImport', message);
       if (!message.entryCount && !message.componentCount)
       {
         return;
       }
 
       var entries = this;
-      var updatedAt = message.timestamp;
+      var updatedAt = Date.parse(message.updatedAt);
       var reqs = [
         message.entryCount ? $.ajax({url: '/kanban/entries?exclude(changes)&updatedAt=' + updatedAt}) : null,
         message.componentCount ? $.ajax({url: '/kanban/components?exclude(changes)&updatedAt=' + updatedAt}) : null

@@ -80,7 +80,7 @@ exports.start = function startKanbanImporterModule(app, module)
 
     module.debug('[%s] Importing...', fileInfo.timeKey);
 
-    importFile(fileInfo, (err, entryCount, componentCount) =>
+    importFile(fileInfo, (err, updatedAt, entryCount, componentCount) =>
     {
       cleanUpFileInfoFile(fileInfo);
 
@@ -99,6 +99,7 @@ exports.start = function startKanbanImporterModule(app, module)
 
         app.broker.publish('kanban.import.success', {
           timestamp: fileInfo.timestamp,
+          updatedAt,
           entryCount,
           componentCount
         });
@@ -164,7 +165,7 @@ exports.start = function startKanbanImporterModule(app, module)
       },
       function finalizeStep(err)
       {
-        return done(err, this.kanbanCount, this.componentCount);
+        return done(err, this.t, this.kanbanCount, this.componentCount);
       }
     );
   }
