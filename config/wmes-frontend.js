@@ -140,7 +140,8 @@ exports.events = {
       'kaizen.*.added', 'kaizen.*.edited',
       'opinionSurveys.*.added', 'opinionSurveys.*.edited',
       'qi.*.added', 'qi.*.edited',
-      'd8.*.added', 'd8.*.edited'
+      'd8.*.added', 'd8.*.edited',
+      'kanban.supplyAreas.added', 'kanban.supplyAreas.edited'
     ],
     info: [
       'events.**',
@@ -161,7 +162,8 @@ exports.events = {
       'qi.*.deleted',
       'd8.*.deleted',
       'orderDocuments.tree.filePurged', 'orderDocuments.tree.folderPurged',
-      'paintShop.paints.deleted'
+      'paintShop.paints.deleted',
+      'kanban.supplyAreas.deleted'
     ],
     error: [
       '*.syncFailed',

@@ -7,6 +7,7 @@ module.exports = function setupKanbanSupplyAreaModel(app, mongoose)
   const kanbanSupplyAreaSchema = new mongoose.Schema({
     _id: String,
     name: String,
+    lineCount: Number,
     lines: [String]
   }, {
     id: false,
@@ -14,6 +15,13 @@ module.exports = function setupKanbanSupplyAreaModel(app, mongoose)
   });
 
   kanbanSupplyAreaSchema.statics.TOPIC_PREFIX = 'kanban.supplyAreas';
+
+  kanbanSupplyAreaSchema.pre('save', function(next)
+  {
+    this.lineCount = this.lines.filter(l => l !== '-').length;
+
+    next();
+  });
 
   mongoose.model('KanbanSupplyArea', kanbanSupplyAreaSchema);
 };

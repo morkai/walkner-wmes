@@ -417,7 +417,13 @@
     "TYPE:kanban.import.success": "Kanban DB: sync",
     "TEXT:kanban.import.success": "Imported {entryCount} {count, plural, one{kanban} other{kanbans}} and {componentCount} {componentCount, plural, one{component} other{components}} from data downloaded at <em>{timestamp}</em>.",
     "TYPE:kanban.import.failure": "Kanban DB: sync failure",
-    "TEXT:kanban.import.failure": "Failed to import SAP data at <em>{timestamp}</em>: {error}"
+    "TEXT:kanban.import.failure": "Failed to import SAP data at <em>{timestamp}</em>: {error}",
+    "TYPE:kanban.supplyAreas.added": "Kanban DB > Supply areas: added",
+    "TEXT:kanban.supplyAreas.added": "Added supply area: <a href='\\#kanban/supplyAreas/{model->_id}'>{model->name}</a>",
+    "TYPE:kanban.supplyAreas.edited": "Kanban DB > Supply areas: edited",
+    "TEXT:kanban.supplyAreas.edited": "Edited supply area: <a href='\\#kanban/supplyAreas/{model->_id}'>{model->name}</a>",
+    "TYPE:kanban.supplyAreas.deleted": "Kanban DB > Supply areas: deleted",
+    "TEXT:kanban.supplyAreas.deleted": "Deleted supply area: <em>{model->name}</em>"
   },
   "pl": true
 }

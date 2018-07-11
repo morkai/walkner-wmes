@@ -57,23 +57,12 @@ define([
       if (supplyArea)
       {
         entry.family = supplyArea.get('name');
-        entry.lineCount = supplyArea.get('lines').length;
+        entry.lineCount = supplyArea.get('lineCount');
       }
       else
       {
         entry.family = '';
         entry.lineCount = 0;
-      }
-
-      if (entry.kanbanId)
-      {
-        entry.kanbanIdEmpty = entry.kanbanId + '2';
-        entry.kanbanIdFull = entry.kanbanId + '5';
-      }
-      else
-      {
-        entry.kanbanIdEmpty = '';
-        entry.kanbanIdFull = '';
       }
 
       entry.workstationsTotal = 0;

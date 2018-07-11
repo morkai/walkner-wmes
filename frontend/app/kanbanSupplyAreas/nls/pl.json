@@ -19,6 +19,11 @@
   "PROPERTY:name": "Nazwa",
   "PROPERTY:lines": "Linie produkcyjne",
 
+  "lines:no": "Lp.",
+  "lines:id": "ID linii",
+  "lines:add": "Dodaj linię",
+  "lines:reserved": "POZYCJA ZAREZERWOWANA",
+
   "filter:submit": "Filtruj obszary",
 
   "FORM:ACTION:add": "Dodaj obszar",

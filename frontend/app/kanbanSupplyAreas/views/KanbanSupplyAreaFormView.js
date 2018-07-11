@@ -21,7 +21,42 @@ define([
 
     events: _.assign({
 
-      'input #-_id': 'validateId'
+      'input #-_id': 'validateId',
+
+      'click #-addLine': function()
+      {
+        this.addLine('-');
+      },
+
+      'click .btn[data-action="up"]': function(e)
+      {
+        var $tr = this.$(e.currentTarget).closest('tr');
+
+        if ($tr.prev().length)
+        {
+          $tr.insertBefore($tr.prev());
+
+          this.recountLines();
+        }
+      },
+
+      'click .btn[data-action="down"]': function(e)
+      {
+        var $tr = this.$(e.currentTarget).closest('tr');
+
+        if ($tr.next().length)
+        {
+          $tr.insertAfter($tr.next());
+
+          this.recountLines();
+        }
+      },
+
+      'click .btn[data-action="remove"]': function(e)
+      {
+        this.$(e.currentTarget).closest('tr').remove();
+        this.recountLines();
+      }
 
     }, FormView.prototype.events),
 
@@ -30,44 +65,52 @@ define([
       FormView.prototype.initialize.apply(this, arguments);
 
       this.validateId = _.debounce(this.validateId.bind(this), 500);
+
+      this.prodLines = [{id: '-', text: this.t('lines:reserved')}].concat(orgUnits.getAllByType('prodLine')
+        .filter(function(l) { return !l.get('deactivatedAt'); })
+        .map(idAndLabel));
     },
 
     afterRender: function()
     {
-      FormView.prototype.afterRender.apply(this, arguments);
+      this.$lineRow = this.$id('lines').children().first().detach();
 
-      this.$id('lines').select2({
-        multiple: true,
-        data: orgUnits.getAllByType('prodLine')
-          .filter(function(l) { return !l.get('deactivatedAt'); })
-          .map(idAndLabel)
-      });
+      FormView.prototype.afterRender.apply(this, arguments);
 
       if (this.options.editMode)
       {
+        this.model.get('lines').forEach(this.addLine, this);
         this.$id('_id').prop('readonly', true);
         this.$id('name').focus();
       }
       else
       {
+        this.addLine('-');
         this.$id('_id').focus();
       }
     },
 
-    serializeToForm: function() // eslint-disable-line no-unused-vars
+    addLine: function(lineId)
     {
-      var obj = this.model.toJSON();
+      var $lines = this.$id('lines');
+      var $lineRow = this.$lineRow.clone();
+      var cells = $lineRow[0].children;
 
-      obj.lines = (obj.lines || []).join(',');
+      cells[0].textContent = ($lines[0].childElementCount + 1) + '.';
 
-      return obj;
+      $lineRow.find('input').val(lineId).select2({
+        data: this.prodLines
+      });
+
+      $lines.append($lineRow);
     },
 
-    serializeForm: function(formData)
+    recountLines: function()
     {
-      formData.lines = (formData.lines || '').split(',').filter(function(d) { return !!d.length; });
-
-      return formData;
+      this.$id('lines').children().each(function(i)
+      {
+        this.children[0].textContent = (i + 1) + '.';
+      });
     },
 
     validateId: function()

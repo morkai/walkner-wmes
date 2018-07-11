@@ -12,8 +12,30 @@
         <input id="<%- idPrefix %>-name" class="form-control" type="text" name="name" required>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-lines" class="control-label"><%- helpers.t('PROPERTY:lines') %></label>
-        <input id="<%- idPrefix %>-lines" type="text" name="lines">
+        <label class="control-label"><%- helpers.t('PROPERTY:lines') %></label>
+        <table class="table table-condensed table-bordered" style="width: 450px">
+          <thead>
+          <tr>
+            <th class="is-min"><%- helpers.t('lines:no') %></th>
+            <th><%- helpers.t('lines:id') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          </tr>
+          </thead>
+          <tbody id="<%- idPrefix %>-lines">
+          <tr>
+            <td class="is-min text-right"></td>
+            <td><input name="lines[]" type="text"></td>
+            <td class="actions">
+              <div class="actions-group">
+                <button data-action="up" class="btn btn-default" type="button"><i class="fa fa-arrow-up"></i></button>
+                <button data-action="down" class="btn btn-default" type="button"><i class="fa fa-arrow-down"></i></button>
+                <button data-action="remove" class="btn btn-default" type="button"><i class="fa fa-remove"></i></button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <button id="<%- idPrefix %>-addLine" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- helpers.t('lines:add') %></span></button>
       </div>
     </div>
     <div class="panel-footer">

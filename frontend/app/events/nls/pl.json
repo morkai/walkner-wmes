@@ -416,5 +416,11 @@
   "TYPE:kanban.import.success": "Baza Kanban: synchronizacja",
   "TEXT:kanban.import.success": "Pomyślnie zaimportowano {entryCount} {count, plural, one{kanban} few{kanbany} other{kanbanów}} i {componentCount} {componentCount, plural, one{komponent} few{komponenty} other{komponentów}} z danych pobranych <em>{timestamp}</em>.",
   "TYPE:kanban.import.failure": "Baza Kanban: nieudana synchronizacja",
-  "TEXT:kanban.import.failure": "Nie udało się zaimportować danych z SAP pobranych <em>{timestamp}</em>: {error}"
+  "TEXT:kanban.import.failure": "Nie udało się zaimportować danych z SAP pobranych <em>{timestamp}</em>: {error}",
+  "TYPE:kanban.supplyAreas.added": "Baza Kanban > Obszary zaopatrzenia: dodanie",
+  "TEXT:kanban.supplyAreas.added": "Dodano obszar zaopatrzenia: <a href='\\#kanban/supplyAreas/{model->_id}'>{model->name}</a>",
+  "TYPE:kanban.supplyAreas.edited": "Baza Kanban > Obszary zaopatrzenia: edycja",
+  "TEXT:kanban.supplyAreas.edited": "Zmodyfikowano obszar zaopatrzenia: <a href='\\#kanban/supplyAreas/{model->_id}'>{model->name}</a>",
+  "TYPE:kanban.supplyAreas.deleted": "Baza Kanban > Obszary zaopatrzenia: usunięcie",
+  "TEXT:kanban.supplyAreas.deleted": "Usunięto obszar zaopatrzenia: <em>{model->name}</em>"
 }
