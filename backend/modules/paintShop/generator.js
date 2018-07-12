@@ -163,26 +163,32 @@ module.exports = function(app, module)
       {
         const workCenters = this.settings.workCenters;
         const leadingOrders = Array.from(this.newOrders.keys());
+        const scheduledStartDate = moment(key, 'YYYY-MM-DD').toDate();
+        const statuses = {
+          $in: this.settings.requiredStatuses,
+          $nin: this.settings.ignoredStatuses
+        };
         const plannedConditions = {
-          leadingOrder: {$in: leadingOrders},
-          statuses: {
-            $in: this.settings.requiredStatuses,
-            $nin: this.settings.ignoredStatuses
-          }
+          scheduledStartDate,
+          statuses,
+          leadingOrder: {$in: leadingOrders}
         };
         const unplannedConditions = {
-          scheduledStartDate: moment(key, 'YYYY-MM-DD').toDate(),
-          leadingOrder: null,
-          statuses: {
-            $in: this.settings.requiredStatuses,
-            $nin: this.settings.ignoredStatuses
-          }
+          scheduledStartDate,
+          statuses,
+          leadingOrder: null
+        };
+        const splitConditions = {
+          scheduledStartDate,
+          statuses,
+          leadingOrder: {$nin: [null].concat(leadingOrders)}
         };
 
         if (!_.isEmpty(workCenters))
         {
           plannedConditions['operations.workCenter'] = {$in: workCenters};
           unplannedConditions['operations.workCenter'] = {$in: workCenters};
+          splitConditions['operations.workCenter'] = {$in: workCenters};
         }
 
         const fields = {
@@ -197,17 +203,20 @@ module.exports = function(app, module)
 
         Order
           .find(plannedConditions, fields)
-          .sort({_id: 1})
           .lean()
           .exec(this.parallel());
 
         Order
           .find(unplannedConditions, fields)
-          .sort({_id: 1})
+          .lean()
+          .exec(this.parallel());
+
+        Order
+          .find(splitConditions, fields)
           .lean()
           .exec(this.parallel());
       },
-      function(err, childOrders, unplannedOrders)
+      function(err, childOrders, unplannedOrders, splitChildOrders)
       {
         if (err)
         {
@@ -217,7 +226,7 @@ module.exports = function(app, module)
         this.childOrderPaintCounts = new Map();
         this.unplannedOrders = new Set();
 
-        unplannedOrders.forEach(unplannedOrder =>
+        unplannedOrders.concat(splitChildOrders).forEach(unplannedOrder =>
         {
           unplannedOrder.leadingOrder = unplannedOrder._id;
 
