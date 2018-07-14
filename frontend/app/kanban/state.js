@@ -6,22 +6,26 @@ define([
   '../pubsub',
   '../user',
   '../core/Model',
+  '../core/Collection',
   'app/kanbanSupplyAreas/KanbanSupplyAreaCollection',
   'app/kanbanComponents/KanbanComponentCollection',
   './KanbanSettingCollection',
   './KanbanTableView',
-  './KanbanEntryCollection'
+  './KanbanEntryCollection',
+  './KanbanPrintQueueBuilder'
 ], function(
   $,
   broker,
   pubsub,
   user,
   Model,
+  Collection,
   KanbanSupplyAreaCollection,
   KanbanComponentCollection,
   KanbanSettingCollection,
   KanbanTableView,
-  KanbanEntryCollection
+  KanbanEntryCollection,
+  KanbanPrintQueueBuilder
 ) {
   'use strict';
 
@@ -51,6 +55,7 @@ define([
     supplyAreas: kanbanState.supplyAreas,
     components: kanbanState.components
   });
+  kanbanState.builder = KanbanPrintQueueBuilder.fromLocalStorage();
   kanbanState.auth = {};
 
   kanbanState.isLoading = function() { return loading; };

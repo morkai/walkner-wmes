@@ -69,6 +69,15 @@ define([
           return false;
         }
       },
+      'click .kanban-td': function(e)
+      {
+        if (!e.ctrlKey)
+        {
+          return;
+        }
+
+        this.handleQueuePrint(e.currentTarget.parentNode.dataset.modelId);
+      },
       'dblclick .kanban-td': function()
       {
         return false;
@@ -733,6 +742,15 @@ define([
         ]
       };
 
+      if (!cell.model.get('discontinued'))
+      {
+        options.menu.unshift({
+          icon: 'fa-print',
+          label: view.t('menu:queuePrint'),
+          handler: view.handleQueuePrint.bind(view, cell.modelId)
+        });
+      }
+
       if (cell.td.classList.contains('kanban-is-editable'))
       {
         options.menu.unshift({
@@ -758,6 +776,27 @@ define([
       }
 
       contextMenu.show(view, top, left, options);
+    },
+
+    handleQueuePrint: function(entryId)
+    {
+      var entry = this.model.entries.get(entryId);
+
+      if (!entry)
+      {
+        return;
+      }
+
+      if (entry.get('discontinued'))
+      {
+        return viewport.msg.show({
+          type: 'warning',
+          time: 2500,
+          text: this.t('msg:discontinued', {id: entryId})
+        });
+      }
+
+      this.model.builder.addFromEntry(entry);
     },
 
     handleCopyTable: function()
@@ -1658,50 +1697,9 @@ define([
         var view = this;
         var searchDialog = new KanbanSearchDialog({model: view.model});
 
-        view.editing = view.focusedCell;
+        view.listenToOnce(searchDialog, 'found', view.find.bind(view));
 
         viewport.showDialog(searchDialog);
-
-        view.listenToOnce(searchDialog, 'found', function(type, model)
-        {
-          if (type === 'component')
-          {
-            view.model.tableView.setFilters({
-              nc12: {
-                type: 'text',
-                data: model.id
-              }
-            });
-          }
-          else if (type === 'entry')
-          {
-            var $tr = view.$tbody.find('tr[data-model-id="' + model.id + '"]');
-
-            if ($tr.length)
-            {
-              return $tr[0].firstElementChild.focus();
-            }
-
-            if (!view.model.entries.filteredMap[model.id])
-            {
-              view.model.tableView.clearFilters();
-            }
-
-            $tr = view.$tbody.find('tr[data-model-id="' + model.id + '"]');
-
-            if ($tr.length)
-            {
-              return $tr[0].firstElementChild.focus();
-            }
-
-            view.afterRenderRows = function()
-            {
-              view.$tbody.find('tr[data-model-id="' + model.id + '"]')[0].firstElementChild.focus();
-            };
-
-            view.$tbodyInner[0].scrollTop = view.model.entries.filtered.indexOf(model) * ROW_HEIGHT;
-          }
-        });
 
         $('.viewport-dialog').removeClass('fade');
 
@@ -1712,7 +1710,52 @@ define([
           $('.viewport-dialog').addClass('fade');
         });
 
+        view.editing = view.focusedCell;
+
         return false;
+      }
+    },
+
+    find: function(type, model)
+    {
+      var view = this;
+
+      if (type === 'component')
+      {
+        view.model.tableView.setFilters({
+          nc12: {
+            type: 'text',
+            data: model.id
+          }
+        });
+      }
+      else if (type === 'entry')
+      {
+        var $tr = view.$tbody.find('tr[data-model-id="' + model.id + '"]');
+
+        if ($tr.length)
+        {
+          return $tr[0].firstElementChild.focus();
+        }
+
+        if (!view.model.entries.filteredMap[model.id])
+        {
+          view.model.tableView.clearFilters();
+        }
+
+        $tr = view.$tbody.find('tr[data-model-id="' + model.id + '"]');
+
+        if ($tr.length)
+        {
+          return $tr[0].firstElementChild.focus();
+        }
+
+        view.afterRenderRows = function()
+        {
+          view.$tbody.find('tr[data-model-id="' + model.id + '"]')[0].firstElementChild.focus();
+        };
+
+        view.$tbodyInner[0].scrollTop = view.model.entries.filtered.indexOf(model) * ROW_HEIGHT;
       }
     },
 
@@ -2312,8 +2355,7 @@ define([
       _id: 'numeric',
       kanbanQtyUser: 'numeric',
       componentQty: 'numeric',
-      kanbanIdEmpty: 'numeric',
-      kanbanIdFull: 'numeric',
+      kanbanId: 'text',
       lineCount: 'numeric',
       emptyFullCount: 'numeric',
       stock: 'numeric',

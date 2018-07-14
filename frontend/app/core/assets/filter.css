@@ -103,7 +103,7 @@ input[type=checkbox].filter-inLabel {
   margin-left: 0;
 }
 .form-control.is-expanded {
-  height: auto;
+  height: auto!important;
   position: absolute;
   z-index: 110;
 }

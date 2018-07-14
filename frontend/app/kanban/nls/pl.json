@@ -10,12 +10,14 @@
   "msg:import:success": "Pomyślnie zaimportowane dane z SAP.",
   "msg:import:IN_PROGRESS": "Importowanie w toku...",
   "msg:import:DISABLED": "Importowanie wyłączone.",
+  "msg:discontinued": "CCN {id} jest wycofany.",
 
   "pa:import": "Importuj z SAP",
   "pa:import:title": "Ostatnia aktualizacja:\n{importedAt}",
   "pa:components": "Komponenty",
   "pa:supplyAreas": "Obszary zaopatrzenia",
   "pa:settings": "Ustawienia",
+  "pa:printQueues": "Kolejki drukowania",
 
   "menu:sort:asc": "Sortuj rosnąco",
   "menu:sort:desc": "Sortuj malejąco",
@@ -29,6 +31,7 @@
   "menu:copy:cell": "Kopiuj komórkę",
   "menu:export": "Eksportuj tabelę",
   "menu:edit": "Edytuj komórkę",
+  "menu:queuePrint": "Drukuj etykiety",
 
   "column:_id": "CCN",
   "column:nc12": "12NC",
@@ -96,5 +99,23 @@
 
   "search:invalid": "Podaj CCN lub 12NC.",
   "search:invalid:ccn": "Nie znaleziono CCN.",
-  "search:invalid:nc12": "Nie znaleziono 12NC."
+  "search:invalid:nc12": "Nie znaleziono 12NC.",
+
+  "builder:title": "Nowa kolejka drukowania",
+  "builder:no": "Lp.",
+  "builder:ccn": "CCN",
+  "builder:lines": "Linie montażowe",
+  "builder:lines:all": "Wszystkie",
+  "builder:kk": "KK",
+  "builder:empty": "Pusty",
+  "builder:full": "Pełny",
+  "builder:wh": "Magazyn",
+  "builder:desc": "Opisowa",
+  "builder:error:noLayout": "Wybierz przynajmniej jeden szablon.",
+  "builder:error:noKind": "Nieznany rodzaj kanbana.",
+  "builder:error:noKanbanId": "Brak ID kanbana dla linii {line} (pozycja {i}).",
+  "builder:error:noKanbans": "Brak kanbanów.",
+  "builder:submit": "Dodaj nową kolejkę drukowania",
+  "builder:remove": "Usuń CCN",
+  "builder:clear": "Wyczyść wszystko"
 }

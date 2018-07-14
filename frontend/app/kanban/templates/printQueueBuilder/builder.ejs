@@ -1,0 +1,57 @@
+<form class="kanban-builder hidden">
+  <input id="<%- idPrefix %>-layoutError" class="kanban-builder-layoutError" type="text" tabindex="-1">
+  <div class="kanban-builder-hd">
+    <span id="<%- idPrefix %>-dragHandle" class="kanban-drag-handle">
+      <i class="fa fa-ellipsis-v"></i>
+      <i class="fa fa-ellipsis-v"></i>
+      <%- helpers.t('builder:title') %>
+    </span>
+    <a id="<%- idPrefix %>-hide" class="btn btn-link kanban-hide"><i class="fa fa-times"></i></a>
+  </div>
+  <table class="kanban-builder-thead">
+    <thead>
+    <tr>
+      <td class="kanban-builder-no"><%- helpers.t('builder:no') %></td>
+      <td class="kanban-builder-ccn"><%- helpers.t('builder:ccn') %></td>
+      <td class="kanban-builder-lines"><%- helpers.t('builder:lines') %></td>
+      <% layouts.forEach(function(layout) { %>
+      <td class="kanban-builder-layout"><button type="button" class="btn btn-default <%- layout.active ? 'active' : '' %>" data-action="layout" value="<%- layout.id %>"><%- helpers.t('builder:' + layout.id) %></button></td>
+      <% }) %>
+      <td class="kanban-builder-actions">
+        <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary" title="<%- helpers.t('builder:submit') %>"><i class="fa fa-print"></i></button>
+      </td>
+    </tr>
+    </thead>
+  </table>
+  <div id="<%- idPrefix %>-tbody" class="kanban-builder-tbody">
+    <table>
+      <tbody id="<%- idPrefix %>-rows">
+      <tr>
+        <td class="kanban-builder-no"></td>
+        <td class="kanban-builder-ccn"></td>
+        <td class="kanban-builder-lines"><select name="lines" class="form-control" size="1" multiple data-expanded-length="6" required></select></td>
+        <% layouts.forEach(function(layout) { %>
+        <td class="kanban-builder-layout" data-layout="<%- layout.id %>">0</td>
+        <% }) %>
+        <td class="kanban-builder-actions">
+          <button type="button" class="btn btn-default" data-action="remove" title="<%- helpers.t('builder:remove') %>"><i class="fa fa-times"></i></button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <table class="kanban-builder-tfoot">
+    <tfoot>
+    <tr>
+      <td id="<%- idPrefix %>-totals-no" colspan="2"></td>
+      <td id="<%- idPrefix %>-totals-lines" class="kanban-builder-lines">0</td>
+      <% ['kk', 'empty', 'full', 'wh', 'desc'].forEach(function(layout) { %>
+      <td id="<%- idPrefix %>-totals-<%- layout %>" class="kanban-builder-layout">0</td>
+      <% }) %>
+      <td class="kanban-builder-actions">
+        <button id="<%- idPrefix %>-clear" type="button" class="btn btn-danger" title="<%- helpers.t('builder:clear') %>"><i class="fa fa-times"></i></button>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+</form>

@@ -9,7 +9,10 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   '../state',
-  '../views/KanbanEntryListView'
+  '../views/KanbanEntryListView',
+  '../views/KanbanPrintQueueBuilderView',
+  'app/kanban/templates/page',
+  'app/kanban/templates/printQueueBuilder/action'
 ], function(
   $,
   t,
@@ -19,13 +22,18 @@ define([
   View,
   bindLoadingMessage,
   state,
-  KanbanEntryListView
+  KanbanEntryListView,
+  KanbanPrintQueueBuilderView,
+  pageTemplate,
+  builderActionTemplate
 ) {
   'use strict';
 
   return View.extend({
 
     layoutName: 'page',
+
+    template: pageTemplate,
 
     localTopics: {
       'socket.connected': function()
@@ -56,7 +64,22 @@ define([
 
     actions: function()
     {
+      var page = this;
+
       return [{
+        template: function()
+        {
+          return builderActionTemplate({
+            idPrefix: page.idPrefix
+          });
+        },
+        afterRender: function()
+        {
+          page.$id('builderToggle').on('click', page.onBuilderToggleClick.bind(page));
+          page.updateBuilderCount();
+        }
+      },
+      {
         label: t.bound('kanban', 'pa:components'),
         href: '#kanban/components'
       }, {
@@ -67,8 +90,8 @@ define([
         label: t.bound('kanban', 'pa:import'),
         icon: 'download',
         privileges: function() { return user.isAllowedTo('KANBAN:MANAGE', 'FN:process-engineer'); },
-        callback: this.import.bind(this),
-        afterRender: this.updateImportedAt.bind(this)
+        callback: page.import.bind(page),
+        afterRender: page.updateImportedAt.bind(page)
       }];
     },
 
@@ -78,7 +101,8 @@ define([
       this.defineViews();
       this.defineBindings();
 
-      this.setView(this.listView);
+      this.setView('#-list', this.listView);
+      this.setView('#-builder', this.builderView);
     },
 
     destroy: function()
@@ -97,6 +121,8 @@ define([
     defineViews: function()
     {
       this.listView = new KanbanEntryListView({model: this.model});
+
+      this.builderView = new KanbanPrintQueueBuilderView({model: this.model});
     },
 
     defineBindings: function()
@@ -104,6 +130,12 @@ define([
       this.listenTo(this.model.tableView, 'change', this.onTableViewChanged);
 
       this.listenTo(this.model.settings, 'change', this.onSettingChanged);
+
+      this.listenTo(this.model.builder, 'add remove reset', this.updateBuilderCount);
+      this.listenTo(this.model.builder, 'add', this.onBuilderAdd);
+
+      this.listenTo(this.builderView, 'find', this.listView.find.bind(this.listView));
+      this.listenTo(this.builderView, 'shown hidden', this.toggleBuilderToggle);
     },
 
     load: function(when)
@@ -181,6 +213,46 @@ define([
       this.$id('import').prop('title', this.t('pa:import:title', {
         importedAt: time.format(this.model.settings.getValue('import.importedAt'), 'LLLL')
       }));
+    },
+
+    updateBuilderCount: function()
+    {
+      this.$id('builderCount')
+        .text(this.model.builder.length)
+        .closest('.btn')
+        .prop('disabled', this.model.builder.length === 0);
+    },
+
+    onBuilderAdd: function()
+    {
+      if (!this.builderView.shown && this.model.builder.length === 1)
+      {
+        this.toggleBuilderVisibility();
+      }
+    },
+
+    toggleBuilderVisibility: function()
+    {
+      if (this.builderView.shown)
+      {
+        this.builderView.hide();
+      }
+      else
+      {
+        this.builderView.show();
+      }
+    },
+
+    toggleBuilderToggle: function()
+    {
+      this.$id('builderToggle').toggleClass('active', this.builderView.shown).blur();
+    },
+
+    onBuilderToggleClick: function()
+    {
+      document.body.focus();
+
+      this.toggleBuilderVisibility();
     }
 
   });
