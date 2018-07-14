@@ -141,7 +141,8 @@ exports.events = {
       'opinionSurveys.*.added', 'opinionSurveys.*.edited',
       'qi.*.added', 'qi.*.edited',
       'd8.*.added', 'd8.*.edited',
-      'kanban.supplyAreas.added', 'kanban.supplyAreas.edited'
+      'kanban.supplyAreas.added', 'kanban.supplyAreas.edited',
+      'kanban.containers.added', 'kanban.containers.edited'
     ],
     info: [
       'events.**',
@@ -163,7 +164,8 @@ exports.events = {
       'd8.*.deleted',
       'orderDocuments.tree.filePurged', 'orderDocuments.tree.folderPurged',
       'paintShop.paints.deleted',
-      'kanban.supplyAreas.deleted'
+      'kanban.supplyAreas.deleted',
+      'kanban.containers.deleted'
     ],
     error: [
       '*.syncFailed',
@@ -292,7 +294,7 @@ exports.mongoose = {
     'planSettings', 'planChange', 'plan', 'whOrderStatus',
     'xData',
     'dailyMrpCount', 'clipOrderCache', 'clipOrderCount',
-    'kanbanEntry', 'kanbanComponent', 'kanbanSupplyArea', 'kanbanTableView'
+    'kanbanEntry', 'kanbanComponent', 'kanbanSupplyArea', 'kanbanContainer', 'kanbanTableView'
   ]
 };
 

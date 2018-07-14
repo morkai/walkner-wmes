@@ -8,6 +8,7 @@ define([
   '../core/Model',
   '../core/Collection',
   'app/kanbanSupplyAreas/KanbanSupplyAreaCollection',
+  'app/kanbanContainers/KanbanContainerCollection',
   'app/kanbanComponents/KanbanComponentCollection',
   './KanbanSettingCollection',
   './KanbanTableView',
@@ -21,6 +22,7 @@ define([
   Model,
   Collection,
   KanbanSupplyAreaCollection,
+  KanbanContainerCollection,
   KanbanComponentCollection,
   KanbanSettingCollection,
   KanbanTableView,
@@ -46,6 +48,10 @@ define([
     paginate: false,
     rqlQuery: 'sort(_id)'
   });
+  kanbanState.containers = new KanbanContainerCollection(null, {
+    paginate: false,
+    rqlQuery: 'sort(name)'
+  });
   kanbanState.components = new KanbanComponentCollection(null, {
     paginate: false,
     rqlQuery: 'exclude(changes)&sort(_id)'
@@ -62,7 +68,7 @@ define([
 
   kanbanState.parse = function(data)
   {
-    ['supplyAreas', 'components', 'entries'].forEach(function(type)
+    ['supplyAreas', 'containers', 'components', 'entries'].forEach(function(type)
     {
       if (typeof data[type] === 'string')
       {
@@ -105,6 +111,7 @@ define([
       kanbanState.settings.setUpPubsub(kanbanState.pubsub);
       kanbanState.tableView.setUpPubsub(kanbanState.pubsub);
       kanbanState.supplyAreas.setUpPubsub(kanbanState.pubsub);
+      kanbanState.containers.setUpPubsub(kanbanState.pubsub);
       kanbanState.components.setUpPubsub(kanbanState.pubsub);
       kanbanState.entries.setUpPubsub(kanbanState.pubsub);
     }
@@ -146,6 +153,7 @@ define([
 
       kanbanState.settings.reset([]);
       kanbanState.supplyAreas.reset([]);
+      kanbanState.containers.reset([]);
       kanbanState.components.reset([]);
       kanbanState.entries.reset([]);
 
@@ -171,6 +179,7 @@ define([
     loaded = false;
 
     kanbanState.supplyAreas.reset([]);
+    kanbanState.containers.reset([]);
     kanbanState.components.reset([]);
     kanbanState.entries.reset([]);
   });

@@ -422,5 +422,11 @@
   "TYPE:kanban.supplyAreas.edited": "Baza Kanban > Obszary zaopatrzenia: edycja",
   "TEXT:kanban.supplyAreas.edited": "Zmodyfikowano obszar zaopatrzenia: <a href='\\#kanban/supplyAreas/{model->_id}'>{model->name}</a>",
   "TYPE:kanban.supplyAreas.deleted": "Baza Kanban > Obszary zaopatrzenia: usunięcie",
-  "TEXT:kanban.supplyAreas.deleted": "Usunięto obszar zaopatrzenia: <em>{model->name}</em>"
+  "TEXT:kanban.supplyAreas.deleted": "Usunięto obszar zaopatrzenia: <em>{model->name}</em>",
+  "TYPE:kanban.containers.added": "Baza Kanban > Rodzaje pojemników: dodanie",
+  "TEXT:kanban.containers.added": "Dodano rodzaj pojemników: <a href='\\#kanban/containers/{model->_id}'>{model->name}</a>",
+  "TYPE:kanban.containers.edited": "Baza Kanban > Rodzaje pojemników: edycja",
+  "TEXT:kanban.containers.edited": "Zmodyfikowano rodzaj pojemników: <a href='\\#kanban/containers/{model->_id}'>{model->name}</a>",
+  "TYPE:kanban.containers.deleted": "Baza Kanban > Rodzaje pojemników: usunięcie",
+  "TEXT:kanban.containers.deleted": "Usunięto rodzaj pojemników: <em>{model->name}</em>"
 }

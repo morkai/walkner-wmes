@@ -12,8 +12,9 @@ define([
   'app/kanban/templates/entryList',
   'app/kanban/templates/entryListColumns',
   'app/kanban/templates/entryListRow',
-  'app/kanban/templates/inputEditor',
-  'app/kanban/templates/textAreaEditor',
+  'app/kanban/templates/editors/input',
+  'app/kanban/templates/editors/select',
+  'app/kanban/templates/editors/textArea',
   'app/kanban/templates/filters/numeric',
   'app/kanban/templates/filters/text',
   'app/kanban/templates/filters/select'
@@ -30,6 +31,7 @@ define([
   columnsTemplate,
   rowTemplate,
   inputEditorTemplate,
+  selectEditorTemplate,
   textAreaEditorTemplate,
   numericFilterTemplate,
   textFilterTemplate,
@@ -85,13 +87,6 @@ define([
       'focus .kanban-td': function(e)
       {
         var newCell = this.idCell(e);
-
-        console.log(
-          'focus',
-          'model=', newCell.model ? newCell.model.id : null,
-          'column=', newCell.columnId,
-          'value=', newCell.value
-        );
 
         if (newCell.value === undefined)
         {
@@ -201,8 +196,6 @@ define([
 
     afterRender: function()
     {
-      console.log('afterRender');
-
       var view = this;
 
       view.$theadInner = view.$('.kanban-thead-innerContainer').on('scroll', view.onTheadScroll.bind(view));
@@ -357,8 +350,6 @@ define([
         view.$tbodyInner[0].scrollTop = scrollTop;
       }
 
-      console.log('optimize=', optimize, 'scrollTop=', scrollTop);
-
       if (optimize === 'same')
       {
         return view.finalizeRenderRows();
@@ -438,7 +429,6 @@ define([
 
       if (view.afterRenderRows)
       {
-        console.log('finalizeRenderRows afterRenderRows');
         view.afterRenderRows.call(view);
         view.afterRenderRows = null;
 
@@ -446,7 +436,6 @@ define([
       }
       else if (view.focusedCell)
       {
-        console.log('finalizeRenderRows focusedCell=', view.focusedCell.modelId, view.focusedCell.columnId);
         var modelId = view.focusedCell.modelId;
         var columnId = view.focusedCell.columnId;
         var arrayIndex = view.focusedCell.arrayIndex;
@@ -483,7 +472,6 @@ define([
       }
       else if ($tbody[0].childElementCount)
       {
-        console.log('finalizeRenderRows focus');
         if (view.prevFocusedCell)
         {
           var modelIndex = view.prevFocusedCell.modelIndex;
@@ -542,8 +530,6 @@ define([
 
     resize: function()
     {
-      console.log('resize');
-
       var height = this.calcHeight();
 
       this.el.style.height = height + 'px';
@@ -1064,8 +1050,6 @@ define([
 
     clearCache: function()
     {
-      console.log('clearCache');
-
       this.rowCache = null;
     },
 
@@ -1073,12 +1057,8 @@ define([
     {
       if (!this.$tbodyInner)
       {
-        console.log('onFilter 0');
-
-        return;
+         return;
       }
-
-      console.log('onFilter 1');
 
       this.filtered = true;
     },
@@ -1092,12 +1072,8 @@ define([
 
       if (!view.$tbodyInner)
       {
-        console.log('onSort 0');
-
-        return;
+         return;
       }
-
-      console.log('onSort 1');
 
       view.clearCache();
 
@@ -1115,12 +1091,10 @@ define([
 
         if (entryInVisibleArea || filtered)
         {
-          console.log('onSort 2');
           view.renderRows(-1, newIndex);
         }
         else
         {
-          console.log('onSort 3');
           tbodyInner.scrollTop = newPosition;
         }
       }
@@ -1131,17 +1105,14 @@ define([
 
         if (tbodyInner.scrollTop === 0)
         {
-          console.log('onSort 4');
           view.renderRows(0);
         }
         else if (filtered && view.prevFocusedCell)
         {
-          console.log('onSort 5');
           view.renderRows(tbodyInner.scrollTop);
         }
         else
         {
-          console.log('onSort 6');
           tbodyInner.scrollTop = 0;
         }
       }
@@ -1151,11 +1122,8 @@ define([
     {
       if (!this.rowCache)
       {
-        console.log('onEntryChange', entry.id, 'nope');
         return;
       }
-
-      console.log('onEntryChange', entry.id, 'yepp');
 
       delete this.rowCache[entry.id];
 
@@ -1199,8 +1167,6 @@ define([
 
       if (!cell)
       {
-        console.log('focusCell NOPE');
-
         return;
       }
 
@@ -1218,21 +1184,15 @@ define([
       }
 
       this.$(tdSelector).addClass('kanban-is-selected');
-
-      console.log('focusCell YEPP', !!cell.td);
     },
 
-    onSortableChange: function(tableView, columnId)
+    onSortableChange: function()
     {
-      console.log('onSortableChange', columnId);
-
       this.renderColumns();
     },
 
     onVisibilityChange: function(tableView, columnId)
     {
-      console.log('onVisibilityChange', columnId);
-
       if (this.focusedCell
         && columnId === this.focusedCell.columnId
         && !this.model.tableView.getVisibility(columnId))
@@ -1276,8 +1236,6 @@ define([
 
       if (this.oldScrollTop !== newScrollTop)
       {
-        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SCROLL', 'old=' + this.oldScrollTop, 'new=' + newScrollTop);
-
         this.oldScrollTop = newScrollTop;
 
         this.renderRows();
@@ -1310,15 +1268,12 @@ define([
         key = key.toUpperCase();
       }
 
-      console.log('handleTdKeyDown', key, cell);
-
       if (this.keyHandlers[key])
       {
         e.preventDefault();
 
         if (this.editing)
         {
-          console.log('                editing!');
           return;
         }
 
@@ -1906,6 +1861,85 @@ define([
         }
       },
 
+      select: function(cell, multiple, options, selected)
+      {
+        var view = this;
+        var changeAt = Number.MAX_VALUE;
+
+        $(document.body).append(selectEditorTemplate({
+          idPrefix: view.idPrefix,
+          columnId: cell.columnId,
+          multiple: multiple,
+          options: options.map(function(option)
+          {
+            option.selected = selected.indexOf(option.id) !== -1;
+
+            return option;
+          })
+        }));
+
+        view.$id('editor-backdrop').one('click', hide);
+        view.$id('editor-form').on('submit', submit);
+        view.$id('editor-input')
+          .on('blur', hide)
+          .on('keydown', keyDown)
+          .on('click', click)
+          .on('change', change).focus();
+
+        view.editorPositioners.input.call(view, cell);
+
+        function submit()
+        {
+          var newValue = cell.column.parseValue(
+            view.$id('editor-input').val(),
+            cell.column,
+            cell.arrayIndex,
+            cell.model.serialize()
+          );
+
+          view.handleEditorValue(cell.modelId, cell.columnId, cell.arrayIndex, newValue);
+
+          hide();
+
+          return false;
+        }
+
+        function hide()
+        {
+          view.$id('editor-backdrop').remove();
+          view.$id('editor-form').remove();
+
+          view.afterEdit();
+        }
+
+        function keyDown(e)
+        {
+          if (e.originalEvent.key === 'Escape')
+          {
+            hide();
+          }
+          else if (e.originalEvent.key === 'Enter')
+          {
+            submit();
+          }
+        }
+
+        function click()
+        {
+          var diff = Date.now() - changeAt;
+
+          if (diff >= 0 && diff < 50)
+          {
+            submit();
+          }
+        }
+
+        function change()
+        {
+          changeAt = Date.now();
+        }
+      },
+
       textArea: function(cell)
       {
         var view = this;
@@ -2004,6 +2038,14 @@ define([
         contextMenu.show(view, rect.top, rect.left, menu);
 
         view.broker.subscribe('planning.contextMenu.hidden', view.afterEdit.bind(view)).setLimit(1);
+      },
+
+      container: function(cell)
+      {
+        var options = [{id: null, text: this.t('container:null')}].concat(this.model.containers.map(idAndLabel));
+        var selected = [cell.model.get('container')];
+
+        this.editors.select.call(this, cell, false, options, selected);
       },
 
       discontinued: function(cell)
@@ -2400,6 +2442,19 @@ define([
               {id: 'kk', text: this.t('kind:kk')},
               {id: 'pk', text: this.t('kind:pk')}
             ]
+          );
+        }
+      },
+      container: {
+        type: 'select-multi',
+        template: selectFilterTemplate,
+        handler: function(cell, $filter)
+        {
+          this.filters.select.call(
+            this,
+            cell,
+            $filter,
+            [{id: '', text: this.t('filters:value:empty')}].concat(this.model.containers.map(idAndLabel))
           );
         }
       },

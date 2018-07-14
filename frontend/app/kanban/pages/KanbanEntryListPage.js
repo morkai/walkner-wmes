@@ -12,6 +12,7 @@ define([
   '../views/KanbanEntryListView',
   '../views/KanbanPrintQueueBuilderView',
   'app/kanban/templates/page',
+  'app/kanban/templates/dictionariesAction',
   'app/kanban/templates/printQueueBuilder/action'
 ], function(
   $,
@@ -25,6 +26,7 @@ define([
   KanbanEntryListView,
   KanbanPrintQueueBuilderView,
   pageTemplate,
+  dictionariesActionTemplate,
   builderActionTemplate
 ) {
   'use strict';
@@ -78,13 +80,6 @@ define([
           page.$id('builderToggle').on('click', page.onBuilderToggleClick.bind(page));
           page.updateBuilderCount();
         }
-      },
-      {
-        label: t.bound('kanban', 'pa:components'),
-        href: '#kanban/components'
-      }, {
-        label: t.bound('kanban', 'pa:supplyAreas'),
-        href: '#kanban/supplyAreas'
       }, {
         id: '-import',
         label: t.bound('kanban', 'pa:import'),
@@ -92,6 +87,8 @@ define([
         privileges: function() { return user.isAllowedTo('KANBAN:MANAGE', 'FN:process-engineer'); },
         callback: page.import.bind(page),
         afterRender: page.updateImportedAt.bind(page)
+      }, {
+        template: dictionariesActionTemplate
       }];
     },
 

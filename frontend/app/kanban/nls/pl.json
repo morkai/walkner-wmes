@@ -14,8 +14,10 @@
 
   "pa:import": "Importuj z SAP",
   "pa:import:title": "Ostatnia aktualizacja:\n{importedAt}",
+  "pa:dictionaries": "Słowniki",
   "pa:components": "Komponenty",
   "pa:supplyAreas": "Obszary zaopatrzenia",
+  "pa:containers": "Rodzaje pojemników",
   "pa:settings": "Ustawienia",
   "pa:printQueues": "Kolejki drukowania",
 
@@ -58,7 +60,8 @@
   "column:replenQty": "Ilość uzupełnienia",
   "column:replenQty:title": "Ilość uzupełnienia",
   "column:kind": "Rodzaj kanbana",
-  "column:kind:title": "Rodzaj kanbana",
+  "column:container": "Rodzaj<br>pojemnika",
+  "column:container:title": "Rodzaj pojemnika",
   "column:workstations": "Stanowisko",
   "column:workstation:title": "Stanowisko {n}",
   "column:workstationsN": "Stanowisko {n}",
@@ -76,10 +79,11 @@
   "kind:kk": "Karta Kanbanowa",
   "kind:pk": "Pojemnik Kanban",
   "kind:null": "Nieokreślony",
-
   "kind:kk:short": "KK",
   "kind:pk:short": "PK",
   "kind:null:short": "",
+
+  "container:null": "Nieokreślony",
 
   "filters:submit": "Filtruj",
   "filters:clear": "Wyczyść",

@@ -224,6 +224,13 @@ define([
         return Math.min(99, Math.max(0, parseNumber(value)));
       }
     },
+    container: {
+      width: 10,
+      tdClassName: function()
+      {
+        return this.state.auth.manage || this.state.auth.processEngineer ? 'kanban-is-editable' : '';
+      }
+    },
     locations: {
       width: 4,
       rowSpan: 1,

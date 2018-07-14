@@ -24,6 +24,9 @@
 .kanban-filter[data-column-id="family"] .form-control > option:first-child {
   font-family: Arial, "Helvetic Neue", Helvetica, sans-serif;
 }
+.kanban-filter[data-column-id="container"] .form-control {
+  font-family: inherit;
+}
 .kanban-filter[data-column-id="kind"] .form-control {
   font-family: inherit;
   height: 59px;

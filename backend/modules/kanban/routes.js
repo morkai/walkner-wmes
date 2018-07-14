@@ -14,6 +14,7 @@ module.exports = function setUpKanbanRoutes(app, module)
   const KanbanEntry = mongoose.model('KanbanEntry');
   const KanbanComponent = mongoose.model('KanbanComponent');
   const KanbanSupplyArea = mongoose.model('KanbanSupplyArea');
+  const KanbanContainer = mongoose.model('KanbanContainer');
   const KanbanTableView = mongoose.model('KanbanTableView');
 
   const canView = userModule.auth('USER');
@@ -45,6 +46,13 @@ module.exports = function setUpKanbanRoutes(app, module)
   express.get('/kanban/supplyAreas/:id', canView, express.crud.readRoute.bind(null, app, KanbanSupplyArea));
   express.put('/kanban/supplyAreas/:id', canManage, express.crud.editRoute.bind(null, app, KanbanSupplyArea));
   express.delete('/kanban/supplyAreas/:id', canManage, express.crud.deleteRoute.bind(null, app, KanbanSupplyArea));
+
+  // Containers
+  express.get('/kanban/containers', canView, express.crud.browseRoute.bind(null, app, KanbanContainer));
+  express.post('/kanban/containers', canManage, express.crud.addRoute.bind(null, app, KanbanContainer));
+  express.get('/kanban/containers/:id', canView, express.crud.readRoute.bind(null, app, KanbanContainer));
+  express.put('/kanban/containers/:id', canManage, express.crud.editRoute.bind(null, app, KanbanContainer));
+  express.delete('/kanban/containers/:id', canManage, express.crud.deleteRoute.bind(null, app, KanbanContainer));
 
   // Table views
   express.get('/kanban/tableViews', canView, express.crud.browseRoute.bind(null, app, KanbanTableView));

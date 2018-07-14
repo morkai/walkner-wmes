@@ -1,0 +1,8 @@
+<div id="<%- idPrefix %>-editor-backdrop" class="kanban-editor-backdrop"></div>
+<form id="<%- idPrefix %>-editor-form" class="kanban-editor-form" data-column-id="<%- columnId %>" autocomplete="off">
+  <select id="<%- idPrefix %>-editor-input" class="form-control kanban-editor-select">
+    <% options.forEach(function(option) { %>
+    <option value="<%= option.id %>" <%- option.selected ? 'selected' : '' %>><%- option.text %></option>
+    <% }) %>
+  </select>
+</form>

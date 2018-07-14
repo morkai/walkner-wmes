@@ -10,9 +10,11 @@ module.exports = function setUpKanbanState(app, module)
   const KanbanEntry = mongoose.model('KanbanEntry');
   const KanbanComponent = mongoose.model('KanbanComponent');
   const KanbanSupplyArea = mongoose.model('KanbanSupplyArea');
+  const KanbanContainer = mongoose.model('KanbanContainer');
 
   const maps = {
     supplyAreas: {},
+    containers: {},
     components: {},
     entries: {}
   };
@@ -65,6 +67,15 @@ module.exports = function setUpKanbanState(app, module)
         else
         {
           KanbanSupplyArea.find({}).lean().exec(this.group());
+        }
+
+        if (lists.containers)
+        {
+          setImmediate(this.group(), null, null);
+        }
+        else
+        {
+          KanbanContainer.find({}).lean().exec(this.group());
         }
 
         if (lists.components)
