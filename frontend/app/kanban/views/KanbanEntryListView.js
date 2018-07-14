@@ -2251,6 +2251,11 @@ define([
               return view.handleFilterValue(cell.columnId, 'empty', '?');
             }
 
+            if (newData === '!')
+            {
+              return view.handleFilterValue(cell.columnId, 'notEmpty', '!');
+            }
+
             if (/^[0-9]+$/.test(newData))
             {
               return view.handleFilterValue(cell.columnId, 'numeric', newData);
@@ -2320,6 +2325,11 @@ define([
             if (newData === '?')
             {
               return view.handleFilterValue(cell.columnId, 'empty', '?');
+            }
+
+            if (newData === '!')
+            {
+              return view.handleFilterValue(cell.columnId, 'notEmpty', '!');
             }
 
             if (!/^\/.*?\/$/.test(newData))

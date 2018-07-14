@@ -692,11 +692,23 @@ define([
           return $ === undefined || $ === null || $ === 0 || $ === '';
         };
       },
+      notEmpty: function()
+      {
+        return function($)
+        {
+          return $ !== undefined && $ !== null && $ !== 0 && $ !== '';
+        };
+      },
       numeric: function(code)
       {
         if (code === '?')
         {
           return this.empty();
+        }
+
+        if (code === '!')
+        {
+          return this.notEmpty();
         }
 
         var numericFilter = function() { return true; };
@@ -731,6 +743,11 @@ define([
         if (code === '?')
         {
           return this.empty();
+        }
+
+        if (code === '!')
+        {
+          return this.notEmpty();
         }
 
         var textFilter = function() { return true; };
