@@ -49,7 +49,7 @@ define([
       },
       'statuses': function(propertyName, term, formData)
       {
-        formData[term.name === 'in' ? 'statusesIn' : 'statusesNin'] = term.args[1].join(',');
+        formData[term.name === 'all' ? 'statusesIn' : 'statusesNin'] = term.args[1].join(',');
       },
       'nc12': '_id'
     },
@@ -100,7 +100,7 @@ define([
 
       if (statusesIn.length)
       {
-        selector.push({name: 'in', args: ['statuses', statusesIn.split(',')]});
+        selector.push({name: 'all', args: ['statuses', statusesIn.split(',')]});
       }
 
       if (statusesNin.length)
