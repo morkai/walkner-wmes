@@ -93,6 +93,13 @@ define([
         this.$id('mobile-number').select();
 
         return false;
+      },
+      'keydown #-cardUid': function(e)
+      {
+        if (e.key === 'Enter')
+        {
+          return false;
+        }
       }
     },
 
@@ -390,6 +397,11 @@ define([
         {
           formData[prop] = null;
         }
+      });
+
+      ['card', 'cardUid'].forEach(function(prop)
+      {
+        formData[prop] = formData[prop] ? formData[prop].replace(/[^0-9]+/g, '').replace(/^0+/, '') : null;
       });
 
       ['aors', 'mrps', 'privileges'].forEach(function(prop)

@@ -50,8 +50,18 @@
               <input id="<%- idPrefix %>-personellId" class="form-control" type="text" name="personellId" maxlength="15">
             </div>
             <div class="col-lg-6 form-group">
+              <label for="<%- idPrefix %>-kdId" class="control-label"><%- t('users', 'PROPERTY:kdId') %></label>
+              <input id="<%- idPrefix %>-kdId" class="form-control" type="text" name="kdId" pattern="^-?[0-9]+$">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 form-group">
               <label for="<%- idPrefix %>-card" class="control-label"><%- t('users', 'PROPERTY:card') %></label>
               <input id="<%- idPrefix %>-card" class="form-control" type="text" name="card" maxlength="15">
+            </div>
+            <div class="col-lg-6 form-group">
+              <label for="<%- idPrefix %>-cardUid" class="control-label"><%- t('users', 'PROPERTY:cardUid') %></label>
+              <input id="<%- idPrefix %>-cardUid" class="form-control" type="text" name="cardUid" maxlength="15">
             </div>
           </div>
           <div class="form-group">
@@ -64,12 +74,6 @@
               <% }) %>
             </div>
           </div>
-          <% if (!accountMode) { %>
-          <div class="form-group">
-            <label for="<%- idPrefix %>-kdId" class="control-label"><%- t('users', 'PROPERTY:kdId') %></label>
-            <input id="<%- idPrefix %>-kdId" class="form-control" type="text" name="kdId" pattern="^-?[0-9]+$">
-          </div>
-          <% } %>
         </div>
         <div class="col-lg-3">
           <div class="form-group">

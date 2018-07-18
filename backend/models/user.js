@@ -64,6 +64,7 @@ module.exports = function setupUserModel(app, mongoose)
     },
     personellId: String,
     card: String,
+    cardUid: String,
     firstName: String,
     lastName: String,
     searchName: String,
