@@ -659,7 +659,14 @@ define([
 
     findWarehousemanByPersonnelId: function(personnelId)
     {
-      return this.warehousemen.findWhere({personellId: personnelId});
+      var cardId = personnelId.replace(/^0+/, '');
+
+      return this.warehousemen.find(function(user)
+      {
+        return user.get('personnelId') === personnelId
+          || user.get('card') === cardId
+          || user.get('cardUid') === cardId;
+      });
     },
 
     findResponseByResponder: function(user)

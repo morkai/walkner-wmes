@@ -28,7 +28,7 @@ define([
       fullscreen: req.query.fullscreen !== undefined,
       model: {
         warehousemen: new UserCollection(null, {
-          rqlQuery: 'select(firstName,lastName,personellId)&privileges=ISA%3AWHMAN'
+          rqlQuery: 'select(firstName,lastName,personellId,card,cardUid)&privileges=ISA%3AWHMAN'
         }),
         shiftPersonnel: new IsaShiftPersonnel(null, {current: true}),
         requests: IsaRequestCollection.active(),
