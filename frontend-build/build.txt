@@ -198,6 +198,10 @@ app/kaizenOrders/assets/report.css
 ----------------
 app/kaizenOrders/assets/report.css
 
+app/kanban/assets/builder.css
+----------------
+app/kanban/assets/builder.css
+
 app/kanban/assets/filters.css
 ----------------
 app/kanban/assets/filters.css
@@ -206,11 +210,16 @@ app/kanban/assets/main.css
 ----------------
 app/kanban/assets/./filters.css
 app/kanban/assets/./search.css
+app/kanban/assets/./builder.css
 app/kanban/assets/main.css
 
 app/kanban/assets/search.css
 ----------------
 app/kanban/assets/search.css
+
+app/kanbanPrintQueues/assets/main.css
+----------------
+app/kanbanPrintQueues/assets/main.css
 
 app/licenses/assets/main.css
 ----------------
@@ -766,6 +775,7 @@ assets/../app/mor/assets/main.css
 assets/../app/planning/assets/main.css
 assets/../app/sapLaborTimeFixer/assets/main.css
 assets/../app/kanban/assets/main.css
+assets/../app/kanbanPrintQueues/assets/main.css
 assets/wmes-main.css
 
 assets/wmes-mrl.css
@@ -1477,6 +1487,8 @@ app/printers/routes.js
 app/kanban/routes.js
 app/kanbanComponents/routes.js
 app/kanbanSupplyAreas/routes.js
+app/kanbanContainers/routes.js
+app/kanbanPrintQueues/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js

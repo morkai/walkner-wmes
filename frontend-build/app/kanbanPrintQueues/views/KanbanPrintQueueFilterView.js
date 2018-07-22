@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["app/core/views/FilterView","app/kanbanPrintQueues/templates/filter"],function(t,e){"use strict";return t.extend({template:e,defaultFormData:{todo:""},termToForm:{todo:function(t,e,o){o[t]=e.args[1].toString()}},afterRender:function(){t.prototype.afterRender.apply(this,arguments),this.toggleButtonGroup("todo")},serializeFormToQuery:function(t,e){var o=this,r=o.getButtonGroupValue("todo");r||(r="true",o.$id("todo").find('input[value="true"]').prop("checked",!0),o.toggleButtonGroup("todo")),t.push({name:"eq",args:["todo","true"===r]}),e.sort="true"===r?{todo:1,createdAt:1}:{todo:1,createdAt:-1},e.limit=10}})});

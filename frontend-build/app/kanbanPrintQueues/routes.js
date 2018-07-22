@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["underscore","../router","../viewport","../user"],function(n,e,u,a){"use strict";var r=a.auth();e.map("/kanban/printQueues",r,function(n){u.loadPage(["app/kanbanPrintQueues/KanbanPrintQueueCollection","app/kanbanPrintQueues/pages/KanbanPrintQueueListPage","i18n!app/nls/kanbanPrintQueues"],function(e,u){return new u({collection:new e(null,{rqlQuery:n.rql})})})})});
