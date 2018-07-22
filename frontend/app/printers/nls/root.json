@@ -44,7 +44,12 @@
     "tags:paintShop": "Paint-shop",
     "tags:fte/production": "FTE (production)",
     "tags:fte/warehouse": " FTE (warehouse)",
-    "tags:fte/other": "FTE (other)"
+    "tags:fte/other": "FTE (other)",
+    "tags:kanban/kk": "Kanban DB: Kanban Card",
+    "tags:kanban/empty": "Kanban DB: Empty",
+    "tags:kanban/full": "Kanban DB: Full",
+    "tags:kanban/wh": "Kanban DB: Warehouse",
+    "tags:kanban/desc": "Kanban DB: Description"
   },
   "pl": true
 }

@@ -3,7 +3,7 @@
 }
 .kanban-builder {
   position: fixed;
-  width: 618px;
+  width: 633px;
   z-index: 3;
   border-bottom: 0;
   background: #f1f1f1;
@@ -66,7 +66,7 @@
   border-bottom: 1px solid #bbb;
 }
 .kanban-builder-no {
-  width: 30px;
+  width: 45px;
 }
 .kanban-builder-tbody .kanban-builder-no {
   text-align: right;
@@ -81,8 +81,24 @@
 .kanban-builder-lines {
   min-width: 125px;
 }
+.kanban-builder-thead .kanban-builder-lines {
+  position: relative;
+}
+.kanban-builder-thead .kanban-builder-lines:hover {
+  cursor: pointer;
+  background-color: #ffffa6;
+}
 .kanban-builder-tbody .kanban-builder-lines {
   padding: 0;
+}
+.kanban-builder-thead .kanban-builder-lines select.is-expandable {
+  position: absolute;
+  top: 0;
+  left: 0!important;
+  width: 125px;
+}
+.kanban-builder-lines div.is-expandable {
+  display: none;
 }
 .kanban-builder-lines .form-control {
   padding: 4px;
@@ -139,12 +155,12 @@
   background-color: #ffffa6;
 }
 .kanban-builder-tfoot td:first-child {
-  width: 90px;
+  width: 105px;
   padding: 0;
 }
 .kanban-builder-layoutError {
   position: absolute;
-  top: 0;
+  top: 35px;
   left: 215px;
   width: 350px;
   height: 32px;

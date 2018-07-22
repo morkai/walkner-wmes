@@ -294,7 +294,7 @@ exports.mongoose = {
     'planSettings', 'planChange', 'plan', 'whOrderStatus',
     'xData',
     'dailyMrpCount', 'clipOrderCache', 'clipOrderCount',
-    'kanbanEntry', 'kanbanComponent', 'kanbanSupplyArea', 'kanbanContainer', 'kanbanTableView'
+    'kanbanEntry', 'kanbanComponent', 'kanbanSupplyArea', 'kanbanContainer', 'kanbanTableView', 'kanbanPrintQueue'
   ]
 };
 
@@ -368,7 +368,7 @@ exports.user = {
     'MOR:MANAGE', 'MOR:MANAGE:USERS',
     'PAINT_SHOP:VIEW', 'PAINT_SHOP:MANAGE', 'PAINT_SHOP:PAINTER', 'PAINT_SHOP:DROP_ZONES',
     'PLANNING:VIEW', 'PLANNING:MANAGE', 'PLANNING:PLANNER', 'PLANNING:WHMAN',
-    'KANBAN:VIEW', 'KANBAN:MANAGE'
+    'KANBAN:VIEW', 'KANBAN:MANAGE', 'KANBAN:PRINT'
   ]
 };
 

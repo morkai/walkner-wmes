@@ -1,0 +1,40 @@
+<tbody class="kanbanPrintQueues-item <%- expanded ? 'is-expanded' : '' %>" data-id="<%- queue._id %>" data-status="<%- queue.status %>">
+  <%- renderHd({
+    idPrefix: idPrefix,
+    helpers: helpers,
+    queue: queue
+  }) %>
+  <tr id="<%- idPrefix %>-jobsContainer" class="kanbanPrintQueues-jobs-container">
+    <td colspan="26" class="is-colored">
+      <table class="table table-bordered table-condensed table-hover">
+        <thead>
+        <tr>
+          <th class="is-min"><%- helpers.t('job:_id') %></th>
+          <th class="is-min"><%- helpers.t('job:line') %></th>
+          <th class="is-min"><%- helpers.t('job:ccn') %></th>
+          <th class="is-min"><%- helpers.t('job:nc12') %></th>
+          <th class="is-min"><%- helpers.t('job:description') %></th>
+          <% ['kk', 'empty', 'full', 'wh', 'desc'].forEach(function(layout) { %>
+          <th class="is-min"><%- helpers.t('layout:' + layout) %></th>
+          <% }) %>
+          <th class="is-min"><%- helpers.t('job:kanbanId') %></th>
+          <% if (user.isAllowedTo('KANBAN:PRINT', 'KANBAN:MANAGE')) { %>
+          <th class="actions"><%- helpers.t('core', 'LIST:COLUMN:actions') %></th>
+          <% } %>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody id="<%- idPrefix %>-jobs" class="kanbanPrintQueues-jobs">
+        <% queue.jobs.forEach(function(job) { %>
+          <%- renderJob({
+            idPrefix: idPrefix,
+            helpers: helpers,
+            queue: queue,
+            job: job
+          }) %>
+        <% }) %>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>

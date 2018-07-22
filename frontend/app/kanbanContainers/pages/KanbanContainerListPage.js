@@ -3,8 +3,7 @@
 define([
   'app/core/util/pageActions',
   'app/core/pages/FilteredListPage',
-  'app/kanbanContainers/views/KanbanContainerFilterView',
-  'i18n!app/nls/kanbanContainers'
+  'app/kanbanContainers/views/KanbanContainerFilterView'
 ], function(
   pageActions,
   FilteredListPage,

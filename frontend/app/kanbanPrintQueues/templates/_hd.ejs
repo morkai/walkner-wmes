@@ -1,0 +1,43 @@
+<tr id="<%- idPrefix %>-hd" class="kanbanPrintQueues-item-hd">
+  <td class="kanbanPrintQueues-item-id" title="<%- queue._id %>">
+    <i class="fa fa-caret-right"></i>
+    <i class="fa fa-caret-down"></i>
+    <%- queue.shortId %>
+  </td>
+  <td class="kanbanPrintQueues-item-separator">▪</td>
+  <td><%- time.format(queue.createdAt, 'LLL') %></td>
+  <td class="kanbanPrintQueues-item-separator">▪</td>
+  <td><%= queue.creator.label %></td>
+  <td class="kanbanPrintQueues-item-separator">▪</td>
+  <td id="<%- idPrefix %>-completed" class="kanbanPrintQueues-jobCount-completed"><%- queue.jobCount.completed %></td>
+  <td class="kanbanPrintQueues-jobCount-separator">/</td>
+  <td class="kanbanPrintQueues-jobCount-total"><%- queue.jobCount.total %></td>
+  <td class="kanbanPrintQueues-item-separator">▪</td>
+  <td class="kanbanPrintQueues-lineCount" title="<%= queue.lines.join('; ') %>"><%- helpers.t('lineCount', {count: queue.lines.length}) %></td>
+  <td class="kanbanPrintQueues-item-separator">▪</td>
+  <td class="kanbanPrintQueues-kanbanCount" title="<%= queue.kanbans.join('; ') %>"><%- helpers.t('kanbanCount', {count: queue.kanbans.length}) %></td>
+  <% ['kk', 'empty', 'full', 'wh', 'desc'].forEach(function(layout) { %>
+  <td class="kanbanPrintQueues-item-separator">▪</td>
+  <td class="kanbanPrintQueues-layoutCount"><%- helpers.t('layoutCount:' + layout, {count: queue.layoutCount[layout]}) %></td>
+  <% }) %>
+  <% if (user.isAllowedTo('KANBAN:PRINT', 'KANBAN:MANAGE')) { %>
+  <td class="kanbanPrintQueues-item-separator">▪</td>
+  <td class="kanbanPrintQueues-actions">
+    <div class="kanbanPrintQueues-actions-inner">
+      <% if (queue.todo) { %>
+      <button id="<%- idPrefix %>-printNext" class="btn btn-primary" type="button">
+        <i class="fa fa-print"></i><span><%- helpers.t('action:print:next') %></span>
+      </button>
+      <button id="<%- idPrefix %>-ignore" class="btn btn-warning" type="button">
+        <i class="fa fa-ban"></i><span><%- helpers.t('action:ignore') %></span>
+      </button>
+      <% } else { %>
+      <button id="<%- idPrefix %>-restore" class="btn btn-primary" type="button">
+        <i class="fa fa-plus"></i><span><%- helpers.t('action:restore') %></span>
+      </button>
+      <% } %>
+    </div>
+  </td>
+  <% } %>
+  <td></td>
+</tr>

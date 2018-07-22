@@ -106,6 +106,7 @@
   "search:invalid:nc12": "Nie znaleziono 12NC.",
 
   "builder:title": "Nowa kolejka drukowania",
+  "builder:addAll": "Dodaj wszystkie",
   "builder:no": "Lp.",
   "builder:ccn": "CCN",
   "builder:lines": "Linie montażowe",

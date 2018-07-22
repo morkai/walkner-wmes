@@ -15,7 +15,12 @@ define([
     'hourlyPlans',
     'fte/production',
     'fte/warehouse',
-    'fte/other'
+    'fte/other',
+    'kanban/kk',
+    'kanban/empty',
+    'kanban/full',
+    'kanban/wh',
+    'kanban/desc'
   ];
 
   return {

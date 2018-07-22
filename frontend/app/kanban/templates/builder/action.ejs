@@ -1,6 +1,9 @@
 <div class="btn-group kanban-builder-action">
   <a href="#kanban/printQueues" class="btn btn-default"><i class="fa fa-print"></i><span><%- t('kanban', 'pa:printQueues') %></span></a>
-  <button id="<%- idPrefix %>-builderToggle" type="button" class="btn btn-default dropdown-toggle">
+  <button id="<%- idPrefix %>-builderAddAll" type="button" class="btn btn-default" title="<%- t('kanban', 'builder:addAll') %>">
+    <i class="fa fa-plus"></i>
+  </button>
+  <button id="<%- idPrefix %>-builderToggle" type="button" class="btn btn-default">
     <span class="caret"></span>
     <span id="<%- idPrefix %>-builderCount">0</span>
   </button>

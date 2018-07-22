@@ -1,0 +1,15 @@
+<form class="well filter-form" autocomplete="off">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-todo"><%- helpers.t('PROPERTY:status') %></label>
+    <div id="<%- idPrefix %>-todo" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% [true, false].forEach(function(todo) { %>
+      <label class="btn btn-default">
+        <input type="radio" name="todo" value="<%- todo %>"> <%- helpers.t('todo:' + todo) %>
+      </label>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
+  </div>
+</form>

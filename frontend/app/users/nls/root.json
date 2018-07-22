@@ -180,6 +180,7 @@
     "PRIVILEGE:PAINT_SHOP:DROP_ZONES": "Paint shop: toggle drop zone",
     "PRIVILEGE:KANBAN:VIEW": "Kanban DB: view",
     "PRIVILEGE:KANBAN:MANAGE": "Kanban DB: manage",
+    "PRIVILEGE:KANBAN:PRINT": "Kanban DB: printing",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System",

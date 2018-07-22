@@ -189,6 +189,16 @@ exports.start = function startWatchdogMemoryUsageModule(app, module)
     const express = app[module.config.expressId];
     const auth = app[module.config.userId].auth('SUPER');
 
+    express.get('/watchdog/memoryUsage/gc', auth, (req, res) =>
+    {
+      if (global.gc)
+      {
+        global.gc();
+      }
+
+      res.sendStatus(204);
+    });
+
     express.get('/watchdog/memoryUsage/check', auth, (req, res) =>
     {
       checkMemoryUsage();

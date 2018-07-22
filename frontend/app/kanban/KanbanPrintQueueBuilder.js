@@ -29,10 +29,40 @@ define([
     {
       this.layouts = options && options.layouts || [].concat(LAYOUTS);
 
-      this.on('add remove change reset', function()
+      this.on('add remove change reset', this.store);
+    },
+
+    store: function()
+    {
+      localStorage.setItem(ENTRIES_STORAGE_KEY, JSON.stringify(this.toJSON()));
+    },
+
+    addFromEntries: function(entries)
+    {
+      var builder = this;
+      var ccns = {};
+      var added = [];
+
+      builder.forEach(function(model) { ccns[model.get('ccn')] = true; });
+
+      entries.forEach(function(entry)
       {
-        localStorage.setItem(ENTRIES_STORAGE_KEY, JSON.stringify(this.toJSON()));
+        if (ccns[entry.id])
+        {
+          return;
+        }
+
+        var model = {
+          _id: uuid(),
+          ccn: entry.id,
+          lines: entry.serialize().lines
+        };
+
+        builder.add(model, {multi: true});
+        added.push(model._id);
       });
+
+      this.trigger('multiAdd', added);
     },
 
     addFromEntry: function(entry)

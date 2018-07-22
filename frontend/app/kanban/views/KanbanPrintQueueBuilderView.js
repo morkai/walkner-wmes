@@ -8,7 +8,7 @@ define([
   'app/core/util/uuid',
   'app/core/util/ExpandableSelect',
   '../KanbanPrintQueueBuilder',
-  'app/kanban/templates/printQueueBuilder/builder'
+  'app/kanban/templates/builder/builder'
 ], function(
   _,
   $,
@@ -114,6 +114,87 @@ define([
       'resize #-tbody': function()
       {
         this.saveCss();
+      },
+
+      'click #-lines': function()
+      {
+        var view = this;
+
+        if (view.$id('lines').find('select').length)
+        {
+          return false;
+        }
+
+        var lines = {};
+
+        view.model.builder.forEach(function(model)
+        {
+          var allLines = view.model.entries.get(model.get('ccn')).serialize().lines;
+          var selectedLines = model.get('lines');
+
+          allLines.forEach(function(line)
+          {
+            lines[line] = selectedLines.indexOf(line) !== -1;
+          });
+        });
+
+        var sortedLines = Object.keys(lines).sort(function(a, b)
+        {
+          return a.localeCompare(b, undefined, {ignorePunctuation: true, numeric: true});
+        });
+
+        var $select = $('<select class="form-control is-expandable" multiple></select>');
+
+        sortedLines.forEach(function(line)
+        {
+          var selected = lines[line];
+
+          line = _.escape(line);
+
+          $select.append('<option value="' + line + '" ' + (selected ? 'selected' : '') + '>' + line + '</option>');
+        });
+
+        view.$id('lines').append($select);
+
+        $select.expandableSelect({expandedLength: Math.min(sortedLines.length, 10)}).focus();
+
+        $select.on('blur', function()
+        {
+          $select.remove();
+        });
+
+        $select.on('change', function()
+        {
+          var selectedLines = {};
+
+          ($select.val() || []).forEach(function(line) { selectedLines[line] = true; });
+
+          view.$rows.find('select').each(function()
+          {
+            var $tr = $(this).closest('tr');
+            var model = view.model.builder.at($tr[0].rowIndex);
+            var lines = [];
+
+            _.forEach(this.options, function(option)
+            {
+              option.selected = selectedLines[option.value];
+
+              if (option.selected)
+              {
+                lines.push(option.value);
+              }
+            });
+
+            model.attributes.lines = lines;
+
+            view.recountRow(model, $tr);
+          });
+
+          view.model.builder.store();
+
+          view.recountTotals();
+          view.validate();
+        });
       }
 
     },
@@ -130,6 +211,7 @@ define([
       view.listenTo(builder, 'focus', view.onFocus);
       view.listenTo(builder, 'reset', view.onReset);
       view.listenTo(builder, 'add', view.onAdd);
+      view.listenTo(builder, 'multiAdd', view.onMultiAdd);
       view.listenTo(builder, 'remove', view.onRemove);
       view.listenTo(builder, 'change:layouts', view.onLayoutsChange);
       view.listenTo(builder, 'change:lines', view.onLinesChange);
@@ -163,7 +245,7 @@ define([
       this.$rows = this.$id('rows');
       this.$row = this.$rows.find('tr').detach();
 
-      this.model.builder.forEach(this.addRow, this);
+      this.addRows(this.model.builder.models);
       this.recountTotals();
     },
 
@@ -267,13 +349,12 @@ define([
       });
     },
 
-    recountRow: function(rowIndex)
+    recountRow: function(model, $tr)
     {
-      var model = this.model.builder.at(rowIndex);
+      var row = $tr && $tr.length ? $tr[0] : this.$rows[0].rows[this.model.builder.models.indexOf(model)];
       var entry = this.model.entries.get(model.get('ccn')).serialize();
       var kanbanQtyUser = entry.kanbanQtyUser;
       var lineCount = model.get('lines').length;
-      var row = this.$id('rows')[0].rows[rowIndex];
       var layouts = this.model.builder.layouts;
 
       KanbanPrintQueueBuilder.LAYOUTS.forEach(function(layoutId, i)
@@ -296,43 +377,57 @@ define([
       });
     },
 
-    addRow: function(model)
+    addRows: function(models)
     {
-      var entry = this.model.entries.get(model.get('ccn'));
+      var view = this;
+      var $fragment = $(document.createDocumentFragment());
+      var no = view.$rows[0].childElementCount;
 
-      if (!entry)
+      models.forEach(function(model)
       {
-        return;
-      }
+        var entry = view.model.entries.get(model.get('ccn'));
 
-      var supplyArea = this.model.supplyAreas.get(entry.get('supplyArea'));
-      var $tr = this.$row.clone();
-      var tds = $tr[0].children;
-      var select = tds[2].firstElementChild;
-      var options = [];
-      var lines = model.get('lines');
+        if (!entry)
+        {
+          return;
+        }
 
-      tds[0].textContent = (this.$rows[0].childElementCount + 1) + '.';
-      tds[1].textContent = entry.id;
+        ++no;
 
-      (supplyArea ? supplyArea.get('lines') : []).forEach(function(lineId)
-      {
-        var selected = lines.indexOf(lineId) === -1 ? '' : 'selected';
+        var supplyArea = view.model.supplyAreas.get(entry.get('supplyArea'));
+        var $tr = view.$row.clone();
+        var tds = $tr[0].children;
+        var select = tds[2].firstElementChild;
+        var options = [];
+        var lines = model.get('lines');
 
-        lineId = _.escape(lineId);
+        tds[0].textContent = no + '.';
+        tds[1].textContent = entry.id;
 
-        options.push('<option value="' + lineId + '" ' + selected + '>' + lineId + '</option>');
+        (supplyArea ? supplyArea.get('lines') : []).forEach(function(lineId)
+        {
+          var selected = lines.indexOf(lineId) === -1 ? '' : 'selected';
+
+          lineId = _.escape(lineId);
+
+          options.push('<option value="' + lineId + '" ' + selected + '>' + lineId + '</option>');
+        });
+
+        select.innerHTML = options.join('');
+
+        view.recountRow(model, $tr);
+
+        $fragment.append($tr);
       });
 
-      select.innerHTML = options.join('');
+      $fragment.find('select').expandableSelect();
 
-      this.$rows.append($tr);
+      view.$rows.append($fragment);
 
-      this.recountRow($tr.prop('rowIndex'));
-
-      this.$(select).expandableSelect();
-
-      this.$rows[0].lastElementChild.querySelector('select').focus();
+      if (models.length === 1)
+      {
+        view.$rows[0].lastElementChild.querySelector('select').focus();
+      }
     },
 
     validate: function()
@@ -442,6 +537,7 @@ define([
           var toIndex = lineIndex * entry.kanbanQtyUser + entry.kanbanQtyUser;
 
           jobs.push({
+            _id: uuid(),
             line: line,
             kanbans: entry.kanbanId.slice(fromIndex, toIndex),
             layouts: layouts,
@@ -463,10 +559,19 @@ define([
         });
       });
 
-      var req = this.ajax({
+      jobs.sort(function(a, b)
+      {
+        return a.line.localeCompare(b.line, undefined, {
+          numeric: true,
+          ignorePunctuation: true
+        });
+      });
+
+      var req = view.ajax({
         method: 'POST',
         url: '/kanban/printQueues',
         data: JSON.stringify({
+          _id: uuid(),
           jobs: jobs
         })
       });
@@ -498,7 +603,7 @@ define([
         return;
       }
 
-      this.recountRow(this.model.builder.indexOf(model));
+      this.recountRow(model);
       this.recountTotals();
       this.validate();
     },
@@ -523,9 +628,19 @@ define([
       }
     },
 
-    onAdd: function(model)
+    onAdd: function(model, collection, options)
     {
-      this.addRow(model);
+      if (options && options.multi)
+      {
+        return;
+      }
+
+      this.onMultiAdd([model.id]);
+    },
+
+    onMultiAdd: function(ids)
+    {
+      this.addRows(ids.map(function(id) { return this.model.builder.get(id); }, this));
       this.recountTotals();
       this.validate();
     },
@@ -546,14 +661,14 @@ define([
     onLayoutsChange: function(layout, newState)
     {
       this.$('.btn[value="' + layout + '"]').toggleClass('active', newState);
-      this.model.builder.forEach(function(model, i) { this.recountRow(i); }, this);
+      this.model.builder.forEach(function(model) { this.recountRow(model); }, this);
       this.recountTotals();
       this.validate();
     },
 
     onLinesChange: function(model)
     {
-      this.recountRow(this.model.builder.models.indexOf(model));
+      this.recountRow(model);
       this.recountTotals();
       this.validate();
     }

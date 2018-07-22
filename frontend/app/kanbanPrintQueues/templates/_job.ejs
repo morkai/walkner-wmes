@@ -1,0 +1,30 @@
+<tr class="kanbanPrintQueues-job" data-id="<%- job._id %>" data-status="<%- job.status %>">
+  <td class="is-min text-mono" title="<%- job._id %>"><%- job.shortId %></td>
+  <td class="is-min"><%= job.line %></td>
+  <td class="is-min text-mono"><%- job.data.ccn %></td>
+  <td class="is-min text-mono"><%- job.data.nc12 %></td>
+  <td class="is-min"><%= job.data.description %></td>
+  <% ['kk', 'empty', 'full', 'wh', 'desc'].forEach(function(layout) { %>
+  <td class="is-min is-number"><%- job.layoutCount[layout] %></td>
+  <% }) %>
+  <td class="is-min text-mono"><%- job.kanbanIds %></td>
+  <% if (user.isAllowedTo('KANBAN:PRINT', 'KANBAN:MANAGE')) { %>
+  <td class="actions">
+    <div class="actions-group">
+      <button class="btn btn-primary" type="button" data-action="print" title="<%- helpers.t('action:print:job') %>">
+        <i class="fa fa-print"></i>
+      </button>
+      <% if (queue.todo) { %>
+      <button class="btn btn-<%- job.status === 'pending' || job.status === 'failure' ? 'warning' : 'default' %>"
+              type="button"
+              data-action="ignore"
+        <%- job.status === 'pending' || job.status === 'failure' ? '' : 'disabled' %>
+              title="<%- helpers.t('action:ignore') %>">
+        <i class="fa fa-ban"></i>
+      </button>
+      <% } %>
+    </div>
+  </td>
+  <% } %>
+  <td></td>
+</tr>

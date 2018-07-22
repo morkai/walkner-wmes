@@ -13,7 +13,7 @@ define([
   '../views/KanbanPrintQueueBuilderView',
   'app/kanban/templates/page',
   'app/kanban/templates/dictionariesAction',
-  'app/kanban/templates/printQueueBuilder/action'
+  'app/kanban/templates/builder/action'
 ], function(
   $,
   t,
@@ -78,6 +78,7 @@ define([
         afterRender: function()
         {
           page.$id('builderToggle').on('click', page.onBuilderToggleClick.bind(page));
+          page.$id('builderAddAll').on('click', page.onBuilderAddAllClick.bind(page));
           page.updateBuilderCount();
         }
       }, {
@@ -250,6 +251,11 @@ define([
       document.body.focus();
 
       this.toggleBuilderVisibility();
+    },
+
+    onBuilderAddAllClick: function()
+    {
+      this.model.builder.addFromEntries(this.model.entries.filtered);
     }
 
   });

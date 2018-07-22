@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Karta Kanbanowa</title>
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      line-height: 1;
+      font-size: 12px;
+      text-rendering: optimizeLegibility;
+      -webkit-text-rendering: optimizeLegibility;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    .page {
+      display: flex;
+    }
+    .page + .page {
+      page-break-before: always;
+    }
+    .card {
+      margin: 10mm;
+      flex: 1 1 auto;
+      width: 50%;
+      border: 1px solid #000;
+    }
+    .box {
+      padding: 5mm 0;
+      border-top: 1px solid #000;
+      font-size: 28px;
+    }
+    .hd {
+      padding: 5mm;
+      font-size: 64px;
+      font-weight: bold;
+      color: #fff;
+      border-top: 0;
+    }
+    .empty .hd {
+      background: red;
+    }
+    .full .hd {
+      background: green;
+    }
+    .row {
+      display: flex;
+    }
+    .row > .box {
+      flex: 1 1 auto;
+      width: 50%;
+    }
+    .row > .box + .box {
+      border-left: 1px solid #000;
+    }
+    .nc12 {
+      font-family: Consolas, monospace;
+      font-size: 42px;
+      font-weight: bold;
+    }
+    .desc {
+      display: flex;
+      padding: 0;
+      font-size: 21px;
+      height: 90px;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+    }
+    .qr {
+      width: 185px;
+      height: 185px;
+      margin: 8px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+<% pages.forEach(page => { %>
+<div class="page">
+  <div class="card empty">
+    <div class="box hd">
+      KARTA<br>
+      KANBAN
+    </div>
+    <div class="row">
+      <div class="box"><%= page.line %></div>
+      <div class="box"><%= page.location %></div>
+    </div>
+    <div class="box nc12">
+      <%= page.nc12 %>
+    </div>
+    <div class="box desc">
+      <%= page.description %>
+    </div>
+    <div class="box">
+      <img class="qr no" src="data:image/png;base64,<%= page.qr.empty %>">
+    </div>
+    <div class="row">
+      <div class="box">PUSTY</div>
+      <div class="box"><%= page.family %></div>
+    </div>
+  </div>
+  <div class="card full">
+    <div class="box hd">
+      KARTA<br>
+      KANBAN
+    </div>
+    <div class="row">
+      <div class="box"><%= page.storageBin %></div>
+      <div class="box"><%= page.componentQty %> [szt]</div>
+    </div>
+    <div class="box nc12">
+      <%= page.nc12 %>
+    </div>
+    <div class="box desc">
+      <%= page.description %>
+    </div>
+    <div class="row">
+      <div class="box">
+        <img class="qr no" src="data:image/png;base64,<%= page.qr.full %>">
+      </div>
+      <div class="box">
+        <img class="qr wh" src="data:image/png;base64,<%= page.qr.wh %>">
+      </div>
+    </div>
+    <div class="row">
+      <div class="box">PEŁNY</div>
+      <div class="box"><%= page.supplyArea %></div>
+    </div>
+  </div>
+</div>
+<% }) %>
+</body>
+</html>

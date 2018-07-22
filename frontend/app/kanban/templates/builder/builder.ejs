@@ -13,7 +13,7 @@
     <tr>
       <td class="kanban-builder-no"><%- helpers.t('builder:no') %></td>
       <td class="kanban-builder-ccn"><%- helpers.t('builder:ccn') %></td>
-      <td class="kanban-builder-lines"><%- helpers.t('builder:lines') %></td>
+      <td id="<%- idPrefix %>-lines" class="kanban-builder-lines"><%- helpers.t('builder:lines') %></td>
       <% layouts.forEach(function(layout) { %>
       <td class="kanban-builder-layout"><button type="button" class="btn btn-default <%- layout.active ? 'active' : '' %>" data-action="layout" value="<%- layout.id %>"><%- helpers.t('builder:' + layout.id) %></button></td>
       <% }) %>
@@ -29,7 +29,7 @@
       <tr>
         <td class="kanban-builder-no"></td>
         <td class="kanban-builder-ccn"></td>
-        <td class="kanban-builder-lines"><select name="lines" class="form-control" size="1" multiple data-expanded-length="6" required></select></td>
+        <td class="kanban-builder-lines"><select name="lines" class="form-control is-expandable" size="1" multiple data-expanded-length="6" required></select></td>
         <% layouts.forEach(function(layout) { %>
         <td class="kanban-builder-layout" data-layout="<%- layout.id %>">0</td>
         <% }) %>

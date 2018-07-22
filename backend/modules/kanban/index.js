@@ -11,12 +11,15 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   sapGuiId: 'sapGui',
   settingsId: 'settings',
-  sapImporterMessengerId: 'messenger/client'
+  sapImporterMessengerId: 'messenger/client',
+  html2pdfId: 'html2pdf'
 };
 
 exports.start = function startKanbanModule(app, module)
 {
   module.importTimer = null;
+
+  module.printing = null;
 
   app.onModuleReady(
     [
@@ -39,5 +42,21 @@ exports.start = function startKanbanModule(app, module)
   {
     clearTimeout(module.importTimer);
     module.importTimer = null;
+  });
+
+  app.broker.subscribe('app.started').setLimit(1).on('message', () =>
+  {
+    app[module.config.mongooseId].model('KanbanPrintQueue').collection.update(
+      {'jobs.status': 'printing'},
+      {$set: {'jobs.$.status': 'failure'}},
+      {multi: true},
+      err =>
+      {
+        if (err)
+        {
+          module.error(`Failed to fail interrupted jobs: ${err.message}`);
+        }
+      }
+    );
   });
 };

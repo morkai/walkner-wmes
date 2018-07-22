@@ -43,5 +43,10 @@
   "tags:paintShop": "Malarnia",
   "tags:fte/production": "FTE (produkcja)",
   "tags:fte/warehouse": " FTE (magazyn)",
-  "tags:fte/other": "FTE (inne)"
+  "tags:fte/other": "FTE (inne)",
+  "tags:kanban/kk": "Baza Kanban: Karta Kanbanowa",
+  "tags:kanban/empty": "Baza Kanban: Pusty",
+  "tags:kanban/full": "Baza Kanban: Pełny",
+  "tags:kanban/wh": "Baza Kanban: Magazynowa",
+  "tags:kanban/desc": "Baza Kanban: Opisowa"
 }

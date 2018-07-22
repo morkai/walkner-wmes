@@ -1,0 +1,57 @@
+{
+  "BREADCRUMBS:base": "Baza Kanban",
+  "BREADCRUMBS:browse": "Kolejki drukowania",
+
+  "msg:printNext:expand": "Wybierz kolejkę drukowania.",
+  "msg:printNext:todo": "Wybrana kolejka jest zrobiona.",
+  "msg:printNext:pending": "Brak zadań w wybranej kolejce.",
+  "msg:print:failure": "Drukowanie nie powiodło się.",
+  "msg:print:IN_PROGRESS": "Drukowanie jest już w toku.",
+
+  "PROPERTY:status": "Status",
+
+  "todo:true": "Do zrobienia",
+  "todo:false": "Zrobione",
+
+  "filter:submit": "Filtruj kolejki",
+
+  "lineCount": "{count} {count, plural, one{linia} few{linie} other{linii}}",
+  "kanbanCount": "{count} {count, plural, one{kanban} few{kanbany} other{kanbanów}}",
+  "layoutCount:kk": "{count} KK",
+  "layoutCount:empty": "{count} {count, plural, one{pusta} few{puste} other{pustych}}",
+  "layoutCount:full": "{count} {count, plural, one{pełna} few{pełne} other{pełnych}}",
+  "layoutCount:wh": "{count} {count, plural, one{magazynowa} few{magazynowe} other{magazynowych}}",
+  "layoutCount:desc": "{count} {count, plural, one{opisowa} few{opisowe} other{opisowych}}",
+
+  "layout:kk": "KK",
+  "layout:empty": "Pusty",
+  "layout:full": "Pełny",
+  "layout:wh": "Magazyn",
+  "layout:desc": "Opis",
+
+  "job:_id": "ID",
+  "job:line": "Linia",
+  "job:ccn": "CCN",
+  "job:nc12": "12NC",
+  "job:description": "Nazwa komponentu",
+  "job:kanbanId": "Kanban ID",
+
+  "action:ignore": "Ignoruj",
+  "action:restore": "Przywróć",
+  "action:print:next": "Drukuj kolejne",
+  "action:print:job": "Drukuj",
+
+  "ignore:title:queue": "Ignorowanie kolejki drukowania",
+  "ignore:title:job": "Ignorowanie zadania drukowania",
+  "ignore:message:queue": "<p>Czy na pewno chcesz zignorować całą wybraną kolejkę drukowania?</p>",
+  "ignore:message:job": "<p>Czy na pewno chcesz zignorować wybrane zadanie drukowania?</p>",
+  "ignore:yes": "Ignoruj",
+  "ignore:no": "Anuluj",
+  "ignore:failure": "Ignorowanie kolejki nie powiodło się.",
+
+  "restore:title": "Przywracanie kolejki drukowania",
+  "restore:message": "<p>Czy na pewno chcesz przywrócić całą wybraną kolejkę drukowania?</p><p>Statusy wszystkich zadań drukowania zostaną zresetowane.</p>",
+  "restore:yes": "Przywróć",
+  "restore:no": "Anuluj",
+  "restore:failure": "Przywracanie kolejki nie powiodło się."
+}
