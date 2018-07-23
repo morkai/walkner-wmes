@@ -663,7 +663,7 @@ define([
 
       return this.warehousemen.find(function(user)
       {
-        return user.get('personnelId') === personnelId
+        return user.get('personellId') === personnelId
           || user.get('card') === cardId
           || user.get('cardUid') === cardId;
       });
