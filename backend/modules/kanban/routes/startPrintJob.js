@@ -249,10 +249,25 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
           storageBin: job.data.storageBin,
           componentQty: job.data.componentQty,
           supplyArea: job.data.supplyArea,
-          qr: {
-            empty: `${kanbanId}2`,
-            full: `${kanbanId}5`,
-            wh: `${job.data.nc12}/${job.data.componentQty}/${job.data.storageBin}/${job.line}/${job.data.supplyArea}`
+          barCodes: {
+            empty: {
+              barcode: 20,
+              notext: true,
+              height: 92,
+              data: `${kanbanId}2`
+            },
+            full: {
+              barcode: 20,
+              notext: true,
+              height: 92,
+              data: `${kanbanId}5`
+            },
+            wh: {
+              barcode: 58,
+              notext: true,
+              scale: 2.5,
+              data: [job.data.nc12, job.data.componentQty, job.data.storageBin, job.line, job.data.supplyArea].join('/')
+            }
           }
         });
       }
@@ -261,13 +276,13 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
     step(
       function()
       {
-        generateQrCodes(pages.map(page => page.qr), this.next());
+        generateBarCodes(pages.map(page => page.barCodes), this.next());
       },
       function(err)
       {
         if (err)
         {
-          return this.skip(app.createError(`Failed to generate QR codes: ${err.message}`, 'PRINT_FAILURE', 500));
+          return this.skip(app.createError(`Failed to generate bar codes: ${err.message}`, 'PRINT_FAILURE', 500));
         }
 
         html2pdf.generatePdf(renderKk({pages}), {orientation: 'landscape'}, this.next());
@@ -279,7 +294,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
           return this.skip(app.createError(`Failed to generate PDF: ${err.message}`, 'PRINT_FAILURE', 500));
         }
 
-        html2pdf.printPdf(result.hash, printer, {}, this.next());
+        html2pdf.printPdf(result.hash, printer, '', this.next());
       },
       function(err)
       {
@@ -470,22 +485,22 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
     return (v || '').replace('~', '\\7e');
   }
 
-  function generateQrCodes(queue, done)
+  function generateBarCodes(queue, done)
   {
     if (!queue.length)
     {
       return done();
     }
 
-    const qr = queue.shift();
-    const keys = Object.keys(qr);
+    const barCodes = queue.shift();
+    const keys = Object.keys(barCodes);
 
     step(
       function()
       {
         keys.forEach(key =>
         {
-          html2pdf.generateQrCode(qr[key], {scale: '2.5'}, this.group());
+          html2pdf.generateBarCode(barCodes[key], this.group());
         });
       },
       function(err, images)
@@ -497,10 +512,10 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
 
         keys.forEach((key, i) =>
         {
-          qr[key] = images[i];
+          barCodes[key] = images[i];
         });
 
-        setImmediate(generateQrCodes, queue, done);
+        setImmediate(generateBarCodes, queue, done);
       }
     );
   }

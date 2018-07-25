@@ -28,7 +28,7 @@
       page-break-before: always;
     }
     .card {
-      margin: 10mm;
+      margin: 10mm 10mm 0 10mm;
       flex: 1 1 auto;
       width: 50%;
       border: 1px solid #000;
@@ -75,6 +75,10 @@
       align-items: center;
       justify-content: center;
     }
+    .bc {
+      margin: 8px;
+      border: none;
+    }
     .qr {
       width: 185px;
       height: 185px;
@@ -102,7 +106,7 @@
       <%= page.description %>
     </div>
     <div class="box">
-      <img class="qr no" src="data:image/png;base64,<%= page.qr.empty %>">
+      <img class="bc no" src="data:image/png;base64,<%= page.barCodes.empty %>">
     </div>
     <div class="row">
       <div class="box">PUSTY</div>
@@ -126,10 +130,10 @@
     </div>
     <div class="row">
       <div class="box">
-        <img class="qr no" src="data:image/png;base64,<%= page.qr.full %>">
+        <img class="bc no" src="data:image/png;base64,<%= page.barCodes.full %>">
       </div>
       <div class="box">
-        <img class="qr wh" src="data:image/png;base64,<%= page.qr.wh %>">
+        <img class="qr wh" src="data:image/png;base64,<%= page.barCodes.wh %>">
       </div>
     </div>
     <div class="row">

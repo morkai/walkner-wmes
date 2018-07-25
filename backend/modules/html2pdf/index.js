@@ -44,7 +44,7 @@ exports.start = function startHtml2pdfModule(app, module)
     setUpRoutes.bind(null, app, module)
   );
 
-  module.generateQrCode = function(data, options, done)
+  module.generateBarCode = function(options, done)
   {
     step(
       function()
@@ -74,26 +74,41 @@ exports.start = function startHtml2pdfModule(app, module)
       },
       function()
       {
-        let cmd = '"%s" --barcode=58 --vers=%s --scale=%s --notext';
+        const cmd = [`"${module.config.zintExe}"`];
 
         if (zintVersion[0] === 2 && zintVersion[1] === 4)
         {
-          cmd += ' --directpng';
+          cmd.push('--directpng');
         }
         else
         {
-          cmd += ' --direct --filetype=PNG';
+          cmd.push('--direct', '--filetype=PNG');
         }
 
-        cmd = format(
-          cmd + ' --data="%s"',
-          module.config.zintExe,
-          options && options.vers || 5,
-          options && options.scale || 1,
-          data
-        );
+        Object.keys(options || {}).forEach(k =>
+        {
+          const v = options[k];
 
-        exec(cmd, {encoding: 'buffer'}, this.next());
+          if (v === false)
+          {
+            return;
+          }
+
+          if (v === true)
+          {
+            cmd.push(`--${k}`);
+          }
+          else if (typeof v === 'string')
+          {
+            cmd.push(`--${k}="${v}"`);
+          }
+          else
+          {
+            cmd.push(`--${k}=${v}`);
+          }
+        });
+
+        exec(cmd.join(' '), {encoding: 'buffer'}, this.next());
       },
       function(err, stdout, stderr)
       {
