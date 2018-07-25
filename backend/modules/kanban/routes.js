@@ -27,7 +27,7 @@ module.exports = function setUpKanbanRoutes(app, module)
   const canManage = userModule.auth('KANBAN:MANAGE');
   const canPrint = userModule.auth('KANBAN:MANAGE', 'KANBAN:PRINT');
   const canImport = userModule.auth('KANBAN:MANAGE', 'FN:process-engineer');
-  const canUpdate = userModule.auth('KANBAN:MANAGE', 'FN:process-engineer', 'FN:leader');
+  const canUpdate = userModule.auth('KANBAN:MANAGE', 'FN:process-engineer', 'FN:leader', 'FN:master');
 
   // Import
   express.post('/kanban;import', canImport, importRoute.bind(null, app, module));
