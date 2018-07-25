@@ -26,6 +26,8 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startHtml2pdfModule(app, module)
 {
+  const zintVersion = [0, 0];
+
   module.pool = createPuppeteerPool(_.defaults({}, module.config.poolOptions, {
     min: 2,
     max: 5,
@@ -44,23 +46,70 @@ exports.start = function startHtml2pdfModule(app, module)
 
   module.generateQrCode = function(data, options, done)
   {
-    const cmd = format(
-      '"%s" --barcode=58 --vers=%s --scale=%s --notext --directpng --data="%s"',
-      module.config.zintExe,
-      options && options.vers || 5,
-      options && options.scale || 1,
-      data
-    );
-
-    exec(cmd, {encoding: 'buffer'}, function(err, stdout)
-    {
-      if (err)
+    step(
+      function()
       {
-        return done(err);
-      }
+        if (zintVersion[0] === 0)
+        {
+          exec(`"${module.config.zintExe}" --help`, {encoding: 'utf8'}, this.next());
+        }
+      },
+      function(err, stdout)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
 
-      return done(null, stdout.toString('base64'));
-    });
+        if (stdout && stdout.length)
+        {
+          const matches = stdout.match(/Zint version ([0-9]+)\.([0-9]+)/i);
+
+          if (matches)
+          {
+            zintVersion[0] = +matches[1];
+            zintVersion[1] = +matches[2];
+          }
+        }
+      },
+      function()
+      {
+        let cmd = '"%s" --barcode=58 --vers=%s --scale=%s --notext';
+
+        if (zintVersion[0] === 2 && zintVersion[1] === 4)
+        {
+          cmd += ' --directpng';
+        }
+        else
+        {
+          cmd += ' --direct --filetype=PNG';
+        }
+
+        cmd = format(
+          cmd + ' --data="%s"',
+          module.config.zintExe,
+          options && options.vers || 5,
+          options && options.scale || 1,
+          data
+        );
+
+        exec(cmd, {encoding: 'buffer'}, this.next());
+      },
+      function(err, stdout, stderr)
+      {
+        if (err)
+        {
+          return done(err);
+        }
+
+        if (stderr && stderr.length)
+        {
+          return done(app.createError(stderr.toString(), 'ZINT_STDERR', 500));
+        }
+
+        done(null, stdout.toString('base64'));
+      }
+    );
   };
 
   module.generatePdf = function(html, userOptions, done)
