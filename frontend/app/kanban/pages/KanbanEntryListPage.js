@@ -178,7 +178,7 @@ define([
 
       var req = page.ajax({
         method: 'POST',
-        url: '/kanban;import'
+        url: '/kanban/import/sap'
       });
 
       req.fail(function()

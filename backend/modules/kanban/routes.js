@@ -2,7 +2,10 @@
 
 'use strict';
 
-const importRoute = require('./routes/import');
+const os = require('os');
+const multer = require('multer');
+const importSapRoute = require('./routes/importSap');
+const importComponentsRoute = require('./routes/importComponents');
 const stateRoute = require('./routes/state');
 const readUsersTableViewRoute = require('./routes/readUsersTableView');
 const updateEntryRoute = require('./routes/updateEntry');
@@ -30,7 +33,19 @@ module.exports = function setUpKanbanRoutes(app, module)
   const canUpdate = userModule.auth('KANBAN:MANAGE', 'FN:process-engineer', 'FN:leader', 'FN:master');
 
   // Import
-  express.post('/kanban;import', canImport, importRoute.bind(null, app, module));
+  express.post('/kanban/import/sap', canImport, importSapRoute.bind(null, app, module));
+  express.post(
+    '/kanban/import/components',
+    canImport,
+    multer({
+      dest: os.tmpdir(),
+      limits: {
+        files: 1,
+        fileSize: 2 * 1024 * 1024
+      }
+    }).single('file'),
+    importComponentsRoute.bind(null, app, module)
+  );
 
   // State
   express.get('/kanban/state', canView, stateRoute.bind(null, app, module));

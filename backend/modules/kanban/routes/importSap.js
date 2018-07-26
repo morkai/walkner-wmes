@@ -4,7 +4,7 @@
 
 const step = require('h5.step');
 
-module.exports = function importRoute(app, module, req, res, next)
+module.exports = function importSapRoute(app, module, req, res, next)
 {
   const sapGuiModule = app[module.config.sapGuiId];
 
