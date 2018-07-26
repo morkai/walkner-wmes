@@ -29,7 +29,7 @@ define([
     columns: [
       {id: '_id', className: 'is-min'},
       {id: 'description', className: 'is-min'},
-      {id: 'storageBin', className: 'is-min'},
+      {id: 'storageBins', className: 'is-min'},
       {id: 'maxBinQty', className: 'is-min is-number'},
       {id: 'minBinQty', className: 'is-min is-number'},
       {id: 'replenQty', className: 'is-min is-number'},

@@ -117,6 +117,10 @@ define([
       rotated: true,
       tdClassName: invalidTdClassName
     },
+    newStorageBin: {
+      width: 10,
+      rotated: true
+    },
     kanbanId: {
       width: 10,
       expand: 186,

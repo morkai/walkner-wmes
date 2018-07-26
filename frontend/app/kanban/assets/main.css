@@ -204,7 +204,8 @@ tr:hover > .kanban-is-invalid,
 .kanban-td[data-column-id="componentQty"] {
   width: 50px;
 }
-.kanban-td[data-column-id="storageBin"] {
+.kanban-td[data-column-id="storageBin"],
+.kanban-td[data-column-id="newStorageBin"] {
   width: 80px;
   text-align: left;
 }

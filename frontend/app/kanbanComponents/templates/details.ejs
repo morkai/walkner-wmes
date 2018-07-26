@@ -1,9 +1,9 @@
 <div class="panel panel-primary">
   <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details') %></div>
   <div class="panel-details row">
-    <div class="col-md-4">
+    <div class="col-md-8">
       <div class="props first">
-        <% ['_id', 'description', 'storageBin', 'maxBinQty', 'minBinQty', 'replenQty'].forEach(function(prop) { %>
+        <% ['_id', 'description', 'storageBin', 'newStorageBin', 'maxBinQty', 'minBinQty', 'replenQty'].forEach(function(prop) { %>
         <div class="prop">
           <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
           <div class="prop-value"><%= model[prop] %></div>

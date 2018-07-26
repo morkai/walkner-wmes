@@ -41,6 +41,7 @@ define([
       {
         entry.description = component.get('description');
         entry.storageBin = component.get('storageBin');
+        entry.newStorageBin = component.get('newStorageBin');
         entry.minBinQty = component.get('minBinQty');
         entry.maxBinQty = component.get('maxBinQty');
         entry.replenQty = component.get('replenQty');
@@ -49,6 +50,7 @@ define([
       {
         entry.description = '';
         entry.storageBin = '';
+        entry.newStorageBin = '';
         entry.minBinQty = 0;
         entry.maxBinQty = 0;
         entry.replenQty = 0;

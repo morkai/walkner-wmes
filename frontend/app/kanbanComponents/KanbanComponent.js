@@ -32,6 +32,22 @@ define([
       obj.updater = renderUserInfo({userInfo: obj.updater});
 
       return obj;
+    },
+
+    serializeRow: function()
+    {
+      var obj = this.serialize();
+
+      if (obj.newStorageBin && obj.storageBin !== obj.newStorageBin)
+      {
+        obj.storageBins = '<del>' + obj.storageBin + '</del> ' + obj.newStorageBin;
+      }
+      else
+      {
+        obj.storageBins = obj.storageBin;
+      }
+
+      return obj;
     }
 
   });

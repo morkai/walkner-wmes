@@ -9,7 +9,9 @@
 
   "PROPERTY:_id": "12NC",
   "PROPERTY:description": "Nazwa komponentu",
-  "PROPERTY:storageBin": "Lokalizacja magazynowa",
+  "PROPERTY:storageBin": "Lokalizacja magazynowa (SAP)",
+  "PROPERTY:newStorageBin": "Lokalizacja magazynowa (nowa)",
+  "PROPERTY:storageBins": "Lokalizacja magazynowa",
   "PROPERTY:maxBinQty": "Maks. ilość w binie",
   "PROPERTY:minBinQty": "Min. ilość w binie",
   "PROPERTY:replenQty": "Ilość uzupełnienia",
