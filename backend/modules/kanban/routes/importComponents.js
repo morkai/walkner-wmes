@@ -198,7 +198,7 @@ module.exports = function importComponentsRoute(app, module, req, res, next)
         return cell && cell.v ? String(cell.v) : null;
 
       case 'newStorageBin':
-        return cell && typeof cell.v === 'string' && /^[A-Z]+-[0-9]+-[A-Z][0-9]+$/i.test(cell.v.trim())
+        return cell && typeof cell.v === 'string' && /^[A-Z0-9-]+$/i.test(cell.v.trim())
           ? cell.v.trim().toUpperCase()
           : null;
 
