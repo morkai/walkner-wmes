@@ -992,24 +992,17 @@ define([
       {
         entry = entry.serialize(view.model);
 
-        var row = {};
-
-        view.columns.list.forEach(function(column)
+        if (columns.kanbanId)
         {
-          if (!column.arrayIndex)
+          entry.kanbanId.forEach(function(kanbanId)
           {
-            row[column._id] = column.exportValue(entry[column._id], column, -1, entry);
-
-            return;
-          }
-
-          for (var i = 0; i < column.arrayIndex; ++i)
-          {
-            row[column._id + i] = column.exportValue(entry[column._id][i], column, i, entry);
-          }
-        });
-
-        data.push(row);
+            exportRow(entry, kanbanId);
+          });
+        }
+        else
+        {
+          exportRow(entry);
+        }
       });
 
       var req = view.ajax({
@@ -1046,6 +1039,35 @@ define([
 
         viewport.msg.hide(view.$exportMsg, true);
       });
+
+      function exportRow(entry, kanbanId)
+      {
+        var row = {};
+
+        view.columns.list.forEach(function(column)
+        {
+          if (column._id === 'kanbanId')
+          {
+            row[column._id] = kanbanId;
+
+            return;
+          }
+
+          if (!column.arrayIndex)
+          {
+            row[column._id] = column.exportValue(entry[column._id], column, -1, entry);
+
+            return;
+          }
+
+          for (var i = 0; i < column.arrayIndex; ++i)
+          {
+            row[column._id + i] = column.exportValue(entry[column._id][i], column, i, entry);
+          }
+        });
+
+        data.push(row);
+      }
     },
 
     clearCache: function()
