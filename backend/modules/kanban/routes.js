@@ -5,6 +5,7 @@
 const os = require('os');
 const multer = require('multer');
 const importSapRoute = require('./routes/importSap');
+const importEntriesRoute = require('./routes/importEntries');
 const importComponentsRoute = require('./routes/importComponents');
 const stateRoute = require('./routes/state');
 const readUsersTableViewRoute = require('./routes/readUsersTableView');
@@ -34,6 +35,18 @@ module.exports = function setUpKanbanRoutes(app, module)
 
   // Import
   express.post('/kanban/import/sap', canImport, importSapRoute.bind(null, app, module));
+  express.post(
+    '/kanban/import/entries',
+    canImport,
+    multer({
+      dest: os.tmpdir(),
+      limits: {
+        files: 1,
+        fileSize: 2 * 1024 * 1024
+      }
+    }).single('file'),
+    importEntriesRoute.bind(null, app, module)
+  );
   express.post(
     '/kanban/import/components',
     canImport,

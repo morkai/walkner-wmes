@@ -7,11 +7,11 @@ const xlsx = require('xlsx');
 const fs = require('fs-extra');
 const deepEqual = require('deep-equal');
 
-module.exports = function importComponentsRoute(app, module, req, res, next)
+module.exports = function importEntriesRoute(app, module, req, res, next)
 {
   const userModule = app[module.config.userId];
   const mongoose = app[module.config.mongooseId];
-  const KanbanComponent = mongoose.model('KanbanComponent');
+  const KanbanEntry = mongoose.model('KanbanEntry');
 
   const updatedAt = new Date();
   const updater = userModule.createUserInfo(req.session.user, req);
@@ -51,7 +51,11 @@ module.exports = function importComponentsRoute(app, module, req, res, next)
       const rows = new Map();
       const addresses = {
         _id: null,
-        newStorageBin: null
+        kind: null,
+        workstations: [null, null, null, null, null, null],
+        container: null,
+        locations: [null, null, null, null, null, null],
+        discontinued: null
       };
       const range = xlsx.utils.decode_range(this.sheet['!ref']);
 
@@ -68,13 +72,29 @@ module.exports = function importComponentsRoute(app, module, req, res, next)
 
         const v = String(cell.v).toLowerCase().replace(/[^a-z0-9]+/g, '');
 
-        if (v === '12nc')
+        if (v === 'ccn')
         {
           addresses._id = col;
         }
-        else if (/lok.*?nowa/.test(v))
+        else if (v.includes('pojemnik'))
         {
-          addresses.newStorageBin = col;
+          addresses.container = col;
+        }
+        else if (v.includes('rodzaj'))
+        {
+          addresses.kind = col;
+        }
+        else if (v.includes('wycof'))
+        {
+          addresses.discontinued = col;
+        }
+        else if (/l(ok.*?)?st(an.*?)?[1-6]$/.test(v))
+        {
+          addresses.locations[v.substr(-1) - 1] = col;
+        }
+        else if (/st(an.*?)?[1-6]$/.test(v))
+        {
+          addresses.workstations[v.substr(-1) - 1] = col;
         }
       }
 
@@ -90,7 +110,7 @@ module.exports = function importComponentsRoute(app, module, req, res, next)
 
       if (!addresses._id)
       {
-        return this.skip(app.createError('Missing the 12NC column.', 'INPUT', 400));
+        return this.skip(app.createError('Missing the CCN column.', 'INPUT', 400));
       }
 
       const columns = Object.keys(addresses);
@@ -155,7 +175,7 @@ module.exports = function importComponentsRoute(app, module, req, res, next)
 
       this.columns.forEach(c => columns[c] = 1);
 
-      KanbanComponent
+      KanbanEntry
         .find({_id: {$in: Array.from(this.rows.keys())}}, columns)
         .lean()
         .exec(this.next());
@@ -195,12 +215,22 @@ module.exports = function importComponentsRoute(app, module, req, res, next)
     switch (column)
     {
       case '_id':
-        return cell && cell.v ? String(cell.v) : null;
+        return cell && cell.v > 0 ? +cell.v : null;
 
-      case 'newStorageBin':
-        return cell && typeof cell.v === 'string' && /^[A-Z]+-[0-9]+-[A-Z][0-9]+$/i.test(cell.v.trim())
-          ? cell.v.trim().toUpperCase()
-          : null;
+      case 'kind':
+        return cell && typeof cell.v === 'string' && /^(pk|kk)$/i.test(cell.v) ? cell.v.toLowerCase() : null;
+
+      case 'container':
+        return cell && typeof cell.v === 'string' && cell.v.length ? cell.v : null;
+
+      case 'discontinued':
+        return !(!cell || cell.v === '' || cell.v === 0 || cell.v === '0');
+
+      case 'workstations':
+        return parseFloat(parseFloat(cell && cell.v || '0').toFixed(1));
+
+      case 'locations':
+        return cell && typeof cell.v === 'string' && /^[A-Za-z][0-9]{2}$/.test(cell.v) ? cell.v.toUpperCase() : '';
 
       default:
         return null;
@@ -235,20 +265,40 @@ module.exports = function importComponentsRoute(app, module, req, res, next)
       const oldValue = oldDoc[column];
       const newValue = newDoc[column];
 
-      if (deepEqual(newValue, oldValue))
+      if (Array.isArray(oldValue))
       {
-        return;
+        oldValue.forEach((oldVal, arrayIndex) =>
+        {
+          const newVal = newValue[arrayIndex];
+
+          if (deepEqual(newVal, oldVal))
+          {
+            return;
+          }
+
+          update.$set[`${column}.${arrayIndex}`] = newVal;
+          update.$set[`updates.${column}_${arrayIndex}`] = {
+            date: updatedAt,
+            user: updater,
+            data: oldVal
+          };
+          update.$push.changes.data[`${column}_${arrayIndex}`] = [oldVal, newVal];
+
+          changed = true;
+        });
       }
+      else if (!deepEqual(newValue, oldValue))
+      {
+        update.$set[column] = newValue;
+        update.$set[`updates.${column}`] = {
+          date: updatedAt,
+          user: updater,
+          data: oldValue
+        };
+        update.$push.changes.data[column] = [oldValue, newValue];
 
-      update.$set[column] = newValue;
-      update.$set[`updates.${column}`] = {
-        date: updatedAt,
-        user: updater,
-        data: oldValue
-      };
-      update.$push.changes.data[column] = [oldValue, newValue];
-
-      changed = true;
+        changed = true;
+      }
     });
 
     if (!changed)
@@ -256,15 +306,15 @@ module.exports = function importComponentsRoute(app, module, req, res, next)
       return setImmediate(importNext, message, oldDocs, newDocs, columns, done);
     }
 
-    KanbanComponent.update({_id: oldDoc._id}, update, err =>
+    KanbanEntry.update({_id: oldDoc._id}, update, err =>
     {
       if (err)
       {
-        module.error(`Failed to import component: ${oldDoc._id}: ${err.message}`);
+        module.error(`Failed to import entry: ${oldDoc._id}: ${err.message}`);
       }
       else
       {
-        message.componentCount += 1;
+        message.entryCount += 1;
       }
 
       setImmediate(importNext, message, oldDocs, newDocs, columns, done);

@@ -1,0 +1,13 @@
+<form>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-file"><%- t('kanban', 'import:' + what + ':file') %></label>
+    <input id="<%- idPrefix %>-file" name="file" class="form-control" type="file" accept=".xlsx" autofocus required>
+  </div>
+  <div class="form-group">
+    <%- t('kanban', 'import:' + what + ':message') %>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('kanban', 'import:' + what + ':submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('kanban', 'import:' + what + ':cancel') %></button>
+  </div>
+</form>

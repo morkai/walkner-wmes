@@ -11,9 +11,11 @@ define([
   '../state',
   '../views/KanbanEntryListView',
   '../views/KanbanPrintQueueBuilderView',
+  '../views/ImportXlsxDialogView',
   'app/kanban/templates/page',
   'app/kanban/templates/dictionariesAction',
-  'app/kanban/templates/builder/action'
+  'app/kanban/templates/builder/action',
+  'app/kanban/templates/importAction'
 ], function(
   $,
   t,
@@ -25,9 +27,11 @@ define([
   state,
   KanbanEntryListView,
   KanbanPrintQueueBuilderView,
+  ImportXlsxDialogView,
   pageTemplate,
   dictionariesActionTemplate,
-  builderActionTemplate
+  builderActionTemplate,
+  importActionTemplate
 ) {
   'use strict';
 
@@ -55,7 +59,7 @@ define([
           text: this.t('msg:import:' + (success ? 'success' : 'failure'))
         });
 
-        this.$id('import').prop('disabled', false);
+        this.$id('import-sap').parent().removeClass('disabled');
       }
     },
 
@@ -82,12 +86,20 @@ define([
           page.updateBuilderCount();
         }
       }, {
-        id: '-import',
-        label: t.bound('kanban', 'pa:import'),
-        icon: 'download',
+        template: function()
+        {
+          return importActionTemplate({
+            idPrefix: page.idPrefix
+          });
+        },
         privileges: function() { return user.isAllowedTo('KANBAN:MANAGE', 'FN:process-engineer'); },
-        callback: page.import.bind(page),
-        afterRender: page.updateImportedAt.bind(page)
+        afterRender: function()
+        {
+          page.$id('import-sap').on('click', page.importSap.bind(page));
+          page.$id('import-entries').on('click', page.importEntries.bind(page));
+          page.$id('import-components').on('click', page.importComponents.bind(page));
+          page.updateImportedAt();
+        }
       }, {
         template: dictionariesActionTemplate
       }];
@@ -164,17 +176,17 @@ define([
       }
     },
 
-    import: function(e)
+    importSap: function()
     {
       var page = this;
-      var $btn = $(e.currentTarget).find('.btn');
+      var $li = page.$id('import-sap').parent();
 
-      if ($btn.prop('disabled'))
+      if ($li.hasClass('disabled'))
       {
         return;
       }
 
-      $btn.prop('disabled', true);
+      $li.addClass('disabled');
 
       var req = page.ajax({
         method: 'POST',
@@ -193,7 +205,7 @@ define([
           text: page.t('msg:import:' + nlsKey)
         });
 
-        $btn.prop('disabled', code === 'IN_PROGRESS');
+        $li.toggleClass('disabled', code === 'IN_PROGRESS');
       });
 
       req.done(function()
@@ -206,9 +218,25 @@ define([
       });
     },
 
+    importComponents: function()
+    {
+      viewport.showDialog(
+        new ImportXlsxDialogView({model: {what: 'components'}}),
+        this.t('import:components:title')
+      );
+    },
+
+    importEntries: function()
+    {
+      viewport.showDialog(
+        new ImportXlsxDialogView({model: {what: 'entries'}}),
+        this.t('import:entries:title')
+      );
+    },
+
     updateImportedAt: function()
     {
-      this.$id('import').prop('title', this.t('pa:import:title', {
+      this.$id('import-sap').prop('title', this.t('pa:import:sap:title', {
         importedAt: time.format(this.model.settings.getValue('import.importedAt'), 'LLLL')
       }));
     },

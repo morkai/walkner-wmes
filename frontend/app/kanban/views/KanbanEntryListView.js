@@ -8,7 +8,7 @@ define([
   'app/core/util/idAndLabel',
   'app/data/clipboard',
   'app/planning/util/contextMenu',
-  './KanbanSearchDialog',
+  './KanbanSearchDialogView',
   'app/kanban/templates/entryList',
   'app/kanban/templates/entryListColumns',
   'app/kanban/templates/entryListRow',
@@ -26,7 +26,7 @@ define([
   idAndLabel,
   clipboard,
   contextMenu,
-  KanbanSearchDialog,
+  KanbanSearchDialogView,
   template,
   columnsTemplate,
   rowTemplate,
@@ -1650,7 +1650,7 @@ define([
         }
 
         var view = this;
-        var searchDialog = new KanbanSearchDialog({model: view.model});
+        var searchDialog = new KanbanSearchDialogView({model: view.model});
 
         view.listenToOnce(searchDialog, 'found', view.find.bind(view));
 
@@ -2417,6 +2417,7 @@ define([
       nc12: 'text',
       description: 'text',
       storageBin: 'text',
+      newStorageBin: 'text',
       comment: 'text',
       supplyArea: {
         type: 'select-multi',
