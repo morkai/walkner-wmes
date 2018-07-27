@@ -4,15 +4,17 @@
 
 const os = require('os');
 const multer = require('multer');
-const importSapRoute = require('./routes/importSap');
-const importEntriesRoute = require('./routes/importEntries');
-const importComponentsRoute = require('./routes/importComponents');
-const stateRoute = require('./routes/state');
-const readUsersTableViewRoute = require('./routes/readUsersTableView');
-const updateEntryRoute = require('./routes/updateEntry');
-const startPrintJobRoute = require('./routes/startPrintJob');
-const ignorePrintJobRoute = require('./routes/ignorePrintJob');
-const restorePrintJobRoute = require('./routes/restorePrintJob');
+const importSapRoute = require('./importSap');
+const importEntriesRoute = require('./importEntries');
+const importComponentsRoute = require('./importComponents');
+const stateRoute = require('./state');
+const readUsersTableViewRoute = require('./readUsersTableView');
+const updateEntryRoute = require('./updateEntry');
+const startPrintJobRoute = require('./startPrintJob');
+const ignorePrintJobRoute = require('./ignorePrintJob');
+const restorePrintJobRoute = require('./restorePrintJob');
+const uploadContainerImageRoute = require('./uploadContainerImage');
+const sendContainerImageRoute = require('./sendContainerImage');
 
 module.exports = function setUpKanbanRoutes(app, module)
 {
@@ -83,6 +85,19 @@ module.exports = function setUpKanbanRoutes(app, module)
   // Containers
   express.get('/kanban/containers', canView, express.crud.browseRoute.bind(null, app, KanbanContainer));
   express.post('/kanban/containers', canManage, express.crud.addRoute.bind(null, app, KanbanContainer));
+  express.get('/kanban/containers/:id.jpg', canView, sendContainerImageRoute.bind(null, app, module));
+  express.post(
+    '/kanban/containers/:id.jpg',
+    canManage,
+    multer({
+      dest: os.tmpdir(),
+      limits: {
+        files: 1,
+        fileSize: 10 * 1024 * 1024
+      }
+    }).single('image'),
+    uploadContainerImageRoute.bind(null, app, module)
+  );
   express.get('/kanban/containers/:id', canView, express.crud.readRoute.bind(null, app, KanbanContainer));
   express.put('/kanban/containers/:id', canManage, express.crud.editRoute.bind(null, app, KanbanContainer));
   express.delete('/kanban/containers/:id', canManage, express.crud.deleteRoute.bind(null, app, KanbanContainer));

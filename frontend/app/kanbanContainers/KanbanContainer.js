@@ -17,7 +17,19 @@ define([
 
     privilegePrefix: 'KANBAN',
 
-    nlsDomain: 'kanbanContainers'
+    nlsDomain: 'kanbanContainers',
+
+    serializeRow: function()
+    {
+      var obj = this.toJSON();
+
+      if (obj.image)
+      {
+        obj.image = '<a><img src="/kanban/containers/' + encodeURIComponent(this.id) + '.jpg"></a>';
+      }
+
+      return obj;
+    }
 
   });
 });

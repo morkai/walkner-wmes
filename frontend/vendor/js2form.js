@@ -94,7 +94,7 @@
         if (String(field[i].value) == String(value)) field[i].checked = true;
       }
     }
-    else if (_inputOrTextareaRegexp.test(field.nodeName))
+    else if (_inputOrTextareaRegexp.test(field.nodeName) && field.type !== 'file')
     {
       field.value = value;
     }

@@ -2,18 +2,24 @@
 
 define([
   'underscore',
+  'jquery',
   '../i18n',
   '../user',
   '../core/Model',
   '../core/util/transliterate',
-  '../core/util/parseNumber'
+  '../core/util/parseNumber',
+  'app/kanban/templates/popover',
+  'app/kanban/templates/containerPopover'
 ], function(
   _,
+  $,
   t,
   user,
   Model,
   transliterate,
-  parseNumber
+  parseNumber,
+  popoverTemplate,
+  containerPopoverTemplate
 ) {
   'use strict';
 
@@ -233,6 +239,48 @@ define([
       tdClassName: function()
       {
         return this.state.auth.manage || this.state.auth.processEngineer ? 'kanban-is-editable' : '';
+      },
+      renderValue: function(value)
+      {
+        if (!value)
+        {
+          return '';
+        }
+
+        return '<a href="#kanban/containers/' + encodeURIComponent(value) + '" target="_blank">'
+          + _.escape(value)
+          + '</a>';
+      },
+      popover: function(cell)
+      {
+        if (!cell.value)
+        {
+          return null;
+        }
+
+        var container = this.state.containers.get(cell.value);
+        var $td = $(cell.td).popover({
+          container: 'body',
+          placement: 'auto left',
+          trigger: 'manual',
+          html: true,
+          title: container.get('name'),
+          template: popoverTemplate({
+            type: 'container'
+          }),
+          content: containerPopoverTemplate({
+            container: container.toJSON()
+          })
+        });
+
+        return $td.popover('show');
+      },
+      handleAltClick: function(cell)
+      {
+        if (cell.value)
+        {
+          window.open('/kanban/containers/' + encodeURIComponent(cell.value) + '.jpg');
+        }
       }
     },
     locations: {

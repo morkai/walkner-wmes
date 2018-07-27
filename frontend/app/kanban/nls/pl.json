@@ -37,6 +37,7 @@
   "menu:export": "Eksportuj tabelę",
   "menu:edit": "Edytuj komórkę",
   "menu:queuePrint": "Drukuj etykiety",
+  "menu:containerImage": "Pokaż obraz",
 
   "column:_id": "CCN",
   "column:nc12": "12NC",

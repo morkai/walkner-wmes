@@ -17,9 +17,10 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
-  "PROPERTY:width": "Szerokość",
-  "PROPERTY:height": "Wysokość",
-  "PROPERTY:length": "Długość",
+  "PROPERTY:width": "Szerokość [mm]",
+  "PROPERTY:height": "Wysokość [mm]",
+  "PROPERTY:length": "Długość [mm]",
+  "PROPERTY:image": "Obraz",
 
   "filter:submit": "Filtruj rodzaje",
 
@@ -28,6 +29,7 @@
   "FORM:ERROR:addFailure": "Nie udało się dodać rodzaju pojemników.",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować rodzaju pojemników.",
   "FORM:ERROR:alreadyExists": "Rodzaj o danym ID już istnieje.",
+  "FORM:ERROR:imageFailure": "Nie udało się załadować obrazu.",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia rodzaju pojemników",
   "ACTION_FORM:BUTTON:delete": "Usuń rodzaj",

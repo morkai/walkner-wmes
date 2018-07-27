@@ -2,14 +2,12 @@
 
 define([
   'underscore',
-  'app/data/orgUnits',
-  'app/core/util/idAndLabel',
+  'app/viewport',
   'app/core/views/FormView',
   'app/kanbanContainers/templates/form'
 ], function(
   _,
-  orgUnits,
-  idAndLabel,
+  viewport,
   FormView,
   template
 ) {
@@ -61,6 +59,42 @@ define([
       req.done(function()
       {
         $id[0].setCustomValidity(req.status === 200 ? view.t('FORM:ERROR:alreadyExists') : '');
+      });
+    },
+
+    submitRequest: function($submit, formData)
+    {
+      var view = this;
+
+      if (!formData.image)
+      {
+        return FormView.prototype.submitRequest.call(view, $submit, formData);
+      }
+
+      var uploadFormData = new FormData();
+
+      uploadFormData.append('image', this.$id('image')[0].files[0]);
+
+      var req = view.ajax({
+        type: 'POST',
+        url: '/kanban/containers/' + formData._id + '.jpg',
+        data: uploadFormData,
+        processData: false,
+        contentType: false
+      });
+
+      req.fail(function()
+      {
+        view.showErrorMessage(view.t('FORM:ERROR:imageFailure'));
+
+        $submit.prop('disabled', false);
+      });
+
+      req.done(function(image)
+      {
+        formData.image = image;
+
+        FormView.prototype.submitRequest.call(view, $submit, formData);
       });
     }
 

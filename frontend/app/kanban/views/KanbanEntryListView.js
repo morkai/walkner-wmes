@@ -109,21 +109,33 @@ define([
       },
       'click .kanban-is-editable': function(e)
       {
-        if (e.shiftKey || e.ctrlKey || e.altKey)
+        if (e.shiftKey || e.ctrlKey)
         {
           return;
         }
 
+        var cell = this.idCell(e);
+
+        if (e.altKey)
+        {
+          if (cell.column.handleAltClick)
+          {
+            cell.column.handleAltClick(cell);
+          }
+
+          return false;
+        }
+
         if (!this.focusedCell || this.focusedCell.td !== e.currentTarget)
         {
-          this.focusedCell = this.idCell(e);
+          this.focusedCell = cell;
         }
 
         this.focusedCell.clicks += 1;
 
         if (this.focusedCell.clicks > 1)
         {
-          this.showCellEditor(this.idCell(e));
+          this.showCellEditor(this.focusedCell);
         }
       },
       'click .kanban-is-with-menu': function(e)
@@ -151,9 +163,16 @@ define([
 
         var column = this.columns.map[td.dataset.columnId];
 
-        if (column && td.parentNode.dataset.modelId && column.expand >= 0)
+        if (column && td.parentNode.dataset.modelId)
         {
-          this.expandTdValue(td);
+          if (column.expand >= 0)
+          {
+            this.expandTdValue(td);
+          }
+          else if (column.popover)
+          {
+            this.showTdPopover(td);
+          }
         }
       },
       'mouseleave .kanban-td': function()
@@ -161,6 +180,7 @@ define([
         this.$('.kanban-is-hovered').removeClass('kanban-is-hovered');
 
         this.collapseTdValue();
+        this.hideTdPopover();
       }
     },
 
@@ -261,15 +281,10 @@ define([
 
     renderRows: function(newPosition, newIndex)
     {
-      console.log('renderRows: start');
-      console.time('renderRows');
-
       var view = this;
 
       if (!view.$tbody)
       {
-        console.timeEnd('renderRows');
-
         return;
       }
 
@@ -418,8 +433,6 @@ define([
       }
 
       view.finalizeRenderRows();
-
-      console.log('            start=', startIndex, 'end=', endIndex, 'focusedCell=', view.focusedCell);
     },
 
     finalizeRenderRows: function()
@@ -519,8 +532,6 @@ define([
           editorPositioner.call(view, view.editing);
         }
       }
-
-      console.timeEnd('renderRows');
     },
 
     calcHeight: function()
@@ -735,6 +746,23 @@ define([
           label: view.t('menu:queuePrint'),
           handler: view.handleQueuePrint.bind(view, cell.modelId)
         });
+      }
+
+      if (cell.column._id === 'container')
+      {
+        var container = this.model.containers.get(cell.model.get('container'));
+
+        if (container && container.get('image'))
+        {
+          options.menu.unshift({
+            icon: 'fa-image',
+            label: view.t('menu:containerImage'),
+            handler: function()
+            {
+              cell.column.handleAltClick(cell);
+            }
+          });
+        }
       }
 
       if (cell.td.classList.contains('kanban-is-editable'))
@@ -2232,6 +2260,22 @@ define([
         left: '',
         width: ''
       });
+    },
+
+    showTdPopover: function(td)
+    {
+      var cell = this.idCell({currentTarget: td});
+
+      this.$popover = cell.column.popover(cell);
+    },
+
+    hideTdPopover: function()
+    {
+      if (this.$popover)
+      {
+        this.$popover.popover('destroy');
+        this.$popover = null;
+      }
     },
 
     filters: {

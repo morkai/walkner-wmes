@@ -336,3 +336,29 @@ tr:hover > .kanban-is-invalid,
 .kanban-editor-form[data-column-id="comment"] {
   width: 400px;
 }
+.kanban-popover .popover-title {
+  padding: 4px 8px;
+  font-size: 12px;
+  line-height: 1;
+}
+.kanban-popover .popover-content {
+  padding: 0;
+  font-size: 12px;
+}
+.kanban-popover-container-image {
+  display: flex;
+  width: 192px;
+  height: 108px;
+  background: #333;
+  margin: 8px 8px 0 8px;
+  justify-content: center;
+  align-items: center;
+}
+.kanban-popover-container-image img {
+  max-width: 192px;
+  max-height: 108px;
+}
+.kanban-popover-container-size {
+  padding: 8px;
+  text-align: center;
+}

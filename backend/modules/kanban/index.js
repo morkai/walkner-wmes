@@ -12,7 +12,8 @@ exports.DEFAULT_CONFIG = {
   sapGuiId: 'sapGui',
   settingsId: 'settings',
   sapImporterMessengerId: 'messenger/client',
-  html2pdfId: 'html2pdf'
+  html2pdfId: 'html2pdf',
+  containerImagesDest: './data/kanban/containers'
 };
 
 exports.start = function startKanbanModule(app, module)

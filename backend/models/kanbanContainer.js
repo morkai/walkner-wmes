@@ -9,7 +9,8 @@ module.exports = function setupKanbanContainerModel(app, mongoose)
     name: String,
     length: Number,
     width: Number,
-    height: Number
+    height: Number,
+    image: String
   }, {
     id: false,
     minimize: false

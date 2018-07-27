@@ -11,12 +11,18 @@
         <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" class="form-control" type="text" name="name" required>
       </div>
-      <% ['length', 'width', 'height'].forEach(function(prop) { %>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-<%- prop %>" class="control-label is-required"><%- helpers.t('PROPERTY:' + prop) %></label>
-        <input id="<%- idPrefix %>-<%- prop %>" class="form-control" type="number" name="<%- prop %>" required min="0">
+      <div style="display: flex">
+        <% ['length', 'width', 'height'].forEach(function(prop) { %>
+        <div class="form-group">
+          <label for="<%- idPrefix %>-<%- prop %>" class="control-label is-required"><%- helpers.t('PROPERTY:' + prop) %></label>
+          <input id="<%- idPrefix %>-<%- prop %>" class="form-control" type="number" name="<%- prop %>" required min="0" step="1" style="width: 125px; margin-right: 15px">
+        </div>
+        <% }) %>
       </div>
-      <% }) %>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-image" class="control-label"><%- helpers.t('PROPERTY:image') %></label>
+        <input id="<%- idPrefix %>-image" class="form-control" type="file" name="image" accept="image/jpeg,image/png">
+      </div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>
