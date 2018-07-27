@@ -518,7 +518,8 @@ define([
 
       viewport.msg.saving();
 
-      var $inputs = view.$('button, select').prop('disabled', true);
+      var $inputs = view.$('button, select, input').prop('disabled', true);
+      var newStorageBin = view.$id('newStorageBin').prop('checked');
       var jobs = [];
 
       view.model.builder.forEach(function(model)
@@ -535,6 +536,12 @@ define([
           var lineIndex = entry.lines.indexOf(line);
           var fromIndex = lineIndex * entry.kanbanQtyUser;
           var toIndex = lineIndex * entry.kanbanQtyUser + entry.kanbanQtyUser;
+          var storageBin = entry.storageBin;
+
+          if (newStorageBin && entry.newStorageBin)
+          {
+            storageBin = entry.newStorageBin;
+          }
 
           jobs.push({
             _id: uuid(),
@@ -548,7 +555,7 @@ define([
               supplyArea: entry.supplyArea,
               family: entry.family,
               componentQty: entry.componentQty,
-              storageBin: entry.storageBin,
+              storageBin: storageBin,
               minBinQty: entry.minBinQty,
               maxBinQty: entry.maxBinQty,
               replenQty: entry.replenQty,

@@ -34,6 +34,7 @@
   "job:ccn": "CCN",
   "job:nc12": "12NC",
   "job:description": "Nazwa komponentu",
+  "job:storageBin": "Lokalizacja mag.",
   "job:kanbanId": "Kanban ID",
 
   "action:ignore": "Ignoruj",

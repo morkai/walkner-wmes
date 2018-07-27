@@ -4,6 +4,7 @@
   <td class="is-min text-mono"><%- job.data.ccn %></td>
   <td class="is-min text-mono"><%- job.data.nc12 %></td>
   <td class="is-min"><%= job.data.description %></td>
+  <td class="is-min"><%= job.data.storageBin %></td>
   <% ['kk', 'empty', 'full', 'wh', 'desc'].forEach(function(layout) { %>
   <td class="is-min is-number"><%- job.layoutCount[layout] %></td>
   <% }) %>

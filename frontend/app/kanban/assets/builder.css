@@ -27,8 +27,14 @@
   margin-right: 2px;
 }
 .kanban-hide {
-  margin-left: auto;
   color: inherit;
+}
+.kanban-builder-newStorageBin {
+  margin: 0 0 0 auto;
+  padding-right: 12px;
+  font-weight: normal;
+  cursor: pointer;
+  border-right: 1px solid #ccc;
 }
 .kanban-builder .btn:focus {
   outline: none;
