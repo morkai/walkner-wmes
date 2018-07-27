@@ -5,6 +5,7 @@ define([
   'jquery',
   'app/time',
   'app/viewport',
+  'app/data/localStorage',
   'app/core/View',
   'app/core/views/DialogView',
   'app/kanbanPrintQueues/templates/item',
@@ -17,6 +18,7 @@ define([
   $,
   time,
   viewport,
+  localStorage,
   View,
   DialogView,
   template,
@@ -33,17 +35,24 @@ define([
 
     events: {
 
-      'click #-hd': function()
+      'click #-hd': function(e)
       {
-        this.model.collection.toggleExpand(this.model.id);
+        if (!this.$(e.target).closest('.kanbanPrintQueues-actions').length)
+        {
+          this.model.collection.toggleExpand(this.model.id);
+        }
       },
 
-      'click #-printNext': function()
+      'click #-print': function()
       {
         this.model.collection.toggleExpand(this.model.id, true);
-        this.model.collection.trigger('print:next');
+        this.model.collection.trigger('print:next', this.$id('print')[0].dataset.what);
+      },
 
-        return false;
+      'click a[data-what]': function(e)
+      {
+        this.model.collection.toggleExpand(this.model.id, true);
+        this.model.collection.trigger('print:next', e.currentTarget.dataset.what);
       },
 
       'click #-ignore': function()
@@ -66,7 +75,7 @@ define([
         var jobId = this.$(e.currentTarget).closest('tr')[0].dataset.id;
         var job = _.find(this.model.get('jobs'), function(job) { return job._id === jobId; });
 
-        this.model.collection.trigger('print:specific', this.model, job);
+        this.model.collection.trigger('print:specific', this.model, [job]);
       },
 
       'click .btn[data-action="ignore"]': function(e)
@@ -82,6 +91,7 @@ define([
     initialize: function()
     {
       this.listenTo(this.model.collection, 'expand', this.onExpand);
+      this.listenTo(this.model.collection, 'printing', this.onPrinting);
 
       this.listenTo(this.model, 'change:todo', this.onQueueChange);
       this.listenTo(this.model, 'change:jobs', this.onJobsChange);
@@ -93,7 +103,8 @@ define([
         renderHd: hdTemplate,
         renderJob: jobTemplate,
         expanded: this.model.collection.isExpanded(this.model.id),
-        queue: this.model.serialize()
+        queue: this.model.serialize(),
+        what: this.model.collection.getPrintingWhat()
       };
     },
 
@@ -114,6 +125,11 @@ define([
       }
     },
 
+    onPrinting: function(what)
+    {
+      this.$id('print').prop('data-what', what).find('span').text(this.t('action:print:' + what));
+    },
+
     updateHd: function(queue)
     {
       this.el.dataset.status = queue.status;
@@ -121,7 +137,8 @@ define([
       this.$id('hd').replaceWith(hdTemplate({
         idPrefix: this.idPrefix,
         helpers: this.getTemplateHelpers(),
-        queue: queue
+        queue: queue,
+        what: this.model.collection.getPrintingWhat()
       }));
     },
 
@@ -139,12 +156,10 @@ define([
     {
       if (this.model.changed.todo === false)
       {
-        console.log('onQueueChange render')
         this.render();
       }
       else
       {
-        console.log('onQueueChange updateHd')
         this.updateHd(this.model.serialize());
       }
     },
@@ -155,7 +170,6 @@ define([
 
       if (view.model.changed.todo === false)
       {
-        console.log('onJobsChange todo=false')
         return;
       }
 
@@ -163,7 +177,6 @@ define([
 
       if (view.model.changed.todo === undefined)
       {
-        console.log('onJobsChange updateHd')
         view.updateHd(queue);
       }
 

@@ -1,10 +1,10 @@
 <tr class="kanbanPrintQueues-job" data-id="<%- job._id %>" data-status="<%- job.status %>">
   <td class="is-min text-mono" title="<%- job._id %>"><%- job.shortId %></td>
-  <td class="is-min"><%= job.line %></td>
+  <td class="is-min text-mono"><%= job.line %></td>
   <td class="is-min text-mono"><%- job.data.ccn %></td>
   <td class="is-min text-mono"><%- job.data.nc12 %></td>
-  <td class="is-min"><%= job.data.description %></td>
-  <td class="is-min"><%= job.data.storageBin %></td>
+  <td class="is-min text-mono"><%= job.data.description %></td>
+  <td class="is-min text-mono"><%= job.data.storageBin %></td>
   <% ['kk', 'empty', 'full', 'wh', 'desc'].forEach(function(layout) { %>
   <td class="is-min is-number"><%- job.layoutCount[layout] %></td>
   <% }) %>

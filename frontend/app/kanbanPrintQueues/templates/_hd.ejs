@@ -25,9 +25,15 @@
   <td class="kanbanPrintQueues-actions">
     <div class="kanbanPrintQueues-actions-inner">
       <% if (queue.todo) { %>
-      <button id="<%- idPrefix %>-printNext" class="btn btn-primary" type="button">
-        <i class="fa fa-print"></i><span><%- helpers.t('action:print:next') %></span>
-      </button>
+      <button id="<%- idPrefix %>-print" type="button" class="btn btn-primary" data-what="<%- what %>"><i class="fa fa-print"></i><span><%- helpers.t('action:print:' + what) %></span></button>
+      <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <% ['job', 'line', 'all'].forEach(function(what) { %>
+          <li><a href="javascript:void(0)" data-what="<%- what %>"><%- helpers.t('action:print:' + what) %></a></li>
+          <% }) %>
+        </ul>
+      </div>
       <button id="<%- idPrefix %>-ignore" class="btn btn-warning" type="button">
         <i class="fa fa-ban"></i><span><%- helpers.t('action:ignore') %></span>
       </button>

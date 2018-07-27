@@ -11,6 +11,8 @@ define([
 ) {
   'use strict';
 
+  var PRINTING_WHAT_STORAGE_KEY = 'WMES_KANBAN_PRINTING_WHAT';
+
   return Collection.extend({
 
     model: KanbanPrintQueue,
@@ -20,6 +22,8 @@ define([
     initialize: function()
     {
       this.expanded = null;
+
+      this.printing = false;
     },
 
     setUpPubsub: function(pubsub)
@@ -113,6 +117,18 @@ define([
       }
 
       this.trigger('expand', this.expanded);
+    },
+
+    getPrintingWhat: function()
+    {
+      return localStorage.getItem(PRINTING_WHAT_STORAGE_KEY) || 'job';
+    },
+
+    setPrintingWhat: function(what)
+    {
+      localStorage.setItem(PRINTING_WHAT_STORAGE_KEY, what);
+
+      this.trigger('printing', what);
     }
 
   });

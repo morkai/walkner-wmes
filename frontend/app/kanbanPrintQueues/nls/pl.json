@@ -7,8 +7,7 @@
   "msg:printNext:pending": "Brak zadań w wybranej kolejce.",
   "msg:print:failure": "Drukowanie nie powiodło się.",
   "msg:print:IN_PROGRESS": "Drukowanie jest już w toku.",
-
-  "PROPERTY:status": "Status",
+  "msg:print:CONNECTION": "Połączenie z serwerem zostało przerwane.",
 
   "todo:true": "Do zrobienia",
   "todo:false": "Zrobione",
@@ -34,13 +33,16 @@
   "job:ccn": "CCN",
   "job:nc12": "12NC",
   "job:description": "Nazwa komponentu",
-  "job:storageBin": "Lokalizacja mag.",
+  "job:storageBin": "Lok. mag.",
   "job:kanbanId": "Kanban ID",
+  "job:status": "Status",
+  "job:labels": "Etykiety",
 
   "action:ignore": "Ignoruj",
   "action:restore": "Przywróć",
-  "action:print:next": "Drukuj kolejne",
-  "action:print:job": "Drukuj",
+  "action:print:job": "Drukuj pozycję",
+  "action:print:line": "Drukuj linię",
+  "action:print:all": "Drukuj wszystko",
 
   "ignore:title:queue": "Ignorowanie kolejki drukowania",
   "ignore:title:job": "Ignorowanie zadania drukowania",
@@ -54,5 +56,11 @@
   "restore:message": "<p>Czy na pewno chcesz przywrócić całą wybraną kolejkę drukowania?</p><p>Statusy wszystkich zadań drukowania zostaną zresetowane.</p>",
   "restore:yes": "Przywróć",
   "restore:no": "Anuluj",
-  "restore:failure": "Przywracanie kolejki nie powiodło się."
+  "restore:failure": "Przywracanie kolejki nie powiodło się.",
+
+  "status:pending": "Oczekiwanie na drukowanie",
+  "status:printing": "Drukowanie",
+  "status:success": "Wydrukowano",
+  "status:failure": "Nieudane drukowanie",
+  "status:error": "Nieudane drukowanie: {error}"
 }

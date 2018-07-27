@@ -104,6 +104,23 @@
   height: auto;
   padding: 4px 12px;
 }
+.kanbanPrintQueues-actions-inner .btn-primary[data-what] {
+  min-width: 150px;
+  text-align: left;
+}
 .kanbanPrintQueues-job td.actions {
   height: 23px;
+}
+.kanbanPrintQueues-dialog .modal-body {
+  border: 15px solid #fff;
+  font-size: 16px;
+}
+.kanbanPrintQueues-dialog[data-status="printing"] .modal-body {
+  border-color: #0af;
+}
+.kanbanPrintQueues-dialog[data-status="failure"] .modal-body {
+  border-color: #e00;
+}
+.kanbanPrintQueues-dialog[data-status="success"] .modal-body {
+  border-color: #0d0;
 }

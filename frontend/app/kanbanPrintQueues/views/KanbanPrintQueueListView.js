@@ -9,6 +9,7 @@ define([
   'app/core/View',
   'app/core/views/PaginationView',
   './KanbanPrintQueueListItemView',
+  './KanbanPrintQueueDialogView',
   'app/kanbanPrintQueues/templates/list'
 ], function(
   _,
@@ -19,6 +20,7 @@ define([
   View,
   PaginationView,
   KanbanPrintQueueListItemView,
+  KanbanPrintQueueDialogView,
   template
 ) {
   'use strict';
@@ -27,15 +29,10 @@ define([
 
     template: template,
 
-    events: {
-
-    },
-
     initialize: function()
     {
       this.lastSpaceAt = 0;
 
-      this.defineModels();
       this.defineViews();
       this.defineBindings();
 
@@ -45,11 +42,6 @@ define([
     destroy: function()
     {
       $(window).off('.' + this.idPrefix);
-    },
-
-    defineModels: function()
-    {
-
     },
 
     defineViews: function()
@@ -88,11 +80,6 @@ define([
       });
     },
 
-    afterRender: function()
-    {
-
-    },
-
     refreshCollectionNow: function()
     {
       this.promised(this.collection.fetch({reset: true}));
@@ -114,11 +101,16 @@ define([
       }
     },
 
-    printNext: function()
+    printNext: function(what)
     {
       if (!user.isAllowedTo('KANBAN:PRINT', 'KANBAN:MANAGE'))
       {
         return;
+      }
+
+      if (what)
+      {
+        this.collection.setPrintingWhat(what);
       }
 
       var $expanded = this.$('.is-expanded');
@@ -143,9 +135,22 @@ define([
         });
       }
 
-      var job = _.find(queue.get('jobs'), function(job) { return job.status === 'pending'; });
+      var jobs = queue.get('jobs').filter(function(job) { return job.status === 'pending'; });
 
-      if (!job)
+      switch (this.collection.getPrintingWhat())
+      {
+        case 'job':
+          jobs = jobs.slice(0, 1);
+          break;
+
+        case 'line':
+          var line = jobs.length ? jobs[0].line : null;
+
+          jobs = jobs.filter(function(job) { return job.line === line; });
+          break;
+      }
+
+      if (!jobs.length)
       {
         return viewport.msg.show({
           type: 'warning',
@@ -154,43 +159,17 @@ define([
         });
       }
 
-      this.printSpecific(queue, job);
+      this.printSpecific(queue, jobs);
     },
 
-    printSpecific: function(queue, job)
+    printSpecific: function(queue, jobs)
     {
-      queue.trigger('printing', true);
-
-      var view = this;
-      var req = view.ajax({
-        method: 'POST',
-        url: '/kanban/printQueues;print',
-        data: JSON.stringify({
-          queue: queue.id,
-          job: job._id
-        })
-      });
-
-      req.fail(function()
-      {
-        var error = req.responseJSON && req.responseJSON.error && req.responseJSON.error.code || 'failure';
-
-        if (!t.has('kanbanPrintQueues', 'msg:print:' + error))
-        {
-          error = 'failure';
+      viewport.showDialog(new KanbanPrintQueueDialogView({
+        model: {
+          queue: queue,
+          jobs: jobs
         }
-
-        viewport.msg.show({
-          type: 'error',
-          time: 2500,
-          text: view.t('msg:print:' + error)
-        });
-      });
-
-      req.always(function()
-      {
-        queue.trigger('printing', false);
-      });
+      }));
     },
 
     onAdd: function(printQueue)
@@ -236,7 +215,7 @@ define([
 
       if (e.key === ' ')
       {
-        if (e.timeStamp - this.lastSpaceAt < 500)
+        if (e.timeStamp - this.lastSpaceAt < 500 && !viewport.currentDialog)
         {
           this.printNext();
         }
