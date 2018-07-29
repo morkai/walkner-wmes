@@ -15,8 +15,8 @@
   "pa:import": "Importowanie",
   "pa:import:sap": "Importuj dane z SAP",
   "pa:import:sap:title": "Ostatnia aktualizacja:\n{importedAt}",
-  "pa:import:entries": "Importuj arkusz kanbanów",
-  "pa:import:components": "Importuj arkusz komponentów",
+  "pa:import:entries": "Importuj dane CCN z pliku",
+  "pa:import:components": "Importuj lokalizacje magazynowe z pliku",
   "pa:dictionaries": "Słowniki",
   "pa:components": "Komponenty",
   "pa:supplyAreas": "Obszary zaopatrzenia",
@@ -134,14 +134,14 @@
   "builder:clear": "Wyczyść wszystko",
   "builder:newStorageBin": "Użyj nowej lokalizacji magazynowej",
 
-  "import:components:title": "Importowanie arkusza komponentów",
-  "import:components:file": "Arkusz komponentów",
-  "import:components:submit": "Importuj komponenty",
+  "import:components:title": "Importowanie lokalizacji magazynowych",
+  "import:components:file": "Plik do importu",
+  "import:components:submit": "Importuj dane",
   "import:components:cancel": "Anuluj",
   "import:components:message": "<p>Pierwszy arkusz w pliku powinien zawierać w pierwszym wierszu nazwy kolumn, a w następnych dane komponentu.</p><p>Oczekiwane nazwy kolumn to:</p><ul><li><code>12NC</code> (wymagane)<li><code>Lok*nowa*</code> - lokalizacja magazynowa (nowa)</ul>",
-  "import:entries:title": "Importowanie arkusza kanbanów",
-  "import:entries:file": "Arkusz kanbanów",
-  "import:entries:submit": "Importuj kanbany",
+  "import:entries:title": "Importowanie danych CCN",
+  "import:entries:file": "Plik do importu",
+  "import:entries:submit": "Importuj dane",
   "import:entries:cancel": "Anuluj",
-  "import:entries:message": "<p>Pierwszy arkusz w pliku powinien zawierać w pierwszym wierszu nazwy kolumn, a w następnych dane kanbanów.</p><p>Oczekiwane nazwy kolumn to:</p><ul><li><code>CCN</code> (wymagane)<li><code>*pojemnik*</code> - rodzaj pojemnika<li><code>*rodzaj*</code> - rodzaj kanbana<li><code>*wycof*</code> - wycofane<li><code>LSTn</code> - lokalizacja n<li><code>STn</code> - stanowisko n</ul>"
+  "import:entries:message": "<p>Pierwszy arkusz w pliku powinien zawierać w pierwszym wierszu nazwy kolumn, a w następnych dane CCN.</p><p>Oczekiwane nazwy kolumn to:</p><ul><li><code>CCN</code> (wymagane)<li><code>*pojemnik*</code> - rodzaj pojemnika<li><code>*rodzaj*</code> - rodzaj kanbana<li><code>*wycof*</code> - wycofane<li><code>LSTn</code> - lokalizacja n<li><code>STn</code> - stanowisko n</ul>"
 }
