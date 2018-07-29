@@ -522,7 +522,7 @@ define([
 
       if (arrayIndex >= 0)
       {
-        n = arrayIndex;
+        n = arrayIndex + 1;
         columnId += 'N';
       }
 
