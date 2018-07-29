@@ -213,6 +213,9 @@ tr:hover > .kanban-is-invalid,
   width: 70px;
   text-align: left;
 }
+.kanban-td[data-column-id="kanbanIdCount"] {
+  width: 35px;
+}
 .kanban-td[data-column-id="lineCount"] {
   width: 30px;
 }

@@ -132,7 +132,7 @@ define([
       expand: 186,
       tdClassName: function(value)
       {
-        return value.length === 0;
+        return value.length === 0 ? 'kanban-is-invalid' : '';
       },
       renderValue: function(value)
       {
@@ -141,6 +141,18 @@ define([
       exportValue: function(value)
       {
         return value.join(',');
+      }
+    },
+    kanbanIdCount: {
+      type: 'integer',
+      width: 6,
+      rotated: true,
+      tdClassName: function(value, column, arrayIndex, entry)
+      {
+        return value < entry.emptyFullCount ? 'kanban-is-invalid' : '';
+      },
+      filters: {
+        missingKanbanIds: '$ < $$.emptyFullCount'
       }
     },
     lineCount: {
@@ -751,6 +763,31 @@ define([
           return $ !== undefined && $ !== null && $ !== 0 && $ !== '';
         };
       },
+      eval: function(code)
+      {
+        if (code === '?')
+        {
+          return this.empty();
+        }
+
+        if (code === '!')
+        {
+          return this.notEmpty();
+        }
+
+        var evalFilter = function() { return true; };
+
+        try
+        {
+          eval('evalFilter = function($, $$) { return ' + code + '; }'); // eslint-disable-line no-eval
+        }
+        catch (err)
+        {
+          console.warn('Invalid eval filter:', code);
+        }
+
+        return evalFilter;
+      },
       numeric: function(code)
       {
         if (code === '?')
@@ -761,6 +798,11 @@ define([
         if (code === '!')
         {
           return this.notEmpty();
+        }
+
+        if (code.indexOf('$$') !== -1)
+        {
+          return this.eval(code);
         }
 
         var numericFilter = function() { return true; };
@@ -776,12 +818,13 @@ define([
         }
 
         code = code
+          .replace(/={2,}/g, '=')
           .replace(/([^<>])=/g, '$1==')
           .replace(/<>/g, '!=');
 
         try
         {
-          eval('numericFilter = function($, $$) { return ' + code + '; }'); // eslint-disable-line no-eval
+          eval('numericFilter = function($) { return ' + code + '; }'); // eslint-disable-line no-eval
         }
         catch (err)
         {
@@ -800,6 +843,11 @@ define([
         if (code === '!')
         {
           return this.notEmpty();
+        }
+
+        if (code.indexOf('$$') !== -1)
+        {
+          return this.eval(code);
         }
 
         var textFilter = function() { return true; };
@@ -828,7 +876,7 @@ define([
 
         try
         {
-          eval('textFilter = function($, $$) { ' + code + '; }'); // eslint-disable-line no-eval
+          eval('textFilter = function($) { ' + code + '; }'); // eslint-disable-line no-eval
         }
         catch (err)
         {

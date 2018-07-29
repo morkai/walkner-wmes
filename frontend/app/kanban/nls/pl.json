@@ -53,6 +53,8 @@
   "column:newStorageBin": "Lokalizacja<br>magazynowa<br>(nowa)",
   "column:newStorageBin:title": "Lokalizacja magazynowa (nowa)",
   "column:kanbanId": "Kanban<br>ID",
+  "column:kanbanIdCount": "Ilość Kanban<br>ID w SAP",
+  "column:kanbanIdCount:title": "Ilość Kanban ID w SAP",
   "column:lineCount": "Ilości linii",
   "column:lineCount:title": "Ilości linii",
   "column:emptyFullCount": "Ilość kanbanów na<br>wszystkie linie",
@@ -106,6 +108,7 @@
   "filters:help:content:numeric": "<p>Podaj samą liczbę, aby wybrać rekordy równe danej wartości.</p><p>Przed liczbą można podać także jeden z warunków: <code>=</code> równa się, <code>&lt;&gt;</code> nie równa się, <code>&gt;</code>, <code>&gt=</code>, <code>&lt;</code> oraz <code>&lt;=</code>, na przykład: <code>>= 1337</code>.</p><p>Filtr akceptuje także złożony warunek, zawierający nawiasy oraz operatory logiczne <code>and</code> oraz <code>or</code>. Jako wartość komórki należy użyć znaku <code>$</code>, na przykład:<br><code>$ = 100 or ($ > 200 and $ < 300)</code>.</p><p>Wpisz <code>?</code>, aby wybrać tylko zera lub <code>!</code>, aby wybrać wartości inne niż 0.</p>",
   "filters:help:content:select-one": "<p>Wybierz jedną wartość z listy klikając na niej lewym przyciskiem myszki.</p><p>Aby odznaczyć wybraną wartość, <i class='fa fa-times'></i> wyczyść filtr.</p>",
   "filters:help:content:select-multi": "<p>Wybierz jedną wartość z listy klikając na niej lewym przyciskiem myszki (LPM).</p><p>Aby zaznaczyć kilka wartości, kliknij LPM trzymając jednocześnie klawisz <kbd>Ctrl</kbd>.</p><p>Aby odznaczyć wybrane wartości, <i class='fa fa-times'></i> wyczyść filtr.</p>",
+  "filters:missingKanbanIds": "Tylko brakujące",
 
   "search:invalid": "Podaj CCN lub 12NC.",
   "search:invalid:ccn": "Nie znaleziono CCN.",

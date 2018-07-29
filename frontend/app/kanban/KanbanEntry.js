@@ -95,6 +95,8 @@ define([
 
       entry.stock = entry.emptyFullCount * entry.componentQty;
 
+      entry.kanbanIdCount = entry.kanbanId.length;
+
       return this.serialized = entry;
     }
 

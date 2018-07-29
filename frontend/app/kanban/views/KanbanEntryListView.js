@@ -673,6 +673,14 @@ define([
         ]
       };
 
+      _.forEach(column.filters, function(filter, label)
+      {
+        options.menu.push({
+          label: view.t('filters:' + label),
+          handler: view.handleFilterValue.bind(view, cell.columnId, 'eval', filter)
+        });
+      });
+
       var filter = view.filters[cell.columnId];
 
       if (typeof filter === 'string')
@@ -2304,8 +2312,7 @@ define([
             var newData = $data.val()
               .trim()
               .replace(/and/ig, '&&')
-              .replace(/or/ig, '||')
-              .replace(/=+/g, '=');
+              .replace(/or/ig, '||');
 
             if (newData === '')
             {
@@ -2329,18 +2336,26 @@ define([
 
             var code = newData;
 
-            if (newData.indexOf('$') === -1)
+            if (newData.indexOf('$$') === -1)
             {
-              code = '$' + code;
-            }
+              if (newData.indexOf('$') === -1)
+              {
+                code = '$' + code;
+              }
 
-            code = code
-              .replace(/([^<>])=/g, '$1==')
-              .replace(/<>/g, '!=');
+              code = code
+                .replace(/=+/g, '=')
+                .replace(/([^<>])=/g, '$1==')
+                .replace(/<>/g, '!=');
+            }
 
             try
             {
-              var result = eval('(function($) { return ' + code + '; })(666);'); // eslint-disable-line no-eval
+              var o = view.model.entries.at(0).serialize();
+              var v = cell.arrayIndex >= 0 ? o[cell.columnId][cell.arrayIndex] : o[cell.columnId];
+              var result = eval( // eslint-disable-line no-eval
+                '(function($, $$) { return ' + code + '; })(' + JSON.stringify(v) + ', ' + JSON.stringify(o) + ');'
+              );
 
               if (typeof result !== 'boolean')
               {
@@ -2349,6 +2364,8 @@ define([
             }
             catch (err)
             {
+              console.error(err);
+
               $data[0].setCustomValidity(view.t('filters:invalid'));
 
               view.timers.revalidate = setTimeout(function() { $filter.find('.btn-primary').click(); }, 1);
@@ -2398,7 +2415,7 @@ define([
               return view.handleFilterValue(cell.columnId, 'notEmpty', '!');
             }
 
-            if (!/^\/.*?\/$/.test(newData))
+            if (!/^\/.*?\/$/.test(newData) && newData.indexOf('$$') === -1)
             {
               if (!newData.replace(/[^A-Za-z0-9]+/g, '').length)
               {
@@ -2412,11 +2429,15 @@ define([
               return view.handleFilterValue(cell.columnId, 'text', newData);
             }
 
-            var code = newData + 'i.test($)';
+            var code = newData + (newData.indexOf('$$') === -1 ? 'i.test($)' : '');
 
             try
             {
-              var result = eval('(function($) { return ' + code + '; })("abc");'); // eslint-disable-line no-eval
+              var o = view.model.entries.at(0).serialize();
+              var v = cell.arrayIndex >= 0 ? o[cell.columnId][cell.arrayIndex] : o[cell.columnId];
+              var result = eval( // eslint-disable-line no-eval
+                '(function($, $$) { return ' + code + '; })(' + JSON.stringify(v) + ', ' + JSON.stringify(o) + ');'
+              );
 
               if (typeof result !== 'boolean')
               {
@@ -2425,6 +2446,8 @@ define([
             }
             catch (err)
             {
+              console.error(err);
+
               $data[0].setCustomValidity(view.t('filters:invalid'));
 
               view.timers.revalidate = setTimeout(function() { $filter.find('.btn-primary').click(); }, 1);
@@ -2474,6 +2497,7 @@ define([
       kanbanQtyUser: 'numeric',
       componentQty: 'numeric',
       kanbanId: 'text',
+      kanbanIdCount: 'numeric',
       lineCount: 'numeric',
       emptyFullCount: 'numeric',
       stock: 'numeric',
