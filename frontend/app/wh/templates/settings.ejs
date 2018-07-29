@@ -1,0 +1,22 @@
+<form class="settings planning-settings">
+  <div class="list-group">
+    <a class="list-group-item" href="#wh/settings?tab=planning" data-tab="planning"><%- t('wh', 'settings:tab:planning') %></a>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="planning">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-planning-groupDuration"><%- t('wh', 'settings:planning:groupDuration') %></label>
+        <input id="<%- idPrefix %>-planning-groupDuration" class="form-control" name="wh.planning.groupDuration" type="number" step="1" min="1" max="24">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-planning-groupExtraItems"><%- t('wh', 'settings:planning:groupExtraItems') %></label>
+        <span class="help-block"><%- t('planning', 'settings:wh:groupExtraItems:help') %></span>
+        <input id="<%- idPrefix %>-planning-groupExtraItems" class="form-control" name="wh.planning.groupExtraItems" type="number" step="1" min="0" max="100">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-planning-ignoredMrps"><%- t('wh', 'settings:planning:ignoredMrps') %></label>
+        <input id="<%- idPrefix %>-planning-ignoredMrps" name="wh.planning.ignoredMrps" type="text" data-setting>
+      </div>
+    </div>
+  </div>
+</form>

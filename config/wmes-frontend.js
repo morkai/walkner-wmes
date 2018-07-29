@@ -84,6 +84,7 @@ exports.modules = [
   'vis',
   'mor',
   'planning',
+  'wh',
   'html2pdf',
   'printing',
   'sapLaborTimeFixer',
@@ -246,6 +247,7 @@ exports.pubsub = {
     'vis.**',
     'mor.**',
     'planning.**',
+    'wh.**',
     'sapLaborTimeFixer.**',
     'printing.**',
     'kanban.**'
@@ -294,7 +296,8 @@ exports.mongoose = {
     'planSettings', 'planChange', 'plan', 'whOrderStatus',
     'xData',
     'dailyMrpCount', 'clipOrderCache', 'clipOrderCount',
-    'kanbanEntry', 'kanbanComponent', 'kanbanSupplyArea', 'kanbanContainer', 'kanbanTableView', 'kanbanPrintQueue'
+    'kanbanEntry', 'kanbanComponent', 'kanbanSupplyArea', 'kanbanContainer', 'kanbanTableView', 'kanbanPrintQueue',
+    'whEvent', 'whOrder', 'whUser'
   ]
 };
 
@@ -368,7 +371,8 @@ exports.user = {
     'MOR:MANAGE', 'MOR:MANAGE:USERS',
     'PAINT_SHOP:VIEW', 'PAINT_SHOP:MANAGE', 'PAINT_SHOP:PAINTER', 'PAINT_SHOP:DROP_ZONES',
     'PLANNING:VIEW', 'PLANNING:MANAGE', 'PLANNING:PLANNER', 'PLANNING:WHMAN',
-    'KANBAN:VIEW', 'KANBAN:MANAGE', 'KANBAN:PRINT'
+    'KANBAN:VIEW', 'KANBAN:MANAGE', 'KANBAN:PRINT',
+    'WH:VIEW', 'WH:MANAGE'
   ]
 };
 
@@ -420,7 +424,9 @@ exports['messenger/client:wmes-planning'] = Object.assign({}, ports['wmes-planni
   broadcastTopics: [
     'planning.generator.requested',
     'paintShop.generator.requested',
-    'settings.updated.orders.operations.groups'
+    'wh.generator.requested',
+    'settings.updated.orders.operations.groups',
+    'settings.updated.wh.**'
   ]
 });
 
@@ -603,6 +609,10 @@ exports.mor = {
 };
 
 exports.planning = {
+  generator: false
+};
+
+exports.wh = {
   generator: false
 };
 

@@ -64,6 +64,7 @@
 @import url("../app/kanban/assets/main.css");
 @import url("../app/kanbanPrintQueues/assets/main.css");
 @import url("../app/kanbanContainers/assets/main.css");
+@import url("../app/wh/assets/main.css");
 
 #app-loading {
   position: absolute;

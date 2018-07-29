@@ -83,6 +83,7 @@ define([
   './d8ProblemSources/routes',
   './mor/routes',
   './planning/routes',
+  './wh/routes',
   './sapLaborTimeFixer/routes',
   './printers/routes',
   './kanban/routes',

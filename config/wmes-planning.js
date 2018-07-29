@@ -13,7 +13,8 @@ exports.modules = [
   'messenger/server',
   'orders',
   'planning',
-  'paintShop'
+  'paintShop',
+  'wh'
 ];
 
 exports.events = {
@@ -46,7 +47,8 @@ exports.mongoose = {
     'hourlyPlan',
     'order',
     'paintShopOrder',
-    'plan', 'planChange', 'planSettings'
+    'plan', 'planChange', 'planSettings',
+    'whOrder'
   ]
 };
 
@@ -66,7 +68,8 @@ exports['messenger/server'] = Object.assign({}, ports[exports.id], {
     'planning.generator.started',
     'planning.generator.finished',
     'planning.changes.created',
-    'paintShop.orders.changed.*'
+    'paintShop.orders.changed.*',
+    'wh.orders.changed.*'
   ]
 });
 
@@ -85,5 +88,9 @@ exports.planning = {
 };
 
 exports.paintShop = {
+  generator: true
+};
+
+exports.wh = {
   generator: true
 };

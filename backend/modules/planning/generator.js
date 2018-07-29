@@ -371,7 +371,7 @@ module.exports = function setUpGenerator(app, module)
   {
     const startedAt = Date.now();
 
-    module.debug(`[generator] [${state.key}] Started...`);
+    state.log(`Started...`);
 
     step(
       function checkFrozenStep()

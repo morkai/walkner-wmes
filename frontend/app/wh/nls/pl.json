@@ -1,0 +1,50 @@
+{
+  "BREADCRUMBS:base": "Magazyn",
+  "BREADCRUMBS:settings": "Ustawienia",
+
+  "MSG:GENERATING": "<i class='fa fa-spinner fa-spin'></i><span>Generowanie planu...</span>",
+
+  "PAGE_ACTION:dailyPlan": "Plan dzienny",
+  "PAGE_ACTION:wh": "Magazyn",
+  "PAGE_ACTION:legend": "Legenda",
+  "PAGE_ACTION:settings": "Ustawienia",
+
+  "filter:date": "Data planu",
+  "filter:useDarkerTheme": "Wysoki kontrast",
+
+  "empty": "Brak planu dla wybranych filtrów.",
+
+  "prop:group": "Gr.",
+  "prop:no": "Lp.",
+  "prop:shift": "Zm.",
+  "prop:set": "Set",
+  "prop:mrp": "MRP",
+  "prop:line": "Linia",
+  "prop:order": "Zlecenie",
+  "prop:status": "Status",
+  "prop:nc12": "12NC",
+  "prop:name": "Nazwa wyrobu",
+  "prop:qty": "Ilość",
+  "prop:startTime": "Początek",
+  "prop:finishTime": "Koniec",
+  "prop:comment": "Ostatni komentarz",
+  "prop:picklist": "Lista",
+  "prop:fmx": "FMX",
+  "prop:kitter": "Kitter",
+  "prop:packer": "Opak.",
+
+  "wh:menu:copy:lineGroup": "Kopiuj listę zleceń <em>{group}. {line}</em>",
+  "wh:menu:copy:lineGroupNo": "Kopiuj nry zleceń <em>{group}. {line}</em>",
+  "wh:status:0": "Nieokreślony",
+  "wh:status:1": "Lista",
+  "wh:status:2": "Kompletacja",
+  "wh:status:3": "{qtySent, plural, =0{Wysyłka} other{Wysłano {qtySent} szt.}}",
+  "wh:sent:comment": "Wysłano {qtySent, plural, one{1 sztukę} few{{qtySent} sztuki} other{{qtySent} sztuk}} na linię {line} o {time}.",
+  "wh:sent:label": "Wysyłana<br>ilość:",
+
+  "settings:tab:planning": "Planowanie",
+  "settings:planning:groupDuration": "Czas trwania grupy zleceń [h]",
+  "settings:planning:groupExtraItems": "Minimalna ilość sztuk w grupie",
+  "settings:planning:groupExtraItems:help": "Jeżeli ilość sztuk zlecenia w pierwszej/ostatniej grupie danej linii będzie mniejsza lub równa podanej wartości, to grupa ta zostanie scalona z następną/poprzednią grupą.",
+  "settings:planning:ignoredMrps": "Ignorowane MRP"
+}
