@@ -242,6 +242,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
 
         pages.push({
           line: job.line,
+          workstation: `0${i + 1}`,
           location,
           nc12: job.data.nc12,
           description: job.data.description,
@@ -252,14 +253,14 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
           barCodes: {
             empty: {
               barcode: 20,
-              notext: true,
-              height: 92,
+              notext: false,
+              height: 82,
               data: `${kanbanId}2`
             },
             full: {
               barcode: 20,
-              notext: true,
-              height: 92,
+              notext: false,
+              height: 82,
               data: `${kanbanId}5`
             },
             wh: {
