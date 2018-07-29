@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["../broker","../router","../viewport","../user","../time","./pages/WhPlanPage","i18n!app/nls/planning","i18n!app/nls/wh"],function(a,e,t,n,r,i){"use strict";var s=n.auth("WH:VIEW"),p=n.auth("WH:MANAGE");e.map("/wh/plans/:id",s,function(e){/^-?[0-9]+d$/.test(e.params.id)&&(e.params.id=r.getMoment().subtract(r.getMoment().hours()<6?1:0,"days").startOf("day").add(+e.params.id.replace("d",""),"days").format("YYYY-MM-DD"),a.publish("router.navigate",{url:"/wh/plans/"+e.params.id,replace:!0,trigger:!1})),t.showPage(new i({date:e.params.id}))}),e.map("/wh/settings",p,function(a){t.loadPage("app/wh/pages/WhSettingsPage",function(e){return new e({initialTab:a.query.tab})})})});

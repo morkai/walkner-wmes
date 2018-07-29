@@ -217,6 +217,10 @@ app/kanban/assets/search.css
 ----------------
 app/kanban/assets/search.css
 
+app/kanbanContainers/assets/main.css
+----------------
+app/kanbanContainers/assets/main.css
+
 app/kanbanPrintQueues/assets/main.css
 ----------------
 app/kanbanPrintQueues/assets/main.css
@@ -626,6 +630,10 @@ app/vis/assets/main.css
 ----------------
 app/vis/assets/main.css
 
+app/wh/assets/main.css
+----------------
+app/wh/assets/main.css
+
 app/xiconf/assets/hidLamps.css
 ----------------
 app/xiconf/assets/hidLamps.css
@@ -776,6 +784,8 @@ assets/../app/planning/assets/main.css
 assets/../app/sapLaborTimeFixer/assets/main.css
 assets/../app/kanban/assets/main.css
 assets/../app/kanbanPrintQueues/assets/main.css
+assets/../app/kanbanContainers/assets/main.css
+assets/../app/wh/assets/main.css
 assets/wmes-main.css
 
 assets/wmes-mrl.css
@@ -1477,6 +1487,21 @@ app/nls/planning.js
 app/nls/pl/planning.js
 i18n!app/nls/planning
 app/planning/routes.js
+app/wh/WhSetting.js
+app/wh/WhSettingCollection.js
+app/wh/settings.js
+app/wh/WhOrder.js
+app/wh/WhOrderCollection.js
+app/wh/templates/planFilter.js
+app/wh/views/WhFilterView.js
+app/wh/templates/whList.js
+app/wh/views/WhPlanView.js
+app/wh/templates/planPage.js
+app/wh/pages/WhPlanPage.js
+app/nls/wh.js
+app/nls/pl/wh.js
+i18n!app/nls/wh
+app/wh/routes.js
 app/sapLaborTimeFixer/routes.js
 app/printers/tags.js
 app/printers/Printer.js

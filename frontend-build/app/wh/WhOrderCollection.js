@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["underscore","../time","../core/Collection","./WhOrder"],function(t,e,n,r){"use strict";function i(){return e.utc.getMoment(Date.now()).startOf("day").subtract(e.getMoment().hours()<6?1:0,"days").format("YYYY-MM-DD")}return n.extend({model:r,paginate:!1,initialize:function(e,n){n=t.assign({date:i()},n),this.date=n.date},setCurrentDate:function(){this.date=i()},url:function(){return"/wh/orders?sort(group,line,startTime)&date="+e.utc.getMoment(this.date,"YYYY-MM-DD").valueOf()}})});
