@@ -108,6 +108,8 @@ module.exports = function setupUserModel(app, mongoose)
   userSchema.index({kdId: 1});
   userSchema.index({login: 1});
   userSchema.index({personellId: 1});
+  userSchema.index({card: 1});
+  userSchema.index({cardUid: 1});
   userSchema.index({lastName: 1});
   userSchema.index({searchName: 1});
   userSchema.index({prodFunction: 1});
