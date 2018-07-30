@@ -344,6 +344,8 @@ module.exports = function(app, module)
           removed: []
         };
 
+        state.log(`Comparing ${this.newOrders.size} old with ${this.oldOrders.size} new...`);
+
         this.oldOrders.forEach(oldOrder =>
         {
           const newOrder = this.newOrders.get(oldOrder._id);
@@ -385,6 +387,13 @@ module.exports = function(app, module)
       },
       function()
       {
+        if (state.cancelled)
+        {
+          this.changes = null;
+
+          return this.skip();
+        }
+
         const {added, changed, removed} = this.changes;
 
         if (added.length)
@@ -418,18 +427,11 @@ module.exports = function(app, module)
       },
       function(err)
       {
-        if (state.cancelled)
-        {
-          state.log(`[generator] [${state.key}] Cancelled!`);
-
-          return done();
-        }
-
         if (err)
         {
           module.error(`[generator] [${state.key}] ${err.message}`);
         }
-        else
+        else if (this.changes)
         {
           const added = this.changes.added.length;
           const changed = this.changes.changed.length;
@@ -447,9 +449,16 @@ module.exports = function(app, module)
           }
         }
 
-        app.broker.publish('wh.generator.finished', {
-          date: state.key
-        });
+        if (state.cancelled)
+        {
+          state.log(`[generator] [${state.key}] Cancelled!`);
+        }
+        else
+        {
+          app.broker.publish('wh.generator.finished', {
+            date: state.key
+          });
+        }
 
         done();
       }
