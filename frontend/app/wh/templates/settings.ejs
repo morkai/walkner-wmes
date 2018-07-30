@@ -1,6 +1,8 @@
-<form class="settings planning-settings">
+<form class="settings planning-settings" autocomplete="off">
   <div class="list-group">
-    <a class="list-group-item" href="#wh/settings?tab=planning" data-tab="planning"><%- t('wh', 'settings:tab:planning') %></a>
+    <% ['planning', 'users'].forEach(function(tab) { %>
+    <a class="list-group-item" href="#wh/settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t('wh', 'settings:tab:' + tab) %></a>
+    <% }) %>
   </div>
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="planning">
@@ -16,6 +18,16 @@
       <div class="form-group">
         <label for="<%- idPrefix %>-planning-ignoredMrps"><%- t('wh', 'settings:planning:ignoredMrps') %></label>
         <input id="<%- idPrefix %>-planning-ignoredMrps" name="wh.planning.ignoredMrps" type="text" data-setting>
+      </div>
+    </div>
+    <div class="panel-body" data-tab="users">
+      <div style="display: flex">
+        <% ['fmx', 'kitter', 'packer'].forEach(function(func) { %>
+        <div class="form-group settings-select2-long" style="min-width: 300px; margin-right: 15px;">
+          <label><%- t('wh', 'settings:users:' + func) %></label>
+          <input type="text" data-user-func="<%- func %>">
+        </div>
+        <% }) %>
       </div>
     </div>
   </div>

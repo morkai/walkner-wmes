@@ -15,9 +15,9 @@ define([
 ) {
   'use strict';
 
-  function formatText(user, name, query) // eslint-disable-line no-unused-vars
+  function formatText(noPersonnelId, user, name, query) // eslint-disable-line no-unused-vars
   {
-    if (user.personellId)
+    if (!noPersonnelId && user.personellId)
     {
       name += ' (' + user.personellId + ')';
     }
@@ -38,7 +38,7 @@ define([
 
     return {
       id: user._id,
-      text: (textFormatter || formatText)(user, name, query),
+      text: textFormatter(user, name, query),
       user: user
     };
   }
@@ -181,9 +181,11 @@ define([
             users = users.filter(userFilter);
           }
 
+          var textFormatter = options.textFormatter || formatText.bind(null, !!options.noPersonnelId);
+
           return {
             results: users
-              .map(function(user) { return userToData(user, options.textFormatter, query); })
+              .map(function(user) { return userToData(user, textFormatter, query); })
               .sort(function(a, b) { return a.text.localeCompare(b.text); })
           };
         }
@@ -212,9 +214,10 @@ define([
       {
         if (res.collection && res.collection.length)
         {
+          var textFormatter = options.textFormatter || formatText.bind(null, !!options.noPersonnelId);
           var data = res.collection.map(function(userData)
           {
-            return userToData(userData, options.textFormatter);
+            return userToData(userData, textFormatter);
           });
 
           $input.select2('data', options.multiple ? data : data[0]);

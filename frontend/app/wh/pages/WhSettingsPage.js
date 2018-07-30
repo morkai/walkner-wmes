@@ -5,12 +5,14 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/View',
   '../settings',
+  '../WhUserCollection',
   '../views/WhSettingsView'
 ], function(
   t,
   bindLoadingMessage,
   View,
   settings,
+  WhUserCollection,
   WhSettingsView
 ) {
   'use strict';
@@ -44,24 +46,27 @@ define([
     defineModels: function()
     {
       this.model = bindLoadingMessage(settings.acquire(), this);
+
+      this.whUsers = bindLoadingMessage(new WhUserCollection(), this);
+
+      this.whUsers.setUpPubsub(this.pubsub.sandbox());
     },
 
     defineViews: function()
     {
       this.view = new WhSettingsView({
         initialTab: this.options.initialTab,
-        settings: this.model
+        settings: this.model,
+        whUsers: this.whUsers
       });
     },
 
     load: function(when)
     {
-      if (this.model.isEmpty())
-      {
-        return when(this.model.fetch({reset: true}));
-      }
-
-      return when();
+      return when(
+        this.model.fetchIfEmpty(),
+        this.whUsers.fetch({reset: true})
+      );
     },
 
     afterRender: function()
