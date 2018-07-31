@@ -286,7 +286,11 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
           return this.skip(app.createError(`Failed to generate bar codes: ${err.message}`, 'PRINT_FAILURE', 500));
         }
 
-        html2pdf.generatePdf(renderKk({pages}), {orientation: 'landscape'}, this.next());
+        html2pdf.generatePdf(
+          renderKk({pages}),
+          {waitUntil: 'load', orientation: 'landscape'},
+          this.next()
+        );
       },
       function(err, result)
       {
