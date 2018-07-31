@@ -116,7 +116,7 @@ define([
         }
         else
         {
-          view.timers.printNext = setTimeout(view.printNext.bind(view), 333);
+          view.timers.printNext = setTimeout(view.printNext.bind(view), 1);
         }
       });
     },
