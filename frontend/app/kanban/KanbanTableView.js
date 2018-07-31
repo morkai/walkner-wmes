@@ -149,10 +149,16 @@ define([
       rotated: true,
       tdClassName: function(value, column, arrayIndex, entry)
       {
-        return value < entry.emptyFullCount ? 'kanban-is-invalid' : '';
+        return value === entry.emptyFullCount
+          ? ''
+          : value < entry.emptyFullCount
+            ? 'kanban-is-invalid'
+            : 'kanban-is-warning';
       },
       filters: {
-        missingKanbanIds: '$ < $$.emptyFullCount'
+        'kanbanIds:invalid': '$$.emptyFullCount == 0 || $ < $$.emptyFullCount || $ > $$.emptyFullCount',
+        'kanbanIds:tooMany': '$$.emptyFullCount > 0 && $ > $$.emptyFullCount',
+        'kanbanIds:tooFew': '$$.emptyFullCount != 0 && $ < $$.emptyFullCount'
       }
     },
     lineCount: {

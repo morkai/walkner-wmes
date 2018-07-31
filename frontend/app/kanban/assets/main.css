@@ -116,11 +116,13 @@
   text-align: center;
   line-height: 1;
 }
-.kanban-is-invalid {
-  background-color: #f2dede;
-}
+.kanban-is-invalid,
 .kanban-is-odd > .kanban-is-invalid {
   background-color: #f2dede;
+}
+.kanban-is-warning,
+.kanban-is-odd > .kanban-is-warning {
+  background-color: #fcf8e3;
 }
 .kanban-is-focused {
   outline: 2px solid #0af;
