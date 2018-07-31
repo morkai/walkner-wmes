@@ -495,7 +495,7 @@ define([
         lineErrors.push(total === 0 ? view.t('builder:error:noKanbans') : '');
       });
 
-      var lines = view.$('select');
+      var lines = view.$rows.find('select');
 
       lineErrors.forEach(function(error, i)
       {
