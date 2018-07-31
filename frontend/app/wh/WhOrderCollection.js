@@ -44,6 +44,40 @@ define([
       return '/wh/orders'
         + '?sort(group,line,startTime)'
         + '&date=' + time.utc.getMoment(this.date, 'YYYY-MM-DD').valueOf();
+    },
+
+    serialize: function(plan)
+    {
+      var prev = null;
+
+      return this.map(function(whOrder, i)
+      {
+        var item = whOrder.serialize(plan, i);
+
+        if (prev)
+        {
+          item.newGroup = item.group !== prev.group;
+          item.newLine = item.line !== prev.line;
+        }
+
+        prev = item;
+
+        return item;
+      });
+    },
+
+    update: function(newOrders)
+    {
+      for (var i = 0; i < newOrders.length; ++i)
+      {
+        var newOrder = newOrders[i];
+        var oldOrder = this.get(newOrder._id);
+
+        if (oldOrder)
+        {
+          oldOrder.update(newOrder);
+        }
+      }
     }
 
   });

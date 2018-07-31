@@ -28,7 +28,7 @@ define([
 
     prepareValue: function(id, newValue)
     {
-      if (/group(Duration|ExtraItems)/.test(id))
+      if (/maxSetSize|(group(Duration|ExtraItems))/.test(id))
       {
         newValue = Math.round(parseInt(newValue, 10));
 

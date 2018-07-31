@@ -1,62 +1,44 @@
-<div class="planning-mrp-lineOrders-list is-expanded">
+<div class="planning-mrp-lineOrders-list">
   <table class="planning-mrp-lineOrders-table">
     <thead>
       <tr>
         <% [
-          {id: 'group', class: 'is-min text-center', width: 29},
           {id: 'no', class: 'is-min text-center', width: 35},
-          {id: 'set', class: 'is-min text-center', width: 35},
-          {id: 'shift', class: 'is-min text-center', width: 35},
+          {id: 'group', class: 'is-min text-center', width: 29},
           {id: 'mrp', class: 'is-min', width: 42},
           {id: 'order', class: 'is-min', width: 71},
-          {id: 'status', class: 'is-min', width: 71},
+          {id: 'planStatus', class: 'is-min', width: 71},
           {id: 'nc12', class: 'is-min', width: 91},
           {id: 'name', class: 'is-min', width: 315},
           {id: 'qty', class: 'is-min', width: 55},
+          {id: 'shift', class: 'is-min text-center', width: 35},
           {id: 'startTime', class: 'is-min', width: 68},
           {id: 'finishTime', class: 'is-min', width: 58},
           {id: 'line', class: 'is-min', width: 50},
-          {id: 'picklist', class: 'is-min'},
-          {id: 'fmx', class: 'is-min'},
-          {id: 'kitter', class: 'is-min'},
-          {id: 'packer', class: 'is-min'},
+          {id: 'whStatus', class: 'is-min', width: 80},
+          {id: 'set', class: 'is-min text-center', width: 35},
+          {id: 'picklist', class: 'is-min text-center', width: 50},
+          {id: 'fmx', class: 'is-min text-center', width: 50},
+          {id: 'kitter', class: 'is-min text-center', width: 50},
+          {id: 'packer', class: 'is-min text-center', width: 50},
           {id: 'comment'}
         ].forEach(function(column) { %>
-        <th class="<%- column.class || '' %>" style="min-width: <%- column.width ? column.width : '1' %>px"><%- t('wh', 'prop:' + column.id) %></th>
+        <th class="<%- column.class || '' %>" colspan="<%- column.colSpan || 1 %>" style="min-width: <%- column.width ? column.width : '1' %>px"><%- t('wh', 'prop:' + column.id) %></th>
         <% }) %>
       </tr>
     </thead>
     <tbody>
-      <% orders.forEach(function(order, i) { %>
-      <% if (order.newGroup) { %>
+      <% rows.forEach(function(row) { %>
+      <% if (row.newGroup) { %>
       <tr>
-        <td class="planning-wh-newGroup" colspan="999">&nbsp;</td>
+        <td class="planning-wh-newGroup" colspan="999"></td>
       </tr>
-      <% } else if (order.newLine) { %>
+      <% } else if (row.newLine) { %>
       <tr>
         <td class="planning-wh-newLine" colspan="999"></td>
       </tr>
       <% } %>
-      <tr class="<%- order.rowClassName %>" data-id="<%- order.orderNo %>" data-index="<%- i %>" data-group="<%- order.group %>" data-line="<%= order.line %>" data-key="<%- order.key %>" data-pce-time="<%- order.pceTime %>">
-        <td class="is-min text-right" style="min-width: 29px"><%- order.group %>.</td>
-        <td class="is-min text-right" style="min-width: 35px"><%- order.no %>.</td>
-        <td class="is-min text-right" style="min-width: 35px"><%- order.set ? (order.set + '.') : '' %></td>
-        <td class="is-min" style="min-width: 35px"><%- t('core', 'SHIFT:' + order.shift) %></td>
-        <td class="is-min"><%- order.mrp %></td>
-        <td class="is-min planning-mrp-lineOrders-status" data-status="<%- order.status %>"><%- order.orderNo %></td>
-        <td class="is-min planning-mrp-lineOrders-status" data-status="<%- order.status %>"><%- order.statuses %></td>
-        <td class="is-min"><%= order.nc12 %></td>
-        <td class="is-min"><%= order.name %></td>
-        <td class="is-min text-right"><%- order.qtyPlan.toLocaleString() %>/<%- order.qtyTodo.toLocaleString() %></td>
-        <td class="is-min text-right"><%- order.startTime %></td>
-        <td class="is-min text-right"><%- order.finishTime %></td>
-        <td class="is-min"><%= order.line %></td>
-        <td class="is-min"><%= order.picklist %></td>
-        <td class="is-min"><%= order.fmx %></td>
-        <td class="is-min"><%= order.kitter %></td>
-        <td class="is-min"><%= order.packer %></td>
-        <td class="planning-mrp-lineOrders-comment"><%- order.comment %></td>
-      </tr>
+      <%- renderRow({row: row}) %>
       <% }) %>
     </tbody>
   </table>

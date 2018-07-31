@@ -16,6 +16,10 @@
         <input id="<%- idPrefix %>-planning-groupExtraItems" class="form-control" name="wh.planning.groupExtraItems" type="number" step="1" min="0" max="100">
       </div>
       <div class="form-group">
+        <label for="<%- idPrefix %>-planning-maxSetSize"><%- t('wh', 'settings:planning:maxSetSize') %></label>
+        <input id="<%- idPrefix %>-planning-maxSetSize" class="form-control" name="wh.planning.maxSetSize" type="number" step="1" min="1" max="100">
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-planning-ignoredMrps"><%- t('wh', 'settings:planning:ignoredMrps') %></label>
         <input id="<%- idPrefix %>-planning-ignoredMrps" name="wh.planning.ignoredMrps" type="text" data-setting>
       </div>

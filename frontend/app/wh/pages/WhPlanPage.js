@@ -18,7 +18,10 @@ define([
   '../WhOrderCollection',
   '../views/WhFilterView',
   '../views/WhPlanView',
+  '../views/WhSetView',
+  '../templates/messages',
   'app/wh/templates/planPage',
+  'app/wh/templates/resolveAction',
   'app/planning/templates/planLegend'
 ], function(
   _,
@@ -38,7 +41,10 @@ define([
   WhOrderCollection,
   WhFilterView,
   WhPlanView,
+  WhSetView,
+  messageTemplates,
   pageTemplate,
+  resolveActionTemplate,
   legendTemplate
 ) {
   'use strict';
@@ -75,6 +81,18 @@ define([
       var page = this;
 
       return [
+        {
+          template: resolveActionTemplate,
+          afterRender: function($action)
+          {
+            $action.find('form').on('submit', function()
+            {
+              page.resolveAction($action.find('input[name="card"]').val());
+
+              return false;
+            });
+          }
+        },
         {
           label: page.t('PAGE_ACTION:dailyPlan'),
           icon: 'calculator',
@@ -150,6 +168,15 @@ define([
         {
           this.promised(this.whOrders.fetch({reset: true}));
         }
+      },
+      'wh.orders.updated': function(message)
+      {
+        var newOrders = message.orders;
+
+        if (newOrders.length && this.whOrders.get(newOrders[0]._id))
+        {
+          this.whOrders.update(newOrders);
+        }
       }
     },
 
@@ -159,6 +186,8 @@ define([
 
     initialize: function()
     {
+      this.keyBuffer = '';
+
       this.defineModels();
       this.defineViews();
       this.defineBindings();
@@ -238,8 +267,11 @@ define([
 
       page.listenTo(plan.sapOrders, 'sync', page.onSapOrdersSynced);
 
-      $(document)
-        .on('click.' + page.idPrefix, '.paintShop-breadcrumb', this.onBreadcrumbsClick.bind(this));
+      page.listenTo(page.whOrders, 'act', page.onActionRequested);
+
+      $(document).on('click.' + page.idPrefix, '.paintShop-breadcrumb', page.onBreadcrumbsClick.bind(page));
+
+      $(window).on('keypress.' + page.idPrefix, page.onWindowKeyPress.bind(page));
     },
 
     load: function(when)
@@ -380,6 +412,209 @@ define([
       return false;
     },
 
+    onWindowKeyPress: function(e)
+    {
+      if (e.keyCode >= 48 && e.keyCode <= 57)
+      {
+        this.keyBuffer += (e.keyCode - 48).toString();
+      }
+
+      clearTimeout(this.timers.handleKeyBuffer);
+
+      this.timers.handleKeyBuffer = setTimeout(this.handleKeyBuffer.bind(this), 200);
+    },
+
+    handleKeyBuffer: function()
+    {
+      if (this.keyBuffer.length >= 6)
+      {
+        this.resolveAction(this.keyBuffer);
+      }
+
+      this.keyBuffer = '';
+    },
+
+    act: function(action, data)
+    {
+      return this.ajax({
+        method: 'POST',
+        url: '/wh/plans/' + this.plan.id + ';act',
+        data: JSON.stringify({
+          action: action,
+          data: data
+        })
+      });
+    },
+
+    resolveAction: function(personnelId)
+    {
+      var page = this;
+
+      if (page.acting)
+      {
+        return;
+      }
+
+      page.acting = true;
+
+      page.showMessage('info', 0, 'resolvingAction', {personnelId: personnelId});
+
+      var req = page.act('resolveAction', {personnelId: personnelId});
+
+      req.fail(function()
+      {
+        var code = req.responseJSON && req.responseJSON.error && req.responseJSON.error.code;
+        var error = code;
+
+        if (!req.status)
+        {
+          error = 'connectionFailure';
+        }
+        else if (!t.has('wh', 'msg:' + error))
+        {
+          error = 'genericFailure';
+        }
+
+        page.showMessage('error', 5000, 'text', {
+          text: t('wh', 'msg:' + error, {
+            errorCode: code,
+            personnelId: personnelId
+          })
+        });
+      });
+
+      req.done(function(res)
+      {
+        page.hideMessage();
+        page.handleActionResult(res);
+      });
+
+      req.always(function()
+      {
+        page.acting = false;
+      });
+    },
+
+    handleActionResult: function(res)
+    {
+      switch (res.result)
+      {
+        case 'newSetStarted':
+          this.whOrders.update(res.orders);
+          this.continueSet(res.user, res.orders[0].set);
+          break;
+
+        case 'assignedToSet':
+          this.whOrders.update(res.orders);
+          this.continueSet(res.user, res.orders[0].set);
+          break;
+
+        case 'continueSet':
+          this.continueSet(res.user, res.set);
+          break;
+      }
+    },
+
+    continueSet: function(user, set)
+    {
+      var orders = this.whOrders.filter(function(o) { return o.get('set') === set; });
+
+      if (!orders.length)
+      {
+        return;
+      }
+
+      this.$('tr[data-id="' + orders[0].id + '"]')[0].scrollIntoView({
+        behavior: 'instant',
+        block: 'start',
+        inline: 'start'
+      });
+
+      var dialogView = new WhSetView({
+        model: {
+          user: user,
+          set: set
+        },
+        whOrders: this.whOrders,
+        plan: this.plan
+      });
+
+      viewport.showDialog(dialogView, t('wh', 'set:title', {
+        set: set,
+        line: orders[0].get('line')
+      }));
+    },
+
+    showMessage: function(type, time, message, messageData)
+    {
+      if (this.timers.hideMessage)
+      {
+        clearTimeout(this.timers.hideMessage);
+      }
+
+      var $overlay = this.$id('messageOverlay');
+      var $message = this.$id('message');
+      var visible = $overlay[0].style.display === 'block';
+
+      $overlay.css('display', 'block');
+      $message
+        .html(messageTemplates[message] && messageTemplates[message](messageData || {}) || message)
+        .removeClass('message-error message-warning message-success message-info')
+        .addClass('message-' + type);
+
+      if (visible)
+      {
+        $message.css({
+          marginTop: ($message.outerHeight() / 2 * -1) + 'px',
+          marginLeft: ($message.outerWidth() / 2 * -1) + 'px'
+        });
+      }
+      else
+      {
+        $message.css({
+          display: 'block',
+          marginLeft: '-5000px'
+        });
+
+        $message.css({
+          display: 'none',
+          marginTop: ($message.outerHeight() / 2 * -1) + 'px',
+          marginLeft: ($message.outerWidth() / 2 * -1) + 'px'
+        });
+
+        $message.fadeIn();
+      }
+
+      if (time > 0)
+      {
+        this.timers.hideMessage = setTimeout(this.hideMessage.bind(this), time);
+      }
+    },
+
+    hideMessage: function()
+    {
+      var page = this;
+
+      clearTimeout(page.timers.hideMessage);
+
+      var $overlay = page.$id('messageOverlay');
+
+      if ($overlay[0].style.display === 'none')
+      {
+        return;
+      }
+
+      var $message = page.$id('message');
+
+      $message.fadeOut(function()
+      {
+        $overlay.css('display', 'none');
+        $message.css('display', 'none');
+
+        page.timers.hideMessage = null;
+      });
+    },
+
     showDatePickerDialog: function()
     {
       var dialogView = new PaintShopDatePickerView({
@@ -496,6 +731,11 @@ define([
       }
 
       this.timers.reloadOrders = setTimeout(this.reloadOrders.bind(this), 10 * 60 * 1000);
+    },
+
+    onActionRequested: function(action, data)
+    {
+      this.act(action, data);
     }
 
   });

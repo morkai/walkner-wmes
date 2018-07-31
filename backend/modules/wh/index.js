@@ -12,28 +12,31 @@ exports.DEFAULT_CONFIG = {
   userId: 'user',
   settingsId: 'settings',
   updaterId: 'updater',
+  html2pdfId: 'html2pdf',
   generator: false
 };
 
 exports.start = function startWhModule(app, module)
 {
+  const config = module.config;
+
   app.onModuleReady(
     [
-      module.config.mongooseId,
-      module.config.userId,
-      module.config.expressId,
-      module.config.updaterId,
-      module.config.settingsId
+      config.mongooseId,
+      config.userId,
+      config.expressId,
+      config.updaterId,
+      config.settingsId
     ],
     setUpRoutes.bind(null, app, module)
   );
 
-  if (module.config.generator)
+  if (config.generator)
   {
     app.onModuleReady(
       [
-        module.config.mongooseId,
-        module.config.settingsId
+        config.mongooseId,
+        config.settingsId
       ],
       setUpGenerator.bind(null, app, module)
     );
@@ -42,9 +45,10 @@ exports.start = function startWhModule(app, module)
   {
     app.onModuleReady(
       [
-        module.config.mongooseId,
-        module.config.userId,
-        module.config.settingsId
+        config.mongooseId,
+        config.userId,
+        config.settingsId,
+        config.html2pdfId
       ],
       setUpState.bind(null, app, module)
     );

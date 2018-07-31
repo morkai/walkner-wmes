@@ -72,8 +72,9 @@ module.exports = function setUpWhRoutes(app, module)
 
   express.put('/wh/settings/:id', canManage, settings.updateRoute);
 
-  // Queues
-  express.post('/wh/:id;generate', canManage, generateRoute);
+  // Plans
+  express.post('/wh/plans/:id;generate', canManage, generateRoute);
+  express.post('/wh/plans/:id;act', canManage, actRoute);
 
   // Events
   express.get(
@@ -141,5 +142,32 @@ module.exports = function setUpWhRoutes(app, module)
     });
 
     res.sendStatus(204);
+  }
+
+  function actRoute(req, res, next)
+  {
+    if (!req.body.data)
+    {
+      req.body.data = {};
+    }
+
+    req.body.data.date = moment.utc(req.params.id, 'YYYY-MM-DD').toDate();
+
+    module.state.act(req.body, (err, result) =>
+    {
+      if (err)
+      {
+        return next(err);
+      }
+
+      if (result)
+      {
+        res.json(result);
+      }
+      else
+      {
+        res.sendStatus(204);
+      }
+    });
   }
 };

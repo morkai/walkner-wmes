@@ -1,0 +1,22 @@
+<tbody class="wh-set-item" data-id="<%- item._id %>" data-order="<%- item.order %>">
+  <tr class="wh-set-separator">
+    <td colspan="999"><hr></td>
+  </tr>
+  <tr>
+    <td data-prop="order"><%- item.order %></td>
+    <td data-prop="nc12"><%- item.nc12 %></td>
+    <td data-prop="qty"><%- item.qty %>/<%- item.qtyTodo %></td>
+    <td data-prop="qty"><%- item.startTime %></td>
+    <td data-prop="picklist" rowspan="2">
+      <i class="fa fa-file-text-o"></i>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td data-prop="planStatusIcons"><%- item.planStatusIcons %></td>
+    <td data-prop="name"><%= item.name %></td>
+    <td data-prop="mrp"><%- item.mrp %></td>
+    <td data-prop="qty"><%- item.finishTime %></td>
+    <td></td>
+  </tr>
+</tbody>

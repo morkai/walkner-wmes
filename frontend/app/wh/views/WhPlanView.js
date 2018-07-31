@@ -9,13 +9,12 @@ define([
   'app/viewport',
   'app/core/View',
   'app/data/clipboard',
-  'app/planning/util/shift',
   'app/planning/util/contextMenu',
   'app/planning/PlanSapOrder',
   'app/core/templates/userInfo',
   'app/wh/templates/whList',
-  'app/planning/templates/lineOrderComments',
-  'app/planning/templates/orderStatusIcons'
+  'app/wh/templates/whListRow',
+  'app/planning/templates/lineOrderComments'
 ], function(
   _,
   $,
@@ -25,13 +24,12 @@ define([
   viewport,
   View,
   clipboard,
-  shiftUtil,
   contextMenu,
   PlanSapOrder,
   userInfoTemplate,
   whListTemplate,
-  lineOrderCommentsTemplate,
-  orderStatusIconsTemplate
+  whListRowTemplate,
+  lineOrderCommentsTemplate
 ) {
   'use strict';
 
@@ -40,7 +38,7 @@ define([
     template: whListTemplate,
 
     events: {
-      'contextmenu tbody > tr[data-id]': function(e)
+      'contextmenu td[data-column-id]': function(e)
       {
         this.showMenu(e);
 
@@ -53,7 +51,7 @@ define([
           return;
         }
 
-        var sapOrder = this.plan.sapOrders.get(e.currentTarget.parentNode.dataset.id);
+        var sapOrder = this.plan.sapOrders.get(e.currentTarget.parentNode.dataset.order);
 
         if (!sapOrder)
         {
@@ -106,14 +104,21 @@ define([
       view.listenTo(sapOrders, 'change:psStatus', view.onPsStatusChanged);
 
       view.listenTo(view.whOrders, 'reset', view.onOrdersReset);
+      view.listenTo(view.whOrders, 'change', view.onOrderChanged);
     },
 
     serialize: function()
     {
       return {
         idPrefix: this.idPrefix,
-        orders: this.serializeOrders()
+        renderRow: whListRowTemplate,
+        rows: this.serializeRows()
       };
+    },
+
+    serializeRows: function()
+    {
+      return this.whOrders.serialize(this.plan);
     },
 
     beforeRender: function()
@@ -139,64 +144,6 @@ define([
       }
     },
 
-    serializeOrders: function()
-    {
-      var view = this;
-      var plan = view.plan;
-      var prev = null;
-
-      return view.whOrders.map(function(whOrder, i)
-      {
-        var orderNo = whOrder.get('order');
-        var planOrder = plan.orders.get(orderNo);
-        var sapOrder = plan.sapOrders.get(orderNo);
-        var startTime = Date.parse(whOrder.get('startTime'));
-        var finishTime = Date.parse(whOrder.get('finishTime'));
-        var duration = finishTime - startTime;
-        var qtyPlan = whOrder.get('qty');
-        var item = {
-          key: whOrder.id,
-          no: i + 1,
-          set: '',
-          shift: shiftUtil.getShiftNo(startTime),
-          orderNo: orderNo,
-          mrp: planOrder.get('mrp'),
-          nc12: planOrder.get('nc12'),
-          name: planOrder.get('name'),
-          startTime: time.utc.format(startTime, 'HH:mm:ss'),
-          finishTime: time.utc.format(finishTime, 'HH:mm:ss'),
-          group: whOrder.get('group'),
-          duration: duration,
-          pceTime: Math.ceil(duration / qtyPlan),
-          qtyTodo: planOrder.get('quantityTodo'),
-          qtyPlan: qtyPlan,
-          line: whOrder.get('line'),
-          comment: sapOrder ? sapOrder.getCommentWithIcon() : '',
-          comments: sapOrder ? sapOrder.get('comments') : [],
-          status: planOrder.getStatus(),
-          statuses: view.serializeOrderStatuses(planOrder),
-          rowClassName: sapOrder ? (sapOrder.get('whStatus') === 'done' ? 'success' : '') : '',
-          newGroup: false,
-          newLine: false
-        };
-
-        if (prev)
-        {
-          item.newGroup = item.group !== prev.group;
-          item.newLine = item.line !== prev.line;
-        }
-
-        prev = item;
-
-        return item;
-      });
-    },
-
-    serializeOrderStatuses: function(planOrder)
-    {
-      return orderStatusIconsTemplate(this.plan, planOrder.id);
-    },
-
     hideMenu: function()
     {
       contextMenu.hide(this);
@@ -204,8 +151,14 @@ define([
 
     showMenu: function(e)
     {
-      var el = e.currentTarget;
-      var orderNo = el.dataset.id;
+      var td = e.currentTarget;
+      var tr = td.parentNode;
+      var whOrder = this.whOrders.get(tr.dataset.id);
+      var orderNo = whOrder.get('order');
+      var group = whOrder.get('group');
+      var line = whOrder.get('line');
+      var set = whOrder.get('set');
+      var status = whOrder.get('status');
       var menu = [
         contextMenu.actions.sapOrder(orderNo)
       ];
@@ -215,7 +168,7 @@ define([
       {
         menu.push({
           icon: 'fa-file-text-o',
-          label: t('planning', 'orders:menu:shiftOrder'),
+          label: t('wh', 'menu:shiftOrder'),
           handler: this.handleShiftOrderAction.bind(this, orderNo)
         });
       }
@@ -225,27 +178,68 @@ define([
         menu.push(contextMenu.actions.comment(orderNo));
       }
 
+      menu.push('-');
+
       menu.push({
         icon: 'fa-clipboard',
-        label: t('planning', 'lineOrders:menu:copy'),
-        handler: this.handleCopyAction.bind(this, el, e.pageY, e.pageX, false, false)
+        label: t('wh', 'menu:copy:all'),
+        handler: this.handleCopyAction.bind(this, tr, e.pageY, e.pageX, false, false)
       });
 
       menu.push({
-        label: t('planning', 'wh:menu:copy:lineGroup', {
-          group: el.dataset.group,
-          line: el.dataset.line
+        label: t('wh', 'menu:copy:lineGroup', {
+          group: group,
+          line: line
         }),
-        handler: this.handleCopyAction.bind(this, el, e.pageY, e.pageX, true, false)
+        handler: this.handleCopyAction.bind(this, tr, e.pageY, e.pageX, true, false)
       });
 
       menu.push({
-        label: t('planning', 'wh:menu:copy:lineGroupNo', {
-          group: el.dataset.group,
-          line: el.dataset.line
+        label: t('wh', 'menu:copy:lineGroupNo', {
+          group: group,
+          line: line
         }),
-        handler: this.handleCopyAction.bind(this, el, e.pageY, e.pageX, true, true)
+        handler: this.handleCopyAction.bind(this, tr, e.pageY, e.pageX, true, true)
       });
+
+      if (user.isAllowedTo('WH:MANAGE'))
+      {
+        menu.push('-');
+
+        if (status !== 'cancelled')
+        {
+          menu.push({
+            icon: 'fa-times',
+            label: t('wh', 'menu:cancelOrder'),
+            handler: this.handleCancelAction.bind(this, {orders: [whOrder.id]})
+          });
+
+          if (set)
+          {
+            menu.push({
+              label: t('wh', 'menu:cancelSet'),
+              handler: this.handleCancelAction.bind(this, {set: set})
+            });
+          }
+        }
+
+        if (status !== 'pending')
+        {
+          menu.push({
+            icon: 'fa-eraser',
+            label: t('wh', 'menu:resetOrder'),
+            handler: this.handleResetAction.bind(this, {orders: [whOrder.id]})
+          });
+
+          if (set)
+          {
+            menu.push({
+              label: t('wh', 'menu:resetSet'),
+              handler: this.handleResetAction.bind(this, {set: set})
+            });
+          }
+        }
+      }
 
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },
@@ -262,7 +256,7 @@ define([
       window.open('/#prodShiftOrders?sort(startedAt)&limit(20)&orderId=' + orderNo);
     },
 
-    handleCopyAction: function(el, y, x, lineGroupOnly, orderNoOnly)
+    handleCopyAction: function(tr, y, x, lineGroupOnly, orderNoOnly)
     {
       var view = this;
 
@@ -279,7 +273,7 @@ define([
           'set',
           'shift',
           'mrp',
-          'orderNo',
+          'order',
           'nc12',
           'name',
           'qtyPlan',
@@ -287,15 +281,20 @@ define([
           'startTime',
           'finishTime',
           'line',
+          'picklist',
+          'fmx',
+          'kitter',
+          'packer',
           'comment'
         ];
         var text = orderNoOnly
           ? []
-          : [columns.map(function(p) { return t('planning', 'lineOrders:list:' + p); }).join('\t')];
-        var line = el.dataset.line;
-        var group = +el.dataset.group;
+          : [columns.map(function(p) { return t('wh', 'prop:' + p); }).join('\t')];
+        var whOrder = view.whOrders.get(tr.dataset.id);
+        var line = whOrder.get('line');
+        var group = whOrder.get('group');
 
-        view.serializeOrders().forEach(function(order)
+        view.serializeRows().forEach(function(order)
         {
           if (lineGroupOnly && (order.line !== line || order.group !== group))
           {
@@ -304,7 +303,7 @@ define([
 
           if (orderNoOnly)
           {
-            text.push(order.orderNo);
+            text.push(order.order);
 
             return;
           }
@@ -315,14 +314,18 @@ define([
             order.set,
             order.shift,
             order.mrp,
-            order.orderNo,
+            order.order,
             order.nc12,
             order.name,
-            order.qtyPlan,
+            order.qty,
             order.qtyTodo,
             order.startTime,
             order.finishTime,
             order.line,
+            order.picklistFunc ? (order.picklistDone ? 1 : 0) : '',
+            t('wh', 'status:' + order.funcs[0].status),
+            t('wh', 'status:' + order.funcs[1].status),
+            t('wh', 'status:' + order.funcs[2].status),
             '"' + order.comments
               .map(function(comment) { return comment.user.label + ': ' + comment.text.replace(/"/g, "'"); })
               .join('\r\n--\r\n') + '"'
@@ -338,7 +341,7 @@ define([
 
         clipboardData.setData('text/plain', text.join('\r\n'));
 
-        var $btn = view.$(el).tooltip({
+        var $btn = view.$(tr).tooltip({
           container: view.el,
           trigger: 'manual',
           placement: 'bottom',
@@ -359,11 +362,21 @@ define([
       });
     },
 
+    handleResetAction: function(filter)
+    {
+      this.whOrders.trigger('act', 'resetOrders', filter);
+    },
+
+    handleCancelAction: function(filter)
+    {
+      this.whOrders.trigger('act', 'cancelOrders', filter);
+    },
+
     onCommentChange: function(sapOrder)
     {
       if (this.plan.orders.get(sapOrder.id))
       {
-        this.$('tr[data-id="' + sapOrder.id + '"] > .planning-mrp-lineOrders-comment').html(
+        this.$('tr[data-order="' + sapOrder.id + '"] > .planning-mrp-lineOrders-comment').html(
           sapOrder.getCommentWithIcon()
         );
       }
@@ -379,7 +392,7 @@ define([
 
     onPsStatusChanged: function(sapOrder)
     {
-      var $order = this.$('tr[data-id="' + sapOrder.id + '"]');
+      var $order = this.$('tr[data-order="' + sapOrder.id + '"]');
 
       if ($order.length)
       {
@@ -390,6 +403,22 @@ define([
           .attr('title', t('planning', 'orders:psStatus:' + psStatus))
           .attr('data-ps-status', psStatus);
       }
+    },
+
+    onOrderChanged: function(whOrder)
+    {
+      var $tr = this.$('tr[data-id="' + whOrder.id + '"]');
+
+      if (!$tr.length)
+      {
+        return;
+      }
+
+      var i = this.whOrders.indexOf(whOrder);
+
+      $tr.replaceWith(whListRowTemplate({
+        row: whOrder.serialize(this.plan, i)
+      }));
     }
 
   });

@@ -4,10 +4,12 @@
 
 module.exports = function setupWhOrderModel(app, mongoose)
 {
+  const FUNCS = ['fmx', 'kitter', 'packer'];
+
   const whOrderFuncSchema = new mongoose.Schema({
     _id: {
       type: String,
-      enum: ['fmx', 'kitter', 'packer']
+      enum: FUNCS
     },
     user: {},
     startedAt: Date,
@@ -54,7 +56,7 @@ module.exports = function setupWhOrderModel(app, mongoose)
     finishTime: Date,
     picklistFunc: {
       type: String,
-      enum: ['fmx', 'kitter', 'packer']
+      enum: FUNCS
     },
     picklistDone: {
       type: Boolean,
@@ -69,10 +71,10 @@ module.exports = function setupWhOrderModel(app, mongoose)
 
   whOrderSchema.statics.TOPIC_PREFIX = 'wh.orders';
   whOrderSchema.statics.BROWSE_LIMIT = 2000;
+  whOrderSchema.statics.FUNCS = FUNCS;
 
   whOrderSchema.index({date: -1, line: 1});
   whOrderSchema.index({status: 1, date: -1});
-  whOrderSchema.index({order: 1, date: -1});
 
   mongoose.model('WhOrder', whOrderSchema);
 };
