@@ -15,7 +15,8 @@ module.exports = function setupPrinterModel(app, mongoose)
       required: true,
       trim: true
     },
-    tags: [String]
+    tags: [String],
+    special: String
   }, {
     id: false
   });

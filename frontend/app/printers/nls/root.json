@@ -18,6 +18,7 @@
     "PROPERTY:name": "Name",
     "PROPERTY:label": "Label",
     "PROPERTY:tags": "Tags",
+    "PROPERTY:special": "Special settings",
 
     "FORM:ACTION:add": "Add printer",
     "FORM:ACTION:edit": "Edit printer",

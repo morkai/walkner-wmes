@@ -20,7 +20,8 @@ define([
     'kanban/empty',
     'kanban/full',
     'kanban/wh',
-    'kanban/desc'
+    'kanban/desc',
+    'wh/cart'
   ];
 
   return {

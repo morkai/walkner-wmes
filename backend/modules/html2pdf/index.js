@@ -5,11 +5,11 @@
 const {createHash} = require('crypto');
 const {join} = require('path');
 const {exec, execFile} = require('child_process');
-const {format} = require('util');
 const {tmpdir} = require('os');
 const fs = require('fs');
 const step = require('h5.step');
 const _ = require('lodash');
+const request = require('request');
 const createPuppeteerPool = require('puppeteer-pool');
 const setUpRoutes = require('./routes');
 
@@ -137,7 +137,8 @@ exports.start = function startHtml2pdfModule(app, module)
         right: '0mm',
         bottom: '0mm',
         left: '0mm'
-      }
+      },
+      waitUntil: 'networkidle2'
     };
 
     Object.keys(options).forEach(k =>
@@ -180,7 +181,7 @@ exports.start = function startHtml2pdfModule(app, module)
             const page = await browser.newPage();
             const res = await page.goto(
               module.config.fileUrl.replace('${hash}', hash).replace('${format}', 'html'),
-              {waitUntil: 'networkidle2'}
+              {waitUntil: options.waitUntil}
             );
 
             if (!res || !res.ok())
@@ -251,6 +252,16 @@ exports.start = function startHtml2pdfModule(app, module)
           return this.skip(app.createError('INVALID_PRINTER', 400));
         }
 
+        if (printer.special)
+        {
+          const matches = printer.special.match(/versalink:((?:\.?[0-9]{1,3}){4})/i);
+
+          if (matches)
+          {
+            return handleDirectVersaLinkPrint(matches[1], pdfFilePath, this.next());
+          }
+        }
+
         const cmd = [
           `"${module.config.sumatraExe}"`,
           `-print-to "${printer.name}"`,
@@ -264,7 +275,7 @@ exports.start = function startHtml2pdfModule(app, module)
     );
   };
 
-  module.printZpl = (zpl, printer, done) =>
+  module.printZpl = (zpl, printerId, done) =>
   {
     const Printer = app[module.config.mongooseId].model('Printer');
     const labelFilePath = join(tmpdir(), `WMES.${Date.now()}.${Math.random()}.zpl`);
@@ -272,7 +283,7 @@ exports.start = function startHtml2pdfModule(app, module)
     step(
       function()
       {
-        Printer.findById(printer).lean().exec(this.parallel());
+        Printer.findById(printerId).lean().exec(this.parallel());
 
         fs.writeFile(labelFilePath, zpl, this.parallel());
       },
@@ -281,6 +292,11 @@ exports.start = function startHtml2pdfModule(app, module)
         if (err)
         {
           return this.skip(err);
+        }
+
+        if (!printer)
+        {
+          return this.skip(app.createError(`Unknown printer: ${printerId}`, 'PRINTER_NOT_FOUND', 400));
         }
 
         if (process.platform === 'win32')
@@ -310,4 +326,53 @@ exports.start = function startHtml2pdfModule(app, module)
       }
     );
   };
+
+  function handleDirectVersaLinkPrint(printerIp, pdfFilePath, done)
+  {
+    const options = {
+      url: `http://${printerIp}/UPLPRT.cmd`,
+      formData: {
+        DEFPRNT: '1',
+        FILE: fs.createReadStream(pdfFilePath)
+      }
+    };
+
+    request.post(options, (err, res, body) =>
+    {
+      if (err)
+      {
+        return done(app.createError(
+          `Failed direct VersaLink print: ${err.message}`,
+          'PRINT_VERSALINK_FAILURE'
+        ));
+      }
+
+      if (res.statusCode !== 200)
+      {
+        return done(app.createError(
+          `Unexpected response code to VersaLink print: ${res.statusCode}`,
+          'PRINT_VERSALINK_FAILURE'
+        ));
+      }
+
+      try
+      {
+        body = JSON.parse(body);
+
+        if (body.result !== '0' || body.errorCode !== '0')
+        {
+          throw new Error();
+        }
+      }
+      catch (err)
+      {
+        return done(app.createError(
+          `Invalid response to VersaLink print: ${JSON.stringify(body)}`,
+          'PRINT_VERSALINK_FAILURE'
+        ));
+      }
+
+      done();
+    });
+  }
 };

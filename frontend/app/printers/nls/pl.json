@@ -17,6 +17,7 @@
   "PROPERTY:name": "Nazwa systemowa",
   "PROPERTY:label": "Opis",
   "PROPERTY:tags": "Tagi",
+  "PROPERTY:special": "Ustawienia specjalne",
 
   "FORM:ACTION:add": "Dodaj drukarkę",
   "FORM:ACTION:edit": "Edytuj drukarkę",
@@ -48,5 +49,6 @@
   "tags:kanban/empty": "Baza Kanban: Pusty",
   "tags:kanban/full": "Baza Kanban: Pełny",
   "tags:kanban/wh": "Baza Kanban: Magazynowa",
-  "tags:kanban/desc": "Baza Kanban: Opisowa"
+  "tags:kanban/desc": "Baza Kanban: Opisowa",
+  "tags:wh/cart": "Magazyn: Na wózek"
 }
