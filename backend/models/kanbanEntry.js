@@ -19,6 +19,7 @@ module.exports = function setupKanbanEntryModel(app, mongoose)
     workstations: [Number],
     locations: [String],
     discontinued: Boolean,
+    deleted: Boolean,
     comment: String,
     updates: {},
     changes: {}

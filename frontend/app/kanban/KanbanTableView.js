@@ -689,11 +689,16 @@ define([
 
       if (filters.length === 0)
       {
-        return function() { return true; };
+        return function(a) { return a.attributes.deleted !== true; };
       }
 
       return function(a)
       {
+        if (a.attributes.deleted)
+        {
+          return false;
+        }
+
         a = a.serialize(options);
 
         var i;

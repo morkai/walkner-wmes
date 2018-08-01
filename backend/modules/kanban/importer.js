@@ -82,7 +82,7 @@ exports.start = function startKanbanImporterModule(app, module)
 
     module.debug('[%s] Importing...', fileInfo.timeKey);
 
-    importFile(fileInfo, (err, updatedAt, entryCount, componentCount) =>
+    importFile(fileInfo, (err, updatedAt, entryCount, componentCount, deletedCount) =>
     {
       cleanUpFileInfoFile(fileInfo);
 
@@ -102,7 +102,7 @@ exports.start = function startKanbanImporterModule(app, module)
         app.broker.publish('kanban.import.success', {
           timestamp: fileInfo.timestamp,
           updatedAt,
-          entryCount,
+          entryCount: entryCount + deletedCount,
           componentCount
         });
       }
@@ -156,12 +156,23 @@ exports.start = function startKanbanImporterModule(app, module)
       {
         importDocs(KanbanComponent, this.input.components, this.t, this.next());
       },
-      function importEntriesStep(err)
+      function deleteEntriesStep(err)
       {
         if (err)
         {
           return this.skip(err);
         }
+
+        deleteEntries(this.input.kanbans.rows.map(r => r[0]), this.t, this.next());
+      },
+      function importEntriesStep(err, deletedCount)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        this.deletedCount = deletedCount;
 
         importDocs(KanbanEntry, this.input.kanbans, this.t, this.next());
       },
@@ -176,7 +187,7 @@ exports.start = function startKanbanImporterModule(app, module)
       },
       function finalizeStep(err)
       {
-        return done(err, this.t, this.kanbanCount, this.componentCount);
+        return done(err, this.t, this.kanbanCount, this.componentCount, this.deletedCount);
       }
     );
   }
@@ -309,6 +320,44 @@ exports.start = function startKanbanImporterModule(app, module)
     );
   }
 
+  function deleteEntries(ids, updatedAt, done)
+  {
+    if (!ids.length)
+    {
+      return done();
+    }
+
+    const conditions = {
+      _id: {$nin: ids},
+      deleted: false
+    };
+    const update = {
+      $set: {
+        updatedAt,
+        deleted: true,
+        'updates.deleted': {
+          date: updatedAt,
+          user: UPDATER,
+          data: false
+        }
+      },
+      $push: {
+        changes: {
+          date: updatedAt,
+          user: UPDATER,
+          data: {
+            deleted: [false, true]
+          }
+        }
+      }
+    };
+
+    KanbanEntry.collection.updateMany(conditions, update, (err, result) =>
+    {
+      done(err, result && result.modifiedCount || 0);
+    });
+  }
+
   function compareDocs(oldDoc, newDoc, columns, updatedAt, updates)
   {
     const update = {
@@ -321,6 +370,17 @@ exports.start = function startKanbanImporterModule(app, module)
         }
       }
     };
+
+    if (oldDoc.deleted)
+    {
+      update.$set.deleted = false;
+      update.$set['updates.deleted'] = {
+        date: updatedAt,
+        user: UPDATER,
+        data: true
+      };
+      update.$push.changes.data.deleted = [true, false];
+    }
 
     columns.forEach((column, i) =>
     {

@@ -18,7 +18,7 @@ define([
         var phrase = this.$id('phrase').val();
         var model = this.model.entries.get(phrase);
 
-        if (model)
+        if (model && !model.attributes.deleted)
         {
           this.trigger('found', 'entry', model);
         }
@@ -47,7 +47,7 @@ define([
         return !(e.key.length === 1 && !/^[0-9]$/.test(e.key));
       },
 
-      'input #-phrase': function(e)
+      'input #-phrase': function()
       {
         var $phrase = this.$id('phrase');
         var phrase = this.$id('phrase').val();
@@ -63,7 +63,9 @@ define([
         }
         else if (phrase.length < 8)
         {
-          error = this.model.entries.get(phrase) ? '' : this.t('search:invalid:ccn');
+          var entry = this.model.entries.get(phrase);
+
+          error = entry && !entry.attributes.deleted ? '' : this.t('search:invalid:ccn');
         }
         else
         {
