@@ -23,6 +23,7 @@ define([
       'submit': 'submitForm',
       'keypress input': function()
       {
+        this.$id('login')[0].setCustomValidity('');
         this.$submit.removeClass('btn-danger').addClass('btn-primary');
       },
       'click #-loginLink': function()
@@ -50,6 +51,10 @@ define([
         this.resetting = true;
 
         this.onModeSwitch();
+      },
+      'click #-office365': function()
+      {
+        window.location.href = '/auth/office365?returnUrl=' + encodeURIComponent(window.location.href);
       }
     },
 
@@ -67,15 +72,41 @@ define([
       this.$submit = null;
     },
 
+    getTemplateData: function()
+    {
+      return {
+        OFFICE365_TENANT: window.OFFICE365_TENANT
+      };
+    },
+
     afterRender: function()
     {
-      this.$id('login').focus();
-      this.$id('loginLink').hide();
+      var view = this;
 
-      this.$title = this.getTitleEl();
-      this.$submit = this.$('.logInForm-submit');
+      view.$title = view.getTitleEl();
+      view.$submit = view.$('.logInForm-submit');
 
-      this.originalTitle = this.$title.text();
+      view.$id('loginLink').hide();
+
+      if (this.model && this.model.unknown)
+      {
+        view.$id('login').val(this.model.unknown)[0].setCustomValidity(t('users', 'LOG_IN_FORM:UNKNOWN'));
+        view.$submit.removeClass('btn-primary').addClass('btn-danger').click();
+      }
+      else
+      {
+        view.$id('login').focus();
+      }
+
+      view.originalTitle = view.$title.text();
+
+      if (window.CORS_PING_URL && window.OFFICE365_TENANT)
+      {
+        view.ajax({url: window.CORS_PING_URL, dataType: 'text'}).done(function()
+        {
+          view.$id('office365').removeClass('hidden');
+        });
+      }
     },
 
     submitForm: function()

@@ -21,7 +21,9 @@ define([
 
     initialize: function()
     {
-      this.view = new LogInFormView();
+      this.view = new LogInFormView({
+        model: this.model
+      });
     }
 
   });

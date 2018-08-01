@@ -2,6 +2,7 @@
 
 define([
   '../i18n',
+  '../broker',
   '../router',
   '../viewport',
   '../user',
@@ -12,6 +13,7 @@ define([
   'i18n!app/nls/users'
 ], function(
   t,
+  broker,
   router,
   viewport,
   user,
@@ -25,9 +27,17 @@ define([
   var canView = user.auth('USERS:VIEW');
   var canManage = user.auth('USERS:MANAGE');
 
-  router.map('/login', function()
+  router.map('/login', function(req)
   {
-    viewport.showPage(new LogInFormPage());
+    broker.publish('router.navigate', {
+      url: '/',
+      replace: true,
+      trigger: false
+    });
+
+    viewport.showPage(new LogInFormPage({
+      model: {unknown: req.query.unknown}
+    }));
   });
 
   router.map('/users;settings', user.auth('USERS:MANAGE'), function(req)

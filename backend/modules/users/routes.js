@@ -161,43 +161,9 @@ module.exports = function setUpUsersRoutes(app, usersModule)
         return next(err);
       }
 
-      const oldSessionId = req.sessionID;
+      req.user = user;
 
-      req.session.regenerate(function(err)
-      {
-        if (err)
-        {
-          return next(err);
-        }
-
-        delete user.password;
-
-        user._id = user._id.toString();
-        user.loggedIn = true;
-        user.ipAddress = userModule.getRealIp({}, req);
-        user.local = userModule.isLocalIpAddress(user.ipAddress);
-        user.super = _.includes(user.privileges, 'SUPER');
-
-        req.session.user = user;
-
-        res.format({
-          json: function()
-          {
-            res.send(req.session.user);
-          },
-          default: function()
-          {
-            res.redirect('/');
-          }
-        });
-
-        app.broker.publish('users.login', {
-          user: user,
-          oldSessionId: oldSessionId,
-          newSessionId: req.sessionID,
-          socketId: req.body.socketId
-        });
-      });
+      usersModule.login(req, res, next);
     });
   }
 

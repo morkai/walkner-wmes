@@ -113,7 +113,9 @@ exports.faviconFile = 'assets/wmes-favicon.ico';
 exports.frontendAppData = {
   KAIZEN_MULTI: false,
   XLSX_EXPORT: process.platform === 'win32',
-  PRODUCTION_DATA_START_DATE: '2017-01-01'
+  PRODUCTION_DATA_START_DATE: '2017-01-01',
+  OFFICE365_TENANT: 'Microsoft',
+  CORS_PING_URL: 'https://wmes.walkner.pl/ping'
 };
 
 exports.dictionaryModules = {

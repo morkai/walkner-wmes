@@ -1,15 +1,21 @@
 <form class="logInForm" method="post" action="/login">
   <div class="form-group">
-    <input id="<%- idPrefix %>-login" name="login" type="text" class="form-control input-lg" placeholder="<%- t('users', 'LOG_IN_FORM:LABEL:LOGIN') %>" autofocus>
+    <input id="<%- idPrefix %>-login" name="login" type="text" class="form-control input-lg" required placeholder="<%- t('users', 'LOG_IN_FORM:LABEL:LOGIN') %>" autofocus>
   </div>
   <div class="form-group">
-    <input id="<%- idPrefix %>-password" name="password" type="password" class="form-control input-lg" placeholder="<%- t('users', 'LOG_IN_FORM:LABEL:PASSWORD') %>">
+    <input id="<%- idPrefix %>-password" name="password" type="password" class="form-control input-lg" required placeholder="<%- t('users', 'LOG_IN_FORM:LABEL:PASSWORD') %>">
   </div>
   <button class="btn btn-block btn-lg btn-primary logInForm-submit" type="submit">
     <i class="fa fa-spinner fa-spin logInForm-submit-spinner"></i>
     <span class="logInForm-submit-label"><%- t('users', 'LOG_IN_FORM:SUBMIT:LOG_IN') %></span>
   </button>
   <p class="logInForm-links">
+    <% if (OFFICE365_TENANT) { %>
+    <button id="<%- idPrefix %>-office365" class="btn btn-link hidden logInForm-links-office365" type="button">
+      <i class="fa fa-windows"></i>
+      <span><%- t('users', 'LOG_IN_FORM:LINK:OFFICE365', {OFFICE365_TENANT: OFFICE365_TENANT}) %></span>
+    </button>
+    <% } %>
     <button id="<%- idPrefix %>-loginLink" class="btn btn-link" type="button"><%- t('users', 'LOG_IN_FORM:LINK:LOG_IN') %></button>
     <button id="<%- idPrefix %>-resetLink" class="btn btn-link" type="button"><%- t('users', 'LOG_IN_FORM:LINK:RESET') %></button>
   </p>
