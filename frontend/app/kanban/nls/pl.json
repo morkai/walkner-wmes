@@ -12,9 +12,9 @@
   "msg:import:DISABLED": "Importowanie wyłączone.",
   "msg:discontinued": "CCN {id} jest wycofany.",
 
+  "pa:lastImport": "Ostatnia aktualizacja:<br>{importedAt}",
   "pa:import": "Importowanie",
   "pa:import:sap": "Importuj dane z SAP",
-  "pa:import:sap:title": "Ostatnia aktualizacja:\n{importedAt}",
   "pa:import:entries": "Importuj dane CCN z pliku",
   "pa:import:components": "Importuj lokalizacje magazynowe z pliku",
   "pa:dictionaries": "Słowniki",

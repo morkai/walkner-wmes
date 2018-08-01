@@ -51,15 +51,26 @@ define([
     remoteTopics: {
       'kanban.import.*': function(message, topic)
       {
-        var success = topic.indexOf('success') !== -1;
+        if (topic.indexOf('started') !== -1)
+        {
+          this.importing = true;
+        }
+        else
+        {
+          this.importing = false;
 
-        viewport.msg.show({
-          type: success ? 'success' : 'error',
-          time: 2500,
-          text: this.t('msg:import:' + (success ? 'success' : 'failure'))
-        });
+          var success = topic.indexOf('success') !== -1;
 
-        this.$id('import-sap').parent().removeClass('disabled');
+          viewport.msg.show({
+            type: success ? 'success' : 'error',
+            time: 2500,
+            text: this.t('msg:import:' + (success ? 'success' : 'failure'))
+          });
+
+          this.$id('import-sap').parent().removeClass('disabled');
+        }
+
+        this.updateImportedAt();
       }
     },
 
@@ -73,6 +84,11 @@ define([
       var page = this;
 
       return [{
+        template: function()
+        {
+          return '<span id="' + page.idPrefix + '-lastImport" class="kanban-pa-lastImport"></span>';
+        }
+      }, {
         template: function()
         {
           return builderActionTemplate({
@@ -206,6 +222,12 @@ define([
         });
 
         $li.toggleClass('disabled', code === 'IN_PROGRESS');
+
+        if (code === 'IN_PROGRESS')
+        {
+          page.importing = true;
+          page.updateImportedAt();
+        }
       });
 
       req.done(function()
@@ -236,9 +258,15 @@ define([
 
     updateImportedAt: function()
     {
-      this.$id('import-sap').prop('title', this.t('pa:import:sap:title', {
-        importedAt: time.format(this.model.settings.getValue('import.importedAt'), 'LLLL')
-      }));
+      var importedAt = time.format(this.model.settings.getValue('import.importedAt'), 'LL LTS');
+      var html = this.t('pa:lastImport', {importedAt: importedAt});
+
+      if (this.importing)
+      {
+        html = '<i class="fa fa-spinner fa-spin"></i>' + html;
+      }
+
+      this.$id('lastImport').html(html);
     },
 
     updateBuilderCount: function()

@@ -2,6 +2,14 @@
 @import "./search.css";
 @import "./builder.css";
 
+.kanban-pa-lastImport {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.kanban-pa-lastImport .fa-spinner {
+  margin-right: 5px;
+}
 .kanban-entries {
   border: 1px solid #bbb;
   border-top: 0;

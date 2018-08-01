@@ -60,6 +60,8 @@ module.exports = function importSapRoute(app, module, req, res, next)
           return next(err);
         }
 
+        app.broker.publish('kanban.import.started');
+
         res.sendStatus(204);
       });
     }
