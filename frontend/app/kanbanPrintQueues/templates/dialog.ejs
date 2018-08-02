@@ -3,6 +3,10 @@
   <dd><%- jobNo %>/<%- jobTotal %>. <span class="text-mono"><%- job._id %></span></dd>
   <dt><%- t('kanbanPrintQueues', 'job:line') %></dt>
   <dd><%= job.line %></dd>
+  <% if (workstation >= 0) { %>
+  <dt><%- t('kanbanPrintQueues', 'job:workstation:long') %></dt>
+  <dd><%- workstation + 1 %></dd>
+  <% } %>
   <dt><%- t('kanbanPrintQueues', 'job:ccn') %></dt>
   <dd class="text-mono"><%= job.data.ccn %></dd>
   <dt><%- t('kanbanPrintQueues', 'job:nc12') %></dt>

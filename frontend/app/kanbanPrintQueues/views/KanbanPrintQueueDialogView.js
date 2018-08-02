@@ -20,7 +20,8 @@ define([
     initialize: function()
     {
       this.current = null;
-      this.remaining = [].concat(this.model.jobs);
+      this.remaining = this.buildRemainingQueue();
+      this.jobTotal = this.remaining.length;
 
       this.listenTo(this.model.queue, 'change:jobs', this.onJobsChange);
     },
@@ -44,7 +45,7 @@ define([
 
     onJobsChange: function(jobs)
     {
-      if (jobs.indexOf(this.current) !== -1)
+      if (this.current && jobs.indexOf(this.current.job) !== -1)
       {
         this.updateJob();
       }
@@ -52,13 +53,16 @@ define([
 
     updateJob: function()
     {
-      this.$el.closest('.kanbanPrintQueues-dialog')[0].dataset.status = this.error ? 'failure' : this.current.status;
+      this.$el.closest('.kanbanPrintQueues-dialog')[0].dataset.status = this.error
+        ? 'failure'
+        : this.current.job.status;
 
       this.el.innerHTML = template({
         idPrefix: this.idPrefix,
-        job: this.current,
-        jobNo: this.model.jobs.length - this.remaining.length,
-        jobTotal: this.model.jobs.length,
+        workstation: this.current.workstation,
+        job: this.current.job,
+        jobNo: this.jobTotal - this.remaining.length,
+        jobTotal: this.jobTotal,
         error: this.error
       });
     },
@@ -77,7 +81,9 @@ define([
         url: '/kanban/printQueues;print',
         data: JSON.stringify({
           queue: view.model.queue.id,
-          job: view.current._id
+          job: view.current.job._id,
+          workstation: view.current.workstation,
+          infoLabels: view.current.infoLabels
         })
       });
 
@@ -94,11 +100,12 @@ define([
         {
           error = 'CONNECTION';
         }
-
-        if (t.has('kanbanPrintQueues', 'msg:print:' + error))
+        else if (!t.has('kanbanPrintQueues', 'msg:print:' + error))
         {
-          view.error = t('kanbanPrintQueues', 'msg:print:' + error);
+          error = 'failure';
         }
+
+        view.error = t('kanbanPrintQueues', 'msg:print:' + error);
 
         view.updateJob();
       });
@@ -126,6 +133,80 @@ define([
     onDialogShown: function(viewport)
     {
       this.closeDialog = viewport.closeDialog.bind(viewport);
+    },
+
+    buildRemainingQueue: function()
+    {
+      if (!this.model.groupByWorkstations)
+      {
+        return this.model.jobs.map(function(job)
+        {
+          return {
+            job: job,
+            workstation: null,
+            infoLabels: []
+          };
+        });
+      }
+
+      var linesToWorkstations = {};
+
+      this.model.jobs.forEach(function(job)
+      {
+        var lineToWorkstations = linesToWorkstations[job.line];
+
+        if (!lineToWorkstations)
+        {
+          lineToWorkstations = linesToWorkstations[job.line] = {};
+        }
+
+        for (var w = 0; w < 6; ++w)
+        {
+          if (!job.data.workstations[w])
+          {
+            continue;
+          }
+
+          if (!lineToWorkstations[w])
+          {
+            lineToWorkstations[w] = [];
+          }
+
+          lineToWorkstations[w].push(job);
+        }
+      });
+
+      var remaining = [];
+
+      Object.keys(linesToWorkstations).forEach(function(line)
+      {
+        var workstations = Object.keys(linesToWorkstations[line]).sort().reverse();
+
+        workstations.forEach(function(workstation)
+        {
+          var workstationJobs = linesToWorkstations[line][workstation];
+          var layouts = {};
+
+          workstationJobs.forEach(function(job)
+          {
+            job.layouts.forEach(function(layout)
+            {
+              layouts[layout] = 1;
+            });
+          });
+
+          workstationJobs.forEach(function(job, i)
+          {
+            remaining.push({
+              job: job,
+              workstation: +workstation,
+              infoLabels: i === 0 ? Object.keys(layouts) : []
+            });
+          });
+        });
+      });
+
+      return remaining;
     }
 
   });

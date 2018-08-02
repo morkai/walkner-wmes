@@ -2,13 +2,21 @@
 
 'use strict';
 
-const fs = require('fs');
+const fs = require('fs-extra');
+const _ = require('lodash');
 const step = require('h5.step');
 const ejs = require('ejs');
 
 const renderKk = ejs.compile(fs.readFileSync(`${__dirname}/../templates/kk.ejs`, 'utf8'), {
   cache: true,
   filename: `${__dirname}/../templates/kk.ejs`,
+  compileDebug: false,
+  rmWhitespace: true
+});
+
+const renderKkInfo = ejs.compile(fs.readFileSync(`${__dirname}/../templates/kk.info.ejs`, 'utf8'), {
+  cache: true,
+  filename: `${__dirname}/../templates/kk.info.ejs`,
   compileDebug: false,
   rmWhitespace: true
 });
@@ -25,16 +33,14 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
   const Printer = mongoose.model('Printer');
   const KanbanPrintQueue = mongoose.model('KanbanPrintQueue');
 
-  const {queue, job} = req.body;
-
-  module.printing = {queue, job};
+  module.printing = _.pick(req.body, ['queue', 'job', 'workstation', 'infoLabels']);
 
   app.broker.publish('kanban.printQueues.started', module.printing);
 
   step(
     function()
     {
-      KanbanPrintQueue.findById({_id: queue}).lean().exec(this.next());
+      KanbanPrintQueue.findById({_id: module.printing.queue}).lean().exec(this.next());
     },
     function(err, queue)
     {
@@ -45,24 +51,31 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
 
       if (!queue)
       {
-        return this.skip(app.createError(`Print queue not found: ${queue}`, 'QUEUE_NOT_FOUND', 400));
+        return this.skip(app.createError(`Print queue not found: ${module.printing.queue}`, 'QUEUE_NOT_FOUND', 400));
       }
 
-      this.jobIndex = queue.jobs.findIndex(j => j._id === job);
+      this.jobIndex = queue.jobs.findIndex(j => j._id === module.printing.job);
 
       if (this.jobIndex === -1)
       {
-        return this.skip(app.createError(`Print job not found: ${job}`, 'JOB_NOT_FOUND', 400));
+        return this.skip(app.createError(`Print job not found: ${module.printing.job}`, 'JOB_NOT_FOUND', 400));
       }
 
       this.queue = queue;
       this.job = queue.jobs[this.jobIndex];
-      this.startedAt = new Date();
+
+      this.job.status = 'printing';
 
       const $set = {
-        [`jobs.${this.jobIndex}.status`]: 'printing',
-        [`jobs.${this.jobIndex}.startedAt`]: this.startedAt
+        [`jobs.${this.jobIndex}.status`]: 'printing'
       };
+
+      if (module.printing.workstation >= 0)
+      {
+        this.job.workstations[module.printing.workstation] = 'printing';
+
+        $set[`jobs.${this.jobIndex}.workstations.${module.printing.workstation}`] = 'printing';
+      }
 
       KanbanPrintQueue.collection.update({_id: this.queue._id}, {$set}, this.next());
     },
@@ -84,7 +97,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
         job: {
           _id: this.job._id,
           status: 'printing',
-          startedAt: this.startedAt
+          workstations: this.job.workstations
         }
       });
 
@@ -94,10 +107,11 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
     {
       if (err)
       {
-        return this.skip(app.createError(`Failed to find printers: ${err.message}`, 'PRINTER_FIND_FAILURE', 500));
+        return this.skip(app.createError(`Failed to find printers: ${err.message}`, 'PRINTER_FIND_FAILURE'));
       }
 
-      this.printers = {};
+      this.allPrinters = {};
+      this.jobPrinters = {};
 
       printers.forEach(printer =>
       {
@@ -110,38 +124,69 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
 
           const layout = tag.replace('kanban/', '');
 
+          if (!this.allPrinters[printer._id])
+          {
+            this.allPrinters[printer._id] = {};
+          }
+
+          this.allPrinters[printer._id][layout] = true;
+
           if (!this.job.layouts.includes(layout))
           {
             return;
           }
 
-          this.printers[layout] = printer._id;
+          this.jobPrinters[layout] = printer._id;
         });
       });
 
       for (const layout of this.job.layouts)
       {
-        if (!this.printers[layout])
+        if (!this.jobPrinters[layout])
         {
-          return this.skip(app.createError(`No printer for layout: ${layout}`, 'PRINTER_NOT_FOUND', 500));
+          return this.skip(app.createError(`No printer for layout: ${layout}`, 'PRINTER_NOT_FOUND'));
         }
       }
     },
     function()
     {
-      if (this.printers.kk)
+      if (_.isEmpty(module.printing.infoLabels))
       {
-        printKk(this.printers.kk, this.job, this.group());
+        return;
       }
 
-      if (this.printers.desc)
+      const printed = {};
+
+      Object.keys(this.allPrinters).forEach(printer =>
       {
-        printDesc(this.printers.desc, this.job, this.group());
+        const printerLayouts = this.allPrinters[printer];
+
+        module.printing.infoLabels.forEach(infoLayout =>
+        {
+          if (printerLayouts[infoLayout] && !printed[printer])
+          {
+            printed[printer] = true;
+
+            printInfoLabel(printer, infoLayout, this.job.line, module.printing.workstation, this.group());
+          }
+        });
+      });
+    },
+    function()
+    {
+      if (this.jobPrinters.kk)
+      {
+        printKk(this.jobPrinters.kk, this.job, this.group());
       }
 
-      if (this.printers.empty || this.printers.full || this.printers.wh)
+      if (this.jobPrinters.desc)
       {
-        printEmptyFullWh(this.printers, this.job, this.group());
+        printDesc(this.jobPrinters.desc, this.job, this.group());
+      }
+
+      if (this.jobPrinters.empty || this.jobPrinters.full || this.jobPrinters.wh)
+      {
+        printEmptyFullWh(this.jobPrinters, this.job, this.group());
       }
     },
     function(err)
@@ -155,8 +200,41 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
     step(
       function()
       {
-        job.status = printError ? 'failure' : 'success';
-        job.finishedAt = new Date();
+        if (printError)
+        {
+          job.status = 'failure';
+
+          if (module.printing.workstation >= 0)
+          {
+            job.workstations[module.printing.workstation] = 'failure';
+          }
+        }
+        else if (module.printing.workstation >= 0)
+        {
+          job.workstations[module.printing.workstation] = 'success';
+
+          let required = 0;
+          let actual = 0;
+
+          job.data.workstations.forEach((workstation, i) =>
+          {
+            if (workstation)
+            {
+              required += 1;
+
+              if (job.workstations[i] === 'success')
+              {
+                actual += 1;
+              }
+            }
+          });
+
+          job.status = actual === required ? 'success' : 'pending';
+        }
+        else
+        {
+          job.status = 'success';
+        }
 
         this.message = {
           queue: {
@@ -165,14 +243,18 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
           job: {
             _id: job._id,
             status: job.status,
-            finishedAt: job.finishedAt
+            workstations: job.workstations
           }
         };
 
         const $set = {
-          [`jobs.${jobIndex}.status`]: job.status,
-          [`jobs.${jobIndex}.finishedAt`]: job.finishedAt
+          [`jobs.${jobIndex}.status`]: job.status
         };
+
+        if (module.printing.workstation >= 0)
+        {
+          $set[`jobs.${jobIndex}.workstations.${module.printing.workstation}`] = 'success';
+        }
 
         KanbanPrintQueue.collection.update({_id: queue._id}, {$set}, this.next());
       },
@@ -240,6 +322,11 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
       {
         const kanbanId = kanbans.shift() || '0';
 
+        if (module.printing.workstation >= 0 && module.printing.workstation !== i)
+        {
+          continue;
+        }
+
         pages.push({
           line: job.line,
           workstation: `0${i + 1}`,
@@ -283,7 +370,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
       {
         if (err)
         {
-          return this.skip(app.createError(`Failed to generate bar codes: ${err.message}`, 'PRINT_FAILURE', 500));
+          return this.skip(app.createError(`Failed to generate bar codes: ${err.message}`, 'PRINT_FAILURE'));
         }
 
         html2pdf.generatePdf(
@@ -296,7 +383,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
       {
         if (err)
         {
-          return this.skip(app.createError(`Failed to generate PDF: ${err.message}`, 'PRINT_FAILURE', 500));
+          return this.skip(app.createError(`Failed to generate PDF: ${err.message}`, 'PRINT_FAILURE'));
         }
 
         html2pdf.printPdf(result.hash, printer, '', this.next());
@@ -305,7 +392,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
       {
         if (err)
         {
-          return this.skip(app.createError(`Failed to print PDF: ${err.message}`, 'PRINT_FAILURE', 500));
+          return this.skip(app.createError(`Failed to print PDF: ${err.message}`, 'PRINT_FAILURE'));
         }
       },
       done
@@ -323,22 +410,36 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
       {
         if (err)
         {
-          return this.skip(app.createError(`Failed to read desc.prn template: ${err.message}`, 'PRINT_FAILURE', 500));
+          return this.skip(app.createError(`Failed to read desc.prn template: ${err.message}`, 'PRINT_FAILURE'));
         }
 
-        template = compileZpl(template, job, '0', '??', '???');
+        template = compileDataZpl(template, job, '0', '??', '???');
 
-        html2pdf.printZpl(
-          job.kanbans.map(() => template).join('\r\n'),
-          printer,
-          this.next()
-        );
+        let zpl;
+
+        if (module.printing.workstation >= 0)
+        {
+          const count = job.data.workstations[module.printing.workstation] * 2;
+
+          zpl = [];
+
+          for (let i = 0; i < count; ++i)
+          {
+            zpl.push(template);
+          }
+        }
+        else
+        {
+          zpl = job.kanbans.map(() => template);
+        }
+
+        html2pdf.printZpl(zpl.join('\r\n'), printer, this.next());
       },
       function(err)
       {
         if (err)
         {
-          return this.skip(app.createError(`Failed to print desc ZPL: ${err.message}`, 'PRINT_FAILURE', 500));
+          return this.skip(app.createError(`Failed to print desc ZPL: ${err.message}`, 'PRINT_FAILURE'));
         }
       },
       done
@@ -384,7 +485,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
       {
         if (err)
         {
-          return this.skip(app.createError(`Failed to read template: ${err.message}`, 'PRINT_FAILURE', 500));
+          return this.skip(app.createError(`Failed to read template: ${err.message}`, 'PRINT_FAILURE'));
         }
 
         const kanbans = [].concat(job.kanbans);
@@ -399,19 +500,24 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
           {
             const kanbanId = kanbans.shift() || '0';
 
+            if (module.printing.workstation >= 0 && module.printing.workstation !== i)
+            {
+              continue;
+            }
+
             if (emptyTemplate)
             {
-              queues.empty.push(compileZpl(emptyTemplate, job, kanbanId, workstation, location));
+              queues.empty.push(compileDataZpl(emptyTemplate, job, kanbanId, workstation, location));
             }
 
             if (fullTemplate)
             {
-              queues.full.push(compileZpl(fullTemplate, job, kanbanId, workstation, location));
+              queues.full.push(compileDataZpl(fullTemplate, job, kanbanId, workstation, location));
             }
 
             if (whTemplate)
             {
-              queues.wh.push(compileZpl(whTemplate, job, kanbanId, workstation, location));
+              queues.wh.push(compileDataZpl(whTemplate, job, kanbanId, workstation, location));
             }
           }
         });
@@ -434,7 +540,87 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
       {
         if (err)
         {
-          return this.skip(app.createError(`Failed to print empty/full/wh ZPL: ${err.message}`, 'PRINT_FAILURE', 500));
+          return this.skip(app.createError(`Failed to print empty/full/wh ZPL: ${err.message}`, 'PRINT_FAILURE'));
+        }
+      },
+      done
+    );
+  }
+
+  function printInfoLabel(printer, layout, line, workstation, done)
+  {
+    if (layout === 'kk')
+    {
+      printPdfInfoLabel(printer, line, workstation + 1, done);
+    }
+    else
+    {
+      printZplInfoLabel(printer, layout, line, workstation + 1, done);
+    }
+  }
+
+  function printPdfInfoLabel(printer, line, workstation, done)
+  {
+    step(
+      function()
+      {
+        html2pdf.generatePdf(
+          renderKkInfo({line, workstation}),
+          {waitUntil: 'load', orientation: 'landscape'},
+          this.next()
+        );
+      },
+      function(err, result)
+      {
+        if (err)
+        {
+          return this.skip(app.createError(`Failed to generate info PDF: ${err.message}`, 'PRINT_FAILURE'));
+        }
+
+        html2pdf.printPdf(result.hash, printer, '', this.next());
+      },
+      function(err)
+      {
+        if (err)
+        {
+          return this.skip(app.createError(`Failed to print info PDF: ${err.message}`, 'PRINT_FAILURE'));
+        }
+      },
+      done
+    );
+  }
+
+  function printZplInfoLabel(printer, layout, line, workstation, done)
+  {
+    step(
+      function()
+      {
+        fs.readFile(`${__dirname}/../templates/${layout}.info.prn`, 'utf8', this.next());
+      },
+      function(err, template)
+      {
+        if (err)
+        {
+          return this.skip(app.createError(
+            `Failed to read ${layout.info}.prn template: ${err.message}`,
+            'PRINT_FAILURE'
+          ));
+        }
+
+        html2pdf.printZpl(
+          compileZpl(template, {
+            LINE: e(line),
+            WORKSTATION: workstation
+          }),
+          printer,
+          this.next()
+        );
+      },
+      function(err)
+      {
+        if (err)
+        {
+          return this.skip(app.createError(`Failed to print info ZPL: ${err.message}`, 'PRINT_FAILURE'));
         }
       },
       done
@@ -461,10 +647,9 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
     });
   }
 
-  function compileZpl(zpl, job, kanbanId, workstation, location)
+  function compileDataZpl(zpl, job, kanbanId, workstation, location)
   {
-    const templateData = {
-      DLE: '\u0010',
+    return compileZpl(zpl, {
       NC12: job.data.nc12,
       DESCRIPTION: e(job.data.description),
       KANBAN_ID: kanbanId,
@@ -475,7 +660,12 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
       WORKSTATION: workstation,
       LOCATION: location,
       COMPONENT_QTY: job.data.componentQty
-    };
+    });
+  }
+
+  function compileZpl(zpl, templateData)
+  {
+    templateData.DLE = '\u0010';
 
     Object.keys(templateData).forEach(key =>
     {

@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/core/views/FilterView',
   'app/kanbanPrintQueues/templates/filter'
 ], function(
+  _,
   FilterView,
   template
 ) {
@@ -24,11 +26,23 @@ define([
       }
     },
 
+    events: _.assign({
+
+      'click #-groupByWorkstations': function(e)
+      {
+        e.currentTarget.classList.toggle('active');
+
+        this.model.setGroupByWorkstations(e.currentTarget.classList.contains('active'));
+      }
+
+    }, FilterView.prototype.events),
+
     afterRender: function()
     {
       FilterView.prototype.afterRender.apply(this, arguments);
 
       this.toggleButtonGroup('todo');
+      this.$id('groupByWorkstations').toggleClass('active', this.model.getGroupByWorkstations());
     },
 
     serializeFormToQuery: function(selector, rqlQuery)

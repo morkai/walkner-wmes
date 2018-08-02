@@ -167,7 +167,8 @@ define([
       viewport.showDialog(new KanbanPrintQueueDialogView({
         model: {
           queue: queue,
-          jobs: jobs
+          jobs: jobs,
+          groupByWorkstations: this.collection.getGroupByWorkstations()
         }
       }));
     },

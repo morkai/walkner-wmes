@@ -3,14 +3,15 @@
 
 'use strict';
 
-db.kanbancomponents.update({newStorageBin: null}, {$set: {newStorageBin: ''}}, {multi: true});
-
-db.kanbanentries.find({}, {deleted: 1}).forEach(d =>
+db.kanbanprintqueues.find().forEach(queue =>
 {
-  if (!d.deleted)
+  queue.jobs.forEach(job =>
   {
-    d.deleted = false;
-  }
+    if (!job.workstations)
+    {
+      job.workstations = [];
+    }
+  });
 
-  db.kanbanentries.update({_id: d._id}, {$set: d});
+  db.kanbanprintqueues.update({_id: queue._id}, queue);
 });

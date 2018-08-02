@@ -28,7 +28,12 @@ module.exports = function restorePrintJobRoute(app, module, req, res, next)
         return this.skip(app.createError('Queue not found.', 'NOT_FOUND', 404));
       }
 
-      queue.jobs.forEach(job => job.status = 'pending');
+      queue.jobs.forEach(job =>
+      {
+        job.status = 'pending';
+
+        job.workstations = [];
+      });
 
       queue.todo = true;
 
@@ -54,7 +59,8 @@ module.exports = function restorePrintJobRoute(app, module, req, res, next)
         {
           return {
             _id: job._id,
-            status: job.status
+            status: job.status,
+            workstations: job.workstations
           };
         })
       });

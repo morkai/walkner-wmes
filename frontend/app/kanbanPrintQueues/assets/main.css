@@ -52,23 +52,28 @@
   text-align: right;
 }
 .kanbanPrintQueues-item[data-status="pending"] > .kanbanPrintQueues-item-hd,
-.kanbanPrintQueues-job[data-status="pending"] > td {
+.kanbanPrintQueues-job[data-status="pending"] > td,
+.kanbanPrintQueues-job > td[data-status="pending"][data-workstation] {
   background-color: #fff;
 }
 .kanbanPrintQueues-item[data-status="printing"] > .kanbanPrintQueues-item-hd,
-.kanbanPrintQueues-job[data-status="printing"] > td {
+.kanbanPrintQueues-job[data-status="printing"] > td,
+.kanbanPrintQueues-job > td[data-status="printing"][data-workstation] {
   background-color: #d9edf7;
 }
 .kanbanPrintQueues-item[data-status="failure"] > .kanbanPrintQueues-item-hd,
-.kanbanPrintQueues-job[data-status="failure"] > td {
+.kanbanPrintQueues-job[data-status="failure"] > td,
+.kanbanPrintQueues-job > td[data-status="failure"][data-workstation] {
   background-color: #f2dede;
 }
 .kanbanPrintQueues-item[data-status="ignored"] > .kanbanPrintQueues-item-hd,
-.kanbanPrintQueues-job[data-status="ignored"] > td {
+.kanbanPrintQueues-job[data-status="ignored"] > td,
+.kanbanPrintQueues-job > td[data-status="ignored"][data-workstation] {
   background-color: #fcf8e3;
 }
 .kanbanPrintQueues-item[data-status="success"] > .kanbanPrintQueues-item-hd,
-.kanbanPrintQueues-job[data-status="success"] > td {
+.kanbanPrintQueues-job[data-status="success"] > td,
+.kanbanPrintQueues-job > td[data-status="success"][data-workstation] {
   background-color: #dff0d8;
 }
 .kanbanPrintQueues-item-separator {

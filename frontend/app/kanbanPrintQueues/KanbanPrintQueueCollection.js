@@ -12,6 +12,7 @@ define([
   'use strict';
 
   var PRINTING_WHAT_STORAGE_KEY = 'WMES_KANBAN_PRINTING_WHAT';
+  var GROUP_BY_WORKSTATIONS_STORAGE_KEY = 'WMES_KANBAN_GROUP_BY_WORKSTATIONS';
 
   return Collection.extend({
 
@@ -129,6 +130,16 @@ define([
       localStorage.setItem(PRINTING_WHAT_STORAGE_KEY, what);
 
       this.trigger('printing', what);
+    },
+
+    getGroupByWorkstations: function()
+    {
+      return localStorage.getItem(GROUP_BY_WORKSTATIONS_STORAGE_KEY) === '1';
+    },
+
+    setGroupByWorkstations: function(state)
+    {
+      return localStorage.setItem(GROUP_BY_WORKSTATIONS_STORAGE_KEY, state ? '1' : '0');
     }
 
   });

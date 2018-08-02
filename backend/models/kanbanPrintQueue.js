@@ -10,14 +10,7 @@ module.exports = function setupKanbanPrintQueueModel(app, mongoose)
       type: String,
       default: 'pending'
     },
-    startedAt: {
-      type: Date,
-      default: null
-    },
-    finishedAt: {
-      type: Date,
-      default: null
-    },
+    workstations: [String],
     line: String,
     kanbans: [Number],
     layouts: [String],

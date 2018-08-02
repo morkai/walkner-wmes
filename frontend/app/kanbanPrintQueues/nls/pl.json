@@ -13,6 +13,7 @@
   "todo:false": "Zrobione",
 
   "filter:submit": "Filtruj kolejki",
+  "filter:groupByWorkstations": "Grupuj wg stanowisk",
 
   "lineCount": "{count} {count, plural, one{linia} few{linie} other{linii}}",
   "kanbanCount": "{count} {count, plural, one{kanban} few{kanbany} other{kanbanów}}",
@@ -37,6 +38,8 @@
   "job:kanbanId": "Kanban ID",
   "job:status": "Status",
   "job:labels": "Etykiety",
+  "job:workstation:short": "S{n}",
+  "job:workstation:long": "Stanowisko",
 
   "action:ignore": "Ignoruj",
   "action:restore": "Przywróć",
