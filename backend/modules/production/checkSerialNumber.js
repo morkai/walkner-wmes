@@ -39,7 +39,8 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
       ProdDowntime
         .find({
           prodShiftOrder: logEntry.prodShiftOrder,
-          reason: {$in: productionModule.settings['taktTime.ignoredDowntimes'] || []}
+          reason: {$in: productionModule.settings['taktTime.ignoredDowntimes'] || []},
+          finishedAt: {$ne: null}
         }, {
           _id: 0,
           startedAt: 1,
