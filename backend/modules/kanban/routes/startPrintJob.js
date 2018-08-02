@@ -70,7 +70,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
         [`jobs.${this.jobIndex}.status`]: 'printing'
       };
 
-      if (module.printing.workstation >= 0)
+      if (module.printing.workstation !== null)
       {
         this.job.workstations[module.printing.workstation] = 'printing';
 
@@ -204,12 +204,12 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
         {
           job.status = 'failure';
 
-          if (module.printing.workstation >= 0)
+          if (module.printing.workstation !== null)
           {
             job.workstations[module.printing.workstation] = 'failure';
           }
         }
-        else if (module.printing.workstation >= 0)
+        else if (module.printing.workstation !== null)
         {
           job.workstations[module.printing.workstation] = 'success';
 
@@ -251,7 +251,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
           [`jobs.${jobIndex}.status`]: job.status
         };
 
-        if (module.printing.workstation >= 0)
+        if (module.printing.workstation !== null)
         {
           $set[`jobs.${jobIndex}.workstations.${module.printing.workstation}`] = 'success';
         }
@@ -322,7 +322,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
       {
         const kanbanId = kanbans.shift() || '0';
 
-        if (module.printing.workstation >= 0 && module.printing.workstation !== i)
+        if (module.printing.workstation !== null && module.printing.workstation !== i)
         {
           continue;
         }
@@ -417,7 +417,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
 
         let zpl;
 
-        if (module.printing.workstation >= 0)
+        if (module.printing.workstation !== null)
         {
           const count = job.data.workstations[module.printing.workstation] * 2;
 
@@ -500,7 +500,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
           {
             const kanbanId = kanbans.shift() || '0';
 
-            if (module.printing.workstation >= 0 && module.printing.workstation !== i)
+            if (module.printing.workstation !== null && module.printing.workstation !== i)
             {
               continue;
             }
