@@ -8,6 +8,7 @@ define([
   'app/core/util/idAndLabel',
   'app/data/clipboard',
   'app/planning/util/contextMenu',
+  'app/kanbanSupplyAreas/KanbanSupplyAreaCollection',
   './KanbanSearchDialogView',
   'app/kanban/templates/entryList',
   'app/kanban/templates/entryListColumns',
@@ -26,6 +27,7 @@ define([
   idAndLabel,
   clipboard,
   contextMenu,
+  KanbanSupplyAreaCollection,
   KanbanSearchDialogView,
   template,
   columnsTemplate,
@@ -2592,6 +2594,19 @@ define([
               {id: 'false', text: this.t('core', 'BOOL:false')}
             ],
             false
+          );
+        }
+      },
+      markerColor: {
+        type: 'select-multi',
+        template: selectFilterTemplate,
+        handler: function(cell, $filter)
+        {
+          this.filters.select.call(
+            this,
+            cell,
+            $filter,
+            [{id: '', text: this.t('filters:value:empty')}].concat(KanbanSupplyAreaCollection.getColors())
           );
         }
       }

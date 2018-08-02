@@ -5,12 +5,14 @@ define([
   'app/data/orgUnits',
   'app/core/util/idAndLabel',
   'app/core/views/FormView',
+  '../KanbanSupplyAreaCollection',
   'app/kanbanSupplyAreas/templates/form'
 ], function(
   _,
   orgUnits,
   idAndLabel,
   FormView,
+  KanbanSupplyAreaCollection,
   template
 ) {
   'use strict';
@@ -71,6 +73,13 @@ define([
         .map(idAndLabel));
     },
 
+    serialize: function()
+    {
+      return _.assign(FormView.prototype.serialize.apply(this, arguments), {
+        colors: KanbanSupplyAreaCollection.getColors()
+      });
+    },
+
     afterRender: function()
     {
       this.$lineRow = this.$id('lines').children().first().detach();
@@ -128,6 +137,16 @@ define([
       {
         $id[0].setCustomValidity(req.status === 200 ? view.t('FORM:ERROR:alreadyExists') : '');
       });
+    },
+
+    serializeForm: function(formData)
+    {
+      if (!formData.markerColor)
+      {
+        formData.markerColor = null;
+      }
+
+      return formData;
     }
 
   });

@@ -3,15 +3,6 @@
 
 'use strict';
 
-db.kanbanprintqueues.find().forEach(queue =>
-{
-  queue.jobs.forEach(job =>
-  {
-    if (!job.workstations)
-    {
-      job.workstations = [];
-    }
-  });
+db.kanbansupplyareas.update({}, {$set: {markerColor: null}}, {multi: true});
 
-  db.kanbanprintqueues.update({_id: queue._id}, queue);
-});
+db.whorders.update({}, {$set: {picklistDone: null}}, {multi: true});

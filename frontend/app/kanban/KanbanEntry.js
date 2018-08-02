@@ -61,12 +61,14 @@ define([
         entry.family = supplyArea.get('name');
         entry.lineCount = supplyArea.get('lineCount');
         entry.lines = supplyArea.get('lines');
+        entry.markerColor = supplyArea.get('markerColor');
       }
       else
       {
         entry.family = '';
         entry.lineCount = 0;
         entry.lines = [];
+        entry.markerColor = null;
       }
 
       entry.workstationsTotal = 0;

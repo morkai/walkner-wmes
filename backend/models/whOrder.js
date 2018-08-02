@@ -60,7 +60,7 @@ module.exports = function setupWhOrderModel(app, mongoose)
     },
     picklistDone: {
       type: Boolean,
-      default: false
+      default: null
     },
     funcs: [whOrderFuncSchema],
     users: [String]

@@ -69,7 +69,6 @@
   "column:replenQty:title": "Ilość uzupełnienia",
   "column:kind": "Rodzaj kanbana",
   "column:container": "Rodzaj<br>pojemnika",
-  "column:container:title": "Rodzaj pojemnika",
   "column:workstations": "Stanowisko",
   "column:workstation:title": "Stanowisko {n}",
   "column:workstationsN": "Stanowisko {n}",
@@ -79,6 +78,7 @@
   "column:discontinued": "Wycofane?",
   "column:discontinued:title": "Wycofane?",
   "column:comment": "Komentarz",
+  "column:markerColor": "Kolor znacznika",
 
   "export:fileName": "WMES_KANBAN",
   "export:sheetName": "Baza Kanban",

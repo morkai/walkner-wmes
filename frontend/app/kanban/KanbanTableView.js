@@ -325,6 +325,30 @@ define([
         return /^[A-Z][0-9][0-9]$/.test(value) ? value : '';
       }
     },
+    markerColor: {
+      width: 3,
+      rotated: true,
+      expand: 150,
+      renderValue: function(value, column, i, entry)
+      {
+        if (!value)
+        {
+          return '';
+        }
+
+        var supplyArea = this.state.supplyAreas.get(entry.supplyArea);
+        var color = supplyArea.getColor();
+
+        return '<span class="kanban-td-color-marker" style="background: ' + color.color + '"></span>'
+          + '<span class="kanban-td-color-label">' + color.text + '</span>';
+      },
+      exportValue: function(value)
+      {
+        return value
+          ? (t.has('kanbanSupplyAreas', 'color:' + value) ? t('kanbanSupplyAreas', 'color:' + value) : value)
+          : '';
+      }
+    },
     discontinued: {
       width: 3,
       rotated: true,
@@ -608,6 +632,11 @@ define([
         },
         COLUMNS[columnId]
       );
+
+      if (column.rotated && !column.title)
+      {
+        column.title = column.label;
+      }
 
       var thClassName = [];
       var labelClassName = [];

@@ -276,6 +276,22 @@ tr:hover > .kanban-is-invalid,
 .kanban-td[data-column-id="discontinued"] {
   width: 30px;
 }
+.kanban-td[data-column-id="markerColor"] {
+  width: 30px;
+}
+.kanban-tbody-table .kanban-td[data-column-id="markerColor"] {
+  text-align: left;
+}
+.kanban-td-color-marker {
+  display: inline-block;
+  width: 21px;
+  height: 16px;
+  vertical-align: top;
+}
+.kanban-td-color-label {
+  margin-left: 4px;
+  font-family: Arial, sans-serif;
+}
 .kanban-td[data-column-id="comment"] {
   width: 400px;
   text-align: left;

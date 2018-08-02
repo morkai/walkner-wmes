@@ -7,6 +7,7 @@ module.exports = function setupKanbanSupplyAreaModel(app, mongoose)
   const kanbanSupplyAreaSchema = new mongoose.Schema({
     _id: String,
     name: String,
+    markerColor: String,
     lineCount: Number,
     lines: [String]
   }, {

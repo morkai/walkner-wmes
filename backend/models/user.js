@@ -186,6 +186,7 @@ module.exports = function setupUserModel(app, mongoose)
       orgUnitId: null,
       personellId: '',
       card: '',
+      cardUid: '',
       searchName: ']:->',
       kdPosition: '',
       kdDivision: '',
