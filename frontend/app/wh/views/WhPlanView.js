@@ -88,6 +88,10 @@ define([
       'mouseup .planning-mrp-lineOrders-comment': function(e)
       {
         this.$(e.currentTarget).popover('destroy');
+      },
+      'click .is-clickable[data-column-id="set"]': function(e)
+      {
+        this.trigger('setClicked', e.currentTarget.parentNode.dataset.id);
       }
     },
 

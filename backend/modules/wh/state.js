@@ -161,7 +161,7 @@ module.exports = function setUpWhState(app, module)
           $set.startedAt = order.startedAt = null;
           $set.finishedAt = order.finishedAt = null;
           $set.picklistFunc = order.picklistFunc = null;
-          $set.picklistDone = order.picklistDone = false;
+          $set.picklistDone = order.picklistDone = null;
           $set.users = order.users = [];
 
           order.funcs.forEach((func, i) =>
@@ -283,6 +283,21 @@ module.exports = function setUpWhState(app, module)
         done(null, {orders: this.orders.map(o => o._id)});
       }
     );
+  };
+
+  actions.updateOrder = (data, done) =>
+  {
+    WhOrder.collection.update({_id: data.order._id}, data.order, err =>
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      app.broker.publish('wh.orders.updated', {orders: [data.order]});
+
+      done(null, {order: data.order});
+    });
   };
 
   function executeNextAction()
@@ -474,6 +489,7 @@ module.exports = function setUpWhState(app, module)
           $set.set = order.set = set;
           $set.startedAt = order.startedAt = startedAt;
           $set.picklistFunc = order.picklistFunc = user.func;
+          $set.picklistDone = order.picklistDone = null;
           $set.users = order.users = [user._id];
 
           const func = order.funcs.find(f => f._id === user.func);

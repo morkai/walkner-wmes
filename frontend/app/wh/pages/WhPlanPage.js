@@ -269,6 +269,8 @@ define([
 
       page.listenTo(page.whOrders, 'act', page.onActionRequested);
 
+      page.listenTo(page.listView, 'setClicked', page.onSetClicked);
+
       $(document).on('click.' + page.idPrefix, '.paintShop-breadcrumb', page.onBreadcrumbsClick.bind(page));
 
       $(window).on('keypress.' + page.idPrefix, page.onWindowKeyPress.bind(page));
@@ -304,6 +306,8 @@ define([
     {
       productionState.load(false);
       whSettings.acquire();
+
+      viewport.currentPage.resolveAction('1000000001');
     },
 
     reload: function()
@@ -515,7 +519,7 @@ define([
       }
     },
 
-    continueSet: function(user, set)
+    continueSet: function(user, set, scroll)
     {
       var orders = this.whOrders.filter(function(o) { return o.get('set') === set; });
 
@@ -524,11 +528,27 @@ define([
         return;
       }
 
-      this.$('tr[data-id="' + orders[0].id + '"]')[0].scrollIntoView({
-        behavior: 'instant',
-        block: 'start',
-        inline: 'start'
-      });
+      if (scroll !== false)
+      {
+        this.$('tr[data-id="' + orders[0].id + '"]')[0].scrollIntoView({
+          behavior: 'instant',
+          block: 'start',
+          inline: 'start'
+        });
+      }
+
+      var currentDialog = viewport.currentDialog;
+
+      if (currentDialog
+        && currentDialog instanceof WhSetView
+        && currentDialog.model.user
+        && currentDialog.model.user._id === user._id
+        && currentDialog.model.set === set)
+      {
+        return;
+      }
+
+      viewport.closeAllDialogs();
 
       var dialogView = new WhSetView({
         model: {
@@ -736,6 +756,16 @@ define([
     onActionRequested: function(action, data)
     {
       this.act(action, data);
+    },
+
+    onSetClicked: function(whOrderId)
+    {
+      var whOrder = this.whOrders.get(whOrderId);
+
+      if (whOrder && whOrder.get('set'))
+      {
+        this.continueSet(null, whOrder.get('set'), false);
+      }
     }
 
   });

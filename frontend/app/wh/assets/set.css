@@ -1,6 +1,6 @@
 @media (min-width: 768px) {
   .wh-set-dialog .modal-dialog {
-    width: 800px;
+    width: 1200px;
   }
 }
 .wh-set {
@@ -9,32 +9,89 @@
   font-size: 21px;
   font-family: Consolas, "Lucida Console", Monaco, monospace;
 }
-.wh-set-item:first-child .wh-set-separator {
-  display: none;
+.wh-set-item thead + tbody > .wh-set-separator hr {
+  border-top-style: solid;
 }
 .wh-set-separator hr {
   margin: 12px 0;
   height: 1px;
   border-top: 1px dotted #ccc;
 }
+.wh-set th {
+  padding-left: 7px;
+  padding-right: 7px;
+  font-family: Arial, sans-serif;
+  font-weight: normal;
+}
+.wh-set th:first-child {
+  padding-left: 0;
+}
+.wh-set th:last-child {
+  padding-right: 0;
+}
+.wh-set th[data-prop="picklistDone"],
+.wh-set th[data-prop="func"] {
+  text-align: center;
+}
 .wh-set-item td {
-  padding-right: 15px;
+  padding-left: 7px;
+  padding-right: 7px;
   white-space: nowrap;
   width: 1px;
   height: 24px;
   vertical-align: middle;
 }
+.wh-set-item td:first-child {
+  padding-left: 0;
+}
 .wh-set-item td:last-child {
   width: auto;
+  padding-right: 0;
 }
 .wh-set-item td[data-prop="name"] {
   white-space: normal;
   width: 149px;
   font-size: 12px;
 }
-.wh-set-item td[data-prop="picklist"] {
-  font-size: 35px;
-}
 .wh-set-item .planning-mrp-list-property:first-child {
   margin-left: 0;
+}
+.wh-set-action {
+  font-size: 42px;
+}
+.wh-set-action.is-clickable {
+  color: #337ab7;
+}
+.wh-set-action.is-clickable:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+.wh-set-action[data-prop^="picklist"] {
+  padding-left: 14px;
+  border-left: 1px dotted #ccc;
+}
+.wh-set-action[data-prop="picklistDone"],
+.wh-set-action[data-prop="pickup"],
+.wh-set-item td[data-prop="startTime"] {
+  padding-right: 14px;
+}
+.wh-set-item .wh-set-actions {
+  padding-left: 14px;
+  border-left: 1px dotted #ccc;
+}
+.wh-set-actions .btn {
+  padding: 0;
+  width: 48px;
+  height: 48px;
+  font-size: 28px;
+}
+.wh-set-action[data-prop="picklistDone"][data-status="true"] .fa-clock-o {
+  color: #00af00;
+}
+.wh-set-action[data-prop="picklistDone"][data-status="false"] .fa-clock-o {
+  color: #e00;
+}
+.wh-set-action .fa {
+  width: 42px;
+  text-align: center;
 }

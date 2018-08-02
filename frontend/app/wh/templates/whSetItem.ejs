@@ -6,17 +6,26 @@
     <td data-prop="order"><%- item.order %></td>
     <td data-prop="nc12"><%- item.nc12 %></td>
     <td data-prop="qty"><%- item.qty %>/<%- item.qtyTodo %></td>
-    <td data-prop="qty"><%- item.startTime %></td>
-    <td data-prop="picklist" rowspan="2">
+    <td data-prop="startTime"><%- item.startTime %></td>
+    <td class="wh-set-action <%- item.clickable.picklistDone ? 'is-clickable' : '' %>" data-prop="picklistDone" data-status="<%- String(item.picklistDone) %>" rowspan="2">
+      <i class="fa fa-print"></i>
+    </td>
+    <% item.funcs.forEach(function(func) { %>
+    <td class="wh-set-action <%- item.clickable[func._id].picklist ? 'is-clickable' : '' %>" data-func="<%- func._id %>" data-prop="picklist" data-status="<%- func.picklist %>" rowspan="2" title="<%- t('wh', 'status:picklist') %>">
       <i class="fa fa-file-text-o"></i>
     </td>
-    <td></td>
+    <td class="wh-set-action <%- item.clickable[func._id].pickup ? 'is-clickable' : '' %>" data-func="<%- func._id %>" data-prop="pickup" data-status="<%- func.pickup %>" rowspan="2" title="<%- t('wh', 'status:pickup') %>">
+      <i class="fa fa-shopping-cart"></i>
+    </td>
+    <% }) %>
+    <td class="wh-set-actions" rowspan="2">
+      <button class="btn btn-default" type="button" data-action="print"><i class="fa fa-print"></i></button>
+    </td>
   </tr>
   <tr>
     <td data-prop="planStatusIcons"><%- item.planStatusIcons %></td>
     <td data-prop="name"><%= item.name %></td>
     <td data-prop="mrp"><%- item.mrp %></td>
-    <td data-prop="qty"><%- item.finishTime %></td>
-    <td></td>
+    <td data-prop="finishTime"><%- item.finishTime %></td>
   </tr>
 </tbody>

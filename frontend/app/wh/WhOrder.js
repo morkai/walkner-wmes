@@ -3,12 +3,14 @@
 define([
   'app/i18n',
   'app/time',
+  'app/user',
   'app/core/Model',
   'app/planning/util/shift',
   'app/planning/templates/orderStatusIcons'
 ], function(
   t,
   time,
+  user,
   Model,
   shiftUtil,
   orderStatusIconsTemplate
@@ -28,6 +30,11 @@ define([
     pickup: 'fa-shopping-cart',
     problem: 'fa-thumbs-down',
     finished: 'fa-thumbs-up'
+  };
+  var FUNC_TO_INDEX = {
+    fmx: 0,
+    kitter: 1,
+    packer: 2
   };
 
   return Model.extend({
@@ -71,9 +78,50 @@ define([
       return obj;
     },
 
+    serializeSet: function(plan, i, whUser)
+    {
+      var obj = this.serialize(plan, i);
+      var canManage = false && user.isAllowedTo('WH:MANAGE'); // false
+      var userFunc = this.getUserFunc(whUser);
+      var isUser = !!userFunc;
+
+      obj.clickable = {
+        picklistDone: canManage || (isUser && userFunc._id === obj.picklistFunc)
+      };
+
+      obj.funcs.forEach(function(func)
+      {
+        obj.clickable[func._id] = {
+          picklist: canManage
+            || (obj.picklistDone && isUser && userFunc._id === func._id && obj.funcs[0].status === 'picklist'),
+          pickup: canManage
+            || (obj.picklistDone && isUser && userFunc._id === func._id && obj.funcs[0].status === 'pickup')
+        };
+      });
+
+      return obj;
+    },
+
     update: function(newOrder)
     {
       this.set(newOrder);
+    },
+
+    getUserFunc: function(user)
+    {
+      if (!user)
+      {
+        return null;
+      }
+
+      var func = this.attributes.funcs[FUNC_TO_INDEX[user.func]];
+
+      if (!func.user || func.user.id !== user._id)
+      {
+        return null;
+      }
+
+      return func;
     }
 
   });

@@ -95,6 +95,8 @@ define([
 
       view.listenTo(view.whOrders, 'reset', view.onOrdersReset);
       view.listenTo(view.whOrders, 'change', view.onOrderChanged);
+
+      window.set = this;
     },
 
     serialize: function()
@@ -112,7 +114,7 @@ define([
 
       return view.whOrders
         .filter(function(whOrder) { return whOrder.get('set') === view.model.set; })
-        .map(function(whOrder, i) {return whOrder.serialize(view.plan, i); });
+        .map(function(whOrder, i) { return whOrder.serializeSet(view.plan, i, view.model.user); });
     },
 
     beforeRender: function()
@@ -195,10 +197,17 @@ define([
         return;
       }
 
-      var i = this.whOrders.indexOf(whOrder);
+      if (whOrder.get('set') !== this.model.set)
+      {
+        return $item.fadeOut('fast', function() { $item.remove(); });
+      }
 
       $item.replaceWith(setItemTemplate({
-        item: whOrder.serialize(this.plan, i)
+        item: whOrder.serializeSet(
+          this.plan,
+          this.whOrders.indexOf(whOrder),
+          this.model.user
+        )
       }));
     }
 

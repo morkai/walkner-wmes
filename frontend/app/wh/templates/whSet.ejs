@@ -1,4 +1,17 @@
 <table class="wh-set">
+  <thead>
+  <tr>
+    <th data-prop="order"><%- t('wh', 'prop:order') %></th>
+    <th data-prop="product"><%- t('wh', 'prop:product') %></th>
+    <th data-prop="qty"><%- t('wh', 'prop:qty') %></th>
+    <th data-prop="time"><%- t('wh', 'prop:time') %></th>
+    <th data-prop="picklistDone"><%- t('wh', 'prop:picklist') %></th>
+    <% items[0].funcs.forEach(function(func) { %>
+    <th data-prop="func" colspan="2"><%- t('wh', 'prop:' + func._id) %></th>
+    <% }) %>
+    <th><%- t('core', 'LIST:COLUMN:actions') %></th>
+  </tr>
+  </thead>
   <% items.forEach(function(item) { %>
   <%- renderItem({item: item}) %>
   <% }) %>

@@ -74,7 +74,7 @@ module.exports = function setUpWhRoutes(app, module)
 
   // Plans
   express.post('/wh/plans/:id;generate', canManage, generateRoute);
-  express.post('/wh/plans/:id;act', canManage, actRoute);
+  express.post('/wh/plans/:id;act', canUpdate, actRoute);
 
   // Events
   express.get(
