@@ -9,6 +9,19 @@ define([
 ) {
   'use strict';
 
+  var COLORS = [
+    'red',
+    'yellow',
+    'orange',
+    'green',
+    'violet',
+    'pink',
+    'lightblue',
+    'darkblue',
+    'brown',
+    'grey'
+  ];
+
   return Collection.extend({
 
     model: KanbanComponent,
@@ -45,6 +58,20 @@ define([
           break;
         }
       }
+    }
+
+  }, {
+
+    COLORS: COLORS,
+
+    getColor: function(color)
+    {
+      return KanbanComponent.getColor(color);
+    },
+
+    getColors: function()
+    {
+      return COLORS.map(this.getColor);
     }
 
   });

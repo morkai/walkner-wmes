@@ -16,7 +16,7 @@ define([
   router.map('/kanban', canView, function()
   {
     viewport.loadPage(
-      ['app/kanban/pages/KanbanEntryListPage', 'i18n!app/nls/kanban', 'i18n!app/nls/kanbanSupplyAreas'],
+      ['app/kanban/pages/KanbanEntryListPage', 'i18n!app/nls/kanban', 'i18n!app/nls/kanbanComponents'],
       function(KanbanEntryListPage)
       {
         return new KanbanEntryListPage();

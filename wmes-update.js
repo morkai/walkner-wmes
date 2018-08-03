@@ -3,6 +3,5 @@
 
 'use strict';
 
-db.kanbansupplyareas.update({}, {$set: {markerColor: null}}, {multi: true});
-
-db.whorders.update({}, {$set: {picklistDone: null}}, {multi: true});
+db.kanbansupplyareas.update({}, {$unset: {markerColor: 1}}, {multi: true});
+db.kanbancomponents.update({}, {$set: {markerColor: null}}, {multi: true});

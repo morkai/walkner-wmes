@@ -45,6 +45,7 @@ define([
         entry.minBinQty = component.get('minBinQty');
         entry.maxBinQty = component.get('maxBinQty');
         entry.replenQty = component.get('replenQty');
+        entry.markerColor = component.get('markerColor');
       }
       else
       {
@@ -54,6 +55,7 @@ define([
         entry.minBinQty = 0;
         entry.maxBinQty = 0;
         entry.replenQty = 0;
+        entry.markerColor = null;
       }
 
       if (supplyArea)
@@ -61,14 +63,12 @@ define([
         entry.family = supplyArea.get('name');
         entry.lineCount = supplyArea.get('lineCount');
         entry.lines = supplyArea.get('lines');
-        entry.markerColor = supplyArea.get('markerColor');
       }
       else
       {
         entry.family = '';
         entry.lineCount = 0;
         entry.lines = [];
-        entry.markerColor = null;
       }
 
       entry.workstationsTotal = 0;

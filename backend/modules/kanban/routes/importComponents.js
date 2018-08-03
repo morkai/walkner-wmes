@@ -16,17 +16,23 @@ module.exports = function importComponentsRoute(app, module, req, res, next)
   const updatedAt = new Date();
   const updater = userModule.createUserInfo(req.session.user, req);
 
+  let MARKER_COLORS = {};
+
   step(
     function()
     {
-      fs.readFile(req.file.path, this.next());
+      fs.readFile(req.file.path, this.parallel());
+
+      fs.readFile(`${__dirname}/../markerColors.json`, {encoding: 'utf8'}, this.parallel());
     },
-    function(err, buffer)
+    function(err, buffer, markerColors)
     {
       if (err)
       {
         return this.skip(err);
       }
+
+      MARKER_COLORS = markerColors;
 
       try
       {
@@ -75,6 +81,10 @@ module.exports = function importComponentsRoute(app, module, req, res, next)
         else if (/lok.*?nowa/.test(v))
         {
           addresses.newStorageBin = col;
+        }
+        else if (/kolor.*?zn/.test(v))
+        {
+          addresses.markerColor = col;
         }
       }
 
@@ -201,6 +211,9 @@ module.exports = function importComponentsRoute(app, module, req, res, next)
         return cell && typeof cell.v === 'string' && /^[A-Z0-9-]+$/i.test(cell.v.trim())
           ? cell.v.trim().toUpperCase()
           : null;
+
+      case 'markerColor':
+        return cell && cell.v ? (MARKER_COLORS[String(cell.v).toLowerCase().replace(/[^a-z]+/g, '')] || null) : null;
 
       default:
         return null;

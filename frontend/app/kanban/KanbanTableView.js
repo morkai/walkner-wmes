@@ -336,8 +336,8 @@ define([
           return '';
         }
 
-        var supplyArea = this.state.supplyAreas.get(entry.supplyArea);
-        var color = supplyArea.getColor();
+        var component = this.state.components.get(entry.nc12);
+        var color = component.getColor();
 
         return '<span class="kanban-td-color-marker" style="background: ' + color.color + '"></span>'
           + '<span class="kanban-td-color-label">' + color.text + '</span>';
@@ -345,7 +345,7 @@ define([
       exportValue: function(value)
       {
         return value
-          ? (t.has('kanbanSupplyAreas', 'color:' + value) ? t('kanbanSupplyAreas', 'color:' + value) : value)
+          ? (t.has('kanbanComponents', 'color:' + value) ? t('kanbanComponents', 'color:' + value) : value)
           : '';
       }
     },

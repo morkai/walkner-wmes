@@ -12,15 +12,6 @@
         <input id="<%- idPrefix %>-name" class="form-control" type="text" name="name" required>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-markerColor" class="control-label"><%- helpers.t('PROPERTY:markerColor') %></label>
-        <select id="<%- idPrefix %>-markerColor" class="form-control" name="markerColor">
-          <option></option>
-          <% colors.forEach(function(color) { %>
-          <option value="<%- color.id %>"><%- color.text %></option>
-          <% }) %>
-        </select>
-      </div>
-      <div class="form-group">
         <label class="control-label"><%- helpers.t('PROPERTY:lines') %></label>
         <table class="table table-condensed table-bordered" style="width: 450px">
           <thead>

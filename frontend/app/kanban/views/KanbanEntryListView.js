@@ -8,7 +8,7 @@ define([
   'app/core/util/idAndLabel',
   'app/data/clipboard',
   'app/planning/util/contextMenu',
-  'app/kanbanSupplyAreas/KanbanSupplyAreaCollection',
+  'app/kanbanComponents/KanbanComponentCollection',
   './KanbanSearchDialogView',
   'app/kanban/templates/entryList',
   'app/kanban/templates/entryListColumns',
@@ -27,7 +27,7 @@ define([
   idAndLabel,
   clipboard,
   contextMenu,
-  KanbanSupplyAreaCollection,
+  KanbanComponentCollection,
   KanbanSearchDialogView,
   template,
   columnsTemplate,
@@ -2611,7 +2611,7 @@ define([
             this,
             cell,
             $filter,
-            [{id: '', text: this.t('filters:value:empty')}].concat(KanbanSupplyAreaCollection.getColors())
+            [{id: '', text: this.t('filters:value:empty')}].concat(KanbanComponentCollection.getColors())
           );
         }
       }

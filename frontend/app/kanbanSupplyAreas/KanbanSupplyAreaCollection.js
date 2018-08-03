@@ -1,28 +1,13 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  '../i18n',
   '../core/Collection',
   './KanbanSupplyArea'
 ], function(
-  t,
   Collection,
   KanbanSupplyArea
 ) {
   'use strict';
-
-  var COLORS = [
-    'red',
-    'yellow',
-    'orange',
-    'green',
-    'violet',
-    'pink',
-    'lightblue',
-    'darkblue',
-    'brown',
-    'grey'
-  ];
 
   return Collection.extend({
 
@@ -78,20 +63,6 @@ define([
           break;
         }
       }
-    }
-
-  }, {
-
-    COLORS: COLORS,
-
-    getColor: function(color)
-    {
-      return KanbanSupplyArea.getColor(color);
-    },
-
-    getColors: function()
-    {
-      return COLORS.map(this.getColor);
     }
 
   });

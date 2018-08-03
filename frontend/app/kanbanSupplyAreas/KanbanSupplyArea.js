@@ -27,32 +27,7 @@ define([
 
       obj.lines = (obj.lines || []).join('; ');
 
-      if (obj.markerColor)
-      {
-        var color = this.getColor();
-
-        obj.markerColor = '<span class="label" style="background: ' + color.color + '">'
-          + color.text
-          + '</span>';
-      }
-
       return obj;
-    },
-
-    getColor: function()
-    {
-      return this.attributes.markerColor ? this.constructor.getColor(this.attributes.markerColor) : null;
-    }
-
-  }, {
-
-    getColor: function(color)
-    {
-      return {
-        id: color,
-        text: t('kanbanSupplyAreas', 'color:' + color),
-        color: color
-      };
     }
 
   });
