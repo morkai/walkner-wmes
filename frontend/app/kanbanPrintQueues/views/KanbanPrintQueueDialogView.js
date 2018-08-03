@@ -43,7 +43,7 @@ define([
       }
     },
 
-    onJobsChange: function(jobs)
+    onJobsChange: function(queue, jobs)
     {
       if (this.current && jobs.indexOf(this.current.job) !== -1)
       {

@@ -65,5 +65,9 @@
   "status:printing": "Drukowanie",
   "status:success": "Wydrukowano",
   "status:failure": "Nieudane drukowanie",
-  "status:error": "Nieudane drukowanie: {error}"
+  "status:error": "Nieudane drukowanie: {error}",
+
+  "quickPrint:label": "Szybki dodruk",
+  "quickPrint:kanbanIds": "Kanban ID",
+  "quickPrint:submit": "Drukuj"
 }

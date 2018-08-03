@@ -41,6 +41,15 @@ define([
           break;
 
         case 'kanban.printQueues.added':
+        {
+          if (!this.get(message.model._id))
+          {
+            this.add(message.model);
+          }
+
+          break;
+        }
+
         case 'kanban.printQueues.edited':
         {
           var printQueue = this.get(message.model._id);
@@ -48,10 +57,6 @@ define([
           if (printQueue)
           {
             printQueue.set(message.model);
-          }
-          else if (this.rqlQuery.skip === 0)
-          {
-            this.add(message.model);
           }
 
           break;
@@ -90,7 +95,7 @@ define([
 
       if (jobsDone.length)
       {
-        queue.trigger('change:jobs', jobsDone);
+        queue.trigger('change:jobs', queue, jobsDone);
       }
     },
 

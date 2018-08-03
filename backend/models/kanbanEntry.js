@@ -32,6 +32,7 @@ module.exports = function setupKanbanEntryModel(app, mongoose)
   kanbanEntrySchema.index({nc12: 1});
   kanbanEntrySchema.index({supplyArea: 1});
   kanbanEntrySchema.index({discontinued: 1});
+  kanbanEntrySchema.index({kanbanId: 1});
 
   kanbanEntrySchema.statics.TOPIC_PREFIX = 'kanban.entries';
   kanbanEntrySchema.statics.BROWSE_LIMIT = 0;

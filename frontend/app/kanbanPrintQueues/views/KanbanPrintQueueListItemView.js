@@ -164,18 +164,18 @@ define([
       }
     },
 
-    onJobsChange: function(jobs)
+    onJobsChange: function(model, jobs)
     {
       var view = this;
 
-      if (view.model.changed.todo === false)
+      if (model.changed.todo === false)
       {
         return;
       }
 
-      var queue = view.model.serialize();
+      var queue = model.serialize();
 
-      if (view.model.changed.todo === undefined)
+      if (model.changed.todo === undefined)
       {
         view.updateHd(queue);
       }

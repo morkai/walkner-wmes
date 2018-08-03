@@ -11,7 +11,22 @@
   </div>
   <div class="form-group filter-actions">
     <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- helpers.t('filter:submit') %></span></button>
+    <% if (user.isAllowedTo('KANBAN:PRINT')) { %>
     <hr>
     <button id="<%- idPrefix %>-groupByWorkstations" type="button" class="btn btn-default"><%- helpers.t('filter:groupByWorkstations') %></button>
+    <hr>
+    <% } %>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-quickPrint-kanbanIds"><%- helpers.t('quickPrint:label') %></label>
+    <div id="<%- idPrefix %>-quickPrint" class="kanbanPrintQueues-quickPrint">
+      <input id="<%- idPrefix %>-quickPrint-kanbanIds" class="form-control text-mono kanbanPrintQueues-quickPrint-kanbanIds" type="text" placeholder="<%- helpers.t('quickPrint:kanbanIds') %>">
+      <select id="<%- idPrefix %>-quickPrint-layouts" class="form-control is-expandable kanbanPrintQueues-quickPrint-layouts" multiple size="1" data-expanded-length="<%- layouts.length %>">
+        <% layouts.forEach(function(layout) { %>
+        <option value="<%- layout %>"><%- helpers.t('layout:' + layout) %></option>
+        <% }) %>
+      </select>
+      <button id="<%- idPrefix %>-quickPrint-submit" class="btn btn-primary kanbanPrintQueues-quickPrint-submit" type="button" title="<%- helpers.t('quickPrint:submit') %>"><i class="fa fa-print"></i></button>
+    </div>
   </div>
 </form>

@@ -8,6 +8,7 @@ define([
   'app/core/util/uuid',
   'app/core/util/ExpandableSelect',
   '../KanbanPrintQueueBuilder',
+  '../layouts',
   'app/kanban/templates/builder/builder'
 ], function(
   _,
@@ -17,6 +18,7 @@ define([
   uuid,
   ExpandableSelect,
   KanbanPrintQueueBuilder,
+  kanbanLayouts,
   template
 ) {
   'use strict';
@@ -229,7 +231,7 @@ define([
       var layouts = this.model.builder.layouts;
 
       return {
-        layouts: KanbanPrintQueueBuilder.LAYOUTS.map(function(layout)
+        layouts: kanbanLayouts.map(function(layout)
         {
           return {
             id: layout,
@@ -336,7 +338,7 @@ define([
       view.$id('totals-no').text(totalNo);
       view.$id('totals-lines').text(Object.keys(totalLines).length);
 
-      KanbanPrintQueueBuilder.LAYOUTS.forEach(function(layoutId)
+      kanbanLayouts.forEach(function(layoutId)
       {
         var total = 0;
 
@@ -357,7 +359,7 @@ define([
       var lineCount = model.get('lines').length;
       var layouts = this.model.builder.layouts;
 
-      KanbanPrintQueueBuilder.LAYOUTS.forEach(function(layoutId, i)
+      kanbanLayouts.forEach(function(layoutId, i)
       {
         var count = 0;
 
@@ -525,7 +527,7 @@ define([
       view.model.builder.forEach(function(model)
       {
         var entry = view.model.entries.get(model.get('ccn')).serialize();
-        var layouts = view.model.builder.layouts.filter(function(layout)
+        var jobLayouts = view.model.builder.layouts.filter(function(layout)
         {
           return (entry.kind === 'kk' && layout === 'kk')
             || (entry.kind !== 'kk' && layout !== 'kk');
@@ -547,7 +549,7 @@ define([
             _id: uuid(),
             line: line,
             kanbans: entry.kanbanId.slice(fromIndex, toIndex),
-            layouts: layouts,
+            layouts: jobLayouts,
             data: {
               ccn: entry._id,
               nc12: entry.nc12,

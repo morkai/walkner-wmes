@@ -5,19 +5,20 @@ define([
   'jquery',
   '../core/util/uuid',
   '../core/Collection',
-  '../core/Model'
+  '../core/Model',
+  './layouts'
 ], function(
   _,
   $,
   uuid,
   Collection,
-  Model
+  Model,
+  layouts
 ) {
   'use strict';
 
   var ENTRIES_STORAGE_KEY = 'WMES_KANBAN_BUILDER_ENTRIES';
   var LAYOUTS_STORAGE_KEY = 'WMES_KANBAN_BUILDER_LAYOUTS';
-  var LAYOUTS = ['kk', 'empty', 'full', 'wh', 'desc'];
 
   return Collection.extend({
 
@@ -27,7 +28,7 @@ define([
 
     initialize: function(models, options)
     {
-      this.layouts = options && options.layouts || [].concat(LAYOUTS);
+      this.layouts = options && options.layouts || [].concat(layouts);
 
       this.on('add remove change reset', this.store);
     },
@@ -110,8 +111,6 @@ define([
     }
 
   }, {
-
-    LAYOUTS: LAYOUTS,
 
     fromLocalStorage: function()
     {

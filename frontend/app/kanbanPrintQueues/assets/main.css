@@ -1,5 +1,15 @@
-.kanbanPrintQueues-list {
-
+.kanbanPrintQueues-quickPrint {
+  display: flex;
+}
+.kanbanPrintQueues-quickPrint-kanbanIds {
+  width: 150px;
+}
+.kanbanPrintQueues-quickPrint-kanbanIds:focus {
+  z-index: 1;
+}
+.kanbanPrintQueues-quickPrint-layouts {
+  margin-left: -1px;
+  width: 100px;
 }
 .kanbanPrintQueues-items {
   width: 100%;

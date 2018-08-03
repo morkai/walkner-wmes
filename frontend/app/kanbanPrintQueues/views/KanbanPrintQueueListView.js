@@ -162,13 +162,15 @@ define([
       this.printSpecific(queue, jobs);
     },
 
-    printSpecific: function(queue, jobs)
+    printSpecific: function(queue, jobs, groupByWorkstations)
     {
       viewport.showDialog(new KanbanPrintQueueDialogView({
         model: {
           queue: queue,
           jobs: jobs,
-          groupByWorkstations: this.collection.getGroupByWorkstations()
+          groupByWorkstations: groupByWorkstations === undefined
+            ? this.collection.getGroupByWorkstations()
+            : groupByWorkstations
         }
       }));
     },
@@ -177,7 +179,7 @@ define([
     {
       this.insertView('#-items', new KanbanPrintQueueListItemView({
         model: printQueue
-      }));
+      })).render();
     },
 
     onWindowKeyDown: function(e)
