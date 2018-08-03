@@ -543,6 +543,11 @@ define([
 
     resize: function()
     {
+      if (!this.$tbodyOuter || !this.$tbodyOuter.length)
+      {
+        return;
+      }
+
       var height = this.calcHeight();
 
       this.el.style.height = height + 'px';
