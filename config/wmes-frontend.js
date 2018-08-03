@@ -334,7 +334,7 @@ exports.express = {
     t: 'app/i18n'
   },
   textBody: {limit: '30mb'},
-  jsonBody: {limit: '4mb'}
+  jsonBody: {limit: '10mb'}
 };
 
 exports.user = {
