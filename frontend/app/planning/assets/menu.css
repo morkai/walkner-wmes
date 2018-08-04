@@ -1,6 +1,16 @@
 .planning-menu {
   display: block;
   margin-top: -1px;
+  z-index: 1042;
+  user-select: none;
+}
+.planning-menu-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1041;
 }
 .planning-menu > .dropdown-header {
   padding: 3px 10px;

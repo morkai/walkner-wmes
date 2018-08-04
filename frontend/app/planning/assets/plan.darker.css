@@ -145,6 +145,7 @@
 .planning-darker .planning-mrp-lineOrders-table > tbody > tr.is-highlighted > td {
   background-color: #ff0;
   border-left-color: #333;
+  color: #000;
 }
 
 .planning-darker .planning-mrp-lineOrders-status[data-status="incomplete"] {

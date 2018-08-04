@@ -81,23 +81,26 @@ define([
     serializeSet: function(plan, i, whUser)
     {
       var obj = this.serialize(plan, i);
-      var canManage = false && user.isAllowedTo('WH:MANAGE'); // false
+      var canManage = user.isAllowedTo('WH:MANAGE');
       var userFunc = this.getUserFunc(whUser);
       var isUser = !!userFunc;
 
       obj.clickable = {
-        picklistDone: canManage || (isUser && userFunc._id === obj.picklistFunc)
+        picklistDone: canManage
+          || (isUser && userFunc._id === obj.picklistFunc && obj.picklistDone === null)
       };
 
       obj.funcs.forEach(function(func)
       {
         obj.clickable[func._id] = {
-          picklist: canManage
-            || (obj.picklistDone && isUser && userFunc._id === func._id && obj.funcs[0].status === 'picklist'),
-          pickup: canManage
-            || (obj.picklistDone && isUser && userFunc._id === func._id && obj.funcs[0].status === 'pickup')
+          picklist: (canManage && obj.picklistDone !== null)
+            || (obj.picklistDone && isUser && userFunc._id === func._id && func.status === 'picklist'),
+          pickup: (canManage && obj.picklistDone !== null && func.picklist === 'require')
+            || (obj.picklistDone && isUser && userFunc._id === func._id && func.status === 'pickup')
         };
       });
+
+      obj.clickable.printLabels = canManage || isUser;
 
       return obj;
     },
@@ -123,6 +126,10 @@ define([
 
       return func;
     }
+
+  }, {
+
+    FUNC_TO_INDEX: FUNC_TO_INDEX
 
   });
 });

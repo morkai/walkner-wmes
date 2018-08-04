@@ -22,7 +22,6 @@ module.exports = function setUpWhState(app, module)
   let queue = null;
 
   module.state = {
-    printLabels,
     act: function(input, done)
     {
       if (typeof actions[input.action] !== 'function')
@@ -287,17 +286,101 @@ module.exports = function setUpWhState(app, module)
 
   actions.updateOrder = (data, done) =>
   {
-    WhOrder.collection.update({_id: data.order._id}, data.order, err =>
+    const newOrder = data.order;
+
+    if (!newOrder)
     {
-      if (err)
+      return done(app.createError(`Invalid input.`, 'INPUT', 400));
+    }
+
+    step(
+      function()
       {
-        return done(err);
+        WhOrder.findOne({_id: newOrder._id}).exec(this.next());
+      },
+      function(err, oldOrder)
+      {
+        if (err)
+        {
+          return this.skip(app.createError(
+            `Failed to find order for update: ${err.message}`,
+            'UPDATE_FIND_ORDER_FAILURE'
+          ));
+        }
+
+        if (!oldOrder)
+        {
+          return this.skip(app.createError(
+            `Order not found: ${newOrder._id}`,
+            'ORDER_NOT_FOUND',
+            404
+          ));
+        }
+
+        oldOrder.$set(newOrder);
+        oldOrder.save(this.next());
+      },
+      function(err, order)
+      {
+        if (err)
+        {
+          return this.skip(app.createError(
+            `Failed to update order: ${err.message}`,
+            'UPDATE_ORDER_FAILURE'
+          ));
+        }
+
+        this.order = order;
+      },
+      function(err)
+      {
+        if (err)
+        {
+          return done(err);
+        }
+
+        app.broker.publish('wh.orders.updated', {orders: [this.order]});
+
+        done(null, {order: this.order});
       }
+    );
+  };
 
-      app.broker.publish('wh.orders.updated', {orders: [data.order]});
+  actions.printLabels = (data, done) =>
+  {
+    if (typeof data.qty !== 'number' || data.qty < 1 || data.qty > 10)
+    {
+      return done(app.createError(`Invalid label quantity: ${data.qty}`, 'INPUT', 400));
+    }
 
-      done(null, {order: data.order});
-    });
+    step(
+      function()
+      {
+        WhOrder.findById(data.order).lean().exec(this.next());
+      },
+      function(err, whOrder)
+      {
+        if (err)
+        {
+          return this.skip(app.createError(
+            `Failed to find order for printing: ${err.message}`,
+            'PRINT_FIND_ORDER_FAILURE'
+          ));
+        }
+
+        if (!whOrder)
+        {
+          return this.skip(app.createError(
+            `Order not found: ${data.order}`,
+            'PRINT_ORDER_NOT_FOUND',
+            404
+          ));
+        }
+
+        printLabels([whOrder], data.qty, this.next());
+      },
+      done
+    );
   };
 
   function executeNextAction()
@@ -444,7 +527,7 @@ module.exports = function setUpWhState(app, module)
           user
         });
 
-        printLabels(this.orders, err =>
+        printLabels(this.orders, 1, err =>
         {
           if (err)
           {
@@ -529,7 +612,7 @@ module.exports = function setUpWhState(app, module)
           user
         });
 
-        printLabels(this.orders, err =>
+        printLabels(this.orders, 1, err =>
         {
           if (err)
           {
@@ -725,7 +808,7 @@ module.exports = function setUpWhState(app, module)
     });
   }
 
-  function printLabels(whOrders, done)
+  function printLabels(whOrders, labelQty, done)
   {
     step(
       function()
@@ -766,6 +849,7 @@ module.exports = function setUpWhState(app, module)
           };
 
           return compileZpl(template, {
+            labelQty,
             time,
             line: whOrder.line,
             order: whOrder.order,
@@ -801,7 +885,8 @@ module.exports = function setUpWhState(app, module)
       NC12: data.nc12,
       QTY_PLAN: data.qtyPlan,
       QTY_TODO: data.qtyTodo,
-      BARCODE_X: [40, 145, 107, 68, 40][data.qtyPlan.toString().length]
+      BARCODE_X: [40, 145, 107, 68, 40][data.qtyPlan.toString().length],
+      LABEL_QTY: data.labelQty
     };
 
     Object.keys(templateData).forEach(key =>

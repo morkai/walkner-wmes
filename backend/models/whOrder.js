@@ -26,7 +26,7 @@ module.exports = function setupWhOrderModel(app, mongoose)
     },
     pickup: {
       type: String,
-      enum: ['pending', 'success', 'failure'],
+      enum: ['pending', 'success', 'failure', 'ignore'],
       default: 'pending'
     },
     carts: [String],

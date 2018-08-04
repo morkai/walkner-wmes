@@ -75,3 +75,32 @@ td.wh-list-icon {
 .wh-pa-resolveAction {
   width: 140px;
 }
+
+.wh-list-item[data-status="started"] {
+  background: #d9edf7;
+}
+.planning-darker .wh-list-item[data-status="started"] {
+  background: #0af;
+  color: #fff;
+}
+.wh-list-item[data-status="finished"] {
+  background: #dff0d8;
+}
+.planning-darker .wh-list-item[data-status="finished"] {
+  background: #00dd00;
+  color: #000;
+}
+.wh-list-item[data-status="problem"] {
+  background: #f2dede;
+}
+.planning-darker .wh-list-item[data-status="problem"] {
+  background: #e00;
+  color: #fff;
+}
+.wh-list-item[data-status="cancelled"] {
+  background: #fcf8e3;
+}
+.planning-darker .wh-list-item[data-status="cancelled"] {
+  background: #ffc000;
+  color: #000;
+}

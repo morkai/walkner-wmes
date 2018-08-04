@@ -2,11 +2,13 @@
 
 define([
   'underscore',
+  'jquery',
   '../time',
   '../core/Collection',
   './WhOrder'
 ], function(
   _,
+  $,
   time,
   Collection,
   WhOrder
@@ -78,6 +80,18 @@ define([
           oldOrder.update(newOrder);
         }
       }
+    },
+
+    act: function(action, data)
+    {
+      return $.ajax({
+        method: 'POST',
+        url: '/wh/plans/' + this.date + ';act',
+        data: JSON.stringify({
+          action: action,
+          data: data
+        })
+      });
     }
 
   });

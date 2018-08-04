@@ -224,7 +224,7 @@ define([
 
       page.whSettings = bindLoadingMessage(whSettings.acquire(), page);
 
-      page.whOrders = bindLoadingMessage(new WhOrderCollection(null, {date: page.options.date}), page);
+      page.whOrders = bindLoadingMessage(new WhOrderCollection(null, {date: plan.id}), page);
 
       var nlsPrefix = 'MSG:LOADING_FAILURE:';
       var nlsDomain = 'planning';
@@ -267,8 +267,6 @@ define([
 
       page.listenTo(plan.sapOrders, 'sync', page.onSapOrdersSynced);
 
-      page.listenTo(page.whOrders, 'act', page.onActionRequested);
-
       page.listenTo(page.listView, 'setClicked', page.onSetClicked);
 
       $(document).on('click.' + page.idPrefix, '.paintShop-breadcrumb', page.onBreadcrumbsClick.bind(page));
@@ -306,8 +304,6 @@ define([
     {
       productionState.load(false);
       whSettings.acquire();
-
-      viewport.currentPage.resolveAction('1000000001');
     },
 
     reload: function()
@@ -418,7 +414,9 @@ define([
 
     onWindowKeyPress: function(e)
     {
-      if (e.keyCode >= 48 && e.keyCode <= 57)
+      var tag = e.target.tagName;
+
+      if (e.keyCode >= 48 && e.keyCode <= 57 && tag !== 'INPUT' && tag !== 'TEXTAREA')
       {
         this.keyBuffer += (e.keyCode - 48).toString();
       }
@@ -438,18 +436,6 @@ define([
       this.keyBuffer = '';
     },
 
-    act: function(action, data)
-    {
-      return this.ajax({
-        method: 'POST',
-        url: '/wh/plans/' + this.plan.id + ';act',
-        data: JSON.stringify({
-          action: action,
-          data: data
-        })
-      });
-    },
-
     resolveAction: function(personnelId)
     {
       var page = this;
@@ -463,7 +449,7 @@ define([
 
       page.showMessage('info', 0, 'resolvingAction', {personnelId: personnelId});
 
-      var req = page.act('resolveAction', {personnelId: personnelId});
+      var req = page.promised(page.whOrders.act('resolveAction', {personnelId: personnelId}));
 
       req.fail(function()
       {
@@ -631,7 +617,10 @@ define([
         $overlay.css('display', 'none');
         $message.css('display', 'none');
 
-        page.timers.hideMessage = null;
+        if (page.timers)
+        {
+          page.timers.hideMessage = null;
+        }
       });
     },
 
@@ -751,11 +740,6 @@ define([
       }
 
       this.timers.reloadOrders = setTimeout(this.reloadOrders.bind(this), 10 * 60 * 1000);
-    },
-
-    onActionRequested: function(action, data)
-    {
-      this.act(action, data);
     },
 
     onSetClicked: function(whOrderId)

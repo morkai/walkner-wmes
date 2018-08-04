@@ -214,15 +214,7 @@ define([
         }
       });
 
-      var $backdrop = $('<div></div>')
-        .css({
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0
-        })
-        .one('mousedown', hideMenu);
+      var $backdrop = $('<div class="planning-menu-backdrop"></div>').one('mousedown', hideMenu);
 
       $menu.data('backdrop', $backdrop);
       $menu.data('options', options);

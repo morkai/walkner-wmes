@@ -368,12 +368,12 @@ define([
 
     handleResetAction: function(filter)
     {
-      this.whOrders.trigger('act', 'resetOrders', filter);
+      this.promised(this.whOrders.act('resetOrders', filter));
     },
 
     handleCancelAction: function(filter)
     {
-      this.whOrders.trigger('act', 'cancelOrders', filter);
+      this.promised(this.whOrders.act('cancelOrders', filter));
     },
 
     onCommentChange: function(sapOrder)

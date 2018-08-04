@@ -73,5 +73,21 @@
   "settings:users:kitter": "Kitter",
   "settings:users:packer": "Opakowania",
 
-  "set:title": "Zestaw zleceń nr {set} dla linii {line}"
+  "set:title": "Zestaw zleceń nr {set} dla linii {line}",
+  "set:cartsEditor:carts": "Numery wózków...",
+  "set:problemEditor:problemArea": "Nr pola problemów...",
+  "set:problemEditor:comment": "Komentarz...",
+
+  "menu:picklistDone:true": "Transakcja wykonana",
+  "menu:picklistDone:false": "Transakcja nieudana",
+  "menu:picklistDone:null": "Resetuj status",
+  "menu:picklist:require": "Picklista wydrukowana",
+  "menu:picklist:ignore": "Ignoruj kompletację",
+  "menu:picklist:pending": "Resetuj status",
+  "menu:pickup:success": "Kompletacja wykonana",
+  "menu:pickup:failure": "Kompletacja nieudana",
+  "menu:pickup:pending": "Resetuj status",
+
+  "update:failure": "Wykonywanie akcji nie powiodło się.",
+  "printLabels:failure": "Drukowanie etykiet nie powiodło się."
 }
