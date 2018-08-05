@@ -885,7 +885,7 @@ module.exports = function setUpWhState(app, module)
       NC12: data.nc12,
       QTY_PLAN: data.qtyPlan,
       QTY_TODO: data.qtyTodo,
-      BARCODE_X: [40, 145, 107, 68, 40][data.qtyPlan.toString().length],
+      BARCODE_X: [40, 184, 145, 107, 40][data.qtyPlan.toString().length],
       LABEL_QTY: data.labelQty
     };
 
