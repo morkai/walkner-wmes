@@ -70,7 +70,7 @@ module.exports = function setUpWhState(app, module)
         WhOrder
           .findOne({
             date: data.date,
-            status: {$in: ['started', 'problem']},
+            status: 'started',
             [`funcs.${funcIndex}.user.id`]: this.user._id,
             [`funcs.${funcIndex}.status`]: {$nin: ['problem', 'finished']}
           })
