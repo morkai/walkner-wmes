@@ -190,22 +190,6 @@ define([
         handler: this.handleCopyAction.bind(this, tr, e.pageY, e.pageX, false, false)
       });
 
-      menu.push({
-        label: t('wh', 'menu:copy:lineGroup', {
-          group: group,
-          line: line
-        }),
-        handler: this.handleCopyAction.bind(this, tr, e.pageY, e.pageX, true, false)
-      });
-
-      menu.push({
-        label: t('wh', 'menu:copy:lineGroupNo', {
-          group: group,
-          line: line
-        }),
-        handler: this.handleCopyAction.bind(this, tr, e.pageY, e.pageX, true, true)
-      });
-
       if (user.isAllowedTo('WH:MANAGE'))
       {
         menu.push('-');
