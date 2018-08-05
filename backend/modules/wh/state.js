@@ -840,7 +840,6 @@ module.exports = function setUpWhState(app, module)
           return this.skip(app.createError('No wh/cart printer!', 'PRINT_FAILURE'));
         }
 
-        const time = moment().format('DD.MM.YYYY, HH:mm');
         const zpl = whOrders.map(whOrder =>
         {
           const sapOrder = sapOrders.find(o => o._id === whOrder.order) || {
@@ -850,7 +849,7 @@ module.exports = function setUpWhState(app, module)
 
           return compileZpl(template, {
             labelQty,
-            time,
+            time: moment.utc(whOrder.startTime).format('DD.MM.YYYY, HH:mm'),
             line: whOrder.line,
             order: whOrder.order,
             nc12: sapOrder.nc12,
