@@ -130,6 +130,9 @@ module.exports = function(grunt)
             {name: 'wmes-heff'},
             {name: 'wmes-ps-queue'},
             {name: 'wmes-ps-load'},
+            {name: 'wmes-wh-pickup'},
+            {name: 'wmes-wh-kitter'},
+            {name: 'wmes-wh-packer'},
             {name: 'pos-main'}
           ],
           paths: requirejsConfig.buildPaths,

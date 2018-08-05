@@ -9,7 +9,6 @@ define([
   'app/core/Model',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
-  'app/factoryLayout/productionState',
   'app/paintShop/views/PaintShopDatePickerView',
   'app/planning/Plan',
   'app/planning/PlanSettings',
@@ -32,7 +31,6 @@ define([
   Model,
   View,
   bindLoadingMessage,
-  productionState,
   PaintShopDatePickerView,
   Plan,
   PlanSettings,
@@ -49,7 +47,7 @@ define([
 ) {
   'use strict';
 
-  var reloadProdState = false;
+  var IS_EMBEDDED = window.parent !== window || window.location.pathname !== '/';
 
   return View.extend({
 
@@ -79,6 +77,11 @@ define([
     actions: function()
     {
       var page = this;
+
+      if (IS_EMBEDDED)
+      {
+        return [];
+      }
 
       return [
         {
@@ -181,7 +184,16 @@ define([
     },
 
     localTopics: {
-      'socket.disconnected': function() { reloadProdState = true; }
+      'socket.connected': function()
+      {
+        this.$el.removeClass('wh-is-disconnected');
+
+        this.reload();
+      },
+      'socket.disconnected': function()
+      {
+        this.$el.addClass('wh-is-disconnected');
+      }
     },
 
     initialize: function()
@@ -198,7 +210,6 @@ define([
       $(document).off('.' + this.idPrefix);
       $(window).off('.' + this.idPrefix);
 
-      productionState.unload();
       whSettings.release();
     },
 
@@ -233,7 +244,6 @@ define([
       bindLoadingMessage(plan.settings, page, nlsPrefix + 'settings', nlsDomain);
       bindLoadingMessage(plan.sapOrders, page, nlsPrefix + 'sapOrders', nlsDomain);
       bindLoadingMessage(plan.shiftOrders, page, nlsPrefix + 'shiftOrders', nlsDomain);
-      bindLoadingMessage(productionState, page, nlsPrefix + 'productionState', nlsDomain);
 
       window.plan = plan;
     },
@@ -245,7 +255,6 @@ define([
       });
 
       this.listView = new WhPlanView({
-        prodLineStates: productionState.prodLineStates,
         whSettings: this.whSettings,
         whOrders: this.whOrders,
         plan: this.plan
@@ -277,12 +286,8 @@ define([
     load: function(when)
     {
       var plan = this.plan;
-      var forceReloadProdState = reloadProdState;
-
-      reloadProdState = false;
 
       return when(
-        productionState.load(forceReloadProdState),
         this.whSettings.fetchIfEmpty(),
         this.whOrders.fetch({reset: true}),
         plan.settings.fetch(),
@@ -302,8 +307,8 @@ define([
 
     afterRender: function()
     {
-      productionState.load(false);
       whSettings.acquire();
+      this.updateUrl();
     },
 
     reload: function()
@@ -344,13 +349,18 @@ define([
 
     updateUrl: function()
     {
-      var plan = this.plan;
-
-      this.broker.publish('router.navigate', {
-        url: '/wh/plans/' + plan.id,
-        replace: true,
-        trigger: false
-      });
+      if (IS_EMBEDDED)
+      {
+        sessionStorage.WMES_WH_PICKUP_DATE = this.plan.id;
+      }
+      else
+      {
+        this.broker.publish('router.navigate', {
+          url: '/wh/plans/' + this.plan.id,
+          replace: true,
+          trigger: false
+        });
+      }
     },
 
     reloadOrders: function()

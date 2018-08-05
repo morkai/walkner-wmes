@@ -18,7 +18,10 @@
       "heff": 16,
       "planning": 39,
       "ps-queue": 14,
-      "ps-load": 7
+      "ps-load": 7,
+      "wh-pickup": 0,
+      "wh-kitter": 0,
+      "wh-packer": 0
     },
     "pos": {
       "backend": 80,

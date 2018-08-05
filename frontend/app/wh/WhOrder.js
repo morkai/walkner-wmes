@@ -93,7 +93,7 @@ define([
       obj.funcs.forEach(function(func)
       {
         obj.clickable[func._id] = {
-          picklist: (canManage && obj.picklistDone !== null)
+          picklist: (canManage && obj.picklistDone)
             || (obj.picklistDone && isUser && userFunc._id === func._id && func.status === 'picklist'),
           pickup: (canManage && obj.picklistDone !== null && func.picklist === 'require')
             || (obj.picklistDone && isUser && userFunc._id === func._id && func.status === 'pickup')

@@ -1,0 +1,23 @@
+@import url("../vendor/bootstrap/css/bootstrap.css");
+@import url("../vendor/font-awesome/css/font-awesome.css");
+@import url("../app/core/assets/main.css");
+@import url("../app/updater/assets/main.css");
+@import url("../app/paintShop/assets/main.css");
+@import url("../app/planning/assets/main.css");
+@import url("../app/production/assets/vkb.css");
+@import url("../app/wh/assets/main.css");
+
+#app-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -32px 0 0 -32px;
+  width: 64px;
+  height: 64px;
+  font-size: 64px;
+  text-align: center;
+  color: #0B5ED7;
+}
+#app-loading.error {
+  color: red;
+}

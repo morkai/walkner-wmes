@@ -375,7 +375,12 @@ define([
       page.promised(plan.settings.set('_id', plan.id).fetch()).then(
         function()
         {
+          var forceReloadProdState = reloadProdState;
+
+          reloadProdState = false;
+
           var promise = $.when(
+            productionState.load(forceReloadProdState),
             plan.shiftOrders.fetch({reset: true, reload: true}),
             plan.sapOrders.fetch({reset: true, reload: true}),
             plan.lateOrders.fetch({reset: true, reload: true}),

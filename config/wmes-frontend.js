@@ -479,6 +479,27 @@ exports.updater = {
       mainJsFile: '/wmes-ps-load.js',
       mainCssFile: '/assets/wmes-ps-load.css',
       template: fs.readFileSync(`${__dirname}/wmes-manifest-ps.appcache`, 'utf8')
+    },
+    {
+      frontendVersionKey: 'wh-pickup',
+      path: '/wh-pickup/manifest.appcache',
+      mainJsFile: '/wmes-wh-pickup.js',
+      mainCssFile: '/assets/wmes-wh-pickup.css',
+      template: fs.readFileSync(`${__dirname}/wmes-manifest-wh.appcache`, 'utf8')
+    },
+    {
+      frontendVersionKey: 'wh-kitter',
+      path: '/wh-kitter/manifest.appcache',
+      mainJsFile: '/wmes-wh-kitter.js',
+      mainCssFile: '/assets/wmes-wh-kitter.css',
+      template: fs.readFileSync(`${__dirname}/wmes-manifest-wh.appcache`, 'utf8')
+    },
+    {
+      frontendVersionKey: 'wh-packer',
+      path: '/wh-packer/manifest.appcache',
+      mainJsFile: '/wmes-wh-packer.js',
+      mainCssFile: '/assets/wmes-wh-packer.css',
+      template: fs.readFileSync(`${__dirname}/wmes-manifest-wh.appcache`, 'utf8')
     }
   ]
 };
