@@ -467,13 +467,6 @@ exports.updater = {
       mainCssFile: '/assets/wmes-heff.css'
     },
     {
-      frontendVersionKey: 'mrl',
-      path: '/mrl/manifest.appcache',
-      mainJsFile: '/wmes-mrl.js',
-      mainCssFile: '/assets/wmes-mrl.css',
-      template: fs.readFileSync(`${__dirname}/wmes-manifest-mrl.appcache`, 'utf8')
-    },
-    {
       frontendVersionKey: 'ps-queue',
       path: '/ps-queue/manifest.appcache',
       mainJsFile: '/wmes-ps-queue.js',
