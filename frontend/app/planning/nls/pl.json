@@ -139,6 +139,7 @@
   "orders:ignored": "Ignorowane",
   "orders:urgent": "Pilne",
   "orders:pinned": "Przypięte",
+  "orders:eto": "ETO",
   "orders:lines": "Linia",
   "orders:source:plan": "Zaplanowane",
   "orders:source:added": "Dodane",

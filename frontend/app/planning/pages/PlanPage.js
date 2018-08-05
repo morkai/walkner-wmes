@@ -306,6 +306,8 @@ define([
 
       page.listenTo(plan.mrps, 'reset', _.after(2, _.debounce(page.renderMrps.bind(page), 1)));
 
+      page.listenTo(plan.orders, 'added', page.reloadOrders.bind(page, true));
+
       page.listenTo(plan.sapOrders, 'sync', page.onSapOrdersSynced);
 
       $(document)
@@ -448,9 +450,13 @@ define([
       this.recountStats();
     },
 
-    reloadOrders: function()
+    reloadOrders: function(onlySap)
     {
-      this.promised(this.plan.lateOrders.fetch({reset: true}));
+      if (!onlySap)
+      {
+        this.promised(this.plan.lateOrders.fetch({reset: true}));
+      }
+
       this.promised(this.plan.sapOrders.fetch({reset: true}));
     },
 

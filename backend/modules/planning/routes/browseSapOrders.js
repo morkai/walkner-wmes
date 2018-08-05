@@ -2,6 +2,7 @@
 
 'use strict';
 
+const fs = require('fs');
 const _ = require('lodash');
 const step = require('h5.step');
 
@@ -17,6 +18,28 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
   step(
     function()
     {
+      if (!module.eto && module.config.etoPath)
+      {
+        fs.readdir(module.config.etoPath, this.next());
+      }
+    },
+    function(err, files)
+    {
+      if (err)
+      {
+        module.error(`Failed to read ETO files: ${err.message}`);
+      }
+
+      if (files)
+      {
+        module.eto = new Set();
+
+        files.forEach(file =>
+        {
+          module.eto.add(file.replace('.html', ''));
+        });
+      }
+
       Plan.findById(req.params.id, {'orders._id': 1}).lean().exec(this.next());
     },
     function(err, plan)
@@ -42,6 +65,7 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
       }
 
       const $project = {
+        nc12: 1,
         quantityTodo: '$qty',
         quantityDone: '$qtyDone',
         statuses: 1,
@@ -106,6 +130,8 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
         psStatuses.set(order.order, order.status);
       });
 
+      const eto = module.eto || new Set();
+
       sapOrders.forEach(order =>
       {
         if (_.isEmpty(order.quantityDone))
@@ -116,6 +142,8 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
           };
         }
 
+        order.eto = eto.has(order.nc12);
+        order.nc12 = undefined;
         order.psStatus = psStatuses.get(order._id);
         order.delayReason = null;
         order.comments = [];

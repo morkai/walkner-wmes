@@ -55,6 +55,11 @@ define([
       statuses.push(formatIcon(planOrder.getIcon('pinned'), 'orders:pinned'));
     }
 
+    if (plan.sapOrders.isEto(orderNo))
+    {
+      statuses.push(formatIcon(planOrder.getIcon('eto'), 'orders:eto'));
+    }
+
     statuses.push('<span class="planning-mrp-list-property planning-mrp-list-property-psStatus" '
       + 'title="' + t('planning', 'orders:psStatus:' + psStatus) + '" '
       + 'data-ps-status="' + psStatus + '">'

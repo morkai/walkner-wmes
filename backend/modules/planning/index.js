@@ -12,7 +12,8 @@ exports.DEFAULT_CONFIG = {
   expressId: 'express',
   ordersId: 'orders',
   settingsId: 'settings',
-  generator: true
+  generator: true,
+  etoPath: './order-documents/eto'
 };
 
 exports.start = function startPlanningModule(app, module)
@@ -88,6 +89,14 @@ exports.start = function startPlanningModule(app, module)
       app.broker.publish('planning.generator.requested', {
         date: m.date
       });
+    }
+  });
+
+  app.broker.subscribe('orderDocuments.eto.synced', m =>
+  {
+    if (module.eto)
+    {
+      module.eto.add(m.nc12);
     }
   });
 };

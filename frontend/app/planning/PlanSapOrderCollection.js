@@ -43,6 +43,13 @@ define([
       var order = this.get(orderNo);
 
       return (order ? order.get('whStatus') : null) || 'unknown';
+    },
+
+    isEto: function(orderNo)
+    {
+      var order = this.get(orderNo);
+
+      return order ? order.get('eto') : false;
     }
 
   });

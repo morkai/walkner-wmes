@@ -185,6 +185,7 @@ define([
           urgent: urgent && !autoAdded,
           invalid: !order.get('operation').laborTime ? 'is-invalid' : '',
           pinned: order.isPinned(),
+          eto: plan.sapOrders.isEto(order.id),
           psStatus: plan.sapOrders.getPsStatus(order.id),
           whStatus: plan.sapOrders.getWhStatus(order.id)
         };
