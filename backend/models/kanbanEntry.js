@@ -55,6 +55,7 @@ module.exports = function setupKanbanEntryModel(app, mongoose)
       locations: ['', '', '', '', '', ''],
       discontinued: false,
       comment: '',
+      deleted: false,
       updates: {},
       changes: []
     };
