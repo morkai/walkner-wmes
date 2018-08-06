@@ -62,6 +62,7 @@ module.exports = function setUpGenerator(app, module)
 
   const mongoose = app[module.config.mongooseId];
   const Order = mongoose.model('Order');
+  const PaintShopOrder = mongoose.model('PaintShopOrder');
   const Plan = mongoose.model('Plan');
   const PlanSettings = mongoose.model('PlanSettings');
   const PlanChange = mongoose.model('PlanChange');
@@ -185,6 +186,7 @@ module.exports = function setUpGenerator(app, module)
       orderToLines: new Map(),
       resizedOrders: new Set(),
       hourlyPlanRecount: new Set(),
+      unpainted: new Set(),
       grouping: {
         orderToGroups: new Map(),
         lineToGroups: new Map()
@@ -434,7 +436,7 @@ module.exports = function setUpGenerator(app, module)
 
         loadPlan(state, this.next());
       },
-      function freezeOrdersStep(err)
+      function loadPsStatusStep(err)
       {
         if (state.cancelled)
         {
@@ -444,6 +446,20 @@ module.exports = function setUpGenerator(app, module)
         if (err)
         {
           return this.skip(new Error(`Failed to load plan: ${err.message}`));
+        }
+
+        loadPsStatus(state, this.next());
+      },
+      function freezeOrdersStep(err)
+      {
+        if (state.cancelled)
+        {
+          return this.skip();
+        }
+
+        if (err)
+        {
+          return this.skip(new Error(`Failed to load PS status: ${err.message}`));
         }
 
         if (state.freezeOrders)
@@ -964,11 +980,55 @@ module.exports = function setUpGenerator(app, module)
     );
   }
 
+  function loadPsStatus(state, done)
+  {
+    state.log('Loading paint-shop statuses...');
+
+    step(
+      function()
+      {
+        const pipeline = [
+          {$match: {
+            order: {$in: state.plan.orders.map(o => o._id)}
+          }},
+          {$group: {
+            _id: '$order',
+            orderCount: {$sum: 1},
+            orderQty: {$max: '$qty'},
+            qtyDone: {$sum: '$qtyDone'}
+          }}
+        ];
+
+        PaintShopOrder.aggregate(pipeline, this.next());
+      },
+      function(err, results)
+      {
+        if (err)
+        {
+          return done(err);
+        }
+
+        results.forEach(r =>
+        {
+          if (r.qtyDone < (r.orderCount * r.orderQty))
+          {
+            state.unpainted.add(r._id);
+          }
+        });
+
+        done();
+      }
+    );
+  }
+
+  function anyFrozenOrders(state)
+  {
+    return state.plan.lines.find(planLine => planLine.frozenOrders.length > 0);
+  }
+
   function freezeOrders(state, done)
   {
-    const anyAlreadyFrozen = state.plan.lines.find(planLine => planLine.frozenOrders.length > 0);
-
-    if (!anyAlreadyFrozen)
+    if (!anyFrozenOrders(state))
     {
       state.log('Freezing first shift orders...');
 
@@ -1483,7 +1543,8 @@ module.exports = function setUpGenerator(app, module)
         name: planOrder.name, // eslint-disable-line comma-dangle
         nameParts: getOrderNameParts(planOrder),
         nameRank: 0,
-        group: null
+        group: null,
+        painted: state.unpainted.has(planOrder._id) ? 1 : 0
       };
 
       if (planOrder.urgent)
@@ -1524,6 +1585,11 @@ module.exports = function setUpGenerator(app, module)
   {
     const aOrder = a.order;
     const bOrder = b.order;
+
+    if (a.painted !== b.painted)
+    {
+      return a.painted - b.painted;
+    }
 
     if (aOrder.lines.length && !bOrder.lines.length)
     {
@@ -1627,6 +1693,8 @@ module.exports = function setUpGenerator(app, module)
       sortedQueue.push(unsortedQueue.shift());
     }
 
+    sortedQueue.sort((a, b) => a.painted - b.painted);
+
     orderStateQueues[kind] = sortedQueue;
   }
 
@@ -1688,6 +1756,11 @@ module.exports = function setUpGenerator(app, module)
 
   function sortHardOrders(a, b)
   {
+    if (a.painted !== b.painted)
+    {
+      return a.painted - b.painted;
+    }
+
     if (a.order.hardComponent === b.order.hardComponent)
     {
       return b.order.manHours - a.order.manHours;
