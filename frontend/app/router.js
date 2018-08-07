@@ -5,6 +5,7 @@ define([
   'h5.rql/specialOperators',
   'app/broker',
   'app/viewport',
+  'app/time',
   'app/core/Router',
   'app/core/pages/ErrorPage'
 ], function(
@@ -12,6 +13,7 @@ define([
   specialOperators,
   broker,
   viewport,
+  time,
   Router,
   ErrorPage
 ) {
@@ -87,6 +89,20 @@ define([
         xhr: message.xhr
       }
     }));
+  });
+
+  broker.subscribe('router.dispatching', function(message)
+  {
+    var recent = JSON.parse(localStorage.WMES_RECENT_DISPATCH || '[]');
+
+    recent.push(time.getMoment().format('YYYY-MM-DD, HH:mm:ss') + ' ' + message.url);
+
+    if (recent.length > 10)
+    {
+      recent.shift();
+    }
+
+    localStorage.WMES_RECENT_DISPATCH = JSON.stringify(recent);
   });
 
   window.router = router;
