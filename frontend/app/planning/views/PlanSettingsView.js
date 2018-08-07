@@ -198,6 +198,7 @@ define([
 
       this.setUpOrderStatusSelect2('requiredStatuses');
       this.setUpOrderStatusSelect2('ignoredStatuses');
+      this.setUpOrderStatusSelect2('completedStatuses');
       this.setUpComponentsSelect2(this.$id('hardComponents'));
       this.setUpLine();
       this.setUpMrpSelect2();
@@ -719,6 +720,7 @@ define([
 
       formData.requiredStatuses = formData.requiredStatuses.join(',');
       formData.ignoredStatuses = formData.ignoredStatuses.join(',');
+      formData.completedStatuses = formData.completedStatuses.join(',');
       formData.schedulingRate = this.formatSchedulingRate(formData.schedulingRate);
 
       return formData;
@@ -848,6 +850,7 @@ define([
       {
         case 'requiredStatuses':
         case 'ignoredStatuses':
+        case 'completedStatuses':
         case 'hardComponents':
         case 'orderPriority':
           v = $property.val().split(',').filter(function(v) { return v.length > 0; });
@@ -1053,6 +1056,7 @@ define([
 
           case 'requiredStatuses':
           case 'ignoredStatuses':
+          case 'completedStatuses':
             view.$id(property).select2('val', value);
             break;
 

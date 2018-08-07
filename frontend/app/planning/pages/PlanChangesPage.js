@@ -340,10 +340,12 @@ define([
         case 'statuses':
         case 'ignoredStatuses':
         case 'requiredStatuses':
+        case 'completedStatuses':
           return value.map(renderOrderStatusLabel).join(' ');
 
         case 'lines':
         case 'extraShiftSeconds':
+        case 'mrpPriority':
           return value.length === 0 ? '-' : value.join(', ');
 
         case 'operation':

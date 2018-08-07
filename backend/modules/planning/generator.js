@@ -1238,14 +1238,19 @@ module.exports = function setUpGenerator(app, module)
       {
         state.newIncompleteOrders.delete(planOrder._id);
 
-        return {
-          _id: planOrder._id,
-          reason: 'IGNORED_STATUS',
-          data: {
-            actualStatuses: planOrder.statuses,
-            ignoredStatus: actualStatus
-          }
-        };
+        planOrder.incomplete = 0;
+
+        if (!state.settings.completedStatuses.includes(actualStatus))
+        {
+          return {
+            _id: planOrder._id,
+            reason: 'IGNORED_STATUS',
+            data: {
+              actualStatuses: planOrder.statuses,
+              ignoredStatus: actualStatus
+            }
+          };
+        }
       }
 
       actualStatuses.add(actualStatus);
@@ -1516,7 +1521,7 @@ module.exports = function setUpGenerator(app, module)
 
     state.plan.orders.forEach(planOrder =>
     {
-      if (planOrder.ignored || !planOrder.operation.laborTime)
+      if (isUnplannableOrder(state, planOrder))
       {
         return;
       }
@@ -1569,6 +1574,27 @@ module.exports = function setUpGenerator(app, module)
     }
 
     setImmediate(done);
+  }
+
+  function isUnplannableOrder(state, planOrder)
+  {
+    return planOrder.ignored || !planOrder.operation.laborTime || isCompletedOrder(state, planOrder);
+  }
+
+  function isCompletedOrder(state, planOrder)
+  {
+    const {completedStatuses} = state.settings;
+    const {statuses} = planOrder;
+
+    for (let i = 0; i < completedStatuses.length; ++i)
+    {
+      if (statuses.includes(completedStatuses[i]))
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   function getAvailablePinnedLines(state, planOrder)
@@ -3176,12 +3202,14 @@ module.exports = function setUpGenerator(app, module)
         return;
       }
 
-      const {ignored, mrp, operation} = state.orders.get(orderNo);
+      const planOrder = state.orders.get(orderNo);
 
-      if (ignored || !operation.laborTime)
+      if (isUnplannableOrder(state, planOrder))
       {
         return;
       }
+
+      const {mrp} = planOrder;
 
       if (checkedMrps.has(mrp))
       {

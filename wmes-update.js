@@ -3,5 +3,4 @@
 
 'use strict';
 
-db.kanbansupplyareas.update({}, {$unset: {markerColor: 1}}, {multi: true});
-db.kanbancomponents.update({}, {$set: {markerColor: null}}, {multi: true});
+db.plansettings.update({}, {$set: {completedStatuses: ['DLV', 'CNF']}}, {multi: true});

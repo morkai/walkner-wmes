@@ -18,16 +18,13 @@
         <p class="help-block"><%- t('planning', 'settings:schedulingRate:help') %></p>
         <textarea id="<%- idPrefix %>-schedulingRate" name="schedulingRate" class="form-control text-mono" required data-object="plan" rows="4"></textarea>
       </div>
+      <% ['requiredStatuses', 'ignoredStatuses', 'completedStatuses'].forEach(function(prop) { %>
       <div class="form-group">
-        <label for="<%- idPrefix %>-requiredStatuses"><%- t('planning', 'settings:requiredStatuses') %></label>
-        <p class="help-block"><%- t('planning', 'settings:requiredStatuses:help') %></p>
-        <input id="<%- idPrefix %>-requiredStatuses" name="requiredStatuses" type="text" data-object="plan">
+        <label for="<%- idPrefix %>-<%- prop %>"><%- t('planning', 'settings:' + prop) %></label>
+        <p class="help-block"><%- t('planning', 'settings:' + prop + ':help') %></p>
+        <input id="<%- idPrefix %>-<%- prop %>" name="<%- prop %>" type="text" data-object="plan">
       </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-ignoredStatuses"><%- t('planning', 'settings:ignoredStatuses') %></label>
-        <p class="help-block"><%- t('planning', 'settings:ignoredStatuses:help') %></p>
-        <input id="<%- idPrefix %>-ignoredStatuses" name="ignoredStatuses" type="text" data-object="plan">
-      </div>
+      <% }) %>
       <div class="checkbox">
         <label class="control-label">
           <input id="<%- idPrefix %>-ignoreCompleted" name="ignoreCompleted" type="checkbox" value="true" data-object="plan">
