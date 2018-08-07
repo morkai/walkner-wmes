@@ -150,6 +150,23 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
     },
     function()
     {
+      if (this.jobPrinters.kk)
+      {
+        printKk(this.jobPrinters.kk, this.job, this.group());
+      }
+
+      if (this.jobPrinters.desc)
+      {
+        printDesc(this.jobPrinters.desc, this.job, this.group());
+      }
+
+      if (this.jobPrinters.empty || this.jobPrinters.full || this.jobPrinters.wh)
+      {
+        printEmptyFullWh(this.jobPrinters, this.job, this.group());
+      }
+    },
+    function()
+    {
       if (_.isEmpty(module.printing.infoLabels))
       {
         return;
@@ -171,23 +188,6 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
           }
         });
       });
-    },
-    function()
-    {
-      if (this.jobPrinters.kk)
-      {
-        printKk(this.jobPrinters.kk, this.job, this.group());
-      }
-
-      if (this.jobPrinters.desc)
-      {
-        printDesc(this.jobPrinters.desc, this.job, this.group());
-      }
-
-      if (this.jobPrinters.empty || this.jobPrinters.full || this.jobPrinters.wh)
-      {
-        printEmptyFullWh(this.jobPrinters, this.job, this.group());
-      }
     },
     function(err)
     {
