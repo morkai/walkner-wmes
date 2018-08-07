@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["../i18n","../core/Model"],function(n,e){"use strict";return e.extend({urlRoot:"/kanban/supplyAreas",clientUrlRoot:"#kanban/supplyAreas",topicPrefix:"kanban.supplyAreas",privilegePrefix:"KANBAN",nlsDomain:"kanbanSupplyAreas",serialize:function(){var n=this.toJSON();return n.lines=(n.lines||[]).join("; "),n}})});
+define(["../i18n","../core/Model"],function(e,n){"use strict";return n.extend({urlRoot:"/kanban/supplyAreas",clientUrlRoot:"#kanban/supplyAreas",topicPrefix:"kanban.supplyAreas",privilegePrefix:"KANBAN",nlsDomain:"kanbanSupplyAreas",labelAttribute:"name",serialize:function(){var e=this.toJSON();return e.lines=(e.lines||[]).join("; "),e}})});
