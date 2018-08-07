@@ -48,28 +48,26 @@ define([
 
       entries.forEach(function(entry)
       {
-        if (ccns[entry.id])
+        if (ccns[entry._id])
         {
           return;
         }
 
         var model = {
           _id: uuid(),
-          ccn: entry.id,
-          lines: entry.serialize().lines
+          ccn: entry._id,
+          lines: entry.lines
         };
 
         builder.add(model, {multi: true});
         added.push(model._id);
       });
 
-      this.trigger('multiAdd', added);
+      builder.trigger('multiAdd', added);
     },
 
     addFromEntry: function(entry)
     {
-      entry = entry.serialize();
-
       var model = this.findWhere({ccn: entry._id});
 
       if (model)

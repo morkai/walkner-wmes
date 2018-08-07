@@ -131,7 +131,7 @@ define([
 
         view.model.builder.forEach(function(model)
         {
-          var allLines = view.model.entries.get(model.get('ccn')).serialize().lines;
+          var allLines = view.model.entries.get(model.get('ccn')).serialize(view.model).lines;
           var selectedLines = model.get('lines');
 
           allLines.forEach(function(line)
@@ -354,7 +354,7 @@ define([
     recountRow: function(model, $tr)
     {
       var row = $tr && $tr.length ? $tr[0] : this.$rows[0].rows[this.model.builder.models.indexOf(model)];
-      var entry = this.model.entries.get(model.get('ccn')).serialize();
+      var entry = this.model.entries.get(model.get('ccn')).serialize(this.model);
       var kanbanQtyUser = entry.kanbanQtyUser;
       var lineCount = model.get('lines').length;
       var layouts = this.model.builder.layouts;
@@ -396,7 +396,6 @@ define([
 
         ++no;
 
-        var supplyArea = view.model.supplyAreas.get(entry.get('supplyArea'));
         var $tr = view.$row.clone();
         var tds = $tr[0].children;
         var select = tds[2].firstElementChild;
@@ -406,7 +405,7 @@ define([
         tds[0].textContent = no + '.';
         tds[1].textContent = entry.id;
 
-        (supplyArea ? supplyArea.get('lines') : []).forEach(function(lineId)
+        entry.serialize(view.model).lines.forEach(function(lineId)
         {
           var selected = lines.indexOf(lineId) === -1 ? '' : 'selected';
 
@@ -449,7 +448,7 @@ define([
       view.$rows.children().each(function(modelIndex)
       {
         var model = builder.at(modelIndex);
-        var entry = view.model.entries.get(model.get('ccn')).serialize();
+        var entry = view.model.entries.get(model.get('ccn')).serialize(view.model);
 
         if (!entry.kind)
         {
@@ -526,7 +525,7 @@ define([
 
       view.model.builder.forEach(function(model)
       {
-        var entry = view.model.entries.get(model.get('ccn')).serialize();
+        var entry = view.model.entries.get(model.get('ccn')).serialize(view.model);
         var jobLayouts = view.model.builder.layouts.filter(function(layout)
         {
           return (entry.kind === 'kk' && layout === 'kk')

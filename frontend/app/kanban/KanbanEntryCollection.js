@@ -54,29 +54,6 @@ define([
       pubsub.subscribe('kanban.entries.updated', this.onUpdated.bind(this));
     },
 
-    getSupplyAreas: function()
-    {
-      var supplyAreas = {};
-
-      this.forEach(function(entry)
-      {
-        supplyAreas[entry.get('supplyArea')] = 1;
-      });
-
-      this.supplyAreas.forEach(function(supplyArea)
-      {
-        supplyAreas[supplyArea.id] = 1;
-      });
-
-      return Object.keys(supplyAreas).sort().map(function(supplyArea)
-      {
-        return {
-          id: supplyArea,
-          text: supplyArea
-        };
-      });
-    },
-
     onFilterModeChange: function()
     {
       if (this.tableView.hasAnyFilter())
@@ -85,8 +62,9 @@ define([
       }
     },
 
-    onFilterChange: function()
+    onFilterChange: function(tableView, columnId)
     {
+      var reserialize = columnId === 'workCenter';
       var filter = this.tableView.createFilter(this);
 
       this.filtered = [];
@@ -95,6 +73,11 @@ define([
       for (var i = 0; i < this.length; ++i)
       {
         var model = this.models[i];
+
+        if (reserialize)
+        {
+          model.serialized = null;
+        }
 
         if (filter(model))
         {
@@ -117,9 +100,11 @@ define([
 
     onSupplyAreaUpdate: function(supplyArea)
     {
+      supplyArea = supplyArea.get('name');
+
       this.forEach(function(entry)
       {
-        if (entry.get('supplyArea') === supplyArea.id)
+        if (entry.get('supplyArea') === supplyArea)
         {
           entry.serialized = null;
         }

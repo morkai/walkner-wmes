@@ -21,6 +21,8 @@ define([
 
     nlsDomain: 'kanbanSupplyAreas',
 
+    labelAttribute: 'name',
+
     serialize: function()
     {
       var obj = this.toJSON();

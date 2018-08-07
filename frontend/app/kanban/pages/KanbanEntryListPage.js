@@ -311,7 +311,12 @@ define([
 
     onBuilderAddAllClick: function()
     {
-      this.model.builder.addFromEntries(this.model.entries.filtered);
+      var kanbanState = this.model;
+
+      kanbanState.builder.addFromEntries(kanbanState.entries.filtered.map(function(entry)
+      {
+        return entry.serialize(kanbanState);
+      }));
     }
 
   });

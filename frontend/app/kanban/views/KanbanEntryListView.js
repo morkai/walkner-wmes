@@ -825,7 +825,7 @@ define([
         });
       }
 
-      this.model.builder.addFromEntry(entry);
+      this.model.builder.addFromEntry(entry.serialize(this.model));
     },
 
     handleCopyTable: function()
@@ -898,7 +898,7 @@ define([
 
     exportEntry: function(entry)
     {
-      entry = entry.serialize();
+      entry = entry.serialize(this.model);
 
       var line = [];
 
@@ -1796,7 +1796,7 @@ define([
         return;
       }
 
-      var serializedEntry = entry.serialize();
+      var serializedEntry = entry.serialize(view.model);
       var oldValue = serializedEntry[columnId];
 
       if (arrayIndex >= 0)
@@ -1842,7 +1842,7 @@ define([
           text: view.t('msg:update:failure')
         });
 
-        var serializedEntry = entry.serialize();
+        var serializedEntry = entry.serialize(view.model);
 
         $td
           .attr('class', 'kanban-td ' + column.tdClassName(oldValue, column, arrayIndex, serializedEntry))
@@ -1871,7 +1871,7 @@ define([
       input: function(cell, maxLength, pattern, placeholder)
       {
         var view = this;
-        var entry = cell.model.serialize();
+        var entry = cell.model.serialize(view.model);
 
         $(document.body).append(inputEditorTemplate({
           idPrefix: view.idPrefix,
@@ -1899,7 +1899,7 @@ define([
             view.$id('editor-input').val(),
             cell.column,
             cell.arrayIndex,
-            cell.model.serialize()
+            cell.model.serialize(view.model)
           );
 
           view.handleEditorValue(cell.modelId, cell.columnId, cell.arrayIndex, newValue);
@@ -1959,7 +1959,7 @@ define([
             view.$id('editor-input').val(),
             cell.column,
             cell.arrayIndex,
-            cell.model.serialize()
+            cell.model.serialize(view.model)
           );
 
           view.handleEditorValue(cell.modelId, cell.columnId, cell.arrayIndex, newValue);
@@ -2008,7 +2008,7 @@ define([
       textArea: function(cell)
       {
         var view = this;
-        var entry = cell.model.serialize();
+        var entry = cell.model.serialize(view.model);
 
         $(document.body).append(textAreaEditorTemplate({
           idPrefix: view.idPrefix,
@@ -2037,7 +2037,7 @@ define([
             view.$id('editor-input').val(),
             cell.column,
             cell.arrayIndex,
-            cell.model.serialize()
+            cell.model.serialize(view.model)
           );
 
           view.handleEditorValue(cell.modelId, cell.columnId, cell.arrayIndex, newValue);
@@ -2358,7 +2358,7 @@ define([
 
             try
             {
-              var o = view.model.entries.at(0).serialize();
+              var o = view.model.entries.at(0).serialize(view.model);
               var v = cell.arrayIndex >= 0 ? o[cell.columnId][cell.arrayIndex] : o[cell.columnId];
               var result = eval( // eslint-disable-line no-eval
                 '(function($, $$) { return ' + code + '; })(' + JSON.stringify(v) + ', ' + JSON.stringify(o) + ');'
@@ -2440,7 +2440,7 @@ define([
 
             try
             {
-              var o = view.model.entries.at(0).serialize();
+              var o = view.model.entries.at(0).serialize(view.model);
               var v = cell.arrayIndex >= 0 ? o[cell.columnId][cell.arrayIndex] : o[cell.columnId];
               var result = eval( // eslint-disable-line no-eval
                 '(function($, $$) { return ' + code + '; })(' + JSON.stringify(v) + ', ' + JSON.stringify(o) + ');'
@@ -2521,7 +2521,29 @@ define([
         template: selectFilterTemplate,
         handler: function(cell, $filter)
         {
-          this.filters.select.call(this, cell, $filter, this.model.entries.getSupplyAreas());
+          this.filters.select.call(this, cell, $filter, this.model.supplyAreas.getNames());
+        }
+      },
+      workCenter: {
+        type: 'select-multi',
+        template: selectFilterTemplate,
+        handler: function(cell, $filter)
+        {
+          var supplyAreaFilter = this.model.tableView.getFilter('supplyArea');
+          var supplyAreas = [];
+
+          if (supplyAreaFilter
+            && supplyAreaFilter.type === 'select'
+            && supplyAreaFilter.data.length)
+          {
+            supplyAreas = supplyAreaFilter.data;
+          }
+
+          var options = [{id: '', text: this.t('filters:value:empty')}].concat(
+            this.model.supplyAreas.getWorkCenters(supplyAreas)
+          );
+
+          this.filters.select.call(this, cell, $filter, options);
         }
       },
       family: {
@@ -2529,12 +2551,11 @@ define([
         template: selectFilterTemplate,
         handler: function(cell, $filter)
         {
-          this.filters.select.call(
-            this,
-            cell,
-            $filter,
-            [{id: '', text: this.t('filters:value:empty')}].concat(this.model.supplyAreas.getFamilies())
+          var options = [{id: '', text: this.t('filters:value:empty')}].concat(
+            this.model.supplyAreas.getFamilies([])
           );
+
+          this.filters.select.call(this, cell, $filter, options);
         }
       },
       kind: {

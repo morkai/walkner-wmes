@@ -15,8 +15,9 @@
   "PANEL:TITLE:addForm": "Formularz dodawania obszaru",
   "PANEL:TITLE:editForm": "Formularz edycji obszaru",
 
-  "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
+  "PROPERTY:workCenter": "WorkCenter",
+  "PROPERTY:family": "Rodzina",
   "PROPERTY:lines": "Linie produkcyjne",
 
   "lines:no": "Lp.",
@@ -30,7 +31,7 @@
   "FORM:ACTION:edit": "Edytuj obszar",
   "FORM:ERROR:addFailure": "Nie udało się dodać obszaru.",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować obszaru.",
-  "FORM:ERROR:alreadyExists": "Obszar o danym ID już istnieje.",
+  "FORM:ERROR:alreadyExists": "Obszar z danym WorkCenter już istnieje.",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia obszaru",
   "ACTION_FORM:BUTTON:delete": "Usuń obszar",

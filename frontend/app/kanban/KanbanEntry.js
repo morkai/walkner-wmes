@@ -32,7 +32,11 @@ define([
       }
 
       var entry = this.toJSON();
-      var supplyArea = options.supplyAreas.get(entry.supplyArea);
+      var workCenterFilter = options.tableView.getFilter('workCenter');
+      var supplyArea = options.supplyAreas.findByWorkCenters(
+        entry.supplyArea,
+        workCenterFilter ? workCenterFilter.data : []
+      );
       var component = options.components.get(entry.nc12);
 
       entry.rowClassName = entry.discontinued ? 'kanban-is-discontinued' : '';
@@ -60,12 +64,16 @@ define([
 
       if (supplyArea)
       {
-        entry.family = supplyArea.get('name');
+        entry.supplyAreaId = supplyArea.id;
+        entry.workCenter = supplyArea.get('workCenter');
+        entry.family = supplyArea.get('family');
         entry.lineCount = supplyArea.get('lineCount');
         entry.lines = supplyArea.get('lines');
       }
       else
       {
+        entry.supplyAreaId = null;
+        entry.workCenter = '';
         entry.family = '';
         entry.lineCount = 0;
         entry.lines = [];

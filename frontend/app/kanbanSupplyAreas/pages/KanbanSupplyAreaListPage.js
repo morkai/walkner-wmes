@@ -19,8 +19,9 @@ define([
     baseBreadcrumb: '#kanban',
 
     columns: [
-      {id: '_id', className: 'is-min'},
       {id: 'name', className: 'is-min'},
+      {id: 'workCenter', className: 'is-min'},
+      {id: 'family', className: 'is-min'},
       'lines'
     ]
 

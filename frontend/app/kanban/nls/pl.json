@@ -43,6 +43,7 @@
   "column:nc12": "12NC",
   "column:description": "Nazwa komponentu",
   "column:supplyArea": "Obszar<br>zaopatrzenia",
+  "column:workCenter": "WorkCenter",
   "column:family": "Rodzina",
   "column:kanbanQtyUser": "Liczba kanbanów na<br>linię montażową",
   "column:kanbanQtyUser:title": "Liczba kanbanów na linię montażową",
@@ -82,6 +83,7 @@
 
   "export:fileName": "WMES_KANBAN",
   "export:sheetName": "Baza Kanban",
+  "export:progress": "Eksportowanie tabeli...",
   "export:failure": "Eksport tabeli nie powiodł się.",
 
   "kind:kk": "Karta Kanbanowa",

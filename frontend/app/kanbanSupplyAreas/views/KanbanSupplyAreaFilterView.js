@@ -14,26 +14,26 @@ define([
     template: template,
 
     defaultFormData: {
-      _id: '',
-      name: ''
+      name: '',
+      family: ''
     },
 
     termToForm: {
-      '_id': function(propertyName, term, formData)
+      'name': function(propertyName, term, formData)
       {
         if (term.name === 'regex')
         {
           formData[propertyName] = this.unescapeRegExp(term.args[1]);
         }
       },
-      'name': '_id'
+      'family': 'name'
     },
 
     serializeFormToQuery: function(selector)
     {
       var view = this;
 
-      ['_id', 'name'].forEach(function(prop)
+      ['name', 'family'].forEach(function(prop)
       {
         view.serializeRegexTerm(selector, prop, -1, null, true, false);
       });

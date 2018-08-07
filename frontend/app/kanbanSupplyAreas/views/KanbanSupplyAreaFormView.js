@@ -23,7 +23,7 @@ define([
 
     events: _.assign({
 
-      'input #-_id': 'validateId',
+      'input #-name, #-workCenter': 'checkUniqueness',
 
       'click #-addLine': function()
       {
@@ -66,7 +66,7 @@ define([
     {
       FormView.prototype.initialize.apply(this, arguments);
 
-      this.validateId = _.debounce(this.validateId.bind(this), 500);
+      this.checkUniqueness = _.debounce(this.checkUniqueness.bind(this), 500);
 
       this.prodLines = [{id: '-', text: this.t('lines:reserved')}].concat(orgUnits.getAllByType('prodLine')
         .filter(function(l) { return !l.get('deactivatedAt'); })
@@ -82,14 +82,13 @@ define([
       if (this.options.editMode)
       {
         this.model.get('lines').forEach(this.addLine, this);
-        this.$id('_id').prop('readonly', true);
-        this.$id('name').focus();
       }
       else
       {
         this.addLine('-');
-        this.$id('_id').focus();
       }
+
+      this.$id('name').focus();
     },
 
     addLine: function(lineId)
@@ -115,20 +114,43 @@ define([
       });
     },
 
-    validateId: function()
+    serializeForm: function(formData)
+    {
+      if (!formData.workCenter)
+      {
+        formData.workCenter = '';
+      }
+
+      return formData;
+    },
+
+    checkUniqueness: function()
     {
       var view = this;
-      var $id = view.$id('_id');
-      var req = view.ajax({method: 'HEAD', url: '/kanban/supplyAreas/' + $id.val()});
+      var $name = view.$id('name');
+      var $workCenter = view.$id('workCenter');
+      var url = '/kanban/supplyAreas?select(_id)'
+        + '&name=string:' + encodeURIComponent($name.val().trim())
+        + '&workCenter=string:' + encodeURIComponent($workCenter.val().trim());
 
-      req.fail(function()
+      if (view.model.id)
       {
-        $id[0].setCustomValidity('');
+        url += '&_id=ne=' + view.model.id;
+      }
+
+      var req = view.ajax({
+        method: 'GET',
+        url: url
       });
 
-      req.done(function()
+      $workCenter[0].setCustomValidity(view.t('FORM:ERROR:alreadyExists'));
+
+      req.done(function(res)
       {
-        $id[0].setCustomValidity(req.status === 200 ? view.t('FORM:ERROR:alreadyExists') : '');
+        if (res.totalCount === 0)
+        {
+          $workCenter[0].setCustomValidity('');
+        }
       });
     }
 

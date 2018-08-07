@@ -91,17 +91,19 @@ define([
       tdClassName: invalidTdClassName,
       renderValue: function(value, column, arrayIndex, entry)
       {
-        if (!entry.family)
+        if (!entry.supplyAreaId)
         {
           return value;
         }
 
-        return '<a href="#kanban/supplyAreas/' + value + '" target="_blank">' + value + '</a>';
+        return '<a href="#kanban/supplyAreas/' + entry.supplyAreaId + '" target="_blank">' + value + '</a>';
       }
     },
+    workCenter: {
+      width: 12
+    },
     family: {
-      width: 10,
-      tdClassName: invalidTdClassName
+      width: 10
     },
     kanbanQtyUser: {
       type: 'integer',
@@ -489,7 +491,18 @@ define([
         delete this.attributes.filters[columnId];
       }
 
+      if (columnId === 'supplyArea')
+      {
+        delete this.attributes.filters.workCenter;
+      }
+
       this.trigger('change:filter', this, columnId, {});
+
+      if (columnId === 'supplyArea')
+      {
+        this.trigger('change:filter', this, 'workCenter', {});
+      }
+
       this.trigger('change:filters', this, this.attributes.filters, {});
       this.trigger('change', this, {save: true});
     },
