@@ -32,7 +32,7 @@ module.exports = function importComponentsRoute(app, module, req, res, next)
         return this.skip(err);
       }
 
-      MARKER_COLORS = markerColors;
+      MARKER_COLORS = JSON.parse(markerColors);
 
       try
       {
