@@ -2,6 +2,7 @@
 
 'use strict';
 
+const _ = require('lodash');
 const step = require('h5.step');
 
 module.exports = function importSapRoute(app, module, req, res, next)
@@ -27,7 +28,7 @@ module.exports = function importSapRoute(app, module, req, res, next)
   step(
     function()
     {
-      KanbanSupplyArea.find({}, {_id: 1}).lean().exec(this.parallel());
+      KanbanSupplyArea.find({}, {name: 1}).lean().exec(this.parallel());
 
       settingsModule.findValues('kanban.', this.parallel());
     },
@@ -42,7 +43,7 @@ module.exports = function importSapRoute(app, module, req, res, next)
         name: 'kanban',
         scriptTimeout: 10 * 60 * 1000,
         repeatOnFailure: 0,
-        supplyAreas: supplyAreas.map(d => d._id),
+        supplyAreas: _.uniq(supplyAreas.map(d => d.name)),
         pkhdStorageType: settings['import.pkhdStorageType'] || '151',
         maktLanguage: settings['import.maktLanguage'] || 'PL',
         mlgtWarehouseNo: settings['import.mlgtWarehouseNo'] || 'KZ1',
