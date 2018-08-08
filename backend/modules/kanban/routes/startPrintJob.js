@@ -189,7 +189,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
           {
             printed[printer] = true;
 
-            printInfoLabel(printer, infoLayout, this.job.line, module.printing.workstation, this.group());
+            printInfoLabel(printer, infoLayout, this.job, module.printing.workstation, this.group());
           }
         });
       });
@@ -552,25 +552,25 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
     );
   }
 
-  function printInfoLabel(printer, layout, line, workstation, done)
+  function printInfoLabel(printer, layout, job, workstation, done)
   {
     if (layout === 'kk')
     {
-      printPdfInfoLabel(printer, line, workstation + 1, done);
+      printPdfInfoLabel(printer, job, workstation + 1, done);
     }
     else
     {
-      printZplInfoLabel(printer, layout, line, workstation + 1, done);
+      printZplInfoLabel(printer, layout, job, workstation + 1, done);
     }
   }
 
-  function printPdfInfoLabel(printer, line, workstation, done)
+  function printPdfInfoLabel(printer, job, workstation, done)
   {
     step(
       function()
       {
         html2pdf.generatePdf(
-          renderKkInfo({line, workstation}),
+          renderKkInfo({line: job.line, family: job.data.family, workstation}),
           {waitUntil: 'load', orientation: 'landscape'},
           this.next()
         );
@@ -595,7 +595,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
     );
   }
 
-  function printZplInfoLabel(printer, layout, line, workstation, done)
+  function printZplInfoLabel(printer, layout, job, workstation, done)
   {
     step(
       function()
@@ -614,7 +614,8 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
 
         html2pdf.printZpl(
           compileZpl(template, {
-            LINE: e(line),
+            LINE: e(job.line),
+            FAMILY: e(job.data.family),
             WORKSTATION: workstation
           }),
           printer,
