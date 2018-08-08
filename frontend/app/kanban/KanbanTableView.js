@@ -100,7 +100,12 @@ define([
       }
     },
     workCenter: {
-      width: 12
+      width: 12,
+      expand: 125,
+      tdClassName: function()
+      {
+        return this.state.auth.manage || this.state.auth.processEngineer ? 'kanban-is-editable' : '';
+      }
     },
     family: {
       width: 10
@@ -491,18 +496,7 @@ define([
         delete this.attributes.filters[columnId];
       }
 
-      if (columnId === 'supplyArea')
-      {
-        delete this.attributes.filters.workCenter;
-      }
-
       this.trigger('change:filter', this, columnId, {});
-
-      if (columnId === 'supplyArea')
-      {
-        this.trigger('change:filter', this, 'workCenter', {});
-      }
-
       this.trigger('change:filters', this, this.attributes.filters, {});
       this.trigger('change', this, {save: true});
     },
@@ -962,7 +956,6 @@ define([
     handleEditMessage: function(data)
     {
       // TODO
-      console.log('TableView edited:', data);
     }
 
   });

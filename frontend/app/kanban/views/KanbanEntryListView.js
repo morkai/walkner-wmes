@@ -2113,6 +2113,17 @@ define([
         this.editors.select.call(this, cell, false, options, selected);
       },
 
+      workCenter: function(cell)
+      {
+        var names = [cell.model.get('supplyArea')];
+        var options = [{id: '', text: this.t('workCenter:null')}].concat(
+          this.model.supplyAreas.getWorkCenters(names)
+        );
+        var selected = [cell.model.get('workCenter')];
+
+        this.editors.select.call(this, cell, false, options, selected);
+      },
+
       discontinued: function(cell)
       {
         this.handleEditorValue(cell.modelId, cell.columnId, cell.arrayIndex, !cell.model.get('discontinued'));
@@ -2529,18 +2540,8 @@ define([
         template: selectFilterTemplate,
         handler: function(cell, $filter)
         {
-          var supplyAreaFilter = this.model.tableView.getFilter('supplyArea');
-          var supplyAreas = [];
-
-          if (supplyAreaFilter
-            && supplyAreaFilter.type === 'select'
-            && supplyAreaFilter.data.length)
-          {
-            supplyAreas = supplyAreaFilter.data;
-          }
-
           var options = [{id: '', text: this.t('filters:value:empty')}].concat(
-            this.model.supplyAreas.getWorkCenters(supplyAreas)
+            this.model.supplyAreas.getWorkCenters([])
           );
 
           this.filters.select.call(this, cell, $filter, options);

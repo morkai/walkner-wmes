@@ -32,10 +32,9 @@ define([
       }
 
       var entry = this.toJSON();
-      var workCenterFilter = options.tableView.getFilter('workCenter');
       var supplyArea = options.supplyAreas.findByWorkCenters(
         entry.supplyArea,
-        workCenterFilter ? workCenterFilter.data : []
+        entry.workCenter ? [entry.workCenter] : []
       );
       var component = options.components.get(entry.nc12);
 
@@ -73,7 +72,6 @@ define([
       else
       {
         entry.supplyAreaId = null;
-        entry.workCenter = '';
         entry.family = '';
         entry.lineCount = 0;
         entry.lines = [];
