@@ -26,10 +26,15 @@
   "color:yellow": "Żółty",
   "color:orange": "Pomarańczowy",
   "color:green": "Zielony",
+  "color:lightgreen": "Jasnozielony",
   "color:violet": "Fioletowy",
   "color:pink": "Różowy",
+  "color:lavender": "Lawendowy",
   "color:lightblue": "Jasnoniebieski",
   "color:darkblue": "Ciemnoniebieski",
   "color:brown": "Brązowy",
-  "color:grey": "Szary"
+  "color:grey": "Szary",
+  "color:sand": "Piaskowy",
+  "color:cyan": "Turkusowy",
+  "color:black": "Czarny"
 }

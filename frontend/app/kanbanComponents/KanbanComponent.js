@@ -13,6 +13,21 @@ define([
 ) {
   'use strict';
 
+  var MARKER_COLORS = {
+    'red': '#DB342D',
+    'yellow': '#F4C605',
+    'orange': '#E46D29',
+    'green': '#00FF00',
+    'lightgreen': '#A7C6C4',
+    'violet': '#612B7D',
+    'lavender': '#B183B2',
+    'lightblue': '#29AADD',
+    'darkblue': '#194F90',
+    'sand': '#E1AE57',
+    'cyan': '#66BCA3',
+    'black': '#000000'
+  };
+
   return Model.extend({
 
     urlRoot: '/kanban/components',
@@ -73,7 +88,7 @@ define([
       return {
         id: color,
         text: t('kanbanComponents', 'color:' + color),
-        color: color
+        color: MARKER_COLORS[color] || color
       };
     }
 
