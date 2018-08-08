@@ -165,8 +165,13 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
         printEmptyFullWh(this.jobPrinters, this.job, this.group());
       }
     },
-    function()
+    function(err)
     {
+      if (err)
+      {
+        return this.skip(err);
+      }
+
       if (_.isEmpty(module.printing.infoLabels))
       {
         return;
