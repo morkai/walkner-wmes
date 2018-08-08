@@ -195,12 +195,14 @@ define([
             });
           });
 
+          var lastIndex = workstationJobs.length - 1;
+
           workstationJobs.forEach(function(job, i)
           {
             remaining.push({
               job: job,
               workstation: +workstation,
-              infoLabels: i === 0 ? Object.keys(layouts) : []
+              infoLabels: i === lastIndex ? Object.keys(layouts) : []
             });
           });
         });
