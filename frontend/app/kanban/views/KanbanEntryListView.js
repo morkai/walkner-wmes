@@ -161,6 +161,8 @@ define([
           tdSelector += '[data-array-index="' + td.dataset.arrayIndex + '"]';
         }
 
+        this.hovered = tdSelector;
+        console.log('in', this.hovered);
         this.$(tdSelector).addClass('kanban-is-hovered');
 
         var column = this.columns.map[td.dataset.columnId];
@@ -179,6 +181,8 @@ define([
       },
       'mouseleave .kanban-td': function()
       {
+        this.hovered = null;
+
         this.$('.kanban-is-hovered').removeClass('kanban-is-hovered');
 
         this.collapseTdValue();
@@ -276,6 +280,11 @@ define([
           columns: view.columns,
           entry: entry.serialize(view.model)
         }))[0];
+      }
+
+      if (this.hovered)
+      {
+        row.querySelector(this.hovered).classList.add('kanban-is-hovered');
       }
 
       return view.rowCache[entry.id];
