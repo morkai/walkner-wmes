@@ -871,7 +871,7 @@ module.exports = function(app, module)
         changes.status = 'cancelled';
         changes.comment = recordEvent(events, 'cancelled', oldOrder);
       }
-      else
+      else if (oldOrder.status !== 'cancelled')
       {
         changes.comment = recordEvent(events, 'comment', oldOrder);
       }
