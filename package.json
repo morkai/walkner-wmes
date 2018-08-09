@@ -5,8 +5,8 @@
   "version": "0.124.0",
   "updater": {
     "wmes": {
-      "backend": 380,
-      "frontend": 493,
+      "backend": 381,
+      "frontend": 494,
       "reports": 63,
       "attachments": 3,
       "importer-sap": 46,
@@ -16,8 +16,8 @@
       "operator": 48,
       "docs": 13,
       "heff": 16,
-      "planning": 40,
-      "ps-queue": 14,
+      "planning": 41,
+      "ps-queue": 15,
       "ps-load": 7,
       "wh-pickup": 1,
       "wh-kitter": 1,
