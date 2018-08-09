@@ -14,16 +14,17 @@ define([
   'use strict';
 
   var MARKER_COLORS = {
-    'red': '#DB342D',
-    'yellow': '#F4C605',
-    'orange': '#E46D29',
-    'grey': '#A7C6C4',
-    'violet': '#612B7D',
-    'lavender': '#B183B2',
-    'lightblue': '#29AADD',
-    'darkblue': '#194F90',
-    'sand': '#E1AE57',
-    'cyan': '#66BCA3',
+    'darkblue': '#0000BB',
+    'violet': '#663399',
+    'lavender': '#C7A2C6',
+    'lightblue': '#00AAFF',
+    'grey': '#A0A0A0',
+    'red': '#EE0000',
+    'orange': '#FF8800',
+    'yellow': '#FFEE00',
+    'sand': '#C09D79',
+    'green': '#009900',
+    'cyan': '#00CDCD',
     'black': '#000000'
   };
 
