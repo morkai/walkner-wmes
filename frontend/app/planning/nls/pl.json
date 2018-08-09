@@ -365,6 +365,7 @@
   "changes:removedOrders:REQUIRED_STATUS": "Brak wymaganego statusu: {requiredStatus}.",
   "changes:removedOrders:IGNORED_STATUS": "Ignorowany status: {ignoredStatus}.",
   "changes:removedOrders:MISSING_ORDER": "Brak zlecenia SAP dla danego dnia.",
+  "changes:removedOrders:INCOMPLETE_DONE": "Zlecenie niekompletne z poprzedniego dnia zostało zrobione.",
 
   "changes:settings:lines:remove": "Usunięto linię <em>{line}</em>",
   "changes:settings:mrps:remove": "Usunięto MRP <em>{mrp}</em>",
