@@ -101,7 +101,8 @@ define([
               quantityPlan: order.quantityPlan,
               statuses: order.statuses.map(renderOrderStatusLabel),
               manHours: order.manHours,
-              laborTime: order.operation && order.operation.laborTime || 0
+              laborTime: order.operation && order.operation.laborTime || 0,
+              lines: order.lines || []
             }
           }),
           template: '<div class="popover planning-mrp-popover">'
