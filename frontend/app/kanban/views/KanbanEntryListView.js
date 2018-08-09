@@ -162,7 +162,7 @@ define([
         }
 
         this.hovered = tdSelector;
-        console.log('in', this.hovered);
+
         this.$(tdSelector).addClass('kanban-is-hovered');
 
         var column = this.columns.map[td.dataset.columnId];

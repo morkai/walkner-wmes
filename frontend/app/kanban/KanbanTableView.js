@@ -953,7 +953,7 @@ define([
       }
     },
 
-    handleEditMessage: function(data)
+    handleEditMessage: function(data) // eslint-disable-line no-unused-vars
     {
       // TODO
     }

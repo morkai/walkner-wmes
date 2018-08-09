@@ -159,8 +159,6 @@ define([
       var tr = td.parentNode;
       var whOrder = this.whOrders.get(tr.dataset.id);
       var orderNo = whOrder.get('order');
-      var group = whOrder.get('group');
-      var line = whOrder.get('line');
       var set = whOrder.get('set');
       var status = whOrder.get('status');
       var menu = [

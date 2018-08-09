@@ -22,11 +22,6 @@ define([
       var setting = this.get('kanban.' + suffix);
 
       return setting ? setting.getValue() : null;
-    },
-
-    prepareValue: function(id, newValue)
-    {
-
     }
 
   });
