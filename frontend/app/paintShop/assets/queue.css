@@ -209,3 +209,6 @@ span.paintShop-property > .fa {
   display: block;
   color: #0f0;
 }
+.paintShop-order .is-deleted {
+  text-decoration: line-through;
+}

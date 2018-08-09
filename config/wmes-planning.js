@@ -46,7 +46,7 @@ exports.mongoose = {
     'setting',
     'hourlyPlan',
     'order',
-    'paintShopOrder',
+    'paintShopOrder', 'paintShopEvent',
     'plan', 'planChange', 'planSettings',
     'whOrder'
   ]

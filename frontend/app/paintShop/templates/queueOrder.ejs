@@ -61,7 +61,7 @@
     </td>
   </tr>
   <% order.childOrders.forEach(function(childOrder, i) { %>
-  <tr class="paintShop-properties paintShop-order-childOrder <%- childOrder.last ? 'is-last' : '' %>">
+  <tr class="paintShop-properties paintShop-order-childOrder <%- childOrder.last ? 'is-last' : '' %> <%- childOrder.deleted ? 'is-deleted' : '' %>">
     <td class="paintShop-property" data-property="order" rowspan="<%- childOrder[rowSpan] %>">
       <%- childOrder.order %>
       <span class="paintShop-childOrder-dropZone <%- getChildOrderDropZoneClass(childOrder) %>" data-order-id="<%- order._id %>" data-child-order-index="<%- i %>"><i class="fa fa-level-down"></i></span>
@@ -80,7 +80,7 @@
   </tr>
   <% } %>
   <% childOrder.components.forEach(function(component) { %>
-  <tr class="paintShop-properties paintShop-order-component <%- component.unit === 'G' || component.unit === 'KG' ? 'is-paint' : '' %>">
+  <tr class="paintShop-properties paintShop-order-component <%- component.unit === 'G' || component.unit === 'KG' ? 'is-paint' : '' %> <%- childOrder.deleted ? 'is-deleted' : '' %>">
     <td class="paintShop-property" data-property="nc12"><%- component.nc12 %></td>
     <td class="paintShop-property" data-property="qty"><%- Math.ceil(component.qty).toLocaleString() %></td>
     <td class="paintShop-property" data-property="unit"><%- component.unit %></td>

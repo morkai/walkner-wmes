@@ -19,7 +19,11 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
     nc12: String,
     name: String,
     qty: Number,
-    components: [componentSchema]
+    components: [componentSchema],
+    deleted: {
+      type: Boolean,
+      default: false
+    }
   }, {
     _id: false,
     minimize: false
@@ -104,8 +108,6 @@ module.exports = function setupPaintShopOrderModel(app, mongoose)
 
       case 'cancel':
         changes.status = 'cancelled';
-        changes.startedAt = null;
-        changes.finishedAt = null;
         break;
 
       case 'comment':

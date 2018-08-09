@@ -31,6 +31,7 @@ module.exports = function(app, module)
   const settingsModule = app[module.config.settingsId];
   const mongoose = app[module.config.mongooseId];
   const Order = mongoose.model('Order');
+  const PaintShopEvent = mongoose.model('PaintShopEvent');
   const PaintShopOrder = mongoose.model('PaintShopOrder');
   const Plan = mongoose.model('Plan');
   const PlanSettings = mongoose.model('PlanSettings');
@@ -84,8 +85,8 @@ module.exports = function(app, module)
             nc12: '$orders.nc12',
             qtyTodo: '$orders.quantityTodo',
             qtyDone: '$orders.quantityDone',
-            qtyIncomplete: '$orders.incomplete',
-            mrp: '$orders.mrp'
+            mrp: '$orders.mrp',
+            statuses: '$orders.statuses'
           }}
         ], this.parallel());
 
@@ -105,14 +106,13 @@ module.exports = function(app, module)
 
         this.settings = Object.assign(settings, planSettings);
         this.newOrders = new Map();
-
-        const maybeCompletedOrders = new Set();
+        this.deletedOrders = new Set();
 
         orders.forEach(o =>
         {
-          if (o.qtyDone >= o.qtyTodo)
+          if (isDeletedOrder(o.statuses))
           {
-            return;
+            this.deletedOrders.add(o._id);
           }
 
           this.newOrders.set(o._id, {
@@ -136,11 +136,6 @@ module.exports = function(app, module)
             paint: null,
             childOrders: []
           });
-
-          if (o.qtyIncomplete === 0)
-          {
-            maybeCompletedOrders.add(o._id);
-          }
         });
 
         startTimes.forEach(o =>
@@ -151,31 +146,15 @@ module.exports = function(app, module)
           }
         });
 
-        maybeCompletedOrders.forEach(orderNo =>
-        {
-          if (!this.newOrders.get(orderNo).startTime)
-          {
-            this.newOrders.delete(orderNo);
-          }
-        });
-
         setImmediate(this.next());
       },
       function()
       {
         const scheduledStartDate = moment(key, 'YYYY-MM-DD').toDate();
-        let ignoredStatuses = this.settings.ignoredStatuses;
-
-        if (moment('2018-08-16', 'YYYY-MM-DD').diff(scheduledStartDate) <= 0)
-        {
-          ignoredStatuses = _.without(this.settings.ignoredStatuses, this.settings.completedStatuses);
-        }
-
         const workCenters = this.settings.workCenters;
         const leadingOrders = Array.from(this.newOrders.keys());
         const statuses = {
-          $in: this.settings.requiredStatuses,
-          $nin: ignoredStatuses
+          $in: this.settings.requiredStatuses
         };
         const plannedConditions = {
           scheduledStartDate,
@@ -207,7 +186,8 @@ module.exports = function(app, module)
           nc12: 1,
           qty: 1,
           mrp: 1,
-          bom: 1
+          bom: 1,
+          statuses: 1
         };
 
         Order
@@ -237,6 +217,11 @@ module.exports = function(app, module)
 
         unplannedOrders.concat(splitChildOrders).forEach(unplannedOrder =>
         {
+          if (isDeletedOrder(unplannedOrder.statuses))
+          {
+            this.deletedOrders.add(unplannedOrder._id);
+          }
+
           unplannedOrder.leadingOrder = unplannedOrder._id;
 
           childOrders.push(unplannedOrder);
@@ -273,6 +258,11 @@ module.exports = function(app, module)
 
         childOrders.forEach(childOrder =>
         {
+          if (isDeletedOrder(childOrder.statuses))
+          {
+            this.deletedOrders.add(childOrder._id);
+          }
+
           const leadingOrder = this.newOrders.get(childOrder.leadingOrder);
 
           if (!leadingOrder
@@ -331,7 +321,8 @@ module.exports = function(app, module)
             name: resolveProductName(childOrder),
             qty: childOrder.qty,
             paint,
-            components
+            components,
+            deleted: this.deletedOrders.has(childOrder._id)
           });
         });
 
@@ -474,6 +465,7 @@ module.exports = function(app, module)
           changed: [],
           removed: []
         };
+        this.events = [];
 
         this.oldOrders.forEach(oldOrder =>
         {
@@ -485,10 +477,30 @@ module.exports = function(app, module)
           {
             logChange(this.changeLog.removed, oldOrder);
 
-            return this.changes.removed.push(oldOrder._id);
+            if (oldOrder.status === 'new')
+            {
+              this.changes.removed.push(oldOrder._id);
+            }
+            else if (oldOrder.status === 'partial')
+            {
+              this.changes.changed.push({
+                _id: oldOrder._id,
+                status: 'cancelled',
+                comment: recordEvent(this.events, 'cancelled', oldOrder)
+              });
+            }
+            else if (oldOrder.status !== 'cancelled')
+            {
+              this.changes.changed.push({
+                _id: oldOrder._id,
+                comment: recordEvent(this.events, 'comment', oldOrder)
+              });
+            }
+
+            return;
           }
 
-          const changed = compareOrders(oldOrder, newOrder);
+          const changed = compareOrders(oldOrder, newOrder, this.events, this.deletedOrders.has(oldOrder.order));
 
           if (changed)
           {
@@ -500,12 +512,20 @@ module.exports = function(app, module)
 
         this.newOrders.forEach(newOrder =>
         {
-          if (newOrder.childOrders.length)
+          if (!newOrder.childOrders.length)
           {
-            logChange(this.changeLog.added, newOrder);
-
-            this.changes.added.push(newOrder);
+            return;
           }
+
+          if (this.deletedOrders.has(newOrder.order))
+          {
+            newOrder.status = 'cancelled';
+            newOrder.comment = recordEvent(this.events, 'cancelled', newOrder);
+          }
+
+          logChange(this.changeLog.added, newOrder);
+
+          this.changes.added.push(newOrder);
         });
 
         setImmediate(this.next());
@@ -545,6 +565,21 @@ module.exports = function(app, module)
               next(err && err.code === 11000 ? null : err);
             }
           );
+        }
+
+        if (this.events.length)
+        {
+          const next = this.group();
+
+          PaintShopEvent.collection.insertMany(this.events, {ordered: false}, err =>
+          {
+            if (err)
+            {
+              module.error(`[generator] [${key}] Failed to save events: ${err.message}`);
+            }
+
+            next();
+          });
         }
 
         if (removed.length)
@@ -615,6 +650,33 @@ module.exports = function(app, module)
         }
       }
     );
+  }
+
+  function recordEvent(events, type, order)
+  {
+    const comment = 'Zlecenie usunięte z planu.';
+
+    if (order.comment !== comment)
+    {
+      events.push({
+        order: order._id,
+        type: type,
+        time: new Date(),
+        user: {
+          id: null,
+          ip: '127.0.0.1',
+          label: 'System'
+        },
+        data: {comment}
+      });
+    }
+
+    return comment;
+  }
+
+  function isDeletedOrder(statuses)
+  {
+    return statuses.includes('TECO') || statuses.includes('DLFL') || statuses.includes('DLT');
   }
 
   function logChange(changeLog, psOrder)
@@ -796,12 +858,24 @@ module.exports = function(app, module)
     return a.startTime - b.startTime;
   }
 
-  function compareOrders(oldOrder, newOrder)
+  function compareOrders(oldOrder, newOrder, events, deleted)
   {
     const changes = {
       _id: oldOrder._id
     };
-    let anyChanges = false;
+
+    if (deleted)
+    {
+      if (oldOrder.status === 'new' || oldOrder.status === 'partial')
+      {
+        changes.status = 'cancelled';
+        changes.comment = recordEvent(events, 'cancelled', oldOrder);
+      }
+      else
+      {
+        changes.comment = recordEvent(events, 'comment', oldOrder);
+      }
+    }
 
     ORDER_COMPARE_PROPERTIES.forEach(p =>
     {
@@ -811,10 +885,9 @@ module.exports = function(app, module)
       if (!deepEqual(oldValue, newValue))
       {
         changes[p] = newValue;
-        anyChanges = true;
       }
     });
 
-    return anyChanges ? changes : null;
+    return Object.keys(changes).length > 1 ? changes : null;
   }
 };

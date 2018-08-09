@@ -3,4 +3,12 @@
 
 'use strict';
 
-db.kanbanentries.update({}, {$set: {workCenter: ''}}, {multi: true});
+db.paintshoporders.find({}, {childOrders: 1}).forEach(o =>
+{
+  o.childOrders.forEach(c =>
+  {
+    c.deleted = false;
+  });
+
+  db.paintshoporders.update({_id: o._id}, {$set: {childOrders: o.childOrders}});
+});
