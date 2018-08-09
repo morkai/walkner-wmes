@@ -3,6 +3,8 @@
 'use strict';
 
 const {createHash} = require('crypto');
+const path = require('path');
+const fs = require('fs');
 const _ = require('lodash');
 const moment = require('moment');
 const step = require('h5.step');
@@ -462,6 +464,11 @@ module.exports = function(app, module)
       },
       function()
       {
+        this.changeLog = {
+          added: [],
+          changed: [],
+          removed: []
+        };
         this.changes = {
           added: [],
           changed: [],
@@ -476,6 +483,8 @@ module.exports = function(app, module)
 
           if (!newOrder || newOrder.childOrders.length === 0)
           {
+            logChange(this.changeLog.removed, oldOrder);
+
             return this.changes.removed.push(oldOrder._id);
           }
 
@@ -483,6 +492,8 @@ module.exports = function(app, module)
 
           if (changed)
           {
+            logChange(this.changeLog.changed, newOrder);
+
             this.changes.changed.push(changed);
           }
         });
@@ -491,6 +502,8 @@ module.exports = function(app, module)
         {
           if (newOrder.childOrders.length)
           {
+            logChange(this.changeLog.added, newOrder);
+
             this.changes.added.push(newOrder);
           }
         });
@@ -501,6 +514,8 @@ module.exports = function(app, module)
       {
         const {added, changed, removed} = this.changes;
 
+        this.notAdded = new Map();
+
         if (added.length)
         {
           const next = this.group();
@@ -510,13 +525,21 @@ module.exports = function(app, module)
             {ordered: false},
             (err, res) =>
             {
+              if (err && err.result)
+              {
+                res = err.result;
+              }
+
               if (res && res.hasWriteErrors && res.hasWriteErrors())
               {
-                const notAdded = new Set();
+                res.getWriteErrors().forEach(writeError =>
+                {
+                  const duplicateOrder = writeError.getOperation();
 
-                res.getWriteErrors().forEach(writeError => notAdded.add(writeError.getOperation()._id));
+                  this.notAdded.set(duplicateOrder._id, duplicateOrder);
+                });
 
-                this.changes.added = added.filter(o => !notAdded.has(o._id));
+                this.changes.added = added.filter(o => !this.notAdded.has(o._id));
               }
 
               next(err && err.code === 11000 ? null : err);
@@ -532,6 +555,37 @@ module.exports = function(app, module)
         changed.forEach(change =>
         {
           PaintShopOrder.collection.updateOne({_id: change._id}, {$set: change}, this.group());
+        });
+      },
+      function(err)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        this.notAdded.forEach(duplicateOrder =>
+        {
+          const next = this.group();
+          const filter = {_id: duplicateOrder._id};
+          const update = {$set: _.pick(duplicateOrder, ORDER_COMPARE_PROPERTIES)};
+          const options = {returnOriginal: false};
+
+          PaintShopOrder.collection.findOneAndUpdate(filter, update, options, (err, res) =>
+          {
+            if (err)
+            {
+              module.error(
+                `[generator] [${key}] Failed to update duplicate order [${duplicateOrder._id}]: ${err.message}`
+              );
+            }
+            else if (res.ok)
+            {
+              this.changes.added.push(res.value);
+            }
+
+            next();
+          });
         });
       },
       function(err)
@@ -556,9 +610,37 @@ module.exports = function(app, module)
             date: date,
             changes: this.changes
           });
+
+          saveChangeLog(key, this.changeLog);
         }
       }
     );
+  }
+
+  function logChange(changeLog, psOrder)
+  {
+    if (module.config.generatorLogPath)
+    {
+      changeLog.push([psOrder._id, psOrder.order].concat(psOrder.childOrders.map(o => o.order)));
+    }
+  }
+
+  function saveChangeLog(key, changeLog)
+  {
+    if (!module.config.generatorLogPath)
+    {
+      return;
+    }
+
+    const logFilePath = path.join(module.config.generatorLogPath, `${key}.${Date.now()}.json`);
+
+    fs.writeFile(logFilePath, JSON.stringify(changeLog, null, 2), err =>
+    {
+      if (err)
+      {
+        module.error(`Failed to save log data: ${err.message}`);
+      }
+    });
   }
 
   function groupOrdersByPaint(newOrders, multiColorOrders, secondShiftTime)

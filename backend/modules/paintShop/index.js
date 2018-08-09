@@ -14,7 +14,8 @@ exports.DEFAULT_CONFIG = {
   updaterId: 'updater',
   reportsId: 'reports',
   generator: false,
-  loadSecretKey: null
+  loadSecretKey: null,
+  generatorLogPath: null
 };
 
 exports.start = function startPaintShopModule(app, module)
