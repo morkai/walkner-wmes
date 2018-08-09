@@ -390,8 +390,17 @@ module.exports = function setUpGenerator(app, module)
           this.skip(new Error('Plan is frozen.'));
         }
       },
-      function loadSettingsStep()
+      function waitToCalmDownStep()
       {
+        waitToCalmDown(state, 0, this.next());
+      },
+      function loadSettingsStep(err)
+      {
+        if (err)
+        {
+          return this.skip(new Error(`Failed to wait to calm down: ${err.message}`));
+        }
+
         loadSettings(state, this.next());
       },
       function loadAutoDowntimesStep(err)
@@ -591,6 +600,42 @@ module.exports = function setUpGenerator(app, module)
         done();
       }
     );
+  }
+
+  function waitToCalmDown(state, tryCount, done)
+  {
+    const cmd = {
+      currentOp: true,
+      $all: true,
+      $or: [
+        {
+          ns: /\.orders$/,
+          op: {$in: ['insert', 'update', 'delete']}
+        },
+        {
+          ns: /\.orders$/,
+          op: 'command',
+          'query.createIndexes': {$exists: true}
+        }
+      ]
+    };
+
+    mongoose.connection.db.executeDbAdminCommand(cmd, (err, result) =>
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      if (!result.inprog.length || tryCount === 10)
+      {
+        return done();
+      }
+
+      state.log(`Waiting to calm down (${tryCount + 1}/10)...`);
+
+      setTimeout(waitToCalmDown, 1000, state, tryCount + 1, done);
+    });
   }
 
   function savePlanChanges(state)
