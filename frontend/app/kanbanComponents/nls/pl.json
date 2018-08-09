@@ -22,19 +22,19 @@
 
   "filter:submit": "Filtruj komponenty",
 
-  "color:red": "Czerwony",
-  "color:yellow": "Żółty",
-  "color:orange": "Pomarańczowy",
-  "color:green": "Zielony",
-  "color:lightgreen": "Jasnozielony",
+  "color:darkblue": "Ciemnoniebieski",
   "color:violet": "Fioletowy",
-  "color:pink": "Różowy",
   "color:lavender": "Lawendowy",
   "color:lightblue": "Jasnoniebieski",
-  "color:darkblue": "Ciemnoniebieski",
-  "color:brown": "Brązowy",
   "color:grey": "Szary",
+  "color:red": "Czerwony",
+  "color:orange": "Pomarańczowy",
+  "color:yellow": "Żółty",
   "color:sand": "Piaskowy",
+  "color:green": "Zielony",
+  "color:lightgreen": "Jasnozielony",
+  "color:pink": "Różowy",
+  "color:brown": "Brązowy",
   "color:cyan": "Turkusowy",
   "color:black": "Czarny"
 }

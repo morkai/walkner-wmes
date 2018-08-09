@@ -10,16 +10,16 @@ define([
   'use strict';
 
   var COLORS = [
-    'red',
-    'yellow',
-    'orange',
-    'green',
-    'violet',
-    'pink',
-    'lightblue',
     'darkblue',
-    'brown',
-    'grey'
+    'violet',
+    'lavender',
+    'lightblue',
+    'grey',
+    'red',
+    'orange',
+    'yellow',
+    'sand',
+    'green'
   ];
 
   return Collection.extend({
