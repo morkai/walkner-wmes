@@ -66,6 +66,14 @@ module.exports = function(app, module)
     module.debug(`[generator] [${key}] Generating...`);
 
     step(
+      // TODO remove
+      function()
+      {
+        if (key === '2018-08-10')
+        {
+          return this.skip(new Error('Locked!'));
+        }
+      },
       function()
       {
         settingsModule.findValues({_id: /^paintShop/}, 'paintShop.', this.parallel());
@@ -333,7 +341,17 @@ module.exports = function(app, module)
             return;
           }
 
-          newOrder.childOrders.sort((a, b) => a.paint.nc12.localeCompare(b.paint.nc12));
+          newOrder.childOrders.sort((a, b) =>
+          {
+            let cmp = a.paint.nc12.localeCompare(b.paint.nc12);
+
+            if (cmp === 0)
+            {
+              cmp = a.order.localeCompare(b.order);
+            }
+
+            return cmp;
+          });
 
           newOrder.paint = newOrder.childOrders[0].paint;
         });
@@ -882,6 +900,16 @@ module.exports = function(app, module)
       const oldValue = oldOrder[p];
       const newValue = newOrder[p];
 
+      if (p === 'childOrders')
+      {
+        if (!compareChildOrders(oldValue, newValue))
+        {
+          changes[p] = newValue;
+        }
+
+        return;
+      }
+
       if (!deepEqual(oldValue, newValue))
       {
         changes[p] = newValue;
@@ -889,5 +917,31 @@ module.exports = function(app, module)
     });
 
     return Object.keys(changes).length > 1 ? changes : null;
+  }
+
+  function compareChildOrders(oldChildOrders, newChildOrders)
+  {
+    if (oldChildOrders.length !== newChildOrders.length)
+    {
+      return false;
+    }
+
+    for (let i = 0; i < oldChildOrders.length; ++i)
+    {
+      const oldChildOrder = oldChildOrders[i];
+      const newChildOrder = newChildOrders.find(o => o.order === oldChildOrder.order);
+
+      if (!newChildOrder)
+      {
+        return false;
+      }
+
+      if (!deepEqual(oldChildOrders, newChildOrder))
+      {
+        return false;
+      }
+    }
+
+    return true;
   }
 };
