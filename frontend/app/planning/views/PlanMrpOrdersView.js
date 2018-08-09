@@ -12,6 +12,7 @@ define([
   'app/orderStatuses/util/renderOrderStatusLabel',
   '../util/scrollIntoView',
   '../util/contextMenu',
+  '../PlanOrderCollection',
   './PlanOrderQuantityDialogView',
   './PlanOrderLinesDialogView',
   './PlanOrderAddDialogView',
@@ -32,6 +33,7 @@ define([
   renderOrderStatusLabel,
   scrollIntoView,
   contextMenu,
+  PlanOrderCollection,
   PlanOrderQuantityDialogView,
   PlanOrderLinesDialogView,
   PlanOrderAddDialogView,
@@ -160,15 +162,17 @@ define([
     {
       var plan = this.plan;
 
-      return this.mrp.orders.sort().map(function(order)
+      return this.mrp.orders.map(function(order)
       {
         var orderData = plan.getActualOrderData(order.id);
+        var sapStatuses = order.mapSapStatuses(orderData.statuses);
         var source = order.get('source');
         var urgent = order.get('urgent');
         var autoAdded = order.isAutoAdded();
 
         return {
           _id: order.id,
+          mrp: order.get('mrp'),
           kind: order.get('kind'),
           kindIcon: order.getKindIcon(),
           incomplete: order.get('incomplete') > 0 ? 'is-incomplete' : '',
@@ -177,9 +181,9 @@ define([
           surplus: orderData.quantityDone > orderData.quantityTodo ? 'is-surplus' : '',
           unplanned: order.get('incomplete') === order.getQuantityTodo() ? 'is-unplanned' : '',
           source: source,
-          confirmed: orderData.statuses.indexOf('CNF') !== -1 ? 'is-cnf' : '',
-          delivered: orderData.statuses.indexOf('DLV') !== -1 ? 'is-dlv' : '',
-          deleted: orderData.statuses.indexOf('TECO') !== -1 ? 'is-teco' : '',
+          confirmed: sapStatuses.CNF ? 'is-cnf' : '',
+          delivered: sapStatuses.DLV ? 'is-dlv' : '',
+          deleted: sapStatuses.deleted ? 'is-teco' : '',
           customQuantity: order.hasCustomQuantity(),
           ignored: order.get('ignored') ? 'is-ignored' : '',
           urgent: urgent && !autoAdded,
@@ -189,7 +193,7 @@ define([
           psStatus: plan.sapOrders.getPsStatus(order.id),
           whStatus: plan.sapOrders.getWhStatus(order.id)
         };
-      });
+      }).sort(PlanOrderCollection.compare);
     },
 
     beforeRender: function()

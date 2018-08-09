@@ -124,6 +124,20 @@ define([
       }
 
       return 'planned';
+    },
+
+    mapSapStatuses: function(statuses)
+    {
+      var sapStatuses = {};
+
+      (statuses || this.get('statuses')).forEach(function(status)
+      {
+        sapStatuses[status] = true;
+      });
+
+      sapStatuses.deleted = sapStatuses.TECO || sapStatuses.DLFL || sapStatuses.DLT;
+
+      return sapStatuses;
     }
 
   });

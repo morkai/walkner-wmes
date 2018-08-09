@@ -16,6 +16,55 @@ define([
     hard: 3
   };
 
+  function compare(a, b)
+  {
+    if (a.deleted !== b.deleted)
+    {
+      if (a.deleted)
+      {
+        return 1;
+      }
+
+      return -1;
+    }
+
+    var cmp = a.mrp.localeCompare(b.mrp);
+
+    if (cmp !== 0)
+    {
+      return cmp;
+    }
+
+    if (a.urgent && !b.urgent)
+    {
+      return -1;
+    }
+
+    if (!a.urgent && b.urgent)
+    {
+      return 1;
+    }
+
+    if (a.incomplete && !b.incomplete)
+    {
+      return -1;
+    }
+
+    if (!a.incomplete && b.incomplete)
+    {
+      return 1;
+    }
+
+    cmp = KIND_WEIGHT[a.kind] - KIND_WEIGHT[b.kind];
+
+    if (cmp === 0)
+    {
+      return a._id.localeCompare(b._id);
+    }
+
+    return cmp;
+  }
+
   return Collection.extend({
 
     model: PlanOrder,
@@ -27,44 +76,7 @@ define([
 
     comparator: function(a, b)
     {
-      a = a.attributes;
-      b = b.attributes;
-
-      var cmp = a.mrp.localeCompare(b.mrp);
-
-      if (cmp !== 0)
-      {
-        return cmp;
-      }
-
-      if (a.urgent && !b.urgent)
-      {
-        return -1;
-      }
-
-      if (!a.urgent && b.urgent)
-      {
-        return 1;
-      }
-
-      if (a.incomplete && !b.incomplete)
-      {
-        return -1;
-      }
-
-      if (!a.incomplete && b.incomplete)
-      {
-        return 1;
-      }
-
-      cmp = KIND_WEIGHT[a.kind] - KIND_WEIGHT[b.kind];
-
-      if (cmp === 0)
-      {
-        return a._id.localeCompare(b._id);
-      }
-
-      return cmp;
+      return compare(a.attributes, b.attributes);
     },
 
     getGroupedByMrp: function()
@@ -85,6 +97,10 @@ define([
 
       return mrpToOrders;
     }
+
+  }, {
+
+    compare: compare
 
   });
 });
