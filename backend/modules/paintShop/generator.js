@@ -68,7 +68,7 @@ module.exports = function(app, module)
         settingsModule.findValues({_id: /^paintShop/}, 'paintShop.', this.parallel());
 
         PlanSettings
-          .findById(date, {requiredStatuses: 1, ignoredStatuses: 1})
+          .findById(date, {requiredStatuses: 1, ignoredStatuses: 1, completedStatuses: 1})
           .lean()
           .exec(this.parallel());
 
@@ -161,12 +161,19 @@ module.exports = function(app, module)
       },
       function()
       {
+        const scheduledStartDate = moment(key, 'YYYY-MM-DD').toDate();
+        let ignoredStatuses = this.settings.ignoredStatuses;
+
+        if (moment('2018-08-16', 'YYYY-MM-DD').diff(scheduledStartDate) <= 0)
+        {
+          ignoredStatuses = _.without(this.settings.ignoredStatuses, this.settings.completedStatuses);
+        }
+
         const workCenters = this.settings.workCenters;
         const leadingOrders = Array.from(this.newOrders.keys());
-        const scheduledStartDate = moment(key, 'YYYY-MM-DD').toDate();
         const statuses = {
           $in: this.settings.requiredStatuses,
-          $nin: this.settings.ignoredStatuses
+          $nin: ignoredStatuses
         };
         const plannedConditions = {
           scheduledStartDate,
