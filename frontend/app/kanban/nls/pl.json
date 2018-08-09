@@ -44,6 +44,7 @@
   "column:description": "Nazwa komponentu",
   "column:supplyArea": "Obszar<br>zaopatrzenia",
   "column:workCenter": "WorkCenter",
+  "column:line": "Linia",
   "column:family": "Rodzina",
   "column:kanbanQtyUser": "Liczba kanbanów na<br>linię montażową",
   "column:kanbanQtyUser:title": "Liczba kanbanów na linię montażową",

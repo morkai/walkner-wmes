@@ -1010,6 +1010,7 @@ define([
       var entries = view.model.entries.filtered;
       var columns = {};
       var data = [];
+      var kanbanIdVisible = view.columns.map.kanbanId.visible;
 
       view.columns.list.forEach(function(column)
       {
@@ -1023,6 +1024,17 @@ define([
             headerAlignmentV: 'Center',
             caption: tableView.getColumnText(column._id, -1, false).replace(/<br>/g, '\r\n')
           };
+
+          if (kanbanIdVisible && column._id === 'family')
+          {
+            columns.line = {
+              type: 'string',
+              width: 10,
+              headerAlignmentH: 'Center',
+              headerAlignmentV: 'Center',
+              caption: view.t('column:line')
+            };
+          }
 
           return;
         }
@@ -1046,9 +1058,9 @@ define([
 
         if (columns.kanbanId)
         {
-          entry.kanbanId.forEach(function(kanbanId)
+          entry.kanbanId.forEach(function(kanbanId, i)
           {
-            exportRow(entry, kanbanId);
+            exportRow(entry, kanbanId, i);
           });
         }
         else
@@ -1092,9 +1104,10 @@ define([
         viewport.msg.hide(view.$exportMsg, true);
       });
 
-      function exportRow(entry, kanbanId)
+      function exportRow(entry, kanbanId, kanbanIndex)
       {
         var row = {};
+        var line = entry.lines[Math.floor(kanbanIndex / entry.kanbanQtyUser)] || '';
 
         view.columns.list.forEach(function(column)
         {
@@ -1108,6 +1121,11 @@ define([
           if (!column.arrayIndex)
           {
             row[column._id] = column.exportValue(entry[column._id], column, -1, entry);
+
+            if (kanbanIndex >= 0 && column._id === 'family')
+            {
+              row.line = line;
+            }
 
             return;
           }
@@ -2245,7 +2263,7 @@ define([
     {
       var valueEl = tdEl.firstElementChild;
       var innerEl = valueEl.firstElementChild;
-      var text = tdEl.textContent.trim();
+      var text = innerEl.textContent.trim();
 
       if (!text.length)
       {
