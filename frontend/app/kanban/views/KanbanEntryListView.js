@@ -1034,6 +1034,22 @@ define([
               headerAlignmentV: 'Center',
               caption: view.t('column:line')
             };
+            columns.workstations = {
+              type: 'string',
+              width: 4,
+              headerRotation: 90,
+              headerAlignmentH: 'Center',
+              headerAlignmentV: 'Center',
+              caption: view.t('column:workstations')
+            };
+            columns.locations = {
+              type: 'string',
+              width: 4,
+              headerRotation: 90,
+              headerAlignmentH: 'Center',
+              headerAlignmentV: 'Center',
+              caption: view.t('column:locations')
+            };
           }
 
           return;
@@ -1058,9 +1074,20 @@ define([
 
         if (columns.kanbanId)
         {
-          entry.kanbanId.forEach(function(kanbanId, i)
+          var kanbanIndex = -1;
+
+          entry.workstations.forEach(function(workstations, i)
           {
-            exportRow(entry, kanbanId, i);
+            var kanbanQty = workstations * 2;
+            var locations = entry.locations[i];
+
+            entry.lines.forEach(function(line)
+            {
+              for (var w = 0; w < kanbanQty; ++w)
+              {
+                exportRow(entry, line, entry.kanbanId[++kanbanIndex], kanbanIndex, 'ST' + (i + 1), locations);
+              }
+            });
           });
         }
         else
@@ -1104,10 +1131,9 @@ define([
         viewport.msg.hide(view.$exportMsg, true);
       });
 
-      function exportRow(entry, kanbanId, kanbanIndex)
+      function exportRow(entry, line, kanbanId, kanbanIndex, workstations, locations)
       {
         var row = {};
-        var line = entry.lines[Math.floor(kanbanIndex / entry.kanbanQtyUser)] || '';
 
         view.columns.list.forEach(function(column)
         {
@@ -1125,6 +1151,8 @@ define([
             if (kanbanIndex >= 0 && column._id === 'family')
             {
               row.line = line;
+              row.workstations = workstations;
+              row.locations = locations;
             }
 
             return;
