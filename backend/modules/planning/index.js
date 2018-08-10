@@ -58,10 +58,7 @@ exports.start = function startPlanningModule(app, module)
 
       if (freezeFirstShiftOrders || m.created || m.updated || m.removed)
       {
-        const now = moment();
-
         app.broker.publish('planning.generator.requested', {
-          forceDayAfterTomorrow: (now.hours() === 16 && now.minutes() > 30) || now.hours() >= 17,
           freezeFirstShiftOrders
         });
       }

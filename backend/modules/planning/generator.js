@@ -147,7 +147,7 @@ module.exports = function setUpGenerator(app, module)
 
     if (!message.date)
     {
-      generateActivePlans(!!message.forceDayAfterTomorrow, !!message.freezeFirstShiftOrders);
+      generateActivePlans(!!message.freezeFirstShiftOrders);
     }
     else
     {
@@ -211,59 +211,69 @@ module.exports = function setUpGenerator(app, module)
     Object.assign(generatorOptions.get(planKey), options);
   }
 
-  function generateActivePlans(forceDayAfterTomorrow, freezeOrders)
+  function generateActivePlans(freezeOrders)
   {
     const plansToGenerate = {};
     const date = moment.utc().startOf('day');
 
-    Plan.find({_id: {$gt: date.toDate()}}, {_id: 1}).lean().exec((err, plans) =>
-    {
-      if (err)
+    step(
+      function()
       {
-        module.error(`[generator] Failed to find active plans: ${err.message}`);
-      }
+        Plan.findOne({}, {_id: 1}).sort({_id: -1}).lean().exec(this.parallel());
 
-      const now = moment();
-      const d = now.day();
-      const h = now.hours();
-      const m = now.minutes();
-
-      if (h < 5 || (h === 5 && m < 59))
+        Order.aggregate([
+          {$match: {
+            scheduledStartDate: {$gte: date.toDate()},
+            statuses: {$in: ['REL'], $nin: ['TECO', 'DLT', 'DLFL']},
+            'bom.0': {$exists: true}
+          }},
+          {$group: {_id: null, date: {$max: '$scheduledStartDate'}}}
+        ], this.parallel());
+      },
+      function(err, latestPlan, latestOrders)
       {
-        const planKey = now.format('YYYY-MM-DD');
-
-        // Today
-        plansToGenerate[planKey] = true;
-
-        updateGeneratorOptions(planKey, {freezeOrders});
-      }
-
-      // Tomorrow
-      plansToGenerate[now.add(1, 'day').format('YYYY-MM-DD')] = true;
-
-      if (forceDayAfterTomorrow || h > 17)
-      {
-        // Day after tomorrow
-        plansToGenerate[now.add(1, 'day').format('YYYY-MM-DD')] = true;
-
-        // Saturday & Sunday on Wednesday
-        if (d === 3)
+        if (err)
         {
-          plansToGenerate[now.add(1, 'day').format('YYYY-MM-DD')] = true;
-          plansToGenerate[now.add(1, 'day').format('YYYY-MM-DD')] = true;
+          module.error(`[generator] Failed to find active plans: ${err.message}`);
         }
-        // Monday on Thursday and Tuesday on Friday
-        else if (d === 4 || d === 5)
+
+        const now = moment();
+        const h = now.hours();
+        const today = now.format('YYYY-MM-DD');
+
+        if (h < 5 || (h === 5 && now.minutes() < 59))
         {
-          plansToGenerate[now.add(2, 'day').format('YYYY-MM-DD')] = true;
+          const planKey = today;
+
+          // Today
+          plansToGenerate[planKey] = true;
+
+          updateGeneratorOptions(planKey, {freezeOrders});
         }
+
+        const latestPlanTime = latestPlan ? latestPlan._id.getTime() : 0;
+        const latestOrderTime = latestOrders.length
+          ? moment.utc(moment(latestOrders[0].date).format('YYYY-MM-DD'), 'YYYY-MM-DD').valueOf()
+          : 0;
+        const maxPlanKey = moment.utc(Math.max(date.valueOf(), latestPlanTime, latestOrderTime)).format('YYYY-MM-DD');
+        let nextPlanKey = null;
+
+        do
+        {
+          nextPlanKey = now.add(1, 'day').format('YYYY-MM-DD');
+
+          if (nextPlanKey === today)
+          {
+            continue;
+          }
+
+          plansToGenerate[nextPlanKey] = true;
+        }
+        while (nextPlanKey !== maxPlanKey);
+
+        Object.keys(plansToGenerate).forEach(date => generatePlan(date));
       }
-
-      // Any additional plans
-      plans.forEach(plan => plansToGenerate[moment.utc(plan._id).format('YYYY-MM-DD')] = true);
-
-      Object.keys(plansToGenerate).forEach(date => generatePlan(date));
-    });
+    );
   }
 
   function generatePlan(date)
