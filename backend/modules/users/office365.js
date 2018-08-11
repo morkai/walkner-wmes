@@ -2,6 +2,7 @@
 
 'use strict';
 
+const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const AzureAdOAuth2Strategy = require('passport-azure-ad-oauth2').Strategy;
@@ -70,7 +71,12 @@ module.exports = function setUpOffice365(app, module)
 
   function loginWithEmail(email, done)
   {
-    User.findOne({email: email, active: true}).lean().exec((err, user) =>
+    const conditions = {
+      email: new RegExp(`^${_.escapeRegExp(email)}$`, 'i'),
+      active: true
+    };
+
+    User.findOne(conditions).lean().exec((err, user) =>
     {
       if (err)
       {
