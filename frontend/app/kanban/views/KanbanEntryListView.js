@@ -1076,6 +1076,20 @@ define([
         {
           var kanbanIndex = -1;
 
+          entry.lines.forEach(function(line)
+          {
+            entry.workstations.forEach(function(workstations, i)
+            {
+              var kanbanQty = workstations * 2;
+              var locations = entry.locations[i];
+
+              for (var w = 0; w < kanbanQty; ++w)
+              {
+                exportRow(entry, line, entry.kanbanId[++kanbanIndex], kanbanIndex, 'ST' + (i + 1), locations);
+              }
+            });
+          });
+
           entry.workstations.forEach(function(workstations, i)
           {
             var kanbanQty = workstations * 2;
