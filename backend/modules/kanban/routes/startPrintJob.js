@@ -665,7 +665,9 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
       STORAGE_BIN: e(job.data.storageBin),
       WORKSTATION: workstation,
       LOCATION: location,
-      COMPONENT_QTY: job.data.componentQty
+      COMPONENT_QTY: job.data.componentQty,
+      BARCODE_X: [0, 0, 0, 0, 98, 38, 48, 39, 38][`${kanbanId}0`.length],
+      BARCODE_WIDTH: [9, 9, 9, 9, 9, 8, 9, 7, 8][`${kanbanId}0`.length]
     });
   }
 
