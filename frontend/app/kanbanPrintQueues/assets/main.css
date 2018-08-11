@@ -139,3 +139,13 @@
 .kanbanPrintQueues-dialog[data-status="success"] .modal-body {
   border-color: #0d0;
 }
+.kanbanPrintQueues-dialog .close {
+  position: absolute;
+  top: -11px;
+  right: -4px;
+  padding: 10px;
+  font-size: 48px;
+}
+.kanbanPrintQueues-dialog dl {
+  margin-bottom: 0;
+}

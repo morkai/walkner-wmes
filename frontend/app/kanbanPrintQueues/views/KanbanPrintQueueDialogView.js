@@ -15,7 +15,7 @@ define([
 
   return View.extend({
 
-    dialogClassName: 'kanbanPrintQueues-dialog',
+    dialogClassName: 'kanbanPrintQueues-dialog modal-static modal-no-keyboard',
 
     initialize: function()
     {
@@ -119,13 +119,20 @@ define([
 
         if (!view.remaining.length)
         {
-          view.timers.hide = setTimeout(view.closeDialog, 30000);
+          view.unlock();
         }
         else
         {
           view.timers.printNext = setTimeout(view.printNext.bind(view), 1);
         }
       });
+    },
+
+    unlock: function()
+    {
+      this.$el.closest('.modal').removeClass('modal-static modal-no-keyboard');
+
+      this.timers.hide = setTimeout(this.closeDialog, 5000);
     },
 
     closeDialog: function() {},
