@@ -77,6 +77,11 @@ define([
     {
       formData.tags = (formData.tags || '').split(',').filter(function(tag) { return tag.length > 0; });
 
+      if (!formData.special)
+      {
+        formData.special = '';
+      }
+
       return formData;
     }
 
