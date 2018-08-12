@@ -320,7 +320,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
 
     job.data.workstations.forEach((workstation, i) =>
     {
-      const location = job.data.locations[i] || '???';
+      const location = job.data.locations[i] || '';
       const kanbanCount = workstation * 2;
 
       for (let w = 0; w < kanbanCount; ++w)
@@ -418,7 +418,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
           return this.skip(app.createError(`Failed to read desc.prn template: ${err.message}`, 'PRINT_FAILURE'));
         }
 
-        template = compileDataZpl(template, job, '0', '??', '???');
+        template = compileDataZpl(template, job, '0', '', '');
 
         let zpl;
 
@@ -499,7 +499,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
         {
           const kanbanCount = workstations * 2;
           const workstation = `0${i + 1}`;
-          const location = job.data.locations[i] || '???';
+          const location = job.data.locations[i] || '';
 
           for (let w = 0; w < kanbanCount; ++w)
           {
