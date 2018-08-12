@@ -19,6 +19,7 @@ define([
 
   var ENTRIES_STORAGE_KEY = 'WMES_KANBAN_BUILDER_ENTRIES';
   var LAYOUTS_STORAGE_KEY = 'WMES_KANBAN_BUILDER_LAYOUTS';
+  var NEW_STORAGE_BIN_STORAGE_KEY = 'WMES_KANBAN_BUILDER_NEW_STORAGE_BIN';
 
   return Collection.extend({
 
@@ -29,6 +30,7 @@ define([
     initialize: function(models, options)
     {
       this.layouts = options && options.layouts || [].concat(layouts);
+      this.newStorageBin = options && options.newStorageBin !== undefined ? options.newStorageBin : true;
 
       this.on('add remove change reset', this.store);
     },
@@ -106,6 +108,18 @@ define([
       localStorage.setItem(LAYOUTS_STORAGE_KEY, JSON.stringify(this.layouts));
 
       this.trigger('change:layouts', layout, newState);
+    },
+
+    toggleNewStorageBin: function(newState)
+    {
+      if (newState === undefined)
+      {
+        newState = !this.newStorageBin;
+      }
+
+      localStorage.setItem(NEW_STORAGE_BIN_STORAGE_KEY, JSON.stringify(newState));
+
+      this.trigger('change:newStorageBin', newState);
     }
 
   }, {
@@ -113,7 +127,8 @@ define([
     fromLocalStorage: function()
     {
       return new this(JSON.parse(localStorage.getItem(ENTRIES_STORAGE_KEY) || '[]'), {
-        layouts: JSON.parse(localStorage.getItem(LAYOUTS_STORAGE_KEY) || 'null')
+        layouts: JSON.parse(localStorage.getItem(LAYOUTS_STORAGE_KEY) || 'null'),
+        newStorageBin: JSON.parse(localStorage.getItem(NEW_STORAGE_BIN_STORAGE_KEY) || 'true')
       });
     }
 

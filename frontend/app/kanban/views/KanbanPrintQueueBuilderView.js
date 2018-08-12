@@ -197,6 +197,11 @@ define([
           view.recountTotals();
           view.validate();
         });
+      },
+
+      'change #-newStorageBin': function()
+      {
+        this.model.builder.toggleNewStorageBin(this.$id('newStorageBin').prop('checked'));
       }
 
     },
@@ -231,6 +236,7 @@ define([
       var layouts = this.model.builder.layouts;
 
       return {
+        newStorageBin: this.model.builder.newStorageBin,
         layouts: kanbanLayouts.map(function(layout)
         {
           return {
