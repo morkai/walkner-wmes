@@ -134,7 +134,6 @@
   "builder:error:noLayout": "Wybierz przynajmniej jeden szablon.",
   "builder:error:noKind": "Nieznany rodzaj kanbana.",
   "builder:error:noKanbanId": "Brak ID kanbana dla linii {line} (pozycja {i}).",
-  "builder:error:noKanbans": "Brak kanbanów.",
   "builder:submit": "Dodaj nową kolejkę drukowania",
   "builder:remove": "Usuń CCN",
   "builder:clear": "Wyczyść wszystko",

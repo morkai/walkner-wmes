@@ -486,14 +486,7 @@ define([
           }
         }
 
-        var total = 0;
-
-        $(this).find('.kanban-builder-layout').each(function()
-        {
-          total += parseInt(this.textContent, 10);
-        });
-
-        lineErrors.push(total === 0 ? view.t('builder:error:noKanbans') : '');
+        lineErrors.push('');
       });
 
       var lines = view.$rows.find('select');
@@ -532,6 +525,11 @@ define([
             || (entry.kind !== 'kk' && layout !== 'kk');
         });
 
+        if (!jobLayouts.length)
+        {
+          return;
+        }
+
         model.get('lines').forEach(function(line)
         {
           var lineIndex = entry.lines.indexOf(line);
@@ -566,6 +564,15 @@ define([
           });
         });
       });
+
+      if (jobs.length === 0)
+      {
+        viewport.msg.saved();
+        view.model.builder.reset([]);
+        $inputs.prop('disabled', false);
+
+        return;
+      }
 
       jobs.sort(function(a, b)
       {
