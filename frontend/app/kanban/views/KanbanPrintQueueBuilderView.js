@@ -525,6 +525,12 @@ define([
       view.model.builder.forEach(function(model)
       {
         var entry = view.model.entries.get(model.get('ccn')).serialize(view.model);
+
+        if (!entry.workstationsTotal)
+        {
+          return;
+        }
+
         var jobLayouts = view.model.builder.layouts.filter(function(layout)
         {
           return (entry.kind === 'kk' && layout === 'kk')
