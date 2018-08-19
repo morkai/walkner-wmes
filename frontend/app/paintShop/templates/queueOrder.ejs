@@ -18,7 +18,7 @@
     <td class="paintShop-property" data-property="name"><%- order.name %></td>
     <td class="paintShop-property"></td>
     <td class="paintShop-property" data-property="mrpTimePlacement" rowspan="<%- order[rowSpan] %>">
-      <span class="paintShop-property paintShop-property-mrp <%- mrpDropped ? 'is-dropped' : '' %>" data-property="mrp" data-mrp="<%- order.mrp %>" title="<%- t('paintShop', 'PROPERTY:mrp') %>">
+      <span class="paintShop-property paintShop-property-mrp <%- order.status !== 'cancelled' && mrpDropped ? 'is-dropped' : '' %>" data-property="mrp" data-mrp="<%- order.mrp %>" title="<%- t('paintShop', 'PROPERTY:mrp') %>">
         <i class="fa fa-filter"></i><span><%- order.mrp %></span><i class="fa fa-level-down"></i>
       </span>
       <% if (order.startTime) { %>
@@ -64,7 +64,7 @@
   <tr class="paintShop-properties paintShop-order-childOrder <%- childOrder.last ? 'is-last' : '' %> <%- childOrder.deleted ? 'is-deleted' : '' %>">
     <td class="paintShop-property" data-property="order" rowspan="<%- childOrder[rowSpan] %>">
       <%- childOrder.order %>
-      <span class="paintShop-childOrder-dropZone <%- getChildOrderDropZoneClass(childOrder) %>" data-order-id="<%- order._id %>" data-child-order-index="<%- i %>"><i class="fa fa-level-down"></i></span>
+      <span class="paintShop-childOrder-dropZone <%- getChildOrderDropZoneClass(childOrder, order) %>" data-order-id="<%- order._id %>" data-child-order-index="<%- i %>"><i class="fa fa-level-down"></i></span>
     </td>
     <td class="paintShop-property" data-property="nc12"><%- childOrder.nc12 %></td>
     <td class="paintShop-property" data-property="qty"><%- childOrder.qty ? childOrder.qty.toLocaleString() : '?' %></td>

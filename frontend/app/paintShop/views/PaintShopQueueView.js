@@ -312,14 +312,16 @@ define([
           return;
         }
 
-        var childOrder = order.serialize().childOrders[this.dataset.childOrderIndex];
+        order = order.serialize();
+
+        var childOrder = order.childOrders[this.dataset.childOrderIndex];
 
         if (!childOrder)
         {
           return;
         }
 
-        var dropZoneClass = view.orders.getChildOrderDropZoneClass(childOrder);
+        var dropZoneClass = view.orders.getChildOrderDropZoneClass(childOrder, order);
 
         if (dropZoneClass)
         {

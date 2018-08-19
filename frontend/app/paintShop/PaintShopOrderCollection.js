@@ -181,9 +181,9 @@ define([
       });
     },
 
-    getChildOrderDropZoneClass: function(childOrder)
+    getChildOrderDropZoneClass: function(childOrder, order)
     {
-      if (!this.dropZones || !this.settings)
+      if (!this.dropZones || !this.settings || order.status === 'cancelled')
       {
         return '';
       }
