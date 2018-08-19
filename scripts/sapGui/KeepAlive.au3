@@ -44,9 +44,32 @@ LogDebug("CHECKING_SESSION")
 
 $session = $connection.Children(0)
 
-If Not IsObj($session) Then
-  LogError("ERR_NO_SESSION", $ERR_NO_SESSION)
+If IsObj($session) Then
+  If $session.IsBusy Then
+    LogDebug("BUSY")
+    Sleep(1337)
+  EndIf
+
+  If Not $session.IsBusy Then
+    LogDebug("KEEPING_ALIVE")
+    $session.findById("wnd[0]/tbar[0]/btn[80]").press
+  EndIf
+
+  Unlock()
+  Exit(0)
 EndIf
+
+LogDebug("ERR_NO_SESSION")
+
+$pid = ProcessExists("saplogon.exe")
+
+If $pid <> 0 Then
+  LogDebug("KILLING_SAPLOGON")
+  Run(@ComSpec & " /c taskkill /F /PID " & $pid & " /T", @SystemDir, @SW_HIDE)
+  ProcessWait("saplogon.exe", 15)
+EndIf
+
+#include "_Logon.au3"
 
 If $session.IsBusy Then
   LogDebug("BUSY")
