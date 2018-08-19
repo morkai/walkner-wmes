@@ -625,7 +625,9 @@ define([
 
         view.orders.serialize().forEach(function(order)
         {
-          if ((mrp && order.mrp !== mrp) || !view.orders.isPaintVisible(order))
+          if (order.status === 'cancelled'
+            || (mrp && order.mrp !== mrp)
+            || !view.orders.isPaintVisible(order))
           {
             return;
           }
@@ -668,7 +670,8 @@ define([
 
         view.orders.serialize().forEach(function(order)
         {
-          if (mrp && order.mrp !== mrp)
+          if (order.status === 'cancelled'
+            || (mrp && order.mrp !== mrp))
           {
             return;
           }
@@ -700,7 +703,8 @@ define([
       {
         var orders = page.orders.filter(function(order)
         {
-          return (!filterValue || order.get(filterProperty) === filterValue)
+          return (filterProperty === 'order' || order.get('status') !== 'cancelled')
+            && (!filterValue || order.get(filterProperty) === filterValue)
             && page.orders.isPaintVisible(order.serialize());
         });
 
