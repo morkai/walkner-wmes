@@ -9,7 +9,7 @@ module.exports = function(app, module, req, res, next)
   const userModule = app[module.config.userId];
 
   const oldSessionId = req.sessionID;
-  const user = req.user;
+  const user = _.defaults({}, req.user, userModule.guest);
 
   req.session.regenerate(err =>
   {
