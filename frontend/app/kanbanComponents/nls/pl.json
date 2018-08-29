@@ -18,23 +18,6 @@
   "PROPERTY:createdAt": "Czas utworzenia",
   "PROPERTY:updatedAt": "Czas ostatniej zmiany",
   "PROPERTY:updater": "Ostatnio zmienione przez",
-  "PROPERTY:markerColor": "Kolor znacznika",
 
-  "filter:submit": "Filtruj komponenty",
-
-  "color:darkblue": "Ciemnoniebieski",
-  "color:violet": "Fioletowy",
-  "color:lavender": "Lawendowy",
-  "color:lightblue": "Jasnoniebieski",
-  "color:grey": "Szary",
-  "color:red": "Czerwony",
-  "color:orange": "Pomarańczowy",
-  "color:yellow": "Żółty",
-  "color:sand": "Piaskowy",
-  "color:green": "Zielony",
-  "color:lightgreen": "Jasnozielony",
-  "color:pink": "Różowy",
-  "color:brown": "Brązowy",
-  "color:cyan": "Turkusowy",
-  "color:black": "Czarny"
+  "filter:submit": "Filtruj komponenty"
 }

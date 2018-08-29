@@ -33,7 +33,6 @@ define([
       {id: 'maxBinQty', className: 'is-min is-number'},
       {id: 'minBinQty', className: 'is-min is-number'},
       {id: 'replenQty', className: 'is-min is-number'},
-      {id: 'markerColor', className: 'is-min'},
       {id: 'filler', label: ''}
     ],
 

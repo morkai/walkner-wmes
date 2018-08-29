@@ -12,15 +12,27 @@ define([
   'use strict';
 
   var canView = user.auth();
+  var canManage = user.auth('KANBAN:MANAGE');
+  var nls = 'i18n!app/nls/kanban';
 
   router.map('/kanban', canView, function()
   {
     viewport.loadPage(
-      ['app/kanban/pages/KanbanEntryListPage', 'i18n!app/nls/kanban', 'i18n!app/nls/kanbanComponents'],
+      ['app/kanban/pages/KanbanEntryListPage', nls, 'i18n!app/nls/kanbanComponents'],
       function(KanbanEntryListPage)
       {
         return new KanbanEntryListPage();
       }
     );
+  });
+
+  router.map('/kanban;settings', canManage, function(req)
+  {
+    viewport.loadPage(['app/kanban/pages/KanbanSettingsPage', nls], function(KanbanSettingsPage)
+    {
+      return new KanbanSettingsPage({
+        initialTab: req.query.tab
+      });
+    });
   });
 });

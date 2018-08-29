@@ -48,7 +48,6 @@ define([
         entry.minBinQty = component.get('minBinQty');
         entry.maxBinQty = component.get('maxBinQty');
         entry.replenQty = component.get('replenQty');
-        entry.markerColor = component.get('markerColor');
       }
       else
       {
@@ -58,7 +57,28 @@ define([
         entry.minBinQty = 0;
         entry.maxBinQty = 0;
         entry.replenQty = 0;
+      }
+
+      if (entry.storageBin)
+      {
+        entry.storageBinRow = entry.storageBin.substr(1, 1);
+        entry.markerColor = options.settings.getRowColor(entry.storageBinRow);
+      }
+      else
+      {
+        entry.storageBinRow = '';
         entry.markerColor = null;
+      }
+
+      if (entry.newStorageBin)
+      {
+        entry.newStorageBinRow = entry.newStorageBin.substr(1, 1);
+        entry.newMarkerColor = options.settings.getRowColor(entry.newStorageBinRow);
+      }
+      else
+      {
+        entry.newStorageBinRow = '';
+        entry.newMarkerColor = null;
       }
 
       if (supplyArea)

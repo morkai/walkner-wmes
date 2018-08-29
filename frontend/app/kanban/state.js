@@ -56,11 +56,7 @@ define([
     paginate: false,
     rqlQuery: 'exclude(changes)&sort(_id)'
   });
-  kanbanState.entries = new KanbanEntryCollection(null, {
-    tableView: kanbanState.tableView,
-    supplyAreas: kanbanState.supplyAreas,
-    components: kanbanState.components
-  });
+  kanbanState.entries = new KanbanEntryCollection(null, kanbanState);
   kanbanState.builder = KanbanPrintQueueBuilder.fromLocalStorage();
   kanbanState.auth = {};
 
@@ -190,7 +186,8 @@ define([
       view: user.isAllowedTo('KANBAN:VIEW'),
       manage: user.isAllowedTo('KANBAN:MANAGE'),
       processEngineer: user.isAllowedTo('FN:process-engineer'),
-      leader: user.isAllowedTo('FN:leader', 'FN:master')
+      leader: user.isAllowedTo('FN:leader', 'FN:master'),
+      whman: user.isAllowedTo('FN:whman', 'FN:prod_whman', 'FN:in_whman')
     };
   }
 

@@ -15,7 +15,6 @@ module.exports = function setupKanbanComponentModel(app, mongoose)
     maxBinQty: Number,
     minBinQty: Number,
     replenQty: Number,
-    markerColor: String,
     updates: {},
     changes: {}
   }, {
@@ -39,7 +38,6 @@ module.exports = function setupKanbanComponentModel(app, mongoose)
       maxBinQty: data[3],
       minBinQty: data[4],
       replenQty: data[5],
-      markerColor: null,
       updates: {},
       changes: []
     };

@@ -1,0 +1,15 @@
+<form class="settings kanban-settings">
+  <div class="list-group">
+    <a class="list-group-item" href="#kanban;settings?tab=import" data-tab="import"><%- t('kanban', 'settings:tab:import') %></a>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="import">
+      <% ['maktLanguage', 'mlgtStorageType', 'mlgtWarehouseNo', 'pkhdStorageType'].forEach(function(prop) { %>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-import-<%- prop %>"><%- t('kanban', 'settings:import:' + prop) %></label>
+        <input id="<%- idPrefix %>-import-<%- prop %>" class="form-control" name="kanban.import.<%- prop %>" type="text" data-change-delay="0">
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</form>

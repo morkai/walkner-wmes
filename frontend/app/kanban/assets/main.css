@@ -110,6 +110,7 @@
   z-index: 1;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 1px 3px #666;
+  user-select: none;
 }
 .kanban-is-expanded[data-column-id="comment"] .kanban-td-value {
   padding: 6px 4px;
@@ -283,10 +284,12 @@ tr:hover > .kanban-is-invalid,
 .kanban-td[data-column-id="discontinued"] {
   width: 30px;
 }
-.kanban-td[data-column-id="markerColor"] {
+.kanban-td[data-column-id="markerColor"],
+.kanban-td[data-column-id="newMarkerColor"] {
   width: 30px;
 }
-.kanban-tbody-table .kanban-td[data-column-id="markerColor"] {
+.kanban-tbody-table .kanban-td[data-column-id="markerColor"],
+.kanban-tbody-table .kanban-td[data-column-id="newMarkerColor"] {
   text-align: left;
 }
 .kanban-td-color-marker {
@@ -374,6 +377,10 @@ tr:hover > .kanban-is-invalid,
 }
 .kanban-editor-form[data-column-id="comment"] {
   width: 400px;
+}
+.kanban-editor-form[data-column-id="markerColor"],
+.kanban-editor-form[data-column-id="newMarkerColor"] {
+  width: 140px;
 }
 .kanban-popover .popover-title {
   padding: 4px 8px;

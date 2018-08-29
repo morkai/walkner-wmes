@@ -130,9 +130,63 @@ define([
       rotated: true,
       tdClassName: invalidTdClassName
     },
+    markerColor: {
+      width: 3,
+      rotated: true,
+      expand: 150,
+      tdClassName: function()
+      {
+        return this.state.auth.manage || this.state.auth.whman ? 'kanban-is-editable' : '';
+      },
+      renderValue: function(value, column, i, entry)
+      {
+        if (!value)
+        {
+          return '';
+        }
+
+        var color = this.state.settings.getMarkerColor(entry.markerColor);
+
+        return '<span class="kanban-td-color-marker" style="background: ' + color.color + '"></span>'
+          + '<span class="kanban-td-color-label">' + color.text + '</span>';
+      },
+      exportValue: function(value)
+      {
+        return value
+          ? (t.has('kanban', 'color:' + value) ? t('kanban', 'color:' + value) : value)
+          : '';
+      }
+    },
     newStorageBin: {
       width: 10,
       rotated: true
+    },
+    newMarkerColor: {
+      width: 3,
+      rotated: true,
+      expand: 150,
+      tdClassName: function()
+      {
+        return this.state.auth.manage || this.state.auth.whman ? 'kanban-is-editable' : '';
+      },
+      renderValue: function(value, column, i, entry)
+      {
+        if (!value)
+        {
+          return '';
+        }
+
+        var color = this.state.settings.getMarkerColor(entry.newMarkerColor);
+
+        return '<span class="kanban-td-color-marker" style="background: ' + color.color + '"></span>'
+          + '<span class="kanban-td-color-label">' + color.text + '</span>';
+      },
+      exportValue: function(value)
+      {
+        return value
+          ? (t.has('kanban', 'color:' + value) ? t('kanban', 'color:' + value) : value)
+          : '';
+      }
     },
     kanbanId: {
       width: 10,
@@ -330,30 +384,6 @@ define([
         value = String(value).toUpperCase();
 
         return /^[A-Z][0-9][0-9]$/.test(value) ? value : '';
-      }
-    },
-    markerColor: {
-      width: 3,
-      rotated: true,
-      expand: 150,
-      renderValue: function(value, column, i, entry)
-      {
-        if (!value)
-        {
-          return '';
-        }
-
-        var component = this.state.components.get(entry.nc12);
-        var color = component.getColor();
-
-        return '<span class="kanban-td-color-marker" style="background: ' + color.color + '"></span>'
-          + '<span class="kanban-td-color-label">' + color.text + '</span>';
-      },
-      exportValue: function(value)
-      {
-        return value
-          ? (t.has('kanbanComponents', 'color:' + value) ? t('kanbanComponents', 'color:' + value) : value)
-          : '';
       }
     },
     discontinued: {

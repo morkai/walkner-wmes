@@ -8,7 +8,7 @@ define([
   'app/core/util/idAndLabel',
   'app/data/clipboard',
   'app/planning/util/contextMenu',
-  'app/kanbanComponents/KanbanComponentCollection',
+  '../KanbanSettingCollection',
   './KanbanSearchDialogView',
   'app/kanban/templates/entryList',
   'app/kanban/templates/entryListColumns',
@@ -27,7 +27,7 @@ define([
   idAndLabel,
   clipboard,
   contextMenu,
-  KanbanComponentCollection,
+  KanbanSettingCollection,
   KanbanSearchDialogView,
   template,
   columnsTemplate,
@@ -931,15 +931,24 @@ define([
 
     showCellEditor: function(cell)
     {
-      if (this.editors[cell.columnId])
+      var editor = this.editors[cell.columnId];
+
+      if (!editor)
       {
-        this.editing = cell;
-
-        cell.td.classList.remove('kanban-is-editable');
-        cell.td.classList.add('kanban-is-editing');
-
-        this.editors[cell.columnId].call(this, cell);
+        return;
       }
+
+      this.editing = cell;
+
+      cell.td.classList.remove('kanban-is-editable');
+      cell.td.classList.add('kanban-is-editing');
+
+      if (typeof editor === 'string')
+      {
+        editor = this.editors[editor];
+      }
+
+      editor.call(this, cell);
     },
 
     handleFilterMode: function(filterMode)
@@ -1893,15 +1902,7 @@ define([
 
       $td.focus();
 
-      var req = view.ajax({
-        method: 'PATCH',
-        url: entry.url(),
-        data: JSON.stringify({
-          property: columnId,
-          arrayIndex: arrayIndex,
-          newValue: newValue
-        })
-      });
+      var req = view.updateEditorValue(entry, column, arrayIndex, newValue);
 
       req.fail(function()
       {
@@ -1922,6 +1923,31 @@ define([
         {
           $td.focus();
         }
+      });
+    },
+
+    updateEditorValue: function(entry, column, arrayIndex, newValue)
+    {
+      var data = entry.serialize(this.model);
+
+      if (column._id === 'markerColor')
+      {
+        return this.model.settings.updateRowColor(data.storageBinRow, newValue);
+      }
+
+      if (column._id === 'newMarkerColor')
+      {
+        return this.model.settings.updateRowColor(data.newStorageBinRow, newValue);
+      }
+
+      return this.ajax({
+        method: 'PATCH',
+        url: entry.url(),
+        data: JSON.stringify({
+          property: column._id,
+          arrayIndex: arrayIndex,
+          newValue: newValue
+        })
       });
     },
 
@@ -2212,7 +2238,20 @@ define([
       comment: function(cell)
       {
         this.editors.textArea.call(this, cell);
-      }
+      },
+
+      markerColor: function(cell)
+      {
+        var entry = cell.model.serialize(this.model);
+        var options = [{id: '', text: this.t('color:null')}].concat(
+          KanbanSettingCollection.getMarkerColors()
+        );
+        var selected = [entry[cell.columnId] || ''];
+
+        this.editors.select.call(this, cell, false, options, selected);
+      },
+
+      newMarkerColor: 'markerColor'
 
     },
 
@@ -2702,10 +2741,11 @@ define([
             this,
             cell,
             $filter,
-            [{id: '', text: this.t('filters:value:empty')}].concat(KanbanComponentCollection.getColors())
+            [{id: '', text: this.t('filters:value:empty')}].concat(KanbanSettingCollection.getMarkerColors())
           );
         }
-      }
+      },
+      newMarkerColor: 'markerColor'
 
     }
 

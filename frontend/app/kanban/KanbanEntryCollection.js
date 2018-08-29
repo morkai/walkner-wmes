@@ -23,6 +23,7 @@ define([
 
     initialize: function(models, options)
     {
+      this.settings = options.settings;
       this.tableView = options.tableView;
       this.supplyAreas = options.supplyAreas;
       this.components = options.components;
@@ -39,6 +40,8 @@ define([
         this.supplyAreas.on('add change remove', this.onSupplyAreaUpdate, this);
 
         this.components.on('add change remove', this.onComponentUpdate, this);
+
+        this.settings.on('change:value', this.onSettingChange, this);
 
         this.on('change', this.onEntryChange);
         this.on('reset', this.onFilterChange);
@@ -238,6 +241,15 @@ define([
       }
 
       entry.set(data);
+    },
+
+    onSettingChange: function(setting)
+    {
+      if (setting.id === 'kanban.rowColors')
+      {
+        this.forEach(function(entry) { entry.serialized = null; });
+        this.onFilterChange();
+      }
     }
 
   });
