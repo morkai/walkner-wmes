@@ -5,6 +5,8 @@
 #include <WinAPI.au3>
 #include "_Common.au3"
 
+Unlock()
+
 LogDebug("CHECKING_WRAPPER")
 
 $wrapper = ObjCreate("SapROTWr.SAPROTWrapper")

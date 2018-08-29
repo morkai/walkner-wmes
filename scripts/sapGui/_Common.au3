@@ -38,6 +38,8 @@ Func SetVariant($session, $variantName, $variantCreator)
 EndFunc
 
 Func Unlock()
+  LogDebug("UNLOCKING")
+
   For $i = 0 To 5
     LogDebug("SEARCHING_MODAL_WINDOW")
 
