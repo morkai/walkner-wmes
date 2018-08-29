@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["app/i18n","app/core/util/bindLoadingMessage","app/core/View","../state","../views/KanbanSettingsView"],function(n,e,i,t,a){"use strict";return i.extend({layoutName:"page",breadcrumbs:function(){return[{label:n.bound("kanban","bc:base"),href:"#kanban"},n.bound("kanban","bc:settings")]},initialize:function(){this.defineModels(),this.defineViews()},destroy:function(){t.unload()},defineModels:function(){this.model=e(t.settings,this)},defineViews:function(){this.view=new a({initialTab:this.options.initialTab,settings:this.model})},load:function(n){return n(t.load(!1))},afterRender:function(){t.load(!1)}})});
