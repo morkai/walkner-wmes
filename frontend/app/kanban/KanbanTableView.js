@@ -317,7 +317,9 @@ define([
       width: 10,
       tdClassName: function()
       {
-        return this.state.auth.manage || this.state.auth.processEngineer ? 'kanban-is-editable' : '';
+        return this.state.auth.manage || this.state.auth.processEngineer || this.state.auth.leader
+          ? 'kanban-is-editable'
+          : '';
       },
       renderValue: function(value)
       {
