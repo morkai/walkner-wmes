@@ -34,6 +34,7 @@ module.exports = function setUpKanbanRoutes(app, module)
   const canPrint = userModule.auth('KANBAN:MANAGE', 'KANBAN:PRINT');
   const canImport = userModule.auth('KANBAN:MANAGE', 'FN:process-engineer');
   const canUpdate = userModule.auth('KANBAN:MANAGE', 'FN:process-engineer', 'FN:leader', 'FN:master');
+  const canUpdateSettings = userModule.auth('KANBAN:MANAGE', 'FN:whman', 'FN:prod_whman', 'FN:in_whman');
 
   // Import
   express.post('/kanban/import/sap', canImport, importSapRoute.bind(null, app, module));
@@ -140,7 +141,7 @@ module.exports = function setUpKanbanRoutes(app, module)
     },
     express.crud.browseRoute.bind(null, app, settingsModule.Setting)
   );
-  express.put('/kanban/settings/:id', canManage, settingsModule.updateRoute);
+  express.put('/kanban/settings/:id', canUpdateSettings, settingsModule.updateRoute);
 
   function preparePrintQueue(req, res, next)
   {
