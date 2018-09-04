@@ -32,6 +32,7 @@
   "filter:placeholder:aor": "Dowolny obszar odpowiedzialności",
   "filter:placeholder:reason": "Dowolny powód przestoju",
   "filter:placeholder:orgUnit": "Dowolna jednostka organizacyjna",
+  "filter:mrp": "Kontroler MRP zlecenia",
 
   "PROPERTY:rid": "ID",
   "PROPERTY:mrpControllers": "MRP",

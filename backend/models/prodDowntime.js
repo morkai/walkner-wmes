@@ -178,6 +178,7 @@ module.exports = function setupProdDowntimeModel(app, mongoose)
   prodDowntimeSchema.index({updatedAt: 1, status: 1});
   prodDowntimeSchema.index({'alerts.active': 1});
   prodDowntimeSchema.index({'orderData.family': 1});
+  prodDowntimeSchema.index({'orderData.mrp': 1, startedAt: -1});
 
   prodDowntimeSchema.statics.TOPIC_PREFIX = 'prodDowntimes';
 

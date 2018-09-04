@@ -9,6 +9,7 @@ define([
   'app/core/views/FilterView',
   'app/core/util/fixTimeRange',
   'app/orgUnits/views/OrgUnitPickerView',
+  'app/mrpControllers/util/setUpMrpSelect2',
   'app/prodDowntimes/templates/filter'
 ], function(
   _,
@@ -19,6 +20,7 @@ define([
   FilterView,
   fixTimeRange,
   OrgUnitPickerView,
+  setUpMrpSelect2,
   filterTemplate
 ) {
   'use strict';
@@ -41,7 +43,8 @@ define([
         aorIn: true,
         reason: null,
         reasonIn: true,
-        status: null
+        status: null,
+        mrp: ''
       };
     },
 
@@ -70,6 +73,10 @@ define([
       'alerts.active': function(propertyName, term, formData)
       {
         formData.alerts = 1;
+      },
+      'orderData.mrp': function(propertyName, term, formData)
+      {
+        formData.mrp = Array.isArray(term.args[1]) ? term.args[1].join(',') : '';
       },
       'reason': 'aor'
     },
@@ -124,6 +131,12 @@ define([
       });
 
       this.toggleStatus();
+
+      setUpMrpSelect2(this.$id('mrp'), {
+        own: true,
+        view: this,
+        width: '256px'
+      });
     },
 
     serializeFormToQuery: function(selector)
@@ -135,6 +148,7 @@ define([
       var reasonIn = this.$id('reasonIn').prop('checked');
       var alerts = this.$id('alerts').prop('checked');
       var status = this.fixStatus();
+      var mrp = this.$id('mrp').val();
 
       if (alerts)
       {
@@ -147,6 +161,11 @@ define([
       else if (status.length > 1)
       {
         selector.push({name: 'in', args: ['status', status]});
+      }
+
+      if (mrp && mrp.length)
+      {
+        selector.push({name: 'in', args: ['orderData.mrp', mrp.split(',')]});
       }
 
       if (timeRange.from)
