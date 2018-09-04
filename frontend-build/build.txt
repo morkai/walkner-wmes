@@ -1147,6 +1147,11 @@ app/nls/orgUnits.js
 app/nls/pl/orgUnits.js
 i18n!app/nls/orgUnits
 app/orgUnits/views/OrgUnitPickerView.js
+app/nls/mrpControllers.js
+app/nls/pl/mrpControllers.js
+i18n!app/nls/mrpControllers
+app/mrpControllers/util/ownMrps.js
+app/mrpControllers/util/setUpMrpSelect2.js
 app/prodDowntimes/templates/filter.js
 app/prodDowntimes/views/ProdDowntimeFilterView.js
 app/core/templates/listPage.js
@@ -1438,11 +1443,6 @@ app/factoryLayout/ProdLineStateCollection.js
 app/factoryLayout/FactoryLayout.js
 app/factoryLayout/productionState.js
 app/planning/PlanDisplayOptions.js
-app/nls/mrpControllers.js
-app/nls/pl/mrpControllers.js
-i18n!app/nls/mrpControllers
-app/mrpControllers/util/ownMrps.js
-app/mrpControllers/util/setUpMrpSelect2.js
 app/planning/templates/planFilter.js
 app/planning/views/PlanFilterView.js
 app/prodShifts/ProdShiftCollection.js
@@ -1682,6 +1682,7 @@ app/orderDocuments/templates/settings.js
 app/orderDocuments/views/DocumentViewerSettingsView.js
 app/orderDocuments/templates/documentListItem.js
 app/orderDocuments/templates/controls.js
+app/orderDocuments/templates/uiLock.js
 app/orderDocuments/views/DocumentViewerControlsView.js
 app/orderDocuments/templates/preview.js
 app/orderDocuments/templates/documentWindow.js
