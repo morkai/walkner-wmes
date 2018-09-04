@@ -6,22 +6,28 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/data/localStorage',
   './LocalOrderPickerView',
   './DocumentViewerSettingsView',
   'app/orderDocuments/templates/documentListItem',
-  'app/orderDocuments/templates/controls'
+  'app/orderDocuments/templates/controls',
+  'app/orderDocuments/templates/uiLock'
 ], function(
   _,
   $,
   t,
   viewport,
   View,
+  localStorage,
   LocalOrderPickerView,
   DocumentViewerSettingsView,
   renderDocumentListItem,
-  template
+  template,
+  uiLockTemplate
 ) {
   'use strict';
+
+  var IS_EMBEDDED = window.parent !== window;
 
   return View.extend({
 
@@ -274,6 +280,10 @@ define([
       'click #-numpad > .btn': function(e)
       {
         this.pressNumpadKey(e.currentTarget.dataset.key);
+      },
+      'click #-lockUi': function(e)
+      {
+        this.control(e, this.lockUi);
       }
     },
 
@@ -302,7 +312,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         touch: window.location.search.indexOf('touch') !== -1,
-        showBottomButtons: window.parent !== window
+        showBottomButtons: IS_EMBEDDED
       };
     },
 
@@ -337,6 +347,13 @@ define([
       if ($active.length)
       {
         $active[0].scrollIntoView();
+      }
+
+      window.WMES_DOCS_LOCK_UI = this.lockUi.bind(this);
+
+      if (localStorage.getItem('WMES_DOCS_UI_LOCKED') === '1')
+      {
+        this.lockUi();
       }
     },
 
@@ -407,6 +424,7 @@ define([
     shrinkControls: function()
     {
       this.$id('buttons').removeClass('is-enlarged');
+      this.$id('addImprovementButtons').addClass('hidden');
     },
 
     toggleControls: function()
@@ -414,6 +432,7 @@ define([
       if (this.$el.hasClass('is-touch'))
       {
         this.$id('buttons').toggleClass('is-enlarged');
+        this.$id('addImprovementButtons').addClass('hidden');
       }
     },
 
@@ -897,6 +916,31 @@ define([
     hideNumpad: function()
     {
       this.$('.orderDocuments-controls-numpad').addClass('hidden');
+    },
+
+    lockUi: function()
+    {
+      var $uiLock = this.$id('uiLock');
+
+      if ($uiLock.length)
+      {
+        return;
+      }
+
+      $uiLock = $(uiLockTemplate({
+        idPrefix: this.idPrefix
+      }));
+
+      $uiLock.find('div').on('click', function()
+      {
+        localStorage.removeItem('WMES_DOCS_UI_LOCKED');
+
+        $uiLock.remove();
+      });
+
+      $uiLock.appendTo('body');
+
+      localStorage.setItem('WMES_DOCS_UI_LOCKED', '1');
     },
 
     onOrderChange: function()

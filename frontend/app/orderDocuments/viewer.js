@@ -14,6 +14,7 @@ Viewer.TEMPLATE =
   '<div class="viewer-footer">' +
   '<div class="viewer-title"></div>' +
   '<ul class="viewer-toolbar">' +
+  '<li id="lockUi" title="Zablokuj interfejs"><span class="fa fa-lock"></span></li>' +
   '<li id="pdf" title="Pokaż oryginalny plik PDF"><span class="fa fa-file-pdf-o"></span></li>' +
   '<li class="viewer-zoom-in" data-action="zoom-in" title="Powiększ"><span class="fa fa-plus" data-action="zoom-in"></span></li>' +
   '<li class="viewer-zoom-out" data-action="zoom-out" title="Pomniejsz"><span class="fa fa-minus" data-action="zoom-out"></span></li>' +
@@ -98,6 +99,14 @@ window.onload = function()
     var href = window.location.href;
 
     window.location.href = href + (href.indexOf('?') === -1 ? '?' : '&') + 'pdf=1';
+  });
+
+  document.getElementById('lockUi').addEventListener('click', function()
+  {
+    if (window.parent.WMES_DOCS_LOCK_UI)
+    {
+      window.parent.WMES_DOCS_LOCK_UI(); // eslint-disable-line new-cap
+    }
   });
 
   if (firstEl)

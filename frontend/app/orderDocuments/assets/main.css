@@ -183,16 +183,22 @@
   box-shadow: 0 4px 12px #666;
 }
 .is-enlarged > .orderDocuments-buttons > .btn {
-  width: 60px;
-  height: 50px;
-  font-size: 24px;
+  width: 80px;
+  height: 70px;
+  font-size: 28px;
 }
 .is-enlarged + .orderDocuments-order {
   margin-top: 32px;
 }
 .is-enlarged > .orderDocuments-buttons-addImprovement {
-  top: 50px;
+  top: 70px;
   box-shadow: 0 4px 12px #666;
+}
+.orderDocuments-buttons-lockUi {
+  display: none;
+}
+.is-enlarged .orderDocuments-buttons-lockUi {
+  display: block;
 }
 .orderDocuments-buttons-addImprovement {
   flex-direction: column;
@@ -351,4 +357,29 @@
 }
 .orderDocuments-localOrderPicker .btn-block:first-child {
   margin-top: 0;
+}
+.orderDocuments-uiLock {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  user-select: none;
+}
+.orderDocuments-uiLock-inner {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 15px;
+  background: #e00;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px #333;
+  cursor: pointer;
+}
+.orderDocuments-uiLock-inner .fa-unlock {
+  font-size: 42px;
+  margin-right: 15px;
 }

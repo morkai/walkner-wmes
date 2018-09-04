@@ -21,6 +21,9 @@
     "controls:reboot": "Refresh page/Restart after 3s",
     "controls:shutdown": "Shutdown after 3s",
     "controls:filter:ph": "Filter documents",
+    "controls:lockUi": "Lock UI",
+
+    "uiLocked": "UI locked.<br>Touch here to unlock.",
 
     "popup:document": "Failed to open the document in a new window.<br>Check if the popups are allowed in the browser!",
     "popup:suggestion": "Failed to open the suggestion form in a new window.<br>Check if the popups are allowed in the browser!",

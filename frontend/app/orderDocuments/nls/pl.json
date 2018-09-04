@@ -20,6 +20,9 @@
   "controls:reboot": "Odśwież stronę/Restartuj komputer po 3s",
   "controls:shutdown": "Wyłącz komputer po 3s",
   "controls:filter:ph": "Filtruj dokumenty",
+  "controls:lockUi": "Zablokuj interfejs",
+
+  "uiLocked": "Interfejs zablokowany.<br>Dotknij tutaj, aby odblokować.",
 
   "popup:document": "Nie udało się otworzyć dokumentu w nowym oknie.<br>Sprawdź czy wyskakujące okienka są dozwolone w przeglądarce!",
   "popup:improvement": "Nie udało się otworzyć formularza ZPW/sugestii w nowym oknie.<br>Sprawdź czy wyskakujące okienka są dozwolone w przeglądarce!",

@@ -229,8 +229,14 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
     const orderNo = /^[0-9]{9}$/.test(req.query.order) ? req.query.order : null;
     const hash = /^[a-f0-9]{32}$/.test(req.query.hash) ? req.query.hash : null;
+    const options = {
+      orderNo,
+      hash,
+      forcePdf: true,
+      includeName: !!req.query.name
+    };
 
-    findDocumentFilePath(nc15, {orderNo, hash, forcePdf: true, includeName: !!req.query.name}, function(err, results)
+    findDocumentFilePath(nc15, options, function(err, results)
     {
       if (err || !results)
       {
@@ -269,8 +275,14 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     }
 
     const hash = /^[a-f0-9]{32}$/.test(req.query.hash) ? req.query.hash : null;
+    const options = {
+      orderNo,
+      hash,
+      forcePdf: !!req.query.pdf,
+      includeName: false
+    };
 
-    findDocumentFilePath(nc15, {orderNo, hash, forcePdf: !!req.query.pdf, includeName: false}, function(err, results)
+    findDocumentFilePath(nc15, options, function(err, results)
     {
       if (err)
       {

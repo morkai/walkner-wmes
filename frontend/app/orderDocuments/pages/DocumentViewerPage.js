@@ -21,6 +21,7 @@ define([
 ) {
   'use strict';
 
+  var IS_EMBEDDED = window.parent !== window;
   var LOADED_FILES_COUNT_TO_REFRESH = 6;
   var BROWSER_VERSION = window.navigator.userAgent.match(/(Chrome)\/([0-9]+)/) || ['Unknown/0', 'Unknown', 0];
 
@@ -61,7 +62,7 @@ define([
       $(window).on('resize.' + this.idPrefix, _.debounce(this.resize.bind(this), 1));
       $(window).on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
 
-      if (window.parent !== window)
+      if (IS_EMBEDDED)
       {
         $(window).on('contextmenu.' + this.idPrefix, function(e) { e.preventDefault(); });
       }
@@ -122,7 +123,7 @@ define([
       this.resize();
       this.checkInitialConfig();
 
-      if (window.parent !== window)
+      if (IS_EMBEDDED)
       {
         this.hammer = new Hammer(document.body);
 
