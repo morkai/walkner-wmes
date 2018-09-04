@@ -2,6 +2,7 @@
 
 'use strict';
 
+const {URL} = require('url');
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
@@ -20,18 +21,19 @@ module.exports = function setUpOffice365(app, module)
 
   passport.use(new AzureAdOAuth2Strategy(module.config.office365.strategy, handleLogin));
 
-  express.get('/auth/office365',
-    function(req, res, next)
-    {
-      if (req.query.returnUrl)
-      {
-        res.cookie('users.returnUrl', req.query.returnUrl, {httpOnly: true});
-      }
+  express.get('/auth/office365', function(req, res, next)
+  {
+    const options = {};
 
-      next();
-    },
-    passport.authenticate('azure_ad_oauth2')
-  );
+    if (req.query.returnUrl)
+    {
+      res.cookie('users.returnUrl', req.query.returnUrl, {httpOnly: true});
+
+      options.callbackURL = `${new URL(req.query.returnUrl).origin}/auth/azureadoauth2/callback`;
+    }
+
+    passport.authenticate('azure_ad_oauth2', options)(req, res, next);
+  });
 
   express.get(
     '/auth/azureadoauth2/callback',
