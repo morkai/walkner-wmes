@@ -27,7 +27,7 @@ module.exports = function editResultRoute(app, qiModule, req, res, next)
     const inspector = userModule.isAllowedTo(user, 'QI:INSPECTOR');
     const specialist = userModule.isAllowedTo(user, 'QI:SPECIALIST');
     const master = userModule.isAllowedTo(user, 'FN:master');
-    const leader = userModule.isAllowedTo(user, 'FN:leader');
+    const leader = userModule.isAllowedTo(user, [['FN:leader'], ['FN:prod_whman']]);
 
     if (inspector)
     {

@@ -30,7 +30,7 @@ module.exports = function setUpQiRoutes(app, qiModule)
 
   const canViewDictionaries = userModule.auth('QI:DICTIONARIES:VIEW');
   const canManageDictionaries = userModule.auth('QI:DICTIONARIES:VIEW');
-  const canViewResults = userModule.auth('QI:RESULTS:VIEW', 'FN:master', 'FN:leader', 'FN:manager');
+  const canViewResults = userModule.auth('QI:RESULTS:VIEW', 'FN:master', 'FN:leader', 'FN:manager', 'FN:prod_whman');
   const canManageResults = userModule.auth('QI:INSPECTOR', 'QI:RESULTS:MANAGE');
   const canEditResults = userModule.auth('USER');
 

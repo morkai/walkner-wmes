@@ -36,7 +36,7 @@ module.exports = function dictionariesRoute(app, qiModule, req, res, next)
         .exec(this.group());
 
       User
-        .find({prodFunction: 'leader'}, {login: 1, firstName: 1, lastName: 1, active: 1})
+        .find({prodFunction: {$in: ['leader', 'prod_whman']}}, {login: 1, firstName: 1, lastName: 1, active: 1})
         .sort({searchName: 1})
         .lean()
         .exec(this.group());
@@ -67,7 +67,7 @@ module.exports = function dictionariesRoute(app, qiModule, req, res, next)
         productFamilies: dictionaries.pop()
       };
 
-      _.forEach(Object.keys(qiModule.DICTIONARIES), function(dictionaryName, i)
+      Object.keys(qiModule.DICTIONARIES).forEach((dictionaryName, i) =>
       {
         result[dictionaryName] = dictionaries[i];
       });

@@ -20,7 +20,7 @@ define([
   'use strict';
 
   var nls = 'i18n!app/nls/qiResults';
-  var canView = user.auth('QI:RESULTS:VIEW', 'FN:master', 'FN:leader', 'FN:manager');
+  var canView = user.auth('QI:RESULTS:VIEW', 'FN:master', 'FN:leader', 'FN:manager', 'FN:prod_whman');
   var canManage = user.auth('QI:INSPECTOR', 'QI:RESULTS:MANAGE');
   var canEdit = user.auth('USER');
 

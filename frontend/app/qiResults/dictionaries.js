@@ -55,7 +55,7 @@ define([
       rqlQuery: 'select(firstName,lastName,login,active)&prodFunction=master'
     }),
     leaders: new UserCollection(null, {
-      rqlQuery: 'select(firstName,lastName,login,active)&prodFunction=leader'
+      rqlQuery: 'select(firstName,lastName,login,active)&prodFunction=in=(leader,prod_whman)'
     }),
     productFamilies: [],
     settings: settings.acquire(),
