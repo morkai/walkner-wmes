@@ -700,47 +700,65 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
   function handleBomDocument(req, res, next)
   {
-    Order.findById(req.query.order, {qty: 1, bom: 1}).lean().exec(function(err, order)
-    {
-      if (err)
+    step(
+      function()
       {
-        return next(err);
-      }
-
-      if (!order)
+        Order.findById(req.query.order, {qty: 1, bom: 1}).lean().exec(this.next());
+      },
+      function(err, order)
       {
-        return next(app.createError('ORDER_NOT_FOUND', 404));
-      }
-
-      if (req.method === 'HEAD')
-      {
-        return res.sendStatus(204);
-      }
-
-      res.render('orderDocuments:bom', {
-        order: order._id,
-        components: _.map(order.bom, function(component)
+        if (err)
         {
-          let qty = component.qty;
+          return next(err);
+        }
 
-          if (component.nc12)
+        if (!order)
+        {
+          return next(app.createError('ORDER_NOT_FOUND', 404));
+        }
+
+        if (req.method !== 'HEAD')
+        {
+          Order.assignPkhdStrategies(order, this.next());
+        }
+      },
+      function(err, order)
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        if (req.method === 'HEAD')
+        {
+          return res.sendStatus(204);
+        }
+
+        res.render('orderDocuments:bom', {
+          order: order._id,
+          components: _.map(order.bom, function(component)
           {
-            qty /= order.qty;
-          }
+            let qty = component.qty;
 
-          qty = qty.toString().split('.');
+            if (component.nc12)
+            {
+              qty /= order.qty;
+            }
 
-          component.qty = [
-            parseInt(qty[0], 10),
-            +(parseInt(qty[1], 10) || 0).toString().substring(0, 3)
-          ];
+            qty = qty.toString().split('.');
 
-          return component;
-        }),
-        windowWidth: parseInt(req.query.w, 10) || 0,
-        windowHeight: parseInt(req.query.h, 10) || 0
-      });
-    });
+            component.qty = [
+              parseInt(qty[0], 10),
+              +(parseInt(qty[1], 10) || 0).toString().substring(0, 3)
+            ];
+
+            return component;
+          }),
+          windowWidth: parseInt(req.query.w, 10) || 0,
+          windowHeight: parseInt(req.query.h, 10) || 0
+        });
+      }
+    );
   }
 
   function handleEtoDocument(req, res, next)

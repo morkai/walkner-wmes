@@ -13,20 +13,20 @@ const parseSapString = require('../../sap/util/parseSapString');
 
 exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
-  filterRe: /^T_COOIS_BOM\.txt$/,
+  filterRe: /^T_PKHD\.txt$/,
   parsedOutputDir: null
 };
 
-exports.start = function startOrderBomImporterModule(app, module)
+exports.start = function startOrderPkhdImporterModule(app, module)
 {
   const mongoose = app[module.config.mongooseId];
 
   if (!mongoose)
   {
-    throw new Error('orders/importer/bom module requires the mongoose module!');
+    throw new Error('orders/importer/pkhd module requires the mongoose module!');
   }
 
-  const Order = mongoose.model('Order');
+  const PkhdComponent = mongoose.model('PkhdComponent');
 
   const filePathCache = {};
   let locked = false;
@@ -90,7 +90,7 @@ exports.start = function startOrderBomImporterModule(app, module)
       {
         module.error('[%s] Failed to import: %s', fileInfo.timeKey, err.message);
 
-        app.broker.publish('orders.bom.syncFailed', {
+        app.broker.publish('orders.pkhd.syncFailed', {
           timestamp: fileInfo.timestamp,
           error: err.message
         });
@@ -99,9 +99,9 @@ exports.start = function startOrderBomImporterModule(app, module)
       {
         module.debug('[%s] Imported %d in %d ms', fileInfo.timeKey, count, Date.now() - startTime);
 
-        app.broker.publish('orders.bom.synced', {
+        app.broker.publish('orders.pkhd.synced', {
           timestamp: fileInfo.timestamp,
-          count: count
+          count
         });
       }
 
@@ -127,95 +127,58 @@ exports.start = function startOrderBomImporterModule(app, module)
 
         module.debug('[%s] Parsing ~%d bytes...', fileInfo.timeKey, fileContents.length);
 
-        const bom = {};
+        this.items = new Map();
+
         const t = Date.now();
 
-        this.count = parseOrderBomTable(fileContents, bom);
+        parseTable(fileContents, this.items);
 
-        module.debug('[%s] Parsed %d items in %d ms!', fileInfo.timeKey, this.count, Date.now() - t);
+        module.debug('[%s] Parsed %d items in %d ms!', fileInfo.timeKey, this.items.size, Date.now() - t);
 
-        setImmediate(this.next(), bom);
+        setImmediate(this.next());
       },
-      function updateOrdersStep(bom)
+      function updateStep()
       {
-        module.debug('[%s] Updating orders...', fileInfo.timeKey);
+        module.debug('[%s] Updating...', fileInfo.timeKey);
 
-        updateNextOrder(fileInfo, new Date(), Object.keys(bom), bom, this.next());
+        updateNext(fileInfo, new Date(), Array.from(this.items.keys()), this.items, this.next());
       },
       function finalizeStep(err)
       {
-        return done(err, this.count);
+        return done(err, this.items.size);
       }
     );
   }
 
-  function updateNextOrder(fileInfo, t, orderNos, bom, done)
+  function updateNext(fileInfo, t, keys, items, done)
   {
-    const orderNo = orderNos.shift();
-    const newBom = bom[orderNo];
-    let oldBom = null;
+    const operations = keys.splice(0, 20).map(key =>
+    {
+      const item = items.get(key);
 
-    delete bom[orderNo];
+      return {
+        updateOne: {
+          filter: {_id: item._id},
+          update: {$set: item},
+          upsert: true
+        }
+      };
+    });
 
-    step(
-      function findOldBomStep()
+    PkhdComponent.collection.bulkWrite(operations, {ordered: false}, err =>
+    {
+      if (err)
       {
-        Order.findById(orderNo, {bom: 1}).lean().exec(this.next());
-      },
-      function compareBomStep(err, order)
-      {
-        if (err)
-        {
-          return this.skip(err);
-        }
-
-        if (!order)
-        {
-          return this.skip();
-        }
-
-        oldBom = order.bom || [];
-
-        if (deepEqual(newBom, oldBom))
-        {
-          return this.skip();
-        }
-
-        setImmediate(this.next());
-      },
-      function updateOrderStep()
-      {
-        const changes = {
-          time: t,
-          user: null,
-          oldValues: {bom: oldBom},
-          newValues: {bom: newBom},
-          comment: ''
-        };
-        const $set = {
-          bom: newBom,
-          updatedAt: t
-        };
-
-        Order.update({_id: orderNo}, {$set: $set, $push: {changes: changes}}, done);
-      },
-      function finalizeStep(err)
-      {
-        if (err)
-        {
-          module.error('[%s] Failed update BOM of order [%s]: %s', fileInfo.timeKey, orderNo, err.message);
-        }
-
-        if (orderNos.length)
-        {
-          setImmediate(updateNextOrder, fileInfo, t, orderNos, bom, done);
-        }
-        else
-        {
-          setImmediate(done);
-        }
+        module.error('[%s] Failed update: %s', fileInfo.timeKey, err.message);
       }
-    );
+
+      if (keys.length)
+      {
+        return setImmediate(updateNext, fileInfo, t, keys, items, done);
+      }
+
+      setImmediate(done);
+    });
   }
 
   function cleanUpFileInfoFile(fileInfo)
@@ -236,7 +199,7 @@ exports.start = function startOrderBomImporterModule(app, module)
   {
     const newFilePath = path.join(module.config.parsedOutputDir, path.basename(oldFilePath));
 
-    fs.move(oldFilePath, newFilePath, {overwrite: true}, function(err)
+    fs.move(oldFilePath, newFilePath, {overwrite: true}, err =>
     {
       if (err)
       {
@@ -249,7 +212,7 @@ exports.start = function startOrderBomImporterModule(app, module)
 
   function deleteFileInfoFile(filePath)
   {
-    fs.unlink(filePath, function(err)
+    fs.unlink(filePath, err =>
     {
       if (err)
       {
@@ -263,49 +226,37 @@ exports.start = function startOrderBomImporterModule(app, module)
     delete filePathCache[filePath];
   }
 
-  function parseOrderBomTable(input, bom)
+  function parseTable(input, items)
   {
-    let count = 0;
-
     parseSapTextTable(input, {
       columnMatchers: {
-        orderNo: /^Order$/,
         nc12: /^Material$/,
-        item: /^BOM item$/,
-        qty: /^Req.*?qty$/,
-        unit: /^Unit$/,
-        description: /^Material Desc/,
-        unloadingPoint: /^Unl.*?Point/,
-        supplyArea: /^Sup.*?Area/
+        supplyArea: /^Sup.*?Area/,
+        msi: /^S$/,
+        storageType: /Typ/
       },
       valueParsers: {
-        nc12: function(input) { return input.replace(/^0+/, ''); },
-        qty: parseSapNumber,
-        description: parseSapString,
-        unloadingPoint: parseSapString,
-        supplyArea: parseSapString
+        nc12: input => input.replace(/^(0|[A-Z])+/, ''),
+        supplyArea: parseSapString,
+        msi: parseSapNumber,
+        storageType: parseSapNumber
       },
-      itemDecorator: function(obj)
+      itemDecorator: obj =>
       {
-        ++count;
-
-        if (!bom[obj.orderNo])
+        if (!obj.nc12.length || !obj.supplyArea.length)
         {
-          bom[obj.orderNo] = [];
+          return;
         }
 
-        bom[obj.orderNo].push({
-          nc12: obj.nc12,
-          item: obj.item,
-          qty: obj.qty,
-          unit: obj.unit,
-          name: obj.description,
-          unloadingPoint: obj.unloadingPoint,
-          supplyArea: obj.supplyArea
+        items.set(`${obj.nc12}:${obj.supplyArea}`, {
+          _id: {
+            nc: obj.nc12,
+            sa: obj.supplyArea
+          },
+          s: obj.msi < 0 ? 0 : obj.msi,
+          t: obj.storageType < 0 ? 0 : obj.storageType
         });
       }
     });
-
-    return count;
   }
 };

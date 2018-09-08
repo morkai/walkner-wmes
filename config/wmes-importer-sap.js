@@ -25,6 +25,7 @@ exports.modules = [
   'orders/importer/intake',
   'orders/importer/bom',
   'orders/importer/zlf1',
+  'orders/importer/pkhd',
   'orders/iptChecker',
   'warehouse/importer/importQueue',
   'warehouse/importer/controlCycles',
@@ -55,7 +56,8 @@ exports.mongoose = {
     'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics',
     'xiconfOrder', 'xiconfHidLamp',
     'cag', 'cagPlan',
-    'kanbanEntry', 'kanbanComponent'
+    'kanbanEntry', 'kanbanComponent',
+    'pkhdComponent'
   ]
 };
 
@@ -175,6 +177,11 @@ exports['orders/importer/bom'] = {
 
 exports['orders/importer/zlf1'] = {
   filterRe: /^ORDERS_ZLF1\.json$/,
+  parsedOutputDir: IMPORT_OUTPUT_DIR
+};
+
+exports['orders/importer/pkhd'] = {
+  filterRe: /^PKHD_2\.txt$/,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 

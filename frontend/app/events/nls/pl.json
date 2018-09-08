@@ -428,5 +428,11 @@
   "TYPE:kanban.containers.edited": "Baza Kanban > Rodzaje pojemników: edycja",
   "TEXT:kanban.containers.edited": "Zmodyfikowano rodzaj pojemników: <a href='\\#kanban/containers/{model->_id}'>{model->name}</a>",
   "TYPE:kanban.containers.deleted": "Baza Kanban > Rodzaje pojemników: usunięcie",
-  "TEXT:kanban.containers.deleted": "Usunięto rodzaj pojemników: <em>{model->name}</em>"
+  "TEXT:kanban.containers.deleted": "Usunięto rodzaj pojemników: <em>{model->name}</em>",
+  "TYPE:pkhdStrategies.added": "Strategie dost. komponentów: dodanie",
+  "TEXT:pkhdStrategies.added": "Dodano strategię: <a href='\\#pkhdStrategies/{model->_id}'>{model->name}</a>",
+  "TYPE:pkhdStrategies.edited": "Strategie dost. komponentów: edycja",
+  "TEXT:pkhdStrategies.edited": "Zmodyfikowano strategię: <a href='\\#pkhdStrategies/{model->_id}'>{model->name}</a>",
+  "TYPE:pkhdStrategies.deleted": "Strategie dost. komponentów: usunięcie",
+  "TEXT:pkhdStrategies.deleted": "Usunięto strategię: <em>{model->name}</em>"
 }

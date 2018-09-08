@@ -429,7 +429,13 @@
     "TYPE:kanban.containers.edited": "Kanban DB > Containers: edited",
     "TEXT:kanban.containers.edited": "Edited container: <a href='\\#kanban/containers/{model->_id}'>{model->name}</a>",
     "TYPE:kanban.containers.deleted": "Kanban DB > Containers: deleted",
-    "TEXT:kanban.containers.deleted": "Deleted container: <em>{model->name}</em>"
+    "TEXT:kanban.containers.deleted": "Deleted container: <em>{model->name}</em>",
+    "TYPE:pkhdStrategies.added": "Component dist. strategies: added",
+    "TEXT:pkhdStrategies.added": "Added strategy: <a href='\\#pkhdStrategies/{model->_id}'>{model->name}</a>",
+    "TYPE:pkhdStrategies.edited": "Component dist. strategies: edited",
+    "TEXT:pkhdStrategies.edited": "Edited strategy: <a href='\\#pkhdStrategies/{model->_id}'>{model->name}</a>",
+    "TYPE:pkhdStrategies.deleted": "Component dist. strategies: deleted",
+    "TEXT:pkhdStrategies.deleted": "Deleted strategy: <em>{model->name}</em>"
   },
   "pl": true
 }

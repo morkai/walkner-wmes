@@ -9,6 +9,7 @@ const setUpOrdersRoutes = require('./ordersRoutes');
 const setUpMechOrdersRoutes = require('./mechOrdersRoutes');
 const setUpEmptyOrdersRoutes = require('./emptyOrdersRoutes');
 const setUpInvalidOrdersRoutes = require('./invalidOrdersRoutes');
+const setUpPkhdStrategiesRoutes = require('./pkhdStrategiesRoutes');
 const setUpOperationGroups = require('./operationGroups');
 
 exports.DEFAULT_CONFIG = {
@@ -38,6 +39,7 @@ exports.start = function startOrdersModule(app, module)
       setUpMechOrdersRoutes(app, module);
       setUpEmptyOrdersRoutes(app, module);
       setUpInvalidOrdersRoutes(app, module);
+      setUpPkhdStrategiesRoutes(app, module);
     }
   );
 

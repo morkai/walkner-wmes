@@ -17,6 +17,8 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
   const Order = mongoose.model('Order');
   const OrderZlf1 = mongoose.model('OrderZlf1');
   const DelayReason = mongoose.model('DelayReason');
+  const PkhdComponent = mongoose.model('PkhdComponent');
+  const PkhdStrategy = mongoose.model('PkhdStrategy');
 
   const canView = userModule.auth('LOCAL', 'ORDERS:VIEW');
   const canPrint = userModule.auth('LOCAL', 'ORDERS:VIEW');
@@ -106,7 +108,10 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
   express.get('/orders/:id.html', canPrint, renderHtmlOrderRoute.bind(null, app, ordersModule));
 
-  express.get('/orders/:id', canView, express.crud.readRoute.bind(null, app, Order));
+  express.get('/orders/:id', canView, express.crud.readRoute.bind(null, app, {
+    model: Order,
+    prepareResult: (model, done) => Order.assignPkhdStrategies(model, done)
+  }));
 
   express.post('/orders/:id', canEdit, editOrderRoute);
 

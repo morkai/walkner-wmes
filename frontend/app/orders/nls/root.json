@@ -75,6 +75,8 @@
     "PROPERTY:bom.qty": "Quantity",
     "PROPERTY:bom.unit": "Unit",
     "PROPERTY:bom.unloadingPoint": "Unloading point",
+    "PROPERTY:bom.supplyArea": "Supply area",
+    "PROPERTY:bom.distStrategy": "Dist. strategy",
     "PROPERTY:whTime": "Drop zone time",
     "PROPERTY:whDropZone": "Drop zone group",
     "PROPERTY:whStatus": "Drop zone status",

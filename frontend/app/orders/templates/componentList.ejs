@@ -12,17 +12,23 @@
         <th class="is-min"><%- t('orders', 'PROPERTY:bom.nc12') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:bom.name') %>
         <th class="is-min"><%- t('orders', 'PROPERTY:bom.qty') %>
-        <th><%- t('orders', 'PROPERTY:bom.unloadingPoint') %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:bom.unloadingPoint') %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:bom.supplyArea') %>
+        <th class="is-min"><%- t('orders', 'PROPERTY:bom.distStrategy') %>
+        <th>
       </tr>
     </thead>
     <tbody>
       <% _.forEach(bom, function(component) { %>
       <tr>
         <td class="is-min is-number orders-bom-item"><%- component.item %>
-        <td class="is-min is-number"><%- component.nc12 || '-' %>
+        <td class="is-min is-number"><%- component.nc12 || '' %>
         <td class="is-min"><%= component.name  %>
         <td class="is-min is-number"><%- component.qty.toLocaleString() %> <%- component.unit %>
-        <td><%= component.unloadingPoint || '-' %>
+        <td class="is-min"><%= component.unloadingPoint || '' %>
+        <td class="is-min"><%= component.supplyArea || '' %>
+        <td class="is-min"><%= component.distStrategy || '' %>
+        <td>
       </tr>
       <% }) %>
     </tbody>

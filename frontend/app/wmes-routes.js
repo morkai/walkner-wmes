@@ -90,7 +90,8 @@ define([
   './kanbanComponents/routes',
   './kanbanSupplyAreas/routes',
   './kanbanContainers/routes',
-  './kanbanPrintQueues/routes'
+  './kanbanPrintQueues/routes',
+  './pkhdStrategies/routes'
 ], function()
 {
   'use strict';

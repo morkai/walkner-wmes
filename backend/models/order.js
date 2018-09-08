@@ -50,7 +50,8 @@ module.exports = function setupOrderModel(app, mongoose)
     qty: Number,
     unit: String,
     name: String,
-    unloadingPoint: String
+    unloadingPoint: String,
+    supplyArea: String
   }, {
     _id: false
   });
@@ -304,6 +305,87 @@ module.exports = function setupOrderModel(app, mongoose)
         }
 
         done(err, qtyDone);
+      }
+    );
+  };
+
+  orderSchema.statics.assignPkhdStrategies = function(order, done)
+  {
+    if (!Array.isArray(order.bom) || !order.bom.length)
+    {
+      return done(null, order);
+    }
+
+    const ids = (order.bom || [])
+      .filter(c => !!c.nc12 && !!c.supplyArea)
+      .map(component => ({
+        nc: component.nc12,
+        sa: component.supplyArea
+      }));
+
+    step(
+      function()
+      {
+        mongoose.model('PkhdComponent').find({_id: {$in: ids}}).lean().exec(this.next());
+      },
+      function(err, pkhdComponents)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        const strategyIds = new Map();
+
+        this.strategies = new Map();
+
+        pkhdComponents.forEach(pkhdComponent =>
+        {
+          const key = `${pkhdComponent.s}:${pkhdComponent.t}`;
+
+          strategyIds.set(key, {
+            s: pkhdComponent.s,
+            t: pkhdComponent.t
+          });
+
+          if (!this.strategies.has(key))
+          {
+            this.strategies.set(key, []);
+          }
+
+          this.strategies.get(key).push(pkhdComponent._id.nc);
+        });
+
+        mongoose.model('PkhdStrategy')
+          .find({$or: Array.from(strategyIds.values())}, {_id: 0})
+          .lean()
+          .exec(this.next());
+      },
+      function(err, pkhdStrategies)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        const nc12ToStrategy = new Map();
+
+        pkhdStrategies.forEach(pkhdStrategy =>
+        {
+          this.strategies.get(`${pkhdStrategy.s}:${pkhdStrategy.t}`).forEach(nc12 =>
+          {
+            nc12ToStrategy.set(nc12, pkhdStrategy.name);
+          });
+        });
+
+        order.bom.forEach(component =>
+        {
+          component.distStrategy = nc12ToStrategy.get(component.nc12) || '';
+        });
+      },
+      function(err)
+      {
+        done(err, order);
       }
     );
   };

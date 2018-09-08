@@ -142,6 +142,7 @@
         <th>12NC</th>
         <th>Nazwa</th>
         <th colspan="3">Ilość</th>
+        <th>Strategia</th>
       </tr>
       </thead>
       <tbody>
@@ -153,6 +154,7 @@
         <td class="integer min"><%- component.nc12 ? component.qty[0] : '' %></td>
         <td class="decimals min"><%- !component.nc12 || component.qty[1] === 0 ? '' : (',' + component.qty[1]) %></td>
         <td class="unit min"><%- component.nc12 ? component.unit : '' %></td>
+        <td class="strategy min"><%- component.distStrategy || '' %></td>
       </tr>
       <% }) %>
       </tbody>

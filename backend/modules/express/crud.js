@@ -235,7 +235,16 @@ exports.addRoute = function(app, Model, req, res, next)
     res.format({
       json: function()
       {
-        res.status(201).send(model);
+        res.status(201);
+
+        if (typeof Model.customizeLeanObject === 'function')
+        {
+          res.json(Model.customizeLeanObject(model.toJSON()));
+        }
+        else
+        {
+          res.json(model);
+        }
       }
     });
 
@@ -449,6 +458,11 @@ exports.editRoute = function(app, options, req, res, next)
     res.format({
       json: function()
       {
+        if (typeof Model.customizeLeanObject === 'function')
+        {
+          model = Model.customizeLeanObject(model.toJSON());
+        }
+
         res.send(model);
       }
     });

@@ -299,7 +299,8 @@ exports.mongoose = {
     'xData',
     'dailyMrpCount', 'clipOrderCache', 'clipOrderCount',
     'kanbanEntry', 'kanbanComponent', 'kanbanSupplyArea', 'kanbanContainer', 'kanbanTableView', 'kanbanPrintQueue',
-    'whEvent', 'whOrder', 'whUser'
+    'whEvent', 'whOrder', 'whUser',
+    'pkhdComponent', 'pkhdStrategy'
   ]
 };
 
