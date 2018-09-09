@@ -1,0 +1,7 @@
+@import "./filter.css";
+@import "./list.css";
+@import "./history.css";
+
+.pfepEntries-details .panel {
+  margin-bottom: 15px;
+}

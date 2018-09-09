@@ -1,0 +1,75 @@
+.pfepEntries-history-item {
+  padding: .5em;
+  border-bottom: 1px solid #d4d4d4;
+}
+.pfepEntries-history-item:last-child {
+  border-bottom: 0;
+}
+.pfepEntries-history-item:nth-child(odd) {
+  background-color: #fbfbfb;
+}
+.pfepEntries-history-item:hover {
+  background-color: #FFFFD6;
+}
+.pfepEntries-history-user {
+  font-weight: bold;
+}
+.pfepEntries-history-changes {
+  margin: 5px 0 5px 0;
+  border-top: 1px dotted #ddd;
+  border-bottom: 1px dotted #ddd;
+}
+.pfepEntries-history-changes:last-child {
+  border-bottom: 0;
+  margin-bottom: 0;
+}
+.pfepEntries-history-changes > tbody > tr > td {
+  border-top: 0;
+  padding: 5px 5px 0 0;
+}
+.pfepEntries-history-changes > tbody > tr > td:first-child {
+  text-align: right;
+}
+.pfepEntries-history-changes > tbody > tr:last-child > td {
+  padding-bottom: 5px;
+}
+.pfepEntries-history-changes:last-child > tbody > tr:last-child > td {
+  padding-bottom: 0;
+}
+.pfepEntries-history-changes .fa {
+  padding: 0 5px;
+}
+.pfepEntries-history-comment {
+  margin: 5px 0 0 0;
+  white-space: pre-line;
+}
+.pfepEntries-history-item .has-more {
+  cursor: help;
+}
+.pfepEntries-history-popover {
+  max-width: 450px;
+}
+.pfepEntries-history-popover > .popover-content {
+  white-space: pre-line;
+}
+.pfepEntries-history-item.is-unseen > .pfepEntries-history-user,
+.pfepEntries-history-item.is-unseen > .pfepEntries-history-time {
+  color: #e00;
+}
+.pfepEntries-history-form > .message {
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  box-shadow: none;
+}
+.pfepEntries-history-form > .form-group {
+  margin: 15px;
+}
+.pfepEntries-history-correctiveActions {
+  cursor: pointer;
+}
+@media print {
+  .pfepEntries-history-form {
+    display: none;
+  }
+}

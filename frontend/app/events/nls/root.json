@@ -435,7 +435,9 @@
     "TYPE:pkhdStrategies.edited": "Component dist. strategies: edited",
     "TEXT:pkhdStrategies.edited": "Edited strategy: <a href='\\#pkhdStrategies/{model->_id}'>{model->name}</a>",
     "TYPE:pkhdStrategies.deleted": "Component dist. strategies: deleted",
-    "TEXT:pkhdStrategies.deleted": "Deleted strategy: <em>{model->name}</em>"
+    "TEXT:pkhdStrategies.deleted": "Deleted strategy: <em>{model->name}</em>",
+    "TYPE:pfep.entries.deleted": "PFEP DB: deleted",
+    "TEXT:pfep.entries.deleted": "Deleted entry: <em>{model->rid}</em>"
   },
   "pl": true
 }

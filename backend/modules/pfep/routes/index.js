@@ -1,0 +1,78 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+'use strict';
+
+const editEntryRoute = require('./editEntryRoute');
+const findByRidRoute = require('./findByRidRoute');
+const exportRoute = require('./exportRoute');
+
+module.exports = function setUpPfepRoutes(app, module)
+{
+  const express = app[module.config.expressId];
+  const userModule = app[module.config.userId];
+  const mongoose = app[module.config.mongooseId];
+  const PfepEntry = mongoose.model('PfepEntry');
+
+  const canView = userModule.auth('PFEP:VIEW');
+  const canManage = userModule.auth('PFEP:MANAGE');
+
+  express.get('/pfep/entries', canView, express.crud.browseRoute.bind(null, app, PfepEntry));
+  express.post('/pfep/entries', canManage, prepareForAdd, express.crud.addRoute.bind(null, app, PfepEntry));
+  express.get('/pfep/entries/:id', canView, express.crud.readRoute.bind(null, app, {
+    model: PfepEntry,
+    idProperty: req => /^[0-9]+$/.test(req.params.id) ? 'rid' : '_id'
+  }));
+  express.put('/pfep/entries/:id', canManage, editEntryRoute.bind(null, app, module));
+  express.delete('/pfep/entries/:id', canManage, express.crud.deleteRoute.bind(null, app, PfepEntry));
+
+  express.get('/pfep/entries;rid', canView, findByRidRoute.bind(null, app, module));
+
+  express.get(
+    '/pfep/entries;export.:format?',
+    canView,
+    express.crud.exportRoute.bind(null, app, {
+      filename: 'PFEP_ENTRIES',
+      freezeRows: 1,
+      freezeColumns: 1,
+      columns: {
+        rid: 10,
+        createdAt: 'datetime',
+        creator: 25,
+        nc12: 12,
+        description: 30,
+        unit: 7,
+        packType: 10,
+        externalPackQty: 'integer',
+        internalPackQty: 'integer',
+        packLength: 'integer',
+        packWidth: 'integer',
+        packHeight: 'integer',
+        packGrossWeight: 'integer',
+        componentNetWeight: 'decimal',
+        componentGrossWeight: 'decimal',
+        qtyPerLayer: 'integer',
+        qtyOnPallet: 'integer',
+        palletLength: 'integer',
+        palletHeight: 'integer',
+        palletWidth: 'integer',
+        moq: 'integer',
+        roundingValue: 'integer',
+        vendor: 10,
+        notes: 40
+      },
+      serializeRow: exportRoute.serializeRow.bind(null, app, module),
+      cleanUp: exportRoute.cleanUp,
+      model: PfepEntry
+    })
+  );
+
+  function prepareForAdd(req, res, next)
+  {
+    const body = req.body;
+
+    body.creator = userModule.createUserInfo(req.session.user, req);
+    body.creator.id = body.creator.id.toString();
+
+    return next();
+  }
+};

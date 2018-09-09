@@ -154,6 +154,8 @@
     "NAVBAR:SAP_LABOR_TIME_FIXER": "Labor Time fixer",
     "NAVBAR:PRINTERS": "Printers",
     "NAVBAR:PKHD_STRATEGIES": "Component dist. strategies",
+    "NAVBAR:kanban": "Kanban DB",
+    "NAVBAR:pfep": "PFEP DB",
 
     "NAVBAR:OPINION:main": "Opinion survey",
     "NAVBAR:OPINION:current": "Current survey",
@@ -234,8 +236,6 @@
     "NAVBAR:D8:areas": "Areas",
     "NAVBAR:D8:entrySources": "Entry sources",
     "NAVBAR:D8:problemSources": "Problem sources",
-
-    "NAVBAR:kanban": "Kanban DB",
 
     "NAVBAR:SEARCH:help": "Search by order no, 12NC or date.",
     "NAVBAR:SEARCH:empty": "No results.",

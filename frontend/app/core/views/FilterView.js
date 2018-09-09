@@ -49,13 +49,14 @@ define([
       var view = this;
 
       return _.assign(View.prototype.serialize.apply(view, arguments), {
-        renderLimit: function()
+        renderLimit: function(templateData)
         {
-          return filterLimitTemplate({
+          return filterLimitTemplate(_.assign({
             idPrefix: view.idPrefix,
             min: view.minLimit,
-            max: view.maxLimit
-          });
+            max: view.maxLimit,
+            hidden: false
+          }, templateData));
         }
       });
     },

@@ -1,0 +1,38 @@
+<form class="well filter-form pfepEntries-filter">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-from"><%- t('core', 'filter:date:from') %></label>
+    <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="<%- t('core', 'placeholder:date') %>" min="2016-01-01">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-to"><%- t('core', 'filter:date:to') %></label>
+    <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="<%- t('core', 'placeholder:date') %>" min="2016-01-01">
+  </div>
+  <div class="form-group hidden" data-filter="nc12">
+    <label for="<%- idPrefix %>-nc12"><%- t('pfepEntries', 'filter:nc12') %></label>
+    <input id="<%- idPrefix %>-nc12" class="form-control" name="nc12" type="text" maxlength="12">
+  </div>
+  <div class="form-group hidden" data-filter="packType">
+    <label for="<%- idPrefix %>-packType"><%- t('pfepEntries', 'filter:packType') %></label>
+    <input id="<%- idPrefix %>-packType" class="form-control" name="packType" type="text">
+  </div>
+  <div class="form-group hidden" data-filter="vendor">
+    <label for="<%- idPrefix %>-vendor"><%- t('pfepEntries', 'filter:vendor') %></label>
+    <input id="<%- idPrefix %>-vendor" class="form-control" name="vendor" type="text">
+  </div>
+  <div class="form-group hidden" data-filter="creator">
+    <label for="<%- idPrefix %>-creator"><%- t('pfepEntries', 'PROPERTY:creator') %></label>
+    <input id="<%- idPrefix %>-creator" name="creator" type="text">
+  </div>
+  <%- renderLimit({hidden: true}) %>
+  <div class="form-group filter-actions">
+    <div class="btn-group">
+      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('pfepEntries', 'filter:submit') %></span></button>
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="<%- t('pfepEntries', 'filter:filters') %>"><span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <% filters.forEach(function(filter) { %>
+        <li><a data-filter="<%- filter %>"><%= t('pfepEntries', 'filter:' + filter) %></a></li>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+</form>

@@ -180,6 +180,8 @@
   "PRIVILEGE:KANBAN:VIEW": "Baza Kanban: przeglądanie",
   "PRIVILEGE:KANBAN:MANAGE": "Baza Kanban: zarządzanie",
   "PRIVILEGE:KANBAN:PRINT": "Baza Kanban: drukowanie",
+  "PRIVILEGE:PFEP:VIEW": "Baza PFEP: przeglądanie",
+  "PRIVILEGE:PFEP:MANAGE": "Baza PFEP: zarządzanie",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System",

@@ -89,6 +89,7 @@ exports.modules = [
   'printing',
   'sapLaborTimeFixer',
   'kanban',
+  'pfep',
   'xlsxExporter',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
@@ -168,7 +169,8 @@ exports.events = {
       'orderDocuments.tree.filePurged', 'orderDocuments.tree.folderPurged',
       'paintShop.paints.deleted',
       'kanban.supplyAreas.deleted',
-      'kanban.containers.deleted'
+      'kanban.containers.deleted',
+      'pfep.entries.deleted'
     ],
     error: [
       '*.syncFailed',
@@ -252,7 +254,8 @@ exports.pubsub = {
     'wh.**',
     'sapLaborTimeFixer.**',
     'printing.**',
-    'kanban.**'
+    'kanban.**',
+    'pfep.**'
   ]
 };
 
@@ -300,7 +303,8 @@ exports.mongoose = {
     'dailyMrpCount', 'clipOrderCache', 'clipOrderCount',
     'kanbanEntry', 'kanbanComponent', 'kanbanSupplyArea', 'kanbanContainer', 'kanbanTableView', 'kanbanPrintQueue',
     'whEvent', 'whOrder', 'whUser',
-    'pkhdComponent', 'pkhdStrategy'
+    'pkhdComponent', 'pkhdStrategy',
+    'pfepEntry'
   ]
 };
 

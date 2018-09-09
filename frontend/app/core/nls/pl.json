@@ -160,6 +160,8 @@
   "NAVBAR:SAP_LABOR_TIME_FIXER": "Sprawdzacz Labor Time",
   "NAVBAR:PRINTERS": "Drukarki",
   "NAVBAR:PKHD_STRATEGIES": "Strategie dost. komponentów",
+  "NAVBAR:kanban": "Baza Kanban",
+  "NAVBAR:pfep": "Baza PFEP",
 
   "NAVBAR:OPINION:main": "Badanie Opinia",
   "NAVBAR:OPINION:current": "Aktualne badanie",
@@ -240,8 +242,6 @@
   "NAVBAR:D8:areas": "Obszary",
   "NAVBAR:D8:entrySources": "Źródła zgłoszeń",
   "NAVBAR:D8:problemSources": "Źródła problemów",
-
-  "NAVBAR:kanban": "Baza Kanban",
 
   "NAVBAR:SEARCH:help": "Szukaj wg nr zlecenia, 12NC, zgłoszenia lub daty.",
   "NAVBAR:SEARCH:empty": "Brak wyników.",
