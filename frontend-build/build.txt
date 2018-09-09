@@ -398,6 +398,25 @@ app/paintShop/assets/tabs.css
 ----------------
 app/paintShop/assets/tabs.css
 
+app/pfepEntries/assets/filter.css
+----------------
+app/pfepEntries/assets/filter.css
+
+app/pfepEntries/assets/history.css
+----------------
+app/pfepEntries/assets/history.css
+
+app/pfepEntries/assets/list.css
+----------------
+app/pfepEntries/assets/list.css
+
+app/pfepEntries/assets/main.css
+----------------
+app/pfepEntries/assets/./filter.css
+app/pfepEntries/assets/./list.css
+app/pfepEntries/assets/./history.css
+app/pfepEntries/assets/main.css
+
 app/planning/assets/changes.css
 ----------------
 app/planning/assets/changes.css
@@ -792,6 +811,7 @@ assets/../app/kanban/assets/main.css
 assets/../app/kanbanPrintQueues/assets/main.css
 assets/../app/kanbanContainers/assets/main.css
 assets/../app/wh/assets/main.css
+assets/../app/pfepEntries/assets/main.css
 assets/wmes-main.css
 
 assets/wmes-operator.css
@@ -1560,6 +1580,8 @@ app/kanbanComponents/routes.js
 app/kanbanSupplyAreas/routes.js
 app/kanbanContainers/routes.js
 app/kanbanPrintQueues/routes.js
+app/pkhdStrategies/routes.js
+app/pfepEntries/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
