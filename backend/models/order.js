@@ -356,6 +356,11 @@ module.exports = function setupOrderModel(app, mongoose)
           this.strategies.get(key).push(pkhdComponent._id.nc);
         });
 
+        if (strategyIds.size === 0)
+        {
+          return this.skip();
+        }
+
         mongoose.model('PkhdStrategy')
           .find({$or: Array.from(strategyIds.values())}, {_id: 0})
           .lean()
