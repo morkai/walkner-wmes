@@ -525,6 +525,18 @@ define([
 
         if (this.isValidSpigotComponent(component, spigotPatterns, spigotNotPatterns))
         {
+          if (_.isEmpty(component.nc12))
+          {
+            var matches = component.name.match(/([0-9]{12})/);
+
+            if (!matches)
+            {
+              continue;
+            }
+
+            component = _.assign({}, component, {nc12: matches[1]});
+          }
+
           return component;
         }
       }
@@ -534,11 +546,6 @@ define([
 
     isValidSpigotComponent: function(component, patterns, notPatterns)
     {
-      if (_.isEmpty(component.nc12))
-      {
-        return false;
-      }
-
       for (var notPatternI = 0; notPatternI < notPatterns.length; ++notPatternI)
       {
         if (notPatterns[notPatternI].test(component.name))

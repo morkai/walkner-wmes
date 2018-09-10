@@ -16,7 +16,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
     {
       productionModule.checkSerialNumber(logEntry, this.next());
     },
-    function checkSpigotStep(err)
+    function(err)
     {
       if (err && err.message !== 'ALREADY_USED')
       {
