@@ -525,6 +525,8 @@ define([
           type: 'warning',
           text: t('production', 'msg:locked')
         });
+
+        this.$el.removeClass('hidden');
       }
     },
 
