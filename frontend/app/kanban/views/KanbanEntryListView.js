@@ -1020,6 +1020,7 @@ define([
       var columns = {};
       var data = [];
       var kanbanIdVisible = view.columns.map.kanbanId.visible;
+      var containerVisible = view.columns.map.container.visible;
 
       view.columns.list.forEach(function(column)
       {
@@ -1058,6 +1059,33 @@ define([
               headerAlignmentH: 'Center',
               headerAlignmentV: 'Center',
               caption: view.t('column:locations')
+            };
+          }
+          else if (containerVisible && column._id === 'container')
+          {
+            columns.containerLength = {
+              type: 'integer',
+              width: 4,
+              headerRotation: 90,
+              headerAlignmentH: 'Center',
+              headerAlignmentV: 'Center',
+              caption: view.t('kanbanContainers', 'PROPERTY:length')
+            };
+            columns.containerWidth = {
+              type: 'integer',
+              width: 4,
+              headerRotation: 90,
+              headerAlignmentH: 'Center',
+              headerAlignmentV: 'Center',
+              caption: view.t('kanbanContainers', 'PROPERTY:width')
+            };
+            columns.containerHeight = {
+              type: 'integer',
+              width: 4,
+              headerRotation: 90,
+              headerAlignmentH: 'Center',
+              headerAlignmentV: 'Center',
+              caption: view.t('kanbanContainers', 'PROPERTY:height')
             };
           }
 
@@ -1176,6 +1204,23 @@ define([
               row.line = line;
               row.workstations = workstations;
               row.locations = locations;
+            }
+            else if (column._id === 'container')
+            {
+              var container = view.model.containers.get(entry.container);
+
+              if (container)
+              {
+                row.containerLength = container.get('length');
+                row.containerWidth = container.get('width');
+                row.containerHeight = container.get('height');
+              }
+              else
+              {
+                row.containerLength = 0;
+                row.containerWidth = 0;
+                row.containerHeight = 0;
+              }
             }
 
             return;
