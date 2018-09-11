@@ -2443,6 +2443,8 @@ define([
 
     showTdPopover: function(td)
     {
+      this.hideTdPopover();
+
       var cell = this.idCell({currentTarget: td});
 
       this.$popover = cell.column.popover(cell);
