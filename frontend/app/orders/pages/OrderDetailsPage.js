@@ -112,11 +112,13 @@ define([
       this.documentsView = new DocumentListView({model: this.model});
       this.componentsView = new ComponentListView({
         model: this.model,
-        linkDocuments: true
+        linkDocuments: true,
+        linkPfep: true
       });
       this.paintComponentsView = new ComponentListView({
         model: this.paintOrder,
-        paint: true
+        paint: true,
+        linkPfep: true
       });
       this.etoView = new EtoView({model: this.model});
       this.changesView = new OrderChangesView({

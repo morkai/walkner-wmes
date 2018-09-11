@@ -22,7 +22,14 @@
       <% _.forEach(bom, function(component) { %>
       <tr>
         <td class="is-min is-number orders-bom-item"><%- component.item %>
-        <td class="is-min is-number"><%- component.nc12 || '' %>
+        <td class="is-min is-number">
+          <% if (component.nc12) { %>
+          <% if (linkPfep) { %>
+          <a class="orders-bom-pfep"><%- component.nc12 %></a>
+          <% } else { %>
+          <%- component.nc12 %>
+          <% } %>
+          <% } %>
         <td class="is-min"><%= component.name  %>
         <td class="is-min is-number"><%- component.qty.toLocaleString() %> <%- component.unit %>
         <td class="is-min"><%= component.unloadingPoint || '' %>

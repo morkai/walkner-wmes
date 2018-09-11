@@ -120,3 +120,6 @@
   display: block;
   font-size: 12px;
 }
+.orders-bom-pfep {
+  cursor: pointer;
+}

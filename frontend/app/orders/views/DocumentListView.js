@@ -72,6 +72,8 @@ define([
     afterRender: function()
     {
       this.listenToOnce(this.model, 'change:documents', this.render);
+
+      this.$el.toggleClass('hidden', this.model.get('documents').length === 0);
     },
 
     tryOpenDocument: function(aEl)

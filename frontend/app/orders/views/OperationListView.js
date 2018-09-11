@@ -235,6 +235,8 @@ define([
     afterRender: function()
     {
       this.listenToOnce(this.model, 'change:operations change:qtyMax change:qtyDone', this.render);
+
+      this.$el.toggleClass('hidden', this.model.get('operations').length === 0);
     }
 
   });
