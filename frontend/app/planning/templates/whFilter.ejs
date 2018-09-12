@@ -15,4 +15,21 @@
       </button>
     </div>
   </div>
+  <div class="form-group" style="flex-grow: 1"></div>
+  <div class="form-group" style="align-self: center">
+    <table class="planning-wh-stats">
+      <tbody id="<%- idPrefix %>-stats">
+      <tr>
+        <% ['all', 0, 1, 2, 3].forEach(function(status) { %>
+        <th class="planning-wh-stats-k"><%- t('planning', 'wh:status:' + status, {qtySent: 0}) %></th>
+        <% }) %>
+      </tr>
+      <tr>
+        <% ['all', 0, 1, 2, 3].forEach(function(status) { %>
+        <td class="planning-wh-stats-v" data-status="<%- status %>">0</td>
+        <% }) %>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </form>

@@ -42,6 +42,8 @@ define([
 
     initialize: function()
     {
+      this.stats = {};
+
       var plan = this.plan;
       var displayOptions = plan.displayOptions;
 
@@ -98,6 +100,7 @@ define([
       });
 
       this.toggleMrpsSelect2();
+      this.updateStats();
     },
 
     updateToggles: function()
@@ -179,6 +182,39 @@ define([
       this.$id('date')
         .prop('min', this.plan.displayOptions.get('minDate'))
         .prop('max', this.plan.displayOptions.get('maxDate'));
+    },
+
+    updateStats: function(stats)
+    {
+      if (stats)
+      {
+        this.stats = stats;
+      }
+
+      var $stats = this.$id('stats');
+
+      if (!$stats.length)
+      {
+        return;
+      }
+
+      _.forEach(this.stats, function(v, k)
+      {
+        $stats.find('.planning-wh-stats-v[data-status="' + k + '"]').text(v.toLocaleString());
+      });
+    },
+
+    updateStat: function(prev, next)
+    {
+      if (prev === next)
+      {
+        return;
+      }
+
+      this.stats[prev] -= 1;
+      this.stats[next] += 1;
+
+      this.updateStats();
     }
 
   });

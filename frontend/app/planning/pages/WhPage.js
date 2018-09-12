@@ -251,6 +251,11 @@ define([
 
       page.listenTo(plan.sapOrders, 'sync', page.onSapOrdersSynced);
 
+      page.listenTo(page.listView, 'statsRecounted', page.filterView.updateStats.bind(page.filterView));
+
+      page.listenTo(page.whOrderStatuses, 'add', page.onWhOrderStatusAdded);
+      page.listenTo(page.whOrderStatuses, 'change:status', page.onWhOrderStatusChanged);
+
       $(document)
         .on('click.' + page.idPrefix, '.paintShop-breadcrumb', this.onBreadcrumbsClick.bind(this));
     },
@@ -546,6 +551,21 @@ define([
     onMrpsReset: function()
     {
       this.listView.scheduleRender();
+    },
+
+    onWhOrderStatusAdded: function(whOrderStatus)
+    {
+      this.filterView.updateStat(0, whOrderStatus.get('status'));
+    },
+
+    onWhOrderStatusChanged: function(whOrderStatus)
+    {
+      var prev = whOrderStatus.previous('status');
+
+      if (typeof prev === 'number')
+      {
+        this.filterView.updateStat(prev, whOrderStatus.get('status'));
+      }
     }
 
   });

@@ -34,7 +34,7 @@
 }
 .planning-wh-qtySent {
   position: absolute;
-  z-index: 1001;
+  z-index: 1043;
   display: flex;
   border: 1px solid rgba(0, 0, 0, 0.15);
   background: #fff;
@@ -59,4 +59,28 @@
 }
 .planning-darker .planning-mrp-lineOrders-table .success {
   background: #00e600;
+}
+.planning-wh-stats-k,
+.planning-wh-stats-v {
+  padding: 0 7px;
+  line-height: 1;
+  border-left: 1px solid #ddd;
+}
+.planning-wh-stats-k {
+  padding-bottom: 4px;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+.planning-wh-stats-v {
+  font-size: 16px;
+  text-align: center;
+}
+.planning-wh-stats-k:first-child,
+.planning-wh-stats-v:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+.planning-wh-stats-k:last-child,
+.planning-wh-stats-v:last-child {
+  padding-right: 0;
 }

@@ -262,8 +262,14 @@ define([
       });
 
       var prev = null;
-
-      return list.map(function(order, i)
+      var stats = {
+        all: 0,
+        0: 0,
+        1: 0,
+        2: 0,
+        3: 0
+      };
+      var result = list.map(function(order, i)
       {
         order.no = i + 1;
         order.shift = shiftUtil.getShiftNo(order.startTime);
@@ -280,8 +286,15 @@ define([
 
         prev = order;
 
+        stats.all += 1;
+        stats[order.whStatus.status] += 1;
+
         return order;
       });
+
+      view.trigger('statsRecounted', stats);
+
+      return result;
     },
 
     getOrderGroup: function(startTime)
