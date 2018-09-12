@@ -145,6 +145,12 @@ define([
           plan: 0,
           done: 0,
           percent: 0
+        },
+        orders: {
+          todo: 0,
+          late: 0,
+          plan: 0,
+          remaining: 0
         }
       };
 

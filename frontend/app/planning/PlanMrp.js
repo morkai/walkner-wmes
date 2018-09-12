@@ -60,6 +60,7 @@ define([
     {
       var orders = this.orders;
       var plan = this.plan;
+      var mrp = this.id;
       var stats = {
         manHours: {
           todo: 0,
@@ -77,24 +78,34 @@ define([
           plan: 0,
           done: 0,
           percent: 0
+        },
+        orders: {
+          todo: 0,
+          late: 0,
+          plan: 0,
+          remaining: 0
         }
       };
 
       this.lines.forEach(function(line)
       {
-        (line.get('shiftData') || []).forEach(function(shift)
-        {
-          stats.manHours.plan += shift.manHours;
-          stats.quantity.plan += shift.quantity;
-        });
-
         line.orders.forEach(function(lineOrder)
         {
+          var planOrder = plan.orders.get(lineOrder.get('orderNo'));
+
+          if (planOrder.get('mrp') !== mrp)
+          {
+            return;
+          }
+
           var startAt = Date.parse(lineOrder.get('startAt'));
           var shiftNo = shiftUtil.getShiftNo(startAt);
-          var quantityDone = plan.shiftOrders.getTotalQuantityDone(line.id, shiftNo, lineOrder.get('orderNo'));
+          var quantityDone = plan.shiftOrders.getTotalQuantityDone(line.id, shiftNo, planOrder.id);
           var quantityTodo = lineOrder.get('quantity');
 
+          stats.manHours.plan += lineOrder.get('manHours');
+          stats.quantity.plan += lineOrder.get('quantity');
+          stats.orders.plan += 1;
           stats.execution.plan += 1;
           stats.execution.done += quantityDone >= quantityTodo ? 1 : 0;
         });
@@ -110,7 +121,7 @@ define([
         {
           var sapOrder = plan.sapOrders.get(planOrder.id);
 
-          if (!sapOrder)
+          if (!sapOrder || planOrder.get('mrp') !== mrp)
           {
             return;
           }
@@ -119,8 +130,10 @@ define([
 
           stats.manHours.todo += planOrder.get('manHours');
           stats.quantity.todo += planOrder.getQuantityTodo();
+          stats.orders.todo += 1;
           stats.manHours.remaining += planOrder.getManHours(quantityRemaining);
           stats.quantity.remaining += quantityRemaining;
+          stats.orders.remaining += quantityRemaining > 0 ? 1 : 0;
         });
 
         plan.lateOrders.mrp(this.id).forEach(function(lateOrder)
@@ -129,6 +142,7 @@ define([
           {
             stats.manHours.late += lateOrder.get('manHours');
             stats.quantity.late += lateOrder.getQuantityTodo();
+            stats.orders.late += 1;
           }
         });
       }

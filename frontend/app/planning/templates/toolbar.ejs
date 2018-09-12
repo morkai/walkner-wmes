@@ -3,14 +3,14 @@
   <div class="btn-group">
     <table class="planning-mrp-stats">
       <tbody>
-      <% ['manHours', 'quantity'].forEach(function(group, i) { %>
+      <% ['manHours', 'quantity', 'orders'].forEach(function(group, i) { %>
       <tr class="planning-mrp-stats-bd">
         <th><%- t('planning', 'toolbar:stats:' + group) %></th>
         <% ['todo', 'late', 'plan', 'remaining'].forEach(function(subgroup) { %>
         <td data-group="<%- group %>" data-subgroup="<%- subgroup %>" data-value="<%- stats[group][subgroup] %>" title="<%- t('planning', 'toolbar:stats:tooltip:' + subgroup) %>"><%- stats[group][subgroup].toLocaleString() %></td>
         <% }) %>
         <% if (i === 0) { %>
-        <td rowspan="2" data-group="execution" data-subgroup="percent" data-plan="<%- stats.execution.plan %>" data-done="<%- stats.execution.done %>" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent') %>"><%- stats.execution.percent.toLocaleString() %></td>
+        <td rowspan="3" data-group="execution" data-subgroup="percent" data-plan="<%- stats.execution.plan %>" data-done="<%- stats.execution.done %>" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent') %>"><%- stats.execution.percent.toLocaleString() %></td>
         <% } %>
       </tr>
       <% }) %>

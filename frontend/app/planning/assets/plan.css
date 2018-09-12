@@ -471,17 +471,14 @@
 .planning-mrp-stats-bd td {
   padding-left: 7px;
   padding-right: 7px;
-  font-size: 16px;
+  line-height: 1;
+  font-size: 14px;
   text-align: right;
   vertical-align: middle;
   border-right: 1px solid #eee;
 }
 .planning-mrp-stats-bd td:last-child {
   border-right: none;
-}
-.planning-mrp-stats-bd:last-child th,
-.planning-mrp-stats-bd:last-child td {
-  padding-top: 4px;
 }
 .planning-mrp-filter .planning-mrp-stats {
   margin-top: 8px;
