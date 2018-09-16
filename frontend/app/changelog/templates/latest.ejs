@@ -1,5 +1,5 @@
 <h1>v0.125.0</h1>
-<h2><%- time.format(Date.now(), 'LL') %></h2>
+<h2><%- time.format('2018-09-16', 'LL') %></h2>
 <h3>Planowanie</h3>
 <ul>
   <li>Poprawiono błąd uniemożliwiający wyświetlenie dymku z informacjami o dodanym zleceniu w historii zmian planu.</li>
@@ -16,6 +16,8 @@
   <li>Dodano nową ikonę statusu zleceń: <i class="fa fa-wrench"></i> ETO.</li>
   <li>Dodano nowe ustawienie: Statusy zrobionego zlecenia - zlecenia, które otrzymają ten status pozostaną na liście
     zleceń planu, ale nie będą rozplanowywane (wcześniej zostały usuwane z planu).</li>
+  <li>Dodano nową statystykę do planu produkcji: Ilość zleceń.</li>
+  <li>Dodano nową statystykę do planu magazynu: Ilość zleceń wg statusów.</li>
 </ul>
 <h3>Malarnia</h3>
 <ul>
@@ -35,11 +37,13 @@
   <li>Zmieniono listę linii w Obszarach zaopatrzenia tak, aby można było rezerwować pozycję linii (np. w razie
     dezaktywacji linii).</li>
   <li>Zmieniono importowanie CCN z SAP tak, aby nieistniejące rekordy były usuwane.</li>
+  <li>Zmieniono wyświetlanie rozmarów pojemnika w dymku z Szerokość x Wysokość x Długość
+    na Długość x Szerokość x Wysokość.</li>
   <li>Dodano nową kolumnę: Komentarz.</li>
   <li>Dodano nową kolumnę: Lokalizacja magazynowa (nowa) - wartość przypisywana do komponentów.</li>
   <li>Dodano nową kolumnę: WorkCenter.</li>
   <li>Dodano nową kolumnę: Rodzaj pojemnika - wartość wybierana z nowego słownika.</li>
-  <li>Dodano nową kolumnę: Kolor znacznika - wartość przypisywana do komponentów.</li>
+  <li>Dodano nową kolumnę: Kolor znacznika - wartość przypisywana do rzędu lokalizacji magazynowej.</li>
   <li>Dodano nową kolumnę: Ilość Kanban ID w SAP - wartość ma czerwone tło, jeżeli jest za mało kanbanów
     lub żółte, jeżeli za dużo.</li>
   <li>Dodano możliwość eksportu tabeli.</li>
@@ -65,10 +69,15 @@
 <ul>
   <li>Poprawiono błąd uniemożliwiający wybranie kierowników.</li>
 </ul>
+<h3>Strategie dostarczania komponentów</h3>
+<ul>
+  <li>Dodano nowy moduł słownikowy.</li>
+</ul>
 <h3>Zlecenia reszty działów</h3>
 <ul>
   <li>Dodano eksport listy zleceń.</li>
   <li>Dodano do listy zleceń filtry: Wymagane statusy oraz Ignorowane statusy.</li>
+  <li>Dodano kolumnę 'Strategia dostarczania komponentu' do listy komponentów zlecenia.</li>
 </ul>
 <h3>Użytkownicy</h3>
 <ul>
@@ -85,4 +94,26 @@
 <ul>
   <li>Poprawiono błąd podczas obliczania taktu dla numeru seryjnego, jeżeli w czasie skanowania danej sztuki
     istniał niezakończony przestój.</li>
+</ul>
+<h3>Produkcja > Przestoje</h3>
+<ul>
+  <li>Dodano nowy filtr listy: Kontroler MRP zlecenia.</li>
+</ul>
+<h3>Dokumentacja</h3>
+<ul>
+  <li>Dodano możliwość zablokowania interfejsu użytkownika w celu zapobiegnięcia przypadkowych kliknięć.</li>
+  <li>Dodano kolumnę 'Strategia dostarczania komponentu' do listy komponentów zlecenia.</li>
+</ul>
+<h3>Inspekcja Jakości</h3>
+<ul>
+  <li>Dodano użytkownikom z funkcją 'Magazynier obsługi prod.' takie same uprawnienia jak 'Lider'.</li>
+</ul>
+<h3>Baza PFEP</h3>
+<ul>
+  <li>Dodano nowy moduł.</li>
+</ul>
+<h3>Formatka operatora</h3>
+<ul>
+  <li>Poprawiono błąd powodujący niewyświetlanie się formatki w trybie wsadowym, jeżeli linia została dezaktywowana.</li>
+  <li>Zmieniono sprawdzanie spigota tak, aby pod uwagę brany był także komponent z 12NC w nazwie.</li>
 </ul>
