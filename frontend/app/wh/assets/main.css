@@ -39,7 +39,7 @@
 }
 .planning-wh-qtySent {
   position: absolute;
-  z-index: 1001;
+  z-index: 1043;
   display: flex;
   border: 1px solid rgba(0, 0, 0, 0.15);
   background: #fff;

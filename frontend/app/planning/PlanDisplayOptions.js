@@ -19,6 +19,7 @@ define([
         minDate: '2017-01-01',
         maxDate: time.utc.getMoment().startOf('day').add(1, 'days').format('YYYY-MM-DD'),
         mrps: [],
+        lines: [],
         printOrderTimes: false,
         useLatestOrderData: true,
         useDarkerTheme: false,
@@ -105,6 +106,11 @@ define([
       if (Array.isArray(attrs.mrps))
       {
         displayOptions.set('mrps', attrs.mrps);
+      }
+
+      if (Array.isArray(attrs.lines))
+      {
+        displayOptions.set('lines', attrs.lines);
       }
 
       return displayOptions;

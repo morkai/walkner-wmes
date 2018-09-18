@@ -6,6 +6,8 @@ define([
   'app/i18n',
   'app/time',
   'app/core/View',
+  'app/core/util/idAndLabel',
+  'app/data/orgUnits',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/planning/templates/whFilter'
 ], function(
@@ -14,6 +16,8 @@ define([
   t,
   time,
   View,
+  idAndLabel,
+  orgUnits,
   setUpMrpSelect2,
   template
 ) {
@@ -28,6 +32,7 @@ define([
       'input #-date': 'changeFilter',
       'change #-date': 'changeFilter',
       'change #-mrps': 'changeFilter',
+      'change #-lines': 'changeFilter',
       'click #-useDarkerTheme': function()
       {
         this.plan.displayOptions.toggleDarkerThemeUse();
@@ -82,6 +87,7 @@ define([
         idPrefix: this.idPrefix,
         date: plan.id,
         mrps: mrps,
+        lines: displayOptions.get('lines'),
         mrpMode: mrpMode,
         minDate: displayOptions.get('minDate'),
         maxDate: displayOptions.get('maxDate'),
@@ -97,6 +103,16 @@ define([
         sortable: true,
         own: false,
         view: this
+      });
+
+      this.$id('lines').select2({
+        width: '300px',
+        placeholder: ' ',
+        allowClear: true,
+        multiple: true,
+        data: orgUnits.getAllByType('prodLine')
+          .filter(function(prodLine) { return !prodLine.get('deactivatedAt'); })
+          .map(idAndLabel)
       });
 
       this.toggleMrpsSelect2();
@@ -133,6 +149,7 @@ define([
     {
       var date = this.$id('date').val();
       var mrps = this.$id('mrps').val().split(',').filter(function(v) { return v.length > 0; });
+      var lines = this.$id('lines').val().split(',').filter(function(v) { return v.length > 0; });
 
       switch (this.$('[name="mrpMode"]:checked').val())
       {
@@ -153,9 +170,21 @@ define([
           break;
       }
 
+      var displayOptions = {};
+
       if (!_.isEqual(mrps, this.plan.displayOptions.get('mrps')))
       {
-        this.plan.displayOptions.set({mrps: mrps});
+        displayOptions.mrps = mrps;
+      }
+
+      if (!_.isEqual(lines, this.plan.displayOptions.get('lines')))
+      {
+        displayOptions.lines = lines;
+      }
+
+      if (!_.isEmpty(displayOptions))
+      {
+        this.plan.displayOptions.set(displayOptions);
       }
 
       if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date) && date !== this.plan.id)
@@ -170,6 +199,7 @@ define([
 
       this.$id('date').prop('disabled', loading);
       this.$id('mrps').select2('enable', !loading);
+      this.$id('lines').select2('enable', !loading);
     },
 
     onDateChanged: function()

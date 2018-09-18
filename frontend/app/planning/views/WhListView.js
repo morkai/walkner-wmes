@@ -176,6 +176,7 @@ define([
     {
       var view = this;
       var plan = view.plan;
+      var lines = plan.displayOptions.get('lines');
       var list = [];
 
       view.groupDuration = plan.settings.global.getWhGroupDuration();
@@ -184,6 +185,11 @@ define([
 
       plan.lines.forEach(function(planLine)
       {
+        if (lines.length && lines.indexOf(planLine.id) === -1)
+        {
+          return;
+        }
+
         for (var i = 0; i < planLine.orders.length; ++i)
         {
           var lineOrder = planLine.orders.models[i];

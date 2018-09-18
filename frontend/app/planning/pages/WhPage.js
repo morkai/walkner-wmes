@@ -188,7 +188,8 @@ define([
 
       var plan = page.model = page.plan = new Plan({_id: page.options.date}, {
         displayOptions: PlanDisplayOptions.fromLocalStorage({
-          mrps: page.options.mrps
+          mrps: page.options.mrps,
+          lines: page.options.lines
         }, {
           storageKey: 'PLANNING:DISPLAY_OPTIONS:WH'
         }),
@@ -240,6 +241,7 @@ define([
       page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
 
       page.listenTo(plan.displayOptions, 'change:mrps', page.onMrpsFilterChanged);
+      page.listenTo(plan.displayOptions, 'change:lines', page.onLinesFilterChanged);
       page.listenTo(plan.displayOptions, 'change:useDarkerTheme', page.onDarkerThemeChanged);
 
       page.listenTo(plan.settings, 'changed', page.onSettingsChanged);
@@ -333,7 +335,8 @@ define([
 
       this.broker.publish('router.navigate', {
         url: '/planning/wh/' + plan.id
-          + '?mrps=' + plan.displayOptions.get('mrps'),
+          + '?mrps=' + plan.displayOptions.get('mrps')
+          + '&lines=' + plan.displayOptions.get('lines'),
         replace: true,
         trigger: false
       });
@@ -496,6 +499,12 @@ define([
     {
       this.updateUrl();
       this.plan.mrps.reset();
+    },
+
+    onLinesFilterChanged: function()
+    {
+      this.updateUrl();
+      this.listView.scheduleRender();
     },
 
     onDarkerThemeChanged: function()
