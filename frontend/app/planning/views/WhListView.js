@@ -172,6 +172,11 @@ define([
       }
     },
 
+    shouldUseLineToOrders: function()
+    {
+      return this.plan.getMoment().diff(Date.parse('2018-09-21T00:00:00.000Z')) >= 0;
+    },
+
     serializeOrders: function()
     {
       var view = this;
@@ -275,13 +280,35 @@ define([
         2: 0,
         3: 0
       };
+      var lineToOrders = {};
+      var useLineToOrders = view.shouldUseLineToOrders();
       var result = list.map(function(order, i)
       {
+        if (!lineToOrders[order.line])
+        {
+          lineToOrders[order.line] = {};
+        }
+
+        if (!lineToOrders[order.line][order.orderNo])
+        {
+          lineToOrders[order.line][order.orderNo] = 0;
+        }
+
+        order.lineOrderNo = lineToOrders[order.line][order.orderNo] += 1;
         order.no = i + 1;
         order.shift = shiftUtil.getShiftNo(order.startTime);
         order.startTime = time.utc.format(order.startTime, 'HH:mm:ss');
         order.finishTime = time.utc.format(order.finishTime, 'HH:mm:ss');
-        order.key = order.orderNo + ':' + order.group + ':' + order.line;
+
+        if (useLineToOrders)
+        {
+          order.key = order.orderNo + ':' + order.lineOrderNo + ':' + order.line;
+        }
+        else
+        {
+          order.key = order.orderNo + ':' + order.group + ':' + order.line;
+        }
+
         order.whStatus = view.whOrderStatuses.serialize(order.key);
 
         if (prev)
@@ -660,12 +687,13 @@ define([
       viewport.msg.saving();
 
       var view = this;
+      var useLineToOrders = view.shouldUseLineToOrders();
       var dataset = view.$('tr[data-key="' + orderKey + '"]')[0].dataset;
       var data = {
         date: time.utc.getMoment(view.plan.id, 'YYYY-MM-DD').valueOf(),
         line: dataset.line,
         orderNo: dataset.id,
-        groupNo: +dataset.group,
+        groupNo: useLineToOrders ? +dataset.lineOrderNo : +dataset.group,
         status: status,
         qtySent: qtySent,
         pceTime: +dataset.pceTime,
