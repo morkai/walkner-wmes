@@ -88,7 +88,10 @@ define([
       {
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
       },
-      'line': 'section',
+      'line': function(propertyName, term, formData)
+      {
+        formData[propertyName] = term.name === 'in' ? term.args[1].join(',') : term.args[1];
+      },
       'anyHardObservations': function(propertyName, term, formData)
       {
         if (term.args[1])
