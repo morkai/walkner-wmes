@@ -100,6 +100,18 @@ define([
     {
       return TYPE_TO_COLLECTION[orgUnitType].models;
     },
+    getActiveByType: function(orgUnitType, filter)
+    {
+      if (!filter)
+      {
+        filter = function() { return true; };
+      }
+
+      return TYPE_TO_COLLECTION[orgUnitType].models.filter(function(orgUnit)
+      {
+        return !orgUnit.get('deactivatedAt') && filter(orgUnit);
+      });
+    },
     getAllDivisions: function()
     {
       return divisions.models;

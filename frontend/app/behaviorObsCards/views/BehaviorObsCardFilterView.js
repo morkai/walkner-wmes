@@ -4,6 +4,8 @@ define([
   'underscore',
   'app/time',
   'app/core/views/FilterView',
+  'app/core/util/idAndLabel',
+  'app/data/orgUnits',
   'app/users/util/setUpUserSelect2',
   'app/kaizenOrders/dictionaries',
   'app/behaviorObsCards/templates/filter',
@@ -12,6 +14,8 @@ define([
   _,
   time,
   FilterView,
+  idAndLabel,
+  orgUnits,
   setUpUserSelect2,
   kaizenDictionaries,
   template
@@ -43,6 +47,7 @@ define([
     {
       return {
         section: [],
+        line: [],
         userType: 'others',
         user: null,
         from: '',
@@ -83,6 +88,7 @@ define([
       {
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
       },
+      'line': 'section',
       'anyHardObservations': function(propertyName, term, formData)
       {
         if (term.args[1])
@@ -156,9 +162,16 @@ define([
         selector.push({name: 'eq', args: ['anyHardRisks', true]});
       }
 
-      ['section'].forEach(function(property)
+      ['section', 'line'].forEach(function(property)
       {
-        var values = (this.$id(property).val() || []).filter(function(v) { return !_.isEmpty(v); });
+        var values = this.$id(property).val() || [];
+
+        if (typeof values === 'string')
+        {
+          values = values.split(',');
+        }
+
+        values = values.filter(function(v) { return !_.isEmpty(v); });
 
         if (values.length === 1)
         {
@@ -180,6 +193,14 @@ define([
       setUpUserSelect2(this.$id('user'), {
         width: '375px',
         view: this
+      });
+
+      this.$id('line').select2({
+        width: '275px',
+        allowClear: true,
+        multiple: true,
+        placeholder: ' ',
+        data: orgUnits.getActiveByType('prodLine').map(idAndLabel)
       });
 
       this.toggleButtonGroup('anyHard');

@@ -77,6 +77,7 @@ module.exports = function setupBehaviorObsCardModel(app, mongoose)
 
   behaviorObsCardSchema.index({date: -1});
   behaviorObsCardSchema.index({section: 1});
+  behaviorObsCardSchema.index({line: 1});
   behaviorObsCardSchema.index({'observer.id': 1});
   behaviorObsCardSchema.index({'superior.id': 1});
   behaviorObsCardSchema.index({users: 1});
