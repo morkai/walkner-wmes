@@ -120,14 +120,13 @@ define([
           ? 'risks'
           : 'difficulties';
       var templateData = {
-        idPrefix: this.idPrefix,
         columnId: columnId,
         model: {}
       };
 
       templateData.model[property] = model.get(property);
 
-      var $detailsRow = $(detailsRowTemplate(templateData));
+      var $detailsRow = this.renderPartial(detailsRowTemplate, templateData);
 
       $detailsRow.insertAfter($rowToExpand);
       $rowToExpand.addClass('is-expanded').attr('data-expanded-column-id', columnId);

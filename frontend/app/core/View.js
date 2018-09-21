@@ -161,10 +161,15 @@ function(
 
   View.prototype.serialize = function()
   {
-    return _.assign({
+    return _.assign(this.getCommonTemplateData(), this.getTemplateData());
+  };
+
+  View.prototype.getCommonTemplateData = function()
+  {
+    return {
       idPrefix: this.idPrefix,
       helpers: this.getTemplateHelpers()
-    }, this.getTemplateData());
+    };
   };
 
   View.prototype.getTemplateData = function()
@@ -178,6 +183,11 @@ function(
       t: this.t.bind(this),
       props: this.props.bind(this)
     };
+  };
+
+  View.prototype.renderPartial = function(partial, data)
+  {
+    return $(partial(_.assign(this.getCommonTemplateData(), data)));
   };
 
   View.prototype.afterRender = function() {};
