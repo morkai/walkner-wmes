@@ -3,7 +3,7 @@
 
 'use strict';
 
-db.prododwntimes.createIndex({
+db.proddowntimes.createIndex({
   "orderData.mrp" : 1,
   "startedAt" : -1
 }, {
