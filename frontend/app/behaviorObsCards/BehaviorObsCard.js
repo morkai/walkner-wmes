@@ -50,6 +50,7 @@ define([
       var obj = this.toJSON();
 
       obj.section = kaizenDictionaries.sections.getLabel(obj.section);
+      obj.observerSection = kaizenDictionaries.sections.getLabel(obj.observerSection);
 
       DATE_PROPERTIES.forEach(function(dateProperty)
       {

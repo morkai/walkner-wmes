@@ -394,6 +394,10 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
+      this.$id('observerSection').select2({
+        data: kaizenDictionaries.sections.map(idAndLabel)
+      });
+
       this.$id('section').select2({
         data: kaizenDictionaries.sections.map(idAndLabel)
       });

@@ -44,6 +44,7 @@ module.exports = function setupBehaviorObsCardModel(app, mongoose)
     updatedAt: Date,
     observer: {},
     superior: {},
+    observerSection: String,
     position: String,
     section: String,
     line: String,
@@ -77,6 +78,7 @@ module.exports = function setupBehaviorObsCardModel(app, mongoose)
 
   behaviorObsCardSchema.index({date: -1});
   behaviorObsCardSchema.index({section: 1});
+  behaviorObsCardSchema.index({observerSection: 1});
   behaviorObsCardSchema.index({line: 1});
   behaviorObsCardSchema.index({'observer.id': 1});
   behaviorObsCardSchema.index({'superior.id': 1});
