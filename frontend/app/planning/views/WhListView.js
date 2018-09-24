@@ -129,6 +129,8 @@ define([
       var plan = view.plan;
       var sapOrders = plan.sapOrders;
 
+      view.model = plan;
+
       view.listenTo(plan, 'change:loading change:updatedAt', view.scheduleRender);
 
       view.listenTo(sapOrders, 'change:comments', view.onCommentChange);
@@ -239,7 +241,8 @@ define([
             dropZone: sapOrder ? sapOrder.getDropZone() : '',
             rowClassName: sapOrder ? (sapOrder.get('whStatus') === 'done' ? 'success' : '') : '',
             newGroup: false,
-            newLine: false
+            newLine: false,
+            lineOrder: lineOrder
           };
 
           if (item.finishTime - item.startTime > view.groupTimeWindow)
@@ -498,6 +501,12 @@ define([
           handler: this.handleDropZoneAction.bind(this, orderNo)
         });
       }
+
+      menu.push({
+        icon: 'fa-download',
+        label: t('planning', 'wh:menu:export'),
+        handler: this.export.bind(this)
+      });
 
       contextMenu.show(this, e.pageY, e.pageX, menu);
     },
@@ -796,7 +805,151 @@ define([
           .attr('data-status', whOrderStatus.get('status'))
           .html(this.whOrderStatuses.serialize(whOrderStatus.id).label);
       }
-    }
+    },
+
+    export: function()
+    {
+      var view = this;
+
+      view.$exportMsg = viewport.msg.show({
+        type: 'warning',
+        text: view.t('MSG:export:started')
+      });
+
+      var req = view.ajax({
+        type: 'POST',
+        url: '/xlsxExporter',
+        data: JSON.stringify({
+          filename: view.t('wh:export:fileName', {date: view.plan.id}),
+          sheetName: view.t('wh:export:sheetName', {date: view.plan.id}),
+          freezeRows: 1,
+          freezeColumns: 0,
+          subHeader: false,
+          columns: {
+            group: {
+              type: 'integer',
+              width: 3,
+              caption: view.t('lineOrders:list:group')
+            },
+            no: {
+              type: 'integer',
+              width: 3,
+              caption: view.t('lineOrders:list:no')
+            },
+            shift: {
+              type: 'integer',
+              width: 3,
+              caption: view.t('lineOrders:list:shift')
+            },
+            mrp: {
+              type: 'string',
+              width: 5,
+              caption: view.t('lineOrders:list:mrp')
+            },
+            orderNo: {
+              type: 'string',
+              width: 9,
+              caption: view.t('lineOrders:list:orderNo')
+            },
+            status: {
+              type: 'string',
+              width: 30,
+              caption: view.t('lineOrders:list:status')
+            },
+            nc12: {
+              type: 'string',
+              width: 12,
+              caption: view.t('lineOrders:list:nc12')
+            },
+            name: {
+              type: 'string',
+              width: 40,
+              caption: view.t('lineOrders:list:name')
+            },
+            qtyPlan: {
+              type: 'integer',
+              width: 5,
+              caption: view.t('lineOrders:list:qtyPlan')
+            },
+            qtyTodo: {
+              type: 'integer',
+              width: 5,
+              caption: view.t('lineOrders:list:qtyTodo')
+            },
+            startTime: {
+              type: 'datetime+utc',
+              caption: view.t('lineOrders:list:startTime')
+            },
+            finishTime: {
+              type: 'datetime+utc',
+              caption: view.t('lineOrders:list:finishTime')
+            },
+            line: {
+              type: 'string',
+              width: 10,
+              caption: view.t('lineOrders:list:line')
+            },
+            whStatus: {
+              type: 'string',
+              width: 15,
+              caption: view.t('lineOrders:list:whStatus')
+            },
+            comment: {
+              type: 'string',
+              width: 50,
+              caption: view.t('lineOrders:list:comment')
+            }
+          },
+          data: view.serializeOrders().map(function(o)
+          {
+            var status = view.t('orderStatus:' + o.status);
+            var statusMatch = null;
+            var statusRe = /title="(.*?)"/g;
+
+            while ((statusMatch = statusRe.exec(o.statuses)) !== null) // eslint-disable-line no-cond-assign
+            {
+              status += ';' + statusMatch[1];
+            }
+
+            return {
+              group: o.group,
+              no: o.no,
+              shift: o.shift,
+              mrp: o.mrp,
+              orderNo: o.orderNo,
+              status: status,
+              nc12: o.nc12,
+              name: o.name,
+              qtyPlan: o.qtyPlan,
+              qtyTodo: o.qtyTodo,
+              startTime: o.lineOrder.get('startAt'),
+              finishTime: o.lineOrder.get('finishAt'),
+              line: o.line,
+              whStatus: o.whStatus.label,
+              comment: o.comment.replace(/(<([^>]+)>)/g, '')
+            };
+          })
+        })
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.hide(view.$exportMsg, true);
+
+        viewport.msg.show({
+          type: 'error',
+          time: 2500,
+          text: view.t('MSG:export:failure')
+        });
+      });
+
+      req.done(function(id)
+      {
+        window.open('/xlsxExporter/' + id);
+
+        viewport.msg.hide(view.$exportMsg, true);
+      });
+    },
 
   });
 });

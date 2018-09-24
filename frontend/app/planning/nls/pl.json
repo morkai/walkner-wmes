@@ -13,6 +13,8 @@
   "MSG:LOADING_FAILURE:delayReasons": "Nie udało się załadować powodów opóźnień.",
   "MSG:LOADING_FAILURE:productionState": "Nie udało się załadować danych produkcyjnych.",
   "MSG:GENERATING": "<i class='fa fa-spinner fa-spin'></i><span>Generowanie planu...</span>",
+  "MSG:export:started": "Eksportowanie...",
+  "MSG:export:failure": "Eksportowanie nie powiodło się.",
 
   "PAGE_ACTION:hourlyPlans": "Plany godzinowe",
   "PAGE_ACTION:dailyPlan": "Plan dzienny",
@@ -273,6 +275,7 @@
 
   "wh:menu:copy:lineGroup": "Kopiuj listę zleceń <em>{group}. {line}</em>",
   "wh:menu:copy:lineGroupNo": "Kopiuj nry zleceń <em>{group}. {line}</em>",
+  "wh:menu:export": "Eksportuj zlecenia",
   "wh:status:all": "Wszystkie",
   "wh:status:0": "Nieokreślony",
   "wh:status:1": "Lista",
@@ -280,11 +283,20 @@
   "wh:status:3": "{qtySent, plural, =0{Wysyłka} other{Wysłano {qtySent} szt.}}",
   "wh:sent:comment": "Wysłano {qtySent, plural, one{1 sztukę} few{{qtySent} sztuki} other{{qtySent} sztuk}} na linię {line} o {time}.",
   "wh:sent:label": "Wysyłana<br>ilość:",
+  "wh:export:fileName": "WMES_PLAN_MAGAZYN_{date}",
+  "wh:export:sheetName": "Plan magazynu {date}",
 
   "stats:orderCount": "Ilość zleceń",
   "stats:quantity": "Ilość sztuk",
   "stats:manHours": "RBH",
   "stats:hourlyPlan": "Plan godzinowy",
+
+  "orderStatus:planned": "Zaplanowane",
+  "orderStatus:unplanned": "Niezaplanowane",
+  "orderStatus:incomplete": "Niekompletne",
+  "orderStatus:started": "Rozpoczęte",
+  "orderStatus:completed": "Zakończone",
+  "orderStatus:surplus": "Nadwyżka",
 
   "orderPriority:unclassified": "Niesklasyfikowane",
   "orderPriority:small": "Małe",
