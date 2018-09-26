@@ -19,6 +19,7 @@ define([
   var TABLE_AND_CHART_METRICS = [
     'total',
     'countBySection',
+    'countByObserverSection',
     'safeBySection',
     'riskyBySection',
     'categories'
@@ -37,6 +38,7 @@ define([
         to: 0,
         interval: 'month',
         sections: [],
+        observerSections: [],
         superior: ''
       };
     },
@@ -50,7 +52,7 @@ define([
 
       options.data = _.extend(
         options.data || {},
-        _.pick(this.attributes, ['from', 'to', 'interval', 'sections', 'superior'])
+        _.pick(this.attributes, ['from', 'to', 'interval', 'sections', 'observerSections', 'superior'])
       );
 
       options.data.sections = options.data.sections.join(',');
@@ -65,6 +67,7 @@ define([
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval')
         + '&sections=' + this.get('sections')
+        + '&observerSections=' + this.get('observerSections')
         + '&superior=' + this.get('superior');
     },
 

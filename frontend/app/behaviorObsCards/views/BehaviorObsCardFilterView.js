@@ -47,6 +47,7 @@ define([
     {
       return {
         section: [],
+        observerSection: [],
         line: [],
         userType: 'others',
         user: null,
@@ -88,6 +89,7 @@ define([
       {
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
       },
+      'observerSection': 'section',
       'line': function(propertyName, term, formData)
       {
         formData[propertyName] = term.name === 'in' ? term.args[1].join(',') : term.args[1];
@@ -165,7 +167,7 @@ define([
         selector.push({name: 'eq', args: ['anyHardRisks', true]});
       }
 
-      ['section', 'line'].forEach(function(property)
+      ['observerSection', 'section', 'line'].forEach(function(property)
       {
         var values = this.$id(property).val() || [];
 
@@ -194,12 +196,12 @@ define([
       this.$('.is-expandable').expandableSelect();
 
       setUpUserSelect2(this.$id('user'), {
-        width: '375px',
+        width: '335px',
         view: this
       });
 
       this.$id('line').select2({
-        width: '275px',
+        width: '250px',
         allowClear: true,
         multiple: true,
         placeholder: ' ',

@@ -40,6 +40,7 @@ module.exports = function(mongoose, options, done)
         date: 1,
         observer: 1,
         section: 1,
+        observerSection: 1,
         observations: 1
       };
 
@@ -65,6 +66,15 @@ module.exports = function(mongoose, options, done)
       else if (options.sections.length)
       {
         conditions.section = {$in: options.sections};
+      }
+
+      if (options.observerSections && options.observerSections.length === 1)
+      {
+        conditions.observerSection = options.observerSections[0];
+      }
+      else if (options.observerSections && options.observerSections.length)
+      {
+        conditions.observerSection = {$in: options.observerSections};
       }
 
       if (options.superior)
@@ -101,6 +111,7 @@ module.exports = function(mongoose, options, done)
 
       _.forEach([
         'countBySection',
+        'countByObserverSection',
         'safeBySection',
         'riskyBySection',
         'categories',
@@ -121,6 +132,7 @@ module.exports = function(mongoose, options, done)
       key: key,
       count: 0,
       countBySection: {},
+      countByObserverSection: {},
       safe: 0,
       safeBySection: {},
       risky: 0,
@@ -167,6 +179,27 @@ module.exports = function(mongoose, options, done)
     }
 
     inc('count');
+
+    if (card.observerSection)
+    {
+      if (!results.sections[card.observerSection])
+      {
+        results.sections[card.observerSection] = card.observerSection;
+      }
+
+      if (!totals.countByObserverSection[card.observerSection])
+      {
+        totals.countByObserverSection[card.observerSection] = 0;
+      }
+
+      if (!group.countByObserverSection[card.observerSection])
+      {
+        group.countByObserverSection[card.observerSection] = 0;
+      }
+
+      totals.countByObserverSection[card.observerSection] += 1;
+      group.countByObserverSection[card.observerSection] += 1;
+    }
 
     if (!group.observers[observer])
     {
