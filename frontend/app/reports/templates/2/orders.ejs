@@ -3,7 +3,7 @@
     <form id="<%- idPrefix %>-filter" class="well filter-form is-vertical">
       <div class="form-group">
         <label for="<%- idPrefix %>-orderNo"><%- t('reports', 'orders:filter:orderNo') %></label>
-        <input id="<%- idPrefix %>-orderNo" class="form-control" name="orderNo" type="text" pattern="^[0-9]{6,}$">
+        <input id="<%- idPrefix %>-orderNo" class="form-control" name="orderNo" type="text" autocomplete="new-password" pattern="^[0-9]{6,}$">
       </div>
       <div class="form-group">
         <% ['inclusive', 'exclusive', 'finish'].forEach(function(filter) { %>
@@ -14,7 +14,7 @@
           </label>
         </div>
         <% }) %>
-        <input id="<%- idPrefix %>-hour" class="form-control" name="hour" type="text" placeholder="hh:mm">
+        <input id="<%- idPrefix %>-hour" class="form-control" name="hour" type="text" autocomplete="new-password" placeholder="hh:mm">
       </div>
       <div id="<%- idPrefix %>-statusFormGroup" class="form-group">
         <% ['red', 'all', 'in', 'nin', 'wo'].forEach(function(filter) { %>

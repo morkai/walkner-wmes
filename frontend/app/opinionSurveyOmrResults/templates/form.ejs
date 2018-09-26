@@ -5,7 +5,7 @@
     <div class="panel-body">
       <div class="form-group has-required-select2">
         <label for="<%- idPrefix %>-survey" class="control-label is-required"><%- t('opinionSurveyOmrResults', 'PROPERTY:survey') %></label>
-        <input id="<%- idPrefix %>-survey" name="survey" type="text" required>
+        <input id="<%- idPrefix %>-survey" name="survey" type="text" autocomplete="new-password" required>
       </div>
       <div class="row">
         <div class="col-md-2 form-group">
@@ -14,7 +14,7 @@
         </div>
         <div class="col-md-10 form-group">
           <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('opinionSurveyOmrResults', 'PROPERTY:name') %></label>
-          <input id="<%- idPrefix %>-name" name="name" class="form-control" type="text" required>
+          <input id="<%- idPrefix %>-name" name="name" class="form-control" type="text" autocomplete="new-password" required>
         </div>
       </div>
       <div class="row">
@@ -65,8 +65,8 @@
       </div>
       <div id="<%-idPrefix %>-toolbar" class="opinionSurveyOmrResults-toolbar">
         <div id="<%-idPrefix %>-toolbar-inner" class="opinionSurveyOmrResults-toolbar-inner">
-          <input data-role="noImageError" class="form-control opinionSurveyOmrResults-toolbar-error" type="text" tabindex="-1" data-action="editImage">
-          <input data-role="noRegionsError" class="form-control opinionSurveyOmrResults-toolbar-error" type="text" tabindex="-1" data-action="createRegion">
+          <input data-role="noImageError" class="form-control opinionSurveyOmrResults-toolbar-error" type="text" autocomplete="new-password" tabindex="-1" data-action="editImage">
+          <input data-role="noRegionsError" class="form-control opinionSurveyOmrResults-toolbar-error" type="text" autocomplete="new-password" tabindex="-1" data-action="createRegion">
           <button data-action="editImage" type="button" class="btn btn-default"><i class="fa fa-image"></i><span><%- t('opinionSurveyOmrResults', 'toolbar:editImage') %></span></button><!--
           //--><button data-action="createRegion" type="button" class="btn btn-default"><i class="fa fa-dot-circle-o"></i><span><%- t('opinionSurveyOmrResults', 'toolbar:createRegion') %></span></button><!--
           //--><button data-action="measureDiameter" type="button" class="btn btn-default"><i class="fa fa-text-height"></i><span><%- t('opinionSurveyOmrResults', 'toolbar:measureDiameter') %></span></button><!--

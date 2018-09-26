@@ -8,16 +8,16 @@
         <% if (editMode) { %>
         <p class="form-control-static"><%= model._id %></p>
         <% } else { %>
-        <input id="<%- idPrefix %>-_id" class="form-control" type="text" name="_id">
+        <input id="<%- idPrefix %>-_id" class="form-control" type="text" autocomplete="new-password" name="_id">
         <% } %>
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-appId" class="control-label is-required"><%- t('licenses', 'PROPERTY:appId') %></label>
-        <input id="<%- idPrefix %>-appId" class="form-control" type="text" name="appId" required>
+        <input id="<%- idPrefix %>-appId" class="form-control" type="text" autocomplete="new-password" name="appId" required>
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-appVersion" class="control-label"><%- t('licenses', 'PROPERTY:appVersion') %></label>
-        <input id="<%- idPrefix %>-appVersion" class="form-control" type="text" name="appVersion">
+        <input id="<%- idPrefix %>-appVersion" class="form-control" type="text" autocomplete="new-password" name="appVersion">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-date" class="control-label"><%- t('licenses', 'PROPERTY:date') %></label>
@@ -29,7 +29,7 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-licensee" class="control-label is-required"><%- t('licenses', 'PROPERTY:licensee') %></label>
-        <input id="<%- idPrefix %>-licensee" class="form-control" type="text" name="licensee" required>
+        <input id="<%- idPrefix %>-licensee" class="form-control" type="text" autocomplete="new-password" name="licensee" required>
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-features" class="control-label is-required"><%- t('licenses', 'PROPERTY:features') %></label>

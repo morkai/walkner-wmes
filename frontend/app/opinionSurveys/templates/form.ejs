@@ -8,13 +8,13 @@
         <% if (editMode) { %>
         <p class="form-control-static"><%- model._id %></p>
         <% } else { %>
-        <input id="<%- idPrefix %>-id" class="form-control" type="text" name="_id" autofocus required maxlength="20" pattern="^[A-Za-z0-9-_]+$">
+        <input id="<%- idPrefix %>-id" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="20" pattern="^[A-Za-z0-9-_]+$">
         <p class="help-block"><%- t('opinionSurveys', 'form:help:_id') %></p>
         <% } %>
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-label" class="control-label is-required"><%- t('opinionSurveys', 'PROPERTY:label') %></label>
-        <input id="<%- idPrefix %>-label" class="form-control" type="text" name="label" required>
+        <input id="<%- idPrefix %>-label" class="form-control" type="text" autocomplete="new-password" name="label" required>
         <p class="help-block"><%- t('opinionSurveys', 'form:help:label') %></p>
       </div>
       <div class="form-group">
@@ -41,11 +41,11 @@
       </div>
       <div class="form-group has-required-select2">
         <label for="<%- idPrefix %>-employers" class="control-label is-required"><%- t('opinionSurveys', 'PROPERTY:employers') %></label>
-        <input id="<%- idPrefix %>-employers" type="text" name="employers" required placeholder="<%- t('opinionSurveys', 'form:placeholder:employers') %>">
+        <input id="<%- idPrefix %>-employers" type="text" autocomplete="new-password" name="employers" required placeholder="<%- t('opinionSurveys', 'form:placeholder:employers') %>">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-superiors" class="control-label"><%- t('opinionSurveys', 'PROPERTY:superiors') %></label>
-        <input id="<%- idPrefix %>-superiors" type="text">
+        <input id="<%- idPrefix %>-superiors" type="text" autocomplete="new-password">
         <table id="<%- idPrefix %>-superiorsTable" class="table table-condensed table-hover opinionSurveys-form-superiorsTable">
           <thead>
           <tr>
@@ -60,7 +60,7 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-questions" class="control-label"><%- t('opinionSurveys', 'PROPERTY:questions') %></label>
-        <input id="<%- idPrefix %>-questions" type="text" placeholder="<%- t('opinionSurveys', 'form:placeholder:questions') %>">
+        <input id="<%- idPrefix %>-questions" type="text" autocomplete="new-password" placeholder="<%- t('opinionSurveys', 'form:placeholder:questions') %>">
         <table id="<%- idPrefix %>-questionsTable" class="table table-condensed table-hover opinionSurveys-form-questionsTable">
           <thead>
           <tr>

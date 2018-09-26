@@ -4,7 +4,7 @@
   <% if (spigot) { %>
   <div id="<%- idPrefix %>-spigot" class="form-group">
     <label for="<%- idPrefix %>-spigot-nc12"><%- t('production', 'endWorkDialog:spigot:nc12') %></label>
-    <input id="<%- idPrefix %>-spigot-nc12" class="form-control production-spigot-nc12 <%- embedded ? 'is-embedded' : '' %>" type="text" value="" placeholder="<%- t('production', 'endWorkDialog:spigot:placeholder') %>" autofocus required>
+    <input id="<%- idPrefix %>-spigot-nc12" class="form-control production-spigot-nc12 <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" value="" placeholder="<%- t('production', 'endWorkDialog:spigot:placeholder') %>" autofocus required>
   </div>
   <% } %>
   <div class="form-group">
@@ -29,17 +29,17 @@
   <% if (correctingOrder || !embedded) { %>
   <div class="form-group">
     <label for="<%- idPrefix %>-order"><%- t('production', 'newOrderPicker:order:label:' + orderIdType) %></label>
-    <input id="<%- idPrefix %>-order" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" placeholder="<%- orderPlaceholder %>" maxlength="<%- orderMaxLength %>" data-ignore-key="1" data-vkb="numeric" <%- embedded || offline ? 'required' : '' %>>
+    <input id="<%- idPrefix %>-order" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" placeholder="<%- orderPlaceholder %>" maxlength="<%- orderMaxLength %>" data-ignore-key="1" data-vkb="numeric" <%- embedded || offline ? 'required' : '' %>>
   </div>
   <% } else { %>
   <div class="production-newOrderPicker-row">
     <div class="form-group">
       <label for="<%- idPrefix %>-order"><%- t('production', 'newOrderPicker:order:label:' + orderIdType) %></label>
-      <input id="<%- idPrefix %>-order" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" placeholder="<%- orderPlaceholder %>" maxlength="<%- orderMaxLength %>" data-ignore-key="1" data-vkb="numeric" <%- embedded || offline ? 'required' : '' %>>
+      <input id="<%- idPrefix %>-order" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" placeholder="<%- orderPlaceholder %>" maxlength="<%- orderMaxLength %>" data-ignore-key="1" data-vkb="numeric" <%- embedded || offline ? 'required' : '' %>>
     </div>
     <div class="form-group">
       <label for="<%- idPrefix %>-newWorkerCount"><%- t('production', 'newOrderPicker:newWorkerCount') %></label>
-      <input id="<%- idPrefix %>-newWorkerCount" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" maxlength="2" min="1" max="15" data-ignore-key="1" data-vkb="numeric" required>
+      <input id="<%- idPrefix %>-newWorkerCount" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" maxlength="2" min="1" max="15" data-ignore-key="1" data-vkb="numeric" required>
     </div>
   </div>
   <% } %>
@@ -51,7 +51,7 @@
   <% } else { %>
   <div id="<%- idPrefix %>-operationGroup" class="form-group">
     <label for="<%- idPrefix %>-operation"><%- t('production', 'newOrderPicker:operation:label:' + (offline ? 'offline' : 'online')) %></label>
-    <input id="<%- idPrefix %>-operation" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" placeholder="<%- operationPlaceholder %>" maxlength="4" pattern="^[0-9]+$" data-ignore-key="1" data-vkb="numeric">
+    <input id="<%- idPrefix %>-operation" class="form-control <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" placeholder="<%- operationPlaceholder %>" maxlength="4" pattern="^[0-9]+$" data-ignore-key="1" data-vkb="numeric">
   </div>
   <% } %>
   <div class="form-actions">

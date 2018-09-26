@@ -1,19 +1,19 @@
 <form class="well filter-form">
   <div class="form-group">
     <label for="<%- idPrefix %>-_id"><%- t('paintShopPaints', 'PROPERTY:_id') %></label>
-    <input id="<%- idPrefix %>-_id" class="form-control" name="_id" type="text" maxlength="12" style="width: 110px">
+    <input id="<%- idPrefix %>-_id" class="form-control" name="_id" type="text" autocomplete="new-password" maxlength="12" style="width: 110px">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-shelf"><%- t('paintShopPaints', 'PROPERTY:shelf') %></label>
-    <input id="<%- idPrefix %>-shelf" class="form-control" name="shelf" type="text" style="width: 75px">
+    <input id="<%- idPrefix %>-shelf" class="form-control" name="shelf" type="text" autocomplete="new-password" style="width: 75px">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-bin"><%- t('paintShopPaints', 'PROPERTY:bin') %></label>
-    <input id="<%- idPrefix %>-bin" class="form-control" name="bin" type="text" style="width: 75px">
+    <input id="<%- idPrefix %>-bin" class="form-control" name="bin" type="text" autocomplete="new-password" style="width: 75px">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-name"><%- t('paintShopPaints', 'PROPERTY:name') %></label>
-    <input id="<%- idPrefix %>-name" class="form-control" name="name" type="text">
+    <input id="<%- idPrefix %>-name" class="form-control" name="name" type="text" autocomplete="new-password">
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">

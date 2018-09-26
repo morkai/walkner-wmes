@@ -16,11 +16,11 @@
       <div class="row">
         <div class="form-group col-lg-3 has-required-select2">
           <label for="<%- idPrefix %>-owner" class="control-label is-required"><%- helpers.t('PROPERTY:owner') %></label>
-          <input id="<%- idPrefix %>-owner" type="text" name="owner" required>
+          <input id="<%- idPrefix %>-owner" type="text" autocomplete="new-password" name="owner" required>
         </div>
         <div class="form-group col-lg-3 has-required-select2">
           <label for="<%- idPrefix %>-section" class="control-label is-required"><%- helpers.t('PROPERTY:section') %></label>
-          <input id="<%- idPrefix %>-section" type="text" name="section" required>
+          <input id="<%- idPrefix %>-section" type="text" autocomplete="new-password" name="section" required>
         </div>
         <div class="form-group col-lg-6 has-required-select2">
           <label for="<%- idPrefix %>-date" class="control-label is-required"><%- helpers.t('PROPERTY:date') %></label>
@@ -29,12 +29,12 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-subject" class="control-label is-required"><%- helpers.t('PROPERTY:subject') %></label>
-        <input id="<%- idPrefix %>-subject" class="form-control" type="text" name="subject" required>
+        <input id="<%- idPrefix %>-subject" class="form-control" type="text" autocomplete="new-password" name="subject" required>
       </div>
       <hr>
       <h4 class="control-label"><%- helpers.t('PROPERTY:observations') %></h4>
       <p id="<%- idPrefix %>-nearMiss" class="message message-inline message-error">
-        <input class="minutesForSafetyCards-form-rid-required" name="nearMiss" type="text" tabindex="-1">
+        <input class="minutesForSafetyCards-form-rid-required" name="nearMiss" type="text" autocomplete="new-password" tabindex="-1">
         <span class="minutesForSafetyCards-form-rid-message">
           <% if (model.nearMiss) { %>
           <%- helpers.t('FORM:MSG:nearMiss:edit', {rid: model.nearMiss}) %>
@@ -62,7 +62,7 @@
       <hr>
       <h4 class="control-label"><%- helpers.t('PROPERTY:orgPropositions') %></h4>
       <p id="<%- idPrefix %>-nearMiss" class="message message-inline message-warning">
-        <input class="minutesForSafetyCards-form-rid-required" name="suggestion" type="text" tabindex="-1">
+        <input class="minutesForSafetyCards-form-rid-required" name="suggestion" type="text" autocomplete="new-password" tabindex="-1">
         <span class="minutesForSafetyCards-form-rid-message">
           <% if (model.suggestion) { %>
           <%- helpers.t('FORM:MSG:suggestion:edit', {rid: model.suggestion}) %>
@@ -96,7 +96,7 @@
       <hr>
       <div class="form-group has-required-select2">
         <label for="<%- idPrefix %>-participants" class="control-label is-required"><%- helpers.t('PROPERTY:participants') %></label>
-        <input id="<%- idPrefix %>-participants" type="text" name="participants" required>
+        <input id="<%- idPrefix %>-participants" type="text" autocomplete="new-password" name="participants" required>
       </div>
     </div>
     <div class="panel-footer">

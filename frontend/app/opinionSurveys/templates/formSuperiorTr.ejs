@@ -4,8 +4,8 @@
     <input type="hidden" name="superiors[<%- i %>].full" value="<%= superior.full %>">
     <%= superior.full %>
   </td>
-  <td><input class="form-control" name="superiors[<%- i %>].short" type="text" value="<%= superior.short %>" required></td>
-  <td><input name="superiors[<%- i %>].division" type="text" value="<%= superior.division %>" required></td>
+  <td><input class="form-control" name="superiors[<%- i %>].short" type="text" autocomplete="new-password" value="<%= superior.short %>" required></td>
+  <td><input name="superiors[<%- i %>].division" type="text" autocomplete="new-password" value="<%= superior.division %>" required></td>
   <td class="actions">
     <div class="actions-group">
       <button class="btn btn-default opinionSurveys-form-deleteRow" type="button"><i class="fa fa-remove"></i></button>

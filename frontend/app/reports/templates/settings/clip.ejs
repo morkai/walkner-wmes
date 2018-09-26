@@ -47,13 +47,13 @@
   <div class="form-group">
     <label for="<%- idPrefix %>-clip-ignoredMrps"><%- t('reports', 'settings:clip:ignoredMrps') %></label>
     <p class="help-block"><%- t('reports', 'settings:clip:ignoredMrps:help') %></p>
-    <input id="<%- idPrefix %>-clip-ignoredMrps" name="reports.clip.ignoredMrps" type="text" data-select2-setting>
+    <input id="<%- idPrefix %>-clip-ignoredMrps" name="reports.clip.ignoredMrps" type="text" autocomplete="new-password" data-select2-setting>
   </div>
   <% ['ignoredStatuses', 'requiredStatuses', 'productionStatuses', 'endToEndStatuses'].forEach(function(setting) { %>
   <div class="form-group">
     <label for="<%- idPrefix %>-clip-<%- setting %>"><%- t('reports', 'settings:clip:' + setting) %></label>
     <p class="help-block"><%- t('reports', 'settings:clip:' + setting + ':help') %></p>
-    <input id="<%- idPrefix %>-clip-<%- setting %>" name="reports.clip.<%- setting %>" type="text" data-select2-setting>
+    <input id="<%- idPrefix %>-clip-<%- setting %>" name="reports.clip.<%- setting %>" type="text" autocomplete="new-password" data-select2-setting>
   </div>
   <% }) %>
   <div class="form-group">
@@ -65,6 +65,6 @@
       </label>
     </div>
     <% }) %>
-    <input id="<%- idPrefix %>-clip-orderFilterStatuses" name="reports.clip.orderFilterStatuses" type="text" data-select2-setting>
+    <input id="<%- idPrefix %>-clip-orderFilterStatuses" name="reports.clip.orderFilterStatuses" type="text" autocomplete="new-password" data-select2-setting>
   </div>
 </div>

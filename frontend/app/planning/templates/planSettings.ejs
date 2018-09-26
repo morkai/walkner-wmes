@@ -6,12 +6,12 @@
       <div class="form-group">
         <label for="<%- idPrefix %>-freezeHour"><%- t('planning', 'settings:freezeHour') %></label>
         <p class="help-block"><%- t('planning', 'settings:freezeHour:help') %></p>
-        <input id="<%- idPrefix %>-freezeHour" name="freezeHour" class="form-control" type="text" required pattern="^(1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
+        <input id="<%- idPrefix %>-freezeHour" name="freezeHour" class="form-control" type="text" autocomplete="new-password" required pattern="^(1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-lateHour"><%- t('planning', 'settings:lateHour') %></label>
         <p class="help-block"><%- t('planning', 'settings:lateHour:help') %></p>
-        <input id="<%- idPrefix %>-lateHour" name="lateHour" class="form-control" type="text" required pattern="^(1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
+        <input id="<%- idPrefix %>-lateHour" name="lateHour" class="form-control" type="text" autocomplete="new-password" required pattern="^(1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-schedulingRate"><%- t('planning', 'settings:schedulingRate') %></label>
@@ -22,7 +22,7 @@
       <div class="form-group">
         <label for="<%- idPrefix %>-<%- prop %>"><%- t('planning', 'settings:' + prop) %></label>
         <p class="help-block"><%- t('planning', 'settings:' + prop + ':help') %></p>
-        <input id="<%- idPrefix %>-<%- prop %>" name="<%- prop %>" type="text" data-object="plan">
+        <input id="<%- idPrefix %>-<%- prop %>" name="<%- prop %>" type="text" autocomplete="new-password" data-object="plan">
       </div>
       <% }) %>
       <div class="checkbox">
@@ -42,22 +42,22 @@
       <hr>
       <div class="form-group">
         <label for="<%- idPrefix %>-line"><%- t('planning', 'settings:line') %></label>
-        <input id="<%- idPrefix %>-line" type="text">
+        <input id="<%- idPrefix %>-line" type="text" autocomplete="new-password">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-mrpPriority"><%- t('planning', 'settings:mrpPriority') %></label>
         <p class="help-block"><%- t('planning', 'settings:mrpPriority:help') %></p>
-        <input id="<%- idPrefix %>-mrpPriority" type="text">
+        <input id="<%- idPrefix %>-mrpPriority" type="text" autocomplete="new-password">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-activeTime"><%- t('planning', 'settings:activeTime') %></label>
-        <input id="<%- idPrefix %>-activeTime" name="activeTime" class="form-control" type="text" placeholder="06:00-06:00" pattern="^[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}(,\s*[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2})*$" data-object="line">
+        <input id="<%- idPrefix %>-activeTime" name="activeTime" class="form-control" type="text" autocomplete="new-password" placeholder="06:00-06:00" pattern="^[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}(,\s*[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2})*$" data-object="line">
       </div>
       <hr>
       <div class="form-group">
         <label for="<%- idPrefix %>-mrp"><%- t('planning', 'settings:mrp') %></label>
         <p class="help-block"><%- t('planning', 'settings:mrp:help') %></p>
-        <input id="<%- idPrefix %>-mrp" type="text">
+        <input id="<%- idPrefix %>-mrp" type="text" autocomplete="new-password">
       </div>
       <div class="row">
         <div class="col-md-3 form-group">
@@ -104,7 +104,7 @@
       <div class="form-group">
         <label for="<%- idPrefix %>-hardComponents"><%- t('planning', 'settings:hardComponents') %></label>
         <p class="help-block"><%- t('planning', 'settings:hardComponents:help') %></p>
-        <input id="<%- idPrefix %>-hardComponents" name="hardComponents" type="text" data-object="mrp">
+        <input id="<%- idPrefix %>-hardComponents" name="hardComponents" type="text" autocomplete="new-password" data-object="mrp">
       </div>
       <div class="form-group">
         <label><%- t('planning', 'settings:groups') %></label>
@@ -129,7 +129,7 @@
       <div class="form-group">
         <label for="<%- idPrefix %>-mrpLine"><%- t('planning', 'settings:mrpLine') %></label>
         <p class="help-block"><%- t('planning', 'settings:mrpLine:help') %></p>
-        <input id="<%- idPrefix %>-mrpLine" type="text">
+        <input id="<%- idPrefix %>-mrpLine" type="text" autocomplete="new-password">
       </div>
       <div class="row">
         <div class="col-md-3 form-group">
@@ -140,7 +140,7 @@
       <div class="form-group">
         <label for="<%- idPrefix %>-orderPriority"><%- t('planning', 'settings:orderPriority') %></label>
         <p class="help-block"><%- t('planning', 'settings:orderPriority:help') %></p>
-        <input id="<%- idPrefix %>-orderPriority" type="text">
+        <input id="<%- idPrefix %>-orderPriority" type="text" autocomplete="new-password">
       </div>
     </div>
     <div class="panel-footer">

@@ -8,7 +8,7 @@
         <% if (editMode || user.data.vendor) { %>
         <p class="form-control-static"><%= model.vendor || user.data.vendor || '?' %></p>
         <% } else { %>
-        <input id="<%- idPrefix %>-vendor" type="text" name="vendor" required>
+        <input id="<%- idPrefix %>-vendor" type="text" autocomplete="new-password" name="vendor" required>
         <% } %>
       </div>
       <div class="form-group">
@@ -16,17 +16,17 @@
         <% if (editMode) { %>
         <p class="form-control-static"><%= model.nc12 %></p>
         <% } else { %>
-        <input id="<%- idPrefix %>-nc12" class="form-control" type="text" name="nc12" required pattern="^[0-9]{12}$">
+        <input id="<%- idPrefix %>-nc12" class="form-control" type="text" autocomplete="new-password" name="nc12" required pattern="^[0-9]{12}$">
         <% } %>
       </div>
       <div class="row">
         <div class="col-md-8 form-group">
           <label for="<%- idPrefix %>-value" class="control-label"><%- t('vendorNc12s', 'PROPERTY:value') %></label>
-          <input id="<%- idPrefix %>-value" class="form-control" type="text" name="value">
+          <input id="<%- idPrefix %>-value" class="form-control" type="text" autocomplete="new-password" name="value">
         </div>
         <div class="col-md-4 form-group">
           <label for="<%- idPrefix %>-unit" class="control-label"><%- t('vendorNc12s', 'PROPERTY:unit') %></label>
-          <input id="<%- idPrefix %>-unit" class="form-control" type="text" name="unit">
+          <input id="<%- idPrefix %>-unit" class="form-control" type="text" autocomplete="new-password" name="unit">
         </div>
       </div>
     </div>

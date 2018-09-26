@@ -149,7 +149,7 @@ define([
       var id = this.idPrefix + '-' + lineId;
       var $group = $('<div class="form-group"></div>');
       var $label = $('<label></label>').attr('for', id).text(lineId);
-      var $input = $('<input type="text">').attr('id', id).attr('data-line-id', lineId).val(mrpPriority.join(','));
+      var $input = $('<input type="text" autocomplete="new-password">').attr('id', id).attr('data-line-id', lineId).val(mrpPriority.join(','));
 
       $group.append($label).append($input).appendTo(this.$id('lines'));
 

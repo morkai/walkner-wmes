@@ -232,7 +232,7 @@ define([
       var options = this.options;
       var $formGroup = $('<div class="form-group">'
         + '<label for="' + id + '" class="control-label">' + t('core', 'ORG_UNIT:' + orgUnit) + '</label>'
-        + '<input id="' + id + '" name="' + orgUnit + '" type="text">'
+        + '<input id="' + id + '" name="' + orgUnit + '" type="text" autocomplete="new-password">'
         + '</div>');
 
       if (options.noGrid !== true)

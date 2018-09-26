@@ -2,7 +2,7 @@
   <% ['division', 'subdivision', 'mrpController', 'prodFlow', 'workCenter', 'prodLine'].forEach(function(orgUnitType) { %>
   <div class="form-group">
     <label class="radio-inline"><input type="radio" name="orgUnitType" value="<%- orgUnitType %>"> <%- t('core', 'ORG_UNIT:' + orgUnitType) %></label>
-    <input id="<%- idPrefix %>-<%- orgUnitType %>" name="<%- orgUnitType %>" type="text">
+    <input id="<%- idPrefix %>-<%- orgUnitType %>" name="<%- orgUnitType %>" type="text" autocomplete="new-password">
   </div>
   <% }) %>
   <div class="form-actions">

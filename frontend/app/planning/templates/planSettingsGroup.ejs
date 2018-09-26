@@ -1,8 +1,8 @@
 <tr>
   <td class="text-right"><%- group.no %>.</td>
-  <td><input type="text" name="group.lines" value="<%- group.lines %>" data-object="mrp"></td>
+  <td><input type="text" autocomplete="new-password" name="group.lines" value="<%- group.lines %>" data-object="mrp"></td>
   <td><input type="number" name="group.splitOrderQuantity" class="form-control" value="<%- group.splitOrderQuantity %>" step="1" min="1" data-object="mrp"></td>
-  <td><input type="text" name="group.components" value="<%- group.components %>" data-object="mrp"></td>
+  <td><input type="text" autocomplete="new-password" name="group.components" value="<%- group.components %>" data-object="mrp"></td>
   <td class="actions">
     <div class="actions-group">
       <button type="button" class="btn btn-default" name="removeGroup" title="<%- t('planning', 'settings:groups:remove') %>">

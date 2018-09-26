@@ -5,11 +5,11 @@
     <div class="panel-body">
       <div class="form-group">
         <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('prodDowntimeAlerts', 'PROPERTY:name') %></label>
-        <input id="<%- idPrefix %>-name" name="name" class="form-control" type="text" required>
+        <input id="<%- idPrefix %>-name" name="name" class="form-control" type="text" autocomplete="new-password" required>
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-repeatInterval" class="control-label"><%- t('prodDowntimeAlerts', 'PROPERTY:repeatInterval') %></label>
-        <input id="<%- idPrefix %>-repeatInterval" name="repeatInterval" class="form-control prodDowntimeAlerts-form-repeatInterval" type="text" placeholder="0h 0m 0s">
+        <input id="<%- idPrefix %>-repeatInterval" name="repeatInterval" class="form-control prodDowntimeAlerts-form-repeatInterval" type="text" autocomplete="new-password" placeholder="0h 0m 0s">
         <p class="help-block"><%- t('prodDowntimeAlerts', 'FORM:HELP:repeatInterval') %></p>
       </div>
       <div class="panel panel-default prodDowntimeAlerts-form-conditions">
@@ -36,7 +36,7 @@
               <label class="radio-inline"><input type="radio" name="conditions[<%- i %>].mode" value="<%- mode %>"> <%- t('prodDowntimeAlerts', 'conditions:modes:' + mode) %></label>
               <% }) %>
             </div>
-            <input id="<%- idPrefix %>-conditions-<%- condition.type %>" name="conditions[<%- i %>].values" type="text">
+            <input id="<%- idPrefix %>-conditions-<%- condition.type %>" name="conditions[<%- i %>].values" type="text" autocomplete="new-password">
             <input type="hidden" name="conditions[<%- i %>].type" value="<%- condition.type %>">
           </div>
           <% }) %>
@@ -46,7 +46,7 @@
         <div class="panel-heading is-with-actions">
           <%- t('prodDowntimeAlerts', 'PROPERTY:actions') %>
           <div class="panel-actions">
-            <input id="<%- idPrefix %>-actions-validity" class="btn btn-default prodDowntimeAlerts-form-actions-validity" type="text" tabindex="-1">
+            <input id="<%- idPrefix %>-actions-validity" class="btn btn-default prodDowntimeAlerts-form-actions-validity" type="text" autocomplete="new-password" tabindex="-1">
             <button id="<%- idPrefix %>-actions-add" class="btn btn-default prodDowntimeAlerts-form-actions-add" type="button"><i class="fa fa-plus"></i><span><%- t('prodDowntimeAlerts', 'FORM:actions:add') %></span></button>
           </div>
         </div>
@@ -59,11 +59,11 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-userWhitelist" class="control-label"><%- t('prodDowntimeAlerts', 'PROPERTY:userWhitelist') %></label>
-        <input id="<%- idPrefix %>-userWhitelist" class="js-actionsValidity" name="userWhitelist" type="text">
+        <input id="<%- idPrefix %>-userWhitelist" class="js-actionsValidity" name="userWhitelist" type="text" autocomplete="new-password">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-userBlacklist" class="control-label"><%- t('prodDowntimeAlerts', 'PROPERTY:userBlacklist') %></label>
-        <input id="<%- idPrefix %>-userBlacklist" name="userBlacklist" type="text">
+        <input id="<%- idPrefix %>-userBlacklist" name="userBlacklist" type="text" autocomplete="new-password">
       </div>
     </div>
     <div class="panel-footer">

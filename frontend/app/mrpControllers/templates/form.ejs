@@ -6,7 +6,7 @@
       <div class="orgUnitDropdowns-container"></div>
       <div class="form-group">
         <label for="<%- idPrefix %>-_id" class="control-label is-required"><%- t('mrpControllers', 'PROPERTY:_id') %></label>
-        <input id="<%- idPrefix %>-_id" class="form-control" type="text" name="_id" autofocus required maxlength="50" pattern="^[a-zA-Z0-9_\-~]*$">
+        <input id="<%- idPrefix %>-_id" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="50" pattern="^[a-zA-Z0-9_\-~]*$">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-inout" class="control-label is-required"><%- t('mrpControllers', 'PROPERTY:inout') %></label>
@@ -18,7 +18,7 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-description" class="control-label is-required"><%- t('mrpControllers', 'PROPERTY:description') %></label>
-        <input id="<%- idPrefix %>-description" class="form-control" type="text" name="description" required maxlength="150">
+        <input id="<%- idPrefix %>-description" class="form-control" type="text" autocomplete="new-password" name="description" required maxlength="150">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-deactivatedAt" class="control-label"><%- t('mrpControllers', 'PROPERTY:deactivatedAt') %></label>
@@ -26,7 +26,7 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-replacedBy" class="control-label"><%- t('mrpControllers', 'PROPERTY:replacedBy') %></label>
-        <input id="<%- idPrefix %>-replacedBy" type="text" name="replacedBy">
+        <input id="<%- idPrefix %>-replacedBy" type="text" autocomplete="new-password" name="replacedBy">
       </div>
     </div>
     <div class="panel-footer">

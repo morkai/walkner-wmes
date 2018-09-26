@@ -7,12 +7,12 @@
     <div class="panel-body" data-tab="general">
       <div class="form-group">
         <label for="<%- idPrefix %>-general-absenceTasks" class="control-label"><%- t('fte', 'settings:general:absenceTasks') %></label>
-        <input id="<%- idPrefix %>-general-absenceTasks" name="fte.absenceTasks" type="text" data-setting>
+        <input id="<%- idPrefix %>-general-absenceTasks" name="fte.absenceTasks" type="text" autocomplete="new-password" data-setting>
       </div>
     </div>
     <div class="panel-body" data-tab="structure">
       <div class="form-group">
-        <input id="<%- idPrefix %>-structure-subdivision" type="text">
+        <input id="<%- idPrefix %>-structure-subdivision" type="text" autocomplete="new-password">
       </div>
       <table class="table table-condensed table-with-tfoot">
         <thead>
@@ -25,7 +25,7 @@
         </thead>
         <tfoot>
         <tr>
-          <td colspan="4"><input id="<%- idPrefix %>-structure-prodFunction" type="text"></td>
+          <td colspan="4"><input id="<%- idPrefix %>-structure-prodFunction" type="text" autocomplete="new-password"></td>
         </tr>
         </tfoot>
         <tbody id="<%- idPrefix %>-structure"></tbody>

@@ -21,7 +21,7 @@
       <div class="row">
         <div class="col-md-3 form-group has-required-select2">
           <label for="<%- idPrefix %>-operators" class="control-label is-required"><%- t('pressWorksheets', 'PROPERTY:operators') %></label>
-          <input id="<%- idPrefix %>-operators" type="text" name="operators" required>
+          <input id="<%- idPrefix %>-operators" type="text" autocomplete="new-password" name="operators" required>
         </div>
         <div class="col-md-3 pressWorksheets-form-dateAndShift">
           <div class="row">
@@ -41,11 +41,11 @@
         </div>
         <div class="col-md-3 form-group has-required-select2">
           <label for="<%- idPrefix %>-operator" class="control-label is-required"><%- t('pressWorksheets', 'PROPERTY:operator') %></label>
-          <input id="<%- idPrefix %>-operator" type="text" name="operator" required>
+          <input id="<%- idPrefix %>-operator" type="text" autocomplete="new-password" name="operator" required>
         </div>
         <div class="col-md-3 form-group has-required-select2">
           <label for="<%- idPrefix %>-master" class="control-label is-required"><%- t('pressWorksheets', 'PROPERTY:master') %></label>
-          <input id="<%- idPrefix %>-master" type="text" name="master" required>
+          <input id="<%- idPrefix %>-master" type="text" autocomplete="new-password" name="master" required>
         </div>
       </div>
       <div id="<%- idPrefix %>-existingWarning" class="message message-inline message-warning"></div>

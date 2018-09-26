@@ -21,7 +21,7 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-planning-ignoredMrps"><%- t('wh', 'settings:planning:ignoredMrps') %></label>
-        <input id="<%- idPrefix %>-planning-ignoredMrps" name="wh.planning.ignoredMrps" type="text" data-setting>
+        <input id="<%- idPrefix %>-planning-ignoredMrps" name="wh.planning.ignoredMrps" type="text" autocomplete="new-password" data-setting>
       </div>
     </div>
     <div class="panel-body" data-tab="users">
@@ -29,7 +29,7 @@
         <% ['fmx', 'kitter', 'packer'].forEach(function(func) { %>
         <div class="form-group settings-select2-long" style="min-width: 300px; margin-right: 15px;">
           <label><%- t('wh', 'settings:users:' + func) %></label>
-          <input type="text" data-user-func="<%- func %>">
+          <input type="text" autocomplete="new-password" data-user-func="<%- func %>">
         </div>
         <% }) %>
       </div>

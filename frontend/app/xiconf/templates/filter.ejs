@@ -9,15 +9,15 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-srcId"><%- t('xiconf', 'PROPERTY:srcId') %></label>
-    <input id="<%- idPrefix %>-srcId" name="srcId" type="text" placeholder="<%- t('xiconf', 'filter:placeholder:srcId') %>">
+    <input id="<%- idPrefix %>-srcId" name="srcId" type="text" autocomplete="new-password" placeholder="<%- t('xiconf', 'filter:placeholder:srcId') %>">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-serviceTag"><%- t('xiconf', 'PROPERTY:serviceTag') %></label>
-    <input id="<%- idPrefix %>-serviceTag" class="form-control" name="serviceTag" type="text" pattern="^(P|p)[0-9]+$">
+    <input id="<%- idPrefix %>-serviceTag" class="form-control" name="serviceTag" type="text" autocomplete="new-password" pattern="^(P|p)[0-9]+$">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-orderNo"><%- t('xiconf', 'PROPERTY:no') %></label>
-    <input id="<%- idPrefix %>-orderNo" class="form-control" name="orderNo" type="text" maxlength="9" pattern="^[0-9]+$">
+    <input id="<%- idPrefix %>-orderNo" class="form-control" name="orderNo" type="text" autocomplete="new-password" maxlength="9" pattern="^[0-9]+$">
   </div>
   <div class="form-group">
     <div class="filter-radioLabels">
@@ -29,7 +29,7 @@
         <%- t('xiconf', 'filter:nc12Type:led') %>
       </label>
     </div>
-    <input id="<%- idPrefix %>-nc12" class="form-control" name="nc12" type="text" maxlength="12">
+    <input id="<%- idPrefix %>-nc12" class="form-control" name="nc12" type="text" autocomplete="new-password" maxlength="12">
   </div>
   <div class="form-group">
     <label><%- t('xiconf', 'PROPERTY:result') %></label>

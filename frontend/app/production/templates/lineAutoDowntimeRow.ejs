@@ -8,7 +8,7 @@
     </label>
     <% }) %>
   </td>
-  <td class="is-min"><input class="form-control production-settings-lineAutoDowntimes-time" name="lineAutoDowntimes[<%- lineAutoDowntime.i %>].time" type="text" value="<%- lineAutoDowntime.time %>" placeholder="00:00, 00:00..." <%- lineAutoDowntime.when === 'time' ? '' : 'disabled' %>></td>
+  <td class="is-min"><input class="form-control production-settings-lineAutoDowntimes-time" name="lineAutoDowntimes[<%- lineAutoDowntime.i %>].time" type="text" autocomplete="new-password" value="<%- lineAutoDowntime.time %>" placeholder="00:00, 00:00..." <%- lineAutoDowntime.when === 'time' ? '' : 'disabled' %>></td>
   <td class="actions">
     <div class="actions-group">
       <button class="btn btn-default" data-auto-downtime-action="up" type="button"><i class="fa fa-arrow-up"></i></button>

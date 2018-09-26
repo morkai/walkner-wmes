@@ -20,7 +20,7 @@
   <div class="form-group">
     <label for="<%- idPrefix %>-quickPrint-kanbanIds"><%- helpers.t('quickPrint:label') %></label>
     <div id="<%- idPrefix %>-quickPrint" class="kanbanPrintQueues-quickPrint">
-      <input id="<%- idPrefix %>-quickPrint-kanbanIds" class="form-control text-mono kanbanPrintQueues-quickPrint-kanbanIds" type="text" placeholder="<%- helpers.t('quickPrint:kanbanIds') %>">
+      <input id="<%- idPrefix %>-quickPrint-kanbanIds" class="form-control text-mono kanbanPrintQueues-quickPrint-kanbanIds" type="text" autocomplete="new-password" placeholder="<%- helpers.t('quickPrint:kanbanIds') %>">
       <select id="<%- idPrefix %>-quickPrint-layouts" class="form-control is-expandable kanbanPrintQueues-quickPrint-layouts" multiple size="1" data-expanded-length="<%- layouts.length %>">
         <% layouts.forEach(function(layout) { %>
         <option value="<%- layout %>"><%- helpers.t('layout:' + layout) %></option>

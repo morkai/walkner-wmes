@@ -36,8 +36,8 @@ define([
           this.options.vkb.hide();
         }
       },
-      'input input[type="text"][max]': 'checkMinMaxValidity',
-      'blur input[type="text"][max]': 'checkMinMaxValidity',
+      'input input[type="text" autocomplete="new-password"][max]': 'checkMinMaxValidity',
+      'blur input[type="text" autocomplete="new-password"][max]': 'checkMinMaxValidity',
       'submit': function(e)
       {
         e.preventDefault();

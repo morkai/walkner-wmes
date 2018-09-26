@@ -2,7 +2,7 @@
   <% ['surveys', 'divisions', 'superiors', 'employers'].forEach(function(prop) { %>
   <div class="form-group">
     <label for="<%- idPrefix %>-<%- prop %>"><%- t('opinionSurveys', 'report:filter:' + prop) %></label>
-    <input id="<%- idPrefix %>-<%- prop %>" name="<%- prop %>" type="text">
+    <input id="<%- idPrefix %>-<%- prop %>" name="<%- prop %>" type="text" autocomplete="new-password">
   </div>
   <% }) %>
   <div class="form-group filter-actions">

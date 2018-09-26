@@ -17,7 +17,7 @@
             <input type="radio" class="programs-form-waitKind" name="steps[<%- stepIndex %>].kind" value="auto" checked> <%- t('xiconfPrograms', 'PROPERTY:waitKind:auto') %>
           </label>
         </div>
-        <input id="<%- idPrefix %>-duration" class="form-control xiconfPrograms-form-duration xiconfPrograms-form-waitDuration" type="text" name="steps[<%- stepIndex %>].duration" value="2s" required>
+        <input id="<%- idPrefix %>-duration" class="form-control xiconfPrograms-form-duration xiconfPrograms-form-waitDuration" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].duration" value="2s" required>
       </div>
     </div>
     <% if (programType === 't24vdc') { %>

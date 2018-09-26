@@ -7,17 +7,17 @@
     <div class="row">
       <div class="form-group col-md-3">
         <label for="<%- idPrefix %>-label" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:label') %></label>
-        <input id="<%- idPrefix %>-label" class="form-control" type="text" name="steps[<%- stepIndex %>].label" value="<%- t('xiconfPrograms', 'step:iso') %>" required maxlength="32">
+        <input id="<%- idPrefix %>-label" class="form-control" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].label" value="<%- t('xiconfPrograms', 'step:iso') %>" required maxlength="32">
       </div>
     </div>
     <div class="row">
       <div class="form-group col-md-3">
         <label for="<%- idPrefix %>-startTime" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></label>
-        <input id="<%- idPrefix %>-startTime" class="form-control xiconfPrograms-form-duration" type="text" name="steps[<%- stepIndex %>].startTime" value="0s" required>
+        <input id="<%- idPrefix %>-startTime" class="form-control xiconfPrograms-form-duration" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].startTime" value="0s" required>
       </div>
       <div class="form-group col-md-3">
         <label for="<%- idPrefix %>-duration" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:duration') %></label>
-        <input id="<%- idPrefix %>-duration" class="form-control xiconfPrograms-form-duration" type="text" name="steps[<%- stepIndex %>].duration" value="1s" required>
+        <input id="<%- idPrefix %>-duration" class="form-control xiconfPrograms-form-duration" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].duration" value="1s" required>
       </div>
       <div class="form-group col-md-3">
         <label for="<%- idPrefix %>-totalTime" class="control-label"><%- t('xiconfPrograms', 'PROPERTY:totalTime') %></label>
@@ -51,7 +51,7 @@
     <div class="row">
       <div class="form-group col-md-3">
         <label for="<%- idPrefix %>-ramp" class="control-label is-required"><%- t('xiconfPrograms', 'glp2:iso:ramp') %></label>
-        <input id="<%- idPrefix %>-ramp" class="form-control xiconfPrograms-form-duration" type="text" name="steps[<%- stepIndex %>].ramp" data-min="0" data-max="60" value="0s" required>
+        <input id="<%- idPrefix %>-ramp" class="form-control xiconfPrograms-form-duration" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].ramp" data-min="0" data-max="60" value="0s" required>
       </div>
     </div>
   </div>

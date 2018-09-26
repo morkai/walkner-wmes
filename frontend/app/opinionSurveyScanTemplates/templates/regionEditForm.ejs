@@ -1,11 +1,11 @@
 <form class="opinionSurveyScanTemplates-regionEditForm">
   <div class="form-group">
     <label for="<%- idPrefix %>-question" class="control-label"><%- t('opinionSurveyScanTemplates', 'regionEditForm:question') %></label>
-    <input id="<%- idPrefix %>-question" name="question" type="text" value="<%- region.question %>" autofocus>
+    <input id="<%- idPrefix %>-question" name="question" type="text" autocomplete="new-password" value="<%- region.question %>" autofocus>
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-answers" class="control-label"><%- t('opinionSurveyScanTemplates', 'regionEditForm:options') %></label>
-    <input id="<%- idPrefix %>-answers" name="answers" type="text">
+    <input id="<%- idPrefix %>-answers" name="answers" type="text" autocomplete="new-password">
   </div>
   <table class="table table-condensed table-bordered">
     <thead>

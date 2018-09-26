@@ -3,13 +3,13 @@
     <label for="<%- idPrefix %>-startedAt"><%- t('production', 'downtimePicker:startedAt') %></label>
     <% if (mode === 'start') { %>
     <div class="input-group">
-      <input id="<%- idPrefix %>-startedAt" class="form-control" type="text" value="<%- time.format(startedAt, 'YYYY-MM-DD, HH:mm:ss') %>" readonly data-time="<%- startedAt.getTime() %>">
+      <input id="<%- idPrefix %>-startedAt" class="form-control" type="text" autocomplete="new-password" value="<%- time.format(startedAt, 'YYYY-MM-DD, HH:mm:ss') %>" readonly data-time="<%- startedAt.getTime() %>">
       <span class="input-group-btn">
         <button class="btn btn-default production-downtimePicker-now" type="button"><%- t('production', 'downtimePicker:startedAt:now') %></button>
       </span>
     </div>
     <% } else { %>
-    <input id="<%- idPrefix %>-startedAt" class="form-control" type="text" value="<%- time.format(startedAt, 'YYYY-MM-DD, HH:mm:ss') %>" readonly data-time="<%- startedAt.getTime() %>">
+    <input id="<%- idPrefix %>-startedAt" class="form-control" type="text" autocomplete="new-password" value="<%- time.format(startedAt, 'YYYY-MM-DD, HH:mm:ss') %>" readonly data-time="<%- startedAt.getTime() %>">
     <% } %>
   </div>
   <div id="<%- idPrefix %>-reasonGroup" class="form-group production-form-btn-group">
@@ -19,10 +19,10 @@
       <button id="<%- idPrefix %>-selectedReason" class="btn btn-lg btn-block btn-default" type="button"><span><%- t('production', 'downtimePicker:reason:placeholder') %></span></button>
       <button id="<%- idPrefix %>-clearReason" class="btn btn-lg btn-block btn-default" type="button"><i class="fa fa-eraser"></i></button>
     </div>
-    <input id="<%- idPrefix %>-reasonFilter" class="form-control is-embedded is-vkb-focused hidden" type="text" placeholder="<%- t('production', 'downtimePicker:reasonFilter:placeholder') %>" data-ignore-key="1" data-vkb="alpha numeric">
+    <input id="<%- idPrefix %>-reasonFilter" class="form-control is-embedded is-vkb-focused hidden" type="text" autocomplete="new-password" placeholder="<%- t('production', 'downtimePicker:reasonFilter:placeholder') %>" data-ignore-key="1" data-vkb="alpha numeric">
     <div class="btn-group-vertical hidden"></div>
     <% } else { %>
-    <input id="<%- idPrefix %>-reason" type="text" placeholder="<%- t('production', 'downtimePicker:reason:placeholder') %>">
+    <input id="<%- idPrefix %>-reason" type="text" autocomplete="new-password" placeholder="<%- t('production', 'downtimePicker:reason:placeholder') %>">
     <% } %>
   </div>
   <div id="<%- idPrefix %>-aorGroup" class="form-group production-form-btn-group">
@@ -32,10 +32,10 @@
       <button id="<%- idPrefix %>-selectedAor" class="btn btn-lg btn-block btn-default" type="button"><span><%- t('production', 'downtimePicker:aor:placeholder') %></span></button>
       <button id="<%- idPrefix %>-clearAor" class="btn btn-lg btn-block btn-default" type="button"><i class="fa fa-eraser"></i></button>
     </div>
-    <input id="<%- idPrefix %>-aorFilter" class="form-control is-embedded is-vkb-focused hidden" type="text" placeholder="<%- t('production', 'downtimePicker:aorFilter:placeholder') %>" data-ignore-key="1" data-vkb="alpha numeric">
+    <input id="<%- idPrefix %>-aorFilter" class="form-control is-embedded is-vkb-focused hidden" type="text" autocomplete="new-password" placeholder="<%- t('production', 'downtimePicker:aorFilter:placeholder') %>" data-ignore-key="1" data-vkb="alpha numeric">
     <div class="btn-group-vertical hidden"></div>
     <% } else { %>
-    <input id="<%- idPrefix %>-aor" type="text" placeholder="<%- t('production', 'downtimePicker:aor:placeholder') %>">
+    <input id="<%- idPrefix %>-aor" type="text" autocomplete="new-password" placeholder="<%- t('production', 'downtimePicker:aor:placeholder') %>">
     <% } %>
   </div>
   <div id="<%- idPrefix %>-commentGroup" class="form-group">

@@ -9,23 +9,23 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-_id"><%- t('orders', 'PROPERTY:_id') %></label>
-    <input id="<%- idPrefix %>-_id" class="form-control orders-filter-_id" name="_id" type="text" maxlength="9">
+    <input id="<%- idPrefix %>-_id" class="form-control orders-filter-_id" name="_id" type="text" autocomplete="new-password" maxlength="9">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-nc12"><%- t('orders', 'PROPERTY:nc12') %></label>
-    <input id="<%- idPrefix %>-nc12" class="form-control orders-filter-nc12" name="nc12" type="text" maxlength="12">
+    <input id="<%- idPrefix %>-nc12" class="form-control orders-filter-nc12" name="nc12" type="text" autocomplete="new-password" maxlength="12">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-mrp"><%- t('orders', 'PROPERTY:mrp') %></label>
-    <input id="<%- idPrefix %>-mrp" name="mrp" type="text">
+    <input id="<%- idPrefix %>-mrp" name="mrp" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-statusesIn"><%- t('orders', 'filter:statuses:in') %></label>
-    <input id="<%- idPrefix %>-statusesIn" name="statusesIn" type="text">
+    <input id="<%- idPrefix %>-statusesIn" name="statusesIn" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-statusesNin"><%- t('orders', 'filter:statuses:nin') %></label>
-    <input id="<%- idPrefix %>-statusesNin" name="statusesNin" type="text">
+    <input id="<%- idPrefix %>-statusesNin" name="statusesNin" type="text" autocomplete="new-password">
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">

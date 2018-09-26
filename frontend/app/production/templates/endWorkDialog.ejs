@@ -3,7 +3,7 @@
   <% if (spigot) { %>
   <div id="<%- idPrefix %>-spigot" class="form-group">
     <label for="<%- idPrefix %>-spigot-nc12"><%- t('production', 'endWorkDialog:spigot:nc12') %></label>
-    <input id="<%- idPrefix %>-spigot-nc12" class="form-control production-spigot-nc12 <%- embedded ? 'is-embedded' : '' %>" type="text" value="" placeholder="<%- t('production', 'endWorkDialog:spigot:placeholder') %>" autofocus required>
+    <input id="<%- idPrefix %>-spigot-nc12" class="form-control production-spigot-nc12 <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" value="" placeholder="<%- t('production', 'endWorkDialog:spigot:placeholder') %>" autofocus required>
   </div>
   <% } %>
   <div class="form-group">

@@ -6,15 +6,15 @@
       <div class="row">
         <div class="form-group col-lg-3 has-required-select2">
           <label for="<%- idPrefix %>-observer" class="control-label is-required"><%- helpers.t('PROPERTY:observer') %></label>
-          <input id="<%- idPrefix %>-observer" type="text" name="observer" required>
+          <input id="<%- idPrefix %>-observer" type="text" autocomplete="new-password" name="observer" required>
         </div>
         <div class="form-group col-lg-3 has-required-select2">
           <label for="<%- idPrefix %>-observerSection" class="control-label is-required"><%- helpers.t('FORM:observerSection') %></label>
-          <input id="<%- idPrefix %>-observerSection" type="text" name="observerSection" required>
+          <input id="<%- idPrefix %>-observerSection" type="text" autocomplete="new-password" name="observerSection" required>
         </div>
         <div class="form-group col-lg-3 has-required-select2">
           <label for="<%- idPrefix %>-superior" class="control-label is-required"><%- helpers.t('FORM:superior') %></label>
-          <input id="<%- idPrefix %>-superior" type="text" name="superior" required>
+          <input id="<%- idPrefix %>-superior" type="text" autocomplete="new-password" name="superior" required>
         </div>
         <div class="form-group col-lg-6">
           <label for="<%- idPrefix %>-date" class="control-label is-required"><%- helpers.t('PROPERTY:date') %></label>
@@ -26,15 +26,15 @@
       <div class="row">
         <div class="form-group col-lg-3 has-required-select2">
           <label for="<%- idPrefix %>-section" class="control-label is-required"><%- helpers.t('PROPERTY:section') %></label>
-          <input id="<%- idPrefix %>-section" type="text" name="section" required>
+          <input id="<%- idPrefix %>-section" type="text" autocomplete="new-password" name="section" required>
         </div>
         <div class="form-group col-lg-3">
           <label for="<%- idPrefix %>-line" class="control-label"><%- helpers.t('PROPERTY:line') %></label>
-          <input id="<%- idPrefix %>-line" type="text" name="line">
+          <input id="<%- idPrefix %>-line" type="text" autocomplete="new-password" name="line">
         </div>
         <div class="form-group col-lg-6">
           <label for="<%- idPrefix %>-position" class="control-label is-required"><%- helpers.t('PROPERTY:position') %></label>
-          <input id="<%- idPrefix %>-position" class="form-control" type="text" name="position" required>
+          <input id="<%- idPrefix %>-position" class="form-control" type="text" autocomplete="new-password" name="position" required>
         </div>
       </div>
       <hr style="margin-top: 5px">
@@ -59,7 +59,7 @@
       <hr>
       <h4 class="control-label"><%- helpers.t('PANEL:TITLE:risks') %></h4>
       <p id="<%- idPrefix %>-nearMiss" class="message message-inline message-error">
-        <input class="behaviorObsCards-form-rid-required" name="nearMiss" type="text" tabindex="-1">
+        <input class="behaviorObsCards-form-rid-required" name="nearMiss" type="text" autocomplete="new-password" tabindex="-1">
         <span class="behaviorObsCards-form-rid-message">
           <% if (model.nearMiss) { %>
           <%- helpers.t('FORM:MSG:nearMiss:edit', {rid: model.nearMiss}) %>
@@ -95,7 +95,7 @@
       <hr>
       <h4 class="control-label"><%- helpers.t('PANEL:TITLE:difficulties') %></h4>
       <p id="<%- idPrefix %>-nearMiss" class="message message-inline message-warning">
-        <input class="behaviorObsCards-form-rid-required" name="suggestion" type="text" tabindex="-1">
+        <input class="behaviorObsCards-form-rid-required" name="suggestion" type="text" autocomplete="new-password" tabindex="-1">
         <span class="behaviorObsCards-form-rid-message">
           <% if (model.suggestion) { %>
           <%- helpers.t('FORM:MSG:suggestion:edit', {rid: model.suggestion}) %>

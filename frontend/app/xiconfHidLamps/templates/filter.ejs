@@ -2,7 +2,7 @@
   <% ['_id', 'nc12', 'description'].forEach(function(prop) { %>
   <div class="form-group">
     <label for="<%- idPrefix %>-<%- prop %>"><%- t('xiconfHidLamps', 'PROPERTY:' + prop) %></label>
-    <input id="<%- idPrefix %>-<%- prop %>" class="form-control" name="<%- prop %>" type="text">
+    <input id="<%- idPrefix %>-<%- prop %>" class="form-control" name="<%- prop %>" type="text" autocomplete="new-password">
   </div>
   <% }) %>
   <%- renderLimit() %>

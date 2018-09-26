@@ -15,16 +15,16 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-subject" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:subject') %></label>
-        <input id="<%- idPrefix %>-subject" class="form-control" type="text" name="subject" required placeholder="<%- t('kaizenOrders', 'FORM:help:subject') %>">
+        <input id="<%- idPrefix %>-subject" class="form-control" type="text" autocomplete="new-password" name="subject" required placeholder="<%- t('kaizenOrders', 'FORM:help:subject') %>">
       </div>
       <div class="row">
         <div class="form-group col-lg-4 has-required-select2">
           <label for="<%- idPrefix %>-section" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:section') %></label>
-          <input id="<%- idPrefix %>-section" type="text" name="section" required placeholder="<%- t('kaizenOrders', 'FORM:help:section') %>">
+          <input id="<%- idPrefix %>-section" type="text" autocomplete="new-password" name="section" required placeholder="<%- t('kaizenOrders', 'FORM:help:section') %>">
         </div>
         <div class="form-group col-lg-8 has-required-select2">
           <label for="<%- idPrefix %>-confirmer" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:confirmer') %></label>
-          <input id="<%- idPrefix %>-confirmer" type="text" name="confirmer" required placeholder="<%- t('kaizenOrders', 'FORM:help:confirmer') %>">
+          <input id="<%- idPrefix %>-confirmer" type="text" autocomplete="new-password" name="confirmer" required placeholder="<%- t('kaizenOrders', 'FORM:help:confirmer') %>">
         </div>
       </div>
       <% if (multiType) { %>
@@ -39,19 +39,19 @@
         <div class="panel-body">
           <div id="<%- idPrefix %>-nearMissOwnersFormGroup" class="form-group has-required-select2">
             <label for="<%- idPrefix %>-nearMissOwners" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:nearMissOwner' + (multiOwner ? 's' : '')) %></label>
-            <input id="<%- idPrefix %>-nearMissOwners" type="text" name="nearMissOwners">
+            <input id="<%- idPrefix %>-nearMissOwners" type="text" autocomplete="new-password" name="nearMissOwners">
           </div>
           <div id="<%- idPrefix %>-eventDateAreaRow" class="row">
             <div class="form-group col-lg-2">
               <label for="<%- idPrefix %>-eventDate" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:eventDate') %></label>
               <div class=" form-group-datetime">
                 <input id="<%- idPrefix %>-eventDate" class="form-control" name="eventDate" type="date" max="<%- today %>">
-                <input id="<%- idPrefix %>-eventTime" class="form-control" name="eventTime" type="text" placeholder="<%- t('kaizenOrders', 'FORM:MSG:eventTime') %>" title="<%- t('kaizenOrders', 'FORM:MSG:eventTime') %>">
+                <input id="<%- idPrefix %>-eventTime" class="form-control" name="eventTime" type="text" autocomplete="new-password" placeholder="<%- t('kaizenOrders', 'FORM:MSG:eventTime') %>" title="<%- t('kaizenOrders', 'FORM:MSG:eventTime') %>">
               </div>
             </div>
             <div class="form-group col-lg-10 has-required-select2">
               <label for="<%- idPrefix %>-area" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:area') %></label>
-              <input id="<%- idPrefix %>-area" type="text" name="area">
+              <input id="<%- idPrefix %>-area" type="text" autocomplete="new-password" name="area">
             </div>
           </div>
           <div id="<%- idPrefix %>-descriptionFormGroup" class="form-group">
@@ -68,15 +68,15 @@
           <div id="<%- idPrefix %>-causeCategoryRiskRow" class="row">
             <div class="form-group col-md-3">
               <label for="<%- idPrefix %>-cause" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:cause') %></label>
-              <input id="<%- idPrefix %>-cause" type="text" name="cause">
+              <input id="<%- idPrefix %>-cause" type="text" autocomplete="new-password" name="cause">
             </div>
             <div class="form-group col-md-3">
               <label for="<%- idPrefix %>-risk" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:risk') %></label>
-              <input id="<%- idPrefix %>-risk" type="text" name="risk">
+              <input id="<%- idPrefix %>-risk" type="text" autocomplete="new-password" name="risk">
             </div>
             <div class="form-group col-md-6">
               <label for="<%- idPrefix %>-nearMissCategory" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:nearMissCategory') %></label>
-              <input id="<%- idPrefix %>-nearMissCategory" type="text" name="nearMissCategory">
+              <input id="<%- idPrefix %>-nearMissCategory" type="text" autocomplete="new-password" name="nearMissCategory">
             </div>
           </div>
           <div id="<%- idPrefix %>-correctiveMeasuresFormGroup" class="form-group">
@@ -98,7 +98,7 @@
         <div id="<%- idPrefix %>-suggestionPanelBody" class="panel-body">
           <div id="<%- idPrefix %>-suggestionOwnersFormGroup" class="form-group has-required-select2">
             <label for="<%- idPrefix %>-suggestionOwners" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:suggestionOwners') %></label>
-            <input id="<%- idPrefix %>-suggestionOwners" type="text" name="suggestionOwners">
+            <input id="<%- idPrefix %>-suggestionOwners" type="text" autocomplete="new-password" name="suggestionOwners">
           </div>
           <div id="<%- idPrefix %>-suggestionFormGroup" class="form-group">
             <label for="<%- idPrefix %>-suggestion" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:suggestion') %></label>
@@ -109,7 +109,7 @@
           </div>
           <div id="<%- idPrefix %>-suggestionCategoryFormGroup" class="form-group">
             <label for="<%- idPrefix %>-suggestionCategory" class="control-label is-requiredToFinish"><%- t('kaizenOrders', 'PROPERTY:suggestionCategory') %></label>
-            <input id="<%- idPrefix %>-suggestionCategory" type="text" name="suggestionCategory">
+            <input id="<%- idPrefix %>-suggestionCategory" type="text" autocomplete="new-password" name="suggestionCategory">
           </div>
         </div>
       </div>
@@ -120,7 +120,7 @@
         <div class="panel-body has-lastElementRow">
           <div id="<%- idPrefix %>-kaizenOwnersFormGroup" class="form-group has-required-select2">
             <label for="<%- idPrefix %>-kaizenOwners" class="control-label is-required"><%- t('kaizenOrders', 'PROPERTY:kaizenOwners') %></label>
-            <input id="<%- idPrefix %>-kaizenOwners" type="text" name="kaizenOwners">
+            <input id="<%- idPrefix %>-kaizenOwners" type="text" autocomplete="new-password" name="kaizenOwners">
           </div>
           <div class="row">
             <div class="form-group col-lg-2">
@@ -173,7 +173,7 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-subscribers" class="control-label"><%- t('kaizenOrders', 'PROPERTY:subscribers') %></label>
-        <input id="<%- idPrefix %>-subscribers" type="text" name="subscribers">
+        <input id="<%- idPrefix %>-subscribers" type="text" autocomplete="new-password" name="subscribers">
         <p class="help-block"><%- t('kaizenOrders', 'FORM:help:subscribers') %></p>
       </div>
       <% if (editMode) { %>

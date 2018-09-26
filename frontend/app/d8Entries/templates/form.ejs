@@ -19,30 +19,30 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-subject" class="control-label is-required"><%- t('d8Entries', 'PROPERTY:subject') %></label>
-        <input id="<%- idPrefix %>-subject" class="form-control" type="text" name="subject" required>
+        <input id="<%- idPrefix %>-subject" class="form-control" type="text" autocomplete="new-password" name="subject" required>
       </div>
       <div class="row">
         <div class="col-md-3 form-group has-required-select2">
           <label for="<%- idPrefix %>-entrySource" class="control-label is-required"><%- t('d8Entries', 'PROPERTY:entrySource') %></label>
-          <input id="<%- idPrefix %>-entrySource" type="text" name="entrySource" required>
+          <input id="<%- idPrefix %>-entrySource" type="text" autocomplete="new-password" name="entrySource" required>
         </div>
         <div class="col-md-3 form-group has-required-select2">
           <label for="<%- idPrefix %>-area" class="control-label is-required"><%- t('d8Entries', 'PROPERTY:area') %></label>
-          <input id="<%- idPrefix %>-area" type="text" name="area" required>
+          <input id="<%- idPrefix %>-area" type="text" autocomplete="new-password" name="area" required>
         </div>
         <div class="col-md-6 form-group has-required-select2">
           <label for="<%- idPrefix %>-manager" class="control-label is-required"><%- t('d8Entries', 'PROPERTY:manager') %></label>
-          <input id="<%- idPrefix %>-manager" type="text" name="manager" required>
+          <input id="<%- idPrefix %>-manager" type="text" autocomplete="new-password" name="manager" required>
         </div>
       </div>
       <div class="row">
         <div class="col-md-3 form-group">
           <label for="<%- idPrefix %>-owner" class="control-label"><%- t('d8Entries', 'PROPERTY:owner') %></label>
-          <input id="<%- idPrefix %>-owner" type="text" name="owner">
+          <input id="<%- idPrefix %>-owner" type="text" autocomplete="new-password" name="owner">
         </div>
         <div class="col-md-9 form-group">
           <label for="<%- idPrefix %>-members" class="control-label"><%- t('d8Entries', 'PROPERTY:members') %></label>
-          <input id="<%- idPrefix %>-members" type="text" name="members">
+          <input id="<%- idPrefix %>-members" type="text" autocomplete="new-password" name="members">
         </div>
       </div>
       <div class="form-group">
@@ -63,7 +63,7 @@
       <div class="row">
         <div class="col-md-3 form-group has-required-select2">
           <label for="<%- idPrefix %>-problemSource" class="control-label is-required"><%- t('d8Entries', 'PROPERTY:problemSource') %></label>
-          <input id="<%- idPrefix %>-problemSource" type="text" name="problemSource" required>
+          <input id="<%- idPrefix %>-problemSource" type="text" autocomplete="new-password" name="problemSource" required>
         </div>
       </div>
       <div class="form-group">
@@ -98,7 +98,7 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-subscribers" class="control-label"><%- t('d8Entries', 'PROPERTY:subscribers') %></label>
-        <input id="<%- idPrefix %>-subscribers" type="text" name="subscribers">
+        <input id="<%- idPrefix %>-subscribers" type="text" autocomplete="new-password" name="subscribers">
         <p class="help-block"><%- t('d8Entries', 'FORM:help:subscribers') %></p>
       </div>
       <% if (editMode) { %>

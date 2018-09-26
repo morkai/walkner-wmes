@@ -15,7 +15,7 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-mrp"><%- t('prodDowntimes', 'filter:mrp') %></label>
-    <input id="<%- idPrefix %>-mrp" name="mrp" type="text" data-placeholder=" ">
+    <input id="<%- idPrefix %>-mrp" name="mrp" type="text" autocomplete="new-password" data-placeholder=" ">
   </div>
   <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>
   <div class="form-group">
@@ -23,14 +23,14 @@
       <input id="<%- idPrefix %>-aorIn" class="filter-inLabel" name="aorIn" type="checkbox" value="true" title="<%- t('prodDowntimes', 'filter:tooltip:in') %>">
       <%- t('prodDowntimes', 'PROPERTY:aor') %>
     </label>
-    <input id="<%- idPrefix %>-aor" name="aor" type="text" data-placeholder="<%- t('prodDowntimes', 'filter:placeholder:aor') %>">
+    <input id="<%- idPrefix %>-aor" name="aor" type="text" autocomplete="new-password" data-placeholder="<%- t('prodDowntimes', 'filter:placeholder:aor') %>">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-reason">
       <input id="<%- idPrefix %>-reasonIn" class="filter-inLabel" name="reasonIn" type="checkbox" value="true" title="<%- t('prodDowntimes', 'filter:tooltip:in') %>">
       <%- t('prodDowntimes', 'PROPERTY:reason') %>
     </label>
-    <input id="<%- idPrefix %>-reason" name="reason" type="text" data-placeholder="<%- t('prodDowntimes', 'filter:placeholder:reason') %>">
+    <input id="<%- idPrefix %>-reason" name="reason" type="text" autocomplete="new-password" data-placeholder="<%- t('prodDowntimes', 'filter:placeholder:reason') %>">
   </div>
   <div class="form-group">
     <label class="control-label"><%- t('prodDowntimes', 'PROPERTY:status') %></label>

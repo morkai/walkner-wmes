@@ -40,9 +40,9 @@
               <%- item.nc12 %>
               <input name="items[<%- i %>].nc12" type="hidden" value="<%- item.nc12 %>">
             </td>
-            <td><input class="form-control no-controls pos-printDialog-qty" name="items[<%- i %>].labelCount" type="text" max="9999999"></td>
-            <td><input class="form-control" name="items[<%- i %>].value" type="text" ></td>
-            <td><input class="form-control" name="items[<%- i %>].unit" type="text"></td>
+            <td><input class="form-control no-controls pos-printDialog-qty" name="items[<%- i %>].labelCount" type="text" autocomplete="new-password" max="9999999"></td>
+            <td><input class="form-control" name="items[<%- i %>].value" type="text" autocomplete="new-password" ></td>
+            <td><input class="form-control" name="items[<%- i %>].unit" type="text" autocomplete="new-password"></td>
           </tr>
           <% }) %>
         </tbody>

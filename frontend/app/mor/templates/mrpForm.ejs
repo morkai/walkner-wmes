@@ -5,15 +5,15 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-mrp" class="control-label"><%- t('mor', 'mrpForm:mrp') %></label>
-    <input id="<%- idPrefix %>-mrp" class="form-control" type="text" required value="<%= mrp ? mrp._id : '' %>">
+    <input id="<%- idPrefix %>-mrp" class="form-control" type="text" autocomplete="new-password" required value="<%= mrp ? mrp._id : '' %>">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-description" class="control-label"><%- t('mor', 'mrpForm:description') %></label>
-    <input id="<%- idPrefix %>-description" class="form-control" type="text" value="<%= mrp ? mrp.description : '' %>">
+    <input id="<%- idPrefix %>-description" class="form-control" type="text" autocomplete="new-password" value="<%= mrp ? mrp.description : '' %>">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-iptCheckRecipients" class="control-label"><%- t('mor', 'mrpForm:iptCheckRecipients') %></label>
-    <input id="<%- idPrefix %>-iptCheckRecipients" type="text" value="<%- mrp ? mrp.iptCheckRecipients.join(',') : '' %>">
+    <input id="<%- idPrefix %>-iptCheckRecipients" type="text" autocomplete="new-password" value="<%- mrp ? mrp.iptCheckRecipients.join(',') : '' %>">
   </div>
   <div class="form-actions">
     <button type="submit" class="btn btn-primary"><%- t('mor', 'mrpForm:submit:' + mode) %></button>

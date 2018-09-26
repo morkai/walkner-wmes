@@ -106,7 +106,7 @@ define([
       var mechOrder = this.collection.get($td.parent().attr('data-id'));
       var view = this;
 
-      var $input = $('<input type="text">');
+      var $input = $('<input type="text" autocomplete="new-password">');
 
       $td.empty().append($input);
 

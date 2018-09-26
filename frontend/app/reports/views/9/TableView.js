@@ -374,7 +374,7 @@ define([
 
     showEditorInput: function(parentEl, placeholder, value)
     {
-      $('<input type="text" maxlength="3" class="reports-9-editor">')
+      $('<input type="text" autocomplete="new-password" maxlength="3" class="reports-9-editor">')
         .attr('placeholder', typeof placeholder === 'number' ? placeholder.toLocaleString() : placeholder)
         .val(typeof value === 'number' ? value.toLocaleString() : value)
         .appendTo(parentEl)

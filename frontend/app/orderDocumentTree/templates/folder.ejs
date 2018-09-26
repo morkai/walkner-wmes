@@ -5,7 +5,7 @@
       <i class="fa fa-chevron-down"></i>
     </span>
     <% if (isEditing) { %>
-    <input class="form-control orderDocumentTree-folders-editor" type="text" value="<%= label %>" <% isNew ? '' : 'required' %> placeholder="<%- isNew ? t('orderDocumentTree', 'folders:newFolder:placeholder') : '' %>">
+    <input class="form-control orderDocumentTree-folders-editor" type="text" autocomplete="new-password" value="<%= label %>" <% isNew ? '' : 'required' %> placeholder="<%- isNew ? t('orderDocumentTree', 'folders:newFolder:placeholder') : '' %>">
     <% } %>
     <span class="orderDocumentTree-folders-label">
       <i class="fa fa-cut"></i>

@@ -15,16 +15,16 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-subject" class="control-label is-required"><%- t('suggestions', 'PROPERTY:subject') %></label>
-        <input id="<%- idPrefix %>-subject" class="form-control" type="text" name="subject" required placeholder="<%- t('suggestions', 'FORM:help:subject') %>">
+        <input id="<%- idPrefix %>-subject" class="form-control" type="text" autocomplete="new-password" name="subject" required placeholder="<%- t('suggestions', 'FORM:help:subject') %>">
       </div>
       <div class="row">
         <div class="form-group col-lg-4 has-required-select2">
           <label for="<%- idPrefix %>-section" class="control-label is-required"><%- t('suggestions', 'PROPERTY:section') %></label>
-          <input id="<%- idPrefix %>-section" type="text" name="section" required placeholder="<%- t('suggestions', 'FORM:help:section') %>">
+          <input id="<%- idPrefix %>-section" type="text" autocomplete="new-password" name="section" required placeholder="<%- t('suggestions', 'FORM:help:section') %>">
         </div>
         <div class="form-group col-lg-8 has-required-select2">
           <label for="<%- idPrefix %>-confirmer" class="control-label is-required"><%- t('suggestions', 'PROPERTY:confirmer') %></label>
-          <input id="<%- idPrefix %>-confirmer" type="text" name="confirmer" required placeholder="<%- t('suggestions', 'FORM:help:confirmer') %>">
+          <input id="<%- idPrefix %>-confirmer" type="text" autocomplete="new-password" name="confirmer" required placeholder="<%- t('suggestions', 'FORM:help:confirmer') %>">
         </div>
       </div>
       <div id="<%- idPrefix %>-panel-suggestion" class="panel panel-warning suggestions-form-typePanel">
@@ -32,7 +32,7 @@
         <div id="<%- idPrefix %>-suggestionPanelBody" class="panel-body has-lastElementRow">
           <div class="form-group has-required-select2">
             <label for="<%- idPrefix %>-suggestionOwners" class="control-label is-required"><%- t('suggestions', 'PROPERTY:suggestionOwners') %></label>
-            <input id="<%- idPrefix %>-suggestionOwners" type="text" name="suggestionOwners" required>
+            <input id="<%- idPrefix %>-suggestionOwners" type="text" autocomplete="new-password" name="suggestionOwners" required>
           </div>
           <div class="row">
             <div class="col-lg-2 form-group has-required-select2">
@@ -43,11 +43,11 @@
           <div class="row">
             <div class="col-lg-8 form-group has-required-select2">
               <label for="<%- idPrefix %>-categories" class="control-label is-required"><%- t('suggestions', 'PROPERTY:categories') %></label>
-              <input id="<%- idPrefix %>-categories" type="text" name="categories" required>
+              <input id="<%- idPrefix %>-categories" type="text" autocomplete="new-password" name="categories" required>
             </div>
             <div class="col-lg-4 form-group">
               <label for="<%- idPrefix %>-productFamily" class="control-label"><%- t('suggestions', 'PROPERTY:productFamily') %></label>
-              <input id="<%- idPrefix %>-productFamily" type="text" name="productFamily">
+              <input id="<%- idPrefix %>-productFamily" type="text" autocomplete="new-password" name="productFamily">
             </div>
           </div>
           <div class="row">
@@ -71,7 +71,7 @@
         <div class="panel-body has-lastElementRow">
           <div id="<%- idPrefix %>-kaizenOwnersFormGroup" class="form-group has-required-select2">
             <label for="<%- idPrefix %>-kaizenOwners" class="control-label is-required"><%- t('suggestions', 'PROPERTY:kaizenOwners') %></label>
-            <input id="<%- idPrefix %>-kaizenOwners" type="text" name="kaizenOwners">
+            <input id="<%- idPrefix %>-kaizenOwners" type="text" autocomplete="new-password" name="kaizenOwners">
           </div>
           <div class="row">
             <div class="form-group col-lg-2">
@@ -124,7 +124,7 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-subscribers" class="control-label"><%- t('suggestions', 'PROPERTY:subscribers') %></label>
-        <input id="<%- idPrefix %>-subscribers" type="text" name="subscribers">
+        <input id="<%- idPrefix %>-subscribers" type="text" autocomplete="new-password" name="subscribers">
         <p class="help-block"><%- t('suggestions', 'FORM:help:subscribers') %></p>
       </div>
       <% if (editMode) { %>

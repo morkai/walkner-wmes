@@ -3,8 +3,8 @@
     <input type="hidden" name="questions[<%- i %>]._id" value="<%- question._id %>">
     <%= question._id %>
   </td>
-  <td><input class="form-control" name="questions[<%- i %>].short" type="text" value="<%= question.short %>" required></td>
-  <td><input class="form-control" name="questions[<%- i %>].full" type="text" value="<%= question.full %>" required></td>
+  <td><input class="form-control" name="questions[<%- i %>].short" type="text" autocomplete="new-password" value="<%= question.short %>" required></td>
+  <td><input class="form-control" name="questions[<%- i %>].full" type="text" autocomplete="new-password" value="<%= question.full %>" required></td>
   <td class="actions">
     <div class="actions-group">
       <button class="btn btn-default opinionSurveys-form-moveRowUp" type="button"><i class="fa fa-arrow-up"></i></button>

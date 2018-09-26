@@ -7,7 +7,7 @@
       <% ['maktLanguage', 'mlgtStorageType', 'mlgtWarehouseNo', 'pkhdStorageType'].forEach(function(prop) { %>
       <div class="form-group">
         <label for="<%- idPrefix %>-import-<%- prop %>"><%- t('kanban', 'settings:import:' + prop) %></label>
-        <input id="<%- idPrefix %>-import-<%- prop %>" class="form-control" name="kanban.import.<%- prop %>" type="text" data-change-delay="0">
+        <input id="<%- idPrefix %>-import-<%- prop %>" class="form-control" name="kanban.import.<%- prop %>" type="text" autocomplete="new-password" data-change-delay="0">
       </div>
       <% }) %>
     </div>

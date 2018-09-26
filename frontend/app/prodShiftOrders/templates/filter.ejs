@@ -19,15 +19,15 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-orderId"><%- t('prodShiftOrders', 'filter:orderId') %></label>
-    <input id="<%- idPrefix %>-orderId" class="form-control prodShiftOrders-filter-orderId" name="orderId" type="text">
+    <input id="<%- idPrefix %>-orderId" class="form-control prodShiftOrders-filter-orderId" name="orderId" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-bom"><%- t('prodShiftOrders', 'filter:bom') %></label>
-    <input id="<%- idPrefix %>-bom" class="form-control prodShiftOrders-filter-orderId" name="bom" type="text">
+    <input id="<%- idPrefix %>-bom" class="form-control prodShiftOrders-filter-orderId" name="bom" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-mrp"><%- t('prodShiftOrders', 'filter:mrp') %></label>
-    <input id="<%- idPrefix %>-mrp" name="mrp" type="text" data-placeholder=" ">
+    <input id="<%- idPrefix %>-mrp" name="mrp" type="text" autocomplete="new-password" data-placeholder=" ">
   </div>
   <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>
   <%- renderLimit() %>

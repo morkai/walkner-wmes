@@ -5,15 +5,15 @@
     <div class="panel-body">
       <div class="form-group">
         <label for="<%- idPrefix %>-id" class="control-label is-required"><%- t('d8Areas', 'PROPERTY:_id') %></label>
-        <input id="<%- idPrefix %>-id" class="form-control" type="text" name="_id" autofocus required maxlength="20" pattern="^[A-Za-z0-9-_]+$">
+        <input id="<%- idPrefix %>-id" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="20" pattern="^[A-Za-z0-9-_]+$">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('d8Areas', 'PROPERTY:name') %></label>
-        <input id="<%- idPrefix %>-name" class="form-control" type="text" name="name" required maxlength="100">
+        <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-manager" class="control-label"><%- t('d8Areas', 'PROPERTY:manager') %></label>
-        <input id="<%- idPrefix %>-manager" type="text" name="manager">
+        <input id="<%- idPrefix %>-manager" type="text" autocomplete="new-password" name="manager">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-position" class="control-label is-required"><%- t('d8Areas', 'PROPERTY:position') %></label>

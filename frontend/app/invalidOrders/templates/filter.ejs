@@ -9,11 +9,11 @@
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-_id"><%- t('invalidOrders', 'PROPERTY:orderNo') %></label>
-    <input id="<%- idPrefix %>-_id" class="form-control" name="_id" type="text">
+    <input id="<%- idPrefix %>-_id" class="form-control" name="_id" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-mrp"><%- t('invalidOrders', 'PROPERTY:mrp') %></label>
-    <input id="<%- idPrefix %>-mrp" name="mrp" type="text">
+    <input id="<%- idPrefix %>-mrp" name="mrp" type="text" autocomplete="new-password">
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
