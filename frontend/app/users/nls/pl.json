@@ -138,6 +138,7 @@
   "PRIVILEGE:REPORTS:9:VIEW": "Raporty: Planowane obciążenie linii",
   "PRIVILEGE:XICONF:VIEW": "Xiconf: przeglądanie",
   "PRIVILEGE:XICONF:MANAGE": "Xiconf: zarządzanie",
+  "PRIVILEGE:XICONF:MANAGE:HID_LAMPS": "Xiconf: Oprawy HID: zarządzanie",
   "PRIVILEGE:XICONF:NOTIFY": "Xiconf: powiadamianie",
   "PRIVILEGE:ICPO:VIEW": "ICPO: przeglądanie",
   "PRIVILEGE:ICPO:MANAGE": "ICPO: zarządzanie",

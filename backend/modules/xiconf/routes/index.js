@@ -38,6 +38,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   const canView = userModule.auth('XICONF:VIEW');
   const canViewLocal = userModule.auth('LOCAL', 'XICONF:VIEW');
   const canManage = userModule.auth('XICONF:MANAGE');
+  const canManageHidLamps = userModule.auth('XICONF:MANAGE', 'XICONF:MANAGE:HID_LAMPS');
   const canManageLocal = userModule.auth('LOCAL', 'XICONF:MANAGE');
   const remoteRequests = {};
 
@@ -352,10 +353,10 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   // HID Lamps
   //
   express.get('/xiconf/hidLamps', canView, express.crud.browseRoute.bind(null, app, XiconfHidLamp));
-  express.post('/xiconf/hidLamps', canManage, express.crud.addRoute.bind(null, app, XiconfHidLamp));
+  express.post('/xiconf/hidLamps', canManageHidLamps, express.crud.addRoute.bind(null, app, XiconfHidLamp));
   express.get('/xiconf/hidLamps/:id', canView, express.crud.readRoute.bind(null, app, XiconfHidLamp));
-  express.put('/xiconf/hidLamps/:id', canManage, express.crud.editRoute.bind(null, app, XiconfHidLamp));
-  express.delete('/xiconf/hidLamps/:id', canManage, express.crud.deleteRoute.bind(null, app, XiconfHidLamp));
+  express.put('/xiconf/hidLamps/:id', canManageHidLamps, express.crud.editRoute.bind(null, app, XiconfHidLamp));
+  express.delete('/xiconf/hidLamps/:id', canManageHidLamps, express.crud.deleteRoute.bind(null, app, XiconfHidLamp));
 
   //
   // Component Weights

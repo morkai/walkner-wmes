@@ -417,7 +417,14 @@ define([
       {
         if (_.isFunction(privileges))
         {
-          if (!privileges())
+          if (!privileges(user))
+          {
+            continue;
+          }
+        }
+        else if (Array.isArray(privileges))
+        {
+          if (!user.isAllowedTo.apply(user, privileges))
           {
             continue;
           }

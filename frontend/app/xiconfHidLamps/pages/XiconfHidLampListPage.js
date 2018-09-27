@@ -3,11 +3,13 @@
 define([
   'app/i18n',
   'app/core/pages/FilteredListPage',
+  'app/core/util/pageActions',
   '../views/XiconfHidLampListView',
   '../views/XiconfHidLampFilterView'
 ], function(
   t,
   FilteredListPage,
+  pageActions,
   XiconfHidLampListView,
   XiconfHidLampFilterView
 ) {
@@ -18,6 +20,11 @@ define([
     FilterView: XiconfHidLampFilterView,
 
     ListView: XiconfHidLampListView,
+
+    actions: function()
+    {
+      return [pageActions.add(this.collection, ['XICONF:MANAGE', 'XICONF:MANAGE:HID_LAMPS'])];
+    },
 
     breadcrumbs: [
       t.bound('xiconfHidLamps', 'BREADCRUMBS:base'),

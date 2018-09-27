@@ -8,6 +8,7 @@ define([
   '../user',
   '../core/pages/DetailsPage',
   '../core/util/showDeleteFormPage',
+  '../core/util/pageActions',
   './XiconfHidLamp'
 ], function(
   _,
@@ -17,13 +18,14 @@ define([
   user,
   DetailsPage,
   showDeleteFormPage,
+  pageActions,
   XiconfHidLamp
 ) {
   'use strict';
 
   var nls = 'i18n!app/nls/xiconfHidLamps';
   var canView = user.auth('XICONF:VIEW');
-  var canManage = user.auth('XICONF:MANAGE');
+  var canManage = user.auth('XICONF:MANAGE', 'XICONF:MANAGE:HID_LAMPS');
 
   router.map('/xiconf/hidLamps', canView, function(req)
   {
@@ -50,7 +52,16 @@ define([
         return new DetailsPage({
           detailsTemplate: detailsTemplate,
           model: new XiconfHidLamp({_id: req.params.id}),
-          baseBreadcrumb: true
+          baseBreadcrumb: true,
+          actions: function()
+          {
+            var privileges = ['XICONF:MANAGE', 'XICONF:MANAGE:HID_LAMPS'];
+
+            return [
+              pageActions.edit(this.model, privileges),
+              pageActions.delete(this.model, privileges)
+            ];
+          }
         });
       }
     );
