@@ -2406,6 +2406,11 @@ module.exports = function setUpGenerator(app, module)
           break;
         }
 
+        if (nextOrderState === candidate.orderState)
+        {
+          continue;
+        }
+
         if (!LOG_LINES || LOG_LINES[lineState._id])
         {
           log('        TRYING...');
@@ -2433,6 +2438,20 @@ module.exports = function setUpGenerator(app, module)
 
       const bestCandidate = candidates[0];
       const completion = Math.ceil(bestCandidate.completion * 100);
+
+      // Reset the assigned groups, so the orders can be picked up by other lines
+      for (let i = 1; i < candidates.length; ++i)
+      {
+        const {orderState} = candidates[i];
+        const orderLines = state.orderToLines.get(orderState.order._id);
+
+        if (orderLines && orderLines.size)
+        {
+          continue;
+        }
+
+        orderState.group = null;
+      }
 
       if (state.generateCallCount === 1)
       {
@@ -2463,12 +2482,6 @@ module.exports = function setUpGenerator(app, module)
       }
 
       candidate = bestCandidate;
-
-      // Reset the assigned groups, so the orders can be picked up by other lines
-      for (let i = 1; i < candidates.length; ++i)
-      {
-        candidates[i].orderState.group = null;
-      }
     }
 
     mergeOrderCandidate(state, lineState, candidate);
