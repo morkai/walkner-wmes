@@ -32,7 +32,7 @@ define([
 
         var selectedOrgUnits = {};
 
-        this.$('input[type="text" autocomplete="new-password"]').each(function()
+        this.$('input[type="text"]').each(function()
         {
           if (this.value)
           {

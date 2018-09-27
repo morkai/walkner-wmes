@@ -82,8 +82,8 @@ define([
           this.onVkbValueChange(e.target);
         }
       },
-      'input input[type="text" autocomplete="new-password"][max]': 'checkMinMaxValidity',
-      'blur input[type="text" autocomplete="new-password"][max]': 'checkMinMaxValidity',
+      'input input[type="text"][max]': 'checkMinMaxValidity',
+      'blur input[type="text"][max]': 'checkMinMaxValidity',
       'keypress .select2-container': function(e)
       {
         if (e.which === 13)
