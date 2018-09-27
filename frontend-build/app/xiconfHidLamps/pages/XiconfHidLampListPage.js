@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["app/i18n","app/core/pages/FilteredListPage","../views/XiconfHidLampListView","../views/XiconfHidLampFilterView"],function(i,e,s,n){"use strict";return e.extend({FilterView:n,ListView:s,breadcrumbs:[i.bound("xiconfHidLamps","BREADCRUMBS:base"),i.bound("xiconfHidLamps","BREADCRUMBS:browse")]})});
+define(["app/i18n","app/core/pages/FilteredListPage","app/core/util/pageActions","../views/XiconfHidLampListView","../views/XiconfHidLampFilterView"],function(i,e,n,t,s){"use strict";return e.extend({FilterView:s,ListView:t,actions:function(){return[n.add(this.collection,["XICONF:MANAGE","XICONF:MANAGE:HID_LAMPS"])]},breadcrumbs:[i.bound("xiconfHidLamps","BREADCRUMBS:base"),i.bound("xiconfHidLamps","BREADCRUMBS:browse")]})});
