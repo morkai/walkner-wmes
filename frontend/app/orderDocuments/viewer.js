@@ -16,13 +16,13 @@ Viewer.TEMPLATE =
   '<ul class="viewer-toolbar">' +
   '<li id="lockUi" title="Zablokuj interfejs"><span class="fa fa-lock"></span></li>' +
   '<li id="pdf" title="Pokaż oryginalny plik PDF"><span class="fa fa-file-pdf-o"></span></li>' +
-  '<li class="viewer-zoom-in" data-action="zoom-in" title="Powiększ"><span class="fa fa-plus" data-action="zoom-in"></span></li>' +
-  '<li class="viewer-zoom-out" data-action="zoom-out" title="Pomniejsz"><span class="fa fa-minus" data-action="zoom-out"></span></li>' +
-  '<li class="viewer-one-to-one" data-action="one-to-one" title="Dopasuj do strony">1:1</li>' +
-  '<li class="viewer-reset" data-action="reset" title="Resetuj widok">0</li>' +
-  '<li class="viewer-rotate-right" data-action="rotate-right" title="Obróć w prawo"><span class="fa fa-rotate-right" data-action="rotate-right"></span></li>' +
-  '<li class="viewer-flip-horizontal" data-action="flip-horizontal" title="Odwróć poziomo"><span class="fa fa-arrows-h" data-action="flip-horizontal"></span></li>' +
-  '<li class="viewer-flip-vertical" data-action="flip-vertical" title="Odwróć pionowo"><span class="fa fa-arrows-v" data-action="flip-vertical"></span></li>';
+  '<li class="viewer-zoom-in" data-viewer-action="zoom-in" title="Powiększ"><span class="fa fa-plus"></span></li>' +
+  '<li class="viewer-zoom-out" data-viewer-action="zoom-out" title="Pomniejsz"><span class="fa fa-minus"></span></li>' +
+  '<li class="viewer-one-to-one" data-viewer-action="one-to-one" title="Dopasuj do strony">1:1</li>' +
+  '<li class="viewer-reset" data-viewer-action="reset" title="Resetuj widok">0</li>' +
+  '<li class="viewer-rotate-right" data-viewer-action="rotate-right" title="Obróć w prawo"><span class="fa fa-rotate-right"></span></li>' +
+  '<li class="viewer-flip-horizontal" data-viewer-action="flip-horizontal" title="Odwróć poziomo"><span class="fa fa-arrows-h"></span></li>' +
+  '<li class="viewer-flip-vertical" data-viewer-action="flip-vertical" title="Odwróć pionowo"><span class="fa fa-arrows-v"></span></li>';
 
   if (PAGE_COUNT > 1)
   {
@@ -32,8 +32,8 @@ Viewer.TEMPLATE =
     }
 
     Viewer.TEMPLATE +=
-      '<li class="viewer-prev" data-action="prev" title="Poprzednia strona"><span class="fa fa-chevron-left" data-action="prev"></span></li>' +
-      '<li class="viewer-next" data-action="next" title="Następna strona"><span class="fa fa-chevron-right" data-action="next"></span></li>';
+      '<li class="viewer-prev" data-viewer-action="prev" title="Poprzednia strona"><span class="fa fa-chevron-left"></span></li>' +
+      '<li class="viewer-next" data-viewer-action="next" title="Następna strona"><span class="fa fa-chevron-right"></span></li>';
 
     if (PAGE_COUNT > 9)
     {
@@ -60,7 +60,10 @@ var viewer = new Viewer(document.getElementById('images'), {
   navbar: false,
   title: false,
   tooltip: false,
-  initialIndex: parseInt(sessionStorage.getItem('PAGE_' + (NC15 || '')), 10) || 0,
+  backdrop: false,
+  initialViewIndex: parseInt(sessionStorage.getItem('PAGE_' + (NC15 || '')), 10) || 0,
+  toolbar: {},
+  toggleOnDblclick: false,
   view: function(e)
   {
     document.getElementById('jumpForm').classList.add('hidden');
