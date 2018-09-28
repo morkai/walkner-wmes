@@ -116,7 +116,7 @@ define([
     return _.values(map);
   }
 
-  function createDefaultRqlQuery(rql, term)
+  function createDefaultRqlQuery(rql, term, options)
   {
     term = term.trim();
 
@@ -127,7 +127,7 @@ define([
       term = setUpUserSelect2.transliterate(term);
     }
 
-    var options = {
+    var rqlQuery = {
       fields: {},
       sort: {},
       limit: 20,
@@ -140,9 +140,14 @@ define([
       }
     };
 
-    options.sort[property] = 1;
+    if (options.activeOnly)
+    {
+      rqlQuery.selector.args.push({name: 'eq', args: ['active', true]});
+    }
 
-    return rql.Query.fromObject(options);
+    rqlQuery.sort[property] = 1;
+
+    return rql.Query.fromObject(rqlQuery);
   }
 
   function setUpUserSelect2($input, options)
@@ -155,7 +160,7 @@ define([
     var rqlQueryProvider = options.rqlQueryProvider ? options.rqlQueryProvider : createDefaultRqlQuery;
     var userFilter = options.userFilter ? options.userFilter : null;
 
-    $input.select2(_.extend({
+    $input.select2(_.assign({
       openOnEnter: null,
       allowClear: true,
       minimumInputLength: 3,
@@ -165,7 +170,7 @@ define([
         quietMillis: 300,
         url: function(term)
         {
-          return '/users' + '?' + rqlQueryProvider(rql, term);
+          return '/users' + '?' + rqlQueryProvider(rql, term, options);
         },
         results: function(data, page, query)
         {

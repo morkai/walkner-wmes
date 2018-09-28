@@ -429,7 +429,8 @@ define([
 
       setUpUserSelect2(this.$id('subscribers'), {
         multiple: true,
-        textFormatter: formatUserSelect2Text
+        textFormatter: formatUserSelect2Text,
+        activeOnly: !this.options.editMode
       });
 
       this.setUpConfirmerSelect2();
@@ -446,7 +447,8 @@ define([
     {
       var confirmer = this.model.get('confirmer');
       var $confirmer = setUpUserSelect2(this.$id('confirmer'), {
-        textFormatter: formatUserSelect2Text
+        textFormatter: formatUserSelect2Text,
+        activeOnly: !this.options.editMode
       });
 
       if (confirmer)
@@ -462,6 +464,7 @@ define([
     {
       var isEditMode = this.options.editMode;
       var isMultiOwner = this.isMultiOwner();
+      var activeOnly = !isEditMode;
       var model = this.model;
       var currentUser = null;
 
@@ -477,14 +480,23 @@ define([
         };
       }
 
-      setUpUserSelect2(this.$id('nearMissOwners'), {multiple: isMultiOwner, textFormatter: formatUserSelect2Text})
-        .select2('data', prepareOwners('nearMiss', isMultiOwner));
+      setUpUserSelect2(this.$id('nearMissOwners'), {
+        multiple: isMultiOwner,
+        textFormatter: formatUserSelect2Text,
+        activeOnly: activeOnly
+      }).select2('data', prepareOwners('nearMiss', isMultiOwner));
 
-      setUpUserSelect2(this.$id('suggestionOwners'), {multiple: true, textFormatter: formatUserSelect2Text})
-        .select2('data', prepareOwners('suggestion', true));
+      setUpUserSelect2(this.$id('suggestionOwners'), {
+        multiple: true,
+        textFormatter: formatUserSelect2Text,
+        activeOnly: activeOnly
+      }).select2('data', prepareOwners('suggestion', true));
 
-      setUpUserSelect2(this.$id('kaizenOwners'), {multiple: true, textFormatter: formatUserSelect2Text})
-        .select2('data', prepareOwners('kaizen', true));
+      setUpUserSelect2(this.$id('kaizenOwners'), {
+        multiple: true,
+        textFormatter: formatUserSelect2Text,
+        activeOnly: activeOnly
+      }).select2('data', prepareOwners('kaizen', true));
 
       function prepareOwners(type, multi)
       {

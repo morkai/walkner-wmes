@@ -225,7 +225,8 @@ define([
         textFormatter: function(user, name)
         {
           return name;
-        }
+        },
+        activeOnly: !this.options.editMode
       });
 
       if (owner)
@@ -245,7 +246,8 @@ define([
         textFormatter: function(user, name)
         {
           return name;
-        }
+        },
+        activeOnly: !this.options.editMode
       });
 
       if (participants && participants.length)
@@ -267,7 +269,8 @@ define([
         textFormatter: function(user, name)
         {
           return name;
-        }
+        },
+        activeOnly: !this.options.editMode
       });
 
       if (users && users.length)

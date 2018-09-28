@@ -427,7 +427,8 @@ define([
         textFormatter: function(user, name)
         {
           return name;
-        }
+        },
+        activeOnly: !this.options.editMode
       });
 
       if (observer)
@@ -446,7 +447,8 @@ define([
         textFormatter: function(user, name)
         {
           return name;
-        }
+        },
+        activeOnly: !this.options.editMode
       });
 
       if (superior)
