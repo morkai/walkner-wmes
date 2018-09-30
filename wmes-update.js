@@ -37,7 +37,7 @@ var toUpdate = [
       mrpControllers: ['KH9'],
       prodFlow: new ObjectId('584435222b4295a7fb91ee5c'),
       workCenter: 'OUTD4-3',
-      prodLine: 'MCL3'
+      prodLine: 'LM-35'
     },
     fteMasterEntry: null
   }
