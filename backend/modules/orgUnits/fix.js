@@ -9,7 +9,8 @@ module.exports = function setUpOrgUnitsFix(app, module)
     'PSR': 'LM-28',
     'HCS': 'LM-24',
     'GS': 'LM-27',
-    'IR3': 'LM-26'
+    'IR3': 'LM-26',
+    'MCL3': 'LM-35'
   };
   const prodLineToOrgUnits = new Map();
   const prodLineToPlainOrgUnits = new Map();
