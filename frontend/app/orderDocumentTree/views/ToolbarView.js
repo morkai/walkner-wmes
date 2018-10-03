@@ -36,6 +36,11 @@ define([
         this.model.setDisplayMode(this.$('input[name="displayMode"]:checked').val());
       },
 
+      'change #-date': function()
+      {
+        this.model.setDateFilter(this.$id('date').val());
+      },
+
       'submit #-searchForm': function()
       {
         this.model.setSearchPhrase(this.$id('searchPhrase').val());
@@ -148,6 +153,7 @@ define([
       return _.assign(View.prototype.serialize.apply(this, arguments), {
         displayMode: this.model.getDisplayMode(),
         searchPhrase: this.model.getSearchPhrase(),
+        dateFilter: this.model.getDateFilter(),
         folderCount: this.serializeFolderCount(),
         fileCount: this.serializeFileCount(),
         markedFileCount: this.model.getMarkedFileCount()

@@ -36,7 +36,8 @@ define([
           model: new OrderDocumentTree({
             selectedFile: req.query.file || null,
             selectedFolder: req.query.folder || null,
-            searchPhrase: req.query.search || ''
+            searchPhrase: req.query.search || '',
+            dateFilter: req.query.date || null
           }, {
             uploads: uploads
           })

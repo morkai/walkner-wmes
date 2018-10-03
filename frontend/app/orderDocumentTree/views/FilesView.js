@@ -243,6 +243,7 @@ define([
       view.listenTo(tree, 'change:selectedFolder change:searchPhrase', view.render);
       view.listenTo(tree, 'change:selectedFile', view.onSelectedFileChange);
       view.listenTo(tree, 'change:markedFiles', view.onMarkedFilesChange);
+      view.listenTo(tree, 'change:dateFilter', view.onDateFilterChange);
       view.listenTo(tree.files, 'request', view.onFilesRequest);
       view.listenTo(tree.files, 'error', view.onFilesError);
       view.listenTo(tree.files, 'reset', view.onFilesReset);
@@ -306,7 +307,29 @@ define([
 
     serializeFiles: function()
     {
-      var files = this.model.files.map(this.serializeFile);
+      var dateFilter = this.model.getDateFilter();
+      var filterFile = function() { return true; };
+
+      if (dateFilter)
+      {
+        dateFilter += 'T00:00:00.000Z';
+        filterFile = function(file)
+        {
+          var files = file.get('files');
+
+          for (var i = 0; i < files.length; ++i)
+          {
+            if (files[i].date === dateFilter)
+            {
+              return true;
+            }
+          }
+
+          return false;
+        };
+      }
+
+      var files = this.model.files.filter(filterFile).map(this.serializeFile);
       var moreFiles = this.serializeMoreFiles();
 
       if (moreFiles)
@@ -685,6 +708,11 @@ define([
       this.$file(file.id).toggleClass('is-marked', state);
     },
 
+    onDateFilterChange: function()
+    {
+      this.render();
+    },
+
     onFilesRequest: function()
     {
       this.hidePreview();
@@ -703,8 +731,9 @@ define([
     onFilesReset: function()
     {
       var html = '';
+      var files = this.serializeFiles();
 
-      if (this.model.files.length === 0 && this.$('.orderDocumentTree-files-folder').length === 0)
+      if (files.length === 0 && this.$('.orderDocumentTree-files-folder').length === 0)
       {
         html = '<p>'
           + t('orderDocumentTree', 'files:' + (this.model.hasSearchPhrase() ? 'noResults' : 'empty'))
@@ -712,7 +741,7 @@ define([
       }
       else
       {
-        this.serializeFiles().forEach(function(file)
+        files.forEach(function(file)
         {
           html += renderFile({file: file});
         });

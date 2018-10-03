@@ -7,6 +7,9 @@
       </span>
     </div>
   </form>
+  <div class="btn-group orderDocumentTree-toolbar-group">
+    <input id="<%- idPrefix %>-date" type="date" class="form-control" value="<%- dateFilter || '' %>" min="2000-01-01" max="<%- time.utc.getMoment(Date.now()).add(1, 'years').format('YYYY-MM-DD') %>">
+  </div>
   <div class="btn-group orderDocumentTree-toolbar-group" data-toggle="buttons">
     <label class="btn btn-default <%- displayMode === 'tiles' ? 'active' : '' %>" title="<%- t('orderDocumentTree', 'toolbar:displayMode:tiles') %>">
       <input type="radio" name="displayMode" value="tiles" <%- displayMode === 'tiles' ? 'checked' : '' %>> <i class="fa fa-th"></i>

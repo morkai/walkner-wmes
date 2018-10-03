@@ -99,7 +99,7 @@ define([
       tree.subscribe(page.pubsub);
 
       page.listenTo(tree, 'change:selectedFolder change:searchPhrase', page.onSelectedChange.bind(page, true));
-      page.listenTo(tree, 'change:selectedFile', page.onSelectedChange.bind(page, false));
+      page.listenTo(tree, 'change:selectedFile change:dateFilter', page.onSelectedChange.bind(page, false));
       page.listenTo(tree.files, 'remove', page.onFileRemove);
       page.listenTo(tree.uploads, 'add remove', page.onUploadChange);
 
@@ -231,6 +231,11 @@ define([
       if (this.model.hasSearchPhrase())
       {
         url += 'search=' + encodeURIComponent(this.model.get('searchPhrase')) + '&';
+      }
+
+      if (this.model.hasDateFilter())
+      {
+        url += 'date=' + this.model.getDateFilter() + '&';
       }
 
       this.broker.publish('router.navigate', {

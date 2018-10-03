@@ -4,6 +4,7 @@ define([
   'underscore',
   'jquery',
   '../user',
+  '../time',
   '../core/Model',
   './OrderDocumentFolder',
   './OrderDocumentFolderCollection',
@@ -13,6 +14,7 @@ define([
   _,
   $,
   user,
+  time,
   Model,
   OrderDocumentFolder,
   OrderDocumentFolderCollection,
@@ -38,6 +40,7 @@ define([
         markedFiles: {},
         expandedFolders: {},
         searchPhrase: '',
+        dateFilter: null,
         displayMode: localStorage[DISPLAY_MODE_STORAGE_KEY] || DISPLAY_MODE.TILES
       };
     },
@@ -72,6 +75,33 @@ define([
     setDisplayMode: function(displayMode)
     {
       this.set('displayMode', localStorage[DISPLAY_MODE_STORAGE_KEY] = displayMode);
+    },
+
+    hasDateFilter: function()
+    {
+      return this.get('dateFilter') !== null;
+    },
+
+    getDateFilter: function()
+    {
+      return this.get('dateFilter');
+    },
+
+    setDateFilter: function(dateFilter)
+    {
+      var moment = time.utc.getMoment(dateFilter, 'YYYY-MM-DD');
+
+      if (!moment.isValid() || moment.diff('2000-01-01T00:00:00Z') < 0)
+      {
+        dateFilter = null;
+      }
+
+      if (dateFilter !== this.get('dateFilter'))
+      {
+        this.unmarkAllFiles();
+
+        this.set('dateFilter', dateFilter);
+      }
     },
 
     hasSearchPhrase: function()
