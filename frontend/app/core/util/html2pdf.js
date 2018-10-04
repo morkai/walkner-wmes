@@ -4,11 +4,13 @@ define([
   'underscore',
   'jquery',
   'app/i18n',
+  'app/broker',
   'app/viewport'
 ], function(
   _,
   $,
   t,
+  broker,
   viewport
 ) {
   'use strict';
@@ -93,6 +95,8 @@ define([
 
       win.focus();
     }
+
+    broker.publish('html2pdf.completed');
   }
 
   function printInPrinter(msg, printer, hash)
@@ -131,6 +135,11 @@ define([
         time: 2500,
         text: t('core', 'html2pdf:printing:failure')
       });
+    });
+
+    req.always(function()
+    {
+      broker.publish('html2pdf.completed');
     });
   }
 });

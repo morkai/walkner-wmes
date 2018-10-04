@@ -203,7 +203,7 @@ define([
             var $fa = $btn.find('.fa').removeClass('fa-print').addClass('fa-spinner fa-spin');
             var sandbox = options.view.broker.sandbox();
 
-            sandbox.subscribe('router.dispatching', unlock);
+            sandbox.subscribe('html2pdf.completed', unlock);
 
             getPrinters(options.tag, function(printers)
             {
