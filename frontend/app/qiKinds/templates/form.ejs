@@ -11,6 +11,12 @@
         <label for="<%- idPrefix %>-division" class="control-label"><%- t('qiKinds', 'PROPERTY:division') %></label>
         <input id="<%- idPrefix %>-division" type="text" autocomplete="new-password" name="division">
       </div>
+      <div class="checkbox">
+        <label for="<%- idPrefix %>-order">
+          <input id="<%- idPrefix %>-order" type="checkbox" name="order" value="true">
+          <%- t('qiKinds', 'PROPERTY:order') %>
+        </label>
+      </div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

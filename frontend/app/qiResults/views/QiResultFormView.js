@@ -39,7 +39,7 @@ define([
 
     template: formTemplate,
 
-    events: _.extend({
+    events: _.assign({
 
       'input #-orderNo': function()
       {
@@ -54,7 +54,11 @@ define([
 
         this.$id('faultDescription').val(name + (description ? (':\n' + description) : ''));
       },
-      'change #-kind': 'updateDivision',
+      'change #-kind': function()
+      {
+        this.updateDivision();
+        this.toggleRequireOrder();
+      },
       'click #-addAction': 'addEmptyAction',
       'click [name="removeAction"]': function(e)
       {
@@ -288,6 +292,14 @@ define([
       formData.okFile = '';
       formData.nokFile = '';
 
+      if (formData.orderNo === '000000000')
+      {
+        formData.orderNo = '';
+        formData.nc12 = '';
+        formData.productFamily = '';
+        formData.productName = '';
+      }
+
       return formData;
     },
 
@@ -357,6 +369,14 @@ define([
         });
       });
 
+      if (!formData.orderNo && !qiDictionaries.kinds.get(formData.kind).get('order'))
+      {
+        formData.orderNo = '000000000';
+        formData.nc12 = '000000000000';
+        formData.productFamily = '000000';
+        formData.productName = '0';
+      }
+
       return formData;
     },
 
@@ -380,6 +400,7 @@ define([
       this.setUpLeaderSelect2('leader');
       buttonGroup.toggle(this.$id('result'));
       this.toggleRoleFields();
+      this.toggleRequireOrder();
       this.findOrder();
     },
 
@@ -507,9 +528,9 @@ define([
         view.findOrderReq = null;
       }
 
-      $orderNo[0].setCustomValidity(t('qiResults', 'FORM:ERROR:orderNo'));
+      $orderNo[0].setCustomValidity($orderNo[0].required ? t('qiResults', 'FORM:ERROR:orderNo') : '');
 
-      var orderNo = view.$id('orderNo').val().replace(/[^0-9]+/g, '');
+      var orderNo = view.$id('orderNo').val().replace(/[^0-9]+/g, '').replace(/^0+/, '');
 
       if (orderNo.length !== 9)
       {
@@ -527,6 +548,8 @@ define([
       req.always(function()
       {
         view.findOrderReq = null;
+
+        $orderNo[0].setCustomValidity(t('qiResults', 'FORM:ERROR:orderNo'));
       });
 
       req.done(function(data)
@@ -623,6 +646,29 @@ define([
       var kindsDivision = kind.get('division');
 
       $division.val(kindsDivision || ordersDivision);
+    },
+
+    toggleRequireOrder: function()
+    {
+      var kind = qiDictionaries.kinds.get(this.$id('kind').val());
+
+      if (!kind)
+      {
+        return;
+      }
+
+      var $orderGroup = this.$id('orderGroup');
+      var $orderNo = this.$id('orderNo');
+      var required = !$orderNo.prop('disabled') && !!kind.get('order');
+
+      $orderNo[0].labels[0].classList.toggle('is-required', required);
+
+      if (!required && $orderNo.val().trim() === '')
+      {
+        $orderNo[0].setCustomValidity('');
+      }
+
+      $orderGroup.find('input').prop('required', required);
     },
 
     updateLines: function(orderLines)

@@ -14,6 +14,10 @@ module.exports = function setupQiKindModel(app, mongoose)
       type: String,
       ref: 'Division',
       default: null
+    },
+    order: {
+      type: Boolean,
+      default: true
     }
   }, {
     id: false

@@ -9,7 +9,7 @@
           <label class="btn btn-default qiResults-filter-nok"><input id="<%- idPrefix %>-nok" type="radio" name="ok" value="false"> NOK</label>
         </div>
       </div>
-      <div class="row">
+      <div id="<%- idPrefix %>-orderGroup" class="row">
         <div class="col-lg-2 form-group">
           <label for="<%- idPrefix %>-orderNo" class="control-label is-required"><%- t('qiResults', 'PROPERTY:orderNo') %></label>
           <input id="<%- idPrefix %>-orderNo" name="orderNo" class="form-control no-controls" type="number" required min="100000000" max="999999999" data-role="inspector">
@@ -29,7 +29,7 @@
       </div>
       <div class="row">
         <div class="col-lg-2 form-group">
-          <label for="<%- idPrefix %>-division" class="control-label"><%- t('qiResults', 'PROPERTY:division') %></label>
+          <label for="<%- idPrefix %>-division" class="control-label is-required"><%- t('qiResults', 'PROPERTY:division') %></label>
           <select id="<%- idPrefix %>-division" name="division" class="form-control" required data-role="inspector">
             <option></option>
             <% divisions.forEach(function(division) { %>

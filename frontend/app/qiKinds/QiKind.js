@@ -34,6 +34,8 @@ define([
         ? (division ? division.getLabel() : obj.division)
         : t.bound('qiKinds', 'ordersDivision');
 
+      obj.order = t('core', 'BOOL:' + obj.order);
+
       return obj;
     }
 

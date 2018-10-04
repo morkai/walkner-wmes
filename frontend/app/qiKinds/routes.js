@@ -38,7 +38,8 @@ define([
           collection: new QiKindCollection(null, {rqlQuery: req.rql}),
           columns: [
             {id: 'name', className: 'is-min'},
-            {id: 'division'}
+            {id: 'division'},
+            {id: 'order', className: 'is-min'}
           ]
         });
       }

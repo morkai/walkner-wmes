@@ -19,6 +19,7 @@
 
   "PROPERTY:name": "Nazwa",
   "PROPERTY:division": "Wydział",
+  "PROPERTY:order": "Wymagane zlecenie?",
 
   "ordersDivision": "centrum produkcyjne ze zlecenia",
 
