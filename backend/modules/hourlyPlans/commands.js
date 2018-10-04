@@ -13,6 +13,8 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
   const divisionsModule = app[hourlyPlansModule.config.divisionsId];
   const HourlyPlan = mongoose.model('HourlyPlan');
 
+  const queues = new Map();
+
   app[hourlyPlansModule.config.sioId].sockets.on('connection', function(socket)
   {
     socket.on('hourlyPlans.findOrCreate', findOrCreate.bind(null, socket));
@@ -78,7 +80,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       shift: data.shift
     };
 
-    HourlyPlan.findOne(condition, function(err, hourlyPlan)
+    HourlyPlan.findOne(condition, (err, hourlyPlan) =>
     {
       if (err)
       {
@@ -107,6 +109,37 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
     });
   }
 
+  function scheduleUpdate(id, reply, update)
+  {
+    if (!queues.has(id))
+    {
+      queues.set(id, []);
+    }
+
+    queues.get(id).push({update, reply});
+
+    updateNext(id);
+  }
+
+  function updateNext(id)
+  {
+    const queue = queues.get(id);
+
+    if (queue.length === 0)
+    {
+      return queues.delete(id);
+    }
+
+    const next = queue.shift();
+
+    next.update(err =>
+    {
+      next.reply(err);
+
+      setImmediate(updateNext, id);
+    });
+  }
+
   function updateCount(socket, data, reply)
   {
     if (!_.isFunction(reply))
@@ -122,52 +155,55 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       return reply(new Error('INPUT'));
     }
 
-    const user = socket.handshake.user;
-
-    HourlyPlan.findById(data._id, {createdAt: 1}).lean().exec(function(err, hourlyPlan)
+    scheduleUpdate(data._id, reply, done =>
     {
-      if (err)
-      {
-        return reply(err);
-      }
+      const user = socket.handshake.user;
 
-      if (hourlyPlan === null)
-      {
-        return reply(new Error('UNKNOWN'));
-      }
-
-      if (!canManage(user, hourlyPlan))
-      {
-        return reply(new Error('AUTH'));
-      }
-
-      const update = {$set: {
-        updatedAt: new Date(),
-        updater: userModule.createUserInfo(user, socket)
-      }};
-      let field = 'flows.' + data.flowIndex;
-
-      if (_.isNumber(data.hourIndex))
-      {
-        field += '.hours.' + data.hourIndex;
-      }
-      else
-      {
-        field += '.level';
-      }
-
-      update.$set[field] = data.newValue;
-
-      HourlyPlan.collection.update({_id: hourlyPlan._id}, update, function(err)
+      HourlyPlan.findById(data._id, {createdAt: 1}).lean().exec((err, hourlyPlan) =>
       {
         if (err)
         {
-          return reply(err);
+          return done(err);
         }
 
-        reply();
+        if (hourlyPlan === null)
+        {
+          return done(new Error('UNKNOWN'));
+        }
 
-        app.broker.publish('hourlyPlans.updated.' + data._id, data);
+        if (!canManage(user, hourlyPlan))
+        {
+          return done(new Error('AUTH'));
+        }
+
+        const update = {$set: {
+          updatedAt: new Date(),
+          updater: userModule.createUserInfo(user, socket)
+        }};
+        let field = 'flows.' + data.flowIndex;
+
+        if (_.isNumber(data.hourIndex))
+        {
+          field += '.hours.' + data.hourIndex;
+        }
+        else
+        {
+          field += '.level';
+        }
+
+        update.$set[field] = data.newValue;
+
+        HourlyPlan.collection.update({_id: hourlyPlan._id}, update, err =>
+        {
+          if (err)
+          {
+            return done(err);
+          }
+
+          done();
+
+          app.broker.publish(`hourlyPlans.updated.${data._id}`, data);
+        });
       });
     });
   }
@@ -194,50 +230,55 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       return reply(new Error('AUTH'));
     }
 
-    HourlyPlan.findById(data._id, {createdAt: 1}).lean().exec(function(err, hourlyPlan)
+    scheduleUpdate(data._id, reply, done =>
     {
-      if (err)
-      {
-        return reply(err);
-      }
-
-      if (hourlyPlan === null)
-      {
-        return reply(new Error('UNKNOWN'));
-      }
-
-      if (!canManage(user, hourlyPlan))
-      {
-        return reply(new Error('AUTH'));
-      }
-
-      const update = {$set: {
-        updatedAt: new Date(),
-        updater: userModule.createUserInfo(user, socket)
-      }};
-
-      update.$set['flows.' + data.flowIndex + '.noPlan'] = data.newValue;
-
-      if (data.newValue)
-      {
-        update.$set['flows.' + data.flowIndex + '.level'] = 0;
-        update.$set['flows.' + data.flowIndex + '.hours'] = [
-          0, 0, 0, 0, 0, 0, 0, 0,
-          0, 0, 0, 0, 0, 0, 0, 0,
-          0, 0, 0, 0, 0, 0, 0, 0
-        ];
-      }
-
-      HourlyPlan.collection.update({_id: hourlyPlan._id}, update, function(err)
+      HourlyPlan.findById(data._id, {createdAt: 1}).lean().exec((err, hourlyPlan) =>
       {
         if (err)
         {
-          return reply(err);
+          return done(err);
         }
 
-        reply();
+        if (hourlyPlan === null)
+        {
+          return done(new Error('UNKNOWN'));
+        }
 
-        app.broker.publish('hourlyPlans.updated.' + data._id, data);
+        if (!canManage(user, hourlyPlan))
+        {
+          return done(new Error('AUTH'));
+        }
+
+        const update = {
+          $set: {
+            updatedAt: new Date(),
+            updater: userModule.createUserInfo(user, socket)
+          }
+        };
+
+        update.$set[`flows.${data.flowIndex}.noPlan`] = data.newValue;
+
+        if (data.newValue)
+        {
+          update.$set[`flows.${data.flowIndex}.level`] = 0;
+          update.$set[`flows.${data.flowIndex}.hours`] = [
+            0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0
+          ];
+        }
+
+        HourlyPlan.collection.update({_id: hourlyPlan._id}, update, err =>
+        {
+          if (err)
+          {
+            return done(err);
+          }
+
+          done();
+
+          app.broker.publish(`hourlyPlans.updated.${data._id}`, data);
+        });
       });
     });
   }
@@ -264,51 +305,56 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
       return reply(new Error('AUTH'));
     }
 
-    HourlyPlan.findById(data._id, {createdAt: 1}).lean().exec(function(err, hourlyPlan)
+    scheduleUpdate(data._id, reply, done =>
     {
-      if (err)
-      {
-        return reply(err);
-      }
-
-      if (hourlyPlan === null)
-      {
-        return reply(new Error('UNKNOWN'));
-      }
-
-      if (!canManage(user, hourlyPlan))
-      {
-        return reply(new Error('AUTH'));
-      }
-
-      const update = {$set: {
-        updatedAt: new Date(),
-        updater: userModule.createUserInfo(user, socket)
-      }};
-
-      const newValues = new Array(24);
-
-      for (let i = 0; i < 24; ++i)
-      {
-        const newValue = data.newValues[i];
-
-        newValues[i] = !_.isNumber(newValue) || newValue < 0 ? 0 : newValue;
-      }
-
-      data.newValues = newValues;
-
-      update.$set['flows.' + data.flowIndex + '.hours'] = data.newValues;
-
-      HourlyPlan.collection.update({_id: hourlyPlan._id}, update, function(err)
+      HourlyPlan.findById(data._id, {createdAt: 1}).lean().exec((err, hourlyPlan) =>
       {
         if (err)
         {
-          return reply(err);
+          return done(err);
         }
 
-        reply();
+        if (hourlyPlan === null)
+        {
+          return done(new Error('UNKNOWN'));
+        }
 
-        app.broker.publish('hourlyPlans.updated.' + data._id, data);
+        if (!canManage(user, hourlyPlan))
+        {
+          return done(new Error('AUTH'));
+        }
+
+        const update = {
+          $set: {
+            updatedAt: new Date(),
+            updater: userModule.createUserInfo(user, socket)
+          }
+        };
+
+        const newValues = new Array(24);
+
+        for (let i = 0; i < 24; ++i)
+        {
+          const newValue = data.newValues[i];
+
+          newValues[i] = !_.isNumber(newValue) || newValue < 0 ? 0 : newValue;
+        }
+
+        data.newValues = newValues;
+
+        update.$set[`flows.${data.flowIndex}.hours`] = data.newValues;
+
+        HourlyPlan.collection.update({_id: hourlyPlan._id}, update, function(err)
+        {
+          if (err)
+          {
+            return done(err);
+          }
+
+          done();
+
+          app.broker.publish(`hourlyPlans.updated.${data._id}`, data);
+        });
       });
     });
   }
