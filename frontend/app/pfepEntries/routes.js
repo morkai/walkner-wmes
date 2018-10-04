@@ -18,7 +18,7 @@ define([
   'use strict';
 
   var nls = 'i18n!app/nls/pfepEntries';
-  var canView = user.auth('PFEP:VIEW');
+  var canView = user.auth();
   var canManage = user.auth('PFEP:MANAGE');
 
   router.map('/pfep/entries', canView, function(req)

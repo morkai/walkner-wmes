@@ -13,7 +13,7 @@ module.exports = function setUpPfepRoutes(app, module)
   const mongoose = app[module.config.mongooseId];
   const PfepEntry = mongoose.model('PfepEntry');
 
-  const canView = userModule.auth('PFEP:VIEW');
+  const canView = userModule.auth('USER');
   const canManage = userModule.auth('PFEP:MANAGE');
 
   express.get('/pfep/entries', canView, express.crud.browseRoute.bind(null, app, PfepEntry));
