@@ -726,10 +726,27 @@ define([
 
     handleExportOrdersAction: function(mrp)
     {
-      // TODO paint filter?
-      window.location.href = '/paintShop/orders;export.xlsx?sort(date,no)&limit(0)'
-        + '&date=' + this.orders.getDateFilter()
-        + (mrp ? ('&mrp=' + mrp) : '');
+      var href = '/paintShop/orders;export.xlsx?sort(date,no)&limit(0)&date=' + this.orders.getDateFilter();
+
+      if (mrp)
+      {
+        href += '&mrp=' + mrp;
+      }
+
+      var mspPaints = (this.settings.getValue('mspPaints') || [])
+        .map(function(nc12) { return 'string:' + nc12; })
+        .join(',');
+
+      if (this.orders.selectedPaint === 'msp' && mspPaints.length)
+      {
+        href += '&childOrders.components.nc12=in=(' + mspPaints + ')';
+      }
+      else if (this.orders.selectedPaint !== 'all')
+      {
+        href += '&childOrders.components.nc12=string:' + this.orders.selectedPaint;
+      }
+
+      window.location.href = href;
     },
 
     handleDropZoneAction: function(mrp, isPaint)
