@@ -50,7 +50,10 @@
     "tags:kanban/empty": "Kanban DB: Empty",
     "tags:kanban/full": "Kanban DB: Full",
     "tags:kanban/wh": "Kanban DB: Warehouse",
-    "tags:kanban/desc": "Kanban DB: Description"
+    "tags:kanban/desc": "Kanban DB: Description",
+    "tags:wh/cart/fmx": "WH: FMX cart",
+    "tags:wh/cart/kitter": "WH: Kitter cart",
+    "tags:wh/cart/packer": "WH: Packer cart"
   },
   "pl": true
 }

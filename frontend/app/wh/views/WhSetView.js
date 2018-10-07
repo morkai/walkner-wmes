@@ -163,7 +163,11 @@ define([
 
           view.hideEditor();
 
-          var req = view.whOrders.act('printLabels', {order: order, qty: qty});
+          var req = view.whOrders.act('printLabels', {
+            order: order,
+            qty: qty,
+            func: view.model.user.func
+          });
 
           req.fail(function()
           {

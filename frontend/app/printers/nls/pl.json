@@ -50,5 +50,7 @@
   "tags:kanban/full": "Baza Kanban: Pełny",
   "tags:kanban/wh": "Baza Kanban: Magazynowa",
   "tags:kanban/desc": "Baza Kanban: Opisowa",
-  "tags:wh/cart": "Magazyn: Na wózek"
+  "tags:wh/cart/fmx": "Magazyn: Wózek FMX",
+  "tags:wh/cart/kitter": "Magazyn: Wózek Kitter",
+  "tags:wh/cart/packer": "Magazyn: Wózek Opakowania"
 }

@@ -505,7 +505,7 @@ module.exports = function(app, module)
       finishTime: lineOrder.finishAt,
       picklistFunc: null,
       picklistDone: false,
-      funcs: ['fmx', 'kitter', 'packer'].map(createFunc),
+      funcs: WhOrder.FUNCS.map(createFunc),
       users: []
     };
   }

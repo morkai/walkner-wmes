@@ -377,7 +377,7 @@ module.exports = function setUpWhState(app, module)
           ));
         }
 
-        printLabels([whOrder], data.qty, this.next());
+        printLabels([whOrder], data.qty, data.func, this.next());
       },
       done
     );
@@ -527,7 +527,7 @@ module.exports = function setUpWhState(app, module)
           user
         });
 
-        printLabels(this.orders, 1, err =>
+        printLabels(this.orders, 1, user.func, err =>
         {
           if (err)
           {
@@ -612,7 +612,7 @@ module.exports = function setUpWhState(app, module)
           user
         });
 
-        printLabels(this.orders, 1, err =>
+        printLabels(this.orders, 1, user.func, err =>
         {
           if (err)
           {
@@ -808,15 +808,20 @@ module.exports = function setUpWhState(app, module)
     });
   }
 
-  function printLabels(whOrders, labelQty, done)
+  function printLabels(whOrders, labelQty, userFunc, done)
   {
+    if (!WhOrder.FUNCS.includes(userFunc))
+    {
+      return done(app.createError(`Unknown user function: ${userFunc}`, 'PRINT_FAILURE'));
+    }
+
     step(
       function()
       {
         fs.readFile(`${__dirname}/templates/label.prn`, 'utf8', this.parallel());
 
         Printer
-          .findOne({tags: 'wh/cart'}, {_id: 1})
+          .findOne({tags: `wh/cart/${userFunc}`}, {_id: 1})
           .lean()
           .exec(this.parallel());
 
@@ -824,22 +829,25 @@ module.exports = function setUpWhState(app, module)
           .find({_id: {$in: whOrders.map(o => o.order)}}, {nc12: 1, qty: 1})
           .lean()
           .exec(this.parallel());
+
+        settingsModule.findById('wh.printing.barcodeData', this.parallel());
       },
-      function(err, template, printer, sapOrders)
+      function(err, template, printer, sapOrders, barcodeDataSetting)
       {
         if (err)
         {
           return this.skip(app.createError(
             `Failed to find print data: ${err.message}`,
-            'FIND_PRINT_DATA_FAILURE'
+            'PRINT_FAILURE'
           ));
         }
 
         if (!printer)
         {
-          return this.skip(app.createError('No wh/cart printer!', 'PRINT_FAILURE'));
+          return this.skip(app.createError(`No wh/cart/${userFunc} printer!`, 'PRINT_FAILURE'));
         }
 
+        const barcodeData = barcodeDataSetting ? barcodeDataSetting.value : '12nc';
         const zpl = whOrders.map(whOrder =>
         {
           const sapOrder = sapOrders.find(o => o._id === whOrder.order) || {
@@ -847,7 +855,7 @@ module.exports = function setUpWhState(app, module)
             qty: 0
           };
 
-          return compileZpl(template, {
+          return compileZpl(template, barcodeData, {
             labelQty,
             time: moment.utc(whOrder.startTime).format('DD.MM.YYYY, HH:mm'),
             line: whOrder.line,
@@ -874,7 +882,7 @@ module.exports = function setUpWhState(app, module)
     );
   }
 
-  function compileZpl(zpl, data)
+  function compileZpl(zpl, barcodeData, data)
   {
     const templateData = {
       DLE: '\u0010',
@@ -884,9 +892,21 @@ module.exports = function setUpWhState(app, module)
       NC12: data.nc12,
       QTY_PLAN: data.qtyPlan,
       QTY_TODO: data.qtyTodo,
-      BARCODE_X: [40, 184, 145, 107, 40][data.qtyPlan.toString().length],
+      BARCODE_X: 0,
+      BARCODE_DATA: '',
       LABEL_QTY: data.labelQty
     };
+
+    if (barcodeData === 'orderNo')
+    {
+      templateData.BARCODE_X = [40, 184, 145, 107, 40, 0, 0, 0, 0][data.qtyPlan.toString().length];
+      templateData.BARCODE_DATA = data.order;
+    }
+    else
+    {
+      templateData.BARCODE_X = [40, 145, 107, 68, 40, 0, 0, 0, 0][data.qtyPlan.toString().length];
+      templateData.BARCODE_DATA = data.nc12;
+    }
 
     Object.keys(templateData).forEach(key =>
     {

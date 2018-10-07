@@ -21,7 +21,9 @@ define([
     'kanban/full',
     'kanban/wh',
     'kanban/desc',
-    'wh/cart'
+    'wh/cart/fmx',
+    'wh/cart/kitter',
+    'wh/cart/packer'
   ];
 
   return {
