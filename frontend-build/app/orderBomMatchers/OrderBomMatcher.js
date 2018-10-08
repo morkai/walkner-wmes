@@ -1,0 +1,3 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define(["../core/Model"],function(e){"use strict";return e.extend({urlRoot:"/orderBomMatchers",clientUrlRoot:"#orderBomMatchers",topicPrefix:"orderBomMatchers",privilegePrefix:"PROD_DATA",nlsDomain:"orderBomMatchers",labelAttribute:"description",serializeRow:function(){var e=this.toJSON();return e.mrp=e.matchers.mrp.join(", "),e.nc12=e.matchers.nc12.join(", "),e.name=e.matchers.name.join(", "),e.components=e.components.map(function(e){return e.nc12}).join(", "),e}})});

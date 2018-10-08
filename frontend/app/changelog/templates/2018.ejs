@@ -1,4 +1,125 @@
 <div class="hidden">
+  <h1>v0.125.0</h1>
+  <h2><%- time.format('2018-09-16', 'LL') %></h2>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający wyświetlenie dymku z informacjami o dodanym zleceniu w historii zmian planu.</li>
+    <li>Zmieniono sortowanie zleceń w grupach tak, aby zlecenia niemalowane lub pomalowane były przed zleceniami
+      niepomalowanymi.</li>
+    <li>Zmieniono generowanie planów tak, aby nie rozpoczynało się w trakcie aktywnych operacji zmieniających dane
+      zleceń z SAP.</li>
+    <li>Zmieniono generowanie aktywnych planów tak, aby generowane były plany do najpóźniejszego dnia, dla którego
+      w bazie zleceń znajduje się przynajmniej jedno zlecenie z przynajmniej jednym komponentem, ze statusem REL
+      oraz bez statusów TECO, DLFL lub DLT.</li>
+    <li>Zmieniono status usuniętego zlecenia tak, aby wskazywał dodatkowo zlecenia ze statusem DLT lub DLFL
+      (a nie tylko TECO).</li>
+    <li>Zmieniono sortowanie listu zleceń MRP w planie tak, aby zlecenia usunięte znajdowały się na końcu listy.</li>
+    <li>Dodano nową ikonę statusu zleceń: <i class="fa fa-wrench"></i> ETO.</li>
+    <li>Dodano nowe ustawienie: Statusy zrobionego zlecenia - zlecenia, które otrzymają ten status pozostaną na liście
+      zleceń planu, ale nie będą rozplanowywane (wcześniej zostały usuwane z planu).</li>
+    <li>Dodano nową statystykę do planu produkcji: Ilość zleceń.</li>
+    <li>Dodano nową statystykę do planu magazynu: Ilość zleceń wg statusów.</li>
+  </ul>
+  <h3>Malarnia</h3>
+  <ul>
+    <li>Poprawiono błąd podczas generowania kolejki mogący zresetować status zlecenia z powodu losowej kolejności
+      podzleceń.</li>
+    <li>Zmieniono generowanie kolejki tak, aby zlecenia, których data zmieniła się, trafiały do nowej kolejki.</li>
+    <li>Zmieniono generowanie kolejki tak, aby zlecenia w większości przypadków były anulowane zamiast usuwane
+      z kolejki.</li>
+    <li>Dodano ilości do pomalowania wg statusów do listy farb. Lista farb jest teraz sortowana malejąco wg ilości
+      pozostałej do pomalowania.</li>
+  </ul>
+  <h3>Baza Kanban</h3>
+  <ul>
+    <li>Zmieniono kod QR z wartością Pusty/Pełny na etykietach Pusty/Pełny na kod kreskowy w formacie Code 128.</li>
+    <li>Zmieniono słownik Obszarów zaopatrzenia tak, aby możliwe było dodanie kilku Obszarów z taką samą nazwą,
+      ale różniących się nową wartością WorkCenter.</li>
+    <li>Zmieniono listę linii w Obszarach zaopatrzenia tak, aby można było rezerwować pozycję linii (np. w razie
+      dezaktywacji linii).</li>
+    <li>Zmieniono importowanie CCN z SAP tak, aby nieistniejące rekordy były usuwane.</li>
+    <li>Zmieniono wyświetlanie rozmarów pojemnika w dymku z Szerokość x Wysokość x Długość
+      na Długość x Szerokość x Wysokość.</li>
+    <li>Dodano nową kolumnę: Komentarz.</li>
+    <li>Dodano nową kolumnę: Lokalizacja magazynowa (nowa) - wartość przypisywana do komponentów.</li>
+    <li>Dodano nową kolumnę: WorkCenter.</li>
+    <li>Dodano nową kolumnę: Rodzaj pojemnika - wartość wybierana z nowego słownika.</li>
+    <li>Dodano nową kolumnę: Kolor znacznika - wartość przypisywana do rzędu lokalizacji magazynowej.</li>
+    <li>Dodano nową kolumnę: Ilość Kanban ID w SAP - wartość ma czerwone tło, jeżeli jest za mało kanbanów
+      lub żółte, jeżeli za dużo.</li>
+    <li>Dodano możliwość eksportu tabeli.</li>
+    <li>Dodano możliwość importu danych CCN z arkusza XLSX.</li>
+    <li>Dodano możliwość importu danych komponentów z arkusza XLSX.</li>
+    <li>Dodano możliwość drukowania etykiet pogrupowanych wg stanowisk na liniach.</li>
+    <li>Dodano możliwość szybkiego druku po ID kanbana.</li>
+  </ul>
+  <h3>Raporty > CLIP (stary)</h3>
+  <ul>
+    <li>Usunięto raport.</li>
+  </ul>
+  <h3>Raporty > CLIP (nowy)</h3>
+  <ul>
+    <li>Dodano możliwość eksportu zleceń CLIP jako akcję w menu wykresów.</li>
+  </ul>
+  <h3>Badanie Opinia</h3>
+  <ul>
+    <li>Zmieniono szablon ankiety tak, aby obok imienia i nazwiska przełożonego wyświetlana była krótka nazwa wydziału,
+      a nie ID.</li>
+  </ul>
+  <h3>Matryca odpowiedzialności</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający wybranie kierowników.</li>
+  </ul>
+  <h3>Strategie dostarczania komponentów</h3>
+  <ul>
+    <li>Dodano nowy moduł słownikowy.</li>
+  </ul>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Dodano eksport listy zleceń.</li>
+    <li>Dodano do listy zleceń filtry: Wymagane statusy oraz Ignorowane statusy.</li>
+    <li>Dodano kolumnę 'Strategia dostarczania komponentu' do listy komponentów zlecenia.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Zmieniono nazwę pola 'Nr karty' na 'Nr karty (KD)'.</li>
+    <li>Dodano nowe pole: ID karty.</li>
+    <li>Dodano możliwość logowania za pomocą konta @signify.com.</li>
+  </ul>
+  <h3>Pola odkładcze</h3>
+  <ul>
+    <li>Zmieniono wyszukiwanie magazynierów tak, aby zeskanowana wartość sprawdzana była wobec nr personalnego,
+      nr karty (KD) i ID karty użytkownika.</li>
+  </ul>
+  <h3>Produkcja > Numery seryjne</h3>
+  <ul>
+    <li>Poprawiono błąd podczas obliczania taktu dla numeru seryjnego, jeżeli w czasie skanowania danej sztuki
+      istniał niezakończony przestój.</li>
+  </ul>
+  <h3>Produkcja > Przestoje</h3>
+  <ul>
+    <li>Dodano nowy filtr listy: Kontroler MRP zlecenia.</li>
+  </ul>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Dodano możliwość zablokowania interfejsu użytkownika w celu zapobiegnięcia przypadkowych kliknięć.</li>
+    <li>Dodano kolumnę 'Strategia dostarczania komponentu' do listy komponentów zlecenia.</li>
+  </ul>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Dodano użytkownikom z funkcją 'Magazynier obsługi prod.' takie same uprawnienia jak 'Lider'.</li>
+  </ul>
+  <h3>Baza PFEP</h3>
+  <ul>
+    <li>Dodano nowy moduł.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący niewyświetlanie się formatki w trybie wsadowym, jeżeli linia została dezaktywowana.</li>
+    <li>Zmieniono sprawdzanie spigota tak, aby pod uwagę brany był także komponent z 12NC w nazwie.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.124.0</h1>
   <h2><%- time.format('2018-07-01', 'LL') %></h2>
   <h3>ZPW</h3>
