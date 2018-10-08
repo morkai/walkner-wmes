@@ -31,6 +31,9 @@ td.is-number {
   font-family: Consolas, Menlo, Monaco, monospace;
   text-align: right;
 }
+td.text-center {
+  text-align: center;
+}
 .table .actions {
   white-space: nowrap;
   width: 1%;

@@ -38,7 +38,7 @@ define([
         {id: 'unit', tdClassName: 'is-min', label: t('LIST:COLUMN:unit')},
         {id: 'packType', tdClassName: 'is-min', thClassName: 'is-filter', label: t('LIST:COLUMN:packType')},
         {id: 'externalPackQty', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:externalPackQty')},
-        {id: 'packSize', tdClassName: 'is-min', label: t('LIST:COLUMN:packSize')},
+        {id: 'packSize', tdClassName: 'is-min is-number text-center', label: t('LIST:COLUMN:packSize')},
         {id: 'packGrossWeight', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:packGrossWeight')},
         {id: 'componentNetWeight', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:componentNetWeight')},
         {id: 'componentGrossWeight', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:componentGrossWeight')},
