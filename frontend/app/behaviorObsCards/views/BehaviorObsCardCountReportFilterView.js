@@ -60,6 +60,13 @@ define([
         data: kaizenDictionaries.sections.map(idAndLabel)
       });
 
+      this.$id('observerSections').select2({
+        width: '350px',
+        allowClear: true,
+        multiple: true,
+        data: kaizenDictionaries.sections.map(idAndLabel)
+      });
+
       setUpUserSelect2(this.$id('superior'), {
         width: '300px',
         view: this
@@ -77,6 +84,7 @@ define([
         from: from ? time.format(from, 'YYYY-MM-DD') : '',
         to: to ? time.format(to, 'YYYY-MM-DD') : '',
         sections: model.get('sections').join(','),
+        observerSections: model.get('observerSections').join(','),
         superior: model.get('superior')
       };
     },
@@ -88,6 +96,7 @@ define([
         to: time.getMoment(this.$id('to').val(), 'YYYY-MM-DD').valueOf(),
         interval: buttonGroup.getValue(this.$id('interval')),
         sections: this.$id('sections').val(),
+        observerSections: this.$id('observerSections').val(),
         superior: this.$id('superior').val()
       };
 
@@ -111,6 +120,7 @@ define([
       }
 
       query.sections = query.sections === '' ? [] : query.sections.split(',');
+      query.observerSections = query.observerSections === '' ? [] : query.observerSections.split(',');
 
       this.model.set(query);
       this.model.trigger('filtered');

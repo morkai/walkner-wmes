@@ -56,6 +56,7 @@ define([
       );
 
       options.data.sections = options.data.sections.join(',');
+      options.data.observerSections = options.data.observerSections.join(',');
 
       return Model.prototype.fetch.call(this, options);
     },
@@ -265,6 +266,7 @@ define([
         to: +query.to || undefined,
         interval: query.interval || undefined,
         sections: _.isEmpty(query.sections) ? [] : query.sections.split(','),
+        observerSections: _.isEmpty(query.observerSections) ? [] : query.observerSections.split(','),
         superior: query.superior || ''
       });
     }

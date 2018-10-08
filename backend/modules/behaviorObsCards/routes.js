@@ -216,6 +216,7 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
       toTime: reportsModule.helpers.getTime(query.to) || null,
       interval: query.interval || 'month',
       sections: _.isEmpty(query.sections) ? [] : query.sections.split(','),
+      observerSections: _.isEmpty(query.observerSections) ? [] : query.observerSections.split(','),
       superior: _.isEmpty(query.superior) ? null : query.superior
     };
 
