@@ -119,7 +119,7 @@ define([
     {
       FormView.prototype.afterRender.apply(this, arguments);
 
-      this.model.get('components').forEach(this.addComponent, this);
+      (this.model.get('components') || []).forEach(this.addComponent, this);
       this.recountComponents();
     },
 
