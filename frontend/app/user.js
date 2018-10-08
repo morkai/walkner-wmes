@@ -190,6 +190,13 @@ function(
       {
         var requiredPrivilege = allPrivileges[ii];
 
+        if (typeof requiredPrivilege !== 'string')
+        {
+          requiredMatches -= 1;
+
+          continue;
+        }
+
         if (requiredPrivilege === 'USER')
         {
           actualMatches += isLoggedIn ? 1 : 0;
