@@ -36,7 +36,11 @@ define([
         var tab = el.dataset.tab;
         var subtab = el.dataset.subtab || '';
 
-        if (!el.classList.contains('disabled'))
+        if (el.dataset.redirect)
+        {
+          window.location.href = el.dataset.redirect;
+        }
+        else if (!el.classList.contains('disabled'))
         {
           this.broker.publish('router.navigate', {
             url: this.clientUrl + '?tab=' + tab + '&subtab=' + subtab,

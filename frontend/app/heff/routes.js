@@ -6,7 +6,8 @@ define([
   '../data/localStorage',
   '../core/View',
   './views/HeffView',
-  'i18n!app/nls/heff'
+  'i18n!app/nls/heff',
+  'i18n!app/nls/production'
 ], function(
   router,
   viewport,

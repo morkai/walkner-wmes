@@ -1,0 +1,44 @@
+<form class="orderBomMatchers-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-description" class="control-label is-required"><%- helpers.t('PROPERTY:description') %></label>
+        <input id="<%- idPrefix %>-description" class="form-control" type="text" autocomplete="new-password" name="description" required maxlength="60">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-matchers-mrp" class="control-label"><%- helpers.t('PROPERTY:mrp') %></label>
+        <input id="<%- idPrefix %>-matchers-mrp" class="form-control" type="text" autocomplete="new-password" name="matchers.mrp">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-matchers-nc12" class="control-label"><%- helpers.t('PROPERTY:nc12') %></label>
+        <input id="<%- idPrefix %>-matchers-nc12" class="form-control" type="text" autocomplete="new-password" name="matchers.nc12">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-matchers-name" class="control-label"><%- helpers.t('PROPERTY:name') %></label>
+        <textarea id="<%- idPrefix %>-matchers-name" class="form-control" type="text" name="matchers.name" rows="4" style="font-family: monospace"></textarea>
+      </div>
+      <label class="control-label"><%- helpers.t('PROPERTY:components') %></label>
+      <table class="table table-bordered table-condensed">
+        <thead>
+        <tr>
+          <th class="is-min"><%- helpers.t('core', '#') %></th>
+          <th class="is-min"><%- helpers.t('PROPERTY:components.nc12') %></th>
+          <th class="is-min"><%- helpers.t('PROPERTY:components.description') %></th>
+          <th class="is-min"><%- helpers.t('PROPERTY:components.unique') %></th>
+          <th class="is-min"><%- helpers.t('PROPERTY:components.nc12Index') %></th>
+          <th class="is-min"><%- helpers.t('PROPERTY:components.snIndex') %></th>
+          <th><%- helpers.t('PROPERTY:components.pattern') %></th>
+          <th class="actions"><%- helpers.t('core', 'LIST:COLUMN:actions') %></th>
+        </tr>
+        </thead>
+        <tbody id="<%- idPrefix %>-components"></tbody>
+      </table>
+      <button type="button" class="btn btn-default" data-action="addComponent"><i class="fa fa-plus"></i><span><%- helpers.t('FORM:ACTION:addComponent') %></span></button>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

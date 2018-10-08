@@ -10,10 +10,18 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
   const orgUnits = app[productionModule.config.orgUnitsId];
   const mongoose = app[productionModule.config.mongooseId];
   const ProdLogEntry = mongoose.model('ProdLogEntry');
+  const Order = mongoose.model('Order');
+  const OrderBomMatcher = mongoose.model('OrderBomMatcher');
   const logEntry = new ProdLogEntry(orgUnits.fix.prodLogEntry(_.assign(req.body, {
     savedAt: new Date(),
     todo: false
   })));
+
+  const orderBomMatcherCache = new Map();
+
+  app.broker.subscribe('ordersBomMatchers.**', () => orderBomMatcherCache.clear());
+
+  app.broker.subscribe('shiftChanged', () => orderBomMatcherCache.clear());
 
   step(
     function()
@@ -74,6 +82,26 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
     },
     function()
     {
+      getOrderBomMatcher(logEntry.data.orderNo, this.next());
+    },
+    function(err, orderBomMatcher)
+    {
+      if (err)
+      {
+        return this.skip(err);
+      }
+
+      if (!Array.isArray(logEntry.data.bom) && orderBomMatcher)
+      {
+        return this.skip(null, {
+          result: 'CHECK_BOM',
+          logEntry,
+          components: orderBomMatcher.components
+        });
+      }
+    },
+    function()
+    {
       productionModule.checkSerialNumber(logEntry, this.next());
     },
     function(err, result)
@@ -85,22 +113,75 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
 
       res.json(result);
 
-      if (result.result !== 'SUCCESS')
+      if (result.result !== 'SUCCESS' && result.result !== 'CHECK_BOM')
       {
         return;
       }
 
       logEntry.save(function(err)
       {
-        if (!err)
+        if (err)
         {
-          return;
+          productionModule.error(
+            `[checkSerialNumber] Failed to save the log entry [${logEntry._id}]: ${err.message}`
+          );
         }
-
-        productionModule.error(
-          `[checkSerialNumber] Failed to save the log entry [${logEntry._id}]: ${err.message}`
-        );
       });
     }
   );
+
+  function getOrderBomMatcher(orderNo, done)
+  {
+    if (orderBomMatcherCache.has(orderNo))
+    {
+      return done(null, orderBomMatcherCache.get(orderNo));
+    }
+
+    step(
+      function()
+      {
+        const fields = {
+          nc12: 1,
+          mrp: 1,
+          name: 1,
+          description: 1,
+          'bom.nc12': 1
+        };
+
+        Order
+          .findById(orderNo, fields)
+          .lean()
+          .exec(this.next());
+      },
+      function(err, order)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!order)
+        {
+          return this.skip(app.createError('ORDER_NOT_FOUND', 400));
+        }
+
+        setImmediate(this.parallel(), null, order);
+
+        OrderBomMatcher.find({active: true}).exec(this.parallel());
+      },
+      function(err, order, orderBomMatchers)
+      {
+        if (err)
+        {
+          return done(err);
+        }
+
+        const orderBomMatcher = orderBomMatchers.find(orderBomMatcher => orderBomMatcher.matchOrder(order)) || null;
+
+        orderBomMatcherCache.set(orderNo, orderBomMatcher);
+
+        done(null, orderBomMatcher);
+      }
+    );
+  }
 };

@@ -1,4 +1,6 @@
+@import url(../../production/assets/modal.css);
 @import url(../../production/assets/taktTime.css);
+@import url(../../production/assets/bomChecker.css);
 
 .heff {
   margin: 30px;

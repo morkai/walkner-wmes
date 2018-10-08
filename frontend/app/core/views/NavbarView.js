@@ -415,7 +415,12 @@ define([
 
     var $newActiveNavItem = this.navItems[this.activeModuleName];
 
-    if (_.isUndefined($newActiveNavItem))
+    if (!$newActiveNavItem && viewport.currentPage && viewport.currentPage.navbarModuleName)
+    {
+      $newActiveNavItem = this.navItems[viewport.currentPage.navbarModuleName];
+    }
+
+    if (!$newActiveNavItem)
     {
       this.$activeNavItem = null;
     }

@@ -1,5 +1,7 @@
 {
-  "BREADCRUMBS:browse": "Strategie dost. komponentów",
+  "BREADCRUMBS:operator": "Operator",
+  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMBS:browse": "Sprawdzanie komponentów",
   "BREADCRUMBS:addForm": "Dodawanie",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
@@ -16,15 +18,25 @@
 
   "filter:submit": "Filtruj strategie",
 
-  "PROPERTY:s": "Mat. Staging Indicat.",
-  "PROPERTY:t": "Storage Type",
-  "PROPERTY:name": "Nazwa",
+  "PROPERTY:description": "Opis",
+  "PROPERTY:mrp": "MRP zlecenia",
+  "PROPERTY:nc12": "12NC zlecenia",
+  "PROPERTY:name": "Wzorce nazwy zlecenia",
+  "PROPERTY:components": "Komponenty",
+  "PROPERTY:components.description": "Opis",
+  "PROPERTY:components.nc12": "12NC",
+  "PROPERTY:components.pattern": "Wzorzec",
+  "PROPERTY:components.nc12Index": "Nr grupy 12NC",
+  "PROPERTY:components.snIndex": "Nr grupy SN",
+  "PROPERTY:components.unique": "Unikalny?",
 
   "FORM:ACTION:add": "Dodaj strategię",
   "FORM:ACTION:edit": "Edytuj strategię",
+  "FORM:ACTION:addComponent": "Dodaj komponent",
+  "FORM:ACTION:removeComponent": "Usuń komponent",
   "FORM:ERROR:addFailure": "Nie udało się dodać strategii.",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować strategii.",
-  "FORM:ERROR:alreadyExists": "Dana strategia już istnieje.",
+  "FORM:ERROR:pattern": "Nieprawidłowy wzorzec.",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia strategii",
   "ACTION_FORM:BUTTON:delete": "Usuń strategię",

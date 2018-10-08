@@ -1,0 +1,17 @@
+<table class="production-bomChecker">
+  <tbody>
+  <% components.forEach(function(component, i) { %>
+  <tr class="production-bomChecker-component" data-i="<%- i %>" data-status="todo">
+    <td class="production-bomChecker-icon"><i class="fa fa-question"></i></td>
+    <td>
+      <span class="production-bomChecker-nc12"><%= component.nc12 %></span>
+      <span class="production-bomChecker-description"><%= component.description %></span>
+    </td>
+    <td>
+      <span class="production-bomChecker-scanBuffer">?</span>
+      <span class="production-bomChecker-message"><%- t('production', 'bomChecker:message:todo') %></span>
+    </td>
+  </tr>
+  <% }) %>
+  </tbody>
+</table>

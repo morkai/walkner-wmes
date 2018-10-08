@@ -2,10 +2,12 @@
 
 define([
   'underscore',
-  'app/broker'
+  'app/broker',
+  'app/viewport'
 ], function(
   _,
-  broker
+  broker,
+  viewport
 ) {
   'use strict';
 
@@ -23,11 +25,16 @@ define([
       scanBuffer = buffer;
     }
 
-    var matches = scanBuffer.match(/P0*([0-9]{9})([0-9]{4})/);
+    var matches = null;
 
-    if (!matches)
+    if (!viewport.currentDialog || viewport.currentDialog.snManagerMode !== 'bom')
     {
-      matches = scanBuffer.match(/[A-Z0-9]{4}\.([0-9]+)\.([0-9]+)/);
+      matches = scanBuffer.match(/P0*([0-9]{9})([0-9]{4})/);
+
+      if (!matches)
+      {
+        matches = scanBuffer.match(/[A-Z0-9]{4}\.([0-9]+)\.([0-9]+)/);
+      }
     }
 
     if (matches)
@@ -63,13 +70,9 @@ define([
         return;
       }
 
-      var is09 = e.which >= 48 && e.which <= 57;
-      var isAZ = e.which >= 65 && e.which <= 90;
-      var isDot = e.which === 190;
-
-      if (is09 || isAZ || isDot)
+      if (e.key && e.key.length === 1)
       {
-        scanBuffer += isDot ? '.' : String.fromCharCode(e.which);
+        scanBuffer += e.key;
 
         clearTimeout(handleTimeout);
         handleTimeout = setTimeout(handleScanBuffer, 50);

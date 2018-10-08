@@ -26,6 +26,7 @@ define([
   '../views/IsaView',
   '../views/TaktTimeView',
   '../views/SpigotCheckerView',
+  '../views/BomCheckerDialogView',
   'app/production/templates/productionPage',
   'app/production/templates/duplicateWarning'
 ], function(
@@ -54,6 +55,7 @@ define([
   IsaView,
   TaktTimeView,
   SpigotCheckerView,
+  BomCheckerDialogView,
   productionPageTemplate,
   duplicateWarningTemplate
 ) {
@@ -1004,7 +1006,12 @@ define([
 
       if (!scanInfo.orderNo)
       {
-        return this.showSnMessage(scanInfo, 'error', 'UNKNOWN_CODE');
+        if (!viewport.currentDialog)
+        {
+          this.showSnMessage(scanInfo, 'error', 'UNKNOWN_CODE');
+        }
+
+        return;
       }
 
       var page = this;
@@ -1044,7 +1051,15 @@ define([
         return this.showSnMessage(scanInfo, 'error', error);
       }
 
-      page.showSnMessage(scanInfo, 'warning', 'CHECKING');
+      page.checkSn(logEntry);
+    },
+
+    checkSn: function(logEntry)
+    {
+      var page = this;
+      var model = page.model;
+
+      page.showSnMessage(logEntry.data, 'warning', 'CHECKING');
 
       var req = this.ajax({
         method: 'POST',
@@ -1059,7 +1074,7 @@ define([
         {
           model.updateTaktTimeLocally(logEntry);
 
-          page.showSnMessage(scanInfo, 'success', 'SUCCESS');
+          page.showSnMessage(logEntry.data, 'success', 'SUCCESS');
 
           return;
         }
@@ -1068,12 +1083,17 @@ define([
 
         prodLog.record(model, logEntry);
 
-        page.showSnMessage(scanInfo, 'error', 'SERVER_FAILURE');
+        page.showSnMessage(logEntry.data, 'error', 'SERVER_FAILURE');
       });
 
       req.done(function(res)
       {
-        if (res.result === 'SUCCESS')
+        if (res.result === 'CHECK_BOM')
+        {
+          page.hideSnMessage();
+          page.showBomChecker(res.logEntry, res.components);
+        }
+        else if (res.result === 'SUCCESS')
         {
           model.updateTaktTime(res);
           page.showSnMessage(res.serialNumber, 'success', 'SUCCESS');
@@ -1089,7 +1109,7 @@ define([
 
           prodLog.record(model, logEntry);
 
-          page.showSnMessage(scanInfo, 'error', res.result);
+          page.showSnMessage(logEntry.data, 'error', res.result);
         }
       });
     },
@@ -1109,7 +1129,7 @@ define([
 
       this.$id('snMessage-text').html(t('production', 'snMessage:' + message));
       this.$id('snMessage-scannedValue').text(
-        scanInfo._id.length > 19 ? (scanInfo._id.substring(0, 16) + '...') : scanInfo._id
+        scanInfo._id.length > 43 ? (scanInfo._id.substring(0, 40) + '...') : scanInfo._id
       );
       this.$id('snMessage-orderNo').text(scanInfo.orderNo || '-');
       this.$id('snMessage-serialNo').text(scanInfo.serialNo || '-');
@@ -1134,6 +1154,31 @@ define([
       this.timers.hideSnMessage = null;
 
       this.$id('snMessage').addClass('hidden');
+    },
+
+    showBomChecker: function(logEntry, components)
+    {
+      var view = this;
+      var dialogView = new BomCheckerDialogView({
+        model: {
+          components: components
+        },
+        snMessage: {
+          show: view.showSnMessage.bind(view),
+          hide: view.hideSnMessage.bind(view)
+        }
+      });
+
+      view.listenTo(dialogView, 'checked', function(bom)
+      {
+        viewport.closeDialog();
+
+        logEntry.data.bom = bom;
+
+        view.checkSn(logEntry);
+      });
+
+      viewport.showDialog(dialogView, t('production', 'bomChecker:title', {psn: logEntry.data._id}));
     },
 
     startActionTimer: function(action, e)

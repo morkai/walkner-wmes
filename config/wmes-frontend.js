@@ -91,6 +91,7 @@ exports.modules = [
   'kanban',
   'pfep',
   'xlsxExporter',
+  'orderBomMatchers',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
@@ -189,7 +190,8 @@ exports.events = {
     'd8.entries.added', 'd8.entries.edited',
     'heffLineStates.added', 'heffLineStates.edited', 'heffLineStates.deleted',
     'behaviorObsCards.added', 'behaviorObsCards.edited',
-    'minutesForSafetyCards.added', 'minutesForSafetyCards.edited'
+    'minutesForSafetyCards.added', 'minutesForSafetyCards.edited',
+    'orderBomMatchers.added', 'orderBomMatchers.edited'
   ]
 };
 
@@ -304,7 +306,8 @@ exports.mongoose = {
     'kanbanEntry', 'kanbanComponent', 'kanbanSupplyArea', 'kanbanContainer', 'kanbanTableView', 'kanbanPrintQueue',
     'whEvent', 'whOrder', 'whUser',
     'pkhdComponent', 'pkhdStrategy',
-    'pfepEntry'
+    'pfepEntry',
+    'orderBomMatcher'
   ]
 };
 

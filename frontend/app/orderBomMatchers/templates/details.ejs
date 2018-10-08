@@ -1,0 +1,52 @@
+<div>
+<div class="panel panel-primary">
+  <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details') %></div>
+  <div class="panel-details">
+    <div class="props first">
+      <div class="prop">
+        <div class="prop-name"><%- helpers.t('PROPERTY:description') %></div>
+        <div class="prop-value"><%= model.description %></div>
+      </div>
+      <% ['mrp', 'nc12', 'name'].forEach(function(prop) { %>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
+          <div class="prop-value">
+            <% model.matchers[prop].forEach(function(matcher) { %>
+            <code><%= matcher %></code>
+            <% }) %>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading"><%- helpers.t('PROPERTY:components') %></div>
+  <table class="table table-bordered table-condensed table-hover">
+    <thead>
+    <tr>
+      <th class="is-min"><%- helpers.t('core', '#') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:components.nc12') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:components.description') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:components.unique') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:components.nc12Index') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:components.snIndex') %></th>
+      <th><%- helpers.t('PROPERTY:components.pattern') %></th>
+    </tr>
+    </thead>
+    <tbody>
+      <% model.components.forEach(function(component, i) { %>
+      <tr>
+        <td class="is-min is-number"><%- i + 1 %>.</td>
+        <td class="is-min"><%= component.nc12 %></td>
+        <td class="is-min"><%= component.description %></td>
+        <td class="is-min"><%- t('core', 'BOOL:' + component.unique) %></td>
+        <td class="is-min"><%- component.nc12Index.join(', ') %></td>
+        <td class="is-min"><%- component.snIndex.join(', ') %></td>
+        <td><code><%= component.pattern %></code></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+</div>

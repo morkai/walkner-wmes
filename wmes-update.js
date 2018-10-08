@@ -14,3 +14,9 @@ db.settings.insert({
   },
   "updatedAt" : ISODate("2018-08-05T22:43:00.394Z")
 });
+
+db.prodserialnumbers.createIndex({bom: 1}, {
+  name: 'bom_1',
+  background: true,
+  partialFilterExpression: {bom: {$type: 'array'}}
+});

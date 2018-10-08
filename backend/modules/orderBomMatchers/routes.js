@@ -1,0 +1,24 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+'use strict';
+
+module.exports = function setUpOrderBomMatchersRoutes(app, module)
+{
+  const express = app[module.config.expressId];
+  const userModule = app[module.config.userId];
+  const mongoose = app[module.config.mongooseId];
+  const OrderBomMatcher = mongoose.model('OrderBomMatcher');
+
+  const canView = userModule.auth('PROD_DATA:VIEW');
+  const canManage = userModule.auth('PROD_DATA:MANAGE');
+
+  express.get('/orderBomMatchers', canView, express.crud.browseRoute.bind(null, app, OrderBomMatcher));
+
+  express.post('/orderBomMatchers', canManage, express.crud.addRoute.bind(null, app, OrderBomMatcher));
+
+  express.get('/orderBomMatchers/:id', canView, express.crud.readRoute.bind(null, app, OrderBomMatcher));
+
+  express.put('/orderBomMatchers/:id', canManage, express.crud.editRoute.bind(null, app, OrderBomMatcher));
+
+  express.delete('/orderBomMatchers/:id', canManage, express.crud.deleteRoute.bind(null, app, OrderBomMatcher));
+};

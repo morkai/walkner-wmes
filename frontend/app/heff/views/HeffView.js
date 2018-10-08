@@ -11,6 +11,7 @@ define([
   'app/core/View',
   'app/core/util/getShiftStartInfo',
   'app/production/snManager',
+  'app/production/views/BomCheckerDialogView',
   'app/heff/templates/page'
 ], function(
   _,
@@ -23,6 +24,7 @@ define([
   View,
   getShiftStartInfo,
   snManager,
+  BomCheckerDialogView,
   template
 ) {
   'use strict';
@@ -333,15 +335,18 @@ define([
 
       if (!scanInfo.orderNo)
       {
-        return view.showSnMessage(scanInfo, 'error', 'UNKNOWN_CODE');
+        if (!viewport.currentDialog)
+        {
+          view.showSnMessage(scanInfo, 'error', 'UNKNOWN_CODE');
+        }
+
+        return;
       }
 
       if (snManager.contains(scanInfo._id))
       {
         return view.showSnMessage(scanInfo, 'error', 'ALREADY_USED');
       }
-
-      view.showSnMessage(scanInfo, 'warning', 'CHECKING');
 
       var logEntry = {
         _id: null,
@@ -354,6 +359,16 @@ define([
       };
 
       scanInfo.sapTaktTime = -1;
+
+      view.checkSn(logEntry);
+    },
+
+    checkSn: function(logEntry)
+    {
+      var view = this;
+      var scanInfo = logEntry.data;
+
+      view.showSnMessage(scanInfo, 'warning', 'CHECKING');
 
       var req = view.ajax({
         method: 'POST',
@@ -376,7 +391,12 @@ define([
 
       req.done(function(res)
       {
-        if (res.result === 'SUCCESS')
+        if (res.result === 'CHECK_BOM')
+        {
+          view.hideSnMessage();
+          view.showBomChecker(res.logEntry, res.components);
+        }
+        else if (res.result === 'SUCCESS')
         {
           view.showSnMessage(res.serialNumber, 'success', 'SUCCESS');
         }
@@ -396,9 +416,9 @@ define([
     {
       var $message = this.$id('snMessage');
 
-      this.$id('snMessage-text').html(t('heff', 'snMessage:' + message));
+      this.$id('snMessage-text').html(t('production', 'snMessage:' + message));
       this.$id('snMessage-scannedValue').text(
-        scanInfo._id.length > 19 ? (scanInfo._id.substring(0, 16) + '...') : scanInfo._id
+        scanInfo._id.length > 43 ? (scanInfo._id.substring(0, 40) + '...') : scanInfo._id
       );
       this.$id('snMessage-orderNo').text(scanInfo.orderNo || '-');
       this.$id('snMessage-serialNo').text(scanInfo.serialNo || '-');
@@ -421,6 +441,31 @@ define([
       this.timers.hideSnMessage = null;
 
       this.$id('snMessage').addClass('hidden');
+    },
+
+    showBomChecker: function(logEntry, components)
+    {
+      var view = this;
+      var dialogView = new BomCheckerDialogView({
+        model: {
+          components: components
+        },
+        snMessage: {
+          show: view.showSnMessage.bind(view),
+          hide: view.hideSnMessage.bind(view)
+        }
+      });
+
+      view.listenTo(dialogView, 'checked', function(bom)
+      {
+        viewport.closeDialog();
+
+        logEntry.data.bom = bom;
+
+        view.checkSn(logEntry);
+      });
+
+      viewport.showDialog(dialogView, t('production', 'bomChecker:title', {psn: logEntry.data._id}));
     }
 
   });

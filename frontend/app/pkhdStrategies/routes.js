@@ -102,8 +102,6 @@ define([
   router.map(
     '/pkhdStrategies/:id;delete',
     canManage,
-    _.partial(showDeleteFormPage, 'app/pkhdStrategies/PkhdStrategy', _, _, {
-      baseBreadcrumb: true
-    })
+    _.partial(showDeleteFormPage, 'app/pkhdStrategies/PkhdStrategy', _, _, {})
   );
 });

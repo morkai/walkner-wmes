@@ -92,7 +92,8 @@ define([
   './kanbanContainers/routes',
   './kanbanPrintQueues/routes',
   './pkhdStrategies/routes',
-  './pfepEntries/routes'
+  './pfepEntries/routes',
+  './orderBomMatchers/routes'
 ], function()
 {
   'use strict';

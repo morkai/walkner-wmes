@@ -15,5 +15,6 @@
   "PROPERTY:serialNo": "Nr sztuki",
   "PROPERTY:taktTime": "Czas cyklu [s]",
   "PROPERTY:iptTaktTime": "Czas cyklu IPT [s]",
-  "PROPERTY:sapTaktTime": "Czas taktu [s]"
+  "PROPERTY:sapTaktTime": "Czas taktu [s]",
+  "PROPERTY:bom": "Komponenty"
 }

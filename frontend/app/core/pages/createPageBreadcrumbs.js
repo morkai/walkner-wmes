@@ -52,10 +52,19 @@ define([
     }
     else if (page.baseBreadcrumb)
     {
-      breadcrumbs.unshift({
-        label: t.bound(nlsDomain, 'BREADCRUMBS:base'),
-        href: String(_.result(page, 'baseBreadcrumb'))
-      });
+      var baseBreadcrumbs = _.result(page, 'baseBreadcrumb');
+
+      if (Array.isArray(baseBreadcrumbs))
+      {
+        breadcrumbs.unshift.apply(breadcrumbs, baseBreadcrumbs);
+      }
+      else
+      {
+        breadcrumbs.unshift({
+          label: t.bound(nlsDomain, 'BREADCRUMBS:base'),
+          href: String(baseBreadcrumbs)
+        });
+      }
     }
 
     return breadcrumbs;

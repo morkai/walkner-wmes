@@ -8,6 +8,7 @@ const getProductionStateRoute = require('./getProductionStateRoute');
 const getProductionHistoryRoute = require('./getProductionHistoryRoute');
 const syncRoute = require('./syncRoute');
 const checkSerialNumberRoute = require('./checkSerialNumberRoute');
+const checkBomSerialNumberRoute = require('./checkBomSerialNumberRoute');
 const getRecentPersonnelRoute = require('./getRecentPersonnelRoute');
 
 module.exports = function setUpProductionRoutes(app, productionModule)
@@ -17,6 +18,8 @@ module.exports = function setUpProductionRoutes(app, productionModule)
   const orgUnits = app[productionModule.config.orgUnitsId];
   const userModule = app[productionModule.config.userId];
   const updaterModule = app[productionModule.config.updaterId];
+
+  const canView = userModule.auth('LOCAL', 'USER');
 
   express.get('/operator', function(req, res)
   {
@@ -61,14 +64,19 @@ module.exports = function setUpProductionRoutes(app, productionModule)
     settings.updateRoute
   );
 
-  express.get('/production/orders', findOrdersRoute.bind(null, app, productionModule));
-  express.get('/production/state', getProductionStateRoute.bind(null, app, productionModule));
-  express.get('/production/history', getProductionHistoryRoute.bind(null, app, productionModule));
-  express.get('/production/getRecentPersonnel', getRecentPersonnelRoute.bind(null, app, productionModule));
-  express.post('/production/checkSerialNumber', checkSerialNumberRoute.bind(null, app, productionModule));
-  express.post('/prodLogEntries', syncRoute.bind(null, app, productionModule));
+  express.get('/production/orders', canView, findOrdersRoute.bind(null, app, productionModule));
+  express.get('/production/state', canView, getProductionStateRoute.bind(null, app, productionModule));
+  express.get('/production/history', canView, getProductionHistoryRoute.bind(null, app, productionModule));
+  express.get('/production/getRecentPersonnel', canView, getRecentPersonnelRoute.bind(null, app, productionModule));
+  express.post('/production/checkSerialNumber', canView, checkSerialNumberRoute.bind(null, app, productionModule));
+  express.post(
+    '/production/checkBomSerialNumber',
+    canView,
+    checkBomSerialNumberRoute.bind(null, app, productionModule)
+  );
+  express.post('/prodLogEntries', canView, syncRoute.bind(null, app, productionModule));
 
-  express.get('/production/orderQueue/:shift', (req, res, next) =>
+  express.get('/production/orderQueue/:shift', canView, (req, res, next) =>
   {
     productionModule.getOrderQueue(req.params.shift, (err, orderQueue) =>
     {

@@ -179,7 +179,8 @@ define([
         subtabs: onlySpigot ? ['spigot'] : [
           'taktTime',
           'downtimes',
-          'spigot'
+          'spigot',
+          'bomChecker'
         ],
         onlySpigot: onlySpigot
       });

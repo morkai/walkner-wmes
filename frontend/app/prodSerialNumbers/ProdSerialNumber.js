@@ -32,6 +32,7 @@ define([
       o.taktTime = time.toString(Math.round(o.taktTime / 1000));
       o.iptTaktTime = o.iptTaktTime ? time.toString(Math.round(o.iptTaktTime / 1000)) : '';
       o.sapTaktTime = o.sapTaktTime ? time.toString(o.sapTaktTime) : '';
+      o.bom = !Array.isArray(o.bom) ? '' : o.bom.map(function(v) { return v.split(':')[0]; }).join(', ')
 
       return o;
     }

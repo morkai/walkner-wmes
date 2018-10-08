@@ -16,7 +16,8 @@
     "PROPERTY:serialNo": "Item no",
     "PROPERTY:taktTime": "Cycle time [s]",
     "PROPERTY:iptTaktTime": "IPT cycle time [s]",
-    "PROPERTY:sapTaktTime": "Takt time [s]"
+    "PROPERTY:sapTaktTime": "Takt time [s]",
+    "PROPERTY:bom": "Components"
   },
   "pl": true
 }

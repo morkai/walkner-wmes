@@ -44,7 +44,8 @@ module.exports = function setupProdSerialNumberModel(app, mongoose)
     iptAt: {
       type: Date,
       default: null
-    }
+    },
+    bom: [String]
   }, {
     id: false,
     versionKey: false,
@@ -57,6 +58,7 @@ module.exports = function setupProdSerialNumberModel(app, mongoose)
   prodSerialNumberSchema.index({prodShiftOrder: 1, scannedAt: -1});
   prodSerialNumberSchema.index({prodLine: 1, scannedAt: -1});
   prodSerialNumberSchema.index({scannedAt: -1});
+  prodSerialNumberSchema.index({bom: 1}, {partialFilterExpression: {bom: {$type: 'array'}}});
 
   prodSerialNumberSchema.post('save', function(doc)
   {

@@ -7,7 +7,7 @@
       <div class="settings">
         <div class="list-group">
           <% subtabs.forEach(function(subtab) { %>
-          <a class="list-group-item" href="#production;settings?tab=operator&subtab=<%- subtab %>" data-tab="operator" data-subtab="<%- subtab %>"><%- t('production', 'settings:tab:' + subtab) %></a>
+          <a class="list-group-item" href="#production;settings?tab=operator&subtab=<%- subtab %>" data-tab="operator" data-subtab="<%- subtab %>" data-redirect="<%- subtab === 'bomChecker' ? '#orderBomMatchers' : '' %>"><%- t('production', 'settings:tab:' + subtab) %></a>
           <% }) %>
         </div>
         <div class="panel panel-primary">

@@ -261,6 +261,7 @@
   "snMessage:orderNo": "Zlecenie",
   "snMessage:serialNo": "Numer",
   "snMessage:UNKNOWN_CODE": "Zeskanowany kod nie zawiera numeru seryjnego.",
+  "snMessage:INVALID_LINE": "Nieprawidłowa linia produkcyjna.",
   "snMessage:INVALID_LINE_STATE": "Nieprawidłowa zmiana produkcyjna lub zlecenie.",
   "snMessage:INVALID_STATE:idle": "Rozpocznij zlecenie, aby móc skanować numery seryjne.",
   "snMessage:INVALID_STATE:downtime": "Zakończ przestój, aby móc skanować numery seryjne.",
@@ -287,9 +288,20 @@
 
   "taktTime:list:title": "Lista zeskanowanych nr seryjnych",
 
+  "bomChecker:title": "Sprawdzanie komponentów dla {psn}",
+  "bomChecker:message:todo": "Zeskanuj etykietę komponentu.",
+  "bomChecker:message:checking": "Sprawdzanie komponentu...",
+  "bomChecker:message:success": "Prawidłowy komponent!",
+  "bomChecker:message:failure": "Nie udało się sprawdzić komponentu.",
+  "bomChecker:message:nc12": "Niepasujące 12NC: {nc12}",
+  "bomChecker:message:used": "Kod wykorzystany w: {psn}",
+  "snMessage:BOM_CHECKER:NO_ORDER": "Wymagany kod komponentu a nie zlecenia.",
+  "snMessage:BOM_CHECKER:NO_MATCH": "Kod nie pasuje do żadnego z komponentów.",
+
   "settings:tab:operator": "Formatka operatora",
   "settings:tab:downtimes": "Przestoje",
   "settings:tab:spigot": "Sprawdzanie Spigota",
+  "settings:tab:bomChecker": "Sprawdzanie komponentów",
   "settings:tab:taktTime": "Takt Time",
   "settings:initialDowntimeWindow": "Czas na rozpoczęcie początkowego przestoju na zmianie [min]",
   "settings:rearmDowntimeReason": "Przestój ze sprawdzaniem Spigota",
