@@ -127,6 +127,12 @@ define([
     {
       var formData = this.model.toJSON();
 
+      formData.matchers = _.assign({
+        mrp: [],
+        nc12: [],
+        name: []
+      }, formData.matchers);
+
       formData.matchers = {
         mrp: formData.matchers.mrp.join(', '),
         nc12: formData.matchers.nc12.join(', '),
@@ -156,6 +162,16 @@ define([
       {
         c.nc12Index = c.nc12Index.split(', ').map(function(v) { return +v; });
         c.snIndex = c.snIndex.split(', ').map(function(v) { return +v; });
+
+        if (c.nc12Index.length === 0)
+        {
+          c.nc12Index.push(-1);
+        }
+
+        if (c.snIndex.length === 0)
+        {
+          c.snIndex.push(-1);
+        }
 
         return c;
       });
