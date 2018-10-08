@@ -17,8 +17,6 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
   const Order = mongoose.model('Order');
   const OrderZlf1 = mongoose.model('OrderZlf1');
   const DelayReason = mongoose.model('DelayReason');
-  const PkhdComponent = mongoose.model('PkhdComponent');
-  const PkhdStrategy = mongoose.model('PkhdStrategy');
 
   const canView = userModule.auth('LOCAL', 'ORDERS:VIEW');
   const canPrint = userModule.auth('LOCAL', 'ORDERS:VIEW');
@@ -97,7 +95,9 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
         scheduledStartDate: 'date',
         scheduledFinishDate: 'date',
         importedAt: 'datetime',
-        updatedAt: 'datetime'
+        updatedAt: 'datetime',
+        enteredBy: 15,
+        changedBy: 15
       },
       serializeRow: exportOrder,
       model: Order
@@ -228,7 +228,9 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
       scheduledStartDate: doc.scheduledStartDate,
       scheduledFinishDate: doc.scheduledFinishDate,
       importedAt: doc.createdAt,
-      updatedAt: doc.updatedAt
+      updatedAt: doc.updatedAt,
+      enteredBy: doc.enteredBy,
+      changedBy: doc.changedBy
     };
   }
 };

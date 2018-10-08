@@ -18,6 +18,10 @@
           <div class="prop-value"><%- model.nc12 || '-' %></div>
         </div>
         <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:mrp') %></div>
+          <div class="prop-value"><%= model.mrp || '-' %></div>
+        </div>
+        <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:name') %></div>
           <div class="prop-value"><%= model.name || '-' %></div>
         </div>
@@ -52,10 +56,6 @@
     <div class="col-md-4">
       <div class="props">
         <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:mrp') %></div>
-          <div class="prop-value"><%= model.mrp || '-' %></div>
-        </div>
-        <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:qty') %></div>
           <div class="prop-value"><%= model.qtyUnit || '-' %></div>
         </div>
@@ -74,6 +74,14 @@
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:delayReason') %></div>
           <div class="prop-value"><%- model.delayReason || '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:enteredBy') %></div>
+          <div class="prop-value"><%- model.enteredBy || '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:changedBy') %></div>
+          <div class="prop-value"><%- model.changedBy || '-' %></div>
         </div>
       </div>
     </div>

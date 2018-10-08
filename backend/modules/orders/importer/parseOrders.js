@@ -30,7 +30,9 @@ module.exports = function parseOrders(input, orders, importTs)
       priority: /^Priority$/,
       scheduledStartDate: /^Sch.*?Sta/,
       scheduledFinishDate: /^Sch.*?Fin/,
-      leadingOrder: /^Lead.*?Ord/
+      leadingOrder: /^Lead.*?Ord/,
+      enteredBy: /^Entered by$/,
+      changedBy: /^Changed by$/
     },
     valueParsers: {
       nc12: input => input.replace(/^0+/, ''),
@@ -44,7 +46,9 @@ module.exports = function parseOrders(input, orders, importTs)
         .replace(/\s+/g, ' ')
         .split(' ')
         .map(status => status.replace(/\*/g, ''))
-        .filter(status => status.length > 0)
+        .filter(status => status.length > 0),
+      enteredBy: parseSapString,
+      changedBy: parseSapString
     },
     itemDecorator: obj =>
     {
@@ -84,6 +88,8 @@ module.exports = function parseOrders(input, orders, importTs)
         whStatus: 'unknown',
         whTime: null,
         whDropZone: '',
+        enteredBy: obj.enteredBy.includes('SYSBTC') ? 'System' : obj.enteredBy,
+        changedBy: obj.changedBy.includes('SYSBTC') ? 'System' : obj.changedBy,
         operations: [],
         documents: [],
         bom: [],

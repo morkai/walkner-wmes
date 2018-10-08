@@ -80,6 +80,8 @@
     "PROPERTY:whTime": "Drop zone time",
     "PROPERTY:whDropZone": "Drop zone group",
     "PROPERTY:whStatus": "Drop zone status",
+    "PROPERTY:enteredBy": "Entered by",
+    "PROPERTY:changedBy": "Changed by",
 
     "whStatus:unknown": "Unknown",
     "whStatus:todo": "Todo",

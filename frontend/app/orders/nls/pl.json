@@ -79,6 +79,8 @@
   "PROPERTY:whTime": "Czas drop zone",
   "PROPERTY:whDropZone": "Grupa drop zone",
   "PROPERTY:whStatus": "Status drop zone",
+  "PROPERTY:enteredBy": "Stworzone przez",
+  "PROPERTY:changedBy": "Zmienione przez",
 
   "whStatus:unknown": "Nieokreślony",
   "whStatus:todo": "Do zrobienia",
