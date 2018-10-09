@@ -125,6 +125,11 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
   {
     const queue = queues.get(id);
 
+    if (!queue)
+    {
+      return;
+    }
+
     if (queue.length === 0)
     {
       return queues.delete(id);
