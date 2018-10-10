@@ -1281,6 +1281,7 @@ app/production/views/TaktTimeView.js
 app/production/templates/spigotChecker.js
 app/production/views/SpigotCheckerView.js
 app/production/templates/bomChecker.js
+app/production/templates/bomCheckerRow.js
 app/production/views/BomCheckerDialogView.js
 app/production/templates/productionPage.js
 app/production/templates/duplicateWarning.js
@@ -1950,6 +1951,7 @@ app/production/views/TaktTimeView.js
 app/production/templates/spigotChecker.js
 app/production/views/SpigotCheckerView.js
 app/production/templates/bomChecker.js
+app/production/templates/bomCheckerRow.js
 app/production/views/BomCheckerDialogView.js
 app/production/templates/productionPage.js
 app/production/templates/duplicateWarning.js
@@ -2057,6 +2059,7 @@ app/core/layouts/BlankLayout.js
 app/core/util/getShiftStartInfo.js
 app/production/snManager.js
 app/production/templates/bomChecker.js
+app/production/templates/bomCheckerRow.js
 app/production/views/BomCheckerDialogView.js
 app/heff/templates/page.js
 app/heff/views/HeffView.js
