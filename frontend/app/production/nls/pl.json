@@ -274,6 +274,20 @@
   "snMessage:STANDARD_LABEL": "Nie można używać wirtualnego numeru seryjnego w tym zleceniu.",
   "snMessage:SUCCESS": "Numer seryjny został pomyślnie zarejestrowany.",
 
+  "bomChecker:title": "Sprawdzanie komponentów",
+  "bomChecker:message:todo": "Zeskanuj etykietę komponentu.",
+  "bomChecker:message:checking": "Sprawdzanie komponentu...",
+  "bomChecker:message:success": "Prawidłowy komponent!",
+  "bomChecker:message:failure": "Nie udało się sprawdzić komponentu.",
+  "bomChecker:message:todo:sn": "Zeskanuj etykietę produktu.",
+  "bomChecker:message:checking:sn": "Sprawdzanie numeru seryjnego...",
+  "bomChecker:message:success:sn": "Prawidłowy numer seryjny!",
+  "bomChecker:message:failure:sn": "Nie udało się sprawdzić numeru seryjnego.",
+  "bomChecker:message:nc12": "Niepasujące 12NC: {nc12}",
+  "bomChecker:message:used": "Kod wykorzystany w: {psn}",
+  "bomChecker:message:used:sn": "Numer seryjny jest już wykorzystany.",
+  "snMessage:BOM_CHECKER:NO_MATCH": "Kod nie pasuje do żadnego z komponentów.",
+
   "taktTime:check:button": "Sprawdź<br>numer seryjny",
   "taktTime:check:title": "Sprawdzanie nr seryjnych",
   "taktTime:check:orderNo": "Nr zlecenia",
@@ -287,16 +301,6 @@
   "taktTime:check:notFound": "Dany nr seryjny nie był jeszcze zeskanowany.",
 
   "taktTime:list:title": "Lista zeskanowanych nr seryjnych",
-
-  "bomChecker:title": "Sprawdzanie komponentów dla {psn}",
-  "bomChecker:message:todo": "Zeskanuj etykietę komponentu.",
-  "bomChecker:message:checking": "Sprawdzanie komponentu...",
-  "bomChecker:message:success": "Prawidłowy komponent!",
-  "bomChecker:message:failure": "Nie udało się sprawdzić komponentu.",
-  "bomChecker:message:nc12": "Niepasujące 12NC: {nc12}",
-  "bomChecker:message:used": "Kod wykorzystany w: {psn}",
-  "snMessage:BOM_CHECKER:NO_ORDER": "Wymagany kod komponentu a nie zlecenia.",
-  "snMessage:BOM_CHECKER:NO_MATCH": "Kod nie pasuje do żadnego z komponentów.",
 
   "settings:tab:operator": "Formatka operatora",
   "settings:tab:downtimes": "Przestoje",

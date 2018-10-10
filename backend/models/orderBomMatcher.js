@@ -5,7 +5,10 @@
 module.exports = function setupOrderBomMatcherModel(app, mongoose)
 {
   const orderBomMatcherSchema = new mongoose.Schema({
-    active: Boolean,
+    active: {
+      type: Boolean,
+      default: true
+    },
     description: {
       type: String,
       required: true,
@@ -19,7 +22,14 @@ module.exports = function setupOrderBomMatcherModel(app, mongoose)
     components: [{
       nc12: String,
       description: String,
-      unique: Boolean,
+      unique: {
+        type: Boolean,
+        default: true
+      },
+      single: {
+        type: Boolean,
+        default: true
+      },
       pattern: {
         type: String,
         required: true,
@@ -33,47 +43,6 @@ module.exports = function setupOrderBomMatcherModel(app, mongoose)
   });
 
   orderBomMatcherSchema.statics.TOPIC_PREFIX = 'orderBomMatchers';
-
-  orderBomMatcherSchema.methods.matchOrder = function(order)
-  {
-    if (this.matchers.mrp.length && !this.matchers.mrp.includes(order.mrp))
-    {
-      return false;
-    }
-
-    if (this.matchers.nc12.length && !this.matchers.nc12.includes(order.nc12))
-    {
-      return false;
-    }
-
-    if (this.matchers.name.length)
-    {
-      const nameMatches = this.matchers.name.find(nameMatcher =>
-      {
-        try
-        {
-          const re = new RegExp(nameMatcher, 'i');
-
-          return re.test(order.name) || re.test(order.description);
-        }
-        catch (x)
-        {
-          return false;
-        }
-      });
-
-      if (!nameMatches)
-      {
-        return false;
-      }
-    }
-
-    const bom = new Set();
-
-    order.bom.forEach(component => bom.add(component.nc12));
-
-    return this.components.every(componentMatcher => bom.has(componentMatcher.nc12));
-  };
 
   mongoose.model('OrderBomMatcher', orderBomMatcherSchema);
 };

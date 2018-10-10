@@ -43,6 +43,7 @@ exports.start = function startProductionModule(app, module)
 
   module.secretKeys = {};
   module.settings = {};
+  module.bomCache = new Map();
 
   module.recreating = false;
   module.recreate = recreate.bind(null, app, module);
@@ -122,7 +123,11 @@ exports.start = function startProductionModule(app, module)
   app.broker.subscribe('shiftChanged', function clearProdDataCache()
   {
     app.timeout(30000, module.clearStaleProdData);
+
+    module.bomCache.clear();
   });
+
+  app.broker.subscribe('ordersBomMatchers.**', () => module.bomCache.clear());
 
   app.broker.subscribe('hourlyPlans.quantitiesPlanned', function(message)
   {

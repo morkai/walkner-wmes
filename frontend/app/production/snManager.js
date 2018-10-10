@@ -25,16 +25,11 @@ define([
       scanBuffer = buffer;
     }
 
-    var matches = null;
+    var matches = scanBuffer.match(/P0*([0-9]{9})([0-9]{4})/);
 
-    if (!viewport.currentDialog || viewport.currentDialog.snManagerMode !== 'bom')
+    if (!matches)
     {
-      matches = scanBuffer.match(/P0*([0-9]{9})([0-9]{4})/);
-
-      if (!matches)
-      {
-        matches = scanBuffer.match(/[A-Z0-9]{4}\.([0-9]+)\.([0-9]+)/);
-      }
+      matches = scanBuffer.match(/[A-Z0-9]{4}\.([0-9]{9})\.([0-9]{4})/);
     }
 
     if (matches)

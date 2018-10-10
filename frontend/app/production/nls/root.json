@@ -276,6 +276,20 @@
     "snMessage:STANDARD_LABEL": "The virtual SN cannot be used in this order.",
     "snMessage:SUCCESS": "Serial number successfully registered.",
 
+    "bomChecker:title": "Checking components",
+    "bomChecker:message:todo": "Scan the component label.",
+    "bomChecker:message:checking": "Checking the component...",
+    "bomChecker:message:success": "Correct component!",
+    "bomChecker:message:failure": "Failed to check the component.",
+    "bomChecker:message:todo:sn": "Scan the product label.",
+    "bomChecker:message:checking:sn": "Checking the serial number...",
+    "bomChecker:message:success:sn": "Correct serial number!",
+    "bomChecker:message:failure:sn": "Failed to check the serial number.",
+    "bomChecker:message:nc12": "12NC mismatch: {nc12}",
+    "bomChecker:message:used": "Code already used in: {psn}",
+    "bomChecker:message:used:sn": "Serial number already used.",
+    "snMessage:BOM_CHECKER:NO_MATCH": "Code does not match any component.",
+
     "taktTime:check:button": "Check<br>serial number",
     "taktTime:check:title": "Serial number checking",
     "taktTime:check:orderNo": "Order no",
@@ -289,16 +303,6 @@
     "taktTime:check:notFound": "The specified serial number was not scanned yet.",
 
     "taktTime:list:title": "List of scanned serial numbers",
-
-    "bomChecker:title": "Checking components for {psn}",
-    "bomChecker:message:todo": "Scan the component label.",
-    "bomChecker:message:checking": "Checking the component...",
-    "bomChecker:message:success": "Correct component!",
-    "bomChecker:message:failure": "Failed to check the component.",
-    "bomChecker:message:nc12": "12NC mismatch: {nc12}",
-    "bomChecker:message:used": "Code already used in: {psn}",
-    "snMessage:BOM_CHECKER:NO_ORDER": "Need component code and not order.",
-    "snMessage:BOM_CHECKER:NO_MATCH": "Code does not match any component.",
 
     "settings:tab:operator": "Operator",
     "settings:tab:downtimes": "Downtimes",

@@ -14,7 +14,7 @@ module.exports = function(app, productionModule, prodLine, logEntry, done)
   step(
     function getModelsStep()
     {
-      productionModule.checkSerialNumber(logEntry, this.next());
+      productionModule.checkSerialNumber(logEntry, null, this.next());
     },
     function(err)
     {

@@ -1,0 +1,12 @@
+<tr class="production-bomChecker-component" data-id="<%- component._id %>" data-status="<%- component.status %>">
+  <td class="production-bomChecker-icon"><i class="fa <%- component.icon %>"></i></td>
+  <td>
+    <span class="production-bomChecker-nc12"><%= component.nc12 %></span>
+    <span class="production-bomChecker-description"><%= component.description %></span>
+  </td>
+  <td>
+    <span class="production-bomChecker-scanBuffer"><%- component.scanInfo.raw %></span>
+    <span class="production-bomChecker-message"><%- component.message %></span>
+    <a class="production-bomChecker-reset" href="#">×</a>
+  </td>
+</tr>

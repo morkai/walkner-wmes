@@ -30,6 +30,7 @@
   "PROPERTY:components.nc12Index": "Nr grupy 12NC",
   "PROPERTY:components.snIndex": "Nr grupy SN",
   "PROPERTY:components.unique": "Unikalny?",
+  "PROPERTY:components.single": "Tylko 1?",
 
   "FORM:ACTION:add": "Dodaj strategię",
   "FORM:ACTION:edit": "Edytuj strategię",

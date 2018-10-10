@@ -2,6 +2,7 @@
   <td class="is-min is-number"><%- i + 1 %>.</td>
   <td class="is-min"><input class="form-control" type="text" name="components[<%- i %>].nc12" value="<%= component.nc12 %>" required pattern="^[0-9A-Z]{7,12}$" maxlength="12" style="width: 110px"></td>
   <td class="is-min"><input class="form-control" type="text" name="components[<%- i %>].description" value="<%= component.description %>" required maxlength="40" style="width: 300px"></td>
+  <td class="is-min text-center"><input type="checkbox" name="components[<%- i %>].single" value="true" <%- component.single ? 'checked' : '' %>></td>
   <td class="is-min text-center"><input type="checkbox" name="components[<%- i %>].unique" value="true" <%- component.unique ? 'checked' : '' %>></td>
   <td class="is-min"><input class="form-control" type="text" name="components[<%- i %>].nc12Index" value="<%- component.nc12Index.join(', ') %>" maxlength="20" style="width: 120px"></td>
   <td class="is-min"><input class="form-control" type="text" name="components[<%- i %>].snIndex" value="<%- component.snIndex.join(', ') %>" maxlength="20" style="width: 120px"></td>

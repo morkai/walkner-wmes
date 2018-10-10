@@ -8,7 +8,7 @@ const getProductionStateRoute = require('./getProductionStateRoute');
 const getProductionHistoryRoute = require('./getProductionHistoryRoute');
 const syncRoute = require('./syncRoute');
 const checkSerialNumberRoute = require('./checkSerialNumberRoute');
-const checkBomSerialNumberRoute = require('./checkBomSerialNumberRoute');
+const checkAnySerialNumberRoute = require('./checkAnySerialNumberRoute');
 const getRecentPersonnelRoute = require('./getRecentPersonnelRoute');
 
 module.exports = function setUpProductionRoutes(app, productionModule)
@@ -70,9 +70,9 @@ module.exports = function setUpProductionRoutes(app, productionModule)
   express.get('/production/getRecentPersonnel', canView, getRecentPersonnelRoute.bind(null, app, productionModule));
   express.post('/production/checkSerialNumber', canView, checkSerialNumberRoute.bind(null, app, productionModule));
   express.post(
-    '/production/checkBomSerialNumber',
+    '/production/checkAnySerialNumber',
     canView,
-    checkBomSerialNumberRoute.bind(null, app, productionModule)
+    checkAnySerialNumberRoute.bind(null, app, productionModule)
   );
   express.post('/prodLogEntries', canView, syncRoute.bind(null, app, productionModule));
 

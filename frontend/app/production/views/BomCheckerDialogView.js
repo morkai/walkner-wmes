@@ -5,13 +5,15 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
-  'app/production/templates/bomChecker'
+  'app/production/templates/bomChecker',
+  'app/production/templates/bomCheckerRow'
 ], function(
   $,
   t,
   viewport,
   View,
-  template
+  template,
+  rowTemplate
 ) {
   'use strict';
 
@@ -23,109 +25,185 @@ define([
 
     dialogClassName: 'production-modal production-bomChecker-modal',
 
-    localTopics: {
+    events: {
 
-      'production.taktTime.snScanned': 'onSnScanned'
+      'click .production-bomChecker-reset': function(e)
+      {
+        this.updateComponent(this.components[this.$(e.target).closest('tr').attr('data-id')], 'todo');
+
+        return false;
+      }
 
     },
 
-    getTemplateData: function()
+    initialize: function()
     {
-      return {
-        components: this.model.components
-      };
+      var orderData = this.model.orderData;
+      var scanInfo = this.model.logEntry.data;
+
+      this.components = [{
+        _id: 0,
+        status: scanInfo.serialNo ? 'success' : 'todo',
+        nc12: orderData.no,
+        description: orderData.description,
+        single: true,
+        unique: true,
+        patternInfo: {
+          pattern: /\.([0-9]{9})\.([0-9]{4})/,
+          nc12: [1],
+          sn: [2]
+        },
+        scanInfo: {
+          raw: scanInfo.serialNo ? scanInfo._id : '?',
+          nc12: orderData.no,
+          sn: scanInfo.serialNo
+        },
+        icon: scanInfo.serialNo ? 'fa-thumbs-up' : 'fa-question',
+        message: t('production', 'bomChecker:message:' + (scanInfo.serialNo ? 'success' : 'todo') + ':sn')
+      }].concat(this.model.components.map(function(component, i)
+      {
+        return {
+          _id: i + 1,
+          status: 'todo',
+          nc12: component.nc12,
+          description: component.description,
+          single: component.single,
+          unique: component.unique,
+          patternInfo: {
+            pattern: new RegExp(component.pattern),
+            nc12: component.nc12Index,
+            sn: component.snIndex
+          },
+          scanInfo: {
+            raw: '?',
+            nc12: '',
+            sn: ''
+          },
+          icon: 'fa-question',
+          message: t('production', 'bomChecker:message:todo')
+        };
+      }));
+    },
+
+    afterRender: function()
+    {
+      var view = this;
+      var html = [];
+
+      view.components.forEach(function(component)
+      {
+        html.push(view.renderPartial(rowTemplate, {component: component}));
+      });
+
+      view.$id('components').append(html);
     },
 
     onSnScanned: function(scanInfo)
     {
-      if (scanInfo.orderNo)
+console.log('BomCheckerDialogView.onSnScanned', scanInfo);
+      var scanBuffer = scanInfo._id;
+
+      for (var i = 0; i < this.components.length; ++i)
       {
-        return this.snMessage.show(scanInfo, 'error', 'BOM_CHECKER:NO_ORDER');
-      }
+        var component = this.components[i];
 
-      for (var i = 0; i < this.model.components.length; ++i)
-      {
-        var matcher = this.model.components[i];
-        var pattern = null;
-
-        try
-        {
-          pattern = new RegExp(matcher.pattern);
-        }
-        catch (err)
-        {
-          continue;
-        }
-
-        var matches = scanInfo._id.match(pattern);
+        var matches = scanBuffer.match(component.patternInfo.pattern);
 
         if (!matches)
         {
           continue;
         }
 
-        var nc12 = matcher.nc12;
-        var sn = '';
-
-        matcher.nc12Index.forEach(function(index) // eslint-disable-line
+        if (!component.single)
         {
-          if (matches[index])
+          if (component.scanInfo.raw === scanBuffer)
           {
-            nc12 = matches[index];
+            return this.updateComponent(component, 'todo');
           }
-        });
 
-        matcher.snIndex.forEach(function(index) // eslint-disable-line
+          if (component.status === 'success' || component.status === 'checking')
+          {
+            continue;
+          }
+        }
+
+        component.scanInfo.raw = scanBuffer;
+
+        if (component._id === 0)
         {
-          if (matches[index])
-          {
-            sn = matches[index];
-          }
-        });
+          component.scanInfo.nc12 = scanInfo.orderNo;
+          component.scanInfo.sn = scanInfo.serialNo;
+        }
+        else
+        {
+          component.scanInfo.nc12 = component.nc12;
+          component.scanInfo.sn = '';
 
-        return this.handleComponent(i, scanInfo._id, matcher, nc12, sn);
+          component.patternInfo.nc12.forEach(function(index) // eslint-disable-line
+          {
+            if (matches[index])
+            {
+              component.scanInfo.nc12 = matches[index];
+            }
+          });
+
+          component.patternInfo.sn.forEach(function(index) // eslint-disable-line
+          {
+            if (matches[index])
+            {
+              component.scanInfo.sn = matches[index];
+            }
+          });
+        }
+
+        return this.handleComponent(component);
       }
 
       this.snMessage.show(scanInfo, 'error', 'BOM_CHECKER:NO_MATCH');
     },
 
-    handleComponent: function(i, scanBuffer, matcher, nc12, sn)
+    handleComponent: function(component)
     {
       var view = this;
-      var $row = view.$('tr[data-i="' + i + '"]');
-      var $icon = $row.find('.fa');
-      var $scanBuffer = $row.find('.production-bomChecker-scanBuffer');
-      var $message = $row.find('.production-bomChecker-message');
 
-      if (nc12 !== matcher.nc12)
+      if (component.scanInfo.nc12 !== component.nc12)
       {
-        return failure(t('production', 'bomChecker:message:nc12', {nc12: nc12}));
+        return view.updateComponent(
+          component,
+          'failure',
+          t('production', 'bomChecker:message:nc12', {nc12: component.nc12})
+        );
       }
 
-      if (matcher.unique)
+      if (component.unique)
       {
-        $row.attr('data-status', 'checking');
-        $icon.attr('class', 'fa fa-spinner fa-spin');
-        $scanBuffer.text(scanBuffer);
-        $message.text(t('production', 'bomChecker:message:checking'));
+        view.updateComponent(component, 'checking');
 
         var req = view.ajax({
           method: 'POST',
-          url: '/production/checkBomSerialNumber',
-          data: JSON.stringify({sn: nc12 + ':' + sn}),
+          url: '/production/checkAnySerialNumber',
+          data: JSON.stringify({
+            sn: component._id === 0
+              ? component.scanInfo.raw
+              : (component.scanInfo.nc12 + ':' + component.scanInfo.sn)
+          }),
           timeout: 6000
         });
 
         req.fail(function()
         {
-          failure(t('production', 'bomChecker:message:failure'));
+          view.updateComponent(component, 'failure');
         });
 
         req.done(function(psn)
         {
           if (psn)
           {
-            failure(t('production', 'bomChecker:message:used', {psn: psn}));
+            view.updateComponent(
+              component,
+              'failure',
+              t('production', 'bomChecker:message:used' + (component._id === 0 ? ':sn' : ''), {psn: psn})
+            );
           }
           else
           {
@@ -140,29 +218,91 @@ define([
 
       function success()
       {
-        $row.attr('data-status', 'success').attr('data-sn', nc12 + ':' + sn);
-        $icon.attr('class', 'fa fa-check');
-        $scanBuffer.text(scanBuffer);
-        $message.text(t('production', 'bomChecker:message:success'));
+        view.updateComponent(component, 'success');
 
         clearTimeout(view.timers.checkAll);
         view.timers.checkAll = setTimeout(view.checkAll.bind(view), 333);
-      }
-
-      function failure(message)
-      {
-        $row.attr('data-status', 'failure');
-        $icon.attr('class', 'fa fa-times');
-        $message.text(message);
       }
     },
 
     checkAll: function()
     {
-      if (this.$('tr[data-status="success"]').length === this.model.components.length)
+      var incomplete = this.components.filter(function(c) { return c.status !== 'success'; });
+
+      if (incomplete.length)
       {
-        this.trigger('checked', this.$('tr[data-sn]').map(function() { return this.dataset.sn; }).get());
+        return;
       }
+
+      var scanInfo = this.model.logEntry.data;
+
+      scanInfo.scannedAt = new Date().toISOString();
+      scanInfo.bom = [];
+
+      this.components.forEach(function(component)
+      {
+        if (component._id === 0)
+        {
+          scanInfo.orderNo = component.scanInfo.nc12;
+          scanInfo.serialNo = component.scanInfo.sn;
+        }
+        else
+        {
+          scanInfo.bom.push(component.scanInfo.nc12 + ':' + component.scanInfo.sn);
+        }
+      });
+
+      this.trigger('checked', this.model.logEntry);
+    },
+
+    updateComponent: function(component, status, message)
+    {
+      if (status)
+      {
+        component.status = status;
+      }
+
+      switch (component.status)
+      {
+        case 'checking':
+          component.icon = 'fa-spinner fa-spin';
+          break;
+
+        case 'failure':
+          component.icon = 'fa-thumbs-down';
+          break;
+
+        case 'success':
+          component.icon = 'fa-thumbs-up';
+          break;
+
+        case 'todo':
+          component.icon = 'fa-question';
+          component.scanInfo.raw = '?';
+          break;
+      }
+
+      if (message)
+      {
+        component.message = message;
+      }
+      else
+      {
+        component.message = t(
+          'production',
+          'bomChecker:message:' + component.status + (component._id === 0 ? ':sn' : '')
+        );
+      }
+
+      if (component._id === 0)
+      {
+        this.model.logEntry.data._id = component.scanInfo.raw;
+        this.model.logEntry.data.serialNo = component.scanInfo.sn;
+      }
+
+      this.$('tr[data-id="' + component._id + '"]').replaceWith(
+        this.renderPartial(rowTemplate, {component: component})
+      );
     }
 
   });

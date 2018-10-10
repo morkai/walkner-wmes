@@ -4,10 +4,11 @@
 
 const moment = require('moment');
 const step = require('h5.step');
+const resolveProductName = require('../util/resolveProductName');
 
 const ORDER_LOCKS = {};
 
-module.exports = function checkSerialNumber(app, productionModule, logEntry, done)
+module.exports = function checkSerialNumber(app, productionModule, logEntry, components, done)
 {
   const mongoose = app[productionModule.config.mongooseId];
   const mysql = app[productionModule.config.mysqlId];
@@ -15,6 +16,8 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
   const ProdShift = mongoose.model('ProdShift');
   const ProdDowntime = mongoose.model('ProdDowntime');
   const ProdSerialNumber = mongoose.model('ProdSerialNumber');
+
+  const bomCheck = Array.isArray(components);
 
   step(
     function()
@@ -36,6 +39,23 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
 
       productionModule.getProdData('order', logEntry.prodShiftOrder, this.parallel());
 
+      ProdSerialNumber
+        .findById(logEntry.data._id)
+        .lean()
+        .exec(this.parallel());
+
+      if (bomCheck)
+      {
+        return;
+      }
+
+      ProdSerialNumber
+        .findOne({prodShiftOrder: logEntry.prodShiftOrder}, {scannedAt: 1, iptAt: 1})
+        .sort({scannedAt: -1})
+        .limit(1)
+        .lean()
+        .exec(this.parallel());
+
       ProdDowntime
         .find({
           prodShiftOrder: logEntry.prodShiftOrder,
@@ -49,20 +69,8 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
         .sort({startedAt: 1})
         .lean()
         .exec(this.parallel());
-
-      ProdSerialNumber
-        .findById(logEntry.data._id)
-        .lean()
-        .exec(this.parallel());
-
-      ProdSerialNumber
-        .findOne({prodShiftOrder: logEntry.prodShiftOrder}, {scannedAt: 1, iptAt: 1})
-        .sort({scannedAt: -1})
-        .limit(1)
-        .lean()
-        .exec(this.parallel());
     },
-    function(err, shift, pso, downtimes, usedSn, previousSn)
+    function(err, shift, pso, usedSn, previousSn, downtimes)
     {
       if (err)
       {
@@ -95,6 +103,20 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
         return this.skip(null, {
           result: 'ALREADY_USED',
           serialNumber: usedSn
+        });
+      }
+
+      if (bomCheck)
+      {
+        return this.skip(null, {
+          result: 'CHECK_BOM',
+          logEntry,
+          components,
+          orderData: {
+            no: pso.orderId,
+            nc12: (pso.orderData ? pso.orderData.nc12 : null) || '000000000000',
+            description: resolveProductName(pso.orderData)
+          }
         });
       }
 
@@ -295,13 +317,13 @@ module.exports = function checkSerialNumber(app, productionModule, logEntry, don
     if (ORDER_LOCKS[orderNo])
     {
       ORDER_LOCKS[orderNo].push(logEntry, done);
-
-      return releaseLock.bind(null, orderNo);
     }
+    else
+    {
+      ORDER_LOCKS[orderNo] = [];
 
-    ORDER_LOCKS[orderNo] = [];
-
-    replaceVirtualSn(logEntry, done);
+      replaceVirtualSn(logEntry, done);
+    }
 
     return releaseLock.bind(null, orderNo);
   }

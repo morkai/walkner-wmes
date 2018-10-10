@@ -1001,19 +1001,35 @@ define([
     {
       if (viewport.currentDialog)
       {
-        return;
-      }
-
-      if (!scanInfo.orderNo)
-      {
-        if (!viewport.currentDialog)
+        if (!(viewport.currentDialog instanceof BomCheckerDialogView))
         {
-          this.showSnMessage(scanInfo, 'error', 'UNKNOWN_CODE');
+          return;
+        }
+
+        if (scanInfo.orderNo)
+        {
+          this.swapBomCheckerIfNeeded(scanInfo);
+        }
+        else
+        {
+          viewport.currentDialog.onSnScanned(scanInfo);
         }
 
         return;
       }
 
+      if (scanInfo.orderNo)
+      {
+        this.createCheckSn(scanInfo);
+      }
+      else
+      {
+        this.resolveBomCheck(scanInfo);
+      }
+    },
+
+    createCheckSn: function(scanInfo, bomScanInfo)
+    {
       var page = this;
       var model = page.model;
       var state = model.get('state');
@@ -1051,10 +1067,10 @@ define([
         return this.showSnMessage(scanInfo, 'error', error);
       }
 
-      page.checkSn(logEntry);
+      page.checkSn(logEntry, bomScanInfo);
     },
 
-    checkSn: function(logEntry)
+    checkSn: function(logEntry, bomScanInfo)
     {
       var page = this;
       var model = page.model;
@@ -1063,7 +1079,7 @@ define([
 
       var req = this.ajax({
         method: 'POST',
-        url: '/production/checkSerialNumber',
+        url: '/production/checkSerialNumber?bomCheck=' + (bomScanInfo ? 1 : 0),
         data: JSON.stringify(logEntry),
         timeout: 6000
       });
@@ -1091,7 +1107,7 @@ define([
         if (res.result === 'CHECK_BOM')
         {
           page.hideSnMessage();
-          page.showBomChecker(res.logEntry, res.components);
+          page.showBomChecker(res, bomScanInfo);
         }
         else if (res.result === 'SUCCESS')
         {
@@ -1112,6 +1128,75 @@ define([
           page.showSnMessage(logEntry.data, 'error', res.result);
         }
       });
+    },
+
+    swapBomCheckerIfNeeded: function(newScanInfo)
+    {
+      var oldScanInfo = viewport.currentDialog.model.logEntry.data;
+
+      if (newScanInfo._id === oldScanInfo._id)
+      {
+        return;
+      }
+
+      if ((newScanInfo.serialNo === 0 && /^0+$/.test(newScanInfo.orderNo))
+        || newScanInfo.orderNo !== oldScanInfo.orderNo)
+      {
+        viewport.closeDialog();
+
+        this.createCheckSn(newScanInfo);
+      }
+      else
+      {
+        viewport.currentDialog.onSnScanned(newScanInfo);
+      }
+    },
+
+    resolveBomCheck: function(bomScanInfo)
+    {
+      var orderScanInfo = {
+        _id: '0000.000000000.0000',
+        orderNo: '000000000',
+        serialNo: 0,
+        scannedAt: bomScanInfo.scannedAt
+      };
+
+      this.createCheckSn(orderScanInfo, bomScanInfo);
+    },
+
+    showBomChecker: function(model, bomScanInfo)
+    {
+      if (bomScanInfo)
+      {
+        model.logEntry.data._id = '0000.000000000.0000';
+        model.logEntry.data.serialNo = 0;
+      }
+
+      var view = this;
+      var dialogView = new BomCheckerDialogView({
+        model: model,
+        snMessage: {
+          show: view.showSnMessage.bind(view),
+          hide: view.hideSnMessage.bind(view)
+        }
+      });
+
+      view.listenToOnce(dialogView, 'dialog:shown', function()
+      {
+        if (bomScanInfo)
+        {
+          dialogView.onSnScanned(bomScanInfo);
+        }
+      });
+
+      view.listenToOnce(dialogView, 'checked', function(logEntry)
+      {
+        viewport.closeDialog();
+
+        view.checkSn(logEntry);
+      });
+
+      viewport.showDialog(dialogView, t('production', 'bomChecker:title'));
     },
 
     onSnChecked: function(data)
@@ -1154,31 +1239,6 @@ define([
       this.timers.hideSnMessage = null;
 
       this.$id('snMessage').addClass('hidden');
-    },
-
-    showBomChecker: function(logEntry, components)
-    {
-      var view = this;
-      var dialogView = new BomCheckerDialogView({
-        model: {
-          components: components
-        },
-        snMessage: {
-          show: view.showSnMessage.bind(view),
-          hide: view.hideSnMessage.bind(view)
-        }
-      });
-
-      view.listenTo(dialogView, 'checked', function(bom)
-      {
-        viewport.closeDialog();
-
-        logEntry.data.bom = bom;
-
-        view.checkSn(logEntry);
-      });
-
-      viewport.showDialog(dialogView, t('production', 'bomChecker:title', {psn: logEntry.data._id}));
     },
 
     startActionTimer: function(action, e)

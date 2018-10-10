@@ -96,6 +96,7 @@ define([
           nc12: '',
           description: '',
           unique: false,
+          single: true,
           nc12Index: [],
           snIndex: [],
           pattern: ''

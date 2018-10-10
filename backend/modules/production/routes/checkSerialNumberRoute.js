@@ -17,12 +17,6 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
     todo: false
   })));
 
-  const orderBomMatcherCache = new Map();
-
-  app.broker.subscribe('ordersBomMatchers.**', () => orderBomMatcherCache.clear());
-
-  app.broker.subscribe('shiftChanged', () => orderBomMatcherCache.clear());
-
   step(
     function()
     {
@@ -82,27 +76,28 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
     },
     function()
     {
-      getOrderBomMatcher(logEntry.data.orderNo, this.next());
+      if (Array.isArray(logEntry.data.bom))
+      {
+        setImmediate(this.next(), null, null);
+      }
+      else
+      {
+        getComponentsToMatch(logEntry.data.orderNo, this.next());
+      }
     },
-    function(err, orderBomMatcher)
+    function(err, components)
     {
       if (err)
       {
         return this.skip(err);
       }
 
-      if (!Array.isArray(logEntry.data.bom) && orderBomMatcher)
+      if (Array.isArray(components) && components.length === 0 && req.query.bomCheck !== '1')
       {
-        return this.skip(null, {
-          result: 'CHECK_BOM',
-          logEntry,
-          components: orderBomMatcher.components
-        });
+        components = null;
       }
-    },
-    function()
-    {
-      productionModule.checkSerialNumber(logEntry, this.next());
+
+      productionModule.checkSerialNumber(logEntry, components, this.next());
     },
     function(err, result)
     {
@@ -113,7 +108,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
 
       res.json(result);
 
-      if (result.result !== 'SUCCESS' && result.result !== 'CHECK_BOM')
+      if (result.result !== 'SUCCESS')
       {
         return;
       }
@@ -130,11 +125,11 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
     }
   );
 
-  function getOrderBomMatcher(orderNo, done)
+  function getComponentsToMatch(orderNo, done)
   {
-    if (orderBomMatcherCache.has(orderNo))
+    if (productionModule.bomCache.has(orderNo))
     {
-      return done(null, orderBomMatcherCache.get(orderNo));
+      return done(null, productionModule.bomCache.get(orderNo));
     }
 
     step(
@@ -145,7 +140,9 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
           mrp: 1,
           name: 1,
           description: 1,
-          'bom.nc12': 1
+          qty: 1,
+          'bom.nc12': 1,
+          'bom.qty': 1
         };
 
         Order
@@ -167,7 +164,17 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
 
         setImmediate(this.parallel(), null, order);
 
-        OrderBomMatcher.find({active: true}).exec(this.parallel());
+        if (productionModule.bomCache.has('active'))
+        {
+          setImmediate(this.parallel(), null, productionModule.bomCache.get('active'));
+        }
+        else
+        {
+          OrderBomMatcher
+            .find({active: true})
+            .lean()
+            .exec(this.parallel());
+        }
       },
       function(err, order, orderBomMatchers)
       {
@@ -176,12 +183,91 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
           return done(err);
         }
 
-        const orderBomMatcher = orderBomMatchers.find(orderBomMatcher => orderBomMatcher.matchOrder(order)) || null;
+        if (!productionModule.bomCache.has('active'))
+        {
+          productionModule.bomCache.set('active', orderBomMatchers);
+        }
 
-        orderBomMatcherCache.set(orderNo, orderBomMatcher);
+        const components = matchOrder(orderBomMatchers, order);
 
-        done(null, orderBomMatcher);
+        productionModule.bomCache.set(orderNo, components);
+
+        done(null, components);
       }
     );
+  }
+
+  function matchOrder(orderBomMatchers, order)
+  {
+    const result = [];
+    const bom = new Map();
+
+    order.bom.forEach(component => bom.set(component.nc12, component.qty));
+
+    for (let i = 0; i < orderBomMatchers.length; ++i)
+    {
+      const obm = orderBomMatchers[i];
+
+      if (obm.matchers.mrp.length && !obm.matchers.mrp.includes(order.mrp))
+      {
+        continue;
+      }
+
+      if (obm.matchers.nc12.length && !obm.matchers.nc12.includes(order.nc12))
+      {
+        continue;
+      }
+
+      if (obm.matchers.name.length && !obm.matchers.name.find(m => matchName(order, m)))
+      {
+        continue;
+      }
+
+      if (!obm.components.every(c => bom.has(c.nc12)))
+      {
+        continue;
+      }
+
+      obm.components.forEach(component =>
+      {
+        const componentQty = bom.get(component.nc12);
+        let qtyPerProduct = componentQty / order.qty;
+
+        if (component.single || qtyPerProduct.toString().includes('.'))
+        {
+          qtyPerProduct = 1;
+        }
+
+        for (let j = 0; j < qtyPerProduct; ++j)
+        {
+          result.push({
+            nc12: component.nc12,
+            description: qtyPerProduct === 1 ? component.description : `#${j + 1} ${component.description}`,
+            unique: component.unique,
+            pattern: component.pattern,
+            nc12Index: component.nc12Index,
+            snIndex: component.snIndex
+          });
+        }
+      });
+
+      break;
+    }
+
+    return result;
+  }
+
+  function matchName(order, nameMatcher)
+  {
+    try
+    {
+      const re = new RegExp(nameMatcher, 'i');
+
+      return re.test(order.name) || re.test(order.description);
+    }
+    catch (x)
+    {
+      return false;
+    }
   }
 };
