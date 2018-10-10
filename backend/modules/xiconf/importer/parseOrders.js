@@ -12,7 +12,7 @@ module.exports = function parseXiconfOrders(input, hidLamps)
   const PROGRAM_RE = /Program\s*(.*?)(?:'|"|”)?$/i;
   const GPRS_PROGRAM_RE = /^LC/;
   const GPRS_CONFIG_RE = /\s+(F|T)(P|A)(_|A|B|C|D)/;
-  const HID_RE = /^(((MASTER|HPI-T|MST|CDM-T).*?W\/)|(Halogen|SON-T).*?W)/;
+  const HID_RE = /^(CDM-T|HPI-T|Halogen|MASTER|MST|SON-T).*?W/;
 
   const isFromDocs = /^DOCS/.test(input);
 
@@ -37,24 +37,21 @@ module.exports = function parseXiconfOrders(input, hidLamps)
         return null;
       }
 
+      const isHidItem = !!hidLamps[obj.nc12];
+
+      if (!isHidItem && HID_RE.test(obj.name))
+      {
+        return null;
+      }
+
       const programMatches = obj.name.match(PROGRAM_RE);
       const isProgramItem = programMatches !== null;
-      let isHidItem = false;
 
       obj.source = isFromDocs && isProgramItem ? 'docs' : 'xiconf';
 
       if (isProgramItem)
       {
         obj.name = programMatches[1].trim();
-      }
-      else if (HID_RE.test(obj.name))
-      {
-        if (!hidLamps[obj.nc12])
-        {
-          return null;
-        }
-
-        isHidItem = true;
       }
 
       const isGprsItem = isProgramItem && GPRS_PROGRAM_RE.test(obj.name);
