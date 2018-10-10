@@ -19,6 +19,7 @@
 
     "filter:submit": "Filter strategies",
 
+    "PROPERTY:active": "Active?",
     "PROPERTY:description": "Description",
     "PROPERTY:mrp": "Order MRP",
     "PROPERTY:nc12": "Order 12NC",

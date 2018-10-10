@@ -4,6 +4,14 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
+        <div class="checkbox">
+          <label class="control-label">
+            <input type="checkbox" name="active" value="true">
+            <%- helpers.t('PROPERTY:active') %>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-description" class="control-label is-required"><%- helpers.t('PROPERTY:description') %></label>
         <input id="<%- idPrefix %>-description" class="form-control" type="text" autocomplete="new-password" name="description" required maxlength="60">
       </div>

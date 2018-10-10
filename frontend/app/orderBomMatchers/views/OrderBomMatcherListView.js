@@ -13,6 +13,7 @@ define([
 
     columns: [
       'description',
+      {id: 'active', className: 'is-min'},
       'mrp',
       'nc12',
       'name',
