@@ -72,7 +72,7 @@ define([
 
       if (e.key && e.key.length === 1)
       {
-        scanBuffer += e.key;
+        scanBuffer += e.key.toUpperCase();
 
         clearTimeout(handleTimeout);
         handleTimeout = setTimeout(handleScanBuffer, 50);
