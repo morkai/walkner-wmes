@@ -8,6 +8,7 @@ define([
   'use strict';
 
   var list = [
+    'generic/text',
     'orders',
     'qi',
     'planning',

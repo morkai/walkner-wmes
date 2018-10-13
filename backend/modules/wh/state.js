@@ -821,7 +821,7 @@ module.exports = function setUpWhState(app, module)
         fs.readFile(`${__dirname}/templates/label.prn`, 'utf8', this.parallel());
 
         Printer
-          .findOne({tags: `wh/cart/${userFunc}`}, {_id: 1})
+          .findOne({tags: `wh/cart/${userFunc}`})
           .lean()
           .exec(this.parallel());
 
@@ -866,7 +866,7 @@ module.exports = function setUpWhState(app, module)
           });
         });
 
-        html2pdf.printZpl(zpl.join('\r\n'), printer._id, this.next());
+        html2pdf.printZpl(zpl.join('\r\n'), {printer}, null, this.next());
       },
       function(err)
       {

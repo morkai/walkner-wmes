@@ -21,7 +21,8 @@ exports.DEFAULT_CONFIG = {
   poolOptions: {},
   sumatraExe: 'SumatraPDF.exe',
   zintExe: 'zint',
-  spoolExe: 'spool.exe'
+  spoolExe: 'spool.exe',
+  ncatExe: 'ncat'
 };
 
 exports.start = function startHtml2pdfModule(app, module)
@@ -275,7 +276,7 @@ exports.start = function startHtml2pdfModule(app, module)
     );
   };
 
-  module.printZpl = (zpl, printerId, done) =>
+  module.printZpl = (zpl, options, done) =>
   {
     const Printer = app[module.config.mongooseId].model('Printer');
     const labelFilePath = join(tmpdir(), `WMES.${Date.now()}.${Math.random()}.zpl`);
@@ -283,7 +284,18 @@ exports.start = function startHtml2pdfModule(app, module)
     step(
       function()
       {
-        Printer.findById(printerId).lean().exec(this.parallel());
+        if (!options.printer)
+        {
+          setImmediate(this.parallel(), null, null);
+        }
+        else if (options.printer._id)
+        {
+          setImmediate(this.parallel(), null, options.printer);
+        }
+        else
+        {
+          Printer.findById(options.printer).lean().exec(this.parallel());
+        }
 
         fs.writeFile(labelFilePath, zpl, this.parallel());
       },
@@ -296,27 +308,49 @@ exports.start = function startHtml2pdfModule(app, module)
 
         if (!printer)
         {
-          return this.skip(app.createError(`Unknown printer: ${printerId}`, 'PRINTER_NOT_FOUND', 400));
+          return this.skip(app.createError(`Unknown printer: ${options.printer}`, 'PRINTER_NOT_FOUND', 400));
+        }
+
+        const line = options.line ? options.line.toUpperCase() : null;
+
+        if (printer.special && line)
+        {
+          const matches = printer.special
+            .split('\n')
+            .map(l => l.trim().split(':'))
+            .filter(l => l[0].toUpperCase() === 'LINE' && l[1].toUpperCase().split(',').includes(line))
+            .shift();
+
+          if (!matches || !/^(?:\.?[0-9]{1,3}){4}$/.test(matches[2]))
+          {
+            return this.skip(app.createError(`No printer for line: ${options.line}`, 'INVALID_PRINTER', 500));
+          }
+
+          const host = matches[2];
+          const port = parseInt(matches[3], 10) || 9100;
+
+          return exec(
+            `"${module.config.ncatExe}" -4 --send-only -w 5 ${host} ${port} < "${labelFilePath}"`,
+            this.next()
+          );
         }
 
         if (process.platform === 'win32')
         {
-          execFile(module.config.spoolExe, [labelFilePath, printer.name], this.next());
+          return execFile(module.config.spoolExe, [labelFilePath, printer.name], this.next());
         }
-        else
+
+        const matches = printer.label.match(/([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)(:[0-9]+)?/);
+
+        if (!matches)
         {
-          const matches = printer.label.match(/([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)(:[0-9]+)?/);
-
-          if (!matches)
-          {
-            return this.skip(app.createError(`No printer address found: ${printer.label}`, 'INVALID_PRINTER', 500));
-          }
-
-          const host = matches[1];
-          const port = (matches[2] || ':9100').substring(1);
-
-          exec(`cat "${labelFilePath}" | netcat -w 1 ${host} ${port}`, this.next());
+          return this.skip(app.createError(`No printer address found: ${printer.label}`, 'INVALID_PRINTER', 500));
         }
+
+        const host = matches[1];
+        const port = (matches[2] || ':9100').substring(1);
+
+        exec(`cat "${labelFilePath}" | netcat -w 1 ${host} ${port}`, this.next());
       },
       function(err)
       {

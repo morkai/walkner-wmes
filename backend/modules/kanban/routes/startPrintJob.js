@@ -438,7 +438,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
           zpl = job.kanbans.map(() => template);
         }
 
-        html2pdf.printZpl(zpl.join('\r\n'), printer, this.next());
+        html2pdf.printZpl(zpl.join('\r\n'), {printer}, this.next());
       },
       function(err)
       {
@@ -618,7 +618,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
             FAMILY: e(job.data.family),
             WORKSTATION: workstation
           }),
-          printer,
+          {printer},
           this.next()
         );
       },
@@ -642,7 +642,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
 
     const zpl = remaining.splice(0, 10);
 
-    html2pdf.printZpl(zpl.join('\r\n'), printer, err =>
+    html2pdf.printZpl(zpl.join('\r\n'), {printer}, err =>
     {
       if (err)
       {
