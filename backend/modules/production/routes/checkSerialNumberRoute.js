@@ -293,14 +293,18 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
         }
 
         const description = obmComponent.description
-          .replace(/@ITEM@/g, orderComponent.item)
-          .replace(/@12NC@/g, orderComponent.nc12)
-          .replace(/@NAME@/g, orderComponent.name);
+          .replace(/@COMPONENT\.ITEM@/g, orderComponent.item)
+          .replace(/@COMPONENT\.12NC@/g, orderComponent.nc12)
+          .replace(/@COMPONENT\.NAME@/g, orderComponent.name)
+          .replace(/@ORDER\.NO@/g, order._id)
+          .replace(/@ORDER\.12NC@/g, order.nc12);
 
         const labelPattern = obmComponent.labelPattern
-          .replace(/@ITEM@/g, orderComponent.item)
-          .replace(/@12NC@/g, orderComponent.nc12)
-          .replace(/@NAME@/g, _.escapeRegExp(orderComponent.name));
+          .replace(/@COMPONENT\.ITEM@/g, orderComponent.item)
+          .replace(/@COMPONENT\.12NC@/g, orderComponent.nc12)
+          .replace(/@COMPONENT\.NAME@/g, _.escapeRegExp(orderComponent.name))
+          .replace(/@ORDER\.NO@/g, order._id)
+          .replace(/@ORDER\.12NC@/g, order.nc12);
 
         for (let j = 0; j < qtyPerProduct; ++j)
         {
@@ -361,7 +365,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
           return module.warn(`Missing HID for 12NC: ${obmComponent.nc12}`);
         }
 
-        obmComponent.labelPattern = obmComponent.labelPattern.replace(/@HID@/g, nc12ToHid.get(obmComponent.nc12));
+        obmComponent.labelPattern = obmComponent.labelPattern.replace(/@HID\.ID@/g, nc12ToHid.get(obmComponent.nc12));
       });
 
       done();
