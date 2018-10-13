@@ -36,7 +36,7 @@ define([
       obj.nc12 = obj.matchers.nc12.join(', ');
       obj.name = obj.matchers.name.join(', ');
       obj.components = obj.components
-        .map(function(c) { return c.nc12; })
+        .map(function(c) { return '<code>' + c.pattern + '</code>'; })
         .join(', ');
 
       return obj;

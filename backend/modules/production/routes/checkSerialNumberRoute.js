@@ -12,6 +12,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
   const ProdLogEntry = mongoose.model('ProdLogEntry');
   const Order = mongoose.model('Order');
   const OrderBomMatcher = mongoose.model('OrderBomMatcher');
+  const XiconfHidLamp = mongoose.model('XiconfHidLamp');
   const logEntry = new ProdLogEntry(orgUnits.fix.prodLogEntry(_.assign(req.body, {
     savedAt: new Date(),
     todo: false
@@ -127,9 +128,9 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
 
   function getComponentsToMatch(orderNo, done)
   {
-    if (productionModule.bomCache.has(orderNo))
+    if (productionModule.bomMatcherCache.has(orderNo))
     {
-      return done(null, productionModule.bomCache.get(orderNo));
+      return done(null, productionModule.bomMatcherCache.get(orderNo));
     }
 
     step(
@@ -141,8 +142,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
           name: 1,
           description: 1,
           qty: 1,
-          'bom.nc12': 1,
-          'bom.qty': 1
+          bom: 1
         };
 
         Order
@@ -164,9 +164,9 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
 
         setImmediate(this.parallel(), null, order);
 
-        if (productionModule.bomCache.has('active'))
+        if (productionModule.bomMatcherCache.has('active'))
         {
-          setImmediate(this.parallel(), null, productionModule.bomCache.get('active'));
+          setImmediate(this.parallel(), null, productionModule.bomMatcherCache.get('active'));
         }
         else
         {
@@ -180,19 +180,45 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
       {
         if (err)
         {
-          return done(err);
+          return this.skip(err);
         }
 
-        if (!productionModule.bomCache.has('active'))
+        if (!productionModule.bomMatcherCache.has('active'))
         {
-          productionModule.bomCache.set('active', orderBomMatchers);
+          productionModule.bomMatcherCache.set('active', orderBomMatchers);
         }
 
         const components = matchOrder(orderBomMatchers, order);
 
-        productionModule.bomCache.set(orderNo, components);
+        productionModule.bomMatcherCache.set(orderNo, components);
 
-        done(null, components);
+        setImmediate(this.group(), null, components);
+
+        const extras = {
+          HID: []
+        };
+
+        components.forEach(component =>
+        {
+          if (component.labelPattern.includes('@HID@'))
+          {
+            extras.HID.push(component);
+          }
+        });
+
+        if (extras.HID.length)
+        {
+          replaceHidExtras(order, extras.HID, this.group());
+        }
+      },
+      function(err, results)
+      {
+        if (err)
+        {
+          return done(err);
+        }
+
+        done(null, results[0]);
       }
     );
   }
@@ -201,60 +227,104 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
   {
     const result = [];
     const bom = new Map();
+    const used = new Set();
 
     order.bom.forEach(component => bom.set(component.nc12, component.qty));
 
-    for (let i = 0; i < orderBomMatchers.length; ++i)
+    orderBomMatchers.forEach(obm =>
     {
-      const obm = orderBomMatchers[i];
-
       if (obm.matchers.mrp.length && !obm.matchers.mrp.includes(order.mrp))
       {
-        continue;
+        return;
       }
 
       if (obm.matchers.nc12.length && !obm.matchers.nc12.includes(order.nc12))
       {
-        continue;
+        return;
       }
 
       if (obm.matchers.name.length && !obm.matchers.name.find(m => matchName(order, m)))
       {
-        continue;
+        return;
       }
 
-      if (!obm.components.every(c => bom.has(c.nc12)))
+      const obmComponents = obm.components.filter(obmComponent =>
       {
-        continue;
-      }
+        if (obmComponent.pattern instanceof RegExp)
+        {
+          return true;
+        }
 
-      obm.components.forEach(component =>
+        try
+        {
+          obmComponent.pattern = new RegExp(
+            /^[0-9]{12}$/.test(obmComponent.pattern) ? `^${obmComponent.pattern}$` : obmComponent.pattern
+          );
+        }
+        catch (err)
+        {
+          return false;
+        }
+
+        return true;
+      });
+
+      order.bom.forEach(orderComponent =>
       {
-        const componentQty = bom.get(component.nc12);
-        let qtyPerProduct = componentQty / order.qty;
+        if (used.has(orderComponent.nc12))
+        {
+          return;
+        }
 
-        if (component.single || qtyPerProduct.toString().includes('.'))
+        const obmComponent = matchComponent(orderComponent, obmComponents);
+
+        if (!obmComponent)
+        {
+          return;
+        }
+
+        used.add(orderComponent.nc12);
+
+        let qtyPerProduct = orderComponent.qty / order.qty;
+
+        if (obmComponent.single || qtyPerProduct.toString().includes('.'))
         {
           qtyPerProduct = 1;
         }
 
+        const description = obmComponent.description
+          .replace(/@ITEM@/g, orderComponent.item)
+          .replace(/@12NC@/g, orderComponent.nc12)
+          .replace(/@NAME@/g, orderComponent.name);
+
+        const labelPattern = obmComponent.labelPattern
+          .replace(/@ITEM@/g, orderComponent.item)
+          .replace(/@12NC@/g, orderComponent.nc12)
+          .replace(/@NAME@/g, _.escapeRegExp(orderComponent.name));
+
         for (let j = 0; j < qtyPerProduct; ++j)
         {
           result.push({
-            nc12: component.nc12,
-            description: qtyPerProduct === 1 ? component.description : `#${j + 1} ${component.description}`,
-            unique: component.unique,
-            pattern: component.pattern,
-            nc12Index: component.nc12Index,
-            snIndex: component.snIndex
+            nc12: orderComponent.nc12,
+            description: qtyPerProduct === 1 ? description : `#${j + 1} ${description}`,
+            unique: obmComponent.unique,
+            labelPattern,
+            nc12Index: obmComponent.nc12Index,
+            snIndex: obmComponent.snIndex
           });
         }
       });
-
-      break;
-    }
+    });
 
     return result;
+  }
+
+  function matchComponent(orderComponent, obmComponents)
+  {
+    return obmComponents.find(obmComponent =>
+    {
+      return obmComponent.pattern.test(orderComponent.nc12) || obmComponent.pattern.test(orderComponent.name);
+    });
   }
 
   function matchName(order, nameMatcher)
@@ -269,5 +339,32 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
     {
       return false;
     }
+  }
+
+  function replaceHidExtras(order, obmComponents, done)
+  {
+    XiconfHidLamp.find({nc12: {$in: obmComponents.map(c => c.nc12)}}).lean().exec((err, hidLamps) =>
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      const nc12ToHid = new Map();
+
+      hidLamps.forEach(hidLamp => nc12ToHid.set(hidLamp.nc12, hidLamp._id));
+
+      obmComponents.forEach(obmComponent =>
+      {
+        if (!nc12ToHid.has(obmComponent.nc12))
+        {
+          return module.warn(`Missing HID for 12NC: ${obmComponent.nc12}`);
+        }
+
+        obmComponent.labelPattern = obmComponent.labelPattern.replace(/@HID@/g, nc12ToHid.get(obmComponent.nc12));
+      });
+
+      done();
+    });
   }
 };

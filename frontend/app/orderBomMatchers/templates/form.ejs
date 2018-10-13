@@ -32,19 +32,19 @@
         <thead>
         <tr>
           <th class="is-min"><%- helpers.t('core', '#') %></th>
-          <th class="is-min"><%- helpers.t('PROPERTY:components.nc12') %></th>
+          <th class="is-min"><%- helpers.t('PROPERTY:components.pattern') %></th>
           <th class="is-min"><%- helpers.t('PROPERTY:components.description') %></th>
-          <th class="is-min"><%- helpers.t('PROPERTY:components.single') %></th>
-          <th class="is-min"><%- helpers.t('PROPERTY:components.unique') %></th>
+          <th class="is-min text-center"><%- helpers.t('PROPERTY:components.single') %></th>
+          <th class="is-min text-center"><%- helpers.t('PROPERTY:components.unique') %></th>
           <th class="is-min"><%- helpers.t('PROPERTY:components.nc12Index') %></th>
           <th class="is-min"><%- helpers.t('PROPERTY:components.snIndex') %></th>
-          <th><%- helpers.t('PROPERTY:components.pattern') %></th>
+          <th><%- helpers.t('PROPERTY:components.labelPattern') %></th>
           <th class="actions"><%- helpers.t('core', 'LIST:COLUMN:actions') %></th>
         </tr>
         </thead>
         <tbody id="<%- idPrefix %>-components"></tbody>
       </table>
-      <button type="button" class="btn btn-default" data-action="addComponent"><i class="fa fa-plus"></i><span><%- helpers.t('FORM:ACTION:addComponent') %></span></button>
+      <button id="<%- idPrefix %>-addComponent" type="button" class="btn btn-default"><i class="fa fa-plus"></i><span><%- helpers.t('FORM:ACTION:addComponent') %></span></button>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

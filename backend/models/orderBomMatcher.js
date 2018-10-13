@@ -20,7 +20,7 @@ module.exports = function setupOrderBomMatcherModel(app, mongoose)
       name: [String]
     },
     components: [{
-      nc12: String,
+      pattern: String,
       description: String,
       unique: {
         type: Boolean,
@@ -30,7 +30,7 @@ module.exports = function setupOrderBomMatcherModel(app, mongoose)
         type: Boolean,
         default: true
       },
-      pattern: {
+      labelPattern: {
         type: String,
         required: true,
         trim: true

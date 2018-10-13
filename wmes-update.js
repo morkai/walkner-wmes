@@ -3,20 +3,20 @@
 
 'use strict';
 
-db.settings.insert({
-  "_id" : "wh.printing.barcodeData",
-  "__v" : 0,
-  "value" : '12nc',
-  "updater" : {
-    "id" : ObjectId("583849c0e46f3a12bc9e5103"),
-    "ip" : "130.142.20.79",
-    "label" : "Walukiewicz Łukasz"
-  },
-  "updatedAt" : ISODate("2018-08-05T22:43:00.394Z")
-});
+db.orderbommatchers.find().forEach(obm =>
+{
+  obm.components.forEach(c =>
+  {
+    if (c.labelPattern)
+    {
+      return;
+    }
 
-db.prodserialnumbers.createIndex({bom: 1}, {
-  name: 'bom_1',
-  background: true,
-  partialFilterExpression: {bom: {$type: 'array'}}
+    c.labelPattern = c.pattern;
+    c.pattern = c.nc12;
+
+    delete c.nc12;
+  });
+
+  db.orderbommatchers.update({_id: obm._id}, obm);
 });

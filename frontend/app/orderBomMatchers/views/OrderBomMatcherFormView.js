@@ -70,7 +70,7 @@ define([
       'blur input[name$="nc12Index"]': 'validateReIndexes',
       'blur input[name$="snIndex"]': 'validateReIndexes',
 
-      'blur input[name$="pattern"]': function(e)
+      'blur input[name$="attern"]': function(e)
       {
         try
         {
@@ -84,22 +84,44 @@ define([
         }
       },
 
+      'focus input[name$="pattern"]': function(e)
+      {
+        console.log(e);
+        var $input = this.$(e.target);
+
+        $input.parent().css({
+          position: 'relative'
+        });
+
+        $input.css({
+          position: 'absolute',
+          width: '878px',
+          top: '5px',
+          left: '5px'
+        });
+
+        $input.one('blur', function()
+        {
+          $input.css({position: '', width: ''}).parent().css({position: ''});
+        });
+      },
+
       'click .btn[data-action="removeComponent"]': function(e)
       {
         this.$(e.currentTarget).closest('tr').remove();
         this.recountComponents();
       },
 
-      'click .btn[data-action="addComponent"]': function()
+      'click #-addComponent': function()
       {
         this.addComponent({
-          nc12: '',
+          pattern: '',
           description: '',
           unique: false,
           single: true,
           nc12Index: [],
           snIndex: [],
-          pattern: ''
+          labelPattern: ''
         });
 
         this.recountComponents();
@@ -120,8 +142,18 @@ define([
     {
       FormView.prototype.afterRender.apply(this, arguments);
 
-      (this.model.get('components') || []).forEach(this.addComponent, this);
-      this.recountComponents();
+      var components = this.model.get('components');
+
+      if (_.isEmpty(components))
+      {
+        this.$id('addComponent').click();
+        this.$id('description').focus();
+      }
+      else
+      {
+        components.forEach(this.addComponent, this);
+        this.recountComponents();
+      }
     },
 
     serializeToForm: function()
@@ -198,10 +230,19 @@ define([
 
     recountComponents: function()
     {
-      this.$id('components').children().each(function(i)
+      var $components = this.$id('components').children();
+
+      if ($components.length)
       {
-        this.children[0].textContent = (i + 1) + '.';
-      });
+        $components.each(function(i)
+        {
+          this.children[0].textContent = (i + 1) + '.';
+        });
+      }
+      else
+      {
+        this.$id('addComponent').click();
+      }
     }
 
   });

@@ -30,26 +30,26 @@
     <thead>
     <tr>
       <th class="is-min"><%- helpers.t('core', '#') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:components.nc12') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:components.pattern') %></th>
       <th class="is-min"><%- helpers.t('PROPERTY:components.description') %></th>
       <th class="is-min"><%- helpers.t('PROPERTY:components.single') %></th>
       <th class="is-min"><%- helpers.t('PROPERTY:components.unique') %></th>
       <th class="is-min"><%- helpers.t('PROPERTY:components.nc12Index') %></th>
       <th class="is-min"><%- helpers.t('PROPERTY:components.snIndex') %></th>
-      <th><%- helpers.t('PROPERTY:components.pattern') %></th>
+      <th><%- helpers.t('PROPERTY:components.labelPattern') %></th>
     </tr>
     </thead>
     <tbody>
       <% model.components.forEach(function(component, i) { %>
       <tr>
         <td class="is-min is-number"><%- i + 1 %>.</td>
-        <td class="is-min"><%= component.nc12 %></td>
+        <td class="is-min"><code><%= component.pattern %></code></td>
         <td class="is-min"><%= component.description %></td>
         <td class="is-min"><%- t('core', 'BOOL:' + component.single) %></td>
         <td class="is-min"><%- t('core', 'BOOL:' + component.unique) %></td>
         <td class="is-min"><%- component.nc12Index.join(', ') %></td>
         <td class="is-min"><%- component.snIndex.join(', ') %></td>
-        <td><code><%= component.pattern %></code></td>
+        <td><code><%= component.labelPattern %></code></td>
       </tr>
       <% }) %>
     </tbody>
