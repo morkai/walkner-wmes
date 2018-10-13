@@ -127,7 +127,7 @@ exports.start = function startProductionModule(app, module)
     module.bomMatcherCache.clear();
   });
 
-  app.broker.subscribe('ordersBomMatchers.**', () => module.bomMatcherCache.clear());
+  app.broker.subscribe('orderBomMatchers.**', () => module.bomMatcherCache.clear());
 
   app.broker.subscribe('hourlyPlans.quantitiesPlanned', function(message)
   {
