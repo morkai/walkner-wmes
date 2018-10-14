@@ -1,3 +1,3 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-define(["underscore","jquery","app/i18n","app/time","app/user","app/core/util/buttonGroup","app/core/util/idAndLabel","app/core/views/FormView","app/users/util/setUpUserSelect2","../PfepEntry","app/pfepEntries/templates/form"],function(e,t,i,r,n,p,o,a,s,u,l){"use strict";return a.extend({template:l,events:e.extend({},a.prototype.events),initialize:function(){a.prototype.initialize.apply(this,arguments)},serialize:function(){return e.assign(a.prototype.serialize.call(this),{})},checkValidity:function(){return!0},serializeToForm:function(){return this.model.toJSON()},serializeForm:function(e){return e},afterRender:function(){a.prototype.afterRender.call(this)}})});
+define(["app/core/views/FormView","app/pfepEntries/templates/form"],function(e,t){"use strict";return e.extend({template:t})});
