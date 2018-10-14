@@ -949,7 +949,7 @@ define([
 
         viewport.msg.hide(view.$exportMsg, true);
       });
-    },
+    }
 
   });
 });

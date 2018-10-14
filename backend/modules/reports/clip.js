@@ -307,7 +307,6 @@ module.exports = function(mongoose, options, done)
     },
     function(err)
     {
-      console.log('done');
       if (err)
       {
         return this.skip(err);

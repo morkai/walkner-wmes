@@ -2,12 +2,10 @@
 
 define([
   'underscore',
-  'app/broker',
-  'app/viewport'
+  'app/broker'
 ], function(
   _,
-  broker,
-  viewport
+  broker
 ) {
   'use strict';
 

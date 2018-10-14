@@ -5,7 +5,6 @@
 const path = require('path');
 const moment = require('moment');
 const step = require('h5.step');
-const deepEqual = require('deep-equal');
 const fs = require('fs-extra');
 const parseSapTextTable = require('../../sap/util/parseSapTextTable');
 const parseSapNumber = require('../../sap/util/parseSapNumber');

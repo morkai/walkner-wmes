@@ -127,7 +127,7 @@ define([
       };
     },
 
-    serializeItemValue: function(property, value, isOld)
+    serializeItemValue: function(property, value)
     {
       if (typeof value === 'number')
       {
