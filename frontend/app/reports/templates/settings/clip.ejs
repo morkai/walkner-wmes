@@ -35,7 +35,7 @@
   <div class="form-group">
     <label for="<%- idPrefix %>-clip-dataHoursOffset"><%- t('reports', 'settings:clip:dataHoursOffset') %></label>
     <p class="help-block"><%- t('reports', 'settings:clip:dataHoursOffset:help') %></p>
-    <input id="<%- idPrefix %>-clip-dataHoursOffset" class="form-control" name="reports.clip.dataHoursOffset" type="number" min="-120" max="120" step="1">
+    <textarea id="<%- idPrefix %>-clip-dataHoursOffset" class="form-control" name="reports.clip.dataHoursOffset" rows="4" data-change-delay="0" data-keyup-delay="10000"></textarea>
   </div>
   <div class="checkbox">
     <label class="control-label">

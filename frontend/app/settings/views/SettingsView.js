@@ -418,20 +418,20 @@ define([
 
     updateSetting: function(settingId, settingValue)
     {
-      clearTimeout(this.timers[settingId]);
+      var view = this;
 
-      if (!this.inProgress[settingId])
+      clearTimeout(view.timers[settingId]);
+
+      if (!view.inProgress[settingId])
       {
-        this.inProgress[settingId] = 0;
+        view.inProgress[settingId] = 0;
       }
 
-      ++this.inProgress[settingId];
-
-      var view = this;
+      ++view.inProgress[settingId];
 
       viewport.msg.saving();
 
-      this.promised(this.settings.update(settingId, settingValue)).always(function()
+      view.settings.update(settingId, settingValue).always(function()
       {
         --view.inProgress[settingId];
 

@@ -158,7 +158,32 @@ define([
 
       if (/dataHoursOffset/.test(id))
       {
-        return parseInt(newValue, 10) || 0;
+        return newValue
+          .split('\n')
+          .map(function(line)
+          {
+            var parts = line.split(':');
+            var hours = parseInt(parts[0], 10);
+            var mrps = (parts[1] || '')
+              .toUpperCase()
+              .replace(/[^A-Z0-9*,]+/g, '')
+              .split(',')
+              .filter(function(mrp) { return mrp.length > 0; });
+
+            return {
+              hours: hours,
+              mrps: mrps
+            };
+          })
+          .filter(function(d)
+          {
+            return d.hours >= -120 && d.hours <= 120 && d.mrps.length > 0;
+          })
+          .map(function(d)
+          {
+            return d.hours + ': ' + d.mrps.join(', ');
+          })
+          .join('\n');
       }
 
       if (/ignoreDone/.test(id))

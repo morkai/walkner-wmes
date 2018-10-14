@@ -19,7 +19,7 @@ module.exports = function(mongoose, options, done)
     dateProperty: 'finishDate',
     findDateProperty: 'scheduledStartDate',
     dataDateProperty: 'scheduledFinishDate',
-    dataHoursOffset: 30,
+    dataHoursOffset: '30: *',
     ignoreDone: true,
     ignoredMrps: 'KS1,KS2,KS3,KS4,KS5,KS6,KS7,KS9,KSA,KSB,KSC,KSD,KSE,KSH'.split(','),
     ignoredStatuses: 'TECO,DEL,DLT,DLFL'.split(','),
@@ -29,6 +29,10 @@ module.exports = function(mongoose, options, done)
     orderFilterMode: 'red',
     orderFilterStatuses: []
   });
+
+  const dataHoursOffset = {
+    '*': 30
+  };
 
   const results = {
     options,
@@ -72,7 +76,16 @@ module.exports = function(mongoose, options, done)
         return this.skip(err);
       }
 
-      settings.forEach(setting => results.options[setting._id.replace('reports.clip.', '')] = setting.value);
+      settings.forEach(setting => options[setting._id.replace('reports.clip.', '')] = setting.value);
+
+      options.dataHoursOffset.split('\n').forEach(line =>
+      {
+        const parts = line.split(':');
+        const hours = parseInt(parts[0], 10);
+        const mrps = parts[1].trim().split(', ');
+
+        mrps.forEach(mrp => dataHoursOffset[mrp] = hours);
+      });
 
       this.keyToMrps = {};
       this.dayToMrps = {};
@@ -178,7 +191,10 @@ module.exports = function(mongoose, options, done)
         'changes.newValues.statuses': 1,
         'changes.comment': 1
       };
-      const cursor = Order.find(conditions, fields).lean().cursor({batchSize: 10});
+      const hint = {
+        [options.findDateProperty]: -1
+      };
+      const cursor = Order.find(conditions, fields).lean().hint(hint).cursor({batchSize: 20});
       const next = _.once(this.next());
 
       cursor.on('error', next);
@@ -186,7 +202,7 @@ module.exports = function(mongoose, options, done)
       cursor.on('data', order =>
       {
         const dataTime = moment(order[options.dataDateProperty])
-          .add(options.dataHoursOffset, 'hours')
+          .add(dataHoursOffset[order.mrp] || dataHoursOffset['*'], 'hours')
           .valueOf();
 
         order.comment = null;
@@ -291,6 +307,7 @@ module.exports = function(mongoose, options, done)
     },
     function(err)
     {
+      console.log('done');
       if (err)
       {
         return this.skip(err);
