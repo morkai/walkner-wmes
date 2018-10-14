@@ -19,3 +19,8 @@ module.exports = {
     promiseLibrary: global.Promise
   }
 };
+
+if (process.env.NODE_ENV !== 'production')
+{
+  delete module.exports.mongoClient.replicaSet;
+}

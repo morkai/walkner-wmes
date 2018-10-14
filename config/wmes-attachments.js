@@ -16,7 +16,7 @@ exports.modules = [
 
 exports.mongoose = {
   uri: mongodb.uri,
-  options: Object.assign(mongodb.mongoClient, {
+  mongoClient: Object.assign(mongodb.mongoClient, {
     poolSize: 2
   }),
   maxConnectTries: 10,

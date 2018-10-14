@@ -31,7 +31,7 @@ exports.events = {
 
 exports.mongoose = {
   uri: mongodb.uri,
-  options: Object.assign(mongodb.mongoClient, {
+  mongoClient: Object.assign(mongodb.mongoClient, {
     poolSize: 8,
     readPreference: 'secondaryPreferred'
   }),
