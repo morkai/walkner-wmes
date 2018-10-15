@@ -7,7 +7,7 @@ const parseSapString = require('../../sap/util/parseSapString');
 const parseSapNumber = require('../../sap/util/parseSapNumber');
 const parseSapDate = require('../../sap/util/parseSapDate');
 
-module.exports = function parseOrders(input, orders, importTs)
+module.exports = function parseOrders(input, orders, importTs, Order)
 {
   if (!input.trim().endsWith('----------'))
   {
@@ -52,50 +52,7 @@ module.exports = function parseOrders(input, orders, importTs)
     },
     itemDecorator: obj =>
     {
-      const scheduledStart = obj.scheduledStartDate;
-      const scheduledFinish = obj.scheduledStartDate;
-
-      orders[obj.no] = {
-        _id: obj.no,
-        createdAt: null,
-        updatedAt: null,
-        nc12: obj.nc12,
-        name: obj.name,
-        mrp: obj.mrp,
-        qty: obj.qty,
-        qtyDone: {
-          total: 0,
-          byLine: {},
-          byOperation: {}
-        },
-        qtyMax: {},
-        unit: obj.unit,
-        startDate: new Date(obj.startDate.y, obj.startDate.m - 1, obj.startDate.d),
-        finishDate: new Date(obj.finishDate.y, obj.finishDate.m - 1, obj.finishDate.d),
-        tzOffsetMs: 0,
-        scheduledStartDate: new Date(scheduledStart.y, scheduledStart.m - 1, scheduledStart.d),
-        scheduledFinishDate: new Date(scheduledFinish.y, scheduledFinish.m - 1, scheduledFinish.d),
-        leadingOrder: obj.leadingOrder || null,
-        salesOrder: obj.salesOrder || null,
-        salesOrderItem: obj.salesOrderItem || null,
-        priority: obj.priority,
-        description: null,
-        soldToParty: null,
-        sapCreatedAt: null,
-        statuses: obj.statuses,
-        statusesSetAt: {},
-        delayReason: null,
-        whStatus: 'unknown',
-        whTime: null,
-        whDropZone: '',
-        enteredBy: obj.enteredBy.includes('SYSBTC') ? 'System' : obj.enteredBy,
-        changedBy: obj.changedBy.includes('SYSBTC') ? 'System' : obj.changedBy,
-        operations: [],
-        documents: [],
-        bom: [],
-        changes: [],
-        importTs: importTs
-      };
+      orders[obj.no] = Order.createForInsert(obj, importTs);
 
       return null;
     }

@@ -28,7 +28,7 @@ define([
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:delayReasons', this.render);
+      this.listenTo(this.model, 'change:' + this.options.property, this.render);
 
       if (this.displayOptions)
       {
@@ -72,17 +72,33 @@ define([
     {
       var chartData = this.serializeChartData();
 
-      this.updateExtremes(false);
+      this.updateExtremes(false, chartData);
 
       this.chart.series[0].setData(chartData, true);
     },
 
     serializeChartData: function()
     {
-      return this.model.get('delayReasons');
+      var data = this.model.get(this.options.property);
+
+      if (data.length > 10 && !this.el.classList.contains('is-fullscreen'))
+      {
+        var remaining = data.slice(9);
+
+        data = data.slice(0, 9);
+
+        data.push({
+          name: t('reports', 'remaining'),
+          color: '#000000',
+          y: remaining.reduce(function(total, d) { return d.y + total; }, 0),
+          remaining: true
+        });
+      }
+
+      return data;
     },
 
-    updateExtremes: function(redraw)
+    updateExtremes: function(redraw, chartData)
     {
       var displayOptions = this.displayOptions;
 
@@ -93,10 +109,16 @@ define([
         return;
       }
 
-      var useMax = !this.isFullscreen && (!this.model.get('isParent') || this.model.get('extremes') === 'parent');
-      var maxDelayReasonsCount = useMax ? displayOptions.get('maxDelayReasonsCount') : null;
+      var useMax = !this.model.get('isParent') || this.model.get('extremes') === 'parent';
+      var max = useMax ? displayOptions.get(this.options.maxProperty) : null;
+      var lastDataPoint = _.last(this.chart.series[0].data) || _.last(chartData);
 
-      this.chart.yAxis[0].setExtremes(0, maxDelayReasonsCount, redraw, false);
+      if (max === null && lastDataPoint && lastDataPoint.remaining)
+      {
+        max = (this.chart.series[0].data[0] || chartData[0]).y;
+      }
+
+      this.chart.yAxis[0].setExtremes(0, max, redraw, false);
     },
 
     onDisplayOptionsChange: function()
@@ -104,7 +126,7 @@ define([
       var changes = this.displayOptions.changedAttributes();
       var redraw = false;
 
-      if (changes.maxDelayReasonsCount !== undefined)
+      if (changes[this.options.maxProperty] !== undefined)
       {
         this.updateExtremes(false);
 
@@ -158,10 +180,10 @@ define([
           type: 'column'
         },
         exporting: {
-          filename: this.t('delayReasons:filename')
+          filename: this.t(this.options.property + ':filename')
         },
         title: {
-          text: this.t('delayReasons:title')
+          text: this.t(this.options.property + ':title')
         },
         noData: {},
         legend: {
@@ -180,8 +202,8 @@ define([
         ],
         series: [
           {
-            id: 'delayReasons',
-            name: this.t('delayReasons:metric'),
+            id: this.options.property,
+            name: this.t(this.options.property + ':metric'),
             data: chartData
           }
         ]

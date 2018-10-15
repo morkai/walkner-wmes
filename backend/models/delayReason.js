@@ -5,10 +5,16 @@
 module.exports = function setupDelayReasonModel(app, mongoose)
 {
   const delayReasonSchema = new mongoose.Schema({
+    active: {
+      type: Boolean,
+      required: true
+    },
     name: {
       type: String,
-      trim: true
-    }
+      trim: true,
+      required: true
+    },
+    drm: {}
   }, {
     id: false
   });

@@ -27,7 +27,15 @@ define([
     {
       return new ListPage({
         collection: new DelayReasonCollection(null, {rqlQuery: req.rql}),
-        columns: ['name']
+        columns: [
+          {id: 'name', className: 'is-min'},
+          {id: 'active', className: 'is-min'},
+          {id: 'man', tdClassName: 'is-min text-mono'},
+          {id: 'machine', tdClassName: 'is-min text-mono'},
+          {id: 'material', tdClassName: 'is-min text-mono'},
+          {id: 'method', tdClassName: 'is-min text-mono'},
+          '-'
+        ]
       });
     });
   });

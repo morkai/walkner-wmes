@@ -2,16 +2,24 @@
 
 define([
   '../time',
+  '../i18n',
   '../core/Model',
+  '../data/orderStatuses',
+  './util/resolveProductName',
   './OperationCollection',
   './DocumentCollection',
-  './ComponentCollection'
+  './ComponentCollection',
+  'app/orderStatuses/util/renderOrderStatusLabel'
 ], function(
   time,
+  t,
   Model,
+  orderStatuses,
+  resolveProductName,
   OperationCollection,
   DocumentCollection,
-  ComponentCollection
+  ComponentCollection,
+  renderOrderStatusLabel
 ) {
   'use strict';
 
@@ -52,81 +60,113 @@ define([
       return data;
     },
 
-    toJSON: function()
+    toJSON: function(options)
     {
-      var order = Model.prototype.toJSON.call(this);
+      var obj = Model.prototype.toJSON.call(this);
+
+      obj.operations = obj.operations ? obj.operations.toJSON() : [];
+
+      if (!Array.isArray(obj.documents))
+      {
+        obj.documents = obj.documents && obj.documents.toJSON ? obj.documents.toJSON() : [];
+      }
+
+      if (!Array.isArray(obj.bom))
+      {
+        obj.bom = obj.bom && obj.bom.toJSON ? obj.bom.toJSON() : [];
+      }
+
+      return obj;
+    },
+
+    serialize: function(options)
+    {
+      var obj = this.toJSON();
+
+      obj.name = resolveProductName(obj);
 
       DATE_PROPS.forEach(function(prop)
       {
-        if (order[prop])
+        if (obj[prop])
         {
-          order[prop + 'Text'] = time.format(order[prop], 'LL');
+          obj[prop + 'Text'] = time.format(obj[prop], 'LL');
         }
       });
 
       TIME_PROPS.forEach(function(prop)
       {
-        if (order[prop])
+        if (obj[prop])
         {
-          order[prop + 'Text'] = time.format(order[prop], 'LLL');
+          obj[prop + 'Text'] = time.format(obj[prop], 'LLL');
         }
       });
 
-      if (!order.unit)
+      if (!obj.unit)
       {
-        order.unit = 'PCE';
+        obj.unit = 'PCE';
       }
 
-      if (!order.qtyMax)
+      if (!obj.qtyMax)
       {
-        order.qtyMax = order.qty;
+        obj.qtyMax = obj.qty;
       }
 
-      if (order.qty)
+      if (obj.qty)
       {
-        order.qtyUnit = order.qty + ' ' + order.unit;
+        obj.qtyUnit = obj.qty + ' ' + obj.unit;
       }
 
-      if (order.qtyMax)
+      if (obj.qtyMax)
       {
-        order.qtyMaxUnit = order.qtyMax + ' ' + order.unit;
+        obj.qtyMaxUnit = obj.qtyMax + ' ' + obj.unit;
       }
 
-      if (order.qtyDone)
+      if (obj.qtyDone)
       {
-        order.qtyDoneUnit = (order.qtyDone.total || 0) + ' ' + order.unit;
+        obj.qtyDoneUnit = (obj.qtyDone.total || 0) + ' ' + obj.unit;
       }
 
-      order.qtys = '';
+      obj.qtys = '';
 
-      if (order.qtyDone && order.qtyDone.total >= 0)
+      if (obj.qtyDone && obj.qtyDone.total >= 0)
       {
-        order.qtys += order.qtyDone.total;
+        obj.qtys += obj.qtyDone.total;
       }
 
-      if (order.qty)
+      if (obj.qty)
       {
-        if (order.qtys.length)
+        if (obj.qtys.length)
         {
-          order.qtys += '/';
+          obj.qtys += '/';
         }
 
-        order.qtys += order.qty;
+        obj.qtys += obj.qty;
       }
 
-      order.operations = order.operations ? order.operations.toJSON() : [];
+      obj.statusLabels = orderStatuses.findAndFill(obj.statuses).map(renderOrderStatusLabel).join(' ');
 
-      if (!Array.isArray(order.documents))
+      var delayReason = options && options.delayReasons && options.delayReasons.get(obj.delayReason);
+
+      obj.delayReason = delayReason ? delayReason.getLabel() : null;
+
+      if (obj.m4)
       {
-        order.documents = order.documents && order.documents.toJSON ? order.documents.toJSON() : [];
+        var m4 = obj.m4;
+
+        obj.m4 = t('orders', 'm4:' + m4);
+
+        if (obj.delayReason)
+        {
+          var drm = (delayReason.get('drm') || {})[m4];
+
+          if (drm)
+          {
+            obj.m4 += ' (' + drm + ')';
+          }
+        }
       }
 
-      if (!Array.isArray(order.bom))
-      {
-        order.bom = order.bom && order.bom.toJSON ? order.bom.toJSON() : [];
-      }
-
-      return order;
+      return obj;
     }
 
   });

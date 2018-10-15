@@ -173,7 +173,11 @@ define([
           return null;
         }
 
-        if (typeof column === 'string')
+        if (column === '-')
+        {
+          column = {id: 'filler', label: ''};
+        }
+        else if (typeof column === 'string')
         {
           column = {id: column, label: t.bound(nlsDomain, 'PROPERTY:' + column)};
         }

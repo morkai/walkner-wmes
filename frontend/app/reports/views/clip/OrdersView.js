@@ -48,7 +48,7 @@ define([
 
       view.setView('.pagination-container', view.paginationView);
 
-      view.listenTo(orders, 'change:delayReason', this.onDelayReasonChange);
+      view.listenTo(orders, 'change:delayReason change:m4', this.onDelayReasonChange);
       view.listenTo(orders, 'change:comment', this.onCommentChange);
       view.listenTo(orders, 'push:change', this.onChangePush);
       view.listenTo(orders.paginationData, 'change:page', this.scrollTop);
@@ -105,14 +105,16 @@ define([
         name: order.get('name'),
         mrp: mrp,
         qty: (order.get('qtyDone') || 0).toLocaleString() + '/' + (order.get('qty') || 0).toLocaleString(),
-        date: date ? time.format(date, 'LL') : '-',
-        cnfStatus: cnfStatus || '-',
+        date: date ? time.format(date, 'L') : '',
+        cnfStatus: cnfStatus || '',
         cnfClassName: cnfClassName,
-        cnfTime: cnfTime ? time.format(cnfTime, 'LLL') : '-',
-        dlvStatus: dlvStatus || '-',
+        cnfTime: cnfTime ? time.format(cnfTime, 'L, HH:mm') : '',
+        dlvStatus: dlvStatus || '',
         dlvClassName: dlvClassName,
-        dlvTime: dlvTime ? time.format(dlvTime, 'LLL') : '-',
-        delayReason: delayReason ? delayReason.getLabel() : '-',
+        dlvTime: dlvTime ? time.format(dlvTime, 'L, HH:mm') : '',
+        delayReason: delayReason ? delayReason.getLabel() : '',
+        m4: order.get('m4'),
+        drm: order.get('drm'),
         comment: order.get('comment'),
         planner: this.planners.getLabel(mrp)
       };
@@ -254,11 +256,26 @@ define([
     onDelayReasonChange: function(order)
     {
       var delayReason = this.delayReasons.get(order.get('delayReason'));
+      var text = '';
+
+      if (delayReason)
+      {
+        text = delayReason.getLabel() + ' (' + this.t('orders', 'm4:' + order.get('m4'));
+
+        var drm = delayReason.get('drm')[order.get('m4')];
+
+        if (drm)
+        {
+          text += '; ' + drm;
+        }
+
+        text += ')';
+      }
 
       this.$id('orders')
         .find('tr[data-id="' + order.id + '"]')
         .find('.reports-2-orders-delayReason')
-        .text(delayReason ? delayReason.getLabel() : '-');
+        .text(text);
     },
 
     onSettingChange: function(setting)

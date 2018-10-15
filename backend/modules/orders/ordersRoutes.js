@@ -90,6 +90,8 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
         priority: 3,
         status: 40,
         delayReason: 15,
+        '4m': 10,
+        drm: 5,
         startDate: 'date',
         finishDate: 'date',
         scheduledStartDate: 'date',
@@ -199,7 +201,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
         return next(err);
       }
 
-      delayReasons.forEach(delayReason => req.delayReasons[delayReason._id] = delayReason.name);
+      delayReasons.forEach(delayReason => req.delayReasons.set(delayReason._id, delayReason));
 
       next();
     });
@@ -207,6 +209,8 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
   function exportOrder(doc, req)
   {
+    const delayReason = req.delayReasons.get(doc.delayReason);
+
     return {
       orderNo: doc._id,
       nc12: doc.nc12,
@@ -222,7 +226,9 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
       soldToParty: doc.soldToParty,
       priority: doc.priority,
       status: doc.statuses.join(' '),
-      delayReason: req.delayReasons[doc.delayReason] || doc.delayReason || '',
+      delayReason: delayReason ? delayReason.name : (doc.delayReason || ''),
+      '4m': doc.m4,
+      drm: delayReason && doc.m4 ? delayReason.drm[doc.m4] : '',
       startDate: doc.startDate,
       finishDate: doc.finishDate,
       scheduledStartDate: doc.scheduledStartDate,

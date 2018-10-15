@@ -21,18 +21,11 @@ define([
 
     updateOnChange: false,
 
-    events: _.extend({
-      'change #-delayReason': function(e)
-      {
-        var changingDelayReason = e.target.value !== (this.model.get('delayReason') || '');
+    events: _.assign({
 
-        this.$id('submit-comment').toggleClass('hidden', changingDelayReason);
-        this.$id('submit-edit').toggleClass('hidden', !changingDelayReason);
-        this.$id('comment')
-          .prop('required', !changingDelayReason)
-          .prev()
-          .toggleClass('is-required', !changingDelayReason);
-      }
+      'change #-delayReason': 'handleDelayReason',
+      'change input[name="m4"]': 'handleDelayReason'
+
     }, FormView.prototype.events),
 
     afterRender: function()
@@ -42,7 +35,9 @@ define([
       this.$id('delayReason').select2({
         allowClear: true,
         placeholder: ' ',
-        data: this.delayReasons.map(idAndLabel)
+        data: this.delayReasons
+          .filter(function(m) { return m.get('active'); })
+          .map(idAndLabel)
       });
 
       var painter = user.isAllowedTo('PAINT_SHOP:PAINTER');
@@ -58,6 +53,7 @@ define([
       if (!formData.delayReason)
       {
         formData.delayReason = '';
+        formData.m4 = '';
       }
 
       return this.ajax({
@@ -70,6 +66,45 @@ define([
     handleSuccess: function()
     {
       this.$id('comment').val('').focus();
+    },
+
+    handleDelayReason: function(e)
+    {
+      var delayReasonId = this.$id('delayReason').val();
+      var m4 = this.$id('input[name="m4"]:checked').val() || '';
+      var delayReason = this.delayReasons.get(delayReasonId);
+      var hasDelayReason = !!delayReason;
+      var changingDelayReason = delayReasonId !== (this.model.get('delayReason') || '');
+      var changingM4 = m4 !== (this.model.get('m4') || '');
+      var changing = changingDelayReason || changingM4;
+
+      this.$('input[name="m4"]')
+        .prop('required', hasDelayReason)
+        .closest('.form-group')
+        .find('.control-label')
+        .toggleClass('is-required', hasDelayReason);
+
+      if (e.target.name === 'delayReason')
+      {
+        if (delayReason)
+        {
+          var drm = delayReason.get('drm');
+          var defaultM4 = Object.keys(drm).filter(function(m4) { return !!drm[m4]; }).shift() || 'man';
+
+          this.$('input[name="m4"][value="' + defaultM4 + '"]').prop('checked', true);
+        }
+        else
+        {
+          this.$('input[name="m4"]:checked').prop('checked', false);
+        }
+      }
+
+      this.$id('submit-comment').toggleClass('hidden', changing);
+      this.$id('submit-edit').toggleClass('hidden', !changing);
+      this.$id('comment')
+        .prop('required', !changing)
+        .prev()
+        .toggleClass('is-required', !changing);
     }
 
   });

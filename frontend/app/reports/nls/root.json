@@ -381,6 +381,14 @@
     "delayReasons:filename": "WMES_CLIP_DelayReasons",
     "delayReasons:metric": "Count",
 
+    "m4s:title": "4M",
+    "m4s:filename": "WMES_CLIP_4M",
+    "m4s:metric": "Count",
+
+    "drms:title": "DRM categories",
+    "drms:filename": "WMES_CLIP_DRM",
+    "drms:metric": "Count",
+
     "orders:empty": "No matching orders found.",
     "orders:qty": "Quantity",
     "orders:startDate": "Start date <br>(basic)",
@@ -621,7 +629,9 @@
     "9:chart:filename": "WMES_PlanLineUtil",
 
     "orgUnitPicker:submit": "Pick",
-    "orgUnitPicker:reset": "Reset"
+    "orgUnitPicker:reset": "Reset",
+
+    "remaining": "Remaining"
   },
   "pl": true
 }

@@ -36,7 +36,9 @@ define([
         extremes: 'none',
         maxClipOrderCount: null,
         maxClipPercent: null,
-        maxDelayReasonsCount: null
+        maxDelayReasonsCount: null,
+        maxM4sCount: null,
+        maxDrmsCount: null
       };
 
       SERIES.forEach(function(series)
@@ -67,7 +69,9 @@ define([
       var extremes = {
         maxClipOrderCount: null,
         maxClipPercent: null,
-        maxDelayReasonsCount: null
+        maxDelayReasonsCount: null,
+        maxM4sCount: null,
+        maxDrmsCount: null
       };
 
       var mode = this.get('extremes');
@@ -84,6 +88,8 @@ define([
         var report = reports[i];
         var maxClip = report.get('maxClip');
         var maxDelayReasons = report.get('maxDelayReasons');
+        var maxM4s = report.get('maxM4s');
+        var maxDrms = report.get('maxDrms');
 
         extremes.maxClipOrderCount = Math.max(
           extremes.maxClipOrderCount,
@@ -101,6 +107,16 @@ define([
         extremes.maxDelayReasonsCount = Math.max(
           extremes.maxDelayReasonsCount,
           maxDelayReasons
+        );
+
+        extremes.maxM4sCount = Math.max(
+          extremes.maxM4sCount,
+          maxM4s
+        );
+
+        extremes.maxDrmsCount = Math.max(
+          extremes.maxDrmsCount,
+          maxDrms
         );
       }
 

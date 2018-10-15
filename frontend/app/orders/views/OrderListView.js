@@ -8,8 +8,7 @@ define([
   'app/data/orderStatuses',
   'app/orderStatuses/util/renderOrderStatusLabel',
   'app/printers/views/PrinterPickerView',
-  '../util/openOrderPrint',
-  '../util/resolveProductName'
+  '../util/openOrderPrint'
 ], function(
   _,
   t,
@@ -18,8 +17,7 @@ define([
   orderStatuses,
   renderOrderStatusLabel,
   PrinterPickerView,
-  openOrderPrint,
-  resolveProductName
+  openOrderPrint
 ) {
   'use strict';
 
@@ -72,6 +70,7 @@ define([
       {id: 'sapCreatedAtText', label: t.bound('orders', 'PROPERTY:sapCreatedAt'), className: 'is-min'},
       {id: 'scheduledStartDateText', label: t.bound('orders', 'PROPERTY:scheduledStartDate'), className: 'is-min'},
       {id: 'delayReason', className: 'is-min'},
+      {id: 'm4', className: 'is-min'},
       {id: 'statusLabels', label: t.bound('orders', 'PROPERTY:statuses')}
     ],
 
@@ -95,18 +94,11 @@ define([
 
     serializeRows: function()
     {
-      var delayReasons = this.delayReasons;
+      var options = {delayReasons: this.delayReasons};
 
       return this.collection.map(function(model)
       {
-        var row = model.toJSON();
-        var delayReason = delayReasons.get(row.delayReason);
-
-        row.name = resolveProductName(row);
-        row.statusLabels = orderStatuses.findAndFill(row.statuses).map(renderOrderStatusLabel).join('');
-        row.delayReason = delayReason ? delayReason.getLabel() : '';
-
-        return row;
+        return model.serialize(options);
       });
     }
 

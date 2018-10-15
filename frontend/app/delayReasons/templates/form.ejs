@@ -2,10 +2,26 @@
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
-    <div class="panel-body">
+    <div class="panel-body has-lastElementRow">
+      <div class="form-group">
+        <div class="checkbox">
+          <label class="control-label">
+            <input type="checkbox" name="active" value="true">
+            <%- helpers.t('PROPERTY:active') %>
+          </label>
+        </div>
+      </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('delayReasons', 'PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100" autofocus>
+      </div>
+      <div class="row">
+        <% ['man', 'machine', 'material', 'method'].forEach(function(prop) { %>
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-<%- prop %>" class="control-label"><%- t('delayReasons', 'PROPERTY:' + prop) %></label>
+          <input id="<%- idPrefix %>-<%- prop %>" class="form-control" type="text" autocomplete="new-password" name="drm.<%- prop %>" maxlength="4" pattern="^[A-Z0-9]{4}$">
+        </div>
+        <% }) %>
       </div>
     </div>
     <div class="panel-footer">

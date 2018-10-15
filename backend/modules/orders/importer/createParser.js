@@ -191,7 +191,8 @@ module.exports = function createParser(app, importerModule, callback)
           parseOrders(
             ordersFileContents,
             orders,
-            ordersFileInfo.timestamp ? new Date(ordersFileInfo.timestamp) : new Date()
+            ordersFileInfo.timestamp ? new Date(ordersFileInfo.timestamp) : new Date(),
+            app[importerModule.config.mongooseId].model('Order')
           );
         }
       },

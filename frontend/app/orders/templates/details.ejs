@@ -73,7 +73,13 @@
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:delayReason') %></div>
-          <div class="prop-value"><%- model.delayReason || '-' %></div>
+          <div class="prop-value"><%= model.delayReason || '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:m4') %></div>
+          <div class="prop-value">
+            <%- model.m4 || '-' %>
+          </div>
         </div>
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:enteredBy') %></div>

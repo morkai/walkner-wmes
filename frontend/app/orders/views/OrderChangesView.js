@@ -93,10 +93,9 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         showPanel: this.options.showPanel !== false,
         changes: this.serializeChanges(),
         renderChange: renderChange,
@@ -215,7 +214,8 @@ define([
           return time.format(value, 'HH:mm');
 
         case 'whStatus':
-          return t('orders', 'whStatus:' + value);
+        case 'm4':
+          return t('orders', valueChange.property + ':' + value);
 
         case 'qtyMax':
           return value.value.toLocaleString();

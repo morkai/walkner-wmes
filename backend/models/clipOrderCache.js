@@ -26,6 +26,8 @@ module.exports = function setupClipOrderCacheModel(app, mongoose)
     scheduledStartDate: Number,
     scheduledFinishDate: Number,
     delayReason: String,
+    m4: String,
+    drm: String,
     statuses: [String],
     productionTime: Number,
     productionStatus: String,

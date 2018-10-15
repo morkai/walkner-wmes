@@ -31,10 +31,33 @@ define([
       this.setView(
         '#-delayReasons',
         new DelayReasonsChartView({
+          property: 'delayReasons',
+          maxProperty: 'maxDelayReasonsCount',
           model: this.model,
           settings: this.settings,
           displayOptions: this.displayOptions,
-          delayReasons: this.delayReasons,
+          skipRenderChart: this.options.skipRenderCharts
+        })
+      );
+      this.setView(
+        '#-m4s',
+        new DelayReasonsChartView({
+          property: 'm4s',
+          maxProperty: 'maxM4sCount',
+          model: this.model,
+          settings: this.settings,
+          displayOptions: this.displayOptions,
+          skipRenderChart: this.options.skipRenderCharts
+        })
+      );
+      this.setView(
+        '#-drms',
+        new DelayReasonsChartView({
+          property: 'drms',
+          maxProperty: 'maxDrmsCount',
+          model: this.model,
+          settings: this.settings,
+          displayOptions: this.displayOptions,
           skipRenderChart: this.options.skipRenderCharts
         })
       );

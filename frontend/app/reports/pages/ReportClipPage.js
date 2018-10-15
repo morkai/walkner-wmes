@@ -316,12 +316,18 @@ define([
       {
         var change = message.change;
         var delayReason = change.newValues.delayReason;
+        var m4 = change.newValues.m4;
         var comment = change.comment;
         var attrs = {};
 
         if (!_.isUndefined(delayReason))
         {
           attrs.delayReason = delayReason;
+        }
+
+        if (!_.isUndefined(m4))
+        {
+          attrs.m4 = m4;
         }
 
         if (!_.isEmpty(comment))

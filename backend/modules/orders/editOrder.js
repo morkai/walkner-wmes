@@ -30,6 +30,7 @@ module.exports = function editOrder(app, module, orderNo, data, userInfo, done)
       const fields = {
         qtyMax: 1,
         delayReason: 1,
+        m4: 1,
         whStatus: 1,
         whTime: 1,
         whDropZone: 1
@@ -73,6 +74,12 @@ module.exports = function editOrder(app, module, orderNo, data, userInfo, done)
           new: data.delayReason,
           value: v => v === '' ? null : new ObjectId(v),
           change: v => v === '' ? null : new ObjectId(v)
+        },
+        m4: {
+          old: order.m4,
+          new: data.m4,
+          value: v => v,
+          change: v => v
         },
         whStatus: {
           old: order.whStatus,
@@ -144,7 +151,7 @@ module.exports = function editOrder(app, module, orderNo, data, userInfo, done)
 
 function validateEditInput(input)
 {
-  const {comment, delayReason, qtyMax, operationNo, whStatus, whTime, whDropZone} = input;
+  const {comment, delayReason, m4, qtyMax, operationNo, whStatus, whTime, whDropZone} = input;
 
   if (!_.isString(comment))
   {
@@ -158,23 +165,34 @@ function validateEditInput(input)
     return false;
   }
 
+  if (m4 !== undefined
+    && m4 !== ''
+    && !['man', 'machine', 'material', 'method'].includes(m4))
+  {
+    return false;
+  }
+
   if (qtyMax !== undefined
     && (qtyMax < 0 || qtyMax > 9999 || !/^[0-9]{4}$/.test(operationNo)))
   {
     return false;
   }
 
-  if (whStatus !== undefined && !_.isString(whStatus))
+  if (whStatus !== undefined
+    && !_.isString(whStatus))
   {
     return false;
   }
 
-  if (whTime !== undefined && whTime !== null && isNaN(Date.parse(whTime)))
+  if (whTime !== undefined
+    && whTime !== null
+    && isNaN(Date.parse(whTime)))
   {
     return false;
   }
 
-  if (whDropZone !== undefined && !_.isString(whDropZone))
+  if (whDropZone !== undefined
+    && !_.isString(whDropZone))
   {
     return false;
   }

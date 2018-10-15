@@ -333,7 +333,10 @@
   flex: 1 1 auto;
 }
 .reports-2-orders-name {
-  min-width: 350px;
+  min-width: 365px;
+}
+.reports-2-orders-qty {
+  min-width: 65px;
 }
 .reports-2-confirm {
   font-weight: bold;

@@ -82,6 +82,12 @@
     "PROPERTY:whStatus": "Drop zone status",
     "PROPERTY:enteredBy": "Entered by",
     "PROPERTY:changedBy": "Changed by",
+    "PROPERTY:m4": "4M",
+
+    "m4:man": "Man",
+    "m4:machine": "Machine",
+    "m4:material": "Material",
+    "m4:method": "Method",
 
     "whStatus:unknown": "Unknown",
     "whStatus:todo": "Todo",

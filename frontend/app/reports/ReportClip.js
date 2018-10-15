@@ -2,10 +2,12 @@
 
 define([
   'underscore',
+  '../i18n',
   '../core/Model',
   '../data/colorFactory'
 ], function(
   _,
+  t,
   Model,
   colorFactory
 ) {
@@ -35,12 +37,16 @@ define([
           endToEndCount: []
         },
         delayReasons: [],
+        m4s: [],
+        drms: [],
         maxClip: {
           orderCount: 0,
           production: 0,
           endToEnd: 0
         },
-        maxDelayReasons: 0
+        maxDelayReasons: 0,
+        maxM4s: 0,
+        maxDrms: 0
       };
     },
 
@@ -80,12 +86,18 @@ define([
         mrps: report.mrps,
         clip: null,
         delayReasons: null,
+        m4s: null,
+        drms: null,
         maxClip: null,
-        maxDelayReasons: null
+        maxDelayReasons: null,
+        maxM4s: null,
+        maxDrms: null
       };
 
       this.parseClip(report.groups, attributes);
       this.parseDelayReasons(report.delayReasons, attributes);
+      this.parseM4s(report.m4s, attributes);
+      this.parseDrms(report.drms, attributes);
 
       return attributes;
     },
@@ -147,6 +159,40 @@ define([
         });
 
         attributes.maxDelayReasons = Math.max(attributes.maxDelayReasons, delayReason.count);
+      });
+    },
+
+    parseM4s: function(m4s, attributes)
+    {
+      attributes.maxM4s = 0;
+      attributes.m4s = [];
+
+      m4s.forEach(function(m4)
+      {
+        attributes.m4s.push({
+          name: t('orders', 'm4:' + m4._id),
+          y: m4.count,
+          color: colorFactory.getColor('m4s', m4._id)
+        });
+
+        attributes.maxM4s = Math.max(attributes.maxM4s, m4.count);
+      });
+    },
+
+    parseDrms: function(delayReasons, attributes)
+    {
+      attributes.maxDrms = 0;
+      attributes.drms = [];
+
+      delayReasons.forEach(function(drm)
+      {
+        attributes.drms.push({
+          name: drm._id,
+          y: drm.count,
+          color: colorFactory.getColor('drms', drm._id)
+        });
+
+        attributes.maxDrms = Math.max(attributes.maxDelayReasons, drm.count);
       });
     },
 

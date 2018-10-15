@@ -17,7 +17,13 @@
     "PANEL:TITLE:addForm": "Add delay reason form",
     "PANEL:TITLE:editForm": "Edit delay reason form",
 
+    "PROPERTY:active": "Active?",
     "PROPERTY:name": "Name",
+    "PROPERTY:drm": "DRM category",
+    "PROPERTY:man": "Man",
+    "PROPERTY:machine": "Machine",
+    "PROPERTY:material": "Material",
+    "PROPERTY:method": "Method",
 
     "FORM:ACTION:add": "Add delay reason",
     "FORM:ACTION:edit": "Edit delay reason",

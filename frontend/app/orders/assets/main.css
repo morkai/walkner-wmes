@@ -54,6 +54,9 @@
 .orders-changes > .table > tbody + tbody {
   border-top-width: 1px;
 }
+.orders-changes > .table > tbody + tbody > tr:first-child > td {
+  border-top-width: 4px;
+}
 .orders-changes > .table > tbody:nth-child(even) > tr > td {
   background-color: #f9f9f9;
 }

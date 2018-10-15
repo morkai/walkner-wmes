@@ -8,9 +8,20 @@
     </label>
     <% }) %>
   </div>
-  <div class="form-group has-required-select2">
-    <label for="<%- idPrefix %>-delayReason" class="control-label"><%- t('orders', 'commentForm:delayReason') %></label>
-    <input id="<%- idPrefix %>-delayReason" type="text" autocomplete="new-password" name="delayReason">
+  <div class="row">
+    <div class="col-md-4 form-group has-required-select2">
+      <label for="<%- idPrefix %>-delayReason" class="control-label"><%- t('orders', 'commentForm:delayReason') %></label>
+      <input id="<%- idPrefix %>-delayReason" type="text" autocomplete="new-password" name="delayReason">
+    </div>
+    <div class="col-md-8 form-group">
+      <label class="control-label"><%- t('orders', 'PROPERTY:m4') %></label>
+      <br>
+      <% ['man', 'machine', 'material', 'method'].forEach(function(m4) { %>
+      <label class="radio-inline">
+        <input type="radio" name="m4" value="<%- m4 %>"> <%- t('orders', 'm4:' + m4) %>
+      </label>
+      <% }) %>
+    </div>
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-comment" class="control-label is-required"><%- t('orders', 'commentForm:comment') %></label>

@@ -3,15 +3,11 @@
 define([
   'app/i18n',
   'app/core/views/DetailsView',
-  'app/data/orderStatuses',
-  'app/orders/templates/details',
-  'app/orderStatuses/util/renderOrderStatusLabel'
+  'app/orders/templates/details'
 ], function(
   t,
   DetailsView,
-  orderStatuses,
-  template,
-  renderOrderStatusLabel
+  template
 ) {
   'use strict';
 
@@ -25,17 +21,12 @@ define([
       'orderStatuses.synced': 'render'
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      var order = this.model.toJSON();
-      var delayReason = this.delayReasons.get(order.delayReason);
-
-      order.statusLabels = orderStatuses.findAndFill(order.statuses).map(renderOrderStatusLabel).join(' ');
-      order.delayReason = delayReason ? delayReason.getLabel() : null;
-
       return {
-        idPrefix: this.idPrefix,
-        model: order,
+        model: this.model.serialize({
+          delayReasons: this.delayReasons
+        }),
         panelType: this.options.panelType || 'primary',
         panelTitle: this.options.panelTitle || t('orders', 'PANEL:TITLE:details'),
         linkOrderNo: !!this.options.linkOrderNo

@@ -467,7 +467,7 @@ exports.start = function startOrdersImporterModule(app, module)
 
     _.forEach(missingOrders, function(missingOrder)
     {
-      insertList.push(Order.prepareMissingForInsert(missingOrder, ts));
+      insertList.push(Order.createMissingForInsert(missingOrder, ts));
     });
   }
 

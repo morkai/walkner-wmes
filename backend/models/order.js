@@ -104,6 +104,7 @@ module.exports = function setupOrderModel(app, mongoose)
       ref: 'DelayReason',
       default: null
     },
+    m4: String,
     whStatus: String,
     whTime: Date,
     whDropZone: String,
@@ -129,18 +130,56 @@ module.exports = function setupOrderModel(app, mongoose)
   orderSchema.index({salesOrder: 1, salesOrderItem: 1});
   orderSchema.index({leadingOrder: 1});
 
-  orderSchema.statics.prepareForInsert = function(order, createdAt)
+  orderSchema.statics.createForInsert = function(obj, importTs)
   {
-    order.createdAt = createdAt;
-    order.tzOffsetMs = (order.startDate ? order.startDate.getTimezoneOffset() : 0) * 60 * 1000 * -1;
-    order.changes = [];
+    const scheduledStart = obj.scheduledStartDate;
+    const scheduledFinish = obj.scheduledStartDate;
 
-    orderSchema.statics.resetStatusesSetAt(order);
-
-    return order;
+    return {
+      _id: obj.no,
+      createdAt: null,
+      updatedAt: null,
+      nc12: obj.nc12,
+      name: obj.name,
+      mrp: obj.mrp,
+      qty: obj.qty,
+      qtyDone: {
+        total: 0,
+        byLine: {},
+        byOperation: {}
+      },
+      qtyMax: {},
+      unit: obj.unit,
+      startDate: new Date(obj.startDate.y, obj.startDate.m - 1, obj.startDate.d),
+      finishDate: new Date(obj.finishDate.y, obj.finishDate.m - 1, obj.finishDate.d),
+      tzOffsetMs: 0,
+      scheduledStartDate: new Date(scheduledStart.y, scheduledStart.m - 1, scheduledStart.d),
+      scheduledFinishDate: new Date(scheduledFinish.y, scheduledFinish.m - 1, scheduledFinish.d),
+      leadingOrder: obj.leadingOrder || null,
+      salesOrder: obj.salesOrder || null,
+      salesOrderItem: obj.salesOrderItem || null,
+      priority: obj.priority,
+      description: null,
+      soldToParty: null,
+      sapCreatedAt: null,
+      statuses: obj.statuses,
+      statusesSetAt: {},
+      delayReason: null,
+      m4: '',
+      whStatus: 'unknown',
+      whTime: null,
+      whDropZone: '',
+      enteredBy: obj.enteredBy.includes('SYSBTC') ? 'System' : obj.enteredBy,
+      changedBy: obj.changedBy.includes('SYSBTC') ? 'System' : obj.changedBy,
+      operations: [],
+      documents: [],
+      bom: [],
+      changes: [],
+      importTs: importTs
+    };
   };
 
-  orderSchema.statics.prepareMissingForInsert = function(missingOrder, createdAt)
+  orderSchema.statics.createMissingForInsert = function(missingOrder, createdAt)
   {
     return {
       _id: missingOrder._id,
@@ -168,6 +207,7 @@ module.exports = function setupOrderModel(app, mongoose)
       statuses: [],
       statusesSetAt: {},
       delayReason: null,
+      m4: '',
       whStatus: 'unknown',
       whTime: null,
       whDropZone: '',
@@ -179,6 +219,17 @@ module.exports = function setupOrderModel(app, mongoose)
       changes: [],
       importTs: missingOrder.importTs
     };
+  };
+
+  orderSchema.statics.prepareForInsert = function(order, createdAt)
+  {
+    order.createdAt = createdAt;
+    order.tzOffsetMs = (order.startDate ? order.startDate.getTimezoneOffset() : 0) * 60 * 1000 * -1;
+    order.changes = [];
+
+    orderSchema.statics.resetStatusesSetAt(order);
+
+    return order;
   };
 
   orderSchema.statics.prepareForUpdate = function(orderModel, newOrderData, updatedAt, change, $set)

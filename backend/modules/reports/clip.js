@@ -14,6 +14,7 @@ module.exports = function(mongoose, options, done)
   const ClipOrderCache = mongoose.model('ClipOrderCache');
   const Order = mongoose.model('Order');
   const Setting = mongoose.model('Setting');
+  const DelayReason = mongoose.model('DelayReason');
 
   Object.assign(options, {
     dateProperty: 'finishDate',
@@ -43,6 +44,8 @@ module.exports = function(mongoose, options, done)
     mrps: {},
     groups: {},
     delayReasons: {},
+    m4s: {},
+    drms: {},
     orders: []
   };
   const fromLocal = moment(options.fromTime);
@@ -68,8 +71,10 @@ module.exports = function(mongoose, options, done)
       DailyMrpCount.find(conditions, {[countProperty]: 1}).lean().exec(this.parallel());
 
       Setting.find({_id: /^reports\.clip\./}, {value: 1}).lean().exec(this.parallel());
+
+      DelayReason.find({}).lean().exec(this.parallel());
     },
-    function(err, dailyMrpCounts, settings)
+    function(err, dailyMrpCounts, settings, delayReasons)
     {
       if (err)
       {
@@ -146,6 +151,13 @@ module.exports = function(mongoose, options, done)
 
       results.mrps = Object.keys(results.mrps);
 
+      this.delayReasons = {};
+
+      delayReasons.forEach(delayReason =>
+      {
+        this.delayReasons[delayReason._id] = delayReason.drm;
+      });
+
       setImmediate(this.next());
     },
     function()
@@ -185,6 +197,7 @@ module.exports = function(mongoose, options, done)
         startDate: 1,
         finishDate: 1,
         delayReason: 1,
+        m4: 1,
         statuses: 1,
         'changes.time': 1,
         'changes.oldValues.statuses': 1,
@@ -281,6 +294,7 @@ module.exports = function(mongoose, options, done)
         order.scheduledStartDate = Date.parse(order.scheduledStartDate);
         order.scheduledFinishDate = Date.parse(order.scheduledFinishDate);
         order.qtyDone = order.qtyDone ? order.qtyDone.total : 0;
+        order.drm = '';
         order.description = undefined;
         order.changes = undefined;
 
@@ -292,6 +306,30 @@ module.exports = function(mongoose, options, done)
           }
 
           results.delayReasons[order.delayReason] += 1;
+        }
+
+        if (order.m4)
+        {
+          if (!results.m4s[order.m4])
+          {
+            results.m4s[order.m4] = 0;
+          }
+
+          results.m4s[order.m4] += 1;
+
+          const drm = this.delayReasons[order.delayReason];
+
+          if (drm && drm[order.m4])
+          {
+            order.drm = drm[order.m4];
+
+            if (!results.drms[order.drm])
+            {
+              results.drms[order.drm] = 0;
+            }
+
+            results.drms[order.drm] += 1;
+          }
         }
 
         const group = getGroup(order[options.findDateProperty]);
@@ -372,10 +410,13 @@ module.exports = function(mongoose, options, done)
         results.children = results.mrps;
       }
 
-      results.delayReasons = Object
-        .keys(results.delayReasons)
-        .sort((a, b) => results.delayReasons[b] - results.delayReasons[a])
-        .map(k => ({_id: k, count: results.delayReasons[k]}));
+      ['delayReasons', 'm4s', 'drms'].forEach(prop =>
+      {
+        results[prop] = Object
+          .keys(results[prop])
+          .sort((a, b) => results[prop][b] - results[prop][a])
+          .map(k => ({_id: k, count: results[prop][k]}));
+      });
 
       results.orderHash = options.hash;
       results.orderCount = results.orders.length;

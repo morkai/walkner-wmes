@@ -13,7 +13,7 @@ define([
 
     model: DelayReason,
 
-    rqlQuery: 'select(name)&sort(name)',
+    rqlQuery: 'sort(name)',
 
     comparator: 'name'
 

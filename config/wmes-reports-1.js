@@ -38,7 +38,8 @@ exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   models: [
-    'event', 'user', 'company', 'setting',
+    'event', 'user', 'setting',
+    'company', 'delayReason',
     'order',
     'prodShift', 'prodShiftOrder', 'prodDowntime',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
