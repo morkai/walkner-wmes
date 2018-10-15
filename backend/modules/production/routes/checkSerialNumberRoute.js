@@ -200,7 +200,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
 
         components.forEach(component =>
         {
-          if (component.labelPattern.includes('@HID@'))
+          if (component.labelPattern.includes('@HID.ID@'))
           {
             extras.HID.push(component);
           }
