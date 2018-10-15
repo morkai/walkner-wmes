@@ -205,6 +205,23 @@ module.exports = function(mongoose, options, done)
           .add(dataHoursOffset[order.mrp] || dataHoursOffset['*'], 'hours')
           .valueOf();
 
+        order.productionStatus = null;
+        order.endToEndStatus = null;
+
+        order.statuses.forEach(status =>
+        {
+          if (options.productionStatuses.includes(status))
+          {
+            order.productionStatus = status;
+          }
+
+          if (options.endToEndStatuses.includes(status))
+          {
+            order.endToEndStatus = status;
+          }
+        });
+
+        order.confirmed = !!orderFilters[options.orderFilterMode] && !orderFilters[options.orderFilterMode](order);
         order.comment = null;
         order.productionTime = null;
         order.productionStatus = null;

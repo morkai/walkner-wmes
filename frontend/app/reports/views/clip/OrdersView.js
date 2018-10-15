@@ -82,13 +82,25 @@ define([
       var delayReason = this.delayReasons.get(order.get('delayReason'));
       var date = order.get(this.collection.displayOptions.settings.getValue('clip.dateProperty', 'finishDate'));
       var mrp = order.get('mrp');
+      var confirmed = order.get('confirmed');
+      var notConfirmed = cnfClassName === 'none' || dlvClassName === 'none';
+      var partiallyConfirmed = cnfClassName === 'partial' || dlvClassName === 'partial';
+      var className = 'success';
+
+      if (!confirmed)
+      {
+        if (notConfirmed)
+        {
+          className = 'danger';
+        }
+        else if (partiallyConfirmed)
+        {
+          className = 'warning';
+        }
+      }
 
       return {
-        className: cnfClassName === 'none' || dlvClassName === 'none'
-          ? 'danger'
-          : cnfClassName === 'partial' || dlvClassName === 'partial'
-            ? 'warning'
-            : 'success',
+        className: className,
         no: order.id,
         name: order.get('name'),
         mrp: mrp,
