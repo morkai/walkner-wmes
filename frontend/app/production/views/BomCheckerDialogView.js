@@ -49,9 +49,9 @@ define([
         single: true,
         unique: true,
         patternInfo: {
-          pattern: /\.([0-9]{9})\.([0-9]{4})/,
-          nc12: [1],
-          sn: [2]
+          pattern: /([A-Z0-9]{4}\.([0-9]{9})\.([0-9]{4}))(?:[^.]|$)/,
+          nc12: [2],
+          sn: [3]
         },
         scanInfo: {
           raw: scanInfo.serialNo ? scanInfo._id : '?',
@@ -70,7 +70,7 @@ define([
           single: component.single,
           unique: component.unique,
           patternInfo: {
-            pattern: new RegExp(component.pattern),
+            pattern: new RegExp(component.labelPattern),
             nc12: component.nc12Index,
             sn: component.snIndex
           },
@@ -100,7 +100,6 @@ define([
 
     onSnScanned: function(scanInfo)
     {
-console.log('BomCheckerDialogView.onSnScanned', scanInfo);
       var scanBuffer = scanInfo._id;
 
       for (var i = 0; i < this.components.length; ++i)
@@ -114,17 +113,14 @@ console.log('BomCheckerDialogView.onSnScanned', scanInfo);
           continue;
         }
 
-        if (!component.single)
+        if (component.unique && component.scanInfo.raw === scanBuffer)
         {
-          if (component.scanInfo.raw === scanBuffer)
-          {
-            return this.updateComponent(component, 'todo');
-          }
+          return this.updateComponent(component, 'todo');
+        }
 
-          if (component.status === 'success' || component.status === 'checking')
-          {
-            continue;
-          }
+        if (!component.single && (component.status === 'success' || component.status === 'checking'))
+        {
+          continue;
         }
 
         component.scanInfo.raw = scanBuffer;

@@ -27,16 +27,16 @@ define([
 
     if (!matches)
     {
-      matches = scanBuffer.match(/[A-Z0-9]{4}\.([0-9]{9})\.([0-9]{4})/);
+      matches = scanBuffer.match(/([A-Z0-9]{4}\.([0-9]{9})\.([0-9]{4}))(?:[^.]|$)/);
     }
 
     if (matches)
     {
       broker.publish('production.taktTime.snScanned', {
-        _id: matches[0],
+        _id: matches[1],
         scannedAt: new Date(),
-        orderNo: matches[1],
-        serialNo: +matches[2]
+        orderNo: matches[2],
+        serialNo: +matches[3]
       });
     }
     else if (scanBuffer.length > 5)
