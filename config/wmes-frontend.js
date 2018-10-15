@@ -269,7 +269,7 @@ exports.mongoose = {
   maxConnectTries: 10,
   connectAttemptDelay: 500,
   models: [
-    'setting', 'event', 'user', 'passwordResetRequest', 'ping', 'printer',
+    'setting', 'event', 'user', 'passwordResetRequest', 'ping', 'printer', 'counter',
     'division', 'subdivision', 'mrpController', 'workCenter', 'prodFlow', 'prodLine',
     'company', 'vendor', 'prodFunction', 'aor',
     'orderStatus', 'delayReason', 'downtimeReason', 'lossReason', 'prodTask',

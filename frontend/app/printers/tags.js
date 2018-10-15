@@ -24,7 +24,8 @@ define([
     'kanban/desc',
     'wh/cart/fmx',
     'wh/cart/kitter',
-    'wh/cart/packer'
+    'wh/cart/packer',
+    'hidLamps'
   ];
 
   return {

@@ -18,6 +18,7 @@ const getClientsSettingsRoute = require('./clients/getSettings');
 const getClientLicensesRoute = require('./clients/getLicenses');
 const addClientLicenseRoute = require('./clients/addLicense');
 const sendUpdateRoute = require('./sendUpdate');
+const printHidLabelRoute = require('./printHidLabel');
 
 module.exports = function setUpXiconfRoutes(app, xiconfModule)
 {
@@ -357,6 +358,7 @@ module.exports = function setUpXiconfRoutes(app, xiconfModule)
   express.get('/xiconf/hidLamps/:id', canView, express.crud.readRoute.bind(null, app, XiconfHidLamp));
   express.put('/xiconf/hidLamps/:id', canManageHidLamps, express.crud.editRoute.bind(null, app, XiconfHidLamp));
   express.delete('/xiconf/hidLamps/:id', canManageHidLamps, express.crud.deleteRoute.bind(null, app, XiconfHidLamp));
+  express.post('/xiconf/hidLamps;printLabel', canManageLocal, printHidLabelRoute.bind(null, app, xiconfModule));
 
   //
   // Component Weights

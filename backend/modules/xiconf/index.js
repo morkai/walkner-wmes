@@ -20,6 +20,7 @@ exports.DEFAULT_CONFIG = {
   settingsId: 'settings',
   updaterId: 'updater',
   orgUnitsId: 'orgUnits',
+  html2pdfId: 'html2pdf',
   featureDbPath: './',
   zipStoragePath: './',
   emailUrlPrefix: 'http://127.0.0.1/',
