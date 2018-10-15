@@ -250,7 +250,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
 
       const obmComponents = obm.components.filter(obmComponent =>
       {
-        if (obmComponent.pattern instanceof RegExp)
+        if (obmComponent.pattern === '' || obmComponent.pattern instanceof RegExp)
         {
           return true;
         }
@@ -267,6 +267,27 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
         }
 
         return true;
+      });
+
+      obmComponents.forEach(obmComponent =>
+      {
+        if (obmComponent.pattern !== '')
+        {
+          return;
+        }
+
+        result.push({
+          nc12: '000000000000',
+          description: obmComponent.description
+            .replace(/@ORDER\.NO@/g, order._id)
+            .replace(/@ORDER\.12NC@/g, order.nc12),
+          unique: obmComponent.unique,
+          labelPattern: obmComponent.labelPattern
+            .replace(/@ORDER\.NO@/g, order._id)
+            .replace(/@ORDER\.12NC@/g, order.nc12),
+          nc12Index: obmComponent.nc12Index,
+          snIndex: obmComponent.snIndex
+        });
       });
 
       order.bom.forEach(orderComponent =>
@@ -312,6 +333,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
             nc12: orderComponent.nc12,
             description: qtyPerProduct === 1 ? description : `#${j + 1} ${description}`,
             unique: obmComponent.unique,
+            single: obmComponent.single,
             labelPattern,
             nc12Index: obmComponent.nc12Index,
             snIndex: obmComponent.snIndex
@@ -327,7 +349,8 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
   {
     return obmComponents.find(obmComponent =>
     {
-      return obmComponent.pattern.test(orderComponent.nc12) || obmComponent.pattern.test(orderComponent.name);
+      return obmComponent.pattern !== ''
+        && (obmComponent.pattern.test(orderComponent.nc12) || obmComponent.pattern.test(orderComponent.name));
     });
   }
 

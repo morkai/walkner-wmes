@@ -1,6 +1,6 @@
 <tr>
   <td class="is-min is-number"><%- i + 1 %>.</td>
-  <td class="is-min"><input class="form-control text-mono" type="text" name="components[<%- i %>].pattern" value="<%= component.pattern %>" required maxlength="400"></td>
+  <td class="is-min"><input class="form-control text-mono" type="text" name="components[<%- i %>].pattern" value="<%= component.pattern %>" maxlength="400"></td>
   <td class="is-min"><input class="form-control" type="text" name="components[<%- i %>].description" value="<%= component.description %>" required maxlength="40" style="width: 300px"></td>
   <td class="is-min text-center" style="width: 80px"><input type="checkbox" name="components[<%- i %>].single" value="true" <%- component.single ? 'checked' : '' %>></td>
   <td class="is-min text-center" style="width: 80px"><input type="checkbox" name="components[<%- i %>].unique" value="true" <%- component.unique ? 'checked' : '' %>></td>

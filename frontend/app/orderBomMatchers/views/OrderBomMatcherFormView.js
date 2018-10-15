@@ -86,7 +86,6 @@ define([
 
       'focus input[name$="pattern"]': function(e)
       {
-        console.log(e);
         var $input = this.$(e.target);
 
         $input.parent().css({
@@ -193,6 +192,11 @@ define([
 
       formData.components = (formData.components || []).map(function(c)
       {
+        if (!c.pattern)
+        {
+          c.pattern = '';
+        }
+
         c.nc12Index = c.nc12Index.split(', ').map(function(v) { return +v; });
         c.snIndex = c.snIndex.split(', ').map(function(v) { return +v; });
 
