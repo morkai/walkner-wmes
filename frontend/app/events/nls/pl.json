@@ -438,7 +438,9 @@
   "TYPE:pkhdStrategies.edited": "Strategie dost. komponentów: edycja",
   "TEXT:pkhdStrategies.edited": "Zmodyfikowano strategię: <a href='\\#pkhdStrategies/{model->_id}'>{model->name}</a>",
   "TYPE:pkhdStrategies.deleted": "Strategie dost. komponentów: usunięcie",
-  "TEXT:pkhdStrategies.deleted": "Usunięto strategię: <em>{model->name}</em>",
+  "TEXT:pkhdStrategies.deleted": "Usunięto strategię dostarczania komponentów: <em>{model->name}</em>",
   "TYPE:pfep.entries.deleted": "Baza PFEP: usunięcie",
-  "TEXT:pfep.entries.deleted": "Usunięto wpis: <em>{model->rid}</em>"
+  "TEXT:pfep.entries.deleted": "Usunięto wpis: <em>{model->rid}</em>",
+  "TYPE:orderBomMatchers.deleted": "Strategie spr. komponentów: usunięcie",
+  "TEXT:orderBomMatchers.deleted": "Usunięto strategię sprawdzania komponentów: <em>{model->description}</em>"
 }
