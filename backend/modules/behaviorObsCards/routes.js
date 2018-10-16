@@ -31,11 +31,13 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
       columns: {
         rid: 10,
         date: 'date',
+        shift: {type: 'integer', width: 5},
         observer: 30,
         superior: 30,
         section: 20,
         line: 20,
         position: 20,
+        company: 20,
         kind: 15,
         option1: 15,
         option2: 10,
@@ -153,11 +155,13 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
       rows.push({
         rid: doc.rid,
         date: doc.date,
+        shift: doc.shift,
         observer: doc.observer.label,
         superior,
         section: doc.section,
         line: doc.line,
         position: doc.position,
+        company: doc.companyName,
         kind: 'observation',
         option1: o.safe ? '' : o.easy ? 'easy' : 'hard',
         option2: o.safe ? 'safe' : 'risky',
@@ -172,11 +176,13 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
       rows.push({
         rid: doc.rid,
         date: doc.date,
+        shift: doc.shift,
         observer: doc.observer.label,
         superior,
         section: doc.section,
         line: doc.line,
         position: doc.position,
+        company: doc.companyName,
         kind: 'risk',
         option1: o.easy ? 'easy' : 'hard',
         option2: '',
@@ -191,11 +197,13 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
       rows.push({
         rid: doc.rid,
         date: doc.date,
+        shift: doc.shift,
         observer: doc.observer.label,
         superior,
         section: doc.section,
         line: doc.line,
         position: doc.position,
+        company: doc.companyName,
         kind: 'difficulty',
         option1: o.behavior ? 'behavior' : 'workConditions',
         option2: '',
@@ -217,7 +225,9 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
       interval: query.interval || 'month',
       sections: _.isEmpty(query.sections) ? [] : query.sections.split(','),
       observerSections: _.isEmpty(query.observerSections) ? [] : query.observerSections.split(','),
-      superior: _.isEmpty(query.superior) ? null : query.superior
+      superior: _.isEmpty(query.superior) ? null : query.superior,
+      company: _.isEmpty(query.company) ? [] : query.company.split(','),
+      shift: +query.shift || 0
     };
 
     reportsModule.helpers.generateReport(

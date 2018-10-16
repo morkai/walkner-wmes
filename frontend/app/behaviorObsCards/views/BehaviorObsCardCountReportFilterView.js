@@ -9,6 +9,7 @@ define([
   'app/core/util/idAndLabel',
   'app/users/util/setUpUserSelect2',
   'app/reports/util/prepareDateRange',
+  'app/data/companies',
   'app/kaizenOrders/dictionaries',
   'app/behaviorObsCards/templates/countReportFilter'
 ], function(
@@ -20,6 +21,7 @@ define([
   idAndLabel,
   setUpUserSelect2,
   prepareDateRange,
+  companies,
   kaizenDictionaries,
   template
 ) {
@@ -52,19 +54,27 @@ define([
       js2form(this.el, this.serializeFormData());
 
       buttonGroup.toggle(this.$id('interval'));
+      buttonGroup.toggle(this.$id('shift'));
 
       this.$id('sections').select2({
-        width: '350px',
+        width: '323px',
         allowClear: true,
         multiple: true,
         data: kaizenDictionaries.sections.map(idAndLabel)
       });
 
       this.$id('observerSections').select2({
-        width: '350px',
+        width: '434px',
         allowClear: true,
         multiple: true,
         data: kaizenDictionaries.sections.map(idAndLabel)
+      });
+
+      this.$id('company').select2({
+        width: '459px',
+        allowClear: true,
+        multiple: true,
+        data: companies.map(idAndLabel)
       });
 
       setUpUserSelect2(this.$id('superior'), {
@@ -85,7 +95,9 @@ define([
         to: to ? time.format(to, 'YYYY-MM-DD') : '',
         sections: model.get('sections').join(','),
         observerSections: model.get('observerSections').join(','),
-        superior: model.get('superior')
+        superior: model.get('superior'),
+        company: model.get('company').join(','),
+        shift: model.get('shift')
       };
     },
 
@@ -97,7 +109,9 @@ define([
         interval: buttonGroup.getValue(this.$id('interval')),
         sections: this.$id('sections').val(),
         observerSections: this.$id('observerSections').val(),
-        superior: this.$id('superior').val()
+        superior: this.$id('superior').val(),
+        company: this.$id('company').val(),
+        shift: +buttonGroup.getValue(this.$id('shift'))
       };
 
       if (!query.from || query.from < 0)
@@ -121,6 +135,7 @@ define([
 
       query.sections = query.sections === '' ? [] : query.sections.split(',');
       query.observerSections = query.observerSections === '' ? [] : query.observerSections.split(',');
+      query.company = query.company === '' ? [] : query.company.split(',');
 
       this.model.set(query);
       this.model.trigger('filtered');

@@ -59,6 +59,11 @@ module.exports = function(mongoose, options, done)
         conditions[groupProperty].$lt = new Date(options.toTime);
       }
 
+      if (options.shift)
+      {
+        conditions.shift = options.shift;
+      }
+
       if (options.sections.length === 1)
       {
         conditions.section = options.sections[0];
@@ -75,6 +80,15 @@ module.exports = function(mongoose, options, done)
       else if (options.observerSections && options.observerSections.length)
       {
         conditions.observerSection = {$in: options.observerSections};
+      }
+
+      if (options.company && options.company.length === 1)
+      {
+        conditions.company = options.company[0];
+      }
+      else if (options.company && options.company.length)
+      {
+        conditions.company = {$in: options.company};
       }
 
       if (options.superior)

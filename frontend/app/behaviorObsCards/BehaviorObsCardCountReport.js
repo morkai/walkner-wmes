@@ -39,7 +39,9 @@ define([
         interval: 'month',
         sections: [],
         observerSections: [],
-        superior: ''
+        superior: '',
+        company: [],
+        shift: 0
       };
     },
 
@@ -52,11 +54,14 @@ define([
 
       options.data = _.extend(
         options.data || {},
-        _.pick(this.attributes, ['from', 'to', 'interval', 'sections', 'observerSections', 'superior'])
+        _.pick(this.attributes, [
+          'from', 'to', 'interval', 'sections', 'observerSections', 'superior', 'company', 'shift'
+        ])
       );
 
       options.data.sections = options.data.sections.join(',');
       options.data.observerSections = options.data.observerSections.join(',');
+      options.data.company = options.data.company.join(',');
 
       return Model.prototype.fetch.call(this, options);
     },
@@ -69,7 +74,9 @@ define([
         + '&interval=' + this.get('interval')
         + '&sections=' + this.get('sections')
         + '&observerSections=' + this.get('observerSections')
-        + '&superior=' + this.get('superior');
+        + '&superior=' + this.get('superior')
+        + '&company=' + this.get('company')
+        + '&shift=' + this.get('shift');
     },
 
     parse: function(report)
@@ -267,7 +274,9 @@ define([
         interval: query.interval || undefined,
         sections: _.isEmpty(query.sections) ? [] : query.sections.split(','),
         observerSections: _.isEmpty(query.observerSections) ? [] : query.observerSections.split(','),
-        superior: query.superior || ''
+        superior: query.superior || '',
+        company: _.isEmpty(query.company) ? [] : query.company.split(','),
+        shift: +query.shift || 0
       });
     }
 

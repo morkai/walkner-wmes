@@ -7,18 +7,12 @@
       <div class="row">
         <div class="col-md-4">
           <div class="props first">
+            <% ['section', 'line', 'position', 'companyName'].forEach(function(prop) { %>
             <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:section') %></div>
-              <div class="prop-value"><%= model.section %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
+              <div class="prop-value"><%= model[prop] || '-' %></div>
             </div>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:line') %></div>
-              <div class="prop-value"><%= model.line || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:position') %></div>
-              <div class="prop-value"><%= model.position || '-' %></div>
-            </div>
+            <% }) %>
           </div>
         </div>
         <div class="col-md-4">

@@ -12,6 +12,7 @@ define([
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
   'app/data/prodLines',
+  'app/data/companies',
   'app/kaizenOrders/dictionaries',
   '../BehaviorObsCard',
   'app/behaviorObsCards/templates/form',
@@ -31,6 +32,7 @@ define([
   FormView,
   setUpUserSelect2,
   prodLines,
+  companies,
   kaizenDictionaries,
   BehaviorObsCard,
   template,
@@ -45,7 +47,7 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
 
       'click .behaviorObsCards-form-radio': function(e)
       {
@@ -152,6 +154,11 @@ define([
         this.showRidEditor(e.currentTarget.dataset.kind, e.currentTarget);
 
         return false;
+      },
+
+      'change #-company': function()
+      {
+        this.toggleCompanyName('');
       }
 
     }, FormView.prototype.events),
@@ -283,6 +290,21 @@ define([
         .toggleClass('is-required', anyEasy);
     },
 
+    toggleCompanyName: function(otherName)
+    {
+      var companyId = this.$id('company').val();
+      var company = companies.get(companyId);
+      var other = /(pozostali|other)/i.test(companyId);
+
+      this.$id('companyName')
+        .prop('readonly', !other)
+        .prop('required', other)
+        .val(other ? otherName : company ? company.getLabel() : '')
+        .closest('.form-group')
+        .find('.control-label')
+        .toggleClass('is-required', other);
+    },
+
     hasAnyObservation: function()
     {
       return _.some(form2js(this.$id('observations')[0]).observations, this.filterObservation);
@@ -409,12 +431,17 @@ define([
           .sort(function(a, b) { return a.text.localeCompare(b.text); })
       });
 
+      this.$id('company').select2({
+        data: companies.map(idAndLabel)
+      });
+
       this.setUpObserverSelect2();
       this.setUpSuperiorSelect2();
       this.renderObservations();
       this.renderRisks();
       this.renderDifficulties();
       this.toggleEasyDiscussed();
+      this.toggleCompanyName(this.model.get('companyName'));
       this.toggleValidity();
 
       this.$('input[autofocus]').focus();

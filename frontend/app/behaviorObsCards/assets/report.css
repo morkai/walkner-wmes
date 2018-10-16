@@ -1,6 +1,9 @@
 .behaviorObsCards-report > h3 {
   clear: left;
-  margin-top: 5px;
+  margin-top: 20px;
+}
+.behaviorObsCards-report > h3:first-child {
+  margin-top: 0;
 }
 .behaviorObsCards-report-tableAndChart .highcharts-container {
   top: -9px;

@@ -59,7 +59,6 @@ define([
 
     afterRender: function()
     {
-      console.log('afterRender')
       js2form(this.el, this.serializeToForm(false));
     },
 

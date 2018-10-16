@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  '../i18n',
   '../time',
   '../user',
   '../core/Model',
@@ -9,6 +10,7 @@ define([
   'app/core/templates/userInfo'
 ], function(
   _,
+  t,
   time,
   user,
   Model,
@@ -66,6 +68,11 @@ define([
       {
         obj[userInfoProperty] = renderUserInfo({userInfo: obj[userInfoProperty]});
       });
+
+      if (obj.shift)
+      {
+        obj.date = t('core', 'SHIFT', {date: obj.date, shift: obj.shift});
+      }
 
       return obj;
     },

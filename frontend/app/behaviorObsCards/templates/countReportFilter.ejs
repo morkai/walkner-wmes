@@ -11,12 +11,27 @@
     <label><%- t('reports', 'filter:interval') %></label>
     <div id="<%- idPrefix %>-interval" class="btn-group filter-btn-group" data-toggle="buttons">
       <% ['year', 'quarter', 'month', 'week', 'day'].forEach(function(interval) { %>
-      <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:' + interval) %>" data-interval="<%- interval %>">
-        <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', 'filter:interval:' + interval) %>
+        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:' + interval) %>" data-interval="<%- interval %>">
+          <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', 'filter:interval:' + interval) %>
+        </label>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label><%- helpers.t('PROPERTY:shift') %></label>
+    <div id="<%- idPrefix %>-shift" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% [0, 1, 2, 3].forEach(function(shift) { %>
+      <label class="btn btn-default">
+        <input type="radio" name="shift" value="<%- shift %>"> <%- t('core', 'SHIFT:' + shift) %>
       </label>
       <% }) %>
     </div>
   </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-company"><%- helpers.t('FORM:company') %></label>
+    <input id="<%- idPrefix %>-company" name="company" type="text" autocomplete="new-password">
+  </div>
+  <div style="margin-left: auto; width: 100%"></div>
   <div class="form-group">
     <label for="<%- idPrefix %>-sections"><%- helpers.t('filter:section') %></label>
     <input id="<%- idPrefix %>-sections" name="sections" type="text" autocomplete="new-password">

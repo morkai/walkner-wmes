@@ -382,8 +382,6 @@ function adjustMark(markEl)
 
 function adjustViewport()
 {
-  console.log('adjustViewport');
-
   var markEls = document.querySelectorAll('.mark');
   var visibleMarkCount = 0;
   var top = Number.MAX_VALUE;

@@ -1,6 +1,9 @@
 .kaizenOrders-report > h3 {
   clear: left;
-  margin-top: 5px;
+  margin-top: 20px;
+}
+.kaizenOrders-report > h3:first-child {
+  margin-top: 0;
 }
 .kaizenOrders-report .highcharts-container {
   top: -9px;

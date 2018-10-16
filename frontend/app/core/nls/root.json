@@ -294,7 +294,7 @@
     "ORG_UNIT:workCenter": "WorkCenter",
     "ORG_UNIT:prodLine": "Production line",
 
-    "SHIFT": "{date}, {shift}",
+    "SHIFT": "{date}, {shift, select, =1{I} =2{II} =3{III} other{{shift}}}",
     "SHIFT:1": "I",
     "SHIFT:2": "II",
     "SHIFT:3": "III",

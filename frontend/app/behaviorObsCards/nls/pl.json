@@ -31,6 +31,7 @@
 
   "PROPERTY:rid": "ID",
   "PROPERTY:date": "Data obserwacji",
+  "PROPERTY:shift": "Zmiana",
   "PROPERTY:section": "Dział",
   "PROPERTY:observer": "Obserwator",
   "PROPERTY:observerSection": "Dział obserwatora",
@@ -61,6 +62,8 @@
   "PROPERTY:risk": "Ryzykowne warunki w miejscu pracy",
   "PROPERTY:hardBehavior": "Trudne do zmiany zachowania",
   "PROPERTY:hardCondition": "Trudne do zmiany warunki pracy",
+  "PROPERTY:company": "Firma",
+  "PROPERTY:companyName": "Firma",
 
   "FORM:ACTION:add": "Dodaj kartę obserwacji zachowań",
   "FORM:ACTION:edit": "Zapisz kartę obserwacji zachowań",
@@ -75,6 +78,8 @@
   "FORM:BTN:remove": "Usuń puste",
   "FORM:superior": "Mistrz (przełożony obserwatora)",
   "FORM:observerSection": "Miejsce pracy obserwatora",
+  "FORM:company": "Osoba obserwowana zatrudniona przez",
+  "FORM:companyName": "Nazwa firmy",
   "FORM:ridEditor:rid": "ID zgłoszenia",
   "FORM:ridEditor:submit": "Zmień",
   "FORM:ridEditor:cancel": "Anuluj",
