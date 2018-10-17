@@ -32,12 +32,13 @@ define([
       var obj = this.toJSON();
 
       obj.active = t('core', 'BOOL:' + obj.active);
+      obj.line = obj.matchers.line.join(', ');
       obj.mrp = obj.matchers.mrp.join(', ');
       obj.nc12 = obj.matchers.nc12.join(', ');
-      obj.name = obj.matchers.name.join(', ');
+      obj.name = obj.matchers.name.join('; ');
       obj.components = obj.components
-        .map(function(c) { return '<code>' + c.pattern + '</code>'; })
-        .join(', ');
+        .map(function(c) { return /^[0-9]{12}$/.test(c.pattern) ? c.pattern : c.description; })
+        .join('; ');
 
       return obj;
     }

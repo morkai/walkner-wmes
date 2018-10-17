@@ -17,7 +17,8 @@ module.exports = function setupOrderBomMatcherModel(app, mongoose)
     matchers: {
       mrp: [String],
       nc12: [String],
-      name: [String]
+      name: [String],
+      line: [String]
     },
     components: [{
       pattern: String,

@@ -23,6 +23,7 @@
   "PROPERTY:mrp": "MRP zlecenia",
   "PROPERTY:nc12": "12NC zlecenia",
   "PROPERTY:name": "Wzorce nazwy zlecenia",
+  "PROPERTY:line": "Linie produkcyjne",
   "PROPERTY:components": "Komponenty",
   "PROPERTY:components.description": "Opis",
   "PROPERTY:components.nc12": "12NC",

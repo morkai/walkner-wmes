@@ -83,7 +83,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
       }
       else
       {
-        getComponentsToMatch(logEntry.data.orderNo, this.next());
+        getComponentsToMatch(logEntry.data.orderNo, logEntry.prodLine, this.next());
       }
     },
     function(err, components)
@@ -126,7 +126,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
     }
   );
 
-  function getComponentsToMatch(orderNo, done)
+  function getComponentsToMatch(orderNo, lineId, done)
   {
     if (productionModule.bomMatcherCache.has(orderNo))
     {
@@ -188,7 +188,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
           productionModule.bomMatcherCache.set('active', orderBomMatchers);
         }
 
-        const components = matchOrder(orderBomMatchers, order);
+        const components = matchOrder(orderBomMatchers, order, lineId);
 
         productionModule.bomMatcherCache.set(orderNo, components);
 
@@ -223,7 +223,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
     );
   }
 
-  function matchOrder(orderBomMatchers, order)
+  function matchOrder(orderBomMatchers, order, lineId)
   {
     const result = [];
     const bom = new Map();
@@ -233,6 +233,11 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
 
     orderBomMatchers.forEach(obm =>
     {
+      if (obm.matchers.line.length && !obm.matchers.line.includes(lineId))
+      {
+        return;
+      }
+
       if (obm.matchers.mrp.length && !obm.matchers.mrp.includes(order.mrp))
       {
         return;

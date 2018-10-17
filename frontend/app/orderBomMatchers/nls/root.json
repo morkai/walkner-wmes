@@ -24,6 +24,7 @@
     "PROPERTY:mrp": "Order MRP",
     "PROPERTY:nc12": "Order 12NC",
     "PROPERTY:name": "Order name pattern",
+    "PROPERTY:line": "Production lines",
     "PROPERTY:components": "Components",
     "PROPERTY:components.description": "Description",
     "PROPERTY:components.nc12": "12NC",

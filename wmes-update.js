@@ -3,12 +3,9 @@
 
 'use strict';
 
-db.delayreasons.update({}, {$set: {
-  active: true,
-  drm: {
-    man: '',
-    machine: '',
-    material: '',
-    method: ''
-  }
-}}, {multi: true});
+db.orderbommatchers.find({}).forEach(obm =>
+{
+  obm.matchers.line = [];
+
+  db.orderbommatchers.update({_id: obm._id}, {$set: {matchers: obm.matchers}});
+});

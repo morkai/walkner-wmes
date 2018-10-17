@@ -3,11 +3,15 @@
 define([
   'underscore',
   'app/core/views/FormView',
+  'app/core/util/idAndLabel',
+  'app/data/orgUnits',
   'app/orderBomMatchers/templates/form',
   'app/orderBomMatchers/templates/_componentRow'
 ], function(
   _,
   FormView,
+  idAndLabel,
+  orgUnits,
   template,
   componentRowTemplate
 ) {
@@ -141,6 +145,14 @@ define([
     {
       FormView.prototype.afterRender.apply(this, arguments);
 
+      this.$id('matchers-line').select2({
+        width: '100%',
+        allowClear: true,
+        multiple: true,
+        placeholder: ' ',
+        data: orgUnits.getActiveByType('prodLine').map(idAndLabel)
+      });
+
       var components = this.model.get('components');
 
       if (_.isEmpty(components))
@@ -160,12 +172,14 @@ define([
       var formData = this.model.toJSON();
 
       formData.matchers = _.assign({
+        line: [],
         mrp: [],
         nc12: [],
         name: []
       }, formData.matchers);
 
       formData.matchers = {
+        line: formData.matchers.line.join(','),
         mrp: formData.matchers.mrp.join(', '),
         nc12: formData.matchers.nc12.join(', '),
         name: formData.matchers.name.join('\n')
@@ -179,12 +193,14 @@ define([
     serializeForm: function(formData)
     {
       formData.matchers = _.assign({
+        line: '',
         mrp: '',
         nc12: '',
         name: ''
       }, formData.matchers);
 
       formData.matchers = {
+        line: formData.matchers.line.split(', ').filter(function(v) { return v.length > 0; }),
         mrp: formData.matchers.mrp.split(', ').filter(function(v) { return v.length > 0; }),
         nc12: formData.matchers.nc12.split(', ').filter(function(v) { return v.length > 0; }),
         name: formData.matchers.name.split('\n').filter(function(v) { return v.length > 0; })

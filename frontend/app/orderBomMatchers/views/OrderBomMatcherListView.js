@@ -14,6 +14,7 @@ define([
     columns: [
       'description',
       {id: 'active', className: 'is-min'},
+      'line',
       'mrp',
       'nc12',
       'name',
