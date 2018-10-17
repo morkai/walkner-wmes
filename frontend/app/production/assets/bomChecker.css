@@ -79,6 +79,11 @@
 .production-bomChecker-description {
   width: 300px;
 }
+.production-bomChecker-description:only-child {
+  padding: 0;
+  font-size: 25px;
+  line-height: 68px;
+}
 .production-bomChecker-message,
 .production-bomChecker-scanBuffer {
   width: 500px;
