@@ -16,7 +16,12 @@ module.exports = function printHidLabelRoute(app, module, req, res, next)
   const Printer = mongoose.model('Printer');
   const Counter = mongoose.model('Counter');
 
-  let {orderNo, serialNo, line} = req.body; // eslint-disable-line prefer-const
+  let {requestId, orderNo, serialNo, line} = req.body; // eslint-disable-line prefer-const
+
+  if (LOCKS.has(requestId))
+  {
+    return res.json(LOCKS.get(requestId));
+  }
 
   step(
     function()
@@ -111,7 +116,13 @@ module.exports = function printHidLabelRoute(app, module, req, res, next)
       }
       else
       {
-        res.json({line, orderNo, serialNo});
+        const result = {line, orderNo, serialNo};
+
+        LOCKS.set(requestId, result);
+
+        setTimeout(() => LOCKS.delete(requestId), 30000);
+
+        res.json(result);
       }
 
       this.release();
