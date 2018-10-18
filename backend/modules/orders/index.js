@@ -55,13 +55,6 @@ exports.start = function startOrdersModule(app, module)
 
   function savePaintShopComment(paintShopEvent)
   {
-    const comment = paintShopEvent.data.comment || '';
-
-    if (_.isEmpty(comment.replace(/[^A-Za-z0-9]+/g, '')))
-    {
-      return;
-    }
-
     const mongoose = app[module.config.mongooseId];
     const PaintShopOrder = mongoose.model('PaintShopOrder');
     const Order = mongoose.model('Order');
@@ -69,7 +62,10 @@ exports.start = function startOrdersModule(app, module)
     step(
       function()
       {
-        PaintShopOrder.findById(paintShopEvent.order, {order: 1}).lean().exec(this.next());
+        PaintShopOrder
+          .findById(paintShopEvent.order, {status: 1, order: 1, qty: 1, qtyDone: 1})
+          .lean()
+          .exec(this.next());
       },
       function(err, paintShopOrder)
       {
@@ -81,6 +77,13 @@ exports.start = function startOrdersModule(app, module)
         if (!paintShopOrder)
         {
           return this.skip(app.createError('PAINT_SHOP_ORDER_NOT_FOUND'));
+        }
+
+        let comment = paintShopEvent.data.comment || '';
+
+        if (_.isEmpty(comment.replace(/[^A-Za-z0-9]+/g, '')))
+        {
+          comment = resolvePaintShopComment(paintShopOrder);
         }
 
         this.orderNo = paintShopOrder.order;
@@ -108,5 +111,26 @@ exports.start = function startOrdersModule(app, module)
         });
       }
     );
+  }
+
+  function resolvePaintShopComment(pso)
+  {
+    switch (pso.status)
+    {
+      case 'new':
+        return 'Zresetowano.';
+
+      case 'started':
+        return pso.qtyDone ? `Wznowiono. Pozostało ${pso.qty - pso.qtyDone} szt.` : 'Rozpoczęto.';
+
+      case 'partial':
+        return `Zakończono ${pso.qtyDone}/${pso.qty} szt.`;
+
+      case 'finished':
+        return 'Zakończono.';
+
+      case 'cancelled':
+        return 'Anulowano.';
+    }
   }
 };
