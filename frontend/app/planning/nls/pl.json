@@ -43,6 +43,10 @@
   "filter:stats:tooltip:late": "Suma wszystkich\nopóźnionych zleceń\nw wybranych MRP",
   "filter:stats:tooltip:plan": "Suma wszystkich zleceń\nrozplanowanych na liniach\nw wybranych MRP",
   "filter:stats:tooltip:remaining": "Suma do zrobienia\nw wybranych MRP",
+  "filter:stats:todo": "Wszystkie",
+  "filter:stats:late": "Opóźnione",
+  "filter:stats:plan": "Rozplanowane",
+  "filter:stats:remaining": "Do zrobienia",
 
   "toolbar:printPlan": "Drukuj plan linii",
   "toolbar:printPlan:all": "Wszystkie linie",

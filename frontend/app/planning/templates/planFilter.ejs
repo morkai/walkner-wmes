@@ -33,18 +33,22 @@
   </div>
   <% if (showStats) { %>
   <div class="form-group" style="flex-grow: 1"></div>
-  <div class="form-group">
-    <table class="planning-mrp-stats">
+  <div class="form-group" style="margin: 0">
+    <table class="planning-mrp-stats" style="margin: 0">
       <tbody>
+      <tr class="planning-mrp-stats-bd">
+        <th></th>
+        <% ['todo', 'late', 'plan', 'remaining'].forEach(function(subgroup) { %>
+        <th style="padding: 0 7px; text-align: center"><%- t('planning', 'filter:stats:' + subgroup) %></th>
+        <% }) %>
+        <td rowspan="4" data-group="execution" data-subgroup="percent" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent') %>">0%</td>
+      </tr>
       <% ['manHours', 'quantity', 'orders'].forEach(function(group, i) { %>
       <tr class="planning-mrp-stats-bd">
         <th><%- t('planning', 'filter:stats:' + group) %></th>
         <% ['todo', 'late', 'plan', 'remaining'].forEach(function(subgroup) { %>
         <td data-group="<%- group %>" data-subgroup="<%- subgroup %>" title="<%- t('planning', 'filter:stats:tooltip:' + subgroup) %>">0</td>
         <% }) %>
-        <% if (i === 0) { %>
-        <td rowspan="3" data-group="execution" data-subgroup="percent" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent') %>">0%</td>
-        <% } %>
       </tr>
       <% }) %>
       </tbody>
