@@ -307,6 +307,8 @@ define([
     {
       var view = this;
 
+      formData = _.assign(this.model.toJSON(), formData);
+
       ['inspector', 'nokOwner', 'leader'].forEach(function(prop)
       {
         var optionEl = (view.$id(prop)[0] || {selectedOptions: []}).selectedOptions[0];
@@ -433,6 +435,11 @@ define([
 
     parseSerialNumbers: function(sns)
     {
+      if (Array.isArray(sns))
+      {
+        return sns;
+      }
+
       var orderNo = this.$id('orderNo').val();
 
       if (!/^[0-9]{9}$/.test(orderNo))
