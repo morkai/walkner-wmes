@@ -18,6 +18,11 @@
         <p class="help-block"><%- t('planning', 'settings:schedulingRate:help') %></p>
         <textarea id="<%- idPrefix %>-schedulingRate" name="schedulingRate" class="form-control text-mono" required data-object="plan" rows="4"></textarea>
       </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-ignoredWorkCenters"><%- t('planning', 'settings:ignoredWorkCenters') %></label>
+        <p class="help-block"><%- t('planning', 'settings:ignoredWorkCenters:help') %></p>
+        <input id="<%- idPrefix %>-ignoredWorkCenters" name="ignoredWorkCenters" class="form-control text-mono" data-object="plan">
+      </div>
       <% ['requiredStatuses', 'ignoredStatuses', 'completedStatuses'].forEach(function(prop) { %>
       <div class="form-group">
         <label for="<%- idPrefix %>-<%- prop %>"><%- t('planning', 'settings:' + prop) %></label>

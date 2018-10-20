@@ -99,6 +99,11 @@ define([
         e.target.value = this.formatSchedulingRate(this.model.get('schedulingRate'));
       },
 
+      'blur #-ignoredWorkCenters': function(e)
+      {
+        e.target.value = this.formatIgnoredWorkCenters(this.model.get('ignoredWorkCenters'));
+      },
+
       'click #-addGroup': function()
       {
         this.addGroup({
@@ -879,8 +884,17 @@ define([
               }
             });
           });
+
           break;
         }
+
+        case 'ignoredWorkCenters':
+          v = $property
+            .val()
+            .split(',')
+            .map(function(v) { return v.trim(); })
+            .filter(function(v) { return v.length; });
+          break;
 
         case 'ignoreCompleted':
         case 'useRemainingQuantity':
@@ -1014,6 +1028,11 @@ define([
       return str.replace('.', decimalSeparator);
     },
 
+    formatIgnoredWorkCenters: function(ignoredWorkCenters)
+    {
+      return Array.isArray(ignoredWorkCenters) ? ignoredWorkCenters.join(', ') : '';
+    },
+
     onGeneratorFinished: function()
     {
       if (!this.timers.waitForGenerator)
@@ -1062,6 +1081,11 @@ define([
 
           case 'schedulingRate':
             view.$id(property).val(view.formatSchedulingRate(value));
+            break;
+
+          case 'ignoredWorkCenters':
+            view.$id(property).val(view.formatIgnoredWorkCenters(value));
+            break;
         }
       });
     },

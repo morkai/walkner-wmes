@@ -94,6 +94,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     requiredStatuses: [String],
     ignoredStatuses: [String],
     completedStatuses: [String],
+    ignoredWorkCenters: [String],
     schedulingRate: {},
     freezeHour: {
       type: Number,
@@ -126,6 +127,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       requiredStatuses: ['REL'],
       ignoredStatuses: ['TECO', 'CNF', 'DLV', 'DLFL', 'DLT'],
       completedStatuses: ['CNF', 'DLV'],
+      ignoredWorkCenters: [],
       schedulingRate: {},
       freezeHour: 0,
       lateHour: 6,
@@ -143,6 +145,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       requiredStatuses: sourceSettings.requiredStatuses,
       ignoredStatuses: sourceSettings.ignoredStatuses,
       completedStatuses: sourceSettings.completedStatuses,
+      ignoredWorkCenters: sourceSettings.ignoredWorkCenters,
       schedulingRate: sourceSettings.schedulingRate,
       freezeHour: sourceSettings.freezeHour,
       lateHour: sourceSettings.lateHour,
@@ -157,10 +160,13 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     const mrps = new Map();
     const mrpLines = new Map();
     const ignoredStatuses = new Set();
+    const ignoredWorkCenters = new Set();
     const hardComponents = new Set();
     const groupComponents = new Map();
 
     this.ignoredStatuses.forEach(status => ignoredStatuses.add(status));
+
+    this.ignoredWorkCenters.forEach(wc => ignoredWorkCenters.add(wc));
 
     this.mrps.forEach(mrp =>
     {
@@ -237,6 +243,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       completedStatuses: this.completedStatuses,
       requiredStatuses: this.requiredStatuses,
       ignoredStatuses,
+      ignoredWorkCenters,
       hardComponents,
       groupComponents,
       shiftStartTimes: [
@@ -349,6 +356,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
       'ignoreCompleted',
       'requiredStatuses',
       'ignoredStatuses',
+      'ignoredWorkCenters',
       'completedStatuses',
       'schedulingRate',
       'freezeHour',

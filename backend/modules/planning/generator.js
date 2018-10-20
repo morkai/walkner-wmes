@@ -47,10 +47,10 @@ module.exports = function setUpGenerator(app, module)
   }
 
   const DEV = app.options.env === 'development';
-  const UNFROZEN_PLANS = DEV ? [] : [];
+  const UNFROZEN_PLANS = DEV ? ['2018-10-22'] : [];
   const LOG_LINES = {};
   const LOG = DEV;
-  const AUTO_GENERATE_NEXT = true || !DEV && UNFROZEN_PLANS.length === 0;
+  const AUTO_GENERATE_NEXT = false;//true || !DEV && UNFROZEN_PLANS.length === 0;
   const COMPARE_ORDERS = true || !DEV && UNFROZEN_PLANS.length === 0;
   const RESIZE_ORDERS = true;
   // sortSmallOrdersByManHours sortSmallOrdersByLeven sortOrdersByNameParts
@@ -879,6 +879,12 @@ module.exports = function setUpGenerator(app, module)
           }
 
           const planOrder = Plan.createPlanOrder(source, sapOrder, mrpSettings.hardComponents);
+
+          if (state.settings.ignoredWorkCenters.has(planOrder.operation.workCenter))
+          {
+            return;
+          }
+
           const bom = new Set();
 
           (sapOrder.bom || []).forEach(component => bom.add(component.nc12));

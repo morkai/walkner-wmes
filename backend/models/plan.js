@@ -13,7 +13,8 @@ const OPERATION_PROPERTIES = [
   'machineSetupTime',
   'laborSetupTime',
   'machineTime',
-  'laborTime'
+  'laborTime',
+  'workCenter'
 ];
 
 module.exports = function setupPlanModel(app, mongoose)
@@ -35,7 +36,8 @@ module.exports = function setupPlanModel(app, mongoose)
       machineSetupTime: Number,
       laborSetupTime: Number,
       machineTime: Number,
-      laborTime: Number
+      laborTime: Number,
+      workCenter: String
     },
     manHours: Number,
     hardComponent: String,

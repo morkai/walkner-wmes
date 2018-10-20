@@ -323,6 +323,8 @@
   "settings:ignoredStatuses:help": "Lista statusów jakie zlecenie nie może mieć, aby było brane pod uwagę podczas generowania planu.",
   "settings:completedStatuses": "Statusy zrobionego zlecenia",
   "settings:completedStatuses:help": "Lista ignorowanych statusów określających zakończenie wykonywania zlecenia. Zlecenia z tymi statusami pozostaną w planie, ale nie będą rozplanowywane na liniach produkcyjnych.",
+  "settings:ignoredWorkCenters": "Ignorowane WorkCentra",
+  "settings:ignoredWorkCenters:help": "Lista WorkCenterów jakie wybrana operacja zlecenia nie może mieć, aby dane zlecenie było brane pod uwagę podczas generowania planu.",
   "settings:ignoreCompleted": "Ignoruj ukończone zlecenia",
   "settings:ignoreCompleted:help": "Podczas planowania pod uwagę nie będą brane zlecenie, których <em>Całkowita ilość zrobiona</em> jest większa lub równa <em>Całkowitej ilości do zrobienia</em>.",
   "settings:useRemainingQuantity": "Planuj wg ilości pozostałej do zrobienia",
