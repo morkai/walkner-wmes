@@ -727,6 +727,7 @@ define([
       formData.ignoredStatuses = formData.ignoredStatuses.join(',');
       formData.completedStatuses = formData.completedStatuses.join(',');
       formData.schedulingRate = this.formatSchedulingRate(formData.schedulingRate);
+      formData.ignoredWorkCenters = this.formatIgnoredWorkCenters(formData.ignoredWorkCenters);
 
       return formData;
     },
