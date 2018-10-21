@@ -1598,6 +1598,7 @@ app/kanbanPrintQueues/routes.js
 app/pkhdStrategies/routes.js
 app/pfepEntries/routes.js
 app/orderBomMatchers/routes.js
+app/help/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
