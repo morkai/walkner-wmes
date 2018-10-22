@@ -46,7 +46,7 @@
         <td data-column="level">
           <% if (editable) { %>
           <input
-            class="form-control hourlyPlan-count"
+            class="form-control hourlyPlan-count <%- flow.level > 0 ? 'hourlyPlan-nonZero' : '' %>"
             name="level"
             type="text" autocomplete="new-password"
             min="0"
@@ -62,7 +62,7 @@
         <td class="hourlyPlan-cell-count <%- hourIndex % 2 ? '' : 'even' %>" data-column="<%- hourIndex %>">
           <% if (editable) { %>
           <input
-            class="form-control hourlyPlan-count"
+            class="form-control hourlyPlan-count <%- count > 0 ? 'hourlyPlan-nonZero' : '' %>"
             name="hour"
             type="text" autocomplete="new-password"
             min="0"

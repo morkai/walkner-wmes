@@ -24,8 +24,14 @@ define([
     template: entryTemplate,
 
     events: {
-      'change .hourlyPlan-count': 'updateCount',
-      'keyup .hourlyPlan-count': 'updateCount',
+      'blur .hourlyPlan-count': function(e)
+      {
+        this.updateCount(e, 1);
+      },
+      'keyup .hourlyPlan-count': function(e)
+      {
+        this.updateCount(e, 1000);
+      },
       'change .hourlyPlan-noPlan': 'updatePlan',
       'mouseenter .hourlyPlan-flow': function(e)
       {
@@ -86,6 +92,14 @@ define([
 
     afterRender: function()
     {
+      // TODO remove on frontend version inc
+      if (!document.getElementById('tmpHourlyPlanCss'))
+      {
+        $(document.head).append(
+          '<style id=tmpHourlyPlanCss>.hourlyPlan-nonZero{font-weight:bold;border: 2px solid #555;}'
+        );
+      }
+
       this.listenToOnce(this.model, 'change', this.render);
 
       this.focusFirstEnabledInput();
@@ -93,7 +107,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(this.model.serialize(), {
+      return _.assign(this.model.serialize(), {
         editable: true
       });
     },
@@ -160,7 +174,7 @@ define([
         return;
       }
 
-      $counts.val('0').attr('data-value', '0');
+      $counts.val('0').attr('data-value', '0').removeClass('hourlyPlan-nonZero');
 
       if (!remote)
       {
@@ -179,19 +193,19 @@ define([
 
     updatePlan: function(e)
     {
+      var view = this;
       var data = {
         type: 'plan',
-        socketId: this.socket.getId(),
-        _id: this.model.id,
+        socketId: view.socket.getId(),
+        _id: view.model.id,
         flowIndex: parseInt(e.target.getAttribute('data-flow'), 10),
         newValue: e.target.checked
       };
-      var $noPlan = this.$(e.target);
-      var view = this;
+      var $noPlan = view.$(e.target);
 
-      this.toggleCountsInRow($noPlan);
+      view.toggleCountsInRow($noPlan);
 
-      this.socket.emit('hourlyPlans.updatePlan', data, function(err)
+      view.socket.emit('hourlyPlans.updatePlan', data, function(err)
       {
         if (err)
         {
@@ -244,24 +258,30 @@ define([
       return false;
     },
 
-    updateCount: function(e)
+    updateCount: function(e, delay)
     {
+      var countEl = e.target;
+
       if (e.which === 13)
       {
-        return this.focusNextInput(this.$(e.target));
+        return this.focusNextInput(this.$(countEl));
       }
 
-      var oldCount = parseInt(e.target.getAttribute('data-value'), 10) || 0;
-      var newCount = parseInt(e.target.value, 10) || 0;
+      var oldCount = parseInt(countEl.getAttribute('data-value'), 10) || 0;
+      var newCount = parseInt(countEl.value, 10) || 0;
 
-      if (oldCount === newCount)
+      var timerKey = countEl.getAttribute('data-flow')
+        + ':' + countEl.getAttribute('data-hour')
+        + ':' + countEl.getAttribute('name');
+
+      if (oldCount === newCount && !this.timers[timerKey])
       {
         return;
       }
 
-      var timerKey = e.target.getAttribute('data-flow')
-        + ':' + e.target.getAttribute('data-hour')
-        + ':' + e.target.getAttribute('name');
+      countEl.setAttribute('data-value', newCount);
+      countEl.setAttribute('data-remote', 'false');
+      countEl.classList.toggle('hourlyPlan-nonZero', newCount > 0);
 
       if (this.timers[timerKey])
       {
@@ -269,7 +289,7 @@ define([
       }
 
       this.timers[timerKey] = setTimeout(
-        this.doUpdateCount.bind(this), 250, e.target, timerKey, oldCount, newCount
+        this.doUpdateCount.bind(this), delay, countEl, timerKey, oldCount, newCount
       );
     },
 
@@ -291,9 +311,6 @@ define([
         data.hourIndex = parseInt(countEl.getAttribute('data-hour'), 10);
       }
 
-      countEl.setAttribute('data-value', data.newValue);
-      countEl.setAttribute('data-remote', 'false');
-
       var view = this;
 
       this.socket.emit('hourlyPlans.updateCount', data, function(err)
@@ -305,6 +322,7 @@ define([
             countEl.value = oldCount;
             countEl.setAttribute('data-value', oldCount);
             countEl.setAttribute('data-remote', oldRemote);
+            countEl.classList.toggle('hourlyPlan-nonZero', oldCount > 0);
           }
 
           view.trigger('remoteError', err);
@@ -378,6 +396,7 @@ define([
         'data-value': message.newValue,
         'data-remote': 'true'
       });
+      $count.toggleClass('hourlyPlan-nonZero', message.newValue > 0);
     },
 
     handleCountsChange: function(message)
@@ -393,6 +412,7 @@ define([
       message.newValues.forEach(function(newValue, i)
       {
         $counts[i + 1].value = newValue;
+        $counts[i + 1].classList.toggle('hourlyPlan-nonZero', newValue > 0);
       });
 
       if (message.socketId === this.socket.getId())
