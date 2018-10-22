@@ -19,10 +19,6 @@
   "PROPERTY:active": "Aktywny?",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:drm": "Kategoria DRM",
-  "PROPERTY:man": "Człowiek",
-  "PROPERTY:machine": "Maszyna",
-  "PROPERTY:material": "Materiał",
-  "PROPERTY:method": "Metoda",
 
   "FORM:ACTION:add": "Dodaj powod opóźnień",
   "FORM:ACTION:edit": "Edytuj powod opóźnień",

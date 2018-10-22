@@ -14,7 +14,7 @@ module.exports = function setupDelayReasonModel(app, mongoose)
       trim: true,
       required: true
     },
-    drm: {}
+    drm: String
   }, {
     id: false
   });

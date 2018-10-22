@@ -92,14 +92,6 @@ define([
 
     afterRender: function()
     {
-      // TODO remove on frontend version inc
-      if (!document.getElementById('tmpHourlyPlanCss'))
-      {
-        $(document.head).append(
-          '<style id=tmpHourlyPlanCss>.hourlyPlan-nonZero{font-weight:bold;border: 2px solid #555;}'
-        );
-      }
-
       this.listenToOnce(this.model, 'change', this.render);
 
       this.focusFirstEnabledInput();

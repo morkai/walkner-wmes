@@ -33,11 +33,6 @@ define([
 
       obj.active = t('core', 'BOOL:' + obj.active);
 
-      Object.keys(obj.drm || {}).forEach(function(prop)
-      {
-        obj[prop] = obj.drm[prop] || '';
-      });
-
       return obj;
     }
 

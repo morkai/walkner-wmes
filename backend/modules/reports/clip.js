@@ -319,16 +319,16 @@ module.exports = function(mongoose, options, done)
 
           const drm = this.delayReasons[order.delayReason];
 
-          if (drm && drm[order.m4])
+          if (drm)
           {
-            order.drm = drm[order.m4];
+            order.drm = drm;
 
-            if (!results.drms[order.drm])
+            if (!results.drms[drm])
             {
-              results.drms[order.drm] = 0;
+              results.drms[drm] = 0;
             }
 
-            results.drms[order.drm] += 1;
+            results.drms[drm] += 1;
           }
         }
 
