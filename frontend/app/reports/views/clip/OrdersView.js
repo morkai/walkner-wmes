@@ -30,7 +30,10 @@ define([
       {
         if (e.target.tagName !== 'A')
         {
-          this.showOrderChanges(e.currentTarget.dataset.id);
+          this.showOrderChanges(
+            e.currentTarget.dataset.id,
+            e.target.classList.contains('reports-2-orders-delayReason')
+          );
         }
       }
     },
@@ -53,6 +56,8 @@ define([
       view.listenTo(orders, 'push:change', this.onChangePush);
       view.listenTo(orders.paginationData, 'change:page', this.scrollTop);
       view.listenTo(orders.displayOptions.settings, 'change', this.onSettingChange);
+
+      $(document).on('');
     },
 
     destroy: function()
@@ -165,7 +170,7 @@ define([
       }
     },
 
-    showOrderChanges: function(orderNo)
+    showOrderChanges: function(orderNo, focusComment)
     {
       var view = this;
       var $orderTr = view.$('tr[data-id="' + orderNo + '"]');
@@ -182,7 +187,7 @@ define([
 
       if (order.get('changes'))
       {
-        return view.renderOrderChanges(order, $orderTr);
+        return view.renderOrderChanges(order, $orderTr, focusComment);
       }
 
       view.req = view.ajax({url: '/orders/' + orderNo + '?select(changes)'});
@@ -192,7 +197,7 @@ define([
       view.req.done(function(res)
       {
         order.set('changes', res.changes);
-        view.renderOrderChanges(order, $orderTr);
+        view.renderOrderChanges(order, $orderTr, focusComment);
       });
 
       view.req.always(function()
@@ -201,7 +206,7 @@ define([
       });
     },
 
-    renderOrderChanges: function(order, $orderTr)
+    renderOrderChanges: function(order, $orderTr, focusComment)
     {
       var $changesTr = $('<tr class="reports-2-changes hidden"><td colspan="999"></td></tr>');
       var $changesTd = $changesTr.find('td');
@@ -218,6 +223,11 @@ define([
       this.orderChangesView.render();
 
       $changesTr.removeClass('hidden');
+
+      if (focusComment)
+      {
+        $changesTr.find('input[name="delayReason"]').select2('focus');
+      }
     },
 
     hideOrderChanges: function()
