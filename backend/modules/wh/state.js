@@ -866,7 +866,7 @@ module.exports = function setUpWhState(app, module)
           });
         });
 
-        html2pdf.printZpl(zpl.join('\r\n'), {printer}, null, this.next());
+        html2pdf.printZpl(zpl.join('\r\n'), {printer}, this.next());
       },
       function(err)
       {
