@@ -3,6 +3,9 @@
 define([
   'underscore',
   'highcharts',
+  'highcharts.exporting',
+  'highcharts.no-data-to-display',
+  'highcharts.grouped-categories',
   './i18n',
   './time',
   './broker',
@@ -10,11 +13,18 @@ define([
 ], function(
   _,
   Highcharts,
+  exporting,
+  noDataToDisplay,
+  groupedCategories,
   t,
   time,
   broker
 ) {
   'use strict';
+
+  exporting(Highcharts);
+  noDataToDisplay(Highcharts);
+  groupedCategories(Highcharts);
 
   var oldGetTooltipPosition = Highcharts.Tooltip.prototype.getPosition;
 
@@ -30,7 +40,7 @@ define([
     return pos;
   };
 
-  _.extend(Highcharts.Axis.prototype.defaultYAxisOptions, {
+  _.assign(Highcharts.Axis.prototype.defaultYAxisOptions, {
     maxPadding: 0.01,
     minPadding: 0.01
   });
@@ -111,6 +121,9 @@ define([
       hideDelay: 250,
       useHTML: true,
       displayHeader: true,
+      style: {
+        pointerEvents: 'auto'
+      },
       formatter: function()
       {
         var header;
@@ -178,8 +191,8 @@ define([
         }
       },
       scale: 1,
-      sourceWidth: 848,
-      sourceHeight: 600,
+      sourceWidth: 842,
+      sourceHeight: 595,
       url: '/reports;export'
     },
     loading: {
@@ -239,6 +252,8 @@ define([
     var plotOptions = {
       dataLabels: {
         enabled: true,
+        padding: 0,
+        allowOverlap: false,
         formatter: formatDataLabelForExport
       }
     };
@@ -278,27 +293,9 @@ define([
       return '';
     }
 
-    var seriesType = series.type;
-
-    if (seriesType !== 'column'
-      && seriesType !== 'bar'
-      && seriesType !== 'pie'
-      && series.points.length > 10)
-    {
-      if (series.index % 2 === 0 && this.point.index % 2 !== 0)
-      {
-        return '';
-      }
-
-      if (series.index % 2 !== 0 && this.point.index % 2 === 0)
-      {
-        return '';
-      }
-    }
-
     var y = Highcharts.numberFormat(this.y, 1);
 
-    if (/.0$/.test(y))
+    if (/[^0-9]0$/.test(y))
     {
       y = Highcharts.numberFormat(this.y, 0);
     }

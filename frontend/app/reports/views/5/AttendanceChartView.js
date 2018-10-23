@@ -6,8 +6,7 @@ define([
   'app/i18n',
   'app/core/View',
   'app/data/companies',
-  'app/reports/util/formatTooltipHeader',
-  'highcharts.grouped-categories'
+  'app/reports/util/formatTooltipHeader'
 ], function(
   _,
   Highcharts,

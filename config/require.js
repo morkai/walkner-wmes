@@ -24,8 +24,10 @@ exports.paths = {
   'd3': 'vendor/d3/d3.v3',
   'd3.timeline': 'vendor/d3/d3.timeline',
   'visibly': 'vendor/visibly',
-  'highcharts': 'vendor/highcharts',
-  'highcharts.grouped-categories': 'vendor/highcharts.grouped-categories',
+  'highcharts': 'vendor/highcharts/highcharts.src',
+  'highcharts.exporting': 'vendor/highcharts/modules/exporting.src',
+  'highcharts.grouped-categories': 'vendor/highcharts/modules/grouped-categories.src',
+  'highcharts.no-data-to-display': 'vendor/highcharts/modules/no-data-to-display.src',
   'zeroclipboard': 'vendor/zeroclipboard/ZeroClipboard',
   'screenfull': 'vendor/screenfull',
   'datatables': 'vendor/datatables/media/js/jquery.dataTables',
@@ -61,14 +63,6 @@ exports.shim = {
   },
   'visibly': {
     exports: 'visibly'
-  },
-  'highcharts': {
-    deps: ['jquery'],
-    exports: 'Highcharts'
-  },
-  'highcharts.grouped-categories': {
-    deps: ['highcharts'],
-    exports: 'Highcharts'
   },
   'screenfull': {
     exports: 'screenfull'

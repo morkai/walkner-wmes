@@ -140,6 +140,8 @@ define([
           size: '80%',
           innerSize: '60%',
           dataLabels: {
+            enabled: true,
+            allowOverlap: true,
             formatter: function()
             {
               return this.y > 0 ? (this.point.name + ': ' + this.y) : null;
