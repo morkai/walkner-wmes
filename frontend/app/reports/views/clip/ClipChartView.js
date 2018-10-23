@@ -353,7 +353,8 @@ define([
             yAxis: 1,
             data: chartData.production,
             tooltip: {
-              valueSuffix: '%'
+              valueSuffix: '%',
+              valueDecimals: 1
             },
             visible: !displayOptions || displayOptions.isSeriesVisible('clipProduction')
           },
@@ -365,7 +366,8 @@ define([
             yAxis: 1,
             data: chartData.endToEnd,
             tooltip: {
-              valueSuffix: '%'
+              valueSuffix: '%',
+              valueDecimals: 1
             },
             visible: !displayOptions || displayOptions.isSeriesVisible('clipEndToEnd')
           }

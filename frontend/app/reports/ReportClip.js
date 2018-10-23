@@ -121,8 +121,8 @@ define([
 
       clipList.forEach(function(metrics)
       {
-        var production = Math.round(metrics.productionCount / metrics.orderCount * 100) || 0;
-        var endToEnd = Math.round(metrics.endToEndCount / metrics.orderCount * 100) || 0;
+        var production = Math.round(metrics.productionCount / metrics.orderCount * 1000) / 10 || 0;
+        var endToEnd = Math.round(metrics.endToEndCount / metrics.orderCount * 1000) / 10 || 0;
 
         clip.orderCount.push({x: metrics.key, y: metrics.orderCount});
         clip.production.push({x: metrics.key, y: production});
