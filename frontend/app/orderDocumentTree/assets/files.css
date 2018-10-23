@@ -151,8 +151,9 @@
   display: inline-block;
   margin-right: 8px;
   padding: 6px 0;
-  width: 129px;
+  width: 125px;
   border-right: 1px solid #ddd;
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
 }
 .is-list .orderDocumentTree-files-label-smallText {
   display: inline-block;
