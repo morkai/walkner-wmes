@@ -51,7 +51,11 @@ module.exports = function clipExportRoute(app, reportsModule, req, res, next)
       confirmed: 10,
       delivered: 10,
       confirmedAt: 'datetime',
-      deliveredAt: 'datetime'
+      deliveredAt: 'datetime',
+      delayReason: 40,
+      m4: 7,
+      drm: 5,
+      comment: 40
     }
   };
 
@@ -66,7 +70,7 @@ module.exports = function clipExportRoute(app, reportsModule, req, res, next)
 
     delayReasonList.forEach(delayReason =>
     {
-      delayReasonMap[delayReason._id] = delayReason.name;
+      delayReasonMap[delayReason._id] = delayReason;
     });
 
     exportOptions.serializeRow = exportOrder.bind(null, delayReasonMap);
@@ -76,6 +80,8 @@ module.exports = function clipExportRoute(app, reportsModule, req, res, next)
 
   function exportOrder(delayReasonMap, order)
   {
+    const delayReason = delayReasonMap[order.delayReason];
+
     return {
       orderNo: order._id.no,
       name: order.name,
@@ -91,7 +97,9 @@ module.exports = function clipExportRoute(app, reportsModule, req, res, next)
       delivered: order.endToEndStatus,
       confirmedAt: order.productionTime,
       deliveredAt: order.endToEndTime,
-      delayReason: delayReasonMap[order.delayReason] || '',
+      delayReason: delayReason ? delayReason.name : '',
+      m4: order.m4,
+      drm: delayReason ? delayReason.drm : '',
       comment: order.comment
     };
   }
