@@ -2307,7 +2307,10 @@ app/core/util/buttonGroup.js
 app/reports/util/prepareDateRange.js
 app/paintShop/templates/load/filter.js
 app/paintShop/views/PaintShopLoadFilterView.js
-vendor/highcharts.js
+vendor/highcharts/highcharts.src.js
+vendor/highcharts/modules/exporting.src.js
+vendor/highcharts/modules/no-data-to-display.src.js
+vendor/highcharts/modules/grouped-categories.src.js
 app/nls/core.js
 app/nls/pl/core.js
 i18n!app/nls/core
