@@ -204,6 +204,37 @@ define([
         {
           return false;
         }
+      },
+      'click #-openLayout': function(e)
+      {
+        if (e.button !== 0)
+        {
+          return;
+        }
+
+        var screen = window.screen;
+        var width = screen.availWidth * 0.8;
+        var height = screen.availHeight * 0.9;
+        var left = Math.floor((screen.availWidth - width) / 2);
+        var top = Math.floor((screen.availHeight - height) / 2) - (screen.height - screen.availHeight);
+        var windowFeatures = 'resizable,scrollbars,location=no'
+          + ',top=' + top
+          + ',left=' + left
+          + ',width=' + Math.floor(width)
+          + ',height=' + Math.floor(height);
+
+        var win = window.open(e.target.href, 'WMES_LAYOUT', windowFeatures);
+
+        if (win)
+        {
+          win.focus();
+        }
+        else
+        {
+          window.location.href = e.target.href;
+        }
+
+        return false;
       }
     }
 

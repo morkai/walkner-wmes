@@ -156,6 +156,7 @@
     "NAVBAR:PKHD_STRATEGIES": "Component dist. strategies",
     "NAVBAR:kanban": "Kanban DB",
     "NAVBAR:pfep": "PFEP DB",
+    "NAVBAR:layout": "Layout",
 
     "NAVBAR:OPINION:main": "Opinion survey",
     "NAVBAR:OPINION:current": "Current survey",
