@@ -201,7 +201,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
         return next(err);
       }
 
-      delayReasons.forEach(delayReason => req.delayReasons.set(delayReason._id, delayReason));
+      delayReasons.forEach(delayReason => req.delayReasons.set(delayReason._id.toString(), delayReason));
 
       next();
     });
@@ -209,7 +209,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
 
   function exportOrder(doc, req)
   {
-    const delayReason = req.delayReasons.get(doc.delayReason);
+    const delayReason = req.delayReasons.get(String(doc.delayReason));
 
     return {
       orderNo: doc._id,
@@ -228,7 +228,7 @@ module.exports = function setUpOrdersRoutes(app, ordersModule)
       status: doc.statuses.join(' '),
       delayReason: delayReason ? delayReason.name : (doc.delayReason || ''),
       '4m': doc.m4,
-      drm: delayReason && doc.m4 ? delayReason.drm[doc.m4] : '',
+      drm: delayReason ? delayReason.drm : '',
       startDate: doc.startDate,
       finishDate: doc.finishDate,
       scheduledStartDate: doc.scheduledStartDate,
