@@ -13,9 +13,18 @@
       <label for="<%- idPrefix %>-extremes"><%- t('reports', 'options:extremes') %></label>
       <div id="<%- idPrefix %>-extremes" class="btn-group filter-btn-group" data-toggle="buttons">
         <% ['none', 'siblings', 'parent'].forEach(function(extremes) { %>
-        <label class="btn btn-default">
-          <input type="radio" name="extremes" value="<%- extremes %>"> <%- t('reports', 'options:extremes:' + extremes) %>
-        </label>
+          <label class="btn btn-default">
+            <input type="radio" name="extremes" value="<%- extremes %>"> <%- t('reports', 'options:extremes:' + extremes) %>
+          </label>
+        <% }) %>
+      </div>
+    </div><div class="form-group">
+      <label for="<%- idPrefix %>-zeroes"><%- t('reports', 'options:zeroes') %></label>
+      <div id="<%- idPrefix %>-zeroes" class="btn-group filter-btn-group" data-toggle="buttons">
+        <% ['include', 'gap', 'ignore'].forEach(function(zeroes) { %>
+          <label class="btn btn-default">
+            <input type="radio" name="zeroes" value="<%- zeroes %>"> <%- t('reports', 'options:zeroes:' + zeroes) %>
+          </label>
         <% }) %>
       </div>
     </div><div class="form-group filter-actions">

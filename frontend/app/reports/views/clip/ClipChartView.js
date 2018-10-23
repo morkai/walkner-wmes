@@ -96,7 +96,36 @@ define([
 
     serializeChartData: function()
     {
-      return this.model.get('clip');
+      var clip = this.model.get('clip');
+      var zeroes = this.displayOptions ? this.displayOptions.get('zeroes') : 'include';
+      var chartData = {};
+
+      if (zeroes === 'ignore')
+      {
+        _.forEach(clip, function(data, series)
+        {
+          chartData[series] = data.filter(function(point)
+          {
+            return !!point.y;
+          });
+        });
+      }
+      else if (zeroes === 'gap')
+      {
+        _.forEach(clip, function(data, series)
+        {
+          chartData[series] = data.map(function(point)
+          {
+            return point.y ? point : _.assign({}, point, {y: null});
+          });
+        });
+      }
+      else
+      {
+        chartData = clip;
+      }
+
+      return chartData;
     },
 
     formatTooltipHeader: formatTooltipHeader,
@@ -187,6 +216,7 @@ define([
     onDisplayOptionsChange: function()
     {
       var changes = this.displayOptions.changedAttributes();
+      var update = !!changes.zeroes;
       var redraw = false;
 
       if (changes.series)
@@ -213,7 +243,11 @@ define([
         redraw = true;
       }
 
-      if (redraw)
+      if (update)
+      {
+        this.updateChart();
+      }
+      else if (redraw)
       {
         this.chart.redraw(false);
       }

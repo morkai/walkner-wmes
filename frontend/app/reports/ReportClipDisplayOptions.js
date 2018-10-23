@@ -34,6 +34,7 @@ define([
       var defaults = {
         series: {},
         extremes: 'none',
+        zeroes: 'include',
         maxClipOrderCount: null,
         maxClipPercent: null,
         maxDelayReasonsCount: null,
@@ -126,8 +127,13 @@ define([
     serializeToString: function()
     {
       var extremes = this.get('extremes');
+      var zeroes = this.get('zeroes');
       var visibleSeries = this.get('series');
-      var parts = [extremes === 'none' ? 0 : extremes === 'siblings' ? 1 : 2, ''];
+      var parts = [
+        extremes === 'none' ? 0 : extremes === 'siblings' ? 1 : 2,
+        '',
+        zeroes === 'include' ? 0 : zeroes === 'gap' ? 1 : 2
+      ];
 
       SERIES.forEach(function(series)
       {
@@ -144,13 +150,14 @@ define([
       var Report2DisplayOptions = this;
       var parts = str.split('&');
 
-      if (parts.length !== 2)
+      if (parts.length < 2)
       {
         return new Report2DisplayOptions(null, options);
       }
 
       var attrs = {
         extremes: parts[0] === '2' ? 'parent' : parts[0] === '1' ? 'siblings' : 'none',
+        zeroes: parts[2] === '2' ? 'ignore' : parts[2] === '1' ? 'gap' : 'include',
         series: {}
       };
 

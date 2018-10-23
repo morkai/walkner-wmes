@@ -33,6 +33,10 @@ define([
       {
         this.model.set('extremes', this.$('[name=extremes]:checked').val());
       },
+      'change [name=zeroes]': function()
+      {
+        this.model.set('zeroes', this.$('[name=zeroes]:checked').val());
+      },
       'click #-showFilter': function()
       {
         this.trigger('showFilter');
@@ -56,13 +60,15 @@ define([
       this.$('.is-expandable').expandableSelect();
 
       this.$('[name=extremes]:checked').closest('.btn').addClass('active');
+      this.$('[name=zeroes]:checked').closest('.btn').addClass('active');
     },
 
     serializeFormData: function()
     {
       return {
         series: Object.keys(this.model.get('series')),
-        extremes: this.model.get('extremes')
+        extremes: this.model.get('extremes'),
+        zeroes: this.model.get('zeroes')
       };
     },
 
