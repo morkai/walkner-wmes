@@ -2,10 +2,12 @@
 
 define([
   'underscore',
-  'app/broker'
+  'app/broker',
+  'app/viewport'
 ], function(
   _,
-  broker
+  broker,
+  viewport
 ) {
   'use strict';
 
@@ -23,11 +25,19 @@ define([
       scanBuffer = buffer;
     }
 
-    var matches = scanBuffer.match(/P0*([0-9]{9})([0-9]{4})/);
+    buffer = scanBuffer.trim();
+    scanBuffer = '';
+
+    if (buffer === '<ESC>' || buffer === '1337000027')
+    {
+      return viewport.closeAllDialogs();
+    }
+
+    var matches = buffer.match(/P0*([0-9]{9})([0-9]{4})/);
 
     if (!matches)
     {
-      matches = scanBuffer.match(/([A-Z0-9]{4}\.([0-9]{9})\.([0-9]{4}))(?:[^.]|$)/);
+      matches = buffer.match(/([A-Z0-9]{4}\.([0-9]{9})\.([0-9]{4}))(?:[^.]|$)/);
     }
 
     if (matches)
@@ -42,14 +52,12 @@ define([
     else if (scanBuffer.length > 5)
     {
       broker.publish('production.taktTime.snScanned', {
-        _id: scanBuffer,
+        _id: buffer,
         scannedAt: new Date(),
         orderNo: null,
         serialNo: null
       });
     }
-
-    scanBuffer = '';
   }
 
   window.fakeSN = handleScanBuffer;
