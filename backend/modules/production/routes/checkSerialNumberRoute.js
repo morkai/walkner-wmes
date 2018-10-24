@@ -128,9 +128,11 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
 
   function getComponentsToMatch(orderNo, lineId, done)
   {
-    if (productionModule.bomMatcherCache.has(orderNo))
+    const cacheKey = `${orderNo}:${lineId}`;
+
+    if (productionModule.bomMatcherCache.has(cacheKey))
     {
-      return done(null, productionModule.bomMatcherCache.get(orderNo));
+      return done(null, productionModule.bomMatcherCache.get(cacheKey));
     }
 
     step(
@@ -190,7 +192,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
 
         const components = matchOrder(orderBomMatchers, order, lineId);
 
-        productionModule.bomMatcherCache.set(orderNo, components);
+        productionModule.bomMatcherCache.set(cacheKey, components);
 
         setImmediate(this.group(), null, components);
 
