@@ -47,10 +47,10 @@ module.exports = function setUpGenerator(app, module)
   }
 
   const DEV = app.options.env === 'development';
-  const UNFROZEN_PLANS = DEV ? ['2018-10-22'] : [];
+  const UNFROZEN_PLANS = DEV ? [] : [];
   const LOG_LINES = {};
   const LOG = DEV;
-  const AUTO_GENERATE_NEXT = false;//true || !DEV && UNFROZEN_PLANS.length === 0;
+  const AUTO_GENERATE_NEXT = true;
   const COMPARE_ORDERS = true || !DEV && UNFROZEN_PLANS.length === 0;
   const RESIZE_ORDERS = true;
   // sortSmallOrdersByManHours sortSmallOrdersByLeven sortOrdersByNameParts
@@ -581,7 +581,7 @@ module.exports = function setUpGenerator(app, module)
 
         state.plan.updatedAt = new Date();
 
-        Plan.collection.update({_id: state.plan._id}, state.plan.toJSON(), {upsert: true}, this.next());
+        Plan.collection.replaceOne({_id: state.plan._id}, state.plan.toJSON(), {upsert: true}, this.next());
       },
       function finalizeStep(err)
       {
@@ -694,7 +694,7 @@ module.exports = function setUpGenerator(app, module)
     });
     const json = planChange.toJSON();
 
-    PlanChange.collection.insert(json, err =>
+    PlanChange.collection.insertOne(json, err =>
     {
       if (err)
       {
