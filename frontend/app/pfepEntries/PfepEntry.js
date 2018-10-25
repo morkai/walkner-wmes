@@ -61,6 +61,11 @@ define([
       obj.packSize = obj.packLength + ' x ' + obj.packWidth + ' x ' + obj.packHeight;
       obj.palletSize = obj.palletLength + ' x ' + obj.palletWidth + ' x ' + obj.palletHeight;
 
+      Object.keys(this.defaults).forEach(prop =>
+      {
+        obj[prop] = obj[prop].toLocaleString();
+      });
+
       return obj;
     }
 

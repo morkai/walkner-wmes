@@ -45,7 +45,7 @@ define([
         {id: 'internalPackQty', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:internalPackQty')},
         {id: 'qtyPerLayer', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyPerLayer')},
         {id: 'qtyOnPallet', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyOnPallet')},
-        {id: 'palletSize', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:palletSize')},
+        {id: 'palletSize', tdClassName: 'is-min is-number text-center', label: t('LIST:COLUMN:palletSize')},
         {id: 'moq', tdClassName: 'is-min is-number'},
         {id: 'roundingValue', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:roundingValue')},
         {id: 'vendor', tdClassName: 'is-min', thClassName: 'is-filter'},

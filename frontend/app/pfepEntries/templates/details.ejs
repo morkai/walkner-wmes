@@ -32,7 +32,13 @@
               ].forEach(function(p) { %>
               <div class="prop">
                 <div class="prop-name"><%- t('pfepEntries', 'PROPERTY:' + p) %></div>
-                <div class="prop-value"><%= model[p] === 0 ? 0 : (model[p] || '-') %></div>
+                <div class="prop-value">
+                  <% if (typeof model[p] === 'number') { %>
+                  <%- model[p].toLocaleString() %>
+                  <% } else { %>
+                  <%= model[p] || '-' %>
+                  <% } %>
+                </div>
               </div>
             <% }) %>
           </div>
