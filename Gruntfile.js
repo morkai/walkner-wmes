@@ -116,12 +116,7 @@ module.exports = function(grunt)
         options: {
           baseUrl: './build/frontend',
           dir: './frontend-build',
-          optimize: 'uglify2',
-          uglify2: {
-            compress: {
-              drop_console: true // eslint-disable-line camelcase
-            }
-          },
+          optimize: 'none',
           optimizeCss: 'standard',
           modules: [
             {name: 'wmes-main'},
@@ -140,12 +135,29 @@ module.exports = function(grunt)
           locale: 'pl'
         }
       }
+    },
+    uglify: {
+      options: {
+        ecma: 6,
+        compress: {
+          drop_console: true // eslint-disable-line camelcase
+        }
+      },
+      frontend: {
+        files: [{
+          expand: true,
+          cwd: './frontend-build',
+          src: '**/*.js',
+          dest: './frontend-build'
+        }]
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
+  grunt.loadNpmTasks('grunt-contrib-uglify-es');
   grunt.loadNpmTasks('grunt-ejs-amd');
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-messageformat-amd');
@@ -165,6 +177,7 @@ module.exports = function(grunt)
     'messageformatAmdLocale:frontend',
     'messageformatAmd:frontend',
     'requirejs:frontend',
+    'uglify:frontend',
     'clean:frontendBuilt'
   ]);
 

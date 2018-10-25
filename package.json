@@ -106,6 +106,7 @@
     "grunt-contrib-concat": "~1.0.1",
     "grunt-contrib-copy": "~1.0.0",
     "grunt-contrib-requirejs": "~1.0.0",
+    "grunt-contrib-uglify-es": "~3.3.0",
     "grunt-ejs-amd": "git+http://github.com/morkai/grunt-ejs-amd.git#07b9f7ae3a",
     "grunt-eslint": "~21.0.0",
     "grunt-messageformat-amd": "git+http://github.com/morkai/grunt-messageformat-amd.git#052e4d4ee5",
