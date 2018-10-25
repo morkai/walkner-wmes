@@ -26,12 +26,6 @@ function MongoStore(db, options)
 
   /**
    * @private
-   * @type {boolean}
-   */
-  this.safe = options.safe === true;
-
-  /**
-   * @private
    * @type {number}
    */
   this.gcInterval = (options.gcInterval || MongoStore.Options.gcInterval) * 1000;
@@ -95,11 +89,6 @@ MongoStore.Options = {
   collectionName: 'sessions',
 
   /**
-   * @type {boolean}
-   */
-  safe: false,
-
-  /**
    * @type {number}
    */
   gcInterval: 600,
@@ -135,7 +124,7 @@ MongoStore.prototype.touch = function(sid, session, done)
   const sessions = this.collection();
   const expires = Date.parse(session.cookie.expires) || (Date.now() + this.defaultExpirationTime);
 
-  sessions.update({_id: sid}, {$set: {expires, updatedAt: now}}, done);
+  sessions.updateOne({_id: sid}, {$set: {expires, updatedAt: now}}, done);
 };
 
 /**
@@ -195,15 +184,7 @@ MongoStore.prototype.set = function(sid, session, done)
     doc.expires = now + this.defaultExpirationTime;
   }
 
-  const opts = {
-    upsert: true,
-    safe: this.safe
-  };
-
-  sessions.update({_id: sid}, doc, opts, function(err)
-  {
-    return done && done(err);
-  });
+  sessions.replaceOne({_id: sid}, doc, {upsert: true}, done);
 };
 
 /**
@@ -212,10 +193,7 @@ MongoStore.prototype.set = function(sid, session, done)
  */
 MongoStore.prototype.destroy = function(sid, done)
 {
-  this.collection().remove({_id: sid}, {safe: this.safe}, function(err)
-  {
-    return done && done(err);
-  });
+  this.collection().deleteOne({_id: sid}, done);
 };
 
 /**
@@ -231,7 +209,7 @@ MongoStore.prototype.clear = function(done)
  */
 MongoStore.prototype.length = function(done)
 {
-  this.collection().count(done);
+  this.collection().countDocuments({}, done);
 };
 
 /**
@@ -239,7 +217,7 @@ MongoStore.prototype.length = function(done)
  */
 MongoStore.prototype.gc = function(done)
 {
-  this.collection().remove({expires: {$lte: Date.now()}}, done);
+  this.collection().deleteMany({expires: {$lte: Date.now()}}, done);
 };
 
 MongoStore.prototype.destruct = function()

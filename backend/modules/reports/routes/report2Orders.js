@@ -376,7 +376,7 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
       '_id.c': cacheKey
     };
     const queryOptions = {
-      fields: {_id: 0},
+      projection: {_id: 0},
       sort: {'_id.c': 1, 'value.scheduledStartDate': 1},
       limit: req.rql.limit || 10,
       skip: req.rql.skip || 0
@@ -400,7 +400,7 @@ module.exports = function report2OrdersRoute(app, reportsModule, req, res, next)
   {
     delete reportsModule.mapReduceResults[cacheKey];
 
-    mongoose.connection.collection('cliporders').remove({'_id.c': cacheKey}, function(err)
+    mongoose.connection.collection('cliporders').deleteMany({'_id.c': cacheKey}, err =>
     {
       if (err)
       {

@@ -25,6 +25,9 @@ exports.start = function startDbModule(app, module, done)
 
   module.Promise = global.Promise;
 
+  module.set('objectIdGetter', false);
+  module.set('strict', true);
+
   module.connection.on('connecting', () => module.debug('Connecting...'));
   module.connection.on('connected', () => module.debug('Connected.'));
   module.connection.on('open', () => module.debug('Open.'));
@@ -34,6 +37,8 @@ exports.start = function startDbModule(app, module, done)
   module.connection.on('close', () => module.warn('Closed.'));
   module.connection.on('unauthorized', () => module.warn('Unauthorized.'));
   module.connection.on('error', (err) => module.error(err.stack));
+
+  app.broker.subscribe('app.started', setUpKeepAliveQuery).setLimit(1);
 
   app.broker.subscribe('express.beforeMiddleware', setUpExpressMiddleware).setLimit(1);
 
@@ -82,7 +87,6 @@ exports.start = function startDbModule(app, module, done)
     {
       initialized = true;
 
-      setUpKeepAliveQuery();
       loadModels();
     }
   }

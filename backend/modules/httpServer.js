@@ -4,7 +4,6 @@
 
 const util = require('util');
 const http = require('http');
-const domain = require('domain');
 
 exports.DEFAULT_CONFIG = {
   expressId: 'express',
@@ -39,59 +38,29 @@ exports.start = function startHttpServerModule(app, module, done)
     return done(err);
   }
 
-  const serverDomain = domain.create();
-
-  serverDomain.run(function()
+  module.server = http.createServer(function onRequest(req, res)
   {
-    module.server = http.createServer(function onRequest(req, res)
+    const expressModule = app[module.config.expressId];
+
+    if (module.isAvailable() && expressModule)
     {
-      const reqDomain = domain.create();
-
-      reqDomain.add(req);
-      reqDomain.add(res);
-
-      reqDomain.on('error', function onRequestError(err)
-      {
-        if (err.code !== 'ECONNRESET')
-        {
-          module.error(err.stack || err.message || err);
-        }
-
-        reqDomain.dispose();
-
-        try
-        {
-          res.statusCode = 500;
-          res.end();
-        }
-        catch (err)
-        {
-          module.error(err.stack);
-        }
-      });
-
-      const expressModule = app[module.config.expressId];
-
-      if (module.isAvailable() && expressModule)
-      {
-        expressModule.app(req, res);
-      }
-      else
-      {
-        res.writeHead(503);
-        res.end();
-      }
-    });
-
-    module.server.once('error', onFirstServerError);
-
-    module.server.listen(module.config.port, module.config.host, function()
+      expressModule.app(req, res);
+    }
+    else
     {
-      module.server.removeListener('error', onFirstServerError);
+      res.writeHead(503);
+      res.end();
+    }
+  });
 
-      module.debug('Listening on port %d...', module.config.port);
+  module.server.once('error', onFirstServerError);
 
-      return done();
-    });
+  module.server.listen(module.config.port, module.config.host, function()
+  {
+    module.server.removeListener('error', onFirstServerError);
+
+    module.debug('Listening on port %d...', module.config.port);
+
+    return done();
   });
 };

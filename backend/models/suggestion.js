@@ -5,7 +5,7 @@
 const _ = require('lodash');
 const moment = require('moment');
 const deepEqual = require('deep-equal');
-const autoIncrement = require('mongoose-plugin-autoinc');
+const autoIncrement = require('mongoose-plugin-autoinc-fix');
 const businessDays = require('../modules/reports/businessDays');
 
 module.exports = function setupSuggestionModel(app, mongoose)
@@ -275,7 +275,7 @@ module.exports = function setupSuggestionModel(app, mongoose)
         }
       };
 
-      Suggestion.collection.update(conditions, update, function(err)
+      Suggestion.collection.updateOne(conditions, update, function(err)
       {
         if (err)
         {

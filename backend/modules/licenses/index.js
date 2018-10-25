@@ -24,7 +24,7 @@ exports.start = function startLicensesModule(app, module)
 
   if (config.licenseEd.pem)
   {
-    const ursa = require('ursa');
+    const ursa = require('strong-ursa');
 
     if (config.licenseEd.password)
     {

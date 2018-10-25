@@ -4,12 +4,12 @@
 
 ### node.js
 
-  * __Version__: 8
+  * __Version__: 10
   * __Website__: https://nodejs.org/
 
 ### MongoDB
 
-  * __Version__: 3.6
+  * __Version__: 4
   * __Website__: https://www.mongodb.org/
 
 ## Installation

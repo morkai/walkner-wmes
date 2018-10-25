@@ -351,7 +351,7 @@ exports.start = function startFteModule(app, module)
       });
     });
 
-    HourlyPlan.collection.update({_id: hourlyPlan._id}, {$set: update}, err =>
+    HourlyPlan.collection.updateOne({_id: hourlyPlan._id}, {$set: update}, err =>
     {
       if (err)
       {

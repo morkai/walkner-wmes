@@ -12,7 +12,6 @@ module.exports = function setupXDataModel(app, mongoose)
     data: {}
   }, {
     id: false,
-    retainKeyOrder: true,
     minimize: false
   });
 

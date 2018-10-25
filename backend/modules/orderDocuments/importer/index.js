@@ -251,7 +251,7 @@ exports.start = function startOrderDocumentsImporterModule(app, module)
       {
         for (let i = 0; i < this.updateList.length; ++i)
         {
-          Order.collection.update(this.updateList[i].condition, this.updateList[i].update, this.group());
+          Order.collection.updateOne(this.updateList[i].condition, this.updateList[i].update, this.group());
         }
       },
       function finalizeStep(err)

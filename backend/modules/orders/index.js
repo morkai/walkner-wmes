@@ -96,7 +96,7 @@ exports.start = function startOrdersModule(app, module)
           source: 'ps'
         };
 
-        Order.collection.update({_id: this.orderNo}, {$push: {changes: this.change}}, this.next());
+        Order.collection.updateOne({_id: this.orderNo}, {$push: {changes: this.change}}, this.next());
       },
       function(err)
       {

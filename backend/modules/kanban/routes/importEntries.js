@@ -306,7 +306,7 @@ module.exports = function importEntriesRoute(app, module, req, res, next)
       return setImmediate(importNext, message, oldDocs, newDocs, columns, done);
     }
 
-    KanbanEntry.update({_id: oldDoc._id}, update, err =>
+    KanbanEntry.updateOne({_id: oldDoc._id}, update, err =>
     {
       if (err)
       {

@@ -16,8 +16,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     orderPriority: [String]
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const mrpGroupSettingsSchema = new mongoose.Schema({
@@ -26,8 +25,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     components: [String]
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const mrpSettingsSchema = new mongoose.Schema({
@@ -58,8 +56,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     groups: [mrpGroupSettingsSchema]
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const lineActiveTimeSchema = new mongoose.Schema({
@@ -67,8 +64,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     to: String
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const lineSchema = new mongoose.Schema({
@@ -77,8 +73,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     activeTime: [lineActiveTimeSchema]
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const planSettingsSchema = new mongoose.Schema({
@@ -112,8 +107,7 @@ module.exports = function setupPlanSettingsModel(app, mongoose)
     mrps: [mrpSettingsSchema]
   }, {
     id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   planSettingsSchema.statics.TOPIC_PREFIX = 'planning.settings';

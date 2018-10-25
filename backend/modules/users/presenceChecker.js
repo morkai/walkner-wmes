@@ -170,7 +170,7 @@ module.exports = function setUpPresenceChecker(app, module)
 
           this.changes[user._id] = presence.in;
 
-          User.collection.update(
+          User.collection.updateOne(
             {_id: user._id},
             {$set: {
               presence: presence.in,

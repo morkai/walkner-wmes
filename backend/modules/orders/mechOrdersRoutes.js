@@ -164,7 +164,7 @@ module.exports = function setUpMechOrdersRoutes(app, ordersModule)
 
       delete mechOrder._id;
 
-      MechOrder.collection.update({_id: _id}, {$set: mechOrder}, {upsert: true}, function(err)
+      MechOrder.collection.updateOne({_id: _id}, {$set: mechOrder}, {upsert: true}, function(err)
       {
         if (err)
         {

@@ -709,11 +709,11 @@ exports.start = function startUserModule(app, module)
         update.$set['data.user.' + k] = v;
       });
 
-      collection.update(conditions, update, {multi: true}, function(err)
+      collection.updateMany(conditions, update, err =>
       {
         if (err)
         {
-          return module.error('Failed to update user sessions: %s', err.message);
+          module.error('Failed to update user sessions: %s', err.message);
         }
       });
     }
@@ -727,11 +727,11 @@ exports.start = function startUserModule(app, module)
         return;
       }
 
-      collection.remove({'data.user._id': userId.toString()}, function(err)
+      collection.deleteMany({'data.user._id': userId.toString()}, err =>
       {
         if (err)
         {
-          return module.error('Failed to remove user sessions: %s', err.message);
+          module.error('Failed to remove user sessions: %s', err.message);
         }
       });
     }

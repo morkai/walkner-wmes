@@ -62,7 +62,7 @@ module.exports = function ignorePrintJobRoute(app, module, req, res, next)
         $set.todo = false;
       }
 
-      KanbanPrintQueue.collection.update({_id: queue}, {$set}, this.next());
+      KanbanPrintQueue.collection.updateOne({_id: queue}, {$set}, this.next());
     },
     function(err)
     {

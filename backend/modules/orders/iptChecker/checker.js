@@ -252,7 +252,7 @@ module.exports = function setUpNotifier(app, module)
 
         if (conditions._id.$in.length)
         {
-          InvalidOrder.remove(conditions, this.next());
+          InvalidOrder.deleteMany(conditions, this.next());
         }
       },
       function findIgnoredOrdersStep(err)
@@ -298,7 +298,7 @@ module.exports = function setUpNotifier(app, module)
             return;
           }
 
-          InvalidOrder.collection.update({_id: orderNo}, {$set: {
+          InvalidOrder.collection.updateOne({_id: orderNo}, {$set: {
             updatedAt: startedAt,
             updater: null,
             status: 'resolved',
@@ -344,16 +344,16 @@ module.exports = function setUpNotifier(app, module)
 
         if (update.length)
         {
-          InvalidOrder.collection.update({_id: {$in: update}}, {$set: {
+          InvalidOrder.collection.updateMany({_id: {$in: update}}, {$set: {
             updatedAt: startedAt,
             updater: null,
             problem: 'MISSING'
-          }}, {multi: true}, this.parallel());
+          }}, this.parallel());
         }
 
         if (insert.length)
         {
-          InvalidOrder.collection.insert(insert, this.parallel());
+          InvalidOrder.collection.insertMany(insert, this.parallel());
         }
       },
       function(err)
@@ -487,7 +487,7 @@ module.exports = function setUpNotifier(app, module)
           return done();
         }
 
-        app[module.config.mongooseId].model('InvalidOrder').collection.update(
+        app[module.config.mongooseId].model('InvalidOrder').collection.updateOne(
           {_id: invalidOrder._id},
           invalidOrder,
           {upsert: true},

@@ -55,8 +55,7 @@ module.exports = function setupPlanModel(app, mongoose)
     }
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const planLineOrderSchema = new mongoose.Schema({
@@ -70,8 +69,7 @@ module.exports = function setupPlanModel(app, mongoose)
     pceTimes: [Number]
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const autoDowntimeSchema = new mongoose.Schema({
@@ -80,8 +78,7 @@ module.exports = function setupPlanModel(app, mongoose)
     duration: Number
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const shiftDataSchema = new mongoose.Schema({
@@ -90,8 +87,7 @@ module.exports = function setupPlanModel(app, mongoose)
     orderCount: Number
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const frozenOrderSchema = new mongoose.Schema({
@@ -99,8 +95,7 @@ module.exports = function setupPlanModel(app, mongoose)
     quantity: Number
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const planLineSchema = new mongoose.Schema({
@@ -114,8 +109,7 @@ module.exports = function setupPlanModel(app, mongoose)
     frozenOrders: [frozenOrderSchema]
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const planSchema = new mongoose.Schema({
@@ -130,8 +124,7 @@ module.exports = function setupPlanModel(app, mongoose)
     lines: [planLineSchema]
   }, {
     id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   planSchema.index({'orders._id': -1});

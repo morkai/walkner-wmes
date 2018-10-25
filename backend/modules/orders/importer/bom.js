@@ -197,7 +197,7 @@ exports.start = function startOrderBomImporterModule(app, module)
           updatedAt: t
         };
 
-        Order.update({_id: orderNo}, {$set: $set, $push: {changes: changes}}, done);
+        Order.updateOne({_id: orderNo}, {$set: $set, $push: {changes: changes}}, done);
       },
       function finalizeStep(err)
       {

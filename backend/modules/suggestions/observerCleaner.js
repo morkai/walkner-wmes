@@ -49,7 +49,7 @@ module.exports = function setUpObserverCleaner(app, module)
             observer.changes = {};
           }
 
-          Suggestion.collection.update(
+          Suggestion.collection.updateOne(
             {_id: suggestion._id},
             {$set: {observers: observers}},
             this.group()

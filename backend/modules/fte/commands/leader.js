@@ -37,7 +37,7 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
       }
     };
 
-    FteLeaderEntry.collection.update({_id: entry._id}, update, done);
+    FteLeaderEntry.collection.updateOne({_id: entry._id}, update, done);
   }
 
   function updateSupplyCount(updater, entry, data, done)
@@ -137,7 +137,7 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
       });
     });
 
-    FteLeaderEntry.collection.update({_id: entry._id}, update, err =>
+    FteLeaderEntry.collection.updateOne({_id: entry._id}, update, err =>
     {
       if (err)
       {
@@ -357,7 +357,7 @@ module.exports = function setUpFteLeaderCommands(app, fteModule)
           const taskCommentProperty = `tasks.${data.taskIndex}.comment`;
           update.$set[taskCommentProperty] = data.comment.trim();
 
-          FteLeaderEntry.collection.update({_id: fteLeaderEntry._id}, update, this.next());
+          FteLeaderEntry.collection.updateOne({_id: fteLeaderEntry._id}, update, this.next());
 
           this.changes = {
             entry: fteLeaderEntry,

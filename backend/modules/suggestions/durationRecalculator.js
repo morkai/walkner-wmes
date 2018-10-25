@@ -96,7 +96,7 @@ module.exports = function setUpDurationRecalculator(app, module)
       return;
     }
 
-    Suggestion.update({_id: doc._id}, {$set: changes}, function(err)
+    Suggestion.updateOne({_id: doc._id}, {$set: changes}, function(err)
     {
       if (err)
       {

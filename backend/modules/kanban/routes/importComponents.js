@@ -256,7 +256,7 @@ module.exports = function importComponentsRoute(app, module, req, res, next)
       return setImmediate(importNext, message, oldDocs, newDocs, columns, done);
     }
 
-    KanbanComponent.update({_id: oldDoc._id}, update, err =>
+    KanbanComponent.updateOne({_id: oldDoc._id}, update, err =>
     {
       if (err)
       {

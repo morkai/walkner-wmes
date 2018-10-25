@@ -94,7 +94,7 @@ exports.start = function startPressWorksheetsModule(app, module)
         const doneRemovingOrders = this.parallel();
         const doneRemovingDowntimes = this.parallel();
 
-        ProdShiftOrder.remove({pressWorksheet: pressWorksheetId}, function(err)
+        ProdShiftOrder.deleteMany({pressWorksheet: pressWorksheetId}, err =>
         {
           if (err)
           {
@@ -106,7 +106,7 @@ exports.start = function startPressWorksheetsModule(app, module)
           return doneRemovingOrders();
         });
 
-        ProdDowntime.remove({pressWorksheet: pressWorksheetId}, function(err)
+        ProdDowntime.deleteMany({pressWorksheet: pressWorksheetId}, err =>
         {
           if (err)
           {

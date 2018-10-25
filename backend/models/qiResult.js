@@ -4,7 +4,7 @@
 
 const _ = require('lodash');
 const deepEqual = require('deep-equal');
-const autoIncrement = require('mongoose-plugin-autoinc');
+const autoIncrement = require('mongoose-plugin-autoinc-fix');
 
 module.exports = function setupQiResultModel(app, mongoose)
 {
@@ -19,10 +19,7 @@ module.exports = function setupQiResultModel(app, mongoose)
     }
   }, {
     _id: false,
-    minimize: false,
-    toObject: {
-      retainKeyOrder: true
-    }
+    minimize: false
   });
 
   const qiCorrectiveActionSchema = new mongoose.Schema({
@@ -42,10 +39,7 @@ module.exports = function setupQiResultModel(app, mongoose)
     }
   }, {
     _id: false,
-    minimize: false,
-    toObject: {
-      retainKeyOrder: true
-    }
+    minimize: false
   });
 
   const qiResultSchema = new mongoose.Schema({
@@ -161,10 +155,7 @@ module.exports = function setupQiResultModel(app, mongoose)
     users: [String]
   }, {
     id: false,
-    minimize: false,
-    toObject: {
-      retainKeyOrder: true
-    }
+    minimize: false
   });
 
   qiResultSchema.plugin(autoIncrement.plugin, {

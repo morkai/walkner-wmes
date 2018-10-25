@@ -521,7 +521,7 @@ exports.start = function startOrdersImporterModule(app, module)
 
     if (orderIds.length)
     {
-      Order.collection.remove({_id: {$in: orderIds}}, this.next());
+      Order.collection.deleteMany({_id: {$in: orderIds}}, this.next());
     }
   }
 
@@ -532,7 +532,7 @@ exports.start = function startOrdersImporterModule(app, module)
       return this.skip(err);
     }
 
-    Order.collection.insert(orders, this.next());
+    Order.collection.insertMany(orders, this.next());
   }
 
   function updateOrderStep(update, err)
@@ -542,7 +542,7 @@ exports.start = function startOrdersImporterModule(app, module)
       return this.skip(err);
     }
 
-    Order.collection.update(update.conditions, update.update, this.next());
+    Order.collection.updateOne(update.conditions, update.update, this.next());
   }
 
   function updateXiconfOrderQty(timestamp, ordersWithNewQty)

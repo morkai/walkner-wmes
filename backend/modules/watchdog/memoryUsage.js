@@ -3,7 +3,9 @@
 'use strict';
 
 const _ = require('lodash');
-const heapdump = require('heapdump');
+let heapdump = null;
+
+try { heapdump = require('heapdump'); } catch (err) {} // eslint-disable-line no-empty
 
 exports.DEFAULT_CONFIG = {
   mailSenderId: 'mail/sender',
@@ -162,6 +164,11 @@ exports.start = function startWatchdogMemoryUsageModule(app, module)
     if (global.gc)
     {
       global.gc();
+    }
+
+    if (!heapdump)
+    {
+      return done(app.createError(`No heapdump module!`));
     }
 
     heapdump.writeSnapshot((err, file) =>

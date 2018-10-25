@@ -119,7 +119,7 @@ module.exports = function setUpSuggestionsReminder(app, module)
       },
       function updateUpdatedAtStep()
       {
-        Suggestion.update(this.conditions, {$set: {remindedAt: Date.now()}}, {multi: true}, this.next());
+        Suggestion.updateMany(this.conditions, {$set: {remindedAt: Date.now()}}, this.next());
       },
       function(err)
       {

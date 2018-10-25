@@ -189,7 +189,7 @@ module.exports = function setUpProductionsLogEntryHandler(app, productionModule)
       const cond = {_id: {$in: handledLogEntryIds}};
       const update = {$set: {todo: false}};
 
-      ProdLogEntry.update(cond, update, {multi: true}, function(err)
+      ProdLogEntry.updateMany(cond, update, err =>
       {
         if (err)
         {

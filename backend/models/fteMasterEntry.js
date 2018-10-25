@@ -22,8 +22,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     }
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const fteMasterTaskFunctionSchema = new mongoose.Schema({
@@ -34,8 +33,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     companies: [fteMasterTaskCompanySchema]
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const fteMasterTaskSchema = new mongoose.Schema({
@@ -59,8 +57,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     }
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const fteMasterAbsentUserSchema = new mongoose.Schema({
@@ -72,8 +69,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     personellId: String
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const fteMasterEntrySchema = new mongoose.Schema({
@@ -112,8 +108,7 @@ module.exports = function setupFteMasterEntryModel(app, mongoose)
     absentUsers: [fteMasterAbsentUserSchema]
   }, {
     id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   fteMasterEntrySchema.statics.TOPIC_PREFIX = 'fte.master';

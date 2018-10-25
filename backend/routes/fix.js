@@ -302,7 +302,7 @@ module.exports = function startFixRoutes(app, express)
             return done();
           }
 
-          ProdLogEntry.collection.insert(newProdLogEntry, done);
+          ProdLogEntry.collection.insertOne(newProdLogEntry, done);
         });
     }
   }
@@ -394,7 +394,7 @@ module.exports = function startFixRoutes(app, express)
           {
             for (let i = 0, l = updates.length; i < l; ++i)
             {
-              ProdLogEntry.update({_id: updates[i]._id}, {$set: updates[i].$set}, this.group());
+              ProdLogEntry.updateOne({_id: updates[i]._id}, {$set: updates[i].$set}, this.group());
             }
           },
           function(err)
@@ -626,7 +626,7 @@ module.exports = function startFixRoutes(app, express)
       $set.divisions = Object.keys(divisions);
       $set.prodLines = Object.keys(prodLines);
 
-      PressWorksheet.collection.update({_id: pressWorksheet._id}, {$set: $set}, function()
+      PressWorksheet.collection.updateOne({_id: pressWorksheet._id}, {$set: $set}, function()
       {
         --todo;
 

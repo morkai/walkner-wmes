@@ -5,7 +5,7 @@
 const _ = require('lodash');
 const moment = require('moment');
 const deepEqual = require('deep-equal');
-const autoIncrement = require('mongoose-plugin-autoinc');
+const autoIncrement = require('mongoose-plugin-autoinc-fix');
 const businessDays = require('../modules/reports/businessDays');
 
 module.exports = function setupKaizenOrderModel(app, mongoose)
@@ -326,7 +326,7 @@ module.exports = function setupKaizenOrderModel(app, mongoose)
         }
       };
 
-      KaizenOrder.collection.update(conditions, update, function(err)
+      KaizenOrder.collection.updateOne(conditions, update, function(err)
       {
         if (err)
         {

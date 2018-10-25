@@ -90,7 +90,7 @@ module.exports = function generateLicenseKey(privateKey, options)
     features
   ].join('\n');
 
-  const licenseKey = privateKey.privateEncrypt(new Buffer(data, 'utf8')).toString('base64');
+  const licenseKey = privateKey.privateEncrypt(Buffer.from(data, 'utf8')).toString('base64');
   const pem = ['-----BEGIN LICENSE KEY-----'];
 
   for (let i = 0; i < licenseKey.length; i += 65)

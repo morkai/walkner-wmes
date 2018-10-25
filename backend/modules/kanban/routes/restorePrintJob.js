@@ -39,7 +39,7 @@ module.exports = function restorePrintJobRoute(app, module, req, res, next)
 
       this.queue = queue;
 
-      KanbanPrintQueue.collection.update({_id: queue._id}, queue, this.next());
+      KanbanPrintQueue.collection.updateOne({_id: queue._id}, queue, this.next());
     },
     function(err)
     {

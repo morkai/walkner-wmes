@@ -19,8 +19,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     count: {}
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   fteLeaderTaskCompanySchema.path('count').validate(
@@ -51,8 +50,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     companies: [fteLeaderTaskCompanySchema]
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const fteLeaderTaskSchema = new mongoose.Schema({
@@ -75,8 +73,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     comment: String
   }, {
     _id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   const fteLeaderEntrySchema = new mongoose.Schema({
@@ -116,8 +113,7 @@ module.exports = function setupFteLeaderEntryModel(app, mongoose)
     tasks: [fteLeaderTaskSchema]
   }, {
     id: false,
-    minimize: false,
-    retainKeyOrder: true
+    minimize: false
   });
 
   fteLeaderEntrySchema.index({subdivision: 1});

@@ -4,7 +4,7 @@
 
 const _ = require('lodash');
 const deepEqual = require('deep-equal');
-const autoIncrement = require('mongoose-plugin-autoinc');
+const autoIncrement = require('mongoose-plugin-autoinc-fix');
 
 module.exports = function setupPfepEntryModel(app, mongoose)
 {
@@ -19,10 +19,7 @@ module.exports = function setupPfepEntryModel(app, mongoose)
     }
   }, {
     _id: false,
-    minimize: false,
-    toObject: {
-      retainKeyOrder: true
-    }
+    minimize: false
   });
 
   const pfepEntrySchema = new mongoose.Schema({
@@ -54,10 +51,7 @@ module.exports = function setupPfepEntryModel(app, mongoose)
     changes: [changeSchema]
   }, {
     id: false,
-    minimize: false,
-    toObject: {
-      retainKeyOrder: true
-    }
+    minimize: false
   });
 
   pfepEntrySchema.plugin(autoIncrement.plugin, {

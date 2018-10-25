@@ -81,7 +81,7 @@ exports.start = function startSettingsModule(app, module)
       }
     };
 
-    Setting.update({_id: _id}, update, {upsert: true}, function(err)
+    Setting.updateOne({_id: _id}, update, {upsert: true}, function(err)
     {
       if (err)
       {

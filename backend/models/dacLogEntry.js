@@ -70,7 +70,7 @@ module.exports = function setupDacLogEntryModel(app, mongoose)
       }
     });
 
-    this.collection.insert(dacLogEntries, {ordered: false}, done);
+    this.collection.insertMany(dacLogEntries, {ordered: false}, done);
   };
 
   mongoose.model('DacLogEntry', dacLogEntrySchema);

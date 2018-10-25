@@ -37,7 +37,6 @@ module.exports = function setupClipOrderCacheModel(app, mongoose)
   }, {
     id: false,
     minimize: false,
-    retainKeyOrder: true,
     strict: false
   });
 

@@ -814,7 +814,7 @@ module.exports = function setUpOrderDocumentsTree(app, module)
 
         if (folder.parent)
         {
-          OrderDocumentFolder.update(
+          OrderDocumentFolder.updateOne(
             {_id: folder.parent},
             {$addToSet: {children: folder._id}},
             this.next()
@@ -866,11 +866,11 @@ module.exports = function setUpOrderDocumentsTree(app, module)
         });
         folder.save(this.parallel());
 
-        OrderDocumentFolder.update({_id: '__TRASH__'}, {$addToSet: {children: folder._id}}, this.parallel());
+        OrderDocumentFolder.updateOne({_id: '__TRASH__'}, {$addToSet: {children: folder._id}}, this.parallel());
 
         if (folder.oldParent)
         {
-          OrderDocumentFolder.update({_id: folder.oldParent}, {$pull: {children: folder._id}}, this.parallel());
+          OrderDocumentFolder.updateOne({_id: folder.oldParent}, {$pull: {children: folder._id}}, this.parallel());
         }
       },
       function(err, folder)
@@ -925,12 +925,12 @@ module.exports = function setUpOrderDocumentsTree(app, module)
 
         if (this.newParentId)
         {
-          OrderDocumentFolder.update({_id: this.newParentId}, {$addToSet: {children: folder._id}}, this.parallel());
+          OrderDocumentFolder.updateOne({_id: this.newParentId}, {$addToSet: {children: folder._id}}, this.parallel());
         }
 
         if (this.oldParentId)
         {
-          OrderDocumentFolder.update({_id: this.oldParentId}, {$pull: {children: folder._id}}, this.parallel());
+          OrderDocumentFolder.updateOne({_id: this.oldParentId}, {$pull: {children: folder._id}}, this.parallel());
         }
       },
       function(err, folder)
@@ -1031,9 +1031,9 @@ module.exports = function setUpOrderDocumentsTree(app, module)
         });
         folder.save(this.parallel());
 
-        OrderDocumentFolder.update({_id: folder.parent}, {$addToSet: {children: folder._id}}, this.parallel());
+        OrderDocumentFolder.updateOne({_id: folder.parent}, {$addToSet: {children: folder._id}}, this.parallel());
 
-        OrderDocumentFolder.update({_id: '__TRASH__'}, {$pull: {children: folder._id}}, this.parallel());
+        OrderDocumentFolder.updateOne({_id: '__TRASH__'}, {$pull: {children: folder._id}}, this.parallel());
       },
       function(err, folder)
       {
@@ -1136,7 +1136,7 @@ module.exports = function setUpOrderDocumentsTree(app, module)
 
   function doPurgeFolder(folder, user, done)
   {
-    folder.remove(function(err)
+    folder.remove(err =>
     {
       if (!err)
       {
@@ -1146,7 +1146,7 @@ module.exports = function setUpOrderDocumentsTree(app, module)
         });
       }
 
-      OrderDocumentFolder.update({_id: folder.parent}, {$pull: {children: folder._id}}, () => {});
+      OrderDocumentFolder.updateOne({_id: folder.parent}, {$pull: {children: folder._id}}, () => {});
 
       done(err);
     });

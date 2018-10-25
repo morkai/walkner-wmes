@@ -303,12 +303,12 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
 
         for (i = 0; i < this.batches.length; ++i)
         {
-          XiconfOrder.collection.insert(this.batches[i], {ordered: false}, this.group());
+          XiconfOrder.collection.insertMany(this.batches[i], {ordered: false}, this.group());
         }
 
         for (i = 0; i < this.updatesList.length; ++i)
         {
-          XiconfOrder.collection.update(
+          XiconfOrder.collection.updateOne(
             this.updatesList[i].condition,
             this.updatesList[i].update,
             this.group()
@@ -361,7 +361,7 @@ exports.start = function startXiconfOrdersImporterModule(app, module)
             update.items.push(item);
           }
 
-          XiconfOrder.update({_id: order._id}, {$set: update}, this.group());
+          XiconfOrder.updateOne({_id: order._id}, {$set: update}, this.group());
         }
       },
       function finalizeStep(err)

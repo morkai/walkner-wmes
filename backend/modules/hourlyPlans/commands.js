@@ -198,7 +198,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
         update.$set[field] = data.newValue;
 
-        HourlyPlan.collection.update({_id: hourlyPlan._id}, update, err =>
+        HourlyPlan.collection.updateOne({_id: hourlyPlan._id}, update, err =>
         {
           if (err)
           {
@@ -273,7 +273,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
           ];
         }
 
-        HourlyPlan.collection.update({_id: hourlyPlan._id}, update, err =>
+        HourlyPlan.collection.updateOne({_id: hourlyPlan._id}, update, err =>
         {
           if (err)
           {
@@ -349,7 +349,7 @@ module.exports = function setUpHourlyPlansCommands(app, hourlyPlansModule)
 
         update.$set[`flows.${data.flowIndex}.hours`] = data.newValues;
 
-        HourlyPlan.collection.update({_id: hourlyPlan._id}, update, function(err)
+        HourlyPlan.collection.updateOne({_id: hourlyPlan._id}, update, function(err)
         {
           if (err)
           {

@@ -37,7 +37,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
       }
     };
 
-    FteMasterEntry.collection.update({_id: entry._id}, update, done);
+    FteMasterEntry.collection.updateOne({_id: entry._id}, update, done);
   }
 
   function updateSupplyCount(updater, entry, data, done)
@@ -74,7 +74,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
       }
     };
 
-    FteMasterEntry.collection.update({_id: entry._id}, update, done);
+    FteMasterEntry.collection.updateOne({_id: entry._id}, update, done);
   }
 
   return {
@@ -239,7 +239,7 @@ module.exports = function setUpFteMasterCommands(app, fteModule)
             }
           };
 
-          FteMasterEntry.collection.update({_id: entry._id}, update, this.next());
+          FteMasterEntry.collection.updateOne({_id: entry._id}, update, this.next());
 
           this.entry = entry;
           this.task = task;

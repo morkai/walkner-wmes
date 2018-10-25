@@ -12,7 +12,6 @@ module.exports = function setupDailyMrpCountModel(app, mongoose)
     count: {}
   }, {
     id: false,
-    retainKeyOrder: true,
     minimize: false
   });
 

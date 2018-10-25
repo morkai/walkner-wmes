@@ -45,7 +45,7 @@ module.exports = function setUpVisRoutes(app, module)
       }
     };
 
-    VisNodePosition.collection.update(conditions, update, {upsert: true}, err =>
+    VisNodePosition.collection.updateOne(conditions, update, {upsert: true}, err =>
     {
       if (err)
       {
@@ -60,7 +60,7 @@ module.exports = function setUpVisRoutes(app, module)
 
   function deleteRoute(nodePosition, res, next)
   {
-    VisNodePosition.collection.remove({_id: nodePosition._id}, err =>
+    VisNodePosition.collection.deleteOne({_id: nodePosition._id}, err =>
     {
       if (err)
       {

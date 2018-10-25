@@ -49,7 +49,7 @@ module.exports = function setUpObserverCleaner(app, module)
             observer.changes = {};
           }
 
-          D8Entry.collection.update(
+          D8Entry.collection.updateOne(
             {_id: entry._id},
             {$set: {observers: observers}},
             this.group()

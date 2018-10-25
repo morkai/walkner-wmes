@@ -234,7 +234,7 @@ exports.start = function startEventsModule(app, module)
 
     pendingEvents = null;
 
-    eventsCollection.insert(eventsToSave, function(err)
+    eventsCollection.insertMany(eventsToSave, function(err)
     {
       if (err)
       {

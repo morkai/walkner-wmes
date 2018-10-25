@@ -69,7 +69,7 @@ module.exports = function editPlanLineRoute(app, module, req, res, next)
         return this.skip();
       }
 
-      Plan.collection.update({_id: planId, 'lines._id': planLine._id}, {$set: update}, this.parallel());
+      Plan.collection.updateOne({_id: planId, 'lines._id': planLine._id}, {$set: update}, this.parallel());
 
       const planChange = new PlanChange({
         plan: planId,

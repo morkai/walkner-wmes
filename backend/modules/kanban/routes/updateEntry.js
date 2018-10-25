@@ -123,7 +123,7 @@ module.exports = function stateRoute(app, module, req, res, next)
         updates: update.$set[`updates.${updatePropertyUs}`]
       };
 
-      KanbanEntry.collection.update({_id: entryId}, update, this.next());
+      KanbanEntry.collection.updateOne({_id: entryId}, update, this.next());
     },
     function(err, result)
     {

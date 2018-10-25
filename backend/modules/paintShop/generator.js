@@ -66,7 +66,6 @@ module.exports = function(app, module)
     module.debug(`[generator] [${key}] Generating...`);
 
     step(
-      // TODO remove
       function()
       {
         if (key === '2018-08-10')

@@ -49,7 +49,7 @@ module.exports = function setUpObserverCleaner(app, module)
             observer.changes = {};
           }
 
-          KaizenOrder.collection.update(
+          KaizenOrder.collection.updateOne(
             {_id: kaizenOrder._id},
             {$set: {observers: observers}},
             this.group()

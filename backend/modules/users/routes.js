@@ -585,7 +585,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
       $set[`data.model.${prop}`] = data[prop];
     });
 
-    Event.collection.update(
+    Event.collection.updateMany(
       {type: /^users/, 'data.model._id': userId},
       {$set},
       done
@@ -612,7 +612,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
       'data.label': '?'
     }};
 
-    ProdLogEntry.collection.update(conditions, update, done);
+    ProdLogEntry.collection.updateMany(conditions, update, done);
   }
 
   function anonymizeNextModel(userId, modelQueue, modelsToUpdate, done)
@@ -770,7 +770,7 @@ module.exports = function setUpUsersRoutes(app, usersModule)
     {
       updates.forEach(update => update(model));
 
-      Model.collection.update({_id: model._id}, {$set: model}, () => {});
+      Model.collection.updateOne({_id: model._id}, {$set: model}, () => {});
     });
   }
 

@@ -2,7 +2,7 @@
 
 'use strict';
 
-const autoIncrement = require('mongoose-plugin-autoinc');
+const autoIncrement = require('mongoose-plugin-autoinc-fix');
 
 module.exports = function setupPscsResultModel(app, mongoose)
 {

@@ -136,7 +136,7 @@ exports.start = function startControlCyclesImporterModule(app, module)
       {
         for (let i = 0, l = this.batches.length; i < l; ++i)
         {
-          WhControlCycleArchive.collection.insert(this.batches[i], {ordered: false}, this.parallel());
+          WhControlCycleArchive.collection.insertMany(this.batches[i], {ordered: false}, this.parallel());
         }
       },
       function handleArchiveError(err)
@@ -183,7 +183,6 @@ exports.start = function startControlCyclesImporterModule(app, module)
     return function updateCurrentControlCyclesBatchStep()
     {
       const ccOptions = {upsert: true};
-      const toOptions = {multi: true};
 
       for (let i = 0, l = controlCyclesArchive.length; i < l; ++i)
       {
@@ -191,16 +190,15 @@ exports.start = function startControlCyclesImporterModule(app, module)
 
         controlCycle._id = controlCycle._id.nc12;
 
-        WhControlCycle.collection.update(
+        WhControlCycle.collection.updateOne(
           {_id: controlCycle._id},
           controlCycle,
           ccOptions,
           this.parallel()
         );
-        WhTransferOrder.collection.update(
+        WhTransferOrder.collection.updateMany(
           {nc12: controlCycle._id, shiftDate: {$gt: minShiftDate}},
           {$set: {s: controlCycle.s}},
-          toOptions,
           this.parallel()
         );
       }

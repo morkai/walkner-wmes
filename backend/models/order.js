@@ -350,7 +350,7 @@ module.exports = function setupOrderModel(app, mongoose)
           qtyDone.total = 0;
         }
 
-        mongoose.model('Order').update({_id: orderNo}, {$set: {qtyDone: qtyDone}}, this.next());
+        mongoose.model('Order').updateOne({_id: orderNo}, {$set: {qtyDone: qtyDone}}, this.next());
       },
       function(err)
       {

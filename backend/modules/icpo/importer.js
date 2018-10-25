@@ -196,7 +196,7 @@ module.exports = function setUpIcpoImporter(app, icpoModule)
 
     for (let i = 0, l = Math.ceil(this.results.length / RESULTS_BATCH_SIZE); i < l; ++i)
     {
-      IcpoResult.collection.insert(
+      IcpoResult.collection.insertMany(
         this.results.slice(i * RESULTS_BATCH_SIZE, i * RESULTS_BATCH_SIZE + RESULTS_BATCH_SIZE),
         {ordered: false},
         this.parallel()

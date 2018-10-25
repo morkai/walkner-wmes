@@ -255,7 +255,7 @@ module.exports = function comparePoList(app, importerModule, purchaseOrders, don
         }
       }
 
-      PurchaseOrder.update({_id: id}, update, step.parallel());
+      PurchaseOrder.updateOne({_id: id}, update, step.parallel());
     });
   }
 

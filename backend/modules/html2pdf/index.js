@@ -10,7 +10,7 @@ const fs = require('fs');
 const step = require('h5.step');
 const _ = require('lodash');
 const request = require('request');
-const createPuppeteerPool = require('puppeteer-pool');
+const {createPool} = require('castelet');
 const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
@@ -29,12 +29,10 @@ exports.start = function startHtml2pdfModule(app, module)
 {
   const zintVersion = [0, 0];
 
-  module.pool = createPuppeteerPool(_.defaults({}, module.config.poolOptions, {
+  module.pool = createPool(_.defaults({}, module.config.poolOptions, {
     min: 2,
     max: 5,
-    idleTimeoutMillis: 30000,
-    maxUses: 50,
-    puppeteerArgs: {}
+    idleTimeoutMillis: 30000
   }));
 
   app.onModuleReady(

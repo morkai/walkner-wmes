@@ -8,8 +8,7 @@ module.exports = function setupIsaEventModel(app, mongoose)
     type: String,
     id: String
   }, {
-    _id: false,
-    retainKeyOrder: true
+    _id: false
   });
 
   const isaEventSchema = new mongoose.Schema({
@@ -34,8 +33,7 @@ module.exports = function setupIsaEventModel(app, mongoose)
   }, {
     id: false,
     minimize: false,
-    versionKey: false,
-    retainKeyOrder: true
+    versionKey: false
   });
 
   isaEventSchema.statics.TOPIC_PREFIX = 'isaEvents';

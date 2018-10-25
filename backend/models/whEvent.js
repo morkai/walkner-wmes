@@ -26,8 +26,7 @@ module.exports = function setupWhEventModel(app, mongoose)
   }, {
     id: false,
     minimize: false,
-    versionKey: false,
-    retainKeyOrder: true
+    versionKey: false
   });
 
   whEventSchema.statics.TOPIC_PREFIX = 'wh.events';

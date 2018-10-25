@@ -262,7 +262,7 @@ module.exports = function setUpPaintShopRoutes(app, module)
 
     const state = !!req.body.state;
 
-    PaintShopDropZone.collection.update({_id: {date, mrp}}, {$set: {state}}, {upsert: true}, (err) =>
+    PaintShopDropZone.collection.updateOne({_id: {date, mrp}}, {$set: {state}}, {upsert: true}, err =>
     {
       if (err)
       {

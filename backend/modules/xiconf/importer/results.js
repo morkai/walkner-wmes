@@ -218,14 +218,14 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
     for (i = 0, l = this.orders.length; i < l; ++i)
     {
-      XiconfOrderResult.collection.update(
+      XiconfOrderResult.collection.updateOne(
         {_id: this.orders[i]._id}, this.orders[i], {upsert: true}, this.group()
       );
     }
 
     for (i = 0, l = Math.ceil(this.results.length / RESULTS_BATCH_SIZE); i < l; ++i)
     {
-      XiconfResult.collection.insert(
+      XiconfResult.collection.insertMany(
         this.results.slice(i * RESULTS_BATCH_SIZE, i * RESULTS_BATCH_SIZE + RESULTS_BATCH_SIZE),
         {ordered: false},
         this.group()

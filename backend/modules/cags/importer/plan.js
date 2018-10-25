@@ -153,7 +153,7 @@ exports.start = function startCagPlanImporterModule(app, module)
         {
           const cagPlan = cagPlans.shift();
 
-          CagPlan.update(
+          CagPlan.updateOne(
             {_id: cagPlan._id},
             {$set: {value: cagPlan.value}},
             {upsert: true},
@@ -189,7 +189,7 @@ exports.start = function startCagPlanImporterModule(app, module)
       return;
     }
 
-    Cag.collection.insert(docs, {ordered: false}, function(err)
+    Cag.collection.insertMany(docs, {ordered: false}, function(err)
     {
       if (err && err.code !== 11000)
       {

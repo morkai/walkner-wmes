@@ -294,7 +294,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             }
           }
 
-          XiconfOrder.collection.update({_id: order._id}, {$set: $set}, this.group());
+          XiconfOrder.collection.updateOne({_id: order._id}, {$set: $set}, this.group());
 
           this.orderNos.push(order._id);
         }
@@ -524,7 +524,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
             continue;
           }
 
-          XiconfResult.collection.update({_id: xiconfResult._id}, {$set: {serviceTag: serviceTag}}, this.group());
+          XiconfResult.collection.updateOne({_id: xiconfResult._id}, {$set: {serviceTag: serviceTag}}, this.group());
         }
       },
       function recountOrdersStep(err)
@@ -569,7 +569,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       return;
     }
 
-    XiconfClient.collection.update({_id: socket.xiconf.srcId}, {$set: newState}, function(err)
+    XiconfClient.collection.updateOne({_id: socket.xiconf.srcId}, {$set: newState}, function(err)
     {
       if (err)
       {
@@ -628,7 +628,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       socket: null
     };
 
-    XiconfClient.collection.update({_id: clientId, socket: socket.id}, {$set: clientChanges}, function(err)
+    XiconfClient.collection.updateOne({_id: clientId, socket: socket.id}, {$set: clientChanges}, function(err)
     {
       if (err)
       {
@@ -727,7 +727,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
       inputMode: data.inputMode || 'remote'
     };
 
-    XiconfClient.collection.update({_id: xiconfClient._id}, xiconfClient, {upsert: true}, function(err)
+    XiconfClient.collection.replaceOne({_id: xiconfClient._id}, xiconfClient, {upsert: true}, function(err)
     {
       if (err)
       {
@@ -1662,7 +1662,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           updates.$set['items.' + (orderData.items.length + i)] = newItems[i];
         }
 
-        XiconfOrder.collection.update(condition, updates, this.next());
+        XiconfOrder.collection.updateOne(condition, updates, this.next());
 
         this.orderData = orderData;
         this.changes = changes;
@@ -1756,7 +1756,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         const condition = {_id: data.orderNo};
         const updates = {$set: $set};
 
-        XiconfOrder.collection.update(condition, updates, this.next());
+        XiconfOrder.collection.updateOne(condition, updates, this.next());
 
         this.orderData = orderData;
         this.changes = changes;
@@ -2027,7 +2027,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           updates.$addToSet = $addToSet;
         }
 
-        XiconfOrder.collection.update(condition, updates, this.next());
+        XiconfOrder.collection.updateOne(condition, updates, this.next());
 
         this.orderData = orderData;
         this.changes = changes;
@@ -2049,7 +2049,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         {
           const next = this.next();
 
-          XiconfResult.update({_id: data.resultId}, {$set: {cancelled: false}}, function(err)
+          XiconfResult.updateOne({_id: data.resultId}, {$set: {cancelled: false}}, function(err)
           {
             if (err)
             {
@@ -2280,7 +2280,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
           updates.$pullAll = $pull;
         }
 
-        XiconfOrder.collection.update(condition, updates, this.next());
+        XiconfOrder.collection.updateOne(condition, updates, this.next());
 
         this.orderData = orderData;
         this.changes = changes;
@@ -2300,7 +2300,7 @@ module.exports = function setUpXiconfCommands(app, xiconfModule)
         {
           const next = this.next();
 
-          XiconfResult.update({_id: data.resultId}, {$set: {cancelled: true}}, function(err)
+          XiconfResult.updateOne({_id: data.resultId}, {$set: {cancelled: true}}, function(err)
           {
             if (err)
             {

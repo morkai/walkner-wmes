@@ -142,7 +142,7 @@ module.exports = function setUpProdDowntimesCommands(app, prodDowntimesModule)
         {
           if (this.prodLogEntryId)
           {
-            ProdLogEntry.collection.remove({_id: this.prodLogEntryId}, function() {});
+            ProdLogEntry.collection.deleteOne({_id: this.prodLogEntryId}, () => {});
           }
 
           prodDowntimesModule.error('Failed to corroborate downtime [%s]: %s', prodDowntime._id, err.message);

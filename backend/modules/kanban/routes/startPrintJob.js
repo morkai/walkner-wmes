@@ -77,7 +77,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
         $set[`jobs.${this.jobIndex}.workstations.${module.printing.workstation}`] = 'printing';
       }
 
-      KanbanPrintQueue.collection.update({_id: this.queue._id}, {$set}, this.next());
+      KanbanPrintQueue.collection.updateOne({_id: this.queue._id}, {$set}, this.next());
     },
     function(err)
     {
@@ -261,7 +261,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
           $set[`jobs.${jobIndex}.workstations.${module.printing.workstation}`] = 'success';
         }
 
-        KanbanPrintQueue.collection.update({_id: queue._id}, {$set}, this.next());
+        KanbanPrintQueue.collection.updateOne({_id: queue._id}, {$set}, this.next());
       },
       function(err)
       {
@@ -280,7 +280,7 @@ module.exports = function startPrintJobRoute(app, module, req, res, next)
         {
           this.message.queue.todo = false;
 
-          KanbanPrintQueue.collection.update({_id: queue._id}, {$set: {todo: false}}, this.next());
+          KanbanPrintQueue.collection.updateOne({_id: queue._id}, {$set: {todo: false}}, this.next());
         }
       },
       function(err)

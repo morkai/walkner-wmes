@@ -77,7 +77,7 @@ module.exports = function setUpDurationRecalculator(app, module)
       return;
     }
 
-    D8Entry.update({_id: doc._id}, {$set: {duration: newDuration}}, function(err)
+    D8Entry.updateOne({_id: doc._id}, {$set: {duration: newDuration}}, function(err)
     {
       if (err)
       {

@@ -166,7 +166,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
 
     updateProdLinesRemoteOrder(newProdLineId, socket);
 
-    OrderDocumentClient.collection.update({_id: newClient._id}, newClient, {upsert: true}, function(err)
+    OrderDocumentClient.collection.replaceOne({_id: newClient._id}, newClient, {upsert: true}, err =>
     {
       if (err)
       {
@@ -200,7 +200,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
       }
     };
 
-    OrderDocumentClient.collection.update({_id: message.clientId}, update, function(err)
+    OrderDocumentClient.collection.updateOne({_id: message.clientId}, update, err =>
     {
       if (err)
       {
@@ -245,7 +245,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
       socket: null
     };
 
-    OrderDocumentClient.collection.update({_id: clientId, socket: socket.id}, {$set: clientChanges}, function(err)
+    OrderDocumentClient.collection.updateOne({_id: clientId, socket: socket.id}, {$set: clientChanges}, err =>
     {
       if (err)
       {

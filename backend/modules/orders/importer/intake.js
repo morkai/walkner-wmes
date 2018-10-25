@@ -168,7 +168,7 @@ exports.start = function startOrderIntakeImporterModule(app, module)
               {
                 const orderIntake = orderIntakes[i];
 
-                OrderIntake.update(
+                OrderIntake.updateOne(
                   {_id: orderIntake._id},
                   orderIntake,
                   {upsert: true, strict: false},
@@ -310,7 +310,7 @@ exports.start = function startOrderIntakeImporterModule(app, module)
       return setImmediate(done);
     }
 
-    Order.update({_id: order._id}, {$set: $set, $push: {changes: changes}}, done);
+    Order.updateOne({_id: order._id}, {$set: $set, $push: {changes: changes}}, done);
   }
 
   function cleanUpFileInfoFile(fileInfo)

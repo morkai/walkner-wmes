@@ -46,7 +46,7 @@ exports.start = function startCagsModule(app, module)
       }
     };
 
-    CagGroup.update(conditions, update, {multi: true}, function(err)
+    CagGroup.updateMany(conditions, update, err =>
     {
       if (err)
       {

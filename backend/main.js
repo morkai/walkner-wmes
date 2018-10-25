@@ -17,7 +17,6 @@ const requireCache = require('./requireCache');
 const _ = require('lodash');
 const moment = require('moment');
 const main = require('h5.main');
-const blocked = () => {}; // process.env.NODE_ENV === 'development' ? require('blocked') : function() {};
 const config = require(process.argv[2]);
 
 moment.locale('pl');
@@ -67,11 +66,6 @@ const app = {
 };
 
 _.assign(app, require('./helpers'));
-
-blocked(function(ms)
-{
-  app.debug(`[blocked] ${ms} ms`);
-});
 
 main(app, modules);
 

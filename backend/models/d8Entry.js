@@ -260,7 +260,7 @@ module.exports = function setupD8EntryModel(app, mongoose)
         }
       };
 
-      D8Entry.collection.update(conditions, update, function(err)
+      D8Entry.collection.updateOne(conditions, update, function(err)
       {
         if (err)
         {

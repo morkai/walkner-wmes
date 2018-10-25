@@ -4,7 +4,7 @@
 
 const _ = require('lodash');
 const moment = require('moment');
-const autoIncrement = require('mongoose-plugin-autoinc');
+const autoIncrement = require('mongoose-plugin-autoinc-fix');
 const createOrderLossSchema = require('./createOrderLossSchema');
 
 module.exports = function setupPressWorksheetModel(app, mongoose)

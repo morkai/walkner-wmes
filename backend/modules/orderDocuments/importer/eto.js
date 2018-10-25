@@ -240,7 +240,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
 
   function deleteFileInfoFile(filePath)
   {
-    fs.remove(filePath, function(err)
+    fs.remove(filePath, err =>
     {
       if (err)
       {

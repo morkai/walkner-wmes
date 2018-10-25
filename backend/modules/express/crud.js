@@ -498,7 +498,7 @@ exports.deleteRoute = function(app, Model, req, res, next)
       return res.sendStatus(404);
     }
 
-    model.remove(function(err)
+    model.remove(err =>
     {
       if (err)
       {
@@ -506,10 +506,7 @@ exports.deleteRoute = function(app, Model, req, res, next)
       }
 
       res.format({
-        json: function()
-        {
-          res.sendStatus(204);
-        }
+        json: () => { res.sendStatus(204); }
       });
 
       if (Model.CRUD_PUBLISH !== false)
@@ -811,7 +808,7 @@ exports.exportRoute = function(app, options, req, res, next)
       .map(column => column.caption)
       .join(CSV_COLUMN_SEPARATOR);
 
-    res.write(new Buffer([0xEF, 0xBB, 0xBF]));
+    res.write(Buffer.from([0xEF, 0xBB, 0xBF]));
     res.write(line + CSV_ROW_SEPARATOR);
 
     ++rowIndex;

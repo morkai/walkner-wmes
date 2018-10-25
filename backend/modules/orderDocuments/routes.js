@@ -9,7 +9,7 @@ const fresh = require('fresh');
 const step = require('h5.step');
 const moment = require('moment');
 const multer = require('multer');
-const transliterate = require('transliteration').transliterate;
+const {transliterate} = require('transliteration');
 
 module.exports = function setUpOrderDocumentsRoutes(app, module)
 {
@@ -32,15 +32,16 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
   };
 
   const canView = userModule.auth('DOCUMENTS:VIEW');
-  const canViewLocal = userModule.auth('LOCAL', 'DOCUMENTS:VIEW');
+  const canViewUser = userModule.auth('USER', 'DOCUMENTS:VIEW');
+  const canViewLocal = userModule.auth('LOCAL', 'USER', 'DOCUMENTS:VIEW');
   const canManage = userModule.auth('DOCUMENTS:MANAGE');
 
   const nc15ToFreshHeaders = module.freshHeaders;
 
-  express.get('/documents', showIndexRoute);
-  express.post('/documents', authClientRoute);
-  express.get('/docs/:clientId', showIndexRoute);
-  express.post('/docs/:clientId', authClientRoute);
+  express.get('/documents', canViewLocal, showIndexRoute);
+  express.post('/documents', canViewLocal, authClientRoute);
+  express.get('/docs/:clientId', canViewLocal, showIndexRoute);
+  express.post('/docs/:clientId', canViewLocal, authClientRoute);
 
   express.get('/orderDocuments/licensing', canView, getClientLicensingRoute);
 
@@ -81,11 +82,11 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
       }
     }
   );
-  express.get('/orderDocuments/folders', canView, express.crud.browseRoute.bind(null, app, OrderDocumentFolder));
-  express.get('/orderDocuments/folders/:id', canView, express.crud.readRoute.bind(null, app, OrderDocumentFolder));
-  express.get('/orderDocuments/files', canView, express.crud.browseRoute.bind(null, app, OrderDocumentFile));
-  express.get('/orderDocuments/files/:id', canView, express.crud.readRoute.bind(null, app, OrderDocumentFile));
-  express.get('/orderDocuments/names', canView, express.crud.browseRoute.bind(null, app, OrderDocumentName));
+  express.get('/orderDocuments/folders', canViewUser, express.crud.browseRoute.bind(null, app, OrderDocumentFolder));
+  express.get('/orderDocuments/folders/:id', canViewUser, express.crud.readRoute.bind(null, app, OrderDocumentFolder));
+  express.get('/orderDocuments/files', canViewUser, express.crud.browseRoute.bind(null, app, OrderDocumentFile));
+  express.get('/orderDocuments/files/:id', canViewUser, express.crud.readRoute.bind(null, app, OrderDocumentFile));
+  express.get('/orderDocuments/names', canViewUser, express.crud.browseRoute.bind(null, app, OrderDocumentName));
 
   express.get('/orders/:orderNo/documents', canViewLocal, function(req, res, next)
   {
@@ -339,7 +340,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     });
   });
 
-  express.get('/orderDocuments/:nc15/:page', function(req, res, next)
+  express.get('/orderDocuments/:nc15/:page', canViewLocal, function(req, res, next)
   {
     const nc15 = req.params.nc15;
     const page = parseInt(req.params.page, 10);
@@ -389,7 +390,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
     });
   });
 
-  express.post('/orderDocuments;import', function(req, res, next)
+  express.post('/orderDocuments;import', canViewLocal, function(req, res, next)
   {
     res.type('text/plain');
 

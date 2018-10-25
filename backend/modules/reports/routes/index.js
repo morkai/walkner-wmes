@@ -207,8 +207,8 @@ module.exports = function setUpReportsRoutes(app, reportsModule)
 
     downloads[key] = {
       filename: req.query.filename + '.csv',
-      body: Buffer.concat([new Buffer([0xEF, 0xBB, 0xBF]), new Buffer(req.body, 'utf8')]),
-      timer: setTimeout(function() { delete downloads[key]; }, 30000)
+      body: Buffer.concat([Buffer.from([0xEF, 0xBB, 0xBF]), Buffer.from(req.body, 'utf8')]),
+      timer: setTimeout(() => { delete downloads[key]; }, 30000)
     };
 
     res.send(key);

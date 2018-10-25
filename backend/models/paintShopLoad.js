@@ -12,8 +12,7 @@ module.exports = function setupPaintShopLoadModel(app, mongoose)
   }, {
     id: false,
     minimize: false,
-    versionKey: false,
-    retainKeyOrder: true
+    versionKey: false
   });
 
   paintShopLoadSchema.statics.TOPIC_PREFIX = 'paintShop.load';

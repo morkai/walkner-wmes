@@ -36,7 +36,7 @@ module.exports = function getSettingsRoute(app, xiconfModule, req, res, next)
       }
     };
 
-    XiconfClientSettings.update({_id: _id}, update, {upsert: true}, function(err)
+    XiconfClientSettings.updateOne({_id: _id}, update, {upsert: true}, function(err)
     {
       if (err)
       {

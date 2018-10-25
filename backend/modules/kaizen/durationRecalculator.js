@@ -99,7 +99,7 @@ module.exports = function setUpDurationRecalculator(app, module)
       return;
     }
 
-    KaizenOrder.update({_id: doc._id}, {$set: changes}, function(err)
+    KaizenOrder.updateOne({_id: doc._id}, {$set: changes}, function(err)
     {
       if (err)
       {

@@ -124,7 +124,7 @@ module.exports = function setUpProdDowntimesAutoConfirmation(app, prodDowntimesM
           .setLimit(1)
           .setFilter(handledEntryIds => _.pullAll(remainingIds, handledEntryIds).length === 0);
 
-        ProdLogEntry.collection.insert(prodLogEntries, function(err)
+        ProdLogEntry.collection.insertMany(prodLogEntries, function(err)
         {
           insertingDone(err);
 

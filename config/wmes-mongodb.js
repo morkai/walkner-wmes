@@ -16,7 +16,8 @@ module.exports = {
     forceServerObjectId: false,
     w: 1,
     wtimeout: 5000,
-    promiseLibrary: global.Promise
+    promiseLibrary: global.Promise,
+    useNewUrlParser: true
   }
 };
 

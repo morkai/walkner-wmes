@@ -127,7 +127,7 @@ module.exports = function editOrder(app, module, orderNo, data, userInfo, done)
 
       this.change = change;
 
-      Order.collection.update({_id: order._id}, update, this.next());
+      Order.collection.updateOne({_id: order._id}, update, this.next());
     },
     function sendResultsStep(err)
     {

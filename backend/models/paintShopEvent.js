@@ -26,8 +26,7 @@ module.exports = function setupPaintShopEventModel(app, mongoose)
   }, {
     id: false,
     minimize: false,
-    versionKey: false,
-    retainKeyOrder: true
+    versionKey: false
   });
 
   paintShopEventSchema.statics.TOPIC_PREFIX = 'paintShop.events';

@@ -234,7 +234,7 @@ exports.start = function startOrderDocumentsModule(app, module)
       disconnectedAt: {$lt: moment().subtract(7, 'days').toDate()}
     };
 
-    mongoose.model('OrderDocumentClient').remove(conditions, function(err)
+    mongoose.model('OrderDocumentClient').deleteMany(conditions, err =>
     {
       if (err)
       {

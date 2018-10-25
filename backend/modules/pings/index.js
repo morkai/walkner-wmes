@@ -84,7 +84,7 @@ exports.start = function startPingsModule(app, module)
       }
     });
 
-    mongoose.model('Ping').update(conditions, update, {upsert: true}, function(err)
+    mongoose.model('Ping').updateOne(conditions, {$set: update}, {upsert: true}, function(err)
     {
       if (err)
       {

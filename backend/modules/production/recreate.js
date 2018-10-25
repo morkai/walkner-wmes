@@ -24,9 +24,9 @@ module.exports = function(app, productionModule, done)
     {
       productionModule.info('Removing current data...');
 
-      mongoose.model('ProdShift').remove(null, this.parallel());
-      mongoose.model('ProdShiftOrder').remove(null, this.parallel());
-      mongoose.model('ProdDowntime').remove(null, this.parallel());
+      mongoose.model('ProdShift').deleteMany(null, this.parallel());
+      mongoose.model('ProdShiftOrder').deleteMany(null, this.parallel());
+      mongoose.model('ProdDowntime').deleteMany(null, this.parallel());
     },
     function handleRemoveCurrentDataResultStep(err)
     {
@@ -42,7 +42,7 @@ module.exports = function(app, productionModule, done)
       productionModule.info('Resetting the todo flag...');
 
       mongoose.model('ProdLogEntry')
-        .update({todo: true}, {todo: false}, {multi: true}, this.next());
+        .updateMany({todo: true}, {todo: false}, this.next());
     },
     function handleResetTodoResultStep(err)
     {
@@ -58,7 +58,7 @@ module.exports = function(app, productionModule, done)
       productionModule.info('Resetting ID counters...');
 
       mongoose.model('IdentityCounter')
-        .update({model: 'ProdDowntime', field: 'rid'}, {$set: {count: 0}}, this.next());
+        .updateOne({model: 'ProdDowntime', field: 'rid'}, {$set: {count: 0}}, this.next());
     },
     function handleResetIdCountersResultStep(err)
     {
@@ -240,7 +240,7 @@ module.exports = function(app, productionModule, done)
       const conditions = {createdAt: {$gte: from, $lt: to}};
       const update = {$set: {todo: true}};
 
-      mongoose.model('ProdLogEntry').update(conditions, update, {multi: true}, function(err)
+      mongoose.model('ProdLogEntry').updateMany(conditions, update, err =>
       {
         if (err)
         {

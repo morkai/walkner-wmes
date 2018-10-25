@@ -4,7 +4,6 @@
 
 const util = require('util');
 const https = require('https');
-const domain = require('domain');
 const fs = require('fs');
 
 exports.DEFAULT_CONFIG = {
@@ -42,64 +41,34 @@ exports.start = function startHttpServerModule(app, module, done)
     return done(err);
   }
 
-  const serverDomain = domain.create();
+  const options = {
+    key: fs.readFileSync(module.config.key),
+    cert: fs.readFileSync(module.config.cert)
+  };
 
-  serverDomain.run(function()
+  module.server = https.createServer(options, function onRequest(req, res)
   {
-    const options = {
-      key: fs.readFileSync(module.config.key),
-      cert: fs.readFileSync(module.config.cert)
-    };
+    const expressModule = app[module.config.expressId];
 
-    module.server = https.createServer(options, function onRequest(req, res)
+    if (module.isAvailable() && expressModule)
     {
-      const reqDomain = domain.create();
-
-      reqDomain.add(req);
-      reqDomain.add(res);
-
-      reqDomain.on('error', function onRequestError(err)
-      {
-        if (err.code !== 'ECONNRESET')
-        {
-          module.error(err.stack || err.message || err);
-        }
-
-        reqDomain.dispose();
-
-        try
-        {
-          res.statusCode = 500;
-          res.end();
-        }
-        catch (err)
-        {
-          module.error(err.stack);
-        }
-      });
-
-      const expressModule = app[module.config.expressId];
-
-      if (module.isAvailable() && expressModule)
-      {
-        expressModule.app(req, res);
-      }
-      else
-      {
-        res.writeHead(503);
-        res.end();
-      }
-    });
-
-    module.server.once('error', onFirstServerError);
-
-    module.server.listen(module.config.port, module.config.host, function()
+      expressModule.app(req, res);
+    }
+    else
     {
-      module.server.removeListener('error', onFirstServerError);
+      res.writeHead(503);
+      res.end();
+    }
+  });
 
-      module.debug('Listening on port %d...', module.config.port);
+  module.server.once('error', onFirstServerError);
 
-      return done();
-    });
+  module.server.listen(module.config.port, module.config.host, function()
+  {
+    module.server.removeListener('error', onFirstServerError);
+
+    module.debug('Listening on port %d...', module.config.port);
+
+    return done();
   });
 };

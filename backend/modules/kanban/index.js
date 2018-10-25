@@ -47,10 +47,9 @@ exports.start = function startKanbanModule(app, module)
 
   app.broker.subscribe('app.started').setLimit(1).on('message', () =>
   {
-    app[module.config.mongooseId].model('KanbanPrintQueue').collection.update(
+    app[module.config.mongooseId].model('KanbanPrintQueue').collection.updateMany(
       {'jobs.status': 'printing'},
       {$set: {'jobs.$.status': 'failure'}},
-      {multi: true},
       err =>
       {
         if (err)

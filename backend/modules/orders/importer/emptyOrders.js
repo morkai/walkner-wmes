@@ -46,7 +46,7 @@ exports.start = function startEmptyOrdersImporterModule(app, module)
       return publishMessage(0);
     }
 
-    EmptyOrder.collection.insert(emptyOrders, {ordered: false}, function(err, docs)
+    EmptyOrder.collection.insertMany(emptyOrders, {ordered: false}, function(err, docs)
     {
       if (err)
       {

@@ -107,7 +107,7 @@ exports.start = function startXiconfModule(app, module)
             disconnectedAt: xiconfClient.connectedAt
           };
 
-          XiconfClient.collection.update({_id: xiconfClient._id}, {$set: update}, this.group());
+          XiconfClient.collection.updateOne({_id: xiconfClient._id}, {$set: update}, this.group());
         }
       },
       function(err)

@@ -52,7 +52,7 @@ module.exports = function removePlanOrderRoute(app, module, req, res, next)
 
       planChange.save(this.parallel());
 
-      Plan.collection.update({_id: planChange.plan}, {$pull: {orders: {_id: planOrder._id}}}, this.parallel());
+      Plan.collection.updateOne({_id: planChange.plan}, {$pull: {orders: {_id: planOrder._id}}}, this.parallel());
     },
     function(err, planChange)
     {

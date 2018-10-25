@@ -18,7 +18,6 @@ module.exports = function setupWhOrderStatusModel(app, mongoose)
     pceTime: Number
   }, {
     id: false,
-    retainKeyOrder: true,
     minimize: false
   });
 

@@ -12,7 +12,6 @@ module.exports = function setupPlanChangeModel(app, mongoose)
   }, {
     id: false,
     minimize: false,
-    retainKeyOrder: true,
     versionKey: false
   });
 

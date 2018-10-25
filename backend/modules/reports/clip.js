@@ -367,7 +367,7 @@ module.exports = function(mongoose, options, done)
         return this.skip(err);
       }
 
-      ClipOrderCache.collection.remove({'_id.hash': options.hash}, this.next());
+      ClipOrderCache.collection.deleteMany({'_id.hash': options.hash}, this.next());
     },
     function(err)
     {
