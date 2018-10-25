@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/time',
   'app/viewport',
+  'app/user',
   'app/core/View',
   'app/core/views/DialogView',
   'app/orderDocumentTree/OrderDocumentTree',
@@ -21,6 +22,7 @@ define([
   t,
   time,
   viewport,
+  user,
   View,
   DialogView,
   OrderDocumentTree,
@@ -131,11 +133,12 @@ define([
           done: function() { viewport.closeDialog(); }
         });
 
-        viewport.showDialog(dialogView, t('orderDocumentTree', 'editFile:title'));
+        viewport.showDialog(dialogView, this.t('editFile:title'));
       },
       'click #-removeFile': function()
       {
-        var tree = this.model;
+        var view = this;
+        var tree = view.model;
         var selectedFolder = tree.getSelectedFolder();
         var selectedFile = tree.getSelectedFile();
         var isInTrash = tree.isInTrash(selectedFolder);
@@ -149,7 +152,7 @@ define([
           }
         });
 
-        this.listenTo(dialogView, 'answered', function(answer)
+        view.listenTo(dialogView, 'answered', function(answer)
         {
           var req = answer === 'purge'
             ? tree.purgeFile(selectedFile)
@@ -164,7 +167,7 @@ define([
             viewport.msg.show({
               type: 'error',
               time: 3000,
-              text: t('orderDocumentTree', 'removeFile:msg:failure')
+              text: view.t('removeFile:msg:failure')
             });
           });
 
@@ -175,16 +178,17 @@ define([
             viewport.msg.show({
               type: 'success',
               time: 3000,
-              text: t('orderDocumentTree', 'removeFile:msg:success')
+              text: view.t('removeFile:msg:success')
             });
           });
         });
 
-        viewport.showDialog(dialogView, t('orderDocumentTree', 'removeFile:title'));
+        viewport.showDialog(dialogView, view.t('removeFile:title'));
       },
       'click #-recoverFile': function()
       {
-        var selectedFile = this.model.getSelectedFile();
+        var view = this;
+        var selectedFile = view.model.getSelectedFile();
         var dialogView = new DialogView({
           template: recoverFileDialogTemplate,
           autoHide: false,
@@ -193,7 +197,7 @@ define([
           }
         });
 
-        this.listenTo(dialogView, 'answered', function(answer)
+        view.listenTo(dialogView, 'answered', function(answer)
         {
           if (answer !== 'yes')
           {
@@ -211,7 +215,7 @@ define([
             viewport.msg.show({
               type: 'error',
               time: 3000,
-              text: t('orderDocumentTree', 'recoverFile:msg:failure')
+              text: view.t('recoverFile:msg:failure')
             });
           });
 
@@ -222,13 +226,65 @@ define([
             viewport.msg.show({
               type: 'success',
               time: 3000,
-              text: t('orderDocumentTree', 'recoverFile:msg:success')
+              text: view.t('recoverFile:msg:success')
             });
           });
         });
 
-        viewport.showDialog(dialogView, t('orderDocumentTree', 'recoverFile:title'));
+        viewport.showDialog(dialogView, view.t('recoverFile:title'));
+      },
+      'click #-subFile': function()
+      {
+        var view = this;
+        var target = view.model.get('selectedFile');
+        var req = $.ajax({
+          method: 'POST',
+          url: '/subscriptions/orderDocumentTree/' + target
+        });
+
+        view.$id('subFile')
+          .prop('disabled', true)
+          .attr('title', '')
+          .find('.fa')
+          .attr('class', 'fa fa-spinner fa-spin');
+
+        req.fail(function()
+        {
+          viewport.msg.show({
+            type: 'error',
+            time: 2500,
+            text: view.t('files:sub:failure')
+          });
+
+          if (target === view.model.get('selectedFile'))
+          {
+            view.resolveFileSub();
+          }
+        });
       }
+    },
+
+    remoteTopics: {
+
+      'subscriptions.*': function(message, topic)
+      {
+        const sub = message.model;
+
+        if (sub.type !== 'orderDocumentTree' || sub.user !== user.data._id)
+        {
+          return;
+        }
+
+        if (/added|edited/.test(topic))
+        {
+          this.toggleFileSub(sub.target, sub);
+        }
+        else if (/deleted/.test(topic))
+        {
+          this.toggleFileSub(sub.target, null);
+        }
+      }
+
     },
 
     initialize: function()
@@ -404,7 +460,7 @@ define([
       viewport.msg.show({
         type: 'warning',
         time: 3000,
-        text: t('orderDocumentTree', 'MSG:canNotMarkSearchResult')
+        text: this.t('MSG:canNotMarkSearchResult')
       });
     },
 
@@ -455,6 +511,14 @@ define([
         .toggleClass('is-in-trash', isInTrash)
         .removeClass('hidden');
 
+      this.$id('subFile')
+        .prop('disabled', true)
+        .removeClass('hidden')
+        .attr('title', '')
+        .find('.fa')
+        .attr('class', 'fa fa-spinner fa-spin');
+
+      this.resolveFileSub();
       this.positionPreview();
     },
 
@@ -528,14 +592,15 @@ define([
 
     serializePreviewFiles: function()
     {
-      var selectedFile = this.model.getSelectedFile();
+      var view = this;
+      var selectedFile = view.model.getSelectedFile();
       var html = '';
 
       _.forEach(selectedFile.get('files'), function(file)
       {
         html += '<li><a href="/orderDocuments/' + selectedFile.id + '?pdf=1&hash=' + file.hash + '" target="_blank"'
           + ' data-file-id="' + selectedFile.id + '" data-hash="' + file.hash + '">'
-          + t('orderDocumentTree', 'files:files:date', {date: time.utc.format(file.date, 'LL')})
+          + view.t('files:files:date', {date: time.utc.format(file.date, 'LL')})
           + '</a>';
       });
 
@@ -607,6 +672,77 @@ define([
     hidePreview: function()
     {
       this.$id('preview').addClass('hidden');
+
+      if (this.fileSubReq)
+      {
+        this.fileSubReq.abort();
+        this.fileSubReq = null;
+      }
+    },
+
+    resolveFileSub: function()
+    {
+      var view = this;
+      var selectedFile = view.model.getSelectedFile();
+
+      if (!selectedFile)
+      {
+        return;
+      }
+
+      var target = selectedFile.id;
+      var req = view.fileSubReq = view.ajax({
+        method: 'GET',
+        url: '/subscriptions/orderDocumentTree/' + target
+      });
+
+      req.fail(function()
+      {
+        if (target !== view.model.getSelectedFile().id)
+        {
+          return;
+        }
+
+        view.$id('subFile').addClass('hidden');
+      });
+
+      req.done(function(res)
+      {
+        view.toggleFileSub(target, res.subscription);
+      });
+
+      req.always(function()
+      {
+        view.fileSubReq = null;
+      });
+    },
+
+    toggleFileSub: function(target, subscription)
+    {
+      if (target !== this.model.getSelectedFile().id)
+      {
+        return;
+      }
+
+      var active = false;
+
+      if (subscription)
+      {
+        if (target !== subscription.target)
+        {
+          return;
+        }
+
+        active = true;
+      }
+
+      this.$id('subFile')
+        .prop('disabled', false)
+        .removeClass('hidden')
+        .toggleClass('active', active)
+        .attr('title', this.t('files:sub:' + active))
+        .find('.fa')
+        .attr('class', 'fa fa-eye');
     },
 
     showEmptyIfNeeded: function()
@@ -614,7 +750,7 @@ define([
       if (!this.$id('folders').children().length && !this.$id('files').children().length)
       {
         this.$id('files').html('<p>'
-          + t('orderDocumentTree', 'files:' + (this.model.hasSearchPhrase() ? 'noResults' : 'empty'))
+          + this.t('files:' + (this.model.hasSearchPhrase() ? 'noResults' : 'empty'))
           + '</p>');
       }
     },
@@ -736,7 +872,7 @@ define([
       if (files.length === 0 && this.$('.orderDocumentTree-files-folder').length === 0)
       {
         html = '<p>'
-          + t('orderDocumentTree', 'files:' + (this.model.hasSearchPhrase() ? 'noResults' : 'empty'))
+          + this.t('files:' + (this.model.hasSearchPhrase() ? 'noResults' : 'empty'))
           + '</p>';
       }
       else

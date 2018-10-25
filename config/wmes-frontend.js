@@ -92,6 +92,7 @@ exports.modules = [
   'pfep',
   'xlsxExporter',
   'orderBomMatchers',
+  'subscriptions',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
@@ -111,6 +112,7 @@ exports.modules = [
 exports.mainJsFile = '/wmes-main.js';
 exports.mainCssFile = '/assets/wmes-main.css';
 exports.faviconFile = 'assets/wmes-favicon.ico';
+exports.emailUrlPrefix = 'http://localhost/';
 
 exports.frontendAppData = {
   KAIZEN_MULTI: false,
@@ -191,7 +193,8 @@ exports.events = {
     'heffLineStates.added', 'heffLineStates.edited', 'heffLineStates.deleted',
     'behaviorObsCards.added', 'behaviorObsCards.edited',
     'minutesForSafetyCards.added', 'minutesForSafetyCards.edited',
-    'orderBomMatchers.added', 'orderBomMatchers.edited'
+    'orderBomMatchers.added', 'orderBomMatchers.edited',
+    'subscriptions.added', 'subscriptions.edited', 'subscriptions.deleted'
   ]
 };
 
@@ -307,7 +310,8 @@ exports.mongoose = {
     'whEvent', 'whOrder', 'whUser',
     'pkhdComponent', 'pkhdStrategy',
     'pfepEntry',
-    'orderBomMatcher'
+    'orderBomMatcher',
+    'subscription'
   ]
 };
 

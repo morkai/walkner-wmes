@@ -11,7 +11,7 @@ define([
 ) {
   'use strict';
 
-  router.map('/orderDocuments/tree', user.auth('DOCUMENTS:VIEW'), function(req)
+  router.map('/orderDocuments/tree', user.auth('USER', 'DOCUMENTS:VIEW'), function(req)
   {
     if (viewport.currentPage && viewport.currentPage.$el.hasClass('orderDocumentTree-page'))
     {

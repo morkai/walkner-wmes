@@ -8,6 +8,7 @@ const setUpRoutes = require('./routes');
 const setUpCommands = require('./commands');
 const setUpTree = require('./tree');
 const setUpConverter = require('./converter');
+const setUpSubscriptions = require('./subscriptions');
 const checkRemoteServer = require('./checkRemoteServer');
 
 exports.DEFAULT_CONFIG = {
@@ -19,6 +20,7 @@ exports.DEFAULT_CONFIG = {
   orgUnitsId: 'orgUnits',
   settingsId: 'settings',
   productionId: 'production',
+  mailSenderId: 'mail/sender',
   cachedPath: './order-documents/cached',
   convertedPath: './order-documents/converted',
   uploadedPath: './order-documents/uploaded',
@@ -76,6 +78,13 @@ exports.start = function startOrderDocumentsModule(app, module)
       module.config.mongooseId
     ],
     setUpConverter.bind(null, app, module)
+  );
+
+  app.onModuleReady(
+    [
+      module.config.mailSenderId
+    ],
+    setUpSubscriptions.bind(null, app, module)
   );
 
   app.onModuleReady(

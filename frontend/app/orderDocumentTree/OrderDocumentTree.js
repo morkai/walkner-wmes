@@ -31,6 +31,8 @@ define([
 
   return Model.extend({
 
+    nlsDomain: 'orderDocumentTree',
+
     defaults: function()
     {
       return {

@@ -42,6 +42,9 @@
   "files:edit": "Edytuj dokument",
   "files:remove": "Usuń dokument",
   "files:close": "Zamknij",
+  "files:sub:true": "Przestań obserwować",
+  "files:sub:false": "Obserwuj",
+  "files:sub:failure": "Zmiana subskrypcji nie powiodła się.",
 
   "unlinkFiles:title": "Usuwanie przypisania dokumentów",
   "unlinkFiles:submit": "Usuń przypisania",

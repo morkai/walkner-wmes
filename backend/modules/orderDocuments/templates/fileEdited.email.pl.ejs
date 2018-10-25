@@ -1,0 +1,47 @@
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-top: 0; margin-bottom: 3px; padding-bottom: 3px;">
+  Dokument WMES
+</h3>
+<table style="font-family: Arial, sans-serif; font-size: 12px">
+  <tbody>
+  <tr>
+    <th align="left">15NC</th>
+    <td>: <%= file._id %></td>
+  </tr>
+  <tr>
+    <th align="left">Nazwa</th>
+    <td>: <%= file.name %></td>
+  </tr>
+  <tr>
+    <th align="left" valign="top">Katalogi</th>
+    <td>
+      <ul style="margin: 0; padding: 0; list-style-position: inside">
+        <% file.folders.forEach(f => { %>
+        <li><a href="<%- urlPrefix %>r/docs/catalog?folder=<%= f._id %>"><%= f.name %></a></li>
+        <% }) %>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <th align="left" valign="top">Pliki</th>
+    <td>
+      <ul style="margin: 0; padding: 0; list-style-position: inside">
+        <% file.files.forEach(f => { %>
+        <li><a href="<%- urlPrefix %>r/docs/preview?file=<%= file._id %>&hash=<%= f.hash %>"><%= f.date %></a></li>
+        <% }) %>
+      </ul>
+    </td>
+  </tr>
+</table>
+<h3 style="font-family: Arial, sans-serif; font-size: 15px; border-bottom: 1px solid #e5e5e5; margin-bottom: 3px; padding-bottom: 3px;">
+  Na skróty
+</h3>
+<ul style="margin-top: 0; font-family: Arial, sans-serif; font-size: 12px">
+  <li><a href="<%- urlPrefix %>r/docs/catalog?folder=<%= file.folders[0]._id %>&file=<%= file._id %>">Dokument w katalogu WMES</a></li>
+  <li><a href="<%- urlPrefix %>r/docs/catalog">Katalog dokumentów WMES</a></li>
+</ul>
+<hr>
+<font face="Arial" color="Gray" size="1">
+  Ta wiadomość została wygenerowana automatycznie przez system WMES, ponieważ obserwujesz dany dokument.
+  <a href="<%- urlPrefix %>r/docs/unsub?file=<%= file._id %>">Kliknij tutaj</a>, aby
+  przestać obserwować zmiany w dokumencie <%= file._id %>.
+</font>

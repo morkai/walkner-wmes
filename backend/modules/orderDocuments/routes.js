@@ -38,6 +38,8 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
   const nc15ToFreshHeaders = module.freshHeaders;
 
+  express.get('/r/docs/:r', redirectRoute);
+
   express.get('/documents', canViewLocal, showIndexRoute);
   express.post('/documents', canViewLocal, authClientRoute);
   express.get('/docs/:clientId', canViewLocal, showIndexRoute);
@@ -889,5 +891,48 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
       res.sendStatus(204);
     });
+  }
+
+  function redirectRoute(req, res)
+  {
+    let url = '/';
+
+    switch (req.params.r)
+    {
+      case 'catalog':
+      {
+        url += '#orderDocuments/tree';
+
+        if (req.query.folder)
+        {
+          url += '?folder=' + req.query.folder;
+
+          if (req.query.file)
+          {
+            url += '&file=' + req.query.file;
+          }
+        }
+
+        break;
+      }
+
+      case 'preview':
+      {
+        url += 'orderDocuments/' + req.query.file + '?hash=' + req.query.hash;
+
+        if (req.query.pdf === '1')
+        {
+          url += '&pdf=1';
+        }
+
+        break;
+      }
+
+      case 'unsub':
+        url += 'subscriptions/orderDocumentTree/' + req.query.file + '?unsub=1';
+        break;
+    }
+
+    res.redirect(url);
   }
 };

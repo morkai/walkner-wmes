@@ -15,6 +15,9 @@
   <div id="<%- idPrefix %>-preview" class="orderDocumentTree-files-preview hidden">
     <div class="orderDocumentTree-files-preview-actions">
       <i class="fa fa-3x fa-file-o"></i>
+      <% if (user.isAllowedTo('USER', 'DOCUMENTS:VIEW')) { %>
+      <button id="<%- idPrefix %>-subFile" class="btn btn-default" disabled><i class="fa"></i></button>
+      <% } %>
       <% if (user.isAllowedTo('DOCUMENTS:MANAGE')) { %>
       <button id="<%- idPrefix %>-recoverFile" class="btn btn-default" data-action="recoverFile" title="<%- t('orderDocumentTree', 'files:recover') %>"><i class="fa fa-undo"></i></button>
       <button id="<%- idPrefix %>-editFile" class="btn btn-default" data-action="editFile" title="<%- t('orderDocumentTree', 'files:edit') %>"><i class="fa fa-edit"></i></button>
