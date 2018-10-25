@@ -118,5 +118,11 @@ module.exports = {
       repHost: '127.0.0.1',
       repPort: nextPort - 1
     }
+  },
+  'wmes-help': {
+    pubHost: '127.0.0.1',
+    pubPort: nextPort++,
+    repHost: '127.0.0.1',
+    repPort: nextPort++
   }
 };
