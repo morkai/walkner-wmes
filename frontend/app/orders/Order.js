@@ -60,7 +60,7 @@ define([
       return data;
     },
 
-    toJSON: function(options)
+    toJSON: function()
     {
       var obj = Model.prototype.toJSON.call(this);
 
@@ -146,18 +146,17 @@ define([
       obj.statusLabels = orderStatuses.findAndFill(obj.statuses).map(renderOrderStatusLabel).join(' ');
 
       var delayReason = options && options.delayReasons && options.delayReasons.get(obj.delayReason);
+      var m4 = obj.m4;
 
       obj.delayReason = delayReason ? delayReason.getLabel() : null;
 
-      if (obj.m4)
+      if (m4)
       {
-        var m4 = obj.m4;
-
         obj.m4 = t('orders', 'm4:' + m4);
 
         if (obj.delayReason)
         {
-          var drm = (delayReason.get('drm') || {})[m4];
+          var drm = delayReason.get('drm');
 
           if (drm)
           {
