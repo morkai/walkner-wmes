@@ -215,6 +215,7 @@ define([
 
         case 'whStatus':
         case 'm4':
+        case 'psStatus':
           return t('orders', valueChange.property + ':' + value);
 
         case 'qtyMax':

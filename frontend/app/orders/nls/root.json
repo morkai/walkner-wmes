@@ -80,6 +80,7 @@
     "PROPERTY:whTime": "Drop zone time",
     "PROPERTY:whDropZone": "Drop zone group",
     "PROPERTY:whStatus": "Drop zone status",
+    "PROPERTY:psStatus": "Paint-shop status",
     "PROPERTY:enteredBy": "Entered by",
     "PROPERTY:changedBy": "Changed by",
     "PROPERTY:m4": "4M",
@@ -92,6 +93,13 @@
     "whStatus:unknown": "Unknown",
     "whStatus:todo": "Todo",
     "whStatus:done": "Done",
+
+    "psStatus:unknown": "Unknown",
+    "psStatus:new": "Waiting",
+    "psStatus:started": "Started",
+    "psStatus:partial": "Partial",
+    "psStatus:finished": "Finished",
+    "psStatus:cancelled": "Cancelled",
 
     "OPERATIONS:NO_DATA": "Order does not have any operations.",
     "DOCUMENTS:NO_DATA": "Order does not have any linked documents.",

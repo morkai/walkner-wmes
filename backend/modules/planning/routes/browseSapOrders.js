@@ -72,6 +72,7 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
         whStatus: 1,
         whTime: 1,
         whDropZone: 1,
+        psStatus: 1,
         changes: {
           $filter: {
             input: '$changes',
@@ -87,48 +88,13 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
       };
 
       Order.aggregate([{$match}, {$project}], this.parallel());
-
-      const conditions = {
-        order: {$in: orders}
-      };
-
-      if (mrp)
-      {
-        conditions.mrp = mrp;
-      }
-
-      PaintShopOrder
-        .find(conditions, {_id: 0, order: 1, status: 1})
-        .lean()
-        .exec(this.parallel());
     },
-    function(err, sapOrders, psOrders)
+    function(err, sapOrders)
     {
       if (err)
       {
         return next(err);
       }
-
-      const psStatuses = new Map();
-
-      psOrders.forEach(order =>
-      {
-        const lastStatus = psStatuses.get(order.order);
-
-        if (!lastStatus)
-        {
-          psStatuses.set(order.order, order.status);
-
-          return;
-        }
-
-        if (lastStatus !== 'finished' && order.status === 'finished')
-        {
-          return;
-        }
-
-        psStatuses.set(order.order, order.status);
-      });
 
       const eto = module.eto || new Set();
 
@@ -144,7 +110,6 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
 
         order.eto = eto.has(order.nc12);
         order.nc12 = undefined;
-        order.psStatus = psStatuses.get(order._id);
         order.delayReason = null;
         order.comments = [];
 

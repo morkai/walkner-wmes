@@ -165,6 +165,10 @@ define([
         }
       }
 
+      obj.psStatus = !obj.psStatus || obj.psStatus === 'unknown'
+        ? null
+        : t('orders', 'psStatus:' + obj.psStatus);
+
       return obj;
     }
 

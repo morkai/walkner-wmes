@@ -50,10 +50,10 @@ exports.start = function startOrdersModule(app, module)
 
   app.onModuleReady(
     module.config.mongooseId,
-    () => app.broker.subscribe('paintShop.events.saved', savePaintShopComment)
+    () => app.broker.subscribe('paintShop.events.saved', onPaintShopEvent)
   );
 
-  function savePaintShopComment(paintShopEvent)
+  function onPaintShopEvent(paintShopEvent)
   {
     const mongoose = app[module.config.mongooseId];
     const PaintShopOrder = mongoose.model('PaintShopOrder');
@@ -86,8 +86,9 @@ exports.start = function startOrdersModule(app, module)
           comment = resolvePaintShopComment(paintShopOrder);
         }
 
+        this.newStatus = paintShopOrder.status;
         this.orderNo = paintShopOrder.order;
-        this.change = {
+        this.eventChange = {
           time: paintShopEvent.time,
           user: paintShopEvent.user,
           oldValues: {},
@@ -96,7 +97,134 @@ exports.start = function startOrdersModule(app, module)
           source: 'ps'
         };
 
-        Order.collection.updateOne({_id: this.orderNo}, {$push: {changes: this.change}}, this.next());
+        Order
+          .findOne({_id: this.orderNo}, {_id: 1, leadingOrder: 1, psStatus: 1})
+          .lean()
+          .exec(this.next());
+      },
+      function(err, eventSapOrder)
+      {
+        if (err)
+        {
+          return this.skip(err);
+        }
+
+        if (!eventSapOrder)
+        {
+          return this.skip(app.createError(`Event SAP order not found: ${err.message}`));
+        }
+
+        if (!eventSapOrder.leadingOrder)
+        {
+          return setImmediate(this.next(), null, [eventSapOrder]);
+        }
+
+        Order
+          .find(
+            {$or: [
+              {_id: eventSapOrder.leadingOrder},
+              {leadingOrder: eventSapOrder.leadingOrder}
+            ]},
+            {_id: 1, leadingOrder: 1, psStatus: 1}
+          )
+          .lean()
+          .exec(this.next());
+      },
+      function(err, sapOrders)
+      {
+        if (err)
+        {
+          return this.skip(app.createError(`Failed to find SAP orders: ${err.message}`));
+        }
+
+        this.eventSapOrder = sapOrders.find(o => o._id === this.orderNo);
+
+        if (this.newStatus !== this.eventSapOrder.psStatus)
+        {
+          this.eventChange.oldValues.psStatus = this.eventSapOrder.psStatus;
+          this.eventChange.newValues.psStatus = this.newStatus;
+        }
+
+        this.leadingSapOrder = sapOrders.find(o => o._id === o.leadingOrder);
+
+        if (this.eventSapOrder === this.leadingSapOrder)
+        {
+          return setImmediate(this.next(), null, []);
+        }
+
+        PaintShopOrder
+          .find({order: {$in: sapOrders.map(o => o._id)}}, {status: 1})
+          .lean()
+          .exec(this.next());
+      },
+      function(err, psOrders)
+      {
+        if (err)
+        {
+          return this.skip(app.createError(`Failed to find PS orders: ${err.message}`));
+        }
+
+        const eventUpdate = {
+          $push: {changes: this.eventChange}
+        };
+
+        if (Object.keys(this.eventChange.newValues).length)
+        {
+          eventUpdate.$set = this.eventChange.newValues;
+        }
+
+        Order.collection.updateOne({_id: this.orderNo}, eventUpdate, this.group());
+
+        if (!psOrders.length)
+        {
+          return;
+        }
+
+        const statuses = {
+          new: 0,
+          started: 0,
+          partial: 0,
+          finished: 0,
+          cancelled: 0
+        };
+
+        psOrders.forEach(o => statuses[o.status] += 1);
+
+        const oldStatus = this.leadingSapOrder.psStatus;
+        let newStatus = 'new';
+
+        if (statuses.partial)
+        {
+          newStatus = 'partial';
+        }
+        else if (statuses.started)
+        {
+          newStatus = 'started';
+        }
+        else if (statuses.finished)
+        {
+          newStatus = (statuses.finished + statuses.cancelled) === psOrders.length ? 'finished' : 'partial';
+        }
+        else if (statuses.cancelled === psOrders.length)
+        {
+          newStatus = 'cancelled';
+        }
+
+        this.leadingChange = {
+          time: paintShopEvent.time,
+          user: paintShopEvent.user,
+          oldValues: {status: oldStatus},
+          newValues: {status: newStatus},
+          comment: this.eventChange.comment,
+          source: 'ps'
+        };
+
+        const leadingUpdate = {
+          $push: {changes: this.leadingChange},
+          $set: {psStatus: newStatus}
+        };
+
+        Order.collection.updateOne({_id: this.leadingSapOrder._id}, leadingUpdate, this.group());
       },
       function(err)
       {
@@ -107,8 +235,16 @@ exports.start = function startOrdersModule(app, module)
 
         app.broker.publish(`orders.updated.${this.orderNo}`, {
           _id: this.orderNo,
-          change: this.change
+          change: this.eventChange
         });
+
+        if (this.leadingChange)
+        {
+          app.broker.publish(`orders.updated.${this.leadingSapOrder._id}`, {
+            _id: this.leadingSapOrder._id,
+            change: this.leadingChange
+          });
+        }
       }
     );
   }

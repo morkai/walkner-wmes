@@ -72,6 +72,10 @@
           <div class="prop-value"><%- model.statusLabels %></div>
         </div>
         <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:psStatus') %></div>
+          <div class="prop-value"><%- model.psStatus || '-' %></div>
+        </div>
+        <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:delayReason') %></div>
           <div class="prop-value"><%= model.delayReason || '-' %></div>
         </div>
@@ -80,14 +84,6 @@
           <div class="prop-value">
             <%- model.m4 || '-' %>
           </div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:enteredBy') %></div>
-          <div class="prop-value"><%- model.enteredBy || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:changedBy') %></div>
-          <div class="prop-value"><%- model.changedBy || '-' %></div>
         </div>
       </div>
     </div>
@@ -120,6 +116,10 @@
         <div class="prop">
           <div class="prop-name"><%- t('orders', 'PROPERTY:updatedAt') %></div>
           <div class="prop-value"><%= model.updatedAtText || '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- t('orders', 'PROPERTY:changedBy') %></div>
+          <div class="prop-value"><%- model.changedBy || '-' %></div>
         </div>
       </div>
     </div>

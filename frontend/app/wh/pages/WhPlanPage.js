@@ -156,15 +156,6 @@ define([
       {
         this.plan.shiftOrders.update(message);
       },
-      'paintShop.orders.updated.*': function(message)
-      {
-        var sapOrder = this.plan.sapOrders.get(message.order);
-
-        if (sapOrder && message.status)
-        {
-          sapOrder.set('psStatus', message.status);
-        }
-      },
       'wh.orders.changed.*': function(message)
       {
         if (this.plan.getMoment().isSame(message.date))
