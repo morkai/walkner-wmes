@@ -15,6 +15,9 @@
   width: 100%;
   border: 1px solid #bbb;
 }
+.kanbanPrintQueues-items + .pagination-container {
+  margin-top: 15px;
+}
 .kanbanPrintQueues-item {
   border-top: 1px solid #bbb;
 }
