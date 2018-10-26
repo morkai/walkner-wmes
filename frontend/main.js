@@ -41,6 +41,30 @@
 
   window.COMPUTERNAME = (location.href.match(/COMPUTERNAME=(.*?)(?:(?:#|&).*)?$/i) || [null, null])[1];
 
+  var oldSend = XMLHttpRequest.prototype.send;
+
+  XMLHttpRequest.prototype.send = function()
+  {
+    this.setRequestHeader('X-WMES-INSTANCE', window.INSTANCE_ID);
+
+    if (window.COMPUTERNAME)
+    {
+      this.setRequestHeader('X-WMES-CNAME', window.COMPUTERNAME);
+    }
+
+    if (window.WMES_APP_ID)
+    {
+      this.setRequestHeader('X-WMES-APP', window.WMES_APP_ID);
+    }
+
+    if (window.WMES_LINE_ID)
+    {
+      this.setRequestHeader('X-WMES-LINE', window.WMES_LINE_ID);
+    }
+
+    return oldSend.apply(this, arguments);
+  };
+
   var domains = [];
   var i18n = null;
   var select2 = null;

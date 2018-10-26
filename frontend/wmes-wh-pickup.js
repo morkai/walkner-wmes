@@ -4,6 +4,8 @@
 {
   'use strict';
 
+  window.WMES_APP_ID = 'wh-pickup';
+
   window.requireApp = requireApp;
 
   function requireApp()

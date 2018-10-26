@@ -19,11 +19,13 @@ define([
 
   router.map('/', function()
   {
+    window.WMES_LINE_ID = localStorage.getItem('HEFF:LINE');
+
     viewport.showPage(new View({
       layoutName: 'blank',
       view: new HeffView({
         model: {
-          prodLineId: localStorage.getItem('HEFF:LINE')
+          prodLineId: window.WMES_LINE_ID
         }
       })
     }));

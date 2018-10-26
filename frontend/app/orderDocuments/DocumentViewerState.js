@@ -70,6 +70,11 @@ define([
       {
         this.filterNc15 = createNc15Filter(this.get('prefixFilterMode'), this.get('prefixFilter'));
       });
+
+      this.on('change:prodLine', function()
+      {
+        window.WMES_LINE_ID = (this.get('prodLine') || {_id: null})._id;
+      });
     },
 
     load: function()

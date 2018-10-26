@@ -107,7 +107,9 @@ define([
         return;
       }
 
-      this.prodLine = prodLines.get(this.get('prodLine'));
+      window.WMES_LINE_ID = this.get('prodLine');
+
+      this.prodLine = prodLines.get(window.WMES_LINE_ID);
 
       if (!this.prodLine)
       {

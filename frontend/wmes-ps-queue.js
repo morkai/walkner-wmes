@@ -4,6 +4,8 @@
 {
   'use strict';
 
+  window.WMES_APP_ID = 'ps-queue';
+
   window.requireApp = requireApp;
 
   function requireApp()

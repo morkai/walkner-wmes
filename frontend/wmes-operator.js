@@ -4,6 +4,8 @@
 {
   'use strict';
 
+  window.WMES_APP_ID = 'operator';
+
   window.requireApp = requireApp;
 
   function requireApp()

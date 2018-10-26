@@ -4,6 +4,8 @@
 {
   'use strict';
 
+  window.WMES_APP_ID = 'wh-packer';
+
   window.requireApp = requireApp;
 
   function requireApp()
