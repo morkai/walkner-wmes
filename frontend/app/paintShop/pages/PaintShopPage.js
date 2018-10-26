@@ -186,10 +186,39 @@ define([
     },
 
     events: {
-      'click .paintShop-tab-paint': 'showPaintPickerDialog',
+      'mousedown .paintShop-tab': function(e)
+      {
+        if (e.button !== 0)
+        {
+          return;
+        }
+
+        if (this.timers.showMrpMenu)
+        {
+          clearTimeout(this.timers.showMrpMenu);
+        }
+
+        this.timers.showMrpMenu = setTimeout(this.showMrpMenu.bind(this, e), 300);
+      },
+      'click .paintShop-tab-paint': function()
+      {
+        if (this.timers.showMrpMenu)
+        {
+          clearTimeout(this.timers.showMrpMenu);
+          this.timers.showMrpMenu = null;
+
+          this.showPaintPickerDialog();
+        }
+      },
       'click .paintShop-tab[data-mrp]': function(e)
       {
-        this.orders.selectMrp(e.currentTarget.dataset.mrp);
+        if (this.timers.showMrpMenu)
+        {
+          clearTimeout(this.timers.showMrpMenu);
+          this.timers.showMrpMenu = null;
+
+          this.orders.selectMrp(e.currentTarget.dataset.mrp);
+        }
       },
       'contextmenu .paintShop-tab': function(e)
       {
@@ -341,7 +370,8 @@ define([
       this.queueView = new PaintShopQueueView({
         orders: this.orders,
         dropZones: this.dropZones,
-        vkb: this.vkbView
+        vkb: this.vkbView,
+        embedded: IS_EMBEDDED
       });
     },
 
@@ -553,18 +583,26 @@ define([
 
     showMrpMenu: function(e)
     {
+      if (this.timers.showMrpMenu)
+      {
+        clearTimeout(this.timers.showMrpMenu);
+        this.timers.showMrpMenu = null;
+      }
+
       var mrp = e.currentTarget.dataset.mrp;
       var menu = [
         t('paintShop', 'menu:header:' + (mrp ? 'mrp' : 'all'), {mrp: mrp}),
         {
           icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyOrders'),
-          handler: this.handleCopyOrdersAction.bind(this, e, mrp)
+          handler: this.handleCopyOrdersAction.bind(this, e, mrp),
+          visible: !IS_EMBEDDED
         },
         {
           icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyChildOrders'),
-          handler: this.handleCopyChildOrdersAction.bind(this, e, mrp)
+          handler: this.handleCopyChildOrdersAction.bind(this, e, mrp),
+          visible: !IS_EMBEDDED
         },
         {
           icon: 'fa-print',
@@ -574,7 +612,8 @@ define([
         {
           icon: 'fa-download',
           label: t('paintShop', 'menu:exportOrders'),
-          handler: this.handleExportOrdersAction.bind(this, mrp)
+          handler: this.handleExportOrdersAction.bind(this, mrp),
+          visible: !IS_EMBEDDED
         }
       ];
 

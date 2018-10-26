@@ -7,6 +7,7 @@
   window.INSTANCE_ID = Math.round(Date.now() + Math.random() * 9999999).toString(36).toUpperCase();
 
   document.body.classList.toggle('is-ie', window.navigator.userAgent.indexOf('Trident/') !== -1);
+  document.body.classList.toggle('is-embedded', window.parent !== window);
 
   var location = window.location;
 

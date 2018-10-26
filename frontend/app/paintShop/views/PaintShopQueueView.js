@@ -33,9 +33,24 @@ define([
       'mousedown .paintShop-order': function(e)
       {
         this.lastClickEvent = e;
+
+        if (this.timers.showMenu)
+        {
+          clearTimeout(this.timers.showMenu);
+        }
+
+        this.timers.showMenu = setTimeout(this.showMenu.bind(this, e), 300);
       },
       'mouseup .paintShop-order': function(e)
       {
+        if (!this.timers.showMenu)
+        {
+          return;
+        }
+
+        clearTimeout(this.timers.showMenu);
+        this.timers.showMenu = null;
+
         var lastE = this.lastClickEvent;
 
         this.lastClickEvent = null;
@@ -189,6 +204,12 @@ define([
 
     showMenu: function(e)
     {
+      if (this.timers.showMenu)
+      {
+        clearTimeout(this.timers.showMenu);
+        this.timers.showMenu = null;
+      }
+
       var order = this.orders.get(e.currentTarget.dataset.orderId);
       var orderNo = order.get('order');
       var mrp = order.get('mrp');
@@ -204,12 +225,14 @@ define([
         {
           icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, mrp)
+          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, mrp),
+          visible: !this.options.embedded
         },
         {
           icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyChildOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, mrp)
+          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, mrp),
+          visible: !this.options.embedded
         },
         {
           icon: 'fa-print',
@@ -219,7 +242,8 @@ define([
         {
           icon: 'fa-download',
           label: t('paintShop', 'menu:exportOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'exportOrders', mrp)
+          handler: this.trigger.bind(this, 'actionRequested', 'exportOrders', mrp),
+          visible: !this.options.embedded
         }
       ];
 
@@ -238,12 +262,14 @@ define([
         {
           icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, null)
+          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, null),
+          visible: !this.options.embedded
         },
         {
           icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyChildOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, null)
+          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, null),
+          visible: !this.options.embedded
         },
         {
           icon: 'fa-print',
@@ -253,7 +279,8 @@ define([
         {
           icon: 'fa-download',
           label: t('paintShop', 'menu:exportOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'exportOrders', null)
+          handler: this.trigger.bind(this, 'actionRequested', 'exportOrders', null),
+          visible: !this.options.embedded
         }
       );
 

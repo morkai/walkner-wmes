@@ -44,3 +44,18 @@
 .planning-menu .divider {
   margin: 5px 0;
 }
+
+.is-embedded .planning-menu > .dropdown-header {
+  font-size: 20px;
+}
+.is-embedded .planning-menu > li > a {
+  padding: 3px 15px;
+  font-size: 28px;
+  line-height: 41px;
+}
+.is-embedded .planning-menu > li > a > .fa {
+  margin-right: 7px;
+  min-width: 28px;
+  font-size: 28px;
+  line-height: 41px;
+}

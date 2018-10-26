@@ -95,10 +95,8 @@ define([
 
       hideMenu(false);
 
-      var $menu = $(template({
-        top: top,
-        icons: _.some(menu, function(item) { return !!item.icon; }),
-        menu: menu.map(function(item)
+      menu = menu
+        .map(function(item)
         {
           if (item === '-')
           {
@@ -110,8 +108,26 @@ define([
             return {type: 'header', label: item};
           }
 
+          if (!item.type)
+          {
+            item.type = 'item';
+          }
+
           return item;
         })
+        .filter(function(item) { return item.visible !== false; });
+
+      menu = menu.filter(function(item, i)
+      {
+        var next = menu[i + 1];
+
+        return item.type !== 'header' || (item.type === 'header' && next && next.type === 'item');
+      });
+
+      var $menu = $(template({
+        top: top,
+        icons: _.some(menu, function(item) { return !!item.icon; }),
+        menu: menu
       }));
 
       $menu.on('mousedown', function(e)
