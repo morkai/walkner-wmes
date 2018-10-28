@@ -8,9 +8,8 @@ const {exec, execFile} = require('child_process');
 const {tmpdir} = require('os');
 const fs = require('fs');
 const step = require('h5.step');
-const _ = require('lodash');
 const request = require('request');
-const {createPool} = require('castelet');
+const setUpPuppeteerPool = require('./puppeteerPool');
 const setUpRoutes = require('./routes');
 
 exports.DEFAULT_CONFIG = {
@@ -18,7 +17,8 @@ exports.DEFAULT_CONFIG = {
   mongooseId: 'mongoose',
   fileUrl: 'http://localhost/html2pdf/${hash}.${format}',
   storagePath: './data/html2pdf',
-  poolOptions: {},
+  puppeteerPoolOptions: {},
+  puppeteerLaunchOptions: {},
   sumatraExe: 'SumatraPDF.exe',
   zintExe: 'zint',
   spoolExe: 'spool.exe',
@@ -29,11 +29,7 @@ exports.start = function startHtml2pdfModule(app, module)
 {
   const zintVersion = [0, 0];
 
-  module.pool = createPool(_.defaults({}, module.config.poolOptions, {
-    min: 2,
-    max: 5,
-    idleTimeoutMillis: 30000
-  }));
+  setUpPuppeteerPool(app, module);
 
   app.onModuleReady(
     [
@@ -173,40 +169,45 @@ exports.start = function startHtml2pdfModule(app, module)
 
         const next = this.next();
 
-        try
-        {
-          module.pool.use(async browser =>
+        module.puppeteerPool.acquire()
+          .then(async browser =>
           {
-            const page = await browser.newPage();
-            const res = await page.goto(
-              module.config.fileUrl.replace('${hash}', hash).replace('${format}', 'html'),
-              {waitUntil: options.waitUntil}
-            );
-
-            if (!res || !res.ok())
+            try
             {
-              throw app.createError('INVALID_STATUS', 500);
+              const page = await browser.newPage();
+              const res = await page.goto(
+                module.config.fileUrl.replace('${hash}', hash).replace('${format}', 'html'),
+                {waitUntil: options.waitUntil}
+              );
+
+              if (!res || !res.ok())
+              {
+                throw app.createError('INVALID_STATUS', 500);
+              }
+
+              await page.emulateMedia('print');
+              await page.pdf({
+                path: join(module.config.storagePath, `${hash}.pdf`),
+                scale: 1,
+                displayHeaderFooter: false,
+                printBackground: true,
+                landscape: options.orientation === 'landscape',
+                pageRanges: '',
+                format: options.format,
+                margin: options.margin
+              });
+              await page.close();
+
+              next();
+            }
+            catch (err)
+            {
+              next(err);
             }
 
-            await page.emulateMedia('print');
-            await page.pdf({
-              path: join(module.config.storagePath, `${hash}.pdf`),
-              scale: 1,
-              displayHeaderFooter: false,
-              printBackground: true,
-              landscape: options.orientation === 'landscape',
-              pageRanges: '',
-              format: options.format,
-              margin: options.margin
-            });
-
-            page.close();
-          }).then(next, next);
-        }
-        catch (err)
-        {
-          next(err);
-        }
+            module.puppeteerPool.release(browser);
+          })
+          .catch(err => next(err));
       },
       function(err)
       {
