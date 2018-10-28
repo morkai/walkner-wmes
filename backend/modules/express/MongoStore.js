@@ -124,7 +124,13 @@ MongoStore.prototype.touch = function(sid, session, done)
   const sessions = this.collection();
   const expires = Date.parse(session.cookie.expires) || (Date.now() + this.defaultExpirationTime);
 
-  sessions.updateOne({_id: sid}, {$set: {expires, updatedAt: now}}, done);
+  sessions.updateOne({_id: sid}, {$set: {expires, updatedAt: now}}, err =>
+  {
+    if (done)
+    {
+      done(err);
+    }
+  });
 };
 
 /**
@@ -135,7 +141,7 @@ MongoStore.prototype.get = function(sid, done)
 {
   const store = this;
 
-  this.collection().findOne({_id: sid}, {_id: 0, data: 1, updatedAt: 1}, function(err, doc)
+  this.collection().findOne({_id: sid}, {_id: 0, data: 1, updatedAt: 1}, (err, doc) =>
   {
     if (err)
     {
@@ -184,7 +190,13 @@ MongoStore.prototype.set = function(sid, session, done)
     doc.expires = now + this.defaultExpirationTime;
   }
 
-  sessions.replaceOne({_id: sid}, doc, {upsert: true}, done);
+  sessions.replaceOne({_id: sid}, doc, {upsert: true}, err =>
+  {
+    if (done)
+    {
+      done(err);
+    }
+  });
 };
 
 /**
@@ -193,7 +205,13 @@ MongoStore.prototype.set = function(sid, session, done)
  */
 MongoStore.prototype.destroy = function(sid, done)
 {
-  this.collection().deleteOne({_id: sid}, done);
+  this.collection().deleteOne({_id: sid}, err =>
+  {
+    if (done)
+    {
+      done(err);
+    }
+  });
 };
 
 /**
@@ -201,7 +219,13 @@ MongoStore.prototype.destroy = function(sid, done)
  */
 MongoStore.prototype.clear = function(done)
 {
-  this.collection().drop(done);
+  this.collection().drop(err =>
+  {
+    if (done)
+    {
+      done(err);
+    }
+  });
 };
 
 /**
@@ -217,7 +241,13 @@ MongoStore.prototype.length = function(done)
  */
 MongoStore.prototype.gc = function(done)
 {
-  this.collection().deleteMany({expires: {$lte: Date.now()}}, done);
+  this.collection().deleteMany({expires: {$lte: Date.now()}}, err =>
+  {
+    if (done)
+    {
+      done(err);
+    }
+  });
 };
 
 MongoStore.prototype.destruct = function()
