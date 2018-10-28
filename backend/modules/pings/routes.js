@@ -9,6 +9,13 @@ module.exports = function setUpPingsRoutes(app, module)
   const mongoose = app[module.config.mongooseId];
   const Ping = mongoose.model('Ping');
 
+  express.options('/ping', (req, res) =>
+  {
+    res.type('text/plain');
+    res.set('Access-Control-Allow-Origin', '*');
+    res.end();
+  });
+
   express.get('/ping', function(req, res)
   {
     res.type('text/plain');
