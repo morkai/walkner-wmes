@@ -110,7 +110,7 @@ exports.start = function startExpressModule(app, expressModule, done)
 
   expressApp.use(function(req, res, next)
   {
-    req.isFrontendRequest = /^\/(app|assets|vendor)/.test(req.url) || /\.[a-z]{1,4}$/.test(req.url);
+    req.isFrontendRequest = /^\/(app|assets|files|vendor)/.test(req.url) || /^[a-z\-]+\.js$/.test(req.url);
 
     next();
   });
