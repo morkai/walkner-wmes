@@ -48,12 +48,13 @@ exports.start = function startOrdersModule(app, module)
     setUpOperationGroups.bind(null, app, module)
   );
 
-  app.onModuleReady(
-    module.config.mongooseId,
-    () => app.broker.subscribe('paintShop.events.saved', onPaintShopEvent)
-  );
+  app.onModuleReady([module.config.mongooseId, module.config.expressId], () =>
+  {
+    app.broker.subscribe('paintShop.events.saved', e => updatePsStatus(e, null));
+    app.broker.subscribe('paintShop.orders.changed.*', onPaintShopChanged);
+  });
 
-  function onPaintShopEvent(paintShopEvent)
+  function updatePsStatus(paintShopEvent, done)
   {
     const mongoose = app[module.config.mongooseId];
     const PaintShopOrder = mongoose.model('PaintShopOrder');
@@ -175,7 +176,7 @@ exports.start = function startOrdersModule(app, module)
 
         Order.collection.updateOne({_id: this.orderNo}, eventUpdate, this.group());
 
-        if (!psOrders.length)
+        if (!psOrders.length || !this.leadingSapOrder)
         {
           return;
         }
@@ -230,20 +231,27 @@ exports.start = function startOrdersModule(app, module)
       {
         if (err)
         {
-          return module.error(`Failed to save paint shop comment [${paintShopEvent._id}]: ${err.message}`);
+          module.error(`Failed to save paint shop comment [${paintShopEvent._id}]: ${err.message}`);
+        }
+        else
+        {
+          app.broker.publish(`orders.updated.${this.orderNo}`, {
+            _id: this.orderNo,
+            change: this.eventChange
+          });
+
+          if (this.leadingChange)
+          {
+            app.broker.publish(`orders.updated.${this.leadingSapOrder._id}`, {
+              _id: this.leadingSapOrder._id,
+              change: this.leadingChange
+            });
+          }
         }
 
-        app.broker.publish(`orders.updated.${this.orderNo}`, {
-          _id: this.orderNo,
-          change: this.eventChange
-        });
-
-        if (this.leadingChange)
+        if (done)
         {
-          app.broker.publish(`orders.updated.${this.leadingSapOrder._id}`, {
-            _id: this.leadingSapOrder._id,
-            change: this.leadingChange
-          });
+          done();
         }
       }
     );
@@ -268,5 +276,40 @@ exports.start = function startOrdersModule(app, module)
       case 'cancelled':
         return 'Anulowano.';
     }
+  }
+
+  function onPaintShopChanged({changes})
+  {
+    const changedPsOrders = new Set();
+
+    changes.added.forEach(o => changedPsOrders.add(o._id));
+    changes.changed.forEach(o => changedPsOrders.add(o._id));
+    changes.removed.forEach(o => changedPsOrders.add(o));
+
+    const psEvent = {
+      _id: null,
+      type: null,
+      time: new Date(),
+      user: {
+        id: null,
+        label: 'System'
+      },
+      order: null,
+      data: {}
+    };
+
+    updateNextPsStatus(psEvent, Array.from(changedPsOrders.values()));
+  }
+
+  function updateNextPsStatus(psEvent, sapOrderQueue, done)
+  {
+    psEvent.order = sapOrderQueue.shift();
+
+    if (!psEvent.order)
+    {
+      return;
+    }
+
+    updatePsStatus(psEvent, () => updateNextPsStatus(psEvent, sapOrderQueue, done));
   }
 };
