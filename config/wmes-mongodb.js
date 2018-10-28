@@ -12,7 +12,6 @@ module.exports = {
     socketTimeoutMS: 0,
     reconnectTries: Number.MAX_SAFE_INTEGER,
     reconnectInterval: 1000,
-    replicaSet: 'plp',
     forceServerObjectId: false,
     w: 1,
     wtimeout: 5000,
@@ -21,7 +20,7 @@ module.exports = {
   }
 };
 
-if (process.env.NODE_ENV !== 'production')
+if (process.env.WMES_MONGODB_REPLICA_SET)
 {
-  delete module.exports.mongoClient.replicaSet;
+  module.exports.mongoClient.replicaSet = process.env.WMES_MONGODB_REPLICA_SET;
 }
