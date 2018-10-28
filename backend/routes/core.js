@@ -62,6 +62,13 @@ module.exports = function startCoreRoutes(app, express)
 
     _.forEach(app.options.dictionaryModules, function(appDataKey, moduleName)
     {
+      const dictionaryModule = app[moduleName];
+
+      if (!dictionaryModule)
+      {
+        return;
+      }
+
       const models = app[moduleName].models;
 
       if (models.length === 0)
