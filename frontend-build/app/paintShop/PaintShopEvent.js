@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["underscore","../time","../i18n","../core/Model","app/core/templates/userInfo"],function(e,t,n,o,i){"use strict";return o.extend({urlRoot:"/paintShop/events",clientUrlRoot:"#paintShop/events",privilegePrefix:"PAINT_SHOP",nlsDomain:"paintShop",serialize:function(){var e=this.toJSON();return e.time=t.toTagData(e.time),e.user=i({userInfo:e.user,noIp:!0}),e.comment=e.data&&e.data.comment||"",e}})});

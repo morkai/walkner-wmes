@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["app/core/pages/AddFormPage","../dictionaries","../views/OpinionSurveyFormView"],function(e,r,o){"use strict";return e.extend({baseBreadcrumb:!0,FormView:o,load:function(e){return e(r.load())},destroy:function(){e.prototype.destroy.call(this),r.unload()},afterRender:function(){e.prototype.afterRender.call(this),r.load()}})});

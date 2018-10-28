@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["app/core/pages/EditFormPage","app/kaizenOrders/dictionaries","../views/MinutesForSafetyCardFormView"],function(e,t,r){"use strict";return e.extend({baseBreadcrumb:!0,FormView:r,load:function(e){return e(this.model.fetch(),t.load())},destroy:function(){e.prototype.destroy.call(this),t.unload()},afterRender:function(){e.prototype.afterRender.call(this),t.load()}})});

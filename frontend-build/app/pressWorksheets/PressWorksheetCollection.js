@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["underscore","../user","../core/Collection","./PressWorksheet"],function(r,e,t,s){"use strict";return t.extend({model:s,rqlQuery:function(r){var t=[],s=e.getDivision();return s&&t.push({name:"eq",args:["divisions",s.id]}),r.Query.fromObject({fields:{orders:0,operators:0},sort:{date:-1},limit:20,selector:{name:"and",args:t}})},sync:function(e,s,i){if("read"===e&&!i.data){var n=r.find(this.rqlQuery.selector.args,function(r){return"eq"===r.name&&"user"===r.args[0]});n&&(this.rqlQuery.selector.args=r.without(this.rqlQuery.selector.args,n)),i.data=this.rqlQuery.toString(),n&&this.rqlQuery.selector.args.push(n)}return t.prototype.sync.call(this,e,s,i)}})});

@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["app/core/util/pageActions","app/core/pages/FilteredListPage","../views/KanbanPrintQueueFilterView","../views/KanbanPrintQueueListView"],function(e,i,t,n){"use strict";return i.extend({FilterView:t,baseBreadcrumb:"#kanban",actions:[],defineModels:function(){i.prototype.defineModels.apply(this,arguments),this.collection.setUpPubsub(this.pubsub)},createListView:function(){return new n({collection:this.collection})}})});

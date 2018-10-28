@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["jquery","../settings/SettingCollection","./FteSetting"],function(e,t,n){"use strict";return t.extend({model:n,topicSuffix:"fte.**",getValue:function(e){var t=this.get("fte."+e);return t?t.getValue():null},prepareValue:function(e,t){return/absenceTasks$/.test(e)?t.split(",").filter(function(e){return e.length>0}):t}})});

@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["app/user","./FteLeaderEntryCollection","./FteWhEntry"],function(e,t,r){"use strict";return t.extend({TYPE:"wh",model:r,rqlQuery:function(t){var i,n=e.getDivision();return n&&n.id===r.WH_DIVISION&&(i={name:"and",args:[{name:"eq",args:[e.data.orgUnitType,e.data.orgUnitId]}]}),t.Query.fromObject({fields:{subdivision:1,date:1,shift:1,createdAt:1,creator:1,"tasks.functions.id":1},sort:{date:-1},limit:20,selector:i})}})});

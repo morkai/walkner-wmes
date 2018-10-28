@@ -853,6 +853,7 @@ assets/../vendor/bootstrap/css/bootstrap.css
 assets/../vendor/font-awesome/css/font-awesome.css
 assets/../app/core/assets/main.css
 assets/../app/updater/assets/main.css
+assets/../app/planning/assets/main.css
 assets/../app/paintShop/assets/main.css
 assets/../app/production/assets/vkb.css
 assets/wmes-ps-queue.css

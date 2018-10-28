@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["./time","./router","./viewport","./user","./core/util/getShiftStartInfo","./wh/pages/WhPlanPage","i18n!app/nls/wh","i18n!app/nls/planning","i18n!app/nls/paintShop"],function(n,t,e,a,o,i){"use strict";t.map("/",a.auth("LOCAL","WH:VIEW"),function(){var t=n.utc.getMoment(o(Date.now()).moment.format("YYYY-MM-DD"),"YYYY-MM-DD");e.showPage(new i({date:sessionStorage.WMES_WH_PICKUP_DATE||t.format("YYYY-MM-DD"),fullscreen:!0}))})});

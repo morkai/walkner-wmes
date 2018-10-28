@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../time","../core/Collection","./ProdSerialNumber"],function(e,t,r){"use strict";return t.extend({model:r,rqlQuery:function(t){return t.Query.fromObject({fields:{},sort:{scannedAt:-1},limit:20,selector:{name:"and",args:[{name:"ge",args:["scannedAt",e.getMoment().subtract(1,"week").startOf("day").valueOf()]}]}})}})});

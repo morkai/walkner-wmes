@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["./aors","./companies","./downtimeReasons","./isaPalletKinds","./orderStatuses","./prodFunctions","./divisions","./subdivisions","./mrpControllers","./prodFlows","./workCenters","./prodLines"],function(s,o,i,n,r,e,S,t,d,O,R,a){"use strict";return{aors:s,AORS:s,companies:o,COMPANIES:o,downtimeReasons:i,DOWNTIME_REASONS:i,isaPalletKinds:n,ISA_PALLET_KINDS:n,orderStatuses:r,ORDER_STATUSES:r,prodFunctions:e,PROD_FUNCTIONS:e,divisions:S,DIVISIONS:S,subdivisions:t,SUBDIVISIONS:t,mrpControllers:d,MRP_CONTROLLERS:d,prodFlows:O,PROD_FLOWS:O,workCenters:R,WORK_CENTERS:R,prodLines:a,PROD_LINES:a}});

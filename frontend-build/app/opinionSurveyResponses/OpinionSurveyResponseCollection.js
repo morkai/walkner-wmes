@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../core/Collection","./OpinionSurveyResponse"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"limit(20)&sort(-createdAt)",initialize:function(){e.prototype.initialize.apply(this,arguments),this.usedSurveyIds=[]},parse:function(t){for(var i=e.prototype.parse.call(this,t),r={},n=0;n<i.length;++n)r[i[n].survey]=1;return this.usedSurveyIds=Object.keys(r),i}})});

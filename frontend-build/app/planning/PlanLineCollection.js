@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../core/Collection","./PlanLine"],function(n,i){"use strict";return n.extend({model:i,initialize:function(n,i){this.plan=i&&i.plan},getGroupedByMrp:function(){var n=this.plan,i={};return this.forEach(function(t){var e=n.settings.lines.get(t.id);e&&e.get("mrpPriority").forEach(function(n){i[n]||(i[n]=[]),i[n].push(t)})}),i}})});

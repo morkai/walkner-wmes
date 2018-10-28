@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../core/Collection","./InvalidOrder"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"status=invalid&sort(-updatedAt,_id)&limit(15)",initialize:function(){this.selected={}},toggleSelection:function(e,t){if(null===e)return this.selected={},void this.trigger("selected",e,!1);void 0===t?this.selected[e]?delete this.selected[e]:this.selected[e]=!0:t?this.selected[e]=!0:delete this.selected[e],this.trigger("selected",e,!!this.selected[e])}})});

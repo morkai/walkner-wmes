@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["app/core/util/pageActions","app/core/pages/FilteredListPage","app/kanbanSupplyAreas/views/KanbanSupplyAreaFilterView","i18n!app/nls/kanbanSupplyAreas"],function(e,a,i){"use strict";return a.extend({FilterView:i,baseBreadcrumb:"#kanban",columns:[{id:"name",className:"is-min"},{id:"workCenter",className:"is-min"},{id:"family",className:"is-min"},"lines"]})});

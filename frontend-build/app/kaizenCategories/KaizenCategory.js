@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../i18n","../core/Model"],function(e,i){"use strict";return i.extend({urlRoot:"/kaizen/categories",clientUrlRoot:"#kaizenCategories",topicPrefix:"kaizen.categories",privilegePrefix:"KAIZEN:DICTIONARIES",nlsDomain:"kaizenCategories",labelAttribute:"name",defaults:{},serialize:function(){var i=this.toJSON();return i.description||(i.description="-"),i.inNearMiss=e("core","BOOL:"+this.get("inNearMiss")),i.inSuggestion=e("core","BOOL:"+this.get("inSuggestion")),i}})});

@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../core/Model","app/core/util/colorLabel"],function(o,r){"use strict";return o.extend({urlRoot:"/cagGroups",clientUrlRoot:"#cagGroups",topicPrefix:"cagGroups",privilegePrefix:"REPORTS",nlsDomain:"cagGroups",labelAttribute:"name",defaults:{color:"#FFFFFF"},serialize:function(){var o=this.toJSON();return o.color=r(o.color),o.cags=o.cags.join(", "),o}})});

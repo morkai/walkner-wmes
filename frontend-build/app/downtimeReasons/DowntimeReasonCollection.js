@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../core/Collection","./DowntimeReason"],function(i,n){"use strict";return i.extend({model:n,rqlQuery:"sort(_id)",comparator:"_id",findBySubdivisionType:function(i){return this.filter(function(n){return-1!==n.get("subdivisionTypes").indexOf(i)})},findFirstBreakIdBySubdivisionType:function(i){var n=this.find(function(n){return"break"===n.get("type")&&-1!==n.get("subdivisionTypes").indexOf(i)});return n?n.id:null}})});

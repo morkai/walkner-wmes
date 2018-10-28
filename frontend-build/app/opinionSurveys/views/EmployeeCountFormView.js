@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["underscore","app/core/views/FormView","../dictionaries","app/opinionSurveys/templates/employeeCountForm"],function(e,i,o,t){"use strict";return i.extend({template:t,serialize:function(){var t={};return(this.model.get("employeeCount")||[]).forEach(function(e,i){t[e.division]||(t[e.division]={label:o.divisions.get(e.division).get("full"),employers:{}}),t[e.division].employers[e.employer]={index:i,label:o.employers.get(e.employer).get("short"),count:e.count}}),e.extend(i.prototype.serialize.call(this),{employeeCounts:t})},afterRender:function(){i.prototype.afterRender.call(this)}})});

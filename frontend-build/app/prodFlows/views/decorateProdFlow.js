@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["underscore","app/time","app/data/mrpControllers","app/orgUnits/util/renderOrgUnitPath"],function(e,t,r,n){"use strict";return function(i,a){var l=i.toJSON();return l.deactivatedAt=l.deactivatedAt?t.format(l.deactivatedAt,"LL"):"-",l.subdivision=n(i.getSubdivision(),!0,!1),l.mrpControllers=(l.mrpController||[]).map(function(t){var n=r.get(t);return n?a?'<a href="'+n.genClientUrl()+'">'+e.escape(n.getLabel())+"</a>":{href:n.genClientUrl(),label:n.getLabel()}:null}).filter(function(e){return!!e}),a&&(l.mrpControllers=l.mrpControllers.join("; ")),l}});

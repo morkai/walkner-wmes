@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["app/core/views/FormView","app/kaizenRisks/templates/form"],function(e,i){"use strict";return e.extend({template:i,afterRender:function(){e.prototype.afterRender.call(this),this.options.editMode&&(this.$id("id").prop("readonly",!0),this.$id("name").focus())},serializeForm:function(e){return e.description||(e.description=""),e}})});

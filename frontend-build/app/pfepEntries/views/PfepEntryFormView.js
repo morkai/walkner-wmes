@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
-define(["app/core/views/FormView","app/pfepEntries/templates/form"],function(e,t){"use strict";return e.extend({template:t})});
+define(["underscore","app/core/views/FormView","app/pfepEntries/templates/form"],function(e,t,r){"use strict";return t.extend({template:r,events:e.assign({"blur #-packType":function(e){if(/^[A-Z]+$/i.test(e.target.value)){var t=e.target.value.toLowerCase();e.target.value=t.substring(0,1).toUpperCase()+t.substring(1)}}},t.prototype.events)})});

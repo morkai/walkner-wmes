@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../time","../user","../core/Collection","../core/util/matchesOperType","../core/util/matchesProdLine","../orgUnits/util/limitOrgUnits","./ProdLogEntry"],function(e,t,r,i,n,s,o){"use strict";return r.extend({model:o,rqlQuery:function(t){var r=[{name:"ge",args:["createdAt",e.getMoment().startOf("day").subtract(1,"week").valueOf()]}];return s(r,{divisionType:"prod",subdivisionType:"assembly"}),t.Query.fromObject({sort:{createdAt:-1},limit:20,selector:{name:"and",args:r}})},matches:function(e){return i(this.rqlQuery,e.types)&&n(this.rqlQuery,e.prodLine)}})});

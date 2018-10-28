@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../time","../core/Collection","./PlanSettings"],function(e,r,n){"use strict";return r.extend({model:n,rqlQuery:function(r){var n=e.utc.getMoment().startOf("day"),t=n.clone().subtract(3,"days").valueOf(),a=n.clone().add(3,"days").valueOf();return r.Query.fromObject({fields:{"mrps._id":1,"mrps.lines._id":1,"mrps.lines.workerCount":1},selector:{name:"and",args:[{name:"ge",args:["_id",t]},{name:"le",args:["_id",a]}]}})}})});

@@ -1,1 +1,1 @@
-define([],function(){return{locale:{}}.locale.en=function(e){return 1===e?"one":"other"}});
+define(function(){return{}.en=function(n){return 1===n?"one":"other"}});

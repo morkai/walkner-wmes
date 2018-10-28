@@ -1,1 +1,1 @@
-define(["require","exports","module","./MessageBroker"],function(e,r,s){"use strict";r.MessageBroker=e("./MessageBroker")});
+define(function(e,s,r){"use strict";s.MessageBroker=e("./MessageBroker")});

@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
-define(["app/data/colorFactory"],function(n){"use strict";function r(r){return'<span class="label license-feature" style="background: '+n.getColor("LICENSES",r)+'">'+r+"</span>"}return function(n){for(var t=[],e={},a=0;a<n.length;++a){var o=Math.pow(2,a);t.push(o),e[o]=r(n[a])}return function(n){for(var r=[],a=0;a<t.length;++a){var o=t[a];n&o&&r.push(e[o])}return r.join(" ")}}});
+define(["app/data/colorFactory"],function(r){"use strict";return function(n){for(var t,a=[],e={},o=0;o<n.length;++o){var u=Math.pow(2,o);a.push(u),e[u]=(t=n[o],'<span class="label license-feature" style="background: '+r.getColor("LICENSES",t)+'">'+t+"</span>")}return function(r){for(var n=[],t=0;t<a.length;++t){var o=a[t];r&o&&n.push(e[o])}return n.join(" ")}}});

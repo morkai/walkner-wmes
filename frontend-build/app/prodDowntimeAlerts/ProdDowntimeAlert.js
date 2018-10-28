@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../core/Model"],function(e){"use strict";return e.extend({urlRoot:"/prodDowntimeAlerts",clientUrlRoot:"#prodDowntimeAlerts",topicPrefix:"prodDowntimeAlerts",privilegePrefix:"PROD_DOWNTIME_ALERTS",nlsDomain:"prodDowntimeAlerts",labelAttribute:"name"},{CONDITION_TYPES:["reason","aor","division","subdivision","mrpController","prodFlow","workCenter","prodLine"]})});

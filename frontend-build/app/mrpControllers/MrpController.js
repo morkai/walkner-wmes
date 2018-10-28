@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../core/Model","app/data/subdivisions"],function(i,e){"use strict";return i.extend({urlRoot:"/mrpControllers",clientUrlRoot:"#mrpControllers",topicPrefix:"mrpControllers",privilegePrefix:"DICTIONARIES",nlsDomain:"mrpControllers",labelAttribute:"_id",defaults:{subdivision:null,description:null,deactivatedAt:null,replacedBy:null,inout:0},getSubdivision:function(){return e.get(this.get("subdivision"))||null}})});

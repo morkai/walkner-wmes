@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["underscore","app/core/views/FilterView","../XiconfProgram","app/xiconfPrograms/templates/filter"],function(e,t,r,a){"use strict";return t.extend({template:a,defaultFormData:{name:"",type:""},termToForm:{name:function(e,t,r){"regex"===t.name&&(r[e]=t.args[1])},type:function(e,t,r){r.type=t.args[1]}},serialize:function(){return e.extend(t.prototype.serialize.call(this),{programTypes:Object.keys(r.TYPES_TO_STEPS)})},serializeFormToQuery:function(e){var t=this.$id("name").val().trim(),r=this.$id("type").val();t.length&&e.push({name:"regex",args:["name",t,"i"]}),r.length&&e.push({name:"eq",args:["type",r]})}})});

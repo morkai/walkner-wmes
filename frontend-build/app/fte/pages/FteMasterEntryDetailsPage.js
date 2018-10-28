@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["underscore","app/i18n","app/user","app/viewport","app/core/util/bindLoadingMessage","app/core/util/pageActions","app/core/View","app/data/orgUnits","../FteMasterEntry","../views/FteMasterEntryDetailsView","./FteLeaderEntryDetailsPage"],function(e,t,a,r,i,n,p,s,o,d,c){"use strict";return c.extend({modelType:"fteMaster",pageId:"fteMasterEntryDetails",createView:function(){return new d({model:this.model})}})});

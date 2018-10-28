@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["app/i18n","app/core/pages/DetailsPage","app/core/util/pageActions","../dictionaries","../views/OpinionSurveyDetailsView"],function(e,t,i,n,o){"use strict";return t.extend({baseBreadcrumb:!0,DetailsView:o,actions:function(){var t=this.model,n=t.getNlsDomain();return[{label:e.bound(n,"PAGE_ACTION:print"),icon:"print",href:"/opinionSurveys/"+t.id+".pdf"},{label:e.bound(n,"PAGE_ACTION:editEmployeeCount"),icon:"users",href:t.genClientUrl("editEmployeeCount")},i.edit(t,!1),i.delete(t,!1)]},destroy:function(){t.prototype.destroy.call(this),n.unload()},load:function(e){return e(this.model.fetch(),n.load())},afterRender:function(){t.prototype.afterRender.call(this),n.load()}})});

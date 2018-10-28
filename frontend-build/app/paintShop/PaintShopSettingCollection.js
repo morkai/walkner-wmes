@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["underscore","../settings/SettingCollection","./PaintShopSetting"],function(t,e,n){"use strict";return e.extend({model:n,topicSuffix:"paintShop.**",getValue:function(t){var e=this.get("paintShop."+t);return e?e.getValue():null},prepareValue:function(t,e){return/(workCenters|mspPaints)$/.test(t)?e.split(",").filter(function(t){return t.length>0}):/load.statuses$/.test(t)?e:void 0},getLoadStatus:function(e){return t.find(this.getValue("load.statuses"),function(t){return e>=t.from&&(!t.to||e<t.to)})||{from:0,to:0,icon:"question",color:"#0AF"}}})});

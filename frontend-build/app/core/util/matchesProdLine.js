@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["underscore","app/user","app/data/prodLines"],function(r,e,i){"use strict";return function(n,t){var u=r.find(n.selector.args,function(r){return"eq"===r.name&&"prodLine"===r.args[0]});if(u)return u.args[1]===t;if(e.data.super)return!0;var a=i.get(t);if(!a)return!0;var s=e.getDivision();if(!s)return!0;var d=e.getSubdivision(),o=a.getSubdivision();return d?d===o:s.id===o.get("division")}});

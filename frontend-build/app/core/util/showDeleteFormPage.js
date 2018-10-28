@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["underscore","app/viewport"],function(e,n){"use strict";return function(r,i,t,a){var o,s=["app/core/pages/ActionFormPage"];"string"==typeof r?s.push("i18n!app/nls/"+r.split("/")[1],r):(o=new r({_id:i.params.id}),s.push("i18n!app/nls/"+o.getNlsDomain())),n.loadPage(s,function(n,r,s){return s&&(o=new s({_id:i.params.id})),new n(e.extend({model:o,actionKey:"delete",successUrl:o.genClientUrl("base"),cancelUrl:t||o.genClientUrl("base"),formMethod:"DELETE",formAction:o.url(),formActionSeverity:"danger"},a))})}});

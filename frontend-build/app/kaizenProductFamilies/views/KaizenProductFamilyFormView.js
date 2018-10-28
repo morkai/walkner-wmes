@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["underscore","app/core/views/FormView","app/users/util/setUpUserSelect2","app/kaizenProductFamilies/templates/form"],function(e,t,i,r){"use strict";return t.extend({template:r,serializeToForm:function(){var t=this.model.toJSON();return t.owners=e.isEmpty(t.owners)?"":t.owners.map(function(e){return e.id}).join(","),t},serializeForm:function(e){return e.owners=(this.$id("owners").select2("data")||[]).map(function(e){return{id:e.id,label:e.text}}),e},afterRender:function(){t.prototype.afterRender.call(this),this.options.editMode&&(this.$id("id").prop("readonly",!0),this.$id("name").focus()),i(this.$id("owners"),{view:this,multiple:!0})}})});

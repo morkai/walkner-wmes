@@ -1,4 +1,83 @@
 <div class="hidden">
+  <h1>v0.126.0</h1>
+  <h2><%- time.format('2018-10-07', 'LL') %></h2>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieresetowanie grupy dla zleceń, które były kandydatem do trafnienia na linię, ale
+      ostatecznie się na niej nie znalazły i wróciły do puli zleceń do rozplanowania.</li>
+  </ul>
+  <h3>Magazyn</h3>
+  <ul>
+    <li>Zmieniono klucz powiązania etapu ze zleceniem magazynu z 'nr zlecenia:nr grupy:linia' na
+      'nr zlecenia:kolejny nr:linia' w celu ograniczenia sytuacji, w których wybrana wartość jest utracona po zmianach
+      w planie dziennym.</li>
+    <li>Dodano filtr 'Linie produkcyjkne'.</li>
+    <li>Dodano możliwość eksportu zleceń.</li>
+  </ul>
+  <h3>Malarnia</h3>
+  <ul>
+    <li>Zmieniono eksportowanie zleceń tak, aby pod uwagę brany był aktualny filtr farby.</li>
+  </ul>
+  <h3>Plany godzinowe</h3>
+  <ul>
+    <li>Zmieniono algorytm aktualizacji wartości planu tak, aby zmiany wykonywały się jedna po drugiej a nie równolegle,
+      w celu ograniczenia błędu zapisu poza kolejnością.</li>
+  </ul>
+  <h3>Produkcja > Numery seryjne</h3>
+  <ul>
+    <li></li>
+  </ul>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Dodano kolumnę 'Linia' do listy wyników inspekcji.</li>
+    <li>Dodano flagę 'Wymagane zlecenie?' do rodzajów inspekcji.</li>
+  </ul>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Poprawiono przybliżanie i powiększanie dokumentu za pomocą dotyku.</li>
+    <li>Dodano filtr 'Data dokumentu' do katalogu dokumentów.</li>
+  </ul>
+  <h3>ZPW</h3>
+  <ul>
+    <li>Zmieniono formularz dodawania tak, aby dezaktywowani użytkownicy nie byli wyświetlani na liście.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Zmieniono formularz dodawania tak, aby dezaktywowani użytkownicy nie byli wyświetlani na liście.</li>
+  </ul>
+  <h3>Minuty dla Bezpieczeństwa</h3>
+  <ul>
+    <li>Zmieniono formularz dodawania tak, aby dezaktywowani użytkownicy nie byli wyświetlani na liście.</li>
+  </ul>
+  <h3>Obserwacje zachowań</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący niewyświetlanie szczegółów karty po kliknięciu myszką na wartości kolumn:
+      Co zaobserwowano, Ryzykowne warunki w miejscu pracy, Trudne do zmiany zachowania oraz
+      Trudne do zmiany warunki pracy.</li>
+    <li>Zmieniono formularz dodawania tak, aby dezaktywowani użytkownicy nie byli wyświetlani na liście.</li>
+    <li>Dodano filtr 'Linia' do listy kart obserwacji.</li>
+    <li>Dodano nowe pole: Miejsce pracy obserwatora.</li>
+    <li>Dodano do raportu wykres 'Ilość przeprowadzonych obserwacji wg działów (miejsce pracy obserwatora)'.</li>
+  </ul>
+  <h3>Baza testów > Oprawy HID</h3>
+  <ul>
+    <li>Zmieniono maksymalną długość ID lampy HID z 13 znaków do 20 znaków.</li>
+    <li>Dodano oddzielne uprawnienie do zarządzania oprawami HID.</li>
+  </ul>
+  <h3>Baza PFEP</h3>
+  <ul>
+    <li>Zmieniono uprawnienia do odczytu tak, aby mieli je wszyscy zalagowani użytkownicy.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Dodano możliwość sprawdzania komponentów po skanowaniu nr seryjnego zlecenia.</li>
+  </ul>
+  <h3>Wydajność godzinowa</h3>
+  <ul>
+    <li>Dodano możliwość sprawdzania komponentów po skanowaniu nr seryjnego zlecenia.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.125.0</h1>
   <h2><%- time.format('2018-09-16', 'LL') %></h2>
   <h3>Planowanie</h3>

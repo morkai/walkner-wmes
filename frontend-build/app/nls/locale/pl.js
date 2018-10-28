@@ -1,1 +1,1 @@
-define([],function(){return{locale:{}}.locale.pl=function(o){return 1==o?"one":o%10>=2&&o%10<=4&&(o%100<12||o%100>14)&&o==Math.floor(o)?"few":o%10==0||1!=o&&o%10==1||(o%10>=5&&o%10<=9||o%100>=12&&o%100<=14)&&o==Math.floor(o)?"many":"other"}});
+define(function(){return{}.pl=function(n){return 1==n?"one":n%10>=2&&n%10<=4&&(n%100<12||n%100>14)&&n==Math.floor(n)?"few":n%10==0||1!=n&&n%10==1||(n%10>=5&&n%10<=9||n%100>=12&&n%100<=14)&&n==Math.floor(n)?"many":"other"}});

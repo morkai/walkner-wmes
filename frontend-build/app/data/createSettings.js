@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
-define(["../pubsub"],function(n){"use strict";return function(u){function l(){r=null,null!==t&&(e.destroy(),e=null,t=null)}var e=null,t=null,r=null;return{acquire:function(l){return null!==r&&(clearTimeout(r),r=null),null===t&&(l||(l={}),l.pubsub=e=n.sandbox(),l.paginate=!1,t=new u(null,l)),t},release:function(){null!==r&&clearTimeout(r),r=setTimeout(l,3e4)}}}});
+define(["../pubsub"],function(n){"use strict";return function(u){var l=null,e=null,t=null;function r(){t=null,null!==e&&(l.destroy(),l=null,e=null)}return{acquire:function(r){return null!==t&&(clearTimeout(t),t=null),null===e&&(r||(r={}),r.pubsub=l=n.sandbox(),r.paginate=!1,e=new u(null,r)),e},release:function(){null!==t&&clearTimeout(t),t=setTimeout(r,3e4)}}}});

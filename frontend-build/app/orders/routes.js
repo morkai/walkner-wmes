@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../router","../viewport","../user"],function(e,r,a){"use strict";var n="i18n!app/nls/orders",t=a.auth("ORDERS:VIEW"),i=a.auth("ORDERS:MANAGE");e.map("/orders",t,function(e){r.loadPage(["app/orders/pages/OrderListPage",n],function(r){return new r({rql:e.rql})})}),e.map("/orders/:id",function(e){r.loadPage(["app/orders/pages/OrderDetailsPage",n],function(r){return new r({modelId:e.params.id})})}),e.map("/orders;settings",i,function(e){r.loadPage(["app/orders/pages/OrderSettingsPage",n],function(r){return new r({initialTab:e.query.tab})})})});

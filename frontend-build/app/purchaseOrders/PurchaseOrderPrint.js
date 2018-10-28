@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../i18n","../core/Model"],function(r,e){"use strict";return e.extend({serialize:function(){var e=this.toJSON();"browser"===e.printer&&(e.printer=r("purchaseOrders","printer:browser")),e.barcodeText=r("purchaseOrders","barcode:"+e.barcode);var p=e.paper.match(/^vendor\/(.*?)\/(.*?)$/);return e.paperText=null===p?r("purchaseOrders","paper:"+e.paper):r("purchaseOrders","paper:vendor",{vendorNo:p[1],paper:p[2]}),e}})});

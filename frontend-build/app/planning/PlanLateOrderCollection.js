@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../core/Collection","./PlanLateOrder"],function(n,t){"use strict";return n.extend({model:t,initialize:function(n,t){this.plan=t&&t.plan,this.byMrp=null,this.on("reset",function(){this.byMrp=null},this)},url:function(){return"/planning/lateOrders/"+this.plan.id},mrp:function(n){if(null===this.byMrp){var t=this.byMrp={};this.forEach(function(n){var i=n.get("mrp");t[i]?t[i].push(n):t[i]=[n]})}return this.byMrp[n]||[]}})});

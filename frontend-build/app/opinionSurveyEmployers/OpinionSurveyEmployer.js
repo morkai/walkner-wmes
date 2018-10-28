@@ -1,3 +1,1 @@
-// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
-
 define(["../core/Model","app/core/util/colorLabel"],function(o,e){"use strict";return o.extend({urlRoot:"/opinionSurveys/employers",clientUrlRoot:"#opinionSurveyEmployers",topicPrefix:"opinionSurveys.employers",privilegePrefix:"OPINION_SURVEYS",nlsDomain:"opinionSurveyEmployers",labelAttribute:"short",serialize:function(){var o=this.toJSON();return o.color=e(o.color),o}})});
