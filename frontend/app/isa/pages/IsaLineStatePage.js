@@ -123,6 +123,46 @@ define([
         {
           this.eventz.pop();
         }
+      },
+      'users.added': function(message)
+      {
+        var user = message.model;
+
+        if (_.includes(user.privileges, 'ISA:WHMAN'))
+        {
+          this.warehousemen.add(user);
+        }
+      },
+      'users.edited': function(message)
+      {
+        var user = message.model;
+        var whman = this.warehousemen.get(user._id);
+        var isWhman = _.includes(user.privileges, 'ISA:WHMAN');
+
+        if (whman)
+        {
+          if (isWhman)
+          {
+            whman.set(user);
+          }
+          else
+          {
+            this.warehousemen.remove(whman);
+          }
+        }
+        else if (isWhman)
+        {
+          this.warehousemen.add(user);
+        }
+      },
+      'users.deleted': function(message)
+      {
+        var user = message.model;
+
+        if (_.includes(user.privileges, 'ISA:WHMAN'))
+        {
+          this.warehousemen.remove(user._id);
+        }
       }
     },
 
@@ -610,7 +650,7 @@ define([
         clearTimeout(this.timers.personnelIdCheck);
       }
 
-      this.timers.personnelIdCheck = setTimeout(this.checkPersonnelId.bind(this), 200);
+      this.timers.personnelIdCheck = setTimeout(this.checkPersonnelId.bind(this), 500);
     },
 
     checkPersonnelId: function()
