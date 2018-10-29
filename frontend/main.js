@@ -4,10 +4,12 @@
 {
   'use strict';
 
+  var embedded = window.parent !== window;
+
   window.INSTANCE_ID = Math.round(Date.now() + Math.random() * 9999999).toString(36).toUpperCase();
 
   document.body.classList.toggle('is-ie', window.navigator.userAgent.indexOf('Trident/') !== -1);
-  document.body.classList.toggle('is-embedded', window.parent !== window);
+  document.body.classList.toggle('is-embedded', embedded);
 
   var location = window.location;
 
@@ -34,7 +36,7 @@
     localStorage.setItem('PROXY', matches[1]);
   }
 
-  if (window.parent !== window)
+  if (embedded)
   {
     window.parent.postMessage({type: 'init', host: location.hostname}, '*');
   }

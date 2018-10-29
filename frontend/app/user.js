@@ -24,6 +24,7 @@ function(
 ) {
   'use strict';
 
+  var embedded = document.body.classList.contains('is-embedded');
   var user = {};
 
   socket.on('user.reload', function(userData)
@@ -36,11 +37,13 @@ function(
     window.location.reload();
   });
 
-  user.data = _.extend(window.GUEST_USER || {}, {
+  var guestUser = _.assign(window.GUEST_USER || {}, {
     name: t.bound('core', 'GUEST_USER_NAME')
   });
 
   delete window.GUEST_USER;
+
+  user.data = guestUser;
 
   user.noReload = false;
 
@@ -49,6 +52,17 @@ function(
    */
   user.reload = function(userData)
   {
+    if (embedded)
+    {
+      _.assign(userData, {
+        loggedIn: false,
+        super: false,
+        privileges: guestUser.privileges,
+        login: guestUser.login,
+        name: guestUser.name
+      });
+    }
+
     if (_.isEqual(userData, user.data))
     {
       return;

@@ -31,7 +31,6 @@ define([
     actions: function()
     {
       var page = this;
-      var canManage = user.isAllowedTo.bind(user, 'MOR:MANAGE', 'FN:manager', 'MOR:MANAGE:USERS');
 
       return [
         {
@@ -50,7 +49,7 @@ define([
         {
           label: t.bound('mor', 'PAGE_ACTION:editMode'),
           icon: 'edit',
-          privileges: canManage,
+          privileges: ['MOR:MANAGE', 'FN:manager', 'MOR:MANAGE:USERS'],
           className: function()
           {
             return page.editing ? 'active' : '';

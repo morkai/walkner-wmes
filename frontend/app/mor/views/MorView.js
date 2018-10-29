@@ -188,11 +188,14 @@ define([
       var prodFunctions = this.serializeProdFunctions();
       var isManager = user.isAllowedTo('FN:manager');
       var canManage = user.isAllowedTo('MOR:MANAGE');
+      var canManageUsers = user.isAllowedTo('MOR:MANAGE:USERS');
 
       return {
         idPrefix: this.idPrefix,
         draggable: this.editing,
-        editModeVisible: this.options.editable !== false && viewport.currentDialog === this,
+        editModeVisible: this.options.editable !== false
+          && viewport.currentDialog === this
+          && (isManager || canManage || canManageUsers),
         linkEmails: this.options.editable !== false,
         sectionActionsVisible: canManage,
         watchActionsVisible: isManager || canManage,

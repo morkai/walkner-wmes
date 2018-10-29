@@ -9,19 +9,18 @@ module.exports = function setUpPingsRoutes(app, module)
   const mongoose = app[module.config.mongooseId];
   const Ping = mongoose.model('Ping');
 
-  express.options('/ping', (req, res) =>
+  express.options('/ping', setPingHeaders, (req, res) => res.end());
+
+  express.get('/ping', setPingHeaders, (req, res) => res.send('pong'));
+
+  express.get('/pings', userModule.auth('SUPER'), express.crud.browseRoute.bind(null, app, Ping));
+
+  function setPingHeaders(req, res, next)
   {
     res.type('text/plain');
     res.set('Access-Control-Allow-Origin', '*');
-    res.end();
-  });
+    res.set('Access-Control-Allow-Headers', '*');
 
-  express.get('/ping', function(req, res)
-  {
-    res.type('text/plain');
-    res.set('Access-Control-Allow-Origin', '*');
-    res.send('pong');
-  });
-
-  express.get('/pings', userModule.auth('ADMIN'), express.crud.browseRoute.bind(null, app, Ping));
+    next();
+  }
 };
