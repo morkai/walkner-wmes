@@ -24,6 +24,7 @@ exports.start = function startOrdersImporterModule(app, module)
     tzOffsetMs: true,
     statusesSetAt: true,
     delayReason: true,
+    m4: true,
     documents: true,
     bom: true,
     changes: true,
@@ -35,7 +36,8 @@ exports.start = function startOrdersImporterModule(app, module)
     qtyMax: true,
     whStatus: true,
     whTime: true,
-    whDropZone: true
+    whDropZone: true,
+    psStatus: true
   };
   const ORDER_DOCUMENTS_FILE_PATH_PATTERN = module.config.orderDocumentsFilePathPattern;
 
