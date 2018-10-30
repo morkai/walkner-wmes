@@ -9,11 +9,7 @@
   right: 15px;
 }
 .is-uploading .orderDocumentTree-files-container {
-  margin-left: 500px;
   margin-right: 516px;
-}
-.is-uploading .orderDocumentTree-folders-container {
-  width: 485px;
 }
 .orderDocumentTree-uploads {
   display: flex;

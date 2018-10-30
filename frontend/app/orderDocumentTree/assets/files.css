@@ -1,5 +1,5 @@
 .orderDocumentTree-files-container {
-  margin-left: 600px;
+  margin-left: 420px;
 }
 .orderDocumentTree-files-container > .panel-body {
   padding: 0;
@@ -170,7 +170,6 @@
 .is-list .orderDocumentTree-files-files {
   display: flex;
   white-space: nowrap;
-  overflow: hidden;
 }
 .orderDocumentTree-files-files > a {
   display: inline-block;

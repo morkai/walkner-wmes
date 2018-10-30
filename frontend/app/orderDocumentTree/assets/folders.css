@@ -2,7 +2,7 @@
   position: fixed;
   top: 102px;
   left: 15px;
-  width: 585px;
+  width: 405px;
 }
 .orderDocumentTree-folders-container > .panel-body {
   padding: 0;
@@ -28,9 +28,6 @@
 }
 .is-expanded > .orderDocumentTree-folders-children {
   display: block;
-}
-.orderDocumentTree-folders-folder {
-
 }
 .orderDocumentTree-folders-item {
   display: block;
