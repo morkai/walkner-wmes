@@ -424,6 +424,11 @@ define([
       };
     },
 
+    beforeRender: function()
+    {
+      this.lastClickEvent = null;
+    },
+
     afterRender: function()
     {
       this.showPreviewIfNeeded();
