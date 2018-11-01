@@ -487,7 +487,7 @@ module.exports = function setUpNotifier(app, module)
           return done();
         }
 
-        app[module.config.mongooseId].model('InvalidOrder').collection.updateOne(
+        app[module.config.mongooseId].model('InvalidOrder').collection.replaceOne(
           {_id: invalidOrder._id},
           invalidOrder,
           {upsert: true},

@@ -170,7 +170,7 @@ exports.start = function startOrderZlf1ImporterModule(app, module)
                   continue;
                 }
 
-                OrderZlf1.updateOne(
+                OrderZlf1.replaceOne(
                   {_id: orderZlf1._id},
                   orderZlf1,
                   {upsert: true},

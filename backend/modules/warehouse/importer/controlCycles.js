@@ -190,7 +190,7 @@ exports.start = function startControlCyclesImporterModule(app, module)
 
         controlCycle._id = controlCycle._id.nc12;
 
-        WhControlCycle.collection.updateOne(
+        WhControlCycle.collection.replaceOne(
           {_id: controlCycle._id},
           controlCycle,
           ccOptions,

@@ -69,7 +69,7 @@ module.exports = function setUpIsaShiftPersonnel(app, isaModule)
     };
     const options = {
       upsert: true,
-      new: true
+      returnOriginal: false
     };
 
     IsaShiftPersonnel.findOneAndUpdate(conditions, update, options, function(err, shiftPersonnel)

@@ -168,10 +168,10 @@ exports.start = function startOrderIntakeImporterModule(app, module)
               {
                 const orderIntake = orderIntakes[i];
 
-                OrderIntake.updateOne(
+                OrderIntake.replaceOne(
                   {_id: orderIntake._id},
                   orderIntake,
-                  {upsert: true, strict: false},
+                  {upsert: true},
                   this.group()
                 );
               }
