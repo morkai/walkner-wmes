@@ -222,7 +222,7 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
 
     for (i = 0, l = this.orders.length; i < l; ++i)
     {
-      XiconfOrderResult.collection.updateOne(
+      XiconfOrderResult.collection.replaceOne(
         {_id: this.orders[i]._id}, this.orders[i], {upsert: true}, this.group()
       );
     }
