@@ -2,6 +2,7 @@ CACHE MANIFEST
 # {version}
 
 CACHE:
+/favicon.ico
 /vendor/require/require.js
 /vendor/font-awesome/fonts/fontawesome-webfont.woff?v=4.7.0
 /vendor/moment/lang/pl.js

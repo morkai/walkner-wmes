@@ -9,6 +9,7 @@ vendor/select2-lang/pl.js
 vendor/socket.io.js
 vendor/qz-print/qz-print_jnlp.jnlp
 vendor/qz-print/qz-print.jar
+favicon.ico
 config.js
 pos-main.js
 main.js
