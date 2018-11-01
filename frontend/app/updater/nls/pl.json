@@ -1,4 +1,13 @@
 {
   "restart:backend": "Serwer aplikacji jest restartowany! Komunikacja z serwerem może przez chwilę nie działać...",
-  "restart:frontend": "Dostępna jest nowa wersja aplikacji! <a href='javascript:window.location.reload()'>Kliknij tutaj aby przeładować przeglądarkę</a>..."
+  "restart:frontend": "Dostępna jest nowa wersja aplikacji! <a href='javascript:window.location.reload()'>Kliknij tutaj aby przeładować przeglądarkę</a>...",
+
+  "browserUpdate:title": "Nieaktualna przeglądarka",
+  "browserUpdate:failure:header": "Nie mogę zaktualizować przeglądarki",
+  "browserUpdate:failure:message": "<ul><li>Jeśli nie możesz sobie pozwolić na zmianę przeglądarki ze względu na problemy ze zgodnością, rozważ zainstalowanie drugiej przeglądarki do codziennego użytku i zachowanie starej ze względu na zgodność.<li>Poproś administratora o zaktualizowanie twojej przeglądarki, jeśli nie możesz zrobić tego samodzielnie.</ul>",
+  "browserUpdate:message": "Twoja przeglądarka jest nieaktualna. W przyszłości Twoja wersja przeglądarki przestanie być wspierana. Zaktualizuj przeglądarkę, by korzystać z tej strony bezpieczniej, szybciej i po prostu sprawniej.",
+  "browserUpdate:windows:message": "Kliknij poniższy przycisk, aby pobrać instalator najnowszej wersji przeglądarki:",
+  "browserUpdate:windows:download": "POBIERZ INSTALATOR NA DYSK",
+  "browserUpdate:android:message": "Kliknij poniższy przycisk, aby przejść do aplikacji Google Chrome w sklepie Google Play:",
+  "browserUpdate:android:download": "PRZEJDŹ DO GOOGLE PLAY"
 }

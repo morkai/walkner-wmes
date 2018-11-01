@@ -218,6 +218,13 @@
     padding-bottom: 0;
     border-bottom: 0;
   }
+  .dashboard-buttons {
+    display: block;
+  }
+  .dashboard-buttons .btn {
+    margin: 0!important;
+    width: 100%;
+  }
 }
 @media (max-width: 590px) {
   .dashboard-top-container {
@@ -233,7 +240,8 @@
     flex-wrap: wrap;
     height: auto;
   }
-  .dashboard-buttonAndMetrics > .btn {
+  .dashboard-buttonAndMetrics > .btn,
+  .dashboard-buttons > .btn {
     flex-grow: 1;
     flex-shrink: 1;
     width: 100%;

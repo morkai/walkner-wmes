@@ -1,0 +1,20 @@
+<div class="updater-browserUpdate">
+  <p><%- t('updater', 'browserUpdate:message') %></p>
+  <p><%- t('updater', 'browserUpdate:' + platform + ':message') %></p>
+  <% if (platform === 'windows') { %>
+  <p style="text-align: center">
+    <a id="<%- idPrefix %>-downloadUrl" class="btn btn-primary btn-block btn-lg" href="/files/ChromeStandaloneSetup64.exe">
+      <%- t('updater', 'browserUpdate:windows:download') %>
+    </a>
+  </p>
+  <% } %>
+  <% if (platform === 'android') { %>
+  <p style="text-align: center">
+    <a class="btn btn-primary btn-block btn-lg" href="https://play.google.com/store/apps/details?id=com.android.chrome&hl=pl">
+      <%- t('updater', 'browserUpdate:android:download') %>
+    </a>
+  </p>
+  <% } %>
+  <h3><%- t('updater', 'browserUpdate:failure:header') %></h3>
+  <%- t('updater', 'browserUpdate:failure:message') %>
+</div>

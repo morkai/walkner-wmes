@@ -26,3 +26,22 @@
   font-size: 1.5em;
   line-height: 58px;
 }
+
+.updater-browserUpdate-dialog .modal-content {
+  border: 10px solid #e00;
+  box-shadow: inset 0 3px 12px #999;
+}
+.updater-browserUpdate {
+  line-height: 1.6;
+  text-align: justify;
+}
+.updater-browserUpdate ul {
+  margin: 0;
+  padding: 0;
+  list-style-position: inside;
+}
+.updater-browserUpdate .btn-lg {
+  margin-top: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}

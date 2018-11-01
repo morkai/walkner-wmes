@@ -7,8 +7,10 @@ define([
   '../socket',
   '../viewport',
   '../time',
+  '../i18n',
   '../data/localStorage',
   './views/RestartMessageView',
+  './views/BrowserUpdateDialogView',
   'app/updater/templates/backendRestart',
   'app/updater/templates/frontendRestart',
   'i18n!app/nls/updater'
@@ -19,13 +21,16 @@ define([
   socket,
   viewport,
   time,
+  t,
   localStorage,
   RestartMessageView,
+  BrowserUpdateDialogView,
   backendRestartTemplate,
   frontendRestartTemplate
 ) {
   'use strict';
 
+  var MIN_CHROME_VERSION = 70;
   var STORAGE_KEY = 'VERSIONS';
   var BACKEND_SERVICE_KEY = 'BACKEND_SERVICE';
   var FRONTEND_SERVICE_KEY = 'FRONTEND_SERVICE';
@@ -94,6 +99,32 @@ define([
     {
       handleFrontendRestart();
     }
+  });
+
+  broker.subscribe('viewport.page.shown', function(page)
+  {
+    if (page.pageId !== 'dashboard'
+      || window.navigator.vendor.toLowerCase().indexOf('google') === -1
+      || window.sessionStorage.getItem('WMES_BROWSER_UPDATE') === '1')
+    {
+      return;
+    }
+
+    var matches = window.navigator.userAgent.match(/Chrome\/([0-9]+)/);
+
+    if (!matches)
+    {
+      return;
+    }
+
+    var chromeVersion = +matches[1];
+
+    if (chromeVersion >= MIN_CHROME_VERSION)
+    {
+      return;
+    }
+
+    viewport.showDialog(new BrowserUpdateDialogView(), t('updater', 'browserUpdate:title'));
   });
 
   function saveLocalStorage()
