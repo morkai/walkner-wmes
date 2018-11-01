@@ -1021,6 +1021,8 @@ app/core/templates/error.js
 app/core/pages/ErrorPage.js
 app/router.js
 app/updater/views/RestartMessageView.js
+app/updater/templates/browserUpdate.js
+app/updater/views/BrowserUpdateDialogView.js
 app/updater/templates/backendRestart.js
 app/updater/templates/frontendRestart.js
 vendor/require/i18n.js
@@ -1685,6 +1687,8 @@ app/core/templates/error.js
 app/core/pages/ErrorPage.js
 app/router.js
 app/updater/views/RestartMessageView.js
+app/updater/templates/browserUpdate.js
+app/updater/views/BrowserUpdateDialogView.js
 app/updater/templates/backendRestart.js
 app/updater/templates/frontendRestart.js
 vendor/require/i18n.js
@@ -1818,6 +1822,8 @@ app/core/templates/error.js
 app/core/pages/ErrorPage.js
 app/router.js
 app/updater/views/RestartMessageView.js
+app/updater/templates/browserUpdate.js
+app/updater/views/BrowserUpdateDialogView.js
 app/updater/templates/backendRestart.js
 app/updater/templates/frontendRestart.js
 vendor/require/i18n.js
@@ -2056,6 +2062,8 @@ app/core/templates/error.js
 app/core/pages/ErrorPage.js
 app/router.js
 app/updater/views/RestartMessageView.js
+app/updater/templates/browserUpdate.js
+app/updater/views/BrowserUpdateDialogView.js
 app/updater/templates/backendRestart.js
 app/updater/templates/frontendRestart.js
 vendor/require/i18n.js
@@ -2157,6 +2165,8 @@ app/core/templates/error.js
 app/core/pages/ErrorPage.js
 app/router.js
 app/updater/views/RestartMessageView.js
+app/updater/templates/browserUpdate.js
+app/updater/views/BrowserUpdateDialogView.js
 app/updater/templates/backendRestart.js
 app/updater/templates/frontendRestart.js
 vendor/require/i18n.js
@@ -2290,6 +2300,8 @@ app/core/templates/error.js
 app/core/pages/ErrorPage.js
 app/router.js
 app/updater/views/RestartMessageView.js
+app/updater/templates/browserUpdate.js
+app/updater/views/BrowserUpdateDialogView.js
 app/updater/templates/backendRestart.js
 app/updater/templates/frontendRestart.js
 vendor/require/i18n.js
@@ -2412,6 +2424,8 @@ app/core/templates/error.js
 app/core/pages/ErrorPage.js
 app/router.js
 app/updater/views/RestartMessageView.js
+app/updater/templates/browserUpdate.js
+app/updater/views/BrowserUpdateDialogView.js
 app/updater/templates/backendRestart.js
 app/updater/templates/frontendRestart.js
 vendor/require/i18n.js
@@ -2593,6 +2607,8 @@ app/core/templates/error.js
 app/core/pages/ErrorPage.js
 app/router.js
 app/updater/views/RestartMessageView.js
+app/updater/templates/browserUpdate.js
+app/updater/views/BrowserUpdateDialogView.js
 app/updater/templates/backendRestart.js
 app/updater/templates/frontendRestart.js
 vendor/require/i18n.js
@@ -2692,6 +2708,8 @@ app/core/templates/error.js
 app/core/pages/ErrorPage.js
 app/router.js
 app/updater/views/RestartMessageView.js
+app/updater/templates/browserUpdate.js
+app/updater/views/BrowserUpdateDialogView.js
 app/updater/templates/backendRestart.js
 app/updater/templates/frontendRestart.js
 vendor/require/i18n.js
@@ -2791,6 +2809,8 @@ app/core/templates/error.js
 app/core/pages/ErrorPage.js
 app/router.js
 app/updater/views/RestartMessageView.js
+app/updater/templates/browserUpdate.js
+app/updater/views/BrowserUpdateDialogView.js
 app/updater/templates/backendRestart.js
 app/updater/templates/frontendRestart.js
 vendor/require/i18n.js
