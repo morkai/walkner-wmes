@@ -198,7 +198,7 @@ define([
   {
     clearTimeout(activityTimer);
 
-    activityTimer = setTimeout(reload, 60000);
+    activityTimer = setTimeout(reload, _.random(60000, 120000));
   }
 
   function reload()
