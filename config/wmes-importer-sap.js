@@ -6,7 +6,6 @@ const mongodb = require('./wmes-mongodb');
 
 const IMPORT_INPUT_DIR = `${__dirname}/../data/attachments-input`;
 const IMPORT_OUTPUT_DIR = `${__dirname}/../data/attachments-imported`;
-const ETO_IMPORT_OUTPUT_DIR = `${__dirname}/../data/documents-eto`;
 
 exports.id = 'wmes-importer-sap';
 
@@ -50,7 +49,7 @@ exports.mongoose = {
   models: [
     'event', 'user',
     'setting',
-    'order', 'emptyOrder', 'orderIntake', 'orderZlf1', 'invalidOrder',
+    'order', 'emptyOrder', 'orderIntake', 'orderZlf1', 'invalidOrder', 'orderEto',
     'mrpController', 'clipOrderCount',
     'fteLeaderEntry',
     'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics',
@@ -166,7 +165,6 @@ exports['orderDocuments/importer'] = {
 
 exports['orderDocuments/importer/eto'] = {
   filterRe: /^EMAIL_[0-9]+$/,
-  outputDir: ETO_IMPORT_OUTPUT_DIR,
   parsedOutputDir: IMPORT_OUTPUT_DIR
 };
 

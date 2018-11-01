@@ -19,6 +19,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
   const orgUnits = app[module.config.orgUnitsId];
   const mongoose = app[module.config.mongooseId];
   const Order = mongoose.model('Order');
+  const OrderEto = mongoose.model('OrderEto');
   const OrderDocumentFile = mongoose.model('OrderDocumentFile');
   const OrderDocumentFolder = mongoose.model('OrderDocumentFolder');
   const OrderDocumentName = mongoose.model('OrderDocumentName');
@@ -766,7 +767,7 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
 
   function handleEtoDocument(req, res, next)
   {
-    Order.findById(req.query.order, {nc12: 1}).lean().exec(function(err, order)
+    Order.findById(req.query.order, {nc12: 1}).lean().exec((err, order) =>
     {
       if (err)
       {
@@ -783,13 +784,17 @@ module.exports = function setUpOrderDocumentsRoutes(app, module)
         return res.sendStatus(204);
       }
 
-      // eslint-disable-next-line handle-callback-err
-      fs.readFile(path.join(module.config.etoPath, order.nc12 + '.html'), 'utf8', function(err, etoTableHtml)
+      OrderEto.findById(order.nc12, {html: 1}).lean().exec((err, orderEto) =>
       {
+        if (err)
+        {
+          return next(err);
+        }
+
         res.render('orderDocuments:eto', {
           order: order._id,
           nc12: order.nc12,
-          etoTableHtml: etoTableHtml,
+          etoTableHtml: orderEto ? orderEto.html : '',
           header: req.query.header !== '0'
         });
       });

@@ -9,6 +9,7 @@ const fs = require('fs-extra');
 const cheerio = require('cheerio');
 
 exports.DEFAULT_CONFIG = {
+  mongooseId: 'mongoose',
   filterRe: /^EMAIL_[0-9]+$/,
   outputDir: './eto',
   parsedOutputDir: null
@@ -16,9 +17,18 @@ exports.DEFAULT_CONFIG = {
 
 exports.start = function startOrderDocumentsEtoImporterModule(app, module)
 {
+  const mongoose = app[module.config.mongooseId];
+
+  if (!mongoose)
+  {
+    throw new Error('mongoose module is required!');
+  }
+
+  const OrderEto = mongoose.model('OrderEto');
+
   const filePathCache = {};
-  let locked = false;
   const queue = [];
+  let locked = false;
 
   app.broker.subscribe('directoryWatcher.changed', queueFile).setFilter(filterFile);
 
@@ -137,26 +147,47 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
 
         this.nc12 = matches[1];
         this.email = email;
+        this.constructor = '';
       },
       function findEtoTableStep()
       {
         const $ = cheerio.load(this.email.body);
         const $tables = $('table');
-        let etoTableHtml = null;
+
+        let etoTableHtml = '';
+        let constructor = '';
 
         $tables.each(function()
         {
-          if (etoTableHtml !== null)
+          if (etoTableHtml)
           {
             return;
           }
 
-          const text = $(this).text().replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
+          const $table = $(this);
+          const text = $table.text().replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
 
-          if (_.includes(text, 'wykonanie') && _.includes(text, '12nc'))
+          if (!_.includes(text, 'wykonanie') || !_.includes(text, '12nc'))
           {
-            etoTableHtml = $.html(this);
+            return;
           }
+
+          etoTableHtml = $.html(this);
+
+          $table.find('tr').each(function()
+          {
+            if (constructor)
+            {
+              return;
+            }
+
+            const matches = $(this).text().trim().match(/(?:opracowa.|konstruktor)\s*:?\s*(.*?)$/i);
+
+            if (matches)
+            {
+              constructor = matches[1];
+            }
+          });
         });
 
         if (!etoTableHtml)
@@ -165,6 +196,7 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
         }
 
         this.etoTableHtml = etoTableHtml;
+        this.constructor = constructor;
 
         setImmediate(this.next());
       },
@@ -198,9 +230,16 @@ exports.start = function startOrderDocumentsEtoImporterModule(app, module)
 
         setImmediate(this.next());
       },
-      function saveEtoTableHtmlStep()
+      function saveOrderEtoStep()
       {
-        fs.writeFile(path.join(module.config.outputDir, this.nc12 + '.html'), this.etoTableHtml, this.next());
+        const orderEto = {
+          _id: this.nc12,
+          updatedAt: new Date(),
+          constructor: this.constructor,
+          html: this.etoTableHtml
+        };
+
+        OrderEto.collection.replaceOne({_id: orderEto._id}, orderEto, {upsert: true}, this.next());
       },
       function finalizeStep(err)
       {

@@ -278,7 +278,7 @@ exports.mongoose = {
     'division', 'subdivision', 'mrpController', 'workCenter', 'prodFlow', 'prodLine',
     'company', 'vendor', 'prodFunction', 'aor',
     'orderStatus', 'delayReason', 'downtimeReason', 'lossReason', 'prodTask',
-    'order', 'mechOrder', 'emptyOrder', 'orderZlf1', 'invalidOrder',
+    'order', 'mechOrder', 'emptyOrder', 'orderZlf1', 'invalidOrder', 'orderEto',
     'orderDocumentClient', 'orderDocumentStatus', 'orderDocumentName',
     'orderDocumentFile', 'orderDocumentFolder', 'orderDocumentUpload',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
@@ -591,7 +591,6 @@ exports.orderDocuments = {
   cachedPath: `${DATA_PATH}/order-documents/cached`,
   convertedPath: `${DATA_PATH}/order-documents/converted`,
   uploadedPath: `${DATA_PATH}/order-documents/uploaded`,
-  etoPath: `${DATA_PATH}/order-documents/eto`,
   sejdaConsolePath: 'sejda-console'
 };
 

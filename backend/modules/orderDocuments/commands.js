@@ -14,6 +14,7 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
   const orgUnits = app[module.config.orgUnitsId];
   const mongoose = app[module.config.mongooseId];
   const Order = mongoose.model('Order');
+  const OrderEto = mongoose.model('OrderEto');
   const OrderDocumentClient = mongoose.model('OrderDocumentClient');
 
   const clients = {};
@@ -373,11 +374,11 @@ module.exports = function setUpOrderDocumentsCommands(app, module)
           prepareDocumentsMap(order.nc12, [], this.order.documents);
         }
 
-        fs.stat(path.join(module.config.etoPath, order.nc12 + '.html'), this.next());
+        OrderEto.findById(order.nc12, {_id: 1}).lean().exec(this.next());
       },
-      function setEtoStep(err, stats)
+      function setEtoStep(err, orderEto)
       {
-        if (!err && stats && stats.isFile())
+        if (!err && orderEto)
         {
           this.order.hasEto = true;
         }

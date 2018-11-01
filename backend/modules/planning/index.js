@@ -12,8 +12,7 @@ exports.DEFAULT_CONFIG = {
   expressId: 'express',
   ordersId: 'orders',
   settingsId: 'settings',
-  generator: true,
-  etoPath: './order-documents/eto'
+  generator: true
 };
 
 exports.start = function startPlanningModule(app, module)

@@ -2,7 +2,6 @@
 
 'use strict';
 
-const fs = require('fs');
 const _ = require('lodash');
 const step = require('h5.step');
 
@@ -10,7 +9,7 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
 {
   const mongoose = app[module.config.mongooseId];
   const Order = mongoose.model('Order');
-  const PaintShopOrder = mongoose.model('PaintShopOrder');
+  const OrderEto = mongoose.model('OrderEto');
   const Plan = mongoose.model('Plan');
 
   const mrp = _.isString(req.query.mrp) && /^[A-Za-z0-9]{1,10}$/.test(req.query.mrp) ? req.query.mrp : null;
@@ -18,25 +17,27 @@ module.exports = function browseSapOrdersRoute(app, module, req, res, next)
   step(
     function()
     {
-      if (!module.eto && module.config.etoPath)
+      if (module.eto)
       {
-        fs.readdir(module.config.etoPath, this.next());
+        return;
       }
+
+      OrderEto.aggregate([{$group: {_id: null, nc12: {$addToSet: '$_id'}}}], this.next());
     },
-    function(err, files)
+    function(err, orderEtos)
     {
       if (err)
       {
         module.error(`Failed to read ETO files: ${err.message}`);
       }
 
-      if (files)
+      if (orderEtos && orderEtos.length === 1)
       {
         module.eto = new Set();
 
-        files.forEach(file =>
+        orderEtos[0].nc12.forEach(nc12 =>
         {
-          module.eto.add(file.replace('.html', ''));
+          module.eto.add(nc12);
         });
       }
 

@@ -24,7 +24,6 @@ exports.DEFAULT_CONFIG = {
   cachedPath: './order-documents/cached',
   convertedPath: './order-documents/converted',
   uploadedPath: './order-documents/uploaded',
-  etoPath: './order-documents/eto',
   sejdaConsolePath: 'sejda-console',
   exiftoolExe: 'exiftool',
   pdfboxAppJar: 'pdfbox-app-2.0.3.jar',
