@@ -139,9 +139,13 @@ module.exports = function setUpXiconfResultsImporter(app, xiconfModule)
     const buf = fs.readFile(this.fileInfo.filePath);
     const zip = await new JSZip().loadAsync(buf);
 
-    this.meta = JSON.parse(await zip.file('meta.json').async('string'));
-    this.orders = JSON.parse(await zip.file('orders.json').async('string'));
-    this.results = JSON.parse(await zip.file('results.json').async('string'));
+    const meta = await zip.file('meta.json').async('string');
+    const orders = await zip.file('orders.json').async('string');
+    const results = await zip.file('results.json').async('string');
+
+    this.meta = JSON.parse(meta);
+    this.orders = JSON.parse(orders || '[]');
+    this.results = JSON.parse(results);
     this.featureFiles = zip.file(/^features\//);
   }
 
