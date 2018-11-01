@@ -120,6 +120,7 @@ define([
         delayReason: delayReason ? delayReason.getLabel() : '',
         m4: order.get('m4'),
         drm: order.get('drm'),
+        eto: order.get('eto'),
         comment: order.get('comment'),
         planner: this.planners.getLabel(mrp)
       };

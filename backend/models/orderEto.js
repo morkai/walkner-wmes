@@ -16,5 +16,22 @@ module.exports = function setupOrderEtoModel(app, mongoose)
   orderEtoSchema.statics.TOPIC_PREFIX = 'orderDocuments.eto';
   orderEtoSchema.statics.BROWSE_LIMIT = 100;
 
+  orderEtoSchema.statics.findSet = function(done)
+  {
+    this.aggregate([{$group: {_id: null, nc12: {$addToSet: '$_id'}}}], (err, res) =>
+    {
+      if (err)
+      {
+        return done(err);
+      }
+
+      const set = new Set();
+
+      res[0].nc12.forEach(nc12 => set.add(nc12));
+
+      done(null, set);
+    });
+  };
+
   mongoose.model('OrderEto', orderEtoSchema);
 };

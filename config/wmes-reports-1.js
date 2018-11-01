@@ -40,7 +40,7 @@ exports.mongoose = {
   models: [
     'event', 'user', 'setting',
     'company', 'delayReason',
-    'order',
+    'order', 'orderEto',
     'prodShift', 'prodShiftOrder', 'prodDowntime',
     'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
     'clipOrderCache', 'clipOrderCount', 'dailyMrpCount',

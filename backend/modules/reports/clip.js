@@ -13,6 +13,7 @@ module.exports = function(mongoose, options, done)
   const DailyMrpCount = mongoose.model('DailyMrpCount');
   const ClipOrderCache = mongoose.model('ClipOrderCache');
   const Order = mongoose.model('Order');
+  const OrderEto = mongoose.model('OrderEto');
   const Setting = mongoose.model('Setting');
   const DelayReason = mongoose.model('DelayReason');
 
@@ -73,8 +74,10 @@ module.exports = function(mongoose, options, done)
       Setting.find({_id: /^reports\.clip\./}, {value: 1}).lean().exec(this.parallel());
 
       DelayReason.find({}).lean().exec(this.parallel());
+
+      OrderEto.findSet(this.parallel());
     },
-    function(err, dailyMrpCounts, settings, delayReasons)
+    function(err, dailyMrpCounts, settings, delayReasons, orderEtos)
     {
       if (err)
       {
@@ -157,6 +160,8 @@ module.exports = function(mongoose, options, done)
       {
         this.delayReasons[delayReason._id] = delayReason.drm;
       });
+
+      this.orderEtos = orderEtos;
 
       setImmediate(this.next());
     },
@@ -295,6 +300,7 @@ module.exports = function(mongoose, options, done)
         order.scheduledFinishDate = Date.parse(order.scheduledFinishDate);
         order.qtyDone = order.qtyDone ? order.qtyDone.total : 0;
         order.drm = '';
+        order.eto = this.orderEtos.has(order.nc12);
         order.description = undefined;
         order.changes = undefined;
 

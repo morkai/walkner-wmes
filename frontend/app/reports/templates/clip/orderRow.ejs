@@ -6,7 +6,9 @@
     <%- order.no %>
     <% } %>
   </td>
-  <td class="is-min reports-2-orders-name"><%= order.name %></td>
+  <td class="is-min reports-2-orders-name">
+    <% if (order.eto) { %><i class="fa fa-wrench" title="ETO"></i><% } %><span><%= order.name %></span>
+  </td>
   <td class="is-min"><%- order.mrp %></td>
   <td class="is-min is-number reports-2-orders-qty"><%- order.qty %></td>
   <td class="is-min reports-2-confirm reports-2-confirm-<%- order.cnfClassName %>"><%- order.cnfStatus %></td>

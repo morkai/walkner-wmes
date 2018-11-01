@@ -28,6 +28,7 @@ module.exports = function setupClipOrderCacheModel(app, mongoose)
     delayReason: String,
     m4: String,
     drm: String,
+    eto: Boolean,
     statuses: [String],
     productionTime: Number,
     productionStatus: String,
