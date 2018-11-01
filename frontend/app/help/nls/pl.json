@@ -1,4 +1,8 @@
 {
+  "bc:base": "Pomoc",
+
   "msg:offline": "Brak połączenia z serwerem.",
-  "msg:undefined": "Dla tej strony nie ma jeszcze pomocy."
+  "msg:undefined": "Dla tej strony nie ma jeszcze pomocy.",
+
+  "pa:edit": "Edytuj"
 }

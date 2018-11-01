@@ -1,0 +1,16 @@
+<div class="help-tree-node <%- node.selected ? 'is-selected' : '' %> <%- node.expanded ? 'is-expanded' : '' %> is-<%- node.kind %>" data-id="<%- node._id %>">
+  <div class="help-tree-node-inner" title="<%= node.description %>">
+    <span class="help-tree-node-icon">
+      <i class="fa fa-chevron-right"></i>
+      <i class="fa fa-chevron-down"></i>
+    </span>
+    <span class="help-tree-node-name">
+      <%= node.name %>
+    </span>
+  </div>
+  <div class="help-tree-node-children">
+    <% node.children.forEach(function(childNode) { %>
+    <%- renderNode({node: childNode, renderNode: renderNode}) %>
+    <% }) %>
+  </div>
+</div>

@@ -20,7 +20,7 @@ exports.events = {
   insertDelay: 1000,
   topics: {
     debug: [
-
+      'help.files.deleted'
     ],
     info: [
       'events.**'
@@ -37,7 +37,7 @@ exports.mongoose = {
     poolSize: 3,
     readPreference: 'secondaryPreferred'
   }),
-  maxConnectTries: 10,
+  maxConnectTries: 5,
   connectAttemptDelay: 500,
   models: [
     'event',
@@ -67,7 +67,7 @@ exports.settings = {
 };
 
 exports.gdrive = {
-  key: require('./gdrive.private.json')
+  key: require(process.env.WMES_GDRIVE_KEY || './gdrive.private.json')
 };
 
 exports.help = {

@@ -1,0 +1,5 @@
+<div class="help-tree">
+  <% tree.forEach(function(node) { %>
+  <%- renderNode({node: node, renderNode: renderNode}) %>
+  <% }) %>
+</div>

@@ -93,6 +93,7 @@ exports.modules = [
   'xlsxExporter',
   'orderBomMatchers',
   'subscriptions',
+  'help',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'messenger/server',
@@ -260,7 +261,8 @@ exports.pubsub = {
     'sapLaborTimeFixer.**',
     'printing.**',
     'kanban.**',
-    'pfep.**'
+    'pfep.**',
+    'help.**'
   ]
 };
 
@@ -311,7 +313,8 @@ exports.mongoose = {
     'pkhdComponent', 'pkhdStrategy',
     'pfepEntry',
     'orderBomMatcher',
-    'subscription'
+    'subscription',
+    'helpFile'
   ]
 };
 
@@ -387,7 +390,8 @@ exports.user = {
     'PLANNING:VIEW', 'PLANNING:MANAGE', 'PLANNING:PLANNER', 'PLANNING:WHMAN',
     'KANBAN:VIEW', 'KANBAN:MANAGE', 'KANBAN:PRINT',
     'WH:VIEW', 'WH:MANAGE',
-    'PFEP:VIEW', 'PFEP:MANAGE'
+    'PFEP:VIEW', 'PFEP:MANAGE',
+    'HELP:MANAGE'
   ]
 };
 
@@ -655,4 +659,9 @@ exports.sapLaborTimeFixer = {
 
 exports.kanban = {
   sapImporterMessengerId: 'messenger/client:wmes-importer-sap'
+};
+
+exports.help = {
+  gdriveId: null,
+  dataPath: `${DATA_PATH}/help`
 };

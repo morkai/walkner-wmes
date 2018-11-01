@@ -1,0 +1,63 @@
+.help-tree-container {
+  position: fixed;
+  left: 15px;
+  top: 102px;
+  width: 400px;
+  line-height: 1;
+  overflow: scroll;
+  user-select: none;
+}
+
+.help-tree-node-inner {
+  display: flex;
+  padding: 6px 0 6px 0;
+}
+.help-tree-node-inner:hover {
+  background-color: #ffffd6;
+}
+.is-selected > .help-tree-node-inner {
+  background-color: #ffffa6;
+}
+.help-tree-node-icon {
+  flex: 0 0 auto;
+  padding-left: 5px;
+  width: 23px;
+  color: #666;
+  cursor: pointer;
+}
+.help-tree-node-icon .fa-chevron-down,
+.help-tree-node.is-expanded .fa-chevron-right {
+  display: none;
+}
+.help-tree-node.is-expanded .fa-chevron-down {
+  display: inline-block;
+}
+.is-file .help-tree-node-icon {
+  opacity: 0;
+  cursor: default;
+  pointer-events: none;
+}
+.help-tree-node-name {
+  flex: 1 1 auto;
+}
+.help-tree-node-children {
+  display: none;
+}
+.is-expanded > .help-tree-node-children {
+  display: block;
+}
+.help-tree-node-children .help-tree-node-inner {
+  padding-left: 25px;
+}
+.help-tree-node-children .help-tree-node-children .help-tree-node-inner {
+  padding-left: 45px;
+}
+.help-tree-node-children .help-tree-node-children .help-tree-node-children .help-tree-node-inner {
+  padding-left: 65px;
+}
+.help-tree-node-children .help-tree-node-children .help-tree-node-children .help-tree-node-children .help-tree-node-inner {
+  padding-left: 85px;
+}
+.help-tree-node-children .help-tree-node-children .help-tree-node-children .help-tree-node-children .help-tree-node-children .help-tree-node-inner {
+  padding-left: 105px;
+}

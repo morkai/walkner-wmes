@@ -16,7 +16,6 @@ define([
     viewport.loadPage(['app/help/pages/HelpPage', 'i18n!app/nls/help'], function(HelpPage)
     {
       return new HelpPage({
-        folder: req.query.folder,
         file: req.query.file
       });
     });
