@@ -200,7 +200,7 @@ define([
       }, formData.matchers);
 
       formData.matchers = {
-        line: formData.matchers.line.split(', ').filter(function(v) { return v.length > 0; }),
+        line: formData.matchers.line.split(',').filter(function(v) { return v.length > 0; }),
         mrp: formData.matchers.mrp.split(', ').filter(function(v) { return v.length > 0; }),
         nc12: formData.matchers.nc12.split(', ').filter(function(v) { return v.length > 0; }),
         name: formData.matchers.name.split('\n').filter(function(v) { return v.length > 0; })
