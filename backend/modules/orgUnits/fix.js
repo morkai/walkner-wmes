@@ -5,12 +5,15 @@
 module.exports = function setUpOrgUnitsFix(app, module)
 {
   const oldToNewProdLine = {
-    'MAXOS_T_NZP': 'MAXOS_T_NZP',
-    'PSR': 'LM-28',
-    'HCS': 'LM-24',
-    'GS': 'LM-27',
-    'IR3': 'LM-26',
-    'MCL3': 'LM-35'
+    'LM-35': 'LM-35',
+    'MT': 'LM-36',
+    'MT_PAK': 'LM-36_PAK',
+    'WB-1': 'WB-1',
+    'WB-2': 'WB-2',
+    'WB-3': 'WB-3',
+    'WB-4': 'WB-4',
+    'WU-1': 'WU-1',
+    'WU-2': 'WU-2'
   };
   const prodLineToOrgUnits = new Map();
   const prodLineToPlainOrgUnits = new Map();
