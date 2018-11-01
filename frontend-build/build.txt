@@ -150,6 +150,15 @@ app/heff/assets/../../production/assets/taktTime.css
 app/heff/assets/../../production/assets/bomChecker.css
 app/heff/assets/main.css
 
+app/help/assets/main.css
+----------------
+app/help/assets/./tree.css
+app/help/assets/main.css
+
+app/help/assets/tree.css
+----------------
+app/help/assets/tree.css
+
 app/hourlyPlans/assets/main.css
 ----------------
 app/hourlyPlans/assets/main.css
@@ -824,6 +833,7 @@ assets/../app/kanbanPrintQueues/assets/main.css
 assets/../app/kanbanContainers/assets/main.css
 assets/../app/wh/assets/main.css
 assets/../app/pfepEntries/assets/main.css
+assets/../app/help/assets/main.css
 assets/wmes-main.css
 
 assets/wmes-operator.css

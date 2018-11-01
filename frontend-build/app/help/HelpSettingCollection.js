@@ -1,0 +1,1 @@
+define(["../settings/SettingCollection","./HelpSetting"],function(e,t){"use strict";return e.extend({model:t,topicSuffix:"help.**",getValue:function(e){var t=this.get("help."+e);return t?t.getValue():null},prepareValue:function(e,t){if(/rootFileId/.test(e))return/^[A-Za-z0-9]+$/.test(t)?t:""}})});

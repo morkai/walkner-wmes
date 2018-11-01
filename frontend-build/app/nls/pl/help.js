@@ -1,1 +1,1 @@
-define(["app/nls/locale/pl"],function(e){return{"msg:offline":function(e){return"Brak połączenia z serwerem."},"msg:undefined":function(e){return"Dla tej strony nie ma jeszcze pomocy."}}});
+define(["app/nls/locale/pl"],function(n){return{"bc:base":function(n){return"Pomoc"},"msg:offline":function(n){return"Brak połączenia z serwerem."},"msg:undefined":function(n){return"Dla tej strony nie ma jeszcze pomocy."},"pa:edit":function(n){return"Edytuj"}}});
