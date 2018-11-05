@@ -435,7 +435,7 @@ module.exports = function(mongoose, options, done)
 
     if (Array.isArray(options.sections) && !_.isEmpty(options.sections))
     {
-      conditions.section = {$in: options.sections};
+      conditions.observerSection = {$in: options.sections};
     }
 
     if (options.fromTime)
@@ -454,7 +454,7 @@ module.exports = function(mongoose, options, done)
     }
 
     const cursor = BehaviorObsCard
-      .find(conditions, {date: 1, section: 1, 'observer.id': 1})
+      .find(conditions, {date: 1, observerSection: 1, 'observer.id': 1})
       .lean()
       .cursor();
     const finalize = _.once(done);
@@ -463,18 +463,18 @@ module.exports = function(mongoose, options, done)
     cursor.on('end', finalize);
     cursor.on('data', behaviorObsCard =>
     {
-      const sectionGroup = getSectionGroup(behaviorObsCard.section);
-      const intervalGroup = getIntervalGroup(behaviorObsCard.date, behaviorObsCard.section);
+      const sectionGroup = getSectionGroup(behaviorObsCard.observerSection);
+      const intervalGroup = getIntervalGroup(behaviorObsCard.date, behaviorObsCard.observerSection);
 
       totals.observationCount += 1;
       sectionGroup.observationCount += 1;
       intervalGroup.observationCount += 1;
-      intervalGroup.bySection[behaviorObsCard.section].observationCount += 1;
+      intervalGroup.bySection[behaviorObsCard.observerSection].observationCount += 1;
 
       totals.userCount.add(behaviorObsCard.observer.id);
       sectionGroup.userCount.add(behaviorObsCard.observer.id);
       intervalGroup.userCount.add(behaviorObsCard.observer.id);
-      intervalGroup.bySection[behaviorObsCard.section].userCount.add(behaviorObsCard.observer.id);
+      intervalGroup.bySection[behaviorObsCard.observerSection].userCount.add(behaviorObsCard.observer.id);
     });
   }
 
