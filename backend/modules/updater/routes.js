@@ -2,19 +2,19 @@
 
 'use strict';
 
-const _ = require('lodash');
-
 module.exports = function setUpUpdaterRoutes(app, updaterModule)
 {
   const express = app[updaterModule.config.expressId];
 
-  _.forEach(updaterModule.config.manifests, function(manifestOptions)
+  updaterModule.config.manifests.forEach(manifestOptions =>
   {
-    express.get(manifestOptions.path, function(req, res)
+    express.get(manifestOptions.path, (req, res) =>
     {
       const template = manifestOptions.template || updaterModule.manifest;
+      const matches = (req.headers['user-agent'] || '').match(/Chrome\/([0-9]+)/);
+      const chromeVersion = matches ? +matches[1] : 99;
 
-      if (app.options.env === 'development' || typeof template !== 'string')
+      if ((!req.secure && chromeVersion >= 70) || app.options.env === 'development' || typeof template !== 'string')
       {
         return res.sendStatus(404);
       }

@@ -96,8 +96,10 @@ module.exports = function startCoreRoutes(app, express)
     });
 
     let appCacheManifest = '';
+    const matches = (req.headers['user-agent'] || '').match(/Chrome\/([0-9]+)/);
+    const chromeVersion = matches ? +matches[1] : 99;
 
-    if (!dev && app.updater)
+    if (app.updater && !dev && (chromeVersion < 70 || req.secure))
     {
       _.forEach(app.updater.config.manifests, function(manifest)
       {
