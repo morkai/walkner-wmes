@@ -20,7 +20,9 @@ module.exports = function(mongoose, options, done)
 
   const results = {
     options: options,
-    sections: {},
+    sections: {
+      null: '?'
+    },
     companies: {},
     totals: createEmptyGroup(),
     bySection: {},
@@ -147,7 +149,7 @@ module.exports = function(mongoose, options, done)
       results.byInterval[key] = Object.assign(createEmptyGroup(), {key, bySection: {}});
     }
 
-    if (section && !results.byInterval[key].bySection[section])
+    if (!results.byInterval[key].bySection[section])
     {
       results.byInterval[key].bySection[section] = createEmptyGroup();
     }
@@ -463,6 +465,11 @@ module.exports = function(mongoose, options, done)
     cursor.on('end', finalize);
     cursor.on('data', behaviorObsCard =>
     {
+      if (!behaviorObsCard.observerSection)
+      {
+        behaviorObsCard.observerSection = null;
+      }
+
       const sectionGroup = getSectionGroup(behaviorObsCard.observerSection);
       const intervalGroup = getIntervalGroup(behaviorObsCard.date, behaviorObsCard.observerSection);
 
