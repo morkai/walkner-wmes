@@ -49,7 +49,7 @@ define([
         serialNo: +matches[3]
       });
     }
-    else if (scanBuffer.length > 5)
+    else if (buffer.length > 5)
     {
       broker.publish('production.taktTime.snScanned', {
         _id: buffer,

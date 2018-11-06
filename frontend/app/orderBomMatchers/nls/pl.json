@@ -33,6 +33,7 @@
   "PROPERTY:components.snIndex": "Nr grupy SN",
   "PROPERTY:components.unique": "Unikalny?",
   "PROPERTY:components.single": "Tylko 1?",
+  "PROPERTY:components.missing": "Brak?",
 
   "FORM:ACTION:add": "Dodaj strategię",
   "FORM:ACTION:edit": "Edytuj strategię",

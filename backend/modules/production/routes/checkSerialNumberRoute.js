@@ -227,7 +227,8 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
 
   function matchOrder(orderBomMatchers, order, lineId)
   {
-    const result = [];
+    let result = [];
+
     const bom = new Map();
     const used = new Set();
 
@@ -276,6 +277,8 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
         return true;
       });
 
+      const virtual = [];
+
       obmComponents.forEach(obmComponent =>
       {
         if (obmComponent.pattern !== '')
@@ -283,7 +286,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
           return;
         }
 
-        result.push({
+        virtual.push({
           nc12: '000000000000',
           description: obmComponent.description
             .replace(/@ORDER\.NO@/g, order._id)
@@ -297,16 +300,29 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
         });
       });
 
+      const candidates = [];
+      const misses = new Set();
+      let matches = 0;
+
       order.bom.forEach(orderComponent =>
       {
-        if (used.has(orderComponent.nc12))
+        const obmComponent = matchComponent(orderComponent, obmComponents);
+
+        if (!obmComponent)
         {
           return;
         }
 
-        const obmComponent = matchComponent(orderComponent, obmComponents);
+        if (obmComponent.missing)
+        {
+          misses.add(obmComponent);
 
-        if (!obmComponent)
+          return;
+        }
+
+        matches += 1;
+
+        if (used.has(orderComponent.nc12))
         {
           return;
         }
@@ -336,7 +352,7 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
 
         for (let j = 0; j < qtyPerProduct; ++j)
         {
-          result.push({
+          candidates.push({
             nc12: orderComponent.nc12,
             description: qtyPerProduct === 1 ? description : `#${j + 1} ${description}`,
             unique: obmComponent.unique,
@@ -347,6 +363,30 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
           });
         }
       });
+
+      obmComponents.forEach(obmComponent =>
+      {
+        if (obmComponent.missing && !misses.has(obmComponent))
+        {
+          matches += 1;
+        }
+      });
+
+      console.log('---');
+      console.inspect({
+        desc: obm.description,
+        virtual,
+        candidates,
+        matches,
+        obmComponents: obmComponents.length,
+        total: virtual.length + matches,
+        misses: misses.size
+      });
+
+      if (misses.size === 0 && obmComponents.length === (virtual.length + matches))
+      {
+        result = result.concat(virtual, candidates);
+      }
     });
 
     return result;

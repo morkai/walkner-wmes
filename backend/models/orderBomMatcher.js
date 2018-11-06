@@ -23,6 +23,10 @@ module.exports = function setupOrderBomMatcherModel(app, mongoose)
     components: [{
       pattern: String,
       description: String,
+      missing: {
+        type: Boolean,
+        default: false
+      },
       unique: {
         type: Boolean,
         default: true

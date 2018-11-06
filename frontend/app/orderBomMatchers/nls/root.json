@@ -34,6 +34,7 @@
     "PROPERTY:components.snIndex": "SN group no",
     "PROPERTY:components.unique": "Unique?",
     "PROPERTY:components.single": "Single?",
+    "PROPERTY:components.missing": "Missing?",
 
     "FORM:ACTION:add": "Add strategy",
     "FORM:ACTION:edit": "Edit strategy",

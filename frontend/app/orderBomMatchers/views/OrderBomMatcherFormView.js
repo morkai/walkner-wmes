@@ -120,6 +120,7 @@ define([
         this.addComponent({
           pattern: '',
           description: '',
+          missing: false,
           unique: false,
           single: true,
           nc12Index: [],
@@ -213,8 +214,12 @@ define([
           c.pattern = '';
         }
 
-        c.nc12Index = c.nc12Index.split(', ').map(function(v) { return +v; });
-        c.snIndex = c.snIndex.split(', ').map(function(v) { return +v; });
+        c.nc12Index = (c.nc12Index || '').split(', ')
+          .map(function(v) { return +v; })
+          .filter(function(v) { return v >= -1; });
+        c.snIndex = (c.snIndex || '').split(', ')
+          .map(function(v) { return +v; })
+          .filter(function(v) { return v >= -1; });
 
         if (c.nc12Index.length === 0)
         {
