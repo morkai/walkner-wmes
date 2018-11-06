@@ -13,9 +13,9 @@ module.exports = function readPlanRoute(app, module, req, res, next)
   step(
     function()
     {
-      const fields = {};
+      const fields = req.rql.fields;
 
-      if (req.query.pceTimes === '0')
+      if (!Object.keys(req.rql.fields).length && req.query.pceTimes === '0')
       {
         fields['lines.orders.pceTimes'] = 0;
       }
