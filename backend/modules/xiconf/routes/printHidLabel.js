@@ -5,6 +5,7 @@
 const fs = require('fs');
 const _ = require('lodash');
 const step = require('h5.step');
+const ejs = require('ejs');
 
 const LOCKS = new Map();
 
@@ -12,6 +13,7 @@ module.exports = function printHidLabelRoute(app, module, req, res, next)
 {
   const html2pdf = app[module.config.html2pdfId];
   const mongoose = app[module.config.mongooseId];
+  const Order = mongoose.model('Order');
   const ProdShiftOrder = mongoose.model('ProdShiftOrder');
   const Printer = mongoose.model('Printer');
   const Counter = mongoose.model('Counter');
@@ -44,25 +46,38 @@ module.exports = function printHidLabelRoute(app, module, req, res, next)
         return this.skip(err);
       }
 
-      if (orderNo)
+      if (pso)
       {
-        return;
+        orderNo = pso.orderId;
       }
 
-      if (!pso)
+      if (!orderNo)
       {
-        return this.skip(app.createError(`No order found for line: ${line}`, 'INPUT', 400));
+        return this.skip(app.createError(`No shift order found for line: ${line}`, 'INPUT', 400));
       }
 
-      orderNo = pso.orderId;
+      Order.findById(orderNo, {qty: 1, bom: 1}, this.next());
     },
-    function()
+    function(err, sapOrder)
     {
+      if (err)
+      {
+        return this.skip(err);
+      }
+
+      if (!sapOrder)
+      {
+        return this.skip(app.createError(`No SAP order ${orderNo} found for line: ${line}`, 'INPUT', 400));
+      }
+
+      this.qtyTodo = sapOrder.qty;
+      this.lamp = sapOrder.bom.find(c => /^(CDM-T|HPI-T|Halogen|MASTER|MST|SON-T).*?[0-9]+W/.test(c.name));
+
       this.release = lock(orderNo, this.next());
     },
     function()
     {
-      fs.readFile(`${__dirname}/hidLamp.prn`, 'utf8', this.parallel());
+      fs.readFile(`${__dirname}/../templates/hidLamp.prn.ejs`, 'utf8', this.parallel());
 
       Printer
         .findOne({tags: 'hidLamps', special: new RegExp(_.escapeRegExp(line), 'i')})
@@ -98,15 +113,17 @@ module.exports = function printHidLabelRoute(app, module, req, res, next)
         DLE: '\u0010',
         ORDER_NO: orderNo,
         SERIAL_NO: serialNo,
-        SERVICE_TAG: serviceTag
+        SERVICE_TAG: serviceTag,
+        LAMP_COUNT: !this.lamp ? 0 : (this.lamp.qty / this.qtyTodo)
       };
-
-      Object.keys(templateData).forEach(key =>
-      {
-        zpl = zpl.replace(new RegExp('\\$\\{' + key + '\\}', 'g'), templateData[key]);
+      const renderLabel = ejs.compile(zpl, {
+        cache: false, // TODO
+        filename: 'hidLamp.prn.ejs',
+        compileDebug: false,
+        rmWhitespace: false
       });
 
-      html2pdf.printZpl(zpl, {printer, line}, this.next());
+      html2pdf.printZpl(renderLabel(templateData), {printer, line}, this.next());
     },
     function(err)
     {
@@ -125,7 +142,10 @@ module.exports = function printHidLabelRoute(app, module, req, res, next)
         res.json(result);
       }
 
-      this.release();
+      if (this.release)
+      {
+        this.release();
+      }
     }
   );
 
