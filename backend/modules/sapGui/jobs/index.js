@@ -12,5 +12,6 @@ module.exports = {
   zoin: require('./zoin'),
   genericList: require('./genericList'),
   zse16d: require('./zse16d'),
-  kanban: require('./kanban')
+  kanban: require('./kanban'),
+  docs: require('./docs')
 };
