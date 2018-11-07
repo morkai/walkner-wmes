@@ -168,7 +168,7 @@ exports.start = function startWatchdogMemoryUsageModule(app, module)
 
     if (!heapdump)
     {
-      return done(app.createError(`No heapdump module!`));
+      return done && done(app.createError(`No heapdump module!`));
     }
 
     heapdump.writeSnapshot((err, file) =>
