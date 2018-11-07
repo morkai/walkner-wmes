@@ -54,7 +54,12 @@ define([
             return user.isAllowedTo(page.collection.getPrivilegePrefix() + ':MANAGE', 'PROD_DATA:MANAGE');
           }
         },
-        pageActions.export(layout, page, page.collection),
+        pageActions.export({
+          layout: layout,
+          page: page,
+          collection: page.collection,
+          maxCount: 4 * 2 * 365 * 2
+        }),
         {
           label: t.bound('fte', 'PAGE_ACTION:settings'),
           icon: 'cogs',

@@ -47,7 +47,12 @@ define([
             return user.isAllowedTo('FTE:MASTER:MANAGE', 'PROD_DATA:MANAGE');
           }
         },
-        pageActions.export(layout, this, this.collection),
+        pageActions.export({
+          layout: layout,
+          page: this,
+          collection: this.collection,
+          maxCount: 4 * 2 * 365 * 2
+        }),
         {
           label: t.bound('fte', 'PAGE_ACTION:settings'),
           icon: 'cogs',

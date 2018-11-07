@@ -136,12 +136,13 @@ define([
         layout: layout,
         page: page,
         collection: collection,
-        privilege: privilege
+        privilege: privilege,
+        maxCount: 60000
       };
 
       if (arguments.length === 1)
       {
-        options = layout;
+        _.assign(options, layout);
       }
 
       var template = function()
@@ -155,7 +156,7 @@ define([
           }
         ];
 
-        if (window.XLSX_EXPORT && totalCount < 30000)
+        if (window.XLSX_EXPORT && totalCount < (options.maxCount / 2))
         {
           formats.push({
             type: 'xlsx',
@@ -164,9 +165,11 @@ define([
         }
 
         return exportActionTemplate({
-          type: totalCount >= 30000 ? 'danger' : totalCount >= 15000 ? 'warning' : 'default',
+          type: totalCount >= (options.maxCount / 2)
+            ? 'danger'
+            : totalCount >= (options.maxCount / 4) ? 'warning' : 'default',
           formats: formats,
-          disabled: totalCount >= 60000 || totalCount === 0,
+          disabled: totalCount >= options.maxCount || totalCount === 0,
           label: options.label || t(options.collection.getNlsDomain(), 'PAGE_ACTION:export')
         });
       };
