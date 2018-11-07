@@ -1,20 +1,66 @@
-<h1>v0.127.1</h1>
-<h2><%- time.format('2018-11-01', 'LL') %></h2>
-<h3>Pola odkładcze</h3>
+<h1>v?.?.?</h1>
+<h2><%- time.format(Date.now(), 'LL') %></h2>
+<h3>Pulpit</h3>
 <ul>
-  <li>Dodano automatyczne odświeżanie listy magazynierów po zmianie użytkowników.</li>
+  <li>Dodano okno dialogowe informujące użytkownika o używaniu nieaktualnej wersji przeglądarki Chrome.</li>
+  <li>Dodano okno dialogowe informujące użytkownika o używaniu nieaktualnego adresu do systemu WMES.</li>
 </ul>
-<h3>Zlecenia reszty działów</h3>
+<h3>Raporty > CLIP</h3>
 <ul>
-  <li>Poprawiono błąd powodujący nadpisywanie wartości 'Status malarnii' oraz '4M' podczas importu zleceń z SAP.</li>
+  <li>Dodano ikonę <i class="fa fa-wrench"></i> przy nazwie wyrobu na liście zleceń informującą, że dane zlecenie
+    jest ETO.</li>
 </ul>
-<h3>Dokumentacja > Dokumenty</h3>
+<h3>ZPW</h3>
 <ul>
-  <li>Poprawiono błąd powodujący nieprawidłowe pozycjonowanie szczegółów wybranego dokumentu po zmianie katalogu,
-    na katalog, w którym wybrany dokument również się znajduje.</li>
-  <li>Zmieniono szerokość panelu z drzewem katalogów z 585px do 405px.</li>
+  <li>Zmieniono raport Wskaźniki tak, aby Obserwacje zliczane były na podstawie 'Miejsca pracy obserwatora',
+    a nie 'Miejsca obserwacji'.</li>
+  <li>Dodano uprawnienia do przeglądania i dodawania wpisów dla lokalnych, niezalogowanych użytkowników.</li>
+</ul>
+<h3>Usprawnienia</h3>
+<ul>
+  <li>Dodano uprawnienia do przeglądania i dodawania wpisów dla lokalnych, niezalogowanych użytkowników.</li>
+</ul>
+<h3>Baza testów</h3>
+<ul>
+  <li>Poprawiono błąd podczas importowania wyników, jeżeli w importowanym archiwum plik zleceń był pusty.</li>
+  <li>Zmieniono drukowanie etykiet po teście opraw HID tak, aby etykieta żarówki drukowała się tylko wtedy, gdy
+    dane zlecenie ma przynajmiej jedną żarówkę.</li>
+</ul>
+<h3>Strategie sprawdzania komponentów</h3>
+<ul>
+  <li>Poprawiono błąd w formularzu powodujący nieprawidłowe zapisywanie filtra linii produkcyjnych.</li>
+  <li>Dodano nowe pole do listy komponentów: Brak? - określa, czy dany komponent ma być na liście komponentów zlecenia
+    czy nie.</li>
+</ul>
+<h3>SAP GUI</h3>
+<ul>
+  <li>Zmieniono zrzucanie dokumentów zleceń tak, aby zrzucane były dokumenty tylko dla zleceń znajdujących się
+    w planie dziennym.</li>
+</ul>
+<h3>Produkcja > Zlecenia</h3>
+<ul>
+  <li>Dodano kolumnę 'Ilość do zrobienia w zleceniu' do eksportowanych danych.</li>
+</ul>
+<h3>FTE</h3>
+<ul>
+  <li>Zmieniono limity eksportowania wpisów tak, aby można było za jednym razem eksportować dane z mniej więcej
+    jednego roku.</li>
+</ul>
+<h3>Watchdog</h3>
+<ul>
+  <li>Poprawiono błąd powodujący wywalenie się serwera po osiągnięciu przez proces serwera ponad 900MB
+    użytej pamięci.</li>
+</ul>
+<h3>Kanban</h3>
+<ul>
+  <li>Poprawiono błąd uniemożliwiający wyeksportowanie całej tabeli.</li>
+  <li>Zmieniono algorytm eksportowania tabeli tak, aby używał mniej pamięci.</li>
 </ul>
 <h3>Inne</h3>
 <ul>
-  <li>Zablokowano możliwość logowania do syetemu w trybie wsadowym.</li>
+  <li>Poprawiono błąd powodujący duże zużycie pamięci przez proces serwera, jeżeli użytkownik próbował załadować
+    na serwer załącznik przekraczający ustawione limity wielkości plików.</li>
+  <li>Zmieniono automatyczne odświeżanie przeglądarki po otrzymaniu komunikatu o nowej wersji aplikacji ze stałych
+    60s nieaktywności na losową ilość sekund z przedziału 60-120, w celu uniknięcia inicjacji aktualizacji przez
+    wszystkich klientów na raz.</li>
 </ul>
