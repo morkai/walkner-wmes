@@ -14,9 +14,11 @@ module.exports = function setUpOrgUnitsFix(app, module)
     'WB-4': 'WB-4',
     'WU-1': 'WU-1',
     'WU-2': 'WU-2',
+    /*
     'AV1': 'LM-37',
     'AV2': 'LM-38',
     'OFC': 'LM-39'
+    */
   };
   const prodLineToOrgUnits = new Map();
   const prodLineToPlainOrgUnits = new Map();
