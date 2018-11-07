@@ -52,49 +52,52 @@ define([
       var actions = [];
       var model = this.model;
 
-      if (model.isNotSeen())
+      if (user.isLoggedIn())
       {
-        actions.push({
-          id: 'markAsSeen',
-          icon: 'eye',
-          label: t('suggestions', 'PAGE_ACTION:markAsSeen'),
-          callback: this.markAsSeen.bind(this)
-        });
-      }
+        if (model.isNotSeen())
+        {
+          actions.push({
+            id: 'markAsSeen',
+            icon: 'eye',
+            label: this.t('PAGE_ACTION:markAsSeen'),
+            callback: this.markAsSeen.bind(this)
+          });
+        }
 
-      var observer = model.get('observer');
+        var observer = model.get('observer');
 
-      if (observer.role === 'subscriber')
-      {
-        actions.push({
-          id: 'unobserve',
-          icon: 'eye-slash',
-          label: t('suggestions', 'PAGE_ACTION:unobserve'),
-          callback: this.unobserve.bind(this)
-        });
-      }
-      else if (observer.role === 'viewer')
-      {
-        actions.push({
-          id: 'observe',
-          icon: 'eye',
-          label: t('suggestions', 'PAGE_ACTION:observe'),
-          callback: this.observe.bind(this)
-        });
-      }
+        if (observer.role === 'subscriber')
+        {
+          actions.push({
+            id: 'unobserve',
+            icon: 'eye-slash',
+            label: this.t('PAGE_ACTION:unobserve'),
+            callback: this.unobserve.bind(this)
+          });
+        }
+        else if (observer.role === 'viewer')
+        {
+          actions.push({
+            id: 'observe',
+            icon: 'eye',
+            label: this.t('PAGE_ACTION:observe'),
+            callback: this.observe.bind(this)
+          });
+        }
 
-      if (model.canEdit())
-      {
-        actions.push(pageActions.edit(model, false));
-      }
+        if (model.canEdit())
+        {
+          actions.push(pageActions.edit(model, false));
+        }
 
-      if (model.canDelete())
-      {
-        actions.push(pageActions.delete(model, false));
+        if (model.canDelete())
+        {
+          actions.push(pageActions.delete(model, false));
+        }
       }
 
       actions.push({
-        label: t.bound(model.getNlsDomain(), 'PAGE_ACTION:add'),
+        label: this.t('PAGE_ACTION:add'),
         icon: 'plus',
         href: '#suggestions;add'
       });

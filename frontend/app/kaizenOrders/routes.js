@@ -108,7 +108,7 @@ define([
     });
   });
 
-  router.map('/kaizenOrders', canAccess, function(req)
+  router.map('/kaizenOrders', canAccessLocal, function(req)
   {
     viewport.loadPage(
       [

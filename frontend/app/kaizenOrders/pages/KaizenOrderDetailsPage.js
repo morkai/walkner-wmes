@@ -51,46 +51,55 @@ define([
     {
       var actions = [];
 
-      if (this.model.isNotSeen())
+      if (user.isLoggedIn())
       {
-        actions.push({
-          id: 'markAsSeen',
-          icon: 'eye',
-          label: t('kaizenOrders', 'PAGE_ACTION:markAsSeen'),
-          callback: this.markAsSeen.bind(this)
-        });
+        if (this.model.isNotSeen())
+        {
+          actions.push({
+            id: 'markAsSeen',
+            icon: 'eye',
+            label: this.t('PAGE_ACTION:markAsSeen'),
+            callback: this.markAsSeen.bind(this)
+          });
+        }
+
+        var observer = this.model.get('observer');
+
+        if (observer.role === 'subscriber')
+        {
+          actions.push({
+            id: 'unobserve',
+            icon: 'eye-slash',
+            label: this.t('PAGE_ACTION:unobserve'),
+            callback: this.unobserve.bind(this)
+          });
+        }
+        else if (observer.role === 'viewer')
+        {
+          actions.push({
+            id: 'observe',
+            icon: 'eye',
+            label: this.t('PAGE_ACTION:observe'),
+            callback: this.observe.bind(this)
+          });
+        }
+
+        if (this.model.canEdit())
+        {
+          actions.push(pageActions.edit(this.model, false));
+        }
+
+        if (this.model.canDelete())
+        {
+          actions.push(pageActions.delete(this.model, false));
+        }
       }
 
-      var observer = this.model.get('observer');
-
-      if (observer.role === 'subscriber')
-      {
-        actions.push({
-          id: 'unobserve',
-          icon: 'eye-slash',
-          label: t('kaizenOrders', 'PAGE_ACTION:unobserve'),
-          callback: this.unobserve.bind(this)
-        });
-      }
-      else if (observer.role === 'viewer')
-      {
-        actions.push({
-          id: 'observe',
-          icon: 'eye',
-          label: t('kaizenOrders', 'PAGE_ACTION:observe'),
-          callback: this.observe.bind(this)
-        });
-      }
-
-      if (this.model.canEdit())
-      {
-        actions.push(pageActions.edit(this.model, false));
-      }
-
-      if (this.model.canDelete())
-      {
-        actions.push(pageActions.delete(this.model, false));
-      }
+      actions.push({
+        label: this.t('PAGE_ACTION:add'),
+        icon: 'plus',
+        href: '#kaizenOrders;add'
+      });
 
       return actions;
     },

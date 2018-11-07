@@ -159,7 +159,7 @@ define([
 
       var attrs = this.attributes;
 
-      if (attrs.status === 'finished' || attrs.status === 'cancelled')
+      if (!user.isLoggedIn() || attrs.status === 'finished' || attrs.status === 'cancelled')
       {
         return false;
       }
@@ -180,7 +180,8 @@ define([
 
     canDelete: function()
     {
-      return user.isAllowedTo(this.privilegePrefix + ':MANAGE') || (this.get('status') === 'new' && this.isCreator());
+      return user.isLoggedIn()
+        && (user.isAllowedTo(this.privilegePrefix + ':MANAGE') || (this.get('status') === 'new' && this.isCreator()));
     },
 
     markAsSeen: function()

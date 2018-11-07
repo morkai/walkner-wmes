@@ -87,7 +87,7 @@ define([
     });
   });
 
-  router.map('/suggestions', canAccess, function(req)
+  router.map('/suggestions', canAccessLocal, function(req)
   {
     viewport.loadPage(
       [
