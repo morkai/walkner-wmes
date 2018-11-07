@@ -24,6 +24,18 @@ define([
       this.view = new LogInFormView({
         model: this.model
       });
+    },
+
+    afterRender: function()
+    {
+      if (window.location.origin === 'http://ket.wmes.pl')
+      {
+        window.location.href = 'https://ket.wmes.pl/' + window.location.hash;
+      }
+      else if (window.location.origin === 'http://ket.wmes.walkner.pl')
+      {
+        window.location.href = 'https://ket.wmes.walkner.pl/' + window.location.hash;
+      }
     }
 
   });

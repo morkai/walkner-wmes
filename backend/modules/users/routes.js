@@ -61,6 +61,9 @@ module.exports = function setUpUsersRoutes(app, usersModule)
   express.post('/resetPassword/request', hashPassword, requestPasswordResetRoute);
   express.get('/resetPassword/:id', confirmPasswordResetRoute);
 
+  express.get('/addressUpdate/redirect', redirectAddressUpdateRoute);
+  express.get('/addressUpdate/login', loginAddressUpdateRoute);
+
   function canViewDetails(req, res, next)
   {
     if (req.session.user && req.params.id === req.session.user._id)
@@ -800,5 +803,67 @@ module.exports = function setUpUsersRoutes(app, usersModule)
 
       next();
     });
+  }
+
+  function redirectAddressUpdateRoute(req, res)
+  {
+    const hash = req.query.hash || '#';
+    const sid = req.signedCookies ? req.signedCookies['wmes.sid'] : null;
+
+    if (!sid)
+    {
+      return res.redirect(`https://ket.wmes.pl/${hash}`);
+    }
+
+    if (!usersModule.addressUpdateState)
+    {
+      usersModule.addressUpdateState = new Map();
+    }
+
+    const key = Buffer.from(Math.random() + '!' + Date.now() + '!' + Math.random(), 'utf8').toString('base64');
+    const data = {
+      sid,
+      hash,
+      expires: req.session && req.session.cookie && req.session.cookie._expires || null
+    };
+
+    usersModule.addressUpdateState.set(key, data);
+
+    setTimeout(() => usersModule.addressUpdateState.delete(key), 30000);
+
+    res.redirect(`https://ket.wmes.pl/addressUpdate/login?${encodeURIComponent(key)}`);
+  }
+
+  function loginAddressUpdateRoute(req, res)
+  {
+    try
+    {
+      const key = Object.keys(req.query)[0];
+      const data = usersModule.addressUpdateState.get(key);
+
+      usersModule.addressUpdateState.delete(key);
+
+      if (!data)
+      {
+        throw new Error(`Missing data for key: ${key}`);
+      }
+
+      req.sessionID = null;
+
+      res.cookie('wmes.sid', data.sid, {
+        expires: data.expires ? new Date(data.expires) : new Date(Date.now() + 30 * 24 * 3600 * 1000),
+        httpOnly: true,
+        secure: false,
+        signed: true
+      });
+
+      res.redirect(`https://ket.wmes.pl/${data.hash || '#'}`);
+    }
+    catch (err)
+    {
+      module.error(`[addressUpdate] Failed address update login: ${err.message}`);
+
+      res.redirect('https://ket.wmes.pl/');
+    }
   }
 };

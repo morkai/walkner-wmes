@@ -11,6 +11,7 @@ define([
   '../data/localStorage',
   './views/RestartMessageView',
   './views/BrowserUpdateDialogView',
+  './views/AddressUpdateDialogView',
   'app/updater/templates/backendRestart',
   'app/updater/templates/frontendRestart',
   'i18n!app/nls/updater'
@@ -25,6 +26,7 @@ define([
   localStorage,
   RestartMessageView,
   BrowserUpdateDialogView,
+  AddressUpdateDialogView,
   backendRestartTemplate,
   frontendRestartTemplate
 ) {
@@ -103,6 +105,12 @@ define([
 
   broker.subscribe('viewport.page.shown', function(page)
   {
+    showBrowserUpdateDialog(page);
+    showAddressUpdateDialog(page);
+  });
+
+  function showBrowserUpdateDialog(page)
+  {
     if (page.pageId !== 'dashboard'
       || window.navigator.vendor.toLowerCase().indexOf('google') === -1
       || window.sessionStorage.getItem('WMES_BROWSER_UPDATE') === '1')
@@ -125,7 +133,20 @@ define([
     }
 
     viewport.showDialog(new BrowserUpdateDialogView(), t('updater', 'browserUpdate:title'));
-  });
+  }
+
+  function showAddressUpdateDialog(page)
+  {
+    if (page.pageId !== 'dashboard'
+      || window.location.hostname === 'ket.wmes.pl'
+      || window.location.hostname === '192.168.21.60'
+      || window.sessionStorage.getItem('WMES_ADDRESS_UPDATE') === '1')
+    {
+      return;
+    }
+
+    viewport.showDialog(new AddressUpdateDialogView(), t('updater', 'addressUpdate:title'));
+  }
 
   function saveLocalStorage()
   {

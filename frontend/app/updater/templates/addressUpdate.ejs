@@ -1,0 +1,10 @@
+<div class="updater-addressUpdate">
+  <%- t('updater', 'addressUpdate:message') %>
+  <p><%- t('updater', 'addressUpdate:old', {oldAddress: window.location.origin}) %></p>
+  <p><%- t('updater', 'addressUpdate:new', {newAddress: 'https://ket.wmes.pl'}) %></p>
+  <p style="text-align: center">
+    <button id="<%- idPrefix %>-go" class="btn btn-primary btn-block btn-lg" type="button">
+      <%- t('updater', 'addressUpdate:go') %>
+    </button>
+  </p>
+</div>
