@@ -1147,21 +1147,37 @@ define([
         }
       });
 
+      var meta = {
+        filename: view.t('export:fileName'),
+        sheetName: view.t('export:sheetName'),
+        freezeRows: 1,
+        freezeColumns: 1
+          + (tableView.getVisibility('nc12') ? 1 : 0)
+          + (tableView.getVisibility('description') ? 1 : 0),
+        headerHeight: 100,
+        subHeader: false,
+        columns: columns
+      };
+
+      var formData = new FormData();
+
+      formData.append(
+        'meta',
+        new Blob([JSON.stringify(meta)], {type: 'application/json'}),
+        'KANABN_META.json'
+      );
+      formData.append(
+        'data',
+        new Blob([data.map(function(line) { return JSON.stringify(line); }).join('\n')], {type: 'text/plain'}),
+        'KANBAN_DATA.txt'
+      );
+
       var req = view.ajax({
         type: 'POST',
         url: '/xlsxExporter',
-        data: JSON.stringify({
-          filename: view.t('export:fileName'),
-          sheetName: view.t('export:sheetName'),
-          freezeRows: 1,
-          freezeColumns: 1
-            + (tableView.getVisibility('nc12') ? 1 : 0)
-            + (tableView.getVisibility('description') ? 1 : 0),
-          headerHeight: 100,
-          subHeader: false,
-          columns: columns,
-          data: data
-        })
+        processData: false,
+        contentType: false,
+        data: formData
       });
 
       req.fail(function()
