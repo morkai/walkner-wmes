@@ -104,10 +104,9 @@ module.exports = function createErrorHandlerMiddleware(expressModule, options)
         stack: err.stack
       };
 
-      _.forEach(err, function(value, key) { error[key] = value; });
+      Object.keys(err).forEach(k => error[k] = err[k]);
 
-      res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({error: error}));
+      res.json({error});
 
       return;
     }
