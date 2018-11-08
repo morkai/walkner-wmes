@@ -2,12 +2,13 @@
 
 'use strict';
 
-var format = require('util').format;
-var execSync = require('child_process').execSync;
-var path = require('path');
-var fs = require('fs');
-var config = require(process.argv[2]);
-var startTime = new Date();
+const {format} = require('util');
+const {execSync} = require('child_process');
+const path = require('path');
+const fs = require('fs');
+const config = require(process.argv[2]);
+
+let startTime = new Date();
 
 console.log("Removing old dump directory: %s...", config.backupPath);
 
@@ -15,15 +16,15 @@ try
 {
   execSync(format('rmdir /S /Q "%s"', config.backupPath));
 }
-catch (err) {}
+catch (err) {} // eslint-disable-line no-empty
 
 console.log("Removing old backup files...");
 
-var backupRootPath = path.dirname(config.backupPath);
-var oldBackupFiles = fs.readdirSync(backupRootPath)
-  .map(function(file)
+const backupRootPath = path.dirname(config.backupPath);
+const oldBackupFiles = fs.readdirSync(backupRootPath)
+  .map(file =>
   {
-    var matches = file.match(/^dump-([0-9]{4})-([0-9]{2})-([0-9]{2})-([0-9]{2})-([0-9]{2})-([0-9]{2})/);
+    const matches = file.match(/^dump-([0-9]{4})-([0-9]{2})-([0-9]{2})-([0-9]{2})-([0-9]{2})-([0-9]{2})/);
 
     if (matches)
     {
@@ -36,18 +37,12 @@ var oldBackupFiles = fs.readdirSync(backupRootPath)
 
     return null;
   })
-  .filter(function(file)
-  {
-    return !!file;
-  })
-  .sort(function(a, b)
-  {
-    return a.time - b.time;
-  });
+  .filter(file => !!file)
+  .sort((a, b) => a.time - b.time);
 
-for (var i = 0, l = oldBackupFiles.length - 3; i < l; ++i)
+for (let i = 0, l = oldBackupFiles.length - 3; i < l; ++i)
 {
-  var oldBackupFile = oldBackupFiles[i];
+  const oldBackupFile = oldBackupFiles[i];
 
   console.log("...%s", oldBackupFile.name);
 
@@ -61,7 +56,7 @@ for (var i = 0, l = oldBackupFiles.length - 3; i < l; ++i)
   }
 }
 
-var excludeCollections = typeof config.excludeCollections === 'function'
+let excludeCollections = typeof config.excludeCollections === 'function'
   ? config.excludeCollections(startTime)
   : config.excludeCollections;
 
@@ -70,7 +65,26 @@ if (!Array.isArray(excludeCollections))
   excludeCollections = [];
 }
 
-var dumpCmd = format(
+const fullyExcludedCollections = [].concat(excludeCollections);
+
+if (!config.minCollections)
+{
+  config.minCollections = {};
+}
+
+const minCollections = typeof config.minCollections === 'function'
+  ? config.minCollections(startTime)
+  : config.minCollections;
+
+Object.keys(minCollections).forEach(collection =>
+{
+  if (!excludeCollections.includes(collection))
+  {
+    excludeCollections.push(collection);
+  }
+});
+
+let dumpCmd = format(
   '"%s" --db "%s" --out "%s"',
   config.mongodumpExe,
   config.dbName,
@@ -87,36 +101,55 @@ if (config.user)
   );
 }
 
-excludeCollections.forEach(function(collectionName)
+const dumpCmds = [dumpCmd];
+
+excludeCollections.forEach(collectionName =>
 {
-  dumpCmd += format(' --excludeCollection "%s"', collectionName);
+  dumpCmds[0] += format(' --excludeCollection "%s"', collectionName);
+});
+
+Object.keys(minCollections).forEach(collection =>
+{
+  if (fullyExcludedCollections.includes(collection))
+  {
+    return;
+  }
+
+  const dateProperty = minCollections[collection];
+
+  dumpCmds.push(
+    `${dumpCmd} --collection ${collection} --query "{${dateProperty}: {$gte: {$date: ${config.minDate}}}}"`
+  );
 });
 
 console.log("Dumping the database...");
-console.log(dumpCmd);
 
 startTime = new Date();
 
-try
+dumpCmds.forEach(dumpCmd =>
 {
-  execSync(dumpCmd);
-}
-catch (err)
-{
-  process.exit(1);
-}
+  try
+  {
+    console.log(dumpCmd);
+    execSync(dumpCmd);
+  }
+  catch (err)
+  {
+    process.exit(1); // eslint-disable-line no-process-exit
+  }
+});
 
 console.log("...done in %ss", (Date.now() - startTime) / 1000);
 
 startTime = new Date();
 
-var date = startTime.getFullYear()
+const date = startTime.getFullYear()
   + '-' + pad0(startTime.getMonth() + 1)
   + '-' + pad0(startTime.getDate())
   + '-' + pad0(startTime.getHours())
   + '-' + pad0(startTime.getMinutes())
   + '-' + pad0(startTime.getSeconds());
-var archivePath = config.backupPath + '-' + date + '.7z';
+const archivePath = config.backupPath + '-' + date + '.7z';
 
 console.log("Packing to: %s...", archivePath);
 
@@ -127,7 +160,7 @@ try
 catch (err)
 {
   console.log("Failed to pack: %s", err.message);
-  process.exit(1);
+  process.exit(1); // eslint-disable-line no-process-exit
 }
 
 if (config.gdriveParentId)
@@ -140,6 +173,13 @@ if (config.gdriveParentId)
   );
 }
 
+if (config.oneDrivePath)
+{
+  console.log("Copying to OneDrive...");
+
+  execSync(`COPY "${archivePath}" "${path.join(config.oneDrivePath, date)}.7z"`);
+}
+
 console.log("...done in %ss", (Date.now() - startTime) / 1000);
 
 console.log("Removing new dump directory...", config.backupPath);
@@ -148,7 +188,7 @@ try
 {
   execSync(format('rmdir /S /Q "%s"', config.backupPath));
 }
-catch (err) {}
+catch (err) {} // eslint-disable-line no-empty
 
 function pad0(num)
 {

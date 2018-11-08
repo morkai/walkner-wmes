@@ -22,7 +22,9 @@ exports.gdriveParentId = '0000000000000000000000000000';
 
 exports.gdriveExecOptions = {};
 
-exports.excludeCollections = function(date) // eslint-disable-line no-unused-vars
+exports.excludeCollections = date => // eslint-disable-line no-unused-vars
 {
   return [];
 };
+
+exports.minCollections = {};
