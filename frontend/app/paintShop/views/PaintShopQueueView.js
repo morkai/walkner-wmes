@@ -281,7 +281,6 @@ define([
           visible: !this.options.embedded
         },
         {
-          icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyChildOrders'),
           handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, null),
           visible: !this.options.embedded
