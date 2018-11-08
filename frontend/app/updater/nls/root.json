@@ -13,7 +13,7 @@
     "browserUpdate:android:download": "GO TO GOOGLE PLAY",
 
     "addressUpdate:title": "Address out of date",
-    "addressUpdate:message": "<p>You are currently in the domain network and you are using an out of date address to the WMES. Consider using the new, easier to remember address and update all of your shortcuts and bookmarks!</p><p>When using the factory network keep using the old address for now (http://192.168.21.60).</p>",
+    "addressUpdate:message": "<p>You are currently in the {network, select, factory{factory} other{domain}} network and you are using an out of date address to the WMES.</p><p>Consider using the new, easier to remember address and update all of your shortcuts and bookmarks!</p>",
     "addressUpdate:old": "Old address: {oldAddress}",
     "addressUpdate:new": "New address: <a href='{newAddress}'>{newAddress}</a>",
     "addressUpdate:go": "GO TO THE NEW ADDRESS"

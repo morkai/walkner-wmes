@@ -37,7 +37,16 @@ define([
 
     getTemplateData: function()
     {
+      var network = 'domain';
+      var ipAddress = user.data.ipAddress || window.location.hostname;
+
+      if (ipAddress.indexOf('192.168') === 0)
+      {
+        network = 'factory';
+      }
+
       return {
+        network: network,
         oldAddress: window.location.origin,
         newAddress: 'https://ket.wmes.pl'
       };

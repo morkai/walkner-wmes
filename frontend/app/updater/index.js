@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'jquery',
   '../broker',
   '../pubsub',
   '../socket',
@@ -17,6 +18,7 @@ define([
   'i18n!app/nls/updater'
 ], function(
   _,
+  $,
   broker,
   pubsub,
   socket,
@@ -139,13 +141,26 @@ define([
   {
     if (page.pageId !== 'dashboard'
       || window.location.hostname === 'ket.wmes.pl'
-      || window.location.hostname === '192.168.21.60'
-      || window.sessionStorage.getItem('WMES_ADDRESS_UPDATE') === '1')
+      || window.location.hostname === 'localhost'
+      || window.sessionStorage.getItem('WMES_ADDRESS_UPDATE') === '1'
+      || window.document.body.classList.contains('is-embedded'))
     {
       return;
     }
 
-    viewport.showDialog(new AddressUpdateDialogView(), t('updater', 'addressUpdate:title'));
+    var req = $.ajax({
+      method: 'GET',
+      url: 'https://ket.wmes.pl/ping',
+      dataType: 'text'
+    });
+
+    req.done(function(res)
+    {
+      if (res === 'pong')
+      {
+        viewport.showDialog(new AddressUpdateDialogView(), t('updater', 'addressUpdate:title'));
+      }
+    });
   }
 
   function saveLocalStorage()

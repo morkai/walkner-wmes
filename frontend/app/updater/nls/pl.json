@@ -12,7 +12,7 @@
   "browserUpdate:android:download": "PRZEJDŹ DO GOOGLE PLAY",
 
   "addressUpdate:title": "Nieaktualny adres",
-  "addressUpdate:message": "<p>Jesteś w sieci domenowej i używasz nieaktualnego adresu do systemu WMES. Rozważ korzystanie z nowego, łatwiejszego adresu i zaktualizuj wszystkie skróty i zakładki!</p><p>W sieci fabrycznej narazie kontynuuj używanie starego adresu (http://192.168.21.60).</p>",
+  "addressUpdate:message": "<p>Jesteś w sieci {network, select, factory{fabrycznej} other{domenowej}} i używasz nieaktualnego adresu do systemu WMES.</p><p>Rozważ korzystanie z nowego, łatwiejszego adresu i zaktualizuj wszystkie skróty i zakładki!</p>",
   "addressUpdate:old": "Stary adres: {oldAddress}",
   "addressUpdate:new": "Nowy adres: <a href='{newAddress}'>{newAddress}</a>",
   "addressUpdate:go": "PRZEJDŹ DO NOWEGO ADRESU"
