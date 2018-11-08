@@ -34,6 +34,11 @@ define([
       {
         this.lastClickEvent = e;
 
+        if (!this.options.embedded)
+        {
+          return;
+        }
+
         if (this.timers.showMenu)
         {
           clearTimeout(this.timers.showMenu);
@@ -43,7 +48,7 @@ define([
       },
       'mouseup .paintShop-order': function(e)
       {
-        if (!this.timers.showMenu)
+        if (this.options.embedded && !this.timers.showMenu)
         {
           return;
         }
@@ -220,6 +225,17 @@ define([
           label: t('paintShop', 'menu:printOrder'),
           handler: this.trigger.bind(this, 'actionRequested', 'printOrders', 'order', orderNo)
         },
+        {
+          icon: 'fa-clipboard',
+          label: t('paintShop', 'menu:copyOrder'),
+          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, orderNo),
+          visible: !this.options.embedded
+        },
+        {
+          label: t('paintShop', 'menu:copyChildOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, orderNo),
+          visible: !this.options.embedded
+        },
         '-',
         t('paintShop', 'menu:header:mrp', {mrp: mrp}),
         {
@@ -229,7 +245,6 @@ define([
           visible: !this.options.embedded
         },
         {
-          icon: 'fa-clipboard',
           label: t('paintShop', 'menu:copyChildOrders'),
           handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, mrp),
           visible: !this.options.embedded

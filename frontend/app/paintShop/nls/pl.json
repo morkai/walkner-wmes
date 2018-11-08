@@ -70,6 +70,7 @@
 
   "menu:header:mrp": "{mrp}",
   "menu:header:all": "Wszystkie przepływy",
+  "menu:copyOrder": "Kopiuj nr zlecenia",
   "menu:copyOrders": "Kopiuj nr zleceń",
   "menu:copyOrders:success": "Lista skopiowana do schowka.",
   "menu:copyChildOrders": "Kopiuj nr podzleceń",

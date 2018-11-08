@@ -645,12 +645,26 @@ define([
       contextMenu.hide(this);
     },
 
-    handleCopyOrdersAction: function(e, mrp)
+    handleCopyOrdersAction: function(e, filter)
     {
       var view = this;
       var el = e.currentTarget;
       var x = e.pageX;
       var y = e.pageY;
+      var requestedMrp = null;
+      var requestedOrderNo = null;
+
+      if (filter)
+      {
+        if (/^[0-9]+/.test(filter))
+        {
+          requestedOrderNo = filter;
+        }
+        else
+        {
+          requestedMrp = filter;
+        }
+      }
 
       clipboard.copy(function(clipboardData)
       {
@@ -664,8 +678,15 @@ define([
 
         view.orders.serialize().forEach(function(order)
         {
-          if (order.status === 'cancelled'
-            || (mrp && order.mrp !== mrp)
+          if (requestedOrderNo)
+          {
+            if (order.order !== requestedOrderNo)
+            {
+              return;
+            }
+          }
+          else if (order.status === 'cancelled'
+            || (requestedMrp && order.mrp !== requestedMrp)
             || !view.orders.isPaintVisible(order))
           {
             return;
@@ -691,12 +712,26 @@ define([
       });
     },
 
-    handleCopyChildOrdersAction: function(e, mrp)
+    handleCopyChildOrdersAction: function(e, filter)
     {
       var view = this;
       var el = e.currentTarget;
       var x = e.pageX;
       var y = e.pageY;
+      var requestedMrp = null;
+      var requestedOrderNo = null;
+
+      if (filter)
+      {
+        if (/^[0-9]+/.test(filter))
+        {
+          requestedOrderNo = filter;
+        }
+        else
+        {
+          requestedMrp = filter;
+        }
+      }
 
       clipboard.copy(function(clipboardData)
       {
@@ -709,8 +744,15 @@ define([
 
         view.orders.serialize().forEach(function(order)
         {
-          if (order.status === 'cancelled'
-            || (mrp && order.mrp !== mrp))
+          if (requestedOrderNo)
+          {
+            if (order.order !== requestedOrderNo)
+            {
+              return;
+            }
+          }
+          else if (order.status === 'cancelled'
+            || (requestedMrp && order.mrp !== requestedMrp))
           {
             return;
           }
