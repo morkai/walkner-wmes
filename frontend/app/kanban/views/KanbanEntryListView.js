@@ -2693,6 +2693,7 @@ define([
       maxBinQty: 'numeric',
       minBinQty: 'numeric',
       replenQty: 'numeric',
+      storageType: 'numeric',
       nc12: 'text',
       description: 'text',
       storageBin: 'text',

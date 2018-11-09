@@ -47,7 +47,9 @@ exports.start = function startKanbanModule(app, module)
 
   app.broker.subscribe('app.started').setLimit(1).on('message', () =>
   {
-    app[module.config.mongooseId].model('KanbanPrintQueue').collection.updateMany(
+    const mongoose = app[module.config.mongooseId];
+
+    mongoose.model('KanbanPrintQueue').collection.updateMany(
       {'jobs.status': 'printing'},
       {$set: {'jobs.$.status': 'failure'}},
       err =>
@@ -58,5 +60,13 @@ exports.start = function startKanbanModule(app, module)
         }
       }
     );
+
+    mongoose.model('KanbanEntry').deleteMany({deleted: true}, err =>
+    {
+      if (err)
+      {
+        module.error(`Failed to remove deleted entries: ${err.message}`);
+      }
+    });
   });
 };

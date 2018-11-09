@@ -113,7 +113,7 @@ For $key In $criteria
 
   LogDebug("SETTING_SELECTION_CRITERIA=" & $key)
 
-  If StringInStr($key, "m", 1) Then
+  If StringInStr($key, "m", 1) Then ; Multiple from clipboard
     $session.FindById("wnd[0]/usr/tblSAPLSE16NSELFIELDS_TC/btnPUSH[" & StringReplace($key, "m", "4") & "]").SetFocus()
     $session.FindById("wnd[0]/usr/tblSAPLSE16NSELFIELDS_TC/btnPUSH[" & StringReplace($key, "m", "4") & "]").Press()
     Sleep(100)
@@ -122,7 +122,7 @@ For $key In $criteria
     $session.FindById("wnd[1]/tbar[0]/btn[24]").Press()
     ClipPut("")
     $session.FindById("wnd[1]/tbar[0]/btn[8]").Press()
-  ElseIf StringInStr($key, "F", 1) Then
+  ElseIf StringInStr($key, "F", 1) Then ; File
     $session.FindById("wnd[0]/usr/tblSAPLSE16NSELFIELDS_TC/btnPUSH[" & StringReplace($key, "F", "4") & "]").SetFocus()
     $session.FindById("wnd[0]/usr/tblSAPLSE16NSELFIELDS_TC/btnPUSH[" & StringReplace($key, "F", "4") & "]").Press()
     Sleep(100)
@@ -134,9 +134,9 @@ For $key In $criteria
     $session.FindById("wnd[2]/usr/ctxtDY_FILENAME").Text = $parts[2]
     $session.FindById("wnd[2]/tbar[0]/btn[0]").Press()
     $session.FindById("wnd[1]/tbar[0]/btn[8]").Press()
-  ElseIf StringInStr($key, "f", 1) Then
+  ElseIf StringInStr($key, "f", 1) Then ; From
     $session.FindById("wnd[0]/usr/tblSAPLSE16NSELFIELDS_TC/ctxtGS_SELFIELDS-LOW[" & StringReplace($key, "f", "2") & "]").Text = $value
-  ElseIf StringInStr($key, "t", 1) Then
+  ElseIf StringInStr($key, "t", 1) Then ; To
     $session.FindById("wnd[0]/usr/tblSAPLSE16NSELFIELDS_TC/ctxtGS_SELFIELDS-HIGH[" & StringReplace($key, "t", "3") & "]").Text = $value
   EndIf
 Next

@@ -153,13 +153,14 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
         return this.skip(app.createError(err.message, 'PKHD_TRANSACTION_FAILURE'));
       }
 
+      const pkhdStorageType = job.pkhdStorageType.split(',').map(v => +v).filter(v => !isNaN(v)).join(',');
       const args = [
         '--output-path', files.pkhd.path,
         '--output-file', files.pkhd.file,
         '--table', 'PKHD',
         '--layout', 'WMES_PKHD',
         '--criteria', `F,4,${files.supplyAreas.path},${files.supplyAreas.file}`,
-        '--criteria', `f,14,${job.pkhdStorageType}`
+        '--criteria', `m,14,${pkhdStorageType}`
       ];
 
       sapGuiModule.runScript(job, 'T_ZSE16D.exe', args, checkOutputFile.bind(null, this.next()));
@@ -188,14 +189,16 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
           nc12: /^Material$/,
           supplyArea: /^Supply.*?Area$/,
           kanbanQtySap: /^Number$/,
-          componentQty: /^Kanban Qty$/
+          componentQty: /^Kanban Qty$/,
+          storageType: /^Typ$/
         },
         valueParsers: {
           _id: parseSapNumber,
           nc12: input => input.replace(/^0+/, ''),
           supplyArea: parseSapString,
           kanbanQtySap: parseSapNumber,
-          componentQty: parseSapNumber
+          componentQty: parseSapNumber,
+          storageType: parseSapNumber
         },
         itemDecorator: obj =>
         {
@@ -210,7 +213,8 @@ module.exports = function runKanbanJob(app, sapGuiModule, job, done)
             obj.supplyArea,
             Math.max(0, obj.kanbanQtySap),
             Math.max(0, obj.componentQty),
-            []
+            [],
+            obj.storageType
           ];
 
           if (!this.components.has(obj.nc12))

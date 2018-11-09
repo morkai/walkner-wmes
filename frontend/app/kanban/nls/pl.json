@@ -44,6 +44,7 @@
   "column:nc12": "12NC",
   "column:description": "Nazwa komponentu",
   "column:supplyArea": "Obszar<br>zaopatrzenia",
+  "column:storageType": "Strategia",
   "column:workCenter": "WorkCenter",
   "column:line": "Linia",
   "column:family": "Rodzina",

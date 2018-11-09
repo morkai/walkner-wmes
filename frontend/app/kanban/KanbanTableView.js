@@ -110,6 +110,11 @@ define([
     family: {
       width: 10
     },
+    storageType: {
+      type: 'integer',
+      width: 6,
+      rotated: true
+    },
     kanbanQtyUser: {
       type: 'integer',
       width: 6,
