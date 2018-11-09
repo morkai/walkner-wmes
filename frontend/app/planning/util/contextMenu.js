@@ -53,6 +53,8 @@ define([
 
       if ($menu)
       {
+        broker.publish('planning.contextMenu.hiding', {$menu: $menu});
+
         var options = $menu.data('options');
 
         $(window).off('.contextMenu.' + view.idPrefix);
@@ -273,7 +275,7 @@ define([
         }
       }
 
-      broker.publish('planning.contextMenu.shown');
+      broker.publish('planning.contextMenu.shown', {$menu: $menu});
     },
 
     position: function(view, top, left)

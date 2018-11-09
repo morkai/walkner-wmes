@@ -48,6 +48,15 @@ define([
 
     template: template,
 
+    localTopics: {
+
+      'planning.contextMenu.hiding': function(message)
+      {
+        message.$menu.find('[aria-describedby^="popover"]').popover('destroy');
+      }
+
+    },
+
     events: {
       'contextmenu': function()
       {
