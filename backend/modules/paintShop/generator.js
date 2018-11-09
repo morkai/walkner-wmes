@@ -935,7 +935,7 @@ module.exports = function(app, module)
         return false;
       }
 
-      if (!deepEqual(oldChildOrders, newChildOrder))
+      if (!deepEqual(oldChildOrder, newChildOrder))
       {
         return false;
       }

@@ -270,6 +270,13 @@ toUpdate.forEach(update =>
     db.whorderstatuses.insert(whOrderStatus);
   });
 
+  print(`\t...BehaviorObsCard`);
+  db.behaviorobscards.update(
+    fromTo('date', update, true, {line: oldProdLine._id}),
+    {$set: {line: newProdLine._id}},
+    {multi: true}
+  );
+
   print(`\t...Plan`);
   db.plansettings.find(fromTo('_id', update, true, {'lines._id': oldProdLine._id})).forEach(planSettings =>
   {
@@ -322,6 +329,17 @@ toUpdate.forEach(update =>
     });
 
     db.orderbommatchers.updateOne({_id: obm._id}, {$set: {matchers: obm.matchers}});
+  });
+
+  print(`\t...KanbanSupplyArea`);
+  db.kanbansupplyareas.find({'lines': update.oldOrgUnits.prodLine}).forEach(sa =>
+  {
+    sa.lines = sa.lines.map(line =>
+    {
+      return line === update.oldOrgUnits.prodLine ? update.newOrgUnits.prodLine : line;
+    });
+
+    db.kanbansupplyareas.updateOne({_id: sa._id}, {$set: {lines: sa.lines}});
   });
 
   print(`\t...Setting...`);
@@ -422,6 +440,20 @@ ignoredLines.value = ignoredLines.value
   .map(l => oldToNewProdLine[l] || l).join(',');
 
 db.settings.updateOne({_id: ignoredLines._id}, {$set: {value: ignoredLines.value}});
+
+db.kanbanentries.updateMany({}, {$set: {storageType: 151}});
+
+db.orders.find({startDate: {$gte: new Date("2018-08-01T00:00:00")}, psStatus: {$ne: null}}, {changes: 1}).forEach(o =>
+{
+  const changes = o.changes.filter(
+    c => !(c.user.label === 'System' && c.source === 'ps' && Object.keys(c.oldValues).length === 0)
+  );
+
+  if (changes.length !== o.changes.length)
+  {
+    db.orders.update({_id: o._id}, {$set: {changes: changes}});
+  }
+});
 
 // END MANUAL
 
