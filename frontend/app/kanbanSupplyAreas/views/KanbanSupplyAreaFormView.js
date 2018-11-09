@@ -67,10 +67,6 @@ define([
       FormView.prototype.initialize.apply(this, arguments);
 
       this.checkUniqueness = _.debounce(this.checkUniqueness.bind(this), 500);
-
-      this.prodLines = [{id: '-', text: this.t('lines:reserved')}].concat(orgUnits.getAllByType('prodLine')
-        .filter(function(l) { return !l.get('deactivatedAt'); })
-        .map(idAndLabel));
     },
 
     afterRender: function()
@@ -78,6 +74,17 @@ define([
       this.$lineRow = this.$id('lines').children().first().detach();
 
       FormView.prototype.afterRender.apply(this, arguments);
+
+      var usedLines = {};
+
+      _.forEach(this.model.get('lines'), function(line)
+      {
+        usedLines[line] = true;
+      });
+
+      this.prodLines = [{id: '-', text: this.t('lines:reserved')}].concat(orgUnits.getAllByType('prodLine')
+        .filter(function(l) { return !l.get('deactivatedAt') || usedLines[l.id]; })
+        .map(idAndLabel));
 
       if (this.options.editMode)
       {
