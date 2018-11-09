@@ -223,7 +223,10 @@ module.exports = function setUpGenerator(app, module)
 
         Order.aggregate([
           {$match: {
-            scheduledStartDate: {$gte: date.toDate()},
+            scheduledStartDate: {
+              $gte: date.toDate(),
+              $lt: date.clone().add(14, 'days').toDate()
+            },
             statuses: {$in: ['REL'], $nin: ['TECO', 'DLT', 'DLFL']},
             'bom.0': {$exists: true}
           }},
@@ -258,18 +261,21 @@ module.exports = function setUpGenerator(app, module)
         const maxPlanKey = moment.utc(Math.max(date.valueOf(), latestPlanTime, latestOrderTime)).format('YYYY-MM-DD');
         let nextPlanKey = null;
 
-        do
+        if (maxPlanKey !== today)
         {
-          nextPlanKey = now.add(1, 'day').format('YYYY-MM-DD');
-
-          if (nextPlanKey === today)
+          do
           {
-            continue;
-          }
+            nextPlanKey = now.add(1, 'day').format('YYYY-MM-DD');
 
-          plansToGenerate[nextPlanKey] = true;
+            if (nextPlanKey === today)
+            {
+              continue;
+            }
+
+            plansToGenerate[nextPlanKey] = true;
+          }
+          while (nextPlanKey !== maxPlanKey);
         }
-        while (nextPlanKey !== maxPlanKey);
 
         Object.keys(plansToGenerate).forEach(date => generatePlan(date));
       }
