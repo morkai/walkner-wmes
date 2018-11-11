@@ -320,6 +320,39 @@ define([
       }
     },
 
+    showPopover: function(item, itemEl)
+    {
+      var view = this;
+
+      if (view.popover !== null && view.popover.el === itemEl)
+      {
+        return;
+      }
+
+      view.hidePopover();
+
+      var canManage = view.options.editable !== false
+        && user.isAllowedTo('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST');
+      var managing = canManage && item.ended;
+      var $item = $(itemEl);
+
+      $item.popover({
+        trigger: 'manual',
+        container: view.el,
+        placement: 'top',
+        html: true,
+        title: t('prodShifts', 'timeline:popover:' + item.type),
+        content: view.renderPopover(item, managing)
+      });
+      $item.popover('show');
+      $item.data('bs.popover').$tip.addClass('popover-' + item.type);
+
+      view.popover = {
+        el: itemEl,
+        item: item
+      };
+    },
+
     hidePopover: function(delay)
     {
       if (this.timers && this.timers.hidePopover)
@@ -551,8 +584,6 @@ define([
     createChart: function()
     {
       var view = this;
-      var canManage = this.options.editable !== false
-        && user.isAllowedTo('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST');
       var itemHeight = this.options.itemHeight || 60;
       var downtimeHeight = Math.round(itemHeight * 0.5);
 
@@ -611,33 +642,7 @@ define([
         })
         .mouseover(function(item)
         {
-          var itemEl = d3.event.target;
-
-          if (view.popover !== null && view.popover.el === itemEl)
-          {
-            return;
-          }
-
-          view.hidePopover();
-
-          var managing = canManage && item.ended;
-          var $item = $(itemEl);
-
-          $item.popover({
-            trigger: 'manual',
-            container: view.el,
-            placement: 'top',
-            html: true,
-            title: t('prodShifts', 'timeline:popover:' + item.type),
-            content: view.renderPopover(item, managing)
-          });
-          $item.popover('show');
-          $item.data('bs.popover').$tip.addClass('popover-' + item.type);
-
-          view.popover = {
-            el: itemEl,
-            item: item
-          };
+          view.showPopover(item, d3.event.target);
         })
         .mouseout(function()
         {
@@ -897,16 +902,40 @@ define([
       });
     },
 
-    highlightItem: function(modelId)
+    highlightItem: function(modelId, showPopover)
     {
-      var $item = this.$('.timeline-item[data-model-id="' + modelId + '"]');
+      var view = this;
+      var $item = view.$('.timeline-item[data-model-id="' + modelId + '"]');
 
       if ($item.length)
       {
         $item[0].classList.add('is-highlighted');
       }
 
-      this.highlightedItem = modelId;
+      view.highlightedItem = modelId;
+
+      if (!showPopover)
+      {
+        return;
+      }
+
+      var item = null;
+
+      [1, 2].forEach(function(d)
+      {
+        view.datum[d].times.forEach(function(itemCandidate)
+        {
+          if (itemCandidate.data && itemCandidate.data._id === modelId)
+          {
+            item = itemCandidate;
+          }
+        });
+      });
+
+      if (item)
+      {
+        view.showPopover(item, $item[0]);
+      }
     }
 
   });

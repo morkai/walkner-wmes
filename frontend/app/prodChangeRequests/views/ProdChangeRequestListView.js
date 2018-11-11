@@ -667,7 +667,7 @@ define([
       this.setView('.prodChangeRequests-timeline', this.timelineView);
 
       this.timelineView.render();
-      this.timelineView.highlightItem(changeRequest.getModelId());
+      this.timelineView.highlightItem(changeRequest.getModelId(), true);
     },
 
     handleProdModelChange: function(data, topic)
