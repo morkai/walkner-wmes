@@ -94,7 +94,7 @@ let dumpCmd = format(
 if (config.user)
 {
   dumpCmd += format(
-    ' --dumpDbUsersAndRoles -u "%s" -p "%s" --authenticationDatabase "%s"',
+    ' -u "%s" -p "%s" --authenticationDatabase "%s"',
     config.user,
     config.pass,
     config.authDb
@@ -102,6 +102,11 @@ if (config.user)
 }
 
 const dumpCmds = [dumpCmd];
+
+if (config.user)
+{
+  dumpCmds[0] += ' --dumpDbUsersAndRoles';
+}
 
 excludeCollections.forEach(collectionName =>
 {
