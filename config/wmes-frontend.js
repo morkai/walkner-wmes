@@ -342,7 +342,9 @@ exports.express = {
   },
   sessionStore: {
     touchInterval: 10 * 60 * 1000,
-    touchChance: 0
+    touchChance: 0,
+    gcInterval: 8 * 3600,
+    cacheInMemory: true
   },
   cookieSecret: '1ee7\\/\\/mes',
   ejsAmdHelpers: {

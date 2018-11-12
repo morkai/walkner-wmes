@@ -51,6 +51,18 @@ function MongoStore(db, options)
 
   /**
    * @private
+   * @type {boolean}
+   */
+  this.cacheInMemory = options.cacheInMemory === true;
+
+  /**
+   * @private
+   * @type {Map<string, object>}
+   */
+  this.cache = new Map();
+
+  /**
+   * @private
    * @type {number|null}
    */
   this.gcTimer = null;
@@ -106,7 +118,12 @@ MongoStore.Options = {
   /**
    * @type {number}
    */
-  touchInterval: 0
+  touchInterval: 0,
+
+  /**
+   * @type {boolean}
+   */
+  cacheInMemory: false
 };
 
 util.inherits(MongoStore, Store);
@@ -123,8 +140,14 @@ MongoStore.prototype.touch = function(sid, session, done)
 
   const sessions = this.collection();
   const expires = Date.parse(session.cookie.expires) || (Date.now() + this.defaultExpirationTime);
+  const update = {expires, updatedAt: now};
 
-  sessions.updateOne({_id: sid}, {$set: {expires, updatedAt: now}}, err =>
+  if (this.cache.has(sid))
+  {
+    Object.assign(this.cache.get(sid), update);
+  }
+
+  sessions.updateOne({_id: sid}, {$set: update}, err =>
   {
     if (done)
     {
@@ -141,15 +164,26 @@ MongoStore.prototype.get = function(sid, done)
 {
   const store = this;
 
-  this.collection().findOne({_id: sid}, {_id: 0, data: 1, updatedAt: 1}, (err, doc) =>
+  if (store.cache.has(sid))
+  {
+    handleGet(null, store.cache.get(sid));
+  }
+  else
+  {
+    store.collection().findOne({_id: sid}, handleGet);
+  }
+
+  function handleGet(err, doc)
   {
     if (err)
     {
       return done(err);
     }
 
-    if (doc === null)
+    if (!doc)
     {
+      store.cache.delete(sid);
+
       return done();
     }
 
@@ -162,11 +196,16 @@ MongoStore.prototype.get = function(sid, done)
     {
       session.updatedAt = doc.updatedAt;
 
+      if (store.cacheInMemory && !store.cache.has(sid))
+      {
+        store.cache.set(sid, doc);
+      }
+
       return done(null, session);
     }
 
     return store.destroy(sid, done);
-  });
+  }
 };
 
 /**
@@ -190,6 +229,11 @@ MongoStore.prototype.set = function(sid, session, done)
     doc.expires = now + this.defaultExpirationTime;
   }
 
+  if (this.cacheInMemory)
+  {
+    this.cache.set(sid, doc);
+  }
+
   sessions.replaceOne({_id: sid}, doc, {upsert: true}, err =>
   {
     if (done)
@@ -205,6 +249,8 @@ MongoStore.prototype.set = function(sid, session, done)
  */
 MongoStore.prototype.destroy = function(sid, done)
 {
+  this.cache.delete(sid);
+
   this.collection().deleteOne({_id: sid}, err =>
   {
     if (done)
@@ -219,6 +265,8 @@ MongoStore.prototype.destroy = function(sid, done)
  */
 MongoStore.prototype.clear = function(done)
 {
+  this.cache.clear();
+
   this.collection().drop(err =>
   {
     if (done)
@@ -241,6 +289,8 @@ MongoStore.prototype.length = function(done)
  */
 MongoStore.prototype.gc = function(done)
 {
+  this.cache.clear();
+
   this.collection().deleteMany({expires: {$lte: Date.now()}}, err =>
   {
     if (done)
@@ -252,6 +302,8 @@ MongoStore.prototype.gc = function(done)
 
 MongoStore.prototype.destruct = function()
 {
+  this.cache.clear();
+
   this.clearGcTimer();
 
   this.db.removeListener('open', this.onOpen);
@@ -302,12 +354,11 @@ MongoStore.prototype.clearGcTimer = function()
 MongoStore.prototype.scheduleGc = function()
 {
   this.gcTimer = setTimeout(
-    function(store)
+    () =>
     {
-      store.gcTimer = null;
-      store.gc(function() { store.scheduleGc(); });
+      this.gcTimer = null;
+      this.gc(this.scheduleGc.bind(this));
     },
-    this.gcInterval,
-    this
+    this.gcInterval
   );
 };
