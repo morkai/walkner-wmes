@@ -11,7 +11,6 @@ define([
   'app/core/View',
   'app/core/util/getShiftStartInfo',
   'app/production/snManager',
-  'app/production/views/BomCheckerDialogView',
   'app/heff/templates/page'
 ], function(
   _,
@@ -24,7 +23,6 @@ define([
   View,
   getShiftStartInfo,
   snManager,
-  BomCheckerDialogView,
   template
 ) {
   'use strict';
@@ -52,8 +50,7 @@ define([
     },
 
     localTopics: {
-      'socket.connected': 'loadData',
-      'production.taktTime.snScanned': 'onSnScanned'
+      'socket.connected': 'loadData'
     },
 
     events: {
@@ -119,7 +116,7 @@ define([
         time: null
       };
 
-      $(window).on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
+      snManager.bind(this);
     },
 
     destroy: function()
@@ -307,223 +304,6 @@ define([
 
       this.actionTimer.action = null;
       this.actionTimer.time = null;
-    },
-
-    onKeyDown: function(e)
-    {
-      var tagName = e.target.tagName;
-      var formField = (tagName === 'INPUT' && e.target.type !== 'BUTTON')
-        || tagName === 'SELECT'
-        || tagName === 'TEXTAREA';
-
-      if (e.keyCode === 8 && (!formField || e.target.readOnly || e.target.disabled))
-      {
-        e.preventDefault();
-      }
-
-      snManager.handleKeyboardEvent(e);
-    },
-
-    onSnScanned: function(scanInfo)
-    {
-      if (viewport.currentDialog)
-      {
-        if (!(viewport.currentDialog instanceof BomCheckerDialogView))
-        {
-          return;
-        }
-
-        if (scanInfo.orderNo)
-        {
-          this.swapBomCheckerIfNeeded(scanInfo);
-        }
-        else
-        {
-          viewport.currentDialog.onSnScanned(scanInfo);
-        }
-
-        return;
-      }
-
-      if (scanInfo.orderNo)
-      {
-        this.createCheckSn(scanInfo);
-      }
-      else
-      {
-        this.resolveBomCheck(scanInfo);
-      }
-    },
-
-    createCheckSn: function(scanInfo, bomScanInfo)
-    {
-      if (snManager.contains(scanInfo._id))
-      {
-        return this.showSnMessage(scanInfo, 'error', 'ALREADY_USED');
-      }
-
-      var logEntry = {
-        _id: null,
-        instanceId: window.INSTANCE_ID,
-        type: 'checkSerialNumber',
-        data: scanInfo,
-        createdAt: time.getMoment().toDate(),
-        creator: user.getInfo(),
-        prodLine: this.model.prodLineId
-      };
-
-      scanInfo.sapTaktTime = -1;
-
-      this.checkSn(logEntry, bomScanInfo);
-    },
-
-    checkSn: function(logEntry, bomScanInfo)
-    {
-      var view = this;
-      var scanInfo = logEntry.data;
-
-      view.showSnMessage(scanInfo, 'warning', 'CHECKING');
-
-      var req = view.ajax({
-        method: 'POST',
-        url: '/production/checkSerialNumber?bomCheck=' + (bomScanInfo ? 1 : 0),
-        data: JSON.stringify(logEntry),
-        timeout: 6000
-      });
-
-      req.fail(function(jqXhr)
-      {
-        if (jqXhr.status < 200)
-        {
-          view.showSnMessage(scanInfo, 'success', 'SUCCESS');
-
-          return;
-        }
-
-        view.showSnMessage(scanInfo, 'error', 'SERVER_FAILURE');
-      });
-
-      req.done(function(res)
-      {
-        if (res.result === 'CHECK_BOM')
-        {
-          view.hideSnMessage();
-          view.showBomChecker(res, bomScanInfo);
-        }
-        else if (res.result === 'SUCCESS')
-        {
-          view.showSnMessage(res.serialNumber, 'success', 'SUCCESS');
-        }
-        else
-        {
-          if (res.result === 'ALREADY_USED')
-          {
-            snManager.add(res.serialNumber);
-          }
-
-          view.showSnMessage(scanInfo, 'error', res.result);
-        }
-      });
-    },
-
-    swapBomCheckerIfNeeded: function(newScanInfo)
-    {
-      var oldScanInfo = viewport.currentDialog.model.logEntry.data;
-
-      if (newScanInfo._id === oldScanInfo._id)
-      {
-        return;
-      }
-
-      if ((newScanInfo.serialNo === 0 && /^0+$/.test(newScanInfo.orderNo))
-        || newScanInfo.orderNo !== oldScanInfo.orderNo)
-      {
-        viewport.closeDialog();
-
-        this.createCheckSn(newScanInfo);
-      }
-      else
-      {
-        viewport.currentDialog.onSnScanned(newScanInfo);
-      }
-    },
-
-    resolveBomCheck: function(bomScanInfo)
-    {
-      var orderScanInfo = {
-        _id: '0000.000000000.0000',
-        orderNo: '000000000',
-        serialNo: 0,
-        scannedAt: bomScanInfo.scannedAt
-      };
-
-      this.createCheckSn(orderScanInfo, bomScanInfo);
-    },
-
-    showBomChecker: function(model, bomScanInfo)
-    {
-      if (bomScanInfo)
-      {
-        model.logEntry.data._id = '0000.000000000.0000';
-        model.logEntry.data.serialNo = 0;
-      }
-
-      var view = this;
-      var dialogView = new BomCheckerDialogView({
-        model: model,
-        snMessage: {
-          show: view.showSnMessage.bind(view),
-          hide: view.hideSnMessage.bind(view)
-        }
-      });
-
-      view.listenToOnce(dialogView, 'dialog:shown', function()
-      {
-        if (bomScanInfo)
-        {
-          dialogView.onSnScanned(bomScanInfo);
-        }
-      });
-
-      view.listenToOnce(dialogView, 'checked', function(logEntry)
-      {
-        viewport.closeDialog();
-
-        view.checkSn(logEntry);
-      });
-
-      viewport.showDialog(dialogView, t('production', 'bomChecker:title'));
-    },
-
-    showSnMessage: function(scanInfo, severity, message)
-    {
-      var $message = this.$id('snMessage');
-
-      this.$id('snMessage-text').html(t('production', 'snMessage:' + message));
-      this.$id('snMessage-scannedValue').text(
-        scanInfo._id.length > 43 ? (scanInfo._id.substring(0, 40) + '...') : scanInfo._id
-      );
-      this.$id('snMessage-orderNo').text(scanInfo.orderNo || '-');
-      this.$id('snMessage-serialNo').text(scanInfo.serialNo || '-');
-
-      $message
-        .css({top: '50%', marginTop: '-80px'})
-        .removeClass('hidden is-success is-error is-warning')
-        .addClass('is-' + severity);
-
-      if (this.timers.hideSnMessage)
-      {
-        clearTimeout(this.timers.hideSnMessage);
-      }
-
-      this.timers.hideSnMessage = setTimeout(this.hideSnMessage.bind(this), 6000);
-    },
-
-    hideSnMessage: function()
-    {
-      this.timers.hideSnMessage = null;
-
-      this.$id('snMessage').addClass('hidden');
     }
 
   });

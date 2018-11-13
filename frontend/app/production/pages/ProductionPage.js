@@ -26,7 +26,6 @@ define([
   '../views/IsaView',
   '../views/TaktTimeView',
   '../views/SpigotCheckerView',
-  '../views/BomCheckerDialogView',
   'app/production/templates/productionPage',
   'app/production/templates/duplicateWarning'
 ], function(
@@ -55,7 +54,6 @@ define([
   IsaView,
   TaktTimeView,
   SpigotCheckerView,
-  BomCheckerDialogView,
   productionPageTemplate,
   duplicateWarningTemplate
 ) {
@@ -108,8 +106,7 @@ define([
         }
       },
       'production.locked': 'onProductionLocked',
-      'production.duplicateDetected': 'onDuplicateDetected',
-      'production.taktTime.snScanned': 'onSnScanned'
+      'production.duplicateDetected': 'onDuplicateDetected'
     },
 
     events: {
@@ -186,13 +183,14 @@ define([
 
       $(window)
         .on('resize.' + this.idPrefix, this.onWindowResize)
-        .on('beforeunload.' + this.idPrefix, this.onBeforeUnload)
-        .on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
+        .on('beforeunload.' + this.idPrefix, this.onBeforeUnload);
 
       if (IS_EMBEDDED)
       {
         $(window).on('contextmenu.' + this.idPrefix, function(e) { e.preventDefault(); });
       }
+
+      snManager.bind(this);
     },
 
     setUpLayout: function(layout)
@@ -469,24 +467,6 @@ define([
       if (IS_EMBEDDED)
       {
         window.parent.postMessage({type: 'ready', app: 'operator'}, '*');
-      }
-    },
-
-    onKeyDown: function(e)
-    {
-      var tagName = e.target.tagName;
-      var formField = (tagName === 'INPUT' && e.target.type !== 'BUTTON')
-        || tagName === 'SELECT'
-        || tagName === 'TEXTAREA';
-
-      if (e.keyCode === 8 && (!formField || e.target.readOnly || e.target.disabled))
-      {
-        e.preventDefault();
-      }
-
-      if (this.model.isTaktTimeEnabled())
-      {
-        snManager.handleKeyboardEvent(e);
       }
     },
 
@@ -997,38 +977,7 @@ define([
       }
     },
 
-    onSnScanned: function(scanInfo)
-    {
-      if (viewport.currentDialog)
-      {
-        if (!(viewport.currentDialog instanceof BomCheckerDialogView))
-        {
-          return;
-        }
-
-        if (scanInfo.orderNo)
-        {
-          this.swapBomCheckerIfNeeded(scanInfo);
-        }
-        else
-        {
-          viewport.currentDialog.onSnScanned(scanInfo);
-        }
-
-        return;
-      }
-
-      if (scanInfo.orderNo)
-      {
-        this.createCheckSn(scanInfo);
-      }
-      else
-      {
-        this.resolveBomCheck(scanInfo);
-      }
-    },
-
-    createCheckSn: function(scanInfo, bomScanInfo)
+    createCheckSn: function(scanInfo, bomScanInfo, checkSn)
     {
       var page = this;
       var model = page.model;
@@ -1064,139 +1013,12 @@ define([
 
         prodLog.record(model, logEntry);
 
-        return this.showSnMessage(scanInfo, 'error', error);
-      }
-
-      page.checkSn(logEntry, bomScanInfo);
-    },
-
-    checkSn: function(logEntry, bomScanInfo)
-    {
-      var page = this;
-      var model = page.model;
-
-      page.showSnMessage(logEntry.data, 'warning', 'CHECKING');
-
-      var req = this.ajax({
-        method: 'POST',
-        url: '/production/checkSerialNumber?bomCheck=' + (bomScanInfo ? 1 : 0),
-        data: JSON.stringify(logEntry),
-        timeout: 6000
-      });
-
-      req.fail(function(jqXhr)
-      {
-        if (jqXhr.status < 200)
-        {
-          model.updateTaktTimeLocally(logEntry);
-
-          page.showSnMessage(logEntry.data, 'success', 'SUCCESS');
-
-          return;
-        }
-
-        logEntry.data.error = 'SERVER_FAILURE';
-
-        prodLog.record(model, logEntry);
-
-        page.showSnMessage(logEntry.data, 'error', 'SERVER_FAILURE');
-      });
-
-      req.done(function(res)
-      {
-        if (res.result === 'CHECK_BOM')
-        {
-          page.hideSnMessage();
-          page.showBomChecker(res, bomScanInfo);
-        }
-        else if (res.result === 'SUCCESS')
-        {
-          model.updateTaktTime(res);
-          page.showSnMessage(res.serialNumber, 'success', 'SUCCESS');
-        }
-        else
-        {
-          if (res.result === 'ALREADY_USED')
-          {
-            snManager.add(res.serialNumber);
-          }
-
-          logEntry.data.error = res.result;
-
-          prodLog.record(model, logEntry);
-
-          page.showSnMessage(logEntry.data, 'error', res.result);
-        }
-      });
-    },
-
-    swapBomCheckerIfNeeded: function(newScanInfo)
-    {
-      var oldScanInfo = viewport.currentDialog.model.logEntry.data;
-
-      if (newScanInfo._id === oldScanInfo._id)
-      {
-        return;
-      }
-
-      if ((newScanInfo.serialNo === 0 && /^0+$/.test(newScanInfo.orderNo))
-        || newScanInfo.orderNo !== oldScanInfo.orderNo)
-      {
-        viewport.closeDialog();
-
-        this.createCheckSn(newScanInfo);
+        snManager.showMessage(scanInfo, 'error', error);
       }
       else
       {
-        viewport.currentDialog.onSnScanned(newScanInfo);
+        checkSn(logEntry, bomScanInfo);
       }
-    },
-
-    resolveBomCheck: function(bomScanInfo)
-    {
-      var orderScanInfo = {
-        _id: '0000.000000000.0000',
-        orderNo: '000000000',
-        serialNo: 0,
-        scannedAt: bomScanInfo.scannedAt
-      };
-
-      this.createCheckSn(orderScanInfo, bomScanInfo);
-    },
-
-    showBomChecker: function(model, bomScanInfo)
-    {
-      if (bomScanInfo)
-      {
-        model.logEntry.data._id = '0000.000000000.0000';
-        model.logEntry.data.serialNo = 0;
-      }
-
-      var view = this;
-      var dialogView = new BomCheckerDialogView({
-        model: model,
-        snMessage: {
-          show: view.showSnMessage.bind(view),
-          hide: view.hideSnMessage.bind(view)
-        }
-      });
-
-      view.listenToOnce(dialogView, 'dialog:shown', function()
-      {
-        if (bomScanInfo)
-        {
-          dialogView.onSnScanned(bomScanInfo);
-        }
-      });
-
-      view.listenToOnce(dialogView, 'checked', function(logEntry)
-      {
-        viewport.closeDialog();
-
-        view.checkSn(logEntry);
-      });
-
-      viewport.showDialog(dialogView, t('production', 'bomChecker:title'));
     },
 
     onSnChecked: function(data)
@@ -1205,40 +1027,6 @@ define([
       {
         this.model.updateTaktTime(data);
       }
-    },
-
-    showSnMessage: function(scanInfo, severity, message)
-    {
-      var $message = this.$id('snMessage');
-      var $actions = this.$('.production-actions');
-
-      this.$id('snMessage-text').html(t('production', 'snMessage:' + message));
-      this.$id('snMessage-scannedValue').text(
-        scanInfo._id.length > 43 ? (scanInfo._id.substring(0, 40) + '...') : scanInfo._id
-      );
-      this.$id('snMessage-orderNo').text(scanInfo.orderNo || '-');
-      this.$id('snMessage-serialNo').text(scanInfo.serialNo || '-');
-
-      $message
-        .css({
-          top: ($actions.position().top + parseInt($actions.css('marginTop'), 10)) + 'px'
-        })
-        .removeClass('hidden is-success is-error is-warning')
-        .addClass('is-' + severity);
-
-      if (this.timers.hideSnMessage)
-      {
-        clearTimeout(this.timers.hideSnMessage);
-      }
-
-      this.timers.hideSnMessage = setTimeout(this.hideSnMessage.bind(this), 6000);
-    },
-
-    hideSnMessage: function()
-    {
-      this.timers.hideSnMessage = null;
-
-      this.$id('snMessage').addClass('hidden');
     },
 
     startActionTimer: function(action, e)

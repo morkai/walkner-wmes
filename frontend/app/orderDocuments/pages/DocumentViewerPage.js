@@ -6,6 +6,7 @@ define([
   'hammer',
   'app/user',
   'app/core/View',
+  'app/production/snManager',
   '../views/DocumentViewerControlsView',
   '../views/DocumentViewerPreviewView',
   'app/orderDocuments/templates/page'
@@ -15,6 +16,7 @@ define([
   Hammer,
   user,
   View,
+  snManager,
   DocumentViewerControlsView,
   DocumentViewerPreviewView,
   template
@@ -56,8 +58,8 @@ define([
         model: this.model
       });
 
-      this.setView('#' + this.idPrefix + '-controls', this.controlsView);
-      this.setView('#' + this.idPrefix + '-preview', this.previewView);
+      this.setView('#-controls', this.controlsView);
+      this.setView('#-preview', this.previewView);
 
       $(window).on('resize.' + this.idPrefix, _.debounce(this.resize.bind(this), 1));
       $(window).on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
@@ -82,6 +84,8 @@ define([
       this.listenTo(this.previewView, 'fileLoaded', this.onFileLoaded);
 
       this.socket.on('orderDocuments.remoteOrderUpdated', this.onRemoteOrderUpdated.bind(this));
+
+      snManager.bind(this);
     },
 
     destroy: function()

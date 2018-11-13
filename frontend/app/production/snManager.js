@@ -2,12 +2,27 @@
 
 define([
   'underscore',
+  'jquery',
   'app/broker',
-  'app/viewport'
+  'app/viewport',
+  'app/i18n',
+  'app/time',
+  'app/user',
+  'app/data/prodLog',
+  'app/production/views/BomCheckerDialogView',
+  'app/production/templates/snMessage',
+  'i18n!app/nls/production'
 ], function(
   _,
+  $,
   broker,
-  viewport
+  viewport,
+  t,
+  time,
+  user,
+  prodLog,
+  BomCheckerDialogView,
+  snMessageTemplate
 ) {
   'use strict';
 
@@ -63,6 +78,7 @@ define([
   window.fakeSN = handleScanBuffer;
 
   return {
+    // TODO remove
     handleKeyboardEvent: function(e)
     {
       if (e.target.classList.contains('form-control')
@@ -140,6 +156,311 @@ define([
           value: hourlyQuantityDone
         }
       };
+    },
+    showMessage: function(scanInfo, severity, message)
+    {
+      if (!this.view)
+      {
+        return;
+      }
+
+      var $message = $('#snMessage');
+
+      if (!$message.length)
+      {
+        $message = $(snMessageTemplate()).appendTo('body');
+        $message.on('click', this.hideMessage.bind(this));
+      }
+
+      var scannedValue = scanInfo._id.length > 43
+        ? (scanInfo._id.substring(0, 40) + '...')
+        : scanInfo._id;
+
+      $('#snMessage-text').html(t('production', 'snMessage:' + message));
+      $('#snMessage-scannedValue').text(scannedValue);
+      $('#snMessage-orderNo').text(scanInfo.orderNo || '-');
+      $('#snMessage-serialNo').text(scanInfo.serialNo || '-');
+
+      $message
+        .css({top: '50%', marginTop: '-80px'})
+        .removeClass('hidden is-success is-error is-warning')
+        .addClass('is-' + severity);
+
+      if (this.view.timers.hideSnMessage)
+      {
+        clearTimeout(this.view.timers.hideSnMessage);
+      }
+
+      this.view.timers.hideSnMessage = setTimeout(this.hideMessage.bind(this), 6000);
+    },
+    hideMessage: function()
+    {
+      if (!this.view)
+      {
+        return;
+      }
+
+      if (this.view.timers.hideSnMessage)
+      {
+        clearTimeout(this.view.timers.hideSnMessage);
+      }
+
+      this.view.timers.hideSnMessage = null;
+
+      $('#snMessage').addClass('hidden');
+    },
+    bind: function(view)
+    {
+      var snManager = this;
+
+      if (snManager.view)
+      {
+        throw new Error('snManager already bound!');
+      }
+
+      snManager.view = view;
+
+      var originalDestroy = view.destroy;
+
+      view.destroy = function()
+      {
+        $(window).off('keydown', onKeyDown);
+
+        originalDestroy.apply(view, arguments);
+      };
+
+      view.broker.subscribe('production.taktTime.snScanned', onSnScanned);
+
+      $(window).on('keydown', onKeyDown);
+
+      function onKeyDown(e)
+      {
+        var tagName = e.target.tagName;
+        var formField = (tagName === 'INPUT' && e.target.type !== 'BUTTON')
+          || tagName === 'SELECT'
+          || tagName === 'TEXTAREA';
+
+        if (e.keyCode === 8 && (!formField || e.target.readOnly || e.target.disabled))
+        {
+          e.preventDefault();
+        }
+
+        if (e.target.classList.contains('form-control')
+          && e.target.dataset.snAccept === undefined)
+        {
+          return;
+        }
+
+        if (e.key && e.key.length === 1)
+        {
+          scanBuffer += e.key.toUpperCase();
+
+          clearTimeout(handleTimeout);
+          handleTimeout = setTimeout(handleScanBuffer, 50);
+        }
+      }
+
+      function onSnScanned(scanInfo)
+      {
+        if (viewport.currentDialog)
+        {
+          if (!(viewport.currentDialog instanceof BomCheckerDialogView))
+          {
+            return;
+          }
+
+          if (scanInfo.orderNo)
+          {
+            swapBomCheckerIfNeeded(scanInfo);
+          }
+          else
+          {
+            viewport.currentDialog.onSnScanned(scanInfo);
+          }
+
+          return;
+        }
+
+        if (scanInfo.orderNo)
+        {
+          createCheckSn(scanInfo);
+        }
+        else
+        {
+          resolveBomCheck(scanInfo);
+        }
+      }
+
+      function swapBomCheckerIfNeeded(newScanInfo)
+      {
+        var oldScanInfo = viewport.currentDialog.model.logEntry.data;
+
+        if (newScanInfo._id === oldScanInfo._id)
+        {
+          return;
+        }
+
+        if ((newScanInfo.serialNo === 0 && /^0+$/.test(newScanInfo.orderNo))
+          || newScanInfo.orderNo !== oldScanInfo.orderNo)
+        {
+          viewport.closeDialog();
+
+          createCheckSn(newScanInfo);
+        }
+        else
+        {
+          viewport.currentDialog.onSnScanned(newScanInfo);
+        }
+      }
+
+      function resolveBomCheck(bomScanInfo)
+      {
+        var orderScanInfo = {
+          _id: '0000.000000000.0000',
+          orderNo: '000000000',
+          serialNo: 0,
+          scannedAt: bomScanInfo.scannedAt
+        };
+
+        createCheckSn(orderScanInfo, bomScanInfo);
+      }
+
+      function createCheckSn(scanInfo, bomScanInfo)
+      {
+        if (view.createCheckSn)
+        {
+          view.createCheckSn(scanInfo, bomScanInfo, checkSn);
+        }
+        else
+        {
+          if (snManager.contains(scanInfo._id))
+          {
+            return snManager.showMessage(scanInfo, 'error', 'ALREADY_USED');
+          }
+
+          var logEntry = {
+            _id: null,
+            instanceId: window.INSTANCE_ID,
+            type: 'checkSerialNumber',
+            data: scanInfo,
+            createdAt: time.getMoment().toDate(),
+            creator: user.getInfo(),
+            prodLine: window.WMES_LINE_ID
+          };
+
+          scanInfo.sapTaktTime = -1;
+
+          checkSn(logEntry, bomScanInfo);
+        }
+      }
+
+      function checkSn(logEntry, bomScanInfo)
+      {
+        var model = view.model;
+        var updateModel = model && model.updateTaktTime && model.updateTaktTimeLocally;
+
+        snManager.showMessage(logEntry.data, 'warning', 'CHECKING');
+
+        var req = view.ajax({
+          method: 'POST',
+          url: '/production/checkSerialNumber?bomCheck=' + (bomScanInfo ? 1 : 0),
+          data: JSON.stringify(logEntry),
+          timeout: 6000
+        });
+
+        req.fail(function(jqXhr)
+        {
+          if (jqXhr.status < 200)
+          {
+            if (updateModel)
+            {
+              model.updateTaktTimeLocally(logEntry);
+            }
+
+            snManager.showMessage(logEntry.data, 'success', 'SUCCESS');
+
+            return;
+          }
+
+          if (updateModel)
+          {
+            logEntry.data.error = 'SERVER_FAILURE';
+
+            prodLog.record(model, logEntry);
+          }
+
+          snManager.showMessage(logEntry.data, 'error', 'SERVER_FAILURE');
+        });
+
+        req.done(function(res)
+        {
+          if (res.result === 'CHECK_BOM')
+          {
+            showBomChecker(res, bomScanInfo);
+          }
+          else if (res.result === 'SUCCESS')
+          {
+            if (updateModel)
+            {
+              model.updateTaktTime(res);
+            }
+
+            snManager.showMessage(res.serialNumber, 'success', 'SUCCESS');
+          }
+          else
+          {
+            if (res.result === 'ALREADY_USED')
+            {
+              snManager.add(res.serialNumber);
+            }
+
+            if (updateModel)
+            {
+              logEntry.data.error = res.result;
+
+              prodLog.record(model, logEntry);
+            }
+
+            snManager.showMessage(logEntry.data, 'error', res.result);
+          }
+        });
+      }
+
+      function showBomChecker(model, bomScanInfo)
+      {
+        snManager.hideMessage();
+
+        if (bomScanInfo)
+        {
+          model.logEntry.data._id = '0000.000000000.0000';
+          model.logEntry.data.serialNo = 0;
+        }
+
+        var dialogView = new BomCheckerDialogView({
+          model: model,
+          snMessage: {
+            show: snManager.showMessage.bind(snManager),
+            hide: snManager.hideMessage.bind(snManager)
+          }
+        });
+
+        view.listenToOnce(dialogView, 'dialog:shown', function()
+        {
+          if (bomScanInfo)
+          {
+            dialogView.onSnScanned(bomScanInfo);
+          }
+        });
+
+        view.listenToOnce(dialogView, 'checked', function(logEntry)
+        {
+          viewport.closeDialog();
+
+          checkSn(logEntry);
+        });
+
+        viewport.showDialog(dialogView, t('production', 'bomChecker:title'));
+      }
     }
   };
 });
