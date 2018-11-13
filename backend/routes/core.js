@@ -35,8 +35,19 @@ module.exports = function startCoreRoutes(app, express)
 
   express.get('/redirect', redirectRoute);
 
-  express.get('/time', function(req, res)
+  express.options('/time', (req, res) =>
   {
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    res.end();
+  });
+
+  express.get('/time', (req, res) =>
+  {
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
     res.send(Date.now().toString());
   });
 
@@ -60,7 +71,7 @@ module.exports = function startCoreRoutes(app, express)
       DASHBOARD_URL_AFTER_LOG_IN: DASHBOARD_URL_AFTER_LOG_IN
     };
 
-    _.forEach(app.options.dictionaryModules, function(appDataKey, moduleName)
+    _.forEach(app.options.dictionaryModules, (appDataKey, moduleName) =>
     {
       const dictionaryModule = app[moduleName];
 
