@@ -21,6 +21,7 @@
     "PROPERTY:name": "Name",
     "PROPERTY:division": "Division",
     "PROPERTY:order": "Require order?",
+    "PROPERTY:position": "Position",
 
     "ordersDivision": "order's production center",
 

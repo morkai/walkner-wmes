@@ -39,7 +39,8 @@ define([
           columns: [
             {id: 'name', className: 'is-min'},
             {id: 'division'},
-            {id: 'order', className: 'is-min'}
+            {id: 'order', className: 'is-min'},
+            {id: 'position', className: 'is-min'}
           ]
         });
       }

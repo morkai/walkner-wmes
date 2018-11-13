@@ -18,6 +18,10 @@ module.exports = function setupQiKindModel(app, mongoose)
     order: {
       type: Boolean,
       default: true
+    },
+    position: {
+      type: Number,
+      default: 0
     }
   }, {
     id: false

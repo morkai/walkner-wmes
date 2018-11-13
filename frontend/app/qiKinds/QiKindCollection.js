@@ -13,7 +13,9 @@ define([
 
     model: QiKind,
 
-    rqlQuery: 'sort(name)'
+    rqlQuery: 'sort(position)',
+
+    comparator: 'position'
 
   });
 });

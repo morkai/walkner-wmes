@@ -17,6 +17,10 @@
           <%- t('qiKinds', 'PROPERTY:order') %>
         </label>
       </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-position" class="control-label"><%- t('qiKinds', 'PROPERTY:position') %></label>
+        <input id="<%- idPrefix %>-position" type="number" name="position">
+      </div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>
