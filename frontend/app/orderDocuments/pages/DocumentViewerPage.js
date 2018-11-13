@@ -3,7 +3,6 @@
 define([
   'underscore',
   'jquery',
-  'hammer',
   'app/user',
   'app/core/View',
   'app/production/snManager',
@@ -46,7 +45,6 @@ define([
     initialize: function()
     {
       this.loadedFilesCount = 0;
-      this.hammer = null;
       this.$els = {
         controls: null,
         viewer: null
@@ -92,12 +90,6 @@ define([
     {
       $('body').removeClass('no-overflow orderDocuments');
       $(window).off('.' + this.idPrefix);
-
-      if (this.hammer)
-      {
-        this.hammer.destroy();
-        this.hammer = null;
-      }
     },
 
     load: function(when)
@@ -105,15 +97,6 @@ define([
       this.model.load();
 
       return when();
-    },
-
-    beforeRender: function()
-    {
-      if (this.hammer)
-      {
-        this.hammer.destroy();
-        this.hammer = null;
-      }
     },
 
     afterRender: function()
@@ -129,16 +112,6 @@ define([
 
       if (IS_EMBEDDED)
       {
-        this.hammer = new Hammer(document.body);
-
-        this.hammer.on('swipe', function(e)
-        {
-          if (e.deltaX > 0)
-          {
-            window.parent.postMessage({type: 'switch', app: 'documents'}, '*');
-          }
-        });
-
         window.parent.postMessage({type: 'ready', app: 'documents'}, '*');
       }
     },
