@@ -13,7 +13,7 @@ module.exports = function setUpPingsRoutes(app, module)
 
   express.get('/ping', setPingHeaders, (req, res) => res.send('pong'));
 
-  express.get('/pings', userModule.auth('SUPER'), express.crud.browseRoute.bind(null, app, Ping));
+  express.get('/pings', userModule.auth('LOCAL', 'SUPER'), express.crud.browseRoute.bind(null, app, Ping));
 
   function setPingHeaders(req, res, next)
   {
