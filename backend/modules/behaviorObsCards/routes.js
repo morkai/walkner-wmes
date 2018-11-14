@@ -54,7 +54,7 @@ module.exports = function setUpBehaviorObsCardsRoutes(app, module)
 
   express.post(
     '/behaviorObsCards',
-    canManage,
+    canView,
     prepareForAdd,
     express.crud.addRoute.bind(null, app, BehaviorObsCard)
   );

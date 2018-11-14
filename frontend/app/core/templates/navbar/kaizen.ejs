@@ -11,7 +11,7 @@
     <li data-privilege="USER" data-module="kaizen"><a href="#kaizenOrders?observers.user.id=unseen&sort(-eventDate)&limit(20)"><%- t('core', 'NAVBAR:KAIZEN:unseen') %></a>
     <li class="divider">
     <li class="dropdown-header"><%- t('core', 'NAVBAR:KAIZEN:observations') %>
-    <li data-privilege="USER" data-module class="navbar-with-button"><a href="#behaviorObsCards"><%- t('core', 'NAVBAR:KAIZEN:all') %></a><button class="btn btn-default" data-href="#behaviorObsCards;add"><i class="fa fa-plus"></i></button>
+    <li data-privilege="LOCAL USER" data-module class="navbar-with-button"><a href="#behaviorObsCards"><%- t('core', 'NAVBAR:KAIZEN:all') %></a><button class="btn btn-default" data-href="#behaviorObsCards;add"><i class="fa fa-plus"></i></button>
     <li data-privilege="USER" data-module><a href="#behaviorObsCards?users=mine&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:KAIZEN:mine') %></a>
     <li class="divider">
     <li class="dropdown-header"><%- t('core', 'NAVBAR:KAIZEN:minutesForSafety') %>

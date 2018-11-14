@@ -135,6 +135,11 @@ define([
 
     canEdit: function()
     {
+      if (!user.isLoggedIn())
+      {
+        return false;
+      }
+
       if (user.isAllowedTo(this.privilegePrefix + ':MANAGE'))
       {
         return true;
@@ -150,6 +155,11 @@ define([
 
     canDelete: function()
     {
+      if (!user.isLoggedIn())
+      {
+        return false;
+      }
+
       if (user.isAllowedTo(this.privilegePrefix + ':MANAGE'))
       {
         return true;

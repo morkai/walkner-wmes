@@ -18,7 +18,7 @@ define([
   'use strict';
 
   var nls = 'i18n!app/nls/behaviorObsCards';
-  var canAccess = user.auth();
+  var canAccess = user.auth('LOCAL', 'USER');
 
   router.map('/behaviorObsCardCountReport', canAccess, function(req)
   {
