@@ -4,31 +4,32 @@
 
 module.exports = function resolveIpAddress(addressData)
 {
-  let ip = '';
-
   if (addressData)
   {
     if (hasRealIpFromProxyServer(addressData))
     {
-      ip = (addressData.headers || addressData.request.headers)['x-real-ip'];
+      return (addressData.headers || addressData.request.headers)['x-real-ip'];
     }
+
     // HTTP
-    else if (addressData.socket && typeof addressData.socket.remoteAddress === 'string')
+    if (addressData.socket && typeof addressData.socket.remoteAddress === 'string')
     {
-      ip = addressData.socket.remoteAddress;
+      return addressData.socket.remoteAddress;
     }
+
     // Socket.IO
-    else if (addressData.conn && typeof addressData.conn.remoteAddress === 'string')
+    if (addressData.conn && typeof addressData.conn.remoteAddress === 'string')
     {
-      ip = addressData.conn.remoteAddress;
+      return addressData.conn.remoteAddress;
     }
-    else if (typeof addressData.address === 'string')
+
+    if (typeof addressData.address === 'string')
     {
-      ip = addressData.address;
+      return addressData.address;
     }
   }
 
-  return ip;
+  return '';
 };
 
 function hasRealIpFromProxyServer(addressData)
@@ -36,17 +37,27 @@ function hasRealIpFromProxyServer(addressData)
   const handshake = addressData.request;
   const headers = handshake ? handshake.headers : addressData.headers;
 
-  if (!headers || typeof headers['x-real-ip'] !== 'string')
+  if (!headers)
   {
     return false;
   }
 
-  // HTTP
-  if (addressData.socket && addressData.socket.remoteAddress === '127.0.0.1')
+  if (typeof headers['x-real-ip'] === 'string')
   {
     return true;
   }
 
-  // Socket.IO
-  return addressData.conn && addressData.conn.remoteAddress === '127.0.0.1';
+  if (typeof headers['x-forwarded-for'] === 'string')
+  {
+    headers['x-real-ip'] = headers['x-forwarded-for'].split(',')[0];
+
+    if (headers['x-real-ip'].includes('.'))
+    {
+      headers['x-real-ip'] = headers['x-real-ip'].split(':').pop();
+    }
+
+    return true;
+  }
+
+  return false;
 }
