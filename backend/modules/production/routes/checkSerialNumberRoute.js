@@ -372,17 +372,6 @@ module.exports = function checkSerialNumberRoute(app, productionModule, req, res
         }
       });
 
-      console.log('---');
-      console.inspect({
-        desc: obm.description,
-        virtual,
-        candidates,
-        matches,
-        obmComponents: obmComponents.length,
-        total: virtual.length + matches,
-        misses: misses.size
-      });
-
       if (misses.size === 0 && obmComponents.length === (virtual.length + matches))
       {
         result = result.concat(virtual, candidates);
