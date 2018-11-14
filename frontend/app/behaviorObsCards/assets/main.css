@@ -2,3 +2,10 @@
 @import url(./form.css);
 @import url(./details.css);
 @import url(./report.css);
+
+.behaviorObsCards-standalone .navbar {
+  display: none;
+}
+.behaviorObsCards-standalone .page-actions {
+  display: none;
+}

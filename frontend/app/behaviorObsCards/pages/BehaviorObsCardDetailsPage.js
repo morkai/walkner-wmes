@@ -1,11 +1,13 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   'app/core/pages/DetailsPage',
   'app/core/util/pageActions',
   'app/kaizenOrders/dictionaries',
   '../views/BehaviorObsCardDetailsView'
 ], function(
+  $,
   DetailsPage,
   pageActions,
   kaizenDictionaries,
@@ -17,6 +19,18 @@ define([
 
     DetailsView: BehaviorObsCardDetailsView,
     baseBreadcrumb: true,
+    breadcrumbs: function()
+    {
+      if (!this.options.standalone)
+      {
+        return DetailsPage.prototype.breadcrumbs.call(this);
+      }
+
+      return [
+        this.t('BREADCRUMBS:base'),
+        this.model.get('rid') + ''
+      ];
+    },
 
     actions: function()
     {
@@ -41,6 +55,8 @@ define([
       DetailsPage.prototype.destroy.call(this);
 
       kaizenDictionaries.unload();
+
+      $('body').removeClass('behaviorObsCards-standalone');
     },
 
     load: function(when)
@@ -53,6 +69,8 @@ define([
       DetailsPage.prototype.afterRender.call(this);
 
       kaizenDictionaries.load();
+
+      $('body').toggleClass('behaviorObsCards-standalone', !!this.options.standalone);
     }
 
   });

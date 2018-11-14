@@ -126,6 +126,14 @@ define([
           this.$id('addImprovementButtons').addClass('hidden');
         });
       },
+      'click #-openAddObservationWindow': function(e)
+      {
+        this.control(e, function()
+        {
+          this.openAddObservationWindow();
+          this.$id('addImprovementButtons').addClass('hidden');
+        });
+      },
       'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
       'touchstart #-switchApps': function() { this.startActionTimer('switchApps'); },
       'mouseup #-switchApps': function() { this.stopActionTimer('switchApps'); },
@@ -713,12 +721,17 @@ define([
       this.openAddImprovementWindow('/#suggestions;add');
     },
 
+    openAddObservationWindow: function()
+    {
+      this.openAddImprovementWindow('/#behaviorObsCards;add');
+    },
+
     openAddImprovementWindow: function(url)
     {
       url += '?standalone=1';
 
       var screen = window.screen;
-      var width = screen.availWidth > 1200 ? 1200 : screen.availWidth * 0.7;
+      var width = screen.availWidth > 1350 ? 1300 : screen.availWidth * 0.7;
       var height = screen.availHeight * 0.8;
       var left = Math.floor((screen.availWidth - width) / 2);
       var top = Math.min(100, Math.floor((screen.availHeight - height) / 2));

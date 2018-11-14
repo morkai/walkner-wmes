@@ -19,7 +19,9 @@ define([
   MorView,
   UnlockDialogView,
   LockDialogView,
-  template
+  template,
+  BehaviorObsCard,
+  BehaviorObsCardFormView
 ) {
   'use strict';
 
@@ -71,6 +73,7 @@ define([
       'click #-mor': 'showMor',
       'click a.production-controls-addNearMiss': 'addNearMiss',
       'click a.production-controls-addSuggestion': 'addSuggestion',
+      'click a.production-controls-addObservation': 'addObservation',
       'click a.production-controls-lock': 'lock',
       'click a.production-controls-unlock': 'unlock',
       'mouseover a.production-controls-lock': function(e)
@@ -118,6 +121,11 @@ define([
       this.addImprovement('/#suggestions;add');
     },
 
+    addObservation: function()
+    {
+      this.addImprovement('/#behaviorObsCards;add');
+    },
+
     addImprovement: function(url)
     {
       var operator = this.model.get('operator');
@@ -137,7 +145,7 @@ define([
       url += '?standalone=1&operator=' + btoa(encodeURIComponent(JSON.stringify(operator)));
 
       var screen = window.screen;
-      var width = screen.availWidth > 1200 ? 1200 : screen.availWidth * 0.7;
+      var width = screen.availWidth > 1350 ? 1300 : screen.availWidth * 0.7;
       var height = screen.availHeight * 0.8;
       var left = Math.floor((screen.availWidth - width) / 2);
       var top = Math.min(100, Math.floor((screen.availHeight - height) / 2));

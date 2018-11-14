@@ -17,6 +17,7 @@
     "controls:toggleAddImprovementButtons": "Add near miss/suggestion",
     "controls:openAddNearMissWindow": "Submit a new near miss",
     "controls:openAddSuggestionWindow": "Submit a new suggestion",
+    "controls:openAddObservationWindow": "Submit a new observation",
     "controls:switchApps": "Switch apps/Configure after 3s",
     "controls:reboot": "Refresh page/Restart after 3s",
     "controls:shutdown": "Shutdown after 3s",

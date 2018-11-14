@@ -66,7 +66,8 @@ define([
       function(BehaviorObsCard, BehaviorObsCardDetailsPage)
       {
         return new BehaviorObsCardDetailsPage({
-          model: new BehaviorObsCard({_id: req.params.id})
+          model: new BehaviorObsCard({_id: req.params.id}),
+          standalone: !!req.query.standalone
         });
       }
     );
@@ -111,8 +112,41 @@ define([
           });
         }
 
+        var operator = null;
+
+        try
+        {
+          operator = JSON.parse(decodeURIComponent(atob(req.query.operator)));
+        }
+        catch (err) {} // eslint-disable-line no-empty
+
+        if (operator)
+        {
+          lastCard.observer.id = operator.id;
+          lastCard.observer.label = operator.text;
+        }
+
+        var standalone = !!req.query.standalone;
+        var p = 'WMES_STANDALONE_CLOSE_TIMER';
+
+        if (standalone && typeof window[p] === 'undefined')
+        {
+          clearTimeout(window[p]);
+
+          window.onblur = function()
+          {
+            clearTimeout(window[p]);
+            window[p] = setTimeout(function() { window.close(); }, 60000);
+          };
+          window.onfocus = function()
+          {
+            clearTimeout(window[p]);
+          };
+        }
+
         return new BehaviorObsCardAddFormPage({
-          model: new BehaviorObsCard(lastCard)
+          model: new BehaviorObsCard(lastCard),
+          standalone: standalone
         });
       }
     );

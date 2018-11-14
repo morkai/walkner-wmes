@@ -633,7 +633,12 @@ define([
     {
       localStorage.removeItem('BOC_LAST');
 
-      return FormView.prototype.handleSuccess.apply(this, arguments);
+      this.broker.publish('router.navigate', {
+        url: this.model.genClientUrl() + '?'
+          + (this.options.editMode ? '' : '&thank=you')
+          + (!this.options.standalone ? '' : '&standalone=1'),
+        trigger: true
+      });
     },
 
     showRidEditor: function(ridProperty, aEl)
