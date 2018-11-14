@@ -146,7 +146,7 @@
   }
 
   var reload = location.reload.bind(location);
-  var reloadTimer = setTimeout(reload, 60000);
+  var reloadTimer = setTimeout(reload, 90000);
 
   function doStartApp()
   {
