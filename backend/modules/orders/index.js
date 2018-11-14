@@ -165,16 +165,24 @@ exports.start = function startOrdersModule(app, module)
           return this.skip(app.createError(`Failed to find PS orders: ${err.message}`));
         }
 
+        const eventChange = this.eventChange;
         const eventUpdate = {
           $push: {changes: this.eventChange}
         };
 
-        if (Object.keys(this.eventChange.newValues).length)
+        if (Object.keys(eventChange.newValues).length)
         {
-          eventUpdate.$set = this.eventChange.newValues;
+          eventUpdate.$set = eventChange.newValues;
+        }
+        else if (!eventChange.user.id)
+        {
+          this.eventChange = null;
         }
 
-        Order.collection.updateOne({_id: this.orderNo}, eventUpdate, this.group());
+        if (this.eventChange)
+        {
+          Order.collection.updateOne({_id: this.orderNo}, eventUpdate, this.group());
+        }
 
         if (!psOrders.length || !this.leadingSapOrder)
         {
@@ -211,12 +219,17 @@ exports.start = function startOrdersModule(app, module)
           newStatus = 'cancelled';
         }
 
+        if (newStatus === oldStatus)
+        {
+          return;
+        }
+
         this.leadingChange = {
           time: paintShopEvent.time,
           user: paintShopEvent.user,
           oldValues: {status: oldStatus},
           newValues: {status: newStatus},
-          comment: this.eventChange.comment,
+          comment: eventChange.comment,
           source: 'ps'
         };
 
@@ -235,10 +248,13 @@ exports.start = function startOrdersModule(app, module)
         }
         else
         {
-          app.broker.publish(`orders.updated.${this.orderNo}`, {
-            _id: this.orderNo,
-            change: this.eventChange
-          });
+          if (this.eventChange)
+          {
+            app.broker.publish(`orders.updated.${this.orderNo}`, {
+              _id: this.orderNo,
+              change: this.eventChange
+            });
+          }
 
           if (this.leadingChange)
           {
