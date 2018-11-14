@@ -4,11 +4,13 @@ define([
   'app/user',
   'app/core/util/pageActions',
   'app/core/pages/DetailsPage',
+  '../PressWorksheetCollection',
   '../views/PressWorksheetDetailsView'
 ], function(
   user,
   pageActions,
   DetailsPage,
+  PressWorksheetCollection,
   PressWorksheetDetailsView
 ) {
   'use strict';
@@ -17,11 +19,15 @@ define([
 
     DetailsView: PressWorksheetDetailsView,
 
-    actions: function()
+    actions: function(layout)
     {
       var eightHours = 8 * 3600 * 1000;
       var now = Date.now();
-      var actions = [];
+      var actions = [
+        pageActions.export(layout, this, new PressWorksheetCollection(null, {
+          rqlQuery: '_id=' + this.model.id
+        }))
+      ];
 
       if (user.isAllowedTo('PROD_DATA:MANAGE')
         || (user.data._id === this.model.get('creator').id

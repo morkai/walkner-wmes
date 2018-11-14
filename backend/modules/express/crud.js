@@ -578,7 +578,7 @@ exports.exportRoute = function(app, options, req, res, next)
 
       handleExportStream(emitter, cursor, false, req, options.cleanUp);
 
-      options.serializeStream(cursor, emitter);
+      options.serializeStream(cursor, emitter, req);
     }
     else
     {
@@ -642,7 +642,7 @@ exports.exportRoute = function(app, options, req, res, next)
 
       if (columns === null)
       {
-        columns = prepareExportColumns(format, options, Object.keys(multiple ? row[0] : row));
+        columns = prepareExportColumns(format, options, Object.keys(multiple ? row[0] : row), req);
       }
 
       writeHeader(cursor);
@@ -837,7 +837,7 @@ exports.exportRoute = function(app, options, req, res, next)
   }
 };
 
-function prepareExportColumns(format, options, columnNames)
+function prepareExportColumns(format, options, columnNames, req)
 {
   const columnConfig = options.columns || {};
   let orderedColumnNames;
@@ -893,7 +893,7 @@ function prepareExportColumns(format, options, columnNames)
     }
     else if (typeof options.prepareColumn === 'function')
     {
-      options.prepareColumn(column);
+      options.prepareColumn(column, req);
     }
 
     if (!column.width)

@@ -33,10 +33,11 @@ define([
       t.bound('pressWorksheets', 'BREADCRUMBS:browse')
     ],
 
-    actions: function()
+    actions: function(layout)
     {
       return [
         pageActions.jump(this, this.pressWorksheetList),
+        pageActions.export(layout, this, this.pressWorksheetList),
         pageActions.add(this.pressWorksheetList)
       ];
     },

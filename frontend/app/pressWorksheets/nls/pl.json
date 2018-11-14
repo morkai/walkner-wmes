@@ -10,6 +10,7 @@
   "MSG:DELETED": "Karta pracy <em>{label}</em> została usunięta.",
   "MSG:jump:404": "Nie znaleziono karty pracy o ID <em>{rid}</em>.",
 
+  "PAGE_ACTION:export": "Eksportuj karty pracy",
   "PAGE_ACTION:add": "Dodaj kartę pracy",
   "PAGE_ACTION:edit": "Edytuj kartę pracy",
   "PAGE_ACTION:delete": "Usuń kartę pracy",

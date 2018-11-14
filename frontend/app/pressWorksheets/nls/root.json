@@ -11,6 +11,7 @@
     "MSG:DELETED": "Worksheet <em>{label}</em> was deleted.",
     "MSG:jump:404": "Couldn't find a worksheet with ID <em>{rid}</em>.",
 
+    "PAGE_ACTION:export": "Export worksheets",
     "PAGE_ACTION:add": "Add worksheet",
     "PAGE_ACTION:edit": "Edit worksheet",
     "PAGE_ACTION:delete": "Delete worksheet",

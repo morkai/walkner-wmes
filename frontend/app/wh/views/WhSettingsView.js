@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'app/user',
   'app/core/util/idAndLabel',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/users/util/setUpUserSelect2',
@@ -10,6 +11,7 @@ define([
   'app/wh/templates/settings'
 ], function(
   _,
+  user,
   idAndLabel,
   setUpMrpSelect2,
   setUpUserSelect2,
@@ -42,6 +44,23 @@ define([
         {
           this.removeUser(e.removed, func);
         }
+      },
+      'dblclick .select2-search-choice > div': function(e)
+      {
+        if (!user.isAllowedTo('USERS:VIEW'))
+        {
+          return;
+        }
+
+        var name = e.currentTarget.textContent.trim();
+        var whUser = this.whUsers.find(function(whUser) { return whUser.get('label') === name; });
+
+        if (!whUser)
+        {
+          return;
+        }
+
+        window.open('#users/' + whUser.id);
       }
     }, SettingsView.prototype.events),
 
