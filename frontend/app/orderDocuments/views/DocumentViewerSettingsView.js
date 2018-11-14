@@ -51,15 +51,13 @@ define([
         });
 
         e.target.value = Object.keys(prefixFilters).sort().join(' ');
-      },
-      'click .message-success, .message-error': 'checkLocalServer'
+      }
     },
 
     afterRender: function()
     {
       js2form(this.el, this.serializeFormData());
 
-      this.checkLocalServer();
       this.setUpProdLineSelect2();
     },
 
@@ -144,23 +142,6 @@ define([
           .removeClass('fa-spin fa-spinner')
           .addClass('fa-save');
       });
-    },
-
-    checkLocalServer: function()
-    {
-      var view = this;
-      var req = this.ajax({
-        type: 'GET',
-        url: 'http://127.0.0.1:1335/hello'
-      });
-
-      var $warning = view.$('.message-warning').removeClass('hidden');
-      var $success = view.$('.message-success').addClass('hidden');
-      var $error = view.$('.message-error').addClass('hidden');
-
-      req.always(function() { $warning.addClass('hidden');});
-      req.done(function() { $success.removeClass('hidden'); });
-      req.fail(function() { $error.removeClass('hidden');});
     },
 
     setUpProdLineSelect2: function()

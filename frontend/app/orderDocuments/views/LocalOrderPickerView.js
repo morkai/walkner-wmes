@@ -228,23 +228,6 @@ define([
       return req;
     },
 
-    checkLocalServer: function()
-    {
-      var view = this;
-      var req = this.ajax({
-        type: 'GET',
-        url: 'http://127.0.0.1:1335/hello'
-      });
-
-      var $warning = view.$('.message-warning').removeClass('hidden');
-      var $success = view.$('.message-success').addClass('hidden');
-      var $error = view.$('.message-error').addClass('hidden');
-
-      req.always(function() { $warning.addClass('hidden');});
-      req.done(function() { $success.removeClass('hidden'); });
-      req.fail(function() { $error.removeClass('hidden');});
-    },
-
     pressNumpadKey: function(key)
     {
       var inputEl = this.$id('orderNo')[0];
