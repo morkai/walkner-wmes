@@ -12,7 +12,6 @@ define([
 ], function(
   _,
   $,
-  Hammer,
   user,
   View,
   snManager,
