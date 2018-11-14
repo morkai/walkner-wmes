@@ -43,11 +43,20 @@ define([
       if (component)
       {
         entry.description = component.get('description');
-        entry.storageBin = component.get('storageBin');
-        entry.newStorageBin = component.get('newStorageBin');
         entry.minBinQty = component.get('minBinQty');
         entry.maxBinQty = component.get('maxBinQty');
         entry.replenQty = component.get('replenQty');
+
+        if (entry.storageType === 153)
+        {
+          entry.storageBin = '';
+          entry.newStorageBin = '';
+        }
+        else
+        {
+          entry.storageBin = component.get('storageBin');
+          entry.newStorageBin = component.get('newStorageBin');
+        }
       }
       else
       {
