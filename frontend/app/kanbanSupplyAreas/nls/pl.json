@@ -15,7 +15,7 @@
   "PANEL:TITLE:addForm": "Formularz dodawania obszaru",
   "PANEL:TITLE:editForm": "Formularz edycji obszaru",
 
-  "PROPERTY:name": "Nazwa",
+  "PROPERTY:name": "Supply area (SAP)",
   "PROPERTY:workCenter": "WorkCenter",
   "PROPERTY:family": "Rodzina",
   "PROPERTY:lines": "Linie produkcyjne",
