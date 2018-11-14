@@ -176,9 +176,27 @@ define([
         }
         catch (err) {} // eslint-disable-line no-empty
 
+        var standalone = !!req.query.standalone;
+        var p = 'WMES_STANDALONE_CLOSE_TIMER';
+
+        if (standalone && typeof window[p] === 'undefined')
+        {
+          clearTimeout(window[p]);
+
+          window.onblur = function()
+          {
+            clearTimeout(window[p]);
+            window[p] = setTimeout(function() { window.close(); }, 60000);
+          };
+          window.onfocus = function()
+          {
+            clearTimeout(window[p]);
+          };
+        }
+
         return new KaizenOrderAddFormPage({
           model: new KaizenOrder(),
-          standalone: !!req.query.standalone,
+          standalone: standalone,
           operator: operator
         });
       }
