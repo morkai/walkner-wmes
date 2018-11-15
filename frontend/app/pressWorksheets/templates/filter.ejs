@@ -1,7 +1,23 @@
 <form class="well filter-form">
-  <div class="form-group">
-    <label for="<%- idPrefix %>-date"><%- t('pressWorksheets', 'PROPERTY:date') %></label>
-    <input id="<%- idPrefix %>-date" class="form-control" name="date" type="date">
+  <div class="form-group form-group-dateRange">
+    <div class="dropdown">
+      <label class="control-label dropdown-toggle" data-toggle="dropdown">
+        <a href="javascript:void(0)">
+          <%- t('pressWorksheets', 'PROPERTY:date') %>
+          <span class="caret"></span>
+        </a>
+      </label>
+      <ul class="dropdown-menu">
+        <% ['today', 'yesterday', 'currentWeek', 'prevWeek', 'currentMonth', 'prevMonth', 'q1', 'q2', 'q3', 'q4', 'currentYear', 'prevYear'].forEach(function(range) { %>
+        <li><a data-range="<%- range %>"><%- t('core', 'filter:date:' + range) %></a></li>
+        <% }) %>
+      </ul>
+    </div>
+    <div>
+      <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
+      <label for="<%- idPrefix %>-to" class="control-label">-</label>
+      <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
+    </div>
   </div>
   <div class="form-group">
     <label><%- t('core', 'filter:shift') %></label>

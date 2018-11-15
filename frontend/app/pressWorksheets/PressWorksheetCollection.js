@@ -3,11 +3,13 @@
 define([
   'underscore',
   '../user',
+  '../time',
   '../core/Collection',
   './PressWorksheet'
 ], function(
   _,
   user,
+  time,
   Collection,
   PressWorksheet
 ) {
@@ -19,7 +21,9 @@ define([
 
     rqlQuery: function(rql)
     {
-      var selector = [];
+      var selector = [
+        {name: 'ge', args: ['date', time.getMoment().startOf('week').subtract(7, 'days').valueOf()]}
+      ];
       var userDivision = user.getDivision();
 
       if (userDivision)

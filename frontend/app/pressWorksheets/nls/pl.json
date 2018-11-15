@@ -22,7 +22,7 @@
   "PANEL:TITLE:editForm": "Formularz edycji karty pracy",
   "PANEL:TITLE:details:orders": "Lista części",
 
-  "filter:submit": "Filtruj karty pracy",
+  "filter:submit": "Filtruj",
   "filter:shift": "Zmiana",
   "filter:type:any": "Dowolny",
   "filter:type:mech": "Obr. mech.",

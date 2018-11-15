@@ -1,30 +1,47 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/time',
-  'app/data/divisions',
+  'app/core/util/fixTimeRange',
   'app/core/views/FilterView',
   'app/users/util/setUpUserSelect2',
+  'app/reports/util/prepareDateRange',
   'app/orgUnits/views/OrgUnitPickerView',
   'app/pressWorksheets/templates/filter'
 ], function(
+  _,
   time,
-  divisions,
+  fixTimeRange,
   FilterView,
   setUpUserSelect2,
+  prepareDateRange,
   OrgUnitPickerView,
-  filterTemplate
+  template
 ) {
   'use strict';
 
   return FilterView.extend({
 
-    template: filterTemplate,
+    template: template,
+
+    events: _.assign({
+
+      'click a[data-range]': function(e)
+      {
+        var dateRange = prepareDateRange(e.target);
+
+        this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
+        this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
+      }
+
+    }, FilterView.prototype.events),
 
     defaultFormData: function()
     {
       return {
-        date: '',
+        from: '',
+        to: '',
         shift: 0,
         type: 'any',
         mine: false,
@@ -39,17 +56,7 @@ define([
     termToForm: {
       'date': function(propertyName, term, formData)
       {
-        if (term.name === 'in')
-        {
-          formData.date = time.format(term.args[1][0], 'YYYY-MM-DD');
-        }
-        else
-        {
-          var dateMoment = time.getMoment(term.args[1]);
-
-          formData.date = dateMoment.format('YYYY-MM-DD');
-          formData.shift = this.getShiftNoFromMoment(dateMoment);
-        }
+        fixTimeRange.toFormData(formData, term, 'date');
       },
       'shift': function(propertyName, term, formData)
       {
@@ -97,38 +104,12 @@ define([
       }));
     },
 
-    serialize: function()
-    {
-      var data = FilterView.prototype.serialize.call(this);
-
-      data.divisions = divisions
-        .filter(function(division)
-        {
-          return division.get('type') === 'prod';
-        })
-        .sort(function(a, b)
-        {
-          return a.getLabel().localeCompare(b.getLabel());
-        })
-        .map(function(division)
-        {
-          return {
-            id: division.id,
-            label: division.id,
-            title: division.get('description')
-          };
-        });
-
-      return data;
-    },
-
     afterRender: function()
     {
       FilterView.prototype.afterRender.call(this);
 
       this.toggleButtonGroup('shift');
       this.toggleButtonGroup('type');
-      this.toggleButtonGroup('divisions');
       this.toggleButtonGroup('mine');
 
       setUpUserSelect2(this.$id('user')).select2(
@@ -136,41 +117,26 @@ define([
       );
     },
 
-    serializeFormToQuery: function(selector, rqlQuery)
+    serializeFormToQuery: function(selector)
     {
-      var dateMoment = time.getMoment(this.$id('date').val());
+      var dateRange = fixTimeRange.fromView(this);
       var shiftNo = parseInt(this.$('input[name=shift]:checked').val(), 10);
       var type = this.$('input[name=type]:checked').val();
       var mine = this.$('input[name=mine]:checked').val();
       var userType = this.$('input[name=userType]:checked').val();
       var user = this.$id('user').select2('data');
 
-      this.setHoursByShiftNo(dateMoment, shiftNo);
-
-      if (dateMoment.isValid())
+      if (dateRange.from)
       {
-        if (shiftNo === 0)
-        {
-          var startTime = dateMoment.valueOf();
-
-          selector.push({
-            name: 'in',
-            args: [
-              'date',
-              [
-                startTime + 6 * 3600 * 1000,
-                startTime + 14 * 3600 * 1000,
-                startTime + 22 * 3600 * 1000
-              ]
-            ]
-          });
-        }
-        else
-        {
-          selector.push({name: 'eq', args: ['date', dateMoment.valueOf()]});
-        }
+        selector.push({name: 'ge', args: ['date', dateRange.from]});
       }
-      else if (shiftNo !== 0)
+
+      if (dateRange.to)
+      {
+        selector.push({name: 'lt', args: ['date', dateRange.to]});
+      }
+
+      if (shiftNo !== 0)
       {
         selector.push({name: 'eq', args: ['shift', shiftNo]});
       }
@@ -189,58 +155,6 @@ define([
       if (mine)
       {
         selector.push({name: 'eq', args: ['mine', 1]});
-
-        rqlQuery.sort = {
-          createdAt: -1
-        };
-      }
-      else
-      {
-        rqlQuery.sort = {
-          date: -1
-        };
-      }
-    },
-
-    getShiftNoFromMoment: function(moment)
-    {
-      var hours = moment.hours();
-
-      if (hours === 6)
-      {
-        return 1;
-      }
-
-      if (hours === 14)
-      {
-        return 2;
-      }
-
-      if (hours === 22)
-      {
-        return 3;
-      }
-
-      return 0;
-    },
-
-    setHoursByShiftNo: function(moment, shiftNo)
-    {
-      if (shiftNo === 1)
-      {
-        moment.hours(6);
-      }
-      else if (shiftNo === 2)
-      {
-        moment.hours(14);
-      }
-      else if (shiftNo === 3)
-      {
-        moment.hours(22);
-      }
-      else
-      {
-        moment.hours(0);
       }
     }
 

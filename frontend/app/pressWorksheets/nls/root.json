@@ -23,7 +23,7 @@
     "PANEL:TITLE:editForm": "Edit worksheet form",
     "PANEL:TITLE:details:orders": "Parts",
 
-    "filter:submit": "Filter worksheets",
+    "filter:submit": "Filter",
     "filter:date": "Date",
     "filter:shift": "Shift",
     "filter:type:any": "Any",
