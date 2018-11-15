@@ -32,6 +32,7 @@
   "filter:mine:title": "Ogranicz listę kart pracy do dodanych przez Ciebie w kolejności od najnowszej do najstarszej!",
   "filter:user:master": "Mistrz",
   "filter:user:operators": "Operator",
+  "filter:machine": "Maszyna",
 
   "PROPERTY:pressWorksheet": "Karta pracy",
   "PROPERTY:user": "Użytkownik",

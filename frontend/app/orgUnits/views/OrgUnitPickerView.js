@@ -43,6 +43,8 @@ define([
       {
         var dialogView = new OrgUnitPickerDialogView({
           model: {
+            subdivisionFilter: this.options.subdivisionFilter,
+            resolveLabel: this.resolveLabel.bind(this),
             orgUnitTypes: this.options.orgUnitTypes,
             orgUnitType: this.model.type,
             orgUnitIds: _.pluck(this.model.units, 'id')
@@ -74,8 +76,7 @@ define([
       {
         this.model = {
           type: null,
-          units: [],
-          labels: []
+          units: []
         };
 
         this.render();
@@ -85,10 +86,21 @@ define([
 
     initialize: function()
     {
-      this.model = this.getOrgUnitsFromRql();
+      var view = this;
 
-      this.listenTo(this.filterView, 'filtering', this.onFiltering);
-      this.listenTo(this.filterView, 'filterChanged', this.onFilterChanged);
+      view.termToType = {};
+      view.typeToTerm = {};
+
+      _.forEach(view.options.orgUnitTerms || ORG_UNIT_TYPES, function(type, term)
+      {
+        view.termToType[term] = type;
+        view.typeToTerm[type] = term;
+      });
+
+      view.model = view.getOrgUnitsFromRql();
+
+      view.listenTo(view.filterView, 'filtering', view.onFiltering);
+      view.listenTo(view.filterView, 'filterChanged', view.onFilterChanged);
     },
 
     serialize: function()
@@ -98,7 +110,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         active: !!model.type,
-        label: model.type ? t('core', 'ORG_UNIT:' + model.type) : t('orgUnits', 'picker:label'),
+        label: this.resolveLabel(model.type),
         button: !model.type
           ? t('orgUnits', 'picker:any')
           : model.units.map(function(unit)
@@ -115,9 +127,27 @@ define([
       };
     },
 
+    resolveLabel: function(type)
+    {
+      if (!type)
+      {
+        return t('orgUnits', 'picker:label');
+      }
+
+      var labels = this.options.orgUnitLabels;
+
+      if (labels && labels[type])
+      {
+        return String(labels[type]);
+      }
+
+      return t('core', 'ORG_UNIT:' + type);
+    },
+
     getOrgUnitsFromRql: function()
     {
       var array = this.options.mode === 'array';
+      var termToType = this.termToType;
       var type = null;
       var units = [];
 
@@ -130,13 +160,13 @@ define([
 
         if (!array && (term.name === 'eq' || term.name === 'in'))
         {
-          type = ORG_UNIT_TYPES[term.args[0]];
+          type = termToType[term.args[0]];
           units = Array.isArray(term.args[1]) ? term.args[1] : [term.args[1]];
         }
         else if (array && term.name === 'orgUnit')
         {
           units = [].concat(term.args);
-          type = ORG_UNIT_TYPES[units.shift()];
+          type = termToType[units.shift()];
         }
       });
 
@@ -161,7 +191,7 @@ define([
       {
         selector.push({
           name: 'orgUnit',
-          args: [this.model.type].concat(ids)
+          args: [this.typeToTerm[this.model.type]].concat(ids)
         });
       }
       else
@@ -169,7 +199,7 @@ define([
         selector.push({
           name: ids.length === 1 ? 'eq' : 'in',
           args: [
-            this.model.type,
+            this.typeToTerm[this.model.type],
             ids.length === 1 ? ids[0] : ids
           ]
         });

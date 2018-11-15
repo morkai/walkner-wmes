@@ -1,8 +1,8 @@
 <form class="orgUnits-picker-dialog">
-  <% orgUnitTypes.forEach(function(orgUnitType) { %>
+  <% orgUnits.forEach(function(orgUnit) { %>
   <div class="form-group">
-    <label class="radio-inline"><input type="radio" name="orgUnitType" value="<%- orgUnitType %>"> <%- t('core', 'ORG_UNIT:' + orgUnitType) %></label>
-    <input id="<%- idPrefix %>-<%- orgUnitType %>" class="orgUnits-picker-orgUnits" name="<%- orgUnitType %>" type="text" autocomplete="new-password">
+    <label class="radio-inline"><input type="radio" name="orgUnitType" value="<%- orgUnit.type %>"> <%- orgUnit.label %></label>
+    <input id="<%- idPrefix %>-<%- orgUnit.type %>" class="orgUnits-picker-orgUnits" name="<%- orgUnit.type %>" type="text" autocomplete="new-password">
   </div>
   <% }) %>
   <div class="form-actions">

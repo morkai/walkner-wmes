@@ -34,6 +34,7 @@
     "filter:mine:title": "Limit the worksheet to those added by you from the newest to the oldest!",
     "filter:user:master": "Master",
     "filter:user:operators": "Operator",
+    "filter:machine": "Machine",
 
     "PROPERTY:pressWorksheet": "Worksheet",
     "PROPERTY:user": "User",

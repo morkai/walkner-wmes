@@ -105,6 +105,11 @@ define([
       var deactivatedAt = this.get('deactivatedAt');
 
       return !deactivatedAt || ((from || Date.now()) < Date.parse(deactivatedAt));
+    },
+
+    getSubdivision: function()
+    {
+      return this;
     }
 
   });

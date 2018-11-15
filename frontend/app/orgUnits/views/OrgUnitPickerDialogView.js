@@ -73,9 +73,17 @@ define([
 
     serialize: function()
     {
+      var view = this;
+
       return {
-        idPrefix: this.idPrefix,
-        orgUnitTypes: this.model.orgUnitTypes,
+        idPrefix: view.idPrefix,
+        orgUnits: view.model.orgUnitTypes.map(function(type)
+        {
+          return {
+            type: type,
+            label: view.model.resolveLabel(type)
+          };
+        }),
         deactivated: localStorage.getItem('WMES:OrgUnitPicker:deactivated') === '1'
       };
     },
@@ -110,6 +118,7 @@ define([
     setUpOrgUnitSelect2: function(type)
     {
       var deactivated = localStorage.getItem('WMES:OrgUnitPicker:deactivated') === '1';
+      var filterSubdivision = this.createSubdivisionFilter();
       var data = orgUnits
         .getAllByType(type)
         .filter(function(orgUnit)
@@ -143,6 +152,11 @@ define([
           else
           {
             text = orgUnit.getLabel();
+          }
+
+          if (type !== 'division' && !filterSubdivision(orgUnit))
+          {
+            return null;
           }
 
           return {
@@ -180,6 +194,29 @@ define([
           return html.join('');
         }
       });
+    },
+
+    createSubdivisionFilter: function()
+    {
+      var subdivisionFilter = this.model.subdivisionFilter;
+
+      if (Array.isArray(subdivisionFilter))
+      {
+        return function(prodLine)
+        {
+          var subdivision = prodLine.getSubdivision();
+          var subdivisionType = subdivision && subdivision.get('type');
+
+          return subdivisionFilter.indexOf(subdivisionType) !== -1;
+        };
+      }
+
+      if (typeof subdivisionFilter === 'function')
+      {
+        return subdivisionFilter;
+      }
+
+      return function() { return true; };
     }
 
   });

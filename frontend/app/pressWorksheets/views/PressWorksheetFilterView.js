@@ -5,12 +5,14 @@ define([
   'app/data/divisions',
   'app/core/views/FilterView',
   'app/users/util/setUpUserSelect2',
+  'app/orgUnits/views/OrgUnitPickerView',
   'app/pressWorksheets/templates/filter'
 ], function(
   time,
   divisions,
   FilterView,
   setUpUserSelect2,
+  OrgUnitPickerView,
   filterTemplate
 ) {
   'use strict';
@@ -25,9 +27,6 @@ define([
         date: '',
         shift: 0,
         type: 'any',
-        divisions: divisions
-          .filter(function(division) { return division.get('type') === 'prod'; })
-          .map(function(division) { return division.id; }),
         mine: false,
         userType: 'operators',
         user: {
@@ -80,6 +79,24 @@ define([
       'operators.id': 'master.id'
     },
 
+    initialize: function()
+    {
+      FilterView.prototype.initialize.apply(this, arguments);
+
+      this.setView('#-orgUnit', new OrgUnitPickerView({
+        subdivisionFilter: ['press', 'paintShop'],
+        orgUnitLabels: {
+          prodLine: this.t('pressWorksheets', 'filter:machine')
+        },
+        orgUnitTerms: {
+          divisions: 'division',
+          prodLines: 'prodLine'
+        },
+        orgUnitTypes: ['division', 'prodLine'],
+        filterView: this
+      }));
+    },
+
     serialize: function()
     {
       var data = FilterView.prototype.serialize.call(this);
@@ -124,7 +141,6 @@ define([
       var dateMoment = time.getMoment(this.$id('date').val());
       var shiftNo = parseInt(this.$('input[name=shift]:checked').val(), 10);
       var type = this.$('input[name=type]:checked').val();
-      var divisions = this.getButtonGroupValue('divisions');
       var mine = this.$('input[name=mine]:checked').val();
       var userType = this.$('input[name=userType]:checked').val();
       var user = this.$id('user').select2('data');
@@ -162,15 +178,6 @@ define([
       if (type !== 'any')
       {
         selector.push({name: 'eq', args: ['type', type]});
-      }
-
-      if (divisions.length === 1)
-      {
-        selector.push({name: 'eq', args: ['divisions', divisions[0]]});
-      }
-      else if (divisions.length > 1)
-      {
-        selector.push({name: 'in', args: ['divisions', divisions]});
       }
 
       if (user)
