@@ -227,8 +227,8 @@ exports.start = function startOrdersModule(app, module)
         this.leadingChange = {
           time: paintShopEvent.time,
           user: paintShopEvent.user,
-          oldValues: {status: oldStatus},
-          newValues: {status: newStatus},
+          oldValues: {psStatus: oldStatus},
+          newValues: {psStatus: newStatus},
           comment: eventChange.comment,
           source: 'ps'
         };
