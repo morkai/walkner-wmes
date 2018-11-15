@@ -53,6 +53,10 @@ module.exports = function setUpPressWorksheetsRoutes(app, module)
       },
       startedAt: 8,
       finishedAt: 8,
+      mmh: {
+        type: 'decimal',
+        width: 7
+      },
       notes: 40
     },
     prepareColumn: (column, req) =>
@@ -357,8 +361,16 @@ module.exports = function setUpPressWorksheetsRoutes(app, module)
       quantityDone: order.quantityDone,
       startedAt: order.startedAt.length === 5 ? `${order.startedAt}:00` : app.formatTime(order.startedAt),
       finishedAt: order.finishedAt.length === 5 ? `${order.finishedAt}:00` : app.formatTime(order.finishedAt),
+      mmh: 0,
       notes: order.notes
     };
+
+    const operation = order.orderData.operations[order.operationNo];
+
+    if (operation)
+    {
+      row.mmh = operation.machineTime / 100 * order.quantityDone;
+    }
 
     dictionaries.lossReasons.forEach(id =>
     {
