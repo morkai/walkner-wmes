@@ -3,19 +3,17 @@
 define([
   'underscore',
   'app/time',
-  'app/core/util/fixTimeRange',
   'app/core/views/FilterView',
+  'app/core/util/forms/dateTimeRange',
   'app/users/util/setUpUserSelect2',
-  'app/reports/util/prepareDateRange',
   'app/orgUnits/views/OrgUnitPickerView',
   'app/pressWorksheets/templates/filter'
 ], function(
   _,
   time,
-  fixTimeRange,
   FilterView,
+  dateTimeRange,
   setUpUserSelect2,
-  prepareDateRange,
   OrgUnitPickerView,
   template
 ) {
@@ -27,21 +25,13 @@ define([
 
     events: _.assign({
 
-      'click a[data-range]': function(e)
-      {
-        var dateRange = prepareDateRange(e.target);
-
-        this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
-        this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
-      }
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent
 
     }, FilterView.prototype.events),
 
     defaultFormData: function()
     {
       return {
-        from: '',
-        to: '',
         shift: 0,
         type: 'any',
         mine: false,
@@ -54,10 +44,7 @@ define([
     },
 
     termToForm: {
-      'date': function(propertyName, term, formData)
-      {
-        fixTimeRange.toFormData(formData, term, 'date');
-      },
+      'date': dateTimeRange.rqlToForm,
       'shift': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
@@ -119,22 +106,13 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var dateRange = fixTimeRange.fromView(this);
       var shiftNo = parseInt(this.$('input[name=shift]:checked').val(), 10);
       var type = this.$('input[name=type]:checked').val();
       var mine = this.$('input[name=mine]:checked').val();
       var userType = this.$('input[name=userType]:checked').val();
       var user = this.$id('user').select2('data');
 
-      if (dateRange.from)
-      {
-        selector.push({name: 'ge', args: ['date', dateRange.from]});
-      }
-
-      if (dateRange.to)
-      {
-        selector.push({name: 'lt', args: ['date', dateRange.to]});
-      }
+      dateTimeRange.formToRql(this, selector);
 
       if (shiftNo !== 0)
       {

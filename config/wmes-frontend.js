@@ -119,6 +119,8 @@ exports.frontendAppData = {
   KAIZEN_MULTI: false,
   XLSX_EXPORT: process.platform === 'win32',
   PRODUCTION_DATA_START_DATE: '2017-01-01',
+  SHIFT_START_HOUR: 6,
+  SHIFT_LENGTH: 8,
   OFFICE365_TENANT: 'Microsoft',
   CORS_PING_URL: 'https://wmes.walkner.pl/ping'
 };
@@ -348,7 +350,12 @@ exports.express = {
   },
   cookieSecret: '1ee7\\/\\/mes',
   ejsAmdHelpers: {
-    t: 'app/i18n'
+    _: 'underscore',
+    $: 'jquery',
+    t: 'app/i18n',
+    time: 'app/time',
+    user: 'app/user',
+    forms: 'app/core/util/forms'
   },
   textBody: {limit: '30mb'},
   jsonBody: {limit: '10mb'}

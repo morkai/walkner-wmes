@@ -1,25 +1,33 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/time',
   'app/core/views/FilterView',
+  'app/core/util/forms/dateTimeRange',
   'app/xiconf/templates/filter'
 ], function(
+  _,
   time,
   FilterView,
-  filterTemplate
+  dateTimeRange,
+  template
 ) {
   'use strict';
 
   return FilterView.extend({
 
-    template: filterTemplate,
+    template: template,
+
+    events: _.assign({
+
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent
+
+    }, FilterView.prototype.events),
 
     defaultFormData: function()
     {
       return {
-        from: '',
-        to: '',
         srcId: '',
         serviceTag: '',
         orderNo: '',
@@ -30,14 +38,7 @@ define([
     },
 
     termToForm: {
-      'startedAt': function(propertyName, term, formData)
-      {
-        var datetimeFormat = this.$id('from').prop('type') === 'datetime-local'
-          ? 'YYYY-MM-DDTHH:mm:ss'
-          : 'YYYY-MM-DD HH:mm';
-
-        formData[term.name === 'ge' ? 'from' : 'to'] = time.format(term.args[1], datetimeFormat);
-      },
+      'startedAt': dateTimeRange.rqlToForm,
       'orderNo': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1].replace(/[^0-9]/g, '');
@@ -109,13 +110,13 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var fromMoment = time.getMoment(this.$id('from').val());
-      var toMoment = time.getMoment(this.$id('to').val());
       var nc12Type = this.$('input[name="nc12Type"]:checked').val();
       var nc12 = this.$id('nc12').val().trim();
       var serviceTag = this.$id('serviceTag').val().trim();
       var srcId = this.$id('srcId').val();
       var $result = this.$('input[name="result[]"]:checked');
+
+      dateTimeRange.formToRql(this, selector);
 
       if (srcId.length)
       {
@@ -141,16 +142,6 @@ define([
       if (/^P[0-9]+$/.test(serviceTag))
       {
         selector.push({name: 'eq', args: ['serviceTag', serviceTag]});
-      }
-
-      if (fromMoment.isValid())
-      {
-        selector.push({name: 'ge', args: ['startedAt', fromMoment.valueOf()]});
-      }
-
-      if (toMoment.isValid())
-      {
-        selector.push({name: 'lt', args: ['startedAt', toMoment.valueOf()]});
       }
 
       if ($result.length === 1)

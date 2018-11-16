@@ -1,15 +1,17 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/user',
   'app/core/views/FilterView',
-  'app/core/util/fixTimeRange',
+  'app/core/util/forms/dateTimeRange',
   'app/orgUnits/views/OrgUnitPickerView',
   'app/prodLogEntries/templates/filter'
 ], function(
+  _,
   user,
   FilterView,
-  fixTimeRange,
+  dateTimeRange,
   OrgUnitPickerView,
   template
 ) {
@@ -19,16 +21,16 @@ define([
 
     template: template,
 
-    defaultFormData: {
-      createdAt: '',
-      type: null
-    },
+    events: _.assign({
+
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent
+
+    }, FilterView.prototype.events),
+
+    defaultFormData: {},
 
     termToForm: {
-      'createdAt': function(propertyName, term, formData)
-      {
-        fixTimeRange.toFormData(formData, term, 'date+time');
-      },
+      'createdAt': dateTimeRange.rqlToForm,
       'type': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
@@ -39,7 +41,7 @@ define([
     {
       FilterView.prototype.initialize.apply(this, arguments);
 
-      this.setView('#' + this.idPrefix + '-orgUnit', new OrgUnitPickerView({
+      this.setView('#-orgUnit', new OrgUnitPickerView({
         filterView: this
       }));
     },
@@ -56,22 +58,13 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var timeRange = fixTimeRange.fromView(this, {defaultTime: '06:00'});
       var type = this.$id('type').val();
+
+      dateTimeRange.formToRql(this, selector);
 
       if (type && type.length)
       {
         selector.push({name: 'eq', args: ['type', type]});
-      }
-
-      if (timeRange.from)
-      {
-        selector.push({name: 'ge', args: ['createdAt', timeRange.from]});
-      }
-
-      if (timeRange.to)
-      {
-        selector.push({name: 'le', args: ['createdAt', timeRange.to]});
       }
     }
 

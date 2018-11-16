@@ -1,3 +1,5 @@
+@import "./dateTimeRange.css";
+
 .form-group:last-child {
   margin-bottom: 0;
 }
@@ -80,8 +82,13 @@
 .form-group-datetime > input[type="text"] {
   width: 110px;
 }
+.form-group-datetime > label {
+  margin: 0 4px;
+  line-height: 34px;
+}
 .form-group-dateRange a {
   text-decoration: none;
+  cursor: pointer;
 }
 .form-group-dateRange > div:first-child > .radio-inline {
   font-weight: bold;

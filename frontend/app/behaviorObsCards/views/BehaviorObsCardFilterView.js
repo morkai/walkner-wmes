@@ -5,6 +5,7 @@ define([
   'app/time',
   'app/core/views/FilterView',
   'app/core/util/idAndLabel',
+  'app/core/util/forms/dateTimeRange',
   'app/data/orgUnits',
   'app/users/util/setUpUserSelect2',
   'app/kaizenOrders/dictionaries',
@@ -15,6 +16,7 @@ define([
   time,
   FilterView,
   idAndLabel,
+  dateTimeRange,
   orgUnits,
   setUpUserSelect2,
   kaizenDictionaries,
@@ -26,7 +28,9 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
+
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'change input[name="userType"]': 'toggleUserSelect2',
       'keyup select': function(e)
       {
@@ -41,6 +45,7 @@ define([
       {
         e.target.selectedIndex = -1;
       }
+
     }, FilterView.prototype.events),
 
     defaultFormData: function()
@@ -51,13 +56,12 @@ define([
         line: [],
         userType: 'others',
         user: null,
-        from: '',
-        to: '',
         anyHard: []
       };
     },
 
     termToForm: {
+      'date': dateTimeRange.rqlToForm,
       'observer.id': function(propertyName, term, formData)
       {
         formData.userType = 'observer';
@@ -80,10 +84,6 @@ define([
           formData.userType = 'others';
           formData.user = term.args[1];
         }
-      },
-      'date': function(propertyName, term, formData)
-      {
-        formData[term.name === 'ge' ? 'from' : 'to'] = time.format(term.args[1], 'YYYY-MM-DD');
       },
       'section': function(propertyName, term, formData)
       {
@@ -112,33 +112,18 @@ define([
 
     serialize: function()
     {
-      return _.extend(FilterView.prototype.serialize.call(this), {
+      return _.assign(FilterView.prototype.serialize.call(this), {
         sections: kaizenDictionaries.sections.toJSON()
       });
     },
 
     serializeFormToQuery: function(selector)
     {
-      var fromMoment = time.getMoment(this.$id('from').val(), 'YYYY-MM-DD');
-      var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var userType = this.$('input[name="userType"]:checked').val();
       var user = this.$id('user').val();
       var anyHard = this.getButtonGroupValue('anyHard');
 
-      if (fromMoment.isValid())
-      {
-        selector.push({name: 'ge', args: ['date', fromMoment.valueOf()]});
-      }
-
-      if (toMoment.isValid())
-      {
-        if (toMoment.valueOf() === fromMoment.valueOf())
-        {
-          this.$id('to').val(toMoment.add(1, 'days').format('YYYY-MM-DD'));
-        }
-
-        selector.push({name: 'lt', args: ['date', toMoment.valueOf()]});
-      }
+      dateTimeRange.formToRql(this, selector);
 
       if (userType === 'observer' && user)
       {

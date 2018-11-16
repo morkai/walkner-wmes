@@ -7,8 +7,52 @@ define([
 ) {
   'use strict';
 
-  return function getShiftStartInfo(date)
+  function getCustomShiftStartInfo(date, utc, startHour, shiftLength)
   {
+    var moment = (utc ? time.utc : time).getMoment(date);
+    var now = moment.valueOf();
+    var shift = 1;
+    var shiftCount = 24 / shiftLength;
+
+    if (moment.hours() < startHour)
+    {
+      moment.subtract(24, 'hours');
+    }
+
+    moment.hours(startHour).startOf('hours');
+
+    for (; shift <= shiftCount; ++shift)
+    {
+      var shiftStartTime = moment.valueOf();
+      var shiftEndTime = moment.add(shiftLength, 'hours').valueOf();
+
+      if (now >= shiftStartTime && now < shiftEndTime)
+      {
+        return {
+          moment: moment.subtract(shiftLength, 'hours').startOf('hour'),
+          no: shift,
+          startTime: shiftStartTime,
+          endTime: shiftEndTime,
+          startHour: startHour,
+          length: shiftLength,
+          count: shiftCount
+        };
+      }
+    }
+  }
+
+  return function getShiftStartInfo(date, options)
+  {
+    if (options)
+    {
+      return getCustomShiftStartInfo(
+        date,
+        !!options.utc,
+        typeof options.startHour === 'number' ? options.startHour : 6,
+        options.shiftLength || 8
+      );
+    }
+
     var moment = time.getMoment(date);
     var hour = moment.hour();
     var shift = -1;
@@ -38,8 +82,10 @@ define([
     }
 
     return {
-      moment: moment.minutes(0).seconds(0).milliseconds(0),
-      shift: shift
+      moment: moment.startOf('minute'),
+      shift: shift,
+      startHour: 6,
+      shiftLength: 8
     };
   };
 });

@@ -5,6 +5,7 @@ define([
   'app/time',
   'app/core/views/FilterView',
   'app/core/util/idAndLabel',
+  'app/core/util/forms/dateTimeRange',
   'app/data/orgUnits',
   'app/users/util/setUpUserSelect2',
   'app/qiResults/dictionaries',
@@ -14,6 +15,7 @@ define([
   time,
   FilterView,
   idAndLabel,
+  dateTimeRange,
   orgUnits,
   setUpUserSelect2,
   qiDictionaries,
@@ -46,7 +48,9 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
+
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
 
       'mouseup #-result > .btn': function(e)
       {
@@ -75,8 +79,6 @@ define([
     defaultFormData: function()
     {
       return {
-        from: '',
-        to: '',
         result: '',
         order: '',
         serialNumbers: '',
@@ -94,13 +96,10 @@ define([
     },
 
     termToForm: {
+      'inspectedAt': dateTimeRange.rqlToForm,
       'ok': function(propertyName, term, formData)
       {
         formData.result = term.args[1] ? 'ok' : 'nok';
-      },
-      'inspectedAt': function(propertyName, term, formData)
-      {
-        formData[term.name === 'ge' ? 'from' : 'to'] = time.format(term.args[1], 'YYYY-MM-DD');
       },
       'nc12': function(propertyName, term, formData)
       {
@@ -132,8 +131,6 @@ define([
     serializeFormToQuery: function(selector)
     {
       var result = this.getButtonGroupValue('result');
-      var fromMoment = time.getMoment(this.$id('from').val(), 'YYYY-MM-DD');
-      var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var order = this.$id('order').val().replace(/[^0-9A-Za-z]+/g, '').toUpperCase();
       var serialNumbers = this.$id('serialNumbers').val().toUpperCase();
       var inspector = this.$id('inspector').val();
@@ -144,6 +141,8 @@ define([
       var faultCode = this.$id('faultCode').val();
       var status = this.$id('status').val();
 
+      dateTimeRange.formToRql(this, selector);
+
       if (result === 'ok')
       {
         selector.push({name: 'eq', args: ['ok', true]});
@@ -151,21 +150,6 @@ define([
       else if (result === 'nok')
       {
         selector.push({name: 'eq', args: ['ok', false]});
-      }
-
-      if (fromMoment.isValid())
-      {
-        selector.push({name: 'ge', args: ['inspectedAt', fromMoment.valueOf()]});
-      }
-
-      if (toMoment.isValid())
-      {
-        if (toMoment.valueOf() === fromMoment.valueOf())
-        {
-          this.$id('to').val(toMoment.add(1, 'days').format('YYYY-MM-DD'));
-        }
-
-        selector.push({name: 'lt', args: ['inspectedAt', toMoment.valueOf()]});
       }
 
       if (order.length === 9)
@@ -412,7 +396,7 @@ define([
     {
       if (filter === 'inspectedAt')
       {
-        this.$id('from').focus();
+        this.$id('from-date').focus();
 
         return;
       }

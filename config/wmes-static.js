@@ -1,5 +1,7 @@
 'use strict';
 
+const frontendConfig = require('./wmes-frontend');
+
 exports.id = 'wmes-static';
 
 exports.modules = [
@@ -14,9 +16,7 @@ exports.httpServer = {
 };
 
 exports['express/static'] = {
-  staticPath: `${__dirname}/../frontend`,
-  staticBuildPath: `${__dirname}/../frontend-build`,
-  ejsAmdHelpers: {
-    t: 'app/i18n'
-  }
+  staticPath: frontendConfig.express.staticPath,
+  staticBuildPath: frontendConfig.express.staticBuildPath,
+  ejsAmdHelpers: frontendConfig.express.ejsAmdHelpers
 };

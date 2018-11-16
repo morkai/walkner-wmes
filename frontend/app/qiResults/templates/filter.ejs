@@ -6,14 +6,12 @@
       <label class="btn btn-default qiResults-filter-nok"><input type="radio" name="result" value="nok"> <%- t('qiResults', 'filter:result:nok') %></label>
     </div>
   </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-from"><%- t('core', 'filter:date:from') %></label>
-    <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="<%- t('core', 'placeholder:date') %>" min="2016-01-01">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-to"><%- t('core', 'filter:date:to') %></label>
-    <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="<%- t('core', 'placeholder:date') %>" min="2016-01-01">
-  </div>
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    property: 'inspectedAt',
+    type: 'date',
+    labels: {text: t('qiResults', 'PROPERTY:inspectedAt'), ranges: true}
+  }) %>
   <div class="form-group hidden" data-filter="order">
     <label for="<%- idPrefix %>-order"><%- t('qiResults', 'filter:order') %></label>
     <input id="<%- idPrefix %>-order" class="form-control" name="order" type="text" autocomplete="new-password" maxlength="12">

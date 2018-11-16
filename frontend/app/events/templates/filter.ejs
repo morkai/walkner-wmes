@@ -1,21 +1,14 @@
 <form id="<%- idPrefix %>-form" class="well filter-form">
-  <div class="form-group">
-    <label for="<%- idPrefix %>-from-date"><%- t('core', 'filter:date:from') %></label>
-    <div id="<%- idPrefix %>-from" class="form-group-datetime">
-      <input id="<%- idPrefix %>-from-date" class="form-control" name="from-date" type="date" placeholder="YYYY-MM-DD">
-      <input id="<%- idPrefix %>-from-time" class="form-control" name="from-time" type="time" placeholder="hh:mm">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-to-date"><%- t('core', 'filter:date:to') %></label>
-    <div id="<%- idPrefix %>-to" class="form-group-datetime">
-      <input id="<%- idPrefix %>-to-date" class="form-control" name="to-date" type="date" placeholder="YYYY-MM-DD">
-      <input id="<%- idPrefix %>-to-time" class="form-control" name="to-time" type="time" placeholder="hh:mm">
-    </div>
-  </div>
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    property: 'time',
+    type: 'date+time',
+    startHour: 6,
+    labels: {text: t('events', 'PROPERTY:time'), ranges: '+shifts'}
+  }) %>
   <div class="form-group">
     <label for="<%- idPrefix %>-type"><%- t('events', 'PROPERTY:type') %></label>
-    <input id="<%- idPrefix %>-type" name="type" type=text" placeholder="<%= t('events', 'filter:placeholder:type') %>">
+    <input id="<%- idPrefix %>-type" name="type" type="text" placeholder="<%= t('events', 'filter:placeholder:type') %>">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-user"><%- t('events', 'PROPERTY:user') %></label>

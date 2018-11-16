@@ -1,25 +1,33 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/time',
   'app/core/views/FilterView',
+  'app/core/util/forms/dateTimeRange',
   'app/xiconfOrders/templates/filter'
 ], function(
+  _,
   time,
   FilterView,
-  filterTemplate
+  dateTimeRange,
+  template
 ) {
   'use strict';
 
   return FilterView.extend({
 
-    template: filterTemplate,
+    template: template,
+
+    events: _.assign({
+
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent
+
+    }, FilterView.prototype.events),
 
     defaultFormData: function()
     {
       return {
-        from: '',
-        to: '',
         _id: '',
         nc12: '',
         status: [-1, 0, 1]
@@ -27,10 +35,7 @@ define([
     },
 
     termToForm: {
-      'reqDate': function(propertyName, term, formData)
-      {
-        formData[term.name === 'ge' ? 'from' : 'to'] = time.format(term.args[1], 'YYYY-MM-DD');
-      },
+      'reqDate': dateTimeRange.rqlToForm,
       '_id': function(propertyName, term, formData)
       {
         formData._id = term.args[1].replace(/[^0-9]/g, '');
@@ -54,22 +59,12 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var fromMoment = time.getMoment(this.$id('from').val(), 'YYYY-MM-DD');
-      var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var status = this.getButtonGroupValue('status').map(Number);
+
+      dateTimeRange.formToRql(this, selector);
 
       this.serializeRegexTerm(selector, '_id', 9, null, false, true);
       this.serializeRegexTerm(selector, 'nc12', 12, null, false, true);
-
-      if (fromMoment.isValid())
-      {
-        selector.push({name: 'ge', args: ['reqDate', fromMoment.valueOf()]});
-      }
-
-      if (toMoment.isValid())
-      {
-        selector.push({name: 'lt', args: ['reqDate', toMoment.valueOf()]});
-      }
 
       if (status.length === 1)
       {

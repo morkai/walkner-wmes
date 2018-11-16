@@ -1,0 +1,70 @@
+<% if (formGroup) { %>
+<div class="form-group">
+<% } %>
+<div class="dateTimeRange" data-property="<%- property %>" data-utc="<%- utc %>" data-set-time="<%- setTime %>" data-type="<%- type %>" data-start-hour="<%- startHour %>" data-shift-length="<%- shiftLength %>">
+  <div class="dateTimeRange-labels">
+    <% labels.forEach(function(label) { %>
+    <div class="dateTimeRange-label <%- label.dropdown || label.ranges ? 'dropdown' : '' %>">
+      <label
+        class="control-label <%- label.dropdown || label.ranges ? 'dropdown-toggle' : '' %>"
+        <%- label.dropdown || label.ranges ? 'data-toggle="dropdown"' : '' %>
+      >
+        <%- label.text %>
+        <% if (label.dropdown || label.ranges) { %><span class="caret"></span><% } %>
+      </label>
+      <% if (label.ranges) { %>
+      <table class="dropdown-menu dateTimeRange-ranges">
+        <% Object.keys(label.ranges).forEach(function(group) { %>
+        <tr>
+          <th><%- t('core', 'dateTimeRange:' + group) %></th>
+          <% label.ranges[group].forEach(function(range) { %>
+          <td>
+            <% if (range) { %>
+            <a href="javascript:void(0)" data-date-time-group="<%- group %>" data-date-time-range="<%- range %>">
+              <% if (t.has('core', 'dateTimeRange:' + group + ':' + range)) { %>
+              <%- t('core', 'dateTimeRange:' + group + ':' + range) %>
+              <% } else if (t.has('core', 'dateTimeRange:' + range)) { %>
+              <%- t('core', 'dateTimeRange:' + range) %>
+              <% } else { %>
+              <%- range %>
+              <% } %>
+            </a>
+            <% } %>
+          </td>
+          <% }) %>
+        </tr>
+        <% }) %>
+      </table>
+      <% } else if (label.dropdown) { %>
+      <ul class="dropdown-menu">
+        <% label.dropdown.forEach(function(item) { %>
+        <li><a <%- item.attrs %>><%- item.text %></a></li>
+        <% }) %>
+      </ul>
+      <% } %>
+    </div>
+    <% }) %>
+  </div>
+  <div class="dateTimeRange-fields">
+    <div class="dateTimeRange-field dateTimeRange-from">
+      <% if (type.indexOf('date') !== -1) { %>
+        <input id="<%- idPrefix %>-from-date" name="from-date" class="form-control" type="date" placeholder="<%- t('core', 'dateTimeRange:placeholder:date') %>" min="<%- minDate %>" max="<%- maxDate %>">
+      <% } %>
+      <% if (type.indexOf('time') !== -1) { %>
+      <input id="<%- idPrefix %>-from-time" name="from-time" class="form-control" type="time" placeholder="<%- t('core', 'dateTimeRange:placeholder:time') %>">
+      <% } %>
+    </div>
+    <div class="dateTimeRange-separator"><%- separator %></div>
+    <div class="dateTimeRange-field dateTimeRange-to">
+      <% if (type.indexOf('date') !== -1) { %>
+      <input id="<%- idPrefix %>-to-date" name="to-date" class="form-control" type="date" placeholder="<%- t('core', 'dateTimeRange:placeholder:date') %>" min="<%- minDate %>" max="<%- maxDate %>">
+      <% } %>
+      <% if (type.indexOf('time') !== -1) { %>
+      <input id="<%- idPrefix %>-to-time" name="to-time" class="form-control" type="time" placeholder="<%- t('core', 'dateTimeRange:placeholder:time') %>">
+      <% } %>
+    </div>
+  </div>
+</div>
+<% if (formGroup) { %>
+</div>
+<% } %>

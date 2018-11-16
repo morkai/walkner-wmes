@@ -125,8 +125,11 @@ define([
       to: null
     };
 
-    var fromMoment = fixEl(view.$id(options.fromId), options.defaultTime, options.utc);
-    var toMoment = fixEl(view.$id(options.toId), options.defaultTime, options.utc);
+    var $from = view.$id(options.fromId);
+    var $to = view.$id(options.toId);
+
+    var fromMoment = fixEl($from, options.defaultTime, options.utc);
+    var toMoment = fixEl($to, options.defaultTime, options.utc);
 
     if (fromMoment.isValid())
     {

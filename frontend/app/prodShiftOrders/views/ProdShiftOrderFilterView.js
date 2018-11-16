@@ -7,7 +7,7 @@ define([
   'app/user',
   'app/data/mrpControllers',
   'app/core/views/FilterView',
-  'app/core/util/fixTimeRange',
+  'app/core/util/forms/dateTimeRange',
   'app/orgUnits/views/OrgUnitPickerView',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/prodShiftOrders/templates/filter'
@@ -18,20 +18,48 @@ define([
   user,
   mrpControllers,
   FilterView,
-  fixTimeRange,
+  dateTimeRange,
   OrgUnitPickerView,
   setUpMrpSelect2,
-  filterTemplate
+  template
 ) {
   'use strict';
 
   return FilterView.extend({
 
-    template: filterTemplate,
+    template: template,
+
+    events: _.assign({
+
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
+
+      'focus .prodShiftOrders-filter-orderId': function(e)
+      {
+        var $input = this.$(e.currentTarget);
+        var $group = $input.closest('.form-group');
+        var $textarea = $('<textarea class="form-control" rows="4"></textarea>')
+          .css({
+            position: 'absolute',
+            marginTop: '-34px',
+            width: '383px',
+            zIndex: '2'
+          })
+          .val($input.val().split(' ').join('\n'))
+          .appendTo($group)
+          .focus();
+
+        $textarea.on('blur', function()
+        {
+          $input.val($textarea.val().split('\n').join(' ')).prop('disabled', false);
+          $textarea.remove();
+        });
+
+        $input[0].disabled = true;
+      }
+
+    }, FilterView.prototype.events),
 
     defaultFormData: {
-      from: '',
-      to: '',
       mrp: '',
       type: null,
       shift: 0,
@@ -40,10 +68,7 @@ define([
     },
 
     termToForm: {
-      'startedAt': function(propertyName, term, formData)
-      {
-        fixTimeRange.toFormData(formData, term, 'date');
-      },
+      'startedAt': dateTimeRange.rqlToForm,
       'orderData.mrp': function(propertyName, term, formData)
       {
         formData.mrp = Array.isArray(term.args[1]) ? term.args[1].join(',') : '';
@@ -94,34 +119,6 @@ define([
         formData[propertyName] = term.args[1];
       }
     },
-
-    events: _.assign({
-
-      'focus .prodShiftOrders-filter-orderId': function(e)
-      {
-        var $input = this.$(e.currentTarget);
-        var $group = $input.closest('.form-group');
-        var $textarea = $('<textarea class="form-control" rows="4"></textarea>')
-          .css({
-            position: 'absolute',
-            marginTop: '-34px',
-            width: '383px',
-            zIndex: '2'
-          })
-          .val($input.val().split(' ').join('\n'))
-          .appendTo($group)
-          .focus();
-
-        $textarea.on('blur', function()
-        {
-          $input.val($textarea.val().split('\n').join(' ')).prop('disabled', false);
-          $textarea.remove();
-        });
-
-        $input[0].disabled = true;
-      }
-
-    }, FilterView.prototype.events),
 
     initialize: function()
     {
@@ -263,12 +260,13 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var timeRange = fixTimeRange.fromView(this, {defaultTime: '06:00'});
       var mrp = this.$id('mrp').val();
       var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
 
       this.serializeOrderId(selector);
       this.serializeBom(selector);
+
+      dateTimeRange.formToRql(this, selector);
 
       if (mrp && mrp.length)
       {
@@ -278,16 +276,6 @@ define([
       if (shift)
       {
         selector.push({name: 'eq', args: ['shift', shift]});
-      }
-
-      if (timeRange.from)
-      {
-        selector.push({name: 'ge', args: ['startedAt', timeRange.from]});
-      }
-
-      if (timeRange.to)
-      {
-        selector.push({name: 'lt', args: ['startedAt', timeRange.to]});
       }
     }
 

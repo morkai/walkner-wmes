@@ -5,6 +5,7 @@ define([
   'app/time',
   'app/core/views/FilterView',
   'app/core/util/idAndLabel',
+  'app/core/util/forms/dateTimeRange',
   'app/users/util/setUpUserSelect2',
   'app/pfepEntries/templates/filter'
 ], function(
@@ -12,6 +13,7 @@ define([
   time,
   FilterView,
   idAndLabel,
+  dateTimeRange,
   setUpUserSelect2,
   template
 ) {
@@ -32,7 +34,9 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
+
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
 
       'mouseup #-result > .btn': function(e)
       {
@@ -61,8 +65,6 @@ define([
     defaultFormData: function()
     {
       return {
-        from: '',
-        to: '',
         nc12: '',
         packType: '',
         vendor: '',
@@ -71,10 +73,7 @@ define([
     },
 
     termToForm: {
-      'createdAt': function(propertyName, term, formData)
-      {
-        formData[term.name === 'ge' ? 'from' : 'to'] = time.format(term.args[1], 'YYYY-MM-DD');
-      },
+      'createdAt': dateTimeRange.rqlToForm,
       'nc12': function(propertyName, term, formData)
       {
         formData.nc12 = term.args[1].replace(/[^A-Z0-9]+/g, '');
@@ -91,25 +90,10 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var fromMoment = time.getMoment(this.$id('from').val(), 'YYYY-MM-DD');
-      var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var nc12 = this.$id('nc12').val().replace(/[^0-9A-Za-z]+/g, '').toUpperCase();
       var creator = this.$id('creator').val();
 
-      if (fromMoment.isValid())
-      {
-        selector.push({name: 'ge', args: ['createdAt', fromMoment.valueOf()]});
-      }
-
-      if (toMoment.isValid())
-      {
-        if (toMoment.valueOf() === fromMoment.valueOf())
-        {
-          this.$id('to').val(toMoment.add(1, 'days').format('YYYY-MM-DD'));
-        }
-
-        selector.push({name: 'lt', args: ['createdAt', toMoment.valueOf()]});
-      }
+      dateTimeRange.formToRql(this, selector);
 
       if (/^([0-9]{12}|[A-Z][A-Z0-9]{6})$/.test(nc12))
       {
@@ -201,7 +185,7 @@ define([
     {
       if (filter === 'date')
       {
-        this.$id('from').focus();
+        this.$id('from-date').focus();
 
         return;
       }

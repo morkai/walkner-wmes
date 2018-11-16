@@ -39,7 +39,7 @@
     "PROPERTY:subject": "Subject",
     "PROPERTY:subjectAndDescription": "Subject/description",
     "PROPERTY:eventDate": "Event time",
-    "PROPERTY:eventDate:short": "YY-MM-DD[, at ] H.",
+    "PROPERTY:eventDate:short": "YYYY-MM-DD[, at ] H.",
     "PROPERTY:eventDate:long": "LL[, at. ] H.",
     "PROPERTY:area": "Area",
     "PROPERTY:cause": "Cause category",

@@ -7,7 +7,7 @@ define([
   'app/user',
   'app/data/mrpControllers',
   'app/core/views/FilterView',
-  'app/core/util/fixTimeRange',
+  'app/core/util/forms/dateTimeRange',
   'app/orgUnits/views/OrgUnitPickerView',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/prodShifts/templates/filter'
@@ -18,16 +18,22 @@ define([
   user,
   mrpControllers,
   FilterView,
-  fixTimeRange,
+  dateTimeRange,
   OrgUnitPickerView,
   setUpMrpSelect2,
-  filterTemplate
+  template
 ) {
   'use strict';
 
   return FilterView.extend({
 
-    template: filterTemplate,
+    template: template,
+
+    events: _.assign({
+
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent
+
+    }, FilterView.prototype.events),
 
     defaultFormData: {
       date: '',
@@ -36,10 +42,7 @@ define([
     },
 
     termToForm: {
-      'date': function(propertyName, term, formData)
-      {
-        fixTimeRange.toFormData(formData, term, 'date');
-      },
+      'date': dateTimeRange.rqlToForm,
       'shift': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
@@ -54,7 +57,7 @@ define([
     {
       FilterView.prototype.initialize.apply(this, arguments);
 
-      this.setView('#' + this.idPrefix + '-orgUnit', new OrgUnitPickerView({
+      this.setView('#-orgUnit', new OrgUnitPickerView({
         filterView: this
       }));
     },
@@ -70,23 +73,14 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var timeRange = fixTimeRange.fromView(this);
       var shift = parseInt(this.$('input[name="shift"]:checked').val(), 10);
       var orderMrp = this.$id('orderMrp').val();
+
+      dateTimeRange.formToRql(this, selector);
 
       if (shift)
       {
         selector.push({name: 'eq', args: ['shift', shift]});
-      }
-
-      if (timeRange.from)
-      {
-        selector.push({name: 'ge', args: ['date', timeRange.from]});
-      }
-
-      if (timeRange.to)
-      {
-        selector.push({name: 'le', args: ['date', timeRange.to]});
       }
 
       if (orderMrp && orderMrp.length)

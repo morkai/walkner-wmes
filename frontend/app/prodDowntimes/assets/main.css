@@ -18,6 +18,11 @@
   font-size: 60px;
   line-height: 1;
 }
+.prodDowntimes-filter .dateTimeRange-separator {
+  margin: 15px 0 5px 0;
+  padding: 0;
+  font-weight: bold;
+}
 .prodDowntimes-list .label {
   font-size: 1em;
 }

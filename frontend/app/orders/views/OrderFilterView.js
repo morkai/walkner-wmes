@@ -2,41 +2,42 @@
 
 define([
   'underscore',
-  'app/core/util/fixTimeRange',
   'app/core/util/idAndLabel',
+  'app/core/util/forms/dateTimeRange',
   'app/core/views/FilterView',
   'app/data/orderStatuses',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/orders/templates/filter'
 ], function(
   _,
-  fixTimeRange,
   idAndLabel,
+  dateTimeRange,
   FilterView,
   orderStatuses,
   setUpMrpSelect2,
-  filterTemplate
+  template
 ) {
   'use strict';
 
   return FilterView.extend({
 
-    template: filterTemplate,
+    template: template,
+
+    events: _.assign({
+
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent
+
+    }, FilterView.prototype.events),
 
     defaultFormData: {
       _id: '',
       nc12: '',
-      from: '',
-      to: '',
       mrp: '',
       statuses: ''
     },
 
     termToForm: {
-      'scheduledStartDate': function(propertyName, term, formData)
-      {
-        fixTimeRange.toFormData(formData, term, 'date');
-      },
+      'scheduledStartDate': dateTimeRange.rqlToForm,
       '_id': function(propertyName, term, formData)
       {
         var value = term.args[1];
@@ -75,23 +76,14 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var timeRange = fixTimeRange.fromView(this);
       var mrp = this.$id('mrp').val();
       var statusesIn = this.$id('statusesIn').val();
       var statusesNin = this.$id('statusesNin').val();
 
+      dateTimeRange.formToRql(this, selector);
+
       this.serializeRegexTerm(selector, '_id', 9, null, false, true);
       this.serializeRegexTerm(selector, 'nc12', 12, null, false, true);
-
-      if (timeRange.from)
-      {
-        selector.push({name: 'ge', args: ['scheduledStartDate', timeRange.from]});
-      }
-
-      if (timeRange.to)
-      {
-        selector.push({name: 'lt', args: ['scheduledStartDate', timeRange.to]});
-      }
 
       if (mrp.length)
       {

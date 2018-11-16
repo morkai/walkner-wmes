@@ -7,7 +7,7 @@ define([
   'app/data/orgUnits',
   'app/data/downtimeReasons',
   'app/core/views/FilterView',
-  'app/core/util/fixTimeRange',
+  'app/core/util/forms/dateTimeRange',
   'app/orgUnits/views/OrgUnitPickerView',
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/prodDowntimes/templates/filter'
@@ -18,19 +18,20 @@ define([
   orgUnits,
   downtimeReasons,
   FilterView,
-  fixTimeRange,
+  dateTimeRange,
   OrgUnitPickerView,
   setUpMrpSelect2,
-  filterTemplate
+  template
 ) {
   'use strict';
 
   return FilterView.extend({
 
-    template: filterTemplate,
+    template: template,
 
-    events: _.extend({
+    events: _.assign({
 
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'change #-alerts': 'toggleStatus'
 
     }, FilterView.prototype.events),
@@ -38,7 +39,6 @@ define([
     defaultFormData: function()
     {
       return {
-        startedAt: '',
         aor: null,
         aorIn: true,
         reason: null,
@@ -49,10 +49,7 @@ define([
     },
 
     termToForm: {
-      'startedAt': function(propertyName, term, formData)
-      {
-        fixTimeRange.toFormData(formData, term, 'date+time');
-      },
+      'startedAt': dateTimeRange.rqlToForm,
       'aor': function(propertyName, term, formData)
       {
         if (term.name === 'eq' || term.name === 'ne')
@@ -85,7 +82,7 @@ define([
     {
       FilterView.prototype.initialize.apply(this, arguments);
 
-      this.setView('#' + this.idPrefix + '-orgUnit', new OrgUnitPickerView({
+      this.setView('#-orgUnit', new OrgUnitPickerView({
         filterView: this
       }));
     },
@@ -141,7 +138,6 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var timeRange = fixTimeRange.fromView(this, {defaultTime: '06:00'});
       var aor = this.$id('aor').select2('val');
       var aorIn = this.$id('aorIn').prop('checked');
       var reason = this.$id('reason').select2('val');
@@ -149,6 +145,8 @@ define([
       var alerts = this.$id('alerts').prop('checked');
       var status = this.fixStatus();
       var mrp = this.$id('mrp').val();
+
+      dateTimeRange.formToRql(this, selector);
 
       if (alerts)
       {
@@ -166,16 +164,6 @@ define([
       if (mrp && mrp.length)
       {
         selector.push({name: 'in', args: ['orderData.mrp', mrp.split(',')]});
-      }
-
-      if (timeRange.from)
-      {
-        selector.push({name: 'ge', args: ['startedAt', timeRange.from]});
-      }
-
-      if (timeRange.to)
-      {
-        selector.push({name: 'le', args: ['startedAt', timeRange.to]});
       }
 
       if (aor.length === 1)

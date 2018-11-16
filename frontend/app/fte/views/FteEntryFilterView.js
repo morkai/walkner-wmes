@@ -9,6 +9,7 @@ define([
   'app/orgUnits/views/OrgUnitDropdownsView',
   'app/core/Model',
   'app/core/views/FilterView',
+  'app/core/util/forms/dateTimeRange',
   'app/fte/templates/filter'
 ], function(
   _,
@@ -19,7 +20,8 @@ define([
   OrgUnitDropdownsView,
   Model,
   FilterView,
-  filterTemplate
+  dateTimeRange,
+  template
 ) {
   'use strict';
 
@@ -27,17 +29,22 @@ define([
 
   return FilterView.extend({
 
-    template: filterTemplate,
+    template: template,
+
+    events: _.assign({
+
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent
+
+    }, FilterView.prototype.events),
 
     defaultFormData: {
       division: '',
       subdivision: '',
-      from: '',
-      to: '',
       shift: 0
     },
 
     termToForm: {
+      'date': dateTimeRange.rqlToForm,
       'division': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
@@ -46,10 +53,6 @@ define([
         {
           formData[propertyName] = '';
         }
-      },
-      'date': function(propertyName, term, formData)
-      {
-        formData[term.name === 'ge' ? 'from' : 'to'] = time.format(term.args[1], 'YYYY-MM-DD');
       },
       'shift': function(propertyName, term, formData)
       {
@@ -101,9 +104,9 @@ define([
     {
       var division = this.orgUnitDropdownsView.$id('division').val();
       var subdivision = this.orgUnitDropdownsView.$id('subdivision').val();
-      var fromMoment = time.getMoment(this.$id('from').val(), 'YYYY-MM-DD');
-      var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var shiftNo = parseInt(this.$('input[name=shift]:checked').val(), 10);
+
+      dateTimeRange.formToRql(this, selector);
 
       if (!_.isEmpty(subdivision))
       {
@@ -114,68 +117,9 @@ define([
         selector.push({name: 'eq', args: ['division', division]});
       }
 
-      if (fromMoment.isValid())
-      {
-        selector.push({name: 'ge', args: ['date', fromMoment.hours(6).valueOf()]});
-      }
-
-      if (toMoment.isValid())
-      {
-        toMoment.hours(6);
-
-        if (toMoment.valueOf() === fromMoment.valueOf())
-        {
-          this.$id('to').val(toMoment.add(1, 'days').format('YYYY-MM-DD'));
-        }
-
-        selector.push({name: 'lt', args: ['date', toMoment.valueOf()]});
-      }
-
       if (shiftNo !== 0)
       {
         selector.push({name: 'eq', args: ['shift', shiftNo]});
-      }
-    },
-
-    getShiftNoFromMoment: function(moment)
-    {
-      var hours = moment.hours();
-
-      if (hours === 6)
-      {
-        return 1;
-      }
-
-      if (hours === 14)
-      {
-        return 2;
-      }
-
-      if (hours === 22)
-      {
-        return 3;
-      }
-
-      return 0;
-    },
-
-    setHoursByShiftNo: function(moment, shiftNo)
-    {
-      if (shiftNo === 1)
-      {
-        moment.hours(6);
-      }
-      else if (shiftNo === 2)
-      {
-        moment.hours(14);
-      }
-      else if (shiftNo === 3)
-      {
-        moment.hours(22);
-      }
-      else
-      {
-        moment.hours(0);
       }
     }
 

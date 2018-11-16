@@ -4,6 +4,7 @@ define([
   'underscore',
   'app/time',
   'app/core/views/FilterView',
+  'app/core/util/forms/dateTimeRange',
   'app/users/util/setUpUserSelect2',
   'app/d8Entries/dictionaries',
   'app/d8Entries/templates/filter'
@@ -11,6 +12,7 @@ define([
   _,
   time,
   FilterView,
+  dateTimeRange,
   setUpUserSelect2,
   dictionaries,
   template
@@ -21,7 +23,9 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
+
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'change input[name="userType"]': 'toggleUserSelect2',
       'keyup select': function(e)
       {
@@ -36,6 +40,7 @@ define([
       {
         e.target.selectedIndex = -1;
       }
+
     }, FilterView.prototype.events),
 
     defaultFormData: function()
@@ -46,13 +51,12 @@ define([
         entrySource: null,
         problemSource: null,
         userType: 'others',
-        user: null,
-        from: '',
-        to: ''
+        user: null
       };
     },
 
     termToForm: {
+      'crsRegisterDate': dateTimeRange.rqlToForm,
       'area': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
@@ -80,10 +84,6 @@ define([
           formData.user = term.args[1];
         }
       },
-      'crsRegisterDate': function(propertyName, term, formData)
-      {
-        formData[term.name === 'ge' ? 'from' : 'to'] = time.format(term.args[1], 'YYYY-MM-DD');
-      },
       'status': 'area',
       'entrySource': 'area',
       'problemSource': 'area'
@@ -101,25 +101,10 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var fromMoment = time.getMoment(this.$id('from').val(), 'YYYY-MM-DD');
-      var toMoment = time.getMoment(this.$id('to').val(), 'YYYY-MM-DD');
       var userType = this.$('input[name="userType"]:checked').val();
       var user = this.$id('user').val();
 
-      if (fromMoment.isValid())
-      {
-        selector.push({name: 'ge', args: ['crsRegisterDate', fromMoment.valueOf()]});
-      }
-
-      if (toMoment.isValid())
-      {
-        if (toMoment.valueOf() === fromMoment.valueOf())
-        {
-          this.$id('to').val(toMoment.add(1, 'days').format('YYYY-MM-DD'));
-        }
-
-        selector.push({name: 'lt', args: ['crsRegisterDate', toMoment.valueOf()]});
-      }
+      dateTimeRange.formToRql(this, selector);
 
       if (userType === 'mine' || userType === 'unseen')
       {
