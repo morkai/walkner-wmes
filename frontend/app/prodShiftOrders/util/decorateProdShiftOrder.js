@@ -39,7 +39,7 @@ define([
       var shiftInfo = getShiftStartInfo(obj.startedAt);
 
       obj.date = shiftInfo.moment.format('L');
-      obj.shift = shiftInfo.shift;
+      obj.shift = shiftInfo.no;
     }
     else
     {

@@ -39,7 +39,7 @@ define([
       return {
         rid: null,
         date: time.format(shiftStartInfo.moment.valueOf(), 'YYYY-MM-DD'),
-        shift: shiftStartInfo.shift,
+        shift: shiftStartInfo.no,
         type: 'mech',
         divisions: [],
         prodLines: [],

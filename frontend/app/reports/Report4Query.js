@@ -25,7 +25,7 @@ define([
         to: from.add(7, 'days').valueOf(),
         interval: 'day',
         mode: 'shift',
-        shift: shiftStartInfo.shift,
+        shift: shiftStartInfo.no,
         masters: undefined,
         operators: undefined,
         divisions: [],

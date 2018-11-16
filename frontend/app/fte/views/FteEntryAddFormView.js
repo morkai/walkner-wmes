@@ -70,7 +70,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         date: shiftStartInfo.moment.format('YYYY-MM-DD'),
-        shift: shiftStartInfo.shift
+        shift: shiftStartInfo.no
       };
     },
 

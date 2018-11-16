@@ -197,7 +197,7 @@ define([
     {
       this.shiftStartInfo = getShiftStartInfo(moment.valueOf());
 
-      var shift = t('core', 'SHIFT:' + this.shiftStartInfo.shift);
+      var shift = t('core', 'SHIFT:' + this.shiftStartInfo.no);
 
       this.$id('shift').html(t('heff', 'shift', {shift: shift}));
     },
