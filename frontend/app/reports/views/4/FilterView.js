@@ -5,21 +5,19 @@ define([
   'app/time',
   'app/data/divisions',
   'app/core/View',
-  'app/core/util/fixTimeRange',
   'app/core/util/buttonGroup',
+  'app/core/util/forms/dateTimeRange',
   'app/users/util/setUpUserSelect2',
-  'app/reports/templates/4/filter',
-  'app/reports/util/prepareDateRange'
+  'app/reports/templates/4/filter'
 ], function(
   js2form,
   time,
   divisions,
   View,
-  fixTimeRange,
   buttonGroup,
+  dateTimeRange,
   setUpUsersSelect2,
-  template,
-  prepareDateRange
+  template
 ) {
   'use strict';
 
@@ -28,21 +26,13 @@ define([
     template: template,
 
     events: {
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'submit': function(e)
       {
         e.preventDefault();
 
         this.toggleDivisions();
         this.changeFilter();
-      },
-      'click a[data-range]': function(e)
-      {
-        var dateRange = prepareDateRange(e.target);
-
-        this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
-        this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
-        this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
-        this.$el.submit();
       },
       'change input[name=mode]': function()
       {
@@ -105,8 +95,8 @@ define([
 
       js2form(this.el, formData);
 
-      this.$('input[name=interval]:checked').closest('.btn').addClass('active');
-      this.$('input[name=shift]:checked').closest('.btn').addClass('active');
+      this.$('input[name="interval"]:checked').closest('.btn').addClass('active');
+      this.$('input[name="shift"]:checked').closest('.btn').addClass('active');
 
       var $users = setUpUsersSelect2(this.$id('users'), {
         width: 550,
@@ -189,8 +179,8 @@ define([
     {
       return {
         interval: this.model.get('interval'),
-        from: time.format(+this.model.get('from'), 'YYYY-MM-DD'),
-        to: time.format(+this.model.get('to'), 'YYYY-MM-DD'),
+        'from-date': time.format(+this.model.get('from'), 'YYYY-MM-DD'),
+        'to-date': time.format(+this.model.get('to'), 'YYYY-MM-DD'),
         mode: this.model.get('mode'),
         shift: this.model.get('shift'),
         divisions: this.model.get('divisions'),
@@ -209,13 +199,16 @@ define([
         mode: this.getSelectedMode()
       };
 
-      var timeRange = fixTimeRange.fromView(this);
+      var range = dateTimeRange.serialize(this);
 
-      query.from = timeRange.from || this.getFromMomentForSelectedInterval().valueOf();
-      query.to = timeRange.to || Date.now();
+      var fromMoment = range.from || this.getFromMomentForSelectedInterval();
+      var toMoment = range.to || time.getMoment();
 
-      this.$id('from').val(time.format(query.from, 'YYYY-MM-DD'));
-      this.$id('to').val(time.format(query.to, 'YYYY-MM-DD'));
+      query.from = fromMoment.valueOf();
+      query.to = toMoment.valueOf();
+
+      this.$id('from-date').val(fromMoment.format('YYYY-MM-DD'));
+      this.$id('to-date').val(toMoment.format('YYYY-MM-DD'));
 
       if (query.mode === 'shift')
       {
@@ -236,7 +229,7 @@ define([
 
     getSelectedMode: function()
     {
-      return this.$('input[name=mode]:checked').val();
+      return this.$('input[name="mode"]:checked').val();
     },
 
     getFromMomentForSelectedInterval: function()

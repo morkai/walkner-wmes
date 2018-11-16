@@ -1,27 +1,14 @@
 <form id="<%- idPrefix %>-form" class="well filter-form">
-  <div class="form-group filter-dateRange">
-    <div>
-      <label>
-        <input id="<%- idPrefix %>-mode-online" name="mode" type="radio" value="online">
-        <%- t('reports', 'filter:mode:online') %>
-      </label>
-      <label>
-        <input id="<%- idPrefix %>-mode-date" name="mode" type="radio" value="date">
-        <%- t('reports', 'filter:mode:date') %>
-      </label>
-    </div><div>
-      <label for="<%- idPrefix %>-from-date" class="control-label"><%- t('reports', 'filter:from') %></label>
-      <div id="<%- idPrefix %>-from" class="form-group-datetime">
-        <input id="<%- idPrefix %>-from-date" class="form-control" name="from-date" type="date" placeholder="YYYY-MM-DD" required min="<%- PRODUCTION_DATA_START_DATE %>">
-        <input id="<%- idPrefix %>-from-time" class="form-control" name="from-time" type="time" placeholder="hh:mm">
-      </div>
-      <label for="<%- idPrefix %>-to-date" class="control-label"><%- t('reports', 'filter:to') %></label>
-      <div id="<%- idPrefix %>-to" class="form-group-datetime">
-        <input id="<%- idPrefix %>-to-date" class="form-control" name="to-date" type="date" placeholder="YYYY-MM-DD" min="<%- PRODUCTION_DATA_START_DATE %>">
-        <input id="<%- idPrefix %>-to-time" class="form-control" name="to-time" type="time" placeholder="hh:mm">
-      </div>
-    </div>
-  </div>
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    property: 'time',
+    type: 'date+time',
+    startHour: 6,
+    labels: [
+      {text: t('reports', 'filter:mode:online'), input: {type: 'radio', name: 'mode', value: 'online'}},
+      {text: t('reports', 'filter:mode:date'), input: {type: 'radio', name: 'mode', value: 'date'}, ranges: '+shifts'}
+    ]
+  }) %>
   <div class="form-group">
     <label><%- t('reports', 'filter:interval') %></label>
     <div id="<%- idPrefix %>-intervals" class="btn-group filter-btn-group" data-toggle="buttons">
@@ -36,19 +23,8 @@
     <button id="<%- idPrefix %>-ignoredOrgUnits" type="button" class="btn btn-default"><i class="fa fa-ban"></i><span><%- t('reports', 'filter:ignoredOrgUnits') %></span></button>
   </div>
   <div class="form-group filter-actions">
-    <div class="btn-group">
-      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu">
-        <% ['currentShift', 'prevShift', 'today', 'yesterday', 'currentWeek', 'prevWeek', 'currentMonth', 'prevMonth', 'q1', 'q2', 'q3', 'q4'].forEach(function(range) { %>
-        <li><a data-range="<%- range %>"><%- t('core', 'filter:date:' + range) %></a></li>
-        <% }) %>
-        <% ['currentYear', 'prevYear'].forEach(function(range) { %>
-        <li><a data-range="<%- range %>" data-interval="quarter"><%- t('core', 'filter:date:' + range) %></a></li>
-        <% }) %>
-      </ul>
-    </div><hr><button id="<%- idPrefix %>-showDisplayOptions" type="button" class="btn btn-default"><i class="fa fa-cog"></i><span><%- t('reports', 'filter:options') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>
+    <hr>
+    <button id="<%- idPrefix %>-showDisplayOptions" type="button" class="btn btn-default"><i class="fa fa-cog"></i><span><%- t('reports', 'filter:options') %></span></button>
   </div>
 </form>

@@ -4,17 +4,15 @@ define([
   'js2form',
   'app/time',
   'app/core/View',
-  'app/core/util/fixTimeRange',
   'app/core/util/buttonGroup',
-  'app/reports/util/prepareDateRange',
+  'app/core/util/forms/dateTimeRange',
   'app/paintShop/templates/load/filter'
 ], function(
   js2form,
   time,
   View,
-  fixTimeRange,
   buttonGroup,
-  prepareDateRange,
+  dateTimeRange,
   template
 ) {
   'use strict';
@@ -24,20 +22,12 @@ define([
     template: template,
 
     events: {
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'submit': function()
       {
         this.changeFilter();
 
         return false;
-      },
-      'click a[data-range]': function(e)
-      {
-        var dateRange = prepareDateRange(e.target);
-
-        this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
-        this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
-        this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
-        this.$el.submit();
       }
     },
 
@@ -56,37 +46,19 @@ define([
 
       return {
         interval: model.get('interval'),
-        from: from ? time.format(from, 'YYYY-MM-DD') : '',
-        to: to ? time.format(to, 'YYYY-MM-DD') : ''
+        'from-date': from ? time.format(from, 'YYYY-MM-DD') : '',
+        'to-date': to ? time.format(to, 'YYYY-MM-DD') : ''
       };
     },
 
     changeFilter: function()
     {
+      var range = dateTimeRange.serialize(this);
       var query = {
-        interval: buttonGroup.getValue(this.$id('interval')),
-        from: time.getMoment(this.$id('from').val(), 'YYYY-MM-DD').valueOf(),
-        to: time.getMoment(this.$id('to').val(), 'YYYY-MM-DD').valueOf()
+        from: range.from ? range.from.valueOf() : 0,
+        to: range.to ? range.to.valueOf() : 0,
+        interval: buttonGroup.getValue(this.$id('interval'))
       };
-
-      if (!query.from || query.from < 0)
-      {
-        query.from = 0;
-      }
-
-      if (!query.to || query.to < 0)
-      {
-        query.to = 0;
-      }
-
-      if (query.from && query.from === query.to)
-      {
-        var to = time.getMoment(query.to).add(1, 'days');
-
-        this.$id('to').val(to.format('YYYY-MM-DD'));
-
-        query.to = to.valueOf();
-      }
 
       this.model.set(query);
       this.model.trigger('filtered');

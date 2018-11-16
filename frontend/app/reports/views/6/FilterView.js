@@ -4,19 +4,17 @@ define([
   'js2form',
   'app/time',
   'app/core/View',
-  'app/core/util/fixTimeRange',
   'app/core/util/buttonGroup',
+  'app/core/util/forms/dateTimeRange',
   'app/reports/templates/6/filter',
-  'app/reports/util/prepareDateRange',
   'app/reports/util/getFromTimeByInterval'
 ], function(
   js2form,
   time,
   View,
-  fixTimeRange,
   buttonGroup,
+  dateTimeRange,
   template,
-  prepareDateRange,
   getFromTimeByInterval
 ) {
   'use strict';
@@ -26,20 +24,12 @@ define([
     template: template,
 
     events: {
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'submit': function(e)
       {
         e.preventDefault();
 
         this.changeFilter();
-      },
-      'click a[data-range]': function(e)
-      {
-        var dateRange = prepareDateRange(e.target);
-
-        this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
-        this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
-        this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
-        this.$el.submit();
       }
     },
 
@@ -56,8 +46,8 @@ define([
     {
       return {
         interval: this.model.get('interval'),
-        from: time.format(+this.model.get('from'), 'YYYY-MM-DD'),
-        to: time.format(+this.model.get('to'), 'YYYY-MM-DD')
+        'from-date': time.format(+this.model.get('from'), 'YYYY-MM-DD'),
+        'to-date': time.format(+this.model.get('to'), 'YYYY-MM-DD')
       };
     },
 
@@ -70,13 +60,16 @@ define([
         interval: buttonGroup.getValue(this.$id('interval'))
       };
 
-      var timeRange = fixTimeRange.fromView(this);
+      var range = dateTimeRange.serialize(this);
 
-      query.from = timeRange.from || getFromTimeByInterval(query.interval);
-      query.to = timeRange.to || Date.now();
+      var fromMoment = range.from || getFromTimeByInterval(query.interval);
+      var toMoment = range.to || time.getMoment();
 
-      this.$id('from').val(time.format(query.from, 'YYYY-MM-DD'));
-      this.$id('to').val(time.format(query.to, 'YYYY-MM-DD'));
+      query.from = fromMoment.valueOf();
+      query.to = toMoment.valueOf();
+
+      this.$id('from-date').val(fromMoment.format('YYYY-MM-DD'));
+      this.$id('to-date').val(toMoment.format('YYYY-MM-DD'));
 
       this.model.set(query, {reset: true});
     }

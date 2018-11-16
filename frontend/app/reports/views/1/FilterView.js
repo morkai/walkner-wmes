@@ -7,10 +7,9 @@ define([
   'app/time',
   'app/viewport',
   'app/core/View',
-  'app/core/util/fixTimeRange',
-  'app/reports/templates/1/filter',
-  'app/reports/util/prepareDateRange',
-  'app/reports/views/OrgUnitPickerView'
+  'app/core/util/forms/dateTimeRange',
+  'app/reports/views/OrgUnitPickerView',
+  'app/reports/templates/1/filter'
 ], function(
   _,
   js2form,
@@ -18,10 +17,9 @@ define([
   time,
   viewport,
   View,
-  fixTimeRange,
-  template,
-  prepareDateRange,
-  OrgUnitPickerView
+  dateTimeRange,
+  OrgUnitPickerView,
+  template
 ) {
   'use strict';
 
@@ -30,26 +28,14 @@ define([
     template: template,
 
     events: {
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'submit': function(e)
       {
         e.preventDefault();
 
         this.changeFilter();
       },
-      'change input[name=mode]': 'onModeChange',
-      'click a[data-range]': function(e)
-      {
-        var dateRange = prepareDateRange(e.target, true);
-
-        this.$id('from-date').val(dateRange.fromMoment.format('YYYY-MM-DD'));
-        this.$id('from-time').val(dateRange.fromMoment.format('HH:mm'));
-        this.$id('to-date').val(dateRange.toMoment.format('YYYY-MM-DD'));
-        this.$id('to-time').val(dateRange.toMoment.format('HH:mm'));
-        this.$id('mode-date').click();
-        this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
-        this.checkDateIntervalValidity();
-        this.$el.submit();
-      },
+      'change input[name="mode"]': 'onModeChange',
       'click #-showDisplayOptions': function()
       {
         this.trigger('showDisplayOptions');
@@ -70,7 +56,7 @@ define([
 
       js2form(this.el, formData);
 
-      this.$('[name=interval]:checked').closest('.btn').addClass('active');
+      this.$('input[name="interval"]:checked').closest('.btn').addClass('active');
 
       this.toggleIgnoredOrgUnits();
       this.onModeChange();
@@ -84,11 +70,11 @@ define([
     onModeChange: function()
     {
       var view = this;
-      var online = this.getSelectedMode() === 'online';
+      var online = view.getSelectedMode() === 'online';
 
-      this.$('.filter-dateRange .form-control').prop('disabled', online);
+      view.$('.dateTimeRange .form-control').prop('disabled', online);
 
-      var $intervals = this.$id('intervals').find('.btn');
+      var $intervals = view.$id('intervals').find('.btn');
 
       $intervals.each(function()
       {
@@ -104,15 +90,13 @@ define([
 
         if ($interval.length)
         {
-          $intervals.filter('[data-interval=hour]').click();
+          $intervals.filter('[data-interval="hour"]').click();
         }
       }
       else
       {
-        this.$id('from').select();
+        view.$id('from').select();
       }
-
-      this.checkDateIntervalValidity();
     },
 
     serializeFormData: function()
@@ -145,7 +129,7 @@ define([
         from: null,
         to: null,
         interval: this.$id('intervals').find('.active > input').val(),
-        ignoredOrgUnits: _.extend({}, this.ignoredOrgUnits)
+        ignoredOrgUnits: _.assign({}, this.ignoredOrgUnits)
       };
 
       var fromMoment;
@@ -153,13 +137,13 @@ define([
 
       if (this.getSelectedMode() === 'date')
       {
-        var timeRange = fixTimeRange.fromView(this, {defaultTime: '06:00'});
+        var timeRange = dateTimeRange.serialize(this);
 
-        query.from = timeRange.from || this.getFromMomentForSelectedInterval().valueOf();
-        query.to = timeRange.to || Date.now();
+        fromMoment = timeRange.from || this.getFromMomentForSelectedInterval();
+        toMoment = timeRange.to || time.getMoment();
 
-        fromMoment = time.getMoment(query.from);
-        toMoment = time.getMoment(query.to);
+        query.from = fromMoment.valueOf();
+        query.to = toMoment.valueOf();
       }
       else
       {
@@ -177,7 +161,7 @@ define([
 
     getSelectedMode: function()
     {
-      return this.$('input[name=mode]:checked').val();
+      return this.$('input[name="mode"]:checked').val();
     },
 
     getSelectedInterval: function()
@@ -187,7 +171,7 @@ define([
 
     getFromMomentForSelectedInterval: function()
     {
-      var fromMoment = time.getMoment().minutes(0).seconds(0).milliseconds(0);
+      var fromMoment = time.getMoment().startOf('hour');
 
       switch (this.getSelectedInterval())
       {
@@ -218,15 +202,6 @@ define([
       });
 
       viewport.showDialog(dialogView, t('reports', 'filter:ignoredOrgUnits'));
-    },
-
-    checkDateIntervalValidity: function()
-    {
-      var mode = this.getSelectedMode();
-      var interval = this.getSelectedInterval();
-      var timeRange = fixTimeRange.fromView(this, {defaultTime: '06:00'});
-
-      console.log(mode, interval, timeRange);
     }
 
   });

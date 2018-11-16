@@ -4,22 +4,20 @@ define([
   'js2form',
   'app/time',
   'app/core/View',
-  'app/core/util/fixTimeRange',
   'app/core/util/idAndLabel',
+  'app/core/util/forms/dateTimeRange',
   'app/users/util/setUpUserSelect2',
   'app/kaizenOrders/dictionaries',
-  'app/suggestions/templates/summaryReportFilter',
-  'app/reports/util/prepareDateRange'
+  'app/suggestions/templates/summaryReportFilter'
 ], function(
   js2form,
   time,
   View,
-  fixTimeRange,
   idAndLabel,
+  dateTimeRange,
   setUpUserSelect2,
   kaizenDictionaries,
-  template,
-  prepareDateRange
+  template
 ) {
   'use strict';
 
@@ -28,19 +26,12 @@ define([
     template: template,
 
     events: {
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'submit': function()
       {
         this.changeFilter();
 
         return false;
-      },
-      'click a[data-range]': function(e)
-      {
-        var dateRange = prepareDateRange(e.target);
-
-        this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
-        this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
-        this.$el.submit();
       }
     },
 
@@ -87,8 +78,8 @@ define([
       var to = +model.get('to');
 
       return {
-        from: from ? time.format(from, 'YYYY-MM-DD') : '',
-        to: to ? time.format(to, 'YYYY-MM-DD') : '',
+        'from-date': from ? time.format(from, 'YYYY-MM-DD') : '',
+        'to-date': to ? time.format(to, 'YYYY-MM-DD') : '',
         section: model.get('section').join(','),
         productFamily: (model.get('productFamily') || []).join(','),
         confirmer: model.get('confirmer').join(',')
@@ -97,32 +88,14 @@ define([
 
     changeFilter: function()
     {
+      var range = dateTimeRange.serialize(this);
       var query = {
-        from: time.getMoment(this.$id('from').val(), 'YYYY-MM-DD').valueOf(),
-        to: time.getMoment(this.$id('to').val(), 'YYYY-MM-DD').valueOf(),
+        from: range.from ? range.from.valueOf() : 0,
+        to: range.to ? range.to.valueOf() : 0,
         section: [],
         productFamily: [],
         confirmer: []
       };
-
-      if (!query.from || query.from < 0)
-      {
-        query.from = 0;
-      }
-
-      if (!query.to || query.to < 0)
-      {
-        query.to = 0;
-      }
-
-      if (query.from && query.from === query.to)
-      {
-        var to = time.getMoment(query.to).add(1, 'days');
-
-        this.$id('to').val(to.format('YYYY-MM-DD'));
-
-        query.to = to.valueOf();
-      }
 
       ['section', 'productFamily', 'confirmer'].forEach(function(p)
       {

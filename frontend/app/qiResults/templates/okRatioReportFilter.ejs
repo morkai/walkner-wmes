@@ -1,25 +1,11 @@
 <form class="well filter-form qiResults-okRatioReport-filter">
-  <div class="form-group">
-    <label for="<%- idPrefix %>-from"><%- t('core', 'filter:date:from') %></label>
-    <input id="<%- idPrefix %>-from" class="form-control" name="from" type="month" placeholder="<%- t('core', 'placeholder:month') %>">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-to"><%- t('core', 'filter:date:to') %></label>
-    <input id="<%- idPrefix %>-to" class="form-control" name="to" type="month" placeholder="<%- t('core', 'placeholder:month') %>">
-  </div>
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    type: 'month',
+    required: true,
+    labels: {ranges: '-days -weeks'}
+  }) %>
   <div class="form-group filter-actions">
-    <div class="btn-group">
-      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu">
-        <% ['currentMonth', 'prevMonth', 'q1', 'q2', 'q3', 'q4', 'currentYear', 'prevYear'].forEach(function(range) { %>
-        <li><a data-range="<%- range %>"><%= t('reports', 'filter:submit:' + range) %></a></li>
-        <% }) %>
-        <li><a data-range="currentYear" data-interval="month"><%= t('reports', 'filter:submit:currentYear') %></a></li>
-        <li><a data-range="prevYear" data-interval="month"><%= t('reports', 'filter:submit:prevYear') %></a></li>
-      </ul>
-    </div>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>
   </div>
 </form>

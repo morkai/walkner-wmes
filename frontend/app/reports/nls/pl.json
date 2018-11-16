@@ -107,6 +107,7 @@
   "filter:interval:day": "dzień",
   "filter:interval:shift": "zm",
   "filter:interval:hour": "godz",
+  "filter:interval:title:none": "",
   "filter:interval:title:year": "Rok",
   "filter:interval:title:quarter": "Kwartał",
   "filter:interval:title:month": "Miesiąc",

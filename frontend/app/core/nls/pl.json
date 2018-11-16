@@ -368,6 +368,7 @@
   "dateTimeRange:placeholder:time": "gg:mm",
   "dateTimeRange:label:date": "Data",
   "dateTimeRange:label:date+time": "Czas",
+  "dateTimeRange:label:month": "Data",
   "dateTimeRange:+0+1": "aktualny",
   "dateTimeRange:-1+0": "poprzedni",
   "dateTimeRange:-2+0": "ostatnie 2",

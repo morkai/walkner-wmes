@@ -9,7 +9,7 @@ define([
 
   return function getFromTimeByInterval(interval)
   {
-    var fromMoment = time.getMoment().hours(6).minutes(0).seconds(0).milliseconds(0);
+    var fromMoment = time.getMoment().hours(6).startOf('hour');
 
     switch (interval)
     {

@@ -1,12 +1,7 @@
 <form class="well filter-form suggestions-report-filter">
-  <div class="form-group">
-    <label for="<%- idPrefix %>-from"><%- t('core', 'filter:date:from') %></label>
-    <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="<%- t('core', 'placeholder:date') %>">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-to"><%- t('core', 'filter:date:to') %></label>
-    <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="<%- t('core', 'placeholder:date') %>">
-  </div>
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix
+  }) %>
   <div class="form-group">
     <label><%- t('reports', 'filter:interval') %></label>
     <div id="<%- idPrefix %>-interval" class="btn-group filter-btn-group" data-toggle="buttons">
@@ -30,18 +25,6 @@
     <input id="<%- idPrefix %>-sections" name="sections" type="text" autocomplete="new-password">
   </div>
   <div class="form-group filter-actions">
-    <div class="btn-group">
-      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu">
-        <% ['currentWeek', 'prevWeek', 'lastTwoWeeks', 'currentMonth', 'prevMonth', 'q1', 'q2', 'q3', 'q4'].forEach(function(range) { %>
-        <li><a data-range="<%- range %>"><%= t('reports', 'filter:submit:' + range) %></a></li>
-        <% }) %>
-        <li><a data-range="currentYear" data-interval="quarter"><%= t('reports', 'filter:submit:currentYear') %></a></li>
-        <li><a data-range="prevYear" data-interval="quarter"><%= t('reports', 'filter:submit:prevYear') %></a></li>
-      </ul>
-    </div>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>
   </div>
 </form>

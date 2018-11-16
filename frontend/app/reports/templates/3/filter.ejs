@@ -1,5 +1,8 @@
 <form class="well filter-form">
-  <% include ../_filterFromTo.ejs %>
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    required: true
+  }) %>
   <div class="form-group">
     <label><%- t('reports', 'filter:interval') %></label>
     <div id="<%- idPrefix %>-intervals" class="btn-group filter-btn-group" data-toggle="buttons">

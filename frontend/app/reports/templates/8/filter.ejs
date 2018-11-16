@@ -1,7 +1,12 @@
 <form class="well filter-form">
   <div class="reports-8-filter-columns">
     <div class="reports-8-filter-column">
-      <% include ../_filterFromTo.ejs %>
+      <%- forms.dateTimeRange({
+        idPrefix: idPrefix,
+        required: true,
+        labels: {text: t('core', 'filter:date:from'), ranges: true},
+        separator: t('core', 'filter:date:to')
+      }) %>
       <div class="form-group">
         <label class="control-label"><%- t('reports', 'filter:interval') %></label>
         <% ['month', 'week', 'day'].forEach(function(interval) { %>

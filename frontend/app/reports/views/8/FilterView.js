@@ -11,6 +11,7 @@ define([
   'app/data/orgUnits',
   'app/core/views/FilterView',
   'app/core/util/idAndLabel',
+  'app/core/util/forms/dateTimeRange',
   'app/reports/Report8Query',
   'app/reports/templates/8/filter'
 ], function(
@@ -24,6 +25,7 @@ define([
   orgUnits,
   FilterView,
   idAndLabel,
+  dateTimeRange,
   Report8Query,
   template
 ) {
@@ -33,8 +35,9 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
 
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'change #-from': 'setUpProdLineSelect2',
       'change #-to': 'setUpProdLineSelect2',
       'change [name="divisions[]"]': 'setUpProdLineSelect2',
@@ -71,7 +74,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(FilterView.prototype.serialize.call(this), {
+      return _.assign(FilterView.prototype.serialize.call(this), {
         numericProps: Report8Query.NUMERIC_PROPS,
         divisions: orgUnits.getAllByType('division')
           .filter(function(division) { return division.get('type') === 'prod'; })
@@ -190,8 +193,8 @@ define([
     {
       var formData = this.model.toJSON();
 
-      formData.from = time.format(formData.from, 'YYYY-MM-DD');
-      formData.to = time.format(formData.to, 'YYYY-MM-DD');
+      formData['from-date'] = time.format(formData.from, 'YYYY-MM-DD');
+      formData['to-date'] = time.format(formData.to, 'YYYY-MM-DD');
 
       ['days', 'shifts', 'divisions', 'subdivisionTypes'].forEach(this.applyAllOptionsIfEmpty.bind(this, formData));
 
@@ -215,13 +218,13 @@ define([
 
     serializeFormToQuery: function()
     {
-      var query = _.extend(
+      var query = _.assign(
         _.result(this.model, 'defaults'),
         form2js(this.el),
         {_rnd: Math.random()}
       );
 
-      _.extend(query, this.serializeTimeRange(query));
+      _.assign(query, this.serializeTimeRange());
 
       this.$id('from').val(time.format(query.from, 'YYYY-MM-DD'));
       this.$id('to').val(time.format(query.to, 'YYYY-MM-DD'));
@@ -238,28 +241,13 @@ define([
       return query;
     },
 
-    serializeTimeRange: function(query)
+    serializeTimeRange: function()
     {
-      if (!query)
-      {
-        query = {
-          from: this.$id('from').val(),
-          to: this.$id('to').val(),
-          interval: this.$('[name="interval"]:checked').val()
-        };
-      }
-
-      var fromTime = time.getMoment(query.from, 'YYYY-MM-DD').startOf(query.interval).valueOf();
-      var toMoment = time.getMoment(query.to, 'YYYY-MM-DD').startOf(query.interval);
-
-      if (fromTime === toMoment.valueOf())
-      {
-        toMoment.add(1, query.interval);
-      }
+      var range = dateTimeRange.serialize(this);
 
       return {
-        from: fromTime,
-        to: toMoment.valueOf()
+        from: range.from.valueOf(),
+        to: range.to.valueOf()
       };
     }
 

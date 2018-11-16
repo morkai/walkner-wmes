@@ -4,15 +4,13 @@ define([
   'underscore',
   'app/time',
   'app/core/views/FilterView',
-  'app/core/util/fixTimeRange',
-  'app/reports/util/prepareDateRange',
+  'app/core/util/forms/dateTimeRange',
   'app/reports/templates/5/filter'
 ], function(
   _,
   time,
   FilterView,
-  fixTimeRange,
-  prepareDateRange,
+  dateTimeRange,
   template
 ) {
   'use strict';
@@ -21,21 +19,13 @@ define([
 
     template: template,
 
-    events: _.extend({}, FilterView.prototype.events, {
-      'click a[data-range]': function(e)
-      {
-        var dateRange = prepareDateRange(e.target);
-
-        this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
-        this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
-        this.$('.btn[data-interval="' + dateRange.interval + '"]:not(.active)').click();
-        this.$el.submit();
-      },
+    events: _.assign({
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'click #-showDisplayOptions': function()
       {
         this.trigger('showDisplayOptions');
       }
-    }),
+    }, FilterView.prototype.events),
 
     afterRender: function()
     {
@@ -52,8 +42,8 @@ define([
       return {
         interval: model.get('interval'),
         weekends: model.get('weekends') ? '1' : '0',
-        from: time.format(Number(model.get('from')), 'YYYY-MM-DD'),
-        to: time.format(Number(model.get('to')), 'YYYY-MM-DD')
+        'from-date': time.format(+model.get('from'), 'YYYY-MM-DD'),
+        'to-date': time.format(+model.get('to'), 'YYYY-MM-DD')
       };
     },
 
@@ -67,13 +57,16 @@ define([
         weekends: this.getButtonGroupValue('weekends')
       };
 
-      var timeRange = fixTimeRange.fromView(this);
+      var range = dateTimeRange.serialize(this);
 
-      query.from = timeRange.from || this.getFromTimeByInterval(query.interval).valueOf();
-      query.to = timeRange.to || Date.now();
+      var fromMoment = range.from || this.getFromTimeByInterval(query.interval);
+      var toMoment = range.to || time.getMoment();
 
-      this.$id('from').val(time.format(query.from, 'YYYY-MM-DD'));
-      this.$id('to').val(time.format(query.to, 'YYYY-MM-DD'));
+      query.from = fromMoment.valueOf();
+      query.to = toMoment.valueOf();
+
+      this.$id('from-date').val(fromMoment.format('YYYY-MM-DD'));
+      this.$id('to-date').val(toMoment.format('YYYY-MM-DD'));
 
       this.model.set(query);
     },

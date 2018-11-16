@@ -5,17 +5,15 @@ define([
   'app/time',
   'app/data/divisions',
   'app/core/View',
-  'app/core/util/fixTimeRange',
-  'app/reports/templates/3/filter',
-  'app/reports/util/prepareDateRange'
+  'app/core/util/forms/dateTimeRange',
+  'app/reports/templates/3/filter'
 ], function(
   js2form,
   time,
   divisions,
   View,
-  fixTimeRange,
-  template,
-  prepareDateRange
+  dateTimeRange,
+  template
 ) {
   'use strict';
 
@@ -24,6 +22,7 @@ define([
     template: template,
 
     events: {
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'submit': function(e)
       {
         e.preventDefault();
@@ -31,15 +30,6 @@ define([
         this.toggleDivisions();
         this.toggleSubdivisionType();
         this.changeFilter();
-      },
-      'click a[data-range]': function(e)
-      {
-        var dateRange = prepareDateRange(e.target);
-
-        this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
-        this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
-        this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
-        this.$el.submit();
       },
       'change input[name="divisions[]"]': function()
       {
@@ -93,7 +83,7 @@ define([
 
       js2form(this.el, formData);
 
-      this.$('input[name=interval]:checked').closest('.btn').addClass('active');
+      this.$('input[name="interval"]:checked').closest('.btn').addClass('active');
       this.$('input[name="divisions[]"]:checked').closest('.btn').addClass('active');
       this.$('input[name="subdivisionType[]"]:checked').closest('.btn').addClass('active');
 
@@ -131,8 +121,8 @@ define([
     {
       return {
         interval: this.model.get('interval'),
-        from: time.format(+this.model.get('from'), 'YYYY-MM-DD'),
-        to: time.format(+this.model.get('to'), 'YYYY-MM-DD'),
+        'from-date': time.format(+this.model.get('from'), 'YYYY-MM-DD'),
+        'to-date': time.format(+this.model.get('to'), 'YYYY-MM-DD'),
         majorMalfunction: this.model.get('majorMalfunction'),
         divisions: this.model.get('divisions'),
         subdivisionType: this.model.get('subdivisionType')
@@ -149,13 +139,16 @@ define([
         majorMalfunction: parseFloat(this.$id('majorMalfunction').val()) || 1.5
       };
 
-      var timeRange = fixTimeRange.fromView(this);
+      var range = dateTimeRange.serialize(this);
 
-      query.from = timeRange.from || this.getFromMomentForSelectedInterval().valueOf();
-      query.to = timeRange.to || Date.now();
+      var fromMoment = range.from || this.getFromMomentForSelectedInterval();
+      var toMoment = range.to || time.getMoment();
 
-      this.$id('from').val(time.format(query.from, 'YYYY-MM-DD'));
-      this.$id('to').val(time.format(query.to, 'YYYY-MM-DD'));
+      query.from = fromMoment.valueOf();
+      query.to = toMoment.valueOf();
+
+      this.$id('from-date').val(fromMoment.format('YYYY-MM-DD'));
+      this.$id('to-date').val(toMoment.format('YYYY-MM-DD'));
 
       this.model.set(query, {reset: true});
     },
@@ -167,7 +160,7 @@ define([
 
     getFromMomentForSelectedInterval: function()
     {
-      var fromMoment = time.getMoment().minutes(0).seconds(0).milliseconds(0);
+      var fromMoment = time.getMoment().startOf('hour');
 
       switch (this.getSelectedInterval())
       {

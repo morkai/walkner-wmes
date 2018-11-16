@@ -100,6 +100,7 @@
     "filter:interval:day": "day",
     "filter:interval:shift": "shift",
     "filter:interval:hour": "hour",
+    "filter:interval:title:none": "",
     "filter:interval:title:year": "Year",
     "filter:interval:title:quarter": "Quarter",
     "filter:interval:title:month": "Month",

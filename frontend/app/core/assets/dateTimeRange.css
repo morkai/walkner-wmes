@@ -55,3 +55,12 @@
   padding: 0 4px;
   align-self: center;
 }
+.dateTimeRange-labels {
+  display: flex;
+}
+.dateTimeRange-label + .dateTimeRange-label {
+  margin-left: 15px;
+}
+.dateTimeRange-is-input .dateTimeRange-label-input {
+  vertical-align: top;
+}

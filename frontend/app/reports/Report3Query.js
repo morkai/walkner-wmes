@@ -34,7 +34,7 @@ define([
 
     defaults: function()
     {
-      var today = time.getMoment().hours(0).minutes(0).seconds(0).milliseconds(0);
+      var today = time.getMoment().startOf('day');
 
       return {
         to: today.valueOf(),

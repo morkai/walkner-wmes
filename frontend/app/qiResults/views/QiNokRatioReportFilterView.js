@@ -5,10 +5,9 @@ define([
   'app/time',
   'app/updater/index',
   'app/core/View',
-  'app/core/util/fixTimeRange',
   'app/core/util/buttonGroup',
   'app/core/util/idAndLabel',
-  'app/reports/util/prepareDateRange',
+  'app/core/util/forms/dateTimeRange',
   'app/qiResults/dictionaries',
   'app/qiResults/templates/nokRatioReportFilter'
 ], function(
@@ -16,10 +15,9 @@ define([
   time,
   updater,
   View,
-  fixTimeRange,
   buttonGroup,
   idAndLabel,
-  prepareDateRange,
+  dateTimeRange,
   qiDictionaries,
   template
 ) {
@@ -30,19 +28,12 @@ define([
     template: template,
 
     events: {
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'submit': function()
       {
         this.changeFilter();
 
         return false;
-      },
-      'click a[data-range]': function(e)
-      {
-        var dateRange = prepareDateRange(e.target);
-
-        this.$id('from').val(dateRange.fromMoment.format('YYYY-MM'));
-        this.$id('to').val(dateRange.toMoment.format('YYYY-MM'));
-        this.$el.submit();
       }
     },
 
@@ -65,38 +56,20 @@ define([
       var to = +model.get('to');
 
       return {
-        from: from ? time.format(from, 'YYYY-MM') : '',
-        to: to ? time.format(to, 'YYYY-MM') : '',
+        'from-date': from ? time.format(from, 'YYYY-MM') : '',
+        'to-date': to ? time.format(to, 'YYYY-MM') : '',
         kinds: model.get('kinds').join(',')
       };
     },
 
     changeFilter: function()
     {
+      var range = dateTimeRange.serialize(this);
       var query = {
-        from: time.getMoment(this.$id('from').val(), 'YYYY-MM').valueOf(),
-        to: time.getMoment(this.$id('to').val(), 'YYYY-MM').valueOf(),
+        from: range.from ? range.from.valueOf() : 0,
+        to: range.to ? range.to.valueOf() : 0,
         kinds: this.$id('kinds').val()
       };
-
-      if (!query.from || query.from < 0)
-      {
-        query.from = 0;
-      }
-
-      if (!query.to || query.to < 0)
-      {
-        query.to = 0;
-      }
-
-      if (query.from && query.from === query.to)
-      {
-        var to = time.getMoment(query.to).add(1, 'months');
-
-        this.$id('to').val(to.format('YYYY-MM'));
-
-        query.to = to.valueOf();
-      }
 
       query.kinds = query.kinds === '' ? [] : query.kinds.split(',');
 

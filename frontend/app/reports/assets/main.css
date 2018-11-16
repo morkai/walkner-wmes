@@ -524,3 +524,8 @@
 .reports-8-prodLines-select2 > .select2-results {
   max-height: 400px;
 }
+.reports-8 .dateTimeRange-separator {
+  margin: 15px 0 4px 0;
+  padding: 0;
+  font-weight: bold;
+}

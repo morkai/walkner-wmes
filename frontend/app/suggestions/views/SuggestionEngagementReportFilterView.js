@@ -4,23 +4,21 @@ define([
   'js2form',
   'app/time',
   'app/core/View',
-  'app/core/util/fixTimeRange',
   'app/core/util/buttonGroup',
   'app/core/util/idAndLabel',
+  'app/core/util/forms/dateTimeRange',
   'app/kaizenOrders/dictionaries',
   'app/suggestions/templates/engagementReportFilter',
-  'app/reports/util/prepareDateRange',
   'app/core/util/ExpandableSelect'
 ], function(
   js2form,
   time,
   View,
-  fixTimeRange,
   buttonGroup,
   idAndLabel,
+  dateTimeRange,
   kaizenDictionaries,
-  template,
-  prepareDateRange
+  template
 ) {
   'use strict';
 
@@ -29,20 +27,12 @@ define([
     template: template,
 
     events: {
+      'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'submit': function()
       {
         this.changeFilter();
 
         return false;
-      },
-      'click a[data-range]': function(e)
-      {
-        var dateRange = prepareDateRange(e.target);
-
-        this.$id('from').val(dateRange.fromMoment.format('YYYY-MM-DD'));
-        this.$id('to').val(dateRange.toMoment.format('YYYY-MM-DD'));
-        this.$('.btn[data-interval="' + dateRange.interval + '"]').click();
-        this.$el.submit();
       }
     },
 
@@ -83,8 +73,8 @@ define([
 
       return {
         interval: model.get('interval'),
-        from: from ? time.format(from, 'YYYY-MM-DD') : '',
-        to: to ? time.format(to, 'YYYY-MM-DD') : '',
+        'from-date': from ? time.format(from, 'YYYY-MM-DD') : '',
+        'to-date': to ? time.format(to, 'YYYY-MM-DD') : '',
         status: model.get('status').join(','),
         sections: model.get('sections').join(',')
       };
@@ -92,32 +82,14 @@ define([
 
     changeFilter: function()
     {
+      var range = dateTimeRange.serialize(this);
       var query = {
-        from: time.getMoment(this.$id('from').val(), 'YYYY-MM-DD').valueOf(),
-        to: time.getMoment(this.$id('to').val(), 'YYYY-MM-DD').valueOf(),
+        from: range.from ? range.from.valueOf() : 0,
+        to: range.to ? range.to.valueOf() : 0,
         interval: buttonGroup.getValue(this.$id('interval')),
         status: this.$id('status').val() || [],
         sections: this.$id('sections').val()
       };
-
-      if (!query.from || query.from < 0)
-      {
-        query.from = 0;
-      }
-
-      if (!query.to || query.to < 0)
-      {
-        query.to = 0;
-      }
-
-      if (query.from && query.from === query.to)
-      {
-        var to = time.getMoment(query.to).add(1, 'days');
-
-        this.$id('to').val(to.format('YYYY-MM-DD'));
-
-        query.to = to.valueOf();
-      }
 
       query.sections = query.sections === '' ? [] : query.sections.split(',');
 

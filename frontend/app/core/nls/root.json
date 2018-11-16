@@ -362,6 +362,7 @@
     "dateTimeRange:placeholder:time": "hh:mm",
     "dateTimeRange:label:date": "Date",
     "dateTimeRange:label:date+time": "Time",
+    "dateTimeRange:label:month": "Date",
     "dateTimeRange:+0+1": "current",
     "dateTimeRange:-1+0": "previous",
     "dateTimeRange:-2+0": "last 2",
