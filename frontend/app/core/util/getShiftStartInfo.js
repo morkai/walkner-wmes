@@ -82,7 +82,7 @@ define([
     }
 
     return {
-      moment: moment.startOf('minute'),
+      moment: moment.startOf('hour'),
       shift: shift,
       startHour: 6,
       shiftLength: 8
