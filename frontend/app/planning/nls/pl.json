@@ -285,7 +285,7 @@
   "wh:status:1": "Lista",
   "wh:status:2": "Kompletacja",
   "wh:status:3": "{qtySent, plural, =0{Wysyłka} other{Wysłano {qtySent} szt.}}",
-  "wh:sent:comment": "Wysłano {qtySent, plural, one{1 sztukę} few{{qtySent} sztuki} other{{qtySent} sztuk}} na linię {line} o {time}.",
+  "wh:sent:comment": "Wysłano {qtySent, plural, one{1 sztukę} few{{qtySent} sztuki} other{{qtySent} sztuk}} na linię {line} {date} o {time}.",
   "wh:sent:label": "Wysyłana<br>ilość:",
   "wh:export:fileName": "WMES_PLAN_MAGAZYN_{date}",
   "wh:export:sheetName": "Plan magazynu {date}",

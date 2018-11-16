@@ -714,6 +714,7 @@ define([
         data.comment = t('planning', 'wh:sent:comment', {
           qtySent: data.qtySent,
           line: data.line,
+          date: time.format(Date.now(), 'L'),
           time: time.format(Date.now(), 'HH:mm')
         });
       }
