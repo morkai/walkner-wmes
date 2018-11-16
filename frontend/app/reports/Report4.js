@@ -52,7 +52,8 @@ define([
         quantities: {
           good: 0,
           bad: 0,
-          losses: {}
+          losses: {},
+          lossCategories: []
         },
         notes: {
           count: 0,
