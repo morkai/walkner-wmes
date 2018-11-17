@@ -2374,9 +2374,7 @@ app/paintShop/PaintShopLoadStats.js
 app/paintShop/PaintShopLoadRecent.js
 app/paintShop/PaintShopLoadReport.js
 vendor/js2form.js
-app/core/util/fixTimeRange.js
 app/core/util/buttonGroup.js
-app/reports/util/prepareDateRange.js
 app/paintShop/templates/load/filter.js
 app/paintShop/views/PaintShopLoadFilterView.js
 vendor/highcharts/highcharts.src.js
