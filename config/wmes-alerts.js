@@ -6,7 +6,7 @@ const mongodb = require('./wmes-mongodb');
 exports.id = 'wmes-alerts';
 
 exports.modules = [
-  'mongoose',
+  {id: 'h5-mongoose', name: 'mongoose'},
   'events',
   'updater',
   'messenger/server',

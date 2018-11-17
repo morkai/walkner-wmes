@@ -7,7 +7,7 @@ exports.id = 'wmes-help';
 
 exports.modules = [
   'updater',
-  'mongoose',
+  {id: 'h5-mongoose', name: 'mongoose'},
   'settings',
   'events',
   'messenger/server',

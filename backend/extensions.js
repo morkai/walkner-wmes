@@ -41,7 +41,7 @@ console.bench = function(label, context, func)
   const result = func.call(context);
   const diff = process.hrtime(time);
 
-  console.log('[bench] %s %d ms', label, (diff[0] * 1e9 + diff[1]) / 1e6);
+  console.log(`[bench] ${label} ${(diff[0] * 1e9 + diff[1]) / 1e6} ms`);
 
   return result;
 };

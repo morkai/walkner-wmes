@@ -10,8 +10,8 @@ const IMPORT_OUTPUT_DIR = `${__dirname}/../data/attachments-imported`;
 exports.id = 'wmes-importer-sap';
 
 exports.modules = [
-  'mongoose',
-  {id: 'mysql', name: 'mysql:ipt'},
+  {id: 'h5-mongoose', name: 'mongoose'},
+  {id: 'h5-mysql', name: 'mysql:ipt'},
   'events',
   'updater',
   'settings',
@@ -33,7 +33,7 @@ exports.modules = [
   'xiconf/importer/orders',
   'orderDocuments/importer',
   'orderDocuments/importer/eto',
-  'reports/clipOrderCount',
+  'reports/clipOrderCounter',
   'cags/importer/nc12',
   'cags/importer/plan',
   'kanban/importer'
@@ -131,7 +131,7 @@ exports.directoryWatcher = {
   path: IMPORT_INPUT_DIR
 };
 
-exports['reports/clipOrderCount'] = {
+exports['reports/clipOrderCounter'] = {
   syncHour: 7
 };
 

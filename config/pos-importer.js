@@ -5,7 +5,7 @@ var mongodb = require('./pos-mongodb');
 exports.id = 'pos-importer';
 
 exports.modules = [
-  'mongoose',
+  {id: 'h5-mongoose', name: 'mongoose'},
   'events',
   'updater',
   'messenger/server',

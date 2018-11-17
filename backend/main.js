@@ -1,7 +1,5 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
-/* eslint-disable no-process-exit */
-
 'use strict';
 
 const startTime = Date.now();
@@ -14,30 +12,28 @@ if (!process.env.NODE_ENV)
 require('./extensions');
 
 const requireCache = require('./requireCache');
-const _ = require('lodash');
+const helpers = require('./helpers');
 const moment = require('moment');
 const main = require('h5.main');
 const config = require(process.argv[2]);
 
 moment.locale('pl');
 
-const modules = (config.modules || []).map(function(module)
+const modules = (config.modules || []).map((module, i) =>
 {
   if (typeof module === 'string')
   {
     module = {id: module};
   }
 
-  if (typeof module !== 'object' || module === null)
+  if (!module || typeof module !== 'object')
   {
-    console.error('Invalid module:', module);
-    process.exit(1);
+    throw new Error(`Invalid type for a module definition at position ${i}.`);
   }
 
   if (typeof module.id !== 'string')
   {
-    console.error('Module ID is required:', module);
-    process.exit(1);
+    throw new Error(`Missing ID for a module at position ${i}.`);
   }
 
   if (typeof module.name !== 'string')
@@ -47,29 +43,31 @@ const modules = (config.modules || []).map(function(module)
 
   if (typeof module.path !== 'string')
   {
-    module.path = './modules/' + module.id;
+    module.path = `${__dirname}/node_modules/${module.id}`;
   }
 
-  module.config = config[module.name];
+  if (!module.config)
+  {
+    module.config = config[module.name];
+  }
 
   return module;
 });
 
 const app = {
-  options: _.assign({}, config, {
+  options: Object.assign({}, config, {
     id: config.id,
     startTime: startTime,
     env: process.env.NODE_ENV,
     rootPath: __dirname,
     moduleStartTimeout: config.moduleStartTimeout || 3000
-  })
+  }),
+  ...helpers
 };
-
-_.assign(app, require('./helpers'));
 
 main(app, modules);
 
-app.broker.subscribe('app.started').setLimit(1).on('message', function()
+app.broker.subscribe('app.started').setLimit(1).on('message', () =>
 {
   if (requireCache.built)
   {

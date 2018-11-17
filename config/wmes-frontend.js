@@ -22,14 +22,14 @@ exports.id = 'wmes-frontend';
 exports.modules = [
   'watchdog/memoryUsage',
   'updater',
-  'mongoose',
-  {id: 'mysql', name: 'mysql:ipt'},
+  {id: 'h5-mongoose', name: 'mongoose'},
+  {id: 'h5-mysql', name: 'mysql:ipt'},
   'settings',
   'events',
   'pubsub',
   'user',
   'pings',
-  'express',
+  {id: 'h5-express', name: 'express'},
   'users',
   'companies',
   'divisions',
@@ -59,7 +59,7 @@ exports.modules = [
   'prodDowntimeAlerts',
   'prodSerialNumbers',
   'reports',
-  'reports/dailyMrpCount',
+  'reports/dailyMrpCounter',
   'xiconf',
   'warehouse',
   'licenses',
@@ -358,7 +358,11 @@ exports.express = {
     forms: 'app/core/util/forms'
   },
   textBody: {limit: '30mb'},
-  jsonBody: {limit: '10mb'}
+  jsonBody: {limit: '10mb'},
+  routes: [
+    require('../backend/routes/core'),
+    require('../backend/routes/fix')
+  ]
 };
 
 exports.user = {
@@ -548,7 +552,7 @@ exports.reports = {
   ]
 };
 
-exports['reports/dailyMrpCount'] = {
+exports['reports/dailyMrpCounter'] = {
 
 };
 

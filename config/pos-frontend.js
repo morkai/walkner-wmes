@@ -14,12 +14,12 @@ exports.id = 'pos-frontend';
 
 exports.modules = [
   'updater',
-  'mongoose',
+  {id: 'h5-mongoose', name: 'mongoose'},
   'settings',
   'events',
   'pubsub',
   'user',
-  'express',
+  {id: 'h5-express', name: 'express'},
   'users',
   'vendors',
   'vendorNc12s',
@@ -115,7 +115,10 @@ exports.express = {
   },
   textBody: {
     limit: '1mb'
-  }
+  },
+  routes: [
+    require('../backend/routes/core')
+  ]
 };
 
 exports.user = {

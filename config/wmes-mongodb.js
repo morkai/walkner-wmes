@@ -16,7 +16,9 @@ module.exports = {
     w: 1,
     wtimeout: 5000,
     promiseLibrary: global.Promise,
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false
   }
 };
 
