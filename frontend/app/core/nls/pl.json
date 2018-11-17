@@ -396,5 +396,6 @@
   "dateTimeRange:quarters:2": "II",
   "dateTimeRange:quarters:3": "III",
   "dateTimeRange:quarters:4": "IV",
-  "dateTimeRange:years": "Rok"
+  "dateTimeRange:years": "Rok",
+  "dateTimeRange:help": "Przytrzymaj <kbd>Alt</kbd> wybierając opcję, aby jednocześnie wysłać formularz."
 }

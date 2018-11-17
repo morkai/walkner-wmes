@@ -388,7 +388,8 @@
     "dateTimeRange:quarters:2": "II",
     "dateTimeRange:quarters:3": "III",
     "dateTimeRange:quarters:4": "IV",
-    "dateTimeRange:years": "Year"
+    "dateTimeRange:years": "Year",
+    "dateTimeRange:help": "Hold <kbd>Alt</kbd> while clicking on an option to automatically submit the form."
   },
   "pl": true
 }

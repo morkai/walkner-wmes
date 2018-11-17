@@ -64,3 +64,9 @@
 .dateTimeRange-is-input .dateTimeRange-label-input {
   vertical-align: top;
 }
+.dateTimeRange-help {
+  font-size: 12px;
+  text-align: center;
+  padding-top: 5px;
+  background-color: #fff;
+}

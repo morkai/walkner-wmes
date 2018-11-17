@@ -363,7 +363,7 @@ define([
       }
     }
 
-    if (e.ctrlKey || e.altKey)
+    if (e.altKey)
     {
       view.$('[type="submit"]').click();
     }
