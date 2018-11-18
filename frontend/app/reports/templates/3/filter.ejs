@@ -18,26 +18,7 @@
     <input id="<%- idPrefix %>-majorMalfunction" class="form-control" name="majorMalfunction" type="number" min="0.1" max="8" step="0.1">
   </div>
   <div class="form-group filter-actions">
-    <div class="btn-group">
-      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('reports', 'filter:submit') %></span></button>
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu">
-        <li><a data-range="today"><%= t('reports', 'filter:submit:today') %></a></li>
-        <li><a data-range="yesterday"><%= t('reports', 'filter:submit:yesterday') %></a></li>
-        <li><a data-range="currentWeek"><%= t('reports', 'filter:submit:currentWeek') %></a></li>
-        <li><a data-range="prevWeek"><%= t('reports', 'filter:submit:prevWeek') %></a></li>
-        <li><a data-range="currentMonth"><%= t('reports', 'filter:submit:currentMonth') %></a></li>
-        <li><a data-range="prevMonth"><%= t('reports', 'filter:submit:prevMonth') %></a></li>
-        <li><a data-range="q1"><%= t('reports', 'filter:submit:q1') %></a></li>
-        <li><a data-range="q2"><%= t('reports', 'filter:submit:q2') %></a></li>
-        <li><a data-range="q3"><%= t('reports', 'filter:submit:q3') %></a></li>
-        <li><a data-range="q4"><%= t('reports', 'filter:submit:q4') %></a></li>
-        <li><a data-range="currentYear"><%= t('reports', 'filter:submit:currentYear') %></a></li>
-        <li><a data-range="prevYear"><%= t('reports', 'filter:submit:prevYear') %></a></li>
-      </ul>
-    </div><hr>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('reports', 'filter:submit') %></span></button><hr>
   </div>
   <div class="form-group">
     <label><%- t('reports', 'filter:divisions') %></label>
