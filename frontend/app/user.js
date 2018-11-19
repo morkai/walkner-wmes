@@ -277,7 +277,10 @@ function(
       }
       else if (!user.isLoggedIn())
       {
-        viewport.showPage(new LogInFormPage());
+        require(['app/viewport'], function(viewport)
+        {
+          viewport.showPage(new LogInFormPage());
+        });
       }
       else
       {
