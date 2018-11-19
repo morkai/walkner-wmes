@@ -505,7 +505,7 @@ define([
   render.rqlToForm = function(propertyName, term, formData)
   {
     var view = this;
-    var dataset = view.$('.dateTimeRange')[0];
+    var dataset = view.$('.dateTimeRange')[0].dataset;
     var dateFormat = DATE_FORMATS[dataset.type];
     var utc = dataset.utc === '1';
     var moment = (utc ? time.utc : time).getMoment(term.args[1]);
