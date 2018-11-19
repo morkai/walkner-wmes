@@ -5,14 +5,17 @@
 
 load('./mongodb-helpers.js');
 
-db.orderetos.find({}, {html: 0}).forEach(d =>
+db.events.find({time: {$gt: 1542499200000}, user: null, 'data.user.privileges': {$exists: true}}).forEach(event =>
 {
-  let constructorUser = d.constructorUser || d.constructor;
+  const userData = event.data.user;
+  const user = {
+    _id: String(userData._id || userData.id),
+    name: userData.lastName && userData.firstName
+      ? (userData.lastName + ' ' + userData.firstName)
+      : (userData.login || userData.label),
+    login: userData.login || userData.label,
+    ipAddress: userData.ipAddress || userData.ip
+  };
 
-  if (typeof constructorUser !== 'string')
-  {
-    constructorUser = '';
-  }
-
-  db.orderetos.updateOne({_id: d._id}, {$unset: {constructor: 1}, $set: {constructorUser}});
+  db.events.updateOne({_id: event._id}, {$unset: {'data.user': 1}, $set: {user: user}});
 });
