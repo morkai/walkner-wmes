@@ -46,7 +46,7 @@ module.exports = function startFixRoutes(app, express)
 
     res.setTimeout(0);
 
-    app.debug('[fix] Recounting ProdShift durations...');
+    app.info('[fix] Recounting ProdShift durations...');
 
     app.mongoose.model('ProdShift')
       .find(mongoSerializer.fromQuery(req.rql).selector)
@@ -59,7 +59,7 @@ module.exports = function startFixRoutes(app, express)
           return next(err);
         }
 
-        app.debug(`[fix] Found ${prodShifts.length} ProdShifts...`);
+        app.info(`[fix] Found ${prodShifts.length} ProdShifts...`);
 
         recountNext(prodShifts, 0);
       });
@@ -68,7 +68,7 @@ module.exports = function startFixRoutes(app, express)
     {
       if (i > 0 && i % 10000 === 0)
       {
-        app.debug(`[fix] Recounted ${i} ProdShifts... ${prodShifts.length} remaining...`);
+        app.info(`[fix] Recounted ${i} ProdShifts... ${prodShifts.length} remaining...`);
       }
 
       const prodShift = prodShifts.shift();
@@ -108,7 +108,7 @@ module.exports = function startFixRoutes(app, express)
 
     res.setTimeout(0);
 
-    app.debug("[fix] Recounting ProdShiftOrders' durations...");
+    app.info("[fix] Recounting ProdShiftOrders' durations...");
 
     app.mongoose.model('ProdShiftOrder')
       .find(mongoSerializer.fromQuery(req.rql).selector)
@@ -121,7 +121,7 @@ module.exports = function startFixRoutes(app, express)
           return next(err);
         }
 
-        app.debug(`[fix] Found ${prodShiftOrders.length} ProdShiftOrders...`);
+        app.info(`[fix] Found ${prodShiftOrders.length} ProdShiftOrders...`);
 
         recountNext(prodShiftOrders, 0);
       });
@@ -130,7 +130,7 @@ module.exports = function startFixRoutes(app, express)
     {
       if (i > 0 && i % 10000 === 0)
       {
-        app.debug(`[fix] Recounted ${i} ProdShiftOrders... ${prodShiftOrders.length} remaining...`);
+        app.info(`[fix] Recounted ${i} ProdShiftOrders... ${prodShiftOrders.length} remaining...`);
       }
 
       const prodShiftOrder = prodShiftOrders.shift();
@@ -462,7 +462,7 @@ module.exports = function startFixRoutes(app, express)
 
     const startedAt = Date.now();
 
-    app.debug('[fix] Recounting FTE Master totals...');
+    app.info('[fix] Recounting FTE Master totals...');
 
     const date = req.query.date || '2013-12-01';
 
@@ -480,7 +480,7 @@ module.exports = function startFixRoutes(app, express)
       res.type('txt');
       res.send('ALL DONE!');
 
-      app.debug(`[fix] Finished recounting FTE Master totals in ${(Date.now() - startedAt) / 1000}s`);
+      app.info(`[fix] Finished recounting FTE Master totals in ${(Date.now() - startedAt) / 1000}s`);
     });
   }
 
@@ -503,7 +503,7 @@ module.exports = function startFixRoutes(app, express)
 
     const startedAt = Date.now();
 
-    app.debug('[fix] Recounting FTE Leader totals...');
+    app.info('[fix] Recounting FTE Leader totals...');
 
     const date = req.query.date || '2013-12-01';
 
@@ -521,7 +521,7 @@ module.exports = function startFixRoutes(app, express)
       res.type('txt');
       res.send('ALL DONE!');
 
-      app.debug(`[fix] Finished recounting FTE Leader totals in ${(Date.now() - startedAt) / 1000}s`);
+      app.info(`[fix] Finished recounting FTE Leader totals in ${(Date.now() - startedAt) / 1000}s`);
     });
   }
 
@@ -648,7 +648,7 @@ module.exports = function startFixRoutes(app, express)
       return next(app.createError('INPUT', 400));
     }
 
-    app.debug(`[fix] Counting daily MRP from [${from.format('YYYY-MM-DD')}] to [${to.format('YYYY-MM-DD')}]...`);
+    app.info(`[fix] Counting daily MRP from [${from.format('YYYY-MM-DD')}] to [${to.format('YYYY-MM-DD')}]...`);
 
     countNextDailyMrp(from, to.valueOf(), res, next);
   }
@@ -657,7 +657,7 @@ module.exports = function startFixRoutes(app, express)
   {
     if (from.valueOf() >= to)
     {
-      app.debug('[fix] Finished counting daily MRP!');
+      app.info('[fix] Finished counting daily MRP!');
 
       return res.end();
     }
