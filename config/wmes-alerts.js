@@ -22,12 +22,7 @@ exports.mongoose = {
     poolSize: 3
   }),
   maxConnectTries: 10,
-  connectAttemptDelay: 500,
-  models: [
-    'event',
-    'user', 'aor', 'downtimeReason', 'prodFlow', 'workCenter', 'prodLine',
-    'prodShiftOrder', 'prodDowntime', 'prodDowntimeAlert', 'prodLogEntry'
-  ]
+  connectAttemptDelay: 500
 };
 
 exports.events = {

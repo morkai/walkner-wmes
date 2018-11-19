@@ -40,16 +40,7 @@ exports.mongoose = {
     readPreference: 'secondaryPreferred'
   }),
   maxConnectTries: 10,
-  connectAttemptDelay: 500,
-  models: [
-    'event',
-    'setting',
-    'hourlyPlan',
-    'order',
-    'paintShopOrder', 'paintShopEvent',
-    'plan', 'planChange', 'planSettings',
-    'whOrder'
-  ]
+  connectAttemptDelay: 500
 };
 
 exports.updater = {

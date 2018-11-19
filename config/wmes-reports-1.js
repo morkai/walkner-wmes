@@ -36,24 +36,7 @@ exports.mongoose = {
     readPreference: 'secondaryPreferred'
   }),
   maxConnectTries: 10,
-  connectAttemptDelay: 500,
-  models: [
-    'event', 'user', 'setting',
-    'company', 'delayReason',
-    'order', 'orderEto',
-    'prodShift', 'prodShiftOrder', 'prodDowntime',
-    'fteMasterEntry', 'fteLeaderEntry', 'hourlyPlan',
-    'clipOrderCache', 'clipOrderCount', 'dailyMrpCount',
-    'whShiftMetrics',
-    'cag', 'cagGroup', 'cagPlan',
-    'qiResult',
-    'kaizenOrder', 'kaizenSection', 'kaizenCategory',
-    'suggestion',
-    'behaviorObsCard',
-    'minutesForSafetyCard',
-    'opinionSurveyResponse',
-    'paintShopLoad'
-  ]
+  connectAttemptDelay: 500
 };
 
 exports.updater = {

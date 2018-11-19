@@ -22,8 +22,7 @@ exports.mongoose = {
     poolSize: 5
   }),
   maxConnectTries: 10,
-  connectAttemptDelay: 500,
-  models: ['event', 'xiconfOrderResult', 'xiconfResult', 'icpoResult', 'license']
+  connectAttemptDelay: 500
 };
 
 exports.events = {

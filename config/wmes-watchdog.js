@@ -61,11 +61,7 @@ exports.mongoose = {
   }),
   maxConnectTries: 0,
   connectAttemptDelay: 250,
-  stopOnConnectError: false,
-  models: [
-    'setting', 'event', 'user',
-    'twilioRequest', 'twilioResponse'
-  ]
+  stopOnConnectError: false
 };
 
 exports['messenger/server'] = Object.assign({}, ports[exports.id], {

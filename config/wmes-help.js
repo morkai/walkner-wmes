@@ -38,12 +38,7 @@ exports.mongoose = {
     readPreference: 'secondaryPreferred'
   }),
   maxConnectTries: 5,
-  connectAttemptDelay: 500,
-  models: [
-    'event',
-    'setting',
-    'helpFile'
-  ]
+  connectAttemptDelay: 500
 };
 
 exports.updater = {

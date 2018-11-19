@@ -19,8 +19,7 @@ exports.mongoose = {
     poolSize: 2
   }),
   maxConnectTries: 10,
-  connectAttemptDelay: 500,
-  models: ['event', 'purchaseOrder', 'purchaseOrderPrint', 'vendor']
+  connectAttemptDelay: 500
 };
 
 exports.events = {

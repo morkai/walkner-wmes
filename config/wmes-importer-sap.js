@@ -45,19 +45,7 @@ exports.mongoose = {
     poolSize: 5
   }),
   maxConnectTries: 10,
-  connectAttemptDelay: 500,
-  models: [
-    'event', 'user',
-    'setting',
-    'order', 'emptyOrder', 'orderIntake', 'orderZlf1', 'invalidOrder', 'orderEto',
-    'mrpController', 'clipOrderCount',
-    'fteLeaderEntry',
-    'whControlCycleArchive', 'whControlCycle', 'whTransferOrder', 'whShiftMetrics',
-    'xiconfOrder', 'xiconfHidLamp',
-    'cag', 'cagPlan',
-    'kanbanEntry', 'kanbanComponent',
-    'pkhdComponent'
-  ]
+  connectAttemptDelay: 500
 };
 
 exports['mysql:ipt'] = frontend['mysql:ipt'];

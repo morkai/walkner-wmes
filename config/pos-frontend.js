@@ -90,14 +90,7 @@ exports.mongoose = {
     poolSize: 6
   }),
   maxConnectTries: 10,
-  connectAttemptDelay: 500,
-  models: [
-    'setting', 'event', 'user', 'passwordResetRequest',
-    'vendor',
-    'vendorNc12',
-    'feedback',
-    'purchaseOrder', 'purchaseOrderPrint'
-  ]
+  connectAttemptDelay: 500
 };
 
 exports.express = {
