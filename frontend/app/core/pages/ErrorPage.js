@@ -3,13 +3,11 @@
 define([
   'underscore',
   'app/i18n',
-  'app/user',
   '../View',
   'app/core/templates/error'
 ], function(
   _,
   t,
-  user,
   View,
   template
 ) {
@@ -78,6 +76,8 @@ define([
       page.view = new View({
         template: function()
         {
+          var user = require('app/user');
+
           if (code === 403 && !user.isLoggedIn())
           {
             code += ':guest';
