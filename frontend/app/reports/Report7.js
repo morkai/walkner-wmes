@@ -117,12 +117,14 @@ define([
       _.forEach(clipList, function(metrics)
       {
         var x = metrics.key;
+        var production = Math.round(metrics.productionCount / metrics.orderCount * 1000) / 10 || 0;
+        var endToEnd = Math.round(metrics.endToEndCount / metrics.orderCount * 1000) / 10 || 0;
 
         clip.orderCount.push({x: x, y: metrics.orderCount || 0});
         clip.productionCount.push({x: x, y: metrics.productionCount || 0});
         clip.endToEndCount.push({x: x, y: metrics.endToEndCount || 0});
-        clip.production.push({x: x, y: Math.round((metrics.production || 0) * 100)});
-        clip.endToEnd.push({x: x, y: Math.round((metrics.endToEnd || 0) * 100)});
+        clip.production.push({x: x, y: production});
+        clip.endToEnd.push({x: x, y: endToEnd});
       });
 
       attrs.clip = clip;
