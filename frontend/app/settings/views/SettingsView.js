@@ -90,6 +90,7 @@ define([
       this.currentTab = this.options.initialTab;
       this.currentSubtab = this.options.initialSubtab;
       this.inProgress = {};
+      this.model = this.settings;
 
       this.listenTo(this.settings, 'add change', this.onSettingsChange);
     },
@@ -104,10 +105,9 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         renderColorPicker: colorPickerTemplate
       };
     },
@@ -140,7 +140,7 @@ define([
 
       this.settings.forEach(function(setting)
       {
-        var value = setting.get('value');
+        var value = view.settings.prepareFormValue(setting.id, setting.get('value'));
 
         if (Array.isArray(value))
         {
@@ -232,7 +232,7 @@ define([
       }
 
       var $formControl = this.$('.form-control[name="' + setting.id + '"]');
-      var value = setting.get('value') || '';
+      var value = this.settings.prepareFormValue(setting.id, setting.get('value'));
 
       if ($formControl.length)
       {

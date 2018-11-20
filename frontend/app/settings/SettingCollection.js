@@ -165,6 +165,11 @@ define([
       }
 
       return value;
+    },
+
+    prepareFormValue: function(id, value)
+    {
+      return value || '';
     }
 
   });

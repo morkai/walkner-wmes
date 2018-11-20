@@ -1,0 +1,67 @@
+<form class="toolcal-tools-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div id="<%- idPrefix %>-statusGroup" class="form-group clearfix">
+        <label for="<%- idPrefix %>-status" class="control-label"><%- helpers.t('PROPERTY:status') %></label>
+        <br>
+        <div id="<%- idPrefix %>-status" class="btn-group" data-toggle="buttons">
+          <% statuses.forEach(function(status) { %>
+          <label class="btn btn-default">
+            <input type="radio" name="status" value="<%- status %>"><%- helpers.t('status:' + status) %>
+          </label>
+          <% }) %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-3 form-group has-required-select2">
+          <label for="<%- idPrefix %>-type" class="control-label is-required"><%- helpers.t('PROPERTY:type') %></label>
+          <input id="<%- idPrefix %>-type" type="text" name="type" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-3 form-group">
+          <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
+          <input id="<%- idPrefix %>-name" class="form-control" type="text" name="name" required maxlength="100">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-3 form-group">
+          <label for="<%- idPrefix %>-sn" class="control-label"><%- helpers.t('PROPERTY:sn') %></label>
+          <input id="<%- idPrefix %>-sn" class="form-control" type="text" name="sn">
+        </div>
+      </div>
+      <div style="display: flex">
+        <div class="form-group">
+          <label for="<%- idPrefix %>-interval" class="control-label is-required"><%- helpers.t('PROPERTY:interval') %></label>
+          <div style="display: flex">
+            <input id="<%- idPrefix %>-interval" class="form-control" type="number" name="interval" min="1" max="9999" required style="width: 70px">
+            <select id="<%- idPrefix %>-intervalUnit" class="form-control" name="intervalUnit" required style="margin-left: -1px">
+              <% ['day', 'week', 'month', 'year'].forEach(function(unit) { %>
+                <option value="<%- unit %>"><%- helpers.t('interval:unit:' + unit) %></option>
+              <% }) %>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-left: 15px">
+          <label for="<%- idPrefix %>-lastDate" class="control-label is-required"><%- helpers.t('PROPERTY:lastDate') %></label>
+          <input id="<%- idPrefix %>-lastDate" class="form-control" type="date" name="lastDate" required min="2000-01-01" max="<%- time.getMoment().add(7, 'days').format('YYYY-MM-DD') %>">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-users" class="control-label"><%- helpers.t('PROPERTY:users') %></label>
+        <input id="<%- idPrefix %>-users" type="text" name="users">
+      </div>
+      <% if (editMode) { %>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-comment" class="control-label"><%- helpers.t('PROPERTY:comment') %></label>
+        <textarea id="<%- idPrefix %>-comment" class="form-control" name="comment" rows="3"></textarea>
+      </div>
+      <% } %>
+    </div>
+    <div class="panel-footer">
+      <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

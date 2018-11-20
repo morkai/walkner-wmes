@@ -183,6 +183,10 @@
   "PRIVILEGE:KANBAN:PRINT": "Baza Kanban: drukowanie",
   "PRIVILEGE:PFEP:VIEW": "Baza PFEP: przeglądanie",
   "PRIVILEGE:PFEP:MANAGE": "Baza PFEP: zarządzanie",
+  "PRIVILEGE:TOOLCAL:VIEW": "Narzędzia pomiarowe: przeglądanie",
+  "PRIVILEGE:TOOLCAL:MANAGE": "Narzędzia pomiarowe: zarządzanie",
+  "PRIVILEGE:TOOLCAL:DICTIONARIES:VIEW": "Narzędzia pomiarowe: przeglądanie słowników",
+  "PRIVILEGE:TOOLCAL:DICTIONARIES:MANAGE": "Narzędzia pomiarowe: zarządzanie słownikami",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System",

@@ -1,0 +1,14 @@
+<form class="settings toolcal-settings" autocomplete="off">
+  <div class="list-group">
+    <a class="list-group-item" href="#toolcal/settings?tab=notifier" data-tab="notifier"><%- helpers.t('settings:tab:notifier') %></a>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="notifier">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-notifier-daysBefore"><%- helpers.t('settings:notifier:daysBefore') %></label>
+        <p class="help-block"><%- helpers.t('settings:notifier:daysBefore:help') %></p>
+        <input id="<%- idPrefix %>-notifier-daysBefore" class="form-control" name="toolcal.notifier.daysBefore" type="text" autocomplete="off" data-change-delay="0">
+      </div>
+    </div>
+  </div>
+</form>

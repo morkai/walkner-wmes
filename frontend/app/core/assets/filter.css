@@ -96,11 +96,13 @@ input[type=checkbox].filter-inLabel {
 }
 .filter-radioLabels > label {
   margin-left: 15px;
-  margin-bottom: 3px;
-  vertical-align: top;
+  margin-bottom: 5px;
 }
 .filter-radioLabels > label:first-child {
   margin-left: 0;
+}
+.filter-radioLabels input {
+  vertical-align: top;
 }
 .form-control.is-expanded {
   height: auto!important;

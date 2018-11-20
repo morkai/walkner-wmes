@@ -57,7 +57,6 @@
 @import url("../app/paintShop/assets/main.css");
 @import url("../app/qiResults/assets/main.css");
 @import url("../app/pscs/assets/main.css");
-@import url("../app/d8Entries/assets/main.css");
 @import url("../app/mor/assets/main.css");
 @import url("../app/planning/assets/main.css");
 @import url("../app/sapLaborTimeFixer/assets/main.css");
@@ -67,6 +66,7 @@
 @import url("../app/wh/assets/main.css");
 @import url("../app/pfepEntries/assets/main.css");
 @import url("../app/help/assets/main.css");
+@import url("../app/wmes-toolcal-tools/assets/main.css");
 
 #app-loading {
   position: absolute;

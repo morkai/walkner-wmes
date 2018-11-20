@@ -1,0 +1,37 @@
+<div class="panel panel-<%- model.status === 'in-use' ? 'primary' : 'default' %> toolcal-tools-details-props">
+  <div class="panel-heading">
+    <%- helpers.t('PANEL:TITLE:details') %>
+  </div>
+  <div class="panel-details">
+    <div class="props first">
+      <% ['rid', 'status', 'type', 'name', 'sn'].forEach(function(prop) { %>
+      <div class="prop">
+        <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
+        <div class="prop-value"><%= model[prop] %></div>
+      </div>
+      <% }) %>
+      <div class="prop">
+        <div class="prop-name"><%- helpers.t('PROPERTY:lastDate') %></div>
+        <div class="prop-value"><%- model.lastDate %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- helpers.t('PROPERTY:interval') %></div>
+        <div class="prop-value"><%- helpers.t('interval:' + model.intervalUnit, {v: model.interval}) %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- helpers.t('PROPERTY:nextDate') %></div>
+        <div class="prop-value"><%- model.nextDate %></div>
+      </div>
+      <div class="prop">
+        <div class="prop-name"><%- helpers.t('PROPERTY:users') %></div>
+        <div class="prop-value">
+          <ul>
+            <% model.users.forEach(function(user) { %>
+            <li><%= user %></li>
+            <% }) %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

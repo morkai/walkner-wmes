@@ -77,10 +77,6 @@ define([
   './qiFaults/routes',
   './qiActionStatuses/routes',
   './pscs/routes',
-  './d8Entries/routes',
-  './d8Areas/routes',
-  './d8EntrySources/routes',
-  './d8ProblemSources/routes',
   './mor/routes',
   './planning/routes',
   './wh/routes',
@@ -94,7 +90,9 @@ define([
   './pkhdStrategies/routes',
   './pfepEntries/routes',
   './orderBomMatchers/routes',
-  './help/routes'
+  './help/routes',
+  './wmes-toolcal-types/routes',
+  './wmes-toolcal-tools/routes'
 ], function()
 {
   'use strict';

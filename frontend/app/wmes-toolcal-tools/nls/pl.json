@@ -1,0 +1,76 @@
+{
+  "BREADCRUMBS:base": "Narzędzia pomiarowe",
+  "BREADCRUMBS:browse": "Narzędzia pomiarowe",
+  "BREADCRUMBS:addForm": "Dodawanie",
+  "BREADCRUMBS:editForm": "Edycja",
+  "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
+
+  "MSG:DELETED": "Urządzenie <em>{label}</em> zostało usunięte.",
+  "MSG:jump:404": "Nie znaleziono urządzenia o ID <em>{rid}</em>.",
+  "MSG:comment:failure": "Nie udało się skomentować urządzenia.",
+
+  "PAGE_ACTION:export": "Eksportuj urządzenia",
+  "PAGE_ACTION:add": "Dodaj urządzenie",
+  "PAGE_ACTION:edit": "Edytuj urządzenie",
+  "PAGE_ACTION:delete": "Usuń urządzenie",
+  "PAGE_ACTION:types": "Typy urządzeń",
+  "PAGE_ACTION:settings": "Ustawienia",
+  "PAGE_ACTION:jump:title": "Skocz do urządzenia po ID",
+  "PAGE_ACTION:jump:placeholder": "ID urządzenia",
+
+  "PANEL:TITLE:details": "Szczegóły urządzenia",
+  "PANEL:TITLE:changes": "Historia zmian urządzenia",
+  "PANEL:TITLE:addForm": "Formularz dodawania urządzenia",
+  "PANEL:TITLE:editForm": "Formularz edycji urządzenia",
+
+  "PROPERTY:rid": "ID",
+  "PROPERTY:name": "Nazwa urządzenia",
+  "PROPERTY:type": "Typ urządzenia",
+  "PROPERTY:sn": "Nr seryjny",
+  "PROPERTY:lastDate": "Data ostatniej kalibracji",
+  "PROPERTY:nextDate": "Data kolejnej kalibracji",
+  "PROPERTY:interval": "Okres kalibracji",
+  "PROPERTY:intervalUnit": "Jednostka okresu kalibracji",
+  "PROPERTY:users": "Użytkownicy urządzenia",
+  "PROPERTY:status": "Status",
+  "PROPERTY:comment": "Komentarz",
+
+  "status:in-use": "W użyciu",
+  "status:retired": "Wycofane",
+
+  "interval:unit:year": "rok",
+  "interval:unit:month": "miesiąc",
+  "interval:unit:week": "tydzień",
+  "interval:unit:day": "dzień",
+
+  "interval:year": "{v} {v, plural, one{rok} few{lata} other{lat}}",
+  "interval:month": "{v} {v, plural, one{miesiąc} few{miesiące} other{miesięcy}}",
+  "interval:week": "{v} {v, plural, one{tydzień} few{tygodnie} other{tygodni}}",
+  "interval:day": "{v} {v, plural, one{dzień} other{dni}}",
+
+  "FORM:ACTION:add": "Dodaj urządzenie",
+  "FORM:ACTION:edit": "Edytuj urządzenie",
+  "FORM:ERROR:addFailure": "Nie udało się dodać urządzenia.",
+  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować urządzenia.",
+
+  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia urządzenia",
+  "ACTION_FORM:BUTTON:delete": "Usuń urządzenie",
+  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrane urządzenie?",
+  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć urządzenie <em>{label}</em>?",
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć urządzenia.",
+
+  "filter:user:mine": "Moje",
+  "filter:user:others": "Użytkownik",
+  "filter:date:last": "Data ostatniej",
+  "filter:date:next": "Data kolejnej",
+  "filter:submit": "Filtruj",
+
+  "history:added": "utworzenie urządzenia.",
+  "history:editMessage": "Tutaj możesz dodać komentarz do urządzenia. Jeżeli chcesz także zmienić jakieś właściwości, <a href='{editUrl}'>to skorzystaj z formularza edycji</a>.",
+  "history:submit": "Komentuj",
+
+  "settings:tab:notifier": "Powiadamianie",
+  "settings:notifier:daysBefore": "Odstęp powiadomień",
+  "settings:notifier:daysBefore:help": "Ilość dni przed kolejną datą kalibracji, na podstawie których określane są urządzenia, do których mają zostać wysłane powiadomienia o zbliżającej się kalibracji. Powiadomienia wysyłane są codziennie o 05:30. Można zdefiniować listę dni."
+}

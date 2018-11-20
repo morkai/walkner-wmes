@@ -157,6 +157,7 @@
     "NAVBAR:kanban": "Kanban DB",
     "NAVBAR:pfep": "PFEP DB",
     "NAVBAR:layout": "Layout",
+    "NAVBAR:toolcal": "Tool calibration",
 
     "NAVBAR:OPINION:main": "Opinion survey",
     "NAVBAR:OPINION:current": "Current survey",
