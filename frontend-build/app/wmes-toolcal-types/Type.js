@@ -1,0 +1,1 @@
+define(["../i18n","../core/Model"],function(e,t){"use strict";return t.extend({urlRoot:"/toolcal/types",clientUrlRoot:"#toolcal/types",topicPrefix:"toolcal.types",privilegePrefix:"TOOLCAL:DICTIONARIES",nlsDomain:"wmes-toolcal-types",labelAttribute:"name",serialize:function(){var t=this.toJSON();return t.active=e("core","BOOL:"+t.active),t}})});

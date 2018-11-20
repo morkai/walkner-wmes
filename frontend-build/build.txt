@@ -688,6 +688,15 @@ app/wh/assets/set.css
 ----------------
 app/wh/assets/set.css
 
+app/wmes-toolcal-tools/assets/history.css
+----------------
+app/wmes-toolcal-tools/assets/history.css
+
+app/wmes-toolcal-tools/assets/main.css
+----------------
+app/wmes-toolcal-tools/assets/./history.css
+app/wmes-toolcal-tools/assets/main.css
+
 app/xiconf/assets/hidLamps.css
 ----------------
 app/xiconf/assets/hidLamps.css
@@ -832,7 +841,6 @@ assets/../app/isa/assets/main.css
 assets/../app/paintShop/assets/main.css
 assets/../app/qiResults/assets/main.css
 assets/../app/pscs/assets/main.css
-assets/../app/d8Entries/assets/main.css
 assets/../app/mor/assets/main.css
 assets/../app/planning/assets/main.css
 assets/../app/sapLaborTimeFixer/assets/main.css
@@ -842,6 +850,7 @@ assets/../app/kanbanContainers/assets/main.css
 assets/../app/wh/assets/main.css
 assets/../app/pfepEntries/assets/main.css
 assets/../app/help/assets/main.css
+assets/../app/wmes-toolcal-tools/assets/main.css
 assets/wmes-main.css
 
 assets/wmes-operator.css
@@ -1462,10 +1471,6 @@ app/qiFaults/routes.js
 app/qiActionStatuses/QiActionStatus.js
 app/qiActionStatuses/routes.js
 app/pscs/routes.js
-app/d8Entries/routes.js
-app/d8Areas/routes.js
-app/d8EntrySources/routes.js
-app/d8ProblemSources/routes.js
 app/mor/pages/MorPage.js
 app/nls/mor.js
 app/nls/pl/mor.js
@@ -1625,6 +1630,8 @@ app/pkhdStrategies/routes.js
 app/pfepEntries/routes.js
 app/orderBomMatchers/routes.js
 app/help/routes.js
+app/wmes-toolcal-types/routes.js
+app/wmes-toolcal-tools/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
