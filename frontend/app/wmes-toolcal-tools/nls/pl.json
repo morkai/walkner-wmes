@@ -35,6 +35,7 @@
   "PROPERTY:users": "Użytkownicy urządzenia",
   "PROPERTY:status": "Status",
   "PROPERTY:comment": "Komentarz",
+  "PROPERTY:remaining": "Dni do kalibracji",
 
   "status:in-use": "W użyciu",
   "status:retired": "Wycofane",

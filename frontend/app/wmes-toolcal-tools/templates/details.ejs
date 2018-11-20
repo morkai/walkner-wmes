@@ -1,35 +1,49 @@
-<div class="panel panel-<%- model.status === 'in-use' ? 'primary' : 'default' %> toolcal-tools-details-props">
+<div class="panel panel-<%- model.className %>">
   <div class="panel-heading">
     <%- helpers.t('PANEL:TITLE:details') %>
   </div>
-  <div class="panel-details">
-    <div class="props first">
-      <% ['rid', 'status', 'type', 'name', 'sn'].forEach(function(prop) { %>
-      <div class="prop">
-        <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
-        <div class="prop-value"><%= model[prop] %></div>
+  <div class="panel-details row">
+    <div class="col-md-4">
+      <div class="props first">
+        <% ['status', 'type', 'name', 'sn'].forEach(function(prop) { %>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
+          <div class="prop-value"><%= model[prop] %></div>
+        </div>
+        <% }) %>
       </div>
-      <% }) %>
-      <div class="prop">
-        <div class="prop-name"><%- helpers.t('PROPERTY:lastDate') %></div>
-        <div class="prop-value"><%- model.lastDate %></div>
+    </div>
+    <div class="col-md-4">
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:interval') %></div>
+          <div class="prop-value"><%- model.interval %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:lastDate') %></div>
+          <div class="prop-value"><%- model.lastDate %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:nextDate') %></div>
+          <div class="prop-value"><%- model.nextDate %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:remaining') %></div>
+          <div class="prop-value"><%- model.remaining %></div>
+        </div>
       </div>
-      <div class="prop">
-        <div class="prop-name"><%- helpers.t('PROPERTY:interval') %></div>
-        <div class="prop-value"><%- helpers.t('interval:' + model.intervalUnit, {v: model.interval}) %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- helpers.t('PROPERTY:nextDate') %></div>
-        <div class="prop-value"><%- model.nextDate %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- helpers.t('PROPERTY:users') %></div>
-        <div class="prop-value">
-          <ul>
-            <% model.users.forEach(function(user) { %>
-            <li><%= user %></li>
-            <% }) %>
-          </ul>
+    </div>
+    <div class="col-md-4">
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:users') %></div>
+          <div class="prop-value">
+            <ul>
+              <% model.users.forEach(function(user) { %>
+                <li><%= user %></li>
+              <% }) %>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

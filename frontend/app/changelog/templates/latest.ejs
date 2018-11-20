@@ -1,112 +1,14 @@
-<h1>v0.128.0</h1>
-<h2><%- time.format('2018-11-20', 'LL') %></h2>
-<h3>Pulpit</h3>
-<ul>
-  <li>Dodano okno dialogowe informujące użytkownika o używaniu nieaktualnej wersji przeglądarki Chrome.</li>
-  <li>Dodano okno dialogowe informujące użytkownika o używaniu nieaktualnego adresu do systemu WMES.</li>
-</ul>
-<h3>Raporty > CLIP</h3>
-<ul>
-  <li>Dodano ikonę <i class="fa fa-wrench"></i> przy nazwie wyrobu na liście zleceń informującą, że dane zlecenie
-    jest ETO.</li>
-</ul>
-<h3>ZPW</h3>
-<ul>
-  <li>Zmieniono raport Wskaźniki tak, aby Obserwacje zliczane były na podstawie 'Miejsca pracy obserwatora',
-    a nie 'Miejsca obserwacji'.</li>
-  <li>Dodano uprawnienia do przeglądania i dodawania wpisów dla lokalnych, niezalogowanych użytkowników.</li>
-</ul>
-<h3>Usprawnienia</h3>
-<ul>
-  <li>Dodano uprawnienia do przeglądania i dodawania wpisów dla lokalnych, niezalogowanych użytkowników.</li>
-</ul>
-<h3>Baza testów</h3>
-<ul>
-  <li>Poprawiono błąd podczas importowania wyników, jeżeli w importowanym archiwum plik zleceń był pusty.</li>
-  <li>Zmieniono drukowanie etykiet po teście opraw HID tak, aby etykieta żarówki drukowała się tylko wtedy, gdy
-    dane zlecenie ma przynajmiej jedną żarówkę.</li>
-</ul>
-<h3>Strategie sprawdzania komponentów</h3>
-<ul>
-  <li>Poprawiono błąd w formularzu powodujący nieprawidłowe zapisywanie filtra linii produkcyjnych.</li>
-  <li>Dodano nowe pole do listy komponentów: Brak? - określa, czy dany komponent ma być na liście komponentów zlecenia
-    czy nie.</li>
-</ul>
-<h3>SAP GUI</h3>
-<ul>
-  <li>Zmieniono zrzucanie dokumentów zleceń tak, aby zrzucane były dokumenty tylko dla zleceń znajdujących się
-    w planie dziennym.</li>
-</ul>
-<h3>Produkcja > Zlecenia</h3>
-<ul>
-  <li>Dodano kolumnę 'Ilość do zrobienia w zleceniu' do eksportowanych danych.</li>
-</ul>
-<h3>FTE</h3>
-<ul>
-  <li>Zmieniono limity eksportowania wpisów tak, aby można było za jednym razem eksportować dane z mniej więcej
-    jednego roku.</li>
-</ul>
-<h3>Watchdog</h3>
-<ul>
-  <li>Poprawiono błąd powodujący wywalenie się serwera po osiągnięciu przez proces serwera ponad 900MB
-    użytej pamięci.</li>
-</ul>
-<h3>Kanban</h3>
-<ul>
-  <li>Poprawiono błąd uniemożliwiający wyeksportowanie całej tabeli.</li>
-  <li>Poprawiono błąd powodujący w niektórych przypadkach nieukrywanie dymka z pomocą dot. filtra.</li>
-  <li>Zmieniono algorytm eksportowania tabeli tak, aby używał mniej pamięci.</li>
-  <li>Zmieniono pole 'Nazwa' obszaru zaopatrzenia na 'Supply area (SAP)'.</li>
-  <li>Zmieniono kolumny 'Lokalizacja magazynowa' i 'Kolor' tak, aby nie miały wartości, jeżeli 'Strategia' danego
-    rekordu równa się `153`.</li>
-  <li>Dodano nową kolumnę: Strategia.</li>
-  <li>Dodano importowanie danych ze strategią `153`.</li>
-</ul>
-<h3>Malarnia</h3>
-<ul>
-  <li>Poprawiono błąd powodujący dodawanie niepotrzebnego komentarza do wszystkich zleceń podczas każdego
-    przeliczania kolejki malarnii.</li>
-  <li>Zmieniono wywoływanie menu kontekstowego przez przytrzymanie lewego przycisku myszy tak, aby funkcja dostępna
-    była tylko w trybie wsadowym.</li>
-  <li>Dodano do menu kontekstowego akcje 'Kopiuj nr zlecenia' oraz 'Kopiuj nr podzleceń' na poziomie zlecenia.</li>
-</ul>
-<h3>Żądania zmian</h3>
-<ul>
-  <li>Dodano automatyczne wyświetlanie dymka z informacjami dot. zmienianego zlecenia/przestoju po otworzeniu szczegółów
-    żądania zmiany.</li>
-</ul>
-<h3>Inspekcja Jakości</h3>
-<ul>
-  <li>Dodano nowe pole do Rodzajów inspekcji: Pozycja - umożliwia ustawienie kolejności sortowania pozycji.</li>
-</ul>
-<h3>Karty pracy</h3>
-<ul>
-  <li>Dodano funkcjonalność eksportowania kart pracy.</li>
-</ul>
-<h3>Obserwacje zachowań</h3>
-<ul>
-  <li>Dodano możliwość przeglądania i dodawania nowych obserwacji przez lokalnych użytkowników.</li>
-  <li>Dodano możliwość dodawania nowych obserwacji z poziomu aplikacji Formatki operatora oraz Dokumentacji.</li>
-</ul>
-<h3>Użytkownicy</h3>
-<ul>
-  <li>Poprawiono błąd uniemożliwiający zalogowanie się za pomocą konta @signify.com z adresu innego
-    niż http://161.87.64.46/.</li>
-</ul>
-<h3>Raporty > Przestoje w obszarach</h3>
-<ul>
-  <li>Zmieniono wykres CLIP tak, aby korzystał z nowego raportu CLIP.</li>
-</ul>
+<h1>v?.?.?</h1>
+<h2><%- time.format(Date.now(), 'LL') %></h2>
 <h3>Narzędzia pomiarowe</h3>
 <ul>
-  <li>Dodano nowy moduł.</li>
-</ul>
-<h3>Inne</h3>
-<ul>
-  <li>Poprawiono błąd powodujący duże zużycie pamięci przez proces serwera, jeżeli użytkownik próbował załadować
-    na serwer załącznik przekraczający ustawione limity wielkości plików.</li>
-  <li>Zmieniono automatyczne odświeżanie przeglądarki po otrzymaniu komunikatu o nowej wersji aplikacji ze stałych
-    60s nieaktywności na losową ilość sekund z przedziału 60-120, w celu uniknięcia inicjacji aktualizacji przez
-    wszystkich klientów na raz.</li>
-  <li>Dodano do filtrów Od-Do możliwość szybkiego wyboru daty.</li>
+  <li>Zmieniono kolor wierszy na liście urządzeń oraz głównego panelu w szczegółach urządzenia tak, aby był zależał
+    od ilości dni do kolejnej kalibracji:
+    <ul>
+      <li>biały - jeżeli urządzenie jest wycofane,</li>
+      <li>zielony - jeżeli jest więcej niż 14 dni do kalibracji,</li>
+      <li>żółty - jeżeli jest mniej niż 14 dni do kalibracji,</li>
+      <li>czerwony - jeżeli data kalibracji minęła.</li>
+    </ul>
+  </li>
 </ul>
