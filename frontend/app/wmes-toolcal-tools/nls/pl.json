@@ -32,7 +32,7 @@
   "PROPERTY:nextDate": "Data kolejnej kalibracji",
   "PROPERTY:interval": "Okres kalibracji",
   "PROPERTY:intervalUnit": "Jednostka okresu kalibracji",
-  "PROPERTY:users": "Użytkownicy urządzenia",
+  "PROPERTY:users": "Aktualni dysponenci sprzętu",
   "PROPERTY:status": "Status",
   "PROPERTY:comment": "Komentarz",
   "PROPERTY:remaining": "Dni do kalibracji",
