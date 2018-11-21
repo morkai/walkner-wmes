@@ -29,7 +29,7 @@ define([
 
     paginationOptions: {},
 
-    refreshDelay: 3000,
+    refreshDelay: 5000,
 
     remoteTopics: function()
     {
