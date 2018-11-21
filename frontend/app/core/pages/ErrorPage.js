@@ -116,6 +116,8 @@ define([
 
     trySendMail: function(url, body, done)
     {
+      var user = require('app/user');
+
       this.ajax({
         method: 'POST',
         url: url,
@@ -147,6 +149,7 @@ define([
 
     buildMail: function()
     {
+      var user = require('app/user');
       var mail = [];
       var json = function(value)
       {
