@@ -91,18 +91,26 @@ define([
     }));
   });
 
-  broker.subscribe('router.dispatching', function(message)
-  {
-    var recent = JSON.parse(localStorage.WMES_RECENT_DISPATCH || '[]');
+  localStorage.WMES_RECENT_LOCATIONS = JSON.stringify([{
+    date: new Date(),
+    href: window.location.href
+  }]);
 
-    recent.push(time.getMoment().format('YYYY-MM-DD, HH:mm:ss') + ' ' + message.url);
+  window.addEventListener('hashchange', function()
+  {
+    var recent = JSON.parse(localStorage.WMES_RECENT_LOCATIONS);
+
+    recent.unshift({
+      date: new Date(),
+      href: window.location.href
+    });
 
     if (recent.length > 10)
     {
-      recent.shift();
+      recent.pop();
     }
 
-    localStorage.WMES_RECENT_DISPATCH = JSON.stringify(recent);
+    localStorage.WMES_RECENT_LOCATIONS = JSON.stringify(recent);
   });
 
   window.router = router;

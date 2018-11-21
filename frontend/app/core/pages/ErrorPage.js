@@ -168,7 +168,7 @@ define([
         + '<br>' + json(_.assign({cname: window.COMPUTERNAME}, _.omit(user.data, 'privilegesMap')), null, 2));
       prop('router.currentRequest', this.model.req ? this.model.req.url : '?');
       prop('router.referrer', this.model.previousUrl || '?');
-      prop('router.recent', json(JSON.parse(localStorage.WMES_RECENT_DISPATCH || '[]')));
+      prop('router.recent', json(JSON.parse(localStorage.WMES_RECENT_LOCATIONS || '[]')));
       prop('response.code', this.model.code);
       prop('response.body', this.model.xhr ? this.model.xhr.responseText : '');
       prop('window.location.href', window.location.href);
