@@ -20,8 +20,8 @@ define([
           viewport.msg.loading();
         }
 
-        jqXhr.done(onSync.bind(options));
-        jqXhr.fail(onError.bind(options));
+        jqXhr.done(onSync.bind(null, options));
+        jqXhr.fail(onError.bind(null, options));
       }
     });
 
