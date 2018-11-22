@@ -1,10 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'app/time',
   'app/user',
   '../core/Collection',
   './FteMasterEntry'
 ], function(
+  time,
   user,
   Collection,
   FteMasterEntry
@@ -19,15 +21,21 @@ define([
 
     rqlQuery: function(rql)
     {
-      var selector;
       var userDivision = user.getDivision();
+      var selector = {
+        name: 'and',
+        args: [{
+          name: 'ge',
+          args: ['date', time.getMoment().subtract(7, 'days').valueOf()]
+        }]
+      };
 
       if (userDivision && userDivision.get('type') === 'prod')
       {
-        selector = {
-          name: 'and',
-          args: [{name: 'eq', args: [user.data.orgUnitType, user.data.orgUnitId]}]
-        };
+        selector.push({
+          name: 'eq',
+          args: [user.data.orgUnitType, user.data.orgUnitId]
+        });
       }
 
       return rql.Query.fromObject({
