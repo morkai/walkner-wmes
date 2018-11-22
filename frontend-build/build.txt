@@ -668,7 +668,12 @@ app/users/assets/logInForm.css
 app/users/assets/main.css
 ----------------
 app/users/assets/./logInForm.css
+app/users/assets/./userInfoPopover.css
 app/users/assets/main.css
+
+app/users/assets/userInfoPopover.css
+----------------
+app/users/assets/userInfoPopover.css
 
 app/vis/assets/main.css
 ----------------
@@ -1338,6 +1343,8 @@ app/core/pages/FilteredListPage.js
 app/prodSerialNumbers/routes.js
 app/reports/routes.js
 app/subdivisions/routes.js
+app/users/templates/userInfoPopover.js
+app/users/util/userInfoPopover.js
 app/nls/users.js
 app/nls/pl/users.js
 i18n!app/nls/users
@@ -3013,6 +3020,8 @@ app/nls/pl/purchaseOrders.js
 i18n!app/nls/purchaseOrders
 app/purchaseOrders/routes.js
 app/core/util/showDeleteFormPage.js
+app/users/templates/userInfoPopover.js
+app/users/util/userInfoPopover.js
 app/nls/users.js
 app/nls/pl/users.js
 i18n!app/nls/users
