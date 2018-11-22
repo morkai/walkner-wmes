@@ -8,7 +8,8 @@ define([
   'app/core/util/forms/dateTimeRange',
   'app/users/util/setUpUserSelect2',
   'app/wmes-toolcal-tools/dictionaries',
-  'app/wmes-toolcal-tools/templates/filter'
+  'app/wmes-toolcal-tools/templates/filter',
+  'app/core/util/ExpandableSelect'
 ], function(
   _,
   time,
@@ -129,12 +130,21 @@ define([
     {
       FilterView.prototype.afterRender.call(this);
 
+      this.$('.is-expandable').expandableSelect();
+
       setUpUserSelect2(this.$id('user'), {
         width: '280px',
         view: this
       });
 
       this.toggleUserSelect2();
+    },
+
+    destroy: function()
+    {
+      FilterView.prototype.destroy.call(this);
+
+      this.$('.is-expandable').expandableSelect('destroy');
     },
 
     toggleUserSelect2: function()
