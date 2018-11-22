@@ -6,14 +6,16 @@ define([
   '../time',
   '../user',
   '../core/Model',
-  './dictionaries'
+  './dictionaries',
+  'app/core/templates/userInfo'
 ], function(
   _,
   t,
   time,
   user,
   Model,
-  dictionaries
+  dictionaries,
+  userInfoTemplate
 ) {
   'use strict';
 
@@ -70,7 +72,6 @@ define([
 
       obj.type = dictionaries.types.getLabel(obj.type) || '-';
       obj.status = t(this.nlsDomain, 'status:' + obj.status);
-      obj.users = obj.users.map(function(u) { return u.label; });
       obj.lastDate = time.format(obj.lastDate, 'L');
       obj.nextDate = time.format(obj.nextDate, 'L');
       obj.interval = t(this.nlsDomain, 'interval:' + obj.intervalUnit, {v: obj.interval});
@@ -82,7 +83,7 @@ define([
     {
       var obj = this.serialize();
 
-      obj.users = obj.users.join(', ');
+      obj.users = obj.users.map(function(u) { return userInfoTemplate({userInfo: u}); }).join(', ');
 
       return obj;
     },

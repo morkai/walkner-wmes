@@ -32,7 +32,7 @@
 .kaizenOrders-details .has-description .fa-info-circle {
   display: inline-block;
 }
-.kaizenOrders-details .popover {
+.kaizenOrders-details-popover {
   max-width: 350px;
   white-space: pre-line;
   text-align: left;

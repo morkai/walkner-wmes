@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'jquery',
   'app/i18n',
   'app/time',
   'app/core/views/ListView',
@@ -11,6 +12,7 @@ define([
   'app/qiResults/templates/correctiveActionsTable'
 ], function(
   _,
+  $,
   t,
   time,
   ListView,
@@ -188,10 +190,13 @@ define([
           }
 
           return undefined;
+        },
+        template: function()
+        {
+          return $($.fn.popover.Constructor.DEFAULTS.template)
+            .addClass('qiResults-list-popover')
+            .toggleClass('is-correctiveAction', this.dataset.id === 'correctiveAction');
         }
-      }).on('shown.bs.popover', function(e)
-      {
-        view.$el.find('.popover').toggleClass('is-correctiveAction', e.target.dataset.id === 'correctiveAction');
       });
     }
 

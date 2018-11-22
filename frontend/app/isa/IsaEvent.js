@@ -4,12 +4,14 @@ define([
   'underscore',
   '../i18n',
   '../time',
-  '../core/Model'
+  '../core/Model',
+  'app/core/templates/userInfo'
 ], function(
   _,
   t,
   time,
-  Model
+  Model,
+  userInfoTemplate
 ) {
   'use strict';
 
@@ -40,7 +42,12 @@ define([
       obj.className = EVENT_TO_SEVERITY_CLASS_NAME[this.get('type')];
       obj.time = time.format(obj.time, compact ? 'LTS' : 'LL, LTS');
       obj.line = this.getProdLineId();
-      obj.user = this.getUserName(compact);
+      obj.user = userInfoTemplate({userInfo: {
+        id: obj.user.id,
+        label: this.getUserName(compact),
+        ip: compact ? null : obj.user.ip,
+        cname: compact ? null : obj.user.cname
+      }});
       obj.action = this.getActionText();
 
       return obj;

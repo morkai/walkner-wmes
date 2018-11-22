@@ -1,4 +1,5 @@
 @import url(./logInForm.css);
+@import url(./userInfoPopover.css);
 
 .page[data-id="logInForm"] .page-breadcrumbs {
   text-align: center;

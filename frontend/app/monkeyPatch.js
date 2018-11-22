@@ -135,6 +135,23 @@ function(
     return this.options.hasContent === true || !!this.getTitle() || !!this.getContent();
   };
 
+  $.fn.popover.Constructor.prototype.tip = function()
+  {
+    if (!this.$tip)
+    {
+      var template = this.options.template;
+
+      if (typeof template === 'function')
+      {
+        template = template.call(this.$element[0]);
+      }
+
+      this.$tip = typeof template === 'string' ? $(template) : template;
+    }
+
+    return this.$tip;
+  };
+
   var $body = $(document.body);
 
   $.fn.select2.defaults.dropdownContainer = function(select2)

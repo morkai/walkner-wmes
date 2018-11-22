@@ -1,0 +1,20 @@
+<div>
+  <div class="userInfoPopover-name">
+    <% if (user.isAllowedTo('USERS:VIEW')) { %>
+    <a href="#users/<%- userInfo._id %>"><%= userInfo.name %></a>
+    <% } else { %>
+    <%= userInfo.name %>
+    <% } %>
+  </div>
+  <% if (userInfo.position) { %>
+  <div class="userInfoPopover-position"><%= userInfo.position %> @ <%= userInfo.company %></div>
+  <% } else if (userInfo.company) { %>
+  <div class="userInfoPopover-position"><%= userInfo.company %></div>
+  <% } %>
+  <% if (userInfo.email) { %>
+    <div class="userInfoPopover-email"><%- t('users', 'userInfo:email') %> <a href="mailto:<%= userInfo.email %>" target="_blank"><%= userInfo.email %></a></div>
+  <% } %>
+  <% if (userInfo.mobile) { %>
+    <div class="userInfoPopover-mobile"><%- t('users', 'userInfo:mobile') %> <a href="tel:<%= userInfo.mobile.number %>" target="_blank"><%= userInfo.mobile.label %></a></div>
+  <% } %>
+</div>

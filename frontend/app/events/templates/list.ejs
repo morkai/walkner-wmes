@@ -15,14 +15,12 @@
         <td class="is-min"><%- event.type %>
         <td class="is-min">
           <% if (event.user) { %>
-            <% if (event.user.login === 'root') { %>
-              <%- event.user.login %>
-            <% } else { %>
-              <a href="#users/<%- event.user._id %>"><%- event.user.name %></a>
-            <% } %>
-            <% if (event.user.ipAddress) { %>(<%- event.user.ipAddress %>)<% } %>
+          <span class="userInfo" data-user-id="<%- event.user._id %>">
+            <span class="userInfo-label"><%- event.user.name %></span>
+            <% if (event.user.ipAddress) { %><span class="userInfo-cname">(<%- event.user.ipAddress %>)</span><% } %>
+          </span>
           <% } else { %>
-            -
+          -
           <% } %>
         <td><%- event.text %>
       </tr>

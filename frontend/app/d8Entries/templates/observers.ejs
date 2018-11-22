@@ -14,7 +14,7 @@
     <% } %>
     <% model.observers.forEach(function(observer) { %>
     <tr>
-      <td class="is-min"><%= observer.user.label %></td>
+      <td class="is-min"><span class="userInfo" data-user-id="<%- observer.user.id %>"><span class="userInfo-label"><%= observer.user.label %></span></span></td>
       <td class="is-min"><%= t('d8Entries', 'role:' + observer.role) %></td>
       <td><%= observer.lastSeenAt ? time.format(observer.lastSeenAt, 'LLLL') : '-' %></td>
     </tr>

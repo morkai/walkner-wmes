@@ -2,11 +2,13 @@
 
 define([
   'underscore',
+  'jquery',
   'app/core/views/DetailsView',
   'app/kaizenOrders/dictionaries',
   'app/suggestions/templates/details'
 ], function(
   _,
+  $,
   DetailsView,
   kaizenDictionaries,
   template
@@ -87,6 +89,10 @@ define([
         content: function()
         {
           return this.dataset.description;
+        },
+        template: function()
+        {
+          return $($.fn.popover.Constructor.DEFAULTS.template).addClass('suggestions-details-popover');
         }
       });
 

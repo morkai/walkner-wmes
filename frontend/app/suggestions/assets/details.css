@@ -32,7 +32,7 @@
 .suggestions-details .has-description .fa-info-circle {
   display: inline-block;
 }
-.suggestions-details .popover {
+.suggestions-details-popover {
   max-width: 350px;
   white-space: pre-line;
   text-align: left;

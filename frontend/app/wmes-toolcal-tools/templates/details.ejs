@@ -40,7 +40,7 @@
           <div class="prop-value">
             <ul>
               <% model.users.forEach(function(user) { %>
-                <li><%= user %></li>
+                <li><span class="userInfo" data-user-id="<%- user.id %>"><span class="userInfo-label"><%= user.label %></span></span></li>
               <% }) %>
             </ul>
           </div>

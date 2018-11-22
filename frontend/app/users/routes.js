@@ -10,6 +10,7 @@ define([
   '../core/util/showDeleteFormPage',
   './User',
   './pages/LogInFormPage',
+  './util/userInfoPopover',
   'i18n!app/nls/users'
 ], function(
   t,

@@ -2,11 +2,13 @@
 
 define([
   'underscore',
+  'jquery',
   'app/core/views/DetailsView',
   '../dictionaries',
   'app/kaizenOrders/templates/details'
 ], function(
   _,
+  $,
   DetailsView,
   kaizenDictionaries,
   template
@@ -29,7 +31,7 @@ define([
 
     currentTab: null,
 
-    events: _.extend({
+    events: _.assign({
       'click a[data-toggle="tab"]': function(e)
       {
         this.currentTab = e.currentTarget.dataset.tab;
@@ -48,7 +50,7 @@ define([
         + (showKaizenPanel ? '1' : '0')
       ];
 
-      return _.extend(DetailsView.prototype.serialize.call(this), {
+      return _.assign(DetailsView.prototype.serialize.call(this), {
         multi: !!window.KAIZEN_MULTI || this.model.isMulti(),
         showNearMissPanel: showNearMissPanel,
         showSuggestionPanel: showSuggestionPanel,
@@ -108,6 +110,10 @@ define([
         content: function()
         {
           return this.dataset.description;
+        },
+        template: function()
+        {
+          return $($.fn.popover.Constructor.DEFAULTS.template).addClass('kaizenOrders-details-popover');
         }
       });
 
