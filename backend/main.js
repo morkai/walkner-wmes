@@ -17,6 +17,11 @@ const moment = require('moment');
 const main = require('h5.main');
 const config = require(process.argv[2]);
 
+if (!config.id)
+{
+  config.id = `unknown`;
+}
+
 moment.locale('pl');
 
 const modules = (config.modules || []).map((module, i) =>
@@ -55,13 +60,14 @@ const modules = (config.modules || []).map((module, i) =>
 });
 
 const app = {
-  options: Object.assign({}, config, {
+  options: {
+    ...config,
     id: config.id,
     startTime: startTime,
     env: process.env.NODE_ENV,
     rootPath: __dirname,
     moduleStartTimeout: config.moduleStartTimeout || 3000
-  }),
+  },
   ...helpers
 };
 
