@@ -15,6 +15,8 @@ define([
 
     model: ProdSerialNumber,
 
+    rowHeight: false,
+
     rqlQuery: function(rql)
     {
       return rql.Query.fromObject({
@@ -22,7 +24,7 @@ define([
         sort: {
           scannedAt: -1
         },
-        limit: 20,
+        limit: -1,
         selector: {
           name: 'and',
           args: [

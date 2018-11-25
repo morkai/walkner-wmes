@@ -13,7 +13,7 @@ define([
 
     model: OpinionSurveyAction,
 
-    rqlQuery: 'limit(20)&sort(-createdAt)',
+    rqlQuery: 'limit(10)&sort(-createdAt)',
 
     initialize: function()
     {

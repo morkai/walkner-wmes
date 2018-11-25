@@ -13,7 +13,7 @@ define([
 
     model: IsaEvent,
 
-    rqlQuery: 'sort(-time)&limit(20)'
+    rqlQuery: 'sort(-time)&limit(-1)'
 
   });
 });

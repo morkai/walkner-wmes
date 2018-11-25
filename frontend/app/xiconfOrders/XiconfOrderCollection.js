@@ -15,6 +15,8 @@ define([
 
     model: XiconfOrder,
 
+    rowHeight: false,
+
     rqlQuery: function(rql)
     {
       var today = time.getMoment().startOf('day');
@@ -26,7 +28,7 @@ define([
         sort: {
           reqDate: -1
         },
-        limit: 20,
+        limit: -1,
         selector: {
           name: 'and',
           args: [

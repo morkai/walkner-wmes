@@ -19,6 +19,8 @@ define([
 
     model: ProdChangeRequest,
 
+    rowHeight: false,
+
     rqlQuery: function(rql)
     {
       var selector = [
@@ -31,7 +33,7 @@ define([
       });
 
       return rql.Query.fromObject({
-        limit: 20,
+        limit: -1,
         sort: {
           prodLine: 1,
           _id: 1

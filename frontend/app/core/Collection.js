@@ -24,6 +24,11 @@ define([
 
     this.rqlQuery = this.createRqlQuery(options.rqlQuery || this.rqlQuery);
 
+    if (this.rqlQuery.limit < 0)
+    {
+      this.rqlQuery.limit = this.getDefaultPageLimit();
+    }
+
     this.paginationData = options.paginate !== false && this.paginate !== false ? new PaginationData() : null;
 
     if (!this.url)
@@ -170,6 +175,44 @@ define([
     this.rqlQuery.skip = (newPage - 1) * this.rqlQuery.limit;
 
     this.fetch({reset: true});
+  };
+
+  Collection.prototype.getDefaultPageLimit = function()
+  {
+    var hdHeight = 84 + 15;
+    var filterHeight = 91 + 15;
+    var pagerHeight = 39 + 15;
+    var theadHeight = 32;
+    var rowHeight = 34;
+
+    if (this.theadHeight > 8)
+    {
+      theadHeight = this.theadHeight;
+    }
+    else
+    {
+      theadHeight = 32 + 20 * ((this.theadHeight || 1) - 1);
+    }
+
+    if (typeof this.rowHeight === 'number')
+    {
+      if (this.rowHeight > 8)
+      {
+        rowHeight = this.rowHeight;
+      }
+      else
+      {
+        rowHeight = 31 + 20 * (this.rowHeight - 1);
+      }
+    }
+    else if (this.rowHeight === false)
+    {
+      rowHeight = 31;
+    }
+
+    var availHeight = window.innerHeight - hdHeight - filterHeight - pagerHeight - theadHeight;
+
+    return Math.floor(availHeight / rowHeight);
   };
 
   return Collection;

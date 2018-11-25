@@ -13,7 +13,7 @@ define([
 
     model: PaintShopPaint,
 
-    rqlQuery: 'sort(shelf,bin)&limit(20)'
+    rqlQuery: 'sort(shelf,bin)&limit(-1)'
 
   });
 });

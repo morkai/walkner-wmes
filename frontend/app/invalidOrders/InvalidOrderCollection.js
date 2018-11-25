@@ -13,7 +13,7 @@ define([
 
     model: InvalidOrder,
 
-    rqlQuery: 'status=invalid&sort(-updatedAt,_id)&limit(15)',
+    rqlQuery: 'status=invalid&sort(-updatedAt,_id)&limit(-1)',
 
     initialize: function()
     {

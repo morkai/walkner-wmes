@@ -15,7 +15,10 @@ define([
 
     model: PfepEntry,
 
-    rqlQuery: 'sort(-rid)&limit(15)'
+    rowHeight: 2,
+    theadHeight: 3,
+
+    rqlQuery: 'sort(-rid)&limit(-1)'
 
   });
 });

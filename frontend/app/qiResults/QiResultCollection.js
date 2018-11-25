@@ -15,6 +15,10 @@ define([
 
     model: QiResult,
 
+    theadHeight: 2,
+
+    rowHeight: 2,
+
     rqlQuery: function(rql)
     {
       return rql.Query.fromObject({
@@ -23,7 +27,7 @@ define([
           inspectedAt: -1,
           rid: -1
         },
-        limit: 20,
+        limit: -1,
         selector: {
           name: 'and',
           args: [

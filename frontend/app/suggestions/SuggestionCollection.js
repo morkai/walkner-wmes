@@ -13,7 +13,11 @@ define([
 
     model: Suggestion,
 
-    rqlQuery: 'exclude(changes)&limit(20)&sort(-date)'
+    theadHeight: 2,
+
+    rowHeight: 1.5,
+
+    rqlQuery: 'exclude(changes)&limit(-1)&sort(-date)'
 
   });
 });

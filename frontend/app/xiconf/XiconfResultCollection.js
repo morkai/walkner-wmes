@@ -17,6 +17,8 @@ define([
 
     model: XiconfResult,
 
+    rowHeight: false,
+
     rqlQuery: function(rql)
     {
       var weekAgo = time.getMoment()
@@ -36,7 +38,7 @@ define([
         sort: {
           startedAt: -1
         },
-        limit: 20,
+        limit: -1,
         selector: {
           name: 'and',
           args: [{name: 'ge', args: ['startedAt', weekAgo]}]

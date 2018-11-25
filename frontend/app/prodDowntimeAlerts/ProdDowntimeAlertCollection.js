@@ -13,7 +13,7 @@ define([
 
     model: ProdDowntimeAlert,
 
-    rqlQuery: 'select(name)&sort(name)&limit(20)'
+    rqlQuery: 'select(name)&sort(name)&limit(-1)'
 
   });
 });

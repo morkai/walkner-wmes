@@ -13,7 +13,9 @@ define([
 
     model: BehaviorObsCard,
 
-    rqlQuery: 'limit(20)&sort(-date)'
+    theadHeight: 2,
+
+    rqlQuery: 'limit(-1)&sort(-date)'
 
   });
 });

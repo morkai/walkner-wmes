@@ -23,6 +23,8 @@ define([
 
     model: ProdLogEntry,
 
+    rowHeight: false,
+
     rqlQuery: function(rql)
     {
       var selector = [
@@ -38,7 +40,7 @@ define([
         sort: {
           createdAt: -1
         },
-        limit: 20,
+        limit: -1,
         selector: {
           name: 'and',
           args: selector
