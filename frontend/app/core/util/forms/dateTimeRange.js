@@ -46,7 +46,8 @@ define([
 
   function toggleInput(e)
   {
-    var inputEl = e.currentTarget.control;
+    var labelEl = e.currentTarget;
+    var inputEl = document.getElementById(labelEl.htmlFor);
 
     if (!inputEl)
     {

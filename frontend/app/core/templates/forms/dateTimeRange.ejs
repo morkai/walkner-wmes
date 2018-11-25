@@ -8,6 +8,7 @@
       <label
         class="control-label <%- label.dropdown || label.ranges ? 'dropdown-toggle' : '' %>"
         <%- label.dropdown || label.ranges ? 'data-toggle="dropdown"' : '' %>
+        <% if (label.input) { %>for="<%- idPrefix %>-<%- label.input.name %>-<%- label.input.value %>"<% } %>
       >
         <% if (label.input) { %>
         <input id="<%- idPrefix %>-<%- label.input.name %>-<%- label.input.value %>" class="dateTimeRange-label-input" type="<%- label.input.type %>" name="<%- label.input.name %>" value="<%- label.input.value %>">

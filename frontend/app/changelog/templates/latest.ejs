@@ -2,6 +2,7 @@
 <h2><%- time.format(Date.now(), 'LL') %></h2>
 <h3>Narzędzia pomiarowe</h3>
 <ul>
+  <li>Poprawiono błąd powodujący nierozwijanie się listy filtra 'Typ urządzenia'.</li>
   <li>Zmieniono kolor wierszy na liście urządzeń oraz głównego panelu w szczegółach urządzenia tak, aby był zależał
     od ilości dni do kolejnej kalibracji:
     <ul>
@@ -11,8 +12,30 @@
       <li>czerwony - jeżeli data kalibracji minęła.</li>
     </ul>
   </li>
+  <li>Zmieniono etykietę pola 'Użytkownicy urządzenia' na 'Aktualni dysponenci sprzętu'.</li>
 </ul>
 <h3>SAP GUI</h3>
 <ul>
-  <li>Dodano do zrzutu dokumentów możliwość definiowania dodatkowych MRP nieznajdujących się w planie dziennym .</li>
+  <li>Dodano do zrzutu dokumentów możliwość definiowania dodatkowych MRP nieznajdujących się w planie dziennym.</li>
+</ul>
+<h3>FTE</h3>
+<ul>
+  <li>Zmieniono domyślny filtr listy tak, aby pokazywał dane tylko z ostatnich 7 dni.</li>
+</ul>
+<h3>Sprawdzanie komponentów</h3>
+<ul>
+  <li>Poprawiono błąd powodujący wywalenie się serwera, jeżeli zeskanowako nr seryjny w zleceniu, które ma oprawę
+    HID niezdefiniowaną w słowniku.</li>
+</ul>
+<h3>Watchdog</h3>
+<ul>
+  <li>Dodano możliwość wykonania telefonu na wybrany numer, gdy jakieś zdarzenie nie wystąpi przez określony czas.</li>
+</ul>
+<h3>Inne</h3>
+<ul>
+  <li>Poprawiono błąd powodujący wyświetlanie komunikatów 'Ładowanie nie powiodło się', jeżeli rozpoczęto odświeżanie
+    listy w momencie, gdy poprzednie żądanie odświeżenia danych jeszcze się nie skończyło.</li>
+  <li>Poprawiono funkcję zaznaczenia pola wyboru w filtrach Od-Do tak, aby działała w starszych wersjach przeglądarki
+    Microsoft Edge.</li>
+  <li>Dodano dymki z dodatkowymi informacjami na temat użytkowników.</li>
 </ul>
