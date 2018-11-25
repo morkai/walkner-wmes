@@ -1,3 +1,6 @@
+.paintShopLoad-page.paintShop-is-embedded {
+  background: #222;
+}
 .paintShopLoad .paintShop-parentControls {
   z-index: 3;
 }
