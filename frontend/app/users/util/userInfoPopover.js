@@ -182,8 +182,8 @@ define([
 
     return _.find(mobiles, function(mobile)
     {
-      const fromTime = parseMobileTime(mobile.fromTime);
-      const toTime = parseMobileTime(mobile.toTime === '00:00' ? '24:00' : mobile.toTime);
+      var fromTime = parseMobileTime(mobile.fromTime);
+      var toTime = parseMobileTime(mobile.toTime === '00:00' ? '24:00' : mobile.toTime);
 
       if (toTime.value < fromTime.value)
       {
@@ -201,9 +201,9 @@ define([
 
   function parseMobileTime(time)
   {
-    const parts = time.split(':');
-    const hours = parseInt(parts[0], 10);
-    const minutes = parseInt(parts[1], 10);
+    var parts = time.split(':');
+    var hours = parseInt(parts[0], 10);
+    var minutes = parseInt(parts[1], 10);
 
     return {
       hours: hours,

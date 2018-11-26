@@ -268,7 +268,7 @@ define([
 
       'subscriptions.*': function(message, topic)
       {
-        const sub = message.model;
+        var sub = message.model;
 
         if (sub.type !== 'orderDocumentTree' || sub.user !== user.data._id)
         {

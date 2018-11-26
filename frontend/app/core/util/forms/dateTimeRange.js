@@ -142,15 +142,15 @@ define([
 
   function resolveInterval(timeRange, group)
   {
-    const h = 3600 * 1000;
-    const h3 = 3 * h;
+    var h = 3600 * 1000;
+    var h3 = 3 * h;
 
     if (timeRange <= 8 * h)
     {
       return 'hour';
     }
 
-    const d = 24 * h;
+    var d = 24 * h;
 
     if (timeRange <= d + h)
     {
@@ -162,7 +162,7 @@ define([
       return 'week';
     }
 
-    const m = 31 * d;
+    var m = 31 * d;
 
     if (timeRange <= m + h3)
     {
