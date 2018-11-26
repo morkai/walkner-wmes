@@ -1,1 +1,1 @@
-define(["../core/Collection","./IsaEvent"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"sort(-time)&limit(20)"})});
+define(["../core/Collection","./IsaEvent"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"sort(-time)&limit(-1)"})});

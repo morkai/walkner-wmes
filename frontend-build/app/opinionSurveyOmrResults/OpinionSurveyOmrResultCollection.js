@@ -1,1 +1,1 @@
-define(["../core/Collection","./OpinionSurveyOmrResult"],function(e,n){"use strict";return e.extend({model:n,rqlQuery:"limit(20)&status=unrecognized"})});
+define(["../core/Collection","./OpinionSurveyOmrResult"],function(e,n){"use strict";return e.extend({model:n,rqlQuery:"limit(-1)&status=unrecognized"})});
