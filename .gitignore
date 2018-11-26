@@ -11,3 +11,5 @@
 /config/license.ed.private.pem
 /config/gdrive.private.json
 /data
+/scripts/sapGui/*.exe
+/bin/fix
