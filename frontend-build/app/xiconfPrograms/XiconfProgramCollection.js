@@ -1,1 +1,1 @@
-define(["../core/Collection","./XiconfProgram"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"select(name,type,prodLines,updatedAt,steps)&limit(-1)&sort(name)"})});
+define(["../core/Collection","./XiconfProgram"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"select(name,type,prodLines,updatedAt,steps)&limit(20)&sort(name)"})});

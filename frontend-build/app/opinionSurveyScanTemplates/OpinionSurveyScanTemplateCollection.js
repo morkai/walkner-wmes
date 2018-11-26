@@ -1,1 +1,1 @@
-define(["../core/Collection","./OpinionSurveyScanTemplate"],function(e,n){"use strict";return e.extend({model:n,rqlQuery:"limit(-1)&sort(-survey)"})});
+define(["../core/Collection","./OpinionSurveyScanTemplate"],function(e,n){"use strict";return e.extend({model:n,rqlQuery:"limit(20)&sort(-survey)"})});

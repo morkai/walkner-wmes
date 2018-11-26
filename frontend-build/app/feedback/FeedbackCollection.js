@@ -1,1 +1,1 @@
-define(["../core/Collection","./Feedback"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"&sort(createdAt)&limit(-1)"})});
+define(["../core/Collection","./Feedback"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"&sort(createdAt)&limit(20)"})});

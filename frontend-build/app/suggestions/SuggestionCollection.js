@@ -1,1 +1,1 @@
-define(["../core/Collection","./Suggestion"],function(e,t){"use strict";return e.extend({model:t,theadHeight:2,rowHeight:1.5,rqlQuery:"exclude(changes)&limit(-1)&sort(-date)"})});
+define(["../core/Collection","./Suggestion"],function(e,t){"use strict";return e.extend({model:t,theadHeight:2,rowHeight:1.5,rqlQuery:"exclude(changes)&limit(20)&sort(-date)"})});
