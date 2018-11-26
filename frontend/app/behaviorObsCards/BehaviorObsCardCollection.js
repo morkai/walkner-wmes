@@ -15,7 +15,7 @@ define([
 
     theadHeight: 2,
 
-    rqlQuery: 'limit(20)&sort(-date)'
+    rqlQuery: 'limit(-1337)&sort(-date)'
 
   });
 });

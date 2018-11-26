@@ -22,7 +22,7 @@ define([
       return rql.Query.fromObject({
         fields: {nc12: 1, mrp: 1, startDate: 1, finishDate: 1},
         sort: {startDate: -1, finishDate: -1},
-        limit: 20,
+        limit: -1337,
         selector: {
           name: 'and',
           args: [

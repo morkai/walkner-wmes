@@ -446,7 +446,7 @@ define([
       if (shiftOrders.length)
       {
         return window.open(
-          '/#prodShiftOrders?sort(startedAt)&limit(20)'
+          '/#prodShiftOrders?sort(startedAt)&limit(-1337)'
             + '&orderId=' + orderNo
             + '&prodLine=' + encodeURIComponent(line)
             + '&shift=' + shift
@@ -463,7 +463,7 @@ define([
       if (shiftOrders.length)
       {
         return window.open(
-          '/#prodShiftOrders?sort(startedAt)&limit(20)'
+          '/#prodShiftOrders?sort(startedAt)&limit(-1337)'
             + '&orderId=' + orderNo
             + '&prodLine=' + encodeURIComponent(line)
         );
@@ -476,7 +476,7 @@ define([
         return window.open('/#prodShiftOrders/' + shiftOrders[0].id);
       }
 
-      window.open('/#prodShiftOrders?sort(startedAt)&limit(20)&orderId=' + orderNo);
+      window.open('/#prodShiftOrders?sort(startedAt)&limit(-1337)&orderId=' + orderNo);
     },
 
     updateShiftState: function()

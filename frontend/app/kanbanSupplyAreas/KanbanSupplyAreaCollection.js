@@ -13,7 +13,7 @@ define([
 
     model: KanbanSupplyArea,
 
-    rqlQuery: 'sort(name,workCenter)&limit(20)',
+    rqlQuery: 'sort(name,workCenter)&limit(-1337)',
 
     initialize: function()
     {

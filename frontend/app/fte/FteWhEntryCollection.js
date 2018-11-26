@@ -48,7 +48,7 @@ define([
           'tasks.functions.id': 1
         },
         sort: {date: -1},
-        limit: 20,
+        limit: -1337,
         selector: selector
       });
     }

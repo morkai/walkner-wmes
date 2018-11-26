@@ -31,7 +31,7 @@ define([
       return rql.Query.fromObject({
         fields: {division: 1, date: 1, shift: 1, createdAt: 1, creator: 1},
         sort: {date: -1},
-        limit: 20,
+        limit: -1337,
         selector: selector
       });
     }

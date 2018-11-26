@@ -33,7 +33,7 @@ define([
       });
 
       return rql.Query.fromObject({
-        limit: 20,
+        limit: -1337,
         sort: {
           prodLine: 1,
           _id: 1

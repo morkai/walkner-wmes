@@ -79,7 +79,7 @@ define([
           label: t.bound('planning', 'PAGE_ACTION:hourlyPlans'),
           icon: 'calendar',
           privileges: 'HOURLY_PLANS:VIEW',
-          href: '#hourlyPlans?sort(-date)&limit(20)'
+          href: '#hourlyPlans?sort(-date)&limit(-1337)'
             + '&date=ge=' + firstShiftMoment.valueOf()
             + '&date=lt=' + firstShiftMoment.add(1, 'days').valueOf()
         },

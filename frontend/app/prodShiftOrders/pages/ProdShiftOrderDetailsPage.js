@@ -79,7 +79,7 @@ define([
       var actions = [{
         label: t.bound('prodShiftOrders', 'PAGE_ACTION:prodLogEntries'),
         icon: 'list-ol',
-        href: '#prodLogEntries?sort(createdAt)&limit(20)'
+        href: '#prodLogEntries?sort(createdAt)&limit(-1337)'
           + '&prodShiftOrder=' + encodeURIComponent(this.prodShiftOrder.id)
       }];
 

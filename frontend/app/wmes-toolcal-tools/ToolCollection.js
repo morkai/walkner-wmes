@@ -13,7 +13,7 @@ define([
 
     model: Tool,
 
-    rqlQuery: 'exclude(changes)&limit(20)&sort(nextDate)&status=in-use'
+    rqlQuery: 'exclude(changes)&limit(-1337)&sort(nextDate)&status=in-use'
 
   });
 });

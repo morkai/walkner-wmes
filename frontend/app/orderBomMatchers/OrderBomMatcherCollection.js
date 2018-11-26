@@ -13,7 +13,7 @@ define([
 
     model: OrderBomMatcher,
 
-    rqlQuery: 'sort(description)&limit(20)'
+    rqlQuery: 'sort(description)&limit(-1337)'
 
   });
 });

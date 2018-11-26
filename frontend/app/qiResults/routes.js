@@ -98,7 +98,7 @@ define([
   router.map('/qi/results;ok', canView, function()
   {
     broker.publish('router.navigate', {
-      url: '/qi/results?sort(-inspectedAt,-rid)&limit(20)&ok=true',
+      url: '/qi/results?sort(-inspectedAt,-rid)&limit(-1337)&ok=true',
       trigger: true,
       replace: true
     });
@@ -107,7 +107,7 @@ define([
   router.map('/qi/results;nok', canView, function()
   {
     broker.publish('router.navigate', {
-      url: '/qi/results?sort(-inspectedAt,-rid)&limit(20)&ok=false',
+      url: '/qi/results?sort(-inspectedAt,-rid)&limit(-1337)&ok=false',
       trigger: true,
       replace: true
     });

@@ -13,7 +13,7 @@ define([
 
     model: Vendor,
 
-    rqlQuery: 'limit(20)&sort(name)'
+    rqlQuery: 'limit(-1337)&sort(name)'
 
   });
 });

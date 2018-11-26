@@ -123,7 +123,7 @@ define([
     function showListPage()
     {
       broker.publish('router.navigate', {
-        url: '/hourlyPlans?sort(-date)&limit(20)'
+        url: '/hourlyPlans?sort(-date)&limit(-1337)'
           + '&date>=' + date
           + '&date<' + time.getMoment(/^[0-9]+$/.test(date) ? +date : date).add(1, 'days').valueOf()
           + '&division=' + req.params.division,

@@ -26,7 +26,7 @@ define([
           documents: 0,
           changes: 0
         },
-        limit: 20,
+        limit: -1337,
         sort: {
           scheduledStartDate: -1
         },

@@ -84,7 +84,7 @@ define([
         actions.push({
           label: t.bound('prodShifts', 'PAGE_ACTION:prodLogEntries'),
           icon: 'list-ol',
-          href: '#prodLogEntries?sort(createdAt)&limit(20)'
+          href: '#prodLogEntries?sort(createdAt)&limit(-1337)'
           + '&prodShift=' + encodeURIComponent(this.prodShift.id)
         });
       }

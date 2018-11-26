@@ -79,7 +79,7 @@ function limitTermHandler(query, name, args)
     skip = parseInt(args[1], 10);
   }
 
-  query.limit = isNaN(limit) || limit < 1 ? -1 : limit;
+  query.limit = isNaN(limit) ? -1 : limit;
   query.skip = isNaN(skip) || skip < 0 ? 0 : skip;
 }
 

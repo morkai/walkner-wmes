@@ -24,7 +24,7 @@ define([
         sort: {
           scannedAt: -1
         },
-        limit: 20,
+        limit: -1337,
         selector: {
           name: 'and',
           args: [
