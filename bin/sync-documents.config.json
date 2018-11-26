@@ -1,0 +1,8 @@
+{
+  "sourcePath": "C:/Workspace/walkner/walkner-wmes/data/order-documents/remote",
+  "targetPdfPath": "C:/Workspace/walkner/walkner-wmes/data/order-documents/local",
+  "targetJpegPath": "C:/Workspace/walkner/walkner-wmes/data/order-documents/converted",
+  "exiftoolExe": "C:/tools/exiftool.exe",
+  "pdfboxAppJar": "C:/tools/pdfbox-app-2.0.3.jar",
+  "cwebpExe": "c:/tools/libwebp/bin/cwebp.exe"
+}
