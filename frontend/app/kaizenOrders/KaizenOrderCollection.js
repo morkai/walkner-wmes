@@ -15,7 +15,7 @@ define([
 
     rowHeight: 2,
 
-    rqlQuery: 'exclude(changes)&limit(-1)&sort(-eventDate)'
+    rqlQuery: 'exclude(changes)&limit(20)&sort(-eventDate)'
 
   });
 });

@@ -28,7 +28,7 @@ define([
         sort: {
           reqDate: -1
         },
-        limit: -1,
+        limit: 20,
         selector: {
           name: 'and',
           args: [

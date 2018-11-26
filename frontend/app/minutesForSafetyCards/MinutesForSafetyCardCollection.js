@@ -13,7 +13,7 @@ define([
 
     model: MinutesForSafetyCard,
 
-    rqlQuery: 'limit(-1)&sort(-date)'
+    rqlQuery: 'limit(20)&sort(-date)'
 
   });
 });

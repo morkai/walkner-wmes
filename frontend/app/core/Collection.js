@@ -24,11 +24,6 @@ define([
 
     this.rqlQuery = this.createRqlQuery(options.rqlQuery || this.rqlQuery);
 
-    if (this.rqlQuery.limit < 0)
-    {
-      this.rqlQuery.limit = this.getDefaultPageLimit();
-    }
-
     this.paginationData = options.paginate !== false && this.paginate !== false ? new PaginationData() : null;
 
     if (!this.url)

@@ -39,7 +39,7 @@ define([
         sort: {
           date: -1
         },
-        limit: -1,
+        limit: 20,
         selector: {
           name: 'and',
           args: selector

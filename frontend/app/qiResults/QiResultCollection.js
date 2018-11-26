@@ -27,7 +27,7 @@ define([
           inspectedAt: -1,
           rid: -1
         },
-        limit: -1,
+        limit: 20,
         selector: {
           name: 'and',
           args: [

@@ -13,7 +13,7 @@ define([
 
     model: Feedback,
 
-    rqlQuery: '&sort(createdAt)&limit(-1)'
+    rqlQuery: '&sort(createdAt)&limit(20)'
 
   });
 });

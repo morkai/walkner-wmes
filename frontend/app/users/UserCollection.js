@@ -13,7 +13,7 @@ define([
 
     model: User,
 
-    rqlQuery: '&sort(+lastName,+firstName)&limit(-1)'
+    rqlQuery: '&sort(+lastName,+firstName)&limit(20)'
 
   });
 });

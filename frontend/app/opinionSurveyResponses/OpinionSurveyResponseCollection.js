@@ -15,7 +15,7 @@ define([
 
     rowHeight: 41,
 
-    rqlQuery: 'limit(-1)&sort(-createdAt)',
+    rqlQuery: 'limit(20)&sort(-createdAt)',
 
     initialize: function()
     {

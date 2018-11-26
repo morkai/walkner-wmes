@@ -13,7 +13,7 @@ define([
 
     model: License,
 
-    rqlQuery: 'limit(-1)&sort(expireDate)'
+    rqlQuery: 'limit(20)&sort(expireDate)'
 
   });
 });

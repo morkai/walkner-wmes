@@ -50,7 +50,7 @@ define([
           'tasks.functions.id': 1
         },
         sort: {date: -1},
-        limit: -1,
+        limit: 20,
         selector: selector
       });
     }

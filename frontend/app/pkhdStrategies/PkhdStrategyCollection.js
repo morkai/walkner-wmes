@@ -13,7 +13,7 @@ define([
 
     model: PkhdStrategy,
 
-    rqlQuery: 'sort(name)&limit(-1)'
+    rqlQuery: 'sort(name)&limit(20)'
 
   });
 });

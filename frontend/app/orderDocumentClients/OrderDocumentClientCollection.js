@@ -18,7 +18,7 @@ define([
       return rql.Query.fromObject({
         fields: {},
         sort: {prodLine: 1},
-        limit: -1
+        limit: 20
       });
     }
 

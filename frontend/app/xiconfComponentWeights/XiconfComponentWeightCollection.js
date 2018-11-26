@@ -13,7 +13,7 @@ define([
 
     model: XiconfComponentWeight,
 
-    rqlQuery: 'limit(-1)&sort(description)'
+    rqlQuery: 'limit(20)&sort(description)'
 
   });
 });

@@ -15,7 +15,7 @@ define([
 
     model: IsaRequest,
 
-    rqlQuery: 'sort(-requestedAt)&limit(-1)',
+    rqlQuery: 'sort(-requestedAt)&limit(20)',
 
     parse: function(res)
     {

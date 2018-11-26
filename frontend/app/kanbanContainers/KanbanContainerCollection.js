@@ -13,7 +13,7 @@ define([
 
     model: KanbanContainer,
 
-    rqlQuery: 'sort(_id)&limit(-1)',
+    rqlQuery: 'sort(_id)&limit(20)',
 
     setUpPubsub: function(pubsub)
     {

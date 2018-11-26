@@ -84,7 +84,7 @@ define([
         sort: {
           startedAt: -1
         },
-        limit: -1,
+        limit: 20,
         selector: {
           name: 'and',
           args: selector

@@ -18,7 +18,7 @@ define([
     rowHeight: 2,
     theadHeight: 3,
 
-    rqlQuery: 'sort(-rid)&limit(-1)'
+    rqlQuery: 'sort(-rid)&limit(20)'
 
   });
 });

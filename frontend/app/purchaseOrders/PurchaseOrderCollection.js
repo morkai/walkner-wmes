@@ -22,7 +22,7 @@ define([
           changes: 0,
           'items.prints': 0
         },
-        limit: -1,
+        limit: 20,
         sort: {
           'scheduledAt': 1
         },
