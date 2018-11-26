@@ -32,7 +32,7 @@ define([
 
       if (userDivision && userDivision.id === FteWhEntry.WH_DIVISION)
       {
-        selector.push({
+        selector.args.push({
           name: 'eq',
           args: [user.data.orgUnitType, user.data.orgUnitId]
         });

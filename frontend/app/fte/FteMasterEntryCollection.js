@@ -32,7 +32,7 @@ define([
 
       if (userDivision && userDivision.get('type') === 'prod')
       {
-        selector.push({
+        selector.args.push({
           name: 'eq',
           args: [user.data.orgUnitType, user.data.orgUnitId]
         });
