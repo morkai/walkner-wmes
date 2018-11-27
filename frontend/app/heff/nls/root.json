@@ -6,10 +6,7 @@
     "planned": "Quantity planned [PCE]",
     "actual": "Quantity done [PCE]",
     "remaining": "Total remaining quantity:",
-    "unit": "PCE",
-    "controls:switchApp": "Switch apps/Configure after 3s",
-    "controls:reboot": "Refresh page/Restart after 3s",
-    "controls:shutdown": "Shutdown after 3s"
+    "unit": "PCE"
   },
   "pl": true
 }

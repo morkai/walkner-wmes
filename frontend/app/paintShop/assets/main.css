@@ -38,19 +38,6 @@
 .paintShop-breadcrumb > .fa-chevron-right {
   padding: 0 0 0 20px;
 }
-.paintShop-parentControls {
-  position: fixed;
-  right: 0;
-  bottom: -1px;
-  display: flex;
-  box-shadow: 0 3px 6px #666;
-}
-.paintShop-parentControls > .btn {
-  margin-right: -1px;
-  width: 75px;
-  height: 60px;
-  font-size: 24px;
-}
 
 .paintShop {
   display: flex;
@@ -73,7 +60,7 @@
   width: 480px;
 }
 .paintShop-is-embedded .paintShop-right {
-  margin-bottom: 67px;
+  margin-bottom: 54px;
 }
 .paintShop-queue-container,
 .paintShop-list-container {

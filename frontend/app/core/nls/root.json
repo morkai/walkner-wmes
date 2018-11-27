@@ -390,7 +390,30 @@
     "dateTimeRange:quarters:3": "III",
     "dateTimeRange:quarters:4": "IV",
     "dateTimeRange:years": "Year",
-    "dateTimeRange:help": "Hold <kbd>Alt</kbd> while clicking on an option to automatically submit the form."
+    "dateTimeRange:help": "Hold <kbd>Alt</kbd> while clicking on an option to automatically submit the form.",
+
+    "embedded:actions:switch": "Switch app",
+    "embedded:actions:refresh": "Refresh app",
+    "embedded:actions:config": "Configure",
+    "embedded:actions:reboot": "Reboot",
+    "embedded:actions:shutdown": "Shutdown",
+    "embedded:apps:operator": "Operator",
+    "embedded:apps:documents": "Documents",
+    "embedded:apps:xiconf": "LED scanning",
+    "embedded:apps:maxos": "MAXOS visualization",
+    "embedded:apps:ps-queue": "Paint-shop queue",
+    "embedded:apps:ps-load": "Paint-shop load",
+    "embedded:apps:isa": "ISA",
+    "embedded:apps:remote": "Remote",
+    "embedded:apps:heff": "Hourly efficiency",
+    "embedded:reboot:title": "Rebooting",
+    "embedded:reboot:message": "Are you sure you want to reboot the computer?",
+    "embedded:reboot:yes": "Reboot",
+    "embedded:reboot:no": "Cancel",
+    "embedded:shutdown:title": "Shutting down",
+    "embedded:shutdown:message": "Are you sure you want to shutdown the computer?",
+    "embedded:shutdown:yes": "Shutdown",
+    "embedded:shutdown:no": "Cancel"
   },
   "pl": true
 }

@@ -1,0 +1,5 @@
+<div class="embedded-appsDialog-apps" style="margin-top: -<%- apps.length * 71 / 2 %>px">
+  <% apps.forEach(function(appId) { %>
+  <button data-app="<%- appId %>" class="btn btn-default btn-block"><%- t('core', 'embedded:apps:' + appId) %></button>
+  <% }) %>
+</div>

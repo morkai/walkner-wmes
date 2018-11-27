@@ -1,9 +1,6 @@
 .paintShopLoad-page.paintShop-is-embedded {
   background: #222;
 }
-.paintShopLoad .paintShop-parentControls {
-  z-index: 3;
-}
 .paintShop-is-embedded .paintShopLoad-stats-container {
    background: linear-gradient(to bottom, #333, #222);
    text-shadow: 1px 1px 3px #000;

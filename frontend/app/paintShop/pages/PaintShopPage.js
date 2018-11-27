@@ -11,6 +11,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/util/getShiftStartInfo',
   'app/core/util/html2pdf',
+  'app/core/util/embedded',
   'app/data/clipboard',
   'app/production/views/VkbView',
   'app/printers/views/PrinterPickerView',
@@ -39,6 +40,7 @@ define([
   bindLoadingMessage,
   getShiftStartInfo,
   html2pdf,
+  embedded,
   clipboard,
   VkbView,
   PrinterPickerView,
@@ -60,7 +62,7 @@ define([
   'use strict';
 
   var APP_ID = window.location.pathname === '/' ? 'paintShop' : 'ps-queue';
-  var IS_EMBEDDED = window.parent !== window || window.location.pathname !== '/';
+  var IS_EMBEDDED = window.parent !== window;
   var STATUS_WEIGHTS = {
     started: 1,
     partial: 2,
@@ -247,33 +249,13 @@ define([
           this.scheduleHideVkb();
         }
       },
-      'input #-search': 'onVkbValueChange',
-
-      'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
-      'touchstart #-switchApps': function() { this.startActionTimer('switchApps'); },
-      'mouseup #-switchApps': function() { this.stopActionTimer('switchApps'); },
-      'touchend #-switchApps': function() { this.stopActionTimer('switchApps'); },
-
-      'mousedown #-reboot': function(e) { this.startActionTimer('reboot', e); },
-      'touchstart #-reboot': function() { this.startActionTimer('reboot'); },
-      'mouseup #-reboot': function() { this.stopActionTimer('reboot'); },
-      'touchend #-reboot': function() { this.stopActionTimer('reboot'); },
-
-      'mousedown #-shutdown': function(e) { this.startActionTimer('shutdown', e); },
-      'touchstart #-shutdown': function() { this.startActionTimer('shutdown'); },
-      'mouseup #-shutdown': function() { this.stopActionTimer('shutdown'); },
-      'touchend #-shutdown': function() { this.stopActionTimer('shutdown'); }
+      'input #-search': 'onVkbValueChange'
     },
 
     initialize: function()
     {
       this.onResize = _.debounce(this.resize.bind(this), 30);
       this.onVkbValueChange = this.onVkbValueChange.bind(this);
-
-      this.actionTimer = {
-        action: null,
-        time: null
-      };
 
       this.defineModels();
       this.defineViews();
@@ -474,6 +456,7 @@ define([
 
       $('.modal.fade').removeClass('fade');
 
+      embedded.render(this);
       this.resize();
     },
 
@@ -1311,57 +1294,6 @@ define([
           page.layout.setBreadcrumbs(page.breadcrumbs, page);
         }
       });
-    },
-
-    startActionTimer: function(action, e)
-    {
-      this.actionTimer.action = action;
-      this.actionTimer.time = Date.now();
-
-      if (e)
-      {
-        e.preventDefault();
-      }
-    },
-
-    stopActionTimer: function(action)
-    {
-      if (this.actionTimer.action !== action)
-      {
-        return;
-      }
-
-      var long = (Date.now() - this.actionTimer.time) > 3000;
-
-      if (action === 'switchApps')
-      {
-        if (long)
-        {
-          window.parent.postMessage({type: 'config'}, '*');
-        }
-        else
-        {
-          window.parent.postMessage({type: 'switch', app: APP_ID}, '*');
-        }
-      }
-      else if (action === 'reboot')
-      {
-        if (long)
-        {
-          window.parent.postMessage({type: 'reboot'}, '*');
-        }
-        else
-        {
-          window.parent.postMessage({type: 'refresh'}, '*');
-        }
-      }
-      else if (long && action === 'shutdown')
-      {
-        window.parent.postMessage({type: 'shutdown'}, '*');
-      }
-
-      this.actionTimer.action = null;
-      this.actionTimer.time = null;
     }
 
   });

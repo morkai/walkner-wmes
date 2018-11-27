@@ -28,15 +28,7 @@
       <input id="<%- idPrefix %>-filterPhrase" type="text" autocomplete="new-password" placeholder="&#61616; <%- t('orderDocuments', 'controls:filter:ph') %>" name="filterPhrase" autocomplete="off">
     </form>
     <div id="<%- idPrefix %>-documents" class="orderDocuments-documents" tabindex="-1"></div>
-    <% if (showBottomButtons) { %>
-    <div id="<%- idPrefix %>-buttons" class="orderDocuments-buttons-container orderDocuments-buttons-bottom">
-      <div class="orderDocuments-buttons">
-        <button id="<%- idPrefix %>-switchApps" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:switchApps') %>"><i class="fa fa-window-restore"></i></button>
-        <button id="<%- idPrefix %>-reboot" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:reboot') %>"><i class="fa fa-refresh"></i></button>
-        <button id="<%- idPrefix %>-shutdown" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:shutdown') %>"><i class="fa fa-power-off"></i></button>
-      </div>
-    </div>
-    <% } %>
+    <div id="<%- idPrefix %>-embedded" class="orderDocuments-embedded-actions"></div>
     <% if (touch) { %>
     <div class="orderDocuments-controls-numpad hidden">
       <% include _numpad.ejs %>

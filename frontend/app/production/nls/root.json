@@ -23,9 +23,6 @@
     "controls:msg:sync:remoteError": "Cannot unlock: failed to get the key.",
     "controls:msg:sync:success": "Line unlocked successfully.",
     "controls:msg:popup": "The popup window has been blocked.",
-    "controls:switchApp": "Switch apps/Configure after 3s",
-    "controls:reboot": "Refresh page/Restart after 3s",
-    "controls:shutdown": "Shutdown after 3s",
     "controls:mor": "Matrix of responsibility",
 
     "unlockDialog:title:unlock": "Production line activation",

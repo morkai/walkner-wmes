@@ -10,6 +10,7 @@ define([
   'app/data/localStorage',
   'app/core/View',
   'app/core/util/getShiftStartInfo',
+  'app/core/util/embedded',
   'app/production/snManager',
   'app/heff/templates/page'
 ], function(
@@ -22,6 +23,7 @@ define([
   localStorage,
   View,
   getShiftStartInfo,
+  embedded,
   snManager,
   template
 ) {
@@ -87,22 +89,7 @@ define([
         });
       },
 
-      'click #-snMessage': 'hideSnMessage',
-
-      'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
-      'touchstart #-switchApps': function() { this.startActionTimer('switchApps'); },
-      'mouseup #-switchApps': function() { this.stopActionTimer('switchApps'); },
-      'touchend #-switchApps': function() { this.stopActionTimer('switchApps'); },
-
-      'mousedown #-reboot': function(e) { this.startActionTimer('reboot', e); },
-      'touchstart #-reboot': function() { this.startActionTimer('reboot'); },
-      'mouseup #-reboot': function() { this.stopActionTimer('reboot'); },
-      'touchend #-reboot': function() { this.stopActionTimer('reboot'); },
-
-      'mousedown #-shutdown': function(e) { this.startActionTimer('shutdown', e); },
-      'touchstart #-shutdown': function() { this.startActionTimer('shutdown'); },
-      'mouseup #-shutdown': function() { this.stopActionTimer('shutdown'); },
-      'touchend #-shutdown': function() { this.stopActionTimer('shutdown'); }
+      'click #-snMessage': 'hideSnMessage'
     },
 
     initialize: function()
@@ -111,10 +98,6 @@ define([
       this.loadData = this.loadData.bind(this);
       this.currentHour = -1;
       this.shiftStartInfo = null;
-      this.actionTimer = {
-        action: null,
-        time: null
-      };
 
       snManager.bind(this);
     },
@@ -124,19 +107,13 @@ define([
       $(window).off('.' + this.idPrefix);
     },
 
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix,
-        showParentControls: window.parent !== window
-      };
-    },
-
     afterRender: function()
     {
       this.updateLine();
       this.periodicUpdate();
       this.loadData();
+
+      embedded.render(this);
 
       if (window.parent !== window)
       {
@@ -253,57 +230,6 @@ define([
       this.$id('eff')
         .removeClass('fa-smile-o fa-frown-o fa-meh-o')
         .addClass(totalActual >= currentPlanned ? 'fa-smile-o' : 'fa-frown-o');
-    },
-
-    startActionTimer: function(action, e)
-    {
-      this.actionTimer.action = action;
-      this.actionTimer.time = Date.now();
-
-      if (e)
-      {
-        e.preventDefault();
-      }
-    },
-
-    stopActionTimer: function(action)
-    {
-      if (this.actionTimer.action !== action)
-      {
-        return;
-      }
-
-      var long = (Date.now() - this.actionTimer.time) > 3000;
-
-      if (action === 'switchApps')
-      {
-        if (long)
-        {
-          window.parent.postMessage({type: 'config'}, '*');
-        }
-        else
-        {
-          window.parent.postMessage({type: 'switch', app: 'heff'}, '*');
-        }
-      }
-      else if (action === 'reboot')
-      {
-        if (long)
-        {
-          window.parent.postMessage({type: 'reboot'}, '*');
-        }
-        else
-        {
-          window.parent.postMessage({type: 'refresh'}, '*');
-        }
-      }
-      else if (long && action === 'shutdown')
-      {
-        window.parent.postMessage({type: 'shutdown'}, '*');
-      }
-
-      this.actionTimer.action = null;
-      this.actionTimer.time = null;
     }
 
   });

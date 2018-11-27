@@ -172,12 +172,13 @@
 .orderDocuments-buttons-container {
   position: relative;
 }
-.orderDocuments-buttons-bottom {
+.orderDocuments-embedded-actions {
+  flex: 0 0 auto;
+  height: 50px;
   border-top: 1px solid #000;
 }
-.orderDocuments-buttons-bottom .btn {
-  height: 50px;
-  font-size: 24px;
+.orderDocuments-embedded-actions .embedded-actions {
+  width: 224px;
 }
 .orderDocuments-buttons-container.is-enlarged {
   position: absolute;

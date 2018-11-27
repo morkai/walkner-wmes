@@ -7,6 +7,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  'app/core/util/embedded',
   'app/data/isaPalletKinds',
   '../IsaRequest',
   '../views/IsaShiftPersonnelView',
@@ -27,6 +28,7 @@ define([
   viewport,
   View,
   bindLoadingMessage,
+  embedded,
   palletKinds,
   IsaRequest,
   IsaShiftPersonnelView,
@@ -418,6 +420,8 @@ define([
       {
         window.parent.postMessage({type: 'ready', app: 'isa'}, '*');
       }
+
+      embedded.render(this);
     },
 
     attractToShiftPersonnel: function()

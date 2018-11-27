@@ -84,10 +84,6 @@
   "menu:dropZone:false": "Wywołaj drop zone",
   "menu:dropZone:failure": "Nie udało się zmienić drop zone.",
 
-  "parent:switchApps": "Zmień aplikację/Konfiguruj po 3s",
-  "parent:reboot": "Odśwież stronę/Restartuj komputer po 3s",
-  "parent:shutdown": "Wyłącz komputer po 3s",
-
   "load:stats:last": "Ostatni",
   "load:stats:current": "Aktualny",
   "load:stats:10m": "10 minut",

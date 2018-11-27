@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/core/util/embedded',
   'app/data/localStorage',
   './LocalOrderPickerView',
   './DocumentViewerSettingsView',
@@ -18,6 +19,7 @@ define([
   t,
   viewport,
   View,
+  embedded,
   localStorage,
   LocalOrderPickerView,
   DocumentViewerSettingsView,
@@ -134,18 +136,6 @@ define([
           this.$id('addImprovementButtons').addClass('hidden');
         });
       },
-      'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
-      'touchstart #-switchApps': function() { this.startActionTimer('switchApps'); },
-      'mouseup #-switchApps': function() { this.stopActionTimer('switchApps'); },
-      'touchend #-switchApps': function() { this.stopActionTimer('switchApps'); },
-      'mousedown #-reboot': function(e) { this.startActionTimer('reboot', e); },
-      'touchstart #-reboot': function() { this.startActionTimer('reboot'); },
-      'mouseup #-reboot': function() { this.stopActionTimer('reboot'); },
-      'touchend #-reboot': function() { this.stopActionTimer('reboot'); },
-      'mousedown #-shutdown': function(e) { this.startActionTimer('shutdown', e); },
-      'touchstart #-shutdown': function() { this.startActionTimer('shutdown'); },
-      'mouseup #-shutdown': function() { this.stopActionTimer('shutdown'); },
-      'touchend #-shutdown': function() { this.stopActionTimer('shutdown'); },
       'change #-localFile': function(e)
       {
         var files = e.target.files;
@@ -302,11 +292,6 @@ define([
 
     initialize: function()
     {
-      this.actionTimer = {
-        action: null,
-        time: null
-      };
-
       $(window).on('keypress.' + this.idPrefix, this.onKeyPress.bind(this));
     },
 
@@ -319,8 +304,7 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        touch: window.location.search.indexOf('touch') !== -1,
-        showBottomButtons: IS_EMBEDDED
+        touch: window.location.search.indexOf('touch') !== -1
       };
     },
 
@@ -363,57 +347,11 @@ define([
       {
         this.lockUi();
       }
-    },
 
-    startActionTimer: function(action, e)
-    {
-      this.actionTimer.action = action;
-      this.actionTimer.time = Date.now();
-
-      if (e)
-      {
-        e.preventDefault();
-      }
-    },
-
-    stopActionTimer: function(action)
-    {
-      if (this.actionTimer.action !== action)
-      {
-        return;
-      }
-
-      var long = (Date.now() - this.actionTimer.time) > 3000;
-
-      if (action === 'switchApps')
-      {
-        if (long)
-        {
-          window.parent.postMessage({type: 'config'}, '*');
-        }
-        else
-        {
-          window.parent.postMessage({type: 'switch', app: 'documents'}, '*');
-        }
-      }
-      else if (action === 'reboot')
-      {
-        if (long)
-        {
-          window.parent.postMessage({type: 'reboot'}, '*');
-        }
-        else
-        {
-          window.location.reload();
-        }
-      }
-      else if (long && action === 'shutdown')
-      {
-        window.parent.postMessage({type: 'shutdown'}, '*');
-      }
-
-      this.actionTimer.action = null;
-      this.actionTimer.time = null;
+      embedded.render(this, {
+        container: this.$id('embedded'),
+        left: true
+      });
     },
 
     canUseControls: function()

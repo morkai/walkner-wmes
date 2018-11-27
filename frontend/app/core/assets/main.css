@@ -8,6 +8,7 @@
 @import url(./dataTables.css);
 @import url(./highlight.css);
 @import url(./highcharts.css);
+@import url(./embedded.css);
 
 body.is-development-env .navbar {
   border-bottom: 4px solid #e00;

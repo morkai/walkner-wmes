@@ -5,6 +5,7 @@ define([
   'app/i18n',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  'app/core/util/embedded',
   '../PaintShopSettingCollection',
   '../PaintShopLoadStats',
   '../PaintShopLoadRecent',
@@ -20,6 +21,7 @@ define([
   t,
   View,
   bindLoadingMessage,
+  embedded,
   PaintShopSettingCollection,
   PaintShopLoadStats,
   PaintShopLoadRecent,
@@ -33,7 +35,7 @@ define([
   'use strict';
 
   var APP_ID = 'ps-load';
-  var IS_EMBEDDED = window.parent !== window || window.location.pathname !== '/';
+  var IS_EMBEDDED = window.parent !== window;
 
   return View.extend({
 
@@ -63,23 +65,6 @@ define([
       }
     ],
 
-    events: {
-      'mousedown #-switchApps': function(e) { this.startActionTimer('switchApps', e); },
-      'touchstart #-switchApps': function() { this.startActionTimer('switchApps'); },
-      'mouseup #-switchApps': function() { this.stopActionTimer('switchApps'); },
-      'touchend #-switchApps': function() { this.stopActionTimer('switchApps'); },
-
-      'mousedown #-reboot': function(e) { this.startActionTimer('reboot', e); },
-      'touchstart #-reboot': function() { this.startActionTimer('reboot'); },
-      'mouseup #-reboot': function() { this.stopActionTimer('reboot'); },
-      'touchend #-reboot': function() { this.stopActionTimer('reboot'); },
-
-      'mousedown #-shutdown': function(e) { this.startActionTimer('shutdown', e); },
-      'touchstart #-shutdown': function() { this.startActionTimer('shutdown'); },
-      'mouseup #-shutdown': function() { this.stopActionTimer('shutdown'); },
-      'touchend #-shutdown': function() { this.stopActionTimer('shutdown'); }
-    },
-
     localTopics: {
       'socket.connected': function()
       {
@@ -99,11 +84,6 @@ define([
 
     initialize: function()
     {
-      this.actionTimer = {
-        action: null,
-        time: null
-      };
-
       this.defineModels();
       this.defineViews();
       this.defineBindings();
@@ -216,79 +196,29 @@ define([
 
     afterRender: function()
     {
-      this.showParentControls();
+      embedded.render(this);
+      this.showEmbeddedActions();
     },
 
-    startActionTimer: function(action, e)
+    showEmbeddedActions: function()
     {
-      this.actionTimer.action = action;
-      this.actionTimer.time = Date.now();
+      var $embeddedActions = this.$('.embedded-actions');
 
-      if (e)
-      {
-        e.preventDefault();
-      }
-    },
-
-    stopActionTimer: function(action)
-    {
-      if (this.actionTimer.action !== action)
+      if (!$embeddedActions.length)
       {
         return;
       }
 
-      var long = (Date.now() - this.actionTimer.time) > 3000;
+      $embeddedActions.fadeIn('fast');
 
-      if (action === 'switchApps')
-      {
-        if (long)
-        {
-          window.parent.postMessage({type: 'config'}, '*');
-        }
-        else
-        {
-          window.parent.postMessage({type: 'switch', app: APP_ID}, '*');
-        }
-      }
-      else if (action === 'reboot')
-      {
-        if (long)
-        {
-          window.parent.postMessage({type: 'reboot'}, '*');
-        }
-        else
-        {
-          window.parent.postMessage({type: 'refresh'}, '*');
-        }
-      }
-      else if (long && action === 'shutdown')
-      {
-        window.parent.postMessage({type: 'shutdown'}, '*');
-      }
+      clearTimeout(this.timers.hideEmbeddedActions);
 
-      this.actionTimer.action = null;
-      this.actionTimer.time = null;
-    },
-
-    showParentControls: function()
-    {
-      var $parentControls = this.$id('parentControls');
-
-      if (!$parentControls.length)
-      {
-        return;
-      }
-
-      $parentControls.fadeIn('fast');
-
-      clearTimeout(this.timers.hideParentControls);
-
-      this.timers.hideParentControls = setTimeout(function() { $parentControls.fadeOut('fast'); }, 15000);
+      this.timers.hideEmbeddedActions = setTimeout(function() { $embeddedActions.fadeOut('fast'); }, 15000);
     },
 
     onDocumentClick: function()
     {
-      this.showParentControls();
+      this.showEmbeddedActions();
     },
 
     onReportFiltered: function()

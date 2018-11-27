@@ -1,0 +1,15 @@
+<div class="dropup embedded-actions <%- left ? 'embedded-left' : 'embedded-right' %>" data-app="<%- app %>">
+  <button data-action="switch" class="btn btn-default btn-lg" type="button" title="<%- t('core', 'embedded:actions:switch') %>">
+    <i class="fa fa-window-restore"></i>
+  </button>
+  <button class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown">
+    <i class="fa fa-cogs"></i>
+  </button>
+  <ul class="dropdown-menu <%- left ? '' : 'dropdown-menu-right' %>">
+    <li><a data-action="switch"><i class="fa fa-window-restore"></i><span><%- t('core', 'embedded:actions:switch') %></span></a></li>
+    <li><a data-action="refresh"><i class="fa fa-refresh"></i><span><%- t('core', 'embedded:actions:refresh') %></span></a></li>
+    <li><a data-action="config"><i class="fa fa-wrench"></i><span><%- t('core', 'embedded:actions:config') %></span></a></li>
+    <li><a data-action="reboot"><i class="fa fa-undo"></i><span><%- t('core', 'embedded:actions:reboot') %></span></a></li>
+    <li><a data-action="shutdown"><i class="fa fa-power-off"></i><span><%- t('core', 'embedded:actions:shutdown') %></span></a></li>
+  </ul>
+</div>
