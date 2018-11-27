@@ -216,8 +216,5 @@
   "anonymize:message": "<p>Czy na pewno chcesz zanonimizować wybranego użytkownika?</p><p>Konto użytkownika zostanie dezaktywowane, a dane identyfikacyjne usunięte z całej bazy danych.</p><p><strong>Ta operacja jest nieodwracalna!</strong></p>",
   "anonymize:yes": "Anonimizuj użytkownika",
   "anonymize:no": "Anuluj",
-  "anonymize:started": "Proces anonimizacji rozpoczęty...",
-
-  "userInfo:email": "e-mail:",
-  "userInfo:mobile": "tel.:"
+  "anonymize:started": "Proces anonimizacji rozpoczęty..."
 }
