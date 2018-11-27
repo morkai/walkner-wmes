@@ -229,6 +229,9 @@
   margin: 0 10px;
   overflow: hidden;
 }
+.isa-is-fullscreen .blankLayout {
+  margin-top: 10px;
+}
 .isa-is-fullscreen .hd,
 .isa-is-fullscreen .ft {
   display: none;

@@ -59,7 +59,10 @@ define([
 
     template: template,
 
-    layoutName: 'page',
+    layoutName: function()
+    {
+      return this.options.embedded ? 'blank' : 'page';
+    },
 
     pageId: 'isa',
 
@@ -382,10 +385,10 @@ define([
       );
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
+        embedded: !!this.options.embedded,
         height: this.calcHeight(),
         disconnected: !this.socket.isConnected(),
         mobile: /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent),
@@ -409,6 +412,11 @@ define([
       if (this.model.selectedResponder)
       {
         this.$id('responderFilter').addClass('isa-attract');
+      }
+
+      if (this.options.embedded)
+      {
+        window.parent.postMessage({type: 'ready', app: 'isa'}, '*');
       }
     },
 

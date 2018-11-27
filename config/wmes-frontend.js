@@ -1,6 +1,8 @@
 'use strict';
 
 const DATA_PATH = `${__dirname}/../data`;
+const PRODUCTION_DATA_START_DATE = '2017-01-01';
+const KAIZEN_MULTI = false;
 
 const fs = require('fs');
 const later = require('later');
@@ -110,22 +112,15 @@ exports.modules = [
   'sio'
 ];
 
-exports.mainJsFile = '/wmes-main.js';
-exports.mainCssFile = '/assets/wmes-main.css';
-exports.faviconFile = 'assets/wmes-favicon.ico';
+exports.productionDataStartDate = PRODUCTION_DATA_START_DATE;
 exports.emailUrlPrefix = 'http://localhost/';
 
-exports.frontendAppData = {
-  KAIZEN_MULTI: false,
-  XLSX_EXPORT: process.platform === 'win32',
-  PRODUCTION_DATA_START_DATE: '2017-01-01',
-  SHIFT_START_HOUR: 6,
-  SHIFT_LENGTH: 8,
-  OFFICE365_TENANT: 'Microsoft',
-  CORS_PING_URL: 'https://wmes.walkner.pl/ping'
+const manifestTemplates = {
+  main: fs.readFileSync(`${__dirname}/wmes-manifest.appcache`, 'utf8'),
+  ps: fs.readFileSync(`${__dirname}/wmes-manifest-ps.appcache`, 'utf8'),
+  wh: fs.readFileSync(`${__dirname}/wmes-manifest-wh.appcache`, 'utf8')
 };
-
-exports.dictionaryModules = {
+const frontendDictionaryModules = {
   prodFunctions: 'PROD_FUNCTIONS',
   companies: 'COMPANIES',
   divisions: 'DIVISIONS',
@@ -138,6 +133,125 @@ exports.dictionaryModules = {
   orderStatuses: 'ORDER_STATUSES',
   downtimeReasons: 'DOWNTIME_REASONS',
   isaPalletKinds: 'ISA_PALLET_KINDS'
+};
+
+exports.updater = {
+  manifestPath: `${__dirname}/wmes-manifest.appcache`,
+  packageJsonPath: `${__dirname}/../package.json`,
+  restartDelay: 5000,
+  pull: {
+    exe: 'git.exe',
+    cwd: `${__dirname}/../`,
+    timeout: 30000
+  },
+  versionsKey: 'wmes',
+  manifests: [
+    {
+      frontendVersionKey: 'frontend',
+      path: '/manifest.appcache',
+      mainJsFile: '/wmes-main.js',
+      mainCssFile: '/assets/wmes-main.css',
+      template: manifestTemplates.main,
+      frontendAppData: {
+        KAIZEN_MULTI,
+        XLSX_EXPORT: process.platform === 'win32',
+        PRODUCTION_DATA_START_DATE,
+        SHIFT_START_HOUR: 6,
+        SHIFT_LENGTH: 8,
+        OFFICE365_TENANT: 'Microsoft',
+        CORS_PING_URL: 'https://wmes.walkner.pl/ping'
+      },
+      dictionaryModules: frontendDictionaryModules
+    },
+    {
+      frontendVersionKey: 'docs',
+      path: '/orderDocuments/manifest.appcache',
+      mainJsFile: '/wmes-docs.js',
+      mainCssFile: '/assets/wmes-docs.css',
+      template: manifestTemplates.main,
+      frontendAppData: {},
+      dictionaryModules: {}
+    },
+    {
+      frontendVersionKey: 'operator',
+      path: '/operator/manifest.appcache',
+      mainJsFile: '/wmes-operator.js',
+      mainCssFile: '/assets/wmes-operator.css',
+      template: manifestTemplates.main,
+      frontendAppData: {},
+      dictionaryModules: {}
+    },
+    {
+      frontendVersionKey: 'heff',
+      path: '/heff/manifest.appcache',
+      mainJsFile: '/wmes-heff.js',
+      mainCssFile: '/assets/wmes-heff.css',
+      template: manifestTemplates.main,
+      frontendAppData: {},
+      dictionaryModules: {}
+    },
+    {
+      frontendVersionKey: 'ps-queue',
+      path: '/ps-queue/manifest.appcache',
+      mainJsFile: '/wmes-ps-queue.js',
+      mainCssFile: '/assets/wmes-ps-queue.css',
+      template: manifestTemplates.ps,
+      frontendAppData: {},
+      dictionaryModules: {}
+    },
+    {
+      frontendVersionKey: 'ps-load',
+      path: '/ps-load/manifest.appcache',
+      mainJsFile: '/wmes-ps-load.js',
+      mainCssFile: '/assets/wmes-ps-load.css',
+      template: manifestTemplates.ps,
+      frontendAppData: {},
+      dictionaryModules: {}
+    },
+    {
+      frontendVersionKey: 'wh-pickup',
+      path: '/wh-pickup/manifest.appcache',
+      mainJsFile: '/wmes-wh-pickup.js',
+      mainCssFile: '/assets/wmes-wh-pickup.css',
+      template: manifestTemplates.wh,
+      frontendAppData: {},
+      dictionaryModules: {}
+    },
+    {
+      frontendVersionKey: 'wh-kitter',
+      path: '/wh-kitter/manifest.appcache',
+      mainJsFile: '/wmes-wh-kitter.js',
+      mainCssFile: '/assets/wmes-wh-kitter.css',
+      template: manifestTemplates.wh,
+      frontendAppData: {},
+      dictionaryModules: {}
+    },
+    {
+      frontendVersionKey: 'wh-packer',
+      path: '/wh-packer/manifest.appcache',
+      mainJsFile: '/wmes-wh-packer.js',
+      mainCssFile: '/assets/wmes-wh-packer.css',
+      template: manifestTemplates.wh,
+      frontendAppData: {},
+      dictionaryModules: {}
+    },
+    {
+      frontendVersionKey: 'isa',
+      path: '/isa/manifest.appcache',
+      mainJsFile: '/wmes-isa.js',
+      mainCssFile: '/assets/wmes-isa.css',
+      frontendAppData: {},
+      dictionaryModules: {
+        divisions: 'DIVISIONS',
+        subdivisions: 'SUBDIVISIONS',
+        mrpControllers: 'MRP_CONTROLLERS',
+        prodFlows: 'PROD_FLOWS',
+        workCenters: 'WORK_CENTERS',
+        prodLines: 'PROD_LINES',
+        isaPalletKinds: 'ISA_PALLET_KINDS'
+      }
+    }
+  ]
 };
 
 exports.events = {
@@ -370,7 +484,8 @@ exports.users = {
 };
 
 exports.production = {
-  mysqlId: 'mysql:ipt'
+  mysqlId: 'mysql:ipt',
+  dictionaryModules: frontendDictionaryModules
 };
 
 exports['messenger/server'] = Object.assign({}, ports[exports.id], {
@@ -419,78 +534,6 @@ exports['messenger/client:wmes-planning'] = Object.assign({}, ports['wmes-planni
   ]
 });
 
-exports.updater = {
-  manifestPath: `${__dirname}/wmes-manifest.appcache`,
-  packageJsonPath: `${__dirname}/../package.json`,
-  restartDelay: 5000,
-  pull: {
-    exe: 'git.exe',
-    cwd: `${__dirname}/../`,
-    timeout: 30000
-  },
-  versionsKey: 'wmes',
-  manifests: [
-    {
-      path: '/manifest.appcache',
-      mainJsFile: exports.mainJsFile,
-      mainCssFile: exports.mainCssFile
-    },
-    {
-      frontendVersionKey: 'docs',
-      path: '/orderDocuments/manifest.appcache',
-      mainJsFile: '/wmes-docs.js',
-      mainCssFile: '/assets/wmes-docs.css'
-    },
-    {
-      frontendVersionKey: 'operator',
-      path: '/operator/manifest.appcache',
-      mainJsFile: '/wmes-operator.js',
-      mainCssFile: '/assets/wmes-operator.css'
-    },
-    {
-      frontendVersionKey: 'heff',
-      path: '/heff/manifest.appcache',
-      mainJsFile: '/wmes-heff.js',
-      mainCssFile: '/assets/wmes-heff.css'
-    },
-    {
-      frontendVersionKey: 'ps-queue',
-      path: '/ps-queue/manifest.appcache',
-      mainJsFile: '/wmes-ps-queue.js',
-      mainCssFile: '/assets/wmes-ps-queue.css',
-      template: fs.readFileSync(`${__dirname}/wmes-manifest-ps.appcache`, 'utf8')
-    },
-    {
-      frontendVersionKey: 'ps-load',
-      path: '/ps-load/manifest.appcache',
-      mainJsFile: '/wmes-ps-load.js',
-      mainCssFile: '/assets/wmes-ps-load.css',
-      template: fs.readFileSync(`${__dirname}/wmes-manifest-ps.appcache`, 'utf8')
-    },
-    {
-      frontendVersionKey: 'wh-pickup',
-      path: '/wh-pickup/manifest.appcache',
-      mainJsFile: '/wmes-wh-pickup.js',
-      mainCssFile: '/assets/wmes-wh-pickup.css',
-      template: fs.readFileSync(`${__dirname}/wmes-manifest-wh.appcache`, 'utf8')
-    },
-    {
-      frontendVersionKey: 'wh-kitter',
-      path: '/wh-kitter/manifest.appcache',
-      mainJsFile: '/wmes-wh-kitter.js',
-      mainCssFile: '/assets/wmes-wh-kitter.css',
-      template: fs.readFileSync(`${__dirname}/wmes-manifest-wh.appcache`, 'utf8')
-    },
-    {
-      frontendVersionKey: 'wh-packer',
-      path: '/wh-packer/manifest.appcache',
-      mainJsFile: '/wmes-wh-packer.js',
-      mainCssFile: '/assets/wmes-wh-packer.css',
-      template: fs.readFileSync(`${__dirname}/wmes-manifest-wh.appcache`, 'utf8')
-    }
-  ]
-};
-
 exports.reports = {
   messengerClientId: 'messenger/client:wmes-reports-1',
   messengerType: 'push',
@@ -536,7 +579,7 @@ exports['mail/sender'] = {
 
 exports.kaizen = {
   attachmentsDest: `${DATA_PATH}/kaizen-attachments`,
-  multiType: exports.frontendAppData.KAIZEN_MULTI
+  multiType: KAIZEN_MULTI
 };
 
 exports.suggestions = {

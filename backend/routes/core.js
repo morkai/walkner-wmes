@@ -25,11 +25,7 @@ module.exports = function startCoreRoutes(app, express)
     .setFilter(message => message.service === app.options.id);
 
   reloadRequirejsConfig();
-
-  if (updaterModule && app.options.dictionaryModules)
-  {
-    _.forEach(Object.keys(app.options.dictionaryModules), setUpFrontendVersionUpdater);
-  }
+  setUpFrontendVersionUpdater();
 
   express.get('/', showIndex);
 
@@ -53,80 +49,15 @@ module.exports = function startCoreRoutes(app, express)
 
   express.get('/config.js', sendRequireJsConfig);
 
-  express.get('/favicon.ico', sendFavicon);
-
   function showIndex(req, res)
   {
-    const sessionUser = req.session.user;
-    const locale = sessionUser && sessionUser.locale ? sessionUser.locale : 'pl';
-    const appData = {
-      ENV: JSON.stringify(app.options.env),
-      VERSIONS: JSON.stringify(updaterModule ? updaterModule.getVersions() : {}),
-      TIME: JSON.stringify(Date.now()),
-      LOCALE: JSON.stringify(locale),
-      ROOT_USER: ROOT_USER,
-      GUEST_USER: GUEST_USER,
-      PRIVILEGES: PRIVILEGES,
-      MODULES: MODULES,
-      DASHBOARD_URL_AFTER_LOG_IN: DASHBOARD_URL_AFTER_LOG_IN
-    };
-
-    _.forEach(app.options.dictionaryModules, (appDataKey, moduleName) =>
-    {
-      const dictionaryModule = app[moduleName];
-
-      if (!dictionaryModule)
-      {
-        return;
-      }
-
-      const models = app[moduleName].models;
-
-      if (models.length === 0)
-      {
-        appData[appDataKey] = '[]';
-
-        return;
-      }
-
-      if (typeof models[0].toDictionaryObject !== 'function')
-      {
-        appData[appDataKey] = JSON.stringify(models);
-
-        return;
-      }
-
-      appData[appDataKey] = JSON.stringify(_.invokeMap(models, 'toDictionaryObject'));
-    });
-
-    _.forEach(app.options.frontendAppData, function(appDataValue, appDataKey)
-    {
-      appData[appDataKey] = JSON.stringify(
-        _.isFunction(appDataValue) ? appDataValue(app) : appDataValue
-      );
-    });
-
-    let appCacheManifest = '';
-    const matches = (req.headers['user-agent'] || '').match(/Chrome\/([0-9]+)/);
-    const chromeVersion = matches ? +matches[1] : 99;
-
-    if (app.updater && !dev && (chromeVersion < 70 || req.secure))
-    {
-      _.forEach(app.updater.config.manifests, function(manifest)
-      {
-        if (manifest.frontendVersionKey === 'frontend' || !manifest.frontendVersionKey)
-        {
-          appCacheManifest = manifest.path;
-        }
-      });
-    }
-
-    res.render('index', {
-      appCacheManifest: appCacheManifest,
-      appData: appData,
-      mainJsFile: app.options.mainJsFile || 'main.js',
-      mainCssFile: app.options.mainCssFile || 'assets/main.css'
-    });
+    res.render('index', updaterModule.getAppTemplateData('frontend', req, {
+      ROOT_USER,
+      GUEST_USER,
+      PRIVILEGES,
+      MODULES,
+      DASHBOARD_URL_AFTER_LOG_IN
+    }));
   }
 
   function redirectRoute(req, res)
@@ -143,17 +74,6 @@ module.exports = function startCoreRoutes(app, express)
     });
   }
 
-  function sendFavicon(req, res)
-  {
-    const faviconPath = path.join(
-      express.config[dev ? 'staticPath' : 'staticBuildPath'],
-      app.options.faviconFile || 'favicon.ico'
-    );
-
-    res.type('image/x-icon');
-    res.sendFile(faviconPath);
-  }
-
   function reloadRequirejsConfig()
   {
     const configPath = require.resolve('../../config/require');
@@ -166,10 +86,8 @@ module.exports = function startCoreRoutes(app, express)
     requirejsShim = JSON.stringify(requirejsConfig.shim);
   }
 
-  function setUpFrontendVersionUpdater(topicPrefix)
+  function setUpFrontendVersionUpdater()
   {
-    app.broker.subscribe(`${topicPrefix}.added`, updaterModule.updateFrontendVersion);
-    app.broker.subscribe(`${topicPrefix}.edited`, updaterModule.updateFrontendVersion);
-    app.broker.subscribe(`${topicPrefix}.deleted`, updaterModule.updateFrontendVersion);
+    app.broker.subscribe('dictionaries.updated', () => updaterModule.updateFrontendVersion());
   }
 };

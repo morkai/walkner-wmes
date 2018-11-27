@@ -2,7 +2,9 @@
   <div class="isa-section isa-section-requests">
     <h1 class="isa-section-header">
       <%- t('isa', 'requests:header') %>
+      <% if (!embedded) { %>
       <button id="<%- idPrefix %>-shiftPersonnel" class="btn btn-link isa-shiftPersonnel" title="<%- t('isa', 'actions:shiftPersonnel') %>" <%- user.isAllowedTo('ISA:MANAGE') ? '' : 'disabled' %>><i class="fa fa-users"></i></button>
+      <% } %>
     </h1>
     <div id="<%- idPrefix %>-requests" class="isa-section-body"></div>
   </div>
@@ -15,11 +17,16 @@
   <div class="isa-section isa-section-events <%- eventsCollapsed ? 'is-collapsing is-collapsed' : '' %>">
     <h1 class="isa-section-expand"><%- t('isa', 'events:header') %></h1>
     <h1 class="isa-section-header">
+      <% if (embedded) { %>
+      <%- t('isa', 'events:header') %>
+      <button id="<%- idPrefix %>-collapseEvents" class="btn btn-link" title="<%- t('isa', 'actions:collapseEvents') %>"><i class="fa fa-chevron-right"></i></button>
+      <% } else { %>
       <a href="#isa/events"><%- t('isa', 'events:header') %></a>
       <button id="<%- idPrefix %>-collapseEvents" class="btn btn-link" title="<%- t('isa', 'actions:collapseEvents') %>"><i class="fa fa-chevron-right"></i></button>
       <button id="<%- idPrefix %>-toggleHotkeys" class="btn btn-link" title="<%- t('isa', 'actions:toggleHotkeys') %>"><i class="fa fa-question"></i></button>
       <button id="<%- idPrefix %>-toggleFullscreen" class="btn btn-link" title="<%- t('isa', 'actions:toggleFullscreen') %>"><i class="fa fa-arrows-alt"></i></button>
       <a href="#isa/requests" class="btn btn-link" title="<%- t('isa', 'actions:showRequests') %>"><i class="fa fa-line-chart"></i></a>
+      <% } %>
     </h1>
     <div id="<%- idPrefix %>-events" class="isa-section-body"></div>
   </div>

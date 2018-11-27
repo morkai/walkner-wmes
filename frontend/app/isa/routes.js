@@ -3,49 +3,56 @@
 define([
   '../router',
   '../viewport',
-  '../user',
-  '../users/UserCollection',
-  './IsaShiftPersonnel',
-  './IsaRequestCollection',
-  './IsaEventCollection',
-  './pages/IsaLineStatePage',
-  'i18n!app/nls/isa'
+  '../user'
 ], function(
   router,
   viewport,
-  user,
-  UserCollection,
-  IsaShiftPersonnel,
-  IsaRequestCollection,
-  IsaEventCollection,
-  IsaLineStatePage
+  user
 ) {
   'use strict';
 
   router.map('/isa', user.auth('LOCAL', 'ISA:VIEW'), function(req)
   {
-    viewport.showPage(new IsaLineStatePage({
-      fullscreen: req.query.fullscreen !== undefined,
-      model: {
-        warehousemen: new UserCollection(null, {
-          rqlQuery: 'select(firstName,lastName,personellId,card,cardUid)&privileges=ISA%3AWHMAN'
-        }),
-        shiftPersonnel: new IsaShiftPersonnel(null, {current: true}),
-        requests: IsaRequestCollection.active(),
-        events: new IsaEventCollection(null, {paginate: false, rqlQuery: 'sort(-time)&limit(50)'}),
-        selectedResponder: null,
-        moving: {}
+    viewport.loadPage(
+      [
+        'app/isa/WhmanCollection',
+        'app/isa/IsaShiftPersonnel',
+        'app/isa/IsaRequestCollection',
+        'app/isa/IsaEventCollection',
+        'app/isa/pages/IsaLineStatePage',
+        'i18n!app/nls/isa'
+      ],
+      function(
+        WhmanCollection,
+        IsaShiftPersonnel,
+        IsaRequestCollection,
+        IsaEventCollection,
+        IsaLineStatePage
+      ) {
+        return new IsaLineStatePage({
+          fullscreen: req.query.fullscreen !== undefined,
+          model: {
+            warehousemen: new WhmanCollection(),
+            shiftPersonnel: new IsaShiftPersonnel(null, {current: true}),
+            requests: IsaRequestCollection.active(),
+            events: new IsaEventCollection(null, {paginate: false, rqlQuery: 'sort(-time)&limit(50)'}),
+            selectedResponder: null,
+            moving: {}
+          }
+        });
       }
-    }));
+    );
   });
 
   router.map('/isa/events', user.auth('LOCAL', 'ISA:VIEW'), function(req)
   {
     viewport.loadPage(
       [
-        'app/isa/pages/IsaEventListPage'
+        'app/isa/IsaEventCollection',
+        'app/isa/pages/IsaEventListPage',
+        'i18n!app/nls/isa'
       ],
-      function(IsaEventListPage)
+      function(IsaEventCollection, IsaEventListPage)
       {
         return new IsaEventListPage({
           collection: new IsaEventCollection(null, {rqlQuery: req.rql})
@@ -59,7 +66,8 @@ define([
     viewport.loadPage(
       [
         'app/isa/IsaRequestCollection',
-        'app/isa/pages/IsaRequestListPage'
+        'app/isa/pages/IsaRequestListPage',
+        'i18n!app/nls/isa'
       ],
       function(IsaRequestCollection, IsaRequestListPage)
       {

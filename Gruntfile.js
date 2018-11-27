@@ -3,7 +3,6 @@
 'use strict';
 
 const requirejsConfig = require('./config/require');
-const scriptsHelpers = require('./scripts/installer-windows/helpers');
 
 module.exports = function(grunt)
 {
@@ -21,9 +20,6 @@ module.exports = function(grunt)
       ],
       scripts: [
         './build/scripts'
-      ],
-      installer: [
-        './build/installer'
       ],
       build: [
         './build'
@@ -53,17 +49,7 @@ module.exports = function(grunt)
         cwd: './frontend',
         src: '**',
         dest: './build/frontend'
-      },
-      scripts: scriptsHelpers.copy.scripts,
-      installer: scriptsHelpers.copy.installer
-    },
-    run: {
-      compileRunScript: scriptsHelpers.run.run,
-      compileUninstallScript: scriptsHelpers.run.uninstall,
-      compileInstallScript: scriptsHelpers.run.install
-    },
-    replace: {
-      scripts: scriptsHelpers.replace.scripts
+      }
     },
     ejsAmd: {
       frontend: {
@@ -119,6 +105,7 @@ module.exports = function(grunt)
           optimize: 'none',
           optimizeCss: 'standard',
           modules: [
+            {name: 'pos-main'},
             {name: 'wmes-main'},
             {name: 'wmes-docs'},
             {name: 'wmes-operator'},
@@ -128,7 +115,7 @@ module.exports = function(grunt)
             {name: 'wmes-wh-pickup'},
             {name: 'wmes-wh-kitter'},
             {name: 'wmes-wh-packer'},
-            {name: 'pos-main'}
+            {name: 'wmes-isa'}
           ],
           paths: requirejsConfig.buildPaths,
           shim: requirejsConfig.buildShim,
@@ -181,26 +168,8 @@ module.exports = function(grunt)
     'clean:frontendBuilt'
   ]);
 
-  grunt.registerTask('build-scripts', [
-    'clean:scripts',
-    'copy:scripts',
-    'replace:scripts',
-    'run:compileRunScript',
-    'run:compileUninstallScript'
-  ]);
-
-  grunt.registerTask('build-installer', [
-    'clean:installer',
-    'copy:installer',
-    'run:compileInstallScript',
-    'clean:installer',
-    'clean:scripts'
-  ]);
-
   grunt.registerTask('build-all', [
     'clean:build',
-    'build-frontend',
-    'build-scripts',
-    'build-installer'
+    'build-frontend'
   ]);
 };
