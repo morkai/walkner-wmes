@@ -30,6 +30,7 @@
   "sectionForm:watchEnabled": "Lista dyżurów",
   "sectionForm:mrpsEnabled": "Tabela MRP",
   "sectionForm:prodFunctions": "Funkcje",
+  "sectionForm:divisions": "Wydziały",
 
   "removeSection:title": "Usuwanie grupy",
   "removeSection:message": "Czy na pewno chcesz usunąć grupę <em>{section}</em>?",
@@ -54,6 +55,7 @@
   "watchForm:user": "Osoba odpowiedzialna",
   "watchForm:from": "Od",
   "watchForm:to": "Do",
+  "watchForm:days": "Dni",
 
   "mrpForm:title:add": "Dodawanie MRP",
   "mrpForm:title:edit": "Edycja MRP",

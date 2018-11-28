@@ -20,8 +20,11 @@
       <tr data-user-id="<%- watch.user._id %>">
         <td><i class="fa fa-user-circle-o mor-user-presence <%- watch.user.presence ? 'mor-user-present' : 'mor-user-notPresent' %>" data-user-id="<%- watch.user._id %>"></i><span><%- watch.user.label %></span></td>
         <td><i class="fa fa-wrench"></i><span><%- watch.user.prodFunction %></span></td>
-        <% if (section.watchAvailabilityVisible) { %>
-        <td><i class="fa fa-clock-o"></i><span><%- watch.user.availability || '06:00-06:00' %></span></td>
+        <% if (section.watchDaysVisible) { %>
+        <td><i class="fa fa-calendar"></i><span><%- watch.user.days %></span></td>
+        <% } %>
+        <% if (section.watchHoursVisible) { %>
+        <td><i class="fa fa-clock-o"></i><span><%- watch.user.hours || '06:00-06:00' %></span></td>
         <% } %>
         <td><i class="fa fa-phone"></i><span><%- watch.user.mobile %></span></td>
         <td>

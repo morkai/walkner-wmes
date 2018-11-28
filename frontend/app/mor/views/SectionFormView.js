@@ -8,6 +8,7 @@ define([
   'app/core/View',
   'app/core/util/idAndLabel',
   'app/core/util/uuid',
+  'app/data/orgUnits',
   'app/data/prodFunctions',
   'app/mor/templates/sectionForm'
 ], function(
@@ -18,6 +19,7 @@ define([
   View,
   idAndLabel,
   uuid,
+  orgUnits,
   prodFunctions,
   template
 ) {
@@ -37,6 +39,7 @@ define([
           name: view.$id('name').val().trim(),
           watchEnabled: view.$id('watchEnabled').prop('checked'),
           mrpsEnabled: view.$id('mrpsEnabled').prop('checked'),
+          divisions: view.$id('divisions').val().split(',').filter(function(id) { return id !== ''; }),
           prodFunctions: view.$id('prodFunctions').val().split(',').filter(function(id) { return id !== ''; })
         };
 
@@ -82,6 +85,15 @@ define([
 
     afterRender: function()
     {
+      this.$id('divisions').select2({
+        allowClear: true,
+        multiple: true,
+        data: orgUnits
+          .getAllByType('division')
+          .filter(function(division) { return !division.get('deactivatedAt'); })
+          .map(idAndLabel)
+      });
+
       var $prodFunctions = this.$id('prodFunctions').select2({
         allowClear: true,
         multiple: true,

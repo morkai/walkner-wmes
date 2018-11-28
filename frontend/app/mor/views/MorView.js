@@ -6,6 +6,7 @@ define([
   'app/broker',
   'app/i18n',
   'app/user',
+  'app/time',
   'app/viewport',
   'app/core/View',
   'app/core/views/DialogView',
@@ -25,6 +26,7 @@ define([
   broker,
   t,
   user,
+  time,
   viewport,
   View,
   DialogView,
@@ -156,6 +158,7 @@ define([
       this.$dndIndicator = null;
       this.draggedSectionId = null;
       this.hoveredSectionId = null;
+      this.week = time.getMoment().startOf('week');
 
       this.model.subscribe(this.pubsub);
 
@@ -220,6 +223,20 @@ define([
       var mor = this.model;
       var viewWatch = this.serializeWatches(morSection);
       var viewMrps = this.serializeMrps(prodFunctions, morSection);
+      var watchDaysVisible = _.some(viewWatch, function(d) { return d.user.days !== ''; });
+
+      if (watchDaysVisible)
+      {
+        var week = this.week;
+
+        viewWatch.forEach(function(d)
+        {
+          if (d.user.days === '')
+          {
+            d.user.days = week.day(1).format('ddd') + '-' + week.day(7).format('ddd');
+          }
+        });
+      }
 
       return {
         _id: morSection._id,
@@ -227,7 +244,8 @@ define([
         label: morSection.name,
         addWatchVisible: morSection.watchEnabled,
         watchVisible: morSection.watchEnabled && viewWatch.length > 0,
-        watchAvailabilityVisible: _.some(viewWatch, function(d) { return d.user.availability !== ''; }),
+        watchDaysVisible: watchDaysVisible,
+        watchHoursVisible: _.some(viewWatch, function(d) { return d.user.hours !== ''; }),
         watch: viewWatch,
         mrpsVisible: morSection.mrpsEnabled
           && (viewMrps.length > 0 || (this.options.editable !== false && user.isAllowedTo('MOR:MANAGE'))),
@@ -355,10 +373,21 @@ define([
     serializeUser: function(availability, userId, i)
     {
       var user = this.model.users.get(userId);
+      var days = '';
+      var hours = '';
 
-      availability = availability && availability.from && availability.to && availability.from !== availability.to
-        ? (availability.from + '-' + availability.to)
-        : '';
+      if (availability)
+      {
+        if (availability.days.length)
+        {
+          days = this.formatDayRange(availability.days);
+        }
+
+        if (availability.from && availability.to && availability.from !== availability.to)
+        {
+          hours = availability.from + '-' + availability.to;
+        }
+      }
 
       if (!user)
       {
@@ -370,7 +399,8 @@ define([
           email: '?',
           mobile: '?',
           presence: false,
-          availability: availability
+          days: days,
+          hours: hours
         };
       }
 
@@ -384,8 +414,51 @@ define([
         email: user.get('email') || '?',
         mobile: user.getMobile() || '?',
         presence: user.get('presence'),
-        availability: availability
+        days: days,
+        hours: hours
       };
+    },
+
+    formatDayRange: function(days)
+    {
+      var ranges = [];
+
+      for (var i = 0; i < days.length; ++i)
+      {
+        var day = days[i];
+
+        if (i === 0)
+        {
+          ranges.push([day, day]);
+
+          continue;
+        }
+
+        var lastRange = ranges[ranges.length - 1];
+
+        if (day - lastRange[1] === 1)
+        {
+          lastRange[1] += 1;
+
+          continue;
+        }
+
+        ranges.push([day, day]);
+      }
+
+      var week = this.week;
+
+      return ranges.map(function(r)
+      {
+        var from = week.day(r[0]).format('ddd');
+
+        if (r[0] === r[1])
+        {
+          return from;
+        }
+
+        return from + '-' + week.day(r[1]).format('ddd');
+      }).join(', ');
     },
 
     serializeProdFunctions: function(allProdFunctions)

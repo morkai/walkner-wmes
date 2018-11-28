@@ -29,7 +29,7 @@ define([
         var params = {
           section: view.model.section._id,
           user: view.model.watch ? view.model.watch.user : view.$id('user').val(),
-          days: [],
+          days: view.$('input[name="days"]:checked').map(function() { return +this.value; }).get(),
           from: view.$id('from').val(),
           to: view.$id('to').val()
         };
