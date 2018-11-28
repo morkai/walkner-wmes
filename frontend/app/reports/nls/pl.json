@@ -36,7 +36,7 @@
   "1:pageTitle": "Wskaźniki",
   "2:pageTitle": "CLIP",
   "5:pageTitle": "HR",
-  "charts:title:overall": "ML",
+  "charts:title:overall": "Total",
 
   "coeffs:quantityDone": "Sztuki",
   "coeffs:downtime": "Przestoje",
@@ -188,7 +188,7 @@
   "settings:tab:wh": "Magazyn",
   "settings:tab:downtimesInAors": "Przestoje w obszarach",
   "settings:tab:lean": "Lean",
-  "settings:overall": "ML",
+  "settings:overall": "Total",
   "settings:prod": "Montaż",
   "settings:press": "Tłocznia",
   "settings:aors": "Kolory i wartości referencyjne dla obszarów odpowiedzialności można ustawić na stronie <a href='#aors'>Słowniki &gt; Obszary odpowiedzialności</a>.",

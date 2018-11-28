@@ -37,7 +37,7 @@
 
     "1:pageTitle": "PROD, EFF, Downtime",
     "2:pageTitle": "CLIP",
-    "charts:title:overall": "ML",
+    "charts:title:overall": "Total",
 
     "coeffs:quantityDone": "Items",
     "coeffs:downtime": "Downtime",
@@ -180,7 +180,7 @@
     "settings:tab:hr": "HR",
     "settings:tab:wh": "Warehouse",
     "settings:tab:downtimesInAors": "Downtimes in AORs",
-    "settings:overall": "ML",
+    "settings:overall": "Total",
     "settings:prod": "Assembly",
     "settings:press": "Press",
     "settings:aors": "Colors and reference values for the areas of responsibility can be set from the <a href='#aors'>Dictionaries &gt; Areas of responsibility</a> page.",

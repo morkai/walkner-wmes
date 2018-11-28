@@ -149,7 +149,7 @@
     "report:series:nokCount": "Red strips",
     "report:series:maxNokCount": "Upper limit",
     "report:series:nokQty": "NOK quantity",
-    "report:series:prod": "ML",
+    "report:series:prod": "Total",
     "report:series:wh": "Warehouse",
     "report:series:okRatioRef": "Target",
     "report:series:nokRatioRef": "Target",
