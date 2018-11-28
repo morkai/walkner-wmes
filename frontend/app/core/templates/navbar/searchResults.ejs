@@ -152,4 +152,9 @@
   <li class="navbar-search-result"><a href="#orderDocuments/tree?file=<%- results.fullNc15 %>"><%- t('core', 'NAVBAR:SEARCH:document') %></a></li>
   <li class="navbar-search-result"><a href="/orderDocuments/<%- results.fullNc15 %>" target="_blank"><%- t('core', 'NAVBAR:SEARCH:documentFile') %></a></li>
   <% } %>
+
+  <% if (results.searchName && user.isAllowedTo('USERS:VIEW')) { %>
+  <li id="<%- idPrefix %>-searchName" class="dropdown-header"><%- t('core', 'NAVBAR:SEARCH:searchName', {nc12: results.searchName}) %></li>
+  <li class="navbar-search-result"><a href="#users?limit(20)&searchName=regex=%5E<%- results.searchName %>"><i class="fa fa-spinner fa-spin"></i></a></li>
+  <% } %>
 </ul>

@@ -239,6 +239,7 @@ define([
   }
 
   setUpUserSelect2.defaultRqlQueryProvider = createDefaultRqlQuery;
+  setUpUserSelect2.filterDuplicates = filterDuplicates;
   setUpUserSelect2.transliterate = function(value)
   {
     return transliterate(value.toUpperCase()).replace(/[^A-Z]+/g, '');

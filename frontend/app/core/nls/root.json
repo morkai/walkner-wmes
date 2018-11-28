@@ -246,6 +246,7 @@
     "NAVBAR:SEARCH:fullNc12": "12NC {nc12}",
     "NAVBAR:SEARCH:partialNc12": "12NC {nc12}...",
     "NAVBAR:SEARCH:fullNc15": "15NC {nc15}",
+    "NAVBAR:SEARCH:searchName": "Users",
     "NAVBAR:SEARCH:sapDetails": "details from SAP",
     "NAVBAR:SEARCH:xiconfDetails": "details from the tests db",
     "NAVBAR:SEARCH:xiconfResults": "test results",

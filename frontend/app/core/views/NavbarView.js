@@ -10,6 +10,7 @@ define([
   '../View',
   'app/mor/Mor',
   'app/mor/views/MorView',
+  'app/users/util/setUpUserSelect2',
   'app/core/templates/navbar',
   'app/core/templates/navbar/searchResults'
 ], function(
@@ -22,6 +23,7 @@ define([
   View,
   Mor,
   MorView,
+  setUpUserSelect2,
   navbarTemplate,
   renderSearchResults
 ) {
@@ -721,8 +723,23 @@ define([
       }
 
       this.lastSearchPhrase = searchPhrase;
+
+      if (results.searchName)
+      {
+        this.scheduleUserSearch(results.searchName);
+      }
     }
 
+    this.showNoSearchResults(searchPhrase);
+    this.showSearchResults();
+  };
+
+  /**
+   * @private
+   * @param {string} searchPhrase
+   */
+  NavbarView.prototype.showNoSearchResults = function(searchPhrase)
+  {
     if (!this.$('.navbar-search-result').length)
     {
       this.$id('searchResults').html(
@@ -731,8 +748,6 @@ define([
         + '</a></li>'
       );
     }
-
-    this.showSearchResults();
   };
 
   /**
@@ -898,7 +913,8 @@ define([
       toShift: null,
       shiftStart: null,
       shiftEnd: null,
-      division: null
+      division: null,
+      searchName: null
     };
     var matches;
 
@@ -926,7 +942,7 @@ define([
     // Full 12NC
     matches = searchPhrase.match(/[^0-9A-Z]([0-9]{12}|[A-Z]{2}[A-Z0-9]{5})[^0-9A-Z]/);
 
-    if (matches)
+    if (matches && (matches[1].length === 12 || /[0-9]+/.test(matches[1])))
     {
       results.fullNc12 = matches[1].toUpperCase();
       searchPhrase = searchPhrase.replace(/([0-9]{12}|[A-Z]{2}[A-Z0-9]{5})/g, '');
@@ -1024,8 +1040,18 @@ define([
       results.day = null;
     }
 
+    // User name
+    var searchName = setUpUserSelect2.transliterate(searchPhrase);
+
+    matches = searchName.match(/([A-Z]{3,})/);
+
+    if (!results.division && matches)
+    {
+      results.searchName = matches[1];
+    }
+
     // Partial order no and/or 12NC
-    matches = searchPhrase.match(/([A-Z0-9]+)/);
+    matches = searchPhrase.match(/([0-9]+)/);
 
     if (matches)
     {
@@ -1085,6 +1111,81 @@ define([
       {
         $mor.removeClass('disabled').find('.fa').removeClass('fa-spinner fa-spin').addClass('fa-group');
       });
+  };
+
+  /**
+   * @private
+   * @param {string} searchName
+   */
+  NavbarView.prototype.scheduleUserSearch = function(searchName)
+  {
+    if (this.timers.searchUsers)
+    {
+      clearTimeout(this.timers.searchUsers);
+    }
+
+    this.timers.searchUsers = setTimeout(this.searchUsers.bind(this, searchName), 300);
+  };
+
+  /**
+   * @private
+   * @param {string} searchName
+   */
+  NavbarView.prototype.searchUsers = function(searchName)
+  {
+    var view = this;
+
+    if (view.searchUsersReq)
+    {
+      view.searchUsersReq.abort();
+    }
+
+    var req = view.searchUsersReq = this.ajax({
+      url: '/users?limit(20)&searchName=regex=' + encodeURIComponent('^' + searchName)
+    });
+
+    req.done(function(res)
+    {
+      var $hd = view.$id('searchName');
+      var $tpl = $hd.next().detach();
+
+      $tpl.removeClass('active').find('.fa').remove();
+
+      var users = setUpUserSelect2.filterDuplicates(res.collection);
+
+      if (users.length === 0)
+      {
+        $hd.remove();
+
+        view.showNoSearchResults(searchName);
+
+        return;
+      }
+
+      users.slice(0, 5).reverse().forEach(function(user)
+      {
+        var $user = $tpl.clone();
+
+        $user.find('a').attr('href', '#users/' + user._id).text(user.lastName + ' ' + user.firstName);
+
+        $user.insertAfter($hd);
+      });
+
+      $hd.next().addClass('active').focus();
+    });
+
+    req.fail(function()
+    {
+      view.$id('searchName').find('.fa-spin').removeClass('.fa-spin');
+    });
+
+    req.always(function()
+    {
+      if (req === view.searchUsersReq)
+      {
+        view.searchUsersReq = null;
+      }
+    });
   };
 
   return NavbarView;
