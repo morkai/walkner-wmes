@@ -88,6 +88,13 @@ define([
             message: t('core', 'ERROR:' + code + ':message'),
             notify: page.notify
           });
+        },
+        afterRender: function()
+        {
+          if (code === 403)
+          {
+            page.checkUser();
+          }
         }
       });
     },
@@ -180,6 +187,20 @@ define([
       ])), {innerWidth: window.innerWidth, innerHeight: window.innerHeight}));
 
       return mail.join('');
+    },
+
+    checkUser: function()
+    {
+      var user = require('app/user');
+      var req = this.ajax({url: '/users/self'});
+
+      req.done(function(userData)
+      {
+        if (userData._id !== user.data._id)
+        {
+          window.location.reload();
+        }
+      });
     }
 
   });
