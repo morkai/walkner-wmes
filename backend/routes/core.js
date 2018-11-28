@@ -2,12 +2,10 @@
 
 'use strict';
 
-const path = require('path');
 const _ = require('lodash');
 
 module.exports = function startCoreRoutes(app, express)
 {
-  const dev = app.options.env === 'development';
   const updaterModule = app[app.options.updaterId || 'updater'];
   const userModule = app[app.options.userId || 'user'];
 

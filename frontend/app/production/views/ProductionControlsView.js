@@ -19,9 +19,7 @@ define([
   MorView,
   UnlockDialogView,
   LockDialogView,
-  template,
-  BehaviorObsCard,
-  BehaviorObsCardFormView
+  template
 ) {
   'use strict';
 

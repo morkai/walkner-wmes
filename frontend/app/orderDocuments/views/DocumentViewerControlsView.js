@@ -29,8 +29,6 @@ define([
 ) {
   'use strict';
 
-  var IS_EMBEDDED = window.parent !== window;
-
   return View.extend({
 
     template: template,
