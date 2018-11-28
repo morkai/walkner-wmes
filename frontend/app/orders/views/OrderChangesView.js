@@ -63,6 +63,14 @@ define([
       'mouseout .orders-changes-noTimeAndUser': function()
       {
         this.$('.is-hovered').removeClass('is-hovered');
+      },
+      'click #-toggleSystemChanges': function()
+      {
+        var $btn = this.$id('toggleSystemChanges').toggleClass('active');
+        var active = $btn.hasClass('active');
+
+        localStorage.setItem('WMES_NO_SYSTEM_CHANGES', active ? '1' : '0');
+        this.$el.toggleClass('orders-no-system-changes', active);
       }
     },
 
@@ -101,7 +109,8 @@ define([
         renderChange: renderChange,
         renderPropertyLabel: this.renderPropertyLabel,
         renderValueChange: this.renderValueChange,
-        canComment: user.can.commentOrders()
+        canComment: user.can.commentOrders(),
+        noSystemChanges: localStorage.getItem('WMES_NO_SYSTEM_CHANGES') === '1'
       };
     },
 
@@ -113,6 +122,14 @@ define([
     serializeChange: function(change)
     {
       change = _.clone(change);
+
+      if (!change.user)
+      {
+        change.user = {
+          id: null,
+          label: 'System'
+        };
+      }
 
       change.timeText = time.format(change.time, 'L<br>LTS');
       change.userText = renderUserInfo({userInfo: change.user});

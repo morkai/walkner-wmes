@@ -126,3 +126,6 @@
 .orders-bom-pfep {
   cursor: pointer;
 }
+.orders-no-system-changes .is-system-change {
+  display: none;
+}

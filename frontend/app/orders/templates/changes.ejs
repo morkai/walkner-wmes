@@ -1,7 +1,10 @@
-<div class="<%- showPanel ? 'panel panel-default' : '' %> orders-changes">
+<div class="<%- showPanel ? 'panel panel-default' : '' %> orders-changes <%- noSystemChanges ? 'orders-no-system-changes' : '' %>">
   <% if (showPanel) { %>
-  <div class="panel-heading">
+  <div class="panel-heading is-with-actions">
     <%- t('orders', 'PANEL:TITLE:changes') %>
+    <div class="panel-actions">
+      <button id="<%- idPrefix %>-toggleSystemChanges" class="btn btn-default <%- noSystemChanges ? 'active' : '' %>" type="button"><%- t('orders', 'CHANGES:toggleSystemChanges') %></button>
+    </div>
   </div>
   <% } %>
   <table id="<%- idPrefix %>-table" class="table table-condensed table-bordered table-hover">

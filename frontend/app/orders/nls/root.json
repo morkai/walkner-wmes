@@ -116,6 +116,7 @@
     "CHANGES:oldValue": "Old value",
     "CHANGES:newValue": "New value",
     "CHANGES:qtyMax": "Max. quantity for <em>{operationNo}</em>",
+    "CHANGES:toggleSystemChanges": "Hide system changes",
 
     "filter:statuses:in": "Required statuses",
     "filter:statuses:nin": "Ignored statuses",

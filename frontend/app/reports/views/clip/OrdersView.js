@@ -136,6 +136,11 @@ define([
     {
       this.listenTo(this.collection, 'request', this.onCollectionRequest);
       this.listenTo(this.collection, 'sync', this.onCollectionSync);
+
+      if (localStorage.getItem('WMES_NO_SYSTEM_CHANGES') !== '0')
+      {
+        this.$el.addClass('clip-no-system-changes');
+      }
     },
 
     renderOrderRows: function()
@@ -229,6 +234,27 @@ define([
       {
         $changesTr.find('input[name="delayReason"]').select2('focus');
       }
+
+      var $toggleSystemChanges = $('<button class="btn btn-default btn-lg clip-toggleSystemChanges"></button>')
+        .attr({
+          id: this.idPrefix + '-toggleSystemChanges'
+        })
+        .text(this.t('reports', 'clip:toggleSystemChanges'))
+        .toggleClass('active', localStorage.getItem('WMES_NO_SYSTEM_CHANGES') !== '0')
+        .on('click', this.toggleSystemChanges.bind(this));
+
+      this.$el.append($toggleSystemChanges);
+    },
+
+    toggleSystemChanges: function()
+    {
+      var oldValue = localStorage.getItem('WMES_NO_SYSTEM_CHANGES') === '0' ? '0' : '1';
+      var newValue = oldValue === '0' ? '1' : '0';
+
+      localStorage.setItem('WMES_NO_SYSTEM_CHANGES', newValue);
+
+      this.$id('toggleSystemChanges').toggleClass('active', newValue === '1');
+      this.$el.toggleClass('clip-no-system-changes', newValue === '1');
     },
 
     hideOrderChanges: function()
@@ -248,6 +274,8 @@ define([
 
         this.orderChangesView = null;
       }
+
+      this.$id('toggleSystemChanges').remove();
     },
 
     onCollectionRequest: function()

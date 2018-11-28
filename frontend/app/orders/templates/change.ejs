@@ -1,4 +1,4 @@
-<tbody class="<%- change.user ? 'is-user-change' : 'is-system-change' %>">
+<tbody class="<%- change.user.id ? 'is-user-change' : 'is-system-change' %>">
   <% if (change.values.length) { %>
   <tr>
     <td class="is-min orders-changes-time" rowspan="<%- change.rowSpan %>"><%- change.timeText %></td>

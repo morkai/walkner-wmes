@@ -430,6 +430,7 @@
     "orders:filter:status:PDLV": "Partially delivered (PDLV)",
 
     "clip:exportOrders": "Export orders",
+    "clip:toggleSystemChanges": "Hide system changes",
 
     "7:filter:statuses": "Downtime statuses on the list",
     "7:filter:specificAor": "Specific AOR",

@@ -115,6 +115,7 @@
   "CHANGES:oldValue": "Stara wartość",
   "CHANGES:newValue": "Nowa wartość",
   "CHANGES:qtyMax": "Maks. ilość dla <em>{operationNo}</em>",
+  "CHANGES:toggleSystemChanges": "Ukryj zmiany systemowe",
 
   "filter:statuses:in": "Wymagane statusy",
   "filter:statuses:nin": "Ignorowane statusy",
