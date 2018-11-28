@@ -9,8 +9,6 @@ set AUTH=--authenticationDatabase %DB_NAME% --username %WMES_MONGODB_USER% --pas
 if [%DB_HOST%] == [] set DB_HOST=localhost
 if [%WMES_MONGODB_USER%] == [] set AUTH=
 
-echo.%AUTH%
-
 cd %NEW_CD%
 call mongo --host %DB_HOST% %AUTH% %DB_NAME% %NEW_CD%mongodb-update.js
 cd %OLD_CD%
