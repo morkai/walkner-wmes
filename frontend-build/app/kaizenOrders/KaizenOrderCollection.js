@@ -1,1 +1,1 @@
-define(["../core/Collection","./KaizenOrder"],function(e,t){"use strict";return e.extend({model:t,rowHeight:2,rqlQuery:"exclude(changes)&limit(20)&sort(-eventDate)"})});
+define(["../core/Collection","./KaizenOrder"],function(e,t){"use strict";return e.extend({model:t,rowHeight:2,rqlQuery:"exclude(changes)&limit(-1337)&sort(-eventDate)"})});

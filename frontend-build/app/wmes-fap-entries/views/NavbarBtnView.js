@@ -1,0 +1,1 @@
+define(["app/broker","app/core/View","app/wmes-fap-entries/templates/navbarBtn"],function(e,n,a){"use strict";return n.extend({template:a},{setUp:function(){if(!window.MODULES||-1!==window.MODULES.indexOf("wmes-fap")){var n=this;e.subscribe("navbar.rendered",function(e){var a=e.view,r=new n;a.$(".navbar-collapse").append(r.render().el)})}}})});

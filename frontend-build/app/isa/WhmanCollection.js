@@ -1,0 +1,1 @@
+define(["app/users/UserCollection"],function(e){"use strict";return e.extend({rqlQuery:"select(firstName,lastName,personellId,card,cardUid)&limit(0)&privileges=ISA%3AWHMAN"})});

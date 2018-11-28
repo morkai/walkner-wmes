@@ -1,0 +1,1 @@
+define(["underscore","../settings/SettingCollection","./Setting"],function(e,t,n){"use strict";return t.extend({model:n,topicSuffix:"fap.**",getValue:function(e){var t=this.get("fap."+e);return t?t.getValue():null},prepareValue:function(e,t){},prepareFormValue:function(e,t){return t}})});

@@ -1,1 +1,1 @@
-define(["../core/Collection","./D8Entry"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"exclude(changes)&limit(20)&sort(-crsRegisterDate)"})});
+define(["../core/Collection","./D8Entry"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"exclude(changes)&limit(-1337)&sort(-crsRegisterDate)"})});

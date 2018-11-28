@@ -1,1 +1,1 @@
-define(["../core/Collection","./XiconfComponentWeight"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"limit(20)&sort(description)"})});
+define(["../core/Collection","./XiconfComponentWeight"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"limit(-1337)&sort(description)"})});

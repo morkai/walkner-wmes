@@ -1,1 +1,1 @@
-define(["../core/Collection","./License"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"limit(20)&sort(expireDate)"})});
+define(["../core/Collection","./License"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"limit(-1337)&sort(expireDate)"})});

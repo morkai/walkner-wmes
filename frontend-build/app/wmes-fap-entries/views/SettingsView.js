@@ -1,0 +1,1 @@
+define(["app/settings/views/SettingsView","app/wmes-fap-entries/templates/settings"],function(e,t){"use strict";return e.extend({clientUrl:"#fap/settings",template:t})});

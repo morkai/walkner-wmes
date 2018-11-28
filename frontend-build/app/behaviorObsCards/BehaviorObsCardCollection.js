@@ -1,1 +1,1 @@
-define(["../core/Collection","./BehaviorObsCard"],function(e,t){"use strict";return e.extend({model:t,theadHeight:2,rqlQuery:"limit(20)&sort(-date)"})});
+define(["../core/Collection","./BehaviorObsCard"],function(e,t){"use strict";return e.extend({model:t,theadHeight:2,rqlQuery:"limit(-1337)&sort(-date)"})});

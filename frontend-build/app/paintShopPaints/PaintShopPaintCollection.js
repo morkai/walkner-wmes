@@ -1,1 +1,1 @@
-define(["../core/Collection","./PaintShopPaint"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"sort(shelf,bin)&limit(20)"})});
+define(["../core/Collection","./PaintShopPaint"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"sort(shelf,bin)&limit(-1337)"})});
