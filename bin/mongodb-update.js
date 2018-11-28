@@ -5,17 +5,40 @@
 
 load('./mongodb-helpers.js');
 
-db.events.find({time: {$gt: 1542499200000}, user: null, 'data.user.privileges': {$exists: true}}).forEach(event =>
-{
-  const userData = event.data.user;
-  const user = {
-    _id: String(userData._id || userData.id),
-    name: userData.lastName && userData.firstName
-      ? (userData.lastName + ' ' + userData.firstName)
-      : (userData.login || userData.label),
-    login: userData.login || userData.label,
-    ipAddress: userData.ipAddress || userData.ip
-  };
+const oldId = 'IR3III';
+const newId = 'SM22';
 
-  db.events.updateOne({_id: event._id}, {$unset: {'data.user': 1}, $set: {user: user}});
+db.plans.find({_id: {$gte: new Date('2018-08-07T00:00:00.000Z')}, 'lines._id': 'IR3III'}).forEach(plan =>
+{
+  var settings = db.plansettings.findOne({_id: plan._id});
+
+  plan.lines.forEach(line =>
+  {
+    if (line._id === oldId)
+    {
+      line._id = newId;
+    }
+  });
+
+  settings.lines.forEach(line =>
+  {
+    if (line._id === oldId)
+    {
+      line._id = newId;
+    }
+  });
+
+  settings.mrps.forEach(mrp =>
+  {
+    mrp.lines.forEach(line =>
+    {
+      if (line._id === oldId)
+      {
+        line._id = newId;
+      }
+    });
+  });
+
+  db.plans.updateOne({_id: plan._id}, {$set: {lines: plan.lines}});
+  db.plansettings.updateOne({_id: plan._id}, {$set: {lines: settings.lines, mrps: settings.mrps}});
 });
