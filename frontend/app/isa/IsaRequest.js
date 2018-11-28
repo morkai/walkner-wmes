@@ -52,14 +52,17 @@ define([
 
     if (obj.orgUnits && !obj.orgUnit)
     {
-      var orgUnit = orgUnits.getAllForProdLine(getProdLineId(obj.orgUnits));
+      var prodLineId = getProdLineId(obj.orgUnits);
+      var orgUnit = orgUnits.getAllForProdLine(prodLineId);
+      var prodLine = orgUnits.getByTypeAndId('prodLine', orgUnit.prodLine);
+      var prodFlow = orgUnits.getByTypeAndId('prodFlow', orgUnit.prodFlow);
 
-      orgUnit.prodLine = orgUnits.getByTypeAndId('prodLine', orgUnit.prodLine).getLabel()
+      orgUnit.prodLine = !prodLine ? prodLineId : orgUnits.getByTypeAndId('prodLine', orgUnit.prodLine).getLabel()
         .toUpperCase()
         .replace(/(_+|~.*?)$/, '')
         .replace(/_/g, ' ');
 
-      orgUnit.prodFlow = orgUnits.getByTypeAndId('prodFlow', orgUnit.prodFlow).getLabel()
+      orgUnit.prodFlow = !prodFlow ? '?' : prodFlow.getLabel()
         .replace(/\s+(;|,)/g, '$1');
 
       obj.orgUnit = orgUnit;
