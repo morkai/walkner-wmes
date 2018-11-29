@@ -30,7 +30,7 @@
   "sectionForm:watchEnabled": "Lista dyżurów",
   "sectionForm:mrpsEnabled": "Tabela MRP",
   "sectionForm:prodFunctions": "Funkcje",
-  "sectionForm:divisions": "Wydziały",
+  "sectionForm:subdivisions": "Działy",
 
   "removeSection:title": "Usuwanie grupy",
   "removeSection:message": "Czy na pewno chcesz usunąć grupę <em>{section}</em>?",

@@ -31,7 +31,7 @@
     "sectionForm:watchEnabled": "Watch list",
     "sectionForm:mrpsEnabled": "MRP table",
     "sectionForm:prodFunctions": "Functions",
-    "sectionForm:divisions": "Divisions",
+    "sectionForm:divisions": "Subdivisions",
 
     "removeSection:title": "Group removal",
     "removeSection:message": "Are you sure you want to remove the <em>{section}</em> group?",

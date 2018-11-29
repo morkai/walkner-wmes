@@ -39,7 +39,7 @@ define([
           name: view.$id('name').val().trim(),
           watchEnabled: view.$id('watchEnabled').prop('checked'),
           mrpsEnabled: view.$id('mrpsEnabled').prop('checked'),
-          divisions: view.$id('divisions').val().split(',').filter(function(id) { return id !== ''; }),
+          subdivisions: view.$id('subdivisions').val().split(',').filter(function(id) { return id !== ''; }),
           prodFunctions: view.$id('prodFunctions').val().split(',').filter(function(id) { return id !== ''; })
         };
 
@@ -85,13 +85,29 @@ define([
 
     afterRender: function()
     {
-      this.$id('divisions').select2({
+      this.$id('subdivisions').select2({
         allowClear: true,
         multiple: true,
-        data: orgUnits
-          .getAllByType('division')
-          .filter(function(division) { return !division.get('deactivatedAt'); })
-          .map(idAndLabel)
+        data: orgUnits.getAllByType('division').map(function(division)
+        {
+          var divisionText = division.getLabel();
+
+          return {
+            text: divisionText,
+            children: orgUnits.getChildren(division).map(function(subdivision)
+            {
+              return {
+                id: subdivision.id,
+                text: subdivision.getLabel(),
+                divisionText: divisionText
+              };
+            })
+          };
+        }),
+        formatSelection: function(item, container, e)
+        {
+          return e(item.divisionText + ' \\ ' + item.text);
+        }
       });
 
       var $prodFunctions = this.$id('prodFunctions').select2({
