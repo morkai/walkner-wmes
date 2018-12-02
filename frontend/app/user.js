@@ -25,6 +25,8 @@ function(
   'use strict';
 
   var embedded = document.body.classList.contains('is-embedded');
+  var reloadLocks = [];
+  var reloadLockI = 0;
   var user = {};
 
   socket.on('user.reload', function(userData)
@@ -46,6 +48,21 @@ function(
   user.data = guestUser;
 
   user.noReload = false;
+
+  user.isReloadLocked = function()
+  {
+    return reloadLocks.length > 0;
+  };
+
+  user.lockReload = function()
+  {
+    return reloadLocks.push(++reloadLockI);
+  };
+
+  user.unlockReload = function(lockI)
+  {
+    reloadLocks = reloadLocks.filter(function(i) { return i !== lockI; });
+  };
 
   /**
    * @param {Object} userData

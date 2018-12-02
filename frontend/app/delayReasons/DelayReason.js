@@ -2,10 +2,14 @@
 
 define([
   '../i18n',
-  '../core/Model'
+  '../core/Model',
+  '../data/orgUnits',
+  '../data/prodFunctions'
 ], function(
   t,
-  Model
+  Model,
+  orgUnits,
+  prodFunctions
 ) {
   'use strict';
 
@@ -27,11 +31,35 @@ define([
       active: true
     },
 
-    serializeRow: function()
+    serialize: function()
     {
       var obj = this.toJSON();
 
       obj.active = t('core', 'BOOL:' + obj.active);
+      obj.notifications = (obj.notifications || []).map(function(n)
+      {
+        return {
+          subdivisions: n.subdivisions.map(function(id)
+          {
+            var subdivision = orgUnits.getByTypeAndId('subdivision', id);
+
+            if (!subdivision)
+            {
+              return id;
+            }
+
+            var division = orgUnits.getParent(subdivision);
+
+            return (division ? division.getLabel() : '?') + ' \\ ' + subdivision.getLabel();
+          }),
+          prodFunctions: n.prodFunctions.map(function(id)
+          {
+            var prodFunction = prodFunctions.get(id);
+
+            return prodFunction ? prodFunction.getLabel() : id;
+          })
+        };
+      });
 
       return obj;
     }

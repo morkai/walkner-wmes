@@ -19,6 +19,32 @@
         <label for="<%- idPrefix %>-drm" class="control-label"><%- helpers.t('PROPERTY:drm') %></label>
         <input id="<%- idPrefix %>-drm" class="form-control" type="text" autocomplete="new-password" name="drm" maxlength="20">
       </div>
+      <div class="form-group">
+        <label class="control-label"><%- helpers.t('PROPERTY:notifications') %></label>
+        <table class="table table-bordered table-condensed delayReasons-form-notifications">
+          <thead>
+          <tr>
+            <th class="is-min"><%- helpers.t('PROPERTY:notifications.subdivisions') %></th>
+            <th class="is-min"><%- helpers.t('PROPERTY:notifications.prodFunctions') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody id="<%- idPrefix %>-notifications">
+          <tr>
+            <td><input name="notifications[].subdivisions" type="text"></td>
+            <td><input name="notifications[].prodFunctions" type="text"></td>
+            <td class="actions">
+              <div class="actions-group">
+                <button type="button" class="btn btn-default" data-action="removeNotification"><i class="fa fa-times"></i></button>
+              </div>
+            </td>
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
+        <button id="<%- idPrefix %>-addNotification" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- helpers.t('FORM:notifications:add') %></span></button>
+      </div>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

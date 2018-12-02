@@ -143,7 +143,7 @@ function(
 
       if (typeof template === 'function')
       {
-        template = template.call(this.$element[0]);
+        template = template.call(this.$element[0], $.fn.popover.Constructor.DEFAULTS.template);
       }
 
       this.$tip = typeof template === 'string' ? $(template) : template;

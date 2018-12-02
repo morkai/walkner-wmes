@@ -19,11 +19,15 @@
   "PROPERTY:active": "Aktywny?",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:drm": "Kategoria DRM",
+  "PROPERTY:notifications": "Powiadomienia",
+  "PROPERTY:notifications.subdivisions": "Działy",
+  "PROPERTY:notifications.prodFunctions": "Funkcje",
 
   "FORM:ACTION:add": "Dodaj powod opóźnień",
   "FORM:ACTION:edit": "Edytuj powod opóźnień",
   "FORM:ERROR:addFailure": "Nie udało się dodać powodu opóźnień.",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować powodu opóźnień.",
+  "FORM:notifications:add": "Dodaj nowe powiadomienie",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia powodu opóźnień",
   "ACTION_FORM:BUTTON:delete": "Usuń powód opóźnień",
