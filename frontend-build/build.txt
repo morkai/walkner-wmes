@@ -698,14 +698,34 @@ app/wh/assets/set.css
 ----------------
 app/wh/assets/set.css
 
+app/wmes-fap-entries/assets/addForm.css
+----------------
+app/wmes-fap-entries/assets/addForm.css
+
+app/wmes-fap-entries/assets/details.css
+----------------
+app/wmes-fap-entries/assets/details.css
+
 app/wmes-fap-entries/assets/history.css
 ----------------
 app/wmes-fap-entries/assets/history.css
 
+app/wmes-fap-entries/assets/list.css
+----------------
+app/wmes-fap-entries/assets/list.css
+
 app/wmes-fap-entries/assets/main.css
 ----------------
+app/wmes-fap-entries/assets/./navbar.css
+app/wmes-fap-entries/assets/./addForm.css
+app/wmes-fap-entries/assets/./list.css
+app/wmes-fap-entries/assets/./details.css
 app/wmes-fap-entries/assets/./history.css
 app/wmes-fap-entries/assets/main.css
+
+app/wmes-fap-entries/assets/navbar.css
+----------------
+app/wmes-fap-entries/assets/navbar.css
 
 app/wmes-toolcal-tools/assets/history.css
 ----------------
@@ -1873,8 +1893,14 @@ app/orderBomMatchers/routes.js
 app/help/routes.js
 app/wmes-toolcal-types/routes.js
 app/wmes-toolcal-tools/routes.js
-app/wmes-fap-entries/templates/navbarBtn.js
-app/wmes-fap-entries/views/NavbarBtnView.js
+app/data/delayReasons.js
+app/wmes-fap-entries/Entry.js
+app/wmes-fap-entries/templates/addForm.js
+app/wmes-fap-entries/templates/addFormUpload.js
+app/wmes-fap-entries/templates/notificationsPopover.js
+app/wmes-fap-entries/views/AddFormView.js
+app/wmes-fap-entries/templates/navbar.js
+app/wmes-fap-entries/views/NavbarView.js
 app/nls/wmes-fap-entries.js
 app/nls/pl/wmes-fap-entries.js
 i18n!app/nls/wmes-fap-entries

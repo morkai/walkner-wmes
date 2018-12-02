@@ -1,0 +1,1 @@
+define(["app/delayReasons/DelayReasonCollection","./createStorage"],function(e,a){"use strict";return a("DELAY_REASONS","delayReasons",e)});
