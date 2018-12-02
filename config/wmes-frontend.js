@@ -132,6 +132,7 @@ const frontendDictionaryModules = {
   aors: 'AORS',
   orderStatuses: 'ORDER_STATUSES',
   downtimeReasons: 'DOWNTIME_REASONS',
+  delayReasons: 'DELAY_REASONS',
   isaPalletKinds: 'ISA_PALLET_KINDS'
 };
 
