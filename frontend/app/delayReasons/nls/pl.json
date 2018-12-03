@@ -29,6 +29,8 @@
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować powodu opóźnień.",
   "FORM:notifications:add": "Dodaj nowe powiadomienie",
 
+  "noNotifications": "Brak zdefiniowanych powiadomień.",
+
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia powodu opóźnień",
   "ACTION_FORM:BUTTON:delete": "Usuń powód opóźnień",
   "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną powod opóźnień?",

@@ -26,6 +26,8 @@
     "FORM:ERROR:addFailure": "Failed to add the new delay reason.",
     "FORM:ERROR:editFailure": "Failed to edit the delay reason.",
 
+    "noNotifications": "No notifications defined.",
+
     "ACTION_FORM:DIALOG_TITLE:delete": "Delay reason deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete delay reason",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen delay reason?",
