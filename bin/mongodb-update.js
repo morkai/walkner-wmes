@@ -5,21 +5,23 @@
 
 load('./mongodb-helpers.js');
 
-const time = new Date();
-const user = {
-  id: null,
-  label: 'System'
-};
-
-db.orderdocumentchanges.deleteMany({});
-
-db.orderdocumentfiles.find({}).forEach(f =>
+db.plans.find({_id: {$gte: new Date('2018-11-01T00:00:00.000Z')}}, {lines: 1, orders: 1}).forEach(plan =>
 {
-  db.orderdocumentchanges.insertOne({
-    time,
-    user,
-    type: 'fileAdded',
-    nc15: f._id,
-    data: f
-  });
+  plan.orders = plan.orders.filter(o => o.mrp !== 'KE3');
+  plan.lines = plan.lines.filter(l => l._id !== 'WB-1');
+
+  db.plans.updateOne({_id: plan._id}, {$set: {
+    orders: plan.orders,
+    lines: plan.lines
+  }});
+
+  const settings = db.plansettings.findOne({_id: plan._id}, {mrps: 1, lines: 1});
+
+  settings.mrps = settings.mrps.filter(m => m._id !== 'KE3');
+  settings.lines = settings.lines.filter(l => l._id !== 'WB-1');
+
+  db.plansettings.updateOne({_id: settings._id}, {$set: {
+    mrps: settings.mrps,
+    lines: settings.lines
+  }});
 });
