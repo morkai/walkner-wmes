@@ -28,12 +28,13 @@ define([
     {
       SettingsView.prototype.afterRender.apply(this, arguments);
 
-      this.setUpIptCheckerMrps();
+      this.setUpMrps('documents-excludedMrps', 'orders.documents.excludedMrps');
+      this.setUpMrps('iptChecker-mrps', 'orders.iptChecker.mrps');
     },
 
-    setUpIptCheckerMrps: function()
+    setUpMrps: function(elId, settingId)
     {
-      this.$id('iptChecker-mrps').select2({
+      this.$id(elId).select2({
         width: '100%',
         allowClear: true,
         multiple: true,
@@ -68,22 +69,24 @@ define([
         }
       });
 
-      this.updateSettingField(this.settings.get('orders.iptChecker.mrps'));
+      this.updateSettingField(this.settings.get(settingId));
     },
 
     shouldAutoUpdateSettingField: function(setting)
     {
-      return setting.id !== 'orders.iptChecker.mrps';
+      return /mrps$/i.test(setting.id);
     },
 
     updateSettingField: function(setting)
     {
-      if (setting && setting.id === 'orders.iptChecker.mrps')
+      if (setting && /mrps$/i.test(setting.id))
       {
-        this.$id('iptChecker-mrps').select2('data', setting.getValue().map(function(mrp)
+        var data = setting.getValue().map(function(mrp)
         {
           return {id: mrp, text: mrp};
-        }));
+        });
+
+        this.$id(setting.id.replace('orders.', '').replace('.', '-')).select2('data', data);
       }
     }
 

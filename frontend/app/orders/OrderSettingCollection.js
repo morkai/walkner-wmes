@@ -58,7 +58,7 @@ define([
         return this.prepareNumericValue(newValue, 1, 9);
       }
 
-      if (/mrps$/.test(id))
+      if (/mrps$/i.test(id))
       {
         if (!Array.isArray(newValue))
         {
