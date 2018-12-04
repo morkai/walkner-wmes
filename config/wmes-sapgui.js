@@ -5,7 +5,7 @@ require('later').date.localTime();
 exports.id = 'wmes-sapgui';
 
 exports.modules = [
-  'express',
+  {id: 'h5-express', name: 'express'},
   'directoryWatcher',
   'sapGui',
   {id: 'sapGui/exporter', name: 'sapGui/exporter:walkner-pos'},
