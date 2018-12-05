@@ -1,0 +1,15 @@
+<tr>
+  <td class="is-min">
+    <input type="hidden" name="employers[<%- i %>]._id" value="<%- employer._id %>">
+    <%= employer._id %>
+  </td>
+  <td><input class="form-control" name="employers[<%- i %>].short" type="text" autocomplete="new-password" value="<%= employer.short %>" required></td>
+  <td><input class="form-control" name="employers[<%- i %>].full" type="text" autocomplete="new-password" value="<%= employer.full %>" required></td>
+  <td class="actions">
+    <div class="actions-group">
+      <button class="btn btn-default opinionSurveys-form-moveRowUp" type="button"><i class="fa fa-arrow-up"></i></button>
+      <button class="btn btn-default opinionSurveys-form-moveRowDown" type="button"><i class="fa fa-arrow-down"></i></button>
+      <button class="btn btn-default opinionSurveys-form-deleteRow" type="button"><i class="fa fa-remove"></i></button>
+    </div>
+  </td>
+</tr>

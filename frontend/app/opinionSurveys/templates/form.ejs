@@ -35,13 +35,31 @@
         <label for="<%- idPrefix %>-endDate" class="control-label is-required"><%- t('opinionSurveys', 'PROPERTY:endDate') %></label>
         <input id="<%- idPrefix %>-endDate" class="form-control" type="date" name="endDate" required>
       </div>
+      <div id="<%- idPrefix %>-lang" class="form-group btn-group" data-toggle="buttons">
+        <% ['pl'].forEach(function(lang) { %>
+        <label class="btn btn-default">
+          <input type="radio" name="langSwitch" value="<%- lang %>"> <%- t('opinionSurveys', 'lang:' + lang) %>
+        </label>
+        <% }) %>
+      </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-intro" class="control-label"><%- t('opinionSurveys', 'PROPERTY:intro') %></label>
         <textarea id="<%- idPrefix %>-intro" class="form-control" name="intro" rows="8"></textarea>
       </div>
-      <div class="form-group has-required-select2">
-        <label for="<%- idPrefix %>-employers" class="control-label is-required"><%- t('opinionSurveys', 'PROPERTY:employers') %></label>
-        <input id="<%- idPrefix %>-employers" type="text" autocomplete="new-password" name="employers" required placeholder="<%- t('opinionSurveys', 'form:placeholder:employers') %>">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-employers" class="control-label"><%- t('opinionSurveys', 'PROPERTY:employers') %></label>
+        <input id="<%- idPrefix %>-employers" type="text" autocomplete="new-password" placeholder="<%- t('opinionSurveys', 'form:placeholder:employers') %>">
+        <table id="<%- idPrefix %>-employersTable" class="table table-condensed table-hover opinionSurveys-form-employersTable">
+          <thead>
+          <tr>
+            <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:employers._id') %></th>
+            <th class="opinionSurveys-form-employersTable-short"><%- t('opinionSurveys', 'PROPERTY:employers.short') %></th>
+            <th><%- t('opinionSurveys', 'PROPERTY:employers.full') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+          </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-superiors" class="control-label"><%- t('opinionSurveys', 'PROPERTY:superiors') %></label>
@@ -49,7 +67,7 @@
         <table id="<%- idPrefix %>-superiorsTable" class="table table-condensed table-hover opinionSurveys-form-superiorsTable">
           <thead>
           <tr>
-            <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:superiors.full') %></th>
+            <th class="opinionSurveys-form-superiorsTable-full"><%- t('opinionSurveys', 'PROPERTY:superiors.full') %></th>
             <th class="opinionSurveys-form-superiorsTable-short"><%- t('opinionSurveys', 'PROPERTY:superiors.short') %></th>
             <th><%- t('opinionSurveys', 'PROPERTY:superiors.division') %></th>
             <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>

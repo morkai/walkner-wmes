@@ -1,8 +1,7 @@
 <tr>
-  <td class="is-min">
+  <td>
     <input type="hidden" name="superiors[<%- i %>]._id" value="<%- superior._id %>">
-    <input type="hidden" name="superiors[<%- i %>].full" value="<%= superior.full %>">
-    <%= superior.full %>
+    <input class="form-control" name="superiors[<%- i %>].full" type="text" autocomplete="new-password" value="<%= superior.full %>" required>
   </td>
   <td><input class="form-control" name="superiors[<%- i %>].short" type="text" autocomplete="new-password" value="<%= superior.short %>" required></td>
   <td><input name="superiors[<%- i %>].division" type="text" autocomplete="new-password" value="<%= superior.division %>" required></td>

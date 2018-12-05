@@ -4,6 +4,7 @@ define([
   'underscore',
   'jquery',
   'form2js',
+  'js2form',
   'app/i18n',
   'app/time',
   'app/user',
@@ -17,12 +18,14 @@ define([
   '../OpinionSurvey',
   '../util/formatQuestionResult',
   'app/opinionSurveys/templates/form',
+  'app/opinionSurveys/templates/formEmployerTr',
   'app/opinionSurveys/templates/formSuperiorTr',
   'app/opinionSurveys/templates/formQuestionTr'
 ], function(
   _,
   $,
   form2js,
+  js2form,
   t,
   time,
   user,
@@ -36,15 +39,22 @@ define([
   OpinionSurvey,
   formatQuestionResult,
   template,
+  renderEmployerTr,
   renderSuperiorTr,
   renderQuestionTr
 ) {
   'use strict';
 
+  function clone(o)
+  {
+    return JSON.parse(JSON.stringify(o));
+  }
+
   return FormView.extend({
 
     template: template,
 
+    employerCounter: 0,
     superiorCounter: 0,
     questionCounter: 0,
 
@@ -64,6 +74,11 @@ define([
             $table.css('display', 'none');
           }
         });
+
+        if ($table.hasClass('opinionSurveys-form-employersTable'))
+        {
+          this.setUpEmployersSelect2(true);
+        }
 
         if ($table.hasClass('opinionSurveys-form-questionsTable'))
         {
@@ -127,10 +142,24 @@ define([
         }
 
         var $btn = this.$id('preview').prop('disabled', true);
+        var mainLang = this.$id('lang').find('input').first().val();
+        var selectedLang = this.$('input[name="langSwitch"]:checked').val();
+
+        if (selectedLang !== mainLang)
+        {
+          this.enableLang();
+        }
+
         var formData = this.serializeForm(form2js(this.el));
+
+        if (selectedLang !== mainLang)
+        {
+          this.disableLang();
+        }
+
         var req = this.ajax({
           method: 'POST',
-          url: '/opinionSurveys/preview',
+          url: '/opinionSurveys/preview?lang=' + selectedLang,
           data: JSON.stringify(formData)
         });
 
@@ -149,9 +178,139 @@ define([
         {
           $btn.prop('disabled', false);
         });
+      },
+
+      'change input[name="langSwitch"]': function()
+      {
+        var mainLang = this.$id('lang').find('input').first().val();
+        var selectedLang = this.$('input[name="langSwitch"]:checked').val();
+
+        if (!this.selectedLang)
+        {
+          this.selectedLang = selectedLang;
+        }
+
+        if (selectedLang === this.selectedLang)
+        {
+          return;
+        }
+
+        var langProps = ['intro', 'employers', 'superiors', 'questions'];
+        var oldFormData = _.pick(this.getFormData(), langProps);
+        var newFormData;
+        var attrs = this.model.attributes;
+
+        if (selectedLang === mainLang)
+        {
+          newFormData = _.pick(attrs, langProps);
+
+          this.enableLang();
+        }
+        else
+        {
+          if (!attrs.lang)
+          {
+            attrs.lang = {};
+          }
+
+          if (!attrs.lang[selectedLang])
+          {
+            attrs.lang[selectedLang] = clone(_.pick(attrs, langProps));
+          }
+
+          newFormData = attrs.lang[selectedLang];
+
+          this.disableLang();
+        }
+
+        if (this.selectedLang === mainLang)
+        {
+          _.assign(attrs, oldFormData);
+        }
+        else
+        {
+          this.copyLang(attrs, attrs.lang[this.selectedLang], oldFormData);
+        }
+
+        js2form(this.el, newFormData, '.', null, false, false);
+
+        this.selectedLang = selectedLang;
       }
 
-    }, FormView.prototype.events),
+    }, FormView.prototype.events, {
+
+      submit: function()
+      {
+        this.sortSuperiors = true;
+
+        this.$id('lang').find('input').first().parent().click();
+
+        this.submitForm();
+
+        this.sortSuperiors = false;
+
+        return false;
+      }
+
+    }),
+
+    enableLang: function()
+    {
+      this.$id('employers').select2('enable');
+      this.$id('superiors').select2('enable');
+      this.$id('questions').select2('enable');
+      this.$('input[name$="division"]').select2('enable');
+      this.$('input[name$="short"]').prop('disabled', false);
+      this.$('.actions .btn').prop('disabled', false);
+    },
+
+    disableLang: function()
+    {
+      this.$id('employers').select2('disable');
+      this.$id('superiors').select2('disable');
+      this.$id('questions').select2('disable');
+      this.$('input[name$="division"]').select2('disable');
+      this.$('input[name$="short"]').prop('disabled', true);
+      this.$('.actions .btn').prop('disabled', true);
+    },
+
+    copyLang: function(main, lang, formData)
+    {
+      var employersMap = {};
+      var superiorsMap = {};
+      var questionsMap = {};
+
+      formData.employers.forEach(function(s) { employersMap[s._id] = s; });
+      formData.superiors.forEach(function(s) { superiorsMap[s._id] = s; });
+      formData.questions.forEach(function(q) { questionsMap[q._id] = q; });
+
+      lang.intro = formData.intro || '';
+      lang.employers = [];
+      lang.superiors = [];
+      lang.questions = [];
+
+      main.employers.forEach(function(e)
+      {
+        lang.employers.push(employersMap[e._id] || clone(e));
+      });
+
+      main.superiors.forEach(function(s)
+      {
+        lang.superiors.push(superiorsMap[s._id] || clone(s));
+      });
+
+      main.questions.forEach(function(s)
+      {
+        lang.questions.push(questionsMap[s._id] || clone(s));
+      });
+    },
+
+    initialize: function()
+    {
+      FormView.prototype.initialize.apply(this, arguments);
+
+      this.sortSuperiors = false;
+    },
 
     serializeToForm: function()
     {
@@ -167,50 +326,56 @@ define([
         formData.endDate = time.format(formData.endDate, 'YYYY-MM-DD');
       }
 
-      formData.employers = (formData.employers || []).map(function(d) { return d._id; }).join(',');
-
       return formData;
     },
 
     serializeForm: function(formData)
     {
-      formData.employers = this.$id('employers').select2('data').map(function(d)
+      if (!formData.employers)
       {
-        return dictionaries.employers.get(d.id).toJSON();
-      });
+        formData.employers = [];
+      }
 
       if (!formData.superiors)
       {
         formData.superiors = [];
       }
 
-      formData.superiors.sort(function(a, b)
+      if (this.sortSuperiors)
       {
-        if (a.division === b.division)
+        formData.superiors.sort(function(a, b)
         {
-          return a.full.localeCompare(b.full);
-        }
+          if (a.division === b.division)
+          {
+            return a.full.localeCompare(b.full);
+          }
 
-        var aMatches = a.division.match(/([a-z])$/);
-        var bMatches = b.division.match(/([a-z])$/);
+          var aMatches = a.division.match(/([a-z])$/);
+          var bMatches = b.division.match(/([a-z])$/);
 
-        if (aMatches && !bMatches)
-        {
-          return -1;
-        }
+          if (aMatches && !bMatches)
+          {
+            return -1;
+          }
 
-        if (!aMatches && bMatches)
-        {
-          return 1;
-        }
+          if (!aMatches && bMatches)
+          {
+            return 1;
+          }
 
-        if (!aMatches && !bMatches)
-        {
-          return a.division.localeCompare(b.division);
-        }
+          if (!aMatches && !bMatches)
+          {
+            return a.division.localeCompare(b.division);
+          }
 
-        return aMatches[1].localeCompare(bMatches[1]);
-      });
+          return aMatches[1].localeCompare(bMatches[1]);
+        });
+      }
+
+      if (!formData.questions)
+      {
+        formData.questions = [];
+      }
 
       return formData;
     },
@@ -219,6 +384,7 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
+      this.renderEmployersTable();
       this.renderSuperiorsTable();
       this.renderQuestionsTable();
 
@@ -226,15 +392,75 @@ define([
       this.setUpSuperiorsSelect2();
       this.setUpQuestionsSelect2();
 
+      this.$id('lang').find('input').first().parent().click();
+
       this.$('input[autofocus]').focus();
     },
 
-    setUpEmployersSelect2: function()
+    setUpEmployersSelect2: function(rebuild)
     {
-      this.$id('employers').select2({
-        multiple: true,
-        data: dictionaries.employers.map(idAndLabel)
+      var $table = this.$id('employersTable');
+      var $tbody = $table.find('tbody');
+      var $select2 = buildEmployersSelect2(this.$id('employers'), $tbody);
+
+      if (rebuild)
+      {
+        return;
+      }
+
+      var view = this;
+
+      if (!$tbody.children().length)
+      {
+        $table.css('display', 'none');
+      }
+
+      $select2.on('change', function(e)
+      {
+        $select2.select2('data', null);
+
+        if (!e.added)
+        {
+          return;
+        }
+
+        var employer = e.added.employer;
+
+        var $tr = $(renderEmployerTr({
+          i: ++view.employerCounter,
+          employer: {
+            _id: employer.id,
+            short: employer.get('short'),
+            full: employer.get('full')
+          }
+        }));
+
+        $tr.appendTo($tbody);
+        $table.css('display', '');
+        $select2.focus();
+
+        buildEmployersSelect2($select2, $tbody);
       });
+
+      function buildEmployersSelect2($select2, $tbody)
+      {
+        var selectedEmployers = $tbody.find('input[name$="_id"]').map(function() { return this.value; }).get();
+
+        return $select2.select2({
+          minimumResultsForSearch: -1,
+          data: dictionaries.employers.map(function(employer)
+          {
+            return {
+              id: employer.id,
+              text: employer.get('short'),
+              employer: employer
+            };
+          }).filter(function(d)
+          {
+            return selectedEmployers.indexOf(d.id) === -1;
+          })
+        });
+      }
     },
 
     setUpSuperiorsSelect2: function()
@@ -296,7 +522,7 @@ define([
         $tbody.append($tr);
         $table.css('display', '');
         view.setUpSuperiorsDivisionSelect2($tr);
-        $tr.find('[name$="short"]').select();
+        $select2.focus();
       });
     },
 
@@ -354,7 +580,7 @@ define([
 
         $tr.appendTo($tbody);
         $table.css('display', '');
-        $tr.find('[name$="short"]').select();
+        $select2.focus();
 
         buildQuestionsSelect2($select2, $tbody);
       });
@@ -381,10 +607,26 @@ define([
       }
     },
 
+    renderEmployersTable: function()
+    {
+      var view = this;
+      var $tbody = this.$id('employersTable').find('tbody').empty();
+
+      (this.model.get('employers') || []).forEach(function(employer)
+      {
+        var $tr = $(renderEmployerTr({
+          i: ++view.employerCounter,
+          employer: employer
+        }));
+
+        $tbody.append($tr);
+      });
+    },
+
     renderSuperiorsTable: function()
     {
       var view = this;
-      var $tbody = this.$id('superiorsTable').find('tbody');
+      var $tbody = this.$id('superiorsTable').find('tbody').empty();
 
       (this.model.get('superiors') || []).forEach(function(superior)
       {
@@ -401,7 +643,7 @@ define([
     renderQuestionsTable: function()
     {
       var view = this;
-      var $tbody = this.$id('questionsTable').find('tbody');
+      var $tbody = this.$id('questionsTable').find('tbody').empty();
 
       (this.model.get('questions') || []).forEach(function(question)
       {

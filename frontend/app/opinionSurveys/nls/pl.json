@@ -70,6 +70,10 @@
   "templates:ketrzyn": "Kętrzyn",
   "templates:pila": "Piła",
 
+  "lang:pl": "Polski",
+  "lang:ua": "Ukraiński",
+  "lang:en": "Angielski",
+
   "report:filter:submit": "Filtruj raport",
   "report:filter:surveys": "Badania",
   "report:filter:divisions": "Wydziały",

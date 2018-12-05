@@ -1,14 +1,19 @@
 .opinionSurveys-form .help-block {
   font-size: 0.9em;
 }
+.opinionSurveys-form-employersTable,
 .opinionSurveys-form-superiorsTable,
 .opinionSurveys-form-questionsTable {
   margin-top: 0.5em;
   margin-bottom: 0;
 }
+.opinionSurveys-form-employersTable-short,
 .opinionSurveys-form-superiorsTable-short,
 .opinionSurveys-form-questionsTable-short {
   width: 200px;
+}
+.opinionSurveys-form-superiorsTable-full {
+  width: 250px;
 }
 .opinionSurveys-select2 > h3 {
   font-size: 1em;
