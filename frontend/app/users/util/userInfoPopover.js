@@ -65,7 +65,7 @@ define([
     userInfoEl.style.cursor = 'wait';
 
     var req = $.ajax({
-      url: '/users/' + userId + '?select(' + PROPS.join(',') + ')'
+      url: '/users?_id=' + userId + '&limit(1)&select(' + PROPS.join(',') + ')'
     });
 
     req.always(function()
@@ -78,11 +78,18 @@ define([
       users[userId] = null;
     });
 
-    req.done(function(user)
+    req.done(function(res)
     {
-      users[userId] = user;
+      if (res.totalCount === 1)
+      {
+        users[userId] = res.collection[0];
 
-      showPopover(userInfoEl, userId);
+        showPopover(userInfoEl, userId);
+      }
+      else
+      {
+        users[userId] = null;
+      }
     });
   }
 
