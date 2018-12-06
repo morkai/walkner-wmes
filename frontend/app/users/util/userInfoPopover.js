@@ -36,6 +36,7 @@ define([
   var sub = null;
   var $popover = null;
   var containerTemplate = null;
+  var showTimer = null;
 
   function setUpPubsub()
   {
@@ -162,13 +163,24 @@ define([
 
     $popover.on('mouseleave.userInfoPopover', function()
     {
+      if (showTimer)
+      {
+        clearTimeout(showTimer);
+        showTimer = null;
+      }
+
       if (hideOnLeave)
       {
         hidePopover();
       }
     });
 
-    $popover.popover('show');
+    if (showTimer)
+    {
+      clearTimeout(showTimer);
+    }
+
+    showTimer = setTimeout(function() { $popover.popover('show'); }, 200);
   }
 
   function hidePopover()
