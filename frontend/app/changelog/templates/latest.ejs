@@ -38,6 +38,8 @@
 <h3>Raporty > CLIP</h3>
 <ul>
   <li>Poprawiono błąd powodujący brak wartości w niektórych kolumnach w wyeksportowanych zleceniach.</li>
+  <li>Dodano akcję 'Ukryj zmiany systemowe' do listy zmian zlecenia. Włączenie opcji sprawi, że wszystkie wpisy
+    w historii zlecenia wykonane przez 'System' zostaną ukryte.</li>
 </ul>
 <h3>Matryca odpowiedzialności</h3>
 <ul>
@@ -48,6 +50,8 @@
 <ul>
   <li>Zmieniono importowanie tabel ETO tak, aby ignorowane były tabele, w treści których nie znajduje się 12NC z tematu
     e-maila.</li>
+  <li>Dodano akcję 'Ukryj zmiany systemowe' do listy zmian zlecenia. Włączenie opcji sprawi, że wszystkie wpisy
+    w historii zlecenia wykonane przez 'System' zostaną ukryte.</li>
 </ul>
 <h3>Dokumentacja</h3>
 <ul>
@@ -59,6 +63,12 @@
     listy w momencie, gdy poprzednie żądanie odświeżenia danych jeszcze się nie skończyło.</li>
   <li>Poprawiono funkcję zaznaczenia pola wyboru w filtrach Od-Do tak, aby działała w starszych wersjach przeglądarki
     Microsoft Edge.</li>
+  <li>Poprawiono eksportowanie danych do formatu XLSX tak, aby możliwe było wyeksportowanie większej ilości danych.
+    Wcześniej eksport kończył się przedwcześnie, jeżeli arkusz nie został wygenerowany w ciągu 2 minut.</li>
+  <li>Zmieniono eksportowanie danych do formatu XLSX tak, aby przez cały czas generowania arkusza widoczny był komunikat
+    '<i class="fa fa-spinner"></i><span>Eksportowanie...</span>'.</li>
+  <li>Zmieniono eksportowanie danych do formatu XLSX tak, aby generowanie arkusza po stronie serwera było przerywane,
+    jeżeli użytkownik zrezygnował z eksportowania.</li>
   <li>Zmieniono akcje aplikacji uruchomionych w trybie wsadowym tak, aby były łatwiejsze w użyciu za pomocą dotyku.</li>
   <li>Zmieniono stronę z błędem 403 Brak uprawnień tak, aby przeglądarka odświeżyła się automatycznie, jeżeli powodem
     błędu jest utrata sesji przez użytkownika.</li>

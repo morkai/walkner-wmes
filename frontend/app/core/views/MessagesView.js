@@ -143,7 +143,8 @@ define([
   {
     var $message = $(messageTemplate({
       type: options.type || 'info',
-      text: options.text
+      text: options.text,
+      sticky: !!options.sticky
     }));
 
     this.$el.append($message.attr('data-view', this.idPrefix));
@@ -176,7 +177,7 @@ define([
   {
     if (!$message)
     {
-      $message = this.$('.message[data-view="' + this.idPrefix + '"]');
+      $message = this.$('.message[data-view="' + this.idPrefix + '"]:not(.message-sticky)');
 
       this.$loadingMessage = null;
     }
@@ -254,8 +255,7 @@ define([
 
     this.$loadingMessage = this.show({
       type: 'warning',
-      text: '<i class="fa fa-spinner fa-spin"></i><span>'
-        + t('core', 'MSG:LOADING') + '</span>',
+      text: t('core', 'MSG:LOADING'),
       immediate: true
     });
   };
@@ -334,8 +334,7 @@ define([
 
     this.$savingMessage = this.show({
       type: 'warning',
-      text: '<i class="fa fa-spinner fa-spin"></i><span>'
-      + t('core', 'MSG:SAVING') + '</span>',
+      text: t('core', 'MSG:SAVING'),
       immediate: true
     });
   };

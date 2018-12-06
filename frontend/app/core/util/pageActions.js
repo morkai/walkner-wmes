@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'jquery',
   'app/i18n',
   'app/viewport',
   '../views/ActionFormView',
@@ -9,6 +10,7 @@ define([
   'app/core/templates/exportAction'
 ], function(
   _,
+  $,
   t,
   viewport,
   ActionFormView,
@@ -83,6 +85,38 @@ define([
     });
 
     return false;
+  }
+
+  function exportXlsx(url)
+  {
+    var $msg = viewport.msg.show({
+      type: 'warning',
+      text: t('core', 'MSG:EXPORTING'),
+      sticky: true
+    });
+
+    var req = $.ajax({
+      url: url
+    });
+
+    req.fail(function()
+    {
+      viewport.msg.show({
+        type: 'error',
+        time: 2500,
+        text: t('core', 'MSG:EXPORTING_FAILURE')
+      });
+    });
+
+    req.done(function(res)
+    {
+      window.open('/express/exports/' + res);
+    });
+
+    req.always(function()
+    {
+      viewport.msg.hide($msg);
+    });
   }
 
   return {
@@ -182,7 +216,27 @@ define([
       return {
         template: template,
         privileges: resolvePrivileges(options.collection, options.privilege, 'VIEW'),
-        callback: options.callback
+        callback: options.callback,
+        afterRender: function($li)
+        {
+          var $xlsx = $li.find('a[data-export-type="xlsx"]');
+
+          if (!$xlsx.length)
+          {
+            return;
+          }
+
+          var href = $xlsx.prop('href');
+
+          $xlsx.prop('href', 'javascript:void(0)'); // eslint-disable-line no-script-url
+
+          $xlsx.on('click', function(e)
+          {
+            e.preventDefault();
+
+            exportXlsx(href);
+          });
+        }
       };
     },
     jump: function(page, collection, options)

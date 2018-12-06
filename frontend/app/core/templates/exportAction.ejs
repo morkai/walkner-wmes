@@ -7,7 +7,7 @@
   </button>
   <ul class="dropdown-menu dropdown-menu-right">
     <% _.forEach(formats, function(format) { %>
-    <li><a href="<%= format.href %>"><%- t('core', 'PAGE_ACTION:export:' + format.type) %></a></li>
+    <li><a data-export-type="<%- format.type %>" href="<%= format.href %>"><%- t('core', 'PAGE_ACTION:export:' + format.type) %></a></li>
     <% }) %>
   </ul>
 </div>
