@@ -105,6 +105,8 @@ exports.modules = [
   {id: 'messenger/client', name: 'messenger/client:wmes-reports-2'},
   {id: 'messenger/client', name: 'messenger/client:wmes-reports-3'},
   {id: 'messenger/client', name: 'messenger/client:wmes-reports-4'},
+  {id: 'messenger/client', name: 'messenger/client:wmes-reports-5'},
+  {id: 'messenger/client', name: 'messenger/client:wmes-reports-6'},
   {id: 'messenger/client', name: 'messenger/client:wmes-watchdog'},
   {id: 'messenger/client', name: 'messenger/client:wmes-alerts'},
   {id: 'messenger/client', name: 'messenger/client:wmes-planning'},
@@ -509,7 +511,7 @@ exports['messenger/client:wmes-importer-results'] = Object.assign({}, ports['wme
   responseTimeout: 5000
 });
 
-[1, 2, 3, 4].forEach(n =>
+[1, 2, 3, 4, 5, 6].forEach(n =>
 {
   exports[`messenger/client:wmes-reports-${n}`] = Object.assign({}, ports[`wmes-reports-${n}`].client, {
     responseTimeout: 4 * 60 * 1000 - 1000

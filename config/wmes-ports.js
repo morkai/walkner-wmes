@@ -124,5 +124,37 @@ module.exports = {
     pubPort: nextPort++,
     repHost: '127.0.0.1',
     repPort: nextPort++
+  },
+  'wmes-reports-5': {
+    server: {
+      pubHost: '127.0.0.1',
+      pubPort: nextPort++,
+      repHost: '127.0.0.1',
+      repPort: nextPort++,
+      pullHost: '127.0.0.1',
+      pullPort: REPORTS_PUSH_PORT
+    },
+    client: {
+      pubHost: '127.0.0.1',
+      pubPort: nextPort - 2,
+      repHost: '127.0.0.1',
+      repPort: nextPort - 1
+    }
+  },
+  'wmes-reports-6': {
+    server: {
+      pubHost: '127.0.0.1',
+      pubPort: nextPort++,
+      repHost: '127.0.0.1',
+      repPort: nextPort++,
+      pullHost: '127.0.0.1',
+      pullPort: REPORTS_PUSH_PORT
+    },
+    client: {
+      pubHost: '127.0.0.1',
+      pubPort: nextPort - 2,
+      repHost: '127.0.0.1',
+      repPort: nextPort - 1
+    }
   }
 };
