@@ -1,7 +1,6 @@
 'use strict';
 
 const DATA_PATH = `${__dirname}/../data`;
-const PRODUCTION_DATA_START_DATE = '2017-01-01';
 const KAIZEN_MULTI = false;
 
 const fs = require('fs');
@@ -20,6 +19,8 @@ try
 catch (err) {} // eslint-disable-line no-empty
 
 exports.id = 'wmes-frontend';
+
+Object.assign(exports, require('./wmes-common'));
 
 exports.modules = [
   'watchdog/memoryUsage',
@@ -114,9 +115,6 @@ exports.modules = [
   'sio'
 ];
 
-exports.productionDataStartDate = PRODUCTION_DATA_START_DATE;
-exports.emailUrlPrefix = 'http://localhost/';
-
 const manifestTemplates = {
   main: fs.readFileSync(`${__dirname}/wmes-manifest.appcache`, 'utf8'),
   ps: fs.readFileSync(`${__dirname}/wmes-manifest-ps.appcache`, 'utf8'),
@@ -158,7 +156,7 @@ exports.updater = {
       frontendAppData: {
         KAIZEN_MULTI,
         XLSX_EXPORT: process.platform === 'win32',
-        PRODUCTION_DATA_START_DATE,
+        PRODUCTION_DATA_START_DATE: exports.PRODUCTION_DATA_START_DATE,
         SHIFT_START_HOUR: 6,
         SHIFT_LENGTH: 8,
         OFFICE365_TENANT: 'Microsoft',

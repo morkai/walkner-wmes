@@ -9,6 +9,8 @@ const IMPORT_OUTPUT_DIR = `${__dirname}/../data/attachments-imported`;
 
 exports.id = 'wmes-importer-sap';
 
+Object.assign(exports, require('./wmes-common'));
+
 exports.modules = [
   {id: 'h5-mongoose', name: 'mongoose'},
   {id: 'h5-mysql', name: 'mysql:ipt'},
