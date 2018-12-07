@@ -312,6 +312,10 @@ define([
     this.setConnectionStatus(this.socket.isConnected() ? 'online' : 'offline');
     this.hideNotAllowedEntries();
     this.hideEmptyEntries();
+
+    this.broker.publish('navbar.rendered', {
+      view: this
+    });
   };
 
   NavbarView.prototype.serialize = function()

@@ -1,0 +1,14 @@
+<div class="navbar-right fap-navbar">
+  <div class="fap-navbarBtn">
+    <div class="dropdown">
+      <button id="<%- idPrefix %>-menu" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"><%- helpers.t('navbar:button') %></button>
+      <ul class="dropdown-menu dropdown-menu-left">
+        <% browseEntriesLinks.forEach(function(link) { %>
+        <li class="navbar-with-button"><a href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)<%- link.rql %>"><%- helpers.t('navbar:' + link.label) %></a><button class="btn btn-default" data-href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)&observers.id=<%- user.data._id %><%- link.rql %>" title="<%- helpers.t('navbar:mine') %>"><i class="fa fa-user"></i></button></li>
+        <% }) %>
+      </ul>
+    </div>
+    <button id="<%- idPrefix %>-add" type="button" class="btn btn-warning fap-navbarBtn-add" title="<%- helpers.t('navbar:add') %>"><i class="fa fa-plus"></i></button>
+    <div id="<%- idPrefix %>-addForm"></div>
+  </div>
+</div>

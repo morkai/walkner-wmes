@@ -1,0 +1,8 @@
+<div class="fap-chat-message <%- message.user.self ? 'fap-is-self' : '' %>" data-user-id="<%- message.user.id %>">
+  <div class="fap-chat-user"><%- message.user.label %></div>
+  <div class="fap-chat-lines" style="border-color: <%- message.color %>">
+    <% message.lines.forEach(function(line) { %>
+    <div class="fap-chat-line" title="<%- line.time %>"><%- line.text %></div>
+    <% }) %>
+  </div>
+</div>

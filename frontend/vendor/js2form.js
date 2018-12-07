@@ -54,8 +54,9 @@
    * @param delimiter
    * @param nodeCallback
    * @param useIdIfEmptyName
+   * @param shouldClean
    */
-  function js2form(rootNode, data, delimiter, nodeCallback, useIdIfEmptyName)
+  function js2form(rootNode, data, delimiter, nodeCallback, useIdIfEmptyName, shouldClean)
   {
     if (arguments.length < 3) delimiter = '.';
     if (arguments.length < 4) nodeCallback = null;
@@ -65,7 +66,7 @@
       formFieldsByName;
 
     fieldValues = object2array(data);
-    formFieldsByName = getFields(rootNode, useIdIfEmptyName, delimiter, {}, true);
+    formFieldsByName = getFields(rootNode, useIdIfEmptyName, delimiter, {}, shouldClean !== false);
 
     for (var i = 0; i < fieldValues.length; i++)
     {

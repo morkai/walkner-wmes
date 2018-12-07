@@ -1,0 +1,16 @@
+<table class="table table-condensed">
+  <thead>
+  <tr>
+    <th class="is-min"><%- helpers.t('addForm:notifications:subdivisions') %></th>
+    <th><%- helpers.t('addForm:notifications:prodFunctions') %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% notifications.forEach(function(n) { %>
+    <tr>
+      <td><%- n.subdivisions.join(',<br>') %></td>
+      <td><%- n.prodFunctions.join(',<br>') %></td>
+    </tr>
+  <% }) %>
+  </tbody>
+</table>

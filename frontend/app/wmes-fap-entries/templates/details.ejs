@@ -1,0 +1,70 @@
+<div class="fap-details">
+  <div id="<%- idPrefix %>-status">
+    <%- model.status %>
+  </div>
+  <div class="fap-props">
+    <div class="fap-prop" data-prop="rid">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:rid') %></div>
+      <div class="fap-prop-value text-mono"><%= model.rid %></div>
+    </div>
+    <div class="fap-prop <%- model.auth.problem ? 'fap-is-editable' : '' %>" data-prop="category">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:category') %></div>
+      <div class="fap-prop-value"><%= model.category %></div>
+    </div>
+    <div class="fap-prop <%- model.multilineProblem ? 'fap-multiline' : '' %> <%- model.auth.problem ? 'fap-is-editable' : '' %>" data-prop="problem">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:problem') %></div>
+      <div class="fap-prop-value"><%= model.problem %></div>
+    </div>
+  </div>
+  <div class="fap-prop-separator"></div>
+  <div class="fap-props">
+    <div class="fap-prop" data-prop="orderNo">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:orderNo') %></div>
+      <div class="fap-prop-value text-mono">
+        <% if (user.isAllowedTo('ORDERS:VIEW')) { %>
+        <a href="#orders/<%- model.orderNo %>"><%- model.orderNo %></a>
+        <% } else { %>
+        <%- model.orderNo %>
+        <% } %>
+      </div>
+    </div>
+    <div class="fap-prop" data-prop="nc12">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:nc12') %></div>
+      <div class="fap-prop-value text-mono"><%= model.nc12 %></div>
+    </div>
+    <div class="fap-prop" data-prop="productName">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:productName') %></div>
+      <div class="fap-prop-value text-mono"><%= model.productName %></div>
+    </div>
+  </div>
+  <div class="fap-prop-separator"></div>
+  <div class="fap-props">
+    <div class="fap-prop" data-prop="qty">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:qty') %></div>
+      <div class="fap-prop-value">
+        <span class="text-mono" data-prop="qtyDone"><%- model.qtyDone %></span>
+        /
+        <span class="text-mono" data-prop="qtyTodo"><%- model.qtyTodo %></span>
+      </div>
+    </div>
+    <div class="fap-prop" data-prop="mrp">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:mrp') %></div>
+      <div class="fap-prop-value text-mono"><%= model.mrp %></div>
+    </div>
+    <div class="fap-prop" data-prop="divisions">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:divisions') %></div>
+      <div class="fap-prop-value"><%= model.divisions %></div>
+    </div>
+    <div class="fap-prop <%- model.auth.lines ? 'fap-is-editable' : '' %>" data-prop="lines">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:lines') %></div>
+      <div class="fap-prop-value"><%= model.lines %></div>
+    </div>
+  </div>
+  <div class="fap-prop-separator"></div>
+  <div style="display: flex">
+    <div id="<%- idPrefix %>-chat"></div>
+    <div id="<%- idPrefix %>-observersAndAttachments" style="flex: 1 1 auto; margin-left: 30px"></div>
+  </div>
+  <div id="<%- idPrefix %>-analysis"></div>
+  <div class="fap-prop-separator" style="margin-top: 15px"></div>
+</div>

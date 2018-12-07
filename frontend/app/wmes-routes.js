@@ -92,7 +92,8 @@ define([
   './orderBomMatchers/routes',
   './help/routes',
   './wmes-toolcal-types/routes',
-  './wmes-toolcal-tools/routes'
+  './wmes-toolcal-tools/routes',
+  './wmes-fap-entries/routes'
 ], function()
 {
   'use strict';

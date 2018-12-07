@@ -22,6 +22,7 @@
       'app/socket',
       'app/router',
       'app/viewport',
+      'app/user',
       'app/updater/index',
       'app/data/loadedModules',
       'app/core/layouts/PageLayout',
@@ -52,6 +53,7 @@
     socket,
     router,
     viewport,
+    user,
     updater,
     loadedModules,
     PageLayout,
@@ -187,7 +189,8 @@
         {
           userReloadTimer = null;
 
-          if (viewport.currentPage && viewport.currentPage.view instanceof FormView)
+          if (user.isReloadLocked()
+            || (viewport.currentPage && viewport.currentPage.view instanceof FormView))
           {
             return;
           }
@@ -280,6 +283,7 @@
       }
 
       $('#app-loading').remove();
+      $('body').removeClass('is-loading');
     }
   }
 })();

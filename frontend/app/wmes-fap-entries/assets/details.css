@@ -1,0 +1,178 @@
+.fap-entries-detailsPage {
+  border-top: 1px dotted #ddd;
+}
+.fap-details {
+  margin: 0 auto;
+  width: 1200px;
+  text-align: center;
+}
+.fap-props {
+  display: flex;
+  line-height: 1;
+}
+.fap-prop-separator {
+  margin: 23px 0;
+  height: 1px;
+  border-top: 1px dotted #ddd;
+}
+.fap-prop {
+  padding: 7px 15px;
+}
+.fap-prop + .fap-prop {
+  border-left: 1px dotted #ddd;
+}
+.fap-prop-name {
+  display: inline-block;
+  text-align: center;
+  font-size: 21px;
+  text-transform: lowercase;
+  font-variant: small-caps;
+  color: #444;
+}
+.fap-prop-value {
+  margin-top: 7px;
+  font-size: 35px;
+  color: #000;
+}
+.fap-prop-value.text-mono {
+  white-space: normal;
+}
+.fap-prop[data-prop="rid"],
+.fap-prop[data-prop="orderNo"],
+.fap-prop[data-prop="qty"] {
+  flex: 0 0 auto;
+  width: 210px;
+}
+.fap-prop[data-prop="category"] {
+  flex: 0 0 auto;
+  width: 400px;
+}
+.fap-prop[data-prop="category"] .fap-prop-value {
+  font-size: 28px;
+  line-height: 35px;
+}
+.fap-prop[data-prop="problem"] {
+  flex: 1 1 auto;
+}
+.fap-prop[data-prop="problem"] .fap-prop-value {
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-line;
+  max-height: 250px;
+  overflow-y: auto;
+}
+.fap-is-editing[data-prop="problem"] .fap-prop-value {
+  overflow: visible;
+}
+.fap-is-editing[data-prop="problem"] .form-control {
+  height: 205px;
+}
+.fap-prop[data-prop="nc12"] {
+  flex: 0 0 auto;
+  width: 265px;
+}
+.fap-prop[data-prop="productName"],
+.fap-prop[data-prop="lines"] {
+  flex: 1 1 auto;
+}
+.fap-prop[data-prop="productName"] .fap-prop-value,
+.fap-prop[data-prop="divisions"] .fap-prop-value {
+  font-size: 28px;
+  line-height: 35px;
+}
+.fap-multiline .fap-prop-value {
+  text-align: justify;
+}
+.fap-prop[data-prop="mrp"] {
+  width: 110px;
+}
+.fap-prop[data-prop="divisions"] {
+  width: 155px;
+}
+.fap-chatAndAttachments {
+  display: flex;
+  margin-top: 30px;
+}
+.fap-details-panel {
+  text-align: left;
+}
+.fap-details-panel-hd {
+  padding: 7px 0;
+  text-align: center;
+  font-size: 21px;
+  text-transform: lowercase;
+  font-variant: small-caps;
+  color: #444;
+}
+.fap-details-panel-bd {
+  overflow-y: scroll;
+  border: 1px solid #ddd;
+  border-bottom: 0;
+}
+.fap-details-list-item {
+  display: flex;
+  align-items: center;
+}
+.fap-details-list-item + .fap-details-list-item {
+  border-top: 1px solid #ddd;
+}
+.fap-details-list-icon {
+  flex: 0 0 auto;
+  padding: 7px 0 7px 7px;
+  width: 21px;
+  text-align: center;
+}
+.fap-details-list-label {
+  flex: 1 1 auto;
+  padding: 7px;
+  margin-left: 0!important;
+  display: block;
+  width: 285px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fap-details-list-action {
+  flex: 0 0 auto;
+  padding: 7px 0;
+  width: 38px;
+  border: 0;
+  border-left: 1px solid #ddd;
+  background: #fff;
+}
+.fap-is-editable .fap-prop-name {
+  position: relative;
+}
+.fap-editable-toggle {
+  display: none;
+  position: absolute;
+  right: -40px;
+  top: -7px;
+  padding: 10px;
+  color: #337ab7;
+}
+.fap-editable-toggle:hover {
+  color: #23527c;
+  cursor: pointer;
+}
+.fap-is-editable:hover .fap-editable-toggle {
+  display: inline-block;
+}
+.fap-is-editing .fap-editable-toggle {
+  display: none!important;
+}
+.fap-is-editing .fap-prop-value {
+  visibility: hidden;
+  position: relative;
+}
+.fap-editor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  visibility: visible;
+}
+.fap-prop[data-prop="problem"] .fap-editor {
+  flex-direction: column;
+}

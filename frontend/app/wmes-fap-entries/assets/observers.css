@@ -1,0 +1,6 @@
+.fap-observers .fap-details-panel-bd {
+  height: 298px;
+}
+.fap-observer.fap-is-online .userInfo-label {
+  font-weight: bold;
+}

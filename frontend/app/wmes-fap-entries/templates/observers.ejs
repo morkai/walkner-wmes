@@ -1,0 +1,15 @@
+<div class="fap-observers fap-details-panel">
+  <div class="fap-details-panel-hd"><%- helpers.t('PROPERTY:observers') %></div>
+  <div class="fap-details-panel-bd fap-details-list">
+    <% observers.forEach(function(observer) { %>
+    <div class="fap-observer fap-details-list-item <%- observer.online ? 'fap-is-online' : '' %>" data-observer-id="<%- observer._id %>">
+      <i class="fa fa-user fap-details-list-icon" style="color: <%- observer.color %>"></i>
+      <span class="fap-details-list-label"><%- observer.label %></span>
+    </div>
+    <% }) %>
+    <div style="border-top: 1px solid #ddd">&nbsp;</div>
+  </div>
+  <div class="fap-details-panel-ft">
+    <input id="<%- idPrefix %>-observer" type="text">
+  </div>
+</div>

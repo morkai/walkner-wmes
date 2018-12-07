@@ -1,0 +1,17 @@
+<div class="fap-attachments fap-details-panel">
+  <div class="fap-details-panel-hd"><%- helpers.t('PROPERTY:attachments') %></div>
+  <div class="fap-details-panel-bd fap-details-list">
+    <% model.attachments.forEach(function(attachment) { %>
+    <div class="fap-attachment fap-details-list-item" data-attachment-id="<%- attachment._id %>" data-preview="<%- attachment.preview ? '1' : '0' %>">
+      <i class="fa <%- attachment.icon %> fap-details-list-icon"></i>
+      <a class="fap-details-list-label" href="/fap/entries/<%- model._id %>/attachments/<%- attachment._id %>" target="_blank"><%= attachment.label %></a>
+      <button class="fap-details-list-action" type="button"><i class="fa fa-wrench"></i></button>
+    </div>
+    <% }) %>
+    <div style="border-top: 1px solid #ddd">&nbsp;</div>
+  </div>
+  <div id="<%- idPrefix %>-preview" class="fap-attachment-preview hidden">
+    <span class="fap-attachment-preview-label"></span>
+    <img class="fap-attachment-preview-image">
+  </div>
+</div>

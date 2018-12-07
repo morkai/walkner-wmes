@@ -1,0 +1,18 @@
+.fap-navbar {
+  position: relative;
+}
+.fap-navbarBtn {
+  margin: 5px 5px 0 0;
+  display: flex;
+}
+.fap-navbarBtn .btn-warning {
+  padding: 0 6px;
+  height: 24px;
+}
+.fap-navbarBtn .btn-warning:first-child {
+  padding: 0 12px;
+  font-weight: bold;
+}
+.fap-navbar-adding .fap-navbarBtn-add {
+  z-index: 1000;
+}

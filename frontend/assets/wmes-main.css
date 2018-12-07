@@ -67,6 +67,7 @@
 @import url("../app/pfepEntries/assets/main.css");
 @import url("../app/help/assets/main.css");
 @import url("../app/wmes-toolcal-tools/assets/main.css");
+@import url("../app/wmes-fap-entries/assets/main.css");
 
 #app-loading {
   position: absolute;

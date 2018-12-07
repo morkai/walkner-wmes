@@ -77,6 +77,9 @@ code.multiline {
   top: 1.5em;
   display: inline-block;
 }
+.is-loading > .message {
+  display: none;
+}
 .message {
   z-index: 1050;
   display: inline-block;

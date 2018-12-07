@@ -26,6 +26,16 @@ define(function()
   }
 
   return {
+    setColors: function(group, colors)
+    {
+      if (typeof groups[group] === 'undefined')
+      {
+        groups[group] = {
+          free: colors.concat(COLORS),
+          assigned: {}
+        };
+      }
+    },
     getColor: function(group, key)
     {
       if (typeof groups[group] === 'undefined')
