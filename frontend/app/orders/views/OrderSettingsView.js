@@ -74,7 +74,7 @@ define([
 
     shouldAutoUpdateSettingField: function(setting)
     {
-      return /mrps$/i.test(setting.id);
+      return !/mrps$/i.test(setting.id);
     },
 
     updateSettingField: function(setting)
