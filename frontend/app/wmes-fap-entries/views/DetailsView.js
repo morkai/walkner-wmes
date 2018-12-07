@@ -4,7 +4,9 @@ define([
   'underscore',
   'jquery',
   'app/core/View',
+  'app/core/util/idAndLabel',
   'app/data/delayReasons',
+  'app/data/orgUnits',
   './ChatView',
   './ObserversView',
   './AttachmentsView',
@@ -14,7 +16,9 @@ define([
   _,
   $,
   View,
+  idAndLabel,
   delayReasons,
+  orgUnits,
   ChatView,
   ObserversView,
   AttachmentsView,
@@ -47,9 +51,10 @@ define([
       view.insertView('#-observersAndAttachments', new AttachmentsView({model: view.model}));
       view.setView('#-analysis', new AnalysisView({model: view.model}));
 
-      this.listenTo(this.model, 'change:status', this.updateStatus);
+      view.listenTo(view.model, 'change:status', view.updateStatus);
       view.listenTo(view.model, 'change:problem', view.updateProblem);
       view.listenTo(view.model, 'change:category', view.updateCategory);
+      view.listenTo(view.model, 'change:lines', view.updateLines);
 
       $(window).on('keydown.' + view.idPrefix, view.onKeyDown.bind(view));
     },
@@ -95,6 +100,11 @@ define([
       this.$('.fap-prop[data-prop="category"]').find('.fap-prop-value').text(this.model.serializeDetails().category);
     },
 
+    updateLines: function()
+    {
+      this.$('.fap-prop[data-prop="lines"]').find('.fap-prop-value').text(this.model.serializeDetails().lines);
+    },
+
     setUpEditable: function($prop)
     {
       $prop.find('.fap-prop-name').append('<i class="fa fa-edit fap-editable-toggle"></i>');
@@ -106,6 +116,8 @@ define([
 
       if (this.editors[prop])
       {
+        $prop.addClass('fap-is-editing');
+
         this.editors[prop].call(this, $prop, prop);
       }
     },
@@ -137,8 +149,6 @@ define([
 
       problem: function($prop)
       {
-        $prop.addClass('fap-is-editing');
-
         var view = this;
         var $form = $('<form class="fap-editor"></form>');
         var $value = $('<textarea class="form-control"></textarea>').val(view.model.get('problem'));
@@ -170,8 +180,6 @@ define([
 
       category: function($prop)
       {
-        $prop.addClass('fap-is-editing');
-
         var view = this;
         var $form = $('<form class="fap-editor"></form>');
         var $value = $('<select class="form-control"></select>');
@@ -206,6 +214,53 @@ define([
           .appendTo($prop.find('.fap-prop-value'));
 
         $value.focus();
+      },
+
+      lines: function($prop)
+      {
+        var view = this;
+        var $form = $('<form class="fap-editor"></form>');
+        var $value = $('<input>');
+        var $submit = $('<button class="btn btn-primary"><i class="fa fa-check"></i></button>');
+
+        $form.on('submit', function()
+        {
+          var newValue = $value.val().split(',').sort(sort);
+          var oldValue = view.model.get('lines').sort(sort);
+
+          if (newValue.length === 0 || JSON.stringify(newValue) === JSON.stringify(oldValue))
+          {
+            return view.hideEditor();
+          }
+
+          view.model.change('lines', newValue);
+
+          view.hideEditor();
+
+          return false;
+        });
+
+        $value.val(view.model.get('lines').join(','));
+
+        $form
+          .append($value)
+          .append($submit)
+          .appendTo($prop.find('.fap-prop-value'));
+
+        $value.select2({
+          width: '100%',
+          multiple: true,
+          allowClear: true,
+          placeholder: ' ',
+          data: orgUnits.getActiveByType('prodLine').map(idAndLabel)
+        });
+
+        $value.focus();
+
+        function sort(a, b)
+        {
+          return a.localeCompare(b, undefined, {numeric: true, ignorePunctuation: true});
+        }
       }
 
     }
