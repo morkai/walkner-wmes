@@ -50,6 +50,7 @@ define([
 
     initialize: function()
     {
+      this.animate = !!this.options.animate;
       this.requiredStatus = this.options.mode === 'requests' ? 'new' : 'accepted';
       this.cancelling = null;
 
@@ -279,6 +280,14 @@ define([
         return done();
       }
 
+      if (!this.animate)
+      {
+        $request.remove();
+        this.recount();
+
+        return done();
+      }
+
       var position = $request.position();
 
       $request.css({
@@ -333,9 +342,17 @@ define([
           this.$el.append($request);
         }
 
-        $request
-          .stop(true, false)
-          .fadeIn(done);
+        if (this.animate)
+        {
+          $request
+            .stop(true, false)
+            .fadeIn(done);
+        }
+        else
+        {
+          $request.css('display', '');
+        }
+
         this.recount();
       }
       else if (done)
@@ -380,16 +397,26 @@ define([
 
       var $request = view.findRequestEl(request.id);
 
-      if ($request.length)
+      if (!$request.length)
       {
-        $request
-          .stop(true, false)
-          .fadeOut(function()
-          {
-            $request.remove();
-            view.recount();
-          });
+        return;
       }
+
+      if (!view.animate)
+      {
+        $request.remove();
+        view.recount();
+
+        return;
+      }
+
+      $request
+        .stop(true, false)
+        .fadeOut(function()
+        {
+          $request.remove();
+          view.recount();
+        });
     },
 
     onChange: function(request)
@@ -411,14 +438,21 @@ define([
 
           if ($request.length)
           {
-            $request.fadeIn();
+            if (this.animate)
+            {
+              $request.fadeIn();
+            }
+            else
+            {
+              $request.css('display', '');
+            }
           }
           else
           {
             this.insert(request);
           }
         }
-        else if (!this.model.moving[request.id])
+        else if (!this.animate || !this.model.moving[request.id])
         {
           this.onRemove(request);
         }
@@ -426,7 +460,7 @@ define([
         return;
       }
 
-      if (request.get('status') === this.requiredStatus && !this.model.moving[request.id])
+      if (request.get('status') === this.requiredStatus && (!this.animate || !this.model.moving[request.id]))
       {
         this.insert(request);
       }

@@ -56,6 +56,20 @@ define([
   };
   var EVENTS_COLLAPSED_STORAGE_KEY = 'ISA_EVENTS_COLLAPSED';
   var HOTKEYS_VISIBILITY_STORAGE_KEY = 'ISA_HOTKEYS_VISIBILITY';
+  var MESSAGE_TIME = {
+    error: 5000,
+    acceptRequest: 10000,
+    finishResponse: 2500
+  };
+
+  if (window.ENV === 'development')
+  {
+    MESSAGE_TIME = {
+      error: 5000,
+      acceptRequest: 1000,
+      finishResponse: 500
+    };
+  }
 
   return View.extend({
 
@@ -235,6 +249,7 @@ define([
 
     initialize: function()
     {
+      this.animate = !this.options.embedded;
       this.onResize = _.debounce(this.resize.bind(this), 30);
       this.onActivity = _.debounce(this.handleInactivity.bind(this), 30000);
       this.pendingChanges = [];
@@ -290,11 +305,13 @@ define([
     {
       this.requestsView = new IsaLineStatesView({
         mode: 'requests',
-        model: this.model
+        model: this.model,
+        animate: this.animate
       });
       this.responsesView = new IsaLineStatesView({
         mode: 'responses',
-        model: this.model
+        model: this.model,
+        animate: this.animate
       });
       this.eventsView = new IsaEventsView({
         collection: this.eventz
@@ -685,7 +702,7 @@ define([
           return;
         }
 
-        return this.showMessage('error', 5000, whmanNotFoundMessage({
+        return this.showMessage('error', MESSAGE_TIME.error, whmanNotFoundMessage({
           personnelId: personnelId
         }));
       }
@@ -704,7 +721,7 @@ define([
         return this.acceptRequest(request, warehouseman);
       }
 
-      this.showMessage('error', 5000, noActionMessage({
+      this.showMessage('error', MESSAGE_TIME.error, noActionMessage({
         whman: warehouseman.getLabel()
       }));
     },
@@ -745,13 +762,13 @@ define([
       {
         if (err)
         {
-          page.showMessage('error', 5000, acceptFailureMessage({
+          page.showMessage('error', MESSAGE_TIME.error, acceptFailureMessage({
             error: err.message
           }));
         }
         else
         {
-          page.showMessage('info', 10000, acceptSuccessMessage({
+          page.showMessage('info', MESSAGE_TIME.acceptRequest, acceptSuccessMessage({
             whman: responder.getLabel(),
             requestType: request.get('type'),
             orgUnit: request.get('orgUnit'),
@@ -770,13 +787,13 @@ define([
       {
         if (err)
         {
-          page.showMessage('error', 5000, finishFailureMessage({
+          page.showMessage('error', MESSAGE_TIME.error, finishFailureMessage({
             error: err.message
           }));
         }
         else
         {
-          page.showMessage('success', 2500, finishSuccessMessage({
+          page.showMessage('success', MESSAGE_TIME.finishResponse, finishSuccessMessage({
             type: requestType,
             line: request.getProdLineId()
           }));
@@ -804,36 +821,49 @@ define([
         .addClass('message-' + type);
 
       $message.css({
-        display: 'none',
+        display: this.animate ? 'none' : 'block',
         marginTop: ($message.outerHeight() / 2 * -1) + 'px',
         marginLeft: ($message.outerWidth() / 2 * -1) + 'px'
       });
 
-      $message.fadeIn();
+      if (this.animate)
+      {
+        $message.fadeIn();
+      }
 
       this.timers.hideMessage = setTimeout(this.hideMessage.bind(this), time);
     },
 
     hideMessage: function()
     {
-      if (!this.timers.hideMessage)
+      var page = this;
+
+      if (!page.timers.hideMessage)
       {
         return;
       }
 
-      clearTimeout(this.timers.hideMessage);
+      clearTimeout(page.timers.hideMessage);
 
-      var page = this;
       var $overlay = page.$id('messageOverlay');
       var $message = page.$id('message');
 
-      $message.fadeOut(function()
+      if (page.animate)
+      {
+        $message.fadeOut(hide);
+      }
+      else
+      {
+        hide();
+      }
+
+      function hide()
       {
         $overlay.css('display', 'none');
         $message.css('display', 'none');
 
         page.timers.hideMessage = null;
-      });
+      }
     },
 
     collapseEvents: function()
