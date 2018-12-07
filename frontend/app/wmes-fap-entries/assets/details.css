@@ -172,6 +172,7 @@
   width: 100%;
   display: flex;
   visibility: visible;
+  font-size: 14px;
 }
 .fap-prop[data-prop="problem"] .fap-editor {
   flex-direction: column;

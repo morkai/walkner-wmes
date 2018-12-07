@@ -333,6 +333,41 @@ define([
       this.update(update);
     },
 
+    multiChange: function(data, hasOldValues)
+    {
+      var entry = this;
+      var change = {
+        date: new Date(),
+        user: user.getInfo(),
+        data: {},
+        comment: ''
+      };
+      var update = {};
+
+      Object.keys(data).forEach(function(prop)
+      {
+        var oldValue;
+        var newValue;
+
+        if (hasOldValues)
+        {
+          oldValue = data[prop][0];
+          newValue = data[prop][1];
+        }
+        else
+        {
+          oldValue = entry.get(prop);
+          newValue = data[prop];
+        }
+
+        change.data[prop] = [oldValue, newValue];
+        update[prop] = newValue;
+      });
+
+      entry.handleChange(change);
+      entry.update(update);
+    },
+
     update: function(data)
     {
       var entry = this;
@@ -445,7 +480,9 @@ define([
 
       status: 1,
       problem: 1,
-      category: 1
+      category: 1,
+      divisions: 1,
+      lines: 1
 
     }
 
