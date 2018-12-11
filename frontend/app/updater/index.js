@@ -140,7 +140,7 @@ define([
   function showAddressUpdateDialog(page)
   {
     if (page.pageId !== 'dashboard'
-      || window.location.hostname === 'ket.wmes.pl'
+      || /\.wmes\.pl$/.test(window.location.hostname)
       || window.location.hostname === 'localhost'
       || window.sessionStorage.getItem('WMES_ADDRESS_UPDATE') === '1'
       || window.document.body.classList.contains('is-embedded'))
