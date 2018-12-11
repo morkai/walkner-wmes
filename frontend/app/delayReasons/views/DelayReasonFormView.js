@@ -1,12 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/data/orgUnits',
   'app/data/prodFunctions',
   'app/core/util/idAndLabel',
   'app/core/views/FormView',
   'app/delayReasons/templates/form'
 ], function(
+  _,
   orgUnits,
   prodFunctions,
   idAndLabel,
@@ -19,7 +21,7 @@ define([
 
     template: formTemplate,
 
-    events: Object.assign({
+    events: _.assign({
 
       'click #-addNotification': function()
       {

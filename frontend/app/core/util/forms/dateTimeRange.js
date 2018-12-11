@@ -1,12 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   'app/i18n',
   'app/time',
   'app/core/util/getShiftStartInfo',
   'app/core/templates/forms/dateTimeRange'
 ], function(
+  _,
   $,
   t,
   time,
@@ -109,7 +111,7 @@ define([
       Object.keys(ranges).forEach(function(k) { ranges[k] = false; });
     }
 
-    var rangeGroups = Object.assign({}, RANGE_GROUPS);
+    var rangeGroups = _.assign({}, RANGE_GROUPS);
 
     label.ranges.split(' ').forEach(function(group)
     {
