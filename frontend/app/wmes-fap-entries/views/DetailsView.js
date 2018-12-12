@@ -7,10 +7,10 @@ define([
   'app/core/util/idAndLabel',
   'app/data/delayReasons',
   'app/data/orgUnits',
+  '../Entry',
   './ChatView',
   './ObserversView',
   './AttachmentsView',
-  './AnalysisView',
   'app/wmes-fap-entries/templates/details'
 ], function(
   _,
@@ -19,10 +19,10 @@ define([
   idAndLabel,
   delayReasons,
   orgUnits,
+  Entry,
   ChatView,
   ObserversView,
   AttachmentsView,
-  AnalysisView,
   template
 ) {
   'use strict';
@@ -45,16 +45,13 @@ define([
     initialize: function()
     {
       var view = this;
+      var entry = view.model;
 
-      view.setView('#-chat', new ChatView({model: view.model}));
-      view.insertView('#-observersAndAttachments', new ObserversView({model: view.model}));
-      view.insertView('#-observersAndAttachments', new AttachmentsView({model: view.model}));
-      view.setView('#-analysis', new AnalysisView({model: view.model}));
+      view.setView('#-chat', new ChatView({model: entry}));
+      view.insertView('#-observersAndAttachments', new ObserversView({model: entry}));
+      view.insertView('#-observersAndAttachments', new AttachmentsView({model: entry}));
 
-      view.listenTo(view.model, 'change:status', view.updateStatus);
-      view.listenTo(view.model, 'change:problem', view.updateProblem);
-      view.listenTo(view.model, 'change:category', view.updateCategory);
-      view.listenTo(view.model, 'change:lines', view.updateLines);
+      view.listenTo(entry, 'change', view.update);
 
       $(window).on('keydown.' + view.idPrefix, view.onKeyDown.bind(view));
     },
@@ -71,43 +68,153 @@ define([
       };
     },
 
-    afterRender: function()
+    update: function()
     {
       var view = this;
 
-      view.$('.fap-prop.fap-is-editable').each(function()
+      if (!view.isRendered())
       {
-        view.setUpEditable(view.$(this), this.dataset.prop);
+        return;
+      }
+
+      Object.keys(view.model.changed).forEach(function(prop)
+      {
+        if (Entry.AUTH_PROPS[prop])
+        {
+          cancelAnimationFrame(view.timers.auth);
+
+          view.timers.auth = requestAnimationFrame(view.updateAuth.bind(view));
+        }
+
+        var updater = view.resolveUpdater(prop);
+
+        if (!updater)
+        {
+          return;
+        }
+
+        cancelAnimationFrame(view.timers[prop]);
+
+        view.timers[prop] = requestAnimationFrame(updater.bind(view));
       });
     },
 
-    updateStatus: function()
+    resolveUpdater: function(prop)
     {
-      this.$id('status').text(this.model.get('status'));
+      switch (prop)
+      {
+        case 'status':
+          return this.updateMessage;
+
+        case 'why5':
+          return this.updateWhy5;
+
+        case 'analysisNeed':
+        case 'analysisDone':
+          return this.updateAnalysis;
+
+        case 'problem':
+        case 'solution':
+          return this.updateMultiline.bind(this, prop);
+
+        case 'category':
+        case 'divisions':
+        case 'lines':
+        case 'assessment':
+          return this.updateProp.bind(this, prop);
+      }
     },
 
-    updateProblem: function()
+    updateAuth: function()
+    {
+      var view = this;
+
+      if (!view.isRendered())
+      {
+        return;
+      }
+
+      var details = view.model.serializeDetails();
+
+      Object.keys(details.auth).forEach(function(prop)
+      {
+        var $prop = view.$('.fap-prop[data-prop="' + prop + '"]');
+
+        if (!$prop.length)
+        {
+          return;
+        }
+
+        $prop.toggleClass('fap-is-editable', details.auth[prop]);
+
+        var $toggle = $prop.find('.fap-editable-toggle');
+
+        if (!$toggle.length)
+        {
+          $prop.find('.fap-prop-name').append('<i class="fa fa-edit fap-editable-toggle"></i>');
+        }
+      });
+    },
+
+    updateText: function($prop, text)
+    {
+      var el = $prop instanceof $ ? $prop.find('.fap-prop-value')[0] : $prop;
+
+      if (el.hasChildNodes())
+      {
+        if (el.childNodes[0].nodeType === Node.TEXT_NODE)
+        {
+          el = el.childNodes[0];
+        }
+        else
+        {
+          el = el.insertBefore(document.createTextNode(text), el);
+        }
+      }
+
+      el.textContent = text;
+    },
+
+    updateProp: function(prop)
+    {
+      this.updateText(this.$('.fap-prop[data-prop="' + prop + '"]'), this.model.serializeDetails()[prop]);
+    },
+
+    updateMessage: function()
     {
       var details = this.model.serializeDetails();
-      var $prop = this.$('.fap-prop[data-prop="problem"]');
 
-      $prop.toggleClass('fap-multiline', details.multilineProblem);
-      $prop.find('.fap-prop-value').text(details.problem);
+      this.$id('message')
+        .attr('class', 'message message-inline message-' + details.message.type)
+        .text(details.message.text);
     },
 
-    updateCategory: function()
+    updateMultiline: function(prop)
     {
-      this.$('.fap-prop[data-prop="category"]').find('.fap-prop-value').text(this.model.serializeDetails().category);
+      var details = this.model.serializeDetails();
+      var $prop = this.$('.fap-prop[data-prop="' + prop + '"]');
+
+      $prop.toggleClass('fap-is-multiline', details[prop + 'Multiline']);
+
+      this.updateText($prop, details[prop]);
     },
 
-    updateLines: function()
+    updateWhy5: function()
     {
-      this.$('.fap-prop[data-prop="lines"]').find('.fap-prop-value').text(this.model.serializeDetails().lines);
+      var view = this;
+      var why5 = view.model.get('why5');
+
+      view.$('.fap-analysis-why-value').each(function(i)
+      {
+        view.updateText(this, why5[i] || '');
+      });
     },
 
-    setUpEditable: function($prop)
+    updateAnalysis: function()
     {
-      $prop.find('.fap-prop-name').append('<i class="fa fa-edit fap-editable-toggle"></i>');
+      this.updateProp('analysisNeed');
+      this.updateProp('analysisDone');
+      this.updateMessage();
     },
 
     showEditor: function($prop, prop)
@@ -147,23 +254,25 @@ define([
 
     editors: {
 
-      problem: function($prop)
+      textArea: function($prop, required)
       {
         var view = this;
+        var prop = $prop[0].dataset.prop;
+        var oldValue = view.model.get(prop);
         var $form = $('<form class="fap-editor"></form>');
-        var $value = $('<textarea class="form-control"></textarea>').val(view.model.get('problem'));
+        var $value = $('<textarea class="form-control"></textarea>').val(oldValue).prop('required', required);
         var $submit = $('<button class="btn btn-primary btn-lg"><i class="fa fa-check"></i></button>');
 
         $form.on('submit', function()
         {
-          var value = $value.val().trim();
+          var newValue = $value.val().trim();
 
-          if (value === '' || value === view.model.get('problem'))
+          if (newValue === oldValue)
           {
             return view.hideEditor();
           }
 
-          view.model.change('problem', value);
+          view.model.change(prop, newValue);
 
           view.hideEditor();
 
@@ -176,25 +285,45 @@ define([
           .appendTo($prop.find('.fap-prop-value'));
 
         $value.focus();
+
+        if ($submit[0].scrollIntoViewIfNeeded)
+        {
+          $submit[0].scrollIntoViewIfNeeded();
+        }
+        else
+        {
+          $submit[0].scrollIntoView();
+        }
+      },
+
+      problem: function($prop)
+      {
+        this.editors.textArea.call(this, $prop, true);
+      },
+
+      solution: function($prop)
+      {
+        this.editors.textArea.call(this, $prop, false);
       },
 
       category: function($prop)
       {
         var view = this;
+        var oldValue = view.model.get('category');
         var $form = $('<form class="fap-editor"></form>');
         var $value = $('<select class="form-control"></select>');
         var $submit = $('<button class="btn btn-primary"><i class="fa fa-check"></i></button>');
 
         $form.on('submit', function()
         {
-          var value = $value.val();
+          var newValue = $value.val();
 
-          if (value === view.model.get('category'))
+          if (newValue === oldValue)
           {
             return view.hideEditor();
           }
 
-          view.model.change('category', value);
+          view.model.change('category', newValue);
 
           view.hideEditor();
 
@@ -206,7 +335,7 @@ define([
           return '<option value="' + dr.id + '">' + _.escape(dr.getLabel()) + '</option>';
         }).join(''));
 
-        $value.val(view.model.get('category'));
+        $value.val(oldValue);
 
         $form
           .append($value)
@@ -219,28 +348,46 @@ define([
       lines: function($prop)
       {
         var view = this;
+        var oldValue = {
+          divisions: [].concat(view.model.get('divisions')).sort(sort),
+          lines: [].concat(view.model.get('lines')).sort(sort)
+        };
         var $form = $('<form class="fap-editor"></form>');
         var $value = $('<input>');
         var $submit = $('<button class="btn btn-primary"><i class="fa fa-check"></i></button>');
 
         $form.on('submit', function()
         {
-          var newValue = $value.val().split(',').sort(sort);
-          var oldValue = view.model.get('lines').sort(sort);
+          var newValue = {
+            divisions: [],
+            lines: $value.val().split(',').sort(sort)
+          };
 
-          if (newValue.length === 0 || JSON.stringify(newValue) === JSON.stringify(oldValue))
+          newValue.lines.forEach(function(line)
+          {
+            var division = orgUnits.getAllForProdLine(line).division;
+
+            if (division && newValue.divisions.indexOf(division) === -1)
+            {
+              newValue.divisions.push(division);
+            }
+          });
+
+          newValue.divisions.sort(sort);
+
+          if (newValue.lines.length === 0 || JSON.stringify(newValue) === JSON.stringify(oldValue))
           {
             return view.hideEditor();
           }
 
-          view.model.change('lines', newValue);
+          view.model.multiChange(newValue);
 
           view.hideEditor();
 
           return false;
         });
 
-        $value.val(view.model.get('lines').join(','));
+        $value.val(oldValue.lines.join(','));
 
         $form
           .append($value)
@@ -261,6 +408,152 @@ define([
         {
           return a.localeCompare(b, undefined, {numeric: true, ignorePunctuation: true});
         }
+      },
+
+      why5: function($prop)
+      {
+        var view = this;
+        var oldValues = [].concat(view.model.get('why5'));
+
+        $prop.find('.fap-analysis-why').each(function(i)
+        {
+          var $why = view.$(this);
+          var $form = $('<form class="fap-editor"></form>');
+          var $value = $('<input class="form-control">').val(oldValues[i] || '');
+          var $submit = $('<button class="btn btn-primary" tabindex="-1"><i class="fa fa-check"></i></button>');
+
+          $form.on('submit', function()
+          {
+            submit();
+
+            return false;
+          });
+
+          $form
+            .append($value)
+            .append($submit)
+            .appendTo($why.find('.fap-analysis-why-value'));
+        });
+
+        $prop.find('.form-control').first().focus();
+
+        function submit()
+        {
+          var newValues = $prop.find('.form-control').map(function() { return this.value.trim(); }).get();
+          var currentValues = view.model.get('why5');
+          var why5 = [];
+          var changed = false;
+
+          newValues.forEach(function(newValue, i)
+          {
+            var oldValue = oldValues[i] || '';
+
+            if (newValue === oldValue)
+            {
+              why5.push(currentValues[i] || '');
+            }
+            else
+            {
+              why5.push(newValue);
+
+              changed = true;
+            }
+          });
+
+          if (changed)
+          {
+            view.model.change('why5', why5);
+          }
+
+          view.hideEditor();
+
+          return false;
+        }
+      },
+
+      assessment: function($prop)
+      {
+        var view = this;
+        var oldValue = this.model.get('assessment');
+        var $form = $('<form class="fap-editor"></form>');
+
+        ['unspecified', 'effective', 'ineffective', 'repeatable'].forEach(function(option)
+        {
+          $('<button type="button" class="btn btn-lg btn-default"></button>')
+            .toggleClass('active', oldValue === option)
+            .val(option)
+            .text(view.t('assessment:' + option))
+            .appendTo($form);
+        });
+
+        $form.on('click', '.btn', function(e)
+        {
+          var newValue = e.currentTarget.value;
+
+          if (newValue !== oldValue)
+          {
+            view.model.change('assessment', newValue);
+          }
+
+          view.hideEditor();
+        });
+
+        $form.appendTo($prop.find('.fap-prop-value'));
+      },
+
+      yesNo: function($prop, prepareData)
+      {
+        var view = this;
+        var prop = $prop[0].dataset.prop;
+        var oldValue = this.model.get(prop);
+        var $form = $('<form class="fap-editor fap-editor-yesNo"></form>');
+
+        ['true', 'false'].forEach(function(option)
+        {
+          $('<button type="button" class="btn btn-lg btn-default"></button>')
+            .toggleClass('active', String(oldValue) === option)
+            .val(option)
+            .text(view.t('core', 'BOOL:' + option))
+            .appendTo($form);
+        });
+
+        $form.on('click', '.btn', function(e)
+        {
+          var newValue = e.currentTarget.value === 'true';
+
+          if (newValue !== oldValue)
+          {
+            if (prepareData)
+            {
+              view.model.multiChange(prepareData(newValue, oldValue, prop, $prop));
+            }
+            else
+            {
+              view.model.change(prop, newValue);
+            }
+          }
+
+          view.hideEditor();
+        });
+
+        $form.appendTo($prop.find('.fap-prop-value'));
+      },
+
+      analysisNeed: function($prop)
+      {
+        this.editors.yesNo.call(this, $prop, function(newValue)
+        {
+          // TODO Reset Why and Solution?
+          return {
+            analysisNeed: newValue,
+            analysisDone: false
+          };
+        });
+      },
+
+      analysisDone: function($prop)
+      {
+        this.editors.yesNo.call(this, $prop);
       }
 
     }

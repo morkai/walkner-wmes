@@ -40,7 +40,16 @@ define([
       var actions = [];
       var auth = this.model.serializeDetails().auth;
 
-      if (auth.status && this.model.get('status') === 'started')
+      if (auth.restart && this.model.get('status') === 'finished')
+      {
+        actions.push({
+          type: 'info',
+          icon: 'thumbs-down',
+          label: this.t('PAGE_ACTION:restart'),
+          callback: this.restart.bind(this)
+        });
+      }
+      else if (auth.status && this.model.get('status') === 'started')
       {
         actions.push({
           type: 'success',
@@ -104,7 +113,12 @@ define([
 
     finish: function()
     {
-      this.update('status', 'finished');
+      this.model.change('status', 'finished');
+    },
+
+    restart: function()
+    {
+      this.model.change('status', 'started');
     },
 
     updateStatus: function()

@@ -2,30 +2,28 @@
   <div class="fap-analysis-header"><%- helpers.t('assessment:header') %></div>
   <div class="fap-prop-separator"></div>
   <div class="fap-props">
-    <div class="fap-prop <%- model.auth.assessment ? 'fap-is-editable' : '' %>" data-prop="assessment" style="flex: 1 1 auto">
+    <div class="fap-prop" data-prop="assessment" style="flex: 1 1 auto">
       <div class="fap-prop-name"><%- helpers.t('PROPERTY:assessment') %></div>
       <div class="fap-prop-value"><%- model.assessment %></div>
     </div>
-    <div class="fap-prop <%- model.auth.analysisNeed ? 'fap-is-editable' : '' %>" data-prop="analysisNeed" style="flex: 1 1 auto">
+    <div class="fap-prop" data-prop="analysisNeed" style="flex: 1 1 auto">
       <div class="fap-prop-name"><%- helpers.t('PROPERTY:analysisNeed') %></div>
       <div class="fap-prop-value"><%- model.analysisNeed %></div>
     </div>
-    <div class="fap-prop <%- model.auth.analysisDone ? 'fap-is-editable' : '' %>" data-prop="analysisDone" style="flex: 1 1 auto">
+    <div class="fap-prop" data-prop="analysisDone" style="flex: 1 1 auto">
       <div class="fap-prop-name"><%- helpers.t('PROPERTY:analysisDone') %></div>
       <div class="fap-prop-value"><%- model.analysisDone %></div>
     </div>
   </div>
   <div class="fap-prop-separator"></div>
   <div class="fap-props">
-    <div class="fap-prop <%- model.auth.why5 ? 'fap-is-editable' : '' %>" data-prop="why5" style="flex: 1 1 auto">
+    <div class="fap-prop" data-prop="why5" style="flex: 1 1 auto">
       <div class="fap-prop-name"><%- helpers.t('PROPERTY:why5') %></div>
       <div class="fap-prop-value">
         <% for (var i = 0; i < 5; ++i) { %>
         <div class="fap-analysis-why" data-why-index="<%- i %>">
           <div class="fap-analysis-why-label"><%- helpers.t('PROPERTY:why') %></div>
-          <div class="fap-analysis-why-value">
-            <%- model.why5[i] || '' %>
-          </div>
+          <div class="fap-analysis-why-value"><%- model.why5[i] || '' %></div>
         </div>
         <% } %>
       </div>
@@ -33,9 +31,9 @@
   </div>
   <div class="fap-prop-separator"></div>
   <div class="fap-props">
-    <div class="fap-prop <%- model.multilineSolution ? 'fap-multiline' : '' %> <%- model.auth.solution ? 'fap-is-editable' : '' %>" data-prop="solution" style="flex: 1 1 auto">
+    <div class="fap-prop fap-is-textarea <%- model.multilineSolution ? 'fap-is-multiline' : '' %>" data-prop="solution" style="flex: 1 1 auto">
       <div class="fap-prop-name"><%- helpers.t('PROPERTY:solution') %></div>
-      <div class="fap-prop-value"><%= model.solution || '-' %></div>
+      <div class="fap-prop-value"><%= model.solution %></div>
     </div>
   </div>
 </div>

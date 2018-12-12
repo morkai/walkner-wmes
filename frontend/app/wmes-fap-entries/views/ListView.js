@@ -17,6 +17,21 @@ define([
 
     className: 'fap-entries-list is-clickable is-colored',
 
+    remoteTopics: function()
+    {
+      var topics = {};
+      var topicPrefix = this.collection.getTopicPrefix();
+
+      if (topicPrefix)
+      {
+        topics[topicPrefix + '.added'] = 'refreshCollection';
+        topics[topicPrefix + '.updated.*'] = 'onModelUpdated';
+        topics[topicPrefix + '.deleted'] = 'onModelDeleted';
+      }
+
+      return topics;
+    },
+
     serializeColumns: function()
     {
       return [
@@ -81,6 +96,14 @@ define([
           return $(template).addClass('fap-list-popover');
         }
       });
+    },
+
+    onModelUpdated: function(message)
+    {
+      if (Object.keys(message.change.data).length)
+      {
+        this.refreshCollection(message);
+      }
     }
 
   });

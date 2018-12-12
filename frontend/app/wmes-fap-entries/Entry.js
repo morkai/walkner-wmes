@@ -25,9 +25,17 @@ define([
 ) {
   'use strict';
 
+  var AUTH_PROPS = {
+    status: true,
+    analysisNeed: true,
+    analysisDone: true,
+    analyzers: true
+  };
+
   var STATUS_CLASS = {
-    pending: '',
-    started: 'warning',
+    pending: 'danger',
+    started: 'info',
+    analyzing: 'warning',
     finished: 'success'
   };
 
@@ -72,7 +80,7 @@ define([
     {
       this.serialized = null;
 
-      this.on('change', function()
+      this.on('sync change', function()
       {
         this.serialized = null;
       });
@@ -99,18 +107,10 @@ define([
       obj.divisions = obj.divisions.join('; ');
       obj.lines = obj.lines.join('; ');
 
-      if (obj.assessment === 'unspecified')
-      {
-        obj.analysisNeed = '-';
-        obj.analysisDone = '-';
-      }
-      else
-      {
-        obj.analysisNeed = t('core', 'BOOL:' + obj.analysisNeed);
-        obj.analysisDone = t('core', 'BOOL:' + obj.analysisDone);
-      }
-
       obj.assessment = t(this.nlsDomain, 'assessment:' + obj.assessment);
+      obj.analyzing = obj.analysisNeed && !obj.analysisDone;
+      obj.analysisDone = obj.analysisNeed ? t('core', 'BOOL:' + obj.analysisDone) : '-';
+      obj.analysisNeed = t('core', 'BOOL:' + obj.analysisNeed);
 
       return this.serialized = obj;
     },
@@ -124,7 +124,7 @@ define([
 
       var obj = this.serialize();
 
-      obj.className = STATUS_CLASS[obj.status];
+      obj.className = STATUS_CLASS[obj.analyzing ? 'analyzing' : obj.status];
       obj.category = '<span class="fap-list-category">' + _.escape(obj.category) + '</span>';
       obj.problem = '<span class="fap-list-problem">' + _.escape(obj.problem) + '</span>';
 
@@ -141,37 +141,65 @@ define([
       var obj = this.serialize();
 
       obj.problem = obj.problem.trim().replace(/\n{3,}/, '\n\n');
+      obj.solution = obj.solution.trim().replace(/\n{3,}/, '\n\n') || '-';
       obj.multilineProblem = obj.problem.indexOf('\n') !== -1;
       obj.multilineSolution = obj.solution.indexOf('\n') !== -1;
       obj.chat = this.serializeChat();
       obj.attachments = obj.attachments.map(this.serializeAttachment, this);
       obj.observers = this.serializeObservers();
       obj.auth = this.serializeAuth();
+      obj.message = {
+        type: '',
+        text: ''
+      };
+
+      switch (obj.status)
+      {
+        case 'pending':
+          obj.message.type = 'error';
+          obj.message.text = t(this.nlsDomain, 'message:pending');
+          break;
+
+        case 'started':
+          obj.message.type = obj.analyzing ? 'warning' : 'info';
+          obj.message.text = t(this.nlsDomain, 'message:started:' + obj.analyzing);
+          break;
+
+        case 'finished':
+          obj.message.type = obj.analyzing ? 'warning' : 'success';
+          obj.message.text = t(this.nlsDomain, 'message:finished:' + obj.analyzing);
+          break;
+      }
 
       return this.serialized = obj;
     },
 
     serializeAuth: function()
     {
-      var canManage = user.isAllowedTo('FAP:MANAGE');
-      var isProcessEngineer = user.isAllowedTo('FN:process-engineer');
-      var isMaster = user.isAllowedTo('FN:master');
-      var isLeader = user.isAllowedTo('FN:leader');
-      var isAnalyzer = _.some(this.get('analyzers'), function(u) { return user.data._id === u.id; });
+      var manage = user.isAllowedTo('FAP:MANAGE');
+      var procEng = user.isAllowedTo('FN:process-engineer');
+      var master = user.isAllowedTo('FN:master');
+      var leader = user.isAllowedTo('FN:leader');
+      var analyzer = _.some(this.get('analyzers'), function(u) { return user.data._id === u.id; });
+      var status = this.get('status');
+      var pending = status === 'pending';
+      var started = status === 'started';
+      var analysisNeed = this.get('analysisNeed');
+      var analysisDone = this.get('analysisDone');
 
       return {
         delete: this.canDelete(),
-        status: canManage || isProcessEngineer || isMaster || isLeader,
-        problem: canManage || isProcessEngineer || isMaster || isLeader,
-        category: canManage || isProcessEngineer,
-        lines: canManage || isProcessEngineer,
-        assessment: canManage || isProcessEngineer || isMaster,
-        // TODO assessment
-        analysisNeed: canManage || isProcessEngineer || isMaster,
-        analysisDone: canManage || isProcessEngineer || isMaster,
-        analysers: canManage || isProcessEngineer || isMaster,
-        why5: canManage || isProcessEngineer || isMaster || isLeader || isAnalyzer,
-        solution: canManage || isProcessEngineer || isMaster || isLeader || isAnalyzer
+        restart: manage,
+        status: manage || procEng || master || leader,
+        problem: started && (manage || procEng || master || leader),
+        category: started && (manage || procEng),
+        lines: started && (manage || procEng),
+        assessment: !pending && (manage || procEng || master),
+        analysisNeed: !pending && (manage || procEng || master),
+        analysisDone: !pending && analysisNeed && (manage || procEng || master),
+        analysers: !pending && analysisNeed && !analysisDone && (manage || procEng || master),
+        why5: !pending && analysisNeed && !analysisDone && (manage || procEng || master || leader || analyzer),
+        solution: !pending && analysisNeed && !analysisDone && (manage || procEng || master || leader || analyzer)
       };
     },
 
@@ -186,7 +214,7 @@ define([
         user: {
           id: owner.id,
           label: userInfoTemplate({userInfo: owner}),
-          self
+          self: self
         },
         color: self ? 'transparent' : colorFactory.getColor('fap/users', owner.id),
         lines: [{
@@ -200,7 +228,7 @@ define([
         }]
       }];
 
-      entry.get('attachments').forEach(a =>
+      entry.get('attachments').forEach(function(a)
       {
         if (a.user.id !== owner.id || a.date !== createdAt)
         {
@@ -414,6 +442,9 @@ define([
     handleChange: function(change)
     {
       var entry = this;
+      var data = {
+        changes: entry.get('changes').concat(change)
+      };
 
       Object.keys(change.data).forEach(function(prop)
       {
@@ -421,33 +452,33 @@ define([
 
         if (handler === 1)
         {
-          entry.set(prop, change.data[prop][1]);
+          data[prop] = change.data[prop][1];
         }
         else if (handler)
         {
-          handler.call(entry.propChangeHandlers, entry, change.data[prop], change);
+          handler.call(entry.propChangeHandlers, data, entry, change.data[prop], change);
         }
       });
 
-      entry.set('changes', entry.get('changes').concat(change));
+      entry.set(data);
     },
 
     propChangeHandlers: {
 
-      subscribers: function(entry, data)
+      subscribers: function(data, entry, subscribers)
       {
         var observers = entry.get('observers');
 
-        if (data[0] === null)
+        if (subscribers[0] === null)
         {
-          this.addObservers(entry, observers, data[1]);
+          this.addObservers(data, entry, observers, subscribers[1]);
         }
-        else if (data[1] === null)
+        else if (subscribers[1] === null)
         {
-          this.removeObservers(entry, observers, data[0]);
+          this.removeObservers(data, entry, observers, subscribers[0]);
         }
       },
-      addObservers: function(entry, oldObservers, subscribers)
+      addObservers: function(data, entry, oldObservers, subscribers)
       {
         var observerMap = {};
 
@@ -467,24 +498,33 @@ define([
           }
         });
 
-        entry.set('observers', newObservers);
+        data.observers = newObservers;
       },
-      removeObservers: function(entry, oldObservers, subscribers)
+      removeObservers: function(data, entry, oldObservers, subscribers)
       {
         var subscriberMap = {};
 
         subscribers.forEach(function(s) { subscriberMap[s.id] = true; });
 
-        entry.set('observers', oldObservers.filter(function(o) { return !subscriberMap[o.user.id]; }));
+        data.observers = oldObservers.filter(function(o) { return !subscriberMap[o.user.id]; });
       },
 
       status: 1,
       problem: 1,
       category: 1,
       divisions: 1,
-      lines: 1
+      lines: 1,
+      why5: 1,
+      solution: 1,
+      assessment: 1,
+      analysisNeed: 1,
+      analysisDone: 1
 
     }
+
+  }, {
+
+    AUTH_PROPS: AUTH_PROPS
 
   });
 });

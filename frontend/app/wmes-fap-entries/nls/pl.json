@@ -15,6 +15,7 @@
   "PAGE_ACTION:jump:title": "Skocz do zgłoszenia po ID",
   "PAGE_ACTION:jump:placeholder": "ID zgłoszenia",
   "PAGE_ACTION:finish": "Zakończ zgłoszenie",
+  "PAGE_ACTION:restart": "Wznów zgłoszenie",
 
   "PANEL:TITLE:changes": "Historia zmian",
 
@@ -29,7 +30,7 @@
   "PROPERTY:category": "Kategoria",
   "PROPERTY:problem": "Opis problemu",
   "PROPERTY:uploads": "Załączniki",
-  "PROPERTY:divisions": "Dział",
+  "PROPERTY:divisions": "Wydział",
   "PROPERTY:lines": "Linia",
   "PROPERTY:qty": "Ilość",
   "PROPERTY:qtyTodo": "Ilość do zrobienia",
@@ -54,6 +55,12 @@
   "assessment:effective": "Skuteczne",
   "assessment:ineffective": "Nieskuteczne",
   "assessment:repeatable": "Powtarzają się",
+
+  "message:pending": "Zgłoszenie czeka na weryfikację.",
+  "message:started:true": "Problem jest analizowany.",
+  "message:started:false": "Problem jest w trakcie rozwiązywania.",
+  "message:finished:true": "Zgłoszenie zostało zakończone, ale analiza nadal trwa.",
+  "message:finished:false": "Zgłoszenie zostało zakończone.",
 
   "FORM:ACTION:add": "Dodaj wpis",
   "FORM:ERROR:addFailure": "Nie udało się dodać zgłoszenia.",

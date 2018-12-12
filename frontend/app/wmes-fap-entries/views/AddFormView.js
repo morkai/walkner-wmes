@@ -35,7 +35,7 @@ define([
 
     template: template,
 
-    events: Object.assign({
+    events: _.assign({
 
       'click #-cancel': function()
       {

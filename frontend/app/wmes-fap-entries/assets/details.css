@@ -6,6 +6,11 @@
   width: 1200px;
   text-align: center;
 }
+.fap-details .message {
+  margin-bottom: 30px;
+  text-align: center;
+  box-shadow: none;
+}
 .fap-props {
   display: flex;
   line-height: 1;
@@ -61,10 +66,10 @@
   max-height: 250px;
   overflow-y: auto;
 }
-.fap-is-editing[data-prop="problem"] .fap-prop-value {
+.fap-is-editing.fap-is-textarea .fap-prop-value {
   overflow: visible;
 }
-.fap-is-editing[data-prop="problem"] .form-control {
+.fap-is-editing.fap-is-textarea .form-control {
   height: 205px;
 }
 .fap-prop[data-prop="nc12"] {
@@ -80,7 +85,7 @@
   font-size: 28px;
   line-height: 35px;
 }
-.fap-multiline .fap-prop-value {
+.fap-is-multiline .fap-prop-value {
   text-align: justify;
 }
 .fap-prop[data-prop="mrp"] {
@@ -161,12 +166,17 @@
 .fap-is-editing .fap-editable-toggle {
   display: none!important;
 }
-.fap-is-editing .fap-prop-value {
+.fap-is-editing .fap-prop-value,
+.fap-is-editing .fap-analysis-why-value {
   visibility: hidden;
   position: relative;
 }
+.fap-is-editing .fap-analysis-why-label {
+  visibility: visible;
+}
 .fap-editor {
   position: absolute;
+  z-index: 1;
   top: 0;
   left: 0;
   width: 100%;
@@ -174,6 +184,26 @@
   visibility: visible;
   font-size: 14px;
 }
-.fap-prop[data-prop="problem"] .fap-editor {
+.fap-prop[data-prop="problem"] .fap-editor,
+.fap-prop[data-prop="solution"] .fap-editor,
+.fap-prop[data-prop="assessment"] .fap-editor {
   flex-direction: column;
+}
+.fap-prop[data-prop="why5"] .fap-editor {
+  top: 16px;
+}
+.fap-prop[data-prop="solution"] .fap-editor {
+  margin-bottom: 30px;
+}
+.fap-editor .btn:focus {
+  z-index: 1;
+}
+.fap-prop[data-prop="assessment"] .fap-editor .btn + .btn {
+  margin-top: -1px;
+}
+.fap-editor-yesNo .btn {
+  flex: 1 1 auto;
+}
+.fap-editor-yesNo .btn:last-child {
+  margin-left: -1px;
 }
