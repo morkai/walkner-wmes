@@ -31,8 +31,12 @@
       <tbody>
       <% model.notifications.forEach(function(n) { %>
       <tr>
-        <td class="is-min"><ul><li><%- n.subdivisions.join('<li>') %></ul></td>
-        <td><ul><li><%- n.prodFunctions.join('<li>') %></ul></td>
+        <td class="is-min">
+          <% if (n.subdivisions.length) { %>
+          <ul style="padding: 0; list-style-position: inside"><li><%- n.subdivisions.join('<li>') %></ul>
+          <% } %>
+        </td>
+        <td><ul style="padding: 0; list-style-position: inside"><li><%- n.prodFunctions.join('<li>') %></ul></td>
       </tr>
       <% }) %>
       </tbody>

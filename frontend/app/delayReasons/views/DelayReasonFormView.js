@@ -123,8 +123,8 @@ define([
         .map(function(n)
         {
           return {
-            subdivisions: n.subdivisions.split(',').filter(function(d) { return !!d.length; }),
-            prodFunctions: n.prodFunctions.split(',').filter(function(d) { return !!d.length; })
+            subdivisions: (n.subdivisions || '').split(',').filter(function(d) { return !!d.length; }),
+            prodFunctions: (n.prodFunctions || '').split(',').filter(function(d) { return !!d.length; })
           };
         })
         .filter(function(n)
