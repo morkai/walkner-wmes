@@ -113,13 +113,22 @@ define([
       var view = this;
       var $send = view.$id('send');
       var comment = $send.val().trim();
+      var data = {};
 
       $send.val('');
+
+      if (user.isLoggedIn() && !view.model.isObserver())
+      {
+        data.subscribers = [null, [{
+          id: user.data._id,
+          label: user.getLabel()
+        }]];
+      }
 
       view.model.handleChange({
         date: new Date(),
         user: user.getInfo(),
-        data: {},
+        data: data,
         comment: comment
       });
 

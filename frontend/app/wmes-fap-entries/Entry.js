@@ -86,6 +86,11 @@ define([
       });
     },
 
+    isObserver: function()
+    {
+      return _.some(this.get('observers'), function(o) { return o.user.id === user.data._id; });
+    },
+
     serialize: function()
     {
       if (this.serialized)
@@ -142,8 +147,8 @@ define([
 
       obj.problem = obj.problem.trim().replace(/\n{3,}/, '\n\n');
       obj.solution = obj.solution.trim().replace(/\n{3,}/, '\n\n') || '-';
-      obj.multilineProblem = obj.problem.indexOf('\n') !== -1;
-      obj.multilineSolution = obj.solution.indexOf('\n') !== -1;
+      obj.problemMultiline = obj.problem.indexOf('\n') !== -1;
+      obj.solutionMultiline = obj.solution.indexOf('\n') !== -1;
       obj.chat = this.serializeChat();
       obj.attachments = obj.attachments.map(this.serializeAttachment, this);
       obj.observers = this.serializeObservers();

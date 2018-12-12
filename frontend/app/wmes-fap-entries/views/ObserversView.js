@@ -1,10 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/core/View',
   'app/users/util/setUpUserSelect2',
   'app/wmes-fap-entries/templates/observers'
 ], function(
+  _,
   View,
   setUpUserSelect2,
   template
@@ -40,7 +42,7 @@ define([
 
     initialize: function()
     {
-      this.listenTo(this.model, 'change:observers', this.onObserversChanged);
+      this.listenTo(this.model, 'change:observers', _.debounce(this.onObserversChanged.bind(this), 1));
       this.listenTo(this.model, 'change:presence', this.onPresenceChanged);
     },
 
