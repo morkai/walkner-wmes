@@ -28,6 +28,9 @@
   "FORM:ERROR:addFailure": "Nie udało się dodać powodu opóźnień.",
   "FORM:ERROR:editFailure": "Nie udało się zmodyfikować powodu opóźnień.",
   "FORM:notifications:add": "Dodaj nowe powiadomienie",
+  "FORM:notifiedUsers:label": "Tester powiadomień",
+  "FORM:notifiedUsers:sms": "SMS?",
+  "FORM:notifiedUsers:mrp": "MRP",
 
   "noNotifications": "Brak zdefiniowanych powiadomień.",
 

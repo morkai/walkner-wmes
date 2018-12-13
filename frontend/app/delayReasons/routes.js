@@ -54,7 +54,12 @@ define([
   router.map('/delayReasons;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/delayReasons/views/DelayReasonFormView', nls],
+      [
+        'app/core/pages/AddFormPage',
+        'app/delayReasons/views/DelayReasonFormView',
+        'i18n!app/nls/users',
+        nls
+      ],
       function(AddFormPage, DelayReasonFormView)
       {
         return new AddFormPage({
@@ -68,7 +73,12 @@ define([
   router.map('/delayReasons/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/delayReasons/views/DelayReasonFormView', nls],
+      [
+        'app/core/pages/EditFormPage',
+        'app/delayReasons/views/DelayReasonFormView',
+        'i18n!app/nls/users',
+        nls
+      ],
       function(EditFormPage, DelayReasonFormView)
       {
         return new EditFormPage({

@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'app/time',
   'app/data/orgUnits',
   'app/data/prodFunctions',
   'app/core/util/idAndLabel',
@@ -9,6 +10,7 @@ define([
   'app/delayReasons/templates/form'
 ], function(
   _,
+  time,
   orgUnits,
   prodFunctions,
   idAndLabel,
@@ -39,7 +41,11 @@ define([
 
         $notification.find('input').select2('destroy');
         $notification.remove();
-      }
+      },
+
+      'input #-notifiedUsers-mrp': 'testNotifications',
+      'change #-notifiedUsers-date': 'testNotifications',
+      'change input[name^="notifications"]': 'testNotifications'
 
     }, FormView.prototype.events),
 
@@ -74,6 +80,7 @@ define([
       FormView.prototype.afterRender.apply(this, arguments);
 
       this.$notification = this.$id('notifications').children().first().detach();
+      this.$notifiedUser = this.$id('notifiedUsers').children().first().detach();
 
       (this.model.get('notifications') || []).forEach(this.addNotification, this);
 
@@ -133,6 +140,72 @@ define([
         });
 
       return formData;
+    },
+
+    testNotifications: function()
+    {
+      var view = this;
+
+      if (view.testReq)
+      {
+        view.testReq.abort();
+      }
+
+      var mrp = view.$id('notifiedUsers-mrp').val();
+      var date = view.$id('notifiedUsers-date').val();
+      var notifications = view.getFormData().notifications;
+
+      if (mrp.length < 3 || !notifications.length)
+      {
+        return;
+      }
+
+      var moment = time.getMoment(date, 'YYYY-MM-DD[T]HH:mm');
+
+      if (moment.isValid())
+      {
+        date = moment.valueOf();
+      }
+
+      view.testReq = view.ajax({
+        method: 'POST',
+        url: '/fap/entries;resolve-participants',
+        data: JSON.stringify({
+          mrp: mrp,
+          date: date,
+          notifications: notifications,
+          category: null
+        })
+      });
+
+      view.testReq.fail(function()
+      {
+        view.$id('notifiedUsers').empty();
+      });
+
+      view.testReq.done(function(res)
+      {
+        var html = '';
+
+        res.collection.forEach(function(user)
+        {
+          var prodFunction = prodFunctions.get(user.prodFunction);
+
+          html += '<tr>'
+            + '<td class="is-min">' + _.escape(user.lastName) + ' ' + _.escape(user.firstName) + '</td>'
+            + '<td class="is-min">' + _.escape(prodFunction ? prodFunction.getLabel() : user.prodFunction) + '</td>'
+            + '<td class="is-min">' + _.escape(user.kdPosition) + '</td>'
+            + '<td class="is-min">' + view.t('core', 'BOOL:' + user.sms) + '</td>'
+            + '<td></td>';
+        });
+
+        view.$id('notifiedUsers').html(html);
+      });
+
+      view.testReq.always(function()
+      {
+        view.testReq = null;
+      });
     }
 
   });

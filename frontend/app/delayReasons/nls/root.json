@@ -20,11 +20,18 @@
     "PROPERTY:active": "Active?",
     "PROPERTY:name": "Name",
     "PROPERTY:drm": "DRM category",
+    "PROPERTY:notifications": "Notifications",
+    "PROPERTY:notifications.subdivisions": "Subdivisions",
+    "PROPERTY:notifications.prodFunctions": "Functions",
 
     "FORM:ACTION:add": "Add delay reason",
     "FORM:ACTION:edit": "Edit delay reason",
     "FORM:ERROR:addFailure": "Failed to add the new delay reason.",
     "FORM:ERROR:editFailure": "Failed to edit the delay reason.",
+    "FORM:notifications:add": "Add notification",
+    "FORM:notifiedUsers:label": "Notifications tester",
+    "FORM:notifiedUsers:sms": "SMS?",
+    "FORM:notifiedUsers:mrp": "MRP",
 
     "noNotifications": "No notifications defined.",
 

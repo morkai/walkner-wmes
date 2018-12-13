@@ -1,4 +1,4 @@
-<form class="delayReasons-form" method="post" action="<%- formAction %>">
+<form method="post" action="<%- formAction %>">
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
@@ -21,7 +21,7 @@
       </div>
       <div class="form-group">
         <label class="control-label"><%- helpers.t('PROPERTY:notifications') %></label>
-        <table class="table table-bordered table-condensed delayReasons-form-notifications">
+        <table class="table table-bordered table-condensed">
           <thead>
           <tr>
             <th class="is-min"><%- helpers.t('PROPERTY:notifications.subdivisions') %></th>
@@ -44,6 +44,33 @@
           </tbody>
         </table>
         <button id="<%- idPrefix %>-addNotification" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- helpers.t('FORM:notifications:add') %></span></button>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- helpers.t('FORM:notifiedUsers:label') %></label>
+        <div style="display: flex; margin-bottom: 5px">
+          <input id="<%- idPrefix %>-notifiedUsers-mrp" class="form-control" type="text" style="width: 46px" placeholder="<%- helpers.t('FORM:notifiedUsers:mrp') %>">
+          <input id="<%- idPrefix %>-notifiedUsers-date" class="form-control" type="datetime-local" style="width: 200px; margin-left: 5px">
+        </div>
+        <table class="table table-bordered table-condensed" style="margin-bottom: 0">
+          <thead>
+          <tr>
+            <th class="is-min"><%- helpers.t('users', 'PROPERTY:name') %></th>
+            <th class="is-min"><%- helpers.t('users', 'PROPERTY:prodFunction') %></th>
+            <th class="is-min"><%- helpers.t('users', 'PROPERTY:kdPosition') %></th>
+            <th class="is-min"><%- helpers.t('FORM:notifiedUsers:sms') %></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody id="<%- idPrefix %>-notifiedUsers">
+          <tr>
+            <td class="is-min"></td>
+            <td class="is-min"></td>
+            <td class="is-min"></td>
+            <td class="is-min"></td>
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     <div class="panel-footer">
