@@ -18,6 +18,10 @@
 .is-editing .mor-watch tr:hover .btn-group {
   display: table;
 }
+.mor-watch .fa-calendar + span {
+  display: inline-block;
+  min-width: 68px;
+}
 .mor-section:nth-child(2) > h3 {
   margin-top: 8px;
 }
