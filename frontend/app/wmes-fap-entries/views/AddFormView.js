@@ -8,9 +8,9 @@ define([
   'app/core/views/FormView',
   'app/core/util/uuid',
   'app/core/util/idAndLabel',
-  'app/data/delayReasons',
   'app/data/orgUnits',
   'app/users/util/setUpUserSelect2',
+  '../dictionaries',
   'app/wmes-fap-entries/templates/addForm',
   'app/wmes-fap-entries/templates/addFormUpload',
   'app/wmes-fap-entries/templates/notificationsPopover'
@@ -22,9 +22,9 @@ define([
   FormView,
   uuid,
   idAndLabel,
-  delayReasons,
   orgUnits,
   setUpUserSelect2,
+  dictionaries,
   template,
   uploadTemplate,
   notificationsPopoverTemplate
@@ -125,6 +125,8 @@ define([
         entry.uploading = null;
         entry.uploadedFiles = [];
       }
+
+      this.listenTo(dictionaries.categories, 'change', this.setUpCategorySelect2);
     },
 
     destroy: function()
@@ -139,6 +141,8 @@ define([
       $('.fap-addForm-backdrop').remove();
 
       user.unlockReload(this.reloadLock);
+
+      dictionaries.unload();
     },
 
     afterRender: function()
@@ -146,6 +150,8 @@ define([
       var view = this;
 
       FormView.prototype.afterRender.apply(view, arguments);
+
+      dictionaries.load();
 
       var $backdrop = $('.fap-addForm-backdrop');
 
@@ -156,11 +162,6 @@ define([
           .on('click', function() { view.trigger('cancel'); });
       }
 
-      view.$id('category').select2({
-        dropdownCssClass: 'fap-addForm-select2',
-        data: delayReasons.map(idAndLabel)
-      });
-
       view.$id('lines').select2({
         dropdownCssClass: 'fap-addForm-select2',
         multiple: true,
@@ -170,6 +171,7 @@ define([
       });
 
       view.renderUploads();
+      view.setUpCategorySelect2();
       view.setUpOwnerSelect2();
       view.setUpDnd(view.$el);
       view.setUpDnd($backdrop);
@@ -237,6 +239,14 @@ define([
       return this.renderPartial(uploadTemplate, {
         uploaded: uploaded,
         upload: upload
+      });
+    },
+
+    setUpCategorySelect2: function()
+    {
+      this.$id('category').select2({
+        dropdownCssClass: 'fap-addForm-select2',
+        data: dictionaries.categories.where({active: true}).map(idAndLabel)
       });
     },
 
@@ -463,8 +473,8 @@ define([
 
     updateNotifications: function()
     {
-      var delayReason = delayReasons.get(this.$id('category').val());
-      var notifications = delayReason && delayReason.get('notifications') || [];
+      var category = dictionaries.categories.get(this.$id('category').val());
+      var notifications = category && category.get('notifications') || [];
 
       if (!notifications.length)
       {
@@ -478,7 +488,7 @@ define([
         trigger: 'hover',
         html: true,
         content: this.renderPartial(notificationsPopoverTemplate, {
-          notifications: delayReason.serialize().notifications
+          notifications: category.serialize().notifications
         }),
         template: function(template)
         {

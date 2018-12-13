@@ -5,8 +5,8 @@ define([
   'jquery',
   'app/core/View',
   'app/core/util/idAndLabel',
-  'app/data/delayReasons',
   'app/data/orgUnits',
+  '../dictionaries',
   '../Entry',
   './ChatView',
   './ObserversView',
@@ -17,8 +17,8 @@ define([
   $,
   View,
   idAndLabel,
-  delayReasons,
   orgUnits,
+  dictionaries,
   Entry,
   ChatView,
   ObserversView,
@@ -330,10 +330,17 @@ define([
           return false;
         });
 
-        $value.html(delayReasons.map(function(dr)
-        {
-          return '<option value="' + dr.id + '">' + _.escape(dr.getLabel()) + '</option>';
-        }).join(''));
+        var categories = dictionaries.categories
+          .filter(function(c)
+          {
+            return c.id === oldValue || c.get('active');
+          })
+          .map(function(c)
+          {
+            return '<option value="' + c.id + '">' + _.escape(c.getLabel()) + '</option>';
+          });
+
+        $value.html(categories.join(''));
 
         $value.val(oldValue);
 

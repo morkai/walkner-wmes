@@ -9,7 +9,7 @@ define([
   'app/core/util/idAndLabel',
   'app/users/util/setUpUserSelect2',
   'app/mrpControllers/util/setUpMrpSelect2',
-  'app/data/delayReasons',
+  '../dictionaries',
   'app/wmes-fap-entries/templates/filter',
   'app/core/util/ExpandableSelect'
 ], function(
@@ -21,7 +21,7 @@ define([
   idAndLabel,
   setUpUserSelect2,
   setUpMrpSelect2,
-  delayReasons,
+  dictionaries,
   template
 ) {
   'use strict';
@@ -146,7 +146,7 @@ define([
         width: '450px',
         multiple: true,
         allowClear: true,
-        data: delayReasons.map(idAndLabel)
+        data: dictionaries.categories.map(idAndLabel)
       });
     },
 

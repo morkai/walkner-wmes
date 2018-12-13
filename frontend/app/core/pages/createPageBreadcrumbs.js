@@ -9,6 +9,11 @@ define([
 ) {
   'use strict';
 
+  function i18n(nlsDomain, key)
+  {
+    return t.bound(t.has(nlsDomain, key) ? nlsDomain : 'core', key);
+  }
+
   return function createPageBreadcrumbs(page, breadcrumbs)
   {
     var modelOrCollection = page.modelProperty ? page[page.modelProperty] : (page.model || page.collection);
@@ -25,13 +30,13 @@ define([
         if (typeof breadcrumb === 'string')
         {
           return {
-            label: breadcrumb[0] === ':' ? t.bound(nlsDomain, 'BREADCRUMBS' + breadcrumb) : breadcrumb
+            label: breadcrumb[0] === ':' ? i18n(nlsDomain, 'BREADCRUMBS' + breadcrumb) : breadcrumb
           };
         }
 
         if (typeof breadcrumb.label === 'string' && breadcrumb.label[0] === ':')
         {
-          breadcrumb.label = t.bound(nlsDomain, 'BREADCRUMBS' + breadcrumb.label);
+          breadcrumb.label = i18n(nlsDomain, 'BREADCRUMBS' + breadcrumb.label);
         }
 
         return breadcrumb;
@@ -41,14 +46,14 @@ define([
     if (page.browseBreadcrumb !== false)
     {
       breadcrumbs.unshift({
-        label: t.bound(nlsDomain, _.result(page, 'browseBreadcrumb') || 'BREADCRUMBS:browse'),
+        label: i18n(nlsDomain, _.result(page, 'browseBreadcrumb') || 'BREADCRUMBS:browse'),
         href: breadcrumbs.length ? modelOrCollection.genClientUrl('base') : null
       });
     }
 
     if (page.baseBreadcrumb === true)
     {
-      breadcrumbs.unshift(t.bound(nlsDomain, 'BREADCRUMBS:base'));
+      breadcrumbs.unshift(i18n(nlsDomain, 'BREADCRUMBS:base'));
     }
     else if (page.baseBreadcrumb)
     {
@@ -61,7 +66,7 @@ define([
       else
       {
         breadcrumbs.unshift({
-          label: t.bound(nlsDomain, 'BREADCRUMBS:base'),
+          label: i18n(nlsDomain, 'BREADCRUMBS:base'),
           href: String(baseBreadcrumbs)
         });
       }

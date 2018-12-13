@@ -5,12 +5,14 @@ define([
   'app/core/pages/DetailsPage',
   'app/core/util/onModelDeleted',
   'app/core/util/pageActions',
+  '../dictionaries',
   '../views/DetailsView'
 ], function(
   socket,
   DetailsPage,
   onModelDeleted,
   pageActions,
+  dictionaries,
   DetailsView
 ) {
   'use strict';
@@ -92,11 +94,20 @@ define([
     destroy: function()
     {
       this.leave();
+
+      dictionaries.unload();
+    },
+
+    load: function(when)
+    {
+      return when(this.model.fetch(), dictionaries.load());
     },
 
     afterRender: function()
     {
       DetailsPage.prototype.afterRender.apply(this, arguments);
+
+      dictionaries.load();
 
       this.join();
     },

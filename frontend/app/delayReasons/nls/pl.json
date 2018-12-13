@@ -1,42 +1,7 @@
 {
   "BREADCRUMBS:browse": "Powody opóźnień",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie powodów opóźnień nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie powodu opóźnień nie powiodło się.",
-  "MSG:DELETED": "Powód opóźnień <em>{label}</em> został usunięty.",
-
-  "PAGE_ACTION:add": "Dodaj powod opóźnień",
-  "PAGE_ACTION:edit": "Edytuj powod opóźnień",
-  "PAGE_ACTION:delete": "Usuń powod opóźnień",
-
-  "PANEL:TITLE:details": "Szczegóły powodu opóźnień",
-  "PANEL:TITLE:addForm": "Formularz dodawania powodu opóźnień",
-  "PANEL:TITLE:editForm": "Formularz edycji powodu opóźnień",
 
   "PROPERTY:active": "Aktywny?",
   "PROPERTY:name": "Nazwa",
-  "PROPERTY:drm": "Kategoria DRM",
-  "PROPERTY:notifications": "Powiadomienia",
-  "PROPERTY:notifications.subdivisions": "Działy",
-  "PROPERTY:notifications.prodFunctions": "Funkcje",
-
-  "FORM:ACTION:add": "Dodaj powod opóźnień",
-  "FORM:ACTION:edit": "Edytuj powod opóźnień",
-  "FORM:ERROR:addFailure": "Nie udało się dodać powodu opóźnień.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować powodu opóźnień.",
-  "FORM:notifications:add": "Dodaj nowe powiadomienie",
-  "FORM:notifiedUsers:label": "Tester powiadomień",
-  "FORM:notifiedUsers:sms": "SMS?",
-  "FORM:notifiedUsers:mrp": "MRP",
-
-  "noNotifications": "Brak zdefiniowanych powiadomień.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia powodu opóźnień",
-  "ACTION_FORM:BUTTON:delete": "Usuń powód opóźnień",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną powod opóźnień?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć powod opóźnień <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć powodu opóźnień."
+  "PROPERTY:drm": "Kategoria DRM"
 }

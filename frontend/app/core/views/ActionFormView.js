@@ -17,6 +17,11 @@ define([
 ) {
   'use strict';
 
+  function i18n(options, key, data)
+  {
+    return t.bound(t.has(options.nlsDomain, key) ? options.nlsDomain : 'core', key, data || {});
+  }
+
   var DEFAULT_OPTIONS = {
     /**
      * @type {string}
@@ -188,7 +193,7 @@ define([
 
       if (options.nlsDomain)
       {
-        dialogTitle = t.bound(options.nlsDomain, 'ACTION_FORM:DIALOG_TITLE:' + options.actionKey);
+        dialogTitle = i18n(options, 'ACTION_FORM:DIALOG_TITLE:' + options.actionKey);
 
         var modelLabel = options.labelAttribute
           ? options.model.get(options.labelAttribute)
@@ -198,26 +203,26 @@ define([
         {
           if (modelLabel)
           {
-            options.messageText = t.bound(
-              options.nlsDomain,
+            options.messageText = i18n(
+              options,
               'ACTION_FORM:MESSAGE_SPECIFIC:' + options.actionKey,
               {label: modelLabel}
             );
           }
           else
           {
-            options.messageText = t.bound(options.nlsDomain, 'ACTION_FORM:MESSAGE:' + options.actionKey);
+            options.messageText = i18n(options, 'ACTION_FORM:MESSAGE:' + options.actionKey);
           }
         }
 
         if (!options.formActionText)
         {
-          options.formActionText = t.bound(options.nlsDomain, 'ACTION_FORM:BUTTON:' + options.actionKey);
+          options.formActionText = i18n(options, 'ACTION_FORM:BUTTON:' + options.actionKey);
         }
 
         if (!options.failureText)
         {
-          options.failureText = t.bound(options.nlsDomain, 'ACTION_FORM:MESSAGE_FAILURE:' + options.actionKey);
+          options.failureText = i18n(options, 'ACTION_FORM:MESSAGE_FAILURE:' + options.actionKey);
         }
       }
 

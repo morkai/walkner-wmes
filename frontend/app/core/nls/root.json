@@ -13,10 +13,17 @@
     "MSG:LOG_OUT:FAILURE": "Logging out failed.",
     "MSG:LOG_OUT:SUCCESS": "You are now logged out!",
     "MSG:POPUP_BLOCKED": "Popup window was blocked.",
+    "MSG:DELETED": "Deleted: <em>{label}</em>.",
 
+    "PAGE_ACTION:add": "Add",
+    "PAGE_ACTION:edit": "Edit",
+    "PAGE_ACTION:delete": "Delete",
     "PAGE_ACTION:filter": "Filter",
+    "PAGE_ACTION:export": "Export",
     "PAGE_ACTION:export:csv": "Export to CSV",
     "PAGE_ACTION:export:xlsx": "Export to XLSX",
+    "PAGE_ACTION:jump:title": "Jump to details by ID",
+    "PAGE_ACTION:jump:placeholder": "ID",
 
     "LIST:COLUMN:actions": "Actions",
     "LIST:NO_DATA": "No data.",
@@ -26,8 +33,9 @@
     "LIST:ACTION:delete": "Delete",
     "LIST:ACTION:print": "Print",
 
-    "BREADCRUMBS:edit": "Editing",
-    "BREADCRUMBS:delete": "Deleting",
+    "BREADCRUMBS:addForm": "Adding",
+    "BREADCRUMBS:editForm": "Editing",
+    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
     "ERROR:notify:message": "Click here to notify the admin about the error.",
     "ERROR:notify:success": "The admin was notified!",
@@ -286,10 +294,20 @@
     "NAVBAR:mor": "Matrix of responsibility",
 
     "ACTION_FORM:BUTTON": "Perform action",
-    "ACTION_FORM:BUTTON:delete": "Delete",
     "ACTION_FORM:BUTTON:cancel": "Cancel",
     "ACTION_FORM:MESSAGE": "Are you sure you want to perform the requested action?",
     "ACTION_FORM:MESSAGE:failure": "Action failed.",
+
+    "ACTION_FORM:DIALOG_TITLE:delete": "Deletion confirmation",
+    "ACTION_FORM:BUTTON:delete": "Delete",
+    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen item?",
+    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete <em>{label}</em>?",
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Deleting failed.",
+
+    "FORM:ACTION:add": "Add",
+    "FORM:ACTION:edit": "Edit",
+    "FORM:ERROR:addFailure": "Adding failed.",
+    "FORM:ERROR:editFailure": "Editing failed.",
 
     "ORG_UNIT:division": "Division",
     "ORG_UNIT:subdivision": "Subdivision",
@@ -416,7 +434,11 @@
     "embedded:shutdown:title": "Shutting down",
     "embedded:shutdown:message": "Are you sure you want to shutdown the computer?",
     "embedded:shutdown:yes": "Shutdown",
-    "embedded:shutdown:no": "Cancel"
+    "embedded:shutdown:no": "Cancel",
+
+    "PANEL:TITLE:details": "Details",
+    "PANEL:TITLE:addForm": "Add form",
+    "PANEL:TITLE:editForm": "Edit form"
   },
   "pl": true
 }

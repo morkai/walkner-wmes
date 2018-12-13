@@ -119,11 +119,18 @@ define([
     });
   }
 
+  function i18n(model, key)
+  {
+    var nlsDomain = model.getNlsDomain();
+
+    return t.bound(t.has(nlsDomain, key) ? nlsDomain : 'core', key);
+  }
+
   return {
     add: function(collection, privilege)
     {
       return {
-        label: t.bound(collection.getNlsDomain(), 'PAGE_ACTION:add'),
+        label: i18n(collection, 'PAGE_ACTION:add'),
         icon: 'plus',
         href: collection.genClientUrl('add'),
         privileges: resolvePrivileges(collection, privilege)
@@ -132,7 +139,7 @@ define([
     edit: function(model, privilege)
     {
       return {
-        label: t.bound(model.getNlsDomain(), 'PAGE_ACTION:edit'),
+        label: i18n(model, 'PAGE_ACTION:edit'),
         icon: 'edit',
         href: model.genClientUrl('edit'),
         privileges: resolvePrivileges(model, privilege)
@@ -146,7 +153,7 @@ define([
       }
 
       return {
-        label: t.bound(model.getNlsDomain(), 'PAGE_ACTION:delete'),
+        label: i18n(model, 'PAGE_ACTION:delete'),
         icon: 'times',
         href: model.genClientUrl('delete'),
         privileges: resolvePrivileges(model, privilege),
@@ -204,7 +211,7 @@ define([
             : totalCount >= (options.maxCount / 4) ? 'warning' : 'default',
           formats: formats,
           disabled: totalCount >= options.maxCount || totalCount === 0,
-          label: options.label || t(options.collection.getNlsDomain(), 'PAGE_ACTION:export')
+          label: options.label || i18n(options.collection, 'PAGE_ACTION:export')
         });
       };
 
@@ -246,11 +253,9 @@ define([
       return {
         template: function()
         {
-          var nlsDomain = collection.getNlsDomain();
-
           return jumpActionTemplate({
-            title: options.title || t(nlsDomain, 'PAGE_ACTION:jump:title'),
-            placeholder: options.placeholder || t(nlsDomain, 'PAGE_ACTION:jump:placeholder'),
+            title: options.title || i18n(collection, 'PAGE_ACTION:jump:title'),
+            placeholder: options.placeholder || i18n(collection, 'PAGE_ACTION:jump:placeholder'),
             autoFocus: options.autoFocus,
             pattern: options.pattern
           });

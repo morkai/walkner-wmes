@@ -4,12 +4,14 @@ define([
   'app/i18n',
   'app/core/pages/FilteredListPage',
   'app/core/util/pageActions',
+  '../dictionaries',
   '../views/FilterView',
   '../views/ListView'
 ], function(
   t,
   FilteredListPage,
   pageActions,
+  dictionaries,
   FilterView,
   ListView
 ) {
@@ -34,6 +36,25 @@ define([
           href: '#fap/settings'
         }
       ];
+    },
+
+    load: function(when)
+    {
+      return when(this.collection.fetch({reset: true}), dictionaries.load());
+    },
+
+    destroy: function()
+    {
+      FilteredListPage.prototype.destroy.call(this);
+
+      dictionaries.unload();
+    },
+
+    afterRender: function()
+    {
+      FilteredListPage.prototype.afterRender.call(this);
+
+      dictionaries.load();
     }
 
   });

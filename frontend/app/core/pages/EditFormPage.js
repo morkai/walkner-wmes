@@ -65,14 +65,15 @@ define([
     getFormViewOptions: function()
     {
       var model = this.model;
+      var nlsDomain = model.getNlsDomain();
       var options = {
         editMode: true,
         model: model,
         formMethod: 'PUT',
         formAction: model.url(),
-        formActionText: t(model.getNlsDomain(), 'FORM:ACTION:edit'),
-        failureText: t(model.getNlsDomain(), 'FORM:ERROR:editFailure'),
-        panelTitleText: t(model.getNlsDomain(), 'PANEL:TITLE:editForm')
+        formActionText: t(t.has(nlsDomain, 'FORM:ACTION:edit') ? nlsDomain : 'core', 'FORM:ACTION:edit'),
+        failureText: t(t.has(nlsDomain, 'FORM:ACTION:editFailure') ? nlsDomain : 'core', 'FORM:ERROR:editFailure'),
+        panelTitleText: t(t.has(nlsDomain, 'FORM:ACTION:editForm') ? nlsDomain : 'core', 'PANEL:TITLE:editForm')
       };
 
       if (typeof this.options.formTemplate === 'function')

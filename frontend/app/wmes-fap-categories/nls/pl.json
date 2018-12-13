@@ -1,0 +1,17 @@
+{
+  "BREADCRUMBS:base": "FAP",
+  "BREADCRUMBS:browse": "Kategorie",
+
+  "PROPERTY:active": "Aktywna?",
+  "PROPERTY:name": "Nazwa",
+  "PROPERTY:notifications": "Powiadomienia",
+  "PROPERTY:notifications.subdivisions": "Działy",
+  "PROPERTY:notifications.prodFunctions": "Funkcje",
+
+  "FORM:notifications:add": "Dodaj nowe powiadomienie",
+  "FORM:notifiedUsers:label": "Tester powiadomień",
+  "FORM:notifiedUsers:sms": "SMS?",
+  "FORM:notifiedUsers:mrp": "MRP",
+
+  "noNotifications": "Brak zdefiniowanych powiadomień."
+}

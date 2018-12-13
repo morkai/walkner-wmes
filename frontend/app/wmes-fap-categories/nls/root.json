@@ -1,0 +1,20 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "FAP",
+    "BREADCRUMBS:browse": "Categories",
+
+    "PROPERTY:active": "Active?",
+    "PROPERTY:name": "Name",
+    "PROPERTY:notifications": "Notifications",
+    "PROPERTY:notifications.subdivisions": "Subdivisions",
+    "PROPERTY:notifications.prodFunctions": "Functions",
+
+    "FORM:notifications:add": "Add notification",
+    "FORM:notifiedUsers:label": "Notifications tester",
+    "FORM:notifiedUsers:sms": "SMS?",
+    "FORM:notifiedUsers:mrp": "MRP",
+
+    "noNotifications": "No notifications defined."
+  },
+  "pl": true
+}

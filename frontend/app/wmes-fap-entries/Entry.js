@@ -8,8 +8,8 @@ define([
   '../user',
   '../socket',
   '../core/Model',
-  '../data/delayReasons',
   '../data/colorFactory',
+  './dictionaries',
   'app/core/templates/userInfo'
 ], function(
   _,
@@ -19,8 +19,8 @@ define([
   user,
   socket,
   Model,
-  delayReasons,
   colorFactory,
+  dictionaries,
   userInfoTemplate
 ) {
   'use strict';
@@ -102,11 +102,11 @@ define([
 
       obj.createdAt = time.format(obj.createdAt, 'L HH:mm');
 
-      var delayReason = delayReasons.get(obj.category);
+      var category = dictionaries.categories.get(obj.category);
 
-      if (delayReason)
+      if (category)
       {
-        obj.category = delayReason.getLabel();
+        obj.category = category.getLabel();
       }
 
       obj.divisions = obj.divisions.join('; ');

@@ -20,10 +20,12 @@ define([
 
     broker.subscribe('router.executing').setLimit(1).on('message', function()
     {
+      var nlsDomain = localModel.getNlsDomain();
+
       viewport.msg.show({
         type: 'warning',
         time: 5000,
-        text: t(localModel.getNlsDomain() || 'core', 'MSG:DELETED', {
+        text: t(t.has(nlsDomain, 'MSG:DELETED') ? nlsDomain : 'core', 'MSG:DELETED', {
           label: localModel.getLabel()
         })
       });

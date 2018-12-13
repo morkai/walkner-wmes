@@ -12,10 +12,17 @@
   "MSG:LOG_OUT:FAILURE": "Wylogowanie nie powiodło się.",
   "MSG:LOG_OUT:SUCCESS": "Zostałeś wylogowany!",
   "MSG:POPUP_BLOCKED": "Wyskakujące okienko zostało zablokowane.",
+  "MSG:DELETED": "Usunięto: <em>{label}</em>.",
 
+  "PAGE_ACTION:add": "Dodaj",
+  "PAGE_ACTION:edit": "Edytuj",
+  "PAGE_ACTION:delete": "Usuń",
   "PAGE_ACTION:filter": "Filtruj",
+  "PAGE_ACTION:export": "Eksportuj",
   "PAGE_ACTION:export:csv": "Eksportuj do CSV",
   "PAGE_ACTION:export:xlsx": "Eksportuj do XLSX",
+  "PAGE_ACTION:jump:title": "Skocz szczegółów po ID",
+  "PAGE_ACTION:jump:placeholder": "ID",
 
   "LIST:COLUMN:actions": "Akcje",
   "LIST:NO_DATA": "Brak danych.",
@@ -25,8 +32,9 @@
   "LIST:ACTION:delete": "Usuń",
   "LIST:ACTION:print": "Drukuj",
 
-  "BREADCRUMBS:edit": "Edycja",
-  "BREADCRUMBS:delete": "Usuwanie",
+  "BREADCRUMBS:addForm": "Dodawanie",
+  "BREADCRUMBS:editForm": "Edycja",
+  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
   "ERROR:notify:message": "Kliknij tutaj, aby poinformować administratora o błędzie.",
   "ERROR:notify:success": "Administrator został powiadomiony o błędzie!",
@@ -292,10 +300,20 @@
   "NAVBAR:mor": "Matryca odpowiedzialności",
 
   "ACTION_FORM:BUTTON": "Wykonaj akcję",
-  "ACTION_FORM:BUTTON:delete": "Usuń",
   "ACTION_FORM:BUTTON:cancel": "Anuluj",
   "ACTION_FORM:MESSAGE": "Czy na pewno chcesz wykonać żądaną akcję?",
   "ACTION_FORM:MESSAGE:failure": "Wykonywanie akcji nie powiodło się.",
+
+  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia",
+  "ACTION_FORM:BUTTON:delete": "Usuń",
+  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną pozycję?",
+  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć <em>{label}</em>?",
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Usuwanie nie powiodło się.",
+
+  "FORM:ACTION:add": "Dodaj",
+  "FORM:ACTION:edit": "Edytuj",
+  "FORM:ERROR:addFailure": "Dodawanie nie powiodło się.",
+  "FORM:ERROR:editFailure": "Edycja nie powiodła się.",
 
   "ORG_UNIT:division": "Wydział",
   "ORG_UNIT:subdivision": "Dział",
@@ -424,5 +442,9 @@
   "embedded:shutdown:title": "Wyłączanie komputera",
   "embedded:shutdown:message": "Czy na pewno chcesz wyłączyć komputer?",
   "embedded:shutdown:yes": "Wyłącz komputer",
-  "embedded:shutdown:no": "Anuluj"
+  "embedded:shutdown:no": "Anuluj",
+
+  "PANEL:TITLE:details": "Szczegóły",
+  "PANEL:TITLE:addForm": "Formularz dodawania",
+  "PANEL:TITLE:editForm": "Formularz edycji"
 }

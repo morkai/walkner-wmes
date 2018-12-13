@@ -17,6 +17,11 @@ define([
 ) {
   'use strict';
 
+  function i18n(nlsDomain, key)
+  {
+    return t.bound(t.has(nlsDomain, key) ? nlsDomain : 'core', key);
+  }
+
   return View.extend({
 
     layoutName: 'page',
@@ -42,9 +47,9 @@ define([
       var actionKey = this.options.actionKey;
 
       this.view = new ActionFormView(_.defaults({model: this.model}, this.options, {
-        formActionText: t.bound(nlsDomain, 'ACTION_FORM:BUTTON:' + actionKey),
-        messageText: t.bound(nlsDomain, 'ACTION_FORM:MESSAGE:' + actionKey),
-        failureText: t.bound(nlsDomain, 'ACTION_FORM:MESSAGE_FAILURE:' + actionKey),
+        formActionText: i18n(nlsDomain, 'ACTION_FORM:BUTTON:' + actionKey),
+        messageText: i18n(nlsDomain, 'ACTION_FORM:MESSAGE:' + actionKey),
+        failureText: i18n(nlsDomain, 'ACTION_FORM:MESSAGE_FAILURE:' + actionKey),
         requestData: {action: actionKey}
       }));
     },

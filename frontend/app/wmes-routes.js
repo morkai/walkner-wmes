@@ -93,6 +93,7 @@ define([
   './help/routes',
   './wmes-toolcal-types/routes',
   './wmes-toolcal-tools/routes',
+  './wmes-fap-categories/routes',
   './wmes-fap-entries/routes'
 ], function()
 {
