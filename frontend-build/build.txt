@@ -702,6 +702,18 @@ app/wmes-fap-entries/assets/addForm.css
 ----------------
 app/wmes-fap-entries/assets/addForm.css
 
+app/wmes-fap-entries/assets/analysis.css
+----------------
+app/wmes-fap-entries/assets/analysis.css
+
+app/wmes-fap-entries/assets/attachments.css
+----------------
+app/wmes-fap-entries/assets/attachments.css
+
+app/wmes-fap-entries/assets/chat.css
+----------------
+app/wmes-fap-entries/assets/chat.css
+
 app/wmes-fap-entries/assets/details.css
 ----------------
 app/wmes-fap-entries/assets/details.css
@@ -720,12 +732,20 @@ app/wmes-fap-entries/assets/./navbar.css
 app/wmes-fap-entries/assets/./addForm.css
 app/wmes-fap-entries/assets/./list.css
 app/wmes-fap-entries/assets/./details.css
+app/wmes-fap-entries/assets/./chat.css
+app/wmes-fap-entries/assets/./observers.css
+app/wmes-fap-entries/assets/./attachments.css
+app/wmes-fap-entries/assets/./analysis.css
 app/wmes-fap-entries/assets/./history.css
 app/wmes-fap-entries/assets/main.css
 
 app/wmes-fap-entries/assets/navbar.css
 ----------------
 app/wmes-fap-entries/assets/navbar.css
+
+app/wmes-fap-entries/assets/observers.css
+----------------
+app/wmes-fap-entries/assets/observers.css
 
 app/wmes-toolcal-tools/assets/history.css
 ----------------
@@ -1893,7 +1913,10 @@ app/orderBomMatchers/routes.js
 app/help/routes.js
 app/wmes-toolcal-types/routes.js
 app/wmes-toolcal-tools/routes.js
-app/data/delayReasons.js
+app/wmes-fap-categories/Category.js
+app/wmes-fap-categories/CategoryCollection.js
+app/wmes-fap-categories/routes.js
+app/wmes-fap-entries/dictionaries.js
 app/wmes-fap-entries/Entry.js
 app/wmes-fap-entries/templates/addForm.js
 app/wmes-fap-entries/templates/addFormUpload.js

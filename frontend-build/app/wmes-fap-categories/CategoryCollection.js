@@ -1,0 +1,1 @@
+define(["../core/Collection","./Category"],function(e,r){"use strict";return e.extend({model:r,rqlQuery:"sort(name)",comparator:"name"})});
