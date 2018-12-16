@@ -26,16 +26,23 @@ define([
 
         $observer.select2('data', null);
 
-        var subscribers = [{
-          id: subscriber.id,
-          label: subscriber.text
-        }];
+        var observer = _.some(this.model.get('observers'), function(o) { return o.user.id === subscriber.id; });
 
-        this.model.change('subscribers', subscribers, null);
+        if (!observer)
+        {
+          var subscribers = [{
+            id: subscriber.id,
+            label: subscriber.text
+          }];
 
-        this.model.update({
-          subscribers: subscribers
-        });
+          this.model.change('subscribers', subscribers, null);
+
+          this.model.update({
+            subscribers: subscribers
+          });
+        }
+
+        this.timers.focus = setTimeout(this.focusObserver.bind(this, subscriber.id), 1);
       }
 
     },
@@ -59,6 +66,33 @@ define([
         width: '370px',
         noPersonnelId: true
       });
+    },
+
+    focusObserver: function(id)
+    {
+      var $observer = this.$('.fap-observer[data-observer-id="' + id + '"]');
+
+      if (!$observer.length)
+      {
+        return;
+      }
+
+      if ($observer[0].scrollIntoViewIfNeeded)
+      {
+        $observer[0].scrollIntoViewIfNeeded();
+      }
+      else
+      {
+        $observer[0].scrollIntoView();
+      }
+
+      this.$('.highlight').removeClass('highlight');
+
+      clearTimeout(this.timers.highlight);
+
+      $observer.addClass('highlight');
+
+      this.timers.highlight = setTimeout(function() { $observer.removeClass('highlight'); }, 1100);
     },
 
     onObserversChanged: function()
