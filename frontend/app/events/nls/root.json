@@ -443,7 +443,15 @@
     "TYPE:pfep.entries.deleted": "PFEP DB: deleted",
     "TEXT:pfep.entries.deleted": "Deleted entry: <em>{model->rid}</em>",
     "TYPE:orderBomMatchers.deleted": "Order BOM matchers: deleted",
-    "TEXT:orderBomMatchers.deleted": "Deleted order BOM matcher strategy: <em>{model->description}</em>"
+    "TEXT:orderBomMatchers.deleted": "Deleted order BOM matcher strategy: <em>{model->description}</em>",
+    "TYPE:fap.entries.deleted": "FAP > Entries: deleted",
+    "TEXT:fap.entries.deleted": "Deleted entry: <em>{model->rid}</em>",
+    "TYPE:fap.categories.added": "FAP > Categories: added",
+    "TEXT:fap.categories.added": "Added category: <a href='\\#fap/categories/{model->_id}'>{model->name}</a>",
+    "TYPE:fap.categories.edited": "FAP > Categories: edited",
+    "TEXT:fap.categories.edited": "Edited category: <a href='\\#fap/categories/{model->_id}'>{model->name}</a>",
+    "TYPE:fap.categories.deleted": "FAP > Categories: deleted",
+    "TEXT:fap.categories.deleted": "Deleted category: <em>{model->rid}</em>"
   },
   "pl": true
 }

@@ -442,5 +442,13 @@
   "TYPE:pfep.entries.deleted": "Baza PFEP: usunięcie",
   "TEXT:pfep.entries.deleted": "Usunięto wpis: <em>{model->rid}</em>",
   "TYPE:orderBomMatchers.deleted": "Strategie spr. komponentów: usunięcie",
-  "TEXT:orderBomMatchers.deleted": "Usunięto strategię sprawdzania komponentów: <em>{model->description}</em>"
+  "TEXT:orderBomMatchers.deleted": "Usunięto strategię sprawdzania komponentów: <em>{model->description}</em>",
+  "TYPE:fap.entries.deleted": "FAP > Zgłoszenia: usunięcie",
+  "TEXT:fap.entries.deleted": "Usunięto zgłoszenie: <em>{model->rid}</em>",
+  "TYPE:fap.categories.added": "FAP > Kategorie: dodanie",
+  "TEXT:fap.categories.added": "Dodano kategorię: <a href='\\#fap/categories/{model->_id}'>{model->name}</a>",
+  "TYPE:fap.categories.edited": "FAP > Kategorie: edycja",
+  "TEXT:fap.categories.edited": "Zmodyfikowano kategorię: <a href='\\#fap/categories/{model->_id}'>{model->name}</a>",
+  "TYPE:fap.categories.deleted": "FAP > Kategorie: usunięcie",
+  "TEXT:fap.categories.deleted": "Usunięto kategorię: <em>{model->rid}</em>"
 }
