@@ -27,3 +27,9 @@
 .fap-entries-list th[data-column-id="nc12"] {
   width: 104px;
 }
+.fap-entries-filter .select2-container-multi[data-id$="category"] .select2-search-choice > div {
+  max-width: 225px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

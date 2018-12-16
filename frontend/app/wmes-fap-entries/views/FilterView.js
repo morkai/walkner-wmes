@@ -33,14 +33,16 @@ define([
     events: _.assign({
 
       'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
-      'change input[name="userType"]': 'toggleUserSelect2'
+      'change input[name="userType"]': 'toggleUserSelect2',
+      'change input[name="statusType"]': 'toggleStatus'
 
     }, FilterView.prototype.events),
 
     defaultFormData: function()
     {
       return {
-        userType: 'others'
+        userType: 'others',
+        statusType: 'specific'
       };
     },
 
@@ -51,7 +53,7 @@ define([
         formData.order = term.args[1];
       },
       'nc12': 'orderNo',
-      'observers.id': function(propertyName, term, formData)
+      'observers.user.id': function(propertyName, term, formData)
       {
         if (term.args[1] === currentUser.data._id)
         {
@@ -72,7 +74,16 @@ define([
       {
         formData.mrp = Array.isArray(term.args[1]) ? term.args[1].join(',') : '';
       },
-      'category': 'mrp'
+      'category': 'mrp',
+      'analysisNeed': function(propertyName, term, formData)
+      {
+        console.log(JSON.stringify(formData));
+        formData[propertyName] = term.args[1];
+        formData.statusType = formData.analysisNeed === undefined || formData.analysisDone === undefined
+          ? 'specific'
+          : 'analysis';
+      },
+      'analysisDone': 'analysisNeed'
     },
 
     serialize: function()
@@ -85,6 +96,7 @@ define([
     serializeFormToQuery: function(selector)
     {
       var userType = this.$('input[name="userType"]:checked').val();
+      var statusType = this.$('input[name="statusType"]:checked').val();
       var status = (this.$id('status').val() || []).filter(function(v) { return !_.isEmpty(v); });
       var user = this.$id('user').val();
       var order = this.$id('order').val().trim();
@@ -95,11 +107,11 @@ define([
 
       if (userType === 'mine')
       {
-        selector.push({name: 'eq', args: ['observers.id', currentUser.data._id]});
+        selector.push({name: 'eq', args: ['observers.user.id', currentUser.data._id]});
       }
       else if (user)
       {
-        selector.push({name: 'eq', args: ['observers.id', user]});
+        selector.push({name: 'eq', args: ['observers.user.id', user]});
       }
 
       if (order.length === 9)
@@ -111,9 +123,16 @@ define([
         selector.push({name: 'eq', args: ['nc12', order]});
       }
 
-      if (status.length)
+      if (statusType === 'specific' && status.length)
       {
         selector.push({name: 'in', args: ['status', status]});
+      }
+      else if (statusType === 'analysis')
+      {
+        selector.push(
+          {name: 'eq', args: ['analysisNeed', true]},
+          {name: 'eq', args: ['analysisDone', false]}
+        );
       }
 
       if (mrp && mrp.length)
@@ -133,17 +152,22 @@ define([
 
       this.$('.is-expandable').expandableSelect();
 
-      setUpMrpSelect2(this.$id('mrp'), {own: true, view: this});
+      setUpMrpSelect2(this.$id('mrp'), {
+        own: true,
+        view: this,
+        width: '280px'
+      });
 
       setUpUserSelect2(this.$id('user'), {
-        width: '280px',
-        view: this
+        view: this,
+        width: '280px'
       });
 
       this.toggleUserSelect2();
+      this.toggleStatus();
 
       this.$id('category').select2({
-        width: '450px',
+        width: '280px',
         multiple: true,
         allowClear: true,
         data: dictionaries.categories.map(idAndLabel)
@@ -162,6 +186,13 @@ define([
       var userType = this.$('input[name="userType"]:checked').val();
 
       this.$id('user').select2('enable', userType === 'others');
+    },
+
+    toggleStatus: function()
+    {
+      var statusType = this.$('input[name="statusType"]:checked').val();
+
+      this.$id('status').prop('disabled', statusType !== 'specific');
     }
 
   });

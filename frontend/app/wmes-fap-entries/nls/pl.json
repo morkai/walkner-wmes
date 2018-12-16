@@ -74,6 +74,8 @@
 
   "filter:user:mine": "Moje",
   "filter:user:others": "Użytkownik",
+  "filter:status:specific": "Status",
+  "filter:status:analysis": "Analiza",
   "filter:order": "Zlecenie/12NC",
   "filter:submit": "Filtruj",
 
@@ -92,6 +94,7 @@
   "navbar:pending": "Oczekujące",
   "navbar:started": "Rozpoczęte",
   "navbar:finished": "Zakończone",
+  "navbar:analysis": "Analizowane",
   "navbar:mine": "Moje",
 
   "addForm:subdivisions": "Powiadomione działy",

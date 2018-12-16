@@ -77,7 +77,8 @@ define([
           {label: 'open', rql: '&status=in=(pending,started)'},
           {label: 'pending', rql: '&status=in=(pending)'},
           {label: 'started', rql: '&status=in=(started)'},
-          {label: 'finished', rql: '&status=in=(finished)'}
+          {label: 'finished', rql: '&status=in=(finished)'},
+          {label: 'analysis', rql: '&analysisNeed=true&analysisDone=false'}
         ]
       };
     },

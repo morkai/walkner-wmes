@@ -16,8 +16,16 @@
     </div>
     <input id="<%- idPrefix %>-user" name="user" type="text">
   </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-status"><%- helpers.t('PROPERTY:status') %></label>
+  <div class="form-group" style="min-width: 150px">
+    <div class="filter-radioLabels">
+      <label>
+        <input name="statusType" type="radio" value="specific">
+        <%- helpers.t('filter:status:specific') %>
+      </label><label>
+        <input name="statusType" type="radio" value="analysis">
+        <%- helpers.t('filter:status:analysis') %>
+      </label>
+    </div>
     <select id="<%- idPrefix %>-status" name="status[]" class="form-control is-expandable" multiple size="1" data-expanded-length="10">
       <% statuses.forEach(function(status) { %>
         <option value="<%- status %>"><%- helpers.t('status:' + status) %></option>
