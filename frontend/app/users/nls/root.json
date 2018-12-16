@@ -188,6 +188,7 @@
     "PRIVILEGE:TOOLCAL:MANAGE": "Tool calibration: manage",
     "PRIVILEGE:TOOLCAL:DICTIONARIES:VIEW": "Tool calibration: view dictionaries",
     "PRIVILEGE:TOOLCAL:DICTIONARIES:MANAGE": "Tool calibration: manage dictionaries",
+    "PRIVILEGE:FAP:MANAGE": "FAP: manage",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System",
