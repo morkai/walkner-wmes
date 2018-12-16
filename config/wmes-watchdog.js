@@ -16,7 +16,7 @@ exports.modules = [
   'pubsub',
   'mail/sender',
   'sms/sender',
-  'twilio',
+  {id: 'h5-twilio', name: 'twilio'},
   'messenger/server',
   'watchdog'
 ];
