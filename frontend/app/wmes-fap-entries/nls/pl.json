@@ -94,6 +94,7 @@
   "navbar:finished": "Zakończone",
   "navbar:mine": "Moje",
 
+  "addForm:subdivisions": "Powiadomione działy",
   "addForm:submit": "Dodaj zgłoszenie",
   "addForm:cancel": "Anuluj",
   "addForm:orderNo:notFound": "Podane zlecenie nie istnieje.",

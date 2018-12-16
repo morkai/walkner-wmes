@@ -70,8 +70,9 @@ define([
 
         this.saveInputFocus(el);
         this.updateNotifications();
+        this.resolveSubdivisions();
       },
-      'change #-lines': function(e)
+      'change #-lines, #-subdivisions': function(e)
       {
         var el = e.target;
 
@@ -126,7 +127,7 @@ define([
         entry.uploadedFiles = [];
       }
 
-      this.listenTo(dictionaries.categories, 'change', this.setUpCategorySelect2);
+      this.listenTo(dictionaries.categories, 'reset change', this.setUpCategorySelect2);
     },
 
     destroy: function()
@@ -172,6 +173,7 @@ define([
 
       view.renderUploads();
       view.setUpCategorySelect2();
+      view.setUpSubdivisionsSelect2();
       view.setUpOwnerSelect2();
       view.setUpDnd(view.$el);
       view.setUpDnd($backdrop);
@@ -248,6 +250,39 @@ define([
         dropdownCssClass: 'fap-addForm-select2',
         data: dictionaries.categories.where({active: true}).map(idAndLabel)
       });
+    },
+
+    setUpSubdivisionsSelect2: function()
+    {
+      this.$id('subdivisions')
+        .select2({
+          dropdownCssClass: 'fap-addForm-select2',
+          placeholder: ' ',
+          allowClear: true,
+          multiple: true,
+          data: orgUnits.getActiveByType('division').map(function(division)
+          {
+            var divisionText = division.getLabel();
+
+            return {
+              text: divisionText,
+              children: orgUnits.getChildren(division)
+                .filter(function(subdivision) { return !subdivision.get('deactivatedAt'); })
+                .map(function(subdivision)
+                {
+                  return {
+                    id: subdivision.id,
+                    text: subdivision.getLabel(),
+                    divisionText: divisionText
+                  };
+                })
+            };
+          }),
+          formatSelection: function(item, container, e)
+          {
+            return e(item.divisionText + ' \\ ' + item.text);
+          }
+        });
     },
 
     setUpOwnerSelect2: function()
@@ -471,6 +506,49 @@ define([
       }
     },
 
+    resolveSubdivisions: function()
+    {
+      var view = this;
+      var orderNo = view.$id('orderNo').val();
+      var category = dictionaries.categories.get(view.$id('category').val());
+
+      if (view.resolveSubdivisionsReq)
+      {
+        view.resolveSubdivisionsReq.abort();
+        view.resolveSubdivisionsReq = null;
+      }
+
+      if (!category)
+      {
+        return;
+      }
+
+      var req = view.resolveSubdivisionsReq = this.ajax({
+        method: 'POST',
+        url: '/fap/entries;resolve-participants',
+        data: JSON.stringify({
+          orderNo: orderNo,
+          category: category
+        })
+      });
+
+      req.done(function(res)
+      {
+        if (res.subdivisions)
+        {
+          view.$id('subdivisions').select2('val', res.subdivisions);
+        }
+      });
+
+      req.always(function()
+      {
+        if (req === view.resolveSubdivisionsReq)
+        {
+          view.resolveSubdivisionsReq = null;
+        }
+      });
+    },
+
     updateNotifications: function()
     {
       var category = dictionaries.categories.get(this.$id('category').val());
@@ -533,6 +611,7 @@ define([
         if (res.lines.length)
         {
           view.$id('lines').select2('val', res.lines).trigger('change');
+          view.resolveSubdivisions();
         }
       });
     },
@@ -634,12 +713,18 @@ define([
         formData.lines = formData.lines.join(',');
       }
 
+      if (Array.isArray(formData.subdivisions))
+      {
+        formData.subdivisions = formData.subdivisions.join(',');
+      }
+
       return formData;
     },
 
     serializeForm: function(formData)
     {
       formData.lines = (formData.lines || '').split(',').filter(function(v) { return !!v.length; });
+      formData.subdivisions = (formData.subdivisions || '').split(',').filter(function(v) { return !!v.length; });
       formData.divisions = [];
 
       formData.lines.forEach(function(line)
