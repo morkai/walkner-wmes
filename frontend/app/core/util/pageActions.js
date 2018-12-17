@@ -117,6 +117,8 @@ define([
     {
       viewport.msg.hide($msg);
     });
+
+    return false;
   }
 
   function i18n(model, key)
@@ -218,33 +220,37 @@ define([
       options.page.listenTo(options.collection, 'sync', function()
       {
         options.layout.$('.page-actions-export').replaceWith(template());
+
+        afterRender(options.layout.$('.page-actions-export'));
       });
 
       return {
         template: template,
         privileges: resolvePrivileges(options.collection, options.privilege, 'VIEW'),
         callback: options.callback,
-        afterRender: function($li)
-        {
-          var $xlsx = $li.find('a[data-export-type="xlsx"]');
-
-          if (!$xlsx.length)
-          {
-            return;
-          }
-
-          var href = $xlsx.prop('href');
-
-          $xlsx.prop('href', 'javascript:void(0)'); // eslint-disable-line no-script-url
-
-          $xlsx.on('click', function(e)
-          {
-            e.preventDefault();
-
-            exportXlsx(href);
-          });
-        }
+        afterRender: afterRender
       };
+
+      function afterRender($container)
+      {
+        var $xlsx = $container.find('a[data-export-type="xlsx"]');
+
+        if (!$xlsx.length)
+        {
+          return;
+        }
+
+        var href = $xlsx.prop('href');
+
+        $xlsx.prop('href', 'javascript:void(0)'); // eslint-disable-line no-script-url
+
+        $xlsx.on('click', function(e)
+        {
+          e.preventDefault();
+
+          exportXlsx(href);
+        });
+      }
     },
     jump: function(page, collection, options)
     {
