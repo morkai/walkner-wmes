@@ -75,7 +75,7 @@ define([
       viewport.msg.show({
         type: 'error',
         time: 2000,
-        text: t(collection.getNlsDomain(), 'MSG:jump:404', {rid: phrase})
+        text: i18n(collection, 'MSG:jump:404', {rid: phrase})
       });
 
       $iconEl.removeClass('fa-spinner fa-spin').addClass('fa-search');
@@ -121,11 +121,11 @@ define([
     return false;
   }
 
-  function i18n(model, key)
+  function i18n(model, key, data)
   {
     var nlsDomain = model.getNlsDomain();
 
-    return t.bound(t.has(nlsDomain, key) ? nlsDomain : 'core', key);
+    return t.bound(t.has(nlsDomain, key) ? nlsDomain : 'core', key, data);
   }
 
   return {

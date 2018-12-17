@@ -1,16 +1,8 @@
 {
   "BREADCRUMBS:base": "FAP",
   "BREADCRUMBS:browse": "FAP",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:settings": "Ustawienia",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:DELETED": "Zgłoszenie <em>{label}</em> został usunięty.",
-  "MSG:jump:404": "Nie znaleziono zgłoszenia o ID <em>{rid}</em>.",
-
-  "PAGE_ACTION:export": "Eksportuj zgłoszenia",
-  "PAGE_ACTION:delete": "Usuń zgłoszenie",
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:jump:title": "Skocz do zgłoszenia po ID",
   "PAGE_ACTION:jump:placeholder": "ID zgłoszenia",
@@ -62,16 +54,6 @@
   "message:finished:true": "Zgłoszenie zostało zakończone, ale analiza nadal trwa.",
   "message:finished:false": "Zgłoszenie zostało zakończone.",
 
-  "FORM:ACTION:add": "Dodaj wpis",
-  "FORM:ERROR:addFailure": "Nie udało się dodać zgłoszenia.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zgłoszenia.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia zgłoszenia",
-  "ACTION_FORM:BUTTON:delete": "Usuń zgłoszenie",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrane zgłoszenie?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć zgłoszenie <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć zgłoszenia.",
-
   "filter:user:mine": "Moje",
   "filter:user:others": "Użytkownik",
   "filter:status:specific": "Status",
@@ -111,6 +93,8 @@
   "chat:title": "Czat",
   "chat:send": "Wyślij wiadomość",
   "chat:new": "Kliknij tutaj, aby zobaczyć nowe wiadomości...",
+
+  "observers:placeholder": "Dodaj po nazwisku lub nr kadrowym...",
 
   "attachments:menu:rename": "Zmień nazwę",
   "attachments:menu:remove": "Usuń plik"

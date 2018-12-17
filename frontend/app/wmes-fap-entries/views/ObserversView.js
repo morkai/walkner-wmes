@@ -60,7 +60,8 @@ define([
     {
       setUpUserSelect2(this.$id('observer'), {
         width: '370px',
-        noPersonnelId: true
+        noPersonnelId: true,
+        placeholder: this.t('observers:placeholder')
       });
     },
 
