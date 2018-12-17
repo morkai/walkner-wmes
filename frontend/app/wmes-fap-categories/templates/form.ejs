@@ -16,6 +16,10 @@
         <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100" autofocus>
       </div>
       <div class="form-group">
+        <label for="<%- idPrefix %>-users" class="control-label"><%- helpers.t('PROPERTY:users') %></label>
+        <input id="<%- idPrefix %>-users" type="text" autocomplete="new-password" name="users">
+      </div>
+      <div class="form-group">
         <label class="control-label"><%- helpers.t('PROPERTY:notifications') %></label>
         <table class="table table-bordered table-condensed">
           <thead>
@@ -42,10 +46,12 @@
         <button id="<%- idPrefix %>-addNotification" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- helpers.t('FORM:notifications:add') %></span></button>
       </div>
       <div class="form-group">
-        <label class="control-label"><%- helpers.t('FORM:notifiedUsers:label') %></label>
+        <label class="control-label"><%- helpers.t('FORM:tester:label') %></label>
         <div style="display: flex; margin-bottom: 5px">
-          <input id="<%- idPrefix %>-notifiedUsers-mrp" class="form-control" type="text" style="width: 46px" placeholder="<%- helpers.t('FORM:notifiedUsers:mrp') %>">
-          <input id="<%- idPrefix %>-notifiedUsers-date" class="form-control" type="datetime-local" style="width: 200px; margin-left: 5px">
+          <input id="<%- idPrefix %>-tester-mrp" class="form-control text-mono" type="text" style="width: 46px" placeholder="<%- helpers.t('FORM:tester:mrp') %>">
+          <input id="<%- idPrefix %>-tester-orderNo" class="form-control text-mono" type="text" style="width: 85px; margin-left: 5px" placeholder="<%- helpers.t('FORM:tester:orderNo') %>">
+          <input id="<%- idPrefix %>-tester-nc12" class="form-control text-mono" type="text" style="width: 110px; margin-left: 5px" placeholder="<%- helpers.t('FORM:tester:nc12') %>">
+          <input id="<%- idPrefix %>-tester-date" class="form-control" type="datetime-local" style="width: 200px; margin-left: 5px">
         </div>
         <table class="table table-bordered table-condensed" style="margin-bottom: 0">
           <thead>
@@ -53,11 +59,11 @@
             <th class="is-min"><%- helpers.t('users', 'PROPERTY:name') %></th>
             <th class="is-min"><%- helpers.t('users', 'PROPERTY:prodFunction') %></th>
             <th class="is-min"><%- helpers.t('users', 'PROPERTY:kdPosition') %></th>
-            <th class="is-min"><%- helpers.t('FORM:notifiedUsers:sms') %></th>
+            <th class="is-min"><%- helpers.t('FORM:tester:sms') %></th>
             <th></th>
           </tr>
           </thead>
-          <tbody id="<%- idPrefix %>-notifiedUsers">
+          <tbody id="<%- idPrefix %>-tester">
           <tr>
             <td class="is-min"></td>
             <td class="is-min"></td>

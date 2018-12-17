@@ -7,6 +7,7 @@ define([
   'app/data/prodFunctions',
   'app/core/util/idAndLabel',
   'app/core/views/FormView',
+  'app/users/util/setUpUserSelect2',
   'app/wmes-fap-categories/templates/form'
 ], function(
   _,
@@ -15,6 +16,7 @@ define([
   prodFunctions,
   idAndLabel,
   FormView,
+  setUpUserSelect2,
   formTemplate
 ) {
   'use strict';
@@ -43,8 +45,8 @@ define([
         $notification.remove();
       },
 
-      'input #-notifiedUsers-mrp': 'testNotifications',
-      'change #-notifiedUsers-date': 'testNotifications',
+      'input #-tester-mrp, #-tester-orderNo, #-tester-nc12': 'testNotifications',
+      'change #-tester-date': 'testNotifications',
       'change input[name^="notifications"]': 'testNotifications'
 
     }, FormView.prototype.events),
@@ -79,8 +81,13 @@ define([
     {
       FormView.prototype.afterRender.apply(this, arguments);
 
+      setUpUserSelect2(this.$id('users'), {
+        view: this,
+        multiple: true
+      });
+
       this.$notification = this.$id('notifications').children().first().detach();
-      this.$notifiedUser = this.$id('notifiedUsers').children().first().detach();
+      this.$notifiedUser = this.$id('tester').children().first().detach();
 
       (this.model.get('notifications') || []).forEach(this.addNotification, this);
 
@@ -124,8 +131,25 @@ define([
       this.$id('notifications').append($notification);
     },
 
+    serializeToForm: function()
+    {
+      var formData = this.model.toJSON();
+
+      formData.users = (formData.users || []).map(function(user) { return user.id; }).join(',');
+
+      return formData;
+    },
+
     serializeForm: function(formData)
     {
+      formData.users = (this.$id('users').select2('data') || []).map(function(user)
+      {
+        return {
+          id: user.id,
+          label: user.text
+        };
+      });
+
       formData.notifications = (formData.notifications || [])
         .map(function(n)
         {
@@ -151,11 +175,13 @@ define([
         view.testReq.abort();
       }
 
-      var mrp = view.$id('notifiedUsers-mrp').val();
-      var date = view.$id('notifiedUsers-date').val();
-      var notifications = view.getFormData().notifications;
+      var mrp = view.$id('tester-mrp').val();
+      var orderNo = view.$id('tester-orderNo').val();
+      var nc12 = view.$id('tester-nc12').val();
+      var date = view.$id('tester-date').val();
+      var formData = view.getFormData();
 
-      if (mrp.length < 3 || !notifications.length)
+      if (mrp.length < 3 && orderNo.length < 9)
       {
         return;
       }
@@ -172,22 +198,25 @@ define([
         url: '/fap/entries;resolve-participants',
         data: JSON.stringify({
           mrp: mrp,
+          orderNo: orderNo,
+          nc12: nc12,
           date: date,
-          notifications: notifications,
+          users: formData.users,
+          notifications: formData.notifications,
           category: null
         })
       });
 
       view.testReq.fail(function()
       {
-        view.$id('notifiedUsers').empty();
+        view.$id('tester').empty();
       });
 
       view.testReq.done(function(res)
       {
         var html = '';
 
-        res.collection.forEach(function(user)
+        res.users.forEach(function(user)
         {
           var prodFunction = prodFunctions.get(user.prodFunction);
 
@@ -199,7 +228,7 @@ define([
             + '<td></td>';
         });
 
-        view.$id('notifiedUsers').html(html);
+        view.$id('tester').html(html);
       });
 
       view.testReq.always(function()

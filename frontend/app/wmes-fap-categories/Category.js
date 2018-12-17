@@ -4,12 +4,14 @@ define([
   '../i18n',
   '../core/Model',
   '../data/orgUnits',
-  '../data/prodFunctions'
+  '../data/prodFunctions',
+  'app/core/templates/userInfo'
 ], function(
   t,
   Model,
   orgUnits,
-  prodFunctions
+  prodFunctions,
+  userInfoTemplate
 ) {
   'use strict';
 
@@ -36,6 +38,10 @@ define([
       var obj = this.toJSON();
 
       obj.active = t('core', 'BOOL:' + obj.active);
+      obj.users = (obj.users || []).map(function(user)
+      {
+        return userInfoTemplate({userInfo: user});
+      });
       obj.notifications = (obj.notifications || []).map(function(n)
       {
         return {

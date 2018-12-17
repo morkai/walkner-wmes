@@ -5,14 +5,15 @@
 
     "PROPERTY:active": "Active?",
     "PROPERTY:name": "Name",
+    "PROPERTY:users": "Notified users",
     "PROPERTY:notifications": "Notifications",
     "PROPERTY:notifications.subdivisions": "Subdivisions",
     "PROPERTY:notifications.prodFunctions": "Functions",
 
     "FORM:notifications:add": "Add notification",
-    "FORM:notifiedUsers:label": "Notifications tester",
-    "FORM:notifiedUsers:sms": "SMS?",
-    "FORM:notifiedUsers:mrp": "MRP",
+    "FORM:tester:label": "Notifications tester",
+    "FORM:tester:sms": "SMS?",
+    "FORM:tester:mrp": "MRP",
 
     "noNotifications": "No notifications defined."
   },
