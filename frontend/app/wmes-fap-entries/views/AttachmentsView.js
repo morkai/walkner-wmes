@@ -288,7 +288,38 @@ define([
     {
       var view = this;
       var entry = view.model;
-      var files = Array.prototype.slice.call(e.originalEvent.dataTransfer.files);
+      var attachments = {};
+
+      entry.get('attachments').forEach(function(a)
+      {
+        attachments[a.name + a.size] = true;
+      });
+
+      if (entry.uploading)
+      {
+        attachments[entry.uploading.upload.name + entry.uploading.upload.file.size] = true;
+      }
+
+      entry.uploadQueue.forEach(function(u)
+      {
+        attachments[u.name + u.file.size] = true;
+      });
+
+      entry.uploadedFiles.forEach(function(u)
+      {
+        attachments[u.name + u.file.size] = true;
+      });
+
+      var files = Array.prototype.slice.call(e.originalEvent.dataTransfer.files).filter(function(file)
+      {
+        return !attachments[file.name + file.size];
+      });
+
+      if (!files.length)
+      {
+        return;
+      }
+
       var totalFiles = (entry.uploading ? 1 : 0)
         + entry.uploadQueue.length
         + entry.uploadedFiles.length
