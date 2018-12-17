@@ -227,6 +227,13 @@ define([
     serializeChat: function()
     {
       var entry = this;
+      var availableAttachments = {};
+
+      entry.attributes.attachments.forEach(function(a)
+      {
+        availableAttachments[a._id] = true;
+      });
+
       var createdAt = entry.get('createdAt');
       var createdAtMoment = time.getMoment(createdAt);
       var owner = entry.get('owner');
@@ -263,27 +270,38 @@ define([
 
         if (hasComment || hasAddedAttachments)
         {
-          entry.serializeChatMessage(change, chat);
+          entry.serializeChatMessage(change, chat, availableAttachments);
         }
       });
 
       return chat;
     },
 
-    serializeChatMessage: function(change, chat)
+    serializeChatMessage: function(change, chat, availableAttachments)
     {
       var entry = this;
       var prev = chat && chat[chat.length - 1];
-      var lines = [{
-        time: time.format(change.date, 'dddd, LL LTS'),
-        text: _.escape(change.comment)
-      }];
+      var lines = [];
+
+      if (change.comment)
+      {
+        lines.push({
+          time: time.format(change.date, 'dddd, LL LTS'),
+          text: _.escape(change.comment)
+        });
+      }
+
       var attachments = change.data.attachments;
 
-      if (!!attachments && !attachments[0] && !!attachments[1])
+      if (attachments && !attachments[0] && attachments[1])
       {
         change.data.attachments[1].forEach(function(a)
         {
+          if (availableAttachments && !availableAttachments[a._id])
+          {
+            return;
+          }
+
           var attachment = entry.serializeAttachment(a);
 
           lines.push({
@@ -461,7 +479,11 @@ define([
         userId: userId,
         online: online
       });
-      this.trigger('change', this, {});
+
+      if (this.serialized)
+      {
+        this.serialized.observers = this.serializeObservers();
+      }
     },
 
     handleChange: function(change)
