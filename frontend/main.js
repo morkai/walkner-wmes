@@ -4,19 +4,24 @@
 {
   'use strict';
 
+  var location = window.location;
+
+  if (location.protocol === 'http:' && location.pathname === '/' && location.port === '')
+  {
+    window.location.protocol = 'https:';
+  }
+
+  if (!location.origin)
+  {
+    location.origin = location.protocol + '//' + location.hostname + (location.port ? (':' + location.port) : '');
+  }
+
   var embedded = window.parent !== window;
 
   window.INSTANCE_ID = Math.round(Date.now() + Math.random() * 9999999).toString(36).toUpperCase();
 
   document.body.classList.toggle('is-ie', window.navigator.userAgent.indexOf('Trident/') !== -1);
   document.body.classList.toggle('is-embedded', embedded);
-
-  var location = window.location;
-
-  if (!location.origin)
-  {
-    location.origin = location.protocol + '//' + location.hostname + (location.port ? (':' + location.port) : '');
-  }
 
   if (window.ENV === 'testing')
   {
