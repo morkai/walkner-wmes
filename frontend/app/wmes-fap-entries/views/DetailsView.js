@@ -70,6 +70,11 @@ define([
       };
     },
 
+    afterRender: function()
+    {
+      this.updateAuth();
+    },
+
     update: function()
     {
       var view = this;
