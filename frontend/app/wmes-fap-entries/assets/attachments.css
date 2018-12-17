@@ -33,3 +33,9 @@
   max-width: 800px;
   max-height: 563px;
 }
+.fap-attachments .fap-details-list > div:only-child {
+  display: none;
+}
+.fap-attachments-editor .btn-primary {
+  width: 38px;
+}

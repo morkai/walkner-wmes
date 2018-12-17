@@ -151,7 +151,9 @@ define([
         return;
       }
 
-      if (change.comment || (change.data.attachments && change.data.attachments.added))
+      var attachments = change.data.attachments;
+
+      if (change.comment || (attachments && !attachments[0] && attachments[1]))
       {
         this.handleChange(change);
       }
@@ -166,12 +168,15 @@ define([
 
       if ($lastMessage[0].dataset.userId === change.user.id)
       {
-        var line = message.lines[0];
+        var $lines = $lastMessage.find('.fap-chat-lines');
 
-        $('<div class="fap-chat-line"></div>')
-          .attr('title', line.time)
-          .html(line.text)
-          .appendTo($lastMessage.find('.fap-chat-lines'));
+        message.lines.forEach(function(line)
+        {
+          $('<div class="fap-chat-line"></div>')
+            .attr('title', line.time)
+            .html(line.text)
+            .appendTo($lines);
+        });
       }
       else
       {

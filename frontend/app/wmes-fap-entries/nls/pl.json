@@ -101,13 +101,17 @@
   "addForm:submit": "Dodaj zgłoszenie",
   "addForm:cancel": "Anuluj",
   "addForm:orderNo:notFound": "Podane zlecenie nie istnieje.",
-  "addForm:upload:drop": "Upuść tutaj pliki jakie chcesz dodać do tego zgłoszenia.",
-  "addForm:upload:tooMany": "Możesz załączyć maksymalnie {max} {max, plural, few{pliki} one{plik} other{plików}}.",
-  "addForm:upload:failure": "Nie udało się załadować pliku: {file}",
   "addForm:notifications:subdivisions": "Działy",
   "addForm:notifications:prodFunctions": "Funkcje",
 
+  "upload:drop": "Upuść tutaj pliki jakie chcesz dodać do tego zgłoszenia.",
+  "upload:tooMany": "Możesz załączyć maksymalnie {max} {max, plural, few{pliki} one{plik} other{plików}}.",
+  "upload:failure": "Nie udało się załadować pliku: {file}",
+
   "chat:title": "Czat",
   "chat:send": "Wyślij wiadomość",
-  "chat:new": "Kliknij tutaj, aby zobaczyć nowe wiadomości..."
+  "chat:new": "Kliknij tutaj, aby zobaczyć nowe wiadomości...",
+
+  "attachments:menu:rename": "Zmień nazwę",
+  "attachments:menu:remove": "Usuń plik"
 }

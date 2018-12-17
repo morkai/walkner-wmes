@@ -4,3 +4,6 @@
 .fap-observer.fap-is-online .userInfo-label {
   font-weight: bold;
 }
+.fap-observer .fa-user {
+  text-shadow: 0 1px 0 #000;
+}

@@ -145,6 +145,7 @@ define([
 
       var obj = this.serialize();
 
+      obj.auth = this.serializeAuth();
       obj.problem = obj.problem.trim().replace(/\n{3,}/, '\n\n');
       obj.solution = obj.solution.trim().replace(/\n{3,}/, '\n\n') || '-';
       obj.problemMultiline = obj.problem.indexOf('\n') !== -1;
@@ -152,7 +153,6 @@ define([
       obj.chat = this.serializeChat();
       obj.attachments = obj.attachments.map(this.serializeAttachment, this);
       obj.observers = this.serializeObservers();
-      obj.auth = this.serializeAuth();
       obj.message = {
         type: '',
         text: ''
@@ -233,24 +233,6 @@ define([
         }]
       }];
 
-      entry.get('attachments').forEach(function(a)
-      {
-        if (a.user.id !== owner.id || a.date !== createdAt)
-        {
-          return;
-        }
-
-        var attachment = entry.serializeAttachment(a);
-
-        chat[0].lines.push({
-          time: chat[0].lines[0].time,
-          text: '<span class="fap-chat-attachment" data-attachment-id="' + a._id + '">'
-            + '<i class="fa ' + attachment.icon + '"></i><a>'
-            + _.escape(attachment.label)
-            + '</a></span>'
-        });
-      });
-
       entry.get('changes').forEach(function(change)
       {
         if (!change.user)
@@ -259,7 +241,9 @@ define([
         }
 
         var hasComment = !!change.comment;
-        var hasAddedAttachments = !!change.data.attachments && !change.data.attachments.added.length;
+        var hasAddedAttachments = !!change.data.attachments
+          && !change.data.attachments[0]
+          && !!change.data.attachments[1];
 
         if (hasComment || hasAddedAttachments)
         {
@@ -272,15 +256,33 @@ define([
 
     serializeChatMessage: function(change, chat)
     {
+      var entry = this;
       var prev = chat && chat[chat.length - 1];
-      var line = {
+      var lines = [{
         time: time.format(change.date, 'dddd, LL LTS'),
         text: _.escape(change.comment)
-      };
+      }];
+      var attachments = change.data.attachments;
+
+      if (!!attachments && !attachments[0] && !!attachments[1])
+      {
+        change.data.attachments[1].forEach(function(a)
+        {
+          var attachment = entry.serializeAttachment(a);
+
+          lines.push({
+            time: time.format(a.date, 'LLLL'),
+            text: '<span class="fap-chat-attachment" data-attachment-id="' + a._id + '">'
+              + '<i class="fa ' + attachment.icon + '"></i><a>'
+              + _.escape(attachment.label)
+              + '</a></span>'
+          });
+        });
+      }
 
       if (prev && prev.user.id === change.user.id)
       {
-        prev.lines.push(line);
+        prev.lines.push.apply(prev.lines, lines);
 
         return prev;
       }
@@ -293,7 +295,7 @@ define([
           self: self
         },
         color: self ? 'transparent' : colorFactory.getColor('fap/users', change.user.id),
-        lines: [line]
+        lines: lines
       };
 
       if (chat)
@@ -335,7 +337,9 @@ define([
         _id: attachment._id,
         icon: MIME_TO_ICON[attachment.type] || MIME_TO_ICON[type] || 'fa-file-o',
         preview: type === 'image',
-        label: attachment.name
+        label: attachment.name,
+        menu: user.isAllowedTo('FAP:MANAGE', 'FN:master', 'FN:leader', 'FN:process-engineer')
+          || (attachment.user && attachment.user.id === user.data._id)
       };
     },
 
@@ -512,6 +516,63 @@ define([
         subscribers.forEach(function(s) { subscriberMap[s.id] = true; });
 
         data.observers = oldObservers.filter(function(o) { return !subscriberMap[o.user.id]; });
+      },
+
+      attachments: function(data, entry, newAttachments)
+      {
+        var oldAttachments = entry.get('attachments');
+
+        if (newAttachments[0] === null)
+        {
+          this.addAttachments(data, entry, oldAttachments, newAttachments[1]);
+        }
+        else if (newAttachments[1] === null)
+        {
+          this.removeAttachments(data, entry, oldAttachments, newAttachments[0]);
+        }
+        else
+        {
+          this.editAttachments(data, entry, oldAttachments, newAttachments[1]);
+        }
+      },
+      addAttachments: function(data, entry, oldAttachments, addedAttachments)
+      {
+        var attachmentMap = {};
+
+        oldAttachments.forEach(function(a) { attachmentMap[a._id] = true; });
+
+        var newAttachments = [].concat(oldAttachments);
+
+        addedAttachments.forEach(function(attachment)
+        {
+          if (!attachmentMap[attachment._id])
+          {
+            newAttachments.push(attachment);
+
+            attachmentMap[attachment.id] = true;
+          }
+        });
+
+        data.attachments = newAttachments;
+      },
+      removeAttachments: function(data, entry, oldAttachments, removedAttachments)
+      {
+        var attachmentMap = {};
+
+        removedAttachments.forEach(function(a) { attachmentMap[a._id] = true; });
+
+        data.attachments = oldAttachments.filter(function(a) { return !attachmentMap[a._id]; });
+      },
+      editAttachments: function(data, entry, oldAttachments, editedAttachments)
+      {
+        var attachmentMap = {};
+
+        editedAttachments.forEach(function(a) { attachmentMap[a._id] = a; });
+
+        data.attachments = oldAttachments.map(function(attachment)
+        {
+          return attachmentMap[attachment._id] || attachment;
+        });
       },
 
       status: 1,

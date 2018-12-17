@@ -47,7 +47,7 @@ define([
         var uploadId = $upload[0].dataset.uploadId;
         var entry = this.model;
 
-        if (entry.uploading && entry.uploading._id === uploadId)
+        if (entry.uploading && entry.uploading.upload._id === uploadId)
         {
           entry.uploading.abort();
           entry.uploading = null;
@@ -193,7 +193,7 @@ define([
 
       if (view.model.uploading)
       {
-        view.renderUpload(view.model.uploading, false).appendTo($uploads);
+        view.renderUpload(view.model.uploading.upload, false).appendTo($uploads);
       }
 
       view.model.uploadQueue.forEach(function(upload)
@@ -327,7 +327,7 @@ define([
         viewport.msg.show({
           type: 'warning',
           time: 2500,
-          text: view.t('addForm:upload:tooMany', {max: 5})
+          text: view.t('upload:tooMany', {max: 5})
         });
 
         return false;
@@ -357,7 +357,7 @@ define([
         view.renderUpload(_.last(entry.uploadQueue), false).appendTo($uploads);
       });
 
-      if (!view.uploading)
+      if (!entry.uploading)
       {
         view.uploadNext();
       }
@@ -393,14 +393,21 @@ define([
         contentType: false
       });
 
+      entry.uploading.upload = upload;
+
       entry.uploading.fail(function()
       {
         view.removeUpload(upload._id);
 
+        if (entry.uploading.statusText === 'abort')
+        {
+          return;
+        }
+
         viewport.msg.show({
           type: 'error',
           time: 2500,
-          text: view.t('addForm:upload:failure', {file: upload.file.name})
+          text: view.t('upload:failure', {file: upload.file.name})
         });
       });
 
@@ -620,9 +627,9 @@ define([
     {
       var entry = this.model;
 
-      if (entry.uploading && entry.uploading._id === uploadId)
+      if (entry.uploading && entry.uploading.upload._id === uploadId)
       {
-        return entry.uploading;
+        return entry.uploading.upload;
       }
 
       for (var i = 0; i < entry.uploadedFiles.length; ++i)

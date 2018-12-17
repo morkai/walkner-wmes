@@ -36,10 +36,6 @@ define([
           }];
 
           this.model.change('subscribers', subscribers, null);
-
-          this.model.update({
-            subscribers: subscribers
-          });
         }
 
         this.timers.focus = setTimeout(this.focusObserver.bind(this, subscriber.id), 1);

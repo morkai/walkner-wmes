@@ -52,6 +52,8 @@ define([
       view.insertView('#-observersAndAttachments', new AttachmentsView({model: entry}));
 
       view.listenTo(entry, 'change', view.update);
+      view.listenTo(entry, 'editor:show', view.showEditor);
+      view.listenTo(entry, 'editor:hide', view.hideEditor);
 
       $(window).on('keydown.' + view.idPrefix, view.onKeyDown.bind(view));
     },
@@ -267,12 +269,10 @@ define([
         {
           var newValue = $value.val().trim();
 
-          if (newValue === oldValue)
+          if (newValue !== oldValue)
           {
-            return view.hideEditor();
+            view.model.change(prop, newValue);
           }
-
-          view.model.change(prop, newValue);
 
           view.hideEditor();
 
@@ -318,12 +318,10 @@ define([
         {
           var newValue = $value.val();
 
-          if (newValue === oldValue)
+          if (newValue !== oldValue)
           {
-            return view.hideEditor();
+            view.model.change('category', newValue);
           }
-
-          view.model.change('category', newValue);
 
           view.hideEditor();
 
@@ -382,12 +380,10 @@ define([
 
           newValue.divisions.sort(sort);
 
-          if (newValue.lines.length === 0 || JSON.stringify(newValue) === JSON.stringify(oldValue))
+          if (newValue.lines.length > 0 && JSON.stringify(newValue) !== JSON.stringify(oldValue))
           {
-            return view.hideEditor();
+            view.model.multiChange(newValue);
           }
-
-          view.model.multiChange(newValue);
 
           view.hideEditor();
 
@@ -561,6 +557,54 @@ define([
       analysisDone: function($prop)
       {
         this.editors.yesNo.call(this, $prop);
+      },
+
+      attachment: function($attachment)
+      {
+        var view = this;
+        var id = $attachment[0].dataset.attachmentId;
+        var oldValue = _.findWhere(view.model.get('attachments'), {_id: id});
+        var rect = $attachment[0].getBoundingClientRect();
+        var $form = $('<form class="fap-editor fap-attachments-editor"></form>').css({
+          top: $attachment.offset().top + 'px',
+          left: rect.left + 'px',
+          width: rect.width + 'px'
+        });
+        var $value = $('<input class="form-control" type="text">')
+          .prop('id', this.idPrefix + '-attachmentEditor')
+          .val(oldValue.name);
+        var $submit = $('<button class="btn btn-primary"><i class="fa fa-check"></i></button>');
+
+        $form.on('submit', function()
+        {
+          var newValue = JSON.parse(JSON.stringify(oldValue));
+
+          newValue.name = $value.val().trim();
+
+          var ext = oldValue.name.split('.').pop();
+          var re = new RegExp('\\.' + ext + '$', 'i');
+
+          if (!re.test(newValue.name))
+          {
+            newValue.name += '.' + ext;
+          }
+
+          if (newValue.name !== oldValue.name)
+          {
+            view.model.change('attachments', [newValue], [oldValue]);
+          }
+
+          view.hideEditor();
+
+          return false;
+        });
+
+        $form
+          .append($value)
+          .append($submit)
+          .appendTo(this.el);
+
+        $value.focus();
       }
 
     }

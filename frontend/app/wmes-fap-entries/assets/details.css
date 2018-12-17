@@ -145,6 +145,10 @@
   border-left: 1px solid #ddd;
   background: #fff;
 }
+.fap-details-list-action[disabled] {
+  opacity: 0.65;
+  pointer-events: none;
+}
 .fap-is-editable .fap-prop-name {
   position: relative;
 }
