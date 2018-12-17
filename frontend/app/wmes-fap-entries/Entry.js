@@ -117,6 +117,22 @@ define([
       obj.analysisDone = obj.analysisNeed ? t('core', 'BOOL:' + obj.analysisDone) : '-';
       obj.analysisNeed = t('core', 'BOOL:' + obj.analysisNeed);
 
+      if (!obj.orderNo)
+      {
+        obj.orderNo = '-';
+        obj.nc12 = '-';
+        obj.productName = '-';
+        obj.mrp = '-';
+        obj.qtyTodo = '-';
+        obj.qtyDone = '-';
+      }
+
+      if (!obj.lines)
+      {
+        obj.lines = '-';
+        obj.divisions = '-';
+      }
+
       return this.serialized = obj;
     },
 

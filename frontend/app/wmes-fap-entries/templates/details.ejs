@@ -21,7 +21,7 @@
     <div class="fap-prop" data-prop="orderNo">
       <div class="fap-prop-name"><%- helpers.t('PROPERTY:orderNo') %></div>
       <div class="fap-prop-value text-mono">
-        <% if (user.isAllowedTo('ORDERS:VIEW')) { %>
+        <% if (model.orderNo !== '-' && user.isAllowedTo('ORDERS:VIEW')) { %>
         <a href="#orders/<%- model.orderNo %>"><%- model.orderNo %></a>
         <% } else { %>
         <%- model.orderNo %>
