@@ -166,7 +166,7 @@ define([
           var req = view.whOrders.act('printLabels', {
             order: order,
             qty: qty,
-            func: view.model.user.func
+            func: view.model.user ? view.model.user.func : 'fmx'
           });
 
           req.fail(function()
