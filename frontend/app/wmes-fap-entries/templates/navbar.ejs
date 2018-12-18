@@ -6,9 +6,11 @@
         <% browseEntriesLinks.forEach(function(link) { %>
         <li class="navbar-with-button"><a href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)<%- link.rql %>"><%- helpers.t('navbar:' + link.label) %></a><button class="btn btn-default" data-href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)&observers.user.id=<%- user.data._id %><%- link.rql %>" title="<%- helpers.t('navbar:mine') %>"><i class="fa fa-user"></i></button></li>
         <% }) %>
+        <% if (user.isAllowedTo('FAP:MANAGE')) { %>
         <li class="divider"></li>
         <li class="dropdown-header"><%- helpers.t('navbar:dictionaries') %>
-        <li data-privilege="FAP:MANAGE"><a href="#fap/categories"><%- helpers.t('navbar:categories') %></a>
+        <li><a href="#fap/categories"><%- helpers.t('navbar:categories') %></a>
+        <% } %>
       </ul>
     </div>
     <button id="<%- idPrefix %>-add" type="button" class="btn btn-warning fap-navbarBtn-add" title="<%- helpers.t('navbar:add') %>"><i class="fa fa-plus"></i></button>

@@ -296,6 +296,7 @@ define([
 
       setUpUserSelect2($owner, {
         view: this,
+        noPersonnelId: true,
         width: '100%',
         dropdownCssClass: 'fap-addForm-select2'
       });
@@ -730,6 +731,16 @@ define([
 
     serializeForm: function(formData)
     {
+      var owner = this.$id('owner').select2('data');
+
+      if (owner)
+      {
+        formData.owner = {
+          id: owner.id,
+          label: owner.text
+        };
+      }
+
       formData.lines = (formData.lines || '').split(',').filter(function(v) { return !!v.length; });
       formData.subdivisions = (formData.subdivisions || '').split(',').filter(function(v) { return !!v.length; });
       formData.divisions = [];
