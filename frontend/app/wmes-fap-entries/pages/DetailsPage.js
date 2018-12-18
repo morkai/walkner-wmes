@@ -165,9 +165,22 @@ define([
 
     onUpdated: function(message)
     {
-      if (message._id === this.model.id && socket.getId() !== message.socketId)
+      var change = message.change;
+
+      if (socket.getId() !== message.socketId)
       {
-        this.model.handleChange(message.change);
+        this.model.handleChange(change);
+      }
+      else if (change.data.subscribers)
+      {
+        this.model.handleChange({
+          date: change.date,
+          user: change.user,
+          data: {
+            subscribers: change.data.subscribers
+          },
+          comment: ''
+        });
       }
     },
 
