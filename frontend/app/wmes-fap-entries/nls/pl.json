@@ -6,6 +6,7 @@
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:jump:title": "Skocz do zgłoszenia po ID",
   "PAGE_ACTION:jump:placeholder": "ID zgłoszenia",
+  "PAGE_ACTION:start": "Rozpocznij zgłoszenie",
   "PAGE_ACTION:finish": "Zakończ zgłoszenie",
   "PAGE_ACTION:restart": "Wznów zgłoszenie",
 
@@ -36,7 +37,8 @@
   "PROPERTY:analyzers": "Osoby biorące udział w analizie",
   "PROPERTY:why5": "Przyczyna problemu",
   "PROPERTY:why": "Dlaczego?",
-  "PROPERTY:solution": "Opis kroków rozwiązujących problem",
+  "PROPERTY:solution": "Opis rozwiązania problemu",
+  "PROPERTY:solutionSteps": "Opis kroków rozwiązujących problem",
 
   "status:pending": "Oczekujące",
   "status:started": "Rozpoczęte",

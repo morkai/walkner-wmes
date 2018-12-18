@@ -41,21 +41,32 @@ define([
     {
       var actions = [];
       var auth = this.model.serializeDetails().auth;
+      var status = this.model.get('status');
 
-      if (auth.restart && this.model.get('status') === 'finished')
+      if (status === 'finished')
       {
-        actions.push({
-          type: 'info',
-          icon: 'thumbs-down',
-          label: this.t('PAGE_ACTION:restart'),
-          callback: this.restart.bind(this)
-        });
+        if (auth.restart)
+        {
+          actions.push({
+            type: 'info',
+            label: this.t('PAGE_ACTION:restart'),
+            callback: this.start.bind(this)
+          });
+        }
       }
-      else if (auth.status && this.model.get('status') === 'started')
+      else if (auth.status)
       {
+        if (status === 'pending')
+        {
+          actions.push({
+            type: 'info',
+            label: this.t('PAGE_ACTION:start'),
+            callback: this.start.bind(this)
+          });
+        }
+
         actions.push({
           type: 'success',
-          icon: 'thumbs-up',
           label: this.t('PAGE_ACTION:finish'),
           callback: this.finish.bind(this)
         });
@@ -124,10 +135,17 @@ define([
 
     finish: function()
     {
-      this.model.change('status', 'finished');
+      if (this.model.get('solution').trim() === '')
+      {
+        this.view.showEditor(this.$('.fap-is-editable[data-prop="solution"]'), 'solution');
+      }
+      else
+      {
+        this.model.change('status', 'finished');
+      }
     },
 
-    restart: function()
+    start: function()
     {
       this.model.change('status', 'started');
     },

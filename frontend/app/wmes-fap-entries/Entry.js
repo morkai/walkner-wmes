@@ -113,7 +113,7 @@ define([
       obj.lines = obj.lines.join('; ');
 
       obj.assessment = t(this.nlsDomain, 'assessment:' + obj.assessment);
-      obj.analyzing = obj.analysisNeed && !obj.analysisDone;
+      obj.analyzing = obj.status !== 'pending' && obj.analysisNeed && !obj.analysisDone;
       obj.analysisDone = obj.analysisNeed ? t('core', 'BOOL:' + obj.analysisDone) : '-';
       obj.analysisNeed = t('core', 'BOOL:' + obj.analysisNeed);
 
@@ -164,8 +164,12 @@ define([
       obj.auth = this.serializeAuth();
       obj.problem = obj.problem.trim().replace(/\n{3,}/, '\n\n');
       obj.solution = obj.solution.trim().replace(/\n{3,}/, '\n\n') || '-';
-      obj.problemMultiline = obj.problem.indexOf('\n') !== -1;
-      obj.solutionMultiline = obj.solution.indexOf('\n') !== -1;
+      obj.solutionSteps = obj.solutionSteps.trim().replace(/\n{3,}/, '\n\n') || '-';
+      obj.multiline = {
+        problem: obj.problem.indexOf('\n') !== -1,
+        solution: obj.solution.indexOf('\n') !== -1,
+        solutionSteps: obj.solutionSteps.indexOf('\n') !== -1
+      };
       obj.chat = this.serializeChat();
       obj.attachments = obj.attachments.map(this.serializeAttachment, this);
       obj.observers = this.serializeObservers();
@@ -212,6 +216,7 @@ define([
         delete: this.canDelete(),
         restart: manage,
         status: manage || procEng || master || leader,
+        solution: manage || procEng || master || leader,
         problem: started && (manage || procEng || master || leader),
         category: started && (manage || procEng),
         orderNo: started && (manage || procEng),
@@ -221,7 +226,7 @@ define([
         analysisDone: !pending && analysisNeed && (manage || procEng || master),
         analysers: !pending && analysisNeed && !analysisDone && (manage || procEng || master),
         why5: !pending && analysisNeed && !analysisDone && (manage || procEng || master || leader || analyzer),
-        solution: !pending && analysisNeed && !analysisDone && (manage || procEng || master || leader || analyzer)
+        solutionSteps: !pending && analysisNeed && !analysisDone && (manage || procEng || master || leader || analyzer)
       };
     },
 
@@ -626,11 +631,12 @@ define([
 
       status: 1,
       problem: 1,
+      solution: 1,
       category: 1,
       divisions: 1,
       lines: 1,
       why5: 1,
-      solution: 1,
+      solutionSteps: 1,
       assessment: 1,
       analysisNeed: 1,
       analysisDone: 1,

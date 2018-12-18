@@ -11,7 +11,7 @@
       <div class="fap-prop-name"><%- helpers.t('PROPERTY:category') %></div>
       <div class="fap-prop-value"><%= model.category %></div>
     </div>
-    <div class="fap-prop fap-is-textarea <%- model.problemMultiline ? 'fap-is-multiline' : '' %>" data-prop="problem">
+    <div class="fap-prop fap-is-textarea <%- model.multiline.problem ? 'fap-is-multiline' : '' %>" data-prop="problem">
       <div class="fap-prop-name"><%- helpers.t('PROPERTY:problem') %></div>
       <div class="fap-prop-value"><%= model.problem %></div>
     </div>
@@ -65,6 +65,13 @@
     <div id="<%- idPrefix %>-chat"></div>
     <div id="<%- idPrefix %>-observersAndAttachments" style="flex: 1 1 auto; margin-left: 30px"></div>
   </div>
+  <div class="fap-props" style="margin-top: 30px">
+    <div class="fap-prop fap-is-textarea <%- model.multiline.solution ? 'fap-is-multiline' : '' %>" data-prop="solution" style="flex: 1 1 auto">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:solution') %></div>
+      <div class="fap-prop-value"><%= model.solution %></div>
+    </div>
+  </div>
+  <div class="fap-prop-separator"></div>
   <div class="fap-analysis">
     <div class="fap-analysis-header"><%- helpers.t('assessment:header') %></div>
     <div class="fap-prop-separator"></div>
@@ -98,9 +105,9 @@
     </div>
     <div class="fap-prop-separator"></div>
     <div class="fap-props">
-      <div class="fap-prop fap-is-textarea <%- model.solutionMultiline ? 'fap-is-multiline' : '' %>" data-prop="solution" style="flex: 1 1 auto">
-        <div class="fap-prop-name"><%- helpers.t('PROPERTY:solution') %></div>
-        <div class="fap-prop-value"><%= model.solution %></div>
+      <div class="fap-prop fap-is-textarea <%- model.multiline.solutionsSteps ? 'fap-is-multiline' : '' %>" data-prop="solutionSteps" style="flex: 1 1 auto">
+        <div class="fap-prop-name"><%- helpers.t('PROPERTY:solutionSteps') %></div>
+        <div class="fap-prop-value"><%= model.solutionSteps %></div>
       </div>
     </div>
   </div>

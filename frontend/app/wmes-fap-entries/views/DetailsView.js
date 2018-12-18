@@ -124,6 +124,7 @@ define([
 
         case 'problem':
         case 'solution':
+        case 'solutionSteps':
           return this.updateMultiline.bind(this, prop);
 
         case 'qtyTodo':
@@ -220,7 +221,7 @@ define([
       var details = this.model.serializeDetails();
       var $prop = this.$('.fap-prop[data-prop="' + prop + '"]');
 
-      $prop.toggleClass('fap-is-multiline', details[prop + 'Multiline']);
+      $prop.toggleClass('fap-is-multiline', details.multiline[prop]);
 
       this.updateText($prop, details[prop]);
     },
@@ -326,6 +327,11 @@ define([
       },
 
       solution: function($prop)
+      {
+        this.editors.textArea.call(this, $prop, false);
+      },
+
+      solutionSteps: function($prop)
       {
         this.editors.textArea.call(this, $prop, false);
       },

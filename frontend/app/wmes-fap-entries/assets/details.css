@@ -66,6 +66,11 @@
   max-height: 250px;
   overflow-y: auto;
 }
+.fap-prop[data-prop="solution"] .fap-prop-value {
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
 .fap-is-editing.fap-is-textarea .fap-prop-value {
   overflow: visible;
 }
@@ -190,6 +195,7 @@
 }
 .fap-prop[data-prop="problem"] .fap-editor,
 .fap-prop[data-prop="solution"] .fap-editor,
+.fap-prop[data-prop="solutionSteps"] .fap-editor,
 .fap-prop[data-prop="assessment"] .fap-editor {
   flex-direction: column;
 }
