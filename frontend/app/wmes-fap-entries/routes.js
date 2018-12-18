@@ -35,6 +35,14 @@ define([
       ],
       function(EntryCollection, ListPage)
       {
+        req.rql.selector.args.forEach(function(term)
+        {
+          if (term.name === 'eq' && term.args[0] === 'observers.user.id' && term.args[1] === 'mine')
+          {
+            term.args[1] = user.data._id;
+          }
+        });
+
         return new ListPage({
           collection: new EntryCollection(null, {rqlQuery: req.rql})
         });

@@ -3,6 +3,7 @@
 define([
   'underscore',
   'jquery',
+  'app/viewport',
   'app/core/View',
   'app/core/util/idAndLabel',
   'app/data/orgUnits',
@@ -15,6 +16,7 @@ define([
 ], function(
   _,
   $,
+  viewport,
   View,
   idAndLabel,
   orgUnits,
@@ -124,7 +126,15 @@ define([
         case 'solution':
           return this.updateMultiline.bind(this, prop);
 
+        case 'qtyTodo':
+        case 'qtyDone':
+          return this.updateQty;
+
         case 'category':
+        case 'orderNo':
+        case 'mrp':
+        case 'nc12':
+        case 'productName':
         case 'divisions':
         case 'lines':
         case 'assessment':
@@ -185,6 +195,15 @@ define([
     updateProp: function(prop)
     {
       this.updateText(this.$('.fap-prop[data-prop="' + prop + '"]'), this.model.serializeDetails()[prop]);
+    },
+
+    updateQty: function()
+    {
+      var $prop = this.$('.fap-prop[data-prop="qty"]');
+      var details = this.model.serializeDetails();
+
+      this.updateText($prop.find('[data-prop="qtyDone"]')[0], details.qtyDone);
+      this.updateText($prop.find('[data-prop="qtyTodo"]')[0], details.qtyTodo);
     },
 
     updateMessage: function()
@@ -608,6 +627,118 @@ define([
           .append($value)
           .append($submit)
           .appendTo(this.el);
+
+        $value.focus();
+      },
+
+      orderNo: function($prop)
+      {
+        var view = this;
+        var oldValue = view.model.get('orderNo');
+        var $form = $('<form class="fap-editor"></form>');
+        var $value = $('<input class="form-control" type="text" pattern="^[0-9]{9}$" maxlength="9">');
+        var $submit = $('<button class="btn btn-primary"><i class="fa fa-check"></i></button>');
+
+        $value.on('input', function()
+        {
+          $value[0].setCustomValidity('');
+        });
+
+        $form.on('submit', function()
+        {
+          var newValue = $value.val();
+
+          if (newValue === oldValue)
+          {
+            view.hideEditor();
+
+            return false;
+          }
+
+          if (newValue === '')
+          {
+            view.model.multiChange({
+              orderNo: '',
+              mrp: '',
+              nc12: '',
+              productName: '',
+              qtyTodo: 0,
+              qtyDone: 0,
+              divisions: [],
+              lines: []
+            });
+
+            view.hideEditor();
+
+            return false;
+          }
+
+          $value.prop('disabled', true);
+          $submit.prop('disabled', true);
+
+          var req = view.ajax({
+            method: 'POST',
+            url: '/fap/entries;validate-order?order=' + newValue
+          });
+
+          req.fail(function()
+          {
+            if (req.statusText === 'abort')
+            {
+              return;
+            }
+
+            $value.prop('disabled', false);
+            $submit.prop('disabled', false);
+
+            if (req.status === 404)
+            {
+              $value[0].setCustomValidity(view.t('orderNo:404'));
+              $submit.click();
+            }
+            else
+            {
+              viewport.msg.show({
+                type: 'error',
+                time: 2500,
+                text: view.t('orderNo:failure')
+              });
+            }
+          });
+
+          req.done(function(res)
+          {
+            res.divisions = [];
+
+            res.lines.forEach(function(line)
+            {
+              var division = orgUnits.getAllForProdLine(line).division;
+
+              if (division && newValue.divisions.indexOf(division) === -1)
+              {
+                res.divisions.push(division);
+              }
+            });
+
+            res.divisions.sort(function(a, b)
+            {
+              return a.localeCompare(b, undefined, {numeric: true, ignorePunctuation: true});
+            });
+
+            view.model.multiChange(res);
+
+            view.hideEditor();
+          });
+
+          return false;
+        });
+
+        $value.val(oldValue);
+
+        $form
+          .append($value)
+          .append($submit)
+          .appendTo($prop.find('.fap-prop-value'));
 
         $value.focus();
       }

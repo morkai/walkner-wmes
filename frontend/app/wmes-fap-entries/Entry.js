@@ -214,6 +214,7 @@ define([
         status: manage || procEng || master || leader,
         problem: started && (manage || procEng || master || leader),
         category: started && (manage || procEng),
+        orderNo: started && (manage || procEng),
         lines: started && (manage || procEng),
         assessment: !pending && (manage || procEng || master),
         analysisNeed: !pending && (manage || procEng || master),
@@ -431,9 +432,19 @@ define([
           newValue = data[prop];
         }
 
+        if (JSON.stringify(newValue) === JSON.stringify(oldValue))
+        {
+          return;
+        }
+
         change.data[prop] = [oldValue, newValue];
         update[prop] = newValue;
       });
+
+      if (!Object.keys(update).length)
+      {
+        return;
+      }
 
       entry.handleChange(change);
       entry.update(update);
@@ -622,7 +633,13 @@ define([
       solution: 1,
       assessment: 1,
       analysisNeed: 1,
-      analysisDone: 1
+      analysisDone: 1,
+      orderNo: 1,
+      mrp: 1,
+      nc12: 1,
+      productName: 1,
+      qtyTodo: 1,
+      qtyDone: 1
 
     }
 

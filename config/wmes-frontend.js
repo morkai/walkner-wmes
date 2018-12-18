@@ -99,6 +99,7 @@ exports.modules = [
   'wmes-toolcal',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
+  'sms/sender',
   'messenger/server',
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-sap'},
   {id: 'messenger/client', name: 'messenger/client:wmes-importer-results'},
@@ -565,6 +566,10 @@ exports.warehouse = {
 
 exports['mail/sender'] = {
   from: 'WMES Bot <wmes@localhost>'
+};
+
+exports['sms/sender'] = {
+
 };
 
 exports.kaizen = {
