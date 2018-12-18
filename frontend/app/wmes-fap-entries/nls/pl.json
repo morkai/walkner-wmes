@@ -63,7 +63,7 @@
   "filter:order": "Zlecenie/12NC",
   "filter:submit": "Filtruj",
 
-  "history:added": "<i>Utworzenie zgłoszenia o {time} {day, select, =7{w niedzielę} =6{w sobotę} =3{w środę} =2{we wtorek} other{w {ddd}}}, {date}.</i>",
+  "history:added": "<i>Utworzono zgłoszenie o {time} {day, select, =7{w niedzielę} =6{w sobotę} =3{w środę} =2{we wtorek} other{w {ddd}}}, {date}.</i>",
 
   "settings:tab:general": "Ogólne",
   "settings:general:pendingFunctions": "Funkcje wymagające zatwierdzenia",
@@ -95,6 +95,10 @@
   "chat:title": "Czat",
   "chat:send": "Wyślij wiadomość",
   "chat:new": "Kliknij tutaj, aby zobaczyć nowe wiadomości...",
+  "chat:status:pending:started": "<i>Zaakceptowano zgłoszenie.</i>",
+  "chat:status:started:finished": "<i>Zakończono zgłoszenie.</i>",
+  "chat:status:finished:started": "<i>Wznowiono zgłoszenie.</i>",
+  "chat:status:pending:finished": "<i>Zakończono zgłoszenie.</i>",
 
   "observers:placeholder": "Dodaj po nazwisku lub nr kadrowym...",
 

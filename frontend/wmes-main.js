@@ -175,7 +175,8 @@
       broker.subscribe('i18n.reloaded', function(message)
       {
         localStorage.setItem('LOCALE', message.newLocale);
-        viewport.render();
+
+        window.location.reload();
       });
 
       broker.subscribe('user.reloaded', function()

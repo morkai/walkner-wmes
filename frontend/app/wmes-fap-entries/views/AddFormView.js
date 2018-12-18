@@ -471,7 +471,14 @@ define([
 
       if (!view.model.focusedInput)
       {
-        view.$id('orderNo').focus();
+        var $el = view.$id('owner');
+
+        if (!$el.length)
+        {
+          $el = view.$id('orderNo');
+        }
+
+        $el.focus();
 
         return;
       }

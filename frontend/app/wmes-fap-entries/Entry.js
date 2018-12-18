@@ -270,11 +270,12 @@ define([
         }
 
         var hasComment = !!change.comment;
-        var hasAddedAttachments = !!change.data.attachments
+        var hasAttachmentsAdded = !!change.data.attachments
           && !change.data.attachments[0]
           && !!change.data.attachments[1];
+        var hasStatusChanged = !!change.data.status;
 
-        if (hasComment || hasAddedAttachments)
+        if (hasComment || hasAttachmentsAdded || hasStatusChanged)
         {
           entry.serializeChatMessage(change, chat, availableAttachments);
         }
@@ -287,13 +288,22 @@ define([
     {
       var entry = this;
       var prev = chat && chat[chat.length - 1];
+      var changeTime = time.format(change.date, 'dddd, LL LTS');
       var lines = [];
 
       if (change.comment)
       {
         lines.push({
-          time: time.format(change.date, 'dddd, LL LTS'),
+          time: changeTime,
           text: _.escape(change.comment)
+        });
+      }
+
+      if (change.data.status)
+      {
+        lines.push({
+          time: changeTime,
+          text: t(this.nlsDomain, 'chat:status:' + change.data.status.join(':'))
         });
       }
 
@@ -311,7 +321,7 @@ define([
           var attachment = entry.serializeAttachment(a);
 
           lines.push({
-            time: time.format(a.date, 'LLLL'),
+            time: changeTime,
             text: '<span class="fap-chat-attachment" data-attachment-id="' + a._id + '">'
               + '<i class="fa ' + attachment.icon + '"></i><a>'
               + _.escape(attachment.label)

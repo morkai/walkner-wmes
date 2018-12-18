@@ -1,6 +1,112 @@
 {
   "root": {
+    "BREADCRUMBS:base": "FAP",
+    "BREADCRUMBS:browse": "FAP",
+    "BREADCRUMBS:settings": "Settings",
 
+    "PAGE_ACTION:settings": "Settings",
+    "PAGE_ACTION:jump:title": "Jump to entry by ID",
+    "PAGE_ACTION:jump:placeholder": "Entry ID",
+    "PAGE_ACTION:start": "Start entry",
+    "PAGE_ACTION:finish": "Finish entry",
+    "PAGE_ACTION:restart": "Restart entry",
+
+    "PANEL:TITLE:changes": "History",
+
+    "PROPERTY:rid": "ID",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:owner": "Owner",
+    "PROPERTY:status": "Status",
+    "PROPERTY:orderNo": "Order no",
+    "PROPERTY:nc12": "12NC",
+    "PROPERTY:mrp": "MRP",
+    "PROPERTY:productName": "Product name",
+    "PROPERTY:category": "Category",
+    "PROPERTY:problem": "Problem",
+    "PROPERTY:divisions": "Division",
+    "PROPERTY:lines": "Line",
+    "PROPERTY:qty": "Quantity",
+    "PROPERTY:qtyTodo": "Quantity todo",
+    "PROPERTY:qtyDone": "Quantity done",
+    "PROPERTY:attachments": "Attachments",
+    "PROPERTY:observers": "Participants",
+    "PROPERTY:assessment": "Assessment",
+    "PROPERTY:analysisNeed": "Analysis needed",
+    "PROPERTY:analysisDone": "Analysis done",
+    "PROPERTY:analyzer": "Person responsible for the analysis",
+    "PROPERTY:analyzers": "People involved in the analysis",
+    "PROPERTY:why5": "Problem cause",
+    "PROPERTY:why": "Why?",
+    "PROPERTY:solution": "Solution",
+    "PROPERTY:solutionSteps": "Solution steps",
+
+    "status:pending": "Pending",
+    "status:started": "Started",
+    "status:finished": "Finished",
+
+    "assessment:header": "Structural solution to the problem",
+    "assessment:unspecified": "Unspecified",
+    "assessment:effective": "Effective",
+    "assessment:ineffective": "Ineffective",
+    "assessment:repeatable": "Repeatable",
+
+    "message:pending": "Entry awaits verification.",
+    "message:started:true": "Problem is being analyzed.",
+    "message:started:false": "Problem is being solved.",
+    "message:finished:true": "Entry is finished, but the analysis is still in progress.",
+    "message:finished:false": "Entry is finished.",
+
+    "filter:user:mine": "Mine",
+    "filter:user:others": "User",
+    "filter:status:specific": "Status",
+    "filter:status:analysis": "Analysis",
+    "filter:order": "Order/12NC",
+    "filter:submit": "Filter",
+
+    "history:added": "<i>Entry created at {time} on {ddd}, {date}.</i>",
+
+    "settings:tab:general": "General",
+    "settings:general:pendingFunctions": "Functions requiring verification",
+    "settings:general:pendingFunctions:help": "Entries added by a user without assigned Function or with a Function from the following list will be added with the <em>Pending</em> status and will have to be verified by a leader.",
+
+    "navbar:dictionaries": "Dictionaries",
+    "navbar:categories": "Categories",
+    "navbar:button": "FAP",
+    "navbar:add": "Add a new FAP",
+    "navbar:all": "All",
+    "navbar:open": "Open",
+    "navbar:pending": "Pending",
+    "navbar:started": "Started",
+    "navbar:finished": "Finished",
+    "navbar:analysis": "Analyzed",
+    "navbar:mine": "Mine",
+
+    "addForm:subdivisions": "Notified subdivisions",
+    "addForm:submit": "Add entry",
+    "addForm:cancel": "Cancel",
+    "addForm:orderNo:notFound": "Order not found.",
+    "addForm:notifications:subdivisions": "Subdivisions",
+    "addForm:notifications:prodFunctions": "Functions",
+
+    "upload:drop": "Drop here any files you want to attach to the entry.",
+    "upload:tooMany": "You can attach at most {max} {max, plural, one{file} other{files}}.",
+    "upload:failure": "Failed to upload file: {file}",
+
+    "chat:title": "Chat",
+    "chat:send": "Send message",
+    "chat:new": "Click here to see new messages...",
+    "chat:status:pending:started": "<i>Entry accepted.</i>",
+    "chat:status:started:finished": "<i>Entry finished.</i>",
+    "chat:status:finished:started": "<i>Entry restarted.</i>",
+    "chat:status:pending:finished": "<i>Entry finished.</i>",
+
+    "observers:placeholder": "Add by last name or personnel ID...",
+
+    "attachments:menu:rename": "Change name",
+    "attachments:menu:remove": "Remove file",
+
+    "orderNo:404": "Order not found.",
+    "orderNo:failure": "Order validation failed."
   },
   "pl": true
 }

@@ -153,7 +153,9 @@ define([
 
       var attachments = change.data.attachments;
 
-      if (change.comment || (attachments && !attachments[0] && attachments[1]))
+      if (change.comment
+        || change.data.status
+        || (attachments && !attachments[0] && attachments[1]))
       {
         this.handleChange(change);
       }
