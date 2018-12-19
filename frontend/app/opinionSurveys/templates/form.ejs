@@ -36,7 +36,7 @@
         <input id="<%- idPrefix %>-endDate" class="form-control" type="date" name="endDate" required>
       </div>
       <div id="<%- idPrefix %>-lang" class="form-group btn-group" data-toggle="buttons">
-        <% ['pl'].forEach(function(lang) { %>
+        <% ['pl', 'ua'].forEach(function(lang) { %>
         <label class="btn btn-default">
           <input type="radio" name="langSwitch" value="<%- lang %>"> <%- t('opinionSurveys', 'lang:' + lang) %>
         </label>
