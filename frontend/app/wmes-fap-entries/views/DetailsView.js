@@ -3,6 +3,7 @@
 define([
   'underscore',
   'jquery',
+  'app/user',
   'app/viewport',
   'app/core/View',
   'app/core/util/idAndLabel',
@@ -16,6 +17,7 @@ define([
 ], function(
   _,
   $,
+  user,
   viewport,
   View,
   idAndLabel,
@@ -131,8 +133,10 @@ define([
         case 'qtyDone':
           return this.updateQty;
 
-        case 'category':
         case 'orderNo':
+          return this.updateOrderNo;
+
+        case 'category':
         case 'mrp':
         case 'nc12':
         case 'productName':
@@ -205,6 +209,35 @@ define([
 
       this.updateText($prop.find('[data-prop="qtyDone"]')[0], details.qtyDone);
       this.updateText($prop.find('[data-prop="qtyTodo"]')[0], details.qtyTodo);
+    },
+
+    updateOrderNo: function()
+    {
+      var $prop = this.$('.fap-prop[data-prop="orderNo"]');
+      var $value = $prop.find('.fap-prop-value');
+      var details = this.model.serializeDetails();
+
+      while ($value[0].firstChild && $value[0].firstChild.nodeName !== 'div')
+      {
+        $value[0].removeChild($value[0].firstChild);
+      }
+
+      var html;
+
+      if (details.orderNo === '-')
+      {
+        html = '-';
+      }
+      else if (user.isAllowedTo('ORDERS:VIEW'))
+      {
+        html = '<a href="#orders/' + details.orderNo + '">' + details.orderNo + '</a>';
+      }
+      else
+      {
+        html = details.orderNo;
+      }
+
+      $value.prepend(html);
     },
 
     updateMessage: function()
@@ -720,7 +753,7 @@ define([
             {
               var division = orgUnits.getAllForProdLine(line).division;
 
-              if (division && newValue.divisions.indexOf(division) === -1)
+              if (division && res.divisions.indexOf(division) === -1)
               {
                 res.divisions.push(division);
               }
