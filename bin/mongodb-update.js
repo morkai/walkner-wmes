@@ -30,3 +30,5 @@ db.opinionsurveys.updateMany({}, {
     lang: {}
   }
 });
+
+db.delayreasons.updateMany({}, {$set: {requireComponent: false}});

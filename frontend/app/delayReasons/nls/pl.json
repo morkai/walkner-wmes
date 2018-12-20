@@ -3,5 +3,6 @@
 
   "PROPERTY:active": "Aktywny?",
   "PROPERTY:name": "Nazwa",
-  "PROPERTY:drm": "Kategoria DRM"
+  "PROPERTY:drm": "Kategoria DRM",
+  "PROPERTY:requireComponent": "Wymagane 12NC?"
 }

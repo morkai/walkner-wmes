@@ -91,6 +91,7 @@
     "PRIVILEGE:SUPER": "Super admin",
     "PRIVILEGE:ORDERS:VIEW": "Orders: view",
     "PRIVILEGE:ORDERS:MANAGE": "Orders: manage",
+    "PRIVILEGE:ORDERS:COMMENT": "Orders: comment",
     "PRIVILEGE:EVENTS:VIEW": "Events: view",
     "PRIVILEGE:EVENTS:MANAGE": "Events: manage",
     "PRIVILEGE:USERS:VIEW": "Users: view",

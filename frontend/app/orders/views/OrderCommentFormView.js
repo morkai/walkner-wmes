@@ -46,6 +46,8 @@ define([
 
       this.$('input[name="source"][value="' + source + '"]').prop('checked', true);
       this.$id('comment').val('');
+
+      this.handleDelayReason();
     },
 
     request: function(formData)
@@ -53,7 +55,12 @@ define([
       if (!formData.delayReason)
       {
         formData.delayReason = '';
+        formData.delayComponent = '';
         formData.m4 = '';
+      }
+      else
+      {
+        formData.delayComponent = (formData.delayComponent || '').toUpperCase();
       }
 
       return this.ajax({
@@ -77,6 +84,7 @@ define([
       var changingDelayReason = delayReasonId !== (this.model.get('delayReason') || '');
       var changingM4 = m4 !== (this.model.get('m4') || '');
       var changing = changingDelayReason || changingM4;
+      var requiredComponent = hasDelayReason && !!delayReason.get('requireComponent');
 
       this.$('input[name="m4"]')
         .prop('required', hasDelayReason)
@@ -84,7 +92,13 @@ define([
         .find('.control-label')
         .toggleClass('is-required', hasDelayReason);
 
-      if (e.target.name === 'delayReason')
+      this.$id('delayComponent')
+        .prop('disabled', !requiredComponent)
+        .closest('.form-group')
+        .find('.control-label')
+        .toggleClass('is-required', requiredComponent);
+
+      if (e && e.target.name === 'delayReason')
       {
         if (delayReason)
         {

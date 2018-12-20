@@ -399,7 +399,7 @@ function(
     commentOrders: function()
     {
       return user.isAllowedTo(
-        'ORDERS:MANAGE',
+        'ORDERS:MANAGE', 'ORDERS:COMMENT',
         'PLANNING:PLANNER', 'PLANNING:WHMAN', 'PAINT_SHOP:PAINTER',
         'FN:master', 'FN:leader'
       );

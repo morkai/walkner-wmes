@@ -32,6 +32,7 @@ define([
       var obj = this.toJSON();
 
       obj.active = t('core', 'BOOL:' + obj.active);
+      obj.requireComponent = t('core', 'BOOL:' + !!obj.requireComponent);
 
       return obj;
     }

@@ -31,6 +31,7 @@ define([
           {id: 'name', className: 'is-min'},
           {id: 'active', className: 'is-min'},
           {id: 'drm', tdClassName: 'is-min'},
+          {id: 'requireComponent', tdClassName: 'is-min'},
           '-'
         ]
       });

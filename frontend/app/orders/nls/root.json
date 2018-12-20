@@ -52,6 +52,7 @@
     "PROPERTY:description": "Description",
     "PROPERTY:soldToParty": "Sold-to party",
     "PROPERTY:delayReason": "Delay reason",
+    "PROPERTY:delayComponent": "Delayed component",
     "PROPERTY:statuses": "Status",
     "PROPERTY:operations": "Operations",
     "PROPERTY:operations.no": "Operation no",
@@ -128,6 +129,7 @@
     "details:opTimes:summed": "Grouped time",
 
     "commentForm:delayReason": "New delay reason",
+    "commentForm:delayComponent": "12NC",
     "commentForm:source": "Source",
     "commentForm:source:other": "Other",
     "commentForm:source:ps": "Paint shop",

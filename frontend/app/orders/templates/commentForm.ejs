@@ -9,11 +9,15 @@
     <% }) %>
   </div>
   <div class="row">
-    <div class="col-md-4 form-group has-required-select2">
+    <div class="col-lg-4 form-group has-required-select2">
       <label for="<%- idPrefix %>-delayReason" class="control-label"><%- t('orders', 'commentForm:delayReason') %></label>
       <input id="<%- idPrefix %>-delayReason" type="text" autocomplete="new-password" name="delayReason">
     </div>
-    <div class="col-md-8 form-group">
+    <div class="col-lg-2 form-group has-required-select2">
+      <label for="<%- idPrefix %>-delayComponent" class="control-label"><%- t('orders', 'commentForm:delayComponent') %></label>
+      <input id="<%- idPrefix %>-delayComponent" class="form-control" type="text" autocomplete="new-password" name="delayComponent" required maxlength="12" pattern="^([A-Za-z0-9]{7}|[0-9]{12})$">
+    </div>
+    <div class="col-lg-6 form-group">
       <label class="control-label"><%- t('orders', 'PROPERTY:m4') %></label>
       <br>
       <% ['man', 'machine', 'material', 'method'].forEach(function(m4) { %>

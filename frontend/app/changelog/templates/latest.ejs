@@ -1,5 +1,9 @@
-<h1>v?.?.?</h1>
+<h1>v0.129.0</h1>
 <h2><%- time.format(Date.now(), 'LL') %></h2>
+<h3>FAP</h3>
+<ul>
+  <li>Dodano nowy moduł: Fast Action to Problem.</li>
+</ul>
 <h3>Narzędzia pomiarowe</h3>
 <ul>
   <li>Poprawiono błąd powodujący nierozwijanie się listy filtra 'Typ urządzenia'.</li>
@@ -46,12 +50,19 @@
   <li>Dodano możliwość przypisywania Wydziałów do Sekcji.</li>
   <li>Dodano możliwość przypisywania Dni do Dyżurów.</li>
 </ul>
+<h3>Powody opóźnień</h3>
+<ul>
+  <li>Dodano nową flagę: Wymagane 12NC?</li>
+</ul>
 <h3>Zlecenia reszty działów</h3>
 <ul>
   <li>Zmieniono importowanie tabel ETO tak, aby ignorowane były tabele, w treści których nie znajduje się 12NC z tematu
     e-maila.</li>
   <li>Dodano akcję 'Ukryj zmiany systemowe' do listy zmian zlecenia. Włączenie opcji sprawi, że wszystkie wpisy
     w historii zlecenia wykonane przez 'System' zostaną ukryte.</li>
+  <li>Dodano nowe uprawnienie: Zlecenia: komentowanie - użytkownicy mający uprawnienia do przeglądania zleceń mogą
+    z tym uprawnieniem także je komentować i ustawiać Powód opóźnienia.</li>
+  <li>Dodano nowe pole: Opóźniony komponent - wymagane przy ustawianiu określonych Powodów opóźnień.</li>
 </ul>
 <h3>Dokumentacja</h3>
 <ul>
@@ -60,6 +71,12 @@
 <h3>Zdarzenia</h3>
 <ul>
   <li>Zmieniono pozycję modułu w menu z nadrzędnej na podrzędną w menu 'Narzędzia'.</li>
+</ul>
+<h3>Badanie Opinia</h3>
+<ul>
+  <li>Zmieniono pytanie <em>Polecanie</em> (<code>REFERRALS)</code> tak, aby wyświetlane było pod tabelką
+    i miało postać wyboru odpowiedzi w skali 1-10.</li>
+  <li>Dodano możliwość przetłumaczenia i wygenerowania ankiety w języku ukraińskim.</li>
 </ul>
 <h3>Inne</h3>
 <ul>
@@ -76,6 +93,7 @@
   <li>Zmieniono akcje aplikacji uruchomionych w trybie wsadowym tak, aby były łatwiejsze w użyciu za pomocą dotyku.</li>
   <li>Zmieniono stronę z błędem 403 Brak uprawnień tak, aby przeglądarka odświeżyła się automatycznie, jeżeli powodem
     błędu jest utrata sesji przez użytkownika.</li>
+  <li>Zmieniono zmianę lokalizacji interfejsu użytkownika tak, aby po zmianie strona była odświeżana.</li>
   <li>Dodano dymki z dodatkowymi informacjami na temat użytkowników.</li>
   <li>Dodano do wyszukiwarki możliwość wyszukiwania użytkowników po nazwisku.</li>
 </ul>

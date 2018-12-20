@@ -90,6 +90,7 @@
   "PRIVILEGE:SUPER": "Super administrator",
   "PRIVILEGE:ORDERS:VIEW": "Zlecenia: przeglądanie",
   "PRIVILEGE:ORDERS:MANAGE": "Zlecenia: zarządzanie",
+  "PRIVILEGE:ORDERS:COMMENT": "Zlecenia: komentowanie",
   "PRIVILEGE:EVENTS:VIEW": "Zdarzenia: przeglądanie",
   "PRIVILEGE:EVENTS:MANAGE": "Zdarzenia: zarządzanie",
   "PRIVILEGE:USERS:VIEW": "Użytkownicy: przeglądanie",

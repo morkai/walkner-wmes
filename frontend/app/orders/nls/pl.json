@@ -51,6 +51,7 @@
   "PROPERTY:description": "Opis",
   "PROPERTY:soldToParty": "Zleceniodawca",
   "PROPERTY:delayReason": "Powód opóźnienia",
+  "PROPERTY:delayComponent": "Opóźniony komponent",
   "PROPERTY:statuses": "Status",
   "PROPERTY:operations": "Operacje",
   "PROPERTY:operations.no": "Nr",
@@ -127,6 +128,7 @@
   "details:opTimes:summed": "Czas zgrupowany",
 
   "commentForm:delayReason": "Nowy powód opóźnienia",
+  "commentForm:delayComponent": "12NC",
   "commentForm:comment": "Komentarz",
   "commentForm:source": "Źródło",
   "commentForm:source:other": "Inne",

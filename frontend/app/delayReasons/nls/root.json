@@ -4,7 +4,8 @@
 
     "PROPERTY:active": "Active?",
     "PROPERTY:name": "Name",
-    "PROPERTY:drm": "DRM category"
+    "PROPERTY:drm": "DRM category",
+    "PROPERTY:requireComponent": "Require 12NC?"
   },
   "pl": true
 }
