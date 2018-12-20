@@ -30,6 +30,7 @@
   "PROPERTY:template": "Szablon",
   "PROPERTY:startDate": "Data rozpoczęcia",
   "PROPERTY:endDate": "Data zakończenia",
+  "PROPERTY:company": "Nazwa firmy",
   "PROPERTY:intro": "Wstęp",
   "PROPERTY:employers": "Pracodawcy",
   "PROPERTY:employers._id": "ID",
@@ -73,6 +74,9 @@
   "lang:pl": "Polski",
   "lang:ua": "Ukraiński",
   "lang:en": "Angielski",
+
+  "showDivision:true": "Pokazuj wydziały",
+  "showDivision:false": "Nie pokazuj wydziałów",
 
   "report:filter:submit": "Filtruj raport",
   "report:filter:surveys": "Badania",

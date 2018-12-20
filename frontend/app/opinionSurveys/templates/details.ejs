@@ -1,49 +1,35 @@
 <div class="opinionSurveys-details">
   <div class="panel panel-primary opinionSurveys-details-props">
     <div class="panel-heading">
-      <%- t('opinionSurveys', 'PANEL:TITLE:details') %>
+      <%- helpers.t('PANEL:TITLE:details') %>
     </div>
     <div class="panel-details">
       <div class="props first">
+        <% ['_id', 'label', 'template', 'startDate', 'endDate', 'company'].forEach(function(prop) { %>
         <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveys', 'PROPERTY:_id') %></div>
-          <div class="prop-value"><%- model._id %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
+          <div class="prop-value"><%= model[prop] %></div>
         </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveys', 'PROPERTY:label') %></div>
-          <div class="prop-value"><%= model.label %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveys', 'PROPERTY:template') %></div>
-          <div class="prop-value"><%- model.template %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveys', 'PROPERTY:startDate') %></div>
-          <div class="prop-value"><%- model.startDate %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveys', 'PROPERTY:endDate') %></div>
-          <div class="prop-value"><%- model.endDate %></div>
-        </div>
+        <% }) %>
       </div>
     </div>
   </div>
   <div class="panel panel-default opinionSurveys-details-intro">
     <div class="panel-heading">
-      <%- t('opinionSurveys', 'PROPERTY:intro') %>
+      <%- helpers.t('PROPERTY:intro') %>
     </div>
     <div class="panel-body"><%- model.intro %></div>
   </div>
   <div class="panel panel-default opinionSurveys-details-employers">
     <div class="panel-heading">
-      <%- t('opinionSurveys', 'PROPERTY:employers') %>
+      <%- helpers.t('PROPERTY:employers') %>
     </div>
     <table class="table table-condensed table-bordered">
       <thead>
       <tr>
-        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:employers._id') %></th>
-        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:employers.short') %></th>
-        <th><%- t('opinionSurveys', 'PROPERTY:employers.full') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:employers._id') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:employers.short') %></th>
+        <th><%- helpers.t('PROPERTY:employers.full') %></th>
       </tr>
       </thead>
       <tbody>
@@ -59,14 +45,14 @@
   </div>
   <div class="panel panel-default opinionSurveys-details-superiors">
     <div class="panel-heading">
-      <%- t('opinionSurveys', 'PROPERTY:superiors') %>
+      <%- helpers.t('PROPERTY:superiors') %>
     </div>
     <table class="table table-condensed table-bordered">
       <thead>
       <tr>
-        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:superiors.short') %></th>
-        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:superiors.full') %></th>
-        <th><%- t('opinionSurveys', 'PROPERTY:superiors.division') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:superiors.short') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:superiors.full') %></th>
+        <th><%- helpers.t('PROPERTY:superiors.division') %></th>
       </tr>
       </thead>
       <tbody>
@@ -82,14 +68,14 @@
   </div>
   <div class="panel panel-default opinionSurveys-details-questions">
     <div class="panel-heading">
-      <%- t('opinionSurveys', 'PROPERTY:questions') %>
+      <%- helpers.t('PROPERTY:questions') %>
     </div>
     <table class="table table-condensed table-bordered">
       <thead>
       <tr>
-        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:questions._id') %></th>
-        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:questions.short') %></th>
-        <th><%- t('opinionSurveys', 'PROPERTY:questions.full') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:questions._id') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:questions.short') %></th>
+        <th><%- helpers.t('PROPERTY:questions.full') %></th>
       </tr>
       </thead>
       <tbody>
@@ -105,14 +91,14 @@
   </div>
   <div class="panel panel-default opinionSurveys-details-employeeCount">
     <div class="panel-heading">
-      <%- t('opinionSurveys', 'PROPERTY:employeeCount') %>
+      <%- helpers.t('PROPERTY:employeeCount') %>
     </div>
     <table class="table table-condensed table-bordered">
       <thead>
       <tr>
-        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:employeeCount.division') %></th>
-        <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:employeeCount.employer') %></th>
-        <th><%- t('opinionSurveys', 'PROPERTY:employeeCount.count') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:employeeCount.division') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:employeeCount.employer') %></th>
+        <th><%- helpers.t('PROPERTY:employeeCount.count') %></th>
       </tr>
       </thead>
       <tbody>

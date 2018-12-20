@@ -195,7 +195,7 @@ define([
           return;
         }
 
-        var langProps = ['intro', 'employers', 'superiors', 'questions'];
+        var langProps = ['company', 'intro', 'employer', 'superior', 'employers', 'superiors', 'questions'];
         var oldFormData = _.pick(this.getFormData(), langProps);
         var newFormData;
         var attrs = this.model.attributes;
@@ -284,7 +284,10 @@ define([
       formData.superiors.forEach(function(s) { superiorsMap[s._id] = s; });
       formData.questions.forEach(function(q) { questionsMap[q._id] = q; });
 
+      lang.company = formData.company || '';
       lang.intro = formData.intro || '';
+      lang.employer = formData.employer || '';
+      lang.superior = formData.superior || '';
       lang.employers = [];
       lang.superiors = [];
       lang.questions = [];

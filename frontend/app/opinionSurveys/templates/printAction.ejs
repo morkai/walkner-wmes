@@ -1,0 +1,14 @@
+<% if (langs.length === 1) { %>
+  <a class="btn btn-default" href="/opinionSurveys/<%- surveyId %>.pdf" target="_blank"><i class="fa fa-print"></i><span><%- helpers.t('PAGE_ACTION:print') %></span></a>
+<% } else { %>
+<div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    <i class="fa fa-print"></i><span><%- helpers.t('PAGE_ACTION:print') %></span> <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu pull-right">
+    <% langs.forEach(function(lang) { %>
+    <li><a href="/opinionSurveys/<%- surveyId %>.pdf?lang=<%- lang %>" target="_blank"><%- helpers.t('lang:' + lang) %></a></li>
+    <% }) %>
+  </ul>
+</div>
+<% } %>

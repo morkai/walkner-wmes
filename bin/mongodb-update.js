@@ -5,11 +5,28 @@
 
 load('./mongodb-helpers.js');
 
-db.delayreasons.find({}).forEach(dr =>
+db.fapcategories.updateMany({users: {$exists: false}}, {$set: {users: []}});
+db.fapcategories.updateMany({subdivisions: {$exists: false}}, {$set: {subdivisions: []}});
+
+db.fapentries.find({}).forEach(entry =>
 {
-  db.delayreasons.updateOne({_id: dr._id}, {$unset: {notifications: 1}});
+  if (entry.solutionSteps !== undefined)
+  {
+    return;
+  }
 
-  delete dr.drm;
+  db.fapentries.updateOne({_id: entry._id}, {$set: {
+    solution: '',
+    solutionSteps: entry.solution
+  }});
+});
 
-  db.fapcategories.insertOne(dr);
+db.opinionsurveys.updateMany({}, {
+  $set: {
+    company: 'Philips Lighting Poland Sp. z o.o.',
+    employer: 'Jestem pracownikiem:',
+    superior: 'Mój przełożony to:',
+    showDivision: true,
+    lang: {}
+  }
 });

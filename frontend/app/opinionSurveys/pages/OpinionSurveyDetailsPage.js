@@ -5,13 +5,15 @@ define([
   'app/core/pages/DetailsPage',
   'app/core/util/pageActions',
   '../dictionaries',
-  '../views/OpinionSurveyDetailsView'
+  '../views/OpinionSurveyDetailsView',
+  'app/opinionSurveys/templates/printAction'
 ], function(
   t,
   DetailsPage,
   pageActions,
   dictionaries,
-  OpinionSurveyDetailsView
+  OpinionSurveyDetailsView,
+  printActionTemplate
 ) {
   'use strict';
 
@@ -22,14 +24,21 @@ define([
 
     actions: function()
     {
-      var model = this.model;
+      var page = this;
+      var model = page.model;
       var nlsDomain = model.getNlsDomain();
 
       return [
         {
           label: t.bound(nlsDomain, 'PAGE_ACTION:print'),
           icon: 'print',
-          href: '/opinionSurveys/' + model.id + '.pdf'
+          template: function()
+          {
+            return page.renderPartial(printActionTemplate, {
+              surveyId: model.id,
+              langs: ['pl'].concat(Object.keys(model.get('lang')))
+            })[0].outerHTML;
+          }
         },
         {
           label: t.bound(nlsDomain, 'PAGE_ACTION:editEmployeeCount'),
