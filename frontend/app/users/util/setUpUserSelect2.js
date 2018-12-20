@@ -242,7 +242,7 @@ define([
   setUpUserSelect2.filterDuplicates = filterDuplicates;
   setUpUserSelect2.transliterate = function(value)
   {
-    return transliterate(value.toUpperCase()).replace(/[^A-Z]+/g, '');
+    return transliterate(value.toUpperCase()).replace(/[^A-Z0-9]+/g, '');
   };
 
   return setUpUserSelect2;
