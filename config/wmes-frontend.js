@@ -97,6 +97,7 @@ exports.modules = [
   'subscriptions',
   'help',
   'wmes-toolcal',
+  'wmes-fap',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'sms/sender',
@@ -443,7 +444,6 @@ exports.user = {
   privileges: [
     'SUPER',
     'USERS:VIEW', 'USERS:MANAGE',
-    'ORDERS:VIEW', 'ORDERS:MANAGE',
     'EVENTS:VIEW', 'EVENTS:MANAGE',
     'FTE:LEADER:VIEW', 'FTE:LEADER:MANAGE', 'FTE:LEADER:ALL',
     'FTE:MASTER:VIEW', 'FTE:MASTER:MANAGE', 'FTE:MASTER:ALL',
