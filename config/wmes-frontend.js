@@ -156,7 +156,7 @@ exports.updater = {
       frontendAppData: {
         KAIZEN_MULTI,
         XLSX_EXPORT: process.platform === 'win32',
-        PRODUCTION_DATA_START_DATE: exports.PRODUCTION_DATA_START_DATE,
+        PRODUCTION_DATA_START_DATE: exports.productionDataStartDate,
         SHIFT_START_HOUR: 6,
         SHIFT_LENGTH: 8,
         OFFICE365_TENANT: 'Microsoft',
