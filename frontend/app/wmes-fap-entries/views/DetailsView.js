@@ -323,6 +323,16 @@ define([
         var $value = $('<textarea class="form-control"></textarea>').val(oldValue).prop('required', required);
         var $submit = $('<button class="btn btn-primary btn-lg"><i class="fa fa-check"></i></button>');
 
+        $value.on('keydown', function(e)
+        {
+          if (e.key === 'Enter' && e.shiftKey)
+          {
+            $submit.click();
+
+            return false;
+          }
+        });
+
         $form.on('submit', function()
         {
           var newValue = $value.val().trim();
