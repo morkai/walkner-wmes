@@ -38,7 +38,7 @@ define([
 
       return [
         {
-          label: this.t('pa:edit'),
+          label: page.t('pa:edit'),
           icon: 'edit',
           privileges: 'HELP:MANAGE',
           callback: function()
