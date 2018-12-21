@@ -775,7 +775,7 @@ define([
 
     getFailureText: function()
     {
-      return this.t('FORM:ERROR:addFailure');
+      return this.t('core', 'FORM:ERROR:addFailure');
     }
 
   });
