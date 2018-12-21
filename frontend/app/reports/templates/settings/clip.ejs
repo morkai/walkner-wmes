@@ -24,11 +24,14 @@
     <div class="col-md-4 form-group">
       <label for="<%- idPrefix %>-clip-<%- setting %>" class="control-label"><%- t('reports', 'settings:clip:' + setting) %></label>
       <p class="help-block"><%- t('reports', 'settings:clip:' + setting + ':help') %></p>
-      <select id="<%- idPrefix %>-clip-<%- setting %>" name="reports.clip.<%- setting %>" class="form-control">
-        <% ['startDate', 'finishDate', 'scheduledStartDate', 'scheduledFinishDate'].forEach(function(dateProperty) { %>
-        <option value="<%- dateProperty %>"><%- t('reports', 'orders:' + dateProperty) %>
-          <% }) %>
-      </select>
+      <div style="display: flex">
+        <select id="<%- idPrefix %>-clip-<%- setting %>" name="reports.clip.<%- setting %>" class="form-control">
+          <% ['startDate', 'finishDate', 'scheduledStartDate', 'scheduledFinishDate'].forEach(function(dateProperty) { %>
+          <option value="<%- dateProperty %>"><%- t('reports', 'orders:' + dateProperty) %>
+            <% }) %>
+        </select>
+        <input name="reports.clip.<%- setting %>Offset" class="form-control" placeholder="<%- t('reports', 'settings:clip:dateOffset') %>" style="width: 100px; margin-left: 7px">
+      </div>
     </div>
     <% }) %>
   </div>

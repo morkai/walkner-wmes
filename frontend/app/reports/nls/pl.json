@@ -448,6 +448,7 @@
   "settings:clip:findDateProperty:help": "Data, według której filtrowane są zlecenia w filtrze Od-Do.",
   "settings:clip:dataDateProperty": "Data danych",
   "settings:clip:dataDateProperty:help": "Data, według której ustalane są statusy zleceń.",
+  "settings:clip:dateOffset": "Przesunięcie",
   "settings:clip:dataHoursOffset": "Przesunięcie godzinowe danych",
   "settings:clip:dataHoursOffset:help": "Ilość godzin dodawana do wybranej <em>Daty danych</em> w celu ostatecznego określenia momentu, według którego ustalane są statusy zlecenia.<br>Na przykład, wybierając <em>Data ukończenia (plan.)</em> jako <em>Datę danych</em> i <em>18</em> jako <em>Przesunięcie godzinowe danych</em>, zlecenia z planowaną datą ukończenia równą <em>12.03.2018</em>, w raporcie będą miały statusy takie, jakie miały o 12.03.2018 18:00.<br>Każda oddzielna linia to inne przesunięcie godzinowe. Wartość podajemy w formacie: <code>h: MRP1, MRP2, MRP3</code>, gdzie <code>h</code> to ilość godzin, a <code>MRPn</code>, to kontroler MRP. Jako kontroler MRP można użyć znaku <code>*</code>, aby zaznaczyć, że dana ilość godzin jest domyślna.",
   "settings:clip:ignoreDone": "Ignoruj zrobione zlecenia",
@@ -469,6 +470,10 @@
   "settings:clip:orderFilterMode:none": "Żadne z wybranych statusów - <span style='font-weight: normal'>tylko zlecenia, które nie mają wszystkich wybranych statusów naraz.</span>",
   "settings:clip:orderFilterMode:without": "Bez wybranego statusu - <span style='font-weight: normal'>tylko zlecenia, które nie mają jednego z wybranych statusów.</span>",
 
+  "clip:filter:dateOffset": "Przesunięcie daty",
+  "clip:filter:dateOffset:1": "Lista: ",
+  "clip:filter:dateOffset:2": "Filtr: ",
+  "clip:filter:dateOffset:3": "Dane: ",
   "clip:exportOrders": "Eksportuj zlecenia",
   "clip:toggleSystemChanges": "Ukryj zmiany systemowe",
 

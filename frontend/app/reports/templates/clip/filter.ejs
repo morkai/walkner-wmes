@@ -8,8 +8,19 @@
     <label><%- t('reports', 'filter:interval') %></label>
     <div id="<%- idPrefix %>-intervals" class="btn-group filter-btn-group" data-toggle="buttons">
       <% ['year', 'quarter', 'month', 'week', 'day'].forEach(function(interval) { %>
-      <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:' + interval) %>" data-interval="<%- interval %>">
-        <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', 'filter:interval:' + interval) %>
+        <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:' + interval) %>" data-interval="<%- interval %>">
+          <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', 'filter:interval:' + interval) %>
+        </label>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label><%- t('reports', 'clip:filter:dateOffset') %></label>
+    <div class="clip-filter-dateOffset">
+      <% [2, 3, 1].forEach(function(offset) { %>
+      <label>
+        <%- t('reports', 'clip:filter:dateOffset:' + offset) %>
+        <input type="number" class="form-control" name="offset<%- offset %>" placeholder="0" style="display: inline-block; width: 55px">
       </label>
       <% }) %>
     </div>

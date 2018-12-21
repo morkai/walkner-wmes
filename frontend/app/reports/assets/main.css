@@ -549,3 +549,13 @@
 .clip-no-system-changes .is-system-change {
   display: none;
 }
+.clip-filter-dateOffset {
+  display: flex;
+}
+.clip-filter-dateOffset > label {
+  margin: 0 10px 0 0;
+  font-weight: normal;
+}
+.clip-filter-dateOffset > label:last-child {
+  margin-right: 0;
+}

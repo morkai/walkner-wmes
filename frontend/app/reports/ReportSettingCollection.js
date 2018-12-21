@@ -151,6 +151,11 @@ define([
 
     prepareClipValue: function(id, newValue)
     {
+      if (/PropertyOffset$/.test(id))
+      {
+        return parseInt(newValue, 10) || 0;
+      }
+
       if (/(Property|FilterMode)/.test(id) && typeof newValue === 'string')
       {
         return newValue;

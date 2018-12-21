@@ -282,7 +282,10 @@ define([
 
     createFilterView: function()
     {
-      return new FilterView({model: this.query});
+      return new FilterView({
+        settings: this.settings,
+        model: this.query
+      });
     },
 
     createDisplayOptionsView: function()
