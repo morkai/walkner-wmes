@@ -180,7 +180,13 @@ define([
       clearTimeout(showTimer);
     }
 
-    showTimer = setTimeout(function() { $popover.popover('show'); }, 200);
+    showTimer = setTimeout(function()
+    {
+      if ($popover)
+      {
+        $popover.popover('show');
+      }
+    }, 200);
   }
 
   function hidePopover()
