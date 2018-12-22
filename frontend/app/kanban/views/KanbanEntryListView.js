@@ -1457,6 +1457,11 @@ define([
 
     onWindowKeyDown: function(e)
     {
+      if (!this.$tbody)
+      {
+        return;
+      }
+
       var tag = e.target.tagName;
 
       if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA')
