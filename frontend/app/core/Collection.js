@@ -212,7 +212,7 @@ define([
 
     var availHeight = window.innerHeight - hdHeight - filterHeight - pagerHeight - theadHeight;
 
-    return Math.floor(availHeight / rowHeight);
+    return Math.max(10, Math.floor(availHeight / rowHeight));
   };
 
   return Collection;
