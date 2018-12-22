@@ -77,3 +77,20 @@
   vertical-align: top;
   white-space: nowrap;
 }
+.fap-addForm-warning {
+  position: absolute;
+  top: auto;
+  left: 0;
+  right: auto;
+  bottom: 0;
+  padding: 15px;
+  border-left: none;
+  border-right: 0;
+  border-bottom: 0;
+  border-top-color: #eea236;
+  z-index: 2;
+}
+.fap-addForm-warning > p {
+  text-align: justify;
+  line-height: 1.4;
+}

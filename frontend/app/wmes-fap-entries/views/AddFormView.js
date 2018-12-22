@@ -37,6 +37,25 @@ define([
 
     events: _.assign({
 
+      'mousedown': function(e)
+      {
+        if (!this.$(e.target).closest('.fap-addForm-warning').length)
+        {
+          this.hideWarning();
+        }
+      },
+      'click #-submit': function()
+      {
+        this.showWarning();
+      },
+      'click #-reject': function()
+      {
+        this.hideWarning();
+      },
+      'select2-focus': function(e)
+      {
+        this.hideWarning();
+      },
       'click #-cancel': function()
       {
         this.trigger('cancel');
@@ -179,6 +198,16 @@ define([
       view.setUpDnd($backdrop);
       view.updateNotifications();
       view.focusInput();
+    },
+
+    showWarning: function()
+    {
+      this.$id('warning').removeClass('hidden');
+    },
+
+    hideWarning: function()
+    {
+      this.$id('warning').addClass('hidden');
     },
 
     renderUploads: function()
