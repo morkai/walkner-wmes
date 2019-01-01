@@ -75,18 +75,29 @@
   <div class="fap-analysis">
     <div class="fap-analysis-header"><%- helpers.t('assessment:header') %></div>
     <div class="fap-prop-separator"></div>
-    <div class="fap-props">
-      <div class="fap-prop" data-prop="assessment" style="flex: 1 1 auto">
+    <div class="fap-props fap-prop-assessment">
+      <div class="fap-prop" data-prop="assessment">
         <div class="fap-prop-name"><%- helpers.t('PROPERTY:assessment') %></div>
         <div class="fap-prop-value"><%- model.assessment %></div>
       </div>
-      <div class="fap-prop" data-prop="analysisNeed" style="flex: 1 1 auto">
+      <div class="fap-prop" data-prop="analysisNeed">
         <div class="fap-prop-name"><%- helpers.t('PROPERTY:analysisNeed') %></div>
         <div class="fap-prop-value"><%- model.analysisNeed %></div>
       </div>
-      <div class="fap-prop" data-prop="analysisDone" style="flex: 1 1 auto">
+      <div class="fap-prop" data-prop="analysisDone">
         <div class="fap-prop-name"><%- helpers.t('PROPERTY:analysisDone') %></div>
         <div class="fap-prop-value"><%- model.analysisDone %></div>
+      </div>
+    </div>
+    <div class="fap-prop-separator"></div>
+    <div class="fap-props">
+      <div class="fap-prop" data-prop="mainAnalyzer" style="flex: 1 1 auto">
+        <div class="fap-prop-name"><%- helpers.t('PROPERTY:mainAnalyzer') %></div>
+        <div class="fap-prop-value"><%- model.mainAnalyzer %></div>
+      </div>
+      <div class="fap-prop" data-prop="analyzers" style="flex: 2 1 auto">
+        <div class="fap-prop-name"><%- helpers.t('PROPERTY:analyzers') %></div>
+        <div class="fap-prop-value"><%- model.analyzers %></div>
       </div>
     </div>
     <div class="fap-prop-separator"></div>

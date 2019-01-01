@@ -52,7 +52,7 @@ define([
       {
         this.hideWarning();
       },
-      'select2-focus': function(e)
+      'select2-focus': function()
       {
         this.hideWarning();
       },

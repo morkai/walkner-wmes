@@ -170,6 +170,10 @@ define([
         solution: obj.solution.indexOf('\n') !== -1,
         solutionSteps: obj.solutionSteps.indexOf('\n') !== -1
       };
+      obj.mainAnalyzer = obj.analyzers.length ? obj.analyzers[0].label : '-';
+      obj.analyzers = obj.analyzers.length > 1
+        ? obj.analyzers.slice(1).map(function(u) { return u.label; }).join('; ')
+        : '-';
       obj.chat = this.serializeChat();
       obj.attachments = obj.attachments.map(this.serializeAttachment, this);
       obj.observers = this.serializeObservers();
@@ -205,12 +209,15 @@ define([
       var procEng = user.isAllowedTo('FN:process-engineer');
       var master = user.isAllowedTo('FN:master');
       var leader = user.isAllowedTo('FN:leader');
-      var analyzer = _.some(this.get('analyzers'), function(u) { return user.data._id === u.id; });
+      var analyzers = this.get('analyzers');
+      var analyzer = _.some(analyzers, function(u) { return user.data._id === u.id; });
+      var mainAnalyzer = analyzer && analyzers[0].id === user.data._id;
       var status = this.get('status');
       var pending = status === 'pending';
       var started = status === 'started';
       var analysisNeed = this.get('analysisNeed');
       var analysisDone = this.get('analysisDone');
+      var mainAnalyzerAuth = !pending && analysisNeed && !analysisDone && (manage || procEng || master);
 
       return {
         delete: this.canDelete(),
@@ -224,7 +231,9 @@ define([
         assessment: !pending && (manage || procEng || master),
         analysisNeed: !pending && (manage || procEng || master),
         analysisDone: !pending && analysisNeed && (manage || procEng || master),
-        analysers: !pending && analysisNeed && !analysisDone && (manage || procEng || master),
+        mainAnalyzer: mainAnalyzerAuth,
+        analyzers: (analyzers.length || mainAnalyzerAuth)
+          && !pending && analysisNeed && !analysisDone && (manage || procEng || master || mainAnalyzer),
         why5: !pending && analysisNeed && !analysisDone && (manage || procEng || master || leader || analyzer),
         solutionSteps: !pending && analysisNeed && !analysisDone && (manage || procEng || master || leader || analyzer)
       };
@@ -655,7 +664,8 @@ define([
       nc12: 1,
       productName: 1,
       qtyTodo: 1,
-      qtyDone: 1
+      qtyDone: 1,
+      analyzers: 1
 
     }
 

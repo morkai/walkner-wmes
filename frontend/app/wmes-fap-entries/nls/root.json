@@ -33,7 +33,7 @@
     "PROPERTY:assessment": "Assessment",
     "PROPERTY:analysisNeed": "Analysis needed",
     "PROPERTY:analysisDone": "Analysis done",
-    "PROPERTY:analyzer": "Person responsible for the analysis",
+    "PROPERTY:mainAnalyzer": "Person responsible",
     "PROPERTY:analyzers": "People involved in the analysis",
     "PROPERTY:why5": "Problem cause",
     "PROPERTY:why": "Why?",

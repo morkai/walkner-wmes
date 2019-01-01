@@ -8,6 +8,7 @@ define([
   'app/core/View',
   'app/core/util/idAndLabel',
   'app/data/orgUnits',
+  'app/users/util/setUpUserSelect2',
   '../dictionaries',
   '../Entry',
   './ChatView',
@@ -22,6 +23,7 @@ define([
   View,
   idAndLabel,
   orgUnits,
+  setUpUserSelect2,
   dictionaries,
   Entry,
   ChatView,
@@ -136,6 +138,9 @@ define([
         case 'orderNo':
           return this.updateOrderNo;
 
+        case 'analyzers':
+          return this.updateAnalyzers;
+
         case 'category':
         case 'mrp':
         case 'nc12':
@@ -143,6 +148,7 @@ define([
         case 'divisions':
         case 'lines':
         case 'assessment':
+        case 'mainAnalyzer':
           return this.updateProp.bind(this, prop);
       }
     },
@@ -238,6 +244,12 @@ define([
       }
 
       $value.prepend(html);
+    },
+
+    updateAnalyzers: function()
+    {
+      this.updateProp('mainAnalyzer');
+      this.updateProp('analyzers');
     },
 
     updateMessage: function()
@@ -471,6 +483,7 @@ define([
           .appendTo($prop.find('.fap-prop-value'));
 
         $value.select2({
+          dropdownCssClass: 'fap-editor-select2',
           width: '100%',
           multiple: true,
           allowClear: true,
@@ -790,6 +803,151 @@ define([
           .appendTo($prop.find('.fap-prop-value'));
 
         $value.focus();
+      },
+
+      analyzers: function($prop)
+      {
+        var view = this;
+        var $mainAnalyzer = view.$('.fap-prop[data-prop="mainAnalyzer"]');
+        var $analyzers = view.$('.fap-prop[data-prop="analyzers"]');
+        var oldValue = [].concat(view.model.get('analyzers'));
+        var $mainAnalyzerForm = $('<form class="fap-editor"></form>')
+          .append('<input>')
+          .append('<button class="btn btn-primary"><i class="fa fa-check"></i></button>');
+        var $analyzersForm = $mainAnalyzerForm.clone();
+        var $mainAnalyzerInput;
+        var $analyzersInput;
+
+        if ($mainAnalyzer.hasClass('fap-is-editable'))
+        {
+          $mainAnalyzer.addClass('fap-is-editing');
+
+          $mainAnalyzerInput = $mainAnalyzerForm
+            .on('submit', submit)
+            .appendTo($mainAnalyzer.find('.fap-prop-value'))
+            .find('input')
+            .val(oldValue.length ? oldValue[0].id : '')
+            .on('change', toggle);
+
+          setUpUserSelect2($mainAnalyzerInput, {
+            view: view,
+            dropdownCssClass: 'fap-editor-select2',
+            width: '100%',
+            noPersonnelId: true
+          });
+        }
+
+        if ($analyzers.hasClass('fap-is-editable'))
+        {
+          $analyzers.addClass('fap-is-editing');
+
+          $analyzersInput = $analyzersForm
+            .on('submit', submit)
+            .appendTo($analyzers.find('.fap-prop-value'))
+            .find('input')
+            .val(oldValue.length > 1 ? oldValue.slice(1).map(function(u) { return u.id; }).join(',') : '');
+
+          setUpUserSelect2($analyzersInput, {
+            view: view,
+            dropdownCssClass: 'fap-editor-select2',
+            width: '100%',
+            multiple: true,
+            noPersonnelId: true
+          });
+        }
+
+        toggle();
+
+        $prop.find('.select2-container').next().select2('focus');
+
+        function toggle()
+        {
+          if ($analyzersInput)
+          {
+            var mainAnalyzer = $mainAnalyzerInput ? $mainAnalyzerInput.val() : oldValue;
+
+            $analyzersInput.select2('enable', mainAnalyzer.length !== 0);
+          }
+        }
+
+        function submit()
+        {
+          $mainAnalyzer.removeClass('fap-is-editing');
+          $analyzers.removeClass('fap-is-editing');
+
+          var newValue = [];
+          var userIds = {};
+          var change = true;
+
+          if ($mainAnalyzerInput)
+          {
+            var newMainAnalyzer = $mainAnalyzerInput.select2('data');
+
+            if (newMainAnalyzer)
+            {
+              newValue.push({
+                id: newMainAnalyzer.id,
+                label: newMainAnalyzer.text
+              });
+            }
+          }
+          else if (oldValue.length)
+          {
+            newValue.push(oldValue[0]);
+          }
+          else
+          {
+            change = false;
+          }
+
+          if (newValue.length)
+          {
+            userIds[newValue[0].id] = true;
+
+            if ($analyzersInput)
+            {
+              $analyzersInput.select2('data').forEach(function(newAnalyzer)
+              {
+                if (userIds[newAnalyzer.id])
+                {
+                  return;
+                }
+
+                newValue.push({
+                  id: newAnalyzer.id,
+                  label: newAnalyzer.text
+                });
+
+                userIds[newAnalyzer.id] = true;
+              });
+            }
+          }
+
+          if (change && compareAnalyzers(newValue))
+          {
+            view.model.change('analyzers', newValue);
+          }
+
+          view.hideEditor();
+
+          return false;
+        }
+
+        function compareAnalyzers(newValue)
+        {
+          var oldValue = view.model.get('analyzers');
+          var oldMainAnalyzer = oldValue.length ? oldValue[0].id : null;
+          var oldAnalyzers = oldValue.slice(1).map(function(u) { return u.id; }).sort().join(',');
+          var newMainAnalyzer = newValue.length ? newValue[0].id : null;
+          var newAnalyzers = newValue.slice(1).map(function(u) { return u.id; }).sort().join(',');
+
+          return newMainAnalyzer !== oldMainAnalyzer || newAnalyzers !== oldAnalyzers;
+        }
+      },
+
+      mainAnalyzer: function()
+      {
+        this.editors.analyzers.apply(this, arguments);
       }
 
     }

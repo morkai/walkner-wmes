@@ -33,7 +33,7 @@
   "PROPERTY:assessment": "Ocena kroków gaszących",
   "PROPERTY:analysisNeed": "Potrzebna dalsza analiza",
   "PROPERTY:analysisDone": "Analiza zakończona",
-  "PROPERTY:analyzer": "Osoba odpowiedzialna za analizę",
+  "PROPERTY:mainAnalyzer": "Osoba odpowiedzialna",
   "PROPERTY:analyzers": "Osoby biorące udział w analizie",
   "PROPERTY:why5": "Przyczyna problemu",
   "PROPERTY:why": "Dlaczego?",
