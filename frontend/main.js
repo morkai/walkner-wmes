@@ -16,12 +16,16 @@
     location.origin = location.protocol + '//' + location.hostname + (location.port ? (':' + location.port) : '');
   }
 
-  var embedded = window.parent !== window;
-
+  window.COMPUTERNAME = (location.href.match(/COMPUTERNAME=(.*?)(?:(?:#|&).*)?$/i) || [null, null])[1];
   window.INSTANCE_ID = Math.round(Date.now() + Math.random() * 9999999).toString(36).toUpperCase();
+  window.IS_EMBEDDED = window.parent !== window;
+  window.IS_IE = window.navigator.userAgent.indexOf('Trident/') !== -1;
+  window.IS_MOBILE = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series[46]0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino|android|ipad|playbook|silk/i
+    .test(window.navigator.userAgent);
 
-  document.body.classList.toggle('is-ie', window.navigator.userAgent.indexOf('Trident/') !== -1);
-  document.body.classList.toggle('is-embedded', embedded);
+  document.body.classList.toggle('is-ie', window.IS_IE);
+  document.body.classList.toggle('is-mobile', window.IS_MOBILE);
+  document.body.classList.toggle('is-embedded', window.IS_EMBEDDED);
 
   if (window.ENV === 'testing')
   {
@@ -41,12 +45,10 @@
     localStorage.setItem('PROXY', matches[1]);
   }
 
-  if (embedded)
+  if (window.IS_EMBEDDED)
   {
     window.parent.postMessage({type: 'init', host: location.hostname}, '*');
   }
-
-  window.COMPUTERNAME = (location.href.match(/COMPUTERNAME=(.*?)(?:(?:#|&).*)?$/i) || [null, null])[1];
 
   var oldSend = XMLHttpRequest.prototype.send;
 

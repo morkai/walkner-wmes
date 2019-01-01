@@ -254,7 +254,7 @@ define([
     },
     jump: function(page, collection, options)
     {
-      options = _.assign({mode: 'rid', pattern: '^ *[0-9]+ *$', autoFocus: true}, options);
+      options = _.assign({mode: 'rid', pattern: '^ *[0-9]+ *$', autoFocus: !window.IS_MOBILE}, options);
 
       return {
         template: function()
