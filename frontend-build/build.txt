@@ -1916,6 +1916,7 @@ app/wmes-toolcal-tools/routes.js
 app/wmes-fap-categories/Category.js
 app/wmes-fap-categories/CategoryCollection.js
 app/wmes-fap-categories/routes.js
+vendor/autolinker.js
 app/wmes-fap-entries/dictionaries.js
 app/wmes-fap-entries/Entry.js
 app/wmes-fap-entries/templates/addForm.js
@@ -2713,6 +2714,7 @@ app/nls/pl/core.js
 i18n!app/nls/core
 app/highcharts.js
 app/reports/util/formatTooltipHeader.js
+app/reports/util/formatXAxis.js
 app/paintShop/views/PaintShopLoadReportView.js
 app/paintShop/templates/load/stats.js
 app/paintShop/views/PaintShopLoadStatsView.js
