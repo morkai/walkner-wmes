@@ -312,7 +312,16 @@ define([
 
       var files = Array.prototype.slice.call(e.originalEvent.dataTransfer.files).filter(function(file)
       {
-        return !attachments[file.name + file.size];
+        var exists = attachments[file.name + file.size];
+
+        if (exists)
+        {
+          return false;
+        }
+
+        attachments[file.name + file.size] = true;
+
+        return true;
       });
 
       if (!files.length)
