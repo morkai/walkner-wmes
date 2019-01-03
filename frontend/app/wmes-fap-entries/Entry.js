@@ -213,7 +213,7 @@ define([
     serializeAuth: function()
     {
       var manage = user.isAllowedTo('FAP:MANAGE');
-      var procEng = user.isAllowedTo('FN:process-engineer');
+      var procEng = user.isAllowedTo('FN:process-engineer', 'FN:process-engineer-NPI');
       var master = user.isAllowedTo('FN:master');
       var leader = user.isAllowedTo('FN:leader');
       var analyzers = this.get('analyzers');
@@ -450,7 +450,7 @@ define([
         icon: MIME_TO_ICON[attachment.type] || MIME_TO_ICON[type] || 'fa-file-o',
         preview: type === 'image',
         label: attachment.name,
-        menu: user.isAllowedTo('FAP:MANAGE', 'FN:master', 'FN:leader', 'FN:process-engineer')
+        menu: user.isAllowedTo('FAP:MANAGE', 'FN:master', 'FN:leader', 'FN:process-engineer', 'FN:process-engineer-NPI')
           || (attachment.user && attachment.user.id === user.data._id)
       };
     },
