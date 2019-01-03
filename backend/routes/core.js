@@ -20,7 +20,7 @@ module.exports = function startCoreRoutes(app, express)
 
   app.broker
     .subscribe('updater.newVersion', reloadRequirejsConfig)
-    .setFilter(message => message.service === app.options.id);
+    .setFilter(message => message.service === 'frontend');
 
   reloadRequirejsConfig();
   setUpFrontendVersionUpdater();
@@ -67,6 +67,7 @@ module.exports = function startCoreRoutes(app, express)
   {
     res.type('js');
     res.render('config.js.ejs', {
+      cache: false,
       paths: requirejsPaths,
       shim: requirejsShim
     });
