@@ -357,7 +357,7 @@ define([
         lines: lines
       };
 
-      if (chat)
+      if (chat && message.lines.length)
       {
         chat.push(message);
       }
