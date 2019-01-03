@@ -93,6 +93,14 @@
   "tooltipHeaderFormat:short:shift": "L[, {shift}]",
   "tooltipHeaderFormat:short:hour": "L LT",
 
+  "x:year": "YYYY",
+  "x:quarter": "{quarter}'YY",
+  "x:month": "MMM'YY",
+  "x:week": "W'YY",
+  "x:day": "D.M",
+  "x:shift": "D.M[ {shift}]",
+  "x:hour": "D.M HH:mm",
+
   "filter:mode": "Tryb",
   "filter:mode:online": "Online",
   "filter:mode:date": "Zadany okres czasu",

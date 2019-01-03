@@ -3,11 +3,13 @@
 define([
   'app/i18n',
   'app/highcharts',
-  './ChartView'
+  './ChartView',
+  'app/reports/util/formatXAxis'
 ], function(
   t,
   Highcharts,
-  ChartView
+  ChartView,
+  formatXAxis
 ) {
   'use strict';
 
@@ -32,7 +34,8 @@ define([
         },
         noData: {},
         xAxis: {
-          type: 'datetime'
+          type: 'datetime',
+          labels: formatXAxis.labels(this)
         },
         yAxis: [
           {

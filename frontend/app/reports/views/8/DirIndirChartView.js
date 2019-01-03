@@ -7,7 +7,8 @@ define([
   'app/highcharts',
   'app/core/View',
   'app/data/colorFactory',
-  'app/reports/util/formatTooltipHeader'
+  'app/reports/util/formatTooltipHeader',
+  'app/reports/util/formatXAxis'
 ], function(
   _,
   t,
@@ -15,7 +16,8 @@ define([
   Highcharts,
   View,
   colorFactory,
-  formatTooltipHeader
+  formatTooltipHeader,
+  formatXAxis
 ) {
   'use strict';
 
@@ -91,7 +93,8 @@ define([
         title: false,
         noData: {},
         xAxis: {
-          type: 'datetime'
+          type: 'datetime',
+          labels: formatXAxis.labels(this)
         },
         yAxis: yAxis,
         tooltip: {

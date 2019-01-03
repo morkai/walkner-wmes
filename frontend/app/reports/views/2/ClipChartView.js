@@ -7,7 +7,8 @@ define([
   'app/highcharts',
   'app/core/View',
   'app/orgUnits/util/renderOrgUnitPath',
-  'app/reports/util/formatTooltipHeader'
+  'app/reports/util/formatTooltipHeader',
+  'app/reports/util/formatXAxis'
 ], function(
   _,
   time,
@@ -15,7 +16,8 @@ define([
   Highcharts,
   View,
   renderOrgUnitPath,
-  formatTooltipHeader
+  formatTooltipHeader,
+  formatXAxis
 ) {
   'use strict';
 
@@ -291,7 +293,8 @@ define([
           }
         },
         xAxis: {
-          type: 'datetime'
+          type: 'datetime',
+          labels: formatXAxis.labels(this)
         },
         yAxis: [
           {

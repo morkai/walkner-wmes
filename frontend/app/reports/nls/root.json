@@ -86,6 +86,22 @@
     "tooltipHeaderFormat:shift": "LL[, {shift} shift]",
     "tooltipHeaderFormat:hour": "LLL",
 
+    "tooltipHeaderFormat:short:year": "YYYY",
+    "tooltipHeaderFormat:short:quarter": "YYYY[, {quarter}]",
+    "tooltipHeaderFormat:short:month": "YYYY.MM",
+    "tooltipHeaderFormat:short:week": "YYYY, wo",
+    "tooltipHeaderFormat:short:day": "L",
+    "tooltipHeaderFormat:short:shift": "L[, {shift}]",
+    "tooltipHeaderFormat:short:hour": "L LT",
+
+    "x:year": "YYYY",
+    "x:quarter": "{quarter}'YY",
+    "x:month": "MMM'YY",
+    "x:week": "W'YY",
+    "x:day": "D.M",
+    "x:shift": "D.M[ {shift}]",
+    "x:hour": "D.M HH:mm",
+
     "filter:mode": "Mode",
     "filter:mode:online": "Online",
     "filter:mode:date": "Time range",

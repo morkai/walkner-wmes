@@ -7,7 +7,8 @@ define([
   'app/highcharts',
   'app/core/View',
   'app/orgUnits/util/renderOrgUnitPath',
-  'app/reports/util/formatTooltipHeader'
+  'app/reports/util/formatTooltipHeader',
+  'app/reports/util/formatXAxis'
 ], function(
   _,
   time,
@@ -15,7 +16,8 @@ define([
   Highcharts,
   View,
   renderOrgUnitPath,
-  formatTooltipHeader
+  formatTooltipHeader,
+  formatXAxis
 ) {
   'use strict';
 
@@ -285,11 +287,12 @@ define([
 
     createChart: function()
     {
-      var chartData = this.serializeChartData();
-      var markerStyles = this.getMarkerStyles(chartData.orderCount.length);
-      var displayOptions = this.displayOptions;
+      var view = this;
+      var chartData = view.serializeChartData();
+      var markerStyles = view.getMarkerStyles(chartData.orderCount.length);
+      var displayOptions = view.displayOptions;
 
-      this.chart = new Highcharts.Chart({
+      view.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.el,
           zoomType: null
@@ -301,19 +304,19 @@ define([
               menuItems: Highcharts.getDefaultMenuItems().concat([
                 {
                   text: t('reports', 'clip:exportOrders'),
-                  onclick: this.exportOrders.bind(this)
+                  onclick: view.exportOrders.bind(view)
                 }
               ])
             }
           }
         },
         title: {
-          text: this.getTitle()
+          text: view.getTitle()
         },
         noData: {},
         tooltip: {
           shared: true,
-          headerFormatter: this.formatTooltipHeader.bind(this),
+          headerFormatter: view.formatTooltipHeader.bind(view),
           valueDecimals: 0
         },
         legend: {
@@ -335,7 +338,8 @@ define([
           }
         },
         xAxis: {
-          type: 'datetime'
+          type: 'datetime',
+          labels: formatXAxis.labels(view)
         },
         yAxis: [
           {
@@ -353,7 +357,7 @@ define([
           {
             id: 'clipOrderCount',
             name: t('reports', 'metrics:clip:orderCount'),
-            color: this.settings.getColor('clipOrderCount'),
+            color: view.settings.getColor('clipOrderCount'),
             type: 'area',
             yAxis: 0,
             data: chartData.orderCount,
@@ -362,7 +366,7 @@ define([
           {
             id: 'clipProductionCount',
             name: t('reports', 'metrics:clip:productionCount'),
-            color: this.settings.getColor('clipProduction'),
+            color: view.settings.getColor('clipProduction'),
             type: 'line',
             dashStyle: 'LongDash',
             yAxis: 0,
@@ -372,7 +376,7 @@ define([
           {
             id: 'clipEndToEndCount',
             name: t('reports', 'metrics:clip:endToEndCount'),
-            color: this.settings.getColor('clipEndToEnd'),
+            color: view.settings.getColor('clipEndToEnd'),
             type: 'line',
             dashStyle: 'LongDash',
             yAxis: 0,
@@ -382,7 +386,7 @@ define([
           {
             id: 'clipProduction',
             name: t('reports', 'metrics:clip:production'),
-            color: this.settings.getColor('clipProduction'),
+            color: view.settings.getColor('clipProduction'),
             type: 'line',
             yAxis: 1,
             data: chartData.production,
@@ -395,7 +399,7 @@ define([
           {
             id: 'clipEndToEnd',
             name: t('reports', 'metrics:clip:endToEnd'),
-            color: this.settings.getColor('clipEndToEnd'),
+            color: view.settings.getColor('clipEndToEnd'),
             type: 'line',
             yAxis: 1,
             data: chartData.endToEnd,

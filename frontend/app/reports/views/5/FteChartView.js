@@ -7,7 +7,8 @@ define([
   'app/highcharts',
   'app/core/View',
   'app/data/companies',
-  'app/reports/util/formatTooltipHeader'
+  'app/reports/util/formatTooltipHeader',
+  'app/reports/util/formatXAxis'
 ], function(
   _,
   time,
@@ -15,7 +16,8 @@ define([
   Highcharts,
   View,
   companies,
-  formatTooltipHeader
+  formatTooltipHeader,
+  formatXAxis
 ) {
   'use strict';
 
@@ -307,7 +309,7 @@ define([
 
     createXAxis: function()
     {
-      return {type: 'datetime'};
+      return {type: 'datetime', labels: formatXAxis.labels(this)};
     },
 
     createYAxis: function()

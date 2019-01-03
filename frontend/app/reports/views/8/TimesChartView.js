@@ -8,7 +8,8 @@ define([
   'app/core/View',
   'app/data/colorFactory',
   'app/data/aors',
-  'app/reports/util/formatTooltipHeader'
+  'app/reports/util/formatTooltipHeader',
+  'app/reports/util/formatXAxis'
 ], function(
   _,
   t,
@@ -17,7 +18,8 @@ define([
   View,
   colorFactory,
   aors,
-  formatTooltipHeader
+  formatTooltipHeader,
+  formatXAxis
 ) {
   'use strict';
 
@@ -107,8 +109,8 @@ define([
           }
         };
         exporting.chartOptions.xAxis = [{
-          type: categories.length ? 'category' : 'datetime',
-          categories: categories.length ? categories : undefined,
+          type: 'category',
+          categories: categories,
           labels: {
             style: {
               fontSize: '16px'
@@ -130,7 +132,8 @@ define([
         noData: {},
         xAxis: {
           type: categories.length ? 'category' : 'datetime',
-          categories: categories.length ? categories : undefined
+          categories: categories.length ? categories : undefined,
+          labels: categories.length ? {} : formatXAxis.labels(this)
         },
         yAxis: yAxis,
         tooltip: {

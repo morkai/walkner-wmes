@@ -6,6 +6,7 @@ define([
   'app/highcharts',
   'app/core/View',
   'app/reports/util/formatTooltipHeader',
+  'app/reports/util/formatXAxis',
   '../dictionaries',
   'app/kaizenOrders/templates/reportTable',
   'app/kaizenOrders/templates/tableAndChart'
@@ -15,6 +16,7 @@ define([
   Highcharts,
   View,
   formatTooltipHeader,
+  formatXAxis,
   kaizenDictionaries,
   renderReportTable,
   template
@@ -109,7 +111,8 @@ define([
         title: false,
         noData: {},
         xAxis: {
-          type: 'datetime'
+          type: 'datetime',
+          labels: formatXAxis.labels(this)
         },
         yAxis: {
           title: false,

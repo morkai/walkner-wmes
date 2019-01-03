@@ -6,6 +6,7 @@ define([
   'app/highcharts',
   'app/core/View',
   'app/reports/util/formatTooltipHeader',
+  'app/reports/util/formatXAxis',
   '../dictionaries'
 ], function(
   _,
@@ -13,6 +14,7 @@ define([
   Highcharts,
   View,
   formatTooltipHeader,
+  formatXAxis,
   qiDictionaries
 ) {
   'use strict';
@@ -93,7 +95,8 @@ define([
         title: false,
         noData: {},
         xAxis: {
-          type: 'datetime'
+          type: 'datetime',
+          labels: formatXAxis.labels(this)
         },
         yAxis: {
           title: false,

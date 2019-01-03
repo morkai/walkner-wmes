@@ -4,12 +4,14 @@ define([
   'app/i18n',
   'app/time',
   'app/core/View',
-  'app/highcharts'
+  'app/highcharts',
+  'app/reports/util/formatXAxis'
 ], function(
   t,
   time,
   View,
-  Highcharts
+  Highcharts,
+  formatXAxis
 ) {
   'use strict';
 
@@ -107,7 +109,8 @@ define([
         },
         noData: {},
         xAxis: {
-          type: 'datetime'
+          type: 'datetime',
+          labels: formatXAxis.labels(this)
         },
         yAxis: {
           title: false,

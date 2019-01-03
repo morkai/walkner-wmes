@@ -7,7 +7,8 @@ define([
   'app/core/View',
   'app/data/colorFactory',
   '../dictionaries',
-  'app/reports/util/formatTooltipHeader'
+  'app/reports/util/formatTooltipHeader',
+  'app/reports/util/formatXAxis'
 ], function(
   _,
   t,
@@ -15,7 +16,8 @@ define([
   View,
   colorFactory,
   qiDictionaries,
-  formatTooltipHeader
+  formatTooltipHeader,
+  formatXAxis
 ) {
   'use strict';
 
@@ -102,7 +104,8 @@ define([
         title: false,
         noData: {},
         xAxis: {
-          type: 'datetime'
+          type: 'datetime',
+          labels: formatXAxis.labels(this)
         },
         yAxis: {
           title: false,
