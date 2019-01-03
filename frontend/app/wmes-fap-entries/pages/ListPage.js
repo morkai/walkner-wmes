@@ -40,7 +40,7 @@ define([
 
     load: function(when)
     {
-      return when(this.collection.fetch({reset: true}), dictionaries.load());
+      return when(dictionaries.load(), this.collection.fetch({reset: true}));
     },
 
     destroy: function()

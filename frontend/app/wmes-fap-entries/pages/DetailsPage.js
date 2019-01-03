@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   'app/socket',
   'app/core/pages/DetailsPage',
   'app/core/util/onModelDeleted',
@@ -8,6 +9,7 @@ define([
   '../dictionaries',
   '../views/DetailsView'
 ], function(
+  $,
   socket,
   DetailsPage,
   onModelDeleted,
@@ -111,7 +113,21 @@ define([
 
     load: function(when)
     {
-      return when(this.model.fetch(), dictionaries.load());
+      var page = this;
+
+      if (dictionaries.loaded)
+      {
+        return when(page.model.fetch());
+      }
+
+      var deferred = $.Deferred();
+
+      dictionaries.load()
+        .then(function() { return page.model.fetch(); })
+        .done(function() { deferred.resolve(); })
+        .fail(function() { deferred.reject(); });
+
+      return when(deferred.promise());
     },
 
     afterRender: function()
