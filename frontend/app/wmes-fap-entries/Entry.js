@@ -3,6 +3,7 @@
 define([
   'underscore',
   'jquery',
+  'autolinker',
   '../i18n',
   '../time',
   '../user',
@@ -14,6 +15,7 @@ define([
 ], function(
   _,
   $,
+  Autolinker,
   t,
   time,
   user,
@@ -61,6 +63,8 @@ define([
   colorFactory.setColors('fap/users', [
     '#0af', '#5cb85c', '#fa0', '#a0f', '#f0a', '#f00', '#ff0', '#9ff'
   ]);
+
+  var AUTOLINKER = null;
 
   return Model.extend({
 
@@ -295,6 +299,52 @@ define([
 
     serializeChatMessage: function(change, chat, availableAttachments)
     {
+      if (!AUTOLINKER)
+      {
+        AUTOLINKER = new Autolinker({
+          urls: {
+            schemeMatches: true,
+            wwwMatches: true,
+            tldMatches: true
+          },
+          email: true,
+          phone: false,
+          mention: false,
+          hashtag: false,
+          stripPrefix: true,
+          stripTrailingSlash: true,
+          newWindow: true,
+          truncate: {
+            length: 0,
+            location: 'end'
+          },
+          className: '',
+          replaceFn: function(match)
+          {
+            var url = match.getUrl();
+            var tag = match.buildTag();
+
+            if (match.getType() === 'url' && url.indexOf(window.location.host) !== -1)
+            {
+              var parts = tag.innerHTML.split('?');
+
+              if (parts.length > 1 && parts[1].length)
+              {
+                tag.innerHTML = parts[0] + '?&hellip;';
+              }
+
+              delete tag.attrs.rel;
+            }
+            else if (tag.innerHTML.length >= 60)
+            {
+              tag.innerHTML = tag.innerHTML.substring(0, 50) + '&hellip;';
+            }
+
+            return tag;
+          }
+        });
+      }
+
       var entry = this;
       var prev = chat && chat[chat.length - 1];
       var changeTime = time.format(change.date, 'dddd, LL LTS');
@@ -304,7 +354,7 @@ define([
       {
         lines.push({
           time: changeTime,
-          text: _.escape(change.comment)
+          text: AUTOLINKER.link(_.escape(change.comment))
         });
       }
 

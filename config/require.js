@@ -41,7 +41,8 @@ exports.paths = {
   'deployJava': 'vendor/deployJava',
   'interact': 'vendor/interact',
   'dragscroll': 'vendor/dragscroll',
-  'hammer': 'vendor/hammer'
+  'hammer': 'vendor/hammer',
+  'autolinker': 'vendor/autolinker'
 };
 
 exports.shim = {
