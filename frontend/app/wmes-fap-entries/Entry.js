@@ -169,6 +169,9 @@ define([
       obj.problem = obj.problem.trim().replace(/\n{3,}/, '\n\n');
       obj.solution = obj.solution.trim().replace(/\n{3,}/, '\n\n') || '-';
       obj.solutionSteps = obj.solutionSteps.trim().replace(/\n{3,}/, '\n\n') || '-';
+      obj.empty = {
+        solution: obj.solution === '-'
+      };
       obj.multiline = {
         problem: obj.problem.indexOf('\n') !== -1,
         solution: obj.solution.indexOf('\n') !== -1,

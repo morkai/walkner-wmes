@@ -66,7 +66,7 @@
     <div id="<%- idPrefix %>-observersAndAttachments" style="flex: 1 1 auto; margin-left: 30px"></div>
   </div>
   <div class="fap-props" style="margin-top: 30px">
-    <div class="fap-prop fap-is-textarea <%- model.multiline.solution ? 'fap-is-multiline' : '' %> <%- !!model.solution ? 'fap-is-success' : '' %>" data-prop="solution" style="flex: 1 1 auto">
+    <div class="fap-prop fap-is-textarea <%- model.multiline.solution ? 'fap-is-multiline' : '' %> <%- model.empty.solution ? '' : 'fap-is-success' %>" data-prop="solution" style="flex: 1 1 auto">
       <div class="fap-prop-name"><%- helpers.t('PROPERTY:solution') %></div>
       <div class="fap-prop-value"><%= model.solution %></div>
     </div>

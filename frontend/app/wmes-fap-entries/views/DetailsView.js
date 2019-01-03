@@ -268,7 +268,7 @@ define([
 
       $prop
         .toggleClass('fap-is-multiline', details.multiline[prop])
-        .toggleClass('fap-is-success', prop === 'solution' && !!details[prop]);
+        .toggleClass('fap-is-success', details.empty[prop] === false);
 
       this.updateText($prop, details[prop]);
     },
