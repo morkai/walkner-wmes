@@ -92,6 +92,11 @@ define([
       this.timers.highlight = setTimeout(function() { $observer.removeClass('highlight'); }, 1100);
     },
 
+    hideUserInfoPopover: function()
+    {
+      this.$('.userInfoPopover').prev().popover('destroy');
+    },
+
     onObserversChanged: function()
     {
       var $new = this.renderPartial(template, {observers: this.model.serializeObservers()})
@@ -99,6 +104,8 @@ define([
       var $old = this.$('.fap-details-panel-bd');
 
       $old.replaceWith($new);
+
+      $new.on('scroll', this.hideUserInfoPopover.bind(this));
     },
 
     onPresenceChanged: function(entry, presence, options)
