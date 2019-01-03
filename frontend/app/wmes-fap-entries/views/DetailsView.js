@@ -266,7 +266,9 @@ define([
       var details = this.model.serializeDetails();
       var $prop = this.$('.fap-prop[data-prop="' + prop + '"]');
 
-      $prop.toggleClass('fap-is-multiline', details.multiline[prop]);
+      $prop
+        .toggleClass('fap-is-multiline', details.multiline[prop])
+        .toggleClass('fap-is-success', prop === 'solution' && !!details[prop]);
 
       this.updateText($prop, details[prop]);
     },

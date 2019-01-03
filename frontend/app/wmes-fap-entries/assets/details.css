@@ -63,9 +63,18 @@
   overflow-y: auto;
 }
 .fap-prop[data-prop="solution"] .fap-prop-value {
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.5;
   white-space: pre-line;
+}
+.fap-is-success[data-prop="solution"] {
+  padding-left: 0;
+  padding-right: 0;
+}
+.fap-is-success[data-prop="solution"] .fap-prop-value {
+  padding: 7px 15px;
+  background: #EAF7D9;
+  border: 1px solid #BBDF8D;
 }
 .fap-is-editing.fap-is-textarea .fap-prop-value {
   overflow: visible;
