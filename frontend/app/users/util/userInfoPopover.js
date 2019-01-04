@@ -191,6 +191,12 @@ define([
 
   function hidePopover()
   {
+    if (showTimer)
+    {
+      clearTimeout(showTimer);
+      showTimer = null;
+    }
+
     if ($popover)
     {
       $popover.off('.userInfoPopover');
@@ -273,5 +279,5 @@ define([
     {
       loadPopover(userInfoEl, userId);
     }
-  });
+  }).on('mouseleave', '.userInfo-label', function() { hidePopover(); });
 });
