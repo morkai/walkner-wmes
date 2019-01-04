@@ -65,7 +65,7 @@
       cyklu, a nie czas cyklu dla ostatniej sztuki.</li>
     <li>Zmieniono funkcjonalność 'Następne zlecenie' na 'Kolejka zleceń'.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Zmieniono domyślny filtr, aby wyświetlane były dane tylko dla aktualnego dnia.</li>
     <li>Dodano filtr 'MRP'.</li>
@@ -124,7 +124,7 @@
     <li>Zmieniono importowanie zleceń tak, aby jako 'Nazwa wyrobu' ze zlecenia kopiowana była wartość 'Opis' zamiast
       'Nazwa wyrobu' (jeżeli jest dostępna).</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Zmieniono kolumnę 'Nazwa wyrobu' tak, aby wyświetlała wartość 'Opis' zamiast 'Nazwa wyrobu' zlecenia (jeżeli
       jest dostępna).</li>
@@ -328,7 +328,7 @@
   <ul>
     <li>Dodano ponowne wymuszenie skanowania komponentu Spigot po wykonaniu operacji 'Poprawa zlecenia'.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Dodano możliwość skalowania czasów zaimportowanych operacji.</li>
   </ul>
@@ -431,7 +431,7 @@
     <li>Zmieniono eksportowanie zleceń tak, aby eksportowana była także kolumna 'Opis' zlecenia
       (<code>orderDescription</code>).</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Zmieniono filtry nr zlecenia i 12NC tak, aby dopasowywały dany ciąg znaków tylko od początku wartości,
       a nie w dowolnym miejscu.</li>
@@ -848,7 +848,7 @@
 <div class="hidden">
   <h1>v0.87.0</h1>
   <h2><%- time.format('2016-05-22', 'LL') %></h2>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Zmieniono pole 'Czas utworzenia' na 'Czas importu'.</li>
     <li>Dodano nowe pole 'Czas utworzenia', będące wartością 'Doc.Date' oraz 'Doc.Time' ze zrzutu transakcji 'ZOIN' w SAP.</li>
@@ -1079,7 +1079,7 @@
 <div class="hidden">
   <h1>v0.84.1</h1>
   <h2><%- time.format('2016-03-27', 'LL') %></h2>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Zmieniono kolumnę '15NC' w tabelce 'Dokumentów' tak, aby wartość po kliknięciu otwierała podczepiony dokument (jeżeli istnieje).</li>
     <li>Dodano sekcję 'ETO' w szczegółach zlecenia, gdzie wyświetlana jest zaimportowana tabelka ETO.</li>
@@ -1220,7 +1220,7 @@
     <li>Dodano do Listy komponentów (BOM) dzielenie ilości komponentów przez ilość w zleceniu (działa tak samo jak
       lista komponentów zlecenia w wersji do druku).</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Zmieniono dzielenie ilości komponentów przez ilość w zleceniu w wersji do druku tak, aby było wykonywane zawsze,
       a nie tylko wtedy, gdy ilość komponentów jest większa od ilości w zleceniu.</li>
@@ -1273,7 +1273,7 @@
   <h3>Baza testów</h3>
   <ul>
     <li>Zmieniono importowanie zleceń tak, aby w danym zleceniu znajdowała się tylko jedna pozycja rodzaju
-      'programowanie driverów' (pozycja utworzona z dokumentów 'Zlecenia reszty działów' ma większy priorytet niż
+      'programowanie driverów' (pozycja utworzona z dokumentów 'Zlecenia produkcyjne' ma większy priorytet niż
       pozycja z komponentów zlecenia).
     </li>
   </ul>
@@ -1299,7 +1299,7 @@
     <li>Poprawiono błąd powodujący wyświetlanie braku wyników na liście usprawnień, jeżeli podano wartości w filtrze
       'Od-Do', nawet w przypadku, gdy zgłoszenia pasujące do filtrów istnieją.
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Poprawiono listę komponentów tak, aby wyświetlała różne komponenty z takim samym numerem zamiast wyświetlać
       tylko ostatni.
@@ -1307,7 +1307,7 @@
   <h3>Baza testów</h3>
   <ul>
     <li>Zmieniono importowanie programów z dokumentów 'Zleceń reszty działów' tak, aby ilość driverów zawsze była brana
-      ze 'Zlecenia reszty działów' zamiast ze 'Zlecenia Xiconf'.
+      ze 'Zlecenia produkcyjne' zamiast ze 'Zlecenia Xiconf'.
   </ul>
 </div>
 <div class="hidden">

@@ -32,7 +32,7 @@
     <li>Poprawiono błąd powodujący wyświetlanie 'undefined' zamiast ID linii produkcyjnej w treści powiadomienia SMS.
     </li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Dodano możliwość generowania zlecenia/zleceń w wersji do druku.</li>
   </ul>
@@ -75,7 +75,7 @@
   <ul>
     <li>Dodano automatyczne kończenie alarmów z poprzedniej zmiany, 10s po rozpoczęciu nowej zmiany.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Dodano nowe właściwości:<br>
       <ul>
@@ -375,7 +375,7 @@
 <div class="hidden">
   <h1>v0.70.0</h1>
   <h2><%- time.format('2015-10-04', 'LL') %></h2>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <h3>Puste zlecenia</h3>
   <ul>
     <li>Zmieniono importowanie tak, aby korzystało ze zrzutów robionych przez SAP GUI, a nie z e-maili.</li>
@@ -710,7 +710,7 @@
       Service Taga i wysłał w danych informację o aktualnie wybranym programie testowym.
     </li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Poprawiono błąd powodujący nie importowanie listy operacji dla pustych zleceń (tzn. bez danych o zleceniu -
       tylko operacje).
@@ -757,8 +757,8 @@
   <h2><%- time.format('2015-07-05', 'LL') %></h2>
   <h3>Programowanie Xiconf</h3>
   <ul>
-    <li>Dodano funkcjonalność automatycznego tworzenia Zleceń Xiconf na podstawie Zlecenia reszty działów wybranego na
-      Formatce operatora, jeżeli dla danego Zlecenia reszty działów nie zostało wcześniej zaimportowane Zlecenie Xiconf
+    <li>Dodano funkcjonalność automatycznego tworzenia Zleceń Xiconf na podstawie Zlecenia produkcyjne wybranego na
+      Formatce operatora, jeżeli dla danego Zlecenia produkcyjne nie zostało wcześniej zaimportowane Zlecenie Xiconf
       (co zdarza się w przypadku, gdy dany wyrób nie ma kroku programowania i LEDów, tylko testowanie).
     </li>
   </ul>
@@ -848,7 +848,7 @@
   <ul>
     <li>Poprawiono błąd mogący powodować wielokrotne automatyczne potwierdzenie tych samym przestojów.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Zmieniono ilość plików ze zleceniami do importu z 8 na 11.</li>
   </ul>
@@ -1143,7 +1143,7 @@
       jest równa lub po aktualnej dacie.
     </li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Dodano listę powiązanych dokumentów do każdego zlecenia. Powiązane dokumenty będą importowane z SAP i
       wykorzystywane w module do wyświetlania rysunków.
@@ -1185,7 +1185,7 @@
 <div class="hidden">
   <h1>v0.58.4</h1>
   <h2><%- time.format('2015-05-05', 'LL') %></h2>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Poprawiono błąd wywalający serwer importera podczas porównywania operacji &quot;pustych zleceń&quot;.</li>
   </ul>
@@ -1237,7 +1237,7 @@
   <ul>
     <li>Dodano nowy słownik: Powody opóźnień - wykorzystywany w Zleceniach reszty działów i raporcie CLIP.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Usprawiono wyświetlanie listy operacji zlecenia.</li>
     <li>Usprawniono wyświetlanie historii zmian w zleceniu.</li>
@@ -1471,7 +1471,7 @@
       przestojów.
     </li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Poprawiono błąd powodujący, że niektóre nagłówki kolumn listy zleceń nie były aktualizowane po zmianie języka
       interfejsu.
@@ -1679,7 +1679,7 @@
     <li>Uruchomiono na serwerze nowy proces: <span style="font-style: italic">wmes-watchdog</span>, którego zadaniem
       jest sprawdzanie czy w określonych przedziałach czasu utworzone zostały określone Zdarzenia. Na przykład, w 35
       minucie każdej godziny sprawdza, czy w ciągu ostatnich 45 minut pojawiło się Zdarzenie <span
-        style="font-style: italic">Zlecenia reszty działów: synchronizacja</span>. Jeżeli nie, to wysyła e-maile na
+        style="font-style: italic">Zlecenia produkcyjne: synchronizacja</span>. Jeżeli nie, to wysyła e-maile na
       <!-- e --><a href="mailto:lukasz@walkner.pl">lukasz@walkner.pl</a><!-- e -->, <!-- e --><a
         href="mailto:walkner@walkner.pl">walkner@walkner.pl</a><!-- e --> i <!-- e --><a
         href="mailto:michal.krajewski@philips.com">michal.krajewski@philips.com</a><!-- e -->. Aktualnie monitorowane
@@ -1691,13 +1691,13 @@
         <li>Magazyn: synchronizacja cykli kontrolnych (powinno wystąpić po 05:00 w każdy poniedziałek),</li>
         <li>Magazyn: synchronizacja zamówień przeniesienia (powinno wystąpić po 06:05, codziennie),</li>
         <li>Puste zlecenia: synchronizacja (powinno wystąpić po 22:35, od poniedziałku do piątku),</li>
-        <li>Zlecenia reszty działów: synchronizacja aktualnego dnia (powinno wystąpić po 5 minucie każdej godziny, od
+        <li>Zlecenia produkcyjne: synchronizacja aktualnego dnia (powinno wystąpić po 5 minucie każdej godziny, od
           poniedziałku do piątku),
         </li>
-        <li>Zlecenia reszty działów: synchronizacja poprzednich dni (powinno wystąpić po 5 minucie, co 4 godziny,
+        <li>Zlecenia produkcyjne: synchronizacja poprzednich dni (powinno wystąpić po 5 minucie, co 4 godziny,
           począwszy od 02:00, od poniedziałku do piątku),
         </li>
-        <li>Zlecenia reszty działów: synchronizacja aktualnego dnia (powinno wystąpić co 4 godziny, począwszy od 02:00,
+        <li>Zlecenia produkcyjne: synchronizacja aktualnego dnia (powinno wystąpić co 4 godziny, począwszy od 02:00,
           od poniedziałku do piątku).
         </li>
       </ul>

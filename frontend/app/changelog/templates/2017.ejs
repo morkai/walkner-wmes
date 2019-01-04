@@ -23,7 +23,7 @@
   <ul>
     <li>Zmieniono aplikację tak, aby nie łączyła się z serwerem, jeżeli nie wybrano linii produkcyjnej.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Zmieniono domyślny filtr Od-Do listy na aktualny dzień zamiast aktualny i jutrzejszy.</li>
     <li>Zmieniono drukowanie zleceń na generowanie pliku w formacie PDF a nie HTML.</li>
@@ -107,7 +107,7 @@
     <li>Poprawiono błąd mogący spowodować wywalenie się serwera podczas sprawdzania zleceń bez ustawionej
       wartości ilości zrobionej.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Poprawiono błąd mogący spowodować wywalenie się serwera importu danych podczas importowania zleceń reszty działów.</li>
   </ul>
@@ -188,7 +188,7 @@
       pod kątem minimalnej i maksymalnej wartości, jeżeli operator nie zaznaczył tego pola.</li>
     <li>Zmieniono ograniczenie zrobionej ilości tak, aby pod uwagę brana była wykonywana aktualnie operacja.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Usunięto 'Maksymalną ilość do zrobienia' w zleceniu.</li>
     <li>Zmieniono obliczanie 'Ilości zrobionej'. Wcześnij była to suma 'Wykonanych ilości' ze zleceń spływających
@@ -218,7 +218,7 @@
   <h3>Formatka operatora</h3>
   <ul>
     <li>Zmieniono kończenie zlecenia tak, aby sprawdzana była zrobiona ilość. Od teraz każde zlecenie ma maksymalną
-      ilość do zrobienia ustawianą na stronie ze szczegółami 'Zlecenia reszty działów' (wymaga uprawnienia
+      ilość do zrobienia ustawianą na stronie ze szczegółami 'Zlecenia produkcyjne' (wymaga uprawnienia
       'Zlecenia: zarządzanie' lub funkcję 'Mistrz' lub 'Lider'). Domyślnie maksymalna wartość
       jest równa ilości do zrobienia. Przy kończeniu zlecenia na Formatce operatora, suma ilości zrobionych w zleceniach
       produkcyjnych (generowanych przez Formatkę operatora) nie może przekraczać maksymalnej wartości.</li>
@@ -253,7 +253,7 @@
 <div class="hidden">
   <h1>v0.116.2</h1>
   <h2><%- time.format('2017-09-17', 'LL') %></h2>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Poprawiono błąd uniemożliwiający aktualizację istniejących zleceń podczas importu zrzutu
       SAP ZOIN (przyjęcia zleceń).</li>
@@ -530,7 +530,7 @@
   <ul>
     <li>Zmieniono filtr 'Linia produkcyjna' na uniwersalny filtr 'Jednostka organizacyjna'.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Zmieniono importowanie zleceń tak, aby usuwane były zlecenia, które nie znajdują się już w aktualnym zrzucie
       (bo data startu została zmieniona na datę poza importowanym zakresem).</li>
@@ -721,7 +721,7 @@
   <ul>
     <li>Dodano zapamiętywanie pozycji poszczególnych jednostek organizacyjnych.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Poprawiono błąd podczas importu zleceń z SAP powodujący nieprzypisywanie wartości 'Opis', 'Zleceniodawca'
       oraz 'Czas utworzenia' w przypadku, gdy dla danego zlecenia sprzedaży istnieje więcej niż jedno
@@ -765,7 +765,7 @@
     <li>Dodano możliwość oznaczania wielu plików w aktualnym katalogu w celu usunięcia przypisania do aktualnego katalogu,
       przeniesienia ich do śmietnika, przywrócenia ze śmietnika lub bezpowrotnego usunięcia ze śmietnika.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Zmieniono listę dokumentów na stronie szczegółów zlecenia tak, aby otwierany był dokument z datą dostępności
       danego zlecenia.</li>
@@ -787,7 +787,7 @@
   <ul>
     <li>Poprawiono błąd wywalający serwer po dodaniu wyniku inspekcji z wybranym Właścicielem niezgodności.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Zmieniono importowanie zleceń ZLF1 tak, aby zdarzenie pomyślnego importu było tworzone nawet wtedy, gdy lista
       zleceń do zaimportowania była pusta.</li>
@@ -881,10 +881,10 @@
     <li>Poprawiono błąd wywalający serwer, gdy przeglądarka z Formatką operatora dla linii, która została usunięta utraci
       połączenie z serwerem.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Zmieniono listę operacji tak, aby użytkownik bez uprawnień 'Dane produkcyjne: przeglądanie'
-      lub 'Zlecenia reszty działów: przeglądanie' nie mógł widzieć czasów operacji.</li>
+      lub 'Zlecenia produkcyjne: przeglądanie' nie mógł widzieć czasów operacji.</li>
   </ul>
   <h3>Dane produkcyjne > Zlecenia</h3>
   <ul>
@@ -916,7 +916,7 @@
   <ul>
     <li>Poprawiono błąd powodujący nieprzeliczanie aktywnie wykonywanych zleceń po imporcie danych z SAP.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Poprawiono błąd wywalający serwer importera danych z SAP, gdy nie otrzymano danych zleceń (tylko operacje).</li>
   </ul>
@@ -1029,7 +1029,7 @@
 <div class="hidden">
   <h1>v0.104.1</h1>
   <h2><%- time.format('2017-02-19', 'LL') %></h2>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Dodano importowanie danych zleceń z transakcji SAP ZLF1.</li>
   </ul>
@@ -1094,7 +1094,7 @@
 <div class="hidden">
   <h1>v0.103.0</h1>
   <h2><%- time.format('2017-01-15', 'LL') %></h2>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Zmieniono filtr daty na stronie z listą zleceń tak, aby podanie dat nie było wymagane.</li>
     <li>Zmieniono wyświetlanie nazwy wyrobu tak, aby wyświetlana była wartość 'Nazwa' ze zlecenia, jeżeli rozpoczyna się
@@ -1134,7 +1134,7 @@
     <li>Dodano możliwość ustawienia dla każdej linii sztywnej planowanej ilości wyświetlanej na ekranie
       'Wydajność godzinowa'.</li>
   </ul>
-  <h3>Zlecenia reszty działów</h3>
+  <h3>Zlecenia produkcyjne</h3>
   <ul>
     <li>Poprawiono błąd powodujący wyświetlanie wykonanej ilości jako <code>undefined</code>.</li>
   </ul>

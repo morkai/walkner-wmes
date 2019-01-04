@@ -37,7 +37,7 @@
   "select:placeholder": "Wybierz drukarkę...",
   "select:browser": "Przez przeglądarkę...",
 
-  "tags:orders": "Zlecenia reszty działów",
+  "tags:orders": "Zlecenia produkcyjne",
   "tags:qi": "Inspekcja jakości",
   "tags:planning": "Plany dzienne",
   "tags:hourlyPlans": "Plany godzinowe",
