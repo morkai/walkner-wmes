@@ -44,7 +44,7 @@ define([
 
           return {
             _id: line.id,
-            workerCount: lineMrpSettings ? lineMrpSettings.get('workerCount') : 1
+            workerCount: lineMrpSettings ? lineMrpSettings.get('workerCount') : [0, 0, 0]
           };
         })
       };
@@ -58,7 +58,7 @@ define([
 
       var settings = view.plan.settings;
 
-      view.$('input[data-line-id]').each(function()
+      view.$('[data-line-id]').each(function()
       {
         var line = view.mrp.lines.get(this.dataset.lineId);
 
@@ -68,17 +68,16 @@ define([
         }
 
         var mrpLineSettings = line.mrpSettings(view.mrp.id);
-        var workerCount = parseInt(this.value, 10);
 
-        if (!mrpLineSettings || !workerCount || workerCount < 0)
+        if (!mrpLineSettings)
         {
           return;
         }
 
-        if (mrpLineSettings)
+        mrpLineSettings.set('workerCount', view.$(this).find('[data-shift-no]').map(function()
         {
-          mrpLineSettings.set('workerCount', workerCount);
-        }
+          return Math.max(0, parseInt(this.value, 10) || 0);
+        }).get());
       });
 
       var req = settings.save();

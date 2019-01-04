@@ -1,4 +1,106 @@
 <div class="hidden">
+  <h1>v0.129.0</h1>
+  <h2><%- time.format('2018-12-22', 'LL') %></h2>
+  <h3>FAP</h3>
+  <ul>
+    <li>Dodano nowy moduł: Fast Action to Problem.</li>
+  </ul>
+  <h3>Narzędzia pomiarowe</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nierozwijanie się listy filtra 'Typ urządzenia'.</li>
+    <li>Zmieniono kolor wierszy na liście urządzeń oraz głównego panelu w szczegółach urządzenia tak, aby był zależał
+      od ilości dni do kolejnej kalibracji:
+      <ul>
+        <li>biały - jeżeli urządzenie jest wycofane,</li>
+        <li>zielony - jeżeli jest więcej niż 14 dni do kalibracji,</li>
+        <li>żółty - jeżeli jest mniej niż 14 dni do kalibracji,</li>
+        <li>czerwony - jeżeli data kalibracji minęła.</li>
+      </ul>
+    </li>
+    <li>Zmieniono etykietę pola 'Użytkownicy urządzenia' na 'Aktualni dysponenci sprzętu'.</li>
+  </ul>
+  <h3>SAP GUI</h3>
+  <ul>
+    <li>Dodano do zrzutu dokumentów możliwość definiowania dodatkowych MRP nieznajdujących się w planie dziennym.</li>
+  </ul>
+  <h3>FTE</h3>
+  <ul>
+    <li>Zmieniono domyślny filtr listy tak, aby pokazywał dane tylko z ostatnich 7 dni.</li>
+  </ul>
+  <h3>Sprawdzanie komponentów</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalenie się serwera, jeżeli zeskanowako nr seryjny w zleceniu, które ma oprawę
+      HID niezdefiniowaną w słowniku.</li>
+  </ul>
+  <h3>Watchdog</h3>
+  <ul>
+    <li>Dodano możliwość wykonania telefonu na wybrany numer, gdy jakieś zdarzenie nie wystąpi przez określony czas.</li>
+  </ul>
+  <h3>Raporty</h3>
+  <ul>
+    <li>Zmieniono etykiety raportów 'ML' na 'Total'.</li>
+  </ul>
+  <h3>Raporty > CLIP</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący brak wartości w niektórych kolumnach w wyeksportowanych zleceniach.</li>
+    <li>Dodano akcję 'Ukryj zmiany systemowe' do listy zmian zlecenia. Włączenie opcji sprawi, że wszystkie wpisy
+      w historii zlecenia wykonane przez 'System' zostaną ukryte.</li>
+    <li>Dodano możliwość ustawiania przesunięcia dat filtra, danych oraz wyświetlanej na liście zleceń.</li>
+  </ul>
+  <h3>Matryca odpowiedzialności</h3>
+  <ul>
+    <li>Dodano możliwość przypisywania Wydziałów do Sekcji.</li>
+    <li>Dodano możliwość przypisywania Dni do Dyżurów.</li>
+  </ul>
+  <h3>Powody opóźnień</h3>
+  <ul>
+    <li>Dodano nową flagę: Wymagane 12NC?</li>
+  </ul>
+  <h3>Zlecenia reszty działów</h3>
+  <ul>
+    <li>Zmieniono importowanie tabel ETO tak, aby ignorowane były tabele, w treści których nie znajduje się 12NC z tematu
+      e-maila.</li>
+    <li>Dodano akcję 'Ukryj zmiany systemowe' do listy zmian zlecenia. Włączenie opcji sprawi, że wszystkie wpisy
+      w historii zlecenia wykonane przez 'System' zostaną ukryte.</li>
+    <li>Dodano nowe uprawnienie: Zlecenia: komentowanie - użytkownicy mający uprawnienia do przeglądania zleceń mogą
+      z tym uprawnieniem także je komentować i ustawiać Powód opóźnienia.</li>
+    <li>Dodano nowe pole: Opóźniony komponent - wymagane przy ustawianiu określonych Powodów opóźnień.</li>
+  </ul>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Usunięto funkcję otwierania dokumentów z lokalnego dysku.</li>
+  </ul>
+  <h3>Zdarzenia</h3>
+  <ul>
+    <li>Zmieniono pozycję modułu w menu z nadrzędnej na podrzędną w menu 'Narzędzia'.</li>
+  </ul>
+  <h3>Badanie Opinia</h3>
+  <ul>
+    <li>Zmieniono pytanie <em>Polecanie</em> (<code>REFERRALS)</code> tak, aby wyświetlane było pod tabelką
+      i miało postać wyboru odpowiedzi w skali 1-10.</li>
+    <li>Dodano możliwość przetłumaczenia i wygenerowania ankiety w języku ukraińskim.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wyświetlanie komunikatów 'Ładowanie nie powiodło się', jeżeli rozpoczęto odświeżanie
+      listy w momencie, gdy poprzednie żądanie odświeżenia danych jeszcze się nie skończyło.</li>
+    <li>Poprawiono funkcję zaznaczenia pola wyboru w filtrach Od-Do tak, aby działała w starszych wersjach przeglądarki
+      Microsoft Edge.</li>
+    <li>Poprawiono eksportowanie danych do formatu XLSX tak, aby możliwe było wyeksportowanie większej ilości danych.
+      Wcześniej eksport kończył się przedwcześnie, jeżeli arkusz nie został wygenerowany w ciągu 2 minut.</li>
+    <li>Zmieniono eksportowanie danych do formatu XLSX tak, aby przez cały czas generowania arkusza widoczny był komunikat
+      '<i class="fa fa-spinner"></i><span>Eksportowanie...</span>'.</li>
+    <li>Zmieniono eksportowanie danych do formatu XLSX tak, aby generowanie arkusza po stronie serwera było przerywane,
+      jeżeli użytkownik zrezygnował z eksportowania.</li>
+    <li>Zmieniono akcje aplikacji uruchomionych w trybie wsadowym tak, aby były łatwiejsze w użyciu za pomocą dotyku.</li>
+    <li>Zmieniono stronę z błędem 403 Brak uprawnień tak, aby przeglądarka odświeżyła się automatycznie, jeżeli powodem
+      błędu jest utrata sesji przez użytkownika.</li>
+    <li>Zmieniono zmianę lokalizacji interfejsu użytkownika tak, aby po zmianie strona była odświeżana.</li>
+    <li>Dodano dymki z dodatkowymi informacjami na temat użytkowników.</li>
+    <li>Dodano do wyszukiwarki możliwość wyszukiwania użytkowników po nazwisku.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.128.0</h1>
   <h2><%- time.format('2018-11-20', 'LL') %></h2>
   <h3>Pulpit</h3>

@@ -9,8 +9,8 @@
     <div class="planning-list-mrp">
       <span class="planning-list-mrp-id"><%- mrp._id %></span>
       <span class="planning-list-mrp-lines">
-        <% mrp.lines.forEach(function(line) { %>
-        <span class="planning-list-mrp-line"><%- line._id %> (<%- line.workerCount %>)</span>
+        <% mrp.lines.forEach(function(line, i) { %>
+        <span class="planning-list-mrp-line"><%- line._id %><%- i === mrp.lines.length - 1 ? '' : ', '%></span>
         <% }) %>
         <% if (!mrp.lines.length) { %>
         &nbsp;

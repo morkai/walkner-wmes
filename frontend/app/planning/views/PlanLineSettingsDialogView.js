@@ -139,9 +139,12 @@ define([
       });
 
       var newMrpPriority = lineSettings.get('mrpPriority');
-      var workerCount = +view.$id('workerCount').val();
       var orderPriority = view.$id('orderPriority').val().split(',');
       var applyToAllMrps = view.$id('applyToAllMrps').prop('checked');
+      var workerCount = [1, 2, 3].map(function(shiftNo)
+      {
+        return Math.max(0, +view.$id('workerCount' + shiftNo).val() || 0);
+      });
 
       newMrpPriority.forEach(function(mrpId)
       {

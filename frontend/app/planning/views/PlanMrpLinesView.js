@@ -87,14 +87,15 @@ define([
         showEditButton: view.plan.canEditSettings(),
         lines: view.mrp.lines.map(function(line)
         {
-          var lineMrpSettings = line.mrpSettings(view.mrp.id);
-
           return {
             _id: line.id,
-            workerCount: lineMrpSettings ? lineMrpSettings.get('workerCount') : '?',
+            workerCount: view.serializeWorkerCount(line),
             customTimes: view.serializeActiveTime(line, false),
             frozenOrders: line.getFrozenOrderCount()
           };
+        }).sort(function(a, b)
+        {
+          return a._id.localeCompare(b._id, undefined, {numeric: true, ignorePunctuation: true});
         })
       };
     },
@@ -179,7 +180,7 @@ define([
           prodFlow: prodFlow,
           prodLine: prodLine,
           activeTime: this.serializeActiveTime(line, true),
-          workerCount: lineMrpSettings ? lineMrpSettings.get('workerCount') : '?',
+          workerCount: this.serializeWorkerCount(line),
           mrpPriority: line.settings ? line.settings.get('mrpPriority').join(', ') : '?',
           orderPriority: !lineMrpSettings
             ? '?'
@@ -207,6 +208,25 @@ define([
       }
 
       return activeTimes;
+    },
+
+    serializeWorkerCount: function(line)
+    {
+      var lineMrpSettings = line.mrpSettings(this.mrp.id);
+
+      if (!lineMrpSettings)
+      {
+        return '?';
+      }
+
+      var workerCount = lineMrpSettings.get('workerCount');
+
+      if (workerCount[0] === workerCount[1] && workerCount[0] === workerCount[2])
+      {
+        return workerCount[0].toString();
+      }
+
+      return workerCount.join(', ');
     },
 
     hideMenu: function()

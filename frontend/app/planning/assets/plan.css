@@ -637,3 +637,16 @@
 .planning-freezeOrders .col-md-8:last-child {
   text-align: right;
 }
+
+.planning-lineSettings-workerCount {
+  display: flex;
+}
+.planning-lineSettings-workerCount-label {
+  margin-right: 7px;
+  line-height: 34px;
+  font-weight: normal;
+}
+.planning-lineSettings-workerCount-input {
+  width: 60px;
+  margin-right: 15px
+}

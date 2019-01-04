@@ -190,15 +190,20 @@ define([
         return;
       }
 
-      view.mrp.lines.forEach(function(line)
-      {
-        view.insertView('#-lineOrders', new PlanMrpLineOrdersView({
-          plan: view.plan,
-          mrp: view.mrp,
-          line: line,
-          prodLineState: view.prodLineStates.get(line.id)
-        })).render();
-      });
+      [].concat(view.mrp.lines.models)
+        .sort(function(a, b)
+        {
+          return a.id.localeCompare(b.id, undefined, {numeric: true, ignorePunctuation: true});
+        })
+        .forEach(function(line)
+        {
+          view.insertView('#-lineOrders', new PlanMrpLineOrdersView({
+            plan: view.plan,
+            mrp: view.mrp,
+            line: line,
+            prodLineState: view.prodLineStates.get(line.id)
+          })).render();
+        });
     },
 
     renderLineOrdersList: function()

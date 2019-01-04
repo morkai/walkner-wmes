@@ -24,8 +24,7 @@ define([
       return rql.Query.fromObject({
         fields: {
           'mrps._id': 1,
-          'mrps.lines._id': 1,
-          'mrps.lines.workerCount': 1
+          'mrps.lines._id': 1
         },
         selector: {
           name: 'and',

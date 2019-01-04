@@ -139,7 +139,12 @@
       <div class="row">
         <div class="col-md-3 form-group">
           <label for="<%- idPrefix %>-workerCount"><%- t('planning', 'settings:workerCount') %></label>
-          <input id="<%- idPrefix %>-workerCount" name="workerCount" class="form-control" type="number" min="0" max="9999" step="1" data-object="mrpLine">
+          <div class="planning-lineSettings-workerCount">
+            <% [1, 2, 3].forEach(function(shiftNo) { %>
+            <label for="<%- idPrefix %>-workerCount-<%- shiftNo %>" class="planning-lineSettings-workerCount-label"><%- t('planning', 'settings:workerCount:shift', {shiftNo: t('core', 'SHIFT:' + shiftNo)}) %></label>
+            <input id="<%- idPrefix %>-workerCount-<%- shiftNo %>" name="workerCount" class="form-control planning-lineSettings-workerCount-input" type="number" min="0" max="20" data-object="mrpLine" data-index="<%- shiftNo - 1 %>">
+            <% }) %>
+          </div>
         </div>
       </div>
       <div class="form-group">

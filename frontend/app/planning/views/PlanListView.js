@@ -148,8 +148,7 @@ define([
             lines: mrpSettings.lines.map(function(mrpLineSettings)
             {
               return {
-                _id: mrpLineSettings.id,
-                workerCount: mrpLineSettings.get('workerCount')
+                _id: mrpLineSettings.id
               };
             })
           });

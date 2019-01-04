@@ -360,6 +360,7 @@
   "settings:mrpLine:help": "Wybierz linię produkcyjną, dla którego chcesz zdefiniować ustawienia w zakresie wybranego kontrolera MRP.",
   "settings:mrpLine:placeholder": "Linia produkcyjna...",
   "settings:workerCount": "Ilość pracowników",
+  "settings:workerCount:shift": "zm. {shiftNo}:",
   "settings:orderPriority": "Priorytet zleceń",
   "settings:orderPriority:help": "Kolejność wykonywania zleceń na danej linii wg klasyfikacji: małe, łatwe, trudne. Łatwe i trudne zlecenia są jednocześnie duże.",
   "settings:groups": "Grupy",

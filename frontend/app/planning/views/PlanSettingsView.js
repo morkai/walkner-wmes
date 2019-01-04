@@ -53,8 +53,9 @@ define([
       {
         var object = e.currentTarget.dataset.object;
         var property = e.currentTarget.name;
+        var index = e.currentTarget.dataset.index >= 0 ? +e.currentTarget.dataset.index : undefined;
 
-        this.updateProperty(object, property);
+        this.updateProperty(object, property, index);
       },
 
       'change #-mrp': function(e)
@@ -633,9 +634,12 @@ define([
         line = mrp.lines.add({_id: lineId}).get(lineId);
       }
 
-      view.$id('workerCount')
-        .val(disabled ? '' : line.get('workerCount'))
-        .prop('disabled', disabled);
+      view.$('input[name="workerCount"]').each(function()
+      {
+        view.$(this)
+          .val(disabled ? '' : line.get('workerCount')[this.dataset.index])
+          .prop('disabled', disabled);
+      });
 
       view.$id('orderPriority')
         .select2('val', disabled ? [] : line.get('orderPriority'))
@@ -826,7 +830,7 @@ define([
       return groups;
     },
 
-    updateProperty: function(object, property)
+    updateProperty: function(object, property, index)
     {
       var o = this.model;
       var v;
@@ -851,6 +855,21 @@ define([
       }
 
       var $property = this.$id(property);
+
+      if (!$property.length)
+      {
+        $property = this.$('[name="' + property + '"]');
+      }
+
+      if (!$property.length)
+      {
+        return;
+      }
+
+      if (index >= 0)
+      {
+        $property = $property.filter('[data-index="' + index + '"]');
+      }
 
       switch (property)
       {
@@ -942,7 +961,19 @@ define([
 
       if (v !== undefined)
       {
-        o.attributes[property] = v;
+        if (index >= 0)
+        {
+          if (!Array.isArray(o.attributes[property]))
+          {
+            return;
+          }
+
+          o.attributes[property][index] = v;
+        }
+        else
+        {
+          o.attributes[property] = v;
+        }
       }
     },
 
