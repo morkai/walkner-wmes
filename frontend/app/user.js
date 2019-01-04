@@ -187,7 +187,8 @@ function(
     }
 
     var userPrivileges = user.data.privileges;
-    var anyPrivileges = (arguments.length === 1 ? [privilege] : Array.prototype.slice.call(arguments)).map(function(p)
+    var args = Array.prototype.slice.call(arguments);
+    var anyPrivileges = (args.length === 1 ? [privilege] : args).map(function(p)
     {
       return Array.isArray(p) ? p : [p];
     });

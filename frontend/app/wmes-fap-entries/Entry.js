@@ -213,7 +213,9 @@ define([
     serializeAuth: function()
     {
       var manage = user.isAllowedTo('FAP:MANAGE');
+      var loggedIn = user.isLoggedIn();
       var procEng = user.isAllowedTo('FN:process-engineer', 'FN:process-engineer-NPI');
+      var designer = user.isAllowedTo('FN:designer', 'FN:designer_eto');
       var master = user.isAllowedTo('FN:master');
       var leader = user.isAllowedTo('FN:leader');
       var analyzers = this.get('analyzers');
@@ -228,11 +230,14 @@ define([
 
       return {
         delete: this.canDelete(),
+        comment: loggedIn,
+        attachments: loggedIn,
+        observers: loggedIn,
         restart: manage,
-        status: manage || procEng || master || leader,
-        solution: manage || procEng || master || leader,
-        problem: started && (manage || procEng || master || leader),
-        category: started && (manage || procEng),
+        status: manage || procEng || designer || master || leader,
+        solution: manage || procEng || designer || master || leader,
+        problem: started && (manage || procEng || designer || master || leader),
+        category: started && (manage || procEng || designer),
         orderNo: started && (manage || procEng),
         lines: started && (manage || procEng),
         assessment: !pending && (manage || procEng || master),

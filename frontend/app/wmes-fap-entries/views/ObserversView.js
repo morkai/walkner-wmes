@@ -58,11 +58,19 @@ define([
 
     afterRender: function()
     {
-      setUpUserSelect2(this.$id('observer'), {
+      var $observer = this.$id('observer');
+      var enabled = this.model.serializeDetails().auth.observers;
+
+      setUpUserSelect2($observer, {
         width: '370px',
         noPersonnelId: true,
-        placeholder: this.t('observers:placeholder')
+        placeholder: this.t('observers:placeholder' + (enabled ? '' : ':auth'))
       });
+
+      if (!enabled)
+      {
+        $observer.select2('enable', false);
+      }
     },
 
     focusObserver: function(id)

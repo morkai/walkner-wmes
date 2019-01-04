@@ -287,6 +287,18 @@ define([
     onDrop: function(e)
     {
       var view = this;
+
+      if (!view.model.serializeDetails().auth.attachments)
+      {
+        viewport.msg.show({
+          type: 'warning',
+          time: 2500,
+          text: view.t('upload:auth')
+        });
+
+        return false;
+      }
+
       var entry = view.model;
       var attachments = {};
 

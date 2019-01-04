@@ -93,10 +93,12 @@
 
     "upload:drop": "Drop here any files you want to attach to the entry.",
     "upload:tooMany": "You can attach at most {max} {max, plural, one{file} other{files}}.",
+    "upload:auth": "Log in to add files.",
     "upload:failure": "Failed to upload file: {file}",
 
     "chat:title": "Chat",
     "chat:send": "Send message",
+    "chat:send:auth": "Log in to send a message",
     "chat:new": "Click here to see new messages...",
     "chat:status:pending:started": "<i>Entry accepted.</i>",
     "chat:status:started:finished": "<i>Entry finished.</i>",
@@ -104,6 +106,7 @@
     "chat:status:pending:finished": "<i>Entry finished.</i>",
 
     "observers:placeholder": "Add by last name or personnel ID...",
+    "observers:placeholder:auth": "Log in to add a new participant...",
 
     "attachments:menu:rename": "Change name",
     "attachments:menu:remove": "Remove file",

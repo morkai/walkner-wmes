@@ -93,10 +93,12 @@
 
   "upload:drop": "Upuść tutaj pliki jakie chcesz dodać do tego zgłoszenia.",
   "upload:tooMany": "Możesz załączyć maksymalnie {max} {max, plural, few{pliki} one{plik} other{plików}}.",
+  "upload:auth": "Zaloguj się, aby dodawać pliki.",
   "upload:failure": "Nie udało się załadować pliku: {file}",
 
   "chat:title": "Czat",
   "chat:send": "Wyślij wiadomość",
+  "chat:send:auth": "Zaloguj się, aby wysłać wiadomość",
   "chat:new": "Kliknij tutaj, aby zobaczyć nowe wiadomości...",
   "chat:status:pending:started": "<i>Zaakceptowano zgłoszenie.</i>",
   "chat:status:started:finished": "<i>Zakończono zgłoszenie.</i>",
@@ -104,6 +106,7 @@
   "chat:status:pending:finished": "<i>Zakończono zgłoszenie.</i>",
 
   "observers:placeholder": "Dodaj po nazwisku lub nr kadrowym...",
+  "observers:placeholder:auth": "Zaloguj się, aby dodać nową osobę...",
 
   "attachments:menu:rename": "Zmień nazwę",
   "attachments:menu:remove": "Usuń plik",
