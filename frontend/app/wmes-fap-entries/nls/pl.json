@@ -101,7 +101,7 @@
   "chat:send:auth": "Zaloguj się, aby wysłać wiadomość",
   "chat:new": "Kliknij tutaj, aby zobaczyć nowe wiadomości...",
   "chat:status:pending:started": "<i>Zaakceptowano zgłoszenie.</i>",
-  "chat:status:started:finished": "<i>Zakończono zgłoszenie.</i>",
+  "chat:status:started:finished": "<i>Zakończono zgłoszenie w {duration}.</i>",
   "chat:status:finished:started": "<i>Wznowiono zgłoszenie.</i>",
   "chat:status:pending:finished": "<i>Zakończono zgłoszenie.</i>",
 

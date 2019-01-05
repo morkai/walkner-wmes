@@ -101,7 +101,7 @@
     "chat:send:auth": "Log in to send a message",
     "chat:new": "Click here to see new messages...",
     "chat:status:pending:started": "<i>Entry accepted.</i>",
-    "chat:status:started:finished": "<i>Entry finished.</i>",
+    "chat:status:started:finished": "<i>Entry finished in {duration}.</i>",
     "chat:status:finished:started": "<i>Entry restarted.</i>",
     "chat:status:pending:finished": "<i>Entry finished.</i>",
 

@@ -368,9 +368,19 @@ define([
 
       if (change.data.status)
       {
+        var duration = '?';
+
+        if (change.data.status[1] === 'finished')
+        {
+          duration = Date.parse(change.date) - Date.parse(this.get('createdAt'));
+          duration = duration > 0 ? time.toString(duration / 1000) : '?';
+        }
+
         lines.push({
           time: changeTime,
-          text: t(this.nlsDomain, 'chat:status:' + change.data.status.join(':'))
+          text: t(this.nlsDomain, 'chat:status:' + change.data.status.join(':'), {
+            duration: duration
+          })
         });
       }
 
