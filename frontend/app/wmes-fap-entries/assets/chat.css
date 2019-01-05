@@ -72,6 +72,12 @@
   text-align: left;
   white-space: pre-line;
 }
+.fap-chat-line > time {
+  margin-right: 5px;
+  font-size: 12px;
+  line-height: 21px;
+  opacity: 0.5;
+}
 .fap-chat-attachment > a {
   margin-left: 7px;
   cursor: pointer;

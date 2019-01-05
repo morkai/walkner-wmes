@@ -364,15 +364,16 @@ define([
     {
       var entry = this;
       var prev = chat && chat[chat.length - 1];
-      var changeTime = time.format(change.date, 'dddd, LL LTS');
+      var shortTime = '<time>' + time.format(change.date, 'HH:mm:ss') + '</time>';
+      var longTime = time.format(change.date, 'dddd, LL LTS');
       var lines = [];
       var duration;
 
       if (change.comment)
       {
         lines.push({
-          time: changeTime,
-          text: autolink(_.escape(change.comment))
+          time: longTime,
+          text: shortTime + autolink(_.escape(change.comment))
         });
       }
 
@@ -387,7 +388,7 @@ define([
         }
 
         lines.push({
-          time: changeTime,
+          time: longTime,
           text: t(this.nlsDomain, 'chat:status:' + change.data.status.join(':'), {
             duration: duration
           })
@@ -397,7 +398,7 @@ define([
       if (change.data.analysisNeed && change.data.analysisNeed[1])
       {
         lines.push({
-          time: changeTime,
+          time: longTime,
           text: t(this.nlsDomain, 'chat:analysis:started')
         });
       }
@@ -416,7 +417,7 @@ define([
         }
 
         lines.push({
-          time: changeTime,
+          time: longTime,
           text: t(this.nlsDomain, 'chat:analysis:finished', {
             duration: duration
           })
@@ -437,7 +438,7 @@ define([
           var attachment = entry.serializeAttachment(a);
 
           lines.push({
-            time: changeTime,
+            time: longTime,
             text: '<span class="fap-chat-attachment" data-attachment-id="' + a._id + '">'
               + '<i class="fa ' + attachment.icon + '"></i><a>'
               + _.escape(attachment.label)
