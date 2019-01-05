@@ -146,16 +146,7 @@ define([
 
       var change = _.last(this.model.get('changes'));
 
-      if (!change || !change.user)
-      {
-        return;
-      }
-
-      var attachments = change.data.attachments;
-
-      if (change.comment
-        || change.data.status
-        || (attachments && !attachments[0] && attachments[1]))
+      if (change && change.user)
       {
         this.handleChange(change);
       }
@@ -163,9 +154,15 @@ define([
 
     handleChange: function(change)
     {
+      var message = this.model.serializeChatMessage(change);
+
+      if (!message.lines.length)
+      {
+        return;
+      }
+
       var $messages = this.$id('messages');
       var $lastMessage = this.$($messages[0].lastElementChild);
-      var message = this.model.serializeChatMessage(change);
       var scrollToBottom = this.isScrolledToBottom();
 
       if ($lastMessage[0].dataset.userId === change.user.id)

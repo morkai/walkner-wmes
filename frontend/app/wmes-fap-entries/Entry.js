@@ -64,7 +64,58 @@ define([
     '#0af', '#5cb85c', '#fa0', '#a0f', '#f0a', '#f00', '#ff0', '#9ff'
   ]);
 
-  var AUTOLINKER = null;
+  var autolinker = null;
+
+  function autolink(text)
+  {
+    if (!autolinker)
+    {
+      autolinker = new Autolinker({
+        urls: {
+          schemeMatches: true,
+          wwwMatches: true,
+          tldMatches: true
+        },
+        email: true,
+        phone: false,
+        mention: false,
+        hashtag: false,
+        stripPrefix: true,
+        stripTrailingSlash: true,
+        newWindow: true,
+        truncate: {
+          length: 0,
+          location: 'end'
+        },
+        className: '',
+        replaceFn: function(match)
+        {
+          var url = match.getUrl();
+          var tag = match.buildTag();
+
+          if (match.getType() === 'url' && url.indexOf(window.location.host) !== -1)
+          {
+            var parts = tag.innerHTML.split('?');
+
+            if (parts.length > 1 && parts[1].length)
+            {
+              tag.innerHTML = parts[0] + '?&hellip;';
+            }
+
+            delete tag.attrs.rel;
+          }
+          else if (tag.innerHTML.length >= 60)
+          {
+            tag.innerHTML = tag.innerHTML.substring(0, 50) + '&hellip;';
+          }
+
+          return tag;
+        }
+      });
+    }
+
+    return autolinker.link(text);
+  }
 
   return Model.extend({
 
@@ -84,7 +135,7 @@ define([
     {
       this.serialized = null;
 
-      this.on('sync change', function()
+      this.on('change', function()
       {
         this.serialized = null;
       });
@@ -268,7 +319,7 @@ define([
       var chat = [{
         user: {
           id: owner.id,
-          label: userInfoTemplate({userInfo: owner}),
+          label: userInfoTemplate({userInfo: owner, noIp: true}),
           self: self
         },
         color: self ? 'transparent' : colorFactory.getColor('fap/users', owner.id),
@@ -295,8 +346,12 @@ define([
           && !change.data.attachments[0]
           && !!change.data.attachments[1];
         var hasStatusChanged = !!change.data.status;
+        var hasAnalysisChanged = !!change.data.analysisNeed || !!change.data.analysisDone;
 
-        if (hasComment || hasAttachmentsAdded || hasStatusChanged)
+        if (hasComment
+          || hasAttachmentsAdded
+          || hasStatusChanged
+          || hasAnalysisChanged)
         {
           entry.serializeChatMessage(change, chat, availableAttachments);
         }
@@ -307,68 +362,23 @@ define([
 
     serializeChatMessage: function(change, chat, availableAttachments)
     {
-      if (!AUTOLINKER)
-      {
-        AUTOLINKER = new Autolinker({
-          urls: {
-            schemeMatches: true,
-            wwwMatches: true,
-            tldMatches: true
-          },
-          email: true,
-          phone: false,
-          mention: false,
-          hashtag: false,
-          stripPrefix: true,
-          stripTrailingSlash: true,
-          newWindow: true,
-          truncate: {
-            length: 0,
-            location: 'end'
-          },
-          className: '',
-          replaceFn: function(match)
-          {
-            var url = match.getUrl();
-            var tag = match.buildTag();
-
-            if (match.getType() === 'url' && url.indexOf(window.location.host) !== -1)
-            {
-              var parts = tag.innerHTML.split('?');
-
-              if (parts.length > 1 && parts[1].length)
-              {
-                tag.innerHTML = parts[0] + '?&hellip;';
-              }
-
-              delete tag.attrs.rel;
-            }
-            else if (tag.innerHTML.length >= 60)
-            {
-              tag.innerHTML = tag.innerHTML.substring(0, 50) + '&hellip;';
-            }
-
-            return tag;
-          }
-        });
-      }
-
       var entry = this;
       var prev = chat && chat[chat.length - 1];
       var changeTime = time.format(change.date, 'dddd, LL LTS');
       var lines = [];
+      var duration;
 
       if (change.comment)
       {
         lines.push({
           time: changeTime,
-          text: AUTOLINKER.link(_.escape(change.comment))
+          text: autolink(_.escape(change.comment))
         });
       }
 
       if (change.data.status)
       {
-        var duration = '?';
+        duration = '?';
 
         if (change.data.status[1] === 'finished')
         {
@@ -379,6 +389,35 @@ define([
         lines.push({
           time: changeTime,
           text: t(this.nlsDomain, 'chat:status:' + change.data.status.join(':'), {
+            duration: duration
+          })
+        });
+      }
+
+      if (change.data.analysisNeed && change.data.analysisNeed[1])
+      {
+        lines.push({
+          time: changeTime,
+          text: t(this.nlsDomain, 'chat:analysis:started')
+        });
+      }
+
+      if (change.data.analysisDone && change.data.analysisDone[1])
+      {
+        duration = Date.parse(change.date) - Date.parse(this.get('analysisStartedAt'));
+
+        if (duration > 0)
+        {
+          duration = time.toString(duration / 1000);
+        }
+        else
+        {
+          duration = '?';
+        }
+
+        lines.push({
+          time: changeTime,
+          text: t(this.nlsDomain, 'chat:analysis:finished', {
             duration: duration
           })
         });
@@ -418,7 +457,7 @@ define([
       var message = {
         user: {
           id: change.user.id,
-          label: userInfoTemplate({userInfo: change.user}),
+          label: userInfoTemplate({userInfo: change.user, noIp: true}),
           self: self
         },
         color: self ? 'transparent' : colorFactory.getColor('fap/users', change.user.id),
@@ -717,6 +756,8 @@ define([
       },
 
       status: 1,
+      startedAt: 1,
+      finishedAt: 1,
       problem: 1,
       solution: 1,
       category: 1,
@@ -727,6 +768,8 @@ define([
       assessment: 1,
       analysisNeed: 1,
       analysisDone: 1,
+      analysisStartedAt: 1,
+      analysisFinishedAt: 1,
       orderNo: 1,
       mrp: 1,
       nc12: 1,

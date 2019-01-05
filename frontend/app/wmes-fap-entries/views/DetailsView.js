@@ -637,14 +637,22 @@ define([
           // TODO Reset Why and Solution?
           return {
             analysisNeed: newValue,
-            analysisDone: false
+            analysisDone: false,
+            analysisStartedAt: newValue ? new Date() : null,
+            analysisFinishedAt: null
           };
         });
       },
 
       analysisDone: function($prop)
       {
-        this.editors.yesNo.call(this, $prop);
+        this.editors.yesNo.call(this, $prop, function(newValue)
+        {
+          return {
+            analysisDone: newValue,
+            analysisFinishedAt: newValue ? new Date() : null
+          };
+        });
       },
 
       attachment: function($attachment)

@@ -104,6 +104,8 @@
   "chat:status:started:finished": "<i>Zakończono zgłoszenie w {duration}.</i>",
   "chat:status:finished:started": "<i>Wznowiono zgłoszenie.</i>",
   "chat:status:pending:finished": "<i>Zakończono zgłoszenie.</i>",
+  "chat:analysis:started": "<i>Rozpoczęto analizę.</i>",
+  "chat:analysis:finished": "<i>Zakończono analizę w {duration}.</i>",
 
   "observers:placeholder": "Dodaj po nazwisku lub nr kadrowym...",
   "observers:placeholder:auth": "Zaloguj się, aby dodać nową osobę...",

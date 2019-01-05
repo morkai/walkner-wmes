@@ -157,13 +157,20 @@ define([
       }
       else
       {
-        this.model.change('status', 'finished');
+        this.model.multiChange({
+          status: 'finished',
+          finishedAt: new Date()
+        });
       }
     },
 
     start: function()
     {
-      this.model.change('status', 'started');
+      this.model.multiChange({
+        status: 'started',
+        startedAt: new Date(),
+        finishedAt: null
+      });
     },
 
     updateStatus: function()
