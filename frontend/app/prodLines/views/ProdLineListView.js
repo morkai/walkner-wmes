@@ -81,6 +81,7 @@ define([
           var row = prodLine.toJSON();
 
           row.orgUnits = renderOrgUnitPath(prodLine);
+          row.orgUnitsText = renderOrgUnitPath(prodLine, false, false);
           row.workCenter = renderOrgUnitPath(prodLine, true);
           row.inventoryNo = row.inventoryNo || '-';
           row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '-';
@@ -89,7 +90,7 @@ define([
         })
         .sort(function(a, b)
         {
-          return a._id.localeCompare(b._id, undefined, {numeric: true});
+          return a.orgUnitsText.localeCompare(b.orgUnitsText, undefined, {numeric: true, ignorePunctuation: true});
         });
     },
 
