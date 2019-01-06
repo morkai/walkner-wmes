@@ -33,3 +33,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.fap-entries-filter-analysis {
+  color: #eeaa00;
+}
+.fap-entries-filter option[value="pending"] {
+  color: #ee0000;
+}
+.fap-entries-filter option[value="started"] {
+  color: #00aaff;
+}
+.fap-entries-filter option[value="finished"] {
+  color: #00af00;
+}
+
