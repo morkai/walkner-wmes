@@ -67,9 +67,16 @@
   line-height: 1.5;
   white-space: pre-line;
 }
+.fap-prop[data-prop="solution"] .fa-user {
+  display: none;
+  cursor: help;
+}
 .fap-is-success[data-prop="solution"] {
   padding-left: 0;
   padding-right: 0;
+}
+.fap-is-success[data-prop="solution"] .fa-user {
+  display: inline-block;
 }
 .fap-is-success[data-prop="solution"] .fap-prop-value {
   padding: 7px 15px;

@@ -5,18 +5,19 @@
 
 load('./mongodb-helpers.js');
 
-db.plansettings.find({'mrps.lines.workerCount': {$type: 'number'}}, {mrps: 1}).forEach(s =>
+db.users.updateMany({}, {$set: {preferences: {}}});
+
+db.fapentries.find({}).forEach(fap =>
 {
-  s.mrps.forEach(mrp =>
+  let solver = null;
+
+  fap.changes.forEach(c =>
   {
-    mrp.lines.forEach(line =>
+    if (c.data.solution && c.data.solution[1])
     {
-      if (typeof line.workerCount === 'number')
-      {
-        line.workerCount = [line.workerCount, line.workerCount, line.workerCount];
-      }
-    });
+      solver = c.user;
+    }
   });
 
-  db.plansettings.updateOne({_id: s._id}, {$set: {mrps: s.mrps}});
+  db.fapentries.updateOne({_id: fap._id}, {$set: {solver}});
 });

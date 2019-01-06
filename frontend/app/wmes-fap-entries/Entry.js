@@ -219,6 +219,7 @@ define([
       obj.auth = this.serializeAuth();
       obj.problem = obj.problem.trim().replace(/\n{3,}/, '\n\n');
       obj.solution = obj.solution.trim().replace(/\n{3,}/, '\n\n') || '-';
+      obj.solver = obj.solver ? obj.solver.label : '';
       obj.solutionSteps = obj.solutionSteps.trim().replace(/\n{3,}/, '\n\n') || '-';
       obj.empty = {
         solution: obj.solution === '-'
@@ -761,6 +762,7 @@ define([
       finishedAt: 1,
       problem: 1,
       solution: 1,
+      solver: 1,
       category: 1,
       divisions: 1,
       lines: 1,

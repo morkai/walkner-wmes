@@ -67,7 +67,10 @@
   </div>
   <div class="fap-props" style="margin-top: 30px">
     <div class="fap-prop fap-is-textarea <%- model.multiline.solution ? 'fap-is-multiline' : '' %> <%- model.empty.solution ? '' : 'fap-is-success' %>" data-prop="solution" style="flex: 1 1 auto">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:solution') %></div>
+      <div class="fap-prop-name">
+        <%- helpers.t('PROPERTY:solution') %>
+        <i class="fa fa-user" title="<%= model.solver %>"></i>
+      </div>
       <div class="fap-prop-value"><%= model.solution %></div>
     </div>
   </div>

@@ -126,6 +126,9 @@ define([
         case 'analysisDone':
           return this.updateAnalysis;
 
+        case 'solver':
+          return this.updateSolver;
+
         case 'problem':
         case 'solution':
         case 'solutionSteps':
@@ -273,6 +276,15 @@ define([
       this.updateText($prop, details[prop]);
     },
 
+    updateSolver: function()
+    {
+      var details = this.model.serializeDetails();
+      var $solution = this.$('.fap-prop[data-prop="solution"]');
+      var $solver = $solution.find('.fa-user');
+
+      $solver.attr('title', details.solver);
+    },
+
     updateWhy5: function()
     {
       var view = this;
@@ -328,7 +340,7 @@ define([
 
     editors: {
 
-      textArea: function($prop, required)
+      textArea: function($prop, required, prepareData)
       {
         var view = this;
         var prop = $prop[0].dataset.prop;
@@ -353,7 +365,14 @@ define([
 
           if (newValue !== oldValue)
           {
-            view.model.change(prop, newValue);
+            if (prepareData)
+            {
+              view.model.multiChange(prepareData(newValue, oldValue, prop, $prop));
+            }
+            else
+            {
+              view.model.change(prop, newValue);
+            }
           }
 
           view.hideEditor();
@@ -385,7 +404,13 @@ define([
 
       solution: function($prop)
       {
-        this.editors.textArea.call(this, $prop, false);
+        this.editors.textArea.call(this, $prop, false, function(newValue)
+        {
+          return {
+            solution: newValue,
+            solver: newValue.trim().length ? user.getInfo() : null
+          };
+        });
       },
 
       solutionSteps: function($prop)
