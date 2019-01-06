@@ -2,14 +2,24 @@
 
 define([
   'underscore',
-  '../data/loadedModules',
-  '../core/Model',
-  './util/decorateUser'
+  'app/i18n',
+  'app/core/Model',
+  'app/data/aors',
+  'app/data/companies',
+  'app/data/prodFunctions',
+  'app/data/orgUnits',
+  'app/data/loadedModules',
+  'app/orgUnits/util/renderOrgUnitPath'
 ], function(
   _,
-  loadedModules,
+  t,
   Model,
-  decorateUser
+  aors,
+  companies,
+  prodFunctions,
+  orgUnits,
+  loadedModules,
+  renderOrgUnitPath
 ) {
   'use strict';
 
@@ -40,19 +50,12 @@ define([
 
     labelAttribute: 'login',
 
-    defaults: {},
-
-    initialize: function()
+    defaults: function()
     {
-      if (!Array.isArray(this.get('privileges')))
-      {
-        this.set('privileges', []);
-      }
-
-      if (!Array.isArray(this.get('aors')))
-      {
-        this.set('aors', []);
-      }
+      return {
+        privileges: [],
+        aors: []
+      };
     },
 
     getLabel: function()
@@ -77,7 +80,76 @@ define([
 
     serialize: function()
     {
-      return decorateUser(this);
+      var obj = this.toJSON();
+      var company = companies.get(obj.company);
+
+      obj.company = company ? company.getLabel() : '-';
+
+      obj.active = t('users', 'active:' + obj.active);
+
+      if (Array.isArray(obj.aors))
+      {
+        obj.aors = obj.aors
+          .map(function(aorId)
+          {
+            var aor = aors.get(aorId);
+
+            return aor ? aor.getLabel() : null;
+          })
+          .filter(function(aorLabel)
+          {
+            return !!aorLabel;
+          });
+      }
+      else
+      {
+        obj.aors = [];
+      }
+
+      var prodFunction = prodFunctions.get(obj.prodFunction);
+
+      obj.prodFunction = prodFunction ? prodFunction.getLabel() : '-';
+
+      if (obj.orgUnitType && obj.orgUnitId)
+      {
+        var orgUnitModel = orgUnits.getByTypeAndId(obj.orgUnitType, obj.orgUnitId);
+
+        if (orgUnitModel)
+        {
+          obj.orgUnit = renderOrgUnitPath(orgUnitModel, false, false);
+        }
+      }
+
+      if (obj.vendor)
+      {
+        if (obj.vendor.name)
+        {
+          obj.vendor = obj.vendor.name + ' (' + obj.vendor._id + ')';
+        }
+        else if (obj.vendor._id)
+        {
+          obj.vendor = obj.vendor._id;
+        }
+      }
+
+      return obj;
+    },
+
+    serializeDetails: function()
+    {
+      var obj = this.serialize();
+
+      obj.notifications = [];
+
+      ['fap_sms'].forEach(function(pref)
+      {
+        if (obj.preferences && obj.preferences[pref])
+        {
+          obj.notifications.push(pref);
+        }
+      });
+
+      return obj;
     },
 
     getMobile: function()

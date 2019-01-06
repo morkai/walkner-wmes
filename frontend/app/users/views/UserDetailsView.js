@@ -27,11 +27,6 @@ define([
       return _.extend(DetailsView.prototype.serialize.call(this), {
         loadedModules: loadedModules
       });
-    },
-
-    afterRender: function()
-    {
-      DetailsView.prototype.afterRender.call(this);
     }
 
   });

@@ -2,12 +2,12 @@
   <div class="row">
     <div class="col-lg-4">
       <div class="panel panel-primary">
-        <div class="panel-heading"><%- t('users', 'PANEL:TITLE:details:basic') %></div>
+        <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details:basic') %></div>
         <div class="panel-details">
           <div class="props first">
             <% ['active', 'login', 'personellId', 'card', 'cardUid', 'kdId', 'kdDivision', 'kdPosition'].forEach(function(prop) { %>
             <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:' + prop) %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
               <div class="prop-value"><%= model[prop] || '-' %></div>
             </div>
             <% }) %>
@@ -17,11 +17,11 @@
     </div>
     <div class="col-lg-4">
       <div class="panel panel-default">
-        <div class="panel-heading"><%- t('users', 'PANEL:TITLE:details:contact') %></div>
+        <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details:contact') %></div>
         <div class="panel-details">
           <div class="props first">
             <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:name') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:name') %></div>
               <div class="prop-value">
                 <% if (!model.lastName && !model.firstName) { %>
                 -
@@ -31,20 +31,20 @@
               </div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:email') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:email') %></div>
               <div class="prop-value"><%= model.email || '-' %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:mobile') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:mobile') %></div>
               <div class="prop-value">
                 <% if (_.isEmpty(model.mobile)) { %>
                 -
                 <% } else if (model.mobile.length === 1) { %>
-                <%- t('users', 'DETAILS:mobile:item', model.mobile[0]) %>
+                <%- helpers.t('DETAILS:mobile:item', model.mobile[0]) %>
                 <% } else { %>
                 <ul>
                   <% _.forEach(model.mobile, function(mobile) { %>
-                  <li><%- t('users', 'DETAILS:mobile:item', mobile) %></li>
+                  <li><%- helpers.t('DETAILS:mobile:item', mobile) %></li>
                   <% }) %>
                 </ul>
                 <% } %>
@@ -56,26 +56,26 @@
     </div>
     <div class="col-lg-4">
       <div class="panel panel-default">
-        <div class="panel-heading"><%- t('users', 'PANEL:TITLE:details:extra') %></div>
+        <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details:extra') %></div>
         <div class="panel-details">
           <div class="props first">
             <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:company') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:company') %></div>
               <div class="prop-value"><%= model.company || '-' %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:prodFunction') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:prodFunction') %></div>
               <div class="prop-value"><%= model.prodFunction || '-' %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:orgUnit') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:orgUnit') %></div>
               <div class="prop-value"><%- model.orgUnit || '-' %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:aors') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:aors') %></div>
               <div class="prop-value">
                 <% if (_.isEmpty(model.aors)) { %>
-                <%- t('users', 'NO_DATA:aors') %>
+                <%- helpers.t('NO_DATA:aors') %>
                 <% } else { %>
                 <ul>
                   <% _.forEach(model.aors, function(aor) { %>
@@ -86,12 +86,12 @@
               </div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:mrps') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:mrps') %></div>
               <div class="prop-value"><%= _.isEmpty(model.mrps) ? '-' : model.mrps.join(', ') %></div>
             </div>
             <% if (loadedModules.isLoaded('vendors')) { %>
             <div class="prop">
-              <div class="prop-name"><%- t('users', 'PROPERTY:vendor') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:vendor') %></div>
               <div class="prop-value"><%= model.vendor || '-' %></div>
             </div>
             <% } %>
@@ -100,12 +100,22 @@
       </div>
     </div>
   </div>
+  <% if (!_.isEmpty(model.notifications)) { %>
+  <div class="panel panel-default users-details-privileges">
+    <div class="panel-heading"><%- helpers.t('PROPERTY:notifications') %></div>
+    <div class="panel-body">
+      <% model.notifications.forEach(function(n) { %>
+      <span class="label label-default"><%- helpers.t('preferences:' + n) %></span>
+      <% }) %>
+    </div>
+  </div>
+  <% } %>
   <% if (!_.isEmpty(model.privileges)) { %>
   <div class="panel panel-default users-details-privileges">
-    <div class="panel-heading"><%- t('users', 'PANEL:TITLE:details:privileges') %></div>
+    <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details:privileges') %></div>
     <div class="panel-body">
       <% model.privileges.forEach(function(privilege) { %>
-      <span class="label label-<%- /VIEW/.test(privilege) ? 'info' : 'warning' %>"><%- t('users', 'PRIVILEGE:' + privilege) %></span>
+      <span class="label label-<%- /VIEW/.test(privilege) ? 'info' : 'warning' %>"><%- helpers.t('PRIVILEGE:' + privilege) %></span>
       <% }) %>
     </div>
   </div>

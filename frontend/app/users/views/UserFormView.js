@@ -380,7 +380,8 @@ define([
       formData = _.defaults(formData, {
         privileges: [],
         aors: [],
-        mrps: []
+        mrps: [],
+        preferences: {}
       });
 
       ['firstName', 'lastName', 'personellId', 'email'].forEach(function(prop)
