@@ -69,8 +69,14 @@ app/core/assets/./dataTables.css
 app/core/assets/./highlight.css
 app/core/assets/./highcharts.css
 app/core/assets/./embedded.css
+app/core/assets/./messages.css
+app/core/assets/./notifications.css
 app/core/assets/main.css
 
+app/core/assets/messages.css
+----------------
+app/core/assets/messages.css
+
 app/core/assets/modal.css
 ----------------
 app/core/assets/modal.css
@@ -78,6 +84,10 @@ app/core/assets/modal.css
 app/core/assets/navbar.css
 ----------------
 app/core/assets/navbar.css
+
+app/core/assets/notifications.css
+----------------
+app/core/assets/notifications.css
 
 app/core/assets/print.css
 ----------------
