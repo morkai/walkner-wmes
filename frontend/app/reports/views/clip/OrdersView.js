@@ -21,6 +21,13 @@ define([
 ) {
   'use strict';
 
+  var FAP_STATUS_TO_LABEL = {
+    pending: 'danger',
+    started: 'info',
+    finished: 'success',
+    analysis: 'warning'
+  };
+
   return View.extend({
 
     template: ordersTemplate,
@@ -139,7 +146,13 @@ define([
         drm: order.get('drm'),
         eto: order.get('eto'),
         comment: order.get('comment'),
-        planner: this.planners.getLabel(mrp)
+        planner: this.planners.getLabel(mrp),
+        faps: (order.get('faps') || []).map(function(fap)
+        {
+          fap.label = FAP_STATUS_TO_LABEL[fap.status];
+
+          return fap;
+        })
       };
     },
 
