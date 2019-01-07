@@ -85,7 +85,11 @@ define([
 
     afterRender: function()
     {
-      if (this.$('.fap-addForm').length)
+      if (!user.isLoggedIn())
+      {
+        this.$el.addClass('hidden');
+      }
+      else if (this.$('.fap-addForm').length)
       {
         this.toggleAddForm(true);
       }
