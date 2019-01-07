@@ -1,0 +1,7 @@
+.notifications-request {
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+.notifications-request:hover {
+  background-color: #F4E8B9;
+}

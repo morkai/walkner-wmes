@@ -2,6 +2,7 @@
 
 define([
   'app/i18n',
+  'app/notifications',
   'app/core/pages/FilteredListPage',
   'app/core/util/pageActions',
   '../dictionaries',
@@ -9,6 +10,7 @@ define([
   '../views/ListView'
 ], function(
   t,
+  notifications,
   FilteredListPage,
   pageActions,
   dictionaries,
@@ -55,6 +57,8 @@ define([
       FilteredListPage.prototype.afterRender.call(this);
 
       dictionaries.load();
+
+      notifications.renderRequest(this);
     }
 
   });

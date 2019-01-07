@@ -448,5 +448,7 @@
 
   "PANEL:TITLE:details": "Szczegóły",
   "PANEL:TITLE:addForm": "Formularz dodawania",
-  "PANEL:TITLE:editForm": "Formularz edycji"
+  "PANEL:TITLE:editForm": "Formularz edycji",
+
+  "notifications:request:message": "Kliknij tutaj, aby włączyć powiadomienia w przeglądarce."
 }
