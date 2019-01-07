@@ -1159,7 +1159,6 @@ app/prodFunctions/ProdFunction.js
 app/prodFunctions/ProdFunctionCollection.js
 app/data/prodFunctions.js
 app/orgUnits/util/renderOrgUnitPath.js
-app/users/util/decorateUser.js
 app/users/User.js
 app/users/UserCollection.js
 app/mor/Mor.js
@@ -1389,7 +1388,6 @@ app/prodFunctions/ProdFunction.js
 app/prodFunctions/ProdFunctionCollection.js
 app/data/prodFunctions.js
 app/orgUnits/util/renderOrgUnitPath.js
-app/users/util/decorateUser.js
 app/users/User.js
 app/users/UserCollection.js
 app/mor/Mor.js
@@ -2252,7 +2250,6 @@ app/data/prodFunctions.js
 app/data/dictionaries.js
 app/production/templates/vkb.js
 app/production/views/VkbView.js
-app/users/util/decorateUser.js
 app/users/User.js
 app/users/UserCollection.js
 app/mor/Mor.js
@@ -3250,13 +3247,12 @@ app/data/workCenters.js
 app/prodLines/ProdLine.js
 app/prodLines/ProdLineCollection.js
 app/data/prodLines.js
+app/data/orgUnits.js
 app/orgUnits/util/renderOrgUnitPath.js
-app/users/util/decorateUser.js
 app/users/User.js
 app/users/UserCollection.js
 app/isa/WhmanCollection.js
 app/isa/IsaShiftPersonnel.js
-app/data/orgUnits.js
 app/isaPalletKinds/IsaPalletKind.js
 app/isaPalletKinds/IsaPalletKindCollection.js
 app/data/isaPalletKinds.js

@@ -1,0 +1,1 @@
+define(["app/core/View","app/wmes-fap-entries/views/ListView","app/orders/templates/fapEntryList"],function(e,i,t){"use strict";return e.extend({template:t,initialize:function(){this.insertView(".orders-fap",new i({collection:this.collection,orderDetails:!0}))}})});
