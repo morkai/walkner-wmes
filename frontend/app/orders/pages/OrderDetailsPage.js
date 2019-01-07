@@ -8,6 +8,8 @@ define([
   'app/core/pages/DetailsPage',
   'app/delayReasons/storage',
   'app/printers/views/PrinterPickerView',
+  'app/wmes-fap-entries/dictionaries',
+  'app/wmes-fap-entries/EntryCollection',
   '../Order',
   '../OrderCollection',
   '../ComponentCollection',
@@ -18,7 +20,9 @@ define([
   '../views/ComponentListView',
   '../views/OrderChangesView',
   '../views/EtoView',
-  'app/orders/templates/detailsJumpList'
+  '../views/FapEntryListView',
+  'app/orders/templates/detailsJumpList',
+  'i18n!app/nls/wmes-fap-entries'
 ], function(
   _,
   $,
@@ -27,6 +31,8 @@ define([
   DetailsPage,
   delayReasonsStorage,
   PrinterPickerView,
+  fapDictionaries,
+  FapEntryCollection,
   Order,
   OrderCollection,
   ComponentCollection,
@@ -37,6 +43,7 @@ define([
   ComponentListView,
   OrderChangesView,
   EtoView,
+  FapEntryListView,
   renderJumpList
 ) {
   'use strict';
@@ -92,63 +99,101 @@ define([
 
     initialize: function()
     {
-      this.model = bindLoadingMessage(new Order({_id: this.options.modelId}), this);
-      this.delayReasons = bindLoadingMessage(delayReasonsStorage.acquire(), this);
-      this.paintOrders = bindLoadingMessage(new OrderCollection(null, {
-        rqlQuery: 'select(bom)&operations.workCenter=PAINT&leadingOrder=' + this.options.modelId
-      }), this);
-      this.paintOrder = new Order({
-        bom: new ComponentCollection()
-      });
-
-      this.detailsView = new OrderDetailsView({
-        model: this.model,
-        delayReasons: this.delayReasons
-      });
-      this.operationsView = new OperationListView({
-        model: this.model,
-        showQtyMax: true
-      });
-      this.documentsView = new DocumentListView({model: this.model});
-      this.componentsView = new ComponentListView({
-        model: this.model,
-        linkDocuments: true,
-        linkPfep: true
-      });
-      this.paintComponentsView = new ComponentListView({
-        model: this.paintOrder,
-        paint: true,
-        linkPfep: true
-      });
-      this.etoView = new EtoView({model: this.model});
-      this.changesView = new OrderChangesView({
-        model: this.model,
-        delayReasons: this.delayReasons
-      });
+      this.defineModels();
+      this.defineViews();
+      this.defineBindings();
 
       this.insertView(this.detailsView);
+      this.insertView(this.fapEntriesView);
       this.insertView(this.operationsView);
       this.insertView(this.documentsView);
       this.insertView(this.componentsView);
       this.insertView(this.paintComponentsView);
       this.insertView(this.etoView);
       this.insertView(this.changesView);
+    },
 
+    destroy: function()
+    {
+      delayReasonsStorage.release();
+      fapDictionaries.unload();
+    },
+
+    defineModels: function()
+    {
+      this.model = bindLoadingMessage(new Order({_id: this.options.modelId}), this);
+
+      this.delayReasons = bindLoadingMessage(delayReasonsStorage.acquire(), this);
+
+      this.fapEntries = bindLoadingMessage(new FapEntryCollection(null, {
+        rqlQuery: 'exclude(changes)&sort(_id)&orderNo=string:' + this.model.id
+      }), this);
+
+      this.paintOrders = bindLoadingMessage(new OrderCollection(null, {
+        rqlQuery: 'select(bom)&operations.workCenter=PAINT&leadingOrder=' + this.model.id
+      }), this);
+
+      this.paintOrder = new Order({
+        bom: new ComponentCollection()
+      });
+    },
+
+    defineViews: function()
+    {
+      this.detailsView = new OrderDetailsView({
+        model: this.model,
+        delayReasons: this.delayReasons
+      });
+
+      this.fapEntriesView = new FapEntryListView({
+        collection: this.fapEntries
+      });
+
+      this.operationsView = new OperationListView({
+        model: this.model,
+        showQtyMax: true
+      });
+
+      this.documentsView = new DocumentListView({
+        model: this.model
+      });
+
+      this.componentsView = new ComponentListView({
+        model: this.model,
+        linkDocuments: true,
+        linkPfep: true
+      });
+
+      this.paintComponentsView = new ComponentListView({
+        model: this.paintOrder,
+        paint: true,
+        linkPfep: true
+      });
+
+      this.etoView = new EtoView({
+        model: this.model
+      });
+
+      this.changesView = new OrderChangesView({
+        model: this.model,
+        delayReasons: this.delayReasons
+      });
+    },
+
+    defineBindings: function()
+    {
       this.listenTo(this.paintOrders, 'reset', this.onPaintOrdersReset);
       this.listenTo(this.documentsView, 'documentOpened', this.onDocumentOpened);
       this.listenTo(this.documentsView, 'documentClosed', this.onDocumentClosed);
       this.listenTo(this.componentsView, 'bestDocumentRequested', this.onBestDocumentRequested);
     },
 
-    destroy: function()
-    {
-      delayReasonsStorage.release();
-    },
-
     load: function(when)
     {
       return when(
         this.model.fetch(),
+        fapDictionaries.load(),
+        this.fapEntries.fetch({reset: true}),
         this.paintOrders.fetch({reset: true}),
         this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null
       );
@@ -157,6 +202,8 @@ define([
     afterRender: function()
     {
       delayReasonsStorage.acquire();
+
+      fapDictionaries.load();
 
       this.renderJumpList();
     },

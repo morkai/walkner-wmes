@@ -23,6 +23,7 @@
     "openOrdersPrint:msg:notFound": "{count, plural, one{Order {orders} doesn't exist.} other{Orders don't exist: {orders}}}",
 
     "PANEL:TITLE:details": "Order's details",
+    "PANEL:TITLE:fap": "Order's FAP entries",
     "PANEL:TITLE:operations": "Order's operations",
     "PANEL:TITLE:documents": "Order's documents",
     "PANEL:TITLE:bom": "Order's components",
@@ -154,6 +155,7 @@
     "settings:iptChecker:mrps": "MRPs to check",
 
     "jumpList:details": "Details",
+    "jumpList:fap": "FAP entries",
     "jumpList:operations": "Operations",
     "jumpList:documents": "Documents",
     "jumpList:bom": "Components",

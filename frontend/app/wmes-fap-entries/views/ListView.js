@@ -15,7 +15,17 @@ define([
 
   return ListView.extend({
 
-    className: 'fap-entries-list is-clickable is-colored',
+    className: function()
+    {
+      var classes = ['fap-entries-list', 'is-clickable'];
+
+      if (!this.options.orderDetails)
+      {
+        classes.push('is-colored');
+      }
+
+      return classes.join(' ');
+    },
 
     remoteTopics: function()
     {
@@ -34,18 +44,27 @@ define([
 
     serializeColumns: function()
     {
-      return [
-        {id: 'rid', className: 'is-min is-number'},
-        {id: 'orderNo', className: 'is-min', tdClassName: 'text-mono'},
-        {id: 'nc12', className: 'is-min', tdClassName: 'text-mono'},
-        {id: 'mrp', className: 'is-min'},
+      var columns = [{id: 'rid', className: 'is-min is-number'}];
+
+      if (!this.options.orderDetails)
+      {
+        columns.push(
+          {id: 'orderNo', className: 'is-min', tdClassName: 'text-mono'},
+          {id: 'nc12', className: 'is-min', tdClassName: 'text-mono'},
+          {id: 'mrp', className: 'is-min'}
+        );
+      }
+
+      columns.push(
         {id: 'category', className: 'is-min'},
         {id: 'createdAt', className: 'is-min'},
         {id: 'divisions', className: 'is-min'},
         {id: 'lines', className: 'is-min'},
         {id: 'problem', className: 'is-min'},
         '-'
-      ];
+      );
+
+      return columns;
     },
 
     serializeActions: function()
@@ -53,7 +72,7 @@ define([
       var view = this;
       var collection = view.collection;
 
-      return function(row)
+      return this.options.orderDetails ? null : function(row)
       {
         var model = collection.get(row._id);
         var actions = [ListView.actions.viewDetails(model)];

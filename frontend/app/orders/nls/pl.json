@@ -22,6 +22,7 @@
   "openOrdersPrint:msg:notFound": "{count, plural, one{Zlecenie {orders} nie istnieje.} other{Zlecenia nie istnieją: {orders}}}",
 
   "PANEL:TITLE:details": "Szczegóły zlecenia",
+  "PANEL:TITLE:fap": "Lista zgłoszeń FAP",
   "PANEL:TITLE:operations": "Lista operacji zlecenia",
   "PANEL:TITLE:documents": "Lista dokumentów zlecenia",
   "PANEL:TITLE:bom": "Lista komponentów zlecenia",
@@ -153,6 +154,7 @@
   "settings:iptChecker:mrps": "MRP do sprawdzenia",
 
   "jumpList:details": "Szczegóły",
+  "jumpList:fap": "Zgłoszenia FAP",
   "jumpList:operations": "Operacje",
   "jumpList:documents": "Dokumenty",
   "jumpList:bom": "Komponenty",

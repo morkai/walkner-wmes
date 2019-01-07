@@ -1,5 +1,5 @@
 <div id="<%- idPrefix %>-jumpList" class="list-group orders-jumpList">
-  <% ['details', 'operations', 'documents', 'bom', 'eto', 'changes'].forEach(function(section) { %>
+  <% ['details', 'fap', 'operations', 'documents', 'bom', 'eto', 'changes'].forEach(function(section) { %>
   <a href="#orders-<%- section %>" class="list-group-item"><%- t('orders', 'jumpList:' + section) %></a>
   <% }) %>
 </div>
