@@ -33,7 +33,7 @@
           <div class="prop-name"><%- t('orders', 'PROPERTY:leadingOrder') %></div>
           <div class="prop-value">
             <% if (model.leadingOrder && model.leadingOrder !== model._id) { %>
-            <% if (linkOrderNo) { %>
+            <% if (user.isAllowedTo('ORDERS:VIEW')) { %>
             <a href="#orders/<%- model.leadingOrder %>"><%- model.leadingOrder %></a>
             <% } else { %>
             <%- model.leadingOrder %>
