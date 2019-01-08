@@ -82,10 +82,15 @@
   margin-left: 7px;
   cursor: pointer;
 }
+.fap-chat-line-text > .fa-user {
+  margin-left: 2px;
+  margin-right: 2px;
+}
 .fap-chat-send {
   padding: 4px 24px;
   resize: none;
   overflow-y: hidden;
+  text-rendering: geometricPrecision;
 }
 .fap-chat-send-scroll {
   overflow-y: scroll;

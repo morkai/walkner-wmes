@@ -206,6 +206,7 @@ define([
           case 'Tab':
             return e.shiftKey ? focusPrev(e) : focusNext(e);
 
+          case ' ':
           case 'Enter':
           {
             if (enter)
@@ -223,6 +224,8 @@ define([
             break;
           }
 
+          case 'Delete':
+          case 'Backspace':
           case 'Escape':
           {
             hideMenu();

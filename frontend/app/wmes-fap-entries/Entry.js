@@ -372,9 +372,12 @@ define([
 
       if (change.comment)
       {
+        var text = autolink(_.escape(change.comment))
+          .replace(/👤/g, '<i class="fa fa-user"></i>');
+
         lines.push({
           time: longTime,
-          text: shortTime + autolink(_.escape(change.comment))
+          text: shortTime + '<span class="fap-chat-line-text">' + text + '</span>'
         });
       }
 

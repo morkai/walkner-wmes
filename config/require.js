@@ -42,7 +42,8 @@ exports.paths = {
   'interact': 'vendor/interact',
   'dragscroll': 'vendor/dragscroll',
   'hammer': 'vendor/hammer',
-  'autolinker': 'vendor/autolinker'
+  'autolinker': 'vendor/autolinker',
+  'getCaretCoordinates': 'vendor/getCaretCoordinates'
 };
 
 exports.shim = {
@@ -74,6 +75,9 @@ exports.shim = {
   },
   'deployJava': {
     exports: 'deployJava'
+  },
+  'getCaretCoordinates': {
+    exports: 'getCaretCoordinates'
   }
 };
 
