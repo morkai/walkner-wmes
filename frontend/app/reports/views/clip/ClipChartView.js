@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/highcharts',
   'app/core/View',
+  'app/core/util/pageActions',
   'app/orgUnits/util/renderOrgUnitPath',
   'app/reports/util/formatTooltipHeader',
   'app/reports/util/formatXAxis'
@@ -15,6 +16,7 @@ define([
   t,
   Highcharts,
   View,
+  pageActions,
   renderOrgUnitPath,
   formatTooltipHeader,
   formatXAxis
@@ -460,7 +462,7 @@ define([
         url += '&mrp=in=(' + mrps.join(',') + ')';
       }
 
-      window.open(url);
+      pageActions.exportXlsx(url);
     }
 
   });

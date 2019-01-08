@@ -7,6 +7,7 @@ define([
   'app/user',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  'app/core/util/pageActions',
   '../settings',
   '../Report7',
   '../Report7Query',
@@ -24,6 +25,7 @@ define([
   user,
   View,
   bindLoadingMessage,
+  pageActions,
   settings,
   Report,
   Query,
@@ -66,15 +68,16 @@ define([
 
     actions: function()
     {
-      var onExportMenuItemClick = this.onExportMenuItemClick.bind(this);
+      var page = this;
+      var onExportMenuItemClick = page.onExportMenuItemClick.bind(page);
 
       return [{
         template: exportPageActionTemplate.bind(null, {
-          urls: this.getExportUrls()
+          urls: page.getExportUrls()
         }),
         afterRender: function($exportAction)
         {
-          $exportAction.on('click', 'a[data-export]', onExportMenuItemClick);
+          page.$exportAction = $exportAction.on('click', 'a[data-export]', onExportMenuItemClick);
         }
       }, {
         label: t.bound('reports', 'PAGE_ACTION:settings'),
@@ -188,6 +191,7 @@ define([
 
         this.promised(this.report.fetch());
         this.promised(this.prodDowntimes.fetch({reset: true}));
+        this.updateExportUrls();
       });
     },
 
@@ -263,12 +267,14 @@ define([
     {
       var type = e.target.dataset.export;
 
+      e.preventDefault();
+
       if (type === 'downtimes')
       {
+        pageActions.exportXlsx(e.target.href);
+
         return;
       }
-
-      e.preventDefault();
 
       var view;
 
