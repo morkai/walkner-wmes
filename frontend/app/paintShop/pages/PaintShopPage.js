@@ -12,6 +12,7 @@ define([
   'app/core/util/getShiftStartInfo',
   'app/core/util/html2pdf',
   'app/core/util/embedded',
+  'app/core/util/pageActions',
   'app/data/clipboard',
   'app/production/views/VkbView',
   'app/printers/views/PrinterPickerView',
@@ -41,6 +42,7 @@ define([
   getShiftStartInfo,
   html2pdf,
   embedded,
+  pageActions,
   clipboard,
   VkbView,
   PrinterPickerView,
@@ -790,11 +792,11 @@ define([
 
     handleExportOrdersAction: function(mrp)
     {
-      var href = '/paintShop/orders;export.xlsx?sort(date,no)&limit(0)&date=' + this.orders.getDateFilter();
+      var url = '/paintShop/orders;export.xlsx?sort(date,no)&limit(0)&date=' + this.orders.getDateFilter();
 
       if (mrp)
       {
-        href += '&mrp=' + mrp;
+        url += '&mrp=' + mrp;
       }
 
       var mspPaints = (this.settings.getValue('mspPaints') || [])
@@ -803,14 +805,14 @@ define([
 
       if (this.orders.selectedPaint === 'msp' && mspPaints.length)
       {
-        href += '&childOrders.components.nc12=in=(' + mspPaints + ')';
+        url += '&childOrders.components.nc12=in=(' + mspPaints + ')';
       }
       else if (this.orders.selectedPaint !== 'all')
       {
-        href += '&childOrders.components.nc12=string:' + this.orders.selectedPaint;
+        url += '&childOrders.components.nc12=string:' + this.orders.selectedPaint;
       }
 
-      window.location.href = href;
+      pageActions.exportXlsx(url);
     },
 
     handleDropZoneAction: function(mrp, isPaint)

@@ -252,6 +252,7 @@ define([
         });
       }
     },
+    exportXlsx: exportXlsx,
     jump: function(page, collection, options)
     {
       options = _.assign({mode: 'rid', pattern: '^ *[0-9]+ *$', autoFocus: !window.IS_MOBILE}, options);
