@@ -2557,6 +2557,11 @@ app/core/templates/embedded/appsDialog.js
 app/core/templates/embedded/confirmDialog.js
 app/core/templates/embedded/actions.js
 app/core/util/embedded.js
+app/core/templates/actionForm.js
+app/core/views/ActionFormView.js
+app/core/templates/jumpAction.js
+app/core/templates/exportAction.js
+app/core/util/pageActions.js
 app/data/clipboard.js
 app/production/templates/vkb.js
 app/production/views/VkbView.js
