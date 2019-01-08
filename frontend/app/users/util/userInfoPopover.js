@@ -37,6 +37,7 @@ define([
   var $popover = null;
   var containerTemplate = null;
   var showTimer = null;
+  var lastUserId = null;
 
   function setUpPubsub()
   {
@@ -65,6 +66,8 @@ define([
 
     userInfoEl.style.cursor = 'wait';
 
+    users[userId] = null;
+
     var req = $.ajax({
       url: '/users?_id=' + userId + '&limit(1)&select(' + PROPS.join(',') + ')'
     });
@@ -74,11 +77,6 @@ define([
       userInfoEl.style.cursor = '';
     });
 
-    req.fail(function()
-    {
-      users[userId] = null;
-    });
-
     req.done(function(res)
     {
       if (res.totalCount === 1)
@@ -86,10 +84,6 @@ define([
         users[userId] = res.collection[0];
 
         showPopover(userInfoEl, userId);
-      }
-      else
-      {
-        users[userId] = null;
       }
     });
   }
@@ -102,6 +96,8 @@ define([
     }
 
     hidePopover();
+
+    lastUserId = userId;
 
     var hideOnLeave = true;
     var user = users[userId];
@@ -147,6 +143,8 @@ define([
       template: containerTemplate
     });
 
+    $popover.data('userId', user._id);
+
     $popover.on('click.userInfoPopover', function()
     {
       if (hideOnLeave)
@@ -182,7 +180,7 @@ define([
 
     showTimer = setTimeout(function()
     {
-      if ($popover)
+      if ($popover && $popover.data('userId') === lastUserId)
       {
         $popover.popover('show');
       }
@@ -191,6 +189,8 @@ define([
 
   function hidePopover()
   {
+    lastUserId = null;
+
     if (showTimer)
     {
       clearTimeout(showTimer);
@@ -270,6 +270,8 @@ define([
       return;
     }
 
+    lastUserId = userId;
+
     if (users[userId])
     {
       return showPopover(userInfoEl, userId);
@@ -279,5 +281,5 @@ define([
     {
       loadPopover(userInfoEl, userId);
     }
-  }).on('mouseleave', '.userInfo-label', function() { hidePopover(); });
+  });
 });
