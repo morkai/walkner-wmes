@@ -477,6 +477,7 @@ define([
     serializeObservers: function()
     {
       var entry = this;
+      var canManage = user.isAllowedTo('FAP:MANAGE');
 
       return entry.get('observers').map(function(observer)
       {
@@ -489,7 +490,8 @@ define([
             ? '#000'
             : colorFactory.getColor('fap/users', observer.user.id),
           lastSeenAt: observer.lastSeenAt ? Date.parse(observer.lastSeenAt) : 0,
-          online: self || !!entry.attributes.presence[observer.user.id]
+          online: self || !!entry.attributes.presence[observer.user.id],
+          canUnsubscribe: self || canManage
         };
       }).sort(function(a, b)
       {
@@ -639,15 +641,17 @@ define([
 
       Object.keys(change.data).forEach(function(prop)
       {
-        var handler = entry.propChangeHandlers[prop];
+        var propName = prop.split('$')[0];
+        var propData = change.data[prop];
+        var handler = entry.propChangeHandlers[propName];
 
         if (handler === 1)
         {
-          data[prop] = change.data[prop][1];
+          data[propName] = propData[1];
         }
         else if (handler)
         {
-          handler.call(entry.propChangeHandlers, data, entry, change.data[prop], change);
+          handler.call(entry.propChangeHandlers, data, entry, propData, change);
         }
       });
 
@@ -658,7 +662,7 @@ define([
 
       subscribers: function(data, entry, subscribers)
       {
-        var observers = entry.get('observers');
+        var observers = data.observers || entry.get('observers');
 
         if (subscribers[0] === null)
         {
