@@ -21,7 +21,7 @@ define([
   'use strict';
 
   var model = 'app/wmes-fap-entries/Entry';
-  var canView = user.auth('LOCAL', 'USER');
+  var canView = user.auth('USER');
   var canManage = user.auth('FAP:MANAGE');
 
   NavbarView.setUp();
