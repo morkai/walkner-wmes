@@ -58,16 +58,30 @@ define([
 
       obj.no = i + 1;
       obj.shift = shiftUtil.getShiftNo(startTime);
-      obj.mrp = planOrder.get('mrp');
-      obj.nc12 = planOrder.get('nc12');
-      obj.name = planOrder.get('name');
-      obj.qtyTodo = planOrder.get('quantityTodo');
+
+      if (planOrder)
+      {
+        obj.mrp = planOrder.get('mrp');
+        obj.nc12 = planOrder.get('nc12');
+        obj.name = planOrder.get('name');
+        obj.qtyTodo = planOrder.get('quantityTodo');
+        obj.planStatus = planOrder.getStatus();
+        obj.planStatusIcons = orderStatusIconsTemplate(plan, planOrder.id);
+      }
+      else
+      {
+        obj.mrp = '?';
+        obj.nc12 = '?';
+        obj.name = '?';
+        obj.qtyTodo = 0;
+        obj.planStatus = 'unplanned';
+        obj.planStatusIcons = '?';
+      }
+
       obj.startTime = time.utc.format(startTime, 'HH:mm:ss');
       obj.finishTime = time.utc.format(finishTime, 'HH:mm:ss');
       obj.comment = sapOrder ? sapOrder.getCommentWithIcon() : '';
       obj.comments = sapOrder ? sapOrder.get('comments') : [];
-      obj.planStatus = planOrder.getStatus();
-      obj.planStatusIcons = orderStatusIconsTemplate(plan, planOrder.id);
       obj.rowClassName = STATUS_TO_CLASS_NAME[obj.status];
       obj.funcIcons = {
         fmx: FUNC_STATUS_TO_ICON[obj.funcs[0].status],
