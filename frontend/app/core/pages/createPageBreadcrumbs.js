@@ -45,9 +45,44 @@ define([
 
     if (page.browseBreadcrumb !== false)
     {
+      var href = breadcrumbs.length ? modelOrCollection.genClientUrl('base') : null;
+
+      if (href)
+      {
+        var baseUrl = window.location.origin + window.location.pathname + href;
+        var recentUrl = _.find(JSON.parse(localStorage.WMES_RECENT_LOCATIONS || '[]'), function(recent)
+        {
+          if (recent.href.indexOf(baseUrl) !== 0)
+          {
+            return false;
+          }
+
+          var c = recent.href.charAt(baseUrl.length);
+
+          return c === '' || c === '?';
+        });
+
+        if (recentUrl)
+        {
+          var query = recentUrl.href.split('?')[1];
+
+          if (query)
+          {
+            if (href.indexOf('?') === -1)
+            {
+              href += '?' + query;
+            }
+            else
+            {
+              href += '&' + query;
+            }
+          }
+        }
+      }
+
       breadcrumbs.unshift({
         label: i18n(nlsDomain, _.result(page, 'browseBreadcrumb') || 'BREADCRUMBS:browse'),
-        href: breadcrumbs.length ? modelOrCollection.genClientUrl('base') : null
+        href: href
       });
     }
 

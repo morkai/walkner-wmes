@@ -91,14 +91,13 @@ define([
     }));
   });
 
-  localStorage.WMES_RECENT_LOCATIONS = JSON.stringify([{
-    date: new Date(),
-    href: window.location.href
-  }]);
+  recordRecent();
 
-  window.addEventListener('hashchange', function()
+  window.addEventListener('hashchange', recordRecent);
+
+  function recordRecent()
   {
-    var recent = JSON.parse(localStorage.WMES_RECENT_LOCATIONS);
+    var recent = JSON.parse(localStorage.WMES_RECENT_LOCATIONS || '[]');
 
     recent.unshift({
       date: new Date(),
@@ -111,7 +110,7 @@ define([
     }
 
     localStorage.WMES_RECENT_LOCATIONS = JSON.stringify(recent);
-  });
+  }
 
   window.router = router;
 
