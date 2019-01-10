@@ -289,10 +289,24 @@ define([
           return null;
         }
 
+        var disabled = false;
+
+        if (prop === 'picklistDone')
+        {
+          disabled = whOrder.get('picklistDone') === item.value;
+        }
+        else
+        {
+          var funcData = whOrder.get('funcs')[WhOrder.FUNC_TO_INDEX[func]];
+
+          disabled = funcData[prop] === item.value;
+        }
+
         return {
           icon: item.icon,
           label: t('wh', 'menu:' + prop + ':' + (item.label || item.value)),
-          handler: view.handleUpdate.bind(view, whOrder, func, prop, item.value)
+          handler: view.handleUpdate.bind(view, whOrder, func, prop, item.value),
+          disabled: disabled
         };
       }).filter(function(item) { return !!item; });
 
@@ -439,14 +453,17 @@ define([
 
           newData.funcs.forEach(function(func)
           {
-            if (newData.picklistFunc === func._id)
+            if (newValue)
             {
-              func.status = 'picklist';
-              func.startedAt = new Date();
-            }
-            else if (func.user)
-            {
-              func.status = 'picklist';
+              if (newData.picklistFunc === func._id)
+              {
+                func.status = 'picklist';
+                func.startedAt = new Date();
+              }
+              else if (func.user)
+              {
+                func.status = 'picklist';
+              }
             }
             else
             {
