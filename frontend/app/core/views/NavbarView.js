@@ -927,7 +927,9 @@ define([
     // Division
     Object.keys(DIVISIONS).forEach(function(pattern)
     {
-      if (searchPhrase.indexOf(pattern) !== -1)
+      var pos = searchPhrase.indexOf(pattern);
+
+      if (pos !== -1 && searchPhrase.substr(pos + pattern.length, 1) === ' ')
       {
         results.division = DIVISIONS[pattern];
         searchPhrase = searchPhrase.replace(pattern, '');
