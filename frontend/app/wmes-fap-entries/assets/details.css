@@ -250,3 +250,8 @@
 .fap-editor-select2 {
   margin-top: 1px;
 }
+.fap-is-unseen .fap-prop-name,
+.fap-is-unseen .fap-chat-title,
+.fap-is-unseen > .fap-details-panel-hd {
+  color: #ee0000;
+}

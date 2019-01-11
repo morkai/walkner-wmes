@@ -9,10 +9,16 @@
   padding: 0 6px;
   height: 24px;
 }
-.fap-navbarBtn .btn-warning:first-child {
+.fap-navbarBtn .dropdown-toggle {
   padding: 0 12px;
+  min-width: 55px;
   font-weight: bold;
 }
 .fap-navbar-adding .fap-navbarBtn-add {
   z-index: 1000;
+}
+.fap-navbarBtn-unseen,
+.fap-navbarBtn-add {
+  min-width: 30px;
+  font-weight: bold;
 }

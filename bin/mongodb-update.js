@@ -5,19 +5,6 @@
 
 load('./mongodb-helpers.js');
 
-db.users.updateMany({}, {$set: {preferences: {}}});
+db.fapentries.dropIndex("moreAnalysis_1_analysisDone_1");
 
-db.fapentries.find({}).forEach(fap =>
-{
-  let solver = null;
-
-  fap.changes.forEach(c =>
-  {
-    if (c.data.solution && c.data.solution[1])
-    {
-      solver = c.user;
-    }
-  });
-
-  db.fapentries.updateOne({_id: fap._id}, {$set: {solver}});
-});
+db.fapentries.updateMany({}, {$set: {unsubscribed: {}}});

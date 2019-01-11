@@ -4,6 +4,7 @@ define([
   'jquery',
   'app/broker',
   'app/user',
+  'app/notifications',
   'app/core/View',
   '../Entry',
   './AddFormView',
@@ -12,6 +13,7 @@ define([
   $,
   broker,
   user,
+  notifications,
   View,
   Entry,
   AddFormView,
@@ -85,6 +87,8 @@ define([
 
     afterRender: function()
     {
+      this.setUpUnseen();
+
       if (!user.isLoggedIn())
       {
         this.$el.addClass('hidden');
@@ -93,6 +97,71 @@ define([
       {
         this.toggleAddForm(true);
       }
+    },
+
+    setUpUnseen: function()
+    {
+      if (this.notifications)
+      {
+        this.notifications.cancel();
+      }
+
+      this.reloadUnseen();
+
+      if (!user.isLoggedIn())
+      {
+        return;
+      }
+
+      this.notifications = this.pubsub.subscribe(
+        'fap.entries.notifications.' + user.data._id,
+        this.onNotification.bind(this)
+      );
+    },
+
+    reloadUnseen: function()
+    {
+      var view = this;
+
+      view.unseenEntries = [];
+
+      view.$('.fap-navbarBtn-unseen')
+        .addClass('disabled')
+        .text('?');
+
+      if (view.req)
+      {
+        view.req.abort();
+        view.req = null;
+      }
+
+      if (!user.isLoggedIn())
+      {
+        return;
+      }
+
+      view.req = view.ajax({
+        url: '/fap/entries;unseen'
+      });
+
+      view.req.done(function(unseenEntries)
+      {
+        view.unseenEntries = unseenEntries;
+
+        view.toggleUnseen();
+      });
+
+      view.req.always(function()
+      {
+        view.req = null;
+      });
+    },
+
+    toggleUnseen: function()
+    {
+      this.$('.fap-navbarBtn-unseen')
+        .toggleClass('disabled', this.unseenEntries.length === 0)
+        .text(this.unseenEntries.length);
     },
 
     toggleAddForm: function(show)
@@ -144,6 +213,190 @@ define([
       {
         this.hideAddForm();
       }
+    },
+
+    onNotification: function(message, topic, meta)
+    {
+      console.warn('onNotification', message);
+
+      if (message.added)
+      {
+        this.handleAddedEntry(message.added);
+      }
+
+      if (message.changed)
+      {
+        this.handleChangedEntry(message.changed);
+      }
+
+      if (message.removed)
+      {
+        this.handleRemovedEntries(message.removed);
+      }
+
+      if (message.seen)
+      {
+        this.handleSeenEntries(message.seen);
+      }
+    },
+
+    handleAddedEntry: function(added)
+    {
+      this.unseenEntries.push(added._id);
+      this.toggleUnseen();
+      this.showAddedNotification(added);
+    },
+
+    handleChangedEntry: function(changed)
+    {
+      if (!this.unseenEntries)
+      {
+        return;
+      }
+
+      if (this.unseenEntries.indexOf(changed._id) === -1)
+      {
+        this.unseenEntries.push(changed._id);
+        this.toggleUnseen();
+      }
+
+      if (changed.comment)
+      {
+        this.showCommentNotification(changed);
+      }
+    },
+
+    handleRemovedEntries: function(removedEntries)
+    {
+      this.handleSeenEntries(removedEntries);
+    },
+
+    handleSeenEntries: function(seenEntries)
+    {
+      if (!this.unseenEntries && !this.unseenEntries.length)
+      {
+        return;
+      }
+
+      var seen = {};
+
+      seenEntries.forEach(function(entryId) { seen[entryId] = true; });
+
+      this.unseenEntries = this.unseenEntries.filter(function(entryId) { return !seen[entryId]; });
+
+      this.toggleUnseen();
+    },
+
+    showAddedNotification: function(entry)
+    {
+      var n = notifications.show({
+        tag: 'wmes-fap-' + entry.rid,
+        title: this.t('notifications:added:title', {
+          rid: entry.rid,
+          category: entry.category
+        }),
+        body: entry.owner + ': ' + entry.problem,
+        scoreTab: function(tab)
+        {
+          var score = tab.focus ? 1 : 0;
+          var req = tab.request;
+
+          if (req.path === '/fap/entries/' + entry._id)
+          {
+            score += 100000;
+          }
+          else if (req.path.startsWith('/fap/entries'))
+          {
+            score += 10000;
+          }
+          else if (req.path.startsWith('/fap'))
+          {
+            score += 1000;
+          }
+
+          return score;
+        }
+      });
+
+      if (!n)
+      {
+        return;
+      }
+
+      n.onerror = function()
+      {
+        console.warn('Failed to show added notification.', {entry: entry});
+      };
+
+      n.onclick = function()
+      {
+        window.focus();
+        window.open('/#fap/entries/' + entry._id);
+      };
+    },
+
+    showCommentNotification: function(entry)
+    {
+      var n = notifications.show({
+        tag: 'wmes-fap-' + entry.rid,
+        title: this.t('notifications:changed:title', {
+          rid: entry.rid
+        }),
+        body: entry.updater + ': ' + entry.comment,
+        actions: [
+          {
+            action: 'test',
+            type: 'text',
+            title: 'Test'
+          }
+        ],
+        scoreTab: function(tab)
+        {
+          var score = tab.focus ? 1 : 0;
+          var req = tab.request;
+
+          if (req.path === '/fap/entries/' + entry._id)
+          {
+            if (tab.focus)
+            {
+              score = -1;
+            }
+            else
+            {
+              score += 100000;
+            }
+          }
+          else if (req.path.startsWith('/fap/entries'))
+          {
+            score += 10000;
+          }
+          else if (req.path.startsWith('/fap'))
+          {
+            score += 1000;
+          }
+
+          return score;
+        }
+      });
+
+      if (!n)
+      {
+        return;
+      }
+
+      n.onerror = function()
+      {
+        console.warn('Failed to show changed notification.', {entry: entry});
+      };
+
+      n.onclick = function(e)
+      {
+        console.log(e);
+
+        return;
+        window.focus();
+        window.open('/#fap/entries/' + entry._id);
+      };
     }
 
   }, {

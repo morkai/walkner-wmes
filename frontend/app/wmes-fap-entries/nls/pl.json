@@ -57,6 +57,7 @@
   "message:finished:false": "Zgłoszenie zostało zakończone.",
 
   "filter:user:mine": "Moje",
+  "filter:user:unseen": "Nieprzeczytane",
   "filter:user:others": "Użytkownik",
   "filter:status:specific": "Status",
   "filter:status:analysis": "Analiza",
@@ -72,6 +73,7 @@
   "navbar:dictionaries": "Słowniki",
   "navbar:categories": "Kategorie",
   "navbar:button": "FAP",
+  "navbar:unseen": "Nieprzeczytane",
   "navbar:add": "Dodaj FAP",
   "navbar:all": "Wszystkie",
   "navbar:open": "Otwarte",
@@ -114,5 +116,8 @@
   "attachments:menu:remove": "Usuń plik",
 
   "orderNo:404": "Zlecenie nie istnieje.",
-  "orderNo:failure": "Sprawdzanie zlecenia nie powiodło się."
+  "orderNo:failure": "Sprawdzanie zlecenia nie powiodło się.",
+
+  "notifications:added:title": "Nowy FAP: {rid} ({category})",
+  "notifications:changed:title": "Zmieniony FAP: {rid}"
 }

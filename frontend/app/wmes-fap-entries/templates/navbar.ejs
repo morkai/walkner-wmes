@@ -1,5 +1,6 @@
 <div class="navbar-right fap-navbar">
   <div class="fap-navbarBtn">
+    <a id="<%- idPrefix %>-unseen" href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)&observers.user.id=unseen" class="btn btn-warning fap-navbarBtn-unseen" title="<%- helpers.t('navbar:unseen') %>">?</a>
     <div class="dropdown">
       <button id="<%- idPrefix %>-menu" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"><%- helpers.t('navbar:button') %></button>
       <ul class="dropdown-menu dropdown-menu-left">

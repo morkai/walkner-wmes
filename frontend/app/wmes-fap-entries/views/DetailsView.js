@@ -79,6 +79,7 @@ define([
     afterRender: function()
     {
       this.updateAuth();
+      this.updateUnseen();
     },
 
     update: function()
@@ -110,6 +111,13 @@ define([
 
         view.timers[prop] = requestAnimationFrame(updater.bind(view));
       });
+
+      if (view.timers.unseen)
+      {
+        cancelAnimationFrame(view.timers.unseen);
+
+        view.timers.unseen = requestAnimationFrame(view.updateUnseen.bind(view));
+      }
     },
 
     resolveUpdater: function(prop)
@@ -183,6 +191,50 @@ define([
         if (!$toggle.length)
         {
           $prop.find('.fap-prop-name').append('<i class="fa fa-edit fap-editable-toggle"></i>');
+        }
+      });
+    },
+
+    updateUnseen: function()
+    {
+      var view = this;
+      var changes = view.model.serializeDetails().observer.changes;
+
+      if (!changes.any)
+      {
+        view.$('.fap-is-unseen').removeClass('fap-is-unseen');
+
+        return;
+      }
+
+      Object.keys(changes).forEach(function(prop)
+      {
+        switch (prop)
+        {
+          case 'any':
+            break;
+
+          case 'all':
+            view.$el.toggleClass('fap-is-unseen', changes[prop]);
+            break;
+
+          case 'subscribers':
+          case 'subscribers$added':
+          case 'subscribers$removed':
+            view.$('.fap-observers').addClass('fap-is-unseen');
+            break;
+
+          case 'attachments':
+            view.$('.fap-attachments').addClass('fap-is-unseen');
+            break;
+
+          case 'comment':
+            view.$('.fap-chat').addClass('fap-is-unseen');
+            break;
+
+          default:
+            view.$('.fap-prop[data-prop="' + prop + '"]').addClass('fap-is-unseen');
+            break;
         }
       });
     },

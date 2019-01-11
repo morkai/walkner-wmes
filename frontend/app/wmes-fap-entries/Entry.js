@@ -188,6 +188,8 @@ define([
         obj.divisions = '-';
       }
 
+      obj.observer = this.serializeObserver();
+
       return this.serialized = obj;
     },
 
@@ -201,6 +203,12 @@ define([
       var obj = this.serialize();
 
       obj.className = STATUS_CLASS[obj.analyzing ? 'analyzing' : obj.status];
+
+      if (obj.observer.changes.any)
+      {
+        obj.className += ' fap-is-unseen';
+      }
+
       obj.category = '<span class="fap-list-category">' + _.escape(obj.category) + '</span>';
       obj.problem = '<span class="fap-list-problem">' + _.escape(obj.problem) + '</span>';
 
@@ -301,6 +309,25 @@ define([
         why5: !pending && analysisNeed && !analysisDone && (manage || procEng || master || leader || analyzer),
         solutionSteps: !pending && analysisNeed && !analysisDone && (manage || procEng || master || leader || analyzer)
       };
+    },
+
+    serializeObserver: function()
+    {
+      var observer = _.assign({
+        user: user.getInfo(),
+        role: 'viewer',
+        func: user.data.prodFunction || null,
+        lastSeenAt: new Date().toISOString(),
+        notify: false,
+        changes: {}
+      }, _.find(this.get('observers'), function(o) { return o.user.id === user.data._id; }));
+
+      var any = Object.keys(observer.changes).length > 0;
+
+      observer.changes.any = observer.notify || any;
+      observer.changes.all = observer.notify && !any;
+
+      return observer;
     },
 
     serializeChat: function()

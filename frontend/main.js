@@ -50,6 +50,11 @@
     window.parent.postMessage({type: 'init', host: location.hostname}, '*');
   }
 
+  if (window.navigator.serviceWorker)
+  {
+    window.navigator.serviceWorker.register('/sw.js');
+  }
+
   var oldSend = XMLHttpRequest.prototype.send;
 
   XMLHttpRequest.prototype.send = function()

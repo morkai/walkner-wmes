@@ -57,6 +57,7 @@
     "message:finished:false": "Entry is finished.",
 
     "filter:user:mine": "Mine",
+    "filter:user:unseen": "Unread",
     "filter:user:others": "User",
     "filter:status:specific": "Status",
     "filter:status:analysis": "Analysis",
@@ -72,6 +73,7 @@
     "navbar:dictionaries": "Dictionaries",
     "navbar:categories": "Categories",
     "navbar:button": "FAP",
+    "navbar:unseen": "Unread",
     "navbar:add": "Add a new FAP",
     "navbar:all": "All",
     "navbar:open": "Open",
@@ -112,7 +114,9 @@
     "attachments:menu:remove": "Remove file",
 
     "orderNo:404": "Order not found.",
-    "orderNo:failure": "Order validation failed."
+    "orderNo:failure": "Order validation failed.",
+
+    "notifications:added:title": "New FAP entry: {rid} ({category})"
   },
   "pl": true
 }

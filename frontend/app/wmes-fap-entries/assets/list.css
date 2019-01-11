@@ -24,6 +24,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.fap-entries-list .fap-is-unseen {
+  font-weight: bold;
+}
 .fap-entries-list th[data-column-id="nc12"] {
   width: 104px;
 }

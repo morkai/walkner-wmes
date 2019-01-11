@@ -33,7 +33,7 @@ define([
     events: _.assign({
 
       'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
-      'change input[name="userType"]': 'toggleUserSelect2',
+      'change input[name="userType"]': function() { this.toggleUserSelect2(true); },
       'change input[name="statusType"]': 'toggleStatus'
 
     }, FilterView.prototype.events),
@@ -59,6 +59,11 @@ define([
         {
           formData.userType = 'mine';
           formData.user = currentUser.data._id;
+        }
+        else if (term.args[1] === 'unseen')
+        {
+          formData.userType = 'unseen';
+          formData.user = null;
         }
         else
         {
@@ -109,6 +114,10 @@ define([
       {
         selector.push({name: 'eq', args: ['observers.user.id', currentUser.data._id]});
       }
+      else if (userType === 'unseen')
+      {
+        selector.push({name: 'eq', args: ['observers.user.id', userType]});
+      }
       else if (user)
       {
         selector.push({name: 'eq', args: ['observers.user.id', user]});
@@ -152,19 +161,16 @@ define([
 
       this.$('.is-expandable').expandableSelect();
 
+      setUpUserSelect2(this.$id('user'), {
+        view: this,
+        width: '300px'
+      });
+
       setUpMrpSelect2(this.$id('mrp'), {
         own: true,
         view: this,
-        width: '280px'
+        width: '250px'
       });
-
-      setUpUserSelect2(this.$id('user'), {
-        view: this,
-        width: '280px'
-      });
-
-      this.toggleUserSelect2();
-      this.toggleStatus();
 
       this.$id('category').select2({
         width: '280px',
@@ -172,6 +178,9 @@ define([
         allowClear: true,
         data: dictionaries.categories.map(idAndLabel)
       });
+
+      this.toggleUserSelect2(false);
+      this.toggleStatus();
     },
 
     destroy: function()
@@ -181,11 +190,15 @@ define([
       this.$('.is-expandable').expandableSelect('destroy');
     },
 
-    toggleUserSelect2: function()
+    toggleUserSelect2: function(resetUser)
     {
       var userType = this.$('input[name="userType"]:checked').val();
+      var $user = this.$id('user').select2('enable', userType === 'others');
 
-      this.$id('user').select2('enable', userType === 'others');
+      if (resetUser && $user.val() === currentUser.data._id)
+      {
+        $user.select2('data', null);
+      }
     },
 
     toggleStatus: function()
