@@ -6,6 +6,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/util/idAndLabel',
+  'app/core/util/pageActions',
   'app/data/clipboard',
   'app/planning/util/contextMenu',
   '../KanbanSettingCollection',
@@ -25,6 +26,7 @@ define([
   viewport,
   View,
   idAndLabel,
+  pageActions,
   clipboard,
   contextMenu,
   KanbanSettingCollection,
@@ -1202,7 +1204,7 @@ define([
 
       req.done(function(id)
       {
-        window.open('/xlsxExporter/' + id);
+        pageActions.exportXlsx('/xlsxExporter/' + id);
 
         viewport.msg.hide(view.$exportMsg, true);
       });

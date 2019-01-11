@@ -8,6 +8,7 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
+  'app/core/util/pageActions',
   'app/data/clipboard',
   '../util/shift',
   '../util/contextMenu',
@@ -25,6 +26,7 @@ define([
   user,
   viewport,
   View,
+  pageActions,
   clipboard,
   shiftUtil,
   contextMenu,
@@ -946,7 +948,7 @@ define([
 
       req.done(function(id)
       {
-        window.open('/xlsxExporter/' + id);
+        pageActions.exportXlsx('/xlsxExporter/' + id);
 
         viewport.msg.hide(view.$exportMsg, true);
       });
