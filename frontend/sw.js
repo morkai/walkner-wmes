@@ -149,14 +149,14 @@ notificationActions.wmesFapComment = (e, data) =>
 {
   if (!data.entryId)
   {
-    return;
+    return Promise.resolve();
   }
 
   const comment = (e.reply || '').trim();
 
   if (!comment.replace(/[^a-zA-Z0-9]+/g, '').length)
   {
-    return;
+    return Promise.resolve();
   }
 
   const init = {
@@ -169,7 +169,7 @@ notificationActions.wmesFapComment = (e, data) =>
     body: JSON.stringify({data: {comment: comment}})
   };
 
-  fetch('/fap/entries/' + data.entryId, init)
+  return fetch('/fap/entries/' + data.entryId, init)
     .then(res =>
     {
       if (res.status !== 204)
@@ -218,16 +218,14 @@ function focusOrOpen(url)
     {
       if (client)
       {
-        client.focus();
+        return client.focus();
       }
-      else
-      {
-        clients.openWindow(url);
-      }
+
+      return clients.openWindow(url);
     });
 }
 
-function inspect(data)
+function inspect(data) // eslint-disable-line no-unused-vars
 {
   fetch('/dev/inspect', {
     method: 'POST',
