@@ -119,5 +119,7 @@
   "orderNo:failure": "Sprawdzanie zlecenia nie powiodło się.",
 
   "notifications:added:title": "Nowy FAP: {rid} ({category})",
-  "notifications:changed:title": "Zmieniony FAP: {rid}"
+  "notifications:changed:title": "Zmieniony FAP: {rid}",
+  "notifications:changed:placeholder": "Odpowiedź...",
+  "notifications:changed:reply": "Wyślij odpowiedź"
 }

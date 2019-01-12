@@ -215,10 +215,8 @@ define([
       }
     },
 
-    onNotification: function(message, topic, meta)
+    onNotification: function(message)
     {
-      console.warn('onNotification', message);
-
       if (message.added)
       {
         this.handleAddedEntry(message.added);
@@ -262,7 +260,7 @@ define([
 
       if (changed.comment)
       {
-        this.showCommentNotification(changed);
+        this.showChangedNotification(changed);
       }
     },
 
@@ -280,7 +278,12 @@ define([
 
       var seen = {};
 
-      seenEntries.forEach(function(entryId) { seen[entryId] = true; });
+      seenEntries.forEach(function(entryId)
+      {
+        seen[entryId] = true;
+
+        notifications.close(['wmes-fap', entryId]);
+      });
 
       this.unseenEntries = this.unseenEntries.filter(function(entryId) { return !seen[entryId]; });
 
@@ -289,27 +292,27 @@ define([
 
     showAddedNotification: function(entry)
     {
-      var n = notifications.show({
-        tag: 'wmes-fap-' + entry.rid,
+      notifications.show({
+        tag: 'wmes-fap ' + entry._id,
         title: this.t('notifications:added:title', {
           rid: entry.rid,
           category: entry.category
         }),
         body: entry.owner + ': ' + entry.problem,
-        scoreTab: function(tab)
-        {
-          var score = tab.focus ? 1 : 0;
-          var req = tab.request;
-
-          if (req.path === '/fap/entries/' + entry._id)
-          {
-            score += 100000;
+        data: {
+          onClick: {
+            open: '/#fap/entries/' + entry._id
           }
-          else if (req.path.startsWith('/fap/entries'))
+        },
+        scoreClient: function(client)
+        {
+          var score = client.focused ? 1 : 0;
+
+          if (client.url.includes('#fap/entries'))
           {
             score += 10000;
           }
-          else if (req.path.startsWith('/fap'))
+          else if (client.url.includes('#fap'))
           {
             score += 1000;
           }
@@ -317,60 +320,57 @@ define([
           return score;
         }
       });
-
-      if (!n)
-      {
-        return;
-      }
-
-      n.onerror = function()
-      {
-        console.warn('Failed to show added notification.', {entry: entry});
-      };
-
-      n.onclick = function()
-      {
-        window.focus();
-        window.open('/#fap/entries/' + entry._id);
-      };
     },
 
-    showCommentNotification: function(entry)
+    showChangedNotification: function(entry)
     {
-      var n = notifications.show({
-        tag: 'wmes-fap-' + entry.rid,
+      notifications.show({
+        tag: 'wmes-fap ' + entry._id,
         title: this.t('notifications:changed:title', {
           rid: entry.rid
         }),
         body: entry.updater + ': ' + entry.comment,
         actions: [
           {
-            action: 'test',
+            action: 'reply',
+            title: this.t('notifications:changed:reply'),
             type: 'text',
-            title: 'Test'
+            placeholder: this.t('notifications:changed:placeholder')
           }
         ],
-        scoreTab: function(tab)
-        {
-          var score = tab.focus ? 1 : 0;
-          var req = tab.request;
-
-          if (req.path === '/fap/entries/' + entry._id)
-          {
-            if (tab.focus)
-            {
-              score = -1;
-            }
-            else
-            {
-              score += 100000;
+        data: {
+          onClick: {
+            open: '/#fap/entries/' + entry._id
+          },
+          onAction: {
+            reply: {
+              act: {
+                action: 'wmesFapComment',
+                data: {
+                  entryId: entry._id
+                }
+              }
             }
           }
-          else if (req.path.startsWith('/fap/entries'))
+        },
+        scoreClient: function(client)
+        {
+          var score = client.focused ? 1 : 0;
+
+          if (client.url.includes('#fap/entries/' + entry._id))
+          {
+            if (client.focused)
+            {
+              return -1;
+            }
+
+            score += 100000;
+          }
+          else if (client.url.includes('#fap/entries'))
           {
             score += 10000;
           }
-          else if (req.path.startsWith('/fap'))
+          else if (client.url.includes('#fap'))
           {
             score += 1000;
           }
@@ -378,25 +378,6 @@ define([
           return score;
         }
       });
-
-      if (!n)
-      {
-        return;
-      }
-
-      n.onerror = function()
-      {
-        console.warn('Failed to show changed notification.', {entry: entry});
-      };
-
-      n.onclick = function(e)
-      {
-        console.log(e);
-
-        return;
-        window.focus();
-        window.open('/#fap/entries/' + entry._id);
-      };
     }
 
   }, {

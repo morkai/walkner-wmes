@@ -116,7 +116,10 @@
     "orderNo:404": "Order not found.",
     "orderNo:failure": "Order validation failed.",
 
-    "notifications:added:title": "New FAP entry: {rid} ({category})"
+    "notifications:added:title": "New FAP entry: {rid} ({category})",
+    "notifications:changed:title": "Changed FAP: {rid}",
+    "notifications:changed:placeholder": "Reply...",
+    "notifications:changed:reply": "Send reply"
   },
   "pl": true
 }

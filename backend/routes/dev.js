@@ -10,4 +10,15 @@ module.exports = (app, express) =>
   }
 
   express.get('/dev/restart', () => process.exit(10001)); // eslint-disable-line no-process-exit
+
+  express.post('/dev/inspect', (req, res) =>
+  {
+    res.sendStatus(204);
+
+    console.inspect({
+      date: new Date(),
+      headers: req.headers,
+      body: req.body
+    });
+  });
 };

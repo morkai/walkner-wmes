@@ -52,7 +52,9 @@
 
   if (window.navigator.serviceWorker)
   {
-    window.navigator.serviceWorker.register('/sw.js');
+    window.navigator.serviceWorker.register('/sw.js')
+      .then(function() { console.log('[sw] Registered!'); })
+      .catch(function(err) { console.error('[sw] Failed to register:', err); });
   }
 
   var oldSend = XMLHttpRequest.prototype.send;

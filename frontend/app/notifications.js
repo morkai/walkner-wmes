@@ -4,150 +4,102 @@ define([
   'underscore',
   'jquery',
   'app/broker',
-  'app/i18n',
-  'app/router'
+  'app/i18n'
 ],
 function(
   _,
   $,
   broker,
-  t,
-  router
+  t
 ) {
   'use strict';
 
+  var clientId = null;
+
   var N = window.Notification;
   var sw = window.navigator.serviceWorker;
-  var bc = window.BroadcastChannel ? new window.BroadcastChannel('wmes-notifications') : null;
-  var bcActions = {};
-  var tabs = {};
+  var userActions = {};
+  var messageHandlers = {
+    userAction: function(message)
+    {
+      if (userActions[message.userAction])
+      {
+        userActions[message.userAction](message);
+      }
+    }
+  };
 
   if (sw)
   {
-    window.addEventListener('message', e =>
+    sw.addEventListener('message', function(e)
     {
-      console.log('window#message', e);
+      var action = e.data && e.data.action && e.data.action.split('.') || [];
+
+      if (action[0] === 'notifications' && messageHandlers[action[1]])
+      {
+        messageHandlers[action[1]](e.data);
+      }
     });
+
+    act({action: 'getClientId'}, function(err, res)
+    {
+      if (err)
+      {
+        return console.error('Failed to get the client ID: %s', err.message);
+      }
+
+      clientId = res.clientId;
+    });
+  }
+
+  function act(message, reply)
+  {
+    var timeout = setTimeout(
+      complete.bind(null, new Error('Timeout.')),
+      message.timeout || 1000
+    );
+
     sw.ready.then(function(registration)
     {
       if (!registration.active)
       {
-        return;
+        return complete(new Error('No active registration!'));
       }
 
       var mc = new MessageChannel();
 
       mc.port1.onmessage = function(e)
       {
-        console.log('port#message', e);
+        complete(e.data.error, e.data.result);
       };
 
-      registration.active.postMessage({action: 'getClientId'}, [mc.port2]);
+      registration.active.postMessage(message, [mc.port2]);
     });
-  }
 
-  function act(action, payload)
-  {
-    payload.action = action;
-  }
-
-  if (bc)
-  {
-    bc.onmessage = function(e)
+    function complete(err, res)
     {
-      if (bcActions[e.data.action])
+      if (timeout === null)
       {
-        bcActions[e.data.action](e.data);
+        return;
       }
-    };
 
-    window.addEventListener('unload', function()
-    {
-      bc.postMessage({
-        action: 'closeTab',
-        tabId: window.INSTANCE_ID
-      });
-    });
+      clearTimeout(timeout);
+      timeout = null;
 
-    window.addEventListener('focus', function()
-    {
-      updateTab({focus: document.hasFocus()});
-    });
-
-    window.addEventListener('blur', function()
-    {
-      updateTab({focus: document.hasFocus()});
-    });
-
-    broker.subscribe('viewport.page.shown', refreshTab);
-
-    broker.subscribe('viewport.page.shown').setLimit(1).on('message', function()
-    {
-      bc.postMessage({action: 'refreshTab'});
-    });
-
-    setInterval(refreshTab, 30000);
-  }
-
-  bcActions.updateTab = function(message)
-  {
-    var tab = message.tab;
-
-    if (!tabs[tab._id])
-    {
-      tabs[tab._id] = {};
+      reply(err, res);
     }
-
-    Object.assign(tabs[tab._id], tab);
-  };
-
-  bcActions.refreshTab = refreshTab;
-
-  bcActions.closeTab = function(message)
-  {
-    delete tabs[message.tabId];
-  };
-
-  function refreshTab()
-  {
-    var req = router.currentRequest;
-
-    updateTab({
-      request: {
-        path: req.path,
-        query: req.queryString,
-        fragment: req.fragment,
-        params: req.params
-      },
-      focus: document.hasFocus()
-    });
   }
 
-  function updateTab(data)
+  function getClients(filter, done)
   {
-    if (!bc)
-    {
-      return;
-    }
-
-    var message = {
-      action: 'updateTab',
-      tab: Object.assign({
-        _id: window.INSTANCE_ID,
-        ts: Date.now()
-      }, data)
-    };
-
-    bcActions.updateTab(message);
-    bc.postMessage(message);
-  }
-
-  function getActiveClients(done)
-  {
-
+    act({action: 'getClients', filter: filter}, done);
   }
 
   return window.notifications = {
+
+    messageHandlers: messageHandlers,
+
+    userActions: userActions,
 
     renderRequest: function()
     {
@@ -201,8 +153,13 @@ function(
           return show();
         }
 
-        getActiveClients(function(clients)
+        getClients(null, function(err, clients)
         {
+          if (err)
+          {
+            return reject(err);
+          }
+
           if (!clients.length)
           {
             return show();
@@ -221,7 +178,12 @@ function(
             return b.score - a.score;
           });
 
-          if (scored[0].score < 0)
+          if (scored[scored.length - 1].score < 0)
+          {
+            return resolve(null);
+          }
+
+          if (scored[0].clientId !== clientId)
           {
             return resolve(null);
           }
@@ -231,7 +193,7 @@ function(
             options.data = {};
           }
 
-          options.data.clientId = scored[0].clientId;
+          options.data.bestClientId = scored[0].clientId;
 
           show();
         });
@@ -251,6 +213,45 @@ function(
           }).catch(reject);
         }
       });
+    },
+
+    close: function(requiredTags)
+    {
+      if (!sw)
+      {
+        return Promise.reject(new Error('Unsupported.'));
+      }
+
+      sw.ready
+        .then(function(registration) { return registration.getNotifications(); })
+        .then(function(notifications)
+        {
+          notifications.forEach(function(n)
+          {
+            if (!Array.isArray(requiredTags) || !requiredTags.length)
+            {
+              n.close();
+
+              return;
+            }
+
+            if (!n.tag)
+            {
+              return;
+            }
+
+            const actualTags = n.tag.split(' ');
+
+            if (requiredTags.every(requiredTag => actualTags.includes(requiredTag)))
+            {
+              n.close();
+            }
+          });
+        })
+        .catch(function(err)
+        {
+          console.error('[notifications] Failed to close.', {tags: requiredTags, error: err});
+        });
     }
 
   };

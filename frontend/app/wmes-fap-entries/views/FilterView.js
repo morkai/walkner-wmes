@@ -82,7 +82,6 @@ define([
       'category': 'mrp',
       'analysisNeed': function(propertyName, term, formData)
       {
-        console.log(JSON.stringify(formData));
         formData[propertyName] = term.args[1];
         formData.statusType = formData.analysisNeed === undefined || formData.analysisDone === undefined
           ? 'specific'
