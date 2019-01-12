@@ -79,10 +79,15 @@ define([
 
     req.done(function(res)
     {
-      if (res.totalCount === 1)
+      if (res.totalCount !== 1)
       {
-        users[userId] = res.collection[0];
+        return;
+      }
 
+      users[userId] = res.collection[0];
+
+      if (lastUserId === userId)
+      {
         showPopover(userInfoEl, userId);
       }
     });
