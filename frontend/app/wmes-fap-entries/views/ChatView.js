@@ -371,6 +371,11 @@ define([
       {
         var caret = prefix + '👤' + user.replace(/\s+/g, space);
 
+        if (suffix.length === 0)
+        {
+          caret += ' ';
+        }
+
         sendEl.value = caret + suffix;
         sendEl.setSelectionRange(caret.length, caret.length);
       }
