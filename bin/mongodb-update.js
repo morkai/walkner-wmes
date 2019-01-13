@@ -5,6 +5,14 @@
 
 load('./mongodb-helpers.js');
 
-db.fapentries.dropIndex("moreAnalysis_1_analysisDone_1");
+db.fapentries.find({}).forEach(entry =>
+{
+  entry.observers.forEach(o =>
+  {
+    o.notify = false;
+    o.changes = {};
+    o.lastSeenAt = new Date();
+  });
 
-db.fapentries.updateMany({}, {$set: {unsubscribed: {}}});
+  db.fapentries.updateOne({_id: entry._id}, {$set: {observers: entry.observers}});
+});
