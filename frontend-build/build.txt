@@ -1924,6 +1924,7 @@ app/wmes-toolcal-tools/routes.js
 app/wmes-fap-categories/Category.js
 app/wmes-fap-categories/CategoryCollection.js
 app/wmes-fap-categories/routes.js
+app/notifications.js
 vendor/autolinker.js
 app/wmes-fap-entries/dictionaries.js
 app/wmes-fap-entries/Entry.js
