@@ -9,26 +9,12 @@ let errorCount = 0;
 
 self.addEventListener('install', e =>
 {
-  e.waitUntil(skipWaiting());
+  e.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', e =>
 {
-  e.waitUntil(clients.claim());
-
-  setInterval(() =>
-  {
-    registration.getNotifications().then(notifications =>
-    {
-      notifications.forEach(n =>
-      {
-        if (n.tag && n.tag.includes('wmes-fap='))
-        {
-          n.close();
-        }
-      });
-    });
-  }, 5000);
+  e.waitUntil(self.clients.claim());
 });
 
 self.addEventListener('message', e =>
@@ -40,7 +26,7 @@ self.addEventListener('message', e =>
 
   if (messageHandlers[e.data.action])
   {
-    messageHandlers[e.data.action](e, function(err, res)
+    messageHandlers[e.data.action](e, (err, res) =>
     {
       response.error = err;
       response.result = res;
@@ -71,17 +57,12 @@ self.addEventListener('notificationclick', e =>
 
   if (onAction.open)
   {
-    promises.push(
-      clients
-        .matchAll({type: 'window'})
-        .then(clientz => clientz.filter(client => client.url.includes(onAction.open)))
-        .then(clientz => clientz.length ? clientz[0].focus() : clients.openWindow(onAction.open))
-    );
+    promises.push(focusOrOpen(onAction.open));
   }
   else if (onAction.focus)
   {
     promises.push(
-      clients
+      self.clients
         .get(typeof onAction.focus === 'string' ? onAction.focus : data.bestClientId)
         .then(client => client.focus())
     );
@@ -95,7 +76,7 @@ self.addEventListener('notificationclick', e =>
     }
 
     promises.push(
-      clients
+      self.clients
         .get(onAction.notify.clientId || data.bestClientId)
         .then(client => client.postMessage({
           action: 'notifications.userAction',
@@ -115,9 +96,9 @@ self.addEventListener('notificationclick', e =>
   e.waitUntil(Promise.all(promises));
 });
 
-self.addEventListener('notificationclose', (e) => // eslint-disable-line no-unused-vars
+self.addEventListener('notificationclose', e =>
 {
-
+  e.waitUntil(self.skipWaiting());
 });
 
 messageHandlers.getClientId = (e, reply) =>
@@ -127,7 +108,7 @@ messageHandlers.getClientId = (e, reply) =>
 
 messageHandlers.getClients = (e, reply) =>
 {
-  clients
+  self.clients
     .matchAll(e.data && e.data.filter || {type: 'window'})
     .then(clients =>
     {
@@ -169,7 +150,7 @@ notificationActions.wmesFapComment = (e, data) =>
     body: JSON.stringify({data: {comment: comment}})
   };
 
-  return fetch('/fap/entries/' + data.entryId, init)
+  return self.fetch('/fap/entries/' + data.entryId, init)
     .then(res =>
     {
       if (res.status !== 204)
@@ -193,11 +174,11 @@ function showError(options)
 {
   options.tag = 'error-' + (++errorCount);
 
-  registration.showNotification('WMES Error', options);
+  self.registration.showNotification('WMES Error', options);
 
   setTimeout(() =>
   {
-    registration.getNotifications().then(notifications =>
+    self.registration.getNotifications().then(notifications =>
     {
       const n = notifications.find(n => n.tag === options.tag);
 
@@ -211,7 +192,7 @@ function showError(options)
 
 function focusOrOpen(url)
 {
-  return clients
+  return self.clients
     .matchAll({type: 'window'})
     .then(clients => clients.find(client => client.url.includes(url)))
     .then(client =>
@@ -221,13 +202,13 @@ function focusOrOpen(url)
         return client.focus();
       }
 
-      return clients.openWindow(url);
+      return self.clients.openWindow(url);
     });
 }
 
 function inspect(data) // eslint-disable-line no-unused-vars
 {
-  fetch('/dev/inspect', {
+  self.fetch('/dev/inspect', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

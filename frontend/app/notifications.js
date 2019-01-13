@@ -146,6 +146,11 @@ function(
         return Promise.reject(new Error('Unsupported or disabled.'));
       }
 
+      if (!options.data)
+      {
+        options.data = {};
+      }
+
       return new Promise(function(resolve, reject)
       {
         if (!options.scoreClient)
@@ -186,11 +191,6 @@ function(
           if (scored[0].clientId !== clientId)
           {
             return resolve(null);
-          }
-
-          if (!options.data)
-          {
-            options.data = {};
           }
 
           options.data.bestClientId = scored[0].clientId;

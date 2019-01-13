@@ -305,9 +305,12 @@ define([
         analysisDone: !pending && analysisNeed && (manage || procEng || master),
         mainAnalyzer: mainAnalyzerAuth,
         analyzers: (analyzers.length || mainAnalyzerAuth)
-          && !pending && analysisNeed && !analysisDone && (manage || procEng || master || mainAnalyzer),
-        why5: !pending && analysisNeed && !analysisDone && (manage || procEng || master || leader || analyzer),
-        solutionSteps: !pending && analysisNeed && !analysisDone && (manage || procEng || master || leader || analyzer)
+          && !pending && analysisNeed && !analysisDone
+          && (manage || procEng || master || mainAnalyzer),
+        why5: !pending && analysisNeed && !analysisDone
+          && (manage || procEng || master || leader || analyzer),
+        solutionSteps: !pending && analysisNeed && !analysisDone
+          && (manage || procEng || master || leader || analyzer)
       };
     },
 
@@ -317,10 +320,12 @@ define([
         user: user.getInfo(),
         role: 'viewer',
         func: user.data.prodFunction || null,
-        lastSeenAt: new Date().toISOString(),
+        lastSeenAt: Date.now(),
         notify: false,
         changes: {}
       }, _.find(this.get('observers'), function(o) { return o.user.id === user.data._id; }));
+
+      observer.lastSeenAt = Date.parse(observer.lastSeenAt || 0);
 
       var any = Object.keys(observer.changes).length > 0;
 
@@ -606,11 +611,6 @@ define([
         update[prop] = newValue;
       });
 
-      if (!Object.keys(update).length)
-      {
-        return;
-      }
-
       entry.handleChange(change);
       entry.update(update);
     },
@@ -637,7 +637,7 @@ define([
 
     handlePresence: function(userId, online)
     {
-      var presence = this.attributes.presence;
+      var presence = this.attributes.presence || {};
 
       if (typeof presence[userId] === 'undefined')
       {
@@ -662,12 +662,15 @@ define([
       }
     },
 
-    handleChange: function(change)
+    handleChange: function(change, notify)
     {
       var entry = this;
-      var data = {
-        changes: entry.get('changes').concat(change)
-      };
+      var data = {};
+
+      if (change.comment.length || !_.isEmpty(change.data))
+      {
+        data.changes = entry.get('changes').concat(change);
+      }
 
       Object.keys(change.data).forEach(function(prop)
       {
@@ -684,6 +687,35 @@ define([
           handler.call(entry.propChangeHandlers, data, entry, propData, change);
         }
       });
+
+      var observers = data.observers || [].concat(entry.get('observers'));
+      var observerIndex = _.findIndex(observers, function(o) { return o.user.id === user.data._id; });
+
+      if (observerIndex !== -1)
+      {
+        var observer = observers[observerIndex];
+
+        if (change.user.id === user.data._id)
+        {
+          observers[observerIndex] = _.defaults({
+            lastSeenAt: change.date,
+            notify: false,
+            changes: {}
+          }, observer);
+
+          data.observers = observers;
+        }
+        else if (notify && notify[user.data._id])
+        {
+          observers[observerIndex] = _.defaults({
+            lastSeenAt: change.date,
+            notify: true,
+            changes: notify[user.data._id]
+          }, observer);
+
+          data.observers = observers;
+        }
+      }
 
       entry.set(data);
     },
@@ -789,6 +821,22 @@ define([
         {
           return attachmentMap[attachment._id] || attachment;
         });
+      },
+
+      unsubscribed: function(data, entry, propData, change)
+      {
+        var unsubscribed = _.clone(entry.get('unsubscribed'));
+
+        if (propData[1])
+        {
+          unsubscribed[change.user.id] = true;
+        }
+        else
+        {
+          delete unsubscribed[change.user.id];
+        }
+
+        data.unsubscribed = unsubscribed;
       },
 
       status: 1,

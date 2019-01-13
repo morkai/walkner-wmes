@@ -258,6 +258,13 @@ define([
 
     broker.publish('updater.frontendRestarting');
 
+    if (window.navigator.serviceWorker)
+    {
+      window.navigator.serviceWorker.ready
+        .then(function(registration) { return registration.update(); })
+        .catch(_.noop);
+    }
+
     updateActivityTimer();
   }
 

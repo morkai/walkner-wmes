@@ -9,6 +9,9 @@
   "PAGE_ACTION:start": "Rozpocznij zgłoszenie",
   "PAGE_ACTION:finish": "Zakończ zgłoszenie",
   "PAGE_ACTION:restart": "Wznów zgłoszenie",
+  "PAGE_ACTION:markAsSeen": "Oznacz jako przeczytane",
+  "PAGE_ACTION:subscribe": "Włącz powiadomienia",
+  "PAGE_ACTION:unsubscribe": "Wyłącz powiadomienia",
 
   "PANEL:TITLE:changes": "Historia zmian",
 

@@ -10,6 +10,9 @@
     "PAGE_ACTION:start": "Start entry",
     "PAGE_ACTION:finish": "Finish entry",
     "PAGE_ACTION:restart": "Restart entry",
+    "PAGE_ACTION:markAsSeen": "Mark as seen",
+    "PAGE_ACTION:subscribe": "Turn on notifications",
+    "PAGE_ACTION:unsubscribe": "Turn off notifications",
 
     "PANEL:TITLE:changes": "History",
 

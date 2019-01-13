@@ -112,12 +112,9 @@ define([
         view.timers[prop] = requestAnimationFrame(updater.bind(view));
       });
 
-      if (view.timers.unseen)
-      {
-        cancelAnimationFrame(view.timers.unseen);
+      cancelAnimationFrame(view.timers.unseen);
 
-        view.timers.unseen = requestAnimationFrame(view.updateUnseen.bind(view));
-      }
+      view.timers.unseen = requestAnimationFrame(view.updateUnseen.bind(view));
     },
 
     resolveUpdater: function(prop)
@@ -200,10 +197,13 @@ define([
       var view = this;
       var changes = view.model.serializeDetails().observer.changes;
 
+      view.$el
+        .removeClass('fap-is-unseen')
+        .find('.fap-is-unseen')
+        .removeClass('fap-is-unseen');
+
       if (!changes.any)
       {
-        view.$('.fap-is-unseen').removeClass('fap-is-unseen');
-
         return;
       }
 
@@ -218,6 +218,7 @@ define([
             view.$el.toggleClass('fap-is-unseen', changes[prop]);
             break;
 
+          case 'observers':
           case 'subscribers':
           case 'subscribers$added':
           case 'subscribers$removed':

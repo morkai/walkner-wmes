@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   'app/broker',
   'app/user',
@@ -10,6 +11,7 @@ define([
   './AddFormView',
   'app/wmes-fap-entries/templates/navbar'
 ], function(
+  _,
   $,
   broker,
   user,
@@ -258,7 +260,7 @@ define([
         this.toggleUnseen();
       }
 
-      if (changed.comment)
+      if (changed.comment && !changed.unsubscribed)
       {
         this.showChangedNotification(changed);
       }
@@ -319,7 +321,7 @@ define([
 
           return score;
         }
-      });
+      }).catch(_.noop);
     },
 
     showChangedNotification: function(entry)
@@ -377,7 +379,7 @@ define([
 
           return score;
         }
-      });
+      }).catch(_.noop);
     }
 
   }, {

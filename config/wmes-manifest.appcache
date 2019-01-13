@@ -12,6 +12,7 @@ CACHE:
 /config.js
 {mainJsFile}
 /main.js
+/sw.js
 {mainCssFile}
 
 NETWORK:

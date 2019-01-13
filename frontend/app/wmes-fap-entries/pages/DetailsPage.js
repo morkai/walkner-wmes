@@ -1,16 +1,20 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   'app/socket',
+  'app/user',
   'app/core/pages/DetailsPage',
   'app/core/util/onModelDeleted',
   'app/core/util/pageActions',
   '../dictionaries',
   '../views/DetailsView'
 ], function(
+  _,
   $,
   socket,
+  user,
   DetailsPage,
   onModelDeleted,
   pageActions,
@@ -42,7 +46,8 @@ define([
     actions: function()
     {
       var actions = [];
-      var auth = this.model.serializeDetails().auth;
+      var details = this.model.serializeDetails();
+      var auth = details.auth;
       var status = this.model.get('status');
 
       if (status === 'finished')
@@ -74,6 +79,33 @@ define([
         });
       }
 
+      actions.push({
+        icon: 'eye',
+        label: this.t('PAGE_ACTION:markAsSeen'),
+        callback: this.markAsSeen.bind(this),
+        disabled: !details.observer.notify
+      });
+
+      if (details.observer.role !== 'viewer')
+      {
+        if (this.model.get('unsubscribed')[user.data._id])
+        {
+          actions.push({
+            icon: 'bell-o',
+            label: this.t('PAGE_ACTION:subscribe'),
+            callback: this.subscribe.bind(this)
+          });
+        }
+        else
+        {
+          actions.push({
+            icon: 'bell-slash-o',
+            label: this.t('PAGE_ACTION:unsubscribe'),
+            callback: this.unsubscribe.bind(this)
+          });
+        }
+      }
+
       if (auth.delete)
       {
         actions.push(pageActions.delete(this.model, false));
@@ -84,19 +116,31 @@ define([
 
     initialize: function()
     {
-      DetailsPage.prototype.initialize.apply(this, arguments);
+      var page = this;
 
-      this.listenTo(this.model, 'updateFailure', function()
+      DetailsPage.prototype.initialize.apply(page, arguments);
+
+      var entry = page.model;
+
+      page.listenTo(entry, 'updateFailure', function()
       {
-        this.model.fetch();
+        entry.fetch();
       });
 
-      this.listenToOnce(this.model, 'sync', function()
+      page.listenToOnce(entry, 'sync', function()
       {
-        this.listenTo(this.model, 'sync', this.render);
+        page.listenTo(entry, 'sync', page.render);
       });
 
-      this.listenTo(this.model, 'change:status', this.updateStatus);
+      page.listenTo(
+        entry,
+        'change:status change:observers change:unsubscribed',
+        _.debounce(page.updateActions.bind(page), 1)
+      );
+
+      page.listenTo(entry, 'change', page.scheduleMarkAsSeen.bind(page));
+
+      $(window).on('focus.' + page.idPrefix, page.onFocus.bind(page));
     },
 
     setUpLayout: function(layout)
@@ -106,6 +150,8 @@ define([
 
     destroy: function()
     {
+      $(window).off('.' + this.idPrefix);
+
       this.leave();
 
       dictionaries.unload();
@@ -173,7 +219,45 @@ define([
       });
     },
 
-    updateStatus: function()
+    subscribe: function()
+    {
+      this.model.change('unsubscribed', false, true);
+    },
+
+    unsubscribe: function()
+    {
+      this.model.change('unsubscribed', true, false);
+    },
+
+    markAsSeen: function()
+    {
+      if (this.model.serializeDetails().observer.notify)
+      {
+        this.model.multiChange({});
+      }
+    },
+
+    scheduleMarkAsSeen: function()
+    {
+      var page = this;
+
+      if (!page.timers)
+      {
+        return;
+      }
+
+      clearTimeout(page.timers.markAsSeen);
+
+      page.timers.markAsSeen = setTimeout(function()
+      {
+        if (document.hasFocus())
+        {
+          page.markAsSeen();
+        }
+      }, 10000);
+    },
+
+    updateActions: function()
     {
       if (this.layout)
       {
@@ -192,7 +276,7 @@ define([
 
       if (socket.getId() !== message.socketId)
       {
-        this.model.handleChange(change);
+        this.model.handleChange(change, message.notify);
       }
       else if (change.data.subscribers)
       {
@@ -203,13 +287,18 @@ define([
             subscribers: change.data.subscribers
           },
           comment: ''
-        });
+        }, message.notify);
       }
     },
 
     onPresence: function(message)
     {
       this.model.handlePresence(message.userId, message.presence);
+    },
+
+    onFocus: function()
+    {
+      this.scheduleMarkAsSeen();
     }
 
   });
