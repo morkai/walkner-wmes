@@ -92,9 +92,6 @@
   "addForm:orderNo:notFound": "Podane zlecenie nie istnieje.",
   "addForm:notifications:subdivisions": "Działy",
   "addForm:notifications:prodFunctions": "Funkcje",
-  "addForm:warning": "Moduł zgłoszeń FAP jest jeszcze w fazie testowej. Po dodaniu zgłoszenia upewnij się, że w sekcji <em>Uczestnicy</em> znajdują się osoby, które miały być powiadomione o nowym zgłoszeniu.",
-  "addForm:accept": "Rozumiem, dodaj zgłoszenie",
-  "addForm:reject": "Rezygnuję",
 
   "upload:drop": "Upuść tutaj pliki jakie chcesz dodać do tego zgłoszenia.",
   "upload:tooMany": "Możesz załączyć maksymalnie {max} {max, plural, few{pliki} one{plik} other{plików}}.",

@@ -92,9 +92,6 @@
     "addForm:orderNo:notFound": "Order not found.",
     "addForm:notifications:subdivisions": "Subdivisions",
     "addForm:notifications:prodFunctions": "Functions",
-    "addForm:warning": "FAP module is still in the testing phase. After adding the new entry, make sure the <em>Participants</em> section has all the people who were to be notified about the new entry.",
-    "addForm:accept": "Understood, add entry",
-    "addForm:reject": "Cancel",
 
     "upload:drop": "Drop here any files you want to attach to the entry.",
     "upload:tooMany": "You can attach at most {max} {max, plural, one{file} other{files}}.",

@@ -1,11 +1,4 @@
 <form class="fap-addForm">
-  <div id="<%- idPrefix %>-warning" class="message message-inline message-warning fap-addForm-warning hidden">
-    <p><%- helpers.t('addForm:warning') %></p>
-    <div class="form-group">
-      <button id="<%- idPrefix %>-accept" type="submit" class="btn btn-success"><%- helpers.t('addForm:accept') %></button>
-      <button id="<%- idPrefix %>-reject" type="button" class="btn btn-danger"><%- helpers.t('addForm:reject') %></button>
-    </div>
-  </div>
   <% if (!user.isLoggedIn()) { %>
   <div class="form-group has-required-select2">
     <label for="<%- idPrefix %>-owner" class="control-label is-required"><%- helpers.t('PROPERTY:owner') %></label>
@@ -44,7 +37,7 @@
     </ul>
   </div>
   <div class="form-group">
-    <button id="<%- idPrefix %>-submit" type="button" class="btn btn-primary"><%- helpers.t('addForm:submit') %></button>
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary"><%- helpers.t('addForm:submit') %></button>
     <button id="<%- idPrefix %>-cancel" type="button" class="btn btn-link"><%- helpers.t('addForm:cancel') %></button>
   </div>
 </form>
