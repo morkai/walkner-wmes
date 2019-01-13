@@ -233,6 +233,10 @@ define([
             view.$('.fap-chat').addClass('fap-is-unseen');
             break;
 
+          case 'status':
+            view.$id('message').addClass('fap-is-unseen');
+            break;
+
           default:
             view.$('.fap-prop[data-prop="' + prop + '"]').addClass('fap-is-unseen');
             break;

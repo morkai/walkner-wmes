@@ -249,6 +249,8 @@
 }
 .fap-is-unseen .fap-prop-name,
 .fap-is-unseen .fap-chat-title,
-.fap-is-unseen .fap-details-panel-hd {
+.fap-is-unseen .fap-details-panel-hd,
+.fap-is-unseen .message,
+.message.fap-is-unseen {
   color: #ee0000;
 }
