@@ -40,7 +40,21 @@ define([
     },
 
     localTopics: {
-      'socket.connected': 'join'
+      'socket.connected': 'join',
+      'fap.entries.seen': function(message)
+      {
+        var entryId = this.model.id;
+
+        if (_.some(message.seenEntries, function(seenEntryId) { return seenEntryId === entryId; }))
+        {
+          this.model.handleChange({
+            date: new Date(),
+            user: user.getInfo(),
+            data: {},
+            comment: ''
+          });
+        }
+      }
     },
 
     actions: function()

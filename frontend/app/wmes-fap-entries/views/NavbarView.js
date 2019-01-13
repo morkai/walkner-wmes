@@ -278,6 +278,10 @@ define([
         return;
       }
 
+      this.broker.publish('fap.entries.seen', {
+        seenEntries: seenEntries
+      });
+
       var seen = {};
 
       seenEntries.forEach(function(entryId)

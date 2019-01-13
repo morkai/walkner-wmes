@@ -42,6 +42,13 @@ define([
       return topics;
     },
 
+    localTopics: {
+      'fap.entries.seen': function(message)
+      {
+        message.seenEntries.forEach(function(entryId) { this.markAsSeen(entryId); }, this);
+      }
+    },
+
     serializeColumns: function()
     {
       var columns = [{id: 'rid', className: 'is-min is-number'}];
@@ -117,9 +124,19 @@ define([
       });
     },
 
+    markAsSeen: function(entryId)
+    {
+      var $unseen = this.$('.fap-is-unseen[data-id="' + entryId + '"]').removeClass('fap-is-unseen');
+
+      if ($unseen.length)
+      {
+        this.refreshCollection();
+      }
+    },
+
     onModelUpdated: function(message)
     {
-      if (Object.keys(message.change.data).length)
+      if (message.change.comment || Object.keys(message.change.data).length)
       {
         this.refreshCollection(message);
       }
