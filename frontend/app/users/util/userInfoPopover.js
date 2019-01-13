@@ -265,26 +265,31 @@ define([
     hidePopover();
   });
 
-  $(document.body).on('mouseenter', '.userInfo-label', function(e)
-  {
-    var userInfoEl = e.currentTarget.parentNode;
-    var userId = userInfoEl.dataset.userId;
-
-    if (!userId)
+  $(document.body)
+    .on('mouseenter', '.userInfo-label', function(e)
     {
-      return;
-    }
+      var userInfoEl = e.currentTarget.parentNode;
+      var userId = userInfoEl.dataset.userId;
 
-    lastUserId = userId;
+      if (!userId)
+      {
+        return;
+      }
 
-    if (users[userId])
+      lastUserId = userId;
+
+      if (users[userId])
+      {
+        return showPopover(userInfoEl, userId);
+      }
+
+      if (users[userId] !== null)
+      {
+        loadPopover(userInfoEl, userId);
+      }
+    })
+    .on('mouseleave', '.userInfo-label', function()
     {
-      return showPopover(userInfoEl, userId);
-    }
-
-    if (users[userId] !== null)
-    {
-      loadPopover(userInfoEl, userId);
-    }
-  });
+      hidePopover();
+    });
 });
