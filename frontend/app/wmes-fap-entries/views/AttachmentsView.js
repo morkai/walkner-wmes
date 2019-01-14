@@ -110,6 +110,8 @@ define([
 
     destroy: function()
     {
+      $(document.body).off('.' + this.idPrefix);
+
       $(window).off('.' + this.idPrefix);
     },
 
