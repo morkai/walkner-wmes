@@ -242,7 +242,7 @@ function(
 
             var actualTags = n.tag.split(' ');
 
-            if (requiredTags.every(requiredTag => actualTags.includes(requiredTag)))
+            if (_.every(requiredTags, function(requiredTag) { return actualTags.includes(requiredTag); }))
             {
               n.close();
             }
