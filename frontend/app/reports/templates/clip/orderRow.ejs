@@ -22,7 +22,7 @@
   <td class="is-min"><%- order.planner %></td>
   <td class="reports-2-orders-delayReason">
     <%- order.delayReason %>
-    <% if (order.m4) { %>(<%- t('orders', 'm4:' + order.m4) + (order.drm ? ('; ' + order.drm) : '') %>)<% } %>
+    <% if (order.m4) { %>(<%- t('orders', 'm4:' + order.m4) + (order.drm ? ('; ' + order.drm) : '') + (order.delayComponent ? ('; ' + order.delayComponent) : '') %>)<% } %>
   </td>
   <td class="reports-2-orders-comment"><%- order.comment %></td>
 </tr>

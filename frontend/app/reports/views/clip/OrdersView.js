@@ -58,7 +58,7 @@ define([
 
       view.setView('.pagination-container', view.paginationView);
 
-      view.listenTo(orders, 'change:delayReason change:m4', this.onDelayReasonChange);
+      view.listenTo(orders, 'change:delayReason change:delayComponent change:m4', this.onDelayReasonChange);
       view.listenTo(orders, 'change:comment', this.onCommentChange);
       view.listenTo(orders, 'push:change', this.onChangePush);
       view.listenTo(orders.paginationData, 'change:page', this.scrollTop);
@@ -142,6 +142,7 @@ define([
         dlvClassName: dlvClassName,
         dlvTime: dlvTime ? time.format(dlvTime, 'L, HH:mm') : '',
         delayReason: delayReason ? delayReason.getLabel() : '',
+        delayComponent: order.get('delayComponent'),
         m4: order.get('m4'),
         drm: order.get('drm'),
         eto: order.get('eto'),
@@ -325,17 +326,23 @@ define([
     onDelayReasonChange: function(order)
     {
       var delayReason = this.delayReasons.get(order.get('delayReason'));
+      var delayComponent = order.get('delayComponent');
       var text = '';
 
       if (delayReason)
       {
-        text = delayReason.getLabel() + ' (' + this.t('orders', 'm4:' + order.get('m4'));
+        text = delayReason.getLabel()+ ' (' + this.t('orders', 'm4:' + order.get('m4'));
 
         var drm = delayReason.get('drm')[order.get('m4')];
 
         if (drm)
         {
           text += '; ' + drm;
+        }
+
+        if (delayComponent)
+        {
+          text += '; ' + delayComponent;
         }
 
         text += ')';
