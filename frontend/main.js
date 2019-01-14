@@ -51,8 +51,9 @@
   }
 
   if (window.navigator.serviceWorker
+    && window.navigator.serviceWorker.getRegistrations
     && !window.IS_EMBEDDED
-    && location.protocl === 'https:'
+    && location.protocol === 'https:'
     && location.pathname === '/')
   {
     window.navigator.serviceWorker.register('/sw.js')

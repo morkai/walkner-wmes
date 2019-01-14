@@ -258,7 +258,8 @@ define([
 
     broker.publish('updater.frontendRestarting');
 
-    if (window.navigator.serviceWorker)
+    if (window.navigator.serviceWorker
+      && window.navigator.serviceWorker.getRegistrations)
     {
       window.navigator.serviceWorker.getRegistrations().then(function(registrations)
       {

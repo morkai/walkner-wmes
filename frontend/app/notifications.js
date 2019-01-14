@@ -17,7 +17,9 @@ function(
   var clientId = null;
 
   var N = window.Notification;
-  var sw = window.navigator.serviceWorker;
+  var sw = window.navigator.serviceWorker && window.navigator.serviceWorker.getRegistrations
+    ? window.navigator.serviceWorker
+    : null;
   var userActions = {};
   var messageHandlers = {
     userAction: function(message)
@@ -29,7 +31,7 @@ function(
     }
   };
 
-  if (sw)
+  if (N && sw)
   {
     sw.addEventListener('message', function(e)
     {
