@@ -41,10 +41,17 @@ function(
       }
     });
 
+    getClientId();
+  }
+
+  function getClientId()
+  {
     act({action: 'getClientId'}, function(err, res)
     {
       if (err)
       {
+        setTimeout(getClientId, 3000);
+
         return console.error('Failed to get the client ID: %s', err.message);
       }
 
