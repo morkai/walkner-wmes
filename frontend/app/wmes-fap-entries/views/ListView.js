@@ -45,7 +45,18 @@ define([
     localTopics: {
       'fap.entries.seen': function(message)
       {
-        message.seenEntries.forEach(function(entryId) { this.markAsSeen(entryId); }, this);
+        var view = this;
+        var count = 0;
+
+        message.seenEntries.forEach(function(entryId)
+        {
+          count += view.$('.fap-is-unseen[data-id="' + entryId + '"]').removeClass('fap-is-unseen').length;
+        });
+
+        if (count)
+        {
+          view.refreshCollection();
+        }
       }
     },
 
@@ -122,16 +133,6 @@ define([
           return $(template).addClass('fap-list-popover');
         }
       });
-    },
-
-    markAsSeen: function(entryId)
-    {
-      var $unseen = this.$('.fap-is-unseen[data-id="' + entryId + '"]').removeClass('fap-is-unseen');
-
-      if ($unseen.length)
-      {
-        this.refreshCollection();
-      }
     },
 
     onModelUpdated: function(message)
