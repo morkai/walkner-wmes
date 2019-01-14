@@ -260,9 +260,13 @@ define([
 
     if (window.navigator.serviceWorker)
     {
-      window.navigator.serviceWorker.ready
-        .then(function(registration) { return registration.update(); })
-        .catch(_.noop);
+      window.navigator.serviceWorker.getRegistrations().then(function(registrations)
+      {
+        registrations.forEach(function(registration)
+        {
+          registration.unregister().catch(_.noop);
+        });
+      }).catch(_.noop);
     }
 
     updateActivityTimer();
