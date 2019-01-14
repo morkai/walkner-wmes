@@ -5,7 +5,7 @@
   "version": "0.130.0",
   "updater": {
     "wmes": {
-      "backend": 427,
+      "backend": 428,
       "frontend": 566,
       "reports": 73,
       "attachments": 3,
