@@ -8,7 +8,7 @@
 
   if (location.protocol === 'http:' && location.pathname === '/' && location.port === '')
   {
-    window.location.protocol = 'https:';
+    location.protocol = 'https:';
   }
 
   if (!location.origin)
@@ -40,7 +40,7 @@
       return;
     }
 
-    window.location.hash = matches && matches[2] ? matches[2] : '#';
+    location.hash = matches && matches[2] ? matches[2] : '#';
 
     localStorage.setItem('PROXY', matches[1]);
   }
@@ -50,7 +50,10 @@
     window.parent.postMessage({type: 'init', host: location.hostname}, '*');
   }
 
-  if (window.navigator.serviceWorker && !window.IS_EMBEDDED)
+  if (window.navigator.serviceWorker
+    && !window.IS_EMBEDDED
+    && location.protocl === 'https:'
+    && location.pathname === '/')
   {
     window.navigator.serviceWorker.register('/sw.js')
       .then(function() { console.log('[sw] Registered!'); })
