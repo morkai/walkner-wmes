@@ -240,7 +240,7 @@ function(
               return;
             }
 
-            const actualTags = n.tag.split(' ');
+            var actualTags = n.tag.split(' ');
 
             if (requiredTags.every(requiredTag => actualTags.includes(requiredTag)))
             {
