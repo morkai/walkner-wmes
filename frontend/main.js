@@ -50,7 +50,7 @@
     window.parent.postMessage({type: 'init', host: location.hostname}, '*');
   }
 
-  if (window.navigator.serviceWorker)
+  if (window.navigator.serviceWorker && !window.IS_EMBEDDED)
   {
     window.navigator.serviceWorker.register('/sw.js')
       .then(function() { console.log('[sw] Registered!'); })
