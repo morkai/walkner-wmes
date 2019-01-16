@@ -17,8 +17,7 @@ define([
   'app/wh/templates/whSetItem',
   'app/wh/templates/cartsEditor',
   'app/wh/templates/problemEditor',
-  'app/wh/templates/printLabels',
-  'app/planning/templates/lineOrderComments'
+  'app/wh/templates/printLabels'
 ], function(
   _,
   $,
@@ -36,8 +35,7 @@ define([
   setItemTemplate,
   cartsEditorTemplate,
   problemEditorTemplate,
-  printLabelsTemplate,
-  lineOrderCommentsTemplate
+  printLabelsTemplate
 ) {
   'use strict';
 
@@ -66,51 +64,6 @@ define([
     dialogClassName: 'wh-set-dialog',
 
     events: {
-      'mousedown .planning-mrp-lineOrders-comment': function(e)
-      {
-        if (e.button !== 0)
-        {
-          return;
-        }
-
-        var sapOrder = this.plan.sapOrders.get(e.currentTarget.parentNode.dataset.order);
-
-        if (!sapOrder)
-        {
-          return;
-        }
-
-        var comments = sapOrder.get('comments');
-
-        if (!comments.length)
-        {
-          return;
-        }
-
-        this.$(e.currentTarget).popover({
-          trigger: 'manual',
-          placement: 'left',
-          html: true,
-          content: lineOrderCommentsTemplate({
-            comments: comments.map(function(comment)
-            {
-              return {
-                user: userInfoTemplate({noIp: true, userInfo: comment.user}),
-                time: time.toTagData(comment.time).human,
-                text: PlanSapOrder.formatCommentWithIcon(comment)
-              };
-            })
-          }),
-          template: '<div class="popover planning-mrp-comment-popover">'
-          + '<div class="arrow"></div>'
-          + '<div class="popover-content"></div>'
-          + '</div>'
-        }).popover('show');
-      },
-      'mouseup .planning-mrp-lineOrders-comment': function(e)
-      {
-        this.$(e.currentTarget).popover('destroy');
-      },
       'click .is-clickable': function(e)
       {
         var whOrder = this.whOrders.get(this.$(e.target).closest('tbody').attr('data-id'));
@@ -289,24 +242,10 @@ define([
           return null;
         }
 
-        var disabled = false;
-
-        if (prop === 'picklistDone')
-        {
-          disabled = whOrder.get('picklistDone') === item.value;
-        }
-        else
-        {
-          var funcData = whOrder.get('funcs')[WhOrder.FUNC_TO_INDEX[func]];
-
-          disabled = funcData[prop] === item.value;
-        }
-
         return {
           icon: item.icon,
           label: t('wh', 'menu:' + prop + ':' + (item.label || item.value)),
-          handler: view.handleUpdate.bind(view, whOrder, func, prop, item.value),
-          disabled: disabled
+          handler: view.handleUpdate.bind(view, whOrder, func, prop, item.value)
         };
       }).filter(function(item) { return !!item; });
 
@@ -428,6 +367,11 @@ define([
         req.done(function(res)
         {
           whOrder.set(res.order);
+
+          if (!whOrder.hasChanged())
+          {
+            view.onOrderChanged(whOrder);
+          }
         });
       });
     },
