@@ -375,7 +375,6 @@ exports.pubsub = {
     'vis.**',
     'mor.**',
     'planning.**',
-    'wh.**',
     'sapLaborTimeFixer.**',
     'printing.**',
     'kanban.**',
