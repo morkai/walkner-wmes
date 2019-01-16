@@ -4,6 +4,7 @@ define([
   'underscore',
   'jquery',
   'app/i18n',
+  'app/user',
   'app/viewport',
   'app/time',
   'app/core/Model',
@@ -26,6 +27,7 @@ define([
   _,
   $,
   t,
+  currentUser,
   viewport,
   time,
   Model,
@@ -85,7 +87,10 @@ define([
 
       return [
         {
-          template: resolveActionTemplate,
+          template: function()
+          {
+            return resolveActionTemplate({});
+          },
           afterRender: function($action)
           {
             $action.find('form').on('submit', function()
@@ -526,7 +531,7 @@ define([
 
       var currentDialog = viewport.currentDialog;
 
-      if (currentDialog
+      if (currentDialog && user
         && currentDialog instanceof WhSetView
         && currentDialog.model.user
         && currentDialog.model.user._id === user._id
@@ -747,10 +752,22 @@ define([
     {
       var whOrder = this.whOrders.get(whOrderId);
 
-      if (whOrder && whOrder.get('set'))
+      if (!whOrder || !whOrder.get('set'))
       {
-        this.continueSet(null, whOrder.get('set'), false);
+        return;
       }
+
+      var func = _.find(whOrder.get('funcs'), function(f)
+      {
+        return f.user && f.user.id === currentUser.data._id;
+      });
+      var user = !func ? null : {
+        _id: currentUser.data._id,
+        label: currentUser.getLabel(),
+        func: func._id
+      };
+
+      this.continueSet(user, whOrder.get('set'), false);
     }
 
   });
