@@ -13,9 +13,9 @@
   <td data-column-id="line" class="is-min"><%= row.line %></td>
   <td data-column-id="whStatus" class="is-min wh-list-status" data-status="<%- row.status %>"><%- t('wh', 'status:' + row.status) %></td>
   <td data-column-id="set" class="is-min text-center <%- row.set ? 'is-clickable' : '' %>" style="min-width: 35px"><%- row.set %></td>
-  <td data-column-id="picklist" class="is-min text-center wh-list-icon"><i class="fa <%- row.picklistFunc ? (row.picklistDone ? 'fa-thumbs-up' : 'fa-thumbs-down') : 'fa-question' %>"></i></td>
-  <td data-column-id="fmx" class="is-min text-center wh-list-icon" title="<%- t('wh', 'status:' + row.funcs[0].status) %>"><i class="fa <%- row.funcIcons.fmx %>"></i></td>
-  <td data-column-id="kitter" class="is-min text-center wh-list-icon" title="<%- t('wh', 'status:' + row.funcs[1].status) %>"><i class="fa <%- row.funcIcons.kitter %>"></i></td>
-  <td data-column-id="packer" class="is-min text-center wh-list-icon" title="<%- t('wh', 'status:' + row.funcs[2].status) %>"><i class="fa <%- row.funcIcons.packer %>"></i></td>
+  <td data-column-id="picklist" class="is-min text-center wh-list-icon wh-has-popover"><i class="fa <%- row.picklistFunc ? (row.picklistDone ? 'fa-thumbs-up' : row.picklistDone === null ? 'fa-question' : 'fa-thumbs-down') : 'fa-question' %>"></i></td>
+  <td data-column-id="fmx" class="is-min text-center wh-list-icon wh-has-popover"><i class="fa <%- row.funcIcons.fmx %>"></i></td>
+  <td data-column-id="kitter" class="is-min text-center wh-list-icon wh-has-popover"><i class="fa <%- row.funcIcons.kitter %>"></i></td>
+  <td data-column-id="packer" class="is-min text-center wh-list-icon wh-has-popover"><i class="fa <%- row.funcIcons.packer %>"></i></td>
   <td data-column-id="comment" class="planning-mrp-lineOrders-comment"><%- row.comment %></td>
 </tr>

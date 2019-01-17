@@ -15,6 +15,7 @@ define([
   'app/core/templates/userInfo',
   'app/wh/templates/whSet',
   'app/wh/templates/whSetItem',
+  'app/wh/templates/whSetPickupPopover',
   'app/wh/templates/cartsEditor',
   'app/wh/templates/problemEditor',
   'app/wh/templates/printLabels'
@@ -33,6 +34,7 @@ define([
   userInfoTemplate,
   setTemplate,
   setItemTemplate,
+  setPickupPopoverTemplate,
   cartsEditorTemplate,
   problemEditorTemplate,
   printLabelsTemplate
@@ -182,6 +184,8 @@ define([
     {
       $(window).off('keydown.' + this.idPrefix);
 
+      this.$el.popover('destroy');
+
       this.hideEditor();
     },
 
@@ -206,6 +210,41 @@ define([
     beforeRender: function()
     {
       clearTimeout(this.timers.render);
+    },
+
+    afterRender: function()
+    {
+      var view = this;
+
+      view.$el.popover({
+        selector: '[data-popover]',
+        container: 'body',
+        trigger: 'hover',
+        placement: 'bottom',
+        html: true,
+        content: function()
+        {
+          var func = view.whOrders.get(view.$(this).closest('.wh-set-item')[0].dataset.id).getFunc(this.dataset.func);
+
+          if (!func.carts.length && !func.problemArea && !func.comment)
+          {
+            return;
+          }
+
+          return view.renderPartial(setPickupPopoverTemplate, {
+            func: func
+          });
+        },
+        template: function(defaultTemplate)
+        {
+          return $(defaultTemplate).addClass('wh-set-popover');
+        }
+      });
+
+      view.$el.on('show.bs.popover', function()
+      {
+        $('.wh-set-popover').remove();
+      });
     },
 
     scheduleRender: function()

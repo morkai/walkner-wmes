@@ -183,3 +183,6 @@
   height: 48px;
   font-size: 28px;
 }
+.wh-set-popover {
+  max-width: 400px;
+}

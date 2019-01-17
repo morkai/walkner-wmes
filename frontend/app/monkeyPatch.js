@@ -152,6 +152,19 @@ function(
     return this.$tip;
   };
 
+  $.fn.popover.Constructor.prototype.getTitle = function()
+  {
+    var $e = this.$element;
+    var o = this.options;
+
+    if (o.title)
+    {
+      return typeof o.title === 'function' ? o.title.call($e[0]) : o.title;
+    }
+
+    return $e.attr('data-original-title') || '';
+  };
+
   var $body = $(document.body);
 
   $.fn.select2.defaults.dropdownContainer = function(select2)

@@ -14,6 +14,7 @@ define([
   'app/core/templates/userInfo',
   'app/wh/templates/whList',
   'app/wh/templates/whListRow',
+  'app/wh/templates/whListPopover',
   'app/planning/templates/lineOrderComments'
 ], function(
   _,
@@ -29,6 +30,7 @@ define([
   userInfoTemplate,
   whListTemplate,
   whListRowTemplate,
+  whListPopoverTemplate,
   lineOrderCommentsTemplate
 ) {
   'use strict';
@@ -128,6 +130,69 @@ define([
     beforeRender: function()
     {
       clearTimeout(this.timers.render);
+    },
+
+    afterRender: function()
+    {
+      var view = this;
+
+      view.$el.popover({
+        selector: '.wh-has-popover',
+        container: 'body',
+        placement: 'top auto',
+        trigger: 'hover',
+        html: true,
+        title: function()
+        {
+          return t('wh', 'list:popover:' + this.dataset.columnId);
+        },
+        content: function()
+        {
+          var whOrder = view.whOrders.get($(this).closest('.wh-list-item')[0].dataset.id);
+          var templateData = {
+            user: null,
+            status: null,
+            carts: [],
+            problemArea: '',
+            comment: ''
+          };
+
+          if (this.dataset.columnId === 'picklist')
+          {
+            var picklistFunc = whOrder.getFunc(whOrder.get('picklistFunc'));
+
+            if (picklistFunc)
+            {
+              templateData.user = picklistFunc.user.label;
+              templateData.status = t('wh', 'status:picklistDone:' + whOrder.get('picklistDone'));
+            }
+            else
+            {
+              templateData.status = t('wh', 'status:pending');
+            }
+          }
+          else
+          {
+            var func = whOrder.getFunc(this.dataset.columnId);
+
+            templateData.status = t('wh', 'status:' + func.status);
+            templateData.carts = func.carts;
+            templateData.problemArea = func.problemArea;
+            templateData.comment = func.comment;
+
+            if (func.user)
+            {
+              templateData.user = func.user.label;
+            }
+          }
+
+          return view.renderPartial(whListPopoverTemplate, templateData);
+        },
+        template: function(defaultTemplate)
+        {
+          return $(defaultTemplate).addClass('wh-list-popover');
+        }
+      });
     },
 
     scheduleRender: function()

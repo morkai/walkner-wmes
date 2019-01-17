@@ -124,6 +124,11 @@ define([
       this.set(newOrder);
     },
 
+    getFunc: function(func)
+    {
+      return this.attributes.funcs[FUNC_TO_INDEX[func]] || null;
+    },
+
     getUserFunc: function(user)
     {
       if (!user)

@@ -9,7 +9,7 @@
     <th data-prop="picklistDone"><%- t('wh', 'prop:picklist') %></th>
     <% items[0].funcs.forEach(function(func) { %>
     <th class="wh-set-separator"></th>
-    <th data-prop="func" colspan="2"><%- t('wh', 'prop:' + func._id) %></th>
+    <th data-prop="func" data-func="<%- func._id %>" colspan="2"><%- t('wh', 'prop:' + func._id) %></th>
     <% }) %>
     <th class="wh-set-separator"></th>
     <th><%- t('core', 'LIST:COLUMN:actions') %></th>

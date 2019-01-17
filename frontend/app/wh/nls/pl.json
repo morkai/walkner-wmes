@@ -44,6 +44,12 @@
   "prop:fmx": "FMX",
   "prop:kitter": "Kitter",
   "prop:packer": "Opak.",
+  "prop:carts": "Wózki",
+  "prop:problemArea": "Pole problemów",
+
+  "status:picklistDone:null": "Transakcja niewykonana",
+  "status:picklistDone:true": "Transakcja wykonana",
+  "status:picklistDone:false": "Transakcja nieudana",
 
   "status:pending": "Oczekiwanie",
   "status:started": "Rozpoczęte",
@@ -89,5 +95,12 @@
   "menu:pickup:pending": "Resetuj status",
 
   "update:failure": "Wykonywanie akcji nie powiodło się.",
-  "printLabels:failure": "Drukowanie etykiet nie powiodło się."
+  "printLabels:failure": "Drukowanie etykiet nie powiodło się.",
+
+  "list:popover:picklist": "LP10",
+  "list:popover:fmx": "FMX",
+  "list:popover:kitter": "Kitter",
+  "list:popover:packer": "Opakowania",
+  "list:popover:status": "Status",
+  "list:popover:user": "Użytkownik"
 }

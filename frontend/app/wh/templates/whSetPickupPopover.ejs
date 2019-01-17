@@ -1,0 +1,14 @@
+<dl>
+  <% if (func.carts.length) { %>
+  <dt><%- t('wh', 'prop:carts') %></dt>
+  <dd><%- func.carts.join(', ') %></dd>
+  <% } %>
+  <% if (func.problemArea) { %>
+  <dt><%- t('wh', 'prop:problemArea') %></dt>
+  <dd><%= func.problemArea %></dd>
+  <% } %>
+  <% if (func.comment) { %>
+  <dt><%- t('wh', 'prop:comment') %></dt>
+  <dd style="white-space: pre-line"><%= func.comment %></dd>
+  <% } %>
+</dl>
