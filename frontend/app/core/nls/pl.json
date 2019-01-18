@@ -428,6 +428,7 @@
   "embedded:actions:config": "Konfiguruj",
   "embedded:actions:reboot": "Uruchom ponownie",
   "embedded:actions:shutdown": "Wyłącz komputer",
+  "embedded:actions:resetBrowser": "Resetuj przeglądarkę",
   "embedded:apps:operator": "Formatka operatora",
   "embedded:apps:documents": "Dokumentacja",
   "embedded:apps:xiconf": "Skanowanie LED",

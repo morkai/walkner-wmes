@@ -419,6 +419,7 @@
     "embedded:actions:config": "Configure",
     "embedded:actions:reboot": "Reboot",
     "embedded:actions:shutdown": "Shutdown",
+    "embedded:actions:resetBrowser": "Reset browser",
     "embedded:apps:operator": "Operator",
     "embedded:apps:documents": "Documents",
     "embedded:apps:xiconf": "LED scanning",

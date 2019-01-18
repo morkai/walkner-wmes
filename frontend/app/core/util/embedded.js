@@ -102,6 +102,10 @@ define([
       {
         window.parent.postMessage({type: 'refresh'}, '*');
       },
+      resetBrowser: function()
+      {
+        window.parent.postMessage({type: 'resetBrowser'}, '*');
+      },
       reboot: function()
       {
         var dialogView = new DialogView({
@@ -151,6 +155,9 @@ define([
         return;
       }
 
+      var showCount = 0;
+      var showCountTimer = null;
+
       var actions = this.actions;
       var $embeddedActions = $(actionsTemplate({
         app: window.WMES_APP_ID,
@@ -169,7 +176,27 @@ define([
         e.preventDefault();
       });
 
+      $embeddedActions.on('show.bs.dropdown', function()
+      {
+        showCount += 1;
+
+        clearTimeout(showCountTimer);
+        showCountTimer = setTimeout(function() { showCount = 0; }, 2000);
+
+        toggleDevItems(showCount < 3);
+      });
+
+      $embeddedActions.on('hidden.bs.dropdown', function()
+      {
+        toggleDevItems(true);
+      });
+
       (options && options.container || view.$el).append($embeddedActions);
+
+      function toggleDevItems(hidden)
+      {
+        $embeddedActions.find('.dev').toggleClass('hidden', hidden);
+      }
     }
 
   };
