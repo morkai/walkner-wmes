@@ -694,9 +694,14 @@ app/vis/assets/main.css
 ----------------
 app/vis/assets/main.css
 
+app/wh/assets/list.css
+----------------
+app/wh/assets/list.css
+
 app/wh/assets/main.css
 ----------------
 app/wh/assets/./message.css
+app/wh/assets/./list.css
 app/wh/assets/./set.css
 app/wh/assets/main.css
 
@@ -1884,9 +1889,11 @@ app/wh/templates/planFilter.js
 app/wh/views/WhFilterView.js
 app/wh/templates/whList.js
 app/wh/templates/whListRow.js
+app/wh/templates/whListPopover.js
 app/wh/views/WhPlanView.js
 app/wh/templates/whSet.js
 app/wh/templates/whSetItem.js
+app/wh/templates/whSetPickupPopover.js
 app/wh/templates/cartsEditor.js
 app/wh/templates/problemEditor.js
 app/wh/templates/printLabels.js
@@ -2900,10 +2907,12 @@ app/planning/util/contextMenu.js
 app/core/templates/userInfo.js
 app/wh/templates/whList.js
 app/wh/templates/whListRow.js
+app/wh/templates/whListPopover.js
 app/planning/templates/lineOrderComments.js
 app/wh/views/WhPlanView.js
 app/wh/templates/whSet.js
 app/wh/templates/whSetItem.js
+app/wh/templates/whSetPickupPopover.js
 app/wh/templates/cartsEditor.js
 app/wh/templates/problemEditor.js
 app/wh/templates/printLabels.js
