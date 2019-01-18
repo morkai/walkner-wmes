@@ -4,6 +4,7 @@
 {
   'use strict';
 
+  var navigator = window.navigator;
   var location = window.location;
 
   if (location.protocol === 'http:' && location.pathname === '/' && location.port === '')
@@ -19,13 +20,15 @@
   window.COMPUTERNAME = (location.href.match(/COMPUTERNAME=(.*?)(?:(?:#|&).*)?$/i) || [null, null])[1];
   window.INSTANCE_ID = Math.round(Date.now() + Math.random() * 9999999).toString(36).toUpperCase();
   window.IS_EMBEDDED = window.parent !== window;
-  window.IS_IE = window.navigator.userAgent.indexOf('Trident/') !== -1;
+  window.IS_IE = navigator.userAgent.indexOf('Trident/') !== -1;
   window.IS_MOBILE = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series[46]0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino|android|ipad|playbook|silk/i
-    .test(window.navigator.userAgent);
+    .test(navigator.userAgent);
+  window.IS_LINUX = navigator.userAgent.indexOf('X11; Linux') !== -1;
 
   document.body.classList.toggle('is-ie', window.IS_IE);
   document.body.classList.toggle('is-mobile', window.IS_MOBILE);
   document.body.classList.toggle('is-embedded', window.IS_EMBEDDED);
+  document.body.classList.toggle('is-linux', window.IS_LINUX);
 
   if (window.ENV === 'testing')
   {
@@ -50,9 +53,10 @@
     window.parent.postMessage({type: 'init', host: location.hostname}, '*');
   }
 
-  if (window.navigator.serviceWorker
+  if (!window.IS_EMBEDDED
+    && !window.IS_LINUX
+    && window.navigator.serviceWorker
     && window.navigator.serviceWorker.getRegistrations
-    && !window.IS_EMBEDDED
     && location.protocol === 'https:'
     && location.pathname === '/')
   {
@@ -91,7 +95,7 @@
 
   require.onError = function(err)
   {
-    console.error(err);
+    console.error(Object.keys(err), err);
 
     var loadingEl = document.getElementById('app-loading');
 
