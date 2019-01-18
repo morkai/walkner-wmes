@@ -92,7 +92,7 @@ step(
 
     console.log('Fetching the hosts...');
 
-    const url = 'http://127.0.0.1/pings?limit(1000)&sort(-time)&select(host)'
+    const url = 'http://127.0.0.1/pings?limit(1000)&sort(-time)'
       + `&time>=${Date.now() - 8 * 3600 * 1000}`
       + `&host=regex=${encodeURIComponent('^(UP|HP|DELL)-')}`;
     const next = this.next();
@@ -134,6 +134,19 @@ step(
     }
 
     console.log(`Found ${remaining.length} hosts!`);
+
+    remaining.sort((a, b) =>
+    {
+      const agentA = (a.headers['user-agent'] || '').match(/Chrome\/([0-9]+)/);
+      const agentB = (a.headers['user-agent'] || '').match(/Chrome\/([0-9]+)/);
+
+      if (agentA && agentB)
+      {
+        return parseInt(agentA[1], 10) - parseInt(agentB[1], 10);
+      }
+
+      return b.time - a.time;
+    });
 
     const next = this.next();
 
