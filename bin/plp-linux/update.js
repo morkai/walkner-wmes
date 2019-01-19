@@ -83,6 +83,8 @@ step(
       return this.skip(new Error(`Failed to start the proxy: ${err.message}`));
     }
 
+    const next = this.next();
+
     if (remaining.length)
     {
       console.log('Not fetching the hosts!');
@@ -95,7 +97,6 @@ step(
     const url = 'http://127.0.0.1/pings?limit(1000)&sort(-time)'
       + `&time>=${Date.now() - 8 * 3600 * 1000}`
       + `&host=regex=${encodeURIComponent('^(UP|HP|DELL)-')}`;
-    const next = this.next();
 
     request({method: 'GET', url, json: true}, (err, res, body) =>
     {
@@ -137,15 +138,20 @@ step(
 
     remaining.sort((a, b) =>
     {
-      const agentA = (a.headers['user-agent'] || '').match(/Chrome\/([0-9]+)/);
-      const agentB = (a.headers['user-agent'] || '').match(/Chrome\/([0-9]+)/);
+      const agentA = (a.headers && a.headers['user-agent'] || '').match(/Chrome\/([0-9]+)/);
+      const agentB = (a.headers && a.headers['user-agent'] || '').match(/Chrome\/([0-9]+)/);
 
       if (agentA && agentB)
       {
         return parseInt(agentA[1], 10) - parseInt(agentB[1], 10);
       }
 
-      return b.time - a.time;
+      if (a.time && b.time)
+      {
+        return b.time - a.time;
+      }
+
+      return 0;
     });
 
     const next = this.next();
