@@ -106,6 +106,14 @@ define([
       {
         window.parent.postMessage({type: 'resetBrowser'}, '*');
       },
+      restartBrowser: function()
+      {
+        window.parent.postMessage({type: 'restartBrowser'}, '*');
+      },
+      noKiosk: function()
+      {
+        window.parent.postMessage({type: 'noKiosk'}, '*');
+      },
       reboot: function()
       {
         var dialogView = new DialogView({
