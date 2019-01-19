@@ -94,38 +94,7 @@ step(
 
     console.log('Fetching the hosts...');
 
-    const url = 'http://127.0.0.1/pings?limit(1000)&sort(-time)'
-      + `&time>=${Date.now() - 48 * 3600 * 1000}`
-      + `&host=regex=%5E%28UP%7CHP%7CDELL%29-`;
-
-    request({method: 'GET', url, json: true}, (err, res, body) =>
-    {
-      if (err)
-      {
-        return next(err);
-      }
-
-      if (res.statusCode !== 200)
-      {
-        body = require('./pings.json');
-      }
-
-      const hosts = new Set();
-
-      if (body && Array.isArray(body.collection))
-      {
-        body.collection.forEach(client =>
-        {
-          if (!hosts.has(client.host) || client.host.includes('Default'))
-          {
-            remaining.push(client);
-            hosts.add(client.host);
-          }
-        });
-      }
-
-      next();
-    });
+    fetchClients(next);
   },
   function(err)
   {
@@ -135,24 +104,6 @@ step(
     }
 
     console.log(`Found ${remaining.length} hosts!`);
-
-    remaining.sort((a, b) =>
-    {
-      const agentA = (a.headers && a.headers['user-agent'] || '').match(/Chrome\/([0-9]+)/);
-      const agentB = (a.headers && a.headers['user-agent'] || '').match(/Chrome\/([0-9]+)/);
-
-      if (agentA && agentB)
-      {
-        return parseInt(agentA[1], 10) - parseInt(agentB[1], 10);
-      }
-
-      if (a.time && b.time)
-      {
-        return b.time - a.time;
-      }
-
-      return 0;
-    });
 
     const next = this.next();
 
@@ -196,13 +147,13 @@ function updateNext(done)
 
   inProgress.add(client);
 
-  console.log(`${client.host.padEnd(16, ' ')} ${client._id.padEnd(15, ' ')} ...`);
+  console.log(`${client.name.padEnd(16, ' ')} ${client.ipAddress.padEnd(15, ' ')} ${client.app.padEnd(10, ' ')} ${client.line.padEnd(10, ' ')} ...`);
 
-  doUpdate(client._id, () =>
+  doUpdate(client.ipAddress, () =>
   {
     inProgress.delete(client);
 
-    console.log(`${client.host.padEnd(16, ' ')} ${client._id.padEnd(15, ' ')} ${(Date.now() - startedAt) / 1000}`);
+    console.log(`${client.host.padEnd(16, ' ')} ${client._id.padEnd(15, ' ')} ${client.app.padEnd(10, ' ')} ${client.line.padEnd(10, ' ')} ${(Date.now() - startedAt) / 1000}`);
 
     updateNext(done);
   });
@@ -219,4 +170,92 @@ function doUpdate(ip, done)
   ];
 
   exec(cmd.join(' '), {timeout: 10 * 60 * 1000}, done);
+}
+
+function fetchClients(done)
+{
+  const clientMap = new Map();
+
+  step(
+    function()
+    {
+      const next = this.next();
+      const url = 'http://127.0.0.1/pings?limit(1000)&sort(-time)'
+        + `&time>=${Date.now() - 48 * 3600 * 1000}`
+        + `&host=regex=%5E%28UP%7CHP%7CDELL%29-`;
+
+      request({method: 'GET', url, json: true}, (err, res, body) =>
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        if (body && Array.isArray(body.collection))
+        {
+          body.collection.forEach(client =>
+          {
+            if (!clientMap.has(client._id))
+            {
+              clientMap.set(client._id, {
+                ipAddress: client._id,
+                name: client.host,
+                app: client.headers['x-wmes-app'] || '',
+                line: client.headers['x-wmes-line'] || ''
+              });
+            }
+          });
+        }
+
+        next();
+      });
+    },
+    function(err)
+    {
+      if (err)
+      {
+        return this.skip(err);
+      }
+
+      const next = this.next();
+      const url = 'http://127.0.0.1/orderDocuments/clients?limit(1000)&disconnectedAt=null'
+        + `&_id=regex=%5E%28UP%7CHP%7CDELL%29-`;
+
+      request({method: 'GET', url, json: true}, (err, res, body) =>
+      {
+        if (err)
+        {
+          return next(err);
+        }
+
+        if (body && Array.isArray(body.collection))
+        {
+          body.collection.forEach(client =>
+          {
+            if (!clientMap.has(client.ipAddress))
+            {
+              client.set(client.ipAddress, {
+                ipAddress: client.ipAddress,
+                name: client._id.split('-', 2).join('-'),
+                app: 'docs',
+                line: client.prodLine
+              });
+            }
+          });
+        }
+
+        next();
+      });
+    },
+    function(err)
+    {
+      if (err)
+      {
+        return this.skip(err);
+      }
+
+      clientMap.forEach(client => remaining.push(client));
+    },
+    done
+  );
 }
