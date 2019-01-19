@@ -150,13 +150,20 @@ function updateNext(done)
 
   inProgress.add(client);
 
-  console.log(`${client.name.padEnd(16, ' ')} ${client.ipAddress.padEnd(15, ' ')} ${client.app.padEnd(10, ' ')} ${client.line.padEnd(10, ' ')} ...`);
+  const id = [
+    client.name.padEnd(16, ' '),
+    client.ipAddress.padEnd(15, ' '),
+    client.app.padEnd(10, ' '),
+    client.line.padEnd(10, ' ')
+  ].join(' ');
+
+  console.log(`${id} ...`);
 
   doUpdate(client.ipAddress, () =>
   {
     inProgress.delete(client);
 
-    console.log(`${client.host.padEnd(16, ' ')} ${client._id.padEnd(15, ' ')} ${client.app.padEnd(10, ' ')} ${client.line.padEnd(10, ' ')} ${(Date.now() - startedAt) / 1000}`);
+    console.log(`${id} ${(Date.now() - startedAt) / 1000}`);
 
     updateNext(done);
   });
@@ -237,11 +244,11 @@ function fetchClients(done)
           {
             if (!clientMap.has(client.ipAddress))
             {
-              client.set(client.ipAddress, {
+              clientMap.set(client.ipAddress, {
                 ipAddress: client.ipAddress,
                 name: client._id.split('-', 2).join('-'),
                 app: 'docs',
-                line: client.prodLine
+                line: client.prodLine || '?'
               });
             }
           });
@@ -261,7 +268,7 @@ function fetchClients(done)
 
       clientMap.forEach(client =>
       {
-        if (client.ipAddress === '127.0.0.1')
+        if (client.ipAddress !== '127.0.0.1')
         {
           remaining.push(client);
         }
