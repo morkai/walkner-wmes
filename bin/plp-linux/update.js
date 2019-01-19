@@ -4,6 +4,7 @@ const {exec} = require('child_process');
 const URL = require('url');
 const path = require('path');
 const net = require('net');
+const os = require('os');
 const request = require('request');
 const step = require('h5.step');
 
@@ -254,7 +255,15 @@ function fetchClients(done)
         return this.skip(err);
       }
 
-      clientMap.forEach(client => remaining.push(client));
+      Object.values(os.networkInterfaces()).forEach(iface => clientMap.delete(iface.address));
+
+      clientMap.forEach(client =>
+      {
+        if (client.ipAddress === '127.0.0.1')
+        {
+          remaining.push(client);
+        }
+      });
     },
     done
   );
