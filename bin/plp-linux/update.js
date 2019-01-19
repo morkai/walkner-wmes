@@ -96,7 +96,7 @@ step(
 
     const url = 'http://127.0.0.1/pings?limit(1000)&sort(-time)'
       + `&time>=${Date.now() - 8 * 3600 * 1000}`
-      + `&host=regex=${encodeURIComponent('^(UP|HP|DELL)-')}`;
+      + `&host=regex=%5E%28UP%7CHP%7CDELL%29-`;
 
     request({method: 'GET', url, json: true}, (err, res, body) =>
     {
