@@ -43,7 +43,7 @@ define([
       var view = this;
       var xhr = view.ajax({
         method: 'HEAD',
-        url: 'https://wmes.walkner.pl/ping'
+        url: 'https://test.wmes.pl/ping'
       });
 
       xhr.done(function()

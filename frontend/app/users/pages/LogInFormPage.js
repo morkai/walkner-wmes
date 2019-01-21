@@ -28,13 +28,15 @@ define([
 
     afterRender: function()
     {
-      if (window.location.origin === 'http://ket.wmes.pl')
+      var location = window.location;
+
+      if (location.protocol === 'http:')
       {
-        window.location.href = 'https://ket.wmes.pl/' + window.location.hash;
+        location.protocol = 'https:';
       }
-      else if (window.location.origin === 'http://ket.wmes.walkner.pl')
+      else if (location.hostname === 'ket.wmes.walkner.pl')
       {
-        window.location.href = 'https://ket.wmes.walkner.pl/' + window.location.hash;
+        location.hostname = 'ket.wmes.pl';
       }
     }
 
