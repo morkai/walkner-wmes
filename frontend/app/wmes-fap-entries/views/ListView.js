@@ -69,6 +69,7 @@ define([
         columns.push(
           {id: 'orderNo', className: 'is-min', tdClassName: 'text-mono'},
           {id: 'nc12', className: 'is-min', tdClassName: 'text-mono'},
+          {id: 'productName', className: 'is-min'},
           {id: 'mrp', className: 'is-min'}
         );
       }
