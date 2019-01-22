@@ -21,18 +21,6 @@
     <input id="<%- idPrefix %>-owner" name="owner" type="text" autocomplete="new-password">
   </div>
   <div class="form-group filter-actions">
-    <div class="btn-group">
-      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu">
-        <% ['today', 'yesterday', 'currentWeek', 'prevWeek', 'lastTwoWeeks', 'currentMonth', 'prevMonth', 'q1', 'q2', 'q3', 'q4'].forEach(function(range) { %>
-        <li><a data-range="<%- range %>"><%= t('reports', 'filter:submit:' + range) %></a></li>
-        <% }) %>
-        <li><a data-range="currentYear" data-interval="quarter"><%= t('reports', 'filter:submit:currentYear') %></a></li>
-        <li><a data-range="prevYear" data-interval="quarter"><%= t('reports', 'filter:submit:prevYear') %></a></li>
-      </ul>
-    </div>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>
   </div>
 </form>
