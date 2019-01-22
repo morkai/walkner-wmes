@@ -476,6 +476,8 @@ define([
           func.picklist = newValue;
           func.carts = [];
           func.problemArea = '';
+          func.comment = '';
+          func.finishedAt = null;
 
           switch (newValue)
           {
@@ -492,8 +494,6 @@ define([
             case 'ignore':
               func.status = 'finished';
               func.pickup = 'ignore';
-              func.carts = [];
-              func.problemArea = '';
               func.finishedAt = new Date();
 
               view.updateHandlers.finalizeOrder.call(view, newData);
@@ -519,6 +519,7 @@ define([
               func.pickup = 'pending';
               func.carts = [];
               func.problemArea = '';
+              func.comment = '';
               func.finishedAt = null;
 
               view.updateHandlers.finalizeOrder.call(view, newData);
@@ -560,6 +561,7 @@ define([
               .filter(function(v) { return !!v.length; })
               .map(function(v) { return +v; });
             func.problemArea = '';
+            func.comment = '';
             func.finishedAt = new Date();
 
             view.updateHandlers.finalizeOrder.call(view, newData);
