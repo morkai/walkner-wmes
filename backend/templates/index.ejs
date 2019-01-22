@@ -9,7 +9,13 @@
   <link rel="stylesheet" href="<%- mainCssFile %>">
 </head>
 <body class="is-loading">
-<div id="app-loading"><i class="fa fa-spinner fa-spin"></i></div>
+<div id="app-loading">
+  <div class="app-loading-spinner">
+    <div class="app-loading-bounce app-loading-bounce1"></div>
+    <div class="app-loading-bounce app-loading-bounce2"></div>
+    <div class="app-loading-bounce app-loading-bounce3"></div>
+  </div>
+</div>
 <div id="app-viewport"></div>
 <script>
 <% Object.keys(appData).forEach(function(key) { %>

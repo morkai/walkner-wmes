@@ -2,10 +2,10 @@
 @import url("../vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css");
 @import url("../vendor/font-awesome/css/font-awesome.css");
 @import url("../vendor/select2/select2.css");
+@import url("./select2.css");
 @import url("../vendor/datatables/media/css/jquery.dataTables.css");
 @import url("../vendor/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.css");
 @import url("../vendor/highlight/styles/monokai.css");
-@import url("./select2.css");
 @import url("../app/core/assets/main.css");
 @import url("../app/orgUnits/assets/main.css");
 @import url("../app/settings/assets/main.css");
@@ -68,18 +68,4 @@
 @import url("../app/help/assets/main.css");
 @import url("../app/wmes-toolcal-tools/assets/main.css");
 @import url("../app/wmes-fap-entries/assets/main.css");
-
-#app-loading {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -32px 0 0 -32px;
-  width: 64px;
-  height: 64px;
-  font-size: 64px;
-  text-align: center;
-  color: #0B5ED7;
-}
-#app-loading.error {
-  color: red;
-}
+@import url("./wmes-loading.css");

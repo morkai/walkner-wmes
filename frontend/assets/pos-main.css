@@ -8,21 +8,8 @@
 @import url("../app/users/assets/main.css");
 @import url("../app/purchaseOrders/assets/main.css");
 @import url("../app/updater/assets/main.css");
+@import url("./wmes-loading.css");
 
-#app-loading {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -32px 0 0 -32px;
-  width: 64px;
-  height: 64px;
-  font-size: 64px;
-  text-align: center;
-  color: #0B5ED7;
-}
-#app-loading.error {
-  color: red;
-}
 .navbar-default .navbar-brand,
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:active,
