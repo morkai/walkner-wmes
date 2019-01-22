@@ -7,9 +7,11 @@ define([
   'app/core/util/buttonGroup',
   'app/core/util/idAndLabel',
   'app/core/util/forms/dateTimeRange',
-  'app/users/util/setUpUserSelect2',
+  'app/mrpControllers/util/setUpMrpSelect2',
+  'app/data/orgUnits',
   '../dictionaries',
-  'app/wmes-fap-entries/templates/countReportFilter'
+  'app/wmes-fap-entries/templates/countReportFilter',
+  'app/core/util/ExpandableSelect'
 ], function(
   js2form,
   time,
@@ -17,7 +19,8 @@ define([
   buttonGroup,
   idAndLabel,
   dateTimeRange,
-  setUpUserSelect2,
+  setUpMrpSelect2,
+  orgUnits,
   dictionaries,
   template
 ) {
@@ -37,11 +40,18 @@ define([
       }
     },
 
+    destroy: function()
+    {
+      this.$('.is-expandable').expandableSelect('destroy');
+    },
+
     afterRender: function()
     {
       js2form(this.el, this.serializeFormData());
 
       buttonGroup.toggle(this.$id('interval'));
+
+      this.$('.is-expandable').expandableSelect();
 
       this.$id('categories').select2({
         width: '350px',
@@ -49,6 +59,21 @@ define([
         multiple: true,
         data: dictionaries.categories.map(idAndLabel)
       });
+
+      setUpMrpSelect2(this.$id('mrps'), {
+        own: true,
+        view: this,
+        width: '250px'
+      });
+    },
+
+    getTemplateData: function()
+    {
+      return {
+        divisions: orgUnits.getAllByType('division')
+          .filter(function(d) { return d.isActive() && d.get('type') === 'prod'; })
+          .map(idAndLabel)
+      };
     },
 
     serializeFormData: function()
@@ -61,24 +86,31 @@ define([
         interval: model.get('interval'),
         'from-date': from ? time.format(from, 'YYYY-MM-DD') : '',
         'to-date': to ? time.format(to, 'YYYY-MM-DD') : '',
-        categories: model.get('categories').join(',')
+        categories: model.get('categories').join(','),
+        mrps: model.get('mrps').join(','),
+        divisions: model.get('divisions').join(',')
       };
     },
 
     changeFilter: function()
     {
-      var range = dateTimeRange.serialize(this);
+      var view = this;
+      var range = dateTimeRange.serialize(view);
       var query = {
         from: range.from ? range.from.valueOf() : 0,
         to: range.to ? range.to.valueOf() : 0,
-        interval: buttonGroup.getValue(this.$id('interval')),
-        categories: this.$id('categories').val()
+        interval: buttonGroup.getValue(this.$id('interval'))
       };
 
-      query.categories = query.categories === '' ? [] : query.categories.split(',');
+      ['categories', 'mrps', 'divisions'].forEach(function(prop)
+      {
+        var value = view.$id(prop).val();
 
-      this.model.set(query);
-      this.model.trigger('filtered');
+        query[prop] = Array.isArray(value) ? value : value ? value.split(',') : [];
+      });
+
+      view.model.set(query);
+      view.model.trigger('filtered');
     }
 
   });

@@ -13,8 +13,20 @@
     </div>
   </div>
   <div class="form-group">
+    <label for="<%- idPrefix %>-mrps"><%- helpers.t('PROPERTY:mrp') %></label>
+    <input id="<%- idPrefix %>-mrps" name="mrps" type="text" autocomplete="new-password" data-placeholder=" ">
+  </div>
+  <div class="form-group">
     <label for="<%- idPrefix %>-categories"><%- helpers.t('PROPERTY:category') %></label>
     <input id="<%- idPrefix %>-categories" name="categories" type="text" autocomplete="new-password">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-divisions"><%- helpers.t('PROPERTY:divisions') %></label>
+    <select id="<%- idPrefix %>-divisions" name="divisions" class="form-control is-expandable" multiple size="1" data-expanded-length="10">
+      <% divisions.forEach(function(division) { %>
+      <option value="<%= division.id %>"><%= division.text %></option>
+      <% }) %>
+    </select>
   </div>
   <div class="form-group filter-actions">
     <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>

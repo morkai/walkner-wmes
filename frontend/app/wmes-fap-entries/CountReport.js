@@ -138,11 +138,17 @@ define([
           series: {
             entry: {
               data: [],
-              color: COLORS.entry
+              color: COLORS.entry,
+              tooltip: {
+                valueSuffix: 'h'
+              }
             },
             analysis: {
               data: [],
-              color: COLORS.analysis
+              color: COLORS.analysis,
+              tooltip: {
+                valueSuffix: 'h'
+              }
             }
           }
         }
@@ -282,7 +288,12 @@ define([
     {
       if (query.from === undefined && query.to === undefined)
       {
-        query.from = time.getMoment().startOf('month').subtract(3, 'months').valueOf();
+        query.from = time.getMoment().startOf('week').subtract(10, 'weeks').valueOf();
+      }
+
+      if (!query.interval)
+      {
+        query.interval = 'week';
       }
 
       return new this({

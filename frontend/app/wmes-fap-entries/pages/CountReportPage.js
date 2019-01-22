@@ -7,6 +7,7 @@ define([
   '../views/CountReportFilterView',
   '../views/CountPerUserChartView',
   '../views/TableAndChartView',
+  '../dictionaries',
   'app/wmes-fap-entries/templates/countReportPage'
 ], function(
   t,
@@ -15,6 +16,7 @@ define([
   CountReportFilterView,
   CountPerUserChartView,
   TableAndChartView,
+  dictionaries,
   template
 ) {
   'use strict';
@@ -54,9 +56,14 @@ define([
       this.listenTo(this.model, 'filtered', this.onFiltered);
     },
 
+    destroy: function()
+    {
+      dictionaries.unload();
+    },
+
     load: function(when)
     {
-      return when(this.model.fetch());
+      return when(dictionaries.load(), this.model.fetch());
     },
 
     getTemplateData: function()
@@ -64,6 +71,11 @@ define([
       return {
         metrics: CountReport.TABLE_AND_CHART_METRICS
       };
+    },
+
+    afterRender: function()
+    {
+      dictionaries.load();
     },
 
     onFiltered: function()
