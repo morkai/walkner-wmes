@@ -24,5 +24,6 @@ module.exports = {
   'opinionSurvey': require('../backend/node_modules/opinionSurveys/report'),
   'behaviorObsCards/count': require('../backend/node_modules/behaviorObsCards/countReport'),
   'minutesForSafetyCards/count': require('../backend/node_modules/minutesForSafetyCards/countReport'),
-  'paintShop/load': require('../backend/node_modules/paintShop/loadReport')
+  'paintShop/load': require('../backend/node_modules/paintShop/loadReport'),
+  'wmes-fap/count': require('../backend/node_modules/wmes-fap/reports/count')
 };

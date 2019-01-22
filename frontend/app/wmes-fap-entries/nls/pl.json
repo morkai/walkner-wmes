@@ -2,6 +2,7 @@
   "BREADCRUMBS:base": "FAP",
   "BREADCRUMBS:browse": "FAP",
   "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMBS:reports:count": "Ilości",
 
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:jump:title": "Skocz do zgłoszenia po ID",
@@ -12,7 +13,6 @@
   "PAGE_ACTION:markAsSeen": "Oznacz jako przeczytane",
   "PAGE_ACTION:subscribe": "Włącz powiadomienia",
   "PAGE_ACTION:unsubscribe": "Wyłącz powiadomienia",
-
 
   "markAsSeen:success": "{count, plural, =0{Wszystkie zgłoszenia przeczytane!} one{Oznaczono jedno zgłoszenie.} few{Oznaczono {count} zgłoszenia.} other{Oznaczono {count} zgłoszeń.}}",
   "markAsSeen:failure": "Oznaczanie zgłoszeń nie powiodło się.",
@@ -94,6 +94,7 @@
   "navbar:finished": "Zakończone",
   "navbar:analysis": "Analizowane",
   "navbar:mine": "Moje",
+  "navbar:reports:count": "Raport",
 
   "addForm:subdivisions": "Powiadomione działy",
   "addForm:submit": "Dodaj zgłoszenie",
@@ -130,5 +131,27 @@
   "notifications:added:title": "Nowy FAP: {rid} ({category})",
   "notifications:changed:title": "Zmieniony FAP: {rid}",
   "notifications:changed:placeholder": "Odpowiedź...",
-  "notifications:changed:reply": "Wyślij odpowiedź"
+  "notifications:changed:reply": "Wyślij odpowiedź",
+
+  "report:title:count": "Ilość zgłoszeń",
+  "report:title:duration": "Średni czas trwania zgłoszeń [h]",
+  "report:title:owner": "Ilość zgłoszeń wg osób zgłaszających",
+  "report:title:solver": "Ilość zgłoszeń wg osób rozwiązujących",
+  "report:title:status": "Ilość zgłoszeń wg statusów",
+  "report:title:category": "Ilość zgłoszeń wg kategorii",
+  "report:title:division": "Ilość zgłoszeń wg wydziałów",
+  "report:title:mrp": "Ilość zgłoszeń wg MRP",
+  "report:title:assessment": "Ilość zgłoszeń wg oceny kroków gaszących",
+  "report:series:entry": "Zgłoszenia",
+  "report:series:analysis": "Analizy",
+  "report:series:total": "Suma",
+  "report:filenames:count": "FAP_Ilosc",
+  "report:filenames:duration": "FAP_CzasTrwania",
+  "report:filenames:owner": "FAP_IloscWgZglaszajacych",
+  "report:filenames:solver": "FAP_IloscWgRozwiazujacych",
+  "report:filenames:status": "FAP_IloscWgStatusow",
+  "report:filenames:category": "FAP_IloscWgKategorii",
+  "report:filenames:division": "FAP_IloscWgWydzialow",
+  "report:filenames:mrp": "FAP_IloscWgMRP",
+  "report:filenames:assessment": "FAP_IloscWgOceny"
 }

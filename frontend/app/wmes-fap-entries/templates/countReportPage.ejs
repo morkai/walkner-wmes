@@ -1,0 +1,7 @@
+<div class="fap-report">
+  <div id="<%- idPrefix %>-filter" class="filter-container"></div>
+  <% metrics.forEach(function(metric) { %>
+  <h3><%- helpers.t('report:title:' + metric) %></h3>
+  <div id="<%- idPrefix %>-<%- metric %>" class="fap-report-<%- metric %>"></div>
+  <% }) %>
+</div>

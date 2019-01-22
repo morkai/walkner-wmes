@@ -1,0 +1,22 @@
+<form class="well filter-form fap-report-filter">
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix
+  }) %>
+  <div class="form-group">
+    <label><%- t('reports', 'filter:interval') %></label>
+    <div id="<%- idPrefix %>-interval" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% ['year', 'quarter', 'month', 'week', 'day'].forEach(function(interval) { %>
+      <label class="btn btn-default" title="<%- t('reports', 'filter:interval:title:' + interval) %>" data-interval="<%- interval %>">
+        <input type="radio" name="interval" value="<%- interval %>"> <%- t('reports', 'filter:interval:' + interval) %>
+      </label>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-categories"><%- helpers.t('PROPERTY:category') %></label>
+    <input id="<%- idPrefix %>-categories" name="categories" type="text" autocomplete="new-password">
+  </div>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>
+  </div>
+</form>

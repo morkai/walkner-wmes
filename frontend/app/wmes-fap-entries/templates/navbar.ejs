@@ -7,6 +7,7 @@
         <% browseEntriesLinks.forEach(function(link) { %>
         <li class="navbar-with-button"><a href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)<%- link.rql %>"><%- helpers.t('navbar:' + link.label) %></a><button class="btn btn-default" data-href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)&observers.user.id=<%- user.data._id %><%- link.rql %>" title="<%- helpers.t('navbar:mine') %>"><i class="fa fa-user"></i></button></li>
         <% }) %>
+        <li><a href="#fap/reports/count"><%- helpers.t('navbar:reports:count') %></a>
         <% if (user.isAllowedTo('FAP:MANAGE')) { %>
         <li class="divider"></li>
         <li class="dropdown-header"><%- helpers.t('navbar:dictionaries') %>

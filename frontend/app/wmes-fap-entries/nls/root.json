@@ -3,6 +3,7 @@
     "BREADCRUMBS:base": "FAP",
     "BREADCRUMBS:browse": "FAP",
     "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMBS:reports:count": "Count report",
 
     "PAGE_ACTION:settings": "Settings",
     "PAGE_ACTION:jump:title": "Jump to entry by ID",
@@ -91,6 +92,7 @@
     "navbar:finished": "Finished",
     "navbar:analysis": "Analyzed",
     "navbar:mine": "Mine",
+    "navbar:reports:count": "Report",
 
     "addForm:subdivisions": "Notified subdivisions",
     "addForm:submit": "Add entry",
@@ -125,7 +127,29 @@
     "notifications:added:title": "New FAP entry: {rid} ({category})",
     "notifications:changed:title": "Changed FAP: {rid}",
     "notifications:changed:placeholder": "Reply...",
-    "notifications:changed:reply": "Send reply"
+    "notifications:changed:reply": "Send reply",
+
+    "report:title:count": "Entry count",
+    "report:title:duration": "Average entry duration [h]",
+    "report:title:owner": "Entry count by owners",
+    "report:title:solver": "Entry count by solvers",
+    "report:title:status": "Entry count by statuses",
+    "report:title:category": "Entry count by categories",
+    "report:title:division": "Entry count by divisions",
+    "report:title:mrp": "Entry count by MRP",
+    "report:title:assessment": "Entry count by assessment",
+    "report:series:entry": "Entry",
+    "report:series:analysis": "Analysis",
+    "report:series:total": "Total",
+    "report:filenames:count": "FAP_Count",
+    "report:filenames:duration": "FAP_Duration",
+    "report:filenames:owner": "FAP_CountByOwners",
+    "report:filenames:solver": "FAP_CountBySolvers",
+    "report:filenames:status": "FAP_CountByStatuses",
+    "report:filenames:category": "FAP_CountByCategories",
+    "report:filenames:division": "FAP_CountByDivisions",
+    "report:filenames:mrp": "FAP_CountByMRP",
+    "report:filenames:assessment": "FAP_CountByAssessment"
   },
   "pl": true
 }

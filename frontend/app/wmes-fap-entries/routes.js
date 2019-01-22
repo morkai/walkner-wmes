@@ -79,4 +79,21 @@ define([
       });
     });
   });
+
+  router.map('/fap/reports/count', canView, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/wmes-fap-entries/CountReport',
+        'app/wmes-fap-entries/pages/CountReportPage',
+        'i18n!app/nls/reports'
+      ],
+      function(CountReport, CountReportPage)
+      {
+        return new CountReportPage({
+          model: CountReport.fromQuery(req.query)
+        });
+      }
+    );
+  });
 });
