@@ -28,6 +28,7 @@
   "PROPERTY:createdAt": "Czas zgłoszenia",
   "PROPERTY:owner": "Zgłaszający",
   "PROPERTY:status": "Status",
+  "PROPERTY:order": "Zlecenie/12NC",
   "PROPERTY:orderNo": "Nr zlecenia",
   "PROPERTY:nc12": "12NC",
   "PROPERTY:mrp": "MRP",
@@ -51,6 +52,8 @@
   "PROPERTY:why": "Dlaczego?",
   "PROPERTY:solution": "Opis rozwiązania problemu",
   "PROPERTY:solutionSteps": "Opis kroków rozwiązujących problem",
+  "PROPERTY:limit": "Limit",
+  "PROPERTY:search": "Tekst",
 
   "status:pending": "Oczekujące",
   "status:started": "Rozpoczęte",
@@ -73,7 +76,6 @@
   "filter:user:others": "Użytkownik",
   "filter:status:specific": "Status",
   "filter:status:analysis": "Analiza",
-  "filter:order": "Zlecenie/12NC",
   "filter:submit": "Filtruj",
 
   "history:added": "<i>Utworzono zgłoszenie o {time} {day, select, =7{w niedzielę} =6{w sobotę} =3{w środę} =2{we wtorek} other{w {ddd}}}, {date}.</i>",

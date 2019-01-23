@@ -1,74 +1,35 @@
-<h1>v0.130.0</h1>
-<h2><%- time.format('2019-01-13', 'LL') %></h2>
+<h1>v?.?.?</h1>
+<h2><%- time.format(Date.now(), 'LL') %></h2>
 <h3>FAP</h3>
 <ul>
-  <li>Poprawiono błąd mogący spowodować niewyświetlanie się nazwy kategorii, jeżeli użytkownik wszedł bezpośrednio
-    na stronę szczegółów zgłoszenia.</li>
-  <li>Zmieniono chat tak, aby nie wyświetlał imienia i nazwiska bez żadnych linii (np. w przypadku usunięcia
-    załączników).</li>
-  <li>Zmieniono czat tak, aby odnośniki podane w wiadomości były automatycznie zamieniane na klikalną wersję.</li>
-  <li>Zmieniono 'Opis rozwiązania problemu' tak, aby był podświetlany na zielono, jeżeli podano jakąś wartość.</li>
-  <li>Zmieniono uprawnienia niezalogowanych użytkowników tak, aby nie mogli już wysyłać wiadomości, dodawać
-    uczestników oraz załączników.</li>
-  <li>Zmieniono uprawnienia tak, aby użytkownicy z funkcją 'Konstruktor FD' lub 'Konstruktor ETO' mieli możliwość
-    zmiany pól: Status, Kategoria, Problem i Rozwiązanie.</li>
-  <li>Zmieniono uprawnienia tak, aby użytkownicy z funkcją 'Inżynier procesu ds. nowych wdrożeń' mieli takie same
-    uprawnienia jak 'Inżynier procesu'.</li>
-  <li>Dodano do wiadomości 'Zakończono zgłoszenie' czas trwania zgłoszenia.</li>
-  <li>Dodano do czatu automatyczne wyświetlanie wiadomości 'Analiza rozpoczęta' oraz 'Analiza zakończona'.</li>
-  <li>Dodano do czatu autouzupełnianie imienia i nazwiska użytkownika po wciśnięciu klawisza <kbd>TAB</kbd>.</li>
-  <li>Dodano oznaczanie nieprzeczytanych zmian w zgłoszeniach.</li>
-  <li>Dodano powiadamianie o nowych wiadomościach w obserwowanych zgłoszeniach.</li>
-</ul>
-<h3>Użytkownicy</h3>
-<ul>
-  <li>Dodano nową opcję do kont użytkowników: Powiadamianie SMS o każdym nowym zgłoszeniu FAP (a nie tylko podczas
-    dyżuru).</li>
-</ul>
-<h3>Zlecenia produkcyjne</h3>
-<ul>
-  <li>Dodano listę zgłoszeń FAP do strony ze szczegółami zlecenia.</li>
-</ul>
-<h3>Planowanie</h3>
-<ul>
-  <li>Poprawiono błąd, który powodował wyświetlanie wszystkich nowych zleceń dodanych podczas przeliczania planu jako
-    'Niekompletne'.</li>
-  <li>Zmieniono ustawienie 'Ilość pracowników' tak, aby można było zdefiniować różną ilość dla każdej zmiany
-    produkcyjnej.</li>
-  <li>Zmieniono wyświetlanie listy linii tak, aby wyświetlane były w kolejności alfabetycznej, a nie kolejności
-    zdefiniowania.</li>
-</ul>
-<h3>Matryca odpowiedzialności</h3>
-<ul>
-  <li>Poprawiono błąd powodujący wywalenie się serwera, jeżeli usunięto Użytkownika, który występował w Matrycy.</li>
-</ul>
-<h3>Raporty</h3>
-<ul>
-  <li>Zmieniono etykiety osi x we wszystkich wykresach czasowych tak, aby były zależne od wybranego Podziału czasu.</li>
+  <li>Poprawiono błąd powodujący nieprawidłowe ustawianie filtra 'MRP' po wejściu na listę zgłoszeń
+    z filtrem 'Kategoria'.</li>
+  <li>Poprawiono błąd powodujący niedziałanie automatycznego dodawania uczestników do nowego zgłoszenia.</li>
+  <li>Poprawiono błąd powodujący dodawanie do zgłoszenia plików załadowanych do modułu Dokumentów, jeżeli wcześniej
+    użytkownik odwiedził stronę ze szczegółami zgłoszenia FAP.</li>
+  <li>Dodano filtr 'Wydział' do listy zgłoszeń.</li>
+  <li>Dodano filtr 'Tekst' do listy zgłoszeń przeszukujący: Problem, Rozwiązanie, Dlaczego?, Opis kroków
+    oraz czat.</li>
+  <li>Dodano do listy kolumnę 'Nazwa produktu'.</li>
+  <li>Dodano raport.</li>
 </ul>
 <h3>Raporty > CLIP</h3>
 <ul>
-  <li>Dodano wyświetlanie ID zgłoszeń FAP na liście zleceń.</li>
+  <li>Dodano wyświetlanie 'Opóźnionego komponentu' w kolumnie 'Powód opóźnienia' na liście zleceń.</li>
 </ul>
-<h3>Raporty > Przestoje w obszarach</h3>
+<h3>Formatka operatora</h3>
 <ul>
-  <li>Poprawiono błąd uniemożliwiający wyeksportowanie przestojów.</li>
+  <li>Usunięto przycisk umożliwiający przejście do Pulpitu.</li>
 </ul>
-<h3>Malarnia</h3>
+<h3>Baza testów</h3>
 <ul>
-  <li>Poprawiono błąd uniemożliwiający wyeksportowanie zleceń.</li>
-</ul>
-<h3>Magazyn</h3>
-<ul>
-  <li>Poprawiono błąd uniemożliwiający wyeksportowanie zleceń.</li>
-</ul>
-<h3>Kanban</h3>
-<ul>
-  <li>Poprawiono błąd uniemożliwiający wyeksportowanie tabeli.</li>
+  <li>Poprawiono błąd powodujący wyświetlanie adresów IP klientów jako <code>127.0.0.1</code>.</li>
 </ul>
 <h3>Inne</h3>
 <ul>
-  <li>Zmieniono akcje 'Skocz do ... po ID' tak, aby pole nie było automatycznie zaznaczane na
-    urządzeniach mobilnych.</li>
-  <li>Zmieniono 'okruszki' prowadzące z powrotem do listy tak, aby miały ustawiony ostatnio wybrany filtr.</li>
+  <li>Poprawiono błąd uniemożliwiający 'przyklejenie' dymka z informacjami o użytkowniku po kliknięciu
+    na nazwę użytkownika.</li>
+  <li>Dodano do aplikacji uruchomionych w trybie wsadowym akcje resetowania przeglądarki, ponownego uruchomienia
+    oraz uruchomienia przeglądarki bez trybu kioskowego. Akcje dostępne po trzykrotnym kliknięciu na przycisk
+    menu akcji.</li>
 </ul>

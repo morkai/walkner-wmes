@@ -27,6 +27,7 @@
     "PROPERTY:createdAt": "Created at",
     "PROPERTY:owner": "Owner",
     "PROPERTY:status": "Status",
+    "PROPERTY:order": "Order/12NC",
     "PROPERTY:orderNo": "Order no",
     "PROPERTY:nc12": "12NC",
     "PROPERTY:mrp": "MRP",
@@ -49,6 +50,8 @@
     "PROPERTY:why": "Why?",
     "PROPERTY:solution": "Solution",
     "PROPERTY:solutionSteps": "Solution steps",
+    "PROPERTY:limit": "Limit",
+    "PROPERTY:search": "Text",
 
     "status:pending": "Pending",
     "status:started": "Started",
@@ -71,7 +74,6 @@
     "filter:user:others": "User",
     "filter:status:specific": "Status",
     "filter:status:analysis": "Analysis",
-    "filter:order": "Order/12NC",
     "filter:submit": "Filter",
 
     "history:added": "<i>Entry created at {time} on {ddd}, {date}.</i>",

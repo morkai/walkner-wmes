@@ -193,6 +193,7 @@ define([
       idPrefix: options.idPrefix || 'v',
       property: options.property || 'date',
       formGroup: options.formGroup !== false,
+      hidden: options.hidden === true,
       utc: options.utc ? 1 : 0,
       setTime: options.setTime !== false ? 1 : 0,
       type: type,

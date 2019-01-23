@@ -1,5 +1,5 @@
 <% if (formGroup) { %>
-<div class="form-group">
+<div class="form-group <%- hidden ? 'hidden' : '' %>" data-filter="<%- property %>">
 <% } %>
 <div id="<%- idPrefix %>-dateTimeRange-<%- property %>" class="dateTimeRange" data-property="<%- property %>" data-utc="<%- utc %>" data-set-time="<%- setTime %>" data-type="<%- type %>" data-start-hour="<%- startHour %>" data-shift-length="<%- shiftLength %>">
   <div class="dateTimeRange-labels">

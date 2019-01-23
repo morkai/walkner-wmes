@@ -28,6 +28,19 @@ define([
 ) {
   'use strict';
 
+  var FILTER_LIST = [
+    'createdAt',
+    'order',
+    'mrp',
+    'category',
+    'divisions',
+    'limit'
+  ];
+  var FILTER_MAP = {
+    orderNo: 'order',
+    nc12: 'order'
+  };
+
   return FilterView.extend({
 
     template: template,
@@ -36,7 +49,14 @@ define([
 
       'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'change input[name="userType"]': function() { this.toggleUserSelect2(true); },
-      'change input[name="statusType"]': 'toggleStatus'
+      'change input[name="statusType"]': 'toggleStatus',
+
+      'click a[data-filter]': function(e)
+      {
+        e.preventDefault();
+
+        this.showFilter(e.currentTarget.dataset.filter);
+      }
 
     }, FilterView.prototype.events),
 
@@ -53,6 +73,10 @@ define([
       'orderNo': function(propertyName, term, formData)
       {
         formData.order = term.args[1];
+      },
+      'search': function(propertyName, term, formData)
+      {
+        formData.search = term.args[1];
       },
       'nc12': 'orderNo',
       'observers.user.id': function(propertyName, term, formData)
@@ -80,7 +104,7 @@ define([
       'divisions': 'status',
       'mrp': function(propertyName, term, formData)
       {
-        formData.mrp = Array.isArray(term.args[1]) ? term.args[1].join(',') : '';
+        formData[propertyName] = Array.isArray(term.args[1]) ? term.args[1].join(',') : '';
       },
       'category': 'mrp',
       'analysisNeed': function(propertyName, term, formData)
@@ -96,6 +120,7 @@ define([
     serialize: function()
     {
       return _.assign(FilterView.prototype.serialize.call(this), {
+        filters: FILTER_LIST,
         statuses: ['pending', 'started', 'finished'],
         divisions: orgUnits.getAllByType('division')
           .filter(function(d) { return d.isActive() && d.get('type') === 'prod'; })
@@ -113,6 +138,7 @@ define([
       var order = this.$id('order').val().trim();
       var mrp = this.$id('mrp').val();
       var category = this.$id('category').val();
+      var search = this.$id('search').val().trim();
 
       dateTimeRange.formToRql(this, selector);
 
@@ -164,11 +190,18 @@ define([
       {
         selector.push({name: 'in', args: ['divisions', divisions]});
       }
+
+      if (search.length)
+      {
+        selector.push({name: 'eq', args: ['search', search]});
+      }
     },
 
     afterRender: function()
     {
       FilterView.prototype.afterRender.call(this);
+
+      this.$id('limit').parent().attr('data-filter', 'limit');
 
       this.$('.is-expandable').expandableSelect();
 
@@ -192,6 +225,7 @@ define([
 
       this.toggleUserSelect2(false);
       this.toggleStatus();
+      this.toggleFilters();
     },
 
     destroy: function()
@@ -217,6 +251,42 @@ define([
       var statusType = this.$('input[name="statusType"]:checked').val();
 
       this.$id('status').prop('disabled', statusType !== 'specific');
+    },
+
+    toggleFilters: function()
+    {
+      var view = this;
+
+      FILTER_LIST.forEach(function(filter)
+      {
+        view.$('.form-group[data-filter="' + filter + '"]').toggleClass(
+          'hidden', filter === 'limit' || !view.filterHasValue(filter)
+        );
+      });
+    },
+
+    filterHasValue: function(filter)
+    {
+      if (filter === 'createdAt')
+      {
+        var $from = this.$id('from-date');
+        var $to = this.$id('to-date');
+
+        return $from.val().length > 0 || $to.val().length > 0;
+      }
+
+      var value = this.$id(filter).val() || '';
+
+      return value.length > 0;
+    },
+
+    showFilter: function(filter)
+    {
+      this.$('.form-group[data-filter="' + (FILTER_MAP[filter] || filter) + '"]')
+        .removeClass('hidden')
+        .find('input, select')
+        .first()
+        .focus();
     }
 
   });
