@@ -16,7 +16,7 @@ define([
 
     if (more)
     {
-      _.extend(result, more);
+      _.assign(result, more);
     }
 
     return result;

@@ -7,6 +7,7 @@ define([
   'app/core/views/FilterView',
   'app/core/util/forms/dateTimeRange',
   'app/core/util/idAndLabel',
+  'app/data/orgUnits',
   'app/users/util/setUpUserSelect2',
   'app/mrpControllers/util/setUpMrpSelect2',
   '../dictionaries',
@@ -19,6 +20,7 @@ define([
   FilterView,
   dateTimeRange,
   idAndLabel,
+  orgUnits,
   setUpUserSelect2,
   setUpMrpSelect2,
   dictionaries,
@@ -75,6 +77,7 @@ define([
       {
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
       },
+      'divisions': 'status',
       'mrp': function(propertyName, term, formData)
       {
         formData.mrp = Array.isArray(term.args[1]) ? term.args[1].join(',') : '';
@@ -93,7 +96,10 @@ define([
     serialize: function()
     {
       return _.assign(FilterView.prototype.serialize.call(this), {
-        statuses: ['pending', 'started', 'finished']
+        statuses: ['pending', 'started', 'finished'],
+        divisions: orgUnits.getAllByType('division')
+          .filter(function(d) { return d.isActive() && d.get('type') === 'prod'; })
+          .map(idAndLabel)
       });
     },
 
@@ -102,6 +108,7 @@ define([
       var userType = this.$('input[name="userType"]:checked').val();
       var statusType = this.$('input[name="statusType"]:checked').val();
       var status = (this.$id('status').val() || []).filter(function(v) { return !_.isEmpty(v); });
+      var divisions = (this.$id('divisions').val() || []).filter(function(v) { return !_.isEmpty(v); });
       var user = this.$id('user').val();
       var order = this.$id('order').val().trim();
       var mrp = this.$id('mrp').val();
@@ -151,6 +158,11 @@ define([
       if (category && category.length)
       {
         selector.push({name: 'in', args: ['category', category.split(',')]});
+      }
+
+      if (divisions.length)
+      {
+        selector.push({name: 'in', args: ['divisions', divisions]});
       }
     },
 
