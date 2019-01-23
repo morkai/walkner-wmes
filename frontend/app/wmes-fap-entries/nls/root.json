@@ -120,6 +120,7 @@
     "observers:placeholder": "Add by last name or personnel ID...",
     "observers:placeholder:auth": "Log in to add a new participant...",
 
+    "attachments:upload": "Add attachments",
     "attachments:menu:rename": "Change name",
     "attachments:menu:remove": "Remove file",
 

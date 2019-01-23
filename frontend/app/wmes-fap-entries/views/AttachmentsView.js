@@ -86,6 +86,17 @@ define([
         contextMenu.show(this, e.pageY, e.pageX, menu);
 
         return false;
+      },
+      'click #-upload': function()
+      {
+        this.$id('files').click();
+      },
+      'change #-files': function(e)
+      {
+        if (e.target.files.length)
+        {
+          this.upload(e.target.files);
+        }
       }
 
     },
@@ -291,7 +302,7 @@ define([
     {
       if (e.originalEvent.clipboardData.files.length)
       {
-        this.upload(e.originalEvent.clipboardData, true);
+        this.upload(e.originalEvent.clipboardData.files, true);
       }
     },
 
@@ -303,12 +314,12 @@ define([
 
     onDrop: function(e)
     {
-      this.upload(e.originalEvent.dataTransfer, false);
+      this.upload(e.originalEvent.dataTransfer.files, false);
 
       return false;
     },
 
-    upload: function(dataTransfer, fromClipboard)
+    upload: function(fileList, fromClipboard)
     {
       var view = this;
 
@@ -346,7 +357,7 @@ define([
         attachments[u.name + u.file.size] = true;
       });
 
-      var files = Array.prototype.slice.call(dataTransfer.files).filter(function(file)
+      var files = Array.prototype.slice.call(fileList).filter(function(file)
       {
         var exists = attachments[file.name + file.size];
 

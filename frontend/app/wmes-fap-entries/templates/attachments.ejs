@@ -1,5 +1,9 @@
 <div class="fap-attachments fap-details-panel">
-  <div class="fap-details-panel-hd"><%- helpers.t('PROPERTY:attachments') %></div>
+  <div class="fap-details-panel-hd">
+    <%- helpers.t('PROPERTY:attachments') %>
+    <button id="<%- idPrefix %>-upload" type="button" class="btn btn-link" title="<%- helpers.t('attachments:upload') %>"><i class="fa fa-upload"></i></button>
+    <input id="<%- idPrefix %>-files" type="file" multiple tabindex="-1">
+  </div>
   <div id="<%- idPrefix %>-attachments" class="fap-details-panel-bd fap-details-list">
     <div style="border-top: 1px solid #ddd">&nbsp;</div>
   </div>

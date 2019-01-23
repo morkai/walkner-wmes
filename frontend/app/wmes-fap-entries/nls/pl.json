@@ -124,6 +124,7 @@
   "observers:placeholder": "Dodaj po nazwisku lub nr kadrowym...",
   "observers:placeholder:auth": "Zaloguj się, aby dodać nową osobę...",
 
+  "attachments:upload": "Dodaj załączniki",
   "attachments:menu:rename": "Zmień nazwę",
   "attachments:menu:remove": "Usuń plik",
 
