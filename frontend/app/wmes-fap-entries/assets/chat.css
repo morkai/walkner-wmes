@@ -45,7 +45,7 @@
   line-height: 1.5;
 }
 .fap-chat-message + .fap-chat-message {
-  margin-top: 12px;
+  margin-top: 15px;
 }
 .fap-chat-lines {
   display: inline-block;
@@ -58,10 +58,10 @@
 .fap-is-self .fap-chat-lines {
   border-top: none;
 }
-.fap-chat-message:nth-child(even) {
+.fap-is-self.fap-chat-message {
   text-align: right;
 }
-.fap-chat-message:nth-child(even) .fap-chat-lines {
+.fap-is-self.fap-chat-message .fap-chat-lines {
   background: #cfd8dc;
   border-top-left-radius: 5px;
   border-top-right-radius: 0;
