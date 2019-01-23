@@ -131,6 +131,8 @@ define([
     {
       this.$('.fap-details-panel-bd').on('scroll', this.hideEditor.bind(this));
 
+      this.$id('upload').toggleClass('hidden', !this.model.serializeDetails().auth.attachments);
+
       this.setUpDnd();
       this.renderAttachments();
     },
