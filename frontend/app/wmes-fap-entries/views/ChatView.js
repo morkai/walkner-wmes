@@ -173,6 +173,11 @@ define([
 
     handleChange: function(change)
     {
+      if (change.data.attachments && !change.data.attachments[1])
+      {
+        this.removeAttachments(change.data.attachments[0]);
+      }
+
       var message = this.model.serializeChatMessage(change);
 
       if (!message.lines.length)
@@ -209,6 +214,16 @@ define([
       {
         this.$id('new').removeClass('hidden');
       }
+    },
+
+    removeAttachments: function(attachments)
+    {
+      var view = this;
+
+      attachments.forEach(function(a)
+      {
+        view.$('.fap-chat-attachment[data-attachment-id="' + a._id + '"]').css('text-decoration', 'line-through');
+      });
     },
 
     showUserAutocomplete: function()
