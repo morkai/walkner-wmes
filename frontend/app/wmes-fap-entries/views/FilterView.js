@@ -38,7 +38,9 @@ define([
   ];
   var FILTER_MAP = {
     orderNo: 'order',
-    nc12: 'order'
+    nc12: 'order',
+    productName: 'search',
+    problem: 'search'
   };
 
   return FilterView.extend({

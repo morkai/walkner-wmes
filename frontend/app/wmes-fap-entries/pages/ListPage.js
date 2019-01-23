@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   'app/i18n',
   'app/viewport',
   'app/notifications',
@@ -11,6 +12,7 @@ define([
   '../views/ListView',
   'app/wmes-fap-entries/templates/markAsSeenAction'
 ], function(
+  $,
   t,
   viewport,
   notifications,
@@ -49,6 +51,23 @@ define([
           href: '#fap/settings'
         }
       ];
+    },
+
+    defineViews: function()
+    {
+      FilteredListPage.prototype.defineViews.apply(this, arguments);
+
+      this.listenTo(this.listView, 'showFilter', function(filter)
+      {
+        if (filter === 'rid')
+        {
+          $('.page-actions-jump').find('input[name="phrase"]').focus();
+        }
+        else
+        {
+          this.filterView.showFilter(filter);
+        }
+      });
     },
 
     load: function(when)

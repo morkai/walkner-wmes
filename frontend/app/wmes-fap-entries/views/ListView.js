@@ -60,26 +60,36 @@ define([
       }
     },
 
+    events: _.assign({
+
+      'click .is-filter': function(e)
+      {
+        this.trigger('showFilter', e.currentTarget.dataset.columnId);
+      }
+
+    }, ListView.prototype.events),
+
     serializeColumns: function()
     {
-      var columns = [{id: 'rid', className: 'is-min is-number'}];
+      var filter = this.options.orderDetails ? '' : 'is-filter';
+      var columns = [{id: 'rid', className: 'is-min is-number', thClassName: filter}];
 
       if (!this.options.orderDetails)
       {
         columns.push(
-          {id: 'orderNo', className: 'is-min', tdClassName: 'text-mono'},
-          {id: 'nc12', className: 'is-min', tdClassName: 'text-mono'},
-          {id: 'productName', className: 'is-min'},
-          {id: 'mrp', className: 'is-min'}
+          {id: 'orderNo', className: 'is-min', tdClassName: 'text-mono', thClassName: filter},
+          {id: 'nc12', className: 'is-min', tdClassName: 'text-mono', thClassName: filter},
+          {id: 'productName', className: 'is-min', thClassName: filter},
+          {id: 'mrp', className: 'is-min', thClassName: filter}
         );
       }
 
       columns.push(
-        {id: 'category', className: 'is-min'},
-        {id: 'createdAt', className: 'is-min'},
-        {id: 'divisions', className: 'is-min'},
+        {id: 'category', className: 'is-min', thClassName: filter},
+        {id: 'createdAt', className: 'is-min', thClassName: filter},
+        {id: 'divisions', className: 'is-min', thClassName: filter},
         {id: 'lines', className: 'is-min'},
-        {id: 'problem', className: 'is-min'},
+        {id: 'problem', className: 'is-min', thClassName: filter},
         '-'
       );
 
