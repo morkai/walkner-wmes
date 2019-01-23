@@ -38,6 +38,7 @@ define([
   var containerTemplate = null;
   var showTimer = null;
   var lastUserId = null;
+  var hideOnLeave = true;
 
   function setUpPubsub()
   {
@@ -88,12 +89,12 @@ define([
 
       if (lastUserId === userId)
       {
-        showPopover(userInfoEl, userId);
+        showPopover(userInfoEl, userId, true);
       }
     });
   }
 
-  function showPopover(userInfoEl, userId)
+  function showPopover(userInfoEl, userId, showNow)
   {
     if ($popover && $popover[0] === userInfoEl)
     {
@@ -104,7 +105,6 @@ define([
 
     lastUserId = userId;
 
-    var hideOnLeave = true;
     var user = users[userId];
     var prodFunction = prodFunctions.get(user.prodFunction);
     var company = companies.get(user.company);
@@ -164,23 +164,16 @@ define([
       return false;
     });
 
-    $popover.on('mouseleave.userInfoPopover', function()
-    {
-      if (showTimer)
-      {
-        clearTimeout(showTimer);
-        showTimer = null;
-      }
-
-      if (hideOnLeave)
-      {
-        hidePopover();
-      }
-    });
-
     if (showTimer)
     {
       clearTimeout(showTimer);
+    }
+
+    if (showNow)
+    {
+      $popover.popover('show');
+
+      return;
     }
 
     showTimer = setTimeout(function()
@@ -195,6 +188,7 @@ define([
   function hidePopover()
   {
     lastUserId = null;
+    hideOnLeave = true;
 
     if (showTimer)
     {
@@ -248,24 +242,23 @@ define([
     };
   }
 
-  $(document.body).on('click', function(e)
-  {
-    if (!$popover)
-    {
-      return;
-    }
-
-    if ($(e.target).closest('.popover').length)
-    {
-      setTimeout(hidePopover, 1);
-
-      return;
-    }
-
-    hidePopover();
-  });
-
   $(document.body)
+    .on('click', function(e)
+    {
+      if (!$popover)
+      {
+        return;
+      }
+
+      if ($(e.target).closest('.popover').length)
+      {
+        setTimeout(hidePopover, 1);
+
+        return;
+      }
+
+      hidePopover();
+    })
     .on('mouseenter', '.userInfo-label', function(e)
     {
       var userInfoEl = e.currentTarget.parentNode;
@@ -288,8 +281,22 @@ define([
         loadPopover(userInfoEl, userId);
       }
     })
-    .on('mouseleave', '.userInfo-label', function()
+    .on('mouseleave', '.userInfo-label', function(e)
     {
+      if (hideOnLeave)
+      {
+        hidePopover();
+
+        return;
+      }
+
+      if (e.currentTarget.parentNode.dataset.userId === lastUserId)
+      {
+        return;
+      }
+
+      hideOnLeave = true;
+
       hidePopover();
     });
 });
