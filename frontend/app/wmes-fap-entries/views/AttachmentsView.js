@@ -402,7 +402,7 @@ define([
           name: file.name,
           file: file,
           src: file.type.indexOf('image/') === 0 ? URL.createObjectURL(file) : null,
-          rename: fromClipboard && files.length === 1 && file.type === 'image/png'
+          rename: fromClipboard && files.length === 1 && file.type.indexOf('image/') === 0
         });
 
         view.renderAttachment(view.model.serializeAttachment(_.last(entry.uploadQueue)), false).insertBefore($last);
