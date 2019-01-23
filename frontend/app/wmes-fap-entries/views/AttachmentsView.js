@@ -105,13 +105,14 @@ define([
       view.listenTo(entry, 'focusAttachment', view.focusAttachment);
       view.listenTo(entry, 'change:attachments', _.debounce(view.renderAttachments.bind(view), 1));
 
-      $(window).on('keydown.' + view.idPrefix, view.onKeyDown.bind(view));
+      $(window)
+        .on('keydown.' + view.idPrefix, view.onKeyDown.bind(view))
+        .on('paste.' + view.idPrefix, view.onPaste.bind(view));
     },
 
     destroy: function()
     {
       $(document.body).off('.' + this.idPrefix);
-
       $(window).off('.' + this.idPrefix);
     },
 
@@ -163,6 +164,12 @@ define([
       {
         view.renderAttachment(attachment, false).insertBefore($last);
       });
+
+      if (view.attachmentToRename)
+      {
+        view.handleRenameAttachment(view.attachmentToRename);
+        view.attachmentToRename = null;
+      }
     },
 
     renderAttachment: function(attachment, uploaded)
@@ -280,6 +287,14 @@ define([
       }
     },
 
+    onPaste: function(e)
+    {
+      if (e.originalEvent.clipboardData.files.length)
+      {
+        this.upload(e.originalEvent.clipboardData, true);
+      }
+    },
+
     onDrag: function(e)
     {
       e.preventDefault();
@@ -287,6 +302,13 @@ define([
     },
 
     onDrop: function(e)
+    {
+      this.upload(e.originalEvent.dataTransfer, false);
+
+      return false;
+    },
+
+    upload: function(dataTransfer, fromClipboard)
     {
       var view = this;
 
@@ -298,7 +320,7 @@ define([
           text: view.t('upload:auth')
         });
 
-        return false;
+        return;
       }
 
       var entry = view.model;
@@ -324,7 +346,7 @@ define([
         attachments[u.name + u.file.size] = true;
       });
 
-      var files = Array.prototype.slice.call(e.originalEvent.dataTransfer.files).filter(function(file)
+      var files = Array.prototype.slice.call(dataTransfer.files).filter(function(file)
       {
         var exists = attachments[file.name + file.size];
 
@@ -368,7 +390,8 @@ define([
           type: file.type,
           name: file.name,
           file: file,
-          src: file.type.indexOf('image/') === 0 ? URL.createObjectURL(file) : null
+          src: file.type.indexOf('image/') === 0 ? URL.createObjectURL(file) : null,
+          rename: fromClipboard && files.length === 1 && file.type === 'image/png'
         });
 
         view.renderAttachment(view.model.serializeAttachment(_.last(entry.uploadQueue)), false).insertBefore($last);
@@ -378,8 +401,6 @@ define([
       {
         view.uploadNext();
       }
-
-      return false;
     },
 
     uploadNext: function()
@@ -464,6 +485,11 @@ define([
       var userInfo = user.getInfo();
       var attachments = view.model.uploadedFiles.map(function(upload)
       {
+        if (upload.rename)
+        {
+          view.attachmentToRename = upload.hash;
+        }
+
         return {
           _id: upload.hash,
           date: date,
