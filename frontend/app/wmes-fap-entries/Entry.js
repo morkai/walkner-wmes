@@ -297,7 +297,7 @@ define([
         status: manage || procEng || designer || master || leader,
         solution: manage || procEng || designer || master || leader,
         problem: started && (manage || procEng || designer || master || leader),
-        category: started && (manage || procEng || designer),
+        category: manage || procEng || designer,
         orderNo: started && (manage || procEng),
         lines: started && (manage || procEng),
         assessment: !pending && (manage || procEng || master),
