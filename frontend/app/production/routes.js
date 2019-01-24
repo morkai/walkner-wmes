@@ -5,20 +5,13 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../data/orgUnits',
-  '../prodShifts/ProdShift',
-  './pages/ProductionPage',
-  'i18n!app/nls/production',
-  'i18n!app/nls/isa',
-  'i18n!app/nls/prodSerialNumbers'
+  '../data/orgUnits'
 ], function(
   broker,
   router,
   viewport,
   user,
-  orgUnits,
-  ProdShift,
-  ProductionPage
+  orgUnits
 ) {
   'use strict';
 
@@ -31,11 +24,23 @@ define([
       return broker.publish('router.404', {req: req});
     }
 
-    viewport.showPage(new ProductionPage({
-      model: new ProdShift(orgUnits.getAllForProdLine(prodLine), {
-        production: true
-      })
-    }));
+    viewport.loadPage(
+      [
+        'app/prodShifts/ProdShift',
+        'app/production/pages/ProductionPage',
+        'i18n!app/nls/production',
+        'i18n!app/nls/isa',
+        'i18n!app/nls/prodSerialNumbers'
+      ],
+      function(ProdShift, ProductionPage)
+      {
+        return new ProductionPage({
+          model: new ProdShift(orgUnits.getAllForProdLine(prodLine), {
+            production: true
+          })
+        });
+      }
+    );
   });
 
   router.map('/production;settings', user.auth('PROD_DATA:MANAGE', 'PROD_DATA:MANAGE:SPIGOT_ONLY'), function(req)
