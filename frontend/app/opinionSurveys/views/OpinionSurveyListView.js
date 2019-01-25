@@ -18,29 +18,7 @@ define([
       {id: 'startDate', className: 'is-min'},
       {id: 'endDate', className: 'is-min'},
       'label'
-    ],
-
-    serializeActions: function()
-    {
-      var collection = this.collection;
-
-      return function(row)
-      {
-        var model = collection.get(row._id);
-
-        return [
-          ListView.actions.viewDetails(model),
-          {
-            id: 'print',
-            icon: 'print',
-            label: t(model.getNlsDomain(), 'LIST:ACTION:print'),
-            href: '/opinionSurveys/' + model.id + '.pdf'
-          },
-          ListView.actions.edit(model),
-          ListView.actions.delete(model)
-        ];
-      };
-    }
+    ]
 
   });
 });
