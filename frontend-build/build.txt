@@ -703,11 +703,16 @@ app/wh/assets/main.css
 app/wh/assets/./message.css
 app/wh/assets/./list.css
 app/wh/assets/./set.css
+app/wh/assets/./problems.css
 app/wh/assets/main.css
 
 app/wh/assets/message.css
 ----------------
 app/wh/assets/message.css
+
+app/wh/assets/problems.css
+----------------
+app/wh/assets/problems.css
 
 app/wh/assets/set.css
 ----------------
@@ -752,6 +757,7 @@ app/wmes-fap-entries/assets/./observers.css
 app/wmes-fap-entries/assets/./attachments.css
 app/wmes-fap-entries/assets/./analysis.css
 app/wmes-fap-entries/assets/./history.css
+app/wmes-fap-entries/assets/./report.css
 app/wmes-fap-entries/assets/main.css
 
 app/wmes-fap-entries/assets/navbar.css
@@ -761,6 +767,10 @@ app/wmes-fap-entries/assets/navbar.css
 app/wmes-fap-entries/assets/observers.css
 ----------------
 app/wmes-fap-entries/assets/observers.css
+
+app/wmes-fap-entries/assets/report.css
+----------------
+app/wmes-fap-entries/assets/report.css
 
 app/wmes-toolcal-tools/assets/history.css
 ----------------
@@ -819,6 +829,7 @@ assets/../app/events/assets/main.css
 assets/../app/users/assets/main.css
 assets/../app/purchaseOrders/assets/main.css
 assets/../app/updater/assets/main.css
+assets/./wmes-loading.css
 assets/pos-main.css
 
 assets/select2.css
@@ -841,6 +852,7 @@ assets/./select2.css
 assets/../app/core/assets/main.css
 assets/../app/orderDocuments/assets/main.css
 assets/../app/updater/assets/main.css
+assets/./wmes-loading.css
 assets/wmes-docs.css
 
 assets/wmes-heff.css
@@ -852,6 +864,7 @@ assets/./select2.css
 assets/../app/core/assets/main.css
 assets/../app/heff/assets/main.css
 assets/../app/updater/assets/main.css
+assets/./wmes-loading.css
 assets/wmes-heff.css
 
 assets/wmes-isa.css
@@ -863,7 +876,12 @@ assets/./select2.css
 assets/../app/core/assets/main.css
 assets/../app/updater/assets/main.css
 assets/../app/isa/assets/main.css
+assets/./wmes-loading.css
 assets/wmes-isa.css
+
+assets/wmes-loading.css
+----------------
+assets/wmes-loading.css
 
 assets/wmes-main.css
 ----------------
@@ -871,10 +889,10 @@ assets/../vendor/bootstrap/css/bootstrap.css
 assets/../vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css
 assets/../vendor/font-awesome/css/font-awesome.css
 assets/../vendor/select2/select2.css
+assets/./select2.css
 assets/../vendor/datatables/media/css/jquery.dataTables.css
 assets/../vendor/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.css
 assets/../vendor/highlight/styles/monokai.css
-assets/./select2.css
 assets/../app/core/assets/main.css
 assets/../app/orgUnits/assets/main.css
 assets/../app/settings/assets/main.css
@@ -937,6 +955,7 @@ assets/../app/pfepEntries/assets/main.css
 assets/../app/help/assets/main.css
 assets/../app/wmes-toolcal-tools/assets/main.css
 assets/../app/wmes-fap-entries/assets/main.css
+assets/./wmes-loading.css
 assets/wmes-main.css
 
 assets/wmes-operator.css
@@ -949,6 +968,7 @@ assets/../app/core/assets/main.css
 assets/../app/production/assets/main.css
 assets/../app/updater/assets/main.css
 assets/../app/mor/assets/main.css
+assets/./wmes-loading.css
 assets/wmes-operator.css
 
 assets/wmes-ps-load.css
@@ -958,6 +978,7 @@ assets/../vendor/font-awesome/css/font-awesome.css
 assets/../app/core/assets/main.css
 assets/../app/updater/assets/main.css
 assets/../app/paintShop/assets/main.css
+assets/./wmes-loading.css
 assets/wmes-ps-load.css
 
 assets/wmes-ps-queue.css
@@ -969,6 +990,7 @@ assets/../app/updater/assets/main.css
 assets/../app/planning/assets/main.css
 assets/../app/paintShop/assets/main.css
 assets/../app/production/assets/vkb.css
+assets/./wmes-loading.css
 assets/wmes-ps-queue.css
 
 assets/wmes-wh-kitter.css
@@ -981,6 +1003,7 @@ assets/../app/paintShop/assets/main.css
 assets/../app/planning/assets/main.css
 assets/../app/production/assets/vkb.css
 assets/../app/wh/assets/main.css
+assets/./wmes-loading.css
 assets/wmes-wh-kitter.css
 
 assets/wmes-wh-packer.css
@@ -993,6 +1016,7 @@ assets/../app/paintShop/assets/main.css
 assets/../app/planning/assets/main.css
 assets/../app/production/assets/vkb.css
 assets/../app/wh/assets/main.css
+assets/./wmes-loading.css
 assets/wmes-wh-packer.css
 
 assets/wmes-wh-pickup.css
@@ -1005,6 +1029,7 @@ assets/../app/paintShop/assets/main.css
 assets/../app/planning/assets/main.css
 assets/../app/production/assets/vkb.css
 assets/../app/wh/assets/main.css
+assets/./wmes-loading.css
 assets/wmes-wh-pickup.css
 
 vendor/bootstrap/css/bootstrap-theme.css
@@ -1583,67 +1608,6 @@ i18n!app/nls/production
 app/production/snManager.js
 app/prodShifts/ProdShift.js
 app/prodShifts/routes.js
-app/core/templates/embedded/appsDialog.js
-app/core/templates/embedded/confirmDialog.js
-app/core/templates/embedded/actions.js
-app/core/util/embedded.js
-app/data/dictionaries.js
-app/production/templates/vkb.js
-app/production/views/VkbView.js
-app/production/templates/unlockDialog.js
-app/production/views/UnlockDialogView.js
-app/production/views/LockDialogView.js
-app/production/templates/controls.js
-app/production/views/ProductionControlsView.js
-app/production/templates/personelPicker.js
-app/production/views/PersonelPickerView.js
-app/production/templates/header.js
-app/production/views/ProductionHeaderView.js
-app/production/util/orderPickerHelpers.js
-app/production/util/limitQuantityDone.js
-app/production/templates/newOrderPicker.js
-app/production/views/NewOrderPickerView.js
-app/production/templates/downtimePicker.js
-app/production/views/DowntimePickerView.js
-app/production/templates/endWorkDialog.js
-app/production/views/EndWorkDialogView.js
-app/production/templates/orderQueue.js
-app/production/templates/orderQueueRow.js
-app/production/views/OrderQueueView.js
-app/prodSerialNumbers/ProdSerialNumber.js
-app/prodSerialNumbers/ProdSerialNumberCollection.js
-app/production/views/SnListView.js
-app/production/templates/snChecker.js
-app/production/views/SnCheckerView.js
-app/production/templates/propertyEditorDialog.js
-app/production/views/PropertyEditorDialogView.js
-app/production/templates/data.js
-app/production/templates/endDowntimeDialog.js
-app/production/templates/continueOrderDialog.js
-app/production/views/ProductionDataView.js
-app/production/views/ProdDowntimeListView.js
-app/production/templates/quantityEditor.js
-app/production/views/QuantityEditorView.js
-app/production/templates/quantities.js
-app/production/views/ProductionQuantitiesView.js
-app/production/templates/isaPalletDeliveryDialog.js
-app/production/views/IsaPalletDeliveryDialogView.js
-app/production/templates/isa.js
-app/production/templates/isaCancelDialog.js
-app/production/views/IsaView.js
-app/production/templates/taktTime.js
-app/production/views/TaktTimeView.js
-app/production/templates/spigotChecker.js
-app/production/views/SpigotCheckerView.js
-app/production/templates/productionPage.js
-app/production/templates/duplicateWarning.js
-app/production/pages/ProductionPage.js
-app/nls/isa.js
-app/nls/pl/isa.js
-i18n!app/nls/isa
-app/nls/prodSerialNumbers.js
-app/nls/pl/prodSerialNumbers.js
-i18n!app/nls/prodSerialNumbers
 app/production/routes.js
 app/prodChangeRequests/ProdChangeRequest.js
 app/prodChangeRequests/ProdChangeRequestCollection.js
@@ -1718,7 +1682,13 @@ app/isaPalletKinds/routes.js
 app/isa/routes.js
 app/paintShopPaints/routes.js
 app/core/util/html2pdf.js
+app/core/templates/embedded/appsDialog.js
+app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/actions.js
+app/core/util/embedded.js
 app/data/clipboard.js
+app/production/templates/vkb.js
+app/production/views/VkbView.js
 app/planning/templates/contextMenu.js
 app/planning/util/contextMenu.js
 app/printers/templates/pageAction.js
@@ -1906,6 +1876,15 @@ app/wh/templates/messages.js
 app/wh/templates/planPage.js
 app/wh/templates/resolveAction.js
 app/wh/pages/WhPlanPage.js
+app/wh/templates/problemFilter.js
+app/wh/views/WhProblemFilterView.js
+app/wh/templates/problemDetails.js
+app/wh/views/WhProblemDetailsView.js
+app/wh/templates/problemList.js
+app/wh/templates/problemListItem.js
+app/wh/views/WhProblemListView.js
+app/wh/templates/problemListPage.js
+app/wh/pages/WhProblemListPage.js
 app/nls/wh.js
 app/nls/pl/wh.js
 i18n!app/nls/wh
