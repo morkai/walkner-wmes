@@ -43,6 +43,11 @@ define([
 
     url: function()
     {
+      if (!this.date)
+      {
+        return '/wh/orders';
+      }
+
       return '/wh/orders'
         + '?sort(group,line,startTime)'
         + '&date=' + time.utc.getMoment(this.date, 'YYYY-MM-DD').valueOf();

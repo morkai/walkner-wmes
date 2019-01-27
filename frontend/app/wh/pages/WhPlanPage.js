@@ -108,6 +108,12 @@ define([
           href: '#planning/plans/' + page.plan.id
         },
         {
+          label: t('wh', 'PAGE_ACTION:problems'),
+          icon: 'bug',
+          privileges: 'WH:VIEW',
+          href: '#wh/problems'
+        },
+        {
           label: page.t('PAGE_ACTION:settings'),
           icon: 'cogs',
           privileges: 'WH:MANAGE',
@@ -277,6 +283,11 @@ define([
       $(document).on('click.' + page.idPrefix, '.paintShop-breadcrumb', page.onBreadcrumbsClick.bind(page));
 
       $(window).on('keypress.' + page.idPrefix, page.onWindowKeyPress.bind(page));
+
+      if (page.options.focus)
+      {
+        page.listenToOnce(page, 'afterRender', page.focusOrder.bind(page, page.options.focus, true));
+      }
     },
 
     load: function(when)
@@ -466,6 +477,10 @@ define([
         {
           error = 'connectionFailure';
         }
+        else if (t.has('wh', 'msg:resolveAction:' + req.status))
+        {
+          error = 'resolveAction:' + req.status;
+        }
         else if (!t.has('wh', 'msg:' + error))
         {
           error = 'genericFailure';
@@ -522,11 +537,7 @@ define([
 
       if (scroll !== false)
       {
-        this.$('tr[data-id="' + orders[0].id + '"]')[0].scrollIntoView({
-          behavior: 'instant',
-          block: 'start',
-          inline: 'start'
-        });
+        this.focusOrder(orders[0].id, false);
       }
 
       var currentDialog = viewport.currentDialog;
@@ -555,6 +566,15 @@ define([
         set: set,
         line: orders[0].get('line')
       }));
+    },
+
+    focusOrder: function(id, smooth)
+    {
+      this.$('tr[data-id="' + id + '"]')[0].scrollIntoView({
+        behavior: smooth ? 'smooth' : 'auto',
+        block: 'start',
+        inline: 'start'
+      });
     },
 
     showMessage: function(type, time, message, messageData)

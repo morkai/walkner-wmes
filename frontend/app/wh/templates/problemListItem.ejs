@@ -1,0 +1,76 @@
+<div class="wh-problems-item" data-id="<%- item._id %>">
+  <div class="wh-problems-column">
+    <div class="wh-problems-prop">
+      <div class="wh-problems-prop-name"><%- t('wh', 'prop:order') %></div>
+      <div class="wh-problems-prop-value">
+        <% if (item.urls.order) { %>
+        <a href="<%- item.urls.order %>"><%- item.order %></a>
+        <% } else { %>
+        <%- item.order %>
+        <% } %>
+      </div>
+    </div>
+    <div class="wh-problems-prop">
+      <div class="wh-problems-prop-name"><%- t('wh', 'prop:line') %></div>
+      <div class="wh-problems-prop-value"><%= item.line %></div>
+    </div>
+    <div class="wh-problems-prop">
+      <div class="wh-problems-prop-name"><%- t('wh', 'prop:qty') %></div>
+      <div class="wh-problems-prop-value"><%= item.qty %></div>
+    </div>
+  </div>
+  <div class="wh-problems-column">
+    <div class="wh-problems-prop">
+      <div class="wh-problems-prop-name"><%- t('wh', 'prop:date') %></div>
+      <div class="wh-problems-prop-value">
+        <% if (item.urls.date) { %>
+        <a href="<%- item.urls.date %>"><%- item.date %></a>
+        <% } else { %>
+        <%- item.order %>
+        <% } %>
+      </div>
+    </div>
+    <div class="wh-problems-prop">
+      <div class="wh-problems-prop-name"><%- t('wh', 'prop:startTime') %></div>
+      <div class="wh-problems-prop-value"><%- item.startTime %></div>
+    </div>
+    <div class="wh-problems-prop">
+      <div class="wh-problems-prop-name"><%- t('wh', 'prop:finishTime') %></div>
+      <div class="wh-problems-prop-value"><%- item.finishTime %></div>
+    </div>
+  </div>
+  <% ['lp10', 'fmx', 'kitter', 'packer'].forEach(function(func) { %>
+  <div class="wh-problems-column wh-problems-func <%- item[func].problem ? '' : 'wh-problems-func-noProblem' %> <%- item[func].className %>">
+    <div class="wh-problems-prop">
+      <div class="wh-problems-prop-name"><%- item[func].label %></div>
+      <div class="wh-problems-prop-value"><%- item[func].status %></div>
+    </div>
+    <% if (item[func].user) { %>
+    <div class="wh-problems-prop">
+      <div class="wh-problems-prop-name"><%- t('wh', 'prop:user') %></div>
+      <div class="wh-problems-prop-value"><%- item[func].user %></div>
+    </div>
+    <% } %>
+    <% if (item[func].carts) { %>
+    <div class="wh-problems-prop">
+      <div class="wh-problems-prop-name"><%- t('wh', 'prop:carts') %></div>
+      <div class="wh-problems-prop-value"><%- item[func].carts %></div>
+    </div>
+    <% } %>
+    <% if (item[func].problemArea) { %>
+    <div class="wh-problems-prop">
+      <div class="wh-problems-prop-name"><%- t('wh', 'prop:problemArea') %></div>
+      <div class="wh-problems-prop-value"><%- item[func].problemArea %></div>
+    </div>
+    <% } %>
+  </div>
+  <% if (item[func].problem) { %>
+    <div class="wh-problems-column wh-problems-problem <%- item[func].className %>">
+      <div class="wh-problems-prop">
+        <div class="wh-problems-prop-name"><%- t('wh', 'prop:problem') %></div>
+        <div class="wh-problems-prop-value"><%- item[func].problem %></div>
+      </div>
+    </div>
+  <% } %>
+  <% }) %>
+</div>

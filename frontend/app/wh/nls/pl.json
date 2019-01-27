@@ -1,5 +1,6 @@
 {
   "BREADCRUMBS:base": "Magazyn",
+  "BREADCRUMBS:problems": "Problemy",
   "BREADCRUMBS:settings": "Ustawienia",
 
   "MSG:GENERATING": "<i class='fa fa-spinner fa-spin'></i><span>Generowanie planu...</span>",
@@ -7,11 +8,13 @@
   "msg:genericFailure": "<p>Wykonywanie akcji nie powiodło się.</p><p>{errorCode}</p>",
   "msg:connectionFailure": "<p>Podczas określania następnej akcji utracono połączenie z serwerem.</p><p>Sprawdź czy masz połączenie z siecią i spróbuj ponownie.</p>",
   "msg:resolvingAction": "<p>Określanie następnej akcji dla:</p><p>{personnelId}</p>",
+  "msg:resolveAction:403": "<p>Brak uprawnień do wykonywania akcji.</p>",
   "msg:USER_NOT_FOUND": "<p>Nie znaleziono użytkownika:</p><p>{personnelId}</p>",
   "msg:NO_PENDING_ORDERS": "<p>Brak zleceń gotowych do realizacji.</p>",
 
   "PAGE_ACTION:dailyPlan": "Plan dzienny",
   "PAGE_ACTION:legend": "Legenda",
+  "PAGE_ACTION:problems": "Problemy",
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:resolveAction:title": "Podaj ID karty, aby rozpocząć następną akcję",
   "PAGE_ACTION:resolveAction:placeholder": "ID karty",
@@ -24,6 +27,7 @@
   "prop:group": "Gr.",
   "prop:no": "Lp.",
   "prop:shift": "Zm.",
+  "prop:date": "Data",
   "prop:set": "Set",
   "prop:mrp": "MRP",
   "prop:line": "Linia",
@@ -40,12 +44,18 @@
   "prop:finishTime": "Koniec",
   "prop:time": "Czas",
   "prop:comment": "Komentarz",
+  "prop:problem": "Problem",
   "prop:picklist": "LP10",
   "prop:fmx": "FMX",
   "prop:kitter": "Kitter",
   "prop:packer": "Opak.",
   "prop:carts": "Wózki",
+  "prop:user": "Magazynier",
   "prop:problemArea": "Pole problemów",
+
+  "func:fmx": "FMX",
+  "func:kitter": "Kitter",
+  "func:packer": "Opakowania",
 
   "status:picklistDone:null": "Transakcja niewykonana",
   "status:picklistDone:true": "Transakcja wykonana",
@@ -102,5 +112,5 @@
   "list:popover:kitter": "Kitter",
   "list:popover:packer": "Opakowania",
   "list:popover:status": "Status",
-  "list:popover:user": "Użytkownik"
+  "list:popover:user": "Magazynier"
 }

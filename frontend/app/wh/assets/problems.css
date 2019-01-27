@@ -1,0 +1,49 @@
+.wh-problems-item {
+  display: flex;
+  padding: 7px;
+}
+.wh-problems-item + .wh-problems-item {
+  border-top: 1px solid #ddd;
+}
+.wh-problems-column {
+  padding: 7px 14px;
+}
+.wh-problems-prop {
+  white-space: nowrap;
+}
+.wh-problems-prop + .wh-problems-prop {
+  margin-top: 7px;
+}
+.wh-problems-prop-name {
+  font-variant: small-caps;
+  text-transform: lowercase;
+}
+.wh-problems-prop-value {
+  font-size: 16px;
+}
+.wh-problems-problem {
+  padding-right: 7px;
+}
+.wh-problems-problem .wh-problems-prop-value {
+  padding-right: 7px;
+  font-size: 14px;
+  white-space: pre-line;
+  max-width: 300px;
+  height: 120px;
+  overflow: auto;
+}
+.wh-problems-func {
+  margin-left: 7px;
+}
+.wh-problems-pending {
+  background: #eee;
+}
+.wh-problems-progress {
+  background: #d9edf7;
+}
+.wh-problems-failure {
+  background: #f2dede;
+}
+.wh-problems-success {
+  background: #dff0d8;
+}

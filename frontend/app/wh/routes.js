@@ -7,6 +7,7 @@ define([
   '../user',
   '../time',
   './pages/WhPlanPage',
+  './pages/WhProblemListPage',
   'i18n!app/nls/planning',
   'i18n!app/nls/wh'
 ], function(
@@ -15,7 +16,8 @@ define([
   viewport,
   user,
   time,
-  WhPlanPage
+  WhPlanPage,
+  WhProblemListPage
 ) {
   'use strict';
 
@@ -40,8 +42,14 @@ define([
     }
 
     viewport.showPage(new WhPlanPage({
-      date: req.params.id
+      date: req.params.id,
+      focus: req.query.focus
     }));
+  });
+
+  router.map('/wh/problems', canView, function()
+  {
+    viewport.showPage(new WhProblemListPage());
   });
 
   router.map('/wh/settings', canManage, function(req)
