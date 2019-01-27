@@ -78,6 +78,7 @@
   "showDivision:true": "Pokazuj wydziały",
   "showDivision:false": "Nie pokazuj wydziałów",
 
+  "report:filter:survey:placeholder": "Ostatnie badanie",
   "report:filter:submit": "Filtruj raport",
   "report:filter:surveys": "Badania",
   "report:filter:divisions": "Wydziały",

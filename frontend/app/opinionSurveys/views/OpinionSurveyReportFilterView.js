@@ -2,12 +2,14 @@
 
 define([
   'underscore',
+  'app/i18n',
   'app/core/views/FilterView',
   'app/core/util/idAndLabel',
   '../dictionaries',
   'app/opinionSurveys/templates/reportFilter'
 ], function(
   _,
+  t,
   FilterView,
   idAndLabel,
   dictionaries,
@@ -25,7 +27,7 @@ define([
 
       this.$id('surveys').select2({
         width: 300,
-        placeholder: ' ',
+        placeholder: t('opinionSurveys', 'report:filter:survey:placeholder'),
         allowClear: true,
         multiple: true,
         data: this.surveys.map(idAndLabel)

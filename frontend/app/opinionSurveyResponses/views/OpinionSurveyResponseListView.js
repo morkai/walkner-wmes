@@ -87,7 +87,9 @@ define([
 
         response.get('answers').forEach(function(answer)
         {
-          row['Q-' + answer.question] = '<i class="fa fa-' + ANSWER_TO_ICON[answer.answer] + '"></i>';
+          row['Q-' + answer.question] = ANSWER_TO_ICON[answer.answer]
+            ? ('<i class="fa fa-' + ANSWER_TO_ICON[answer.answer] + '"></i>')
+            : answer.answer;
         });
 
         return row;

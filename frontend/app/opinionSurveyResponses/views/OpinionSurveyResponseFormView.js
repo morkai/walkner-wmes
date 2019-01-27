@@ -160,7 +160,9 @@ define([
           idPrefix: idPrefix,
           index: i,
           question: question,
-          value: answers[i] ? answers[i].answer : 'na'
+          value: answers[i]
+            ? answers[i].answer
+            : (/referrals/i.test(question._id) ? '1' : 'na'),
         });
       });
 

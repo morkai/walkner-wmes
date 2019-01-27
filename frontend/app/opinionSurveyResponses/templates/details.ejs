@@ -1,50 +1,50 @@
 <div>
   <div class="panel panel-primary">
-    <div class="panel-heading"><%- t('opinionSurveyResponses', 'PANEL:TITLE:details') %></div>
+    <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details') %></div>
     <div class="panel-details">
       <div class="props first">
         <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyResponses', 'PROPERTY:createdAt') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:createdAt') %></div>
           <div class="prop-value"><%- model.createdAt %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyResponses', 'PROPERTY:creator') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:creator') %></div>
           <div class="prop-value"><%- model.creator %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyResponses', 'PROPERTY:survey') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:survey') %></div>
           <div class="prop-value"><%= model.survey %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyResponses', 'PROPERTY:employer') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:employer') %></div>
           <div class="prop-value"><%= model.employer %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyResponses', 'PROPERTY:superior') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:superior') %></div>
           <div class="prop-value"><%= model.superior %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyResponses', 'PROPERTY:division') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:division') %></div>
           <div class="prop-value"><%= model.division %></div>
         </div>
       </div>
     </div>
   </div>
   <div class="panel panel-default">
-    <div class="panel-heading"><%- t('opinionSurveyResponses', 'PANEL:TITLE:comment') %></div>
+    <div class="panel-heading"><%- helpers.t('PANEL:TITLE:comment') %></div>
     <div class="panel-body">
-      <%= model.comment || t('opinionSurveyResponses', 'noComment') %>
+      <%= model.comment || helpers.t('noComment') %>
     </div>
   </div>
   <div class="panel panel-default">
-    <div class="panel-heading"><%- t('opinionSurveyResponses', 'PANEL:TITLE:answers') %></div>
+    <div class="panel-heading"><%- helpers.t('PANEL:TITLE:answers') %></div>
     <table class="table table-bordered table-condensed">
       <thead>
       <tr>
         <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:questions._id') %></th>
         <th class="is-min"><%- t('opinionSurveys', 'PROPERTY:questions.short') %></th>
         <th><%- t('opinionSurveys', 'PROPERTY:questions.full') %></th>
-        <th class="is-min"><%- t('opinionSurveyResponses', 'PROPERTY:answer') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:answer') %></th>
       </tr>
       </thead>
       <tbody>
@@ -53,7 +53,7 @@
         <td class="is-min"><%- answer.question._id %></td>
         <td class="is-min"><%= answer.question.short %></td>
         <td><%= answer.question.full %></td>
-        <td class="is-min"><%- t('opinionSurveyResponses', 'answer:' + answer.answer) %></td>
+        <td class="is-min"><%- /^[0-9]+$/.test(answer.answer) ? answer.answer : helpers.t('answer:' + answer.answer) %></td>
       </tr>
       <% }) %>
       </tbody>

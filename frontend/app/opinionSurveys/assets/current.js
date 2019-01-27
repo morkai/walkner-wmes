@@ -1,13 +1,13 @@
-/* globals $, SURVEY, alert */
+/* globals $, LANG, SURVEY, alert */
 /* eslint-disable strict, no-alert */
 
 'use strict';
 
 $('body').on('keydown', function(e)
 {
-  if (e.keyCode === 80 && e.ctrlKey)
+  if (e.which === 80 && e.ctrlKey)
   {
-    window.location.href = '/opinionSurveys/' + SURVEY._id + '.pdf';
+    window.location.href = $('#printer').attr('href');
 
     return false;
   }
@@ -15,7 +15,7 @@ $('body').on('keydown', function(e)
 
 $('#submit').on('keydown', function(e)
 {
-  if (e.keyCode === 9)
+  if (e.which === 9)
   {
     $('#comment').focus();
 
@@ -57,13 +57,13 @@ $('#submit').on('keydown', function(e)
   {
     $('#submit').prop('disabled', false);
 
-    alert('Nie udało się wysłać ankiety.');
+    alert('Failed to save the response.');
   });
 
   req.done(function()
   {
     $('body').addClass('closed');
-    $('#bd').html('<p>Dziękujemy za wypełnienie ankiety!</p>');
+    $('#bd').html('<p>' + LANG.THANKS + '</p>');
 
     window.scrollTo(0, 0);
 
@@ -77,7 +77,7 @@ $('#bd')
   .on('click', '.label', function(e) { selectOption($(e.currentTarget).find('.option')); })
   .on('keyup', '.label', function(e)
   {
-    if (e.keyCode === 13 || e.keyCode === 32)
+    if (e.which === 13 || e.which === 32)
     {
       selectOption($(e.currentTarget).find('.option'));
 
