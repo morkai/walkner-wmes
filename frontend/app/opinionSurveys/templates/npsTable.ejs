@@ -1,0 +1,15 @@
+<div class="panel panel-default">
+  <div class="panel-heading"><%- t('opinionSurveys', 'report:npsTable:title') %></div>
+  <table class="table table-bordered">
+    <tbody>
+      <% Object.keys(absolute).forEach(function(prop) { %>
+      <tr>
+        <th class="is-min"><%- t('opinionSurveys', 'report:npsTable:' + prop) %></th>
+        <td class="is-min is-number"><%- absolute[prop] %></td>
+        <td class="is-min is-number"><%- percent[prop] %>%</td>
+        <td></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

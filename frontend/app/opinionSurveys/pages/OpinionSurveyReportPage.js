@@ -19,6 +19,8 @@ define([
   '../views/AnswerCountBySuperiorChartView',
   '../views/PositiveAnswerPercentBySurveyChartView',
   '../views/PositiveAnswerPercentByDivisionChartView',
+  '../views/NpsTableView',
+  '../views/NpsChartView',
   'app/opinionSurveys/templates/reportPage'
 ], function(
   $,
@@ -39,6 +41,8 @@ define([
   AnswerCountBySuperiorChartView,
   PositiveAnswerPercentBySurveyChartView,
   PositiveAnswerPercentByDivisionChartView,
+  NpsTableView,
+  NpsChartView,
   template
 ) {
   'use strict';
@@ -69,7 +73,7 @@ define([
       this.defineModels();
       this.defineViews();
 
-      this.setView('.filter-container', this.filterView);
+      this.setView('#-filter', this.filterView);
 
       [
         'responseCount',
@@ -80,10 +84,12 @@ define([
         'answerCountBySurvey',
         'answerCountBySuperior',
         'positiveAnswerPercentBySurvey',
-        'positiveAnswerPercentByDivision'
+        'positiveAnswerPercentByDivision',
+        'npsTable',
+        'npsChart'
       ].forEach(function(viewName)
       {
-        this.setView('.opinionSurveys-report-' + viewName + '-container', this[viewName + 'View']);
+        this.setView('#-' + viewName, this[viewName + 'View']);
       }, this);
     },
 
@@ -125,6 +131,8 @@ define([
       this.answerCountBySuperiorView = new AnswerCountBySuperiorChartView(chartViewOptions);
       this.positiveAnswerPercentBySurveyView = new PositiveAnswerPercentBySurveyChartView(chartViewOptions);
       this.positiveAnswerPercentByDivisionView = new PositiveAnswerPercentByDivisionChartView(chartViewOptions);
+      this.npsTableView = new NpsTableView(chartViewOptions);
+      this.npsChartView = new NpsChartView(chartViewOptions);
     },
 
     destroy: function()
