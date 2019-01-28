@@ -63,7 +63,7 @@ define([
 
     template: setTemplate,
 
-    dialogClassName: 'wh-set-dialog',
+    dialogClassName: 'wh-set-dialog modal-no-keyboard',
 
     events: {
       'click .is-clickable': function(e)
@@ -616,37 +616,7 @@ define([
 
       finalizeOrder: function(newData)
       {
-        var anyProblem = newData.picklistDone === false;
-        var allFinished = true;
-
-        newData.funcs.forEach(function(func)
-        {
-          if (func.status === 'problem')
-          {
-            anyProblem = true;
-          }
-
-          if (func.status !== 'finished')
-          {
-            allFinished = false;
-          }
-        });
-
-        if (anyProblem)
-        {
-          newData.status = 'problem';
-          newData.finishedAt = new Date();
-        }
-        else if (allFinished)
-        {
-          newData.status = 'finished';
-          newData.finishedAt = new Date();
-        }
-        else
-        {
-          newData.status = 'started';
-          newData.finishedAt = null;
-        }
+        WhOrder.finalizeOrder(newData);
       }
 
     },

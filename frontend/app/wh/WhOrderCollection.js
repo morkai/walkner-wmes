@@ -89,9 +89,21 @@ define([
 
     act: function(action, data)
     {
+      return this.constructor.act(data.date || this.date, action, data);
+    }
+
+  }, {
+
+    act: function(date, action, data)
+    {
+      if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date))
+      {
+        date = time.utc.format(date, 'YYYY-MM-DD');
+      }
+
       return $.ajax({
         method: 'POST',
-        url: '/wh/plans/' + this.date + ';act',
+        url: '/wh/plans/' + date + ';act',
         data: JSON.stringify({
           action: action,
           data: data

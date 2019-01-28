@@ -17,6 +17,7 @@ define([
   '../WhOrderCollection',
   '../views/WhProblemFilterView',
   '../views/WhProblemListView',
+  '../views/WhProblemDetailsView',
   'app/wh/templates/problemListPage'
 ], function(
   _,
@@ -35,6 +36,7 @@ define([
   WhOrderCollection,
   WhProblemFilterView,
   WhProblemListView,
+  WhProblemDetailsView,
   pageTemplate
 ) {
   'use strict';
@@ -77,6 +79,40 @@ define([
     },
 
     remoteTopics: {
+      'orders.updated.*': function(message)
+      {
+        var problemView = viewport.currentDialog;
+
+        if (!(problemView instanceof WhProblemDetailsView))
+        {
+          return;
+        }
+
+        var change = message.change;
+        var newValues = change.newValues;
+
+        var sapOrder = problemView.plan.sapOrders.get(message._id);
+
+        if (!sapOrder)
+        {
+          return;
+        }
+
+        var attrs = _.clone(newValues);
+
+        if (!_.isEmpty(change.comment))
+        {
+          attrs.comments = sapOrder.get('comments').concat({
+            source: change.source,
+            time: change.time,
+            user: change.user,
+            text: change.comment,
+            delayReason: newValues.delayReason
+          });
+        }
+
+        sapOrder.set(attrs);
+      },
       'wh.orders.changed.*': function(message)
       {
         var page = this;
@@ -87,16 +123,22 @@ define([
 
           if (!whOrder)
           {
-            return;
+            if (viewport.currentDialog instanceof WhProblemDetailsView
+              && viewport.currentDialog.model.id === changes._id)
+            {
+              whOrder = viewport.currentDialog.model;
+            }
+            else
+            {
+              return;
+            }
           }
+
+          whOrder.set(changes);
 
           if (changes.status && changes.status !== 'problem')
           {
             page.whOrders.remove(whOrder);
-          }
-          else
-          {
-            whOrder.set(changes);
           }
         });
 
@@ -113,16 +155,21 @@ define([
         {
           var oldWhOrder = page.whOrders.get(newWhOrder._id);
 
+          if (!oldWhOrder
+            && viewport.currentDialog instanceof WhProblemDetailsView
+            && viewport.currentDialog.model.id === newWhOrder._id)
+          {
+            oldWhOrder = viewport.currentDialog.model;
+          }
+
           if (oldWhOrder)
           {
+            oldWhOrder.set(newWhOrder);
+
             if (newWhOrder.status !== 'problem')
             {
               page.whOrders.remove(oldWhOrder);
-
-              return;
             }
-
-            oldWhOrder.set(newWhOrder);
 
             return;
           }
@@ -140,7 +187,7 @@ define([
       {
         this.$el.removeClass('wh-is-disconnected');
 
-        this.load();
+        this.load(_.noop);
       },
       'socket.disconnected': function()
       {

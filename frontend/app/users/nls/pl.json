@@ -190,6 +190,9 @@
   "PRIVILEGE:TOOLCAL:DICTIONARIES:VIEW": "Narzędzia pomiarowe: przeglądanie słowników",
   "PRIVILEGE:TOOLCAL:DICTIONARIES:MANAGE": "Narzędzia pomiarowe: zarządzanie słownikami",
   "PRIVILEGE:FAP:MANAGE": "FAP: zarządzanie",
+  "PRIVILEGE:WH:VIEW": "Magazyn: przeglądanie",
+  "PRIVILEGE:WH:MANAGE": "Magazyn: zarządzanie",
+  "PRIVILEGE:WH:SOLVER": "Magazyn: rozwiązywanie problemów",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System",

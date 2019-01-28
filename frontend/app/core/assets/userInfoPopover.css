@@ -3,6 +3,7 @@
   max-width: 500px;
   line-height: 1;
   z-index: 1061;
+  color: #333;
 }
 .userInfoPopover .popover-content {
   padding: 9px;

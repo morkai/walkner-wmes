@@ -112,5 +112,18 @@
   "list:popover:kitter": "Kitter",
   "list:popover:packer": "Opakowania",
   "list:popover:status": "Status",
-  "list:popover:user": "Magazynier"
+  "list:popover:user": "Magazynier",
+
+  "problem:empty": "Nie ma żadnych problemów!",
+  "problem:title": "Szczegóły problemu ze zleceniem {orderNo} dla linii {line}",
+  "problem:menu:solveProblem": "Rozwiąż problem",
+  "problem:menu:cancelOrder": "Anuluj zlecenie",
+  "problem:editor:comment": "Komentarz...",
+  "problem:editor:carts": "Numery wózków...",
+  "problem:editor:cancelOrder:yes": "Anuluj zlecenie",
+  "problem:editor:cancelOrder:no": "Nie anuluj",
+  "problem:editor:cancelOrder:message": "Anulowano kompletację {qty} szt. na linię {line}.",
+  "problem:editor:solveProblem:yes": "Rozwiąż problem",
+  "problem:editor:solveProblem:no": "Nie rozwiązuj",
+  "problem:editor:solveProblem:message": "Rozwiązano problem {func, select, fmx{FMX} kitter{Kittera} packer{Opakowań} other{LP10}} z kompletacją {qty} szt. na linię {line}."
 }

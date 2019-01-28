@@ -53,6 +53,8 @@ define([
 
       if ($menu)
       {
+        $(document.body).click();
+
         broker.publish('planning.contextMenu.hiding', {$menu: $menu});
 
         var options = $menu.data('options');
@@ -127,6 +129,7 @@ define([
       });
 
       var $menu = $(template({
+        className: options.className || '',
         top: top,
         icons: _.some(menu, function(item) { return !!item.icon; }),
         menu: menu

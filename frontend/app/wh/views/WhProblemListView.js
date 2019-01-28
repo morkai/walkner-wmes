@@ -8,7 +8,6 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
-  'app/core/templates/userInfo',
   './WhProblemDetailsView',
   'app/wh/templates/problemList',
   'app/wh/templates/problemListItem'
@@ -20,20 +19,11 @@ define([
   user,
   viewport,
   View,
-  userInfoTemplate,
   WhProblemDetailsView,
   listTemplate,
   itemTemplate
 ) {
   'use strict';
-
-  var FUNC_STATUS_TO_CLASS = {
-    pending: 'wh-problems-pending',
-    picklist: 'wh-problems-progress',
-    pickup: 'wh-problems-progress',
-    problem: 'wh-problems-failure',
-    finished: 'wh-problems-success'
-  };
 
   return View.extend({
 
@@ -42,6 +32,11 @@ define([
     events: {
       'click .wh-problems-item': function(e)
       {
+        if (this.$(e.target).closest('a').length)
+        {
+          return;
+        }
+
         this.showProblemDetails(e.currentTarget.dataset.id);
       }
     },
@@ -86,35 +81,14 @@ define([
         date: time.utc.format(whOrder.get('date'), 'LL'),
         startTime: time.utc.format(whOrder.get('startTime'), 'L HH:mm:ss'),
         finishTime: time.utc.format(whOrder.get('finishTime'), 'L HH:mm:ss'),
-        lp10: {
-          label: this.t('prop:picklist'),
-          className: whOrder.get('picklistDone') ? 'wh-problems-success' : 'wh-problems-failure',
-          status: t('wh', 'status:picklistDone:' + whOrder.get('picklistDone')),
-          user: userInfoTemplate({userInfo: whOrder.getFunc(whOrder.get('picklistFunc')).user}),
-          problem: whOrder.get('problem')
-        },
-        fmx: this.serializeFunc(whOrder, 'fmx'),
-        kitter: this.serializeFunc(whOrder, 'kitter'),
-        packer: this.serializeFunc(whOrder, 'packer'),
+        lp10: whOrder.serializeProblemFunc('lp10'),
+        fmx: whOrder.serializeProblemFunc('fmx'),
+        kitter: whOrder.serializeProblemFunc('kitter'),
+        packer: whOrder.serializeProblemFunc('packer'),
         urls: {
           order: !user.isAllowedTo('LOCAL', 'ORDERS:VIEW') ? '' : ('#orders/' + whOrder.get('order')),
           date: '#wh/plans/' + time.utc.format(whOrder.get('date'), 'YYYY-MM-DD') + '?focus=' + whOrder.id
         }
-      };
-    },
-
-    serializeFunc: function(whOrder, funcId)
-    {
-      var func = whOrder.getFunc(funcId);
-
-      return {
-        label: this.t('func:' + funcId),
-        className: FUNC_STATUS_TO_CLASS[func.status],
-        status: this.t('status:' + func.status),
-        user: func.user ? userInfoTemplate({userInfo: func.user}) : '',
-        carts: func.carts.join(', '),
-        problemArea: func.problemArea,
-        problem: func.comment
       };
     },
 
@@ -125,16 +99,25 @@ define([
 
     showProblemDetails: function(id)
     {
+      var whOrder = this.whOrders.get(id);
       var detailsView = new WhProblemDetailsView({
-        model: this.whOrders.get(id)
+        model: whOrder
       });
 
-      viewport.showDialog(detailsView, this.t('problem:title'));
+      viewport.showDialog(detailsView, this.t('problem:title', {
+        orderNo: whOrder.get('order'),
+        line: whOrder.get('line')
+      }));
     },
 
     hideProblemDetails: function()
     {
 
+    },
+
+    toggleEmpty: function()
+    {
+      this.$el.toggleClass('is-empty', this.whOrders.length === 0);
     },
 
     onOrdersReset: function()
@@ -147,16 +130,18 @@ define([
       this.$el.append(itemTemplate({
         item: this.serializeItem(whOrder)
       }));
+      this.toggleEmpty();
     },
 
     onOrderRemoved: function(whOrder)
     {
-      this.$item(whOrder).remove();
+      this.$item(whOrder.id).remove();
+      this.toggleEmpty();
     },
 
     onOrderChanged: function(whOrder)
     {
-      var $item = this.$item(whOrder);
+      var $item = this.$item(whOrder.id);
 
       if ($item.length)
       {

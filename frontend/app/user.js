@@ -402,6 +402,7 @@ function(
       return user.isAllowedTo(
         'ORDERS:MANAGE', 'ORDERS:COMMENT',
         'PLANNING:PLANNER', 'PLANNING:WHMAN', 'PAINT_SHOP:PAINTER',
+        'WH:VIEW',
         'FN:master', 'FN:leader'
       );
     }

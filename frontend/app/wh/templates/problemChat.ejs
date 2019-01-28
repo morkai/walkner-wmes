@@ -1,0 +1,9 @@
+<form class="wh-problems-chat-form">
+  <div id="<%- idPrefix %>-messages" class="wh-problems-chat-messages"></div>
+  <% if (canComment) { %>
+  <div class="wh-problems-chat-send">
+    <textarea id="<%- idPrefix %>-message" class="form-control" rows="3"></textarea>
+    <button class="btn btn-primary"><i class="fa fa-comment-o"></i></button>
+  </div>
+  <% } %>
+</form>

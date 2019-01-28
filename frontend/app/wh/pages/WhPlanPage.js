@@ -225,9 +225,7 @@ define([
       var page = this;
 
       var plan = page.model = page.plan = new Plan({_id: page.options.date}, {
-        displayOptions: PlanDisplayOptions.fromLocalStorage({
-          mrps: page.options.mrps
-        }, {
+        displayOptions: PlanDisplayOptions.fromLocalStorage({}, {
           storageKey: 'PLANNING:DISPLAY_OPTIONS:WH'
         }),
         settings: PlanSettings.fromDate(page.options.date),

@@ -1,3 +1,17 @@
 <div class="wh-problems-details">
-  PROBLEM!
+  <div class="wh-problems-details-details">
+    <div id="<%- idPrefix %>-orderInfo" class="wh-problems-row">
+      <%- renderOrderInfo({
+        helpers: helpers,
+        whOrder: whOrder
+      }) %>
+    </div>
+    <div id="<%- idPrefix %>-funcs" class="wh-problems-row">
+      <%- renderFuncs({
+        helpers: helpers,
+        funcs: funcs
+      }) %>
+    </div>
+  </div>
+  <div id="<%- idPrefix %>-chat" class="wh-problems-chat-container"></div>
 </div>
