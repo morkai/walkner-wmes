@@ -2,7 +2,7 @@
   <label for="<%- idPrefix %>-answers-<%- question._id %>" class="control-label"><%= question.short %></label>
   <p class="help-block"><%= question.full %></p>
   <input type="hidden" name="answers[<%- index %>].question" value="<%- question._id %>">
-  <% if (/^[0-9]+$/.test(value)) { %>
+  <% if (/referral/i.test(question._id)) { %>
   <% for (var answer = 1; answer <= 10; ++answer) { %>
   <label class="radio-inline">
     <input type="radio" name="answers[<%- index %>].answer" value="<%- answer %>" <%- value == answer ? 'checked' : '' %> required> <%- answer %>

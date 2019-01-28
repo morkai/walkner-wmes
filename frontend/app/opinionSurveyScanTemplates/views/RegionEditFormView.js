@@ -42,10 +42,17 @@ define([
         if (e.added && !_.includes(['comment', 'employer', 'superior'], e.added.id))
         {
           var view = this;
+          var options = /referral/i.test(e.added.id)
+            ? ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+            : ['no', 'na', 'yes'];
 
-          ['no', 'na', 'yes'].forEach(function(id)
+          options.forEach(function(id)
           {
-            view.addOption(id, t('opinionSurveyScanTemplates', 'regionEditForm:answer:' + id));
+            var answer = t.has('opinionSurveyScanTemplates', 'regionEditForm:answer:' + id)
+              ? t('opinionSurveyScanTemplates', 'regionEditForm:answer:' + id)
+              : id;
+
+            view.addOption(id, answer);
           });
         }
 
@@ -203,11 +210,13 @@ define([
           break;
 
         default:
-          data = ['no', 'na', 'yes'].map(function(id)
+          data = ['no', 'na', 'yes', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].map(function(id)
           {
             return {
               id: id,
-              text: t('opinionSurveyScanTemplates', 'regionEditForm:answer:' + id)
+              text: t.has('opinionSurveyScanTemplates', 'regionEditForm:answer:' + id)
+                ? t('opinionSurveyScanTemplates', 'regionEditForm:answer:' + id)
+                : id
             };
           });
           break;

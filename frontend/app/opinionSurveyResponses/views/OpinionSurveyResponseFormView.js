@@ -162,7 +162,7 @@ define([
           question: question,
           value: answers[i]
             ? answers[i].answer
-            : (/referrals/i.test(question._id) ? '1' : 'na'),
+            : (/referrals/i.test(question._id) ? '1' : 'na')
         });
       });
 
