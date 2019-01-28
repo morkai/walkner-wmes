@@ -71,6 +71,7 @@ app/core/assets/./highcharts.css
 app/core/assets/./embedded.css
 app/core/assets/./messages.css
 app/core/assets/./notifications.css
+app/core/assets/./userInfoPopover.css
 app/core/assets/main.css
 
 app/core/assets/messages.css
@@ -100,6 +101,10 @@ app/core/assets/properties.css
 app/core/assets/table.css
 ----------------
 app/core/assets/table.css
+
+app/core/assets/userInfoPopover.css
+----------------
+app/core/assets/userInfoPopover.css
 
 app/d8Entries/assets/details.css
 ----------------
@@ -683,12 +688,7 @@ app/users/assets/logInForm.css
 app/users/assets/main.css
 ----------------
 app/users/assets/./logInForm.css
-app/users/assets/./userInfoPopover.css
 app/users/assets/main.css
-
-app/users/assets/userInfoPopover.css
-----------------
-app/users/assets/userInfoPopover.css
 
 app/vis/assets/main.css
 ----------------
@@ -1878,7 +1878,14 @@ app/wh/templates/resolveAction.js
 app/wh/pages/WhPlanPage.js
 app/wh/templates/problemFilter.js
 app/wh/views/WhProblemFilterView.js
+app/wh/templates/problemChat.js
+app/wh/templates/problemChatMessage.js
+app/wh/views/WhProblemChatView.js
 app/wh/templates/problemDetails.js
+app/wh/templates/problemDetailsOrderInfo.js
+app/wh/templates/problemDetailsFuncs.js
+app/wh/templates/problemCancelOrderEditor.js
+app/wh/templates/problemSolveProblemEditor.js
 app/wh/views/WhProblemDetailsView.js
 app/wh/templates/problemList.js
 app/wh/templates/problemListItem.js
@@ -2865,6 +2872,7 @@ app/planning/PlanDisplayOptions.js
 app/wh/WhSetting.js
 app/wh/WhSettingCollection.js
 app/wh/settings.js
+app/core/templates/userInfo.js
 app/orderStatuses/OrderStatus.js
 app/orderStatuses/OrderStatusCollection.js
 app/data/orderStatuses.js
@@ -2883,7 +2891,6 @@ app/wh/views/WhFilterView.js
 app/data/clipboard.js
 app/planning/templates/contextMenu.js
 app/planning/util/contextMenu.js
-app/core/templates/userInfo.js
 app/wh/templates/whList.js
 app/wh/templates/whListRow.js
 app/wh/templates/whListPopover.js
