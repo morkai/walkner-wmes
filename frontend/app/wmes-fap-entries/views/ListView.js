@@ -138,6 +138,12 @@ define([
           {
             return this.textContent.trim();
           }
+
+          if (this.dataset.id === 'lines'
+            && this.firstElementChild.clientWidth >= 250)
+          {
+            return this.textContent.trim();
+          }
         },
         template: function(template)
         {

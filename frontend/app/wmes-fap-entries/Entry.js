@@ -211,6 +211,7 @@ define([
 
       obj.category = '<span class="fap-list-category">' + _.escape(obj.category) + '</span>';
       obj.problem = '<span class="fap-list-problem">' + _.escape(obj.problem) + '</span>';
+      obj.lines = '<span class="fap-list-lines">' + _.escape(obj.lines) + '</span>';
 
       return this.serialized = obj;
     },

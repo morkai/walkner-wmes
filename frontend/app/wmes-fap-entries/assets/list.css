@@ -8,7 +8,9 @@
   white-space: pre-line;
   text-align: justify;
 }
-.fap-list-category {
+.fap-list-category,
+.fap-list-problem,
+.fap-list-lines {
   display: inline-block;
   vertical-align: top;
   max-width: 275px;
@@ -17,12 +19,10 @@
   white-space: nowrap;
 }
 .fap-list-problem {
-  display: inline-block;
-  vertical-align: top;
   max-width: 400px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+}
+.fap-list-lines {
+  max-width: 250px;
 }
 .fap-entries-list .fap-is-unseen {
   font-weight: bold;
