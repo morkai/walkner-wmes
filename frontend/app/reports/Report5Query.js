@@ -59,7 +59,7 @@ define([
       {
         childOrgUnits = orgUnits.getChildren(parentOrgUnit).sort(function(a, b)
         {
-          return a.getLabel().localeCompare(b.getLabel());
+          return a.getLabel().localeCompare(b.getLabel(), undefined, {numeric: true, ignorePunctuation: true});
         });
       }
       else
@@ -73,7 +73,7 @@ define([
 
             if (aType === b.get('type'))
             {
-              return a.id.localeCompare(b.id);
+              return a.id.localeCompare(b.id, undefined, {numeric: true, ignorePunctuation: true});
             }
 
             return aType === 'prod' ? -1 : 1;

@@ -93,13 +93,13 @@ define([
               })
               .sort(function(a, b)
               {
-                return a.label.localeCompare(b.label);
+                return a.label.localeCompare(b.label, undefined, {numeric: true, ignorePunctuation: true});
               })
           };
         })
         .sort(function(a, b)
         {
-          return a.label.localeCompare(b.label);
+          return a.label.localeCompare(b.label, undefined, {numeric: true, ignorePunctuation: true});
         });
     },
 
@@ -119,7 +119,7 @@ define([
         })
         .sort(function(a, b)
         {
-          return a.text.localeCompare(b.text);
+          return a.text.localeCompare(b.text, undefined, {numeric: true, ignorePunctuation: true});
         });
     },
 

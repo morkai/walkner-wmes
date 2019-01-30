@@ -121,7 +121,7 @@ define([
       var divisionIds = divisions
         .filter(function(division) { return division.get('type') === 'prod'; })
         .map(function(division) { return division.id; })
-        .sort(function(a, b) { return a.localeCompare(b); });
+        .sort(function(a, b) { return a.localeCompare(b, undefined, {numeric: true, ignorePunctuation: true}); });
 
       var effAndProd = {
         efficiency: [],

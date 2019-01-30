@@ -65,7 +65,10 @@ define([
         idPrefix: this.idPrefix,
         divisions: divisions
           .filter(function(division) { return division.get('type') === 'prod'; })
-          .sort(function(a, b) { return a.getLabel().localeCompare(b.getLabel()); })
+          .sort(function(a, b)
+          {
+            return a.getLabel().localeCompare(b.getLabel(), undefined, {numeric: true, ignorePunctuation: true});
+          })
           .map(function(division)
           {
             return {

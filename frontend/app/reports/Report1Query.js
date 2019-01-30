@@ -61,7 +61,7 @@ define([
 
       childOrgUnits.sort(function(a, b)
       {
-        return a.getLabel().localeCompare(b.getLabel());
+        return a.getLabel().localeCompare(b.getLabel(), undefined, {numeric: true, ignorePunctuation: true});
       });
 
       childOrgUnits.forEach(function(childOrgUnit)
