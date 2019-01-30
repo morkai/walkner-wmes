@@ -65,6 +65,17 @@ define([
       'click .is-filter': function(e)
       {
         this.trigger('showFilter', e.currentTarget.dataset.columnId);
+      },
+
+      'click .action-seen': function(e)
+      {
+        var $action = this.$(e.currentTarget).addClass('disabled');
+        var entry = this.collection.get($action.closest('tr')[0].dataset.id);
+
+        if (entry)
+        {
+          entry.multiChange({});
+        }
       }
 
     }, ListView.prototype.events),
@@ -104,7 +115,16 @@ define([
       return this.options.orderDetails ? null : function(row)
       {
         var model = collection.get(row._id);
-        var actions = [ListView.actions.viewDetails(model)];
+        var actions = [];
+
+        actions.push({
+          id: 'seen',
+          icon: 'eye',
+          label: view.t('markAsSeen:listAction'),
+          className: row.observer.changes.any ? '' : 'disabled'
+        });
+
+        actions.push(ListView.actions.viewDetails(model));
 
         if (model.canDelete())
         {

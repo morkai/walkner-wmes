@@ -15,6 +15,7 @@
     "PAGE_ACTION:subscribe": "Turn on notifications",
     "PAGE_ACTION:unsubscribe": "Turn off notifications",
 
+    "markAsSeen:listAction": "Mark as seen",
     "markAsSeen:noComment": "Changes without comments",
     "markAsSeen:finished": "Finished",
     "markAsSeen:dayOld": "Older than a day",
