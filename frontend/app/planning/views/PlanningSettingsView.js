@@ -37,18 +37,26 @@ define([
         own: false,
         view: this
       });
+
+      setUpMrpSelect2(this.$id('wh-newIncludedMrps'), {
+        width: '100%',
+        placeholder: ' ',
+        sortable: true,
+        own: false,
+        view: this
+      });
     },
 
     shouldAutoUpdateSettingField: function(setting)
     {
-      return setting.id !== 'planning.wh.ignoredMrps';
+      return setting.id !== 'planning.wh.ignoredMrps' && setting.id !== 'planning.wh.newIncludedMrps';
     },
 
     updateSettingField: function(setting)
     {
-      if (setting && setting.id === 'planning.wh.ignoredMrps')
+      if (setting && /edMrps/.test(setting.id))
       {
-        this.$id('wh-ignoredMrps').select2('data', setting.getValue().map(function(mrp)
+        this.$id(setting.id.replace('planning.wh.', 'wh-')).select2('data', setting.getValue().map(function(mrp)
         {
           return {id: mrp, text: mrp};
         }));

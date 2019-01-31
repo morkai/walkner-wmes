@@ -83,7 +83,7 @@ define([
         return !!newValue;
       }
 
-      if (/ignoredMrps/.test(id))
+      if (/edMrps/.test(id))
       {
         return newValue.split(',').filter(function(mrp) { return !!mrp.length; });
       }
