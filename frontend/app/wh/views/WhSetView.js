@@ -388,8 +388,10 @@ define([
           return view.onOrderChanged(whOrder);
         }
 
+        var events = [];
         var req = view.promised(view.whOrders.act('updateOrder', {
-          order: update(JSON.parse(JSON.stringify(whOrder.attributes)))
+          order: update(JSON.parse(JSON.stringify(whOrder.attributes)), events),
+          events: events
         }));
 
         req.fail(function()
@@ -419,8 +421,10 @@ define([
 
       picklistDone: function(newData, newValue, propFunc, done)
       {
-        done(function(newData)
+        done(function(newData, events)
         {
+          var oldValue = newData.picklistDone;
+
           newData.picklistDone = newValue;
 
           if (newValue === false)
@@ -434,8 +438,15 @@ define([
             newData.problem = '';
           }
 
+          var picklistFunc = null;
+
           newData.funcs.forEach(function(func)
           {
+            if (newData.picklistFunc === func._id)
+            {
+              picklistFunc = func;
+            }
+
             if (newValue)
             {
               if (newData.picklistFunc === func._id)
@@ -461,6 +472,17 @@ define([
             func.problemArea = '';
           });
 
+          events.push({
+            type: 'picklistDone',
+            order: newData._id,
+            data: {
+              oldValue: oldValue,
+              newValue: newValue,
+              func: picklistFunc ? picklistFunc._id : null,
+              user: picklistFunc ? picklistFunc.user : null
+            }
+          });
+
           return newData;
         });
       },
@@ -469,9 +491,10 @@ define([
       {
         var view = this;
 
-        done(function(newData)
+        done(function(newData, events)
         {
           var func = newData.funcs[WhOrder.FUNC_TO_INDEX[propFunc]];
+          var oldValue = func.picklist;
 
           func.picklist = newValue;
           func.carts = [];
@@ -500,6 +523,17 @@ define([
               break;
           }
 
+          events.push({
+            type: 'picklist',
+            order: newData._id,
+            data: {
+              oldValue: oldValue,
+              newValue: newValue,
+              func: func._id,
+              user: func.user
+            }
+          });
+
           return newData;
         });
       },
@@ -511,9 +545,10 @@ define([
         switch (newValue)
         {
           case 'pending':
-            done(function(newData)
+            done(function(newData, events)
             {
               var func = newData.funcs[WhOrder.FUNC_TO_INDEX[propFunc]];
+              var oldValue = newData.func.pickup;
 
               func.status = 'pickup';
               func.pickup = 'pending';
@@ -523,6 +558,17 @@ define([
               func.finishedAt = null;
 
               view.updateHandlers.finalizeOrder.call(view, newData);
+
+              events.push({
+                type: 'pickup',
+                order: newData._id,
+                data: {
+                  oldValue: oldValue,
+                  newValue: newValue,
+                  func: func._id,
+                  user: func.user
+                }
+              });
 
               return newData;
             });
@@ -549,9 +595,10 @@ define([
 
         $editor.on('submit', function()
         {
-          done(function(newData)
+          done(function(newData, events)
           {
             var func = newData.funcs[WhOrder.FUNC_TO_INDEX[propFunc]];
+            var oldValue = func.pickup;
 
             func.status = 'finished';
             func.pickup = 'success';
@@ -565,6 +612,18 @@ define([
             func.finishedAt = new Date();
 
             view.updateHandlers.finalizeOrder.call(view, newData);
+
+            events.push({
+              type: 'pickup',
+              order: newData._id,
+              data: {
+                oldValue: oldValue,
+                newValue: func.pickup,
+                func: func._id,
+                user: func.user,
+                carts: func.carts
+              }
+            });
 
             return newData;
           });
@@ -590,9 +649,10 @@ define([
 
         $editor.on('submit', function()
         {
-          done(function(newData)
+          done(function(newData, events)
           {
             var func = newData.funcs[WhOrder.FUNC_TO_INDEX[propFunc]];
+            var oldValue = func.pickup;
 
             func.status = 'problem';
             func.pickup = 'failure';
@@ -602,6 +662,19 @@ define([
             func.finishedAt = new Date();
 
             view.updateHandlers.finalizeOrder.call(view, newData);
+
+            events.push({
+              type: 'pickup',
+              order: newData._id,
+              data: {
+                oldValue: oldValue,
+                newValue: func.pickup,
+                func: func._id,
+                user: func.user,
+                problemArea: func.problemArea,
+                comment: func.comment
+              }
+            });
 
             return newData;
           });

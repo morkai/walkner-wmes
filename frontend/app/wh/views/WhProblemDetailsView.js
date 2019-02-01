@@ -243,7 +243,15 @@ define([
         WhOrder.finalizeOrder(newData);
 
         var req = WhOrderCollection.act(view.model.get('date'), 'updateOrder', {
-          order: newData
+          order: newData,
+          events: [{
+            type: 'problemResolved',
+            order: newData._id,
+            data: {
+              func: funcId,
+              carts: carts
+            }
+          }]
         });
 
         req.fail(function()
