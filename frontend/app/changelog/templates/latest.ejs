@@ -54,3 +54,16 @@
     oraz uruchomienia przeglądarki bez trybu kioskowego. Akcje dostępne po trzykrotnym kliknięciu na przycisk
     menu akcji.</li>
 </ul>
+<h3>Planowanie</h3>
+<ul>
+  <li>Poprawiono błąd powodujący rozplanowanie zlecenia z 0 ilością sztuk na początku drugiej i trzeciej zmiany
+    w niektórych przypadkach.</li>
+  <li>Zmieniono generowanie planu tak, aby linie były rozplanowywane w kolejności alfanumerycznej wg MRP i ID linii,
+    a nie wg kolejności pojawienia się w ustawieniach.</li>
+  <li>Zmieniono generowanie planu tak, aby części podzielonych zleceń były wcześniej rozplanowywane na kolejnych
+    liniach, jeżeli różnica w czasie rozpoczęcia pierszej części zlecenia i aktualnego czasu rozplanowywanej linii
+    jest mniejsza niż 60 minut, a nie 20 minut.</li>
+  <li>Zmieniono generowanie planu tak, aby zlecenia, które pasują do przynajmniej jednej grupy ze
+    zdefiniowanymi 12NC nie trafiały na linie, które należą do grupy bez żadnych 12NC w przypadku,
+    gdy na liniach z grupy 12NC nie ma już miejsca.</li>
+</ul>
