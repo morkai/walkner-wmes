@@ -83,33 +83,6 @@ define([
       FilteredListPage.prototype.afterRender.call(this);
 
       qiDictionaries.load();
-
-      if (!localStorage.QI_FILTER_HELP)
-      {
-        this.showFilterHelp();
-      }
-    },
-
-    showFilterHelp: function()
-    {
-      if (!t.has('qiResults', 'filter:help'))
-      {
-        return;
-      }
-
-      $('<div class="message message-inline message-info"></div>')
-        .css('margin-bottom', '15px')
-        .html(t('qiResults', 'filter:help'))
-        .insertAfter(this.$('.filter-container'))
-        .on('click', function()
-        {
-          localStorage.QI_FILTER_HELP = '1';
-
-          $(this).fadeOut('fast', function()
-          {
-            $(this).remove();
-          });
-        });
     }
 
   });
