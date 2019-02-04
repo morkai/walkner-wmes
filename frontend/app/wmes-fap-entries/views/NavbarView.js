@@ -211,9 +211,14 @@ define([
 
     onKeyDown: function(e)
     {
-      if (e.originalEvent.key === 'Escape')
+      if (e.key === 'Escape')
       {
         this.hideAddForm();
+      }
+      else if (e.key === 'F1')
+      {
+        e.preventDefault();
+        this.$id('add').click();
       }
     },
 
