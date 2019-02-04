@@ -1,70 +1,7 @@
-<h1>v0.131.0</h1>
-<h2><%- time.format('2019-02-03', 'LL') %></h2>
-<h3>FAP</h3>
-<ul>
-  <li>Poprawiono błąd powodujący nieprawidłowe ustawianie filtra 'MRP' po wejściu na listę zgłoszeń
-    z filtrem 'Kategoria'.</li>
-  <li>Poprawiono błąd powodujący niedziałanie automatycznego dodawania uczestników do nowego zgłoszenia.</li>
-  <li>Poprawiono błąd powodujący dodawanie do zgłoszenia plików załadowanych do modułu Dokumentów, jeżeli wcześniej
-    użytkownik odwiedził stronę ze szczegółami zgłoszenia FAP.</li>
-  <li>Zmieniono nazwy załączników na czacie tak, aby stawały się przekreślone, jeżeli załącznik został usunięty.</li>
-  <li>Zmieniono wyświetlanie wiadomości na czacie tak, aby wszystkie wiadomości wysłane przez innych użytkowników
-    były po lewej stronie, a wiadomości użytkownika po prawej.</li>
-  <li>Zmieniono dodawanie nowych zgłoszeń tak, aby zgłoszenia dodane przez użytkownika bez ustawionej
-    'Funkcji na produkcji', ale z przynajmniej jednym 'Uprawnieniem' miały status 'Rozpoczęte' a nie 'Oczekujące'.</li>
-  <li>Zmieniono kolumnę 'Linie' na liście zgłoszeń tak, żeby miała maksymalnie szerokość równą 200px.</li>
-  <li>Dodano filtr 'Wydział' do listy zgłoszeń.</li>
-  <li>Dodano filtr 'Tekst' do listy zgłoszeń przeszukujący: Nazwa produktu, Problem, Rozwiązanie, Dlaczego?,
-    Opis kroków rozwiązujących problem oraz czat.</li>
-  <li>Dodano do listy kolumnę 'Nazwa produktu'.</li>
-  <li>Dodano do listy akcję 'Oznacz jako przeczytane'.</li>
-  <li>Dodano raport.</li>
-  <li>Dodano możliwość dodawania obrazków znajdujących się w schowku przez skrót <kbd>CTRL+V</kbd>.</li>
-  <li>Dodano akcję 'Dodaj załączniki' do sekcji 'Załączniki' na stronie szczegółów zgłoszenia umożliwiającą
-    wybranie plików z dysku.</li>
-  <li>Dodano do eksportowania zgłoszeń kolumnę z wiadomościami z czata.</li>
-</ul>
-<h3>Raporty > CLIP</h3>
-<ul>
-  <li>Zmieniono listę zleceń tak, aby dane w wygenerowanym raporcie zmieniały się, jeżeli zaktualizowano zlecenie
-    (komentarz, powód opóźnienia, opóźniony komponent, M4) zanim raport wygasł.</li>
-  <li>Dodano wyświetlanie 'Opóźnionego komponentu' w kolumnie 'Powód opóźnienia' na liście zleceń.</li>
-</ul>
-<h3>Formatka operatora</h3>
-<ul>
-  <li>Usunięto przycisk umożliwiający przejście do Pulpitu.</li>
-</ul>
-<h3>Baza testów</h3>
-<ul>
-  <li>Poprawiono błąd powodujący wyświetlanie adresów IP klientów jako <code>127.0.0.1</code>.</li>
-</ul>
-<h3>Badanie Opinia</h3>
-<ul>
-  <li>Zmieniono domyślny filtr 'Badania' w raporcie tak, aby pokazywane były wyniki tylko dla badania
-    z najnowszymi wynikami zamiast wszystkie.</li>
-  <li>Zmieniono nagłówki odpowiedzi w papierowej wersji ankiety z tekstu na ikony.</li>
-  <li>Dodano wsparcie dla języka ukraińskiego w przeglądarkowej wersji ankiety.</li>
-  <li>Dodano wsparcie dla pytania 'Polecanie' w formacie 1-10 do przeglądarkowej wersji ankiety
-    oraz do 'Odpowiedzi'.</li>
-</ul>
-<h3>Planowanie</h3>
-<ul>
-  <li>Poprawiono błąd powodujący rozplanowanie zlecenia z 0 ilością sztuk na początku drugiej i trzeciej zmiany
-    w niektórych przypadkach.</li>
-  <li>Zmieniono generowanie planu tak, aby linie były rozplanowywane w kolejności alfanumerycznej wg MRP i ID linii,
-    a nie wg kolejności pojawienia się w ustawieniach.</li>
-  <li>Zmieniono generowanie planu tak, aby części podzielonych zleceń były wcześniej rozplanowywane na kolejnych
-    liniach, jeżeli różnica w czasie rozpoczęcia pierszej części zlecenia i aktualnego czasu rozplanowywanej linii
-    jest mniejsza niż 60 minut, a nie 20 minut.</li>
-  <li>Zmieniono generowanie planu tak, aby zlecenia, które pasują do przynajmniej jednej grupy ze
-    zdefiniowanymi 12NC nie trafiały na linie, które należą do grupy bez żadnych 12NC w przypadku,
-    gdy na liniach z grupy 12NC nie ma już miejsca.</li>
-</ul>
+<h1>v?.?.?</h1>
+<h2><%- time.format(Date.now(), 'LL') %></h2>
 <h3>Inne</h3>
 <ul>
-  <li>Poprawiono błąd uniemożliwiający 'przyklejenie' dymka z informacjami o użytkowniku po kliknięciu
-    na nazwę użytkownika.</li>
-  <li>Dodano do aplikacji uruchomionych w trybie wsadowym akcje resetowania przeglądarki, ponownego uruchomienia
-    oraz uruchomienia przeglądarki bez trybu kioskowego. Akcje dostępne po trzykrotnym kliknięciu na przycisk
-    menu akcji.</li>
+  <li>Zmieniono maksymalną szerokość często używanych formularzy tak aby była dynamicznie dostosowywana na większych
+    rozdzielczościach ekranu.</li>
 </ul>

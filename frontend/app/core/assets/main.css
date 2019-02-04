@@ -105,6 +105,16 @@ code.multiline {
   text-shadow: none;
 }
 
+@media (min-width: 1330px) {
+  .page-max-flex .bd {
+    display: flex;
+    justify-content: center;
+  }
+  .page-max-flex .bd > form,
+  .page-max-flex .bd > div {
+    min-width: 1280px;
+  }
+}
 .page-header {
   border-bottom: none;
   margin: 15px;
@@ -143,6 +153,7 @@ code.multiline {
 .page-actions-jump {
   width: 150px;
 }
+
 .fa + span {
   margin-left: 7px;
 }

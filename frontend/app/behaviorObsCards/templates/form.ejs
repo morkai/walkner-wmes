@@ -4,21 +4,21 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="row">
-        <div class="form-group col-lg-3 has-required-select2">
+        <div class="form-group col-lg-4 has-required-select2">
           <label for="<%- idPrefix %>-observer" class="control-label is-required"><%- helpers.t('PROPERTY:observer') %></label>
           <input id="<%- idPrefix %>-observer" type="text" autocomplete="new-password" name="observer" required>
         </div>
-        <div class="form-group col-lg-3 has-required-select2">
+        <div class="form-group col-lg-4 has-required-select2">
           <label for="<%- idPrefix %>-observerSection" class="control-label is-required"><%- helpers.t('FORM:observerSection') %></label>
           <input id="<%- idPrefix %>-observerSection" type="text" autocomplete="new-password" name="observerSection" required>
         </div>
-        <div class="form-group col-lg-3 has-required-select2">
+        <div class="form-group col-lg-4 has-required-select2">
           <label for="<%- idPrefix %>-superior" class="control-label is-required"><%- helpers.t('FORM:superior') %></label>
           <input id="<%- idPrefix %>-superior" type="text" autocomplete="new-password" name="superior" required>
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-3" style="display: flex">
+        <div class="col-lg-4" style="display: flex">
           <div class="form-group">
             <label for="<%- idPrefix %>-date" class="control-label is-required"><%- helpers.t('PROPERTY:date') %></label>
             <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required min="2017-01-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
@@ -34,11 +34,11 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-3 form-group has-required-select2">
+        <div class="col-lg-4 form-group has-required-select2">
           <label for="<%- idPrefix %>-company" class="control-label is-required"><%- helpers.t('FORM:company') %></label>
           <input id="<%- idPrefix %>-company" type="text" autocomplete="new-password" name="company" required>
         </div>
-        <div class="col-lg-3 form-group">
+        <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-companyName" class="control-label is-required"><%- helpers.t('FORM:companyName') %></label>
           <input id="<%- idPrefix %>-companyName" class="form-control" type="text" autocomplete="new-password" name="companyName" required>
         </div>
@@ -46,15 +46,15 @@
       <hr style="margin-top: 5px">
       <h4 class="control-label"><%- helpers.t('PANEL:TITLE:where') %></h4>
       <div class="row">
-        <div class="form-group col-lg-3 has-required-select2">
+        <div class="form-group col-lg-4 has-required-select2">
           <label for="<%- idPrefix %>-section" class="control-label is-required"><%- helpers.t('PROPERTY:section') %></label>
           <input id="<%- idPrefix %>-section" type="text" autocomplete="new-password" name="section" required>
         </div>
-        <div class="form-group col-lg-3">
+        <div class="form-group col-lg-4">
           <label for="<%- idPrefix %>-line" class="control-label"><%- helpers.t('PROPERTY:line') %></label>
           <input id="<%- idPrefix %>-line" type="text" autocomplete="new-password" name="line">
         </div>
-        <div class="form-group col-lg-3">
+        <div class="form-group col-lg-4">
           <label for="<%- idPrefix %>-position" class="control-label is-required"><%- helpers.t('PROPERTY:position') %></label>
           <input id="<%- idPrefix %>-position" class="form-control" type="text" autocomplete="new-password" name="position" required>
         </div>

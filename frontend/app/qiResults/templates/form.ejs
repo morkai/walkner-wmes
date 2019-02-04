@@ -53,7 +53,7 @@
           </select>
         </div>
         <% if (!model.ok) { %>
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-nokOwner" class="control-label"><%- t('qiResults', 'PROPERTY:nokOwner') %></label>
           <select id="<%- idPrefix %>-nokOwner" name="nokOwner" class="form-control" data-role="inspector">
             <option></option>
@@ -77,7 +77,7 @@
           <label for="<%- idPrefix %>-inspectedAt" class="control-label is-required"><%- t('qiResults', 'PROPERTY:inspectedAt') %></label>
           <input id="<%- idPrefix %>-inspectedAt" name="inspectedAt" class="form-control" type="date" min="<%- inspectedAtMin %>" max="<%- inspectedAtMax %>" data-role="inspector">
         </div>
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-inspector" class="control-label is-required"><%- t('qiResults', 'PROPERTY:inspector') %></label>
           <select id="<%- idPrefix %>-inspector" name="inspector" class="form-control" required data-role="inspector">
             <% inspectors.forEach(function(inspector) { %>
@@ -97,7 +97,7 @@
         </div>
         <% if (!model.ok) { %>
         <div class="col-lg-2 form-group">
-          <label for="<%- idPrefix %>-qtyNokInspected" class="control-label is-required"><%- t('qiResults', 'PROPERTY:qtyNokInspected') %></label>
+          <label for="<%- idPrefix %>-qtyNokInspected" class="control-label is-required" title="<%- t('qiResults', 'PROPERTY:qtyNokInspected') %>"><%- t('qiResults', 'PROPERTY:qtyNokInspected:min') %></label>
           <input id="<%- idPrefix %>-qtyNokInspected" name="qtyNokInspected" class="form-control" type="number" required min="0" data-role="inspector">
         </div>
         <div class="col-lg-2 form-group">

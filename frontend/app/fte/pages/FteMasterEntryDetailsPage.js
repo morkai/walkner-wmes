@@ -33,6 +33,8 @@ define([
 
     pageId: 'fteMasterEntryDetails',
 
+    pageClassName: 'page-max-flex',
+
     createView: function()
     {
       return new FteMasterEntryDetailsView({model: this.model});

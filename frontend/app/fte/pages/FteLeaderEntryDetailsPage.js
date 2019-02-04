@@ -25,6 +25,8 @@ define([
 
   return View.extend({
 
+    pageClassName: 'page-max-flex',
+
     modelType: 'fteLeader',
 
     layoutName: 'page',

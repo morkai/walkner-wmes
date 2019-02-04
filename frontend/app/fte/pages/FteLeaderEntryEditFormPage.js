@@ -21,6 +21,8 @@ define([
 
     pageId: 'fteLeaderEntryForm',
 
+    pageClassName: 'page-max-flex',
+
     breadcrumbs: function()
     {
       return [

@@ -17,6 +17,8 @@ define([
 
   return AddFormPage.extend({
 
+    pageClassName: 'page-max-flex',
+
     FormView: BehaviorObsCardFormView,
     getFormViewOptions: function()
     {

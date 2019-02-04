@@ -71,6 +71,7 @@
     "PROPERTY:qtyToFix": "Quantity to fix",
     "PROPERTY:qtyNok": "NOK quantity",
     "PROPERTY:qtyNokInspected": "Inspected NOK quantity",
+    "PROPERTY:qtyNokInspected:min": "Inspected NOK qty",
     "PROPERTY:serialNumbers": "Serial number",
     "PROPERTY:comment": "Comment",
     "PROPERTY:ok": "Result",

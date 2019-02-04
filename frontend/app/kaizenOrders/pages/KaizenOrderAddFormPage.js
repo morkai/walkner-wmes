@@ -19,6 +19,8 @@ define([
 
   return AddFormPage.extend({
 
+    pageClassName: 'page-max-flex',
+
     FormView: KaizenOrderFormView,
     getFormViewOptions: function()
     {

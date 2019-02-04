@@ -4,28 +4,28 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="row">
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-nc12" class="control-label is-required"><%- t('pfepEntries', 'PROPERTY:nc12') %></label>
           <input id="<%- idPrefix %>-nc12" name="nc12" class="form-control" type="text" autocomplete="new-password" required maxlength="12" pattern="^([0-9]{12}|[A-Z][A-Z0-9]{6})$">
         </div>
-        <div class="col-lg-4 form-group">
+        <div class="col-lg-8 form-group">
           <label for="<%- idPrefix %>-description" class="control-label"><%- t('pfepEntries', 'PROPERTY:description') %></label>
           <input id="<%- idPrefix %>-description" name="description" class="form-control" type="text" autocomplete="new-password">
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-unit" class="control-label is-required"><%- t('pfepEntries', 'PROPERTY:unit') %></label>
           <input id="<%- idPrefix %>-unit" name="unit" class="form-control" type="text" autocomplete="new-password" required>
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-packType" class="control-label is-required"><%- t('pfepEntries', 'PROPERTY:packType') %></label>
           <input id="<%- idPrefix %>-packType" name="packType" class="form-control" type="text" autocomplete="new-password" required>
         </div>
         <% ['externalPackQty', 'internalPackQty'].forEach(function(prop) { %>
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-<%- prop %>" class="control-label is-required"><%- t('pfepEntries', 'PROPERTY:' + prop) %></label>
           <input id="<%- idPrefix %>-<%- prop %>" name="<%- prop %>" class="form-control" type="number" required min="0">
         </div>
@@ -33,7 +33,7 @@
       </div>
       <div class="row">
         <% ['packLength', 'packWidth', 'packHeight'].forEach(function(prop) { %>
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-<%- prop %>" class="control-label is-required"><%- t('pfepEntries', 'PROPERTY:' + prop) %></label>
           <input id="<%- idPrefix %>-<%- prop %>" name="<%- prop %>" class="form-control" type="number" required min="0">
         </div>
@@ -41,7 +41,7 @@
       </div>
       <div class="row">
         <% ['packGrossWeight', 'componentNetWeight', 'componentGrossWeight'].forEach(function(prop) { %>
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-<%- prop %>" class="control-label is-required"><%- t('pfepEntries', 'PROPERTY:' + prop) %></label>
           <input id="<%- idPrefix %>-<%- prop %>" name="<%- prop %>" class="form-control" type="number" required min="0" step="0.001">
         </div>
@@ -49,7 +49,7 @@
       </div>
       <div class="row">
         <% ['qtyPerLayer', 'qtyOnPallet'].forEach(function(prop) { %>
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-<%- prop %>" class="control-label"><%- t('pfepEntries', 'PROPERTY:' + prop) %></label>
           <input id="<%- idPrefix %>-<%- prop %>" name="<%- prop %>" class="form-control" type="number" min="0" step="0.001">
         </div>
@@ -57,7 +57,7 @@
       </div>
       <div class="row">
         <% ['palletLength', 'palletWidth', 'palletHeight'].forEach(function(prop) { %>
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-<%- prop %>" class="control-label"><%- t('pfepEntries', 'PROPERTY:' + prop) %></label>
           <input id="<%- idPrefix %>-<%- prop %>" name="<%- prop %>" class="form-control" type="number" min="0">
         </div>
@@ -65,14 +65,14 @@
       </div>
       <div class="row">
         <% ['moq', 'roundingValue'].forEach(function(prop) { %>
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-<%- prop %>" class="control-label is-required"><%- t('pfepEntries', 'PROPERTY:' + prop) %></label>
           <input id="<%- idPrefix %>-<%- prop %>" name="<%- prop %>" class="form-control" type="number" required min="0">
         </div>
         <% }) %>
       </div>
       <div class="row">
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-4 form-group">
           <label for="<%- idPrefix %>-vendor" class="control-label is-required"><%- t('pfepEntries', 'PROPERTY:vendor') %></label>
           <input id="<%- idPrefix %>-vendor" name="vendor" class="form-control" type="text" autocomplete="new-password" required>
         </div>

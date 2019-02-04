@@ -29,6 +29,7 @@ define([
   {
     this.model = {
       id: null,
+      className: null,
       actions: [],
       breadcrumbs: [],
       title: null
@@ -98,11 +99,17 @@ define([
     {
       this.setId(this.model.id);
     }
+
+    if (this.model.className !== null)
+    {
+      this.setClassName(this.model.className);
+    }
   };
 
   PageLayout.prototype.reset = function()
   {
     this.setId(null);
+    this.setClassName(null);
 
     this.model.title = null;
 
@@ -133,6 +140,11 @@ define([
     if (page.pageId)
     {
       this.setId(page.pageId);
+    }
+
+    if (page.pageClassName)
+    {
+      this.setClassName(page.pageClassName);
     }
 
     if (page.breadcrumbs)
@@ -166,6 +178,27 @@ define([
     }
 
     this.model.id = id;
+
+    return this;
+  };
+
+  /**
+   * @param {string} className
+   * @returns {PageLayout}
+   */
+  PageLayout.prototype.setClassName = function(className)
+  {
+    if (this.model.className)
+    {
+      document.body.classList.remove(this.model.className);
+    }
+
+    if (this.isRendered() && className)
+    {
+      document.body.classList.add(className);
+    }
+
+    this.model.className = className;
 
     return this;
   };

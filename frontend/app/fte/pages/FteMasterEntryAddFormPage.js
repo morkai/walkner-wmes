@@ -19,6 +19,8 @@ define([
 
     pageId: 'fteMasterEntryAddForm',
 
+    pageClassName: 'page-max-flex',
+
     breadcrumbs: [
       {
         label: t.bound('fte', 'BREADCRUMBS:master:browse'),

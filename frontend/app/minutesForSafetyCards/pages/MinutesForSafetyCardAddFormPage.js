@@ -13,6 +13,8 @@ define([
 
   return AddFormPage.extend({
 
+    pageClassName: 'page-max-flex',
+
     FormView: MinutesForSafetyCardFormView,
     baseBreadcrumb: true,
 

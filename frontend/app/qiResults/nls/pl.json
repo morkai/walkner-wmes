@@ -70,6 +70,7 @@
   "PROPERTY:qtyToFix": "Ilość do selekcji",
   "PROPERTY:qtyNok": "Ilość niezgodnych",
   "PROPERTY:qtyNokInspected": "Ilość niezgodnych w skontrolowanych",
+  "PROPERTY:qtyNokInspected:min": "Ilość niezg. w skontr.",
   "PROPERTY:serialNumbers": "Numer seryjny",
   "PROPERTY:comment": "Komentarz",
   "PROPERTY:ok": "Wynik",

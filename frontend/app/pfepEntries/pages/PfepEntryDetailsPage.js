@@ -17,6 +17,8 @@ define([
 
   return DetailsPage.extend({
 
+    pageClassName: 'page-max-flex',
+
     template: template,
 
     baseBreadcrumb: true,
