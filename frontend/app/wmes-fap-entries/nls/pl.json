@@ -105,6 +105,9 @@
   "addForm:orderNo:notFound": "Podane zlecenie nie istnieje.",
   "addForm:notifications:subdivisions": "Działy",
   "addForm:notifications:prodFunctions": "Funkcje",
+  "addForm:copy:title": "Kopiuj kategorię i problem z Twojego ostatniego zgłoszenia.",
+  "addForm:copy:failure": "Kopiowanie ostatniego zgłoszenia nie powiodło się.",
+  "addForm:copy:notFound": "Nie znaleziono żadnych pasujących zgłoszeń.",
 
   "upload:drop": "Upuść tutaj pliki jakie chcesz dodać do tego zgłoszenia.",
   "upload:tooMany": "Możesz załączyć maksymalnie {max} {max, plural, few{pliki} one{plik} other{plików}}.",

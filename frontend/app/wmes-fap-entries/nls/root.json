@@ -103,6 +103,9 @@
     "addForm:orderNo:notFound": "Order not found.",
     "addForm:notifications:subdivisions": "Subdivisions",
     "addForm:notifications:prodFunctions": "Functions",
+    "addForm:copy:title": "Copy category and problem from your last entry.",
+    "addForm:copy:failure": "Failed to copy the last entry.",
+    "addForm:copy:notFound": "You don't have any entries yet.",
 
     "upload:drop": "Drop here any files you want to attach to the entry.",
     "upload:tooMany": "You can attach at most {max} {max, plural, one{file} other{files}}.",

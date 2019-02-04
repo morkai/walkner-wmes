@@ -108,6 +108,10 @@ define([
       'click .fap-addForm-upload-name': function(e)
       {
         this.showUploadNameEditor(this.$(e.target).closest('.fap-addForm-upload')[0].dataset.uploadId);
+      },
+      'click #-copy': function()
+      {
+        this.copyLastEntry();
       }
 
     }, FormView.prototype.events),
@@ -776,6 +780,55 @@ define([
     getFailureText: function()
     {
       return this.t('core', 'FORM:ERROR:addFailure');
+    },
+
+    copyLastEntry: function()
+    {
+      var view = this;
+      var $copy = view.$id('copy');
+      var $icon = $copy.find('.fa');
+
+      if ($icon.hasClass('fa-spin'))
+      {
+        return;
+      }
+
+      $icon.removeClass('fa-copy').addClass('fa-spinner fa-spin');
+
+      var req = view.ajax({
+        url: '/fap/entries?limit(1)&sort(-createdAt)&select(category,problem)'
+          + '&observers.user.id=' + user.data._id
+          + '&creator.id=' + user.data._id
+      });
+
+      req.done(function(res)
+      {
+        if (!res.totalCount)
+        {
+          return viewport.msg.show({
+            type: 'warning',
+            time: 2500,
+            text: view.t('addForm:copy:notFound')
+          });
+        }
+
+        view.$id('category').select2('val', res.collection[0].category).trigger('change');
+        view.$id('problem').val(res.collection[0].problem).focus();
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.show({
+          type: 'error',
+          time: 2500,
+          text: view.t('addForm:copy:failure')
+        });
+      });
+
+      req.done(function()
+      {
+        $icon.removeClass('fa-spinner fa-spin').addClass('fa-copy');
+      });
     }
 
   });

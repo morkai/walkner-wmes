@@ -77,6 +77,17 @@
   vertical-align: top;
   white-space: nowrap;
 }
+.fap-addForm-copy {
+  margin-left: auto;
+}
+.fap-addForm-copy > .fa-copy {
+  padding: 5px 0 5px 10px;
+  cursor: pointer;
+  color: #337ab7;
+}
+.fap-addForm-copy:hover > .fa-copy {
+  color: #23527c;
+}
 .fap-addForm-warning {
   position: absolute;
   top: auto;
