@@ -9,6 +9,8 @@ const mongoSerializer = require('h5.rql/lib/serializers/mongoSerializer');
 
 module.exports = function startFixRoutes(app, express)
 {
+  const logger = app.logger.create({module: 'fix'});
+
   const inProgress = {};
 
   function onlySuper(req, res, next)
@@ -46,53 +48,84 @@ module.exports = function startFixRoutes(app, express)
 
     res.setTimeout(0);
 
-    app.info('[fix] Recounting ProdShift durations...');
+    logger.debug('Recounting ProdShift durations...');
 
-    app.mongoose.model('ProdShift')
+    const complete = _.once(finalize);
+    const todo = [];
+    const cursor = app.mongoose.model('ProdShift')
       .find(mongoSerializer.fromQuery(req.rql).selector)
-      .exec(function(err, prodShifts)
-      {
-        if (err)
-        {
-          inProgress.fixProdShiftDurations = false;
+      .select({_id: 1})
+      .lean()
+      .cursor();
 
-          return next(err);
-        }
+    cursor.on('error', complete);
 
-        app.info(`[fix] Found ${prodShifts.length} ProdShifts...`);
-
-        recountNext(prodShifts, 0);
-      });
-
-    function recountNext(prodShifts, i)
+    cursor.on('data', (doc) =>
     {
-      if (i > 0 && i % 10000 === 0)
+      todo.push(doc._id);
+    });
+
+    cursor.on('end', () =>
+    {
+      logger.info(`[fix] Found ${todo.length} ProdShifts...`);
+
+      recountNextBatch(1);
+    });
+
+    function finalize(err)
+    {
+      cursor.close();
+
+      inProgress.fixProdShiftDurations = false;
+
+      app.production.clearProdData();
+
+      if (err)
       {
-        app.info(`[fix] Recounted ${i} ProdShifts... ${prodShifts.length} remaining...`);
+        return next(err);
       }
 
-      const prodShift = prodShifts.shift();
+      res.type('txt');
+      res.send('ALL DONE!');
+    }
 
-      if (!prodShift)
+    function recountNextBatch(i)
+    {
+      if (!todo.length)
       {
-        inProgress.fixProdShiftDurations = false;
-
-        res.type('txt');
-        res.send('ALL DONE!');
-
-        return;
+        return complete();
       }
 
-      const next = recountNext.bind(null, prodShifts, i + 1);
-
-      app.production.getProdData(null, prodShift._id, function(err, cachedProdShift)
+      app.production.getMultipleProdData('shift', todo.splice(0, 100), (err, prodShifts) =>
       {
         if (err)
         {
-          app.warn(`[fix] ${err.message}`);
+          return complete(err);
         }
 
-        (cachedProdShift || prodShift).recalcTimes(next);
+        recountNext(i, prodShifts);
+      });
+    }
+
+    function recountNext(i, prodShifts)
+    {
+      if (!prodShifts.length)
+      {
+        app.production.clearProdData();
+
+        logger.info(`Batch #${i} done!`);
+
+        return setImmediate(recountNextBatch, i + 1);
+      }
+
+      prodShifts.shift().recalcTimes((err) =>
+      {
+        if (err)
+        {
+          return complete(err);
+        }
+
+        recountNext(i, prodShifts);
       });
     }
   }
@@ -121,7 +154,7 @@ module.exports = function startFixRoutes(app, express)
           return next(err);
         }
 
-        app.info(`[fix] Found ${prodShiftOrders.length} ProdShiftOrders...`);
+        logger.debug(`Found ${prodShiftOrders.length} ProdShiftOrders...`);
 
         recountNext(prodShiftOrders, 0);
       });
@@ -130,7 +163,7 @@ module.exports = function startFixRoutes(app, express)
     {
       if (i > 0 && i % 10000 === 0)
       {
-        app.info(`[fix] Recounted ${i} ProdShiftOrders... ${prodShiftOrders.length} remaining...`);
+        logger.debug(`Recounted ${i} ProdShiftOrders... ${prodShiftOrders.length} remaining...`);
       }
 
       const prodShiftOrder = prodShiftOrders.shift();
@@ -462,7 +495,7 @@ module.exports = function startFixRoutes(app, express)
 
     const startedAt = Date.now();
 
-    app.info('[fix] Recounting FTE Master totals...');
+    logger.debug('Recounting FTE Master totals...');
 
     const date = req.query.date || '2013-12-01';
 
@@ -480,7 +513,7 @@ module.exports = function startFixRoutes(app, express)
       res.type('txt');
       res.send('ALL DONE!');
 
-      app.info(`[fix] Finished recounting FTE Master totals in ${(Date.now() - startedAt) / 1000}s`);
+      logger.debug(`Finished recounting FTE Master totals in ${(Date.now() - startedAt) / 1000}s`);
     });
   }
 
@@ -503,7 +536,7 @@ module.exports = function startFixRoutes(app, express)
 
     const startedAt = Date.now();
 
-    app.info('[fix] Recounting FTE Leader totals...');
+    logger.debug('Recounting FTE Leader totals...');
 
     const date = req.query.date || '2013-12-01';
 
@@ -521,7 +554,7 @@ module.exports = function startFixRoutes(app, express)
       res.type('txt');
       res.send('ALL DONE!');
 
-      app.info(`[fix] Finished recounting FTE Leader totals in ${(Date.now() - startedAt) / 1000}s`);
+      logger.debug(`Finished recounting FTE Leader totals in ${(Date.now() - startedAt) / 1000}s`);
     });
   }
 
@@ -648,7 +681,7 @@ module.exports = function startFixRoutes(app, express)
       return next(app.createError('INPUT', 400));
     }
 
-    app.info(`[fix] Counting daily MRP from [${from.format('YYYY-MM-DD')}] to [${to.format('YYYY-MM-DD')}]...`);
+    logger.debug(`Counting daily MRP from [${from.format('YYYY-MM-DD')}] to [${to.format('YYYY-MM-DD')}]...`);
 
     countNextDailyMrp(from, to.valueOf(), res, next);
   }
@@ -657,7 +690,7 @@ module.exports = function startFixRoutes(app, express)
   {
     if (from.valueOf() >= to)
     {
-      app.info('[fix] Finished counting daily MRP!');
+      logger.debug('Finished counting daily MRP!');
 
       return res.end();
     }
