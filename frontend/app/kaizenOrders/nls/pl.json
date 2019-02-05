@@ -4,6 +4,7 @@
   "BREADCRUMBS:addForm": "Dodawanie",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
+  "BREADCRUMBS:settings": "Ustawienia",
   "BREADCRUMBS:reports:count": "Ilość zgłoszeń",
   "BREADCRUMBS:reports:summary": "Zestawienie informacji",
 
@@ -16,6 +17,7 @@
   "MSG:unobserve:failure": "Nie udało się zakończyć obserwacji zgłoszenia.",
   "MSG:comment:failure": "Nie udało się skomentować zgłoszenia.",
 
+  "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:export": "Eksportuj zgłoszenia",
   "PAGE_ACTION:add": "Dodaj zgłoszenie",
   "PAGE_ACTION:edit": "Edytuj zgłoszenie",
@@ -143,6 +145,7 @@
   "FORM:help:preventiveMeasures": "Co zrobiono, aby usunąć <strong>przyczynę</strong> występowania podobnych zdarzeń.",
   "FORM:help:subscribers": "W tym polu możesz wybrać dodatkowe osoby, które nie zostały wskazane we wcześniejszych polach, a mogą być zainteresowane tym zgłoszeniem lub chcesz, aby wyraziły swoją opinię.<br>Osoby te zostaną dodane do listy uczestników zgłoszenia z rolą Obserwatora, dzięki czemu będą powiadamiani o zmianach w tym zgłoszeniu.",
   "FORM:help:date:diff": "Wybrano datę będącą {days} dni w {dir, select, past{przeszłości} other{przyszłości}}.",
+  "FORM:fm24:confirmation": "Dodaj prośbę o potwierdzenie przyjęcia zgłoszenia przez FM24 na adres e-mail:",
 
   "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia zgłoszenia",
   "ACTION_FORM:BUTTON:delete": "Usuń zgłoszenie",
@@ -241,5 +244,9 @@
   "report:filenames:ipc": "ZPW_Wskazniki_IPC",
   "report:filenames:fte": "ZPW_Wskazniki_FTE",
   "report:filenames:count": "ZPW_Wskazniki_Ilosci",
-  "report:filenames:users": "ZPW_Wskazniki_Uzytkownicy"
+  "report:filenames:users": "ZPW_Wskazniki_Uzytkownicy",
+
+  "settings:tab:fm24": "FM-24",
+  "settings:fm24:subject": "Temat e-maila",
+  "settings:fm24:message": "Dodatkowa treść e-maila"
 }

@@ -20,6 +20,7 @@ define([
   'app/data/loadedModules',
   'app/vendors/util/setUpVendorSelect2',
   'app/mrpControllers/util/setUpMrpSelect2',
+  '../User',
   'app/users/templates/formMobileList',
   'app/users/templates/form'
 ], function(
@@ -42,6 +43,7 @@ define([
   loadedModules,
   setUpVendorSelect2,
   setUpMrpSelect2,
+  User,
   formMobileListTemplate,
   formTemplate
 ) {
@@ -359,7 +361,8 @@ define([
         aors: aors.toJSON(),
         companies: companies.toJSON(),
         privileges: privileges,
-        accountMode: this.accountMode
+        accountMode: this.accountMode,
+        notifications: User.NOTIFICATIONS
       });
     },
 

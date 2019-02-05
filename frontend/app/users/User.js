@@ -23,6 +23,8 @@ define([
 ) {
   'use strict';
 
+  var NOTIFICATIONS = ['fap_sms', 'fm24_sms', 'fm24_email'];
+
   function parseMobileTime(time)
   {
     var parts = time.split(':');
@@ -141,7 +143,7 @@ define([
 
       obj.notifications = [];
 
-      ['fap_sms'].forEach(function(pref)
+      NOTIFICATIONS.forEach(function(pref)
       {
         if (obj.preferences && obj.preferences[pref])
         {
@@ -197,6 +199,10 @@ define([
 
       return number;
     }
+
+  }, {
+
+    NOTIFICATIONS: NOTIFICATIONS
 
   });
 });

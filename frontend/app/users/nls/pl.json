@@ -224,5 +224,7 @@
   "anonymize:no": "Anuluj",
   "anonymize:started": "Proces anonimizacji rozpoczęty...",
 
-  "preferences:fap_sms": "Zawsze wysyłaj SMS o nowym zgłoszeniu FAP."
+  "preferences:fap_sms": "Zawsze wysyłaj SMS o nowym zgłoszeniu FAP.",
+  "preferences:fm24_sms": "Wysyłaj SMS o nowym zgłoszeniu FM-24.",
+  "preferences:fm24_email": "Wysyłaj e-mail o nowym zgłoszeniu FM-24."
 }

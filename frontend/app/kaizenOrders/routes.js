@@ -19,6 +19,7 @@ define([
 
   var nls = 'i18n!app/nls/kaizenOrders';
   var canAccess = user.auth();
+  var canManage = user.auth('KAIZEN:DICTIONARIES:MANAGE');
   var canAccessLocal = user.auth('LOCAL', 'USER');
 
   router.map('/kaizenReport', canAccess, function(req)
@@ -222,4 +223,14 @@ define([
   router.map('/kaizenOrders/:id;delete', canAccess, _.partial(showDeleteFormPage, KaizenOrder, _, _, {
     baseBreadcrumb: true
   }));
+
+  router.map('/kaizenOrders;settings', canManage, function(req)
+  {
+    viewport.loadPage(['app/kaizenOrders/pages/KaizenSettingsPage', nls], function(KaizenSettingsPage)
+    {
+      return new KaizenSettingsPage({
+        initialTab: req.query.tab
+      });
+    });
+  });
 });

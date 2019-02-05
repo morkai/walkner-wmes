@@ -113,6 +113,30 @@ define([
           dir: days > 0 ? 'future' : 'past',
           days: daysAbs
         })).appendTo($group);
+      },
+
+      'change #-confirmer': function()
+      {
+        var confirmer = this.$id('confirmer').select2('data');
+
+        this.$id('fm24-group').toggleClass('hidden', !confirmer || !/fm.?24/i.test(confirmer.text));
+      },
+
+      'change #-fm24-confirmation': function(e)
+      {
+        var $email = this.$id('fm24-email');
+
+        $email.prop('disabled', !e.target.checked);
+
+        if (e.target.checked)
+        {
+          if (!/@/.test($email.val()))
+          {
+            $email.val(user.data.email);
+          }
+
+          $email.select();
+        }
       }
 
     }, FormView.prototype.events),

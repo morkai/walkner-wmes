@@ -225,7 +225,9 @@
     "anonymize:no": "Cancel",
     "anonymize:started": "User anonymization started...",
 
-    "preferences:fap_sms": "Always send an SMS about a new FAP entry."
+    "preferences:fap_sms": "Always send an SMS about a new FAP entry.",
+    "preferences:fm24_sms": "Always send an SMS about a new FM-24 ticket.",
+    "preferences:fm24_email": "Always send an e-mail about a new FM-24 ticket."
   },
   "pl": true
 }

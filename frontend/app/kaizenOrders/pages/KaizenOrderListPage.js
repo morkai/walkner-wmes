@@ -31,9 +31,15 @@ define([
         pageActions.jump(this, collection),
         pageActions.export(layout, this, this.collection, false),
         {
-          label: t.bound(collection.getNlsDomain(), 'PAGE_ACTION:add'),
+          label: this.t('PAGE_ACTION:add'),
           icon: 'plus',
           href: collection.genClientUrl('add')
+        },
+        {
+          label: this.t('PAGE_ACTION:settings'),
+          icon: 'cogs',
+          privileges: 'KAIZEN:DICTIONARIES:MANAGE',
+          href: '#kaizenOrders;settings'
         }
       ];
     },

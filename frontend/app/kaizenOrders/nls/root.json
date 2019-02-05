@@ -5,6 +5,7 @@
     "BREADCRUMBS:addForm": "Add",
     "BREADCRUMBS:editForm": "Edit",
     "BREADCRUMBS:ACTION_FORM:delete": "Delete",
+    "BREADCRUMBS:settings": "Settings",
     "BREADCRUMBS:reports:count": "Number of entries",
     "BREADCRUMBS:reports:summary": "Summary",
 
@@ -17,6 +18,7 @@
     "MSG:unobserve:failure": "Failed to unsubscribe from the entry.",
     "MSG:comment:failure": "Failed to comment the entry.",
 
+    "PAGE_ACTION:settings": "Settings",
     "PAGE_ACTION:export": "Export entries",
     "PAGE_ACTION:add": "Add entry",
     "PAGE_ACTION:edit": "Edit entry",
@@ -143,6 +145,7 @@
     "FORM:help:preventiveMeasures": "What was done to stop similar events occurring again in the future.",
     "FORM:help:subscribers": "You can select additional people, that weren't selected in the previous fields, but may be interesed in this entry or you want for them to express their opinion.<br>Those people will be added to a list of participants with an Observer role, and will be notified about changes in this entry.",
     "FORM:help:date:diff": "The chosen date is {days} days in the {dir}.",
+    "FORM:fm24:confirmation": "Include a request to confirm FM-24 report acceptance by e-mail:",
 
     "ACTION_FORM:DIALOG_TITLE:delete": "Entry deletion confirmation",
     "ACTION_FORM:BUTTON:delete": "Delete entry",
@@ -241,7 +244,11 @@
     "report:filenames:ipc": "NR_Metrics_IPC",
     "report:filenames:fte": "NR_Metrics_FTE",
     "report:filenames:count": "NR_Metrics_Count",
-    "report:filenames:users": "NR_Metrics_Users"
+    "report:filenames:users": "NR_Metrics_Users",
+
+    "settings:tab:fm24": "FM-24",
+    "settings:fm24:subject": "E-mail subject",
+    "settings:fm24:message": "Extra e-mail message"
   },
   "pl": true
 }

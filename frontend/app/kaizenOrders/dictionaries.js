@@ -5,28 +5,41 @@ define([
   '../broker',
   '../pubsub',
   '../user',
+  '../data/createSettings',
   '../kaizenSections/KaizenSectionCollection',
   '../kaizenAreas/KaizenAreaCollection',
   '../kaizenCategories/KaizenCategoryCollection',
   '../kaizenCauses/KaizenCauseCollection',
   '../kaizenRisks/KaizenRiskCollection',
   '../kaizenBehaviours/KaizenBehaviourCollection',
-  '../kaizenProductFamilies/KaizenProductFamilyCollection'
+  '../kaizenProductFamilies/KaizenProductFamilyCollection',
+  './KaizenSettingCollection'
 ], function(
   $,
   broker,
   pubsub,
   user,
+  createSettings,
   KaizenSectionCollection,
   KaizenAreaCollection,
   KaizenCategoryCollection,
   KaizenCauseCollection,
   KaizenRiskCollection,
   KaizenBehaviourCollection,
-  KaizenProductFamilyCollection
+  KaizenProductFamilyCollection,
+  KaizenSettingCollection
 ) {
   'use strict';
 
+  var DICTS = [
+    'sections',
+    'areas',
+    'categories',
+    'causes',
+    'risks',
+    'productFamilies',
+    'behaviours'
+  ];
   var PROP_TO_DICT = {
     section: 'sections',
     area: 'areas',
@@ -44,6 +57,7 @@ define([
   var pubsubSandbox = null;
   var kaizenSeenSub = null;
   var suggestionSeenSub = null;
+  var settings = createSettings(KaizenSettingCollection);
   var dictionaries = {
     multiType: !!window.KAIZEN_MULTI,
     colors: {
@@ -53,6 +67,7 @@ define([
       observation: '#31b0d5',
       minutes: '#5cb85c'
     },
+    settings: settings.acquire(),
     types: [],
     statuses: [],
     sections: new KaizenSectionCollection(),
@@ -89,9 +104,6 @@ define([
       {
         dictionaries.loaded = true;
 
-        dictionaries.types = res.types;
-        dictionaries.statuses = res.statuses;
-
         resetDictionaries(res);
       });
 
@@ -103,13 +115,11 @@ define([
       });
 
       pubsubSandbox = pubsub.sandbox();
-      pubsubSandbox.subscribe('kaizen.sections.**', handleDictionaryMessage);
-      pubsubSandbox.subscribe('kaizen.areas.**', handleDictionaryMessage);
-      pubsubSandbox.subscribe('kaizen.categories.**', handleDictionaryMessage);
-      pubsubSandbox.subscribe('kaizen.causes.**', handleDictionaryMessage);
-      pubsubSandbox.subscribe('kaizen.risks.**', handleDictionaryMessage);
-      pubsubSandbox.subscribe('kaizen.productFamilies.**', handleDictionaryMessage);
-      pubsubSandbox.subscribe('kaizen.behaviours.**', handleDictionaryMessage);
+
+      DICTS.forEach(function(dict)
+      {
+        pubsubSandbox.subscribe('kaizen.' + dict + '.**', handleDictionaryMessage);
+      });
 
       subToSeenMessages();
 
@@ -170,18 +180,15 @@ define([
 
   function resetDictionaries(data)
   {
-    [
-      'sections',
-      'areas',
-      'categories',
-      'causes',
-      'risks',
-      'productFamilies',
-      'behaviours'
-    ].forEach(function(prop)
+    DICTS.forEach(function(prop)
     {
       dictionaries[prop].reset(data ? data[prop] : []);
     });
+
+    dictionaries.types = data ? data.types : [];
+    dictionaries.statuses = data ? data.statuses : [];
+
+    dictionaries.settings.reset(data ? data.settings : []);
   }
 
   function subToSeenMessages()
@@ -210,6 +217,8 @@ define([
     dictionaries.statuses = [];
 
     resetDictionaries();
+
+    settings.release();
   }
 
   function handleDictionaryMessage(message, topic)

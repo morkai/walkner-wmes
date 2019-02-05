@@ -94,11 +94,13 @@
           </div>
           <div class="form-group">
             <label class="control-label"><%- helpers.t('PROPERTY:notifications') %></label>
+            <% notifications.forEach(function(pref) { %>
             <div class="checkbox">
               <label>
-                <input type="checkbox" name="preferences.fap_sms" value="true"> <%- helpers.t('preferences:fap_sms') %>
+                <input type="checkbox" name="preferences.<%- pref %>" value="true"> <%- helpers.t('preferences:' + pref) %>
               </label>
             </div>
+            <% }) %>
           </div>
         </div>
         <% if (accountMode) { %>
