@@ -1451,6 +1451,7 @@ app/core/views/FormView.js
 app/core/util/showDeleteFormPage.js
 app/aors/routes.js
 app/companies/routes.js
+app/data/createSettings.js
 app/kaizenSections/KaizenSection.js
 app/kaizenSections/KaizenSectionCollection.js
 app/kaizenAreas/KaizenArea.js
@@ -1466,6 +1467,10 @@ app/kaizenBehaviours/KaizenBehaviourCollection.js
 app/core/templates/userInfo.js
 app/kaizenProductFamilies/KaizenProductFamily.js
 app/kaizenProductFamilies/KaizenProductFamilyCollection.js
+app/settings/Setting.js
+app/settings/SettingCollection.js
+app/kaizenOrders/KaizenSetting.js
+app/kaizenOrders/KaizenSettingCollection.js
 app/kaizenOrders/dictionaries.js
 app/kaizenOrders/KaizenOrder.js
 app/kaizenOrders/KaizenOrderCollection.js
@@ -1531,9 +1536,6 @@ app/core/util/bindLoadingMessage.js
 app/core/templates/jumpAction.js
 app/core/templates/exportAction.js
 app/core/util/pageActions.js
-app/data/createSettings.js
-app/settings/Setting.js
-app/settings/SettingCollection.js
 app/prodDowntimes/ProdDowntimeSetting.js
 app/prodDowntimes/ProdDowntimeSettingCollection.js
 app/prodDowntimes/settings.js
@@ -1915,7 +1917,9 @@ app/help/routes.js
 app/wmes-toolcal-types/routes.js
 app/wmes-toolcal-tools/routes.js
 app/wmes-fap-categories/Category.js
+app/data/createOnDemandStorage.js
 app/wmes-fap-categories/CategoryCollection.js
+app/wmes-fap-categories/storage.js
 app/wmes-fap-categories/routes.js
 app/notifications.js
 vendor/autolinker.js

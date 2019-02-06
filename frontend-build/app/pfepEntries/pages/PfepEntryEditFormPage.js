@@ -1,1 +1,1 @@
-define(["app/core/pages/EditFormPage","../views/PfepEntryFormView"],function(e,r){"use strict";return e.extend({baseBreadcrumb:!0,FormView:r})});
+define(["app/core/pages/EditFormPage","../views/PfepEntryFormView"],function(e,a){"use strict";return e.extend({pageClassName:"page-max-flex",baseBreadcrumb:!0,FormView:a})});

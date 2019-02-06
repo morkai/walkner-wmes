@@ -1,0 +1,1 @@
+define(["underscore","jquery","../settings/SettingCollection","./KaizenSetting"],function(e,t,n,i){"use strict";return n.extend({model:i,topicSuffix:"kaizen.**",getValue:function(e){var t=this.get("kaizen."+e);return t?t.getValue():null},prepareValue:function(e,t){if(/fm24.(subject|message)$/.test(e))return t||""}})});
