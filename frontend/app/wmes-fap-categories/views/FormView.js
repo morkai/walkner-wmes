@@ -47,7 +47,8 @@ define([
 
       'input #-tester-mrp, #-tester-orderNo, #-tester-nc12': 'testNotifications',
       'change #-tester-date': 'testNotifications',
-      'change input[name^="notifications"]': 'testNotifications'
+      'change input[name^="notifications"]': 'testNotifications',
+      'change #-etoCategoryToggle': 'toggleEtoCategory'
 
     }, FormView.prototype.events),
 
@@ -79,22 +80,39 @@ define([
 
     afterRender: function()
     {
-      FormView.prototype.afterRender.apply(this, arguments);
+      var view = this;
 
-      setUpUserSelect2(this.$id('users'), {
-        view: this,
+      FormView.prototype.afterRender.apply(view, arguments);
+
+      setUpUserSelect2(view.$id('users'), {
+        view: view,
         multiple: true
       });
 
-      this.$notification = this.$id('notifications').children().first().detach();
-      this.$notifiedUser = this.$id('tester').children().first().detach();
+      view.$notification = view.$id('notifications').children().first().detach();
+      view.$notifiedUser = view.$id('tester').children().first().detach();
 
-      (this.model.get('notifications') || []).forEach(this.addNotification, this);
+      (view.model.get('notifications') || []).forEach(view.addNotification, view);
 
-      this.addNotification({
+      view.addNotification({
         subdivisions: [],
         prodFunctions: []
       });
+
+      view.$id('etoCategory').select2({
+        allowClear: true,
+        placeholder: ' ',
+        data: this.categories
+          .filter(function(c) { return c.id !== view.model.id; })
+          .map(idAndLabel)
+      });
+
+      this.toggleEtoCategory();
+    },
+
+    toggleEtoCategory: function()
+    {
+      this.$id('etoCategory').select2('enable', this.$id('etoCategoryToggle').prop('checked'));
     },
 
     addNotification: function(notification)
@@ -137,6 +155,8 @@ define([
 
       formData.users = (formData.users || []).map(function(user) { return user.id; }).join(',');
 
+      formData.etoCategoryToggle = formData.etoCategory != null;
+
       return formData;
     },
 
@@ -162,6 +182,20 @@ define([
         {
           return !!n.prodFunctions.length;
         });
+
+      if (formData.etoCategoryToggle)
+      {
+        if (!formData.etoCategory)
+        {
+          formData.etoCategory = '';
+        }
+      }
+      else
+      {
+        formData.etoCategory = null;
+      }
+
+      delete formData.etoCategoryToggle;
 
       return formData;
     },

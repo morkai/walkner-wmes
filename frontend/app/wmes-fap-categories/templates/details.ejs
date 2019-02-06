@@ -12,6 +12,10 @@
           <div class="prop-value"><%= model.name %></div>
         </div>
         <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:etoCategory') %></div>
+          <div class="prop-value"><%= model.etoCategory %></div>
+        </div>
+        <div class="prop">
           <div class="prop-name"><%- helpers.t('PROPERTY:users') %></div>
           <div class="prop-value"><%- model.users.length ? model.users.join(', ') : '-' %></div>
         </div>

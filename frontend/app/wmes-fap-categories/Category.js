@@ -33,15 +33,31 @@ define([
       active: true
     },
 
-    serialize: function()
+    serialize: function(categories)
     {
+      if (!categories)
+      {
+        categories = this.collection;
+      }
+
       var obj = this.toJSON();
+      var etoCategory = categories && categories.get(obj.etoCategory);
 
       obj.active = t('core', 'BOOL:' + obj.active);
+
+      obj.etoCategory = etoCategory
+        ? etoCategory.getLabel()
+        : obj.etoCategory === ''
+          ? t('core', 'BOOL:true')
+          : obj.etoCategory === null
+            ? t('core', 'BOOL:false')
+            : obj.etoCategory;
+
       obj.users = (obj.users || []).map(function(user)
       {
         return userInfoTemplate({userInfo: user});
       });
+
       obj.notifications = (obj.notifications || []).map(function(n)
       {
         return {

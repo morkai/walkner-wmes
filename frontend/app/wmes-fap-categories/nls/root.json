@@ -9,6 +9,7 @@
     "PROPERTY:notifications": "Notifications",
     "PROPERTY:notifications.subdivisions": "Subdivisions",
     "PROPERTY:notifications.prodFunctions": "Functions",
+    "PROPERTY:etoCategory": "ETO category",
 
     "FORM:notifications:add": "Add notification",
     "FORM:tester:label": "Notifications tester",

@@ -6,16 +6,16 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './CategoryCollection',
-  './Category'
+  './Category',
+  './storage'
 ], function(
   _,
   router,
   viewport,
   user,
   showDeleteFormPage,
-  CategoryCollection,
-  Category
+  Category,
+  storage
 ) {
   'use strict';
 
@@ -25,30 +25,28 @@ define([
 
   router.map('/fap/categories', canView, function(req)
   {
-    viewport.loadPage(['app/core/pages/ListPage', nls], function(ListPage)
-    {
-      return new ListPage({
-        baseBreadcrumb: '#fap/entries',
-        collection: new CategoryCollection(null, {rqlQuery: req.rql}),
-        columns: [
-          {id: 'name', className: 'is-min'},
-          {id: 'active', className: 'is-min'},
-          '-'
-        ]
-      });
-    });
+    viewport.loadPage(
+      [
+        'app/wmes-fap-categories/pages/ListPage',
+        nls
+      ],
+      function(ListPage)
+      {
+        return new ListPage({
+          collection: storage.acquire()
+        });
+      }
+    );
   });
 
   router.map('/fap/categories/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/wmes-fap-categories/templates/details', nls],
-      function(DetailsPage, detailsTemplate)
+      ['app/wmes-fap-categories/pages/DetailsPage', nls],
+      function(DetailsPage)
       {
         return new DetailsPage({
-          baseBreadcrumb: '#fap/entries',
-          model: new Category({_id: req.params.id}),
-          detailsTemplate: detailsTemplate
+          model: new Category({_id: req.params.id})
         });
       }
     );
@@ -58,16 +56,13 @@ define([
   {
     viewport.loadPage(
       [
-        'app/core/pages/AddFormPage',
-        'app/wmes-fap-categories/views/FormView',
+        'app/wmes-fap-categories/pages/AddFormPage',
         'i18n!app/nls/users',
         nls
       ],
-      function(AddFormPage, FormView)
+      function(AddFormPage)
       {
         return new AddFormPage({
-          baseBreadcrumb: '#fap/entries',
-          FormView: FormView,
           model: new Category()
         });
       }
@@ -78,16 +73,13 @@ define([
   {
     viewport.loadPage(
       [
-        'app/core/pages/EditFormPage',
-        'app/wmes-fap-categories/views/FormView',
+        'app/wmes-fap-categories/pages/EditFormPage',
         'i18n!app/nls/users',
         nls
       ],
-      function(EditFormPage, FormView)
+      function(EditFormPage)
       {
         return new EditFormPage({
-          baseBreadcrumb: '#fap/entries',
-          FormView: FormView,
           model: new Category({_id: req.params.id})
         });
       }

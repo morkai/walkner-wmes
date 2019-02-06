@@ -39,15 +39,35 @@ define([
 
     initialize: function()
     {
+      this.defineModels();
+      this.defineViews();
+    },
+
+    defineModels: function()
+    {
       this.collection = bindLoadingMessage(this.options.collection, this);
+    },
+
+    defineViews: function()
+    {
       this.view = this.createListView();
     },
 
     createListView: function()
     {
-      var ListViewClass = this.ListView || this.options.ListView || ListView;
+      return new (this.getViewClass())(this.getViewOptions());
+    },
 
-      return new ListViewClass({
+    getViewClass: function()
+    {
+      return this.ListView || this.options.ListView || ListView;
+    },
+
+    getViewOptions: function()
+    {
+      var ListViewClass = this.getViewClass();
+
+      return {
         collection: this.collection,
         model: this.model,
         columns: this.options.columns || this.columns || ListViewClass.prototype.columns,
@@ -56,7 +76,7 @@ define([
           || this.listClassName
           || ListViewClass.prototype.className
           || 'is-clickable'
-    });
+      };
     },
 
     load: function(when)

@@ -8,6 +8,7 @@
   "PROPERTY:notifications": "Powiadomienia",
   "PROPERTY:notifications.subdivisions": "Działy",
   "PROPERTY:notifications.prodFunctions": "Funkcje",
+  "PROPERTY:etoCategory": "Kategoria ETO",
 
   "FORM:notifications:add": "Dodaj nowe powiadomienie",
   "FORM:tester:label": "Tester powiadomień",

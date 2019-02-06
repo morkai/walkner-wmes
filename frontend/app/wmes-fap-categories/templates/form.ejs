@@ -16,6 +16,13 @@
         <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100" autofocus>
       </div>
       <div class="form-group">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-etoCategoryToggle" name="etoCategoryToggle" type="checkbox" value="true">
+          <%- helpers.t('PROPERTY:etoCategory') %>
+        </label>
+        <input id="<%- idPrefix %>-etoCategory" type="text" autocomplete="new-password" name="etoCategory">
+      </div>
+      <div class="form-group">
         <label for="<%- idPrefix %>-users" class="control-label"><%- helpers.t('PROPERTY:users') %></label>
         <input id="<%- idPrefix %>-users" type="text" autocomplete="new-password" name="users">
       </div>

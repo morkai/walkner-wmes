@@ -70,7 +70,7 @@ define([
 
         this.saveInputFocus(el);
         this.updateNotifications();
-        this.resolveSubdivisions();
+        this.updateEtoCategory();
       },
       'change #-lines, #-subdivisions': function(e)
       {
@@ -525,6 +525,67 @@ define([
       }
     },
 
+    updateEtoCategory: function()
+    {
+      var view = this;
+      var $category = view.$id('category');
+      var category = dictionaries.categories.get($category.val());
+      var order = view.model.validatedOrder;
+
+      if (!category || category.get('etoCategory') === null || !order)
+      {
+        this.resolveSubdivisions();
+
+        return;
+      }
+
+      var etoCategoryId = category.get('etoCategory');
+
+      if (etoCategoryId === '')
+      {
+        if (order.eto)
+        {
+          this.resolveSubdivisions();
+
+          return;
+        }
+
+        var nonEtoCategory = dictionaries.categories.find(function(c)
+        {
+          return c.get('etoCategory') === category.id;
+        });
+
+        if (nonEtoCategory)
+        {
+          this.$id('category').select2('val', nonEtoCategory.id).trigger('change');
+
+          return;
+        }
+
+        this.resolveSubdivisions();
+
+        return;
+      }
+
+      if (!order.eto)
+      {
+        this.resolveSubdivisions();
+
+        return;
+      }
+
+      var etoCategory = dictionaries.categories.get(etoCategoryId);
+
+      if (etoCategory)
+      {
+        this.$id('category').select2('val', etoCategory.id).trigger('change');
+
+        return;
+      }
+
+      this.resolveSubdivisions();
+    },
+
     resolveSubdivisions: function()
     {
       var view = this;
@@ -605,12 +666,14 @@ define([
         return;
       }
 
-      if (view.model.validatedOrder === orderNo)
+      if (view.model.validatedOrder && view.model.validatedOrder.orderNo === orderNo)
       {
         return;
       }
 
-      view.model.validatedOrder = orderNo;
+      view.model.validatedOrder = {
+        orderNo: orderNo
+      };
 
       var req = view.ajax({
         method: 'POST',
@@ -627,11 +690,10 @@ define([
 
       req.done(function(res)
       {
-        if (res.lines.length)
-        {
-          view.$id('lines').select2('val', res.lines).trigger('change');
-          view.resolveSubdivisions();
-        }
+        view.model.validatedOrder = res;
+
+        view.$id('lines').select2('val', res.lines).trigger('change');
+        view.updateEtoCategory();
       });
     },
 
