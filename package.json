@@ -6,23 +6,23 @@
   "updater": {
     "wmes": {
       "backend": 437,
-      "frontend": 574,
+      "frontend": 575,
       "reports": 76,
       "attachments": 3,
       "importer-sap": 47,
       "importer-results": 12,
       "watchdog": 13,
       "mailer": 14,
-      "operator": 66,
-      "docs": 23,
-      "heff": 29,
+      "operator": 67,
+      "docs": 24,
+      "heff": 30,
       "planning": 46,
       "ps-queue": 21,
       "ps-load": 10,
       "wh-pickup": 4,
       "wh-kitter": 4,
       "wh-packer": 4,
-      "isa": 1
+      "isa": 2
     },
     "pos": {
       "backend": 80,
