@@ -68,6 +68,13 @@ define([
         .map(function(prodFlow)
         {
           return decorateProdFlow(prodFlow, true);
+        })
+        .sort(function(a, b)
+        {
+          return a.orgUnitsText.localeCompare(b.orgUnitsText, undefined, {
+            numeric: true,
+            ignorePunctuation: true
+          });
         });
     },
 

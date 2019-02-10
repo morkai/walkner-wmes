@@ -25,7 +25,7 @@ define([
     deactivatedVisible: false,
 
     columns: [
-      'workCenter',
+      {id: 'workCenter', className: 'is-min'},
       {id: '_id', className: 'is-min'},
       {id: 'description', tdAttrs: createDescriptionTdAttrs},
       {id: 'inventoryNo', className: 'is-min'},
@@ -90,7 +90,10 @@ define([
         })
         .sort(function(a, b)
         {
-          return a.orgUnitsText.localeCompare(b.orgUnitsText, undefined, {numeric: true, ignorePunctuation: true});
+          return a.orgUnitsText.localeCompare(b.orgUnitsText, undefined, {
+            numeric: true,
+            ignorePunctuation: true
+          });
         });
     },
 

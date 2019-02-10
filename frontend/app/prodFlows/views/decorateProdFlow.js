@@ -20,6 +20,7 @@ define([
     data.deactivatedAt = data.deactivatedAt ? time.format(data.deactivatedAt, 'LL') : '-';
 
     data.subdivision = renderOrgUnitPath(prodFlow.getSubdivision(), true, false);
+    data.orgUnitsText = renderOrgUnitPath(prodFlow, false, false);
 
     data.mrpControllers = (data.mrpController || [])
       .map(function(mrpControllerId)

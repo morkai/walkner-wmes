@@ -23,7 +23,7 @@ define([
     deactivatedVisible: false,
 
     columns: [
-      'orgUnitPath',
+      {id: 'orgUnitPath', className: 'is-min'},
       {id: '_id', className: 'is-min'},
       {id: 'description', tdAttrs: createDescriptionTdAttrs},
       {id: 'deactivatedAt', className: 'is-min'}
@@ -68,9 +68,14 @@ define([
           var row = workCenter.toJSON();
 
           row.orgUnitPath = renderOrgUnitPath(workCenter, true);
+          row.orgUnitsText = renderOrgUnitPath(workCenter, false, false);
           row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '-';
 
           return row;
+        })
+        .sort(function(a, b)
+        {
+          return a.orgUnitsText.localeCompare(b.orgUnitsText, undefined, {numeric: true, ignorePunctuation: true});
         });
     },
 
