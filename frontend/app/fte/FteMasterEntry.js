@@ -162,6 +162,14 @@ define([
         });
 
         return task;
+      }).sort(function(a, b)
+      {
+        if (a.type === b.type)
+        {
+          return a.name.localeCompare(b.name, undefined, {numeric: true, ignorePunctuation: true});
+        }
+
+        return a.type === 'prodFlow' ? -1 : 1;
       });
     },
 
