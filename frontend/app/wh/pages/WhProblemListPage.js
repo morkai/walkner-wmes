@@ -59,25 +59,6 @@ define([
       ];
     },
 
-    actions: function()
-    {
-      var page = this;
-
-      if (window.IS_EMBEDDED)
-      {
-        return [];
-      }
-
-      return [
-        {
-          label: page.t('PAGE_ACTION:settings'),
-          icon: 'cogs',
-          privileges: 'WH:MANAGE',
-          href: '#wh/settings'
-        }
-      ];
-    },
-
     remoteTopics: {
       'orders.updated.*': function(message)
       {

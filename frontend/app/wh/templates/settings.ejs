@@ -1,26 +1,25 @@
 <form class="settings planning-settings" autocomplete="off">
   <div class="list-group">
-    <% ['planning', 'users'].forEach(function(tab) { %>
-    <a class="list-group-item" href="#wh/settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t('wh', 'settings:tab:' + tab) %></a>
-    <% }) %>
+    <a class="list-group-item" href="#wh/settings?tab=planning" data-tab="planning" data-privileges="WH:MANAGE"><%- helpers.t('settings:tab:planning') %></a>
+    <a class="list-group-item" href="#wh/settings?tab=users" data-tab="users" data-privileges="WH:MANAGE:USERS"><%- helpers.t('settings:tab:users') %></a>
   </div>
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="planning">
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-groupDuration"><%- t('wh', 'settings:planning:groupDuration') %></label>
+        <label for="<%- idPrefix %>-planning-groupDuration"><%- helpers.t('settings:planning:groupDuration') %></label>
         <input id="<%- idPrefix %>-planning-groupDuration" class="form-control" name="wh.planning.groupDuration" type="number" step="1" min="1" max="24">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-groupExtraItems"><%- t('wh', 'settings:planning:groupExtraItems') %></label>
+        <label for="<%- idPrefix %>-planning-groupExtraItems"><%- helpers.t('settings:planning:groupExtraItems') %></label>
         <span class="help-block"><%- t('planning', 'settings:wh:groupExtraItems:help') %></span>
         <input id="<%- idPrefix %>-planning-groupExtraItems" class="form-control" name="wh.planning.groupExtraItems" type="number" step="1" min="0" max="100">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-maxSetSize"><%- t('wh', 'settings:planning:maxSetSize') %></label>
+        <label for="<%- idPrefix %>-planning-maxSetSize"><%- helpers.t('settings:planning:maxSetSize') %></label>
         <input id="<%- idPrefix %>-planning-maxSetSize" class="form-control" name="wh.planning.maxSetSize" type="number" step="1" min="1" max="100">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-ignoredMrps"><%- t('wh', 'settings:planning:ignoredMrps') %></label>
+        <label for="<%- idPrefix %>-planning-ignoredMrps"><%- helpers.t('settings:planning:ignoredMrps') %></label>
         <input id="<%- idPrefix %>-planning-ignoredMrps" name="wh.planning.ignoredMrps" type="text" autocomplete="new-password" data-setting>
       </div>
     </div>
@@ -28,7 +27,7 @@
       <div style="display: flex">
         <% ['fmx', 'kitter', 'packer'].forEach(function(func) { %>
         <div class="form-group settings-select2-long" style="min-width: 300px; margin-right: 15px;">
-          <label><%- t('wh', 'settings:users:' + func) %></label>
+          <label><%- helpers.t('settings:users:' + func) %></label>
           <input type="text" autocomplete="new-password" data-user-func="<%- func %>">
         </div>
         <% }) %>

@@ -192,6 +192,7 @@
   "PRIVILEGE:FAP:MANAGE": "FAP: zarządzanie",
   "PRIVILEGE:WH:VIEW": "Magazyn: przeglądanie",
   "PRIVILEGE:WH:MANAGE": "Magazyn: zarządzanie",
+  "PRIVILEGE:WH:MANAGE:USERS": "Magazyn: zarządzanie użytkownikami",
   "PRIVILEGE:WH:SOLVER": "Magazyn: rozwiązywanie problemów",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",

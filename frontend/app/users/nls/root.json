@@ -193,6 +193,7 @@
     "PRIVILEGE:FAP:MANAGE": "FAP: manage",
     "PRIVILEGE:WH:VIEW": "WH: view",
     "PRIVILEGE:WH:MANAGE": "WH: manage",
+    "PRIVILEGE:WH:MANAGE:USERS": "WH: manage users",
     "PRIVILEGE:WH:SOLVER": "WH: problem solving",
 
     "select2:placeholder": "Search by last name or personnel ID...",

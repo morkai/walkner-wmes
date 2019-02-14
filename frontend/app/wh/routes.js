@@ -22,7 +22,7 @@ define([
   'use strict';
 
   var canView = user.auth('LOCAL', 'WH:VIEW');
-  var canManage = user.auth('WH:MANAGE');
+  var canManage = user.auth('WH:MANAGE', 'WH:MANAGE:USERS');
 
   router.map('/wh/plans/:id', canView, function(req)
   {

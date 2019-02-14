@@ -122,8 +122,8 @@ define([
         {
           label: page.t('PAGE_ACTION:settings'),
           icon: 'cogs',
-          privileges: 'WH:MANAGE',
-          href: '#wh/settings'
+          privileges: ['WH:MANAGE', 'WH:MANAGE:USERS'],
+          href: '#wh/settings?tab=' + (currentUser.isAllowedTo('WH:MANAGE') ? '' : 'users')
         },
         {
           label: page.t('PAGE_ACTION:legend'),

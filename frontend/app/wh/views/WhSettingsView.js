@@ -100,6 +100,22 @@ define([
       });
     },
 
+    toggleTabPrivileges: function()
+    {
+      this.$('.list-group-item[data-privileges]').each(function()
+      {
+        var requiredPrivileges = this.dataset.privileges.split(',');
+
+        for (var i = 0; i < requiredPrivileges.length; ++i)
+        {
+          if (!user.isAllowedTo(requiredPrivileges[i]))
+          {
+            this.classList.add('disabled');
+          }
+        }
+      });
+    },
+
     shouldAutoUpdateSettingField: function(setting)
     {
       return setting.id !== 'wh.planning.ignoredMrps';
