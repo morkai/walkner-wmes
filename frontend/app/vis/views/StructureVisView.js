@@ -168,7 +168,7 @@ define([
             var parentIndex = idToIndex[parentNodeId];
             var parentNode = nodes[parentIndex];
 
-            if (parentNode.fixed && !node.fixed)
+            if (parentNode && parentNode.fixed && !node.fixed)
             {
               node.x = parentNode.x;
               node.y = parentNode.y;
