@@ -5,22 +5,16 @@ define([
   'app/i18n',
   'app/broker',
   'app/socket',
-  'app/viewport',
   'app/data/divisions',
-  'app/data/subdivisions',
-  'app/core/pages/ErrorPage',
-  'app/users/pages/LogInFormPage'
+  'app/data/subdivisions'
 ],
 function(
   _,
   t,
   broker,
   socket,
-  viewport,
   divisions,
-  subdivisions,
-  ErrorPage,
-  LogInFormPage
+  subdivisions
 ) {
   'use strict';
 
@@ -295,14 +289,14 @@ function(
       }
       else if (!user.isLoggedIn())
       {
-        require(['app/viewport'], function(viewport)
+        require(['app/viewport', 'app/users/pages/LogInFormPage'], function(viewport, LogInFormPage)
         {
           viewport.showPage(new LogInFormPage());
         });
       }
       else
       {
-        require(['app/core/pages/ErrorPage'], function(ErrorPage)
+        require(['app/viewport', 'app/core/pages/ErrorPage'], function(viewport, ErrorPage)
         {
           viewport.showPage(new ErrorPage({
             model: {
