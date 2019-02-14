@@ -77,7 +77,22 @@ define([
         execution: {
           plan: 0,
           done: 0,
-          percent: 0
+          percent: 0,
+          1: {
+            plan: 0,
+            done: 0,
+            percent: 0
+          },
+          2: {
+            plan: 0,
+            done: 0,
+            percent: 0
+          },
+          3: {
+            plan: 0,
+            done: 0,
+            percent: 0
+          }
         },
         orders: {
           todo: 0,
@@ -108,12 +123,21 @@ define([
           stats.orders.plan += 1;
           stats.execution.plan += 1;
           stats.execution.done += quantityDone >= quantityTodo ? 1 : 0;
+          stats.execution[shiftNo].plan += 1;
+          stats.execution[shiftNo].done += quantityDone >= quantityTodo ? 1 : 0;
         });
       });
 
       stats.execution.percent = stats.execution.plan
         ? Math.round(stats.execution.done / stats.execution.plan * 100)
         : 100;
+
+      for (var shiftNo = 1; shiftNo <= 3; ++shiftNo)
+      {
+        stats.execution[shiftNo].percent = stats.execution[shiftNo].plan
+          ? Math.round(stats.execution[shiftNo].done / stats.execution[shiftNo].plan * 100)
+          : 100;
+      }
 
       if (plan)
       {

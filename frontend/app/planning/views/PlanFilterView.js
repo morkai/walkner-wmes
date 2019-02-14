@@ -146,6 +146,21 @@ define([
           done: 0,
           percent: 0
         },
+        execution1: {
+          plan: 0,
+          done: 0,
+          percent: 0
+        },
+        execution2: {
+          plan: 0,
+          done: 0,
+          percent: 0
+        },
+        execution3: {
+          plan: 0,
+          done: 0,
+          percent: 0
+        },
         orders: {
           todo: 0,
           late: 0,
@@ -158,19 +173,31 @@ define([
       {
         $(this).find('td').each(function()
         {
-          if (this.dataset.plan)
+          var dataset = this.dataset;
+
+          if (dataset.plan)
           {
-            stats.execution.plan += parseInt(this.dataset.plan, 10);
-            stats.execution.done += parseInt(this.dataset.done, 10);
+            var shiftNo = dataset.shiftNo;
+
+            if (shiftNo)
+            {
+              stats['execution' + shiftNo].plan += parseInt(dataset.plan, 10);
+              stats['execution' + shiftNo].done += parseInt(dataset.done, 10);
+            }
+            else
+            {
+              stats.execution.plan += parseInt(dataset.plan, 10);
+              stats.execution.done += parseInt(dataset.done, 10);
+            }
 
             return;
           }
 
-          var value = this.dataset.value;
+          var value = dataset.value;
 
           if (value > 0)
           {
-            stats[this.dataset.group][this.dataset.subgroup] += parseFloat(value);
+            stats[dataset.group][dataset.subgroup] += parseFloat(value);
           }
         });
       });
@@ -178,6 +205,15 @@ define([
       stats.execution.percent = stats.execution.plan
         ? Math.round(stats.execution.done / stats.execution.plan * 100)
         : 0;
+
+      for (var shiftNo = 1; shiftNo <= 3; ++shiftNo)
+      {
+        var execution = stats['execution' + shiftNo];
+
+        execution.percent = execution.plan
+          ? Math.round(execution.done / execution.plan * 100)
+          : 100;
+      }
 
       this.$('.planning-mrp-stats-bd td').each(function()
       {

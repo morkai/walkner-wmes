@@ -41,7 +41,7 @@
         <% ['todo', 'late', 'plan', 'remaining'].forEach(function(subgroup) { %>
         <th style="padding: 0 7px; text-align: center"><%- t('planning', 'filter:stats:' + subgroup) %></th>
         <% }) %>
-        <td rowspan="4" data-group="execution" data-subgroup="percent" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent') %>">0%</td>
+        <th colspan="2" style="min-width: 141px"><%- t('planning', 'filter:stats:execution') %></th>
       </tr>
       <% ['manHours', 'quantity', 'orders'].forEach(function(group, i) { %>
       <tr class="planning-mrp-stats-bd">
@@ -49,6 +49,10 @@
         <% ['todo', 'late', 'plan', 'remaining'].forEach(function(subgroup) { %>
         <td data-group="<%- group %>" data-subgroup="<%- subgroup %>" title="<%- t('planning', 'filter:stats:tooltip:' + subgroup) %>">0</td>
         <% }) %>
+        <% if (i === 0) { %>
+        <td rowspan="3" data-group="execution" data-subgroup="percent" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent') %>">0</td>
+        <% } %>
+        <td data-group="execution<%- i + 1 %>" data-subgroup="percent" data-shift-no="<%- i + 1 %>" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent:shift', {shiftNo: t('core', 'SHIFT:' + (i + 1))}) %>">0</td>
       </tr>
       <% }) %>
       </tbody>
