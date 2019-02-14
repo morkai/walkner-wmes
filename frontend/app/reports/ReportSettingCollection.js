@@ -196,7 +196,7 @@ define([
         return !!newValue;
       }
 
-      if (/(Mrps|Statuses)/.test(id))
+      if (/(Mrps|Statuses|DelayReasons)/.test(id))
       {
         return newValue.split(',').filter(function(v) { return v.length > 1; });
       }

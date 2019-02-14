@@ -7,6 +7,7 @@ define([
   'app/data/orgUnits',
   'app/data/aors',
   'app/data/downtimeReasons',
+  'app/data/delayReasons',
   'app/data/orderStatuses',
   'app/settings/views/SettingsView',
   'app/reports/templates/settings'
@@ -17,6 +18,7 @@ define([
   orgUnits,
   aors,
   downtimeReasons,
+  delayReasons,
   orderStatuses,
   SettingsView,
   template
@@ -37,7 +39,7 @@ define([
       'downtimeReasons.synced': 'render'
     },
 
-    events: _.extend({
+    events: _.assign({
       'change [name$="prodTask"]': 'updateSettingOnInputChange',
       'change [name$="id"]': 'updateSettingOnInputChange',
       'change [name$="aors"]': 'updateSettingOnInputChange',
@@ -392,6 +394,14 @@ define([
 
           return input === result ? null : result.replace(/\s+/, ' ').trim();
         }
+      });
+
+      view.$id('clip-ignoredDelayReasons').select2({
+        width: '100%',
+        allowClear: true,
+        placeholder: ' ',
+        multiple: true,
+        data: this.delayReasons.map(idAndLabel)
       });
 
       var statuses = orderStatuses.map(idAndLabel);

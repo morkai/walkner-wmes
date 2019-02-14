@@ -458,6 +458,8 @@
     "settings:clip:ignoreDone:help": "Order list will not have orders with quantity done equal to or greater than quantity todo.",
     "settings:clip:ignoredMrps": "Ignored MRP",
     "settings:clip:ignoredMrps:help": "Ignore orders with the specified MRP regardless whether that MRP was done on the chosen org unit.",
+    "settings:clip:ignoredDelayReasons": "Ignored delay reasons",
+    "settings:clip:ignoredDelayReasons:help": "Ignore orders that currently have one of the specified delay reasons.",
     "settings:clip:ignoredStatuses": "Ignored statuses",
     "settings:clip:ignoredStatuses:help": "Ignore orders that <b>HAVE</b> at least one of the specified statuses.",
     "settings:clip:requiredStatuses": "Required statses",

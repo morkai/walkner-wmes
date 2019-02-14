@@ -463,6 +463,8 @@
   "settings:clip:ignoreDone:help": "Na liście zleceń nie będą pojawiać się zlecenia, których ilość zrobiona jest równa lub większa ilości do zrobienia.",
   "settings:clip:ignoredMrps": "Ignorowane MRP",
   "settings:clip:ignoredMrps:help": "Ignoruj zlecenia z wybranych MRP, bez względu na to, czy dane MRP było wykonywane na wybranej jednostce organizacyjnej.",
+  "settings:clip:ignoredDelayReasons": "Ignorowane powody opóźnień",
+  "settings:clip:ignoredDelayReasons:help": "Ignoruj zlecenia, które aktualnie mają ustawiony jeden z poniższych powodów opóźnień.",
   "settings:clip:ignoredStatuses": "Ignorowane statusy",
   "settings:clip:ignoredStatuses:help": "Ignoruj zlecenia, które <b>mają</b> przynajmniej jeden z wybranych statusów.",
   "settings:clip:requiredStatuses": "Wymagane statusy",
