@@ -18,7 +18,7 @@
   "PAGE_ACTION:export": "Eksportuj plany",
   "PAGE_ACTION:heff": "Wydajność godzinowa",
   "PAGE_ACTION:planning": "Planowanie",
-  "PAGE_ACTION:settings": "Zmień ustawienia",
+  "PAGE_ACTION:settings": "Ustawienia",
 
   "panel:title": "Plan godzinowy",
   "panel:title:editable": "Formularz edycji planu godzinowego",

@@ -7,7 +7,7 @@
   "MSG:jump:404": "Nie znaleziono zlecenia o nr <em>{rid}</em>.",
 
   "PAGE_ACTION:export": "Eksportuj zlecenia",
-  "PAGE_ACTION:settings": "Zmień ustawienia",
+  "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:print": "Drukuj zlecenie",
   "PAGE_ACTION:openOrdersPrint": "Drukuj zlecenia",
   "PAGE_ACTION:jump:title": "Skocz do zlecenia po nr",

@@ -9,7 +9,7 @@
   "PANEL:TITLE:details:order": "Szczegóły zlecenia Xiconf",
 
   "PAGE_ACTION:export": "Eksportuj zlecenia",
-  "PAGE_ACTION:settings": "Zmień ustawienia",
+  "PAGE_ACTION:settings": "Ustawienia",
 
   "PROPERTY:orderNo": "Nr zlecenia",
   "PROPERTY:nc12": "12NC",

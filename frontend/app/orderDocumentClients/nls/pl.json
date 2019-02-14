@@ -5,7 +5,7 @@
   "MSG:LOADING_FAILURE": "Ładowanie klientów nie powiodło się.",
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie klienta nie powiodło się.",
 
-  "page:settings": "Zmień ustawienia",
+  "page:settings": "Ustawienia",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:status": "Status",

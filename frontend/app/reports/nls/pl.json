@@ -19,7 +19,7 @@
   "MSG:LOADING_SINGLE_FAILURE": "Ładowanie raportu nie powiodło się.",
   "MSG:1:export:empty": "Brak danych do wyeksportowania.",
 
-  "PAGE_ACTION:settings": "Zmień ustawienia",
+  "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:1:export": "Eksportuj wydajność",
   "PAGE_ACTION:2:export": "Eksportuj zlecenia",
   "PAGE_ACTION:3:exportTable": "Eksportuj tabelę",
