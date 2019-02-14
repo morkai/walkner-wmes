@@ -20,7 +20,7 @@ define([
       + '</span>';
   }
 
-  return function(plan, orderNo)
+  return function(plan, orderNo, options)
   {
     var statuses = [];
     var planOrder = plan.orders.get(orderNo);
@@ -60,6 +60,15 @@ define([
       statuses.push(formatIcon(planOrder.getIcon('eto'), 'orders:eto'));
     }
 
+    if (orderData.priority)
+    {
+      statuses.push(
+        '<span class="planning-mrp-list-property planning-mrp-list-property-priority" '
+        + 'title="' + t('planning', 'orders:priority', {priority: orderData.priority}) + '" '
+        + '>' + orderData.priority + '</span>'
+      );
+    }
+
     statuses.push('<span class="planning-mrp-list-property planning-mrp-list-property-psStatus" '
       + 'title="' + t('planning', 'orders:psStatus:' + psStatus) + '" '
       + 'data-ps-status="' + psStatus + '">'
@@ -70,13 +79,16 @@ define([
       + 'data-wh-status="' + whStatus + '">'
       + '<i class="fa ' + planOrder.getIcon('whStatus') + '"></i></span>');
 
-    SAP_STATUSES.forEach(function(sapStatus)
+    if (!options || options.sapStatuses !== false)
     {
-      if (orderData.statuses.indexOf(sapStatus) !== -1)
+      SAP_STATUSES.forEach(function(sapStatus)
       {
-        statuses.push(renderOrderStatusLabel(sapStatus));
-      }
-    });
+        if (orderData.statuses.indexOf(sapStatus) !== -1)
+        {
+          statuses.push(renderOrderStatusLabel(sapStatus));
+        }
+      });
+    }
 
     return statuses.join('');
   };

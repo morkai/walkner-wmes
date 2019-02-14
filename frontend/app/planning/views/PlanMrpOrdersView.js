@@ -20,7 +20,8 @@ define([
   'app/planning/templates/orders',
   'app/planning/templates/orderPopover',
   'app/planning/templates/orderIgnoreDialog',
-  'app/planning/templates/orderRemoveDialog'
+  'app/planning/templates/orderRemoveDialog',
+  'app/planning/templates/orderStatusIcons'
 ], function(
   _,
   $,
@@ -41,7 +42,8 @@ define([
   ordersTemplate,
   orderPopoverTemplate,
   orderIgnoreDialogTemplate,
-  orderRemoveDialogTemplate
+  orderRemoveDialogTemplate,
+  orderStatusIconsTemplate
 ) {
   'use strict';
 
@@ -166,32 +168,21 @@ define([
       {
         var orderData = plan.getActualOrderData(order.id);
         var sapStatuses = order.mapSapStatuses(orderData.statuses);
-        var source = order.get('source');
-        var urgent = order.get('urgent');
-        var autoAdded = order.isAutoAdded();
 
         return {
           _id: order.id,
           mrp: order.get('mrp'),
-          kind: order.get('kind'),
-          kindIcon: order.getKindIcon(),
           incomplete: order.get('incomplete') > 0 ? 'is-incomplete' : '',
           completed: orderData.quantityDone >= orderData.quantityTodo ? 'is-completed' : '',
           started: orderData.quantityDone > 0 ? 'is-started' : '',
           surplus: orderData.quantityDone > orderData.quantityTodo ? 'is-surplus' : '',
           unplanned: order.get('incomplete') === order.getQuantityTodo() ? 'is-unplanned' : '',
-          source: source,
           confirmed: sapStatuses.CNF ? 'is-cnf' : '',
           delivered: sapStatuses.DLV ? 'is-dlv' : '',
           deleted: sapStatuses.deleted ? 'is-teco' : '',
-          customQuantity: order.hasCustomQuantity(),
           ignored: order.get('ignored') ? 'is-ignored' : '',
-          urgent: urgent && !autoAdded,
           invalid: !order.get('operation').laborTime ? 'is-invalid' : '',
-          pinned: order.isPinned(),
-          eto: plan.sapOrders.isEto(order.id),
-          psStatus: plan.sapOrders.getPsStatus(order.id),
-          whStatus: plan.sapOrders.getWhStatus(order.id)
+          statusIcons: orderStatusIconsTemplate(plan, order.id, {sapStatuses: false})
         };
       }).sort(PlanOrderCollection.compare);
     },

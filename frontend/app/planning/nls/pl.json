@@ -154,6 +154,7 @@
   "orders:urgent": "Pilne",
   "orders:pinned": "Przypięte",
   "orders:eto": "ETO",
+  "orders:priority": "{priority, select, E{Pilot ETO} other{Priorytet zlecenia}}",
   "orders:lines": "Linia",
   "orders:source:plan": "Zaplanowane",
   "orders:source:added": "Dodane",

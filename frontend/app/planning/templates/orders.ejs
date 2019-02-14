@@ -12,30 +12,7 @@
     <div class="planning-mrp-list-item is-order <%- icons ? 'with-icons' : '' %> <%- order.started %> <%- order.completed %> <%- order.surplus %> <%- order.ignored %> <%- order.incomplete %> <%- order.unplanned %> <%- order.invalid %> <%- order.deleted %>" data-id="<%= order._id %>">
       <div class="planning-mrp-list-item-inner <%- order.confirmed %> <%- order.delivered %>">
         <span class="planning-mrp-list-item-label"><%= order._id %></span>
-        <% if (order.kind && order.kind !== 'unclassified') { %>
-        <span class="planning-mrp-list-property" title="<%- t('planning', 'orderPriority:' + order.kind) %>"><i class="fa <%- order.kindIcon %>"></i></span>
-        <% } %>
-        <% if (order.source === 'late') { %>
-        <span class="planning-mrp-list-property" title="<%- t('planning', 'orders:source:late') %>"><i class="fa fa-hourglass-end"></i></span>
-        <% } else if (order.source === 'added') { %>
-        <span class="planning-mrp-list-property" title="<%- t('planning', 'orders:source:added') %>"><i class="fa fa-plus"></i></span>
-        <% } else if (order.source === 'incomplete') { %>
-        <span class="planning-mrp-list-property" title="<%- t('planning', 'orders:source:incomplete') %>"><i class="fa fa-arrow-right"></i></span>
-        <% } %>
-        <% if (order.urgent) { %>
-        <span class="planning-mrp-list-property" title="<%- t('planning', 'orders:urgent') %>"><i class="fa fa-exclamation"></i></span>
-        <% } %>
-        <% if (order.pinned) { %>
-        <span class="planning-mrp-list-property" title="<%- t('planning', 'orders:pinned') %>"><i class="fa fa-thumb-tack"></i></span>
-        <% } %>
-        <% if (order.customQuantity) { %>
-        <span class="planning-mrp-list-property" title="<%- t('planning', 'orders:customQuantity') %>"><i class="fa fa-sort-numeric-desc"></i></span>
-        <% } %>
-        <% if (order.eto) { %>
-        <span class="planning-mrp-list-property" title="<%- t('planning', 'orders:eto') %>"><i class="fa fa-wrench"></i></span>
-        <% } %>
-        <span class="planning-mrp-list-property planning-mrp-list-property-psStatus" title="<%- t('planning', 'orders:psStatus:' + order.psStatus) %>" data-ps-status="<%- order.psStatus %>"><i class="fa fa-paint-brush"></i></span>
-        <span class="planning-mrp-list-property planning-mrp-list-property-whStatus" title="<%- t('planning', 'orders:whStatus:' + order.whStatus) %>" data-wh-status="<%- order.whStatus %>"><i class="fa fa-level-down"></i></span>
+        <%- order.statusIcons %>
       </div>
     </div>
     <% }) %>

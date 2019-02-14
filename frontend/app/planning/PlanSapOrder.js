@@ -45,7 +45,7 @@ define([
 
     getActualOrderData: function()
     {
-      var orderData = this.pick(['quantityTodo', 'statuses']);
+      var orderData = this.pick(['quantityTodo', 'statuses', 'priority']);
 
       orderData.quantityDone = this.getQuantityDone();
 
