@@ -32,7 +32,8 @@
     "ACTION_FORM:BUTTON:delete": "Delete WorkCenter",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen WorkCenter?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> WorkCenter?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the WorkCenter."
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the WorkCenter.",
+    "ACTION_FORM:delete:NOT_EMPTY": "WorkCenter is not empty."
   },
   "pl": true
 }

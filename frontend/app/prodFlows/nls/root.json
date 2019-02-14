@@ -33,7 +33,8 @@
     "ACTION_FORM:BUTTON:delete": "Delete production flow",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen production flow?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> production flow?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the production flow."
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the production flow.",
+    "ACTION_FORM:delete:NOT_EMPTY": "Production flow is not empty."
   },
   "pl": true
 }

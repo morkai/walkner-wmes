@@ -152,12 +152,18 @@ define([
       {
         view.trigger('failure', jqXhr);
 
-        if (options.failureText)
+        var errorCode = jqXhr.responseJSON && jqXhr.responseJSON.error && jqXhr.responseJSON.error.code || '?';
+        var errorKey = 'ACTION_FORM:' + options.actionKey + ':' + errorCode;
+        var errorMessage = t.has(view.options.nlsDomain, errorKey)
+          ? t(view.options.nlsDomain, errorKey)
+          : options.failureText;
+
+        if (errorMessage)
         {
           view.$errorMessage = viewport.msg.show({
             type: 'error',
-            time: 5000,
-            text: options.failureText
+            time: 3000,
+            text: errorMessage
           });
         }
       });

@@ -32,5 +32,6 @@
   "ACTION_FORM:BUTTON:delete": "Usuń przepływ",
   "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany przepływ?",
   "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć przepływ <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć przepływu."
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć przepływu.",
+  "ACTION_FORM:delete:NOT_EMPTY": "Przepływ nie jest pusty."
 }

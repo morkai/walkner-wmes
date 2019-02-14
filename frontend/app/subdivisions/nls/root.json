@@ -49,7 +49,8 @@
     "ACTION_FORM:BUTTON:delete": "Delete subdivision",
     "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen subdivision?",
     "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> subdivision?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the subdivision."
+    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the subdivision.",
+    "ACTION_FORM:delete:NOT_EMPTY": "Subdivision is not empty."
   },
   "pl": true
 }
