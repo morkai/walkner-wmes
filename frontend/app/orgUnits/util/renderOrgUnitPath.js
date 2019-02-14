@@ -23,20 +23,23 @@ define([
   {
     if (!model)
     {
-      return null;
+      return '?';
     }
 
     var orgUnits = [];
+    var parentId = '???';
 
     if (model.constructor === prodLines.model)
     {
       orgUnits.unshift(model);
 
-      model = workCenters.get(model.get('workCenter'));
+      parentId = model.get('workCenter');
+
+      model = workCenters.get(parentId);
 
       if (!model)
       {
-        return null;
+        return '???' + parentId + '???';
       }
     }
 
@@ -44,13 +47,15 @@ define([
     {
       orgUnits.unshift(model);
 
+      parentId = model.get('prodFlow') || model.get('mrpController');
+
       model = model.get('prodFlow')
-        ? prodFlows.get(model.get('prodFlow'))
-        : mrpControllers.get(model.get('mrpController'));
+        ? prodFlows.get(parentId)
+        : mrpControllers.get(parentId);
 
       if (!model)
       {
-        return null;
+        return '???' + parentId + '???';
       }
     }
 
@@ -58,11 +63,13 @@ define([
     {
       orgUnits.unshift(model);
 
-      model = (model.get('mrpController') || []).map(function(id) { return mrpControllers.get(id); });
+      parentId = model.get('mrpController') || [];
+
+      model = parentId.map(function(id) { return mrpControllers.get(id); }).filter(m => !!m);
 
       if (!model.length)
       {
-        return null;
+        return '???' + parentId.join('; ') + '???';
       }
     }
 
@@ -70,11 +77,13 @@ define([
     {
       orgUnits.unshift(model);
 
-      model = subdivisions.get((model[0] || model).get('subdivision'));
+      parentId = (model[0] || model).get('subdivision');
+
+      model = subdivisions.get(parentId);
 
       if (!model)
       {
-        return null;
+        return '???' + parentId + '???';
       }
     }
 
@@ -82,11 +91,13 @@ define([
     {
       orgUnits.unshift(model);
 
-      model = divisions.get(model.get('division'));
+      parentId = model.get('division');
+
+      model = divisions.get(parentId);
 
       if (!model)
       {
-        return null;
+        return '???' + parentId + '???';
       }
     }
 
@@ -102,7 +113,7 @@ define([
 
     if (orgUnits.length === 0)
     {
-      return null;
+      return '???';
     }
 
     return orgUnits
