@@ -1,5 +1,5 @@
 {
-  "BREADCRUMBS:base": "Magazyn",
+  "BREADCRUMBS:base": "Magazyn (nowy)",
   "BREADCRUMBS:problems": "Problemy",
   "BREADCRUMBS:settings": "Ustawienia",
 
@@ -13,6 +13,7 @@
   "msg:NO_PENDING_ORDERS": "<p>Brak zleceń gotowych do realizacji.</p>",
 
   "PAGE_ACTION:dailyPlan": "Plan dzienny",
+  "PAGE_ACTION:old": "Stary moduł",
   "PAGE_ACTION:legend": "Legenda",
   "PAGE_ACTION:problems": "Problemy",
   "PAGE_ACTION:settings": "Ustawienia",

@@ -24,13 +24,18 @@
       <a href="#paintShop/load"><%- t('core', 'NAVBAR:PLANNING:paintShop:load') %></a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header"><%- t('core', 'NAVBAR:PLANNING:wh') %></li>
+    <li id="<%- idPrefix %>-wh-hd" class="dropdown-header">
+      <%- t('core', 'NAVBAR:PLANNING:wh') %>
+      <a id="<%- idPrefix %>-wh-old" class="active" href="javascript:void(0)"><%- t('core', 'NAVBAR:PLANNING:wh:old') %></a><a
+        id="<%- idPrefix %>-wh-new" href="javascript:void(0)"><%- t('core', 'NAVBAR:PLANNING:wh:new') %></a>
+    </li>
     <li data-privilege="PLANNING:VIEW" data-module><a href="#planning/wh/-1d"><%- t('core', 'NAVBAR:PLANNING:-1d') %></a></li>
     <li data-privilege="PLANNING:VIEW" data-module><a href="#planning/wh/0d"><%- t('core', 'NAVBAR:PLANNING:0d') %></a></li>
     <li data-privilege="PLANNING:VIEW" data-module><a href="#planning/wh/1d"><%- t('core', 'NAVBAR:PLANNING:1d') %></a></li>
     <li data-privilege="PLANNING:VIEW" data-module class="planning-navbar-2d" title="<%- t('core', 'NAVBAR:PLANNING:2d:help') %>">
       <a href="#planning/wh/2d"><%- t('core', 'NAVBAR:PLANNING:2d') %></a>
     </li>
+    <li data-privilege="WH:VIEW" data-module class="hidden"><a href="#wh/problems"><%- t('core', 'NAVBAR:PLANNING:wh:problems') %></a></li>
     <li class="divider"></li>
     <li class="dropdown-header"><%- t('core', 'NAVBAR:PLANNING:hourly') %></li>
     <li class="navbar-with-button" data-privilege="HOURLY_PLANS:VIEW" data-module>

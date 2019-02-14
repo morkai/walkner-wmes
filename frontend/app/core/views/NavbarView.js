@@ -237,6 +237,22 @@ define([
         }
 
         return false;
+      },
+      'click #-wh-old': function(e)
+      {
+        this.toggleWh('old');
+
+        e.currentTarget.blur();
+
+        return false;
+      },
+      'click #-wh-new': function(e)
+      {
+        this.toggleWh('new');
+
+        e.currentTarget.blur();
+
+        return false;
       }
     }
 
@@ -312,6 +328,7 @@ define([
     this.setConnectionStatus(this.socket.isConnected() ? 'online' : 'offline');
     this.hideNotAllowedEntries();
     this.hideEmptyEntries();
+    this.toggleWh(localStorage.getItem('WMES_NAVBAR_WH') || 'old');
 
     this.broker.publish('navbar.rendered', {
       view: this
@@ -1192,6 +1209,26 @@ define([
         view.searchUsersReq = null;
       }
     });
+  };
+
+  NavbarView.prototype.toggleWh = function(state)
+  {
+    var urlTemplate = state === 'old' ? '#planning/wh/{id}' : '#wh/plans/{id}';
+    var $li = this.$id('wh-hd');
+
+    ['-1d', '0d', '1d', '2d'].forEach(function(id)
+    {
+      $li = $li.next();
+
+      $li.find('a').attr('href', urlTemplate.replace('{id}', id));
+    });
+
+    $li.next().toggleClass('hidden', state === 'old');
+
+    this.$id('wh-old').toggleClass('active', state === 'old');
+    this.$id('wh-new').toggleClass('active', state === 'new');
+
+    localStorage.setItem('WMES_NAVBAR_WH', state);
   };
 
   return NavbarView;

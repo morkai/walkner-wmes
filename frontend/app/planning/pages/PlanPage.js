@@ -18,7 +18,8 @@ define([
   '../views/PlanFilterView',
   '../views/PlanMrpView',
   'app/planning/templates/planPage',
-  'app/planning/templates/planLegend'
+  'app/planning/templates/planLegend',
+  'app/planning/templates/whPageAction'
 ], function(
   _,
   $,
@@ -37,7 +38,8 @@ define([
   PlanFilterView,
   PlanMrpView,
   pageTemplate,
-  legendTemplate
+  legendTemplate,
+  whPageActionTemplate
 ) {
   'use strict';
 
@@ -90,10 +92,8 @@ define([
           href: '#paintShop/' + page.plan.id
         },
         {
-          label: t.bound('planning', 'PAGE_ACTION:wh'),
-          icon: 'truck',
           privileges: 'PLANNING:VIEW',
-          href: '#planning/wh/' + page.plan.id
+          template: function() { return whPageActionTemplate({id: page.plan.id}); }
         },
         {
           label: t.bound('planning', 'PAGE_ACTION:changes'),

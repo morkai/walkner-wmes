@@ -78,6 +78,12 @@ define([
 
       return [
         {
+          label: page.t('PAGE_ACTION:wh:new'),
+          icon: 'truck',
+          privileges: 'WH:VIEW',
+          href: '#wh/plans/' + page.plan.id
+        },
+        {
           label: page.t('PAGE_ACTION:dailyPlan'),
           icon: 'calculator',
           privileges: 'PLANNING:VIEW',

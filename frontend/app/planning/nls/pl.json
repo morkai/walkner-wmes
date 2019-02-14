@@ -1,6 +1,6 @@
 {
   "BREADCRUMBS:base": "Planowanie",
-  "BREADCRUMBS:wh": "Magazyn",
+  "BREADCRUMBS:wh": "Magazyn (stary)",
   "BREADCRUMBS:settings": "Ustawienia",
   "BREADCRUMBS:changes": "Historia zmian",
 
@@ -20,6 +20,9 @@
   "PAGE_ACTION:dailyPlan": "Plan dzienny",
   "PAGE_ACTION:paintShop": "Malarnia",
   "PAGE_ACTION:wh": "Magazyn",
+  "PAGE_ACTION:wh:old": "Stary moduł",
+  "PAGE_ACTION:wh:new": "Nowy moduł",
+  "PAGE_ACTION:wh:problems": "Lista problemów",
   "PAGE_ACTION:legend": "Legenda",
   "PAGE_ACTION:changes": "Historia zmian",
   "PAGE_ACTION:settings": "Ustawienia",

@@ -96,6 +96,19 @@
   font-weight: bold;
   color: #777;
 }
+.navbar .dropdown-header a {
+  display: inline-block;
+  padding: 0 4px;
+  color: #337ab7;
+  min-width: 42px;
+  text-align: center;
+}
+.navbar .dropdown-header a.active {
+  color: #777;
+  font-weight: bold;
+  cursor: default;
+  background: #fff;
+}
 @media (min-width: 768px) {
   .navbar {
     min-height: 0;

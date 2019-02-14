@@ -102,16 +102,22 @@ define([
           }
         },
         {
-          label: page.t('PAGE_ACTION:dailyPlan'),
-          icon: 'calculator',
+          label: page.t('PAGE_ACTION:wh:old'),
+          icon: 'truck',
           privileges: 'PLANNING:VIEW',
-          href: '#planning/plans/' + page.plan.id
+          href: '#planning/wh/' + page.plan.id
         },
         {
           label: t('wh', 'PAGE_ACTION:problems'),
           icon: 'bug',
           privileges: 'WH:VIEW',
           href: '#wh/problems'
+        },
+        {
+          label: page.t('PAGE_ACTION:dailyPlan'),
+          icon: 'calculator',
+          privileges: 'PLANNING:VIEW',
+          href: '#planning/plans/' + page.plan.id
         },
         {
           label: page.t('PAGE_ACTION:settings'),
