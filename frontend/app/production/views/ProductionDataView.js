@@ -83,6 +83,10 @@ define([
         this.toggleActions();
       });
       this.listenTo(this.model, 'change:state', this.toggleActions);
+      this.listenTo(this.model, 'newOrderRequested', function(order)
+      {
+        this.newOrder(null, order);
+      });
 
       var order = this.model.prodShiftOrder;
 
@@ -451,7 +455,7 @@ define([
       return this.$('.production-property-' + propertyName + ' .production-property-value');
     },
 
-    newOrder: function(e)
+    newOrder: function(e, order)
     {
       if (e)
       {
@@ -467,7 +471,8 @@ define([
         new NewOrderPickerView({
           model: this.model,
           embedded: this.options.embedded,
-          vkb: this.options.vkb
+          vkb: this.options.vkb,
+          order: order
         }),
         t('production', 'newOrderPicker:title' + (this.model.hasOrder() ? ':replacing' : ''))
       );

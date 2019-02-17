@@ -25,6 +25,7 @@ define([
   '../isa/IsaRequestCollection',
   '../production/settings',
   '../production/snManager',
+  '../production/Execution',
   'app/core/templates/userInfo'
 ], function(
   _,
@@ -51,6 +52,7 @@ define([
   IsaRequestCollection,
   settings,
   snManager,
+  Execution,
   renderUserInfo
 ) {
   'use strict';
@@ -132,6 +134,10 @@ define([
       });
 
       this.isaRequests = IsaRequestCollection.activeForLine(this.prodLine.id);
+
+      this.execution = new Execution(null, {
+        prodLineId: this.prodLine.id
+      });
     },
 
     serialize: function(options)
@@ -543,6 +549,8 @@ define([
 
       prodLog.record(this, 'changeOrder', this.prodShiftOrder.toJSON(), new Date(createdAt));
 
+      this.execution.startOrder(this.prodShiftOrder);
+
       if (prevOrderNo !== this.prodShiftOrder.get('orderId'))
       {
         this.autoStartDowntime();
@@ -564,6 +572,8 @@ define([
       }
 
       prodLog.record(this, 'correctOrder', changes);
+
+      this.execution.updateOrder(this.prodShiftOrder);
 
       this.trigger('orderCorrected');
     },
@@ -623,6 +633,8 @@ define([
       this.prodShiftOrder.onOrderContinued(this);
 
       prodLog.record(this, 'changeOrder', this.prodShiftOrder.toJSON());
+
+      this.execution.startOrder(this.prodShiftOrder);
     },
 
     changeQuantityDone: function(newValue)
@@ -647,6 +659,8 @@ define([
       prodLog.record(this, 'changeQuantityDone', {
         newValue: newValue
       });
+
+      this.execution.updateOrder(this.prodShiftOrder);
     },
 
     changeWorkerCount: function(newValue)
@@ -673,6 +687,8 @@ define([
         newValue: newValue,
         sapTaktTime: this.prodShiftOrder.get('sapTaktTime')
       });
+
+      this.execution.updateOrder(this.prodShiftOrder);
     },
 
     endDowntime: function()
@@ -722,6 +738,8 @@ define([
       this.set('state', 'downtime');
 
       prodLog.record(this, 'startDowntime', prodDowntime.toJSON());
+
+      this.execution.startDowntime(prodDowntime);
     },
 
     finishOrder: function(createdAt)
@@ -735,6 +753,8 @@ define([
 
       prodLog.record(this, 'finishOrder', finishedProdShiftOrder, createdAt);
 
+      this.execution.updateOrder(this.prodShiftOrder);
+
       return true;
     },
 
@@ -745,6 +765,8 @@ define([
       if (finishedProdDowntime)
       {
         prodLog.record(this, 'finishDowntime', finishedProdDowntime);
+
+        this.execution.updateDowntime(this.prodDowntimes.first());
       }
 
       return !!finishedProdDowntime;
@@ -764,6 +786,8 @@ define([
       changes._id = prodDowntime.id;
 
       prodLog.record(this, 'editDowntime', changes);
+
+      this.execution.updateDowntime(prodDowntime);
     },
 
     isTaktTimeEnabled: function()
@@ -799,6 +823,8 @@ define([
           lastTaktTime: data.lastTaktTime,
           avgTaktTime: data.avgTaktTime
         });
+
+        this.execution.updateOrder(this.prodShiftOrder);
       }
 
       this.saveLocalData();

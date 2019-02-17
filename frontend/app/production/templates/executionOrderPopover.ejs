@@ -1,0 +1,10 @@
+<table>
+  <tbody>
+  <% ['orderNo', 'operationNo', 'quantityDone', 'workerCount', 'startedAt', 'finishedAt'].forEach(function(prop) { %>
+  <tr>
+    <th><%- t('production', 'execution:order:' + prop) %></th>
+    <td><%= order[prop] %></td>
+  </tr>
+  <% }) %>
+  </tbody>
+</table>

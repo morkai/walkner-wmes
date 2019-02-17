@@ -27,6 +27,7 @@ define([
   '../views/IsaView',
   '../views/TaktTimeView',
   '../views/SpigotCheckerView',
+  '../views/ExecutionView',
   'app/production/templates/productionPage',
   'app/production/templates/duplicateWarning'
 ], function(
@@ -56,6 +57,7 @@ define([
   IsaView,
   TaktTimeView,
   SpigotCheckerView,
+  ExecutionView,
   productionPageTemplate,
   duplicateWarningTemplate
 ) {
@@ -286,12 +288,16 @@ define([
         embedded: IS_EMBEDDED,
         vkb: page.vkbView
       });
+      page.executionView = new ExecutionView({
+        model: model
+      });
 
       var idPrefix = '#' + page.idPrefix + '-';
 
       page.setView(idPrefix + 'controls', page.controlsView);
       page.setView(idPrefix + 'header', page.headerView);
       page.setView(idPrefix + 'data', page.dataView);
+      page.setView(idPrefix + 'execution', page.executionView);
       page.setView(idPrefix + 'downtimes', page.downtimesView);
       page.setView(idPrefix + 'taktTime', page.taktTimeView);
       page.setView(idPrefix + 'quantities', page.quantitiesView);
@@ -598,7 +604,7 @@ define([
         prodDowntimeId: unfinishedProdDowntime ? unfinishedProdDowntime.id : null,
         orderNo: model.prodShiftOrder.get('orderId') || null,
         dictionaries: {},
-        orderQueue: !model.hasOrderQueue()
+        orderQueue: true
       };
 
       _.forEach(dictionaries, function(collection, moduleName)
@@ -659,6 +665,11 @@ define([
         if (!_.isEmpty(res.orderQueue))
         {
           model.setNextOrder(res.orderQueue);
+        }
+
+        if (!_.isEmpty(res.execution))
+        {
+          model.execution.set(res.execution);
         }
 
         _.forEach(res.dictionaries, function(models, dictionaryName)
@@ -771,12 +782,10 @@ define([
         return;
       }
 
-      page.ajax({url: '/production/orderQueue/' + page.model.id}).done(function(orderQueue)
+      page.ajax({url: '/production/planExecution/' + page.model.id}).done(function(result)
       {
-        if (!_.isEmpty(orderQueue))
-        {
-          page.model.setNextOrder(orderQueue);
-        }
+        page.model.setNextOrder(result.orderQueue);
+        page.model.execution.set(result.execution);
       });
     },
 

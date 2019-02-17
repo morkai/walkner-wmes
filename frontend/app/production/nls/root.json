@@ -302,6 +302,21 @@
 
     "taktTime:list:title": "List of scanned serial numbers",
 
+    "execution:todo": "Plan",
+    "execution:done": "Done",
+    "execution:order:label": "{orderId}, {quantityDone} PCE",
+    "execution:order:orderNo": "Order",
+    "execution:order:operationNo": "Operation",
+    "execution:order:startedAt": "Started at",
+    "execution:order:finishedAt": "Finished at",
+    "execution:order:quantityDone": "Quantity",
+    "execution:order:workerCount": "Worker count",
+    "execution:downtime:label": "{reason}",
+    "execution:downtime:reason": "Reason",
+    "execution:downtime:aor": "AOR",
+    "execution:downtime:startedAt": "Started at",
+    "execution:downtime:finishedAt": "Finished at",
+
     "settings:tab:operator": "Operator",
     "settings:tab:downtimes": "Downtimes",
     "settings:tab:spigot": "Spigot check",

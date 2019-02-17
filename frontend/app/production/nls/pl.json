@@ -300,6 +300,21 @@
 
   "taktTime:list:title": "Lista zeskanowanych nr seryjnych",
 
+  "execution:todo": "Plan",
+  "execution:done": "Wykonane",
+  "execution:order:label": "{orderId}, {quantityDone} szt.",
+  "execution:order:orderNo": "Nr zlecenia",
+  "execution:order:operationNo": "Nr operacji",
+  "execution:order:startedAt": "Czas rozpoczęcia",
+  "execution:order:finishedAt": "Czas zakończenia",
+  "execution:order:quantityDone": "Ilość sztuk",
+  "execution:order:workerCount": "Ilość osób",
+  "execution:downtime:label": "{reason}",
+  "execution:downtime:reason": "Powód",
+  "execution:downtime:aor": "Obszar",
+  "execution:downtime:startedAt": "Czas rozpoczęcia",
+  "execution:downtime:finishedAt": "Czas zakończenia",
+
   "settings:tab:operator": "Formatka operatora",
   "settings:tab:downtimes": "Przestoje",
   "settings:tab:spigot": "Sprawdzanie Spigota",

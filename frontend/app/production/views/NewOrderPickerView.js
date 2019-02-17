@@ -223,6 +223,10 @@ define([
         {
           this.selectCurrentOrder();
         }
+        else if (this.options.order)
+        {
+          this.selectSpecifiedOrder();
+        }
         else
         {
           this.selectNextOrder();
@@ -354,6 +358,25 @@ define([
         type: 'change',
         operations: _.values(order.operations),
         selectedOperationNo: next.operationNo
+      });
+    },
+
+    selectSpecifiedOrder: function()
+    {
+      var view = this;
+      var input = view.options.order;
+
+      if (!input)
+      {
+        return;
+      }
+
+      view.$id('order').val(input.orderId);
+
+      this.handleOrderChange(function()
+      {
+        view.$id('operationGroup').find('[data-operation="' + input.operationNo + '"]').click();
+        view.$id('newWorkerCount').val(input.workerCount);
       });
     },
 
@@ -580,13 +603,17 @@ define([
       }
     },
 
-    handleOrderChange: function()
+    handleOrderChange: function(operationsBuilt)
     {
       var phrase = this.$id('order').val().replace(/[^0-9]+/g, '');
       var $group = this.$id('operationGroup');
-      var list = this.buildOperationList(phrase);
+      var list = this.buildOperationList(phrase, operationsBuilt);
 
-      if (!list.length)
+      if (list.length)
+      {
+        operationsBuilt();
+      }
+      else
       {
         list = '<p><i class="fa fa-spinner fa-spin"></i></p>';
       }
@@ -604,12 +631,14 @@ define([
       }
     },
 
-    buildOperationList: function(phrase)
+    buildOperationList: function(phrase, done)
     {
       var view = this;
 
       if (phrase.length !== 9)
       {
+        done();
+
         return '<p>' + t('production', 'newOrderPicker:order:tooShort') + '</p>';
       }
 
@@ -660,6 +689,8 @@ define([
       view.searchReq.always(function()
       {
         view.searchReq = null;
+
+        done();
       });
 
       view.lastPhrase = phrase;

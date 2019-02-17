@@ -3,6 +3,7 @@
 @import "bomChecker.css";
 @import "vkb.css";
 @import "modal.css";
+@import "execution.css";
 
 .is-production {
   overflow: auto;
@@ -534,6 +535,9 @@
   .production-downtimes .list-item > td:nth-child(2) {
     width: auto;
     white-space: normal;
+  }
+  .production-execution {
+    margin-top: 15px;
   }
 }
 @media (max-width: 1440px) {

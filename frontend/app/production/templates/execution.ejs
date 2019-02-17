@@ -1,0 +1,21 @@
+<div class="production-execution">
+  <div class="production-execution-labels">
+    <div class="production-execution-label"><%- t('production', 'execution:todo') %></div>
+    <div class="production-execution-label"><%- t('production', 'execution:done') %></div>
+  </div>
+  <div class="production-execution-timelines">
+    <div id="<%- idPrefix %>-todo" class="production-execution-todo"></div>
+    <div id="<%- idPrefix %>-done" class="production-execution-done"></div>
+    <div id="<%- idPrefix %>-legend" class="production-execution-legend">
+      <div class="production-execution-legend-h">1</div>
+      <div class="production-execution-legend-h">2</div>
+      <div class="production-execution-legend-h">3</div>
+      <div class="production-execution-legend-h">4</div>
+      <div class="production-execution-legend-h">5</div>
+      <div class="production-execution-legend-h">6</div>
+      <div class="production-execution-legend-h">7</div>
+      <div class="production-execution-legend-h">8</div>
+      <div id="<%- idPrefix %>-time" class="production-execution-legend-time hidden" style="left: 50%">00:00:00<br></div>
+    </div>
+  </div>
+</div>
