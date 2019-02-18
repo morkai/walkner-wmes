@@ -216,6 +216,22 @@ define([
       }
     },
 
+    events: {
+
+      'click #-message': function()
+      {
+        if (document.getSelection().toString() === '')
+        {
+          this.hideMessage();
+        }
+      },
+      'click #-messageOverlay': function()
+      {
+        this.hideMessage();
+      }
+
+    },
+
     initialize: function()
     {
       this.keyBuffer = '';
@@ -298,7 +314,9 @@ define([
 
       $(document).on('click.' + page.idPrefix, '.paintShop-breadcrumb', page.onBreadcrumbsClick.bind(page));
 
-      $(window).on('keypress.' + page.idPrefix, page.onWindowKeyPress.bind(page));
+      $(window)
+        .on('keydown.' + page.idPrefix, page.onWindowKeyDown.bind(page))
+        .on('keypress.' + page.idPrefix, page.onWindowKeyPress.bind(page));
 
       if (page.options.focus)
       {
@@ -443,6 +461,14 @@ define([
       }
 
       return false;
+    },
+
+    onWindowKeyDown: function(e)
+    {
+      if (e.key === 'Escape')
+      {
+        this.hideMessage();
+      }
     },
 
     onWindowKeyPress: function(e)
