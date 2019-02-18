@@ -547,6 +547,7 @@
   border-top: none;
   height: 26px;
   box-shadow: inset -3px -3px 24px #ccc;
+  background-color: #fff;
 }
 .planning-mrp-lineOrders-table > thead > tr > th:first-child {
   border-left: none;

@@ -111,6 +111,19 @@ define([
 
       view.listenTo(view.whOrders, 'reset', view.onOrdersReset);
       view.listenTo(view.whOrders, 'change', view.onOrderChanged);
+
+      $(window).on('scroll.' + view.idPrefix, view.positionStickyHeaders.bind(view));
+    },
+
+    destroy: function()
+    {
+      $(window).off('.' + this.idPrefix);
+
+      if (this.$stickyHeaders)
+      {
+        this.$stickyHeaders.remove();
+        this.$stickyHeaders = null;
+      }
     },
 
     serialize: function()
@@ -133,6 +146,30 @@ define([
     },
 
     afterRender: function()
+    {
+      this.setUpStickyHeaders();
+      this.setUpPopover();
+    },
+
+    scheduleRender: function()
+    {
+      clearTimeout(this.timers.render);
+
+      if (!this.plan.isAnythingLoading() && this.isRendered())
+      {
+        this.timers.render = setTimeout(this.renderIfNotLoading.bind(this), 1);
+      }
+    },
+
+    renderIfNotLoading: function()
+    {
+      if (!this.plan.isAnythingLoading())
+      {
+        this.render();
+      }
+    },
+
+    setUpPopover: function()
     {
       var view = this;
 
@@ -195,22 +232,48 @@ define([
       });
     },
 
-    scheduleRender: function()
+    setUpStickyHeaders: function()
     {
-      clearTimeout(this.timers.render);
+      this.$stickyHeaders = $('<div class="planning-wh-list wh-list-sticky"></div>').html(
+        '<table class="planning-mrp-lineOrders-table">'
+        + this.$('thead').first()[0].outerHTML
+        + '</table>'
+      );
 
-      if (!this.plan.isAnythingLoading() && this.isRendered())
-      {
-        this.timers.render = setTimeout(this.renderIfNotLoading.bind(this), 1);
-      }
+      this.adjustStickyHeaders();
+      this.positionStickyHeaders();
+
+      var $body = $(document.body);
+
+      $body.find('.wh-list-sticky').remove();
+      $body.append(this.$stickyHeaders);
     },
 
-    renderIfNotLoading: function()
+    adjustStickyHeaders: function()
     {
-      if (!this.plan.isAnythingLoading())
+      if (!this.$stickyHeaders)
       {
-        this.render();
+        return;
       }
+
+      var $stickyThs = this.$stickyHeaders.find('th');
+
+      this.$('th').each(function(i)
+      {
+        var rects = this.getClientRects();
+
+        $stickyThs[i].style.width = (rects.length ? rects[0].width : 0) + 'px';
+      });
+    },
+
+    positionStickyHeaders: function()
+    {
+      if (!this.$stickyHeaders)
+      {
+        return;
+      }
+
+      this.$stickyHeaders[0].classList.toggle('hidden', window.scrollY < this.el.offsetTop);
     },
 
     hideMenu: function()
@@ -471,6 +534,8 @@ define([
       $tr.replaceWith(whListRowTemplate({
         row: whOrder.serialize(this.plan, i)
       }));
+
+      this.adjustStickyHeaders();
     }
 
   });
