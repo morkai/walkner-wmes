@@ -23,10 +23,10 @@
     <div class="wh-problems-prop">
       <div class="wh-problems-prop-name"><%- t('wh', 'prop:date') %></div>
       <div class="wh-problems-prop-value">
-        <% if (item.urls.date) { %>
-        <a href="<%- item.urls.date %>"><%- item.date %></a>
+        <% if (item.urls.pickup) { %>
+        <a href="<%- item.urls.pickup %>"><%- item.date %></a>
         <% } else { %>
-        <%- item.order %>
+        <%- item.date %>
         <% } %>
       </div>
     </div>

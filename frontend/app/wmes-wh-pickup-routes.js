@@ -1,7 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  './time',
+  './broker',
   './router',
   './viewport',
   './user',
@@ -11,7 +11,7 @@ define([
   'i18n!app/nls/planning',
   'i18n!app/nls/paintShop'
 ], function(
-  time,
+  broker,
   router,
   viewport,
   user,
@@ -20,13 +20,24 @@ define([
 ) {
   'use strict';
 
-  router.map('/', user.auth('LOCAL', 'WH:VIEW'), function()
+  router.map('/', user.auth('LOCAL', 'WH:VIEW'), function(req)
   {
-    var date = sessionStorage.WMES_WH_PICKUP_DATE
+    var date = req.query.date
+      || sessionStorage.WMES_WH_PICKUP_DATE
       || getShiftStartInfo(Date.now()).moment.format('YYYY-MM-DD');
 
+    if (req.url !== '/')
+    {
+      broker.publish('router.navigate', {
+        url: '/',
+        replace: true,
+        trigger: false
+      });
+    }
+
     viewport.showPage(new WhPlanPage({
-      date: date
+      date: date,
+      focus: req.query.focus
     }));
   });
 });

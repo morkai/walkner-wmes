@@ -239,6 +239,7 @@ define([
       });
 
       this.listView = new WhProblemListView({
+        embedded: IS_EMBEDDED,
         whSettings: this.whSettings,
         whOrders: this.whOrders
       });

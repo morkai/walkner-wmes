@@ -73,6 +73,27 @@ define([
 
     serializeItem: function(whOrder)
     {
+      var urls = {
+        order: '',
+        pickup: ''
+      };
+
+      if (user.isAllowedTo('LOCAL', 'ORDERS:VIEW') && !this.options.embedded)
+      {
+        urls.order = '#orders/' + whOrder.get('order');
+      }
+
+      var date = time.utc.format(whOrder.get('date'), 'YYYY-MM-DD');
+
+      if (this.options.embedded)
+      {
+        urls.pickup = '/wh-pickup#?date=' + date + '&focus=' + whOrder.id;
+      }
+      else
+      {
+        urls.pickup = '#wh/plans/' + date + '?focus=' + whOrder.id;
+      }
+
       return {
         _id: whOrder.id,
         order: whOrder.get('order'),
@@ -85,10 +106,7 @@ define([
         fmx: whOrder.serializeProblemFunc('fmx'),
         kitter: whOrder.serializeProblemFunc('kitter'),
         packer: whOrder.serializeProblemFunc('packer'),
-        urls: {
-          order: !user.isAllowedTo('LOCAL', 'ORDERS:VIEW') ? '' : ('#orders/' + whOrder.get('order')),
-          date: '#wh/plans/' + time.utc.format(whOrder.get('date'), 'YYYY-MM-DD') + '?focus=' + whOrder.id
-        }
+        urls: urls
       };
     },
 
