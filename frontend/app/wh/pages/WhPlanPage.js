@@ -320,7 +320,10 @@ define([
 
       if (page.options.focus)
       {
-        page.listenToOnce(page, 'afterRender', page.focusOrder.bind(page, page.options.focus, true));
+        page.listenToOnce(page, 'afterRender', function()
+        {
+          page.timers.focus = setTimeout(page.focusOrder.bind(page, page.options.focus, true), 1);
+        });
       }
     },
 
@@ -612,11 +615,17 @@ define([
 
     focusOrder: function(id, smooth)
     {
-      this.$('tr[data-id="' + id + '"]')[0].scrollIntoView({
-        behavior: smooth ? 'smooth' : 'auto',
-        block: 'start',
-        inline: 'start'
-      });
+      var el = this.$('tr[data-id="' + id + '"]')[0];
+      var y = el.getBoundingClientRect().top - this.listView.$('thead').outerHeight();
+
+      if (smooth)
+      {
+        $('html, body').stop(true, false).animate({scrollTop: y});
+      }
+      else
+      {
+        window.scrollTo(0, y);
+      }
     },
 
     showMessage: function(type, time, message, messageData)
