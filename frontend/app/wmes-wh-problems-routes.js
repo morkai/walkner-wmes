@@ -6,7 +6,7 @@ define([
   './viewport',
   './user',
   './core/util/getShiftStartInfo',
-  './wh/pages/WhPlanPage',
+  './wh/pages/WhProblemListPage',
   'i18n!app/nls/wh',
   'i18n!app/nls/planning',
   'i18n!app/nls/paintShop'
@@ -16,17 +16,14 @@ define([
   viewport,
   user,
   getShiftStartInfo,
-  WhPlanPage
+  WhProblemListPage
 ) {
   'use strict';
 
-  router.map('/', user.auth('LOCAL', 'WH:VIEW'), function()
+  router.map('/', user.auth('LOCAL', 'WH:VIEW'), function(req)
   {
-    var date = sessionStorage.WMES_WH_PICKUP_DATE
-      || getShiftStartInfo(Date.now()).moment.format('YYYY-MM-DD');
-
-    viewport.showPage(new WhPlanPage({
-      date: date
+    viewport.showPage(new WhProblemListPage({
+      returnDate: req.query.returnDate
     }));
   });
 });

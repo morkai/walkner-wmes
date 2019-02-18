@@ -220,6 +220,15 @@ exports.updater = {
       dictionaryModules: {}
     },
     {
+      frontendVersionKey: 'wh-problems',
+      path: '/wh-problems/manifest.appcache',
+      mainJsFile: '/wmes-wh-problems.js',
+      mainCssFile: '/assets/wmes-wh-problems.css',
+      template: manifestTemplates.wh,
+      frontendAppData: {},
+      dictionaryModules: {}
+    },
+    {
       frontendVersionKey: 'wh-kitter',
       path: '/wh-kitter/manifest.appcache',
       mainJsFile: '/wmes-wh-kitter.js',

@@ -72,6 +72,9 @@ define([
               + '<a href="' + breadcrumb.href + '" data-action="showPicker">' + breadcrumb.label + '</a>'
               + '<a class="fa fa-chevron-right" data-action="next"></a></span>';
           }
+        },
+        {
+          label: t.bound('wh', 'BREADCRUMBS:pickup')
         }
       ];
     },
@@ -79,10 +82,28 @@ define([
     actions: function()
     {
       var page = this;
+      var legend = {
+        label: page.t('PAGE_ACTION:legend'),
+        icon: 'question-circle',
+        callback: function()
+        {
+          page.toggleLegend(this.querySelector('.btn'));
+
+          return false;
+        }
+      };
 
       if (IS_EMBEDDED)
       {
-        return [];
+        return [
+          {
+            label: t('wh', 'PAGE_ACTION:problems'),
+            icon: 'bug',
+            privileges: 'WH:VIEW',
+            href: '/wh-problems'
+          },
+          legend
+        ];
       }
 
       return [
@@ -125,16 +146,7 @@ define([
           privileges: ['WH:MANAGE', 'WH:MANAGE:USERS'],
           href: '#wh/settings?tab=' + (currentUser.isAllowedTo('WH:MANAGE') ? '' : 'users')
         },
-        {
-          label: page.t('PAGE_ACTION:legend'),
-          icon: 'question-circle',
-          callback: function()
-          {
-            page.toggleLegend(this.querySelector('.btn'));
-
-            return false;
-          }
-        }
+        legend
       ];
     },
 

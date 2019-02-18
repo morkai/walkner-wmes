@@ -1,5 +1,6 @@
 {
   "BREADCRUMBS:base": "Magazyn (nowy)",
+  "BREADCRUMBS:pickup": "Kompletacja",
   "BREADCRUMBS:problems": "Problemy",
   "BREADCRUMBS:settings": "Ustawienia",
 
@@ -15,6 +16,7 @@
   "PAGE_ACTION:dailyPlan": "Plan dzienny",
   "PAGE_ACTION:old": "Stary moduł",
   "PAGE_ACTION:legend": "Legenda",
+  "PAGE_ACTION:pickup": "Kompletacja",
   "PAGE_ACTION:problems": "Problemy",
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:resolveAction:title": "Podaj ID karty, aby rozpocząć następną akcję",

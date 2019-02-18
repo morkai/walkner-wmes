@@ -41,6 +41,8 @@ define([
 ) {
   'use strict';
 
+  var IS_EMBEDDED = window.parent !== window || window.location.pathname !== '/';
+
   return View.extend({
 
     template: pageTemplate,
@@ -57,6 +59,22 @@ define([
           label: this.t('BREADCRUMBS:problems')
         }
       ];
+    },
+
+    actions: function()
+    {
+      if (IS_EMBEDDED)
+      {
+        return [
+          {
+            label: t('wh', 'PAGE_ACTION:pickup'),
+            icon: 'check-square-o',
+            href: '/wh-pickup'
+          }
+        ];
+      }
+
+      return [];
     },
 
     remoteTopics: {

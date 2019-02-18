@@ -20,6 +20,7 @@
       "ps-queue": 21,
       "ps-load": 10,
       "wh-pickup": 4,
+      "wh-problems": 1,
       "wh-kitter": 4,
       "wh-packer": 4,
       "isa": 2
