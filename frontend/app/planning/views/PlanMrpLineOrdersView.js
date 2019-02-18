@@ -4,6 +4,7 @@ define([
   'underscore',
   'jquery',
   'app/i18n',
+  'app/user',
   'app/core/View',
   'app/data/downtimeReasons',
   '../util/shift',
@@ -17,6 +18,7 @@ define([
   _,
   $,
   t,
+  user,
   View,
   downtimeReasons,
   shiftUtil,
@@ -413,8 +415,9 @@ define([
         contextMenu.actions.sapOrder(orderNo)
       ];
 
-      if (this.plan.shiftOrders.findOrders(orderNo).length
-        || this.plan.getActualOrderData(orderNo).quantityDone)
+      if (user.isAllowedTo('PROD_DATA:VIEW')
+        && (this.plan.shiftOrders.findOrders(orderNo).length
+        || this.plan.getActualOrderData(orderNo).quantityDone))
       {
         menu.push({
           icon: 'fa-file-text-o',

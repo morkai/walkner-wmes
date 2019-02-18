@@ -92,7 +92,7 @@ define([
           href: '#paintShop/' + page.plan.id
         },
         {
-          privileges: 'PLANNING:VIEW',
+          privileges: 'WH:VIEW',
           template: function() { return whPageActionTemplate({id: page.plan.id}); }
         },
         {

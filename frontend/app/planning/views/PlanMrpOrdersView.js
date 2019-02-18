@@ -374,8 +374,9 @@ define([
         contextMenu.actions.sapOrder(planOrder.id)
       ];
 
-      if (this.plan.shiftOrders.findOrders(planOrder.id).length
-        || this.plan.getActualOrderData(planOrder.id).quantityDone)
+      if (user.isAllowedTo('PROD_DATA:VIEW')
+        && (this.plan.shiftOrders.findOrders(planOrder.id).length
+        || this.plan.getActualOrderData(planOrder.id).quantityDone))
       {
         menu.push({
           icon: 'fa-file-text-o',

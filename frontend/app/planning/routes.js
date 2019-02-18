@@ -36,6 +36,7 @@ define([
 
   var canView = user.auth('PLANNING:VIEW');
   var canManage = user.auth('PLANNING:MANAGE');
+  var canViewWh = user.auth('WH:VIEW');
 
   router.map('/planning/settings/:id', canManage, function(req)
   {
@@ -90,7 +91,7 @@ define([
     }));
   });
 
-  router.map('/planning/wh/:id', canView, function(req)
+  router.map('/planning/wh/:id', canViewWh, function(req)
   {
     if (/^-?[0-9]+d$/.test(req.params.id))
     {

@@ -112,10 +112,6 @@ define([
 
     serialize: function()
     {
-      var isEmbedded = window.parent !== window;
-      var isLocal = user.isAllowedTo('LOCAL');
-      var isPainter = user.isAllowedTo('PAINT_SHOP:PAINTER');
-      var canManage = user.isAllowedTo('PAINT_SHOP:MANAGE');
       var order = this.model.serialize();
 
       order.childOrders.forEach(function(childOrder)
@@ -133,10 +129,20 @@ define([
         order: order,
         fillerHeight: this.calcFillerHeight(),
         renderQueueOrder: queueOrderTemplate,
-        canAct: (isEmbedded && isLocal) || isPainter || canManage,
+        canAct: this.canAct(),
         mrpDropped: this.dropZones.getState(order.mrp),
         getChildOrderDropZoneClass: this.orders.getChildOrderDropZoneClass.bind(this.orders)
       };
+    },
+
+    canAct: function()
+    {
+      var isEmbedded = document.body.classList.contains('is-embedded');
+      var isLocal = user.isAllowedTo('LOCAL');
+      var isPainter = user.isAllowedTo('PAINT_SHOP:PAINTER');
+      var canManage = user.isAllowedTo('PAINT_SHOP:MANAGE');
+
+      return (isEmbedded && isLocal) || isPainter || canManage;
     },
 
     beforeRender: function()
@@ -164,7 +170,9 @@ define([
     renderChanges: function()
     {
       var view = this;
-      var $changes = $(orderChangesTemplate());
+      var $changes = $(orderChangesTemplate({
+        canAct: view.canAct()
+      }));
 
       $changes.find('.paintShop-orderChanges-comment').on('focus', function()
       {

@@ -104,7 +104,7 @@ define([
         {
           label: page.t('PAGE_ACTION:wh:old'),
           icon: 'truck',
-          privileges: 'PLANNING:VIEW',
+          privileges: 'WH:VIEW',
           href: '#planning/wh/' + page.plan.id
         },
         {
