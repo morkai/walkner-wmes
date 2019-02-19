@@ -1037,6 +1037,19 @@ assets/../app/wh/assets/main.css
 assets/./wmes-loading.css
 assets/wmes-wh-pickup.css
 
+assets/wmes-wh-problems.css
+----------------
+assets/../vendor/bootstrap/css/bootstrap.css
+assets/../vendor/font-awesome/css/font-awesome.css
+assets/../app/core/assets/main.css
+assets/../app/updater/assets/main.css
+assets/../app/paintShop/assets/main.css
+assets/../app/planning/assets/main.css
+assets/../app/production/assets/vkb.css
+assets/../app/wh/assets/main.css
+assets/./wmes-loading.css
+assets/wmes-wh-problems.css
+
 vendor/bootstrap/css/bootstrap-theme.css
 ----------------
 vendor/bootstrap/css/bootstrap-theme.css
