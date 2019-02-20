@@ -10,6 +10,7 @@ define([
   'app/core/Model',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  'app/core/util/embedded',
   'app/planning/Plan',
   'app/planning/PlanSettings',
   'app/planning/PlanDisplayOptions',
@@ -29,6 +30,7 @@ define([
   Model,
   View,
   bindLoadingMessage,
+  embedded,
   Plan,
   PlanSettings,
   PlanDisplayOptions,
@@ -253,6 +255,11 @@ define([
       var page = this;
 
       page.listenTo(page.displayOptions, 'change:useDarkerTheme', page.onDarkerThemeChanged);
+
+      page.listenToOnce(page, 'afterRender', function()
+      {
+        window.parent.postMessage({type: 'ready', app: window.WMES_APP_ID}, '*');
+      });
     },
 
     load: function(when)
@@ -273,6 +280,7 @@ define([
     afterRender: function()
     {
       whSettings.acquire();
+      embedded.render(this);
     },
 
     onDarkerThemeChanged: function()

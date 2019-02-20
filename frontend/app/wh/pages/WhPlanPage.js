@@ -10,6 +10,7 @@ define([
   'app/core/Model',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  'app/core/util/embedded',
   'app/paintShop/views/PaintShopDatePickerView',
   'app/planning/Plan',
   'app/planning/PlanSettings',
@@ -33,6 +34,7 @@ define([
   Model,
   View,
   bindLoadingMessage,
+  embedded,
   PaintShopDatePickerView,
   Plan,
   PlanSettings,
@@ -325,6 +327,11 @@ define([
           page.timers.focus = setTimeout(page.focusOrder.bind(page, page.options.focus, true), 1);
         });
       }
+
+      page.listenToOnce(page, 'afterRender', function()
+      {
+        window.parent.postMessage({type: 'ready', app: window.WMES_APP_ID}, '*');
+      });
     },
 
     load: function(when)
@@ -352,6 +359,7 @@ define([
     afterRender: function()
     {
       whSettings.acquire();
+      embedded.render(this);
       this.updateUrl();
     },
 
