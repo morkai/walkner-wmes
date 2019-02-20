@@ -52,6 +52,7 @@
     "axon": "~2.0.3",
     "bcrypt": "~3.0.2",
     "body-parser": "~1.18.3",
+    "chalk": "^2.4.1",
     "cheerio": "~0.22.0",
     "content-disposition": "~0.5.2",
     "cookie": "~0.3.1",
