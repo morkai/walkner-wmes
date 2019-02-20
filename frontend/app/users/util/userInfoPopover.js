@@ -150,8 +150,13 @@ define([
 
     $popover.data('userId', user._id);
 
-    $popover.on('click.userInfoPopover', function()
+    $popover.on('click.userInfoPopover', function(e)
     {
+      if (e.currentTarget.dataset.clickable === '0')
+      {
+        return;
+      }
+
       if (hideOnLeave)
       {
         hideOnLeave = false;

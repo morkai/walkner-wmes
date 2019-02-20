@@ -141,7 +141,11 @@ define([
           label: t('wh', 'prop:picklist'),
           className: this.get('picklistDone') ? 'wh-problems-success' : 'wh-problems-failure',
           status: t('wh', 'status:picklistDone:' + this.get('picklistDone')),
-          user: userInfoTemplate({userInfo: this.getFunc(this.get('picklistFunc')).user}),
+          user: userInfoTemplate({
+            userInfo: this.getFunc(this.get('picklistFunc')).user,
+            noIp: true,
+            clickable: false
+          }),
           carts: '',
           problemArea: '',
           problem: this.get('problem')
