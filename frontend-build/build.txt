@@ -2843,6 +2843,11 @@ app/core/layouts/PageLayout.js
 app/core/templates/blankLayout.js
 app/core/layouts/BlankLayout.js
 app/core/util/bindLoadingMessage.js
+app/core/views/DialogView.js
+app/core/templates/embedded/appsDialog.js
+app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/actions.js
+app/core/util/embedded.js
 app/paintShop/templates/datePicker.js
 app/paintShop/views/PaintShopDatePickerView.js
 app/mrpControllers/MrpController.js
@@ -3030,6 +3035,11 @@ app/core/layouts/PageLayout.js
 app/core/templates/blankLayout.js
 app/core/layouts/BlankLayout.js
 app/core/util/bindLoadingMessage.js
+app/core/views/DialogView.js
+app/core/templates/embedded/appsDialog.js
+app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/actions.js
+app/core/util/embedded.js
 app/mrpControllers/MrpController.js
 app/mrpControllers/MrpControllerCollection.js
 app/data/mrpControllers.js
