@@ -67,7 +67,7 @@
     localStorage,
     BlankLayout)
   {
-    var startBroker = null;
+    var startBroker = broker.sandbox();
     var heffLine = localStorage.getItem('HEFF:LINE');
 
     if (heffLine)
@@ -106,8 +106,6 @@
 
     if (navigator.onLine && heffLine)
     {
-      startBroker = broker.sandbox();
-
       startBroker.subscribe('socket.connected', function()
       {
         startBroker.subscribe('user.reloaded', doStartApp);
@@ -122,21 +120,21 @@
 
     function doStartApp()
     {
-      if (startBroker !== null)
-      {
-        startBroker.destroy();
-        startBroker = null;
-      }
-
       broker.subscribe('i18n.reloaded', function(message)
       {
         localStorage.setItem('LOCALE', message.newLocale);
-        viewport.render();
+
+        window.location.reload();
       });
+
+      if (typeof window.onPageShown === 'function')
+      {
+        broker.subscribe('viewport.page.shown', window.onPageShown);
+      }
 
       domReady(function()
       {
-        $('#app-loading').fadeOut(function() { $(this).remove(); });
+        startBroker.subscribe('viewport.page.shown', reveal);
 
         if (window.ENV)
         {
@@ -149,6 +147,18 @@
           pushState: false
         });
       });
+    }
+
+    function reveal()
+    {
+      if (startBroker !== null)
+      {
+        startBroker.destroy();
+        startBroker = null;
+      }
+
+      $('#app-loading').remove();
+      $('body').removeClass('is-loading');
     }
   }
 })();

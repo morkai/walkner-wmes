@@ -63,7 +63,7 @@
     FormView,
     LogInFormView)
   {
-    var startBroker = null;
+    var startBroker = broker.sandbox();
 
     socket.connect();
 
@@ -121,8 +121,6 @@
 
     if (navigator.onLine)
     {
-      startBroker = broker.sandbox();
-
       startBroker.subscribe('socket.connected', function()
       {
         startBroker.subscribe('user.reloaded', doStartApp);
