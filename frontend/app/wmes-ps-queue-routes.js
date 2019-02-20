@@ -20,7 +20,9 @@ define([
 ) {
   'use strict';
 
-  router.map('/', user.auth('LOCAL', 'PAINT_SHOP:VIEW'), function()
+  var canView = user.auth('LOCAL', 'PAINT_SHOP:VIEW');
+
+  router.map('/', canView, function()
   {
     var date = time.utc.getMoment(
       getShiftStartInfo(Date.now()).moment.subtract(1, 'days').format('YYYY-MM-DD'),
@@ -48,5 +50,14 @@ define([
         fullscreen: true
       }));
     });
+  });
+
+  router.map('/paintShop/:date', canView, function(req)
+  {
+    viewport.showPage(new PaintShopPage({
+      date: req.params.date,
+      selectedMrp: req.query.mrp,
+      fullscreen: req.query.fullscreen === '1'
+    }));
   });
 });
