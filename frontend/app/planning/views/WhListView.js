@@ -186,6 +186,7 @@ define([
       var view = this;
       var plan = view.plan;
       var lines = plan.displayOptions.get('lines');
+      var disabledMrps = plan.settings.global.getValue('wh.newIncludedMrps') || [];
       var list = [];
 
       view.groupDuration = plan.settings.global.getWhGroupDuration();
@@ -212,7 +213,7 @@ define([
 
           var mrp = order.get('mrp');
 
-          if (!plan.mrps.get(mrp))
+          if (!plan.mrps.get(mrp) || disabledMrps.indexOf(mrp) !== -1)
           {
             continue;
           }
