@@ -1,1 +1,1 @@
-define(["h5.pubsub/MessageBroker"],function(e){"use strict";var n=new e;return n.on("message",function(e,n){}),window.broker=n,n});
+define(["h5.pubsub/MessageBroker"],function(e){"use strict";var o=new e;return o.on("message",function(e,o){void 0===o?console.log("[%s]",e):console.log("[%s]",e,o)}),window.broker=o,o});
