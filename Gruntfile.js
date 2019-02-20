@@ -128,7 +128,7 @@ module.exports = function(grunt)
       options: {
         ecma: 6,
         compress: {
-          drop_console: true // eslint-disable-line camelcase
+          drop_console: false // eslint-disable-line camelcase
         }
       },
       frontend: {
