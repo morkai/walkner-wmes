@@ -288,7 +288,10 @@ define([
         };
       }).filter(function(item) { return !!item; });
 
-      contextMenu.show(view, e.pageY - 17, e.pageX - 17, menu);
+      contextMenu.show(view, e.pageY - 17, e.pageX - 17, {
+        className: 'wh-set-menu',
+        menu: menu
+      });
     },
 
     showFixUpdateMenu: function(whOrder, propFunc, prop, e)

@@ -189,3 +189,12 @@
 .wh-set-popover {
   max-width: 400px;
 }
+.wh-set-menu > li > a {
+  font-size: 21px;
+  line-height: 1.4;
+}
+.wh-set-menu > li > a > .fa {
+  font-size: 21px;
+  line-height: 1.4;
+  min-width: 21px;
+}
