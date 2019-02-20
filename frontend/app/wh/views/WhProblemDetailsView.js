@@ -127,11 +127,6 @@ define([
       this.hideEditor();
     },
 
-    afterRender: function()
-    {
-
-    },
-
     loadPlan: function()
     {
       var view = this;
@@ -224,6 +219,15 @@ define([
         if (funcId === 'lp10')
         {
           newData.picklistDone = true;
+
+          newData.funcs.forEach(func =>
+          {
+            if (func.user)
+            {
+              func.status = 'picklist';
+              func.startedAt = newData.startedAt;
+            }
+          });
         }
         else if (!carts.length)
         {

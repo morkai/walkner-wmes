@@ -128,11 +128,6 @@ define([
       }));
     },
 
-    hideProblemDetails: function()
-    {
-
-    },
-
     toggleEmpty: function()
     {
       this.$el.toggleClass('is-empty', this.whOrders.length === 0);
