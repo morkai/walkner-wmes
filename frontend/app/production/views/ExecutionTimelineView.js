@@ -173,7 +173,7 @@ define([
     scheduleExtendLastItems: function()
     {
       clearTimeout(this.timers.extendLastItems);
-      this.timers.extendLastItems = setTimeout(this.extendLastItems.bind(this), 1000);
+      this.timers.extendLastItems = setTimeout(this.extendLastItems.bind(this), 60000);
     },
 
     extendLastItems: function()
@@ -186,7 +186,7 @@ define([
     {
       this.scheduleExtendLastItems();
 
-      var items = this.model.get(this[type + 'Prop']);
+      var items = this.model.get(this[type + 'Prop']) || [];
       var lastI = items.length - 1;
       var last = items[lastI];
 
