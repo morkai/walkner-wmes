@@ -34,6 +34,9 @@ define([
     finished: 'fa-thumbs-up'
   };
   var FUNC_STATUS_TO_CLASS = {
+    null: 'wh-problems-pending',
+    true: 'wh-problems-success',
+    false: 'wh-problems-failure',
     pending: 'wh-problems-pending',
     picklist: 'wh-problems-progress',
     pickup: 'wh-problems-progress',
@@ -134,15 +137,18 @@ define([
     serializeProblemFunc: function(funcId)
     {
       var problemFunc;
+      var func;
 
       if (funcId === 'lp10')
       {
+        func = this.getFunc(this.get('picklistFunc'));
+
         problemFunc = {
           label: t('wh', 'prop:picklist'),
-          className: this.get('picklistDone') ? 'wh-problems-success' : 'wh-problems-failure',
+          className: FUNC_STATUS_TO_CLASS[this.get('picklistDone')],
           status: t('wh', 'status:picklistDone:' + this.get('picklistDone')),
-          user: userInfoTemplate({
-            userInfo: this.getFunc(this.get('picklistFunc')).user,
+          user: !func || !func.user ? '' : userInfoTemplate({
+            userInfo: func.user,
             noIp: true,
             clickable: false
           }),
@@ -153,13 +159,17 @@ define([
       }
       else
       {
-        var func = this.getFunc(funcId);
+        func = this.getFunc(funcId);
 
         problemFunc = {
           label: t('wh', 'func:' + funcId),
           className: FUNC_STATUS_TO_CLASS[func.status],
           status: t('wh', 'status:' + func.status),
-          user: func.user ? userInfoTemplate({userInfo: func.user}) : '',
+          user: !func.user ? '' : userInfoTemplate({
+            userInfo: func.user,
+            noIp: true,
+            clickable: false
+          }),
           carts: func.carts.join(', '),
           problemArea: func.problemArea,
           problem: func.comment
