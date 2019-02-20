@@ -13,6 +13,15 @@ define([
 ) {
   'use strict';
 
+  var NUMERIC_SETTINGS_RE = new RegExp([
+    'maxSetSize',
+    'minSetDuration',
+    'maxSetDuration',
+    'maxSetDifference',
+    'groupDuration',
+    'groupExtraItems'
+  ].join('|'));
+
   return SettingCollection.extend({
 
     model: WhSetting,
@@ -28,7 +37,7 @@ define([
 
     prepareValue: function(id, newValue)
     {
-      if (/maxSetSize|(group(Duration|ExtraItems))/.test(id))
+      if (NUMERIC_SETTINGS_RE.test(id))
       {
         newValue = Math.round(parseInt(newValue, 10));
 

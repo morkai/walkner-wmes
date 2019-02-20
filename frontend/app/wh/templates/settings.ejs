@@ -11,12 +11,27 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-planning-groupExtraItems"><%- helpers.t('settings:planning:groupExtraItems') %></label>
-        <span class="help-block"><%- t('planning', 'settings:wh:groupExtraItems:help') %></span>
+        <span class="help-block"><%- helpers.t('settings:planning:groupExtraItems:help') %></span>
         <input id="<%- idPrefix %>-planning-groupExtraItems" class="form-control" name="wh.planning.groupExtraItems" type="number" step="1" min="0" max="100">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-planning-maxSetSize"><%- helpers.t('settings:planning:maxSetSize') %></label>
         <input id="<%- idPrefix %>-planning-maxSetSize" class="form-control" name="wh.planning.maxSetSize" type="number" step="1" min="1" max="100">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-planning-minSetDuration"><%- helpers.t('settings:planning:minSetDuration') %></label>
+        <span class="help-block"><%- helpers.t('settings:planning:minSetDuration:help') %></span>
+        <input id="<%- idPrefix %>-planning-minSetDuration" class="form-control" name="wh.planning.minSetDuration" type="number" step="1" min="1" max="600">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-planning-maxSetDuration"><%- helpers.t('settings:planning:maxSetDuration') %></label>
+        <span class="help-block"><%- helpers.t('settings:planning:maxSetDuration:help') %></span>
+        <input id="<%- idPrefix %>-planning-maxSetDuration" class="form-control" name="wh.planning.maxSetDuration" type="number" step="1" min="1" max="600">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-planning-maxSetDifference"><%- helpers.t('settings:planning:maxSetDifference') %></label>
+        <span class="help-block"><%- helpers.t('settings:planning:maxSetDifference:help') %></span>
+        <input id="<%- idPrefix %>-planning-maxSetDifference" class="form-control" name="wh.planning.maxSetDifference" type="number" step="1" min="1" max="600">
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-planning-ignoredMrps"><%- helpers.t('settings:planning:ignoredMrps') %></label>
