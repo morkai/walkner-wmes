@@ -155,12 +155,14 @@ define([
         message.orders.forEach(function(newWhOrder)
         {
           var oldWhOrder = page.whOrders.get(newWhOrder._id);
+          var readd = false;
 
           if (!oldWhOrder
             && viewport.currentDialog instanceof WhProblemDetailsView
             && viewport.currentDialog.model.id === newWhOrder._id)
           {
             oldWhOrder = viewport.currentDialog.model;
+            readd = true;
           }
 
           if (oldWhOrder)
@@ -170,6 +172,10 @@ define([
             if (newWhOrder.status !== 'problem')
             {
               page.whOrders.remove(oldWhOrder);
+            }
+            else if (readd)
+            {
+              page.whOrders.add(oldWhOrder);
             }
 
             return;
