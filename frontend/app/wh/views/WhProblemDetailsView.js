@@ -79,6 +79,7 @@ define([
 
       view.listenTo(view.model, 'remove', view.onOrderRemoved);
       view.listenTo(view.model, 'change', view.onOrderChanged);
+      view.listenTo(view.model, 'change:status', view.onOrderStatusChanged);
       view.once('afterRender', view.loadPlan);
 
       $(window).on('keydown.' + this.idPrefix, function(e)
@@ -377,6 +378,11 @@ define([
     onOrderChanged: function()
     {
       this.renderFuncs();
+    },
+
+    onOrderStatusChanged: function()
+    {
+      this.$id('orderInfo').toggleClass('is-cancelled', this.model.get('status') === 'cancelled');
     },
 
     onDialogShown: function()

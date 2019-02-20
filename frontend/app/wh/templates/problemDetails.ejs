@@ -1,6 +1,6 @@
 <div class="wh-problems-details">
   <div class="wh-problems-details-details">
-    <div id="<%- idPrefix %>-orderInfo" class="wh-problems-row">
+    <div id="<%- idPrefix %>-orderInfo" class="wh-problems-row <%- whOrder.status === 'cancelled' ? 'is-cancelled' : '' %>">
       <%- renderOrderInfo({
         helpers: helpers,
         whOrder: whOrder

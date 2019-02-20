@@ -58,6 +58,9 @@
   font-size: 14px;
   height: auto;
 }
+.is-cancelled .wh-problems-prop-value {
+  text-decoration: line-through;
+}
 .wh-problems-func {
   margin-left: 7px;
 }
