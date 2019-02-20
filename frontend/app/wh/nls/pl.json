@@ -78,6 +78,8 @@
   "menu:copy:lineGroupNo": "Kopiuj nry zleceń <em>gr.{group}. {line}</em>",
   "menu:cancelOrder": "Anuluj zlecenie",
   "menu:cancelSet": "Anuluj zestaw zleceń",
+  "menu:restoreOrder": "Wznów zlecenie",
+  "menu:restoreSet": "Wznów zestaw zleceń",
   "menu:resetOrder": "Resetuj zlecenie",
   "menu:resetSet": "Resetuj zestaw zleceń",
 

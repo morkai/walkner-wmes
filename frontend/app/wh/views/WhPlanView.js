@@ -321,7 +321,23 @@ define([
       {
         menu.push('-');
 
-        if (status !== 'cancelled')
+        if (status === 'cancelled')
+        {
+          menu.push({
+            icon: 'fa-recycle',
+            label: t('wh', 'menu:restoreOrder'),
+            handler: this.handleRestoreAction.bind(this, {orders: [whOrder.id]})
+          });
+
+          if (set)
+          {
+            menu.push({
+              label: t('wh', 'menu:restoreSet'),
+              handler: this.handleRestoreAction.bind(this, {set: set})
+            });
+          }
+        }
+        else
         {
           menu.push({
             icon: 'fa-times',
@@ -485,6 +501,11 @@ define([
     handleCancelAction: function(filter)
     {
       this.promised(this.whOrders.act('cancelOrders', filter));
+    },
+
+    handleRestoreAction: function(filter)
+    {
+      this.promised(this.whOrders.act('restoreOrders', filter));
     },
 
     onCommentChange: function(sapOrder)
