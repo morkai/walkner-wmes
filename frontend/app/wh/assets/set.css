@@ -52,6 +52,9 @@
   width: auto;
   padding-right: 0;
 }
+.wh-set-item.is-cancelled {
+  text-decoration: line-through;
+}
 .wh-set-item td[data-prop="name"] {
   white-space: normal;
   width: 149px;

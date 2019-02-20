@@ -1,4 +1,4 @@
-<tbody class="wh-set-item" data-id="<%- item._id %>" data-order="<%- item.order %>">
+<tbody class="wh-set-item <%- item.status === 'cancelled' ? 'is-cancelled' : '' %>" data-id="<%- item._id %>" data-order="<%- item.order %>">
   <tr>
     <td data-prop="order"><%- item.order %></td>
     <td data-prop="nc12"><%- item.nc12 %></td>
