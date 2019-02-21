@@ -5,7 +5,7 @@
   "version": "0.131.0",
   "updater": {
     "wmes": {
-      "backend": 441,
+      "backend": 442,
       "frontend": 581,
       "reports": 76,
       "attachments": 3,
@@ -16,7 +16,7 @@
       "operator": 69,
       "docs": 24,
       "heff": 30,
-      "planning": 47,
+      "planning": 48,
       "ps-queue": 21,
       "ps-load": 10,
       "wh-pickup": 8,
