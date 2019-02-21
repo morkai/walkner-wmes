@@ -83,7 +83,7 @@ if (process.env.NODE_ENV === 'development')
     }
     else if (errorStack)
     {
-      const matches = errorStack.match(/^(?:Error:\s*)?(.*?)(at.*?)?$/s);
+      const matches = errorStack.match(/^(?:Error:\s*)?(.*?)(\s{2,}at .*?)?$/s);
 
       if (matches)
       {
