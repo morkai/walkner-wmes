@@ -110,7 +110,7 @@ define([
       entry.invalidWorkstations = false;
       entry.invalidLocations = false;
 
-      for (var i = 0; i < 6; ++i)
+      for (var i = 0; i < 7; ++i)
       {
         var workstations = entry.workstations[i];
         var location = entry.locations[i];

@@ -62,6 +62,7 @@ define([
   var defaultTdValueRenderer = function(value) { return value; };
   var invalidTdClassName = function(value) { return value ? '' : 'kanban-is-invalid'; };
 
+  var WORKSTATION_COUNT = 7;
   var VALIDATION_FILTER_PROPERTIES = {
     workstations: 'invalidWorkstations',
     locations: 'invalidLocations'
@@ -287,8 +288,8 @@ define([
       width: 5,
       type: 'decimal',
       rowSpan: 1,
-      colSpan: 6,
-      arrayIndex: 6,
+      colSpan: WORKSTATION_COUNT,
+      arrayIndex: WORKSTATION_COUNT,
       sortable: false,
       tdClassName: function(value, column, i, entry)
       {
@@ -372,8 +373,8 @@ define([
     locations: {
       width: 4,
       rowSpan: 1,
-      colSpan: 6,
-      arrayIndex: 6,
+      colSpan: WORKSTATION_COUNT,
+      arrayIndex: WORKSTATION_COUNT,
       sortable: false,
       tdClassName: function(value, column, i, entry)
       {

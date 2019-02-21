@@ -269,7 +269,7 @@ tr:hover > .kanban-is-invalid,
   height: 72px;
 }
 .kanban-td[data-column-id="workstations"][colspan] {
-  width: 210px;
+  width: 245px;
   height: 73px;
   border-bottom-width: 1px;
 }
@@ -280,7 +280,7 @@ tr:hover > .kanban-is-invalid,
   height: 72px;
 }
 .kanban-td[data-column-id="locations"][colspan] {
-  width: 240px;
+  width: 280px;
   height: 73px;
   border-bottom-width: 1px;
 }

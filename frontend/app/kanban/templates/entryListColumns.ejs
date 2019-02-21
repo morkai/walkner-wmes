@@ -11,18 +11,18 @@
 <% if (columns.map.workstations.visible || columns.map.locations.visible) { %>
 <tr>
   <% if (columns.map.workstations.visible) { %>
-  <% [0, 1, 2, 3, 4, 5].forEach(function(i) { %>
+  <% for (var i = 0; i < columns.map.workstations.colSpan; ++i){ %>
   <td class="kanban-td" data-column-id="workstations" data-array-index="<%- i %>" title="<%- t('kanban', 'column:workstation:title', {n: i + 1}) %>">
     <span class="kanban-td-label"><%- i + 1 %></span>
   </td>
-  <% }) %>
+  <% } %>
   <% } %>
   <% if (columns.map.locations.visible) { %>
-  <% [0, 1, 2, 3, 4, 5].forEach(function(i) { %>
+  <% for (var i = 0; i < columns.map.locations.colSpan; ++i){ %>
   <td class="kanban-td" data-column-id="locations" data-array-index="<%- i %>" title="<%- t('kanban', 'column:location:title', {n: i + 1}) %>">
     <span class="kanban-td-label"><%- i + 1 %></span>
   </td>
-  <% }) %>
+  <% } %>
   <% } %>
 </tr>
 <% } %>
