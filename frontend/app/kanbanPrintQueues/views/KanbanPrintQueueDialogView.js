@@ -167,11 +167,11 @@ define([
           lineToWorkstations = linesToWorkstations[job.line] = {};
         }
 
-        for (var w = 0; w < 6; ++w)
+        job.data.workstations.forEach(function(value, w)
         {
-          if (!job.data.workstations[w])
+          if (!value)
           {
-            continue;
+            return;
           }
 
           if (!lineToWorkstations[w])
@@ -180,7 +180,7 @@ define([
           }
 
           lineToWorkstations[w].push(job);
-        }
+        });
       });
 
       var remaining = [];

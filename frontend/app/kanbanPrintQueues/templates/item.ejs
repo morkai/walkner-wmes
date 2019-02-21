@@ -20,9 +20,9 @@
           <th class="is-min"><%- helpers.t('layout:' + layout) %></th>
           <% }) %>
           <th class="is-min"><%- helpers.t('job:kanbanId') %></th>
-          <% for (var i = 0; i < 6; ++i) { %>
+          <% queue.jobs[0].data.workstations.forEach(function(_, i) { %>
           <th class="is-min"><%- helpers.t('job:workstation:short', {n: i + 1}) %></th>
-          <% } %>
+          <% }) %>
           <% if (user.isAllowedTo('KANBAN:PRINT', 'KANBAN:MANAGE')) { %>
           <th class="actions"><%- helpers.t('core', 'LIST:COLUMN:actions') %></th>
           <% } %>

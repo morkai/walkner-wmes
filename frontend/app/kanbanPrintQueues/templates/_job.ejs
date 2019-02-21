@@ -9,9 +9,9 @@
   <td class="is-min is-number"><%- job.layoutCount[layout] %></td>
   <% }) %>
   <td class="is-min text-mono"><%- job.kanbanIds %></td>
-  <% for (var i = 0; i < 6; ++i) { %>
-  <td class="is-min text-mono text-center" data-workstation="<%- i %>" data-status="<%- job.workstations[i] || 'pending' %>"><%- job.data.workstations[i] %></td>
-  <% } %>
+  <% job.data.workstations.forEach(function(value, i) { %>
+  <td class="is-min text-mono text-center" data-workstation="<%- i %>" data-status="<%- job.workstations[i] || 'pending' %>"><%- value %></td>
+  <% }) %>
   <% if (user.isAllowedTo('KANBAN:PRINT', 'KANBAN:MANAGE')) { %>
   <td class="actions">
     <div class="actions-group">
