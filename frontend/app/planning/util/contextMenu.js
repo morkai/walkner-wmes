@@ -195,6 +195,7 @@ define([
       $menu.on('keydown', '[tabindex]', function(e)
       {
         var tagName = e.currentTarget.tagName;
+        var input = tagName === 'SELECT' || tagName === 'TEXTAREA' || tagName === 'INPUT';
         var upDown = tagName !== 'SELECT' && tagName !== 'TEXTAREA';
         var enter = upDown && tagName !== 'INPUT';
 
@@ -229,6 +230,14 @@ define([
 
           case 'Delete':
           case 'Backspace':
+            if (!input)
+            {
+              hideMenu();
+
+              return false;
+            }
+            break;
+
           case 'Escape':
           {
             hideMenu();
