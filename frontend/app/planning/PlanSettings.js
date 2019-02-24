@@ -41,6 +41,7 @@ define([
     defaults: function()
     {
       return {
+        locked: false,
         extraOrderSeconds: 0,
         extraShiftSeconds: [0, 0, 0],
         bigOrderQuantity: 0,
@@ -48,7 +49,8 @@ define([
         maxSplitLineCount: 0,
         hardOrderManHours: 0,
         hardComponents: [],
-        lines: []
+        lines: [],
+        groups: []
       };
     },
 
@@ -109,6 +111,9 @@ define([
 
     initialize: function()
     {
+      this.lockedMrps = null;
+      this.lockedLines = null;
+
       this.lines = new PlanLineSettingsCollection(null, {paginate: false});
 
       this.mrps = new PlanMrpSettingsCollection(null, {paginate: false});
@@ -135,6 +140,12 @@ define([
 
         delete this.attributes.global;
       }
+
+      this.on('sync', function()
+      {
+        this.lockedMrps = null;
+        this.lockedLines = null;
+      });
     },
 
     parse: function(res)
@@ -232,6 +243,82 @@ define([
     hasAnyIgnoredStatus: function(statuses)
     {
       return _.intersection(this.get('ignoredStatuses'), statuses).length > 0;
+    },
+
+    isLineLocked: function(lineId)
+    {
+      this.cacheLocked();
+
+      return !!this.lockedLines[lineId];
+    },
+
+    isMrpLocked: function(mrpId)
+    {
+      this.cacheLocked();
+
+      return !!this.lockedMrps[mrpId];
+    },
+
+    isMrpLockedDirectly: function(mrpId)
+    {
+      return this.mrps.get(mrpId).get('locked');
+    },
+
+    cacheLocked: function()
+    {
+      var settings = this;
+
+      if (settings.lockedMrps)
+      {
+        return;
+      }
+
+      settings.lockedMrps = {};
+      settings.lockedLines = {};
+
+      var mrpsToLines = {};
+      var linesToMrps = {};
+
+      settings.mrps.forEach(function(mrpSettings)
+      {
+        if (mrpSettings.get('locked'))
+        {
+          settings.lockedMrps[mrpSettings.id] = true;
+        }
+
+        mrpsToLines[mrpSettings.id] = [];
+      });
+
+      settings.lines.forEach(function(lineSettings)
+      {
+        var lineId = lineSettings.id;
+
+        linesToMrps[lineId] = [];
+
+        lineSettings.get('mrpPriority').forEach(function(mrpId)
+        {
+          mrpsToLines[mrpId].push(lineId);
+          linesToMrps[lineId].push(mrpId);
+        });
+      });
+
+      _.forEach(linesToMrps, function(mrps)
+      {
+        var anyLocked = _.some(mrps, function(mrpId) { return !!settings.lockedMrps[mrpId]; });
+
+        if (anyLocked)
+        {
+          mrps.forEach(function(mrpId) { settings.lockedMrps[mrpId] = true; });
+        }
+      });
+
+      _.forEach(mrpsToLines, function(lines, mrpId)
+      {
+        if (settings.lockedMrps[mrpId])
+        {
+          lines.forEach(function(lineId) { settings.lockedLines[lineId] = true; });
+        }
+      });
     }
 
   }, {

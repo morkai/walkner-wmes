@@ -34,5 +34,6 @@
         <% include toolbarPrintLineList.ejs %>
       </ul>
     </div>
+    <button id="<%- idPrefix %>-toggleLock" class="btn btn-default <%- locked ? 'active' : '' %>" <%- canLock ? '' : 'disabled' %> title="<%- t('planning', 'toolbar:toggleLock:' + locked) %>"><i class="fa fa-lock"></i></button>
   </div>
 </div>

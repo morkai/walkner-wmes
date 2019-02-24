@@ -46,6 +46,13 @@
 .planning-mrp-hd-name {
   font-size: 12px;
 }
+.planning-mrp-hd .fa-lock {
+  display: none;
+  color: #e00;
+}
+.is-locked .planning-mrp-hd .fa-lock {
+  display: inline-block;
+}
 .planning-mrp-messages {
   padding: 5px 0 10px 0;
 }

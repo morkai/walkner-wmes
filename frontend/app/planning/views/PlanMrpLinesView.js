@@ -84,7 +84,8 @@ define([
 
       return {
         idPrefix: view.idPrefix,
-        showEditButton: view.plan.canEditSettings(),
+        showEditButton: view.plan.canEditSettings()
+          && !view.plan.settings.isMrpLocked(view.mrp.id),
         lines: view.mrp.lines.map(function(line)
         {
           return {
@@ -265,7 +266,7 @@ define([
 
     showLineMenu: function(e)
     {
-      if (!this.plan.canEditSettings())
+      if (!this.plan.canEditSettings() || this.plan.settings.isMrpLocked(this.mrp.id))
       {
         return;
       }
@@ -387,9 +388,10 @@ define([
       viewport.showDialog(dialogView, t('planning', 'lines:menu:freezeOrders:title'));
     },
 
-    onSettingsChanged: function(changedObjects)
+    onSettingsChanged: function(changes)
     {
-      if (changedObjects.lines.any && changedObjects.mrps[this.mrp.id])
+      if ((changes.lines.any && changes.mrps[this.mrp.id])
+        || changes.locked)
       {
         this.render();
       }

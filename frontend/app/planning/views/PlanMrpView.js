@@ -112,6 +112,7 @@ define([
 
       view.listenTo(view.plan, 'change:loading', this.onLoadingChanged);
       view.listenTo(view.plan.displayOptions, 'change:lineOrdersList', this.onLineOrdersListChanged);
+      view.listenTo(view.plan.settings, 'changed', this.onSettingsChanged);
 
       view.setView('#-toolbar', new PlanMrpToolbarView({
         delayReasons: view.delayReasons,
@@ -143,10 +144,10 @@ define([
       });
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
+        locked: this.plan.settings.isMrpLocked(this.mrp.id),
         mrp: {
           _id: this.mrp.id,
           name: this.mrp.id,
@@ -232,6 +233,14 @@ define([
       this.$els.time.toggleClass('hidden', hidden);
 
       this.renderLineOrders();
+    },
+
+    onSettingsChanged: function(changes)
+    {
+      if (changes.locked)
+      {
+        this.$el.toggleClass('is-locked', this.plan.settings.isMrpLocked(this.mrp.id));
+      }
     }
 
   });

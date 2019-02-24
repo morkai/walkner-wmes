@@ -18,6 +18,9 @@ define([
     initialize: function(models, options)
     {
       this.plan = options && options.plan;
+
+      this.lockedMrps = null;
+      this.lockedLines = null;
     },
 
     reset: function(models, options)

@@ -349,6 +349,9 @@ define([
         case 'mrpPriority':
           return value.length === 0 ? '-' : value.join(', ');
 
+        case 'workerCount':
+          return Array.isArray(value) ? value.join(', ') : value;
+
         case 'operation':
           return value.no + '. ' + value.name + ' - ' + value.laborTime.toLocaleString();
 

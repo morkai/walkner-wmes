@@ -7,6 +7,7 @@ define([
   'app/time',
   'app/viewport',
   'app/core/View',
+  'app/core/views/DialogView',
   'app/core/util/html2pdf',
   'app/data/clipboard',
   'app/printers/views/PrinterPickerView',
@@ -16,7 +17,8 @@ define([
   'app/planning/templates/toolbar',
   'app/planning/templates/toolbarPrintLineList',
   'app/planning/templates/printPage',
-  'app/planning/templates/orderStatusIcons'
+  'app/planning/templates/orderStatusIcons',
+  'app/planning/templates/toggleLockDialog'
 ], function(
   _,
   $,
@@ -24,6 +26,7 @@ define([
   time,
   viewport,
   View,
+  DialogView,
   html2pdf,
   clipboard,
   PrinterPickerView,
@@ -33,7 +36,8 @@ define([
   toolbarTemplate,
   toolbarPrintLineListTemplate,
   printPageTemplate,
-  orderStatusIconsTemplate
+  orderStatusIconsTemplate,
+  toggleLockDialogTemplate
 ) {
   'use strict';
 
@@ -106,7 +110,47 @@ define([
 
         return false;
       },
-      'show.bs.dropdown #-printLines': 'toggleShowTimes'
+      'show.bs.dropdown #-printLines': 'toggleShowTimes',
+      'click #-toggleLock': function()
+      {
+        var view = this;
+        var locked = view.plan.settings.isMrpLockedDirectly(view.mrp.id);
+        var dialogView = new DialogView({
+          template: toggleLockDialogTemplate,
+          model: {
+            locked: locked,
+            mrp: view.mrp.id
+          }
+        });
+
+        view.listenTo(dialogView, 'answered', function(answer)
+        {
+          if (answer !== 'yes')
+          {
+            return;
+          }
+
+          viewport.msg.saving();
+
+          view.mrp.settings.set('locked', !locked);
+
+          var req = view.plan.settings.save();
+
+          req.done(function()
+          {
+            viewport.msg.saved();
+          });
+
+          req.fail(function()
+          {
+            viewport.msg.savingFailed();
+
+            view.plan.settings.trigger('errored');
+          });
+        });
+
+        viewport.showDialog(dialogView, t('planning', 'toggleLock:title:' + locked));
+      }
 
     },
 
@@ -116,6 +160,7 @@ define([
       this.listenTo(this.plan.sapOrders, 'reset', this.scheduleRender);
       this.listenTo(this.mrp.orders, 'added removed changed reset', this.scheduleRender);
       this.listenTo(this.mrp.lines, 'added removed changed reset', this.scheduleRender);
+      this.listenTo(this.plan.settings, 'changed', this.onSettingsChanged);
     },
 
     serialize: function()
@@ -123,7 +168,9 @@ define([
       return {
         idPrefix: this.idPrefix,
         lines: this.mrp.lines.map(function(line) { return line.id; }),
-        stats: this.options.stats === false ? null : this.mrp.getStats()
+        stats: this.options.stats === false ? null : this.mrp.getStats(),
+        canLock: this.plan.canLockMrps(),
+        locked: this.plan.settings.isMrpLockedDirectly(this.mrp.id)
       };
     },
 
@@ -495,6 +542,18 @@ define([
         .find('.fa')
         .removeClass('fa-check fa-times')
         .addClass(this.plan.displayOptions.isOrderTimePrinted() ? 'fa-check' : 'fa-times');
+    },
+
+    onSettingsChanged: function(changes)
+    {
+      if (changes.locked)
+      {
+        var locked = this.plan.settings.isMrpLockedDirectly(this.mrp.id);
+
+        this.$id('toggleLock')
+          .toggleClass('active', locked)
+          .attr('title', t('planning', 'toolbar:toggleLock:' + locked));
+      }
     }
 
   });

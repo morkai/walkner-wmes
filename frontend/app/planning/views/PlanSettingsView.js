@@ -164,23 +164,8 @@ define([
       FormView.prototype.initialize.apply(view, arguments);
 
       view.sortables = [];
-
       view.maxLineLength = 0;
-      view.lines = orgUnits.getAllByType('prodLine')
-        .filter(function(prodLine) { return !prodLine.get('deactivatedAt'); })
-        .map(function(prodLine)
-        {
-          if (prodLine.id.length > view.maxLineLength)
-          {
-            view.maxLineLength = prodLine.id.length;
-          }
-
-          return {
-            id: prodLine.id,
-            text: _.escape(prodLine.get('description'))
-          };
-        })
-        .sort(function(a, b) { return a.id.localeCompare(b.id, undefined, {numeric: true}); });
+      view.lines = [];
 
       view.stopListening(view.model, 'change');
 
@@ -202,11 +187,12 @@ define([
     {
       FormView.prototype.afterRender.call(this);
 
+      this.cacheLines();
       this.setUpOrderStatusSelect2('requiredStatuses');
       this.setUpOrderStatusSelect2('ignoredStatuses');
       this.setUpOrderStatusSelect2('completedStatuses');
       this.setUpComponentsSelect2(this.$id('hardComponents'));
-      this.setUpLine();
+      this.setUpLineSelect2();
       this.setUpMrpSelect2();
       this.setUpMrpLineSelect2();
       this.setUpOrderPrioritySelect2();
@@ -216,6 +202,28 @@ define([
       {
         this.$id('submit').prop('disabled', true);
       }
+    },
+
+    cacheLines: function()
+    {
+      var view = this;
+
+      view.lines = orgUnits.getAllByType('prodLine')
+        .filter(function(prodLine) { return !prodLine.get('deactivatedAt'); })
+        .map(function(prodLine)
+        {
+          if (prodLine.id.length > view.maxLineLength)
+          {
+            view.maxLineLength = prodLine.id.length;
+          }
+
+          return {
+            id: prodLine.id,
+            text: _.escape(prodLine.get('description')),
+            disabled: view.model.isLineLocked(prodLine.id)
+          };
+        })
+        .sort(function(a, b) { return a.id.localeCompare(b.id, undefined, {numeric: true}); });
     },
 
     setUpOrderStatusSelect2: function(id)
@@ -281,7 +289,7 @@ define([
       });
     },
 
-    setUpLine: function()
+    setUpLineSelect2: function()
     {
       var view = this;
       var $line = view.$id('line');
@@ -363,10 +371,11 @@ define([
 
     setUpMrpSelect2: function()
     {
+      var view = this;
       var maxMrpLength = 0;
       var mrps = {};
 
-      this.model.lines.forEach(function(line)
+      view.model.lines.forEach(function(line)
       {
         line.get('mrpPriority').forEach(function(mrpId)
         {
@@ -379,7 +388,7 @@ define([
         });
       });
 
-      this.$id('mrp').select2({
+      view.$id('mrp').select2({
         width: '100%',
         placeholder: t('planning', 'settings:mrp:placeholder'),
         allowClear: true,
@@ -389,7 +398,8 @@ define([
 
           return {
             id: mrpId,
-            text: mrpModel ? mrpModel.get('description') : ''
+            text: mrpModel ? mrpModel.get('description') : '',
+            disabled: view.model.isMrpLocked(mrpId)
           };
         }),
         matcher: idAndTextMatcher,
@@ -508,6 +518,8 @@ define([
       var disabled = !lineId;
       var activeTime = '';
       var $mrpPriority = view.$id('mrpPriority');
+
+      view.$id('line').select2('val', lineId || '');
 
       if (!disabled)
       {
@@ -1128,15 +1140,35 @@ define([
       var selectedLine = this.$id('line').val();
       var selectedMrp = this.$id('mrp').val();
       var selectedMrpLine = this.$id('mrpLine').val();
+      var mrpLocked = this.model.isMrpLocked(selectedMrp);
+      var lineLocked = this.model.isLineLocked(selectedLine);
 
-      if (changed.lines[selectedLine])
+      if (lineLocked)
       {
-        this.$id('line').select2('val', selectedLine).trigger('change', {id: selectedLine});
+        selectedLine = null;
       }
 
-      if (changed.mrps[selectedMrp])
+      if (lineLocked || changed.lines[selectedLine])
+      {
+        this.selectLine(selectedLine);
+      }
+
+      if (mrpLocked)
+      {
+        selectedMrp = null;
+        selectedMrpLine = null;
+      }
+
+      if (mrpLocked || changed.mrps[selectedMrp])
       {
         this.selectMrp(selectedMrp, selectedMrpLine);
+      }
+
+      if (changed.locked)
+      {
+        this.cacheLines();
+        this.setUpLineSelect2();
+        this.setUpMrpSelect2();
       }
 
       if (activeEl)

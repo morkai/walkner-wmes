@@ -208,6 +208,11 @@ define([
       return user.can.commentOrders();
     },
 
+    canLockMrps: function()
+    {
+      return this.canEditSettings();
+    },
+
     canFreezeOrders: function()
     {
       if (window.ENV === 'development' && user.isAllowedTo('SUPER'))

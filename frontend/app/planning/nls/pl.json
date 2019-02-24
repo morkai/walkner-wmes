@@ -61,6 +61,8 @@
   "toolbar:copyOrderList:2": "II zmiana",
   "toolbar:copyOrderList:3": "III zmiana",
   "toolbar:copyOrderList:success": "Lista skopiowana do schowka.",
+  "toolbar:toggleLock:true": "Wyłącz blokowanie MRP",
+  "toolbar:toggleLock:false": "Włącz blokowanie MRP",
   "toolbar:stats:quantity": "Sztuki:",
   "toolbar:stats:manHours": "RBH:",
   "toolbar:stats:orders": "Zlecenia:",
@@ -77,6 +79,16 @@
   "list:generate": "Wymuś<br>utworzenie<br>planu",
 
   "empty": "Brak planu dla wybranych filtrów.",
+  "locked": "MRP jest zablokowane!",
+
+  "toggleLock:title:true": "Odblokowywanie MRP",
+  "toggleLock:title:false": "Blokowanie MRP",
+  "toggleLock:message:true": "<p>Czy na pewno chcesz odblokować MRP <em>{mrp}</em>?</p><p>Odblokowanie wznowi przeliczanie planu dla danego MRP i może zmienić plan magazynu.</p>",
+  "toggleLock:message:false": "<p>Czy na pewno chcesz zablokować MRP <em>{mrp}</em>?</p><p>Zablokowanie uniemożliwi zmianę ustawień dla danego MRP oraz sprawi, że plan linii nie będzie przeliczany (tzn. pozostanie taki jak w momencie zablokowania, nawet bez względu na zmiany statusów zleceń w SAP).</p>",
+  "toggleLock:yes:true": "Odblokuj MRP",
+  "toggleLock:yes:false": "Zablokuj MRP",
+  "toggleLock:no:true": "Pozostaw zablokowane",
+  "toggleLock:no:false": "Pozostaw odblokowane",
 
   "lines:hd": "Linie",
   "lines:division": "Wydział",
@@ -376,6 +388,7 @@
   "settings:groups:components": "Komponenty",
   "settings:groups:add": "Dodaj grupę",
   "settings:groups:remove": "Usuń grupę",
+  "settings:locked": "Zablokowane",
 
   "settings:tab:wh": "Magazyn",
   "settings:wh:groupDuration": "Czas trwania grupy zleceń [h]",

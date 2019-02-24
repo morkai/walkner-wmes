@@ -84,6 +84,7 @@ define([
 
       view.listenTo(mrp.orders, 'added removed reset', view.render);
       view.listenTo(plan.lateOrders, 'reset', view.render);
+      view.listenTo(plan.settings, 'changed', view.onSettingsChanged);
     },
 
     destroy: function()
@@ -97,7 +98,8 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        showEditButton: this.plan.canAddLateOrders(),
+        showEditButton: this.plan.canAddLateOrders()
+          && !this.plan.settings.isMrpLocked(this.mrp.id),
         actionLabel: t('planning', 'lateOrders:action'),
         hdLabel: t('planning', 'lateOrders:hd'),
         orders: this.serializeOrders(),
@@ -240,7 +242,8 @@ define([
         menu.push(contextMenu.actions.comment(lateOrder.id));
       }
 
-      if (this.plan.canAddLateOrders())
+      if (this.plan.canAddLateOrders()
+        && !this.plan.settings.isMrpLocked(this.mrp.id))
       {
         menu.push({
           icon: 'fa-plus',
@@ -264,6 +267,14 @@ define([
       });
 
       viewport.showDialog(dialogView, t('planning', 'orders:add:title'));
+    },
+
+    onSettingsChanged: function(changes)
+    {
+      if (changes.locked)
+      {
+        this.render();
+      }
     }
 
   });

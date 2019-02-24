@@ -56,6 +56,11 @@ define([
       });
     },
 
+    isLocked: function()
+    {
+      return !!this.settings.get('locked');
+    },
+
     getStats: function()
     {
       var orders = this.orders;

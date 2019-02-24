@@ -1,7 +1,10 @@
-<div class="planning-mrp" data-id="<%= mrp._id %>">
+<div class="planning-mrp <%- locked ? 'is-locked' : '' %>" data-id="<%= mrp._id %>">
   <div id="<%- idPrefix %>-toolbar"></div>
   <div class="planning-mrp-hd">
-    <span class="planning-mrp-hd-id"><%= mrp.name %>&nbsp;</span>
+    <span class="planning-mrp-hd-id">
+      <i class="fa fa-lock"></i>
+      <%= mrp.name %>
+    </span>
     <span class="planning-mrp-hd-name"><%= mrp.description %></span>
   </div>
   <div id="<%- idPrefix %>-messages" class="planning-mrp-messages"></div>

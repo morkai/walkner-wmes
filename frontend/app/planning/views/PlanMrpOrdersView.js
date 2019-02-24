@@ -133,6 +133,7 @@ define([
       view.listenTo(plan.sapOrders, 'reset', view.onSapOrdersReset);
       view.listenTo(plan.sapOrders, 'change:psStatus', view.onPsStatusChanged);
       view.listenTo(plan.sapOrders, 'change:whStatus', view.onWhStatusChanged);
+      view.listenTo(plan.settings, 'changed', view.onSettingsChanged);
     },
 
     destroy: function()
@@ -152,7 +153,8 @@ define([
     {
       return {
         idPrefix: this.idPrefix,
-        showEditButton: this.plan.canEditSettings(),
+        showEditButton: this.plan.canEditSettings()
+          && !this.plan.settings.isMrpLocked(this.mrp.id),
         actionLabel: t('planning', 'orders:add'),
         hdLabel: t('planning', 'orders:hd'),
         orders: this.serializeOrders(),
@@ -390,7 +392,9 @@ define([
         menu.push(contextMenu.actions.comment(planOrder.id));
       }
 
-      if (this.plan.canEditSettings() && !planOrder.isAutoAdded())
+      if (this.plan.canEditSettings()
+        && !this.plan.settings.isMrpLocked(this.mrp.id)
+        && !planOrder.isAutoAdded())
       {
         menu.push({
           icon: 'fa-sort-numeric-desc',
@@ -708,6 +712,14 @@ define([
           .find('.planning-mrp-list-property-whStatus')
           .attr('title', t('planning', 'orders:whStatus:' + whStatus))
           .attr('data-wh-status', whStatus);
+      }
+    },
+
+    onSettingsChanged: function(changes)
+    {
+      if (changes.locked)
+      {
+        this.render();
       }
     }
 

@@ -133,6 +133,11 @@ define([
       changed.mrps[planMrpSettings.id] = true;
 
       planMrpSettings.lines.forEach(function(mrpLine) { changed.lines[mrpLine.id] = true; });
+
+      if (change.property === 'locked')
+      {
+        changed.locked = true;
+      }
     },
 
     'mrpLines:add': function(plan, change, changed)
@@ -202,7 +207,8 @@ define([
       var changed = {
         reset: false,
         lines: {},
-        mrps: {}
+        mrps: {},
+        locked: false
       };
 
       changes.forEach(function(change)
@@ -214,6 +220,12 @@ define([
 
       changed.lines.any = Object.keys(changed.lines).length > 0;
       changed.mrps.any = Object.keys(changed.mrps).length > 0;
+
+      if (changed.locked)
+      {
+        plan.settings.lockedMrps = null;
+        plan.settings.lockedLines = null;
+      }
 
       plan.settings.trigger('changed', changed);
     },
