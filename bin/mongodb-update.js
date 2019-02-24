@@ -13,5 +13,5 @@ db.plansettings.find({}, {mrps: 1}).forEach(settings =>
     }
   });
 
-  db.plansettings.updateOne({_id: settings._id}, {$set: {mrps: settings.mrp}});
+  db.plansettings.updateOne({_id: settings._id}, {$set: {mrps: settings.mrps}});
 });
