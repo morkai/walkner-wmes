@@ -5,8 +5,8 @@
   "version": "0.131.0",
   "updater": {
     "wmes": {
-      "backend": 443,
-      "frontend": 582,
+      "backend": 444,
+      "frontend": 583,
       "reports": 77,
       "attachments": 3,
       "importer-sap": 47,
@@ -16,11 +16,11 @@
       "operator": 69,
       "docs": 24,
       "heff": 30,
-      "planning": 50,
+      "planning": 51,
       "ps-queue": 21,
       "ps-load": 10,
-      "wh-pickup": 8,
-      "wh-problems": 5,
+      "wh-pickup": 9,
+      "wh-problems": 6,
       "wh-kitter": 4,
       "wh-packer": 4,
       "isa": 2

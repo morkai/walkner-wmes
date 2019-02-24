@@ -1802,6 +1802,7 @@ app/planning/templates/toolbarPrintLineList.js
 app/planning/templates/printPage.js
 app/orderStatuses/util/renderOrderStatusLabel.js
 app/planning/templates/orderStatusIcons.js
+app/planning/templates/toggleLockDialog.js
 app/planning/views/PlanMrpToolbarView.js
 app/planning/templates/lineSettingsDialog.js
 app/planning/views/PlanLineSettingsDialogView.js
