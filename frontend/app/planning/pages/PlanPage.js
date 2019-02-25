@@ -17,8 +17,10 @@ define([
   '../PlanDisplayOptions',
   '../views/PlanFilterView',
   '../views/PlanMrpView',
+  '../views/CopySettingsDialogView',
   'app/planning/templates/planPage',
   'app/planning/templates/planLegend',
+  'app/planning/templates/planSettingsPageAction',
   'app/planning/templates/whPageAction'
 ], function(
   _,
@@ -37,8 +39,10 @@ define([
   PlanDisplayOptions,
   PlanFilterView,
   PlanMrpView,
+  CopySettingsDialogView,
   pageTemplate,
   legendTemplate,
+  planSettingsPageActionTemplate,
   whPageActionTemplate
 ) {
   'use strict';
@@ -101,23 +105,40 @@ define([
           href: '#planning/changes?sort(date)&plan=' + page.plan.id
         },
         {
-          label: t.bound('planning', 'PAGE_ACTION:settings'),
-          icon: 'cogs',
-          privileges: 'PLANNING:MANAGE',
-          href: '#planning/settings/' + page.plan.id,
-          className: page.plan.isEditable() ? '' : 'disabled',
-          callback: function(e)
+          template: function()
           {
-            if (e.button === 0 && !e.ctrlKey && page.plan.isEditable())
+            return planSettingsPageActionTemplate({
+              id: page.plan.id,
+              editable: page.plan.isEditable()
+            });
+          },
+          privileges: 'PLANNING:MANAGE',
+          afterRender: function($action)
+          {
+            $action.find('[data-action="openSettings"]').on('click', function(e)
             {
-              page.broker.publish('router.navigate', {
-                url: '/planning/settings/' + page.plan.id + '?back=1',
-                trigger: true,
-                replace: false
+              if (e.button === 0 && !e.ctrlKey && page.plan.isEditable())
+              {
+                page.broker.publish('router.navigate', {
+                  url: '/planning/settings/' + page.plan.id + '?back=1',
+                  trigger: true,
+                  replace: false
+                });
+
+                return false;
+              }
+            });
+
+            $action.find('[data-action="copySettings"]').on('click', function()
+            {
+              var dialogView = new CopySettingsDialogView({
+                model: page.plan
               });
 
+              viewport.showDialog(dialogView, t('planning', 'copySettings:title'));
+
               return false;
-            }
+            });
           }
         },
         {

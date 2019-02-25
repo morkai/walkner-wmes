@@ -1,0 +1,39 @@
+<form>
+  <div class="form-group">
+    <label class="control-label"><%- helpers.t('copySettings:source') %></label>
+    <p class="form-control-static"><%= source %></p>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-target" class="control-label"><%- helpers.t('copySettings:target') %></label>
+    <input id="<%- idPrefix %>-target" name="target" type="text" autocomplete="new-password">
+  </div>
+  <div class="form-group">
+    <% ['in', 'nin'].forEach(function(filter) { %>
+    <div class="radio">
+      <label class="control-label">
+        <input type="radio" name="filter" value="<%- filter %>">
+        <%- helpers.t('copySettings:mrps:' + filter) %>
+      </label>
+    </div>
+    <% }) %>
+    <input id="<%- idPrefix %>-mrps" name="mrps" type="text" autocomplete="new-password">
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- helpers.t('copySettings:what') %></label>
+    <% ['workerCount', 'activeTime', 'orderPriority'].forEach(function(prop) { %>
+    <div class="checkbox">
+      <label>
+        <input name="what[]" type="checkbox" value="<%- prop %>" checked>
+        <%- helpers.t('copySettings:what:' + prop) %>
+      </label>
+    </div>
+    <% }) %>
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary">
+      <span class="fa fa-spinner fa-spin hidden"></span>
+      <span><%- helpers.t('copySettings:submit') %></span>
+    </button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

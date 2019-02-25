@@ -26,6 +26,7 @@
   "PAGE_ACTION:legend": "Legenda",
   "PAGE_ACTION:changes": "Historia zmian",
   "PAGE_ACTION:settings": "Ustawienia",
+  "PAGE_ACTION:settings:copy": "Kopiuj ustawienia linii",
 
   "filter:date": "Data planu",
   "filter:mrps:1": "Wybrane MRP",
@@ -418,5 +419,22 @@
   "changes:settings:mrpLines:change": "Zmieniono linię <em>{line}</em> w MRP <em>{mrp}</em>: <em>{property}</em>: ",
   "changes:settings:lines:add": "Dodano linię <em>{line}</em>",
   "changes:settings:mrps:add": "Dodano MRP <em>{mrp}</em>",
-  "changes:settings:mrpLines:add": "Dodano linię <em>{line}</em> do MRP <em>{mrp}</em>"
+  "changes:settings:mrpLines:add": "Dodano linię <em>{line}</em> do MRP <em>{mrp}</em>",
+
+  "copySettings:title": "Kopiowanie ustawień linii",
+  "copySettings:submit": "Kopiuj ustawienia",
+  "copySettings:source": "Plan źródłowy",
+  "copySettings:target": "Plany docelowe",
+  "copySettings:target:all": "Wszystkie",
+  "copySettings:target:empty": "Brak docelowych planów.",
+  "copySettings:mrps:all": "Wszystkie",
+  "copySettings:mrps:in": "Wszystkie wybrane MRP",
+  "copySettings:mrps:nin": "Wszystkie oprócz wybranych MRP",
+  "copySettings:mrps:empty": "Nie wybrano MRP do skopiowania.",
+  "copySettings:what": "Kopiuj",
+  "copySettings:what:empty": "Nie wybrano ustawień do skopiowania.",
+  "copySettings:what:workerCount": "Ilości pracowników",
+  "copySettings:what:activeTime": "Czasy dostępności",
+  "copySettings:what:orderPriority": "Priorytety zleceń",
+  "copySettings:failure:fetchSettings": "Nie udało się pobrać ustawień dla planu {plan}."
 }
