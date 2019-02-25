@@ -137,7 +137,7 @@ define([
       }
 
       var startedAt = Date.parse(item.startedAt);
-      var finishedAt = Math.min(Date.parse(item.finishedAt) || now, now);
+      var finishedAt = Date.parse(item.finishedAt) || now;
       var duration = finishedAt - startedAt;
       var width = duration / SHIFT_DURATION * 100;
       var left = (startedAt - shiftStartedAt) / SHIFT_DURATION * 100;
