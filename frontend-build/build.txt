@@ -1847,8 +1847,11 @@ app/planning/templates/lineOrderComments.js
 app/planning/views/PlanMrpLineOrdersListView.js
 app/planning/templates/planMrp.js
 app/planning/views/PlanMrpView.js
+app/planning/templates/copySettingsDialog.js
+app/planning/views/CopySettingsDialogView.js
 app/planning/templates/planPage.js
 app/planning/templates/planLegend.js
+app/planning/templates/planSettingsPageAction.js
 app/planning/templates/whPageAction.js
 app/planning/pages/PlanPage.js
 app/planning/templates/listFilter.js
