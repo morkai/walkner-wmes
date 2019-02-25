@@ -1,5 +1,5 @@
 <div class="btn-group">
-  <a href="#planning/settings/<%- id %>" class="btn btn-default" data-action="openSettings">
+  <a href="#planning/settings/<%- id %>" class="btn btn-default <%- editable ? '' : 'disabled' %>" data-action="openSettings">
     <i class="fa fa-cogs"></i><span><%- t('planning', 'PAGE_ACTION:settings') %></span>
   </a>
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
