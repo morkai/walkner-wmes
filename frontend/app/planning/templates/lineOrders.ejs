@@ -18,7 +18,7 @@
     </div>
     <div id="<%- idPrefix %>-list-<%- shift.no %>" class="planning-mrp-list planning-mrp-lineOrders-list" data-shift-start-time="<%- shift.startTime %>">
       <% shift.orders.forEach(function(shiftOrder) { %>
-      <div class="planning-mrp-list-item is-lineOrder <%- shiftOrder.incomplete %> <%- shiftOrder.started %> <%- shiftOrder.completed %> <%- shiftOrder.external %> <%- shiftOrder.selected %>"
+      <div class="planning-mrp-list-item is-lineOrder <%- shiftOrder.incomplete %> <%- shiftOrder.started %> <%- shiftOrder.completed %> <%- shiftOrder.external %> <%- shiftOrder.selected %> <%- shiftOrder.missing %>"
            data-id="<%- shiftOrder._id %>"
            data-order-no="<%- shiftOrder.orderNo %>"
            data-popover-content="lineOrder"

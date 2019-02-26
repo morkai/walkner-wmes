@@ -24,6 +24,12 @@ define([
   {
     var statuses = [];
     var planOrder = plan.orders.get(orderNo);
+
+    if (!planOrder)
+    {
+      return '';
+    }
+
     var orderData = plan.getActualOrderData(orderNo);
     var kindIcon = planOrder.getKindIcon();
     var sourceIcon = planOrder.getSourceIcon();

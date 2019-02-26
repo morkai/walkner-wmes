@@ -76,9 +76,17 @@ define([
     getQuantityDone: function()
     {
       var quantityDone = this.get('quantityDone');
-      var operation = this.collection && this.collection.plan
-        ? this.collection.plan.orders.get(this.id).get('operation')
-        : null;
+      var operation = null;
+
+      if (this.collection && this.collection.plan)
+      {
+        var planOrder = this.collection.plan.orders.get(this.id);
+
+        if (planOrder)
+        {
+          operation = planOrder.get('operation');
+        }
+      }
 
       if (operation)
       {

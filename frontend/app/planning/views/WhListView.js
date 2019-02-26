@@ -240,7 +240,7 @@ define([
             comment: sapOrder ? sapOrder.getCommentWithIcon() : '',
             comments: sapOrder ? sapOrder.get('comments') : [],
             status: order.getStatus(),
-            statuses: view.serializeOrderStatuses(order),
+            statuses: view.serializeOrderStatuses(orderNo),
             dropZone: sapOrder ? sapOrder.getDropZone() : '',
             rowClassName: sapOrder ? (sapOrder.get('whStatus') === 'done' ? 'success' : '') : '',
             newGroup: false,
@@ -441,9 +441,9 @@ define([
       }
     },
 
-    serializeOrderStatuses: function(planOrder)
+    serializeOrderStatuses: function(orderNo)
     {
-      return orderStatusIconsTemplate(this.plan, planOrder.id);
+      return orderStatusIconsTemplate(this.plan, orderNo);
     },
 
     hideMenu: function()

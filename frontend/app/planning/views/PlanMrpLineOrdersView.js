@@ -74,20 +74,29 @@ define([
             orderNo: orderNo,
             source: 'lineOrders'
           });
-        }
-        else
-        {
-          var externalMrp = this.plan.mrps.get(this.plan.orders.get(orderNo).get('mrp'));
 
-          if (externalMrp)
-          {
-            externalMrp.orders.trigger('preview', {
-              orderNo: orderNo,
-              scrollIntoView: true,
-              source: 'lineOrders'
-            });
-          }
+          return;
         }
+
+        var planOrder = this.plan.orders.get(orderNo);
+
+        if (!planOrder)
+        {
+          return;
+        }
+
+        var externalMrp = this.plan.mrps.get(planOrder.get('mrp'));
+
+        if (!externalMrp)
+        {
+          return;
+        }
+
+        externalMrp.orders.trigger('preview', {
+          orderNo: orderNo,
+          scrollIntoView: true,
+          source: 'lineOrders'
+        });
       },
       'contextmenu .is-lineOrder': function(e)
       {
@@ -244,26 +253,12 @@ define([
         });
       });
 
-      var anyMissingOrder = false;
-
       planLine.orders.forEach(function(lineOrder)
       {
-        if (anyMissingOrder)
-        {
-          return;
-        }
-
-        var order = plan.orders.get(lineOrder.get('orderNo'));
-
-        if (!order)
-        {
-          anyMissingOrder = true;
-
-          return;
-        }
-
-        var orderData = plan.getActualOrderData(order.id);
-        var mrp = order.get('mrp');
+        var orderNo = lineOrder.get('orderNo');
+        var order = plan.orders.get(orderNo);
+        var orderData = plan.getActualOrderData(orderNo);
+        var mrp = order ? order.get('mrp') : order;
         var startAt = Date.parse(lineOrder.get('startAt'));
         var finishAt = Date.parse(lineOrder.get('finishAt'));
         var duration = finishAt - startAt;
@@ -277,18 +272,19 @@ define([
         var prevShiftOrder = shift.orders[shift.orders.length - 1];
         var prevFinishedAt = prevShiftOrder ? prevShiftOrder.finishAt : shift.startTime;
         var quantityTodo = lineOrder.get('quantity');
-        var quantityDone = plan.shiftOrders.getTotalQuantityDone(planLine.id, shift.no, order.id);
+        var quantityDone = plan.shiftOrders.getTotalQuantityDone(planLine.id, shift.no, orderNo);
 
         shift.orders.push({
           _id: lineOrder.id,
-          orderNo: order.id,
+          orderNo: orderNo,
           quantity: lineOrder.get('quantity'),
-          incomplete: order.get('incomplete') > 0 ? 'is-incomplete' : '',
+          missing: order ? '' : 'is-missing',
+          incomplete: order && order.get('incomplete') > 0 ? 'is-incomplete' : '',
           completed: quantityDone >= quantityTodo ? 'is-completed' : '',
           started: quantityDone > 0 && quantityDone < quantityTodo ? 'is-started' : '',
           confirmed: orderData.statuses.indexOf('CNF') !== -1 ? 'is-cnf' : '',
           delivered: orderData.statuses.indexOf('DLV') !== -1 ? 'is-dlv' : '',
-          selected: shift.state && order.id === prodState.orderNo ? 'is-selected' : '',
+          selected: shift.state && orderNo === prodState.orderNo ? 'is-selected' : '',
           external: mrp !== planMrp.id ? 'is-external' : '',
           finishAt: finishAt,
           margin: (startAt - prevFinishedAt) * 100 / shiftUtil.SHIFT_DURATION,
@@ -312,7 +308,7 @@ define([
 
       return shifts.filter(function(shift)
       {
-        return !anyMissingOrder && shift && shift.orders.length > 0;
+        return shift && shift.orders.length > 0;
       });
     },
 
@@ -358,19 +354,19 @@ define([
     serializeOrderPopover: function(id)
     {
       var lineOrder = this.line.orders.get(id);
-      var planOrder = this.plan.orders.get(lineOrder.get('orderNo'));
-      var sapOrder = this.plan.sapOrders.get(planOrder.id);
-      var orderData = this.plan.getActualOrderData(planOrder.id);
+      var orderNo = lineOrder.get('orderNo');
+      var sapOrder = this.plan.sapOrders.get(orderNo);
+      var orderData = this.plan.getActualOrderData(orderNo);
       var startAt = Date.parse(lineOrder.get('startAt'));
       var finishAt = Date.parse(lineOrder.get('finishAt'));
       var quantityDone = this.plan.isProdStateUsed()
-        ? this.plan.shiftOrders.getTotalQuantityDone(this.line.id, shiftUtil.getShiftNo(startAt), planOrder.id)
+        ? this.plan.shiftOrders.getTotalQuantityDone(this.line.id, shiftUtil.getShiftNo(startAt), orderNo)
         : -1;
 
       return lineOrderPopoverTemplate({
         lineOrder: {
           _id: lineOrder.id,
-          orderNo: planOrder.id,
+          orderNo: orderNo,
           quantityPlanned: lineOrder.get('quantity'),
           quantityRemaining: orderData.quantityTodo - orderData.quantityDone,
           quantityTotal: orderData.quantityTodo,

@@ -164,12 +164,23 @@ define([
 
     getActualOrderData: function(orderNo)
     {
+      var order;
+
       if (this.displayOptions.isLatestOrderDataUsed())
       {
-        return (this.sapOrders.get(orderNo) || this.orders.get(orderNo)).getActualOrderData();
+        order = this.sapOrders.get(orderNo);
       }
 
-      return this.orders.get(orderNo).getActualOrderData();
+      if (!order)
+      {
+        order = this.orders.get(orderNo);
+      }
+
+      return order ? order.getActualOrderData() : {
+        quantityTodo: -1,
+        quantityDone: -1,
+        statuses: []
+      };
     },
 
     isAnythingLoading: function()

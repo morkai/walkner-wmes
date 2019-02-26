@@ -196,31 +196,25 @@ define([
         line.orders.forEach(function(lineOrder)
         {
           var orderNo = lineOrder.get('orderNo');
-          var order = mrp.orders.get(orderNo);
-
-          if (!order)
-          {
-            return;
-          }
-
+          var planOrder = mrp.orders.get(orderNo);
           var sapOrder = sapOrders.get(orderNo);
           var item = map[orderNo];
 
           if (!item)
           {
             item = map[orderNo] = {
-              orderNo: order.id,
-              nc12: order.get('nc12'),
-              name: order.get('name'),
+              orderNo: orderNo,
+              nc12: planOrder ? planOrder.get('nc12') : '',
+              name: planOrder ? planOrder.get('name') : '',
               startTime: Number.MAX_VALUE,
               finishTime: 0,
-              qtyTodo: order.get('quantityTodo'),
+              qtyTodo: planOrder ? planOrder.get('quantityTodo') : -1,
               qtyPlan: 0,
               lines: {},
               comment: sapOrder ? sapOrder.getCommentWithIcon() : '',
               comments: sapOrder ? sapOrder.get('comments') : [],
-              status: order.getStatus(),
-              statuses: view.serializeOrderStatuses(order),
+              status: planOrder ? planOrder.getStatus() : 'missing',
+              statuses: view.serializeOrderStatuses(orderNo),
               dropZone: sapOrder ? sapOrder.getDropZone() : '',
               rowClassName: whMode && sapOrder
                 ? (sapOrder.get('whStatus') === 'done' ? 'success' : '')
@@ -265,9 +259,9 @@ define([
       });
     },
 
-    serializeOrderStatuses: function(planOrder)
+    serializeOrderStatuses: function(orderNo)
     {
-      return orderStatusIconsTemplate(this.plan, planOrder.id);
+      return orderStatusIconsTemplate(this.plan, orderNo);
     },
 
     formatIcon: function(icon, title)
