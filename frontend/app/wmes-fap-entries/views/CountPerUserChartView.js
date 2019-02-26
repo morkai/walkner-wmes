@@ -5,8 +5,8 @@ define([
   'app/i18n',
   'app/highcharts',
   'app/core/View',
-  'app/minutesForSafetyCards/templates/reportTable',
-  'app/minutesForSafetyCards/templates/tableAndChart'
+  'app/wmes-fap-entries/templates/reportTable',
+  'app/wmes-fap-entries/templates/tableAndChart'
 ], function(
   _,
   t,
@@ -219,6 +219,14 @@ define([
       {
         series = series.map(function(s) { return s.data.slice(0, 15); });
       }
+
+      rows.push({
+        dataIndex: -1,
+        no: '',
+        label: this.t('report:series:total'),
+        abs: total,
+        rel: 1
+      });
 
       if (filtered)
       {
