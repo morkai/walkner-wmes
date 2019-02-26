@@ -113,7 +113,7 @@ define([
         {
           var planOrder = plan.orders.get(lineOrder.get('orderNo'));
 
-          if (planOrder.get('mrp') !== mrp)
+          if (planOrder && planOrder.get('mrp') !== mrp)
           {
             return;
           }
