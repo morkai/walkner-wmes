@@ -66,6 +66,9 @@
   "assessment:ineffective": "Nieskuteczne",
   "assessment:repeatable": "Powtarzają się",
 
+  "division:unspecified": "Nieokreślony",
+  "mrp:unspecified": "Nieokreślone",
+
   "message:pending": "Zgłoszenie czeka na weryfikację.",
   "message:started:true": "Problem jest analizowany.",
   "message:started:false": "Problem jest w trakcie rozwiązywania.",
@@ -152,6 +155,7 @@
   "report:series:entry": "Zgłoszenia",
   "report:series:analysis": "Analizy",
   "report:series:total": "Suma",
+  "report:series:unspecified": "Suma",
   "report:filenames:count": "FAP_Ilosc",
   "report:filenames:duration": "FAP_CzasTrwania",
   "report:filenames:owner": "FAP_IloscWgZglaszajacych",

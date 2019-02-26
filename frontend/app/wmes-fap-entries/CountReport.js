@@ -221,10 +221,11 @@ define([
     prepareRows: function(metric, report)
     {
       var totalCount = report.totals.count;
-      var metricTotals = report.totals[metric];
+      var metricTotals = [].concat(report.totals[metric]);
       var labels = typeof LABEL_METRICS[metric] === 'object'
         ? LABEL_METRICS[metric]
         : report[LABEL_METRICS[metric]];
+
       var total = {
         id: 'total',
         abs: 0,
