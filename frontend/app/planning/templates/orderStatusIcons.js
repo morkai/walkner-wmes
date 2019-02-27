@@ -66,7 +66,7 @@ define([
       statuses.push(formatIcon(planOrder.getIcon('eto'), 'orders:eto'));
     }
 
-    if (orderData.priority)
+    if (orderData.priority === 'E')
     {
       statuses.push(
         '<span class="planning-mrp-list-property planning-mrp-list-property-priority" '
