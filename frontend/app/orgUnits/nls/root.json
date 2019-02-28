@@ -3,7 +3,7 @@
     "picker:label": "Organizational unit",
     "picker:any": "Any",
     "picker:dialog:title": "Organizational units",
-    "picker:dialog:submit": "Choose organizational units",
+    "picker:dialog:submit": "Choose",
     "picker:dialog:deactivated": "Deactivated"
   },
   "pl": true
