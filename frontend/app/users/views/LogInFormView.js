@@ -93,11 +93,6 @@ define([
           view.$id('office365').removeClass('hidden');
         });
       }
-
-      if (document.body.classList.contains('is-embedded'))
-      {
-        this.$('input, button').prop('disabled', true);
-      }
     },
 
     submitForm: function()
