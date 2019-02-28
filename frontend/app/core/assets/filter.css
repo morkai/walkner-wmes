@@ -193,6 +193,11 @@ input[type=checkbox].filter-inLabel {
   .filter-form .btn[type="submit"] {
     font-size: 21px;
   }
+  .filter-actions > hr {
+    display: block;
+    opacity: 0;
+    height: 15px;
+  }
   .filter-actions > .btn-group {
     display: block;
     width: 100%;

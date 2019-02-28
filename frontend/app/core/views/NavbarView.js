@@ -65,6 +65,13 @@ define([
       'socket.disconnected': function onSocketDisconnected()
       {
         this.setConnectionStatus('offline');
+      },
+      'viewport.page.shown': function()
+      {
+        if (this.$('.navbar-collapse.in').length)
+        {
+          this.$('.navbar-toggle').click();
+        }
       }
     },
 
