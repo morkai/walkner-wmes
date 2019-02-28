@@ -1,29 +1,33 @@
 <div class="panel panel-default orders-documents">
   <div class="panel-heading"><%- t('orders', 'PANEL:TITLE:documents') %></div>
   <% if (documents.length) { %>
-  <table class="table table-condensed table-hover table-bordered">
-    <thead>
-      <tr>
-        <th class="is-min"><%- t('orders', 'PROPERTY:documents.item') %>
-        <th class="is-min"><%- t('orders', 'PROPERTY:documents.nc15') %>
-        <th><%- t('orders', 'PROPERTY:documents.name') %>
-      </tr>
-    </thead>
-    <tbody>
-      <% documents.forEach(function(document) { %>
-      <tr data-nc15="<%- document.nc15 %>">
-        <td class="is-min is-number"><%= document.item || '' %>
-        <td class="is-min is-number">
-          <% if (canView) { %>
-          <a href="/orderDocuments/<%- document.nc15 %>?order=<%- orderNo %>"><%= document.nc15 %></a>
-          <% } else { %>
-          <%= document.nc15 %>
-          <% } %>
-        <td><%= document.name  %>
-      </tr>
-      <% }) %>
-    </tbody>
-  </table>
+  <div class="list">
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover table-bordered">
+        <thead>
+          <tr>
+            <th class="is-min"><%- t('orders', 'PROPERTY:documents.item') %>
+            <th class="is-min"><%- t('orders', 'PROPERTY:documents.nc15') %>
+            <th><%- t('orders', 'PROPERTY:documents.name') %>
+          </tr>
+        </thead>
+        <tbody>
+          <% documents.forEach(function(document) { %>
+          <tr data-nc15="<%- document.nc15 %>">
+            <td class="is-min is-number"><%= document.item || '' %>
+            <td class="is-min is-number">
+              <% if (canView) { %>
+              <a href="/orderDocuments/<%- document.nc15 %>?order=<%- orderNo %>"><%= document.nc15 %></a>
+              <% } else { %>
+              <%= document.nc15 %>
+              <% } %>
+            <td><%= document.name  %>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
   <% } else { %>
   <div class="panel-body">
     <%- t('orders', 'DOCUMENTS:NO_DATA') %>

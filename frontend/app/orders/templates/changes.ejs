@@ -7,37 +7,41 @@
     </div>
   </div>
   <% } %>
-  <table id="<%- idPrefix %>-table" class="table table-condensed table-bordered table-hover">
-    <thead>
-      <tr>
-        <th class="is-min"><%- t('orders', 'CHANGES:time') %>
-        <th class="is-min"><%- t('orders', 'CHANGES:user') %>
-        <th class="is-min"><%- t('orders', 'CHANGES:property') %>
-        <th class="is-min"><%- t('orders', 'CHANGES:oldValue') %>
-        <th><%- t('orders', 'CHANGES:newValue') %>
-      </tr>
-    </thead>
-    <% if (canComment) { %>
-    <tfoot>
-      <tr>
-        <td class="orders-commentForm-container" colspan="5"></td>
-      </tr>
-    </tfoot>
-    <% } %>
-    <% if (!changes.length) { %>
-    <tbody id="<%- idPrefix %>-empty">
-      <tr>
-        <td colspan="5"><%- t('orders', 'CHANGES:NO_DATA') %></td>
-      </tr>
-    </tbody>
-    <% } %>
-    <% changes.forEach(function(change, i) { %>
-    <%- renderChange({
-      renderPropertyLabel: renderPropertyLabel,
-      renderValueChange: renderValueChange,
-      change: change,
-      i: i
-    }) %>
-    <% }) %>
-  </table>
+  <div class="list">
+    <div class="table-responsive">
+      <table id="<%- idPrefix %>-table" class="table table-condensed table-bordered table-hover">
+        <thead>
+          <tr>
+            <th class="is-min"><%- t('orders', 'CHANGES:time') %>
+            <th class="is-min"><%- t('orders', 'CHANGES:user') %>
+            <th class="is-min"><%- t('orders', 'CHANGES:property') %>
+            <th class="is-min"><%- t('orders', 'CHANGES:oldValue') %>
+            <th><%- t('orders', 'CHANGES:newValue') %>
+          </tr>
+        </thead>
+        <% if (canComment) { %>
+        <tfoot>
+          <tr>
+            <td class="orders-commentForm-container" colspan="5"></td>
+          </tr>
+        </tfoot>
+        <% } %>
+        <% if (!changes.length) { %>
+        <tbody id="<%- idPrefix %>-empty">
+          <tr>
+            <td colspan="5"><%- t('orders', 'CHANGES:NO_DATA') %></td>
+          </tr>
+        </tbody>
+        <% } %>
+        <% changes.forEach(function(change, i) { %>
+        <%- renderChange({
+          renderPropertyLabel: renderPropertyLabel,
+          renderValueChange: renderValueChange,
+          change: change,
+          i: i
+        }) %>
+        <% }) %>
+      </table>
+    </div>
+  </div>
 </div>

@@ -5,40 +5,44 @@
     <%- t('orders', 'BOM:NO_DATA') %>
   </div>
   <% } else { %>
-  <table class="table table-condensed table-hover table-bordered">
-    <thead>
-      <tr>
-        <th class="is-min"><%- t('orders', 'PROPERTY:bom.item') %>
-        <th class="is-min"><%- t('orders', 'PROPERTY:bom.nc12') %>
-        <th class="is-min"><%- t('orders', 'PROPERTY:bom.name') %>
-        <th class="is-min"><%- t('orders', 'PROPERTY:bom.qty') %>
-        <th class="is-min"><%- t('orders', 'PROPERTY:bom.unloadingPoint') %>
-        <th class="is-min"><%- t('orders', 'PROPERTY:bom.supplyArea') %>
-        <th class="is-min"><%- t('orders', 'PROPERTY:bom.distStrategy') %>
-        <th>
-      </tr>
-    </thead>
-    <tbody>
-      <% _.forEach(bom, function(component) { %>
-      <tr>
-        <td class="is-min is-number orders-bom-item"><%- component.item %>
-        <td class="is-min is-number">
-          <% if (component.nc12) { %>
-          <% if (linkPfep) { %>
-          <a class="orders-bom-pfep"><%- component.nc12 %></a>
-          <% } else { %>
-          <%- component.nc12 %>
-          <% } %>
-          <% } %>
-        <td class="is-min"><%= component.name  %>
-        <td class="is-min is-number"><%- component.qty.toLocaleString() %> <%- component.unit %>
-        <td class="is-min"><%= component.unloadingPoint || '' %>
-        <td class="is-min"><%= component.supplyArea || '' %>
-        <td class="is-min"><%= component.distStrategy || '' %>
-        <td>
-      </tr>
-      <% }) %>
-    </tbody>
-  </table>
+  <div class="list">
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover table-bordered">
+        <thead>
+          <tr>
+            <th class="is-min"><%- t('orders', 'PROPERTY:bom.item') %>
+            <th class="is-min"><%- t('orders', 'PROPERTY:bom.nc12') %>
+            <th class="is-min"><%- t('orders', 'PROPERTY:bom.name') %>
+            <th class="is-min"><%- t('orders', 'PROPERTY:bom.qty') %>
+            <th class="is-min"><%- t('orders', 'PROPERTY:bom.unloadingPoint') %>
+            <th class="is-min"><%- t('orders', 'PROPERTY:bom.supplyArea') %>
+            <th class="is-min"><%- t('orders', 'PROPERTY:bom.distStrategy') %>
+            <th>
+          </tr>
+        </thead>
+        <tbody>
+          <% _.forEach(bom, function(component) { %>
+          <tr>
+            <td class="is-min is-number orders-bom-item"><%- component.item %>
+            <td class="is-min is-number">
+              <% if (component.nc12) { %>
+              <% if (linkPfep) { %>
+              <a class="orders-bom-pfep"><%- component.nc12 %></a>
+              <% } else { %>
+              <%- component.nc12 %>
+              <% } %>
+              <% } %>
+            <td class="is-min"><%= component.name  %>
+            <td class="is-min is-number"><%- component.qty.toLocaleString() %> <%- component.unit %>
+            <td class="is-min"><%= component.unloadingPoint || '' %>
+            <td class="is-min"><%= component.supplyArea || '' %>
+            <td class="is-min"><%= component.distStrategy || '' %>
+            <td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
   <% } %>
 </div>
