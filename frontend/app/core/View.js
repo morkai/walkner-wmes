@@ -53,7 +53,27 @@ function(
     Layout.call(view, options);
 
     util.subscribeTopics(view, 'broker', view.localTopics, true);
-    util.subscribeTopics(view, 'pubsub', view.remoteTopics, true);
+
+    if (view.remoteTopicsAfterSync)
+    {
+      if (view.remoteTopicsAfterSync === true)
+      {
+        view.remoteTopicsAfterSync = 'model';
+      }
+
+      if (typeof view.remoteTopicsAfterSync === 'string' && view[view.remoteTopicsAfterSync])
+      {
+        view.listenToOnce(
+          view[view.remoteTopicsAfterSync],
+          'sync',
+          util.subscribeTopics.bind(util, view, 'pubsub', view.remoteTopics, true)
+        );
+      }
+    }
+    else
+    {
+      util.subscribeTopics(view, 'pubsub', view.remoteTopics, true);
+    }
   }
 
   util.inherits(View, Layout);

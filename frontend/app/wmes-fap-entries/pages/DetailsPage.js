@@ -27,6 +27,7 @@ define([
 
     DetailsView: DetailsView,
 
+    remoteTopicsAfterSync: true,
     remoteTopics: function()
     {
       var topics = {
