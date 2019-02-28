@@ -7,33 +7,35 @@
     </div>
     <% } %>
   </div>
-  <table class="table table-bordered table-hover behaviorObsCards-details-risks">
-    <% if (model.risks.length) { %>
-    <thead>
-    <tr>
-      <th><%- helpers.t('PROPERTY:risks:risk') %></th>
-      <th><%- helpers.t('PROPERTY:risks:cause') %></th>
-      <th class="is-min text-center">
-        <%- helpers.t('PROPERTY:risks:easy:true') %>
-        /<br>
-        <%- helpers.t('PROPERTY:risks:easy:false') %>
-      </th>
-    </tr>
-    </thead>
-    <% } %>
-    <tbody>
-    <% if (!model.risks.length) { %>
-    <tr>
-      <td colspan="3"><%- t('core', 'LIST:NO_DATA') %></td>
-    </tr>
-    <% } %>
-    <% model.risks.forEach(function(risk) { %>
-    <tr>
-      <td class="text-lines"><%= risk.risk %></td>
-      <td class="text-lines"><%= risk.cause %></td>
-      <td class="is-min text-center"><%- helpers.t('PROPERTY:risks:easy:' + risk.easy) %></td>
-    </tr>
-    <% }) %>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover behaviorObsCards-details-risks">
+      <% if (model.risks.length) { %>
+      <thead>
+      <tr>
+        <th><%- helpers.t('PROPERTY:risks:risk') %></th>
+        <th><%- helpers.t('PROPERTY:risks:cause') %></th>
+        <th class="is-min text-center">
+          <%- helpers.t('PROPERTY:risks:easy:true') %>
+          /<br>
+          <%- helpers.t('PROPERTY:risks:easy:false') %>
+        </th>
+      </tr>
+      </thead>
+      <% } %>
+      <tbody>
+      <% if (!model.risks.length) { %>
+      <tr>
+        <td colspan="3"><%- t('core', 'LIST:NO_DATA') %></td>
+      </tr>
+      <% } %>
+      <% model.risks.forEach(function(risk) { %>
+      <tr>
+        <td class="text-lines"><%= risk.risk %></td>
+        <td class="text-lines"><%= risk.cause %></td>
+        <td class="is-min text-center"><%- helpers.t('PROPERTY:risks:easy:' + risk.easy) %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
 </div>

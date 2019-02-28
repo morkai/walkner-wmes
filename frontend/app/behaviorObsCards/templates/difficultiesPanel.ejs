@@ -7,33 +7,35 @@
     </div>
     <% } %>
   </div>
-  <table class="table table-bordered table-hover behaviorObsCards-details-difficulties">
-    <% if (model.difficulties.length) { %>
-    <thead>
-    <tr>
-      <th><%- helpers.t('PROPERTY:difficulties:problem') %></th>
-      <th><%- helpers.t('PROPERTY:difficulties:solution') %></th>
-      <th class="is-min text-center">
-        <%- helpers.t('PROPERTY:difficulties:behavior:true') %>
-        /<br>
-        <%- helpers.t('PROPERTY:difficulties:behavior:false') %>
-      </th>
-    </tr>
-    </thead>
-    <% } %>
-    <tbody>
-    <% if (!model.difficulties.length) { %>
-    <tr>
-      <td colspan="3"><%- t('core', 'LIST:NO_DATA') %></td>
-    </tr>
-    <% } %>
-    <% model.difficulties.forEach(function(difficulty) { %>
-    <tr>
-      <td class="text-lines"><%= difficulty.problem %></td>
-      <td class="text-lines"><%= difficulty.solution %></td>
-      <td class="is-min text-center"><%- helpers.t('PROPERTY:difficulties:behavior:' + difficulty.behavior) %></td>
-    </tr>
-    <% }) %>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover behaviorObsCards-details-difficulties">
+      <% if (model.difficulties.length) { %>
+      <thead>
+      <tr>
+        <th><%- helpers.t('PROPERTY:difficulties:problem') %></th>
+        <th><%- helpers.t('PROPERTY:difficulties:solution') %></th>
+        <th class="is-min text-center">
+          <%- helpers.t('PROPERTY:difficulties:behavior:true') %>
+          /<br>
+          <%- helpers.t('PROPERTY:difficulties:behavior:false') %>
+        </th>
+      </tr>
+      </thead>
+      <% } %>
+      <tbody>
+      <% if (!model.difficulties.length) { %>
+      <tr>
+        <td colspan="3"><%- t('core', 'LIST:NO_DATA') %></td>
+      </tr>
+      <% } %>
+      <% model.difficulties.forEach(function(difficulty) { %>
+      <tr>
+        <td class="text-lines"><%= difficulty.problem %></td>
+        <td class="text-lines"><%= difficulty.solution %></td>
+        <td class="is-min text-center"><%- helpers.t('PROPERTY:difficulties:behavior:' + difficulty.behavior) %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
 </div>

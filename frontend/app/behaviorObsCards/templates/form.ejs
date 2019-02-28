@@ -61,20 +61,22 @@
       </div>
       <hr style="margin-top: 5px">
       <h4 class="control-label"><%- helpers.t('PANEL:TITLE:observations') %></h4>
-      <table class="table table-bordered table-hover table-condensed behaviorObsCards-form-observations">
-        <thead>
-        <tr>
-          <th class="is-min"><%- helpers.t('PROPERTY:observations:category') %></th>
-          <th class="is-min text-center"><%- helpers.t('PROPERTY:observations:safe:true') %></th>
-          <th class="is-min text-center"><%- helpers.t('PROPERTY:observations:safe:false') %></th>
-          <th class="behaviorObsCards-form-half"><label class="control-label is-required"><%- helpers.t('PROPERTY:observations:observation') %></label></th>
-          <th class="behaviorObsCards-form-half"><label class="control-label is-required"><%- helpers.t('PROPERTY:observations:cause') %></label></th>
-          <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:observations:easy:true') %></label></th>
-          <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:observations:easy:false') %></label></th>
-        </tr>
-        </thead>
-        <tbody id="<%- idPrefix %>-observations"></tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover table-condensed behaviorObsCards-form-observations">
+          <thead>
+          <tr>
+            <th class="is-min"><%- helpers.t('PROPERTY:observations:category') %></th>
+            <th class="is-min text-center"><%- helpers.t('PROPERTY:observations:safe:true') %></th>
+            <th class="is-min text-center"><%- helpers.t('PROPERTY:observations:safe:false') %></th>
+            <th class="behaviorObsCards-form-half"><label class="control-label is-required"><%- helpers.t('PROPERTY:observations:observation') %></label></th>
+            <th class="behaviorObsCards-form-half"><label class="control-label is-required"><%- helpers.t('PROPERTY:observations:cause') %></label></th>
+            <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:observations:easy:true') %></label></th>
+            <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:observations:easy:false') %></label></th>
+          </tr>
+          </thead>
+          <tbody id="<%- idPrefix %>-observations"></tbody>
+        </table>
+      </div>
       <button id="<%- idPrefix %>-addObservation" class="btn btn-default behaviorObsCards-form-button" type="button">
         <i class="fa fa-plus"></i><span><%- helpers.t('FORM:BTN:add') %></span>
       </button>
@@ -90,17 +92,19 @@
           <% } %>
         </span>
       </p>
-      <table class="table table-bordered table-hover table-condensed">
-        <thead>
-        <tr>
-          <th class="behaviorObsCards-form-risk"><label class="control-label"><%- helpers.t('PROPERTY:risks:risk') %></label></th>
-          <th><%- helpers.t('PROPERTY:risks:cause') %></th>
-          <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:risks:easy:true') %></label></th>
-          <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:risks:easy:false') %></label></th>
-        </tr>
-        </thead>
-        <tbody id="<%- idPrefix %>-risks"></tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover table-condensed">
+          <thead>
+          <tr>
+            <th class="behaviorObsCards-form-risk"><label class="control-label"><%- helpers.t('PROPERTY:risks:risk') %></label></th>
+            <th><%- helpers.t('PROPERTY:risks:cause') %></th>
+            <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:risks:easy:true') %></label></th>
+            <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:risks:easy:false') %></label></th>
+          </tr>
+          </thead>
+          <tbody id="<%- idPrefix %>-risks"></tbody>
+        </table>
+      </div>
       <button id="<%- idPrefix %>-addRisk" class="btn btn-default behaviorObsCards-form-button" type="button">
         <i class="fa fa-plus"></i><span><%- helpers.t('FORM:BTN:add') %></span>
       </button><!--
@@ -126,17 +130,19 @@
           <% } %>
         </span>
       </p>
-      <table class="table table-bordered table-hover table-condensed">
-        <thead>
-        <tr>
-          <th class="behaviorObsCards-form-difficulty"><label class="control-label"><%- helpers.t('PROPERTY:difficulties:problem') %></label></th>
-          <th><%- helpers.t('PROPERTY:difficulties:solution') %></th>
-          <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:difficulties:behavior:true') %></label></th>
-          <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:difficulties:behavior:false') %></label></th>
-        </tr>
-        </thead>
-        <tbody id="<%- idPrefix %>-difficulties"></tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover table-condensed">
+          <thead>
+          <tr>
+            <th class="behaviorObsCards-form-difficulty"><label class="control-label"><%- helpers.t('PROPERTY:difficulties:problem') %></label></th>
+            <th><%- helpers.t('PROPERTY:difficulties:solution') %></th>
+            <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:difficulties:behavior:true') %></label></th>
+            <th class="is-min text-center"><label class="control-label is-required"><%- helpers.t('PROPERTY:difficulties:behavior:false') %></label></th>
+          </tr>
+          </thead>
+          <tbody id="<%- idPrefix %>-difficulties"></tbody>
+        </table>
+      </div>
       <button id="<%- idPrefix %>-addDifficulty" class="btn btn-default behaviorObsCards-form-button" type="button">
         <i class="fa fa-plus"></i><span><%- helpers.t('FORM:BTN:add') %></span>
       </button><!--

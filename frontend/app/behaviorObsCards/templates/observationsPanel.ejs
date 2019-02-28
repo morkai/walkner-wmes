@@ -1,33 +1,35 @@
 <div class="panel panel-default">
   <div class="panel-heading"><%- helpers.t('PANEL:TITLE:observations') %></div>
-  <table class="table table-bordered table-hover behaviorObsCards-details-observations">
-    <thead>
-    <tr>
-      <th class="is-min"><%- helpers.t('PROPERTY:observations:category') %></th>
-      <th class="is-min text-center">
-        <%- helpers.t('PROPERTY:observations:safe:true') %>
-        /<br>
-        <%- helpers.t('PROPERTY:observations:safe:false') %>
-      </th>
-      <th><%- helpers.t('PROPERTY:observations:observation') %></th>
-      <th><%- helpers.t('PROPERTY:observations:cause') %></th>
-      <th class="is-min text-center">
-        <%- helpers.t('PROPERTY:observations:easy:true') %>
-        /<br>
-        <%- helpers.t('PROPERTY:observations:easy:false') %>
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <% model.observations.forEach(function(observation) { %>
-    <tr>
-      <td class="is-min"><%= observation.behavior %></td>
-      <td class="is-min text-center"><%- helpers.t('PROPERTY:observations:safe:' + observation.safe) %></td>
-      <td class="text-lines"><%= observation.safe ? '' : observation.observation %></td>
-      <td class="text-lines"><%= observation.safe ? '' : observation.cause %></td>
-      <td class="is-min text-center"><%- observation.safe ? '' : helpers.t('PROPERTY:observations:easy:' + observation.easy) %></td>
-    </tr>
-    <% }) %>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover behaviorObsCards-details-observations">
+      <thead>
+      <tr>
+        <th class="is-min"><%- helpers.t('PROPERTY:observations:category') %></th>
+        <th class="is-min text-center">
+          <%- helpers.t('PROPERTY:observations:safe:true') %>
+          /<br>
+          <%- helpers.t('PROPERTY:observations:safe:false') %>
+        </th>
+        <th><%- helpers.t('PROPERTY:observations:observation') %></th>
+        <th><%- helpers.t('PROPERTY:observations:cause') %></th>
+        <th class="is-min text-center">
+          <%- helpers.t('PROPERTY:observations:easy:true') %>
+          /<br>
+          <%- helpers.t('PROPERTY:observations:easy:false') %>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <% model.observations.forEach(function(observation) { %>
+      <tr>
+        <td class="is-min"><%= observation.behavior %></td>
+        <td class="is-min text-center"><%- helpers.t('PROPERTY:observations:safe:' + observation.safe) %></td>
+        <td class="text-lines"><%= observation.safe ? '' : observation.observation %></td>
+        <td class="text-lines"><%= observation.safe ? '' : observation.cause %></td>
+        <td class="is-min text-center"><%- observation.safe ? '' : helpers.t('PROPERTY:observations:easy:' + observation.easy) %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
 </div>
