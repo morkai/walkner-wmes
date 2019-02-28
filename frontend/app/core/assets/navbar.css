@@ -137,6 +137,7 @@
   .navbar-with-button + .navbar-with-button > .btn {
     border-top-width: 1px;
   }
+  .navbar-mor,
   .navbar-form {
     display: none;
   }

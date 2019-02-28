@@ -16,11 +16,11 @@
       <% include navbar/tools.ejs %>
     </ul>
     <% include navbar/right.ejs %>
-    <% if (user.isAllowedTo('LOCAL', 'ORDERS:VIEW', 'XICONF:VIEW', 'PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW', 'QI:RESULTS:VIEW', 'PRESS_WORKSHEETS:VIEW', 'FTE:MASTER:VIEW', 'FTE:LEADER:VIEW', 'HOURLY_PLANS:VIEW')) { %>
+    <% if (user.isAllowedTo('LOCAL', 'USER')) { %>
     <% include navbar/search.ejs %>
     <% } %>
     <div class="navbar-right">
-      <a id="<%- idPrefix %>-mor" class="btn btn-link" href="#mor" title="<%- t('core', 'NAVBAR:mor') %>" style="width: 41px"><i class="fa fa-group"></i></a>
+      <a id="<%- idPrefix %>-mor" class="btn btn-link navbar-mor" href="#mor" title="<%- t('core', 'NAVBAR:mor') %>" style="width: 41px"><i class="fa fa-group"></i></a>
     </div>
   </div>
 </div>
