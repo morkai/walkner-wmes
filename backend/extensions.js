@@ -88,7 +88,7 @@ if (process.env.NODE_ENV === 'development')
       if (matches)
       {
         line += ` ${matches[1].trim()}`;
-        errorStack = matches[2].trim();
+        errorStack = (matches[2] || '').trim();
 
         if (errorStack)
         {
