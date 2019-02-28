@@ -101,3 +101,15 @@
 .fap-chat-send[rows="2"] {
   padding: 14px 24px;
 }
+
+@media (max-width: 1272px) {
+  .fap-chat {
+    width: 100%;
+  }
+  .fap-chat-lines {
+    max-width: none;
+  }
+  .fap-chat-line {
+    min-width: auto;
+  }
+}

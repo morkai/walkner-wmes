@@ -5,21 +5,25 @@ define([
   'jquery',
   'app/broker',
   'app/user',
+  'app/viewport',
   'app/notifications',
   'app/core/View',
   '../Entry',
   './AddFormView',
-  'app/wmes-fap-entries/templates/navbar'
+  'app/wmes-fap-entries/templates/navbar',
+  'app/wmes-fap-entries/templates/navbarItem'
 ], function(
   _,
   $,
   broker,
   user,
+  viewport,
   notifications,
   View,
   Entry,
   AddFormView,
-  template
+  template,
+  itemTemplate
 ) {
   'use strict';
 
@@ -400,7 +404,36 @@ define([
         return;
       }
 
-      var NavbarBtnView = this;
+      var NavbarView = this;
+      var fapNavbarView = null;
+
+      broker.subscribe('navbar.render', function(message)
+      {
+        var navbarView = message.view;
+        var $firstItem = navbarView.$el.find('.navbar-nav').first().children().first();
+        var $fapItem = $(itemTemplate({}));
+
+        $fapItem.insertAfter($firstItem);
+
+        $fapItem.find('[data-action="addFap"]').on('click', function()
+        {
+          var dialogView = new AddFormView({
+            model: fapNavbarView.model
+          });
+
+          dialogView.on('cancel', function()
+          {
+            viewport.closeDialog();
+          });
+
+          dialogView.listenToOnce(fapNavbarView.model, 'sync', function()
+          {
+            viewport.closeDialog();
+          });
+
+          viewport.showDialog(dialogView);
+        });
+      });
 
       broker.subscribe('navbar.rendered', function(message)
       {
@@ -411,9 +444,9 @@ define([
           return;
         }
 
-        var navbarBtnView = new NavbarBtnView();
+        fapNavbarView = new NavbarView();
 
-        navbarView.insertView('.navbar-collapse', navbarBtnView).render();
+        navbarView.insertView('.navbar-collapse', fapNavbarView).render();
       });
     }
 

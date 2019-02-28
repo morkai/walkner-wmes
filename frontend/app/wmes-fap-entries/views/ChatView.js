@@ -474,7 +474,7 @@ define([
     {
       var messagesEl = this.$id('messages')[0];
 
-      return messagesEl.scrollHeight - messagesEl.scrollTop === messagesEl.clientHeight;
+      return Math.abs(messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight) < 5;
     },
 
     onScroll: function(e)

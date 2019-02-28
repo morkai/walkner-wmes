@@ -124,9 +124,13 @@
 .fap-prop[data-prop="analyzers"] {
   width: 67%;
 }
-.fap-chatAndAttachments {
+.fap-chatAndAside {
   display: flex;
-  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.fap-observersAndAttachments {
+  flex: 1 1 auto;
+  margin-left: 30px;
 }
 .fap-details-panel {
   text-align: left;
@@ -253,4 +257,54 @@
 .fap-is-unseen .message,
 .message.fap-is-unseen {
   color: #ee0000;
+}
+
+@media (max-width: 1272px) {
+  .fap-details {
+    width: 100%;
+  }
+  .fap-props,
+  .fap-chatAndAside {
+    flex-direction: column;
+  }
+  .fap-chatAndAside {
+    margin-top: -11px;
+    margin-bottom: 0;
+  }
+  .fap-prop {
+    flex: 1 1 auto!important;
+    padding: 15px 0 0 0!important;
+    width: 100%!important;
+    border-top: 1px dotted #ddd;
+    margin-top: 15px;
+  }
+  .fap-prop + .fap-prop {
+    border-left: none;
+  }
+  .fap-prop[data-prop="rid"] {
+    margin-top: 0;
+    border-top: none;
+  }
+  .fap-prop[data-prop="solution"] {
+    margin-top: 7px;
+    border-top: none;
+  }
+  .fap-prop-separator {
+    margin: 15px 0;
+  }
+  .fap-prop-separator + .fap-prop,
+  .fap-prop-separator + .fap-props > .fap-prop:first-child {
+    padding: 0!important;
+    margin-top: 0;
+    border-top: none;
+  }
+  .fap-details .message {
+    margin-bottom: 0;
+  }
+  .fap-observersAndAttachments {
+    margin-left: 0;
+  }
+  .fap-observers {
+    margin-top: 11px;
+  }
 }

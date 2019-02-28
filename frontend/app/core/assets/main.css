@@ -358,7 +358,8 @@ code.multiline {
     margin-left: 0;
     margin-bottom: 15px;
   }
-  .page-actions > li > .btn {
+  .page-actions > li .btn,
+  .page-actions > li .btn-group {
     width: 100%;
   }
   .page-actions-jump {

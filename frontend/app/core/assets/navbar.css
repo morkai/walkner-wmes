@@ -134,6 +134,9 @@
   }
 }
 @media (max-width: 767px) {
+  .navbar-with-button > .btn {
+    width: 52px;
+  }
   .navbar-with-button + .navbar-with-button > .btn {
     border-top-width: 1px;
   }

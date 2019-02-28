@@ -27,3 +27,16 @@
   line-height: 1.5;
   white-space: pre-line;
 }
+
+@media (max-width: 1272px) {
+  .fap-analysis-why {
+    flex-direction: column;
+  }
+  .fap-analysis-why-value {
+    padding: 0;
+    min-height: 17px;
+  }
+  .fap-prop[data-prop="why5"] .fap-editor {
+    top: -10px;
+  }
+}

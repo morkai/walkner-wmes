@@ -22,3 +22,21 @@
   min-width: 30px;
   font-weight: bold;
 }
+.navbar-nav > li[data-module="wmes-fap"] {
+  display: none;
+}
+.modal-body .fap-addForm {
+  position: static;
+  z-index: auto;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+}
+@media (max-width: 767px) {
+  .fap-navbar {
+    display: none;
+  }
+  .navbar-nav > li[data-module="wmes-fap"] {
+    display: block;
+  }
+}

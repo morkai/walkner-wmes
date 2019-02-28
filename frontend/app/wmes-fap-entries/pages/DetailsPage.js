@@ -142,9 +142,20 @@ define([
         entry.fetch();
       });
 
+      var idIsRid = parseInt(entry.id, 10) < 9999999;
+
       page.listenToOnce(entry, 'sync', function()
       {
         page.listenTo(entry, 'sync', page.render);
+
+        if (idIsRid)
+        {
+          page.broker.publish('router.navigate', {
+            url: entry.genClientUrl(),
+            replace: true,
+            trigger: false
+          });
+        }
       });
 
       page.listenTo(

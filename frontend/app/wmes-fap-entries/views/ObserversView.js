@@ -62,7 +62,7 @@ define([
       var enabled = this.model.serializeDetails().auth.observers;
 
       setUpUserSelect2($observer, {
-        width: '370px',
+        width: '100%',
         noPersonnelId: true,
         placeholder: this.t('observers:placeholder' + (enabled ? '' : ':auth'))
       });

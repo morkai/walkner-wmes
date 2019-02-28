@@ -1,0 +1,15 @@
+<li data-online data-module="wmes-fap" class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown">
+    <%- t('wmes-fap-entries', 'navbar:button') %>
+    <b class="caret"></b>
+  </a>
+  <ul class="dropdown-menu">
+    <li data-privilege="USER" class="navbar-with-button"><a href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)"><%- t('wmes-fap-entries', 'navbar:all') %></a><button type="button" class="btn btn-default" data-action="addFap"><i class="fa fa-plus"></i></button></li>
+    <li data-privilege="USER"><a href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)&status=in=(pending,started)"><%- t('wmes-fap-entries', 'navbar:open') %></a></li>
+    <li data-privilege="USER"><a href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)&observers.user.id=mine"><%- t('wmes-fap-entries', 'navbar:mine') %></a></li>
+    <li data-privilege="USER"><a href="#fap/entries?exclude(changes)&sort(-createdAt)&limit(-1337)&observers.user.id=unseen"><%- t('wmes-fap-entries', 'navbar:unseen') %></a></li>
+    <li data-privilege="USER"><a href="#fap/reports/count"><%- t('wmes-fap-entries', 'navbar:reports:count') %></a>
+    <li class="divider"></li>
+    <li class="dropdown-header"><%- t('wmes-fap-entries', 'navbar:dictionaries') %>
+    <li data-privilege="FAP:MANAGE"><a href="#fap/categories"><%- t('wmes-fap-entries', 'navbar:categories') %></a>
+  </ul>

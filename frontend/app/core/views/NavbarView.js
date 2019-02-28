@@ -68,10 +68,11 @@ define([
       },
       'viewport.page.shown': function()
       {
-        if (this.$('.navbar-collapse.in').length)
-        {
-          this.$('.navbar-toggle').click();
-        }
+        this.collapse();
+      },
+      'viewport.dialog.shown': function()
+      {
+        this.collapse();
       }
     },
 
@@ -333,6 +334,10 @@ define([
 
   NavbarView.prototype.afterRender = function()
   {
+    this.broker.publish('navbar.render', {
+      view: this
+    });
+
     this.selectActiveNavItem();
     this.setConnectionStatus(this.socket.isConnected() ? 'online' : 'offline');
     this.hideNotAllowedEntries();
@@ -1238,6 +1243,14 @@ define([
     this.$id('wh-new').toggleClass('active', state === 'new');
 
     localStorage.setItem('WMES_NAVBAR_WH', state);
+  };
+
+  NavbarView.prototype.collapse = function()
+  {
+    if (this.$('.navbar-collapse.in').length)
+    {
+      this.$('.navbar-toggle').click();
+    }
   };
 
   return NavbarView;
