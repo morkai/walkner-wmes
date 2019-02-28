@@ -116,6 +116,17 @@ define([
       }
     },
 
+    localTopics: {
+      'navbar.shown': function()
+      {
+        this.onResize();
+      },
+      'navbar.hidden': function()
+      {
+        this.onResize();
+      }
+    },
+
     initialize: function()
     {
       this.onKeyDown = this.onKeyDown.bind(this);

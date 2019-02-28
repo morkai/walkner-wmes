@@ -76,6 +76,8 @@ define([
     },
 
     events: {
+      'shown.bs.collapse': function() { this.broker.publish('navbar.shown'); },
+      'hidden.bs.collapse': function() { this.broker.publish('navbar.hidden'); },
       'click .disabled a': function onDisabledEntryClick(e)
       {
         e.preventDefault();
