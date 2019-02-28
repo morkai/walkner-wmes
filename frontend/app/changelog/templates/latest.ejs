@@ -5,6 +5,9 @@
   <li>Poprawiono błąd mogący spowodować wywalenie się serwera, jeżeli dwóch użytkowników zmieniało zgłoszenie
     w tym samym czasie.</li>
   <li>Zmieniono treść powiadomienia SMS tak, aby zawierał adres URL do zgłoszenia.</li>
+  <li>Zmieniono tabele w wykresach 'Ilość zgłoszeń wg wydziałów' oraz 'Ilość zgłoszeń wg MRP' raportu tak,
+    aby zliczały pozycje 'Nieokreślone' (bez wydziału/MRP).</li>
+  <li>Zmieniono tabele w wykresach 'Ilość zgłoszeń wg osób' tak, aby pokazywały sumę osób.</li>
   <li>Dodano możliwość wywoływania formularza dodawania zgłoszenia klawiszem <kbd>F1</kbd>.</li>
   <li>Dodano możliwość kopiowania Kategorii i Problemu z ostatniego zgłoszenia użytkownika podczas dodawania
     nowego zgłoszenia.</li>
@@ -57,6 +60,15 @@
   <li>Poprawiono błąd powodujący ukrycie menu kontekstowego kolumny po użyciu klawisza <kbd>Delete</kbd>
     lub <kbd>Backspace</kbd> w polu filtra.</li>
   <li>Dodano wsparcie dla siódmego stanowiska.</li>
+</ul>
+<h3>Użytkownicy</h3>
+<ul>
+  <li>Zmieniono proces logowania tak, aby wymuszona została zmiana hasła dla użytkowników, których hasło
+    jest takie samo jak login lub numer kadrowy.</li>
+  <li>Zmieniono proces logowania tak, aby nie można było się zalogować, jeżeli jako loginu użytko adresu
+    e-mail i w bazie istnieje kilku użytkowników z takim samym adres.</li>
+  <li>Zmieniono formularz resetowania hasła tak, aby użytkownik musiał potwierdzić nowe hasło podając
+    je dwa razy.</li>
 </ul>
 <h3>Inne</h3>
 <ul>

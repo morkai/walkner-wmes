@@ -26,31 +26,17 @@ define([
         this.$id('login')[0].setCustomValidity('');
         this.$submit.removeClass('btn-danger').addClass('btn-primary');
       },
+      'input input[type="password"]': function()
+      {
+        this.togglePasswordValidity();
+      },
       'click #-loginLink': function()
       {
-        this.$el.attr('action', '/login');
-        this.$id('loginLink').hide();
-        this.$id('resetLink').show();
-        this.$id('login').select();
-        this.$id('password').attr('placeholder', t('users', 'LOG_IN_FORM:LABEL:PASSWORD'));
-        this.$('.logInForm-submit-label').text(t('users', 'LOG_IN_FORM:SUBMIT:LOG_IN'));
-
-        this.resetting = false;
-
-        this.onModeSwitch();
+        this.switchToLogin();
       },
       'click #-resetLink': function()
       {
-        this.$el.attr('action', '/resetPassword/request');
-        this.$id('resetLink').hide();
-        this.$id('loginLink').show();
-        this.$id('login').select();
-        this.$id('password').val('').attr('placeholder', t('users', 'LOG_IN_FORM:LABEL:NEW_PASSWORD'));
-        this.$('.logInForm-submit-label').text(t('users', 'LOG_IN_FORM:SUBMIT:RESET'));
-
-        this.resetting = true;
-
-        this.onModeSwitch();
+        this.switchToReset();
       },
       'click #-office365': function()
       {
@@ -179,26 +165,39 @@ define([
 
       req.fail(function(res)
       {
+        var error = res.responseJSON && res.responseJSON.error || {};
+
+        if (error.code === 'UNSAFE_PASSWORD')
+        {
+          view.switchToReset(t('users', 'LOG_IN_FORM:UNSAFE_PASSWORD'));
+
+          return;
+        }
+
         if (view.$submit)
         {
           view.$submit.removeClass('btn-primary').addClass('btn-danger');
         }
 
-        if (view.resetting)
+        if (t.has('users', 'LOG_IN_FORM:MSG:' + error.code))
         {
-          var error = res.responseJSON && res.responseJSON.error ? res.responseJSON.error : {};
-
           viewport.msg.show({
             type: 'error',
-            time: 5000,
-            text: t.has('users', 'LOG_IN_FORM:RESET:MSG:' + error.message)
-              ? t('users', 'LOG_IN_FORM:RESET:MSG:' + error.message)
-              : t('users', 'LOG_IN_FORM:RESET:MSG:FAILURE')
+            time: 3000,
+            text: t('users', 'LOG_IN_FORM:MSG:' + error.code)
+          });
+        }
+        else if (view.resetting)
+        {
+          viewport.msg.show({
+            type: 'error',
+            time: 3000,
+            text: t('users', 'LOG_IN_FORM:RESET:MSG:FAILURE')
           });
         }
       });
 
-      req.always(function()
+      req.always(function(res)
       {
         if (view.$submit)
         {
@@ -208,7 +207,7 @@ define([
           view.$('[autofocus]').focus();
         }
 
-        if (view.resetting)
+        if (view.resetting && !res)
         {
           view.$id('loginLink').click();
         }
@@ -229,10 +228,63 @@ define([
       return this.$el.closest('.page').find('.page-breadcrumbs > :last-child');
     },
 
-    onModeSwitch: function()
+    togglePasswordValidity: function()
+    {
+      var error = '';
+
+      if (this.resetting && this.$id('password').val() !== this.$id('password2').val())
+      {
+        error = t('users', 'LOG_IN_FORM:PASSWORD_MISMATCH');
+      }
+
+      this.$id('password2')[0].setCustomValidity(error);
+    },
+
+    switchToLogin: function(message)
+    {
+      this.$el.attr('action', '/login');
+      this.$id('loginLink').hide();
+      this.$id('resetLink').show();
+      this.$id('login').select();
+      this.$id('password').val('').attr('placeholder', t('users', 'LOG_IN_FORM:LABEL:PASSWORD'));
+      this.$id('password2').val('').prop('required', false);
+      this.$id('password2-container').addClass('hidden');
+      this.$('.logInForm-submit-label').text(t('users', 'LOG_IN_FORM:SUBMIT:LOG_IN'));
+
+      this.resetting = false;
+
+      this.onModeSwitch(message);
+    },
+
+    switchToReset: function(message)
+    {
+      this.$el.attr('action', '/resetPassword/request');
+      this.$id('resetLink').hide();
+      this.$id('loginLink').show();
+      this.$id('login').select();
+      this.$id('password').val('').attr('placeholder', t('users', 'LOG_IN_FORM:LABEL:NEW_PASSWORD'));
+      this.$id('password2').val('').prop('required', true);
+      this.$id('password2-container').removeClass('hidden');
+      this.$('.logInForm-submit-label').text(t('users', 'LOG_IN_FORM:SUBMIT:RESET'));
+
+      this.resetting = true;
+
+      this.onModeSwitch(message);
+    },
+
+    onModeSwitch: function(message)
     {
       this.$title.text(this.resetting ? t('users', 'LOG_IN_FORM:TITLE:RESET') : this.originalTitle);
       this.$submit.removeClass('btn-danger').addClass('btn-primary');
+
+      if (message)
+      {
+        this.$id('message').html(message).removeClass('hidden');
+      }
+      else
+      {
+        this.$id('message').addClass('hidden');
+      }
     }
 
   });
