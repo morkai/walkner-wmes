@@ -25,15 +25,15 @@
     <tbody>
       <% orders.forEach(function(order, i) { %>
       <% if (order.newGroup) { %>
-      <tr>
+      <tr class="planning-wh-newGroup-tr">
         <td class="planning-wh-newGroup" colspan="999">&nbsp;</td>
       </tr>
       <% } else if (order.newLine) { %>
-      <tr>
+      <tr class="planning-wh-newLine-tr">
         <td class="planning-wh-newLine" colspan="999"></td>
       </tr>
       <% } %>
-      <tr class="<%- order.rowClassName %>" data-id="<%- order.orderNo %>" data-index="<%- i %>" data-group="<%- order.group %>" data-line="<%= order.line %>" data-line-order-no="<%- order.lineOrderNo %>" data-key="<%- order.key %>" data-pce-time="<%- order.pceTime %>">
+      <tr class="planning-wh-order <%- order.rowClassName %>" data-id="<%- order.orderNo %>" data-index="<%- i %>" data-group="<%- order.group %>" data-line="<%= order.line %>" data-line-order-no="<%- order.lineOrderNo %>" data-key="<%- order.key %>" data-pce-time="<%- order.pceTime %>">
         <td class="is-min text-right" style="min-width: 29px"><%- order.group %>.</td>
         <td class="is-min text-right" style="min-width: 35px"><%- order.no %>.</td>
         <td class="is-min" style="min-width: 35px"><%- t('core', 'SHIFT:' + order.shift) %></td>

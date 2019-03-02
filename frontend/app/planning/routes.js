@@ -115,7 +115,10 @@ define([
         : req.query.mrps.split(/[^A-Z0-9]+/i).filter(function(mrp) { return mrp.length > 0; }),
       lines: req.query.lines === undefined
         ? null
-        : req.query.lines.split(',').filter(function(line) { return line.length > 0; })
+        : req.query.lines.split(',').filter(function(line) { return line.length > 0; }),
+      whStatuses: req.query.whStatuses === undefined
+        ? null
+        : req.query.whStatuses.split(',').filter(function(whStatus) { return whStatus.length > 0; })
     }));
   });
 

@@ -142,6 +142,8 @@ define([
       view.listenTo(sapOrders, 'change:whDropZone change:whTime', view.onWhDropZoneChanged);
 
       view.listenTo(view.whOrderStatuses, 'add change', view.onWhOrderStatusChanged);
+
+      view.listenTo(plan.displayOptions, 'change:whStatuses', view.onWhStatusesFilterChanged);
     },
 
     serialize: function()
@@ -186,6 +188,7 @@ define([
       var view = this;
       var plan = view.plan;
       var lines = plan.displayOptions.get('lines');
+      var whStatuses = plan.displayOptions.get('whStatuses') || [];
       var disabledMrps = plan.settings.global.getValue('wh.newIncludedMrps') || [];
       var list = [];
 
@@ -316,6 +319,11 @@ define([
         }
 
         order.whStatus = view.whOrderStatuses.serialize(order.key);
+
+        if (whStatuses.length && whStatuses.indexOf(order.whStatus.status.toString()) === -1)
+        {
+          order.rowClassName += ' hidden';
+        }
 
         if (prev)
         {
@@ -805,11 +813,34 @@ define([
 
       if ($order.length)
       {
+        var whStatus = this.whOrderStatuses.serialize(whOrderStatus.id);
+
         $order
           .find('.planning-wh-status')
           .attr('data-status', whOrderStatus.get('status'))
-          .html(this.whOrderStatuses.serialize(whOrderStatus.id).label);
+          .html(whStatus.label);
+
+        var whStatuses = this.plan.displayOptions.get('whStatuses') || [];
+
+        $order.toggleClass(
+          'hidden',
+          whStatuses.length > 0 && whStatuses.indexOf(whStatus.status.toString()) === -1
+        );
       }
+    },
+
+    onWhStatusesFilterChanged: function()
+    {
+      var view = this;
+      var whStatuses = view.plan.displayOptions.get('whStatuses') || [];
+
+      view.$('.planning-wh-status').each(function()
+      {
+        this.parentNode.classList.toggle(
+          'hidden',
+          whStatuses.length > 0 && whStatuses.indexOf(this.dataset.status) === -1
+        );
+      });
     },
 
     export: function()

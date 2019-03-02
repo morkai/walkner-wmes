@@ -35,6 +35,7 @@
   "filter:mrps:wh": "Magazyn",
   "filter:mrps:placeholder": "Wszystkie",
   "filter:lines": "Linie produkcyjne",
+  "filter:whStatuses": "Etap",
   "filter:wrapLists": "Przewijanie list",
   "filter:lineOrdersList": "Lista <u>z</u>leceń",
   "filter:useLatestOrderData": "Najnowsze zlecenia",

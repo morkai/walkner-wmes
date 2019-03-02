@@ -9,7 +9,8 @@ define([
   'app/core/util/idAndLabel',
   'app/data/orgUnits',
   'app/mrpControllers/util/setUpMrpSelect2',
-  'app/planning/templates/whFilter'
+  'app/planning/templates/whFilter',
+  'app/core/util/ExpandableSelect'
 ], function(
   _,
   $,
@@ -33,6 +34,7 @@ define([
       'change #-date': 'changeFilter',
       'change #-mrps': 'changeFilter',
       'change #-lines': 'changeFilter',
+      'change #-whStatuses': 'changeFilter',
       'click #-useDarkerTheme': function()
       {
         this.plan.displayOptions.toggleDarkerThemeUse();
@@ -56,6 +58,11 @@ define([
       this.listenTo(plan, 'change:_id', this.onDateChanged);
       this.listenTo(displayOptions, 'change:minDate change:maxDate', this.onMinMaxDateChanged);
       this.listenTo(displayOptions, 'change:useDarkerTheme', this.updateToggles);
+    },
+
+    destroy: function()
+    {
+      this.$('.is-expandable').expandableSelect('destroy');
     },
 
     serialize: function()
@@ -88,6 +95,7 @@ define([
         date: plan.id,
         mrps: mrps,
         lines: displayOptions.get('lines'),
+        whStatuses: displayOptions.get('whStatuses'),
         mrpMode: mrpMode,
         minDate: displayOptions.get('minDate'),
         maxDate: displayOptions.get('maxDate'),
@@ -114,6 +122,8 @@ define([
           .filter(function(prodLine) { return !prodLine.get('deactivatedAt'); })
           .map(idAndLabel)
       });
+
+      this.$('.is-expandable').expandableSelect();
 
       this.toggleMrpsSelect2();
       this.updateStats();
@@ -147,49 +157,56 @@ define([
 
     changeFilter: function()
     {
-      var date = this.$id('date').val();
-      var mrps = this.$id('mrps').val().split(',').filter(function(v) { return v.length > 0; });
-      var lines = this.$id('lines').val().split(',').filter(function(v) { return v.length > 0; });
+      var view = this;
+      var date = view.$id('date').val();
+      var data = {
+        mrps: view.$id('mrps').val().split(',').filter(function(v) { return v.length > 0; }),
+        lines: view.$id('lines').val().split(',').filter(function(v) { return v.length > 0; }),
+        whStatuses: view.$id('whStatuses').val()
+      };
 
-      switch (this.$('[name="mrpMode"]:checked').val())
+      if (!data.whStatuses || data.whStatuses.length === 4)
+      {
+        data.whStatuses = [];
+      }
+
+      switch (view.$('[name="mrpMode"]:checked').val())
       {
         case '1':
-          mrps.unshift('1');
+          data.mrps.unshift('1');
           break;
 
         case '0':
-          mrps.unshift('0');
+          data.mrps.unshift('0');
           break;
 
         case 'mine':
-          mrps = ['mine'];
+          data.mrps = ['mine'];
           break;
 
         case 'wh':
-          mrps = ['wh'];
+          data.mrps = ['wh'];
           break;
       }
 
       var displayOptions = {};
 
-      if (!_.isEqual(mrps, this.plan.displayOptions.get('mrps')))
+      ['mrps', 'lines', 'whStatuses'].forEach(function(prop)
       {
-        displayOptions.mrps = mrps;
-      }
-
-      if (!_.isEqual(lines, this.plan.displayOptions.get('lines')))
-      {
-        displayOptions.lines = lines;
-      }
+        if (!_.isEqual(data[prop], view.plan.displayOptions.get(prop)))
+        {
+          displayOptions[prop] = data[prop];
+        }
+      });
 
       if (!_.isEmpty(displayOptions))
       {
-        this.plan.displayOptions.set(displayOptions);
+        view.plan.displayOptions.set(displayOptions);
       }
 
-      if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date) && date !== this.plan.id)
+      if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date) && date !== view.plan.id)
       {
-        this.plan.set('_id', date);
+        view.plan.set('_id', date);
       }
     },
 

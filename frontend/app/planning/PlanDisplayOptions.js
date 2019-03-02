@@ -20,6 +20,7 @@ define([
         maxDate: time.utc.getMoment().startOf('day').add(1, 'days').format('YYYY-MM-DD'),
         mrps: [],
         lines: [],
+        whStatuses: [],
         printOrderTimes: false,
         useLatestOrderData: true,
         useDarkerTheme: false,
@@ -103,15 +104,13 @@ define([
 
       displayOptions.readFromLocalStorage();
 
-      if (Array.isArray(attrs.mrps))
+      ['mrps', 'lines', 'whStatuses'].forEach(function(prop)
       {
-        displayOptions.set('mrps', attrs.mrps);
-      }
-
-      if (Array.isArray(attrs.lines))
-      {
-        displayOptions.set('lines', attrs.lines);
-      }
+        if (Array.isArray(attrs[prop]))
+        {
+          displayOptions.set(prop, attrs[prop]);
+        }
+      });
 
       return displayOptions;
     }

@@ -11,6 +11,14 @@
     <label for="<%- idPrefix %>-lines" class="control-label"><%- t('planning', 'filter:lines') %></label>
     <input id="<%- idPrefix %>-lines" name="lines" type="text" autocomplete="new-password" value="<%- lines %>">
   </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-whStatuses" class="control-label"><%- t('planning', 'filter:whStatuses') %></label>
+    <select id="<%- idPrefix %>-whStatuses" name="whStatuses" multiple class="form-control is-expandable" size="1" data-expanded-length="4">
+    <% ['0', '1', '2', '3'].forEach(function(whStatus) { %>
+      <option value="<%- whStatus %>" <%- _.includes(whStatuses, whStatus) ? 'selected' : '' %>><%- t('planning', 'wh:status:' + whStatus, {qtySent: 0}) %></option>
+    <% }) %>
+    </select>
+  </div>
   <div class="form-group filter-actions">
     <div class="btn-group">
       <button id="<%- idPrefix %>-useDarkerTheme" type="button" class="btn btn-default <%- useDarkerTheme ? 'active' : '' %>">
