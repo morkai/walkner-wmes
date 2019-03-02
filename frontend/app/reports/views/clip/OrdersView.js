@@ -111,30 +111,13 @@ define([
         }
       }
 
-      if (date)
-      {
-        var moment = time.getMoment(date);
-        var offset = this.collection.query.get('offset1') || 0;
-
-        if (offset)
-        {
-          moment.add(offset, 'days');
-        }
-
-        date = moment.format('L');
-      }
-      else
-      {
-        date = '';
-      }
-
       return {
         className: className,
         no: order.id,
         name: order.get('name'),
         mrp: mrp,
         qty: (order.get('qtyDone') || 0).toLocaleString() + '/' + (order.get('qty') || 0).toLocaleString(),
-        date: date,
+        date: date ? time.format(date, 'L') : '',
         cnfStatus: cnfStatus || '',
         cnfClassName: cnfClassName,
         cnfTime: cnfTime ? time.format(cnfTime, 'L, HH:mm') : '',
