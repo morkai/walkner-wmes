@@ -67,7 +67,7 @@ define([
       'blur [data-vkb]': 'scheduleHideVkb',
       'click .btn[data-action]': function(e)
       {
-        this.handleAction(e.currentTarget.dataset.action);
+        this.handleAction(e.currentTarget.dataset);
       }
     },
 
@@ -187,7 +187,7 @@ define([
 
       $changes.find('.btn-primary').on('click', function()
       {
-        view.handleAction('comment');
+        view.handleAction({action: 'comment'});
       });
 
       $changes.appendTo(this.$el.parent());
@@ -258,14 +258,16 @@ define([
       return Math.max(window.innerHeight - 2 - 30 * 2 - 30 - vkbHeight, 0);
     },
 
-    handleAction: function(action)
+    handleAction: function(dataset)
     {
       var view = this;
+      var action = dataset.action;
       var $comment = view.$changes.find('.paintShop-orderChanges-comment');
       var comment = $comment.val().trim();
       var data = {
         qtyDone: parseInt(view.$id('qtyDone').val(), 10),
-        qtyDlv: parseInt(view.$id('qtyDlv').val(), 10)
+        qtyDlv: parseInt(view.$id('qtyDlv').val(), 10),
+        cabin: parseInt(dataset.cabin, 10) || undefined
       };
 
       if (action === 'comment' && !comment)

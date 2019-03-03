@@ -22,6 +22,8 @@ define([
     return {
       new: 0,
       started: 0,
+      started1: 0,
+      started2: 0,
       partial: 0,
       finished: 0,
       delivered: 0,
@@ -342,6 +344,7 @@ define([
     {
       var mrp = order.mrp;
       var status = order.status;
+      var cabin = status === 'started' && order.cabin ? ('started' + order.cabin) : null;
       var qtyPaint = order.qtyPaint;
       var qtyPaintPce = order.qtyPaint / order.qty;
       var qtyPaintDlv = 0;
@@ -362,6 +365,12 @@ define([
       totalQuantities.all.delivered += qtyPaintDlv;
       totalQuantities[mrp].delivered += qtyPaintDlv;
 
+      if (cabin)
+      {
+        totalQuantities.all[cabin] += qtyPaint;
+        totalQuantities[mrp][cabin] += qtyPaint;
+      }
+
       Object.keys(order.paints).forEach(function(paint)
       {
         var qtyPaint = order.paints[paint];
@@ -381,6 +390,12 @@ define([
         totalQuantities[mrpPaint][status] += qtyPaint;
         totalQuantities[paint].delivered += qtyPaint;
         totalQuantities[mrpPaint].delivered += qtyPaint;
+
+        if (cabin)
+        {
+          totalQuantities[paint][cabin] += qtyPaint;
+          totalQuantities[mrpPaint][cabin] += qtyPaint;
+        }
       });
     },
 

@@ -1,3 +1,11 @@
 <% _.forEach(totals, function(total, status) { %>
+<% if (/^started/.test(status)) { %>
+<% if (/[0-9]$/.test(status)) return %>
+<div class="paintShop-totals-split">
+  <div class="paintShop-totals-total" data-status="started1"><%- totals.started1 %></div>
+  <div class="paintShop-totals-total" data-status="started2"><%- totals.started2 %></div>
+</div>
+<% } else { %>
 <div class="paintShop-totals-total" data-status="<%- status %>"><%- total %></div>
+<% } %>
 <% }) %>

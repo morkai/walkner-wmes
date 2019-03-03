@@ -1,4 +1,4 @@
-<tbody class="paintShop-order <%- visible ? 'visible' : 'hidden' %> <%- first ? 'is-first' : '' %> <%- last ? 'is-last' : '' %>" data-order-id="<%- order._id %>" data-status="<%- order.status %>" data-mrp="<%= order.mrp %>">
+<tbody class="paintShop-order <%- visible ? 'visible' : 'hidden' %> <%- first ? 'is-first' : '' %> <%- last ? 'is-last' : '' %>" data-order-id="<%- order._id %>" data-status="<%- order.status %>" data-mrp="<%= order.mrp %>" data-cabin="<%- order.cabin %>">
   <tr class="paintShop-properties paintShop-order-order">
     <td class="paintShop-property" data-property="no" rowspan="<%- order[rowSpan] %>">
       <%- order.no %>
@@ -45,7 +45,7 @@
         <i class="fa fa-shopping-cart"></i><span><%- (order.qty - order.qtyDlv).toLocaleString() %></span>
       </span>
     </td>
-    <td class="paintShop-property" rowspan="<%- order[rowSpan] %>">
+    <td class="paintShop-property" rowspan="<%- order[rowSpan] %>" data-property="timesCabin">
       <% if (order.startedAt) { %>
       <span class="paintShop-property" data-property="startedAt" title="<%- t('paintShop', 'PROPERTY:startedAt') %>">
         <i class="fa fa-hourglass-start"></i><span><%- order.startedAtDate %></span>
@@ -59,6 +59,11 @@
       <% if (commentVisible && order.comment) { %>
       <span class="paintShop-property" data-property="comment" title="<%- t('paintShop', 'PROPERTY:comment') %>">
         <i class="fa fa-comment"></i><span><%= order.comment %></span>
+      </span>
+      <% } %>
+      <% if (order.cabin) { %>
+      <span class="paintShop-property" data-property="cabin" title="<%- t('paintShop', 'PROPERTY:cabin') %>">
+        <span><%- order.cabin %></span>
       </span>
       <% } %>
     </td>

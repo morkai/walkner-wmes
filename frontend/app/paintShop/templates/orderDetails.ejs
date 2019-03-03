@@ -15,7 +15,10 @@
     <td colspan="9">
       <div class="paintShop-orderDetails-actions">
         <% if (order.status === 'new') { %>
-        <button class="btn btn-info" type="button" data-action="start"><%- t('paintShop', 'action:start') %></button>
+        <div class="paintShop-orderDetails-actions-group">
+          <button class="btn btn-info" type="button" data-action="start" data-cabin="1"><%- t('paintShop', 'action:start', {cabin: 1}) %></button>
+          <button class="btn btn-info" type="button" data-action="start" data-cabin="2"><%- t('paintShop', 'action:start', {cabin: 2}) %></button>
+        </div>
         <button class="btn btn-danger" type="button" data-action="cancel"><%- t('paintShop', 'action:cancel') %></button>
         <% } else if (order.status === 'cancelled') { %>
         <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
@@ -27,7 +30,10 @@
         <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
         <button class="btn btn-danger" type="button" data-action="cancel"><%- t('paintShop', 'action:cancel') %></button>
         <% } else if (order.status === 'partial') { %>
-        <button class="btn btn-info" type="button" data-action="continue"><%- t('paintShop', 'action:continue') %></button>
+        <div class="paintShop-orderDetails-actions-group">
+          <button class="btn btn-info" type="button" data-action="continue" data-cabin="1"><%- t('paintShop', 'action:continue', {cabin: 1}) %></button>
+          <button class="btn btn-info" type="button" data-action="continue" data-cabin="2"><%- t('paintShop', 'action:continue', {cabin: 2}) %></button>
+        </div>
         <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
         <button class="btn btn-danger" type="button" data-action="cancel"><%- t('paintShop', 'action:cancel') %></button>
         <% } else if (order.status === 'finished' || order.status === 'delivered') { %>
@@ -35,7 +41,10 @@
           <input id="<%- idPrefix %>-qtyDlv" class="form-control" type="text" autocomplete="new-password" maxlength="4" min="0" max="999" placeholder="<%- Math.max(0, order.qty - order.qtyDlv) %>" data-vkb="numeric negative">
           <button class="btn btn-success" type="button" data-action="deliver" title="<%- t('paintShop', 'action:deliver') %>"><i class="fa fa-shopping-cart"></i></button>
         </div>
-        <button class="btn btn-info" type="button" data-action="continue"><%- t('paintShop', 'action:continue') %></button>
+        <div class="paintShop-orderDetails-actions-group">
+          <button class="btn btn-info" type="button" data-action="continue" data-cabin="1"><%- t('paintShop', 'action:continue', {cabin: 1}) %></button>
+          <button class="btn btn-info" type="button" data-action="continue" data-cabin="2"><%- t('paintShop', 'action:continue', {cabin: 2}) %></button>
+        </div>
         <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
         <button class="btn btn-danger" type="button" data-action="cancel"><%- t('paintShop', 'action:cancel') %></button>
         <% } %>

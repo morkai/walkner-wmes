@@ -11,7 +11,7 @@
         <% if (paint.totals) { %>
         <span class="paintShop-paintPicker-totals">
           <% Object.keys(paint.totals).forEach(function(status) { %>
-          <% if (status !== 'delivered') { %>
+          <% if (status !== 'delivered' && status !== 'started1' && status !== 'started2') { %>
           <span class="paintShop-paintPicker-total" data-status="<%- status %>"><%- paint.totals[status] %></span>
           <% } %>
           <% }) %>

@@ -32,18 +32,20 @@
   "PROPERTY:startedAt": "Czas rozpoczęcia",
   "PROPERTY:finishedAt": "Czas zakończenia",
   "PROPERTY:comment": "Komentarz",
+  "PROPERTY:cabin": "Kabina",
 
   "status:new": "Do realizacji",
   "status:started": "W realizacji",
   "status:finished": "Zrealizowane",
   "status:partial": "Niekompletne",
   "status:cancelled": "Anulowane",
+  "status:delivered": "Dostarczone",
 
-  "action:start": "Rozpocznij",
+  "action:start": "<small>Rozpocznij</small>Kabina {cabin}",
   "action:finish": "Zakończ",
   "action:cancel": "Ignoruj",
   "action:reset": "Resetuj",
-  "action:continue": "Kontynuuj",
+  "action:continue": "<small>Kontynuuj</small>Kabina {cabin}",
   "action:comment": "Komentuj",
   "action:deliver": "Dostarcz",
 
@@ -71,10 +73,11 @@
   "multiPaint": "UWAGA! Zlecenie z {count, plural, one{jedną farbą} =2{dwiema farbami} other{{count} farbami}}.",
 
   "orderChanges:change": "{type, select, start{Rozpoczęto} finish{Zakończono {qtyDone} szt.} cancel{Zignorowano} reset{Zresetowano} comment{Skomentowano} continue{Kontynuowano} deliver{Dostarczono {qtyDlv} szt.} other{Zmieniono}} <time title='{timeLong}'>{timeShort}</time> przez {user}",
+  "orderChanges:change:reset": "Zresetowano zlecenie.",
   "orderChanges:change:cancel": "Zignorowano zlecenie.",
   "orderChanges:change:start": "{cabin, select, =1{Rozpoczęto zlecenie w kabinie pierwszej.} =2{Rozpoczęto zlecenie w kabinie drugiej.} other{Rozpoczęto zlecenie.}}",
   "orderChanges:change:finish": "Zakończono {qtyDone} szt.",
-  "orderChanges:change:continue": "Wznowiono zlecenie.",
+  "orderChanges:change:continue": "{cabin, select, =1{Wznowiono zlecenie w kabinie pierwszej.} =2{Wznowiono zlecenie w kabinie drugiej.} other{Wznowiono zlecenie.}}",
   "orderChanges:change:deliver": "Dostarczono {qtyDlv} szt.",
 
   "menu:header:mrp": "{mrp}",

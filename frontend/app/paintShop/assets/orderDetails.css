@@ -13,13 +13,50 @@
 .paintShop-orderDetails-actions {
   display: flex;
 }
-.paintShop-orderDetails-actions > .btn {
+.paintShop-orderDetails-actions-group {
+  flex: 1 1 0;
+  display: flex;
+}
+.paintShop-orderDetails-actions .btn {
   flex: 1 1 0;
   padding: 12px 0;
   font-size: 32px;
 }
+.paintShop-orderDetails-actions .btn[data-action="start"],
+.paintShop-orderDetails-actions .btn[data-action="continue"] {
+  font-size: 28px;
+  line-height: 1;
+}
+.paintShop-orderDetails-actions small {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  line-height: 1;
+}
+.paintShop-orderDetails-actions .btn[data-action="reset"],
+.paintShop-orderDetails-actions .btn[data-action="cancel"] {
+  flex: 0 0 auto;
+  padding-left: 12px;
+  padding-right: 12px;
+  min-width: 135px;
+}
+.paintShop-orderDetails-qtyDone + .btn[data-action="reset"],
+.paintShop-orderDetails-qtyDone + .btn[data-action="reset"] + .btn[data-action="cancel"] {
+  flex: 1 1 auto;
+}
+.paintShop-orderDetails-actions .btn[data-cabin="2"] {
+  background-color: #ce93d8;
+  border-color: #9c64a6;
+}
+.paintShop-orderDetails-actions .btn[data-cabin="2"]:hover {
+  background-color: #9c64a6;
+  border-color: #9c64a6;
+}
+.paintShop-orderDetails-actions .btn:only-child {
+  flex: 1 1 auto;
+}
 .paintShop-orderDetails-qtyDone {
-  flex: 1 1 0;
+  flex: 0 0 auto;
   display: flex;
 }
 .paintShop-orderDetails-qtyDone > .form-control {
@@ -32,11 +69,12 @@
   border: 5px solid #5cb85c;
 }
 .paintShop-orderDetails-qtyDone > .btn {
-  flex: 1 1 0;
+  flex: 0 0 auto;
   font-size: 32px;
+  width: 135px;
 }
 .paintShop-orderDetails-qtyDlv {
-  flex: 1 1 0;
+  flex: 0 0 auto;
   display: flex;
 }
 .paintShop-orderDetails-qtyDlv > .form-control {
@@ -49,8 +87,9 @@
   border: 5px solid #222;
 }
 .paintShop-orderDetails-qtyDlv > .btn {
-  flex: 1 1 0;
+  flex: 0 0 auto;
   font-size: 32px;
+  width: 135px;
   background-color: #222;
   border-color: #000;
 }

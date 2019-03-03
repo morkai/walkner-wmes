@@ -51,6 +51,21 @@
 .paintShop-order[data-status="started"] .paintShop-order-component {
   background-color: #f4ffff;
 }
+.paintShop-order[data-status="started"][data-cabin="2"] .paintShop-order-order {
+  background-color: #9c64a6;
+  border-bottom-color: #7a4284;
+  color: #fff;
+}
+.paintShop-order[data-status="started"][data-cabin="2"] .paintShop-order-childOrder {
+  background-color: #ce93d8;
+  border-top-color: #ac71b6;
+  border-bottom-color: #ac71b6;
+  color: #000;
+}
+.paintShop-order[data-status="started"][data-cabin="2"] .paintShop-order-component {
+  background-color: #ffc4ff;
+  color: #000;
+}
 .paintShop-order[data-status="partial"] .paintShop-order-order {
   background-color: #f0ad4e;
   border-bottom-color: #d08b2c;
@@ -184,6 +199,9 @@ td.paintShop-property[data-property="placement"] {
 td.paintShop-property[data-property="mrpTimePlacement"] {
   width: 80px;
 }
+td.paintShop-property[data-property="timesCabin"] {
+  position: relative;
+}
 span.paintShop-property {
   display: block;
 }
@@ -197,6 +215,16 @@ span.paintShop-property > .fa {
 .paintShop-property[data-property="comment"] {
   white-space: normal;
   line-height: 1.2;
+}
+.paintShop-property[data-property="cabin"] {
+  position: absolute;
+  top: -11px;
+  left: 135px;
+  font-size: 49px;
+}
+.paintShop-orderDetails .paintShop-property[data-property="cabin"] {
+  position: static;
+  margin-top: 8px;
 }
 .paintShop-property-mrp > .fa-level-down {
   display: none;

@@ -1,8 +1,10 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   '../core/Model'
 ], function(
+  _,
   Model
 ) {
   'use strict';
@@ -22,6 +24,29 @@ define([
     initialize: function()
     {
       this.serialized = null;
+    },
+
+    split: function()
+    {
+      var parent = this;
+      var KanbanEntry = parent.constructor;
+      var result = [parent];
+      var children = parent.get('children') || [];
+
+      children.forEach(function(child, i)
+      {
+        result.push(new KanbanEntry(_.defaults(
+          {
+            _id: parseFloat(parent.id + '.' + (i + 1)),
+            changes: [],
+            children: []
+          },
+          child,
+          parent.attributes
+        )));
+      });
+
+      return result;
     },
 
     serialize: function(options)

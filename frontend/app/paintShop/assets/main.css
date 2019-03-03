@@ -57,7 +57,7 @@
   margin: 0 20px;
 }
 .paintShop-right {
-  width: 480px;
+  width: 520px;
 }
 .paintShop-is-embedded .paintShop-right {
   margin-bottom: 54px;
@@ -96,25 +96,39 @@
 .paintShop-totals {
   flex: 0 0 auto;
   display: flex;
-  font-size: 32px;
   line-height: 51px;
   text-align: center;
   background-color: #fff;
   border-top: 1px solid #000;
 }
-.paintShop-totals-total {
+.paintShop-totals-total,
+.paintShop-totals-split {
   flex: 1 1 auto;
   width: 20%;
   font-size: 24px;
   background: #ccc;
   border-left: 1px solid #000;
 }
-.paintShop-totals-total:first-child {
-  border-left: 0;
+.paintShop-totals-split .paintShop-totals-total {
+  width: 100%;
+  border-left: none;
+  font-size: 21px;
+  line-height: 25px;
 }
-.paintShop-totals-total[data-status="started"] {
+.paintShop-totals-split .paintShop-totals-total:first-child {
+  border-bottom: 1px solid #000;
+}
+.paintShop-totals-total:first-child {
+  border-left: none;
+}
+.paintShop-totals-total[data-status="started"],
+.paintShop-totals-total[data-status="started1"] {
   background: #5bc0de;
   color: #000;
+}
+.paintShop-totals-total[data-status="started2"] {
+  background: #9c64a6;
+  color: #fff;
 }
 .paintShop-totals-total[data-status="partial"] {
   background: #f0ad4e;

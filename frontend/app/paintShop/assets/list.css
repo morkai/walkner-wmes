@@ -1,4 +1,5 @@
 .paintShop-list-item {
+  position: relative;
   flex: 0 0 auto;
   line-height: 50px;
   font-size: 32px;
@@ -11,6 +12,10 @@
 .paintShop-list-item[data-status="started"] {
   background-color: #5bc0de;
   color: #000;
+}
+.paintShop-list-item[data-status="started"][data-cabin="2"] {
+  background-color: #9c64a6;
+  color: #fff;
 }
 .paintShop-list-item[data-status="partial"] {
   background-color: #f0ad4e;
@@ -28,8 +33,8 @@
   color: #fff;
 }
 .paintShop-list-item:hover {
-  background: #ffffd6;
-  color: #333;
+  background: #ffffd6!important;
+  color: #333!important;
 }
 .paintShop-list-item:last-child {
   flex: 1 1 auto;
@@ -51,4 +56,9 @@
   width: 125px;
   font-size: 24px;
 }
-
+.paintShop-list-cabin {
+  position: absolute;
+  top: 0;
+  right: 11px;
+  font-size: 42px;
+}

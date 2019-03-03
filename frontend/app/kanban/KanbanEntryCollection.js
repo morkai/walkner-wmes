@@ -67,31 +67,32 @@ define([
 
     onFilterChange: function(tableView, columnId)
     {
+      var entries = this;
       var reserialize = columnId === 'workCenter';
-      var filter = this.tableView.createFilter(this);
+      var filter = entries.tableView.createFilter(this);
 
-      this.filtered = [];
-      this.filteredMap = {};
+      entries.filtered = [];
+      entries.filteredMap = {};
 
-      for (var i = 0; i < this.length; ++i)
+      entries.forEach(function(entry)
       {
-        var model = this.models[i];
-
-        if (reserialize)
+        entry.split().forEach(function(splitEntry, i)
         {
-          model.serialized = null;
-        }
+          if (reserialize)
+          {
+            splitEntry.serialized = null;
+          }
+          if (filter(splitEntry))
+          {
+            entries.filtered.push(splitEntry);
+            entries.filteredMap[splitEntry.id] = splitEntry;
+          }
+        });
+      });
 
-        if (filter(model))
-        {
-          this.filtered.push(model);
-          this.filteredMap[model.id] = model;
-        }
-      }
+      entries.trigger('filter');
 
-      this.trigger('filter');
-
-      this.onSortChange();
+      entries.onSortChange();
     },
 
     onSortChange: function()
