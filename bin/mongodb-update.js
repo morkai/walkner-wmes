@@ -7,6 +7,9 @@
 // /fix/clip/count-daily-mrp?from=2018-10-01
 // /fix/fteMasterEntries/recount-totals?date=2018-10-01
 
+db.paintshoporders.updateMany({qtyDlv: {$exists: false}}, {$set: {qtyDlv: 0}});
+db.paintshoporders.updateMany({cabin: {$exists: false}}, {$set: {cabin: 0}});
+
 const toRemove = [
 
 ];

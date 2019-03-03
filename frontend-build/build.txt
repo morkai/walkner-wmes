@@ -408,6 +408,7 @@ app/paintShop/assets/./orderDetails.css
 app/paintShop/assets/./orderChanges.css
 app/paintShop/assets/./datePicker.css
 app/paintShop/assets/./paintPicker.css
+app/paintShop/assets/./userPicker.css
 app/paintShop/assets/./tabs.css
 app/paintShop/assets/./load.css
 app/paintShop/assets/./settings.css
@@ -436,6 +437,10 @@ app/paintShop/assets/settings.css
 app/paintShop/assets/tabs.css
 ----------------
 app/paintShop/assets/tabs.css
+
+app/paintShop/assets/userPicker.css
+----------------
+app/paintShop/assets/userPicker.css
 
 app/pfepEntries/assets/filter.css
 ----------------
@@ -1737,10 +1742,13 @@ app/paintShop/templates/datePicker.js
 app/paintShop/views/PaintShopDatePickerView.js
 app/paintShop/templates/paintPicker.js
 app/paintShop/views/PaintShopPaintPickerView.js
+app/paintShop/templates/userPicker.js
+app/paintShop/views/UserPickerView.js
 app/paintShop/templates/page.js
 app/paintShop/templates/mrpTabs.js
 app/paintShop/templates/totals.js
 app/paintShop/templates/printPage.js
+app/paintShop/templates/userPageAction.js
 app/paintShop/pages/PaintShopPage.js
 app/nls/paintShop.js
 app/nls/pl/paintShop.js
@@ -1867,6 +1875,7 @@ app/planning/pages/PlanSettingsPage.js
 app/planning/templates/change.js
 app/planning/pages/PlanChangesPage.js
 app/planning/templates/whFilter.js
+app/core/util/ExpandableSelect.js
 app/planning/views/WhFilterView.js
 app/planning/templates/whList.js
 app/planning/views/WhListView.js
@@ -1954,6 +1963,7 @@ app/wmes-fap-entries/templates/addFormUpload.js
 app/wmes-fap-entries/templates/notificationsPopover.js
 app/wmes-fap-entries/views/AddFormView.js
 app/wmes-fap-entries/templates/navbar.js
+app/wmes-fap-entries/templates/navbarItem.js
 app/wmes-fap-entries/views/NavbarView.js
 app/nls/wmes-fap-entries.js
 app/nls/pl/wmes-fap-entries.js
@@ -2613,10 +2623,13 @@ app/paintShop/templates/datePicker.js
 app/paintShop/views/PaintShopDatePickerView.js
 app/paintShop/templates/paintPicker.js
 app/paintShop/views/PaintShopPaintPickerView.js
+app/paintShop/templates/userPicker.js
+app/paintShop/views/UserPickerView.js
 app/paintShop/templates/page.js
 app/paintShop/templates/mrpTabs.js
 app/paintShop/templates/totals.js
 app/paintShop/templates/printPage.js
+app/paintShop/templates/userPageAction.js
 app/paintShop/pages/PaintShopPage.js
 app/nls/paintShop.js
 app/nls/pl/paintShop.js
