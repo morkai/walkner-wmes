@@ -40,7 +40,7 @@
   flex: 1 1 auto;
   border-bottom: 0;
   border-right: 0;
-  background-color: #fff;
+  background-color: #fff!important;
   cursor: default;
 }
 .paintShop-list-with-times .paintShop-list-item {

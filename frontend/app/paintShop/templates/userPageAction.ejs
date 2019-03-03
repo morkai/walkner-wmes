@@ -1,0 +1,8 @@
+<div class="paintShop-userPicker-pageAction <%- loggedIn ? '' : 'is-clickable' %>">
+  <% if (signedIn || loggedIn) { %>
+  <%= user.label %>
+  <% } else { %>
+  <%- t('paintShop', 'userPicker:guest') %>
+  <% } %>
+  <i class="fa fa-user"></i>
+</div>

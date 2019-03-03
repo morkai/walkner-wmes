@@ -201,7 +201,8 @@ define([
         orders: this.orders,
         dropZones: this.dropZones,
         height: orderEl ? orderEl.clientHeight : 0,
-        vkb: this.options.vkb
+        vkb: this.options.vkb,
+        embedded: this.options.embedded
       });
 
       viewport.showDialog(detailsView);

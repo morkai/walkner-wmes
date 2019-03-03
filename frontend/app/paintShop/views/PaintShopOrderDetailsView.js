@@ -131,12 +131,13 @@ define([
 
     canAct: function()
     {
-      var isEmbedded = document.body.classList.contains('is-embedded');
+      var isEmbedded = this.options.embedded;
       var isLocal = user.isAllowedTo('LOCAL');
+      var isLoggedIn = !!this.orders.user;
       var isPainter = user.isAllowedTo('PAINT_SHOP:PAINTER');
       var canManage = user.isAllowedTo('PAINT_SHOP:MANAGE');
 
-      return (isEmbedded && isLocal) || isPainter || canManage;
+      return (isEmbedded && isLocal && isLoggedIn) || isPainter || canManage;
     },
 
     beforeRender: function()

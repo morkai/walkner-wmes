@@ -42,6 +42,7 @@ define([
       this.settings = options ? options.settings : null;
       this.paints = options ? options.paints : null;
       this.dropZones = options ? options.dropZones : null;
+      this.user = options ? options.user : null;
       this.selectedMrp = options && options.selectedMrp ? options.selectedMrp : 'all';
       this.selectedPaint = options && options.selectedPaint ? options.selectedPaint : 'all';
 
@@ -407,6 +408,11 @@ define([
       if (reqData.orderId)
       {
         url = '/paintShop/orders/' + reqData.orderId;
+      }
+
+      if (collection.user)
+      {
+        reqData.user = collection.user;
       }
 
       var req = $.ajax({

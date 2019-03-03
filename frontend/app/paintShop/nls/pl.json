@@ -64,6 +64,10 @@
   "paintPicker:msp": "MSP",
   "paintPicker:all": "Wszystkie",
 
+  "userPicker:guest": "Zaloguj się",
+  "userPicker:logIn": "Zaloguj",
+  "userPicker:logOut": "Wyloguj",
+
   "tabs:all": "Wszystkie",
   "tabs:dropZone": "Drop zone wywołany",
   "tabs:paint:all": "Wszystkie farby",

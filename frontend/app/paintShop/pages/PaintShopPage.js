@@ -26,10 +26,12 @@ define([
   '../views/PaintShopListView',
   '../views/PaintShopDatePickerView',
   '../views/PaintShopPaintPickerView',
+  '../views/UserPickerView',
   'app/paintShop/templates/page',
   'app/paintShop/templates/mrpTabs',
   'app/paintShop/templates/totals',
-  'app/paintShop/templates/printPage'
+  'app/paintShop/templates/printPage',
+  'app/paintShop/templates/userPageAction'
 ], function(
   _,
   $,
@@ -56,10 +58,12 @@ define([
   PaintShopListView,
   PaintShopDatePickerView,
   PaintShopPaintPickerView,
+  UserPickerView,
   pageTemplate,
   mrpTabsTemplate,
   totalsTemplate,
-  printPageTemplate
+  printPageTemplate,
+  userPageActionTemplate
 ) {
   'use strict';
 
@@ -99,27 +103,45 @@ define([
 
     actions: function()
     {
-      var view = this;
+      var page = this;
       var actions = [];
 
-      if (!IS_EMBEDDED)
+      if (IS_EMBEDDED)
+      {
+        actions.push({
+          id: 'user',
+          template: function()
+          {
+            return userPageActionTemplate({
+              loggedIn: user.isLoggedIn(),
+              signedIn: !!page.orders.user,
+              user: page.orders.user || user.getInfo()
+            });
+          },
+          afterRender: function($action)
+          {
+            $action.find('.is-clickable').on('click', page.showUserPickerDialog.bind(page));
+          }
+        });
+      }
+      else
       {
         actions.push({
           type: 'link',
           icon: 'arrows-alt',
-          callback: this.toggleFullscreen.bind(view)
+          callback: this.toggleFullscreen.bind(page)
         }, {
           icon: 'balance-scale',
           href: '#paintShop/load',
           privileges: 'PAINT_SHOP:VIEW',
           label: t('paintShop', 'PAGE_ACTIONS:load'),
-          callback: function() { window.WMES_LAST_PAINT_SHOP_DATE = view.orders.getDateFilter(); }
+          callback: function() { window.WMES_LAST_PAINT_SHOP_DATE = page.orders.getDateFilter(); }
         }, {
           icon: 'paint-brush',
           href: '#paintShop/paints',
           privileges: 'PAINT_SHOP:MANAGE',
           label: t('paintShop', 'PAGE_ACTIONS:paints'),
-          callback: function() { window.WMES_LAST_PAINT_SHOP_DATE = view.orders.getDateFilter(); }
+          callback: function() { window.WMES_LAST_PAINT_SHOP_DATE = page.orders.getDateFilter(); }
         }, {
           href: '#paintShop;settings?tab=planning',
           icon: 'cogs',
@@ -311,7 +333,8 @@ define([
         selectedPaint: this.options.selectedPaint || 'all',
         settings: this.settings,
         paints: this.paints,
-        dropZones: this.dropZones
+        dropZones: this.dropZones,
+        user: JSON.parse(sessionStorage.getItem('WMES_PS_USER') || 'null')
       }), this);
     },
 
@@ -1299,6 +1322,39 @@ define([
           page.layout.setBreadcrumbs(page.breadcrumbs, page);
         }
       });
+    },
+
+    showUserPickerDialog: function()
+    {
+      var page = this;
+      var dialogView = new UserPickerView({
+        model: {
+          user: page.orders.user
+        }
+      });
+
+      page.listenTo(dialogView, 'picked', function(user)
+      {
+        if (user)
+        {
+          sessionStorage.setItem('WMES_PS_USER', JSON.stringify(user));
+        }
+        else
+        {
+          sessionStorage.removeItem('WMES_PS_USER');
+        }
+
+        page.orders.user = user;
+
+        if (page.layout)
+        {
+          page.layout.setActions(page.actions, page);
+        }
+
+        viewport.closeDialog();
+      });
+
+      viewport.showDialog(dialogView);
     }
 
   });
