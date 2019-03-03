@@ -64,11 +64,12 @@ define([
   'use strict';
 
   var APP_ID = window.location.pathname === '/' ? 'paintShop' : 'ps-queue';
-  var IS_EMBEDDED = window.parent !== window;
+  var IS_EMBEDDED = window.parent !== window || APP_ID === 'ps-queue';
   var STATUS_WEIGHTS = {
     started: 1,
     partial: 2,
-    finished: 3
+    finished: 3,
+    delivered: 4
   };
 
   return View.extend({
@@ -160,7 +161,9 @@ define([
         {
           order.set(PaintShopOrder.parse(changes));
 
-          if (changes.qtyPaint || changes.status)
+          if (changes.qtyDlv != null
+            || changes.qtyPaint != null
+            || changes.status != null)
           {
             this.orders.recountTotals();
           }

@@ -24,6 +24,7 @@ define([
       started: 0,
       partial: 0,
       finished: 0,
+      delivered: 0,
       cancelled: 0
     };
   }
@@ -342,6 +343,14 @@ define([
       var mrp = order.mrp;
       var status = order.status;
       var qtyPaint = order.qtyPaint;
+      var qtyPaintPce = order.qtyPaint / order.qty;
+      var qtyPaintDlv = 0;
+
+      if (status === 'finished' && order.qtyDlv)
+      {
+        qtyPaintDlv = qtyPaintPce * order.qtyDlv;
+        qtyPaint -= qtyPaintDlv;
+      }
 
       if (!totalQuantities[mrp])
       {
@@ -350,6 +359,8 @@ define([
 
       totalQuantities.all[status] += qtyPaint;
       totalQuantities[mrp][status] += qtyPaint;
+      totalQuantities.all.delivered += qtyPaintDlv;
+      totalQuantities[mrp].delivered += qtyPaintDlv;
 
       Object.keys(order.paints).forEach(function(paint)
       {
@@ -368,6 +379,8 @@ define([
 
         totalQuantities[paint][status] += qtyPaint;
         totalQuantities[mrpPaint][status] += qtyPaint;
+        totalQuantities[paint].delivered += qtyPaint;
+        totalQuantities[mrpPaint].delivered += qtyPaint;
       });
     },
 

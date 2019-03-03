@@ -2,5 +2,8 @@
   <div class="paintShop-orderChanges-changes">
     <i class="fa fa-spinner fa-spin fa-2x"></i>
   </div>
-  <textarea class="form-control paintShop-orderChanges-comment" data-vkb="numeric alpha multiline" <%- canAct ? '' : 'disabled' %>></textarea>
+  <div class="paintShop-orderChanges-comment-container">
+    <textarea class="form-control paintShop-orderChanges-comment" data-vkb="numeric alpha multiline" <%- canAct ? '' : 'disabled' %>></textarea>
+    <button type="button" class="btn btn-primary"><i class="fa fa-comment-o"></i></button>
+  </div>
 </div>

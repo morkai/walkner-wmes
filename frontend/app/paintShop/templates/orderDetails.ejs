@@ -16,25 +16,29 @@
       <div class="paintShop-orderDetails-actions">
         <% if (order.status === 'new') { %>
         <button class="btn btn-info" type="button" data-action="start"><%- t('paintShop', 'action:start') %></button>
+        <button class="btn btn-danger" type="button" data-action="cancel"><%- t('paintShop', 'action:cancel') %></button>
+        <% } else if (order.status === 'cancelled') { %>
+        <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
         <% } else if (order.status === 'started') { %>
         <div class="paintShop-orderDetails-qtyDone">
           <input id="<%- idPrefix %>-qtyDone" class="form-control" type="text" autocomplete="new-password" maxlength="3" min="0" max="999" placeholder="<%- order.qty %>" data-vkb="numeric">
           <button class="btn btn-success" type="button" data-action="finish" title="<%- t('paintShop', 'action:finish') %>"><i class="fa fa-check"></i></button>
         </div>
         <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
-        <% } else if (order.status === 'finished' || order.status === 'partial') { %>
+        <button class="btn btn-danger" type="button" data-action="cancel"><%- t('paintShop', 'action:cancel') %></button>
+        <% } else if (order.status === 'partial') { %>
         <button class="btn btn-info" type="button" data-action="continue"><%- t('paintShop', 'action:continue') %></button>
         <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
-        <% } else { %>
-        <% if (order.qtyDone) { %>
+        <button class="btn btn-danger" type="button" data-action="cancel"><%- t('paintShop', 'action:cancel') %></button>
+        <% } else if (order.status === 'finished' || order.status === 'delivered') { %>
+        <div class="paintShop-orderDetails-qtyDlv">
+          <input id="<%- idPrefix %>-qtyDlv" class="form-control" type="text" autocomplete="new-password" maxlength="4" min="0" max="999" placeholder="<%- Math.max(0, order.qty - order.qtyDlv) %>" data-vkb="numeric negative">
+          <button class="btn btn-success" type="button" data-action="deliver" title="<%- t('paintShop', 'action:deliver') %>"><i class="fa fa-shopping-cart"></i></button>
+        </div>
         <button class="btn btn-info" type="button" data-action="continue"><%- t('paintShop', 'action:continue') %></button>
-        <% } %>
         <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
-        <% } %>
-        <% if (order.status !== 'cancelled') { %>
         <button class="btn btn-danger" type="button" data-action="cancel"><%- t('paintShop', 'action:cancel') %></button>
         <% } %>
-        <button class="btn btn-primary" type="button" data-action="comment"><%- t('paintShop', 'action:comment') %></button>
       </div>
     </td>
   </tr>

@@ -105,7 +105,7 @@
 .paintShop-totals-total {
   flex: 1 1 auto;
   width: 20%;
-  font-size: 28px;
+  font-size: 24px;
   background: #ccc;
   border-left: 1px solid #000;
 }
@@ -121,6 +121,10 @@
 }
 .paintShop-totals-total[data-status="finished"] {
   background: #449d44;
+  color: #fff;
+}
+.paintShop-totals-total[data-status="delivered"] {
+  background: #222;
   color: #fff;
 }
 .paintShop-totals-total[data-status="cancelled"] {

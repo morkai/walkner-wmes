@@ -41,6 +41,9 @@
         <i class="fa fa-check"></i><span><%- order.qtyDone.toLocaleString() %></span>
       </span>
       <% } %>
+      <span class="paintShop-property" data-property="qtyDlv" title="<%- t('paintShop', 'PROPERTY:qtyDlv') %>">
+        <i class="fa fa-shopping-cart"></i><span><%- (order.qty - order.qtyDlv).toLocaleString() %></span>
+      </span>
     </td>
     <td class="paintShop-property" rowspan="<%- order[rowSpan] %>">
       <% if (order.startedAt) { %>

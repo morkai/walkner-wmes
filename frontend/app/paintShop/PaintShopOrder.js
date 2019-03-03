@@ -181,6 +181,11 @@ define([
         obj.finishedAtDate = finishedAt.format('DD.MM, HH:mm:ss');
       }
 
+      if (obj.status === 'finished' && obj.qtyDlv >= obj.qty)
+      {
+        obj.status = 'delivered';
+      }
+
       obj.statusText = t('paintShop', 'status:' + obj.status);
 
       return obj;

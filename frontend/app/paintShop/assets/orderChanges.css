@@ -14,9 +14,18 @@
   flex: 1 1 auto;
   overflow-y: scroll;
 }
-.paintShop-orderChanges-comment {
+.paintShop-orderChanges-comment-container {
   flex: 0 0 auto;
+  display: flex;
+}
+.paintShop-orderChanges-comment {
+  flex: 1 1 auto;
   font-size: 24px;
+}
+.paintShop-orderChanges-comment-container .btn-primary {
+  flex: 0 0 auto;
+  width: 82px;
+  font-size: 35px;
 }
 .paintShop-orderChanges-changes > .fa-spin {
   margin: 15px;
@@ -27,6 +36,14 @@
 }
 .paintShop-orderChanges-change:first-child {
   border-top: none;
+}
+.paintShop-orderChanges-change-meta {
+  margin-bottom: 0;
+  color: #777;
+}
+.paintShop-orderChanges-change-type {
+  margin-bottom: 0;
+  font-style: oblique;
 }
 .paintShop-orderChanges-change > .text-lines {
   font-size: 16px;

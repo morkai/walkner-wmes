@@ -23,9 +23,10 @@
   display: flex;
 }
 .paintShop-orderDetails-qtyDone > .form-control {
-  flex: 1 1 0;
+  flex: 0 0 auto;
   padding: 0;
   font-size: 48px;
+  width: 120px;
   height: 71px;
   text-align: center;
   border: 5px solid #5cb85c;
@@ -33,6 +34,28 @@
 .paintShop-orderDetails-qtyDone > .btn {
   flex: 1 1 0;
   font-size: 32px;
+}
+.paintShop-orderDetails-qtyDlv {
+  flex: 1 1 0;
+  display: flex;
+}
+.paintShop-orderDetails-qtyDlv > .form-control {
+  flex: 0 0 auto;
+  padding: 0;
+  font-size: 48px;
+  width: 120px;
+  height: 71px;
+  text-align: center;
+  border: 5px solid #222;
+}
+.paintShop-orderDetails-qtyDlv > .btn {
+  flex: 1 1 0;
+  font-size: 32px;
+  background-color: #222;
+  border-color: #000;
+}
+.paintShop-orderDetails-qtyDlv > .btn:hover {
+  background-color: #000;
 }
 .paintShop-orderDetails-filler {
   background: #333;

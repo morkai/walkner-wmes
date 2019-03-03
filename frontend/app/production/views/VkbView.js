@@ -37,6 +37,7 @@ define([
       this.mode = {
         alpha: false,
         numeric: true,
+        negative: false,
         multiline: false
       };
 

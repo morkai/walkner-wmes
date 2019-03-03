@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'jquery',
   'app/i18n',
   'app/viewport',
@@ -12,6 +13,7 @@ define([
   'app/paintShop/templates/orderChange',
   'app/paintShop/templates/queueOrder'
 ], function(
+  _,
   $,
   t,
   viewport,
@@ -32,7 +34,16 @@ define([
     dialogClassName: 'paintShop-orderDetails-dialog',
 
     events: {
-      'focus #-qtyDone': function(e)
+      'keydown .form-control': function(e)
+      {
+        if (e.key === 'Enter')
+        {
+          this.$(e.currentTarget).next().click();
+
+          return false;
+        }
+      },
+      'focus [data-vkb]': function(e)
       {
         if (!this.vkb)
         {
@@ -53,27 +64,10 @@ define([
 
         this.resizeChanges();
       },
-      'blur #-qtyDone': 'scheduleHideVkb',
+      'blur [data-vkb]': 'scheduleHideVkb',
       'click .btn[data-action]': function(e)
       {
-        var view = this;
-        var $comment = view.$changes.find('.paintShop-orderChanges-comment');
-        var comment = $comment.val().trim();
-        var action = e.currentTarget.dataset.action;
-        var qtyDone = Math.max(0, parseInt(view.$id('qtyDone').val(), 10) || 0);
-
-        if (action === 'comment' && comment.length === 0)
-        {
-          $comment.focus();
-
-          return;
-        }
-
-        var $actions = view.$('.btn').prop('disabled', true);
-
-        view.act(action, comment, qtyDone)
-          .fail(function() { $actions.prop('disabled', false); })
-          .done(function() { view.closeDialog(); });
+        this.handleAction(e.currentTarget.dataset.action);
       }
     },
 
@@ -191,6 +185,11 @@ define([
         }
       });
 
+      $changes.find('.btn-primary').on('click', function()
+      {
+        view.handleAction('comment');
+      });
+
       $changes.appendTo(this.$el.parent());
 
       this.$changes = $changes;
@@ -259,14 +258,51 @@ define([
       return Math.max(window.innerHeight - 2 - 30 * 2 - 30 - vkbHeight, 0);
     },
 
-    act: function(action, comment, qtyDone)
+    handleAction: function(action)
     {
-      var reqData = {
+      var view = this;
+      var $comment = view.$changes.find('.paintShop-orderChanges-comment');
+      var comment = $comment.val().trim();
+      var data = {
+        qtyDone: parseInt(view.$id('qtyDone').val(), 10),
+        qtyDlv: parseInt(view.$id('qtyDlv').val(), 10)
+      };
+
+      if (action === 'comment' && !comment)
+      {
+        viewport.closeDialog();
+
+        return;
+      }
+
+      var $actions = view.$('.btn').prop('disabled', true);
+
+      view.act(action, comment, data)
+        .fail(function()
+        {
+          $actions.prop('disabled', false);
+        })
+        .done(function()
+        {
+          if (action === 'comment')
+          {
+            $comment.val('');
+            $actions.prop('disabled', false);
+          }
+          else
+          {
+            view.closeDialog();
+          }
+        });
+    },
+
+    act: function(action, comment, data)
+    {
+      var reqData = _.assign({
         action: action,
         orderId: this.model.id,
-        comment: comment,
-        qtyDone: qtyDone
-      };
+        comment: comment
+      }, data);
 
       return this.model.collection.act(reqData, function(err)
       {

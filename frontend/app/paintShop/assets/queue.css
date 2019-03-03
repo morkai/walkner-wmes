@@ -77,10 +77,25 @@
 .paintShop-order[data-status="finished"] .paintShop-order-component {
   background-color: #ddffdd;
 }
+.paintShop-order[data-status="delivered"] .paintShop-order-order {
+  background-color: #222;
+  border-bottom-color: #000;
+  color: #fff;
+}
+.paintShop-order[data-status="delivered"] .paintShop-order-childOrder {
+  background-color: #555;
+  border-top-color: #000;
+  border-bottom-color: #000;
+  color: #fff;
+}
+.paintShop-order[data-status="delivered"] .paintShop-order-component {
+  background-color: #888;
+  color: #fff;
+}
 .paintShop-order[data-status="cancelled"] .paintShop-order-order {
   background-color: #d9534f;
   border-bottom-color: #b7312d;
-  color: #fff;
+  color: #eee;
 }
 .paintShop-order[data-status="cancelled"] .paintShop-order-childOrder {
   background-color: #ff8682;

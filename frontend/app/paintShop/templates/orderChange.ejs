@@ -1,10 +1,10 @@
 <div class="paintShop-orderChanges-change">
-  <%- t('paintShop', 'orderChanges:change', {
-    type: change.type,
-    user: change.user,
-    timeLong: change.time.long,
-    timeShort: time.format(change.time.iso, 'L LT')
-  }) %>
+  <p class="paintShop-orderChanges-change-meta">
+    <time title="<%- change.time.long %>"><%- time.format(change.time.iso, 'L LT') %></time>, <%- change.user %>:
+  </p>
+  <% if (t.has('paintShop', 'orderChanges:change:' + change.type)) { %>
+  <p class="paintShop-orderChanges-change-type"><%- t('paintShop', 'orderChanges:change:' + change.type, change.data) %></p>
+  <% } %>
   <% if (change.comment) { %>
   <p class="text-lines"><%= change.comment %></p>
   <% } %>

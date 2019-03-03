@@ -11,12 +11,14 @@
         <% if (paint.totals) { %>
         <span class="paintShop-paintPicker-totals">
           <% Object.keys(paint.totals).forEach(function(status) { %>
+          <% if (status !== 'delivered') { %>
           <span class="paintShop-paintPicker-total" data-status="<%- status %>"><%- paint.totals[status] %></span>
+          <% } %>
           <% }) %>
         </span>
         <% } %>
       </span>
-      <span class="paintShop-paintPicker-name"><%= paint.name %></span>
+      <span class="paintShop-paintPicker-name"><%- _.escape(paint.name) || '&nbsp;' %></span>
       <% if (paint.dropped) { %>
       <i class="fa fa-level-down"></i>
       <% } %>

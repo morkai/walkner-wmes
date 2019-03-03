@@ -6,9 +6,11 @@
   "MSG:date:failure": "Nie udało się znaleźć daty.",
   "MSG:date:empty": "Brak zleceń.",
   "MSG:start:failure": "Nie udało się rozpocząć zlecenia.",
+  "MSG:continue:failure": "Nie udało się kontynuować zlecenia.",
   "MSG:finish:failure": "Nie udało się zakończyć zlecenia.",
   "MSG:reset:failure": "Nie udało się zresetować zlecenia.",
   "MSG:cancel:failure": "Nie udało się zignorować zlecenia.",
+  "MSG:deliver:failure": "Nie udało się dostarczyć zlecenia.",
   "MSG:search:failure": "Nie znaleziono zlecenia.",
 
   "PAGE_ACTIONS:load": "Obciążenie",
@@ -21,6 +23,7 @@
   "PROPERTY:qty": "Ilość",
   "PROPERTY:qtyDone": "Ilość pomalowana",
   "PROPERTY:qtyPaint": "Ilość do pomalowania",
+  "PROPERTY:qtyDlv": "Ilość do dostarczenia",
   "PROPERTY:mrp": "Przepływ",
   "PROPERTY:startTime": "Początek montażu",
   "PROPERTY:placement": "Położenie",
@@ -42,6 +45,7 @@
   "action:reset": "Resetuj",
   "action:continue": "Kontynuuj",
   "action:comment": "Komentuj",
+  "action:deliver": "Dostarcz",
 
   "datePicker:d0": "Dzisiaj",
   "datePicker:d+1": "Jutro",
@@ -66,7 +70,12 @@
   "empty": "Brak zleceń dla wybranego dnia.",
   "multiPaint": "UWAGA! Zlecenie z {count, plural, one{jedną farbą} =2{dwiema farbami} other{{count} farbami}}.",
 
-  "orderChanges:change": "{type, select, start{Rozpoczęto} finish{Zakończono} cancel{Zignorowano} reset{Zresetowano} comment{Skomentowano} continue{Kontynuowano} other{Zmieniono}} <time title='{timeLong}'>{timeShort}</time> przez {user}",
+  "orderChanges:change": "{type, select, start{Rozpoczęto} finish{Zakończono {qtyDone} szt.} cancel{Zignorowano} reset{Zresetowano} comment{Skomentowano} continue{Kontynuowano} deliver{Dostarczono {qtyDlv} szt.} other{Zmieniono}} <time title='{timeLong}'>{timeShort}</time> przez {user}",
+  "orderChanges:change:cancel": "Zignorowano zlecenie.",
+  "orderChanges:change:start": "{cabin, select, =1{Rozpoczęto zlecenie w kabinie pierwszej.} =2{Rozpoczęto zlecenie w kabinie drugiej.} other{Rozpoczęto zlecenie.}}",
+  "orderChanges:change:finish": "Zakończono {qtyDone} szt.",
+  "orderChanges:change:continue": "Wznowiono zlecenie.",
+  "orderChanges:change:deliver": "Dostarczono {qtyDlv} szt.",
 
   "menu:header:mrp": "{mrp}",
   "menu:header:all": "Wszystkie przepływy",
