@@ -451,7 +451,15 @@
     "TYPE:fap.categories.edited": "FAP > Categories: edited",
     "TEXT:fap.categories.edited": "Edited category: <a href='\\#fap/categories/{model->_id}'>{model->name}</a>",
     "TYPE:fap.categories.deleted": "FAP > Categories: deleted",
-    "TEXT:fap.categories.deleted": "Deleted category: <em>{model->rid}</em>"
+    "TEXT:fap.categories.deleted": "Deleted category: <em>{model->rid}</em>",
+    "TYPE:toolcal.types.added": "Tool calibration > Types: added",
+    "TEXT:toolcal.types.added": "Added tool type: <a href='\\#toolcal/types/{model->_id}'>{model->name}</a>",
+    "TYPE:toolcal.types.edited": "Tool calibration > Types: edited",
+    "TEXT:toolcal.types.edited": "Edited tool type: <a href='\\#toolcal/types/{model->_id}'>{model->name}</a>",
+    "TYPE:toolcal.types.deleted": "Tool calibration > Types: deleted",
+    "TEXT:toolcal.types.deleted": "Deleted tool type: <em>{model->rid}</em>",
+    "TYPE:toolcal.tools.deleted": "Tool calibration > Tools: deleted",
+    "TEXT:toolcal.tools.deleted": "Deleted tool: <em>{model->rid}</em>"
   },
   "pl": true
 }
