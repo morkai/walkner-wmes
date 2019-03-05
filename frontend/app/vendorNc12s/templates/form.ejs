@@ -4,7 +4,7 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body has-lastElementRow">
       <div class="form-group">
-        <label for="<%- idPrefix %>-vendor" class="control-label is-required"><%- t('vendorNc12s', 'PROPERTY:vendor') %></label>
+        <label for="<%- idPrefix %>-vendor" class="control-label is-required"><%- helpers.t('PROPERTY:vendor') %></label>
         <% if (editMode || user.data.vendor) { %>
         <p class="form-control-static"><%= model.vendor || user.data.vendor || '?' %></p>
         <% } else { %>
@@ -12,7 +12,7 @@
         <% } %>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-nc12" class="control-label is-required"><%- t('vendorNc12s', 'PROPERTY:nc12') %></label>
+        <label for="<%- idPrefix %>-nc12" class="control-label is-required"><%- helpers.t('PROPERTY:nc12') %></label>
         <% if (editMode) { %>
         <p class="form-control-static"><%= model.nc12 %></p>
         <% } else { %>
@@ -21,11 +21,11 @@
       </div>
       <div class="row">
         <div class="col-md-8 form-group">
-          <label for="<%- idPrefix %>-value" class="control-label"><%- t('vendorNc12s', 'PROPERTY:value') %></label>
+          <label for="<%- idPrefix %>-value" class="control-label"><%- helpers.t('PROPERTY:value') %></label>
           <input id="<%- idPrefix %>-value" class="form-control" type="text" autocomplete="new-password" name="value">
         </div>
         <div class="col-md-4 form-group">
-          <label for="<%- idPrefix %>-unit" class="control-label"><%- t('vendorNc12s', 'PROPERTY:unit') %></label>
+          <label for="<%- idPrefix %>-unit" class="control-label"><%- helpers.t('PROPERTY:unit') %></label>
           <input id="<%- idPrefix %>-unit" class="form-control" type="text" autocomplete="new-password" name="unit">
         </div>
       </div>

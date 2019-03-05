@@ -1,24 +1,24 @@
 <form class="opinionSurveyScanTemplates-regionEditForm">
   <div class="form-group">
-    <label for="<%- idPrefix %>-question" class="control-label"><%- t('opinionSurveyScanTemplates', 'regionEditForm:question') %></label>
+    <label for="<%- idPrefix %>-question" class="control-label"><%- helpers.t('regionEditForm:question') %></label>
     <input id="<%- idPrefix %>-question" name="question" type="text" autocomplete="new-password" value="<%- region.question %>" autofocus>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-answers" class="control-label"><%- t('opinionSurveyScanTemplates', 'regionEditForm:options') %></label>
+    <label for="<%- idPrefix %>-answers" class="control-label"><%- helpers.t('regionEditForm:options') %></label>
     <input id="<%- idPrefix %>-answers" name="answers" type="text" autocomplete="new-password">
   </div>
   <table class="table table-condensed table-bordered">
     <thead>
     <tr>
-      <th class="is-min"><%- t('opinionSurveyScanTemplates', 'regionEditForm:no') %></th>
-      <th><%- t('opinionSurveyScanTemplates', 'regionEditForm:answer') %></th>
-      <th class="actions"><%- t('opinionSurveyScanTemplates', 'regionEditForm:actions') %></th>
+      <th class="is-min"><%- helpers.t('regionEditForm:no') %></th>
+      <th><%- helpers.t('regionEditForm:answer') %></th>
+      <th class="actions"><%- helpers.t('regionEditForm:actions') %></th>
     </tr>
     </thead>
     <tbody id="<%- idPrefix %>-options"></tbody>
   </table>
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary"><%- t('opinionSurveyScanTemplates', 'regionEditForm:submit') %></button>
-    <button type="button" class="cancel btn btn-link"><%- t('opinionSurveyScanTemplates', 'regionEditForm:cancel') %></button>
+    <button type="submit" class="btn btn-primary"><%- helpers.t('regionEditForm:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- helpers.t('regionEditForm:cancel') %></button>
   </div>
 </form>

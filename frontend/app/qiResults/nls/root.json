@@ -2,30 +2,18 @@
   "root": {
     "BREADCRUMBS:base": "QI",
     "BREADCRUMBS:browse": "Results",
-    "BREADCRUMBS:addForm": "Add",
-    "BREADCRUMBS:editForm": "Edit",
     "BREADCRUMBS:reports:count": "Count report",
     "BREADCRUMBS:reports:okRatio": "% of OK goods report",
     "BREADCRUMBS:reports:nokRatio": "% of NOK goods report",
     "BREADCRUMBS:settings": "Settings",
-    "BREADCRUMBS:ACTION_FORM:delete": "Delete",
 
-    "MSG:LOADING_FAILURE": "Failed to load results.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the result.",
-    "MSG:DELETED": "Result <em>{label}</em> was deleted.",
-    "MSG:jump:404": "Result <em>{rid}</em> doesn't exist.",
     "MSG:comment:failure": "Failed to comment the entry.",
 
-    "PAGE_ACTION:export": "Export results",
     "PAGE_ACTION:add": "Add result",
     "PAGE_ACTION:add:ok": "Add OK result",
     "PAGE_ACTION:add:nok": "NOK result",
-    "PAGE_ACTION:edit": "Edit result",
-    "PAGE_ACTION:delete": "Delete result",
     "PAGE_ACTION:print": "Print NOK notification",
     "PAGE_ACTION:settings": "Settings",
-    "PAGE_ACTION:jump:title": "Jump to result by ID",
-    "PAGE_ACTION:jump:placeholder": "Result ID",
 
     "PANEL:TITLE:details": "Result details",
     "PANEL:TITLE:details:order": "Order",
@@ -36,8 +24,6 @@
     "PANEL:TITLE:details:attachments:ok": "OK attachment",
     "PANEL:TITLE:details:attachments:nok": "NOK attachment",
     "PANEL:TITLE:changes": "Result changes history",
-    "PANEL:TITLE:addForm": "Add result form",
-    "PANEL:TITLE:editForm": "Edit result form",
 
     "PROPERTY:rid": "ID",
     "PROPERTY:creator": "Creator",
@@ -109,10 +95,6 @@
     "LIST:COLUMN:qtyNok": "Qty NOK",
     "LIST:COLUMN:qtyNokInspected": "Qty&nbsp;NOK&nbsp;insp.",
 
-    "FORM:ACTION:add": "Add result",
-    "FORM:ACTION:edit": "Edit result",
-    "FORM:ERROR:addFailure": "Failed to add the result.",
-    "FORM:ERROR:editFailure": "Failed to edit the result.",
     "FORM:ERROR:upload": "Failed to upload the attachments.",
     "FORM:ERROR:orderNo": "Enter a valid order.",
     "FORM:okFile:new": "New OK file",
@@ -121,12 +103,6 @@
     "FORM:nokFile:current": "Current NOK file",
     "FORM:attachments:remove": "remove",
     "FORM:attachments:update": "Select new files only if you want to replace the existing ones.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Result deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete result",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen result?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> result?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the result.",
 
     "correctiveActions:#": "#",
     "correctiveActions:what": "Action",
@@ -137,7 +113,6 @@
     "correctiveActions:empty": "No actions.",
 
     "history:added": "added the result.",
-    "history:editMessage": "Here you can add a new comment. If you also want to change some properties, <a href='{editUrl}'>then use the edit form</a>.",
     "history:submit": "Comment",
     "history:correctiveActions": "{count, plural, one{1 corrective action} other{# corrective actions}}",
 

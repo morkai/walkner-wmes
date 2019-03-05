@@ -24,10 +24,9 @@ define([
       this.xiconfResultCollection = new XiconfResultCollection();
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         programPanelClassName: 'panel-' + this.model.getStatusClassName(),
         linkToResults: this.linkToResults.bind(this),
         model: this.serializeModel()

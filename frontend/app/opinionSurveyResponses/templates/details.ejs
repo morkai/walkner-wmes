@@ -1,33 +1,8 @@
 <div>
   <div class="panel panel-primary">
-    <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details') %></div>
+    <div class="panel-heading"><%- panelTitle %></div>
     <div class="panel-details">
-      <div class="props first">
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:createdAt') %></div>
-          <div class="prop-value"><%- model.createdAt %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:creator') %></div>
-          <div class="prop-value"><%- model.creator %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:survey') %></div>
-          <div class="prop-value"><%= model.survey %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:employer') %></div>
-          <div class="prop-value"><%= model.employer %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:superior') %></div>
-          <div class="prop-value"><%= model.superior %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:division') %></div>
-          <div class="prop-value"><%= model.division %></div>
-        </div>
-      </div>
+      <%- helpers.props(model, ['createdAt', '!creator', 'survey', 'employer', 'superior', 'division']) %>
     </div>
   </div>
   <div class="panel panel-default">

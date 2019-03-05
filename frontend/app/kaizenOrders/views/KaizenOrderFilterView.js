@@ -107,7 +107,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(FilterView.prototype.serialize.call(this), {
+      return _.assign(FilterView.prototype.serialize.call(this), {
         multi: !!window.KAIZEN_MULTI,
         types: kaizenDictionaries.types,
         statuses: kaizenDictionaries.statuses,

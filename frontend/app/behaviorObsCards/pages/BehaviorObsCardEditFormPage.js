@@ -14,7 +14,6 @@ define([
   return EditFormPage.extend({
 
     pageClassName: 'page-max-flex',
-
     baseBreadcrumb: true,
     FormView: BehaviorObsCardFormView,
 

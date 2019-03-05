@@ -2,37 +2,11 @@
   "root": {
     "BREADCRUMBS:base": "Opinion survey",
     "BREADCRUMBS:browse": "Employers",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the employers.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the employer.",
-    "MSG:DELETED": "Employer <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add employer",
-    "PAGE_ACTION:edit": "Edit employer",
-    "PAGE_ACTION:delete": "Delete employer",
-
-    "PANEL:TITLE:details": "Employer's details",
-    "PANEL:TITLE:addForm": "Add employer form",
-    "PANEL:TITLE:editForm": "Edit employer form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:full": "Full name",
     "PROPERTY:short": "Short name",
-    "PROPERTY:color": "Color",
-
-    "FORM:ACTION:add": "Add employer",
-    "FORM:ACTION:edit": "Edit employer",
-    "FORM:ERROR:addFailure": "Failed to add the new employer.",
-    "FORM:ERROR:editFailure": "Failed to edit the employer.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Employer deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete employer",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen employer?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> employer?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the employer."
+    "PROPERTY:color": "Color"
   },
   "pl": true
 }

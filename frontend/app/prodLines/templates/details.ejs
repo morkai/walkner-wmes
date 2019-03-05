@@ -1,29 +1,12 @@
 <div class="panel panel-primary">
-  <div class="panel-heading">
-    <%- t('prodLines', 'PANEL:TITLE:details') %>
-  </div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('prodLines', 'PROPERTY:workCenter') %></div>
-        <div class="prop-value"><%- orgUnitPath || '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('prodLines', 'PROPERTY:_id') %></div>
-        <div class="prop-value"><%= model._id %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('prodLines', 'PROPERTY:description') %></div>
-        <div class="prop-value"><%= model.description || '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('prodLines', 'PROPERTY:inventoryNo') %></div>
-        <div class="prop-value"><%= model.inventoryNo || '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('prodLines', 'PROPERTY:deactivatedAt') %></div>
-        <div class="prop-value"><%= model.deactivatedAt ? time.format(model.deactivatedAt, 'LL') : '-' %></div>
-      </div>
-    </div>
+    <%- helpers.props(model, [
+      {id: 'workCenter', value: model.orgUnitPath},
+      '_id',
+      'description',
+      'inventoryNo',
+      {id: 'deactivatedAt', value: model.deactivatedAt ? time.format(model.deactivatedAt, 'LL') : ''}
+    ]) %>
   </div>
 </div>

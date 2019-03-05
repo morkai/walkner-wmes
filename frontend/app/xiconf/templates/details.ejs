@@ -3,22 +3,22 @@
     <div class="panel-details">
       <div class="props first">
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:srcId') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:srcId') %></div>
           <div class="prop-value"><%- model.srcId %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:srcTitle') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:srcTitle') %></div>
           <div class="prop-value"><%- model.srcTitle || '-' %></div>
         </div>
         <% if (model.srcIp) { %>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:srcIp') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:srcIp') %></div>
           <div class="prop-value"><%- model.srcIp %></div>
         </div>
         <% } %>
         <% if (model.srcUuid) { %>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:srcUuid') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:srcUuid') %></div>
           <div class="prop-value"><%- model.srcUuid %></div>
         </div>
         <% } %>
@@ -27,37 +27,37 @@
   </div>
   <div class="panel panel-primary xiconf-details-order">
     <div class="panel-heading">
-      <%- t('xiconf', 'PANEL:TITLE:details:order') %>
+      <%- helpers.t('PANEL:TITLE:details:order') %>
     </div>
     <div class="panel-details">
       <div class="props first">
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:no') %></div>
-          <div class="prop-value" title="<%- t('xiconf', 'details:showOrderSummaryLink') %>"><a href="#xiconf/orders/<%- model.orderNo %>"><%- model.orderNo %></a></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:no') %></div>
+          <div class="prop-value" title="<%- helpers.t('details:showOrderSummaryLink') %>"><a href="#xiconf/orders/<%- model.orderNo %>"><%- model.orderNo %></a></div>
         </div>
         <% if (model.order) { %>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:quantity') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:quantity') %></div>
           <div class="prop-value"><%- model.order.quantity %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:successCounter') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:successCounter') %></div>
           <div class="prop-value"><%- model.order.successCounter %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:failureCounter') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:failureCounter') %></div>
           <div class="prop-value"><%- model.order.failureCounter %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:startedAt') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:startedAt') %></div>
           <div class="prop-value"><%- time.format(model.order.startedAt, 'LL, LTS') %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:finishedAt') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:finishedAt') %></div>
           <div class="prop-value"><%- time.format(model.order.finishedAt, 'LL, LTS') %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:duration') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:duration') %></div>
           <div class="prop-value"><%- time.toString(model.order.duration / 1000, false, true) %></div>
         </div>
         <% } %>
@@ -66,77 +66,77 @@
   </div>
   <div class="panel panel-<%- model.cancelled ? 'default' : model.result === 'success'  ? 'success' : 'danger' %> xiconf-details-entry">
     <div class="panel-heading">
-      <%- t('xiconf', 'PANEL:TITLE:details:entry') %>
+      <%- helpers.t('PANEL:TITLE:details:entry') %>
     </div>
     <div class="panel-details">
       <div class="props first">
         <% if (!_.isEmpty(model.prodLine)) { %>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:prodLine') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:prodLine') %></div>
           <div class="prop-value"><%- model.prodLine %></div>
         </div>
         <% } %>
         <% if (!_.isEmpty(model.serviceTag)) { %>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:serviceTag') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:serviceTag') %></div>
           <div class="prop-value"><%- model.serviceTag %></div>
         </div>
         <% } %>
         <% if (!_.isEmpty(model.nc12)) { %>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:nc12') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:nc12') %></div>
           <div class="prop-value"><%- model.nc12 %></div>
         </div>
         <% } %>
         <% if (!_.isEmpty(model.gprsNc12)) { %>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:gprsNc12') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:gprsNc12') %></div>
           <div class="prop-value"><%- model.gprsNc12 %></div>
         </div>
         <% } %>
         <% if (!_.isEmpty(model.program) || model.programName) { %>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:programName') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:programName') %></div>
           <div class="prop-value"><%= model.program ? model.program.name : (model.programName || '-') %></div>
         </div>
         <% } %>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:counter') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:counter') %></div>
           <div class="prop-value"><%- model.counter %><%- model.order ? ('/' + model.order.quantity) : '' %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:startedAt') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:startedAt') %></div>
           <div class="prop-value"><%- time.format(model.startedAt, 'LL, LTS') %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:finishedAt') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:finishedAt') %></div>
           <div class="prop-value"><%- time.format(model.finishedAt, 'LL, LTS') %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:duration') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:duration') %></div>
           <div class="prop-value"><%- time.toString(model.duration / 1000, false, true) %></div>
         </div>
         <% if (!_.isEmpty(model.errorCode)) { %>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:errorCode') %></div>
-          <div class="prop-value"><%- t('xiconf', 'error:' + model.errorCode) %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:errorCode') %></div>
+          <div class="prop-value"><%- helpers.t('error:' + model.errorCode) %></div>
         </div>
         <% } %>
         <% if (!_.isEmpty(model.exception)) { %>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:exception') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:exception') %></div>
           <div class="prop-value"><%= model.exception %></div>
         </div>
         <% } %>
         <% if (!_.isEmpty(model.workflowPath)) { %>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:workflowFile') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:workflowFile') %></div>
           <div class="prop-value"><%= model.workflowPath %></div>
         </div>
         <% } %>
         <% if (!_.isEmpty(model.featurePath)) { %>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconf', 'PROPERTY:featureFile') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:featureFile') %></div>
           <div class="prop-value"><%= model.featurePath %></div>
         </div>
         <% } %>
@@ -146,37 +146,37 @@
   <div class="xiconf-tabs">
     <ul class="nav nav-tabs">
       <% if (!_.isEmpty(model.log)) { %>
-      <li data-tab="log"><a href="#<%- idPrefix %>-log" data-toggle="tab"><%- t('xiconf', 'tab:log') %></a></li>
+      <li data-tab="log"><a href="#<%- idPrefix %>-log" data-toggle="tab"><%- helpers.t('tab:log') %></a></li>
       <% } %>
       <% if (!_.isEmpty(model.output)) { %>
-      <li data-tab="output"><a href="#<%- idPrefix %>-output" data-toggle="tab"><%- t('xiconf', 'tab:output') %></a></li>
+      <li data-tab="output"><a href="#<%- idPrefix %>-output" data-toggle="tab"><%- helpers.t('tab:output') %></a></li>
       <% } %>
       <% if (!_.isEmpty(model.gprsOrderFile)) { %>
-      <li data-tab="gprsOrderFile"><a href="#<%- idPrefix %>-gprsOrderFile" data-toggle="tab"><%- t('xiconf', 'tab:gprsOrderFile') %></a></li>
+      <li data-tab="gprsOrderFile"><a href="#<%- idPrefix %>-gprsOrderFile" data-toggle="tab"><%- helpers.t('tab:gprsOrderFile') %></a></li>
       <% } %>
       <% if (!_.isEmpty(model.workflow)) { %>
-      <li data-tab="workflow"><a href="#<%- idPrefix %>-workflow" data-toggle="tab"><%- t('xiconf', 'tab:workflow') %></a></li>
+      <li data-tab="workflow"><a href="#<%- idPrefix %>-workflow" data-toggle="tab"><%- helpers.t('tab:workflow') %></a></li>
       <% } %>
       <% if (!_.isEmpty(model.feature)) { %>
-      <li data-tab="feature" data-highlight><a href="#<%- idPrefix %>-feature" data-toggle="tab"><%- t('xiconf', 'tab:feature') %></a></li>
+      <li data-tab="feature" data-highlight><a href="#<%- idPrefix %>-feature" data-toggle="tab"><%- helpers.t('tab:feature') %></a></li>
       <% } %>
       <% if (!_.isEmpty(model.leds)) { %>
-      <li data-tab="leds"><a href="#<%- idPrefix %>-leds" data-toggle="tab"><%- t('xiconf', 'tab:leds') %></a></li>
+      <li data-tab="leds"><a href="#<%- idPrefix %>-leds" data-toggle="tab"><%- helpers.t('tab:leds') %></a></li>
       <% } %>
       <% if (!_.isEmpty(model.hidLamps)) { %>
-      <li data-tab="hidLamps"><a href="#<%- idPrefix %>-hidLamps" data-toggle="tab"><%- t('xiconf', 'tab:hidLamps') %></a></li>
+      <li data-tab="hidLamps"><a href="#<%- idPrefix %>-hidLamps" data-toggle="tab"><%- helpers.t('tab:hidLamps') %></a></li>
       <% } %>
       <% if (!_.isEmpty(model.gprsInputFile)) { %>
-      <li data-tab="gprsInputFile" data-highlight><a href="#<%- idPrefix %>-gprsInputFile" data-toggle="tab"><%- t('xiconf', 'tab:gprsInputFile') %></a></li>
+      <li data-tab="gprsInputFile" data-highlight><a href="#<%- idPrefix %>-gprsInputFile" data-toggle="tab"><%- helpers.t('tab:gprsInputFile') %></a></li>
       <% } %>
       <% if (!_.isEmpty(model.gprsOutputFile)) { %>
-      <li data-tab="gprsOutputFile" data-highlight><a href="#<%- idPrefix %>-gprsOutputFile" data-toggle="tab"><%- t('xiconf', 'tab:gprsOutputFile') %></a></li>
+      <li data-tab="gprsOutputFile" data-highlight><a href="#<%- idPrefix %>-gprsOutputFile" data-toggle="tab"><%- helpers.t('tab:gprsOutputFile') %></a></li>
       <% } %>
       <% if (!_.isEmpty(model.metrics) && model.metrics.activeProbes) { %>
-      <li data-tab="wiring"><a href="#<%- idPrefix %>-wiring" data-toggle="tab"><%- t('xiconf', 'tab:wiring') %></a></li>
+      <li data-tab="wiring"><a href="#<%- idPrefix %>-wiring" data-toggle="tab"><%- helpers.t('tab:wiring') %></a></li>
       <% } %>
       <% if (!_.isEmpty(model.program)) { %>
-      <li data-tab="program"><a href="#<%- idPrefix %>-program" data-toggle="tab"><%- t('xiconf', 'tab:program') %></a></li>
+      <li data-tab="program"><a href="#<%- idPrefix %>-program" data-toggle="tab"><%- helpers.t('tab:program') %></a></li>
       <% } %>
     </ul>
     <div class="tab-content">

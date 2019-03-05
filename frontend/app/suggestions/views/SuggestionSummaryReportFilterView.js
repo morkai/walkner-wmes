@@ -35,10 +35,9 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         showProductFamily: !!this.options.productFamily
       };
     },

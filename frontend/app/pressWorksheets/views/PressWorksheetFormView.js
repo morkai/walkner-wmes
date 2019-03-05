@@ -310,7 +310,7 @@ define([
 
       this.lastOrderNo = -1;
 
-      this.$id('ordersTable').html(renderOrdersTable({
+      this.$id('ordersTable').html(this.renderPartial(renderOrdersTable, {
         rowspan: this.lossReasons.length || this.downtimeReasons.length ? 2 : 0,
         lossReasons: this.lossReasons,
         downtimeReasons: this.downtimeReasons
@@ -1211,7 +1211,8 @@ define([
     {
       if (e.altKey && e.keyCode === 13)
       {
-        this.$('.pressWorksheets-form-order:last-child')
+        this.$('.pressWorksheets-form-order')
+          .last()
           .find('.pressWorksheets-form-part')
           .select2('focus');
       }

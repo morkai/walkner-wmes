@@ -44,7 +44,7 @@ define([
 
     getFormViewOptions: function()
     {
-      return _.extend(EditFormPage.prototype.getFormViewOptions.call(this), {
+      return _.assign(EditFormPage.prototype.getFormViewOptions.call(this), {
         fixing: this.options.fixing
       });
     },

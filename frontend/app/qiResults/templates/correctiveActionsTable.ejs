@@ -1,11 +1,11 @@
 <table class="table table-condensed <%- bordered ? 'table-bordered table-hover' : '' %>">
   <thead>
   <tr>
-    <th class="is-min"><%- t('qiResults', 'correctiveActions:#') %></th>
-    <th class="is-min"><%- t('qiResults', 'correctiveActions:status') %></th>
-    <th class="is-min"><%- t('qiResults', 'correctiveActions:when') %></th>
-    <th><%- t('qiResults', 'correctiveActions:who') %></th>
-    <th><%- t('qiResults', 'correctiveActions:what') %></th>
+    <th class="is-min"><%- helpers.t('correctiveActions:#') %></th>
+    <th class="is-min"><%- helpers.t('correctiveActions:status') %></th>
+    <th class="is-min"><%- helpers.t('correctiveActions:when') %></th>
+    <th><%- helpers.t('correctiveActions:who') %></th>
+    <th><%- helpers.t('correctiveActions:what') %></th>
   </tr>
   </thead>
   <tbody>
@@ -14,7 +14,7 @@
     <td class="is-min"><%- i + 1 %></td>
     <td class="is-min"><%= action.status %></td>
     <td class="is-min"><%= action.when %></td>
-    <td class="is-min"><%= action.who %></td>
+    <td class="is-min qiResults-correctiveActions-who"><%= action.who %></td>
     <td class="text-lines"><%= action.what %></td>
   </tr>
   <% }) %>

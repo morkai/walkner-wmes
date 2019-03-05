@@ -1,8 +1,6 @@
 {
   "BREADCRUMBS:browse": "Żądania zmian danych produkcyjnych",
 
-  "MSG:LOADING_FAILURE": "Ładowanie danych nie powiodło się.",
-
   "LIST:ACTION:confirm": "Potwierdź żądanie zmiany",
 
   "PROPERTY:status": "Status",
@@ -20,7 +18,7 @@
   "status:new": "Nowe",
   "status:old": "Zaakceptowane i odrzucone",
 
-  "filter:submit": "Filtruj żądania",
+  "filter:submit": "Filtruj",
 
   "operation:add:shift": "Dodanie zmiany: {extra}",
   "operation:add:order": "Dodanie zlecenia: {extra}",

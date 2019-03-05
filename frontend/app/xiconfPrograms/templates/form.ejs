@@ -4,20 +4,20 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:name') %></label>
+        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" maxlength="100" required autofocus>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-prodLines" class="control-label"><%- t('xiconfPrograms', 'PROPERTY:prodLines') %></label>
-        <input id="<%- idPrefix %>-prodLines" class="form-control" type="text" autocomplete="new-password" name="prodLines" maxlength="200" placeholder="<%- t('xiconfPrograms', 'PROPERTY:prodLines:all') %>">
+        <label for="<%- idPrefix %>-prodLines" class="control-label"><%- helpers.t('PROPERTY:prodLines') %></label>
+        <input id="<%- idPrefix %>-prodLines" class="form-control" type="text" autocomplete="new-password" name="prodLines" maxlength="200" placeholder="<%- helpers.t('PROPERTY:prodLines:all') %>">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-type" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:type') %></label>
+        <label for="<%- idPrefix %>-type" class="control-label is-required"><%- helpers.t('PROPERTY:type') %></label>
         <% programTypes.forEach(function(programType) { %>
         <div class="radio">
           <label>
             <input id="<%- idPrefix %>-type-<%- programType %>" name="type" type="radio" value="<%- programType %>" required>
-            <%- t('xiconfPrograms', 'type:' + programType) %>
+            <%- helpers.t('type:' + programType) %>
           </label>
         </div>
         <% }) %>
@@ -25,12 +25,12 @@
       <div id="<%- idPrefix %>-steps" class="xiconfPrograms-form-steps"></div>
       <div class="form-group">
         <select id="<%- idPrefix %>-stepType" class="form-control xiconfPrograms-form-stepType">
-          <option value="" disabled selected><%- t('xiconfPrograms', 'form:steps:placeholder') %></option>
+          <option value="" disabled selected><%- helpers.t('form:steps:placeholder') %></option>
           <% stepTypes.forEach(function(stepType) { %>
-          <option value="<%- stepType %>"><%- t('xiconfPrograms', 'step:' + stepType) %></option>
+          <option value="<%- stepType %>"><%- helpers.t('step:' + stepType) %></option>
           <% }) %>
         </select>
-        <button id="<%- idPrefix %>-addStep" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- t('xiconfPrograms', 'form:steps:add') %></span></button>
+        <button id="<%- idPrefix %>-addStep" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- helpers.t('form:steps:add') %></span></button>
       </div>
     </div>
     <div class="panel-footer">

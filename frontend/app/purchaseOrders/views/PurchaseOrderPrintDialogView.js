@@ -50,10 +50,9 @@ define([
       this.hideMessage();
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         action: '/purchaseOrders/' + this.model.get('orderId') + '/prints',
         printers: this.options.printers,
         barcodes: labelConfigurations.getBarcodes(),

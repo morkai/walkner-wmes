@@ -1,31 +1,13 @@
 {
   "BREADCRUMBS:base": "Obserwacje zachowań",
   "BREADCRUMBS:browse": "Karty",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
   "BREADCRUMBS:reports:count": "Ilość obserwacji",
-
-  "MSG:LOADING_FAILURE": "Ładowanie kart obserwacji nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie karty obserwacji nie powiodło się.",
-  "MSG:DELETED": "Karta obserwacji <em>{label}</em> została usunięta.",
-  "MSG:jump:404": "Nie znaleziono karty obserwacji o ID <em>{rid}</em>.",
-
-  "PAGE_ACTION:add": "Dodaj kartę",
-  "PAGE_ACTION:edit": "Edytuj kartę",
-  "PAGE_ACTION:delete": "Usuń kartę",
-  "PAGE_ACTION:export": "Eksportuj karty",
-  "PAGE_ACTION:jump:title": "Skocz do karty po ID",
-  "PAGE_ACTION:jump:placeholder": "ID karty",
-  "PAGE_ACTION:print": "Wersja do druku",
 
   "PANEL:TITLE:details": "Szczegóły karty obserwacji",
   "PANEL:TITLE:where": "Miejsce obserwacji",
   "PANEL:TITLE:observations": "Obserwacje zachowań",
   "PANEL:TITLE:risks": "Ryzykowne warunki w miejscu pracy",
   "PANEL:TITLE:difficulties": "Trudności zmian",
-  "PANEL:TITLE:addForm": "Formularz dodawania karty obserwacji",
-  "PANEL:TITLE:editForm": "Formularz edycji karty obserwacji",
   "PANEL:ACTION:nearMiss": "Przypisane ZPW:",
   "PANEL:ACTION:suggestion": "Przypisane usprawnienie:",
 
@@ -65,10 +47,8 @@
   "PROPERTY:company": "Firma",
   "PROPERTY:companyName": "Firma",
 
-  "FORM:ACTION:add": "Dodaj kartę obserwacji zachowań",
-  "FORM:ACTION:edit": "Zapisz kartę obserwacji zachowań",
-  "FORM:ERROR:addFailure": "Nie udało się dodać karty obserwacji.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować karty obserwacji.",
+  "FORM:ACTION:add": "Dodaj kartę",
+  "FORM:ACTION:edit": "Zapisz kartę",
   "FORM:ERROR:empty": "Opisz przynajmniej jedną obserwację lub ryzykowne warunki w pracy.",
   "FORM:MSG:nearMiss:add": "Jeżeli stwierdziłeś ryzykowne warunki w miejscu prowadzenia obserwacji zarejestruj je w bazie ZPW - <a href='#kaizenOrders;add'>Zgłoś nowe ZPW</a> lub <a href=# role=rid data-kind=nearMiss>przypisz istniejące</a>!",
   "FORM:MSG:nearMiss:edit": "Stwierdzone ryzykowne warunki w miejscu prowadzenia obserwacji zostały zarejestrowane w bazie ZPW - <a href='#kaizenOrders/{rid}'>zgłoszenie #{rid}</a>! (<a href=# role=rid data-kind=nearMiss>zmień</a>)",
@@ -85,12 +65,6 @@
   "FORM:ridEditor:cancel": "Anuluj",
   "FORM:ridEditor:notFound": "Dane zgłoszenie nie istnieje!",
   "FORM:ridEditor:failure": "Nie udało się sprawdzić zgłoszenia.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia karty obserwacji",
-  "ACTION_FORM:BUTTON:delete": "Usuń kartę obserwacji",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną kartę obserwacji zachowań?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć kartę obserwacji zachowań <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć karty obserwacji.",
 
   "filter:user:mine": "Moje",
   "filter:user:observer": "Obserwator",

@@ -4,11 +4,6 @@
   <% include historyItem.ejs %>
   <% }) %>
   <form class="pfepEntries-history-form">
-    <% if (canEdit) { %>
-    <div class="message message-inline message-info">
-      <p><%- t('pfepEntries', 'history:editMessage', {editUrl: editUrl}) %></p>
-    </div>
-    <% } %>
     <div class="form-group">
       <label for="<%- idPrefix %>-comment" class="control-label"><%- t('pfepEntries', 'PROPERTY:comment') %></label>
       <textarea id="<%- idPrefix %>-comment" class="form-control" name="comment" rows="3"></textarea>

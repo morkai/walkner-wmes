@@ -2,9 +2,9 @@
   <div class="panel panel-primary kaizenOrders-details-props">
     <div class="panel-heading">
       <% if (multi) { %>
-      <%= model.subject || t('kaizenOrders', 'PANEL:TITLE:details') %>
+      <%= model.subject || panelTitle %>
       <% } else { %>
-      <%- t('kaizenOrders', 'PANEL:TITLE:details') %>
+      <%- panelTitle %>
       <% } %>
     </div>
     <div class="panel-details <%- model.changed.all ? 'is-changed' : '' %>">
@@ -13,19 +13,19 @@
           <div class="props first">
             <div class="prop">
               <% if (multi) { %>
-              <div class="prop-name <%- model.changed.types ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:types') %></div>
+              <div class="prop-name <%- model.changed.types ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:types') %></div>
               <div class="prop-value"><%- model.types %></div>
               <% } else { %>
-              <div class="prop-name <%- model.changed.subject ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:subject') %></div>
+              <div class="prop-name <%- model.changed.subject ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:subject') %></div>
               <div class="prop-value"><%= model.subject %></div>
               <% } %>
             </div>
             <div class="prop">
-              <div class="prop-name <%- model.changed.status ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:status') %></div>
+              <div class="prop-name <%- model.changed.status ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:status') %></div>
               <div class="prop-value"><%- model.status %></div>
             </div>
             <div class="prop">
-              <div class="prop-name <%- model.changed.section ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:section') %></div>
+              <div class="prop-name <%- model.changed.section ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:section') %></div>
               <div class="prop-value"><%- model.section %></div>
             </div>
           </div>
@@ -33,15 +33,15 @@
         <div class="col-md-4">
           <div class="props">
             <div class="prop">
-              <div class="prop-name"><%- t('kaizenOrders', 'PROPERTY:creator') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:creator') %></div>
               <div class="prop-value"><%- model.creator %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('kaizenOrders', 'PROPERTY:updater') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:updater') %></div>
               <div class="prop-value"><%- model.updater %></div>
             </div>
             <div class="prop">
-              <div class="prop-name <%- model.changed.confirmer ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:confirmer') %></div>
+              <div class="prop-name <%- model.changed.confirmer ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:confirmer') %></div>
               <div class="prop-value"><%- model.confirmer %></div>
             </div>
           </div>
@@ -49,15 +49,15 @@
         <div class="col-md-4">
           <div class="props">
             <div class="prop">
-              <div class="prop-name"><%- t('kaizenOrders', 'PROPERTY:createdAt') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:createdAt') %></div>
               <div class="prop-value"><%- model.createdAt %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('kaizenOrders', 'PROPERTY:updatedAt') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:updatedAt') %></div>
               <div class="prop-value"><%- model.updatedAt %></div>
             </div>
             <div class="prop">
-              <div class="prop-name"><%- t('kaizenOrders', 'PROPERTY:confirmedAt') %></div>
+              <div class="prop-name"><%- helpers.t('PROPERTY:confirmedAt') %></div>
               <div class="prop-value"><%- model.confirmedAt || '-' %></div>
             </div>
           </div>
@@ -78,8 +78,8 @@
   </div>
   <div class="kaizenOrders-details-tabs">
     <ul class="nav nav-tabs">
-      <li class="active"><a href="#<%- idPrefix %>-attachments" data-toggle="tab" data-tab="attachments"><%- t('kaizenOrders', 'tab:attachments') %></a></li>
-      <li><a href="#<%- idPrefix %>-observers" data-toggle="tab" data-tab="observers"><%- t('kaizenOrders', 'tab:observers') %></a></li>
+      <li class="active"><a href="#<%- idPrefix %>-attachments" data-toggle="tab" data-tab="attachments"><%- helpers.t('tab:attachments') %></a></li>
+      <li><a href="#<%- idPrefix %>-observers" data-toggle="tab" data-tab="observers"><%- helpers.t('tab:observers') %></a></li>
     </ul>
     <div class="tab-content">
       <div class="tab-pane active" id="<%- idPrefix %>-attachments"><% include attachments.ejs %></div>

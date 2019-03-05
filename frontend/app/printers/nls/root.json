@@ -1,35 +1,11 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Printers",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:DELETED": "Printer <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add printer",
-    "PAGE_ACTION:edit": "Edit printer",
-    "PAGE_ACTION:delete": "Delete printer",
-
-    "PANEL:TITLE:details": "Printer's details",
-    "PANEL:TITLE:addForm": "Add printer form",
-    "PANEL:TITLE:editForm": "Edit printer form",
 
     "PROPERTY:name": "Name",
     "PROPERTY:label": "Label",
     "PROPERTY:tags": "Tags",
     "PROPERTY:special": "Special settings",
-
-    "FORM:ACTION:add": "Add printer",
-    "FORM:ACTION:edit": "Edit printer",
-    "FORM:ERROR:addFailure": "Failed to add the new printer.",
-    "FORM:ERROR:editFailure": "Failed to edit the printer.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Printer deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete printer",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen printer?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> printer?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the printer.",
 
     "menu:header": "Printers",
     "menu:browser": "In the browser...",
@@ -42,7 +18,7 @@
     "tags:qi": "QI",
     "tags:planning": "Daily plans",
     "tags:hourlyPlans": "Hourly plans",
-    "tags:paintShop": "Paint-shop",
+    "tags:paintShop": "Paint shop",
     "tags:fte/production": "FTE (production)",
     "tags:fte/warehouse": " FTE (warehouse)",
     "tags:fte/other": "FTE (other)",

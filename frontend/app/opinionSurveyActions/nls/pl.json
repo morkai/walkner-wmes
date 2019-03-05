@@ -1,25 +1,6 @@
 {
   "BREADCRUMBS:base": "Badanie Opinia",
   "BREADCRUMBS:browse": "Akcje naprawcze",
-  "BREADCRUMBS:details": "Akcja naprawcza",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie akcji naprawczych nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie akcji naprawczej nie powiodło się.",
-  "MSG:DELETED": "Akcja naprawcza została usunięta.",
-  "MSG:jump:404": "Nie znaleziono akcji naprawczej o ID <em>{rid}</em>.",
-
-  "PAGE_ACTION:add": "Dodaj akcję",
-  "PAGE_ACTION:edit": "Edytuj akcję",
-  "PAGE_ACTION:delete": "Usuń akcję",
-  "PAGE_ACTION:jump:title": "Skocz do akcji po ID",
-  "PAGE_ACTION:jump:placeholder": "ID akcji",
-
-  "PANEL:TITLE:details": "Szczegóły akcji naprawczej",
-  "PANEL:TITLE:addForm": "Formularz dodawania akcji naprawczej",
-  "PANEL:TITLE:editForm": "Formularz edycji akcji naprawczej",
 
   "PROPERTY:rid": "ID",
   "PROPERTY:creator": "Dodana przez",
@@ -38,19 +19,8 @@
   "PROPERTY:superior": "Przełożony",
   "PROPERTY:status": "Status",
 
-  "FORM:ACTION:add": "Dodaj akcję naprawczą",
-  "FORM:ACTION:edit": "Edytuj akcję naprawczą",
-  "FORM:ERROR:addFailure": "Nie udało się dodać akcji naprawczej.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować akcji naprawczej.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia akcji naprawczej",
-  "ACTION_FORM:BUTTON:delete": "Usuń akcję naprawczą",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną akcję naprawczą?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną akcję naprawczą?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć akcji naprawczej.",
-
   "filter:participants": "Właściciel/Przełożony",
-  "filter:submit": "Filtruj akcje",
+  "filter:submit": "Filtruj",
 
   "status:planned": "Zaplanowana",
   "status:progress": "W realizacji",

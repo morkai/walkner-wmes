@@ -1,20 +1,5 @@
 {
   "BREADCRUMBS:browse": "Wydziały",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie wydziałów nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie wydziału nie powiodło się.",
-  "MSG:DELETED": "Wydział <em>{label}</em> zostało usunięte.",
-
-  "PAGE_ACTION:add": "Dodaj wydział",
-  "PAGE_ACTION:edit": "Edytuj wydział",
-  "PAGE_ACTION:delete": "Usuń wydział",
-
-  "PANEL:TITLE:details": "Szczegóły wydziału",
-  "PANEL:TITLE:addForm": "Formularz dodawania wydziału",
-  "PANEL:TITLE:editForm": "Formularz edycji wydziału",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:description": "Opis",
@@ -25,15 +10,5 @@
   "TYPE:dist": "Dystrybucja",
   "TYPE:other": "Inny",
 
-  "FORM:ACTION:add": "Dodaj wydział",
-  "FORM:ACTION:edit": "Edytuj wydział",
-  "FORM:ERROR:addFailure": "Nie udało się dodać wydziału.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować wydziału.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia wydziału",
-  "ACTION_FORM:BUTTON:delete": "Usuń wydział",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany wydział?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć wydział <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć wydziału.",
   "ACTION_FORM:delete:NOT_EMPTY": "Wydział nie jest pusty."
 }

@@ -2,8 +2,6 @@
   "root": {
     "BREADCRUMBS:browse": "Invalid orders",
 
-    "MSG:LOADING_FAILURE": "Failed to load the invalid orders.",
-
     "PAGE_ACTION:check": "Check orders",
     "PAGE_ACTION:notify": "Notify responsible persons",
     "PAGE_ACTION:settings": "Settings",
@@ -46,7 +44,7 @@
     "solution:STATUS": "CNF, DLV or TECO.",
     "solution:OPERATIONS": "Operations showed up.",
 
-    "filter:submit": "Filter orders",
+    "filter:submit": "Filter",
 
     "LIST:ACTION:select": "Mark for notification",
     "LIST:ACTION:ignore": "Ignore"

@@ -1,10 +1,10 @@
 <div class="col-md-<%- nearMissColumnSize %>">
   <div class="panel panel-danger">
-    <div class="panel-heading"><%- t('kaizenOrders', 'type:nearMiss') %></div>
+    <div class="panel-heading"><%- helpers.t('type:nearMiss') %></div>
     <div class="panel-details <%- model.changed.all ? 'is-changed' : '' %>">
       <div class="props first">
         <div class="prop">
-          <div class="prop-name <%- model.changed.nearMissOwners ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:nearMissOwners') %></div>
+          <div class="prop-name <%- model.changed.nearMissOwners ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:nearMissOwners') %></div>
           <div class="prop-value">
             <ul>
               <% model.nearMissOwners.forEach(function(owner) { %>
@@ -14,15 +14,15 @@
           </div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.eventDate ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:eventDate') %></div>
+          <div class="prop-name <%- model.changed.eventDate ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:eventDate') %></div>
           <div class="prop-value"><%- model.eventDate || '-' %></div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.area ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:area') %></div>
+          <div class="prop-name <%- model.changed.area ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:area') %></div>
           <div class="prop-value"><%- model.area || '-' %></div>
         </div>
         <div class="prop" data-dictionary="causes" data-property="cause">
-          <div class="prop-name <%- model.changed.cause || model.changed.causeText ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:causeText') %> <i class="fa fa-info-circle"></i></div>
+          <div class="prop-name <%- model.changed.cause || model.changed.causeText ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:causeText') %> <i class="fa fa-info-circle"></i></div>
           <div class="prop-value">
             <% if (!model.cause && !model.causeText) { %>
             -
@@ -37,23 +37,23 @@
           </div>
         </div>
         <div class="prop" data-dictionary="risks" data-property="risk">
-          <div class="prop-name <%- model.changed.risk ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:risk') %> <i class="fa fa-info-circle"></i></div>
+          <div class="prop-name <%- model.changed.risk ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:risk') %> <i class="fa fa-info-circle"></i></div>
           <div class="prop-value"><%- model.risk || '-' %></div>
         </div>
         <div class="prop" data-dictionary="categories" data-property="nearMissCategory">
-          <div class="prop-name <%- model.changed.nearMissCategory ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:nearMissCategory') %> <i class="fa fa-info-circle"></i></div>
+          <div class="prop-name <%- model.changed.nearMissCategory ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:nearMissCategory') %> <i class="fa fa-info-circle"></i></div>
           <div class="prop-value"><%- model.nearMissCategory || '-' %></div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.description ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:description') %></div>
+          <div class="prop-name <%- model.changed.description ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:description') %></div>
           <div class="prop-value text-lines"><%= model.description || '-' %></div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.correctiveMeasures ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:correctiveMeasures') %></div>
+          <div class="prop-name <%- model.changed.correctiveMeasures ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:correctiveMeasures') %></div>
           <div class="prop-value text-lines"><%= model.correctiveMeasures || '-' %></div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.preventiveMeasures ? 'is-changed' : '' %>"><%- t('kaizenOrders', 'PROPERTY:preventiveMeasures') %></div>
+          <div class="prop-name <%- model.changed.preventiveMeasures ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:preventiveMeasures') %></div>
           <div class="prop-value text-lines"><%= model.preventiveMeasures || '-' %></div>
         </div>
       </div>

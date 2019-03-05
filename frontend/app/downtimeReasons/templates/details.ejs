@@ -1,71 +1,35 @@
 <div class="panel panel-primary">
-  <div class="panel-heading"><%- t('downtimeReasons', 'PANEL:TITLE:details') %></div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:_id') %></div>
-        <div class="prop-value"><%= model._id %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:label') %></div>
-        <div class="prop-value"><%= model.label %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:type') %></div>
-        <div class="prop-value"><%= model.type %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:subdivisionTypes') %></div>
-        <div class="prop-value"><%= model.subdivisionTypes %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:defaultAor') %></div>
-        <div class="prop-value"><%- model.defaultAor %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:aors') %></div>
-        <div class="prop-value">
-          <% if (!model.aors.length) { %>
-          <%- t('downtimeReasons', 'aors:all') %>
-          <% } else if (model.aors.length === 1) { %>
-          <%= model.aors[0] %>
-          <% } else { %>
-          <ul>
-            <% model.aors.forEach(function(aor) { %>
-            <li><%= aor %></li>
-            <% }) %>
-          </ul>
-          <% } %>
-        </div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:opticsPosition') %></div>
-        <div class="prop-value"><%- model.opticsPosition %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:pressPosition') %></div>
-        <div class="prop-value"><%- model.pressPosition %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:auto') %></div>
-        <div class="prop-value"><%- model.auto %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:scheduled') %></div>
-        <div class="prop-value"><%- model.scheduled %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:color') %></div>
-        <div class="prop-value"><%- model.color %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:refColor') %></div>
-        <div class="prop-value"><%- model.refColor %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('downtimeReasons', 'PROPERTY:refValue') %></div>
-        <div class="prop-value"><%- model.refValue %></div>
-      </div>
-    </div>
+    <%- helpers.props(model, [
+      '_id',
+      'label',
+      'type',
+      'subdivisionTypes',
+      'defaultAor',
+      {
+        id: '!aors',
+        value: function(aors)
+        {
+          if (!aors.length)
+          {
+            return helpers.t('aors:all');
+          }
+
+          if (aors.length === 1)
+          {
+            return _.escape(aors[0]);
+          }
+
+          return '<ul>' + aors.map(function(aor) { return '<li>' + _.escape(aor); }) + '</ul>';
+        }
+      },
+      'opticsPosition',
+      'pressPosition',
+      'auto',
+      '!color',
+      '!refColor',
+      'refValue'
+    ]) %>
   </div>
 </div>

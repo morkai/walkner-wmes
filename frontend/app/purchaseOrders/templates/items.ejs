@@ -1,40 +1,40 @@
 <div class="panel panel-default pos-items">
-  <div class="panel-heading is-with-actions"><%- t('purchaseOrders', 'panel:items') %></div>
+  <div class="panel-heading is-with-actions"><%- helpers.t('panel:items') %></div>
   <% if (toolbarVisible) { %>
   <div class="btn-toolbar">
     <div id="<%- idPrefix %>-statuses" class="btn-group" data-toggle="buttons">
       <label class="btn btn-default">
-        <input type="radio" name="status" value="waiting"> <i class="fa fa-unlock-alt"></i><span><%- t('purchaseOrders', 'items:status:waiting', {count: waitingCount}) %></span>
+        <input type="radio" name="status" value="waiting"> <i class="fa fa-unlock-alt"></i><span><%- helpers.t('items:status:waiting', {count: waitingCount}) %></span>
       </label>
-      <label class="btn btn-default" title="<%- t('purchaseOrders', 'items:status:inProgress:title') %>">
+      <label class="btn btn-default" title="<%- helpers.t('items:status:inProgress:title') %>">
         <input type="radio" name="status" value="inProgress">
-        <i class="fa fa-star-half-o"></i><span><%- t('purchaseOrders', 'items:status:inProgress', {count: inProgressCount}) %></span>
+        <i class="fa fa-star-half-o"></i><span><%- helpers.t('items:status:inProgress', {count: inProgressCount}) %></span>
       </label>
       <label class="btn btn-default">
-        <input type="radio" name="status" value="completed"> <i class="fa fa-lock"></i><span><%- t('purchaseOrders', 'items:status:completed', {count: completedCount}) %></span>
+        <input type="radio" name="status" value="completed"> <i class="fa fa-lock"></i><span><%- helpers.t('items:status:completed', {count: completedCount}) %></span>
       </label>
     </div>
     <div class="btn-group">
-      <button id="<%- idPrefix %>-selectAll" class="btn btn-default"><i class="fa fa-check-square"></i><span><%- t('purchaseOrders', 'items:select:all') %></span></button>
-      <button id="<%- idPrefix %>-selectNone" class="btn btn-default"><i class="fa fa-square"></i><span><%- t('purchaseOrders', 'items:select:none') %></span></button>
+      <button id="<%- idPrefix %>-selectAll" class="btn btn-default"><i class="fa fa-check-square"></i><span><%- helpers.t('items:select:all') %></span></button>
+      <button id="<%- idPrefix %>-selectNone" class="btn btn-default"><i class="fa fa-square"></i><span><%- helpers.t('items:select:none') %></span></button>
     </div>
-    <button id="<%- idPrefix %>-print" class="btn btn-primary"><i class="fa fa-print"></i><span><%- t('purchaseOrders', 'items:print') %></span></button><!--
-    //--><button id="<%- idPrefix %>-printVendor" class="btn btn-default"><i class="fa fa-print"></i><span><%- t('purchaseOrders', 'items:printVendor') %></span></button>
+    <button id="<%- idPrefix %>-print" class="btn btn-primary"><i class="fa fa-print"></i><span><%- helpers.t('items:print') %></span></button><!--
+    //--><button id="<%- idPrefix %>-printVendor" class="btn btn-default"><i class="fa fa-print"></i><span><%- helpers.t('items:printVendor') %></span></button>
   </div>
   <% } %>
   <table class="table table-bordered table-hover">
     <thead>
       <tr>
-        <th><%- t('purchaseOrders', 'PROPERTY:item._id') %></th>
-        <th><%- t('purchaseOrders', 'PROPERTY:item.nc12') %></th>
-        <th><%- t('purchaseOrders', 'PROPERTY:item.unit') %></th>
-        <th><%- t('purchaseOrders', 'PROPERTY:item.qty') %></th>
-        <th><%- t('purchaseOrders', 'PROPERTY:item.printedQty') %></th>
+        <th><%- helpers.t('PROPERTY:item._id') %></th>
+        <th><%- helpers.t('PROPERTY:item.nc12') %></th>
+        <th><%- helpers.t('PROPERTY:item.unit') %></th>
+        <th><%- helpers.t('PROPERTY:item.qty') %></th>
+        <th><%- helpers.t('PROPERTY:item.printedQty') %></th>
         <% if (open) {%>
-        <th><%- t('purchaseOrders', 'PROPERTY:item.schedule.qty') %></th>
-        <th><%- t('purchaseOrders', 'PROPERTY:item.schedule.date') %></th>
+        <th><%- helpers.t('PROPERTY:item.schedule.qty') %></th>
+        <th><%- helpers.t('PROPERTY:item.schedule.date') %></th>
         <% } %>
-        <th><%- t('purchaseOrders', 'PROPERTY:item.name') %></th>
+        <th><%- helpers.t('PROPERTY:item.name') %></th>
         <% if (vendorNc12Visible) { %>
         <th class="is-min"><%- t('vendorNc12s', 'PROPERTY:value') %></th>
         <% } %>

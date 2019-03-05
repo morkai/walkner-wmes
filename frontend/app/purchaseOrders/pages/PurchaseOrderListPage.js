@@ -50,9 +50,7 @@ define([
     defineViews: function()
     {
       this.filterView = new PurchaseOrderFilterView({
-        model: {
-          rqlQuery: this.collection.rqlQuery
-        }
+        model: this.collection
       });
 
       this.listView = new PurchaseOrderListView({collection: this.collection});

@@ -2,34 +2,30 @@
   "root": {
     "BREADCRUMBS:base": "Opinion survey",
     "BREADCRUMBS:browse": "Responses",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
+    "BREADCRUMBS:details": "Response",
 
-    "MSG:LOADING_FAILURE": "Failed to load the responses.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the response.",
-    "MSG:DELETED": "Response <em>{label}</em> was deleted.",
+    "PANEL:TITLE:answers": "Answers",
+    "PANEL:TITLE:comment": "Comment",
 
-    "PAGE_ACTION:add": "Add response",
-    "PAGE_ACTION:edit": "Edit response",
-    "PAGE_ACTION:delete": "Delete response",
+    "PROPERTY:creator": "Creator",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:comment": "Comment",
+    "PROPERTY:survey": "Survey",
+    "PROPERTY:division": "Division",
+    "PROPERTY:superior": "Superior",
+    "PROPERTY:employer": "Employer",
+    "PROPERTY:answer": "Answer",
 
-    "PANEL:TITLE:details": "Response's details",
-    "PANEL:TITLE:addForm": "Add response form",
-    "PANEL:TITLE:editForm": "Edit response form",
+    "form:preview:tab": "Page{pageNumber}",
 
-    "PROPERTY:": "",
+    "filter:submit": "Filter",
 
-    "FORM:ACTION:add": "Add response",
-    "FORM:ACTION:edit": "Edit response",
-    "FORM:ERROR:addFailure": "Failed to add the new response.",
-    "FORM:ERROR:editFailure": "Failed to edit the response.",
+    "noComment": "No comment.",
 
-    "ACTION_FORM:DIALOG_TITLE:delete": "Response deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete response",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen response?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> response?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the response."
+    "answer:yes": "Yes",
+    "answer:no": "No",
+    "answer:na": "n/a",
+    "answer:null": "?"
   },
   "pl": true
 }

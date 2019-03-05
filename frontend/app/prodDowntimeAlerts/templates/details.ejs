@@ -1,46 +1,22 @@
 <div class="prodDowntimeAlerts-details">
   <div class="panel panel-primary">
-    <div class="panel-heading"><%- t('prodDowntimeAlerts', 'PANEL:TITLE:details') %></div>
+    <div class="panel-heading"><%- panelTitle %></div>
     <div class="panel-details">
-      <div class="props first">
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimeAlerts', 'PROPERTY:name') %></div>
-          <div class="prop-value"><%= model.name %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimeAlerts', 'PROPERTY:repeatInterval') %></div>
-          <div class="prop-value"><%- model.repeatInterval ? time.toString(model.repeatInterval) : '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimeAlerts', 'PROPERTY:userWhitelist') %></div>
-          <div class="prop-value">
-            <% if (model.userWhitelist.length) { %>
-            <%= _.pluck(model.userWhitelist, 'label').join('; ') %>
-            <% } else { %>
-            -
-            <% } %>
-          </div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimeAlerts', 'PROPERTY:userBlacklist') %></div>
-          <div class="prop-value">
-            <% if (model.userBlacklist.length) { %>
-            <%= _.pluck(model.userBlacklist, 'label').join('; ') %>
-            <% } else { %>
-            -
-            <% } %>
-          </div>
-        </div>
-      </div>
+      <%- helpers.props(model, [
+        'name',
+        {id: 'repeatInterval', value: model.repeatInterval ? time.toString(model.repeatInterval) : ''},
+        {id: '!userWhitelist', value: model.userWhitelist ? _.pluck(model.userWhitelist, 'label').join('; ') : ''},
+        {id: '!userBlacklist', value: model.userBlacklist ? _.pluck(model.userBlacklist, 'label').join('; ') : ''}
+      ]) %>
     </div>
   </div>
   <div class="panel panel-default">
-    <div class="panel-heading"><%- t('prodDowntimeAlerts', 'PROPERTY:conditions') %></div>
+    <div class="panel-heading"><%- helpers.t('PROPERTY:conditions') %></div>
     <div class="panel-details">
       <div class="props first">
         <% _.forEach(model.conditions, function(condition) { %>
         <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimeAlerts', 'DETAILS:conditions:' + condition.type, {mode: condition.mode}) %></div>
+          <div class="prop-name"><%- helpers.t('DETAILS:conditions:' + condition.type, {mode: condition.mode}) %></div>
           <div class="prop-value"><%= condition.labels.join('; ') %></div>
         </div>
         <% }) %>
@@ -48,31 +24,31 @@
     </div>
   </div>
   <div class="panel panel-default">
-    <div class="panel-heading"><%- t('prodDowntimeAlerts', 'PROPERTY:actions') %></div>
+    <div class="panel-heading"><%- helpers.t('PROPERTY:actions') %></div>
     <div class="panel-body prodDowntimeAlerts-details-actions">
       <% _.forEach(model.actions, function(action) { %>
       <div class="prodDowntimeAlerts-details-action">
         <p>
           <% if (action.sendEmail && action.sendSms) { %>
-          <%- t('prodDowntimeAlerts', 'DETAILS:actions:emailAndSms', {delay: time.toString(action.delay)}) %>
+          <%- helpers.t('DETAILS:actions:emailAndSms', {delay: time.toString(action.delay)}) %>
           <% } else if (action.sendEmail) { %>
-          <%- t('prodDowntimeAlerts', 'DETAILS:actions:emailOnly', {delay: time.toString(action.delay)}) %>
+          <%- helpers.t('DETAILS:actions:emailOnly', {delay: time.toString(action.delay)}) %>
           <% } else { %>
-          <%- t('prodDowntimeAlerts', 'DETAILS:actions:smsOnly', {delay: time.toString(action.delay)}) %>
+          <%- helpers.t('DETAILS:actions:smsOnly', {delay: time.toString(action.delay)}) %>
           <% } %>
         </p>
         <ul>
           <% _.forEach(['informAor', 'informManager', 'informMaster', 'informLeader'], function(p) { %>
           <% if (action[p]) { %>
-          <li><%- t('prodDowntimeAlerts', 'actions:' + p) %></li>
+          <li><%- helpers.t('actions:' + p) %></li>
           <% } %>
           <% }) %>
           <% if (action.userWhitelist.length) { %>
-          <li><%- t('prodDowntimeAlerts', 'actions:userWhitelist') %> <%= _.pluck(action.userWhitelist, 'label').join('; ') %></li>
+          <li><%- helpers.t('actions:userWhitelist') %> <%= _.pluck(action.userWhitelist, 'label').join('; ') %></li>
           <% } %>
         </ul>
         <% if (action.userBlacklist.length) { %>
-        <p><%- t('prodDowntimeAlerts', 'actions:userBlacklist') %> <%= _.pluck(action.userBlacklist, 'label').join('; ') %></p>
+        <p><%- helpers.t('actions:userBlacklist') %> <%= _.pluck(action.userBlacklist, 'label').join('; ') %></p>
         <% } %>
       </div>
       <% }) %>

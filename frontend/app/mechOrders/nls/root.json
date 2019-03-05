@@ -2,12 +2,10 @@
   "root": {
     "BREADCRUMBS:browse": "Mechanical orders",
 
-    "MSG:LOADING_FAILURE": "Failed to load the orders.",
-
     "PAGE_ACTION:import": "Import orders",
 
-    "PANEL:TITLE:details": "Order's details",
-    "PANEL:TITLE:operations": "Order's operations",
+    "PANEL:TITLE:details": "Order details",
+    "PANEL:TITLE:operations": "Order operations",
 
     "PROPERTY:_id": "12NC",
     "PROPERTY:name": "Product name",
@@ -18,7 +16,7 @@
     "OPERATIONS:NO_DATA": "Order does not have any operations.",
 
     "filter:placeholder:_id": "Any 12NC",
-    "filter:submit": "Filter orders",
+    "filter:submit": "Filter",
 
     "import:title": "Import orders",
     "import:file": "CSV file with the orders:",

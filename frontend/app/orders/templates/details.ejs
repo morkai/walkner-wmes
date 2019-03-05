@@ -2,130 +2,61 @@
   <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details row">
     <div class="col-md-4">
-      <div class="props first">
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:_id') %></div>
-          <div class="prop-value">
-            <% if (linkOrderNo && model._id) { %>
-            <a href="#orders/<%- model._id %>" title="<%- t('orders', 'details:showMoreLink') %>"><%- model._id %></a>
-            <% } else { %>
-            <%- model._id || '-' %>
-            <% } %>
-          </div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:nc12') %></div>
-          <div class="prop-value"><%- model.nc12 || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:mrp') %></div>
-          <div class="prop-value"><%= model.mrp || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:name') %></div>
-          <div class="prop-value"><%= model.name || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:description') %></div>
-          <div class="prop-value"><%= model.name === model.description ? '-' : (model.description || '-') %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:leadingOrder') %></div>
-          <div class="prop-value">
-            <% if (model.leadingOrder && model.leadingOrder !== model._id) { %>
-            <% if (user.isAllowedTo('ORDERS:VIEW')) { %>
-            <a href="#orders/<%- model.leadingOrder %>"><%- model.leadingOrder %></a>
-            <% } else { %>
-            <%- model.leadingOrder %>
-            <% } %>
-            <% } else { %>
-            -
-            <% } %>
-          </div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:salesOrder') %></div>
-          <div class="prop-value"><%- model.salesOrder || '-' %>/<%- model.salesOrderItem || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:soldToParty') %></div>
-          <div class="prop-value"><%= model.soldToParty || '-' %></div>
-        </div>
-      </div>
+      <%- helpers.props(model, [
+        {id: '!_id', value: function(orderNo)
+        {
+          if (linkOrderNo && orderNo)
+          {
+            return '<a href="#orders/' + orderNo + '" title="' + helpers.t('details:showMoreLink') + '">' + orderNo + '</a>';
+          }
+
+          return orderNo;
+        }},
+        'nc12',
+        'mrp',
+        'name',
+        {id: 'description', value: model.name === model.description ? '' : (model.description || '')},
+        {id: '!leadingOrder', value: function(leadingOrder)
+        {
+          if (leadingOrder && leadingOrder !== model._id)
+          {
+            if (user.isAllowedTo('ORDERS:VIEW'))
+            {
+              return '<a href="#orders/' + leadingOrder + '">' + leadingOrder + '</a>';
+            }
+
+            return leadingOrder;
+          }
+
+          return '';
+        }},
+        {id: 'salesOrder', value: (model.salesOrder || '-') + '/' + (model.salesOrderItem || '-')},
+        'soldToParty'
+      ]) %>
     </div>
     <div class="col-md-4">
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:qty') %></div>
-          <div class="prop-value"><%= model.qtyUnit || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:qtyDone') %></div>
-          <div class="prop-value"><%= model.qtyDoneUnit || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:priority') %></div>
-          <div class="prop-value"><%- model.priority || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:statuses') %></div>
-          <div class="prop-value"><%- model.statusLabels %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:psStatus') %></div>
-          <div class="prop-value"><%- model.psStatus || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:delayReason') %></div>
-          <div class="prop-value"><%= model.delayReason || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:delayComponent') %></div>
-          <div class="prop-value"><%= model.delayComponent || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:m4') %></div>
-          <div class="prop-value">
-            <%- model.m4 || '-' %>
-          </div>
-        </div>
-      </div>
+      <%- helpers.props(model, [
+        {id: 'qty', value: model.qtyUnit},
+        {id: 'qtyDone', value: model.qtyDoneUnit},
+        'priority',
+        {id: '!statuses', value: model.statusLabels},
+        'psStatus',
+        'delayReason',
+        'delayComponent',
+        'm4'
+      ]) %>
     </div>
     <div class="col-md-4">
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:sapCreatedAt') %></div>
-          <div class="prop-value"><%= model.sapCreatedAtText || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:startDate') %></div>
-          <div class="prop-value"><%= model.startDateText || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:finishDate') %></div>
-          <div class="prop-value"><%= model.finishDateText || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:scheduledStartDate') %></div>
-          <div class="prop-value"><%= model.scheduledStartDateText || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:scheduledFinishDate') %></div>
-          <div class="prop-value"><%= model.scheduledFinishDateText || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:createdAt') %></div>
-          <div class="prop-value"><%= model.createdAtText || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:updatedAt') %></div>
-          <div class="prop-value"><%= model.updatedAtText || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('orders', 'PROPERTY:changedBy') %></div>
-          <div class="prop-value"><%- model.changedBy || '-' %></div>
-        </div>
-      </div>
+      <%- helpers.props(model, [
+        {id: 'sapCreatedAt', value: model.sapCreatedAtText},
+        {id: 'startDate', value: model.startDateText},
+        {id: 'finishDate', value: model.finishDateText},
+        {id: 'scheduledStartDate', value: model.scheduledStartDateText},
+        {id: 'scheduledFinishDate', value: model.scheduledFinishDateText},
+        {id: 'createdAt', value: model.createdAtText},
+        {id: 'updatedAt', value: model.updatedAtText},
+        'changedBy'
+      ]) %>
     </div>
   </div>
 </div>

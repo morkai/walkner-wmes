@@ -29,12 +29,8 @@ define([
 
       return [
         pageActions.jump(this, collection),
-        pageActions.export(layout, this, this.collection, false),
-        {
-          label: t.bound(collection.getNlsDomain(), 'PAGE_ACTION:add'),
-          icon: 'plus',
-          href: collection.genClientUrl('add')
-        }
+        pageActions.export(layout, this, collection, false),
+        pageActions.add(collection, false)
       ];
     },
 

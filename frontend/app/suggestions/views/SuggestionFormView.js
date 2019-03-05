@@ -62,7 +62,7 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
 
       'keydown [role="togglePanel"]': function(e)
       {
@@ -158,7 +158,7 @@ define([
         });
       }
 
-      return _.extend(FormView.prototype.serialize.call(this), {
+      return _.assign(FormView.prototype.serialize.call(this), {
         today: time.format(new Date(), 'YYYY-MM-DD'),
         statuses: kaizenDictionaries.statuses,
         attachments: attachments,

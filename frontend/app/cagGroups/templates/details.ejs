@@ -1,19 +1,6 @@
 <div class="panel panel-primary">
-  <div class="panel-heading"><%- t('cagGroups', 'PANEL:TITLE:details') %></div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('cagGroups', 'PROPERTY:name') %></div>
-        <div class="prop-value"><%= model.name || '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('cagGroups', 'PROPERTY:color') %></div>
-        <div class="prop-value"><%- model.color %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('cagGroups', 'PROPERTY:cags') %></div>
-        <div class="prop-value"><%= model.cags %></div>
-      </div>
-    </div>
+    <%- helpers.props(model, ['name', '!color', 'cags']) %>
   </div>
 </div>

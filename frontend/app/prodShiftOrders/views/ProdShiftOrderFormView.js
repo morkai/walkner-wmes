@@ -31,7 +31,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(FormView.prototype.serialize.call(this), {
+      return _.assign(FormView.prototype.serialize.call(this), {
         isChangeRequest: isChangeRequest()
       });
     },

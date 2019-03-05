@@ -34,7 +34,7 @@ define([
 
     initialize: function()
     {
-      this.setView('.filter-container', new BehaviorObsCardCountReportFilterView({
+      this.setView('#-filter', new BehaviorObsCardCountReportFilterView({
         model: this.model
       }));
 
@@ -59,10 +59,9 @@ define([
       kaizenDictionaries.unload();
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         metrics: BehaviorObsCardCountReport.TABLE_AND_CHART_METRICS.concat('observers')
       };
     },

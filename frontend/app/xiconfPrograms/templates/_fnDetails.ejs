@@ -1,49 +1,49 @@
 <div class="panel panel-default xiconfPrograms-stepPanel xiconfPrograms-stepPanel-fn">
-  <div class="panel-heading"><%- stepIndex + 1 %>. <%- t('xiconfPrograms', 'step:fn') %></div>
+  <div class="panel-heading"><%- stepIndex + 1 %>. <%- helpers.t('step:fn') %></div>
   <div class="panel-details">
     <div class="props first">
       <% if (model.type === 't24vdc') { %>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:startTime') %></div>
         <div class="prop-value"><%= time.toString(step.startTime, false, true) %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:duration') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:duration') %></div>
         <div class="prop-value"><%= time.toString(step.duration, false, true) %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:voltage') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:voltage') %></div>
         <div class="prop-value"><%= step.voltage.toLocaleString() %></div>
       </div>
       <div class="prop">
         <% if (step.powerMin === step.powerMax && step.powerReq === step.powerMin) { %>
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:power:req') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:power:req') %></div>
         <div class="prop-value"><%= step.powerReq %></div>
         <% } else { %>
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:power') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:power') %></div>
         <div class="prop-value"><%= step.powerMin %> ≤ <strong><%= step.powerReq %></strong> ≤ <%= step.powerMax %></div>
         <% } %>
       </div>
       <% } %>
       <% if (model.type === 'glp2') { %>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:label') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:label') %></div>
         <div class="prop-value"><%= step.label %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:startTime') %></div>
         <div class="prop-value"><%= time.toString(step.startTime, false, true) %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:duration') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:duration') %></div>
         <div class="prop-value"><%= time.toString(step.duration, false, true) %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:mode') %></div>
-        <div class="prop-value"><%- t('xiconfPrograms', 'glp2:fn:mode:' + step.mode) %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:mode') %></div>
+        <div class="prop-value"><%- helpers.t('glp2:fn:mode:' + step.mode) %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'glp2:fn:mode:' + step.mode + ':label') %></div>
+        <div class="prop-name"><%- helpers.t('glp2:fn:mode:' + step.mode + ':label') %></div>
         <div class="prop-value">
           <% if (step.mode === 5) { %>
           -
@@ -61,15 +61,15 @@
         </div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:trigger') %></div>
-        <div class="prop-value"><%- t('xiconfPrograms', 'PROPERTY:trigger:' + step.trigger) %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:trigger') %></div>
+        <div class="prop-value"><%- helpers.t('PROPERTY:trigger:' + step.trigger) %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:lampCount') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:lampCount') %></div>
         <div class="prop-value"><%- step.lampCount || 0 %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:lampDuration') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:lampDuration') %></div>
         <div class="prop-value"><%- time.toString(step.lampDuration || 0) %></div>
       </div>
       <% } %>

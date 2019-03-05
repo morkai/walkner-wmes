@@ -1,36 +1,10 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Loss reasons",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the loss reasons.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the loss reason.",
-    "MSG:DELETED": "Loss reason <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add loss reason",
-    "PAGE_ACTION:edit": "Edit loss reason",
-    "PAGE_ACTION:delete": "Delete loss reason",
-
-    "PANEL:TITLE:details": "Loss reason's details",
-    "PANEL:TITLE:addForm": "Add loss reason form",
-    "PANEL:TITLE:editForm": "Edit loss reason form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:label": "Label",
-    "PROPERTY:position": "Position in Worksheet",
-
-    "FORM:ACTION:add": "Add loss reason",
-    "FORM:ACTION:edit": "Edit loss reason",
-    "FORM:ERROR:addFailure": "Failed to add the new loss reason.",
-    "FORM:ERROR:editFailure": "Failed to edit the loss reason.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Loss reason deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete loss reason",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen loss reason?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> loss reason?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the loss reason."
+    "PROPERTY:position": "Position in Worksheet"
   },
   "pl": true
 }

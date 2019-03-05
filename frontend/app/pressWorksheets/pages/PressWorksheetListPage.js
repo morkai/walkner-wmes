@@ -27,7 +27,7 @@ define([
 
     layoutName: 'page',
 
-    pageId: 'pressWorksheetList',
+    pageId: 'collection',
 
     breadcrumbs: [
       t.bound('pressWorksheets', 'BREADCRUMBS:browse')
@@ -36,9 +36,9 @@ define([
     actions: function(layout)
     {
       return [
-        pageActions.jump(this, this.pressWorksheetList),
-        pageActions.export(layout, this, this.pressWorksheetList),
-        pageActions.add(this.pressWorksheetList)
+        pageActions.jump(this, this.collection),
+        pageActions.export(layout, this, this.collection),
+        pageActions.add(this.collection)
       ];
     },
 
@@ -53,37 +53,33 @@ define([
 
     defineModels: function()
     {
-      this.pressWorksheetList = bindLoadingMessage(
+      this.collection = bindLoadingMessage(
         new PressWorksheetCollection(null, {rqlQuery: this.options.rql}), this
       );
     },
 
     defineViews: function()
     {
-      this.filterView = new PressWorksheetFilterView({
-        model: {
-          rqlQuery: this.pressWorksheetList.rqlQuery
-        }
-      });
+      this.filterView = new PressWorksheetFilterView({model: this.collection});
 
-      this.listView = new PressWorksheetListView({collection: this.pressWorksheetList});
+      this.listView = new PressWorksheetListView({collection: this.collection});
 
       this.listenTo(this.filterView, 'filterChanged', this.refreshList);
     },
 
     load: function(when)
     {
-      return when(this.pressWorksheetList.fetch({reset: true}));
+      return when(this.collection.fetch({reset: true}));
     },
 
     refreshList: function(newRqlQuery)
     {
-      this.pressWorksheetList.rqlQuery = newRqlQuery;
+      this.collection.rqlQuery = newRqlQuery;
 
       this.listView.refreshCollectionNow();
 
       this.broker.publish('router.navigate', {
-        url: this.pressWorksheetList.genClientUrl() + '?' + newRqlQuery,
+        url: this.collection.genClientUrl() + '?' + newRqlQuery,
         trigger: false,
         replace: true
       });

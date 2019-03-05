@@ -1,34 +1,8 @@
 {
   "BREADCRUMBS:browse": "Dostawcy",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie dostawców nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie dostawcy nie powiodło się.",
-  "MSG:DELETED": "Dostawca <em>{label}</em> został usunięty.",
-
-  "PAGE_ACTION:add": "Dodaj dostawcę",
-  "PAGE_ACTION:edit": "Edytuj dostawcę",
-  "PAGE_ACTION:delete": "Usuń dostawcę",
-
-  "PANEL:TITLE:details": "Szczegóły dostawcy",
-  "PANEL:TITLE:addForm": "Formularz dodawania dostawcy",
-  "PANEL:TITLE:editForm": "Formularz edycji dostawcy",
 
   "PROPERTY:_id": "Nr dostawcy",
   "PROPERTY:name": "Nazwa",
-
-  "FORM:ACTION:add": "Dodaj dostawcę",
-  "FORM:ACTION:edit": "Edytuj dostawcę",
-  "FORM:ERROR:addFailure": "Nie udało się dodać dostawcy.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować dostawcy.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia dostawcy",
-  "ACTION_FORM:BUTTON:delete": "Usuń dostawcę",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybranego dostawcę?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć dostawcę <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć dostawcy.",
 
   "select2:placeholder": "Dowolny dostawca"
 }

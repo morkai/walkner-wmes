@@ -1,35 +1,33 @@
 {
   "root": {
     "BREADCRUMBS:base": "Opinion survey",
-    "BREADCRUMBS:browse": "Corrective corrective actions",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
+    "BREADCRUMBS:browse": "Corrective actions",
 
-    "MSG:LOADING_FAILURE": "Failed to load the corrective actions.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the corrective action.",
-    "MSG:DELETED": "Corrective corrective action <em>{label}</em> was deleted.",
+    "PROPERTY:rid": "ID",
+    "PROPERTY:creator": "Creator",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:updater": "Updater",
+    "PROPERTY:updatedAt": "Updated at",
+    "PROPERTY:survey": "Survey",
+    "PROPERTY:division": "Division",
+    "PROPERTY:question": "Question",
+    "PROPERTY:problem": "Problem",
+    "PROPERTY:cause": "Cause",
+    "PROPERTY:action": "Action",
+    "PROPERTY:startDate": "Start date",
+    "PROPERTY:finishDate": "Finish date",
+    "PROPERTY:owners": "Owners",
+    "PROPERTY:superior": "Superior",
+    "PROPERTY:status": "Status",
 
-    "PAGE_ACTION:add": "Add corrective action",
-    "PAGE_ACTION:edit": "Edit corrective action",
-    "PAGE_ACTION:delete": "Delete corrective action",
+    "filter:participants": "Owner/Superior",
+    "filter:submit": "Filter",
 
-    "PANEL:TITLE:details": "Corrective corrective action's details",
-    "PANEL:TITLE:addForm": "Add corrective action form",
-    "PANEL:TITLE:editForm": "Edit corrective action form",
-
-    "PROPERTY:": "",
-
-    "FORM:ACTION:add": "Add corrective action",
-    "FORM:ACTION:edit": "Edit corrective action",
-    "FORM:ERROR:addFailure": "Failed to add the new corrective action.",
-    "FORM:ERROR:editFailure": "Failed to edit the corrective action.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Corrective corrective action deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete corrective action",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen corrective action?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> corrective action?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the corrective action."
+    "status:planned": "Planned",
+    "status:progress": "In progress",
+    "status:done": "Completed",
+    "status:failed": "Failed",
+    "status:late": "Late"
   },
   "pl": true
 }

@@ -88,6 +88,15 @@ define([
       return obj;
     },
 
+    serializeDetails: function()
+    {
+      var obj = this.serialize();
+
+      obj.users = '<ul>' + obj.users.map(function(u) { return '<li>' + userInfoTemplate({userInfo: u}); }) + '</ul>';
+
+      return obj;
+    },
+
     isOwner: function()
     {
       return _.some(this.attributes.users, function(u) { return u.id === user.data._id; });

@@ -1,25 +1,13 @@
 <div>
   <div class="panel panel-primary">
-    <div class="panel-heading"><%- t('core', 'PANEL:TITLE:details') %></div>
+    <div class="panel-heading"><%- panelTitle %></div>
     <div class="panel-details">
-      <div class="props first">
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:active') %></div>
-          <div class="prop-value"><%- model.active %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:name') %></div>
-          <div class="prop-value"><%= model.name %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:etoCategory') %></div>
-          <div class="prop-value"><%= model.etoCategory %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:users') %></div>
-          <div class="prop-value"><%- model.users.length ? model.users.join(', ') : '-' %></div>
-        </div>
-      </div>
+      <%- helpers.props(model, [
+        'active',
+        'name',
+        'etoCategory',
+        {id: 'users', value: model.users.length ? model.users.join(', ') : ''}
+      ]) %>
     </div>
   </div>
   <div class="panel panel-default">

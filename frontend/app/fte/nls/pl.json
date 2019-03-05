@@ -6,18 +6,10 @@
   "BREADCRUMBS:addForm": "Wybieranie wpisu",
   "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:details": "Zasoby",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
   "BREADCRUMBS:settings": "Ustawienia",
-
-  "MSG:LOADING_FAILURE": "Ładowanie danych FTE nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych FTE nie powiodło się.",
-  "MSG:DELETED": "Wpis FTE <em>{label}</em> został usunięty.",
 
   "PAGE_ACTION:print": "Pokaż wersję do druku",
   "PAGE_ACTION:add": "Przydzielaj zasoby",
-  "PAGE_ACTION:edit": "Edytuj wpis",
-  "PAGE_ACTION:delete": "Usuń wpis",
-  "PAGE_ACTION:export": "Eksportuj wpisy",
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:changeRequest:save": "Utwórz żądanie zmiany",
   "PAGE_ACTION:changeRequest:cancel": "Anuluj",
@@ -26,7 +18,7 @@
 
   "filter:date": "Data",
   "filter:shift": "Zmiana",
-  "filter:submit": "Filtruj wpisy",
+  "filter:submit": "Filtruj",
 
   "addForm:panel:title": "Formularz wyszukiwania/tworzenia wpisu FTE",
   "addForm:copy": "Kopiuj wartości z poprzedniego wpisu wybranej zmiany",
@@ -60,12 +52,6 @@
 
   "print:hdLeft": "Zasoby przydzielone do {subdivision}",
   "print:hdRight": "{date}, {shift} zmiana",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia wpisu FTE",
-  "ACTION_FORM:BUTTON:delete": "Usuń wpis FTE",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany wpis FTE?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć wpis FTE <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć wpisu FTE.",
 
   "settings:tab:general": "Ogólne",
   "settings:tab:structure": "Struktura",

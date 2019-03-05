@@ -348,7 +348,7 @@ define([
         newOrder.documents.ETO = t('orderDocuments', 'eto');
       }
 
-      _.extend(newOrder.documents, orderData.documents);
+      _.assign(newOrder.documents, orderData.documents);
 
       if (newOrder.no === oldOrder.no && newOrder.documents[oldOrder.nc15])
       {

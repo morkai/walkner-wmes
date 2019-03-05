@@ -15,10 +15,9 @@ define([
 
     remoteTopics: {},
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         prodShiftOrderId: this.model.id,
         serialNumbers: this.collection.toJSON()
       };

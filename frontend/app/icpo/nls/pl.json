@@ -2,12 +2,6 @@
   "BREADCRUMBS:browse": "Wyniki ICPO",
   "BREADCRUMBS:details": "Wynik",
 
-  "MSG:LOADING_FAILURE": "Ładowanie wyników programowania nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych wyniku programowania nie powiodło się.",
-
-  "PANEL:TITLE:details": "Szczegóły programowania",
-
-  "PAGE_ACTION:export": "Eksportuj wyniki",
   "PAGE_ACTION:download": "Pobierz konfigurację",
   "PAGE_ACTION:download:orderData": "Konfiguracja zlecenia",
   "PAGE_ACTION:download:driverData": "Konfiguracja drivera",
@@ -34,7 +28,7 @@
   "filter:result:success": "Sukces",
   "filter:result:failure": "Porażka",
   "filter:placeholder:srcId": "Dowolne",
-  "filter:submit": "Filtruj wyniki",
+  "filter:submit": "Filtruj",
 
   "tab:log": "Przebieg programowania",
   "tab:output": "Odpowiedź programatora",

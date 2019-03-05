@@ -1,29 +1,17 @@
 {
   "BREADCRUMBS:browse": "Zmiany",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie historii zmian nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych zmiany nie powiodło się.",
-  "MSG:DELETED": "Zmiana <em>{label}</em> została usunięta.",
 
   "PAGE_ACTION:prodLogEntries": "Pokaż historię operacji",
-  "PAGE_ACTION:export": "Eksportuj zmiany",
-  "PAGE_ACTION:add": "Dodaj zmianę",
-  "PAGE_ACTION:edit": "Edytuj zmianę",
-  "PAGE_ACTION:delete": "Usuń zmianę",
 
-  "PANEL:TITLE:details": "Szczegóły zmiany",
-  "PANEL:TITLE:addForm": "Formularz dodawania zmiany produkcyjnej",
-  "PANEL:TITLE:editForm": "Formularz edycji danych zmiany produkcyjnej",
-
-  "filter:submit": "Filtruj historię",
+  "filter:submit": "Filtruj",
   "filter:placeholder:prodLine": "Dowolna linia produkcyjna",
   "filter:orderMrp": "Kontroler MRP zlecenia",
 
+  "PROPERTY:division": "Wydział",
+  "PROPERTY:subdivision": "Dział",
   "PROPERTY:mrpControllers": "Kontroler MRP",
   "PROPERTY:prodFlow": "Przepływ",
+  "PROPERTY:workCenter": "WorkCenter",
   "PROPERTY:prodLine": "Linia produkcyjna",
   "PROPERTY:type": "Typ",
   "PROPERTY:createdAt": "Czas rozpoczęcia",
@@ -42,10 +30,6 @@
   "PROPERTY:efficiency": "Wydajność",
   "PROPERTY:orderMrp": "MRP zleceń",
 
-  "FORM:ACTION:add": "Dodaj zmianę",
-  "FORM:ACTION:edit": "Edytuj zmianę",
-  "FORM:ERROR:addFailure": "Nie udało się dodać zmiany.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zmiany.",
   "FORM:ERROR:INVALID_CHANGES": "Nie można zmodyfikować zmiany produkcyjnej: nie wykryto żadnych poprawnych zmian.",
   "FORM:ERROR:INPUT": "Nieprawidłowe dane wejściowe!",
   "FORM:ERROR:NOT_EDITABLE": "Wybrana zmiana jeszcze się nie skończyła!",
@@ -84,12 +68,6 @@
   "charts:quantitiesDone:unit": " szt.",
   "charts:quantitiesDone:series:planned": "Plan",
   "charts:quantitiesDone:series:actual": "Wykonane",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia zmiany",
-  "ACTION_FORM:BUTTON:delete": "Usuń zmianę",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną zmianę?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć zmianę <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć zmiany.",
 
   "changeRequest:delete:messageText": "Jesteś w trybie tworzenia żądania zmiany danych produkcyjnych. <em>Zmiana produkcyjna</em> zostanie usunięta dopiero po zaakceptowaniu operacji przez osobę odpowiedzialną.<br><br>Czy na pewno chcesz utworzyć żądanie usunięcia wybranej zmiany produkcyjnej?",
   "changeRequest:delete:formActionText": "Utwórz żądanie usunięcia",

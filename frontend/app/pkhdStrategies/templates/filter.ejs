@@ -1,18 +1,18 @@
 <form class="well filter-form" autocomplete="off">
   <div class="form-group">
-    <label for="<%- idPrefix %>-s"><%- t('pkhdStrategies', 'PROPERTY:s') %></label>
+    <label for="<%- idPrefix %>-s"><%- helpers.t('PROPERTY:s') %></label>
     <input id="<%- idPrefix %>-s" class="form-control no-controls" name="s" type="number" min="0" max="999">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-t"><%- t('pkhdStrategies', 'PROPERTY:t') %></label>
+    <label for="<%- idPrefix %>-t"><%- helpers.t('PROPERTY:t') %></label>
     <input id="<%- idPrefix %>-t" class="form-control no-controls" name="t" type="number" min="0" max="999">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-name"><%- t('pkhdStrategies', 'PROPERTY:name') %></label>
+    <label for="<%- idPrefix %>-name"><%- helpers.t('PROPERTY:name') %></label>
     <input id="<%- idPrefix %>-name" class="form-control" name="name" type="text" autocomplete="new-password">
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('pkhdStrategies', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

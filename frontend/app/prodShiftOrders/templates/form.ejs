@@ -3,56 +3,56 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <% if (isChangeRequest) { %>
-    <div class="message message-inline message-warning"><%- t('prodShiftOrders', 'changeRequest:warning:' + (editMode ? 'edit' : 'add')) %></div>
+    <div class="message message-inline message-warning"><%- helpers.t('changeRequest:warning:' + (editMode ? 'edit' : 'add')) %></div>
     <% } %>
     <div class="panel-body">
       <% if (isChangeRequest) { %>
       <div class="form-group">
-        <label for="<%- idPrefix %>-requestComment" class="control-label"><%- t('prodShiftOrders', 'changeRequest:commentLabel') %></label>
+        <label for="<%- idPrefix %>-requestComment" class="control-label"><%- helpers.t('changeRequest:commentLabel') %></label>
         <textarea id="<%- idPrefix %>-requestComment" class="form-control" name="requestComment" rows="2"></textarea>
       </div>
       <% } %>
       <div class="row">
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-master" class="control-label"><%- t('prodShiftOrders', 'PROPERTY:master') %></label>
+          <label for="<%- idPrefix %>-master" class="control-label"><%- helpers.t('PROPERTY:master') %></label>
           <input id="<%- idPrefix %>-master" type="text" autocomplete="new-password" name="master">
         </div>
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-leader" class="control-label"><%- t('prodShiftOrders', 'PROPERTY:leader') %></label>
+          <label for="<%- idPrefix %>-leader" class="control-label"><%- helpers.t('PROPERTY:leader') %></label>
           <input id="<%- idPrefix %>-leader" type="text" autocomplete="new-password" name="leader">
         </div>
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-operator" class="control-label"><%- t('prodShiftOrders', 'PROPERTY:operator') %></label>
+          <label for="<%- idPrefix %>-operator" class="control-label"><%- helpers.t('PROPERTY:operator') %></label>
           <input id="<%- idPrefix %>-operator" type="text" autocomplete="new-password" name="operator">
         </div>
       </div>
       <div class="form-group has-required-select2">
-        <label for="<%- idPrefix %>-order" class="control-label is-required"><%- t('prodShiftOrders', 'PROPERTY:order') %></label>
+        <label for="<%- idPrefix %>-order" class="control-label is-required"><%- helpers.t('PROPERTY:order') %></label>
         <input id="<%- idPrefix %>-order" type="text" autocomplete="new-password" required>
       </div>
       <div class="form-group has-required-select2">
-        <label for="<%- idPrefix %>-operation" class="control-label is-required"><%- t('prodShiftOrders', 'PROPERTY:operation') %></label>
+        <label for="<%- idPrefix %>-operation" class="control-label is-required"><%- helpers.t('PROPERTY:operation') %></label>
         <input id="<%- idPrefix %>-operation" type="text" autocomplete="new-password" required>
       </div>
       <div class="row">
         <div class="form-group col-md-2">
-          <label for="<%- idPrefix %>-quantityDone" class="control-label is-required"><%- t('prodShiftOrders', 'PROPERTY:quantityDone') %></label>
+          <label for="<%- idPrefix %>-quantityDone" class="control-label is-required"><%- helpers.t('PROPERTY:quantityDone') %></label>
           <input id="<%- idPrefix %>-quantityDone" class="form-control" type="number" name="quantityDone" min="0" required>
         </div>
         <div class="form-group col-md-2">
-          <label for="<%- idPrefix %>-workerCount" class="control-label is-required"><%- t('prodShiftOrders', 'PROPERTY:workerCount') %></label>
+          <label for="<%- idPrefix %>-workerCount" class="control-label is-required"><%- helpers.t('PROPERTY:workerCount') %></label>
           <input id="<%- idPrefix %>-workerCount" class="form-control" type="number" name="workerCount" min="1" required>
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-startedAtDate" class="control-label is-required"><%- t('prodShiftOrders', 'PROPERTY:startedAt') %></label>
+        <label for="<%- idPrefix %>-startedAtDate" class="control-label is-required"><%- helpers.t('PROPERTY:startedAt') %></label>
         <div class=" form-group-datetime">
           <input id="<%- idPrefix %>-startedAtDate" class="form-control" name="startedAtDate" type="date" required>
           <input id="<%- idPrefix %>-startedAtTime" class="form-control" name="startedAtTime" type="time" required step="1">
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-finishedAtDate" class="control-label is-required"><%- t('prodShiftOrders', 'PROPERTY:finishedAt') %></label>
+        <label for="<%- idPrefix %>-finishedAtDate" class="control-label is-required"><%- helpers.t('PROPERTY:finishedAt') %></label>
         <div class=" form-group-datetime">
           <input id="<%- idPrefix %>-finishedAtDate" class="form-control" name="finishedAtDate" type="date" required>
           <input id="<%- idPrefix %>-finishedAtTime" class="form-control" name="finishedAtTime" type="time" required step="1">

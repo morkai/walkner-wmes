@@ -88,7 +88,7 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
 
       'click #-conditions-add': function()
       {
@@ -210,7 +210,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(FormView.prototype.serialize.call(this), {
+      return _.assign(FormView.prototype.serialize.call(this), {
         renderAction: actionTemplate,
         conditions: this.serializeConditions(),
         actions: this.serializeActions()
@@ -246,7 +246,7 @@ define([
     {
       this.actions = _.map(this.model.get('actions'), function(action, i)
       {
-        return _.extend({}, action, {
+        return _.assign({}, action, {
           no: i + 1,
           delaySeconds: action.delay,
           delay: time.toString(action.delay),

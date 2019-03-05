@@ -1,4 +1,105 @@
 <div class="hidden">
+  <h1>v0.132.0</h1>
+  <h2><%- time.format('2019-03-03', 'LL') %></h2>
+  <h3>FAP</h3>
+  <ul>
+    <li>Poprawiono błąd mogący spowodować wywalenie się serwera, jeżeli dwóch użytkowników zmieniało zgłoszenie
+      w tym samym czasie.</li>
+    <li>Poprawiono błąd powodujący brak aktualizacji szczegółów zgłoszenia w czasie rzeczywistym, jeżeli
+      FAP otwarto za pomocą ID zgłoszenia.</li>
+    <li>Zmieniono treść powiadomienia SMS tak, aby zawierał adres URL do zgłoszenia.</li>
+    <li>Zmieniono tabele w wykresach 'Ilość zgłoszeń wg wydziałów' oraz 'Ilość zgłoszeń wg MRP' raportu tak,
+      aby zliczały pozycje 'Nieokreślone' (bez wydziału/MRP).</li>
+    <li>Zmieniono tabele w wykresach 'Ilość zgłoszeń wg osób' tak, aby pokazywały sumę osób.</li>
+    <li>Zmieniono menu oraz stronę ze szczegółami zgłoszenia tak, aby były bardziej użyteczne na urządzeniach
+      mobilnych.</li>
+    <li>Dodano możliwość wywoływania formularza dodawania zgłoszenia klawiszem <kbd>F1</kbd>.</li>
+    <li>Dodano możliwość kopiowania Kategorii i Problemu z ostatniego zgłoszenia użytkownika podczas dodawania
+      nowego zgłoszenia.</li>
+    <li>Dodano możliwość zdefiniowania 'Kategorii ETO' dla każdej kategorii zgłoszeń. Jeżeli wybrana zostanie kategoria,
+      która ma przypisaną kategorię ETO oraz wybrane zlecenie jest ETO, to kategoria automatycznie zostanie zamieniona
+      na kategorię ETO (i w drugą stronę).</li>
+  </ul>
+  <h3>ZPW</h3>
+  <ul>
+    <li>Zmieniono poawiadamianie o nowych zgłoszeniach tak, aby specjalny e-mail FM-24 był wysyłany na adres
+      zatwierdzającego, jeżeli nazwa zatwierdzającego pasuje do wzorca <code>/fm.?24/i</code>.</li>
+    <li>Dodano do formularza dodawania możliwość dołączenia prośby o potwierdzenie przyjęcia zgłoszenia FM-24
+      do specjalnego e-maila FM-24.</li>
+    <li>Dodano możliwość włączenia powiadomień SMS i e-mail o nowych zgłoszeniach FM-24 przez każdego użytkownika.</li>
+  </ul>
+  <h3>Operator</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieprzeliczanie danych zmiany produkcyjnej po wykonaniu operacji
+      'Poprawa zlecenia'.</li>
+    <li>Poprawiono błąd powodujący zwracanie pustej kolejki zaplanowanych zleceń po połączeniu się klienta
+      z serwerem.</li>
+    <li>Dodano osie czasu przedstawiające zaplanowaną oraz wykonaną sekwencję zleceń.</li>
+  </ul>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Usunięto komunikat informujący o nowym typie filtra listy.</li>
+  </ul>
+  <h3>Jednostki organizacyjne</h3>
+  <ul>
+    <li>Zmieniono usuwanie jednostek organizacyjnych tak, aby nie można było usunąć jednostki nadrzędnej, która
+      ma przypisane jednostki podrzędne (np. nie można usunąć WorkCentra, jeżeli jakaś Linia należy do tego WC).</li>
+  </ul>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Zmieniono generowanie planu tak, aby zlecenia z priorytetem <strong>E</strong> były rozplanowywane
+      w całości tylko na pierwszej zmianie.</li>
+    <li>Dodano do statystyk wskaźniki realizacji planu z podziałem na zmiany produkcyjne.</li>
+    <li>Dodano do statusów zleceń wyświetlanie priorytetu zlecenia <strong>E</strong> - Pilot ETO.</li>
+    <li>Dodano możliwość blokowania MRP. Zablokowane MRP nie będzie przeliczane i nie można w nim dokonywać
+      żadnych zmian, tak jakby wykonywanie danego planu już się rozpoczęło.</li>
+    <li>Dodano możliwość kopiowania niektórych ustawień linii z dowolnego planu do innych wybranych,
+      otwartych planów.</li>
+  </ul>
+  <h3>Malarnia</h3>
+  <ul>
+    <li>Zmieniono rozpoczynanie zlecenia tak, aby wymagało wybranie nr kabiny.</li>
+    <li>Dodano możliwość rejestrowania dostarczonej ilości.</li>
+    <li>Dodano możliwość logowania się malarzy w trybie wsadowym. Bez zalogowania się nie można dokonywać zmian
+      w zleceniach.</li>
+  </ul>
+  <h3>Magazyn</h3>
+  <ul>
+    <li>Dodano filtr 'Etap' do starej wersji modułu.</li>
+    <li>Dodano nową wersję modułu.</li>
+  </ul>
+  <h3>Raporty > CLIP</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący, że ustawienie przesunięcia daty danych nie miało na nic wpływu.</li>
+    <li>Zmieniono ustawienia 'Przesunięcie dniowe ...' oraz 'Przesunięcie godzinowe danych' tak, aby podana
+      ilość oznaczała dni robocze (tzn. dla przesunięcia <code>-2</code>, data z poniedziałku zostanie zamieniona
+      na czwartek poprzedniego tygodnia, a nie na sobotę, zakładając, że czwartek i piątek to dni robocze).</li>
+  </ul>
+  <h3>Baza Kanban</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący ukrycie menu kontekstowego kolumny po użyciu klawisza <kbd>Delete</kbd>
+      lub <kbd>Backspace</kbd> w polu filtra.</li>
+    <li>Dodano wsparcie dla siódmego stanowiska.</li>
+  </ul>
+  <h3>Użytkownicy</h3>
+  <ul>
+    <li>Zmieniono proces logowania tak, aby wymuszona została zmiana hasła dla użytkowników, których hasło
+      jest takie samo jak login lub numer kadrowy.</li>
+    <li>Zmieniono proces logowania tak, aby nie można było się zalogować, jeżeli jako loginu użytko adresu
+      e-mail i w bazie istnieje kilku użytkowników z takim samym adres.</li>
+    <li>Zmieniono formularz resetowania hasła tak, aby użytkownik musiał potwierdzić nowe hasło podając
+      je dwa razy.</li>
+    <li>Zmieniono formularz logowania tak, aby był ponownie dostępny w trybie wsadowym.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Zmieniono maksymalną szerokość często używanych formularzy tak aby była dynamicznie dostosowywana na większych
+      rozdzielczościach ekranu.</li>
+    <li>Zmieniono wewnętrzny kalendarz tak, aby traktował dni bez zleceń ze statusem REL jako dni wolne od pracy.</li>
+    <li>Dodano do wewnętrznego kalendarza dni ustawowo wolne od pracy dla lat 2019, 2020 i 2021.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.131.0</h1>
   <h2><%- time.format('2019-02-03', 'LL') %></h2>
   <h3>FAP</h3>

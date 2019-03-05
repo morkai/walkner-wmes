@@ -1,40 +1,15 @@
 {
   "BREADCRUMBS:base": "Malarnia",
   "BREADCRUMBS:browse": "Farby",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie farb nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie farby nie powiodło się.",
-  "MSG:DELETED": "Farba <em>{label}</em> została usunięta.",
-
-  "PAGE_ACTION:add": "Dodaj farbę",
-  "PAGE_ACTION:edit": "Edytuj farbę",
-  "PAGE_ACTION:delete": "Usuń farbę",
-  "PAGE_ACTION:jump:title": "Skocz do farby po 12NC",
-  "PAGE_ACTION:jump:placeholder": "12NC farby...",
-
-  "PANEL:TITLE:details": "Szczegóły farby",
-  "PANEL:TITLE:addForm": "Formularz dodawania farby",
-  "PANEL:TITLE:editForm": "Formularz edycji farby",
+  "PAGE_ACTION:jump:placeholder": "12NC...",
 
   "PROPERTY:_id": "12NC",
   "PROPERTY:shelf": "Regał",
   "PROPERTY:bin": "Bin",
   "PROPERTY:name": "Nazwa",
 
-  "filter:submit": "Filtruj farby",
+  "filter:submit": "Filtruj",
 
-  "FORM:ACTION:add": "Dodaj farbę",
-  "FORM:ACTION:edit": "Edytuj farbę",
-  "FORM:ERROR:addFailure": "Nie udało się dodać farby.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować farby.",
-  "FORM:ERROR:alreadyExists": "Farba o danym 12NC już istnieje.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia farby",
-  "ACTION_FORM:BUTTON:delete": "Usuń farbę",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną farbę?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć farbę <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć farby."
+  "FORM:ERROR:alreadyExists": "Farba o danym 12NC już istnieje."
 }

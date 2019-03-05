@@ -143,7 +143,7 @@ define([
       this.listenTo(this.model, 'change:groups', this.render);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var model = this.model;
       var divisions = model.get('divisions');
@@ -168,7 +168,6 @@ define([
       this.lastColumns = columns;
 
       return {
-        idPrefix: this.idPrefix,
         renderOkRatioTotalsTable: renderOkRatioTotalsTable,
         columns: columns,
         rows: model.get('groups'),
@@ -195,8 +194,7 @@ define([
 
     renderTotals: function(group)
     {
-      this.$id('totals').html(renderOkRatioTotalsTable({
-        idPrefix: this.idPrefix,
+      this.$id('totals').html(this.renderPartialHtml(renderOkRatioTotalsTable, {
         columns: this.lastColumns,
         total: group
       }));

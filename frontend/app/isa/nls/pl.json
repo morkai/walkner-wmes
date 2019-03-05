@@ -3,11 +3,6 @@
   "BREADCRUMBS:events": "Zdarzenia",
   "BREADCRUMBS:requests": "Żądania",
 
-  "MSG:LOADING_FAILURE": "Ładowanie pól odkładczych nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie pola odkładczego nie powiodło się.",
-
-  "PAGE_ACTION:export": "Eksportuj",
-
   "actions:shiftPersonnel": "Zmień personel",
   "actions:responderFilter": "Filtruj wg magazyniera",
   "actions:toggleFullscreen": "Przełącz tryb pełnoekranowy",

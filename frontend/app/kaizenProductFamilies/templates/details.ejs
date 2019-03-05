@@ -1,33 +1,19 @@
 <div class="panel panel-primary">
-  <div class="panel-heading"><%- t('kaizenProductFamilies', 'PANEL:TITLE:details') %></div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('kaizenProductFamilies', 'PROPERTY:_id') %></div>
-        <div class="prop-value"><%= model._id %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('kaizenProductFamilies', 'PROPERTY:name') %></div>
-        <div class="prop-value"><%= model.name %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('kaizenProductFamilies', 'PROPERTY:position') %></div>
-        <div class="prop-value"><%= model.position || '0' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('kaizenProductFamilies', 'PROPERTY:owners') %></div>
-        <div class="prop-value">
-          <% if (_.isEmpty(model.owners)) { %>
-          -
-          <% } else { %>
-          <ul>
-            <% _.forEach(model.owners, function(owner) { %>
-            <li><%- owner %></li>
-            <% }) %>
-          </ul>
-          <% } %>
-        </div>
-      </div>
-    </div>
+    <%- helpers.props(model, [
+      '_id',
+      'name',
+      'position',
+      {id: '!owners', value: function(owners)
+      {
+        if (!owners.length)
+        {
+          return '';
+        }
+
+        return '<ul>' + owners.map(function(owner) { return '<li>' + owner; }) + '</ul>';
+      }}
+    ]) %>
   </div>
 </div>

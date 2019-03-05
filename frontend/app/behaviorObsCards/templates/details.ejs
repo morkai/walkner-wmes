@@ -6,54 +6,16 @@
     <div class="panel-details">
       <div class="row">
         <div class="col-md-4">
-          <div class="props first">
-            <% ['section', 'line', 'position', 'companyName'].forEach(function(prop) { %>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
-              <div class="prop-value"><%= model[prop] || '-' %></div>
-            </div>
-            <% }) %>
-          </div>
+          <%- helpers.props(model, {
+            first: true,
+            props: ['section', 'line', 'position', 'companyName']
+          }) %>
         </div>
         <div class="col-md-4">
-          <div class="props">
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:date') %></div>
-              <div class="prop-value"><%- model.date %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:observer') %></div>
-              <div class="prop-value"><%- model.observer %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:observerSection') %></div>
-              <div class="prop-value"><%- model.observerSection || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:superior') %></div>
-              <div class="prop-value"><%- model.superior %></div>
-            </div>
-          </div>
+          <%- helpers.props(model, ['date', '!observer', 'observerSection', '!superior']) %>
         </div>
         <div class="col-md-4">
-          <div class="props">
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:createdAt') %></div>
-              <div class="prop-value"><%- model.createdAt %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:creator') %></div>
-              <div class="prop-value"><%- model.creator %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:updatedAt') %></div>
-              <div class="prop-value"><%- model.updatedAt %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:updater') %></div>
-              <div class="prop-value"><%- model.updater %></div>
-            </div>
-          </div>
+          <%- helpers.props(model, ['createdAt', '!creator', 'updatedAt', '!updater']) %>
         </div>
       </div>
     </div>

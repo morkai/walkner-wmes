@@ -4,8 +4,6 @@
   "BREADCRUMBS:details": "Wynik",
   "BREADCRUMBS:settings": "Ustawienia",
 
-  "MSG:LOADING_FAILURE": "Ładowanie wyników programowania nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych wyniku programowania nie powiodło się.",
   "MSG:drop:filesOnly": "Upuszczać można tylko pliki!",
   "MSG:drop:invalidFile": "Nieprawidłowy plik aktualizacji oprogramowania!",
   "MSG:drop:upload:failure": "Nie udało się załadować pliku aktualizacji.",
@@ -14,7 +12,6 @@
   "PANEL:TITLE:details:order": "Szczegóły lokalnego zlecenia",
   "PANEL:TITLE:details:entry": "Szczegóły programowania",
 
-  "PAGE_ACTION:export": "Eksportuj wyniki",
   "PAGE_ACTION:download": "Pobierz konfigurację",
   "PAGE_ACTION:download:workflow": "Konfiguracja MultiOneWorkflow",
   "PAGE_ACTION:download:feature": "Konfiguracja drivera",
@@ -60,7 +57,7 @@
   "filter:placeholder:srcId": "Dowolne",
   "filter:nc12Type:program": "12NC programu",
   "filter:nc12Type:led": "12NC płytki LED",
-  "filter:submit": "Filtruj wyniki",
+  "filter:submit": "Filtruj",
 
   "step:wait": "Przerwa",
   "step:pe": "Test obwodu ochronnego",

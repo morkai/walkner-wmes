@@ -1,23 +1,17 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'app/i18n',
   'app/user',
-  'app/time',
-  'app/orgUnits/util/renderOrgUnitPath',
   'app/core/views/ListView'
 ], function(
-  t,
   user,
-  time,
-  renderOrgUnitPath,
   ListView
 ) {
   'use strict';
 
   function createDescriptionTdAttrs(row)
   {
-    return row.deactivatedAt === '-' ? '' : 'class="is-deleted"';
+    return !row.deactivatedAt ? '' : 'class="is-deleted"';
   }
 
   return ListView.extend({
@@ -69,15 +63,7 @@ define([
         })
         .map(function(mrpController)
         {
-          var row = mrpController.toJSON();
-
-          row.className = row.deactivatedAt ? 'is-deactivated' : '';
-          row.subdivision = renderOrgUnitPath(mrpController, true);
-          row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '-';
-          row.inout = t('mrpControllers', 'inout:' + row.inout);
-          row.replacedBy = row.replacedBy || '-';
-
-          return row;
+          return mrpController.serializeRow();
         });
     },
 

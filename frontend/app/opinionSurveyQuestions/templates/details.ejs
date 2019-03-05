@@ -1,19 +1,6 @@
 <div class="panel panel-primary">
-  <div class="panel-heading"><%- t('opinionSurveyQuestions', 'PANEL:TITLE:details') %></div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('opinionSurveyQuestions', 'PROPERTY:_id') %></div>
-        <div class="prop-value"><%= model._id %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('opinionSurveyQuestions', 'PROPERTY:short') %></div>
-        <div class="prop-value"><%= model.short %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('opinionSurveyQuestions', 'PROPERTY:full') %></div>
-        <div class="prop-value"><%= model.full %></div>
-      </div>
-    </div>
+    <%- helpers.props(model, ['_id', 'short', 'full']) %>
   </div>
 </div>

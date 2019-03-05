@@ -357,7 +357,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(FormView.prototype.serialize.call(this), {
+      return _.assign(FormView.prototype.serialize.call(this), {
         aors: aors.toJSON(),
         companies: companies.toJSON(),
         privileges: privileges,
@@ -484,7 +484,7 @@ define([
 
     renderMobileList: function()
     {
-      this.$id('mobile-list').html(formMobileListTemplate({
+      this.$id('mobile-list').html(this.renderPartialHtml(formMobileListTemplate, {
         mobileList: this.mobileList
       }));
     },

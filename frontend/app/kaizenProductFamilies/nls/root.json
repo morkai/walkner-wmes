@@ -2,37 +2,11 @@
   "root": {
     "BREADCRUMBS:base": "Improvements",
     "BREADCRUMBS:browse": "Product families",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the product families.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the product family.",
-    "MSG:DELETED": "Product family <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add product family",
-    "PAGE_ACTION:edit": "Edit product family",
-    "PAGE_ACTION:delete": "Delete product family",
-
-    "PANEL:TITLE:details": "Product family details",
-    "PANEL:TITLE:addForm": "Product family add form",
-    "PANEL:TITLE:editForm": "Product family edit form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
     "PROPERTY:position": "Position",
-    "PROPERTY:owners": "Owners",
-
-    "FORM:ACTION:add": "Add product family",
-    "FORM:ACTION:edit": "Edit product family",
-    "FORM:ERROR:addFailure": "Failed to add the new product family.",
-    "FORM:ERROR:editFailure": "Failed to edit the product family.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Product family deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete product family",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen product family?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> product family?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the product family."
+    "PROPERTY:owners": "Owners"
   },
   "pl": true
 }

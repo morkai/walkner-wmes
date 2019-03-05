@@ -1,9 +1,9 @@
 <div class="<%- showPanel ? 'panel panel-default' : '' %> orders-changes <%- noSystemChanges ? 'orders-no-system-changes' : '' %>">
   <% if (showPanel) { %>
   <div class="panel-heading is-with-actions">
-    <%- t('orders', 'PANEL:TITLE:changes') %>
+    <%- helpers.t('PANEL:TITLE:changes') %>
     <div class="panel-actions">
-      <button id="<%- idPrefix %>-toggleSystemChanges" class="btn btn-default <%- noSystemChanges ? 'active' : '' %>" type="button"><%- t('orders', 'CHANGES:toggleSystemChanges') %></button>
+      <button id="<%- idPrefix %>-toggleSystemChanges" class="btn btn-default <%- noSystemChanges ? 'active' : '' %>" type="button"><%- helpers.t('CHANGES:toggleSystemChanges') %></button>
     </div>
   </div>
   <% } %>
@@ -12,11 +12,11 @@
       <table id="<%- idPrefix %>-table" class="table table-condensed table-bordered table-hover">
         <thead>
           <tr>
-            <th class="is-min"><%- t('orders', 'CHANGES:time') %>
-            <th class="is-min"><%- t('orders', 'CHANGES:user') %>
-            <th class="is-min"><%- t('orders', 'CHANGES:property') %>
-            <th class="is-min"><%- t('orders', 'CHANGES:oldValue') %>
-            <th><%- t('orders', 'CHANGES:newValue') %>
+            <th class="is-min"><%- helpers.t('CHANGES:time') %>
+            <th class="is-min"><%- helpers.t('CHANGES:user') %>
+            <th class="is-min"><%- helpers.t('CHANGES:property') %>
+            <th class="is-min"><%- helpers.t('CHANGES:oldValue') %>
+            <th><%- helpers.t('CHANGES:newValue') %>
           </tr>
         </thead>
         <% if (canComment) { %>
@@ -29,7 +29,7 @@
         <% if (!changes.length) { %>
         <tbody id="<%- idPrefix %>-empty">
           <tr>
-            <td colspan="5"><%- t('orders', 'CHANGES:NO_DATA') %></td>
+            <td colspan="5"><%- helpers.t('CHANGES:NO_DATA') %></td>
           </tr>
         </tbody>
         <% } %>

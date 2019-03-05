@@ -66,7 +66,7 @@ define([
 
       return new ListViewClass({
         collection: this.collection,
-        model: this[this.modelProperty] || this.model,
+        model: this.collection ? undefined : this.getDefaultModel(),
         columns: this.options.columns || this.columns || ListViewClass.prototype.columns,
         serializeRow: this.options.serializeRow || this.serializeRow || ListViewClass.prototype.serializeRow,
         className: this.options.listClassName

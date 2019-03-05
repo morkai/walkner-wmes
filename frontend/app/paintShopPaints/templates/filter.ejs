@@ -1,22 +1,22 @@
 <form class="well filter-form">
   <div class="form-group">
-    <label for="<%- idPrefix %>-_id"><%- t('paintShopPaints', 'PROPERTY:_id') %></label>
+    <label for="<%- idPrefix %>-_id"><%- helpers.t('PROPERTY:_id') %></label>
     <input id="<%- idPrefix %>-_id" class="form-control" name="_id" type="text" autocomplete="new-password" maxlength="12" style="width: 110px">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-shelf"><%- t('paintShopPaints', 'PROPERTY:shelf') %></label>
+    <label for="<%- idPrefix %>-shelf"><%- helpers.t('PROPERTY:shelf') %></label>
     <input id="<%- idPrefix %>-shelf" class="form-control" name="shelf" type="text" autocomplete="new-password" style="width: 75px">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-bin"><%- t('paintShopPaints', 'PROPERTY:bin') %></label>
+    <label for="<%- idPrefix %>-bin"><%- helpers.t('PROPERTY:bin') %></label>
     <input id="<%- idPrefix %>-bin" class="form-control" name="bin" type="text" autocomplete="new-password" style="width: 75px">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-name"><%- t('paintShopPaints', 'PROPERTY:name') %></label>
+    <label for="<%- idPrefix %>-name"><%- helpers.t('PROPERTY:name') %></label>
     <input id="<%- idPrefix %>-name" class="form-control" name="name" type="text" autocomplete="new-password">
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('paintShopPaints', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

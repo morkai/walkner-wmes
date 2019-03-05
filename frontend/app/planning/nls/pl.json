@@ -145,7 +145,6 @@
   "lines:menu:freezeOrders:shift:3": "wszystkie zmiany",
 
   "orders:hd": "Zlecenia",
-  "orders:edit": "Ustaw kolejkę zleceń",
   "orders:_id": "Nr zlecenia",
   "orders:date": "Data",
   "orders:delayReason": "Powód",
@@ -377,7 +376,7 @@
   "settings:maxSplitLineCount": "Ilość części zlecenia",
   "settings:maxSplitLineCount:help": "Maksymalna ilość linii na jaką <em>Duże</em> zlecenie może być podzielone. Zero - maksymalna dostępna ilość linii.",
   "settings:mrpLine": "Ustawienia linii w MRP",
-  "settings:mrpLine:help": "Wybierz linię produkcyjną, dla którego chcesz zdefiniować ustawienia w zakresie wybranego kontrolera MRP.",
+  "settings:mrpLine:help": "Wybierz linię produkcyjną, dla której chcesz zdefiniować ustawienia w zakresie wybranego kontrolera MRP.",
   "settings:mrpLine:placeholder": "Linia produkcyjna...",
   "settings:workerCount": "Ilość pracowników",
   "settings:workerCount:shift": "zm. {shiftNo}:",

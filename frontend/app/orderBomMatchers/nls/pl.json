@@ -1,22 +1,9 @@
 {
   "BREADCRUMBS:operator": "Operator",
-  "BREADCRUMBS:settings": "Ustawienia",
   "BREADCRUMBS:browse": "Sprawdzanie komponentów",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
+  "BREADCRUMBS:settings": "Ustawienia",
 
-  "MSG:DELETED": "Strategia <em>{label}</em> została usunięta.",
-
-  "PAGE_ACTION:add": "Dodaj strategię",
-  "PAGE_ACTION:edit": "Edytuj strategię",
-  "PAGE_ACTION:delete": "Usuń strategię",
-
-  "PANEL:TITLE:details": "Szczegóły strategii",
-  "PANEL:TITLE:addForm": "Formularz dodawania strategii",
-  "PANEL:TITLE:editForm": "Formularz edycji strategii",
-
-  "filter:submit": "Filtruj strategie",
+  "filter:submit": "Filtruj",
 
   "PROPERTY:active": "Aktywna?",
   "PROPERTY:description": "Opis",
@@ -35,17 +22,7 @@
   "PROPERTY:components.single": "Tylko 1?",
   "PROPERTY:components.missing": "Brak?",
 
-  "FORM:ACTION:add": "Dodaj strategię",
-  "FORM:ACTION:edit": "Edytuj strategię",
   "FORM:ACTION:addComponent": "Dodaj komponent",
   "FORM:ACTION:removeComponent": "Usuń komponent",
-  "FORM:ERROR:addFailure": "Nie udało się dodać strategii.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować strategii.",
-  "FORM:ERROR:pattern": "Nieprawidłowy wzorzec.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia strategii",
-  "ACTION_FORM:BUTTON:delete": "Usuń strategię",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną strategię?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć strategię <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć strategii."
+  "FORM:ERROR:pattern": "Nieprawidłowy wzorzec."
 }

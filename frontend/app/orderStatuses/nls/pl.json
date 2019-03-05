@@ -1,33 +1,7 @@
 {
   "BREADCRUMBS:browse": "Statusy zleceń",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie statusów zleceń nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie statusu zleceń nie powiodło się.",
-  "MSG:DELETED": "Status zleceń <em>{label}</em> został usunięty.",
-
-  "PAGE_ACTION:add": "Dodaj status zleceń",
-  "PAGE_ACTION:edit": "Edytuj status zleceń",
-  "PAGE_ACTION:delete": "Usuń status zleceń",
-
-  "PANEL:TITLE:details": "Szczegóły statusu zleceń",
-  "PANEL:TITLE:addForm": "Formularz dodawania statusu zleceń",
-  "PANEL:TITLE:editForm": "Formularz edycji statusu zleceń",
 
   "PROPERTY:_id": "Etykieta",
   "PROPERTY:label": "Opis",
-  "PROPERTY:color": "Kolor",
-
-  "FORM:ACTION:add": "Dodaj status zleceń",
-  "FORM:ACTION:edit": "Edytuj status zleceń",
-  "FORM:ERROR:addFailure": "Nie udało się dodać statusu zleceń.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować statusu zleceń.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia statusu zleceń",
-  "ACTION_FORM:BUTTON:delete": "Usuń status zleceń",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany status zleceń?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć status zleceń <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć statusu zleceń."
+  "PROPERTY:color": "Kolor"
 }

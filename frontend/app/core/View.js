@@ -207,7 +207,12 @@ function(
 
   View.prototype.renderPartial = function(partial, data)
   {
-    return $(partial(_.assign(this.getCommonTemplateData(), data)));
+    return $(this.renderPartialHtml(partial, data));
+  };
+
+  View.prototype.renderPartialHtml = function(partial, data)
+  {
+    return partial(_.assign(this.getCommonTemplateData(), data));
   };
 
   View.prototype.afterRender = function() {};
@@ -323,16 +328,34 @@ function(
         prop = {id: prop};
       }
 
-      var escape = prop.id.charAt(0) !== '!';
+      var escape = prop.escape === false ? false : (prop.id.charAt(0) !== '!');
       var id = escape ? prop.id : prop.id.substring(1);
       var className = prop.className || '';
+      var valueClassName = prop.valueClassName || '';
       var nlsDomain = prop.nlsDomain || options.nlsDomain || defaultNlsDomain;
       var label = prop.label || t(nlsDomain, 'PROPERTY:' + id);
-      var value = escape ? _.escape(data[id]) : data[id];
+      var value = _.isFunction(prop.value)
+        ? prop.value(data[id], prop, view)
+        : _.isUndefined(prop.value) ? data[id] : prop.value;
+
+      if (_.isFunction(prop.visible) && !prop.visible(value, prop, view))
+      {
+        return;
+      }
+
+      if (prop.visible != null && !prop.visible)
+      {
+        return;
+      }
+
+      if (escape)
+      {
+        value = _.escape(value);
+      }
 
       html += '<div class="prop ' + className + '" data-prop="' + id + '">'
         + '<div class="prop-name">' + label + '</div>'
-        + '<div class="prop-value">' + value + '</div>'
+        + '<div class="prop-value ' + valueClassName + '">' + value + '</div>'
         + '</div>';
     });
 

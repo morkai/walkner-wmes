@@ -64,9 +64,7 @@ define([
       this.listView = new XiconfResultListView({collection: this.collection});
 
       this.filterView = new XiconfResultFilterView({
-        model: {
-          rqlQuery: this.collection.rqlQuery
-        },
+        model: this.collection,
         collection: this.collection
       });
 

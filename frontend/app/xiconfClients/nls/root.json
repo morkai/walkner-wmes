@@ -3,8 +3,6 @@
     "BREADCRUMBS:base": "Xiconf",
     "BREADCRUMBS:browse": "Clients",
 
-    "MSG:LOADING_FAILURE": "Failed to load the clients.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the client.",
     "MSG:NO_APPS_TO_UPDATE": "No apps to update.",
 
     "PROPERTY:_id": "ID",
@@ -35,12 +33,6 @@
     "list:update": "Update application",
 
     "filter:submit": "Filter clients",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Client deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete client",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen client?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> client?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the client.",
 
     "restartDialog:title": "Application restart",
     "restartDialog:message": "Are you sure you want to restart the <em>{client}</em> application?<br><br>The application will be restarted right after the current programming finishes.",

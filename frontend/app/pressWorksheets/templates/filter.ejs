@@ -16,11 +16,11 @@
     </div>
   </div>
   <div class="form-group">
-    <label><%- t('pressWorksheets', 'PROPERTY:type') %></label>
+    <label><%- helpers.t('PROPERTY:type') %></label>
     <div id="<%- idPrefix %>-type" class="btn-group filter-btn-group" data-toggle="buttons">
       <% ['any', 'mech', 'paintShop', 'optics'].forEach(function(type) { %>
       <label class="btn btn-default">
-        <input type="radio" name="type" value="<%- type %>"> <%- t('pressWorksheets', 'filter:type:' + type) %>
+        <input type="radio" name="type" value="<%- type %>"> <%- helpers.t('filter:type:' + type) %>
       </label>
       <% }) %>
     </div>
@@ -30,10 +30,10 @@
     <div class="filter-radioLabels">
       <label>
         <input name="userType" type="radio" value="master">
-        <%- t('pressWorksheets', 'filter:user:master') %>
+        <%- helpers.t('filter:user:master') %>
       </label><label>
         <input name="userType" type="radio" value="operators">
-        <%- t('pressWorksheets', 'filter:user:operators') %>
+        <%- helpers.t('filter:user:operators') %>
       </label>
     </div>
     <input id="<%- idPrefix %>-user" name="user" type="hidden">
@@ -41,12 +41,12 @@
   <%- renderLimit() %>
   <div class="form-group no-label">
     <div id="<%- idPrefix %>-mine" class="btn-group filter-btn-group" data-toggle="buttons">
-      <label class="btn btn-default" title="<%- t('pressWorksheets', 'filter:mine:title') %>">
-        <input type="checkbox" name="mine" value="1"> <%- t('pressWorksheets', 'filter:mine') %>
+      <label class="btn btn-default" title="<%- helpers.t('filter:mine:title') %>">
+        <input type="checkbox" name="mine" value="1"> <%- helpers.t('filter:mine') %>
       </label>
     </div>
   </div>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('pressWorksheets', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

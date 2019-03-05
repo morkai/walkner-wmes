@@ -1,22 +1,8 @@
 {
   "BREADCRUMBS:base": "Xiconf",
   "BREADCRUMBS:browse": "Programy",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie programów nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie programu nie powiodło się.",
-  "MSG:DELETED": "Program <em>{label}</em> został usunięty.",
-
-  "PAGE_ACTION:add": "Dodaj program",
-  "PAGE_ACTION:edit": "Edytuj program",
-  "PAGE_ACTION:delete": "Usuń program",
   "PAGE_ACTION:toggle": "Pokaż/ukryj szczegóły",
-
-  "PANEL:TITLE:details": "Szczegóły programu",
-  "PANEL:TITLE:addForm": "Formularz dodawania programu",
-  "PANEL:TITLE:editForm": "Formularz edycji programu",
 
   "step:wait": "Przerwa",
   "step:pe": "Test obwodu ochronnego",
@@ -85,7 +71,7 @@
   "glp2:input:26": "Stop bezpieczeństwa",
   "glp2:input:27": "Start oburęczny",
 
-  "filter:submit": "Filtruj programy",
+  "filter:submit": "Filtruj",
 
   "PROPERTY:name": "Nazwa",
   "PROPERTY:type": "Typ",
@@ -127,20 +113,10 @@
   "PROPERTY:lampCount": "Ilość świetlówek",
   "PROPERTY:lampDuration": "Czas nieprzerwanego świecenia [s]",
 
-  "FORM:ACTION:add": "Dodaj program",
-  "FORM:ACTION:edit": "Edytuj program",
-  "FORM:ERROR:addFailure": "Nie udało się dodać programu.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować programu.",
   "FORM:ERROR:minDuration": "Wartość nie może być mniejsza niż 1s.",
   "FORM:ERROR:minMaxDurations": "Czas na potwierdzenie musi być dłuższy od Czasu do potwierdzenia.",
   "FORM:ERROR:requiredStep": "Wybierz przynajmniej jeden krok.",
 
   "form:steps:add": "Dodaj krok",
-  "form:steps:placeholder": "Wybierz typ kroku...",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia programu",
-  "ACTION_FORM:BUTTON:delete": "Usuń program",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany program?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć program <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć programu."
+  "form:steps:placeholder": "Wybierz typ kroku..."
 }

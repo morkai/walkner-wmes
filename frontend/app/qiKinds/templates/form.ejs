@@ -4,21 +4,21 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('qiKinds', 'PROPERTY:name') %></label>
+        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-division" class="control-label"><%- t('qiKinds', 'PROPERTY:division') %></label>
+        <label for="<%- idPrefix %>-division" class="control-label"><%- helpers.t('PROPERTY:division') %></label>
         <input id="<%- idPrefix %>-division" type="text" autocomplete="new-password" name="division">
       </div>
       <div class="checkbox">
         <label for="<%- idPrefix %>-order">
           <input id="<%- idPrefix %>-order" type="checkbox" name="order" value="true">
-          <%- t('qiKinds', 'PROPERTY:order') %>
+          <%- helpers.t('PROPERTY:order') %>
         </label>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-position" class="control-label"><%- t('qiKinds', 'PROPERTY:position') %></label>
+        <label for="<%- idPrefix %>-position" class="control-label"><%- helpers.t('PROPERTY:position') %></label>
         <input id="<%- idPrefix %>-position" type="number" name="position">
       </div>
     </div>

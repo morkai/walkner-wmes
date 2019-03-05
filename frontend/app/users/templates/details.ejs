@@ -4,14 +4,7 @@
       <div class="panel panel-primary">
         <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details:basic') %></div>
         <div class="panel-details">
-          <div class="props first">
-            <% ['active', 'login', 'personellId', 'card', 'cardUid', 'kdId', 'kdDivision', 'kdPosition'].forEach(function(prop) { %>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
-              <div class="prop-value"><%= model[prop] || '-' %></div>
-            </div>
-            <% }) %>
-          </div>
+          <%- helpers.props(model, ['active', 'login', 'personellId', 'card', 'cardUid', 'kdId', 'kdDivision', 'kdPosition']) %>
         </div>
       </div>
     </div>
@@ -19,38 +12,26 @@
       <div class="panel panel-default">
         <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details:contact') %></div>
         <div class="panel-details">
-          <div class="props first">
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:name') %></div>
-              <div class="prop-value">
-                <% if (!model.lastName && !model.firstName) { %>
-                -
-                <% } else { %>
-                <%= model.lastName || '' %> <%= model.firstName || '' %>
-                <% } %>
-              </div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:email') %></div>
-              <div class="prop-value"><%= model.email || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:mobile') %></div>
-              <div class="prop-value">
-                <% if (_.isEmpty(model.mobile)) { %>
-                -
-                <% } else if (model.mobile.length === 1) { %>
-                <%- helpers.t('DETAILS:mobile:item', model.mobile[0]) %>
-                <% } else { %>
-                <ul>
-                  <% _.forEach(model.mobile, function(mobile) { %>
-                  <li><%- helpers.t('DETAILS:mobile:item', mobile) %></li>
-                  <% }) %>
-                </ul>
-                <% } %>
-              </div>
-            </div>
-          </div>
+          <%- helpers.props(model, [
+            'name',
+            'email',
+            {id: '!mobile', value: function(mobiles)
+            {
+              if (_.isEmpty(mobiles))
+              {
+                return '';
+              }
+
+              if (mobiles.length === 1)
+              {
+                return helpers.t('DETAILS:mobile:item', mobiles[0]);
+              }
+
+              return '<ul>'
+                + mobiles.map(function(mobile) { return '<li>' + helpers.t('DETAILS:mobile:item', mobile); })
+                + '</ul>';
+            }}
+          ]) %>
         </div>
       </div>
     </div>
@@ -58,44 +39,29 @@
       <div class="panel panel-default">
         <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details:extra') %></div>
         <div class="panel-details">
-          <div class="props first">
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:company') %></div>
-              <div class="prop-value"><%= model.company || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:prodFunction') %></div>
-              <div class="prop-value"><%= model.prodFunction || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:orgUnit') %></div>
-              <div class="prop-value"><%- model.orgUnit || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:aors') %></div>
-              <div class="prop-value">
-                <% if (_.isEmpty(model.aors)) { %>
-                <%- helpers.t('NO_DATA:aors') %>
-                <% } else { %>
-                <ul>
-                  <% _.forEach(model.aors, function(aor) { %>
-                  <li><%= aor %></li>
-                  <% }) %>
-                </ul>
-                <% } %>
-              </div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:mrps') %></div>
-              <div class="prop-value"><%= _.isEmpty(model.mrps) ? '-' : model.mrps.join(', ') %></div>
-            </div>
-            <% if (loadedModules.isLoaded('vendors')) { %>
-            <div class="prop">
-              <div class="prop-name"><%- helpers.t('PROPERTY:vendor') %></div>
-              <div class="prop-value"><%= model.vendor || '-' %></div>
-            </div>
-            <% } %>
-          </div>
+          <%- helpers.props(model, [
+            'company',
+            'prodFunction',
+            '!orgUnit',
+            {id: '!aors', value: function(aors)
+            {
+              if (_.isEmpty(aors))
+              {
+                return helpers.t('NO_DATA:aors');
+              }
+
+              if (aors.length === 1)
+              {
+                return _.escape(aors[0]);
+              }
+
+              return '<ul>'
+                + aors.map(function(aor) { return '<li>' + _.escape(aor); })
+                + '</ul>';
+            }},
+            'mrps',
+            {id: 'vendor', visible: loadedModules.isLoaded('vendors')}
+          ]) %>
         </div>
       </div>
     </div>

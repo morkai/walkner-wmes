@@ -2,10 +2,7 @@
   "BREADCRUMBS:base": "Baza Kanban",
   "BREADCRUMBS:browse": "Komponenty",
 
-  "PAGE_ACTION:jump:title": "Skocz do komponentu po 12NC",
-  "PAGE_ACTION:jump:placeholder": "12NC komponentu...",
-
-  "PANEL:TITLE:details": "Szczegóły komponentu",
+  "PAGE_ACTION:jump:placeholder": "12NC",
 
   "PROPERTY:_id": "12NC",
   "PROPERTY:description": "Nazwa komponentu",

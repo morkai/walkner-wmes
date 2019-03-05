@@ -2,36 +2,10 @@
   "root": {
     "BREADCRUMBS:base": "8D",
     "BREADCRUMBS:browse": "Problem sources",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the problem sources.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the problem source.",
-    "MSG:DELETED": "Problem source <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add problem source",
-    "PAGE_ACTION:edit": "Edit problem source",
-    "PAGE_ACTION:delete": "Delete problem source",
-
-    "PANEL:TITLE:details": "Problem source details",
-    "PANEL:TITLE:addForm": "Problem source add form",
-    "PANEL:TITLE:editForm": "Problem source edit form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
-    "PROPERTY:position": "Position",
-
-    "FORM:ACTION:add": "Add problem source",
-    "FORM:ACTION:edit": "Edit problem source",
-    "FORM:ERROR:addFailure": "Failed to add the new problem source.",
-    "FORM:ERROR:editFailure": "Failed to edit the problem source.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Problem source deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete problem source",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen problem source?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> problem source?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the problem source."
+    "PROPERTY:position": "Position"
   },
   "pl": true
 }

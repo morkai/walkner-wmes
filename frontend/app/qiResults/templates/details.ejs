@@ -3,95 +3,40 @@
     <div class="col-lg-4">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <%- t('qiResults', 'PANEL:TITLE:details:order') %>
+          <%- helpers.t('PANEL:TITLE:details:order') %>
         </div>
         <div class="panel-details">
-          <div class="props first">
-            <% ['orderNo', 'serialNumbers', 'nc12', 'productFamily', 'productName', 'division', 'line', 'qtyOrder'].forEach(function(p) { %>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:' + p) %></div>
-              <div class="prop-value"><%= model[p] || '-' %></div>
-            </div>
-            <% }) %>
-          </div>
+          <%- helpers.props(model, ['orderNo', 'serialNumbers', 'nc12', 'productFamily', 'productName', 'division', 'line', 'qtyOrder']) %>
         </div>
       </div>
     </div>
     <div class="col-lg-4">
       <div class="panel panel-<%- model.ok ? 'success' : 'danger' %>">
         <div class="panel-heading">
-          <%- t('qiResults', 'PANEL:TITLE:details:inspection') %>
+          <%- helpers.t('PANEL:TITLE:details:inspection') %>
         </div>
         <div class="panel-details">
-          <div class="props first">
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:kind') %></div>
-              <div class="prop-value"><%= model.kind %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:inspectedAt') %></div>
-              <div class="prop-value"><%= model.inspectedAt %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:inspector') %></div>
-              <div class="prop-value"><%- model.inspector %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:leader') %></div>
-              <div class="prop-value"><%- model.leader %></div>
-            </div>
-            <% if (!model.ok && model.nokOwner !== '-') { %>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:nokOwner') %></div>
-              <div class="prop-value"><%- model.nokOwner %></div>
-            </div>
-            <% } %>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:qtyInspected') %></div>
-              <div class="prop-value"><%- model.qtyInspected %></div>
-            </div>
-            <% if (!model.ok) { %>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:qtyNokInspected') %></div>
-              <div class="prop-value"><%- model.qtyNokInspected %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:qtyToFix') %></div>
-              <div class="prop-value"><%- model.qtyToFix %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:qtyNok') %></div>
-              <div class="prop-value"><%- model.qtyNok %></div>
-            </div>
-            <% } %>
-          </div>
+          <%- helpers.props(model, [
+            'kind',
+            'inspectedAt',
+            '!inspector',
+            '!leader',
+            {id: '!nokOwner', visible: !model.ok},
+            'qtyInspected',
+            {id: 'qtyNokInspected', visible: !model.ok},
+            {id: 'qtyToFix', visible: !model.ok},
+            {id: 'qtyNok', visible: !model.ok}
+          ]) %>
         </div>
       </div>
     </div>
     <div class="col-lg-4">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <%- t('qiResults', 'PANEL:TITLE:details:extra') %>
+          <%- helpers.t('PANEL:TITLE:details:extra') %>
         </div>
         <div class="panel-details">
-          <div class="props first">
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:createdAt') %></div>
-              <div class="prop-value"><%= model.createdAt %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:creator') %></div>
-              <div class="prop-value"><%- model.creator %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:updatedAt') %></div>
-              <div class="prop-value"><%= model.updatedAt || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:updater') %></div>
-              <div class="prop-value"><%- model.updater %></div>
-            </div>
-          </div>
+          <%- helpers.props(model, ['createdAt', '!creator', 'updatedAt', '!updater']) %>
         </div>
       </div>
     </div>
@@ -101,42 +46,24 @@
     <div class="col-lg-4">
       <div class="panel panel-danger">
         <div class="panel-heading">
-          <%- t('qiResults', 'PANEL:TITLE:details:inspection:nok') %>
+          <%- helpers.t('PANEL:TITLE:details:inspection:nok') %>
         </div>
         <div class="panel-details">
-          <div class="props first">
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:errorCategory') %></div>
-              <div class="prop-value"><%= model.errorCategory || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:faultCode') %></div>
-              <div class="prop-value"><%- model.faultCode || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:faultDescription') %></div>
-              <div class="prop-value text-lines"><%= model.faultDescription || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:problem') %></div>
-              <div class="prop-value text-lines"><%= model.problem || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:immediateActions') %></div>
-              <div class="prop-value text-lines"><%= model.immediateActions || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('qiResults', 'PROPERTY:rootCause') %></div>
-              <div class="prop-value text-lines"><%= model.rootCause || '-' %></div>
-            </div>
-          </div>
+          <%- helpers.props(model, [
+            'errorCategory',
+            'faultCode',
+            {id: 'faultDescription', valueClassName: 'text-lines'},
+            {id: 'problem', valueClassName: 'text-lines'},
+            {id: 'immediateActions', valueClassName: 'text-lines'},
+            {id: 'rootCause', valueClassName: 'text-lines'},
+          ]) %>
         </div>
       </div>
     </div>
     <div class="col-lg-4">
       <div class="panel panel-success">
         <div class="panel-heading">
-          <%- t('qiResults', 'PANEL:TITLE:details:attachments:ok') %>
+          <%- helpers.t('PANEL:TITLE:details:attachments:ok') %>
         </div>
         <div class="panel-body qiResults-details-attachment">
           <% if (model.okFile) { %>
@@ -157,7 +84,7 @@
     <div class="col-lg-4">
       <div class="panel panel-danger">
         <div class="panel-heading">
-          <%- t('qiResults', 'PANEL:TITLE:details:attachments:nok') %>
+          <%- helpers.t('PANEL:TITLE:details:attachments:nok') %>
         </div>
         <div class="panel-body qiResults-details-attachment">
           <% if (model.nokFile) { %>
@@ -178,16 +105,17 @@
   </div>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <%- t('qiResults', 'PANEL:TITLE:details:actions') %>
+      <%- helpers.t('PANEL:TITLE:details:actions') %>
     </div>
     <% if (model.correctiveActions.length) { %>
     <%- renderCorrectiveActionsTable({
+      helpers: helpers,
       bordered: true,
       correctiveActions: model.correctiveActions
     }) %>
     <% } else { %>
     <div class="panel-body">
-      <p><%- t('qiResults', 'correctiveActions:empty') %></p>
+      <p><%- helpers.t('correctiveActions:empty') %></p>
     </div>
     <% } %>
   </div>

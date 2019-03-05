@@ -1,29 +1,12 @@
 <div class="panel panel-<%- panelType %> mechOrders-details">
   <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('mechOrders', 'PROPERTY:_id') %></div>
-        <div class="prop-value"><%= model._id || model.nc12 %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('mechOrders', 'PROPERTY:name') %></div>
-        <div class="prop-value"><%= model.name || '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('mechOrders', 'PROPERTY:materialNorm') %></div>
-        <div class="prop-value"><%= model.materialNorm || '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('mechOrders', 'PROPERTY:mrp') %></div>
-        <div class="prop-value"><%= model.mrp || '-' %></div>
-      </div>
-      <% if (model.importTs) { %>
-      <div class="prop">
-        <div class="prop-name"><%- t('mechOrders', 'PROPERTY:importTs') %></div>
-        <div class="prop-value"><%= model.importTs %></div>
-      </div>
-      <% } %>
-    </div>
+    <%- helpers.props(model, [
+      {id: '_id', value: function() { return model._id || model.nc12; }},
+      'name',
+      'materialNorm',
+      'mrp',
+      'importTs'
+    ]) %>
   </div>
 </div>

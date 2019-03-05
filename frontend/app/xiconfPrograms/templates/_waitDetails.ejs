@@ -1,11 +1,11 @@
 <div class="panel panel-default xiconfPrograms-stepPanel xiconfPrograms-stepPanel-wait">
-  <div class="panel-heading"><%- stepIndex + 1 %>. <%- t('xiconfPrograms', 'step:wait') %></div>
+  <div class="panel-heading"><%- stepIndex + 1 %>. <%- helpers.t('step:wait') %></div>
   <div class="panel-details">
     <div class="props first">
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:waitKind') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:waitKind') %></div>
         <div class="prop-value">
-          <%- t('xiconfPrograms', 'PROPERTY:waitKind:' + step.kind) %>
+          <%- helpers.t('PROPERTY:waitKind:' + step.kind) %>
           <% if (step.kind === 'auto') { %>
           <%= time.toString(step.duration, false, true) %>
           <%} %>
@@ -13,7 +13,7 @@
       </div>
       <% if (model.type === 't24vdc') { %>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:voltage') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:voltage') %></div>
         <div class="prop-value"><%= step.voltage.toLocaleString() %></div>
       </div>
       <% } %>

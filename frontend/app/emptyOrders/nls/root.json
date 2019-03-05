@@ -2,8 +2,6 @@
   "root": {
     "BREADCRUMBS:browse": "Empty orders",
 
-    "MSG:LOADING_FAILURE": "Failed to load the empty orders.",
-
     "PAGE_ACTION:print": "Show printable version",
 
     "PRINT_PAGE:HD:LEFT:all": "All orders without any operations",
@@ -19,7 +17,7 @@
     "PROPERTY:statuses": "Status",
 
     "filter:placeholder:_id": "Any order",
-    "filter:submit": "Filter empty orders"
+    "filter:submit": "Filter"
   },
   "pl": true
 }

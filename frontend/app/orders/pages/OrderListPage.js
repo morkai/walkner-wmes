@@ -90,6 +90,7 @@ define([
     {
       this.filterView = new OrderFilterView({
         model: {
+          nlsDomain: this.collection.getNlsDomain(),
           rqlQuery: this.collection.rqlQuery
         }
       });

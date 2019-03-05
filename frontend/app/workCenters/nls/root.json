@@ -1,38 +1,14 @@
 {
   "root": {
     "BREADCRUMBS:browse": "WorkCenters",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the WorkCenters.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the WorkCenter.",
-    "MSG:DELETED": "WorkCenter <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add WorkCenter",
-    "PAGE_ACTION:edit": "Edit WorkCenter",
-    "PAGE_ACTION:delete": "Delete WorkCenter",
     "PAGE_ACTION:toggleDeactivated": "Hide deactivated",
-
-    "PANEL:TITLE:details": "WorkCenter's details",
-    "PANEL:TITLE:addForm": "Add WorkCenter form",
-    "PANEL:TITLE:editForm": "Edit WorkCenter form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:description": "Label",
     "PROPERTY:orgUnitPath": "MRP Controller/Production flow",
     "PROPERTY:deactivatedAt": "Deactivated at",
 
-    "FORM:ACTION:add": "Add WorkCenter",
-    "FORM:ACTION:edit": "Edit WorkCenter",
-    "FORM:ERROR:addFailure": "Failed to add the new WorkCenter.",
-    "FORM:ERROR:editFailure": "Failed to edit the WorkCenter.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "WorkCenter deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete WorkCenter",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen WorkCenter?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> WorkCenter?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the WorkCenter.",
     "ACTION_FORM:delete:NOT_EMPTY": "WorkCenter is not empty."
   },
   "pl": true

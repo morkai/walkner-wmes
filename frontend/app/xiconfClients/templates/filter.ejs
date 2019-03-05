@@ -1,17 +1,17 @@
 <form class="well filter-form xiconfClients-filter">
   <div class="form-group">
-    <label><%- t('xiconfClients', 'PROPERTY:status') %></label>
+    <label><%- helpers.t('PROPERTY:status') %></label>
     <div id="<%- idPrefix %>-status" class="btn-group filter-btn-group" data-toggle="buttons">
-      <label class="btn btn-default"><input type="checkbox" name="status[]" value="online"><i class="fa fa-plug"></i><span><%- t('xiconfClients', 'status:online') %></span></label>
-      <label class="btn btn-default"><input type="checkbox" name="status[]" value="offline"><i class="fa fa-power-off"></i><span><%- t('xiconfClients', 'status:offline') %></span></label>
+      <label class="btn btn-default"><input type="checkbox" name="status[]" value="online"><i class="fa fa-plug"></i><span><%- helpers.t('status:online') %></span></label>
+      <label class="btn btn-default"><input type="checkbox" name="status[]" value="offline"><i class="fa fa-power-off"></i><span><%- helpers.t('status:offline') %></span></label>
     </div>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-prodLine"><%- t('xiconfClients', 'PROPERTY:prodLine') %></label>
+    <label for="<%- idPrefix %>-prodLine"><%- helpers.t('PROPERTY:prodLine') %></label>
     <input id="<%- idPrefix %>-prodLine" class="form-control xiconfClients-filter-prodLine" name="prodLine" type="text" autocomplete="new-password">
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('xiconfClients', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

@@ -1,14 +1,14 @@
 <div class="panel panel-default orders-documents">
-  <div class="panel-heading"><%- t('orders', 'PANEL:TITLE:documents') %></div>
+  <div class="panel-heading"><%- helpers.t('PANEL:TITLE:documents') %></div>
   <% if (documents.length) { %>
   <div class="list">
     <div class="table-responsive">
       <table class="table table-condensed table-hover table-bordered">
         <thead>
           <tr>
-            <th class="is-min"><%- t('orders', 'PROPERTY:documents.item') %>
-            <th class="is-min"><%- t('orders', 'PROPERTY:documents.nc15') %>
-            <th><%- t('orders', 'PROPERTY:documents.name') %>
+            <th class="is-min"><%- helpers.t('PROPERTY:documents.item') %>
+            <th class="is-min"><%- helpers.t('PROPERTY:documents.nc15') %>
+            <th><%- helpers.t('PROPERTY:documents.name') %>
           </tr>
         </thead>
         <tbody>
@@ -30,7 +30,7 @@
   </div>
   <% } else { %>
   <div class="panel-body">
-    <%- t('orders', 'DOCUMENTS:NO_DATA') %>
+    <%- helpers.t('DOCUMENTS:NO_DATA') %>
   </div>
   <% } %>
 </div>

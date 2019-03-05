@@ -1,45 +1,45 @@
 <div class="panel panel-default xiconfPrograms-stepPanel xiconfPrograms-stepPanel-fn xiconfPrograms-stepPanel-<%- programType %>">
   <div class="panel-heading is-with-actions">
-    <span class="xiconfPrograms-form-stepNo">0.</span> <%- t('xiconfPrograms', 'step:fn') %>
+    <span class="xiconfPrograms-form-stepNo">0.</span> <%- helpers.t('step:fn') %>
     <% include _stepPanelActions.ejs %>
   </div>
   <% if (programType === 't24vdc') { %>
   <div class="panel-body has-lastElementRow">
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-startTime" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></label>
+        <label for="<%- idPrefix %>-startTime" class="control-label is-required"><%- helpers.t('PROPERTY:startTime') %></label>
         <input id="<%- idPrefix %>-startTime" class="form-control xiconfPrograms-form-duration" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].startTime" value="2s" required>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-duration" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:duration') %></label>
+        <label for="<%- idPrefix %>-duration" class="control-label is-required"><%- helpers.t('PROPERTY:duration') %></label>
         <input id="<%- idPrefix %>-duration" class="form-control xiconfPrograms-form-duration" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].duration" value="28s" required>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-totalTime" class="control-label"><%- t('xiconfPrograms', 'PROPERTY:totalTime') %></label>
+        <label for="<%- idPrefix %>-totalTime" class="control-label"><%- helpers.t('PROPERTY:totalTime') %></label>
         <p class="form-control-static xiconfPrograms-form-totalTime">30s</p>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-voltage" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:voltage') %></label>
+        <label for="<%- idPrefix %>-voltage" class="control-label is-required"><%- helpers.t('PROPERTY:voltage') %></label>
         <input id="<%- idPrefix %>-voltage" class="form-control" type="number" name="steps[<%- stepIndex %>].voltage" min="0.1" max="99.9" step="0.1" value="12" required>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-powerReq" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:power:req') %></label>
+        <label for="<%- idPrefix %>-powerReq" class="control-label is-required"><%- helpers.t('PROPERTY:power:req') %></label>
         <input id="<%- idPrefix %>-powerReq" class="form-control" type="number" name="steps[<%- stepIndex %>].powerReq" min="1" step="1" value="100" required>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-powerRel" class="control-label"><%- t('xiconfPrograms', 'PROPERTY:power:rel') %></label>
+        <label for="<%- idPrefix %>-powerRel" class="control-label"><%- helpers.t('PROPERTY:power:rel') %></label>
         <input id="<%- idPrefix %>-powerRel" class="form-control" type="number" name="steps[<%- stepIndex %>].powerRel" min="0" max="100" value="5" step="1">
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-powerMin" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:power:min') %></label>
+        <label for="<%- idPrefix %>-powerMin" class="control-label is-required"><%- helpers.t('PROPERTY:power:min') %></label>
         <input id="<%- idPrefix %>-powerMin" class="form-control" type="number" name="steps[<%- stepIndex %>].powerMin" min="0" step="1" value="95" required>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-powerMax" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:power:max') %></label>
+        <label for="<%- idPrefix %>-powerMax" class="control-label is-required"><%- helpers.t('PROPERTY:power:max') %></label>
         <input id="<%- idPrefix %>-powerMax" class="form-control" type="number" name="steps[<%- stepIndex %>].powerMax" min="0" step="1" value="105" required>
       </div>
     </div>
@@ -49,76 +49,76 @@
   <div class="panel-body has-lastElementRow">
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-label" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:label') %></label>
-        <input id="<%- idPrefix %>-label" class="form-control" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].label" value="<%- t('xiconfPrograms', 'step:fn') %>" required maxlength="32">
+        <label for="<%- idPrefix %>-label" class="control-label is-required"><%- helpers.t('PROPERTY:label') %></label>
+        <input id="<%- idPrefix %>-label" class="form-control" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].label" value="<%- helpers.t('step:fn') %>" required maxlength="32">
       </div>
     </div>
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-startTime" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></label>
+        <label for="<%- idPrefix %>-startTime" class="control-label is-required"><%- helpers.t('PROPERTY:startTime') %></label>
         <input id="<%- idPrefix %>-startTime" class="form-control xiconfPrograms-form-duration" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].startTime" value="5s" required>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-duration" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:duration') %></label>
+        <label for="<%- idPrefix %>-duration" class="control-label is-required"><%- helpers.t('PROPERTY:duration') %></label>
         <input id="<%- idPrefix %>-duration" class="form-control xiconfPrograms-form-duration" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].duration" value="5s" required>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-totalTime" class="control-label"><%- t('xiconfPrograms', 'PROPERTY:totalTime') %></label>
+        <label for="<%- idPrefix %>-totalTime" class="control-label"><%- helpers.t('PROPERTY:totalTime') %></label>
         <p class="form-control-static xiconfPrograms-form-totalTime">10s</p>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-mode" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:mode') %></label>
+        <label for="<%- idPrefix %>-mode" class="control-label is-required"><%- helpers.t('PROPERTY:mode') %></label>
         <select id="<%- idPrefix %>-mode" class="form-control xiconfPrograms-form-glp2-mode" name="steps[<%- stepIndex %>].mode" required>
-          <option value="0" data-label="glp2:fn:mode:0:label" data-min="0.01" data-max="64" data-step="0.01"><%- t('xiconfPrograms', 'glp2:fn:mode:0') %></option>
-          <option value="1" data-label="glp2:fn:mode:1:label" data-min="1" data-max="15000" data-step="0.1"><%- t('xiconfPrograms', 'glp2:fn:mode:1') %></option>
-          <option value="2" data-label="glp2:fn:mode:2:label" data-min="1" data-max="15000" data-step="0.1" selected><%- t('xiconfPrograms', 'glp2:fn:mode:2') %></option>
-          <option value="3" data-label="glp2:fn:mode:3:label" data-min="0.01" data-max="1" data-step="0.01"><%- t('xiconfPrograms', 'glp2:fn:mode:3') %></option>
-          <option value="5" data-label="glp2:fn:mode:5:label"><%- t('xiconfPrograms', 'glp2:fn:mode:5') %></option>
-          <option value="6" data-label="glp2:fn:mode:6:label" data-min="20" data-max="300" data-step="1"><%- t('xiconfPrograms', 'glp2:fn:mode:6') %></option>
+          <option value="0" data-label="glp2:fn:mode:0:label" data-min="0.01" data-max="64" data-step="0.01"><%- helpers.t('glp2:fn:mode:0') %></option>
+          <option value="1" data-label="glp2:fn:mode:1:label" data-min="1" data-max="15000" data-step="0.1"><%- helpers.t('glp2:fn:mode:1') %></option>
+          <option value="2" data-label="glp2:fn:mode:2:label" data-min="1" data-max="15000" data-step="0.1" selected><%- helpers.t('glp2:fn:mode:2') %></option>
+          <option value="3" data-label="glp2:fn:mode:3:label" data-min="0.01" data-max="1" data-step="0.01"><%- helpers.t('glp2:fn:mode:3') %></option>
+          <option value="5" data-label="glp2:fn:mode:5:label"><%- helpers.t('glp2:fn:mode:5') %></option>
+          <option value="6" data-label="glp2:fn:mode:6:label" data-min="20" data-max="300" data-step="1"><%- helpers.t('glp2:fn:mode:6') %></option>
         </select>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-setValue" class="control-label is-required"><%- t('xiconfPrograms', 'glp2:fn:mode:2:label') %></label>
+        <label for="<%- idPrefix %>-setValue" class="control-label is-required"><%- helpers.t('glp2:fn:mode:2:label') %></label>
         <input id="<%- idPrefix %>-setValue" class="form-control xiconfPrograms-form-glp2-setValue" type="number" name="steps[<%- stepIndex %>].setValue" min="1" max="15000" step="0.1" value="40" required>
       </div>
     </div>
     <div class="row xiconfPrograms-form-glp2-tolerances">
       <div class="form-group col-md-3">
-        <label class="control-label is-required"><input class="xiconfPrograms-form-glp2-tolerance" type="radio" name="<%- idPrefix %>-tolerance" value="rel" checked> <%- t('xiconfPrograms', 'PROPERTY:lowerTolerance') %> [%]</label>
+        <label class="control-label is-required"><input class="xiconfPrograms-form-glp2-tolerance" type="radio" name="<%- idPrefix %>-tolerance" value="rel" checked> <%- helpers.t('PROPERTY:lowerTolerance') %> [%]</label>
         <input class="form-control" type="number" name="steps[<%- stepIndex %>].lowerToleranceRel" min="0" max="100" value="11" step="1" required>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-upperToleranceRel" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:upperTolerance') %> [%]</label>
+        <label for="<%- idPrefix %>-upperToleranceRel" class="control-label is-required"><%- helpers.t('PROPERTY:upperTolerance') %> [%]</label>
         <input id="<%- idPrefix %>-upperToleranceRel" class="form-control" type="number" name="steps[<%- stepIndex %>].upperToleranceRel" min="0" max="100" value="11" step="1" required>
       </div>
       <div class="form-group col-md-3">
-        <label class="control-label is-required"><input class="xiconfPrograms-form-glp2-tolerance" type="radio" name="<%- idPrefix %>-tolerance" value="abs"> <%- t('xiconfPrograms', 'PROPERTY:lowerTolerance') %><span></span></label>
+        <label class="control-label is-required"><input class="xiconfPrograms-form-glp2-tolerance" type="radio" name="<%- idPrefix %>-tolerance" value="abs"> <%- helpers.t('PROPERTY:lowerTolerance') %><span></span></label>
         <input class="form-control" type="number" name="steps[<%- stepIndex %>].lowerToleranceAbs" min="0" step="0.1" value="0" required readonly>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-upperToleranceAbs" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:upperTolerance') %><span></span></label>
+        <label for="<%- idPrefix %>-upperToleranceAbs" class="control-label is-required"><%- helpers.t('PROPERTY:upperTolerance') %><span></span></label>
         <input id="<%- idPrefix %>-upperToleranceAbs" class="form-control" type="number" name="steps[<%- stepIndex %>].upperToleranceAbs" min="0" step="0.1" value="0" required readonly>
       </div>
     </div>
     <div class="form-group">
-      <label for="<%- idPrefix %>-trigger" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:trigger') %></label>
+      <label for="<%- idPrefix %>-trigger" class="control-label is-required"><%- helpers.t('PROPERTY:trigger') %></label>
       <div class="radio-inline-group">
-        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="0" checked required> <%- t('xiconfPrograms', 'PROPERTY:trigger:0') %></label>
-        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="1" required> <%- t('xiconfPrograms', 'PROPERTY:trigger:1') %></label>
-        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="2" required> <%- t('xiconfPrograms', 'PROPERTY:trigger:2') %></label>
+        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="0" checked required> <%- helpers.t('PROPERTY:trigger:0') %></label>
+        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="1" required> <%- helpers.t('PROPERTY:trigger:1') %></label>
+        <label class="radio-inline"><input type="radio" name="steps[<%- stepIndex %>].trigger" value="2" required> <%- helpers.t('PROPERTY:trigger:2') %></label>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-lampCount" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:lampCount') %></label>
+        <label for="<%- idPrefix %>-lampCount" class="control-label is-required"><%- helpers.t('PROPERTY:lampCount') %></label>
         <input id="<%- idPrefix %>-lampCount" class="form-control" type="number" name="steps[<%- stepIndex %>].lampCount" min="0" max="2" step="1" value="0" required>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-lampDuration" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:lampDuration') %></label>
+        <label for="<%- idPrefix %>-lampDuration" class="control-label is-required"><%- helpers.t('PROPERTY:lampDuration') %></label>
         <input id="<%- idPrefix %>-lampDuration" class="form-control" type="number" name="steps[<%- stepIndex %>].lampDuration" min="1" max="3600" step="1" value="1" required>
       </div>
     </div>

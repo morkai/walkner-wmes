@@ -43,6 +43,7 @@ define([
     {
       return new OpinionSurveyOmrResultFilterView({
         model: {
+          nlsDomain: this.collection.getNlsDomain(),
           rqlQuery: this.collection.rqlQuery,
           opinionSurveys: this.opinionSurveys
         }

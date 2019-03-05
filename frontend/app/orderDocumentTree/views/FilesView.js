@@ -330,7 +330,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(View.prototype.serialize.apply(this, arguments), {
+      return _.assign(View.prototype.serialize.apply(this, arguments), {
         displayMode: this.model.getDisplayMode(),
         searchPhrase: this.model.getSearchPhrase(),
         folders: this.serializeFolders(),

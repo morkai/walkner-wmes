@@ -159,7 +159,7 @@ define([
       var $reason = view.$id('reason');
       var data = this.getReasonsForAor(view, aor);
 
-      $reason.select2(_.extend({
+      $reason.select2(_.assign({
         openOnEnter: null,
         data: data
       }, options));
@@ -174,7 +174,7 @@ define([
       var $aor = view.$id('aor');
       var data = this.getAorsForReason(view, reason);
 
-      $aor.select2(_.extend({
+      $aor.select2(_.assign({
         openOnEnter: null,
         data: data
       }, options));

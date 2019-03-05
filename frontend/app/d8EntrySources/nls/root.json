@@ -2,36 +2,10 @@
   "root": {
     "BREADCRUMBS:base": "8D",
     "BREADCRUMBS:browse": "Entry sources",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the entry sources.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the entry source.",
-    "MSG:DELETED": "Entry source <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add entry source",
-    "PAGE_ACTION:edit": "Edit entry source",
-    "PAGE_ACTION:delete": "Delete entry source",
-
-    "PANEL:TITLE:details": "Entry source details",
-    "PANEL:TITLE:addForm": "Entry source add form",
-    "PANEL:TITLE:editForm": "Entry source edit form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
-    "PROPERTY:position": "Position",
-
-    "FORM:ACTION:add": "Add entry source",
-    "FORM:ACTION:edit": "Edit entry source",
-    "FORM:ERROR:addFailure": "Failed to add the new entry source.",
-    "FORM:ERROR:editFailure": "Failed to edit the entry source.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Entry source deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete entry source",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen entry source?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> entry source?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the entry source."
+    "PROPERTY:position": "Position"
   },
   "pl": true
 }

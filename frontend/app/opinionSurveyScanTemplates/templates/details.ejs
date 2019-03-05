@@ -1,21 +1,8 @@
 <div class="opinionSurveyScanTemplates-details">
   <div class="panel panel-primary">
-    <div class="panel-heading"><%- t('opinionSurveyScanTemplates', 'PANEL:TITLE:details') %></div>
+    <div class="panel-heading"><%- panelTitle %></div>
     <div class="panel-details">
-      <div class="props first">
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyScanTemplates', 'PROPERTY:survey') %></div>
-          <div class="prop-value"><%= model.survey %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyScanTemplates', 'PROPERTY:pageNumber') %></div>
-          <div class="prop-value"><%- model.pageNumber %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyScanTemplates', 'PROPERTY:name') %></div>
-          <div class="prop-value"><%= model.name %></div>
-        </div>
-      </div>
+      <%- helpers.props(model, ['survey', 'pageNumber', 'name']) %>
     </div>
   </div>
   <div class="panel panel-default">
@@ -23,48 +10,13 @@
     <div class="panel-details">
       <div class="row">
         <div class="col-md-4">
-          <div class="props first">
-            <div class="prop">
-              <div class="prop-name"><%- t('opinionSurveyScanTemplates', 'PROPERTY:dp') %></div>
-              <div class="prop-value"><%- model.dp.toLocaleString() %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('opinionSurveyScanTemplates', 'PROPERTY:cannyThreshold') %></div>
-              <div class="prop-value"><%- model.cannyThreshold %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('opinionSurveyScanTemplates', 'PROPERTY:circleAccumulatorThreshold') %></div>
-              <div class="prop-value"><%= model.circleAccumulatorThreshold %></div>
-            </div>
-          </div>
+          <%- helpers.props(model, ['dp', 'cannyThreshold', 'circleAccumulatorThreshold']) %>
         </div>
         <div class="col-md-4">
-          <div class="props">
-            <div class="prop">
-              <div class="prop-name"><%- t('opinionSurveyScanTemplates', 'PROPERTY:minimumRadius') %></div>
-              <div class="prop-value"><%= model.minimumRadius %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('opinionSurveyScanTemplates', 'PROPERTY:maximumRadius') %></div>
-              <div class="prop-value"><%= model.maximumRadius %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('opinionSurveyScanTemplates', 'PROPERTY:minimumDistance') %></div>
-              <div class="prop-value"><%= model.minimumDistance %></div>
-            </div>
-          </div>
+          <%- helpers.props(model, ['minimumRadius', 'maximumRadius', 'minimumDistance']) %>
         </div>
         <div class="col-md-4">
-          <div class="props">
-            <div class="prop">
-              <div class="prop-name"><%- t('opinionSurveyScanTemplates', 'PROPERTY:filledThreshold') %></div>
-              <div class="prop-value"><%= model.filledThreshold %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('opinionSurveyScanTemplates', 'PROPERTY:markedThreshold') %></div>
-              <div class="prop-value"><%= model.markedThreshold %></div>
-            </div>
-          </div>
+          <%- helpers.props(model, ['filledThreshold', 'markedThreshold']) %>
         </div>
       </div>
     </div>

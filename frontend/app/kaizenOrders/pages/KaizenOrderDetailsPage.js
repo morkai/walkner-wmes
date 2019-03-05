@@ -96,7 +96,7 @@ define([
       }
 
       actions.push({
-        label: this.t('PAGE_ACTION:add'),
+        label: this.t('core', 'PAGE_ACTION:add'),
         icon: 'plus',
         href: '#kaizenOrders;add'
       });

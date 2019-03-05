@@ -2,39 +2,13 @@
   "root": {
     "BREADCRUMBS:base": "Xiconf",
     "BREADCRUMBS:browse": "Component weights",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the components.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the component.",
-    "MSG:DELETED": "Component <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add component",
-    "PAGE_ACTION:edit": "Edit component",
-    "PAGE_ACTION:delete": "Delete component",
-
-    "PANEL:TITLE:details": "Component details",
-    "PANEL:TITLE:addForm": "Component add form",
-    "PANEL:TITLE:editForm": "Component edit form",
-
-    "filter:submit": "Filter components",
+    "filter:submit": "Filter",
 
     "PROPERTY:nc12": "Component 12NC",
     "PROPERTY:description": "Description",
     "PROPERTY:minWeight": "Min. weight [g]",
-    "PROPERTY:maxWeight": "Max. weight [g]",
-
-    "FORM:ACTION:add": "Add component",
-    "FORM:ACTION:edit": "Edit component",
-    "FORM:ERROR:addFailure": "Failed to add the component.",
-    "FORM:ERROR:editFailure": "Failed to edit the component.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "component deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete component",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the selected component?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> component?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the component."
+    "PROPERTY:maxWeight": "Max. weight [g]"
   },
   "pl": true
 }

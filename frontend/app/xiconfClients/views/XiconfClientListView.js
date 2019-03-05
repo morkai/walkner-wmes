@@ -35,7 +35,7 @@ define([
       'xiconf.clients.**': 'refreshCollection'
     },
 
-    events: _.extend({
+    events: _.assign({
       'click a.licenses-id': function(e)
       {
         e.currentTarget.blur();
@@ -83,7 +83,8 @@ define([
         var dialogView = new DialogView({
           template: restartDialogTemplate,
           model: {
-            client: model.id
+            client: model.id,
+            nlsDomain: model.getNlsDomain()
           }
         });
 
@@ -119,7 +120,8 @@ define([
         var dialogView = new DialogView({
           template: updateDialogTemplate,
           model: {
-            client: model.id
+            client: model.id,
+            nlsDomain: model.getNlsDomain()
           }
         });
 

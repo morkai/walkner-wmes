@@ -91,7 +91,7 @@ define([
    */
   Router.prototype.navigate = function(url, options)
   {
-    this.broker.publish('router.navigate', _.extend({url: url}, options));
+    this.broker.publish('router.navigate', _.assign({url: url}, options));
   };
 
   /**

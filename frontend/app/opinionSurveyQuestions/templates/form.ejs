@@ -4,15 +4,15 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-id" class="control-label is-required"><%- t('opinionSurveyQuestions', 'PROPERTY:_id') %></label>
+        <label for="<%- idPrefix %>-id" class="control-label is-required"><%- helpers.t('PROPERTY:_id') %></label>
         <input id="<%- idPrefix %>-id" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="30" pattern="^[A-Za-z0-9-_]+$">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-short" class="control-label is-required"><%- t('opinionSurveyQuestions', 'PROPERTY:short') %></label>
+        <label for="<%- idPrefix %>-short" class="control-label is-required"><%- helpers.t('PROPERTY:short') %></label>
         <input id="<%- idPrefix %>-short" class="form-control" type="text" autocomplete="new-password" name="short" required maxlength="30">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-full" class="control-label is-required"><%- t('opinionSurveyQuestions', 'PROPERTY:full') %></label>
+        <label for="<%- idPrefix %>-full" class="control-label is-required"><%- helpers.t('PROPERTY:full') %></label>
         <input id="<%- idPrefix %>-full" class="form-control" type="text" autocomplete="new-password" name="full" required maxlength="250">
       </div>
     </div>

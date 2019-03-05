@@ -1,9 +1,7 @@
 {
   "BREADCRUMBS:browse": "Historia operacji na liniach produkcyjnych",
 
-  "MSG:LOADING_FAILURE": "Ładowanie historii operacji nie powiodło się.",
-
-  "filter:submit": "Filtruj historię",
+  "filter:submit": "Filtruj",
   "filter:placeholder:type": "Dowolny typ",
   "filter:placeholder:prodLine": "Dowolna linia produkcyjna",
 

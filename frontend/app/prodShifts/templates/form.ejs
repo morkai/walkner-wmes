@@ -3,26 +3,26 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <% if (isChangeRequest) { %>
-    <div class="message message-inline message-warning"><%- t('prodShifts', 'changeRequest:warning:' + (editMode ? 'edit' : 'add')) %></div>
+    <div class="message message-inline message-warning"><%- helpers.t('changeRequest:warning:' + (editMode ? 'edit' : 'add')) %></div>
     <% } %>
     <div class="panel-body">
       <% if (isChangeRequest) { %>
       <div class="form-group">
-        <label for="<%- idPrefix %>-requestComment" class="control-label"><%- t('prodShifts', 'changeRequest:commentLabel') %></label>
+        <label for="<%- idPrefix %>-requestComment" class="control-label"><%- helpers.t('changeRequest:commentLabel') %></label>
         <textarea id="<%- idPrefix %>-requestComment" class="form-control" name="requestComment" rows="2"></textarea>
       </div>
       <% } %>
       <div class="row">
         <div class="form-group col-md-4 has-required-select2">
-          <label for="<%- idPrefix %>-prodLine" class="control-label is-required"><%- t('prodShifts', 'PROPERTY:prodLine') %></label>
+          <label for="<%- idPrefix %>-prodLine" class="control-label is-required"><%- helpers.t('PROPERTY:prodLine') %></label>
           <input id="<%- idPrefix %>-prodLine" type="text" autocomplete="new-password" name="prodLine" required>
         </div>
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('prodShifts', 'PROPERTY:date') %></label>
+          <label for="<%- idPrefix %>-date" class="control-label is-required"><%- helpers.t('PROPERTY:date') %></label>
           <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required min="2013-12-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
         </div>
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-shift-1" class="control-label is-required"><%- t('prodShifts', 'PROPERTY:shift') %></label>
+          <label for="<%- idPrefix %>-shift-1" class="control-label is-required"><%- helpers.t('PROPERTY:shift') %></label>
           <div>
             <label class="radio-inline"><input id="<%- idPrefix %>-shift-1" name="shift" type="radio" value="1" checked required> <%- t('core', 'SHIFT:1') %></label>
             <label class="radio-inline"><input name="shift" type="radio" value="2" required> <%- t('core', 'SHIFT:2') %></label>
@@ -32,26 +32,26 @@
       </div>
       <div class="row">
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-master" class="control-label"><%- t('prodShifts', 'PROPERTY:master') %></label>
+          <label for="<%- idPrefix %>-master" class="control-label"><%- helpers.t('PROPERTY:master') %></label>
           <input id="<%- idPrefix %>-master" type="text" autocomplete="new-password" name="master">
         </div>
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-leader" class="control-label"><%- t('prodShifts', 'PROPERTY:leader') %></label>
+          <label for="<%- idPrefix %>-leader" class="control-label"><%- helpers.t('PROPERTY:leader') %></label>
           <input id="<%- idPrefix %>-leader" type="text" autocomplete="new-password" name="leader">
         </div>
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-operator" class="control-label"><%- t('prodShifts', 'PROPERTY:operator') %></label>
+          <label for="<%- idPrefix %>-operator" class="control-label"><%- helpers.t('PROPERTY:operator') %></label>
           <input id="<%- idPrefix %>-operator" type="text" autocomplete="new-password" name="operator">
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label"><%- t('prodShifts', 'PROPERTY:quantitiesDone') %></label>
+        <label class="control-label"><%- helpers.t('PROPERTY:quantitiesDone') %></label>
         <table class="table table-bordered table-condensed prodShifts-form-quantitiesDone">
           <thead>
             <tr>
-              <th><%- t('prodShifts', 'PROPERTY:quantitiesDone:hour') %></th>
-              <th><%- t('prodShifts', 'PROPERTY:quantitiesDone:planned') %></th>
-              <th><%- t('prodShifts', 'PROPERTY:quantitiesDone:actual') %></th>
+              <th><%- helpers.t('PROPERTY:quantitiesDone:hour') %></th>
+              <th><%- helpers.t('PROPERTY:quantitiesDone:planned') %></th>
+              <th><%- helpers.t('PROPERTY:quantitiesDone:actual') %></th>
             </tr>
           </thead>
           <tbody>

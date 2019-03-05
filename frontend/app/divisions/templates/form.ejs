@@ -4,27 +4,27 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-_id" class="control-label is-required"><%- t('divisions', 'PROPERTY:_id') %></label>
+        <label for="<%- idPrefix %>-_id" class="control-label is-required"><%- helpers.t('PROPERTY:_id') %></label>
         <input id="<%- idPrefix %>-_id" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="50" pattern="^[a-zA-Z][a-zA-Z0-9_\-]*$">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-type" class="control-label is-required"><%- t('divisions', 'PROPERTY:type') %></label>
+        <label for="<%- idPrefix %>-type" class="control-label is-required"><%- helpers.t('PROPERTY:type') %></label>
         <div class="radio">
-          <label><input type="radio" name="type" value="prod" checked required> <%- t('divisions', 'TYPE:prod') %></label>
+          <label><input type="radio" name="type" value="prod" checked required> <%- helpers.t('TYPE:prod') %></label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="type" value="dist" required> <%- t('divisions', 'TYPE:dist') %></label>
+          <label><input type="radio" name="type" value="dist" required> <%- helpers.t('TYPE:dist') %></label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="type" value="other" required> <%- t('divisions', 'TYPE:other') %></label>
+          <label><input type="radio" name="type" value="other" required> <%- helpers.t('TYPE:other') %></label>
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-description" class="control-label is-required"><%- t('divisions', 'PROPERTY:description') %></label>
+        <label for="<%- idPrefix %>-description" class="control-label is-required"><%- helpers.t('PROPERTY:description') %></label>
         <input id="<%- idPrefix %>-description" class="form-control" type="text" autocomplete="new-password" name="description" required maxlength="150">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-deactivatedAt" class="control-label"><%- t('divisions', 'PROPERTY:deactivatedAt') %></label>
+        <label for="<%- idPrefix %>-deactivatedAt" class="control-label"><%- helpers.t('PROPERTY:deactivatedAt') %></label>
         <input id="<%- idPrefix %>-deactivatedAt" class="form-control" type="date" name="deactivatedAt" maxlength="10">
       </div>
     </div>

@@ -17,7 +17,7 @@ define([
 
     template: filterTemplate,
 
-    events: _.extend({}, FilterView.prototype.events, {
+    events: _.assign({}, FilterView.prototype.events, {
       'change #-from': function(e)
       {
         var $to = this.$id('to');

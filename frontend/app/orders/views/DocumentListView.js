@@ -55,7 +55,7 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
         orderNo: this.model.id,

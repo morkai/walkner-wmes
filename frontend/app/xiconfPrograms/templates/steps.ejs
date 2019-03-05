@@ -16,7 +16,7 @@
       <% } %>
     </div>
     <div class="xiconfPrograms-step-nameAndProgress">
-      <h3 class="xiconfPrograms-step-name"><%- step.label || t('xiconfPrograms', 'step:' + step.type) %></h3>
+      <h3 class="xiconfPrograms-step-name"><%- step.label || helpers.t('step:' + step.type) %></h3>
       <div class="xiconfPrograms-step-details">
         <% step.props.forEach(function(prop) { %>
         <% if (prop.key) { %>

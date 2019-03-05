@@ -217,7 +217,7 @@ define([
       var modelType = changeRequest.get('modelType');
       var data = changeRequest.get('data');
       var operation = changeRequest.get('operation');
-      var model = new TYPE_TO_MODEL[modelType](_.extend({_id: changeRequest.get('modelId')}, data));
+      var model = new TYPE_TO_MODEL[modelType](_.assign({_id: changeRequest.get('modelId')}, data));
       var extra = '?';
       var href = operation === 'add' || (operation === 'delete' && status !== 'new') ? null : model.genClientUrl();
 

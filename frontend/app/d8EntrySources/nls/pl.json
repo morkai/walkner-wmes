@@ -1,34 +1,8 @@
 {
   "BREADCRUMBS:base": "8D",
   "BREADCRUMBS:browse": "Źródła zgłoszeń",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie źródeł zgłoszeń nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie źródła zgłoszeń nie powiodło się.",
-  "MSG:DELETED": "Źródło zgłoszeń <em>{label}</em> zostało usunięte.",
-
-  "PAGE_ACTION:add": "Dodaj źródło zgłoszeń",
-  "PAGE_ACTION:edit": "Edytuj źródło zgłoszeń",
-  "PAGE_ACTION:delete": "Usuń źródło zgłoszeń",
-
-  "PANEL:TITLE:details": "Szczegóły źródła zgłoszeń",
-  "PANEL:TITLE:addForm": "Formularz dodawania źródła zgłoszeń",
-  "PANEL:TITLE:editForm": "Formularz edycji źródła zgłoszeń",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
-  "PROPERTY:position": "Pozycja",
-
-  "FORM:ACTION:add": "Dodaj źródło zgłoszeń",
-  "FORM:ACTION:edit": "Edytuj źródło zgłoszeń",
-  "FORM:ERROR:addFailure": "Nie udało się dodać źródła zgłoszeń.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować źródła zgłoszeń.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia źródła zgłoszeń",
-  "ACTION_FORM:BUTTON:delete": "Usuń źródło zgłoszeń",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrane źródło zgłoszeń?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć źródło zgłoszeń <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć źródła zgłoszeń."
+  "PROPERTY:position": "Pozycja"
 }

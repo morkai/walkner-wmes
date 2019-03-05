@@ -1,21 +1,22 @@
 <div class="panel panel-primary">
   <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details') %></div>
   <div class="panel-details">
-    <div class="props first">
-      <% ['_id', 'name', 'length', 'width', 'height'].forEach(function(prop) { %>
-      <div class="prop">
-        <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
-        <div class="prop-value"><%= model[prop] %></div>
-      </div>
-      <% }) %>
-      <div class="prop">
-        <div class="prop-name"><%- helpers.t('PROPERTY:image') %></div>
-        <div class="prop-value">
-        <% if (model.image) { %>
-          <a href="/kanban/containers/<%- encodeURIComponent(model._id) %>.jpg" target="_blank"><img src="/kanban/containers/<%- encodeURIComponent(model._id) %>.jpg" style="max-height: 216px"></a>
-        <% } %>
-        </div>
-      </div>
-    </div>
+      <%- helpers.props(model, [
+        '_id',
+        'name',
+        'length',
+        'width',
+        'height',
+        {id: '!image', value: function(image)
+        {
+          if (image)
+          {
+            return '<a href="/kanban/containers/' + encodeURIComponent(model._id) + '.jpg" target="_blank">'
+              + '<img src="/kanban/containers/' + encodeURIComponent(model._id) + '.jpg" style="max-height: 216px"></a>';
+          }
+
+          return '';
+        }}
+      ]) %>
   </div>
 </div>

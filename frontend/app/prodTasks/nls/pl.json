@@ -1,20 +1,5 @@
 {
   "BREADCRUMBS:browse": "Zadania produkcyjne",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie zadań produkcyjnych nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zadania produkcyjnego nie powiodło się.",
-  "MSG:DELETED": "Zadanie produkcyjne <em>{label}</em> zostało usunięte.",
-
-  "PAGE_ACTION:add": "Dodaj zadanie produkcyjne",
-  "PAGE_ACTION:edit": "Edytuj zadanie produkcyjne",
-  "PAGE_ACTION:delete": "Usuń zadanie produkcyjne",
-
-  "PANEL:TITLE:details": "Szczegóły zadania produkcyjnego",
-  "PANEL:TITLE:addForm": "Formularz dodawania zadania produkcyjnego",
-  "PANEL:TITLE:editForm": "Formularz edycji zadania produkcyjnego",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:parent": "Nadrzędne zadanie",
@@ -22,16 +7,5 @@
   "PROPERTY:tags": "Tagi",
   "PROPERTY:fteDiv": "Podział na wydziały w FTE (inne)?",
   "PROPERTY:clipColor": "Kolor w raporcie CLIP",
-  "PROPERTY:inProd": "Użycie w Produktywności?",
-
-  "FORM:ACTION:add": "Dodaj zadanie produkcyjne",
-  "FORM:ACTION:edit": "Edytuj zadanie produkcyjne",
-  "FORM:ERROR:addFailure": "Nie udało się dodać zadania produkcyjnego.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zadania produkcyjnego.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia zadania produkcyjnego",
-  "ACTION_FORM:BUTTON:delete": "Usuń zadanie produkcyjne",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany zadanie produkcyjne?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć zadanie produkcyjne <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć zadania produkcyjnego."
+  "PROPERTY:inProd": "Użycie w Produktywności?"
 }

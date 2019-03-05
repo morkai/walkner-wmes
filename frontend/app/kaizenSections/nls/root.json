@@ -2,37 +2,11 @@
   "root": {
     "BREADCRUMBS:base": "Improvements",
     "BREADCRUMBS:browse": "Sections",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the sections.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the section.",
-    "MSG:DELETED": "Section <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add section",
-    "PAGE_ACTION:edit": "Edit section",
-    "PAGE_ACTION:delete": "Delete section",
-
-    "PANEL:TITLE:details": "Section's details",
-    "PANEL:TITLE:addForm": "Add section form",
-    "PANEL:TITLE:editForm": "Edit section form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
     "PROPERTY:position": "Position",
-    "PROPERTY:subdivision": "Subdivisions",
-
-    "FORM:ACTION:add": "Add section",
-    "FORM:ACTION:edit": "Edit section",
-    "FORM:ERROR:addFailure": "Failed to add the new section.",
-    "FORM:ERROR:editFailure": "Failed to edit the section.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Section deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete section",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen section?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> section?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the section."
+    "PROPERTY:subdivisions": "Subdivisions"
   },
   "pl": true
 }

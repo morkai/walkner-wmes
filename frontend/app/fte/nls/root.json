@@ -7,7 +7,6 @@
     "BREADCRUMBS:addForm": "Choosing",
     "BREADCRUMBS:editForm": "Editing",
     "BREADCRUMBS:details": "Resources",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
     "BREADCRUMBS:settings": "Settings",
 
     "MSG:LOADING_FAILURE": "Failed to load the FTE data.",
@@ -16,9 +15,6 @@
 
     "PAGE_ACTION:print": "Show printable version",
     "PAGE_ACTION:add": "Allocate resources",
-    "PAGE_ACTION:edit": "Edit entry",
-    "PAGE_ACTION:delete": "Delete entry",
-    "PAGE_ACTION:export": "Export entries",
     "PAGE_ACTION:settings": "Settings",
     "PAGE_ACTION:changeRequest:save": "Create change request",
     "PAGE_ACTION:changeRequest:cancel": "Cancel",
@@ -27,7 +23,7 @@
 
     "filter:date": "Date",
     "filter:shift": "Shift",
-    "filter:submit": "Filter entries",
+    "filter:submit": "Filter",
 
     "addForm:panel:title": "FTE entry find/create form",
     "addForm:copy": "Copy the values from the previous entry for the specified shift.",
@@ -61,12 +57,6 @@
 
     "print:hdLeft": "FTE allocated to {subdivision}",
     "print:hdRight": "{date}, {shift} shift",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "FTE entry deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete FTE entry",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen FTE entry?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> FTE entry?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the FTE entry.",
 
     "settings:tab:general": "General",
     "settings:tab:structure": "Structure",

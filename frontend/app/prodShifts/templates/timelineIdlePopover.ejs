@@ -2,24 +2,24 @@
   <% if (managing) { %>
   <tfoot>
     <tr>
-      <td colspan="2"><button class="btn btn-block btn-success prodShifts-timeline-addOrder"><%- t('prodShifts', 'timeline:action:addOrder') %></button></td>
+      <td colspan="2"><button class="btn btn-block btn-success prodShifts-timeline-addOrder"><%- helpers.t('timeline:action:addOrder') %></button></td>
     </tr>
     <tr>
-      <td colspan="2"><button class="btn btn-block btn-danger prodShifts-timeline-addDowntime"><%- t('prodShifts', 'timeline:action:addDowntime') %></button></td>
+      <td colspan="2"><button class="btn btn-block btn-danger prodShifts-timeline-addDowntime"><%- helpers.t('timeline:action:addDowntime') %></button></td>
     </tr>
   </tfoot>
   <% } %>
   <tbody>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:startedAt') %></th>
+      <th><%- helpers.t('timeline:popover:startedAt') %></th>
       <td><%- startedAt %></td>
     </tr>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:finishedAt') %></th>
+      <th><%- helpers.t('timeline:popover:finishedAt') %></th>
       <td><%- finishedAt %></td>
     </tr>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:duration') %></th>
+      <th><%- helpers.t('timeline:popover:duration') %></th>
       <td><%- duration %></td>
     </tr>
   </tbody>

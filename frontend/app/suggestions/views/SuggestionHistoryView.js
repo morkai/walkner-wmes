@@ -90,10 +90,9 @@ define([
       this.$el.popover('destroy');
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         canEdit: this.model.canEdit(),
         editUrl: this.model.genClientUrl('edit'),
         items: this.serializeItems()

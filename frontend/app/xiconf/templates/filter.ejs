@@ -4,45 +4,45 @@
     property: 'startedAt',
     type: 'date',
     startHour: 6,
-    labels: {text: t('xiconf', 'PROPERTY:startedAt'), ranges: true}
+    labels: {text: helpers.t('PROPERTY:startedAt'), ranges: true}
   }) %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-srcId"><%- t('xiconf', 'PROPERTY:srcId') %></label>
-    <input id="<%- idPrefix %>-srcId" name="srcId" type="text" autocomplete="new-password" placeholder="<%- t('xiconf', 'filter:placeholder:srcId') %>">
+    <label for="<%- idPrefix %>-srcId"><%- helpers.t('PROPERTY:srcId') %></label>
+    <input id="<%- idPrefix %>-srcId" name="srcId" type="text" autocomplete="new-password" placeholder="<%- helpers.t('filter:placeholder:srcId') %>">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-serviceTag"><%- t('xiconf', 'PROPERTY:serviceTag') %></label>
+    <label for="<%- idPrefix %>-serviceTag"><%- helpers.t('PROPERTY:serviceTag') %></label>
     <input id="<%- idPrefix %>-serviceTag" class="form-control" name="serviceTag" type="text" autocomplete="new-password" pattern="^(P|p)[0-9]+$">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-orderNo"><%- t('xiconf', 'PROPERTY:no') %></label>
+    <label for="<%- idPrefix %>-orderNo"><%- helpers.t('PROPERTY:no') %></label>
     <input id="<%- idPrefix %>-orderNo" class="form-control" name="orderNo" type="text" autocomplete="new-password" maxlength="9" pattern="^[0-9]+$">
   </div>
   <div class="form-group">
     <div class="filter-radioLabels">
       <label>
         <input name="nc12Type" type="radio" value="program">
-        <%- t('xiconf', 'filter:nc12Type:program') %>
+        <%- helpers.t('filter:nc12Type:program') %>
       </label><label>
         <input name="nc12Type" type="radio" value="led">
-        <%- t('xiconf', 'filter:nc12Type:led') %>
+        <%- helpers.t('filter:nc12Type:led') %>
       </label>
     </div>
     <input id="<%- idPrefix %>-nc12" class="form-control" name="nc12" type="text" autocomplete="new-password" maxlength="12">
   </div>
   <div class="form-group">
-    <label><%- t('xiconf', 'PROPERTY:result') %></label>
+    <label><%- helpers.t('PROPERTY:result') %></label>
     <div class="btn-group filter-btn-group xiconf-filter-result" data-toggle="buttons">
       <label class="btn btn-success xiconf-filter-success">
-        <input type="checkbox" name="result[]" value="success"> <%- t('xiconf', 'filter:result:success') %>
+        <input type="checkbox" name="result[]" value="success"> <%- helpers.t('filter:result:success') %>
       </label>
       <label class="btn btn-danger xiconf-filter-failure">
-        <input type="checkbox" name="result[]" value="failure"> <%- t('xiconf', 'filter:result:failure') %>
+        <input type="checkbox" name="result[]" value="failure"> <%- helpers.t('filter:result:failure') %>
       </label>
     </div>
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('xiconf', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

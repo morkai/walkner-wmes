@@ -18,10 +18,10 @@ define([
 
     template: formTemplate,
 
-    events: _.extend({}, FormView.prototype.events, {
+    events: _.assign({
       'change [name=color]': 'updateColorPicker',
       'change [name=refColor]': 'updateColorPicker'
-    }),
+    }, FormView.prototype.events),
 
     destroy: function()
     {
@@ -30,11 +30,11 @@ define([
       this.$('.colorpicker-component').colorpicker('destroy');
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      return _.extend(FormView.prototype.serialize.call(this), {
+      return {
         renderColorPicker: colorPickerTemplate
-      });
+      };
     },
 
     afterRender: function()

@@ -2,22 +2,8 @@
   "root": {
     "BREADCRUMBS:base": "Xiconf",
     "BREADCRUMBS:browse": "Programs",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the programs.",
-    "MSG:LOADING_SINGLE_FAILURE": "Filed to load the program.",
-    "MSG:DELETED": "Program <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add program",
-    "PAGE_ACTION:edit": "Edit program",
-    "PAGE_ACTION:delete": "Delete program",
     "PAGE_ACTION:toggle": "Toggle details",
-
-    "PANEL:TITLE:details": "Program details",
-    "PANEL:TITLE:addForm": "Program add form",
-    "PANEL:TITLE:editForm": "Program edit form",
 
     "step:wait": "Wait",
     "step:pe": "Protective earth test",
@@ -52,6 +38,9 @@
     "glp2:iso:mode:1:label": "Current [mA]",
     "glp2:iso:mode:2": "Varistor test",
     "glp2:iso:mode:2:label": "Voltage [V]",
+    "glp2:iso:u": "Isolation voltage [V]",
+    "glp2:iso:rMax": "Max resistance [MΩ]",
+    "glp2:iso:ramp": "Ramp time",
 
     "glp2:vis:duration": "Time to confirmation",
     "glp2:vis:maxDuration": "Max time to confirm",
@@ -83,7 +72,7 @@
     "glp2:input:26": "Emergency stop",
     "glp2:input:27": "Two-handed start",
 
-    "filter:submit": "Filter programs",
+    "filter:submit": "Filter",
 
     "PROPERTY:name": "Name",
     "PROPERTY:type": "Type",
@@ -111,6 +100,8 @@
     "PROPERTY:buzzer": "Buzzer",
     "PROPERTY:buzzer:0": "Disabled",
     "PROPERTY:buzzer:1": "After success",
+    "PROPERTY:lowerTolerance": "Lower tolerance",
+    "PROPERTY:upperTolerance": "Upper tolerance",
     "PROPERTY:execution": "Execution",
     "PROPERTY:execution:0": "Auto",
     "PROPERTY:execution:1": "Hold start",
@@ -123,22 +114,12 @@
     "PROPERTY:lampCount": "Fluorescent lamp count",
     "PROPERTY:lampDuration": "Uninterrupted lighting time [s]",
 
-    "FORM:ACTION:add": "Add program",
-    "FORM:ACTION:edit": "Edit program",
-    "FORM:ERROR:addFailure": "Failed to add the program.",
-    "FORM:ERROR:editFailure": "Failed to edit the program.",
     "FORM:ERROR:minDuration": "Value cannot be lower than 1s.",
     "FORM:ERROR:minMaxDurations": "Max time to confirm must be longer than Time to confirmation.",
     "FORM:ERROR:requiredStep": "Select at least one step.",
 
     "form:steps:add": "Add a new step",
-    "form:steps:placeholder": "Select a step type...",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Program deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete program",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the selected program?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> program?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the program."
+    "form:steps:placeholder": "Select a step type..."
   },
   "pl": true
 }

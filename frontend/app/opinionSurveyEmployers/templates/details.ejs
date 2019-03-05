@@ -1,23 +1,6 @@
 <div class="panel panel-primary">
-  <div class="panel-heading"><%- t('opinionSurveyEmployers', 'PANEL:TITLE:details') %></div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('opinionSurveyEmployers', 'PROPERTY:_id') %></div>
-        <div class="prop-value"><%= model._id %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('opinionSurveyEmployers', 'PROPERTY:short') %></div>
-        <div class="prop-value"><%= model.short %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('opinionSurveyEmployers', 'PROPERTY:full') %></div>
-        <div class="prop-value"><%= model.full %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('opinionSurveyEmployers', 'PROPERTY:color') %></div>
-        <div class="prop-value"><%- model.color %></div>
-      </div>
-    </div>
+    <%- helpers.props(model, ['_id', 'short', 'full', '!color']) %>
   </div>
 </div>

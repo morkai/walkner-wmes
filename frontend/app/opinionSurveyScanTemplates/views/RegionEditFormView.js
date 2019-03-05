@@ -114,10 +114,9 @@ define([
       this.answerIdToTextMap = {};
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         region: this.model.region
       };
     },

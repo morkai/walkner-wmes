@@ -40,7 +40,7 @@ define([
       }
     },
 
-    events: _.extend({
+    events: _.assign({
 
       'click .action-print': function(e)
       {

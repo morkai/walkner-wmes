@@ -1,19 +1,19 @@
 <div class="qiResults-print">
   <h1 class="qiResults-print-date"><%- time.format(model.inspectedAt, 'LL') %></h1>
-  <h1 class="qiResults-print-title"><%- t('qiResults', 'print:title', {rid: model.rid}) %></h1>
-  <h2 class="qiResults-print-product"><span class="qiResults-print-label"><%- t('qiResults', 'print:product') %></span> <%= model.productName %></h2>
+  <h1 class="qiResults-print-title"><%- helpers.t('print:title', {rid: model.rid}) %></h1>
+  <h2 class="qiResults-print-product"><span class="qiResults-print-label"><%- helpers.t('print:product') %></span> <%= model.productName %></h2>
   <h2 class="qiResults-print-quantities">
     <span class="qiResults-print-quantity">
-      <span class="qiResults-print-label"><%- t('qiResults', 'print:qtyInspected') %></span> <%- model.qtyInspected %>
+      <span class="qiResults-print-label"><%- helpers.t('print:qtyInspected') %></span> <%- model.qtyInspected %>
     </span>
     <span class="qiResults-print-quantity">
-      <span class="qiResults-print-label"><%- t('qiResults', 'print:qtyToFix') %></span> <%- model.qtyToFix %>
+      <span class="qiResults-print-label"><%- helpers.t('print:qtyToFix') %></span> <%- model.qtyToFix %>
     </span>
     <span class="qiResults-print-quantity">
-      <span class="qiResults-print-label"><%- t('qiResults', 'print:qtyNok') %></span> <%- model.qtyNok %>
+      <span class="qiResults-print-label"><%- helpers.t('print:qtyNok') %></span> <%- model.qtyNok %>
     </span>
   </h2>
-  <h2 class="qiResults-print-problem"><span class="qiResults-print-label"><%- t('qiResults', 'print:problem') %></span> <%= model.problem %></h2>
+  <h2 class="qiResults-print-problem"><span class="qiResults-print-label"><%- helpers.t('print:problem') %></span> <%= model.problem %></h2>
   <div class="qiResults-print-images">
     <div class="qiResults-print-ok">
       <% if (model.okFile && /^image/.test(model.okFile.type)) { %>

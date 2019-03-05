@@ -38,7 +38,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(FilterView.prototype.serialize.call(this), {
+      return _.assign(FilterView.prototype.serialize.call(this), {
         programTypes: Object.keys(XiconfProgram.TYPES_TO_STEPS)
       });
     },

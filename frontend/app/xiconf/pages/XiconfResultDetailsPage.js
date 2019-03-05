@@ -56,7 +56,8 @@ define([
 
     actions: function()
     {
-      var model = this.model;
+      var page = this;
+      var model = page.model;
       var workflow = model.get('workflow');
       var feature = model.get('feature');
       var gprsOrderFile = model.get('gprsOrderFile');
@@ -67,7 +68,7 @@ define([
       return [{
         template: function()
         {
-          return downloadActionTemplate({
+          return page.renderPartialHtml(downloadActionTemplate, {
             files: {
               gprsOrderFile: gprsOrderFile && gprsOrderFile.length ? (url + 'gprsOrder') : null,
               workflow: workflow && workflow.length ? (url + 'workflow') : null,

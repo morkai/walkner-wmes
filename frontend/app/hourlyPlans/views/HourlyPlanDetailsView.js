@@ -29,7 +29,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(this.model.serialize(), {
+      return _.assign(this.model.serialize(), {
         editable: false
       });
     },

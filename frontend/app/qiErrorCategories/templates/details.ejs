@@ -1,11 +1,6 @@
 <div class="panel panel-primary">
-  <div class="panel-heading"><%- t('qiErrorCategories', 'PANEL:TITLE:details') %></div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('qiErrorCategories', 'PROPERTY:name') %></div>
-        <div class="prop-value"><%= model.name %></div>
-      </div>
-    </div>
+    <%- helpers.props(model, ['name']) %>
   </div>
 </div>

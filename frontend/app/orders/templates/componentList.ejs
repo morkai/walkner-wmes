@@ -1,8 +1,8 @@
 <div class="panel panel-default orders-bom">
-  <div class="panel-heading"><%- t('orders', 'PANEL:TITLE:bom' + (paint ? ':paint' : '')) %></div>
+  <div class="panel-heading"><%- helpers.t('PANEL:TITLE:bom' + (paint ? ':paint' : '')) %></div>
   <% if (_.isEmpty(bom)) { %>
   <div class="panel-body">
-    <%- t('orders', 'BOM:NO_DATA') %>
+    <%- helpers.t('BOM:NO_DATA') %>
   </div>
   <% } else { %>
   <div class="list">
@@ -10,13 +10,13 @@
       <table class="table table-condensed table-hover table-bordered">
         <thead>
           <tr>
-            <th class="is-min"><%- t('orders', 'PROPERTY:bom.item') %>
-            <th class="is-min"><%- t('orders', 'PROPERTY:bom.nc12') %>
-            <th class="is-min"><%- t('orders', 'PROPERTY:bom.name') %>
-            <th class="is-min"><%- t('orders', 'PROPERTY:bom.qty') %>
-            <th class="is-min"><%- t('orders', 'PROPERTY:bom.unloadingPoint') %>
-            <th class="is-min"><%- t('orders', 'PROPERTY:bom.supplyArea') %>
-            <th class="is-min"><%- t('orders', 'PROPERTY:bom.distStrategy') %>
+            <th class="is-min"><%- helpers.t('PROPERTY:bom.item') %>
+            <th class="is-min"><%- helpers.t('PROPERTY:bom.nc12') %>
+            <th class="is-min"><%- helpers.t('PROPERTY:bom.name') %>
+            <th class="is-min"><%- helpers.t('PROPERTY:bom.qty') %>
+            <th class="is-min"><%- helpers.t('PROPERTY:bom.unloadingPoint') %>
+            <th class="is-min"><%- helpers.t('PROPERTY:bom.supplyArea') %>
+            <th class="is-min"><%- helpers.t('PROPERTY:bom.distStrategy') %>
             <th>
           </tr>
         </thead>

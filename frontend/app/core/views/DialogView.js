@@ -33,7 +33,7 @@ define([
 
     serialize: function()
     {
-      return this.model;
+      return _.assign(this.getCommonTemplateData(), this.model);
     },
 
     onDialogShown: function(viewport)

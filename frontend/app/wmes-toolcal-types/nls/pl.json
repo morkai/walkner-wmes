@@ -1,32 +1,8 @@
 {
   "BREADCRUMBS:base": "Narzędzia pomiarowe",
   "BREADCRUMBS:browse": "Typy urządzeń",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:DELETED": "Typ urządzeń <em>{label}</em> został usunięty.",
-
-  "PAGE_ACTION:add": "Dodaj typ urządzeń",
-  "PAGE_ACTION:edit": "Edytuj typ urządzeń",
-  "PAGE_ACTION:delete": "Usuń typ urządzeń",
-
-  "PANEL:TITLE:details": "Szczegóły typu urządzeń",
-  "PANEL:TITLE:addForm": "Formularz dodawania typu urządzeń",
-  "PANEL:TITLE:editForm": "Formularz edycji typu urządzeń",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
-  "PROPERTY:active": "Aktywny?",
-
-  "FORM:ACTION:add": "Dodaj typ urządzeń",
-  "FORM:ACTION:edit": "Edytuj typ urządzeń",
-  "FORM:ERROR:addFailure": "Nie udało się dodać typu urządzeń.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować typu urządzeń.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia typu urządzeń",
-  "ACTION_FORM:BUTTON:delete": "Usuń typ urządzeń",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrane typ urządzeń?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć typ urządzeń <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć typu urządzeń."
+  "PROPERTY:active": "Aktywny?"
 }

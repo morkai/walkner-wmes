@@ -21,7 +21,7 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
 
       'change #-survey': function(e)
       {
@@ -46,7 +46,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(FormView.prototype.serialize.call(this), {
+      return _.assign(FormView.prototype.serialize.call(this), {
         omrResults: (this.model.omrResults || []).map(function(omrResult)
         {
           return {

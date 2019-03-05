@@ -5,7 +5,7 @@
       <% if (row.no) { %>
       <td class="is-min is-number" style="border-left: 0"><%- row.no %>.</td>
       <% } %>
-      <td style="<% if (row.color) { %>border-left-color: <%- row.color %>;<% } else { %>border-left: 0;<% } %>"><%= row.label || t('suggestions', 'report:series:' + row.id) %></td>
+      <td style="<% if (row.color) { %>border-left-color: <%- row.color %>;<% } else { %>border-left: 0;<% } %>"><%= row.label || helpers.t('report:series:' + row.id) %></td>
       <td class="is-min is-number"><%- Math.round(row.abs || 0).toLocaleString() %></td>
       <td class="is-min is-number"><%- Math.round((row.rel || 0) * 100).toLocaleString() %>%</td>
     </tr>

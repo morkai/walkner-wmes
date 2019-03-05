@@ -1,25 +1,25 @@
 <div>
   <div class="panel <%- programPanelClassName %> xiconfOrders-orderDetails">
     <div class="panel-heading">
-      <%- t('xiconfOrders', 'PANEL:TITLE:details:order') %>
+      <%- helpers.t('PANEL:TITLE:details:order') %>
     </div>
     <div class="panel-details row">
       <div class="col-md-4">
         <div class="props first">
           <div class="prop">
-            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:orderNo') %></div>
+            <div class="prop-name"><%- helpers.t('PROPERTY:orderNo') %></div>
             <div class="prop-value">
-              <a href="<%- linkToResults(model._id) %>" title="<%- t('xiconfOrders', 'details:showResultsLink') %>"><%- model._id %></a>
+              <a href="<%- linkToResults(model._id) %>" title="<%- helpers.t('details:showResultsLink') %>"><%- model._id %></a>
             </div>
           </div>
           <div class="prop">
-            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:nc12') %></div>
+            <div class="prop-name"><%- helpers.t('PROPERTY:nc12') %></div>
             <div class="prop-value">
-              <a href="<%- linkToResults(null, model.nc12[0]) %>" title="<%- t('xiconfOrders', 'details:showResultsLink') %>"><%- model.nc12[0] %></a>
+              <a href="<%- linkToResults(null, model.nc12[0]) %>" title="<%- helpers.t('details:showResultsLink') %>"><%- model.nc12[0] %></a>
             </div>
           </div>
           <div class="prop">
-            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:name') %></div>
+            <div class="prop-name"><%- helpers.t('PROPERTY:name') %></div>
             <div class="prop-value"><%= model.name || '-' %></div>
           </div>
         </div>
@@ -27,15 +27,15 @@
       <div class="col-md-4">
         <div class="props">
           <div class="prop">
-            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:quantityTodo') %></div>
+            <div class="prop-name"><%- helpers.t('PROPERTY:quantityTodo') %></div>
             <div class="prop-value"><%- (model.quantityTodo || 0).toLocaleString() %></div>
           </div>
           <div class="prop">
-            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:quantityDone') %></div>
+            <div class="prop-name"><%- helpers.t('PROPERTY:quantityDone') %></div>
             <div class="prop-value"><%- (model.quantityDone || 0).toLocaleString() %></div>
           </div>
           <div class="prop">
-            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:serviceTagCounter') %></div>
+            <div class="prop-name"><%- helpers.t('PROPERTY:serviceTagCounter') %></div>
             <div class="prop-value"><%- model.serviceTagCounter.toLocaleString() %></div>
           </div>
         </div>
@@ -43,15 +43,15 @@
       <div class="col-md-4">
         <div class="props">
           <div class="prop">
-            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:startedAt') %></div>
+            <div class="prop-name"><%- helpers.t('PROPERTY:startedAt') %></div>
             <div class="prop-value"><%- model.startedAt ? time.format(model.startedAt, 'LLLL') : '-' %></div>
           </div>
           <div class="prop">
-            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:finishedAt') %></div>
+            <div class="prop-name"><%- helpers.t('PROPERTY:finishedAt') %></div>
             <div class="prop-value"><%- model.finishedAt ? time.format(model.finishedAt, 'LLLL') : '-' %></div>
           </div>
           <div class="prop">
-            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:duration') %></div>
+            <div class="prop-name"><%- helpers.t('PROPERTY:duration') %></div>
             <div class="prop-value"><%- model.startedAt ? time.toString(((Date.parse(model.finishedAt) || Date.now()) - Date.parse(model.startedAt)) / 1000) : '-' %></div>
           </div>
         </div>
@@ -66,31 +66,31 @@
         <div class="props first">
           <% if (item.kind !== 'ft' && item.nc12) { %>
           <div class="prop">
-            <div class="prop-name"><%- t('xiconfOrders', 'kind:nc12:' + item.kind) %></div>
+            <div class="prop-name"><%- helpers.t('kind:nc12:' + item.kind) %></div>
             <div class="prop-value">
-              <a href="<%- linkToResults(model._id, item.nc12, item.kind) %>" title="<%- t('xiconfOrders', 'details:showResultsLink') %>"><%- item.nc12 %></a>
+              <a href="<%- linkToResults(model._id, item.nc12, item.kind) %>" title="<%- helpers.t('details:showResultsLink') %>"><%- item.nc12 %></a>
             </div>
           </div>
           <% } %>
           <div class="prop">
-            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:name') %></div>
+            <div class="prop-name"><%- helpers.t('PROPERTY:name') %></div>
             <div class="prop-value">
               <% if (item.kind === 'test') { %>
               <a href="#xiconf/programs/<%- item.nc12 %>"><%= item.name %></a>
               <% } else if (item.kind === 'ft') { %>
-              <a href="<%- linkToResults(model._id, item.nc12, item.kind) %>" title="<%- t('xiconfOrders', 'details:showResultsLink') %>"><%- t('xiconfOrders', 'kind:name:ft') %></a>
+              <a href="<%- linkToResults(model._id, item.nc12, item.kind) %>" title="<%- helpers.t('details:showResultsLink') %>"><%- helpers.t('kind:name:ft') %></a>
               <% } else { %>
               <%= item.name %>
               <% } %>
             </div>
           </div>
           <div class="prop">
-            <div class="prop-name"><%- t('xiconfOrders', 'PROPERTY:quantity') %></div>
+            <div class="prop-name"><%- helpers.t('PROPERTY:quantity') %></div>
             <div class="prop-value">
               <% if (item.kind === 'gprs') { %>
               <%- item.quantityTodo.toLocaleString() %>
               <% } else { %>
-              <%- item.totalQuantityDone.toLocaleString() %>/<%- item.quantityTodo.toLocaleString() %> <%- t('xiconfOrders', 'kind:unit:' + item.kind) %>
+              <%- item.totalQuantityDone.toLocaleString() %>/<%- item.quantityTodo.toLocaleString() %> <%- helpers.t('kind:unit:' + item.kind) %>
               <% } %>
             </div>
           </div>

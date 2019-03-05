@@ -2,37 +2,11 @@
   "root": {
     "BREADCRUMBS:base": "Near miss",
     "BREADCRUMBS:browse": "Behaviours",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the behaviours.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the behaviour.",
-    "MSG:DELETED": "Behaviour <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add behaviour",
-    "PAGE_ACTION:edit": "Edit behaviour",
-    "PAGE_ACTION:delete": "Delete behaviour",
-
-    "PANEL:TITLE:details": "Behaviour's details",
-    "PANEL:TITLE:addForm": "Add behaviour form",
-    "PANEL:TITLE:editForm": "Edit behaviour form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
     "PROPERTY:description": "Description",
-    "PROPERTY:position": "Position",
-
-    "FORM:ACTION:add": "Add behaviour",
-    "FORM:ACTION:edit": "Edit behaviour",
-    "FORM:ERROR:addFailure": "Failed to add the new behaviour.",
-    "FORM:ERROR:editFailure": "Failed to edit the behaviour.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Behaviour deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete behaviour",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen behaviour?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> behaviour?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the behaviour."
+    "PROPERTY:position": "Position"
   },
   "pl": true
 }

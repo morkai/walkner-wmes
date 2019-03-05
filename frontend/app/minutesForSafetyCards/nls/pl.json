@@ -1,27 +1,10 @@
 {
   "BREADCRUMBS:base": "Minuty dla Bezpieczeństwa",
   "BREADCRUMBS:browse": "Karty",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
   "BREADCRUMBS:reports:count": "Ilość minutek",
 
-  "MSG:LOADING_FAILURE": "Ładowanie kart MdB nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie karty MdB nie powiodło się.",
-  "MSG:DELETED": "Karta MdB <em>{label}</em> została usunięta.",
-  "MSG:jump:404": "Nie znaleziono karty MdB o ID <em>{rid}</em>.",
-
-  "PAGE_ACTION:add": "Dodaj kartę",
-  "PAGE_ACTION:edit": "Edytuj kartę",
-  "PAGE_ACTION:delete": "Usuń kartę",
-  "PAGE_ACTION:export": "Eksportuj karty",
-  "PAGE_ACTION:jump:title": "Skocz do karty po ID",
-  "PAGE_ACTION:jump:placeholder": "ID karty",
   "PAGE_ACTION:print": "Wersja do druku",
 
-  "PANEL:TITLE:details": "Szczegóły karty MdB",
-  "PANEL:TITLE:addForm": "Formularz dodawania karty Minuty dla Bezpieczeństwa",
-  "PANEL:TITLE:editForm": "Formularz edycji karty Minuty dla Bezpieczeństwa",
   "PANEL:ACTION:nearMiss": "Przypisane ZPW:",
   "PANEL:ACTION:suggestion": "Przypisane usprawnienie:",
 
@@ -48,8 +31,6 @@
 
   "FORM:ACTION:add": "Dodaj kartę MdB",
   "FORM:ACTION:edit": "Zapisz kartę MdB",
-  "FORM:ERROR:addFailure": "Nie udało się dodać karty MdB.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować karty MdB.",
   "FORM:ERROR:empty": "Podaj przynajmniej jedną obserwację.",
   "FORM:MSG:nearMiss:add": "Jeżeli stwierdziłeś ryzykowne warunki w miejscu prowadzenia obserwacji zarejestruj je w bazie ZPW - <a href='#kaizenOrders;add'>Zgłoś nowe ZPW</a> lub <a href=# role=rid data-kind=nearMiss>przypisz istniejące</a>!",
   "FORM:MSG:nearMiss:edit": "Stwierdzone ryzykowne warunki w miejscu prowadzenia obserwacji zostały zarejestrowane w bazie ZPW - <a href='#kaizenOrders/{rid}'>zgłoszenie #{rid}</a>! (<a href=# role=rid data-kind=nearMiss>zmień</a>)",
@@ -60,12 +41,6 @@
   "FORM:ridEditor:cancel": "Anuluj",
   "FORM:ridEditor:notFound": "Dane zgłoszenie nie istnieje!",
   "FORM:ridEditor:failure": "Nie udało się sprawdzić zgłoszenia.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia karty MdB",
-  "ACTION_FORM:BUTTON:delete": "Usuń kartę MdB",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną kartę MdB?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć kartę MdB <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć karty MdB.",
 
   "filter:user:mine": "Moje",
   "filter:user:owner": "Rejestrujący",

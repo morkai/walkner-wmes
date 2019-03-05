@@ -25,7 +25,7 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
 
       'input #-personnelId': function(e)
       {

@@ -58,7 +58,7 @@ define([
     superiorCounter: 0,
     questionCounter: 0,
 
-    events: _.extend({
+    events: _.assign({
 
       'click .opinionSurveys-form-deleteRow': function(e)
       {

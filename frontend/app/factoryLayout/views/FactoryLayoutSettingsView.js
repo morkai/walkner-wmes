@@ -25,7 +25,7 @@ define([
       'subdivisions.synced': 'render'
     },
 
-    events: _.extend({
+    events: _.assign({
       'change input[name^="factoryLayout.blacklist"]': function(e)
       {
         this.updateSetting(e.target.name, e.target.value);
@@ -36,7 +36,7 @@ define([
     {
       var settings = this.settings;
 
-      return _.extend(SettingsView.prototype.serialize.call(this), {
+      return _.assign(SettingsView.prototype.serialize.call(this), {
         divisions: _.map(orgUnits.getAllByType('division'), function(division)
         {
           var property = 'factoryLayout.' + division.id + '.color';

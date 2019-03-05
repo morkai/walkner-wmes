@@ -1,36 +1,36 @@
 <form class="orders-commentForm">
   <div class="form-group" style="position: relative">
-    <label for="<%- idPrefix %>-source" class="control-label"><%- t('orders', 'commentForm:source') %></label>
+    <label for="<%- idPrefix %>-source" class="control-label"><%- helpers.t('commentForm:source') %></label>
     <br>
     <% ['other', 'ps', 'wh'].forEach(function(source) { %>
     <label class="radio-inline">
-      <input type="radio" name="source" value="<%- source %>" required> <%- t('orders', 'commentForm:source:' + source) %>
+      <input type="radio" name="source" value="<%- source %>" required> <%- helpers.t('commentForm:source:' + source) %>
     </label>
     <% }) %>
   </div>
   <div class="row">
     <div class="col-lg-4 form-group has-required-select2">
-      <label for="<%- idPrefix %>-delayReason" class="control-label"><%- t('orders', 'commentForm:delayReason') %></label>
+      <label for="<%- idPrefix %>-delayReason" class="control-label"><%- helpers.t('commentForm:delayReason') %></label>
       <input id="<%- idPrefix %>-delayReason" type="text" autocomplete="new-password" name="delayReason">
     </div>
     <div class="col-lg-2 form-group has-required-select2">
-      <label for="<%- idPrefix %>-delayComponent" class="control-label"><%- t('orders', 'commentForm:delayComponent') %></label>
+      <label for="<%- idPrefix %>-delayComponent" class="control-label"><%- helpers.t('commentForm:delayComponent') %></label>
       <input id="<%- idPrefix %>-delayComponent" class="form-control" type="text" autocomplete="new-password" name="delayComponent" required maxlength="12" pattern="^([A-Za-z0-9]{7}|[0-9]{12})$">
     </div>
     <div class="col-lg-6 form-group">
-      <label class="control-label"><%- t('orders', 'PROPERTY:m4') %></label>
+      <label class="control-label"><%- helpers.t('PROPERTY:m4') %></label>
       <br>
       <% ['man', 'machine', 'material', 'method'].forEach(function(m4) { %>
       <label class="radio-inline">
-        <input type="radio" name="m4" value="<%- m4 %>"> <%- t('orders', 'm4:' + m4) %>
+        <input type="radio" name="m4" value="<%- m4 %>"> <%- helpers.t('m4:' + m4) %>
       </label>
       <% }) %>
     </div>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-comment" class="control-label is-required"><%- t('orders', 'commentForm:comment') %></label>
+    <label for="<%- idPrefix %>-comment" class="control-label is-required"><%- helpers.t('commentForm:comment') %></label>
     <textarea id="<%- idPrefix %>-comment" class="form-control" name="comment" rows="3" required></textarea>
   </div>
-  <button id="<%- idPrefix %>-submit-comment" type="submit" class="btn btn-primary"><i class="fa fa-comment"></i><span><%- t('orders', 'commentForm:submit:comment') %></span></button>
-  <button id="<%- idPrefix %>-submit-edit" type="submit" class="btn btn-primary hidden"><i class="fa fa-edit"></i><span><%- t('orders', 'commentForm:submit:edit') %></span></button>
+  <button id="<%- idPrefix %>-submit-comment" type="submit" class="btn btn-primary"><i class="fa fa-comment"></i><span><%- helpers.t('commentForm:submit:comment') %></span></button>
+  <button id="<%- idPrefix %>-submit-edit" type="submit" class="btn btn-primary hidden"><i class="fa fa-edit"></i><span><%- helpers.t('commentForm:submit:edit') %></span></button>
 </form>

@@ -3,49 +3,49 @@
     idPrefix: idPrefix,
     property: 'eventDate',
     type: 'date',
-    labels: {text: t('kaizenOrders', 'PROPERTY:eventDate'), ranges: true}
+    labels: {text: helpers.t('PROPERTY:eventDate'), ranges: true}
   }) %>
   <div class="form-group">
     <div class="filter-radioLabels">
       <label>
         <input name="userType" type="radio" value="mine">
-        <%- t('kaizenOrders', 'filter:user:mine') %>
+        <%- helpers.t('filter:user:mine') %>
       </label><label>
         <input name="userType" type="radio" value="unseen">
-        <%- t('kaizenOrders', 'filter:user:unseen') %>
+        <%- helpers.t('filter:user:unseen') %>
       </label><label>
         <input name="userType" type="radio" value="owner">
-        <%- t('kaizenOrders', 'filter:user:owner') %>
+        <%- helpers.t('filter:user:owner') %>
       </label><label>
         <input name="userType" type="radio" value="others">
-        <%- t('kaizenOrders', 'filter:user:others') %>
+        <%- helpers.t('filter:user:others') %>
       </label>
     </div>
     <input id="<%- idPrefix %>-user" name="user" type="text" autocomplete="new-password">
   </div>
   <% if (multi) { %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-types"><%- t('kaizenOrders', 'PROPERTY:types') %></label>
+    <label for="<%- idPrefix %>-types"><%- helpers.t('PROPERTY:types') %></label>
     <select id="<%- idPrefix %>-types" name="types" class="form-control" size="1">
       <option></option>
       <% types.forEach(function(type) { %>
-      <option value="<%- type %>"><%- t('kaizenOrders', 'type:short:' + type) %></option>
+      <option value="<%- type %>"><%- helpers.t('type:short:' + type) %></option>
       <% }) %>
     </select>
   </div>
   <% } %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-status"><%- t('kaizenOrders', 'PROPERTY:status') %></label>
+    <label for="<%- idPrefix %>-status"><%- helpers.t('PROPERTY:status') %></label>
     <select id="<%- idPrefix %>-status" name="status" class="form-control" size="1">
       <option></option>
-      <option value="open"><%- t('kaizenOrders', 'status:open') %></option>
+      <option value="open"><%- helpers.t('status:open') %></option>
       <% statuses.forEach(function(status) { %>
-      <option value="<%- status %>"><%- t('kaizenOrders', 'status:' + status) %></option>
+      <option value="<%- status %>"><%- helpers.t('status:' + status) %></option>
       <% }) %>
     </select>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-area"><%- t('kaizenOrders', 'PROPERTY:area') %></label>
+    <label for="<%- idPrefix %>-area"><%- helpers.t('PROPERTY:area') %></label>
     <select id="<%- idPrefix %>-area" name="area" class="form-control" size="1">
       <option></option>
       <% areas.forEach(function(area) { %>
@@ -54,7 +54,7 @@
     </select>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-cause"><%- t('kaizenOrders', 'filter:cause') %></label>
+    <label for="<%- idPrefix %>-cause"><%- helpers.t('filter:cause') %></label>
     <select id="<%- idPrefix %>-cause" name="cause" class="form-control" size="1">
       <option></option>
       <% causes.forEach(function(cause) { %>
@@ -63,7 +63,7 @@
     </select>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-risk"><%- t('kaizenOrders', 'PROPERTY:risk') %></label>
+    <label for="<%- idPrefix %>-risk"><%- helpers.t('PROPERTY:risk') %></label>
     <select id="<%- idPrefix %>-risk" name="risk" class="form-control" size="1">
       <option></option>
       <% risks.forEach(function(risk) { %>
@@ -72,16 +72,16 @@
     </select>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-category"><%- t('kaizenOrders', 'PROPERTY:category') %></label>
+    <label for="<%- idPrefix %>-category"><%- helpers.t('PROPERTY:category') %></label>
     <select id="<%- idPrefix %>-category" name="category" class="form-control" size="1">
       <option></option>
       <% if (multi) { %>
-      <optgroup label="<%- t('kaizenOrders', 'type:nearMiss') %>">
+      <optgroup label="<%- helpers.t('type:nearMiss') %>">
         <% nearMissCategories.forEach(function(category) { %>
         <option value="nearMiss.<%- category._id %>"><%= category.name %></option>
         <% }) %>
       </optgroup>
-      <optgroup label="<%- t('kaizenOrders', 'type:suggestion') %>">
+      <optgroup label="<%- helpers.t('type:suggestion') %>">
         <% suggestionCategories.forEach(function(category) { %>
         <option value="suggestion.<%- category._id %>"><%= category.name %></option>
         <% }) %>
@@ -94,7 +94,7 @@
     </select>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-section"><%- t('kaizenOrders', 'PROPERTY:section') %></label>
+    <label for="<%- idPrefix %>-section"><%- helpers.t('PROPERTY:section') %></label>
     <select id="<%- idPrefix %>-section" name="section" class="form-control" size="1">
       <option></option>
       <% sections.forEach(function(section) { %>
@@ -104,6 +104,6 @@
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('kaizenOrders', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

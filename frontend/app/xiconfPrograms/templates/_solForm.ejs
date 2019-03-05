@@ -1,11 +1,11 @@
 <div class="panel panel-default xiconfPrograms-stepPanel xiconfPrograms-stepPanel-sol">
   <div class="panel-heading is-with-actions">
-    <span class="xiconfPrograms-form-stepNo">0.</span> <%- t('xiconfPrograms', 'step:sol') %>
+    <span class="xiconfPrograms-form-stepNo">0.</span> <%- helpers.t('step:sol') %>
     <% include _stepPanelActions.ejs %>
   </div>
   <div class="panel-body row has-lastElementRow">
     <div class="form-group col-md-3">
-      <label for="<%- idPrefix %>-sol-voltage" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:voltage') %></label>
+      <label for="<%- idPrefix %>-sol-voltage" class="control-label is-required"><%- helpers.t('PROPERTY:voltage') %></label>
       <input id="<%- idPrefix %>-sol-voltage" class="form-control" type="number" name="steps[<%- stepIndex %>].voltage" min="0.1" max="99.9" step="0.1" value="12" required>
     </div>
   </div>

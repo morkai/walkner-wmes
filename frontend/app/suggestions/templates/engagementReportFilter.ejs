@@ -13,15 +13,15 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-status"><%- t('suggestions', 'PROPERTY:status') %></label>
+    <label for="<%- idPrefix %>-status"><%- helpers.t('PROPERTY:status') %></label>
     <select id="<%- idPrefix %>-status" name="status[]" class="form-control is-expandable" multiple size="1">
       <% statuses.forEach(function(status) { %>
-      <option value="<%- status %>"><%- t('suggestions', 'status:' + status) %></option>
+      <option value="<%- status %>"><%- helpers.t('status:' + status) %></option>
       <% }) %>
     </select>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-sections"><%- t('suggestions', 'PROPERTY:section') %></label>
+    <label for="<%- idPrefix %>-sections"><%- helpers.t('PROPERTY:section') %></label>
     <input id="<%- idPrefix %>-sections" name="sections" type="text" autocomplete="new-password">
   </div>
   <div class="form-group filter-actions">

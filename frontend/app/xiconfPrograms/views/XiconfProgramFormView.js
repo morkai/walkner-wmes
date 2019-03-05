@@ -53,7 +53,7 @@ define([
 
     template: formTemplate,
 
-    events: _.extend({
+    events: _.assign({
 
       'blur .xiconfPrograms-form-duration': function(e)
       {
@@ -114,15 +114,17 @@ define([
 
       'change [name="type"]': function(e)
       {
-        this.$id('steps').empty();
+        var view = this;
 
-        var $stepType = this.$id('stepType');
+        view.$id('steps').empty();
+
+        var $stepType = view.$id('stepType');
 
         $stepType.find('option[value!=""]').remove();
 
         XiconfProgram.TYPES_TO_STEPS[e.target.value].forEach(function(stepType)
         {
-          $stepType.append('<option value="' + stepType + '">' + t('xiconfPrograms', 'step:' + stepType) + '</option>');
+          $stepType.append('<option value="' + stepType + '">' + view.t('step:' + stepType) + '</option>');
         });
       },
 
@@ -216,7 +218,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(FormView.prototype.serialize.call(this), {
+      return _.assign(FormView.prototype.serialize.call(this), {
         programTypes: Object.keys(XiconfProgram.TYPES_TO_STEPS),
         stepTypes: XiconfProgram.TYPES_TO_STEPS[this.model.get('type')]
       });
@@ -292,12 +294,12 @@ define([
         programType = this.$('[name="type"]:checked').val();
       }
 
-      var $stepPanel = $(stepTemplate({
+      var $stepPanel = this.renderPartial(stepTemplate, {
         idPrefix: this.idPrefix + '-' + this.nextStepIndex,
         stepIndex: this.nextStepIndex,
         programType: programType,
         inputs: XiconfProgram.GLP2_INPUTS
-      }));
+      });
 
       this.$id('steps').append($stepPanel);
 
@@ -354,7 +356,7 @@ define([
 
       var invalidMinDuration = time.toSeconds($duration.val()) < 1;
 
-      $duration[0].setCustomValidity(invalidMinDuration ? t('xiconfPrograms', 'FORM:ERROR:minDuration') : '');
+      $duration[0].setCustomValidity(invalidMinDuration ? this.t('FORM:ERROR:minDuration') : '');
 
       var $visStepPanel = $duration.closest('.xiconfPrograms-stepPanel-vis');
 
@@ -378,7 +380,7 @@ define([
       }
       else
       {
-        error = t('xiconfPrograms', 'FORM:ERROR:minMaxDurations');
+        error = this.t('FORM:ERROR:minMaxDurations');
       }
 
       $maxDuration[0].setCustomValidity(error);
@@ -387,7 +389,7 @@ define([
     validateSteps: function()
     {
       this.$id('stepType')[0].setCustomValidity(
-        this.$id('steps').children().length ? '' : t('xiconfPrograms', 'FORM:ERROR:requiredStep')
+        this.$id('steps').children().length ? '' : this.t('FORM:ERROR:requiredStep')
       );
     },
 
@@ -445,7 +447,7 @@ define([
       var $tolerances = $stepPanel.find('.xiconfPrograms-form-glp2-tolerances');
       var $minAbs = $tolerances.find('[name$="lowerToleranceAbs"]');
       var $maxAbs = $tolerances.find('[name$="upperToleranceAbs"]');
-      var label = t('xiconfPrograms', dataset.label);
+      var label = this.t(dataset.label);
 
       $setValueLabel.html(label);
 

@@ -4,11 +4,6 @@
     "BREADCRUMBS:events": "Events",
     "BREADCRUMBS:requests": "Requests",
 
-    "MSG:LOADING_FAILURE": "Failed to load the ISAs.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the ISA.",
-
-    "PAGE_ACTION:export": "Export",
-
     "actions:shiftPersonnel": "Change available personnel",
     "actions:responderFilter": "Filter by warehouseman",
     "actions:toggleFullscreen": "Toggle fullscreen mode",

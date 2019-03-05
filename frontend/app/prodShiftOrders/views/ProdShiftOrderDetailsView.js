@@ -13,17 +13,7 @@ define([
 
     template: detailsTemplate,
 
-    remoteTopics: {},
-
-    serialize: function()
-    {
-      return {
-        model: this.model.serialize({
-          orgUnits: true,
-          orderUrl: true
-        })
-      };
-    }
+    remoteTopics: {}
 
   });
 });

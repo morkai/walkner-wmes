@@ -47,7 +47,7 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
 
       'change [data-object]': function(e)
       {

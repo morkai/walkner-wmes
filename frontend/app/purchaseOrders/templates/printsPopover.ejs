@@ -1,14 +1,14 @@
 <table class="table table-bordered table-condensed table-hover pos-prints">
   <thead>
     <tr>
-      <th><%- t('purchaseOrders', 'PROPERTY:print.printedAt') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:print.shippingNo') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:print.printer') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:print.paper') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:print.barcode') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:print.packageQty') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:print.componentQty') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:print.remainingQty') %>
+      <th><%- helpers.t('PROPERTY:print.printedAt') %>
+      <th><%- helpers.t('PROPERTY:print.shippingNo') %>
+      <th><%- helpers.t('PROPERTY:print.printer') %>
+      <th><%- helpers.t('PROPERTY:print.paper') %>
+      <th><%- helpers.t('PROPERTY:print.barcode') %>
+      <th><%- helpers.t('PROPERTY:print.packageQty') %>
+      <th><%- helpers.t('PROPERTY:print.componentQty') %>
+      <th><%- helpers.t('PROPERTY:print.remainingQty') %>
       <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
     </tr>
   </thead>
@@ -25,9 +25,9 @@
       <td class="is-number"><%- print.remainingQty.toLocaleString() %></td>
       <td class="actions">
         <div class="actions-group">
-          <a class="btn btn-default action-showPrintPdf" href="/purchaseOrders/<%- orderId %>/prints/<%- print._id %>.pdf" title="<%- t('purchaseOrders', 'prints:showPrintPdf') %>"><i class="fa fa-file-pdf-o"></i></a>
+          <a class="btn btn-default action-showPrintPdf" href="/purchaseOrders/<%- orderId %>/prints/<%- print._id %>.pdf" title="<%- helpers.t('prints:showPrintPdf') %>"><i class="fa fa-file-pdf-o"></i></a>
           <% if (user.isAllowedTo('PURCHASE_ORDERS:MANAGE')) { %>
-          <button type="button" class="btn btn-<%- print.cancelled ? 'success' : 'danger' %> action-toggleCancelled" title="<%- t('purchaseOrders', 'prints:' + (print.cancelled ? 'restore' : 'cancel')) %>"><i class="fa fa-thumbs-<%- print.cancelled ? 'up' : 'down' %>"></i></button>
+          <button type="button" class="btn btn-<%- print.cancelled ? 'success' : 'danger' %> action-toggleCancelled" title="<%- helpers.t('prints:' + (print.cancelled ? 'restore' : 'cancel')) %>"><i class="fa fa-thumbs-<%- print.cancelled ? 'up' : 'down' %>"></i></button>
           <% } %>
         </div>
       </td>

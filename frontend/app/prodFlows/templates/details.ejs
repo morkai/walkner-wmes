@@ -1,35 +1,21 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
-    <%- t('prodFlows', 'PANEL:TITLE:details') %>
+    <%- panelTitle %>
   </div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('prodFlows', 'PROPERTY:subdivision') %></div>
-        <div class="prop-value"><%- subdivision %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('prodFlows', 'PROPERTY:mrpControllers') %></div>
-        <div class="prop-value">
-          <% if (mrpControllers.length) { %>
-          <ul>
-            <% mrpControllers.forEach(function(mrpController) { %>
-            <li><a href="<%- mrpController.href %>"><%= mrpController.label %></a></li>
-            <% }) %>
-          </ul>
-          <% } else { %>
-          -
-          <% } %>
-        </div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('prodFlows', 'PROPERTY:name') %></div>
-        <div class="prop-value"><%= name || '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('prodFlows', 'PROPERTY:deactivatedAt') %></div>
-        <div class="prop-value"><%= deactivatedAt %></div>
-      </div>
-    </div>
+    <%- helpers.props(model, [
+      '!subdivision',
+      {id: '!mrpControllers', value: function(mrps)
+      {
+        if (mrps.length)
+        {
+          return '<ul>' + mrps.map(function(mrp) { return '<li><a href="' + mrp.href + '">' + mrp.label + '</a>'; }) + '</ul>';
+        }
+
+        return '';
+      }},
+      'name',
+      'deactivatedAt'
+    ]) %>
   </div>
 </div>

@@ -17,7 +17,7 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
       'change input[data-setting]': function(e)
       {
         this.updateSetting(e.target.name, e.target.value);

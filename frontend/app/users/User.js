@@ -85,6 +85,23 @@ define([
       var obj = this.toJSON();
       var company = companies.get(obj.company);
 
+      obj.name = '';
+
+      if (obj.lastName)
+      {
+        obj.name = obj.lastName;
+      }
+
+      if (obj.firstName)
+      {
+        if (obj.name)
+        {
+          obj.name += ' ';
+        }
+
+        obj.name += obj.firstName;
+      }
+
       obj.company = company ? company.getLabel() : '-';
 
       obj.active = t('users', 'active:' + obj.active);
@@ -150,6 +167,8 @@ define([
           obj.notifications.push(pref);
         }
       });
+
+      obj.mrps = _.isEmpty(obj.mrps) ? '' : obj.mrps.join('; ');
 
       return obj;
     },

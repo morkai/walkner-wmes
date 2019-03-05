@@ -5,15 +5,15 @@
       <li data-online data-privilege="EVENTS:VIEW" data-module><a href="#events"><%- t('core', 'NAVBAR:EVENTS') %></a>
       <li data-online data-loggedin class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown">
-          <%- t('suggestions', 'navbar:kaizen') %>
+          <%- helpers.t('navbar:kaizen') %>
           <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
-          <li data-module="kaizen"><a href="#suggestions"><%- t('suggestions', 'navbar:all') %></a>
-          <li data-module="kaizen"><a href="#suggestions?observers.user.id=mine&sort(-createdAt)&limit(20)"><%- t('suggestions', 'navbar:mine') %></a>
-          <li data-module="kaizen"><a href="#suggestions?observers.user.id=unseen&sort(-createdAt)&limit(20)"><%- t('suggestions', 'navbar:unseen') %></a>
+          <li data-module="kaizen"><a href="#suggestions"><%- helpers.t('navbar:all') %></a>
+          <li data-module="kaizen"><a href="#suggestions?observers.user.id=mine&sort(-createdAt)&limit(20)"><%- helpers.t('navbar:mine') %></a>
+          <li data-module="kaizen"><a href="#suggestions?observers.user.id=unseen&sort(-createdAt)&limit(20)"><%- helpers.t('navbar:unseen') %></a>
         </ul>
-      <li data-online data-loggedin data-module="kaizen"><a href="#kaizenReport"><%- t('suggestions', 'navbar:report') %></a>
+      <li data-online data-loggedin data-module="kaizen"><a href="#kaizenReport"><%- helpers.t('navbar:report') %></a>
       <li data-online class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown">
           <%- t('core', 'NAVBAR:DICTIONARIES') %>
@@ -27,12 +27,12 @@
           <li data-privilege="DICTIONARIES:VIEW" data-module><a href="#divisions"><%- t('core', 'NAVBAR:DIVISIONS') %></a>
           <li data-privilege="DICTIONARIES:VIEW" data-module><a href="#subdivisions"><%- t('core', 'NAVBAR:SUBDIVISIONS') %></a>
           <li class="divider">
-          <li class="dropdown-header"><%- t('suggestions', 'navbar:kaizen') %>
-          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenSections"><%- t('suggestions', 'navbar:sections') %></a>
-          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenAreas"><%- t('suggestions', 'navbar:areas') %></a>
-          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenCategories"><%- t('suggestions', 'navbar:categories') %></a>
-          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenCauses"><%- t('suggestions', 'navbar:causes') %></a>
-          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenRisks"><%- t('suggestions', 'navbar:risks') %></a>
+          <li class="dropdown-header"><%- helpers.t('navbar:kaizen') %>
+          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenSections"><%- helpers.t('navbar:sections') %></a>
+          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenAreas"><%- helpers.t('navbar:areas') %></a>
+          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenCategories"><%- helpers.t('navbar:categories') %></a>
+          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenCauses"><%- helpers.t('navbar:causes') %></a>
+          <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenRisks"><%- helpers.t('navbar:risks') %></a>
         </ul>
     </ul>
     <% include ../../core/templates/navbar/right.ejs %>

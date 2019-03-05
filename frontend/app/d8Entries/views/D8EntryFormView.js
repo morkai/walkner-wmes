@@ -42,7 +42,7 @@ define([
 
     stripIndex: 0,
 
-    events: _.extend({
+    events: _.assign({
 
       'click #-addStrip': function()
       {
@@ -149,7 +149,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(FormView.prototype.serialize.call(this), {
+      return _.assign(FormView.prototype.serialize.call(this), {
         nextYear: time.getMoment().add(1, 'year').format('YYYY-MM-DD'),
         statuses: dictionaries.statuses,
         userRoles: this.model.getUserRoles()

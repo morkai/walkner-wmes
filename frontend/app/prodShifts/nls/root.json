@@ -1,30 +1,18 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Shifts",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the shifts.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the shift.",
-    "MSG:DELETED": "Shift <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:prodLogEntries": "Show operation log",
-    "PAGE_ACTION:export": "Export shifts",
-    "PAGE_ACTION:add": "Add shift",
-    "PAGE_ACTION:edit": "Edit shift",
-    "PAGE_ACTION:delete": "Delete shift",
 
-    "PANEL:TITLE:details": "Shift's details",
-    "PANEL:TITLE:addForm": "Add shift form",
-    "PANEL:TITLE:editForm": "Edit shift form",
-
-    "filter:submit": "Filter shifts",
+    "filter:submit": "Filter",
     "filter:placeholder:prodLine": "Any production line",
     "filter:orderMrp": "Order MRP",
 
+    "PROPERTY:division": "Division",
+    "PROPERTY:subdivision": "Subdivision",
     "PROPERTY:mrpControllers": "MRP Controller",
     "PROPERTY:prodFlow": "Production flow",
+    "PROPERTY:workCenter": "WorkCenter",
     "PROPERTY:prodLine": "Production line",
     "PROPERTY:type": "Type",
     "PROPERTY:createdAt": "Created at",
@@ -43,10 +31,6 @@
     "PROPERTY:efficiency": "Efficiency",
     "PROPERTY:orderMrp": "Order MRP",
 
-    "FORM:ACTION:add": "Add shift",
-    "FORM:ACTION:edit": "Edit shift",
-    "FORM:ERROR:addFailure": "Failed to add the shift.",
-    "FORM:ERROR:editFailure": "Failed to edit the shift.",
     "FORM:ERROR:INVALID_CHANGES": "Cannot edit the shift: no valid changes were detected.",
     "FORM:ERROR:INPUT": "Invalid input data!",
     "FORM:ERROR:NOT_EDITABLE": "The specified shift didn't end yet!",
@@ -81,12 +65,6 @@
     "charts:quantitiesDone:unit": " items",
     "charts:quantitiesDone:series:planned": "Planned",
     "charts:quantitiesDone:series:actual": "Actual",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Shift deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete shift",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen shift?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> shift?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the shift.",
 
     "changeRequest:delete:messageText": "You're in a change request creation mode. The <em>Production shift</em> will be deleted only after it has been approved by the person responsible.<br><br>Are you sure you want to create the shift deletion request?",
     "changeRequest:delete:formActionText": "Create deletion request",

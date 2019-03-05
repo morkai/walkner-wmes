@@ -1,6 +1,54 @@
 {
   "root": {
+    "BREADCRUMBS:base": "Tool calibration",
+    "BREADCRUMBS:browse": "Tool calibration",
+    "BREADCRUMBS:settings": "Settings",
 
+    "MSG:comment:failure": "Failed to comment.",
+
+    "PAGE_ACTION:types": "Tool types",
+    "PAGE_ACTION:settings": "Settings",
+
+    "PANEL:TITLE:changes": "Tool history",
+
+    "PROPERTY:rid": "ID",
+    "PROPERTY:name": "Tool name",
+    "PROPERTY:type": "Tool type",
+    "PROPERTY:sn": "Serial number",
+    "PROPERTY:lastDate": "Last calibration date",
+    "PROPERTY:nextDate": "Next calibration date",
+    "PROPERTY:interval": "Calibration interval",
+    "PROPERTY:intervalUnit": "Calibration interval unit",
+    "PROPERTY:users": "Current tool operators",
+    "PROPERTY:status": "Status",
+    "PROPERTY:comment": "Comment",
+    "PROPERTY:remaining": "Days to calibration",
+
+    "status:in-use": "In use",
+    "status:retired": "Retired",
+
+    "interval:unit:year": "year",
+    "interval:unit:month": "month",
+    "interval:unit:week": "week",
+    "interval:unit:day": "day",
+
+    "interval:year": "{v} {v, plural, one{year} other{years}}",
+    "interval:month": "{v} {v, plural, one{month} other{months}}",
+    "interval:week": "{v} {v, plural, one{week} other{weeks}}",
+    "interval:day": "{v} {v, plural, one{day} other{days}}",
+
+    "filter:user:mine": "Mine",
+    "filter:user:others": "User",
+    "filter:date:last": "Last date",
+    "filter:date:next": "Next date",
+    "filter:submit": "Filter",
+
+    "history:added": "created the tool.",
+    "history:submit": "Comment",
+
+    "settings:tab:notifier": "Notifications",
+    "settings:notifier:daysBefore": "Notification interval",
+    "settings:notifier:daysBefore:help": "Number of days before the next calibration date used to determine the tools for which notifications about incoming calibration are to be sent. Notifications are sent everyday at 05:30. A list of days can be defined."
   },
   "pl": true
 }

@@ -1,39 +1,13 @@
 {
   "root": {
     "BREADCRUMBS:browse": "12NC",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the 12NC list.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the 12NC details.",
-    "MSG:DELETED": "12NC <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add 12NC",
-    "PAGE_ACTION:edit": "Edit 12NC",
-    "PAGE_ACTION:delete": "Delete 12NC",
-
-    "PANEL:TITLE:details": "12NC details",
-    "PANEL:TITLE:addForm": "Add 12NC form",
-    "PANEL:TITLE:editForm": "Edit 12NC form",
-
-    "filter:submit": "Filter 12NC",
+    "filter:submit": "Filter",
 
     "PROPERTY:vendor": "Vendor no",
     "PROPERTY:nc12": "12NC",
     "PROPERTY:value": "Value 1",
-    "PROPERTY:unit": "Unit 1",
-
-    "FORM:ACTION:add": "Add 12NC",
-    "FORM:ACTION:edit": "Edit 12NC",
-    "FORM:ERROR:addFailure": "Failed to add the new 12NC.",
-    "FORM:ERROR:editFailure": "Failed to edit the 12NC.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "12NC deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete 12NC",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen 12NC?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> 12NC?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the 12NC."
+    "PROPERTY:unit": "Unit 1"
   },
   "pl": true
 }

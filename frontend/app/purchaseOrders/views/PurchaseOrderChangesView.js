@@ -54,10 +54,9 @@ define([
       this.hidden = true;
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         changes: this.serializeChanges(),
         hidden: this.hidden
       };
@@ -99,7 +98,7 @@ define([
             key: 'newItems',
             name: t('purchaseOrders', 'changes:newItems'),
             oldValue: '-',
-            newValue: renderNewItemsChange({items: newItems})
+            newValue: this.renderPartial(renderNewItemsChange, {items: newItems})
           });
         }
 
@@ -195,12 +194,12 @@ define([
 
       if (propertyKey === 'item.schedule')
       {
-        return renderItemScheduleChange({schedule: rawValue});
+        return this.renderPartial(renderItemScheduleChange, {schedule: rawValue});
       }
 
       if (propertyKey === 'prints')
       {
-        return renderPrintsChange({change: rawValue});
+        return this.renderPartial(renderPrintsChange, {change: rawValue});
       }
 
       return _.escape(JSON.stringify(rawValue));

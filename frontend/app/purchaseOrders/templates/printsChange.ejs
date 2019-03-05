@@ -1,21 +1,21 @@
 <table class="table table-bordered table-hover pos-changes-prints">
   <thead>
     <tr>
-      <th><%- t('purchaseOrders', 'PROPERTY:print.shippingNo') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:print.paper') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:print.barcode') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:item._id') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:item.nc12') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:print.packageQty') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:print.componentQty') %>
-      <th><%- t('purchaseOrders', 'PROPERTY:print.remainingQty') %>
+      <th><%- helpers.t('PROPERTY:print.shippingNo') %>
+      <th><%- helpers.t('PROPERTY:print.paper') %>
+      <th><%- helpers.t('PROPERTY:print.barcode') %>
+      <th><%- helpers.t('PROPERTY:item._id') %>
+      <th><%- helpers.t('PROPERTY:item.nc12') %>
+      <th><%- helpers.t('PROPERTY:print.packageQty') %>
+      <th><%- helpers.t('PROPERTY:print.componentQty') %>
+      <th><%- helpers.t('PROPERTY:print.remainingQty') %>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td rowspan="<%- change.items.length %>"><%= change.shippingNo || '-' %></td>
-      <td rowspan="<%- change.items.length %>"><%- t('purchaseOrders', 'paper:' + change.paper) %></td>
-      <td rowspan="<%- change.items.length %>"><%- t('purchaseOrders', 'barcode:' + change.barcode) %></td>
+      <td rowspan="<%- change.items.length %>"><%- helpers.t('paper:' + change.paper) %></td>
+      <td rowspan="<%- change.items.length %>"><%- helpers.t('barcode:' + change.barcode) %></td>
       <td><%- change.items[0]._id %></td>
       <td><%- change.items[0].nc12 %></td>
       <td class="is-number"><%- change.items[0].packageQty.toLocaleString() %></td>

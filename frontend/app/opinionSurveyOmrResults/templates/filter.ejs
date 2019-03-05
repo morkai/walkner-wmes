@@ -1,19 +1,19 @@
 <form class="well filter-form opinionSurveyOmrResults-filter">
   <div class="form-group">
-    <label for="<%- idPrefix %>-status"><%- t('opinionSurveyOmrResults', 'PROPERTY:status') %></label>
+    <label for="<%- idPrefix %>-status"><%- helpers.t('PROPERTY:status') %></label>
     <select id="<%- idPrefix %>-status" name="status" class="form-control">
       <option></option>
       <% ['unrecognized', 'recognized', 'ignored', 'fixed'].forEach(function(status) { %>
-      <option value="<%- status %>"><%- t('opinionSurveyOmrResults', 'status:' + status) %></option>
+      <option value="<%- status %>"><%- helpers.t('status:' + status) %></option>
       <% }) %>
     </select>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-survey"><%- t('opinionSurveyOmrResults', 'PROPERTY:survey') %></label>
+    <label for="<%- idPrefix %>-survey"><%- helpers.t('PROPERTY:survey') %></label>
     <input id="<%- idPrefix %>-survey" name="survey" type="text" autocomplete="new-password">
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('opinionSurveyOmrResults', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

@@ -3,26 +3,26 @@
     <tr>
       <th class="is-min"><%- t('core', '#') %></th>
       <% if (extended) { %>
-      <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:pressWorksheet') %></th>
-      <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:user') %></th>
-      <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:shift') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:pressWorksheet') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:user') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:shift') %></th>
       <% } %>
-      <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.nc12') %></th>
-      <th><%- t('pressWorksheets', 'PROPERTY:order.name') %></th>
-      <th><%- t('pressWorksheets', 'PROPERTY:order.operationName') %></th>
-      <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.operationNo') %></th>
-      <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.division') %></th>
-      <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.prodLine') %></th>
-      <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.quantityDone') %></th>
-      <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.startedAt') %></th>
-      <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.finishedAt') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:order.nc12') %></th>
+      <th><%- helpers.t('PROPERTY:order.name') %></th>
+      <th><%- helpers.t('PROPERTY:order.operationName') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:order.operationNo') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:order.division') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:order.prodLine') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:order.quantityDone') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:order.startedAt') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:order.finishedAt') %></th>
       <% if (typeof worksheet !== 'undefined') { %>
-      <th class="is-min"><%- t('pressWorksheets', 'PROPERTY:order.machineManHours') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:order.machineManHours') %></th>
       <% } %>
       <% if (typeof losses !== 'undefined' && losses) { %>
-      <th><%- t('pressWorksheets', 'PROPERTY:order.losses') %></th>
+      <th><%- helpers.t('PROPERTY:order.losses') %></th>
       <% } %>
-      <th><%- t('pressWorksheets', 'PROPERTY:order.downtimes') %></th>
+      <th><%- helpers.t('PROPERTY:order.downtimes') %></th>
     </tr>
   </thead>
   <% if (typeof worksheet !== 'undefined') { %>

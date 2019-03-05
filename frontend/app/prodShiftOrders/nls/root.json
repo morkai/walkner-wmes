@@ -1,31 +1,20 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Orders",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the orders.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order.",
-    "MSG:DELETED": "Order <em>{label}</em> was deleted.",
 
     "PAGE_ACTION:prodLogEntries": "Show operation log",
     "PAGE_ACTION:prodDowntimes": "Show downtimes",
-    "PAGE_ACTION:export": "Export orders",
-    "PAGE_ACTION:edit": "Edit order",
-    "PAGE_ACTION:delete": "Delete order",
 
     "PANEL:TITLE:details": "Order's production details",
     "PANEL:TITLE:orderDetails": "Order's details at the moment of start",
     "PANEL:TITLE:losses": "Losses",
     "PANEL:TITLE:downtimes": "Downtimes",
     "PANEL:TITLE:serialNumbers": "Scanned serial numbers",
-    "PANEL:TITLE:addForm": "Add order form",
-    "PANEL:TITLE:editForm": "Edit order form",
+    "PANEL:TITLE:addForm": "Order add form",
+    "PANEL:TITLE:editForm": "Order edit form",
 
     "FORM:ACTION:add": "Add order",
     "FORM:ACTION:edit": "Edit order",
-    "FORM:ERROR:addFailure": "Failed to add the order.",
-    "FORM:ERROR:editFailure": "Failed to edit the order.",
     "FORM:ERROR:order": "Order is required!",
     "FORM:ERROR:operation": "Operation is required!",
     "FORM:ERROR:startedAt": "Started at must be between the shift's time boundries!",
@@ -72,12 +61,6 @@
 
     "unit:workerCount": "persons",
     "unit:taktTime": "s",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Order deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete order",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen order?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> order?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the order.",
 
     "changeRequest:delete:messageText": "You're in a change request creation mode. The <em>Order</em> will be deleted only after it has been approved by the person responsible.<br><br>Are you sure you want to create the order deletion request?",
     "changeRequest:delete:formActionText": "Create deletion request",

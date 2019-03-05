@@ -85,9 +85,7 @@ define([
       });
 
       this.filterView = new ProdDowntimeFilterView({
-        model: {
-          rqlQuery: this.collection.rqlQuery
-        }
+        model: this.collection
       });
 
       this.listenTo(this.filterView, 'filterChanged', this.refreshList);

@@ -192,7 +192,7 @@ define([
 
     getQueryDataForOrgUnitChange: function(orgUnit)
     {
-      return _.extend(DrillingReportPage.prototype.getQueryDataForOrgUnitChange.call(this, orgUnit), {
+      return _.assign(DrillingReportPage.prototype.getQueryDataForOrgUnitChange.call(this, orgUnit), {
         skip: 0
       });
     },

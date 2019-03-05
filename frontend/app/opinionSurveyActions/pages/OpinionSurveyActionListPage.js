@@ -60,6 +60,7 @@ define([
     {
       return new OpinionSurveyActionFilterView({
         model: {
+          nlsDomain: this.collection.getNlsDomain(),
           rqlQuery: this.collection.rqlQuery,
           opinionSurveys: this.opinionSurveys
         }

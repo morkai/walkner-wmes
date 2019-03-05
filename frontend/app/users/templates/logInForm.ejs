@@ -1,26 +1,26 @@
 <form class="logInForm" method="post" action="/login">
   <div id="<%- idPrefix %>-message" class="message message-inline message-warning hidden"></div>
   <div class="form-group">
-    <input id="<%- idPrefix %>-login" name="login" type="text" autocomplete="new-password" class="form-control input-lg" required placeholder="<%- t('users', 'LOG_IN_FORM:LABEL:LOGIN') %>" autofocus>
+    <input id="<%- idPrefix %>-login" name="login" type="text" autocomplete="new-password" class="form-control input-lg" required placeholder="<%- helpers.t('LOG_IN_FORM:LABEL:LOGIN') %>" autofocus>
   </div>
   <div class="form-group">
-    <input id="<%- idPrefix %>-password" name="password" type="password" class="form-control input-lg" required placeholder="<%- t('users', 'LOG_IN_FORM:LABEL:PASSWORD') %>">
+    <input id="<%- idPrefix %>-password" name="password" type="password" class="form-control input-lg" required placeholder="<%- helpers.t('LOG_IN_FORM:LABEL:PASSWORD') %>">
   </div>
   <div id="<%- idPrefix %>-password2-container" class="form-group hidden">
-    <input id="<%- idPrefix %>-password2" name="password2" type="password" class="form-control input-lg" placeholder="<%- t('users', 'LOG_IN_FORM:LABEL:NEW_PASSWORD2') %>">
+    <input id="<%- idPrefix %>-password2" name="password2" type="password" class="form-control input-lg" placeholder="<%- helpers.t('LOG_IN_FORM:LABEL:NEW_PASSWORD2') %>">
   </div>
   <button class="btn btn-block btn-lg btn-primary logInForm-submit" type="submit">
     <i class="fa fa-spinner fa-spin logInForm-submit-spinner"></i>
-    <span class="logInForm-submit-label"><%- t('users', 'LOG_IN_FORM:SUBMIT:LOG_IN') %></span>
+    <span class="logInForm-submit-label"><%- helpers.t('LOG_IN_FORM:SUBMIT:LOG_IN') %></span>
   </button>
   <p class="logInForm-links">
     <% if (OFFICE365_TENANT) { %>
     <button id="<%- idPrefix %>-office365" class="btn btn-link hidden logInForm-links-office365" type="button">
       <i class="fa fa-windows"></i>
-      <span><%- t('users', 'LOG_IN_FORM:LINK:OFFICE365', {OFFICE365_TENANT: OFFICE365_TENANT}) %></span>
+      <span><%- helpers.t('LOG_IN_FORM:LINK:OFFICE365', {OFFICE365_TENANT: OFFICE365_TENANT}) %></span>
     </button>
     <% } %>
-    <button id="<%- idPrefix %>-loginLink" class="btn btn-link" type="button"><%- t('users', 'LOG_IN_FORM:LINK:LOG_IN') %></button>
-    <button id="<%- idPrefix %>-resetLink" class="btn btn-link" type="button"><%- t('users', 'LOG_IN_FORM:LINK:RESET') %></button>
+    <button id="<%- idPrefix %>-loginLink" class="btn btn-link" type="button"><%- helpers.t('LOG_IN_FORM:LINK:LOG_IN') %></button>
+    <button id="<%- idPrefix %>-resetLink" class="btn btn-link" type="button"><%- helpers.t('LOG_IN_FORM:LINK:RESET') %></button>
   </p>
 </form>

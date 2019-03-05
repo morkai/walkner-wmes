@@ -1,27 +1,25 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'app/i18n',
+  'underscore',
   'app/core/views/DetailsView',
   'app/mechOrders/templates/details'
 ], function(
-  t,
+  _,
   DetailsView,
-  detailsTemplate
+  template
 ) {
   'use strict';
 
   return DetailsView.extend({
 
-    template: detailsTemplate,
+    template: template,
 
-    serialize: function()
+    getTemplateData: function()
     {
-      return {
-        model: this.model.toJSON(),
-        panelType: this.options.panelType || 'primary',
-        panelTitle: this.options.panelTitle || t('mechOrders', 'PANEL:TITLE:details')
-      };
+      return _.assign(DetailsView.prototype.getTemplateData.apply(this, arguments), {
+        panelType: this.options.panelType || 'primary'
+      });
     }
 
   });

@@ -30,11 +30,7 @@ define([
       return [
         pageActions.jump(this, collection),
         pageActions.export(layout, this, this.collection, false),
-        {
-          label: this.t('PAGE_ACTION:add'),
-          icon: 'plus',
-          href: collection.genClientUrl('add')
-        },
+        pageActions.add(collection, false),
         {
           label: this.t('PAGE_ACTION:settings'),
           icon: 'cogs',

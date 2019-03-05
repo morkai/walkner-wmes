@@ -1,30 +1,18 @@
 {
   "BREADCRUMBS:base": "Inspekcja Jakości",
   "BREADCRUMBS:browse": "Wyniki",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
   "BREADCRUMBS:reports:count": "Ilości",
   "BREADCRUMBS:reports:okRatio": "% wyrobów zgodnych",
   "BREADCRUMBS:reports:nokRatio": "Jakość wyrobu gotowego",
   "BREADCRUMBS:settings": "Ustawienia",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie wyników nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie wyniku nie powiodło się.",
-  "MSG:DELETED": "Wynik <em>{label}</em> został usunięty.",
-  "MSG:jump:404": "Nie znaleziono wyniku o ID <em>{rid}</em>.",
   "MSG:comment:failure": "Nie udało się skomentować zgłoszenia.",
 
-  "PAGE_ACTION:export": "Eksportuj wyniki",
   "PAGE_ACTION:add": "Dodaj wynik",
   "PAGE_ACTION:add:ok": "Dodaj wynik zgodny",
   "PAGE_ACTION:add:nok": "niezgodny",
-  "PAGE_ACTION:edit": "Edytuj wynik",
-  "PAGE_ACTION:delete": "Usuń wynik",
   "PAGE_ACTION:print": "Drukuj zgłoszenie niezgodności",
   "PAGE_ACTION:settings": "Ustawienia",
-  "PAGE_ACTION:jump:title": "Skocz do wyniku po ID",
-  "PAGE_ACTION:jump:placeholder": "ID wyniku",
 
   "PANEL:TITLE:details": "Szczegóły wyniku",
   "PANEL:TITLE:details:order": "Zlecenie",
@@ -35,8 +23,6 @@
   "PANEL:TITLE:details:attachments:ok": "Załącznik OK",
   "PANEL:TITLE:details:attachments:nok": "Załącznik NOK",
   "PANEL:TITLE:changes": "Historia zmian",
-  "PANEL:TITLE:addForm": "Formularz dodawania wyniku",
-  "PANEL:TITLE:editForm": "Formularz edycji wyniku",
 
   "PROPERTY:rid": "ID",
   "PROPERTY:creator": "Stworzone przez",
@@ -109,10 +95,6 @@
   "LIST:COLUMN:qtyNok": "Ilość NOK",
   "LIST:COLUMN:qtyNokInspected": "Ilość&nbsp;NOK w&nbsp;spr.",
 
-  "FORM:ACTION:add": "Dodaj wynik",
-  "FORM:ACTION:edit": "Edytuj wynik",
-  "FORM:ERROR:addFailure": "Nie udało się dodać wyniku.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować wyniku.",
   "FORM:ERROR:upload": "Nie udało się załadować załączników.",
   "FORM:ERROR:orderNo": "Wybierz prawidłowe zlecenie.",
   "FORM:okFile:new": "Nowe zdjęcie OK",
@@ -121,12 +103,6 @@
   "FORM:nokFile:current": "Aktualne zdjęcie NOK",
   "FORM:attachments:remove": "usuń",
   "FORM:attachments:update": "Wybierz nowe pliki tylko wtedy, gdy chcesz nadpisać aktualne.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia wyniku",
-  "ACTION_FORM:BUTTON:delete": "Usuń wynik",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany wynik?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć wynik <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć wyniku.",
 
   "correctiveActions:#": "#",
   "correctiveActions:what": "Akcja",
@@ -137,7 +113,6 @@
   "correctiveActions:empty": "Brak akcji.",
 
   "history:added": "utworzenie wyniku inspekcji.",
-  "history:editMessage": "Tutaj możesz dodać komentarz do wyniku inspekcji. Jeżeli chcesz także zmienić jakieś właściwości, <a href='{editUrl}'>to skorzystaj z formularza edycji</a>.",
   "history:submit": "Komentuj",
   "history:correctiveActions": "{count, plural, one{1 akcja korygująca} few{# akcje korygujące} other{# akcji korygujących}}",
 

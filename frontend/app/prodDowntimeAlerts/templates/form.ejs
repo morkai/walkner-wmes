@@ -4,36 +4,36 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('prodDowntimeAlerts', 'PROPERTY:name') %></label>
+        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" name="name" class="form-control" type="text" autocomplete="new-password" required>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-repeatInterval" class="control-label"><%- t('prodDowntimeAlerts', 'PROPERTY:repeatInterval') %></label>
+        <label for="<%- idPrefix %>-repeatInterval" class="control-label"><%- helpers.t('PROPERTY:repeatInterval') %></label>
         <input id="<%- idPrefix %>-repeatInterval" name="repeatInterval" class="form-control prodDowntimeAlerts-form-repeatInterval" type="text" autocomplete="new-password" placeholder="0h 0m 0s">
-        <p class="help-block"><%- t('prodDowntimeAlerts', 'FORM:HELP:repeatInterval') %></p>
+        <p class="help-block"><%- helpers.t('FORM:HELP:repeatInterval') %></p>
       </div>
       <div class="panel panel-default prodDowntimeAlerts-form-conditions">
         <div class="panel-heading is-with-actions">
-          <%- t('prodDowntimeAlerts', 'PROPERTY:conditions') %>
+          <%- helpers.t('PROPERTY:conditions') %>
           <div class="panel-actions">
             <select id="<%- idPrefix %>-conditionTypes" class="form-control prodDowntimeAlerts-form-conditions-types">
-              <option value="" disabled selected hidden><%- t('prodDowntimeAlerts', 'FORM:conditions:type') %></option>
+              <option value="" disabled selected hidden><%- helpers.t('FORM:conditions:type') %></option>
               <% _.forEach(conditions, function(condition) { %>
-              <option value="<%- condition.type %>" <%- condition.hidden ? '' : 'disabled' %>><%- t('prodDowntimeAlerts', 'conditions:types:' + condition.type) %></option>
+              <option value="<%- condition.type %>" <%- condition.hidden ? '' : 'disabled' %>><%- helpers.t('conditions:types:' + condition.type) %></option>
               <% }) %>
             </select>
-            <button id="<%- idPrefix %>-conditions-add" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- t('prodDowntimeAlerts', 'FORM:conditions:add') %></span></button>
+            <button id="<%- idPrefix %>-conditions-add" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- helpers.t('FORM:conditions:add') %></span></button>
           </div>
         </div>
         <div class="panel-body">
-          <p id="<%- idPrefix %>-conditions-empty" class="prodDowntimeAlerts-form-empty"><%- t('prodDowntimeAlerts', 'FORM:conditions:empty') %></p>
+          <p id="<%- idPrefix %>-conditions-empty" class="prodDowntimeAlerts-form-empty"><%- helpers.t('FORM:conditions:empty') %></p>
           <% _.forEach(conditions, function(condition, i) { %>
           <div class="form-group prodDowntimeAlerts-form-condition <%- condition.hidden ? 'hidden' : '' %>" data-type="<%- condition.type %>">
-            <button class="btn btn-default prodDowntimeAlerts-form-condition-remove" type="button" title="<%- t('prodDowntimeAlerts', 'FORM:conditions:remove') %>"><i class="fa fa-remove"></i></button>
-            <label for="<%- idPrefix %>-conditions-<%- condition.type %>" class="control-label"><%- t('prodDowntimeAlerts', 'conditions:types:' + condition.type) %></label>
+            <button class="btn btn-default prodDowntimeAlerts-form-condition-remove" type="button" title="<%- helpers.t('FORM:conditions:remove') %>"><i class="fa fa-remove"></i></button>
+            <label for="<%- idPrefix %>-conditions-<%- condition.type %>" class="control-label"><%- helpers.t('conditions:types:' + condition.type) %></label>
             <div class="prodDowntimeAlerts-form-condition-modes">
               <% _.forEach(['include', 'exclude'], function(mode) { %>
-              <label class="radio-inline"><input type="radio" name="conditions[<%- i %>].mode" value="<%- mode %>"> <%- t('prodDowntimeAlerts', 'conditions:modes:' + mode) %></label>
+              <label class="radio-inline"><input type="radio" name="conditions[<%- i %>].mode" value="<%- mode %>"> <%- helpers.t('conditions:modes:' + mode) %></label>
               <% }) %>
             </div>
             <input id="<%- idPrefix %>-conditions-<%- condition.type %>" name="conditions[<%- i %>].values" type="text" autocomplete="new-password">
@@ -44,25 +44,25 @@
       </div>
       <div class="panel panel-default prodDowntimeAlerts-form-actions">
         <div class="panel-heading is-with-actions">
-          <%- t('prodDowntimeAlerts', 'PROPERTY:actions') %>
+          <%- helpers.t('PROPERTY:actions') %>
           <div class="panel-actions">
             <input id="<%- idPrefix %>-actions-validity" class="btn btn-default prodDowntimeAlerts-form-actions-validity" type="text" autocomplete="new-password" tabindex="-1">
-            <button id="<%- idPrefix %>-actions-add" class="btn btn-default prodDowntimeAlerts-form-actions-add" type="button"><i class="fa fa-plus"></i><span><%- t('prodDowntimeAlerts', 'FORM:actions:add') %></span></button>
+            <button id="<%- idPrefix %>-actions-add" class="btn btn-default prodDowntimeAlerts-form-actions-add" type="button"><i class="fa fa-plus"></i><span><%- helpers.t('FORM:actions:add') %></span></button>
           </div>
         </div>
         <div id="<%- idPrefix %>-actions" class="panel-body">
-          <p id="<%- idPrefix %>-actions-empty" class="prodDowntimeAlerts-form-empty"><%- t('prodDowntimeAlerts', 'FORM:actions:empty') %></p>
+          <p id="<%- idPrefix %>-actions-empty" class="prodDowntimeAlerts-form-empty"><%- helpers.t('FORM:actions:empty') %></p>
           <% _.forEach(actions, function(action, i) { %>
           <%- renderAction({i: i, action: action}) %>
           <% }) %>
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-userWhitelist" class="control-label"><%- t('prodDowntimeAlerts', 'PROPERTY:userWhitelist') %></label>
+        <label for="<%- idPrefix %>-userWhitelist" class="control-label"><%- helpers.t('PROPERTY:userWhitelist') %></label>
         <input id="<%- idPrefix %>-userWhitelist" class="js-actionsValidity" name="userWhitelist" type="text" autocomplete="new-password">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-userBlacklist" class="control-label"><%- t('prodDowntimeAlerts', 'PROPERTY:userBlacklist') %></label>
+        <label for="<%- idPrefix %>-userBlacklist" class="control-label"><%- helpers.t('PROPERTY:userBlacklist') %></label>
         <input id="<%- idPrefix %>-userBlacklist" name="userBlacklist" type="text" autocomplete="new-password">
       </div>
     </div>

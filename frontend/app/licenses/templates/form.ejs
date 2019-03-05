@@ -4,7 +4,7 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-_id" class="control-label"><%- t('licenses', 'PROPERTY:_id') %></label>
+        <label for="<%- idPrefix %>-_id" class="control-label"><%- helpers.t('PROPERTY:_id') %></label>
         <% if (editMode) { %>
         <p class="form-control-static"><%= model._id %></p>
         <% } else { %>
@@ -12,27 +12,27 @@
         <% } %>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-appId" class="control-label is-required"><%- t('licenses', 'PROPERTY:appId') %></label>
+        <label for="<%- idPrefix %>-appId" class="control-label is-required"><%- helpers.t('PROPERTY:appId') %></label>
         <input id="<%- idPrefix %>-appId" class="form-control" type="text" autocomplete="new-password" name="appId" required>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-appVersion" class="control-label"><%- t('licenses', 'PROPERTY:appVersion') %></label>
+        <label for="<%- idPrefix %>-appVersion" class="control-label"><%- helpers.t('PROPERTY:appVersion') %></label>
         <input id="<%- idPrefix %>-appVersion" class="form-control" type="text" autocomplete="new-password" name="appVersion">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-date" class="control-label"><%- t('licenses', 'PROPERTY:date') %></label>
+        <label for="<%- idPrefix %>-date" class="control-label"><%- helpers.t('PROPERTY:date') %></label>
         <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" placeholder="YYYY-MM-DD">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-expireDate" class="control-label"><%- t('licenses', 'PROPERTY:expireDate') %></label>
+        <label for="<%- idPrefix %>-expireDate" class="control-label"><%- helpers.t('PROPERTY:expireDate') %></label>
         <input id="<%- idPrefix %>-expireDate" class="form-control" type="date" name="expireDate" placeholder="YYYY-MM-DD">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-licensee" class="control-label is-required"><%- t('licenses', 'PROPERTY:licensee') %></label>
+        <label for="<%- idPrefix %>-licensee" class="control-label is-required"><%- helpers.t('PROPERTY:licensee') %></label>
         <input id="<%- idPrefix %>-licensee" class="form-control" type="text" autocomplete="new-password" name="licensee" required>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-features" class="control-label is-required"><%- t('licenses', 'PROPERTY:features') %></label>
+        <label for="<%- idPrefix %>-features" class="control-label is-required"><%- helpers.t('PROPERTY:features') %></label>
         <input id="<%- idPrefix %>-features" class="form-control" type="number" name="features" required min="0">
       </div>
     </div>

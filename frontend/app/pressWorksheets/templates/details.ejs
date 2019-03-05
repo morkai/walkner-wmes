@@ -1,66 +1,35 @@
 <div>
   <div class="panel panel-primary pressWorksheets-details">
     <div class="panel-heading">
-      <%- t('pressWorksheets', 'PANEL:TITLE:details') %>
+      <%- panelTitle %>
     </div>
     <div class="panel-details row">
       <div class="col-md-6">
-        <div class="props first">
-          <div class="prop">
-            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:type') %></div>
-            <div class="prop-value"><%- model.type %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:date') %></div>
-            <div class="prop-value"><%- model.date %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:shift') %></div>
-            <div class="prop-value"><%- model.shift %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:master') %></div>
-            <div class="prop-value"><%= model.master || '-' %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:operator') %></div>
-            <div class="prop-value"><%= model.operator || '-' %></div>
-          </div>
-        </div>
+        <%- helpers.props(model, ['type', 'date', 'shift', 'master', 'operator']) %>
       </div>
       <div class="col-md-6">
-        <div class="props">
-          <div class="prop">
-            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:createdAt') %></div>
-            <div class="prop-value"><%= model.createdAt || '-' %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:creator') %></div>
-            <div class="prop-value"><%= model.creator || '-' %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('pressWorksheets', 'PROPERTY:operators') %></div>
-            <div class="prop-value">
-              <% if (model.operators.length) { %>
-              <ol>
-                <% model.operators.forEach(function(operator) { %>
-                <li><%= operator %></li>
-                <% }) %>
-              </ol>
-              <% } else { %>
-              -
-              <% } %>
-            </div>
-          </div>
-        </div>
+        <%- helpers.props(model, [
+          'createdAt',
+          'creator',
+          {id: '!operators', value: function(operators)
+          {
+            if (operators.length)
+            {
+              return '<ol>' + operators.map(function(op) { return '<li>' + _.escape(op); }) + '</ol>';
+            }
+
+            return '';
+          }}
+        ]) %>
       </div>
     </div>
   </div>
   <div class="panel panel-default pressWorksheets-details-orders">
     <div class="panel-heading">
-      <%- t('pressWorksheets', 'PANEL:TITLE:details:orders') %>
+      <%- helpers.t('PANEL:TITLE:details:orders') %>
     </div>
     <%- renderOrdersList({
+      helpers: helpers,
       worksheet: model,
       losses: model.losses,
       orders: model.orders,

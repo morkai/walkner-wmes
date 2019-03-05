@@ -1,57 +1,18 @@
-<div class="panel panel-<%- po.open ? 'primary' : 'success'%> pos-details-props">
-  <div class="panel-heading"><%- t('purchaseOrders', 'panel:props') %></div>
+<div class="panel panel-<%- model.open ? 'primary' : 'success'%> pos-details-props">
+  <div class="panel-heading"><%- helpers.t('panel:props') %></div>
   <div class="panel-details row">
     <div class="col-md-4">
-      <div class="props first">
-        <div class="prop">
-          <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:_id') %></div>
-          <div class="prop-value"><%- po._id %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:docDate') %></div>
-          <div class="prop-value"><%- po.docDate %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:vendorId') %></div>
-          <div class="prop-value"><%- po.vendor %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:vendorName') %></div>
-          <div class="prop-value"><%= po.vendorName %></div>
-        </div>
-      </div>
+      <%- helpers.props(model, ['_id', 'docDate', 'vendorId', 'vendorName']) %>
     </div>
     <div class="col-md-4">
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:pOrg') %></div>
-          <div class="prop-value"><%- po.pOrg %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:pGr') %></div>
-          <div class="prop-value"><%- po.pGr %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:plant') %></div>
-          <div class="prop-value"><%- po.plant %></div>
-        </div>
-      </div>
+      <%- helpers.props(model, ['pOrg', 'pGr', 'plant']) %>
     </div>
     <div class="col-md-4">
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:importedAt') %></div>
-          <div class="prop-value"><%- po.importedAtText %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:createdAt') %></div>
-          <div class="prop-value"><%- po.createdAtText %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('purchaseOrders', 'PROPERTY:updatedAt') %></div>
-          <div class="prop-value"><%- po.updatedAtText || '-' %></div>
-        </div>
-      </div>
+      <%- helpers.props(model, [
+        {id: 'importedAt', value: model.importedAtText},
+        {id: 'createdAt', value: model.createdAtText},
+        {id: 'updatedAt', value: model.updatedAtText}
+      ]) %>
     </div>
   </div>
 </div>

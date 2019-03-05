@@ -7,7 +7,7 @@
         <% columns.forEach(function(column) { %>
         <th><%= column.label %></th>
         <% }) %>
-        <th><%- t('qiResults', 'report:series:okRatioRef') %></th>
+        <th><%- helpers.t('report:series:okRatioRef') %></th>
       </tr>
       </thead>
       <tbody>
@@ -27,6 +27,7 @@
   </div><div id="<%- idPrefix %>-totals" class="qiResults-okRatioReport-tableContainer">
     <%- renderOkRatioTotalsTable({
       idPrefix: idPrefix,
+      helpers: helpers,
       columns: columns,
       total: total
     }) %>

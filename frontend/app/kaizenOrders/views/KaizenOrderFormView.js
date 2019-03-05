@@ -49,7 +49,7 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
 
       'keydown [role="togglePanel"]': function(e)
       {

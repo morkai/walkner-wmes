@@ -2,37 +2,11 @@
   "root": {
     "BREADCRUMBS:base": "Improvements",
     "BREADCRUMBS:browse": "Causes",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the causes.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the cause.",
-    "MSG:DELETED": "Cause <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add cause",
-    "PAGE_ACTION:edit": "Edit cause",
-    "PAGE_ACTION:delete": "Delete cause",
-
-    "PANEL:TITLE:details": "Cause's details",
-    "PANEL:TITLE:addForm": "Add cause form",
-    "PANEL:TITLE:editForm": "Edit cause form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
     "PROPERTY:description": "Description",
-    "PROPERTY:position": "Position",
-
-    "FORM:ACTION:add": "Add cause",
-    "FORM:ACTION:edit": "Edit cause",
-    "FORM:ERROR:addFailure": "Failed to add the new cause.",
-    "FORM:ERROR:editFailure": "Failed to edit the cause.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Cause deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete cause",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen cause?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> cause?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the cause."
+    "PROPERTY:position": "Position"
   },
   "pl": true
 }

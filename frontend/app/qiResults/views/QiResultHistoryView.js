@@ -100,10 +100,9 @@ define([
       this.$el.popover('destroy');
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         canEdit: this.model.canEdit(),
         editUrl: this.model.genClientUrl('edit'),
         items: this.serializeItems()
@@ -248,7 +247,7 @@ define([
 
       for (var i = this.lastChangeCount; i < changes.length; ++i)
       {
-        html += renderHistoryItem({item: this.serializeItem(changes[i], i)});
+        html += this.renderPartialHtml(renderHistoryItem, {item: this.serializeItem(changes[i], i)});
       }
 
       $(html).insertAfter(this.$('.qiResults-history-item').last()).addClass('highlight');
@@ -290,13 +289,13 @@ define([
       var position = $toggle.position();
       var top = position.top + $toggle.outerHeight() + 2;
       var left = position.left;
-      var $table = $(renderCorrectiveActionsTable({
+      var $table = this.renderPartial(renderCorrectiveActionsTable, {
         bordered: true,
         correctiveActions: QiResult.serializeCorrectiveActions(
           qiDictionaries,
           this.model.get('changes')[dataset.index].data[dataset.property][dataset.which]
         )
-      }));
+      });
 
       $table
         .css({

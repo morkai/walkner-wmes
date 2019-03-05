@@ -1,35 +1,9 @@
 {
   "BREADCRUMBS:base": "Usprawnienia",
   "BREADCRUMBS:browse": "Przyczyny",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie przyczyn nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie przyczyny nie powiodło się.",
-  "MSG:DELETED": "Przyczyna <em>{label}</em> została usunięty.",
-
-  "PAGE_ACTION:add": "Dodaj przyczynę",
-  "PAGE_ACTION:edit": "Edytuj przyczynę",
-  "PAGE_ACTION:delete": "Usuń przyczynę",
-
-  "PANEL:TITLE:details": "Szczegóły przyczyny",
-  "PANEL:TITLE:addForm": "Formularz dodawania przyczyny",
-  "PANEL:TITLE:editForm": "Formularz edycji przyczyny",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:description": "Opis",
-  "PROPERTY:position": "Pozycja",
-
-  "FORM:ACTION:add": "Dodaj przyczynę",
-  "FORM:ACTION:edit": "Edytuj przyczynę",
-  "FORM:ERROR:addFailure": "Nie udało się dodać przyczyny.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować przyczyny.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia przyczyny",
-  "ACTION_FORM:BUTTON:delete": "Usuń przyczynę",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną przyczynę?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć przyczynę <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć przyczyny."
+  "PROPERTY:position": "Pozycja"
 }

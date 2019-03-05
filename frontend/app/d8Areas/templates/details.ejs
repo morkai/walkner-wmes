@@ -1,23 +1,11 @@
 <div class="panel panel-primary">
-  <div class="panel-heading"><%- t('d8Areas', 'PANEL:TITLE:details') %></div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('d8Areas', 'PROPERTY:_id') %></div>
-        <div class="prop-value"><%= model._id %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('d8Areas', 'PROPERTY:name') %></div>
-        <div class="prop-value"><%= model.name %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('d8Areas', 'PROPERTY:manager') %></div>
-        <div class="prop-value"><%= model.manager ? model.manager.label : '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('d8Areas', 'PROPERTY:position') %></div>
-        <div class="prop-value"><%= model.position || '0' %></div>
-      </div>
-    </div>
+    <%- helpers.props(model, [
+      '_id',
+      'name',
+      {id: 'manager', value: function(v) { return v ? v.label : ''; }},
+      'position'
+    ]) %>
   </div>
 </div>

@@ -19,7 +19,7 @@ define([
 
     template: formTemplate,
 
-    events: _.extend({}, FormView.prototype.events, {
+    events: _.assign({}, FormView.prototype.events, {
       'change #-nc12': function()
       {
         var $nc12 = this.$id('nc12');

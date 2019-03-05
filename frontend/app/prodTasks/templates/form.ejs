@@ -4,28 +4,28 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('prodTasks', 'PROPERTY:name') %></label>
+        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" autofocus required maxlength="150">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-parent" class="control-label"><%- t('prodTasks', 'PROPERTY:parent') %></label>
+        <label for="<%- idPrefix %>-parent" class="control-label"><%- helpers.t('PROPERTY:parent') %></label>
         <input id="<%- idPrefix %>-parent" type="text" autocomplete="new-password" name="parent">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-tags" class="control-label"><%- t('prodTasks', 'PROPERTY:tags') %></label>
+        <label for="<%- idPrefix %>-tags" class="control-label"><%- helpers.t('PROPERTY:tags') %></label>
         <input id="<%- idPrefix %>-tags" type="text" autocomplete="new-password" name="tags" value="">
       </div>
-      <%- renderColorPicker({idPrefix: idPrefix, label: t('prodTasks', 'PROPERTY:clipColor'), property: 'clipColor', value: model.clipColor}) %>
+      <%- renderColorPicker({idPrefix: idPrefix, label: helpers.t('PROPERTY:clipColor'), property: 'clipColor', value: model.clipColor}) %>
       <div class="checkbox">
         <label class="control-label">
           <input id="<%- idPrefix %>-fteDiv" type="checkbox" name="fteDiv" value="true">
-          <%- t('prodTasks', 'PROPERTY:fteDiv') %>
+          <%- helpers.t('PROPERTY:fteDiv') %>
         </label>
       </div>
       <div class="checkbox">
         <label class="control-label">
           <input id="<%- idPrefix %>-inProd" type="checkbox" name="inProd" value="true">
-          <%- t('prodTasks', 'PROPERTY:inProd') %>
+          <%- helpers.t('PROPERTY:inProd') %>
         </label>
       </div>
     </div>

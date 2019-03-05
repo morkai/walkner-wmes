@@ -1,14 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'app/i18n',
   'app/core/pages/FilteredListPage',
   'app/core/util/pageActions',
   'app/kaizenOrders/dictionaries',
   '../views/BehaviorObsCardFilterView',
   '../views/BehaviorObsCardListView'
 ], function(
-  t,
   FilteredListPage,
   pageActions,
   kaizenDictionaries,
@@ -30,11 +28,7 @@ define([
       return [
         pageActions.jump(this, collection),
         pageActions.export(layout, this, this.collection),
-        {
-          label: t.bound(collection.getNlsDomain(), 'PAGE_ACTION:add'),
-          icon: 'plus',
-          href: collection.genClientUrl('add')
-        }
+        pageActions.add(collection, false)
       ];
     },
 

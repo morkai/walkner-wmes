@@ -3,7 +3,7 @@
     idPrefix: idPrefix,
     property: 'startedAt',
     startHour: 6,
-    labels: {text: t('prodShiftOrders', 'PROPERTY:startedAt'), ranges: true}
+    labels: {text: helpers.t('PROPERTY:startedAt'), ranges: true}
   }) %>
   <div class="form-group">
     <label><%- t('core', 'filter:shift') %></label>
@@ -16,20 +16,20 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-orderId"><%- t('prodShiftOrders', 'filter:orderId') %></label>
+    <label for="<%- idPrefix %>-orderId"><%- helpers.t('filter:orderId') %></label>
     <input id="<%- idPrefix %>-orderId" class="form-control prodShiftOrders-filter-orderId" name="orderId" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-bom"><%- t('prodShiftOrders', 'filter:bom') %></label>
+    <label for="<%- idPrefix %>-bom"><%- helpers.t('filter:bom') %></label>
     <input id="<%- idPrefix %>-bom" class="form-control prodShiftOrders-filter-orderId" name="bom" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-mrp"><%- t('prodShiftOrders', 'filter:mrp') %></label>
+    <label for="<%- idPrefix %>-mrp"><%- helpers.t('filter:mrp') %></label>
     <input id="<%- idPrefix %>-mrp" name="mrp" type="text" autocomplete="new-password" data-placeholder=" ">
   </div>
   <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('prodShiftOrders', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

@@ -1,13 +1,13 @@
 <div class="panel panel-default xiconfPrograms-stepPanel xiconfPrograms-stepPanel-program">
   <div class="panel-heading is-with-actions">
-    <span class="xiconfPrograms-form-stepNo">0.</span> <%- t('xiconfPrograms', 'step:program') %>
+    <span class="xiconfPrograms-form-stepNo">0.</span> <%- helpers.t('step:program') %>
     <% include _stepPanelActions.ejs %>
   </div>
   <div class="panel-body has-lastElementRow">
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-label" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:label') %></label>
-        <input id="<%- idPrefix %>-label" class="form-control" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].label" value="<%- t('xiconfPrograms', 'step:program') %>" required maxlength="32">
+        <label for="<%- idPrefix %>-label" class="control-label is-required"><%- helpers.t('PROPERTY:label') %></label>
+        <input id="<%- idPrefix %>-label" class="form-control" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].label" value="<%- helpers.t('step:program') %>" required maxlength="32">
       </div>
     </div>
   </div>

@@ -3,17 +3,17 @@
     idPrefix: idPrefix
   }) %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-section"><%- t('suggestions', 'PROPERTY:section') %></label>
+    <label for="<%- idPrefix %>-section"><%- helpers.t('PROPERTY:section') %></label>
     <input id="<%- idPrefix %>-section" name="section" type="text" autocomplete="new-password">
   </div>
   <% if (showProductFamily) { %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-productFamily"><%- t('suggestions', 'PROPERTY:productFamily') %></label>
+    <label for="<%- idPrefix %>-productFamily"><%- helpers.t('PROPERTY:productFamily') %></label>
     <input id="<%- idPrefix %>-productFamily" name="productFamily" type="text" autocomplete="new-password">
   </div>
   <% } %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-confirmer"><%- t('suggestions', 'PROPERTY:confirmer') %></label>
+    <label for="<%- idPrefix %>-confirmer"><%- helpers.t('PROPERTY:confirmer') %></label>
     <input id="<%- idPrefix %>-confirmer" name="confirmer" type="text" autocomplete="new-password">
   </div>
   <div class="form-group filter-actions">

@@ -57,10 +57,9 @@ define([
       });
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         unused: this.model.unused,
         loading: false,
         licenses: this.serializeLicenses()

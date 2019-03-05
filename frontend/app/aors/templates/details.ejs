@@ -1,29 +1,6 @@
 <div class="panel panel-primary">
-  <div class="panel-heading">
-    <%- t('aors', 'PANEL:TITLE:details') %>
-  </div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('aors', 'PROPERTY:name') %></div>
-        <div class="prop-value"><%= model.name %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('aors', 'PROPERTY:description') %></div>
-        <div class="prop-value"><%= model.description || '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('aors', 'PROPERTY:color') %></div>
-        <div class="prop-value"><%- model.color %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('aors', 'PROPERTY:refColor') %></div>
-        <div class="prop-value"><%- model.refColor %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('aors', 'PROPERTY:refValue') %></div>
-        <div class="prop-value"><%- model.refValue %></div>
-      </div>
-    </div>
+    <%- helpers.props(model, ['name', 'description', '!color', '!refColor', 'refValue']) %>
   </div>
 </div>

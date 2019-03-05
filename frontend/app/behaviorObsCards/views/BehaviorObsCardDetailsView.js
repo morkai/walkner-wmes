@@ -3,12 +3,10 @@
 define([
   'underscore',
   'app/core/views/DetailsView',
-  'app/kaizenOrders/dictionaries',
   'app/behaviorObsCards/templates/details'
 ], function(
   _,
   DetailsView,
-  kaizenDictionaries,
   template
 ) {
   'use strict';
@@ -17,9 +15,9 @@ define([
 
     template: template,
 
-    serialize: function()
+    getTemplateData: function()
     {
-      return _.extend(DetailsView.prototype.serialize.call(this), {
+      return _.assign(DetailsView.prototype.getTemplateData.call(this), {
         showEasyDiscussed: this.model.hasAnyEasy()
       });
     }

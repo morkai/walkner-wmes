@@ -5,14 +5,12 @@ define([
   'app/i18n',
   'app/core/View',
   'app/reports/util/formatTooltipHeader',
-  'app/kaizenOrders/dictionaries',
   'app/suggestions/templates/engagementReport'
 ], function(
   _,
   t,
   View,
   formatTooltipHeader,
-  kaizenDictionaries,
   template
 ) {
   'use strict';
@@ -26,10 +24,9 @@ define([
       this.listenTo(this.model, 'change:groups', this.render);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         formatHeader: formatTooltipHeader.bind(this),
         groups: this.model.get('groups')
       };

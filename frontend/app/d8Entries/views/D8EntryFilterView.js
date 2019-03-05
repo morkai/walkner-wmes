@@ -91,7 +91,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(FilterView.prototype.serialize.call(this), {
+      return _.assign(FilterView.prototype.serialize.call(this), {
         statuses: dictionaries.statuses,
         areas: dictionaries.areas.toJSON(),
         entrySources: dictionaries.entrySources.toJSON(),

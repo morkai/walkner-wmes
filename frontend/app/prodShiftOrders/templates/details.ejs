@@ -1,127 +1,96 @@
 <div>
   <div class="panel panel-<%- model.mechOrder || !model.sapTaktTime ? 'primary' : model.taktTimeOk ? 'success' : 'warning' %>">
-    <div class="panel-heading">
-      <%- t('prodShiftOrders', 'PANEL:TITLE:details') %>
-    </div>
+    <div class="panel-heading"><%- panelTitle %></div>
     <div class="panel-details row">
       <div class="col-md-4">
-        <div class="props first">
-          <div class="prop">
-            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:order') %></div>
-            <div class="prop-value">
-              <% if (model.orderUrl) { %>
-              <a href="<%- model.orderUrl %>"><%- model.order %></a>
-              <% } else { %>
-              <%- model.order %>
-              <% } %>
-            </div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:operation') %></div>
-            <div class="prop-value"><%- model.operation %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:quantityDoneSap') %></div>
-            <div class="prop-value"><%- model.quantityDone %> / <%- model.orderData.qty || '?' %> [<%- model.orderData.unit || '?' %>]</div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:workerCountSap') %></div>
-            <div class="prop-value"><%- model.workerCount %> / <%- model.workerCountSap -%> [<%- t('prodShiftOrders', 'unit:workerCount') %>]</div>
-          </div>
-          <% if (user.isAllowedTo('PROD_DATA:VIEW:EFF')) { %>
-          <div class="prop">
-            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:taktTime') %></div>
-            <div class="prop-value"><%- model.taktTime %> / <%- model.taktTimeSap %> [<%- t('prodShiftOrders', 'unit:taktTime') %>]
-              <% if (model.taktTimeEff) { %>
-              (<%- model.taktTimeEff%>%)
-              <% } %>
-            </div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:efficiency') %></div>
-            <div class="prop-value"><%- model.efficiency || '?' %></div>
-          </div>
-          <% } %>
-        </div>
+        <%- helpers.props(model, [
+          {id: '!order', value: function(orderNo)
+          {
+            if (model.orderUrl)
+            {
+              return '<a href="' + model.orderUrl + '">' + model.order + '</a>';
+            }
+
+            return orderNo;
+          }},
+          '!operation',
+          {
+            id: 'quantityDoneSap',
+            value:  model.quantityDone
+              + ' / ' + (model.orderData.qty || '?')
+              + ' [' + (model.orderData.unit || '?') + ']'
+          },
+          {
+            id: 'workerCountSap',
+            value:  model.workerCount
+              + ' / ' + model.workerCountSap
+              + ' [' + helpers.t('unit:workerCount') + ']'
+          },
+          {
+            id: 'taktTime',
+            visible: user.isAllowedTo('PROD_DATA:VIEW:EFF'),
+            value:  function()
+            {
+              var value = model.taktTime + ' / ' + model.taktTimeSap + ' [' + helpers.t('unit:taktTime') + ']';
+
+              if (model.taktTimeEff)
+              {
+                value += ' (' + model.taktTimeEff + '%)';
+              }
+
+              return value;
+            }
+          },
+          {id: 'efficiency', visible: user.isAllowedTo('PROD_DATA:VIEW:EFF')}
+        ]) %>
       </div>
       <div class="col-md-4">
-        <div class="props">
-          <div class="prop">
-            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:pressWorksheet') %></div>
-            <div class="prop-value">
-              <% if (model.pressWorksheet) { %>
-              <% if (user.isAllowedTo('PRESS_WORKSHEETS:VIEW')) { %>
-              <a href="#pressWorksheets/<%- model.pressWorksheet %>"><%- t('core', 'BOOL:true') %></a>
-              <% } else { %>
-              <%- t('core', 'BOOL:true') %>
-              <% } %>
-              <% } else { %>
-              -
-              <% } %>
-            </div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:prodShift') %></div>
-            <div class="prop-value"><%- model.prodShift %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:startedAt') %></div>
-            <div class="prop-value"><%= model.startedAt %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:finishedAt') %></div>
-            <div class="prop-value"><%= model.finishedAt || '-' %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:duration') %></div>
-            <div class="prop-value"><%= model.duration || '-' %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:creator') %></div>
-            <div class="prop-value"><%- model.creator %></div>
-          </div>
-        </div>
+        <%- helpers.props(model, [
+          {id: '!pressWorksheet', value: function(pw)
+          {
+            if (pw)
+            {
+              if (user.isAllowedTo('PRESS_WORKSHEETS:VIEW'))
+              {
+                return '<a href="#pressWorksheets/' + model.pressWorksheet + '">' + t('core', 'BOOL:true') + '</a>';
+              }
+
+              return t('core', 'BOOL:true');
+            }
+
+            return t('core', 'BOOL:false');
+          }},
+          '!prodShift',
+          'startedAt',
+          'finishedAt',
+          'duration',
+          '!creator'
+        ]) %>
       </div>
       <div class="col-md-4">
-        <div class="props">
-          <div class="prop">
-            <div class="prop-name"><%- t('core', 'ORG_UNIT:division') %></div>
-            <div class="prop-value"><%= model.division %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('core', 'ORG_UNIT:subdivision') %></div>
-            <div class="prop-value"><%= model.subdivision %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('core', 'ORG_UNIT:mrpController') %></div>
-            <div class="prop-value"><%= model.mrpControllers %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('core', 'ORG_UNIT:prodFlow') %></div>
-            <div class="prop-value"><%= model.prodFlow %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('core', 'ORG_UNIT:workCenter') %></div>
-            <div class="prop-value"><%= model.workCenter %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('prodShiftOrders', 'PROPERTY:prodLine') %></div>
-            <div class="prop-value"><%= model.prodLine %></div>
-          </div>
-        </div>
+        <%- helpers.props(model, {
+          props: [
+            {id: 'division', label: t('core', 'ORG_UNIT:division')},
+            {id: 'subdivision', label: t('core', 'ORG_UNIT:subdivision')},
+            {id: 'mrpControllers', label: t('core', 'ORG_UNIT:mrpController')},
+            {id: 'prodFlow', label: t('core', 'ORG_UNIT:prodFlow')},
+            {id: 'workCenter', label: t('core', 'ORG_UNIT:workCenter')},
+            'prodLine'
+          ]
+        }) %>
       </div>
     </div>
   </div>
   <% if (model.losses && model.losses.length) { %>
   <div class="panel panel-warning">
     <div class="panel-heading">
-      <%- t('prodShiftOrders', 'PANEL:TITLE:losses') %>
+      <%- helpers.t('PANEL:TITLE:losses') %>
     </div>
     <table class="table table-bordered table-condensed table-hover">
       <thead>
         <tr>
-          <th class="is-min"><%- t('prodShiftOrders', 'losses:reason') %></th>
-          <th class="is-min"><%- t('prodShiftOrders', 'losses:quantity') %></th>
+          <th class="is-min"><%- helpers.t('losses:reason') %></th>
+          <th class="is-min"><%- helpers.t('losses:quantity') %></th>
           <th></th>
         </tr>
       </thead>

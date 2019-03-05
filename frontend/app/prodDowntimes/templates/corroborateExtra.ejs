@@ -1,29 +1,29 @@
 <div id="<%- idPrefix %>-corroborateExtra" class="prodDowntimes-corroborate-extra">
   <div class="form-group prodDowntimes-corroborate-statuses">
-    <label for="<%- idPrefix %>-status" class="control-label"><%- t('prodDowntimes', 'corroborate:status') %></label>
+    <label for="<%- idPrefix %>-status" class="control-label"><%- helpers.t('corroborate:status') %></label>
     <div id="<%- idPrefix %>-status" class="btn-group btn-block" data-toggle="buttons">
       <% if (showUndecidedStatus) { %>
-      <label class="btn btn-default"><input type="checkbox" name="status" value="undecided"><i class="fa fa-question text-warning"></i><span><%- t('prodDowntimes', 'PROPERTY:status:undecided') %></span></label>
+      <label class="btn btn-default"><input type="checkbox" name="status" value="undecided"><i class="fa fa-question text-warning"></i><span><%- helpers.t('PROPERTY:status:undecided') %></span></label>
       <% } %>
       <% if (showRejectedStatus) { %>
-      <label class="btn btn-default"><input type="checkbox" name="status" value="rejected"><i class="fa fa-thumbs-o-down text-danger"></i><span><%- t('prodDowntimes', 'PROPERTY:status:rejected') %></span></label>
+      <label class="btn btn-default"><input type="checkbox" name="status" value="rejected"><i class="fa fa-thumbs-o-down text-danger"></i><span><%- helpers.t('PROPERTY:status:rejected') %></span></label>
       <% } %>
       <% if (showConfirmedStatus) { %>
-      <label class="btn btn-default"><input type="checkbox" name="status" value="confirmed"><i class="fa fa-thumbs-o-up text-success"></i><span><%- t('prodDowntimes', 'PROPERTY:status:confirmed') %></span></label>
+      <label class="btn btn-default"><input type="checkbox" name="status" value="confirmed"><i class="fa fa-thumbs-o-up text-success"></i><span><%- helpers.t('PROPERTY:status:confirmed') %></span></label>
       <% } %>
     </div>
   </div>
   <div class="form-group has-required-select2">
-    <label for="<%- idPrefix %>-reason" class="control-label is-required"><%- t('prodDowntimes', 'corroborate:reason') %></label>
+    <label for="<%- idPrefix %>-reason" class="control-label is-required"><%- helpers.t('corroborate:reason') %></label>
     <input id="<%- idPrefix %>-reason" name="reason" required>
   </div>
   <div class="form-group has-required-select2">
-    <label for="<%- idPrefix %>-aor" class="control-label is-required"><%- t('prodDowntimes', 'corroborate:aor') %></label>
+    <label for="<%- idPrefix %>-aor" class="control-label is-required"><%- helpers.t('corroborate:aor') %></label>
     <input id="<%- idPrefix %>-aor" name="aor" required>
   </div>
   <% if (defaultAor) { %>
   <div id="<%- idPrefix %>-defaultAor" class="form-group">
-    <label class="control-label is-required"><%- t('prodDowntimes', 'corroborate:aor') %></label>
+    <label class="control-label is-required"><%- helpers.t('corroborate:aor') %></label>
     <p class="form-control-static"><%- defaultAor %></p>
   </div>
   <% } %>

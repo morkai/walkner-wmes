@@ -26,7 +26,7 @@ define([
 
   return function setUpVendorSelect2($vendor, options)
   {
-    $vendor.select2(_.extend({
+    $vendor.select2(_.assign({
       width: '100%',
       allowClear: true,
       minimumInputLength: 3,

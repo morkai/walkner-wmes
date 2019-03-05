@@ -1,32 +1,13 @@
 <div class="panel panel-primary">
-  <div class="panel-heading"><%- t('mrpControllers', 'PANEL:TITLE:details') %></div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('mrpControllers', 'PROPERTY:subdivision') %></div>
-        <div class="prop-value"><%- orgUnitPath || '-' %>
-        </div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('mrpControllers', 'PROPERTY:_id') %></div>
-        <div class="prop-value"><%= model._id %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('mrpControllers', 'PROPERTY:inout') %></div>
-        <div class="prop-value"><%- t('mrpControllers', 'inout:' + model.inout) %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('mrpControllers', 'PROPERTY:description') %></div>
-        <div class="prop-value"><%= model.description || '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('mrpControllers', 'PROPERTY:deactivatedAt') %></div>
-        <div class="prop-value"><%= model.deactivatedAt ? time.format(model.deactivatedAt, 'LL') : '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('mrpControllers', 'PROPERTY:replacedBy') %></div>
-        <div class="prop-value"><%= model.replacedBy || '-' %></div>
-      </div>
-    </div>
+    <%- helpers.props(model, [
+      '!subdivision',
+      '_id',
+      'inout',
+      'description',
+      'deactivatedAt',
+      'replacedBy'
+    ]) %>
   </div>
 </div>

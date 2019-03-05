@@ -3,11 +3,6 @@
     "BREADCRUMBS:browse": "Production orders",
     "BREADCRUMBS:settings": "Settings",
 
-    "MSG:LOADING_FAILURE": "Failed to load the orders.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order details.",
-    "MSG:jump:404": "Couldn't find an order with no <em>{rid}</em>.",
-
-    "PAGE_ACTION:export": "Export orders",
     "PAGE_ACTION:settings": "Change settings",
     "PAGE_ACTION:print": "Print order",
     "PAGE_ACTION:openOrdersPrint": "Print orders",
@@ -22,14 +17,13 @@
     "openOrdersPrint:msg:findFailure": "Failed to find orders.",
     "openOrdersPrint:msg:notFound": "{count, plural, one{Order {orders} doesn't exist.} other{Orders don't exist: {orders}}}",
 
-    "PANEL:TITLE:details": "Order's details",
     "PANEL:TITLE:fap": "Order's FAP entries",
     "PANEL:TITLE:operations": "Order's operations",
     "PANEL:TITLE:documents": "Order's documents",
     "PANEL:TITLE:bom": "Order's components",
     "PANEL:TITLE:bom:paint": "Order's paint components",
     "PANEL:TITLE:eto": "Order's ETO",
-    "PANEL:TITLE:changes": "Change log",
+    "PANEL:TITLE:changes": "Order's history",
 
     "PROPERTY:_id": "Order no",
     "PROPERTY:sapCreatedAt": "Created at",

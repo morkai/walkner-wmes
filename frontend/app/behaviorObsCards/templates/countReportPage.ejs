@@ -1,5 +1,5 @@
 <div class="behaviorObsCards-report">
-  <div class="filter-container"></div>
+  <div id="<%- idPrefix %>-filter" class="filter-container"></div>
   <% metrics.forEach(function(metric) { %>
   <h3><%- t('behaviorObsCards', 'report:title:' + metric) %></h3>
   <div id="<%- idPrefix %>-<%- metric %>" class="behaviorObsCards-report-<%- metric %>"></div>

@@ -1,21 +1,6 @@
 <div class="panel panel-primary">
-  <div class="panel-heading">
-    <%- t('orderStatuses', 'PANEL:TITLE:details') %>
-  </div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('orderStatuses', 'PROPERTY:_id') %></div>
-        <div class="prop-value"><%= model._id %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('orderStatuses', 'PROPERTY:label') %></div>
-        <div class="prop-value"><%= model.label || '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('orderStatuses', 'PROPERTY:color') %></div>
-        <div class="prop-value"><span class="label" style="background-color: <%- model.color %>"><%- model.color %></span></div>
-      </div>
-    </div>
+    <%- helpers.props(model, ['_id', 'label', '!color']) %>
   </div>
 </div>

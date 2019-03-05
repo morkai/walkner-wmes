@@ -22,7 +22,7 @@ define([
     FormView: BehaviorObsCardFormView,
     getFormViewOptions: function()
     {
-      return _.extend(AddFormPage.prototype.getFormViewOptions.call(this), {
+      return _.assign(AddFormPage.prototype.getFormViewOptions.call(this), {
         standalone: this.options.standalone
       });
     },

@@ -1,7 +1,7 @@
 <div>
-  <%- t('xiconfClients', 'restartDialog:message', {client: client}) %>
+  <%- helpers.t('restartDialog:message', {client: client}) %>
   <div class="form-actions">
-    <button class="btn btn-danger dialog-answer" type="button" autofocus data-answer="yes"><%- t('xiconfClients', 'restartDialog:yes') %></button>
-    <button class="btn btn-link cancel" type="button"><%- t('xiconfClients', 'restartDialog:no') %></button>
+    <button class="btn btn-danger dialog-answer" type="button" autofocus data-answer="yes"><%- helpers.t('restartDialog:yes') %></button>
+    <button class="btn btn-link cancel" type="button"><%- helpers.t('restartDialog:no') %></button>
   </div>
 </div>

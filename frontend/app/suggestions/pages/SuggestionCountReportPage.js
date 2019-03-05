@@ -63,10 +63,9 @@ define([
       kaizenDictionaries.unload();
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         metrics: SuggestionCountReport.TABLE_AND_CHART_METRICS
       };
     },

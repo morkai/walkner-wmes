@@ -1,21 +1,6 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Downtime reasons",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load thedowntime reasons.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the downtime reason.",
-    "MSG:DELETED": "Downtime reason <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add downtime reason",
-    "PAGE_ACTION:edit": "Edit downtime reason",
-    "PAGE_ACTION:delete": "Delete downtime reason",
-
-    "PANEL:TITLE:details": "Downtime reason's details",
-    "PANEL:TITLE:addForm": "Add downtime reason form",
-    "PANEL:TITLE:editForm": "Edit downtime reason form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:label": "Label",
@@ -44,18 +29,7 @@
     "subdivisionType:none": "None",
     "subdivisionType:assembly": "Assembly",
     "subdivisionType:press": "Press",
-    "subdivisionType:paintShop": "Paint shop",
-
-    "FORM:ACTION:add": "Add downtime reason",
-    "FORM:ACTION:edit": "Edit downtime reason",
-    "FORM:ERROR:addFailure": "Failed to add the new downtime reason.",
-    "FORM:ERROR:editFailure": "Failed to edit the downtime reason.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Downtime reason deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete downtime reason",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen downtime reason?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> downtime reason?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the downtime reason."
+    "subdivisionType:paintShop": "Paint shop"
   },
   "pl": true
 }

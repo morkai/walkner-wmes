@@ -4,73 +4,73 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group has-required-select2">
-        <label for="<%- idPrefix %>-survey" class="control-label is-required"><%- t('opinionSurveyOmrResults', 'PROPERTY:survey') %></label>
+        <label for="<%- idPrefix %>-survey" class="control-label is-required"><%- helpers.t('PROPERTY:survey') %></label>
         <input id="<%- idPrefix %>-survey" name="survey" type="text" autocomplete="new-password" required>
       </div>
       <div class="row">
         <div class="col-md-2 form-group">
-          <label for="<%- idPrefix %>-pageNumber" class="control-label is-required"><%- t('opinionSurveyOmrResults', 'PROPERTY:pageNumber') %></label>
+          <label for="<%- idPrefix %>-pageNumber" class="control-label is-required"><%- helpers.t('PROPERTY:pageNumber') %></label>
           <input id="<%- idPrefix %>-pageNumber" name="pageNumber" class="form-control" type="number" required min="1" max="10">
         </div>
         <div class="col-md-10 form-group">
-          <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('opinionSurveyOmrResults', 'PROPERTY:name') %></label>
+          <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
           <input id="<%- idPrefix %>-name" name="name" class="form-control" type="text" autocomplete="new-password" required>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4 form-group">
-          <label for="<%- idPrefix %>-dp" class="control-label is-required"><%- t('opinionSurveyOmrResults', 'PROPERTY:dp') %></label>
+          <label for="<%- idPrefix %>-dp" class="control-label is-required"><%- helpers.t('PROPERTY:dp') %></label>
           <input id="<%- idPrefix %>-dp" name="dp" class="form-control" type="number" required min="0.1" max="2" step="0.1">
-          <p class="help-block"><%- t('opinionSurveyOmrResults', 'form:help:dp') %></p>
+          <p class="help-block"><%- helpers.t('form:help:dp') %></p>
         </div>
         <div class="col-md-4 form-group">
-          <label for="<%- idPrefix %>-cannyThreshold" class="control-label is-required"><%- t('opinionSurveyOmrResults', 'PROPERTY:cannyThreshold') %></label>
+          <label for="<%- idPrefix %>-cannyThreshold" class="control-label is-required"><%- helpers.t('PROPERTY:cannyThreshold') %></label>
           <input id="<%- idPrefix %>-cannyThreshold" name="cannyThreshold" class="form-control" type="number" required min="1" step="1">
-          <p class="help-block"><%- t('opinionSurveyOmrResults', 'form:help:cannyThreshold') %></p>
+          <p class="help-block"><%- helpers.t('form:help:cannyThreshold') %></p>
         </div>
         <div class="col-md-4 form-group">
-          <label for="<%- idPrefix %>-circleAccumulatorThreshold" class="control-label is-required"><%- t('opinionSurveyOmrResults', 'PROPERTY:circleAccumulatorThreshold') %></label>
+          <label for="<%- idPrefix %>-circleAccumulatorThreshold" class="control-label is-required"><%- helpers.t('PROPERTY:circleAccumulatorThreshold') %></label>
           <input id="<%- idPrefix %>-circleAccumulatorThreshold" name="circleAccumulatorThreshold" class="form-control" type="number" required min="1" step="1">
-          <p class="help-block"><%- t('opinionSurveyOmrResults', 'form:help:circleAccumulatorThreshold') %></p>
+          <p class="help-block"><%- helpers.t('form:help:circleAccumulatorThreshold') %></p>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4 form-group">
-          <label for="<%- idPrefix %>-minimumRadius" class="control-label is-required"><%- t('opinionSurveyOmrResults', 'PROPERTY:minimumRadius') %></label>
+          <label for="<%- idPrefix %>-minimumRadius" class="control-label is-required"><%- helpers.t('PROPERTY:minimumRadius') %></label>
           <input id="<%- idPrefix %>-minimumRadius" name="minimumRadius" class="form-control" type="number" required min="1" step="1">
-          <p class="help-block"><%- t('opinionSurveyOmrResults', 'form:help:minimumRadius') %></p>
+          <p class="help-block"><%- helpers.t('form:help:minimumRadius') %></p>
         </div>
         <div class="col-md-4 form-group">
-          <label for="<%- idPrefix %>-maximumRadius" class="control-label is-required"><%- t('opinionSurveyOmrResults', 'PROPERTY:maximumRadius') %></label>
+          <label for="<%- idPrefix %>-maximumRadius" class="control-label is-required"><%- helpers.t('PROPERTY:maximumRadius') %></label>
           <input id="<%- idPrefix %>-maximumRadius" name="maximumRadius" class="form-control" type="number" required min="1" step="1">
-          <p class="help-block"><%- t('opinionSurveyOmrResults', 'form:help:maximumRadius') %></p>
+          <p class="help-block"><%- helpers.t('form:help:maximumRadius') %></p>
         </div>
         <div class="col-md-4 form-group">
-          <label for="<%- idPrefix %>-minimumDistance" class="control-label is-required"><%- t('opinionSurveyOmrResults', 'PROPERTY:minimumDistance') %></label>
+          <label for="<%- idPrefix %>-minimumDistance" class="control-label is-required"><%- helpers.t('PROPERTY:minimumDistance') %></label>
           <input id="<%- idPrefix %>-minimumDistance" name="minimumDistance" class="form-control" type="number" required min="1" step="1">
-          <p class="help-block"><%- t('opinionSurveyOmrResults', 'form:help:minimumDistance') %></p>
+          <p class="help-block"><%- helpers.t('form:help:minimumDistance') %></p>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4 form-group">
-          <label for="<%- idPrefix %>-filledThreshold" class="control-label is-required"><%- t('opinionSurveyOmrResults', 'PROPERTY:filledThreshold') %></label>
+          <label for="<%- idPrefix %>-filledThreshold" class="control-label is-required"><%- helpers.t('PROPERTY:filledThreshold') %></label>
           <input id="<%- idPrefix %>-filledThreshold" name="filledThreshold" class="form-control" type="number" required min="100" max="255" step="1">
-          <p class="help-block"><%- t('opinionSurveyOmrResults', 'form:help:filledThreshold') %></p>
+          <p class="help-block"><%- helpers.t('form:help:filledThreshold') %></p>
         </div>
         <div class="col-md-4 form-group">
-          <label for="<%- idPrefix %>-markedThreshold" class="control-label is-required"><%- t('opinionSurveyOmrResults', 'PROPERTY:markedThreshold') %></label>
+          <label for="<%- idPrefix %>-markedThreshold" class="control-label is-required"><%- helpers.t('PROPERTY:markedThreshold') %></label>
           <input id="<%- idPrefix %>-markedThreshold" name="markedThreshold" class="form-control" type="number" required min="10" max="100" step="1">
-          <p class="help-block"><%- t('opinionSurveyOmrResults', 'form:help:markedThreshold') %></p>
+          <p class="help-block"><%- helpers.t('form:help:markedThreshold') %></p>
         </div>
       </div>
       <div id="<%-idPrefix %>-toolbar" class="opinionSurveyOmrResults-toolbar">
         <div id="<%-idPrefix %>-toolbar-inner" class="opinionSurveyOmrResults-toolbar-inner">
           <input data-role="noImageError" class="form-control opinionSurveyOmrResults-toolbar-error" type="text" autocomplete="new-password" tabindex="-1" data-action="editImage">
           <input data-role="noRegionsError" class="form-control opinionSurveyOmrResults-toolbar-error" type="text" autocomplete="new-password" tabindex="-1" data-action="createRegion">
-          <button data-action="editImage" type="button" class="btn btn-default"><i class="fa fa-image"></i><span><%- t('opinionSurveyOmrResults', 'toolbar:editImage') %></span></button><!--
-          //--><button data-action="createRegion" type="button" class="btn btn-default"><i class="fa fa-dot-circle-o"></i><span><%- t('opinionSurveyOmrResults', 'toolbar:createRegion') %></span></button><!--
-          //--><button data-action="measureDiameter" type="button" class="btn btn-default"><i class="fa fa-text-height"></i><span><%- t('opinionSurveyOmrResults', 'toolbar:measureDiameter') %></span></button><!--
-          //--><span><%- t('opinionSurveyOmrResults', 'toolbar:measuredValue') %> <span id="<%- idPrefix %>-measuredValue">0</span>px</span>
+          <button data-action="editImage" type="button" class="btn btn-default"><i class="fa fa-image"></i><span><%- helpers.t('toolbar:editImage') %></span></button><!--
+          //--><button data-action="createRegion" type="button" class="btn btn-default"><i class="fa fa-dot-circle-o"></i><span><%- helpers.t('toolbar:createRegion') %></span></button><!--
+          //--><button data-action="measureDiameter" type="button" class="btn btn-default"><i class="fa fa-text-height"></i><span><%- helpers.t('toolbar:measureDiameter') %></span></button><!--
+          //--><span><%- helpers.t('toolbar:measuredValue') %> <span id="<%- idPrefix %>-measuredValue">0</span>px</span>
         </div>
       </div>
       <div id="<%- idPrefix %>-container" class="opinionSurveyOmrResults-page-container dragscroll">

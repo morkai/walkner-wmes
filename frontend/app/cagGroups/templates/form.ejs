@@ -4,12 +4,12 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('cagGroups', 'PROPERTY:name') %></label>
+        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100">
       </div>
-      <%- renderColorPicker({idPrefix: idPrefix, property: 'color', label: t('cagGroups', 'PROPERTY:color'), value: model.color}) %>
+      <%- renderColorPicker({idPrefix: idPrefix, property: 'color', label: helpers.t('PROPERTY:color'), value: model.color}) %>
       <div class="form-group">
-        <label for="<%- idPrefix %>-cags" class="control-label"><%- t('cagGroups', 'PROPERTY:cags') %></label>
+        <label for="<%- idPrefix %>-cags" class="control-label"><%- helpers.t('PROPERTY:cags') %></label>
         <input id="<%- idPrefix %>-cags" type="text" autocomplete="new-password" name="cags">
       </div>
     </div>

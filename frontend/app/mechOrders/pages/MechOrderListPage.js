@@ -66,9 +66,7 @@ define([
     defineViews: function()
     {
       this.filterView = new MechOrderFilterView({
-        model: {
-          rqlQuery: this.collection.rqlQuery
-        }
+        model: this.collection
       });
 
       this.listView = new MechOrderListView({collection: this.collection});

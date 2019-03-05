@@ -1,50 +1,50 @@
 <div class="panel panel-default xiconfPrograms-stepPanel xiconfPrograms-stepPanel-vis">
   <div class="panel-heading is-with-actions">
-    <span class="xiconfPrograms-form-stepNo">0.</span> <%- t('xiconfPrograms', 'step:vis') %>
+    <span class="xiconfPrograms-form-stepNo">0.</span> <%- helpers.t('step:vis') %>
     <% include _stepPanelActions.ejs %>
   </div>
   <div class="panel-body has-lastElementRow">
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-label" class="control-label is-required"><%- t('xiconfPrograms', 'PROPERTY:label') %></label>
-        <input id="<%- idPrefix %>-label" class="form-control" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].label" value="<%- t('xiconfPrograms', 'step:vis') %>" required maxlength="32">
+        <label for="<%- idPrefix %>-label" class="control-label is-required"><%- helpers.t('PROPERTY:label') %></label>
+        <input id="<%- idPrefix %>-label" class="form-control" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].label" value="<%- helpers.t('step:vis') %>" required maxlength="32">
       </div>
     </div>
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-duration" class="control-label is-required"><%- t('xiconfPrograms', 'glp2:vis:duration') %></label>
+        <label for="<%- idPrefix %>-duration" class="control-label is-required"><%- helpers.t('glp2:vis:duration') %></label>
         <input id="<%- idPrefix %>-duration" class="form-control xiconfPrograms-form-duration" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].duration" value="5s" required>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-maxDuration" class="control-label is-required"><%- t('xiconfPrograms', 'glp2:vis:maxDuration') %></label>
+        <label for="<%- idPrefix %>-maxDuration" class="control-label is-required"><%- helpers.t('glp2:vis:maxDuration') %></label>
         <input id="<%- idPrefix %>-maxDuration" class="form-control xiconfPrograms-form-duration" type="text" autocomplete="new-password" name="steps[<%- stepIndex %>].maxDuration" value="10s" required>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-mode" class="control-label is-required"><%- t('xiconfPrograms', 'glp2:vis:mode') %></label>
+        <label for="<%- idPrefix %>-mode" class="control-label is-required"><%- helpers.t('glp2:vis:mode') %></label>
         <select id="<%- idPrefix %>-mode" class="form-control" name="steps[<%- stepIndex %>].mode" required>
-          <option value="0" data-label="glp2:vis:mode:0:label"><%- t('xiconfPrograms', 'glp2:vis:mode:0') %></option>
-          <option value="1" data-label="glp2:vis:mode:1:label"><%- t('xiconfPrograms', 'glp2:vis:mode:1') %></option>
+          <option value="0" data-label="glp2:vis:mode:0:label"><%- helpers.t('glp2:vis:mode:0') %></option>
+          <option value="1" data-label="glp2:vis:mode:1:label"><%- helpers.t('glp2:vis:mode:1') %></option>
         </select>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-goInput" class="control-label"><%- t('xiconfPrograms', 'glp2:vis:goInput') %></label>
+        <label for="<%- idPrefix %>-goInput" class="control-label"><%- helpers.t('glp2:vis:goInput') %></label>
         <select id="<%- idPrefix %>-goInput" class="form-control" name="steps[<%- stepIndex %>].goInput" required>
           <option value="0"></option>
           <% inputs.forEach(function(input) { %>
-          <option value="<%- input %>"><%- t('xiconfPrograms', 'glp2:input:' + input) %></option>
+          <option value="<%- input %>"><%- helpers.t('glp2:input:' + input) %></option>
           <% }) %>
         </select>
       </div>
       <div class="form-group col-md-3">
-        <label for="<%- idPrefix %>-noGoInput" class="control-label"><%- t('xiconfPrograms', 'glp2:vis:noGoInput') %></label>
+        <label for="<%- idPrefix %>-noGoInput" class="control-label"><%- helpers.t('glp2:vis:noGoInput') %></label>
         <select id="<%- idPrefix %>-noGoInput" class="form-control" name="steps[<%- stepIndex %>].noGoInput" required>
           <option value="0"></option>
           <% inputs.forEach(function(input) { %>
-          <option value="<%- input %>"><%- t('xiconfPrograms', 'glp2:input:' + input) %></option>
+          <option value="<%- input %>"><%- helpers.t('glp2:input:' + input) %></option>
           <% }) %>
         </select>
       </div>

@@ -2,23 +2,8 @@
   "root": {
     "BREADCRUMBS:base": "Downtimes",
     "BREADCRUMBS:browse": "Alerts",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the alerts.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the alert.",
-    "MSG:DELETED": "Alert <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add alert",
-    "PAGE_ACTION:edit": "Edit alert",
-    "PAGE_ACTION:delete": "Delete alert",
-
-    "PANEL:TITLE:details": "Alert details",
-    "PANEL:TITLE:editForm": "Edit alert form",
-    "PANEL:TITLE:addForm": "Add alert form",
-
-    "filter:submit": "Filter alerts",
+    "filter:submit": "Filter",
 
     "PROPERTY:name": "Name",
     "PROPERTY:repeatInterval": "Last action repeat",
@@ -45,10 +30,6 @@
     "actions:userWhitelist": "to users on the following list:",
     "actions:userBlacklist": "Do not notify users on the following list:",
 
-    "FORM:ACTION:add": "Add alert",
-    "FORM:ACTION:edit": "Edit alert",
-    "FORM:ERROR:addFailure": "Failed to add the alert.",
-    "FORM:ERROR:editFailure": "Failed to edit the alert.",
     "FORM:ERROR:conditions": "Define at least one condition.",
     "FORM:ERROR:actions": "Define at least one action.",
     "FORM:HELP:repeatInterval": "Repeat the last action after the specified interval. Leave 0s, if the last action should not be repeated.",
@@ -62,12 +43,6 @@
     "FORM:actions:delay": "after a start of a downtime",
     "FORM:actions:sendEmail": "send an e-mail",
     "FORM:actions:sendSms": "send SMS",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Alert deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete alert",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen alert?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> alert?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the alert.",
 
     "DETAILS:conditions:reason": "Downtime reasons ({mode})",
     "DETAILS:conditions:aor": "Areas of responsibility ({mode})",

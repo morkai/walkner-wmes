@@ -1,12 +1,12 @@
 <form class="settings xiconf-settings">
   <div class="list-group">
-    <a class="list-group-item" href="#xiconf;settings?tab=clients" data-tab="clients"><%- t('xiconf', 'settings:tab:clients') %></a>
-    <a class="list-group-item" href="#xiconf;settings?tab=notifier" data-tab="notifier"><%- t('xiconf', 'settings:tab:notifier') %></a>
+    <a class="list-group-item" href="#xiconf;settings?tab=clients" data-tab="clients"><%- helpers.t('settings:tab:clients') %></a>
+    <a class="list-group-item" href="#xiconf;settings?tab=notifier" data-tab="notifier"><%- helpers.t('settings:tab:notifier') %></a>
   </div>
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="clients">
       <div class="form-group">
-        <label for="<%- idPrefix %>-clients-version"><%- t('xiconf', 'settings:appVersion') %></label>
+        <label for="<%- idPrefix %>-clients-version"><%- helpers.t('settings:appVersion') %></label>
         <input id="<%- idPrefix %>-clients-version" class="form-control" name="xiconf.appVersion" type="text" autocomplete="new-password" value="">
       </div>
     </div>
@@ -14,27 +14,27 @@
       <div class="checkbox">
         <label class="control-label">
           <input id="<%- idPrefix %>-notifier-enabled" name="xiconf.notifier.enabled" type="checkbox" value="true">
-          <%- t('xiconf', 'settings:notifier:enabled') %>
+          <%- helpers.t('settings:notifier:enabled') %>
         </label>
       </div>
       <div class="checkbox">
         <label class="control-label">
           <input id="<%- idPrefix %>-notifier-emptyLeds" name="xiconf.notifier.emptyLeds" type="checkbox" value="true">
-          <%- t('xiconf', 'settings:notifier:emptyLeds') %>
+          <%- helpers.t('settings:notifier:emptyLeds') %>
         </label>
       </div>
       <div class="checkbox">
         <label class="control-label">
           <input id="<%- idPrefix %>-notifier-emptyHids" name="xiconf.notifier.emptyHids" type="checkbox" value="true">
-          <%- t('xiconf', 'settings:notifier:emptyHids') %>
+          <%- helpers.t('settings:notifier:emptyHids') %>
         </label>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-notifier-delay"><%- t('xiconf', 'settings:notifier:delay') %></label>
+        <label for="<%- idPrefix %>-notifier-delay"><%- helpers.t('settings:notifier:delay') %></label>
         <input id="<%- idPrefix %>-notifier-delay" class="form-control" name="xiconf.notifier.delay" type="number" min="1" max="30">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-notifier-nameFilter"><%- t('xiconf', 'settings:notifier:nameFilter') %></label>
+        <label for="<%- idPrefix %>-notifier-nameFilter"><%- helpers.t('settings:notifier:nameFilter') %></label>
         <textarea id="<%- idPrefix %>-notifier-nameFilter" class="form-control" name="xiconf.notifier.nameFilter" rows="5"></textarea>
       </div>
     </div>

@@ -1,8 +1,6 @@
 {
   "BREADCRUMBS:browse": "Nieprawidłowe zlecenia",
 
-  "MSG:LOADING_FAILURE": "Ładowanie nieprawidłowych zleceń nie powiodło się.",
-
   "PAGE_ACTION:check": "Sprawdź zlecenia",
   "PAGE_ACTION:notify": "Powiadom osoby odpowiedzialne",
   "PAGE_ACTION:settings": "Ustawienia",
@@ -45,7 +43,7 @@
   "solution:STATUS": "CNF, DLV lub TECO.",
   "solution:OPERATIONS": "Pojawienie się operacji.",
 
-  "filter:submit": "Filtruj zlecenia",
+  "filter:submit": "Filtruj",
 
   "LIST:ACTION:select": "Oznacz do powiadomienia",
   "LIST:ACTION:ignore": "Ignoruj"

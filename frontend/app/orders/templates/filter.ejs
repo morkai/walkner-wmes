@@ -6,32 +6,32 @@
     startHour: 6,
     setTime: false,
     labels: {
-      text: t('orders', 'PROPERTY:scheduledStartDate'),
+      text: helpers.t('PROPERTY:scheduledStartDate'),
       ranges: '+days:+0+1_-1+0_+1+2_-7+0_+0+7'
     }
   }) %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-_id"><%- t('orders', 'PROPERTY:_id') %></label>
+    <label for="<%- idPrefix %>-_id"><%- helpers.t('PROPERTY:_id') %></label>
     <input id="<%- idPrefix %>-_id" class="form-control orders-filter-_id" name="_id" type="text" autocomplete="new-password" maxlength="9">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-nc12"><%- t('orders', 'PROPERTY:nc12') %></label>
+    <label for="<%- idPrefix %>-nc12"><%- helpers.t('PROPERTY:nc12') %></label>
     <input id="<%- idPrefix %>-nc12" class="form-control orders-filter-nc12" name="nc12" type="text" autocomplete="new-password" maxlength="12">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-mrp"><%- t('orders', 'PROPERTY:mrp') %></label>
+    <label for="<%- idPrefix %>-mrp"><%- helpers.t('PROPERTY:mrp') %></label>
     <input id="<%- idPrefix %>-mrp" name="mrp" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-statusesIn"><%- t('orders', 'filter:statuses:in') %></label>
+    <label for="<%- idPrefix %>-statusesIn"><%- helpers.t('filter:statuses:in') %></label>
     <input id="<%- idPrefix %>-statusesIn" name="statusesIn" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-statusesNin"><%- t('orders', 'filter:statuses:nin') %></label>
+    <label for="<%- idPrefix %>-statusesNin"><%- helpers.t('filter:statuses:nin') %></label>
     <input id="<%- idPrefix %>-statusesNin" name="statusesNin" type="text" autocomplete="new-password">
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('orders', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

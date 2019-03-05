@@ -85,10 +85,9 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         model: this.model.toJSON(),
         log: this.model.getDecoratedLog()
       };

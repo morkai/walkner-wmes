@@ -1,86 +1,42 @@
 <div>
   <div class="panel panel-default">
     <div class="panel-details">
-      <div class="props first">
-        <div class="prop">
-          <div class="prop-name"><%- t('icpo', 'PROPERTY:srcId') %></div>
-          <div class="prop-value"><%- model.srcId %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('icpo', 'PROPERTY:srcTitle') %></div>
-          <div class="prop-value"><%- model.srcTitle %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('icpo', 'PROPERTY:srcIp') %></div>
-          <div class="prop-value"><%- model.srcIp %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('icpo', 'PROPERTY:srcUuid') %></div>
-          <div class="prop-value"><%- model.srcUuid %></div>
-        </div>
-      </div>
+      <%- helpers.props(model, ['srcId', 'srcTitle', 'srcIp', 'srcUuid']) %>
     </div>
   </div>
   <div class="panel panel-<%- model.result === 'success'  ? 'success' : 'danger' %> icpo-details-entry">
     <div class="panel-heading">
-      <%- t('icpo', 'PANEL:TITLE:details') %>
+      <%- panelTitle %>
     </div>
     <div class="panel-details">
-      <div class="props first">
-        <div class="prop">
-          <div class="prop-name"><%- t('icpo', 'PROPERTY:serviceTag') %></div>
-          <div class="prop-value"><%- model.serviceTag %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('icpo', 'PROPERTY:driver') %></div>
-          <div class="prop-value"><%= model.driver %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('icpo', 'PROPERTY:gprs') %></div>
-          <div class="prop-value"><%= model.gprs %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('icpo', 'PROPERTY:led') %></div>
-          <div class="prop-value"><%= model.led %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('icpo', 'PROPERTY:startedAt') %></div>
-          <div class="prop-value"><%- time.format(model.startedAt, 'LL, LTS') %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('icpo', 'PROPERTY:finishedAt') %></div>
-          <div class="prop-value"><%- time.format(model.finishedAt, 'LL, LTS') %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('icpo', 'PROPERTY:duration') %></div>
-          <div class="prop-value"><%- time.toString((model.finishedAt - model.startedAt) / 1000, false, true) %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('icpo', 'PROPERTY:errorCode') %></div>
-          <div class="prop-value"><%- model.errorCode ? t('icpo', 'error:' + model.errorCode) : '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('icpo', 'PROPERTY:exception') %></div>
-          <div class="prop-value"><%= model.exception || '-' %></div>
-        </div>
-      </div>
+      <%- helpers.props(model, [
+        'serviceTag',
+        'driver',
+        'gprs',
+        'led',
+        'startedAt',
+        'finishedAt',
+        'duration',
+        '!errorCode',
+        'exception'
+      ]) %>
     </div>
   </div>
   <div class="icpo-tabs">
     <ul class="nav nav-tabs">
-      <li data-tab="log"><a href="#<%- idPrefix %>-log" data-toggle="tab"><%- t('icpo', 'tab:log') %></a></li>
-      <li data-tab="output"><a href="#<%- idPrefix %>-output" data-toggle="tab"><%- t('icpo', 'tab:output') %></a></li>
-      <li data-tab="orderData"><a href="#<%- idPrefix %>-orderData" data-toggle="tab"><%- t('icpo', 'tab:orderData') %></a></li>
-      <li data-tab="driverData" data-highlight><a href="#<%- idPrefix %>-driverData" data-toggle="tab"><%- t('icpo', 'tab:driverData') %></a></li>
-      <li data-tab="gprsData" data-highlight><a href="#<%- idPrefix %>-gprsData" data-toggle="tab"><%- t('icpo', 'tab:gprsData') %></a></li>
-      <li data-tab="inputData" data-highlight><a href="#<%- idPrefix %>-inputData" data-toggle="tab"><%- t('icpo', 'tab:inputData') %></a></li>
-      <li data-tab="outputData" data-highlight><a href="#<%- idPrefix %>-outputData" data-toggle="tab"><%- t('icpo', 'tab:outputData') %></a></li>
+      <li data-tab="log"><a href="#<%- idPrefix %>-log" data-toggle="tab"><%- helpers.t('tab:log') %></a></li>
+      <li data-tab="output"><a href="#<%- idPrefix %>-output" data-toggle="tab"><%- helpers.t('tab:output') %></a></li>
+      <li data-tab="orderData"><a href="#<%- idPrefix %>-orderData" data-toggle="tab"><%- helpers.t('tab:orderData') %></a></li>
+      <li data-tab="driverData" data-highlight><a href="#<%- idPrefix %>-driverData" data-toggle="tab"><%- helpers.t('tab:driverData') %></a></li>
+      <li data-tab="gprsData" data-highlight><a href="#<%- idPrefix %>-gprsData" data-toggle="tab"><%- helpers.t('tab:gprsData') %></a></li>
+      <li data-tab="inputData" data-highlight><a href="#<%- idPrefix %>-inputData" data-toggle="tab"><%- helpers.t('tab:inputData') %></a></li>
+      <li data-tab="outputData" data-highlight><a href="#<%- idPrefix %>-outputData" data-toggle="tab"><%- helpers.t('tab:outputData') %></a></li>
     </ul>
     <div class="tab-content">
       <div class="tab-pane" id="<%- idPrefix %>-log">
         <table class="table table-bordered icpo-log">
           <tbody>
-            <% log.forEach(function(logEntry) { %>
+            <% model.log.forEach(function(logEntry) { %>
             <tr>
               <td><time datetime="<%- logEntry.datetime %>"><%- logEntry.time %></time></td>
               <td><%- logEntry.text %></td>

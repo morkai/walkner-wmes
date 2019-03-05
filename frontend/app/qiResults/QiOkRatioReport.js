@@ -17,6 +17,8 @@ define([
 
     urlRoot: '/qi/reports/okRatio',
 
+    nlsDomain: 'qiResults',
+
     defaults: function()
     {
       return {
@@ -33,7 +35,7 @@ define([
         options = {};
       }
 
-      options.data = _.extend(
+      options.data = _.assign(
         options.data || {},
         _.pick(this.attributes, [
           'from', 'to'

@@ -3,9 +3,6 @@
     "BREADCRUMBS:base": "Documentation",
     "BREADCRUMBS:browse": "Clients",
 
-    "MSG:LOADING_FAILURE": "Failed to load the clients.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the client.",
-
     "page:settings": "Change settings",
 
     "PROPERTY:_id": "ID",
@@ -26,13 +23,7 @@
     "fileSource:remote": "Remote file",
     "fileSource:search": "TPD Search",
 
-    "filter:submit": "Filter clients",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Client deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete client",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen client?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> client?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the client.",
+    "filter:submit": "Filter",
 
     "licensingMessage": "The current number of clients ({clientCount}) is greater than the number of purchased licenses ({licenseCount})!"
   },

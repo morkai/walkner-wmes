@@ -4,8 +4,6 @@
   "BREADCRUMBS:details": "Wynik skanowania",
   "BREADCRUMBS:ACTION_FORM:delete": "Ignorowanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie wyników nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie wyniku nie powiodło się.",
   "MSG:DELETED": "Wynik <em>{label}</em> został zignorowany.",
 
   "PAGE_ACTION:edit": "Napraw",
@@ -14,7 +12,11 @@
   "LIST:ACTION:edit": "Napraw",
   "LIST:ACTION:delete": "Ignoruj",
 
-  "PANEL:TITLE:details": "Szczegóły wyniku",
+  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie zignorowania wyniku",
+  "ACTION_FORM:BUTTON:delete": "Ignoruj wynik",
+  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie zignorować wybrany wynik?",
+  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie zignorować wynik <em>{label}</em>?",
+  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się zignorować wyniku.",
 
   "PROPERTY:survey": "Badanie",
   "PROPERTY:pageNumber": "Nr strony",
@@ -32,13 +34,7 @@
   "PROPERTY:omrInput": "Wejście OMR",
   "PROPERTY:omrOutput": "Wyjście OMR",
 
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie zignorowania wyniku",
-  "ACTION_FORM:BUTTON:delete": "Ignoruj wynik",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie zignorować wybrany wynik?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie zignorować wynik <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się zignorować wyniku.",
-
-  "filter:submit": "Filtruj wyniki",
+  "filter:submit": "Filtruj",
 
   "status:unrecognized": "Nierozpoznany",
   "status:recognized": "Rozpoznany",

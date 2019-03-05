@@ -148,7 +148,7 @@ define([
 
     updateTable: function()
     {
-      this.$id('table').html(renderReportTable({
+      this.$id('table').html(this.renderPartialHtml(renderReportTable, {
         rows: this.model.get(this.options.metric).rows
       }));
     },

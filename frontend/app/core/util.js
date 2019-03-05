@@ -16,7 +16,7 @@ define([
    */
   util.inherits = function(ctor, superCtor)
   {
-    _.extend(ctor, superCtor);
+    _.assign(ctor, superCtor);
 
     var Surrogate = function() { this.constructor = ctor; };
     Surrogate.prototype = superCtor.prototype;

@@ -29,7 +29,7 @@ define([
     {
       var helper = this;
 
-      $order.removeClass('form-control').select2(_.extend({
+      $order.removeClass('form-control').select2(_.assign({
         openOnEnter: null,
         allowClear: false,
         minimumInputLength: 6,
@@ -131,7 +131,7 @@ define([
         return;
       }
 
-      $operation.removeClass('form-control').select2(_.extend({
+      $operation.removeClass('form-control').select2(_.assign({
         width: '100%',
         placeholder: ' ',
         openOnEnter: null,

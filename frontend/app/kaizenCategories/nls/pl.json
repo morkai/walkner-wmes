@@ -1,37 +1,11 @@
 {
   "BREADCRUMBS:base": "Usprawnienia",
   "BREADCRUMBS:browse": "Kategorie",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie kategorii nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie kategorii nie powiodło się.",
-  "MSG:DELETED": "Kategoria <em>{label}</em> została usunięta.",
-
-  "PAGE_ACTION:add": "Dodaj kategorię",
-  "PAGE_ACTION:edit": "Edytuj kategorię",
-  "PAGE_ACTION:delete": "Usuń kategorię",
-
-  "PANEL:TITLE:details": "Szczegóły kategorii",
-  "PANEL:TITLE:addForm": "Formularz dodawania kategorii",
-  "PANEL:TITLE:editForm": "Formularz edycji kategorii",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:description": "Opis",
   "PROPERTY:inNearMiss": "W zdarzeniach potencjalnie wypadkowych?",
   "PROPERTY:inSuggestion": "W sugestiach?",
-  "PROPERTY:position": "Pozycja",
-
-  "FORM:ACTION:add": "Dodaj kategorię",
-  "FORM:ACTION:edit": "Edytuj kategorię",
-  "FORM:ERROR:addFailure": "Nie udało się dodać kategorii.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować kategorii.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia kategorii",
-  "ACTION_FORM:BUTTON:delete": "Usuń kategorię",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną kategorię?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć kategorię <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć kategorii."
+  "PROPERTY:position": "Pozycja"
 }

@@ -1,9 +1,6 @@
 {
   "BREADCRUMBS:browse": "Zamówienia",
 
-  "MSG:LOADING_FAILURE": "Ładowanie zamówień nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zamówienia nie powiodło się.",
-
   "panel:props": "Szczegóły zamówienia",
   "panel:items": "Pozycje zamówienia",
   "panel:changes": "Historia zmian zamówienia",

@@ -1,6 +1,23 @@
 {
   "root": {
+    "BREADCRUMBS:base": "Kanban DB",
+    "BREADCRUMBS:browse": "Components",
 
+    "PAGE_ACTION:jump:placeholder": "12NC",
+
+    "PROPERTY:_id": "12NC",
+    "PROPERTY:description": "Component name",
+    "PROPERTY:storageBin": "Storage bin (SAP)",
+    "PROPERTY:newStorageBin": "Storage bin (new)",
+    "PROPERTY:storageBins": "Storage bins",
+    "PROPERTY:maxBinQty": "Max bin qty",
+    "PROPERTY:minBinQty": "Main bin qty",
+    "PROPERTY:replenQty": "Replen. qty",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:updatedAt": "Updated at",
+    "PROPERTY:updater": "Updater",
+
+    "filter:submit": "Filter"
   },
   "pl": true
 }

@@ -1,22 +1,8 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Production lines",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the production lines.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the production line.",
-    "MSG:DELETED": "Production line <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add production line",
-    "PAGE_ACTION:edit": "Edit production line",
-    "PAGE_ACTION:delete": "Delete production line",
     "PAGE_ACTION:toggleDeactivated": "Hide deactivated",
-
-    "PANEL:TITLE:details": "Production line's details",
-    "PANEL:TITLE:addForm": "Add production line form",
-    "PANEL:TITLE:editForm": "Edit production line form",
 
     "LIST:ACTION:production": "Show the operator's screen",
 
@@ -24,18 +10,7 @@
     "PROPERTY:description": "Description",
     "PROPERTY:workCenter": "WorkCenter",
     "PROPERTY:inventoryNo": "Inventory no",
-    "PROPERTY:deactivatedAt": "Deactivated at",
-
-    "FORM:ACTION:add": "Add production line",
-    "FORM:ACTION:edit": "Edit production line",
-    "FORM:ERROR:addFailure": "Failed to add the new production line.",
-    "FORM:ERROR:editFailure": "Failed to edit the production line.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Production line deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete production line",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen production line?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> production line?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the production line."
+    "PROPERTY:deactivatedAt": "Deactivated at"
   },
   "pl": true
 }

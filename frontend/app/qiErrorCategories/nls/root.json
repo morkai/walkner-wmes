@@ -2,34 +2,8 @@
   "root": {
     "BREADCRUMBS:base": "QI",
     "BREADCRUMBS:browse": "Error categories",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the error categories.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the error category.",
-    "MSG:DELETED": "Error category <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add error category",
-    "PAGE_ACTION:edit": "Edit error category",
-    "PAGE_ACTION:delete": "Delete error category",
-
-    "PANEL:TITLE:details": "Error category details",
-    "PANEL:TITLE:addForm": "Add error category form",
-    "PANEL:TITLE:editForm": "Edit error category form",
-
-    "PROPERTY:name": "Name",
-
-    "FORM:ACTION:add": "Add error category",
-    "FORM:ACTION:edit": "Edit error category",
-    "FORM:ERROR:addFailure": "Failed to add the new error category.",
-    "FORM:ERROR:editFailure": "Failed to edit the error category.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Error category deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete error category",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen error category?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> error category?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the error category."
+    "PROPERTY:name": "Name"
   },
   "pl": true
 }

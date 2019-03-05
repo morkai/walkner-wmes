@@ -1,20 +1,20 @@
 <form id="<%- idPrefix %>-printDialog" autocomplete="off" action="<%= action %>">
   <div class="row">
     <div class="col-md-3 form-group">
-      <label for="<%- idPrefix %>-shippingNo"><%- t('purchaseOrders', 'PROPERTY:print.shippingNo') %></label>
+      <label for="<%- idPrefix %>-shippingNo"><%- helpers.t('PROPERTY:print.shippingNo') %></label>
       <input id="<%- idPrefix %>-shippingNo" name="shippingNo" class="form-control pos-printDialog-input" type="text" autocomplete="new-password" maxlength="20" autofocus pattern="[a-zA-Z0-9\/\\\.\-_: ]{0,20}">
     </div>
     <div class="col-md-3 form-group">
-      <label for="<%- idPrefix %>-printer" class="control-label"><%- t('purchaseOrders', 'PROPERTY:print.printer') %></label>
+      <label for="<%- idPrefix %>-printer" class="control-label"><%- helpers.t('PROPERTY:print.printer') %></label>
       <select id="<%- idPrefix %>-printer" class="form-control" name="printer">
-        <option value="browser"><%- t('purchaseOrders', 'printer:browser') %></option>
+        <option value="browser"><%- helpers.t('printer:browser') %></option>
         <% printers.forEach(function(printerName) { %>
         <option value="<%= printerName %>"><%= printerName %></option>
         <% }) %>
       </select>
     </div>
     <div class="col-md-3 form-group">
-      <label for="<%- idPrefix %>-paper" class="control-label"><%- t('purchaseOrders', 'PROPERTY:print.paper') %></label>
+      <label for="<%- idPrefix %>-paper" class="control-label"><%- helpers.t('PROPERTY:print.paper') %></label>
       <select id="<%- idPrefix %>-paper" class="form-control" name="paper">
         <% paperGroups.forEach(function(paperGroup) { %>
         <optgroup label="<%= paperGroup.label %>">
@@ -26,7 +26,7 @@
       </select>
     </div>
     <div class="col-md-3 form-group">
-      <label for="<%- idPrefix %>-barcode" class="control-label"><%- t('purchaseOrders', 'PROPERTY:print.barcode') %></label>
+      <label for="<%- idPrefix %>-barcode" class="control-label"><%- helpers.t('PROPERTY:print.barcode') %></label>
       <select id="<%- idPrefix %>-barcode" class="form-control" name="barcode">
         <% barcodes.forEach(function(barcode) { %>
         <option value="<%- barcode.id %>"><%- barcode.text %></option>
@@ -39,19 +39,19 @@
       <table class="table pos-printDialog-items">
         <thead>
           <tr>
-            <th><%- t('purchaseOrders', 'PROPERTY:item._id') %></th>
-            <th><%- t('purchaseOrders', 'PROPERTY:item.nc12') %></th>
-            <th><%- t('purchaseOrders', 'PROPERTY:print.packageQty') %></th>
-            <th><%- t('purchaseOrders', 'PROPERTY:print.componentQty') %></th>
-            <th><%- t('purchaseOrders', 'PROPERTY:print.remainingQty') %></th>
-            <th><%- t('purchaseOrders', 'PROPERTY:print.totalPackageQty') %></th>
-            <th><%- t('purchaseOrders', 'PROPERTY:print.totalQty') %></th>
+            <th><%- helpers.t('PROPERTY:item._id') %></th>
+            <th><%- helpers.t('PROPERTY:item.nc12') %></th>
+            <th><%- helpers.t('PROPERTY:print.packageQty') %></th>
+            <th><%- helpers.t('PROPERTY:print.componentQty') %></th>
+            <th><%- helpers.t('PROPERTY:print.remainingQty') %></th>
+            <th><%- helpers.t('PROPERTY:print.totalPackageQty') %></th>
+            <th><%- helpers.t('PROPERTY:print.totalQty') %></th>
             <th></th>
           </tr>
         </thead>
         <tfoot>
           <tr>
-            <td colspan="2" class="pos-printDialog-items-total"><%- t('purchaseOrders', 'printDialog:total') %></td>
+            <td colspan="2" class="pos-printDialog-items-total"><%- helpers.t('printDialog:total') %></td>
             <td id="<%- idPrefix %>-overallPackageQty">0</td>
             <td id="<%- idPrefix %>-overallComponentQty">0</td>
             <td id="<%- idPrefix %>-overallRemainingQty">0</td>
@@ -81,7 +81,7 @@
     </div>
   </div>
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary"><i class="fa fa-print"></i><span><%- t('purchaseOrders', 'printDialog:print') %></span></button>
+    <button type="submit" class="btn btn-primary"><i class="fa fa-print"></i><span><%- helpers.t('printDialog:print') %></span></button>
     <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
   </div>
 </form>

@@ -50,6 +50,9 @@ define([
       this.originalTitle = null;
       this.$title = null;
       this.$submit = null;
+      this.model = {
+        nlsDomain: 'users'
+      };
     },
 
     destroy: function()

@@ -41,10 +41,9 @@ define([
       this.$('.is-expandable').expandableSelect('destroy');
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         statuses: kaizenDictionaries.statuses
       };
     },

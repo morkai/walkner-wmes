@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  '../core/Model'
+  '../core/Model',
+  'app/core/util/colorLabel'
 ], function(
-  Model
+  Model,
+  colorLabel
 ) {
   'use strict';
 
@@ -36,6 +38,15 @@ define([
       }
 
       return orderStatus;
+    },
+
+    serialize: function()
+    {
+      var obj = this.toJSON();
+
+      obj.color = colorLabel(obj.color);
+
+      return obj;
     }
 
   });

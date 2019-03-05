@@ -1,8 +1,6 @@
 {
   "BREADCRUMBS:browse": "Puste zlecenia",
 
-  "MSG:LOADING_FAILURE": "Ładowanie pustych zleceń nie powiodło się.",
-
   "PAGE_ACTION:print": "Pokaż wersję do druku",
 
   "PRINT_PAGE:HD:LEFT:all": "Wszystkie zlecenia bez żadnych operacji",
@@ -18,5 +16,5 @@
   "PROPERTY:statuses": "Status",
 
   "filter:placeholder:_id": "Dowolny nr",
-  "filter:submit": "Filtruj puste zlecenia"
+  "filter:submit": "Filtruj"
 }

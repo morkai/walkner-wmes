@@ -9,7 +9,9 @@ define([
 
   return Setting.extend({
 
-    urlRoot: '/xiconf/settings'
+    urlRoot: '/xiconf/settings',
+
+    nlsDomain: 'xiconf'
 
   });
 });

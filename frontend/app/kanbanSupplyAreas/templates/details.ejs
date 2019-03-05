@@ -1,13 +1,6 @@
 <div class="panel panel-primary">
-  <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details') %></div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <% ['name', 'workCenter', 'family', 'lines'].forEach(function(prop) { %>
-      <div class="prop">
-        <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
-        <div class="prop-value"><%= model[prop] %></div>
-      </div>
-      <% }) %>
-    </div>
+    <%- helpers.props(model, ['name', 'workCenter', 'family', 'lines']) %>
   </div>
 </div>

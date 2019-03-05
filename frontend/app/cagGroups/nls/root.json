@@ -2,37 +2,11 @@
   "root": {
     "BREADCRUMBS:base": "Planned line utilization",
     "BREADCRUMBS:browse": "CAG groups",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the CAG groups.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the CAG group.",
-    "MSG:DELETED": "CAG group <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add CAG group",
-    "PAGE_ACTION:edit": "Edit CAG group",
-    "PAGE_ACTION:delete": "Delete CAG group",
-
-    "PANEL:TITLE:details": "CAG group details",
-    "PANEL:TITLE:addForm": "Add CAG group form",
-    "PANEL:TITLE:editForm": "Edit CAG group form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
     "PROPERTY:color": "Color",
-    "PROPERTY:cags": "CAGs",
-
-    "FORM:ACTION:add": "Add CAG group",
-    "FORM:ACTION:edit": "Edit CAG group",
-    "FORM:ERROR:addFailure": "Failed to add the new CAG group.",
-    "FORM:ERROR:editFailure": "Failed to edit the CAG group.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "CAG group deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete CAG group",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen CAG group?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> CAG group?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the CAG group."
+    "PROPERTY:cags": "CAGs"
   },
   "pl": true
 }

@@ -475,6 +475,9 @@
   text-align: right;
   vertical-align: middle;
 }
+.planning-mrp-stats-bd:first-child th:last-child {
+  text-align: center;
+}
 .planning-mrp-stats-bd td {
   padding-left: 7px;
   padding-right: 7px;

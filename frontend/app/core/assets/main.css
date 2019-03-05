@@ -233,6 +233,9 @@ code.multiline {
   border-bottom: 1px solid #ddd;
   background: linear-gradient(to bottom, #F5F5F5, #EEE);
 }
+.panel-footer .btn-primary {
+  min-width: 100px;
+}
 
 .btn:active,
 .btn.active {

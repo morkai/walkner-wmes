@@ -1,36 +1,10 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Order statuses",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the order statuses.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order status.",
-    "MSG:DELETED": "Order status <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add order status",
-    "PAGE_ACTION:edit": "Edit order status",
-    "PAGE_ACTION:delete": "Delete order status",
-
-    "PANEL:TITLE:details": "Order status' details",
-    "PANEL:TITLE:addForm": "Add order status form",
-    "PANEL:TITLE:editForm": "Edit order status form",
 
     "PROPERTY:_id": "Label",
     "PROPERTY:label": "Description",
-    "PROPERTY:color": "Color",
-
-    "FORM:ACTION:add": "Add order status",
-    "FORM:ACTION:edit": "Edit order status",
-    "FORM:ERROR:addFailure": "Failed to add the new order status.",
-    "FORM:ERROR:editFailure": "Failed to edit the order status.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Order status deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete order status",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen order status?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> order status?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the order status."
+    "PROPERTY:color": "Color"
   },
   "pl": true
 }

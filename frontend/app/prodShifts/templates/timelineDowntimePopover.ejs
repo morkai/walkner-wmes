@@ -2,32 +2,32 @@
   <% if (managing) { %>
   <tfoot>
     <tr>
-      <td colspan="2"><button class="btn btn-block btn-danger prodShifts-timeline-editDowntime"><%- t('prodShifts', 'timeline:action:editDowntime') %></button></td>
+      <td colspan="2"><button class="btn btn-block btn-danger prodShifts-timeline-editDowntime"><%- helpers.t('timeline:action:editDowntime') %></button></td>
     </tr>
     <tr>
-      <td colspan="2"><button class="btn btn-block btn-<%- hasOrder ? 'success' : 'warning' %> prodShifts-timeline-deleteDowntime"><%- t('prodShifts', 'timeline:action:deleteDowntime') %></button></td>
+      <td colspan="2"><button class="btn btn-block btn-<%- hasOrder ? 'success' : 'warning' %> prodShifts-timeline-deleteDowntime"><%- helpers.t('timeline:action:deleteDowntime') %></button></td>
     </tr>
   </tfoot>
   <% } %>
   <tbody>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:startedAt') %></th>
+      <th><%- helpers.t('timeline:popover:startedAt') %></th>
       <td><%- startedAt %></td>
     </tr>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:finishedAt') %></th>
+      <th><%- helpers.t('timeline:popover:finishedAt') %></th>
       <td><%- finishedAt %></td>
     </tr>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:duration') %></th>
+      <th><%- helpers.t('timeline:popover:duration') %></th>
       <td><%- duration %></td>
     </tr>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:reason') %></th>
+      <th><%- helpers.t('timeline:popover:reason') %></th>
       <td><%- reason %></td>
     </tr>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:aor') %></th>
+      <th><%- helpers.t('timeline:popover:aor') %></th>
       <td><%- aor %></td>
     </tr>
   </tbody>

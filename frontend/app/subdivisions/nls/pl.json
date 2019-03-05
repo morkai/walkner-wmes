@@ -1,20 +1,5 @@
 {
   "BREADCRUMBS:browse": "Działy",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie działów nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie działu nie powiodło się.",
-  "MSG:DELETED": "Dział <em>{label}</em> zostało usunięte.",
-
-  "PAGE_ACTION:add": "Dodaj dział",
-  "PAGE_ACTION:edit": "Edytuj dział",
-  "PAGE_ACTION:delete": "Usuń dział",
-
-  "PANEL:TITLE:details": "Szczegóły działu",
-  "PANEL:TITLE:addForm": "Formularz dodawania działu",
-  "PANEL:TITLE:editForm": "Formularz edycji działu",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:division": "Wydział",
@@ -39,16 +24,7 @@
   "TYPE:paintShop": "Malarnia",
   "TYPE:other": "Inny",
 
-  "FORM:ACTION:add": "Dodaj dział",
-  "FORM:ACTION:edit": "Edytuj dział",
-  "FORM:ERROR:addFailure": "Nie udało się dodać działu.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować działu.",
   "FORM:PLACEHOLDER:aor": "Wybierz obszar odpowiedzialności...",
 
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia działu",
-  "ACTION_FORM:BUTTON:delete": "Usuń dział",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany dział?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć dział <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć działu.",
   "ACTION_FORM:delete:NOT_EMPTY": "Dział nie jest pusty."
 }

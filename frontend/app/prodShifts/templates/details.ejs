@@ -1,43 +1,20 @@
 <div class="panel panel-<%- panelType %>">
-  <div class="panel-heading">
-    <%- t('prodShifts', 'PANEL:TITLE:details') %>
-  </div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details row">
     <div class="col-md-4">
-      <div class="props first">
-        <% ['prodLine', 'date', 'shift', 'createdAt', 'creator'].forEach(function(prop) { %>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodShifts', 'PROPERTY:' + prop) %></div>
-          <div class="prop-value"><%- model[prop] %></div>
-        </div>
-        <% }) %>
-      </div>
+      <%- helpers.props(model, ['prodLine', 'date', 'shift', 'createdAt', '!creator']) %>
     </div>
     <div class="col-md-4">
-      <div class="props">
-        <% ['division', 'subdivision', 'mrpControllers', 'prodFlow', 'workCenter'].forEach(function(prop) { %>
-        <div class="prop">
-          <div class="prop-name"><%- t('core', 'ORG_UNIT:' + prop) %></div>
-          <div class="prop-value"><%- model[prop] %></div>
-        </div>
-        <% }) %>
-      </div>
+      <%- helpers.props(model, ['division', 'subdivision', 'mrpControllers', 'prodFlow', 'workCenter']) %>
     </div>
     <div class="col-md-4">
-      <div class="props">
-        <% ['master', 'leader', 'operator', 'totalQuantityDone'].forEach(function(prop) { %>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodShifts', 'PROPERTY:' + prop) %></div>
-          <div class="prop-value"><%- model[prop] %></div>
-        </div>
-        <% }) %>
-        <% if (user.isAllowedTo('PROD_DATA:VIEW:EFF')) { %>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodShifts', 'PROPERTY:efficiency') %></div>
-          <div class="prop-value"><%- model.efficiency %></div>
-        </div>
-        <% } %>
-      </div>
+      <%- helpers.props(model, [
+        '!master',
+        '!leader',
+        '!operator',
+        'totalQuantityDone',
+        {id: 'efficiency', visible: user.isAllowedTo('PROD_DATA:VIEW:EFF')}
+      ]) %>
     </div>
   </div>
 </div>

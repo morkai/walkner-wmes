@@ -9,7 +9,9 @@ define([
 
   return Setting.extend({
 
-    urlRoot: '/qi/settings'
+    urlRoot: '/qi/settings',
+
+    nlsDomain: 'qiResults'
 
   });
 });

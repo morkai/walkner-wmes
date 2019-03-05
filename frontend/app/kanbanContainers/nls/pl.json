@@ -1,19 +1,6 @@
 {
   "BREADCRUMBS:base": "Baza Kanban",
   "BREADCRUMBS:browse": "Rodzaje pojemników",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:DELETED": "Rodzaj pojemników <em>{label}</em> został usunięty.",
-
-  "PAGE_ACTION:add": "Dodaj rodzaj",
-  "PAGE_ACTION:edit": "Edytuj rodzaj",
-  "PAGE_ACTION:delete": "Usuń rodzaj",
-
-  "PANEL:TITLE:details": "Szczegóły rodzaju pojemników",
-  "PANEL:TITLE:addForm": "Formularz dodawania rodzaju pojemników",
-  "PANEL:TITLE:editForm": "Formularz edycji rodzaju pojemników",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
@@ -22,18 +9,8 @@
   "PROPERTY:length": "Długość [mm]",
   "PROPERTY:image": "Obraz",
 
-  "filter:submit": "Filtruj rodzaje",
+  "filter:submit": "Filtruj",
 
-  "FORM:ACTION:add": "Dodaj rodzaj",
-  "FORM:ACTION:edit": "Edytuj rodzaj",
-  "FORM:ERROR:addFailure": "Nie udało się dodać rodzaju pojemników.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować rodzaju pojemników.",
   "FORM:ERROR:alreadyExists": "Rodzaj o danym ID już istnieje.",
-  "FORM:ERROR:imageFailure": "Nie udało się załadować obrazu.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia rodzaju pojemników",
-  "ACTION_FORM:BUTTON:delete": "Usuń rodzaj",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany rodzaj pojemników?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć rodzaj pojemników <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć rodzaju pojemników."
+  "FORM:ERROR:imageFailure": "Nie udało się załadować obrazu."
 }

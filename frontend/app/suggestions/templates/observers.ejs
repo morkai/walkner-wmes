@@ -1,21 +1,21 @@
 <table class="table table-bordered table-condensed table-hover suggestions-details-observers">
   <thead>
     <tr>
-      <th class="is-min"><%- t('suggestions', 'PROPERTY:observers:name') %></th>
-      <th class="is-min"><%- t('suggestions', 'PROPERTY:observers:role') %></th>
-      <th><%- t('suggestions', 'PROPERTY:observers:lastSeenAt') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:observers:name') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:observers:role') %></th>
+      <th><%- helpers.t('PROPERTY:observers:lastSeenAt') %></th>
     </tr>
   </thead>
   <tbody>
     <% if (!model.observers.length) { %>
     <tr>
-      <td colspan="3"><%- t('suggestions', 'observers:noData') %></td>
+      <td colspan="3"><%- helpers.t('observers:noData') %></td>
     </tr>
     <% } %>
     <% model.observers.forEach(function(observer) { %>
     <tr>
       <td class="is-min"><span class="userInfo" data-user-id="<%- observer.user.id %>"><span class="userInfo-label"><%= observer.user.label %></span></span></td>
-      <td class="is-min"><%= t('suggestions', 'role:' + observer.role) %></td>
+      <td class="is-min"><%= helpers.t('role:' + observer.role) %></td>
       <td><%= observer.lastSeenAt ? time.format(observer.lastSeenAt, 'LLLL') : '-' %></td>
     </tr>
     <% }) %>

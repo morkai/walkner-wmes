@@ -4,19 +4,19 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-_id" class="control-label is-required"><%- t('paintShopPaints', 'PROPERTY:_id') %></label>
+        <label for="<%- idPrefix %>-_id" class="control-label is-required"><%- helpers.t('PROPERTY:_id') %></label>
         <input id="<%- idPrefix %>-_id" class="form-control" type="text" autocomplete="new-password" name="_id" required maxlength="12" pattern="^[0-9]{12}$">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-shelf" class="control-label is-required"><%- t('paintShopPaints', 'PROPERTY:shelf') %></label>
+        <label for="<%- idPrefix %>-shelf" class="control-label is-required"><%- helpers.t('PROPERTY:shelf') %></label>
         <input id="<%- idPrefix %>-shelf" class="form-control" type="text" autocomplete="new-password" name="shelf" required maxlength="2">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-bin" class="control-label is-required"><%- t('paintShopPaints', 'PROPERTY:bin') %></label>
+        <label for="<%- idPrefix %>-bin" class="control-label is-required"><%- helpers.t('PROPERTY:bin') %></label>
         <input id="<%- idPrefix %>-bin" class="form-control" type="text" autocomplete="new-password" name="bin" required maxlength="6">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('paintShopPaints', 'PROPERTY:name') %></label>
+        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="40">
       </div>
     </div>

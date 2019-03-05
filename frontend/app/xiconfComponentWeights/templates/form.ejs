@@ -4,19 +4,19 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-nc12" class="control-label is-required"><%- t('xiconfComponentWeights', 'PROPERTY:nc12') %></label>
+        <label for="<%- idPrefix %>-nc12" class="control-label is-required"><%- helpers.t('PROPERTY:nc12') %></label>
         <input id="<%- idPrefix %>-nc12" class="form-control" type="text" autocomplete="new-password" name="nc12" maxlength="12" required autofocus pattern="^[0-9]{12}$">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-description" class="control-label is-required"><%- t('xiconfComponentWeights', 'PROPERTY:description') %></label>
+        <label for="<%- idPrefix %>-description" class="control-label is-required"><%- helpers.t('PROPERTY:description') %></label>
         <input id="<%- idPrefix %>-description" class="form-control" type="text" autocomplete="new-password" name="description" maxlength="100" required>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-minWeight" class="control-label is-required"><%- t('xiconfComponentWeights', 'PROPERTY:minWeight') %></label>
+        <label for="<%- idPrefix %>-minWeight" class="control-label is-required"><%- helpers.t('PROPERTY:minWeight') %></label>
         <input id="<%- idPrefix %>-minWeight" class="form-control" type="number" name="minWeight" required min="1" step="1">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-maxWeight" class="control-label is-required"><%- t('xiconfComponentWeights', 'PROPERTY:maxWeight') %></label>
+        <label for="<%- idPrefix %>-maxWeight" class="control-label is-required"><%- helpers.t('PROPERTY:maxWeight') %></label>
         <input id="<%- idPrefix %>-maxWeight" class="form-control" type="number" name="maxWeight" required min="1" step="1">
       </div>
     </div>

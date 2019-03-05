@@ -108,7 +108,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(View.prototype.serialize.apply(this, arguments), {
+      return _.assign(View.prototype.serialize.apply(this, arguments), {
         searchPhrase: this.model.get('searchPhrase'),
         path: this.model.getPath().map(function(folder)
         {

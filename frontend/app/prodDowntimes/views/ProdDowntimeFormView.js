@@ -33,7 +33,7 @@ define([
 
     template: formTemplate,
 
-    events: _.extend({
+    events: _.assign({
       'select2-removed #-reason, #-aor': function()
       {
         this.$id('reason').val('');
@@ -70,7 +70,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(FormView.prototype.serialize.call(this), {
+      return _.assign(FormView.prototype.serialize.call(this), {
         isChangeRequest: isChangeRequest()
       });
     },

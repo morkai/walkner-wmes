@@ -103,10 +103,9 @@ define([
       this.contents = null;
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         paint: !!this.options.paint,
         linkPfep: !!this.options.linkPfep && user.isAllowedTo('PFEP:VIEW'),
         bom: this.model.get('bom').toJSON()

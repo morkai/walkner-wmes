@@ -74,6 +74,14 @@ define([
       return row;
     },
 
+    serializeDetails: function()
+    {
+      return this.serialize({
+        orgUnits: true,
+        orderUrl: true
+      });
+    },
+
     onShiftChanged: function()
     {
       this.clear();

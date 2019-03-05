@@ -119,7 +119,7 @@ define([
         visibleSeries: {}
       };
 
-      return _.extend(defaults, NUMERIC_PROPS);
+      return _.assign(defaults, NUMERIC_PROPS);
     },
 
     initialize: function()
@@ -225,7 +225,7 @@ define([
 
       if (_.isEmpty(query))
       {
-        _.extend(attrs, JSON.parse(localStorage.LEAN_FILTER || '{}'));
+        _.assign(attrs, JSON.parse(localStorage.LEAN_FILTER || '{}'));
       }
 
       _.forEach(query, function(value, name)

@@ -37,7 +37,7 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
 
       'dblclick .is-selected': function(e)
       {
@@ -140,7 +140,7 @@ define([
         });
       }, this);
 
-      return _.extend(FormView.prototype.serialize.call(this), {
+      return _.assign(FormView.prototype.serialize.call(this), {
         image: image,
         regions: regions,
         renderRegion: regionTemplate
@@ -369,6 +369,7 @@ define([
       var formView = this;
       var dialogView = new RegionEditFormView({
         model: {
+          nlsDomain: this.model.getNlsDomain(),
           region: {
             question: regionEl.dataset.question,
             options: regionEl.dataset.options.split(',')
@@ -442,7 +443,9 @@ define([
     enterEditImage: function()
     {
       var formView = this;
-      var dialogView = new ImageEditFormView();
+      var dialogView = new ImageEditFormView({
+        model: this.model
+      });
 
       this.listenTo(dialogView, 'success', function(res)
       {
@@ -472,7 +475,7 @@ define([
     {
       this.startDrawing('region', function(ctx)
       {
-        var region = _.extend({
+        var region = _.assign({
           question: null,
           options: []
         }, ctx.value);

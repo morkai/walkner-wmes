@@ -1,37 +1,11 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Companies",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the companies.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the company.",
-    "MSG:DELETED": "Company <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add company",
-    "PAGE_ACTION:edit": "Edit company",
-    "PAGE_ACTION:delete": "Delete company",
-
-    "PANEL:TITLE:details": "Company's details",
-    "PANEL:TITLE:addForm": "Add company form",
-    "PANEL:TITLE:editForm": "Edit company form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
     "PROPERTY:shortName": "Short name",
-    "PROPERTY:color": "Color",
-
-    "FORM:ACTION:add": "Add company",
-    "FORM:ACTION:edit": "Edit company",
-    "FORM:ERROR:addFailure": "Failed to add the new company.",
-    "FORM:ERROR:editFailure": "Failed to edit the company.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Company deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete company",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen company?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> company?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the company."
+    "PROPERTY:color": "Color"
   },
   "pl": true
 }

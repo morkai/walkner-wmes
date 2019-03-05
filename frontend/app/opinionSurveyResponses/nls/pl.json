@@ -2,23 +2,9 @@
   "BREADCRUMBS:base": "Badanie Opinia",
   "BREADCRUMBS:browse": "Odpowiedzi",
   "BREADCRUMBS:details": "Odpowiedź",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie odpowiedzi nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie odpowiedzi nie powiodło się.",
-  "MSG:DELETED": "Odpowiedź została usunięta.",
-
-  "PAGE_ACTION:add": "Dodaj odpowiedź",
-  "PAGE_ACTION:edit": "Edytuj odpowiedź",
-  "PAGE_ACTION:delete": "Usuń odpowiedź",
-
-  "PANEL:TITLE:details": "Szczegóły odpowiedzi",
   "PANEL:TITLE:answers": "Odpowiedzi do ankiety",
   "PANEL:TITLE:comment": "Komentarz",
-  "PANEL:TITLE:addForm": "Formularz dodawania odpowiedzi",
-  "PANEL:TITLE:editForm": "Formularz edycji odpowiedzi",
 
   "PROPERTY:creator": "Dodający",
   "PROPERTY:createdAt": "Czas dodania",
@@ -29,19 +15,9 @@
   "PROPERTY:employer": "Pracodawca",
   "PROPERTY:answer": "Odpowiedź",
 
-  "FORM:ACTION:add": "Dodaj odpowiedź",
-  "FORM:ACTION:edit": "Edytuj odpowiedź",
-  "FORM:ERROR:addFailure": "Nie udało się dodać odpowiedzi.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować odpowiedzi.",
   "form:preview:tab": "Strona {pageNumber}",
 
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia odpowiedzi",
-  "ACTION_FORM:BUTTON:delete": "Usuń odpowiedź",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną odpowiedź?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną odpowiedź?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć odpowiedzi.",
-
-  "filter:submit": "Filtruj odpowiedzi",
+  "filter:submit": "Filtruj",
 
   "noComment": "Brak komentarza.",
 

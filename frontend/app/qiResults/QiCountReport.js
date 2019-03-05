@@ -17,6 +17,8 @@ define([
 
     urlRoot: '/qi/reports/count',
 
+    nlsDomain: 'qiResults',
+
     defaults: function()
     {
       return {
@@ -42,7 +44,7 @@ define([
         options = {};
       }
 
-      var data = options.data = _.extend(
+      var data = options.data = _.assign(
         options.data || {},
         _.pick(this.attributes, [
           'from', 'to', 'interval', 'productFamilies', 'kinds', 'errorCategories', 'faultCodes', 'inspector'

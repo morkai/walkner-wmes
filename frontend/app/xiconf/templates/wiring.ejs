@@ -2,7 +2,7 @@
   <tbody>
   <% probes.forEach(function(probe) { %>
   <tr class="xiconf-wiring-row">
-    <th class="is-min"><%- t('xiconf', 'wiring:probe:' + probe.n) %></th>
+    <th class="is-min"><%- helpers.t('wiring:probe:' + probe.n) %></th>
     <% probe.pins.forEach(function(pin) { %>
     <td class="is-min is-number"><span class="xiconf-wiring-pin <%- pin.inactive ? 'xiconf-wiring-inactive' : '' %> <%- pin.on ? 'xiconf-wiring-on' : '' %>"><%- pin.label %></span></td>
     <% }) %>

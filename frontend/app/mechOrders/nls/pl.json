@@ -1,8 +1,6 @@
 {
   "BREADCRUMBS:browse": "Zlecenia mechaniczne",
 
-  "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się.",
-
   "PAGE_ACTION:import": "Importuj zlecenia",
 
   "PANEL:TITLE:details": "Szczegóły zlecenia",
@@ -17,7 +15,7 @@
   "OPERATIONS:NO_DATA": "Zlecenie nie ma zdefiniowanych żadnych operacji.",
 
   "filter:placeholder:_id": "Dowolny 12NC",
-  "filter:submit": "Filtruj zlecenia",
+  "filter:submit": "Filtruj",
 
   "import:title": "Importowanie zleceń",
   "import:file": "Plik CSV ze zleceniami:",

@@ -1,38 +1,14 @@
 {
   "BREADCRUMBS:browse": "Linie produkcyjne",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie linii produkcyjnych nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie linii produkcyjnej nie powiodło się.",
-  "MSG:DELETED": "Linia produkcyjna <em>{label}</em> została usunięte.",
-
-  "PAGE_ACTION:add": "Dodaj linii produkcyjną",
-  "PAGE_ACTION:edit": "Edytuj linii produkcyjną",
-  "PAGE_ACTION:delete": "Usuń linii produkcyjną",
   "PAGE_ACTION:toggleDeactivated": "Ukryj dezaktywowane",
 
   "LIST:ACTION:production": "Pokaż formatkę produkcji",
-
-  "PANEL:TITLE:details": "Szczegóły linii produkcyjnej",
-  "PANEL:TITLE:addForm": "Formularz dodawania linii produkcyjnej",
-  "PANEL:TITLE:editForm": "Formularz edycji linii produkcyjnej",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:description": "Opis",
   "PROPERTY:workCenter": "WorkCenter",
   "PROPERTY:inventoryNo": "Nr inwentarzowy",
-  "PROPERTY:deactivatedAt": "Data dezaktywacji",
+  "PROPERTY:deactivatedAt": "Data dezaktywacji"
 
-  "FORM:ACTION:add": "Dodaj linię produkcyjną",
-  "FORM:ACTION:edit": "Edytuj linię produkcyjną",
-  "FORM:ERROR:addFailure": "Nie udało się dodać linii produkcyjnej.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować linii produkcyjnej.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia linii produkcyjnej",
-  "ACTION_FORM:BUTTON:delete": "Usuń linię produkcyjną",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną linię produkcyjną?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć linię produkcyjną <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć linii produkcyjnej."
 }

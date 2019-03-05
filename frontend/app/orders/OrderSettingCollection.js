@@ -19,6 +19,8 @@ define([
 
     topicSuffix: 'orders.**',
 
+    nlsDomain: 'orders',
+
     getValue: function(suffix)
     {
       var setting = this.get('orders.' + suffix);

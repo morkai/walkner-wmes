@@ -2,7 +2,44 @@
   "root": {
     "BREADCRUMBS:browse": "Production data change requests",
 
-    "MSG:LOADING_FAILURE": "Failed to load the change requests.",
+    "LIST:ACTION:confirm": "Confirm change request",
+
+    "PROPERTY:status": "Status",
+    "PROPERTY:division": "Division",
+    "PROPERTY:orgUnit": "Subdivision/Line",
+    "PROPERTY:prodLine": "Production line",
+    "PROPERTY:operation": "Operation",
+    "PROPERTY:createdAt": "Created at",
+    "PROPERTY:creator": "Creator",
+    "PROPERTY:creatorComment": "Request comment",
+    "PROPERTY:confirmedAt": "Confirmed at",
+    "PROPERTY:confirmer": "Confirmer",
+    "PROPERTY:confirmerComment": "Confirmation comment",
+
+    "status:new": "Todo",
+    "status:old": "Done",
+
+    "filter:submit": "Filtruj",
+
+    "operation:add:shift": "Add shift: {extra}",
+    "operation:add:order": "Add order: {extra}",
+    "operation:add:downtime": "Add downtime: {extra}",
+    "operation:edit:shift": "Edit shift: {extra}",
+    "operation:edit:order": "Edit order: {extra}",
+    "operation:edit:downtime": "Edit downtime: {extra}",
+    "operation:delete:shift": "Delete shift: {extra}",
+    "operation:delete:order": "Delete order: {extra}",
+    "operation:delete:downtime": "Delete downtime: {extra}",
+    "operation:edit:fteMaster": "Edit FTE (production): {extra}",
+    "operation:edit:fteWh": "Edit FTE (warehouse): {extra}",
+    "operation:edit:fteLeader": "Edit FTE (other): {extra}",
+
+    "confirm:accept": "Accept change",
+    "confirm:reject": "Reject change",
+    "confirm:success:accepted": "Production data was changed.",
+    "confirm:success:rejected": "Change request was rejected.",
+    "confirm:error:WRONG_ORDER": "Earlier requests must be handled first!",
+    "confirm:error": "Failed to handle the change request.",
 
     "fte:demand": "(demand)",
     "fte:supply": "(supply)"

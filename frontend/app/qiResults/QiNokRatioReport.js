@@ -17,6 +17,8 @@ define([
 
     urlRoot: '/qi/reports/nokRatio',
 
+    nlsDomain: 'qiResults',
+
     defaults: function()
     {
       return {
@@ -33,7 +35,7 @@ define([
         options = {};
       }
 
-      var data = options.data = _.extend(
+      var data = options.data = _.assign(
         options.data || {},
         _.pick(this.attributes, [
           'from', 'to', 'kinds'

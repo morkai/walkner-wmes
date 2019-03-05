@@ -1,18 +1,18 @@
 <div>
   <% if (!groups.length) { %>
-  <p class="well"><%- t('suggestions', 'engagement:empty') %></p>
+  <p class="well"><%- helpers.t('engagement:empty') %></p>
   <% } %>
   <% groups.forEach(function(group) { %>
   <h3><%- formatHeader(group.key) %></h3>
   <table class="table table-bordered table-striped table-hover">
     <thead>
     <tr>
-      <th class="is-min"><%- t('suggestions', 'engagement:name') %></th>
-      <th class="is-min"><%- t('suggestions', 'engagement:nearMisses') %></th>
-      <th class="is-min"><%- t('suggestions', 'engagement:suggestions') %></th>
-      <th class="is-min"><%- t('suggestions', 'engagement:behaviorObs') %></th>
-      <th class="is-min"><%- t('suggestions', 'engagement:minutesForSafety') %></th>
-      <th><%- t('suggestions', 'engagement:sections') %></th>
+      <th class="is-min"><%- helpers.t('engagement:name') %></th>
+      <th class="is-min"><%- helpers.t('engagement:nearMisses') %></th>
+      <th class="is-min"><%- helpers.t('engagement:suggestions') %></th>
+      <th class="is-min"><%- helpers.t('engagement:behaviorObs') %></th>
+      <th class="is-min"><%- helpers.t('engagement:minutesForSafety') %></th>
+      <th><%- helpers.t('engagement:sections') %></th>
     </tr>
     </thead>
     <tfoot>

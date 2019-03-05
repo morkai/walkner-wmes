@@ -1,38 +1,18 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Paint-shop",
+    "BREADCRUMBS:base": "Paint shop",
     "BREADCRUMBS:browse": "Paints",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the paints.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the paint.",
-    "MSG:DELETED": "Error category <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add paint",
-    "PAGE_ACTION:edit": "Edit paint",
-    "PAGE_ACTION:delete": "Delete paint",
-
-    "PANEL:TITLE:details": "Error paint details",
-    "PANEL:TITLE:addForm": "Add paint form",
-    "PANEL:TITLE:editForm": "Edit paint form",
+    "PAGE_ACTION:jump:placeholder": "12NC...",
 
     "PROPERTY:_id": "12NC",
     "PROPERTY:shelf": "Shelf",
     "PROPERTY:bin": "Bin",
     "PROPERTY:name": "Name",
 
-    "FORM:ACTION:add": "Add paint",
-    "FORM:ACTION:edit": "Edit paint",
-    "FORM:ERROR:addFailure": "Failed to add the new paint.",
-    "FORM:ERROR:editFailure": "Failed to edit the paint.",
+    "filter:submit": "Filter",
 
-    "ACTION_FORM:DIALOG_TITLE:delete": "Error category deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete paint",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen paint?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> paint?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the paint."
+    "FORM:ERROR:alreadyExists": "Paint with the specified 12NC already exists."
   },
   "pl": true
 }

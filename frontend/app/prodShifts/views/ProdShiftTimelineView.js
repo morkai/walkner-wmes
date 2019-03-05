@@ -38,10 +38,10 @@ define([
   aors,
   createDeletePageAction,
   calcOrderEfficiency,
-  renderTimelineIdlePopover,
-  renderTimelineWorkingPopover,
-  renderTimelineDowntimePopover,
-  renderTimelineWhPopover
+  timelineIdlePopoverTemplate,
+  timelineWorkingPopoverTemplate,
+  timelineDowntimePopoverTemplate,
+  timelineWhPopoverTemplate
 ) {
   'use strict';
 
@@ -82,6 +82,10 @@ define([
           this.timers.hidePopover = null;
         }
       }
+    },
+
+    model: {
+      nlsDomain: 'prodShifts'
     },
 
     initialize: function()
@@ -706,7 +710,7 @@ define([
 
       if (type === 'idle')
       {
-        return renderTimelineIdlePopover(templateData);
+        return this.renderPartialHtml(timelineIdlePopoverTemplate, templateData);
       }
 
       if (type === 'working')
@@ -731,7 +735,7 @@ define([
         templateData.lastTaktTime = model.getLastTaktTime();
         templateData.avgTaktTime = model.getAvgTaktTime();
 
-        return renderTimelineWorkingPopover(templateData);
+        return this.renderPartialHtml(timelineWorkingPopoverTemplate, templateData);
       }
 
       if (type === 'downtime')
@@ -743,7 +747,7 @@ define([
         templateData.aor = aor ? aor.getLabel() : data.aor;
         templateData.hasOrder = !!data.prodShiftOrder;
 
-        return renderTimelineDowntimePopover(templateData);
+        return this.renderPartialHtml(timelineDowntimePopoverTemplate, templateData);
       }
 
       if (type === 'wh')
@@ -755,7 +759,7 @@ define([
         templateData.nextQty = '0';
         templateData.nextTime = '0s';
 
-        return renderTimelineWhPopover(templateData);
+        return this.renderPartialHtml(timelineWhPopoverTemplate, templateData);
       }
     },
 

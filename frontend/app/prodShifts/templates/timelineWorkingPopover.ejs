@@ -2,53 +2,53 @@
   <% if (managing) { %>
   <tfoot>
     <tr>
-      <td colspan="2"><button class="btn btn-block btn-danger prodShifts-timeline-addDowntime"><%- t('prodShifts', 'timeline:action:addDowntime') %></button></td>
+      <td colspan="2"><button class="btn btn-block btn-danger prodShifts-timeline-addDowntime"><%- helpers.t('timeline:action:addDowntime') %></button></td>
     </tr>
     <tr>
-      <td colspan="2"><button class="btn btn-block btn-success prodShifts-timeline-editOrder"><%- t('prodShifts', 'timeline:action:editOrder') %></button></td>
+      <td colspan="2"><button class="btn btn-block btn-success prodShifts-timeline-editOrder"><%- helpers.t('timeline:action:editOrder') %></button></td>
     </tr>
     <tr>
-      <td colspan="2"><button class="btn btn-block btn-warning prodShifts-timeline-deleteOrder"><%- t('prodShifts', 'timeline:action:deleteOrder') %></button></td>
+      <td colspan="2"><button class="btn btn-block btn-warning prodShifts-timeline-deleteOrder"><%- helpers.t('timeline:action:deleteOrder') %></button></td>
     </tr>
   </tfoot>
   <% } %>
   <tbody>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:startedAt') %></th>
+      <th><%- helpers.t('timeline:popover:startedAt') %></th>
       <td><%- startedAt %></td>
     </tr>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:duration') %></th>
+      <th><%- helpers.t('timeline:popover:duration') %></th>
       <td><%- duration %></td>
     </tr>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:order') %></th>
+      <th><%- helpers.t('timeline:popover:order') %></th>
       <td><%- order %>, <%- operation %></td>
     </tr>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:workerCount') %></th>
+      <th><%- helpers.t('timeline:popover:workerCount') %></th>
       <td><%- workerCount %></td>
     </tr>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:quantityDone') %></th>
+      <th><%- helpers.t('timeline:popover:quantityDone') %></th>
       <td><%- quantityDone %></td>
     </tr>
     <% if (user.isAllowedTo('PROD_DATA:VIEW:EFF')) { %>
     <% if (sapTaktTime) { %>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:sapTaktTime') %></th>
+      <th><%- helpers.t('timeline:popover:sapTaktTime') %></th>
       <td><%- time.toString(sapTaktTime) %></td>
     </tr>
     <% } %>
     <% if (avgTaktTime) { %>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:avgTaktTime') %></th>
+      <th><%- helpers.t('timeline:popover:avgTaktTime') %></th>
       <td><%- time.toString(avgTaktTime) %></td>
     </tr>
     <% } %>
     <% if (efficiency !== '?') { %>
     <tr>
-      <th><%- t('prodShifts', 'timeline:popover:efficiency') %></th>
+      <th><%- helpers.t('timeline:popover:efficiency') %></th>
       <td><%- efficiency %></td>
     </tr>
     <% } %>

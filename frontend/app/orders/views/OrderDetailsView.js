@@ -28,7 +28,7 @@ define([
           delayReasons: this.delayReasons
         }),
         panelType: this.options.panelType || 'primary',
-        panelTitle: this.options.panelTitle || t('orders', 'PANEL:TITLE:details'),
+        panelTitle: this.options.panelTitle || t('core', 'PANEL:TITLE:details'),
         linkOrderNo: !!this.options.linkOrderNo
       };
     }

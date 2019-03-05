@@ -1,25 +1,6 @@
 {
   "BREADCRUMBS:browse": "Karty pracy",
-  "BREADCRUMBS:details": "Karta pracy",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie kart pracy nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie karty pracy nie powiodło się.",
-  "MSG:DELETED": "Karta pracy <em>{label}</em> została usunięta.",
-  "MSG:jump:404": "Nie znaleziono karty pracy o ID <em>{rid}</em>.",
-
-  "PAGE_ACTION:export": "Eksportuj karty pracy",
-  "PAGE_ACTION:add": "Dodaj kartę pracy",
-  "PAGE_ACTION:edit": "Edytuj kartę pracy",
-  "PAGE_ACTION:delete": "Usuń kartę pracy",
-  "PAGE_ACTION:jump:title": "Skocz do karty pracy po ID",
-  "PAGE_ACTION:jump:placeholder": "ID karty pracy",
-
-  "PANEL:TITLE:details": "Szczegóły karty pracy",
-  "PANEL:TITLE:addForm": "Formularz dodawania karty pracy",
-  "PANEL:TITLE:editForm": "Formularz edycji karty pracy",
   "PANEL:TITLE:details:orders": "Lista części",
 
   "filter:submit": "Filtruj",
@@ -67,17 +48,7 @@
   "PROPERTY:order.downtimes": "Straty czasu z polecenia mistrza [minuty]",
   "PROPERTY:order.machineManHours": "RBH",
 
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia karty pracy",
-  "ACTION_FORM:BUTTON:delete": "Usuń kartę pracy",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną kartę pracy?<br><br>Wraz z kartą pracy usunięte zostaną zdefiniowane w niej Zlecenia i Przestoje.",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć kartę pracy <em>{label}</em>?<br><br>Wraz z kartą pracy usunięte zostaną zdefiniowane w niej Zlecenia i Przestoje.",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć karty pracy.",
-
-  "FORM:ACTION:add": "Dodaj kartę pracy",
-  "FORM:ACTION:edit": "Edytuj kartę pracy",
   "FROM:ACTION:saveOverlapping": "Zapisz kartę pracy z pokrywającymi się czasami zleceń",
-  "FORM:ERROR:addFailure": "Nie udało się dodać karty pracy.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować karty pracy.",
   "FORM:ERROR:startedAt:boundries": "Godz. rozp. musi mieścić się w zakresie godzinowym wybranej zmiany.",
   "FORM:ERROR:finishedAt:boundries": "Godz. zak. musi mieścić się w zakresie godzinowym wybranej zmiany.",
   "FORM:ERROR:finishedAt:gt": "Godz. zak. musi być późniejsza niż Godz. rozp.",

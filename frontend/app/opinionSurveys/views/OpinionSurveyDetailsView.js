@@ -17,7 +17,7 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
 
     }, DetailsView.prototype.events),
 

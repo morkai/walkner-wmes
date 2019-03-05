@@ -1,49 +1,49 @@
 <div class="panel panel-default xiconfPrograms-stepPanel xiconfPrograms-stepPanel-pe">
-  <div class="panel-heading"><%- stepIndex + 1 %>. <%- t('xiconfPrograms', 'step:pe') %></div>
+  <div class="panel-heading"><%- stepIndex + 1 %>. <%- helpers.t('step:pe') %></div>
   <div class="panel-details">
     <div class="props first">
       <% if (model.type === 't24vdc') { %>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:startTime') %></div>
         <div class="prop-value"><%= time.toString(step.startTime, false, true) %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:duration') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:duration') %></div>
         <div class="prop-value"><%= time.toString(step.duration, false, true) %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:voltage') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:voltage') %></div>
         <div class="prop-value"><%= step.voltage.toLocaleString() %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:resistance:max') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:resistance:max') %></div>
         <div class="prop-value"><%= step.resistanceMax.toLocaleString() %></div>
       </div>
       <% } %>
       <% if (model.type === 'glp2') { %>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:label') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:label') %></div>
         <div class="prop-value"><%= step.label %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:duration') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:duration') %></div>
         <div class="prop-value"><%= time.toString(step.duration, false, true) %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:resistance:max') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:resistance:max') %></div>
         <div class="prop-value"><%= step.setValue.toLocaleString() %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:current') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:current') %></div>
         <div class="prop-value"><%= step.ipr.toLocaleString() %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:voltage') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:voltage') %></div>
         <div class="prop-value"><%= step.u.toLocaleString() %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:buzzer') %></div>
-        <div class="prop-value"><%- t('xiconfPrograms', 'PROPERTY:buzzer:' + step.buzzer) %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:buzzer') %></div>
+        <div class="prop-value"><%- helpers.t('PROPERTY:buzzer:' + step.buzzer) %></div>
       </div>
       <% } %>
     </div>

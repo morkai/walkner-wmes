@@ -13,7 +13,8 @@
 .prop + .prop {
   border-top: 1px dotted #d4d4d4;
 }
-.props.first .prop:first-child {
+.props:first-child .prop-first-child,
+.props.first > .prop:first-child {
   border-top: 0;
 }
 .prop-name,

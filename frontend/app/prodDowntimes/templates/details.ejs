@@ -1,7 +1,7 @@
 <div>
   <% include detailsProps.ejs %>
   <div id="<%- idPrefix %>-history" class="panel panel-default prodDowntimes-history">
-    <div class="panel-heading"><%- t('prodDowntimes', 'PANEL:TITLE:history') %></div>
+    <div class="panel-heading"><%- helpers.t('PANEL:TITLE:history') %></div>
     <% model.history.forEach(function(item, itemIndex) { %>
     <% include historyItem.ejs %>
     <% }) %>

@@ -63,7 +63,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(this.model.serializeWithTotals(), {
+      return _.assign(this.model.serializeWithTotals(), {
         idPrefix: this.idPrefix,
         editable: false,
         withFunctions: this.model.isWithFunctions(),

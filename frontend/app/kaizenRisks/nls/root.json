@@ -2,37 +2,11 @@
   "root": {
     "BREADCRUMBS:base": "Improvements",
     "BREADCRUMBS:browse": "Risks",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the risks.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the risk.",
-    "MSG:DELETED": "Risk <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add risk",
-    "PAGE_ACTION:edit": "Edit risk",
-    "PAGE_ACTION:delete": "Delete risk",
-
-    "PANEL:TITLE:details": "Risk's details",
-    "PANEL:TITLE:addForm": "Add risk form",
-    "PANEL:TITLE:editForm": "Edit risk form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
     "PROPERTY:description": "Description",
-    "PROPERTY:position": "Position",
-
-    "FORM:ACTION:add": "Add risk",
-    "FORM:ACTION:edit": "Edit risk",
-    "FORM:ERROR:addFailure": "Failed to add the new risk.",
-    "FORM:ERROR:editFailure": "Failed to edit the risk.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Risk deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete risk",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen risk?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> risk?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the risk."
+    "PROPERTY:position": "Position"
   },
   "pl": true
 }

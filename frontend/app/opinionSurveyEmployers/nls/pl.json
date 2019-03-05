@@ -1,35 +1,9 @@
 {
   "BREADCRUMBS:base": "Badanie Opinia",
   "BREADCRUMBS:browse": "Pracodawcy",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie pracodawcy nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie pracodawcy nie powiodło się.",
-  "MSG:DELETED": "Pracodawca <em>{label}</em> został usunięty.",
-
-  "PAGE_ACTION:add": "Dodaj pracodawcę",
-  "PAGE_ACTION:edit": "Edytuj pracodawcę",
-  "PAGE_ACTION:delete": "Usuń pracodawcę",
-
-  "PANEL:TITLE:details": "Szczegóły pracodawcy",
-  "PANEL:TITLE:addForm": "Formularz dodawania pracodawcy",
-  "PANEL:TITLE:editForm": "Formularz edycji pracodawcy",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:full": "Pełna nazwa",
   "PROPERTY:short": "Krótka nazwa",
-  "PROPERTY:color": "Kolor",
-
-  "FORM:ACTION:add": "Dodaj pracodawcę",
-  "FORM:ACTION:edit": "Edytuj pracodawcę",
-  "FORM:ERROR:addFailure": "Nie udało się dodać pracodawcy.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować pracodawcy.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia pracodawcy",
-  "ACTION_FORM:BUTTON:delete": "Usuń pracodawcę",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybranego pracodawcę?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć pracodawcę <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć pracodawcy."
+  "PROPERTY:color": "Kolor"
 }

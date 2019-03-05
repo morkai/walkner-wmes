@@ -28,9 +28,9 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      return _.extend(DetailsView.prototype.serialize.call(this), {
+      return _.assign(DetailsView.prototype.getTemplateData.call(this), {
         renderOrdersList: renderOrdersList,
         extended: false
       });

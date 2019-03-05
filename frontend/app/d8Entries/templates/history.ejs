@@ -4,11 +4,6 @@
   <% include historyItem.ejs %>
   <% }) %>
   <form class="d8Entries-history-form">
-    <% if (canEdit) { %>
-    <div class="message message-inline message-info">
-      <p><%- t('d8Entries', 'history:editMessage', {editUrl: editUrl}) %></p>
-    </div>
-    <% } %>
     <div class="form-group">
       <label for="<%- idPrefix %>-comment" class="control-label"><%- t('d8Entries', 'PROPERTY:comment') %></label>
       <textarea id="<%- idPrefix %>-comment" class="form-control" name="comment" rows="3"></textarea>

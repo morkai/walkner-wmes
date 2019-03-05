@@ -2,37 +2,21 @@
   "root": {
     "BREADCRUMBS:base": "Near miss",
     "BREADCRUMBS:browse": "Entries",
-    "BREADCRUMBS:addForm": "Add",
-    "BREADCRUMBS:editForm": "Edit",
-    "BREADCRUMBS:ACTION_FORM:delete": "Delete",
     "BREADCRUMBS:settings": "Settings",
-    "BREADCRUMBS:reports:count": "Number of entries",
+    "BREADCRUMBS:reports:count": "Entry count",
     "BREADCRUMBS:reports:summary": "Summary",
 
-    "MSG:LOADING_FAILURE": "Failed to load entries.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the entry.",
-    "MSG:DELETED": "Entry <em>{label}</em> was deleted.",
-    "MSG:jump:404": "Entry <em>{rid}</em> doesn't exist.",
     "MSG:markAsSeen:failure": "Failed to mark the entry as read.",
     "MSG:observe:failure": "Failed to subscribe to the entry.",
     "MSG:unobserve:failure": "Failed to unsubscribe from the entry.",
     "MSG:comment:failure": "Failed to comment the entry.",
 
     "PAGE_ACTION:settings": "Settings",
-    "PAGE_ACTION:export": "Export entries",
-    "PAGE_ACTION:add": "Add entry",
-    "PAGE_ACTION:edit": "Edit entry",
-    "PAGE_ACTION:delete": "Delete entry",
     "PAGE_ACTION:markAsSeen": "Mark as read",
     "PAGE_ACTION:observe": "Subscribe",
     "PAGE_ACTION:unobserve": "Unsubscribe",
-    "PAGE_ACTION:jump:title": "Jump to entry by ID",
-    "PAGE_ACTION:jump:placeholder": "Entry ID",
 
-    "PANEL:TITLE:details": "Entry details",
     "PANEL:TITLE:changes": "Entry changes history",
-    "PANEL:TITLE:addForm": "Add entry form",
-    "PANEL:TITLE:editForm": "Edit entry form",
 
     "LIST:owners": "{first} +{count, plural, one{1 other} other{{count} others}}",
 
@@ -129,8 +113,6 @@
     "FORM:backTo:minutesForSafetyCards:cancel": "Cancel and go back to the minutes card",
     "FORM:backTo:minutesForSafetyCards:add": "Add entry and go back to the minutes card",
     "FORM:backTo:minutesForSafetyCards:edit": "Save and go back to the minutes card",
-    "FORM:ERROR:addFailure": "Failed to add the entry.",
-    "FORM:ERROR:editFailure": "Failed to edit the entry.",
     "FORM:ERROR:onlyKaizen": "Kaizen requires a Near Miss or a Suggestion!",
     "FORM:ERROR:upload": "Failed to upload the attachments.",
     "FORM:ERROR:date": "The specified date cannot differ from the current date by more than {days} days.",
@@ -147,12 +129,6 @@
     "FORM:help:date:diff": "The chosen date is {days} days in the {dir}.",
     "FORM:fm24:confirmation": "Include a request to confirm FM-24 report acceptance by e-mail:",
 
-    "ACTION_FORM:DIALOG_TITLE:delete": "Entry deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete entry",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen entry?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> entry?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the entry.",
-
     "filter:cause": "Cause",
     "filter:user:mine": "Mine",
     "filter:user:unseen": "Unread",
@@ -163,7 +139,6 @@
     "history:added": "added the entry.",
     "history:observer:0": "subscribed to the entry.",
     "history:observer:1": "unsubscribe from the entry.",
-    "history:editMessage": "Here you can add a new comment. If you also want to change some properties, <a href='{editUrl}'>then use the edit form</a>.",
     "history:submit": "Comment",
 
     "report:title:type": "Entry count",

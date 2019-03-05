@@ -25,7 +25,7 @@ define([
 
     template: template,
 
-    events: _.extend({
+    events: _.assign({
       'click #-customTimes': function()
       {
         this.$id('customTimes').blur();
@@ -108,7 +108,7 @@ define([
       {
         viewport.closeDialog();
 
-        this.model.setCustomTimes(_.extend(this.serializeFormToQuery(), data));
+        this.model.setCustomTimes(_.assign(this.serializeFormToQuery(), data));
       });
 
       this.listenToOnce(customTimesView, 'reset', function()

@@ -1,19 +1,19 @@
 <form class="well filter-form">
   <div class="form-group">
-    <label for="<%- idPrefix %>-_id"><%- t('licenses', 'PROPERTY:_id') %></label>
+    <label for="<%- idPrefix %>-_id"><%- helpers.t('PROPERTY:_id') %></label>
     <input id="<%- idPrefix %>-_id" class="form-control" name="_id" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-appId"><%- t('licenses', 'PROPERTY:appName') %></label>
+    <label for="<%- idPrefix %>-appId"><%- helpers.t('PROPERTY:appName') %></label>
     <select id="<%- idPrefix %>-appId" class="form-control" name="appId">
       <option value=""></option>
       <% ['msys-xiconf-lp', 'walkner-xiconf', 'walkner-icpo', 'wmes-docs'].forEach(function(appId) { %>
-      <option value="<%- appId %>"><%- t('licenses', 'app:' + appId) %></option>
+      <option value="<%- appId %>"><%- helpers.t('app:' + appId) %></option>
       <% }) %>
     </select>
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('licenses', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

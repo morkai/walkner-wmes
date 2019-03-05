@@ -54,20 +54,6 @@ define([
       this.listenTo(this.model, 'change', _.after(2, this.render.bind(this)));
     },
 
-    serialize: function()
-    {
-      var model = this.model.toJSON();
-
-      model.startedAt = Date.parse(model.startedAt);
-      model.finishedAt = Date.parse(model.finishedAt);
-
-      return {
-        idPrefix: this.idPrefix,
-        model: model,
-        log: this.model.getDecoratedLog()
-      };
-    },
-
     beforeRender: function()
     {
       this.highlighted = {

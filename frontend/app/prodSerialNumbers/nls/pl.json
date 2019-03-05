@@ -1,10 +1,6 @@
 {
   "BREADCRUMBS:browse": "Numery seryjne",
 
-  "MSG:LOADING_FAILURE": "Ładowanie numerów seryjnych nie powiodło się.",
-
-  "PAGE_ACTION:export": "Eksportuj nr seryjne",
-
   "filter:submit": "Filtruj",
 
   "PROPERTY:_id": "Nr seryjny",

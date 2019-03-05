@@ -137,7 +137,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(View.prototype.serialize.apply(this, arguments), {
+      return _.assign(View.prototype.serialize.apply(this, arguments), {
         rootFolders: this.model.getRootFolders(),
         renderFolder: this.renderFolder
       });

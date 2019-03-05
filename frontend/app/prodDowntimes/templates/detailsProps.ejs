@@ -1,123 +1,73 @@
 <div id="<%- idPrefix %>-props" class="panel panel-<%- model.statusClassName %> prodDowntimes-details">
-  <div class="panel-heading">
-    <%- t('prodDowntimes', 'PANEL:TITLE:details') %>
-  </div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details row">
     <div class="col-md-4">
-      <div class="props first">
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:pressWorksheet') %></div>
-          <div class="prop-value">
-            <% if (model.pressWorksheet) { %>
-            <% if (user.isAllowedTo('PRESS_WORKSHEETS:VIEW')) { %>
-            <a href="#pressWorksheets/<%- model.pressWorksheet %>"><%- t('core', 'BOOL:true') %></a>
-            <% } else { %>
-            <%- t('core', 'BOOL:true') %>
-            <% } %>
-            <% } else { %>
-            -
-            <% } %>
-          </div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:shift') %></div>
-          <div class="prop-value"><%- model.prodShiftText %></div>
-        </div>
-        <% if (model.productName) { %>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:order') %></div>
-          <div class="prop-value"><a href="#prodShiftOrders/<%- model.prodShiftOrder._id %>"><%- model.orderId %></a>: <%= model.productName %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:operation') %></div>
-          <div class="prop-value">
-            <% if (model.operationName) { %>
-            <%- model.operationNo %>: <%= model.operationName %>
-            <% } else { %>
-            <%- model.operationNo %>
-            <% } %>
-          </div>
-        </div>
-        <% } else { %>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:order') %></div>
-          <div class="prop-value"><%- model.order %></div>
-        </div>
-        <% } %>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:master') %></div>
-          <div class="prop-value"><%- model.masterInfo %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:leader') %></div>
-          <div class="prop-value"><%- model.leaderInfo %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:operator') %></div>
-          <div class="prop-value"><%- model.operatorInfo %></div>
-        </div>
-      </div>
+      <%- helpers.props(model, [
+        {id: '!pressWorksheet', visible: !!model.productName, value: function(pw)
+        {
+          if (pw)
+          {
+            if (user.isAllowedTo('PRESS_WORKSHEETS:VIEW'))
+            {
+              return '<a href="#pressWorksheets/' + model.pressWorksheet + '">' + t('core', 'BOOL:true') + '</a>';
+            }
+
+            return t('core', 'BOOL:true');
+          }
+
+          return t('core', 'BOOL:false');
+        }},
+        {id: '!shift', value: model.prodShiftText},
+        {id: '!order', visible: !!model.productName, value: function()
+        {
+          if (user.isAllowedTo('PROD_DATA:VIEW'))
+          {
+            return '<a href="#prodShiftOrders/' + model.prodShiftOrder._id + '">' + model.orderId + '</a>: '
+              + _.escape(model.productName);
+          }
+
+          return model.orderId + ': ' + _.escape(model.productName);
+        }},
+        {
+          id: 'operation',
+          visible: !!model.productName,
+          value: model.operationNo + (model.operationName ? (': ' + model.operationName) : '')
+        },
+        {id: '!order', visible: !model.productName},
+        {id: '!master', value: model.masterInfo},
+        {id: '!leader', value: model.leaderInfo},
+        {id: '!operator', value: model.operatorInfo}
+      ]) %>
     </div>
     <div class="col-md-4">
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:status') %></div>
-          <div class="prop-value"><%= model.statusText %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:reason') %></div>
-          <div class="prop-value"><%= model.reason %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:aor') %></div>
-          <div class="prop-value"><%= model.aor || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:startedAt') %></div>
-          <div class="prop-value"><%- model.startedAt %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:finishedAt') %></div>
-          <div class="prop-value"><%- model.finishedAt %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('prodDowntimes', 'PROPERTY:duration') %></div>
-          <div id="<%- idPrefix %>-duration" class="prop-value"><%- model.duration %></div>
-        </div>
-      </div>
+      <%- helpers.props(model, [
+        {id: 'status', value: model.statusText},
+        'reason',
+        'aor',
+        'startedAt',
+        'finishedAt',
+        'duration'
+      ]) %>
     </div>
     <div class="col-md-4">
-      <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- t('core', 'ORG_UNIT:division') %></div>
-          <div class="prop-value"><%= model.division %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('core', 'ORG_UNIT:subdivision') %></div>
-          <div class="prop-value"><%= model.subdivision %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('core', 'ORG_UNIT:mrpController') %></div>
-          <div class="prop-value">
-            <%= model.mrpControllers %>
-            <% if (model.orderMrp) { %>
-            <%- t('prodDowntimes', 'details:orderMrp', {mrp: model.orderMrp}) %>
-            <% } %>
-          </div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('core', 'ORG_UNIT:prodFlow') %></div>
-          <div class="prop-value"><%= model.prodFlow %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('core', 'ORG_UNIT:workCenter') %></div>
-          <div class="prop-value"><%= model.workCenter %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('core', 'ORG_UNIT:prodLine') %></div>
-          <div class="prop-value"><%= model.prodLine %></div>
-        </div>
-      </div>
+      <%- helpers.props(model, [
+        'division',
+        'subdivision',
+        {id: '!mrpControllers', value: function(mrps)
+        {
+          var value = _.escape(mrps);
+
+          if (model.orderMrp)
+          {
+            value += ' ' + helpers.t('details:orderMrp', {mrp: model.orderMrp});
+          }
+
+          return value;
+        }},
+        'prodFlow',
+        'workCenter',
+        'prodLine'
+      ]) %>
     </div>
   </div>
 </div>

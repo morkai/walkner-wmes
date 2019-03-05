@@ -1,26 +1,7 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Worksheets",
-    "BREADCRUMBS:details": "Worksheet",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the worksheets.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the worksheet.",
-    "MSG:DELETED": "Worksheet <em>{label}</em> was deleted.",
-    "MSG:jump:404": "Couldn't find a worksheet with ID <em>{rid}</em>.",
-
-    "PAGE_ACTION:export": "Export worksheets",
-    "PAGE_ACTION:add": "Add worksheet",
-    "PAGE_ACTION:edit": "Edit worksheet",
-    "PAGE_ACTION:delete": "Delete worksheet",
-    "PAGE_ACTION:jump:title": "Jump to worksheet by ID",
-    "PAGE_ACTION:jump:placeholder": "Worksheet ID",
-
-    "PANEL:TITLE:details": "Worksheet's details",
-    "PANEL:TITLE:addForm": "Add worksheet form",
-    "PANEL:TITLE:editForm": "Edit worksheet form",
     "PANEL:TITLE:details:orders": "Parts",
 
     "filter:submit": "Filter",
@@ -69,17 +50,7 @@
     "PROPERTY:order.downtimes": "Downtimes by master's instruction [minutes]",
     "PROPERTY:order.machineManHours": "MH",
 
-    "ACTION_FORM:DIALOG_TITLE:delete": "Worksheet deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete worksheet",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen worksheet?<br><br>Along with the worksheet, all Orders and Downtimes defined in it will be deleted.",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> worksheet? Along with the worksheet, all Orders and Downtimes defined in it will be deleted.",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the worksheet.",
-
-    "FORM:ACTION:add": "Add worksheet",
-    "FORM:ACTION:edit": "Edit worksheet",
     "FROM:ACTION:saveOverlapping": "Save worksheet with overlapping orders",
-    "FORM:ERROR:addFailure": "Failed to add the worksheet.",
-    "FORM:ERROR:editFailure": "Failed to edit the worksheet.",
     "FORM:ERROR:startedAt:boundries": "Started at must be within the boundries of the selected shift.",
     "FORM:ERROR:finishedAt:boundries": "Finished at must be within the boundries of the selected shift.",
     "FORM:ERROR:finishedAt:gt": "Finished at must be later than Started at.",

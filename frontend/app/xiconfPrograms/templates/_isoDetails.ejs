@@ -1,37 +1,37 @@
 <div class="panel panel-default xiconfPrograms-stepPanel xiconfPrograms-stepPanel-iso">
-  <div class="panel-heading"><%- stepIndex + 1 %>. <%- t('xiconfPrograms', 'step:iso') %></div>
+  <div class="panel-heading"><%- stepIndex + 1 %>. <%- helpers.t('step:iso') %></div>
   <div class="panel-details">
     <div class="props first">
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:label') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:label') %></div>
         <div class="prop-value"><%= step.label %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:startTime') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:startTime') %></div>
         <div class="prop-value"><%= time.toString(step.startTime, false, true) %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:duration') %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:duration') %></div>
         <div class="prop-value"><%= time.toString(step.duration, false, true) %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:mode') %></div>
-        <div class="prop-value"><%- t('xiconfPrograms', 'glp2:iso:mode:' + step.mode) %></div>
+        <div class="prop-name"><%- helpers.t('PROPERTY:mode') %></div>
+        <div class="prop-value"><%- helpers.t('glp2:iso:mode:' + step.mode) %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'glp2:iso:mode:' + step.mode + ':label') %></div>
+        <div class="prop-name"><%- helpers.t('glp2:iso:mode:' + step.mode + ':label') %></div>
         <div class="prop-value"><%- step.setValue.toLocaleString() %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'glp2:iso:u') %></div>
+        <div class="prop-name"><%- helpers.t('glp2:iso:u') %></div>
         <div class="prop-value"><%- step.u.toLocaleString() %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'glp2:iso:rMax') %></div>
+        <div class="prop-name"><%- helpers.t('glp2:iso:rMax') %></div>
         <div class="prop-value"><%- step.rMax ? step.rMax.toLocaleString() : '-' %></div>
       </div>
       <div class="prop">
-        <div class="prop-name"><%- t('xiconfPrograms', 'glp2:iso:ramp') %></div>
+        <div class="prop-name"><%- helpers.t('glp2:iso:ramp') %></div>
         <div class="prop-value"><%- time.toString(step.ramp, false, true) %></div>
       </div>
     </div>

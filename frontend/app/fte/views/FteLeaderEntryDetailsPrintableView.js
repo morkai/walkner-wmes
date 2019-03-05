@@ -24,7 +24,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(this.model.serializeWithTotals(), {
+      return _.assign(this.model.serializeWithTotals(), {
         round: fractionsUtil.round
       });
     },

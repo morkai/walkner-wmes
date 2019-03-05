@@ -2,7 +2,6 @@
 
 define([
   'underscore',
-  'jquery',
   'form2js',
   'app/i18n',
   'app/time',
@@ -22,7 +21,6 @@ define([
   'app/behaviorObsCards/templates/_formRidEditor'
 ], function(
   _,
-  $,
   form2js,
   t,
   time,
@@ -172,7 +170,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(FormView.prototype.serialize.call(this), {
+      return _.assign(FormView.prototype.serialize.call(this), {
 
       });
     },
@@ -435,6 +433,7 @@ define([
         data: companies.map(idAndLabel)
       });
 
+      buttonGroup.toggle(this.$id('shift'));
       this.setUpObserverSelect2();
       this.setUpSuperiorSelect2();
       this.renderObservations();

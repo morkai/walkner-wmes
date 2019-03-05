@@ -2,37 +2,22 @@
   "root": {
     "BREADCRUMBS:base": "Suggestions",
     "BREADCRUMBS:browse": "Entries",
-    "BREADCRUMBS:addForm": "Add",
-    "BREADCRUMBS:editForm": "Edit",
-    "BREADCRUMBS:ACTION_FORM:delete": "Delete",
     "BREADCRUMBS:reports:count": "Number of entries",
     "BREADCRUMBS:reports:summary": "Summary",
     "BREADCRUMBS:reports:engagement": "Engagement",
 
-    "MSG:LOADING_FAILURE": "Failed to load entries.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the entry.",
-    "MSG:DELETED": "Entry <em>{label}</em> was deleted.",
-    "MSG:jump:404": "Entry <em>{rid}</em> doesn't exist.",
     "MSG:markAsSeen:failure": "Failed to mark the entry as read.",
     "MSG:observe:failure": "Failed to subscribe to the entry.",
     "MSG:unobserve:failure": "Failed to unsubscribe from the entry.",
     "MSG:comment:failure": "Failed to comment the entry.",
 
-    "PAGE_ACTION:export": "Export entries",
     "PAGE_ACTION:add": "Add entry",
-    "PAGE_ACTION:edit": "Edit entry",
-    "PAGE_ACTION:delete": "Delete entry",
     "PAGE_ACTION:markAsSeen": "Mark as read",
     "PAGE_ACTION:observe": "Subscribe",
     "PAGE_ACTION:unobserve": "Unsubscribe",
-    "PAGE_ACTION:jump:title": "Jump to entry by ID",
-    "PAGE_ACTION:jump:placeholder": "Entry ID",
     "PAGE_ACTION:print": "Printable version",
 
-    "PANEL:TITLE:details": "Entry details",
     "PANEL:TITLE:changes": "Entry changes history",
-    "PANEL:TITLE:addForm": "Add entry form",
-    "PANEL:TITLE:editForm": "Edit entry form",
 
     "LIST:owners": "{first} +{count, plural, one{1 other} other{{count} others}}",
 
@@ -47,6 +32,7 @@
     "PROPERTY:categories": "Categories",
     "PROPERTY:productFamily": "Product family",
     "PROPERTY:section": "Section",
+    "PROPERTY:owners": "Owners",
     "PROPERTY:suggestionOwners": "Owners",
     "PROPERTY:kaizenOwners": "Owners",
     "PROPERTY:kaizenStartDate": "Start date",
@@ -105,7 +91,6 @@
     "attachments:after:current": "Current state after",
     "attachments:after:new": "New state after",
 
-    "FORM:ACTION:add": "Add entry",
     "FORM:ACTION:edit": "Save",
     "FORM:backTo:behaviorObsCards:cancel": "Cancel and go back to the observations card",
     "FORM:backTo:behaviorObsCards:add": "Add entry and go back to the observations card",
@@ -113,8 +98,6 @@
     "FORM:backTo:minutesForSafetyCards:cancel": "Cancel and go back to the minutes card",
     "FORM:backTo:minutesForSafetyCards:add": "Add entry and go back to the minutes card",
     "FORM:backTo:minutesForSafetyCards:edit": "Save and go back to the minutes card",
-    "FORM:ERROR:addFailure": "Failed to add the entry.",
-    "FORM:ERROR:editFailure": "Failed to edit the entry.",
     "FORM:ERROR:upload": "Failed to upload the attachments.",
     "FORM:ERROR:date": "The specified date cannot differ from the current date by more than {days} days.",
     "FORM:MSG:attachmentEdit": "Choose new files only if you want to override the current files.",
@@ -123,12 +106,6 @@
     "FORM:help:confirmer": "Search a superior, to whom this entry should be directed for a confirmation...",
     "FORM:help:subscribers": "You can select additional people, that weren't selected in the previous fields, but may be interested in this entry or you want for them to express their opinion.<br>Those people will be added to a list of participants with an Observer role, and will be notified about changes in this entry.",
     "FORM:help:date:diff": "Wybrano datę będącą {days} dni w {dir, select, past{przeszłości} other{przyszłości}}.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Entry deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete entry",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen entry?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> entry?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the entry.",
 
     "filter:user:mine": "Mine",
     "filter:user:unseen": "Unread",
@@ -139,7 +116,6 @@
     "history:added": "added the entry.",
     "history:observer:0": "subscribed to the entry.",
     "history:observer:1": "unsubscribe from the entry.",
-    "history:editMessage": "Here you can add a new comment. If you also want to change some properties, <a href='{editUrl}'>then use the edit form</a>.",
     "history:submit": "Comment",
 
     "report:title:total": "Entry count",

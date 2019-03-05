@@ -53,7 +53,7 @@ define([
         options = {};
       }
 
-      options.data = _.extend(
+      options.data = _.assign(
         options.data || {},
         _.pick(this.attributes, ['from', 'to', 'interval', 'sections', 'owner'])
       );

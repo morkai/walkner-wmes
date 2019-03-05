@@ -4,19 +4,19 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-id" class="control-label is-required"><%- t('kaizenRisks', 'PROPERTY:_id') %></label>
+        <label for="<%- idPrefix %>-id" class="control-label is-required"><%- helpers.t('PROPERTY:_id') %></label>
         <input id="<%- idPrefix %>-id" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="20" pattern="^[A-Za-z0-9-]+$">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('kaizenRisks', 'PROPERTY:name') %></label>
+        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-description" class="control-label"><%- t('kaizenRisks', 'PROPERTY:description') %></label>
+        <label for="<%- idPrefix %>-description" class="control-label"><%- helpers.t('PROPERTY:description') %></label>
         <textarea id="<%- idPrefix %>-description" class="form-control" name="description" rows="4"></textarea>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-position" class="control-label is-required"><%- t('kaizenCauses', 'PROPERTY:position') %></label>
+        <label for="<%- idPrefix %>-position" class="control-label is-required"><%- helpers.t('PROPERTY:position') %></label>
         <input id="<%- idPrefix %>-position" class="form-control" type="number" name="position" min="0" required>
       </div>
     </div>

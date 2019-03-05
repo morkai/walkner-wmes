@@ -182,7 +182,7 @@ define([
             {
               $tip.addClass('is-correctiveAction');
 
-              return renderCorrectiveActionsTable({
+              return view.renderPartialHtml(renderCorrectiveActionsTable, {
                 bordered: false,
                 correctiveActions: model.serializeCorrectiveActions(qiDictionaries)
               });

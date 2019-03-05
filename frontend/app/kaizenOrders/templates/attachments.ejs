@@ -1,25 +1,25 @@
 <table class="table table-bordered table-condensed table-hover kaizenOrders-details-attachments">
   <thead>
     <tr>
-      <th class="is-min"><%- t('kaizenOrders', 'PROPERTY:attachments:description') %></th>
-      <th><%- t('kaizenOrders', 'PROPERTY:attachments:file') %></th>
+      <th class="is-min"><%- helpers.t('PROPERTY:attachments:description') %></th>
+      <th><%- helpers.t('PROPERTY:attachments:file') %></th>
       <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
     </tr>
   </thead>
   <tbody>
     <% if (!model.attachments.length) { %>
     <tr>
-      <td colspan="3"><%- t('kaizenOrders', 'attachments:noData') %></td>
+      <td colspan="3"><%- helpers.t('attachments:noData') %></td>
     </tr>
     <% } %>
     <% model.attachments.forEach(function(attachment) { %>
     <tr>
-      <td class="is-min"><%= t.has('kaizenOrders', 'attachments:' + attachment.description) ? t('kaizenOrders', 'attachments:' + attachment.description) : attachment.description %></td>
+      <td class="is-min"><%= t.has('kaizenOrders', 'attachments:' + attachment.description) ? helpers.t('attachments:' + attachment.description) : attachment.description %></td>
       <td><%= attachment.name %></td>
       <td class="actions">
         <div class="actions-group">
-          <a class="btn btn-default" href="/kaizen/orders/<%- model._id %>/attachments/<%- attachment._id %>" title="<%- t('kaizenOrders', 'attachments:actions:view') %>"><i class="fa fa-file-text-o"></i></a>
-          <a class="btn btn-default" href="/kaizen/orders/<%- model._id %>/attachments/<%- attachment._id %>?download=1" title="<%- t('kaizenOrders', 'attachments:actions:download') %>"><i class="fa fa-download"></i></a>
+          <a class="btn btn-default" href="/kaizen/orders/<%- model._id %>/attachments/<%- attachment._id %>" title="<%- helpers.t('attachments:actions:view') %>"><i class="fa fa-file-text-o"></i></a>
+          <a class="btn btn-default" href="/kaizen/orders/<%- model._id %>/attachments/<%- attachment._id %>?download=1" title="<%- helpers.t('attachments:actions:download') %>"><i class="fa fa-download"></i></a>
         </div>
       </td>
     </tr>

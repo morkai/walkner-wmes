@@ -24,7 +24,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(DetailsView.prototype.serialize.call(this), {
+      return _.assign(DetailsView.prototype.serialize.call(this), {
         loadedModules: loadedModules
       });
     }

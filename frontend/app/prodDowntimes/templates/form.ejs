@@ -3,54 +3,54 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <% if (isChangeRequest) { %>
-    <div class="message message-inline message-warning"><%- t('prodDowntimes', 'changeRequest:warning:' + (editMode ? 'edit' : 'add')) %></div>
+    <div class="message message-inline message-warning"><%- helpers.t('changeRequest:warning:' + (editMode ? 'edit' : 'add')) %></div>
     <% } %>
     <div class="panel-body">
       <% if (isChangeRequest) { %>
       <div class="form-group">
-        <label for="<%- idPrefix %>-requestComment" class="control-label"><%- t('prodDowntimes', 'changeRequest:commentLabel') %></label>
+        <label for="<%- idPrefix %>-requestComment" class="control-label"><%- helpers.t('changeRequest:commentLabel') %></label>
         <textarea id="<%- idPrefix %>-requestComment" class="form-control" name="requestComment" rows="2"></textarea>
       </div>
       <% } %>
       <div class="row">
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-master" class="control-label"><%- t('prodDowntimes', 'PROPERTY:master') %></label>
+          <label for="<%- idPrefix %>-master" class="control-label"><%- helpers.t('PROPERTY:master') %></label>
           <input id="<%- idPrefix %>-master" type="text" autocomplete="new-password" name="master">
         </div>
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-leader" class="control-label"><%- t('prodDowntimes', 'PROPERTY:leader') %></label>
+          <label for="<%- idPrefix %>-leader" class="control-label"><%- helpers.t('PROPERTY:leader') %></label>
           <input id="<%- idPrefix %>-leader" type="text" autocomplete="new-password" name="leader">
         </div>
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-operator" class="control-label"><%- t('prodDowntimes', 'PROPERTY:operator') %></label>
+          <label for="<%- idPrefix %>-operator" class="control-label"><%- helpers.t('PROPERTY:operator') %></label>
           <input id="<%- idPrefix %>-operator" type="text" autocomplete="new-password" name="operator">
         </div>
       </div>
       <% if (!editMode) { %>
       <div class="row">
         <div class="form-group col-md-4 has-required-select2">
-          <label for="<%- idPrefix %>-reason" class="control-label is-required"><%- t('prodDowntimes', 'PROPERTY:reason') %></label>
+          <label for="<%- idPrefix %>-reason" class="control-label is-required"><%- helpers.t('PROPERTY:reason') %></label>
           <input id="<%- idPrefix %>-reason" type="text" autocomplete="new-password" name="reason" required>
         </div>
         <div class="form-group col-md-4 has-required-select2">
-          <label for="<%- idPrefix %>-aor" class="control-label is-required"><%- t('prodDowntimes', 'PROPERTY:aor') %></label>
+          <label for="<%- idPrefix %>-aor" class="control-label is-required"><%- helpers.t('PROPERTY:aor') %></label>
           <input id="<%- idPrefix %>-aor" type="text" autocomplete="new-password" name="aor" required>
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-reasonComment" class="control-label"><%- t('prodDowntimes', 'PROPERTY:reasonComment') %></label>
+        <label for="<%- idPrefix %>-reasonComment" class="control-label"><%- helpers.t('PROPERTY:reasonComment') %></label>
         <textarea id="<%- idPrefix %>-reasonComment" class="form-control" name="reasonComment" rows="3"></textarea>
       </div>
       <% } %>
       <div class="form-group">
-        <label for="<%- idPrefix %>-startedAtDate" class="control-label is-required"><%- t('prodDowntimes', 'PROPERTY:startedAt') %></label>
+        <label for="<%- idPrefix %>-startedAtDate" class="control-label is-required"><%- helpers.t('PROPERTY:startedAt') %></label>
         <div class=" form-group-datetime">
           <input id="<%- idPrefix %>-startedAtDate" class="form-control" name="startedAtDate" type="date" required>
           <input id="<%- idPrefix %>-startedAtTime" class="form-control" name="startedAtTime" type="time" required step="1">
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-finishedAtDate" class="control-label is-required"><%- t('prodDowntimes', 'PROPERTY:finishedAt') %></label>
+        <label for="<%- idPrefix %>-finishedAtDate" class="control-label is-required"><%- helpers.t('PROPERTY:finishedAt') %></label>
         <div class=" form-group-datetime">
           <input id="<%- idPrefix %>-finishedAtDate" class="form-control" name="finishedAtDate" type="date" required>
           <input id="<%- idPrefix %>-finishedAtTime" class="form-control" name="finishedAtTime" type="time" required step="1">
@@ -58,19 +58,19 @@
       </div>
       <% if (!editMode) { %>
       <div class="form-group">
-        <label for="<%- idPrefix %>-status" class="control-label is-required"><%- t('prodDowntimes', 'PROPERTY:status') %></label>
+        <label for="<%- idPrefix %>-status" class="control-label is-required"><%- helpers.t('PROPERTY:status') %></label>
         <div class="radio">
-          <label><input type="radio" name="status" value="undecided" required> <%- t('prodDowntimes', 'PROPERTY:status:undecided') %></label>
+          <label><input type="radio" name="status" value="undecided" required> <%- helpers.t('PROPERTY:status:undecided') %></label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="status" value="confirmed" required> <%- t('prodDowntimes', 'PROPERTY:status:confirmed') %></label>
+          <label><input type="radio" name="status" value="confirmed" required> <%- helpers.t('PROPERTY:status:confirmed') %></label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="status" value="rejected" required> <%- t('prodDowntimes', 'PROPERTY:status:rejected') %></label>
+          <label><input type="radio" name="status" value="rejected" required> <%- helpers.t('PROPERTY:status:rejected') %></label>
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-decisionComment" class="control-label"><%- t('prodDowntimes', 'PROPERTY:decisionComment') %></label>
+        <label for="<%- idPrefix %>-decisionComment" class="control-label"><%- helpers.t('PROPERTY:decisionComment') %></label>
         <textarea id="<%- idPrefix %>-decisionComment" class="form-control" name="decisionComment" rows="3"></textarea>
       </div>
       <% } %>

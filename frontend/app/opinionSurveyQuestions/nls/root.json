@@ -2,36 +2,10 @@
   "root": {
     "BREADCRUMBS:base": "Opinion survey",
     "BREADCRUMBS:browse": "Questions",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the questions.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the question.",
-    "MSG:DELETED": "Question <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add question",
-    "PAGE_ACTION:edit": "Edit question",
-    "PAGE_ACTION:delete": "Delete question",
-
-    "PANEL:TITLE:details": "Question's details",
-    "PANEL:TITLE:addForm": "Add question form",
-    "PANEL:TITLE:editForm": "Edit question form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:full": "Full text",
-    "PROPERTY:short": "Short text",
-
-    "FORM:ACTION:add": "Add question",
-    "FORM:ACTION:edit": "Edit question",
-    "FORM:ERROR:addFailure": "Failed to add the new question.",
-    "FORM:ERROR:editFailure": "Failed to edit the question.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Question deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete question",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen question?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> question?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the question."
+    "PROPERTY:short": "Short text"
   },
   "pl": true
 }

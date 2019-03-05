@@ -1,19 +1,6 @@
 <div class="panel panel-primary">
-  <div class="panel-heading"><%- t('lossReasons', 'PANEL:TITLE:details') %></div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('lossReasons', 'PROPERTY:_id') %></div>
-        <div class="prop-value"><%= model._id %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('lossReasons', 'PROPERTY:label') %></div>
-        <div class="prop-value"><%= model.label || '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('lossReasons', 'PROPERTY:position') %></div>
-        <div class="prop-value"><%= model.position %></div>
-      </div>
-    </div>
+    <%- helpers.props(model, ['_id', 'label', 'position']) %>
   </div>
 </div>

@@ -13,22 +13,7 @@ define([
 
   return EditFormPage.extend({
 
-    FormView: ProdDowntimeFormView,
-
-    breadcrumbs: function()
-    {
-      return [
-        {
-          label: t.bound('prodDowntimes', 'BREADCRUMBS:browse'),
-          href: this.model.genClientUrl('base')
-        },
-        {
-          label: this.model.getLabel(),
-          href: this.model.genClientUrl()
-        },
-        t.bound('prodDowntimes', 'BREADCRUMBS:editForm')
-      ];
-    }
+    FormView: ProdDowntimeFormView
 
   });
 });

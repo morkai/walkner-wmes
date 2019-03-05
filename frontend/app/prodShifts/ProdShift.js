@@ -201,6 +201,15 @@ define([
       return d;
     },
 
+    serializeDetails: function()
+    {
+      return this.serialize({
+        orgUnits: true,
+        personnel: true,
+        totalQuantityDone: true
+      });
+    },
+
     startShiftChangeMonitor: function()
     {
       this.stopShiftChangeMonitor();

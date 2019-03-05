@@ -2,13 +2,11 @@
 
 define([
   'underscore',
-  'jquery',
   'app/i18n',
   'app/core/views/ListView',
   'app/behaviorObsCards/templates/detailsRow'
 ], function(
   _,
-  $,
   t,
   ListView,
   detailsRowTemplate

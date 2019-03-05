@@ -3,34 +3,34 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
-      <div id="<%- idPrefix %>-typeChangeWarning" class="message message-inline message-warning"><%- t('pressWorksheets', 'FORM:typeChangeWarning') %></div>
+      <div id="<%- idPrefix %>-typeChangeWarning" class="message message-inline message-warning"><%- helpers.t('FORM:typeChangeWarning') %></div>
       <div class="form-group">
         <label class="radio-inline">
           <input id="<%- idPrefix %>-type" type="radio" name="type" value="mech">
-          <%- t('pressWorksheets', 'PROPERTY:type:mech') %>
+          <%- helpers.t('PROPERTY:type:mech') %>
         </label>
         <label class="radio-inline">
           <input type="radio" name="type" value="optics">
-          <%- t('pressWorksheets', 'PROPERTY:type:optics') %>
+          <%- helpers.t('PROPERTY:type:optics') %>
         </label>
         <label class="radio-inline">
           <input type="radio" name="type" value="paintShop">
-          <%- t('pressWorksheets', 'PROPERTY:type:paintShop') %>
+          <%- helpers.t('PROPERTY:type:paintShop') %>
         </label>
       </div>
       <div class="row">
         <div class="col-md-3 form-group has-required-select2">
-          <label for="<%- idPrefix %>-operators" class="control-label is-required"><%- t('pressWorksheets', 'PROPERTY:operators') %></label>
+          <label for="<%- idPrefix %>-operators" class="control-label is-required"><%- helpers.t('PROPERTY:operators') %></label>
           <input id="<%- idPrefix %>-operators" type="text" autocomplete="new-password" name="operators" required>
         </div>
         <div class="col-md-3 pressWorksheets-form-dateAndShift">
           <div class="row">
             <div class="col-md-6 form-group">
-              <label for="<%- idPrefix %>-date" class="control-label is-required"><%- t('pressWorksheets', 'PROPERTY:date') %></label>
+              <label for="<%- idPrefix %>-date" class="control-label is-required"><%- helpers.t('PROPERTY:date') %></label>
               <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required>
             </div>
             <div class="col-md-6 form-group pressWorksheets-form-group-shift">
-              <label for="<%- idPrefix %>-shift-1" class="control-label is-required"><%- t('pressWorksheets', 'PROPERTY:shift') %></label>
+              <label for="<%- idPrefix %>-shift-1" class="control-label is-required"><%- helpers.t('PROPERTY:shift') %></label>
               <div class="pressWorksheets-form-group-shift-checkboxes">
                 <label class="radio-inline"><input id="<%- idPrefix %>-shift-1" name="shift" type="radio" value="1" checked> <%- t('core', 'SHIFT:1') %></label>
                 <label class="radio-inline"><input name="shift" type="radio" value="2"> <%- t('core', 'SHIFT:2') %></label>
@@ -40,22 +40,22 @@
           </div>
         </div>
         <div class="col-md-3 form-group has-required-select2">
-          <label for="<%- idPrefix %>-operator" class="control-label is-required"><%- t('pressWorksheets', 'PROPERTY:operator') %></label>
+          <label for="<%- idPrefix %>-operator" class="control-label is-required"><%- helpers.t('PROPERTY:operator') %></label>
           <input id="<%- idPrefix %>-operator" type="text" autocomplete="new-password" name="operator" required>
         </div>
         <div class="col-md-3 form-group has-required-select2">
-          <label for="<%- idPrefix %>-master" class="control-label is-required"><%- t('pressWorksheets', 'PROPERTY:master') %></label>
+          <label for="<%- idPrefix %>-master" class="control-label is-required"><%- helpers.t('PROPERTY:master') %></label>
           <input id="<%- idPrefix %>-master" type="text" autocomplete="new-password" name="master" required>
         </div>
       </div>
       <div id="<%- idPrefix %>-existingWarning" class="message message-inline message-warning"></div>
       <div class="pressWorksheets-form-group-paintShop">
         <div class="form-group">
-          <label for="<%- idPrefix %>-startedAt" class="control-label"><%- t('pressWorksheets', 'PROPERTY:startedAt') %></label>
+          <label for="<%- idPrefix %>-startedAt" class="control-label"><%- helpers.t('PROPERTY:startedAt') %></label>
           <input id="<%- idPrefix %>-startedAt" class="form-control pressWorksheets-form-time" type="time" name="startedAt">
         </div>
         <div class="form-group">
-          <label for="<%- idPrefix %>-finishedAt" class="control-label"><%- t('pressWorksheets', 'PROPERTY:finishedAt') %></label>
+          <label for="<%- idPrefix %>-finishedAt" class="control-label"><%- helpers.t('PROPERTY:finishedAt') %></label>
           <input id="<%- idPrefix %>-finishedAt" class="form-control pressWorksheets-form-time" type="time" name="finishedAt">
         </div>
       </div>
@@ -63,7 +63,7 @@
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>
-      <button type="submit" class="btn btn-danger"><%- t('pressWorksheets', 'FROM:ACTION:saveOverlapping') %></button>
+      <button type="submit" class="btn btn-danger"><%- helpers.t('FROM:ACTION:saveOverlapping') %></button>
     </div>
   </div>
 </form>

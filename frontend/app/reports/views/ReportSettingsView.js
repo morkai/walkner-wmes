@@ -67,7 +67,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(SettingsView.prototype.serialize.call(this), {
+      return _.assign(SettingsView.prototype.serialize.call(this), {
         divisions: this.serializeProdDivisions(),
         colors: this.serializeColors()
       });

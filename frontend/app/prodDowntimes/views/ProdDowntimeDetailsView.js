@@ -41,7 +41,7 @@ define([
 
     template: detailsTemplate,
 
-    events: _.extend({
+    events: _.assign({
       'select2-removed #-reason, #-aor': function()
       {
         this.$id('reason').val('');
@@ -182,8 +182,7 @@ define([
       var defaultAor = this.getDefaultAor();
       var status = this.model.get('status');
 
-      this.$id('corroborate').prepend(corroborateExtraTemplate({
-        idPrefix: this.idPrefix,
+      this.$id('corroborate').prepend(this.renderPartial(corroborateExtraTemplate, {
         defaultAor: defaultAor ? defaultAor.getLabel() : null,
         showUndecidedStatus: canChangeStatus === 2 || (status === 'rejected' && canChangeStatus === 1),
         showRejectedStatus: canChangeStatus === 2 || (status === 'undecided' && canChangeStatus === 1),
@@ -298,7 +297,7 @@ define([
     {
       if (!this.model.get('finishedAt'))
       {
-        this.$id('duration').text(this.model.getDurationString());
+        this.$('[data-prop="duration"]').text(this.model.getDurationString());
       }
 
       this.$('.prodDowntimes-history-time').each(function()

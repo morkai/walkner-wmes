@@ -1,35 +1,9 @@
 {
   "BREADCRUMBS:base": "Usprawnienia",
   "BREADCRUMBS:browse": "Rodziny produktów",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie rodzin produktów nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie rodziny produktów nie powiodło się.",
-  "MSG:DELETED": "Rodzina produktów <em>{label}</em> został usunięty.",
-
-  "PAGE_ACTION:add": "Dodaj rodzinę produktów",
-  "PAGE_ACTION:edit": "Edytuj rodzinę",
-  "PAGE_ACTION:delete": "Usuń rodzinę",
-
-  "PANEL:TITLE:details": "Szczegóły rodziny produktów",
-  "PANEL:TITLE:addForm": "Formularz dodawania rodziny produktów",
-  "PANEL:TITLE:editForm": "Formularz edycji rodziny produktów",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:position": "Pozycja",
-  "PROPERTY:owners": "Właściciele",
-
-  "FORM:ACTION:add": "Dodaj rodzinę produktów",
-  "FORM:ACTION:edit": "Edytuj rodzinę produktów",
-  "FORM:ERROR:addFailure": "Nie udało się dodać rodziny produktów.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować rodziny produktów.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia rodziny produktów",
-  "ACTION_FORM:BUTTON:delete": "Usuń rodzinę produktów",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną rodzinę produktów?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć rodzinę produktów <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć rodziny produktów."
+  "PROPERTY:owners": "Właściciele"
 }

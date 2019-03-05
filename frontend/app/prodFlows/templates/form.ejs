@@ -5,11 +5,11 @@
     <div class="panel-body">
       <div class="orgUnitDropdowns-container"></div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- t('prodFlows', 'PROPERTY:name') %></label>
+        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
         <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="150">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-deactivatedAt" class="control-label"><%- t('prodFlows', 'PROPERTY:deactivatedAt') %></label>
+        <label for="<%- idPrefix %>-deactivatedAt" class="control-label"><%- helpers.t('PROPERTY:deactivatedAt') %></label>
         <input id="<%- idPrefix %>-deactivatedAt" class="form-control" type="date" name="deactivatedAt" maxlength="10">
       </div>
     </div>

@@ -32,7 +32,7 @@ define([
         model = new LoadedModel({_id: req.params.id});
       }
 
-      return new ActionFormPage(_.extend({
+      return new ActionFormPage(_.assign({
         model: model,
         actionKey: 'delete',
         successUrl: model.genClientUrl('base'),

@@ -5,26 +5,26 @@
     <div class="panel-body">
       <div class="row">
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-master" class="control-label"><%- t('prodShifts', 'PROPERTY:master') %></label>
+          <label for="<%- idPrefix %>-master" class="control-label"><%- helpers.t('PROPERTY:master') %></label>
           <input id="<%- idPrefix %>-master" type="text" autocomplete="new-password" name="master">
         </div>
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-leader" class="control-label"><%- t('prodShifts', 'PROPERTY:leader') %></label>
+          <label for="<%- idPrefix %>-leader" class="control-label"><%- helpers.t('PROPERTY:leader') %></label>
           <input id="<%- idPrefix %>-leader" type="text" autocomplete="new-password" name="leader">
         </div>
         <div class="form-group col-md-4">
-          <label for="<%- idPrefix %>-operator" class="control-label"><%- t('prodShifts', 'PROPERTY:operator') %></label>
+          <label for="<%- idPrefix %>-operator" class="control-label"><%- helpers.t('PROPERTY:operator') %></label>
           <input id="<%- idPrefix %>-operator" type="text" autocomplete="new-password" name="operator">
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label"><%- t('prodShifts', 'PROPERTY:quantitiesDone') %></label>
+        <label class="control-label"><%- helpers.t('PROPERTY:quantitiesDone') %></label>
         <table class="table table-bordered table-condensed prodShifts-form-quantitiesDone">
           <thead>
             <tr>
-              <th><%- t('prodShifts', 'PROPERTY:quantitiesDone:hour') %></th>
-              <th><%- t('prodShifts', 'PROPERTY:quantitiesDone:planned') %></th>
-              <th><%- t('prodShifts', 'PROPERTY:quantitiesDone:actual') %></th>
+              <th><%- helpers.t('PROPERTY:quantitiesDone:hour') %></th>
+              <th><%- helpers.t('PROPERTY:quantitiesDone:planned') %></th>
+              <th><%- helpers.t('PROPERTY:quantitiesDone:actual') %></th>
             </tr>
           </thead>
           <tbody>

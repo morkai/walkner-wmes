@@ -106,7 +106,7 @@ define([
     serializeQueryToForm: function()
     {
       var rqlQuery = this.model.rqlQuery;
-      var formData = _.extend({}, _.result(this, 'defaultFormData'), {
+      var formData = _.assign({}, _.result(this, 'defaultFormData'), {
         limit: rqlQuery.limit < 5 ? 5 : (rqlQuery.limit > 100 ? 100 : rqlQuery.limit)
       });
 

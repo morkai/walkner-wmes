@@ -1,16 +1,6 @@
 <div class="panel panel-primary">
-  <div class="panel-heading">
-    <%- t('xiconfHidLamps', 'PANEL:TITLE:details') %>
-  </div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <% ['_id', 'nc12', 'description'].forEach(function(k) { %>
-      <div class="prop">
-        <div class="prop-name"><%- t('xiconfHidLamps', 'PROPERTY:' + k) %></div>
-        <div class="prop-value"><%= model[k] || '-' %></div>
-      </div>
-      <% }) %>
-    </div>
+    <%- helpers.props(model, ['_id', 'nc12', 'description']) %>
   </div>
 </div>
-

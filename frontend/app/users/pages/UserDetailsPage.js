@@ -32,7 +32,7 @@ define([
         return DetailsPage.prototype.breadcrumbs.call(this);
       }
 
-      return [t.bound('users', 'BREADCRUMBS:myAccount')];
+      return [this.t('BREADCRUMBS:myAccount')];
     },
 
     actions: function()
@@ -51,7 +51,7 @@ define([
         if (user.isAllowedTo('SUPER'))
         {
           actions.push({
-            label: t.bound('users', 'PAGE_ACTION:anonymize'),
+            label: this.t('PAGE_ACTION:anonymize'),
             icon: 'user-secret',
             callback: this.handleAnonymizeAction.bind(this)
           });
@@ -60,7 +60,7 @@ define([
       else if (user.data._id === model.id)
       {
         actions.push({
-          label: t.bound('users', 'PAGE_ACTION:editAccount'),
+          label: this.t('PAGE_ACTION:editAccount'),
           icon: 'edit',
           href: model.genClientUrl('edit')
         });
@@ -73,7 +73,10 @@ define([
     {
       var page = this;
       var dialogView = new DialogView({
-        template: anonymizeDialogTemplate
+        template: anonymizeDialogTemplate,
+        model: {
+          nlsDomain: page.model.getNlsDomain()
+        }
       });
 
       page.listenToOnce(dialogView, 'answered', function(answer)

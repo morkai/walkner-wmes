@@ -1,10 +1,10 @@
 <form>
   <div class="form-group">
-    <label for="<%- idPrefix %>-image" class="control-label is-required"><%- t('opinionSurveyScanTemplates', 'imageEditForm:file') %></label>
+    <label for="<%- idPrefix %>-image" class="control-label is-required"><%- helpers.t('imageEditForm:file') %></label>
     <input id="<%- idPrefix %>-image" name="image" class="form-control" type="file" autofocus required>
   </div>
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary"><i class="fa fa-spinner fa-spin hidden"></i><span><%- t('opinionSurveyScanTemplates', 'imageEditForm:submit') %></span></button>
-    <button type="button" class="cancel btn btn-link"><%- t('opinionSurveyScanTemplates', 'imageEditForm:cancel') %></button>
+    <button type="submit" class="btn btn-primary"><i class="fa fa-spinner fa-spin hidden"></i><span><%- helpers.t('imageEditForm:submit') %></span></button>
+    <button type="button" class="cancel btn btn-link"><%- helpers.t('imageEditForm:cancel') %></button>
   </div>
 </form>

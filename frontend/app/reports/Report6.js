@@ -66,7 +66,7 @@ define([
         options = {};
       }
 
-      options.data = _.extend(
+      options.data = _.assign(
         options.data || {},
         this.query.serializeToObject()
       );
@@ -229,7 +229,7 @@ define([
 
     prepareEmptyGroupData: function(groupData)
     {
-      return _.extend(groupData, {
+      return _.assign(groupData, {
         finGoodsTasks: {},
         compTasks: {},
         finGoodsTotalFte: 0,

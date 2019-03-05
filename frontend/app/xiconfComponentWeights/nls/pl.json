@@ -1,37 +1,11 @@
 {
   "BREADCRUMBS:base": "Xiconf",
   "BREADCRUMBS:browse": "Wagi komponentów",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie komponentów nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie komponentu nie powiodło się.",
-  "MSG:DELETED": "Komponent <em>{label}</em> została usunięta.",
-
-  "PAGE_ACTION:add": "Dodaj komponent",
-  "PAGE_ACTION:edit": "Edytuj komponent",
-  "PAGE_ACTION:delete": "Usuń komponent",
-
-  "PANEL:TITLE:details": "Szczegóły komponentu",
-  "PANEL:TITLE:addForm": "Formularz dodawania komponentu",
-  "PANEL:TITLE:editForm": "Formularz edycji komponentu",
-
-  "filter:submit": "Filtruj komponenty",
+  "filter:submit": "Filtruj",
 
   "PROPERTY:nc12": "12NC komponentu",
   "PROPERTY:description": "Opis",
   "PROPERTY:minWeight": "Min. waga [g]",
-  "PROPERTY:maxWeight": "Maks. waga [g]",
-
-  "FORM:ACTION:add": "Dodaj komponent",
-  "FORM:ACTION:edit": "Edytuj komponent",
-  "FORM:ERROR:addFailure": "Nie udało się dodać komponentu.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować komponentu.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia komponentu",
-  "ACTION_FORM:BUTTON:delete": "Usuń komponent",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany komponent?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć komponent <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć komponentu."
+  "PROPERTY:maxWeight": "Maks. waga [g]"
 }

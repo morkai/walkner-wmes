@@ -77,7 +77,7 @@ define([
       },
       'change [name="ok"]': function()
       {
-        this.model.set(_.extend(this.getFormData(), {
+        this.model.set(_.assign(this.getFormData(), {
           ok: this.$id('ok').prop('checked')
         }), {silent: true});
         this.render();
@@ -104,7 +104,7 @@ define([
     {
       var faultCode = this.model.get('faultCode');
 
-      return _.extend(FormView.prototype.serialize.call(this), {
+      return _.assign(FormView.prototype.serialize.call(this), {
         inspectedAtMin: time.getMoment(this.model.get('inspectedAt')).clone().subtract(14, 'days').format('YYYY-MM-DD'),
         inspectedAtMax: time.getMoment().startOf('day').add(1, 'days').format('YYYY-MM-DD'),
         kinds: qiDictionaries.kinds.map(idAndLabel),
@@ -247,7 +247,7 @@ define([
 
       uploadReq.done(function(attachments)
       {
-        _.extend(formData.attachments, attachments);
+        _.assign(formData.attachments, attachments);
 
         FormView.prototype.submitRequest.call(view, $submitEl, formData);
       });

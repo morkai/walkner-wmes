@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'app/i18n',
   '../View',
   '../util/onModelDeleted'
 ], function(
+  t,
   View,
   onModelDeleted
 ) {
@@ -24,7 +26,10 @@ define([
 
     getTemplateData: function()
     {
+      var nlsDomain = this.model.getNlsDomain();
+
       return {
+        panelTitle: t(t.has(nlsDomain, 'PANEL:TITLE:details') ? nlsDomain : 'core', 'PANEL:TITLE:details'),
         model: this.serializeDetails(this.model)
       };
     },

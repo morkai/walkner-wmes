@@ -21,7 +21,7 @@ define([
 
     currentTab: null,
 
-    events: _.extend({
+    events: _.assign({
       'click a[data-toggle="tab"]': function(e)
       {
         this.currentTab = e.currentTarget.dataset.tab;
@@ -33,7 +33,7 @@ define([
       var status = this.model.get('status');
       var showKaizenPanel = status !== 'new' && status !== 'cancelled';
 
-      return _.extend(DetailsView.prototype.serialize.call(this), {
+      return _.assign(DetailsView.prototype.serialize.call(this), {
         showKaizenPanel: showKaizenPanel,
         suggestionColumnSize: showKaizenPanel ? 6 : 12,
         kaizenColumnSize: showKaizenPanel ? 6 : 0

@@ -1,23 +1,10 @@
 {
   "root": {
     "BREADCRUMBS:operator": "Operator",
-    "BREADCRUMBS:settings": "Settings",
     "BREADCRUMBS:browse": "Component checking",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
+    "BREADCRUMBS:settings": "Settings",
 
-    "MSG:DELETED": "Strategy <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add strategy",
-    "PAGE_ACTION:edit": "Edit strategy",
-    "PAGE_ACTION:delete": "Delete strategy",
-
-    "PANEL:TITLE:details": "Strategy details",
-    "PANEL:TITLE:addForm": "Add strategy form",
-    "PANEL:TITLE:editForm": "Edit strategy form",
-
-    "filter:submit": "Filter strategies",
+    "filter:submit": "Filter",
 
     "PROPERTY:active": "Active?",
     "PROPERTY:description": "Description",
@@ -36,19 +23,9 @@
     "PROPERTY:components.single": "Single?",
     "PROPERTY:components.missing": "Missing?",
 
-    "FORM:ACTION:add": "Add strategy",
-    "FORM:ACTION:edit": "Edit strategy",
     "FORM:ACTION:addComponent": "Add component",
     "FORM:ACTION:removeComponent": "Remove component",
-    "FORM:ERROR:addFailure": "Failed to add the strategy.",
-    "FORM:ERROR:editFailure": "Failed to edit the strategy.",
-    "FORM:ERROR:pattern": "Invalid pattern.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Strategy deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete strategy",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen strategy?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> strategy?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the strategy."
+    "FORM:ERROR:pattern": "Invalid pattern."
   },
   "pl": true
 }

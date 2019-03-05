@@ -1,22 +1,8 @@
 {
   "root": {
     "BREADCRUMBS:browse": "MRP Controllers",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
-    "MSG:LOADING_FAILURE": "Failed to load the MRP Controllers.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the MRP Controller.",
-    "MSG:DELETED": "MRP Controller <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add MRP Controller",
-    "PAGE_ACTION:edit": "Edit MRP Controller",
-    "PAGE_ACTION:delete": "Delete MRP Controller",
     "PAGE_ACTION:toggleDeactivated": "Hide deactivated",
-
-    "PANEL:TITLE:details": "MRP Controller's details",
-    "PANEL:TITLE:addForm": "Add MRP Controller form",
-    "PANEL:TITLE:editForm": "Edit MRP Controller form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:description": "Label",
@@ -30,16 +16,6 @@
     "inout:0": "Not applicable",
     "inout:1": "Indoor",
 
-    "FORM:ACTION:add": "Add MRP Controller",
-    "FORM:ACTION:edit": "Edit MRP Controller",
-    "FORM:ERROR:addFailure": "Failed to add the new MRP Controller.",
-    "FORM:ERROR:editFailure": "Failed to edit the MRP Controller.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "MRP Controller deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete MRP Controller",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen MRP Controller?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> MRP Controller?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the MRP Controller.",
     "ACTION_FORM:delete:NOT_EMPTY": "MRP Controller is not empty.",
 
     "ownMrps:trigger": "mine",

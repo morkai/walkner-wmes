@@ -1,20 +1,9 @@
 {
   "BREADCRUMBS:browse": "Licencje",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie licencji nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie licencji nie powiodło się.",
-  "MSG:DELETED": "Licencja <em>{label}</em> została usunięta.",
 
   "PAGE_ACTION:add": "Dodaj licencję",
   "PAGE_ACTION:edit": "Edytuj licencję",
   "PAGE_ACTION:delete": "Usuń licencję",
-
-  "PANEL:TITLE:details": "Szczegóły licencji",
-  "PANEL:TITLE:addForm": "Formularz dodawania licencji",
-  "PANEL:TITLE:editForm": "Formularz modyfikacji licencji",
 
   "PROPERTY:_id": "ID licencji",
   "PROPERTY:appId": "ID aplikacji",
@@ -26,16 +15,7 @@
   "PROPERTY:licensee": "Licencjobiorca",
   "PROPERTY:key": "Klucz licencyjny",
 
-  "filter:submit": "Filtruj licencje",
-
-  "FORM:ACTION:add": "Dodaj licencję",
-  "FORM:ACTION:edit": "Edytuj licencję",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia licencji",
-  "ACTION_FORM:BUTTON:delete": "Usuń licencję",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybraną licencję?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć licencję <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć licencji.",
+  "filter:submit": "Filtruj",
 
   "error:NO_KEY": "Brak klucza licencji.",
   "error:INVALID_ED_PEM": "Nieprawidłowy klucz odszyfrowywania.",

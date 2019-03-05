@@ -1,11 +1,11 @@
 <form class="settings users-settings">
   <div class="list-group">
-    <a class="list-group-item" href="#users;settings?tab=presence" data-tab="presence"><%- t('users', 'settings:tab:presence') %></a>
+    <a class="list-group-item" href="#users;settings?tab=presence" data-tab="presence"><%- helpers.t('settings:tab:presence') %></a>
   </div>
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="presence">
       <div class="form-group">
-        <label for="<%- idPrefix %>-presence-hardware"><%- t('users', 'settings:presence:hardware') %></label>
+        <label for="<%- idPrefix %>-presence-hardware"><%- helpers.t('settings:presence:hardware') %></label>
         <textarea id="<%- idPrefix %>-presence-hardware" name="users.presence.hardware" class="form-control" rows="6"></textarea>
       </div>
     </div>

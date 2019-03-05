@@ -1,5 +1,11 @@
 {
   "root": {
+    "BREADCRUMBS:base": "Tool calibration",
+    "BREADCRUMBS:browse": "Tool types",
+
+    "PROPERTY:_id": "ID",
+    "PROPERTY:name": "Name",
+    "PROPERTY:active": "Active?"
   },
   "pl": true
 }

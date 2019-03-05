@@ -125,7 +125,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(View.prototype.serialize.apply(this, arguments), {
+      return _.assign(View.prototype.serialize.apply(this, arguments), {
         uploads: this.model.uploads.invoke('serializeDetails'),
         renderUpload: renderUpload
       });

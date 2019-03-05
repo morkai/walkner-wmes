@@ -1,19 +1,19 @@
 <div class="panel panel-default pos-changes">
-  <div class="panel-heading"><%- t('purchaseOrders', 'panel:changes') %></div>
+  <div class="panel-heading"><%- helpers.t('panel:changes') %></div>
   <table class="table table-bordered table-hover">
     <thead>
       <tr>
-        <th><%- t('purchaseOrders', 'PROPERTY:changes.date') %></th>
-        <th><%- t('purchaseOrders', 'PROPERTY:changes.property') %></th>
-        <th><%- t('purchaseOrders', 'PROPERTY:changes.oldValue') %></th>
-        <th><%- t('purchaseOrders', 'PROPERTY:changes.newValue') %></th>
+        <th><%- helpers.t('PROPERTY:changes.date') %></th>
+        <th><%- helpers.t('PROPERTY:changes.property') %></th>
+        <th><%- helpers.t('PROPERTY:changes.oldValue') %></th>
+        <th><%- helpers.t('PROPERTY:changes.newValue') %></th>
       </tr>
     </thead>
     <tbody>
       <% changes.forEach(function(change, i) { %>
       <% if (hidden && i === 1 && changes.length > 3) { %>
       <tr>
-        <td id="<%- idPrefix %>-more" colspan="999" class="pos-changes-more"><%- t('purchaseOrders', 'changes:more') %></td>
+        <td id="<%- idPrefix %>-more" colspan="999" class="pos-changes-more"><%- helpers.t('changes:more') %></td>
       </tr>
       <% } %>
       <tr class="<%- change.visible ? '' : 'hidden'%>">

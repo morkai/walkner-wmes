@@ -45,7 +45,7 @@ define([
       }
     },
 
-    events: _.extend(ListView.prototype.events, {
+    events: _.assign(ListView.prototype.events, {
       'click .mechOrders-editMrp': 'showMrpEditor'
     }),
 

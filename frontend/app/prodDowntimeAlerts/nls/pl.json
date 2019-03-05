@@ -1,23 +1,8 @@
 {
   "BREADCRUMBS:base": "Przestoje",
   "BREADCRUMBS:browse": "Alarmy",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie alarmów nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie alarmu nie powiodło się.",
-  "MSG:DELETED": "Alarm <em>{label}</em> został usunięty.",
-
-  "PAGE_ACTION:add": "Dodaj alarm",
-  "PAGE_ACTION:edit": "Edytuj alarm",
-  "PAGE_ACTION:delete": "Usuń alarm",
-
-  "PANEL:TITLE:details": "Szczegóły alarmu",
-  "PANEL:TITLE:editForm": "Formularz edycji alarmu",
-  "PANEL:TITLE:addForm": "Formularz dodawania alarmu",
-
-  "filter:submit": "Filtruj alarmy",
+  "filter:submit": "Filtruj",
 
   "PROPERTY:name": "Nazwa",
   "PROPERTY:repeatInterval": "Powtarzanie ostatniej akcji",
@@ -44,10 +29,6 @@
   "actions:userWhitelist": "do użytkowników znajdujących się na liście:",
   "actions:userBlacklist": "Nie powiadamiaj użytkowników znajdujących się na liście:",
 
-  "FORM:ACTION:add": "Dodaj alarm",
-  "FORM:ACTION:edit": "Edytuj alarm",
-  "FORM:ERROR:addFailure": "Nie udało się dodać alarmu.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować alarmu.",
   "FORM:ERROR:conditions": "Zdefiniuj przynajmniej jeden warunek.",
   "FORM:ERROR:actions": "Zdefiniuj przynajmniej jedną akcję.",
   "FORM:HELP:repeatInterval": "Powtarzanie ostatniej akcji co określony interwał. Pozostaw 0s, jeżeli ostatnia akcja ma nie być powtarzana.",
@@ -61,12 +42,6 @@
   "FORM:actions:delay": "po rozpoczęciu przestoju",
   "FORM:actions:sendEmail": "wyślij e-mail",
   "FORM:actions:sendSms": "wyślij SMS",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia alarmu",
-  "ACTION_FORM:BUTTON:delete": "Usuń alarm",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany alarm?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć alarm <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć alarmu.",
 
   "DETAILS:conditions:reason": "{mode, select, include{Wybrane powody przestojów} other{Powody przestojów inne niż}}",
   "DETAILS:conditions:aor": "{mode, select, include{Wybrane obszary odpowiedzialności} other{Obszary odpowiedzialności inne niż}}",

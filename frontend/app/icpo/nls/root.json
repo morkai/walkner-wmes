@@ -3,12 +3,6 @@
     "BREADCRUMBS:browse": "ICPO results",
     "BREADCRUMBS:details": "Result",
 
-    "MSG:LOADING_FAILURE": "Failed to load the programming results.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the programming result.",
-
-    "PANEL:TITLE:details": "Programming details",
-
-    "PAGE_ACTION:export": "Export results",
     "PAGE_ACTION:download": "Download configuration",
     "PAGE_ACTION:download:orderData": "Order configuration",
     "PAGE_ACTION:download:driverData": "Driver configuration",
@@ -35,7 +29,7 @@
     "filter:result:success": "Success",
     "filter:result:failure": "Failure",
     "filter:placeholder:srcId": "Any",
-    "filter:submit": "Filter results",
+    "filter:submit": "Filter",
 
     "tab:log": "Programming log",
     "tab:output": "Programmer output",

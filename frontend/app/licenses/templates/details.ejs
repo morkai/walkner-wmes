@@ -1,45 +1,16 @@
 <div class="panel panel-primary">
-  <div class="panel-heading">
-    <%- t('licenses', 'PANEL:TITLE:details') %>
-  </div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('licenses', 'PROPERTY:_id') %></div>
-        <div class="prop-value licenses-id"><%= model._id %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('licenses', 'PROPERTY:appId') %></div>
-        <div class="prop-value licenses-id"><%= model.appId %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('licenses', 'PROPERTY:appName') %></div>
-        <div class="prop-value"><%= model.appName %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('licenses', 'PROPERTY:appVersion') %></div>
-        <div class="prop-value"><%= model.appVersion %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('licenses', 'PROPERTY:date') %></div>
-        <div class="prop-value"><%= model.date %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('licenses', 'PROPERTY:expireDate') %></div>
-        <div class="prop-value"><%= model.expireDate %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('licenses', 'PROPERTY:licensee') %></div>
-        <div class="prop-value"><%= model.licensee %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('licenses', 'PROPERTY:features') %></div>
-        <div class="prop-value"><%- model.features %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('licenses', 'PROPERTY:key') %></div>
-        <div class="prop-value"><pre><%- model.key %></pre></div>
-      </div>
-    </div>
+    <%- helpers.props(model, [
+      {id: '_id', className: 'licenses-id'},
+      {id: 'appId', className: 'licenses-id'},
+      'appName',
+      'appVersion',
+      'date',
+      'expireDate',
+      'licensee',
+      '!features',
+      {id: '!key', value: function(key) { return '<pre>' + key + '</pre>'; }}
+    ]) %>
   </div>
 </div>

@@ -1,28 +1,16 @@
 {
   "BREADCRUMBS:base": "Badanie Opinia",
   "BREADCRUMBS:browse": "Badania",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
   "BREADCRUMBS:report": "Raport",
   "BREADCRUMBS:settings": "Ustawienia",
 
-  "MSG:LOADING_FAILURE": "Ładowanie badań nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie badania nie powiodło się.",
-  "MSG:DELETED": "Badanie <em>{label}</em> zostało usunięte.",
-
   "PAGE_ACTION:print": "Wersja do druku",
-  "PAGE_ACTION:add": "Dodaj badanie",
   "PAGE_ACTION:edit": "Edytuj badanie",
   "PAGE_ACTION:editEmployeeCount": "Edytuj zatrudnienie",
-  "PAGE_ACTION:delete": "Usuń badanie",
   "PAGE_ACTION:settings": "Ustawienia",
 
   "LIST:ACTION:print": "Pokaż wersję do druku",
 
-  "PANEL:TITLE:details": "Szczegóły badania",
-  "PANEL:TITLE:addForm": "Formularz dodawania badania",
-  "PANEL:TITLE:editForm": "Formularz edycji badania",
   "PANEL:TITLE:editEmployeeCountForm": "Formularz edycji zatrudnienia w trakcie badania",
 
   "PROPERTY:_id": "ID",
@@ -49,24 +37,14 @@
   "PROPERTY:employeeCount.employer": "Pracodawca",
   "PROPERTY:employeeCount.count": "Ilość pracowników",
 
-  "FORM:ACTION:add": "Dodaj badanie",
-  "FORM:ACTION:edit": "Edytuj badanie",
   "FORM:ACTION:editEmployeeCount": "Edytuj zatrudnienie",
   "FORM:ACTION:preview": "Wygeneruj podgląd (ALT+P)",
   "FORM:ERROR:previewFailure": "Nie udało się wygenerować podglądu.",
   "FORM:ERROR:previewPopupBlocked": "Wyskakujące okienko podglądu zostało zablokowane.",
-  "FORM:ERROR:addFailure": "Nie udało się dodać badania.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować badania.",
   "form:placeholder:employers": "Wybierz opcje dostępne do zaznaczenia w pytaniu Jestem pracownikiem...",
   "form:placeholder:questions": "Wybierz pytania ankiety...",
   "form:help:_id": "Unikalny identyfikator badania wykorzystywany do łatwiejszej identyfikacji danych powiązanych z tym badaniem. Dozwolone są tylko znaki alfanumeryczne, myślnik oraz podkreślenie (A-Z0-9-_). Na przykład, rok i miesiąc rozpoczęcia badania: 2015-07. Wartości tej nie będzie można zmienić po dodaniu.",
   "form:help:label": "Krótka etykieta badania wyświetlana między innymi na wykresach porównawczych. Na przykład, rok i miesiąc badania: Lipiec 2015.",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia badania",
-  "ACTION_FORM:BUTTON:delete": "Usuń badanie",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrane badanie?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć badanie <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć badania.",
 
   "templates:ketrzyn": "Kętrzyn",
   "templates:pila": "Piła",

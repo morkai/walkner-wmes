@@ -1,10 +1,10 @@
 <div class="col-md-<%- kaizenColumnSize %>">
   <div class="panel panel-success">
-    <div class="panel-heading"><%- t('suggestions', 'type:kaizen') %></div>
+    <div class="panel-heading"><%- helpers.t('type:kaizen') %></div>
     <div class="panel-details <%- model.changed.all ? 'is-changed' : '' %>">
       <div class="props first">
         <div class="prop">
-          <div class="prop-name <%- model.changed.kaizenOwners ? 'is-changed' : '' %>"><%- t('suggestions', 'PROPERTY:kaizenOwners') %></div>
+          <div class="prop-name <%- model.changed.kaizenOwners ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:kaizenOwners') %></div>
           <div class="prop-value">
             <% if (model.kaizenOwners.length) { %>
             <ul>
@@ -18,27 +18,27 @@
           </div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.kaizenStartDate ? 'is-changed' : '' %>"><%- t('suggestions', 'PROPERTY:kaizenStartDate') %></div>
+          <div class="prop-name <%- model.changed.kaizenStartDate ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:kaizenStartDate') %></div>
           <div class="prop-value"><%- model.kaizenStartDate || '-' %></div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.kaizenFinishDate ? 'is-changed' : '' %>"><%- t('suggestions', 'PROPERTY:kaizenFinishDate') %></div>
+          <div class="prop-name <%- model.changed.kaizenFinishDate ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:kaizenFinishDate') %></div>
           <div class="prop-value"><%- model.kaizenFinishDate || '-' %></div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.kaizenStartDate || model.changed.kaizenFinishDate ? 'is-changed' : '' %>"><%- t('suggestions', 'PROPERTY:kaizenDuration') %></div>
+          <div class="prop-name <%- model.changed.kaizenStartDate || model.changed.kaizenFinishDate ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:kaizenDuration') %></div>
           <div class="prop-value"><%- model.kaizenDuration || '-' %></div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.kaizenFinishDate ? 'is-changed' : '' %>"><%- t('suggestions', 'PROPERTY:finishDuration') %></div>
+          <div class="prop-name <%- model.changed.kaizenFinishDate ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:finishDuration') %></div>
           <div class="prop-value"><%- model.finishDuration || '-' %></div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.kaizenImprovements ? 'is-changed' : '' %>"><%- t('suggestions', 'PROPERTY:kaizenImprovements') %></div>
+          <div class="prop-name <%- model.changed.kaizenImprovements ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:kaizenImprovements') %></div>
           <div class="prop-value text-lines"><%= model.kaizenImprovements || '-' %></div>
         </div>
         <div class="prop">
-          <div class="prop-name <%- model.changed.kaizenEffect ? 'is-changed' : '' %>"><%- t('suggestions', 'PROPERTY:kaizenEffect') %></div>
+          <div class="prop-name <%- model.changed.kaizenEffect ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:kaizenEffect') %></div>
           <div class="prop-value text-lines"><%= model.kaizenEffect || '-' %></div>
         </div>
       </div>

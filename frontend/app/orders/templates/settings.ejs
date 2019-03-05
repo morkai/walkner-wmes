@@ -1,19 +1,19 @@
 <form class="settings orders-settings">
   <div class="list-group">
-    <a class="list-group-item" href="#orders;settings?tab=operations" data-tab="operations"><%- t('orders', 'settings:tab:operations') %></a>
-    <a class="list-group-item" href="#orders;settings?tab=documents" data-tab="documents"><%- t('orders', 'settings:tab:documents') %></a>
-    <a class="list-group-item" href="#orders;settings?tab=iptChecker" data-tab="iptChecker"><%- t('orders', 'settings:tab:iptChecker') %></a>
+    <a class="list-group-item" href="#orders;settings?tab=operations" data-tab="operations"><%- helpers.t('settings:tab:operations') %></a>
+    <a class="list-group-item" href="#orders;settings?tab=documents" data-tab="documents"><%- helpers.t('settings:tab:documents') %></a>
+    <a class="list-group-item" href="#orders;settings?tab=iptChecker" data-tab="iptChecker"><%- helpers.t('settings:tab:iptChecker') %></a>
   </div>
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="operations">
       <div class="form-group">
-        <label for="<%- idPrefix %>-operations-groups"><%- t('orders', 'settings:operations:groups') %></label>
-        <span class="help-block"><%- t('orders', 'settings:operations:groups:help') %></span>
+        <label for="<%- idPrefix %>-operations-groups"><%- helpers.t('settings:operations:groups') %></label>
+        <span class="help-block"><%- helpers.t('settings:operations:groups:help') %></span>
         <textarea id="<%- idPrefix %>-operations-groups" class="form-control text-mono" name="orders.operations.groups" rows="10" data-keyup-delay="10000" data-change-delay="0"></textarea>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-operations-timeCoeffs"><%- t('orders', 'settings:operations:timeCoeffs') %></label>
-        <span class="help-block"><%- t('orders', 'settings:operations:timeCoeffs:help') %></span>
+        <label for="<%- idPrefix %>-operations-timeCoeffs"><%- helpers.t('settings:operations:timeCoeffs') %></label>
+        <span class="help-block"><%- helpers.t('settings:operations:timeCoeffs:help') %></span>
         <textarea id="<%- idPrefix %>-operations-timeCoeffs" class="form-control text-mono" name="orders.operations.timeCoeffs" rows="10" data-keyup-delay="10000" data-change-delay="0"></textarea>
       </div>
     </div>
@@ -21,33 +21,33 @@
       <div class="checkbox">
         <label class="control-label">
           <input id="<%- idPrefix %>-documents-useCatalog" name="orders.documents.useCatalog" type="checkbox" value="true">
-          <%- t('orders', 'settings:documents:useCatalog') %>
+          <%- helpers.t('settings:documents:useCatalog') %>
         </label>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-documents-excludedMrps"><%- t('orders', 'settings:documents:excludedMrps') %></label>
+        <label for="<%- idPrefix %>-documents-excludedMrps"><%- helpers.t('settings:documents:excludedMrps') %></label>
         <input id="<%- idPrefix %>-documents-excludedMrps" name="orders.documents.excludedMrps" type="text" autocomplete="new-password" data-setting>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-documents-remoteServer"><%- t('orders', 'settings:documents:remoteServer') %></label>
+        <label for="<%- idPrefix %>-documents-remoteServer"><%- helpers.t('settings:documents:remoteServer') %></label>
         <input id="<%- idPrefix %>-documents-remoteServer" class="form-control" name="orders.documents.remoteServer" type="text" autocomplete="new-password" data-change-delay="0">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-documents-path"><%- t('orders', 'settings:documents:path') %></label>
+        <label for="<%- idPrefix %>-documents-path"><%- helpers.t('settings:documents:path') %></label>
         <input id="<%- idPrefix %>-documents-path" class="form-control" name="orders.documents.path" type="text" autocomplete="new-password" data-change-delay="0">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-documents-extra"><%- t('orders', 'settings:documents:extra') %></label>
+        <label for="<%- idPrefix %>-documents-extra"><%- helpers.t('settings:documents:extra') %></label>
         <textarea id="<%- idPrefix %>-documents-extra" class="form-control text-mono" name="orders.documents.extra" rows="20" data-keyup-delay="10000" data-change-delay="0"></textarea>
       </div>
     </div>
     <div class="panel-body" data-tab="iptChecker">
       <div class="form-group">
-        <label for="<%- idPrefix %>-iptChecker-toBusinessDays"><%- t('orders', 'settings:iptChecker:toBusinessDays') %></label>
+        <label for="<%- idPrefix %>-iptChecker-toBusinessDays"><%- helpers.t('settings:iptChecker:toBusinessDays') %></label>
         <input id="<%- idPrefix %>-iptChecker-toBusinessDays" class="form-control" name="orders.iptChecker.toBusinessDays" type="number" min="1" max="9">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-iptChecker-mrps"><%- t('orders', 'settings:iptChecker:mrps') %></label>
+        <label for="<%- idPrefix %>-iptChecker-mrps"><%- helpers.t('settings:iptChecker:mrps') %></label>
         <input id="<%- idPrefix %>-iptChecker-mrps" name="orders.iptChecker.mrps" type="text" autocomplete="new-password" data-setting>
       </div>
     </div>

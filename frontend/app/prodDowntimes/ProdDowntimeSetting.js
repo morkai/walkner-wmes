@@ -9,7 +9,9 @@ define([
 
   return Setting.extend({
 
-    urlRoot: '/prodDowntimes/settings'
+    urlRoot: '/prodDowntimes/settings',
+
+    nlsDomain: 'prodDowntimes'
 
   });
 });

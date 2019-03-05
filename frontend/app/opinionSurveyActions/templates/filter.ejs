@@ -1,22 +1,22 @@
 <form class="well filter-form opinionSurveyActions-filter">
   <div class="form-group">
-    <label for="<%- idPrefix %>-survey"><%- t('opinionSurveyActions', 'PROPERTY:survey') %></label>
+    <label for="<%- idPrefix %>-survey"><%- helpers.t('PROPERTY:survey') %></label>
     <input id="<%- idPrefix %>-survey" name="survey" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-division"><%- t('opinionSurveyActions', 'PROPERTY:division') %></label>
+    <label for="<%- idPrefix %>-division"><%- helpers.t('PROPERTY:division') %></label>
     <input id="<%- idPrefix %>-division" name="division" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-participants"><%- t('opinionSurveyActions', 'filter:participants') %></label>
+    <label for="<%- idPrefix %>-participants"><%- helpers.t('filter:participants') %></label>
     <input id="<%- idPrefix %>-participants" name="participants" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-status"><%- t('opinionSurveyActions', 'PROPERTY:status') %></label>
+    <label for="<%- idPrefix %>-status"><%- helpers.t('PROPERTY:status') %></label>
     <input id="<%- idPrefix %>-status" name="status" type="text" autocomplete="new-password">
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('opinionSurveyActions', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

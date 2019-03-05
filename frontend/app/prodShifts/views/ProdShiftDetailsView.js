@@ -1,9 +1,11 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/core/views/DetailsView',
   'app/prodShifts/templates/details'
 ], function(
+  _,
   DetailsView,
   detailsTemplate
 ) {
@@ -20,16 +22,11 @@ define([
       this.panelType = this.options.panelType || 'primary';
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      return {
-        panelType: this.panelType,
-        model: this.model.serialize({
-          orgUnits: true,
-          personnel: true,
-          totalQuantityDone: true
-        })
-      };
+      return _.assign(DetailsView.prototype.getTemplateData.apply(this, arguments), {
+        panelType: this.panelType
+      });
     },
 
     setPanelType: function(panelType)

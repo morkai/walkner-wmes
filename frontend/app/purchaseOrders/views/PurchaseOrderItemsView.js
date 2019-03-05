@@ -140,7 +140,7 @@ define([
       this.printWindow = null;
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var po = this.model;
       var waitingCount = 0;
@@ -166,7 +166,6 @@ define([
       });
 
       return {
-        idPrefix: this.idPrefix,
         toolbarVisible: po.get('open') && user.isAllowedTo('PURCHASE_ORDERS:MANAGE'),
         open: po.get('open'),
         items: items,
@@ -815,7 +814,7 @@ define([
         trigger: 'manual',
         html: true,
         title: t('purchaseOrders', 'prints:title'),
-        content: renderPrintsPopover({
+        content: this.renderPartial(renderPrintsPopover, {
           orderId: this.model.id,
           prints: this.model.prints.byItem[itemId].map(function(print) { return print.serialize(); })
         })

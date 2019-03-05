@@ -5,19 +5,19 @@
     <div class="panel-body">
       <div class="orgUnitDropdowns-container"></div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-_id" class="control-label is-required"><%- t('prodLines', 'PROPERTY:_id') %></label>
+        <label for="<%- idPrefix %>-_id" class="control-label is-required"><%- helpers.t('PROPERTY:_id') %></label>
         <input id="<%- idPrefix %>-_id" class="form-control" type="text" autocomplete="new-password" name="_id" required maxlength="50" pattern="^[a-zA-Z0-9_~\-]+$">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-description" class="control-label is-required"><%- t('prodLines', 'PROPERTY:description') %></label>
+        <label for="<%- idPrefix %>-description" class="control-label is-required"><%- helpers.t('PROPERTY:description') %></label>
         <input id="<%- idPrefix %>-description" class="form-control" type="text" autocomplete="new-password" name="description" required maxlength="150">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-inventoryNo" class="control-label"><%- t('prodLines', 'PROPERTY:inventoryNo') %></label>
+        <label for="<%- idPrefix %>-inventoryNo" class="control-label"><%- helpers.t('PROPERTY:inventoryNo') %></label>
         <input id="<%- idPrefix %>-inventoryNo" class="form-control" type="text" autocomplete="new-password" name="inventoryNo" maxlength="50">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-deactivatedAt" class="control-label"><%- t('prodLines', 'PROPERTY:deactivatedAt') %></label>
+        <label for="<%- idPrefix %>-deactivatedAt" class="control-label"><%- helpers.t('PROPERTY:deactivatedAt') %></label>
         <input id="<%- idPrefix %>-deactivatedAt" class="form-control" type="date" name="deactivatedAt" maxlength="10">
       </div>
     </div>

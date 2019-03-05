@@ -1,23 +1,23 @@
 <form class="settings prodDowntimes-settings">
   <div class="list-group">
-    <a class="list-group-item" href="#prodDowntimes;settings?tab=default" data-tab="default"><%- t('prodDowntimes', 'settings:tab:default') %></a>
+    <a class="list-group-item" href="#prodDowntimes;settings?tab=default" data-tab="default"><%- helpers.t('settings:tab:default') %></a>
   </div>
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="default">
       <div class="form-group">
-        <label for="<%- idPrefix %>-autoConfirmHours"><%- t('prodDowntimes', 'settings:autoConfirmHours') %></label>
+        <label for="<%- idPrefix %>-autoConfirmHours"><%- helpers.t('settings:autoConfirmHours') %></label>
         <input id="<%- idPrefix %>-autoConfirmHours" class="form-control" name="prodDowntimes.autoConfirmHours" type="number" value="168" step="1" min="24">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-maxRejectedChanges"><%- t('prodDowntimes', 'settings:maxRejectedChanges') %></label>
+        <label for="<%- idPrefix %>-maxRejectedChanges"><%- helpers.t('settings:maxRejectedChanges') %></label>
         <input id="<%- idPrefix %>-maxRejectedChanges" class="form-control" name="prodDowntimes.maxRejectedChanges" type="number" value="2" step="1" min="0" max="10">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-maxReasonChanges"><%- t('prodDowntimes', 'settings:maxReasonChanges') %></label>
+        <label for="<%- idPrefix %>-maxReasonChanges"><%- helpers.t('settings:maxReasonChanges') %></label>
         <input id="<%- idPrefix %>-maxReasonChanges" class="form-control" name="prodDowntimes.maxReasonChanges" type="number" value="2" step="1" min="0" max="10">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-maxAorChanges"><%- t('prodDowntimes', 'settings:maxAorChanges') %></label>
+        <label for="<%- idPrefix %>-maxAorChanges"><%- helpers.t('settings:maxAorChanges') %></label>
         <input id="<%- idPrefix %>-maxAorChanges" class="form-control" name="prodDowntimes.maxAorChanges" type="number" value="2" step="1" min="0" max="10">
       </div>
     </div>

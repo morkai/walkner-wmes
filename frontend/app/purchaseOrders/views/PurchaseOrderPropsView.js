@@ -23,11 +23,10 @@ define([
       this.listenToOnce(this.model, 'change', this.render);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
-        po: this.model.serialize()
+        model: this.model.serialize()
       };
     }
 

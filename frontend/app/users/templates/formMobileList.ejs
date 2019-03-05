@@ -1,10 +1,10 @@
 <% if (_.isEmpty(mobileList)) { %>
-<p class="form-control-static"><%- t('users', 'FORM:mobile:empty') %></p>
+<p class="form-control-static"><%- helpers.t('FORM:mobile:empty') %></p>
 <% } else { %>
 <ul class="users-form-mobile-list">
   <% _.forEach(mobileList, function(mobile) { %>
   <li data-number="<%- mobile.number %>" data-from-time="<%- mobile.fromTime %>" data-to-time="<%- mobile.toTime %>">
-    <%- t('users', 'FORM:mobile:item', mobile) %> <a class="users-form-mobile-remove" href="#"><i class="fa fa-remove"></i></a>
+    <%- helpers.t('FORM:mobile:item', mobile) %> <a class="users-form-mobile-remove" href="#"><i class="fa fa-remove"></i></a>
   </li>
   <% }) %>
 </ul>

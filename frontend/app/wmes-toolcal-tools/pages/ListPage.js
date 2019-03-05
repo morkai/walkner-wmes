@@ -28,13 +28,8 @@ define([
 
       return [
         pageActions.jump(this, collection),
-        pageActions.export(layout, this, this.collection, false),
-        {
-          label: this.t('PAGE_ACTION:add'),
-          icon: 'plus',
-          privileges: 'TOOLCAL:MANAGE',
-          href: collection.genClientUrl('add')
-        },
+        pageActions.export(layout, this, collection, false),
+        pageActions.add(collection),
         {
           label: this.t('PAGE_ACTION:types'),
           icon: 'genderless',

@@ -3,7 +3,7 @@
     <div class="col-lg-8">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <%- t('pfepEntries', 'PANEL:TITLE:details') %>
+          <%- panelTitle %>
         </div>
         <div class="panel-details">
           <div class="props first">
@@ -51,24 +51,7 @@
           <%- t('pfepEntries', 'PANEL:TITLE:details:extra') %>
         </div>
         <div class="panel-details">
-          <div class="props first">
-            <div class="prop">
-              <div class="prop-name"><%- t('pfepEntries', 'PROPERTY:createdAt') %></div>
-              <div class="prop-value"><%= model.createdAt %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('pfepEntries', 'PROPERTY:creator') %></div>
-              <div class="prop-value"><%- model.creator %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('pfepEntries', 'PROPERTY:updatedAt') %></div>
-              <div class="prop-value"><%= model.updatedAt || '-' %></div>
-            </div>
-            <div class="prop">
-              <div class="prop-name"><%- t('pfepEntries', 'PROPERTY:updater') %></div>
-              <div class="prop-value"><%- model.updater %></div>
-            </div>
-          </div>
+          <%- helpers.props(model, ['createdAt', '!creator', 'updatedAt', '!updater']) %>
         </div>
       </div>
     </div>

@@ -1,35 +1,24 @@
 {
   "BREADCRUMBS:browse": "Zlecenia",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
-
-  "MSG:LOADING_FAILURE": "Ładowanie historii zleceń nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie danych zlecenia nie powiodło się.",
-  "MSG:DELETED": "Zlecenie <em>{label}</em> zostało usunięte.",
 
   "PAGE_ACTION:prodLogEntries": "Pokaż historię operacji",
   "PAGE_ACTION:prodDowntimes": "Pokaż przestoje",
-  "PAGE_ACTION:export": "Eksportuj zlecenia",
-  "PAGE_ACTION:edit": "Edytuj zlecenie",
-  "PAGE_ACTION:delete": "Usuń zlecenie",
 
   "PANEL:TITLE:details": "Szczegóły zlecenia produkcyjnego",
   "PANEL:TITLE:orderDetails": "Szczegóły zlecenia w momencie rozpoczęcia",
   "PANEL:TITLE:losses": "Straty materiałowe",
   "PANEL:TITLE:downtimes": "Przestoje rozpoczęte w trakcie wykonywania zlecenia",
   "PANEL:TITLE:serialNumbers": "Zeskanowane numery seryjne",
-  "PANEL:TITLE:addForm": "Formularz dodawania zlecenia produkcyjnego",
-  "PANEL:TITLE:editForm": "Formularz edycji danych zlecenia produkcyjnego",
+  "PANEL:TITLE:addForm": "Formularz dodawania zlecenia",
+  "PANEL:TITLE:editForm": "Formularz edycji zlecenia",
 
   "filter:orderId": "Nr/12NC zleceń",
   "filter:bom": "Komponenty",
   "filter:mrp": "Kontroler MRP zlecenia",
-  "filter:submit": "Filtruj historię",
+  "filter:submit": "Filtruj",
 
   "FORM:ACTION:add": "Dodaj zlecenie",
   "FORM:ACTION:edit": "Edytuj zlecenie",
-  "FORM:ERROR:addFailure": "Nie udało się dodać zlecenia.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować zlecenia.",
   "FORM:ERROR:order": "Zlecenie jest wymagane!",
   "FORM:ERROR:operation": "Operacja jest wymagana!",
   "FORM:ERROR:startedAt": "Czas rozpoczęcia musi mieścić się w ramach Zmiany produkcyjnej!",
@@ -71,12 +60,6 @@
 
   "unit:workerCount": "osoby",
   "unit:taktTime": "s",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia zlecenia",
-  "ACTION_FORM:BUTTON:delete": "Usuń zlecenie",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrane zlecenie?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć zlecenie <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć zlecenia.",
 
   "changeRequest:delete:messageText": "Jesteś w trybie tworzenia żądania zmiany danych produkcyjnych. <em>Zlecenie produkcyjne</em> zostanie usunięte dopiero po zaakceptowaniu operacji przez osobę odpowiedzialną.<br><br>Czy na pewno chcesz utworzyć żądanie usunięcia wybranego zlecenia produkcyjnego?",
   "changeRequest:delete:formActionText": "Utwórz żądanie usunięcia",

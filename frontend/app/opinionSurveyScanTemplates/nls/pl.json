@@ -1,23 +1,8 @@
 {
   "BREADCRUMBS:base": "Badanie Opinia",
   "BREADCRUMBS:browse": "Szablony skanowania",
-  "BREADCRUMBS:details": "Szablon skanowania",
-  "BREADCRUMBS:addForm": "Dodawanie",
-  "BREADCRUMBS:editForm": "Edycja",
-  "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie szablonów nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie szablonu nie powiodło się.",
-  "MSG:DELETED": "Szablon został usunięty.",
-
-  "PAGE_ACTION:add": "Dodaj szablon",
-  "PAGE_ACTION:edit": "Edytuj szablon",
-  "PAGE_ACTION:delete": "Usuń szablon",
-
-  "PANEL:TITLE:details": "Szczegóły szablonu",
   "PANEL:TITLE:params": "Parametry rozpoznawania odpowiedzi",
-  "PANEL:TITLE:addForm": "Formularz dodawania szablonu",
-  "PANEL:TITLE:editForm": "Formularz edycji szablonu",
 
   "PROPERTY:survey": "Badanie",
   "PROPERTY:pageNumber": "Numer strony",
@@ -31,10 +16,6 @@
   "PROPERTY:filledThreshold": "Próg zamalowania",
   "PROPERTY:markedThreshold": "Próg zaznaczenia [%]",
 
-  "FORM:ACTION:add": "Dodaj szablon",
-  "FORM:ACTION:edit": "Edytuj szablon",
-  "FORM:ERROR:addFailure": "Nie udało się dodać szablonu.",
-  "FORM:ERROR:editFailure": "Nie udało się zmodyfikować szablonu.",
   "FORM:ERROR:noImage": "Wybierz obraz szablonu.",
   "FORM:ERROR:noRegions": "Zaznacz przynajmniej jeden obszar odpowiedzi.",
   "form:help:dp": "Odwrotny stosunek rozdzielczości akumulatora do rozdzielczości obrazu. Na przykład, 1 sprawi, że akumulator będzie miał taką samą rozdzielczość jak obraz wejściowy, a 2 - dwa razy mniejszą.",
@@ -46,13 +27,7 @@
   "form:help:filledThreshold": "Próg RGB, poniżej którego piksele w obszarze danego okręgu mają być uznane za zamalowane (czarne).",
   "form:help:markedThreshold": "Minimalny stosunek ilości czarnych pikseli do ilości wszystkich pikseli w obszarze danego okręgu, aby okrąg został oznany za zaznaczony.",
 
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia szablonu",
-  "ACTION_FORM:BUTTON:delete": "Usuń szablon",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany szablon?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany szablon?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć szablonu.",
-
-  "filter:submit": "Filtruj szablony",
+  "filter:submit": "Filtruj",
 
   "toolbar:editImage": "Zmień obraz",
   "toolbar:measureMinDistance": "Zmierz min. odstęp",

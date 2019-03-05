@@ -1,10 +1,10 @@
 <form class="well filter-form">
   <div class="form-group">
-    <label for="<%- idPrefix %>-_id"><%- t('mechOrders', 'PROPERTY:_id') %></label>
-    <input id="<%- idPrefix %>-_id" class="form-control mechOrders-filter-_id" name="_id" type="text" autocomplete="new-password" maxlength="12" placeholder="<%- t('mechOrders', 'filter:placeholder:_id') %>">
+    <label for="<%- idPrefix %>-_id"><%- helpers.t('PROPERTY:_id') %></label>
+    <input id="<%- idPrefix %>-_id" class="form-control mechOrders-filter-_id" name="_id" type="text" autocomplete="new-password" maxlength="12" placeholder="<%- helpers.t('filter:placeholder:_id') %>">
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('mechOrders', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

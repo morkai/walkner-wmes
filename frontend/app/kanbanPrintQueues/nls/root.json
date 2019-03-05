@@ -1,6 +1,76 @@
 {
   "root": {
+    "BREADCRUMBS:base": "Kanban DB",
+    "BREADCRUMBS:browse": "Print queues",
 
+    "msg:printNext:expand": "Select a print queue.",
+    "msg:printNext:todo": "The select queue is already done.",
+    "msg:printNext:pending": "No tasks in the selected queue.",
+    "msg:print:failure": "Printing failed.",
+    "msg:print:IN_PROGRESS": "Printing in progress.",
+    "msg:print:CONNECTION": "Connection to the server was lost.",
+
+    "todo:true": "Todo",
+    "todo:false": "Done",
+
+    "filter:submit": "Filter",
+    "filter:groupByWorkstations": "Group by workstations",
+
+    "lineCount": "{count} {count, plural, one{line} other{lines}}",
+    "kanbanCount": "{count} {count, plural, one{kanban} other{kanbans}}",
+    "layoutCount:kk": "{count} KC",
+    "layoutCount:empty": "{count} empty",
+    "layoutCount:full": "{count} full",
+    "layoutCount:wh": "{count} WH",
+    "layoutCount:desc": "{count} desc.",
+
+    "layout:kk": "KC",
+    "layout:empty": "Empty",
+    "layout:full": "Full",
+    "layout:wh": "WH",
+    "layout:desc": "Desc.",
+
+    "job:_id": "ID",
+    "job:line": "Line",
+    "job:ccn": "CCN",
+    "job:nc12": "12NC",
+    "job:description": "Component name",
+    "job:storageBin": "Storage bin",
+    "job:kanbanId": "Kanban ID",
+    "job:status": "Status",
+    "job:labels": "Labels",
+    "job:workstation:short": "W{n}",
+    "job:workstation:long": "Workstation",
+
+    "action:ignore": "Ignore",
+    "action:restore": "Restore",
+    "action:print:job": "Print job",
+    "action:print:line": "Print line",
+    "action:print:all": "Print all",
+
+    "ignore:title:queue": "Ignoring print queue",
+    "ignore:title:job": "Ignoring print jobs",
+    "ignore:message:queue": "<p>Are you sure you want to ignore the selected print queue?</p>",
+    "ignore:message:job": "<p>Are you sure you want to ignore the selected job?</p>",
+    "ignore:yes": "Ignore",
+    "ignore:no": "Cancel",
+    "ignore:failure": "Ignoring failed.",
+
+    "restore:title": "Restoring print queue",
+    "restore:message": "<p>Are you sure you want to restore the selected print queue?</p><p>Statuses of all print jobs will reset.</p>",
+    "restore:yes": "Restore",
+    "restore:no": "Cancel",
+    "restore:failure": "Restoring failed.",
+
+    "status:pending": "Pending",
+    "status:printing": "Printing",
+    "status:success": "Success",
+    "status:failure": "Failure",
+    "status:error": "Failure: {error}",
+
+    "quickPrint:label": "Quick print",
+    "quickPrint:kanbanIds": "Kanban ID",
+    "quickPrint:submit": "Print"
   },
   "pl": true
 }

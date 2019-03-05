@@ -2,13 +2,9 @@
   "BREADCRUMBS:base": "Xiconf",
   "BREADCRUMBS:browse": "Zlecenia",
 
-  "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się.",
-
   "PANEL:TITLE:details:parentOrder": "Szczegóły zlecenia wyrobu",
   "PANEL:TITLE:details:order": "Szczegóły zlecenia Xiconf",
 
-  "PAGE_ACTION:export": "Eksportuj zlecenia",
   "PAGE_ACTION:settings": "Ustawienia",
 
   "PROPERTY:orderNo": "Nr zlecenia",
@@ -42,7 +38,7 @@
   "kind:unit:weight": "zważonych komponentów",
   "kind:nc12:weight": "12NC komponentu",
 
-  "filter:submit": "Filtruj zlecenia",
+  "filter:submit": "Filtruj",
 
   "details:showResultsLink": "Pokaż historię wyników"
 }

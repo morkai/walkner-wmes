@@ -1,21 +1,6 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Divisions",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the divisions.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the division.",
-    "MSG:DELETED": "Division <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add division",
-    "PAGE_ACTION:edit": "Edit division",
-    "PAGE_ACTION:delete": "Delete division",
-
-    "PANEL:TITLE:details": "Division's details",
-    "PANEL:TITLE:addForm": "Add division form",
-    "PANEL:TITLE:editForm": "Edit division form",
 
     "PROPERTY:_id": "ID",
     "PROPERTY:description": "Description",
@@ -26,16 +11,6 @@
     "TYPE:dist": "Distribution",
     "TYPE:other": "Other",
 
-    "FORM:ACTION:add": "Add division",
-    "FORM:ACTION:edit": "Edit division",
-    "FORM:ERROR:addFailure": "Failed to add the new division.",
-    "FORM:ERROR:editFailure": "Failed to edit the division.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Division deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete division",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen division?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> division?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the division.",
     "ACTION_FORM:delete:NOT_EMPTY": "Division is not empty."
   },
   "pl": true

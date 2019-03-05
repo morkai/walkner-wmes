@@ -7,15 +7,8 @@
   "BREADCRUMBS:settings": "Ustawienia",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
-  "MSG:LOADING_FAILURE": "Ładowanie planów godzinowych nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie planu godzinowego nie powiodło się.",
-  "MSG:DELETED": "Plan godzinowy <em>{label}</em> został usunięty.",
-
   "PAGE_ACTION:print": "Drukuj plan",
   "PAGE_ACTION:add": "Planuj",
-  "PAGE_ACTION:edit": "Edytuj plan",
-  "PAGE_ACTION:delete": "Usuń plan",
-  "PAGE_ACTION:export": "Eksportuj plany",
   "PAGE_ACTION:heff": "Wydajność godzinowa",
   "PAGE_ACTION:planning": "Planowanie",
   "PAGE_ACTION:settings": "Ustawienia",
@@ -36,12 +29,6 @@
   "addForm:submit": "Planuj",
   "addForm:msg:offline": "Nie można planować: brak połączenia z serwerem.",
   "addForm:msg:failure": "Nie udało się znaleźć/utworzyć wpisu do edycji: {error, select, AUTH{brak uprawnień!} INPUT{nieprawidłowe dane wejściowe!} other{{error}}}",
-
-  "ACTION_FORM:DIALOG_TITLE:delete": "Potwierdzenie usunięcia planu godzinowego",
-  "ACTION_FORM:BUTTON:delete": "Usuń plan godzinowy",
-  "ACTION_FORM:MESSAGE:delete": "Czy na pewno chcesz bezpowrotnie usunąć wybrany plan godzinowy?",
-  "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Czy na pewno chcesz bezpowrotnie usunąć plan godzinowy <em>{label}</em>?",
-  "ACTION_FORM:MESSAGE_FAILURE:delete": "Nie udało się usunąć planu godzinowego.",
 
   "heff:filter:division": "Wydział",
   "heff:filter:prodFlows": "Przepływy",

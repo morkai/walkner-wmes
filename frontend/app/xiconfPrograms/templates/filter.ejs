@@ -1,19 +1,19 @@
 <form class="well filter-form">
   <div class="form-group">
-    <label for="<%- idPrefix %>-name"><%- t('xiconfPrograms', 'PROPERTY:name') %></label>
+    <label for="<%- idPrefix %>-name"><%- helpers.t('PROPERTY:name') %></label>
     <input id="<%- idPrefix %>-name" class="form-control" name="name" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-type"><%- t('xiconfPrograms', 'PROPERTY:type') %></label>
+    <label for="<%- idPrefix %>-type"><%- helpers.t('PROPERTY:type') %></label>
     <select id="<%- idPrefix %>-type" class="form-control" name="type">
       <option></option>
       <% programTypes.forEach(function(programType) { %>
-      <option value="<%- programType %>"><%- t('xiconfPrograms', 'type:' + programType) %></option>
+      <option value="<%- programType %>"><%- helpers.t('type:' + programType) %></option>
       <% }) %>
     </select>
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('xiconfPrograms', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

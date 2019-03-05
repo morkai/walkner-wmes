@@ -1,69 +1,19 @@
 <div>
   <div class="panel panel-primary">
-    <div class="panel-heading"><%- t('opinionSurveyActions', 'PANEL:TITLE:details') %></div>
+    <div class="panel-heading"><%- panelTitle %></div>
     <div class="panel-details row">
       <div class="col-md-6">
-        <div class="props first">
-          <div class="prop">
-            <div class="prop-name"><%- t('opinionSurveyActions', 'PROPERTY:rid') %></div>
-            <div class="prop-value"><%- model.rid %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('opinionSurveyActions', 'PROPERTY:survey') %></div>
-            <div class="prop-value"><%= model.survey %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('opinionSurveyActions', 'PROPERTY:status') %></div>
-            <div class="prop-value"><%- model.status %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('opinionSurveyActions', 'PROPERTY:division') %></div>
-            <div class="prop-value"><%= model.division %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('opinionSurveyActions', 'PROPERTY:superior') %></div>
-            <div class="prop-value"><%- model.superior %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('opinionSurveyActions', 'PROPERTY:owners') %></div>
-            <div class="prop-value"><%- model.owners %></div>
-          </div>
-        </div>
+        <%- helpers.props(model, ['rid', 'survey', 'status', 'division', '!superior', '!owners']) %>
       </div>
       <div class="col-md-6">
-        <div class="props">
-          <div class="prop">
-            <div class="prop-name"><%- t('opinionSurveyActions', 'PROPERTY:startDate') %></div>
-            <div class="prop-value"><%- model.startDate %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('opinionSurveyActions', 'PROPERTY:finishDate') %></div>
-            <div class="prop-value"><%- model.finishDate %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('opinionSurveyActions', 'PROPERTY:createdAt') %></div>
-            <div class="prop-value"><%- model.createdAt %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('opinionSurveyActions', 'PROPERTY:creator') %></div>
-            <div class="prop-value"><%- model.creator %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('opinionSurveyActions', 'PROPERTY:updatedAt') %></div>
-            <div class="prop-value"><%- model.updatedAt %></div>
-          </div>
-          <div class="prop">
-            <div class="prop-name"><%- t('opinionSurveyActions', 'PROPERTY:updater') %></div>
-            <div class="prop-value"><%- model.updater %></div>
-          </div>
-        </div>
+        <%- helpers.props(model, ['startDate', 'finishDate', 'createdAt', '!creator', 'updatedAt', '!updater']) %>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-lg-3">
       <div class="panel panel-default">
-        <div class="panel-heading"><%- t('opinionSurveyActions', 'PROPERTY:question') %></div>
+        <div class="panel-heading"><%- helpers.t('PROPERTY:question') %></div>
         <div class="panel-body">
           <p class="opinionSurveyActions-details-text"><%= model.question %></p>
         </div>
@@ -71,7 +21,7 @@
     </div>
     <div class="col-lg-3">
       <div class="panel panel-danger">
-        <div class="panel-heading"><%- t('opinionSurveyActions', 'PROPERTY:problem') %></div>
+        <div class="panel-heading"><%- helpers.t('PROPERTY:problem') %></div>
         <div class="panel-body">
           <p class="opinionSurveyActions-details-text"><%= model.problem %></p>
         </div>
@@ -79,7 +29,7 @@
     </div>
     <div class="col-lg-3">
       <div class="panel panel-warning">
-        <div class="panel-heading"><%- t('opinionSurveyActions', 'PROPERTY:cause') %></div>
+        <div class="panel-heading"><%- helpers.t('PROPERTY:cause') %></div>
         <div class="panel-body">
           <p class="opinionSurveyActions-details-text"><%= model.cause %></p>
         </div>
@@ -87,7 +37,7 @@
     </div>
     <div class="col-lg-3">
       <div class="panel panel-success">
-        <div class="panel-heading"><%- t('opinionSurveyActions', 'PROPERTY:action') %></div>
+        <div class="panel-heading"><%- helpers.t('PROPERTY:action') %></div>
         <div class="panel-body">
           <p class="opinionSurveyActions-details-text"><%= model.action %></p>
         </div>

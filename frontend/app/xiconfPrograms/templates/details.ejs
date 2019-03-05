@@ -1,28 +1,28 @@
 <div>
   <div class="panel panel-primary">
     <div class="panel-heading">
-      <%- t('xiconfPrograms', 'PANEL:TITLE:details') %>
+      <%- helpers.t('PANEL:TITLE:details') %>
     </div>
     <div class="panel-details">
       <div class="props first">
         <div class="prop">
-          <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:name') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:name') %></div>
           <div class="prop-value"><%= model.name %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:prodLines') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:prodLines') %></div>
           <div class="prop-value"><%= model.prodLines %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:type') %></div>
-          <div class="prop-value"><%- t('xiconfPrograms', 'type:' + model.type) %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:type') %></div>
+          <div class="prop-value"><%- helpers.t('type:' + model.type) %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:createdAt') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:createdAt') %></div>
           <div class="prop-value"><%- model.createdAt %></div>
         </div>
         <div class="prop">
-          <div class="prop-name"><%- t('xiconfPrograms', 'PROPERTY:updatedAt') %></div>
+          <div class="prop-name"><%- helpers.t('PROPERTY:updatedAt') %></div>
           <div class="prop-value"><%- model.updatedAt %></div>
         </div>
       </div>

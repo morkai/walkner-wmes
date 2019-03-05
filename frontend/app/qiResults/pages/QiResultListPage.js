@@ -31,13 +31,13 @@ define([
 
     actions: function(layout)
     {
-      var collection = this.collection;
+      var page = this;
 
       return [
-        pageActions.jump(this, collection),
-        pageActions.export(layout, this, this.collection, false),
+        pageActions.jump(page, page.collection),
+        pageActions.export(layout, page, page.collection, false),
         {
-          template: addPageActionsTemplate,
+          template: function() { return page.renderPartialHtml(addPageActionsTemplate); },
           privileges: function() { return user.isAllowedTo('QI:INSPECTOR', 'QI:RESULTS:MANAGE'); }
         },
         {

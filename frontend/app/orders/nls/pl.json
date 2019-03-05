@@ -2,11 +2,6 @@
   "BREADCRUMBS:browse": "Zlecenia produkcyjne",
   "BREADCRUMBS:settings": "Ustawienia",
 
-  "MSG:LOADING_FAILURE": "Ładowanie zleceń nie powiodło się.",
-  "MSG:LOADING_SINGLE_FAILURE": "Ładowanie zlecenia nie powiodło się.",
-  "MSG:jump:404": "Nie znaleziono zlecenia o nr <em>{rid}</em>.",
-
-  "PAGE_ACTION:export": "Eksportuj zlecenia",
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:print": "Drukuj zlecenie",
   "PAGE_ACTION:openOrdersPrint": "Drukuj zlecenia",
@@ -21,7 +16,6 @@
   "openOrdersPrint:msg:findFailure": "Nie udało się wyszukać zleceń.",
   "openOrdersPrint:msg:notFound": "{count, plural, one{Zlecenie {orders} nie istnieje.} other{Zlecenia nie istnieją: {orders}}}",
 
-  "PANEL:TITLE:details": "Szczegóły zlecenia",
   "PANEL:TITLE:fap": "Lista zgłoszeń FAP",
   "PANEL:TITLE:operations": "Lista operacji zlecenia",
   "PANEL:TITLE:documents": "Lista dokumentów zlecenia",

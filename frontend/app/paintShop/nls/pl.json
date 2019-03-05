@@ -76,9 +76,8 @@
   "empty": "Brak zleceń dla wybranego dnia.",
   "multiPaint": "UWAGA! Zlecenie z {count, plural, one{jedną farbą} =2{dwiema farbami} other{{count} farbami}}.",
 
-  "orderChanges:change": "{type, select, start{Rozpoczęto} finish{Zakończono {qtyDone} szt.} cancel{Zignorowano} reset{Zresetowano} comment{Skomentowano} continue{Kontynuowano} deliver{Dostarczono {qtyDlv} szt.} other{Zmieniono}} <time title='{timeLong}'>{timeShort}</time> przez {user}",
   "orderChanges:change:reset": "Zresetowano zlecenie.",
-  "orderChanges:change:cancel": "Zignorowano zlecenie.",
+  "orderChanges:change:cancel": "Anulowano zlecenie.",
   "orderChanges:change:start": "{cabin, select, =1{Rozpoczęto zlecenie w kabinie pierwszej.} =2{Rozpoczęto zlecenie w kabinie drugiej.} other{Rozpoczęto zlecenie.}}",
   "orderChanges:change:finish": "Zakończono {qtyDone} szt.",
   "orderChanges:change:continue": "{cabin, select, =1{Wznowiono zlecenie w kabinie pierwszej.} =2{Wznowiono zlecenie w kabinie drugiej.} other{Wznowiono zlecenie.}}",

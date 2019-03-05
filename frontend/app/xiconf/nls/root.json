@@ -5,8 +5,6 @@
     "BREADCRUMBS:details": "Result",
     "BREADCRUMBS:settings": "Settings",
 
-    "MSG:LOADING_FAILURE": "Failed to load the programming results.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the programming result.",
     "MSG:drop:filesOnly": "Only update archives can be dropped!",
     "MSG:drop:invalidFile": "The dropped file is not an update archive!",
     "MSG:drop:upload:failure": "Failed to upload the update archive.",
@@ -15,7 +13,6 @@
     "PANEL:TITLE:details:order": "Local order details",
     "PANEL:TITLE:details:entry": "Programming details",
 
-    "PAGE_ACTION:export": "Export results",
     "PAGE_ACTION:download": "Download configuration",
     "PAGE_ACTION:download:workflow": "MultiOneWorkflow config",
     "PAGE_ACTION:download:feature": "Driver config",
@@ -61,7 +58,7 @@
     "filter:placeholder:srcId": "Any",
     "filter:nc12Type:program": "Program 12NC",
     "filter:nc12Type:led": "LED board 12NC",
-    "filter:submit": "Filter results",
+    "filter:submit": "Filter",
 
     "step:wait": "Wait",
     "step:pe": "Protective earth test",

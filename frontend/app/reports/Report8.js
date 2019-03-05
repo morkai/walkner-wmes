@@ -40,7 +40,7 @@ define([
         options = {};
       }
 
-      options.data = _.extend(
+      options.data = _.assign(
         options.data || {},
         this.query.serializeToObject()
       );

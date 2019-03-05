@@ -1,25 +1,6 @@
 <div class="panel panel-primary">
-  <div class="panel-heading">
-    <%- t('vendorNc12s', 'PANEL:TITLE:details') %>
-  </div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('vendorNc12s', 'PROPERTY:vendor') %></div>
-        <div class="prop-value"><%= model.vendor %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('vendorNc12s', 'PROPERTY:nc12') %></div>
-        <div class="prop-value"><%= model.nc12 %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('vendorNc12s', 'PROPERTY:value') %></div>
-        <div class="prop-value"><%= model.value === '' ? '-' : model.value %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('vendorNc12s', 'PROPERTY:unit') %></div>
-        <div class="prop-value"><%- model.unit || '-' %></div>
-      </div>
-    </div>
+    <%- helpers.props(model, ['vendor', 'nc12', 'value', 'unit']) %>
   </div>
 </div>

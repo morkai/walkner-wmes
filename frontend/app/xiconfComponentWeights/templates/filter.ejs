@@ -1,12 +1,12 @@
 <form class="well filter-form">
   <% ['nc12', 'description'].forEach(function(prop) { %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-<%- prop %>"><%- t('xiconfComponentWeights', 'PROPERTY:' + prop) %></label>
+    <label for="<%- idPrefix %>-<%- prop %>"><%- helpers.t('PROPERTY:' + prop) %></label>
     <input id="<%- idPrefix %>-<%- prop %>" class="form-control" name="<%- prop %>" type="text" autocomplete="new-password">
   </div>
   <% }) %>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('xiconfComponentWeights', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

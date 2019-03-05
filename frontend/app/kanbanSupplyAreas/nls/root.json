@@ -1,6 +1,21 @@
 {
   "root": {
+    "BREADCRUMBS:base": "Kanban DB",
+    "BREADCRUMBS:browse": "Supply areas",
 
+    "PROPERTY:name": "Supply area (SAP)",
+    "PROPERTY:workCenter": "WorkCenter",
+    "PROPERTY:family": "Family",
+    "PROPERTY:lines": "Lines",
+
+    "lines:no": "#",
+    "lines:id": "Line ID",
+    "lines:add": "Add line",
+    "lines:reserved": "RESERVED POSITION",
+
+    "filter:submit": "Filter",
+
+    "FORM:ERROR:alreadyExists": "Area with the specified WorkCenter already exists."
   },
   "pl": true
 }

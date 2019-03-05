@@ -2,35 +2,9 @@
   "root": {
     "BREADCRUMBS:base": "Planned line utilization",
     "BREADCRUMBS:browse": "CAG",
-    "BREADCRUMBS:addForm": "Adding",
-    "BREADCRUMBS:editForm": "Editing",
-    "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
-
-    "MSG:LOADING_FAILURE": "Failed to load the CAGs.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the CAG.",
-    "MSG:DELETED": "Company <em>{label}</em> was deleted.",
-
-    "PAGE_ACTION:add": "Add CAG",
-    "PAGE_ACTION:edit": "Edit CAG",
-    "PAGE_ACTION:delete": "Delete CAG",
-
-    "PANEL:TITLE:details": "CAG details",
-    "PANEL:TITLE:addForm": "Add CAG form",
-    "PANEL:TITLE:editForm": "Edit CAG form",
 
     "PROPERTY:_id": "ID",
-    "PROPERTY:name": "Name",
-
-    "FORM:ACTION:add": "Add CAG",
-    "FORM:ACTION:edit": "Edit CAG",
-    "FORM:ERROR:addFailure": "Failed to add the new CAG.",
-    "FORM:ERROR:editFailure": "Failed to edit the CAG.",
-
-    "ACTION_FORM:DIALOG_TITLE:delete": "Company deletion confirmation",
-    "ACTION_FORM:BUTTON:delete": "Delete CAG",
-    "ACTION_FORM:MESSAGE:delete": "Are you sure you want to delete the chosen CAG?",
-    "ACTION_FORM:MESSAGE_SPECIFIC:delete": "Are you sure you want to delete the <em>{label}</em> CAG?",
-    "ACTION_FORM:MESSAGE_FAILURE:delete": "Failed to delete the CAG."
+    "PROPERTY:name": "Name"
   },
   "pl": true
 }

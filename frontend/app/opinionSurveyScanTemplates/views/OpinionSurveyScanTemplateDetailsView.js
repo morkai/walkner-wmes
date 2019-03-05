@@ -23,7 +23,7 @@ define([
     {
       var survey = this.model.get('survey');
 
-      return _.extend(DetailsView.prototype.serialize.call(this), {
+      return _.assign(DetailsView.prototype.serialize.call(this), {
         regions: this.model.get('regions').map(function(region)
         {
           return {

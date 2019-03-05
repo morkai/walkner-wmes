@@ -46,10 +46,9 @@ define([
       this.decimalSeparator = (1.1).toLocaleString().substr(1, 1);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         printers: this.options.printers,
         labelTypes: labelConfigurations.getVendorLabelTypes(),
         items: this.model

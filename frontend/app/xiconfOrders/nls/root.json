@@ -3,14 +3,10 @@
     "BREADCRUMBS:base": "Xiconf",
     "BREADCRUMBS:browse": "Orders",
 
-    "MSG:LOADING_FAILURE": "Failed to load the orders.",
-    "MSG:LOADING_SINGLE_FAILURE": "Failed to load the order.",
-
     "PANEL:TITLE:details:parentOrder": "Product order details",
     "PANEL:TITLE:details:order": "Xiconf order details",
 
-    "PAGE_ACTION:export": "Export orders",
-    "PAGE_ACTION:settings": "Change settings",
+    "PAGE_ACTION:settings": "Settings",
 
     "PROPERTY:orderNo": "Order no",
     "PROPERTY:nc12": "12NC",
@@ -43,7 +39,7 @@
     "kind:unit:weight": "weighed components",
     "kind:nc12:weight": "Component 12NC",
 
-    "filter:submit": "Filter orders",
+    "filter:submit": "Filter",
 
     "details:showResultsLink": "Show results history"
   },

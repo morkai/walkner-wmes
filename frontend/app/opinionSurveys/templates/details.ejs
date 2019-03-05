@@ -1,17 +1,8 @@
 <div class="opinionSurveys-details">
   <div class="panel panel-primary opinionSurveys-details-props">
-    <div class="panel-heading">
-      <%- helpers.t('PANEL:TITLE:details') %>
-    </div>
+    <div class="panel-heading"><%- panelTitle %></div>
     <div class="panel-details">
-      <div class="props first">
-        <% ['_id', 'label', 'template', 'startDate', 'endDate', 'company'].forEach(function(prop) { %>
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
-          <div class="prop-value"><%= model[prop] %></div>
-        </div>
-        <% }) %>
-      </div>
+      <%- helpers.props(model, ['_id', 'label', 'template', 'startDate', 'endDate', 'company']) %>
     </div>
   </div>
   <div class="panel panel-default opinionSurveys-details-intro">

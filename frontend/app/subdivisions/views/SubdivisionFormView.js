@@ -29,7 +29,7 @@ define([
 
     template: template,
 
-    events: _.extend(FormView.prototype.events, {
+    events: _.assign(FormView.prototype.events, {
 
       'click #-addAutoDowntime': function()
       {

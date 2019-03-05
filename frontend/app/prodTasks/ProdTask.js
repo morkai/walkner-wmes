@@ -1,9 +1,13 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  '../core/Model'
+  '../i18n',
+  '../core/Model',
+  'app/core/util/colorLabel'
 ], function(
-  Model
+  t,
+  Model,
+  colorLabel
 ) {
   'use strict';
 
@@ -55,6 +59,43 @@ define([
       }
 
       return data;
+    },
+
+    serialize: function()
+    {
+      var obj = this.toJSON();
+
+      obj.tags = obj.tags.length ? obj.tags.join(', ') : '-';
+      obj.fteDiv = t('core', 'BOOL:' + !!obj.fteDiv);
+      obj.inProd = t('core', 'BOOL:' + !!obj.inProd);
+
+      if (obj.clipColor)
+      {
+        obj.clipColor = colorLabel(obj.clipColor);
+      }
+
+      var parentTask = this.collection ? this.collection.get(obj.parent) : null;
+
+      if (typeof obj.parent === 'string')
+      {
+        parentTask = this.collection ? this.collection.get(obj.parent) : null;
+
+        if (parentTask)
+        {
+          obj.parent = parentTask.getLabel();
+        }
+      }
+      else if (obj.parent)
+      {
+        obj.parent = obj.parent.name;
+      }
+
+      if (!obj.parent)
+      {
+        obj.parent = '';
+      }
+
+      return obj;
     }
 
   });

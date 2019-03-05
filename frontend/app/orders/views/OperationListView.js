@@ -162,7 +162,7 @@ define([
 
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
         operations: this.serializeOperations(),

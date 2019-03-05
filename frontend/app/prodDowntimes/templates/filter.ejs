@@ -8,43 +8,43 @@
     separator: t('core', 'filter:date:to')
   }) %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-mrp"><%- t('prodDowntimes', 'filter:mrp') %></label>
+    <label for="<%- idPrefix %>-mrp"><%- helpers.t('filter:mrp') %></label>
     <input id="<%- idPrefix %>-mrp" name="mrp" type="text" autocomplete="new-password" data-placeholder=" ">
   </div>
   <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>
   <div class="form-group">
     <label for="<%- idPrefix %>-aor">
-      <input id="<%- idPrefix %>-aorIn" class="filter-inLabel" name="aorIn" type="checkbox" value="true" title="<%- t('prodDowntimes', 'filter:tooltip:in') %>">
-      <%- t('prodDowntimes', 'PROPERTY:aor') %>
+      <input id="<%- idPrefix %>-aorIn" class="filter-inLabel" name="aorIn" type="checkbox" value="true" title="<%- helpers.t('filter:tooltip:in') %>">
+      <%- helpers.t('PROPERTY:aor') %>
     </label>
-    <input id="<%- idPrefix %>-aor" name="aor" type="text" autocomplete="new-password" data-placeholder="<%- t('prodDowntimes', 'filter:placeholder:aor') %>">
+    <input id="<%- idPrefix %>-aor" name="aor" type="text" autocomplete="new-password" data-placeholder="<%- helpers.t('filter:placeholder:aor') %>">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-reason">
-      <input id="<%- idPrefix %>-reasonIn" class="filter-inLabel" name="reasonIn" type="checkbox" value="true" title="<%- t('prodDowntimes', 'filter:tooltip:in') %>">
-      <%- t('prodDowntimes', 'PROPERTY:reason') %>
+      <input id="<%- idPrefix %>-reasonIn" class="filter-inLabel" name="reasonIn" type="checkbox" value="true" title="<%- helpers.t('filter:tooltip:in') %>">
+      <%- helpers.t('PROPERTY:reason') %>
     </label>
-    <input id="<%- idPrefix %>-reason" name="reason" type="text" autocomplete="new-password" data-placeholder="<%- t('prodDowntimes', 'filter:placeholder:reason') %>">
+    <input id="<%- idPrefix %>-reason" name="reason" type="text" autocomplete="new-password" data-placeholder="<%- helpers.t('filter:placeholder:reason') %>">
   </div>
   <div class="form-group">
-    <label class="control-label"><%- t('prodDowntimes', 'PROPERTY:status') %></label>
+    <label class="control-label"><%- helpers.t('PROPERTY:status') %></label>
     <div class="checkbox">
       <label>
         <input id="<%- idPrefix %>-alerts" type="checkbox" name="alerts" value="1">
-        <%- t('prodDowntimes', 'PROPERTY:status:alert') %>
+        <%- helpers.t('PROPERTY:status:alert') %>
       </label>
     </div>
     <% ['undecided', 'rejected', 'confirmed'].forEach(function(status) { %>
     <div class="checkbox">
       <label>
         <input type="checkbox" name="status[]" value="<%- status %>">
-        <%- t('prodDowntimes', 'PROPERTY:status:' + status) %>
+        <%- helpers.t('PROPERTY:status:' + status) %>
       </label>
     </div>
     <% }) %>
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('prodDowntimes', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

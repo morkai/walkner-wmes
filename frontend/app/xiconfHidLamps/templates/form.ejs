@@ -4,15 +4,15 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-_id" class="control-label is-required"><%- t('xiconfHidLamps', 'PROPERTY:_id') %></label>
+        <label for="<%- idPrefix %>-_id" class="control-label is-required"><%- helpers.t('PROPERTY:_id') %></label>
         <input id="<%- idPrefix %>-_id" class="form-control" type="text" autocomplete="new-password" name="_id" maxlength="20" required autofocus pattern="^[0-9]{13,20}$">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-nc12" class="control-label is-required"><%- t('xiconfHidLamps', 'PROPERTY:nc12') %></label>
+        <label for="<%- idPrefix %>-nc12" class="control-label is-required"><%- helpers.t('PROPERTY:nc12') %></label>
         <input id="<%- idPrefix %>-nc12" class="form-control" type="text" autocomplete="new-password" name="nc12" maxlength="12" required pattern="^[0-9]{12}$">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-description" class="control-label is-required"><%- t('xiconfHidLamps', 'PROPERTY:description') %></label>
+        <label for="<%- idPrefix %>-description" class="control-label is-required"><%- helpers.t('PROPERTY:description') %></label>
         <input id="<%- idPrefix %>-description" class="form-control" type="text" autocomplete="new-password" name="description" maxlength="100" required>
       </div>
     </div>

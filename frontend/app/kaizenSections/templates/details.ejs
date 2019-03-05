@@ -1,23 +1,6 @@
 <div class="panel panel-primary">
-  <div class="panel-heading"><%- t('kaizenSections', 'PANEL:TITLE:details') %></div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('kaizenSections', 'PROPERTY:_id') %></div>
-        <div class="prop-value"><%= model._id %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('kaizenSections', 'PROPERTY:name') %></div>
-        <div class="prop-value"><%= model.name %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('kaizenSections', 'PROPERTY:position') %></div>
-        <div class="prop-value"><%= model.position || '0' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('kaizenSections', 'PROPERTY:subdivisions') %></div>
-        <div class="prop-value"><%= model.subdivisions || '-' %></div>
-      </div>
-    </div>
+    <%- helpers.props(model, ['_id', 'name', 'position', 'subdivisions']) %>
   </div>
 </div>

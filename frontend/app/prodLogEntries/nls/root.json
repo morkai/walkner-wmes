@@ -2,9 +2,7 @@
   "root": {
     "BREADCRUMBS:browse": "Operation log",
 
-    "MSG:LOADING_FAILURE": "Failed to load the operation log.",
-
-    "filter:submit": "Filter operations",
+    "filter:submit": "Filter",
     "filter:placeholder:type": "Any type",
     "filter:placeholder:prodLine": "Any production line",
 

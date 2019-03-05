@@ -18,7 +18,7 @@ define([
 
     template: formTemplate,
 
-    events: _.extend({}, FormView.prototype.events, {
+    events: _.assign({}, FormView.prototype.events, {
       'change [name=color]': 'updateColorPicker'
     }),
 
@@ -42,7 +42,7 @@ define([
 
     serialize: function()
     {
-      return _.extend(FormView.prototype.serialize.call(this), {
+      return _.assign(FormView.prototype.serialize.call(this), {
         renderColorPicker: colorPickerTemplate
       });
     },

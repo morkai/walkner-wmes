@@ -1,39 +1,13 @@
 <div class="panel panel-primary">
-  <div class="panel-heading">
-    <%- t('prodTasks', 'PANEL:TITLE:details') %>
-  </div>
+  <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details">
-    <div class="props first">
-      <div class="prop">
-        <div class="prop-name"><%- t('prodTasks', 'PROPERTY:name') %></div>
-        <div class="prop-value"><%= model.name %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('prodTasks', 'PROPERTY:parent') %></div>
-        <div class="prop-value"><%= model.parent ? model.parent.name : '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('prodTasks', 'PROPERTY:tags') %></div>
-        <div class="prop-value"><%= model.tags.length ? model.tags.join(', ') : '-' %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('prodTasks', 'PROPERTY:fteDiv') %></div>
-        <div class="prop-value"><%= t('core', 'BOOL:' + model.fteDiv) %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('prodTasks', 'PROPERTY:inProd') %></div>
-        <div class="prop-value"><%= t('core', 'BOOL:' + model.inProd) %></div>
-      </div>
-      <div class="prop">
-        <div class="prop-name"><%- t('prodTasks', 'PROPERTY:clipColor') %></div>
-        <div class="prop-value">
-          <% if (model.clipColor) { %>
-          <span class="label color" style="background: <%- model.clipColor %>"><%- model.clipColor %></span>
-          <% } else { %>
-          -
-          <% } %>
-        </div>
-      </div>
-    </div>
+    <%- helpers.props(model, [
+      'name',
+      'parent',
+      'tags',
+      'fteDiv',
+      'inProd',
+      '!clipColor'
+    ]) %>
   </div>
 </div>

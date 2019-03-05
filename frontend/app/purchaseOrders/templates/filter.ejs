@@ -1,38 +1,38 @@
 <form class="well filter-form">
   <% if (!user.data.vendor) { %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-vendor" class="control-label"><%- t('purchaseOrders', 'filter:vendor') %></label>
+    <label for="<%- idPrefix %>-vendor" class="control-label"><%- helpers.t('filter:vendor') %></label>
     <input id="<%- idPrefix %>-vendor" type="text" autocomplete="new-password" name="vendor">
   </div>
   <% } %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-from"><%- t('purchaseOrders', 'filter:from') %></label>
+    <label for="<%- idPrefix %>-from"><%- helpers.t('filter:from') %></label>
     <input id="<%- idPrefix %>-from" class="form-control" name="from" type="date" placeholder="YYYY-MM-DD">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-to"><%- t('purchaseOrders', 'filter:to') %></label>
+    <label for="<%- idPrefix %>-to"><%- helpers.t('filter:to') %></label>
     <input id="<%- idPrefix %>-to" class="form-control" name="to" type="date" placeholder="YYYY-MM-DD">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-_id"><%- t('purchaseOrders', 'PROPERTY:_id') %></label>
+    <label for="<%- idPrefix %>-_id"><%- helpers.t('PROPERTY:_id') %></label>
     <input id="<%- idPrefix %>-_id" class="form-control no-controls" name="_id" type="number" min="2" max="999999">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-items-nc12"><%- t('purchaseOrders', 'PROPERTY:item.nc12') %></label>
+    <label for="<%- idPrefix %>-items-nc12"><%- helpers.t('PROPERTY:item.nc12') %></label>
     <input id="<%- idPrefix %>-items-nc12" class="form-control no-controls" name="items.nc12" type="number" min="1" max="999999999999">
   </div>
   <div class="form-group">
-    <label><%- t('purchaseOrders', 'filter:status') %></label>
+    <label><%- helpers.t('filter:status') %></label>
     <div id="<%- idPrefix %>-status" class="btn-group filter-btn-group" data-toggle="buttons">
       <% ['open', 'closed'].forEach(function(status) { %>
       <label class="btn btn-default">
-        <input type="checkbox" name="status[]" value="<%- status %>"> <%- t('purchaseOrders', 'filter:status:' + status) %>
+        <input type="checkbox" name="status[]" value="<%- status %>"> <%- helpers.t('filter:status:' + status) %>
       </label>
       <% }) %>
     </div>
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('purchaseOrders', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
   </div>
 </form>

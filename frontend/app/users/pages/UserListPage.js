@@ -31,7 +31,7 @@ define([
 
     layoutName: 'page',
 
-    pageId: 'userList',
+    pageId: 'collection',
 
     remoteTopics: {
       'users.synced': 'onSynced',
@@ -46,9 +46,9 @@ define([
     {
       var page = this;
 
-      return [pageActions.add(this.userList)].concat(
+      return [pageActions.add(this.collection)].concat(
         {
-          label: t.bound('users', 'PAGE_ACTION:sync'),
+          label: page.t('PAGE_ACTION:sync'),
           icon: 'refresh',
           privileges: 'USERS:MANAGE',
           callback: function()
@@ -61,7 +61,7 @@ define([
           }
         },
         {
-          label: t.bound('users', 'PAGE_ACTION:settings'),
+          label: page.t('PAGE_ACTION:settings'),
           icon: 'cogs',
           privileges: 'USERS:MANAGE',
           href: '#users;settings'
@@ -82,19 +82,17 @@ define([
 
     defineModels: function()
     {
-      this.userList = bindLoadingMessage(
+      this.collection = bindLoadingMessage(
         new UserCollection(null, {rqlQuery: this.options.rql}), this
       );
     },
 
     defineViews: function()
     {
-      this.listView = new UserListView({collection: this.userList});
+      this.listView = new UserListView({collection: this.collection});
 
       this.filterView = new UserFilterView({
-        model: {
-          rqlQuery: this.userList.rqlQuery
-        }
+        model: this.collection
       });
 
       this.listenTo(this.filterView, 'filterChanged', this.refreshList);
@@ -102,17 +100,17 @@ define([
 
     load: function(when)
     {
-      return when(this.userList.fetch({reset: true}));
+      return when(this.collection.fetch({reset: true}));
     },
 
     refreshList: function(newRqlQuery)
     {
-      this.userList.rqlQuery = newRqlQuery;
+      this.collection.rqlQuery = newRqlQuery;
 
       this.listView.refreshCollectionNow();
 
       this.broker.publish('router.navigate', {
-        url: this.userList.genClientUrl() + '?' + newRqlQuery,
+        url: this.collection.genClientUrl() + '?' + newRqlQuery,
         trigger: false,
         replace: true
       });
@@ -120,7 +118,8 @@ define([
 
     syncUsers: function()
     {
-      var $action = this.$syncAction;
+      var page = this;
+      var $action = page.$syncAction;
 
       if ($action.hasClass('disabled'))
       {
@@ -130,8 +129,6 @@ define([
       $action.addClass('disabled');
       $action.find('i').removeClass('fa-refresh').addClass('fa-spinner fa-spin');
 
-      var page = this;
-
       this.socket.emit('users.sync', function(err)
       {
         if (err)
@@ -140,7 +137,7 @@ define([
 
           viewport.msg.show({
             type: 'error',
-            text: t('users', 'MSG:SYNC_FAILURE')
+            text: page.t('MSG:SYNC_FAILURE')
           });
 
           page.unlockSync();
@@ -164,7 +161,7 @@ define([
 
       viewport.msg.show({
         type: 'success',
-        text: t('users', 'MSG:SYNCED'),
+        text: this.t('MSG:SYNCED'),
         time: 2500
       });
 
@@ -180,7 +177,7 @@ define([
 
       viewport.msg.show({
         type: 'error',
-        text: t('users', 'MSG:SYNC_FAILURE'),
+        text: this.t('MSG:SYNC_FAILURE'),
         time: 5000
       });
 

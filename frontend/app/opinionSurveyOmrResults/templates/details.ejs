@@ -1,65 +1,29 @@
 <div class="opinionSurveyOmrResults-details">
   <div class="panel panel-primary">
-    <div class="panel-heading"><%- t('opinionSurveyOmrResults', 'PANEL:TITLE:details') %></div>
+    <div class="panel-heading"><%- panelTitle %></div>
     <div class="panel-details">
-      <div class="props first">
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyOmrResults', 'PROPERTY:status') %></div>
-          <div class="prop-value"><%- model.status %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyOmrResults', 'PROPERTY:survey') %></div>
-          <div class="prop-value">
-            <%= model.survey %>
-          </div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyOmrResults', 'PROPERTY:pageNumber') %></div>
-          <div class="prop-value"><%- model.pageNumber %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyOmrResults', 'PROPERTY:inputFileName') %></div>
-          <div class="prop-value"><%= model.inputDirName %>\<%= model.inputFileName %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyOmrResults', 'PROPERTY:startedAt') %></div>
-          <div class="prop-value"><%- model.startedAt %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyOmrResults', 'PROPERTY:finishedAt') %></div>
-          <div class="prop-value"><%- model.finishedAt %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyOmrResults', 'PROPERTY:duration') %></div>
-          <div class="prop-value"><%- model.duration %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyOmrResults', 'PROPERTY:scanTemplate') %></div>
-          <div class="prop-value">
-            <% if (model.scanTemplate) { %>
-            <a href="#opinionSurveyScanTemplates/<%- model.scanTemplate._id %>"><%= model.scanTemplate.name %></a>
-            <% } else { %>
-            -
-            <% } %>
-          </div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyOmrResults', 'PROPERTY:qrCode') %></div>
-          <div class="prop-value"><%= model.qrCode || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyOmrResults', 'PROPERTY:matchScore') %></div>
-          <div class="prop-value"><%- model.matchScore %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyOmrResults', 'PROPERTY:errorCode') %></div>
-          <div class="prop-value"><%= model.errorCode || '-' %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- t('opinionSurveyOmrResults', 'PROPERTY:errorMessage') %></div>
-          <div class="prop-value"><%= model.errorMessage || '-' %></div>
-        </div>
-      </div>
+      <%- helpers.props(model, [
+        'status',
+        'survey',
+        'pageNumber',
+        {id: 'inputFileName', value: model.inputDirName + '\\' + model.inputFileName},
+        'startedAt',
+        'finishedAt',
+        'duration',
+        {id: '!scanTemplate', value: function(scanTemplate)
+        {
+          if (scanTemplate)
+          {
+            return '<a href="#opinionSurveyScanTemplates/' +  scanTemplate._id + '">' + _.escape(scanTemplate.name) + '</a>';
+          }
+
+          return '';
+        }},
+        'qrCode',
+        'matchScore',
+        'errorCode',
+        'errorMessage'
+      ]) %>
     </div>
   </div>
   <div class="opinionSurveyOmrResults-details-tabs">

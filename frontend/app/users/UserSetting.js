@@ -9,7 +9,9 @@ define([
 
   return Setting.extend({
 
-    urlRoot: '/users/settings'
+    urlRoot: '/users/settings',
+
+    nlsDomain: 'users'
 
   });
 });
