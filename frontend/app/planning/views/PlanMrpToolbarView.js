@@ -359,13 +359,14 @@ define([
 
         line.orders.forEach(function(lineOrder, i)
         {
-          var order = plan.orders.get(lineOrder.get('orderNo'));
+          var orderNo = lineOrder.get('orderNo');
+          var order = plan.orders.get(orderNo);
           var shiftNo = shiftUtil.getShiftNo(lineOrder.get('startAt'));
           var nextShift = prevShiftNo !== -1 && shiftNo !== prevShiftNo;
 
           prevShiftNo = shiftNo;
 
-          var lineMrpSettings = line.mrpSettings(order.get('mrp'));
+          var lineMrpSettings = order ? line.mrpSettings(order.get('mrp')) : null;
 
           if (lineMrpSettings && !_.includes(workerCounts, lineMrpSettings.get('workerCount')))
           {
@@ -373,15 +374,16 @@ define([
           }
 
           var qtyPlan = lineOrder.get('quantity');
-          var qtyDone = done ? plan.shiftOrders.getTotalQuantityDone(line.id, shiftNo, order.id) : -1;
+          var qtyDone = done ? plan.shiftOrders.getTotalQuantityDone(line.id, shiftNo, orderNo) : -1;
 
           var printOrder = {
             no: i + 1,
-            orderNo: order.id,
-            nc12: order.get('nc12'),
-            name: order.get('name'),
-            kind: order.get('kind'),
-            qtyTodo: order.get('quantityTodo'),
+            missing: !order,
+            orderNo: orderNo,
+            nc12: order ? order.get('nc12') : '?',
+            name: order ? order.get('name') : '?',
+            kind: order ? order.get('kind') : '?',
+            qtyTodo: order ? order.get('quantityTodo') : '?',
             qtyPlan: qtyPlan,
             qtyClass: qtyDone === -1
               ? ''
@@ -391,15 +393,15 @@ define([
             startAt: lineOrder.get('startAt'),
             finishAt: lineOrder.get('finishAt'),
             nextShift: nextShift,
-            icons: orderStatusIconsTemplate(plan, order.id)
+            icons: orderStatusIconsTemplate(plan, orderNo)
           };
 
           bigPage.orders.push(printOrder);
 
-          if (done && !doneOrders[order.id])
+          if (done && !doneOrders[orderNo])
           {
-            var sapOrder = sapOrders.get(order.id);
-            var shiftOrders = plan.shiftOrders.findOrders(order.id, line.id).sort(function(a, b)
+            var sapOrder = sapOrders.get(orderNo);
+            var shiftOrders = plan.shiftOrders.findOrders(orderNo, line.id).sort(function(a, b)
             {
               return Date.parse(a.get('startedAt')) - Date.parse(b.get('startedAt'));
             });
@@ -452,7 +454,7 @@ define([
               });
             }
 
-            doneOrders[order.id] = true;
+            doneOrders[orderNo] = true;
           }
         });
 
