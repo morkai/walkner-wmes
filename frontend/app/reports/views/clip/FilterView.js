@@ -45,8 +45,6 @@ define([
       js2form(this.el, formData);
 
       this.$('input[name="interval"]:checked').closest('.btn').addClass('active');
-
-      this.updateDefaultOffsets();
     },
 
     serializeFormData: function()
@@ -54,10 +52,7 @@ define([
       return {
         interval: this.model.get('interval'),
         'from-date': time.format(Number(this.model.get('from')), 'YYYY-MM-DD'),
-        'to-date': time.format(Number(this.model.get('to')), 'YYYY-MM-DD'),
-        offset1: this.model.get('offset1'),
-        offset2: this.model.get('offset2'),
-        offset3: this.model.get('offset3')
+        'to-date': time.format(Number(this.model.get('to')), 'YYYY-MM-DD')
       };
     },
 
@@ -69,10 +64,7 @@ define([
         from: null,
         to: null,
         interval: view.$id('intervals').find('.active > input').val(),
-        skip: 0,
-        offset1: '',
-        offset2: '',
-        offset3: ''
+        skip: 0
       };
 
       var range = dateTimeRange.serialize(this);
@@ -85,16 +77,6 @@ define([
 
       view.$id('from-date').val(fromMoment.format('YYYY-MM-DD'));
       view.$id('to-date').val(toMoment.format('YYYY-MM-DD'));
-
-      [1, 2, 3].forEach(function(n)
-      {
-        var value = view.$('input[name="offset' + n + '"]').val().trim();
-
-        if (value.length)
-        {
-          query['offset' + n] = value;
-        }
-      });
 
       view.model.set(query);
     },
@@ -118,27 +100,6 @@ define([
 
         default:
           return fromMoment.hour(6);
-      }
-    },
-
-    updateDefaultOffsets: function()
-    {
-      var view = this;
-
-      ['date', 'findDate', 'dataDate'].forEach(function(prop, n)
-      {
-        view.$('input[name="offset' + (n + 1) + '"]').prop(
-          'placeholder',
-          view.settings.getValue('clip.' + prop + 'PropertyOffset') || 0
-        );
-      });
-    },
-
-    onSettingChange: function(setting)
-    {
-      if (/datePropertyOffset$/i.test(setting.id))
-      {
-        this.updateDefaultOffsets();
       }
     }
 

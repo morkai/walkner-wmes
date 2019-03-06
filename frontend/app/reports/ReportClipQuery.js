@@ -39,10 +39,7 @@ define([
         limit: 25,
         skip: 0,
         orderHash: null,
-        orderCount: 0,
-        offset1: '',
-        offset2: '',
-        offset3: ''
+        orderCount: 0
       };
     },
 
@@ -149,10 +146,7 @@ define([
       var query = {
         interval: this.get('interval'),
         from: this.get('from'),
-        to: this.get('to'),
-        offset1: this.get('offset1'),
-        offset2: this.get('offset2'),
-        offset3: this.get('offset3')
+        to: this.get('to')
       };
 
       if (orgUnitType && orgUnit)
@@ -196,10 +190,6 @@ define([
 
       queryString += '&limit=' + attrs.limit;
       queryString += '&skip=' + attrs.skip;
-
-      queryString += '&offset1=' + attrs.offset1;
-      queryString += '&offset2=' + attrs.offset2;
-      queryString += '&offset3=' + attrs.offset3;
 
       return queryString.substr(1);
     }

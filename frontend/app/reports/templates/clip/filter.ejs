@@ -14,17 +14,6 @@
       <% }) %>
     </div>
   </div>
-  <div class="form-group">
-    <label><%- t('reports', 'clip:filter:dateOffset') %></label>
-    <div class="clip-filter-dateOffset">
-      <% [2, 3, 1].forEach(function(offset) { %>
-      <label>
-        <%- t('reports', 'clip:filter:dateOffset:' + offset) %>
-        <input type="number" class="form-control" name="offset<%- offset %>" placeholder="0" style="display: inline-block; width: 55px">
-      </label>
-      <% }) %>
-    </div>
-  </div>
   <div class="form-group filter-actions">
     <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('reports', 'filter:submit') %></span></button><hr><button id="<%- idPrefix %>-showDisplayOptions" type="button" class="btn btn-default"><i class="fa fa-cog"></i><span><%- t('reports', 'filter:options') %></span></button>
   </div>
