@@ -1,1 +1,1 @@
-define(["app/orgUnits/util/renderOrgUnitPath","app/core/views/DetailsView","app/mrpControllers/templates/details"],function(e,i,t){"use strict";return i.extend({template:t,localTopics:{"divisions.synced":"render","subdivisions.synced":"render"},serialize:function(){var t=i.prototype.serialize.call(this);return t.orgUnitPath=e(this.model,!0),t}})});
+define(["app/core/views/DetailsView","app/mrpControllers/templates/details"],function(e,s){"use strict";return e.extend({template:s,localTopics:{"divisions.synced":"render","subdivisions.synced":"render"}})});

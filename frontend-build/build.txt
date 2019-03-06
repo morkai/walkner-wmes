@@ -160,10 +160,6 @@ app/factoryLayout/assets/./layout.css
 app/factoryLayout/assets/./list.css
 app/factoryLayout/assets/main.css
 
-app/feedback/assets/main.css
-----------------
-app/feedback/assets/main.css
-
 app/fte/assets/main.css
 ----------------
 app/fte/assets/main.css
@@ -934,7 +930,6 @@ assets/../app/xiconfOrders/assets/main.css
 assets/../app/xiconfPrograms/assets/main.css
 assets/../app/xiconfClients/assets/main.css
 assets/../app/updater/assets/main.css
-assets/../app/feedback/assets/main.css
 assets/../app/factoryLayout/assets/main.css
 assets/../app/licenses/assets/main.css
 assets/../app/kaizenOrders/assets/main.css

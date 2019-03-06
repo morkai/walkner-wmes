@@ -1,1 +1,1 @@
-define(["app/i18n","app/core/pages/EditFormPage","../views/ProdDowntimeFormView"],function(e,r,o){"use strict";return r.extend({FormView:o,breadcrumbs:function(){return[{label:e.bound("prodDowntimes","BREADCRUMBS:browse"),href:this.model.genClientUrl("base")},{label:this.model.getLabel(),href:this.model.genClientUrl()},e.bound("prodDowntimes","BREADCRUMBS:editForm")]}})});
+define(["app/i18n","app/core/pages/EditFormPage","../views/ProdDowntimeFormView"],function(e,i,r){"use strict";return i.extend({FormView:r})});

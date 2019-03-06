@@ -1,1 +1,1 @@
-define(["../settings/Setting"],function(t){"use strict";return t.extend({urlRoot:"/users/settings"})});
+define(["../settings/Setting"],function(t){"use strict";return t.extend({urlRoot:"/users/settings",nlsDomain:"users"})});
