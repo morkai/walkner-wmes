@@ -3,4 +3,4 @@
 
 'use strict';
 
-db.events.updateMany({type: 'minutesForSafety.deleted'}, {$set: {type: 'minutesForSafetyCards.deleted'}});
+db.paintshoporders.updateMany({qtyDlv: {$exists: false}}, {$set: {qtyDlv: 0}});
