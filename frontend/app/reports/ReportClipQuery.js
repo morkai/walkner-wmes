@@ -34,7 +34,7 @@ define([
         orgUnitType: null,
         orgUnitId: null,
         to: today.valueOf(),
-        from: today.subtract(7, 'days').valueOf(),
+        from: today.subtract(1, 'days').valueOf(),
         interval: 'day',
         limit: 25,
         skip: 0,
