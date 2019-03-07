@@ -167,7 +167,7 @@ define([
 
           rows.push({
             point: point,
-            color: point.color || point.series.color,
+            color: point.series.userOptions.tooltipColor || point.color || point.series.color,
             name: rowNameFormatter(point),
             prefix: typeof options.valuePrefix === 'function' ? options.valuePrefix(point) : options.valuePrefix,
             suffix: typeof options.valueSuffix === 'function' ? options.valueSuffix(point) : options.valueSuffix,

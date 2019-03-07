@@ -79,23 +79,30 @@ define([
 
     updateChart: function()
     {
+      var chart = this.chart;
       var chartData = this.serializeChartData();
 
       this.updateExtremes(false);
 
-      var markerStyles = this.getMarkerStyles(chartData.orderCount.length);
-      var series = this.chart.series;
+      var dataSize = chartData.orderCount.length;
+      var markerStyles = this.getMarkerStyles(dataSize);
+      var series = chart.series;
 
       for (var i = 0; i < series.length; ++i)
       {
-        series[i].update({marker: markerStyles}, false);
+        var seriesOptions = _.assign(
+          {marker: markerStyles},
+          series[i].userOptions[dataSize === 1 ? 'singleOptions' : 'multiOptions']
+        );
+
+        series[i].update(seriesOptions, false);
       }
 
-      this.chart.series[0].setData(chartData.orderCount, false);
-      this.chart.series[1].setData(chartData.productionCount, false);
-      this.chart.series[2].setData(chartData.endToEndCount, false);
-      this.chart.series[3].setData(chartData.production, false);
-      this.chart.series[4].setData(chartData.endToEnd, true);
+      series[0].setData(chartData.orderCount, false);
+      series[1].setData(chartData.productionCount, false);
+      series[2].setData(chartData.endToEndCount, false);
+      series[3].setData(chartData.production, false);
+      series[4].setData(chartData.endToEnd, true);
     },
 
     serializeChartData: function()
@@ -293,6 +300,19 @@ define([
       var chartData = view.serializeChartData();
       var markerStyles = view.getMarkerStyles(chartData.orderCount.length);
       var displayOptions = view.displayOptions;
+      var orderCountColor = view.settings.getColor('clipOrderCount');
+      var productionColor = view.settings.getColor('clipProduction');
+      var endToEndColor = view.settings.getColor('clipEndToEnd');
+      var multiDataLabels = {
+        enabled: false
+      };
+      var singleDataLabels = {
+        enabled: true,
+        formatter: function()
+        {
+          return Math.floor(this.y);
+        }
+      };
 
       view.chart = new Highcharts.Chart({
         chart: {
@@ -345,50 +365,90 @@ define([
         },
         yAxis: [
           {
-            title: false
+            title: false,
+            min: 0
           },
           {
             title: false,
             opposite: true,
             labels: {
               format: '{value}%'
-            }
+            },
+            min: 0
           }
         ],
         series: [
           {
             id: 'clipOrderCount',
             name: t('reports', 'metrics:clip:orderCount'),
-            color: view.settings.getColor('clipOrderCount'),
+            color: orderCountColor,
             type: 'area',
             yAxis: 0,
             data: chartData.orderCount,
-            visible: !displayOptions || displayOptions.isSeriesVisible('clipOrderCount')
+            visible: !displayOptions || displayOptions.isSeriesVisible('clipOrderCount'),
+            multiOptions: {
+              type: 'area',
+              dataLabels: multiDataLabels
+            },
+            singleOptions: {
+              type: 'column',
+              dataLabels: singleDataLabels
+            }
           },
           {
             id: 'clipProductionCount',
             name: t('reports', 'metrics:clip:productionCount'),
-            color: view.settings.getColor('clipProduction'),
+            color: productionColor,
             type: 'line',
             dashStyle: 'LongDash',
             yAxis: 0,
             data: chartData.productionCount,
-            visible: !displayOptions || displayOptions.isSeriesVisible('clipOrderCount')
+            visible: !displayOptions || displayOptions.isSeriesVisible('clipOrderCount'),
+            multiOptions: {
+              type: 'line',
+              color: productionColor,
+              dashStyle: 'LongDash',
+              dataLabels: multiDataLabels
+            },
+            singleOptions: {
+              type: 'column',
+              borderWidth: 4,
+              borderColor: productionColor,
+              color: orderCountColor,
+              dashStyle: 'Solid',
+              dataLabels: singleDataLabels
+            },
+            tooltipColor: productionColor
           },
           {
             id: 'clipEndToEndCount',
             name: t('reports', 'metrics:clip:endToEndCount'),
-            color: view.settings.getColor('clipEndToEnd'),
+            color: endToEndColor,
             type: 'line',
             dashStyle: 'LongDash',
             yAxis: 0,
             data: chartData.endToEndCount,
-            visible: !displayOptions || displayOptions.isSeriesVisible('clipOrderCount')
+            visible: !displayOptions || displayOptions.isSeriesVisible('clipOrderCount'),
+            multiOptions: {
+              type: 'line',
+              color: endToEndColor,
+              dashStyle: 'LongDash',
+              dataLabels: multiDataLabels
+            },
+            singleOptions: {
+              type: 'column',
+              borderWidth: 4,
+              borderColor: endToEndColor,
+              color: orderCountColor,
+              dashStyle: 'Solid',
+              dataLabels: singleDataLabels
+            },
+            tooltipColor: endToEndColor
           },
           {
             id: 'clipProduction',
             name: t('reports', 'metrics:clip:production'),
-            color: view.settings.getColor('clipProduction'),
+            color: productionColor,
             type: 'line',
             yAxis: 1,
             data: chartData.production,
@@ -396,12 +456,20 @@ define([
               valueSuffix: '%',
               valueDecimals: 1
             },
-            visible: !displayOptions || displayOptions.isSeriesVisible('clipProduction')
+            visible: !displayOptions || displayOptions.isSeriesVisible('clipProduction'),
+            multiOptions: {
+              type: 'line',
+              dataLabels: multiDataLabels
+            },
+            singleOptions: {
+              type: 'column',
+              dataLabels: singleDataLabels
+            }
           },
           {
             id: 'clipEndToEnd',
             name: t('reports', 'metrics:clip:endToEnd'),
-            color: view.settings.getColor('clipEndToEnd'),
+            color: endToEndColor,
             type: 'line',
             yAxis: 1,
             data: chartData.endToEnd,
@@ -409,7 +477,15 @@ define([
               valueSuffix: '%',
               valueDecimals: 1
             },
-            visible: !displayOptions || displayOptions.isSeriesVisible('clipEndToEnd')
+            visible: !displayOptions || displayOptions.isSeriesVisible('clipEndToEnd'),
+            multiOptions: {
+              type: 'line',
+              dataLabels: multiDataLabels
+            },
+            singleOptions: {
+              type: 'column',
+              dataLabels: singleDataLabels
+            }
           }
         ]
       });
