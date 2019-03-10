@@ -66,7 +66,7 @@ define([
         return this.prepareLines(newValue);
       }
 
-      if (/spigotGroups$/.test(id))
+      if (/spigot.*?Groups$/.test(id))
       {
         return this.prepareSpigotGroups(newValue);
       }

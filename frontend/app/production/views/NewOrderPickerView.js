@@ -605,6 +605,11 @@ define([
 
     handleOrderChange: function(operationsBuilt)
     {
+      if (!operationsBuilt)
+      {
+        operationsBuilt = _.noop;
+      }
+
       var phrase = this.$id('order').val().replace(/[^0-9]+/g, '');
       var $group = this.$id('operationGroup');
       var list = this.buildOperationList(phrase, operationsBuilt);

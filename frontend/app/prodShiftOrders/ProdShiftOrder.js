@@ -552,6 +552,13 @@ define([
       return null;
     },
 
+    /**
+     * @private
+     * @param {Object} component
+     * @param {Array.<RegExp>} patterns
+     * @param {Array.<RegExp>} notPatterns
+     * @returns {boolean}
+     */
     isValidSpigotComponent: function(component, patterns, notPatterns)
     {
       for (var notPatternI = 0; notPatternI < notPatterns.length; ++notPatternI)
@@ -571,6 +578,41 @@ define([
       }
 
       return false;
+    },
+
+    getSpigotInsertComponent: function(insertGroups)
+    {
+      if (!insertGroups)
+      {
+        return null;
+      }
+
+      var groups = {};
+
+      (insertGroups || '').split('\n').forEach(function(line)
+      {
+        var parts = line.split(':');
+        var insertNc12 = parts[0].trim();
+        var productNc12s = parts[1].split(', ');
+
+        productNc12s.forEach(function(productNc12)
+        {
+          groups[productNc12.trim()] = insertNc12;
+        });
+      });
+
+      var productNc12 = this.getNc12();
+      var insertNc12 = groups[productNc12];
+
+      if (!insertNc12)
+      {
+        return null;
+      }
+
+      return _.find(this.get('orderData').bom, function(component)
+      {
+        return component.nc12 === insertNc12;
+      });
     },
 
     getOrderIdType: function()

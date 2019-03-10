@@ -800,7 +800,16 @@ define([
         return;
       }
 
-      if (spigot && spigot.forceCheck && spigotComponent)
+      var spigotInsertComponent = model.getSpigotInsertComponent();
+
+      if (spigotInsertComponent)
+      {
+        spigotComponent = spigotInsertComponent;
+      }
+
+      console.log({spigotComponent, spigotInsertComponent, spigot});
+
+      if (spigot && spigot.forceCheck)
       {
         this.showSpigotDialog(spigotComponent);
 

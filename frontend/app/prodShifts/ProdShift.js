@@ -1108,6 +1108,13 @@ define([
       );
     },
 
+    getSpigotInsertComponent: function()
+    {
+      return this.prodShiftOrder.getSpigotInsertComponent(
+        this.settings.getValue('spigotInsertGroups')
+      );
+    },
+
     getNextOrders: function()
     {
       var nextOrders = this.get('nextOrder') || [];
