@@ -52,6 +52,14 @@
     <label for="<%- idPrefix %>-category"><%- helpers.t('PROPERTY:category') %></label>
     <input id="<%- idPrefix %>-category" name="category" type="text" autocomplete="new-password" data-placeholder=" ">
   </div>
+  <div class="form-group hidden" data-filter="subdivisionType">
+    <label for="<%- idPrefix %>-subdivisionType"><%- helpers.t('PROPERTY:subdivisionType') %></label>
+    <select id="<%- idPrefix %>-subdivisionType" name="subdivisionType[]" class="form-control is-expandable" multiple size="1" data-expanded-length="10">
+      <% subdivisionTypes.forEach(function(subdivisionType) { %>
+        <option value="<%= subdivisionType %>"><%- helpers.t('subdivisionType:' + subdivisionType) %></option>
+      <% }) %>
+    </select>
+  </div>
   <div class="form-group hidden" data-filter="divisions">
     <label for="<%- idPrefix %>-divisions"><%- helpers.t('PROPERTY:divisions') %></label>
     <select id="<%- idPrefix %>-divisions" name="divisions[]" class="form-control is-expandable" multiple size="1" data-expanded-length="10">

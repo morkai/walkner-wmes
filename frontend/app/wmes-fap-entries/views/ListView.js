@@ -90,8 +90,9 @@ define([
         columns.push(
           {id: 'orderNo', className: 'is-min', tdClassName: 'text-mono', thClassName: filter},
           {id: 'nc12', className: 'is-min', tdClassName: 'text-mono', thClassName: filter},
-          {id: 'productName', className: 'is-min', thClassName: filter},
-          {id: 'mrp', className: 'is-min', thClassName: filter}
+          {id: 'productName', className: 'is-min', thClassName: filter, label: this.t('LIST:COLUMN:name')},
+          {id: 'mrp', className: 'is-min', thClassName: filter},
+          {id: 'subdivisionType', className: 'is-min', thClassName: filter}
         );
       }
 

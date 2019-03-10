@@ -11,6 +11,7 @@ define([
   'app/users/util/setUpUserSelect2',
   'app/mrpControllers/util/setUpMrpSelect2',
   '../dictionaries',
+  '../Entry',
   'app/wmes-fap-entries/templates/filter',
   'app/core/util/ExpandableSelect'
 ], function(
@@ -24,6 +25,7 @@ define([
   setUpUserSelect2,
   setUpMrpSelect2,
   dictionaries,
+  Entry,
   template
 ) {
   'use strict';
@@ -33,6 +35,7 @@ define([
     'order',
     'mrp',
     'category',
+    'subdivisionType',
     'divisions',
     'limit'
   ];
@@ -116,7 +119,8 @@ define([
           ? 'specific'
           : 'analysis';
       },
-      'analysisDone': 'analysisNeed'
+      'analysisDone': 'analysisNeed',
+      'subdivisionType': 'divisions'
     },
 
     serialize: function()
@@ -126,7 +130,8 @@ define([
         statuses: ['pending', 'started', 'finished'],
         divisions: orgUnits.getAllByType('division')
           .filter(function(d) { return d.isActive() && d.get('type') === 'prod'; })
-          .map(idAndLabel)
+          .map(idAndLabel),
+        subdivisionTypes: Entry.SUBDIVISION_TYPES
       });
     },
 
@@ -136,6 +141,7 @@ define([
       var statusType = this.$('input[name="statusType"]:checked').val();
       var status = (this.$id('status').val() || []).filter(function(v) { return !_.isEmpty(v); });
       var divisions = (this.$id('divisions').val() || []).filter(function(v) { return !_.isEmpty(v); });
+      var subdivisionType = (this.$id('subdivisionType').val() || []).filter(function(v) { return !_.isEmpty(v); });
       var user = this.$id('user').val();
       var order = this.$id('order').val().trim();
       var mrp = this.$id('mrp').val();
@@ -161,7 +167,7 @@ define([
       {
         selector.push({name: 'eq', args: ['orderNo', order]});
       }
-      else if (order.length === 7 || order.length === 12)
+      else if (order.length)
       {
         selector.push({name: 'eq', args: ['nc12', order]});
       }
@@ -191,6 +197,11 @@ define([
       if (divisions.length)
       {
         selector.push({name: 'in', args: ['divisions', divisions]});
+      }
+
+      if (subdivisionType.length)
+      {
+        selector.push({name: 'in', args: ['subdivisionType', subdivisionType]});
       }
 
       if (search.length)

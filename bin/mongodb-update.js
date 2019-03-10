@@ -3,6 +3,12 @@
 
 'use strict';
 
+db.fapentries.updateMany({subdivisionType: {$exists: false}}, {$set: {
+  subdivisionType: 'unspecified',
+  componentCode: '',
+  componentName: ''
+}});
+
 var map = {};
 
 print('Fetching components...');

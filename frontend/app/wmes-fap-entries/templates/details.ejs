@@ -61,6 +61,21 @@
     </div>
   </div>
   <div class="fap-prop-separator"></div>
+  <div class="fap-props">
+    <div class="fap-prop" data-prop="subdivisionType">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:subdivisionType') %></div>
+      <div class="fap-prop-value"><%- model.subdivisionType %></div>
+    </div>
+    <div class="fap-prop" data-prop="componentCode">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:componentCode') %></div>
+      <div class="fap-prop-value text-mono"><%= model.componentCode %></div>
+    </div>
+    <div class="fap-prop" data-prop="componentName">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:componentName') %></div>
+      <div class="fap-prop-value text-mono"><%= model.componentName %></div>
+    </div>
+  </div>
+  <div class="fap-prop-separator"></div>
   <div class="fap-chatAndAside">
     <div id="<%- idPrefix %>-chat" class="fap-chat-container"></div>
     <div id="<%- idPrefix %>-observersAndAttachments" class="fap-observersAndAttachments"></div>

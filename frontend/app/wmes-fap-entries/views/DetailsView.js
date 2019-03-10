@@ -157,6 +157,9 @@ define([
         case 'lines':
         case 'assessment':
         case 'mainAnalyzer':
+        case 'subdivisionType':
+        case 'componentCode':
+        case 'componentName':
           return this.updateProp.bind(this, prop);
       }
     },
@@ -265,7 +268,12 @@ define([
 
     updateProp: function(prop)
     {
-      this.updateText(this.$('.fap-prop[data-prop="' + prop + '"]'), this.model.serializeDetails()[prop]);
+      var $prop = this.$('.fap-prop[data-prop="' + prop + '"]');
+
+      if ($prop.length)
+      {
+        this.updateText($prop, this.model.serializeDetails()[prop]);
+      }
     },
 
     updateQty: function()
@@ -454,6 +462,44 @@ define([
         }
       },
 
+      select: function($prop, options)
+      {
+        var view = this;
+        var prop = $prop[0].dataset.prop;
+        var oldValue = view.model.get(prop);
+        var $form = $('<form class="fap-editor"></form>');
+        var $value = $('<select class="form-control"></select>');
+        var $submit = $('<button class="btn btn-primary"><i class="fa fa-check"></i></button>');
+
+        $form.on('submit', function()
+        {
+          var newValue = $value.val();
+
+          if (newValue !== oldValue)
+          {
+            view.model.change(prop, newValue);
+          }
+
+          view.hideEditor();
+
+          return false;
+        });
+
+        $value.html(options.map(function(option)
+        {
+          return '<option value="' + option.id + '">' + _.escape(option.text) + '</option>';
+        }).join(''));
+
+        $value.val(oldValue);
+
+        $form
+          .append($value)
+          .append($submit)
+          .appendTo($prop.find('.fap-prop-value'));
+
+        $value.focus();
+      },
+
       problem: function($prop)
       {
         this.editors.textArea.call(this, $prop, true);
@@ -477,46 +523,35 @@ define([
 
       category: function($prop)
       {
-        var view = this;
-        var oldValue = view.model.get('category');
-        var $form = $('<form class="fap-editor"></form>');
-        var $value = $('<select class="form-control"></select>');
-        var $submit = $('<button class="btn btn-primary"><i class="fa fa-check"></i></button>');
-
-        $form.on('submit', function()
-        {
-          var newValue = $value.val();
-
-          if (newValue !== oldValue)
-          {
-            view.model.change('category', newValue);
-          }
-
-          view.hideEditor();
-
-          return false;
-        });
-
-        var categories = dictionaries.categories
+        var oldValue = this.model.get('category');
+        var options = dictionaries.categories
           .filter(function(c)
           {
             return c.id === oldValue || c.get('active');
           })
           .map(function(c)
           {
-            return '<option value="' + c.id + '">' + _.escape(c.getLabel()) + '</option>';
+            return {
+              id: c.id,
+              text: c.getLabel()
+            };
           });
 
-        $value.html(categories.join(''));
+        this.editors.select.call(this, $prop, options);
+      },
 
-        $value.val(oldValue);
+      subdivisionType: function($prop)
+      {
+        var view = this;
+        var options = Entry.SUBDIVISION_TYPES.map(function(type)
+        {
+          return {
+            id: type,
+            text: view.t('subdivisionType:' + type)
+          };
+        });
 
-        $form
-          .append($value)
-          .append($submit)
-          .appendTo($prop.find('.fap-prop-value'));
-
-        $value.focus();
+        view.editors.select.call(view, $prop, options);
       },
 
       lines: function($prop)
@@ -1040,6 +1075,98 @@ define([
       mainAnalyzer: function()
       {
         this.editors.analyzers.apply(this, arguments);
+      },
+
+      componentCode: function($prop)
+      {
+        var view = this;
+        var oldValue = view.model.get('componentCode');
+        var $form = $('<form class="fap-editor"></form>');
+        var $value = $('<input class="form-control" type="text" pattern="^[0-9]{1,12}$" maxlength="12">');
+        var $submit = $('<button class="btn btn-primary"><i class="fa fa-check"></i></button>');
+
+        $value.on('input', function()
+        {
+          $value[0].setCustomValidity('');
+        });
+
+        $form.on('submit', function()
+        {
+          var newValue = $value.val();
+
+          if (newValue === oldValue)
+          {
+            view.hideEditor();
+
+            return false;
+          }
+
+          if (newValue === '')
+          {
+            view.model.multiChange({
+              componentCode: '',
+              componentName: ''
+            });
+
+            view.hideEditor();
+
+            return false;
+          }
+
+          $value.prop('disabled', true);
+          $submit.prop('disabled', true);
+
+          var req = view.ajax({
+            method: 'POST',
+            url: '/fap/entries;validate-component?nc12=' + newValue
+          });
+
+          req.fail(function()
+          {
+            if (req.statusText === 'abort')
+            {
+              return;
+            }
+
+            $value.prop('disabled', false);
+            $submit.prop('disabled', false);
+
+            if (req.status === 404)
+            {
+              $value[0].setCustomValidity(view.t('componentCode:404'));
+              $submit.click();
+            }
+            else
+            {
+              viewport.msg.show({
+                type: 'error',
+                time: 2500,
+                text: view.t('componentCode:failure')
+              });
+            }
+          });
+
+          req.done(function(res)
+          {
+            view.model.multiChange({
+              componentCode: res._id,
+              componentName: res.name
+            });
+
+            view.hideEditor();
+          });
+
+          return false;
+        });
+
+        $value.val(oldValue);
+
+        $form
+          .append($value)
+          .append($submit)
+          .appendTo($prop.find('.fap-prop-value'));
+
+        $value.focus();
       }
 
     }

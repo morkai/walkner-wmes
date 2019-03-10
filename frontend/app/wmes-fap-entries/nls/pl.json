@@ -25,6 +25,8 @@
 
   "PANEL:TITLE:changes": "Historia zmian",
 
+  "LIST:COLUMN:name": "Nazwa wyrobu/komponentu",
+
   "PROPERTY:rid": "ID",
   "PROPERTY:createdAt": "Czas zgłoszenia",
   "PROPERTY:owner": "Zgłaszający",
@@ -55,6 +57,14 @@
   "PROPERTY:solutionSteps": "Opis kroków rozwiązujących problem",
   "PROPERTY:limit": "Limit",
   "PROPERTY:search": "Tekst",
+  "PROPERTY:subdivisionType": "Dział",
+  "PROPERTY:componentCode": "Komponent",
+  "PROPERTY:componentName": "Nazwa komponentu",
+
+  "subdivisionType:unspecified": "Nieokreślony",
+  "subdivisionType:assembly": "Montaż",
+  "subdivisionType:press": "Tłocznia",
+  "subdivisionType:wh": "Magazyn",
 
   "status:pending": "Oczekujące",
   "status:started": "Rozpoczęte",
@@ -106,6 +116,7 @@
   "addForm:submit": "Dodaj zgłoszenie",
   "addForm:cancel": "Anuluj",
   "addForm:orderNo:notFound": "Podane zlecenie nie istnieje.",
+  "addForm:componentCode:notFound": "Podany komponent nie istnieje.",
   "addForm:notifications:subdivisions": "Działy",
   "addForm:notifications:prodFunctions": "Funkcje",
   "addForm:copy:title": "Kopiuj kategorię i problem z Twojego ostatniego zgłoszenia.",
@@ -138,6 +149,9 @@
   "orderNo:404": "Zlecenie nie istnieje.",
   "orderNo:failure": "Sprawdzanie zlecenia nie powiodło się.",
 
+  "componentCode:404": "Komponent nie istnieje.",
+  "componentCode:failure": "Sprawdzanie komponentu nie powiodło się.",
+
   "notifications:added:title": "Nowy FAP: {rid} ({category})",
   "notifications:changed:title": "Zmieniony FAP: {rid}",
   "notifications:changed:placeholder": "Odpowiedź...",
@@ -149,6 +163,7 @@
   "report:title:solver": "Ilość zgłoszeń wg osób rozwiązujących",
   "report:title:status": "Ilość zgłoszeń wg statusów",
   "report:title:category": "Ilość zgłoszeń wg kategorii",
+  "report:title:subdivisionType": "Ilość zgłoszeń wg działów",
   "report:title:division": "Ilość zgłoszeń wg wydziałów",
   "report:title:mrp": "Ilość zgłoszeń wg MRP",
   "report:title:assessment": "Ilość zgłoszeń wg oceny kroków gaszących",
@@ -162,6 +177,7 @@
   "report:filenames:solver": "FAP_IloscWgRozwiazujacych",
   "report:filenames:status": "FAP_IloscWgStatusow",
   "report:filenames:category": "FAP_IloscWgKategorii",
+  "report:filenames:subdivisionType": "FAP_IloscWgDzialow",
   "report:filenames:division": "FAP_IloscWgWydzialow",
   "report:filenames:mrp": "FAP_IloscWgMRP",
   "report:filenames:assessment": "FAP_IloscWgOceny"

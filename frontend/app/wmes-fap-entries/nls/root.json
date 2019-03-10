@@ -24,6 +24,8 @@
 
     "PANEL:TITLE:changes": "History",
 
+    "LIST:COLUMN:name": "Product/component name",
+
     "PROPERTY:rid": "ID",
     "PROPERTY:createdAt": "Created at",
     "PROPERTY:owner": "Owner",
@@ -53,6 +55,14 @@
     "PROPERTY:solutionSteps": "Solution steps",
     "PROPERTY:limit": "Limit",
     "PROPERTY:search": "Text",
+    "PROPERTY:subdivisionType": "Subdivision",
+    "PROPERTY:componentCode": "Component",
+    "PROPERTY:componentName": "Component name",
+
+    "subdivisionType:unspecified": "Unspecified",
+    "subdivisionType:assembly": "Assembly",
+    "subdivisionType:press": "Press",
+    "subdivisionType:wh": "Warehouse",
 
     "status:pending": "Pending",
     "status:started": "Started",
@@ -101,6 +111,7 @@
     "addForm:submit": "Add entry",
     "addForm:cancel": "Cancel",
     "addForm:orderNo:notFound": "Order not found.",
+    "addForm:componentCode:notFound": "Component not found.",
     "addForm:notifications:subdivisions": "Subdivisions",
     "addForm:notifications:prodFunctions": "Functions",
     "addForm:copy:title": "Copy category and problem from your last entry.",
@@ -131,6 +142,9 @@
     "orderNo:404": "Order not found.",
     "orderNo:failure": "Order validation failed.",
 
+    "componentCode:404": "Component not found.",
+    "componentCode:failure": "Component validation failed.",
+
     "notifications:added:title": "New FAP entry: {rid} ({category})",
     "notifications:changed:title": "Changed FAP: {rid}",
     "notifications:changed:placeholder": "Reply...",
@@ -142,6 +156,7 @@
     "report:title:solver": "Entry count by solvers",
     "report:title:status": "Entry count by statuses",
     "report:title:category": "Entry count by categories",
+    "report:title:subdivisionType": "Entry count by subdivisions",
     "report:title:division": "Entry count by divisions",
     "report:title:mrp": "Entry count by MRP",
     "report:title:assessment": "Entry count by assessment",
@@ -154,6 +169,7 @@
     "report:filenames:solver": "FAP_CountBySolvers",
     "report:filenames:status": "FAP_CountByStatuses",
     "report:filenames:category": "FAP_CountByCategories",
+    "report:filenames:subdivisionType": "FAP_CountBySubdivisions",
     "report:filenames:division": "FAP_CountByDivisions",
     "report:filenames:mrp": "FAP_CountByMRP",
     "report:filenames:assessment": "FAP_CountByAssessment"

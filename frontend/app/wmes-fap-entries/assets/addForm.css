@@ -105,3 +105,10 @@
   text-align: justify;
   line-height: 1.4;
 }
+.fap-addForm-componentName {
+  width: 290px;
+  line-height: 34px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

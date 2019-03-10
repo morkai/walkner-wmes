@@ -27,6 +27,7 @@ define([
     'duration',
     'status',
     'category',
+    'subdivisionType',
     'division',
     'mrp',
     'assessment',
@@ -54,6 +55,7 @@ define([
         to: 0,
         interval: 'month',
         categories: [],
+        subdivisionTypes: [],
         divisions: [],
         mrps: []
       };
@@ -68,10 +70,19 @@ define([
 
       options.data = _.assign(
         options.data || {},
-        _.pick(this.attributes, ['from', 'to', 'interval', 'categories', 'divisions', 'mrps'])
+        _.pick(this.attributes, [
+          'from',
+          'to',
+          'interval',
+          'categories',
+          'subdivisionTypes',
+          'divisions',
+          'mrps'
+        ])
       );
 
       options.data.categories = options.data.categories.join(',');
+      options.data.subdivisionTypes = options.data.subdivisionTypes.join(',');
       options.data.divisions = options.data.divisions.join(',');
       options.data.mrps = options.data.mrps.join(',');
 
@@ -85,6 +96,7 @@ define([
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval')
         + '&categories=' + this.get('categories')
+        + '&subdivisionTypes=' + this.get('subdivisionTypes')
         + '&divisions=' + this.get('divisions')
         + '&mrps=' + this.get('mrps');
     },
@@ -302,6 +314,7 @@ define([
         to: +query.to || undefined,
         interval: query.interval || undefined,
         categories: _.isEmpty(query.categories) ? [] : query.categories.split(','),
+        subdivisionTypes: _.isEmpty(query.subdivisionTypes) ? [] : query.subdivisionTypes.split(','),
         divisions: _.isEmpty(query.divisions) ? [] : query.divisions.split(','),
         mrps: _.isEmpty(query.mrps) ? [] : query.mrps.split(',')
       });

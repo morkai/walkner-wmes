@@ -11,6 +11,7 @@ define([
   'app/data/orgUnits',
   'app/users/util/setUpUserSelect2',
   '../dictionaries',
+  '../Entry',
   'app/wmes-fap-entries/templates/addForm',
   'app/wmes-fap-entries/templates/addFormUpload',
   'app/wmes-fap-entries/templates/notificationsPopover'
@@ -25,6 +26,7 @@ define([
   orgUnits,
   setUpUserSelect2,
   dictionaries,
+  Entry,
   template,
   uploadTemplate,
   notificationsPopoverTemplate
@@ -70,6 +72,7 @@ define([
 
         this.saveInputFocus(el);
         this.updateNotifications();
+        this.toggleRequiredFields();
         this.updateEtoCategory();
       },
       'change #-lines, #-subdivisions': function(e)
@@ -93,6 +96,15 @@ define([
           this.validateOrder();
         }
       },
+      'input #-componentCode': function(e)
+      {
+        this.model.attributes[e.target.name] = e.target.value;
+
+        e.target.setCustomValidity('');
+
+        this.saveInputFocus(e.target);
+        this.validateComponent();
+      },
       'focus input, textarea': function(e)
       {
         this.saveInputFocus(e.target);
@@ -101,9 +113,19 @@ define([
       {
         this.saveInputFocus(e.target);
       },
+      'change [name="subdivisionType"]': function()
+      {
+        this.model.attributes.subdivisionType = this.$('[name="subdivisionType"]:checked').val();
+
+        this.toggleRequiredFields();
+      },
       'change #-orderNo': function()
       {
         this.validateOrder();
+      },
+      'change #-componentCode': function()
+      {
+        this.validateComponent();
       },
       'click .fap-addForm-upload-name': function(e)
       {
@@ -182,7 +204,57 @@ define([
       view.setUpDnd(view.$el);
       view.setUpDnd($backdrop);
       view.updateNotifications();
+      view.updateComponentName();
+      view.toggleRequiredFields();
       view.focusInput();
+    },
+
+    toggleRequiredFields: function()
+    {
+      var orderNo = false;
+      var lines = false;
+      var componentCode = false;
+
+      switch (this.model.get('subdivisionType'))
+      {
+        case 'assembly':
+          orderNo = true;
+          break;
+
+        case 'press':
+          componentCode = true;
+          lines = true;
+          break;
+
+        case 'wh':
+          componentCode = true;
+          break;
+      }
+
+      if (this.model.get('category') === '5544b9182b5949f80d80b369')
+      {
+        orderNo = false;
+        lines = true;
+      }
+
+      this.$id('orderNo')
+        .prop('required', orderNo)
+        .closest('.form-group')
+        .find('.control-label')
+        .toggleClass('is-required', orderNo);
+
+      this.$id('lines')
+        .prop('required', lines)
+        .closest('.form-group')
+        .toggleClass('has-required-select2', lines)
+        .find('.control-label')
+        .toggleClass('is-required', lines);
+
+      this.$id('componentCode')
+        .prop('required', componentCode)
+        .closest('.form-group')
+        .find('.control-label')
+        .toggleClass('is-required', componentCode);
     },
 
     renderUploads: function()
@@ -697,6 +769,59 @@ define([
       });
     },
 
+    validateComponent: function()
+    {
+      var view = this;
+      var $componentCode = view.$id('componentCode');
+      var nc12 = $componentCode.val();
+
+      if (!/^[0-9]{1,12}$/.test(nc12) || nc12 === '000000000000')
+      {
+        return;
+      }
+
+      if (view.model.validatedComponent && view.model.validatedComponent._id === nc12)
+      {
+        return;
+      }
+
+      view.model.validatedComponent = {
+        _id: nc12
+      };
+
+      view.model.attributes.componentName = '';
+
+      var req = view.ajax({
+        method: 'POST',
+        url: '/fap/entries;validate-component?nc12=' + nc12
+      });
+
+      req.fail(function()
+      {
+        if (req.status === 404)
+        {
+          $componentCode[0].setCustomValidity(view.t('addForm:componentCode:notFound'));
+        }
+
+        view.$id('componentName').text('');
+      });
+
+      req.done(function(res)
+      {
+        view.model.validatedComponent = res;
+
+        view.model.attributes.componentCode = res._id;
+        view.model.attributes.componentName = res.name;
+
+        view.updateComponentName();
+      });
+    },
+
+    updateComponentName: function()
+    {
+      this.$id('componentName').text(this.model.get('componentName') || '-');
+    },
+
     findUpload: function(uploadId)
     {
       var entry = this.model;
@@ -783,6 +908,13 @@ define([
 
         $upload.find('.fap-addForm-upload-name').text(name);
       }
+    },
+
+    getTemplateData: function()
+    {
+      return {
+        subdivisionTypes: Entry.SUBDIVISION_TYPES
+      };
     },
 
     serializeToForm: function()
@@ -875,7 +1007,7 @@ define([
         }
 
         view.$id('category').select2('val', res.collection[0].category).trigger('change');
-        view.$id('problem').val(res.collection[0].problem).focus();
+        view.$id('problem').val(res.collection[0].problem).trigger('input').focus();
       });
 
       req.fail(function()

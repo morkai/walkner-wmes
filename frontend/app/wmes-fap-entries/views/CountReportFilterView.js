@@ -10,6 +10,7 @@ define([
   'app/mrpControllers/util/setUpMrpSelect2',
   'app/data/orgUnits',
   '../dictionaries',
+  '../Entry',
   'app/wmes-fap-entries/templates/countReportFilter',
   'app/core/util/ExpandableSelect'
 ], function(
@@ -22,6 +23,7 @@ define([
   setUpMrpSelect2,
   orgUnits,
   dictionaries,
+  Entry,
   template
 ) {
   'use strict';
@@ -72,7 +74,8 @@ define([
       return {
         divisions: orgUnits.getAllByType('division')
           .filter(function(d) { return d.isActive() && d.get('type') === 'prod'; })
-          .map(idAndLabel)
+          .map(idAndLabel),
+        subdivisionTypes: Entry.SUBDIVISION_TYPES
       };
     },
 
@@ -88,6 +91,7 @@ define([
         'to-date': to ? time.format(to, 'YYYY-MM-DD') : '',
         categories: model.get('categories').join(','),
         mrps: model.get('mrps').join(','),
+        subdivisionTypes: model.get('subdivisionTypes').join(','),
         divisions: model.get('divisions').join(',')
       };
     },
@@ -102,7 +106,7 @@ define([
         interval: buttonGroup.getValue(this.$id('interval'))
       };
 
-      ['categories', 'mrps', 'divisions'].forEach(function(prop)
+      ['categories', 'mrps', 'subdivisionTypes', 'divisions'].forEach(function(prop)
       {
         var value = view.$id(prop).val();
 

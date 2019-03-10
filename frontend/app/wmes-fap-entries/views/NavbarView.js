@@ -60,7 +60,9 @@ define([
     {
       var view = this;
 
-      view.model = new Entry();
+      view.model = new Entry({
+        subdivisionType: 'assembly'
+      });
 
       view.listenTo(view.model, 'sync', function()
       {
@@ -209,8 +211,10 @@ define([
       delete entry.uploading;
       delete entry.uploadedFiles;
       delete entry.validatedOrder;
+      delete entry.validatedComponent;
 
       entry.clear();
+      entry.set(entry.defaults());
     },
 
     onKeyDown: function(e)

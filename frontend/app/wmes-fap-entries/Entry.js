@@ -27,6 +27,12 @@ define([
 ) {
   'use strict';
 
+  var SUBDIVISION_TYPES = [
+    'assembly',
+    'press',
+    'wh'
+  ];
+
   var AUTH_PROPS = {
     status: true,
     analysisNeed: true,
@@ -131,6 +137,13 @@ define([
 
     labelAttribute: 'rid',
 
+    defaults: function()
+    {
+      return {
+        subdivisionType: 'assembly'
+      };
+    },
+
     initialize: function()
     {
       this.serialized = null;
@@ -188,6 +201,14 @@ define([
         obj.divisions = '-';
       }
 
+      obj.subdivisionType = t(this.nlsDomain, 'subdivisionType:' + obj.subdivisionType);
+
+      if (!obj.componentCode)
+      {
+        obj.componentCode = '-';
+        obj.componentName = '-';
+      }
+
       obj.observer = this.serializeObserver();
 
       return this.serialized = obj;
@@ -212,6 +233,12 @@ define([
       obj.category = '<span class="fap-list-category">' + _.escape(obj.category) + '</span>';
       obj.problem = '<span class="fap-list-problem">' + _.escape(obj.problem) + '</span>';
       obj.lines = '<span class="fap-list-lines">' + _.escape(obj.lines) + '</span>';
+
+      if (obj.componentCode !== '-')
+      {
+        obj.nc12 = obj.componentCode;
+        obj.productName = obj.componentName;
+      }
 
       return this.serialized = obj;
     },
@@ -299,6 +326,8 @@ define([
         solution: manage || procEng || designer || master || leader,
         problem: started && (manage || procEng || designer || master || leader),
         category: manage || procEng || designer,
+        subdivisionType: manage || procEng || designer || master || leader,
+        componentCode: started && (manage || procEng),
         orderNo: started && (manage || procEng),
         lines: started && (manage || procEng),
         assessment: !pending && (manage || procEng || master),
@@ -862,12 +891,16 @@ define([
       productName: 1,
       qtyTodo: 1,
       qtyDone: 1,
-      analyzers: 1
+      analyzers: 1,
+      subdivisionType: 1,
+      componentCode: 1,
+      componentName: 1
 
     }
 
   }, {
 
+    SUBDIVISION_TYPES: SUBDIVISION_TYPES,
     AUTH_PROPS: AUTH_PROPS
 
   });

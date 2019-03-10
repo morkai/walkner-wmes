@@ -21,6 +21,14 @@
     <input id="<%- idPrefix %>-categories" name="categories" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
+    <label for="<%- idPrefix %>-subdivisionTypes"><%- helpers.t('PROPERTY:subdivisionType') %></label>
+    <select id="<%- idPrefix %>-subdivisionTypes" name="subdivisionTypes" class="form-control is-expandable" multiple size="1" data-expanded-length="10">
+      <% subdivisionTypes.forEach(function(subdivisionType) { %>
+      <option value="<%= subdivisionType %>"><%- helpers.t('subdivisionType:' + subdivisionType) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
     <label for="<%- idPrefix %>-divisions"><%- helpers.t('PROPERTY:divisions') %></label>
     <select id="<%- idPrefix %>-divisions" name="divisions" class="form-control is-expandable" multiple size="1" data-expanded-length="10">
       <% divisions.forEach(function(division) { %>

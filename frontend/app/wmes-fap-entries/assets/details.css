@@ -41,7 +41,8 @@
 }
 .fap-prop[data-prop="rid"],
 .fap-prop[data-prop="orderNo"],
-.fap-prop[data-prop="qty"] {
+.fap-prop[data-prop="qty"],
+.fap-prop[data-prop="subdivisionType"] {
   flex: 0 0 auto;
   width: 210px;
 }
@@ -86,16 +87,19 @@
 .fap-is-editing.fap-is-textarea .form-control {
   height: 205px;
 }
-.fap-prop[data-prop="nc12"] {
+.fap-prop[data-prop="nc12"],
+.fap-prop[data-prop="componentCode"] {
   flex: 0 0 auto;
   width: 265px;
 }
 .fap-prop[data-prop="productName"],
+.fap-prop[data-prop="componentName"],
 .fap-prop[data-prop="lines"] {
   flex: 1 1 auto;
 }
 .fap-prop[data-prop="category"] .fap-prop-value,
 .fap-prop[data-prop="productName"] .fap-prop-value,
+.fap-prop[data-prop="componentName"] .fap-prop-value,
 .fap-prop[data-prop="divisions"] .fap-prop-value,
 .fap-prop[data-prop="mainAnalyzer"] .fap-prop-value,
 .fap-prop[data-prop="analyzers"] .fap-prop-value {
