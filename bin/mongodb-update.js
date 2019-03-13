@@ -3,51 +3,34 @@
 
 'use strict';
 
-db.fapentries.updateMany({subdivisionType: {$exists: false}}, {$set: {
-  subdivisionType: 'unspecified',
-  componentCode: '',
-  componentName: ''
-}});
+load('./mongodb-helpers.js');
 
-var map = {};
-
-print('Fetching components...');
-
-db.orders.find({}, {'bom.nc12': 1, 'bom.name': 1}).forEach(o =>
+db.ftemasterentries.find({'tasks.noPlan': true}).forEach(entry =>
 {
-  if (!Array.isArray(o.bom))
-  {
-    return;
-  }
+  let changed = false;
 
-  o.bom.forEach(c =>
+  entry.tasks.forEach(task =>
   {
-    if (c.nc12.length !== 0)
+    if (!task.noPlan || task.total === 0)
     {
-      map[c.nc12] = c.name;
+      return;
     }
+
+    changed = true;
+
+    task.total = 0;
+
+    task.functions.forEach(fn =>
+    {
+      fn.companies.forEach(c =>
+      {
+        c.count = 0;
+      });
+    });
   });
+
+  if (changed)
+  {
+    db.ftemasterentries.updateOne({_id: entry._id}, {$set: {tasks: entry.tasks}});
+  }
 });
-
-var list = [];
-
-Object.keys(map).forEach(nc12 =>
-{
-  list.push({
-    _id: nc12,
-    name: map[nc12]
-  });
-});
-
-print('Removing components...');
-
-db.components.deleteMany({});
-
-print('Inserting components...');
-
-while (list.length)
-{
-  var chunk = list.splice(0, 100);
-
-  db.components.insertMany(chunk);
-}
