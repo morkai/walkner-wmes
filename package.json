@@ -6,7 +6,7 @@
   "updater": {
     "wmes": {
       "backend": 446,
-      "frontend": 589,
+      "frontend": 590,
       "reports": 80,
       "attachments": 3,
       "importer-sap": 48,
@@ -17,7 +17,7 @@
       "docs": 24,
       "heff": 30,
       "planning": 55,
-      "ps-queue": 22,
+      "ps-queue": 23,
       "ps-load": 10,
       "wh-pickup": 9,
       "wh-problems": 6,
@@ -112,9 +112,9 @@
     "grunt-contrib-copy": "~1.0.0",
     "grunt-contrib-requirejs": "~1.0.0",
     "grunt-contrib-uglify-es": "~3.3.0",
-    "grunt-ejs-amd": "git+http://github.com/morkai/grunt-ejs-amd.git#07b9f7ae3a",
+    "grunt-ejs-amd": "morkai/grunt-ejs-amd#07b9f7ae3a",
     "grunt-eslint": "~21.0.0",
-    "grunt-messageformat-amd": "git+http://github.com/morkai/grunt-messageformat-amd.git#052e4d4ee5",
+    "grunt-messageformat-amd": "morkai/grunt-messageformat-amd#052e4d4ee5",
     "grunt-run": "~0.8.0",
     "grunt-text-replace": "~0.4.0"
   }
