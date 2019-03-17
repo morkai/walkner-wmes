@@ -51,6 +51,13 @@
   width: 33%;
   font-size: 32px;
 }
+.paintShop-paintPicker-weight {
+  position: absolute;
+  top: 5px;
+  right: 53px;
+  font-size: 42px;
+  line-height: 1;
+}
 .paintShop-paintPicker-paint .fa-level-down {
   position: absolute;
   top: 3px;
@@ -99,4 +106,9 @@
   background-color: #d9534f;
   color: #fff;
   text-shadow: none;
+}
+@media (min-width: 768px) {
+  .modal-dialog {
+    width: 790px;
+  }
 }

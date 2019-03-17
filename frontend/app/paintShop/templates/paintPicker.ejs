@@ -19,6 +19,7 @@
         <% } %>
       </span>
       <span class="paintShop-paintPicker-name"><%- _.escape(paint.name) || '&nbsp;' %></span>
+      <span class="paintShop-paintPicker-weight"><%- paint.weight.toLocaleString() %>g</span>
       <% if (paint.dropped) { %>
       <i class="fa fa-level-down"></i>
       <% } %>

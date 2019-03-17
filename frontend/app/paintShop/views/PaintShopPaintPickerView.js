@@ -1,11 +1,13 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'jquery',
   'app/i18n',
   'app/time',
   'app/core/View',
   'app/paintShop/templates/paintPicker'
 ], function(
+  $,
   t,
   time,
   View,
@@ -54,10 +56,14 @@ define([
     initialize: function()
     {
       this.onVkbValueChange = this.onVkbValueChange.bind(this);
+
+      $(window).on('resize.' + this.idPrefix, this.resize.bind(this));
     },
 
     destroy: function()
     {
+      $(window).off('.' + this.idPrefix);
+
       if (this.options.vkb)
       {
         this.options.vkb.hide();
@@ -70,12 +76,31 @@ define([
       var dropZones = this.dropZones;
       var nc12s = {};
       var paints = [];
+      var weights = {};
 
       orders.serialize().forEach(function(order)
       {
         Object.keys(order.paints).forEach(function(nc12)
         {
           nc12s[nc12] = 1;
+        });
+
+        order.childOrders.forEach(function(childOrder)
+        {
+          childOrder.components.forEach(function(component)
+          {
+            if (component.unit !== 'G' && component.unit !== 'KG')
+            {
+              return;
+            }
+
+            if (!weights[component.nc12])
+            {
+              weights[component.nc12] = 0;
+            }
+
+            weights[component.nc12] += component.qty;
+          });
         });
       });
 
@@ -98,6 +123,7 @@ define([
           dropped: dropZones.getState(nc12),
           totals: totals,
           remaining: remaining,
+          weight: weights[nc12] || 0,
           className: !totals || remaining === 0 ? 'success' : 'default'
         });
       });
@@ -120,6 +146,8 @@ define([
 
     afterRender: function()
     {
+      this.resize();
+
       var $paint = this.$('.paintShop-paintPicker-paint[value="' + this.orders.selectedPaint + '"]');
 
       if (!$paint.length)
@@ -129,15 +157,18 @@ define([
 
       $paint.click().focus();
 
+      this.$id('filter').focus();
+    },
+
+    resize: function()
+    {
       var height = window.innerHeight
         - this.$('.paintShop-paintPicker-filter').outerHeight()
         - this.$('.paintShop-paintPicker-buttons').outerHeight()
         - 4 * 15
-        - 60;
+        - 62;
 
       this.$('.paintShop-paintPicker-paints').css('height', height + 'px');
-
-      this.$id('filter').focus();
     },
 
     onVkbValueChange: function()
