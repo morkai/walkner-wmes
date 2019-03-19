@@ -95,6 +95,7 @@
   "menu:printOrders:all": "Drukuj wszystkie zlecenia",
   "menu:printOrders:mrp": "Drukuj zlecenia {mrp}",
   "menu:exportOrders": "Eksportuj zlecenia",
+  "menu:exportPaints": "Eksportuj farby",
   "menu:dropZone:true": "Odwołaj drop zone",
   "menu:dropZone:false": "Wywołaj drop zone",
   "menu:dropZone:failure": "Nie udało się zmienić drop zone.",

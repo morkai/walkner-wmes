@@ -96,6 +96,7 @@
     "menu:printOrders:all": "Print all orders",
     "menu:printOrders:mrp": "Print {mrp} orders",
     "menu:exportOrders": "Export orders",
+    "menu:exportPaints": "Export paints",
     "menu:dropZone:true": "Recall drop zone",
     "menu:dropZone:false": "Call drop zone",
     "menu:dropZone:failure": "Failed to change the drop zone state.",

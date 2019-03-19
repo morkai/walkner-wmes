@@ -628,6 +628,15 @@ define([
         }
       ];
 
+      if (!mrp)
+      {
+        menu.push({
+          label: t('paintShop', 'menu:exportPaints'),
+          handler: this.handleExportPaintsAction.bind(this, mrp),
+          visible: !IS_EMBEDDED
+        });
+      }
+
       if (user.isAllowedTo('PAINT_SHOP:DROP_ZONES'))
       {
         if (mrp)
@@ -839,6 +848,76 @@ define([
       }
 
       pageActions.exportXlsx(url);
+    },
+
+    handleExportPaintsAction: function(mrp)
+    {
+      var $msg = viewport.msg.show({
+        type: 'warning',
+        text: t('core', 'MSG:EXPORTING')
+      });
+
+      var paintPickerView = new PaintShopPaintPickerView({
+        orders: this.orders,
+        dropZones: this.dropZones
+      });
+
+      var req = this.ajax({
+        method: 'POST',
+        url: '/xlsxExporter',
+        data: JSON.stringify({
+          filename: 'WMES-PAINT_SHOP-PAINTS',
+          freezeRows: 1,
+          freezeColumns: 1,
+          columns: {
+            nc12: 13,
+            name: 40,
+            weight: {type: 'integer', width: 8},
+            dropZone: 'boolean',
+            pending: 'integer',
+            started1: 'integer',
+            started2: 'integer',
+            partial: 'integer',
+            finished: 'integer',
+            delivered: 'integer',
+            cancelled: 'integer'
+          },
+          data: paintPickerView.serialize().paints.map(function(paint)
+          {
+            return {
+              nc12: paint.nc12,
+              name: paint.name,
+              weight: paint.weight,
+              dropZone: paint.dropped,
+              pending: paint.totals.new,
+              started1: paint.totals.started1,
+              started2: paint.totals.started2,
+              partial: paint.totals.partial,
+              finished: paint.totals.finished,
+              delivered: paint.totals.delivered,
+              cancelled: paint.totals.cancelled
+            };
+          })
+        })
+      });
+
+      req.fail(function()
+      {
+        viewport.msg.hide($msg, true);
+
+        viewport.msg.show({
+          type: 'error',
+          time: 2500,
+          text: t('core', 'MSG:EXPORTING_FAILURE')
+        });
+      });
+
+      req.done(function(id)
+      {
+        viewport.msg.hide($msg, true);
+
+        pageActions.exportXlsx('/xlsxExporter/' + id);
+      });
     },
 
     handleDropZoneAction: function(mrp, isPaint)
