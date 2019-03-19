@@ -334,6 +334,8 @@
   "settings:freezeHour:help": "Godzina, po której rozplanowane zlecenia zostaną automatycznie zamrożone. Zlecenia są zamrażane po pierwszym imporcie zleceń do 30 minut przed podaną godziną (jeżeli wystąpi), lub po pierwszym przeliczeniu planu po podanej godzinie. Np. W planie na 12.01.2018 z godziną zamrożenia równą 23, zlecenia zostaną zamrożone 11.01.2018 o 22:45, jeżeli o 22:45 zostaną zaimportowane zlecenia z SAP lub po pierwszej ręcznej zmianie w planie po 23:00.",
   "settings:lateHour": "Godzina rozpoczęcia opóźnionych zleceń",
   "settings:lateHour:help": "Godzina, od której rozplanowywane są ręcznie dodane pilne zlecenia (opóźnione).",
+  "settings:etoPilotHour": "Godzina rozpoczęcia ETO pilotów",
+  "settings:etoPilotHour:help": "Godzina, od której rozplanowywane są zlecenia z priorytetem <em>E</em> - ETO pilot.",
   "settings:schedulingRate": "Szybkość planowania",
   "settings:schedulingRate:help": "Współczynnik zmieniający czas wykonania jednej sztuki danego zlecenia: <code>OrderLaborTime / 100 / LineWorkerCount * 3600 * SchedulingRate</code>",
   "settings:requiredStatuses": "Wymagane statusy",

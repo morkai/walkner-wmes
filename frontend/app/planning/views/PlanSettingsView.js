@@ -935,6 +935,7 @@ define([
 
         case 'freezeHour':
         case 'lateHour':
+        case 'etoPilotHour':
         case 'extraOrderSeconds':
         case 'bigOrderQuantity':
         case 'splitOrderQuantity':

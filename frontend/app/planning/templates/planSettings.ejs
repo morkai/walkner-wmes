@@ -4,122 +4,127 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
       <div class="form-group">
-        <label for="<%- idPrefix %>-freezeHour"><%- t('planning', 'settings:freezeHour') %></label>
-        <p class="help-block"><%- t('planning', 'settings:freezeHour:help') %></p>
-        <input id="<%- idPrefix %>-freezeHour" name="freezeHour" class="form-control" type="text" autocomplete="new-password" required pattern="^(1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
+        <label for="<%- idPrefix %>-freezeHour"><%- helpers.t('settings:freezeHour') %></label>
+        <p class="help-block"><%- helpers.t('settings:freezeHour:help') %></p>
+        <input id="<%- idPrefix %>-freezeHour" name="freezeHour" class="form-control" type="text" autocomplete="new-password" required pattern="^(0|1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-lateHour"><%- t('planning', 'settings:lateHour') %></label>
-        <p class="help-block"><%- t('planning', 'settings:lateHour:help') %></p>
-        <input id="<%- idPrefix %>-lateHour" name="lateHour" class="form-control" type="text" autocomplete="new-password" required pattern="^(1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
+        <label for="<%- idPrefix %>-lateHour"><%- helpers.t('settings:lateHour') %></label>
+        <p class="help-block"><%- helpers.t('settings:lateHour:help') %></p>
+        <input id="<%- idPrefix %>-lateHour" name="lateHour" class="form-control" type="text" autocomplete="new-password" required pattern="^(0|1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-schedulingRate"><%- t('planning', 'settings:schedulingRate') %></label>
-        <p class="help-block"><%- t('planning', 'settings:schedulingRate:help') %></p>
+        <label for="<%- idPrefix %>-etoPilotHour"><%- helpers.t('settings:etoPilotHour') %></label>
+        <p class="help-block"><%- helpers.t('settings:etoPilotHour:help') %></p>
+        <input id="<%- idPrefix %>-etoPilotHour" name="etoPilotHour" class="form-control" type="text" autocomplete="new-password" required pattern="^(0|1?[0-9]|2[0-3])$" data-object="plan" style="width: 100px">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-schedulingRate"><%- helpers.t('settings:schedulingRate') %></label>
+        <p class="help-block"><%- helpers.t('settings:schedulingRate:help') %></p>
         <textarea id="<%- idPrefix %>-schedulingRate" name="schedulingRate" class="form-control text-mono" required data-object="plan" rows="4"></textarea>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-ignoredWorkCenters"><%- t('planning', 'settings:ignoredWorkCenters') %></label>
-        <p class="help-block"><%- t('planning', 'settings:ignoredWorkCenters:help') %></p>
+        <label for="<%- idPrefix %>-ignoredWorkCenters"><%- helpers.t('settings:ignoredWorkCenters') %></label>
+        <p class="help-block"><%- helpers.t('settings:ignoredWorkCenters:help') %></p>
         <input id="<%- idPrefix %>-ignoredWorkCenters" name="ignoredWorkCenters" class="form-control text-mono" data-object="plan">
       </div>
       <% ['requiredStatuses', 'ignoredStatuses', 'completedStatuses'].forEach(function(prop) { %>
       <div class="form-group">
-        <label for="<%- idPrefix %>-<%- prop %>"><%- t('planning', 'settings:' + prop) %></label>
-        <p class="help-block"><%- t('planning', 'settings:' + prop + ':help') %></p>
+        <label for="<%- idPrefix %>-<%- prop %>"><%- helpers.t('settings:' + prop) %></label>
+        <p class="help-block"><%- helpers.t('settings:' + prop + ':help') %></p>
         <input id="<%- idPrefix %>-<%- prop %>" name="<%- prop %>" type="text" autocomplete="new-password" data-object="plan">
       </div>
       <% }) %>
       <div class="checkbox">
         <label class="control-label">
           <input id="<%- idPrefix %>-ignoreCompleted" name="ignoreCompleted" type="checkbox" value="true" data-object="plan">
-          <%- t('planning', 'settings:ignoreCompleted') %>
+          <%- helpers.t('settings:ignoreCompleted') %>
         </label>
-        <p class="help-block"><%- t('planning', 'settings:ignoreCompleted:help') %></p>
+        <p class="help-block"><%- helpers.t('settings:ignoreCompleted:help') %></p>
       </div>
       <div class="checkbox">
         <label class="control-label">
           <input id="<%- idPrefix %>-useRemainingQuantity" name="useRemainingQuantity" type="checkbox" value="true" data-object="plan">
-          <%- t('planning', 'settings:useRemainingQuantity') %>
+          <%- helpers.t('settings:useRemainingQuantity') %>
         </label>
-        <p class="help-block"><%- t('planning', 'settings:useRemainingQuantity:help') %></p>
+        <p class="help-block"><%- helpers.t('settings:useRemainingQuantity:help') %></p>
       </div>
       <hr>
       <div class="form-group">
-        <label for="<%- idPrefix %>-line"><%- t('planning', 'settings:line') %></label>
+        <label for="<%- idPrefix %>-line"><%- helpers.t('settings:line') %></label>
         <input id="<%- idPrefix %>-line" type="text" autocomplete="new-password">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-mrpPriority"><%- t('planning', 'settings:mrpPriority') %></label>
-        <p class="help-block"><%- t('planning', 'settings:mrpPriority:help') %></p>
+        <label for="<%- idPrefix %>-mrpPriority"><%- helpers.t('settings:mrpPriority') %></label>
+        <p class="help-block"><%- helpers.t('settings:mrpPriority:help') %></p>
         <input id="<%- idPrefix %>-mrpPriority" type="text" autocomplete="new-password">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-activeTime"><%- t('planning', 'settings:activeTime') %></label>
+        <label for="<%- idPrefix %>-activeTime"><%- helpers.t('settings:activeTime') %></label>
         <input id="<%- idPrefix %>-activeTime" name="activeTime" class="form-control" type="text" autocomplete="new-password" placeholder="06:00-06:00" pattern="^[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}(,\s*[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2})*$" data-object="line">
       </div>
       <hr>
       <div class="form-group">
-        <label for="<%- idPrefix %>-mrp"><%- t('planning', 'settings:mrp') %></label>
-        <p class="help-block"><%- t('planning', 'settings:mrp:help') %></p>
+        <label for="<%- idPrefix %>-mrp"><%- helpers.t('settings:mrp') %></label>
+        <p class="help-block"><%- helpers.t('settings:mrp:help') %></p>
         <input id="<%- idPrefix %>-mrp" type="text" autocomplete="new-password">
       </div>
       <div class="row">
         <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-extraOrderSeconds"><%- t('planning', 'settings:extraOrderSeconds') %></label>
+          <label for="<%- idPrefix %>-extraOrderSeconds"><%- helpers.t('settings:extraOrderSeconds') %></label>
           <input id="<%- idPrefix %>-extraOrderSeconds" name="extraOrderSeconds" class="form-control" type="number" min="0" max="600" step="1" data-object="mrp">
-          <p class="help-block"><%- t('planning', 'settings:extraOrderSeconds:help') %></p>
+          <p class="help-block"><%- helpers.t('settings:extraOrderSeconds:help') %></p>
         </div>
         <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-extraShiftSeconds-1"><%- t('planning', 'settings:extraShiftSeconds:1') %></label>
+          <label for="<%- idPrefix %>-extraShiftSeconds-1"><%- helpers.t('settings:extraShiftSeconds:1') %></label>
           <input id="<%- idPrefix %>-extraShiftSeconds-1" name="extraShiftSeconds" class="form-control" type="number" min="0" max="3600" step="1" data-object="mrp">
-          <p class="help-block"><%- t('planning', 'settings:extraShiftSeconds:help') %></p>
+          <p class="help-block"><%- helpers.t('settings:extraShiftSeconds:help') %></p>
         </div>
         <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-extraShiftSeconds-2"><%- t('planning', 'settings:extraShiftSeconds:2') %></label>
+          <label for="<%- idPrefix %>-extraShiftSeconds-2"><%- helpers.t('settings:extraShiftSeconds:2') %></label>
           <input id="<%- idPrefix %>-extraShiftSeconds-2" name="extraShiftSeconds" class="form-control" type="number" min="0" max="3600" step="1" data-object="mrp">
         </div>
         <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-extraShiftSeconds-3"><%- t('planning', 'settings:extraShiftSeconds:3') %></label>
+          <label for="<%- idPrefix %>-extraShiftSeconds-3"><%- helpers.t('settings:extraShiftSeconds:3') %></label>
           <input id="<%- idPrefix %>-extraShiftSeconds-3" name="extraShiftSeconds" class="form-control" type="number" min="0" max="3600" step="1" data-object="mrp">
         </div>
       </div>
       <div class="row">
         <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-bigOrderQuantity"><%- t('planning', 'settings:bigOrderQuantity') %></label>
+          <label for="<%- idPrefix %>-bigOrderQuantity"><%- helpers.t('settings:bigOrderQuantity') %></label>
           <input id="<%- idPrefix %>-bigOrderQuantity" name="bigOrderQuantity" class="form-control" type="number" min="0" max="9999" step="1" data-object="mrp">
-          <p class="help-block"><%- t('planning', 'settings:bigOrderQuantity:help') %></p>
+          <p class="help-block"><%- helpers.t('settings:bigOrderQuantity:help') %></p>
         </div>
         <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-hardOrderManHours"><%- t('planning', 'settings:hardOrderManHours') %></label>
+          <label for="<%- idPrefix %>-hardOrderManHours"><%- helpers.t('settings:hardOrderManHours') %></label>
           <input id="<%- idPrefix %>-hardOrderManHours" name="hardOrderManHours" class="form-control" type="number" min="0" max="9999" step="0.001" data-object="mrp">
-          <p class="help-block"><%- t('planning', 'settings:hardOrderManHours:help') %></p>
+          <p class="help-block"><%- helpers.t('settings:hardOrderManHours:help') %></p>
         </div>
         <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-splitOrderQuantity"><%- t('planning', 'settings:splitOrderQuantity') %></label>
+          <label for="<%- idPrefix %>-splitOrderQuantity"><%- helpers.t('settings:splitOrderQuantity') %></label>
           <input id="<%- idPrefix %>-splitOrderQuantity" name="splitOrderQuantity" class="form-control" type="number" min="0" max="9999" step="1" data-object="mrp">
-          <p class="help-block"><%- t('planning', 'settings:splitOrderQuantity:help') %></p>
+          <p class="help-block"><%- helpers.t('settings:splitOrderQuantity:help') %></p>
         </div>
         <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-maxSplitLineCount"><%- t('planning', 'settings:maxSplitLineCount') %></label>
+          <label for="<%- idPrefix %>-maxSplitLineCount"><%- helpers.t('settings:maxSplitLineCount') %></label>
           <input id="<%- idPrefix %>-maxSplitLineCount" name="maxSplitLineCount" class="form-control" type="number" min="0" max="99" step="1" data-object="mrp">
-          <p class="help-block"><%- t('planning', 'settings:maxSplitLineCount:help') %></p>
+          <p class="help-block"><%- helpers.t('settings:maxSplitLineCount:help') %></p>
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-hardComponents"><%- t('planning', 'settings:hardComponents') %></label>
-        <p class="help-block"><%- t('planning', 'settings:hardComponents:help') %></p>
+        <label for="<%- idPrefix %>-hardComponents"><%- helpers.t('settings:hardComponents') %></label>
+        <p class="help-block"><%- helpers.t('settings:hardComponents:help') %></p>
         <input id="<%- idPrefix %>-hardComponents" name="hardComponents" type="text" autocomplete="new-password" data-object="mrp">
       </div>
       <div class="form-group">
-        <label><%- t('planning', 'settings:groups') %></label>
+        <label><%- helpers.t('settings:groups') %></label>
         <table class="table table-bordered table-condensed">
           <thead>
           <tr>
-            <th class="is-min"><%- t('planning', 'settings:groups:no') %></th>
-            <th class="is-min"><%- t('planning', 'settings:groups:lines') %></th>
-            <th class="is-min"><%- t('planning', 'settings:groups:splitOrderQuantity') %></th>
-            <th><%- t('planning', 'settings:groups:components') %></th>
+            <th class="is-min"><%- helpers.t('settings:groups:no') %></th>
+            <th class="is-min"><%- helpers.t('settings:groups:lines') %></th>
+            <th class="is-min"><%- helpers.t('settings:groups:splitOrderQuantity') %></th>
+            <th><%- helpers.t('settings:groups:components') %></th>
             <th><%- t('core', 'LIST:COLUMN:actions') %></th>
           </tr>
           </thead>
@@ -127,29 +132,29 @@
         </table>
         <button id="<%- idPrefix %>-addGroup" type="button" class="btn btn-default" disabled>
           <i class="fa fa-plus"></i>
-          <span><%- t('planning', 'settings:groups:add') %></span>
+          <span><%- helpers.t('settings:groups:add') %></span>
         </button>
       </div>
       <hr>
       <div class="form-group">
-        <label for="<%- idPrefix %>-mrpLine"><%- t('planning', 'settings:mrpLine') %></label>
-        <p class="help-block"><%- t('planning', 'settings:mrpLine:help') %></p>
+        <label for="<%- idPrefix %>-mrpLine"><%- helpers.t('settings:mrpLine') %></label>
+        <p class="help-block"><%- helpers.t('settings:mrpLine:help') %></p>
         <input id="<%- idPrefix %>-mrpLine" type="text" autocomplete="new-password">
       </div>
       <div class="row">
         <div class="col-md-3 form-group">
-          <label for="<%- idPrefix %>-workerCount"><%- t('planning', 'settings:workerCount') %></label>
+          <label for="<%- idPrefix %>-workerCount"><%- helpers.t('settings:workerCount') %></label>
           <div class="planning-lineSettings-workerCount">
             <% [1, 2, 3].forEach(function(shiftNo) { %>
-            <label for="<%- idPrefix %>-workerCount-<%- shiftNo %>" class="planning-lineSettings-workerCount-label"><%- t('planning', 'settings:workerCount:shift', {shiftNo: t('core', 'SHIFT:' + shiftNo)}) %></label>
+            <label for="<%- idPrefix %>-workerCount-<%- shiftNo %>" class="planning-lineSettings-workerCount-label"><%- helpers.t('settings:workerCount:shift', {shiftNo: t('core', 'SHIFT:' + shiftNo)}) %></label>
             <input id="<%- idPrefix %>-workerCount-<%- shiftNo %>" name="workerCount" class="form-control planning-lineSettings-workerCount-input" type="number" min="0" max="20" data-object="mrpLine" data-index="<%- shiftNo - 1 %>">
             <% }) %>
           </div>
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-orderPriority"><%- t('planning', 'settings:orderPriority') %></label>
-        <p class="help-block"><%- t('planning', 'settings:orderPriority:help') %></p>
+        <label for="<%- idPrefix %>-orderPriority"><%- helpers.t('settings:orderPriority') %></label>
+        <p class="help-block"><%- helpers.t('settings:orderPriority:help') %></p>
         <input id="<%- idPrefix %>-orderPriority" type="text" autocomplete="new-password">
       </div>
     </div>

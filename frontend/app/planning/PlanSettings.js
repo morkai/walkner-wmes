@@ -109,6 +109,22 @@ define([
 
     nlsDomain: 'planning',
 
+    defaults: function()
+    {
+      return {
+        useRemainingQuantity: true,
+        ignoreCompleted: true,
+        requiredStatuses: [],
+        ignoredStatuses: [],
+        ignoredWorkCenters: [],
+        completedStatuses: [],
+        schedulingRate: '',
+        freezeHour: 17,
+        lateHour: 6,
+        etoPilotHour: 6
+      };
+    },
+
     initialize: function()
     {
       this.lockedMrps = null;

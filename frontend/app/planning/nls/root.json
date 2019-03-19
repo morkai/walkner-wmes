@@ -335,6 +335,8 @@
     "settings:freezeHour:help": "Hour after which the planned orders will be automatically frozen. Orders are frozen after the first SAP order import up to 30 minutes before the specified hour (if the import occurs), or after the first plan recalculation after the specified hour. For example, given a plan for 2018-01-12 with Freeze hour set to 23, the orders will be frozen 2018-01-11 at 22:45, if at 22:45 SAP orders will be imported or after the first manual plan change after hour 23:00.",
     "settings:lateHour": "Late order start hour",
     "settings:lateHour:help": "Hour from which the manually added, urgent orders (late) can be planned.",
+    "settings:etoPilotHour": "ETO pilot start hour",
+    "settings:etoPilotHour:help": "Hour from which orders with the <em>E</em> priority (ETO pilot) can be planned.",
     "settings:schedulingRate": "Scheduling rate",
     "settings:schedulingRate:help": "Coefficient that changes the time required to do a single PCE: <code>OrderLaborTime / 100 / LineWorkerCount * 3600 * SchedulingRate</code>",
     "settings:requiredStatuses": "Required statuses",
