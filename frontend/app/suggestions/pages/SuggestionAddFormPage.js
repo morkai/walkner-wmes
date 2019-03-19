@@ -39,8 +39,8 @@ define([
       }
 
       return [
-        t.bound('suggestions', 'BREADCRUMBS:base'),
-        t.bound('suggestions', 'BREADCRUMBS:addForm')
+        this.t('BREADCRUMBS:base'),
+        this.t('core', 'BREADCRUMBS:addForm')
       ];
     },
 

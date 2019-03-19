@@ -39,8 +39,8 @@ define([
       }
 
       return [
-        t.bound('kaizenOrders', 'BREADCRUMBS:base'),
-        t.bound('kaizenOrders', 'BREADCRUMBS:addForm')
+        this.t('BREADCRUMBS:base'),
+        this.t('core', 'BREADCRUMBS:addForm')
       ];
     },
 
