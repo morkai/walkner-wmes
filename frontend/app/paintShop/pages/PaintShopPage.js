@@ -458,6 +458,7 @@ define([
         return {
           mrp: mrp,
           label: mrp,
+          description: t.has('paintShop', 'mrp:' + mrp) ? t('paintShop', 'mrp:' + mrp) : '',
           active: orders.selectedMrp === mrp,
           dropZone: dropZones.getState(mrp)
         };
@@ -850,7 +851,7 @@ define([
       pageActions.exportXlsx(url);
     },
 
-    handleExportPaintsAction: function(mrp)
+    handleExportPaintsAction: function()
     {
       var $msg = viewport.msg.show({
         type: 'warning',

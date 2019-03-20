@@ -125,5 +125,7 @@
   "settings:load:statuses:to": "Do [s]",
   "settings:load:statuses:icon": "Ikona",
   "settings:load:statuses:color": "Kolor",
-  "settings:load:statuses:add": "Dodaj status"
+  "settings:load:statuses:add": "Dodaj status",
+
+  "mrp:KSJ": "Wiercenie"
 }

@@ -126,7 +126,9 @@
     "settings:load:statuses:to": "To [s]",
     "settings:load:statuses:icon": "Icon",
     "settings:load:statuses:color": "Color",
-    "settings:load:statuses:add": "Add status"
+    "settings:load:statuses:add": "Add status",
+
+    "mrp:KSJ": "Drilling"
   },
   "pl": true
 }

@@ -39,6 +39,12 @@
 .paintShop-tab.is-loading .fa-spinner {
   font-size: 24px;
 }
+.paintShop-tab-description {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 21px;
+  line-height: 49px;
+}
 .paintShop-tab-paint {
   padding: 0;
   min-width: 270px;
