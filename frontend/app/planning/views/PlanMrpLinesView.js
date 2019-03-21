@@ -84,8 +84,7 @@ define([
 
       return {
         idPrefix: view.idPrefix,
-        showEditButton: view.plan.canEditSettings()
-          && !view.plan.settings.isMrpLocked(view.mrp.id),
+        showEditButton: view.isEditable(),
         lines: view.mrp.lines.map(function(line)
         {
           return {
@@ -264,9 +263,19 @@ define([
       ]);
     },
 
+    isEditable: function()
+    {
+      if (window.ENV === 'development' && user.isAllowedTo('SUPER'))
+      {
+        return true;
+      }
+
+      return this.plan.canEditSettings() && !this.plan.settings.isMrpLocked(this.mrp.id);
+    },
+
     showLineMenu: function(e)
     {
-      if (!this.plan.canEditSettings() || this.plan.settings.isMrpLocked(this.mrp.id))
+      if (!this.isEditable())
       {
         return;
       }

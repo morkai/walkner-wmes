@@ -94,12 +94,10 @@ define([
       this.$el.popover('destroy');
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
-        showEditButton: this.plan.canAddLateOrders()
-          && !this.plan.settings.isMrpLocked(this.mrp.id),
+        showEditButton: this.isEditable(),
         actionLabel: t('planning', 'lateOrders:action'),
         hdLabel: t('planning', 'lateOrders:hd'),
         orders: this.serializeOrders(),
@@ -225,6 +223,16 @@ define([
       viewport.showDialog(dialogView, t('planning', 'lateOrders:add:title'));
     },
 
+    isEditable: function()
+    {
+      if (window.ENV === 'development' && user.isAllowedTo('SUPER'))
+      {
+        return true;
+      }
+
+      return this.plan.canAddLateOrders() && !this.plan.settings.isMrpLocked(this.mrp.id);
+    },
+
     hideMenu: function()
     {
       contextMenu.hide(this);
@@ -242,8 +250,7 @@ define([
         menu.push(contextMenu.actions.comment(lateOrder.id));
       }
 
-      if (this.plan.canAddLateOrders()
-        && !this.plan.settings.isMrpLocked(this.mrp.id))
+      if (this.isEditable())
       {
         menu.push({
           icon: 'fa-plus',

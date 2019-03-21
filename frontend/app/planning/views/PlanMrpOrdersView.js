@@ -149,12 +149,10 @@ define([
       this.$el.popover('destroy');
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
-        showEditButton: this.plan.canEditSettings()
-          && !this.plan.settings.isMrpLocked(this.mrp.id),
+        showEditButton: this.isEditable(),
         actionLabel: t('planning', 'orders:add'),
         hdLabel: t('planning', 'orders:hd'),
         orders: this.serializeOrders(),
@@ -364,6 +362,16 @@ define([
       viewport.showDialog(dialogView, t('planning', 'orders:add:title'));
     },
 
+    isEditable: function()
+    {
+      if (window.ENV === 'development' && user.isAllowedTo('SUPER'))
+      {
+        return true;
+      }
+
+      return this.plan.canEditSettings() && !this.plan.settings.isMrpLocked(this.mrp.id);
+    },
+
     hideMenu: function()
     {
       contextMenu.hide(this);
@@ -392,9 +400,7 @@ define([
         menu.push(contextMenu.actions.comment(planOrder.id));
       }
 
-      if (this.plan.canEditSettings()
-        && !this.plan.settings.isMrpLocked(this.mrp.id)
-        && !planOrder.isAutoAdded())
+      if (this.isEditable() && !planOrder.isAutoAdded())
       {
         menu.push({
           icon: 'fa-sort-numeric-desc',
