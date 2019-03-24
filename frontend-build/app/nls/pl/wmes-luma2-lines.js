@@ -1,0 +1,1 @@
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMBS:base":function(n){return"Luma gen. 2"},"BREADCRUMBS:browse":function(n){return"Linie"},"PROPERTY:_id":function(n){return"ID"},"PROPERTY:active":function(n){return"Aktywna?"},"PROPERTY:host":function(n){return"Adres"},"PROPERTY:port":function(n){return"Port"},"PROPERTY:unit":function(n){return"MODBUS ID"}}});

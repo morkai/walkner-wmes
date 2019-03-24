@@ -1,0 +1,1 @@
+define(["../router","../viewport","../user"],function(e,n,t){"use strict";e.map("/luma2/events",t.auth("LUMA2:VIEW"),function(e){n.loadPage(["app/wmes-luma2-events/EventCollection","app/wmes-luma2-events/pages/ListPage","i18n!app/nls/wmes-luma2-events"],function(n,t){return new t({collection:new n(null,{rqlQuery:e.rql})})})})});

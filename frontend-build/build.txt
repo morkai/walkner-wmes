@@ -1964,6 +1964,8 @@ app/nls/wmes-fap-entries.js
 app/nls/pl/wmes-fap-entries.js
 i18n!app/nls/wmes-fap-entries
 app/wmes-fap-entries/routes.js
+app/wmes-luma2-events/routes.js
+app/wmes-luma2-lines/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
