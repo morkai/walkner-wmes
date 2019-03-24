@@ -102,7 +102,7 @@ define([
         obj.name += obj.firstName;
       }
 
-      obj.company = company ? company.getLabel() : '-';
+      obj.company = company ? company.getLabel() : '';
 
       obj.active = t('users', 'active:' + obj.active);
 
@@ -127,7 +127,7 @@ define([
 
       var prodFunction = prodFunctions.get(obj.prodFunction);
 
-      obj.prodFunction = prodFunction ? prodFunction.getLabel() : '-';
+      obj.prodFunction = prodFunction ? prodFunction.getLabel() : '';
 
       if (obj.orgUnitType && obj.orgUnitId)
       {
@@ -137,6 +137,10 @@ define([
         {
           obj.orgUnit = renderOrgUnitPath(orgUnitModel, false, false);
         }
+      }
+      else
+      {
+        obj.orgUnit = '';
       }
 
       if (obj.vendor)
