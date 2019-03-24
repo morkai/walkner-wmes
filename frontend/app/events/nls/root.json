@@ -459,7 +459,13 @@
     "TYPE:toolcal.types.deleted": "Tool calibration > Types: deleted",
     "TEXT:toolcal.types.deleted": "Deleted tool type: <em>{model->rid}</em>",
     "TYPE:toolcal.tools.deleted": "Tool calibration > Tools: deleted",
-    "TEXT:toolcal.tools.deleted": "Deleted tool: <em>{model->rid}</em>"
+    "TEXT:toolcal.tools.deleted": "Deleted tool: <em>{model->rid}</em>",
+    "TYPE:luma2.lines.added": "Luma2 > Lines: added",
+    "TEXT:luma2.lines.added": "Added line: <a href='\\#luma2/lines/{model->_id}'>{model->_id}</a>",
+    "TYPE:luma2.lines.edited": "Luma2 > Lines: edited",
+    "TEXT:luma2.lines.edited": "Edited line: <a href='\\#luma2/lines/{model->_id}'>{model->_id}</a>",
+    "TYPE:luma2.lines.deleted": "Luma2 > Lines: deleted",
+    "TEXT:luma2.lines.deleted": "Deleted line: <em>{model->_id}</em>"
   },
   "pl": true
 }
