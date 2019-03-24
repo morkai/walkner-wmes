@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/i18n',
   '../util/bindLoadingMessage',
   '../util/pageActions',
@@ -8,6 +9,7 @@ define([
   '../views/ListView',
   './createPageBreadcrumbs'
 ], function(
+  _,
   t,
   bindLoadingMessage,
   pageActions,
@@ -72,10 +74,12 @@ define([
         model: this.model,
         columns: this.options.columns || this.columns || ListViewClass.prototype.columns,
         serializeRow: this.options.serializeRow || this.serializeRow || ListViewClass.prototype.serializeRow,
-        className: this.options.listClassName
-          || this.listClassName
-          || ListViewClass.prototype.className
-          || 'is-clickable'
+        className: _.find([
+          this.options.listClassName,
+          this.listClassName,
+          ListViewClass.prototype.className,
+          'is-clickable'
+        ], function(className) { return className !== undefined; })
       };
     },
 

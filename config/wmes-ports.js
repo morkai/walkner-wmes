@@ -156,5 +156,11 @@ module.exports = {
       repHost: '127.0.0.1',
       repPort: nextPort - 1
     }
+  },
+  'wmes-luma2': {
+    pubHost: '127.0.0.1',
+    pubPort: nextPort++,
+    repHost: '127.0.0.1',
+    repPort: nextPort++
   }
 };

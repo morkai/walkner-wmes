@@ -1,0 +1,34 @@
+{
+  "BREADCRUMBS:base": "Luma gen. 2",
+  "BREADCRUMBS:browse": "Zdarzenia",
+
+  "PAGE_ACTION:lines": "Linie",
+
+  "PROPERTY:line": "Linia",
+  "PROPERTY:type": "Typ",
+  "PROPERTY:time": "Czas wystąpienia",
+  "PROPERTY:station": "Stanowisko",
+  "PROPERTY:program": "Program",
+  "PROPERTY:order": "Zlecenie",
+  "PROPERTY:pce": "Sztuka",
+
+  "type:connected": "Połączono",
+  "type:disconnected": "Rozłączono",
+  "type:order-queued": "Ustawienie zlecenia",
+  "type:order-started": "Rozpoczęcie zlecenia",
+  "type:order-finished": "Zakończenie zlecenia",
+  "type:rearm-started": "Rozpoczęcie przezbrojenia",
+  "type:rearm-finished": "Zakończenie przezbrojenia",
+  "type:pce-started": "Rozpoczęcie kolejnej sztuki",
+  "type:pce-finished": "Zakończenie kolejnej sztuki",
+  "type:inspection-started": "Rozpoczęcie kontroli 1. sztuki",
+  "type:inspection-finished": "Zakończenie kontroli 1. sztuki",
+  "type:receipt-started": "Rozpoczęcie odbioru",
+  "type:receipt-finished": "Zakończenie odbioru",
+  "type:delivery-started": "Rozpoczęcie dostawy",
+  "type:delivery-finished": "Zakończenie dostawy",
+  "type:estop-started": "Rozpoczęcie e-stop",
+  "type:estop-finished": "Zakończenie e-stop",
+  "type:pause-started": "Rozpoczęcie zatrzymania",
+  "type:pause-finished": "Zakończenie zatrzymania"
+}

@@ -1,0 +1,33 @@
+<form method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-id" class="control-label is-required"><%- helpers.t('PROPERTY:_id') %></label>
+        <input id="<%- idPrefix %>-id" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="40" pattern="^[A-Za-z0-9-_]+$">
+      </div>
+      <div class="checkbox">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-active" type="checkbox" name="active" value="true">
+          <%- helpers.t('PROPERTY:active') %>
+        </label>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-host" class="control-label is-required"><%- helpers.t('PROPERTY:host') %></label>
+        <input id="<%- idPrefix %>-host" class="form-control" type="text" autocomplete="new-password" name="host" required maxlength="50">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-port" class="control-label is-required"><%- helpers.t('PROPERTY:port') %></label>
+        <input id="<%- idPrefix %>-port" class="form-control" type="number" autocomplete="new-password" name="port" required min="1" max="65535">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-unit" class="control-label is-required"><%- helpers.t('PROPERTY:unit') %></label>
+        <input id="<%- idPrefix %>-unit" class="form-control" type="number" autocomplete="new-password" name="unit" required min="0" max="255">
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

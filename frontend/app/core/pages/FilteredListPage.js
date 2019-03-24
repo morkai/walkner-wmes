@@ -69,10 +69,12 @@ define([
         model: this.collection ? undefined : this.getDefaultModel(),
         columns: this.options.columns || this.columns || ListViewClass.prototype.columns,
         serializeRow: this.options.serializeRow || this.serializeRow || ListViewClass.prototype.serializeRow,
-        className: this.options.listClassName
-          || this.listClassName
-          || ListViewClass.prototype.className
-          || 'is-clickable'
+        className: _.find([
+          this.options.listClassName,
+          this.listClassName,
+          ListViewClass.prototype.className,
+          'is-clickable'
+        ], function(className) { return className !== undefined; })
       });
     },
 

@@ -1,0 +1,10 @@
+{
+  "BREADCRUMBS:base": "Luma gen. 2",
+  "BREADCRUMBS:browse": "Linie",
+
+  "PROPERTY:_id": "ID",
+  "PROPERTY:active": "Aktywna?",
+  "PROPERTY:host": "Adres",
+  "PROPERTY:port": "Port",
+  "PROPERTY:unit": "MODBUS ID"
+}

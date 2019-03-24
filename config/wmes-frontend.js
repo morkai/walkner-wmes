@@ -98,6 +98,7 @@ exports.modules = [
   'help',
   'wmes-toolcal',
   'wmes-fap',
+  'wmes-luma2-frontend',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'sms/sender',
@@ -113,6 +114,7 @@ exports.modules = [
   {id: 'messenger/client', name: 'messenger/client:wmes-watchdog'},
   {id: 'messenger/client', name: 'messenger/client:wmes-alerts'},
   {id: 'messenger/client', name: 'messenger/client:wmes-planning'},
+  {id: 'messenger/client', name: 'messenger/client:wmes-luma2'},
   'httpServer',
   'sio'
 ];
@@ -540,6 +542,13 @@ exports['messenger/client:wmes-planning'] = Object.assign({}, ports['wmes-planni
     'wh.generator.requested',
     'settings.updated.orders.operations.groups',
     'settings.updated.wh.**'
+  ]
+});
+
+exports['messenger/client:wmes-luma2'] = Object.assign({}, ports['wmes-luma2'], {
+  responseTimeout: 5000,
+  broadcastTopics: [
+    'luma2.lines.*'
   ]
 });
 
