@@ -74,6 +74,16 @@ define([
         obj.date = t('core', 'SHIFT', {date: obj.date, shift: obj.shift});
       }
 
+      obj.observations.forEach(function(o)
+      {
+        var b = kaizenDictionaries.behaviours.get(o.id);
+
+        if (b)
+        {
+          o.behavior = b.t('name');
+        }
+      });
+
       return obj;
     },
 

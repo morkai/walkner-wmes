@@ -43,3 +43,6 @@
   border: 0;
   width: 1px
 }
+.behaviorObsCards-form-textarea textarea {
+  resize: vertical;
+}

@@ -2,23 +2,26 @@
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
-    <div class="panel-body">
+    <div class="panel-body" style="padding-bottom: 0">
       <div class="form-group">
         <label for="<%- idPrefix %>-id" class="control-label is-required"><%- helpers.t('PROPERTY:_id') %></label>
         <input id="<%- idPrefix %>-id" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="20" pattern="^[A-Za-z0-9-]+$">
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
-        <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100">
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-description" class="control-label"><%- helpers.t('PROPERTY:description') %></label>
-        <textarea id="<%- idPrefix %>-description" class="form-control" name="description" rows="4"></textarea>
-      </div>
-      <div class="form-group">
         <label for="<%- idPrefix %>-position" class="control-label is-required"><%- helpers.t('PROPERTY:position') %></label>
         <input id="<%- idPrefix %>-position" class="form-control" type="number" name="position" min="0" required>
       </div>
+      <div id="<%- idPrefix %>-lang"></div>
+      <% ['pl', 'en'].forEach(function(lang) { %>
+      <div class="form-group" data-lang="<%- lang %>">
+        <label for="<%- idPrefix %>-<%- lang %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
+        <input id="<%- idPrefix %>-<%- lang %>-name" name="lang.<%- lang %>.name" class="form-control" type="text" autocomplete="new-password" required maxlength="100">
+      </div>
+      <div class="form-group" data-lang="<%- lang %>" style="margin-bottom: 15px">
+        <label for="<%- idPrefix %>-<%- lang %>-description" class="control-label"><%- helpers.t('PROPERTY:description') %></label>
+        <textarea id="<%- idPrefix %>-<%- lang %>-description" name="lang.<%- lang %>.description" class="form-control" rows="4"></textarea>
+      </div>
+      <% }) %>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

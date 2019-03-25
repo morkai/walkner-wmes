@@ -188,7 +188,7 @@
     "NAVBAR:OPINION:questions": "Questions",
 
     "NAVBAR:KAIZEN:main": "Near miss",
-    "NAVBAR:KAIZEN:orders": "Entries",
+    "NAVBAR:KAIZEN:orders": "Near misses",
     "NAVBAR:KAIZEN:all": "All",
     "NAVBAR:KAIZEN:open": "Only open",
     "NAVBAR:KAIZEN:mine": "Only mine",
@@ -446,7 +446,10 @@
 
     "PANEL:TITLE:details": "Details",
     "PANEL:TITLE:addForm": "Add form",
-    "PANEL:TITLE:editForm": "Edit form"
+    "PANEL:TITLE:editForm": "Edit form",
+
+    "lang:pl": "Polish (pl)",
+    "lang:en": "English (en)"
   },
   "pl": true
 }

@@ -5,13 +5,15 @@ define([
   '../i18n',
   '../time',
   '../core/Model',
-  '../data/colorFactory'
+  '../data/colorFactory',
+  '../kaizenOrders/dictionaries'
 ], function(
   _,
   t,
   time,
   Model,
-  colorFactory
+  colorFactory,
+  kaizenDictionaries
 ) {
   'use strict';
 
@@ -103,12 +105,19 @@ define([
 
         if (metric === 'categories')
         {
+          var labels = report.categories;
+
+          kaizenDictionaries.behaviours.forEach(function(b)
+          {
+            labels[b.id] = b.t('name');
+          });
+
           attrs[metric] = {
             rows: model.prepareRows(
               totals.risky,
               totals.categories,
               'categories',
-              report.categories
+              labels
             ),
             series: {}
           };

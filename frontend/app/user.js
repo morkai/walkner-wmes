@@ -41,6 +41,8 @@ function(
 
   user.data = guestUser;
 
+  user.lang = window.APP_LOCALE || window.appLocale || 'pl';
+
   user.noReload = false;
 
   user.isReloadLocked = function()

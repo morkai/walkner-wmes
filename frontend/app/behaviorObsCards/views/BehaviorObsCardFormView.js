@@ -168,13 +168,6 @@ define([
       this.rowIndex = 0;
     },
 
-    serialize: function()
-    {
-      return _.assign(FormView.prototype.serialize.call(this), {
-
-      });
-    },
-
     removeEmpty: function(tbodyId, addBtnId, textareaName)
     {
       var $trs = this.$id(tbodyId).find('tr');
@@ -538,7 +531,7 @@ define([
 
         if (obs)
         {
-          obs.behavior = behavior.get('name');
+          obs.behavior = behavior.t('name');
 
           list.push(obs);
 
@@ -548,7 +541,7 @@ define([
         {
           list.push({
             id: behavior.id,
-            behavior: behavior.get('name'),
+            behavior: behavior.t('name'),
             observation: '',
             safe: null,
             easy: null
