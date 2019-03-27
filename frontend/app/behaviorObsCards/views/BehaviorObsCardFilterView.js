@@ -3,6 +3,7 @@
 define([
   'underscore',
   'app/time',
+  'app/user',
   'app/core/views/FilterView',
   'app/core/util/idAndLabel',
   'app/core/util/forms/dateTimeRange',
@@ -14,6 +15,7 @@ define([
 ], function(
   _,
   time,
+  currentUser,
   FilterView,
   idAndLabel,
   dateTimeRange,
@@ -172,6 +174,8 @@ define([
           selector.push({name: 'in', args: [property, values]});
         }
       }, this);
+
+      selector.push({name: 'lang', args: [currentUser.lang]});
     },
 
     afterRender: function()

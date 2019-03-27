@@ -75,7 +75,6 @@
   "filter:anyHard:risks": "warunki pracy",
   "filter:section": "Miejsce obserwacji",
   "filter:observerSection": "Miejsce pracy obserwatora",
-  "filter:submit": "Filtruj",
 
   "report:title:total": "Ilość przeprowadzonych obserwacji",
   "report:title:countBySection": "Ilość przeprowadzonych obserwacji wg działów (miejsce obserwacji)",
