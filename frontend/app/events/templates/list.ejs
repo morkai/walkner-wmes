@@ -13,15 +13,7 @@
       <tr class="list-item <%- event.severity %>">
         <td class="is-min"><%- event.time %>
         <td class="is-min"><%- event.type %>
-        <td class="is-min">
-          <% if (event.user) { %>
-          <span class="userInfo" data-user-id="<%- event.user._id %>">
-            <span class="userInfo-label"><%- event.user.name %></span>
-            <% if (event.user.ipAddress) { %><span class="userInfo-cname">(<%- event.user.ipAddress %>)</span><% } %>
-          </span>
-          <% } else { %>
-          -
-          <% } %>
+        <td class="is-min"><%- event.user %>
         <td><%- event.text %>
       </tr>
       <% }) %>

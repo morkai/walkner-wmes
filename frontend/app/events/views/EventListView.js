@@ -8,7 +8,8 @@ define([
   'app/data/subdivisions',
   'app/orgUnits/util/renderOrgUnitPath',
   'app/core/views/ListView',
-  'app/events/templates/list'
+  'app/events/templates/list',
+  'app/core/templates/userInfo'
 ], function(
   _,
   time,
@@ -17,7 +18,8 @@ define([
   subdivisions,
   renderOrgUnitPath,
   ListView,
-  listTemplate
+  listTemplate,
+  userInfoTemplate
 ) {
   'use strict';
 
@@ -38,11 +40,22 @@ define([
         {
           var type = event.get('type');
           var data = view.prepareData(type, event.get('data'));
+          var user = event.get('user');
+          var userInfo = null;
+
+          if (user)
+          {
+            userInfo = {
+              id: user._id,
+              label: user.name,
+              ip: user.ipAddress
+            };
+          }
 
           return {
             severity: event.getSeverityClassName(),
             time: time.format(event.get('time'), 'L, LTS'),
-            user: event.get('user'),
+            user: userInfoTemplate({userInfo: userInfo}),
             type: t('events', 'TYPE:' + type),
             text: t('events', 'TEXT:' + type, t.flatten(data))
           };
