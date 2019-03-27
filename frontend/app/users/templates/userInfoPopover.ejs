@@ -1,6 +1,6 @@
 <div>
   <div class="userInfoPopover-name">
-    <% if (user.isAllowedTo('USERS:VIEW')) { %>
+    <% if (linkToDetails && user.isAllowedTo('USERS:VIEW')) { %>
     <a href="#users/<%- userInfo._id %>"><%= userInfo.name %></a>
     <% } else { %>
     <%= userInfo.name %>

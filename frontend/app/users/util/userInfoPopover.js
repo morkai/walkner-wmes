@@ -39,6 +39,7 @@ define([
   var showTimer = null;
   var lastUserId = null;
   var hideOnLeave = true;
+  var linkToDetails = null;
 
   function setUpPubsub()
   {
@@ -101,6 +102,11 @@ define([
       return;
     }
 
+    if (linkToDetails === null)
+    {
+      linkToDetails = $('.navbar').find('a[href^="#users"]').length > 0;
+    }
+
     hidePopover();
 
     lastUserId = userId;
@@ -135,6 +141,7 @@ define([
       trigger: 'manual',
       html: true,
       content: contentTemplate({
+        linkToDetails: linkToDetails,
         userInfo: {
           _id: user._id,
           name: user.firstName && user.lastName ? (user.firstName + ' ' + user.lastName) : user.login,
