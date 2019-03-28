@@ -47,6 +47,7 @@
   "PROPERTY:mobile": "Telefony komórkowe",
   "PROPERTY:mrps": "Moje MRP",
   "PROPERTY:notifications": "Powiadomienia",
+  "PROPERTY:apiKey": "Klucz API",
 
   "active:true": "Tak",
   "active:false": "Nie",

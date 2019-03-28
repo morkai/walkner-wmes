@@ -20,3 +20,5 @@ db.kaizenbehaviours.find({lang: {$exists: false}}).forEach(kb =>
 
   db.kaizenbehaviours.updateOne({_id: kb._id}, {$set: {lang: kb.lang}, $unset: {name: 1, description: 1}});
 });
+
+db.users.updateMany({apiKey: {$exists: false}}, {$set: {apiKey: ''}});

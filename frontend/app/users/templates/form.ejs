@@ -157,6 +157,12 @@
         </div>
       </div>
       <% } %>
+      <% if (user.isAllowedTo('SUPER')) { %>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-apiKey" class="control-label"><%- helpers.t('PROPERTY:apiKey') %></label>
+        <input id="<%- idPrefix %>-apiKey" class="form-control" type="text" autocomplete="new-password" name="apiKey" pattern="^[a-zA-Z0-9-_]{64}$">
+      </div>
+      <%} %>
     </div>
     <div class="panel-footer">
       <button type="submit" class="btn btn-primary"><%- formActionText %></button>

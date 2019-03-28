@@ -46,6 +46,7 @@
     "PROPERTY:mobile": "Mobile phone numbers",
     "PROPERTY:mrps": "My MRPs",
     "PROPERTY:notifications": "Notifications",
+    "PROPERTY:apiKey": "API key",
 
     "active:true": "Yes",
     "active:false": "No",
