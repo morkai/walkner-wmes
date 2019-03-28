@@ -78,9 +78,6 @@
   <% ['kaizenOrders', 'suggestions', 'behaviorObsCards', 'minutesForSafetyCards'].forEach(function(type) { %>
   <li class="navbar-search-result"><a href="#<%- type %>/<%- results.entryId %>"><%- t('core', 'NAVBAR:SEARCH:' + type) %></a></li>
   <% }) %>
-  <% if (user.isAllowedTo('D8:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#d8/entries/<%- results.entryId %>"><%- t('core', 'NAVBAR:SEARCH:d8') %></a></li>
-  <% } %>
   <li class="divider"></li>
   <% } %>
 
