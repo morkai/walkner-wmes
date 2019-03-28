@@ -113,6 +113,10 @@
   "CHANGES:qtyMax": "Maks. ilość dla <em>{operationNo}</em>",
   "CHANGES:toggleSystemChanges": "Ukryj zmiany systemowe",
 
+  "filter:id:_id": "Zlecenie",
+  "filter:id:nc12": "Wyrób",
+  "filter:id:bom.nc12": "Komponent",
+  "filter:id:documents.nc15": "Dokument",
   "filter:statuses:in": "Wymagane statusy",
   "filter:statuses:nin": "Ignorowane statusy",
   "filter:submit": "Filtruj zlecenia",

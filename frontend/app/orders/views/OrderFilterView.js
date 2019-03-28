@@ -30,7 +30,8 @@ define([
     }, FilterView.prototype.events),
 
     defaultFormData: {
-      _id: '',
+      id: '',
+      idType: 'order',
       nc12: '',
       mrp: '',
       statuses: ''
@@ -40,10 +41,12 @@ define([
       'scheduledStartDate': dateTimeRange.rqlToForm,
       '_id': function(propertyName, term, formData)
       {
-        var value = term.args[1];
-
-        formData[propertyName] = typeof value === 'string' ? value.replace(/[^0-9]/g, '') : '-';
+        formData.id = term.args[1];
+        formData.idType = propertyName;
       },
+      'nc12': '_id',
+      'bom.nc12': '_id',
+      'documents.nc15': '_id',
       'mrp': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1].join(',');
@@ -51,8 +54,7 @@ define([
       'statuses': function(propertyName, term, formData)
       {
         formData[term.name === 'all' ? 'statusesIn' : 'statusesNin'] = term.args[1].join(',');
-      },
-      'nc12': '_id'
+      }
     },
 
     afterRender: function()
@@ -76,14 +78,18 @@ define([
 
     serializeFormToQuery: function(selector)
     {
+      var id = this.$id('id').val().trim();
+      var idType = this.$('input[name="idType"]:checked').val();
       var mrp = this.$id('mrp').val();
       var statusesIn = this.$id('statusesIn').val();
       var statusesNin = this.$id('statusesNin').val();
 
       dateTimeRange.formToRql(this, selector);
 
-      this.serializeRegexTerm(selector, '_id', 9, null, false, true);
-      this.serializeRegexTerm(selector, 'nc12', 12, null, false, true);
+      if (id.length)
+      {
+        selector.push({name: 'eq', args: [idType, id]});
+      }
 
       if (mrp.length)
       {

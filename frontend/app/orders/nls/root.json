@@ -114,6 +114,10 @@
     "CHANGES:qtyMax": "Max. quantity for <em>{operationNo}</em>",
     "CHANGES:toggleSystemChanges": "Hide system changes",
 
+    "filter:id:order": "Order",
+    "filter:id:product": "Product",
+    "filter:id:component": "Component",
+    "filter:id:document": "Document",
     "filter:statuses:in": "Required statuses",
     "filter:statuses:nin": "Ignored statuses",
     "filter:submit": "Filter orders",

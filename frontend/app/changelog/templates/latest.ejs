@@ -2,5 +2,16 @@
 <h2><%- time.format(Date.now(), 'LL') %></h2>
 <h3>Obserwacje zachowań</h3>
 <ul>
-  <li>Dodano możliwość tłumaczenia pól 'Nazwa' oraz 'Opis' w słowniku 'Zachowania' na język angielski.</li>
+  <li>Dodano możliwość tłumaczenia na język angielski pól 'Nazwa' oraz 'Opis' w słowniku 'Zachowania'.</li>
+</ul>
+<h3>Dokumentacja</h3>
+<ul>
+  <li>Poprawiono błąd powodujący wywalenie się serwera, jeżeli pobieranie zlecenia do specjalnego
+    dokumentu (BOM, ETO) nie powiodło się lub dane zlecenie nie istnieje.</li>
+</ul>
+<h3>Zlecenia produkcyjne</h3>
+<ul>
+  <li>Zmieniono filtry 'Nr zlecenia' (od teraz 'Zlecenie') oraz '12NC' (od teraz 'Wyrób'),
+    tak aby nie były w oddzielnych polach.</li>
+  <li>Dodano filtry: Komponent oraz Dokument.</li>
 </ul>

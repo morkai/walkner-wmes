@@ -11,12 +11,15 @@
     }
   }) %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-_id"><%- helpers.t('PROPERTY:_id') %></label>
-    <input id="<%- idPrefix %>-_id" class="form-control orders-filter-_id" name="_id" type="text" autocomplete="new-password" maxlength="9">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-nc12"><%- helpers.t('PROPERTY:nc12') %></label>
-    <input id="<%- idPrefix %>-nc12" class="form-control orders-filter-nc12" name="nc12" type="text" autocomplete="new-password" maxlength="12">
+    <div class="filter-radioLabels">
+      <% ['_id', 'nc12', 'bom.nc12', 'documents.nc15'].forEach(function(type) { %>
+      <label>
+        <input name="idType" type="radio" value="<%- type %>">
+        <%- helpers.t('filter:id:' + type) %>
+      </label>
+      <% }) %>
+    </div>
+    <input id="<%- idPrefix %>-id" class="form-control" name="id" type="text" autocomplete="new-password" maxlength="15">
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-mrp"><%- helpers.t('PROPERTY:mrp') %></label>
