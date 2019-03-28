@@ -139,6 +139,12 @@
   "chat:analysis:started": "<i>Rozpoczęto analizę.</i>",
   "chat:analysis:finished": "<i>Zakończono analizę w {duration}.</i>",
 
+  "autolink:attachment": "Załącznik",
+  "autolink:product": "12NC",
+  "autolink:document": "15NC",
+  "autolink:order": "Nr zlecenia",
+  "autolink:entry": "Zgłoszenie",
+
   "observers:placeholder": "Dodaj po nazwisku lub nr kadrowym...",
   "observers:placeholder:auth": "Zaloguj się, aby dodać nową osobę...",
 

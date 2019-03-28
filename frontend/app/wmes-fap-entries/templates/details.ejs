@@ -13,7 +13,7 @@
     </div>
     <div class="fap-prop fap-is-textarea <%- model.multiline.problem ? 'fap-is-multiline' : '' %>" data-prop="problem">
       <div class="fap-prop-name"><%- helpers.t('PROPERTY:problem') %></div>
-      <div class="fap-prop-value"><%= model.problem %></div>
+      <div class="fap-prop-value"><%- model.problem %></div>
     </div>
   </div>
   <div class="fap-prop-separator"></div>
@@ -21,10 +21,10 @@
     <div class="fap-prop" data-prop="orderNo">
       <div class="fap-prop-name"><%- helpers.t('PROPERTY:orderNo') %></div>
       <div class="fap-prop-value text-mono">
-        <% if (model.orderNo !== '-' && user.isAllowedTo('ORDERS:VIEW')) { %>
-        <a href="#orders/<%- model.orderNo %>"><%- model.orderNo %></a>
+        <% if (model.orderNo !== '-') { %>
+        <a href="javascript:void(0)" class="fap-autolink" data-type="order" data-id="<%- model.orderNo %>"><%- model.orderNo %></a>
         <% } else { %>
-        <%- model.orderNo %>
+        -
         <% } %>
       </div>
     </div>
@@ -86,7 +86,7 @@
         <%- helpers.t('PROPERTY:solution') %>
         <i class="fa fa-user" title="<%= model.solver %>"></i>
       </div>
-      <div class="fap-prop-value"><%= model.solution %></div>
+      <div class="fap-prop-value"><%- model.solution %></div>
     </div>
   </div>
   <div class="fap-prop-separator"></div>
@@ -136,7 +136,7 @@
     <div class="fap-props">
       <div class="fap-prop fap-is-textarea <%- model.multiline.solutionSteps ? 'fap-is-multiline' : '' %>" data-prop="solutionSteps" style="flex: 1 1 auto">
         <div class="fap-prop-name"><%- helpers.t('PROPERTY:solutionSteps') %></div>
-        <div class="fap-prop-value"><%= model.solutionSteps %></div>
+        <div class="fap-prop-value"><%- model.solutionSteps %></div>
       </div>
     </div>
   </div>

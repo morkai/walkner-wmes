@@ -25,7 +25,7 @@ define([
   MorView,
   setUpUserSelect2,
   navbarTemplate,
-  renderSearchResults
+  searchResultsTemplate
 ) {
   'use strict';
 
@@ -745,10 +745,7 @@ define([
     {
       var results = this.parseSearchPhrase(searchPhrase);
 
-      this.$id('searchResults').replaceWith(renderSearchResults({
-        idPrefix: this.idPrefix,
-        results: results
-      }));
+      this.$id('searchResults').replaceWith(this.renderSearchResults(results));
 
       var $last = this.$id('searchResults').children().last();
 
@@ -925,7 +922,17 @@ define([
   };
 
   /**
-   * @private
+   * @param {Object} results
+   * @returns {jQuery}
+   */
+  NavbarView.prototype.renderSearchResults = function(results)
+  {
+    return this.renderPartial(searchResultsTemplate, {
+      results: results
+    });
+  };
+
+  /**
    * @param {string} searchPhrase
    * @returns {Object}
    */

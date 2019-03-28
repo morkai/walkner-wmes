@@ -401,6 +401,8 @@ define([
 
   }, {
 
+    appNavbarView: null,
+
     setUp: function()
     {
       if (window.MODULES && window.MODULES.indexOf('wmes-fap') === -1)
@@ -413,8 +415,8 @@ define([
 
       broker.subscribe('navbar.render', function(message)
       {
-        var navbarView = message.view;
-        var $firstItem = navbarView.$el.find('.navbar-nav').first().children().first();
+        var appNavbarView = NavbarView.appNavbarView = message.view;
+        var $firstItem = appNavbarView.$el.find('.navbar-nav').first().children().first();
         var $fapItem = $(itemTemplate({}));
 
         $fapItem.insertAfter($firstItem);
@@ -441,16 +443,16 @@ define([
 
       broker.subscribe('navbar.rendered', function(message)
       {
-        var navbarView = message.view;
+        var appNavbarView = message.view;
 
-        if (navbarView.$el.find('.fap-navbar').length)
+        if (appNavbarView.$el.find('.fap-navbar').length)
         {
           return;
         }
 
         fapNavbarView = new NavbarView();
 
-        navbarView.insertView('.navbar-collapse', fapNavbarView).render();
+        appNavbarView.insertView('.navbar-collapse', fapNavbarView).render();
       });
     }
 

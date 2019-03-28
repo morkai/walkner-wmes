@@ -70,6 +70,7 @@ define([
     '#0af', '#5cb85c', '#fa0', '#a0f', '#f0a', '#f00', '#ff0', '#9ff'
   ]);
 
+  var AUTOLINK_ID_RE = /(.)??(#[0-9]+|[0-9]{15}|[0-9]{12}|[0-9]{9}|[A-Z]{3}[0-9]{3}[A-Z]{1})(.)??/g;
   var autolinker = null;
 
   function autolink(text)
@@ -253,10 +254,10 @@ define([
       var obj = this.serialize();
 
       obj.auth = this.serializeAuth();
-      obj.problem = obj.problem.trim().replace(/\n{3,}/, '\n\n');
-      obj.solution = obj.solution.trim().replace(/\n{3,}/, '\n\n') || '-';
+      obj.problem = this.serializeText(obj.problem.trim().replace(/\n{3,}/, '\n\n'));
+      obj.solution = this.serializeText(obj.solution.trim().replace(/\n{3,}/, '\n\n') || '-');
       obj.solver = obj.solver ? obj.solver.label : '';
-      obj.solutionSteps = obj.solutionSteps.trim().replace(/\n{3,}/, '\n\n') || '-';
+      obj.solutionSteps = this.serializeText(obj.solutionSteps.trim().replace(/\n{3,}/, '\n\n') || '-');
       obj.empty = {
         solution: obj.solution === '-'
       };
@@ -434,8 +435,7 @@ define([
 
       if (change.comment)
       {
-        var text = autolink(_.escape(change.comment))
-          .replace(/👤/g, '<i class="fa fa-user"></i>');
+        var text = this.serializeText(change.comment);
 
         lines.push({
           time: longTime,
@@ -494,6 +494,8 @@ define([
 
       if (attachments && !attachments[0] && attachments[1])
       {
+        var title = t(entry.nlsDomain, 'autolink:attachment');
+
         change.data.attachments[1].forEach(function(a)
         {
           if (availableAttachments && !availableAttachments[a._id])
@@ -505,7 +507,7 @@ define([
 
           lines.push({
             time: longTime,
-            text: '<span class="fap-chat-attachment" data-attachment-id="' + a._id + '">'
+            text: '<span class="fap-chat-attachment" title="' + title + '" data-attachment-id="' + a._id + '">'
               + '<i class="fa ' + attachment.icon + '"></i><a>'
               + _.escape(attachment.label)
               + '</a></span>'
@@ -537,6 +539,64 @@ define([
       }
 
       return message;
+    },
+
+    serializeText: function(text)
+    {
+      var nlsDomain = this.nlsDomain;
+
+      text = autolink(_.escape(text))
+        .replace(/👤/g, '<i class="fa fa-user"></i>');
+
+      text = text.replace(AUTOLINK_ID_RE, function(match, prefix, id, suffix)
+      {
+        var type;
+
+        if (prefix === undefined)
+        {
+          prefix = '';
+        }
+
+        if (suffix === undefined)
+        {
+          suffix = '';
+        }
+
+        id = id.replace(/^0+/, '');
+
+        if (/^#[0-9]+$/.test(id) && id.length < 9)
+        {
+          type = 'entry';
+          id = id.substring(1);
+          prefix += '#';
+        }
+        else if (id.length === 15)
+        {
+          type = 'document';
+        }
+        else if (id.length === 9)
+        {
+          type = 'order';
+        }
+        else
+        {
+          type = 'product';
+        }
+
+        if (!type)
+        {
+          return match;
+        }
+
+        return prefix
+          + '<a href="javascript:void(0)" class="fap-autolink"'
+          + ' title="' + t(nlsDomain, 'autolink:' + type) + '"'
+          + ' data-type="' + type + '"'
+          + ' data-id="' + id.toUpperCase() + '">'
+          + id + '</a>' + suffix;
+      });
+
+      return text;
     },
 
     serializeObservers: function()

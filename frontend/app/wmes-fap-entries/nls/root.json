@@ -132,6 +132,12 @@
     "chat:status:finished:started": "<i>Entry restarted.</i>",
     "chat:status:pending:finished": "<i>Entry finished.</i>",
 
+    "autolink:attachment": "Attachment",
+    "autolink:product": "12NC",
+    "autolink:document": "15NC",
+    "autolink:order": "Order no",
+    "autolink:entry": "Entry",
+
     "observers:placeholder": "Add by last name or personnel ID...",
     "observers:placeholder:auth": "Log in to add a new participant...",
 

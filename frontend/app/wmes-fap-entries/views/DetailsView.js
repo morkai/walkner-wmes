@@ -9,11 +9,13 @@ define([
   'app/core/util/idAndLabel',
   'app/data/orgUnits',
   'app/users/util/setUpUserSelect2',
+  'app/planning/util/contextMenu',
   '../dictionaries',
   '../Entry',
   './ChatView',
   './ObserversView',
   './AttachmentsView',
+  './NavbarView',
   'app/wmes-fap-entries/templates/details'
 ], function(
   _,
@@ -24,11 +26,13 @@ define([
   idAndLabel,
   orgUnits,
   setUpUserSelect2,
+  contextMenu,
   dictionaries,
   Entry,
   ChatView,
   ObserversView,
   AttachmentsView,
+  NavbarView,
   template
 ) {
   'use strict';
@@ -44,6 +48,45 @@ define([
         var $prop = this.$(e.target).closest('.fap-prop');
 
         this.showEditor($prop, $prop[0].dataset.prop);
+      },
+      'mouseup .fap-autolink': function(e)
+      {
+        var id = e.currentTarget.dataset.id;
+
+        if (e.button === 1)
+        {
+          switch (e.currentTarget.dataset.type)
+          {
+            case 'order':
+              window.open('#orders/' + id);
+              break;
+
+            case 'product':
+              window.open('/r/nc12/' + id);
+              break;
+
+            case 'document':
+              if (user.isAllowedTo('DOCUMENTS:VIEW'))
+              {
+                window.open('#orderDocuments/tree?file=' + id);
+              }
+              else
+              {
+                window.open('/orderDocuments/' + id);
+              }
+              break;
+          }
+        }
+        else if (NavbarView.appNavbarView)
+        {
+          this.showAutolinkMenu(e);
+        }
+        else
+        {
+          $('.navbar-search-phrase').first().val(id).focus();
+        }
+
+        return false;
       }
 
     },
@@ -251,19 +294,13 @@ define([
     {
       var el = $prop instanceof $ ? $prop.find('.fap-prop-value')[0] : $prop;
 
-      if (el.hasChildNodes())
+      while (el.childNodes.length
+        && (!el.childNodes[0].classList || !el.childNodes[0].classList.contains('fap-editor')))
       {
-        if (el.childNodes[0].nodeType === Node.TEXT_NODE)
-        {
-          el = el.childNodes[0];
-        }
-        else
-        {
-          el = el.insertBefore(document.createTextNode(text), el);
-        }
+        el.removeChild(el.childNodes[0]);
       }
 
-      el.textContent = text;
+      this.$(el).closest('.fap-prop-value').prepend(text);
     },
 
     updateProp: function(prop)
@@ -302,13 +339,11 @@ define([
       {
         html = '-';
       }
-      else if (user.isAllowedTo('ORDERS:VIEW'))
-      {
-        html = '<a href="#orders/' + details.orderNo + '">' + details.orderNo + '</a>';
-      }
       else
       {
-        html = details.orderNo;
+        html = '<a href="javascript:void(0)" class="fap-autolink" data-type="order" data-id="' + details.orderNo + '">'
+          + details.orderNo
+          + '</a>';
       }
 
       $value.prepend(html);
@@ -393,6 +428,72 @@ define([
       $editor.remove();
 
       view.$('.fap-is-editing').removeClass('fap-is-editing');
+    },
+
+    showAutolinkMenu: function(e)
+    {
+      if (!NavbarView.appNavbarView)
+      {
+        return;
+      }
+
+      var $results = NavbarView.appNavbarView.renderSearchResults(
+        NavbarView.appNavbarView.parseSearchPhrase(e.currentTarget.dataset.id)
+      );
+
+      while ($results.length)
+      {
+        var $last = $results.children().last();
+
+        if ($last.hasClass('dropdown-header') || $last.hasClass('divider'))
+        {
+          $last.remove();
+        }
+        else
+        {
+          break;
+        }
+      }
+
+      var menu = [];
+      var groups = 0;
+
+      $results.children().each(function()
+      {
+        if (groups > 1)
+        {
+          return;
+        }
+
+        if (this.classList.contains('navbar-search-result'))
+        {
+          menu.push({
+            label: this.textContent,
+            href: this.querySelector('a').href,
+            handler: function() { window.open(this.href); }
+          });
+
+          return;
+        }
+
+        groups += 1;
+
+        if (groups > 1)
+        {
+          return;
+        }
+
+        if (this.classList.contains('dropdown-header'))
+        {
+          menu.push(this.textContent);
+        }
+        else if (this.classList.contains('divider'))
+        {
+          menu.push('-');
+        }
+      });
+
+      contextMenu.show(this, e.pageY, e.pageX, menu);
     },
 
     onKeyDown: function(e)
