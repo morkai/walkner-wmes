@@ -277,6 +277,8 @@
   "NAVBAR:SEARCH:qiResults": "wyniki inspekcji",
   "NAVBAR:SEARCH:mechOrders": "lista zleceń mechanicznych",
   "NAVBAR:SEARCH:sapOrders": "lista zleceń z SAP",
+  "NAVBAR:SEARCH:sapOrdersBom": "lista zleceń z SAP z komponentem",
+  "NAVBAR:SEARCH:sapOrdersDoc": "lista zleceń z SAP z dokumentem",
   "NAVBAR:SEARCH:sapOrdersStart": "lista zleceń z SAP wg daty startu",
   "NAVBAR:SEARCH:sapOrdersFinish": "lista zleceń z SAP wg daty ukończenia",
   "NAVBAR:SEARCH:sapList": "lista z SAP",
@@ -289,7 +291,7 @@
   "NAVBAR:SEARCH:hourlyPlans": "lista planów godzinowych",
   "NAVBAR:SEARCH:hourlyPlan": "plan godzinowy",
   "NAVBAR:SEARCH:prodShifts": "lista zmian produkcyjnych",
-  "NAVBAR:SEARCH:document": "dokument",
+  "NAVBAR:SEARCH:document": "dokument w katalogu",
   "NAVBAR:SEARCH:documentFile": "plik dokumentacji",
   "NAVBAR:SEARCH:entryId": "Zgłoszenie nr {entryId}",
   "NAVBAR:SEARCH:kaizenOrders": "ZPW",
@@ -302,6 +304,7 @@
   "NAVBAR:SEARCH:plan:wh": "plan magazynu",
   "NAVBAR:SEARCH:plan:ps": "plan malarnii",
   "NAVBAR:SEARCH:fap": "FAP",
+  "NAVBAR:SEARCH:fapEntries": "zgłoszenia FAP",
 
   "NAVBAR:mor": "Matryca odpowiedzialności",
 

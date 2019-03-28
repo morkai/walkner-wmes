@@ -270,6 +270,8 @@
     "NAVBAR:SEARCH:qiResults": "QI results",
     "NAVBAR:SEARCH:mechOrders": "list of mechanical orders",
     "NAVBAR:SEARCH:sapOrders": "list of orders from SAP",
+    "NAVBAR:SEARCH:sapOrdersBom": "list of orders from SAP with the component",
+    "NAVBAR:SEARCH:sapOrdersDoc": "list of orders from SAP with the document",
     "NAVBAR:SEARCH:sapOrdersStart": "list of orders from SAP by start date",
     "NAVBAR:SEARCH:sapOrdersFinish": "list of orders from SAP by finish date",
     "NAVBAR:SEARCH:sapList": "list from SAP",
@@ -282,7 +284,7 @@
     "NAVBAR:SEARCH:hourlyPlans": "list of hourly plans",
     "NAVBAR:SEARCH:hourlyPlan": "hourly plan",
     "NAVBAR:SEARCH:prodShifts": "list of production shifts",
-    "NAVBAR:SEARCH:document": "document",
+    "NAVBAR:SEARCH:document": "document in the catalog",
     "NAVBAR:SEARCH:documentFile": "documentation file",
     "NAVBAR:SEARCH:entryId": "Entry no {entryId}",
     "NAVBAR:SEARCH:kaizenOrders": "Near miss",
@@ -295,6 +297,7 @@
     "NAVBAR:SEARCH:plan:wh": "warehouse plan",
     "NAVBAR:SEARCH:plan:ps": "paint shop plan",
     "NAVBAR:SEARCH:fap": "FAP",
+    "NAVBAR:SEARCH:fapEntries": "FAP entries",
 
     "NAVBAR:mor": "Matrix of responsibility",
 
