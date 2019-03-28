@@ -298,6 +298,8 @@
     "NAVBAR:SEARCH:plan:ps": "paint shop plan",
     "NAVBAR:SEARCH:fap": "FAP",
     "NAVBAR:SEARCH:fapEntries": "FAP entries",
+    "NAVBAR:SEARCH:kanbanEntries": "kanbans",
+    "NAVBAR:SEARCH:kanbanComponent": "kanban component",
 
     "NAVBAR:mor": "Matrix of responsibility",
 

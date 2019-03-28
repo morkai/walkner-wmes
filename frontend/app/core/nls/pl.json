@@ -305,6 +305,8 @@
   "NAVBAR:SEARCH:plan:ps": "plan malarnii",
   "NAVBAR:SEARCH:fap": "FAP",
   "NAVBAR:SEARCH:fapEntries": "zgłoszenia FAP",
+  "NAVBAR:SEARCH:kanbanEntries": "kanbany",
+  "NAVBAR:SEARCH:kanbanComponent": "komponent kanban",
 
   "NAVBAR:mor": "Matryca odpowiedzialności",
 

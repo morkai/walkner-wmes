@@ -155,6 +155,11 @@ define([
     {
       this.listenTo(this.model.tableView, 'change', this.onTableViewChanged);
 
+      if (this.options.selectComponent)
+      {
+        this.listenToOnce(this.model.tableView, 'sync', this.onTableViewSynced);
+      }
+
       this.listenTo(this.model.settings, 'change', this.onSettingChanged);
 
       this.listenTo(this.model.builder, 'add remove reset', this.updateBuilderCount);
@@ -182,6 +187,16 @@ define([
       {
         this.promised(tableView.save());
       }
+    },
+
+    onTableViewSynced: function(tableView)
+    {
+      tableView.setFilters({
+        nc12: {
+          type: 'text',
+          data: this.options.selectComponent
+        }
+      });
     },
 
     onSettingChanged: function(setting)

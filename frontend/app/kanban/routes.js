@@ -1,10 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  '../broker',
   '../user',
   '../router',
   '../viewport'
 ], function(
+  broker,
   user,
   router,
   viewport
@@ -15,8 +17,21 @@ define([
   var canManage = user.auth('KANBAN:MANAGE');
   var nls = 'i18n!app/nls/kanban';
 
-  router.map('/kanban', canView, function()
+  router.map('/kanban', canView, function(req)
   {
+    var nc12 = req.query.nc12;
+
+    if (nc12)
+    {
+      broker.publish('router.navigate', {
+        url: '/kanban',
+        trigger: false,
+        replace: true
+      });
+
+      nc12 = nc12.toString();
+    }
+
     viewport.loadPage(
       [
         'app/kanban/pages/KanbanEntryListPage',
@@ -26,7 +41,9 @@ define([
       ],
       function(KanbanEntryListPage)
       {
-        return new KanbanEntryListPage();
+        return new KanbanEntryListPage({
+          selectComponent: nc12
+        });
       }
     );
   });

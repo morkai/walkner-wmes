@@ -103,6 +103,10 @@
   <% if (user.isAllowedTo('QI:RESULTS:VIEW')) { %>
   <li class="navbar-search-result"><a href="#qi/results?sort(-inspectedAt,-rid)&limit(-1337)&nc12=string:<%- results.fullNc12 %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('core', 'NAVBAR:SEARCH:qiResults') %></a></li>
   <% } %>
+  <% if (user.isAllowedTo('USER')) { %>
+  <li class="navbar-search-result"><a href="#kanban?nc12=<%- results.fullNc12 %>"><%- t('core', 'NAVBAR:SEARCH:kanbanEntries') %></a></li>
+  <li class="navbar-search-result"><a href="#kanban/components/<%- results.fullNc12 %>"><%- t('core', 'NAVBAR:SEARCH:kanbanComponent') %></a></li>
+  <% } %>
   <li class="divider"></li>
   <% } %>
 
@@ -146,6 +150,9 @@
   <% } %>
   <% if (user.isAllowedTo('QI:RESULTS:VIEW')) { %>
   <li class="navbar-search-result"><a href="#qi/results?sort(-inspectedAt,-rid)&limit(-1337)&nc12=regex=%5E<%- results.partialNc12 %><%- results.division ? ('&division=' + results.division) : '' %>"><%- t('core', 'NAVBAR:SEARCH:qiResults') %></a></li>
+  <% } %>
+  <% if (user.isAllowedTo('USER')) { %>
+  <li class="navbar-search-result"><a href="#kanban?nc12=<%- results.partialNc12 %>"><%- t('core', 'NAVBAR:SEARCH:kanbanEntries') %></a></li>
   <% } %>
   <% } %>
 
