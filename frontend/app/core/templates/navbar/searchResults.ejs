@@ -88,8 +88,8 @@
   <li class="dropdown-header"><%- t('core', 'NAVBAR:SEARCH:fullNc12', {nc12: results.fullNc12}) %></li>
   <% if (user.isAllowedTo('ORDERS:VIEW')) { %>
   <li class="navbar-search-result"><a href="#mechOrders/<%- results.fullNc12 %>">szczegóły zlecenia mechanicznego</a></li>
-  <li class="navbar-search-result"><a href="#orders?sort(scheduledStartDate)&limit(-1337)&nc12=string:<%- results.fullNc12 %>"><%- t('core', 'NAVBAR:SEARCH:sapOrders') %></a></li>
-  <li class="navbar-search-result"><a href="#orders?sort(scheduledStartDate)&limit(-1337)&bom.nc12=string:<%- results.fullNc12 %>"><%- t('core', 'NAVBAR:SEARCH:sapOrdersBom') %></a></li>
+  <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&nc12=string:<%- results.fullNc12 %>"><%- t('core', 'NAVBAR:SEARCH:sapOrders') %></a></li>
+  <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&bom.nc12=string:<%- results.fullNc12 %>"><%- t('core', 'NAVBAR:SEARCH:sapOrdersBom') %></a></li>
   <% } %>
   <% if (user.isAllowedTo('XICONF:VIEW')) { %>
   <li class="navbar-search-result"><a href="#xiconf/orders?sort(-reqDate)&limit(-1337)&nc12=string:<%- results.fullNc12 %>"><%- t('core', 'NAVBAR:SEARCH:xiconfOrders') %></a></li>
@@ -113,7 +113,7 @@
   <% if (results.partialOrderNo) { %>
   <li class="dropdown-header"><%- t('core', 'NAVBAR:SEARCH:partialOrderNo', {orderNo: results.partialOrderNo}) %></li>
   <% if (user.isAllowedTo('ORDERS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#orders?sort(scheduledStartDate)&limit(-1337)&_id=regex=%5E<%- results.partialOrderNo %>"><%- t('core', 'NAVBAR:SEARCH:sapList') %></a></li>
+  <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&_id=regex=%5E<%- results.partialOrderNo %>"><%- t('core', 'NAVBAR:SEARCH:sapList') %></a></li>
   <% } %>
   <% if (user.isAllowedTo('XICONF:VIEW')) { %>
   <li class="navbar-search-result"><a href="#xiconf/orders?sort(-reqDate)&limit(-1337)&_id=regex=%5E<%- results.partialOrderNo %>"><%- t('core', 'NAVBAR:SEARCH:xiconfList') %></a></li>
@@ -136,7 +136,7 @@
   <% if (results.partialNc12) { %>
   <li class="dropdown-header"><%- t('core', 'NAVBAR:SEARCH:partialNc12', {nc12: results.partialNc12}) %></li>
   <% if (user.isAllowedTo('ORDERS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#orders?sort(scheduledStartDate)&limit(-1337)&nc12=regex=%5E<%- results.partialNc12 %>"><%- t('core', 'NAVBAR:SEARCH:sapOrders') %></a></li>
+  <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&nc12=regex=%5E<%- results.partialNc12 %>"><%- t('core', 'NAVBAR:SEARCH:sapOrders') %></a></li>
   <li class="navbar-search-result"><a href="#mechOrders?limit(-1337)&_id=regex=%5E<%- results.partialNc12 %>"><%- t('core', 'NAVBAR:SEARCH:mechOrders') %></a></li>
   <% } %>
   <% if (user.isAllowedTo('XICONF:VIEW')) { %>
@@ -163,7 +163,7 @@
   <% } %>
   <li class="navbar-search-result"><a href="/orderDocuments/<%- results.fullNc15 %>" target="_blank"><%- t('core', 'NAVBAR:SEARCH:documentFile') %></a></li>
   <% if (user.isAllowedTo('ORDERS:VIEW')) { %>
-  <li class="navbar-search-result"><a href="#orders?sort(scheduledStartDate)&limit(-1337)&documents.nc15=string:<%- results.fullNc15 %>"><%- t('core', 'NAVBAR:SEARCH:sapOrdersDoc') %></a></li>
+  <li class="navbar-search-result"><a href="#orders?sort(-scheduledStartDate)&limit(-1337)&documents.nc15=string:<%- results.fullNc15 %>"><%- t('core', 'NAVBAR:SEARCH:sapOrdersDoc') %></a></li>
   <% } %>
   <% } %>
 
