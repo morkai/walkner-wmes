@@ -31,7 +31,7 @@ define([
 
     defaultFormData: {
       id: '',
-      idType: 'order',
+      idType: '_id',
       nc12: '',
       mrp: '',
       statuses: ''
