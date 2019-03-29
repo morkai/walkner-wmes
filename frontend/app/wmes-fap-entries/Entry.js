@@ -307,15 +307,19 @@ define([
       var designer = user.isAllowedTo('FN:designer', 'FN:designer_eto');
       var master = user.isAllowedTo('FN:master');
       var leader = user.isAllowedTo('FN:leader');
+      var whman = user.isAllowedTo('FN:whman', 'FN:prod_whman', 'FN:in_whman');
       var analyzers = this.get('analyzers');
       var analyzer = _.some(analyzers, function(u) { return user.data._id === u.id; });
       var mainAnalyzer = analyzer && analyzers[0].id === user.data._id;
+      var subdivisionType = this.get('subdivisionType');
+      var wh = subdivisionType === 'wh';
       var status = this.get('status');
       var pending = status === 'pending';
       var started = status === 'started';
       var analysisNeed = this.get('analysisNeed');
       var analysisDone = this.get('analysisDone');
       var mainAnalyzerAuth = !pending && analysisNeed && !analysisDone && (manage || procEng || master);
+      var solver = manage || procEng || designer || master || leader || (wh && whman);
 
       return {
         delete: this.canDelete(),
@@ -323,8 +327,8 @@ define([
         attachments: loggedIn,
         observers: loggedIn,
         restart: manage,
-        status: manage || procEng || designer || master || leader,
-        solution: manage || procEng || designer || master || leader,
+        status: solver,
+        solution: solver,
         problem: started && (manage || procEng || designer || master || leader),
         category: manage || procEng || designer,
         subdivisionType: manage || procEng || designer || master || leader,
