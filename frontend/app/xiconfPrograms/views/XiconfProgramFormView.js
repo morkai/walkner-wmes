@@ -109,7 +109,13 @@ define([
 
       'click .btn[role="removeStep"]': function(e)
       {
-        this.$(e.currentTarget).closest('.panel').fadeOut('fast', function() { $(this).remove(); });
+        var view = this;
+
+        view.$(e.currentTarget).closest('.panel').fadeOut('fast', function()
+        {
+          $(this).remove();
+          view.recalcStepNo();
+        });
       },
 
       'change [name="type"]': function(e)

@@ -6,6 +6,8 @@ exports.paths = {
   'domReady': 'vendor/require/domReady',
   'underscore': 'vendor/underscore',
   'jquery': 'vendor/jquery',
+  'jquery.kinetic': 'vendor/jquery.kinetic',
+  'jquery.stickytableheaders': 'vendor/jquery.stickytableheaders',
   'backbone': 'vendor/backbone',
   'backbone.layout': 'vendor/backbone.layoutmanager',
   'moment': 'vendor/moment/moment',
@@ -35,7 +37,6 @@ exports.paths = {
   'datatables-fixedheader': 'vendor/datatables/extensions/FixedHeader/js/dataTables.fixedHeader',
   'datatables-scroller': 'vendor/datatables/extensions/Scroller/js/dataTables.scroller',
   'datatables-tabletools': 'vendor/datatables/extensions/TableTools/js/dataTables.tableTools',
-  'jquery.stickytableheaders': 'vendor/jquery.stickytableheaders',
   'highlight': 'vendor/highlight/highlight.pack',
   'Sortable': 'vendor/Sortable',
   'deployJava': 'vendor/deployJava',
@@ -69,6 +70,7 @@ exports.shim = {
   'screenfull': {
     exports: 'screenfull'
   },
+  'jquery.kinetic': ['jquery'],
   'jquery.stickytableheaders': ['jquery'],
   'highlight': {
     exports: 'hljs'

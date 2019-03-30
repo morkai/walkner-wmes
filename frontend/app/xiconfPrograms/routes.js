@@ -44,6 +44,7 @@ define([
       function(DetailsPage, XiconfProgramDetailsView)
       {
         return new DetailsPage({
+          pageClassName: 'page-max-flex',
           DetailsView: XiconfProgramDetailsView,
           model: new XiconfProgram({_id: req.params.id}),
           baseBreadcrumb: true
@@ -59,6 +60,7 @@ define([
       function(AddFormPage, XiconfProgramFormView)
       {
         return new AddFormPage({
+          pageClassName: 'page-max-flex',
           FormView: XiconfProgramFormView,
           model: new XiconfProgram(),
           baseBreadcrumb: true
@@ -74,6 +76,7 @@ define([
       function(EditFormPage, XiconfProgramFormView)
       {
         return new EditFormPage({
+          pageClassName: 'page-max-flex',
           FormView: XiconfProgramFormView,
           model: new XiconfProgram({_id: req.params.id}),
           baseBreadcrumb: true

@@ -1,34 +1,16 @@
 <div>
   <div class="panel panel-default">
     <div class="panel-details">
-      <div class="props first">
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:srcId') %></div>
-          <div class="prop-value"><%- model.srcId %></div>
-        </div>
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:srcTitle') %></div>
-          <div class="prop-value"><%- model.srcTitle || '-' %></div>
-        </div>
-        <% if (model.srcIp) { %>
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:srcIp') %></div>
-          <div class="prop-value"><%- model.srcIp %></div>
-        </div>
-        <% } %>
-        <% if (model.srcUuid) { %>
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:srcUuid') %></div>
-          <div class="prop-value"><%- model.srcUuid %></div>
-        </div>
-        <% } %>
-      </div>
+      <%- helpers.props(model, [
+        {id: 'srcId', visible: !!model.srcId},
+        {id: 'srcTitle', visible: !!model.srcTitle},
+        {id: 'srcIp', visible: !!model.srcIp},
+        {id: 'srcUuid', visible: !!model.srcUuid}
+      ]) %>
     </div>
   </div>
   <div class="panel panel-primary xiconf-details-order">
-    <div class="panel-heading">
-      <%- helpers.t('PANEL:TITLE:details:order') %>
-    </div>
+    <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details:order') %></div>
     <div class="panel-details">
       <div class="props first">
         <div class="prop">
@@ -65,9 +47,7 @@
     </div>
   </div>
   <div class="panel panel-<%- model.cancelled ? 'default' : model.result === 'success'  ? 'success' : 'danger' %> xiconf-details-entry">
-    <div class="panel-heading">
-      <%- helpers.t('PANEL:TITLE:details:entry') %>
-    </div>
+    <div class="panel-heading"><%- helpers.t('PANEL:TITLE:details:entry') %></div>
     <div class="panel-details">
       <div class="props first">
         <% if (!_.isEmpty(model.prodLine)) { %>

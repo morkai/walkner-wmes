@@ -17,10 +17,9 @@ define([
 
     template: template,
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         probes: this.serializeProbes()
       };
     },

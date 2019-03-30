@@ -1,0 +1,140 @@
+<form class="snf-programs-form" method="post" action="<%- formAction %>" autocomplete="off">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-name" class="control-label"><%- t('snf-programs', 'PROPERTY:name') %></label>
+        <input id="<%- idPrefix %>-name" class="form-control" type="text" name="name" required autofocus maxlength="150">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-kind" class="control-label"><%- t('snf-programs', 'PROPERTY:kind') %></label>
+        <select id="<%- idPrefix %>-kind" name="kind">
+          <% kinds.forEach(function(kind) { %>
+          <option value="<%- kind %>"><%- t('snf-programs', 'kind:' + kind) %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="row snf-programs-form-choices">
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-lightSourceType" class="control-label"><%- t('snf-programs', 'PROPERTY:lightSourceType') %></label>
+          <select id="<%- idPrefix %>-lightSourceType" name="lightSourceType">
+            <% lightSourceTypes.forEach(function(lightSourceType) { %>
+            <option value="<%- lightSourceType %>"><%- t('snf-programs', 'lightSourceType:' + lightSourceType) %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-bulbPower" class="control-label"><%- t('snf-programs', 'PROPERTY:bulbPower') %></label>
+          <select id="<%- idPrefix %>-bulbPower" name="bulbPower">
+            <% bulbPowers.forEach(function(bulbPower) { %>
+            <option value="<%- bulbPower %>"><%- t('snf-programs', 'bulbPower:' + bulbPower) %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-ballast" class="control-label"><%- t('snf-programs', 'PROPERTY:ballast') %></label>
+          <select id="<%- idPrefix %>-ballast" name="ballast">
+            <% ballasts.forEach(function(ballast) { %>
+            <option value="<%- ballast %>"><%- t('snf-programs', 'ballast:' + ballast) %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="col-md-3 form-group">
+          <label for="<%- idPrefix %>-ignitron" class="control-label"><%- t('snf-programs', 'PROPERTY:ignitron') %></label>
+          <select id="<%- idPrefix %>-ignitron" name="ignitron">
+            <% ignitrons.forEach(function(ignitron) { %>
+            <option value="<%- ignitron %>"><%- t('snf-programs', 'ignitron:' + ignitron) %></option>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <label for="<%- idPrefix %>-waitForStartTime" class="control-label"><%- t('snf-programs', 'PROPERTY:waitForStartTime') %></label>
+          <input id="<%- idPrefix %>-waitForStartTime" class="form-control snf-programs-form-time" type="text" name="waitForStartTime" required>
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="<%- idPrefix %>-illuminationTime" class="control-label"><%- t('snf-programs', 'PROPERTY:illuminationTime') %></label>
+          <input id="<%- idPrefix %>-illuminationTime" class="form-control snf-programs-form-time" type="text" name="illuminationTime">
+        </div>
+      </div>
+      <div id="<%- idPrefix %>-hrs" class="row">
+        <div class="col-md-4 form-group">
+          <label for="<%- idPrefix %>-hrsInterval" class="control-label"><%- t('snf-programs', 'PROPERTY:hrsInterval') %></label>
+          <input id="<%- idPrefix %>-hrsInterval" class="form-control snf-programs-form-time" type="text" name="hrsInterval" required>
+        </div>
+        <div class="col-md-4 form-group">
+          <label for="<%- idPrefix %>-hrsTime" class="control-label"><%- t('snf-programs', 'PROPERTY:hrsTime') %></label>
+          <input id="<%- idPrefix %>-hrsTime" class="form-control snf-programs-form-time" type="text" name="hrsTime">
+        </div>
+        <div class="col-md-4 form-group">
+          <label for="<%- idPrefix %>-hrsCount" class="control-label"><%- t('snf-programs', 'PROPERTY:hrsCount') %></label>
+          <input id="<%- idPrefix %>-hrsCount" class="form-control" type="number" name="hrsCount">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <div class="checkbox">
+              <label><input id="<%- idPrefix %>-limitSwitch" type="checkbox" name="limitSwitch" value="true"> <%- t('snf-programs', 'PROPERTY:limitSwitch') %></label>
+            </div>
+            <div class="checkbox">
+              <label><input id="<%- idPrefix %>-lampBulb" type="checkbox" name="lampBulb" value="true"> <%- t('snf-programs', 'PROPERTY:lampBulb') %></label>
+            </div>
+            <div class="checkbox">
+              <label><input id="<%- idPrefix %>-lightSensors" type="checkbox" name="lightSensors" value="true"> <%- t('snf-programs', 'PROPERTY:lightSensors') %></label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="<%- idPrefix %>-lampCount" class="control-label"><%- t('snf-programs', 'PROPERTY:lampCount') %></label>
+            <div class="radio">
+              <label><input id="<%- idPrefix %>-lampCount" type="radio" name="lampCount" value="1"> <%- t('snf-programs', 'lampCount:1') %></label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="lampCount" value="2"> <%- t('snf-programs', 'lampCount:2') %></label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="lampCount" value="3"> <%- t('snf-programs', 'lampCount:3') %></label>
+            </div>
+          </div>
+          <div class="form-group form-group-last">
+            <label for="<%- idPrefix %>-interlock" class="control-label"><%- t('snf-programs', 'PROPERTY:interlock') %></label>
+            <div class="radio">
+              <label><input id="<%- idPrefix %>-interlock" type="radio" name="interlock" value="1"> <%- t('snf-programs', 'interlock:1') %></label>
+            </div>
+            <div class="radio">
+              <label><input id="<%- idPrefix %>-interlock" type="radio" name="interlock" value="1+2"> <%- t('snf-programs', 'interlock:1+2') %></label>
+            </div>
+            <div class="radio">
+              <label><input id="<%- idPrefix %>-interlock" type="radio" name="interlock" value="mnh"> <%- t('snf-programs', 'interlock:mnh') %></label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 form-group">
+          <label class="control-label"><%- t('snf-programs', 'PROPERTY:contactors') %></label>
+          <% contactors.forEach(function(contactor) { %>
+          <div class="checkbox">
+            <label><input type="checkbox" name="<%- contactor %>"> <%- t('snf-programs', 'PROPERTY:' + contactor) %></label>
+          </div>
+          <% }) %>
+        </div>
+        <div class="col-md-4">
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label for="<%- idPrefix %>-minCurrent" class="control-label"><%- t('snf-programs', 'PROPERTY:minCurrent') %></label>
+              <input id="<%- idPrefix %>-minCurrent" class="form-control" type="number" name="minCurrent" min="0" max="100">
+            </div>
+            <div class="col-md-6 form-group">
+              <label for="<%- idPrefix %>-maxCurrent" class="control-label"><%- t('snf-programs', 'PROPERTY:maxCurrent') %></label>
+              <input id="<%- idPrefix %>-maxCurrent" class="form-control" type="number" name="maxCurrent" min="0" max="100">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

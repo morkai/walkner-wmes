@@ -1,0 +1,13 @@
+<div class="thumbnail" data-id="<%- image._id %>">
+  <a href="/snf/programs/<%- program._id %>/images/<%- image._id %>.<%- image.type %>"><img src="/snf/programs/<%- program._id %>/images/<%- image._id %>.<%- image.type %>" alt=""></a>
+  <div class="caption">
+    <p class="thumbnail-label"><%= image.label %></p>
+    <p class="thumbnail-actions">
+      <% if (user.isAllowedTo('XICONF:MANAGE')) { %>
+      <button type="button" class="btn btn-default snf-programs-image-edit"><i class="fa fa-edit"></i></button>
+      <button type="button" class="btn btn-default snf-programs-image-delete"><i class="fa fa-remove"></i></button>
+      <% } %>
+      <i class="fa fa-spinner fa-spin"></i>
+    </p>
+  </div>
+</div>

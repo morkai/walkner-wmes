@@ -1,7 +1,7 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Xiconf",
-    "BREADCRUMBS:browse": "Programs",
+    "BREADCRUMBS:base": "Tests",
+    "BREADCRUMBS:browse": "Xiconf programs",
 
     "PAGE_ACTION:toggle": "Toggle details",
 

@@ -365,7 +365,6 @@ exports.pubsub = {
     'prodShifts.**', 'prodDowntimes.**', 'prodShiftOrders.**', 'prodChangeRequests.**', 'prodSerialNumbers.created.**',
     'updater.newVersion',
     'settings.updated.**',
-    'xiconf.results.**', 'xiconf.orders.**', 'xiconf.clients.**',
     'icpo.results.synced', 'orders.intake.synced',
     'orders.updated.*', 'orders.quantityDone.*', 'orders.invalid.**',
     'orderDocuments.tree.**', 'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*',
@@ -569,7 +568,8 @@ exports.xiconf = {
   zipStoragePath: `${DATA_PATH}/xiconf-input`,
   featureDbPath: `${DATA_PATH}/xiconf-features`,
   ordersImportPath: `${DATA_PATH}/attachments-input`,
-  updatesPath: `${DATA_PATH}/xiconf-updates`
+  updatesPath: `${DATA_PATH}/xiconf-updates`,
+  snfImagesPath: `${DATA_PATH}/uploads/snf`
 };
 
 exports.icpo = {

@@ -1,0 +1,101 @@
+<div class="panel panel-primary snf-programs-details">
+  <div class="panel-heading"><%- panelTitle %></div>
+  <div class="panel-details row">
+    <div class="col-md-3">
+      <div class="props first">
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:name') %></div>
+          <div class="prop-value"><%= model.name %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:kind') %></div>
+          <div class="prop-value"><%- helpers.t('kind:' + model.kind) %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:lightSourceType') %></div>
+          <div class="prop-value"><%- helpers.t('lightSourceType:' + model.lightSourceType) %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:bulbPower') %></div>
+          <div class="prop-value"><%- helpers.t('bulbPower:' + model.bulbPower) %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:ballast') %></div>
+          <div class="prop-value"><%- helpers.t('ballast:' + model.ballast) %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:ignitron') %></div>
+          <div class="prop-value"><%- helpers.t('ignitron:' + model.ignitron) %></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:waitForStartTime') %></div>
+          <div class="prop-value"><%- time.toString(model.waitForStartTime) %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:illuminationTime') %></div>
+          <div class="prop-value"><%- time.toString(model.illuminationTime) %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:hrsInterval') %></div>
+          <div class="prop-value"><%- model.kind === 'hrs' ? time.toString(model.hrsInterval) : '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:hrsTime') %></div>
+          <div class="prop-value"><%- model.kind === 'hrs' ? time.toString(model.hrsTime) : '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:hrsCount') %></div>
+          <div class="prop-value"><%- model.kind === 'hrs' ? model.hrsCount : '-' %></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:limitSwitch') %></div>
+          <div class="prop-value"><%- t('core', 'BOOL:' + model.limitSwitch) %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:lampBulb') %></div>
+          <div class="prop-value"><%- t('core', 'BOOL:' + model.lampBulb) %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:lightSensors') %></div>
+          <div class="prop-value"><%- t('core', 'BOOL:' + model.lightSensors) %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:lampCount') %></div>
+          <div class="prop-value"><%- helpers.t('lampCount:' + model.lampCount) %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:interlock') %></div>
+          <div class="prop-value"><%- helpers.t('interlock:' + model.interlock) %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:contactors') %></div>
+          <div class="prop-value">
+            <% contactors.forEach(function(contactor) { %>
+            <% if (model[contactor]) { %>
+            <span class="label label-<%- model[contactor] ? 'success' : 'danger' %>"><%- helpers.t('PROPERTY:' + contactor) %></span>
+            <% } %>
+            <% }) %>
+          </div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:currentBoundries') %></div>
+          <div class="prop-value">
+          <% if (model.minCurrent === 0 && model.maxCurrent === 0) { %>
+          <%- helpers.t('current:noBoundries') %>
+          <% } else { %>
+          <%- helpers.t('current:boundries', {min: model.minCurrent, max: model.maxCurrent}) %>
+          <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+<div class="yesNoDialog">
+  <%- message %>
+  <div class="form-actions">
+    <button class="btn btn-<%- typeof severity === 'undefined' ? 'success' : severity %> dialog-answer" type="button" autofocus data-answer="yes"><%- yes %></button>
+    <button class="btn btn-link cancel" type="button"><%- no %></button>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="panel panel-default snf-programs-gallery">
+  <div class="panel-heading"><%- helpers.t('PANEL:TITLE:gallery') %></div>
+  <div class="panel-body">
+    <% if (user.isAllowedTo('XICONF:MANAGE')) { %>
+    <form class="thumbnail snf-programs-gallery-upload" method="post" enctype="multipart/form-data" action="/programs/<%- program._id %>/images">
+      <input id="<%- idPrefix %>-files" type="file" accept="image/*" multiple>
+      <button id="<%- idPrefix %>-upload" class="btn btn-link" type="button"><i class="fa fa-plus-circle"></i></button>
+      <div class="caption">
+        <p><%- helpers.t('gallery:add') %></p>
+      </div>
+    </form>
+    <% } %>
+    <% program.images.forEach(function(image) { %>
+    <% include galleryThumbnail.ejs %>
+    <% }) %>
+  </div>
+</div>

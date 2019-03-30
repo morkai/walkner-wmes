@@ -1,0 +1,11 @@
+<form class="action-form" method="post" action="/snf/programs/<%- programId %>/images/<%- image._id %>.<%- image.type %>">
+  <input type="hidden" name="_method" value="put">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-label" class="control-label"><%- t('snf-programs', 'PROPERTY:images.label') %></label>
+    <input id="<%- idPrefix %>-label" class="form-control" type="text" required autofocus maxlength="150" value="<%= image.label %>">
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary"><%- t('snf-programs', 'gallery:edit:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>
