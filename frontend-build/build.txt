@@ -71,7 +71,6 @@ app/core/assets/./highcharts.css
 app/core/assets/./embedded.css
 app/core/assets/./messages.css
 app/core/assets/./notifications.css
-app/core/assets/./userInfoPopover.css
 app/core/assets/main.css
 
 app/core/assets/messages.css
@@ -101,10 +100,6 @@ app/core/assets/properties.css
 app/core/assets/table.css
 ----------------
 app/core/assets/table.css
-
-app/core/assets/userInfoPopover.css
-----------------
-app/core/assets/userInfoPopover.css
 
 app/d8Entries/assets/details.css
 ----------------
@@ -645,6 +640,10 @@ app/settings/assets/main.css
 ----------------
 app/settings/assets/main.css
 
+app/snf-programs/assets/main.css
+----------------
+app/snf-programs/assets/main.css
+
 app/subdivisions/assets/main.css
 ----------------
 app/subdivisions/assets/main.css
@@ -694,7 +693,12 @@ app/users/assets/logInForm.css
 app/users/assets/main.css
 ----------------
 app/users/assets/./logInForm.css
+app/users/assets/./userInfoPopover.css
 app/users/assets/main.css
+
+app/users/assets/userInfoPopover.css
+----------------
+app/users/assets/userInfoPopover.css
 
 app/vis/assets/main.css
 ----------------
@@ -960,6 +964,7 @@ assets/../app/pfepEntries/assets/main.css
 assets/../app/help/assets/main.css
 assets/../app/wmes-toolcal-tools/assets/main.css
 assets/../app/wmes-fap-entries/assets/main.css
+assets/../app/snf-programs/assets/main.css
 assets/./wmes-loading.css
 assets/wmes-main.css
 
@@ -1966,6 +1971,9 @@ i18n!app/nls/wmes-fap-entries
 app/wmes-fap-entries/routes.js
 app/wmes-luma2-events/routes.js
 app/wmes-luma2-lines/routes.js
+app/snf-programs/Program.js
+app/snf-programs/ProgramCollection.js
+app/snf-programs/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
