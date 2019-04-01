@@ -124,8 +124,8 @@ define([
         return false;
       });
 
-      view.off('cleanup', destroy, view);
-      view.once('cleanup', destroy, view);
+      view.off('remove', destroy, view);
+      view.once('remove', destroy, view);
     }
   };
 });

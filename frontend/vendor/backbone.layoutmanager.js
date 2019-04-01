@@ -617,6 +617,8 @@ var LayoutManager = Backbone.View.extend({
 
   // Ensure the cleanup function is called whenever remove is called.
   remove: function() {
+    this.trigger('remove', this);
+
     // Force remove itself from its parent.
     LayoutManager._removeView(this, true);
 
