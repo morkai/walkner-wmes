@@ -29,7 +29,7 @@ define([
       {
         return new ListPage({
           ListView: ProdTaskListView,
-          collection: new ProdTaskCollection({rqlQuery: req.rql})
+          collection: new ProdTaskCollection(null, {rqlQuery: req.rql})
         });
       }
     );

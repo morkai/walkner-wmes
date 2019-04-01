@@ -10,7 +10,7 @@ define([
   'app/core/util/getShiftStartInfo',
   'app/core/util/pageActions',
   'app/core/util/onModelDeleted',
-  'app/core/View',
+  'app/core/pages/DetailsPage',
   'app/prodChangeRequests/util/createDeletePageAction',
   'app/prodShiftOrders/ProdShiftOrderCollection',
   'app/prodDowntimes/ProdDowntimeCollection',
@@ -29,7 +29,7 @@ define([
   getShiftStartInfo,
   pageActions,
   onModelDeleted,
-  View,
+  DetailsPage,
   createDeletePageAction,
   ProdShiftOrderCollection,
   ProdDowntimeCollection,
@@ -47,13 +47,13 @@ define([
     'downtime': 'danger'
   };
 
-  return View.extend({
+  return DetailsPage.extend({
 
     template: detailsPageTemplate,
 
-    layoutName: 'page',
-
     pageId: 'details',
+
+    modelProperty: 'prodShift',
 
     localTopics: {
       'socket.connected': function()
@@ -64,16 +64,7 @@ define([
       }
     },
 
-    breadcrumbs: function()
-    {
-      return [
-        {
-          label: t.bound('prodShifts', 'BREADCRUMBS:browse'),
-          href: this.prodShift.genClientUrl('base')
-        },
-        this.prodShift.getLabel()
-      ];
-    },
+    remoteTopics: {},
 
     actions: function()
     {

@@ -26,7 +26,7 @@ define([
     viewport.loadPage(['app/core/pages/ListPage'], function(ListPage)
     {
       return new ListPage({
-        collection: new VendorCollection({rqlQuery: req.rql}),
+        collection: new VendorCollection(null, {rqlQuery: req.rql}),
         columns: ['_id', 'name']
       });
     });

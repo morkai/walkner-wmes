@@ -7,7 +7,8 @@ define([
   'app/viewport',
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
-  'app/core/View',
+  'app/core/pages/createPageBreadcrumbs',
+  'app/core/pages/DetailsPage',
   'app/data/orgUnits',
   '../views/FteLeaderEntryDetailsView'
 ], function(
@@ -17,31 +18,29 @@ define([
   viewport,
   bindLoadingMessage,
   pageActions,
-  View,
+  createPageBreadcrumbs,
+  DetailsPage,
   orgUnits,
   FteLeaderEntryDetailsView
 ) {
   'use strict';
 
-  return View.extend({
+  return DetailsPage.extend({
 
     pageClassName: 'page-max-flex',
 
     modelType: 'fteLeader',
 
-    layoutName: 'page',
-
     pageId: 'fteLeaderEntryDetails',
+
+    browseBreadcrumb: function()
+    {
+      return 'BREADCRUMBS:' + this.model.TYPE + ':browse';
+    },
 
     breadcrumbs: function()
     {
-      return [
-        {
-          label: t.bound('fte', 'BREADCRUMBS:' + this.model.TYPE + ':browse'),
-          href: this.model.genClientUrl('base')
-        },
-        t.bound('fte', 'BREADCRUMBS:details')
-      ];
+      return createPageBreadcrumbs(this, [':details']);
     },
 
     actions: function()

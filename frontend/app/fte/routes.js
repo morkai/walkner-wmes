@@ -255,7 +255,7 @@ define([
       function(FteWhEntryCollection, FteLeaderEntryListPage)
       {
         return new FteLeaderEntryListPage({
-          collection: new FteWhEntryCollection({rqlQuery: req.rql})
+          collection: new FteWhEntryCollection(null, {rqlQuery: req.rql})
         });
       }
     );

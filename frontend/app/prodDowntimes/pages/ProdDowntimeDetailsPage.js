@@ -7,7 +7,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
   'app/core/util/onModelDeleted',
-  'app/core/View',
+  'app/core/pages/DetailsPage',
   'app/prodChangeRequests/util/createDeletePageAction',
   '../settings',
   '../ProdDowntime',
@@ -19,7 +19,7 @@ define([
   bindLoadingMessage,
   pageActions,
   onModelDeleted,
-  View,
+  DetailsPage,
   createDeletePageAction,
   settings,
   ProdDowntime,
@@ -27,20 +27,9 @@ define([
 ) {
   'use strict';
 
-  return View.extend({
+  return DetailsPage.extend({
 
-    layoutName: 'page',
-
-    breadcrumbs: function()
-    {
-      return [
-        {
-          label: t.bound('prodDowntimes', 'BREADCRUMBS:browse'),
-          href: this.model.genClientUrl('base')
-        },
-        this.model.getLabel()
-      ];
-    },
+    remoteTopics: {},
 
     actions: function()
     {

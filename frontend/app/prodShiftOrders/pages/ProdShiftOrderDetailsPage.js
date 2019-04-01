@@ -9,7 +9,7 @@ define([
   'app/core/util/bindLoadingMessage',
   'app/core/util/pageActions',
   'app/core/util/onModelDeleted',
-  'app/core/View',
+  'app/core/pages/DetailsPage',
   'app/prodChangeRequests/util/createDeletePageAction',
   'app/delayReasons/storage',
   'app/production/settings',
@@ -35,7 +35,7 @@ define([
   bindLoadingMessage,
   pageActions,
   onModelDeleted,
-  View,
+  DetailsPage,
   createDeletePageAction,
   delayReasonsStorage,
   productionSettings,
@@ -55,24 +55,15 @@ define([
 ) {
   'use strict';
 
-  return View.extend({
+  return DetailsPage.extend({
 
     template: detailsPageTemplate,
 
-    layoutName: 'page',
-
     pageId: 'details',
 
-    breadcrumbs: function()
-    {
-      return [
-        {
-          label: t.bound('prodShiftOrders', 'BREADCRUMBS:browse'),
-          href: this.prodShiftOrder.genClientUrl('base')
-        },
-        this.prodShiftOrder.getLabel()
-      ];
-    },
+    modelProperty: 'prodShiftOrder',
+
+    remoteTopics: {},
 
     actions: function()
     {
@@ -101,9 +92,9 @@ define([
 
       this.listenToOnce(this.prodShiftOrder, 'sync', this.onSync);
 
-      this.setView('#' + this.idPrefix + '-details', this.detailsView);
-      this.insertView('#' + this.idPrefix + '-downtimes', this.downtimesView);
-      this.insertView('#' + this.idPrefix + '-serialNumbers', this.serialNumbersView);
+      this.setView('#-details', this.detailsView);
+      this.insertView('#-downtimes', this.downtimesView);
+      this.insertView('#-serialNumbers', this.serialNumbersView);
     },
 
     destroy: function()
