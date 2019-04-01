@@ -173,7 +173,7 @@ define([
     }
     else
     {
-      onPageLoadSuccess();
+      when().then(onPageLoadSuccess, onPageLoadFailure);
     }
 
     function when()
@@ -194,12 +194,16 @@ define([
         }
       }
 
+      page.trigger('beforeLoad', page, requests);
+
       return $.when.apply($, _.map(requests, page.promised, page));
     }
 
     function onPageLoadSuccess()
     {
       viewport.broker.publish('viewport.page.loaded', {page: page});
+
+      page.trigger('afterLoad', page);
 
       if (viewport.currentPage !== null)
       {
