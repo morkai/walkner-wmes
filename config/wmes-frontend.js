@@ -96,6 +96,7 @@ exports.modules = [
   'orderBomMatchers',
   'subscriptions',
   'help',
+  'logs',
   'wmes-toolcal',
   'wmes-fap',
   'wmes-luma2-frontend',

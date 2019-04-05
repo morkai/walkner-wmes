@@ -4,6 +4,72 @@
 {
   'use strict';
 
+  var lastError = null;
+
+  window.addEventListener('error', function(e)
+  {
+    if (!window.fetch)
+    {
+      return;
+    }
+
+    if (e.error.stack === lastError)
+    {
+      return;
+    }
+
+    lastError = e.error.stack;
+
+    var stack = lastError.split(/\s+at\s+/);
+
+    stack.shift();
+
+    var error = {
+      type: e.error.name,
+      message: e.error.message,
+      file: e.filename,
+      col: e.colno,
+      line: e.lineno,
+      stack: stack,
+      time: e.timeStamp
+    };
+
+    var navigator = window.navigator;
+    var screen = window.screen;
+    var headers = getCommonHeaders();
+
+    headers['Content-Type'] = 'application/json';
+
+    fetch('/logs/browserErrors', {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        error: error,
+        browser: {
+          time: new Date(),
+          navigator: {
+            language: navigator.language,
+            languages: navigator.languages,
+            cookieEnabled: navigator.cookieEnabled,
+            onLine: navigator.onLine,
+            platform: navigator.platform,
+            userAgent: navigator.userAgent
+          },
+          screen: {
+            availHeight: screen.availHeight,
+            availWidth: screen.availWidth,
+            width: screen.width,
+            height: screen.height,
+            innerWidth: window.innerWidth,
+            innerHeight: window.innerHeight
+          },
+          location: window.location.href,
+          history: JSON.parse(localStorage.getItem('WMES_RECENT_LOCATIONS') || [])
+        }
+      })
+    }).then(function() {}, function() {});
+  });
+
   var navigator = window.navigator;
   var location = window.location;
 
@@ -69,25 +135,42 @@
 
   XMLHttpRequest.prototype.send = function()
   {
-    this.setRequestHeader('X-WMES-INSTANCE', window.INSTANCE_ID);
+    var headers = getCommonHeaders();
+
+    Object.keys(headers).forEach(function(key)
+    {
+      this.setRequestHeader(key, headers[key]);
+    }, this);
+
+    return oldSend.apply(this, arguments);
+  };
+
+  function getCommonHeaders()
+  {
+    var headers = {};
+
+    if (window.INSTANCE_ID)
+    {
+      headers['X-WMES-INSTANCE'] = window.INSTANCE_ID;
+    }
 
     if (window.COMPUTERNAME)
     {
-      this.setRequestHeader('X-WMES-CNAME', window.COMPUTERNAME);
+      headers['X-WMES-CNAME'] = window.COMPUTERNAME;
     }
 
     if (window.WMES_APP_ID)
     {
-      this.setRequestHeader('X-WMES-APP', window.WMES_APP_ID);
+      headers['X-WMES-APP'] = window.WMES_APP_ID;
     }
 
     if (window.WMES_LINE_ID)
     {
-      this.setRequestHeader('X-WMES-LINE', window.WMES_LINE_ID);
+      headers['X-WMES-LINE'] = window.WMES_LINE_ID;
     }
 
-    return oldSend.apply(this, arguments);
-  };
+    return headers;
+  }
 
   var domains = [];
   var i18n = null;
