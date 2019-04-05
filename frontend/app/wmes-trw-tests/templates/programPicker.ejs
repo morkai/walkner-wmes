@@ -1,0 +1,16 @@
+<form class="trw-programPicker">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-filter" class="control-label"><%- helpers.t('programPicker:filter') %></label>
+    <input id="<%- idPrefix %>-filter" name="filter" class="form-control" type="text" data-vkb="alpha numeric">
+  </div>
+  <div id="<%- idPrefix %>-programGroup" class="form-group">
+    <label class="control-label"><%- helpers.t('programPicker:programs') %></label>
+    <div id="<%- idPrefix %>-programs" class="trw-testing-list" style="height: 64px">
+      <i class="fa fa-spinner fa-spin"></i>
+    </div>
+    </div>
+  <div class="form-actions">
+    <button class="btn btn-lg btn-primary"><%- helpers.t('programPicker:submit') %></button>
+    <button class="btn btn-lg btn-link cancel" type="button"><%- helpers.t('programPicker:cancel') %></button>
+  </div>
+</form>

@@ -97,6 +97,8 @@ define([
   './wmes-fap-entries/routes',
   './wmes-luma2-events/routes',
   './wmes-luma2-lines/routes',
+  './wmes-trw-testers/routes',
+  './wmes-trw-programs/routes',
   './snf-programs/routes'
 ], function()
 {

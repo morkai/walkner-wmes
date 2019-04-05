@@ -1,0 +1,16 @@
+{
+  "BREADCRUMBS:base": "TRW",
+  "BREADCRUMBS:browse": "Testery",
+
+  "PROPERTY:_id": "ID",
+  "PROPERTY:name": "Nazwa",
+  "PROPERTY:io": "I/O",
+  "PROPERTY:io._id": "ID",
+  "PROPERTY:io.name": "Nazwa",
+  "PROPERTY:io.type": "Typ",
+  "PROPERTY:io.device": "Nr urządzenia",
+  "PROPERTY:io.channel": "Nr kanału",
+
+  "ioType:input": "Wejście",
+  "ioType:output": "Wyjście"
+}

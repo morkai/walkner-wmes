@@ -1,0 +1,36 @@
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitle %></div>
+    <div class="panel-details">
+      <%- helpers.props(model, ['name', 'tester']) %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%- helpers.t('PROPERTY:steps') %></div>
+    <div class="panel-body trw-programs-details-steps">
+      <% model.steps.forEach(function(step, i) { %>
+      <div class="trw-programs-details-step">
+        <div class="trw-programs-details-step-no"><%- i + 1 %></div>
+        <% if (step.name) { %>
+          <div class="trw-programs-details-step-prop" data-prop="name">
+            <div class="trw-programs-details-step-value"><%- step.name %></div>
+          </div>
+        <% } %>
+        <% if (step.description) { %>
+        <div class="trw-programs-details-step-prop" data-prop="description">
+          <div class="trw-programs-details-step-value"><%- step.description %></div>
+        </div>
+        <% } %>
+        <div class="trw-programs-details-step-prop">
+          <div class="trw-programs-details-step-label"><%- helpers.t('PROPERTY:steps.setIo') %></div>
+          <div class="trw-programs-details-step-value"><%= step.setIo %></div>
+        </div>
+        <div class="trw-programs-details-step-prop">
+          <div class="trw-programs-details-step-label"><%- helpers.t('PROPERTY:steps.checkIo') %></div>
+          <div class="trw-programs-details-step-value"><%= step.checkIo %></div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</div>

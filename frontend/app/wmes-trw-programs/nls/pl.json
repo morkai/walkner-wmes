@@ -1,0 +1,14 @@
+{
+  "BREADCRUMBS:base": "TRW",
+  "BREADCRUMBS:browse": "Programy",
+
+  "PROPERTY:name": "Nazwa",
+  "PROPERTY:tester": "Tester",
+  "PROPERTY:steps": "Kroki",
+  "PROPERTY:steps.name": "Krótki tekst",
+  "PROPERTY:steps.description": "Długi tekst",
+  "PROPERTY:steps.setIo": "Wyjścia",
+  "PROPERTY:steps.checkIo": "Wejścia",
+
+  "steps:hd": "Krok {n}"
+}

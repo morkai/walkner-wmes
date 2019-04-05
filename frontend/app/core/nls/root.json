@@ -243,16 +243,8 @@
     "NAVBAR:QI:faults": "Faults",
     "NAVBAR:QI:actionStatuses": "Action statuses",
 
-    "NAVBAR:D8:main": "8D",
-    "NAVBAR:D8:entries": "Entries",
-    "NAVBAR:D8:all": "All",
-    "NAVBAR:D8:open": "Only open",
-    "NAVBAR:D8:mine": "Only mine",
-    "NAVBAR:D8:unseen": "Only unread",
-    "NAVBAR:D8:dictionaries": "Dictionaries",
-    "NAVBAR:D8:areas": "Areas",
-    "NAVBAR:D8:entrySources": "Entry sources",
-    "NAVBAR:D8:problemSources": "Problem sources",
+    "NAVBAR:trw:testers": "TRW testers",
+    "NAVBAR:trw:programs": "TRW programs",
 
     "NAVBAR:SEARCH:help": "Search by order no, 12NC or date.",
     "NAVBAR:SEARCH:empty": "No results.",

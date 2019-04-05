@@ -1,0 +1,15 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "TRW",
+    "BREADCRUMBS:browse": "Programs",
+
+    "PROPERTY:name": "Name",
+    "PROPERTY:tester": "Tester",
+    "PROPERTY:steps": "Steps",
+    "PROPERTY:steps.name": "Short text",
+    "PROPERTY:steps.description": "Long text",
+    "PROPERTY:steps.setIo": "Outputs",
+    "PROPERTY:steps.checkIo": "Inputs"
+  },
+  "pl": true
+}

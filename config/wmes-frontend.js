@@ -99,6 +99,7 @@ exports.modules = [
   'wmes-toolcal',
   'wmes-fap',
   'wmes-luma2-frontend',
+  'wmes-trw',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'sms/sender',
@@ -253,6 +254,7 @@ exports.updater = {
       path: '/isa/manifest.appcache',
       mainJsFile: '/wmes-isa.js',
       mainCssFile: '/assets/wmes-isa.css',
+      template: manifestTemplates.main,
       frontendAppData: {},
       dictionaryModules: {
         divisions: 'DIVISIONS',
@@ -263,6 +265,15 @@ exports.updater = {
         prodLines: 'PROD_LINES',
         isaPalletKinds: 'ISA_PALLET_KINDS'
       }
+    },
+    {
+      frontendVersionKey: 'trw',
+      path: '/trw/manifest.appcache',
+      mainJsFile: '/wmes-trw.js',
+      mainCssFile: '/assets/wmes-trw.css',
+      template: manifestTemplates.main,
+      frontendAppData: {},
+      dictionaryModules: {}
     }
   ]
 };

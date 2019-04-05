@@ -250,16 +250,8 @@
   "NAVBAR:QI:faults": "Wady",
   "NAVBAR:QI:actionStatuses": "Statusy akcji",
 
-  "NAVBAR:D8:main": "8D",
-  "NAVBAR:D8:entries": "Zgłoszenia",
-  "NAVBAR:D8:all": "Wszystkie",
-  "NAVBAR:D8:open": "Tylko otwarte",
-  "NAVBAR:D8:mine": "Tylko moje",
-  "NAVBAR:D8:unseen": "Tylko nieprzeczytane",
-  "NAVBAR:D8:dictionaries": "Słowniki",
-  "NAVBAR:D8:areas": "Obszary",
-  "NAVBAR:D8:entrySources": "Źródła zgłoszeń",
-  "NAVBAR:D8:problemSources": "Źródła problemów",
+  "NAVBAR:trw:testers": "Testery TRW",
+  "NAVBAR:trw:programs": "Programy TRW",
 
   "NAVBAR:SEARCH:help": "Szukaj wg nr zlecenia, 12NC, zgłoszenia lub daty.",
   "NAVBAR:SEARCH:empty": "Brak wyników.",

@@ -1,0 +1,53 @@
+<form method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
+        <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100">
+      </div>
+      <div class="form-group has-required-select2">
+        <label for="<%- idPrefix %>-tester" class="control-label is-required"><%- helpers.t('PROPERTY:tester') %></label>
+        <input id="<%- idPrefix %>-tester" type="text" autocomplete="new-password" name="tester" required>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- helpers.t('PROPERTY:steps') %></label>
+        <div id="<%- idPrefix %>-steps" class="trw-programs-form-steps" style="margin-bottom: 15px">
+          <div class="panel panel-default">
+            <div class="panel-heading is-with-actions">
+              <span class="panel-heading-text"></span>
+              <div class="panel-actions">
+                <button type="button" class="btn btn-default" data-action="moveStepUp"><i class="fa fa-chevron-up"></i></button>
+                <button type="button" class="btn btn-default" data-action="moveStepDown"><i class="fa fa-chevron-down"></i></button>
+                <button type="button" class="btn btn-default" data-action="removeStep"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="form-group">
+                <label for="<%- idPrefix %>-steps-${i}-name" class="control-label"><%- helpers.t('PROPERTY:steps.name') %></label>
+                <input id="<%- idPrefix %>-steps-${i}-name" class="form-control" type="text" autocomplete="new-password" name="steps[${i}].name" maxlength="500">
+              </div>
+              <div class="form-group">
+                <label for="<%- idPrefix %>-steps-${i}-description" class="control-label"><%- helpers.t('PROPERTY:steps.description') %></label>
+                <textarea id="<%- idPrefix %>-steps-${i}-description" class="form-control" autocomplete="new-password" name="steps[${i}].description" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="<%- idPrefix %>-steps-${i}-setIo" class="control-label"><%- helpers.t('PROPERTY:steps.setIo') %></label>
+                <input id="<%- idPrefix %>-steps-${i}-setIo" type="text" autocomplete="new-password" name="steps[${i}].setIo">
+              </div>
+              <div class="form-group">
+                <label for="<%- idPrefix %>-steps-${i}-checkIo" class="control-label"><%- helpers.t('PROPERTY:steps.checkIo') %></label>
+                <input id="<%- idPrefix %>-steps-${i}-checkIo" type="text" autocomplete="new-password" name="steps[${i}].checkIo">
+              </div>
+            </div>
+          </div>
+        </div>
+        <button id="<%- idPrefix %>-addStep" class="btn btn-default" type="button"><i class="fa fa-plus"></i></button>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

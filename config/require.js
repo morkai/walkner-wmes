@@ -44,7 +44,8 @@ exports.paths = {
   'dragscroll': 'vendor/dragscroll',
   'hammer': 'vendor/hammer',
   'autolinker': 'vendor/autolinker',
-  'getCaretCoordinates': 'vendor/getCaretCoordinates'
+  'getCaretCoordinates': 'vendor/getCaretCoordinates',
+  'viewerjs': 'vendor/viewerjs/viewer'
 };
 
 exports.shim = {

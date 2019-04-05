@@ -1,0 +1,10 @@
+<form class="well filter-form" autocomplete="off">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-name"><%- helpers.t('PROPERTY:name') %></label>
+    <input id="<%- idPrefix %>-name" name="name" class="form-control" type="text">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('core', 'filter:submit') %></span></button>
+  </div>
+</form>

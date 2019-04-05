@@ -1,0 +1,35 @@
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitle %></div>
+    <div class="panel-details">
+      <%- helpers.props(model, ['_id', 'name']) %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%- helpers.t('PROPERTY:io') %></div>
+    <table class="table table-bordered table-condensed">
+      <thead>
+      <tr>
+        <th class="is-min"><%- helpers.t('PROPERTY:io._id') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:io.name') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:io.type') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:io.device') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:io.channel') %></th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% model.io.forEach(function(io) { %>
+      <tr>
+        <td class="is-min text-mono"><%= io._id %></td>
+        <td class="is-min"><%= io.name %></td>
+        <td class="is-min"><%- helpers.t('ioType:' + io.type) %></td>
+        <td class="is-min is-number"><%= io.device %></td>
+        <td class="is-min is-number"><%= io.channel %></td>
+        <td></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

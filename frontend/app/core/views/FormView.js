@@ -64,7 +64,7 @@ define([
 
     serializeToForm: function(partial) // eslint-disable-line no-unused-vars
     {
-      return this.model.toJSON();
+      return this.model.serializeForm ? this.model.serializeForm() : this.model.toJSON();
     },
 
     serializeForm: function(formData)

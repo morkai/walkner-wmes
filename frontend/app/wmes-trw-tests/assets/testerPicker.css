@@ -1,0 +1,7 @@
+.trw-testerPicker input[name="filter"] {
+  font-size: 35px;
+  height: auto;
+}
+.trw-testerPicker .btn {
+  height: 64px;
+}

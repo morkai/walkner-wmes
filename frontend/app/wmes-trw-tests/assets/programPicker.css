@@ -1,0 +1,7 @@
+.trw-programPicker input[name="filter"] {
+  font-size: 35px;
+  height: auto;
+}
+.trw-programPicker .btn {
+  height: 64px;
+}

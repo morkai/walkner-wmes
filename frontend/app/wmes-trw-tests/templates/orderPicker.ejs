@@ -1,0 +1,24 @@
+<form class="trw-orderPicker">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-order" class="control-label"><%- helpers.t('orderPicker:order') %></label>
+    <input id="<%- idPrefix %>-order" name="order" class="form-control" type="text" required pattern="^[0-9]{9}$" data-vkb="numeric">
+  </div>
+  <div style="display: flex">
+    <div id="<%- idPrefix %>-doneGroup" class="form-group" style="margin-bottom: 0; margin-right: 7px; width: 50%">
+      <label class="control-label"><%- helpers.t('orderPicker:done') %></label>
+      <div id="<%- idPrefix %>-done" class="trw-testing-list" style="height: 64px">
+        <i class="fa fa-spinner fa-spin"></i>
+      </div>
+    </div>
+    <div id="<%- idPrefix %>-todoGroup" class="form-group" style="margin-left: 7px; width: 50%">
+      <label class="control-label"><%- helpers.t('orderPicker:todo') %></label>
+      <div id="<%- idPrefix %>-todo" class="trw-testing-list" style="height: 64px">
+        <i class="fa fa-spinner fa-spin"></i>
+      </div>
+    </div>
+  </div>
+  <div class="form-actions">
+    <button class="btn btn-lg btn-primary"><%- helpers.t('orderPicker:submit') %></button>
+    <button class="btn btn-lg btn-link cancel" type="button"><%- helpers.t('orderPicker:cancel') %></button>
+  </div>
+</form>

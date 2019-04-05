@@ -1,0 +1,16 @@
+<form class="trw-workstationPicker">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-workstation" class="control-label"><%- helpers.t('workstationPicker:workstation') %></label>
+    <input id="<%- idPrefix %>-workstation" name="workstation" class="form-control" type="text" required pattern="^(1|2|3|4|5|6|7)$" data-vkb="numeric">
+  </div>
+  <div id="<%- idPrefix %>-lineGroup" class="form-group">
+    <label class="control-label"><%- helpers.t('workstationPicker:line') %></label>
+    <div id="<%- idPrefix %>-lines" class="trw-testing-list" style="height: 64px">
+      <i class="fa fa-spinner fa-spin"></i>
+    </div>
+    </div>
+  <div class="form-actions">
+    <button class="btn btn-lg btn-primary"><%- helpers.t('workstationPicker:submit') %></button>
+    <button class="btn btn-lg btn-link cancel" type="button"><%- helpers.t('workstationPicker:cancel') %></button>
+  </div>
+</form>

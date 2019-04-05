@@ -114,9 +114,10 @@ module.exports = function(grunt)
             {name: 'wmes-ps-load'},
             {name: 'wmes-wh-pickup'},
             {name: 'wmes-wh-problems'},
-            {name: 'wmes-wh-kitter'},
-            {name: 'wmes-wh-packer'},
-            {name: 'wmes-isa'}
+            //{name: 'wmes-wh-kitter'},
+            //{name: 'wmes-wh-packer'},
+            {name: 'wmes-isa'},
+            {name: 'wmes-trw'}
           ],
           paths: requirejsConfig.buildPaths,
           shim: requirejsConfig.buildShim,

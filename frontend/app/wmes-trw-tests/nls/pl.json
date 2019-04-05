@@ -1,0 +1,51 @@
+{
+  "BREADCRUMBS:base": "TRW",
+  "BREADCRUMBS:browse": "Testy",
+
+  "testing:noWorkstation": "wybierz stanowisko",
+  "testing:noOrder": "wybierz zlecenie",
+  "testing:noTester": "wybierz tester",
+  "testing:noProgram": "wybierz program",
+  "testing:menu:workstation": "Zmień stanowisko",
+  "testing:menu:tester": "Zmień tester",
+  "testing:error:setIo": "Ustawianie wyjść nie powiodło się: {error}",
+  "testing:error:getIo": "Odczytywanie wejść nie powiodło się: {error}",
+  "testing:error:save": "Zapisywanie wyniku nie powiodło się: {error}",
+
+  "workstationPicker:title": "Konfiguracja stanowiska",
+  "workstationPicker:workstation": "Numer stanowiska",
+  "workstationPicker:line": "Linia produkcyjna",
+  "workstationPicker:submit": "Zapisz stanowisko",
+  "workstationPicker:cancel": "Anuluj",
+
+  "orderPicker:title": "Wybór zlecenia",
+  "orderPicker:order": "Numer zlecenia",
+  "orderPicker:done": "Zlecenia rozpoczęte",
+  "orderPicker:todo": "Zlecenia zaplanowane",
+  "orderPicker:submit": "Wybierz zlecenie",
+  "orderPicker:cancel": "Anuluj",
+
+  "programPicker:title": "Wybór programu",
+  "programPicker:filter": "Filtruj listę programów",
+  "programPicker:programs": "Lista programów",
+  "programPicker:submit": "Wybierz program",
+  "programPicker:cancel": "Anuluj",
+
+  "testerPicker:title": "Wybór testera",
+  "testerPicker:filter": "Filtruj listę testerów",
+  "testerPicker:testers": "Lista testerów",
+  "testerPicker:submit": "Wybierz tester",
+  "testerPicker:cancel": "Anuluj",
+
+  "state:unknown": "?",
+  "state:not-ready": "<i class='fa fa-spinner fa-spin'></i>",
+  "state:no-connection": "Brak połączenia ze sterownikiem!",
+  "state:no-tester": "Wybierz tester.",
+  "state:no-program": "Wybierz program.",
+  "state:no-line": "Wybierz stanowisko.",
+  "state:no-order": "Wybierz zlecenie.",
+  "state:test-teardown": "Odłącz przetestowany produkt.",
+  "state:test-saving": "Zapisywanie wyniku <i class='fa fa-spinner fa-spin'></i>",
+  "state:test-success": "Test zakończony pomyślnie <i class='fa fa-smile-o'></i>",
+  "state:step:prefix": "Krok {n}: "
+}

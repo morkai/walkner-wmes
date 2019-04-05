@@ -1,0 +1,7 @@
+.trw-workstationPicker input[name="workstation"] {
+  font-size: 35px;
+  height: auto;
+}
+.trw-workstationPicker .btn {
+  height: 64px;
+}
