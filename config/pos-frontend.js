@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs-extra');
 const mongodb = require('./pos-mongodb');
 
 try
@@ -23,7 +24,6 @@ exports.modules = [
   'users',
   'vendors',
   'vendorNc12s',
-  'feedback',
   'purchaseOrders',
   'sapGui/importer',
   {id: 'messenger/client', name: 'messenger/client:pos-importer'},
@@ -69,7 +69,16 @@ exports.events = {
 
 exports.httpServer = {
   host: '0.0.0.0',
-  port: 80
+  port: 10080
+};
+
+
+exports.sio = {
+  httpServerIds: ['httpServer'],
+  socketIo: {
+    pingInterval: 10000,
+    pingTimeout: 5000
+  }
 };
 
 exports.pubsub = {
@@ -94,21 +103,30 @@ exports.mongoose = {
 };
 
 exports.express = {
-  staticPath: __dirname + '/../frontend',
-  staticBuildPath: __dirname + '/../frontend-build',
+  staticPath: `${__dirname}/../frontend`,
+  staticBuildPath: `${__dirname}/../frontend-build`,
   sessionCookieKey: 'wmes-pos.sid',
   sessionCookie: {
     httpOnly: true,
     path: '/',
-    maxAge: null
+    maxAge: 3600 * 24 * 30 * 1000
+  },
+  sessionStore: {
+    touchInterval: 10 * 60 * 1000,
+    touchChance: 0,
+    gcInterval: 8 * 3600,
+    cacheInMemory: false
   },
   cookieSecret: '1ee7\\/\\/mes+pos',
   ejsAmdHelpers: {
-    t: 'app/i18n'
+    _: 'underscore',
+    $: 'jquery',
+    t: 'app/i18n',
+    time: 'app/time',
+    user: 'app/user',
+    forms: 'app/core/util/forms'
   },
-  textBody: {
-    limit: '1mb'
-  },
+  textBody: {limit: '1mb'},
   routes: [
     require('../backend/routes/core')
   ]
@@ -133,9 +151,14 @@ exports['messenger/client:pos-importer'] = {
   responseTimeout: 5000
 };
 
+
+const manifestTemplates = {
+  main: fs.readFileSync(`${__dirname}/pos-manifest.appcache`, 'utf8')
+};
+
 exports.updater = {
-  manifestPath: __dirname + '/pos-manifest.appcache',
-  packageJsonPath: __dirname + '/../package.json',
+  manifestPath: `${__dirname}/pos-manifest.appcache`,
+  packageJsonPath: `${__dirname}/../package.json`,
   restartDelay: 10000,
   pull: {
     exe: 'git.exe',
@@ -145,9 +168,13 @@ exports.updater = {
   versionsKey: 'pos',
   manifests: [
     {
+      frontendVersionKey: 'frontend',
       path: '/manifest.appcache',
       mainJsFile: exports.mainJsFile,
-      mainCssFile: exports.mainCssFile
+      mainCssFile: exports.mainCssFile,
+      template: manifestTemplates.main,
+      frontendAppData: {},
+      dictionaryModules: {}
     }
   ]
 };
