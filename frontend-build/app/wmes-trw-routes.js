@@ -1,0 +1,1 @@
+define(["./router","./viewport","./user","./wmes-trw-tests/pages/TestingPage","i18n!app/nls/wmes-trw-tests"],function(e,t,s,n){"use strict";e.map("/",s.auth("LOCAL","TRW:VIEW"),function(){t.showPage(new n)})});

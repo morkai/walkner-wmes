@@ -1,0 +1,1 @@
+define(["../core/Model"],function(t){"use strict";return t.extend({urlRoot:"/trw/testers",clientUrlRoot:"#trw/testers",topicPrefix:"trw.testers",privilegePrefix:"TRW",nlsDomain:"wmes-trw-testers",labelAttribute:"name"},{IO_TYPES:["input","output"]})});
