@@ -4,7 +4,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
-  'app/snf-programs/templates/imageForm'
+  'app/wmes-snf-programs/templates/imageForm'
 ], function(
   t,
   viewport,

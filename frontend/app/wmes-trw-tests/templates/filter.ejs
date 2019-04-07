@@ -1,0 +1,33 @@
+<form class="well filter-form" autocomplete="off">
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    property: 'startedAt',
+    type: 'date+time',
+    startHour: 6,
+    labels: {text: helpers.t('PROPERTY:startedAt'), ranges: true}
+  }) %>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-line"><%- helpers.t('PROPERTY:line') %></label>
+    <input id="<%- idPrefix %>-line" name="line" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-workstation"><%- helpers.t('PROPERTY:workstation') %></label>
+    <input id="<%- idPrefix %>-workstation" name="workstation" class="form-control" type="number" min="1" max="7">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-order"><%- helpers.t('PROPERTY:order') %></label>
+    <input id="<%- idPrefix %>-order" name="order" class="form-control" type="text" pattern="^[0-9]{9}$" style="width: 110px">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-tester"><%- helpers.t('PROPERTY:tester') %></label>
+    <input id="<%- idPrefix %>-tester" name="tester" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-program"><%- helpers.t('PROPERTY:program') %></label>
+    <input id="<%- idPrefix %>-program" name="program" type="text">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('core', 'filter:submit') %></span></button>
+  </div>
+</form>

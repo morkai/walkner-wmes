@@ -1,6 +1,6 @@
 {
   "BREADCRUMBS:base": "TRW",
-  "BREADCRUMBS:browse": "Testy",
+  "BREADCRUMBS:browse": "Wyniki",
 
   "testing:noWorkstation": "wybierz stanowisko",
   "testing:noOrder": "wybierz zlecenie",
@@ -47,5 +47,16 @@
   "state:test-teardown": "Odłącz przetestowany produkt.",
   "state:test-saving": "Zapisywanie wyniku <i class='fa fa-spinner fa-spin'></i>",
   "state:test-success": "Test zakończony pomyślnie <i class='fa fa-smile-o'></i>",
-  "state:step:prefix": "Krok {n}: "
+  "state:step:prefix": "Krok {n}: ",
+
+  "PROPERTY:tester": "Tester",
+  "PROPERTY:program": "Program",
+  "PROPERTY:line": "Linia",
+  "PROPERTY:workstation": "Stanowisko",
+  "PROPERTY:order": "Zlecenie",
+  "PROPERTY:pce": "Sztuka",
+  "PROPERTY:startedAt": "Czas rozpoczęcia",
+  "PROPERTY:finishedAt": "Czas zakończenia",
+  "PROPERTY:duration": "Czas trwania",
+  "PROPERTY:user": "Użytkownik"
 }

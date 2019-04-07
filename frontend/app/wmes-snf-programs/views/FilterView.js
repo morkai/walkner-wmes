@@ -2,7 +2,7 @@
 
 define([
   'app/core/views/FilterView',
-  'app/snf-programs/templates/filter'
+  'app/wmes-snf-programs/templates/filter'
 ], function(
   FilterView,
   template

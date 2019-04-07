@@ -1,19 +1,23 @@
 <li data-online class="dropdown">
   <a class="dropdown-toggle" data-toggle="dropdown">
-    <%- t('core', 'NAVBAR:PROGRAMMING') %>
+    <%- t('core', 'NAVBAR:testing') %>
     <b class="caret"></b>
   </a>
   <ul class="dropdown-menu">
-    <li class="dropdown-header"><%- t('core', 'NAVBAR:XICONF:RESULTS') %>
-    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/orders"><%- t('core', 'NAVBAR:XICONF:ORDERS') %></a>
-    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/results"><%- t('core', 'NAVBAR:XICONF:HISTORY') %></a>
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:xiconf') %>
+    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/clients"><%- t('core', 'NAVBAR:xiconf:clients') %></a>
+    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/orders"><%- t('core', 'NAVBAR:xiconf:orders') %></a>
+    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/results"><%- t('core', 'NAVBAR:xiconf:results') %></a>
+    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/programs"><%- t('core', 'NAVBAR:xiconf:programs') %></a>
+    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/hidLamps"><%- t('core', 'NAVBAR:xiconf:hidLamps') %></a>
+    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/componentWeights"><%- t('core', 'NAVBAR:xiconf:componentWeights') %></a>
     <li class="divider">
-    <li class="dropdown-header"><%- t('core', 'NAVBAR:XICONF:DICTIONARIES') %>
-    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/clients"><%- t('core', 'NAVBAR:XICONF:CLIENTS') %></a>
-    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/programs"><%- t('core', 'NAVBAR:XICONF:PROGRAMS') %></a>
-    <li data-privilege="XICONF:VIEW" data-module="xiconf"><a href="#snf/programs"><%- t('core', 'NAVBAR:SNF:PROGRAMS') %></a>
-    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/hidLamps"><%- t('core', 'NAVBAR:XICONF:HID_LAMPS') %></a>
-    <li data-privilege="XICONF:VIEW" data-module><a href="#xiconf/componentWeights"><%- t('core', 'NAVBAR:XICONF:COMPONENT_WEIGHTS') %></a>
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:snf') %>
+    <li data-privilege="SNF:VIEW" data-module="wmes-snf" class="disabled"><a href="#snf/results"><%- t('core', 'NAVBAR:snf:results') %></a>
+    <li data-privilege="SNF:VIEW" data-module="wmes-snf"><a href="#snf/programs"><%- t('core', 'NAVBAR:snf:programs') %></a>
+    <li class="divider">
+    <li class="dropdown-header"><%- t('core', 'NAVBAR:trw') %>
+    <li data-privilege="TRW:VIEW" data-module="wmes-trw"><a href="#trw/tests"><%- t('core', 'NAVBAR:trw:results') %></a>
     <li data-privilege="TRW:VIEW" data-module="wmes-trw"><a href="#trw/testers"><%- t('core', 'NAVBAR:trw:testers') %></a>
     <li data-privilege="TRW:VIEW" data-module="wmes-trw"><a href="#trw/programs"><%- t('core', 'NAVBAR:trw:programs') %></a>
   </ul>

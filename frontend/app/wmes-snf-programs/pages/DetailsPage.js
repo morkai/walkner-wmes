@@ -4,7 +4,7 @@ define([
   'app/core/pages/DetailsPage',
   '../views/DetailsView',
   '../views/GalleryView',
-  'app/snf-programs/templates/detailsPage'
+  'app/wmes-snf-programs/templates/detailsPage'
 ], function(
   DetailsPage,
   DetailsView,

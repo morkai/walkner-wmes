@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Tests",
+    "BREADCRUMBS:base": "Xiconf",
     "BREADCRUMBS:browse": "Clients",
 
     "MSG:NO_APPS_TO_UPDATE": "No apps to update.",

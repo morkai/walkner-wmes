@@ -8,9 +8,9 @@ define([
   'app/core/views/DialogView',
   './ImageView',
   './ImageFormView',
-  'app/snf-programs/templates/gallery',
-  'app/snf-programs/templates/galleryThumbnail',
-  'app/snf-programs/templates/yesNoDialog'
+  'app/wmes-snf-programs/templates/gallery',
+  'app/wmes-snf-programs/templates/galleryThumbnail',
+  'app/wmes-snf-programs/templates/yesNoDialog'
 ], function(
   _,
   t,

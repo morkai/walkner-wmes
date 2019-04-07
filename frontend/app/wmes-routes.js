@@ -99,7 +99,8 @@ define([
   './wmes-luma2-lines/routes',
   './wmes-trw-testers/routes',
   './wmes-trw-programs/routes',
-  './snf-programs/routes'
+  './wmes-trw-tests/routes',
+  './wmes-snf-programs/routes'
 ], function()
 {
   'use strict';

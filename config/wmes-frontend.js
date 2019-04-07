@@ -100,6 +100,7 @@ exports.modules = [
   'wmes-toolcal',
   'wmes-fap',
   'wmes-luma2-frontend',
+  'wmes-snf',
   'wmes-trw',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
@@ -581,7 +582,11 @@ exports.xiconf = {
   zipStoragePath: `${DATA_PATH}/xiconf-input`,
   featureDbPath: `${DATA_PATH}/xiconf-features`,
   ordersImportPath: `${DATA_PATH}/attachments-input`,
-  updatesPath: `${DATA_PATH}/xiconf-updates`,
+  updatesPath: `${DATA_PATH}/xiconf-updates`
+
+};
+
+exports['wmes-snf'] = {
   snfImagesPath: `${DATA_PATH}/uploads/snf`
 };
 

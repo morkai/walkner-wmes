@@ -4,7 +4,7 @@ define([
   'underscore',
   'app/core/views/DetailsView',
   '../Program',
-  'app/snf-programs/templates/details'
+  'app/wmes-snf-programs/templates/details'
 ], function(
   _,
   DetailsView,

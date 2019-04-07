@@ -1,7 +1,54 @@
 {
   "root": {
     "BREADCRUMBS:base": "TRW",
-    "BREADCRUMBS:browse": "Tests"
+    "BREADCRUMBS:browse": "Results",
+
+    "testing:noWorkstation": "choose workstation",
+    "testing:noOrder": "choose order",
+    "testing:noTester": "choose tester",
+    "testing:noProgram": "choose program",
+    "testing:menu:workstation": "Change workstation",
+    "testing:menu:tester": "Change tester",
+    "testing:error:setIo": "Failed to set outputs: {error}",
+    "testing:error:getIo": "Failed to get inputs: {error}",
+    "testing:error:save": "Failed to save results: {error}",
+
+    "workstationPicker:title": "Workstation configuration",
+    "workstationPicker:workstation": "Workstation number",
+    "workstationPicker:line": "Production line",
+    "workstationPicker:submit": "Save workstation",
+    "workstationPicker:cancel": "Cancel",
+
+    "orderPicker:title": "Choosing order",
+    "orderPicker:order": "Order number",
+    "orderPicker:done": "Started orders",
+    "orderPicker:todo": "Planned orders",
+    "orderPicker:submit": "Set order",
+    "orderPicker:cancel": "Cancel",
+
+    "programPicker:title": "Choosing program",
+    "programPicker:filter": "Filter program list",
+    "programPicker:programs": "Program list",
+    "programPicker:submit": "Set program",
+    "programPicker:cancel": "Cancel",
+
+    "testerPicker:title": "Choosing tester",
+    "testerPicker:filter": "Filter tester list",
+    "testerPicker:testers": "Tester list",
+    "testerPicker:submit": "Set tester",
+    "testerPicker:cancel": "Cancel",
+
+    "state:unknown": "?",
+    "state:not-ready": "<i class='fa fa-spinner fa-spin'></i>",
+    "state:no-connection": "No connection to the device!",
+    "state:no-tester": "Choose tester.",
+    "state:no-program": "Choose program.",
+    "state:no-line": "Choose workstation.",
+    "state:no-order": "Choose order.",
+    "state:test-teardown": "Disconnect the tested product.",
+    "state:test-saving": "Saving the results <i class='fa fa-spinner fa-spin'></i>",
+    "state:test-success": "Test finished successfully <i class='fa fa-smile-o'></i>",
+    "state:step:prefix": "Step {n}: "
   },
   "pl": true
 }

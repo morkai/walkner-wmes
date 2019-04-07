@@ -5,7 +5,7 @@ define([
   'app/time',
   'app/core/views/FormView',
   '../Program',
-  'app/snf-programs/templates/form'
+  'app/wmes-snf-programs/templates/form'
 ], function(
   _,
   time,

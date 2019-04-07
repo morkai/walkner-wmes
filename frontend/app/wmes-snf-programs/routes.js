@@ -19,17 +19,17 @@ define([
 ) {
   'use strict';
 
-  var nls = 'i18n!app/nls/snf-programs';
-  var canView = user.auth('XICONF:VIEW');
-  var canManage = user.auth('XICONF:MANAGE');
+  var nls = 'i18n!app/nls/wmes-snf-programs';
+  var canView = user.auth('SNF:VIEW');
+  var canManage = user.auth('SNF:MANAGE');
 
   router.map('/snf/programs', canView, function(req)
   {
     viewport.loadPage(
       [
         'app/core/pages/FilteredListPage',
-        'app/snf-programs/views/FilterView',
-        'app/snf-programs/views/ListView',
+        'app/wmes-snf-programs/views/FilterView',
+        'app/wmes-snf-programs/views/ListView',
         nls
       ],
       function(FilteredListPage, FilterView, ListView)
@@ -50,7 +50,7 @@ define([
   {
     viewport.loadPage(
       [
-        'app/snf-programs/pages/DetailsPage',
+        'app/wmes-snf-programs/pages/DetailsPage',
         nls
       ],
       function(DetailsPage)
@@ -67,7 +67,7 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/AddFormPage',
-        'app/snf-programs/views/FormView',
+        'app/wmes-snf-programs/views/FormView',
         nls
       ],
       function(AddFormPage, FormView)
@@ -87,7 +87,7 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/EditFormPage',
-        'app/snf-programs/views/FormView',
+        'app/wmes-snf-programs/views/FormView',
         nls
       ],
       function(EditFormPage, FormView)

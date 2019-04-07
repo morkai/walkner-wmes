@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/i18n',
   '../util/bindLoadingMessage',
   '../util/pageActions',
@@ -9,6 +10,7 @@ define([
   './createPageBreadcrumbs',
   'app/core/templates/listPage'
 ], function(
+  _,
   t,
   bindLoadingMessage,
   pageActions,
@@ -67,8 +69,15 @@ define([
       return new ListViewClass({
         collection: this.collection,
         model: this.collection ? undefined : this.getDefaultModel(),
-        columns: this.options.columns || this.columns || ListViewClass.prototype.columns,
-        serializeRow: this.options.serializeRow || this.serializeRow || ListViewClass.prototype.serializeRow,
+        columns: this.options.columns
+          || this.columns
+          || ListViewClass.prototype.columns,
+        serializeRow: this.options.serializeRow
+          || this.serializeRow
+          || ListViewClass.prototype.serializeRow,
+        serializeActions: this.options.serializeActions
+          || this.serializeActions
+          || ListViewClass.prototype.serializeActions,
         className: _.find([
           this.options.listClassName,
           this.listClassName,

@@ -19,7 +19,7 @@ define([
 
     privilegePrefix: 'XICONF',
 
-    nlsDomain: 'snf-programs',
+    nlsDomain: 'wmes-snf-programs',
 
     labelAttribute: 'name',
 

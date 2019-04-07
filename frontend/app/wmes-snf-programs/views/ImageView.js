@@ -5,7 +5,7 @@ define([
   'jquery',
   'app/viewport',
   'app/core/View',
-  'app/snf-programs/templates/image',
+  'app/wmes-snf-programs/templates/image',
   'jquery.kinetic'
 ], function(
   _,

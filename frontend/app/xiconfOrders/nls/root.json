@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Tests",
+    "BREADCRUMBS:base": "Xiconf",
     "BREADCRUMBS:browse": "Orders",
 
     "PANEL:TITLE:details:parentOrder": "Product order details",
