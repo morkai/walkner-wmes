@@ -4,42 +4,43 @@
   <meta charset="utf-8">
   <title>WMES PO LABELS PAPER=<%- paper %> BARCODE=<%- barcode %></title>
   <style type="text/css">
-  body {
-    margin: 0;
-    line-height: 1;
-    font-family: sans-serif;
-    font-size: 16px;
-    text-align: center;
-  }
-  .barcode-container {
-    margin: 0;
-  }
-  .barcode-data {
-    margin: 0;
-  }
-  .page + .page {
-    page-break-before: always;
-  }
-  table {
-    border-collapse: collapse;
-    border: 0;
-    width: 100%;
-  }
-  th {
-    font-size: 24px;
-    font-weight: normal;
-    text-transform: uppercase;
-    padding: 30mm 0 0 0;
-  }
-  th:first-child,
-  th:last-child {
-    width: 1%;
-    white-space: nowrap;
-  }
-  td {
-    font-size: 44px;
-    padding: 0;
-  }
+    * {
+      box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+    }
+    body {
+      font-family: Verdana, sans-serif;
+      font-size: 5mm;
+      text-align: center;
+    }
+    .page {
+      padding: 25mm 30mm 0 30mm;
+    }
+    .page + .page {
+      page-break-before: always;
+    }
+    table {
+      border-collapse: collapse;
+      border: 0;
+      width: 100%;
+    }
+    th {
+      font-weight: normal;
+      text-transform: uppercase;
+      padding: 25mm 0 0 0;
+    }
+    th:first-child,
+    th:last-child {
+      width: 1%;
+      white-space: nowrap;
+    }
+    td {
+      font-size: 12mm;
+      padding: 0;
+    }
   </style>
 </head>
 <body>

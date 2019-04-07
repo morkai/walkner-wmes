@@ -4,69 +4,72 @@
   <meta charset="utf-8">
   <title>WMES PO LABELS PAPER=<%- paper %> BARCODE=<%- barcode %></title>
   <style type="text/css">
-  body {
-    margin: 0;
-    line-height: 1;
-    font-family: sans-serif;
-    font-size: 16px;
-    text-align: center;
-  }
-  .barcode-container {
-    margin: 0;
-  }
-  .page {
-    position: relative;
-  }
-  .page + .page {
-    page-break-before: always;
-  }
-  table {
-    border-collapse: collapse;
-    border: 0;
-    width: 100%;
-  }
-  th {
-    font-size: 12px;
-    font-weight: normal;
-    text-transform: uppercase;
-    padding: 3mm 0 0 0;
-  }
-  th:first-child,
-  th:last-child {
-    width: 1%;
-    white-space: nowrap;
-  }
-  td {
-    font-size: 12px;
-    padding: 1mm 0 0 0;
-  }
-  .qr {
-    width: 103mm;
-    height: 41mm;
-  }
-  .qr .barcode-container {
-    margin: 0;
-    position: absolute;
-    top: 8mm;
-    left: 0;
-  }
-  .qr table {
-    position: absolute;
-    top: 7mm;
-    left: 30mm;
-    width: 1%;
-    text-align: left;
-    white-space: nowrap;
-  }
-  .qr th {
-    padding: 0 0 0 5mm;
-  }
-  .qr td {
-    padding: 1mm 0 5mm 5mm;
-  }
-  .qr tr:last-child td {
-    padding-bottom: 0;
-  }
+    * {
+      box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+    }
+    body {
+      font-family: Verdana, sans-serif;
+      text-align: center;
+      text-rendering: optimizeLegibility;
+      letter-spacing: 0;
+    }
+    .page {
+      position: relative;
+      padding: 3.5mm 3mm 0 3mm;
+    }
+    .page + .page {
+      page-break-before: always;
+    }
+    table {
+      border-collapse: collapse;
+      border: 0;
+      width: 100%;
+    }
+    th {
+      font-size: 3mm;
+      font-weight: normal;
+      text-transform: uppercase;
+      padding: 3mm 0 0 0;
+    }
+    th:first-child,
+    th:last-child {
+      width: 1%;
+      white-space: nowrap;
+    }
+    td {
+      font-size: 4mm;
+      padding: 0;
+    }
+    .qr {
+      padding: 0;
+    }
+    .qr .barcode-container {
+      margin: 0;
+      position: absolute;
+      top: 6mm;
+      left: 5mm;
+    }
+    .qr table {
+      position: absolute;
+      top: 5mm;
+      left: 35mm;
+      width: 1%;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .qr th {
+      padding: 0 0 0 5mm;
+    }
+    .qr td {
+      padding: 1mm 0 5mm 5mm;
+    }
+    .qr tr:last-child td {
+      padding-bottom: 0;
+    }
   </style>
 </head>
 <body>

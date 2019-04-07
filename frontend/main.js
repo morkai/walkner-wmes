@@ -119,7 +119,8 @@
     window.parent.postMessage({type: 'init', host: location.hostname}, '*');
   }
 
-  if (!window.IS_EMBEDDED
+  if (window.SERVICE_WORKER
+    && !window.IS_EMBEDDED
     && !window.IS_LINUX
     && window.navigator.serviceWorker
     && window.navigator.serviceWorker.getRegistrations

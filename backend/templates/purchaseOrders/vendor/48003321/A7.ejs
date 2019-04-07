@@ -4,69 +4,65 @@
   <meta charset="utf-8">
   <title>WMES PO LABELS VENDOR=48003321 PAPER=A6</title>
   <style type="text/css">
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    margin: 0;
-    line-height: 1;
-    font-family: Arial, sans-serif;
-    font-size: 9px;
-    text-align: left;
-  }
-  .page + .page {
-    page-break-before: always;
-  }
-  .barcode {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  .barcode-data {
-    margin: 0;
-  }
-  table {
-    margin: 0;
-    border-collapse: collapse;
-    border: 1px solid #000;
-    width: 100%;
-  }
-  td {
-    border: 1px solid #000;
-    padding: <%- barcode === 'qr' ? '3px 8px' : '3px 7px' %>;
-    font-size: 11px;
-    white-space: nowrap;
-    line-height: 1.2;
-  }
-  td:first-child {
-    width: 1%;
-  }
-  .prop-name {
-    text-align: right;
-    vertical-align: top;
-  }
-  .barcode {
-    vertical-align: middle;
-    text-align: center;
-    padding: 4px 8px;
-  }
-  <% if (barcode === 'qr') { %>
-  .barcode {
-    height: 14mm;
-  }
-  .barcode-qr {
-    position: absolute;
-    bottom: 18px;
-    right: 0;
-    background: #fff;
-    padding: 3mm;
-    border: 1px solid #000;
-  }
-  <% } %>
+    * {
+      box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+    }
+    body {
+      font-family: Verdana, sans-serif;
+      text-align: left;
+      text-rendering: optimizeLegibility;
+      letter-spacing: 0;
+    }
+    .page {
+      position: relative;
+      padding: 5mm 5mm 0 5mm;
+    }
+    table {
+      margin: 0;
+      border-collapse: collapse;
+      border: 1px solid #000;
+      width: 100%;
+    }
+    td {
+      border: 1px solid #000;
+      padding: 1mm 2mm;
+      font-size: 2.8mm;
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+    td:first-child {
+      width: 1%;
+    }
+    .prop-name {
+      text-align: right;
+      vertical-align: top;
+    }
+    .barcode {
+      vertical-align: middle;
+      text-align: center;
+      padding: 1.5mm 0 1.5mm 0;
+    }
+    .qr .barcode {
+      padding: 0;
+      height: 14mm;
+    }
+    .qr .barcode-qr {
+      position: absolute;
+      bottom: 5mm;
+      right: 5mm;
+      background: #fff;
+      padding: 2mm;
+      border: 1px solid #000;
+    }
   </style>
 </head>
 <body>
 <% pages.forEach(function(page) { %>
-<div class="page">
+<div class="page <%- barcode %>">
   <table>
     <tbody>
       <tr>
@@ -79,7 +75,7 @@
       <tr>
         <td class="prop-name">ODBIORCA:</td>
         <td class="prop-value">
-          SIGNIFY POLAND S.A.<br>
+          SIGNIFY POLAND Sp. z o. o.<br>
           11-400 Kętrzyn, ul. Chrobrego 8
         </td>
       </tr>

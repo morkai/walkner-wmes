@@ -165,7 +165,8 @@ exports.updater = {
         SHIFT_START_HOUR: 6,
         SHIFT_LENGTH: 8,
         OFFICE365_TENANT: 'Microsoft',
-        CORS_PING_URL: 'https://test.wmes.pl/ping'
+        CORS_PING_URL: 'https://test.wmes.pl/ping',
+        SERVICE_WORKER: '/sw.js'
       },
       dictionaryModules: frontendDictionaryModules
     },
