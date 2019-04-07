@@ -1,5 +1,7 @@
 'use strict';
 
+const DATA_PATH = `${__dirname}/../data`;
+
 const fs = require('fs-extra');
 const mongodb = require('./pos-mongodb');
 
@@ -26,6 +28,7 @@ exports.modules = [
   'vendorNc12s',
   'purchaseOrders',
   'sapGui/importer',
+  'html2pdf',
   {id: 'messenger/client', name: 'messenger/client:pos-importer'},
   'httpServer',
   'sio'
@@ -180,11 +183,15 @@ exports.updater = {
 };
 
 exports.purchaseOrders = {
-  pdfStoragePath: __dirname + '/../data/pos-labels',
-  renderCmdPath: __dirname + '/../data/pos-render'
+  pdfStoragePath: `${DATA_PATH}/pos-labels`,
+  renderCmdPath: `${DATA_PATH}/pos-render`
 };
 
 exports['sapGui/importer'] = {
   secretKey: '',
-  importPath: __dirname + '/../data/attachments-input'
+  importPath: `${DATA_PATH}/attachments-input`
+};
+
+exports.html2pdf = {
+  storagePath: `${DATA_PATH}/html2pdf/`
 };

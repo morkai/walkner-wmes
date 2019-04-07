@@ -51,13 +51,13 @@ define([
       return {
         printers: this.options.printers,
         labelTypes: labelConfigurations.getVendorLabelTypes(),
-        items: this.model
+        items: this.model.items
       };
     },
 
     afterRender: function()
     {
-      js2form(this.el, {items: this.model});
+      js2form(this.el, {items: this.model.items});
     },
 
     toggleRowFocus: function(e)

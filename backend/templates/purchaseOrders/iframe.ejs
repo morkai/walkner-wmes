@@ -23,7 +23,7 @@
 </head>
 <body>
 <iframe id="pdf" src="about:blank"></iframe>
-<i id="app-loading" class="fa fa-spinner fa-spin"></i>
+<i id="loading" class="fa fa-spinner fa-spin"></i>
 <script>
 
 function printPdf(iframe)
@@ -32,8 +32,6 @@ function printPdf(iframe)
   {
     iframe.contentWindow.focus();
     iframe.contentWindow.print();
-
-    setTimeout(function() { window.close(); }, 1);
   }
   catch (err)
   {
@@ -49,7 +47,7 @@ window.onload = function()
 
   iframe.onload = function()
   {
-    var loading = document.getElementById('app-loading');
+    var loading = document.getElementById('loading');
 
     if (iframe.src.indexOf('pdf') === -1)
     {
@@ -72,7 +70,10 @@ window.onload = function()
 
 window.onbeforeunload = function()
 {
-  window.opener.WMES_PO_PRINT_DONE();
+  if (window.opener && window.opener.WMES_PO_PRINT_DONE)
+  {
+    window.opener.WMES_PO_PRINT_DONE();
+  }
 };
 
 </script>

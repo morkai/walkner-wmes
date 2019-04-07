@@ -11,6 +11,8 @@ define([
 
   return Model.extend({
 
+    nlsDomain: 'purchaseOrders',
+
     serialize: function()
     {
       var obj = this.toJSON();

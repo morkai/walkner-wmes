@@ -65,7 +65,7 @@ define([
 
       parentId = model.get('mrpController') || [];
 
-      model = parentId.map(function(id) { return mrpControllers.get(id); }).filter(m => !!m);
+      model = parentId.map(function(id) { return mrpControllers.get(id); }).filter(function(m) { return !!m; });
 
       if (!model.length)
       {

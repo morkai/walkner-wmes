@@ -6,13 +6,12 @@
   <style type="text/css">
   * {
     box-sizing: border-box;
-    -webkit-box-sizing: border-box;
   }
   body {
     margin: 0;
     line-height: 1;
     font-family: Arial, sans-serif;
-    font-size: 12px;
+    font-size: 9px;
     text-align: left;
   }
   .page + .page {
@@ -33,8 +32,8 @@
   }
   td {
     border: 1px solid #000;
-    padding: <%- barcode === 'qr' ? '3px 8px' : '4px 8px' %>;
-    font-size: 14px;
+    padding: <%- barcode === 'qr' ? '3px 8px' : '3px 7px' %>;
+    font-size: 11px;
     white-space: nowrap;
     line-height: 1.2;
   }
@@ -48,18 +47,18 @@
   .barcode {
     vertical-align: middle;
     text-align: center;
-    padding: '4px 8px';
+    padding: 4px 8px;
   }
   <% if (barcode === 'qr') { %>
   .barcode {
-    height: 21mm;
+    height: 14mm;
   }
   .barcode-qr {
     position: absolute;
-    bottom: 0;
+    bottom: 18px;
     right: 0;
     background: #fff;
-    padding: 5mm;
+    padding: 3mm;
     border: 1px solid #000;
   }
   <% } %>
@@ -80,7 +79,7 @@
       <tr>
         <td class="prop-name">ODBIORCA:</td>
         <td class="prop-value">
-          PHILIPS LIGHTING POLAND S.A.<br>
+          SIGNIFY POLAND S.A.<br>
           11-400 Kętrzyn, ul. Chrobrego 8
         </td>
       </tr>

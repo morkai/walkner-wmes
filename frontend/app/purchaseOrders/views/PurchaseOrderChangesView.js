@@ -194,12 +194,12 @@ define([
 
       if (propertyKey === 'item.schedule')
       {
-        return this.renderPartial(renderItemScheduleChange, {schedule: rawValue});
+        return this.renderPartialHtml(renderItemScheduleChange, {schedule: rawValue});
       }
 
       if (propertyKey === 'prints')
       {
-        return this.renderPartial(renderPrintsChange, {change: rawValue});
+        return this.renderPartialHtml(renderPrintsChange, {change: rawValue});
       }
 
       return _.escape(JSON.stringify(rawValue));
@@ -213,7 +213,7 @@ define([
         unit: rawItem.unit,
         qty: rawItem.qty.toLocaleString(),
         name: rawItem.name,
-        schedule: renderItemScheduleChange({schedule: rawItem.schedule})
+        schedule: this.renderPartialHtml(renderItemScheduleChange, {schedule: rawItem.schedule})
       };
     },
 

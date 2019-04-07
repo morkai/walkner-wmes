@@ -220,7 +220,7 @@ define([
         {
           newData.picklistDone = true;
 
-          newData.funcs.forEach(func =>
+          newData.funcs.forEach(function(func)
           {
             if (func.user)
             {

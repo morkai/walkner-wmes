@@ -33,10 +33,6 @@ define([
 
     labelAttribute: '_id',
 
-    defaults: {
-
-    },
-
     initialize: function(attributes, options)
     {
       if (options.prints)

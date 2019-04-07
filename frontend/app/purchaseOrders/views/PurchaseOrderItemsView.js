@@ -107,13 +107,15 @@ define([
         status: null,
         selected: []
       });
-      this.print = new Model({
+      this.print = _.assign(new Model({
         orderId: null,
         shippingNo: '',
         printer: 'browser',
         paper: localStorage.getItem('POS:PAPER') || 'a4',
         barcode: localStorage.getItem('POS:BARCODE') || 'code128',
         items: []
+      }), {
+        nlsDomain: this.model.nlsDomain
       });
       this.printers = [];
       this.printWindow = null;
@@ -444,7 +446,7 @@ define([
         view.listenToOnce(dialogView, 'print', view.onPrintRequest.bind(view));
 
         viewport.msg.loaded();
-        viewport.showDialog(dialogView, t('purchaseOrders', 'printDialog:title'));
+        viewport.showDialog(dialogView, view.t('printDialog:title'));
       });
 
       qzPrint.findPrinters(function(error, printers)
@@ -515,7 +517,10 @@ define([
       qzPrint.findPrinters(function(error, printers)
       {
         var dialogView = new PurchaseOrderVendorPrintDialogView({
-          model: selectedItems,
+          model: {
+            nlsDomain: view.model.nlsDomain,
+            items: selectedItems
+          },
           printers: (printers || []).filter(function(printer)
           {
             return printer.indexOf('ZPL203') !== -1;
@@ -525,7 +530,7 @@ define([
         view.listenToOnce(dialogView, 'print', view.onVendorPrintRequest.bind(view));
 
         viewport.msg.loaded();
-        viewport.showDialog(dialogView, t('purchaseOrders', 'vendorPrintDialog:title'));
+        viewport.showDialog(dialogView, view.t('vendorPrintDialog:title'));
       });
     },
 

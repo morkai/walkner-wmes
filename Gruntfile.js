@@ -127,7 +127,7 @@ module.exports = function(grunt)
     },
     uglify: {
       options: {
-        ecma: 6,
+        ecma: 5,
         compress: {
           drop_console: false // eslint-disable-line camelcase
         }
