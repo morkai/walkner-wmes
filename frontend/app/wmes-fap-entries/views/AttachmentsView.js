@@ -302,9 +302,11 @@ define([
 
     onPaste: function(e)
     {
-      if (e.originalEvent.clipboardData.files.length)
+      var dt = e.originalEvent.clipboardData;
+
+      if (dt && dt.files && dt.files.length)
       {
-        this.upload(e.originalEvent.clipboardData.files, true);
+        this.upload(dt.files, true);
       }
     },
 
@@ -316,7 +318,12 @@ define([
 
     onDrop: function(e)
     {
-      this.upload(e.originalEvent.dataTransfer.files, false);
+      var dt = e.originalEvent.dataTransfer;
+
+      if (dt && dt.files && dt.files.length)
+      {
+        this.upload(dt.files, false);
+      }
 
       return false;
     },

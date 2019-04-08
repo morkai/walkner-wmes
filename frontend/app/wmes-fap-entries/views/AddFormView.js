@@ -391,9 +391,16 @@ define([
 
     onDrop: function(e)
     {
+      var dt = e.originalEvent.dataTransfer;
+
+      if (!dt || !dt.files || !dt.files.length)
+      {
+        return false;
+      }
+
       var view = this;
       var entry = view.model;
-      var files = Array.prototype.slice.call(e.originalEvent.dataTransfer.files);
+      var files = Array.prototype.slice.call(dt.files);
       var totalFiles = (entry.uploading ? 1 : 0)
         + entry.uploadQueue.length
         + entry.uploadedFiles.length
