@@ -9,6 +9,7 @@ define([
   'app/data/orgUnits',
   'app/core/util/buttonGroup',
   'app/core/util/idAndLabel',
+  'app/core/util/getInputLabel',
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
   'app/qiResults/dictionaries',
@@ -24,6 +25,7 @@ define([
   orgUnits,
   buttonGroup,
   idAndLabel,
+  getInputLabel,
   FormView,
   setUpUserSelect2,
   qiDictionaries,
@@ -668,7 +670,7 @@ define([
       var $orderNo = this.$id('orderNo');
       var required = !$orderNo.prop('disabled') && !!kind.get('order');
 
-      $orderNo[0].labels[0].classList.toggle('is-required', required);
+      getInputLabel($orderNo).toggleClass('is-required', required);
 
       if (!required && $orderNo.val().trim() === '')
       {

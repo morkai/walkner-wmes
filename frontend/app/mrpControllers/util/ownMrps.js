@@ -6,13 +6,15 @@ define([
   'app/i18n',
   'app/user',
   'app/viewport',
+  'app/core/util/getInputLabel',
   'i18n!app/nls/mrpControllers'
 ], function(
   _,
   $,
   t,
   user,
-  viewport
+  viewport,
+  getInputLabel
 ) {
   'use strict';
 
@@ -110,9 +112,9 @@ define([
         return;
       }
 
-      if (!$ownMrps.length && $input[0] && $input[0].labels[0])
+      if (!$ownMrps.length)
       {
-        $($input[0].labels[0]).append(
+        getInputLabel($input).append(
           ' (<a id="' + view.idPrefix + '-ownMrps" href="#">' + t('mrpControllers', 'ownMrps:trigger') + '</a>)'
         );
       }
