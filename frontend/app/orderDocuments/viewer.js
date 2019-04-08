@@ -338,7 +338,7 @@ function showMarks(marks) // eslint-disable-line no-unused-vars
   {
     adjustMarks();
   }
-  else
+  else if (marks.length)
   {
     viewer.view(marks[0].p - 1);
   }
