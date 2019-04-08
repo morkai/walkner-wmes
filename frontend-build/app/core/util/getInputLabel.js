@@ -1,0 +1,1 @@
+define(["jquery"],function(e){"use strict";return function(r){if(r&&r instanceof e&&(r=r[0]),!r)return null;if(r.labels)return e(r.labels[0]);if(r.id){var n=document.querySelector('label[for="'+r.id+'"]');if(n)return e(n)}return e(r).closest("label")}});

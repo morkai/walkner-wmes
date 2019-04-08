@@ -1,1 +1,1 @@
-define(["underscore"],function(r){"use strict";return function(n,e,i){if(void 0===i)return!0;var t=r.find(n.selector.args,function(r){return("eq"===r.name||"in"===r.name)&&r.args[0]===e});return!t||("eq"===t.args[0]?t.args[1]===i:-1!==t.args[1].indexOf(i))}});
+define(["underscore"],function(r){"use strict";return function(n,e,i){if(void 0===i)return!0;var t=r.find(n.selector.args,function(r){return("eq"===r.name||"in"===r.name)&&r.args[0]===e});return!t||("eq"===t.args[0]?String(t.args[1])===String(i):Array.isArray(t.args[1])&&-1!==t.args[1].indexOf(i))}});

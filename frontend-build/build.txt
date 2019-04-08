@@ -1629,6 +1629,7 @@ app/nls/orgUnits.js
 app/nls/pl/orgUnits.js
 i18n!app/nls/orgUnits
 app/orgUnits/views/OrgUnitPickerView.js
+app/core/util/getInputLabel.js
 app/nls/mrpControllers.js
 app/nls/pl/mrpControllers.js
 i18n!app/nls/mrpControllers
@@ -2982,6 +2983,7 @@ app/planning/templates/orderStatusIcons.js
 app/wh/WhOrder.js
 app/wh/WhOrderCollection.js
 vendor/Sortable.js
+app/core/util/getInputLabel.js
 app/nls/mrpControllers.js
 app/nls/pl/mrpControllers.js
 i18n!app/nls/mrpControllers
