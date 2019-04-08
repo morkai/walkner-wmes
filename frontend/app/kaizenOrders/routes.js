@@ -151,7 +151,9 @@ define([
               replace: true
             });
 
-            viewport.showDialog(new KaizenOrderThankYouView());
+            viewport.showDialog(new KaizenOrderThankYouView({
+              model: page.model
+            }));
           });
         }
 

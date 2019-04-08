@@ -1,4 +1,73 @@
 <div class="hidden">
+  <h1>v0.134.0</h1>
+  <h2><%- time.format('2019-04-07', 'LL') %></h2>
+  <h3>Obserwacje zachowań</h3>
+  <ul>
+    <li>Dodano możliwość tłumaczenia na język angielski pól 'Nazwa' oraz 'Opis' w słowniku 'Zachowania'.</li>
+  </ul>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalenie się serwera, jeżeli pobieranie zlecenia do specjalnego
+      dokumentu (BOM, ETO) nie powiodło się lub dane zlecenie nie istnieje.</li>
+  </ul>
+  <h3>Zlecenia produkcyjne</h3>
+  <ul>
+    <li>Zmieniono filtry 'Nr zlecenia' (od teraz 'Zlecenie') oraz '12NC' (od teraz 'Wyrób'),
+      tak aby nie były w oddzielnych polach.</li>
+    <li>Dodano filtry: Komponent oraz Dokument.</li>
+  </ul>
+  <h3>FAP</h3>
+  <ul>
+    <li>Dodano do 'Czatu', 'Problemu', 'Opisu rozwiązania problemu' oraz 'Opisu kroków rozwiązujących problem'
+      zamianę na odnośniki:
+      <ul>
+        <li>nr zgłoszeń - liczba poprzedzona znakiem #, np. #1429,
+        <li>nr zleceń - 9-cyfrowa liczba, np. 122565269,
+        <li>12NC - 12-cyfrowa liczba lub 7-znakowa rodzina produktu, np. 822278061596 lub BGP607I,
+        <li>15NC - 15-cyfrowa liczba, np. 132828800042351.
+      </ul>
+      Kliknięcie lewym lub prawym przyciskiem myszy otworzy menu kontekstowe z takimi samymi pozycjami
+      jak wyszukiwarka. Kliknięcie środkowym przyciskiem myszy otworzy:
+      <ul>
+        <li>szczegóły zlecenia produkcyjnego po kliknięciu na nr zlecenia,</li>
+        <li>dokument w katalogu dokumentów po kliknięciu 15NC (jeżeli użytkownik ma uprawnienia)
+          lub plik dokumentu,</li>
+        <li>listę zleceń z 12NC po kliknięciu 12NC wyrobu (jeżeli istnieje przynajmniej jedno
+          takie zlecenie),</li>
+        <li>listę zleceń z 12NC komponentu po kliknięciu 12NC komponentu (jeżeli istnieje przynajmniej
+          jedno takie zlecenie),</li>
+        <li>listę kanbanów z 12NC komponentu po kliknięciu 12NC komponentu (jeżeli istnieje komponent
+          kanban).</li>
+      </ul>
+    </li>
+    <li>Dodano możliwość zmiany 'Statusu' oraz 'Opis rozwiązania problemu' dla zgłoszeń z Magazynu przez
+      użytkowników z funkcją 'Magazynier', 'Magazynier obsługi prod.' lub 'Magazynier przyjęć komp.'.</li>
+  </ul>
+  <h3>Baza testów > Xiconf</h3>
+  <ul>
+    <li>Zmieniono akcje 'Pobierz konfigurację TightVNC' oraz 'Przejdź do...' na liście klientów tak, aby
+      lepiej rozpoznawały adres IP klienta..</li>
+  </ul>
+  <h3>Baza testów > TRW</h3>
+  <ul>
+    <li>Dodano nowy moduł.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Usunięto z wyników wyszukiwania po nr zgłoszenia zgłoszenie 8D.</li>
+    <li>Dodano nowe pozycje do wyników wyszukiwania:
+      <ul>
+        <li>zgłoszenia FAP - po nr zlecenia,</li>
+        <li>lista zleceń z SAP z komponentem - po 12NC,</li>
+        <li>lista zleceń z SAP z dokumentem - po 15NC,</li>
+        <li>kanbany - po 12NC,</li>
+        <li>komponent kanban - po 12NC,</li>
+      </ul>
+    </li>
+    <li>Dodano funkcję logowania błędów występujących po stronie klienta (w przeglądarce).</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.133.0</h1>
   <h2><%- time.format('2019-03-24', 'LL') %></h2>
   <h3>Karty pracy</h3>

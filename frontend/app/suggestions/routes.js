@@ -129,7 +129,9 @@ define([
               replace: true
             });
 
-            viewport.showDialog(new SuggestionThankYouView());
+            viewport.showDialog(new SuggestionThankYouView({
+              model: page.model
+            }));
           });
         }
 
