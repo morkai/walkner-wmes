@@ -72,7 +72,6 @@ define([
       });
 
       this.listenToOnce(this.model, 'sync', this.onFirstModelSync);
-      this.listenTo(this.model, 'change', this.onModelChange);
     },
 
     destroy: function()
@@ -154,11 +153,6 @@ define([
     onFirstModelSync: function()
     {
       this.setUpRemoteTopics();
-    },
-
-    onModelChange: function()
-    {
-
     },
 
     onPressWorksheetEdited: function()

@@ -128,8 +128,7 @@ define([
 
     updateProps: function()
     {
-      this.$id('props').replaceWith(detailsPropsTemplate({
-        idPrefix: this.idPrefix,
+      this.$id('props').replaceWith(this.renderPartialHtml(detailsPropsTemplate, {
         model: decorateProdDowntime(this.model, {longDate: true, noHistory: true})
       }));
     },
