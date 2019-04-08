@@ -11,8 +11,8 @@ define([
 ) {
   'use strict';
 
-  window.ORDER_DOCUMENT_PREVIEW_NC15 = null;
-  window.ORDER_DOCUMENT_PREVIEW_WINDOW = null;
+  var ORDER_DOCUMENT_PREVIEW_NC15 = null;
+  var ORDER_DOCUMENT_PREVIEW_WINDOW = null;
 
   return View.extend({
 
@@ -33,11 +33,11 @@ define([
 
         var nc15 = e.currentTarget.textContent.trim();
 
-        if (nc15 === window.ORDER_DOCUMENT_PREVIEW_NC15
-          && window.ORDER_DOCUMENT_PREVIEW_WINDOW
-          && !window.ORDER_DOCUMENT_PREVIEW_WINDOW.closed)
+        if (nc15 === ORDER_DOCUMENT_PREVIEW_NC15
+          && ORDER_DOCUMENT_PREVIEW_WINDOW
+          && !ORDER_DOCUMENT_PREVIEW_WINDOW.closed)
         {
-          window.ORDER_DOCUMENT_PREVIEW_WINDOW.focus();
+          ORDER_DOCUMENT_PREVIEW_WINDOW.focus();
 
           return false;
         }
@@ -53,6 +53,12 @@ define([
 
         return false;
       }
+    },
+
+    destroy: function()
+    {
+      ORDER_DOCUMENT_PREVIEW_NC15 = null;
+      ORDER_DOCUMENT_PREVIEW_WINDOW = null;
     },
 
     getTemplateData: function()
@@ -98,7 +104,7 @@ define([
         });
     },
 
-    openDocumentWindow: function(aEl, windowName)
+    openDocumentWindow: function(aEl)
     {
       var view = this;
       var ready = false;
@@ -113,23 +119,25 @@ define([
         + ',left=' + left
         + ',width=' + Math.floor(width)
         + ',height=' + Math.floor(height);
-
-      var win = window.open(aEl.href, 'WMES_ORDER_DOCUMENT_PREVIEW', windowFeatures);
+      var windowName = 'WMES_ORDER_DOCUMENT_PREVIEW';
+      var win = window.open(aEl.href, windowName, windowFeatures);
 
       if (!win)
       {
         return;
       }
 
-      window.ORDER_DOCUMENT_PREVIEW_NC15 = nc15;
-      window.ORDER_DOCUMENT_PREVIEW_WINDOW = win;
+      ORDER_DOCUMENT_PREVIEW_NC15 = nc15;
+      ORDER_DOCUMENT_PREVIEW_WINDOW = win;
+
+      clearInterval(view.timers[windowName]);
 
       view.timers[windowName] = setInterval(function()
       {
         if (win.closed)
         {
-          window.ORDER_DOCUMENT_PREVIEW_NC15 = null;
-          window.ORDER_DOCUMENT_PREVIEW_WINDOW = null;
+          ORDER_DOCUMENT_PREVIEW_NC15 = null;
+          ORDER_DOCUMENT_PREVIEW_WINDOW = null;
 
           view.trigger('documentClosed', nc15);
 
