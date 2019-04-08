@@ -62,7 +62,8 @@
           },
           location: window.location.href,
           history: JSON.parse(localStorage.getItem('WMES_RECENT_LOCATIONS') || [])
-        }
+        },
+        versions: window.updater && window.updater.versions || {}
       })
     }).then(function() {}, function() {});
   };
