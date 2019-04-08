@@ -240,9 +240,14 @@ define([
       this.toggleEasyDiscussed();
       this.toggleDifficulties();
 
-      this.$('input[name="observations[1].safe"]')[0].setCustomValidity(
-        this.hasAnyObservation() || this.hasAnyRisk() ? '' : this.t('FORM:ERROR:empty')
-      );
+      var first = this.$('input[name="observations[1].safe"]')[0];
+
+      if (first)
+      {
+        first.setCustomValidity(
+          this.hasAnyObservation() || this.hasAnyRisk() ? '' : this.t('FORM:ERROR:empty')
+        );
+      }
     },
 
     toggleDifficulties: function()
