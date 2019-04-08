@@ -171,18 +171,33 @@ define([
     toggleVisibility: function()
     {
       var orders = this.model;
+      var missingOrders = [];
 
       this.$('.paintShop-list-item').each(function()
       {
-        if (this.nextElementSibling)
+        if (!this.nextElementSibling)
         {
-          var orderData = orders.get(this.dataset.orderId).serialize();
-          var hidden = !orders.isVisible(orderData);
+          return;
+        }
 
-          this.classList.toggle('hidden', hidden);
-          this.classList.toggle('visible', !hidden);
+        var order = orders.get(this.dataset.orderId);
+        var hidden = !order || !orders.isVisible(order.serialize());
+
+        this.classList.toggle('hidden', hidden);
+        this.classList.toggle('visible', !hidden);
+
+        if (!order)
+        {
+          missingOrders.push(this.dataset.orderId);
         }
       });
+
+      if (missingOrders.length && window.logBrowserError)
+      {
+        window.logBrowserError(new Error(
+          'Missing paint-shop orders during visibility toggle: ' + missingOrders.join(', ')
+        ));
+      }
     }
 
   });

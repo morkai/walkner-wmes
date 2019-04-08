@@ -6,32 +6,29 @@
 
   var lastError = null;
 
-  window.addEventListener('error', function(e)
+  window.logBrowserError = function(error, event)
   {
     if (!window.fetch)
     {
       return;
     }
 
-    if (e.error.stack === lastError)
+    if (error.stack === lastError)
     {
       return;
     }
 
-    lastError = e.error.stack;
+    lastError = error.stack;
 
     var stack = lastError.split(/\s+at\s+/);
 
     stack.shift();
 
-    var error = {
-      type: e.error.name,
-      message: e.error.message,
-      file: e.filename,
-      col: e.colno,
-      line: e.lineno,
+    error = {
+      type: error.name,
+      message: error.message,
       stack: stack,
-      time: e.timeStamp
+      time: event ? event.timeStamp : -1
     };
 
     var navigator = window.navigator;
@@ -68,6 +65,11 @@
         }
       })
     }).then(function() {}, function() {});
+  };
+
+  window.addEventListener('error', function(e)
+  {
+    window.logBrowserError(e.error, e);
   });
 
   var navigator = window.navigator;
