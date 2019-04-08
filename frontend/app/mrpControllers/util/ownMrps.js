@@ -110,7 +110,7 @@ define([
         return;
       }
 
-      if (!$ownMrps.length)
+      if (!$ownMrps.length && $input[0] && $input[0].labels[0])
       {
         $($input[0].labels[0]).append(
           ' (<a id="' + view.idPrefix + '-ownMrps" href="#">' + t('mrpControllers', 'ownMrps:trigger') + '</a>)'
