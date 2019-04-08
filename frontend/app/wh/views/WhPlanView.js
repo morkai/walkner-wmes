@@ -384,7 +384,7 @@ define([
         return window.open('/#prodShiftOrders/' + shiftOrders[0].id);
       }
 
-      window.open('/#prodShiftOrders?sort(startedAt)&limit(-1337)&orderId=' + orderNo);
+      window.open('/#prodShiftOrders?sort(startedAt)&limit(-1337)&orderId=string:' + orderNo);
     },
 
     handleCopyAction: function(tr, y, x, lineGroupOnly, orderNoOnly)

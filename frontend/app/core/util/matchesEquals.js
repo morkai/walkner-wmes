@@ -26,9 +26,9 @@ define([
 
     if (term.args[0] === 'eq')
     {
-      return term.args[1] === value;
+      return String(term.args[1]) === String(value);
     }
 
-    return term.args[1].indexOf(value) !== -1;
+    return Array.isArray(term.args[1]) && term.args[1].indexOf(value) !== -1;
   };
 });

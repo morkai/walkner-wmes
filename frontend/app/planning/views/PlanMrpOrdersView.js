@@ -456,7 +456,7 @@ define([
       }
       else
       {
-        url += '?sort(startedAt)&limit(-1337)&orderId=' + planOrder.id;
+        url += '?sort(startedAt)&limit(-1337)&orderId=string:' + planOrder.id;
       }
 
       window.open(url);
