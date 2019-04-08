@@ -60,26 +60,9 @@ exports.events = {
 
     ],
     info: [
-      'events.**',
-      'orders.synced',
-      'emptyOrders.synced',
-      'orders.*.synced',
-      'clipOrderCount.created',
-      'warehouse.*.synced',
-      'xiconf.orders.synced',
-      'orderDocuments.synced',
-      'orderDocuments.eto.synced',
-      'cags.*.synced',
-      'kanban.import.success'
+      'events.**'
     ],
     error: [
-      'orders.*.syncFailed',
-      'warehouse.*.syncFailed',
-      'xiconf.orders.syncFailed',
-      'orderDocuments.syncFailed',
-      'orderDocuments.eto.syncFailed',
-      'cags.*.syncFailed',
-      'kanban.import.failure',
       'app.started'
     ]
   }

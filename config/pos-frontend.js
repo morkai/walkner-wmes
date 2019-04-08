@@ -28,6 +28,7 @@ exports.modules = [
   'vendorNc12s',
   'purchaseOrders',
   'sapGui/importer',
+  'mail/sender',
   'html2pdf',
   {id: 'messenger/client', name: 'messenger/client:pos-importer'},
   'httpServer',
@@ -194,4 +195,8 @@ exports['sapGui/importer'] = {
 
 exports.html2pdf = {
   storagePath: `${DATA_PATH}/html2pdf/`
+};
+
+exports['mail/sender'] = {
+
 };
