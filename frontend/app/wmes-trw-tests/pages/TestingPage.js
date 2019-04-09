@@ -538,6 +538,7 @@ define([
       this.model.program.clear();
 
       this.updateProgramName();
+      this.updateMessage();
       this.startTest();
     },
 
@@ -579,6 +580,7 @@ define([
 
       this.loadCounter();
       this.updateOrder();
+      this.startTest();
     },
 
     onLineChange: function()
@@ -596,6 +598,7 @@ define([
 
       this.updateWorkstation();
       this.updateOrder();
+      this.startTest();
     },
 
     loadCounter: function()
@@ -709,17 +712,17 @@ define([
         });
       }
 
-      if (!this.model.program.get('name'))
-      {
-        return this.model.set({
-          state: 'no-program'
-        });
-      }
-
       if (!this.model.get('order'))
       {
         return this.model.set({
           state: 'no-order'
+        });
+      }
+
+      if (!this.model.program.get('name'))
+      {
+        return this.model.set({
+          state: 'no-program'
         });
       }
 
