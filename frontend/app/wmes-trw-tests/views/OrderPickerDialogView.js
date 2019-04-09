@@ -36,6 +36,13 @@ define([
       {
         this.validateOrder();
       },
+      'click #-noOrder': function()
+      {
+        this.trigger('picked', {
+          order: '000000000',
+          qtyTodo: 0
+        });
+      },
       'submit': function(e)
       {
         e.preventDefault();
@@ -78,7 +85,14 @@ define([
 
     afterRender: function()
     {
-      this.$id('order').val(this.model.get('order') || '');
+      var order = this.model.get('order') || '';
+
+      if (order === '000000000')
+      {
+        order = '';
+      }
+
+      this.$id('order').val(order);
       this.loadOrders();
       this.validateOrder();
     },

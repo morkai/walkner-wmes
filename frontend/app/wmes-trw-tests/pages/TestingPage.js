@@ -370,6 +370,10 @@ define([
       {
         value = this.t('testing:noOrder');
       }
+      else if (value === '000000000')
+      {
+        value = this.t('testing:woOrder');
+      }
       else if (qtyTodo)
       {
         value += ' • ' + (qtyDone >= 0 ? qtyDone : '?') + '/' + qtyTodo;
@@ -463,8 +467,6 @@ define([
           qtyTodo: data.qtyTodo
         });
 
-        sessionStorage.removeItem('TRW:PROGRAM');
-
         viewport.closeDialog();
       });
 
@@ -548,11 +550,11 @@ define([
     {
       if (this.model.program.id)
       {
-        localStorage.setItem('TRW:PROGRAM', this.model.program.id);
+        sessionStorage.setItem('TRW:PROGRAM', this.model.program.id);
       }
       else
       {
-        localStorage.removeItem('TRW:PROGRAM');
+        sessionStorage.removeItem('TRW:PROGRAM');
       }
 
       this.updateProgramName();
@@ -564,7 +566,7 @@ define([
     {
       if (this.model.get('line'))
       {
-        sessionStorage.setItem('TRW:ORDER', this.model.get('line'));
+        sessionStorage.setItem('TRW:ORDER', this.model.get('order'));
         sessionStorage.setItem('TRW:QTY_TODO', this.model.get('qtyTodo'));
       }
       else
@@ -616,6 +618,11 @@ define([
       var program = page.model.program.id;
 
       page.model.set('qtyDone', 0);
+
+      if (order === '000000000')
+      {
+        order = '';
+      }
 
       if (!order || !program)
       {

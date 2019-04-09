@@ -5,6 +5,7 @@
 
     "testing:noWorkstation": "choose workstation",
     "testing:noOrder": "choose order",
+    "testing:woOrder": "no order",
     "testing:noTester": "choose tester",
     "testing:noProgram": "choose program",
     "testing:menu:workstation": "Change workstation",
@@ -24,7 +25,9 @@
     "orderPicker:done": "Started orders",
     "orderPicker:todo": "Planned orders",
     "orderPicker:submit": "Set order",
+    "orderPicker:noOrder": "No order",
     "orderPicker:cancel": "Cancel",
+    "orderPicker:notFound": "Order not found.",
 
     "programPicker:title": "Choosing program",
     "programPicker:filter": "Filter program list",

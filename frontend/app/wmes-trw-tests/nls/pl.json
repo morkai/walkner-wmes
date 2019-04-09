@@ -4,6 +4,7 @@
 
   "testing:noWorkstation": "wybierz stanowisko",
   "testing:noOrder": "wybierz zlecenie",
+  "testing:woOrder": "brak zlecenia",
   "testing:noTester": "wybierz tester",
   "testing:noProgram": "wybierz program",
   "testing:menu:workstation": "Zmień stanowisko",
@@ -23,7 +24,9 @@
   "orderPicker:done": "Zlecenia rozpoczęte",
   "orderPicker:todo": "Zlecenia zaplanowane",
   "orderPicker:submit": "Wybierz zlecenie",
+  "orderPicker:noOrder": "Brak zlecenia",
   "orderPicker:cancel": "Anuluj",
+  "orderPicker:notFound": "Zlecenie nie istnieje.",
 
   "programPicker:title": "Wybór programu",
   "programPicker:filter": "Filtruj listę programów",
