@@ -123,9 +123,16 @@ define([
         return;
       }
 
+      var parent = this.el.parentNode;
+
+      if (!parent)
+      {
+        return;
+      }
+
       this.lastVisibleItem = $visible[0].dataset.orderId;
 
-      var scrollTop = this.el.parentNode.scrollTop;
+      var scrollTop = parent.scrollTop;
 
       for (var i = 0; i < $visible.length; ++i)
       {
