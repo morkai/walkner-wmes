@@ -111,13 +111,13 @@ define([
 
     serializeItems: function()
     {
-      var items = this.model.get('changes').map(this.serializeItem, this);
+      var items = (this.model.get('changes') || []).map(this.serializeItem, this);
 
       items.unshift(this.serializeItem({
         user: this.model.get('creator'),
         date: this.model.get('createdAt'),
         data: {},
-        comment: t('qiResults', 'history:added')
+        comment: this.t('history:added')
       }, 0));
 
       return items;
@@ -215,7 +215,7 @@ define([
 
     afterRender: function()
     {
-      this.lastChangeCount = this.model.get('changes').length;
+      this.lastChangeCount = (this.model.get('changes') || []).length;
 
       this.listenTo(this.model, 'change:changes', this.updateHistory);
 
