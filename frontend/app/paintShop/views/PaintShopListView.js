@@ -171,7 +171,6 @@ define([
     toggleVisibility: function()
     {
       var orders = this.model;
-      var missingOrders = [];
 
       this.$('.paintShop-list-item').each(function()
       {
@@ -185,19 +184,7 @@ define([
 
         this.classList.toggle('hidden', hidden);
         this.classList.toggle('visible', !hidden);
-
-        if (!order)
-        {
-          missingOrders.push(this.dataset.orderId);
-        }
       });
-
-      if (missingOrders.length && window.logBrowserError)
-      {
-        window.logBrowserError(new Error(
-          'Missing paint-shop orders during visibility toggle: ' + missingOrders.join(', ')
-        ));
-      }
     }
 
   });

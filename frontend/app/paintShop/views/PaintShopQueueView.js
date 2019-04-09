@@ -322,8 +322,8 @@ define([
 
       this.$('.paintShop-order').each(function()
       {
-        var orderData = orders.get(this.dataset.orderId).serialize();
-        var hidden = !orders.isVisible(orderData);
+        var order = orders.get(this.dataset.orderId);
+        var hidden = !order || !orders.isVisible(order.serialize());
 
         this.classList.toggle('hidden', hidden);
         this.classList.toggle('visible', !hidden);
