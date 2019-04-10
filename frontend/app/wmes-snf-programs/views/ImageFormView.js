@@ -20,16 +20,17 @@ define([
     events: {
       'submit': function()
       {
-        var $label = this.$id('label');
-        var $primary = this.$('.btn-primary').attr('disabled', true);
+        var view = this;
+        var $label = view.$id('label');
+        var $primary = view.$('.btn-primary').attr('disabled', true);
 
-        var req = this.ajax({
+        var req = view.ajax({
           type: 'PUT',
-          url: this.el.action,
+          url: view.el.action,
           data: JSON.stringify({label: $label.val()})
         });
 
-        req.done(this.onFormSuccess.bind(this));
+        req.done(view.onFormSuccess.bind(view));
 
         req.fail(function()
         {
@@ -38,7 +39,7 @@ define([
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('snf-programs', 'gallery:edit:failure')
+            text: view.t('gallery:edit:failure')
           });
 
           $label.focus();

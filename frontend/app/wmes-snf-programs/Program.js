@@ -17,7 +17,7 @@ define([
 
     topicPrefix: 'snf.programs',
 
-    privilegePrefix: 'XICONF',
+    privilegePrefix: 'SNF',
 
     nlsDomain: 'wmes-snf-programs',
 

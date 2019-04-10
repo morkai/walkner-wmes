@@ -82,12 +82,13 @@ define([
         var imageId = $thumbnail.attr('data-id');
         var programImageFormView = new ImageFormView({
           model: {
+            nlsDomain: this.model.nlsDomain,
             programId: this.model.id,
             image: _.find(this.model.get('images'), function(image) { return image._id === imageId; })
           }
         });
 
-        viewport.showDialog(programImageFormView, t('snf-programs', 'gallery:edit:title'));
+        viewport.showDialog(programImageFormView, this.t('gallery:edit:title'));
       },
       'click .snf-programs-image-delete': function(e)
       {
@@ -124,6 +125,7 @@ define([
 
         var imageView = new ImageView({
           model: {
+            nlsDomain: this.model.nlsDomain,
             programId: this.model.id,
             image: image
           }
