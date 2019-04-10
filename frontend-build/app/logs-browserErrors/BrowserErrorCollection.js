@@ -1,0 +1,1 @@
+define(["../core/Collection","./BrowserError"],function(e,i){"use strict";return e.extend({model:i,rqlQuery:"sort(time)&limit(30)&resolved=false",initialize:function(){e.prototype.initialize.apply(this,arguments),this.expanded={}}})});

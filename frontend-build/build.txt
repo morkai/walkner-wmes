@@ -256,6 +256,10 @@ app/licenses/assets/main.css
 ----------------
 app/licenses/assets/main.css
 
+app/logs-browserErrors/assets/main.css
+----------------
+app/logs-browserErrors/assets/main.css
+
 app/mechOrders/assets/main.css
 ----------------
 app/mechOrders/assets/main.css
@@ -1003,6 +1007,7 @@ assets/../app/kanbanContainers/assets/main.css
 assets/../app/wh/assets/main.css
 assets/../app/pfepEntries/assets/main.css
 assets/../app/help/assets/main.css
+assets/../app/logs-browserErrors/assets/main.css
 assets/../app/wmes-toolcal-tools/assets/main.css
 assets/../app/wmes-fap-entries/assets/main.css
 assets/../app/wmes-trw-programs/assets/main.css
@@ -2005,6 +2010,7 @@ app/pkhdStrategies/routes.js
 app/pfepEntries/routes.js
 app/orderBomMatchers/routes.js
 app/help/routes.js
+app/logs-browserErrors/routes.js
 app/wmes-toolcal-types/routes.js
 app/wmes-toolcal-tools/routes.js
 app/wmes-fap-categories/Category.js
