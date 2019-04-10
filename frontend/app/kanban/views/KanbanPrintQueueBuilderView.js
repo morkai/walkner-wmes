@@ -431,10 +431,22 @@ define([
 
       view.$rows.append($fragment);
 
-      if (models.length === 1)
+      if (models.length !== 1)
       {
-        view.$rows[0].lastElementChild.querySelector('select').focus();
+        return;
       }
+
+      clearTimeout(view.timers.focusLast);
+
+      view.timers.focusLast = setTimeout(function()
+      {
+        var lastRowEl = view.$rows[0].lastElementChild;
+
+        if (lastRowEl)
+        {
+          lastRowEl.querySelector('select').focus();
+        }
+      }, 1);
     },
 
     validate: function()
