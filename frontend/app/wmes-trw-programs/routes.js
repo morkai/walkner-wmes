@@ -62,13 +62,21 @@ define([
           baseBreadcrumb: baseBreadcrumb,
           pageClassName: 'page-max-flex',
           model: new Program({_id: req.params.id}),
-          detailsTemplate: detailsTemplate
+          detailsTemplate: detailsTemplate,
+          actions: function()
+          {
+            return [{
+              icon: 'copy',
+              label: this.t('PAGE_ACTION:copy'),
+              href: '#trw/programs;add?copy=' + this.model.id
+            }].concat(DetailsPage.prototype.actions.apply(this, arguments));
+          }
         });
       }
     );
   });
 
-  router.map('/trw/programs;add', canManage, function()
+  router.map('/trw/programs;add', canManage, function(req)
   {
     viewport.loadPage(
       [
@@ -80,11 +88,18 @@ define([
       ],
       function(AddFormPage, dictionaries, Program, FormView)
       {
+        var model = new Program({_id: req.query.copy});
+
+        model.once('sync', function()
+        {
+          model.set('_id', undefined);
+        });
+
         return dictionaries.bind(new AddFormPage({
           baseBreadcrumb: baseBreadcrumb,
           pageClassName: 'page-max-flex',
           FormView: FormView,
-          model: new Program()
+          model: model
         }));
       }
     );

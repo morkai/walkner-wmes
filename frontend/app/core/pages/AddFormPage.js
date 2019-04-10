@@ -32,6 +32,11 @@ define([
       this.defineViews();
     },
 
+    load: function(when)
+    {
+      return when(this.model.id ? this.model.fetch(this.options.fetchOptions) : null);
+    },
+
     defineModels: function()
     {
 

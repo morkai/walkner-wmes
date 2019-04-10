@@ -2,6 +2,8 @@
   "BREADCRUMBS:base": "TRW",
   "BREADCRUMBS:browse": "Programy",
 
+  "PAGE_ACTION:copy": "Kopiuj",
+
   "PROPERTY:name": "Nazwa",
   "PROPERTY:tester": "Tester",
   "PROPERTY:steps": "Kroki",

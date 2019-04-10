@@ -3,6 +3,8 @@
     "BREADCRUMBS:base": "TRW",
     "BREADCRUMBS:browse": "Programs",
 
+    "PAGE_ACTION:copy": "Copy",
+
     "PROPERTY:name": "Name",
     "PROPERTY:tester": "Tester",
     "PROPERTY:steps": "Steps",
