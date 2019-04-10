@@ -2421,6 +2421,19 @@ define([
     {
       var valueEl = tdEl.firstElementChild;
       var innerEl = valueEl.firstElementChild;
+
+      if (!innerEl)
+      {
+        if (window.logBrowserError)
+        {
+          window.logBrowserError(new Error(
+            'No inner TD: ccn=' + tdEl.parentNode.dataset.modelId + ' column=' + tdEl.dataset.columnId
+          ));
+        }
+
+        return;
+      }
+
       var text = innerEl.textContent.trim();
 
       if (!text.length)
