@@ -379,6 +379,11 @@ define([
 
   Viewport.prototype.onDialogShown = function()
   {
+    if (!this.currentDialog)
+    {
+      return;
+    }
+
     this.currentDialog.$('[autofocus]').focus();
 
     if (_.isFunction(this.currentDialog.onDialogShown))
@@ -393,6 +398,11 @@ define([
 
   Viewport.prototype.onDialogHidden = function()
   {
+    if (!this.currentDialog)
+    {
+      return;
+    }
+
     if (this.currentDialog.dialogClassName)
     {
       this.$dialog.removeClass(_.result(this.currentDialog, 'dialogClassName'));
