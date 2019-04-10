@@ -1,0 +1,20 @@
+{
+  "BREADCRUMBS:base": "Logi",
+  "BREADCRUMBS:browse": "Błędy klientów",
+
+  "PROPERTY:time": "Czas wystąpienia",
+  "PROPERTY:user": "Użytkownik",
+  "PROPERTY:error": "Błąd",
+  "PROPERTY:source": "Źródło",
+  "PROPERTY:location": "Adres",
+  "PROPERTY:file": "Plik",
+  "PROPERTY:line": "Linia",
+  "PROPERTY:col": "Kolumna",
+  "PROPERTY:appId": "Aplikacja",
+  "PROPERTY:history": "Historia",
+  "PROPERTY:versions": "Wersje aplikacji",
+  "PROPERTY:headers": "Nagłówki",
+  "PROPERTY:clientTime": "Czas klienta",
+  "PROPERTY:navigator": "window.navigator",
+  "PROPERTY:screen": "window.screen"
+}

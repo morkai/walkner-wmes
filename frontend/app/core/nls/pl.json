@@ -184,6 +184,7 @@
   "NAVBAR:layout": "Layout",
   "NAVBAR:toolcal": "Narzędzia pomiarowe",
   "NAVBAR:luma2": "Luma gen. 2",
+  "NAVBAR:logs:browserErrors": "Błędy klientów",
 
   "NAVBAR:OPINION:main": "Badanie Opinia",
   "NAVBAR:OPINION:current": "Aktualne badanie",

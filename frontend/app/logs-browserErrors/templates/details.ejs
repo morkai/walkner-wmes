@@ -1,0 +1,39 @@
+<tr>
+  <td colspan="6" class="logs-list-details">
+    <p>
+      <strong style="white-space: pre-wrap"><%= error.error.type %>: <%= error.error.message %></strong>
+    </p>
+    <ol>
+      <% error.error.stack.forEach(function(stack) { %>
+      <li><%- stack %></li>
+      <% }) %>
+    </ol>
+    <dl>
+      <dt><%- helpers.t('PROPERTY:location') %></dt>
+      <dd><a href="<%= error.browser.location %>" target="_blank"><%= error.browser.location %></a></dd>
+      <dt><%- helpers.t('PROPERTY:history') %></dt>
+      <dd>
+        <ol>
+          <% error.browser.history.forEach(function(history) { %>
+          <li><%- time.format(history.date, 'L, HH:mm:ss.SSS') %> <a href="<%= history.href %>" target="_blank"><%= history.href %></a></li>
+          <% }) %>
+        </ol>
+      </dd>
+      <dt><%- helpers.t('PROPERTY:versions') %></dt>
+      <dd>
+        <% _.forEach(error.versions, function(version, appId) { %>
+        • <%- appId %>=<%- version %>/<%- window.updater ? window.updater.versions[appId] : '?' %>
+        <% }) %>
+      </dd>
+      <dt><%- helpers.t('PROPERTY:clientTime') %></dt>
+      <dd><%- time.format(error.browser.time, 'L, HH:mm:ss.SSS') %></dd>
+      <dt><%- helpers.t('PROPERTY:headers') %></dt>
+      <dd><code><%= JSON.stringify(error.headers, null, 2) %></code></dd>
+      <dt><%- helpers.t('PROPERTY:navigator') %></dt>
+      <dd><code><%= JSON.stringify(error.browser.navigator, null, 2) %></code></dd>
+      <dt><%- helpers.t('PROPERTY:screen') %></dt>
+      <dd><code><%= JSON.stringify(error.browser.screen, null, 2) %></code></dd>
+    </dl>
+    <button class="btn btn-lg btn-success" type="button"><i class="fa fa-check"></i></button>
+  </td>
+</tr>

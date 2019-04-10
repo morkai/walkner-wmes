@@ -177,6 +177,7 @@
     "NAVBAR:layout": "Layout",
     "NAVBAR:toolcal": "Tool calibration",
     "NAVBAR:luma2": "Luma gen. 2",
+    "NAVBAR:logs:browserErrors": "Client-side errors",
 
     "NAVBAR:OPINION:main": "Opinion survey",
     "NAVBAR:OPINION:current": "Current survey",

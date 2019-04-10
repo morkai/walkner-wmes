@@ -1,0 +1,20 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "Logs",
+    "BREADCRUMBS:browse": "Client-side errors",
+
+    "PROPERTY:time": "Time",
+    "PROPERTY:user": "User",
+    "PROPERTY:error": "Error",
+    "PROPERTY:source": "Source",
+    "PROPERTY:location": "Location",
+    "PROPERTY:appId": "App ID",
+    "PROPERTY:history": "History",
+    "PROPERTY:versions": "App versions",
+    "PROPERTY:headers": "Headers",
+    "PROPERTY:clientTime": "Client time",
+    "PROPERTY:navigator": "window.navigator",
+    "PROPERTY:screen": "window.screen"
+  },
+  "pl": true
+}
