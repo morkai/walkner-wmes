@@ -113,6 +113,12 @@ define([
         };
 
         return false;
+      },
+      'mousedown .factoryLayout-bg': function()
+      {
+        this.clickInfo = null;
+
+        return false;
       }
     },
 
@@ -499,7 +505,13 @@ define([
 
           view.handleClick();
         })
-        .on('zoom', onZoom);
+        .on('zoom', function()
+        {
+          if (view.canvas)
+          {
+            view.canvas.attr('transform', 'translate(' + d3.event.translate + ')');
+          }
+        });
 
       var outerContainer = d3.select(this.el).select('svg')
         .attr('class', 'factoryLayout-canvas')
@@ -533,11 +545,6 @@ define([
         .attr('height', '1080px');
 
       this.translate(5, 5);
-
-      function onZoom()
-      {
-        view.canvas.attr('transform', 'translate(' + d3.event.translate + ')');
-      }
     },
 
     translate: function(x, y)
