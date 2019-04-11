@@ -200,10 +200,13 @@ define([
       page.listenTo(model.program, 'change', page.onProgramChange);
 
       page.setView('#-vkb', page.vkbView);
+
+      $(window).on('resize.' + page.idPrefix, page.resizePreview.bind(page));
     },
 
     destroy: function()
     {
+      $(window).off('.' + this.idPrefix);
       document.body.classList.remove('trw-testing-page');
       $('.modal.fade').addClass('fade');
     },
@@ -219,6 +222,7 @@ define([
 
       embedded.render(this);
 
+      this.resizePreview();
       this.updateWorkstation();
       this.updateOrder();
       this.updateProgramName();
@@ -241,6 +245,15 @@ define([
         this.model.set('ready', true);
         this.startTest();
       }
+    },
+
+    resizePreview: function()
+    {
+      var height = window.innerHeight
+        - this.$('.trw-testing-hd').outerHeight()
+        - this.$('.trw-testing-ft').outerHeight();
+
+      this.$id('preview').css('height', height + 'px');
     },
 
     loadTesterAndProgram: function()
@@ -396,6 +409,28 @@ define([
       }
 
       this.$prop('program', value);
+    },
+
+    updateProgramPreview: function()
+    {
+      var $preview = this.$id('preview');
+      var matches = (this.model.program.get('name') || '').match(/([0-9]{12,15})/);
+
+      if (!matches)
+      {
+        $preview.addClass('hidden');
+
+        return;
+      }
+
+      var documentId = matches[1];
+
+      if (documentId.length === 12)
+      {
+        documentId = '132' + documentId;
+      }
+
+      $preview.prop('src', '/orderDocuments/' + documentId).removeClass('hidden');
     },
 
     updateState: function()
@@ -559,6 +594,7 @@ define([
       }
 
       this.updateProgramName();
+      this.updateProgramPreview();
       this.loadCounter();
       this.startTest();
     },
