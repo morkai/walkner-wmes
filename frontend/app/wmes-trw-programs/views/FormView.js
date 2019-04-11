@@ -245,6 +245,19 @@ define([
           view.io[io.type + 'Ids'].push(io._id);
         });
 
+        Object.keys(view.io).forEach(function(type)
+        {
+          if (/Ids$/.test(type))
+          {
+            return;
+          }
+
+          view.io[type].sort(function(a, b)
+          {
+            return a.id.localeCompare(b.id, undefined, {numeric: true, ignorePunctuation: true});
+          });
+        });
+
         view.setUpIoSelect2();
       });
     }
