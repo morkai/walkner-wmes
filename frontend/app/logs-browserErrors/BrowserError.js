@@ -17,6 +17,18 @@ define([
   {
     var matches = line.match(/^(.*?)(?: \()?(https?:\/\/.*?)(\/.*?):([0-9]+):([0-9]+)/);
 
+    if (!matches)
+    {
+      return {
+        stack: line,
+        fn: line,
+        host: '',
+        file: '',
+        line: '',
+        col: ''
+      };
+    }
+
     return {
       stack: line,
       fn: matches[1],
