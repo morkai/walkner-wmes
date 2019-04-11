@@ -63,8 +63,8 @@ define([
 
     getStats: function()
     {
-      var orders = this.orders;
       var plan = this.plan;
+      var orders = this.orders;
       var mrp = this.id;
       var stats = {
         manHours: {
@@ -106,6 +106,11 @@ define([
           remaining: 0
         }
       };
+
+      if (!plan)
+      {
+        return stats;
+      }
 
       this.lines.forEach(function(line)
       {
