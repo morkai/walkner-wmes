@@ -216,8 +216,11 @@ define([
       {
         view.updateComponent(component, 'success');
 
-        clearTimeout(view.timers.checkAll);
-        view.timers.checkAll = setTimeout(view.checkAll.bind(view), 333);
+        if (view.timers)
+        {
+          clearTimeout(view.timers.checkAll);
+          view.timers.checkAll = setTimeout(view.checkAll.bind(view), 333);
+        }
       }
     },
 
