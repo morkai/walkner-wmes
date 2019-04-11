@@ -821,6 +821,28 @@ define([
 
       var quantitiesDone = this.get('quantitiesDone');
 
+      if (!quantitiesDone)
+      {
+        if (window.logBrowserError)
+        {
+          window.logBrowserError(new Error(
+            'No quantities done during takt time update for line ' + this.prodLine.id + ': '
+            + JSON.stringify(data)
+          ));
+        }
+
+        quantitiesDone = this.attributes.quantitiesDone = [
+          {planned: 0, actual: 0},
+          {planned: 0, actual: 0},
+          {planned: 0, actual: 0},
+          {planned: 0, actual: 0},
+          {planned: 0, actual: 0},
+          {planned: 0, actual: 0},
+          {planned: 0, actual: 0},
+          {planned: 0, actual: 0}
+        ];
+      }
+
       quantitiesDone[data.hourlyQuantityDone.index].actual = data.hourlyQuantityDone.value;
 
       this.trigger('change:quantitiesDone', this, quantitiesDone, {});
