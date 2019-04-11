@@ -92,7 +92,10 @@ define([
 
         model.once('sync', function()
         {
-          model.set('_id', undefined);
+          if (req.query.copy)
+          {
+            model.set('_id', undefined);
+          }
         });
 
         return dictionaries.bind(new AddFormPage({
