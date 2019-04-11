@@ -106,7 +106,7 @@ define([
       {
         var state = this.model.get('state');
 
-        if (state === 'test-success' || state === 'error')
+        if (state === 'error' || /^test/.test(state))
         {
           this.startTest();
         }
@@ -758,6 +758,7 @@ define([
         setIo: {},
         checkIo: {}
       });
+      this.updateMessage();
 
       this.setIo(true, this.runStep);
     },
