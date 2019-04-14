@@ -2041,6 +2041,7 @@ app/wmes-trw-tests/routes.js
 app/wmes-snf-programs/Program.js
 app/wmes-snf-programs/ProgramCollection.js
 app/wmes-snf-programs/routes.js
+app/wmes-snf-tests/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
