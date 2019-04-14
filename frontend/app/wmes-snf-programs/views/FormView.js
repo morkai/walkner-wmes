@@ -57,6 +57,7 @@ define([
 
       TIME_PROPERTIES.forEach(function(timeProperty)
       {
+        console.log(timeProperty, formData[timeProperty], time.toString(formData[timeProperty]));
         formData[timeProperty] = time.toString(formData[timeProperty]);
       });
 
@@ -97,7 +98,7 @@ define([
       var isTester = e.val === 'tester';
 
       this.$id('illuminationTime')
-        .val(isTester ? '0s' : is30s ? '30s' : '6min')
+        .val(isTester ? '0s' : is30s ? '30s' : this.$id('illuminationTime').val())
         .attr('readonly', is30s || isTester);
       this.$id('waitForStartTime').attr('disabled', isTester);
       this.$id('hrs').find('input').attr('readonly', is30s || isTester);

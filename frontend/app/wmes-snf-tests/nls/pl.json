@@ -1,0 +1,32 @@
+{
+  "BREADCRUMBS:base": "SNF",
+  "BREADCRUMBS:browse": "Wyniki",
+
+  "PANEL:TITLE:details": "Szczegóły wyniku",
+  "PANEL:TITLE:charts": "Wykresy",
+
+  "PROPERTY:prodLine": "Linia",
+  "PROPERTY:orderNo": "Zlecenie",
+  "PROPERTY:serialNo": "Sztuka",
+  "PROPERTY:startedAt": "Czas rozpoczęcia",
+  "PROPERTY:finishedAt": "Czas zakończenia",
+  "PROPERTY:duration": "Czas trwania",
+  "PROPERTY:program": "Program",
+  "PROPERTY:result": "Wynik",
+  "PROPERTY:timePassed": "Czas trwania?",
+  "PROPERTY:lightPassed": "Poziom światła?",
+  "PROPERTY:currentPassed": "Pobór mocy?",
+
+  "result:true": "Sukces",
+  "result:false": "Porażka",
+
+  "charts:temperature": "Temperatura",
+  "charts:temperature:suffix": "°C",
+  "charts:current": "Natężenie",
+  "charts:current:suffix": "A",
+  "charts:voltage": "Napięcie",
+  "charts:voltage:suffix": "V",
+  "charts:light": "Poziom światła",
+  "charts:light1": "Poziom światła 1",
+  "charts:light2": "Poziom światła 2"
+}

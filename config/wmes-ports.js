@@ -12,10 +12,18 @@ let nextPort = 28010;
 
 module.exports = {
   'wmes-frontend': {
-    pubHost: '127.0.0.1',
-    pubPort: nextPort++,
-    repHost: '127.0.0.1',
-    repPort: nextPort++
+    server: {
+      pubHost: '0.0.0.0',
+      pubPort: nextPort++,
+      repHost: '0.0.0.0',
+      repPort: nextPort++
+    },
+    client: {
+      pubHost: '127.0.0.1',
+      pubPort: nextPort - 2,
+      repHost: '127.0.0.1',
+      repPort: nextPort - 1
+    }
   },
   'wmes-watchdog': {
     pubHost: '127.0.0.1',

@@ -101,7 +101,8 @@ define([
   './wmes-trw-testers/routes',
   './wmes-trw-programs/routes',
   './wmes-trw-tests/routes',
-  './wmes-snf-programs/routes'
+  './wmes-snf-programs/routes',
+  './wmes-snf-tests/routes'
 ], function()
 {
   'use strict';

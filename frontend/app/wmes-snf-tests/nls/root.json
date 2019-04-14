@@ -1,0 +1,35 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "SNF",
+    "BREADCRUMBS:browse": "Results",
+
+    "PANEL:TITLE:details": "Result details",
+    "PANEL:TITLE:charts": "Charts",
+
+    "PROPERTY:prodLine": "Line",
+    "PROPERTY:orderNo": "Order",
+    "PROPERTY:serialNo": "PCE",
+    "PROPERTY:startedAt": "Started at",
+    "PROPERTY:finishedAt": "Finished at",
+    "PROPERTY:duration": "Duration",
+    "PROPERTY:program": "Program",
+    "PROPERTY:result": "Result",
+    "PROPERTY:timePassed": "Duration?",
+    "PROPERTY:lightPassed": "Light?",
+    "PROPERTY:currentPassed": "Current?",
+
+    "result:true": "Success",
+    "result:false": "Failure",
+
+    "charts:temperature": "Temperature",
+    "charts:temperature:suffix": "°C",
+    "charts:current": "Current",
+    "charts:current:suffix": "A",
+    "charts:voltage": "Voltage",
+    "charts:voltage:suffix": "V",
+    "charts:light": "Light level",
+    "charts:light1": "Light level 1",
+    "charts:light2": "Light level 2"
+  },
+  "pl": true
+}

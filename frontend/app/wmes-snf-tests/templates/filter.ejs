@@ -1,0 +1,35 @@
+<form class="well filter-form" autocomplete="off">
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    property: 'startedAt',
+    type: 'date+time',
+    startHour: 6,
+    labels: {text: helpers.t('PROPERTY:startedAt'), ranges: true}
+  }) %>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-prodLine"><%- helpers.t('PROPERTY:prodLine') %></label>
+    <input id="<%- idPrefix %>-prodLine" name="prodLine" type="text">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-orderNo"><%- helpers.t('PROPERTY:orderNo') %></label>
+    <input id="<%- idPrefix %>-orderNo" name="orderNo" class="form-control" type="text" pattern="^[0-9]{9}$" style="width: 110px">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-program"><%- helpers.t('PROPERTY:program') %></label>
+    <input id="<%- idPrefix %>-program" name="program" type="text">
+  </div>
+  <div class="form-group">
+    <label><%- helpers.t('PROPERTY:result') %></label>
+    <div id="<%- idPrefix %>-result" class="btn-group filter-btn-group" data-toggle="buttons">
+      <% [true, false].forEach(function(result) { %>
+      <label class="btn btn-<%- result ? 'success' : 'danger' %>">
+        <input type="checkbox" name="result[]" value="<%- result %>"> <%- helpers.t('result:' + result) %>
+      </label>
+      <% }) %>
+    </div>
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('core', 'filter:submit') %></span></button>
+  </div>
+</form>

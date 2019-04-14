@@ -2,6 +2,7 @@
   "BREADCRUMBS:base": "SNF",
   "BREADCRUMBS:browse": "Programy",
 
+  "PANEL:TITLE:details": "Szczegóły programu",
   "PANEL:TITLE:gallery": "Galeria",
 
   "PROPERTY:name": "Nazwa programu",

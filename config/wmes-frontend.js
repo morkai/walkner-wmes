@@ -480,7 +480,7 @@ exports.production = {
   dictionaryModules: frontendDictionaryModules
 };
 
-exports['messenger/server'] = Object.assign({}, ports[exports.id], {
+exports['messenger/server'] = Object.assign({}, ports[exports.id].server, {
   responseTimeout: 5000,
   broadcastTopics: [
     'fte.leader.**',

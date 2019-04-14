@@ -1,0 +1,42 @@
+<div class="panel panel-<%- model.result ? 'success' : 'danger' %>">
+  <div class="panel-heading">
+    <%- helpers.t('PANEL:TITLE:details') %>
+  </div>
+  <div class="panel-details row">
+    <div class="col-md-4">
+      <%- helpers.props(model, [
+        'prodLine',
+        'orderNo',
+        'serialNo'
+      ]) %>
+    </div>
+    <div class="col-md-4">
+      <%- helpers.props(model, [
+        'program',
+        'startedAt',
+        'finishedAt',
+        'duration'
+      ]) %>
+    </div>
+    <div class="col-md-4">
+      <div class="props">
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:result') %></div>
+          <div class="prop-value"><%- helpers.t('result:' + !!model.result) %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:timePassed') %></div>
+          <div class="prop-value"><i class="fa fa-thumbs-o-<%- model.timePassed ? 'up' : 'down' %>"></i></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:lightPassed') %></div>
+          <div class="prop-value"><i class="fa fa-thumbs-o-<%- model.lightPassed ? 'up' : 'down' %>"></i></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:currentPassed') %></div>
+          <div class="prop-value"><i class="fa fa-thumbs-o-<%- model.currentPassed ? 'up' : 'down' %>"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
