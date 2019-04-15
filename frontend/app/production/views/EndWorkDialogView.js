@@ -183,7 +183,12 @@ define([
       {
         this.lastKeyPressAt = Date.now();
 
-        this.$id('spigot-nc12').val('')[0].setCustomValidity('');
+        var $nc12 = this.$id('spigot-nc12');
+
+        if ($nc12.length)
+        {
+          $nc12.val('')[0].setCustomValidity('');
+        }
 
         return false;
       }
