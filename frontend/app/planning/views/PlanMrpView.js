@@ -226,6 +226,11 @@ define([
 
     onLineOrdersListChanged: function()
     {
+      if (!this.$els.timeline)
+      {
+        return;
+      }
+
       var hidden = this.plan.displayOptions.isLineOrdersListEnabled();
 
       this.$els.timeline.toggleClass('hidden', hidden);
