@@ -137,7 +137,7 @@ define([
         })
         .on('shown.bs.popover', function(e)
         {
-          view.$(e.target).data('bs.popover').$tip.addClass('production-downtimes-popover');
+          view.$(e.target).data('bs.popover').tip().addClass('production-downtimes-popover');
         });
     },
 

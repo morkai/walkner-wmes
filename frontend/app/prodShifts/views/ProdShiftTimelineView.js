@@ -349,7 +349,7 @@ define([
         content: view.renderPopover(item, managing)
       });
       $item.popover('show');
-      $item.data('bs.popover').$tip.addClass('popover-' + item.type);
+      $item.data('bs.popover').tip().addClass('popover-' + item.type);
 
       view.popover = {
         el: itemEl,
