@@ -21,12 +21,7 @@ define([
 
     rqlQuery: function(rql)
     {
-      var weekAgo = time.getMoment()
-        .hours(6)
-        .minutes(0)
-        .seconds(0)
-        .milliseconds(0)
-        .subtract(7, 'days').valueOf();
+      var weekAgo = time.getMoment().hours(6).startOf('hour').subtract(7, 'days').valueOf();
 
       return rql.Query.fromObject({
         fields: {
@@ -44,29 +39,6 @@ define([
           args: [{name: 'ge', args: ['startedAt', weekAgo]}]
         }
       });
-    },
-
-    initialize: function()
-    {
-      this.srcIds = null;
-    },
-
-    parse: function(res)
-    {
-      if (Array.isArray(res.srcIds))
-      {
-        var first = this.srcIds === null;
-        var diff = !_.isEqual(res.srcIds, this.srcIds);
-
-        this.srcIds = res.srcIds;
-
-        if (!first && diff)
-        {
-          this.trigger('change:srcIds');
-        }
-      }
-
-      return Collection.prototype.parse.call(this, res);
     }
 
   });

@@ -5,12 +5,16 @@ define([
   'app/time',
   'app/core/views/FilterView',
   'app/core/util/forms/dateTimeRange',
+  'app/core/util/idAndLabel',
+  'app/data/orgUnits',
   'app/xiconf/templates/filter'
 ], function(
   _,
   time,
   FilterView,
   dateTimeRange,
+  idAndLabel,
+  orgUnits,
   template
 ) {
   'use strict';
@@ -28,21 +32,12 @@ define([
     defaultFormData: function()
     {
       return {
-        srcId: '',
-        serviceTag: '',
-        orderNo: '',
-        nc12Type: 'program',
-        nc12: '',
         result: ['success', 'failure']
       };
     },
 
     termToForm: {
       'startedAt': dateTimeRange.rqlToForm,
-      'orderNo': function(propertyName, term, formData)
-      {
-        formData[propertyName] = term.args[1].replace(/[^0-9]/g, '');
-      },
       'result': function(propertyName, term, formData)
       {
         if (term.args[1] === 'success' || term.args[1] === 'failure')
@@ -50,33 +45,13 @@ define([
           formData.result = [term.args[1]];
         }
       },
-      'nc12': function(propertyName, term, formData)
-      {
-        formData.nc12Type = 'program';
-        formData.nc12 = term.args[1].replace(/[^0-9A-Z]/g, '');
-      },
-      'program._id': function(propertyName, term, formData)
-      {
-        formData.nc12Type = 'program';
-        formData.nc12 = term.args[1].replace(/[^0-9A-Za-z]/g, '');
-      },
-      'leds.nc12': function(propertyName, term, formData)
-      {
-        formData.nc12Type = 'led';
-        formData.nc12 = term.args[1].replace(/[^0-9A-Z]/g, '');
-      },
-      'srcId': function(propertyName, term, formData)
+      'prodLine': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
       },
-      'serviceTag': 'srcId'
-    },
-
-    initialize: function()
-    {
-      if (this.collection)
+      'search': function(propertyName, term, formData)
       {
-        this.listenTo(this.collection, 'change:srcIds', this.setUpSrcIdSelect2);
+        formData[propertyName] = term.args[1] === '__FT__' ? 'FT' : term.args[1];
       }
     },
 
@@ -84,69 +59,37 @@ define([
     {
       FilterView.prototype.afterRender.call(this);
 
-      if (this.formData.result.length === 1)
-      {
-        this.$('.xiconf-filter-' + this.formData.result[0]).addClass('active');
-      }
-      else
-      {
-        this.$('.xiconf-filter-result > label').addClass('active');
-      }
+      this.toggleButtonGroup('result');
 
-      this.setUpSrcIdSelect2();
-    },
-
-    setUpSrcIdSelect2: function()
-    {
-      this.$id('srcId').select2({
+      this.$id('prodLine').select2({
         width: '200px',
+        placeholder: ' ',
         allowClear: true,
-        data: (this.collection.srcIds || []).map(function(srcId)
-        {
-          return {id: srcId, text: srcId};
-        })
+        data: orgUnits.getActiveByType('prodLine').map(idAndLabel)
       });
     },
 
     serializeFormToQuery: function(selector)
     {
-      var nc12Type = this.$('input[name="nc12Type"]:checked').val();
-      var nc12 = this.$id('nc12').val().trim();
-      var serviceTag = this.$id('serviceTag').val().trim();
-      var srcId = this.$id('srcId').val();
-      var $result = this.$('input[name="result[]"]:checked');
+      var prodLine = this.$id('prodLine').val();
+      var search = this.$id('search').val().trim().toUpperCase();
+      var result = this.getButtonGroupValue('result');
 
       dateTimeRange.formToRql(this, selector);
 
-      if (srcId.length)
+      if (prodLine)
       {
-        selector.push({name: 'eq', args: ['srcId', srcId]});
+        selector.push({name: 'eq', args: ['prodLine', prodLine]});
       }
 
-      this.serializeRegexTerm(selector, 'orderNo', 9, null, false, true);
-
-      if (/^[0-9A-Z]{9,}$/.test(nc12))
+      if (search)
       {
-        var property = nc12Type === 'led' ? 'leds.nc12' : /[A-Z]/.test(nc12) ? 'program._id' : 'nc12';
-
-        if (nc12.length === 12)
-        {
-          selector.push({name: 'eq', args: [property, nc12]});
-        }
-        else
-        {
-          selector.push({name: 'regex', args: [property, '^' + nc12]});
-        }
+        selector.push({name: 'eq', args: ['search', search === 'FT' ? '__FT__' : search]});
       }
 
-      if (/^P[0-9]+$/.test(serviceTag))
+      if (result.length === 1)
       {
-        selector.push({name: 'eq', args: ['serviceTag', serviceTag]});
-      }
-
-      if ($result.length === 1)
-      {
-        selector.push({name: 'eq', args: ['result', $result.val()]});
+        selector.push({name: 'eq', args: ['result', result[0]]});
       }
     }
 

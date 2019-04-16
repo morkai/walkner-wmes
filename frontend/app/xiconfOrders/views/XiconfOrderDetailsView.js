@@ -64,7 +64,7 @@ define([
       this.listenTo(this.model, 'change', this.render);
     },
 
-    linkToResults: function(orderNo, nc12, itemKind)
+    linkToResults: function(orderNo, nc12)
     {
       var rqlQuery = this.xiconfResultCollection.rqlQuery;
 
@@ -78,9 +78,7 @@ define([
 
       if (nc12)
       {
-        var property = itemKind === 'led' ? 'leds.nc12' : /[A-Z]/i.test(nc12) ? 'program._id' : 'nc12';
-
-        rqlQuery.selector.args.push({name: 'eq', args: [property, nc12]});
+        rqlQuery.selector.args.push({name: 'eq', args: ['search', nc12]});
       }
 
       return this.xiconfResultCollection.genClientUrl() + '?' + rqlQuery;

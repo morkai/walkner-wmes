@@ -3,46 +3,33 @@
     idPrefix: idPrefix,
     property: 'startedAt',
     type: 'date',
+    required: true,
     startHour: 6,
     labels: {text: helpers.t('PROPERTY:startedAt'), ranges: true}
   }) %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-srcId"><%- helpers.t('PROPERTY:srcId') %></label>
-    <input id="<%- idPrefix %>-srcId" name="srcId" type="text" autocomplete="new-password" placeholder="<%- helpers.t('filter:placeholder:srcId') %>">
+    <label for="<%- idPrefix %>-prodLine"><%- helpers.t('PROPERTY:prodLine') %></label>
+    <input id="<%- idPrefix %>-prodLine" name="prodLine" type="text">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-serviceTag"><%- helpers.t('PROPERTY:serviceTag') %></label>
-    <input id="<%- idPrefix %>-serviceTag" class="form-control" name="serviceTag" type="text" autocomplete="new-password" pattern="^(P|p)[0-9]+$">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-orderNo"><%- helpers.t('PROPERTY:no') %></label>
-    <input id="<%- idPrefix %>-orderNo" class="form-control" name="orderNo" type="text" autocomplete="new-password" maxlength="9" pattern="^[0-9]+$">
-  </div>
-  <div class="form-group">
-    <div class="filter-radioLabels">
-      <label>
-        <input name="nc12Type" type="radio" value="program">
-        <%- helpers.t('filter:nc12Type:program') %>
-      </label><label>
-        <input name="nc12Type" type="radio" value="led">
-        <%- helpers.t('filter:nc12Type:led') %>
-      </label>
-    </div>
-    <input id="<%- idPrefix %>-nc12" class="form-control" name="nc12" type="text" autocomplete="new-password" maxlength="12">
+    <label for="<%- idPrefix %>-search"><%- helpers.t('filter:search') %></label>
+    <input id="<%- idPrefix %>-search" class="form-control" name="search" type="text">
   </div>
   <div class="form-group">
     <label><%- helpers.t('PROPERTY:result') %></label>
-    <div class="btn-group filter-btn-group xiconf-filter-result" data-toggle="buttons">
-      <label class="btn btn-success xiconf-filter-success">
-        <input type="checkbox" name="result[]" value="success"> <%- helpers.t('filter:result:success') %>
+    <div id="<%- idPrefix %>-result" class="btn-group filter-btn-group" data-toggle="buttons">
+      <label class="btn btn-default" style="color: #00af00; font-weight: bold; width: 75px">
+        <input type="checkbox" name="result[]" value="success">
+        <%- helpers.t('filter:result:success') %>
       </label>
-      <label class="btn btn-danger xiconf-filter-failure">
-        <input type="checkbox" name="result[]" value="failure"> <%- helpers.t('filter:result:failure') %>
+      <label class="btn btn-default" style="color: #E00; font-weight: bold; width: 75px">
+        <input type="checkbox" name="result[]" value="failure">
+        <%- helpers.t('filter:result:failure') %>
       </label>
     </div>
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('core', 'filter:submit') %></span></button>
   </div>
 </form>

@@ -17,15 +17,27 @@ define([
 
   router.map('/xiconf/results', canView, function(req)
   {
-    viewport.loadPage(['app/xiconf/pages/XiconfResultListPage', nls], function(XiconfResultListPage)
-    {
-      return new XiconfResultListPage({rql: req.rql});
+    viewport.loadPage([
+      'app/xiconf/XiconfResultCollection',
+      'app/xiconf/pages/XiconfResultListPage',
+      nls
+    ], function(
+      XiconfResultCollection,
+      XiconfResultListPage
+    ) {
+      return new XiconfResultListPage({
+        collection: new XiconfResultCollection(null, {rqlQuery: req.rql})
+      });
     });
   });
 
   router.map('/xiconf/results/:id', canView, function(req)
   {
-    viewport.loadPage(['app/xiconf/pages/XiconfResultDetailsPage', nls], function(XiconfResultDetailsPage)
+    viewport.loadPage([
+      'app/xiconf/pages/XiconfResultDetailsPage',
+      'i18n!app/nls/xiconfPrograms',
+      nls
+    ], function(XiconfResultDetailsPage)
     {
       return new XiconfResultDetailsPage({
         modelId: req.params.id,
@@ -36,7 +48,10 @@ define([
 
   router.map('/xiconf;settings', canManage, function(req)
   {
-    viewport.loadPage(['app/xiconf/pages/XiconfSettingsPage', nls], function(XiconfSettingsPage)
+    viewport.loadPage([
+      'app/xiconf/pages/XiconfSettingsPage',
+      nls
+    ], function(XiconfSettingsPage)
     {
       return new XiconfSettingsPage({
         initialTab: req.query.tab

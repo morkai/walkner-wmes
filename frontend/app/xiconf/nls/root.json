@@ -53,12 +53,9 @@
 
     "details:showOrderSummaryLink": "Show the order summary",
 
-    "filter:result:success": "Success",
-    "filter:result:failure": "Failure",
-    "filter:placeholder:srcId": "Any",
-    "filter:nc12Type:program": "Program 12NC",
-    "filter:nc12Type:led": "LED board 12NC",
-    "filter:submit": "Filter",
+    "filter:search": "Order/SN/12NC/Program",
+    "filter:result:success": "OK",
+    "filter:result:failure": "NOK",
 
     "step:wait": "Wait",
     "step:pe": "Protective earth test",
@@ -353,6 +350,9 @@
     "log:WEIGHT:SCANNING": "Waiting for the component code scan...",
     "log:WEIGHT:SCANNED": "Scanned: <code>{scanValue}</code>",
     "log:WEIGHT:CHECKING_COMPONENT": "Checking component <code>{nc12}</code>...",
+    "log:WEIGHT:SELECTING_COMPONENT": "Waiting for the selection of 1 of {count} components with 12NC <code>{nc12}</code>...",
+    "log:WEIGHT:COMPONENT_SELECTED:AUTO": "Selected component basing on the last result: <code>{description}</code>",
+    "log:WEIGHT:COMPONENT_SELECTED:MANUAL": "Selected component: <code>{description}</code>",
     "log:WEIGHT:WEIGHING": "Weighing component <code>{component}</code>. Required weight: <code>{weight}</code>g",
     "log:WEIGHT:WEIGHED": "Actual weight: <code>{weight}</code>g",
 
@@ -363,6 +363,7 @@
     "error:WEIGHT:SN_ALREADY_USED": "The component's serial number was already used.",
     "error:WEIGHT:BAD_RESPONSE": "Invalid response from the remote server.",
     "error:WEIGHT:TIMEOUT": "Waiting for the component weight timed out.",
+    "error:WEIGHT:NO_CONNECTION": "No connection to the scales.",
 
     "hidLamps:error:NO_CONNECTION": "No connection to<br>the remote server!",
     "hidLamps:error:TIMEOUT": "Response timeout!",

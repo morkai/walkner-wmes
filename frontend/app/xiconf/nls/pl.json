@@ -52,12 +52,9 @@
 
   "details:showOrderSummaryLink": "Pokaż podsumowanie zlecenia",
 
-  "filter:result:success": "Sukces",
-  "filter:result:failure": "Porażka",
-  "filter:placeholder:srcId": "Dowolne",
-  "filter:nc12Type:program": "12NC programu",
-  "filter:nc12Type:led": "12NC płytki LED",
-  "filter:submit": "Filtruj",
+  "filter:search": "Zlecenie/SN/12NC/Program",
+  "filter:result:success": "OK",
+  "filter:result:failure": "NOK",
 
   "step:wait": "Przerwa",
   "step:pe": "Test obwodu ochronnego",
@@ -360,6 +357,9 @@
   "log:WEIGHT:SCANNING": "Oczekiwanie na zeskanowanie kodu komponentu...",
   "log:WEIGHT:SCANNED": "Zeskanowano: <code>{scanValue}</code>",
   "log:WEIGHT:CHECKING_COMPONENT": "Sprawdzanie komponentu <code>{nc12}</code>...",
+  "log:WEIGHT:SELECTING_COMPONENT": "Oczekiwanie na wybranie 1 z {count} komponentów o 12NC <code>{nc12}</code>...",
+  "log:WEIGHT:COMPONENT_SELECTED:AUTO": "Wybrano komponent na podstawie ostatniego wyniku: <code>{description}</code>",
+  "log:WEIGHT:COMPONENT_SELECTED:MANUAL": "Wybrano komponent: <code>{description}</code>",
   "log:WEIGHT:WEIGHING": "Ważenie komponentu <code>{component}</code>. Oczekiwana waga: <code>{weight}</code>g",
   "log:WEIGHT:WEIGHED": "Rzeczywista waga: <code>{weight}</code>g",
 
@@ -370,6 +370,7 @@
   "error:WEIGHT:SN_ALREADY_USED": "Numer seryjny komponentu został już użyty.",
   "error:WEIGHT:BAD_RESPONSE": "Nieprawidłowa odpowiedź z serwera zewnętrznego.",
   "error:WEIGHT:TIMEOUT": "Upłynięcie limitu czasu oczekiwania na zważenie komponentu.",
+  "error:WEIGHT:NO_CONNECTION": "Brak połączenia z wagą.",
 
   "log:MRL:STARTED": "Rozpoczynanie testu...",
   "log:MRL:SUCCESS": "Pomyślnie ukończono test w ciągu <code>{duration}</code>.",

@@ -23,8 +23,6 @@ define([
       {id: 'srcId', className: 'is-min', tdClassName: 'text-mono'},
       {id: 'order', className: 'is-min', tdClassName: 'text-mono'},
       {id: 'serviceTag', className: 'is-min', tdClassName: 'text-mono'},
-      {id: 'nc12', className: 'is-min', tdClassName: 'text-mono'},
-      {id: 'quantity', className: 'is-min is-number'},
       {id: 'startedAt', className: 'is-min'},
       {id: 'duration', className: 'is-min'},
       {id: 'prodLine', className: 'is-min', tdClassName: 'text-mono'},
@@ -59,8 +57,6 @@ define([
         programName: program ? program.name : (model.get('programName') || ''),
         programSteps: program ? buildStepLabels(program.steps, model.get('steps')) : '',
         prodLine: model.get('prodLine'),
-        nc12: model.get('nc12'),
-        quantity: order ? order.quantity : '',
         startedAt: time.format(model.get('startedAt'), 'L, LTS'),
         duration: time.toString(model.get('duration') / 1000, false, true)
       };
