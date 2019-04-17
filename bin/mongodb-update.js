@@ -38,7 +38,11 @@ db.xiconfresults.find({}).forEach(r =>
   (r.leds || []).forEach(led =>
   {
     search[led.nc12] = 1;
-    search[led.serialNumber.toUpperCase()] = 1;
+
+    if (search[led.serialNumber])
+    {
+      search[led.serialNumber.toUpperCase()] = 1;
+    }
   });
 
   (r.hidLamps || []).forEach(hid =>
