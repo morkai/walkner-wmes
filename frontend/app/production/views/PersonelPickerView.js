@@ -321,7 +321,7 @@ define([
 
     buildFilteredPersonnelList: function()
     {
-      var filter = setUpUserSelect2.transliterate(this.$id('user').val());
+      var filter = setUpUserSelect2.transliterate(this.$id('user').val() || '');
       var users = this.lastUsers.filter(function(user) { return user.searchName.indexOf(filter) === 0; });
       var keys = {};
       var html = '';
