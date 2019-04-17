@@ -37,8 +37,7 @@ define([
 
     serializeRow: function(model)
     {
-      var order = model.get('order');
-      var orderNo = order ? order.no : model.get('orderNo');
+      var orderNo = model.get('orderNo');
       var program = model.get('program');
       var serviceTag = model.get('serviceTag');
       var className = ['xiconf-entry', model.get('result') === 'success' ? 'success' : 'danger'];
