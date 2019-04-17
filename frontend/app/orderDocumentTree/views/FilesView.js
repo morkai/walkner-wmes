@@ -703,7 +703,9 @@ define([
 
       req.fail(function()
       {
-        if (target !== view.model.getSelectedFile().id)
+        var selectedFile = view.model.getSelectedFile();
+
+        if (!selectedFile || target !== selectedFile.id)
         {
           return;
         }
@@ -724,7 +726,9 @@ define([
 
     toggleFileSub: function(target, subscription)
     {
-      if (target !== this.model.getSelectedFile().id)
+      var selectedFile = this.model.getSelectedFile();
+
+      if (!selectedFile || target !== selectedFile.id)
       {
         return;
       }
