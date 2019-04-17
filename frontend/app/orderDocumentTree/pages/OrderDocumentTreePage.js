@@ -198,7 +198,14 @@ define([
 
     resize: function()
     {
-      var top = Math.max(15, this.$els.filesContainer[0].offsetTop - window.scrollY);
+      var $filesContainer = this.$els.filesContainer;
+
+      if (!$filesContainer || !$filesContainer.length)
+      {
+        return;
+      }
+
+      var top = Math.max(15, $filesContainer[0].offsetTop - window.scrollY);
       var height = window.innerHeight - 17 - top;
 
       this.$els.uploadContainer
