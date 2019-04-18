@@ -155,9 +155,9 @@ function(
 
     if (_.isObject(this.timers))
     {
-      _.each(this.timers, clearTimeout);
+      _.forEach(this.timers, clearTimeout);
 
-      this.timers = null;
+      this.timers = {};
     }
 
     this.cancelRequests();
