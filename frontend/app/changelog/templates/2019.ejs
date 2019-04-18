@@ -1,4 +1,63 @@
 <div class="hidden">
+  <h1>v0.135.0</h1>
+  <h2><%- time.format('2019-04-14', 'LL') %></h2>
+  <h3>Baza testów > TRW</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalenie się serwera po usunięciu Testera, który nie ma zdefiniowanych żadnych
+      Programów.</li>
+    <li>Poprawiono błąd powodujący ustawienie ID linii jako numer wcześniej wybranego zlecenia po odświeżeniu
+      strony.</li>
+    <li>Dodano możliwość testowania bez wybrania istniejącego zlecenia.</li>
+    <li>Dodano możliwość dodawania nowego programu przez skopiowanie istniejącego.</li>
+  </ul>
+  <h3>Baza testów > SNF</h3>
+  <ul>
+    <li>Dodano nowy moduł.</li>
+  </ul>
+  <h3>Dane produkcyjne > Zlecenia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieodświeżanie się listy zleceń po zmianach, jeżeli do listy weszło się z modułu
+      Planowanie dzienne lub Magazyn.</li>
+    <li>Zmieniono obliczanie czasu pracy zlecenia tak, aby czas mniejszy niż 0s był zamieniany na 0s.</li>
+    <li>Zmieniono obliczanie czasu przestojów zlecenia tak, aby zlecenia z ujemnym czasem trwania były ignorowane.</li>
+  </ul>
+  <h3>Raporty > Wskaźniki</h3>
+  <ul>
+    <li>Zmieniono eksportowanie danych wydajności tak, aby zlecenia, których czas pracy nie jest większy od 0
+      były ignorowane.</li>
+    <li>Zmieniono obliczanie wydajności na wykresach tak, aby pod uwagę brane były te same wartości co podczas
+      eksportowania danych.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący niewyświetlanie się komunikatu z podziękowaniem po dodaniu nowego ZPW
+      oraz Usprawnienia.</li>
+  </ul>
+  <h3>Malarnia</h3>
+  <ul>
+    <li>Poprawiono błąd mogący zatrzymać zmianę list zleceń do zrobienia oraz zleceń rozpoczętych podczas zmiany
+      filtra MRP lub farby.</li>
+    <li>Poprawiono błąd zatrzymujący ładowanie zleceń po zmianie filtra daty, jeżeli wybrane było MRP, które
+      w nowym dniu nie ma żadnych zleceń.</li>
+  </ul>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Poprawiono błąd mogący spowodować brak zmiany wymagania pola 'Nr zlecenia' po zmianie 'Rodzaju inspekcji'
+      w starszych wersjach przeglądarki Chrome.</li>
+    <li>Poprawiono błąd uniemożliwiający przeglądanie szczegółów starych wyników inspekcji.</li>
+  </ul>
+  <h3>Przestoje</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieodświeżanie się danych na stronie ze szczegółami przestoju po dokonaniu
+      zmiany przestoju przez dowolnego użytkownika.</li>
+  </ul>
+  <h3>Inne</h3>
+  <ul>
+    <li>Poprawiono błąd mogący spowodować niekompletne załadowanie się strony z filtrowalną listą, jeżeli filtr
+      zawiera kontrolkę 'Moje MRP' w starszych wersjach przeglądarki Chrome.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.134.0</h1>
   <h2><%- time.format('2019-04-07', 'LL') %></h2>
   <h3>Obserwacje zachowań</h3>

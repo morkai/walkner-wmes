@@ -887,6 +887,14 @@ define([
         $uiLock.remove();
       });
 
+      $uiLock.on('touchstart', function(e)
+      {
+        if (!$(e.target).closest('.orderDocuments-uiLock-inner').length)
+        {
+          return false;
+        }
+      });
+
       $uiLock.appendTo('body');
 
       localStorage.setItem('WMES_DOCS_UI_LOCKED', '1');
