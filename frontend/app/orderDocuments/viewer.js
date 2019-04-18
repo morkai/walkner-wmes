@@ -64,6 +64,7 @@ var viewer = new Viewer(document.getElementById('images'), {
   initialViewIndex: parseInt(sessionStorage.getItem('PAGE_' + (NC15 || '')), 10) || 0,
   toolbar: {},
   toggleOnDblclick: false,
+  switchable: false,
   view: function(e)
   {
     document.getElementById('jumpForm').classList.add('hidden');

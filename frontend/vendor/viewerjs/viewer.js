@@ -81,6 +81,8 @@
      */
     scalable: true,
 
+    switchable: true,
+
     /**
      * Enable CSS3 Transition for some special elements.
      * @type {boolean}
@@ -2818,8 +2820,12 @@
       var imageData = this.imageData,
         viewerData = this.viewerData;
 
-
-      return this.length > 1 && imageData.left >= 0 && imageData.top >= 0 && imageData.width <= viewerData.width && imageData.height <= viewerData.height;
+      return this.options.switchable
+        && this.length > 1
+        && imageData.left >= 0
+        && imageData.top >= 0
+        && imageData.width <= viewerData.width
+        && imageData.height <= viewerData.height;
     }
   };
 
