@@ -59,7 +59,8 @@ $session.FindById("wnd[0]").sendVKey(0)
 $session.FindById("wnd[0]/usr/btnBUTTON_GROKO").Press()
 
 ; Read planist
-$planist = $session.FindById("wnd[0]/usr/tabsTABTC/tabpTB01/ssubINCLUDE7XX:SAPLM61K:0101/txtT024D-DSNAM").Text
+$planist1 = $session.FindById("wnd[0]/usr/tabsTABTC/tabpTB01/ssubINCLUDE7XX:SAPLM61K:0101/txtT024D-DSNAM").Text
+$planist2 = $session.FindById("wnd[0]/usr/tabsTABTC/tabpTB01/ssubINCLUDE7XX:SAPLM61K:0101/txtT024-EKNAM").Text
 
 ; Back to main screen
 $session.FindById("wnd[0]/tbar[0]/btn[15]").Press()
@@ -69,4 +70,5 @@ LogDebug("ENDING_TRANSACTION")
 
 CloseSession()
 
-LogDebug('planist="' & $planist & '"')
+LogDebug('planist1="' & $planist1 & '"')
+LogDebug('planist2="' & $planist2 & '"')
