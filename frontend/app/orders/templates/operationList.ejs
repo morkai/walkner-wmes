@@ -1,27 +1,27 @@
 <div class="panel panel-default orders-operations">
-  <div class="panel-heading"><%- helpers.t('PANEL:TITLE:operations') %></div>
+  <div class="panel-heading"><%- helpers.t('orders', 'PANEL:TITLE:operations') %></div>
   <% if (operations.length) { %>
   <div class="list">
     <div class="table-responsive">
       <table class="table table-condensed table-hover table-bordered">
         <thead>
         <tr>
-          <th class="is-min"><%- helpers.t('PROPERTY:operations.no') %>
-          <th class="is-min"><%- helpers.t('PROPERTY:operations.workCenter') %>
-          <th class="is-min"><%- helpers.t('PROPERTY:operations.name') %>
-            <% if (showQty) { %>
-          <th class="is-min"><%- helpers.t('PROPERTY:operations.qty') %>
-            <% if (showQtyMax) { %>
-          <th class="is-min"><%- helpers.t('PROPERTY:operations.qtyMax') %>
-            <% } %>
+          <th class="is-min"><%- helpers.t('orders', 'PROPERTY:operations.no') %>
+          <th class="is-min"><%- helpers.t('orders', 'PROPERTY:operations.workCenter') %>
+          <th class="is-min"><%- helpers.t('orders', 'PROPERTY:operations.name') %>
+          <% if (showQty) { %>
+          <th class="is-min"><%- helpers.t('orders', 'PROPERTY:operations.qty') %>
+          <% if (showQtyMax) { %>
+          <th class="is-min"><%- helpers.t('orders', 'PROPERTY:operations.qtyMax') %>
+          <% } %>
           <th class="is-min">
-            <% } %>
-            <% if (user.isAllowedTo('PROD_DATA:VIEW', 'ORDERS:VIEW')) { %>
-          <th class="is-min"><%- helpers.t('PROPERTY:operations.machineSetupTime') %>
-          <th class="is-min"><%- helpers.t('PROPERTY:operations.laborSetupTime') %>
-          <th class="is-min"><%- helpers.t('PROPERTY:operations.machineTime') %>
-          <th class="is-min"><%- helpers.t('PROPERTY:operations.laborTime') %>
-            <% } %>
+          <% } %>
+          <% if (user.isAllowedTo('PROD_DATA:VIEW', 'ORDERS:VIEW')) { %>
+          <th class="is-min"><%- helpers.t('orders', 'PROPERTY:operations.machineSetupTime') %>
+          <th class="is-min"><%- helpers.t('orders', 'PROPERTY:operations.laborSetupTime') %>
+          <th class="is-min"><%- helpers.t('orders', 'PROPERTY:operations.machineTime') %>
+          <th class="is-min"><%- helpers.t('orders', 'PROPERTY:operations.laborTime') %>
+          <% } %>
           <th>
         </tr>
         </thead>
@@ -31,7 +31,7 @@
             <td class="is-min is-number"><%= operation.no || '-' %>
             <td class="is-min"><%= operation.workCenter || '-' %>
             <td class="is-min"><%= operation.name || '-' %>
-              <% if (showQty) { %>
+            <% if (showQty) { %>
             <td class="is-min is-number">
               <% if (showQtyMax) { %>
                 <%- operation.qtyDone.toLocaleString() %>/<%- operation.qty.toLocaleString() %>
@@ -50,16 +50,16 @@
             <td class="is-min"><%= operation.unit %></td>
             <% } %>
             <% if (user.isAllowedTo('PROD_DATA:VIEW', 'ORDERS:VIEW')) { %>
-              <% timeProps.forEach(function(timeProp) { %>
+            <% timeProps.forEach(function(timeProp) { %>
             <td class="is-min is-number">
               <% if (operation.times.sap[timeProp] && operation.times.sap[timeProp] !== operation.times.actual[timeProp]) { %>
-                <span title="<%- helpers.t('details:opTimes:sap') %>"><%- operation.times.sap[timeProp] %></span> -> <span title="<%- helpers.t('details:opTimes:actual') %>">
-                <% } else { %>
-                <span title="<%- helpers.t('details:opTimes:sap') %>">
-                  <% } %>
-                  <%- operation.times.actual[timeProp] || '-' %></span><% if (operation.no === highlighted && operation.times.summed[timeProp] && operation.times.summed[timeProp] !== operation.times.actual[timeProp]) { %> <span title="<%- helpers.t('details:opTimes:summed') %>">(<%- operation.times.summed[timeProp] %>)</span><% } %>
-                <% }) %>
-                <% } %>
+                <span title="<%- helpers.t('orders', 'details:opTimes:sap') %>"><%- operation.times.sap[timeProp] %></span> -> <span title="<%- helpers.t('orders', 'details:opTimes:actual') %>">
+              <% } else { %>
+                <span title="<%- helpers.t('orders', 'details:opTimes:sap') %>">
+              <% } %>
+              <%- operation.times.actual[timeProp] || '-' %></span><% if (operation.no === highlighted && operation.times.summed[timeProp] && operation.times.summed[timeProp] !== operation.times.actual[timeProp]) { %> <span title="<%- helpers.t('orders', 'details:opTimes:summed') %>">(<%- operation.times.summed[timeProp] %>)</span><% } %>
+            <% }) %>
+            <% } %>
             <td>
           </tr>
         <% }) %>
@@ -69,7 +69,7 @@
   </div>
   <% } else { %>
   <div class="panel-body">
-    <%- helpers.t('OPERATIONS:NO_DATA') %>
+    <%- helpers.t('orders', 'OPERATIONS:NO_DATA') %>
   </div>
   <% } %>
 </div>
