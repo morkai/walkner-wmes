@@ -58,7 +58,7 @@ define([
       obj.time = time.format(obj.time, 'L, HH:mm:ss');
       obj.user = userInfoTemplate({userInfo: obj.user});
       obj.stack = obj.error.stack.map(parseStack);
-      obj.source = obj.stack[0].file;
+      obj.source = obj.stack.length ? obj.stack[0].file : '';
       obj.location = obj.browser.location.match(/[a-z0-9](\/.*?)$/)[1];
       obj.error = obj.error.message;
       obj.appId = obj.headers['x-wmes-app'];
