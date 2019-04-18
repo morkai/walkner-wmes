@@ -200,6 +200,12 @@ define([
     getOrgUnitFromChartsElement: function($charts)
     {
       var orgUnit = DrillingReportPage.prototype.getOrgUnitFromChartsElement.apply(this, arguments);
+
+      if (!orgUnit)
+      {
+        return null;
+      }
+
       var root = !$charts.prev().length;
 
       if (orgUnit.type === 'division')
