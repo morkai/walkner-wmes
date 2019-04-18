@@ -654,19 +654,11 @@ define([
         oldValue = this.get(prop);
       }
 
-      var change = {
-        date: new Date(),
-        user: user.getInfo(),
-        data: {},
-        comment: ''
-      };
-      var update = {};
+      var data = {};
 
-      change.data[prop] = [oldValue, newValue];
-      update[prop] = newValue;
+      data[prop] = [oldValue, newValue];
 
-      this.handleChange(change);
-      this.update(update);
+      this.multiChange(data, true);
     },
 
     multiChange: function(data, hasOldValues)
@@ -704,6 +696,22 @@ define([
         change.data[prop] = [oldValue, newValue];
         update[prop] = newValue;
       });
+
+      if (user.isLoggedIn() && !this.isObserver())
+      {
+        if (!change.data.subscribers)
+        {
+          change.data.subscribers = [null, []];
+        }
+
+        if (!change.data.subscribers[0])
+        {
+          change.data.subscribers[1].push({
+            id: user.data._id,
+            label: user.getLabel()
+          });
+        }
+      }
 
       entry.handleChange(change);
       entry.update(update);

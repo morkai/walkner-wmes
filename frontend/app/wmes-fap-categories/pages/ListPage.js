@@ -21,6 +21,7 @@ define([
       {id: 'name', className: 'is-min'},
       {id: 'active', className: 'is-min'},
       {id: 'etoCategory', className: 'is-min'},
+      {id: 'planners', className: 'is-min'},
       '-'
     ],
 

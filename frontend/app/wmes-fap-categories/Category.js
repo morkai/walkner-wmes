@@ -44,6 +44,7 @@ define([
       var etoCategory = categories && categories.get(obj.etoCategory);
 
       obj.active = t('core', 'BOOL:' + obj.active);
+      obj.planners = t('core', 'BOOL:' + obj.planners);
 
       obj.etoCategory = etoCategory
         ? etoCategory.getLabel()

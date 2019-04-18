@@ -9,6 +9,7 @@
   "PROPERTY:notifications.subdivisions": "Działy",
   "PROPERTY:notifications.prodFunctions": "Funkcje",
   "PROPERTY:etoCategory": "Kategoria ETO",
+  "PROPERTY:planners": "Planiści?",
 
   "FORM:notifications:add": "Dodaj nowe powiadomienie",
   "FORM:tester:label": "Tester powiadomień",
