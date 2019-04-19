@@ -96,6 +96,11 @@ define([
 
     getStatus: function()
     {
+      if (!this.collection.plan)
+      {
+        return 'unknown';
+      }
+
       var orderData = this.collection.plan.getActualOrderData(this.id);
 
       if (orderData.quantityDone > orderData.quantityTodo)
