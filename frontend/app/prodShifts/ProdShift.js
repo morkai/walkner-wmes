@@ -176,7 +176,17 @@ define([
       {
         d.master = renderUserInfo({userInfo: d.master});
         d.leader = renderUserInfo({userInfo: d.leader});
-        d.operator = renderUserInfo({userInfo: d.operator});
+
+        if (Array.isArray(d.operators) && d.operators.length)
+        {
+          d.operator = d.operators
+            .map(function(operator) { return renderUserInfo({userInfo: operator}); })
+            .join('; ');
+        }
+        else
+        {
+          d.operator = renderUserInfo({userInfo: d.operator});
+        }
       }
 
       if (options.totalQuantityDone)
@@ -459,9 +469,25 @@ define([
       this.changePersonnel('changeLeader', 'leader', userInfo);
     },
 
-    changeOperator: function(userInfo)
+    changeOperators: function(newOperators)
     {
-      this.changePersonnel('changeOperator', 'operator', userInfo);
+      var oldOperators = this.get('operators');
+
+      if (_.isEqual(newOperators, oldOperators))
+      {
+        return;
+      }
+
+      this.set({
+        operator: newOperators.length ? newOperators[0] : null,
+        operators: newOperators
+      });
+
+      this.onPersonnelChanged('operator');
+
+      prodLog.record(this, 'changeOperators', {
+        personnel: newOperators
+      });
     },
 
     changePersonnel: function(operation, personnelType, newUserInfo)
@@ -483,24 +509,25 @@ define([
 
     onPersonnelChanged: function(type)
     {
-      var personnelInfo = this.get(type);
+      var changes = {};
+
+      changes[type] = this.get(type);
+
+      if (type === 'operator')
+      {
+        changes.operators = this.get('operators');
+      }
 
       if (this.prodShiftOrder.id)
       {
-        this.prodShiftOrder.set(type, personnelInfo);
+        this.prodShiftOrder.set(changes);
       }
 
       var prodDowntime = this.prodDowntimes.findFirstUnfinished();
 
       if (prodDowntime)
       {
-        prodDowntime.set(type, personnelInfo);
-      }
-
-      if (type === 'operator' && this.getSubdivisionType() === 'assembly')
-      {
-        this.set('operators', personnelInfo ? [personnelInfo] : null);
-        this.onPersonnelChanged('operators');
+        prodDowntime.set(changes);
       }
     },
 

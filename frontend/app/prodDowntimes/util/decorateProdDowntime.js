@@ -134,7 +134,18 @@ define([
 
     obj.masterInfo = renderUserInfo({userInfo: obj.master});
     obj.leaderInfo = renderUserInfo({userInfo: obj.leader});
-    obj.operatorInfo = renderUserInfo({userInfo: obj.operator});
+
+    if (Array.isArray(obj.operators) && obj.operators.length)
+    {
+      obj.operatorInfo = obj.operators
+        .map(function(operator) { return renderUserInfo({userInfo: operator}); })
+        .join('; ');
+    }
+    else
+    {
+      obj.operatorInfo = renderUserInfo({userInfo: obj.operator});
+    }
+
     obj.creatorInfo = renderUserInfo({userInfo: obj.creator});
     obj.corroboratorInfo = renderUserInfo({userInfo: obj.corroborator});
 

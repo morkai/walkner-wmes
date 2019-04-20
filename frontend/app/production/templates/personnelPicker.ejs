@@ -1,17 +1,17 @@
-<form class="production-personelPicker">
+<form class="production-personnelPicker">
   <% if (offline) { %>
-  <p class="message message-inline message-warning"><%- t('production', 'personelPicker:offline:warning') %></p>
+  <p class="message message-inline message-warning"><%- t('production', 'personnelPicker:offline:warning') %></p>
   <% } %>
   <div class="form-group">
     <label for="<%- idPrefix %>-user"><%= label %></label>
     <input id="<%- idPrefix %>-user" class="form-control" type="text" autocomplete="new-password" data-vkb="<%- offline ? 'numeric' : 'alpha' %>">
   </div>
   <div id="<%- idPrefix %>-list" class="production-form-btn-group">
-    <label><%- t('production', 'personelPicker:recent') %></label>
+    <label><%- t('production', 'personnelPicker:recent') %></label>
     <div class="btn-group-vertical"><p><i class="fa fa-spinner fa-spin"></i></p></div>
   </div>
   <div class="form-actions">
-    <button type="submit" class="btn btn-lg btn-primary"><%- t('production', 'personelPicker:submit') %></button>
-    <button type="button" class="cancel btn btn-lg btn-link"><%- t('production', 'personelPicker:cancel') %></button>
+    <button type="submit" class="btn btn-lg btn-primary"><%- t('production', 'personnelPicker:submit') %></button>
+    <button type="button" class="cancel btn btn-lg btn-link"><%- t('production', 'personnelPicker:cancel') %></button>
   </div>
 </form>

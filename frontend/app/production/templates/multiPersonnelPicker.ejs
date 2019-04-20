@@ -1,0 +1,30 @@
+<form class="production-multiPersonnelPicker">
+  <div class="production-multiPersonnelPicker-picked">
+    <div class="production-form-btn-group">
+      <label><%- t('production', 'multiPersonnelPicker:picked') %></label>
+      <div id="<%- idPrefix %>-picked-list" class="btn-group-vertical"><p><%- t('production', 'multiPersonnelPicker:empty') %></p></div>
+    </div>
+    <div class="form-actions" style="display: flex">
+      <button id="<%- idPrefix %>-picked-submit" type="submit" class="btn btn-lg btn-primary"><%- t('production', 'multiPersonnelPicker:submit') %></button>
+      <button type="button" class="cancel btn btn-lg btn-link"><%- t('production', 'multiPersonnelPicker:cancel') %></button>
+      <button id="<%- idPrefix %>-picked-switch" type="button" class="btn btn-lg btn-default" style="margin-left: auto"><i class="fa fa-plus"></i></button>
+    </div>
+  </div>
+  <div class="production-multiPersonnelPicker-picker">
+    <% if (offline) { %>
+    <p class="message message-inline message-warning"><%- t('production', 'multiPersonnelPicker:offline:warning') %></p>
+    <% } %>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-picker-user"><%= label %></label>
+      <input id="<%- idPrefix %>-picker-user" class="form-control" type="text" autocomplete="new-password" data-vkb="<%- offline ? 'numeric' : 'alpha' %>">
+    </div>
+    <div id="<%- idPrefix %>-picker-list" class="production-form-btn-group">
+      <label><%- t('production', 'multiPersonnelPicker:recent') %></label>
+      <div class="btn-group-vertical"><p><i class="fa fa-spinner fa-spin"></i></p></div>
+    </div>
+    <div class="form-actions">
+      <button id="<%- idPrefix %>-picker-submit" type="button" class="btn btn-lg btn-default"><%- t('production', 'multiPersonnelPicker:pick') %></button>
+      <button id="<%- idPrefix %>-picker-switch" type="button" class="btn btn-lg btn-link"><%- t('production', 'multiPersonnelPicker:back') %></button>
+    </div>
+  </div>
+</form>

@@ -71,6 +71,16 @@ define([
         data.name = logData ? logData.label : '-';
         break;
 
+      case 'changeOperators':
+      {
+        data.names = (logData && logData.personnel.length ? logData.personnel : [])
+          .filter(function(op) { return !!op.label; })
+          .map(function(op) { return '<em>' + op.label + '</em>'; })
+          .join(', ');
+
+        break;
+      }
+
       case 'changeQuantitiesDone':
         data.hour = logData.hour + 1;
         data.value = logData.newValue;

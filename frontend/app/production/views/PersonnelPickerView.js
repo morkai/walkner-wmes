@@ -6,7 +6,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/users/util/setUpUserSelect2',
-  'app/production/templates/personelPicker'
+  'app/production/templates/personnelPicker'
 ], function(
   _,
   t,
@@ -119,7 +119,7 @@ define([
       return {
         idPrefix: this.idPrefix,
         offline: offline,
-        label: t('production', 'personelPicker:' + labelType + ':label')
+        label: t('production', 'personnelPicker:' + labelType + ':label')
       };
     },
 
@@ -206,10 +206,10 @@ define([
       else
       {
         label = 'recent';
-        list = this.recentHtml || ('<p>' + t('production', 'personelPicker:notFound') + '</p>');
+        list = this.recentHtml || ('<p>' + t('production', 'personnelPicker:notFound') + '</p>');
       }
 
-      $list.find('label').html(t('production', 'personelPicker:' + label));
+      $list.find('label').html(t('production', 'personnelPicker:' + label));
       $list.find('div').html(list);
       $list.removeClass('hidden');
     },
@@ -261,7 +261,7 @@ define([
 
         if ($spinner.length)
         {
-          $spinner.replaceWith(t('production', 'personelPicker:notFound'));
+          $spinner.replaceWith(t('production', 'personnelPicker:notFound'));
         }
       });
     },
@@ -272,7 +272,7 @@ define([
 
       if (phrase.length < 3)
       {
-        return '<p>' + t('production', 'personelPicker:tooShort') + '</p>';
+        return '<p>' + t('production', 'personnelPicker:tooShort') + '</p>';
       }
 
       var prefix = phrase.substring(0, 3);
@@ -369,7 +369,7 @@ define([
         this.options.vkb.disableKeys(keys);
       }
 
-      return html.length ? html : ('<p>' + t('production', 'personelPicker:notFound') + '</p>');
+      return html.length ? html : ('<p>' + t('production', 'personnelPicker:notFound') + '</p>');
     }
 
   });

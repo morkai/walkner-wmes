@@ -4,6 +4,7 @@
 @import "vkb.css";
 @import "modal.css";
 @import "execution.css";
+@import "multiPersonnelPicker.css";
 
 .is-production {
   overflow: auto;
@@ -367,6 +368,25 @@
   display: inline-block;
   min-width: 45px;
 }
+.production-form-btn-group-item {
+  display: flex;
+}
+.production-form-btn-group-item > .btn {
+  border-top: 0;
+  border-left: 0;
+}
+.production-form-btn-group-item:last-child > .btn {
+  border-bottom: 0;
+}
+.production-form-btn-group-item > .btn:first-child {
+  flex: 1 1 auto;
+  text-align: left;
+}
+.production-form-btn-group-item > .btn:last-child {
+  flex: 0;
+  margin-left: auto;
+  border-right: 0;
+}
 
 .production-action {
   height: 60px;
@@ -400,7 +420,8 @@
 }
 
 .is-embedded .modal-body .btn-lg {
-  padding: 16px 24px;
+  padding: 0 24px;
+  line-height: 57px;
 }
 .is-production .form-control.is-embedded {
   cursor: default;

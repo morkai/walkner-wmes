@@ -16,9 +16,10 @@
     "PROPERTY:instanceId": "Instance ID",
 
     "type:changeShift": "Shift start",
-    "type:changeMaster": "Master change",
+    "type:changeMaster": "Shift leader change",
     "type:changeLeader": "Leader change",
     "type:changeOperator": "Operator change",
+    "type:changeOperators": "Operators change",
     "type:changeQuantitiesDone": "Quantities done in an hour change",
     "type:changeOrder": "Order start",
     "type:changeQuantityDone": "Order's quantity done change",
@@ -46,9 +47,10 @@
 
     "data:changeShift": "Shift <em>{shift}</em> on <em>{date}</em>",
     "data:addShift": "Shift <em>{shift}</em> on <em>{date}</em>",
-    "data:changeMaster": "New master: <em>{name}</em>",
+    "data:changeMaster": "New shift leader: <em>{name}</em>",
     "data:changeLeader": "New leader: <em>{name}</em>",
     "data:changeOperator": "New operator: <em>{name}</em>",
+    "data:changeOperators": "New operators: {names}",
     "data:changeQuantitiesDone": "Quantity done in the <em>{hour}.</em> hour: <em>{value}</em>",
     "data:changeOrder": "Order: <em>{orderId}</em> (<em>{orderName}</em>); operation: <em>{operationNo}</em> (<em>{operationName}</em>)",
     "data:addOrder": "Order: <em>{orderId}</em> (<em>{orderName}</em>); operation: <em>{operationNo}</em> (<em>{operationName}</em>)",

@@ -7,7 +7,8 @@ define([
   'app/data/prodLog',
   'app/orgUnits/util/renderOrgUnitPath',
   'app/users/UserCollection',
-  './PersonelPickerView',
+  './PersonnelPickerView',
+  './MultiPersonnelPickerView',
   'app/production/templates/header'
 ], function(
   t,
@@ -16,7 +17,8 @@ define([
   prodLog,
   renderOrgUnitPath,
   UserCollection,
-  PersonelPickerView,
+  PersonnelPickerView,
+  MultiPersonnelPickerView,
   headerTemplate
 ) {
   'use strict';
@@ -148,7 +150,22 @@ define([
         {
           var matches = label.match(/^(.*?) \(.*?\)$/);
 
-          html = (matches === null ? label : matches[1].trim())
+          if (matches)
+          {
+            label = matches[1];
+          }
+
+          if (type === 'operator')
+          {
+            var operators = this.model.get('operators');
+
+            if (Array.isArray(operators) && operators.length > 1)
+            {
+              label += ' +' + (operators.length - 1);
+            }
+          }
+
+          html = label
             + ' <button class="btn btn-link">'
             + t('production', 'property:' + type + ':change')
             + '</button>';
@@ -212,7 +229,7 @@ define([
         return;
       }
 
-      this.showPickerDialog('operator', this.model.changeOperator.bind(this.model));
+      this.showMultiPickerDialog('operator', this.model.changeOperators.bind(this.model));
     },
 
     showPickerDialog: function(type, onUserPicked)
@@ -222,14 +239,14 @@ define([
         return;
       }
 
-      var personelPickerView = new PersonelPickerView({
+      var personnelPickerView = new PersonnelPickerView({
         type: type,
         embedded: this.options.embedded,
         vkb: this.options.vkb,
         model: this.model
       });
 
-      this.listenTo(personelPickerView, 'userPicked', function(userInfo)
+      this.listenTo(personnelPickerView, 'userPicked', function(userInfo)
       {
         viewport.closeDialog();
 
@@ -252,7 +269,33 @@ define([
         this.$('.production-property-' + type + ' .btn-link').focus();
       });
 
-      viewport.showDialog(personelPickerView, t('production', 'personelPicker:title:' + type));
+      viewport.showDialog(personnelPickerView, t('production', 'personnelPicker:title:' + type));
+    },
+
+    showMultiPickerDialog: function(type, onUsersPicked)
+    {
+      if (this.model.isLocked())
+      {
+        return;
+      }
+
+      var multiPersonnelPickerView = new MultiPersonnelPickerView({
+        type: type,
+        embedded: this.options.embedded,
+        vkb: this.options.vkb,
+        model: this.model
+      });
+
+      this.listenTo(multiPersonnelPickerView, 'usersPicked', function(personnel)
+      {
+        viewport.closeDialog();
+
+        onUsersPicked(personnel);
+
+        this.$('.production-property-' + type + ' .btn-link').focus();
+      });
+
+      viewport.showDialog(multiPersonnelPickerView, t('production', 'multiPersonnelPicker:title:' + type));
     },
 
     fillPersonnelData: function()
