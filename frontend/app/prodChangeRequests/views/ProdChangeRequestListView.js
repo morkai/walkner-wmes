@@ -60,7 +60,7 @@ define([
     fteMaster: FteMasterEntry,
     fteLeader: FteLeaderEntry
   };
-  var COMMON_PROPERTIES = ['date', 'shift', 'master', 'leader', 'operator'];
+  var COMMON_PROPERTIES = ['date', 'shift', 'master', 'leader', 'operator', 'operators'];
   var TYPE_TO_PROPERTIES = {
     shift: ['quantitiesDone'],
     order: ['orderId', 'operationNo', 'quantityDone', 'workerCount', 'startedAt', 'finishedAt'],
@@ -424,6 +424,12 @@ define([
         case 'leader':
         case 'operator':
           return renderUserInfo({userInfo: value});
+
+        case 'operators':
+          return !Array.isArray(value) || !value.length ? '-' : value.map(function(userInfo)
+          {
+            return renderUserInfo({userInfo: userInfo});
+          });
 
         case 'date':
           return time.format(value, 'LL');
