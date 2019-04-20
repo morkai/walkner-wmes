@@ -89,7 +89,7 @@ define([
 
       this.setUpUserSelect2('master');
       this.setUpUserSelect2('leader');
-      this.setUpUserSelect2('operator');
+      this.setUpUserSelect2('operators', true);
 
       if (!this.options.editMode && this.model.get('status') === 'undecided')
       {
@@ -100,13 +100,25 @@ define([
       this.$id('master').select2('focus');
     },
 
-    setUpUserSelect2: function(personnelProperty)
+    setUpUserSelect2: function(personnelProperty, multiple)
     {
-      var $user = setUpUserSelect2(this.$id(personnelProperty));
+      var $user = setUpUserSelect2(this.$id(personnelProperty), {
+        multiple: !!multiple
+      });
 
       var userInfo = this.model.get(personnelProperty);
 
-      if (userInfo && userInfo.id && userInfo.label)
+      if (Array.isArray(userInfo))
+      {
+        $user.select2('data', userInfo.map(function(u)
+        {
+          return {
+            id: u.id,
+            text: u.label
+          };
+        }));
+      }
+      else if (userInfo && userInfo.id && userInfo.label)
       {
         $user.select2('data', {
           id: userInfo.id,
@@ -188,8 +200,8 @@ define([
     {
       formData.master = this.serializeUserInfo('master');
       formData.leader = this.serializeUserInfo('leader');
-      formData.operator = this.serializeUserInfo('operator');
-      formData.operators = formData.operator ? [formData.operator] : [];
+      formData.operators = this.serializeUserInfo('operators');
+      formData.operator = formData.operators.length ? formData.operators[0] : null;
       formData.startedAt = time.getMoment(formData.startedAtDate + ' ' + formData.startedAtTime).toDate();
       formData.finishedAt = time.getMoment(formData.finishedAtDate + ' ' + formData.finishedAtTime).toDate();
       formData.reasonComment = _.isEmpty(formData.reasonComment) ? '' : formData.reasonComment;
@@ -206,6 +218,17 @@ define([
     serializeUserInfo: function(personnelProperty)
     {
       var userInfo = this.$id(personnelProperty).select2('data');
+
+      if (Array.isArray(userInfo))
+      {
+        return userInfo.map(function(u)
+        {
+          return {
+            id: u.id,
+            label: u.text
+          };
+        });
+      }
 
       if (userInfo === null)
       {
