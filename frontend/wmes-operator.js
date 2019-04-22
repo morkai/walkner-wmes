@@ -91,6 +91,8 @@
       return new BlankLayout();
     });
 
+    viewport.setDefaultLayout('blank');
+
     broker.subscribe('page.titleChanged', function(newTitle)
     {
       newTitle.unshift(i18n('core', 'TITLE'));

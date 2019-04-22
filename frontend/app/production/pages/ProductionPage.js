@@ -212,8 +212,6 @@ define([
 
     load: function(when)
     {
-      viewport.msg.loading();
-
       var page = this;
       var enableDeferred = $.Deferred(); // eslint-disable-line new-cap
       var loadDeferred = $.Deferred(); // eslint-disable-line new-cap
@@ -234,8 +232,6 @@ define([
 
       enableDeferred.always(function()
       {
-        viewport.msg.loaded();
-
         if (enableDeferred.state() === 'rejected')
         {
           page.enableProdLog = false;

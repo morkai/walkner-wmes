@@ -15,8 +15,6 @@ define([
 
   return View.extend({
 
-    layoutName: 'page',
-
     pageId: 'error',
 
     events: {

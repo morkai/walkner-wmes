@@ -38,6 +38,8 @@ define([
 
     this.currentLayoutName = null;
 
+    this.defaultLayoutName = null;
+
     this.currentPage = null;
 
     this.$dialog = null;
@@ -104,6 +106,13 @@ define([
     this.$dialog.on('hidden.bs.modal', this.onDialogHidden.bind(this));
   };
 
+  Viewport.prototype.setDefaultLayout = function(name)
+  {
+    this.defaultLayoutName = name;
+
+    return this;
+  };
+
   Viewport.prototype.registerLayout = function(name, layoutFactory)
   {
     this.layouts[name] = layoutFactory;
@@ -154,18 +163,26 @@ define([
 
   Viewport.prototype.showPage = function(page)
   {
-    var layoutName = _.result(page, 'layoutName');
+    var viewport = this;
+    var layoutName = viewport.defaultLayoutName;
 
-    if (!_.isObject(this.layouts[layoutName]))
+    if (typeof page.layoutName === 'string')
     {
-      throw new Error('Unknown layout: `' + layoutName + '`');
+      layoutName = page.layoutName;
+    }
+    else if (typeof page.layoutName === 'function')
+    {
+      layoutName = page.layoutName(viewport);
     }
 
-    ++this.pageCounter;
+    if (!_.isObject(viewport.layouts[layoutName]))
+    {
+      throw new Error('Unknown layout: ' + layoutName);
+    }
 
-    var viewport = this;
+    ++viewport.pageCounter;
 
-    this.broker.publish('viewport.page.loading', {page: page});
+    viewport.broker.publish('viewport.page.loading', {page: page});
 
     if (_.isFunction(page.load))
     {
