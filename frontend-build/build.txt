@@ -562,11 +562,16 @@ app/production/assets/bomChecker.css
 app/production/assets/vkb.css
 app/production/assets/modal.css
 app/production/assets/execution.css
+app/production/assets/multiPersonnelPicker.css
 app/production/assets/main.css
 
 app/production/assets/modal.css
 ----------------
 app/production/assets/modal.css
+
+app/production/assets/multiPersonnelPicker.css
+----------------
+app/production/assets/multiPersonnelPicker.css
 
 app/production/assets/settings.css
 ----------------
@@ -2378,8 +2383,10 @@ app/production/views/UnlockDialogView.js
 app/production/views/LockDialogView.js
 app/production/templates/controls.js
 app/production/views/ProductionControlsView.js
-app/production/templates/personelPicker.js
-app/production/views/PersonelPickerView.js
+app/production/templates/personnelPicker.js
+app/production/views/PersonnelPickerView.js
+app/production/templates/multiPersonnelPicker.js
+app/production/views/MultiPersonnelPickerView.js
 app/production/templates/header.js
 app/production/views/ProductionHeaderView.js
 app/production/util/orderPickerHelpers.js
