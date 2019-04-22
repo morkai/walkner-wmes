@@ -80,7 +80,7 @@
 }
 .form-group-datetime > input[type="time"],
 .form-group-datetime > input[type="text"] {
-  width: 110px;
+  width: 120px;
 }
 .form-group-datetime > label {
   margin: 0 4px;
