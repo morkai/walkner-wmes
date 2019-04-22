@@ -186,6 +186,12 @@ define([
         content: function()
         {
           var whOrder = view.whOrders.get($(this).closest('.wh-list-item')[0].dataset.id);
+
+          if (!whOrder)
+          {
+            return '?';
+          }
+
           var templateData = {
             user: null,
             status: null,
