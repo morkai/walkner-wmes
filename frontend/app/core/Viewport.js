@@ -115,6 +115,11 @@ define([
 
   Viewport.prototype.registerLayout = function(name, layoutFactory)
   {
+    if (!this.defaultLayoutName)
+    {
+      this.defaultLayoutName = name;
+    }
+
     this.layouts[name] = layoutFactory;
 
     return this;
