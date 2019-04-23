@@ -28,6 +28,11 @@ define([
 
     afterRender: function()
     {
+      if (window.ENV === 'development')
+      {
+        return;
+      }
+
       var location = window.location;
 
       if (location.protocol === 'http:')
