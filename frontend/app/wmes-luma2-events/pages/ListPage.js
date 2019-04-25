@@ -29,9 +29,16 @@ define([
       return [
         pageActions.export(layout, this, collection, false),
         {
+          icon: 'genderless',
           label: this.t('PAGE_ACTION:lines'),
           privileges: 'LUMA2:MANAGE',
           href: '#luma2/lines'
+        },
+        {
+          icon: 'cogs',
+          label: this.t('PAGE_ACTION:settings'),
+          privileges: 'LUMA2:MANAGE',
+          href: '#luma2/settings'
         }
       ];
     },

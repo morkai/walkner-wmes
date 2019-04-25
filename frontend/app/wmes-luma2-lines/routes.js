@@ -110,4 +110,14 @@ define([
   router.map('/luma2/lines/:id;delete', canManage, _.partial(showDeleteFormPage, model, _, _, {
     baseBreadcrumb: baseBreadcrumb
   }));
+
+  router.map('/luma2/settings', canManage, function(req)
+  {
+    viewport.loadPage(['app/wmes-luma2-lines/pages/SettingsPage', nls], function(SettingsPage)
+    {
+      return new SettingsPage({
+        initialTab: req.query.tab
+      });
+    });
+  });
 });

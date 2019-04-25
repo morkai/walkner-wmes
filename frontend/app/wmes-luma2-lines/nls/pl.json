@@ -1,10 +1,16 @@
 {
   "BREADCRUMBS:base": "Luma gen. 2",
   "BREADCRUMBS:browse": "Linie",
+  "BREADCRUMBS:settings": "Ustawienia",
 
   "PROPERTY:_id": "ID",
   "PROPERTY:active": "Aktywna?",
   "PROPERTY:host": "Adres",
   "PROPERTY:port": "Port",
-  "PROPERTY:unit": "MODBUS ID"
+  "PROPERTY:unit": "MODBUS ID",
+
+  "settings:tab:general": "Ogólne",
+  "settings:general:rearmShortTime": "Czas trwania krótkiego przezbrojenia",
+  "settings:general:rearmMediumTime": "Czas trwania średniego przezbrojenia",
+  "settings:general:inspectionTime": "Czas trwania kontroli pierwszej sztuki"
 }
