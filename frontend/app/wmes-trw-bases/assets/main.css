@@ -1,0 +1,136 @@
+.trw-base-canvas-outer {
+  padding: 0;
+  overflow: scroll;
+  border: 1px solid #ddd;
+}
+.trw-base-canvas-inner {
+  position: relative;
+  width: 1980px;
+  height: 906px;
+  user-select: none;
+}
+.trw-base-cluster {
+  position: absolute;
+}
+.trw-base-cluster.jtk-dragged {
+  z-index: 1;
+}
+.trw-base-cluster-label {
+  position: absolute;
+  bottom: -45px;
+  left: 50%;
+  margin-left: -100px;
+  width: 200px;
+  font-size: 35px;
+  font-weight: bold;
+  text-align: center;
+}
+.trw-base-cluster-label[data-position="top"] {
+  top: -45px;
+  bottom: unset;
+}
+.trw-base-cluster-label[data-position="left"] {
+  top: 50%;
+  left: -205px;
+  bottom: unset;
+  margin-left: 0;
+  margin-top: -35px;
+  width: 200px;
+  height: 70px;
+  text-align: right;
+  line-height: 70px;
+}
+.trw-base-cluster-label[data-position="right"] {
+  top: 50%;
+  left: unset;
+  right: -205px;
+  bottom: unset;
+  margin-left: 0;
+  margin-top: -35px;
+  width: 200px;
+  height: 70px;
+  text-align: left;
+  line-height: 70px;
+}
+.trw-base-rows {
+
+}
+.trw-base-row {
+  display: flex;
+}
+.trw-base-cell {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  border-top: 1px solid #000;
+  border-left: 1px solid #000;
+  box-shadow: inset 0 0 10px #ddd;
+}
+.trw-base-cell:last-child {
+  border-right: 1px solid #000;
+}
+.trw-base-row:last-child .trw-base-cell {
+  border-bottom: 1px solid #000;
+}
+.trw-base-cell-label {
+  text-align: center;
+  line-height: 70px;
+  font-family: monospace;
+  font-size: 28px;
+  font-weight: bold;
+}
+.trw-base-cell {
+  background-color: #fff;
+  color: #333;
+}
+form .trw-base-cell.is-without-io {
+  background-color: #e00;
+  color: #fff;
+}
+form .trw-base-cell:hover,
+form .trw-base-cell.is-without-io:hover {
+  background-color: #ffffa6;
+  color: #333;
+}
+.jtk-dragged .trw-base-cell:hover {
+  background-color: #fff;
+  color: #333;
+}
+.jtk-dragged .trw-base-cell.is-without-io:hover {
+  background-color: #e00;
+  color: #fff;
+}
+.trw-base-endpoint {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #000;
+  border-radius: 10px;
+}
+.trw-base-endpoint[data-position="top"] {
+  top: -10px;
+  left: 50%;
+  margin-left: -10px;
+}
+.trw-base-endpoint[data-position="bottom"] {
+  bottom: -10px;
+  left: 50%;
+  margin-left: -10px;
+}
+.trw-base-endpoint[data-position="left"] {
+  top: 50%;
+  left: -10px;
+  margin-top: -10px;
+}
+.trw-base-endpoint[data-position="right"] {
+  top: 50%;
+  right: -10px;
+  margin-top: -10px;
+}
+.trw-base-spacer {
+  width: 70px;
+  height: 20px;
+}
+.trw-base-row + .trw-base-spacer {
+  border-top: 1px solid #000;
+}

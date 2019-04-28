@@ -160,6 +160,7 @@
   "NAVBAR:trw": "TRW",
   "NAVBAR:trw:results": "Wyniki",
   "NAVBAR:trw:testers": "Testery",
+  "NAVBAR:trw:bases": "Podstawki",
   "NAVBAR:trw:programs": "Programy",
   "NAVBAR:DOCUMENTS": "Dokumentacja",
   "NAVBAR:DOCUMENTS:TREE": "Dokumenty",
@@ -363,9 +364,6 @@
   "dataTables:loadingRecords": "Ładowanie danych...",
   "dataTables:loadingFailed": "Ładowanie danych nie powiodło się.",
 
-  "feedback:button:text": "Feedback",
-  "feedback:button:tooltip": "Zgłoś błędy, uwagi, opinie lub pomysły!",
-
   "colorPicker:label": "Kolor",
 
   "filter:date": "Data",
@@ -460,5 +458,7 @@
   "notifications:request:message": "Kliknij tutaj, aby włączyć powiadomienia w przeglądarce.",
 
   "lang:pl": "Polski (pl)",
-  "lang:en": "Angielski (en)"
+  "lang:en": "Angielski (en)",
+
+  "labelCopySuffix": "{label} (kopia)"
 }

@@ -284,6 +284,11 @@ function(
 
   View.prototype.getDefaultNlsDomain = function()
   {
+    if (this.nlsDomain)
+    {
+      return this.nlsDomain;
+    }
+
     var model = this.getDefaultModel();
 
     return model.getNlsDomain ? model.getNlsDomain() : (model.nlsDomain || 'core');

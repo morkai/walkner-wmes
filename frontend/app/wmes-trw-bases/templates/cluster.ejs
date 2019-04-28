@@ -1,0 +1,23 @@
+<div class="trw-base-cluster" data-id="<%- cluster._id %>" style="top: <%- cluster.top %>px; left: <%- cluster.left %>px">
+  <div class="trw-base-rows">
+    <% cluster.rows.forEach(function(row, rowI) { %>
+    <% if (row.length === 0) { %>
+    <div class="trw-base-spacer"></div>
+    <% } else { %>
+    <div class="trw-base-row">
+      <% row.forEach(function(io, colI) { %>
+      <div class="trw-base-cell <%- io.io.length ? 'is-with-io' : 'is-without-io' %>" data-row="<%- rowI %>" data-col="<%- colI %>">
+        <div class="trw-base-cell-label"><%- io.label %></div>
+        <% io.endpoints.forEach(function(endpoint) { %>
+        <div class="trw-base-endpoint" data-position="<%- endpoint %>"></div>
+        <% }) %>
+      </div>
+      <% }) %>
+    </div>
+    <% } %>
+    <% }) %>
+  </div>
+  <div class="trw-base-cluster-label" data-position="<%- cluster.label.position %>">
+    <%- cluster.label.text %>
+  </div>
+</div>

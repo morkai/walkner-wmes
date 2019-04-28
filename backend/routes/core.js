@@ -4,7 +4,7 @@
 
 const _ = require('lodash');
 
-module.exports = function startCoreRoutes(app, express)
+module.exports = (app, express) =>
 {
   const updaterModule = app[app.options.updaterId || 'updater'];
   const userModule = app[app.options.userId || 'user'];

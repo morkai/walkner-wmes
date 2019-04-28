@@ -5,12 +5,14 @@ define([
   '../broker',
   '../pubsub',
   '../wmes-trw-testers/TesterCollection',
+  '../wmes-trw-bases/BaseCollection',
   '../wmes-trw-programs/ProgramCollection'
 ], function(
   $,
   broker,
   pubsub,
   TesterCollection,
+  BaseCollection,
   ProgramCollection
 ) {
   'use strict';
@@ -18,6 +20,7 @@ define([
   var TOPIC_PREFIX = 'trw.';
   var PROP_TO_DICT = {
     tester: 'testers',
+    bases: 'bases',
     program: 'programs'
   };
 
@@ -26,6 +29,7 @@ define([
   var pubsubSandbox = null;
   var dictionaries = {
     testers: new TesterCollection(),
+    bases: new BaseCollection(),
     programs: new ProgramCollection(),
     loaded: false,
     load: function()

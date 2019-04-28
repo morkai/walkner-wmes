@@ -1,0 +1,43 @@
+{
+  "BREADCRUMBS:base": "TRW",
+  "BREADCRUMBS:browse": "Podstawki",
+
+  "PAGE_ACTION:copy": "Kopiuj",
+
+  "PROPERTY:_id": "ID",
+  "PROPERTY:name": "Nazwa",
+  "PROPERTY:tester": "Tester",
+
+  "FORM:ERROR:testerLoadingFailure": "Ładowanie testera nie powiodło się.",
+
+  "menu:addCluster": "Dodaj grupę I/O",
+  "menu:editCluster": "Edytuj grupę I/O",
+  "menu:deleteCluster": "Usuń grupę I/O",
+  "menu:editIo": "Edytuj I/O",
+  "menu:alignH": "Wyśrodkuj poziomo",
+  "menu:alignV": "Wyśrodkuj pionowo",
+
+  "clusterForm:title": "Grupa I/O",
+  "clusterForm:submit": "Zapisz grupę I/O",
+  "clusterForm:id": "ID grupy",
+  "clusterForm:label:text": "Tekst etykiety",
+  "clusterForm:label:position": "Pozycja etykiety",
+  "clusterForm:position:top": "Na górze",
+  "clusterForm:position:bottom": "Na dole",
+  "clusterForm:position:left": "Z lewej",
+  "clusterForm:position:right": "Z prawej",
+  "clusterForm:top": "Pozycja Y",
+  "clusterForm:left": "Pozycja X",
+  "clusterForm:rows": "Ilość rzędów",
+  "clusterForm:cols": "Ilość kolumn",
+
+  "clusterCellForm:title": "I/O",
+  "clusterCellForm:submit": "Zapisz I/O",
+  "clusterCellForm:label": "Etykieta",
+  "clusterCellForm:ios": "I/O",
+  "clusterCellForm:endpoints": "Połączenia",
+  "clusterCellForm:endpoints:top": "Na górze",
+  "clusterCellForm:endpoints:bottom": "Na dole",
+  "clusterCellForm:endpoints:left": "Z lewej",
+  "clusterCellForm:endpoints:right": "Z prawej"
+}

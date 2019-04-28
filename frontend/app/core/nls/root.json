@@ -153,6 +153,7 @@
     "NAVBAR:trw": "TRW",
     "NAVBAR:trw:results": "Results",
     "NAVBAR:trw:testers": "Testers",
+    "NAVBAR:trw:bases": "Bases",
     "NAVBAR:trw:programs": "Programs",
     "NAVBAR:DOCUMENTS": "Documentation",
     "NAVBAR:DOCUMENTS:TREE": "Documents",
@@ -449,7 +450,9 @@
     "PANEL:TITLE:editForm": "Edit form",
 
     "lang:pl": "Polish (pl)",
-    "lang:en": "English (en)"
+    "lang:en": "English (en)",
+
+    "labelCopySuffix": "{label} (copy)"
   },
   "pl": true
 }

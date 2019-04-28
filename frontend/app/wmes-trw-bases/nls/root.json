@@ -1,0 +1,19 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "TRW",
+    "BREADCRUMBS:browse": "Bases",
+
+    "PROPERTY:_id": "ID",
+    "PROPERTY:name": "Name",
+    "PROPERTY:io": "I/O",
+    "PROPERTY:io._id": "ID",
+    "PROPERTY:io.name": "Name",
+    "PROPERTY:io.type": "Type",
+    "PROPERTY:io.device": "Device no",
+    "PROPERTY:io.channel": "Channel no",
+
+    "ioType:input": "Input",
+    "ioType:output": "Output"
+  },
+  "pl": true
+}

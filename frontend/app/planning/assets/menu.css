@@ -30,6 +30,10 @@
   min-width: 14px;
   font-size: 14px;
   text-align: center;
+  vertical-align: middle;
+}
+.planning-menu > li > a > .fa + span {
+  vertical-align: middle;
 }
 .planning-menu-disabled {
   cursor: default!important;

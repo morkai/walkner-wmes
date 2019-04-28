@@ -1,0 +1,22 @@
+<form method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
+        <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100" autofocus>
+      </div>
+      <div class="form-group has-required-select2">
+        <label for="<%- idPrefix %>-tester" class="control-label is-required"><%- helpers.t('PROPERTY:tester') %></label>
+        <input id="<%- idPrefix %>-tester" type="text" autocomplete="new-password" name="tester" required>
+      </div>
+      <div class="trw-base-canvas-outer">
+        <div id="<%- idPrefix %>-canvas" class="trw-base-canvas-inner"></div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

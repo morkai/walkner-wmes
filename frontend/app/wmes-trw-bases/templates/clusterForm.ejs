@@ -1,0 +1,46 @@
+<form>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-id" class="control-label is-required"><%- helpers.t('clusterForm:id') %></label>
+    <input id="<%- idPrefix %>-id" name="_id" class="form-control" type="text" autocomplete="new-password" required maxlength="30" style="width: 8em">
+  </div>
+  <div style="display: flex">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-label-text" class="control-label"><%- helpers.t('clusterForm:label:text') %></label>
+      <input id="<%- idPrefix %>-label-text" name="label.text" class="form-control" type="text" autocomplete="new-password" maxlength="3" style="width: 8em">
+    </div>
+    <div class="form-group" style="margin-left: 15px">
+      <label class="control-label"><%- helpers.t('clusterForm:label:position') %></label>
+      <br>
+      <% ['top', 'bottom', 'left', 'right'].forEach(function(position) { %>
+      <label class="radio-inline">
+        <input name="label.position" type="radio" value="<%- position %>">
+        <%- helpers.t('clusterForm:position:' + position) %>
+      </label>
+      <% }) %>
+    </div>
+  </div>
+  <div style="display: flex">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-left" class="control-label"><%- helpers.t('clusterForm:left') %></label>
+      <input id="<%- idPrefix %>-left" name="left" class="form-control small" type="number" min="0">
+    </div>
+    <div class="form-group" style="margin-left: 15px">
+      <label for="<%- idPrefix %>-top" class="control-label"><%- helpers.t('clusterForm:top') %></label>
+      <input id="<%- idPrefix %>-top" name="top" class="form-control small" type="number" min="0">
+    </div>
+  </div>
+  <div style="display: flex">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-rows" class="control-label"><%- helpers.t('clusterForm:rows') %></label>
+      <input id="<%- idPrefix %>-rows" name="rows" class="form-control small" type="number" min="1" max="10">
+    </div>
+    <div class="form-group" style="margin-left: 15px">
+      <label for="<%- idPrefix %>-cols" class="control-label"><%- helpers.t('clusterForm:cols') %></label>
+      <input id="<%- idPrefix %>-cols" name="cols" class="form-control small" type="number" min="1" max="10">
+    </div>
+  </div>
+  <div class="form-actions" style="margin-top: 0">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary"><%- helpers.t('clusterForm:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

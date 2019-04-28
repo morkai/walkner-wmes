@@ -1,0 +1,24 @@
+<form>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-label" class="control-label"><%- helpers.t('clusterCellForm:label') %></label>
+    <input id="<%- idPrefix %>-label" name="label" class="form-control" type="text" autocomplete="new-password" maxlength="1" style="width: 8em">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-io" class="control-label"><%- helpers.t('clusterCellForm:ios') %></label>
+    <input id="<%- idPrefix %>-io" name="io" type="text" autocomplete="new-password">
+  </div>
+  <div class="form-group">
+    <label class="control-label"><%- helpers.t('clusterCellForm:endpoints') %></label>
+    <br>
+    <% ['top', 'bottom', 'left', 'right'].forEach(function(endpoint) { %>
+      <label class="checkbox-inline">
+        <input name="endpoints[]" type="checkbox" value="<%- endpoint %>">
+        <%- helpers.t('clusterCellForm:endpoints:' + endpoint) %>
+      </label>
+    <% }) %>
+  </div>
+  <div class="form-actions" style="margin-top: 0">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary"><%- helpers.t('clusterCellForm:submit') %></button>
+    <button type="button" class="cancel btn btn-link"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

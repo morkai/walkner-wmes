@@ -1,0 +1,15 @@
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitle %></div>
+    <div class="panel-details">
+      <%- helpers.props(model, ['name', 'tester']) %>
+    </div>
+  </div>
+  <div class="panel-body trw-base-canvas-outer">
+    <div id="<%- idPrefix %>-canvas" class="trw-base-canvas-inner">
+      <% model.clusters.forEach(function(cluster) { %>
+      <% include cluster.ejs %>
+      <% }) %>
+    </div>
+  </div>
+</div>

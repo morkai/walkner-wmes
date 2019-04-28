@@ -100,6 +100,7 @@ define([
   './wmes-luma2-lines/routes',
   './wmes-trw-testers/routes',
   './wmes-trw-programs/routes',
+  './wmes-trw-bases/routes',
   './wmes-trw-tests/routes',
   './wmes-snf-programs/routes',
   './wmes-snf-tests/routes'
