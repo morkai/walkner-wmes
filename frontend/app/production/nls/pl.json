@@ -266,6 +266,7 @@
   "spigotChecker:nc12:placeholder": "Zeskanuj kod kreskowy komponentu...",
   "spigotChecker:nc12:invalid": "Nieprawidłowe 12NC komponentu!",
   "spigotChecker:submit": "Sprawdź komponent",
+  "spigotChecker:endWork": "Zakończ zlecenie",
   "spigotChecker:success": "Zeskanowano prawidłowy komponent.",
 
   "autoDowntimes:remainingTime": "rozpocznie się za {time}",

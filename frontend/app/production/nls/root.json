@@ -267,6 +267,7 @@
     "spigotChecker:nc12:placeholder": "Scan the component's bar code...",
     "spigotChecker:nc12:invalid": "Invalid component 12NC!",
     "spigotChecker:submit": "Check component",
+    "spigotChecker:endWork": "Close order",
     "spigotChecker:success": "The scanned component is valid.",
 
     "autoDowntimes:remainingTime": "starts in {time}",

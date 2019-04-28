@@ -7,7 +7,8 @@
     <label for="<%- idPrefix %>-nc12"><%- t('production', 'spigotChecker:nc12:label') %></label>
     <input id="<%- idPrefix %>-nc12" class="form-control production-spigot-nc12 <%- embedded ? 'is-embedded' : '' %>" type="text" autocomplete="new-password" placeholder="<%- t('production', 'spigotChecker:nc12:placeholder') %>">
   </div>
-  <div class="form-actions">
+  <div class="form-actions" style="display: flex">
     <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-lg btn-primary"><%- t('production', 'spigotChecker:submit') %></button>
+    <button id="<%- idPrefix %>-endWork" type="button" class="btn btn-lg btn-warning" style="margin-left: auto"><%- t('production', 'spigotChecker:endWork') %></button>
   </div>
 </form>

@@ -39,13 +39,18 @@ define([
           viewport.msg.show({
             type: 'success',
             time: 3000,
-            text: t('production', t('production', 'spigotChecker:success'))
+            text: t('production', 'spigotChecker:success')
           });
 
           this.closeDialog();
         }
 
         return false;
+      },
+      'click #-endWork': function()
+      {
+        this.model.endWork();
+        this.closeDialog();
       }
     },
 
@@ -63,10 +68,9 @@ define([
       $(window).off('.' + this.idPrefix);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         component: this.options.component,
         embedded: this.options.embedded
       };
