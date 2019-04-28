@@ -142,6 +142,7 @@ define([
       {
         return new QiResultAddFormPage({
           model: new QiResult({
+            source: localStorage.getItem('WMES_QI_SOURCE') || 'prod',
             ok: req.queryString === 'ok',
             inspector: {
               id: user.data._id,

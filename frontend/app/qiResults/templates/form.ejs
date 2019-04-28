@@ -4,26 +4,43 @@
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body <%- !editMode && model.ok ? 'has-lastElementRow' : '' %>">
       <div class="form-group">
-        <div id="<%- idPrefix %>-result" class="btn-group" data-toggle="buttons">
-          <label class="btn btn-default qiResults-filter-ok"><input id="<%- idPrefix %>-ok" type="radio" name="ok" value="true"> OK</label>
-          <label class="btn btn-default qiResults-filter-nok"><input id="<%- idPrefix %>-nok" type="radio" name="ok" value="false"> NOK</label>
+        <div id="<%- idPrefix %>-source" class="btn-group" data-toggle="buttons">
+          <% ['prod', 'wh'].forEach(function(source) { %>
+          <label class="btn btn-default" style="min-width: 100px">
+            <input id="<%- idPrefix %>-source" type="radio" name="source" value="<%- source %>">
+            <%- helpers.t('source:' + source) %>
+          </label>
+          <% }) %>
+        </div>
+        <div id="<%- idPrefix %>-result" class="btn-group" data-toggle="buttons" style="margin-left: 30px">
+          <label class="btn btn-default qiResults-filter-ok" style="min-width: 90px">
+            <input id="<%- idPrefix %>-ok" type="radio" name="ok" value="true">
+            <%- helpers.t('ok:true') %>
+          </label>
+          <label class="btn btn-default qiResults-filter-nok" style="min-width: 90px">
+            <input id="<%- idPrefix %>-nok" type="radio" name="ok" value="false">
+            <%- helpers.t('ok:false') %>
+          </label>
         </div>
       </div>
       <div id="<%- idPrefix %>-orderGroup" class="row">
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-2 form-group" data-source="prod">
           <label for="<%- idPrefix %>-orderNo" class="control-label is-required"><%- helpers.t('PROPERTY:orderNo') %></label>
           <input id="<%- idPrefix %>-orderNo" name="orderNo" class="form-control no-controls" type="number" required min="100000000" max="999999999" data-role="inspector">
         </div>
         <div class="col-lg-2 form-group">
-          <label for="<%- idPrefix %>-nc12" class="control-label"><%- helpers.t('PROPERTY:nc12') %></label>
+          <label for="<%- idPrefix %>-nc12" class="control-label"><span data-source="prod"><%- helpers.t('PROPERTY:nc12:prod') %></span><span data-source="wh"><%- helpers.t('PROPERTY:nc12:wh') %></span></label>
           <input id="<%- idPrefix %>-nc12" name="nc12" class="form-control" type="text" autocomplete="new-password" required readonly>
         </div>
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-2 form-group" data-source="prod">
           <label for="<%- idPrefix %>-productFamily" class="control-label"><%- helpers.t('PROPERTY:productFamily') %></label>
           <input id="<%- idPrefix %>-productFamily" name="productFamily" class="form-control" type="text" autocomplete="new-password" required readonly pattern="^[A-Z0-9]{6}$">
         </div>
         <div class="col-lg-6 form-group">
-          <label for="<%- idPrefix %>-productName" class="control-label"><%- helpers.t('PROPERTY:productName') %></label>
+          <label for="<%- idPrefix %>-productName" class="control-label">
+            <span data-source="prod"><%- helpers.t('PROPERTY:productName:prod') %></span>
+            <span data-source="wh"><%- helpers.t('PROPERTY:productName:wh') %></span>
+          </label>
           <input id="<%- idPrefix %>-productName" name="productName" class="form-control" type="text" autocomplete="new-password" required readonly>
         </div>
       </div>
@@ -37,20 +54,22 @@
             <% }) %>
           </select>
         </div>
-        <div class="col-lg-2 form-group">
-          <label for="<%- idPrefix %>-line" class="control-label"><%- helpers.t('PROPERTY:line') %></label>
+        <div class="col-lg-2 form-group" data-source="prod">
+          <label for="<%- idPrefix %>-line" class="control-label"><%- helpers.t('PROPERTY:line:prod') %></label>
           <select id="<%- idPrefix %>-line" name="line" class="form-control" data-role="inspector">
             <option></option>
           </select>
         </div>
-        <div class="col-lg-2 form-group">
-          <label for="<%- idPrefix %>-leader" class="control-label"><%- helpers.t('PROPERTY:leader') %></label>
-          <select id="<%- idPrefix %>-leader" name="leader" class="form-control" data-role="inspector">
-            <option></option>
-            <% leaders.forEach(function(leader) { %>
-            <option value="<%- leader.id %>"><%= leader.text %></option>
-            <% }) %>
-          </select>
+        <div class="col-lg-2 form-group" data-source="wh">
+          <label for="<%- idPrefix %>-location" class="control-label"><%- helpers.t('PROPERTY:line:wh') %></label>
+          <input id="<%- idPrefix %>-location" name="location" class="form-control" type="text" data-role="inspector">
+        </div>
+        <div class="col-lg-4 form-group">
+          <label for="<%- idPrefix %>-leader" class="control-label">
+            <span data-source="prod"><%- helpers.t('PROPERTY:leader:prod') %></span>
+            <span data-source="wh"><%- helpers.t('PROPERTY:leader:wh') %></span>
+          </label>
+          <select id="<%- idPrefix %>-leader" name="leader" class="form-control" data-role="inspector"></select>
         </div>
         <% if (!model.ok) { %>
         <div class="col-lg-4 form-group">
@@ -87,7 +106,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-2 form-group" data-source="prod">
           <label for="<%- idPrefix %>-qtyOrder" class="control-label"><%- helpers.t('PROPERTY:qtyOrder') %></label>
           <input id="<%- idPrefix %>-qtyOrder" name="qtyOrder" class="form-control" type="number"  required readonly min="0">
         </div>
@@ -109,7 +128,7 @@
           <input id="<%- idPrefix %>-qtyNok" name="qtyNok" class="form-control" type="number" required min="0" data-role="inspector">
         </div>
         <% } %>
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-2 form-group" data-source="prod">
           <label for="<%- idPrefix %>-serialNumbers" class="control-label"><%- helpers.t('PROPERTY:serialNumbers') %></label>
           <input id="<%- idPrefix %>-serialNumbers" name="serialNumbers" class="form-control" type="text" autocomplete="new-password" data-role="inspector">
         </div>

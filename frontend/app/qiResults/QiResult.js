@@ -200,7 +200,12 @@ define([
         obj.correctiveActions = this.serializeCorrectiveActions(dictionaries);
       }
 
-      if (obj.orderNo === '000000000')
+      if (obj.source === 'wh')
+      {
+        obj.orderNo = '';
+        obj.productFamily = '';
+      }
+      else if (obj.orderNo === '000000000')
       {
         obj.orderNo = '';
         obj.nc12 = '';

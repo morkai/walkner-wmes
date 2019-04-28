@@ -72,7 +72,7 @@ define([
         {id: 'orderNo', tdClassName: 'is-min is-number', thClassName: 'is-filter'},
         {id: 'nc12', tdClassName: 'is-min is-number', thClassName: 'is-filter'},
         {id: 'productFamily', tdClassName: 'is-min', thClassName: 'is-filter'},
-        'productName',
+        {id: 'productName'},
         {id: 'division', tdClassName: 'is-min', thClassName: 'is-filter', label: t('LIST:COLUMN:division')},
         {id: 'line', tdClassName: 'is-min', thClassName: 'is-filter'},
         {id: 'kind', thClassName: 'is-filter'},

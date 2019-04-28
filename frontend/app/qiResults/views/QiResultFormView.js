@@ -43,10 +43,25 @@ define([
 
     events: _.assign({
 
+      'change #-source': function()
+      {
+        localStorage.setItem('WMES_QI_SOURCE', this.getSource());
+
+        this.setUpLeaderSelect2();
+        this.toggleSourceFields();
+        this.toggleRequireOrder();
+        this.clearOrderFields();
+        this.clearComponentFields();
+      },
       'input #-orderNo': function()
       {
         this.clearOrderFields();
         this.scheduleFindOrder();
+      },
+      'input #-nc12': function()
+      {
+        this.clearComponentFields();
+        this.scheduleFindComponent();
       },
       'change #-faultCode': function()
       {
@@ -96,6 +111,7 @@ define([
       FormView.prototype.initialize.apply(this, arguments);
 
       this.scheduleFindOrder = _.debounce(this.findOrder.bind(this), 250);
+      this.scheduleFindComponent = _.debounce(this.findComponent.bind(this), 250);
       this.findOrderCount = 0;
       this.findOrderReq = null;
       this.statuses = null;
@@ -125,7 +141,6 @@ define([
         errorCategories: qiDictionaries.errorCategories.map(idAndLabel),
         inspectors: this.serializeInspectors(),
         masters: this.serializeLeaders('masters', 'nokOwner'),
-        leaders: this.serializeLeaders('leaders', 'leader'),
         divisions: orgUnits.getAllByType('division'),
         isAndroid: IS_ANDROID,
         canEditAttachments: this.model.canEditAttachments(this.options.editMode),
@@ -181,11 +196,11 @@ define([
           return;
         }
 
-        var master = idAndLabel(user);
+        var item = idAndLabel(user);
 
-        map[master.id] = true;
+        map[item.id] = true;
 
-        list.push(master);
+        list.push(item);
       });
 
       var user = this.model.get(userProperty);
@@ -294,7 +309,14 @@ define([
       formData.okFile = '';
       formData.nokFile = '';
 
-      if (formData.orderNo === '000000000')
+      if (formData.source === 'wh')
+      {
+        formData.orderNo = '';
+        formData.productFamily = '';
+        formData.location = formData.line;
+        formData.line = null;
+      }
+      else if (formData.orderNo === '000000000')
       {
         formData.orderNo = '';
         formData.nc12 = '';
@@ -373,7 +395,13 @@ define([
         });
       });
 
-      if (!formData.orderNo && !qiDictionaries.kinds.get(formData.kind).get('order'))
+      if (formData.source === 'wh')
+      {
+        formData.orderNo = '000000000';
+        formData.productFamily = '000000';
+        formData.line = formData.location || null;
+      }
+      else if (!formData.orderNo && !qiDictionaries.kinds.get(formData.kind).get('order'))
       {
         formData.orderNo = '000000000';
         formData.nc12 = '000000000000';
@@ -400,12 +428,27 @@ define([
       }
 
       this.setUpInspectorSelect2();
-      this.setUpLeaderSelect2('nokOwner');
-      this.setUpLeaderSelect2('leader');
+      this.setUpMasterSelect2();
+      this.setUpLeaderSelect2();
+      buttonGroup.toggle(this.$id('source'));
       buttonGroup.toggle(this.$id('result'));
       this.toggleRoleFields();
+      this.toggleSourceFields();
       this.toggleRequireOrder();
-      this.findOrder();
+
+      if (this.getSource() === 'wh')
+      {
+        this.findComponent();
+      }
+      else
+      {
+        this.findOrder();
+      }
+    },
+
+    getSource: function()
+    {
+      return this.options.editMode ? this.model.get('source') : buttonGroup.getValue(this.$id('source'));
     },
 
     setUpInspectorSelect2: function()
@@ -422,14 +465,50 @@ define([
         .addClass('has-required-select2');
     },
 
-    setUpLeaderSelect2: function(userProperty)
+    setUpMasterSelect2: function()
     {
       if (IS_ANDROID)
       {
         return;
       }
 
-      this.$id(userProperty).removeClass('form-control').select2({
+      this.$id('nokOwner').removeClass('form-control').select2({
+        placeholder: ' ',
+        allowClear: true
+      });
+    },
+
+    setUpLeaderSelect2: function()
+    {
+      var users = this.serializeLeaders(this.getSource() === 'prod' ? 'leaders' : 'whman', 'leader');
+      var $leader = this.$id('leader');
+      var selected = $leader.val();
+      var options = '<option></option>';
+
+      if (selected === null)
+      {
+        selected = this.model.get('leader');
+
+        if (selected)
+        {
+          selected = selected.id;
+        }
+      }
+
+      users.forEach(function(user)
+      {
+        options += '<option value="' + user.id + '" ' + (selected === user.id ? 'selected' : '') + '>'
+          + _.escape(user.text);
+      });
+
+      $leader.html(options);
+
+      if (IS_ANDROID)
+      {
+        return;
+      }
+
+      $leader.removeClass('form-control').select2({
         placeholder: ' ',
         allowClear: true
       });
@@ -501,16 +580,44 @@ define([
         }
       });
 
+      this.$id('source').find('.btn').toggleClass('disabled', this.options.editMode || (!manager && !inspector));
       this.$id('result').find('.btn').toggleClass('disabled', !manager && !inspector);
+    },
+
+    toggleSourceFields: function()
+    {
+      var source = this.getSource();
+
+      this.$('[data-source]').each(function()
+      {
+        this.classList.toggle('hidden', this.dataset.source !== source);
+      });
+
+      if (source === 'wh')
+      {
+        var kind = qiDictionaries.kinds.find(function(kind) { return kind.get('division') === 'LD'; });
+
+        if (kind)
+        {
+          this.$id('kind').val(kind.id).trigger('change');
+        }
+      }
     },
 
     clearOrderFields: function()
     {
-      this.$id('nc12').val('');
+      this.$id('nc12').val('')[0].setCustomValidity('');
       this.$id('productName').val('');
       this.$id('productFamily').val('');
       this.$id('division').val('');
       this.$id('qtyOrder').val('');
+
+      this.model.set({
+        nc12: '',
+        productFamily: '',
+        division: '',
+        qtyOrder: ''
+      }, {silent: true});
 
       this.updateLeaders([]);
       this.updateLines([]);
@@ -537,7 +644,7 @@ define([
         view.findOrderReq = null;
       }
 
-      $orderNo[0].setCustomValidity($orderNo[0].required ? t('qiResults', 'FORM:ERROR:orderNo') : '');
+      $orderNo[0].setCustomValidity($orderNo[0].required ? view.t('FORM:ERROR:orderNo') : '');
 
       var orderNo = view.$id('orderNo').val().replace(/[^0-9]+/g, '').replace(/^0+/, '');
 
@@ -558,7 +665,7 @@ define([
       {
         view.findOrderReq = null;
 
-        $orderNo[0].setCustomValidity(t('qiResults', 'FORM:ERROR:orderNo'));
+        $orderNo[0].setCustomValidity(view.t('FORM:ERROR:orderNo'));
       });
 
       req.done(function(data)
@@ -574,6 +681,84 @@ define([
         view.updateDivision();
 
         $orderNo[0].setCustomValidity('');
+      });
+
+      view.findOrderReq = req;
+    },
+
+    clearComponentFields: function()
+    {
+      this.$id('orderNo').val('')[0].setCustomValidity('');
+      this.$id('productName').val('');
+      this.$id('productFamily').val('');
+      this.$id('division').val('');
+      this.$id('qtyOrder').val('');
+
+      this.model.set({
+        orderNo: '',
+        productFamily: '',
+        division: '',
+        qtyOrder: ''
+      }, {silent: true});
+
+      this.updateLeaders([]);
+      this.updateLines([]);
+    },
+
+    findComponent: function()
+    {
+      var view = this;
+      var $nc12 = view.$id('nc12');
+
+      if ($nc12.prop('disabled'))
+      {
+        this.updateLines([]);
+        this.updateLeaders([]);
+
+        return;
+      }
+
+      view.findOrderCount += 1;
+
+      if (view.findOrderReq)
+      {
+        view.findOrderReq.abort();
+        view.findOrderReq = null;
+      }
+
+      $nc12[0].setCustomValidity($nc12[0].required ? view.t('FORM:ERROR:nc12') : '');
+
+      var nc12 = view.$id('nc12').val().replace(/[^0-9]+/g, '').toUpperCase();
+
+      if (nc12.length !== 12)
+      {
+        return;
+      }
+
+      var req = view.ajax({
+        method: 'GET',
+        url: '/qi/results;component',
+        data: {
+          nc12: nc12.replace(/^0+/, '')
+        }
+      });
+
+      req.always(function()
+      {
+        view.findOrderReq = null;
+
+        $nc12[0].setCustomValidity(view.t('FORM:ERROR:nc12'));
+      });
+
+      req.done(function(data)
+      {
+        view.$id('nc12').val(data.nc12);
+        view.$id('productName').val(data.productName);
+        view.$id('productFamily').val('');
+        view.$id('division').val('LD').attr('data-orders-division', '');
+        view.$id('qtyOrder').val('');
+
+        $nc12[0].setCustomValidity('');
       });
 
       view.findOrderReq = req;
@@ -659,16 +844,23 @@ define([
 
     toggleRequireOrder: function()
     {
-      var kind = qiDictionaries.kinds.get(this.$id('kind').val());
-
-      if (!kind)
+      if (this.getSource() === 'wh')
       {
-        return;
+        this.toggleRequireComponent();
       }
+      else
+      {
+        this.toggleRequireOrderNo();
+      }
+    },
 
+    toggleRequireOrderNo: function()
+    {
+      var kind = qiDictionaries.kinds.get(this.$id('kind').val());
       var $orderGroup = this.$id('orderGroup');
       var $orderNo = this.$id('orderNo');
-      var required = !$orderNo.prop('disabled') && !!kind.get('order');
+      var required = !$orderNo.prop('disabled')
+        && (!!kind && !!kind.get('order'));
 
       getInputLabel($orderNo).toggleClass('is-required', required);
 
@@ -678,6 +870,26 @@ define([
       }
 
       $orderGroup.find('input').prop('required', required);
+    },
+
+    toggleRequireComponent: function()
+    {
+      var $orderNo = this.$id('orderNo');
+      var $nc12 = this.$id('nc12');
+      var required = !$orderNo.prop('disabled');
+
+      getInputLabel($nc12).toggleClass('is-required', required);
+
+      $nc12.prop('readonly', !required);
+
+      if ($nc12.val().trim() === '')
+      {
+        $nc12[0].setCustomValidity('');
+      }
+
+      this.$id('orderGroup').find('input').prop('required', required);
+      $orderNo.prop('required', false);
+      this.$id('productFamily').prop('required', false);
     },
 
     updateLines: function(orderLines)
@@ -750,6 +962,8 @@ define([
 
     updateLeaders: function(orderLeaders)
     {
+      var source = this.getSource();
+      var leaders = qiDictionaries[source === 'wh' ? 'whman' : 'leaders'];
       var $leader = this.$id('leader');
       var options = [];
       var map = {};
@@ -762,7 +976,7 @@ define([
 
       orderLeaders.forEach(function(leader)
       {
-        var user = qiDictionaries.leaders.get(leader.id);
+        var user = leaders.get(leader.id);
         var text;
 
         if (user)
@@ -790,7 +1004,7 @@ define([
         options.push({id: '', text: '', disabled: true});
       }
 
-      if (currentLeader && !map[currentLeader.id] && !qiDictionaries.leaders.get(currentLeader.id))
+      if (currentLeader && !map[currentLeader.id] && !leaders.get(currentLeader.id))
       {
         options.push({
           id: currentLeader.id,
@@ -798,7 +1012,7 @@ define([
         });
       }
 
-      qiDictionaries.leaders.forEach(function(leader)
+      leaders.forEach(function(leader)
       {
         if (!map[leader.id])
         {

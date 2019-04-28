@@ -3,10 +3,19 @@
     <div class="col-lg-4">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <%- helpers.t('PANEL:TITLE:details:order') %>
+          <%- helpers.t('PANEL:TITLE:details:' + model.source) %>
         </div>
         <div class="panel-details">
-          <%- helpers.props(model, ['orderNo', 'serialNumbers', 'nc12', 'productFamily', 'productName', 'division', 'line', 'qtyOrder']) %>
+          <%- helpers.props(model, [
+            {id: 'orderNo', visible: model.source === 'prod'},
+            {id: 'serialNumbers', visible: model.source === 'prod'},
+            {id: 'nc12', label: helpers.t('PROPERTY:nc12:' + model.source)},
+            {id: 'productFamily', visible: model.source === 'prod'},
+            {id: 'productName', label: helpers.t('PROPERTY:productName:' + model.source)},
+            'division',
+            {id: 'line', label: helpers.t('PROPERTY:line:' + model.source)},
+            {id: 'qtyOrder', visible: model.source === 'prod'}
+          ]) %>
         </div>
       </div>
     </div>
@@ -20,7 +29,7 @@
             'kind',
             'inspectedAt',
             '!inspector',
-            '!leader',
+            {id: '!leader', label: helpers.t('PROPERTY:leader:' + model.source)},
             {id: '!nokOwner', visible: !model.ok},
             'qtyInspected',
             {id: 'qtyNokInspected', visible: !model.ok},

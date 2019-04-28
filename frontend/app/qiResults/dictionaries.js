@@ -57,6 +57,9 @@ define([
     leaders: new UserCollection(null, {
       rqlQuery: 'select(firstName,lastName,login,active)&prodFunction=in=(leader,prod_whman)'
     }),
+    whman: new UserCollection(null, {
+      rqlQuery: 'select(firstName,lastName,login,active)&prodFunction=regex=whman'
+    }),
     productFamilies: [],
     settings: settings.acquire(),
     counter: {
@@ -153,6 +156,7 @@ define([
     dictionaries.inspectors.reset(data ? data.inspectors : []);
     dictionaries.masters.reset(data ? data.masters : []);
     dictionaries.leaders.reset(data ? data.leaders : []);
+    dictionaries.whman.reset(data ? data.whman : []);
     dictionaries.productFamilies = data ? data.productFamilies : [];
 
     dictionaries.counter = data && data.counter || {
@@ -266,6 +270,7 @@ define([
     dictionaries.inspectors.fetch();
     dictionaries.masters.fetch();
     dictionaries.leaders.fetch();
+    dictionaries.whman.fetch();
   }
 
   function reloadDictionaries()

@@ -7,6 +7,8 @@
 // /fix/clip/count-daily-mrp?from=2018-01-01
 // /fix/fteMasterEntries/recount-totals?date=2018-01-01
 
+db.qiresults.updateMany({source: {$exists: false}}, {$set: {source: 'prod'}});
+
 db.prodflows.updateOne({_id: new ObjectId('5974b50436d51b12462c6c22')}, {$set: {
   mrpController: ['KH3']
 }});
