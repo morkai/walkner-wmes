@@ -326,7 +326,7 @@ define([
       var view = this;
       var $list = view.$id('picker-list');
 
-      if (!this.socket.isConnected())
+      if (!view.socket.isConnected())
       {
         return $list.remove();
       }

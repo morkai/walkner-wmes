@@ -79,12 +79,12 @@ define([
 
   SocketSandbox.prototype.getId = function()
   {
-    return this.socket.getId();
+    return !!this.socket && this.socket.getId();
   };
 
   SocketSandbox.prototype.isConnected = function()
   {
-    return this.socket.isConnected();
+    return !!this.socket && this.socket.isConnected();
   };
 
   SocketSandbox.prototype.on = function(eventName, cb)

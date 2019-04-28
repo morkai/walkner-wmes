@@ -94,14 +94,15 @@ define([
     updateOrgUnits: function(silent)
     {
       var ou = orgUnits.getAllForProdLine(this.getProdLineId());
+      var prodLine = orgUnits.getByTypeAndId('prodLine', ou.prodLine);
+      var prodFlow = orgUnits.getByTypeAndId('prodFlow', ou.prodFlow);
 
-      ou.prodLine = orgUnits.getByTypeAndId('prodLine', ou.prodLine).getLabel()
+      ou.prodLine = (prodLine ? prodLine.getLabel() : this.getProdLineId())
         .toUpperCase()
         .replace(/(_+|~.*?)$/, '')
         .replace(/_/g, ' ');
 
-      ou.prodFlow = orgUnits.getByTypeAndId('prodFlow', ou.prodFlow).getLabel()
-        .replace(/\s+(;|,)/g, '$1');
+      ou.prodFlow = prodFlow ? prodFlow.getLabel().replace(/\s+(;|,)/g, '$1') : '?';
 
       this.set('orgUnit', ou, {silent: silent});
     },

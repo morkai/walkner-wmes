@@ -96,7 +96,7 @@ define([
 
     getStatus: function()
     {
-      if (!this.collection.plan)
+      if (!this.collection || !this.collection.plan)
       {
         return 'unknown';
       }

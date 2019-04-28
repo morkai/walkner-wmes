@@ -198,7 +198,7 @@ define([
         return '';
       }
 
-      var activeTimes = line.settings.get('activeTime')
+      var activeTimes = (line.settings.get('activeTime') || [])
         .map(function(activeTime) { return activeTime.from + '-' + activeTime.to; })
         .join(', ');
 
