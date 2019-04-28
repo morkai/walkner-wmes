@@ -800,6 +800,10 @@ app/wmes-toolcal-tools/assets/main.css
 app/wmes-toolcal-tools/assets/./history.css
 app/wmes-toolcal-tools/assets/main.css
 
+app/wmes-trw-bases/assets/main.css
+----------------
+app/wmes-trw-bases/assets/main.css
+
 app/wmes-trw-programs/assets/details.css
 ----------------
 app/wmes-trw-programs/assets/details.css
@@ -1016,6 +1020,7 @@ assets/../app/logs-browserErrors/assets/main.css
 assets/../app/wmes-toolcal-tools/assets/main.css
 assets/../app/wmes-fap-entries/assets/main.css
 assets/../app/wmes-trw-programs/assets/main.css
+assets/../app/wmes-trw-bases/assets/main.css
 assets/../app/wmes-snf-programs/assets/main.css
 assets/./wmes-loading.css
 assets/wmes-main.css
@@ -2042,6 +2047,7 @@ app/wmes-luma2-events/routes.js
 app/wmes-luma2-lines/routes.js
 app/wmes-trw-testers/routes.js
 app/wmes-trw-programs/routes.js
+app/wmes-trw-bases/routes.js
 app/wmes-trw-tests/routes.js
 app/wmes-snf-programs/Program.js
 app/wmes-snf-programs/ProgramCollection.js
