@@ -1,0 +1,8 @@
+{
+  "BREADCRUMBS:base": "FAP",
+  "BREADCRUMBS:browse": "Podkategorie",
+
+  "PROPERTY:active": "Aktywna?",
+  "PROPERTY:parent": "Nadrzędna kategoria",
+  "PROPERTY:name": "Nazwa"
+}

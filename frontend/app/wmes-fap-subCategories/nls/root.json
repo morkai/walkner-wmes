@@ -1,0 +1,11 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "FAP",
+    "BREADCRUMBS:browse": "Subcategories",
+
+    "PROPERTY:active": "Active?",
+    "PROPERTY:parent": "Parent category",
+    "PROPERTY:name": "Name"
+  },
+  "pl": true
+}

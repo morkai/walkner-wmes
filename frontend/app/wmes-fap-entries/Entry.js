@@ -178,6 +178,18 @@ define([
         obj.category = category.getLabel();
       }
 
+      var subCategory = dictionaries.subCategories.get(obj.subCategory);
+
+      if (subCategory)
+      {
+        obj.subCategory = subCategory.getLabel();
+      }
+
+      if (!obj.subCategory)
+      {
+        obj.subCategory = '-';
+      }
+
       obj.divisions = obj.divisions.join('; ');
       obj.lines = obj.lines.join('; ');
 
@@ -231,7 +243,14 @@ define([
         obj.className += ' fap-is-unseen';
       }
 
-      obj.category = '<span class="fap-list-category">' + _.escape(obj.category) + '</span>';
+      var category = obj.category;
+
+      if (obj.subCategory !== '-')
+      {
+        category += ' (' + obj.subCategory + ')';
+      }
+
+      obj.category = '<span class="fap-list-category">' + _.escape(category) + '</span>';
       obj.problem = '<span class="fap-list-problem">' + _.escape(obj.problem) + '</span>';
       obj.lines = '<span class="fap-list-lines">' + _.escape(obj.lines) + '</span>';
 
@@ -331,6 +350,7 @@ define([
         solution: solver,
         problem: started && (manage || procEng || designer || master || leader),
         category: manage || procEng || designer,
+        subCategory: manage || procEng || designer,
         subdivisionType: manage || procEng || designer || master || leader,
         componentCode: started && (manage || procEng),
         orderNo: started && (manage || procEng),
@@ -948,6 +968,7 @@ define([
       solution: 1,
       solver: 1,
       category: 1,
+      subCategory: 1,
       divisions: 1,
       lines: 1,
       why5: 1,

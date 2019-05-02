@@ -1,0 +1,27 @@
+<form method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <div class="checkbox">
+          <label class="control-label">
+            <input type="checkbox" name="active" value="true">
+            <%- helpers.t('PROPERTY:active') %>
+          </label>
+        </div>
+      </div>
+      <div class="form-group has-required-select2">
+        <label for="<%- idPrefix %>-parent" class="control-label is-required"><%- helpers.t('PROPERTY:parent') %></label>
+        <input id="<%- idPrefix %>-parent" name="parent" type="text" autocomplete="new-password" required autofocus>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
+        <input id="<%- idPrefix %>-name" name="name" class="form-control" type="text" autocomplete="new-password" required maxlength="100">
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

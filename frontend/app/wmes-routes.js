@@ -95,6 +95,7 @@ define([
   './wmes-toolcal-types/routes',
   './wmes-toolcal-tools/routes',
   './wmes-fap-categories/routes',
+  './wmes-fap-subCategories/routes',
   './wmes-fap-entries/routes',
   './wmes-luma2-events/routes',
   './wmes-luma2-lines/routes',

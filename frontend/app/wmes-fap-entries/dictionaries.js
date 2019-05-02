@@ -5,19 +5,22 @@ define([
   '../broker',
   '../pubsub',
   '../user',
-  '../wmes-fap-categories/CategoryCollection'
+  '../wmes-fap-categories/CategoryCollection',
+  '../wmes-fap-subCategories/SubCategoryCollection'
 ], function(
   $,
   broker,
   pubsub,
   user,
-  CategoryCollection
+  CategoryCollection,
+  SubCategoryCollection
 ) {
   'use strict';
 
   var TOPIC_PREFIX = 'fap.';
   var PROP_TO_DICT = {
-    category: 'categories'
+    category: 'categories',
+    subCategory: 'subCategories'
   };
 
   var req = null;
@@ -26,6 +29,7 @@ define([
   var dictionaries = {
     statuses: ['pending', 'started', 'finished'],
     categories: new CategoryCollection(),
+    subCategories: new SubCategoryCollection(),
     loaded: false,
     load: function()
     {
@@ -102,6 +106,21 @@ define([
     forProperty: function(prop)
     {
       return this[PROP_TO_DICT[prop]] || null;
+    },
+    bind: function(page)
+    {
+      var dictionaries = this;
+
+      page.on('beforeLoad', function(page, requests)
+      {
+        requests.push(dictionaries.load());
+      });
+
+      page.on('afterRender', dictionaries.load.bind(dictionaries));
+
+      page.once('remove', dictionaries.unload.bind(dictionaries));
+
+      return page;
     }
   };
 

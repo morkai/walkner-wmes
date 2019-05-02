@@ -37,6 +37,7 @@
   "PROPERTY:mrp": "MRP",
   "PROPERTY:productName": "Nazwa wyrobu",
   "PROPERTY:category": "Kategoria",
+  "PROPERTY:subCategory": "Podkategoria",
   "PROPERTY:problem": "Opis problemu",
   "PROPERTY:uploads": "Załączniki",
   "PROPERTY:divisions": "Wydział",
@@ -100,6 +101,7 @@
 
   "navbar:dictionaries": "Słowniki",
   "navbar:categories": "Kategorie",
+  "navbar:subCategories": "Podkategorie",
   "navbar:button": "FAP",
   "navbar:unseen": "Nieprzeczytane",
   "navbar:add": "Dodaj FAP",

@@ -46,9 +46,15 @@
   flex: 0 0 auto;
   width: 210px;
 }
-.fap-prop[data-prop="category"] {
+.fap-prop[data-prop="category"],
+.fap-prop[data-prop="subCategory"] {
   flex: 0 0 auto;
-  width: 400px;
+  width: 325px;
+}
+.fap-prop[data-prop="category"] .fap-prop-value,
+.fap-prop[data-prop="subCategory"] .fap-prop-value {
+  font-size: 21px;
+  line-height: 35px;
 }
 .fap-prop[data-prop="problem"] {
   flex: 1 1 auto;
@@ -97,7 +103,6 @@
 .fap-prop[data-prop="lines"] {
   flex: 1 1 auto;
 }
-.fap-prop[data-prop="category"] .fap-prop-value,
 .fap-prop[data-prop="productName"] .fap-prop-value,
 .fap-prop[data-prop="componentName"] .fap-prop-value,
 .fap-prop[data-prop="divisions"] .fap-prop-value,

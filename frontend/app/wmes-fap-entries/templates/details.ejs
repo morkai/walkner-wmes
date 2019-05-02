@@ -3,13 +3,13 @@
     <%- model.message.text %>
   </div>
   <div class="fap-props">
-    <div class="fap-prop" data-prop="rid">
-      <div class="fap-prop-name"><%- helpers.t('PROPERTY:rid') %></div>
-      <div class="fap-prop-value text-mono"><%= model.rid %></div>
-    </div>
     <div class="fap-prop" data-prop="category">
       <div class="fap-prop-name"><%- helpers.t('PROPERTY:category') %></div>
       <div class="fap-prop-value"><%= model.category %></div>
+    </div>
+    <div class="fap-prop" data-prop="subCategory">
+      <div class="fap-prop-name"><%- helpers.t('PROPERTY:subCategory') %></div>
+      <div class="fap-prop-value"><%= model.subCategory %></div>
     </div>
     <div class="fap-prop fap-is-textarea <%- model.multiline.problem ? 'fap-is-multiline' : '' %>" data-prop="problem">
       <div class="fap-prop-name"><%- helpers.t('PROPERTY:problem') %></div>

@@ -193,6 +193,7 @@ define([
           return this.updateAnalyzers;
 
         case 'category':
+        case 'subCategory':
         case 'mrp':
         case 'nc12':
         case 'productName':
@@ -563,7 +564,7 @@ define([
         }
       },
 
-      select: function($prop, options)
+      select: function($prop, options, prepareData)
       {
         var view = this;
         var prop = $prop[0].dataset.prop;
@@ -578,7 +579,14 @@ define([
 
           if (newValue !== oldValue)
           {
-            view.model.change(prop, newValue);
+            if (prepareData)
+            {
+              view.model.multiChange(prepareData(newValue, oldValue, prop, $prop));
+            }
+            else
+            {
+              view.model.change(prop, newValue);
+            }
           }
 
           view.hideEditor();
@@ -638,7 +646,45 @@ define([
             };
           });
 
-        this.editors.select.call(this, $prop, options);
+        this.editors.select.call(this, $prop, options, function(newValue)
+        {
+          return {
+            category: newValue,
+            subCategory: null
+          };
+        });
+      },
+
+      subCategory: function($prop)
+      {
+        var parent = this.model.get('category');
+        var oldValue = this.model.get('subCategory');
+        var options = dictionaries.subCategories
+          .filter(function(c)
+          {
+            if (c.id === oldValue)
+            {
+              return true;
+            }
+
+            return c.get('active') && c.get('parent') === parent;
+          })
+          .map(function(c)
+          {
+            return {
+              id: c.id,
+              text: c.getLabel()
+            };
+          });
+
+        options.unshift({id: null, text: ''});
+
+        this.editors.select.call(this, $prop, options, function(newValue)
+        {
+          return {
+            subCategory: newValue === 'null' ? null : newValue
+          };
+        });
       },
 
       subdivisionType: function($prop)

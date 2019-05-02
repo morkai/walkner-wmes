@@ -74,6 +74,13 @@ define([
         this.updateNotifications();
         this.toggleRequiredFields();
         this.updateEtoCategory();
+        this.setUpSubCategorySelect2();
+      },
+      'change #-subCategory': function(e)
+      {
+        var el = e.target;
+
+        this.model.attributes[el.name] = el.value.length ? el.value : null;
       },
       'change #-lines, #-subdivisions': function(e)
       {
@@ -199,6 +206,7 @@ define([
 
       view.renderUploads();
       view.setUpCategorySelect2();
+      view.setUpSubCategorySelect2();
       view.setUpSubdivisionsSelect2();
       view.setUpOwnerSelect2();
       view.setUpDnd(view.$el);
@@ -326,6 +334,24 @@ define([
         dropdownCssClass: 'fap-addForm-select2',
         data: dictionaries.categories.where({active: true}).map(idAndLabel)
       });
+    },
+
+    setUpSubCategorySelect2: function()
+    {
+      var category = this.$id('category').val();
+      var data = dictionaries.subCategories.where({active: true, parent: category}).map(idAndLabel);
+      var $subCategory = this.$id('subCategory');
+
+      $subCategory.select2('data', null);
+
+      $subCategory.select2({
+        allowClear: true,
+        placeholder: ' ',
+        dropdownCssClass: 'fap-addForm-select2',
+        data: data
+      });
+
+      $subCategory.select2('enable', data.length > 0);
     },
 
     setUpSubdivisionsSelect2: function()
@@ -997,7 +1023,7 @@ define([
       $icon.removeClass('fa-copy').addClass('fa-spinner fa-spin');
 
       var req = view.ajax({
-        url: '/fap/entries?limit(1)&sort(-createdAt)&select(category,problem)'
+        url: '/fap/entries?limit(1)&sort(-createdAt)&select(category,subCategory,problem)'
           + '&observers.user.id=' + user.data._id
           + '&creator.id=' + user.data._id
       });
@@ -1014,6 +1040,7 @@ define([
         }
 
         view.$id('category').select2('val', res.collection[0].category).trigger('change');
+        view.$id('subCategory').select2('val', res.collection[0].subCategory).trigger('change');
         view.$id('problem').val(res.collection[0].problem).trigger('input').focus();
       });
 
