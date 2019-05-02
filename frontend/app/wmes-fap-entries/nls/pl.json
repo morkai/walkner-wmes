@@ -2,6 +2,7 @@
   "BREADCRUMBS:base": "FAP",
   "BREADCRUMBS:browse": "FAP",
   "BREADCRUMBS:settings": "Ustawienia",
+  "BREADCRUMBS:history": "Historia zmian",
   "BREADCRUMBS:reports:count": "Ilości",
 
   "PAGE_ACTION:settings": "Ustawienia",
@@ -13,6 +14,7 @@
   "PAGE_ACTION:markAsSeen": "Oznacz jako przeczytane",
   "PAGE_ACTION:subscribe": "Włącz powiadomienia",
   "PAGE_ACTION:unsubscribe": "Wyłącz powiadomienia",
+  "PAGE_ACTION:history": "Historia zmian",
 
   "markAsSeen:listAction": "Oznacz jako przeczytane",
   "markAsSeen:success": "{count, plural, =0{Wszystkie zgłoszenia przeczytane!} one{Oznaczono jedno zgłoszenie.} few{Oznaczono {count} zgłoszenia.} other{Oznaczono {count} zgłoszeń.}}",
@@ -61,6 +63,10 @@
   "PROPERTY:subdivisionType": "Dział",
   "PROPERTY:componentCode": "Komponent",
   "PROPERTY:componentName": "Nazwa komponentu",
+  "PROPERTY:startedAt": "Czas rozpoczęcia zgłoszenia",
+  "PROPERTY:finishedAt": "Czas zakończenia zgłoszenia",
+  "PROPERTY:analysisStartedAt": "Czas rozpoczęcia analizy",
+  "PROPERTY:analysisFinishedAt": "Czas zakończenia analizy",
 
   "subdivisionType:unspecified": "Nieokreślony",
   "subdivisionType:assembly": "Montaż",

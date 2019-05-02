@@ -121,6 +121,12 @@ define([
         }
       }
 
+      actions.push({
+        icon: 'calendar',
+        label: this.t('PAGE_ACTION:history'),
+        href: this.model.genClientUrl('history')
+      });
+
       if (auth.delete)
       {
         actions.push(pageActions.delete(this.model, false));

@@ -8,6 +8,7 @@ define([
   '../user',
   '../core/util/showDeleteFormPage',
   './views/NavbarView',
+  './dictionaries',
   'i18n!app/nls/wmes-fap-entries'
 ], function(
   _,
@@ -16,7 +17,8 @@ define([
   viewport,
   user,
   showDeleteFormPage,
-  NavbarView
+  NavbarView,
+  dictionaries
 ) {
   'use strict';
 
@@ -62,6 +64,22 @@ define([
         return new DetailsPage({
           model: new Entry({_id: req.params.id})
         });
+      }
+    );
+  });
+
+  router.map('/fap/entries/:id;history', canView, function(req)
+  {
+    viewport.loadPage(
+      [
+        model,
+        'app/wmes-fap-entries/pages/HistoryPage'
+      ],
+      function(Entry, HistoryPage)
+      {
+        return dictionaries.bind(new HistoryPage({
+          model: new Entry({_id: req.params.id})
+        }));
       }
     );
   });

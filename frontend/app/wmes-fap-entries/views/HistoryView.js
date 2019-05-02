@@ -9,6 +9,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/templates/userInfo',
+  '../dictionaries',
   'app/wmes-fap-entries/templates/historyItem',
   'app/wmes-fap-entries/templates/history'
 ], function(
@@ -20,10 +21,16 @@ define([
   viewport,
   View,
   renderUserInfo,
+  dictionaries,
   renderHistoryItem,
   template
 ) {
   'use strict';
+
+  var IGNORED_PROPS = {
+    subdivisions: true,
+    unsubscribed: true
+  };
 
   return View.extend({
 
@@ -32,14 +39,16 @@ define([
     getTemplateData: function()
     {
       return {
-        editUrl: this.model.genClientUrl('edit'),
         items: this.serializeItems()
       };
     },
 
     serializeItems: function()
     {
-      return this.model.get('changes').map(this.serializeItem, this);
+      return this.model.get('changes').map(this.serializeItem, this).filter(function(change)
+      {
+        return !!change.comment || !!change.changes.length;
+      });
     },
 
     serializeItem: function(change, changeIndex)
@@ -57,11 +66,26 @@ define([
       {
         changes = _.map(change.data, function(values, property)
         {
+          if (IGNORED_PROPS[property])
+          {
+            return null;
+          }
+
+          property = property.split('$')[0];
+
+          if (property === 'subscribers')
+          {
+            property = 'observers';
+          }
+
           return {
             label: view.t('PROPERTY:' + property),
             oldValue: view.serializeItemValue(property, values[0], true, changeIndex),
             newValue: view.serializeItemValue(property, values[1], false, changeIndex)
           };
+        }).filter(function(change)
+        {
+          return !!change;
         });
         comment = change.comment.trim();
       }
@@ -76,9 +100,14 @@ define([
 
     serializeItemValue: function(property, value)
     {
-      if (value == null || value === '')
+      if (value == null || value === '' || (Array.isArray(value) && value.length === 0))
       {
         return '-';
+      }
+
+      if (value === 0)
+      {
+        return 0;
       }
 
       if (/At$/i.test(property))
@@ -86,19 +115,35 @@ define([
         return time.format(value, 'LLLL');
       }
 
+      if (typeof value === 'boolean')
+      {
+        return this.t('core', 'BOOL:' + value);
+      }
+
+      if (typeof value === 'string')
+      {
+        value = _.escape(value);
+      }
+
       switch (property)
       {
+        case 'observers':
         case 'analyzers':
-          return value.map(function(u) { return (u.label || '').replace(/\s*\(.*?\)/, ''); }).join(', ');
+        {
+          value = value.map(function(u) { return (u.label || '').replace(/\s*\(.*?\)/, ''); }).join(', ');
+
+          return value.length <= 43 ? value : {
+            more: value,
+            toString: function() { return value.substr(0, 40) + '...'; }
+          };
+        }
 
         case 'status':
         case 'assessment':
           return this.t(property + ':' + value);
 
-        case 'moreAnalysis':
-        case 'analysisDone':
-          return this.t('core', 'BOOL:' + value);
-
+        case 'productName':
+        case 'componentName':
         case 'problem':
         case 'solution':
           return value.length <= 43 ? value : {
@@ -107,10 +152,35 @@ define([
           };
 
         case 'category':
-          return value; // TODO
+        {
+          var category = dictionaries.categories.get(value);
+
+          return category ? category.getLabel() : value;
+        }
+
+        case 'subCategory':
+        {
+          var subCategory = dictionaries.subCategories.get(value);
+
+          return subCategory ? subCategory.getLabel() : value;
+        }
 
         case 'why5':
-          return JSON.stringify(value, null, 2); // TODO
+        {
+          value = value.filter(function(v) { return !!v; });
+
+          if (!value.length)
+          {
+            return '-';
+          }
+
+          return '<ol><li>' + value.join('<li>') + '</ol>';
+        }
+
+        case 'attachments':
+        {
+          return '<ul><li>' + value.map(function(a) { return a.name; }).join('<li>') + '</ul>';
+        }
 
         default:
           return value || '';

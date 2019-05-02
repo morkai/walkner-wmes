@@ -49,6 +49,11 @@
 .fap-entries-history-item .has-more {
   cursor: help;
 }
+.fap-entries-history-item ol,
+.fap-entries-history-item ul {
+  padding-left: 0;
+  list-style-position: inside;
+}
 .fap-entries-history-popover {
   max-width: 450px;
 }

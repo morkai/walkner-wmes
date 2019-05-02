@@ -3,6 +3,7 @@
     "BREADCRUMBS:base": "FAP",
     "BREADCRUMBS:browse": "FAP",
     "BREADCRUMBS:settings": "Settings",
+    "BREADCRUMBS:history": "Changelog",
     "BREADCRUMBS:reports:count": "Count report",
 
     "PAGE_ACTION:settings": "Settings",
@@ -14,6 +15,7 @@
     "PAGE_ACTION:markAsSeen": "Mark as seen",
     "PAGE_ACTION:subscribe": "Turn on notifications",
     "PAGE_ACTION:unsubscribe": "Turn off notifications",
+    "PAGE_ACTION:history": "Changelog",
 
     "markAsSeen:listAction": "Mark as seen",
     "markAsSeen:noComment": "Changes without comments",
@@ -59,6 +61,10 @@
     "PROPERTY:subdivisionType": "Subdivision",
     "PROPERTY:componentCode": "Component",
     "PROPERTY:componentName": "Component name",
+    "PROPERTY:startedAt": "Started at",
+    "PROPERTY:finishedAt": "Finished at",
+    "PROPERTY:analysisStartedAt": "Analysis started at",
+    "PROPERTY:analysisFinishedAt": "Analysis finished at",
 
     "subdivisionType:unspecified": "Unspecified",
     "subdivisionType:assembly": "Assembly",
