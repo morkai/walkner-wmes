@@ -291,9 +291,14 @@ define([
       });
     },
 
-    updateText: function($prop, text)
+    updateText: function($prop, text, valueSelector)
     {
-      var el = $prop instanceof $ ? $prop.find('.fap-prop-value')[0] : $prop;
+      if (!valueSelector)
+      {
+        valueSelector = '.fap-prop-value';
+      }
+
+      var el = $prop instanceof $ ? $prop.find(valueSelector)[0] : $prop;
 
       while (el.childNodes.length
         && (!el.childNodes[0].classList || !el.childNodes[0].classList.contains('fap-editor')))
@@ -301,7 +306,7 @@ define([
         el.removeChild(el.childNodes[0]);
       }
 
-      this.$(el).closest('.fap-prop-value').prepend(text);
+      this.$(el).closest(valueSelector).prepend(text);
     },
 
     updateProp: function(prop)
@@ -319,8 +324,8 @@ define([
       var $prop = this.$('.fap-prop[data-prop="qty"]');
       var details = this.model.serializeDetails();
 
-      this.updateText($prop.find('[data-prop="qtyDone"]')[0], details.qtyDone);
-      this.updateText($prop.find('[data-prop="qtyTodo"]')[0], details.qtyTodo);
+      this.updateText($prop.find('[data-prop="qtyDone"]')[0], details.qtyDone, '[data-prop="qtyDone"]');
+      this.updateText($prop.find('[data-prop="qtyTodo"]')[0], details.qtyTodo, '[data-prop="qtyTodo"]');
     },
 
     updateOrderNo: function()
@@ -390,10 +395,11 @@ define([
     {
       var view = this;
       var why5 = view.model.get('why5');
+      var valueSelector = '.fap-analysis-why-value';
 
-      view.$('.fap-analysis-why-value').each(function(i)
+      view.$(valueSelector).each(function(i)
       {
-        view.updateText(this, why5[i] || '');
+        view.updateText(this, why5[i] || '', valueSelector);
       });
     },
 
