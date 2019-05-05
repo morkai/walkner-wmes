@@ -563,7 +563,12 @@ app/production/assets/vkb.css
 app/production/assets/modal.css
 app/production/assets/execution.css
 app/production/assets/multiPersonnelPicker.css
+app/production/assets/message.css
 app/production/assets/main.css
+
+app/production/assets/message.css
+----------------
+app/production/assets/message.css
 
 app/production/assets/modal.css
 ----------------
@@ -2028,9 +2033,12 @@ app/data/createOnDemandStorage.js
 app/wmes-fap-categories/CategoryCollection.js
 app/wmes-fap-categories/storage.js
 app/wmes-fap-categories/routes.js
+app/wmes-fap-subCategories/SubCategory.js
+app/wmes-fap-subCategories/SubCategoryCollection.js
+app/wmes-fap-entries/dictionaries.js
+app/wmes-fap-subCategories/routes.js
 app/notifications.js
 vendor/autolinker.js
-app/wmes-fap-entries/dictionaries.js
 app/wmes-fap-entries/Entry.js
 app/wmes-fap-entries/templates/addForm.js
 app/wmes-fap-entries/templates/addFormUpload.js
