@@ -1,0 +1,1 @@
+define(["../data/createOnDemandStorage","./SubCategoryCollection"],function(e,n){"use strict";return e(function(){return new n(null,{paginate:!1})})});

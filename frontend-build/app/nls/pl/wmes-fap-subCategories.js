@@ -1,0 +1,1 @@
+define(["app/nls/locale/pl"],function(n){return{"BREADCRUMBS:base":function(n){return"FAP"},"BREADCRUMBS:browse":function(n){return"Podkategorie"},"PROPERTY:active":function(n){return"Aktywna?"},"PROPERTY:parent":function(n){return"Nadrzędna kategoria"},"PROPERTY:name":function(n){return"Nazwa"}}});

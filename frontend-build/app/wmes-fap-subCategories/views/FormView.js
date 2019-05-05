@@ -1,0 +1,1 @@
+define(["app/core/util/idAndLabel","app/core/views/FormView","app/wmes-fap-entries/dictionaries","app/wmes-fap-subCategories/templates/form"],function(e,t,a,p){"use strict";return t.extend({template:p,afterRender:function(){t.prototype.afterRender.apply(this,arguments),this.$id("parent").select2({data:a.categories.map(e)})}})});
