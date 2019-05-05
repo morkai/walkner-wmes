@@ -182,6 +182,8 @@
   "PRIVILEGE:SNF:MANAGE": "SNF: zarządzanie",
   "PRIVILEGE:TRW:VIEW": "TRW: przeglądanie",
   "PRIVILEGE:TRW:MANAGE": "TRW: zarządzanie",
+  "PRIVILEGE:LUCA:VIEW": "Luca: przeglądanie",
+  "PRIVILEGE:LUCA:MANAGE": "Luca: zarządzanie",
 
   "select2:placeholder": "Szukaj po nazwisku lub nr kadrowym...",
   "select2:users:system": "System",

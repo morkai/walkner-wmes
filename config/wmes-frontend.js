@@ -102,6 +102,7 @@ exports.modules = [
   'wmes-luma2-frontend',
   'wmes-snf',
   'wmes-trw',
+  'wmes-luca-frontend',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'sms/sender',
@@ -118,6 +119,7 @@ exports.modules = [
   {id: 'messenger/client', name: 'messenger/client:wmes-alerts'},
   {id: 'messenger/client', name: 'messenger/client:wmes-planning'},
   {id: 'messenger/client', name: 'messenger/client:wmes-luma2'},
+  {id: 'messenger/client', name: 'messenger/client:wmes-luca'},
   'httpServer',
   'sio'
 ];
@@ -290,15 +292,9 @@ exports.events = {
       'qi.*.added', 'qi.*.edited',
       'd8.*.added', 'd8.*.edited'
     ],
-    info: [
-      'production.unlocked',
-      'production.locked'
-    ],
     warning: [
       '*.deleted',
       'fte.leader.deleted', 'fte.master.deleted',
-      'production.unlockFailure',
-      'production.lockFailure',
       'prodDowntimes.confirmedEdited',
       'qi.*.deleted',
       'd8.*.deleted',
@@ -354,8 +350,6 @@ exports.pubsub = {
     'shiftChanged',
     'fte.master.**', 'fte.leader.**',
     'hourlyPlans.created', 'hourlyPlans.updated.*',
-    'production.synced.**', 'production.edited.**', 'production.stateChanged.**', 'production.autoDowntimes.**',
-    'production.taktTime.snChecked.**',
     'prodShifts.**', 'prodDowntimes.**', 'prodShiftOrders.**', 'prodChangeRequests.**', 'prodSerialNumbers.created.**',
     'settings.updated.**',
     'icpo.results.synced', 'orders.intake.synced',
@@ -533,6 +527,14 @@ exports['messenger/client:wmes-luma2'] = Object.assign({}, ports['wmes-luma2'], 
   ]
 });
 
+exports['messenger/client:wmes-luca'] = Object.assign({}, ports['wmes-luca'], {
+  responseTimeout: 5000,
+  broadcastTopics: [
+    'luca.orderChanged',
+    'luca.kanbanChanged'
+  ]
+});
+
 exports.reports = {
   messengerClientId: 'messenger/client:wmes-reports-1',
   messengerType: 'push',
@@ -678,4 +680,8 @@ exports.help = {
 
 exports['wmes-fap'] = {
 
+};
+
+exports['wmes-luca-frontend'] = {
+  messengerClientId: 'messenger/client:wmes-luca'
 };

@@ -181,6 +181,8 @@
     "PRIVILEGE:SNF:MANAGE": "SNF: manage",
     "PRIVILEGE:TRW:VIEW": "TRW: view",
     "PRIVILEGE:TRW:MANAGE": "TRW: manage",
+    "PRIVILEGE:LUCA:VIEW": "Luca: view",
+    "PRIVILEGE:LUCA:MANAGE": "Luca: manage",
 
     "select2:placeholder": "Search by last name or personnel ID...",
     "select2:users:system": "System",
