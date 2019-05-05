@@ -78,6 +78,7 @@ define([
 
       if (prodLineId)
       {
+        topics['production.messageRequested.' + prodLineId] = 'onMessageRequested';
         topics['production.autoDowntimes.' + this.model.get('subdivision')] = 'onSubdivisionAutoDowntime';
         topics['production.autoDowntimes.' + prodLineId] = 'onLineAutoDowntime';
         topics['production.taktTime.snChecked.' + prodLineId] = 'onSnChecked';
@@ -137,7 +138,7 @@ define([
         }, 5000);
       },
 
-      'click #-snMessage': 'hideSnMessage'
+      'click #-message': 'hideMessage'
     },
 
     breadcrumbs: function()
@@ -803,8 +804,6 @@ define([
         spigotComponent = spigotInsertComponent;
       }
 
-      console.log({spigotComponent, spigotInsertComponent, spigot});
-
       if (spigot && spigot.forceCheck)
       {
         this.showSpigotDialog(spigotComponent);
@@ -1036,6 +1035,52 @@ define([
           'hidden', !this.model.isTaktTimeEnabled() || !this.model.settings.showSmiley()
         );
       }
+    },
+
+    onMessageRequested: function(message)
+    {
+      this.showMessage(message.message);
+    },
+
+    showMessage: function(message)
+    {
+      var html = t.has('production', 'message:' + message.code)
+        ? t('production', 'message:' + message.code, message)
+        : message.text;
+
+      if (!html)
+      {
+        return;
+      }
+
+      if (this.timers.hideMessage)
+      {
+        clearTimeout(this.timers.hideMessage);
+      }
+
+      this.timers.hideMessage = setTimeout(this.hideMessage.bind(this), message.time || 60000);
+
+      this.$id('message-inner')
+        .html(html);
+
+      this.$id('message')
+        .attr('data-type', message.type || 'info')
+        .css({marginTop: ''})
+        .removeClass('hidden')
+        .css({marginTop: (this.$id('message-outer').outerHeight() / 2 * -1) + 'px'});
+
+      document.body.click();
+    },
+
+    hideMessage: function()
+    {
+      if (this.timers.hideMessage)
+      {
+        clearTimeout(this.timers.hideMessage);
+        this.timers.hideMessage = null;
+      }
+
+      this.$id('message').addClass('hidden');
     }
 
   });

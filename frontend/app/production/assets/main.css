@@ -5,6 +5,7 @@
 @import "modal.css";
 @import "execution.css";
 @import "multiPersonnelPicker.css";
+@import "message.css";
 
 .is-production {
   overflow: auto;
