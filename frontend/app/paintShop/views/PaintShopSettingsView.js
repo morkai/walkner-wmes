@@ -6,6 +6,7 @@ define([
   'app/core/util/idAndLabel',
   'app/data/orgUnits',
   'app/settings/views/SettingsView',
+  'app/mrpControllers/util/setUpMrpSelect2',
   'app/paintShop/templates/loadStatusRow',
   'app/paintShop/templates/settings'
 ], function(
@@ -14,6 +15,7 @@ define([
   idAndLabel,
   orgUnits,
   SettingsView,
+  setUpMrpSelect2,
   renderLoadStatusRow,
   template
 ) {
@@ -88,6 +90,7 @@ define([
       SettingsView.prototype.afterRender.apply(this, arguments);
 
       this.setUpWorkCenters();
+      this.setUpUnpaintedMrps();
       this.setUpMspPaints();
       this.setUpLoadStatuses();
     },
@@ -104,6 +107,15 @@ define([
       });
 
       this.updateSettingField(this.settings.get('paintShop.workCenters'));
+    },
+
+    setUpUnpaintedMrps: function()
+    {
+      setUpMrpSelect2(this.$id('planning-unpaintedMrps'), {
+        width: '100%'
+      });
+
+      this.updateSettingField(this.settings.get('paintShop.unpaintedMrps'));
     },
 
     setUpMspPaints: function()
@@ -188,6 +200,7 @@ define([
     shouldAutoUpdateSettingField: function(setting)
     {
       return setting.id !== 'paintShop.workCenters'
+        && setting.id !== 'paintShop.unpaintedMrps'
         && setting.id !== 'paintShop.mspPaints'
         && setting.id !== 'paintShop.load.statuses';
     },
@@ -199,24 +212,13 @@ define([
         return;
       }
 
-      if (setting.id === 'paintShop.workCenters')
+      if (/(workCenters|unpaintedMrps|mspPaints)$/i.test(setting.id))
       {
-        return this.$id('planning-workCenters').select2('data', setting.getValue().map(function(workCenter)
+        return this.$id(setting.id.replace('.', '-')).select2('data', setting.getValue().map(function(v)
         {
           return {
-            id: workCenter,
-            text: workCenter
-          };
-        }));
-      }
-
-      if (setting.id === 'paintShop.mspPaints')
-      {
-        return this.$id('planning-mspPaints').select2('data', setting.getValue().map(function(nc12)
-        {
-          return {
-            id: nc12,
-            text: nc12
+            id: v,
+            text: v
           };
         }));
       }

@@ -86,6 +86,12 @@
       <span class="paintShop-orderDetails-multiPaint"><%- t('paintShop', 'multiPaint', {count: childOrder.paintCount}) %></span>
     </td>
   </tr>
+  <% } else if (childOrder.paintCount === 0) { %>
+  <tr class="paintShop-properties paintShop-order-component">
+    <td class="paintShop-property" colspan="5">
+      <span class="paintShop-orderDetails-multiPaint"><%- t('paintShop', 'noPaints') %></span>
+    </td>
+  </tr>
   <% } %>
   <% childOrder.components.forEach(function(component) { %>
   <tr class="paintShop-properties paintShop-order-component <%- component.unit === 'G' || component.unit === 'KG' ? 'is-paint' : '' %> <%- childOrder.deleted ? 'is-deleted' : '' %>">

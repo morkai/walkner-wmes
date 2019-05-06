@@ -76,6 +76,11 @@ define([
       obj.rowSpanDetails = obj.rowSpan;
       obj.paints = {};
 
+      if (obj.paint.nc12 === '000000000000')
+      {
+        obj.paints['000000000000'] = obj.qty;
+      }
+
       obj.childOrders = obj.childOrders.map(function(childOrder, i)
       {
         var components = [];
@@ -126,7 +131,7 @@ define([
         });
 
         var rowSpan = components.length;
-        var rowSpanDetails = rowSpan + (obj.paintCount > 1 ? 1 : 0);
+        var rowSpanDetails = rowSpan + (obj.paintCount !== 1 ? 1 : 0);
 
         obj.rowSpan += rowSpan;
         obj.rowSpanDetails += rowSpanDetails;
