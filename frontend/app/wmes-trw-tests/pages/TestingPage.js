@@ -805,8 +805,8 @@ define([
       var stepNo = this.model.get('step');
       var step = program.steps[stepNo - 1];
       var allIo = this.model.get('allIo');
-      var setIo = this.model.get('setIo');
-      var checkIo = this.model.get('checkIo');
+      var setIo = {};
+      var checkIo = {};
 
       step.setIo.forEach(function(id)
       {
@@ -816,6 +816,11 @@ define([
       step.checkIo.forEach(function(id)
       {
         checkIo[id] = allIo[id];
+      });
+
+      this.model.set({
+        setIo: setIo,
+        checkIo: checkIo
       });
 
       this.setIo(false, this.checkIo);
@@ -938,18 +943,41 @@ define([
 
     tearDown: function()
     {
-      if (/^TEST/.test(this.model.get('line')))
+      var page = this;
+
+      if (/^TEST/.test(page.model.get('line')))
       {
-        this.setIo(true, this.saveTest);
+        page.setIo(true, page.saveTest);
 
         return;
       }
 
-      this.model.set({
+      page.model.set({
         state: 'test-teardown'
       });
 
-      this.checkTearDown();
+      var allIo = page.model.get('allIo');
+      var setIo = {};
+      var checkIo = {};
+
+      _.forEach(allIo, function(io)
+      {
+        if (io.type === 'output')
+        {
+          setIo[io._id] = io;
+        }
+        else
+        {
+          checkIo[io._id] = io;
+        }
+      });
+
+      page.model.set({
+        setIo: setIo,
+        checkIo: checkIo
+      });
+
+      page.setIo(false, page.checkTearDown);
     },
 
     checkTearDown: function()
@@ -984,14 +1012,22 @@ define([
         _.forEach(checkIo, function(io)
         {
           var value = res[io.device][io.channel];
+          var min = io.min;
+          var max = io.max;
 
-          if (value < 100)
+          if (min === 0 && max === 0)
           {
-            ok.push(io._id);
+            min = 900;
+            max = 1024;
+          }
+
+          if (value >= min && value <= max)
+          {
+            nok.push(io._id);
           }
           else
           {
-            nok.push(io._id);
+            ok.push(io._id);
           }
         });
 
