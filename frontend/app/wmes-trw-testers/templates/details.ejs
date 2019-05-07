@@ -15,6 +15,8 @@
         <th class="is-min"><%- helpers.t('PROPERTY:io.type') %></th>
         <th class="is-min"><%- helpers.t('PROPERTY:io.device') %></th>
         <th class="is-min"><%- helpers.t('PROPERTY:io.channel') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:io.min') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:io.max') %></th>
         <th></th>
       </tr>
       </thead>
@@ -26,6 +28,8 @@
         <td class="is-min"><%- helpers.t('ioType:' + io.type) %></td>
         <td class="is-min is-number"><%= io.device %></td>
         <td class="is-min is-number"><%= io.channel %></td>
+        <td class="is-min is-number"><%= io.max ? io.min : '' %></td>
+        <td class="is-min is-number"><%= io.max || '' %></td>
         <td></td>
       </tr>
       <% }) %>

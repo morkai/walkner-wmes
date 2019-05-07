@@ -82,6 +82,8 @@ define([
 
         io.device = parseInt(io.device, 10);
         io.channel = parseInt(io.channel, 10);
+        io.min = parseInt(io.min, 10) || 0;
+        io.max = parseInt(io.max, 10) || 0;
       });
 
       formData.io = formData.io.filter(function(io) { return !!io._id && io.device >= 0 && io.channel >= 0; });

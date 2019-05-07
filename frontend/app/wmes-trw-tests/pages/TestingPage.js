@@ -866,7 +866,7 @@ define([
 
       _.forEach(checkIo, function(io)
       {
-        if (io.type !== 'input')
+        if (io.type === 'output')
         {
           return;
         }
@@ -895,8 +895,16 @@ define([
         _.forEach(checkIo, function(io)
         {
           var value = res[io.device][io.channel];
+          var min = io.min;
+          var max = io.max;
 
-          if (value > 900)
+          if (min === 0 && max === 0)
+          {
+            min = 900;
+            max = 1024;
+          }
+
+          if (value >= min && value <= max)
           {
             ok.push(io._id);
           }

@@ -10,7 +10,10 @@
   "PROPERTY:io.type": "Typ",
   "PROPERTY:io.device": "Nr urządzenia",
   "PROPERTY:io.channel": "Nr kanału",
+  "PROPERTY:io.min": "Min.",
+  "PROPERTY:io.max": "Maks.",
 
   "ioType:input": "Wejście",
-  "ioType:output": "Wyjście"
+  "ioType:output": "Wyjście",
+  "ioType:analog": "Analog"
 }

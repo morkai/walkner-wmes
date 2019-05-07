@@ -11,9 +11,12 @@
     "PROPERTY:io.type": "Type",
     "PROPERTY:io.device": "Device no",
     "PROPERTY:io.channel": "Channel no",
+    "PROPERTY:io.min": "Min.",
+    "PROPERTY:io.max": "Max.",
 
     "ioType:input": "Input",
-    "ioType:output": "Output"
+    "ioType:output": "Output",
+    "ioType:analog": "Analog"
   },
   "pl": true
 }

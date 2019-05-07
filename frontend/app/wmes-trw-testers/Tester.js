@@ -23,7 +23,7 @@ define([
 
   }, {
 
-    IO_TYPES: ['input', 'output']
+    IO_TYPES: ['input', 'output', 'analog']
 
   });
 });

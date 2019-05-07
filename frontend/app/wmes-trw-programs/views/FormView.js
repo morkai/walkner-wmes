@@ -232,17 +232,19 @@ define([
 
         tester.io.forEach(function(io)
         {
-          if (!view.io[io.type])
+          var type = io.type === 'output' ? 'output' : 'input';
+
+          if (!view.io[type])
           {
-            view.io[io.type] = [];
-            view.io[io.type + 'Ids'] = [];
+            view.io[type] = [];
+            view.io[type + 'Ids'] = [];
           }
 
-          view.io[io.type].push({
+          view.io[type].push({
             id: io._id,
             text: io.name + ' [' + io.device + ':' + io.channel + ']'
           });
-          view.io[io.type + 'Ids'].push(io._id);
+          view.io[type + 'Ids'].push(io._id);
         });
 
         Object.keys(view.io).forEach(function(type)

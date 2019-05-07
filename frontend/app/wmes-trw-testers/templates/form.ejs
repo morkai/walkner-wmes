@@ -21,6 +21,8 @@
             <th class="is-min"><%- helpers.t('PROPERTY:io.type') %></th>
             <th style="width: 125px"><%- helpers.t('PROPERTY:io.device') %></th>
             <th style="width: 125px"><%- helpers.t('PROPERTY:io.channel') %></th>
+            <th style="width: 100px"><%- helpers.t('PROPERTY:io.min') %></th>
+            <th style="width: 100px"><%- helpers.t('PROPERTY:io.max') %></th>
             <th></th>
             <th class="actions"></th>
           </tr>
@@ -38,6 +40,8 @@
             </td>
             <td><input name="io[].device" class="form-control" type="number" min="0" max="127"></td>
             <td><input name="io[].channel" class="form-control" type="number" min="0" max="24"></td>
+            <td><input name="io[].min" class="form-control" type="number" min="0" max="1024"></td>
+            <td><input name="io[].max" class="form-control" type="number" min="0" max="1024"></td>
             <td></td>
             <td class="actions">
               <div class="actions-group">
