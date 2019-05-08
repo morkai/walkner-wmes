@@ -29,6 +29,24 @@ define([
         var $row = this.$(e.currentTarget).closest('tr');
 
         $row.fadeOut('fast', function() { $row.remove(); });
+      },
+
+      'click .trw-testers-form-tearDown': function(e)
+      {
+        if (e.target.tagName === 'TD')
+        {
+          var checkboxEl = e.currentTarget.querySelector('input');
+
+          if (!checkboxEl.disabled)
+          {
+            checkboxEl.checked = !checkboxEl.checked;
+          }
+        }
+      },
+
+      'change input[name$=".type"]': function(e)
+      {
+        this.toggleIo(this.$(e.currentTarget).closest('tr'));
       }
 
     }, FormView.prototype.events),
@@ -42,20 +60,27 @@ define([
 
     afterRender: function()
     {
-      (this.model.get('io') || []).forEach(this.addIo, this);
+      var view = this;
 
-      FormView.prototype.afterRender.call(this);
+      (view.model.get('io') || []).forEach(view.addIo, view);
 
-      this.addIo();
+      FormView.prototype.afterRender.call(view);
 
-      if (this.options.editMode)
+      view.$id('io').children().each(function()
       {
-        this.$id('_id').prop('readonly', true);
-        this.$id('name').focus();
+        view.toggleIo(view.$(this));
+      });
+
+      view.addIo();
+
+      if (view.options.editMode)
+      {
+        view.$id('_id').prop('readonly', true);
+        view.$id('name').focus();
       }
       else
       {
-        this.$id('_id').focus();
+        view.$id('_id').focus();
       }
     },
 
@@ -84,6 +109,7 @@ define([
         io.channel = parseInt(io.channel, 10);
         io.min = parseInt(io.min, 10) || 0;
         io.max = parseInt(io.max, 10) || 0;
+        io.tearDown = !!io.tearDown;
       });
 
       formData.io = formData.io.filter(function(io) { return !!io._id && io.device >= 0 && io.channel >= 0; });
@@ -116,7 +142,17 @@ define([
 
       $io.append(html);
 
+      this.toggleIo($io.children().last());
+
       ++this.ioI;
+    },
+
+    toggleIo: function($io)
+    {
+      var type = $io.find('input[name$=".type"]:checked').val();
+
+      $io.find('input[name$=".min"]').prop('disabled', type !== 'analog');
+      $io.find('input[name$=".max"]').prop('disabled', type !== 'analog');
     }
 
   });

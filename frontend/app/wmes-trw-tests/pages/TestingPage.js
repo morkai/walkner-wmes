@@ -962,6 +962,11 @@ define([
 
       _.forEach(allIo, function(io)
       {
+        if (!io.tearDown)
+        {
+          return;
+        }
+
         if (io.type === 'output')
         {
           setIo[io._id] = io;

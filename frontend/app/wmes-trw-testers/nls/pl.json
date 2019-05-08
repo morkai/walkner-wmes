@@ -12,6 +12,7 @@
   "PROPERTY:io.channel": "Nr kanału",
   "PROPERTY:io.min": "Min.",
   "PROPERTY:io.max": "Maks.",
+  "PROPERTY:io.tearDown": "Odłącz?",
 
   "ioType:input": "Wejście",
   "ioType:output": "Wyjście",

@@ -19,10 +19,11 @@
             <th style="width: 175px"><%- helpers.t('PROPERTY:io._id') %></th>
             <th style="width: 250px"><%- helpers.t('PROPERTY:io.name') %></th>
             <th class="is-min"><%- helpers.t('PROPERTY:io.type') %></th>
-            <th style="width: 125px"><%- helpers.t('PROPERTY:io.device') %></th>
-            <th style="width: 125px"><%- helpers.t('PROPERTY:io.channel') %></th>
-            <th style="width: 100px"><%- helpers.t('PROPERTY:io.min') %></th>
-            <th style="width: 100px"><%- helpers.t('PROPERTY:io.max') %></th>
+            <th class="is-min"><%- helpers.t('PROPERTY:io.device') %></th>
+            <th class="is-min"><%- helpers.t('PROPERTY:io.channel') %></th>
+            <th style="width: 75px"><%- helpers.t('PROPERTY:io.min') %></th>
+            <th style="width: 75px"><%- helpers.t('PROPERTY:io.max') %></th>
+            <th class="is-min"><%- helpers.t('PROPERTY:io.tearDown') %></th>
             <th></th>
             <th class="actions"></th>
           </tr>
@@ -42,6 +43,7 @@
             <td><input name="io[].channel" class="form-control" type="number" min="0" max="24"></td>
             <td><input name="io[].min" class="form-control" type="number" min="0" max="1024"></td>
             <td><input name="io[].max" class="form-control" type="number" min="0" max="1024"></td>
+            <td class="trw-testers-form-tearDown" style="text-align: center"><input name="io[].tearDown" type="checkbox" value="true" checked></td>
             <td></td>
             <td class="actions">
               <div class="actions-group">

@@ -17,6 +17,7 @@
         <th class="is-min"><%- helpers.t('PROPERTY:io.channel') %></th>
         <th class="is-min"><%- helpers.t('PROPERTY:io.min') %></th>
         <th class="is-min"><%- helpers.t('PROPERTY:io.max') %></th>
+        <th class="is-min"><%- helpers.t('PROPERTY:io.tearDown') %></th>
         <th></th>
       </tr>
       </thead>
@@ -30,6 +31,7 @@
         <td class="is-min is-number"><%= io.channel %></td>
         <td class="is-min is-number"><%= io.max ? io.min : '' %></td>
         <td class="is-min is-number"><%= io.max || '' %></td>
+        <td class="is-min" style="text-align: <%- io.tearDown ? 'left' : 'right' %>"><%- t('core', 'BOOL:' + io.tearDown) %></td>
         <td></td>
       </tr>
       <% }) %>

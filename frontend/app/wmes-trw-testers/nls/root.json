@@ -13,6 +13,7 @@
     "PROPERTY:io.channel": "Channel no",
     "PROPERTY:io.min": "Min.",
     "PROPERTY:io.max": "Max.",
+    "PROPERTY:io.tearDown": "Tear down?",
 
     "ioType:input": "Input",
     "ioType:output": "Output",
