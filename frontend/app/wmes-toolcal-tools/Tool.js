@@ -82,8 +82,14 @@ define([
     serializeRow: function()
     {
       var obj = this.serialize();
+      var users = this.groupUsers(true);
 
-      obj.users = obj.users.map(function(u) { return userInfoTemplate({userInfo: u}); }).join(', ');
+      Object.keys(users).forEach(function(kind)
+      {
+        var prop = kind === 'all' ? 'users' : (kind + 'Users');
+
+        obj[prop] = users[kind].join(', ');
+      });
 
       return obj;
     },
@@ -91,10 +97,52 @@ define([
     serializeDetails: function()
     {
       var obj = this.serialize();
+      var users = this.groupUsers(true);
 
-      obj.users = '<ul>' + obj.users.map(function(u) { return '<li>' + userInfoTemplate({userInfo: u}); }) + '</ul>';
+      Object.keys(users).forEach(function(kind)
+      {
+        var prop = kind === 'all' ? 'users' : (kind + 'Users');
+
+        if (users[kind].length === 1)
+        {
+          obj[prop] = users[kind][0];
+        }
+        else
+        {
+          obj[prop] = '<ul>'
+            + users[kind].map(function(u) { return '<li>' + u; })
+            + '</ul>';
+        }
+      });
 
       return obj;
+    },
+
+    groupUsers: function(serialize)
+    {
+      var users = {
+        all: {},
+        current: [],
+        individual: []
+      };
+
+      this.get('users').forEach(function(u)
+      {
+        var userInfo = serialize ? userInfoTemplate({userInfo: u}) : u;
+
+        if (!users[u.kind])
+        {
+          users[u.kind] = [];
+        }
+
+        users[u.kind].push(userInfo);
+
+        users.all[u.id] = userInfo;
+      });
+
+      users.all = _.values(users.all);
+
+      return users;
     },
 
     isOwner: function()

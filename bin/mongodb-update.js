@@ -3,19 +3,14 @@
 
 'use strict';
 
-db.fapentries.updateOne({subCategory: {$exists: false}}, {$set: {subCategory: null}});
+db.toolcaltools.find({}, {users: 1}).forEach(function(tool)
+{
+  db.toolcaltools.updateOne({_id: tool._id}, {$set: {
+    users: tool.users.map(u =>
+    {
+      u.kind = u.kind || 'individual';
 
-db. settings.insertMany([
-  {
-    _id: 'luca.lines',
-    value: ['TEST'],
-    updater: null,
-    updatedAt: null
-  },
-  {
-    _id: 'luca.setLineOrderUrl',
-    value: 'https://luca.local/api/setLineOrder',
-    updater: null,
-    updatedAt: null
-  }
-]);
+      return u;
+    })
+  }});
+});

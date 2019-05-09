@@ -50,8 +50,12 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-users" class="control-label"><%- helpers.t('PROPERTY:users') %></label>
-        <input id="<%- idPrefix %>-users" type="text" name="users">
+        <label for="<%- idPrefix %>-individualUsers" class="control-label"><%- helpers.t('PROPERTY:individualUsers') %></label>
+        <input id="<%- idPrefix %>-individualUsers" type="text" name="individualUsers">
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-currentUsers" class="control-label"><%- helpers.t('PROPERTY:currentUsers') %></label>
+        <input id="<%- idPrefix %>-currentUsers" type="text" name="currentUsers">
       </div>
       <% if (editMode) { %>
       <div class="form-group">

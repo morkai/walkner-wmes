@@ -64,17 +64,32 @@ define([
       var formData = this.model.toJSON();
 
       formData.lastDate = formData.lastDate ? time.format(formData.lastDate, 'YYYY-MM-DD') : '';
-      formData.users = (formData.users || []).map(function(u) { return u.id; });
+
+      var groupedUsers = this.model.groupUsers(false);
+
+      _.forEach(groupedUsers, function(users, kind)
+      {
+        formData[kind + 'Users'] = _.pluck(users, 'id').join(',');
+      });
 
       return formData;
     },
 
     serializeForm: function(formData)
     {
-      formData.users = this.$id('users')
-        .select2('data')
-        .map(function(u) { return {id: u.id, label: u.text}; })
-        .filter(function(u) { return !!u.id; });
+      var view = this;
+
+      formData.users = [];
+
+      ['individual', 'current'].forEach(function(kind)
+      {
+        var users = view.$id(kind + 'Users')
+          .select2('data')
+          .map(function(u) { return {id: u.id, label: u.text, kind: kind}; })
+          .filter(function(u) { return !!u.id; });
+
+        formData.users = formData.users.concat(users);
+      });
 
       formData.interval = +formData.interval;
 
@@ -95,10 +110,11 @@ define([
 
       buttonGroup.toggle(this.$id('status'));
 
-      this.setUpUsersSelect2();
+      this.setUpUsersSelect2('individual');
+      this.setUpUsersSelect2('current');
     },
 
-    setUpUsersSelect2: function()
+    setUpUsersSelect2: function(kind)
     {
       var isEditMode = this.options.editMode;
       var model = this.model;
@@ -110,17 +126,22 @@ define([
 
         if (Array.isArray(users) && users.length)
         {
-          data = users.map(function(u)
-          {
-            return {
-              id: u.id,
-              text: u.label
-            };
-          });
+          data = users
+            .filter(function(u)
+            {
+              return u.kind === kind;
+            })
+            .map(function(u)
+            {
+              return {
+                id: u.id,
+                text: u.label
+              };
+            });
         }
       }
 
-      setUpUserSelect2(this.$id('users'), {multiple: true, textFormatter: formatUserSelect2Text})
+      setUpUserSelect2(this.$id(kind + 'Users'), {multiple: true, textFormatter: formatUserSelect2Text})
         .select2('data', data)
         .select2('enable', user.isAllowedTo('TOOLCAL:MANAGE'));
     }
