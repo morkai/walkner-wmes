@@ -130,7 +130,7 @@ define([
       }), this);
 
       this.paintOrders = bindLoadingMessage(new OrderCollection(null, {
-        rqlQuery: 'select(bom)&operations.workCenter=PAINT&leadingOrder=' + this.model.id
+        rqlQuery: 'select(mrp,bom)&operations.workCenter=PAINT&leadingOrder=' + this.model.id
       }), this);
 
       this.paintOrder = new Order({
@@ -265,7 +265,10 @@ define([
       {
         order.get('bom').forEach(function(component)
         {
-          bom.add(_.assign({}, component.toJSON(), {index: i++}));
+          bom.add(_.assign(
+            {orderNo: order.id, mrp: order.get('mrp'), index: i++},
+            component.toJSON()
+          ));
         });
       });
 

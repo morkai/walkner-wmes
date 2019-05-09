@@ -64,6 +64,8 @@
   "PROPERTY:documents.nc15": "15NC",
   "PROPERTY:documents.name": "Nazwa dokumentu",
   "PROPERTY:bom": "Komponenty",
+  "PROPERTY:bom.orderNo": "Zlecenie",
+  "PROPERTY:bom.mrp": "MRP",
   "PROPERTY:bom.item": "Nr",
   "PROPERTY:bom.nc12": "12NC",
   "PROPERTY:bom.name": "Nazwa",
