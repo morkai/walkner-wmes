@@ -1,3 +1,7 @@
+<% if (panel) { %>
+<div class="panel panel-<%- panel.type || 'default' %> <%- panel.className || '' %>">
+  <div class="panel-heading"><%- panel.title || '' %></div>
+<% } %>
 <div class="list <%- typeof className === 'undefined' ? '' : className %>">
   <div class="table-responsive"><table class="table <%- tableClassName %>">
       <thead>
@@ -57,3 +61,6 @@
     </table></div>
   <div class="pagination-container"></div>
 </div>
+<% if (panel) { %>
+</div>
+<% } %>

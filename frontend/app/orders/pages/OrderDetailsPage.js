@@ -15,6 +15,7 @@ define([
   '../ComponentCollection',
   '../util/openOrderPrint',
   '../views/OrderDetailsView',
+  '../views/OrderListView',
   '../views/OperationListView',
   '../views/DocumentListView',
   '../views/ComponentListView',
@@ -38,6 +39,7 @@ define([
   ComponentCollection,
   openOrderPrint,
   OrderDetailsView,
+  OrderListView,
   OperationListView,
   DocumentListView,
   ComponentListView,
@@ -105,6 +107,7 @@ define([
 
       this.insertView(this.detailsView);
       this.insertView(this.fapEntriesView);
+      this.insertView(this.childOrdersView);
       this.insertView(this.operationsView);
       this.insertView(this.documentsView);
       this.insertView(this.componentsView);
@@ -129,8 +132,16 @@ define([
         rqlQuery: 'exclude(changes)&sort(_id)&orderNo=string:' + this.model.id
       }), this);
 
+      this.childOrders = bindLoadingMessage(new OrderCollection(null, {
+        paginate: false,
+        rqlQuery: 'exclude(operations,bom,documents,changes)'
+          + '&sort(mrp,scheduledStartDate)&limit(0)'
+          + '&_id!=' + this.model.id
+          + '&leadingOrder=' + this.model.id
+      }), this);
+
       this.paintOrders = bindLoadingMessage(new OrderCollection(null, {
-        rqlQuery: 'select(mrp,bom)&operations.workCenter=PAINT&leadingOrder=' + this.model.id
+        rqlQuery: 'select(mrp,bom)&limit(0)&operations.workCenter=PAINT&leadingOrder=' + this.model.id
       }), this);
 
       this.paintOrder = new Order({
@@ -147,6 +158,15 @@ define([
 
       this.fapEntriesView = new FapEntryListView({
         collection: this.fapEntries
+      });
+
+      this.childOrdersView = new OrderListView({
+        collection: this.childOrders,
+        delayReasons: this.delayReasons,
+        panel: {
+          title: this.t('PANEL:TITLE:childOrders'),
+          className: 'orders-childOrders'
+        }
       });
 
       this.operationsView = new OperationListView({
@@ -194,6 +214,7 @@ define([
         this.model.fetch(),
         fapDictionaries.load(),
         this.fapEntries.fetch({reset: true}),
+        this.childOrders.fetch({reset: true}),
         this.paintOrders.fetch({reset: true}),
         this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null
       );

@@ -36,6 +36,9 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
+.page[data-id="orderDetails"] .table-responsive {
+  max-height: 400px;
+}
 .orders-change + .orders-change {
   margin-top: 15px;
   padding-top: 15px;
@@ -80,6 +83,9 @@
 }
 .orders-changes .userInfo-cname {
   display: block;
+}
+.orders-changes .table-responsive {
+  max-height: none!important;
 }
 .table > tfoot > tr > td.orders-commentForm-container {
   padding: 15px;

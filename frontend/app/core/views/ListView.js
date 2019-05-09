@@ -138,7 +138,8 @@ define([
         rows: this.serializeRows(),
         className: _.result(this, 'className'),
         tableClassName: _.result(this, 'tableClassName'),
-        noData: this.options.noData || t('core', 'LIST:NO_DATA')
+        noData: this.options.noData || t('core', 'LIST:NO_DATA'),
+        panel: this.options.panel
       };
     },
 
@@ -348,13 +349,17 @@ define([
 
     isNotClickable: function(e)
     {
-      return !this.el.classList.contains('is-clickable')
-        || e.target.tagName === 'A'
-        || e.target.tagName === 'INPUT'
-        || e.target.tagName === 'BUTTON'
-        || e.target.classList.contains('actions')
+      var listEl = this.el.classList.contains('list') ? this.el : this.el.querySelector('.list');
+      var targetEl = e.target;
+      var tagName = targetEl.tagName;
+
+      return !listEl.classList.contains('is-clickable')
+        || tagName === 'A'
+        || tagName === 'INPUT'
+        || tagName === 'BUTTON'
+        || targetEl.classList.contains('actions')
         || window.getSelection().toString() !== ''
-        || (e.target.tagName !== 'TD' && this.$(e.target).closest('a, input, button').length);
+        || (tagName !== 'TD' && this.$(targetEl).closest('a, input, button').length);
     }
 
   });

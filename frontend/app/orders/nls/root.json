@@ -18,6 +18,7 @@
     "openOrdersPrint:msg:notFound": "{count, plural, one{Order {orders} doesn't exist.} other{Orders don't exist: {orders}}}",
 
     "PANEL:TITLE:fap": "Order's FAP entries",
+    "PANEL:TITLE:childOrders": "Child orders",
     "PANEL:TITLE:operations": "Order's operations",
     "PANEL:TITLE:documents": "Order's documents",
     "PANEL:TITLE:bom": "Order's components",
@@ -156,6 +157,7 @@
 
     "jumpList:details": "Details",
     "jumpList:fap": "FAP entries",
+    "jumpList:childOrders": "Child orders",
     "jumpList:operations": "Operations",
     "jumpList:documents": "Documents",
     "jumpList:bom": "Components",

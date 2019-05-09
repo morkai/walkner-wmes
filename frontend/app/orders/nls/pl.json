@@ -17,6 +17,7 @@
   "openOrdersPrint:msg:notFound": "{count, plural, one{Zlecenie {orders} nie istnieje.} other{Zlecenia nie istnieją: {orders}}}",
 
   "PANEL:TITLE:fap": "Lista zgłoszeń FAP",
+  "PANEL:TITLE:childOrders": "Lista podzleceń",
   "PANEL:TITLE:operations": "Lista operacji zlecenia",
   "PANEL:TITLE:documents": "Lista dokumentów zlecenia",
   "PANEL:TITLE:bom": "Lista komponentów zlecenia",
@@ -155,6 +156,7 @@
 
   "jumpList:details": "Szczegóły",
   "jumpList:fap": "Zgłoszenia FAP",
+  "jumpList:childOrders": "Podzlecenia",
   "jumpList:operations": "Operacje",
   "jumpList:documents": "Dokumenty",
   "jumpList:bom": "Komponenty",
