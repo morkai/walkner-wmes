@@ -251,7 +251,7 @@
     || !navigator.onLine
     || !document.getElementsByTagName('html')[0].hasAttribute('manifest'))
   {
-    return window.requireApp();
+    return tryRequireApp(0);
   }
 
   var reload = location.reload.bind(location);
@@ -268,7 +268,7 @@
     appCache.onobsolete = null;
     appCache.onupdateready = null;
 
-    window.requireApp();
+    tryRequireApp();
   }
 
   appCache.onnoupdate = doStartApp;
@@ -276,4 +276,21 @@
   appCache.onerror = doStartApp;
   appCache.onobsolete = reload;
   appCache.onupdateready = reload;
+
+  function tryRequireApp(i)
+  {
+    if (i === 10)
+    {
+      throw new Error('No window.requireApp()?!');
+    }
+
+    if (typeof window.requireApp === 'function')
+    {
+      window.requireApp();
+    }
+    else
+    {
+      setTimeout(tryRequireApp, 1000, i + 1);
+    }
+  }
 })();
