@@ -223,6 +223,11 @@ define([
     {
       var mrpCoeffs = {};
 
+      if (!value)
+      {
+        return mrpCoeffs;
+      }
+
       value.split('\n').forEach(function(line)
       {
         var wcCoeffs = {};
