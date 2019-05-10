@@ -70,7 +70,7 @@ define([
 
     resize: function()
     {
-      if (this.options.embedded)
+      if (this.options.embedded && this.el.parentNode)
       {
         this.el.parentNode.style.width = window.innerWidth + 'px';
       }
