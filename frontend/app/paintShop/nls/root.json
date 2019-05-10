@@ -24,6 +24,7 @@
     "PROPERTY:qty": "Quantity",
     "PROPERTY:qtyDone": "Quantity painted",
     "PROPERTY:qtyPaint": "Quantity to paint",
+    "PROPERTY:qtyPaint:drilling": "Quantity to drill",
     "PROPERTY:qtyDlv": "Quantity to deliver",
     "PROPERTY:mrp": "MRP",
     "PROPERTY:startTime": "Assembly time",
@@ -77,6 +78,7 @@
     "empty": "No orders for the specified date.",
     "multiPaint": "WARNING! Order with {count, plural, one{a single paint} =2{two paints} other{{count} paints}}.",
     "noPaints": "WARNING! Order with no paints.",
+    "drilling": "WARNING! Components for drilling.",
 
     "orderChanges:change:reset": "Reset order.",
     "orderChanges:change:cancel": "Cancelled order.",

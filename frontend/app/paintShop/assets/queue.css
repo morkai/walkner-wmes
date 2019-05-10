@@ -152,12 +152,17 @@ td.paintShop-property {
 .is-paint > td.paintShop-property {
   font-weight: bold;
 }
-.paintShop-orderDetails-multiPaint {
+.paintShop-orderDetails-message {
   display: block;
   padding: 5px;
   color: #fff;
   background: #d9534f;
   box-shadow: 0 1px 3px #666;
+  text-shadow: 1px 1px 1px #333;
+  font-weight: bold;
+}
+.paintShop-orderDetails-drilling {
+  background: #f0ad4e;
 }
 .paintShop-order-childOrder + .paintShop-order-component > td.paintShop-property {
   padding-top: 5px;

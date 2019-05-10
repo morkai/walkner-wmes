@@ -14,3 +14,15 @@ db.toolcaltools.find({}, {users: 1}).forEach(function(tool)
     })
   }});
 });
+
+db.paintshoporders.find({}, {childOrders: 1}).forEach(pso =>
+{
+  pso.childOrders.forEach(childOrder =>
+  {
+    var sapOrder = db.orders.findOne({_id: childOrder.order}, {mrp: 1});
+
+    childOrder.mrp = sapOrder ? sapOrder.mrp : null;
+  });
+
+  db.paintshoporders.updateOne({_id: pso._id}, {$set: {childOrders: pso.childOrders}});
+});

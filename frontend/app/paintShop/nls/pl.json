@@ -23,6 +23,7 @@
   "PROPERTY:qty": "Ilość",
   "PROPERTY:qtyDone": "Ilość pomalowana",
   "PROPERTY:qtyPaint": "Ilość do pomalowania",
+  "PROPERTY:qtyPaint:drilling": "Ilość do wiercenia",
   "PROPERTY:qtyDlv": "Ilość do dostarczenia",
   "PROPERTY:mrp": "Przepływ",
   "PROPERTY:startTime": "Początek montażu",
@@ -76,6 +77,7 @@
   "empty": "Brak zleceń dla wybranego dnia.",
   "multiPaint": "UWAGA! Zlecenie z {count, plural, one{jedną farbą} =2{dwiema farbami} other{{count} farbami}}.",
   "noPaints": "UWAGA! Zlecenie bez malowania.",
+  "drilling": "UWAGA! Komponenty do wiercenia.",
 
   "orderChanges:change:reset": "Zresetowano zlecenie.",
   "orderChanges:change:cancel": "Anulowano zlecenie.",

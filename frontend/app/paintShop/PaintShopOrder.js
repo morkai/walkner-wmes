@@ -75,6 +75,9 @@ define([
       obj.rowSpan = childOrderCount + 1;
       obj.rowSpanDetails = obj.rowSpan;
       obj.paints = {};
+      obj.mrps = {};
+      obj.mrps[obj.mrp] = 1;
+      obj.drilling = true;
 
       if (obj.paint.nc12 === '000000000000')
       {
@@ -83,6 +86,9 @@ define([
 
       obj.childOrders = obj.childOrders.map(function(childOrder, i)
       {
+        obj.drilling = obj.drilling && childOrder.mrp === 'KSJ';
+        obj.mrps[childOrder.mrp] = 1;
+
         var components = [];
 
         obj.paintCount = 0;
@@ -164,6 +170,8 @@ define([
           components: components
         });
       });
+
+      obj.mrps = Object.keys(obj.mrps).join(' ');
 
       if (obj.startTime)
       {

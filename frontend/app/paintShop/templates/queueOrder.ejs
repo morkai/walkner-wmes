@@ -1,4 +1,4 @@
-<tbody class="paintShop-order <%- visible ? 'visible' : 'hidden' %> <%- first ? 'is-first' : '' %> <%- last ? 'is-last' : '' %>" data-order-id="<%- order._id %>" data-status="<%- order.status %>" data-mrp="<%= order.mrp %>" data-cabin="<%- order.cabin %>">
+<tbody class="paintShop-order <%- visible ? 'visible' : 'hidden' %> <%- first ? 'is-first' : '' %> <%- last ? 'is-last' : '' %>" data-order-id="<%- order._id %>" data-status="<%- order.status %>" data-mrp="<%= order.mrps %>" data-cabin="<%- order.cabin %>">
   <tr class="paintShop-properties paintShop-order-order">
     <td class="paintShop-property" data-property="no" rowspan="<%- order[rowSpan] %>">
       <%- order.no %>
@@ -32,8 +32,8 @@
       </span>
       <% } %>
       <% if (order.qtyPaint) { %>
-      <span class="paintShop-property" data-property="qtyPaint" title="<%- t('paintShop', 'PROPERTY:qtyPaint') %>">
-        <i class="fa fa-paint-brush"></i><span><%- order.qtyPaint.toLocaleString() %></span>
+      <span class="paintShop-property" data-property="qtyPaint" title="<%- t('paintShop', 'PROPERTY:qtyPaint' + (order.drilling ? ':drilling' : '')) %>">
+        <i class="fa <%- order.drilling ? 'fa-circle-o' : 'fa-paint-brush' %>"></i><span><%- order.qtyPaint.toLocaleString() %></span>
       </span>
       <% } %>
       <% if (order.qtyDone) { %>
@@ -83,13 +83,23 @@
   <% if (childOrder.paintCount > 1) { %>
   <tr class="paintShop-properties paintShop-order-component">
     <td class="paintShop-property" colspan="5">
-      <span class="paintShop-orderDetails-multiPaint"><%- t('paintShop', 'multiPaint', {count: childOrder.paintCount}) %></span>
+      <span class="paintShop-orderDetails-message paintShop-orderDetails-multiPaint">
+        <%- t('paintShop', 'multiPaint', {count: childOrder.paintCount}) %>
+      </span>
     </td>
   </tr>
   <% } else if (childOrder.paintCount === 0) { %>
   <tr class="paintShop-properties paintShop-order-component">
     <td class="paintShop-property" colspan="5">
-      <span class="paintShop-orderDetails-multiPaint"><%- t('paintShop', 'noPaints') %></span>
+      <% if (childOrder.mrp === 'KSJ') { %>
+      <span class="paintShop-orderDetails-message paintShop-orderDetails-drilling">
+        <%- t('paintShop', 'drilling') %>
+      </span>
+      <% } else { %>
+      <span class="paintShop-orderDetails-message paintShop-orderDetails-multiPaint">
+        <%- t('paintShop', 'noPaints') %>
+      </span>
+      <% } %>
     </td>
   </tr>
   <% } %>
