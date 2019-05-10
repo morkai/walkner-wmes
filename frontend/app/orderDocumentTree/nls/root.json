@@ -46,6 +46,8 @@
     "files:sub:true": "Stop observing",
     "files:sub:false": "Observe",
     "files:sub:failure": "Failed to change the subscription state.",
+    "files:updatedAt": "Last change",
+    "files:updatedAt:value": "{user}<br>{date}",
 
     "unlinkFiles:title": "Unlinking files",
     "unlinkFiles:submit": "Unlink files",
@@ -132,7 +134,16 @@
     "uploads:msg:folderIsTrash": "Files cannot be added to the Trash.",
     "uploads:error:INVALID_TYPE": "Invalid file type. Expected a PDF document.",
     "uploads:error:INVALID_RESPONSE": "Invalid server response.",
-    "uploads:error:UNKNOWN_ERROR": "Unexpected error during file loading."
+    "uploads:error:UNKNOWN_ERROR": "Unexpected error during file loading.",
+
+    "fileChanges:time": "Time",
+    "fileChanges:user": "User",
+    "fileChanges:type": "Action",
+    "fileChanges:type:fileAdded": "Added",
+    "fileChanges:type:fileEdited": "Edited",
+    "fileChanges:type:fileRemoved": "Trashed",
+    "fileChanges:type:fileRecovered": "Recovered",
+    "fileChanges:type:filePurged": "Purged"
   },
   "pl": true
 }

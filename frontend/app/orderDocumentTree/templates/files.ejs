@@ -29,6 +29,12 @@
       <dt><%- t('orderDocumentTree', 'files:' + prop) %></dt>
       <dd data-prop="<%- prop %>"></dd>
       <% }) %>
+      <% if (user.isAllowedTo('DOCUMENTS:VIEW')) { %>
+      <dt><a id="<%- idPrefix %>-showChanges" href="javascript:void(0)"><%- t('orderDocumentTree', 'files:updatedAt') %></a></dt>
+      <% } else { %>
+      <dt><%- t('orderDocumentTree', 'files:updatedAt') %></dt>
+      <% } %>
+      <dd data-prop="updatedAt"></dd>
     </dl>
     <i id="<%- idPrefix %>-closePreview" class="fa fa-remove" title="<%- t('orderDocumentTree', 'files:close') %>"></i>
   </div>

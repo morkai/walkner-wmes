@@ -2,6 +2,7 @@
 @import "./folders.css";
 @import "./files.css";
 @import "./upload.css";
+@import "./changes.css";
 
 .orderDocumentTree-contextMenu {
   position: absolute;

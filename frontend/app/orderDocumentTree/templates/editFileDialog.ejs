@@ -25,8 +25,15 @@
       <label>
         <input class="orderDocumentTree-editFile-checkbox" type="checkbox" name="files[<%- i %>].hash" value="<%- file.hash %>">
         <input type="hidden" name="files[<%- i %>].type" value="application/pdf">
-        <input type="date" name="files[<%- i %>].date" class="form-control" required min="2000-01-01" max="<%- time.getMoment().startOf('day').add(1, 'year').format('YYYY-MM-DD') %>"><a class="btn btn-link" href="/orderDocuments/<%- model._id %>?pdf=1&hash=<%- file.hash %>" target="_blank" title="<%- t('orderDocumentTree', 'editFile:openFile') %>"><i class="fa fa-file-o"></i></a>
+        <input type="date" name="files[<%- i %>].date" class="form-control" required min="2000-01-01" max="<%- time.getMoment().startOf('day').add(1, 'year').format('YYYY-MM-DD') %>">
       </label>
+      <a class="btn btn-default" href="/orderDocuments/<%- model._id %>?pdf=1&hash=<%- file.hash %>" target="_blank" title="<%- t('orderDocumentTree', 'editFile:openFile') %>"><i class="fa fa-file-o"></i></a>
+      <% if (file.updatedAt && file.updater) { %>
+      <span style="margin-left: 10px; line-height: 34px; vertical-align: middle">
+        <i class="fa fa-clock-o"></i><span style="margin-right: 10px"><%- time.format(file.updatedAt, 'LLL') %></span>
+        <i class="fa fa-user"></i><span><%= file.updater.label %></span>
+      </span>
+      <% } %>
     </div>
     <% }) %>
   </div>

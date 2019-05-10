@@ -5,7 +5,7 @@
   <span class="orderDocumentTree-files-files">
     <% _.forEach(file.files, function(f, i) { %>
     <% if (i < 6) { %>
-    <a href="/orderDocuments/<%- file.id %>?pdf=1&hash=<%- f.hash %>" target="_blank" data-file-id="<%- file.id %>" data-hash="<%- f.hash %>"><%- time.format(f.date, 'L') %></a>
+    <a href="/orderDocuments/<%- file.id %>?pdf=1&hash=<%- f.hash %>" target="_blank" data-file-id="<%- file.id %>" data-hash="<%- f.hash %>" title="<%= f.title %>"><%- f.date %></a>
     <% } %>
     <% }) %>
   </span>

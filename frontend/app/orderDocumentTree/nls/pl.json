@@ -45,6 +45,8 @@
   "files:sub:true": "Przestań obserwować",
   "files:sub:false": "Obserwuj",
   "files:sub:failure": "Zmiana subskrypcji nie powiodła się.",
+  "files:updatedAt": "Ostatnia zmiana",
+  "files:updatedAt:value": "{user}<br>{date}",
 
   "unlinkFiles:title": "Usuwanie przypisania dokumentów",
   "unlinkFiles:submit": "Usuń przypisania",
@@ -131,5 +133,14 @@
   "uploads:msg:folderIsTrash": "Nie można dodawać plików do śmietnika.",
   "uploads:error:INVALID_TYPE": "Nieprawidłowy typ pliku. Oczekiwano dokumentu PDF.",
   "uploads:error:INVALID_RESPONSE": "Nieprawidłowa odpowiedź serwera.",
-  "uploads:error:UNKNOWN_ERROR": "Nieoczekiwany błąd podczas ładowania pliku."
+  "uploads:error:UNKNOWN_ERROR": "Nieoczekiwany błąd podczas ładowania pliku.",
+
+  "fileChanges:time": "Czas zmiany",
+  "fileChanges:user": "Użytkownik",
+  "fileChanges:type": "Akcja",
+  "fileChanges:type:fileAdded": "Dodanie",
+  "fileChanges:type:fileEdited": "Edycja",
+  "fileChanges:type:fileRemoved": "Śmietnik",
+  "fileChanges:type:fileRecovered": "Przywrócenie",
+  "fileChanges:type:filePurged": "Usunięcie"
 }

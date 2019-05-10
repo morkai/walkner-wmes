@@ -3,6 +3,8 @@
 
 'use strict';
 
+print('toolcaltools...');
+
 db.toolcaltools.find({}, {users: 1}).forEach(function(tool)
 {
   db.toolcaltools.updateOne({_id: tool._id}, {$set: {
@@ -15,7 +17,9 @@ db.toolcaltools.find({}, {users: 1}).forEach(function(tool)
   }});
 });
 
-db.paintshoporders.find({}, {childOrders: 1}).forEach(pso =>
+print('paintshoporders...');
+
+db.paintshoporders.find({'childOrders.mrp': {$exists: false}}, {childOrders: 1}).forEach(pso =>
 {
   pso.childOrders.forEach(childOrder =>
   {
@@ -25,4 +29,59 @@ db.paintshoporders.find({}, {childOrders: 1}).forEach(pso =>
   });
 
   db.paintshoporders.updateOne({_id: pso._id}, {$set: {childOrders: pso.childOrders}});
+});
+
+print('orderdocumentfiles...');
+
+db.orderdocumentfiles.find({}).forEach(odf =>
+{
+  var changes = db.orderdocumentchanges.find({nc15: odf._id}).toArray();
+
+  if (!changes.length)
+  {
+    return;
+  }
+
+  var files = {};
+  var $set = {
+    updater: null,
+    updatedAt: null,
+    files: odf.files
+  };
+
+  odf.files.forEach(f =>
+  {
+    f.updater = null;
+    f.updatedAt = null;
+    files[f.hash] = f;
+  });
+
+  changes.forEach(change =>
+  {
+    $set.updater = change.user;
+    $set.updatedAt = change.time;
+
+    if (!change.data || !Array.isArray(change.data.files))
+    {
+      return;
+    }
+
+    change.data.files.forEach(changeFile =>
+    {
+      var file = files[changeFile.hash];
+
+      if (!file)
+      {
+        return;
+      }
+
+      if (!file.updater || file.date.getTime() !== changeFile.date.getTime())
+      {
+        file.updater = change.user;
+        file.updatedAt = change.time;
+      }
+    });
+  });
+
+  db.orderdocumentfiles.updateOne({_id: odf._id}, {$set});
 });

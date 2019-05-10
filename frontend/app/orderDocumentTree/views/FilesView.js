@@ -11,6 +11,7 @@ define([
   'app/core/views/DialogView',
   'app/orderDocumentTree/OrderDocumentTree',
   'app/orderDocumentTree/views/EditFileDialogView',
+  'app/orderDocumentTree/views/FileChangesView',
   'app/orderDocumentTree/templates/files',
   'app/orderDocumentTree/templates/filesFile',
   'app/orderDocumentTree/templates/filesFolder',
@@ -27,6 +28,7 @@ define([
   DialogView,
   OrderDocumentTree,
   EditFileDialogView,
+  FileChangesView,
   template,
   renderFile,
   renderFolder,
@@ -261,6 +263,16 @@ define([
             view.resolveFileSub();
           }
         });
+      },
+      'click #-showChanges': function()
+      {
+        var file = this.model.getSelectedFile();
+        var dialogView = new FileChangesView({
+          nc15: file.id,
+          model: this.model
+        });
+
+        viewport.showDialog(dialogView, file.id + ': ' + file.getLabel());
       }
     },
 
@@ -420,7 +432,16 @@ define([
         selected: file.id === this.model.get('selectedFile'),
         marked: marked,
         icon: 'fa-file-o',
-        files: file.get('files')
+        files: file.get('files').map(function(f)
+        {
+          return {
+            hash: f.hash,
+            date: time.format(f.date, 'L'),
+            title: f.updatedAt && f.updater
+              ? (f.updater.label + '\n' + time.format(f.updatedAt, 'LLL'))
+              : ''
+          };
+        })
       };
     },
 
@@ -535,7 +556,8 @@ define([
         nc15: _.escape(selectedFile.id),
         name: _.escape(selectedFile.getLabel()),
         folders: this.serializePreviewFolders(),
-        files: this.serializePreviewFiles()
+        files: this.serializePreviewFiles(),
+        updatedAt: this.serializePreviewUpdatedAt()
       };
     },
 
@@ -603,8 +625,18 @@ define([
 
       _.forEach(selectedFile.get('files'), function(file)
       {
-        html += '<li><a href="/orderDocuments/' + selectedFile.id + '?pdf=1&hash=' + file.hash + '" target="_blank"'
-          + ' data-file-id="' + selectedFile.id + '" data-hash="' + file.hash + '">'
+        var title = '';
+
+        if (file.updatedAt && file.updater)
+        {
+          title = _.escape(file.updater.label) + '\n' + time.format(file.updatedAt, 'LLL');
+        }
+
+        html += '<li><a target="_blank"'
+          + ' href="/orderDocuments/' + selectedFile.id + '?pdf=1&hash=' + file.hash + '"'
+          + ' data-file-id="' + selectedFile.id + '"'
+          + ' data-hash="' + file.hash + '"'
+          + ' title="' + title + '">'
           + view.t('files:files:date', {date: time.utc.format(file.date, 'LL')})
           + '</a>';
       });
@@ -615,6 +647,18 @@ define([
       }
 
       return '-';
+    },
+
+    serializePreviewUpdatedAt: function()
+    {
+      var selectedFile = this.model.getSelectedFile();
+      var updatedAt = selectedFile.get('updatedAt');
+      var updater = selectedFile.get('updater');
+
+      return this.t('files:updatedAt:value', {
+        date: updatedAt ? time.format(updatedAt, 'LLL') : '?',
+        user: updater ? _.escape(updater.label) : '?'
+      });
     },
 
     positionPreview: function()

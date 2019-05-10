@@ -1,0 +1,30 @@
+<table class="table table-condensed table-hover">
+  <thead>
+  <tr>
+    <th class="is-min"><%- helpers.t('fileChanges:time') %></th>
+    <th class="is-min"><%- helpers.t('fileChanges:user') %></th>
+    <th class="is-min"><%- helpers.t('fileChanges:type') %></th>
+    <th class="is-min"><%- helpers.t('files:name') %></th>
+    <th class="is-min"><%- helpers.t('files:folders') %></th>
+    <th><%- helpers.t('files:files') %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% if (state === 'loaded') { %>
+  <% changes.forEach(function(change) { %>
+  <tr>
+    <td class="is-min"><%- change.time %></td>
+    <td class="is-min"><%- change.user %></td>
+    <td class="is-min"><%- change.type %></td>
+    <td class="is-min"><%= change.name %></td>
+    <td class="is-min"><%- change.folders %></td>
+    <td><%- change.files %></td>
+  </tr>
+  <% }) %>
+  <% } else { %>
+  <tr>
+    <td colspan="5"><i class="fa fa-spinner <%- state === 'loading' ? 'fa-spin' : '' %>"></i></td>
+  </tr>
+  <% } %>
+  </tbody>
+</table>
