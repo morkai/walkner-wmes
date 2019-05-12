@@ -342,6 +342,10 @@ app/orderDocuments/assets/../../production/assets/taktTime.css
 app/orderDocuments/assets/../../production/assets/bomChecker.css
 app/orderDocuments/assets/main.css
 
+app/orderDocumentTree/assets/changes.css
+----------------
+app/orderDocumentTree/assets/changes.css
+
 app/orderDocumentTree/assets/files.css
 ----------------
 app/orderDocumentTree/assets/files.css
@@ -356,6 +360,7 @@ app/orderDocumentTree/assets/./path.css
 app/orderDocumentTree/assets/./folders.css
 app/orderDocumentTree/assets/./files.css
 app/orderDocumentTree/assets/./upload.css
+app/orderDocumentTree/assets/./changes.css
 app/orderDocumentTree/assets/main.css
 
 app/orderDocumentTree/assets/path.css

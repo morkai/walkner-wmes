@@ -1,0 +1,1 @@
+define(["underscore","../core/Model"],function(e,r){"use strict";return r.extend({urlRoot:"/orderDocuments/changes"})});
