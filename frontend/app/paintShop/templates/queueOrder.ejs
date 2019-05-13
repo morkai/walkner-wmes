@@ -1,4 +1,4 @@
-<tbody class="paintShop-order <%- visible ? 'visible' : 'hidden' %> <%- first ? 'is-first' : '' %> <%- last ? 'is-last' : '' %>" data-order-id="<%- order._id %>" data-status="<%- order.status %>" data-mrp="<%= order.mrps %>" data-cabin="<%- order.cabin %>">
+<tbody class="paintShop-order <%- visible ? 'visible' : 'hidden' %> <%- first ? 'is-first' : '' %> <%- last ? 'is-last' : '' %>" data-order-id="<%- order._id %>" data-status="<%- order.status %>" data-mrp="<%= order.mrp %>" data-cabin="<%- order.cabin %>">
   <tr class="paintShop-properties paintShop-order-order">
     <td class="paintShop-property" data-property="no" rowspan="<%- order[rowSpan] %>">
       <%- order.no %>

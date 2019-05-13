@@ -136,7 +136,9 @@ define([
 
     isMrpVisible: function(serializedOrder)
     {
-      return this.selectedMrp === 'all' || serializedOrder.mrp === this.selectedMrp;
+      return this.selectedMrp === 'all'
+        || serializedOrder.mrp === this.selectedMrp
+        || (this.selectedMrp === 'KSJ' && serializedOrder.mrps.indexOf(this.selectedMrp) !== -1);
     },
 
     isPaintVisible: function(serializedOrder)
@@ -261,6 +263,11 @@ define([
         serializedList.push(serializedOrder);
 
         mrpMap[serializedOrder.mrp] = 1;
+
+        if (serializedOrder.drilling)
+        {
+          mrpMap.KSJ = 1;
+        }
 
         orders.recountOrder(totalQuantities, serializedOrder);
       });
