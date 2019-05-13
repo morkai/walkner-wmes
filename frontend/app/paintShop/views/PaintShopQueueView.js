@@ -434,6 +434,11 @@ define([
 
       if (orderEl)
       {
+        if (orderEl.classList.contains('hidden'))
+        {
+          this.orders.selectMrp(orderEl.dataset.mrp);
+        }
+
         this.$el.parent().animate({scrollTop: orderEl.offsetTop + 1}, 200);
 
         this.lastFocusedOrder = orderId;
