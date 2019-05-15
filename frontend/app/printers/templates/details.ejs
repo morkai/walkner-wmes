@@ -5,7 +5,7 @@
       'name',
       'label',
       'tags',
-      {id: 'special', value: model.special ? ('<pre><code>' + model.special + '</code></pre>') : ''}
+      {id: '!special', value: model.special ? ('<pre><code>' + _.escape(model.special) + '</code></pre>') : ''}
     ]) %>
   </div>
 </div>
