@@ -86,7 +86,7 @@ define([
 
       obj.childOrders = obj.childOrders.map(function(childOrder, i)
       {
-        obj.drilling = obj.drilling && childOrder.mrp === 'KSJ';
+        obj.drilling = obj.drilling || childOrder.mrp === 'KSJ';
         obj.mrps[childOrder.mrp] = 1;
 
         var components = [];
