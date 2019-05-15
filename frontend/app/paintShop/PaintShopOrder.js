@@ -142,26 +142,6 @@ define([
         obj.rowSpan += rowSpan;
         obj.rowSpanDetails += rowSpanDetails;
 
-        if (orders && obj.followups.length)
-        {
-          var followupIds = obj.followups;
-
-          obj.followups = [];
-
-          followupIds.forEach(function(followupId)
-          {
-            var followupOrder = orders.get(followupId);
-
-            if (followupOrder)
-            {
-              obj.followups.push({
-                id: followupId,
-                no: followupOrder.get('no')
-              });
-            }
-          });
-        }
-
         return _.assign({
           rowSpan: rowSpan + 1,
           rowSpanDetails: rowSpanDetails + 1,
@@ -172,6 +152,26 @@ define([
       });
 
       obj.mrps = Object.keys(obj.mrps).join(' ');
+
+      if (orders && obj.followups.length)
+      {
+        var followupIds = obj.followups;
+
+        obj.followups = [];
+
+        followupIds.forEach(function(followupId)
+        {
+          var followupOrder = orders.get(followupId);
+
+          if (followupOrder)
+          {
+            obj.followups.push({
+              id: followupId,
+              no: followupOrder.get('no')
+            });
+          }
+        });
+      }
 
       if (obj.startTime)
       {
