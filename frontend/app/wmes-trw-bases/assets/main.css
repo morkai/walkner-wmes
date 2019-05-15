@@ -175,7 +175,7 @@
   z-index: 9;
 }
 .trw-base-canvas-faded {
-  opacity: 0.25;
+  opacity: 0.1;
 }
 .trw-base-canvas-connector.trw-base-canvas-faded > path:first-child {
   stroke: #000!important;
