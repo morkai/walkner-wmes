@@ -1029,8 +1029,9 @@ assets/../app/help/assets/main.css
 assets/../app/logs-browserErrors/assets/main.css
 assets/../app/wmes-toolcal-tools/assets/main.css
 assets/../app/wmes-fap-entries/assets/main.css
-assets/../app/wmes-trw-programs/assets/main.css
 assets/../app/wmes-trw-bases/assets/main.css
+assets/../app/wmes-trw-programs/assets/main.css
+assets/../app/wmes-trw-tests/assets/testing.css
 assets/../app/wmes-snf-programs/assets/main.css
 assets/./wmes-loading.css
 assets/wmes-main.css
