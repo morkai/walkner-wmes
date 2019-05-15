@@ -33,13 +33,6 @@ define([
 ) {
   'use strict';
 
-  var ENDPOINT_TO_ANCHOR = {
-    top: 'Top',
-    left: 'Left',
-    right: 'Right',
-    bottom: 'Bottom'
-  };
-
   return FormView.extend({
 
     template: template,
@@ -357,8 +350,6 @@ define([
 
       view.$id('canvas').html(html);
 
-      var endpoints = {};
-
       view.base.clusters.forEach(function(cluster)
       {
         cluster.rows.forEach(function(row, rowI)
@@ -370,9 +361,9 @@ define([
 
             cell.endpoints.forEach(function(endpoint)
             {
-              endpoints[1] = view.jsPlumb.addEndpoint(cellEl, {
+              view.jsPlumb.addEndpoint(cellEl, {
                 uuid: cellId + ':' + endpoint,
-                anchor: ENDPOINT_TO_ANCHOR[endpoint],
+                anchor: Program.ENDPOINT_TO_ANCHOR[endpoint],
                 isSource: true,
                 isTarget: true,
                 allowLoopback: false,
@@ -597,19 +588,14 @@ define([
 
         view.jsPlumb.connect({
           uuids: [
-            view.formatEndpointUuid(step.source),
-            view.formatEndpointUuid(step.target)
+            Program.formatEndpointUuid(step.source),
+            Program.formatEndpointUuid(step.target)
           ],
           parameters: {step: step._id},
           detachable: selected,
           cssClass: cssClass.join(' ')
         });
       });
-    },
-
-    formatEndpointUuid: function(endpoint)
-    {
-      return [endpoint.cluster, endpoint.row, endpoint.col, endpoint.endpoint].join(':');
     },
 
     updateStep: function(stepId)

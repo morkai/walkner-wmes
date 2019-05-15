@@ -113,27 +113,22 @@
 .trw-testing[data-state="test"] .trw-testing-ft .trw-testing-prop {
   display: block;
 }
-.trw-testing-preview {
-  position: absolute;
-  top: 94px;
-  left: 0;
-  right: 0;
-  bottom: 94px;
-  margin: 0;
-  overflow: hidden;
+.trw-testing .trw-base-canvas-outer {
+  margin-top: 94px;
+  overflow: auto;
+  text-align: center;
   border: none;
 }
-iframe.trw-testing-preview {
-  width: 100%;
-  height: 100%;
-  right: auto;
-  bottom: auto;
+.trw-testing .trw-base-canvas-outer::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
-.trw-testing-preview-images {
-  display: none;
+.trw-testing .trw-base-canvas-outer::-webkit-scrollbar-thumb {
+  background: #111;
+  border: 2px solid #fff;
 }
-.trw-testing-preview .viewer-container {
-  background: none;
+.trw-testing .trw-base-canvas-outer::-webkit-scrollbar-track {
+  background: transparent;
 }
 .trw-testing-list {
   overflow-y: scroll;

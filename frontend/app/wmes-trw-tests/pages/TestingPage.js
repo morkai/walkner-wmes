@@ -3,7 +3,7 @@
 define([
   'underscore',
   'jquery',
-  'viewerjs',
+  'jsplumb',
   'app/i18n',
   'app/viewport',
   'app/data/localStorage',
@@ -15,6 +15,7 @@ define([
   'app/planning/util/contextMenu',
   'app/wmes-trw-testers/Tester',
   'app/wmes-trw-bases/Base',
+  'app/wmes-trw-bases/templates/cluster',
   'app/wmes-trw-programs/Program',
   '../Test',
   '../views/WorkstationPickerDialogView',
@@ -25,7 +26,7 @@ define([
 ], function(
   _,
   $,
-  Viewer,
+  jsPlumb,
   t,
   viewport,
   localStorage,
@@ -37,6 +38,7 @@ define([
   contextMenu,
   Tester,
   Base,
+  clusterTemplate,
   Program,
   Test,
   WorkstationPickerDialogView,
@@ -47,7 +49,7 @@ define([
 ) {
   'use strict';
 
-  window.TRW_DEBUG = window.ENV !== 'production';
+  window.TRW_DEBUG = false;
 
   return View.extend({
 
@@ -206,6 +208,7 @@ define([
         program: new Program({_id: sessionStorage.getItem('TRW:PROGRAM') || null}),
         test: new Test()
       });
+      page.jsPlumb = null;
 
       page.vkbView = new VkbView();
 
@@ -231,6 +234,12 @@ define([
       $(window).off('.' + this.idPrefix);
       document.body.classList.remove('trw-testing-page');
       $('.modal.fade').addClass('fade');
+
+      if (this.jsPlumb)
+      {
+        this.jsPlumb.reset();
+        this.jsPlumb = null;
+      }
     },
 
     beforeRender: function()
@@ -250,7 +259,6 @@ define([
       this.updateProgramName();
       this.updateMessage();
       this.loadModels();
-      this.setUpViewer();
 
       if (window.IS_EMBEDDED)
       {
@@ -337,44 +345,6 @@ define([
       });
     },
 
-    setUpViewer: function()
-    {
-      var viewer = new Viewer(this.$id('viewer-images')[0], {
-        inline: true,
-        button: false,
-        keyboard: false,
-        navbar: false,
-        title: false,
-        tooltip: false,
-        backdrop: false,
-        initialViewIndex: 0,
-        toolbar: {},
-        toggleOnDblclick: false,
-        view: function(e)
-        {
-          console.log('viewer#view', e);
-        },
-        rendering: function()
-        {
-          console.log('viewer#rendering');
-          // document.getElementById('marks').style.display = 'none';
-        },
-        rendered: function()
-        {
-          console.log('viewer#rendered');
-          // clearTimeout(adjustMarksTimer);
-          // adjustMarksTimer = setTimeout(adjustMarks, 300);
-        },
-        viewed: function()
-        {
-          console.log('viewer#viewed');
-          // viewer.zoomTo(1);
-        }
-      });
-
-      viewer.show();
-    },
-
     updateWorkstation: function()
     {
       var value;
@@ -440,24 +410,100 @@ define([
 
     updateProgramPreview: function()
     {
-      var $preview = this.$id('preview');
-      var matches = (this.model.program.get('name') || '').match(/([0-9]{12,15})/);
+      var $canvas = this.$id('canvas');
 
-      if (!matches)
+      if (this.jsPlumb)
       {
-        $preview.addClass('hidden');
+        this.jsPlumb.reset(true);
+      }
 
+      $canvas.empty();
+
+      var program = this.model.program;
+      var base = this.model.base;
+
+      if (!program.get('name') || !base.get('name'))
+      {
         return;
       }
 
-      var documentId = matches[1];
+      this.setUpJsPlumb();
+      this.renderCanvas();
+    },
 
-      if (documentId.length === 12)
+    setUpJsPlumb: function()
+    {
+      if (this.jsPlumb)
       {
-        documentId = '132' + documentId;
+        return;
       }
 
-      $preview.prop('src', '/orderDocuments/' + documentId).removeClass('hidden');
+      this.jsPlumb = jsPlumb.getInstance({
+        Container: this.$('.trw-base-canvas-inner')[0],
+        ConnectionOverlays: [
+          ['Arrow', {
+            id: 'ARROW',
+            location: -6,
+            cssClass: 'trw-base-canvas-arrow',
+            visible: true,
+            width: 22,
+            length: 22
+          }],
+          ['Label', {
+            id: 'LABEL',
+            location: 0.5,
+            cssClass: 'trw-base-canvas-label',
+            visible: false
+          }]
+        ]
+      });
+
+      this.jsPlumb.bind('beforeDrag', function()
+      {
+        return false;
+      });
+    },
+
+    renderCanvas: function()
+    {
+      var page = this;
+      var clusters = page.model.base.get('clusters');
+      var html = clusters.map(function(cluster)
+      {
+        return page.renderPartialHtml(clusterTemplate, {cluster: cluster});
+      });
+
+      page.$id('canvas').html(html);
+
+      clusters.forEach(function(cluster)
+      {
+        cluster.rows.forEach(function(row, rowI)
+        {
+          row.forEach(function(cell, colI)
+          {
+            var $cluster = page.$('.trw-base-cluster[data-id="' + cluster._id + '"]');
+            var $cell = $cluster.find('.trw-base-cell[data-row="' + rowI + '"][data-col="' + colI + '"]');
+            var cellEl = $cell[0];
+            var cellId = cluster._id + ':' + rowI + ':' + colI;
+
+            cell.endpoints.forEach(function(endpoint)
+            {
+              page.jsPlumb.addEndpoint(cellEl, {
+                uuid: cellId + ':' + endpoint,
+                anchor: Program.ENDPOINT_TO_ANCHOR[endpoint],
+                isSource: false,
+                isTarget: false,
+                allowLoopback: false,
+                maxConnections: -1,
+                endpoint: ['Dot', {radius: 10}],
+                cssClass: 'trw-base-canvas-endpoint',
+                connector: 'Bezier',
+                connectorClass: 'trw-base-canvas-connector'
+              });
+            });
+          });
+        });
+      });
     },
 
     updateState: function()
@@ -645,10 +691,16 @@ define([
         localStorage.removeItem('TRW:BASE');
       }
 
-      this.model.program.clear();
+      if (this.model.program.id)
+      {
+        this.model.program.clear();
+      }
+      else
+      {
+        this.updateProgramName();
+        this.updateProgramPreview();
+      }
 
-      this.updateProgramName();
-      this.updateProgramPreview();
       this.updateMessage();
       this.startTest();
     },
@@ -1012,7 +1064,60 @@ define([
         console.log({setIo: setIo, checkIo: checkIo});
       }
 
+      this.updateConnections();
       this.setIo(false, this.checkIo);
+    },
+
+    updateConnections: function()
+    {
+      var page = this;
+
+      if (!page.jsPlumb)
+      {
+        return;
+      }
+
+      page.jsPlumb.deleteEveryConnection();
+
+      var steps = page.model.program.get('steps');
+      var stepNo = page.model.get('step');
+
+      for (var stepI = 0; stepI < stepNo; ++stepI)
+      {
+        var step = steps[stepI];
+
+        if (!step.source.cluster || !step.target.cluster)
+        {
+          continue;
+        }
+
+        var faded = stepI < stepNo - 1;
+        var cssClass = ['trw-base-canvas-connector'];
+
+        if (faded)
+        {
+          cssClass.push('trw-base-canvas-faded');
+        }
+
+        var connection = page.jsPlumb.connect({
+          uuids: [
+            Program.formatEndpointUuid(step.source),
+            Program.formatEndpointUuid(step.target)
+          ],
+          parameters: {step: step._id},
+          detachable: false,
+          cssClass: cssClass.join(' ')
+        });
+        var label = connection.getOverlay('LABEL');
+
+        label.setLabel((stepI + 1).toString());
+        label.setVisible(true);
+
+        if (faded)
+        {
+          label.addClass('trw-base-canvas-faded');
+        }
+      }
     },
 
     setIo: function(reset, nextAction)
@@ -1120,7 +1225,7 @@ define([
 
         if (nok.length)
         {
-          page.scheduleAction(page.checkIo, 100);
+          page.scheduleAction(page.checkIo, 150);
         }
         else
         {
@@ -1372,10 +1477,15 @@ define([
         .catch(done);
     },
 
-    ioSet: function(device, channel, value)
+    ioSet: function(device, channel, value, done)
     {
       this.runCommand('setIo', {outputs: [{device: device, channel: channel, value: value}]}, function(err)
       {
+        if (done)
+        {
+          done(err);
+        }
+
         if (err)
         {
           return console.warn('Failed to set IO: %s', err.message);

@@ -5,8 +5,9 @@
 }
 .trw-base-canvas-inner {
   position: relative;
-  width: 1980px;
-  height: 906px;
+  margin: auto;
+  width: 1920px;
+  height: 892px;
   user-select: none;
 }
 .trw-base-cluster {
@@ -169,6 +170,7 @@
   padding: 1px 5px;
   font-size: 16px;
   font-weight: bold;
+  line-height: 1.4;
   background-color: #00E487;
   color: #fff;
   text-shadow: 1px 1px 1px #333;

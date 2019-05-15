@@ -161,6 +161,13 @@ define([
       'yellow'
     ],
 
+    ENDPOINT_TO_ANCHOR: {
+      top: 'Top',
+      left: 'Left',
+      right: 'Right',
+      bottom: 'Bottom'
+    },
+
     formatColor: function(color, defaultValue)
     {
       if (!color.length)
@@ -219,6 +226,11 @@ define([
       }
 
       return [endpoint.cluster, endpoint.row, endpoint.col].join(':');
+    },
+
+    formatEndpointUuid: function(endpoint)
+    {
+      return [endpoint.cluster, endpoint.row, endpoint.col, endpoint.endpoint].join(':');
     }
 
   });
