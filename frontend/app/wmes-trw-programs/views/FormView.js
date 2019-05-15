@@ -723,6 +723,8 @@ define([
           };
         })
       });
+
+      $input.select2('focus');
     },
 
     showLengthEditor: function()
@@ -759,6 +761,8 @@ define([
       });
 
       $form.appendTo('body');
+
+      $input.focus();
     }
 
   });
