@@ -1,10 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'underscore',
+  '../i18n',
   '../core/Model'
 ], function(
+  require,
   _,
+  t,
   Model
 ) {
   'use strict';
@@ -57,6 +61,13 @@ define([
 
     labelAttribute: 'name',
 
+    defaults: function()
+    {
+      return {
+        steps: []
+      };
+    },
+
     url: function()
     {
       var url = Model.prototype.url.apply(this, arguments);
@@ -66,16 +77,26 @@ define([
         return url;
       }
 
-      return url + '?populate(tester)';
+      return url + '?populate(base)';
     },
 
     serialize: function()
     {
       var obj = this.toJSON();
 
-      if (obj.tester && obj.tester.name)
+      if (obj.base && obj.base.name)
       {
-        obj.tester = obj.tester.name;
+        obj.base = obj.base.name;
+      }
+      else
+      {
+        var dictionaries = require('app/wmes-trw-tests/dictionaries');
+        var base = dictionaries.bases.get(obj.base);
+
+        if (base)
+        {
+          obj.base = base.get('name');
+        }
       }
 
       return obj;
@@ -83,23 +104,18 @@ define([
 
     serializeDetails: function()
     {
+      var Program = this.constructor;
       var obj = this.serialize();
-      var tester = this.get('tester');
-      var ioNames = {};
-
-      (tester && tester.io || []).forEach(function(io)
-      {
-        ioNames[io._id] = io.name;
-      });
+      var base = this.get('base');
 
       obj.steps = obj.steps.map(function(step)
       {
-        return _.defaults({
-          name: colorize(step.name),
-          description: colorize(step.description),
-          setIo: step.setIo.map(function(ioId) { return '▪ ' + (ioNames[ioId] || ioId); }).join(' &nbsp; '),
-          checkIo: step.checkIo.map(function(ioId) { return '▪ ' + (ioNames[ioId] || ioId); }).join(' &nbsp; ')
-        }, step);
+        return {
+          source: Program.formatEndpoint(step.source, base),
+          target: Program.formatEndpoint(step.target, base),
+          color: Program.formatColor(step.color, '?'),
+          length: Program.formatLength(step.length, '?')
+        };
       });
 
       return obj;
@@ -109,27 +125,101 @@ define([
     {
       var formData = this.toJSON();
 
-      if (formData.tester && formData.tester._id)
+      if (formData.base && formData.base._id)
       {
-        formData.tester = formData.tester._id;
+        formData.base = formData.base._id;
       }
 
-      formData.steps = (formData.steps || []).map(function(step)
-      {
-        return {
-          name: step.name,
-          description: step.description,
-          setIo: step.setIo.join(','),
-          checkIo: step.checkIo.join(',')
-        };
-      });
-
       return formData;
+    },
+
+    getStep: function(id)
+    {
+      return _.find(this.attributes.steps, function(step) { return step._id === id; });
+    },
+
+    getStepIndex: function(id)
+    {
+      return _.findIndex(this.attributes.steps, function(step) { return step._id === id; });
     }
 
   }, {
 
-    colorize: colorize
+    colorize: colorize,
+
+    COLORS: [
+      'white',
+      'brown',
+      'black',
+      'red',
+      'purple',
+      'blue',
+      'orange',
+      'pink',
+      'grey',
+      'green',
+      'yellow'
+    ],
+
+    formatColor: function(color, defaultValue)
+    {
+      if (!color.length)
+      {
+        return defaultValue || '';
+      }
+
+      if (color.length === 1)
+      {
+        return t('wmes-trw-programs', 'colors:' + color[0]);
+      }
+
+      return color
+        .map(function(c, i)
+        {
+          return t('wmes-trw-programs', 'colors:' + c + (i + 1 === color.length ? '' : ':multi'));
+        })
+        .join('-');
+    },
+
+    formatLength: function(length, defaultValue)
+    {
+      return length > 0 ? (length + 'mm') : (defaultValue || '');
+    },
+
+    formatEndpoint: function(endpoint, base)
+    {
+      if (!endpoint)
+      {
+        return '?';
+      }
+
+      if (!base)
+      {
+        return this.formatUnknownEndpoint(endpoint);
+      }
+
+      var cluster = _.find(base.clusters, function(cluster) { return cluster._id === endpoint.cluster; });
+
+      if (!cluster || !cluster.rows[endpoint.row] || !cluster.rows[endpoint.row][endpoint.col])
+      {
+        return this.formatUnknownEndpoint(endpoint);
+      }
+
+      var cell = cluster.rows[endpoint.row][endpoint.col];
+      var label = cluster.label.text + (/[0-9]$/.test(cluster.label.text) ? ':' : '') + cell.label;
+
+      return label || this.formatUnknownEndpoint(endpoint);
+    },
+
+    formatUnknownEndpoint: function(endpoint)
+    {
+      if (!endpoint.cluster)
+      {
+        return '?';
+      }
+
+      return [endpoint.cluster, endpoint.row, endpoint.col].join(':');
+    }
 
   });
 });

@@ -6,7 +6,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/util/transliterate',
-  'app/wmes-trw-tests/templates/testerPicker'
+  'app/wmes-trw-tests/templates/basePicker'
 ], function(
   _,
   $,
@@ -46,7 +46,7 @@ define([
         e.preventDefault();
 
         var data = {
-          tester: this.testers[this.$('.active').attr('data-id')]
+          base: this.bases[this.$('.active').attr('data-id')]
         };
 
         if (this.options.vkb)
@@ -61,7 +61,7 @@ define([
     initialize: function()
     {
       this.filterPhrase = '';
-      this.testers = {};
+      this.bases = {};
 
       $(window).on('resize.' + this.idPrefix, this.resize.bind(this));
     },
@@ -90,7 +90,7 @@ define([
     afterRender: function()
     {
       this.toggleSubmit();
-      this.loadTesters();
+      this.loadBases();
     },
 
     resize: function()
@@ -111,14 +111,14 @@ define([
       this.$('.btn-primary').prop('disabled', this.$('.active').length === 0);
     },
 
-    loadTesters: function()
+    loadBases: function()
     {
       var view = this;
       var req = view.ajax({
-        url: '/trw/testers?limit(0)'
+        url: '/trw/bases?limit(0)&populate(tester)'
       });
 
-      view.testers = {};
+      view.bases = {};
 
       req.fail(function()
       {
@@ -128,18 +128,18 @@ define([
       req.done(function(res)
       {
         var html = '';
-        var selectedTester = view.model.tester.id;
+        var selectedBase = view.model.base.id;
 
         res.collection.sort(function(a, b)
         {
           return a.name.localeCompare(b.name, undefined, {numeric: true, ignorePunctuation: true});
         });
 
-        res.collection.forEach(function(tester)
+        res.collection.forEach(function(base)
         {
-          view.testers[tester._id] = tester;
+          view.bases[base._id] = base;
 
-          var filter = view.prepareFilter(tester.name);
+          var filter = view.prepareFilter(base.name);
           var className = 'btn btn-lg btn-block btn-default';
 
           if (view.filterPhrase.length && filter.indexOf(view.filterPhrase) === -1)
@@ -147,21 +147,21 @@ define([
             className += ' hidden';
           }
 
-          if (tester._id === selectedTester)
+          if (base._id === selectedBase)
           {
             className += ' active';
           }
 
           html += '<button type="button" class="' + className + '"'
-            + ' data-id="' + tester._id + '"'
+            + ' data-id="' + base._id + '"'
             + ' data-filter="' + filter + '">'
-            + _.escape(tester.name)
+            + _.escape(base.name)
             + '</button>';
         });
 
         html += '<div class="trw-testing-list-last"></div>';
 
-        view.$id('testers').html(html);
+        view.$id('bases').html(html);
 
         var $active = view.$('.active');
 
@@ -183,7 +183,7 @@ define([
     {
       var view = this;
 
-      view.$id('testers').find('.btn-lg').each(function()
+      view.$id('bases').find('.btn-lg').each(function()
       {
         var hidden = view.filterPhrase.length > 0 && this.dataset.filter.indexOf(view.filterPhrase) === -1;
 

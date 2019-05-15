@@ -2,12 +2,16 @@
 
 define([
   'underscore',
+  '../i18n',
+  '../broker',
   '../router',
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage'
 ], function(
   _,
+  t,
+  broker,
   router,
   viewport,
   user,
@@ -38,7 +42,7 @@ define([
           FilterView: FilterView,
           collection: new ProgramCollection(null, {rqlQuery: req.rql}),
           columns: [
-            {id: 'tester', className: 'is-min'},
+            {id: 'base', className: 'is-min'},
             {id: 'name', className: 'is-min'},
             '-'
           ]
@@ -94,9 +98,18 @@ define([
         {
           if (req.query.copy)
           {
-            model.set('_id', undefined);
+            model.set({
+              _id: undefined,
+              name: t('core', 'labelCopySuffix', {
+                label: model.get('name')
+              })
+            });
 
-            broker.publish('router.navigate')
+            broker.publish('router.navigate', {
+              url: '/trw/programs;add',
+              trigger: false,
+              replace: true
+            });
           }
         });
 

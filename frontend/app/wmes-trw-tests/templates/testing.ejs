@@ -1,24 +1,25 @@
 <div class="trw-testing">
   <div class="trw-testing-hd">
-    <div class="trw-testing-hd-app">TRW</div>
-    <div class="trw-testing-hd-prop" data-prop="workstation">
-      <div class="trw-testing-hd-prop-name">Stanowisko</div>
-      <div class="trw-testing-hd-prop-value">?</div>
+    <div class="trw-testing-app">TRW</div>
+    <% ['workstation', 'order', 'program'].forEach(function(prop) { %>
+    <div class="trw-testing-prop" data-prop="<%- prop %>">
+      <div class="trw-testing-prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
+      <div class="trw-testing-prop-value">?</div>
     </div>
-    <div class="trw-testing-hd-prop" data-prop="order">
-      <div class="trw-testing-hd-prop-name">Zlecenie</div>
-      <div class="trw-testing-hd-prop-value">?</div>
-    </div>
-    <div class="trw-testing-hd-prop" data-prop="program">
-      <div class="trw-testing-hd-prop-name">Program</div>
-      <div class="trw-testing-hd-prop-value">?</div>
-    </div>
+    <% }) %>
     <div class="trw-testing-hd-action">
       <i id="<%- idPrefix %>-menu" class="fa fa-wrench"></i>
     </div>
   </div>
   <div class="trw-testing-ft">
     <p id="<%- idPrefix %>-message" class="trw-testing-message">???</p>
+    <div id="<%- idPrefix %>-step" class="trw-testing-app"></div>
+    <% ['source', 'target', 'length', 'color'].forEach(function(prop) { %>
+    <div class="trw-testing-prop is-unclickable" data-prop="<%- prop %>">
+      <div class="trw-testing-prop-name"><%- helpers.t('PROPERTY:' + prop) %></div>
+      <div class="trw-testing-prop-value">?</div>
+    </div>
+    <% }) %>
   </div>
   <div id="<%- idPrefix %>-viewer" class="trw-testing-preview">
     <ul id="<%- idPrefix %>-viewer-images" class="trw-testing-preview-images">

@@ -18,7 +18,7 @@ define([
     template: template,
 
     termToForm: {
-      'tester': function(propertyName, term, formData)
+      'base': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
       },
@@ -32,21 +32,21 @@ define([
     {
       FilterView.prototype.afterRender.apply(this, arguments);
 
-      this.$id('tester').select2({
+      this.$id('base').select2({
         width: '200px',
         allowClear: true,
         placeholder: ' ',
-        data: dictionaries.testers.map(idAndLabel)
+        data: dictionaries.bases.map(idAndLabel)
       });
     },
 
     serializeFormToQuery: function(selector)
     {
-      var tester = this.$id('tester').val();
+      var base = this.$id('base').val();
 
-      if (tester.length)
+      if (base.length)
       {
-        selector.push({name: 'eq', args: ['tester', tester]});
+        selector.push({name: 'eq', args: ['base', base]});
       }
 
       this.serializeRegexTerm(selector, 'name', 100, null, true, false);

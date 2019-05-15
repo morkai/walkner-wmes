@@ -14,11 +14,12 @@ define([
   'app/production/views/VkbView',
   'app/planning/util/contextMenu',
   'app/wmes-trw-testers/Tester',
+  'app/wmes-trw-bases/Base',
   'app/wmes-trw-programs/Program',
   '../Test',
   '../views/WorkstationPickerDialogView',
   '../views/OrderPickerDialogView',
-  '../views/TesterPickerDialogView',
+  '../views/BasePickerDialogView',
   '../views/ProgramPickerDialogView',
   'app/wmes-trw-tests/templates/testing'
 ], function(
@@ -35,15 +36,18 @@ define([
   VkbView,
   contextMenu,
   Tester,
+  Base,
   Program,
   Test,
   WorkstationPickerDialogView,
   OrderPickerDialogView,
-  TesterPickerDialogView,
+  BasePickerDialogView,
   ProgramPickerDialogView,
   template
 ) {
   'use strict';
+
+  window.TRW_DEBUG = window.ENV !== 'production';
 
   return View.extend({
 
@@ -77,13 +81,13 @@ define([
       },
       'click [data-prop="program"]': function()
       {
-        if (this.model.tester.get('name'))
+        if (this.model.base.get('name'))
         {
           this.showProgramPickerDialog();
         }
         else
         {
-          this.showTesterPickerDialog();
+          this.showBasePickerDialog();
         }
       },
       'click #-menu': function()
@@ -96,8 +100,8 @@ define([
               handler: this.showWorkstationPickerDialog.bind(this)
             },
             {
-              label: this.t('testing:menu:tester'),
-              handler: this.showTesterPickerDialog.bind(this)
+              label: this.t('testing:menu:base'),
+              handler: this.showBasePickerDialog.bind(this)
             }
           ]
         });
@@ -117,7 +121,7 @@ define([
     localTopics: {
       'socket.connected': function()
       {
-        this.loadTesterAndProgram();
+        this.loadModels();
       }
     },
 
@@ -133,7 +137,22 @@ define([
       {
         if (message.model._id === this.model.tester.id)
         {
+          this.model.base.clear();
           this.model.tester.clear();
+        }
+      },
+      'trw.bases.edited': function(message)
+      {
+        if (message.model._id === this.model.base.id)
+        {
+          this.model.base.set(message.model);
+        }
+      },
+      'trw.bases.deleted': function(message)
+      {
+        if (message.model._id === this.model.base.id)
+        {
+          this.model.base.clear();
         }
       },
       'trw.programs.edited': function(message)
@@ -146,9 +165,9 @@ define([
           return;
         }
 
-        if (newProgram.tester === this.model.tester.id)
+        if (newProgram.base === this.model.base.id)
         {
-          newProgram.tester = this.model.tester.toJSON();
+          newProgram.base = this.model.base.toJSON();
 
           oldProgram.set(newProgram);
         }
@@ -183,6 +202,7 @@ define([
       }), {
         nlsDomain: 'wmes-trw-tests',
         tester: new Tester({_id: localStorage.getItem('TRW:TESTER') || null}),
+        base: new Base({_id: localStorage.getItem('TRW:BASE') || null}),
         program: new Program({_id: sessionStorage.getItem('TRW:PROGRAM') || null}),
         test: new Test()
       });
@@ -196,6 +216,8 @@ define([
       page.listenTo(model, 'change:line change:workstation', page.onLineChange);
       page.listenTo(model.tester, 'error', page.onTesterError);
       page.listenTo(model.tester, 'change', page.onTesterChange);
+      page.listenTo(model.base, 'error', page.onBaseError);
+      page.listenTo(model.base, 'change', page.onBaseChange);
       page.listenTo(model.program, 'error', page.onProgramError);
       page.listenTo(model.program, 'change', page.onProgramChange);
 
@@ -227,7 +249,7 @@ define([
       this.updateOrder();
       this.updateProgramName();
       this.updateMessage();
-      this.loadTesterAndProgram();
+      this.loadModels();
       this.setUpViewer();
 
       if (window.IS_EMBEDDED)
@@ -256,31 +278,36 @@ define([
       this.$id('preview').css('height', height + 'px');
     },
 
-    loadTesterAndProgram: function()
+    loadModels: function()
     {
       var page = this;
 
-      if (!page.model.tester.id)
+      if (!page.model.tester.id || !page.model.base.id)
       {
         page.model.program.clear();
+        page.model.base.clear();
         page.model.tester.clear();
 
         return;
       }
 
       var programId = page.model.program.id;
-      var req = page.model.tester.fetch();
+      var req = page.model.base.fetch();
 
       req.fail(function()
       {
         if (req.status === 404)
         {
+          page.model.base.clear();
           page.model.tester.clear();
         }
       });
 
-      req.done(function()
+      req.done(function(base)
       {
+        page.model.tester.set(base.tester);
+        page.model.base.set(base);
+
         if (!programId)
         {
           return;
@@ -300,9 +327,9 @@ define([
 
         req.done(function()
         {
-          var programTester = page.model.program.get('tester');
+          var programBase = page.model.program.get('base');
 
-          if (!programTester || programTester._id !== page.model.tester.id)
+          if (!programBase || programBase._id !== page.model.base.id)
           {
             page.model.program.clear();
           }
@@ -399,9 +426,9 @@ define([
     {
       var value = this.model.program.get('name');
 
-      if (!this.model.tester.get('name'))
+      if (!this.model.base.get('name'))
       {
-        value = this.t('testing:noTester');
+        value = this.t('testing:noBase');
       }
       else if (!value)
       {
@@ -457,7 +484,9 @@ define([
 
         if (programStep)
         {
-          html = this.t('state:step:prefix', {n: step}) + Program.colorize(programStep.name);
+          this.updateStepMessage();
+
+          html = '';
         }
       }
       else if (state === 'error')
@@ -466,6 +495,26 @@ define([
       }
 
       this.$id('message').html(html);
+    },
+
+    updateStepMessage: function()
+    {
+      var program = this.model.test.get('program');
+      var stepNo = this.model.get('step');
+      var step = program.steps[stepNo - 1];
+
+      this.$id('step').text(this.t('state:step', {no: stepNo}));
+      this.updateStepProp('source', Program.formatEndpoint(step.source, program.base));
+      this.updateStepProp('target', Program.formatEndpoint(step.target, program.base));
+      this.updateStepProp('color', Program.formatColor(step.color, '?'));
+      this.updateStepProp('length', Program.formatLength(step.length, '?'));
+    },
+
+    updateStepProp: function(prop, value)
+    {
+      this.$('.trw-testing-prop[data-prop="' + prop + '"]')
+        .find('.trw-testing-prop-value')
+        .text(value);
     },
 
     showWorkstationPickerDialog: function()
@@ -508,21 +557,22 @@ define([
       viewport.showDialog(dialogView, this.t('orderPicker:title'));
     },
 
-    showTesterPickerDialog: function()
+    showBasePickerDialog: function()
     {
-      var dialogView = new TesterPickerDialogView({
+      var dialogView = new BasePickerDialogView({
         model: this.model,
         vkb: this.vkbView
       });
 
       this.listenTo(dialogView, 'picked', function(data)
       {
-        this.model.tester.set(data.tester);
+        this.model.tester.set(data.base.tester);
+        this.model.base.set(data.base);
 
         viewport.closeDialog();
       });
 
-      viewport.showDialog(dialogView, this.t('testerPicker:title'));
+      viewport.showDialog(dialogView, this.t('basePicker:title'));
     },
 
     showProgramPickerDialog: function()
@@ -544,11 +594,11 @@ define([
 
     $prop: function(name, value)
     {
-      var $prop = this.$('.trw-testing-hd-prop[data-prop="' + name + '"]');
+      var $prop = this.$('.trw-testing-prop[data-prop="' + name + '"]');
 
       if (arguments.length === 2)
       {
-        $prop.find('.trw-testing-hd-prop-value').html(value);
+        $prop.find('.trw-testing-prop-value').html(value);
       }
 
       return $prop;
@@ -556,6 +606,7 @@ define([
 
     onTesterError: function()
     {
+      this.model.base.clear();
       this.model.tester.clear();
     },
 
@@ -570,9 +621,34 @@ define([
         localStorage.removeItem('TRW:TESTER');
       }
 
+      this.model.base.clear();
       this.model.program.clear();
 
       this.updateProgramName();
+      this.updateMessage();
+      this.startTest();
+    },
+
+    onBaseError: function()
+    {
+      this.model.base.clear();
+    },
+
+    onBaseChange: function()
+    {
+      if (this.model.base.id)
+      {
+        localStorage.setItem('TRW:BASE', this.model.base.id);
+      }
+      else
+      {
+        localStorage.removeItem('TRW:BASE');
+      }
+
+      this.model.program.clear();
+
+      this.updateProgramName();
+      this.updateProgramPreview();
       this.updateMessage();
       this.startTest();
     },
@@ -741,10 +817,10 @@ define([
         });
       }
 
-      if (!this.model.tester.get('name'))
+      if (!this.model.base.get('name'))
       {
         return this.model.set({
-          state: 'no-tester'
+          state: 'no-base'
         });
       }
 
@@ -768,12 +844,67 @@ define([
     runTest: function()
     {
       var program = this.model.program.toJSON();
+
+      program.base = this.model.base.toJSON();
+      program.base.tester = this.model.tester.toJSON();
+
+      if (window.TRW_DEBUG)
+      {
+        console.log('runTest', {program: program});
+      }
+
       var allIo = {};
 
-      program.tester.io.forEach(function(io)
+      program.base.tester.io.forEach(function(io)
       {
         allIo[io._id] = io;
       });
+
+      var endpointIo = {};
+      var missingIo = [];
+
+      program.base.clusters.forEach(function(cluster)
+      {
+        cluster.rows.forEach(function(row, rowI)
+        {
+          row.forEach(function(cell, colI)
+          {
+            var inputs = [];
+            var outputs = [];
+
+            cell.io.forEach(function(cellIo)
+            {
+              var io = allIo[cellIo];
+
+              if (!io)
+              {
+                missingIo.push(cellIo);
+
+                return;
+              }
+
+              if (io.type === 'output')
+              {
+                outputs.push(io);
+              }
+              else
+              {
+                inputs.push(io);
+              }
+            });
+
+            endpointIo[cluster._id + ':' + rowI + ':' + colI] = {
+              inputs: inputs,
+              outputs: outputs
+            };
+          });
+        });
+      });
+
+      if (missingIo.length)
+      {
+        return this.error('missingIo', {io: missingIo.join(', ')});
+      }
 
       this.model.test.clear();
       this.model.test.set({
@@ -790,13 +921,29 @@ define([
         step: 1,
         error: null,
         test: uuid(),
+        endpointIo: endpointIo,
         allIo: allIo,
         setIo: {},
         checkIo: {}
       });
       this.updateMessage();
 
+      if (window.TRW_DEBUG)
+      {
+        console.log({endpointIo: endpointIo, allIo: allIo});
+      }
+
       this.setIo(true, this.runStep);
+    },
+
+    error: function(message, data)
+    {
+      this.model.set({
+        state: 'error',
+        error: this.t('testing:error:' + message, data || {})
+      });
+
+      return this.scheduleAction(this.startTest, 10000);
     },
 
     runStep: function()
@@ -804,24 +951,66 @@ define([
       var program = this.model.test.get('program');
       var stepNo = this.model.get('step');
       var step = program.steps[stepNo - 1];
-      var allIo = this.model.get('allIo');
+      var endpointIo = this.model.get('endpointIo');
       var setIo = {};
       var checkIo = {};
+      var missingEndpoints = [];
 
-      step.setIo.forEach(function(id)
+      if (window.TRW_DEBUG)
       {
-        setIo[id] = allIo[id];
-      });
+        console.log('runStep', {stepNo: stepNo, step: step});
+      }
 
-      step.checkIo.forEach(function(id)
+      if (step.source.cluster)
       {
-        checkIo[id] = allIo[id];
-      });
+        var sourceId = step.source.cluster + ':' + step.source.row + ':' + step.source.col;
+        var sourceEndpoint = endpointIo[sourceId];
+
+        if (sourceEndpoint)
+        {
+          sourceEndpoint.outputs.forEach(function(io)
+          {
+            setIo[io._id] = io;
+          });
+        }
+        else
+        {
+          missingEndpoints.push(sourceId);
+        }
+      }
+
+      if (step.target.cluster)
+      {
+        var targetId = step.target.cluster + ':' + step.target.row + ':' + step.target.col;
+        var targetEndpoint = endpointIo[targetId];
+
+        if (targetEndpoint)
+        {
+          targetEndpoint.inputs.forEach(function(io)
+          {
+            checkIo[io._id] = io;
+          });
+        }
+        else
+        {
+          missingEndpoints.push(targetId);
+        }
+      }
+
+      if (missingEndpoints.length)
+      {
+        return this.error('missingEndpoints', {endpoints: missingEndpoints.join(', ')});
+      }
 
       this.model.set({
         setIo: setIo,
         checkIo: checkIo
       });
+
+      if (window.TRW_DEBUG)
+      {
+        console.log({setIo: setIo, checkIo: checkIo});
+      }
 
       this.setIo(false, this.checkIo);
     },
@@ -847,16 +1036,16 @@ define([
         });
       });
 
+      if (window.TRW_DEBUG)
+      {
+        console.log('setIo', {outputs: outputs});
+      }
+
       page.runCommand('setIo', {outputs: outputs}, function(err)
       {
         if (err)
         {
-          page.model.set({
-            state: 'error',
-            error: page.t('testing:error:setIo', {error: err.message})
-          });
-
-          return page.scheduleAction(page.startTest, 10000);
+          return page.error('setIo', {error: err.message});
         }
 
         page.scheduleAction(nextAction);
@@ -882,16 +1071,16 @@ define([
         });
       });
 
+      if (window.TRW_DEBUG)
+      {
+        console.log('checkIo', {inputs: inputs});
+      }
+
       page.runCommand('getIo', {inputs: inputs}, function(err, res)
       {
         if (err)
         {
-          page.model.set({
-            state: 'error',
-            error: page.t('testing:error:getIo', {error: err.message})
-          });
-
-          return page.scheduleAction(page.startTest, 10000);
+          return page.error('getIo', {error: err.message});
         }
 
         var ok = [];
@@ -918,6 +1107,16 @@ define([
             nok.push(io._id);
           }
         });
+
+        if (window.TRW_DEBUG)
+        {
+          console.log('getIo', {
+            success: nok.length === 0,
+            ok: ok,
+            nok: nok,
+            res: res
+          });
+        }
 
         if (nok.length)
         {
@@ -982,6 +1181,14 @@ define([
         checkIo: checkIo
       });
 
+      if (window.TRW_DEBUG)
+      {
+        console.log('tearDown', {
+          setIo: setIo,
+          checkIo: checkIo
+        });
+      }
+
       page.setIo(false, page.checkTearDown);
     },
 
@@ -999,16 +1206,16 @@ define([
         });
       });
 
+      if (window.TRW_DEBUG)
+      {
+        console.log('checkTearDown', {inputs: inputs});
+      }
+
       page.runCommand('getIo', {inputs: inputs}, function(err, res)
       {
         if (err)
         {
-          page.model.set({
-            state: 'error',
-            error: page.t('testing:error:getIo', {error: err.message})
-          });
-
-          return page.scheduleAction(page.startTest, 10000);
+          return page.error('getIo', {error: err.message});
         }
 
         var ok = [];
@@ -1036,6 +1243,16 @@ define([
           }
         });
 
+        if (window.TRW_DEBUG)
+        {
+          console.log('getIo', {
+            success: nok.length === 0,
+            ok: ok,
+            nok: nok,
+            res: res
+          });
+        }
+
         if (nok.length)
         {
           page.scheduleAction(page.checkTearDown, 100);
@@ -1049,6 +1266,11 @@ define([
 
     saveTest: function()
     {
+      if (window.TRW_DEBUG)
+      {
+        console.log('saveTest');
+      }
+
       this.model.test.set({
         finishedAt: new Date()
       });
@@ -1061,6 +1283,11 @@ define([
 
     trySaveTest: function(tryNo)
     {
+      if (window.TRW_DEBUG)
+      {
+        console.log('trySaveTest', {tryNo: tryNo});
+      }
+
       var page = this;
       var req = page.ajax({
         method: 'POST',
@@ -1094,6 +1321,11 @@ define([
 
     finishTest: function()
     {
+      if (window.TRW_DEBUG)
+      {
+        console.log('finishTest');
+      }
+
       this.model.test.clear();
       this.model.set({
         state: 'test-success'
@@ -1114,8 +1346,11 @@ define([
         },
         body: JSON.stringify(data)
       };
+      var url = window.ENV === 'development'
+        ? 'https://dev.wmes.pl'
+        : 'http://localhost';
 
-      fetch('http://localhost/trw/' + cmd, init)
+      fetch(url + '/trw/' + cmd, init)
         .then(function(res)
         {
           if (res.ok)
@@ -1135,6 +1370,19 @@ define([
           done(null, res);
         })
         .catch(done);
+    },
+
+    ioSet: function(device, channel, value)
+    {
+      this.runCommand('setIo', {outputs: [{device: device, channel: channel, value: value}]}, function(err)
+      {
+        if (err)
+        {
+          return console.warn('Failed to set IO: %s', err.message);
+        }
+
+        console.info('IO %s:%s set to: %s', device, channel, value);
+      });
     }
 
   });

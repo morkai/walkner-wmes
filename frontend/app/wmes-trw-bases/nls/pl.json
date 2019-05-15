@@ -6,9 +6,9 @@
 
   "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
-  "PROPERTY:tester": "Tester",
+  "PROPERTY:tester": "Sterownik",
 
-  "FORM:ERROR:testerLoadingFailure": "Ładowanie testera nie powiodło się.",
+  "FORM:ERROR:testerLoadingFailure": "Ładowanie sterownika nie powiodło się.",
 
   "menu:addCluster": "Dodaj grupę I/O",
   "menu:editCluster": "Edytuj grupę I/O",

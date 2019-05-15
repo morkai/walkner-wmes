@@ -40,7 +40,8 @@ define([
     {
       var obj = this.serialize();
 
-      obj.tester = obj.program.tester.name;
+      obj.tester = obj.program.base.tester.name;
+      obj.base = obj.program.base.name;
       obj.program = obj.program.name;
 
       return obj;

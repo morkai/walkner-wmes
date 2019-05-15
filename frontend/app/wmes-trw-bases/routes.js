@@ -30,13 +30,14 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/FilteredListPage',
+        'app/wmes-trw-tests/dictionaries',
         'app/wmes-trw-bases/BaseCollection',
         'app/wmes-trw-bases/views/FilterView',
         nls
       ],
-      function(FilteredListPage, BaseCollection, FilterView)
+      function(FilteredListPage, dictionaries, BaseCollection, FilterView)
       {
-        return new FilteredListPage({
+        return dictionaries.bind(new FilteredListPage({
           baseBreadcrumb: baseBreadcrumb,
           FilterView: FilterView,
           collection: new BaseCollection(null, {rqlQuery: req.rql}),
@@ -44,7 +45,7 @@ define([
             {id: 'tester', className: 'is-min'},
             'name'
           ]
-        });
+        }));
       }
     );
   });

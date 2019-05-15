@@ -49,7 +49,7 @@ define([
           program: this.programs[this.$('.active').attr('data-id')]
         };
 
-        data.program.tester = this.model.tester.toJSON();
+        data.program.base = this.model.base.toJSON();
 
         if (this.options.vkb)
         {
@@ -117,7 +117,7 @@ define([
     {
       var view = this;
       var req = view.ajax({
-        url: '/trw/programs?tester=' + encodeURIComponent(this.model.tester.id) + '&limit(0)'
+        url: '/trw/programs?base=' + encodeURIComponent(this.model.base.id) + '&limit(0)'
       });
 
       view.programs = {};

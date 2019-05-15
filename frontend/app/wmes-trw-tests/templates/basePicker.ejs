@@ -1,0 +1,16 @@
+<form class="trw-basePicker">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-filter" class="control-label"><%- helpers.t('basePicker:filter') %></label>
+    <input id="<%- idPrefix %>-filter" name="filter" class="form-control" type="text" data-vkb="alpha numeric">
+  </div>
+  <div id="<%- idPrefix %>-testerGroup" class="form-group">
+    <label class="control-label"><%- helpers.t('basePicker:bases') %></label>
+    <div id="<%- idPrefix %>-bases" class="trw-testing-list" style="height: 64px">
+      <i class="fa fa-spinner fa-spin"></i>
+    </div>
+    </div>
+  <div class="form-actions">
+    <button class="btn btn-lg btn-primary"><%- helpers.t('basePicker:submit') %></button>
+    <button class="btn btn-lg btn-link cancel" type="button"><%- helpers.t('basePicker:cancel') %></button>
+  </div>
+</form>

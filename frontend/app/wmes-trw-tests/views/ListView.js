@@ -23,6 +23,7 @@ define([
       {id: 'startedAt', className: 'is-min'},
       {id: 'duration', className: 'is-min'},
       {id: 'tester', className: 'is-min'},
+      {id: 'base', className: 'is-min'},
       {id: 'program'}
     ],
 

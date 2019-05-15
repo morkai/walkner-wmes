@@ -42,7 +42,11 @@ define([
       {
         formData.program = term.args[1];
       },
-      'program.tester._id': function(propertyName, term, formData)
+      'program.base._id': function(propertyName, term, formData)
+      {
+        formData.base = term.args[1];
+      },
+      'program.base.tester._id': function(propertyName, term, formData)
       {
         formData.tester = term.args[1];
       }
@@ -52,12 +56,13 @@ define([
     {
       var props = {
         program: 'program._id',
-        tester: 'program.tester._id'
+        base: 'program.base._id',
+        tester: 'program.base.tester._id'
       };
 
       dateTimeRange.formToRql(this, selector);
 
-      ['line', 'workstation', 'order', 'tester', 'program'].forEach(function(prop)
+      ['line', 'workstation', 'order', 'program', 'base', 'tester'].forEach(function(prop)
       {
         var value = this.$id(prop).val();
 
@@ -79,18 +84,25 @@ define([
         data: orgUnits.getActiveByType('prodLine').map(idAndLabel)
       });
 
-      this.$id('tester').select2({
-        width: '230px',
-        allowClear: true,
-        placeholder: ' ',
-        data: dictionaries.testers.map(idAndLabel)
-      });
-
       this.$id('program').select2({
         width: '230px',
         allowClear: true,
         placeholder: ' ',
         data: dictionaries.programs.map(idAndLabel)
+      });
+
+      this.$id('base').select2({
+        width: '170px',
+        allowClear: true,
+        placeholder: ' ',
+        data: dictionaries.bases.map(idAndLabel)
+      });
+
+      this.$id('tester').select2({
+        width: '170px',
+        allowClear: true,
+        placeholder: ' ',
+        data: dictionaries.testers.map(idAndLabel)
       });
     }
 

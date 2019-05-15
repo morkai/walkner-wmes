@@ -1,8 +1,7 @@
 {
   "BREADCRUMBS:base": "TRW",
-  "BREADCRUMBS:browse": "Testery",
+  "BREADCRUMBS:browse": "Sterowniki",
 
-  "PROPERTY:_id": "ID",
   "PROPERTY:name": "Nazwa",
   "PROPERTY:io": "I/O",
   "PROPERTY:io._id": "ID",

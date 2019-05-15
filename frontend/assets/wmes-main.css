@@ -68,7 +68,8 @@
 @import url("../app/logs-browserErrors/assets/main.css");
 @import url("../app/wmes-toolcal-tools/assets/main.css");
 @import url("../app/wmes-fap-entries/assets/main.css");
-@import url("../app/wmes-trw-programs/assets/main.css");
 @import url("../app/wmes-trw-bases/assets/main.css");
+@import url("../app/wmes-trw-programs/assets/main.css");
+@import url("../app/wmes-trw-tests/assets/testing.css");
 @import url("../app/wmes-snf-programs/assets/main.css");
 @import url("./wmes-loading.css");

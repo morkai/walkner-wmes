@@ -2,7 +2,7 @@
   padding: 0;
 }
 .trw-programs-details-step {
-  position: relative;
+  display: flex;
   padding: 15px;
   border-top: 1px dotted #ddd;
 }
@@ -10,28 +10,21 @@
   border-top: none;
 }
 .trw-programs-details-step-no {
-  position: absolute;
-  top: 15px;
-  left: 0;
   font-size: 70px;
   line-height: 1;
   text-align: center;
   width: 120px;
 }
 .trw-programs-details-step-prop {
-  margin-top: 10px;
-  margin-left: 105px;
+  margin-top: 8px;
+  margin-left: 15px;
 }
-.trw-programs-details-step-prop[data-prop="name"] .trw-programs-details-step-value {
-  margin-top: 0;
-  font-size: 21px;
-  font-weight: bold;
-  line-height: 1;
-}
-.trw-programs-details-step-prop[data-prop="description"] .trw-programs-details-step-value {
-  white-space: pre-line;
-  max-width: 1100px;
+.trw-programs-details-step-prop + .trw-programs-details-step-prop {
+  margin-left: 30px;
 }
 .trw-programs-details-step-label {
   font-weight: bold;
+}
+.trw-programs-details-step-value {
+  font-size: 28px;
 }

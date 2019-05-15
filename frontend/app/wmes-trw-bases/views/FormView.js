@@ -184,7 +184,7 @@ define([
     setUpJsPlumb: function()
     {
       this.jsPlumb = jsPlumb.getInstance({
-        Container: this.$id('jsPlumb')[0]
+        Container: this.$('.trw-base-canvas-outer')[0]
       });
     },
 

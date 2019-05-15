@@ -5,7 +5,8 @@ define([
   './viewport',
   './user',
   './wmes-trw-tests/pages/TestingPage',
-  'i18n!app/nls/wmes-trw-tests'
+  'i18n!app/nls/wmes-trw-tests',
+  'i18n!app/nls/wmes-trw-programs'
 ], function(
   router,
   viewport,

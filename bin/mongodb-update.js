@@ -3,85 +3,41 @@
 
 'use strict';
 
-print('toolcaltools...');
+var testers = {};
 
-db.toolcaltools.find({}, {users: 1}).forEach(function(tool)
+db.trwtesters.find({}).forEach(tester =>
 {
-  db.toolcaltools.updateOne({_id: tool._id}, {$set: {
-    users: tool.users.map(u =>
-    {
-      u.kind = u.kind || 'individual';
-
-      return u;
-    })
-  }});
-});
-
-print('paintshoporders...');
-
-db.paintshoporders.find({'childOrders.mrp': {$exists: false}}, {childOrders: 1}).forEach(pso =>
-{
-  pso.childOrders.forEach(childOrder =>
-  {
-    var sapOrder = db.orders.findOne({_id: childOrder.order}, {mrp: 1});
-
-    childOrder.mrp = sapOrder ? sapOrder.mrp : null;
-  });
-
-  db.paintshoporders.updateOne({_id: pso._id}, {$set: {childOrders: pso.childOrders}});
-});
-
-print('orderdocumentfiles...');
-
-db.orderdocumentfiles.find({}).forEach(odf =>
-{
-  var changes = db.orderdocumentchanges.find({nc15: odf._id}).toArray();
-
-  if (!changes.length)
+  if (typeof tester._id !== 'string')
   {
     return;
   }
 
-  var files = {};
-  var $set = {
-    updater: null,
-    updatedAt: null,
-    files: odf.files
-  };
+  testers[tester._id] = new ObjectId();
 
-  odf.files.forEach(f =>
-  {
-    f.updater = null;
-    f.updatedAt = null;
-    files[f.hash] = f;
-  });
+  db.trwtesters.deleteOne({_id: tester._id});
 
-  changes.forEach(change =>
-  {
-    $set.updater = change.user;
-    $set.updatedAt = change.time;
+  tester._id = testers[tester._id];
 
-    if (!change.data || !Array.isArray(change.data.files))
-    {
-      return;
-    }
-
-    change.data.files.forEach(changeFile =>
-    {
-      var file = files[changeFile.hash];
-
-      if (!file)
-      {
-        return;
-      }
-
-      if (!file.updater || file.date.getTime() !== changeFile.date.getTime())
-      {
-        file.updater = change.user;
-        file.updatedAt = change.time;
-      }
-    });
-  });
-
-  db.orderdocumentfiles.updateOne({_id: odf._id}, {$set});
+  db.trwtesters.insertOne(tester);
 });
+
+db.trwbases.find({}).forEach(base =>
+{
+  if (typeof base.tester !== 'string')
+  {
+    return;
+  }
+
+  base.tester = testers[base.tester];
+
+  if (!base.tester)
+  {
+    db.trwbases.deleteOne({_id: base._id});
+  }
+  else
+  {
+    db.trwbases.updateOne({_id: base._id}, {$set: {tester: base.tester}});
+  }
+});
+
+db.trwtests.deleteMany({'program.base._id': {$exists: false}});

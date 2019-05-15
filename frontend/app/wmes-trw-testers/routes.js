@@ -37,7 +37,6 @@ define([
           FilterView: FilterView,
           collection: new TesterCollection(null, {rqlQuery: req.rql}),
           columns: [
-            {id: '_id', className: 'is-min'},
             'name'
           ]
         });

@@ -5,15 +5,40 @@
 
     "PROPERTY:_id": "ID",
     "PROPERTY:name": "Name",
-    "PROPERTY:io": "I/O",
-    "PROPERTY:io._id": "ID",
-    "PROPERTY:io.name": "Name",
-    "PROPERTY:io.type": "Type",
-    "PROPERTY:io.device": "Device no",
-    "PROPERTY:io.channel": "Channel no",
+    "PROPERTY:tester": "Controller",
 
-    "ioType:input": "Input",
-    "ioType:output": "Output"
+    "FORM:ERROR:testerLoadingFailure": "Failed to load the controller.",
+
+    "menu:addCluster": "Add I/O group",
+    "menu:editCluster": "Edit I/O group",
+    "menu:deleteCluster": "Delete I/O group",
+    "menu:editIo": "Edit I/O",
+    "menu:alignH": "Center horizontally",
+    "menu:alignV": "Center vertically",
+
+    "clusterForm:title": "I/O group",
+    "clusterForm:submit": "Save I/O group",
+    "clusterForm:id": "Group ID",
+    "clusterForm:label:text": "Label text",
+    "clusterForm:label:position": "Label position",
+    "clusterForm:position:top": "Top",
+    "clusterForm:position:bottom": "Bottom",
+    "clusterForm:position:left": "Left",
+    "clusterForm:position:right": "Right",
+    "clusterForm:top": "Position Y",
+    "clusterForm:left": "Position X",
+    "clusterForm:rows": "Row count",
+    "clusterForm:cols": "Column count",
+
+    "clusterCellForm:title": "I/O",
+    "clusterCellForm:submit": "Save I/O",
+    "clusterCellForm:label": "Label",
+    "clusterCellForm:ios": "I/O",
+    "clusterCellForm:endpoints": "Endpoints",
+    "clusterCellForm:endpoints:top": "Top",
+    "clusterCellForm:endpoints:bottom": "Bottom",
+    "clusterCellForm:endpoints:left": "Left",
+    "clusterCellForm:endpoints:right": "Right"
   },
   "pl": true
 }
