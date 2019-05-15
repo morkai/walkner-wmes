@@ -113,6 +113,19 @@ if (process.env.NODE_ENV === 'development')
       console.log(line);
     }
 
+    if (log.error)
+    {
+      delete log.error.message;
+      delete log.error.stack;
+      delete log.error.code;
+      delete log.error.statusCode;
+
+      if (!Object.keys(log.error).length)
+      {
+        delete log.error;
+      }
+    }
+
     if (errorStack)
     {
       console.log(errorStack);
@@ -124,7 +137,6 @@ if (process.env.NODE_ENV === 'development')
     delete log.module;
     delete log.submodule;
     delete log.message;
-    delete log.error;
 
     if (Object.keys(log).length)
     {
