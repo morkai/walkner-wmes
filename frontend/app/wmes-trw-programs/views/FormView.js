@@ -183,9 +183,12 @@ define([
       }
     },
 
-    onKeyDown: function()
+    onKeyDown: function(e)
     {
-      this.hideEditor();
+      if (e.key === 'Escape')
+      {
+        this.hideEditor();
+      }
     },
 
     setUpJsPlumb: function()
