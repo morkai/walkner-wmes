@@ -1082,6 +1082,7 @@ assets/../app/core/assets/main.css
 assets/../app/updater/assets/main.css
 assets/../app/production/assets/vkb.css
 assets/../app/planning/assets/menu.css
+assets/../app/wmes-trw-bases/assets/main.css
 assets/../app/wmes-trw-tests/assets/testing.css
 assets/./wmes-loading.css
 assets/wmes-trw.css
