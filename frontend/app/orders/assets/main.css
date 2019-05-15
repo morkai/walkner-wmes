@@ -37,7 +37,10 @@
   overflow: hidden;
 }
 .page[data-id="orderDetails"] .table-responsive {
-  max-height: 400px;
+  max-height: 355px;
+}
+.page[data-id="orderDetails"] .is-clickable .table-responsive {
+  max-height: 388px;
 }
 .orders-change + .orders-change {
   margin-top: 15px;
