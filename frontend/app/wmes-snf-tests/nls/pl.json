@@ -16,6 +16,7 @@
   "PROPERTY:timePassed": "Czas trwania?",
   "PROPERTY:lightPassed": "Poziom światła?",
   "PROPERTY:currentPassed": "Pobór mocy?",
+  "PROPERTY:bulbHolderPassed": "Test porcelanki?",
 
   "result:true": "Sukces",
   "result:false": "Porażka",

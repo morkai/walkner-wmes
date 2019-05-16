@@ -58,6 +58,7 @@ define([
         k21: false,
         minCurrent: 0,
         maxCurrent: 0,
+        bulbHolder: false,
         images: []
       };
     },

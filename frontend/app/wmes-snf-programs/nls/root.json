@@ -40,6 +40,7 @@
     "PROPERTY:currentBoundries": "Current boundaries",
     "PROPERTY:minCurrent": "Min. current",
     "PROPERTY:maxCurrent": "Max. current",
+    "PROPERTY:bulbHolder": "Porcelain test?",
     "PROPERTY:images.label": "Label",
 
     "current:noBoundries": "Not checked",

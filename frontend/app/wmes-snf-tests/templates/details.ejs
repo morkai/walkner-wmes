@@ -12,7 +12,7 @@
     </div>
     <div class="col-md-4">
       <%- helpers.props(model, [
-        'program',
+        {id: 'program', value: model.program.name},
         'startedAt',
         'finishedAt',
         'duration'
@@ -20,10 +20,6 @@
     </div>
     <div class="col-md-4">
       <div class="props">
-        <div class="prop">
-          <div class="prop-name"><%- helpers.t('PROPERTY:result') %></div>
-          <div class="prop-value"><%- helpers.t('result:' + !!model.result) %></div>
-        </div>
         <div class="prop">
           <div class="prop-name"><%- helpers.t('PROPERTY:timePassed') %></div>
           <div class="prop-value"><i class="fa fa-thumbs-o-<%- model.timePassed ? 'up' : 'down' %>"></i></div>
@@ -35,6 +31,14 @@
         <div class="prop">
           <div class="prop-name"><%- helpers.t('PROPERTY:currentPassed') %></div>
           <div class="prop-value"><i class="fa fa-thumbs-o-<%- model.currentPassed ? 'up' : 'down' %>"></i></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name"><%- helpers.t('PROPERTY:bulbHolderPassed') %></div>
+          <div class="prop-value">
+            <% if (model.program.bulbHolder) { %>
+            <i class="fa fa-thumbs-o-<%- model.bulbHolderPassed ? 'up' : 'down' %>"></i>
+            <% } %>
+          </div>
         </div>
       </div>
     </div>

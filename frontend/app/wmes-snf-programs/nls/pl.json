@@ -39,6 +39,7 @@
   "PROPERTY:currentBoundries": "Tolerancja prądu",
   "PROPERTY:minCurrent": "Prąd minimalny",
   "PROPERTY:maxCurrent": "Prąd maksymalny",
+  "PROPERTY:bulbHolder": "Test porcelanki?",
   "PROPERTY:images.label": "Etykieta",
 
   "current:noBoundries": "Nie sprawdzana",

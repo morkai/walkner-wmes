@@ -17,6 +17,7 @@
     "PROPERTY:timePassed": "Duration?",
     "PROPERTY:lightPassed": "Light?",
     "PROPERTY:currentPassed": "Current?",
+    "PROPERTY:bulbHolderPassed": "Porcelain test?",
 
     "result:true": "Success",
     "result:false": "Failure",

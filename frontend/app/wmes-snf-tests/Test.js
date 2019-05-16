@@ -47,15 +47,6 @@ define([
       obj.program = obj.program.name;
 
       return obj;
-    },
-
-    serializeDetails: function()
-    {
-      var obj = this.serialize();
-
-      obj.program = obj.program.name;
-
-      return obj;
     }
 
   });
