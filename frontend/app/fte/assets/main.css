@@ -129,6 +129,18 @@ th.fte-masterEntry-column-task,
 .fte-masterEntry-cell-task {
   text-align: left;
 }
+.fte-masterEntry-cell-task-container {
+  display: flex;
+}
+.fte-masterEntry-cell-task-name {
+  flex: 1 1 auto;
+}
+.fte-masterEntry-cell-task-lines {
+  flex: 0 0 auto;
+  margin-left: 15px;
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+  font-size: 16px;
+}
 .fte-masterEntry th,
 .fte-masterEntry-print th.fte-masterEntry-column-task ,
 .fte-masterEntry-print th.fte-masterEntry-column-noPlan {

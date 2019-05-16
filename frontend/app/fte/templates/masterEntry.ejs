@@ -148,7 +148,10 @@
       <tr data-task-index="<%- taskIndex %>" style="display: <%- !changing && task.noPlan ? 'none': 'table-row' %>">
         <td class="fte-masterEntry-cell-task" colspan="<%- 1 + (absence.available ? (demand.columnCount + shortage.columnCount) : 0) %>">
           <% if (task.type === 'prodFlow') { %>
-          <%= task.name %>
+          <span class="fte-masterEntry-cell-task-container">
+            <span class="fte-masterEntry-cell-task-name"><%= task.name %></span>
+            <span class="fte-masterEntry-cell-task-lines"><%= task.lines %></span>
+          </span>
           <% } else { %>
           <em><%= task.name %></em>
           <% } %>

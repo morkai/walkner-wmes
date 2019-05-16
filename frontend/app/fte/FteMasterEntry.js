@@ -4,22 +4,39 @@ define([
   'underscore',
   '../i18n',
   '../time',
-  '../data/subdivisions',
+  '../data/orgUnits',
   '../data/prodFunctions',
   '../orgUnits/util/renderOrgUnitPath',
   '../core/Model',
+  '../core/util',
   './util/isEditable'
 ], function(
   _,
   t,
   time,
-  subdivisions,
+  orgUnits,
   prodFunctions,
   renderOrgUnitPath,
   Model,
+  util,
   isEditable
 ) {
   'use strict';
+
+  function findFlowLines(prodFlowId)
+  {
+    var prodLines = [];
+
+    orgUnits.getChildren(orgUnits.getByTypeAndId('prodFlow', prodFlowId)).forEach(function(workCenter)
+    {
+      orgUnits.getChildren(workCenter).forEach(function(prodLine)
+      {
+        prodLines.push(prodLine.id);
+      });
+    });
+
+    return prodLines;
+  }
 
   return Model.extend({
 
@@ -46,7 +63,7 @@ define([
 
     getSubdivisionPath: function()
     {
-      var subdivision = subdivisions.get(this.get('subdivision'));
+      var subdivision = orgUnits.getByTypeAndId('subdivision', this.get('subdivision'));
 
       return subdivision ? renderOrgUnitPath(subdivision, false, false) : '?';
     },
@@ -134,6 +151,19 @@ define([
 
       return this.get('tasks').map(function(task)
       {
+        task.lines = findFlowLines(task.id);
+
+        task.name = ' ' + task.name + ' ';
+
+        task.lines.forEach(function(lineId)
+        {
+          var re = new RegExp('[\s\\-,]*' + util.escapeRegExp(lineId) + '[\s\\-,]*');
+
+          task.name = task.name.replace(re, '');
+        });
+
+        task.name = task.name.trim().replace(/[s\-,.]+$/, '');
+
         task.absence = absenceTasks[task.id] >= 0;
         task.totalByCompany = {};
 
