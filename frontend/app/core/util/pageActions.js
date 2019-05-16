@@ -19,11 +19,19 @@ define([
 ) {
   'use strict';
 
-  function resolvePrivileges(modelOrCollection, privilege, privilegeSuffix)
+  function resolvePrivileges(action, modelOrCollection, privilege, privilegeSuffix)
   {
     if (privilege === false)
     {
       return null;
+    }
+
+    var Model = modelOrCollection.model || modelOrCollection.constructor;
+    var canAccess = Model.can && (Model.can[action] || Model.can.manage);
+
+    if (canAccess)
+    {
+      return canAccess.bind(Model, modelOrCollection, action);
     }
 
     return privilege || (modelOrCollection.getPrivilegePrefix() + ':' + (privilegeSuffix || 'MANAGE'));
@@ -135,7 +143,7 @@ define([
         label: i18n(collection, 'PAGE_ACTION:add'),
         icon: 'plus',
         href: collection.genClientUrl('add'),
-        privileges: resolvePrivileges(collection, privilege)
+        privileges: resolvePrivileges('add', collection, privilege)
       };
     },
     edit: function(model, privilege)
@@ -144,7 +152,7 @@ define([
         label: i18n(model, 'PAGE_ACTION:edit'),
         icon: 'edit',
         href: model.genClientUrl('edit'),
-        privileges: resolvePrivileges(model, privilege)
+        privileges: resolvePrivileges('edit', model, privilege)
       };
     },
     delete: function(model, privilege, options)
@@ -158,7 +166,7 @@ define([
         label: i18n(model, 'PAGE_ACTION:delete'),
         icon: 'times',
         href: model.genClientUrl('delete'),
-        privileges: resolvePrivileges(model, privilege),
+        privileges: resolvePrivileges('delete', model, privilege),
         callback: function(e)
         {
           if (!e || e.button === 0)
@@ -226,7 +234,7 @@ define([
 
       return {
         template: template,
-        privileges: resolvePrivileges(options.collection, options.privilege, 'VIEW'),
+        privileges: resolvePrivileges('view', options.collection, options.privilege, 'VIEW'),
         callback: options.callback,
         afterRender: afterRender
       };

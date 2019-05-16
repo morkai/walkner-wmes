@@ -71,7 +71,8 @@ define([
             return [{
               icon: 'copy',
               label: this.t('PAGE_ACTION:copy'),
-              href: '#trw/bases;add?copy=' + this.model.id
+              href: '#trw/bases;add?copy=' + this.model.id,
+              privileges: 'TRW:MANAGE'
             }].concat(DetailsPage.prototype.actions.apply(this, arguments));
           }
         });

@@ -4,48 +4,16 @@ define([
   'require',
   'underscore',
   '../i18n',
+  '../user',
   '../core/Model'
 ], function(
   require,
   _,
   t,
+  user,
   Model
 ) {
   'use strict';
-
-  function colorize(text)
-  {
-    return (text || '').replace(/<(#.*?)>(.*?)<\/>/g, function(match, attrs, inner)
-    {
-      var styles = [];
-
-      attrs.split(/\s+/).forEach(function(attr, i)
-      {
-        if (/^#([A-F0-9]{3}|[A-F0-9]{6})$/.test(attr))
-        {
-          styles.push((i === 0 ? 'color: ' : 'background-color: ') + attr);
-        }
-        else if (/^#[a-z]+$/.test(attr))
-        {
-          styles.push((i === 0 ? 'color: ' : 'background-color: ') + attr.substring(1));
-        }
-        else if (attr === 'bold')
-        {
-          styles.push('font-weight: bold');
-        }
-        else if (attr === 'italic' || attr === 'oblique')
-        {
-          styles.push('font-style: ' + attr);
-        }
-        else if (attr === 'line-through' || attr === 'underline' || attr === 'overline')
-        {
-          styles.push('text-decoration: ' + attr);
-        }
-      });
-
-      return '<span style="' + styles.join('; ') + '">' + inner + '</span>';
-    });
-  }
 
   return Model.extend({
 
@@ -145,7 +113,12 @@ define([
 
   }, {
 
-    colorize: colorize,
+    can: {
+      manage: function()
+      {
+        return user.isAllowedTo('TRW:PROGRAM', 'TRW:MANAGE');
+      }
+    },
 
     COLORS: [
       'white',

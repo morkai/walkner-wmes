@@ -22,7 +22,7 @@ define([
   var nls = 'i18n!app/nls/wmes-trw-programs';
   var model = 'app/wmes-trw-programs/Program';
   var canView = user.auth('TRW:VIEW');
-  var canManage = user.auth('TRW:MANAGE');
+  var canManage = user.auth('TRW:PROGRAM', 'TRW:MANAGE');
   var baseBreadcrumb = true;
 
   router.map('/trw/programs', canView, function(req)
