@@ -77,7 +77,7 @@ define([
       obj.paints = {};
       obj.mrps = {};
       obj.mrps[obj.mrp] = 1;
-      obj.drilling = true;
+      obj.drilling = false;
 
       if (obj.paint.nc12 === '000000000000')
       {
