@@ -57,7 +57,6 @@ define([
 
       TIME_PROPERTIES.forEach(function(timeProperty)
       {
-        console.log(timeProperty, formData[timeProperty], time.toString(formData[timeProperty]));
         formData[timeProperty] = time.toString(formData[timeProperty]);
       });
 

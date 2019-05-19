@@ -118,7 +118,7 @@
           <label class="control-label"><%- helpers.t('PROPERTY:contactors') %></label>
           <% contactors.forEach(function(contactor) { %>
           <div class="checkbox">
-            <label><input type="checkbox" name="<%- contactor %>"> <%- helpers.t('PROPERTY:' + contactor) %></label>
+            <label><input type="checkbox" name="<%- contactor %>" value="true"> <%- helpers.t('PROPERTY:' + contactor) %></label>
           </div>
           <% }) %>
         </div>
