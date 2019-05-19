@@ -106,6 +106,9 @@
     "FORM:help:confirmer": "Search a superior, to whom this entry should be directed for a confirmation...",
     "FORM:help:subscribers": "You can select additional people, that weren't selected in the previous fields, but may be interested in this entry or you want for them to express their opinion.<br>Those people will be added to a list of participants with an Observer role, and will be notified about changes in this entry.",
     "FORM:help:date:diff": "Wybrano datę będącą {days} dni w {dir, select, past{przeszłości} other{przyszłości}}.",
+    "FORM:productFamily:other": "(other)",
+    "FORM:productFamily:list": "(list)",
+    "FORM:productFamily:kaizenEvent": "Other...",
 
     "filter:user:mine": "Mine",
     "filter:user:unseen": "Unread",
@@ -129,6 +132,7 @@
     "report:series:entry": "Entries",
     "report:series:suggestion": "Suggestions",
     "report:series:kaizen": "Kaizens",
+    "report:series:kaizenEvent": "Kaizen Events",
     "report:series:new": "New",
     "report:series:accepted": "Accepted",
     "report:series:todo": "To do",

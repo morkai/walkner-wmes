@@ -67,7 +67,7 @@ define([
       obj.categories = (obj.categories || [])
         .map(function(c) { return kaizenDictionaries.categories.getLabel(c); })
         .join('; ');
-      obj.productFamily = kaizenDictionaries.productFamilies.getLabel(obj.productFamily) || '-';
+      obj.productFamily = obj.kaizenEvent || kaizenDictionaries.productFamilies.getLabel(obj.productFamily) || '-';
 
       DATE_PROPERTIES.forEach(function(dateProperty)
       {

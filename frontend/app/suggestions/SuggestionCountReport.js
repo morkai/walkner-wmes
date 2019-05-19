@@ -19,6 +19,7 @@ define([
 
   var COLOR_SUGGESTION = '#f0ad4e';
   var COLOR_KAIZEN = '#5cb85c';
+  var COLOR_KAIZEN_EVENT = '#8e5ec7';
   var TABLE_AND_CHART_METRICS = [
     'total',
     'status',
@@ -92,6 +93,10 @@ define([
         confirmer: {
           categories: this.prepareUserCategories(report.users, totals.confirmer),
           series: this.prepareConfirmerSeries(totals.confirmer, report.groups)
+        },
+        productFamily: {
+          rows: this.prepareProductFamilyRows(report),
+          series: {}
         }
       };
 
@@ -127,6 +132,7 @@ define([
 
         totalSeries.suggestion.data.push({x: x, y: group.type.suggestion || null});
         totalSeries.kaizen.data.push({x: x, y: group.type.kaizen || null});
+        totalSeries.kaizenEvent.data.push({x: x, y: group.type.kaizenEvent || null});
 
         _.forEach(TABLE_AND_CHART_METRICS, function(metric) { model.createSeriesFromRows(metric, attrs, group); });
       }, this);
@@ -148,6 +154,12 @@ define([
           abs: totals.type.kaizen,
           rel: totals.type.kaizen / totals.type.suggestion,
           color: COLOR_KAIZEN
+        },
+        {
+          id: 'kaizenEvent',
+          abs: totals.type.kaizenEvent,
+          rel: totals.type.kaizenEvent / totals.type.suggestion,
+          color: COLOR_KAIZEN_EVENT
         }
       ];
     },
@@ -162,6 +174,10 @@ define([
         kaizen: {
           data: [],
           color: COLOR_KAIZEN
+        },
+        kaizenEvent: {
+          data: [],
+          color: COLOR_KAIZEN_EVENT
         }
       };
     },
@@ -172,12 +188,30 @@ define([
 
       return values.map(function(value)
       {
+        var id = value[0];
+
         return {
-          id: value[0],
+          id: id,
           abs: value[1],
           rel: value[1] / totalCount,
-          color: colorFactory.getColor(metric, value[0]),
-          label: dictionary ? kaizenDictionaries.getLabel(dictionary, value[0]) : undefined
+          color: colorFactory.getColor(metric, id),
+          label: dictionary ? kaizenDictionaries.getLabel(dictionary, id) : undefined
+        };
+      });
+    },
+
+    prepareProductFamilyRows: function(report)
+    {
+      return report.totals.productFamily.map(function(value)
+      {
+        var id = value[0];
+
+        return {
+          id: id,
+          abs: value[1],
+          rel: value[1] / report.totals.count,
+          color: colorFactory.getColor('productFamily', id),
+          label: report.kaizenEvents[id] || kaizenDictionaries.getLabel('productFamilies', id)
         };
       });
     },
@@ -228,6 +262,12 @@ define([
           name: t.bound('suggestions', 'report:series:kaizen'),
           data: [],
           color: COLOR_KAIZEN
+        },
+        {
+          id: 'kaizenEvent',
+          name: t.bound('suggestions', 'report:series:kaizenEvent'),
+          data: [],
+          color: COLOR_KAIZEN_EVENT
         }
       ];
 
@@ -235,6 +275,7 @@ define([
       {
         series[0].data.push(totals[3]);
         series[1].data.push(totals[4]);
+        series[2].data.push(totals[5]);
       });
 
       return series;

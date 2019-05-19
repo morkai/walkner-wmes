@@ -105,6 +105,9 @@
   "FORM:help:confirmer": "Wyszukaj po nazwisku przełożonego, do którego ma zostać skierowane zgłoszenie...",
   "FORM:help:subscribers": "W tym polu możesz wybrać dodatkowe osoby, które nie zostały wskazane we wcześniejszych polach, a mogą być zainteresowane tym zgłoszeniem lub chcesz, aby wyraziły swoją opinię.<br>Osoby te zostaną dodane do listy uczestników zgłoszenia z rolą Obserwatora, dzięki czemu będą powiadamiani o zmianach w tym zgłoszeniu.",
   "FORM:help:date:diff": "Wybrano datę będącą {days} dni w {dir, select, past{przeszłości} other{przyszłości}}.",
+  "FORM:productFamily:other": "(inna)",
+  "FORM:productFamily:list": "(lista)",
+  "FORM:productFamily:kaizenEvent": "Inna...",
 
   "filter:user:mine": "Moje",
   "filter:user:unseen": "Nieprzeczytane",
@@ -128,6 +131,7 @@
   "report:series:entry": "Zgłoszenia",
   "report:series:suggestion": "Sugestie",
   "report:series:kaizen": "Kaizeny",
+  "report:series:kaizenEvent": "Kaizen Event",
   "report:series:new": "Nowe",
   "report:series:accepted": "Zaakceptowane",
   "report:series:todo": "Do realizacji",

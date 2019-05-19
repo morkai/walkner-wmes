@@ -135,6 +135,27 @@ define([
           dir: days > 0 ? 'future' : 'past',
           days: daysAbs
         })).appendTo($group);
+      },
+
+      'click #-productFamily-other': function()
+      {
+        var $productFamily = this.$id('productFamily');
+        var $kaizenEvent = this.$id('kaizenEvent');
+        var reset = $productFamily.val() === 'OTHER';
+
+        $productFamily.val(reset ? '' : 'OTHER');
+        $kaizenEvent.val('');
+
+        this.setUpProductFamily();
+
+        if (reset)
+        {
+          $productFamily.select2('open');
+        }
+        else
+        {
+          $kaizenEvent.focus();
+        }
       }
 
     }, FormView.prototype.events),
@@ -355,12 +376,6 @@ define([
         formatResult: formatResultWithDescription
       });
 
-      this.$id('productFamily').select2({
-        allowClear: true,
-        placeholder: ' ',
-        data: kaizenDictionaries.productFamilies.map(idAndLabel)
-      });
-
       buttonGroup.toggle(this.$id('status'));
 
       setUpUserSelect2(this.$id('subscribers'), {
@@ -369,13 +384,39 @@ define([
         activeOnly: !this.options.editMode
       });
 
+      this.setUpProductFamily();
       this.setUpConfirmerSelect2();
       this.setUpOwnerSelect2();
       this.toggleStatuses();
       this.togglePanels();
-      this.toggleProductFamily();
 
       this.$('input[autofocus]').focus();
+    },
+
+    setUpProductFamily: function()
+    {
+      var $productFamily = this.$id('productFamily');
+      var $kaizenEvent = this.$id('kaizenEvent');
+      var $other = this.$id('productFamily-other');
+
+      if ($productFamily.val() === 'OTHER')
+      {
+        $other.text(this.t('FORM:productFamily:list'));
+        $productFamily.select('destroy').addClass('hidden');
+        $kaizenEvent.removeClass('hidden');
+      }
+      else
+      {
+        $other.text(this.t('FORM:productFamily:other'));
+        $kaizenEvent.addClass('hidden');
+        $productFamily.removeClass('hidden').select2({
+          allowClear: true,
+          placeholder: ' ',
+          data: kaizenDictionaries.productFamilies.map(idAndLabel)
+        });
+      }
+
+      this.toggleProductFamily();
     },
 
     setUpConfirmerSelect2: function()

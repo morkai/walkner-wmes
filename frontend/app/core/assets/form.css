@@ -12,11 +12,15 @@
 .radio > .control-label {
   font-weight: bold;
 }
-.control-label.is-required:after {
+.control-label.is-required:after,
+.control-label.is-required.is-required-first-child > span:first-child:after {
   content: "*";
   font-family: Consolas, "Lucida Console", Monaco, monospace;
   color: #f00;
   vertical-align: top;
+}
+.control-label.is-required-first-child:after {
+  content: none;
 }
 .control-label + .form-control-static {
   padding: 0;

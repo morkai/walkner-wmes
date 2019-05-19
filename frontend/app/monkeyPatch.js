@@ -183,7 +183,7 @@ function(
 
   $body.on('click', 'label[for]', function(e)
   {
-    var $el = $('#' + e.target.htmlFor);
+    var $el = $('#' + e.currentTarget.htmlFor);
 
     if ($el.data('select2') && !$el.parent().hasClass('has-required-select2'))
     {

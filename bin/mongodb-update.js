@@ -3,6 +3,13 @@
 
 'use strict';
 
-var testers = {};
-
-db.snftests.updateMany({}, {$set: {bulbHolderPassed: false}});
+db.suggestions.updateMany({kaizenEvent: {$exists: false}}, {$set: {kaizenEvent: ''}});
+db.suggestions.updateMany({productFamily: 'INNE'}, {$set: {productFamily: 'OTHER'}});
+db.kaizenproductfamilies.deleteOne({_id: 'INNE'});
+db.kaizenproductfamilies.insertOne({
+  "_id": "OTHER",
+  "position": 60,
+  "owners": [],
+  "name": "Inna",
+  "__v": 0
+});

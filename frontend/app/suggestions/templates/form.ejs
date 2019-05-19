@@ -46,8 +46,12 @@
               <input id="<%- idPrefix %>-categories" type="text" autocomplete="new-password" name="categories" required>
             </div>
             <div class="col-lg-4 form-group">
-              <label for="<%- idPrefix %>-productFamily" class="control-label"><%- helpers.t('PROPERTY:productFamily') %></label>
+              <label for="<%- idPrefix %>-productFamily" class="control-label is-required-first-child" style="display: flex">
+                <span><%- helpers.t('PROPERTY:productFamily') %></span>
+                <a id="<%- idPrefix %>-productFamily-other" href="javascript:void(0)" style="margin-left: auto"><%- helpers.t('FORM:productFamily:other') %></a>
+              </label>
               <input id="<%- idPrefix %>-productFamily" type="text" autocomplete="new-password" name="productFamily">
+              <input id="<%- idPrefix %>-kaizenEvent" class="form-control hidden" type="text" autocomplete="new-password" name="kaizenEvent" placeholder="<%- helpers.t('FORM:productFamily:kaizenEvent') %>">
             </div>
           </div>
           <div class="row">
