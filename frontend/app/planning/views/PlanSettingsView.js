@@ -691,7 +691,7 @@ define([
 
     buildActiveTime: function(activeTimes)
     {
-      return activeTimes
+      return (activeTimes || [])
         .map(function(activeTime) { return activeTime.from + '-' + activeTime.to; })
         .join(', ');
     },

@@ -358,8 +358,18 @@ define([
               'top=80,left=' + left + ',width=' + width + ',height=' + height
             );
 
+            if (!win)
+            {
+              return;
+            }
+
             win.onPageShown = function()
             {
+              if (!win)
+              {
+                return;
+              }
+
               win.focus();
               win.document.querySelector('textarea[name="comment"]').focus();
 

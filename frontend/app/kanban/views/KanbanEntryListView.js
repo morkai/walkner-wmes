@@ -1476,6 +1476,11 @@ define([
         this.$tbody.find('tr:first-child > td:first-child').focus();
       }
 
+      if (!this.focusedCell)
+      {
+        return;
+      }
+
       this.handleTdKeyDown(e, this.focusedCell);
     },
 

@@ -97,7 +97,7 @@ define([
       var prodLine = orgUnits.getByTypeAndId('prodLine', ou.prodLine);
       var prodFlow = orgUnits.getByTypeAndId('prodFlow', ou.prodFlow);
 
-      ou.prodLine = (prodLine ? prodLine.getLabel() : this.getProdLineId())
+      ou.prodLine = ((prodLine ? prodLine.getLabel() : this.getProdLineId()) || '')
         .toUpperCase()
         .replace(/(_+|~.*?)$/, '')
         .replace(/_/g, ' ');

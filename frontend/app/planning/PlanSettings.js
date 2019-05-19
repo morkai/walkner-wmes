@@ -277,7 +277,9 @@ define([
 
     isMrpLockedDirectly: function(mrpId)
     {
-      return this.mrps.get(mrpId).get('locked');
+      var mrp = this.mrps.get(mrpId);
+
+      return !!mrp && mrp.get('locked');
     },
 
     cacheLocked: function()
