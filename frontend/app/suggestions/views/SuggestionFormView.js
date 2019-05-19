@@ -103,6 +103,12 @@ define([
       'change [name="productFamily"]': function()
       {
         this.updateProductFamilySubscribers();
+
+        if (this.$id('productFamily').val() === 'OTHER')
+        {
+          this.setUpProductFamily();
+          this.$id('kaizenEvent').focus();
+        }
       },
 
       'change [type="date"]': function(e)
@@ -143,7 +149,7 @@ define([
         var $kaizenEvent = this.$id('kaizenEvent');
         var reset = $productFamily.val() === 'OTHER';
 
-        $productFamily.val(reset ? '' : 'OTHER');
+        $productFamily.select2('destroy').val(reset ? '' : 'OTHER');
         $kaizenEvent.val('');
 
         this.setUpProductFamily();
@@ -402,7 +408,7 @@ define([
       if ($productFamily.val() === 'OTHER')
       {
         $other.text(this.t('FORM:productFamily:list'));
-        $productFamily.select('destroy').addClass('hidden');
+        $productFamily.select2('destroy').addClass('hidden');
         $kaizenEvent.removeClass('hidden');
       }
       else
