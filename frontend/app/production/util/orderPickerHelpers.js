@@ -189,26 +189,34 @@ define([
         delete orderInfo._id;
       }
 
-      if (Array.isArray(orderInfo.operations))
-      {
-        var operations = {};
-
-        orderInfo.operations.forEach(function(operation)
-        {
-          if (operation.workCenter !== '' && operation.laborTime !== -1)
-          {
-            operations[operation.no] = operation;
-          }
-        });
-
-        orderInfo.operations = operations;
-      }
-      else if (!_.isObject(orderInfo.operations))
-      {
-        orderInfo.operations = {};
-      }
+      orderInfo.operations = this.prepareOperations(orderInfo.operations);
 
       return orderInfo;
+    },
+    prepareOperations: function(operations)
+    {
+      if (Array.isArray(operations))
+      {
+        var ops = {};
+
+        operations.forEach(function(operation)
+        {
+          if (operation.workCenter === '' || operation.laborTime === -1 || ops[operation.no])
+          {
+            return;
+          }
+
+          ops[operation.no] = operation;
+        });
+
+        return ops;
+      }
+      else if (!_.isObject(operations))
+      {
+        return {};
+      }
+
+      return operations;
     },
     getBestDefaultOperationNo: function(operations)
     {

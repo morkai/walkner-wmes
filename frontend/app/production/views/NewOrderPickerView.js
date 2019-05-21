@@ -404,7 +404,7 @@ define([
         });
       }
 
-      var operationNo = this.$id('operationGroup').find('.active').attr('data-operation') || '0000';
+      var operationNo = this.$id('operationGroup').find('.active').first().attr('data-operation') || '0000';
       var orderInfo = _.clone(order);
 
       orderPickerHelpers.prepareOrderInfo(this.model, orderInfo);
@@ -723,7 +723,7 @@ define([
         active = orderPickerHelpers.getBestDefaultOperationNo(order.operations);
       }
 
-      _.forEach(order.operations, function(op)
+      _.forEach(orderPickerHelpers.prepareOperations(order.operations), function(op)
       {
         var className = 'btn btn-lg btn-default ' + (op.no === active ? 'active' : '');
 
