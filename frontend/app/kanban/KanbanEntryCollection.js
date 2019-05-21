@@ -76,7 +76,7 @@ define([
 
       entries.forEach(function(entry)
       {
-        entry.split().forEach(function(splitEntry, i)
+        entry.split().forEach(function(splitEntry)
         {
           if (reserialize)
           {

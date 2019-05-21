@@ -4,16 +4,12 @@ define([
   'underscore',
   'app/i18n',
   'app/core/View',
-  'app/highcharts',
-  'app/data/colorFactory',
-  '../dictionaries'
+  'app/highcharts'
 ], function(
   _,
   t,
   View,
-  Highcharts,
-  colorFactory,
-  dictionaries
+  Highcharts
 ) {
   'use strict';
 

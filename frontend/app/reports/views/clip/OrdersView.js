@@ -314,7 +314,7 @@ define([
 
       if (delayReason)
       {
-        text = delayReason.getLabel()+ ' (' + this.t('orders', 'm4:' + order.get('m4'));
+        text = delayReason.getLabel() + ' (' + this.t('orders', 'm4:' + order.get('m4'));
 
         var drm = delayReason.get('drm')[order.get('m4')];
 

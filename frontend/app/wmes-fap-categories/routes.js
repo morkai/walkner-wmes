@@ -23,7 +23,7 @@ define([
   var canView = user.auth('FAP:MANAGE');
   var canManage = canView;
 
-  router.map('/fap/categories', canView, function(req)
+  router.map('/fap/categories', canView, function()
   {
     viewport.loadPage(
       [
