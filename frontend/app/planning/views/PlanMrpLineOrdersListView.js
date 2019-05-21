@@ -196,7 +196,7 @@ define([
         line.orders.forEach(function(lineOrder)
         {
           var orderNo = lineOrder.get('orderNo');
-          var planOrder = mrp.orders.get(orderNo);
+          var planOrder = view.plan.orders.get(orderNo);
           var sapOrder = sapOrders.get(orderNo);
           var item = map[orderNo];
 
