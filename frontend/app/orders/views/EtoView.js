@@ -57,13 +57,6 @@ define([
       }
     },
 
-    serialize: function()
-    {
-      return {
-        idPrefix: this.idPrefix
-      };
-    },
-
     afterRender: function()
     {
       this.tryLoadDocument();

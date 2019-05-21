@@ -138,3 +138,45 @@
 .orders-no-system-changes .is-system-change {
   display: none;
 }
+
+.page[data-parent-app-id="docs"] {
+  background-color: #525659;
+}
+.page[data-parent-app-id="docs"] .hd,
+.page[data-parent-app-id="docs"] .ft {
+  display: none;
+}
+.page[data-parent-app-id="docs"] .panel {
+  border-color: #000;
+}
+.page[data-parent-app-id="docs"] .panel-heading {
+  color: #fff;
+  background-color: #323639;
+  border-color: #000;
+}
+.page[data-parent-app-id="docs"] .orders-eto .btn[data-action="external"] {
+  display: none;
+}
+.page[data-parent-app-id="docs"] .table-bordered > thead > tr > th,
+.page[data-parent-app-id="docs"] .table-bordered > tbody > tr > td,
+.page[data-parent-app-id="docs"] .table > tbody + tbody {
+  border-color: #aaa;
+}
+.page[data-parent-app-id="docs"] .orders-jumpList {
+  opacity: 1;
+}
+.page[data-parent-app-id="docs"] .orders-jumpList > .list-group-item {
+  padding: 10px 20px;
+  font-size: 21px;
+  border-left-color: #000;
+  border-right-color: #000;
+}
+.page[data-parent-app-id="docs"] .orders-jumpList > .list-group-item:first-child {
+  border-top-color: #000;
+}
+.page[data-parent-app-id="docs"] .orders-jumpList > .list-group-item:last-child {
+  border-bottom-color: #000;
+}
+.page[data-parent-app-id="docs"] .table-responsive {
+  max-height: none!important;
+}

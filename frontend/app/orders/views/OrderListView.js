@@ -77,18 +77,23 @@ define([
     serializeActions: function()
     {
       var collection = this.collection;
+      var isUser = user.isAllowedTo('USER');
 
       return function(row)
       {
-        return [
-          ListView.actions.viewDetails(collection.get(row._id)),
-          {
+        var actions = [ListView.actions.viewDetails(collection.get(row._id))];
+
+        if (isUser)
+        {
+          actions.push({
             id: 'print',
             icon: 'print',
             label: t.bound('orders', 'LIST:ACTION:print'),
             href: '/orders/' + row._id + '.html?print'
-          }
-        ];
+          });
+        }
+
+        return actions;
       };
     },
 

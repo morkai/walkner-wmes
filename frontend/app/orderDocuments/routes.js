@@ -6,13 +6,16 @@ define([
   '../user',
   './DocumentViewerState',
   './pages/DocumentViewerPage',
-  'i18n!app/nls/orderDocuments'
+  '../orders/pages/OrderDetailsPage',
+  'i18n!app/nls/orderDocuments',
+  'i18n!app/nls/orders'
 ], function(
   router,
   viewport,
   user,
   DocumentViewerState,
-  DocumentViewerPage
+  DocumentViewerPage,
+  OrderDetailsPage
 ) {
   'use strict';
 
@@ -37,6 +40,13 @@ define([
       model: new DocumentViewerState({
         _id: clientId
       })
+    }));
+  });
+
+  router.map('/orders/:id', function(req)
+  {
+    viewport.showPage(new OrderDetailsPage({
+      modelId: req.params.id
     }));
   });
 });

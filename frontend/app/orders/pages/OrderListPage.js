@@ -49,6 +49,7 @@ define([
         {
           label: page.t('PAGE_ACTION:openOrdersPrint'),
           icon: 'print',
+          privileges: 'USER',
           callback: function()
           {
             viewport.showDialog(new OpenOrdersPrintView(), page.t('openOrdersPrint:title'));

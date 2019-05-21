@@ -69,6 +69,7 @@
     "localOrderPicker:error:NOT_FOUND:order": "Order does not exist!",
     "localOrderPicker:error:NOT_FOUND:document": "Document does not exist!",
 
+    "order": "Order card",
     "bom": "Bill of materials",
     "eto": "Engineering To Order"
   },

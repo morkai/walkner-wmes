@@ -68,6 +68,7 @@
   "localOrderPicker:error:NOT_FOUND:order": "Zlecenie o podanym numerze nie istnieje!",
   "localOrderPicker:error:NOT_FOUND:document": "Dokument o podanym numerze nie istnieje!",
 
+  "order": "Karta zlecenia",
   "bom": "Lista komponentów",
   "eto": "Konstrukcja na zamówienie"
 }

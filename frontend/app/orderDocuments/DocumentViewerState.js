@@ -215,7 +215,12 @@ define([
       {
         var documentName = currentOrder.documents[currentOrder.nc15];
 
-        if (documentName)
+        if (currentOrder.nc15 === 'ORDER')
+        {
+          orderInfo.documentNc15 = documentName;
+          orderInfo.documentName = '';
+        }
+        else if (documentName)
         {
           orderInfo.documentNc15 = currentOrder.nc15;
           orderInfo.documentName = documentName;
@@ -231,8 +236,6 @@ define([
           orderInfo.documentName = t('orderDocuments', 'controls:emptyDocumentName');
         }
       }
-
-      orderInfo.documentName = orderInfo.documentName.replace(/\$__.*?__/g, '');
 
       return orderInfo;
     },
@@ -338,6 +341,8 @@ define([
         nc15: null
       };
 
+      newOrder.documents.ORDER = t('orderDocuments', 'order');
+
       if (orderData.hasBom)
       {
         newOrder.documents.BOM = t('orderDocuments', 'bom');
@@ -398,6 +403,13 @@ define([
 
       var nc15s = Object.keys(orderData.documents);
       var newDocuments = {};
+
+      if (orderData.documents.ORDER)
+      {
+        newDocuments.ORDER = orderData.documents.ORDER;
+
+        nc15s.shift();
+      }
 
       if (orderData.documents.BOM)
       {

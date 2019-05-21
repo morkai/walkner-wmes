@@ -99,6 +99,17 @@
   document.body.classList.toggle('is-embedded', window.IS_EMBEDDED);
   document.body.classList.toggle('is-linux', window.IS_LINUX);
 
+  document.body.dataset.appId = window.WMES_APP_ID;
+
+  try
+  {
+    if (window.IS_EMBEDDED && window.parent.WMES_APP_ID)
+    {
+      document.body.dataset.parentAppId = window.parent.WMES_APP_ID;
+    }
+  }
+  catch (err) {} // eslint-disable-line no-empty
+
   if (window.ENV === 'testing')
   {
     var matches = location.hash.match(/^(?:#proxy=([0-9]+))?(#.*?)?$/);
@@ -106,7 +117,7 @@
     if (!matches || matches[1] === undefined || matches[1] === localStorage.getItem('PROXY'))
     {
       location.href = '/redirect?referrer=' + encodeURIComponent(
-        location.origin + '/#proxy=' + Date.now() + (matches && matches[2] ? matches[2] : '#')
+        location.origin + location.pathname + '#proxy=' + Date.now() + (matches && matches[2] ? matches[2] : '#')
       );
 
       return;

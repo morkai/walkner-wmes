@@ -12,7 +12,7 @@ define(function()
   {
     var msg = e.data;
 
-    if (msg.type !== 'localStorage')
+    if (!window.IS_EMBEDDED || !window.IS_LINUX || msg.type !== 'localStorage')
     {
       return;
     }

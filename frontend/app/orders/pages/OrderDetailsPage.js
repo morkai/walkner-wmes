@@ -4,6 +4,7 @@ define([
   'underscore',
   'jquery',
   'app/i18n',
+  'app/user',
   'app/core/util/bindLoadingMessage',
   'app/core/pages/DetailsPage',
   'app/delayReasons/storage',
@@ -28,6 +29,7 @@ define([
   _,
   $,
   t,
+  user,
   bindLoadingMessage,
   DetailsPage,
   delayReasonsStorage,
@@ -46,7 +48,7 @@ define([
   OrderChangesView,
   EtoView,
   FapEntryListView,
-  renderJumpList
+  jumpListTemplate
 ) {
   'use strict';
 
@@ -106,7 +108,12 @@ define([
       this.defineBindings();
 
       this.insertView(this.detailsView);
-      this.insertView(this.fapEntriesView);
+
+      if (this.fapEntriesView)
+      {
+        this.insertView(this.fapEntriesView);
+      }
+
       this.insertView(this.childOrdersView);
       this.insertView(this.operationsView);
       this.insertView(this.documentsView);
@@ -128,7 +135,7 @@ define([
 
       this.delayReasons = bindLoadingMessage(delayReasonsStorage.acquire(), this);
 
-      this.fapEntries = bindLoadingMessage(new FapEntryCollection(null, {
+      this.fapEntries = !user.isAllowedTo('USER') ? null : bindLoadingMessage(new FapEntryCollection(null, {
         rqlQuery: 'exclude(changes)&sort(_id)&orderNo=string:' + this.model.id
       }), this);
 
@@ -156,11 +163,12 @@ define([
         delayReasons: this.delayReasons
       });
 
-      this.fapEntriesView = new FapEntryListView({
+      this.fapEntriesView = !this.fapEntries ? null : new FapEntryListView({
         collection: this.fapEntries
       });
 
       this.childOrdersView = new OrderListView({
+        tableClassName: 'table-bordered table-hover table-condensed table-striped',
         collection: this.childOrders,
         delayReasons: this.delayReasons,
         panel: {
@@ -213,7 +221,7 @@ define([
       return when(
         this.model.fetch(),
         fapDictionaries.load(),
-        this.fapEntries.fetch({reset: true}),
+        this.fapEntries ? this.fapEntries.fetch({reset: true}) : null,
         this.childOrders.fetch({reset: true}),
         this.paintOrders.fetch({reset: true}),
         this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null
@@ -271,10 +279,23 @@ define([
 
     renderJumpList: function()
     {
-      this.$id('jumpList').remove();
-      this.$el.append(renderJumpList({
-        idPrefix: this.idPrefix
-      }));
+      var page = this;
+
+      page.$id('jumpList').remove();
+
+      var $jumpList = page.renderPartial(jumpListTemplate);
+
+      $jumpList.find('[data-section]').each(function()
+      {
+        var $section = page.$('.orders-' + this.dataset.section).first();
+
+        if (!$section.length || $section.hasClass('hidden'))
+        {
+          this.parentNode.removeChild(this);
+        }
+      });
+
+      page.$el.append($jumpList);
     },
 
     onPaintOrdersReset: function()

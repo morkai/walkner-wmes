@@ -40,6 +40,7 @@
       'app/updater/index',
       'app/data/loadedModules',
       'app/core/layouts/BlankLayout',
+      'app/core/layouts/PageLayout',
       'app/time',
       'app/wmes-docs-routes',
       'bootstrap',
@@ -63,7 +64,8 @@
     viewport,
     updater,
     loadedModules,
-    BlankLayout)
+    BlankLayout,
+    PageLayout)
   {
     var startBroker = broker.sandbox();
 
@@ -89,6 +91,16 @@
     viewport.registerLayout('blank', function createBlankLayout()
     {
       return new BlankLayout();
+    });
+
+
+    viewport.registerLayout('page', function createPageLayout()
+    {
+      return new PageLayout({
+        version: updater.getCurrentVersionString(),
+        changelogUrl: '#changelog',
+        hdHidden: true
+      });
     });
 
     broker.subscribe('page.titleChanged', function(newTitle)

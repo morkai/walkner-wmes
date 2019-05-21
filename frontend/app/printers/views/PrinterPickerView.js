@@ -192,6 +192,7 @@ define([
         return {
           label: label,
           icon: 'print',
+          privileges: 'USER',
           callback: function(e)
           {
             if (cache && filterPrinters(options.tag).length === 0)

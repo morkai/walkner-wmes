@@ -66,7 +66,7 @@ define([
       return {
         orderNo: this.model.id,
         documents: this.model.get('documents').toJSON(),
-        canView: user.isAllowedTo('LOCAL', 'DOCUMENTS:VIEW')
+        canView: !window.IS_EMBEDDED && user.isAllowedTo('LOCAL', 'DOCUMENTS:VIEW')
       };
     },
 
@@ -78,8 +78,6 @@ define([
     afterRender: function()
     {
       this.listenToOnce(this.model, 'change:documents', this.render);
-
-      this.$el.toggleClass('hidden', this.model.get('documents').length === 0);
     },
 
     tryOpenDocument: function(aEl)

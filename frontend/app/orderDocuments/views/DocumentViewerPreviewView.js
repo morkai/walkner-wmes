@@ -168,29 +168,39 @@ define([
 
     tryLoadRemoteDocument: function(nc15)
     {
-      this.model.setFileSource('remote');
-      this.setLoadingMessage('remoteServer');
-
       var view = this;
-      var remoteFileUrl = this.model.getRemoteFileUrl(nc15) + '?' + view.getRemoteFileUrlQuery();
 
-      if (this.req)
+      view.model.setFileSource('remote');
+      view.setLoadingMessage('remoteServer');
+
+      if (nc15 === 'ORDER')
       {
-        this.req.abort();
+        return view.loadFile(
+          window.location.pathname
+          + window.location.search
+          + '#orders/' + view.model.getCurrentOrder().no
+        );
       }
 
-      this.req = this.ajax({
+      var remoteFileUrl = view.model.getRemoteFileUrl(nc15) + '?' + view.getRemoteFileUrlQuery();
+
+      if (view.req)
+      {
+        view.req.abort();
+      }
+
+      view.req = this.ajax({
         type: 'HEAD',
         url: remoteFileUrl
       });
 
-      this.req.fail(function()
+      view.req.fail(function()
       {
         view.req = null;
         view.tryLoadLocalDocument(nc15);
       });
 
-      this.req.done(function(res, status, jqXhr)
+      view.req.done(function(res, status, jqXhr)
       {
         var fileSource = jqXhr.getResponseHeader('X-Document-Source');
 

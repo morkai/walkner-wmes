@@ -20,9 +20,9 @@
         {
           if (leadingOrder && leadingOrder !== model._id)
           {
-            if (user.isAllowedTo('ORDERS:VIEW'))
+            if (user.isAllowedTo('LOCAL', 'ORDERS:VIEW'))
             {
-              return '<a href="#orders/' + leadingOrder + '">' + leadingOrder + '</a>';
+              return '<a href="' + window.location.origin + window.location.pathname + window.location.search + '#orders/' + leadingOrder + '">' + leadingOrder + '</a>';
             }
 
             return leadingOrder;
