@@ -18,6 +18,17 @@
     <label for="<%- idPrefix %>-workerCount"><%- t('production', 'endWorkDialog:workerCount') %></label>
     <input id="<%- idPrefix %>-workerCount" class="form-control small <%- embedded ? 'is-embedded' : '' %>" type="<%- embedded ? 'text' : 'number' %>" value="<%- workerCount %>" min="1" max="<%- maxWorkerCount %>" data-ignore-key="1" data-vkb="numeric">
   </div>
+  <div id="<%- idPrefix %>-ft" class="hidden" style="margin-bottom: 15px">
+    <p class="message message-inline message-error"><%- t('production', 'ft:warning') %></p>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-ft-login"><%- t('production', 'ft:login') %></label>
+      <input id="<%- idPrefix %>-ft-login" class="form-control small" type="text" required data-ignore-key="1">
+    </div>
+    <div class="form-group">
+      <label for="<%- idPrefix %>-ft-password"><%- t('production', 'ft:password') %></label>
+      <input id="<%- idPrefix %>-ft-password" class="form-control small" type="password" required autocomplete="new-password" data-ignore-key="1">
+    </div>
+  </div>
   <div class="form-actions">
     <button id="<%- idPrefix %>-submit" class="btn btn-lg btn-warning" type="submit"><%- t('production', 'endWorkDialog:yes') %></button>
     <button class="btn btn-lg btn-link cancel" type="button"><%- t('production', 'endWorkDialog:no') %></button>

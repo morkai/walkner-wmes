@@ -65,3 +65,10 @@
   <li>Zmieniono zrzut dokumentów tak, aby zrzut dla danego dnia był dodatkowo podzielony na maksymalnie
     po 500 zleceń na jedną transakcję (dla dnia z 3700 zleceniami zostanie wykonanych 8 zrzutów).</li>
 </ul>
+<h3>Formatka operatora</h3>
+<ul>
+  <li>Dodano do formatek kończenia zlecenia sprawdzanie czy w danym zleceniu wykonano wszystkie testy ramki
+    (tylko w przypadku, gdy zlecenie ma przynajmniej jeden test pomyślnie wykonany). Jeżeli zlecenie nie ma
+    wszystkich testów ramki, to do jego zakończenia należy podać login i hasło uprawnionego użytkownika
+    (funkcja 'Inżynier...' lub uprawnienie 'Operator: odblokowywanie zleceń').</li>
+</ul>

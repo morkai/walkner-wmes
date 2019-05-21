@@ -3,11 +3,15 @@
 define([
   'underscore',
   'jquery',
-  'app/socket'
+  'app/socket',
+  'app/i18n',
+  'app/viewport'
 ], function(
   _,
   $,
-  socket
+  socket,
+  t,
+  viewport
 ) {
   'use strict';
 
@@ -17,21 +21,30 @@ define([
 
   return function limitQuantityDone(view, prodShiftOrder)
   {
+    view.ft = {
+      checkCredentials: null
+    };
+
     if (!prodShiftOrder.id || !socket.isConnected())
     {
       return;
     }
 
     var $submit = view.$id('submit').prop('disabled', true);
-    var requests = [requestMin(view, prodShiftOrder)];
+    var requests = [
+      requestFt(view, prodShiftOrder),
+      requestMin(view, prodShiftOrder)
+    ];
 
     if (prodShiftOrder.get('orderId') && !NO_MAX_CHECK_LINES[prodShiftOrder.get('prodLine')])
     {
       requests.push(requestMax(view, prodShiftOrder));
     }
 
-    $.when.apply($, requests).always(function()
+    $.when.apply($, requests).always(function(ftResults)
     {
+      checkFt(view, ftResults && ftResults[0]);
+
       $submit.prop('disabled', false);
     });
   };
@@ -129,5 +142,112 @@ define([
       .attr('min', newMin)
       .attr('max', newMax)
       .trigger('input');
+  }
+
+  function requestFt(view, prodShiftOrder)
+  {
+    var url = '/xiconf/orders/' + prodShiftOrder.get('orderId');
+
+    return view.ajax({url: url, timeout: 10000});
+  }
+
+  function checkFt(view, xiconfOrder)
+  {
+    if (!xiconfOrder)
+    {
+      return ftOk(view);
+    }
+
+    var ftItem = _.find(xiconfOrder.items, function(item) { return item.kind === 'ft'; });
+
+    if (!ftItem || ftItem.quantityDone >= ftItem.quantityTodo)
+    {
+      return ftOk(view);
+    }
+
+    var $ft = view.$id('ft').removeClass('hidden');
+
+    $ft.on('input', resetState);
+    $ft.on('change', resetState);
+
+    if (view.options.vkb)
+    {
+      view.options.vkb.reposition();
+    }
+
+    function resetState()
+    {
+      view.ft.checkCredentials = checkCredentials.bind(null, view);
+
+      $ft.find('input').each(function() { this.setCustomValidity(''); });
+    }
+  }
+
+  function ftOk(view)
+  {
+    view.$id('ft').remove();
+  }
+
+  function checkCredentials(view)
+  {
+    var login = view.$id('ft-login').val();
+    var password = view.$id('ft-password').val();
+
+    var req = view.ajax({
+      method: 'POST',
+      url: '/login?login=0',
+      data: JSON.stringify({
+        login: login,
+        password: password
+      })
+    });
+
+    req.fail(function()
+    {
+      var $login = view.$id('ft-login');
+
+      if (!$login.length)
+      {
+        return;
+      }
+
+      if (req.status >= 400 && req.status < 500)
+      {
+        view.ft.checkCredentials = null;
+
+        $login[0].setCustomValidity(t('production', 'ft:invalidCredentials'));
+      }
+      else if (!socket.isConnected())
+      {
+        view.ft.checkCredentials = null;
+      }
+      else
+      {
+        viewport.msg.show({
+          type: 'error',
+          time: 5000,
+          text: t('production', 'ft:requestFailure')
+        });
+      }
+    });
+
+    req.done(function(user)
+    {
+      if (user.super
+        || _.includes(user.prodFunction, 'engineer')
+        || _.includes(user.privileges, 'OPERATOR:ORDER_UNLOCK'))
+      {
+        view.ft.checkCredentials = null;
+      }
+      else
+      {
+        view.$id('ft-login')[0].setCustomValidity(t('production', 'ft:noPrivileges'));
+      }
+    });
+
+    req.always(function()
+    {
+      view.$id('submit').prop('disabled', false).click();
+    });
   }
 });

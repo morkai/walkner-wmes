@@ -136,6 +136,7 @@
   "PRIVILEGE:KAIZEN:DICTIONARIES:MANAGE": "ZPW/Usprawnienia: zarządzanie słownikami",
   "PRIVILEGE:SUGGESTIONS:MANAGE": "Usprawnienia: zarządzanie zgłoszeniami",
   "PRIVILEGE:OPERATOR:ACTIVATE": "Operator WMES: aktywacja klientów",
+  "PRIVILEGE:OPERATOR:ORDER_UNLOCK": "Operator WMES: odblokowywanie zlecenia",
   "PRIVILEGE:DOCUMENTS:VIEW": "Dokumenty WMES: przeglądanie",
   "PRIVILEGE:DOCUMENTS:MANAGE": "Dokumenty WMES: zarządzanie",
   "PRIVILEGE:DOCUMENTS:ACTIVATE": "Dokumenty WMES: aktywacja klientów",

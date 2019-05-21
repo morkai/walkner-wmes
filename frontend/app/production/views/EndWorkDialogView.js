@@ -76,6 +76,11 @@ define([
           }
         }
 
+        if (this.ft.checkCredentials)
+        {
+          return this.ft.checkCredentials();
+        }
+
         var newQuantitiesDone = this.parseInt('quantitiesDone');
         var newQuantityDone = this.parseInt('quantityDone');
         var newWorkerCount = this.parseInt('workerCount');

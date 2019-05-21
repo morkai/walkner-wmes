@@ -332,6 +332,13 @@
     "execution:downtime:startedAt": "Started at",
     "execution:downtime:finishedAt": "Finished at",
 
+    "ft:warning": "Order can be finished only by an authorized person, because all frame tests have not been performed. Inform your supervisor.",
+    "ft:login": "Login",
+    "ft:password": "Password",
+    "ft:invalidCredentials": "Invalid credentials.",
+    "ft:noPrivileges": "User doesn't have the required privileges.",
+    "ft:requestFailure": "Failed to check the authorization.",
+
     "settings:tab:operator": "Operator",
     "settings:tab:downtimes": "Downtimes",
     "settings:tab:spigot": "Spigot check",

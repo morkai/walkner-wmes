@@ -331,6 +331,13 @@
   "execution:downtime:startedAt": "Czas rozpoczęcia",
   "execution:downtime:finishedAt": "Czas zakończenia",
 
+  "ft:warning": "Zlecenie zakończyć może tylko osoba uprawniona, ponieważ nie wykonano wszystkich testów ramki. Poinformuj swojego przełożonego.",
+  "ft:login": "Login",
+  "ft:password": "Hasło",
+  "ft:invalidCredentials": "Nieprawidłowy login i/lub hasło.",
+  "ft:noPrivileges": "Użytkownik nie ma odpowiednich uprawnień.",
+  "ft:requestFailure": "Sprawdzanie uprawnień nie powiodło się.",
+
   "settings:tab:operator": "Formatka operatora",
   "settings:tab:downtimes": "Przestoje",
   "settings:tab:spigot": "Sprawdzanie Spigota",

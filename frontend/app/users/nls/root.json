@@ -135,6 +135,7 @@
     "PRIVILEGE:KAIZEN:DICTIONARIES:MANAGE": "Near miss/Suggestions: manage dictionaries",
     "PRIVILEGE:SUGGESTIONS:MANAGE": "Suggestions: manage entries",
     "PRIVILEGE:OPERATOR:ACTIVATE": "WMES Operator: client activation",
+    "PRIVILEGE:OPERATOR:ORDER_UNLOCK": "WMES Operator: order unlock",
     "PRIVILEGE:DOCUMENTS:VIEW": "WMES Documents: view",
     "PRIVILEGE:DOCUMENTS:MANAGE": "WMES Documents: manage",
     "PRIVILEGE:DOCUMENTS:ACTIVATE": "WMES Documents: client activation",

@@ -131,6 +131,11 @@ define([
           }
         }
 
+        if (this.ft.checkCredentials)
+        {
+          return this.ft.checkCredentials();
+        }
+
         if (this.socket.isConnected())
         {
           if (this.options.embedded)
@@ -226,6 +231,7 @@ define([
         else if (this.options.order)
         {
           this.selectSpecifiedOrder();
+          this.limitQuantityDone();
         }
         else
         {
