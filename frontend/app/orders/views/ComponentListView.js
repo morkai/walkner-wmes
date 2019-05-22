@@ -100,6 +100,7 @@ define([
     {
       this.item = null;
       this.document = null;
+      this.window = null;
       this.contents = null;
     },
 
@@ -206,6 +207,11 @@ define([
 
     mark: function()
     {
+      if (!this.window || !this.window.showMarks)
+      {
+        return;
+      }
+
       if (this.window)
       {
         this.window.focus();
