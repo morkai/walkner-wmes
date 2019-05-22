@@ -102,14 +102,14 @@ define([
       {
         this.onWindowResize = _.debounce(this.onWindowResize.bind(this), 16);
 
-        $(window).on('resize', this.onWindowResize);
+        $(window).on('resize.' + this.idPrefix, this.onWindowResize);
       }
 
       if (this.options.editable !== false)
       {
         this.onDocumentClick = this.onDocumentClick.bind(this);
 
-        $(document.body).on('click', this.onDocumentClick);
+        $(document.body).on('click.' + this.idPrefix, this.onDocumentClick);
       }
 
       var render = _.debounce(this.render.bind(this), 1);
@@ -129,21 +129,14 @@ define([
 
     destroy: function()
     {
+      $(window).off('.' + this.idPrefix);
+      $(document.body).off('.' + this.idPrefix);
+
       this.hidePopover();
       this.removeChart();
 
       this.chart = null;
       this.datum = null;
-
-      if (this.options.resizable !== false)
-      {
-        $(window).off('resize', this.onWindowResize);
-      }
-
-      if (this.options.editable !== false)
-      {
-        $(document.body).off('click', this.onDocumentClick);
-      }
 
       $(document.body).removeClass('prodShifts-extendedDowntime');
 
@@ -310,6 +303,12 @@ define([
       var width = this.calcWidth();
 
       this.hidePopover();
+
+      if (!this.chart)
+      {
+        return;
+      }
+
       this.chart.width(width);
 
       d3.select(this.el)
