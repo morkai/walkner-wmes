@@ -234,7 +234,7 @@ define([
     req.done(function(user)
     {
       if (user.super
-        || _.includes(user.prodFunction, 'engineer')
+        || /(engineer|leader)/i.test(user.prodFunction)
         || _.includes(user.privileges, 'OPERATOR:ORDER_UNLOCK'))
       {
         view.ft.checkCredentials = null;
