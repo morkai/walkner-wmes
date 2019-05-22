@@ -31,7 +31,10 @@ define([
     {
       orgUnits.getChildren(workCenter).forEach(function(prodLine)
       {
-        prodLines.push(prodLine.id);
+        if (!prodLine.get('deactivatedAt'))
+        {
+          prodLines.push(prodLine.id);
+        }
       });
     });
 
@@ -152,7 +155,6 @@ define([
       return this.get('tasks').map(function(task)
       {
         task.lines = findFlowLines(task.id);
-
         task.name = ' ' + task.name + ' ';
 
         task.lines.forEach(function(lineId)
@@ -163,6 +165,10 @@ define([
         });
 
         task.name = task.name.trim().replace(/[s\-,.]+$/, '');
+        task.lines = {
+          title: '* ' + task.lines.join('\n* '),
+          label: task.lines.shift() + (task.lines.length ? '...' : '')
+        };
 
         task.absence = absenceTasks[task.id] >= 0;
         task.totalByCompany = {};

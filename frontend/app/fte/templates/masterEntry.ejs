@@ -150,7 +150,7 @@
           <% if (task.type === 'prodFlow') { %>
           <span class="fte-masterEntry-cell-task-container">
             <span class="fte-masterEntry-cell-task-name"><%= task.name %></span>
-            <span class="fte-masterEntry-cell-task-lines"><%= task.lines %></span>
+            <span class="fte-masterEntry-cell-task-lines" title="<%= task.lines.title %>"><%= task.lines.label %></span>
           </span>
           <% } else { %>
           <em><%= task.name %></em>
