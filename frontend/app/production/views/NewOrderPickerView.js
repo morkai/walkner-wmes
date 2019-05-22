@@ -131,7 +131,7 @@ define([
           }
         }
 
-        if (this.ft.checkCredentials)
+        if (this.ft && this.ft.checkCredentials)
         {
           return this.ft.checkCredentials();
         }
