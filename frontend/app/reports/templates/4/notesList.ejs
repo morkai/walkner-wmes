@@ -18,7 +18,11 @@
   <% } %>
   <% if (orders.length) { %>
   <div id="<%- idPrefix %>-table">
-    <%- renderOrderList({extended: true, orders: orders}) %>
+    <%- renderOrderList({
+      helpers: helpers,
+      extended: true,
+      orders: orders
+    }) %>
   </div>
   <% } %>
 </div>
