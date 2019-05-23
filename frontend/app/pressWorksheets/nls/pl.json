@@ -44,6 +44,7 @@
   "PROPERTY:order.quantityDone": "Ilość dobrych",
   "PROPERTY:order.startedAt": "Godz. rozp.",
   "PROPERTY:order.finishedAt": "Godz. zak.",
+  "PROPERTY:order.opWorkDuration": "Czas pracy op.",
   "PROPERTY:order.losses": "Straty materiałowe [sztuki]",
   "PROPERTY:order.downtimes": "Straty czasu z polecenia mistrza [minuty]",
   "PROPERTY:order.machineManHours": "RBH",

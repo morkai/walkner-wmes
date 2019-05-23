@@ -59,14 +59,48 @@ define([
       },
       'blur .pressWorksheets-form-time': function(e)
       {
-        var time = e.target.value.trim().replace(/[^0-9: \-]+/g, '');
+        var v = e.target.value;
 
-        if (time.length === 0)
+        if (/opWorkDuration$/.test(e.target.name) && /[0-9]+%/.test(e.target.value))
         {
+          var $row = this.$(e.target).closest('tr');
+          var startedAt = time.utc.getMoment($row.find('input[name$="startedAt"]').val(), 'HH:mm');
+          var finishedAt = time.utc.getMoment($row.find('input[name$="finishedAt"]').val(), 'HH:mm');
+          var duration = finishedAt.diff(startedAt);
+
+          if (duration > 0)
+          {
+            duration *= parseInt(v, 10) / 100;
+            v = Math.round(duration / 60000).toString();
+          }
+          else
+          {
+            v = '';
+          }
+        }
+
+        v = v.trim();
+
+        if (/^[0-9]+$/.test(v))
+        {
+          v += 'm';
+        }
+
+        if (/[a-z]/.test(v))
+        {
+          v = time.toString(time.toSeconds(v), true).split(':').slice(0, 2).join(':');
+        }
+
+        v = v.replace(/[^0-9: \-]+/g, '').trim();
+
+        if (v.length === 0)
+        {
+          e.target.value = '';
+
           return;
         }
 
-        var matches = time.match(/^([0-9]+)(?::| +|\-)+([0-9]+)$/);
+        var matches = v.match(/^([0-9]+)(?::| +|-)+([0-9]+)$/);
         var hh = 0;
         var mm = 0;
 
@@ -75,19 +109,19 @@ define([
           hh = parseInt(matches[1], 10);
           mm = parseInt(matches[2], 10);
         }
-        else if (time.length === 4)
+        else if (v.length === 4)
         {
-          hh = parseInt(time.substr(0, 2), 10);
-          mm = parseInt(time.substr(2), 10);
+          hh = parseInt(v.substr(0, 2), 10);
+          mm = parseInt(v.substr(2), 10);
         }
-        else if (time.length === 3)
+        else if (v.length === 3)
         {
-          hh = parseInt(time[0], 10);
-          mm = parseInt(time.substr(1), 10);
+          hh = parseInt(v[0], 10);
+          mm = parseInt(v.substr(1), 10);
         }
         else
         {
-          mm = parseInt(time, 10);
+          mm = parseInt(v, 10);
         }
 
         var invalidH = isNaN(hh) || hh >= 24;
@@ -217,12 +251,12 @@ define([
 
       this.listenTo(this.existingWorksheets, 'reset', this.toggleExistingWarning);
 
-      $('body').on('keydown', this.onKeyDown);
+      $(document.body).on('keydown.' + this.idPrefix, this.onKeyDown);
     },
 
     destroy: function()
     {
-      $('body').off('keydown', this.onKeyDown);
+      $(document.body).off('.' + this.idPrefix);
     },
 
     afterRender: function()
@@ -418,6 +452,14 @@ define([
       }
 
       var subdivision = prodLines.get(order.prodLine).getSubdivision();
+      var opWorkDuration = 0;
+
+      if (order.opWorkDuration)
+      {
+        var parts = order.opWorkDuration.split(':');
+
+        opWorkDuration = (parts[0] * 3600 + parts[1] * 60) * 1000 / 3600000;
+      }
 
       return {
         prodShiftOrder: $part.attr('data-prodShiftOrder') || null,
@@ -431,6 +473,7 @@ define([
         quantityDone: order.quantityDone,
         startedAt: order.startedAt || null,
         finishedAt: order.finishedAt || null,
+        opWorkDuration: opWorkDuration,
         losses: losses,
         downtimes: downtimes,
         notes: order.notes || ''
@@ -1121,8 +1164,13 @@ define([
 
       if (this.model.get('type') !== 'paintShop')
       {
-        $orderRow.find('.pressWorksheets-form-startedAt').val(order.startedAt);
-        $orderRow.find('.pressWorksheets-form-finishedAt').val(order.finishedAt);
+        var opWorkDuration = order.opWorkDuration > 0
+          ? time.toString(order.opWorkDuration * 3600, true).split(':').slice(0, 2).join(':')
+          : '';
+
+        $orderRow.find('input[name$="startedAt"]').val(order.startedAt);
+        $orderRow.find('input[name$="finishedAt"]').val(order.finishedAt);
+        $orderRow.find('input[name$="opWorkDuration"]').val(opWorkDuration);
       }
 
       if (order.notes)

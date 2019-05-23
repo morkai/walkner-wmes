@@ -3,13 +3,17 @@
 
 'use strict';
 
-db.suggestions.updateMany({kaizenEvent: {$exists: false}}, {$set: {kaizenEvent: ''}});
-db.suggestions.updateMany({productFamily: 'INNE'}, {$set: {productFamily: 'OTHER'}});
-db.kaizenproductfamilies.deleteOne({_id: 'INNE'});
-db.kaizenproductfamilies.insertOne({
-  "_id": "OTHER",
-  "position": 60,
-  "owners": [],
-  "name": "Inna",
-  "__v": 0
+db.prodshiftorders.updateMany({opWorkDuration: {$exists: false}}, {$set: {opWorkDuration: 0}});
+
+db.pressworksheets.find({}).forEach(pw =>
+{
+  pw.orders.forEach(o =>
+  {
+    if (!o.opWorkDuration)
+    {
+      o.opWorkDuration = 0;
+    }
+  });
+
+  db.pressworksheets.updateOne({_id: pw._id}, {$set: {orders: pw.orders}});
 });

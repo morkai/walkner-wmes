@@ -4,8 +4,9 @@
   <td><input class="form-control pressWorksheets-form-operation" type="text" autocomplete="new-password" name="orders[<%- no %>].operation" data-column="operation" placeholder="<%- t('pressWorksheets', 'FORM:PLACEHOLDER:operation') %>"></td>
   <td><input class="pressWorksheets-form-prodLine" type="text" autocomplete="new-password" name="orders[<%- no %>].prodLine" data-column="prodLine" placeholder="<%- t('pressWorksheets', 'FORM:PLACEHOLDER:prodLine') %>"></td>
   <td><input class="form-control no-controls pressWorksheets-form-quantityDone" type="number" name="orders[<%- no %>].quantityDone" data-column="quantityDone"></td>
-  <td class="pressWorksheets-form-timeCell"><input class="form-control no-controls pressWorksheets-form-time pressWorksheets-form-startedAt" type="time" name="orders[<%- no %>].startedAt" data-column="startedAt"></td>
-  <td class="pressWorksheets-form-timeCell"><input class="form-control no-controls pressWorksheets-form-time pressWorksheets-form-finishedAt" type="time" name="orders[<%- no %>].finishedAt" data-column="finishedAt"></td>
+  <td class="pressWorksheets-form-timeCell"><input class="form-control no-controls pressWorksheets-form-time pressWorksheets-form-startedAt" type="text" name="orders[<%- no %>].startedAt" pattern="^[0-9]{2}:[0-9]{2}$" data-column="startedAt"></td>
+  <td class="pressWorksheets-form-timeCell"><input class="form-control no-controls pressWorksheets-form-time pressWorksheets-form-finishedAt" type="text" name="orders[<%- no %>].finishedAt" pattern="^[0-9]{2}:[0-9]{2}$" data-column="finishedAt"></td>
+  <td class="pressWorksheets-form-timeCell"><input class="form-control no-controls pressWorksheets-form-time pressWorksheets-form-opWorkDuration" type="text" name="orders[<%- no %>].opWorkDuration" pattern="^[0-9]{2}:[0-9]{2}$" data-column="opWorkDuration"></td>
   <% lossReasons.forEach(function(lossReason, i) { %>
   <td class="pressWorksheets-form-lossCell <%- i ? '' : 'pressWorksheets-form-separator' %>"><input class="form-control no-controls pressWorksheets-form-count is-loss" type="number" name="orders[<%- no %>].losses.<%- lossReason._id %>" data-column="loss.<%- i %>" data-reason="<%- lossReason._id %>"></td>
   <% }) %>

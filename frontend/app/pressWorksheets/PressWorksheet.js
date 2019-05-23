@@ -1,11 +1,13 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   '../i18n',
   '../time',
   '../core/Model',
   '../core/util/getShiftStartInfo'
 ], function(
+  _,
   t,
   time,
   Model,
@@ -73,25 +75,7 @@ define([
 
       if (data.orders)
       {
-        var paintShop = data.type === 'paintShop';
-
-        data.orders = data.orders.map(function(order)
-        {
-          if (paintShop)
-          {
-            order.startedAt = time.getMoment(order.startedAt).format('LTS');
-            order.finishedAt = time.getMoment(order.finishedAt).format('LTS');
-          }
-
-          var operation = order.orderData.operations[order.operationNo];
-
-          if (operation)
-          {
-            data.machineManHours += order.machineManHours = operation.machineTime / 100 * order.quantityDone;
-          }
-
-          return order;
-        });
+        data.orders = this.constructor.serializeOrders(data.orders, data);
       }
 
       if (Array.isArray(data.divisions))
@@ -124,6 +108,43 @@ define([
       }
 
       return false;
+    }
+
+  }, {
+
+    serializeOrders: function(orders, data)
+    {
+      var paintShop = orders.length && orders[0].startedAt.length > 5;
+
+      return orders.map(function(order)
+      {
+        order = _.clone(order);
+
+        var startedAt = time.getMoment(order.startedAt, paintShop ? undefined : 'HH:mm');
+        var finishedAt = time.getMoment(order.finishedAt, paintShop ? undefined : 'HH:mm');
+
+        if (!order.opWorkDuration)
+        {
+          order.opWorkDuration = finishedAt.diff(startedAt) / 3600000;
+        }
+
+        order.opWorkDuration = time.utc.format(order.opWorkDuration * 3600000, 'HH:mm');
+
+        if (paintShop)
+        {
+          order.startedAt = startedAt.format('HH:mm:ss');
+          order.finishedAt = finishedAt.format('HH:mm:ss');
+        }
+
+        var operation = order.orderData.operations[order.operationNo];
+
+        if (operation && data)
+        {
+          data.machineManHours += order.machineManHours = operation.machineTime / 100 * order.quantityDone;
+        }
+
+        return order;
+      });
     }
 
   });

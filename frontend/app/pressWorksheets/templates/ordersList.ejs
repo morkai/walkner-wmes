@@ -1,34 +1,36 @@
+<% t = t.forDomain ? t.forDomain('pressWorksheets') : t %>
 <table class="table table-bordered table-condensed table-hover pressWorksheets-orders-table">
   <thead>
     <tr>
       <th class="is-min"><%- t('core', '#') %></th>
       <% if (extended) { %>
-      <th class="is-min"><%- helpers.t('PROPERTY:pressWorksheet') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:user') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:shift') %></th>
+      <th class="is-min"><%- t('PROPERTY:pressWorksheet') %></th>
+      <th class="is-min"><%- t('PROPERTY:user') %></th>
+      <th class="is-min"><%- t('PROPERTY:shift') %></th>
       <% } %>
-      <th class="is-min"><%- helpers.t('PROPERTY:order.nc12') %></th>
-      <th><%- helpers.t('PROPERTY:order.name') %></th>
-      <th><%- helpers.t('PROPERTY:order.operationName') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:order.operationNo') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:order.division') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:order.prodLine') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:order.quantityDone') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:order.startedAt') %></th>
-      <th class="is-min"><%- helpers.t('PROPERTY:order.finishedAt') %></th>
+      <th class="is-min"><%- t('PROPERTY:order.nc12') %></th>
+      <th><%- t('PROPERTY:order.name') %></th>
+      <th><%- t('PROPERTY:order.operationName') %></th>
+      <th class="is-min"><%- t('PROPERTY:order.operationNo') %></th>
+      <th class="is-min"><%- t('PROPERTY:order.division') %></th>
+      <th class="is-min"><%- t('PROPERTY:order.prodLine') %></th>
+      <th class="is-min"><%- t('PROPERTY:order.quantityDone') %></th>
+      <th class="is-min"><%- t('PROPERTY:order.startedAt') %></th>
+      <th class="is-min"><%- t('PROPERTY:order.finishedAt') %></th>
+      <th class="is-min"><%- t('PROPERTY:order.opWorkDuration') %></th>
       <% if (typeof worksheet !== 'undefined') { %>
-      <th class="is-min"><%- helpers.t('PROPERTY:order.machineManHours') %></th>
+      <th class="is-min"><%- t('PROPERTY:order.machineManHours') %></th>
       <% } %>
       <% if (typeof losses !== 'undefined' && losses) { %>
-      <th><%- helpers.t('PROPERTY:order.losses') %></th>
+      <th><%- t('PROPERTY:order.losses') %></th>
       <% } %>
-      <th><%- helpers.t('PROPERTY:order.downtimes') %></th>
+      <th><%- t('PROPERTY:order.downtimes') %></th>
     </tr>
   </thead>
   <% if (typeof worksheet !== 'undefined') { %>
   <tfoot>
   <tr>
-    <td colspan="<%- extended ? 13 : 10 %>"></td>
+    <td colspan="<%- extended ? 14 : 11 %>"></td>
     <td class="is-min is-number"><%- worksheet.machineManHours.toLocaleString() %></td>
     <td colspan="<%- losses ? 2 : 1 %>"></td>
   </tr>
@@ -58,6 +60,7 @@
       <td class="is-min is-number"><%= order.quantityDone.toLocaleString() %></td>
       <td class="is-min"><%= order.startedAt %></td>
       <td class="is-min"><%= order.finishedAt %></td>
+      <td class="is-min"><%= order.opWorkDuration %></td>
       <% if (typeof worksheet !== 'undefined') { %>
       <td class="is-min is-number"><%- (order.machineManHours || 0).toLocaleString() %></td>
       <% } %>

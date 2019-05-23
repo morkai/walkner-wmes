@@ -4,12 +4,14 @@ define([
   'app/i18n',
   'app/time',
   'app/core/View',
+  'app/pressWorksheets/PressWorksheet',
   'app/pressWorksheets/templates/ordersList',
   'app/reports/templates/4/notesList'
 ], function(
   t,
   time,
   View,
+  PressWorksheet,
   renderOrdersList,
   template
 ) {
@@ -49,16 +51,7 @@ define([
 
         req.done(function(res)
         {
-          view.orders = res.collection.map(function(order)
-          {
-            if (order.startedAt.length !== 5)
-            {
-              order.startedAt = time.format(order.startedAt, 'HH:mm:ss');
-              order.finishedAt = time.format(order.finishedAt, 'HH:mm:ss');
-            }
-
-            return order;
-          });
+          view.orders = PressWorksheet.serializeOrders(res.collection);
 
           view.render();
         });
@@ -82,29 +75,19 @@ define([
       {
         this.orders = [];
       });
+      this.listenTo(this.model, 'request error change:notes', this.render);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var notes = this.model.get('notes');
 
       return {
-        idPrefix: this.idPrefix,
         orders: this.orders,
         notes: notes.count,
         worksheets: notes.worksheets.length,
         renderOrderList: renderOrdersList
       };
-    },
-
-    beforeRender: function()
-    {
-      this.stopListening(this.model, 'request error change:notes', this.render);
-    },
-
-    afterRender: function()
-    {
-      this.listenToOnce(this.model, 'request error change:notes', this.render);
     },
 
     toggleHovered: function(rowEl, hovered)
