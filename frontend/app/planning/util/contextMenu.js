@@ -353,7 +353,7 @@ define([
             var left = window.screen.availWidth - width - 80;
 
             var win = window.open(
-              '/?hd=0#orders/' + orderNo,
+              '/#orders/' + orderNo,
               'WMES_PLANNING_COMMENT',
               'top=80,left=' + left + ',width=' + width + ',height=' + height
             );
@@ -371,7 +371,13 @@ define([
               }
 
               win.focus();
-              win.document.querySelector('textarea[name="comment"]').focus();
+
+              var commentEl = win.document.querySelector('textarea[name="comment"]');
+
+              if (commentEl)
+              {
+                commentEl.focus();
+              }
 
               setTimeout(function() { win.scrollTo(0, win.document.body.scrollHeight); }, 1);
             };

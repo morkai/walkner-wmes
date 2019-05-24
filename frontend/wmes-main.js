@@ -98,7 +98,7 @@
         },
         version: updater.getCurrentVersionString(),
         changelogUrl: '#changelog',
-        hdHidden: window.location.search.indexOf('hd=0') !== -1
+        hdHidden: !!window.locationbar && !window.locationbar.visible
       });
     });
 
