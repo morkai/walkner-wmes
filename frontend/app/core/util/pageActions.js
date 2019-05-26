@@ -126,7 +126,7 @@ define([
       viewport.msg.hide($msg);
     });
 
-    return false;
+    return req;
   }
 
   function i18n(model, key, data)

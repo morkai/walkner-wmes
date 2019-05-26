@@ -17,6 +17,7 @@
     "PAGE_ACTIONS:load": "Load",
     "PAGE_ACTIONS:paints": "Paints",
     "PAGE_ACTIONS:settings": "Settings",
+    "PAGE_ACTIONS:exportPlanExecution": "Export plan",
 
     "PROPERTY:order": "Order",
     "PROPERTY:nc12": "Product 12NC",
@@ -133,7 +134,13 @@
     "settings:load:statuses:color": "Color",
     "settings:load:statuses:add": "Add status",
 
-    "mrp:KSJ": "Drilling"
+    "mrp:KSJ": "Drilling",
+
+    "planExecutionExport:title": "Export plan execution",
+    "planExecutionExport:date": "Date",
+    "planExecutionExport:mrp": "MRP",
+    "planExecutionExport:submit": "Export data",
+    "planExecutionExport:cancel": "Cancel"
   },
   "pl": true
 }

@@ -27,6 +27,7 @@ define([
   '../views/PaintShopDatePickerView',
   '../views/PaintShopPaintPickerView',
   '../views/UserPickerView',
+  '../views/PlanExecutionExportView',
   'app/paintShop/templates/page',
   'app/paintShop/templates/mrpTabs',
   'app/paintShop/templates/totals',
@@ -59,6 +60,7 @@ define([
   PaintShopDatePickerView,
   PaintShopPaintPickerView,
   UserPickerView,
+  PlanExecutionExportView,
   pageTemplate,
   mrpTabsTemplate,
   totalsTemplate,
@@ -83,6 +85,8 @@ define([
     layoutName: 'page',
 
     pageId: 'paintShop',
+
+    modelProperty: 'orders',
 
     breadcrumbs: function()
     {
@@ -129,23 +133,28 @@ define([
         actions.push({
           type: 'link',
           icon: 'arrows-alt',
-          callback: this.toggleFullscreen.bind(page)
+          callback: page.toggleFullscreen.bind(page)
+        }, {
+          icon: 'download',
+          privileges: 'PAINT_SHOP:VIEW',
+          label: page.t('PAGE_ACTIONS:exportPlanExecution'),
+          callback: page.exportPlanExecution.bind(page)
         }, {
           icon: 'balance-scale',
           href: '#paintShop/load',
           privileges: 'PAINT_SHOP:VIEW',
-          label: t('paintShop', 'PAGE_ACTIONS:load'),
+          label: page.t('PAGE_ACTIONS:load'),
           callback: function() { window.WMES_LAST_PAINT_SHOP_DATE = page.orders.getDateFilter(); }
         }, {
           icon: 'paint-brush',
           href: '#paintShop/paints',
           privileges: 'PAINT_SHOP:MANAGE',
-          label: t('paintShop', 'PAGE_ACTIONS:paints'),
+          label: page.t('PAGE_ACTIONS:paints'),
           callback: function() { window.WMES_LAST_PAINT_SHOP_DATE = page.orders.getDateFilter(); }
         }, {
           href: '#paintShop;settings?tab=planning',
           icon: 'cogs',
-          label: t.bound('paintShop', 'PAGE_ACTIONS:settings'),
+          label: page.t('PAGE_ACTIONS:settings'),
           privileges: 'PAINT_SHOP:MANAGE'
         });
       }
@@ -431,10 +440,9 @@ define([
       );
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         embedded: IS_EMBEDDED,
         height: this.calcInitialHeight() + 'px',
         renderTabs: mrpTabsTemplate,
@@ -458,7 +466,7 @@ define([
         return {
           mrp: mrp,
           label: mrp,
-          description: t.has('paintShop', 'mrp:' + mrp) ? t('paintShop', 'mrp:' + mrp) : '',
+          description: t.has('paintShop', 'mrp:' + mrp) ? this.t('mrp:' + mrp) : '',
           active: orders.selectedMrp === mrp,
           dropZone: dropZones.getState(mrp)
         };
@@ -545,6 +553,17 @@ define([
       this.resize();
     },
 
+    exportPlanExecution: function()
+    {
+      var dialogView = new PlanExecutionExportView({
+        model: this.orders
+      });
+
+      console.log(dialogView, dialogView.getDefaultModel());
+
+      viewport.showDialog(dialogView, this.t('planExecutionExport:title'));
+    },
+
     renderTabs: function()
     {
       this.$id('tabs').html(mrpTabsTemplate({
@@ -603,27 +622,27 @@ define([
 
       var mrp = e.currentTarget.dataset.mrp;
       var menu = [
-        t('paintShop', 'menu:header:' + (mrp ? 'mrp' : 'all'), {mrp: mrp}),
+        this.t('menu:header:' + (mrp ? 'mrp' : 'all'), {mrp: mrp}),
         {
           icon: 'fa-clipboard',
-          label: t('paintShop', 'menu:copyOrders'),
+          label: this.t('menu:copyOrders'),
           handler: this.handleCopyOrdersAction.bind(this, e, mrp),
           visible: !IS_EMBEDDED
         },
         {
           icon: 'fa-clipboard',
-          label: t('paintShop', 'menu:copyChildOrders'),
+          label: this.t('menu:copyChildOrders'),
           handler: this.handleCopyChildOrdersAction.bind(this, e, mrp),
           visible: !IS_EMBEDDED
         },
         {
           icon: 'fa-print',
-          label: t('paintShop', 'menu:printOrders'),
+          label: this.t('menu:printOrders'),
           handler: this.handlePrintOrdersAction.bind(this, 'mrp', mrp)
         },
         {
           icon: 'fa-download',
-          label: t('paintShop', 'menu:exportOrders'),
+          label: this.t('menu:exportOrders'),
           handler: this.handleExportOrdersAction.bind(this, mrp),
           visible: !IS_EMBEDDED
         }
@@ -632,7 +651,7 @@ define([
       if (!mrp)
       {
         menu.push({
-          label: t('paintShop', 'menu:exportPaints'),
+          label: this.t('menu:exportPaints'),
           handler: this.handleExportPaintsAction.bind(this, mrp),
           visible: !IS_EMBEDDED
         });
@@ -644,7 +663,7 @@ define([
         {
           menu.push({
             icon: 'fa-level-down',
-            label: t('paintShop', 'menu:dropZone:' + this.dropZones.getState(mrp)),
+            label: this.t('menu:dropZone:' + this.dropZones.getState(mrp)),
             handler: this.handleDropZoneAction.bind(this, mrp, false)
           });
         }
@@ -652,7 +671,7 @@ define([
         {
           menu.push({
             icon: 'fa-level-down',
-            label: t('paintShop', 'menu:dropZone:' + this.dropZones.getState(this.orders.selectedPaint)),
+            label: this.t('menu:dropZone:' + this.dropZones.getState(this.orders.selectedPaint)),
             handler: this.handleDropZoneAction.bind(this, this.orders.selectedPaint, true)
           });
         }
@@ -668,7 +687,7 @@ define([
 
     handleCopyOrdersAction: function(e, filter)
     {
-      var view = this;
+      var page = this;
       var el = e.currentTarget;
       var x = e.pageX;
       var y = e.pageY;
@@ -697,7 +716,7 @@ define([
         var text = [];
         var usedOrders = {};
 
-        view.orders.serialize().forEach(function(order)
+        page.orders.serialize().forEach(function(order)
         {
           if (requestedOrderNo)
           {
@@ -708,7 +727,7 @@ define([
           }
           else if (order.status === 'cancelled'
             || (requestedMrp && order.mrp !== requestedMrp)
-            || !view.orders.isPaintVisible(order))
+            || !page.orders.isPaintVisible(order))
           {
             return;
           }
@@ -727,15 +746,15 @@ define([
 
         clipboardData.setData('text/plain', text.join('\r\n'));
 
-        clipboard.showTooltip(view, el, x, y, {
-          title: t('paintShop', 'menu:copyOrders:success')
+        clipboard.showTooltip(page, el, x, y, {
+          title: page.t('menu:copyOrders:success')
         });
       });
     },
 
     handleCopyChildOrdersAction: function(e, filter)
     {
-      var view = this;
+      var page = this;
       var el = e.currentTarget;
       var x = e.pageX;
       var y = e.pageY;
@@ -763,7 +782,7 @@ define([
 
         var text = [];
 
-        view.orders.serialize().forEach(function(order)
+        page.orders.serialize().forEach(function(order)
         {
           if (requestedOrderNo)
           {
@@ -780,7 +799,7 @@ define([
 
           order.childOrders.forEach(function(childOrder)
           {
-            if (view.orders.isPaintVisible(childOrder))
+            if (page.orders.isPaintVisible(childOrder))
             {
               text.push(childOrder.order);
             }
@@ -789,8 +808,8 @@ define([
 
         clipboardData.setData('text/plain', text.join('\r\n'));
 
-        clipboard.showTooltip(view, el, x, y, {
-          title: t('paintShop', 'menu:copyChildOrders:success')
+        clipboard.showTooltip(page, el, x, y, {
+          title: page.t('menu:copyChildOrders:success')
         });
       });
     },
@@ -923,31 +942,31 @@ define([
 
     handleDropZoneAction: function(mrp, isPaint)
     {
-      var view = this;
+      var page = this;
       var $tab;
       var $icon;
 
       if (isPaint)
       {
-        $tab = view.$('.paintShop-tab-paint');
+        $tab = page.$('.paintShop-tab-paint');
         $icon = $tab.find('.fa-paint-brush').first().removeClass('fa-paint-brush').addClass('fa-spinner fa-spin');
       }
       else
       {
-        $tab = view.$('.paintShop-tab[data-mrp="' + mrp + '"]').addClass('is-loading');
+        $tab = page.$('.paintShop-tab[data-mrp="' + mrp + '"]').addClass('is-loading');
         $icon = $tab.find('.fa').removeClass('fa-level-down').addClass('fa-spinner fa-spin');
       }
 
-      var req = view.promised(view.dropZones.toggle(mrp));
+      var req = page.promised(page.dropZones.toggle(mrp));
 
       req.fail(function()
       {
-        $tab.toggleClass('is-dropped', view.dropZones.getState(mrp));
+        $tab.toggleClass('is-dropped', page.dropZones.getState(mrp));
 
         viewport.msg.show({
           type: 'error',
           time: 2500,
-          text: t('paintShop', 'menu:dropZone:failure')
+          text: page.t('menu:dropZone:failure')
         });
       });
 
@@ -975,7 +994,7 @@ define([
     {
       var paint = this.orders.selectedPaint;
 
-      return t.has('paintShop', 'tabs:paint:' + paint) ? t('paintShop', 'tabs:paint:' + paint) : paint;
+      return t.has('paintShop', 'tabs:paint:' + paint) ? this.t('tabs:paint:' + paint) : paint;
     },
 
     isSelectedPaintDropped: function()
@@ -1149,7 +1168,7 @@ define([
         viewport.msg.show({
           type: 'warning',
           time: 2500,
-          text: t('paintShop', 'MSG:search:failure')
+          text: page.t('MSG:search:failure')
         });
 
         complete('#f2dede');
@@ -1381,7 +1400,7 @@ define([
           viewport.msg.show({
             type: 'warning',
             time: 2500,
-            text: t('paintShop', 'MSG:date:empty')
+            text: page.t('MSG:date:empty')
           });
         }
       });
@@ -1391,7 +1410,7 @@ define([
         viewport.msg.show({
           type: 'error',
           time: 2500,
-          text: t('paintShop', 'MSG:date:failure')
+          text: page.t('MSG:date:failure')
         });
       });
 

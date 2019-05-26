@@ -299,7 +299,6 @@ exports.events = {
       'qi.*.deleted',
       'd8.*.deleted',
       'orderDocuments.tree.filePurged', 'orderDocuments.tree.folderPurged',
-      'paintShop.paints.deleted',
       'pfep.entries.deleted'
     ],
     error: [
@@ -362,10 +361,6 @@ exports.pubsub = {
     'pscs.**',
     'd8.**',
     'heff.**',
-    'paintShop.events.saved',
-    'paintShop.orders.changed.*', 'paintShop.orders.updated.*',
-    'paintShop.dropZones.updated.*', 'paintShop.paints.*',
-    'paintShop.load.updated',
     'vis.**',
     'mor.**',
     'planning.**',
@@ -456,7 +451,6 @@ exports.user = {
     'PSCS:VIEW', 'PSCS:MANAGE',
     'D8:VIEW', 'D8:MANAGE', 'D8:LEADER', 'D8:DICTIONARIES:VIEW', 'D8:DICTIONARIES:MANAGE',
     'MOR:MANAGE', 'MOR:MANAGE:USERS',
-    'PAINT_SHOP:VIEW', 'PAINT_SHOP:MANAGE', 'PAINT_SHOP:PAINTER', 'PAINT_SHOP:DROP_ZONES',
     'PLANNING:VIEW', 'PLANNING:MANAGE', 'PLANNING:PLANNER', 'PLANNING:WHMAN',
     'WH:VIEW', 'WH:MANAGE',
     'PFEP:VIEW', 'PFEP:MANAGE',

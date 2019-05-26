@@ -1,0 +1,19 @@
+<form>
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    property: 'date',
+    required: true,
+    labels: {
+      text: helpers.t('planExecutionExport:date'),
+      ranges: true
+    }
+  }) %>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-mrp"><%- helpers.t('planExecutionExport:mrp') %></label>
+    <input id="<%- idPrefix %>-mrp" type="text">
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary"><%- helpers.t('planExecutionExport:submit') %></button>
+    <button type="button" class="btn btn-link cancel"><%- helpers.t('planExecutionExport:cancel') %></button>
+  </div>
+</form>

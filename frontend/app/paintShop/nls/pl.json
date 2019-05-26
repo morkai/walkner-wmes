@@ -16,6 +16,7 @@
   "PAGE_ACTIONS:load": "Obciążenie",
   "PAGE_ACTIONS:paints": "Farby",
   "PAGE_ACTIONS:settings": "Ustawienia",
+  "PAGE_ACTIONS:exportPlanExecution": "Eksportuj plan",
 
   "PROPERTY:order": "Zlecenie",
   "PROPERTY:nc12": "12NC wyrobu",
@@ -132,5 +133,11 @@
   "settings:load:statuses:color": "Kolor",
   "settings:load:statuses:add": "Dodaj status",
 
-  "mrp:KSJ": "Wiercenie"
+  "mrp:KSJ": "Wiercenie",
+
+  "planExecutionExport:title": "Eksport wykonania planu",
+  "planExecutionExport:date": "Data",
+  "planExecutionExport:mrp": "MRP",
+  "planExecutionExport:submit": "Eksportuj dane",
+  "planExecutionExport:cancel": "Anuluj"
 }
