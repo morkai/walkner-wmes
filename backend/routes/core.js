@@ -33,7 +33,7 @@ module.exports = (app, express) =>
   {
     res.set('Access-Control-Allow-Origin', '*');
     res.set('Access-Control-Allow-Methods', 'GET');
-    res.set('Access-Control-Allow-Headers', req.headers['access-control-request-headers'] || '*');
+    res.set('Access-Control-Allow-Headers', req.headers['access-control-request-headers'] || '');
     res.end();
   });
 
@@ -41,7 +41,7 @@ module.exports = (app, express) =>
   {
     res.set('Access-Control-Allow-Origin', '*');
     res.set('Access-Control-Allow-Methods', 'GET');
-    res.set('Access-Control-Allow-Headers', req.headers['access-control-request-headers'] || '*');
+    res.set('Access-Control-Allow-Headers', req.headers['access-control-request-headers'] || '');
     res.send(Date.now().toString());
   });
 
