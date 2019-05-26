@@ -1,4 +1,4 @@
-<div id="TRW:<%- cluster._id %>" class="trw-base-cluster" data-id="<%- cluster._id %>" style="top: <%- cluster.top %>px; left: <%- cluster.left %>px">
+<div id="TRW:<%- cluster._id %>" class="trw-base-cluster" data-id="<%- cluster._id %>" data-connector="<%- cluster.connector %>" style="top: <%- cluster.top %>px; left: <%- cluster.left %>px">
   <div class="trw-base-rows">
     <% cluster.rows.forEach(function(row, rowI) { %>
     <% if (row.length === 0) { %>

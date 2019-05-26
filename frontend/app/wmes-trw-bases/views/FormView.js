@@ -338,6 +338,7 @@ define([
         },
         top: top,
         left: left,
+        connector: 'na',
         rows: []
       });
     },

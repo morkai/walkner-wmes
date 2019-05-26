@@ -1,7 +1,19 @@
 <form>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-id" class="control-label is-required"><%- helpers.t('clusterForm:id') %></label>
-    <input id="<%- idPrefix %>-id" name="_id" class="form-control" type="text" autocomplete="new-password" required maxlength="30" style="width: 8em">
+  <div style="display: flex">
+    <div class="form-group">
+      <label for="<%- idPrefix %>-id" class="control-label is-required"><%- helpers.t('clusterForm:id') %></label>
+      <input id="<%- idPrefix %>-id" name="_id" class="form-control" type="text" autocomplete="new-password" required maxlength="30" style="width: 8em">
+    </div>
+    <div class="form-group" style="margin-left: 15px">
+      <label class="control-label"><%- helpers.t('clusterForm:connector') %></label>
+      <br>
+      <% ['na', 'male', 'female'].forEach(function(connector) { %>
+        <label class="radio-inline">
+          <input name="connector" type="radio" value="<%- connector %>">
+          <%- helpers.t('clusterForm:connector:' + connector) %>
+        </label>
+      <% }) %>
+    </div>
   </div>
   <div style="display: flex">
     <div class="form-group">

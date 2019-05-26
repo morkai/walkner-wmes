@@ -1,4 +1,102 @@
 <div class="hidden">
+  <h1>v0.137.0</h1>
+  <h2><%- time.format('2019-05-26', 'LL') %></h2>
+  <h3>Malarnia</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący nieresetowanie nr kabiny po zresetowaniu zlecenia.</li>
+    <li>Poprawiono błąd powodujący niewyświetlanie nr kontynuacji zlecenia w niektórych przypadkach.</li>
+    <li>Zmieniono ikonę '<i class="fa fa-paint-brush"></i> Ilość do pomalowania'
+      na '<i class="fa fa-circle-o"></i> Ilość do wiercenia' dla zleceń wiercenia.</li>
+    <li>Zmieniono łączenie zleceń podzielonych ze względu na różne farby tak, aby nie były łączone jeżeli
+      jedno z łączonych zleceń jest bez malowania.</li>
+    <li>Dodano nową opcję konfiguracyjną: Niemalowane MRP - lista MRP zleceń, które nie będą ignorowane nawet wtedy,
+      gdy nie mają ani jednej farby.</li>
+    <li>Dodano etykietę 'Wiercenie' do zakładki MRP 'KSJ'.</li>
+    <li>Dodano komunikat 'UWAGA! Zlecenie wiercenia.' do podzleceń, które są z MRP 'KSJ' i nie mają żadnej farby.</li>
+    <li>Dodano komunikat 'UWAGA! Zlecenie bez malowania.' do podzleceń, które nie mają żadnej farby.</li>
+    <li>Dodano eksportowanie sekwencji wykonania planu.</li>
+  </ul>
+  <h3>Luca</h3>
+  <ul>
+    <li>Zmieniono definicję zlecenia wysyłanego do serwera Luca.</li>
+    <li>Dodano możliwość rejestrowania i przeglądania zdarzeń.</li>
+  </ul>
+  <h3>Baza testów > TRW</h3>
+  <ul>
+    <li>Dodano nowy typ I/O: Analog.</li>
+    <li>Dodano możliwość ignorowania wybranych I/O podczas sprawdzania stanu odłączenia przewodów na koniec testu.</li>
+    <li>Dodano nowy słownik: Podstawki.</li>
+    <li>Zmieniono 'Testery' na 'Sterowniki'.</li>
+    <li>Zmieniono tworzenie Programów tak, aby opierały się na Podstawkach a nie Sterownikach.
+      Programowanie od teraz odbywa się metodą drag & drop.</li>
+  </ul>
+  <h3>Zlecenia produkcyjne</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wywalenie się serwera po zresetowaniu powodu opóźnienia zlecenia.</li>
+    <li>Dodano kolumny 'Zlecenie' oraz 'MRP' do 'Listy komponentów zlecenia z malarni'.</li>
+    <li>Dodano 'Lista podzleceń' do strony ze szczegółami zlecenia.</li>
+  </ul>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Dodano do katalogu dokumentów wyświetlanie informacji o ostatniej zmianie dokumentu oraz
+      historię zmian w dokumencie.</li>
+    <li>Dodano Kartę zlecenia do przeglądarki dokumentów.</li>
+  </ul>
+  <h3>Usprawnienia</h3>
+  <ul>
+    <li>Poprawiono błąd w wyświetlaniu pustego wykresu 'Ilość zgłoszeń wg rodzin produktów'.</li>
+    <li>Zmieniono 'Rodzinę produktów' tak, aby przy wybraniu opcji 'Inna' możliwe było wpisanie tekstowej wartości.</li>
+    <li>Zmieniono wykres 'Ilość zgłoszeń wg rodzin produktów' tak, aby wyświetlana była tekstowa wartość
+      wpisana przy wyborze kategorii 'Inna'.</li>
+    <li>Dodano do wykresów 'Ilość zgłoszeń' oraz 'Ilość zgłoszeń wg właścicieli' kategorię 'Kaizen Event'.</li>
+  </ul>
+  <h3>Baza Kanban</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający przywrócenie kolejki drukowania.</li>
+  </ul>
+  <h3>FTE (produkcja)</h3>
+  <ul>
+    <li>Zmieniono sortowanie przepływów tak, aby były posortowane według ID linii produkcyjnej w przepływie,
+      a nie według nazwy przepływu.</li>
+    <li>Zmieniono wyświetlanie nazwy przepływów tak, aby ID linii było rozdzielone od nazwy przepływu.</li>
+  </ul>
+  <h3>Baza testów > SNF</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący niezaznaczanie wybranych styczników na formularzu edycji programu.</li>
+    <li>Dodano wsparcie dla testu porcelanki.</li>
+  </ul>
+  <h3>SAP GUI</h3>
+  <ul>
+    <li>Zmieniono zrzut dokumentów tak, aby zrzut dla danego dnia był dodatkowo podzielony na maksymalnie
+      po 500 zleceń na jedną transakcję (dla dnia z 3700 zleceniami zostanie wykonanych 8 zrzutów).</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący wyświetlanie się nieprawidłowych operacji na liście operacji
+      rozpoczynanego zlecenia.</li>
+    <li>Dodano do formatek kończenia zlecenia sprawdzanie czy w danym zleceniu wykonano wszystkie testy ramki
+      (tylko w przypadku, gdy zlecenie ma przynajmniej jeden test pomyślnie wykonany). Jeżeli zlecenie nie ma
+      wszystkich testów ramki, to do jego zakończenia należy podać login i hasło uprawnionego użytkownika
+      (funkcja 'Inżynier...' lub uprawnienie 'Operator: odblokowywanie zleceń').</li>
+  </ul>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący niewyświetlanie wszystkich danych dla rozplanowanych zleceń z innego MRP
+      w trybie listy.</li>
+  </ul>
+  <h3>Karty pracy</h3>
+  <ul>
+    <li>Dodano możliwość wpisywania oddzielnego 'Czasu pracy operatora' dla zleceń w kartach typu
+      'Obróbka mechaniczna' i 'Montaż optyki'.</li>
+  </ul>
+  <h3>Raporty > Operatorzy</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający wyświetlenie komentarzy z kart pracy.</li>
+    <li>Zmieniono obliczanie wskaźników dla operatorów tak, aby korzystały z wartości 'Czas pracy operatora'
+      zamiast 'Czas trwania zlecenia'.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.136.0</h1>
   <h2><%- time.format('2019-05-05', 'LL') %></h2>
   <h3>FAP</h3>

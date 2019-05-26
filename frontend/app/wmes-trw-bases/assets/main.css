@@ -76,6 +76,12 @@
 .trw-base-row:last-child .trw-base-cell {
   border-bottom: 1px solid #000;
 }
+.trw-base-cluster[data-connector="male"] .trw-base-cell {
+  box-shadow: inset 0 0 10px #0af;
+}
+.trw-base-cluster[data-connector="female"] .trw-base-cell {
+  box-shadow: inset 0 0 10px hotpink;
+}
 .trw-base-cell-label {
   text-align: center;
   line-height: 70px;

@@ -3,30 +3,15 @@
 
 'use strict';
 
-print('luma2events');
-db.luma2events.getIndexes().forEach(index =>
+db.trwbases.find({}).forEach(base =>
 {
-  if (index.name === '_id_')
+  base.clusters.forEach(cluster =>
   {
-    return;
-  }
-
-  db.luma2events.dropIndex(index.name);
-});
-
-print('prodshiftorders');
-db.prodshiftorders.updateMany({opWorkDuration: {$exists: false}}, {$set: {opWorkDuration: 0}});
-
-print('pressworksheets');
-db.pressworksheets.find({}).forEach(pw =>
-{
-  pw.orders.forEach(o =>
-  {
-    if (!o.opWorkDuration)
+    if (!cluster.connector)
     {
-      o.opWorkDuration = 0;
+      cluster.connector = 'na';
     }
   });
 
-  db.pressworksheets.updateOne({_id: pw._id}, {$set: {orders: pw.orders}});
+  db.trwbases.replaceOne({_id: base._id}, base);
 });
