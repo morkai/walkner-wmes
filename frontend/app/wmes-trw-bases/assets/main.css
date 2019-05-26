@@ -26,6 +26,9 @@
   font-weight: bold;
   text-align: center;
 }
+.trw-base-cluster-label[data-position="none"] {
+  display: none;
+}
 .trw-base-cluster-label[data-position="top"] {
   top: -45px;
   bottom: unset;

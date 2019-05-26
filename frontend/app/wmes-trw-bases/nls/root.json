@@ -21,6 +21,7 @@
     "clusterForm:id": "Group ID",
     "clusterForm:label:text": "Label text",
     "clusterForm:label:position": "Label position",
+    "clusterForm:position:none": "None",
     "clusterForm:position:top": "Top",
     "clusterForm:position:bottom": "Bottom",
     "clusterForm:position:left": "Left",

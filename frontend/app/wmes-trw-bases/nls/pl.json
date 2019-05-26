@@ -22,6 +22,7 @@
   "clusterForm:id": "ID grupy",
   "clusterForm:label:text": "Tekst etykiety",
   "clusterForm:label:position": "Pozycja etykiety",
+  "clusterForm:position:none": "Brak",
   "clusterForm:position:top": "Na górze",
   "clusterForm:position:bottom": "Na dole",
   "clusterForm:position:left": "Z lewej",

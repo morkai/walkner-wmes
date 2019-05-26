@@ -11,7 +11,7 @@
     <div class="form-group" style="margin-left: 15px">
       <label class="control-label"><%- helpers.t('clusterForm:label:position') %></label>
       <br>
-      <% ['top', 'bottom', 'left', 'right'].forEach(function(position) { %>
+      <% ['none', 'top', 'bottom', 'left', 'right'].forEach(function(position) { %>
       <label class="radio-inline">
         <input name="label.position" type="radio" value="<%- position %>">
         <%- helpers.t('clusterForm:position:' + position) %>
