@@ -3,19 +3,18 @@
 define([
   'jquery',
   '../broker',
-  '../pubsub',
-  '../wmes-luma2-lines/LineCollection'
+  '../pubsub'
 ], function(
   $,
   broker,
-  pubsub,
-  LineCollection
+  pubsub
 ) {
   'use strict';
 
-  var TOPIC_PREFIX = 'luma2.';
+  var TOPIC_PREFIX = 'luca.';
   var PROP_TO_DICT = {
-    line: 'lines'
+    line: 'lines',
+    type: 'types'
   };
 
   var req = null;
@@ -23,7 +22,7 @@ define([
   var pubsubSandbox = null;
   var dictionaries = {
     types: [],
-    lines: new LineCollection(),
+    lines: [],
     loaded: false,
     load: function()
     {
@@ -44,7 +43,7 @@ define([
       }
 
       req = $.ajax({
-        url: '/luma2/dictionaries'
+        url: '/luca/dictionaries'
       });
 
       req.done(function(res)
@@ -65,6 +64,11 @@ define([
 
       Object.keys(PROP_TO_DICT).forEach(function(prop)
       {
+        if (Array.isArray(dictionaries.forProperty(prop)))
+        {
+          return;
+        }
+
         pubsubSandbox.subscribe(TOPIC_PREFIX + PROP_TO_DICT[prop] + '.**', handleDictionaryMessage);
       });
 
@@ -103,21 +107,38 @@ define([
     forProperty: function(prop)
     {
       return this[PROP_TO_DICT[prop]] || null;
+    },
+    bind: function(page)
+    {
+      var dictionaries = this;
+
+      page.on('beforeLoad', function(page, requests)
+      {
+        requests.push(dictionaries.load());
+      });
+
+      page.on('afterRender', dictionaries.load.bind(dictionaries));
+
+      page.once('remove', dictionaries.unload.bind(dictionaries));
+
+      return page;
     }
   };
 
   function resetDictionaries(data)
   {
-    if (data && data.types)
-    {
-      dictionaries.types = data.types;
-    }
-
     Object.keys(PROP_TO_DICT).forEach(function(prop)
     {
       var dict = PROP_TO_DICT[prop];
 
-      dictionaries[dict].reset(data ? data[dict] : []);
+      if (Array.isArray(dictionaries[dict]))
+      {
+        dictionaries[dict] = data ? data[dict] : [];
+      }
+      else if (dictionaries[dict].reset)
+      {
+        dictionaries[dict].reset(data ? data[dict] : []);
+      }
     });
   }
 
@@ -141,7 +162,7 @@ define([
     var topicParts = topic.split('.');
     var collection = dictionaries[topicParts[1]];
 
-    if (!collection)
+    if (!collection || !collection.model)
     {
       return;
     }

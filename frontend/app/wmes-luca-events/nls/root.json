@@ -1,0 +1,17 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "LUCA PbL",
+    "BREADCRUMBS:browse": "Events",
+
+    "PAGE_ACTION:settings": "Settings",
+
+    "PROPERTY:line": "Line",
+    "PROPERTY:type": "Type",
+    "PROPERTY:time": "Time",
+    "PROPERTY:station": "Station",
+    "PROPERTY:order": "Order",
+
+    "type:pce-finished": "PCE finished"
+  },
+  "pl": true
+}

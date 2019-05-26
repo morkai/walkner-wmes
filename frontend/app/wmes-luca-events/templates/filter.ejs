@@ -1,0 +1,38 @@
+<form class="well filter-form" autocomplete="off">
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix,
+    property: 'time',
+    labels: {
+      text: helpers.t('PROPERTY:time'),
+      ranges: true
+    }
+  }) %>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-type"><%- helpers.t('PROPERTY:type') %></label>
+    <select id="<%- idPrefix %>-type" name="type[]" class="form-control is-expandable" multiple size="1" data-expanded-length="15">
+      <% types.forEach(function(type) { %>
+        <option value="<%= type %>"><%- helpers.t('type:' + type) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-line"><%- helpers.t('PROPERTY:line') %></label>
+    <select id="<%- idPrefix %>-line" name="line[]" class="form-control is-expandable" multiple size="1" data-expanded-length="15">
+      <% lines.forEach(function(line) { %>
+      <option value="<%= line %>"><%= line %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-station"><%- helpers.t('PROPERTY:station') %></label>
+    <input id="<%- idPrefix %>-station" name="station" class="form-control" type="number" min="1" max="7">
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-order"><%- helpers.t('PROPERTY:order') %></label>
+    <input id="<%- idPrefix %>-order" name="order" class="form-control" type="text" pattern="^[0-9]{9}$" style="width: 90px">
+  </div>
+  <%- renderLimit() %>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('core', 'filter:submit') %></span></button>
+  </div>
+</form>

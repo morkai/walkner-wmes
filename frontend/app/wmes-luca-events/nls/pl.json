@@ -1,0 +1,14 @@
+{
+  "BREADCRUMBS:base": "LUCA PbL",
+  "BREADCRUMBS:browse": "Zdarzenia",
+
+  "PAGE_ACTION:settings": "Ustawienia",
+
+  "PROPERTY:line": "Linia",
+  "PROPERTY:type": "Typ",
+  "PROPERTY:time": "Czas wystąpienia",
+  "PROPERTY:station": "Stanowisko",
+  "PROPERTY:order": "Zlecenie",
+
+  "type:pce-finished": "Zakończenie kolejnej sztuki"
+}
