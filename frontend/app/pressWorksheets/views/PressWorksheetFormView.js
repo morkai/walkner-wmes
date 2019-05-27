@@ -100,7 +100,7 @@ define([
           return;
         }
 
-        var matches = v.match(/^([0-9]+)(?::| +|-)+([0-9]+)$/);
+        var matches = v.match(/^([0-9]+)(?::| +|-)+([0-9]+)/);
         var hh = 0;
         var mm = 0;
 
@@ -157,6 +157,8 @@ define([
         var num = parseInt(e.target.value, 10);
 
         e.target.value = isNaN(num) || num < 0 ? '' : num;
+
+        this.calcOpWorkDuration(e.currentTarget);
       },
       'focus input': function(e)
       {
@@ -217,6 +219,14 @@ define([
           this.renderOrdersTable();
           this.addOrderRow();
         }
+      },
+      'change input[name$=".part"]': function(e)
+      {
+        this.calcOpWorkDuration(e.currentTarget);
+      },
+      'change input[name$=".operation"]': function(e)
+      {
+        this.calcOpWorkDuration(e.currentTarget);
       },
       'click .pressWorksheets-form-comment': function(e)
       {
@@ -1264,6 +1274,41 @@ define([
           .find('.pressWorksheets-form-part')
           .select2('focus');
       }
+    },
+
+    calcOpWorkDuration: function(sourceEl)
+    {
+      var $order = this.$(sourceEl).closest('.pressWorksheets-form-order');
+      var $opWorkDuration = $order.find('input[name$=".opWorkDuration"]');
+      var part = $order.find('input[name$=".part"]').select2('data');
+      var operation = $order.find('input[name$=".operation"]').select2('data');
+      var quantityDone = parseInt($order.find('input[name$=".quantityDone"]').val(), 10);
+
+      if (!part || !operation || !quantityDone)
+      {
+        $opWorkDuration.val('');
+
+        return;
+      }
+
+      var op = _.find(part.data.operations, function(op) { return op.no === operation.id; });
+
+      if (!op || op.laborTime.toFixed(3) === op.machineTime.toFixed(3))
+      {
+        $opWorkDuration.val('');
+
+        return;
+      }
+
+      var seconds = Math.round(op.laborTime / 100 * quantityDone * 3600);
+      var text = time.toString(seconds, true, false);
+      var parts = text.split(':');
+
+      parts.pop();
+
+      var opWorkDuration = parts.join(':');
+
+      $opWorkDuration.val(opWorkDuration);
     }
 
   });

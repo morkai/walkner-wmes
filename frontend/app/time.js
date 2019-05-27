@@ -121,6 +121,20 @@ define([
 
     var time = str.trim();
     var seconds = parseInt(time, 10);
+    var matches = time.match(/([0-9]+):([0-9]+)(?::([0-9]+))?/);
+
+    if (matches)
+    {
+      seconds = parseInt(matches[1], 10) * 3600;
+      seconds += parseInt(matches[2], 10) * 60;
+
+      if (matches[3])
+      {
+        seconds += parseInt(matches[3], 10);
+      }
+
+      return seconds;
+    }
 
     if (/^[0-9]+\.?[0-9]*$/.test(time) === false)
     {
