@@ -5,7 +5,7 @@
   "version": "0.137.0",
   "updater": {
     "wmes": {
-      "backend": 461,
+      "backend": 462,
       "frontend": 615,
       "reports": 85,
       "attachments": 3,
@@ -25,7 +25,7 @@
       "wh-packer": 5,
       "isa": 4,
       "luma2": 5,
-      "trw": 6,
+      "trw": 7,
       "luca": 6
     },
     "pos": {
