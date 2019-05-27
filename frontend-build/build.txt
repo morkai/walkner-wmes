@@ -828,6 +828,10 @@ app/wmes-trw-programs/assets/./form.css
 app/wmes-trw-programs/assets/./details.css
 app/wmes-trw-programs/assets/main.css
 
+app/wmes-trw-tests/assets/debug.css
+----------------
+app/wmes-trw-tests/assets/debug.css
+
 app/wmes-trw-tests/assets/main.css
 ----------------
 app/wmes-trw-tests/assets/main.css
@@ -849,6 +853,7 @@ app/wmes-trw-tests/assets/testing.css
 app/wmes-trw-tests/assets/./workstationPicker.css
 app/wmes-trw-tests/assets/./orderPicker.css
 app/wmes-trw-tests/assets/./programPicker.css
+app/wmes-trw-tests/assets/./debug.css
 app/wmes-trw-tests/assets/testing.css
 
 app/wmes-trw-tests/assets/workstationPicker.css

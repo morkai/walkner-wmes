@@ -427,6 +427,10 @@ define([
         return;
       }
 
+      var image = new Image();
+
+      image.src = cluster.image;
+
       view.$clusterPopover = view.$cluster(clusterId).popover({
         container: document.body,
         placement: 'top',
@@ -434,7 +438,9 @@ define([
         html: true,
         content: function()
         {
-          return '<img src="' + cluster.image + '">';
+          return '<img src="' + cluster.image + '"'
+            + ' width="' + image.naturalWidth + '"'
+            + ' height="' + image.naturalHeight + '">';
         },
         template: function(template)
         {
@@ -444,7 +450,7 @@ define([
 
       view.timers.showClusterPopover = setTimeout(function()
       {
-        if (view.$clusterPopover)
+        if (view.$clusterPopover && view.$clusterPopover[0].dataset.id === clusterId)
         {
           view.$clusterPopover.popover('show');
         }

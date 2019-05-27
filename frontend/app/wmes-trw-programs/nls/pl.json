@@ -21,6 +21,8 @@
   "form:steps:down": "Przesuń krok w dół",
   "form:steps:description": "{no}. {length} {color} od {source} do {target}",
 
+  "form:connectorEdit:menuItem": "Edytuj połączenie",
+
   "colors:white": "biały",
   "colors:white:multi": "biało",
   "colors:brown": "brązowy",

@@ -49,23 +49,27 @@ define([
 
     showClusterPopover: function(clusterId)
     {
-      this.hideClusterPopover();
+      var page = this;
 
-      var cluster = this.model.getCluster(clusterId);
+      page.hideClusterPopover();
+
+      var cluster = page.model.getCluster(clusterId);
 
       if (!cluster || !cluster.image)
       {
         return;
       }
 
-      this.$clusterPopover = this.$('.trw-base-cluster[data-id="' + clusterId + '"]').popover({
+      page.$clusterPopover = page.$('.trw-base-cluster[data-id="' + clusterId + '"]').popover({
         container: document.body,
         placement: 'top',
         trigger: 'manual',
         html: true,
         content: function()
         {
-          return '<img src="' + cluster.image + '">';
+          return '<img src="' + cluster.image + '"'
+            + ' width="' + image.naturalWidth + '"'
+            + ' height="' + image.naturalHeight + '">';
         },
         template: function(template)
         {
@@ -73,7 +77,17 @@ define([
         }
       });
 
-      this.$clusterPopover.popover('show');
+      var image = new Image();
+
+      image.onload = function()
+      {
+        if (page.$clusterPopover && page.$clusterPopover[0].dataset.id === clusterId)
+        {
+          page.$clusterPopover.popover('show');
+        }
+      };
+
+      image.src = cluster.image;
     },
 
     hideClusterPopover: function(clusterId)

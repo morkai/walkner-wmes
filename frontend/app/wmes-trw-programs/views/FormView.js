@@ -221,7 +221,36 @@ define([
       view.jsPlumb.bind('contextmenu', function(el, e)
       {
         e.preventDefault();
+
+        if (!(el instanceof jsPlumb.Connection))
+        {
+          return;
+        }
+
+        view.showConnectionMenu(e, el.getParameters());
       });
+    },
+
+    showConnectionMenu: function(e, params)
+    {
+      // TODO
+      return;
+
+      var options = {
+        menu: [
+          {
+            label: this.t('form:connectorEdit:menuItem'),
+            handler: this.showConnectorEditDialog.bind(this, params)
+          }
+        ]
+      };
+
+      contextMenu.show(this, e.pageY, e.pageX, options);
+    },
+
+    showConnectorEditDialog: function(params)
+    {
+      console.log(params);
     },
 
     onConnectionCreated: function(info, e)
@@ -380,7 +409,6 @@ define([
                   radius: 10
                 }],
                 cssClass: 'trw-base-canvas-endpoint',
-                connector: 'Bezier',
                 connectorClass: 'trw-base-canvas-connector',
                 parameters: {
                   cluster: cluster._id,
@@ -601,7 +629,8 @@ define([
           ],
           parameters: {step: step._id},
           detachable: selected,
-          cssClass: cssClass.join(' ')
+          cssClass: cssClass.join(' '),
+          connector: step.connector
         });
       });
     },
@@ -772,6 +801,10 @@ define([
         return;
       }
 
+      var image = new Image();
+
+      image.src = cluster.image;
+
       view.$clusterPopover = view.$cluster(clusterId).popover({
         container: document.body,
         placement: 'top',
@@ -779,7 +812,9 @@ define([
         html: true,
         content: function()
         {
-          return '<img src="' + cluster.image + '">';
+          return '<img src="' + cluster.image + '"'
+            + ' width="' + image.naturalWidth + '"'
+            + ' height="' + image.naturalHeight + '">';
         },
         template: function(template)
         {
@@ -789,7 +824,7 @@ define([
 
       view.timers.showClusterPopover = setTimeout(function()
       {
-        if (view.$clusterPopover)
+        if (view.$clusterPopover && view.$clusterPopover[0].dataset.id === clusterId)
         {
           view.$clusterPopover.popover('show');
         }
