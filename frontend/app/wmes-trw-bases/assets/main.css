@@ -217,3 +217,26 @@
   background-color: #000;
   opacity: 1;
 }
+.trw-base-cluster-popover {
+  max-width: 518px;
+}
+.trw-base-cluster-popover.in {
+  opacity: 0.95;
+}
+.trw-base-cluster-popover .popover-content {
+  padding: 7px;
+}
+
+.trw-base-clusterForm-image {
+  max-width: 500px;
+  max-height: 300px;
+  cursor: pointer;
+}
+.trw-base-clusterForm-image[src=""] {
+  min-width: 50px;
+  min-height: 50px;
+  background: #337ab7;
+}
+.trw-base-clusterForm-image[src=""]:hover {
+  background: #23527c;
+}

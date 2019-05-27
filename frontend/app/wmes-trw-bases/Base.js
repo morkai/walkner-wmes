@@ -131,6 +131,11 @@ define([
 
       this.trigger('change:clusters', this, clusters, {action: 'updateIo'});
       this.trigger('change', this);
+    },
+
+    getCluster: function(clusterId)
+    {
+      return _.find(this.get('clusters'), function(cluster) { return cluster._id === clusterId; });
     }
 
   });

@@ -11,6 +11,11 @@ db.trwbases.find({}).forEach(base =>
     {
       cluster.connector = 'na';
     }
+
+    if (!cluster.image)
+    {
+      cluster.image = '';
+    }
   });
 
   db.trwbases.replaceOne({_id: base._id}, base);

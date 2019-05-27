@@ -103,6 +103,14 @@ define([
         this.showLengthEditor();
 
         return false;
+      },
+      'mouseenter .trw-base-cluster': function(e)
+      {
+        this.showClusterPopover(e.currentTarget.dataset.id);
+      },
+      'mouseleave .trw-base-cluster': function()
+      {
+        this.hideClusterPopover();
       }
 
     }, FormView.prototype.events),
@@ -749,6 +757,61 @@ define([
       $form.appendTo('body');
 
       $input.focus();
+    },
+
+    showClusterPopover: function(clusterId)
+    {
+      var view = this;
+
+      view.hideClusterPopover();
+
+      var cluster = view.model.getCluster(clusterId);
+
+      if (!cluster || !cluster.image)
+      {
+        return;
+      }
+
+      view.$clusterPopover = view.$cluster(clusterId).popover({
+        container: document.body,
+        placement: 'top',
+        trigger: 'manual',
+        html: true,
+        content: function()
+        {
+          return '<img src="' + cluster.image + '">';
+        },
+        template: function(template)
+        {
+          return $(template).addClass('trw-base-cluster-popover');
+        }
+      });
+
+      view.timers.showClusterPopover = setTimeout(function()
+      {
+        if (view.$clusterPopover)
+        {
+          view.$clusterPopover.popover('show');
+        }
+      }, 333);
+    },
+
+    hideClusterPopover: function(clusterId)
+    {
+      clearTimeout(this.timers.showClusterPopover);
+
+      if (!this.$clusterPopover)
+      {
+        return;
+      }
+
+      if (clusterId && this.$clusterPopover[0].dataset.id !== clusterId)
+      {
+        return;
+      }
+
+      this.$clusterPopover.popover('destroy');
+      this.$clusterPopover = null;
     }
 
   });

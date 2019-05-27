@@ -109,6 +109,18 @@ define([
     getStepIndex: function(id)
     {
       return _.findIndex(this.attributes.steps, function(step) { return step._id === id; });
+    },
+
+    getCluster: function(clusterId)
+    {
+      var base = this.get('base');
+
+      if (!base)
+      {
+        return null;
+      }
+
+      return _.find(base.clusters, function(cluster) { return cluster._id === clusterId; });
     }
 
   }, {

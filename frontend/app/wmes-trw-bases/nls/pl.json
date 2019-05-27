@@ -35,6 +35,7 @@
   "clusterForm:left": "Pozycja X",
   "clusterForm:rows": "Ilość rzędów",
   "clusterForm:cols": "Ilość kolumn",
+  "clusterForm:image": "Obraz",
 
   "clusterCellForm:title": "I/O",
   "clusterCellForm:submit": "Zapisz I/O",

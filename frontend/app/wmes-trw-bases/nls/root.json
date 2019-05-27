@@ -34,6 +34,7 @@
     "clusterForm:left": "Position X",
     "clusterForm:rows": "Row count",
     "clusterForm:cols": "Column count",
+    "clusterForm:image": "Image",
 
     "clusterCellForm:title": "I/O",
     "clusterCellForm:submit": "Save I/O",

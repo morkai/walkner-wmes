@@ -54,27 +54,14 @@ define([
   {
     viewport.loadPage(
       [
-        'app/core/pages/DetailsPage',
+        'app/wmes-trw-bases/pages/DetailsPage',
         model,
-        'app/wmes-trw-bases/templates/details',
         nls
       ],
-      function(DetailsPage, Base, detailsTemplate)
+      function(DetailsPage, Base)
       {
         return new DetailsPage({
-          baseBreadcrumb: baseBreadcrumb,
-          pageClassName: 'page-max-flex',
-          model: new Base({_id: req.params.id}),
-          detailsTemplate: detailsTemplate,
-          actions: function()
-          {
-            return [{
-              icon: 'copy',
-              label: this.t('PAGE_ACTION:copy'),
-              href: '#trw/bases;add?copy=' + this.model.id,
-              privileges: 'TRW:MANAGE'
-            }].concat(DetailsPage.prototype.actions.apply(this, arguments));
-          }
+          model: new Base({_id: req.params.id})
         });
       }
     );
