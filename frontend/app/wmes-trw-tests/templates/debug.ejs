@@ -1,0 +1,15 @@
+<table>
+  <tbody>
+  <% rows.forEach(function(row) { %>
+  <tr class="trw-testing-debug-row <%- row.highlighted ? 'is-highlighted' : '' %>" data-id="<%- row._id %>">
+    <td class="text-mono"><%= row._id %></td>
+    <td><%= row.name %></td>
+    <td class="text-mono"><%= row.type %></td>
+    <td class="text-mono"><%- row.device %>:<%- row.channel %></td>
+    <td class="text-mono"><%- row.min %>-<%- row.max %></td>
+    <td><% if (row.tearDown) { %><i class="fa fa-unlink"></i><% } %></td>
+    <td class="is-number"><%- row.value %></td>
+  </tr>
+  <% }) %>
+  </tbody>
+</table>

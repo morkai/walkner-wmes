@@ -1,0 +1,44 @@
+.trw-testing-debugging .trw-base-canvas-inner {
+  width: 2920px;
+}
+.trw-testing-debug {
+  position: fixed;
+  top: 90px;
+  right: 12px;
+  padding: 7px;
+  max-height: 800px;
+  background: #111;
+  border: 4px solid #00E487;
+  box-shadow: 0 0 30px #111;
+  font-size: 16px;
+  color: #fff;
+  z-index: 100;
+  overflow-y: scroll;
+}
+.trw-testing-debug::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.trw-testing-debug::-webkit-scrollbar-thumb {
+  background: #00E487;
+  border: 2px solid #111;
+}
+.trw-testing-debug::-webkit-scrollbar-track {
+  background: transparent;
+}
+.trw-testing-debug td {
+  padding: 5px 7px;
+}
+.trw-testing-debug tr:hover td,
+.trw-testing-debug .is-highlighted td,
+.trw-base-cell.is-highlighted {
+  background-color: #00E487;
+  color: #000;
+}
+.trw-testing-debugging .trw-base-cell-label {
+  line-height: 60px;
+}
+.trw-testing-debugging .trw-base-cell-subLabel {
+  display: block;
+  margin-top: -16px;
+}

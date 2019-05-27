@@ -89,6 +89,14 @@
   font-size: 28px;
   font-weight: bold;
 }
+.trw-base-cell-subLabel {
+  display: none;
+  margin-top: -22px;
+  text-align: center;
+  line-height: 1;
+  font-family: monospace;
+  font-size: 12px;
+}
 .trw-base-cell {
   background-color: #fff;
   color: #333;

@@ -8,6 +8,7 @@
       <% row.forEach(function(io, colI) { %>
       <div id="TRW:<%- cluster._id %>:<%- rowI %>:<%- colI %>" class="trw-base-cell <%- io.io.length ? 'is-with-io' : 'is-without-io' %>" data-row="<%- rowI %>" data-col="<%- colI %>">
         <div class="trw-base-cell-label"><%- io.label %></div>
+        <div class="trw-base-cell-subLabel"></div>
         <% io.endpoints.forEach(function(endpoint) { %>
         <div class="trw-base-endpoint" data-position="<%- endpoint %>"></div>
         <% }) %>

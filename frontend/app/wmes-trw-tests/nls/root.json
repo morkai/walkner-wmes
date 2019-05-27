@@ -10,6 +10,8 @@
     "testing:noProgram": "choose program",
     "testing:menu:workstation": "Change workstation",
     "testing:menu:base": "Change base",
+    "testing:menu:debug:false": "Turn on debugging",
+    "testing:menu:debug:true": "Turn off debugging",
     "testing:error:setIo": "Failed to set outputs: {error}",
     "testing:error:getIo": "Failed to get inputs: {error}",
     "testing:error:save": "Failed to save results: {error}",

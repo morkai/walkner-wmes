@@ -22,7 +22,8 @@ define([
   '../views/OrderPickerDialogView',
   '../views/BasePickerDialogView',
   '../views/ProgramPickerDialogView',
-  'app/wmes-trw-tests/templates/testing'
+  'app/wmes-trw-tests/templates/testing',
+  'app/wmes-trw-tests/templates/debug'
 ], function(
   _,
   $,
@@ -45,11 +46,10 @@ define([
   OrderPickerDialogView,
   BasePickerDialogView,
   ProgramPickerDialogView,
-  template
+  template,
+  debugTemplate
 ) {
   'use strict';
-
-  window.TRW_DEBUG = false;
 
   return View.extend({
 
@@ -104,6 +104,10 @@ define([
             {
               label: this.t('testing:menu:base'),
               handler: this.showBasePickerDialog.bind(this)
+            },
+            {
+              label: this.t('testing:menu:debug:' + this.model.get('debug')),
+              handler: this.toggleDebugMode.bind(this)
             }
           ]
         });
@@ -116,6 +120,93 @@ define([
         {
           this.startTest();
         }
+      },
+      'mouseenter .trw-base-cell': function(e)
+      {
+        var page = this;
+
+        if (!page.model.get('debug'))
+        {
+          return;
+        }
+
+        var endpointIo = page.model.get('endpointIo') || {};
+        var endpoints = endpointIo[e.currentTarget.id.replace('TRW:', '')];
+
+        if (!endpoints)
+        {
+          return;
+        }
+
+        var $debug = page.$id('debug');
+
+        endpoints.inputs.concat(endpoints.outputs).forEach(function(io)
+        {
+          page.debug.highlightedRows[io._id] = true;
+
+          $debug.find('.trw-testing-debug-row[data-id="' + io._id + '"]').addClass('is-highlighted');
+        });
+      },
+      'mouseleave .trw-base-cell': function()
+      {
+        if (!this.model.get('debug'))
+        {
+          return;
+        }
+
+        this.debug.highlightedRows = {};
+
+        this.$id('debug').find('.is-highlighted').removeClass('is-highlighted');
+      },
+      'mouseenter .trw-testing-debug-row': function(e)
+      {
+        var page = this;
+        var cellIo = page.model.get('cellIo') || {};
+        var ioId = e.currentTarget.dataset.id;
+        var cells = cellIo[ioId];
+
+        if (!cells || !cells.length)
+        {
+          return;
+        }
+
+        cells.forEach(function(cellId)
+        {
+          page.debug.highlightedCells[cellId] = true;
+
+          document.getElementById('TRW:' + cellId).classList.add('is-highlighted');
+        });
+      },
+      'mouseleave .trw-testing-debug-row': function()
+      {
+        if (!this.model.get('debug'))
+        {
+          return;
+        }
+
+        this.debug.highlightedCells = {};
+
+        this.$id('preview').find('.is-highlighted').removeClass('is-highlighted');
+      },
+      'mouseenter .trw-base-cluster': function(e)
+      {
+        var page = this;
+
+        clearTimeout(page.timers.showImage);
+        page.timers.showImage = setTimeout(function()
+        {
+          var cluster = page.model.program.getCluster(e.currentTarget.dataset.id);
+
+          if (cluster)
+          {
+            page.$id('image').prop('src', cluster.image);
+          }
+        }, 666);
+      },
+      'mouseleave .trw-base-cluster': function()
+      {
+        clearTimeout(this.timers.showImage);
+        this.$id('image').prop('src', '');
       }
 
     },
@@ -191,6 +282,7 @@ define([
     {
       var page = this;
       var model = page.model = Object.assign(new Model({
+        debug: false,
         ready: false,
         state: 'unknown',
         error: null,
@@ -209,9 +301,15 @@ define([
         test: new Test()
       });
       page.jsPlumb = null;
+      page.debug = {
+        lastValues: {},
+        highlightedRows: {},
+        highlightedCells: {}
+      };
 
       page.vkbView = new VkbView();
 
+      page.listenTo(model, 'change:debug', page.updateDebugInfo);
       page.listenTo(model, 'change:state', page.updateState);
       page.listenTo(model, 'change:step', page.updateMessage);
       page.listenTo(model, 'change:qtyTodo change:qtyDone', page.updateOrder);
@@ -274,6 +372,12 @@ define([
       {
         this.model.set('ready', true);
         this.startTest();
+      }
+
+      if (this.model.get('debug'))
+      {
+        this.model.set('debug', false, {silent: true});
+        this.model.toggleDebugMode();
       }
     },
 
@@ -900,7 +1004,7 @@ define([
       program.base = this.model.base.toJSON();
       program.base.tester = this.model.tester.toJSON();
 
-      if (window.TRW_DEBUG)
+      if (this.model.get('debug'))
       {
         console.log('runTest', {program: program});
       }
@@ -913,6 +1017,7 @@ define([
       });
 
       var endpointIo = {};
+      var cellIo = {};
       var missingIo = [];
 
       program.base.clusters.forEach(function(cluster)
@@ -923,14 +1028,15 @@ define([
           {
             var inputs = [];
             var outputs = [];
+            var cellId = cluster._id + ':' + rowI + ':' + colI;
 
-            cell.io.forEach(function(cellIo)
+            cell.io.forEach(function(ioId)
             {
-              var io = allIo[cellIo];
+              var io = allIo[ioId];
 
               if (!io)
               {
-                missingIo.push(cellIo);
+                missingIo.push(ioId);
 
                 return;
               }
@@ -943,9 +1049,16 @@ define([
               {
                 inputs.push(io);
               }
+
+              if (!cellIo[ioId])
+              {
+                cellIo[ioId] = [];
+              }
+
+              cellIo[ioId].push(cellId);
             });
 
-            endpointIo[cluster._id + ':' + rowI + ':' + colI] = {
+            endpointIo[cellId] = {
               inputs: inputs,
               outputs: outputs
             };
@@ -974,13 +1087,14 @@ define([
         error: null,
         test: uuid(),
         endpointIo: endpointIo,
+        cellIo: cellIo,
         allIo: allIo,
         setIo: {},
         checkIo: {}
       });
       this.updateMessage();
 
-      if (window.TRW_DEBUG)
+      if (this.model.get('debug'))
       {
         console.log({endpointIo: endpointIo, allIo: allIo});
       }
@@ -1008,7 +1122,7 @@ define([
       var checkIo = {};
       var missingEndpoints = [];
 
-      if (window.TRW_DEBUG)
+      if (this.model.get('debug'))
       {
         console.log('runStep', {stepNo: stepNo, step: step});
       }
@@ -1059,7 +1173,7 @@ define([
         checkIo: checkIo
       });
 
-      if (window.TRW_DEBUG)
+      if (this.model.get('debug'))
       {
         console.log({setIo: setIo, checkIo: checkIo});
       }
@@ -1141,7 +1255,7 @@ define([
         });
       });
 
-      if (window.TRW_DEBUG)
+      if (page.model.get('debug'))
       {
         console.log('setIo', {outputs: outputs});
       }
@@ -1176,7 +1290,7 @@ define([
         });
       });
 
-      if (window.TRW_DEBUG)
+      if (page.model.get('debug'))
       {
         console.log('checkIo', {inputs: inputs});
       }
@@ -1213,7 +1327,7 @@ define([
           }
         });
 
-        if (window.TRW_DEBUG)
+        if (page.model.get('debug'))
         {
           console.log('getIo', {
             success: nok.length === 0,
@@ -1286,7 +1400,7 @@ define([
         checkIo: checkIo
       });
 
-      if (window.TRW_DEBUG)
+      if (page.model.get('debug'))
       {
         console.log('tearDown', {
           setIo: setIo,
@@ -1311,7 +1425,7 @@ define([
         });
       });
 
-      if (window.TRW_DEBUG)
+      if (page.model.get('debug'))
       {
         console.log('checkTearDown', {inputs: inputs});
       }
@@ -1348,7 +1462,7 @@ define([
           }
         });
 
-        if (window.TRW_DEBUG)
+        if (page.model.get('debug'))
         {
           console.log('getIo', {
             success: nok.length === 0,
@@ -1371,7 +1485,7 @@ define([
 
     saveTest: function()
     {
-      if (window.TRW_DEBUG)
+      if (this.model.get('debug'))
       {
         console.log('saveTest');
       }
@@ -1388,7 +1502,7 @@ define([
 
     trySaveTest: function(tryNo)
     {
-      if (window.TRW_DEBUG)
+      if (this.model.get('debug'))
       {
         console.log('trySaveTest', {tryNo: tryNo});
       }
@@ -1426,7 +1540,7 @@ define([
 
     finishTest: function()
     {
-      if (window.TRW_DEBUG)
+      if (this.model.get('debug'))
       {
         console.log('finishTest');
       }
@@ -1492,6 +1606,109 @@ define([
         }
 
         console.info('IO %s:%s set to: %s', device, channel, value);
+      });
+    },
+
+    toggleDebugMode: function()
+    {
+      this.debug.lastValues = {};
+      this.debug.highlightedRows = {};
+      this.debug.highlightedCells = {};
+
+      this.model.set('debug', !this.model.get('debug'));
+      this.$el.toggleClass('trw-testing-debugging', this.model.get('debug'));
+    },
+
+    updateDebugInfo: function()
+    {
+      var page = this;
+
+      clearTimeout(page.timers.updateDebugInfo);
+
+      if (!page.model.get('debug'))
+      {
+        page.$id('debug').addClass('hidden');
+
+        return;
+      }
+
+      var inputs = [];
+      var ioMap = {};
+      var cellIo = page.model.get('cellIo') || {};
+
+      _.forEach(page.model.get('allIo'), function(io)
+      {
+        ioMap[io.device + ':' + io.channel] = io;
+        inputs.push({device: io.device, channel: io.channel});
+      });
+
+      page.runCommand('getIo', {inputs: inputs}, function(err, res)
+      {
+        if (!page.model.get('debug'))
+        {
+          return;
+        }
+
+        var $debug = page.$id('debug');
+
+        if (err)
+        {
+          $debug.html('???');
+        }
+        else if (!_.isEqual(res, page.debug.lastValues))
+        {
+          page.debug.lastValues = res;
+
+          var rows = [];
+          var setCells = {};
+
+          _.forEach(res, function(channels, device)
+          {
+            _.forEach(channels, function(value, channel)
+            {
+              var io = ioMap[device + ':' + channel];
+
+              (cellIo[io._id] || []).forEach(function(cellId)
+              {
+                var setCell = setCells[cellId];
+
+                if (setCell && setCell.value > 0 && setCell.io.type !== 'output')
+                {
+                  return;
+                }
+
+                if (setCell && setCell.io.type !== 'output' && io.type === 'output')
+                {
+                  return;
+                }
+
+                setCells[cellId] = {
+                  value: value,
+                  io: io
+                };
+
+                var cellEl = document.getElementById('TRW:' + cellId);
+                var subLabelEl = cellEl.querySelector('.trw-base-cell-subLabel');
+
+                subLabelEl.textContent = value.toString();
+              });
+
+              rows.push(_.assign(
+                {
+                  value: value,
+                  highlighted: page.debug.highlightedRows[io._id]
+                },
+                io
+              ));
+            });
+          });
+
+          $debug.html(page.renderPartialHtml(debugTemplate, {rows: rows}));
+        }
+
+        $debug.removeClass('hidden');
+
+        page.timers.updateDebugInfo = setTimeout(page.updateDebugInfo.bind(page), 1000);
       });
     }
 

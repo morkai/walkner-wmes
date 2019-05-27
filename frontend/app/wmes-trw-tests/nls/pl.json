@@ -9,6 +9,8 @@
   "testing:noProgram": "wybierz program",
   "testing:menu:workstation": "Zmień stanowisko",
   "testing:menu:base": "Zmień podstawkę",
+  "testing:menu:debug:false": "Włącz debugowanie",
+  "testing:menu:debug:true": "Wyłącz debugowanie",
   "testing:error:setIo": "Ustawianie wyjść nie powiodło się: {error}",
   "testing:error:getIo": "Odczytywanie wejść nie powiodło się: {error}",
   "testing:error:save": "Zapisywanie wyniku nie powiodło się: {error}",
