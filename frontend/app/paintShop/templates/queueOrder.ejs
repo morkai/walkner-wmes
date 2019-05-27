@@ -91,15 +91,9 @@
   <% } else if (childOrder.paintCount === 0) { %>
   <tr class="paintShop-properties paintShop-order-component">
     <td class="paintShop-property" colspan="5">
-      <% if (childOrder.mrp === 'KSJ') { %>
       <span class="paintShop-orderDetails-message paintShop-orderDetails-drilling">
         <%- t('paintShop', 'drilling') %>
       </span>
-      <% } else { %>
-      <span class="paintShop-orderDetails-message paintShop-orderDetails-multiPaint">
-        <%- t('paintShop', 'noPaints') %>
-      </span>
-      <% } %>
     </td>
   </tr>
   <% } %>

@@ -77,16 +77,16 @@ define([
       obj.paints = {};
       obj.mrps = {};
       obj.mrps[obj.mrp] = 1;
-      obj.drilling = false;
+      obj.drilling = obj.paint.nc12 === '000000000000';
 
-      if (obj.paint.nc12 === '000000000000')
+      if (obj.drilling)
       {
+        obj.mrps.KSJ = 1;
         obj.paints['000000000000'] = obj.qty;
       }
 
       obj.childOrders = obj.childOrders.map(function(childOrder, i)
       {
-        obj.drilling = obj.drilling || childOrder.mrp === 'KSJ';
         obj.mrps[childOrder.mrp] = 1;
 
         var components = [];

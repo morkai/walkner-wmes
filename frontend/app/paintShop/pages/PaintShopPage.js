@@ -458,15 +458,16 @@ define([
 
     serializeTabs: function()
     {
-      var orders = this.orders;
-      var dropZones = this.dropZones;
+      var page = this;
+      var orders = page.orders;
+      var dropZones = page.dropZones;
 
       return (orders.allMrps || []).map(function(mrp)
       {
         return {
           mrp: mrp,
           label: mrp,
-          description: t.has('paintShop', 'mrp:' + mrp) ? this.t('mrp:' + mrp) : '',
+          description: t.has('paintShop', 'mrp:' + mrp) ? page.t('mrp:' + mrp) : '',
           active: orders.selectedMrp === mrp,
           dropZone: dropZones.getState(mrp)
         };
@@ -558,8 +559,6 @@ define([
       var dialogView = new PlanExecutionExportView({
         model: this.orders
       });
-
-      console.log(dialogView, dialogView.getDefaultModel());
 
       viewport.showDialog(dialogView, this.t('planExecutionExport:title'));
     },
