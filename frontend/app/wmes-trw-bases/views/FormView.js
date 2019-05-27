@@ -37,6 +37,8 @@ define([
 
     template: template,
 
+    updateOnChange: false,
+
     events: _.assign({
 
       'dblclick #-canvas': function(e)
