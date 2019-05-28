@@ -629,6 +629,12 @@ define([
     focusOrder: function(id, smooth)
     {
       var el = this.$('tr[data-id="' + id + '"]')[0];
+
+      if (!el || el.classList.contains('hidden'))
+      {
+        return;
+      }
+
       var y = el.getBoundingClientRect().top - this.listView.$('thead').outerHeight();
 
       if (smooth)
