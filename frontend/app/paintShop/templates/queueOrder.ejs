@@ -37,7 +37,7 @@
       </span>
       <% } %>
       <% if (order.qtyDone) { %>
-      <span class="paintShop-property" data-property="qtyDone" title="<%- t('paintShop', 'PROPERTY:qtyDone') %>">
+      <span class="paintShop-property" data-property="qtyDone" title="<%- t('paintShop', 'PROPERTY:qtyDone' + (order.drilling ? ':drilling' : '')) %>">
         <i class="fa fa-check"></i><span><%- order.qtyDone.toLocaleString() %></span>
       </span>
       <% } %>

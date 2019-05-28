@@ -23,6 +23,7 @@
   "PROPERTY:name": "Nazwa wyrobu/komponentu",
   "PROPERTY:qty": "Ilość",
   "PROPERTY:qtyDone": "Ilość pomalowana",
+  "PROPERTY:qtyDone:drilling": "Ilość wywiercona",
   "PROPERTY:qtyPaint": "Ilość do pomalowania",
   "PROPERTY:qtyPaint:drilling": "Ilość do wiercenia",
   "PROPERTY:qtyDlv": "Ilość do dostarczenia",

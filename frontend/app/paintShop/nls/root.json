@@ -24,6 +24,7 @@
     "PROPERTY:name": "Product/component name",
     "PROPERTY:qty": "Quantity",
     "PROPERTY:qtyDone": "Quantity painted",
+    "PROPERTY:qtyDone:drilling": "Quantity drilled",
     "PROPERTY:qtyPaint": "Quantity to paint",
     "PROPERTY:qtyPaint:drilling": "Quantity to drill",
     "PROPERTY:qtyDlv": "Quantity to deliver",
