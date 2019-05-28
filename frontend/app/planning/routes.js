@@ -118,7 +118,9 @@ define([
         : req.query.lines.split(',').filter(function(line) { return line.length > 0; }),
       whStatuses: req.query.whStatuses === undefined
         ? null
-        : req.query.whStatuses.split(',').filter(function(whStatus) { return whStatus.length > 0; })
+        : req.query.whStatuses.split(',').filter(function(whStatus) { return whStatus.length > 0; }),
+      from: req.query.from === undefined ? '06:00' : req.query.from,
+      to: req.query.to === undefined ? '06:00' : req.query.to
     }));
   });
 

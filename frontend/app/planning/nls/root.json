@@ -54,6 +54,7 @@
     "filter:stats:plan": "Plan",
     "filter:stats:remaining": "Remaining",
     "filter:stats:execution": "Sequence execution",
+    "filter:startTime": "Start",
 
     "toolbar:printPlan": "Print line plan",
     "toolbar:printPlan:all": "All lines",

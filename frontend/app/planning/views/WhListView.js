@@ -144,6 +144,7 @@ define([
       view.listenTo(view.whOrderStatuses, 'add change', view.onWhOrderStatusChanged);
 
       view.listenTo(plan.displayOptions, 'change:whStatuses', view.onWhStatusesFilterChanged);
+      view.listenTo(plan.displayOptions, 'change:from change:to', view.onStartTimeFilterChanged);
     },
 
     getTemplateData: function()
@@ -161,7 +162,7 @@ define([
 
     afterRender: function()
     {
-      this.toggleRowSeparatorVisibility();
+      this.toggleSeparatorRowVisibility();
     },
 
     scheduleRender: function()
@@ -193,6 +194,7 @@ define([
       var plan = view.plan;
       var lines = plan.displayOptions.get('lines');
       var whStatuses = plan.displayOptions.get('whStatuses') || [];
+      var startTimeRange = plan.displayOptions.getStartTimeRange(plan.id);
       var disabledMrps = plan.settings.global.getValue('wh.newIncludedMrps') || [];
       var list = [];
 
@@ -235,6 +237,7 @@ define([
             mrp: mrp,
             nc12: order.get('nc12'),
             name: order.get('name'),
+            startTimeMs: startTime,
             startTime: startTime,
             finishTime: finishTime,
             group: view.getOrderGroup(startTime),
@@ -324,7 +327,10 @@ define([
 
         order.whStatus = view.whOrderStatuses.serialize(order.key);
 
-        if (whStatuses.length && whStatuses.indexOf(order.whStatus.status.toString()) === -1)
+        var hiddenWhStatus = whStatuses.length && whStatuses.indexOf(order.whStatus.status.toString()) === -1;
+        var hiddenStartTime = order.startTimeMs < startTimeRange.from || order.startTimeMs >= startTimeRange.to;
+
+        if (hiddenWhStatus || hiddenStartTime)
         {
           order.rowClassName += ' hidden';
         }
@@ -834,32 +840,53 @@ define([
         whStatuses.length > 0 && whStatuses.indexOf(whStatus.status.toString()) === -1
       );
 
-      this.toggleRowSeparatorVisibility();
+      this.toggleSeparatorRowVisibility();
     },
 
     onWhStatusesFilterChanged: function()
     {
-      var view = this;
-      var whStatuses = view.plan.displayOptions.get('whStatuses') || [];
-
-      view.$('.planning-wh-status').each(function()
-      {
-        this.parentNode.classList.toggle(
-          'hidden',
-          whStatuses.length > 0 && whStatuses.indexOf(this.dataset.status) === -1
-        );
-      });
-
-      view.toggleRowSeparatorVisibility();
+      this.toggleOrderRowVisibility();
     },
 
-    toggleRowSeparatorVisibility: function()
+    onStartTimeFilterChanged: function()
+    {
+      this.toggleOrderRowVisibility();
+    },
+
+    toggleOrderRowVisibility: function()
+    {
+      var view = this;
+      var startTimeRange = view.plan.displayOptions.getStartTimeRange(view.plan.id);
+      var whStatuses = view.plan.displayOptions.get('whStatuses') || [];
+
+      view.$('.planning-wh-order').each(function()
+      {
+        var startTime = +this.dataset.startTime;
+        var hidden = startTime < startTimeRange.from || startTime >= startTimeRange.to;
+
+        if (!hidden && whStatuses.length)
+        {
+          var whStatus = this.querySelector('.planning-wh-status').dataset.status;
+
+          hidden = whStatuses.indexOf(whStatus) === -1;
+        }
+
+        this.classList.toggle('hidden', hidden);
+      });
+
+      view.toggleSeparatorRowVisibility();
+    },
+
+    toggleSeparatorRowVisibility: function()
     {
       var $table = this.$('.planning-mrp-lineOrders-table');
 
-      if (_.isEmpty(this.plan.displayOptions.get('whStatuses')))
+      if (_.isEmpty(this.plan.displayOptions.get('whStatuses'))
+        && this.plan.displayOptions.get('from') === '06:00'
+        && this.plan.displayOptions.get('to') === '06:00')
       {
-        $table.find('.hidden').removeClass('hidden');
+        $table.find('.planning-wh-newLine-tr.hidden').removeClass('hidden');
+        $table.find('.planning-wh-newGroup-tr.hidden').removeClass('hidden');
 
         return;
       }

@@ -25,7 +25,9 @@ define([
         useLatestOrderData: true,
         useDarkerTheme: false,
         wrapLists: true,
-        lineOrdersList: false
+        lineOrdersList: false,
+        from: '06:00',
+        to: '06:00'
       };
     },
 
@@ -94,6 +96,27 @@ define([
     toggleLineOrdersList: function()
     {
       this.set('lineOrdersList', !this.attributes.lineOrdersList);
+    },
+
+    getStartTimeRange: function(planDate)
+    {
+      var from = time.utc.getMoment(planDate + ' ' + this.get('from'), 'YYYY-MM-DD HH:mm');
+      var to = time.utc.getMoment(planDate + ' ' + this.get('to'), 'YYYY-MM-DD HH:mm');
+
+      if (from.hours() < 6)
+      {
+        from.add(1, 'days');
+      }
+
+      if (to.hours() < 6 || (to.hours() === 6 && to.minutes() === 0))
+      {
+        to.add(1, 'days');
+      }
+
+      return {
+        from: from.valueOf(),
+        to: to.valueOf()
+      };
     }
 
   }, {

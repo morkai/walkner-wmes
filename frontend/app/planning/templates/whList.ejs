@@ -33,7 +33,7 @@
         <td class="planning-wh-newLine" colspan="999"></td>
       </tr>
       <% } %>
-      <tr class="planning-wh-order <%- order.rowClassName %>" data-id="<%- order.orderNo %>" data-index="<%- i %>" data-group="<%- order.group %>" data-line="<%= order.line %>" data-line-order-no="<%- order.lineOrderNo %>" data-key="<%- order.key %>" data-pce-time="<%- order.pceTime %>">
+      <tr class="planning-wh-order <%- order.rowClassName %>" data-id="<%- order.orderNo %>" data-index="<%- i %>" data-group="<%- order.group %>" data-line="<%= order.line %>" data-line-order-no="<%- order.lineOrderNo %>" data-key="<%- order.key %>" data-pce-time="<%- order.pceTime %>" data-start-time="<%- order.startTimeMs %>">
         <td class="is-min text-right" style="min-width: 29px"><%- order.group %>.</td>
         <td class="is-min text-right" style="min-width: 35px"><%- order.no %>.</td>
         <td class="is-min" style="min-width: 35px"><%- t('core', 'SHIFT:' + order.shift) %></td>

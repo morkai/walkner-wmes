@@ -35,6 +35,8 @@ define([
       'change #-mrps': 'changeFilter',
       'change #-lines': 'changeFilter',
       'change #-whStatuses': 'changeFilter',
+      'change #-from': 'changeFilter',
+      'change #-to': 'changeFilter',
       'click #-useDarkerTheme': function()
       {
         this.plan.displayOptions.toggleDarkerThemeUse();
@@ -65,7 +67,7 @@ define([
       this.$('.is-expandable').expandableSelect('destroy');
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var plan = this.plan;
       var displayOptions = plan.displayOptions;
@@ -91,7 +93,6 @@ define([
       }
 
       return _.assign({
-        idPrefix: this.idPrefix,
         date: plan.id,
         mrps: mrps,
         lines: displayOptions.get('lines'),
@@ -99,6 +100,8 @@ define([
         mrpMode: mrpMode,
         minDate: displayOptions.get('minDate'),
         maxDate: displayOptions.get('maxDate'),
+        from: displayOptions.get('from'),
+        to: displayOptions.get('to'),
         useDarkerTheme: displayOptions.isDarkerThemeUsed()
       });
     },
@@ -106,7 +109,7 @@ define([
     afterRender: function()
     {
       setUpMrpSelect2(this.$id('mrps'), {
-        width: '600px',
+        width: '450px',
         placeholder: t('planning', 'filter:mrps:placeholder'),
         sortable: true,
         own: false,
@@ -162,7 +165,9 @@ define([
       var data = {
         mrps: view.$id('mrps').val().split(',').filter(function(v) { return v.length > 0; }),
         lines: view.$id('lines').val().split(',').filter(function(v) { return v.length > 0; }),
-        whStatuses: view.$id('whStatuses').val()
+        whStatuses: view.$id('whStatuses').val(),
+        from: view.$id('from').val() || '06:00',
+        to: view.$id('to').val() || '06:00'
       };
 
       if (!data.whStatuses || data.whStatuses.length === 4)
@@ -191,7 +196,7 @@ define([
 
       var displayOptions = {};
 
-      ['mrps', 'lines', 'whStatuses'].forEach(function(prop)
+      ['mrps', 'lines', 'whStatuses', 'from', 'to'].forEach(function(prop)
       {
         if (!_.isEqual(data[prop], view.plan.displayOptions.get(prop)))
         {
@@ -212,11 +217,16 @@ define([
 
     onLoadingChanged: function()
     {
-      var loading = this.plan.get('loading');
+      var view = this;
+      var loading = view.plan.get('loading');
 
-      this.$id('date').prop('disabled', loading);
-      this.$id('mrps').select2('enable', !loading);
-      this.$id('lines').select2('enable', !loading);
+      ['date', 'whStatuses', 'from', 'to'].forEach(function(prop)
+      {
+        view.$id(prop).prop('disabled', loading);
+      });
+
+      view.$id('mrps').select2('enable', !loading);
+      view.$id('lines').select2('enable', !loading);
     },
 
     onDateChanged: function()

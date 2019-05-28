@@ -241,6 +241,7 @@ define([
       page.listenTo(plan.displayOptions, 'change:mrps', page.onMrpsFilterChanged);
       page.listenTo(plan.displayOptions, 'change:lines', page.onLinesFilterChanged);
       page.listenTo(plan.displayOptions, 'change:whStatuses', page.onWhStatusesFilterChanged);
+      page.listenTo(plan.displayOptions, 'change:from change:to', page.onStartTimeFilterChanged);
       page.listenTo(plan.displayOptions, 'change:useDarkerTheme', page.onDarkerThemeChanged);
 
       page.listenTo(plan.settings, 'changed', page.onSettingsChanged);
@@ -336,7 +337,9 @@ define([
         url: '/planning/wh/' + plan.id
           + '?mrps=' + plan.displayOptions.get('mrps')
           + '&lines=' + plan.displayOptions.get('lines')
-          + '&whStatuses=' + plan.displayOptions.get('whStatuses'),
+          + '&whStatuses=' + plan.displayOptions.get('whStatuses')
+          + '&from=' + encodeURIComponent(plan.displayOptions.get('from'))
+          + '&to=' + encodeURIComponent(plan.displayOptions.get('to')),
         replace: true,
         trigger: false
       });
@@ -508,6 +511,11 @@ define([
     },
 
     onWhStatusesFilterChanged: function()
+    {
+      this.updateUrl();
+    },
+
+    onStartTimeFilterChanged: function()
     {
       this.updateUrl();
     },

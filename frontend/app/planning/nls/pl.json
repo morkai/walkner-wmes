@@ -53,6 +53,7 @@
   "filter:stats:plan": "Rozplanowane",
   "filter:stats:remaining": "Do zrobienia",
   "filter:stats:execution": "Realizacja sekwencji",
+  "filter:startTime": "Początek",
 
   "toolbar:printPlan": "Drukuj plan linii",
   "toolbar:printPlan:all": "Wszystkie linie",
