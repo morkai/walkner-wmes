@@ -140,5 +140,18 @@
   "planExecutionExport:date": "Data",
   "planExecutionExport:mrp": "MRP",
   "planExecutionExport:submit": "Eksportuj dane",
-  "planExecutionExport:cancel": "Anuluj"
+  "planExecutionExport:cancel": "Anuluj",
+
+  "printPage:title": "Plan malarnii na dzień {date}",
+  "printPage:title:drilling": "Plan wiercenia na dzień {date}",
+  "printPage:hd": "Plan malarnii",
+  "printPage:hd:drilling": "Plan wiercenia",
+  "printPage:ft": "Plan malarnii na dzień {date}.",
+  "printPage:ft:drilling": "Plan wiercenia na dzień {date}.",
+  "printPage:info": "Wciśnij <kbd>Ctrl+P</kbd>, aby rozpocząć drukowanie.",
+  "printPage:date": "Data:",
+  "printPage:mrp": "Przepływ:",
+  "printPage:order": "Zlecenie:",
+  "printPage:page": "Strona {n} z {total}",
+  "printPage:printed": "Wydrukowano w {time} przez {user} za pomocą systemu WMES."
 }

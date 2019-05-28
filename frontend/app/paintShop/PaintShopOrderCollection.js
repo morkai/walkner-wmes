@@ -138,7 +138,17 @@ define([
     {
       return this.selectedMrp === 'all'
         || serializedOrder.mrp === this.selectedMrp
-        || (this.selectedMrp === 'KSJ' && serializedOrder.mrps.indexOf(this.selectedMrp) !== -1);
+        || (this.isDrillingMrpSelected() && serializedOrder.mrps.indexOf(this.selectedMrp) !== -1);
+    },
+
+    isDrillingMrp: function(mrp)
+    {
+      return mrp === PaintShopOrder.DRILLING_MRP;
+    },
+
+    isDrillingMrpSelected: function()
+    {
+      return this.selectedMrp === PaintShopOrder.DRILLING_MRP;
     },
 
     isPaintVisible: function(serializedOrder)
@@ -266,7 +276,7 @@ define([
 
         if (serializedOrder.drilling)
         {
-          mrpMap.KSJ = 1;
+          mrpMap[PaintShopOrder.DRILLING_MRP] = 1;
         }
 
         orders.recountOrder(totalQuantities, serializedOrder);

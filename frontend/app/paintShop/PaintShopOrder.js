@@ -13,6 +13,8 @@ define([
 ) {
   'use strict';
 
+  var DRILLING_MRP = 'KSJ';
+
   var COMPONENT_BLACKLIST = {
     '777777777777': true
   };
@@ -81,7 +83,7 @@ define([
 
       if (obj.drilling)
       {
-        obj.mrps.KSJ = 1;
+        obj.mrps[DRILLING_MRP] = 1;
         obj.paints['000000000000'] = obj.qty;
       }
 
@@ -205,6 +207,8 @@ define([
     }
 
   }, {
+
+    DRILLING_MRP: DRILLING_MRP,
 
     parse: parse,
 

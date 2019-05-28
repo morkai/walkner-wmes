@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Plan malarnii na dzień <%- time.utc.format(date, 'LL') %></title>
+  <title><%- helpers.t(drilling ? 'printPage:title:drilling' : 'printPage:title', {date: time.utc.format(date, 'LL')}) %></title>
   <style>
     @page {
       size: A4 portrait;
@@ -140,42 +140,40 @@
   </style>
 </head>
 <body>
-<div id="info">
-  Wciśnij <kbd>Ctrl+P</kbd>, aby rozpocząć drukowanie.
-</div>
+<div id="info"><%- helpers.t('printPage:info') %></div>
 <% pages.forEach(function(page, i) { %>
 <section class="page">
   <header>
     <div class="props">
       <div class="prop">
-        <span>Data:</span>
+        <span><%- helpers.t('printPage:date') %></span>
         <span><%= time.utc.format(date, 'dd, LL') %></span>
       </div>
       <% if (mrp) { %>
       <div class="prop">
-        <span>Przepływ:</span>
+        <span><%- helpers.t('printPage:mrp') %></span>
         <span><%= mrp %> %></span>
       </div>
       <% } %>
       <% if (orderNo) { %>
       <div class="prop">
-        <span>Zlecenie:</span>
+        <span><%- helpers.t('printPage:order') %></span>
         <span><%= orderNo %></span>
       </div>
       <% } %>
     </div>
-    Plan malarnii
+    <%- helpers.t(drilling ? 'printPage:hd:drilling' : 'printPage:hd') %>
   </header>
   <section class="bd">
     <table>
       <thead>
-        <th><%- t('paintShop', 'PROPERTY:no') %></th>
-        <th><%- t('paintShop', 'PROPERTY:order') %></th>
-        <th><%- t('paintShop', 'PROPERTY:nc12') %></th>
-        <th><%- t('paintShop', 'PROPERTY:qty') %></th>
+        <th><%- helpers.t('PROPERTY:no') %></th>
+        <th><%- helpers.t('PROPERTY:order') %></th>
+        <th><%- helpers.t('PROPERTY:nc12') %></th>
+        <th><%- helpers.t('PROPERTY:qty') %></th>
         <th></th>
-        <th><%- t('paintShop', 'PROPERTY:name') %></th>
-        <th><%- t('paintShop', 'PROPERTY:mrp') %></th>
+        <th><%- helpers.t('PROPERTY:name') %></th>
+        <th><%- helpers.t('PROPERTY:mrp') %></th>
       </thead>
       <tbody>
       <% page.rows.forEach(function(row) { %>
@@ -194,11 +192,11 @@
   </section>
   <footer>
     <div>
-      <p>Plan malarnii na dzień <%- time.utc.format(date, 'LL') %>.</p>
-      <p>Wydrukowano w <%- time.format(Date.now(), 'LLLL') %> przez <%= user.getLabel() %> za pomocą systemu WMES.</p>
+      <p><%- helpers.t(drilling ? 'printPage:ft:drilling' : 'printPage:ft', {date: time.utc.format(date, 'LL')}) %></p>
+      <p><%- helpers.t('printPage:printed', {time: time.format(Date.now(), 'LLLL'), user: user.getLabel()}) %></p>
     </div>
     <div>
-      Strona <%- i + 1 %> z <%- pages.length %>
+      <%- helpers.t('printPage:page', {n: i + 1, total: pages.length}) %>
     </div>
   </footer>
 </section>

@@ -91,7 +91,7 @@ define([
     breadcrumbs: function()
     {
       return [
-        t.bound('paintShop', 'BREADCRUMBS:base'),
+        this.t('BREADCRUMBS:base'),
         {
           href: '#paintShop/' + this.orders.getDateFilter(),
           label: this.orders.getDateFilter('L'),
@@ -620,34 +620,46 @@ define([
       }
 
       var mrp = e.currentTarget.dataset.mrp;
+      var drilling = this.orders.isDrillingMrp(mrp);
+
+      if (drilling)
+      {
+        mrp = null;
+      }
+
+      var actionOptions = {
+        filterProperty: drilling ? null : 'mrp',
+        filterValue: mrp,
+        drilling: drilling
+      };
       var menu = [
         this.t('menu:header:' + (mrp ? 'mrp' : 'all'), {mrp: mrp}),
         {
           icon: 'fa-clipboard',
           label: this.t('menu:copyOrders'),
-          handler: this.handleCopyOrdersAction.bind(this, e, mrp),
+          handler: this.handleCopyOrdersAction.bind(this, e, actionOptions),
           visible: !IS_EMBEDDED
         },
         {
           icon: 'fa-clipboard',
           label: this.t('menu:copyChildOrders'),
-          handler: this.handleCopyChildOrdersAction.bind(this, e, mrp),
+          handler: this.handleCopyChildOrdersAction.bind(this, e, actionOptions),
           visible: !IS_EMBEDDED
         },
         {
           icon: 'fa-print',
           label: this.t('menu:printOrders'),
-          handler: this.handlePrintOrdersAction.bind(this, 'mrp', mrp)
+          handler: this.handlePrintOrdersAction.bind(this, actionOptions)
         },
         {
           icon: 'fa-download',
           label: this.t('menu:exportOrders'),
-          handler: this.handleExportOrdersAction.bind(this, mrp),
+          handler: this.handleExportOrdersAction.bind(this, actionOptions),
           visible: !IS_EMBEDDED
         }
       ];
 
-      if (!mrp)
+      if (!mrp && !drilling)
       {
         menu.push({
           label: this.t('menu:exportPaints'),
@@ -684,26 +696,15 @@ define([
       contextMenu.hide(this);
     },
 
-    handleCopyOrdersAction: function(e, filter)
+    handleCopyOrdersAction: function(e, options)
     {
       var page = this;
       var el = e.currentTarget;
       var x = e.pageX;
       var y = e.pageY;
-      var requestedMrp = null;
-      var requestedOrderNo = null;
-
-      if (filter)
-      {
-        if (/^[0-9]+/.test(filter))
-        {
-          requestedOrderNo = filter;
-        }
-        else
-        {
-          requestedMrp = filter;
-        }
-      }
+      var filterProperty = options.filterProperty;
+      var filterValue = options.filterValue;
+      var drilling = options.drilling;
 
       clipboard.copy(function(clipboardData)
       {
@@ -717,21 +718,37 @@ define([
 
         page.orders.serialize().forEach(function(order)
         {
-          if (requestedOrderNo)
-          {
-            if (order.order !== requestedOrderNo)
-            {
-              return;
-            }
-          }
-          else if (order.status === 'cancelled'
-            || (requestedMrp && order.mrp !== requestedMrp)
-            || !page.orders.isPaintVisible(order))
+          if (drilling && !order.drilling)
           {
             return;
           }
 
           var orderNo = order.order;
+
+          if (filterProperty === 'order')
+          {
+            if (orderNo !== filterValue)
+            {
+              return;
+            }
+          }
+          else
+          {
+            if (order.status === 'cancelled')
+            {
+              return;
+            }
+
+            if (filterProperty === 'mrp' && order.mrp !== filterValue)
+            {
+              return;
+            }
+
+            if (!page.orders.isPaintVisible(order))
+            {
+              return;
+            }
+          }
 
           if (usedOrders[orderNo])
           {
@@ -751,26 +768,15 @@ define([
       });
     },
 
-    handleCopyChildOrdersAction: function(e, filter)
+    handleCopyChildOrdersAction: function(e, options)
     {
       var page = this;
       var el = e.currentTarget;
       var x = e.pageX;
       var y = e.pageY;
-      var requestedMrp = null;
-      var requestedOrderNo = null;
-
-      if (filter)
-      {
-        if (/^[0-9]+/.test(filter))
-        {
-          requestedOrderNo = filter;
-        }
-        else
-        {
-          requestedMrp = filter;
-        }
-      }
+      var filterProperty = options.filterProperty;
+      var filterValue = options.filterValue;
+      var drilling = options.drilling;
 
       clipboard.copy(function(clipboardData)
       {
@@ -783,17 +789,36 @@ define([
 
         page.orders.serialize().forEach(function(order)
         {
-          if (requestedOrderNo)
+          if (drilling && !order.drilling)
           {
-            if (order.order !== requestedOrderNo)
+            return;
+          }
+
+          var orderNo = order.order;
+
+          if (filterProperty === 'order')
+          {
+            if (orderNo !== filterValue)
             {
               return;
             }
           }
-          else if (order.status === 'cancelled'
-            || (requestedMrp && order.mrp !== requestedMrp))
+          else
           {
-            return;
+            if (order.status === 'cancelled')
+            {
+              return;
+            }
+
+            if (filterProperty === 'mrp' && order.mrp !== filterValue)
+            {
+              return;
+            }
+
+            if (!page.orders.isPaintVisible(order))
+            {
+              return;
+            }
           }
 
           order.childOrders.forEach(function(childOrder)
@@ -813,9 +838,12 @@ define([
       });
     },
 
-    handlePrintOrdersAction: function(filterProperty, filterValue, e)
+    handlePrintOrdersAction: function(options, e)
     {
       var page = this;
+      var filterProperty = options.filterProperty;
+      var filterValue = options.filterValue;
+      var drilling = options.drilling;
 
       e.contextMenu.tag = 'paintShop';
 
@@ -823,9 +851,24 @@ define([
       {
         var orders = page.orders.filter(function(order)
         {
-          return (filterProperty === 'order' || order.get('status') !== 'cancelled')
-            && (!filterValue || order.get(filterProperty) === filterValue)
-            && page.orders.isPaintVisible(order.serialize());
+          if (order.get('status') === 'cancelled')
+          {
+            return false;
+          }
+
+          var serializedOrder = order.serialize();
+
+          if (drilling && !serializedOrder.drilling)
+          {
+            return false;
+          }
+
+          if (!page.orders.isPaintVisible(serializedOrder))
+          {
+            return false;
+          }
+
+          return !filterValue || order.get(filterProperty) === filterValue;
         });
 
         if (!orders.length)
@@ -833,7 +876,8 @@ define([
           return;
         }
 
-        var html = printPageTemplate({
+        var html = page.renderPartialHtml(printPageTemplate, {
+          drilling: drilling,
           date: +page.orders.getDateFilter('x'),
           mrp: !filterValue ? null : filterProperty === 'order' ? orders[0].get('mrp') : filterValue,
           orderNo: filterProperty === 'order' ? filterValue : null,
@@ -844,26 +888,31 @@ define([
       });
     },
 
-    handleExportOrdersAction: function(mrp)
+    handleExportOrdersAction: function(options)
     {
       var url = '/paintShop/orders;export.xlsx?sort(date,no)&limit(0)&date=' + this.orders.getDateFilter();
 
-      if (mrp)
+      if (options.filterProperty === 'mrp')
       {
-        url += '&mrp=' + mrp;
+        url += '&mrp=' + options.filterValue;
       }
 
+      var selectedPaint = this.orders.selectedPaint;
       var mspPaints = (this.settings.getValue('mspPaints') || [])
         .map(function(nc12) { return 'string:' + nc12; })
         .join(',');
 
-      if (this.orders.selectedPaint === 'msp' && mspPaints.length)
+      if (options.drilling)
+      {
+        url += '&paint.nc12=000000000000';
+      }
+      else if (selectedPaint === 'msp' && mspPaints.length)
       {
         url += '&childOrders.components.nc12=in=(' + mspPaints + ')';
       }
-      else if (this.orders.selectedPaint !== 'all')
+      else if (selectedPaint !== 'all')
       {
-        url += '&childOrders.components.nc12=string:' + this.orders.selectedPaint;
+        url += '&childOrders.components.nc12=string:' + selectedPaint;
       }
 
       pageActions.exportXlsx(url);

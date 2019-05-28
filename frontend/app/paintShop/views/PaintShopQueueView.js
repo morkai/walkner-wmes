@@ -29,6 +29,8 @@ define([
 
     template: queueTemplate,
 
+    modelProperty: 'orders',
+
     events: {
       'mousedown .paintShop-order': function(e)
       {
@@ -219,92 +221,139 @@ define([
       var order = this.orders.get(e.currentTarget.dataset.orderId);
       var orderNo = order.get('order');
       var mrp = order.get('mrp');
+      var drilling = this.orders.isDrillingMrpSelected();
       var menu = [
         order.get('order'),
         {
           icon: 'fa-print',
-          label: t('paintShop', 'menu:printOrder'),
-          handler: this.trigger.bind(this, 'actionRequested', 'printOrders', 'order', orderNo)
+          label: this.t('menu:printOrder'),
+          handler: this.trigger.bind(this, 'actionRequested', 'printOrders', {
+            filterProperty: 'order',
+            filterValue: orderNo,
+            drilling: drilling
+          })
         },
         {
           icon: 'fa-clipboard',
-          label: t('paintShop', 'menu:copyOrder'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, orderNo),
+          label: this.t('menu:copyOrder'),
+          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, {
+            filterProperty: 'order',
+            filterValue: orderNo,
+            drilling: drilling
+          }),
           visible: !this.options.embedded
         },
         {
-          label: t('paintShop', 'menu:copyChildOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, orderNo),
+          label: this.t('menu:copyChildOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, {
+            filterProperty: 'order',
+            filterValue: orderNo,
+            drilling: drilling
+          }),
           visible: !this.options.embedded
         },
         '-',
-        t('paintShop', 'menu:header:mrp', {mrp: mrp}),
-        {
-          icon: 'fa-clipboard',
-          label: t('paintShop', 'menu:copyOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, mrp),
-          visible: !this.options.embedded
-        },
-        {
-          label: t('paintShop', 'menu:copyChildOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, mrp),
-          visible: !this.options.embedded
-        },
+        this.t('menu:header:mrp', {mrp: mrp}),
         {
           icon: 'fa-print',
-          label: t('paintShop', 'menu:printOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'printOrders', 'mrp', mrp)
+          label: this.t('menu:printOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'printOrders', {
+            filterProperty: 'mrp',
+            filterValue: mrp,
+            drilling: drilling
+          })
+        },
+        {
+          icon: 'fa-clipboard',
+          label: this.t('menu:copyOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, {
+            filterProperty: 'mrp',
+            filterValue: mrp,
+            drilling: drilling
+          }),
+          visible: !this.options.embedded
+        },
+        {
+          label: this.t('menu:copyChildOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, {
+            filterProperty: 'mrp',
+            filterValue: mrp,
+            drilling: drilling
+          }),
+          visible: !this.options.embedded
         },
         {
           icon: 'fa-download',
-          label: t('paintShop', 'menu:exportOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'exportOrders', mrp),
+          label: this.t('menu:exportOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'exportOrders', {
+            filterProperty: 'mrp',
+            filterValue: mrp,
+            drilling: drilling
+          }),
           visible: !this.options.embedded
         }
       ];
 
-      if (user.isAllowedTo('PAINT_SHOP:DROP_ZONES'))
+      if (!drilling && user.isAllowedTo('PAINT_SHOP:DROP_ZONES'))
       {
         menu.push({
           icon: 'fa-level-down',
-          label: t('paintShop', 'menu:dropZone:' + this.dropZones.getState(mrp)),
+          label: this.t('menu:dropZone:' + this.dropZones.getState(mrp)),
           handler: this.trigger.bind(this, 'actionRequested', 'dropZone', mrp, false)
         });
       }
 
       menu.push(
         '-',
-        t('paintShop', 'menu:header:all'),
-        {
-          icon: 'fa-clipboard',
-          label: t('paintShop', 'menu:copyOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, null),
-          visible: !this.options.embedded
-        },
-        {
-          label: t('paintShop', 'menu:copyChildOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, null),
-          visible: !this.options.embedded
-        },
+        this.t('menu:header:all'),
         {
           icon: 'fa-print',
-          label: t('paintShop', 'menu:printOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'printOrders', null, null)
+          label: this.t('menu:printOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'printOrders', {
+            filterProperty: null,
+            filterValue: null,
+            drilling: drilling
+          })
+        },
+        {
+          icon: 'fa-clipboard',
+          label: this.t('menu:copyOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, {
+            filterProperty: null,
+            filterValue: null,
+            drilling: drilling
+          }),
+          visible: !this.options.embedded
+        },
+        {
+          label: this.t('menu:copyChildOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, {
+            filterProperty: null,
+            filterValue: null,
+            drilling: drilling
+          }),
+          visible: !this.options.embedded
         },
         {
           icon: 'fa-download',
-          label: t('paintShop', 'menu:exportOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'exportOrders', null),
+          label: this.t('menu:exportOrders'),
+          handler: this.trigger.bind(this, 'actionRequested', 'exportOrders', {
+            filterProperty: null,
+            filterValue: null,
+            drilling: drilling
+          }),
           visible: !this.options.embedded
         }
       );
 
-      if (user.isAllowedTo('PAINT_SHOP:DROP_ZONES') && this.orders.selectedPaint !== 'all')
+      var selectedPaint = this.orders.selectedPaint;
+
+      if (user.isAllowedTo('PAINT_SHOP:DROP_ZONES') && selectedPaint !== 'all')
       {
         menu.push({
           icon: 'fa-level-down',
-          label: t('paintShop', 'menu:dropZone:' + this.dropZones.getState(this.orders.selectedPaint)),
-          handler: this.trigger.bind(this, 'actionRequested', 'dropZone', this.orders.selectedPaint, true)
+          label: this.t('menu:dropZone:' + this.dropZones.getState(selectedPaint)),
+          handler: this.trigger.bind(this, 'actionRequested', 'dropZone', selectedPaint, true)
         });
       }
 

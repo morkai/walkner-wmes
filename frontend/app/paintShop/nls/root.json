@@ -141,7 +141,20 @@
     "planExecutionExport:date": "Date",
     "planExecutionExport:mrp": "MRP",
     "planExecutionExport:submit": "Export data",
-    "planExecutionExport:cancel": "Cancel"
+    "planExecutionExport:cancel": "Cancel",
+
+    "printPage:title": "Paint-shop plan for {date}",
+    "printPage:title:drilling": "Drilling plan for {date}",
+    "printPage:hd": "Paint-shop plan",
+    "printPage:hd:drilling": "Drilling plan",
+    "printPage:ft": "Paint-shop plan for {date}.",
+    "printPage:ft:drilling": "Drilling plan for {date}.",
+    "printPage:info": "Press <kbd>Ctrl+P</kbd> to start printing.",
+    "printPage:date": "Date:",
+    "printPage:mrp": "MRP:",
+    "printPage:order": "Order:",
+    "printPage:page": "Page {n} of {total}",
+    "printPage:printed": "Printed on {time} by {user} with WMES."
   },
   "pl": true
 }
