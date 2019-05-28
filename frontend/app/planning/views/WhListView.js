@@ -146,10 +146,9 @@ define([
       view.listenTo(plan.displayOptions, 'change:whStatuses', view.onWhStatusesFilterChanged);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         canChangeStatus: this.plan.canChangeWhStatus(),
         orders: this.serializeOrders()
       };
@@ -158,6 +157,11 @@ define([
     beforeRender: function()
     {
       clearTimeout(this.timers.render);
+    },
+
+    afterRender: function()
+    {
+      this.toggleRowSeparatorVisibility();
     },
 
     scheduleRender: function()
@@ -811,22 +815,26 @@ define([
     {
       var $order = this.$('tr[data-key="' + whOrderStatus.id + '"]');
 
-      if ($order.length)
+      if (!$order.length)
       {
-        var whStatus = this.whOrderStatuses.serialize(whOrderStatus.id);
-
-        $order
-          .find('.planning-wh-status')
-          .attr('data-status', whOrderStatus.get('status'))
-          .html(whStatus.label);
-
-        var whStatuses = this.plan.displayOptions.get('whStatuses') || [];
-
-        $order.toggleClass(
-          'hidden',
-          whStatuses.length > 0 && whStatuses.indexOf(whStatus.status.toString()) === -1
-        );
+        return;
       }
+
+      var whStatus = this.whOrderStatuses.serialize(whOrderStatus.id);
+
+      $order
+        .find('.planning-wh-status')
+        .attr('data-status', whOrderStatus.get('status'))
+        .html(whStatus.label);
+
+      var whStatuses = this.plan.displayOptions.get('whStatuses') || [];
+
+      $order.toggleClass(
+        'hidden',
+        whStatuses.length > 0 && whStatuses.indexOf(whStatus.status.toString()) === -1
+      );
+
+      this.toggleRowSeparatorVisibility();
     },
 
     onWhStatusesFilterChanged: function()
@@ -840,6 +848,104 @@ define([
           'hidden',
           whStatuses.length > 0 && whStatuses.indexOf(this.dataset.status) === -1
         );
+      });
+
+      view.toggleRowSeparatorVisibility();
+    },
+
+    toggleRowSeparatorVisibility: function()
+    {
+      var $table = this.$('.planning-mrp-lineOrders-table');
+
+      if (_.isEmpty(this.plan.displayOptions.get('whStatuses')))
+      {
+        $table.find('.hidden').removeClass('hidden');
+
+        return;
+      }
+
+      var row = $table[0].tBodies[0].firstElementChild;
+
+      if (!row)
+      {
+        return;
+      }
+
+      var groupNo = '';
+      var groupLine = '';
+      var groups = {};
+
+      do
+      {
+        if (row.dataset.id)
+        {
+          groupNo = row.dataset.group;
+          groupLine = row.dataset.line;
+
+          if (!groups[groupNo])
+          {
+            groups[groupNo] = {
+              lines: {},
+              separator: null,
+              empty: true
+            };
+          }
+
+          if (!groups[groupNo].lines[groupLine])
+          {
+            groups[groupNo].lines[groupLine] = {
+              separator: null,
+              empty: true
+            };
+          }
+
+          var hidden = row.classList.contains('hidden');
+
+          groups[groupNo].lines[groupLine].empty = hidden && groups[groupNo].lines[groupLine].empty;
+          groups[groupNo].empty = hidden && groups[groupNo].empty;
+        }
+        else if (row.classList.contains('planning-wh-newLine-tr'))
+        {
+          groups[groupNo].lines[groupLine].separator = row;
+        }
+        else if (row.classList.contains('planning-wh-newGroup-tr'))
+        {
+          groups[groupNo].separator = row;
+        }
+
+        row = row.nextElementSibling;
+      }
+      while (row);
+
+      _.forEach(groups, function(group)
+      {
+        if (group.separator)
+        {
+          group.separator.classList.toggle('hidden', group.empty);
+        }
+
+        var lastLine = null;
+        var lastSeparator = null;
+
+        _.forEach(group.lines, function(line)
+        {
+          if (line.separator)
+          {
+            line.separator.classList.toggle('hidden', line.empty);
+
+            if (!line.empty)
+            {
+              lastSeparator = line.separator;
+            }
+          }
+
+          lastLine = line;
+        });
+
+        if (lastSeparator && lastLine.empty)
+        {
+          lastSeparator.classList.add('hidden');
+        }
       });
     },
 
