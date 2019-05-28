@@ -308,6 +308,7 @@ define([
       page.listenTo(plan, 'sync', page.onPlanSynced);
       page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
 
+      page.listenTo(plan.displayOptions, 'change:from change:to', page.onStartTimeFilterChanged);
       page.listenTo(plan.displayOptions, 'change:useDarkerTheme', page.onDarkerThemeChanged);
 
       page.listenTo(plan.sapOrders, 'sync', page.onSapOrdersSynced);
@@ -401,14 +402,18 @@ define([
 
     updateUrl: function()
     {
+      var plan = this.plan;
+
       if (IS_EMBEDDED)
       {
-        sessionStorage.WMES_WH_PICKUP_DATE = this.plan.id;
+        sessionStorage.WMES_WH_PICKUP_DATE = plan.id;
       }
       else
       {
         this.broker.publish('router.navigate', {
-          url: '/wh/plans/' + this.plan.id,
+          url: '/wh/plans/' + plan.id
+            + '?from=' + encodeURIComponent(plan.displayOptions.get('from'))
+            + '&to=' + encodeURIComponent(plan.displayOptions.get('to')),
           replace: true,
           trigger: false
         });
@@ -801,6 +806,11 @@ define([
 
       this.updateUrl();
       this.reload();
+    },
+
+    onStartTimeFilterChanged: function()
+    {
+      this.updateUrl();
     },
 
     onDarkerThemeChanged: function()

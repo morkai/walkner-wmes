@@ -59,7 +59,7 @@ define([
 
     nlsDomain: 'wh',
 
-    serialize: function(plan, i)
+    serialize: function(plan, i, filters)
     {
       var obj = this.toJSON();
 
@@ -93,6 +93,7 @@ define([
 
       obj.startDate = time.utc.format(startTime, 'LL');
       obj.finishDate = time.utc.format(finishTime, 'LL');
+      obj.startTimeMs = startTime;
       obj.startTime = time.utc.format(startTime, 'HH:mm:ss');
       obj.finishTime = time.utc.format(finishTime, 'HH:mm:ss');
       obj.comment = sapOrder ? sapOrder.getCommentWithIcon() : '';
@@ -103,6 +104,14 @@ define([
         kitter: FUNC_STATUS_TO_ICON[obj.funcs[1].status],
         packer: FUNC_STATUS_TO_ICON[obj.funcs[2].status]
       };
+      obj.hidden = startTime < filters.startTime.from
+        || startTime >= filters.startTime.to
+        || (filters.whStatuses.length > 0 && filters.whStatuses.indexOf(obj.status) === -1);
+
+      if (obj.hidden)
+      {
+        obj.rowClassName += ' hidden';
+      }
 
       return obj;
     },

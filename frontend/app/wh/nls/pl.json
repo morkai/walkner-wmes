@@ -23,6 +23,7 @@
   "PAGE_ACTION:resolveAction:placeholder": "ID karty",
 
   "filter:date": "Data planu",
+  "filter:startTime": "Początek",
   "filter:useDarkerTheme": "Wysoki kontrast",
 
   "empty": "Brak planu dla wybranych filtrów.",

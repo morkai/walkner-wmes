@@ -27,6 +27,8 @@ define([
 
       'input #-date': 'changeFilter',
       'change #-date': 'changeFilter',
+      'change #-from': 'changeFilter',
+      'change #-to': 'changeFilter',
       'click #-useDarkerTheme': function()
       {
         this.plan.displayOptions.toggleDarkerThemeUse();
@@ -54,6 +56,8 @@ define([
         date: plan.id,
         minDate: displayOptions.get('minDate'),
         maxDate: displayOptions.get('maxDate'),
+        from: displayOptions.get('from'),
+        to: displayOptions.get('to'),
         useDarkerTheme: displayOptions.isDarkerThemeUsed()
       };
     },
@@ -65,11 +69,31 @@ define([
 
     changeFilter: function()
     {
-      var date = this.$id('date').val();
+      var view = this;
+      var date = view.$id('date').val();
+      var data = {
+        from: view.$id('from').val() || '06:00',
+        to: view.$id('to').val() || '06:00'
+      };
 
-      if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date) && date !== this.plan.id)
+      var displayOptions = {};
+
+      ['from', 'to'].forEach(function(prop)
       {
-        this.plan.set('_id', date);
+        if (!_.isEqual(data[prop], view.plan.displayOptions.get(prop)))
+        {
+          displayOptions[prop] = data[prop];
+        }
+      });
+
+      if (!_.isEmpty(displayOptions))
+      {
+        view.plan.displayOptions.set(displayOptions);
+      }
+
+      if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date) && date !== view.plan.id)
+      {
+        view.plan.set('_id', date);
       }
     },
 

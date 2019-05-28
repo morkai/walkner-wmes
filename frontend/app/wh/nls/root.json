@@ -24,6 +24,7 @@
     "PAGE_ACTION:resolveAction:placeholder": "Card ID",
 
     "filter:date": "Plan date",
+    "filter:startTime": "Start",
     "filter:useDarkerTheme": "High contrast",
 
     "empty": "No plan for the specified filters.",

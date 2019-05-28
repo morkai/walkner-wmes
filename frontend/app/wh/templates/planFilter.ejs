@@ -1,13 +1,31 @@
 <form class="well filter-form planning-mrp-filter">
   <div class="form-group">
-    <label for="<%- idPrefix %>-date" class="control-label"><%- t('planning', 'filter:date') %></label>
+    <label for="<%- idPrefix %>-date" class="control-label"><%- t('wh', 'filter:date') %></label>
     <input id="<%- idPrefix %>-date" name="date" class="form-control" type="date" value="<%- date %>" min="<%- minDate %>" max="<%- maxDate %>">
+  </div>
+  <div class="form-group">
+    <div class="dateTimeRange">
+      <div class="dateTimeRange-labels">
+        <div class="dateTimeRange-label">
+          <label for="<%- idPrefix %>-from" class="control-label"><%- t('wh', 'filter:startTime') %></label>
+        </div>
+      </div>
+      <div class="dateTimeRange-fields">
+        <div class="dateTimeRange-field dateTimeRange-from">
+          <input id="<%- idPrefix %>-from" name="from" class="form-control" type="time" step="60" value="<%- from %>">
+        </div>
+        <div class="dateTimeRange-separator">-</div>
+        <div class="dateTimeRange-field dateTimeRange-to">
+          <input id="<%- idPrefix %>-to" name="to" class="form-control" type="time" step="60" value="<%- to %>">
+        </div>
+      </div>
+    </div>
   </div>
   <div class="form-group filter-actions">
     <div class="btn-group">
       <button id="<%- idPrefix %>-useDarkerTheme" type="button" class="btn btn-default <%- useDarkerTheme ? 'active' : '' %>">
         <i class="fa fa-adjust"></i>
-        <span><%- t('planning', 'filter:useDarkerTheme') %></span>
+        <span><%- t('wh', 'filter:useDarkerTheme') %></span>
       </button>
     </div>
   </div>

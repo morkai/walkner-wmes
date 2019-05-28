@@ -53,13 +53,22 @@ define([
         + '&date=' + time.utc.getMoment(this.date, 'YYYY-MM-DD').valueOf();
     },
 
+    getFilters: function(plan)
+    {
+      return {
+        whStatuses: plan.displayOptions.get('whStatuses') || [],
+        startTime: plan.displayOptions.getStartTimeRange(plan.id)
+      };
+    },
+
     serialize: function(plan)
     {
       var prev = null;
+      var filters = this.getFilters(plan);
 
       return this.map(function(whOrder, i)
       {
-        var item = whOrder.serialize(plan, i);
+        var item = whOrder.serialize(plan, i, filters);
 
         if (prev)
         {

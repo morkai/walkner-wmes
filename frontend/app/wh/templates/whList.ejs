@@ -30,11 +30,11 @@
     <tbody>
       <% rows.forEach(function(row) { %>
       <% if (row.newGroup) { %>
-      <tr>
+      <tr class="planning-wh-newGroup-tr">
         <td class="planning-wh-newGroup" colspan="999"></td>
       </tr>
       <% } else if (row.newLine) { %>
-      <tr>
+      <tr class="planning-wh-newLine-tr">
         <td class="planning-wh-newLine" colspan="999"></td>
       </tr>
       <% } %>
