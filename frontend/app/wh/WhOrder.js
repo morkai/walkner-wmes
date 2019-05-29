@@ -118,7 +118,10 @@ define([
 
     serializeSet: function(plan, i, whUser)
     {
-      var obj = this.serialize(plan, i);
+      var obj = this.serialize(plan, i, this.collection ? this.collection.getFilters(plan) : {
+        startTime: {},
+        whStatuses: []
+      });
       var canManage = user.isAllowedTo('WH:MANAGE');
       var userFunc = this.getUserFunc(whUser);
       var isUser = !!userFunc;

@@ -119,7 +119,8 @@ define([
     {
       var whOrder = this.whOrders.get(id);
       var detailsView = new WhProblemDetailsView({
-        model: whOrder
+        model: whOrder,
+        whOrders: this.whOrders
       });
 
       viewport.showDialog(detailsView, this.t('problem:title', {

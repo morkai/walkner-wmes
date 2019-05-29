@@ -112,7 +112,7 @@ define([
       return {
         renderOrderInfo: orderInfoTemplate,
         renderFuncs: funcsTemplate,
-        whOrder: this.model.serialize(this.plan, 0),
+        whOrder: this.model.serialize(this.plan, 0, this.whOrders.getFilters(this.plan)),
         funcs: {
           lp10: this.model.serializeProblemFunc('lp10'),
           fmx: this.model.serializeProblemFunc('fmx'),
