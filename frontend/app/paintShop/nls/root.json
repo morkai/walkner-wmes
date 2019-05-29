@@ -45,11 +45,13 @@
     "status:cancelled": "Cancelled",
     "status:delivered": "Delivered",
 
-    "action:start": "<small>Start</small>Cabin {cabin}",
+    "action:start": "Start",
+    "action:start:cabin": "<small>Start</small>Cabin {cabin}",
     "action:finish": "Finish",
     "action:cancel": "Cancel",
     "action:reset": "Reset",
-    "action:continue": "<small>Continue</small>Cabin {cabin}",
+    "action:continue": "Continue",
+    "action:continue:cabin": "<small>Continue</small>Cabin {cabin}",
     "action:comment": "Comment",
     "action:deliver": "Deliver",
 

@@ -104,7 +104,7 @@ define([
 
     closeDialog: function() {},
 
-    serialize: function()
+    getTemplateData: function()
     {
       var order = this.model.serialize();
 
@@ -119,7 +119,6 @@ define([
       });
 
       return {
-        idPrefix: this.idPrefix,
         order: order,
         fillerHeight: this.calcFillerHeight(),
         renderQueueOrder: queueOrderTemplate,

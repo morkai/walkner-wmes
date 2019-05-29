@@ -1,12 +1,12 @@
 <table class="paintShop-orderDetails">
   <thead>
   <tr>
-    <th><%- t('paintShop', 'PROPERTY:no') %></th>
-    <th><%- t('paintShop', 'PROPERTY:order') %></th>
-    <th><%- t('paintShop', 'PROPERTY:nc12') %></th>
-    <th colspan="2"><%- t('paintShop', 'PROPERTY:qty') %></th>
-    <th><%- t('paintShop', 'PROPERTY:name') %></th>
-    <th colspan="3"><%- t('paintShop', 'PROPERTY:placement') %></th>
+    <th><%- helpers.t('PROPERTY:no') %></th>
+    <th><%- helpers.t('PROPERTY:order') %></th>
+    <th><%- helpers.t('PROPERTY:nc12') %></th>
+    <th colspan="2"><%- helpers.t('PROPERTY:qty') %></th>
+    <th><%- helpers.t('PROPERTY:name') %></th>
+    <th colspan="3"><%- helpers.t('PROPERTY:placement') %></th>
   </tr>
   </thead>
   <% if (canAct) { %>
@@ -15,38 +15,50 @@
     <td colspan="9">
       <div class="paintShop-orderDetails-actions">
         <% if (order.status === 'new') { %>
+        <% if (order.drilling) { %>
+        <button class="btn btn-info" type="button" data-action="start" data-cabin="0"><%- helpers.t('action:start') %></button>
+        <% } else { %>
         <div class="paintShop-orderDetails-actions-group">
-          <button class="btn btn-info" type="button" data-action="start" data-cabin="1"><%- t('paintShop', 'action:start', {cabin: 1}) %></button>
-          <button class="btn btn-info" type="button" data-action="start" data-cabin="2"><%- t('paintShop', 'action:start', {cabin: 2}) %></button>
+          <button class="btn btn-info" type="button" data-action="start" data-cabin="1"><%- helpers.t('action:start:cabin', {cabin: 1}) %></button>
+          <button class="btn btn-info" type="button" data-action="start" data-cabin="2"><%- helpers.t('action:start:cabin', {cabin: 2}) %></button>
         </div>
-        <button class="btn btn-danger" type="button" data-action="cancel"><%- t('paintShop', 'action:cancel') %></button>
+        <% } %>
+        <button class="btn btn-danger" type="button" data-action="cancel"><%- helpers.t('action:cancel') %></button>
         <% } else if (order.status === 'cancelled') { %>
-        <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
+        <button class="btn btn-default" type="button" data-action="reset"><%- helpers.t('action:reset') %></button>
         <% } else if (order.status === 'started') { %>
         <div class="paintShop-orderDetails-qtyDone">
           <input id="<%- idPrefix %>-qtyDone" class="form-control" type="text" autocomplete="new-password" maxlength="3" min="0" max="999" placeholder="<%- order.qty %>" data-vkb="numeric">
-          <button class="btn btn-success" type="button" data-action="finish" title="<%- t('paintShop', 'action:finish') %>"><i class="fa fa-check"></i></button>
+          <button class="btn btn-success" type="button" data-action="finish" title="<%- helpers.t('action:finish') %>"><i class="fa fa-check"></i></button>
         </div>
-        <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
-        <button class="btn btn-danger" type="button" data-action="cancel"><%- t('paintShop', 'action:cancel') %></button>
+        <button class="btn btn-default" type="button" data-action="reset"><%- helpers.t('action:reset') %></button>
+        <button class="btn btn-danger" type="button" data-action="cancel"><%- helpers.t('action:cancel') %></button>
         <% } else if (order.status === 'partial') { %>
+        <% if (order.drilling) { %>
+        <button class="btn btn-info" type="button" data-action="start" data-cabin="0"><%- helpers.t('action:continue') %></button>
+        <% } else { %>
         <div class="paintShop-orderDetails-actions-group">
-          <button class="btn btn-info" type="button" data-action="continue" data-cabin="1"><%- t('paintShop', 'action:continue', {cabin: 1}) %></button>
-          <button class="btn btn-info" type="button" data-action="continue" data-cabin="2"><%- t('paintShop', 'action:continue', {cabin: 2}) %></button>
+          <button class="btn btn-info" type="button" data-action="continue" data-cabin="1"><%- helpers.t('action:continue:cabin', {cabin: 1}) %></button>
+          <button class="btn btn-info" type="button" data-action="continue" data-cabin="2"><%- helpers.t('action:continue:cabin', {cabin: 2}) %></button>
         </div>
-        <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
-        <button class="btn btn-danger" type="button" data-action="cancel"><%- t('paintShop', 'action:cancel') %></button>
+        <% } %>
+        <button class="btn btn-default" type="button" data-action="reset"><%- helpers.t('action:reset') %></button>
+        <button class="btn btn-danger" type="button" data-action="cancel"><%- helpers.t('action:cancel') %></button>
         <% } else if (order.status === 'finished' || order.status === 'delivered') { %>
         <div class="paintShop-orderDetails-qtyDlv">
           <input id="<%- idPrefix %>-qtyDlv" class="form-control" type="text" autocomplete="new-password" maxlength="4" min="0" max="999" placeholder="<%- Math.max(0, order.qty - order.qtyDlv) %>" data-vkb="numeric negative">
-          <button class="btn btn-success" type="button" data-action="deliver" title="<%- t('paintShop', 'action:deliver') %>"><i class="fa fa-shopping-cart"></i></button>
+          <button class="btn btn-success" type="button" data-action="deliver" title="<%- helpers.t('action:deliver') %>"><i class="fa fa-shopping-cart"></i></button>
         </div>
+        <% if (order.drilling) { %>
+        <button class="btn btn-info" type="button" data-action="start" data-cabin="0"><%- helpers.t('action:continue') %></button>
+        <% } else { %>
         <div class="paintShop-orderDetails-actions-group">
-          <button class="btn btn-info" type="button" data-action="continue" data-cabin="1"><%- t('paintShop', 'action:continue', {cabin: 1}) %></button>
-          <button class="btn btn-info" type="button" data-action="continue" data-cabin="2"><%- t('paintShop', 'action:continue', {cabin: 2}) %></button>
+          <button class="btn btn-info" type="button" data-action="continue" data-cabin="1"><%- helpers.t('action:continue:cabin', {cabin: 1}) %></button>
+          <button class="btn btn-info" type="button" data-action="continue" data-cabin="2"><%- helpers.t('action:continue:cabin', {cabin: 2}) %></button>
         </div>
-        <button class="btn btn-default" type="button" data-action="reset"><%- t('paintShop', 'action:reset') %></button>
-        <button class="btn btn-danger" type="button" data-action="cancel"><%- t('paintShop', 'action:cancel') %></button>
+        <% } %>
+        <button class="btn btn-default" type="button" data-action="reset"><%- helpers.t('action:reset') %></button>
+        <button class="btn btn-danger" type="button" data-action="cancel"><%- helpers.t('action:cancel') %></button>
         <% } %>
       </div>
     </td>

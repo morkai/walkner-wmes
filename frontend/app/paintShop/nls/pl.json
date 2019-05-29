@@ -44,11 +44,13 @@
   "status:cancelled": "Anulowane",
   "status:delivered": "Dostarczone",
 
-  "action:start": "<small>Rozpocznij</small>Kabina {cabin}",
+  "action:start": "Rozpocznij",
+  "action:start:cabin": "<small>Rozpocznij</small>Kabina {cabin}",
   "action:finish": "Zakończ",
   "action:cancel": "Ignoruj",
   "action:reset": "Resetuj",
-  "action:continue": "<small>Kontynuuj</small>Kabina {cabin}",
+  "action:continue": "Kontynuuj",
+  "action:continue:cabin": "<small>Kontynuuj</small>Kabina {cabin}",
   "action:comment": "Komentuj",
   "action:deliver": "Dostarcz",
 
