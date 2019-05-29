@@ -6,7 +6,7 @@
   "updater": {
     "wmes": {
       "backend": 463,
-      "frontend": 620,
+      "frontend": 621,
       "reports": 85,
       "attachments": 3,
       "importer-sap": 49,
@@ -17,7 +17,7 @@
       "docs": 27,
       "heff": 30,
       "planning": 59,
-      "ps-queue": 35,
+      "ps-queue": 36,
       "ps-load": 12,
       "wh-pickup": 12,
       "wh-problems": 7,
