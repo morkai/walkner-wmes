@@ -9,6 +9,7 @@ exports.modules = [
   'updater',
   {id: 'h5-mongoose', name: 'mongoose'},
   'events',
+  'settings',
   'messenger/server',
   'wmes-luma2-backend'
 ];
