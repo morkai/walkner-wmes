@@ -38,6 +38,18 @@
   <li>Zmieniono filtr 'Etap' w starym module tak, aby separatory oddzielające puste grupy były ukrywane.</li>
   <li>Dodano filtr 'Początek' do starego i nowego modułu.</li>
 </ul>
+<h3>Zlecenia produkcyjne</h3>
+<ul>
+  <li>Zmieniono wybieranie komponentu do zaznaczenia na dokumencie:
+    <ul>
+      <li>dokument mający w nazwie 'ASSEMBL' dostaje 10 punktów a 'ASS' 5,</li>
+      <li>dokument mający w nazwie 'QOP' dostaje -10 punktów a 'PALLET' -20,</li>
+      <li>za każdy tekst w treści dokumentu identyczny z nr komponentu dokument dostaje 15 punktów.</li>
+    </ul>
+    Wybierany jest dokument z największą ilością punktów, a na wybranym dokumencie zaznaczany jest
+    w pierwszej kolejności tekst identyczny z nr komponentu znajdujący się na najwcześniejszej stronie.
+  </li>
+</ul>
 <h3>Dokumentacja</h3>
 <ul>
   <li>Poprawiono błąd powodujący nieprawidłowe rozpoznanie marginesów w importowanym dokumencie PDF

@@ -154,13 +154,14 @@ define([
 
     openBestDocument: function(requestedItem, contents)
     {
+      var view = this;
       var stats = {};
 
-      this.model.get('bom').forEach(function(component)
+      view.model.get('bom').forEach(function(component)
       {
         var item = component.get('item');
 
-        if (!contents[item])
+        if (item !== requestedItem || !contents[item])
         {
           return;
         }
@@ -169,10 +170,40 @@ define([
         {
           if (!stats[nc15])
           {
-            stats[nc15] = item === requestedItem ? 1000 : 0;
+            stats[nc15] = 0;
+
+            var document = view.model.get('documents').get(nc15);
+            var name = (document && document.get('name') || '').replace(/[^A-Za-z0-9]+/g, '').toUpperCase();
+
+            if (name.indexOf('ASSEMBL') !== -1)
+            {
+              stats[nc15] += 10;
+            }
+            else if (name.indexOf('ASS') !== -1)
+            {
+              stats[nc15] += 5;
+            }
+
+            if (name.indexOf('QAP') !== -1)
+            {
+              stats[nc15] -= 10;
+            }
+
+            if (name.indexOf('PALLET') !== -1)
+            {
+              stats[nc15] -= 20;
+            }
           }
 
           stats[nc15] += 1;
+
+          contents[item][nc15].forEach(function(mark)
+          {
+            if (mark.s === item)
+            {
+              stats[nc15] += 15;
+            }
+          });
         });
       });
 
@@ -190,7 +221,7 @@ define([
         }
       });
 
-      this.$('tr[data-nc15="' + bestNc15 + '"]').find('a').click();
+      view.$('tr[data-nc15="' + bestNc15 + '"]').find('a').click();
     }
 
   });

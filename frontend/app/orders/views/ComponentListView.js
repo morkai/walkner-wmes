@@ -194,7 +194,9 @@ define([
       {
         var html = this.textContent.trim();
 
-        if (view.contents[html] && view.contents[html][view.document])
+        if (view.contents[html]
+          && view.contents[html][view.document]
+          && this.nextElementSibling.textContent.trim().length)
         {
           html = '<a>' + html + '</a>';
         }
@@ -207,25 +209,54 @@ define([
 
     mark: function()
     {
-      if (!this.window || !this.window.showMarks)
+      var view = this;
+      var window = view.window;
+
+      if (!window || !window.showMarks)
       {
         return;
       }
 
-      if (this.window)
+      if (window)
       {
-        this.window.focus();
+        window.focus();
       }
 
-      if (!this.item
-        || !this.document
-        || !this.contents
-        || !this.contents[this.item])
+      var item = view.item;
+      var document = view.document;
+      var contents = view.contents;
+
+      if (!item
+        || !document
+        || !contents
+        || !contents[item])
       {
         return;
       }
 
-      this.window.showMarks(this.contents[this.item][this.document] || []);
+      var marks = contents[item][document] || [];
+
+      marks.sort(function(a, b)
+      {
+        if (a.s === b.s)
+        {
+          return a.p - b.p;
+        }
+
+        if (a.s === item)
+        {
+          return -1;
+        }
+
+        if (b.s === item)
+        {
+          return 1;
+        }
+
+        return 0;
+      });
+
+      window.showMarks(marks);
     }
 
   });
