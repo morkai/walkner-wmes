@@ -619,7 +619,7 @@ define([
         this.timers.showMrpMenu = null;
       }
 
-      var mrp = e.currentTarget.dataset.mrp;
+      var mrp = e.currentTarget.dataset.mrp || null;
       var drilling = this.orders.isDrillingMrp(mrp);
 
       if (drilling)
@@ -628,7 +628,7 @@ define([
       }
 
       var actionOptions = {
-        filterProperty: drilling ? null : 'mrp',
+        filterProperty: drilling || !mrp ? null : 'mrp',
         filterValue: mrp,
         drilling: drilling
       };
