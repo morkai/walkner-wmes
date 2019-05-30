@@ -1,5 +1,12 @@
 @import "./dateTimeRange.css";
 
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  padding-top: 0;
+  padding-bottom: 0;
+}
 .form-group:last-child {
   margin-bottom: 0;
 }
@@ -134,6 +141,9 @@ input:enabled:read-write::-webkit-clear-button {
 }
 input[type="number"]::-webkit-inner-spin-button {
   margin-left: 6px;
+}
+input[type="date"]::-webkit-inner-spin-button {
+  margin-top: 6px;
 }
 input.no-controls::-webkit-clear-button,
 input.no-controls::-webkit-inner-spin-button {
