@@ -259,6 +259,7 @@
   var appCache = window.applicationCache;
 
   if (!appCache
+    || appCache.status === 0
     || !navigator.onLine
     || !document.getElementsByTagName('html')[0].hasAttribute('manifest'))
   {
