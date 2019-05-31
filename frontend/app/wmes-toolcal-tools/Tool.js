@@ -126,7 +126,7 @@ define([
         individual: []
       };
 
-      this.get('users').forEach(function(u)
+      (this.get('users') || []).forEach(function(u)
       {
         var userInfo = serialize ? userInfoTemplate({userInfo: u}) : u;
 
