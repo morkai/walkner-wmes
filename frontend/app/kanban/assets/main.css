@@ -192,7 +192,7 @@ tr:hover > .kanban-is-invalid,
   content: "\f0dd  \f0b0";
 }
 .kanban-td[data-column-id="_id"] {
-  width: 55px;
+  width: 60px;
 }
 .kanban-td[data-column-id="nc12"] {
   width: 105px;
