@@ -838,14 +838,14 @@ define([
       {
         return function($)
         {
-          return $ === undefined || $ === null || $ === 0 || $ === '';
+          return $ === undefined || $ === null || $ === 0 || $.length === 0;
         };
       },
       notEmpty: function()
       {
         return function($)
         {
-          return $ !== undefined && $ !== null && $ !== 0 && $ !== '';
+          return $ !== undefined && $ !== null && $ !== 0 && $.length !== 0;
         };
       },
       eval: function(code)
