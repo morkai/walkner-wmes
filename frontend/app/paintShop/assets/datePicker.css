@@ -13,13 +13,8 @@
   font-family: monospace;
   font-size: 64px;
   text-align: center;
+  width: 100px;
   height: 75px;
-}
-.paintShop-datePicker-input > .form-control[name="day"] {
-  width: 100px;
-}
-.paintShop-datePicker-input > .form-control[name="month"] {
-  width: 100px;
 }
 .paintShop-datePicker-input > .form-control[name="year"] {
   flex: 1 1 auto;
