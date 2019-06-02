@@ -1222,6 +1222,12 @@ define([
           detachable: false,
           cssClass: cssClass.join(' ')
         });
+
+        if (!connection)
+        {
+          return;
+        }
+
         var label = connection.getOverlay('LABEL');
 
         label.setLabel((stepI + 1).toString());
