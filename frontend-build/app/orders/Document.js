@@ -1,1 +1,1 @@
-define(["../core/Model"],function(e){"use strict";return e.extend({idAttribute:"index",labelAttribute:"name"})});
+define(["../core/Model"],function(e){"use strict";return e.extend({idAttribute:"nc15",labelAttribute:"name"})});

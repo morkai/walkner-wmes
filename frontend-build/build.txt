@@ -335,12 +335,21 @@ app/orderDocumentClients/assets/main.css
 ----------------
 app/orderDocumentClients/assets/main.css
 
+app/orderDocuments/assets/bom.css
+----------------
+app/orderDocuments/assets/bom.css
+
 app/orderDocuments/assets/main.css
 ----------------
 app/orderDocuments/assets/../../production/assets/modal.css
 app/orderDocuments/assets/../../production/assets/taktTime.css
 app/orderDocuments/assets/../../production/assets/bomChecker.css
+app/orderDocuments/assets/./bom.css
 app/orderDocuments/assets/main.css
+
+app/orderDocuments/assets/viewer.css
+----------------
+app/orderDocuments/assets/viewer.css
 
 app/orderDocumentTree/assets/changes.css
 ----------------
@@ -920,6 +929,7 @@ assets/wmes-docs-viewer.css
 assets/../vendor/bootstrap/css/bootstrap.css
 assets/../vendor/font-awesome/css/font-awesome.css
 assets/../vendor/viewerjs/viewer.css
+assets/../app/orderDocuments/assets/viewer.css
 assets/wmes-docs-viewer.css
 
 assets/wmes-docs.css
@@ -931,8 +941,10 @@ assets/./select2.css
 assets/../app/core/assets/main.css
 assets/../app/orders/assets/main.css
 assets/../app/orderStatuses/assets/main.css
-assets/../app/orderDocuments/assets/main.css
+assets/../app/production/assets/vkb.css
+assets/../app/planning/assets/menu.css
 assets/../app/updater/assets/main.css
+assets/../app/orderDocuments/assets/main.css
 assets/./wmes-loading.css
 assets/wmes-docs.css
 
@@ -2173,6 +2185,11 @@ app/core/layouts/BlankLayout.js
 app/core/templates/pageLayout.js
 app/core/layouts/PageLayout.js
 app/orderDocuments/DocumentViewerState.js
+app/core/views/DialogView.js
+app/core/templates/embedded/appsDialog.js
+app/core/templates/embedded/confirmDialog.js
+app/core/templates/embedded/actions.js
+app/core/util/embedded.js
 app/data/prodLog.js
 app/production/templates/bomChecker.js
 app/production/templates/bomCheckerRow.js
@@ -2182,11 +2199,6 @@ app/nls/production.js
 app/nls/pl/production.js
 i18n!app/nls/production
 app/production/snManager.js
-app/core/views/DialogView.js
-app/core/templates/embedded/appsDialog.js
-app/core/templates/embedded/confirmDialog.js
-app/core/templates/embedded/actions.js
-app/core/util/embedded.js
 vendor/js2form.js
 vendor/form2js.js
 app/mrpControllers/MrpController.js
@@ -2223,6 +2235,13 @@ app/orderDocuments/views/DocumentViewerControlsView.js
 app/orderDocuments/templates/preview.js
 app/orderDocuments/templates/documentWindow.js
 app/orderDocuments/views/DocumentViewerPreviewView.js
+app/core/util/scrollbarSize.js
+app/production/templates/vkb.js
+app/production/views/VkbView.js
+app/planning/templates/contextMenu.js
+app/planning/util/contextMenu.js
+app/orderDocuments/templates/bom.js
+app/orderDocuments/views/BomView.js
 app/orderDocuments/templates/page.js
 app/orderDocuments/pages/DocumentViewerPage.js
 app/core/util/bindLoadingMessage.js
@@ -2239,8 +2258,6 @@ app/data/createOnDemandStorage.js
 app/delayReasons/DelayReason.js
 app/delayReasons/DelayReasonCollection.js
 app/delayReasons/storage.js
-app/planning/templates/contextMenu.js
-app/planning/util/contextMenu.js
 app/printers/templates/pageAction.js
 app/printers/views/PrinterPickerView.js
 app/data/orgUnits.js
