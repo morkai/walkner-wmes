@@ -70,5 +70,7 @@
 
   "order": "Karta zlecenia",
   "bom": "Lista komponentów",
-  "eto": "Konstrukcja na zamówienie"
+  "eto": "Konstrukcja na zamówienie",
+
+  "bom:filter:ps": "Filtruj komponenty"
 }

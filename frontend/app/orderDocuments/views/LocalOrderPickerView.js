@@ -8,6 +8,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/core/util/embedded',
   'app/prodShiftOrders/ProdShiftOrderCollection',
   'app/orderDocuments/templates/localOrderPicker'
 ], function(
@@ -18,6 +19,7 @@ define([
   t,
   viewport,
   View,
+  embedded,
   ProdShiftOrderCollection,
   template
 ) {
@@ -65,11 +67,10 @@ define([
       this.listenTo(this.lastOrders, 'sync', this.renderLastOrders);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
-        touch: window.location.href.indexOf('touch') !== -1
+        touch: embedded.isEnabled()
       };
     },
 

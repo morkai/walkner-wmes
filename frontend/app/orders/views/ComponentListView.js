@@ -234,29 +234,7 @@ define([
         return;
       }
 
-      var marks = contents[item][document] || [];
-
-      marks.sort(function(a, b)
-      {
-        if (a.s === b.s)
-        {
-          return a.p - b.p;
-        }
-
-        if (a.s === item)
-        {
-          return -1;
-        }
-
-        if (b.s === item)
-        {
-          return 1;
-        }
-
-        return 0;
-      });
-
-      window.showMarks(marks);
+      window.showMarks(contents[item][document] || []);
     }
 
   });

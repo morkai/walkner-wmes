@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/core/util/embedded',
   'app/orderDocuments/templates/preview',
   'app/orderDocuments/templates/documentWindow'
 ], function(
@@ -14,6 +15,7 @@ define([
   t,
   viewport,
   View,
+  embedded,
   template,
   renderDocumentWindow
 ) {
@@ -25,6 +27,7 @@ define([
 
     initialize: function()
     {
+      this.showMarksCounter = 0;
       this.$iframe = null;
 
       this.listenTo(
@@ -33,10 +36,9 @@ define([
         _.debounce(this.onOrderChange.bind(this), 1, true)
       );
 
-      if (window.navigator.userAgent.indexOf('Chrome/') !== -1)
-      {
-        this.timers.blurIframe = setInterval(this.blurIframe.bind(this), 333);
-      }
+      this.listenTo(this.model, 'marksRequested', this.onMarksRequested);
+
+      this.timers.blurIframe = setInterval(this.blurIframe.bind(this), 333);
     },
 
     destroy: function()
@@ -161,7 +163,7 @@ define([
       this.$iframe.one('load', function()
       {
         view.$id('loading').addClass('hidden');
-        view.trigger('fileLoaded', src);
+        view.trigger('loadDocument:success', src);
       });
       this.$iframe.prop('src', src);
     },
@@ -216,40 +218,43 @@ define([
 
     tryLoadLocalDocument: function(nc15)
     {
-      this.model.setFileSource('local');
-      this.setLoadingMessage('localServer');
-
       var view = this;
+
+      view.model.setFileSource('local');
+      view.setLoadingMessage('localServer');
+
       var localFileUrl = this.model.getLocalFileUrl(nc15);
 
-      if (this.req)
+      if (view.req)
       {
-        this.req.abort();
-        this.req = null;
+        view.req.abort();
+        view.req = null;
       }
 
       if (localFileUrl === null)
       {
-        this.$id('loading').addClass('is-failure');
-        this.model.setFileSource(null);
+        view.$id('loading').addClass('is-failure');
+        view.model.setFileSource(null);
+        view.trigger('loadDocument:failure');
 
         return;
       }
 
-      this.req = this.ajax({
+      view.req = this.ajax({
         type: 'HEAD',
         url: localFileUrl
       });
 
-      this.req.fail(function()
+      view.req.fail(function()
       {
         view.req = null;
         view.$id('loading').addClass('is-failure');
         view.model.setFileSource(null);
         view.setLoadingMessage('failure');
+        view.trigger('loadDocument:failure');
       });
 
-      this.req.done(function()
+      view.req.done(function()
       {
         view.req = null;
         view.loadFile(localFileUrl);
@@ -268,12 +273,74 @@ define([
         + '&w=' + this.$iframe.width()
         + '&h=' + this.$iframe.height();
 
-      if (window.location.search.indexOf('touch') === -1)
+      if (!embedded.isEnabled())
       {
         query += '&pdf=1';
       }
 
       return query;
+    },
+
+    onMarksRequested: function(options)
+    {
+      var currentOrder = this.model.getCurrentOrder();
+
+      if (options.nc15 !== currentOrder.nc15)
+      {
+        this.model.selectDocument(options.nc15);
+        this.showMarksAfterLoad(options.page, options.marks);
+      }
+      else
+      {
+        this.showMarks(options.page, options.marks);
+      }
+    },
+
+    showMarks: function(page, marks)
+    {
+      if (!this.$iframe)
+      {
+        return;
+      }
+
+      var previewWindow = this.$iframe[0].contentWindow;
+
+      if (!previewWindow.showMarks)
+      {
+        return;
+      }
+
+      previewWindow.showMarks(marks, page);
+    },
+
+    showMarksAfterLoad: function(page, marks)
+    {
+      var view = this;
+      var counter = ++view.showMarksCounter;
+
+      view.on('loadDocument:success', onSuccess);
+      view.on('loadDocument:failure', onFailure);
+
+      function onSuccess()
+      {
+        cleanUp();
+
+        if (view.showMarksCounter === counter)
+        {
+          view.showMarks(page, marks);
+        }
+      }
+
+      function onFailure()
+      {
+        cleanUp();
+      }
+
+      function cleanUp()
+      {
+        view.off('loadDocument:success', onSuccess);
+        view.off('loadDocument:failure', onFailure);
+      }
     }
 
   });

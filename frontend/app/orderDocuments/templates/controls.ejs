@@ -4,17 +4,17 @@
     <div id="<%- idPrefix %>-prodLine" class="orderDocuments-prodLine"></div>
     <div id="<%- idPrefix %>-buttons" class="orderDocuments-buttons-container">
       <div class="orderDocuments-buttons">
-        <button id="<%- idPrefix %>-openLocalOrderDialog" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:openLocalOrderDialog') %>"><i class="fa fa-search"></i></button>
-        <button id="<%- idPrefix %>-reloadDocument" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:reloadDocument') %>"><i class="fa fa-refresh"></i></button>
-        <button id="<%- idPrefix %>-openDocumentWindow" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:openDocumentWindow') %>"><i class="fa fa-external-link"></i></button>
-        <button id="<%- idPrefix %>-openSettingsDialog" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:openSettingsDialog') %>"><i class="fa fa-wrench"></i></button>
-        <button id="<%- idPrefix %>-toggleAddImprovementButtons" type="button" class="btn btn-default" title="<%- t('orderDocuments', 'controls:toggleAddImprovementButtons') %>"><i class="fa fa-comment"></i></button>
-        <button id="<%- idPrefix %>-lockUi" type="button" class="btn btn-default orderDocuments-buttons-lockUi" title="<%- t('orderDocuments', 'controls:lockUi') %>"><i class="fa fa-lock"></i></button>
+        <button id="<%- idPrefix %>-openLocalOrderDialog" type="button" class="btn btn-default" title="<%- helpers.t('controls:openLocalOrderDialog') %>"><i class="fa fa-search"></i></button>
+        <button id="<%- idPrefix %>-reloadDocument" type="button" class="btn btn-default" title="<%- helpers.t('controls:reloadDocument') %>"><i class="fa fa-refresh"></i></button>
+        <button id="<%- idPrefix %>-openDocumentWindow" type="button" class="btn btn-default" title="<%- helpers.t('controls:openDocumentWindow') %>"><i class="fa fa-external-link"></i></button>
+        <button id="<%- idPrefix %>-openSettingsDialog" type="button" class="btn btn-default" title="<%- helpers.t('controls:openSettingsDialog') %>"><i class="fa fa-wrench"></i></button>
+        <button id="<%- idPrefix %>-toggleAddImprovementButtons" type="button" class="btn btn-default" title="<%- helpers.t('controls:toggleAddImprovementButtons') %>"><i class="fa fa-comment"></i></button>
+        <button id="<%- idPrefix %>-lockUi" type="button" class="btn btn-default orderDocuments-buttons-lockUi" title="<%- helpers.t('controls:lockUi') %>"><i class="fa fa-lock"></i></button>
       </div>
       <div id="<%- idPrefix %>-addImprovementButtons" class="orderDocuments-buttons orderDocuments-buttons-addImprovement hidden">
-        <button id="<%- idPrefix %>-openAddNearMissWindow" type="button" class="btn btn-danger" title="<%- t('orderDocuments', 'controls:openAddNearMissWindow') %>"><i class="fa fa-warning"></i></button>
-        <button id="<%- idPrefix %>-openAddSuggestionWindow" type="button" class="btn btn-warning" title="<%- t('orderDocuments', 'controls:openAddSuggestionWindow') %>"><i class="fa fa-lightbulb-o"></i></button>
-        <button id="<%- idPrefix %>-openAddObservationWindow" type="button" class="btn btn-primary" title="<%- t('orderDocuments', 'controls:openAddObservationWindow') %>"><i class="fa fa-eye"></i></button>
+        <button id="<%- idPrefix %>-openAddNearMissWindow" type="button" class="btn btn-danger" title="<%- helpers.t('controls:openAddNearMissWindow') %>"><i class="fa fa-warning"></i></button>
+        <button id="<%- idPrefix %>-openAddSuggestionWindow" type="button" class="btn btn-warning" title="<%- helpers.t('controls:openAddSuggestionWindow') %>"><i class="fa fa-lightbulb-o"></i></button>
+        <button id="<%- idPrefix %>-openAddObservationWindow" type="button" class="btn btn-primary" title="<%- helpers.t('controls:openAddObservationWindow') %>"><i class="fa fa-eye"></i></button>
       </div>
     </div>
     <div id="<%- idPrefix %>-order" class="orderDocuments-order">
@@ -24,7 +24,7 @@
       <span class="orderDocuments-order-name" data-property="documentName"></span>
     </div>
     <form id="<%- idPrefix %>-filterForm" class="orderDocuments-filter">
-      <input id="<%- idPrefix %>-filterPhrase" type="text" autocomplete="new-password" placeholder="&#61616; <%- t('orderDocuments', 'controls:filter:ph') %>" name="filterPhrase" autocomplete="off">
+      <input id="<%- idPrefix %>-filterPhrase" type="text" autocomplete="new-password" placeholder="&#61616; <%- helpers.t('controls:filter:ph') %>" name="filterPhrase" autocomplete="off">
     </form>
     <div id="<%- idPrefix %>-documents" class="orderDocuments-documents" tabindex="-1"></div>
     <div id="<%- idPrefix %>-embedded" class="orderDocuments-embedded-actions"></div>

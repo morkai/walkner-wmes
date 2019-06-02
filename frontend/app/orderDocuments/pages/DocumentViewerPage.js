@@ -5,23 +5,26 @@ define([
   'jquery',
   'app/user',
   'app/core/View',
+  'app/core/util/embedded',
   'app/production/snManager',
   '../views/DocumentViewerControlsView',
   '../views/DocumentViewerPreviewView',
+  '../views/BomView',
   'app/orderDocuments/templates/page'
 ], function(
   _,
   $,
   user,
   View,
+  embedded,
   snManager,
   DocumentViewerControlsView,
   DocumentViewerPreviewView,
+  BomView,
   template
 ) {
   'use strict';
 
-  var IS_EMBEDDED = window.parent !== window;
   var LOADED_FILES_COUNT_TO_REFRESH = 6;
   var BROWSER_VERSION = window.navigator.userAgent.match(/(Chrome)\/([0-9]+)/) || ['Unknown/0', 'Unknown', 0];
 
@@ -43,46 +46,76 @@ define([
 
     initialize: function()
     {
-      this.loadedFilesCount = 0;
-      this.$els = {
+      var page = this;
+
+      page.loadedFilesCount = 0;
+      page.$els = {
         controls: null,
         viewer: null
       };
+
+      page.defineViews();
+      page.defineBindings();
+
+      snManager.bind(page);
+
+      page.setView('#-controls', page.controlsView);
+      page.setView('#-preview', page.previewView);
+      page.setView('#-bom', page.bomView);
+    },
+
+    defineViews: function()
+    {
       this.controlsView = new DocumentViewerControlsView({
         model: this.model
       });
+
       this.previewView = new DocumentViewerPreviewView({
         model: this.model
       });
 
-      this.setView('#-controls', this.controlsView);
-      this.setView('#-preview', this.previewView);
+      this.bomView = new BomView({
+        model: this.model
+      });
+    },
 
-      $(window).on('resize.' + this.idPrefix, _.debounce(this.resize.bind(this), 1));
-      $(window).on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
+    defineBindings: function()
+    {
+      var page = this;
+      var updateClientState = _.debounce(page.updateClientState.bind(page), 1000);
 
-      if (IS_EMBEDDED)
+      page.listenTo(page.model, 'change:prodLine', page.joinProdLine);
+      page.listenTo(page.model, 'change:bom', page.onBomChanged);
+      page.listenTo(page.model, 'save', function()
       {
-        $(window).on('contextmenu.' + this.idPrefix, function(e) { e.preventDefault(); });
-      }
+        updateClientState();
 
-      this.listenTo(this.model, 'change:prodLine', this.joinProdLine);
-      this.listenTo(this.model, 'save', _.debounce(this.updateClientState.bind(this), 1000));
-      this.listenTo(
-        this.controlsView,
+        if (!page.model.isBomActive())
+        {
+          page.model.set('bom', null);
+        }
+      });
+      page.listenTo(
+        page.controlsView,
         'documentReloadRequested',
-        this.previewView.loadDocument.bind(this.previewView)
+        page.previewView.loadDocument.bind(page.previewView)
       );
-      this.listenTo(
-        this.controlsView,
+      page.listenTo(
+        page.controlsView,
         'documentWindowRequested',
-        setTimeout.bind(window, this.previewView.openDocumentWindow.bind(this.previewView), 1)
+        setTimeout.bind(window, page.previewView.openDocumentWindow.bind(page.previewView), 1)
       );
-      this.listenTo(this.previewView, 'fileLoaded', this.onFileLoaded);
+      page.listenTo(page.previewView, 'loadDocument:success', page.onFileLoaded);
 
-      this.socket.on('orderDocuments.remoteOrderUpdated', this.onRemoteOrderUpdated.bind(this));
+      page.socket.on('orderDocuments.remoteOrderUpdated', page.onRemoteOrderUpdated.bind(page));
 
-      snManager.bind(this);
+      $(window).on('resize.' + page.idPrefix, _.debounce(page.resize.bind(page), 1));
+      $(window).on('keydown.' + page.idPrefix, page.onKeyDown.bind(page));
+
+      if (embedded.isEnabled())
+      {
+        $(window).on('contextmenu.' + page.idPrefix, function(e) { e.preventDefault(); });
+      }
     },
 
     destroy: function()
@@ -100,17 +133,24 @@ define([
 
     afterRender: function()
     {
-      this.$els.controls = this.$id('controls');
-      this.$els.viewport = this.$id('viewport');
+      var page = this;
+
+      page.$els.controls = page.$id('controls');
+      page.$els.viewport = page.$id('viewport');
 
       $('body').addClass('no-overflow orderDocuments');
 
-      this.toggleConnectionStatus();
-      this.resize();
-      this.checkInitialConfig();
+      page.toggleConnectionStatus();
+      page.resize();
+      page.checkInitialConfig();
 
-      if (IS_EMBEDDED)
+      if (embedded.isEnabled())
       {
+        window.WMES_DOCS_BOM_TOGGLE = page.toggleBom.bind(page);
+        window.WMES_DOCS_BOM_ACTIVE = page.model.isBomActive.bind(page.model);
+
+        page.onBomChanged();
+
         window.parent.postMessage({type: 'ready', app: 'documents'}, '*');
       }
     },
@@ -119,6 +159,15 @@ define([
     {
       this.controlsView.resize(null, window.innerHeight);
       this.previewView.resize(null, window.innerHeight);
+      this.resizeBom();
+    },
+
+    resizeBom: function()
+    {
+      var filterForm = this.controlsView.$id('filterForm')[0];
+      var filterTop = filterForm ? filterForm.offsetTop : 0;
+
+      this.$id('bom').css('height', (window.innerHeight - filterTop + 1) + 'px');
     },
 
     toggleConnectionStatus: function()
@@ -255,6 +304,124 @@ define([
           return setTimeout(window.location.reload.bind(window.location), 10);
         }
       });
+    },
+
+    toggleBom: function(newState, done)
+    {
+      var currentOrder = this.model.getCurrentOrder();
+
+      if (!currentOrder.no)
+      {
+        return done(true);
+      }
+
+      if (newState === null)
+      {
+        newState = !this.model.isBomActive();
+      }
+
+      if (newState)
+      {
+        this.showBom(done);
+      }
+      else
+      {
+        this.hideBom(done);
+      }
+    },
+
+    hideBom: function(done)
+    {
+      var bom = this.model.get('bom');
+
+      if (bom && bom.active)
+      {
+        bom = _.defaults({active: false}, bom);
+
+        this.model.set('bom', bom);
+      }
+
+      if (done)
+      {
+        done();
+      }
+    },
+
+    showBom: function(done)
+    {
+      var page = this;
+
+      if (page.model.isBomActive())
+      {
+        if (done)
+        {
+          done();
+        }
+
+        return;
+      }
+
+      if (page.model.isBomAvailable())
+      {
+        var bom = _.defaults({active: true}, this.model.get('bom'));
+
+        page.model.set('bom', bom);
+
+        if (done)
+        {
+          done();
+        }
+
+        return;
+      }
+
+      var currentOrder = page.model.getCurrentOrder();
+      var req = page.ajax({
+        url: '/orders/' + currentOrder.no + '/documentContents?result=bom'
+      });
+
+      req.fail(function()
+      {
+        page.hideBom(function()
+        {
+          if (done)
+          {
+            done(true);
+          }
+        });
+      });
+
+      req.done(function(bom)
+      {
+        bom.active = true;
+        bom.orderNo = currentOrder.no;
+
+        page.model.set('bom', bom);
+
+        if (done)
+        {
+          done();
+        }
+      });
+    },
+
+    onBomChanged: function()
+    {
+      var active = this.model.isBomActive();
+      var $preview = this.previewView.$iframe;
+
+      if ($preview && $preview.length && $preview[0].contentWindow.toggleBom)
+      {
+        $preview[0].contentWindow.toggleBom(active);
+      }
+
+      if (active)
+      {
+        this.resizeBom();
+        this.bomView.render();
+      }
+
+      this.$id('bom').toggleClass('hidden', !active);
     }
 
   });

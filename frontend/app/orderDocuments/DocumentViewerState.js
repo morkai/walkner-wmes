@@ -34,6 +34,8 @@ define([
 
   return Model.extend({
 
+    nlsDomain: 'orderDocuments',
+
     defaults: function()
     {
       return {
@@ -60,7 +62,8 @@ define([
           nc15: null
         },
         localFile: null,
-        fileSource: null
+        fileSource: null,
+        bom: null
       };
     },
 
@@ -428,6 +431,34 @@ define([
       orderData.documents = newDocuments;
 
       return true;
+    },
+
+    isBomActive: function()
+    {
+      var bom = this.get('bom');
+
+      if (!bom || !bom.active)
+      {
+        return false;
+      }
+
+      var currentOrder = this.getCurrentOrder();
+
+      return !!currentOrder.no && currentOrder.no === bom.orderNo;
+    },
+
+    isBomAvailable: function()
+    {
+      var bom = this.get('bom');
+
+      if (!bom)
+      {
+        return false;
+      }
+
+      var currentOrder = this.getCurrentOrder();
+
+      return !!currentOrder.no && currentOrder.no === bom.orderNo;
     }
 
   });

@@ -298,11 +298,10 @@ define([
       $(window).off('.' + this.idPrefix);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
-        touch: window.location.search.indexOf('touch') !== -1
+        touch: embedded.isEnabled()
       };
     },
 
@@ -940,7 +939,8 @@ define([
 
       if (activeElement.tagName === 'INPUT'
         || activeElement.tagName === 'TEXTAREA'
-        || activeElement.tagName === 'SELECT')
+        || activeElement.tagName === 'SELECT'
+        || this.model.isBomActive())
       {
         return;
       }

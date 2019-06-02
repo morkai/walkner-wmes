@@ -1,6 +1,7 @@
 @import url(../../production/assets/modal.css);
 @import url(../../production/assets/taktTime.css);
 @import url(../../production/assets/bomChecker.css);
+@import url(./bom.css);
 
 .orderDocuments {
   background-color: #ccc;
@@ -197,6 +198,7 @@
 }
 .is-enlarged > .orderDocuments-buttons-addImprovement {
   top: 70px;
+  right: 79px;
   box-shadow: 0 4px 12px #666;
 }
 .orderDocuments-buttons-lockUi {
@@ -213,9 +215,12 @@
   margin: 0;
 }
 .orderDocuments-buttons-addImprovement > .btn {
-  width: 38px;
+  width: 45.59px;
   border-right: none;
   border-left: 1px solid #000!important;
+}
+.is-enlarged > .orderDocuments-buttons-addImprovement > .btn {
+  border-right: 1px solid #000!important;
 }
 .orderDocuments-buttons-addImprovement > .btn:last-child {
   border-bottom: 1px solid #000;
@@ -234,7 +239,7 @@
   position: relative;
   display: block;
   padding: 8px;
-  color: #ccc;
+  color: #ddd;
   cursor: pointer;
   background: #333;
   border-right: 1px solid #000;

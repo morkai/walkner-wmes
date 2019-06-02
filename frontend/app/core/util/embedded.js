@@ -21,6 +21,7 @@ define([
 ) {
   'use strict';
 
+  var enabled = window.parent !== window || window.location.href.indexOf('_embedded=1') !== -1;
   var switchTimer = null;
 
   function handleWindowMessage(e)
@@ -156,9 +157,11 @@ define([
       }
     },
 
+    isEnabled: function() { return enabled; },
+
     render: function(view, options)
     {
-      if (window.parent === window)
+      if (!enabled)
       {
         return;
       }

@@ -1,0 +1,67 @@
+<div class="orderDocuments-bom <%- touch ? 'is-touch' : '' %>">
+  <div class="orderDocuments-bom-hd">
+    <input id="<%- idPrefix %>-filter" class="orderDocuments-bom-filter" type="text" value="<%= filterPhrase %>" placeholder="&#61616; <%- helpers.t('bom:filter:ps') %>" data-vkb="numeric">
+    <div id="<%- idPrefix %>-documents" class="orderDocuments-bom-documents">
+      <% documents.forEach(function(document) { %>
+      <div class="orderDocuments-bom-document" data-nc15="<%- document.nc15 %>">
+        <div class="orderDocuments-bom-document-name"><%= document.name %></div>
+        <div class="orderDocuments-bom-document-code"><%= document.nc15 %></div>
+      </div>
+      <% }) %>
+      <div class="orderDocuments-bom-filler" style="width: <%- scrollbarSize.width %>px">&nbsp;</div>
+    </div>
+  </div>
+  <div class="orderDocuments-bom-bd">
+    <div id="<%- idPrefix %>-components" class="orderDocuments-bom-components">
+      <% components.forEach(function(component, componentI) { %>
+      <div class="orderDocuments-bom-component <%- component.visible ? '' : 'hidden' %>" data-component-index="<%- componentI %>">
+        <div class="orderDocuments-bom-component-label">
+          <div class="orderDocuments-bom-component-name"><%= component.name %></div>
+          <div class="orderDocuments-bom-component-code">
+            <span class="orderDocuments-bom-component-item"><%= component.item %></span>
+            <span class="orderDocuments-bom-component-nc12"><%= component.nc12 %></span>
+          </div>
+        </div>
+        <div class="orderDocuments-bom-component-qty">
+          <div class="orderDocuments-bom-component-qty-value"><%= component.nc12 ? component.qty.toLocaleString() : '' %></div>
+          <div class="orderDocuments-bom-component-qty-unit"><%= component.nc12 ? component.unit : '' %></div>
+        </div>
+      </div>
+      <% }) %>
+      <div class="orderDocuments-bom-filler" style="height: <%- scrollbarSize.height %>px">&nbsp;</div>
+    </div>
+    <div id="<%- idPrefix %>-documentPages" class="orderDocuments-bom-documentPages">
+      <% components.forEach(function(component,  componentI) { %>
+      <div class="orderDocuments-bom-documentPages-component <%- component.hasAnyMarks ? '' : 'orderDocuments-bom-documentPages-component-empty' %> <%- component.visible ? '' : 'hidden' %>" data-component-index="<%- componentI %>">
+        <% component.documentPages.forEach(function(documentPages) { %>
+        <div class="orderDocuments-bom-documentPages-document">
+          <% for (var i = 0; i < 4; ++i) { %>
+          <% if (i === 3 && documentPages.length > 4) { %>
+          <div class="orderDocuments-bom-documentPages-page orderDocuments-bom-documentPages-more" data-document="<%- documentPages[i].document %>">
+            ...
+          </div>
+          <% } else if (documentPages[i]) { %>
+          <div class="orderDocuments-bom-documentPages-page" data-document="<%- documentPages[i].document %>" data-page="<%- documentPages[i].page %>">
+            <%- documentPages[i].page %>
+          </div>
+          <% } else { %>
+          <div class="orderDocuments-bom-documentPages-page orderDocuments-bom-documentPages-empty">
+            &nbsp;
+          </div>
+          <% } %>
+          <% } %>
+        </div>
+        <% }) %>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+  <div class="orderDocuments-bom-ft">
+    <button id="<%- idPrefix %>-close" class="btn btn-default"><i class="fa fa-close"></i></button>
+    <button id="<%- idPrefix %>-prev" class="btn btn-default"><i class="fa fa-backward"></i></button>
+    <button id="<%- idPrefix %>-next" class="btn btn-default"><i class="fa fa-forward"></i></button>
+    <button id="<%- idPrefix %>-collapse" class="btn btn-default"><i class="fa fa-compress"></i></button>
+    <button id="<%- idPrefix %>-expand" class="btn btn-default"><i class="fa fa-expand"></i></button>
+  </div>
+  <div id="<%- idPrefix %>-vkb"></div>
+</div>

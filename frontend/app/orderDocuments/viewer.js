@@ -14,6 +14,7 @@ Viewer.TEMPLATE =
   '<div class="viewer-footer">' +
   '<div class="viewer-title"></div>' +
   '<ul class="viewer-toolbar">' +
+  '<li id="bomToggle" title="Pokaż komponenty">BOM</li>' +
   '<li id="lockUi" title="Zablokuj interfejs"><span class="fa fa-lock"></span></li>' +
   '<li id="pdf" title="Pokaż oryginalny plik PDF"><span class="fa fa-file-pdf-o"></span></li>' +
   '<li class="viewer-zoom-in" data-viewer-action="zoom-in" title="Powiększ"><span class="fa fa-plus"></span></li>' +
@@ -89,7 +90,7 @@ var viewer = new Viewer(document.getElementById('images'), {
   }
 });
 
-window.onload = function()
+window.addEventListener('load', function()
 {
   viewer.show();
 
@@ -193,7 +194,16 @@ window.onload = function()
       viewer.view(pageNo - 1);
     });
   }
-};
+
+  if (window.parent.WMES_DOCS_BOM_TOGGLE)
+  {
+    var bomToggle = document.getElementById('bomToggle');
+
+    bomToggle.addEventListener('click', function() { toggleBom(); });
+
+    toggleBom(window.parent.WMES_DOCS_BOM_ACTIVE()); // eslint-disable-line new-cap
+  }
+});
 
 function renderPages(currentPage)
 {
@@ -314,7 +324,7 @@ function generatePages(firstPageNr, lastPageNr, currentPage)
   return pages;
 }
 
-function showMarks(marks) // eslint-disable-line no-unused-vars
+function showMarks(marks, page) // eslint-disable-line no-unused-vars
 {
   var anyMarksOnCurrentPage = false;
   var currentPage = viewer.index + 1;
@@ -335,7 +345,20 @@ function showMarks(marks) // eslint-disable-line no-unused-vars
 
   adjustViewportAfterMarks = true;
 
-  if (anyMarksOnCurrentPage)
+  if (page)
+  {
+    page -= 1;
+
+    if (page === viewer.index)
+    {
+      adjustMarks();
+    }
+    else
+    {
+      viewer.view(page);
+    }
+  }
+  else if (anyMarksOnCurrentPage)
   {
     adjustMarks();
   }
@@ -349,7 +372,10 @@ function adjustMarks()
 {
   var marksEl = document.getElementById('marks');
 
-  marksEl.style.cssText = viewer.image.style.cssText;
+  if (viewer.image)
+  {
+    marksEl.style.cssText = viewer.image.style.cssText;
+  }
 
   var markEls = marksEl.querySelectorAll('.mark');
 
@@ -452,4 +478,43 @@ function adjustViewport()
 
   viewer.zoomTo(newRatio, false);
   viewer.moveTo(x2 - newLeft, y2 - newTop);
+}
+
+function toggleBom(newState)
+{
+  var bomToggle = document.getElementById('bomToggle');
+
+  if (typeof newState === 'boolean')
+  {
+    bomToggle.classList.toggle('is-active', newState);
+
+    return;
+  }
+
+  if (bomToggle.classList.contains('is-loading')
+    || bomToggle.classList.contains('is-error'))
+  {
+    return;
+  }
+
+  bomToggle.classList.add('is-loading');
+
+  bomToggle.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+
+  newState = !bomToggle.classList.contains('is-active');
+
+  window.parent.WMES_DOCS_BOM_TOGGLE(newState, function(failure) // eslint-disable-line new-cap
+  {
+    if (failure)
+    {
+      bomToggle.classList.add('is-error');
+
+      setTimeout(function() { bomToggle.classList.remove('is-error'); }, 3000);
+    }
+
+    bomToggle.classList.remove('is-loading');
+    bomToggle.classList.toggle('is-active', window.parent.WMES_DOCS_BOM_ACTIVE()); // eslint-disable-line new-cap
+
+    bomToggle.innerHTML = 'BOM';
+  });
 }
