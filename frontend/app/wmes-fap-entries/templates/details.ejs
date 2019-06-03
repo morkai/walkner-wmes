@@ -1,6 +1,16 @@
 <div class="fap-details">
-  <div id="<%- idPrefix %>-message" class="message message-inline message-<%- model.message.type %>">
-    <%- model.message.text %>
+  <div class="fap-details-hd">
+    <div id="<%- idPrefix %>-message" class="message message-inline message-<%- model.message.type %>">
+      <%- model.message.text %>
+    </div>
+    <div id="<%- idPrefix %>-levelIndicator">
+      <%- model.levelIndicator %>
+    </div>
+    <% if (statusAction) { %>
+    <button id="<%- idPrefix %>-statusAction" class="btn btn-<%- statusAction.type %>">
+      <%- statusAction.label %>
+    </button>
+    <% } %>
   </div>
   <div class="fap-props">
     <div class="fap-prop" data-prop="category">

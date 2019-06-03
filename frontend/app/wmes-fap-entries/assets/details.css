@@ -3,10 +3,25 @@
   width: 1200px;
   text-align: center;
 }
-.fap-details .message {
+
+.fap-details-hd {
+  display: flex;
   margin-bottom: 30px;
+}
+.fap-details-hd .message {
+  flex: 1 1 auto;
+  padding: 0;
+  line-height: 50px;
+  font-size: 21px;
   text-align: center;
   box-shadow: none;
+}
+.fap-details-hd .btn {
+  flex: 0 0 auto;
+  margin-left: 15px;
+  padding: 5px 20px;
+  font-size: 28px;
+  min-width: 320px;
 }
 .fap-props {
   display: flex;
@@ -271,6 +286,21 @@
 @media (max-width: 1272px) {
   .fap-details {
     width: 100%;
+  }
+  .fap-details-hd {
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  .fap-details-hd .fap-levelIndicator-outer {
+    margin-top: 15px;
+    justify-content: center;
+  }
+  .fap-details-hd .fap-levelIndicator-inner:first-child {
+    margin-left: 0;
+  }
+  .fap-details-hd .btn {
+    margin-top: 15px;
+    margin-left: 0;
   }
   .fap-props,
   .fap-chatAndAside {

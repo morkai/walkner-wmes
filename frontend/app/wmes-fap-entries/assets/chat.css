@@ -33,7 +33,7 @@
   cursor: pointer;
 }
 .fap-chat-messages {
-  padding: 24px;
+  padding: 24px 24px 0 24px;
   border: 1px solid #ddd;
   border-bottom: none;
   text-align: left;
@@ -46,6 +46,9 @@
 }
 .fap-chat-message + .fap-chat-message {
   margin-top: 15px;
+}
+.fap-chat-message:last-child {
+  margin-bottom: 24px;
 }
 .fap-chat-lines {
   display: inline-block;

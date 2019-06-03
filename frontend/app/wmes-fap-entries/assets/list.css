@@ -13,16 +13,16 @@
 .fap-list-lines {
   display: inline-block;
   vertical-align: top;
-  max-width: 275px;
+  max-width: 250px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .fap-list-problem {
-  max-width: 400px;
+  max-width: 350px;
 }
 .fap-list-lines {
-  max-width: 250px;
+  max-width: 225px;
 }
 .fap-entries-list .fap-is-unseen {
   font-weight: bold;

@@ -26,6 +26,7 @@ define([
     'count',
     'duration',
     'status',
+    'level',
     'category',
     'subdivisionType',
     'division',
@@ -57,7 +58,8 @@ define([
         categories: [],
         subdivisionTypes: [],
         divisions: [],
-        mrps: []
+        mrps: [],
+        levels: 0
       };
     },
 
@@ -77,7 +79,8 @@ define([
           'categories',
           'subdivisionTypes',
           'divisions',
-          'mrps'
+          'mrps',
+          'levels'
         ])
       );
 
@@ -98,7 +101,8 @@ define([
         + '&categories=' + this.get('categories')
         + '&subdivisionTypes=' + this.get('subdivisionTypes')
         + '&divisions=' + this.get('divisions')
-        + '&mrps=' + this.get('mrps');
+        + '&mrps=' + this.get('mrps')
+        + '&levels=' + this.get('levels');
     },
 
     parse: function(report)
@@ -316,7 +320,8 @@ define([
         categories: _.isEmpty(query.categories) ? [] : query.categories.split(','),
         subdivisionTypes: _.isEmpty(query.subdivisionTypes) ? [] : query.subdivisionTypes.split(','),
         divisions: _.isEmpty(query.divisions) ? [] : query.divisions.split(','),
-        mrps: _.isEmpty(query.mrps) ? [] : query.mrps.split(',')
+        mrps: _.isEmpty(query.mrps) ? [] : query.mrps.split(','),
+        levels: +query.levels || undefined
       });
     }
 

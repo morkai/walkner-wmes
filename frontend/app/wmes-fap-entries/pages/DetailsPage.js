@@ -63,36 +63,6 @@ define([
       var actions = [];
       var details = this.model.serializeDetails();
       var auth = details.auth;
-      var status = this.model.get('status');
-
-      if (status === 'finished')
-      {
-        if (auth.restart)
-        {
-          actions.push({
-            type: 'info',
-            label: this.t('PAGE_ACTION:restart'),
-            callback: this.start.bind(this)
-          });
-        }
-      }
-      else if (auth.status)
-      {
-        if (status === 'pending')
-        {
-          actions.push({
-            type: 'info',
-            label: this.t('PAGE_ACTION:start'),
-            callback: this.start.bind(this)
-          });
-        }
-
-        actions.push({
-          type: 'success',
-          label: this.t('PAGE_ACTION:finish'),
-          callback: this.finish.bind(this)
-        });
-      }
 
       actions.push({
         icon: 'eye',
@@ -166,7 +136,7 @@ define([
 
       page.listenTo(
         entry,
-        'change:status change:observers change:unsubscribed',
+        'change:observers change:unsubscribed',
         _.debounce(page.updateActions.bind(page), 1)
       );
 
@@ -225,30 +195,6 @@ define([
     leave: function()
     {
       this.socket.emit('fap.entries.leave', this.model.id);
-    },
-
-    finish: function()
-    {
-      if (this.model.get('solution').trim() === '')
-      {
-        this.view.showEditor(this.$('.fap-is-editable[data-prop="solution"]'), 'solution');
-      }
-      else
-      {
-        this.model.multiChange({
-          status: 'finished',
-          finishedAt: new Date()
-        });
-      }
-    },
-
-    start: function()
-    {
-      this.model.multiChange({
-        status: 'started',
-        startedAt: new Date(),
-        finishedAt: null
-      });
     },
 
     subscribe: function()

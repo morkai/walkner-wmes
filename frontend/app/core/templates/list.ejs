@@ -31,14 +31,14 @@
         >
           <% columns.forEach(function(column) { %>
           <td <%- typeof column.tdAttrs === 'function' ? column.tdAttrs(row) : (column.tdAttrs || '') %> data-id="<%- column.id %>">
-          <% if (row[column.id] == null) { %>
+          <% if (row[column.valueProperty] == null) { %>
             <% if (column.noData == null) { %>
             <em><%- t('core', 'LIST:NO_DATA:cell') %></em>
             <% } else { %>
             <%- column.noData %>
             <% } %>
             <% } else { %>
-            <%- typeof column.tdDecorator === 'function' ? column.tdDecorator(column.id, row[column.id]) : row[column.id] %>
+            <%- typeof column.tdDecorator === 'function' ? column.tdDecorator(column.id, row[column.valueProperty], row) : row[column.valueProperty] %>
             <% } %>
           </td>
           <% }) %>

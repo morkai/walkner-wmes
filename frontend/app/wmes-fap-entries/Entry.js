@@ -11,7 +11,8 @@ define([
   '../core/Model',
   '../data/colorFactory',
   './dictionaries',
-  'app/core/templates/userInfo'
+  'app/core/templates/userInfo',
+  'app/wmes-fap-entries/templates/levelIndicator'
 ], function(
   _,
   $,
@@ -23,7 +24,8 @@ define([
   Model,
   colorFactory,
   dictionaries,
-  userInfoTemplate
+  userInfoTemplate,
+  levelIndicatorTemplate
 ) {
   'use strict';
 
@@ -260,6 +262,12 @@ define([
         obj.productName = obj.componentName;
       }
 
+      obj.levelIndicator = levelIndicatorTemplate({
+        level: obj.level,
+        canIncrease: false,
+        canManage: false
+      });
+
       return this.serialized = obj;
     },
 
@@ -315,6 +323,12 @@ define([
           break;
       }
 
+      obj.levelIndicator = levelIndicatorTemplate({
+        level: obj.level,
+        canIncrease: obj.auth.level,
+        canManage: obj.auth.manage
+      });
+
       return this.serialized = obj;
     },
 
@@ -322,6 +336,7 @@ define([
     {
       var manage = user.isAllowedTo('FAP:MANAGE');
       var loggedIn = user.isLoggedIn();
+      var manager = user.isAllowedTo('FN:manager');
       var procEng = user.isAllowedTo('FN:process-engineer', 'FN:process-engineer-NPI');
       var designer = user.isAllowedTo('FN:designer', 'FN:designer_eto');
       var master = user.isAllowedTo('FN:master');
@@ -335,6 +350,7 @@ define([
       var status = this.get('status');
       var pending = status === 'pending';
       var started = status === 'started';
+      var finished = status === 'finished';
       var analysisNeed = this.get('analysisNeed');
       var analysisDone = this.get('analysisDone');
       var mainAnalyzerAuth = !pending && analysisNeed && !analysisDone && (manage || procEng || master);
@@ -342,11 +358,13 @@ define([
 
       return {
         delete: this.canDelete(),
+        manage: manage,
         comment: loggedIn,
         attachments: loggedIn,
         observers: loggedIn,
         restart: manage,
         status: solver,
+        level: !finished && (solver || manager),
         solution: solver,
         problem: started && (manage || procEng || designer || master || leader),
         category: manage || procEng || designer,
@@ -962,6 +980,7 @@ define([
       },
 
       status: 1,
+      level: 1,
       startedAt: 1,
       finishedAt: 1,
       problem: 1,

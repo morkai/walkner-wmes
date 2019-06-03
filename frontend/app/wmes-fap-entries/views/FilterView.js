@@ -37,6 +37,7 @@ define([
     'category',
     'subdivisionType',
     'divisions',
+    'level',
     'limit'
   ];
   var FILTER_MAP = {
@@ -61,6 +62,15 @@ define([
         e.preventDefault();
 
         this.showFilter(e.currentTarget.dataset.filter);
+      },
+
+      'click #-level .active': function(e)
+      {
+        setTimeout(function()
+        {
+          e.currentTarget.classList.remove('active');
+          e.currentTarget.querySelector('input').checked = false;
+        }, 1);
       }
 
     }, FilterView.prototype.events),
@@ -79,11 +89,12 @@ define([
       {
         formData.order = term.args[1];
       },
+      'nc12': 'orderNo',
       'search': function(propertyName, term, formData)
       {
-        formData.search = term.args[1];
+        formData[propertyName] = term.args[1];
       },
-      'nc12': 'orderNo',
+      'level': 'search',
       'observers.user.id': function(propertyName, term, formData)
       {
         if (term.args[1] === currentUser.data._id)
@@ -139,6 +150,7 @@ define([
     {
       var userType = this.$('input[name="userType"]:checked').val();
       var statusType = this.$('input[name="statusType"]:checked').val();
+      var level = this.$('input[name="level"]:checked').val();
       var status = (this.$id('status').val() || []).filter(function(v) { return !_.isEmpty(v); });
       var divisions = (this.$id('divisions').val() || []).filter(function(v) { return !_.isEmpty(v); });
       var subdivisionType = (this.$id('subdivisionType').val() || []).filter(function(v) { return !_.isEmpty(v); });
@@ -182,6 +194,11 @@ define([
           {name: 'eq', args: ['analysisNeed', true]},
           {name: 'eq', args: ['analysisDone', false]}
         );
+      }
+
+      if (level > 0)
+      {
+        selector.push({name: 'eq', args: ['level', +level]});
       }
 
       if (mrp && mrp.length)
@@ -236,6 +253,7 @@ define([
         data: dictionaries.categories.map(idAndLabel)
       });
 
+      this.toggleButtonGroup('level');
       this.toggleUserSelect2(false);
       this.toggleStatus();
       this.toggleFilters();
@@ -288,9 +306,13 @@ define([
         return $from.val().length > 0 || $to.val().length > 0;
       }
 
-      var value = this.$id(filter).val() || '';
+      var $filter = this.$id(filter);
 
-      return value.length > 0;
+      var value = $filter.hasClass('btn-group')
+        ? $filter.find('.active > input').val()
+        : $filter.val();
+
+      return typeof value === 'string' && value.length > 0;
     },
 
     showFilter: function(filter)

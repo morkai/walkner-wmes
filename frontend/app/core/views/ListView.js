@@ -183,6 +183,11 @@ define([
           column = {id: column, label: t.bound(nlsDomain, 'PROPERTY:' + column)};
         }
 
+        if (!column.valueProperty)
+        {
+          column.valueProperty = column.id;
+        }
+
         if (!column.label && column.label !== '')
         {
           column.label = t.bound(nlsDomain, 'PROPERTY:' + column.id);

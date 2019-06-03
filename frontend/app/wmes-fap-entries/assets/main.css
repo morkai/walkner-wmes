@@ -1,5 +1,6 @@
 @import url(./navbar.css);
 @import url(./addForm.css);
+@import url(./levelIndicator.css);
 @import url(./list.css);
 @import url(./details.css);
 @import url(./chat.css);
@@ -8,4 +9,3 @@
 @import url(./analysis.css);
 @import url(./history.css);
 @import url(./report.css);
-

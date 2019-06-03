@@ -39,6 +39,14 @@ define([
         this.changeFilter();
 
         return false;
+      },
+      'click #-levels .active': function(e)
+      {
+        setTimeout(function()
+        {
+          e.currentTarget.classList.remove('active');
+          e.currentTarget.querySelector('input').checked = false;
+        }, 1);
       }
     },
 
@@ -52,6 +60,7 @@ define([
       js2form(this.el, this.serializeFormData());
 
       buttonGroup.toggle(this.$id('interval'));
+      buttonGroup.toggle(this.$id('levels'));
 
       this.$('.is-expandable').expandableSelect();
 
@@ -92,7 +101,8 @@ define([
         categories: model.get('categories').join(','),
         mrps: model.get('mrps').join(','),
         subdivisionTypes: model.get('subdivisionTypes').join(','),
-        divisions: model.get('divisions').join(',')
+        divisions: model.get('divisions').join(','),
+        levels: model.get('levels')
       };
     },
 
@@ -103,7 +113,8 @@ define([
       var query = {
         from: range.from ? range.from.valueOf() : 0,
         to: range.to ? range.to.valueOf() : 0,
-        interval: buttonGroup.getValue(this.$id('interval'))
+        interval: buttonGroup.getValue(this.$id('interval')),
+        levels: parseInt(buttonGroup.getValue(this.$id('levels')), 10) || 0
       };
 
       ['categories', 'mrps', 'subdivisionTypes', 'divisions'].forEach(function(prop)

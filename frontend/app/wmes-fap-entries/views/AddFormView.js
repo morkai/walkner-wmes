@@ -92,7 +92,7 @@ define([
       },
       'input #-orderNo, #-problem': function(e)
       {
-        this.model.attributes[e.target.name] = e.target.value;
+        this.model.attributes[e.target.name] = e.target.value.trim();
 
         e.target.setCustomValidity('');
 
@@ -105,7 +105,7 @@ define([
       },
       'input #-componentCode': function(e)
       {
-        this.model.attributes[e.target.name] = e.target.value;
+        this.model.attributes[e.target.name] = e.target.value.trim();
 
         e.target.setCustomValidity('');
 

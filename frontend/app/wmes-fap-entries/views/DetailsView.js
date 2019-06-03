@@ -43,6 +43,32 @@ define([
 
     events: {
 
+      'click #-statusAction': function(e)
+      {
+        if (e.currentTarget.classList.contains('btn-info'))
+        {
+          this.start();
+        }
+        else if (e.currentTarget.classList.contains('btn-success'))
+        {
+          this.finish();
+        }
+      },
+      'click .fap-levelIndicator-inner': function(e)
+      {
+        var details = this.model.serializeDetails();
+        var newLevel = +e.currentTarget.dataset.level;
+
+        if (newLevel === details.level)
+        {
+          return;
+        }
+
+        if (details.auth.manage || (details.auth.level && newLevel === details.level + 1))
+        {
+          this.model.change('level', newLevel);
+        }
+      },
       'click .fap-editable-toggle': function(e)
       {
         var $prop = this.$(e.target).closest('.fap-prop');
@@ -115,8 +141,43 @@ define([
     getTemplateData: function()
     {
       return {
+        statusAction: this.serializeStatusAction(),
         model: this.model.serializeDetails()
       };
+    },
+
+    serializeStatusAction: function()
+    {
+      var auth = this.model.serializeDetails().auth;
+      var status = this.model.get('status');
+
+      if (status === 'finished')
+      {
+        if (auth.restart)
+        {
+          return {
+            type: 'info',
+            label: this.t('PAGE_ACTION:restart')
+          };
+        }
+      }
+      else if (auth.status)
+      {
+        if (status === 'pending')
+        {
+          return {
+            type: 'info',
+            label: this.t('PAGE_ACTION:start')
+          };
+        }
+
+        return {
+          type: 'success',
+          label: this.t('PAGE_ACTION:finish')
+        };
+      }
+
+      return null;
     },
 
     afterRender: function()
@@ -165,7 +226,10 @@ define([
       switch (prop)
       {
         case 'status':
-          return this.updateMessage;
+          return this.updateStatus;
+
+        case 'level':
+          return this.updateLevel;
 
         case 'why5':
           return this.updateWhy5;
@@ -361,6 +425,23 @@ define([
       this.updateProp('analyzers');
     },
 
+    updateStatus: function()
+    {
+      this.updateMessage();
+
+      var statusAction = this.serializeStatusAction();
+
+      this.$id('statusAction')
+        .removeClass('btn-info btn-success')
+        .addClass('btn-' + statusAction.type)
+        .text(statusAction.label);
+    },
+
+    updateLevel: function()
+    {
+      this.$id('levelIndicator').html(this.model.serializeDetails().levelIndicator);
+    },
+
     updateMessage: function()
     {
       var details = this.model.serializeDetails();
@@ -501,6 +582,30 @@ define([
       });
 
       contextMenu.show(this, e.pageY, e.pageX, menu);
+    },
+
+    finish: function()
+    {
+      if (this.model.get('solution').trim() === '')
+      {
+        this.showEditor(this.$('.fap-is-editable[data-prop="solution"]'), 'solution');
+      }
+      else
+      {
+        this.model.multiChange({
+          status: 'finished',
+          finishedAt: new Date()
+        });
+      }
+    },
+
+    start: function()
+    {
+      this.model.multiChange({
+        status: 'started',
+        startedAt: new Date(),
+        finishedAt: null
+      });
     },
 
     onKeyDown: function(e)

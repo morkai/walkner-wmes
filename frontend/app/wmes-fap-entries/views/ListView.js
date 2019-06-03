@@ -102,6 +102,7 @@ define([
         {id: 'divisions', className: 'is-min', thClassName: filter},
         {id: 'lines', className: 'is-min'},
         {id: 'problem', className: 'is-min', thClassName: filter},
+        {id: 'level', valueProperty: 'levelIndicator', className: 'is-min', thClassName: filter},
         '-'
       );
 
@@ -148,22 +149,17 @@ define([
         html: true,
         content: function()
         {
-          if (this.dataset.id === 'category'
-            && this.firstElementChild.clientWidth >= 275)
+          var outer = this;
+          var inner = outer.firstElementChild;
+
+          if (!inner || inner.tagName !== 'SPAN')
           {
-            return this.textContent.trim();
+            return;
           }
 
-          if (this.dataset.id === 'problem'
-            && this.firstElementChild.clientWidth >= 400)
+          if ($(inner).outerWidth() >= $(outer).width())
           {
-            return this.textContent.trim();
-          }
-
-          if (this.dataset.id === 'lines'
-            && this.firstElementChild.clientWidth >= 250)
-          {
-            return this.textContent.trim();
+            return outer.textContent.trim();
           }
         },
         template: function(template)
