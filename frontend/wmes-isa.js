@@ -123,12 +123,12 @@
 
       if (typeof window.onPageShown === 'function')
       {
-        broker.subscribe('viewport.page.shown', window.onPageShown);
+        broker.subscribe('viewport.page.shown', window.onPageShown).setLimit(1);
       }
 
       domReady(function()
       {
-        startBroker.subscribe('viewport.page.shown', reveal);
+        startBroker.subscribe('viewport.page.shown', reveal).setLimit(1);
 
         if (window.ENV)
         {
