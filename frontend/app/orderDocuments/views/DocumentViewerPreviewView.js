@@ -273,7 +273,7 @@ define([
         + '&w=' + this.$iframe.width()
         + '&h=' + this.$iframe.height();
 
-      //if (!embedded.isEnabled())
+      if (!embedded.isEnabled())
       {
         query += '&pdf=1';
       }
