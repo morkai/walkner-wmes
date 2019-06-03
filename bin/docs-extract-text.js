@@ -23,13 +23,30 @@ fs.readdirSync(root).forEach(nc15 =>
       return;
     }
 
-    const pdfFile = path.join(root, nc15, hash, `${nc15}.pdf`);
+    const metaPath = path.join(root, nc15, hash, `meta.json`);
+    const pdfPath = path.join(root, nc15, hash, `${nc15}.pdf`);
 
     try
     {
-      const meta = execSync(`node ${extractText} ${pdfFile}`);
+      const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+      const extractedText = JSON.parse(execSync(`node ${extractText} ${pdfPath}`).toString());
 
-      fs.writeFileSync(path.join(root, nc15, hash, 'meta.json'), meta);
+      if (extractedText.meta.Title && !meta.title)
+      {
+        meta.title = extractedText.meta.Title;
+      }
+
+      if (extractedText.pages)
+      {
+        meta.pages = extractedText.pages;
+
+        if (!meta.pageCount)
+        {
+          meta.pageCount = extractedText.pages.length;
+        }
+      }
+
+      fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2));
     }
     catch (err)
     {
