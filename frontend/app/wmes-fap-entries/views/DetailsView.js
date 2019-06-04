@@ -7,6 +7,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/util/idAndLabel',
+  'app/core/util/isElementInView',
   'app/data/orgUnits',
   'app/users/util/setUpUserSelect2',
   'app/planning/util/contextMenu',
@@ -24,6 +25,7 @@ define([
   viewport,
   View,
   idAndLabel,
+  isElementInView,
   orgUnits,
   setUpUserSelect2,
   contextMenu,
@@ -500,6 +502,8 @@ define([
         $prop.addClass('fap-is-editing');
 
         this.editors[prop].call(this, $prop, prop);
+
+        this.trigger('editor:shown', prop);
       }
     },
 
@@ -515,7 +519,9 @@ define([
 
       $editor.remove();
 
-      view.$('.fap-is-editing').removeClass('fap-is-editing');
+      var prop = view.$('.fap-is-editing').removeClass('fap-is-editing').attr('data-prop');
+
+      view.trigger('editor:hidden', prop);
     },
 
     showAutolinkMenu: function(e)
@@ -589,6 +595,18 @@ define([
       if (this.model.get('solution').trim() === '')
       {
         this.showEditor(this.$('.fap-is-editable[data-prop="solution"]'), 'solution');
+
+        this.once('editor:hidden', function()
+        {
+          if (this.model.get('solution').trim() !== '')
+          {
+            window.scrollTo({
+              top: 0,
+              left: 0,
+              behavior: 'smooth'
+            });
+          }
+        });
       }
       else
       {
@@ -663,15 +681,19 @@ define([
           .append($submit)
           .appendTo($prop.find('.fap-prop-value'));
 
-        $value.focus();
+        var propTop = $prop[0].offsetTop;
+        var height = (propTop - $form.offset().top) + $form.outerHeight(true);
 
-        if ($submit[0].scrollIntoViewIfNeeded)
+        if (isElementInView($prop, {fullyInView: true, height: height}))
         {
-          $submit[0].scrollIntoViewIfNeeded();
+          $value.focus();
         }
         else
         {
-          $submit[0].scrollIntoView();
+          $('html, body').stop(true, false).animate({scrollTop: propTop}, function()
+          {
+            $value.focus();
+          });
         }
       },
 
