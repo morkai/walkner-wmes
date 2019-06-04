@@ -68,7 +68,9 @@ define([
         width: '350px',
         allowClear: true,
         multiple: true,
-        data: dictionaries.categories.map(idAndLabel)
+        data: dictionaries.categories
+          .filter(function(c) { return c.get('active'); })
+          .map(idAndLabel)
       });
 
       setUpMrpSelect2(this.$id('mrps'), {

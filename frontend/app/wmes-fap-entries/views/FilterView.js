@@ -250,7 +250,9 @@ define([
         width: '280px',
         multiple: true,
         allowClear: true,
-        data: dictionaries.categories.map(idAndLabel)
+        data: dictionaries.categories
+          .filter(function(c) { return c.get('active'); })
+          .map(idAndLabel)
       });
 
       this.toggleButtonGroup('level');
