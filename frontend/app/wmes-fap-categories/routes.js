@@ -6,20 +6,21 @@ define([
   '../viewport',
   '../user',
   '../core/util/showDeleteFormPage',
-  './Category',
-  './storage'
+  '../wmes-fap-entries/dictionaries',
+  './Category'
 ], function(
   _,
   router,
   viewport,
   user,
   showDeleteFormPage,
-  Category,
-  storage
+  dictionaries,
+  Category
 ) {
   'use strict';
 
   var nls = 'i18n!app/nls/wmes-fap-categories';
+  var baseBreadcrumb = '#fap/entries';
   var canView = user.auth('FAP:MANAGE');
   var canManage = canView;
 
@@ -27,14 +28,22 @@ define([
   {
     viewport.loadPage(
       [
-        'app/wmes-fap-categories/pages/ListPage',
+        'app/core/pages/ListPage',
         nls
       ],
       function(ListPage)
       {
-        return new ListPage({
-          collection: storage.acquire()
-        });
+        return dictionaries.bind(new ListPage({
+          baseBreadcrumb: baseBreadcrumb,
+          columns: [
+            {id: 'name', className: 'is-min'},
+            {id: 'active', className: 'is-min'},
+            {id: 'etoCategory', className: 'is-min'},
+            {id: 'planners', className: 'is-min'},
+            '-'
+          ],
+          collection: dictionaries.categories
+        }));
       }
     );
   });
@@ -42,12 +51,18 @@ define([
   router.map('/fap/categories/:id', function(req)
   {
     viewport.loadPage(
-      ['app/wmes-fap-categories/pages/DetailsPage', nls],
-      function(DetailsPage)
+      [
+        'app/core/pages/DetailsPage',
+        'app/wmes-fap-categories/templates/details',
+        nls
+      ],
+      function(DetailsPage, detailsTemplate)
       {
-        return new DetailsPage({
+        return dictionaries.bind(new DetailsPage({
+          baseBreadcrumb: baseBreadcrumb,
+          detailsTemplate: detailsTemplate,
           model: new Category({_id: req.params.id})
-        });
+        }));
       }
     );
   });
@@ -56,15 +71,18 @@ define([
   {
     viewport.loadPage(
       [
-        'app/wmes-fap-categories/pages/AddFormPage',
+        'app/core/pages/AddFormPage',
+        'app/wmes-fap-categories/views/FormView',
         'i18n!app/nls/users',
         nls
       ],
-      function(AddFormPage)
+      function(AddFormPage, FormView)
       {
-        return new AddFormPage({
+        return dictionaries.bind(new AddFormPage({
+          baseBreadcrumb: baseBreadcrumb,
+          FormView: FormView,
           model: new Category()
-        });
+        }));
       }
     );
   });
@@ -73,15 +91,18 @@ define([
   {
     viewport.loadPage(
       [
-        'app/wmes-fap-categories/pages/EditFormPage',
+        'app/core/pages/EditFormPage',
+        'app/wmes-fap-categories/views/FormView',
         'i18n!app/nls/users',
         nls
       ],
-      function(EditFormPage)
+      function(EditFormPage, FormView)
       {
-        return new EditFormPage({
+        return dictionaries.bind(new EditFormPage({
+          baseBreadcrumb: baseBreadcrumb,
+          FormView: FormView,
           model: new Category({_id: req.params.id})
-        });
+        }));
       }
     );
   });
@@ -90,7 +111,7 @@ define([
     '/fap/categories/:id;delete',
     canManage,
     _.partial(showDeleteFormPage, 'app/wmes-fap-categories/Category', _, _, {
-      baseBreadcrumb: '#fap/entries'
+      baseBreadcrumb: baseBreadcrumb
     })
   );
 });

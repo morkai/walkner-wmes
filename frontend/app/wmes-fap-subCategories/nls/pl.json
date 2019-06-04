@@ -4,5 +4,20 @@
 
   "PROPERTY:active": "Aktywna?",
   "PROPERTY:parent": "Nadrzędna kategoria",
-  "PROPERTY:name": "Nazwa"
+  "PROPERTY:name": "Nazwa",
+  "PROPERTY:users": "Powiadamiani użytkownicy",
+  "PROPERTY:notifications": "Powiadomienia",
+  "PROPERTY:notifications.subdivisions": "Działy",
+  "PROPERTY:notifications.prodFunctions": "Funkcje",
+  "PROPERTY:etoCategory": "Podkategoria ETO",
+  "PROPERTY:planners": "Planiści?",
+
+  "FORM:notifications:add": "Dodaj nowe powiadomienie",
+  "FORM:tester:label": "Tester powiadomień",
+  "FORM:tester:sms": "SMS?",
+  "FORM:tester:mrp": "MRP",
+  "FORM:tester:orderNo": "Zlecenie",
+  "FORM:tester:nc12": "12NC",
+
+  "noNotifications": "Brak zdefiniowanych powiadomień."
 }

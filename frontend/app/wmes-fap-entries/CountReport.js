@@ -28,6 +28,7 @@ define([
     'status',
     'level',
     'category',
+    'subCategory',
     'subdivisionType',
     'division',
     'mrp',
@@ -40,7 +41,8 @@ define([
     solver: true
   };
   var LABEL_METRICS = {
-    category: 'categories'
+    category: 'categories',
+    subCategory: 'subCategories'
   };
 
   return Model.extend({

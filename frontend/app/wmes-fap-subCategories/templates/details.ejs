@@ -1,10 +1,44 @@
-<div class="panel panel-primary">
-  <div class="panel-heading"><%- panelTitle %></div>
-  <div class="panel-details">
-    <%- helpers.props(model, [
-      'active',
-      'parent',
-      'name'
-    ]) %>
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitle %></div>
+    <div class="panel-details">
+      <%- helpers.props(model, [
+        'active',
+        'parent',
+        'name',
+        'etoCategory',
+        'planners',
+        {id: '!users', value: model.users.length ? model.users.join(', ') : ''}
+      ]) %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%- helpers.t('PROPERTY:notifications') %></div>
+    <% if (model.notifications.length) { %>
+      <table class="table table-bordered table-condensed">
+        <thead>
+        <tr>
+          <th class="is-min"><%- helpers.t('PROPERTY:notifications.subdivisions') %></th>
+          <th><%- helpers.t('PROPERTY:notifications.prodFunctions') %></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% model.notifications.forEach(function(n) { %>
+          <tr>
+            <td class="is-min">
+              <% if (n.subdivisions.length) { %>
+                <ul style="padding: 0; list-style-position: inside"><li><%- n.subdivisions.join('<li>') %></ul>
+              <% } %>
+            </td>
+            <td><ul style="padding: 0; list-style-position: inside"><li><%- n.prodFunctions.join('<li>') %></ul></td>
+          </tr>
+        <% }) %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <div class="panel-body">
+        <p><%- helpers.t('noNotifications') %></p>
+      </div>
+    <% } %>
   </div>
 </div>

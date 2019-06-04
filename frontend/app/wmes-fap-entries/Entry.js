@@ -735,6 +735,11 @@ define([
         update[prop] = newValue;
       });
 
+      if (!Object.keys(update).length)
+      {
+        return;
+      }
+
       if (user.isLoggedIn() && !this.isObserver())
       {
         if (!change.data.subscribers)

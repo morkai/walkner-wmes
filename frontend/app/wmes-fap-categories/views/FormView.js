@@ -2,21 +2,25 @@
 
 define([
   'underscore',
+  'select2',
   'app/time',
   'app/data/orgUnits',
   'app/data/prodFunctions',
   'app/core/util/idAndLabel',
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
+  'app/wmes-fap-entries/dictionaries',
   'app/wmes-fap-categories/templates/form'
 ], function(
   _,
+  select2,
   time,
   orgUnits,
   prodFunctions,
   idAndLabel,
   FormView,
   setUpUserSelect2,
+  dictionaries,
   formTemplate
 ) {
   'use strict';
@@ -43,11 +47,15 @@ define([
 
         $notification.find('input').select2('destroy');
         $notification.remove();
+
+        this.testNotifications();
       },
 
       'input #-tester-mrp, #-tester-orderNo, #-tester-nc12': 'testNotifications',
       'change #-tester-date': 'testNotifications',
+      'change input[name="users"]': 'testNotifications',
       'change input[name^="notifications"]': 'testNotifications',
+
       'change #-etoCategoryToggle': 'toggleEtoCategory'
 
     }, FormView.prototype.events),
@@ -99,15 +107,61 @@ define([
         prodFunctions: []
       });
 
+      view.setUpEtoCategorySelect2();
+      view.toggleEtoCategory();
+    },
+
+    setUpEtoCategorySelect2: function()
+    {
+      var view = this;
+
       view.$id('etoCategory').select2({
         allowClear: true,
         placeholder: ' ',
-        data: this.categories
-          .filter(function(c) { return c.id !== view.model.id; })
-          .map(idAndLabel)
-      });
+        data: dictionaries.categories
+          .filter(function(c)
+          {
+            return c.id !== view.model.id && (c.get('active') || c.id === view.model.get('etoCategory'));
+          })
+          .sort(function(a, b)
+          {
+            if (a.attributes.active && b.attributes.active)
+            {
+              return a.attributes.name.localeCompare(b.attributes.name);
+            }
 
-      this.toggleEtoCategory();
+            return a.attributes.active ? -1 : 1;
+          })
+          .map(function(model)
+          {
+            return {
+              id: model.id,
+              text: model.getLabel(),
+              deactivated: !model.get('active')
+            };
+          }),
+        formatSelection: function(item)
+        {
+          var text = _.escape(item.selection || item.text);
+
+          if (item.deactivated)
+          {
+            return '<span style="text-decoration: line-through">' + text + '</span>';
+          }
+
+          return text;
+        },
+        formatResult: function(item, $container, query, e)
+        {
+          var html = [];
+
+          html.push('<span style="text-decoration: ' + (item.deactivated ? 'line-through' : 'initial') + '">');
+          select2.util.markMatch(item.selection || item.text, query.term, html, e);
+          html.push('</span>');
+
+          return html.join('');
+        }
+      });
     },
 
     toggleEtoCategory: function()
@@ -237,7 +291,8 @@ define([
           date: date,
           users: formData.users,
           notifications: formData.notifications,
-          category: null
+          category: null,
+          subCategory: null
         })
       });
 

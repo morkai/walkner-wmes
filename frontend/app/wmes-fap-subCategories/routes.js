@@ -39,6 +39,8 @@ define([
             {id: 'parent', className: 'is-min'},
             {id: 'name', className: 'is-min'},
             {id: 'active', className: 'is-min'},
+            {id: 'etoCategory', className: 'is-min'},
+            {id: 'planners', className: 'is-min'},
             '-'
           ],
           collection: dictionaries.subCategories
@@ -72,6 +74,7 @@ define([
       [
         'app/core/pages/AddFormPage',
         'app/wmes-fap-subCategories/views/FormView',
+        'i18n!app/nls/users',
         nls
       ],
       function(AddFormPage, FormView)
@@ -91,6 +94,7 @@ define([
       [
         'app/core/pages/EditFormPage',
         'app/wmes-fap-subCategories/views/FormView',
+        'i18n!app/nls/users',
         nls
       ],
       function(EditFormPage, FormView)

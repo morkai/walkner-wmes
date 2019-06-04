@@ -501,7 +501,7 @@ define([
       {
         $prop.addClass('fap-is-editing');
 
-        this.editors[prop].call(this, $prop, prop);
+        this.editors[prop].call(this, $prop);
 
         this.trigger('editor:shown', prop);
       }
@@ -710,16 +710,13 @@ define([
         {
           var newValue = $value.val();
 
-          if (newValue !== oldValue)
+          if (prepareData)
           {
-            if (prepareData)
-            {
-              view.model.multiChange(prepareData(newValue, oldValue, prop, $prop));
-            }
-            else
-            {
-              view.model.change(prop, newValue);
-            }
+            view.model.multiChange(prepareData(newValue, oldValue, prop, $prop));
+          }
+          else
+          {
+            view.model.change(prop, newValue);
           }
 
           view.hideEditor();
@@ -763,9 +760,10 @@ define([
         this.editors.textArea.call(this, $prop, false);
       },
 
-      category: function($prop)
+      category: function($category)
       {
-        var oldValue = this.model.get('category');
+        var view = this;
+        var oldValue = view.model.get('category');
         var options = dictionaries.categories
           .filter(function(c)
           {
@@ -779,28 +777,40 @@ define([
             };
           });
 
-        this.editors.select.call(this, $prop, options, function(newValue)
+        var $subCategory = view.$('.fap-prop[data-prop="subCategory"]').addClass('fap-is-editing');
+
+        view.editors.subCategory.call(view, $subCategory, oldValue);
+
+        view.editors.select.call(view, $category, options, function(newValue)
         {
+          var subCategory = $subCategory.find('.form-control').val();
+
           return {
             category: newValue,
-            subCategory: null
+            subCategory: subCategory === 'null' ? null : subCategory
           };
+        });
+
+        $category.find('.form-control').on('change', function()
+        {
+          $subCategory.find('.fap-editor').remove();
+
+          view.editors.subCategory.call(view, $subCategory, this.value);
         });
       },
 
-      subCategory: function($prop)
+      subCategory: function($prop, parent)
       {
-        var parent = this.model.get('category');
+        if (!parent)
+        {
+          parent = this.model.get('category');
+        }
+
         var oldValue = this.model.get('subCategory');
         var options = dictionaries.subCategories
           .filter(function(c)
           {
-            if (c.id === oldValue)
-            {
-              return true;
-            }
-
-            return c.get('active') && c.get('parent') === parent;
+            return c.get('parent') === parent && (c.id === oldValue || c.get('active'));
           })
           .map(function(c)
           {
@@ -810,11 +820,15 @@ define([
             };
           });
 
-        options.unshift({id: null, text: ''});
+        if (!options.length)
+        {
+          options.unshift({id: null, text: ''});
+        }
 
         this.editors.select.call(this, $prop, options, function(newValue)
         {
           return {
+            category: parent,
             subCategory: newValue === 'null' ? null : newValue
           };
         });

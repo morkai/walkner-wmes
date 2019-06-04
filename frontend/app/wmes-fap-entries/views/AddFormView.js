@@ -71,16 +71,19 @@ define([
         this.model.attributes[el.name] = el.value;
 
         this.saveInputFocus(el);
-        this.updateNotifications();
+        this.updateNotifications('category');
         this.toggleRequiredFields();
-        this.updateEtoCategory();
         this.setUpSubCategorySelect2();
+        this.updateEtoCategory('category');
       },
       'change #-subCategory': function(e)
       {
         var el = e.target;
 
         this.model.attributes[el.name] = el.value.length ? el.value : null;
+
+        this.updateNotifications('subCategory');
+        this.updateEtoCategory('subCategory');
       },
       'change #-lines, #-subdivisions': function(e)
       {
@@ -239,6 +242,7 @@ define([
           break;
       }
 
+      // TODO Change to category flags?
       if (this.model.get('category') === '5544b9182b5949f80d80b369')
       {
         orderNo = false;
@@ -342,16 +346,29 @@ define([
       var data = dictionaries.subCategories.where({active: true, parent: category}).map(idAndLabel);
       var $subCategory = this.$id('subCategory');
 
-      $subCategory.select2('data', null);
+      $subCategory.select2('val', '');
+
+      if (data.length === 1)
+      {
+        $subCategory.val(data[0].id);
+      }
 
       $subCategory.select2({
-        allowClear: true,
+        allowClear: false,
         placeholder: ' ',
         dropdownCssClass: 'fap-addForm-select2',
         data: data
       });
 
-      $subCategory.select2('enable', data.length > 0);
+      var required = data.length > 0;
+
+      $subCategory
+        .select2('enable', required)
+        .prop('required', required)
+        .closest('.form-group')
+        .toggleClass('has-required-select2', required)
+        .find('.control-label')
+        .toggleClass('is-required', required);
     },
 
     setUpSubdivisionsSelect2: function()
@@ -630,11 +647,21 @@ define([
       }
     },
 
-    updateEtoCategory: function()
+    updateEtoCategory: function(property)
     {
       var view = this;
-      var $category = view.$id('category');
-      var category = dictionaries.categories.get($category.val());
+
+      if (!property)
+      {
+        this.updateEtoCategory('category');
+        this.updateEtoCategory('subCategory');
+
+        return;
+      }
+
+      var $category = view.$id(property);
+      var categories = dictionaries.forProperty(property);
+      var category = categories.get($category.val());
       var order = view.model.validatedOrder;
 
       if (!category || category.get('etoCategory') === null || !order)
@@ -655,14 +682,14 @@ define([
           return;
         }
 
-        var nonEtoCategory = dictionaries.categories.find(function(c)
+        var nonEtoCategory = categories.find(function(c)
         {
           return c.get('etoCategory') === category.id;
         });
 
         if (nonEtoCategory)
         {
-          this.$id('category').select2('val', nonEtoCategory.id).trigger('change');
+          $category.select2('val', nonEtoCategory.id).trigger('change');
 
           return;
         }
@@ -679,11 +706,11 @@ define([
         return;
       }
 
-      var etoCategory = dictionaries.categories.get(etoCategoryId);
+      var etoCategory = categories.get(etoCategoryId);
 
       if (etoCategory)
       {
-        this.$id('category').select2('val', etoCategory.id).trigger('change');
+        $category.select2('val', etoCategory.id).trigger('change');
 
         return;
       }
@@ -696,6 +723,7 @@ define([
       var view = this;
       var orderNo = view.$id('orderNo').val();
       var category = dictionaries.categories.get(view.$id('category').val());
+      var subCategory = dictionaries.subCategories.get(view.$id('subCategory').val());
 
       if (view.resolveSubdivisionsReq)
       {
@@ -703,50 +731,75 @@ define([
         view.resolveSubdivisionsReq = null;
       }
 
+      if (view.timers.resolveSubdivisions)
+      {
+        clearTimeout(view.timers.resolveSubdivisions);
+      }
+
+      view.$id('subdivisions').select2('val', '');
+
       if (!category)
       {
         return;
       }
 
-      var req = view.resolveSubdivisionsReq = this.ajax({
-        method: 'POST',
-        url: '/fap/entries;resolve-participants',
-        data: JSON.stringify({
-          orderNo: orderNo,
-          category: category
-        })
-      });
+      view.timers.resolveSubdivisions = setTimeout(request, 30);
 
-      req.done(function(res)
+      function request()
       {
-        if (res.subdivisions)
-        {
-          view.$id('subdivisions').select2('val', res.subdivisions);
-        }
-      });
+        view.timers.resolveSubdivisions = null;
 
-      req.always(function()
-      {
-        if (req === view.resolveSubdivisionsReq)
+        var req = view.resolveSubdivisionsReq = view.ajax({
+          method: 'POST',
+          url: '/fap/entries;resolve-participants',
+          data: JSON.stringify({
+            orderNo: orderNo,
+            category: category.id,
+            subCategory: subCategory ? subCategory.id : null
+          })
+        });
+
+        req.done(function(res)
         {
-          view.resolveSubdivisionsReq = null;
-        }
-      });
+          if (res.subdivisions)
+          {
+            view.$id('subdivisions').select2('val', res.subdivisions);
+          }
+        });
+
+        req.always(function()
+        {
+          if (req === view.resolveSubdivisionsReq)
+          {
+            view.resolveSubdivisionsReq = null;
+          }
+        });
+      }
     },
 
-    updateNotifications: function()
+    updateNotifications: function(property)
     {
-      var category = dictionaries.categories.get(this.$id('category').val());
-      var notifications = category && category.get('notifications') || [];
-
-      if (!notifications.length)
+      if (!property)
       {
-        this.$id('notifications').addClass('hidden');
+        this.updateNotifications('category');
+        this.updateNotifications('subCategory');
 
         return;
       }
 
-      this.$id('notifications').removeClass('hidden').popover({
+      var categories = dictionaries.forProperty(property);
+      var category = categories.get(this.$id(property).val());
+      var notifications = category && category.get('notifications') || [];
+      var $notifications = this.$id(property + '-notifications');
+
+      if (!notifications.length)
+      {
+        $notifications.addClass('hidden');
+
+        return;
+      }
+
+      $notifications.removeClass('hidden').popover({
         placement: 'bottom',
         trigger: 'hover',
         html: true,

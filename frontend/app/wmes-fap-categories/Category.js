@@ -1,12 +1,14 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   '../i18n',
   '../core/Model',
   '../data/orgUnits',
   '../data/prodFunctions',
   'app/core/templates/userInfo'
 ], function(
+  require,
   t,
   Model,
   orgUnits,
@@ -30,18 +32,15 @@ define([
     labelAttribute: 'name',
 
     defaults: {
-      active: true
+      active: true,
+      planners: false
     },
 
-    serialize: function(categories)
+    serialize: function()
     {
-      if (!categories)
-      {
-        categories = this.collection;
-      }
-
       var obj = this.toJSON();
-      var etoCategory = categories && categories.get(obj.etoCategory);
+      var dictionaries = require('app/wmes-fap-entries/dictionaries');
+      var etoCategory = dictionaries && dictionaries.categories.get(obj.etoCategory);
 
       obj.active = t('core', 'BOOL:' + obj.active);
       obj.planners = t('core', 'BOOL:' + obj.planners);

@@ -17,7 +17,81 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-name" class="control-label is-required"><%- helpers.t('PROPERTY:name') %></label>
-        <input id="<%- idPrefix %>-name" name="name" class="form-control" type="text" autocomplete="new-password" required maxlength="100">
+        <input id="<%- idPrefix %>-name" class="form-control" type="text" autocomplete="new-password" name="name" required maxlength="100">
+      </div>
+      <div class="form-group">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-etoCategoryToggle" name="etoCategoryToggle" type="checkbox" value="true">
+          <%- helpers.t('PROPERTY:etoCategory') %>
+        </label>
+        <input id="<%- idPrefix %>-etoCategory" type="text" autocomplete="new-password" name="etoCategory">
+      </div>
+      <div class="form-group">
+        <div class="checkbox">
+          <label class="control-label">
+            <input type="checkbox" name="planners" value="true">
+            <%- helpers.t('PROPERTY:planners') %>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-users" class="control-label"><%- helpers.t('PROPERTY:users') %></label>
+        <input id="<%- idPrefix %>-users" type="text" autocomplete="new-password" name="users">
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- helpers.t('PROPERTY:notifications') %></label>
+        <table class="table table-bordered table-condensed">
+          <thead>
+          <tr>
+            <th class="is-min"><%- helpers.t('PROPERTY:notifications.subdivisions') %></th>
+            <th class="is-min"><%- helpers.t('PROPERTY:notifications.prodFunctions') %></th>
+            <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody id="<%- idPrefix %>-notifications">
+          <tr>
+            <td><input name="notifications[].subdivisions" type="text"></td>
+            <td><input name="notifications[].prodFunctions" type="text"></td>
+            <td class="actions">
+              <div class="actions-group">
+                <button type="button" class="btn btn-default" data-action="removeNotification"><i class="fa fa-times"></i></button>
+              </div>
+            </td>
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
+        <button id="<%- idPrefix %>-addNotification" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- helpers.t('FORM:notifications:add') %></span></button>
+      </div>
+      <div class="form-group">
+        <label class="control-label"><%- helpers.t('FORM:tester:label') %></label>
+        <div style="display: flex; margin-bottom: 5px">
+          <input id="<%- idPrefix %>-tester-mrp" class="form-control text-mono" type="text" style="width: 46px" placeholder="<%- helpers.t('FORM:tester:mrp') %>">
+          <input id="<%- idPrefix %>-tester-orderNo" class="form-control text-mono" type="text" style="width: 85px; margin-left: 5px" placeholder="<%- helpers.t('FORM:tester:orderNo') %>">
+          <input id="<%- idPrefix %>-tester-nc12" class="form-control text-mono" type="text" style="width: 110px; margin-left: 5px" placeholder="<%- helpers.t('FORM:tester:nc12') %>">
+          <input id="<%- idPrefix %>-tester-date" class="form-control" type="datetime-local" style="width: 200px; margin-left: 5px">
+        </div>
+        <table class="table table-bordered table-condensed" style="margin-bottom: 0">
+          <thead>
+          <tr>
+            <th class="is-min"><%- helpers.t('users', 'PROPERTY:name') %></th>
+            <th class="is-min"><%- helpers.t('users', 'PROPERTY:prodFunction') %></th>
+            <th class="is-min"><%- helpers.t('users', 'PROPERTY:kdPosition') %></th>
+            <th class="is-min"><%- helpers.t('FORM:tester:sms') %></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody id="<%- idPrefix %>-tester">
+          <tr>
+            <td class="is-min"></td>
+            <td class="is-min"></td>
+            <td class="is-min"></td>
+            <td class="is-min"></td>
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     <div class="panel-footer">

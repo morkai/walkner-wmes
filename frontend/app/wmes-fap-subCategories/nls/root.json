@@ -5,7 +5,22 @@
 
     "PROPERTY:active": "Active?",
     "PROPERTY:parent": "Parent category",
-    "PROPERTY:name": "Name"
+    "PROPERTY:name": "Name",
+    "PROPERTY:users": "Notified users",
+    "PROPERTY:notifications": "Notifications",
+    "PROPERTY:notifications.subdivisions": "Subdivisions",
+    "PROPERTY:notifications.prodFunctions": "Functions",
+    "PROPERTY:etoCategory": "ETO subcategory",
+    "PROPERTY:planners": "Planners?",
+
+    "FORM:notifications:add": "Add notification",
+    "FORM:tester:label": "Notifications tester",
+    "FORM:tester:sms": "SMS?",
+    "FORM:tester:mrp": "MRP",
+    "FORM:tester:orderNo": "Order",
+    "FORM:tester:nc12": "12NC",
+
+    "noNotifications": "No notifications defined."
   },
   "pl": true
 }
