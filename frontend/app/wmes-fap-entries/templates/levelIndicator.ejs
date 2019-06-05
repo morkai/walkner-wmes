@@ -1,6 +1,12 @@
 <div class="fap-levelIndicator-outer <%- canIncrease ? 'fap-levelIndicator-can-increase' : '' %> <%- canManage ? 'fap-levelIndicator-can-manage' : '' %>">
   <% for (var i = 1; i <= 4; ++i) { %>
-  <div class="fap-levelIndicator-inner <%- i <= level ? 'is-selected' : 'is-unselected' %>" data-level="<%- i %>"><%- i %></div>
+  <%
+    var title = ''
+    if (canManage || (canIncrease && i === level + 1)) {
+      title = t('wmes-fap-entries', 'levelIndicator:title', {level: i})
+    }
+  %>
+  <div class="fap-levelIndicator-inner <%- i <= level ? 'is-selected' : 'is-unselected' %>" title="<%- title %>" data-level="<%- i %>"><%- i %></div>
   <% } %>
-  <div class="fap-levelIndicator-label"><%- t('wmes-fap-entries', 'PROPERTY:levelIndicator') %></div>
+  <div class="fap-levelIndicator-label"><%- t('wmes-fap-entries', 'levelIndicator:label') %></div>
 </div>

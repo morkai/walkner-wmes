@@ -33,7 +33,6 @@
     "PROPERTY:owner": "Owner",
     "PROPERTY:status": "Status",
     "PROPERTY:level": "Level",
-    "PROPERTY:levelIndicator": "Entry escalation level",
     "PROPERTY:order": "Order/12NC",
     "PROPERTY:orderNo": "Order no",
     "PROPERTY:nc12": "12NC",
@@ -67,6 +66,9 @@
     "PROPERTY:finishedAt": "Finished at",
     "PROPERTY:analysisStartedAt": "Analysis started at",
     "PROPERTY:analysisFinishedAt": "Analysis finished at",
+
+    "levelIndicator:label": "Entry escalation level",
+    "levelIndicator:title": "Escalte entry to level {level}",
 
     "subdivisionType:unspecified": "Unspecified",
     "subdivisionType:assembly": "Assembly",
