@@ -292,11 +292,16 @@
     margin-bottom: 15px;
   }
   .fap-details-hd .fap-levelIndicator-outer {
-    margin-top: 15px;
+    margin-top: 40px;
     justify-content: center;
   }
   .fap-details-hd .fap-levelIndicator-inner:first-child {
     margin-left: 0;
+  }
+  .fap-details-hd .fap-levelIndicator-label {
+    font-size: 21px;
+    top: -36px;
+    left: 0;
   }
   .fap-details-hd .btn {
     margin-top: 15px;

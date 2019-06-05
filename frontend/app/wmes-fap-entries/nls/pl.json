@@ -34,6 +34,7 @@
   "PROPERTY:owner": "Zgłaszający",
   "PROPERTY:status": "Status",
   "PROPERTY:level": "Poziom",
+  "PROPERTY:levelIndicator": "Poziom eskalacji zgłoszenia",
   "PROPERTY:order": "Zlecenie/12NC",
   "PROPERTY:orderNo": "Nr zlecenia",
   "PROPERTY:nc12": "12NC",

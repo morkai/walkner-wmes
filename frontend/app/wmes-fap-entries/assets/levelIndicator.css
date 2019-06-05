@@ -1,5 +1,6 @@
 .fap-levelIndicator-outer {
   display: flex;
+  position: relative;
 }
 .fap-levelIndicator-inner {
   width: 22px;
@@ -23,6 +24,20 @@
   height: 52px;
   font-size: 28px;
   line-height: 50px;
+}
+.fap-levelIndicator-label {
+  display: none;
+}
+.fap-details-hd .fap-levelIndicator-label {
+  display: block;
+  position: absolute;
+  top: -20px;
+  left: 15px;
+  width: 100%;
+  font-size: 14px;
+  font-variant: small-caps;
+  text-transform: lowercase;
+  color: #444;
 }
 .fap-levelIndicator-inner:hover {
   color: #000;

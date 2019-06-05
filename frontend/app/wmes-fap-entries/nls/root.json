@@ -33,6 +33,7 @@
     "PROPERTY:owner": "Owner",
     "PROPERTY:status": "Status",
     "PROPERTY:level": "Level",
+    "PROPERTY:levelIndicator": "Entry escalation level",
     "PROPERTY:order": "Order/12NC",
     "PROPERTY:orderNo": "Order no",
     "PROPERTY:nc12": "12NC",
