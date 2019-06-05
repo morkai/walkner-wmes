@@ -123,6 +123,7 @@ define([
         formData[propertyName] = Array.isArray(term.args[1]) ? term.args[1].join(',') : '';
       },
       'category': 'mrp',
+      'subCategory': 'mrp',
       'analysisNeed': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
@@ -132,6 +133,31 @@ define([
       },
       'analysisDone': 'analysisNeed',
       'subdivisionType': 'divisions'
+    },
+
+    serializeTermToForm: function(term, formData)
+    {
+      if (term.name === 'or')
+      {
+        var categories = [];
+
+        term.args.forEach(function(subTerm)
+        {
+          if (subTerm.name === 'in' && (subTerm.args[0] === 'category' || subTerm.args[0] === 'subCategory'))
+          {
+            categories = categories.concat(subTerm.args[1]);
+          }
+        });
+
+        if (categories.length)
+        {
+          formData.category = categories.join(',');
+        }
+
+        return;
+      }
+
+      FilterView.prototype.serializeTermToForm.apply(this, arguments);
     },
 
     serialize: function()
@@ -208,7 +234,36 @@ define([
 
       if (category && category.length)
       {
-        selector.push({name: 'in', args: ['category', category.split(',')]});
+        var categories = [];
+        var subCategories = [];
+
+        category.split(',').forEach(function(id)
+        {
+          if (dictionaries.categories.get(id))
+          {
+            categories.push(id);
+          }
+          else if (dictionaries.subCategories.get(id))
+          {
+            subCategories.push(id);
+          }
+        });
+
+        if (categories.length && subCategories.length)
+        {
+          selector.push({name: 'or', args: [
+            {name: 'in', args: ['category', categories]},
+            {name: 'in', args: ['subCategory', subCategories]}
+          ]});
+        }
+        else if (categories.length)
+        {
+          selector.push({name: 'in', args: ['category', categories]});
+        }
+        else if (subCategories.length)
+        {
+          selector.push({name: 'in', args: ['subCategory', subCategories]});
+        }
       }
 
       if (divisions.length)
@@ -246,15 +301,7 @@ define([
         width: '250px'
       });
 
-      this.$id('category').select2({
-        width: '280px',
-        multiple: true,
-        allowClear: true,
-        data: dictionaries.categories
-          .filter(function(c) { return c.get('active'); })
-          .map(idAndLabel)
-      });
-
+      this.setUpCategorySelect2();
       this.toggleButtonGroup('level');
       this.toggleUserSelect2(false);
       this.toggleStatus();
@@ -266,6 +313,46 @@ define([
       FilterView.prototype.destroy.call(this);
 
       this.$('.is-expandable').expandableSelect('destroy');
+    },
+
+    setUpCategorySelect2: function()
+    {
+      var parentToSub = {};
+
+      dictionaries.subCategories.forEach(function(subCategory)
+      {
+        if (!subCategory.get('active'))
+        {
+          return;
+        }
+
+        var parent = subCategory.get('parent');
+
+        if (!parentToSub[parent])
+        {
+          parentToSub[parent] = [];
+        }
+
+        parentToSub[parent].push(subCategory);
+      });
+
+      this.$id('category').select2({
+        width: '280px',
+        multiple: true,
+        allowClear: true,
+        data: dictionaries.categories
+          .filter(function(c) { return c.get('active'); })
+          .map(function(category)
+          {
+            var subCategories = parentToSub[category.id];
+
+            return {
+              id: category.id,
+              text: category.getLabel(),
+              children: !subCategories ? [] : subCategories.map(idAndLabel)
+            };
+          })
+      });
     },
 
     toggleUserSelect2: function(resetUser)

@@ -157,7 +157,7 @@ define([
             return;
           }
 
-          if ($(inner).outerWidth() >= $(outer).width())
+          if (inner.scrollWidth > $(outer).width())
           {
             return outer.textContent.trim();
           }

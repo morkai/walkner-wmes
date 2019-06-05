@@ -134,7 +134,7 @@ function pushSelector(rqlString, options, selector)
 
       rqlString.push('&');
 
-      pushTerm(rqlString, options, selectorArg, argCount);
+      pushTerm(rqlString, options, selectorArg, argCount, true);
     }
   }
   else
@@ -224,7 +224,7 @@ function pushTermWithArgs(rqlString, options, conjunction, term, parentArgCount)
     }
   }
 
-  if (conjunction === ',' || parentArgCount !== -1)
+  if (conjunction === ',' || parentArgCount !== 1)
   {
     rqlString.push(')');
   }

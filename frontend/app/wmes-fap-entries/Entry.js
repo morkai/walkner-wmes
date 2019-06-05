@@ -249,7 +249,7 @@ define([
 
       if (obj.subCategory !== '-')
       {
-        category += ' (' + obj.subCategory + ')';
+        category = obj.subCategory;
       }
 
       obj.category = '<span class="fap-list-category">' + _.escape(category) + '</span>';

@@ -4,10 +4,3 @@
 'use strict';
 
 db.fapentries.updateMany({level: {$exists: false}}, {$set: {level: 1}});
-
-db.fapsubcategories.updateMany({planners: {$exists: false}}, {$set: {
-  users: [],
-  notifications: [],
-  etoCategory: null,
-  planners: false
-}});
