@@ -776,6 +776,10 @@ app/wmes-fap-entries/assets/history.css
 ----------------
 app/wmes-fap-entries/assets/history.css
 
+app/wmes-fap-entries/assets/levelIndicator.css
+----------------
+app/wmes-fap-entries/assets/levelIndicator.css
+
 app/wmes-fap-entries/assets/list.css
 ----------------
 app/wmes-fap-entries/assets/list.css
@@ -784,6 +788,7 @@ app/wmes-fap-entries/assets/main.css
 ----------------
 app/wmes-fap-entries/assets/./navbar.css
 app/wmes-fap-entries/assets/./addForm.css
+app/wmes-fap-entries/assets/./levelIndicator.css
 app/wmes-fap-entries/assets/./list.css
 app/wmes-fap-entries/assets/./details.css
 app/wmes-fap-entries/assets/./chat.css
@@ -2057,16 +2062,15 @@ app/logs-browserErrors/routes.js
 app/wmes-toolcal-types/routes.js
 app/wmes-toolcal-tools/routes.js
 app/wmes-fap-categories/Category.js
-app/data/createOnDemandStorage.js
 app/wmes-fap-categories/CategoryCollection.js
-app/wmes-fap-categories/storage.js
-app/wmes-fap-categories/routes.js
 app/wmes-fap-subCategories/SubCategory.js
 app/wmes-fap-subCategories/SubCategoryCollection.js
 app/wmes-fap-entries/dictionaries.js
+app/wmes-fap-categories/routes.js
 app/wmes-fap-subCategories/routes.js
 app/notifications.js
 vendor/autolinker.js
+app/wmes-fap-entries/templates/levelIndicator.js
 app/wmes-fap-entries/Entry.js
 app/wmes-fap-entries/templates/addForm.js
 app/wmes-fap-entries/templates/addFormUpload.js
@@ -2274,6 +2278,7 @@ app/wmes-fap-subCategories/SubCategoryCollection.js
 app/wmes-fap-entries/dictionaries.js
 vendor/autolinker.js
 app/data/colorFactory.js
+app/wmes-fap-entries/templates/levelIndicator.js
 app/wmes-fap-entries/Entry.js
 app/wmes-fap-entries/EntryCollection.js
 app/orderStatuses/OrderStatus.js

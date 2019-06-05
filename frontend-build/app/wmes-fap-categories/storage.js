@@ -1,1 +1,0 @@
-define(["../data/createOnDemandStorage","./CategoryCollection"],function(e,n){"use strict";return e(function(){return new n(null,{paginate:!1})})});

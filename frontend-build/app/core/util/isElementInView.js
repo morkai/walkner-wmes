@@ -1,0 +1,1 @@
+define(["jquery"],function(t){"use strict";var e=t(window);return function(i,n){var o=e.scrollTop(),r=o+e.height(),u=t(i),f=u.offset().top,h=n&&n.height||u.height(),c=n.bottom||f+h;return n&&!0===n.fullyInView?o<f&&r>c:f<=r&&c>=o}});
