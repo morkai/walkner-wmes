@@ -25,6 +25,7 @@
       'app/user',
       'app/updater/index',
       'app/data/loadedModules',
+      'app/core/util/embedded',
       'app/core/layouts/PageLayout',
       'app/core/layouts/PrintLayout',
       'app/core/layouts/BlankLayout',
@@ -56,6 +57,7 @@
     user,
     updater,
     loadedModules,
+    embedded,
     PageLayout,
     PrintLayout,
     BlankLayout,
@@ -92,10 +94,15 @@
 
     viewport.registerLayout('page', function createPageLayout()
     {
+      var views = {};
+
+      if (!embedded.isEnabled())
+      {
+        views['.navbar'] = createNavbarView();
+      }
+
       return new PageLayout({
-        views: {
-          '.navbar': createNavbarView()
-        },
+        views: views,
         version: updater.getCurrentVersionString(),
         changelogUrl: '#changelog',
         hdHidden: !!window.locationbar && !window.locationbar.visible
@@ -283,6 +290,14 @@
 
       $('#app-loading').remove();
       $('body').removeClass('is-loading');
+
+      embedded.ready('remote');
+      embedded.render(viewport.currentPage);
+
+      broker.subscribe('viewport.page.shown', function()
+      {
+        embedded.render(viewport.currentPage);
+      });
     }
   }
 })();

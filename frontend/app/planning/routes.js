@@ -34,7 +34,7 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('PLANNING:VIEW');
+  var canView = user.auth('EMBEDDED', 'PLANNING:VIEW');
   var canManage = user.auth('PLANNING:MANAGE');
   var canViewWh = user.auth('WH:VIEW');
 
