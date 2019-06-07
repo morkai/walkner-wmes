@@ -4,6 +4,7 @@ define([
   '../router',
   '../viewport',
   '../user',
+  '../data/localStorage',
   './DocumentViewerState',
   './pages/DocumentViewerPage',
   '../orders/pages/OrderDetailsPage',
@@ -13,6 +14,7 @@ define([
   router,
   viewport,
   user,
+  localStorage,
   DocumentViewerState,
   DocumentViewerPage,
   OrderDetailsPage

@@ -9,6 +9,7 @@ define([
   'app/time',
   'app/user',
   'app/data/prodLog',
+  'app/data/localStorage',
   'app/production/views/BomCheckerDialogView',
   'app/production/templates/snMessage',
   'i18n!app/nls/production'
@@ -21,6 +22,7 @@ define([
   time,
   user,
   prodLog,
+  localStorage,
   BomCheckerDialogView,
   snMessageTemplate
 ) {

@@ -3,11 +3,13 @@
 define([
   'underscore',
   '../time',
-  '../core/Model'
+  '../core/Model',
+  '../data/localStorage'
 ], function(
   _,
   time,
-  Model
+  Model,
+  localStorage
 ) {
   'use strict';
 

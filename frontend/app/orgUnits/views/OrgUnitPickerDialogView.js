@@ -7,6 +7,7 @@ define([
   'select2',
   'app/i18n',
   'app/data/orgUnits',
+  'app/data/localStorage',
   'app/core/View',
   'app/orgUnits/templates/pickerDialog'
 ], function(
@@ -16,6 +17,7 @@ define([
   select2,
   t,
   orgUnits,
+  localStorage,
   View,
   template
 ) {

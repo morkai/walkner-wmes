@@ -6,6 +6,7 @@ define([
   '../core/util/uuid',
   '../core/Collection',
   '../core/Model',
+  '../data/localStorage',
   './layouts'
 ], function(
   _,
@@ -13,6 +14,7 @@ define([
   uuid,
   Collection,
   Model,
+  localStorage,
   layouts
 ) {
   'use strict';

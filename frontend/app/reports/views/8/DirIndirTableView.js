@@ -4,11 +4,13 @@ define([
   'underscore',
   'app/highcharts',
   'app/core/View',
+  'app/data/localStorage',
   'app/reports/templates/8/dirIndirTable'
 ], function(
   _,
   Highcharts,
   View,
+  localStorage,
   template
 ) {
   'use strict';
@@ -206,7 +208,7 @@ define([
 
     readDirIndir: function()
     {
-      return JSON.parse(localStorage.LEAN_DIR_INDIR || '{}');
+      return JSON.parse(localStorage.getItem('LEAN_DIR_INDIR') || '{}');
     },
 
     saveDirIndir: function()
@@ -218,7 +220,7 @@ define([
         dirIndir[this.dataset.prop] = this.classList.contains('is-dir') ? 'dir' : 'indir';
       });
 
-      localStorage.LEAN_DIR_INDIR = JSON.stringify(dirIndir);
+      localStorage.setItem('LEAN_DIR_INDIR', JSON.stringify(dirIndir));
     },
 
     toggleSeries: function(prop, kind)

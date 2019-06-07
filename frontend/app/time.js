@@ -2,10 +2,12 @@
 
 define([
   'moment-timezone',
-  'app/socket'
+  'app/socket',
+  'app/data/localStorage'
 ], function(
   moment,
-  socket
+  socket,
+  localStorage
 ) {
   'use strict';
 

@@ -7,6 +7,7 @@ define([
   'app/core/View',
   'app/core/util/uuid',
   'app/core/util/ExpandableSelect',
+  'app/data/localStorage',
   '../KanbanPrintQueueBuilder',
   '../layouts',
   'app/kanban/templates/builder/builder'
@@ -17,6 +18,7 @@ define([
   View,
   uuid,
   ExpandableSelect,
+  localStorage,
   KanbanPrintQueueBuilder,
   kanbanLayouts,
   template

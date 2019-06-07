@@ -3,10 +3,12 @@
 define([
   'underscore',
   '../core/Collection',
+  '../data/localStorage',
   './KanbanPrintQueue'
 ], function(
   _,
   Collection,
+  localStorage,
   KanbanPrintQueue
 ) {
   'use strict';

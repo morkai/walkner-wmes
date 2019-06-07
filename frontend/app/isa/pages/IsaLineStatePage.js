@@ -8,6 +8,7 @@ define([
   'app/core/View',
   'app/core/util/bindLoadingMessage',
   'app/core/util/embedded',
+  'app/data/localStorage',
   'app/data/isaPalletKinds',
   '../IsaRequest',
   '../views/IsaShiftPersonnelView',
@@ -29,6 +30,7 @@ define([
   View,
   bindLoadingMessage,
   embedded,
+  localStorage,
   palletKinds,
   IsaRequest,
   IsaShiftPersonnelView,
@@ -211,7 +213,8 @@ define([
           responderPickerView.hide();
 
           this.model.selectedResponder = user;
-          localStorage.ISA_SELECTED_RESPONDER = JSON.stringify(user);
+
+          localStorage.set('ISA_SELECTED_RESPONDER', JSON.stringify(user));
 
           this.$id('selectedResponder').text(user ? user.label : '');
 
@@ -412,8 +415,8 @@ define([
         disconnected: !this.socket.isConnected(),
         mobile: /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent),
         selectedResponder: this.model.selectedResponder ? this.model.selectedResponder.label : '',
-        eventsCollapsed: !!localStorage[EVENTS_COLLAPSED_STORAGE_KEY],
-        hotkeysVisible: !!localStorage[HOTKEYS_VISIBILITY_STORAGE_KEY]
+        eventsCollapsed: !!localStorage.getItem(EVENTS_COLLAPSED_STORAGE_KEY),
+        hotkeysVisible: !!localStorage.getItem(HOTKEYS_VISIBILITY_STORAGE_KEY)
       };
     },
 
@@ -469,7 +472,7 @@ define([
       {
         height -= 15;
 
-        if (localStorage[HOTKEYS_VISIBILITY_STORAGE_KEY])
+        if (localStorage.getItem(HOTKEYS_VISIBILITY_STORAGE_KEY))
         {
           height -= this.$id('hotkeys').outerHeight();
         }
@@ -875,7 +878,7 @@ define([
 
       this.timers.collapsed = setTimeout(function() { $section.addClass('is-collapsed'); }, 400);
 
-      localStorage[EVENTS_COLLAPSED_STORAGE_KEY] = '1';
+      localStorage.setItem(EVENTS_COLLAPSED_STORAGE_KEY, '1');
     },
 
     toggleFullscreen: function()
@@ -893,7 +896,7 @@ define([
 
     toggleHotkeysVisibility: function()
     {
-      if (localStorage[HOTKEYS_VISIBILITY_STORAGE_KEY])
+      if (localStorage.getItem(HOTKEYS_VISIBILITY_STORAGE_KEY))
       {
         localStorage.removeItem(HOTKEYS_VISIBILITY_STORAGE_KEY);
 
@@ -901,7 +904,7 @@ define([
       }
       else
       {
-        localStorage[HOTKEYS_VISIBILITY_STORAGE_KEY] = '1';
+        localStorage.setItem(HOTKEYS_VISIBILITY_STORAGE_KEY, '1');
 
         this.$id('hotkeys').removeClass('hidden');
       }

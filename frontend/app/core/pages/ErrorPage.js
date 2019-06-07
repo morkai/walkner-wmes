@@ -4,12 +4,14 @@ define([
   'underscore',
   'app/i18n',
   '../View',
-  'app/core/templates/error'
+  'app/core/templates/error',
+  'app/data/localStorage'
 ], function(
   _,
   t,
   View,
-  template
+  template,
+  localStorage
 ) {
   'use strict';
 
@@ -173,7 +175,7 @@ define([
         + '<br>' + json(_.assign({cname: window.COMPUTERNAME}, _.omit(user.data, 'privilegesMap')), null, 2));
       prop('router.currentRequest', this.model.req ? this.model.req.url : '?');
       prop('router.referrer', this.model.previousUrl || '?');
-      prop('router.recent', json(JSON.parse(localStorage.WMES_RECENT_LOCATIONS || '[]')));
+      prop('router.recent', json(JSON.parse(localStorage.getItem('WMES_RECENT_LOCATIONS') || '[]')));
       prop('response.code', this.model.code);
       prop('response.body', this.model.xhr ? this.model.xhr.responseText : '');
       prop('window.location.href', window.location.href);

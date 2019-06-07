@@ -6,6 +6,7 @@ define([
   '../time',
   '../core/Model',
   '../data/colorFactory',
+  '../data/localStorage',
   './dictionaries'
 ], function(
   _,
@@ -13,6 +14,7 @@ define([
   time,
   Model,
   colorFactory,
+  localStorage,
   kaizenDictionaries
 ) {
   'use strict';

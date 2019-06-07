@@ -6,14 +6,16 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage'
+  '../core/util/showDeleteFormPage',
+  '../data/localStorage'
 ], function(
   _,
   broker,
   router,
   viewport,
   user,
-  showDeleteFormPage
+  showDeleteFormPage,
+  localStorage
 ) {
   'use strict';
 

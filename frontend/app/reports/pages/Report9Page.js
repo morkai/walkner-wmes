@@ -6,6 +6,7 @@ define([
   'app/viewport',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
+  'app/data/localStorage',
   '../Report9',
   '../views/9/TableView',
   '../views/9/ChartView',
@@ -18,6 +19,7 @@ define([
   viewport,
   View,
   bindLoadingMessage,
+  localStorage,
   Report,
   TableView,
   ChartView,
@@ -66,7 +68,7 @@ define([
           icon: 'eraser',
           callback: function()
           {
-            localStorage.PLU_QUERY = '';
+            localStorage.setItem('PLU_QUERY', '');
 
             page.report.clearOptions();
             page.updateQuery();
@@ -169,7 +171,7 @@ define([
 
       if (!queryString)
       {
-        queryString = localStorage.PLU_QUERY || '';
+        queryString = localStorage.getItem('PLU_QUERY') || '';
       }
 
       if (!queryString)
@@ -203,7 +205,7 @@ define([
         replace: true
       });
 
-      localStorage.PLU_QUERY = query;
+      localStorage.setItem('PLU_QUERY', query);
     }
 
   });

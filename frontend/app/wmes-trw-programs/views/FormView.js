@@ -231,11 +231,12 @@ define([
       });
     },
 
-    showConnectionMenu: function(e, params)
+    showConnectionMenu: function(e, params) // eslint-disable-line no-unused-vars
     {
       // TODO
       return;
 
+      /*
       var options = {
         menu: [
           {
@@ -246,6 +247,7 @@ define([
       };
 
       contextMenu.show(this, e.pageY, e.pageX, options);
+      */
     },
 
     showConnectorEditDialog: function(params)

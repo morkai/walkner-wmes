@@ -6,7 +6,8 @@ define([
   'app/broker',
   'app/socket',
   'app/data/divisions',
-  'app/data/subdivisions'
+  'app/data/subdivisions',
+  'app/core/util/embedded'
 ],
 function(
   _,
@@ -14,11 +15,11 @@ function(
   broker,
   socket,
   divisions,
-  subdivisions
+  subdivisions,
+  embedded
 ) {
   'use strict';
 
-  var embedded = document.body.classList.contains('is-embedded');
   var reloadLocks = [];
   var reloadLockI = 0;
   var user = {};
@@ -65,17 +66,6 @@ function(
    */
   user.reload = function(userData)
   {
-    if (embedded)
-    {
-      _.assign(userData, {
-        loggedIn: false,
-        super: false,
-        privileges: guestUser.privileges,
-        login: guestUser.login,
-        name: guestUser.name
-      });
-    }
-
     if (_.isEqual(userData, user.data))
     {
       return;
@@ -183,23 +173,16 @@ function(
     }
 
     var userPrivileges = user.data.privileges;
-    var args = Array.prototype.slice.call(arguments);
-    var anyPrivileges = (args.length === 1 ? [privilege] : args).map(function(p)
-    {
-      return Array.isArray(p) ? p : [p];
-    });
-
-    if (anyPrivileges.length
-      && user.data.local
-      && anyPrivileges[0].some(function(privilege) { return privilege === 'LOCAL'; }))
-    {
-      return true;
-    }
 
     if (!userPrivileges)
     {
       return false;
     }
+
+    var args = Array.prototype.slice.call(arguments);
+    var anyPrivileges = (args.length === 1 ? [privilege] : args).map(
+      function(p) { return Array.isArray(p) ? p : [p]; }
+    );
 
     var isLoggedIn = user.isLoggedIn();
 
@@ -228,6 +211,14 @@ function(
         if (requiredPrivilege === 'USER')
         {
           actualMatches += isLoggedIn ? 1 : 0;
+        }
+        else if (requiredPrivilege === 'LOCAL')
+        {
+          actualMatches += user.data.local ? 1 : 0;
+        }
+        else if (requiredPrivilege === 'EMBEDDED')
+        {
+          actualMatches += embedded.isEnabled() ? 1 : 0;
         }
         else if (/^FN:/.test(requiredPrivilege))
         {

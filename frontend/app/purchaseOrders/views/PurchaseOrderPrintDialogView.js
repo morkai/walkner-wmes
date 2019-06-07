@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/viewport',
   'app/core/View',
+  'app/data/localStorage',
   'app/purchaseOrders/templates/printDialog',
   '../labelConfigurations'
 ], function(
@@ -14,6 +15,7 @@ define([
   t,
   viewport,
   View,
+  localStorage,
   template,
   labelConfigurations
 ) {

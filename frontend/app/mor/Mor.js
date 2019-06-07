@@ -7,6 +7,7 @@ define([
   'app/core/Model',
   'app/data/orgUnits',
   'app/data/prodFunctions',
+  'app/data/localStorage',
   'app/users/UserCollection'
 ], function(
   _,
@@ -15,6 +16,7 @@ define([
   Model,
   orgUnits,
   prodFunctions,
+  localStorage,
   UserCollection
 ) {
   'use strict';
@@ -43,7 +45,7 @@ define([
 
     initialize: function()
     {
-      this.collapsedSections = JSON.parse(localStorage.MOR_COLLAPSED_SECTIONS || '{}');
+      this.collapsedSections = JSON.parse(localStorage.getItem('MOR_COLLAPSED_SECTIONS') || '{}');
 
       this.users = new UserCollection(this.attributes.users, {paginate: false});
 
@@ -122,7 +124,7 @@ define([
         this.collapsedSections[id] = true;
       }
 
-      localStorage.MOR_COLLAPSED_SECTIONS = JSON.stringify(this.collapsedSections);
+      localStorage.setItem('MOR_COLLAPSED_SECTIONS', JSON.stringify(this.collapsedSections));
     },
 
     isSectionCollapsed: function(sectionId)

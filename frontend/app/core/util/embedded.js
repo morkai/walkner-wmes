@@ -21,7 +21,9 @@ define([
 ) {
   'use strict';
 
-  var enabled = window.parent !== window || window.location.href.indexOf('_embedded=1') !== -1;
+  var enabled = window.IS_EMBEDDED
+    || window.parent !== window
+    || window.location.href.indexOf('_embedded=1') !== -1;
   var switchTimer = null;
 
   function handleWindowMessage(e)
@@ -159,6 +161,16 @@ define([
 
     isEnabled: function() { return enabled; },
 
+    ready: function(appId)
+    {
+      if (!enabled)
+      {
+        return;
+      }
+
+      window.parent.postMessage({type: 'ready', app: appId || window.WMES_APP_ID}, '*');
+    },
+
     render: function(view, options)
     {
       if (!enabled)
@@ -201,6 +213,8 @@ define([
       {
         toggleDevItems(true);
       });
+
+      $('.embedded-actions').remove();
 
       (options && options.container || view.$el).append($embeddedActions);
 

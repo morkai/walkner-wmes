@@ -7,7 +7,8 @@ define([
   '../viewport',
   '../user',
   '../time',
-  '../core/util/showDeleteFormPage'
+  '../core/util/showDeleteFormPage',
+  'app/data/localStorage'
 ], function(
   _,
   broker,
@@ -15,7 +16,8 @@ define([
   viewport,
   user,
   time,
-  showDeleteFormPage
+  showDeleteFormPage,
+  localStorage
 ) {
   'use strict';
 

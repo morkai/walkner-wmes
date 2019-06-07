@@ -5,13 +5,15 @@ define([
   '../time',
   '../user',
   '../core/Model',
-  '../data/orgUnits'
+  '../data/orgUnits',
+  '../data/localStorage'
 ], function(
   _,
   time,
   user,
   Model,
-  orgUnits
+  orgUnits,
+  localStorage
 ) {
   'use strict';
 
@@ -126,8 +128,8 @@ define([
     {
       this.on('change', function()
       {
-        localStorage.LEAN_FILTER = JSON.stringify(_.omit(this.attributes, 'visibleSeries'));
-        localStorage.LEAN_VISIBLE_SERIES = JSON.stringify(this.attributes.visibleSeries);
+        localStorage.setItem('LEAN_FILTER', JSON.stringify(_.omit(this.attributes, 'visibleSeries')));
+        localStorage.setItem('LEAN_VISIBLE_SERIES', JSON.stringify(this.attributes.visibleSeries));
       });
     },
 
@@ -225,7 +227,7 @@ define([
 
       if (_.isEmpty(query))
       {
-        _.assign(attrs, JSON.parse(localStorage.LEAN_FILTER || '{}'));
+        _.assign(attrs, JSON.parse(localStorage.getItem('LEAN_FILTER') || '{}'));
       }
 
       _.forEach(query, function(value, name)
@@ -259,7 +261,7 @@ define([
       }
       else
       {
-        attrs.visibleSeries = JSON.parse(localStorage.LEAN_VISIBLE_SERIES || '{}');
+        attrs.visibleSeries = JSON.parse(localStorage.getItem('LEAN_VISIBLE_SERIES') || '{}');
       }
 
       return new this(attrs);

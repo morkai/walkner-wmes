@@ -7,7 +7,8 @@ define([
   'app/viewport',
   'app/time',
   'app/core/Router',
-  'app/core/pages/ErrorPage'
+  'app/core/pages/ErrorPage',
+  'app/data/localStorage'
 ], function(
   Backbone,
   specialOperators,
@@ -15,7 +16,8 @@ define([
   viewport,
   time,
   Router,
-  ErrorPage
+  ErrorPage,
+  localStorage
 ) {
   'use strict';
 
@@ -97,7 +99,7 @@ define([
 
   function recordRecent()
   {
-    var recent = JSON.parse(localStorage.WMES_RECENT_LOCATIONS || '[]');
+    var recent = JSON.parse(localStorage.getItem('WMES_RECENT_LOCATIONS') || '[]');
 
     recent.unshift({
       date: new Date(),
@@ -109,7 +111,7 @@ define([
       recent.pop();
     }
 
-    localStorage.WMES_RECENT_LOCATIONS = JSON.stringify(recent);
+    localStorage.setItem('WMES_RECENT_LOCATIONS', JSON.stringify(recent));
   }
 
   window.router = router;

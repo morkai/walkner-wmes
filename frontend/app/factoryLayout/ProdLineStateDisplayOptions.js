@@ -4,12 +4,14 @@ define([
   'underscore',
   '../user',
   '../core/Model',
-  '../data/orgUnits'
+  '../data/orgUnits',
+  '../data/localStorage'
 ], function(
   _,
   user,
   Model,
-  orgUnits
+  orgUnits,
+  localStorage
 ) {
   'use strict';
 

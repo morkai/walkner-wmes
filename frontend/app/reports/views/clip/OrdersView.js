@@ -6,6 +6,7 @@ define([
   'app/time',
   'app/core/View',
   'app/core/views/PaginationView',
+  'app/data/localStorage',
   'app/orders/views/OrderChangesView',
   'app/reports/templates/clip/orders',
   'app/reports/templates/clip/orderRow'
@@ -15,6 +16,7 @@ define([
   time,
   View,
   PaginationView,
+  localStorage,
   OrderChangesView,
   ordersTemplate,
   orderRowTemplate

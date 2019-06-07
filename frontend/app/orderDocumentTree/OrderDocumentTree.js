@@ -6,6 +6,7 @@ define([
   '../user',
   '../time',
   '../core/Model',
+  '../data/localStorage',
   './OrderDocumentFolder',
   './OrderDocumentFolderCollection',
   './OrderDocumentFileCollection',
@@ -16,6 +17,7 @@ define([
   user,
   time,
   Model,
+  localStorage,
   OrderDocumentFolder,
   OrderDocumentFolderCollection,
   OrderDocumentFileCollection,
@@ -43,7 +45,7 @@ define([
         expandedFolders: {},
         searchPhrase: '',
         dateFilter: null,
-        displayMode: localStorage[DISPLAY_MODE_STORAGE_KEY] || DISPLAY_MODE.TILES
+        displayMode: localStorage.getItem(DISPLAY_MODE_STORAGE_KEY) || DISPLAY_MODE.TILES
       };
     },
 
@@ -76,7 +78,9 @@ define([
 
     setDisplayMode: function(displayMode)
     {
-      this.set('displayMode', localStorage[DISPLAY_MODE_STORAGE_KEY] = displayMode);
+      localStorage.setItem(DISPLAY_MODE_STORAGE_KEY, displayMode);
+
+      this.set('displayMode', displayMode);
     },
 
     hasDateFilter: function()

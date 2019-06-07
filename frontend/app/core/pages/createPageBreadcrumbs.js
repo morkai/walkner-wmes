@@ -2,10 +2,12 @@
 
 define([
   'underscore',
-  'app/i18n'
+  'app/i18n',
+  'app/data/localStorage'
 ], function(
   _,
-  t
+  t,
+  localStorage
 ) {
   'use strict';
 
@@ -50,7 +52,7 @@ define([
       if (href)
       {
         var baseUrl = window.location.origin + window.location.pathname + href;
-        var recentUrl = _.find(JSON.parse(localStorage.WMES_RECENT_LOCATIONS || '[]'), function(recent)
+        var recentUrl = _.find(JSON.parse(localStorage.getItem('WMES_RECENT_LOCATIONS') || '[]'), function(recent)
         {
           if (recent.href.indexOf(baseUrl) !== 0)
           {
