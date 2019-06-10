@@ -453,11 +453,13 @@ define([
           && !!change.data.attachments[1];
         var hasStatusChanged = !!change.data.status;
         var hasAnalysisChanged = !!change.data.analysisNeed || !!change.data.analysisDone;
+        var hasLevelChanged = !!change.data.level;
 
         if (hasComment
           || hasAttachmentsAdded
           || hasStatusChanged
-          || hasAnalysisChanged)
+          || hasAnalysisChanged
+          || hasLevelChanged)
         {
           entry.serializeChatMessage(change, chat, availableAttachments);
         }
@@ -528,6 +530,18 @@ define([
           time: longTime,
           text: t(this.nlsDomain, 'chat:analysis:finished', {
             duration: duration
+          })
+        });
+      }
+
+      if (change.data.level)
+      {
+        var escalation = change.data.level[1] > change.data.level[0] ? 'up' : 'down';
+
+        lines.push({
+          time: longTime,
+          text: t(this.nlsDomain, 'chat:level:' + escalation, {
+            level: change.data.level[1]
           })
         });
       }

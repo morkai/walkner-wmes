@@ -143,6 +143,8 @@
     "chat:status:started:finished": "<i>Entry finished in {duration}.</i>",
     "chat:status:finished:started": "<i>Entry restarted.</i>",
     "chat:status:pending:finished": "<i>Entry finished.</i>",
+    "chat:level:up": "<i>Escalated the entry to level {level}.</i>",
+    "chat:level:down": "<i>De-escalated the entry to level {level}.</i>",
 
     "autolink:attachment": "Attachment",
     "autolink:product": "12NC",

@@ -150,6 +150,8 @@
   "chat:status:pending:finished": "<i>Zakończono zgłoszenie.</i>",
   "chat:analysis:started": "<i>Rozpoczęto analizę.</i>",
   "chat:analysis:finished": "<i>Zakończono analizę w {duration}.</i>",
+  "chat:level:up": "<i>Wyeskalowano zgłoszenie do poziomu {level}.</i>",
+  "chat:level:down": "<i>Deeskalowano zgłoszenie do poziomu {level}.</i>",
 
   "autolink:attachment": "Załącznik",
   "autolink:product": "12NC",
