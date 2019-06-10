@@ -219,25 +219,8 @@ define([
 
     updateChart: function()
     {
-      var chart = this.chart;
-      var plotLines = this.serializePlotLines();
-
-      while (chart.series.length)
-      {
-        chart.series[0].remove(false);
-      }
-
-      chart.xAxis[0].setCategories(this.serializeCategories(), false);
-      chart.yAxis[0].removePlotLine('refValue');
-
-      if (plotLines.length)
-      {
-        chart.yAxis[0].addPlotLine(plotLines[0]);
-      }
-
-      _.forEach(this.serializeSeries(), function(series) { chart.addSeries(series, false); });
-
-      chart.redraw();
+      this.chart.destroy();
+      this.createChart();
     },
 
     onModelLoading: function()

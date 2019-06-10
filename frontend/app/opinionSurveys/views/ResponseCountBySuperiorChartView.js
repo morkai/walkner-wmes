@@ -153,13 +153,8 @@ define([
 
     updateChart: function()
     {
-      var chartData = this.serializeChartData();
-      var series = this.chart.series;
-
-      series[0].setData(chartData.superiors, false, false, true);
-      series[1].setData(chartData.employers, false, false, true);
-
-      this.chart.redraw(false);
+      this.chart.destroy();
+      this.createChart();
     },
 
     serializeChartData: function()

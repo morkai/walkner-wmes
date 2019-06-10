@@ -200,18 +200,8 @@ define([
 
     updateChart: function()
     {
-      var chart = this.chart;
-      var series = chart.series;
-      var chartData = this.serializeChartData();
-
-      chart.xAxis[0].setCategories(this.serializeCategories(), false);
-
-      _.forEach(series, function(series)
-      {
-        series.setData(chartData[series.options.id], false);
-      });
-
-      chart.redraw();
+      this.chart.destroy();
+      this.createChart();
     },
 
     onModelLoading: function()

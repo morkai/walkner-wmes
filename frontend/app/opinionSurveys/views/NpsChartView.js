@@ -126,18 +126,8 @@ define([
 
     updateChart: function()
     {
-      var chart = this.chart;
-
-      while (chart.series.length)
-      {
-        chart.series[0].remove(false);
-      }
-
-      chart.xAxis[0].setCategories(this.serializeCategories(), false);
-
-      _.forEach(this.serializeSeries(), function(series) { chart.addSeries(series, false); });
-
-      chart.redraw();
+      this.chart.destroy();
+      this.createChart();
     },
 
     onModelLoading: function()
