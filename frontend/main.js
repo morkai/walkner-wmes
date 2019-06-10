@@ -94,6 +94,16 @@
     .test(navigator.userAgent);
   window.IS_LINUX = navigator.userAgent.indexOf('X11; Linux') !== -1;
 
+  if (window.IS_EMBEDDED
+    || window.IS_LINUX
+    || !navigator.serviceWorker
+    || !navigator.serviceWorker.getRegistrations
+    || location.protocol !== 'https:'
+    || location.pathname !== '/')
+  {
+    delete window.SERVICE_WORKER;
+  }
+
   document.body.classList.toggle('is-ie', window.IS_IE);
   document.body.classList.toggle('is-mobile', window.IS_MOBILE);
   document.body.classList.toggle('is-embedded', window.IS_EMBEDDED);
@@ -133,15 +143,9 @@
     window.parent.postMessage({type: 'init', host: location.hostname}, '*');
   }
 
-  if (window.SERVICE_WORKER
-    && !window.IS_EMBEDDED
-    && !window.IS_LINUX
-    && window.navigator.serviceWorker
-    && window.navigator.serviceWorker.getRegistrations
-    && location.protocol === 'https:'
-    && location.pathname === '/')
+  if (window.SERVICE_WORKER)
   {
-    window.navigator.serviceWorker.register('/sw.js')
+    window.navigator.serviceWorker.register(window.SERVICE_WORKER)
       .then(function() { console.log('[sw] Registered!'); })
       .catch(function(err) { console.error('[sw] Failed to register:', err); });
   }

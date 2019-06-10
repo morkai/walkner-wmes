@@ -17,9 +17,7 @@ function(
   var clientId = null;
 
   var N = window.Notification;
-  var sw = window.navigator.serviceWorker && window.navigator.serviceWorker.getRegistrations
-    ? window.navigator.serviceWorker
-    : null;
+  var sw = window.SERVICE_WORKER ? window.navigator.serviceWorker : null;
   var userActions = {};
   var messageHandlers = {
     userAction: function(message)
