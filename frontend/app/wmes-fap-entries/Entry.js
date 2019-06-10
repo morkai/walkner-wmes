@@ -834,7 +834,18 @@ define([
       });
 
       var observers = data.observers || [].concat(entry.get('observers'));
-      var observerIndex = _.findIndex(observers, function(o) { return o.user.id === user.data._id; });
+      var observerIndex = _.findIndex(observers, function(o)
+      {
+        if (!o.user && window.logBrowserError)
+        {
+          window.logBrowserError(new Error('Invalid observer: ' + JSON.stringify({
+            change: change,
+            observer: o
+          })));
+        }
+
+        return !!o.user && o.user.id === user.data._id;
+      });
 
       if (observerIndex !== -1)
       {
@@ -893,6 +904,9 @@ define([
           if (!observerMap[subscriber.id])
           {
             newObservers.push({
+              lastSeenAt: new Date(),
+              notify: false,
+              changes: {},
               user: subscriber
             });
 
