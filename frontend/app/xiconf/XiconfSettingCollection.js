@@ -49,7 +49,7 @@ define([
               : newValue;
       }
 
-      if (/Filter$/.test(id))
+      if (/(Filter|componentPatterns)$/.test(id))
       {
         return newValue;
       }

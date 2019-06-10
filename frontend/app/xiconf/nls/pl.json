@@ -382,10 +382,12 @@
 
   "settings:tab:clients": "Klienci",
   "settings:tab:notifier": "Powiadomienia",
+  "settings:tab:importer": "Importowanie",
   "settings:appVersion": "Aktualna wersja aplikacji Walkner Xiconf",
   "settings:notifier:enabled": "Powiadamianie włączone",
   "settings:notifier:emptyLeds": "Powiadamianie o zleceniach bez driverów z zerową ilością zeskanowanych płytek LED",
   "settings:notifier:emptyHids": "Powiadamianie o zleceniach bez driverów z zerową ilością zeskanowanych lamp HID",
   "settings:notifier:delay": "Opóźnienie powiadomienia [min]",
-  "settings:notifier:nameFilter": "Ignorowanie powiadomień po nazwie wyrobu"
+  "settings:notifier:nameFilter": "Ignorowanie powiadomień po nazwie wyrobu",
+  "settings:importer:componentPatterns": "Wzorce dopasowania komponentów"
 }

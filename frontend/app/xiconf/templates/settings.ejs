@@ -1,7 +1,8 @@
 <form class="settings xiconf-settings">
   <div class="list-group">
-    <a class="list-group-item" href="#xiconf;settings?tab=clients" data-tab="clients"><%- helpers.t('settings:tab:clients') %></a>
-    <a class="list-group-item" href="#xiconf;settings?tab=notifier" data-tab="notifier"><%- helpers.t('settings:tab:notifier') %></a>
+    <% ['clients', 'notifier', 'importer'].forEach(function(tab) { %>
+    <a class="list-group-item" href="#xiconf;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- helpers.t('settings:tab:' + tab) %></a>
+    <% }) %>
   </div>
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="clients">
@@ -36,6 +37,12 @@
       <div class="form-group">
         <label for="<%- idPrefix %>-notifier-nameFilter"><%- helpers.t('settings:notifier:nameFilter') %></label>
         <textarea id="<%- idPrefix %>-notifier-nameFilter" class="form-control" name="xiconf.notifier.nameFilter" rows="5"></textarea>
+      </div>
+    </div>
+    <div class="panel-body" data-tab="importer">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-importer-componentPatterns"><%- helpers.t('settings:importer:componentPatterns') %></label>
+        <textarea id="<%- idPrefix %>-importer-componentPatterns" class="form-control text-mono" name="xiconf.importer.componentPatterns" rows="35"></textarea>
       </div>
     </div>
   </div>

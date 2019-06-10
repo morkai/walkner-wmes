@@ -143,7 +143,8 @@ exports['orderDocuments/importer/eto'] = {
 
 exports['orders/importer/bom'] = {
   filterRe: /^ORDERS_COMPONENTS\.txt$/,
-  parsedOutputDir: IMPORT_OUTPUT_DIR
+  parsedOutputDir: IMPORT_OUTPUT_DIR,
+  xiconfFilePathPattern: exports['orderDocuments/importer'].xiconfProgramFilePathPattern
 };
 
 exports['orders/importer/zlf1'] = {

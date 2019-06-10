@@ -383,12 +383,14 @@
 
     "settings:tab:clients": "Clients",
     "settings:tab:notifier": "Notifications",
+    "settings:tab:importer": "Importer",
     "settings:appVersion": "Current version of the Walkner Xiconf app",
     "settings:notifier:enabled": "Notifications enabled",
     "settings:notifier:emptyLeds": "Notify about orders without drivers and with no LED boards scanned",
     "settings:notifier:emptyHids": "Notify about orders without drivers and with no HID lamps scanned",
     "settings:notifier:delay": "Notification delay [min]",
-    "settings:notifier:nameFilter": "Ignore notifications by product name"
+    "settings:notifier:nameFilter": "Ignore notifications by product name",
+    "settings:importer:componentPatterns": "Component patterns"
   },
   "pl": true
 }
