@@ -20,7 +20,7 @@
         {id: '!shift', value: model.prodShiftText},
         {id: '!order', visible: !!model.productName, value: function()
         {
-          if (user.isAllowedTo('PROD_DATA:VIEW'))
+          if (model.prodShiftOrder && user.isAllowedTo('PROD_DATA:VIEW'))
           {
             return '<a href="#prodShiftOrders/' + model.prodShiftOrder._id + '">' + model.orderId + '</a>: '
               + _.escape(model.productName);
