@@ -715,11 +715,18 @@ define([
 
     saveStatus: function(orderKey, status, qtySent)
     {
+      var view = this;
+      var $row = view.$('tr[data-key="' + orderKey + '"]');
+
+      if (!$row.length)
+      {
+        return;
+      }
+
       viewport.msg.saving();
 
-      var view = this;
       var useLineToOrders = view.shouldUseLineToOrders();
-      var dataset = view.$('tr[data-key="' + orderKey + '"]')[0].dataset;
+      var dataset = $row[0].dataset;
       var data = {
         date: time.utc.getMoment(view.plan.id, 'YYYY-MM-DD').valueOf(),
         line: dataset.line,
