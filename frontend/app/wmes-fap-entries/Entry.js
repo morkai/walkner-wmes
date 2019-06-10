@@ -594,6 +594,11 @@ define([
       {
         var type;
 
+        if (prefix === '/')
+        {
+          return match;
+        }
+
         if (prefix === undefined)
         {
           prefix = '';
