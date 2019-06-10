@@ -333,16 +333,9 @@ define([
       this.loadTimeline(changeRequest);
     },
 
-    isCurrentUserAllowedToConfirm: function(changeRequest)
+    isCurrentUserAllowedToConfirm: function()
     {
-      if (!user.isAllowedTo('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:MANAGE'))
-      {
-        return false;
-      }
-
-      var userDivision = user.getDivision();
-
-      return !userDivision || userDivision.id === changeRequest.get('division');
+      return user.isAllowedTo('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:MANAGE');
     },
 
     serializeChanges: function(changeRequest)
