@@ -754,7 +754,7 @@ define([
         update[prop] = newValue;
       });
 
-      if (!Object.keys(update).length)
+      if (Object.keys(data).length && !Object.keys(update).length)
       {
         return;
       }
