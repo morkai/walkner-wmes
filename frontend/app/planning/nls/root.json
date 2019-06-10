@@ -37,6 +37,7 @@
     "filter:mrps:placeholder": "All",
     "filter:lines": "Production lines",
     "filter:whStatuses": "Stage",
+    "filter:psStatuses": "Paint-shop status",
     "filter:wrapLists": "List wrapping",
     "filter:lineOrdersList": "<u>O</u>rder list",
     "filter:useLatestOrderData": "Latest order data",

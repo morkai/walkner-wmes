@@ -27,6 +27,8 @@ define([
 
       'input #-date': 'changeFilter',
       'change #-date': 'changeFilter',
+      'change #-whStatuses': 'changeFilter',
+      'change #-psStatuses': 'changeFilter',
       'change #-from': 'changeFilter',
       'change #-to': 'changeFilter',
       'click #-useDarkerTheme': function()
@@ -47,6 +49,11 @@ define([
       this.listenTo(displayOptions, 'change:useDarkerTheme', this.updateToggles);
     },
 
+    destroy: function()
+    {
+      this.$('.is-expandable').expandableSelect('destroy');
+    },
+
     getTemplateData: function()
     {
       var plan = this.plan;
@@ -56,10 +63,17 @@ define([
         date: plan.id,
         minDate: displayOptions.get('minDate'),
         maxDate: displayOptions.get('maxDate'),
+        whStatuses: displayOptions.get('whStatuses'),
+        psStatuses: displayOptions.get('psStatuses'),
         from: displayOptions.get('from'),
         to: displayOptions.get('to'),
         useDarkerTheme: displayOptions.isDarkerThemeUsed()
       };
+    },
+
+    afterRender: function()
+    {
+      this.$('.is-expandable').expandableSelect();
     },
 
     updateToggles: function()
@@ -70,15 +84,29 @@ define([
     changeFilter: function()
     {
       var view = this;
+      var $whStatuses = view.$id('whStatuses');
+      var $psStatuses = view.$id('psStatuses');
       var date = view.$id('date').val();
       var data = {
+        whStatuses: $whStatuses.val(),
+        psStatuses: $psStatuses.val(),
         from: view.$id('from').val() || '06:00',
         to: view.$id('to').val() || '06:00'
       };
 
+      if (!data.whStatuses || data.whStatuses.length === $whStatuses[0].options.length)
+      {
+        data.whStatuses = [];
+      }
+
+      if (!data.psStatuses || data.psStatuses.length === $psStatuses[0].options.length)
+      {
+        data.psStatuses = [];
+      }
+
       var displayOptions = {};
 
-      ['from', 'to'].forEach(function(prop)
+      ['whStatuses', 'psStatuses', 'from', 'to'].forEach(function(prop)
       {
         if (!_.isEqual(data[prop], view.plan.displayOptions.get(prop)))
         {
@@ -99,9 +127,13 @@ define([
 
     onLoadingChanged: function()
     {
-      var loading = this.plan.get('loading');
+      var view = this;
+      var loading = view.plan.get('loading');
 
-      this.$id('date').prop('disabled', loading);
+      ['date', 'whStatuses', 'psStatuses', 'from', 'to'].forEach(function(prop)
+      {
+        view.$id(prop).prop('disabled', loading);
+      });
     },
 
     onDateChanged: function()

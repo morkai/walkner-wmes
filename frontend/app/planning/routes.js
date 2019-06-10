@@ -108,20 +108,23 @@ define([
       });
     }
 
-    viewport.showPage(new WhPage({
+    var options = {
       date: req.params.id,
       mrps: req.query.mrps === undefined
         ? null
         : req.query.mrps.split(/[^A-Z0-9]+/i).filter(function(mrp) { return mrp.length > 0; }),
-      lines: req.query.lines === undefined
-        ? null
-        : req.query.lines.split(',').filter(function(line) { return line.length > 0; }),
-      whStatuses: req.query.whStatuses === undefined
-        ? null
-        : req.query.whStatuses.split(',').filter(function(whStatus) { return whStatus.length > 0; }),
       from: req.query.from === undefined ? '06:00' : req.query.from,
       to: req.query.to === undefined ? '06:00' : req.query.to
-    }));
+    };
+
+    ['lines', 'whStatuses', 'psStatuses'].forEach(function(prop)
+    {
+      options[prop] = req.query[prop] === undefined
+        ? null
+        : req.query[prop].split(',').filter(function(v) { return v.length > 0; });
+    });
+
+    viewport.showPage(new WhPage(options));
   });
 
   router.map('/planning/settings', canManage, function(req)

@@ -22,6 +22,8 @@
   "PAGE_ACTION:resolveAction:title": "Podaj ID karty, aby rozpocząć następną akcję",
   "PAGE_ACTION:resolveAction:placeholder": "ID karty",
 
+  "filter:whStatuses": "Etap",
+  "filter:psStatuses": "Status malarnii",
   "filter:date": "Data planu",
   "filter:startTime": "Początek",
   "filter:useDarkerTheme": "Wysoki kontrast",

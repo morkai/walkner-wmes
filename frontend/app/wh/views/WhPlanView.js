@@ -112,6 +112,8 @@ define([
       view.listenTo(view.whOrders, 'reset', view.onOrdersReset);
       view.listenTo(view.whOrders, 'change', view.onOrderChanged);
 
+      view.listenTo(plan.displayOptions, 'change:whStatuses', view.onWhStatusesFilterChanged);
+      view.listenTo(plan.displayOptions, 'change:psStatuses', view.onPsStatusesFilterChanged);
       view.listenTo(plan.displayOptions, 'change:from change:to', view.onStartTimeFilterChanged);
 
       $(window).on('scroll.' + view.idPrefix, view.positionStickyHeaders.bind(view));
@@ -574,6 +576,16 @@ define([
       this.toggleSeparatorRowVisibility();
     },
 
+    onWhStatusesFilterChanged: function()
+    {
+      this.toggleOrderRowVisibility();
+    },
+
+    onPsStatusesFilterChanged: function()
+    {
+      this.toggleOrderRowVisibility();
+    },
+
     onStartTimeFilterChanged: function()
     {
       this.toggleOrderRowVisibility();
@@ -594,6 +606,14 @@ define([
           hidden = filters.whStatuses.indexOf(this.dataset.status) === -1;
         }
 
+        if (!hidden && filters.psStatuses.length)
+        {
+          var psStatusEl = this.querySelector('.planning-mrp-list-property-psStatus');
+          var psStatus = psStatusEl ? psStatusEl.dataset.psStatus : 'unknown';
+
+          hidden = filters.psStatuses.indexOf(psStatus) === -1;
+        }
+
         this.classList.toggle('hidden', hidden);
       });
 
@@ -605,6 +625,7 @@ define([
       var $table = this.$('.planning-mrp-lineOrders-table');
 
       if (_.isEmpty(this.plan.displayOptions.get('whStatuses'))
+        && _.isEmpty(this.plan.displayOptions.get('psStatuses'))
         && this.plan.displayOptions.get('from') === '06:00'
         && this.plan.displayOptions.get('to') === '06:00')
       {

@@ -57,6 +57,7 @@ define([
     {
       return {
         whStatuses: plan.displayOptions.get('whStatuses') || [],
+        psStatuses: plan.displayOptions.get('psStatuses') || [],
         startTime: plan.displayOptions.getStartTimeRange(plan.id)
       };
     },

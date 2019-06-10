@@ -23,6 +23,8 @@
     "PAGE_ACTION:resolveAction:title": "Enter a card ID to resolve the next action",
     "PAGE_ACTION:resolveAction:placeholder": "Card ID",
 
+    "filter:whStatuses": "Stage",
+    "filter:psStatuses": "Paint-shop status",
     "filter:date": "Plan date",
     "filter:startTime": "Start",
     "filter:useDarkerTheme": "High contrast",

@@ -104,9 +104,11 @@ define([
         kitter: FUNC_STATUS_TO_ICON[obj.funcs[1].status],
         packer: FUNC_STATUS_TO_ICON[obj.funcs[2].status]
       };
+      obj.psStatus = plan.sapOrders.getPsStatus(obj.order);
       obj.hidden = startTime < filters.startTime.from
         || startTime >= filters.startTime.to
-        || (filters.whStatuses.length > 0 && filters.whStatuses.indexOf(obj.status) === -1);
+        || (filters.whStatuses.length > 0 && filters.whStatuses.indexOf(obj.status) === -1)
+        || (filters.psStatuses.length > 0 && filters.psStatuses.indexOf(obj.psStatus) === -1);
 
       if (obj.hidden)
       {
@@ -120,7 +122,8 @@ define([
     {
       var obj = this.serialize(plan, i, this.collection ? this.collection.getFilters(plan) : {
         startTime: {},
-        whStatuses: []
+        whStatuses: [],
+        psStatuses: []
       });
       var canManage = user.isAllowedTo('WH:MANAGE');
       var userFunc = this.getUserFunc(whUser);

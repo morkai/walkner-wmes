@@ -41,10 +41,21 @@ define([
       });
     }
 
-    viewport.showPage(new WhPlanPage({
+    var options = {
       date: req.params.id,
-      focus: req.query.focus
-    }));
+      focus: req.query.focus,
+      from: req.query.from === undefined ? '06:00' : req.query.from,
+      to: req.query.to === undefined ? '06:00' : req.query.to
+    };
+
+    ['whStatuses', 'psStatuses'].forEach(function(prop)
+    {
+      options[prop] = req.query[prop] === undefined
+        ? null
+        : req.query[prop].split(',').filter(function(v) { return v.length > 0; });
+    });
+
+    viewport.showPage(new WhPlanPage(options));
   });
 
   router.map('/wh/problems', canView, function()

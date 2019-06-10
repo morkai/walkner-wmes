@@ -144,6 +144,7 @@ define([
       view.listenTo(view.whOrderStatuses, 'add change', view.onWhOrderStatusChanged);
 
       view.listenTo(plan.displayOptions, 'change:whStatuses', view.onWhStatusesFilterChanged);
+      view.listenTo(plan.displayOptions, 'change:psStatuses', view.onPsStatusesFilterChanged);
       view.listenTo(plan.displayOptions, 'change:from change:to', view.onStartTimeFilterChanged);
     },
 
@@ -194,6 +195,7 @@ define([
       var plan = view.plan;
       var lines = plan.displayOptions.get('lines');
       var whStatuses = plan.displayOptions.get('whStatuses') || [];
+      var psStatuses = plan.displayOptions.get('psStatuses') || [];
       var startTimeRange = plan.displayOptions.getStartTimeRange(plan.id);
       var disabledMrps = plan.settings.global.getValue('wh.newIncludedMrps') || [];
       var list = [];
@@ -326,11 +328,13 @@ define([
         }
 
         order.whStatus = view.whOrderStatuses.serialize(order.key);
+        order.psStatus = plan.sapOrders.getPsStatus(order.orderNo);
 
         var hiddenWhStatus = whStatuses.length && whStatuses.indexOf(order.whStatus.status.toString()) === -1;
+        var hiddenPsStatus = psStatuses.length && psStatuses.indexOf(order.psStatus) === -1;
         var hiddenStartTime = order.startTimeMs < startTimeRange.from || order.startTimeMs >= startTimeRange.to;
 
-        if (hiddenWhStatus || hiddenStartTime)
+        if (hiddenWhStatus || hiddenPsStatus || hiddenStartTime)
         {
           order.rowClassName += ' hidden';
         }
@@ -795,6 +799,11 @@ define([
           .find('.planning-mrp-list-property-psStatus')
           .attr('title', t('planning', 'orders:psStatus:' + psStatus))
           .attr('data-ps-status', psStatus);
+
+        if (!_.isEmpty(this.plan.displayOptions.get('psStatuses')))
+        {
+          this.toggleOrderRowVisibility();
+        }
       }
     },
 
@@ -811,6 +820,11 @@ define([
           .find('.planning-mrp-list-property-whStatus')
           .attr('title', t('planning', 'orders:whStatus:' + whStatus))
           .attr('data-wh-status', whStatus);
+
+        if (!_.isEmpty(this.plan.displayOptions.get('whStatuses')))
+        {
+          this.toggleOrderRowVisibility();
+        }
       }
     },
 
@@ -855,6 +869,11 @@ define([
       this.toggleOrderRowVisibility();
     },
 
+    onPsStatusesFilterChanged: function()
+    {
+      this.toggleOrderRowVisibility();
+    },
+
     onStartTimeFilterChanged: function()
     {
       this.toggleOrderRowVisibility();
@@ -865,6 +884,7 @@ define([
       var view = this;
       var startTimeRange = view.plan.displayOptions.getStartTimeRange(view.plan.id);
       var whStatuses = view.plan.displayOptions.get('whStatuses') || [];
+      var psStatuses = view.plan.displayOptions.get('psStatuses') || [];
 
       view.$('.planning-wh-order').each(function()
       {
@@ -878,6 +898,14 @@ define([
           hidden = whStatuses.indexOf(whStatus) === -1;
         }
 
+        if (!hidden && psStatuses.length)
+        {
+          var psStatusEl = this.querySelector('.planning-mrp-list-property-psStatus');
+          var psStatus = psStatusEl ? psStatusEl.dataset.psStatus : 'unknown';
+
+          hidden = psStatuses.indexOf(psStatus) === -1;
+        }
+
         this.classList.toggle('hidden', hidden);
       });
 
@@ -889,6 +917,7 @@ define([
       var $table = this.$('.planning-mrp-lineOrders-table');
 
       if (_.isEmpty(this.plan.displayOptions.get('whStatuses'))
+        && _.isEmpty(this.plan.displayOptions.get('psStatuses'))
         && this.plan.displayOptions.get('from') === '06:00'
         && this.plan.displayOptions.get('to') === '06:00')
       {

@@ -187,7 +187,10 @@ define([
         displayOptions: PlanDisplayOptions.fromLocalStorage({
           mrps: page.options.mrps,
           lines: page.options.lines,
-          whStatuses: page.options.whStatuses
+          whStatuses: page.options.whStatuses,
+          psStatuses: page.options.psStatuses,
+          from: page.options.from,
+          to: page.options.to
         }, {
           storageKey: 'PLANNING:DISPLAY_OPTIONS:WH'
         }),
@@ -241,6 +244,7 @@ define([
       page.listenTo(plan.displayOptions, 'change:mrps', page.onMrpsFilterChanged);
       page.listenTo(plan.displayOptions, 'change:lines', page.onLinesFilterChanged);
       page.listenTo(plan.displayOptions, 'change:whStatuses', page.onWhStatusesFilterChanged);
+      page.listenTo(plan.displayOptions, 'change:psStatuses', page.onPsStatusesFilterChanged);
       page.listenTo(plan.displayOptions, 'change:from change:to', page.onStartTimeFilterChanged);
       page.listenTo(plan.displayOptions, 'change:useDarkerTheme', page.onDarkerThemeChanged);
 
@@ -338,6 +342,7 @@ define([
           + '?mrps=' + plan.displayOptions.get('mrps')
           + '&lines=' + plan.displayOptions.get('lines')
           + '&whStatuses=' + plan.displayOptions.get('whStatuses')
+          + '&psStatuses=' + plan.displayOptions.get('psStatuses')
           + '&from=' + encodeURIComponent(plan.displayOptions.get('from'))
           + '&to=' + encodeURIComponent(plan.displayOptions.get('to')),
         replace: true,
@@ -511,6 +516,11 @@ define([
     },
 
     onWhStatusesFilterChanged: function()
+    {
+      this.updateUrl();
+    },
+
+    onPsStatusesFilterChanged: function()
     {
       this.updateUrl();
     },

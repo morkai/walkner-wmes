@@ -23,6 +23,7 @@ define([
         mrps: [],
         lines: [],
         whStatuses: [],
+        psStatuses: [],
         printOrderTimes: false,
         useLatestOrderData: true,
         useDarkerTheme: false,
@@ -129,12 +130,17 @@ define([
 
       displayOptions.readFromLocalStorage();
 
-      ['mrps', 'lines', 'whStatuses'].forEach(function(prop)
+      ['mrps', 'lines', 'whStatuses', 'psStatuses', 'from', 'to'].forEach(function(prop)
       {
         if (Array.isArray(attrs[prop]))
         {
           displayOptions.set(prop, attrs[prop]);
         }
+      });
+
+      ['from', 'to'].forEach(function(prop)
+      {
+        displayOptions.set(prop, attrs[prop]);
       });
 
       return displayOptions;

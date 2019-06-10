@@ -14,9 +14,17 @@
   <div class="form-group">
     <label for="<%- idPrefix %>-whStatuses" class="control-label"><%- t('planning', 'filter:whStatuses') %></label>
     <select id="<%- idPrefix %>-whStatuses" name="whStatuses" multiple class="form-control is-expandable" size="1" data-expanded-length="4">
-    <% ['0', '1', '2', '3'].forEach(function(whStatus) { %>
+      <% ['0', '1', '2', '3'].forEach(function(whStatus) { %>
       <option value="<%- whStatus %>" <%- _.includes(whStatuses, whStatus) ? 'selected' : '' %>><%- t('planning', 'wh:status:' + whStatus, {qtySent: 0}) %></option>
-    <% }) %>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-psStatuses" class="control-label"><%- t('planning', 'filter:psStatuses') %></label>
+    <select id="<%- idPrefix %>-psStatuses" name="psStatuses" multiple class="form-control is-expandable" size="1" data-expanded-length="6">
+      <% ['unknown', 'new', 'started', 'partial', 'finished', 'cancelled'].forEach(function(psStatus) { %>
+      <option value="<%- psStatus %>" <%- _.includes(psStatuses, psStatus) ? 'selected' : '' %>><%- t('planning', 'orders:psStatus:' + psStatus) %></option>
+      <% }) %>
     </select>
   </div>
   <div class="form-group">

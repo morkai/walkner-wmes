@@ -261,7 +261,12 @@ define([
       var page = this;
 
       var plan = page.model = page.plan = new Plan({_id: page.options.date}, {
-        displayOptions: PlanDisplayOptions.fromLocalStorage({}, {
+        displayOptions: PlanDisplayOptions.fromLocalStorage({
+          whStatuses: page.options.whStatuses,
+          psStatuses: page.options.psStatuses,
+          from: page.options.from,
+          to: page.options.to
+        }, {
           storageKey: 'PLANNING:DISPLAY_OPTIONS:WH'
         }),
         settings: PlanSettings.fromDate(page.options.date),
@@ -308,6 +313,8 @@ define([
       page.listenTo(plan, 'sync', page.onPlanSynced);
       page.listenTo(plan, 'change:_id', page.onDateFilterChanged);
 
+      page.listenTo(plan.displayOptions, 'change:whStatuses', page.onWhStatusesFilterChanged);
+      page.listenTo(plan.displayOptions, 'change:psStatuses', page.onPsStatusesFilterChanged);
       page.listenTo(plan.displayOptions, 'change:from change:to', page.onStartTimeFilterChanged);
       page.listenTo(plan.displayOptions, 'change:useDarkerTheme', page.onDarkerThemeChanged);
 
@@ -413,7 +420,9 @@ define([
         this.broker.publish('router.navigate', {
           url: '/wh/plans/' + plan.id
             + '?from=' + encodeURIComponent(plan.displayOptions.get('from'))
-            + '&to=' + encodeURIComponent(plan.displayOptions.get('to')),
+            + '&to=' + encodeURIComponent(plan.displayOptions.get('to'))
+            + '&whStatuses=' + plan.displayOptions.get('whStatuses')
+            + '&psStatuses=' + plan.displayOptions.get('psStatuses'),
           replace: true,
           trigger: false
         });
@@ -812,6 +821,16 @@ define([
 
       this.updateUrl();
       this.reload();
+    },
+
+    onWhStatusesFilterChanged: function()
+    {
+      this.updateUrl();
+    },
+
+    onPsStatusesFilterChanged: function()
+    {
+      this.updateUrl();
     },
 
     onStartTimeFilterChanged: function()

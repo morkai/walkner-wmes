@@ -4,6 +4,22 @@
     <input id="<%- idPrefix %>-date" name="date" class="form-control" type="date" value="<%- date %>" min="<%- minDate %>" max="<%- maxDate %>">
   </div>
   <div class="form-group">
+    <label for="<%- idPrefix %>-whStatuses" class="control-label"><%- t('wh', 'filter:whStatuses') %></label>
+    <select id="<%- idPrefix %>-whStatuses" name="whStatuses" multiple class="form-control is-expandable" size="1" data-expanded-length="5">
+      <% ['pending', 'started', 'finished', 'problem', 'cancelled'].forEach(function(whStatus) { %>
+      <option value="<%- whStatus %>" <%- _.includes(whStatuses, whStatus) ? 'selected' : '' %>><%- t('wh', 'status:' + whStatus) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-psStatuses" class="control-label"><%- t('wh', 'filter:psStatuses') %></label>
+    <select id="<%- idPrefix %>-psStatuses" name="psStatuses" multiple class="form-control is-expandable" size="1" data-expanded-length="6">
+      <% ['unknown', 'new', 'started', 'partial', 'finished', 'cancelled'].forEach(function(psStatus) { %>
+      <option value="<%- psStatus %>" <%- _.includes(psStatuses, psStatus) ? 'selected' : '' %>><%- t('planning', 'orders:psStatus:' + psStatus) %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="form-group">
     <div class="dateTimeRange">
       <div class="dateTimeRange-labels">
         <div class="dateTimeRange-label">

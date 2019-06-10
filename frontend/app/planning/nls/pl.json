@@ -36,6 +36,7 @@
   "filter:mrps:placeholder": "Wszystkie",
   "filter:lines": "Linie produkcyjne",
   "filter:whStatuses": "Etap",
+  "filter:psStatuses": "Status malarnii",
   "filter:wrapLists": "Przewijanie list",
   "filter:lineOrdersList": "Lista <u>z</u>leceń",
   "filter:useLatestOrderData": "Najnowsze zlecenia",
