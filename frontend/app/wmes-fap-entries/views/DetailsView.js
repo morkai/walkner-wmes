@@ -433,10 +433,13 @@ define([
 
       var statusAction = this.serializeStatusAction();
 
-      this.$id('statusAction')
-        .removeClass('btn-info btn-success')
-        .addClass('btn-' + statusAction.type)
-        .text(statusAction.label);
+      if (statusAction)
+      {
+        this.$id('statusAction')
+          .removeClass('btn-info btn-success')
+          .addClass('btn-' + statusAction.type)
+          .text(statusAction.label);
+      }
     },
 
     updateLevel: function()
