@@ -84,7 +84,10 @@ define([
 
       for (var i = 0; i < e.removed; ++i)
       {
-        view.el.removeChild(view.el.firstElementChild);
+        if (view.el.firstElementChild)
+        {
+          view.el.removeChild(view.el.firstElementChild);
+        }
       }
 
       var html = e.added.map(function(d)
