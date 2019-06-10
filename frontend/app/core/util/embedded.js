@@ -1,6 +1,7 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'require',
   'jquery',
   'app/i18n',
   'app/viewport',
@@ -10,6 +11,7 @@ define([
   'app/core/templates/embedded/confirmDialog',
   'app/core/templates/embedded/actions'
 ], function(
+  require,
   $,
   t,
   viewport,
@@ -59,6 +61,8 @@ define([
 
   function showAppsDialog(apps)
   {
+    var viewport = require('app/viewport');
+
     viewport.showDialog(new View({
       events: {
         'click [data-app]': function(e)
@@ -135,7 +139,7 @@ define([
           }
         });
 
-        viewport.showDialog(dialogView, t('core', 'embedded:reboot:title'));
+        require('app/viewport').showDialog(dialogView, t('core', 'embedded:reboot:title'));
       },
       shutdown: function()
       {
@@ -155,7 +159,7 @@ define([
           }
         });
 
-        viewport.showDialog(dialogView, t('core', 'embedded:shutdown:title'));
+        require('app/viewport').showDialog(dialogView, t('core', 'embedded:shutdown:title'));
       }
     },
 
