@@ -14,20 +14,13 @@ function(
 ) {
   'use strict';
 
-  var query = {};
-
-  if (window.COMPUTERNAME)
-  {
-    query.COMPUTERNAME = window.COMPUTERNAME;
-  }
-
   var socket = new Socket(sio({
     path: '/sio',
     transports: ['websocket'],
     timeout: 10000,
     reconnectionDelay: 500,
     autoConnect: false,
-    query: query
+    query: window.WMES_GET_COMMON_HEADERS ? window.WMES_GET_COMMON_HEADERS() : {} // eslint-disable-line new-cap
   }));
 
   var wasConnected = false;

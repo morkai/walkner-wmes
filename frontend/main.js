@@ -6,7 +6,7 @@
 
   var lastError = null;
 
-  window.logBrowserError = function(error, event)
+  function logBrowserError(error, event)
   {
     if (!window.fetch)
     {
@@ -66,11 +66,41 @@
         versions: window.updater && window.updater.versions || {}
       })
     }).then(function() {}, function() {});
-  };
+  }
+
+  function getCommonHeaders()
+  {
+    var headers = {};
+
+    if (window.INSTANCE_ID)
+    {
+      headers['X-WMES-INSTANCE'] = window.INSTANCE_ID;
+    }
+
+    if (window.COMPUTERNAME)
+    {
+      headers['X-WMES-CNAME'] = window.COMPUTERNAME;
+    }
+
+    if (window.WMES_APP_ID)
+    {
+      headers['X-WMES-APP'] = window.WMES_APP_ID;
+    }
+
+    if (window.WMES_LINE_ID)
+    {
+      headers['X-WMES-LINE'] = window.WMES_LINE_ID;
+    }
+
+    return headers;
+  }
+
+  window.WMES_GET_COMMON_HEADERS = getCommonHeaders;
+  window.WMES_LOG_BROWSER_ERROR = logBrowserError;
 
   window.addEventListener('error', function(e)
   {
-    window.logBrowserError(e.error, e);
+    logBrowserError(e.error, e);
   });
 
   var navigator = window.navigator;
@@ -163,33 +193,6 @@
 
     return oldSend.apply(this, arguments);
   };
-
-  function getCommonHeaders()
-  {
-    var headers = {};
-
-    if (window.INSTANCE_ID)
-    {
-      headers['X-WMES-INSTANCE'] = window.INSTANCE_ID;
-    }
-
-    if (window.COMPUTERNAME)
-    {
-      headers['X-WMES-CNAME'] = window.COMPUTERNAME;
-    }
-
-    if (window.WMES_APP_ID)
-    {
-      headers['X-WMES-APP'] = window.WMES_APP_ID;
-    }
-
-    if (window.WMES_LINE_ID)
-    {
-      headers['X-WMES-LINE'] = window.WMES_LINE_ID;
-    }
-
-    return headers;
-  }
 
   var domains = [];
   var i18n = null;
