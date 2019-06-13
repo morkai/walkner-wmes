@@ -24,7 +24,8 @@ define([
           'program.name': 1,
           result: 1,
           orderNo: 1,
-          serialNo: 1
+          serialNo: 1,
+          prodLine: 1
         },
         sort: {
           startedAt: -1
