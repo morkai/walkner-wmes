@@ -60,7 +60,14 @@ define([
   var defaultEditorValue = function(value) { return value; };
   var defaultTdClassName = function() { return ''; };
   var defaultTdValueRenderer = function(value) { return value; };
-  var invalidTdClassName = function(value) { return value ? '' : 'kanban-is-invalid'; };
+  var invalidTdClassName = function(value)
+  {
+    return value ? '' : 'kanban-is-invalid';
+  };
+  var invalidFifoTdClassName = function(value, column, arrayIndex, entry)
+  {
+    return value || entry.storageType === 100 ? '' : 'kanban-is-invalid';
+  };
 
   var WORKSTATION_COUNT = 7;
   var VALIDATION_FILTER_PROPERTIES = {
@@ -129,7 +136,7 @@ define([
       type: 'integer',
       width: 9,
       rotated: true,
-      tdClassName: invalidTdClassName
+      tdClassName: invalidFifoTdClassName
     },
     storageBin: {
       width: 10,
@@ -197,9 +204,9 @@ define([
     kanbanId: {
       width: 10,
       expand: 186,
-      tdClassName: function(value)
+      tdClassName: function(value, column, arrayIndex, entry)
       {
-        return value.length === 0 ? 'kanban-is-invalid' : '';
+        return value.length === 0 && entry.storageType !== 100 ? 'kanban-is-invalid' : '';
       },
       renderValue: function(value)
       {
@@ -247,28 +254,28 @@ define([
       type: 'integer',
       width: 7,
       rotated: true,
-      tdClassName: invalidTdClassName
+      tdClassName: invalidFifoTdClassName
     },
     minBinQty: {
       type: 'integer',
       width: 7,
       rotated: true,
-      tdClassName: invalidTdClassName
+      tdClassName: invalidFifoTdClassName
     },
     replenQty: {
       type: 'integer',
       width: 7,
       rotated: true,
-      tdClassName: invalidTdClassName
+      tdClassName: invalidFifoTdClassName
     },
     kind: {
       width: 3,
       rotated: true,
-      tdClassName: function(value)
+      tdClassName: function(value, column, arrayIndex, entry)
       {
-        var className = invalidTdClassName(value);
+        var className = invalidFifoTdClassName(value, column, arrayIndex, entry);
 
-        if (this.state.auth.manage || this.state.auth.processEngineer)
+        if (entry.storageType !== 100 && (this.state.auth.manage || this.state.auth.processEngineer))
         {
           className += ' kanban-is-editable';
         }
