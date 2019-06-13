@@ -1,6 +1,6 @@
 {
   "root": {
-    "bc:base": "Kanban DB",
+    "bc:base": "Component DB",
     "bc:settings": "Settings",
 
     "msg:update:failure": "Failed to change the value.",

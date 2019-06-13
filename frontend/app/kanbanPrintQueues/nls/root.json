@@ -1,6 +1,6 @@
 {
   "root": {
-    "BREADCRUMBS:base": "Kanban DB",
+    "BREADCRUMBS:base": "Component DB",
     "BREADCRUMBS:browse": "Print queues",
 
     "msg:printNext:expand": "Select a print queue.",

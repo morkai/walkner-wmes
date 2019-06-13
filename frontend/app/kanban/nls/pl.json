@@ -1,5 +1,5 @@
 {
-  "bc:base": "Baza Kanban",
+  "bc:base": "Baza komponentów",
   "bc:settings": "Ustawienia",
 
   "msg:update:failure": "Zmiana wartości nie powiodła się.",
