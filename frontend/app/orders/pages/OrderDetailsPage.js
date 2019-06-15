@@ -247,6 +247,12 @@ define([
       }
 
       var attrs = {};
+      var changes = order.get('changes');
+
+      if (!Array.isArray(changes))
+      {
+        attrs.changes = changes = [];
+      }
 
       _.forEach(message.change.newValues, function(newValue, property)
       {
@@ -262,8 +268,8 @@ define([
         attrs[property] = newValue;
       });
 
+      changes.push(message.change);
       order.set(attrs);
-      order.get('changes').push(message.change);
       order.trigger('push:change', message.change);
     },
 
