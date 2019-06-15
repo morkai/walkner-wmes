@@ -18,7 +18,7 @@
       return;
     }
 
-    lastError = error.stack;
+    lastError = error.stack || '';
 
     var stack = lastError.split(/\s+at\s+/);
 
