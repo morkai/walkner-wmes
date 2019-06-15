@@ -15,6 +15,7 @@
   "PROPERTY:createdAt": "Czas utworzenia",
   "PROPERTY:updatedAt": "Czas ostatniej zmiany",
   "PROPERTY:updater": "Ostatnio zmienione przez",
+  "PROPERTY:lastUsageAt": "Data ostatniego wykorzystania",
 
   "filter:submit": "Filtruj komponenty"
 }

@@ -16,6 +16,7 @@
     "PROPERTY:createdAt": "Created at",
     "PROPERTY:updatedAt": "Updated at",
     "PROPERTY:updater": "Updater",
+    "PROPERTY:lastUsageAt": "Last used at",
 
     "filter:submit": "Filter"
   },

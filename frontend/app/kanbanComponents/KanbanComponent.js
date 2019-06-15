@@ -1,10 +1,12 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   '../time',
   '../core/Model',
   'app/core/templates/userInfo'
 ], function(
+  _,
   time,
   Model,
   renderUserInfo
@@ -30,6 +32,15 @@ define([
       obj.createdAt = time.format(obj.createdAt, 'LLLL');
       obj.updatedAt = time.format(obj.updatedAt, 'LLLL');
       obj.updater = renderUserInfo({userInfo: obj.updater});
+
+      obj.lastUsageAt = 0;
+
+      _.forEach(obj.usage, function(time)
+      {
+        obj.lastUsageAt = Math.max(time, obj.lastUsageAt);
+      });
+
+      obj.lastUsageAt = time.format(obj.lastUsageAt, 'LL');
 
       return obj;
     },
