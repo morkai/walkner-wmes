@@ -765,7 +765,13 @@ define([
     showAddOrderDialog: function()
     {
       var view = this;
-      var popoverItem = this.popover.item;
+
+      if (!view.popover)
+      {
+        return;
+      }
+
+      var popoverItem = view.popover.item;
 
       require(
         [
@@ -815,7 +821,13 @@ define([
     showAddDowntimeDialog: function()
     {
       var view = this;
-      var popoverItem = this.popover.item;
+
+      if (!view.popover)
+      {
+        return;
+      }
+
+      var popoverItem = view.popover.item;
 
       require(
         [
@@ -857,6 +869,11 @@ define([
 
     showEditDialog: function(collection, editFormViewModule)
     {
+      if (!this.popover)
+      {
+        return;
+      }
+
       var model = collection.get(this.popover.item.data._id);
 
       if (!model)
@@ -890,6 +907,11 @@ define([
 
     showDeleteDialog: function(collection)
     {
+      if (!this.popover)
+      {
+        return;
+      }
+
       var model = collection.get(this.popover.item.data._id);
 
       if (!model)
