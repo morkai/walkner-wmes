@@ -34,6 +34,7 @@ define([
       function(ListPage)
       {
         return dictionaries.bind(new ListPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: baseBreadcrumb,
           columns: [
             {id: 'parent', className: 'is-min'},
@@ -60,6 +61,7 @@ define([
       function(DetailsPage, detailsTemplate)
       {
         return dictionaries.bind(new DetailsPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: baseBreadcrumb,
           detailsTemplate: detailsTemplate,
           model: new SubCategory({_id: req.params.id})
@@ -80,6 +82,7 @@ define([
       function(AddFormPage, FormView)
       {
         return dictionaries.bind(new AddFormPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: baseBreadcrumb,
           FormView: FormView,
           model: new SubCategory()
@@ -100,6 +103,7 @@ define([
       function(EditFormPage, FormView)
       {
         return dictionaries.bind(new EditFormPage({
+          pageClassName: 'page-max-flex',
           baseBreadcrumb: baseBreadcrumb,
           FormView: FormView,
           model: new SubCategory({_id: req.params.id})
