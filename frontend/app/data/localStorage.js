@@ -90,7 +90,7 @@ define(function()
         window.removeEventListener('message', handleWindowMessage);
         start = null;
         timeout = null;
-      }, 333);
+      }, 3333);
 
       window.parent.postMessage({type: 'localStorage', action: 'read'}, '*');
     },
