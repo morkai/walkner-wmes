@@ -126,6 +126,8 @@
     "settings:tab:load": "Load",
     "settings:planning:workCenters": "WorkCenters",
     "settings:planning:workCenters:help": "WorkCenters used during the generation of the paint shop order queue to load paint shop child orders for the planned production orders.",
+    "settings:planning:drillingWorkCenters": "Drilling WorkCenters",
+    "settings:planning:drillingWorkCenters:help": "Unpainted orders must have at least one operation with one of the following WorkCenter to be treated as drilling orders.",
     "settings:planning:mspPaints": "MSP paints",
     "settings:planning:mspPaints:help": "Paints belonging to the MSP group.",
     "settings:planning:unpaintedMrps": "Unpainted MRPs",

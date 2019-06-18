@@ -89,15 +89,16 @@ define([
     {
       SettingsView.prototype.afterRender.apply(this, arguments);
 
-      this.setUpWorkCenters();
+      this.setUpWorkCenters('workCenters');
+      this.setUpWorkCenters('drillingWorkCenters');
       this.setUpUnpaintedMrps();
       this.setUpMspPaints();
       this.setUpLoadStatuses();
     },
 
-    setUpWorkCenters: function()
+    setUpWorkCenters: function(setting)
     {
-      this.$id('planning-workCenters').select2({
+      this.$id('planning-' + setting).select2({
         width: '100%',
         allowClear: true,
         multiple: true,
@@ -106,7 +107,7 @@ define([
           .map(idAndLabel)
       });
 
-      this.updateSettingField(this.settings.get('paintShop.workCenters'));
+      this.updateSettingField(this.settings.get('paintShop.' + setting));
     },
 
     setUpUnpaintedMrps: function()
@@ -201,6 +202,7 @@ define([
     {
       return setting.id !== 'paintShop.workCenters'
         && setting.id !== 'paintShop.unpaintedMrps'
+        && setting.id !== 'paintShop.drillingWorkCenters'
         && setting.id !== 'paintShop.mspPaints'
         && setting.id !== 'paintShop.load.statuses';
     },

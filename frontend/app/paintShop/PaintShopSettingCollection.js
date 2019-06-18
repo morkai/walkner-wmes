@@ -26,7 +26,7 @@ define([
 
     prepareValue: function(id, newValue)
     {
-      if (/(workCenters|mspPaints|unpaintedMrps)$/.test(id))
+      if (/(workCenters|mspPaints|unpaintedMrps)$/i.test(id))
       {
         return newValue.split(',').filter(function(v) { return v.length > 0; });
       }
