@@ -311,7 +311,6 @@ exports.events = {
     'prodDowntimeAlerts.added',
     'qi.results.added', 'qi.results.edited',
     'd8.entries.added', 'd8.entries.edited',
-    'heffLineStates.added', 'heffLineStates.edited', 'heffLineStates.deleted',
     'orderBomMatchers.added', 'orderBomMatchers.edited',
     'subscriptions.added', 'subscriptions.edited', 'subscriptions.deleted'
   ]
@@ -360,7 +359,6 @@ exports.pubsub = {
     'qi.**',
     'pscs.**',
     'd8.**',
-    'heff.**',
     'vis.**',
     'mor.**',
     'planning.**',

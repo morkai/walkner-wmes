@@ -3,7 +3,6 @@
   "BREADCRUMBS:browse": "Plany godzinowe",
   "BREADCRUMBS:addForm": "Wybieranie planu",
   "BREADCRUMBS:editForm": "Planowanie",
-  "BREADCRUMBS:heffLineStates": "Wydajność godzinowa",
   "BREADCRUMBS:settings": "Ustawienia",
   "BREADCRUMBS:ACTION_FORM:delete": "Usuwanie",
 
@@ -28,9 +27,5 @@
   "addForm:panel:title": "Formularz wyszukiwania/tworzenia planu godzinowego",
   "addForm:submit": "Planuj",
   "addForm:msg:offline": "Nie można planować: brak połączenia z serwerem.",
-  "addForm:msg:failure": "Nie udało się znaleźć/utworzyć wpisu do edycji: {error, select, AUTH{brak uprawnień!} INPUT{nieprawidłowe dane wejściowe!} other{{error}}}",
-
-  "heff:filter:division": "Wydział",
-  "heff:filter:prodFlows": "Przepływy",
-  "heff:filter:submit": "Filtruj linie"
+  "addForm:msg:failure": "Nie udało się znaleźć/utworzyć wpisu do edycji: {error, select, AUTH{brak uprawnień!} INPUT{nieprawidłowe dane wejściowe!} other{{error}}}"
 }

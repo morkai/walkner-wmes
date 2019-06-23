@@ -4,7 +4,6 @@
     "BREADCRUMBS:browse": "Hourly plans",
     "BREADCRUMBS:addForm": "Choosing",
     "BREADCRUMBS:editForm": "Planning",
-    "BREADCRUMBS:heffLineStates": "Hourly efficiency",
     "BREADCRUMBS:settings": "Settings",
     "BREADCRUMBS:ACTION_FORM:delete": "Deleting",
 
@@ -29,11 +28,7 @@
     "addForm:panel:title": "Hourly plan find/create form",
     "addForm:submit": "Plan",
     "addForm:msg:offline": "Cannot plan: no connection to the server.",
-    "addForm:msg:failure": "Failed to find/create the hourly plan for editing: {error, select, AUTH{no privileges!} INPUT{invalid input data!} other{{error}}}",
-
-    "heff:filter:division": "Division",
-    "heff:filter:prodFlows": "Flows",
-    "heff:filter:submit": "Filter lines"
+    "addForm:msg:failure": "Failed to find/create the hourly plan for editing: {error, select, AUTH{no privileges!} INPUT{invalid input data!} other{{error}}}"
   },
   "pl": true
 }

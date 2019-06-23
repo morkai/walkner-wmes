@@ -45,7 +45,7 @@ define([
 
       if (this.model.prodLineId)
       {
-        topics['heff.reload.' + this.model.prodLineId] = 'loadData';
+        topics['heff.reload.' + this.model.prodLineId] = 'onReload';
       }
 
       return topics;
@@ -114,11 +114,7 @@ define([
       this.loadData();
 
       embedded.render(this);
-
-      if (window.parent !== window)
-      {
-        window.parent.postMessage({type: 'ready', app: 'heff'}, '*');
-      }
+      embedded.ready('heff');
     },
 
     loadData: function()
@@ -134,11 +130,11 @@ define([
 
       clearTimeout(view.timers.loadData);
 
-      view.ajax({url: url}).done(function(res)
+      view.ajax({url: url}).done(function(quantitiesDone)
       {
-        view.updateData(res);
+        view.updateData(quantitiesDone);
 
-        view.timers.loadData = setTimeout(view.loadData, _.random(25000, 35000));
+        view.timers.loadData = setTimeout(view.loadData, 5 * 60 * 1000);
       });
     },
 
@@ -230,6 +226,11 @@ define([
       this.$id('eff')
         .removeClass('fa-smile-o fa-frown-o fa-meh-o')
         .addClass(totalActual >= currentPlanned ? 'fa-smile-o' : 'fa-frown-o');
+    },
+
+    onReload: function(message)
+    {
+      this.updateData(message.quantitiesDone);
     }
 
   });

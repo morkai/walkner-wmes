@@ -60,6 +60,8 @@ define(function()
 
   function clearRemoteData()
   {
+    remoteData = {};
+
     window.parent.postMessage({type: 'localStorage', action: 'clear'}, '*');
   }
 
@@ -96,7 +98,7 @@ define(function()
     },
     getItem: function(key)
     {
-      var value = (remoteData ? remoteData : localStorage)[key];
+      var value = (remoteData || localStorage)[key];
 
       if (value === undefined)
       {
@@ -107,35 +109,29 @@ define(function()
     },
     setItem: function(key, value)
     {
+      localStorage.setItem(key, value);
+
       if (remoteData)
       {
         setRemoteItem(key, value);
       }
-      else
-      {
-        localStorage.setItem(key, value);
-      }
     },
     removeItem: function(key)
     {
+      localStorage.removeItem(key);
+
       if (remoteData)
       {
         removeRemoteItem(key);
       }
-      else
-      {
-        localStorage.removeItem(key);
-      }
     },
     clear: function()
     {
+      localStorage.clear();
+
       if (remoteData)
       {
         clearRemoteData();
-      }
-      else
-      {
-        localStorage.clear();
       }
     }
   };

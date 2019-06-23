@@ -61,7 +61,7 @@
             innerHeight: window.innerHeight
           },
           location: window.location.href,
-          history: JSON.parse(localStorage.getItem('WMES_RECENT_LOCATIONS') || [])
+          history: JSON.parse(require('app/data/localStorage').getItem('WMES_RECENT_LOCATIONS') || [])
         },
         versions: window.updater && window.updater.versions || {}
       })

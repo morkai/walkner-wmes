@@ -52,23 +52,6 @@ define([
     );
   });
 
-  router.map('/hourlyPlans;heff', canManage, function(req)
-  {
-    viewport.loadPage(
-      [
-        'app/hourlyPlans/HeffLineStateCollection',
-        'app/hourlyPlans/pages/HeffLineStatePage',
-        nls
-      ],
-      function(HeffLineStateCollection, HeffLineStatePage)
-      {
-        return new HeffLineStatePage({
-          collection: new HeffLineStateCollection(null, {rqlQuery: req.rql})
-        });
-      }
-    );
-  });
-
   router.map('/hourlyPlans;settings', user.auth('PROD_DATA:MANAGE'), function(req)
   {
     viewport.loadPage(['app/hourlyPlans/pages/PlanningSettingsPage', nls], function(PlanningSettingsPage)
