@@ -2,6 +2,9 @@
 <h2><%- time.format(Date.now(), 'LL') %></h2>
 <h3>Malarnia</h3>
 <ul>
+  <li>Poprawiono ustawianie statusu malarnii dla zlecenia produkcyjnego podzielonego na części tak, aby
+    po wykonaniu tylko jednej części status malarnii był ustawiany na 'Niekompletne malowanie' a nie
+    'Malowanie zakończone'.</li>
   <li>Dodano nową opcję konfiguracyjną: WorkCentra wiercenia - zlecenia niemalowane muszą mieć przynajmniej jedną
     operację z listy WorkCenterów wiercenia, aby zostały potraktowane jako zlecenia wiercenia.</li>
 </ul>
