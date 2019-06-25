@@ -203,11 +203,13 @@ define([
       if (obj.source === 'wh')
       {
         obj.orderNo = '';
+        obj.mrp = '';
         obj.productFamily = '';
       }
       else if (obj.orderNo === '000000000')
       {
         obj.orderNo = '';
+        obj.mrp = '';
         obj.nc12 = '';
         obj.productFamily = '';
         obj.productName = '';

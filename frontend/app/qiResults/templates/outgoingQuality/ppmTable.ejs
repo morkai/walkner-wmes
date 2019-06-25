@@ -1,0 +1,29 @@
+<div class="table-responsive">
+  <table class="table table-bordered table-condensed">
+    <thead>
+    <tr>
+      <th class="is-min text-right" style="border-left: none"><%- helpers.t('report:oql:week') %></th>
+      <% data.forEach(function(d) { %>
+      <th class="is-min text-center"><%- d.week %></th>
+      <% }) %>
+      <th style="border-right: none"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <th class="is-min text-right" style="border-left: none"><%- helpers.t('report:oql:series:oqlTarget') %></th>
+      <% data.forEach(function(d) { %>
+      <td class="is-min is-number"><%- d.target %></td>
+      <% }) %>
+      <td></td>
+    </tr>
+    <tr>
+      <th class="is-min text-right" style="border-left: none"><%- helpers.t('report:oql:series:oql') %></th>
+      <% data.forEach(function(d) { %>
+      <td class="is-min is-number"><%- d.oql %></td>
+      <% }) %>
+      <td></td>
+    </tr>
+    </tbody>
+  </table>
+</div>

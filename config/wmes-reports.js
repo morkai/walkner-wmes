@@ -15,6 +15,7 @@ module.exports = {
   'qi/count': require('../backend/node_modules/qi/countReport'),
   'qi/okRatio': require('../backend/node_modules/qi/okRatioReport'),
   'qi/nokRatio': require('../backend/node_modules/qi/nokRatioReport'),
+  'qi/outgoingQuality': require('../backend/node_modules/qi/outgoingQualityReport'),
   'kaizen/count': require('../backend/node_modules/kaizen/countReport'),
   'kaizen/summary': require('../backend/node_modules/kaizen/summaryReport'),
   'kaizen/metrics': require('../backend/node_modules/kaizen/metricsReport'),

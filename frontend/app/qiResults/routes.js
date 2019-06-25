@@ -80,6 +80,25 @@ define([
     );
   });
 
+  router.map('/qi/reports/outgoingQuality', canView, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/qiResults/dictionaries',
+        'app/qiResults/QiOutgoingQualityReport',
+        'app/qiResults/pages/QiOutgoingQualityReportPage',
+        'i18n!app/nls/reports',
+        nls
+      ],
+      function(dictionaries, QiOutgoingQualityReport, QiOutgoingQualityReportPage)
+      {
+        return dictionaries.bind(new QiOutgoingQualityReportPage({
+          model: QiOutgoingQualityReport.fromQuery(req.query)
+        }));
+      }
+    );
+  });
+
   router.map('/qi/results', canView, function(req)
   {
     viewport.loadPage(

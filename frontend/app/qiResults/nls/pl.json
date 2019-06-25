@@ -4,6 +4,7 @@
   "BREADCRUMBS:reports:count": "Ilości",
   "BREADCRUMBS:reports:okRatio": "% wyrobów zgodnych",
   "BREADCRUMBS:reports:nokRatio": "Jakość wyrobu gotowego",
+  "BREADCRUMBS:reports:outgoingQuality": "Outgoing quality",
   "BREADCRUMBS:settings": "Ustawienia",
 
   "MSG:comment:failure": "Nie udało się skomentować zgłoszenia.",
@@ -156,6 +157,18 @@
   "report:column:nok": "Wadliwe",
   "report:column:all": "Wszystkie",
   "report:column:ratio": "% dobrych",
+
+  "report:oql:title:ppm": "Tygodniowy poziom PPM",
+  "report:oql:title:where": "Gdzie",
+  "report:oql:title:what": "Co",
+  "report:oql:series:oql": "OQL",
+  "report:oql:series:oqlTarget": "Cel",
+  "report:oql:filename:ppm": "WMES_OQL_TygPPM",
+  "report:oql:filename:where": "WMES_OQL_Gdzie",
+  "report:oql:filename:what": "WMES_OQL_Co",
+  "report:oql:week": "Tydzień",
+  "report:oql:where": "Rodzina",
+  "report:oql:what": "Wada",
 
   "settings:tab:results": "Wyniki",
   "settings:tab:reports": "Raporty",

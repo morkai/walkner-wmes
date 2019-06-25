@@ -244,6 +244,7 @@
     "NAVBAR:QI:reports:count": "Count",
     "NAVBAR:QI:reports:okRatio": "% of OK goods",
     "NAVBAR:QI:reports:nokRatio": "% of NOK goods",
+    "NAVBAR:QI:reports:outgoingQuality": "Outgoing quality",
     "NAVBAR:QI:dictionaries": "Dictionaries",
     "NAVBAR:QI:kinds": "Kinds",
     "NAVBAR:QI:errorCategories": "Error categories",

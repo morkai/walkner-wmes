@@ -411,6 +411,8 @@ define([
         formData.productName = '0';
       }
 
+      formData.mrp = view.$id('division').attr('data-orders-mrp') || '';
+
       return formData;
     },
 
@@ -675,7 +677,9 @@ define([
         view.$id('nc12').val(data.nc12);
         view.$id('productName').val(data.productName);
         view.$id('productFamily').val(data.productFamily);
-        view.$id('division').val(data.division).attr('data-orders-division', data.division);
+        view.$id('division').val(data.division)
+          .attr('data-orders-division', data.division)
+          .attr('data-orders-mrp', data.mrp);
         view.$id('qtyOrder').val(data.quantity);
 
         view.updateLines(data.lines);
@@ -757,7 +761,9 @@ define([
         view.$id('nc12').val(data.nc12);
         view.$id('productName').val(data.productName);
         view.$id('productFamily').val('');
-        view.$id('division').val('LD').attr('data-orders-division', '');
+        view.$id('division').val('LD')
+          .attr('data-orders-division', '')
+          .attr('data-orders-mrp', '');
         view.$id('qtyOrder').val('');
 
         $nc12[0].setCustomValidity('');

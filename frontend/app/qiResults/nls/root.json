@@ -5,6 +5,7 @@
     "BREADCRUMBS:reports:count": "Count report",
     "BREADCRUMBS:reports:okRatio": "% of OK goods report",
     "BREADCRUMBS:reports:nokRatio": "% of NOK goods report",
+    "BREADCRUMBS:reports:outgoingQuality": "Outgoing quality",
     "BREADCRUMBS:settings": "Settings",
 
     "MSG:comment:failure": "Failed to comment the entry.",
@@ -156,6 +157,18 @@
     "report:column:nok": "NOK",
     "report:column:all": "All",
     "report:column:ratio": "% OK",
+
+    "report:oql:title:ppm": "Weekly PPM level",
+    "report:oql:title:where": "Where",
+    "report:oql:title:what": "What",
+    "report:oql:series:oql": "OQL",
+    "report:oql:series:oqlTarget": "Target",
+    "report:oql:filename:ppm": "WMES_OQL_WeeklyPPM",
+    "report:oql:filename:where": "WMES_OQL_Where",
+    "report:oql:filename:what": "WMES_OQL_What",
+    "report:oql:week": "Week",
+    "report:oql:where": "Family",
+    "report:oql:what": "Fault",
 
     "settings:tab:results": "Results",
     "settings:tab:reports": "Reports",

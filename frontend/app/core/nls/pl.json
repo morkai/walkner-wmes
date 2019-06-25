@@ -251,6 +251,7 @@
   "NAVBAR:QI:reports:count": "Ilości",
   "NAVBAR:QI:reports:okRatio": "% wyrobów zgodnych",
   "NAVBAR:QI:reports:nokRatio": "Jakość wyrobu gotowego",
+  "NAVBAR:QI:reports:outgoingQuality": "Outgoing quality",
   "NAVBAR:QI:dictionaries": "Słowniki",
   "NAVBAR:QI:kinds": "Rodzaje inspekcji",
   "NAVBAR:QI:errorCategories": "Kategorie błędów",

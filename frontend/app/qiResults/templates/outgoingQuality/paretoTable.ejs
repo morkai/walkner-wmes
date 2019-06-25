@@ -1,0 +1,30 @@
+<div class="table-responsive">
+  <table class="table table-bordered table-condensed">
+    <thead>
+    <tr>
+      <th class="is-min text-right" style="border-left: none"><%- helpers.t('report:oql:' + property) %></th>
+      <% weeks.forEach(function(week) { %>
+      <th class="is-min text-center"><%- week %></th>
+      <% }) %>
+      <th class="is-min text-center"></th>
+      <th style="border-right: none"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% rows.forEach(function(row) { %>
+    <tr data-id="<%= row._id %>">
+      <th class="is-min text-right" title="<%= row.title %>"><%= row.label %></th>
+      <% row.data.forEach(function(d) { %>
+      <td class="is-min is-number" style="width: 46px">
+        <% if (d) { %>
+        <%- d %>%
+        <% } %>
+      </td>
+      <% }) %>
+      <th class="is-min is-number text-right"><%- row.total %>%</th>
+      <td></td>
+    </tr>
+    <% }) %>
+    </tbody>
+  </table>
+</div>
