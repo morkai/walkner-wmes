@@ -219,6 +219,12 @@ define([
       }
 
       var order = this.orders.get(e.currentTarget.dataset.orderId);
+
+      if (!order)
+      {
+        return;
+      }
+
       var orderNo = order.get('order');
       var mrp = order.get('mrp');
       var drilling = this.orders.isDrillingMrpSelected();
