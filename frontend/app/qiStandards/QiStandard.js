@@ -11,15 +11,17 @@ define([
 
   return Model.extend({
 
-    urlRoot: '/qi/faults',
+    urlRoot: '/qi/standards',
 
-    clientUrlRoot: '#qi/faults',
+    clientUrlRoot: '#qi/standards',
 
-    topicPrefix: 'qi.faults',
+    topicPrefix: 'qi.standards',
 
     privilegePrefix: 'QI:DICTIONARIES',
 
-    nlsDomain: 'qiFaults',
+    nlsDomain: 'qiStandards',
+
+    labelAttribute: 'name',
 
     defaults: {
       active: true
@@ -29,12 +31,7 @@ define([
     {
       var obj = this.toJSON();
 
-      if (!obj.description)
-      {
-        obj.description = '';
-      }
-
-      obj.active = t('qiFaults', 'active:' + (obj.active !== false));
+      obj.active = t('qiStandards', 'active:' + (obj.active !== false));
 
       return obj;
     }

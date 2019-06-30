@@ -75,7 +75,8 @@ define([
         chart: {
           renderTo: this.el,
           plotBorderWidth: 1,
-          height: 400
+          height: 400,
+          zoomType: undefined
         },
         exporting: {
           filename: view.t('report:oql:filename:ppm'),
@@ -110,6 +111,7 @@ define([
           column: {
             dataLabels: {
               enabled: true,
+              y: 15,
               style: {
                 color: '#000',
                 fontSize: '14px',
@@ -146,7 +148,7 @@ define([
         type: 'line',
         name: this.t('report:oql:series:oqlTarget'),
         data: [],
-        color: '#ffd580'
+        color: '#f0ad4e'
       }];
 
       _.forEach(this.model.get('groups'), function(group)

@@ -1,13 +1,11 @@
 {
   "root": {
     "BREADCRUMBS:base": "QI",
-    "BREADCRUMBS:browse": "Faults",
+    "BREADCRUMBS:browse": "Standards",
 
-    "PROPERTY:_id": "Fault code",
-    "PROPERTY:name": "Classification",
+    "PROPERTY:name": "Name",
     "PROPERTY:description": "Description",
     "PROPERTY:active": "Active?",
-    "PROPERTY:weight": "Weight",
 
     "active:true": "Active",
     "active:false": "Inactive"

@@ -171,6 +171,7 @@ define([
         case 'kind':
         case 'errorCategory':
         case 'faultCode':
+        case 'standard':
         {
           var model = qiDictionaries.forProperty(property).get(value);
 

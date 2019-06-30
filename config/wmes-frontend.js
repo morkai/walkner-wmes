@@ -356,7 +356,6 @@ exports.pubsub = {
     'orderDocuments.eto.synced',
     'cags.nc12.synced', 'cags.nc12.syncFailed', 'cags.plan.synced', 'cags.plan.syncFailed',
     'isaRequests.**', 'isaEvents.saved', 'isaShiftPersonnel.updated',
-    'qi.**',
     'pscs.**',
     'd8.**',
     'vis.**',

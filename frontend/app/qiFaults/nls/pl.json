@@ -6,6 +6,7 @@
   "PROPERTY:name": "Klasyfikacja wady",
   "PROPERTY:description": "Opis wady",
   "PROPERTY:active": "Aktywna?",
+  "PROPERTY:weight": "Waga",
 
   "active:true": "Aktywna",
   "active:false": "Nieaktywna"

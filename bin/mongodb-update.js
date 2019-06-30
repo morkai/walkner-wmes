@@ -14,3 +14,9 @@ db.qiresults.find({mrp: {$exists: false}}, {orderNo: 1}).forEach(r =>
 
   db.qiresults.updateOne({_id: r._id}, {$set: {mrp: o.mrp}});
 });
+
+db.qiresults.updateMany({standard: {$exists: false}}, {$set: {standard: ''}});
+
+db.qifaults.updateMany({weight: {$exists: false}}, {$set: {weight: 0}});
+
+db.qioqlweeks.updateMany({results: {$exists: false}}, {$set: {results: []}});

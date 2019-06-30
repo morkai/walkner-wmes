@@ -256,6 +256,7 @@
   "NAVBAR:QI:kinds": "Rodzaje inspekcji",
   "NAVBAR:QI:errorCategories": "Kategorie błędów",
   "NAVBAR:QI:faults": "Wady",
+  "NAVBAR:QI:standards": "Standardy",
   "NAVBAR:QI:actionStatuses": "Statusy akcji",
 
   "NAVBAR:SEARCH:help": "Szukaj wg nr zlecenia, 12NC, zgłoszenia lub daty.",

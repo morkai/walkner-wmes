@@ -72,6 +72,18 @@
     "PROPERTY:comment": "Comment",
     "PROPERTY:ok": "Result",
 
+    "PROPERTY:kpi": "KPI",
+    "PROPERTY:site": "Site",
+    "PROPERTY:date": "Date",
+    "PROPERTY:pareto": "Pareto",
+    "PROPERTY:concern": "Concern",
+    "PROPERTY:cause": "Cause",
+    "PROPERTY:countermeasure": "Countermeasure",
+    "PROPERTY:check": "Check",
+    "PROPERTY:standard": "Standard",
+    "PROPERTY:who": "Who",
+    "PROPERTY:when": "When",
+
     "source:prod": "Production",
     "source:wh": "Warehouse",
 
@@ -161,6 +173,7 @@
     "report:oql:title:ppm": "Weekly PPM level",
     "report:oql:title:where": "Where",
     "report:oql:title:what": "What",
+    "report:oql:title:results": "4C and link to Standards",
     "report:oql:series:oql": "OQL",
     "report:oql:series:oqlTarget": "Target",
     "report:oql:filename:ppm": "WMES_OQL_WeeklyPPM",
@@ -169,6 +182,7 @@
     "report:oql:week": "Week",
     "report:oql:where": "Family",
     "report:oql:what": "Fault",
+    "report:oql:pareto": "Pareto",
 
     "settings:tab:results": "Results",
     "settings:tab:reports": "Reports",

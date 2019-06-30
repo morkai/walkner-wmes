@@ -14,6 +14,7 @@ define([
   '../views/outgoingQuality/PpmTableView',
   '../views/outgoingQuality/ParetoChartView',
   '../views/outgoingQuality/ParetoTableView',
+  '../views/outgoingQuality/ResultListView',
   'app/qiResults/templates/outgoingQuality/page'
 ], function(
   _,
@@ -29,6 +30,7 @@ define([
   PpmTableView,
   ParetoChartView,
   ParetoTableView,
+  ResultListView,
   template
 ) {
   'use strict';
@@ -38,6 +40,13 @@ define([
     layoutName: 'page',
 
     template: template,
+
+    remoteTopics: {
+      'qi.oqlWeeks.updated': function(oqlWeek)
+      {
+        this.model.updateOqlWeek(oqlWeek);
+      }
+    },
 
     breadcrumbs: function()
     {
@@ -49,36 +58,40 @@ define([
 
     initialize: function()
     {
-      var model = bindLoadingMessage(this.model, this);
+      var report = bindLoadingMessage(this.model, this);
 
-      this.setView('#-filter', new FilterView({model: model}));
+      bindLoadingMessage(report.results, this);
 
-      this.setView('#-ppm-chart', new PpmChartView({model: model}));
-      this.setView('#-ppm-table', new PpmTableView({model: model}));
+      this.setView('#-filter', new FilterView({model: report}));
+
+      this.setView('#-ppm-chart', new PpmChartView({model: report}));
+      this.setView('#-ppm-table', new PpmTableView({model: report}));
 
       this.setView('#-where-chart', new ParetoChartView({
-        model: model,
+        model: report,
         property: 'where',
         resolveTitle: resolveWhereTitle
       }));
       this.setView('#-where-table', new ParetoTableView({
-        model: model,
+        model: report,
         property: 'where',
         resolveTitle: resolveWhereTitle
       }));
 
       this.setView('#-what-chart', new ParetoChartView({
-        model: model,
+        model: report,
         property: 'what',
         resolveTitle: resolveWhatTitle
       }));
       this.setView('#-what-table', new ParetoTableView({
-        model: model,
+        model: report,
         property: 'what',
         resolveTitle: resolveWhatTitle
       }));
 
-      this.listenTo(model, 'filtered', this.onFiltered);
+      this.setView('#-results', new ResultListView({collection: report.results}));
+
+      this.listenTo(report, 'filtered', this.onFiltered);
 
       function resolveWhereTitle(id)
       {

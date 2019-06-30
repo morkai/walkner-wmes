@@ -4,14 +4,27 @@ define([
   'underscore',
   '../i18n',
   '../time',
-  '../core/Model'
+  '../user',
+  '../core/Model',
+  '../core/Collection'
 ], function(
   _,
   t,
   time,
-  Model
+  user,
+  Model,
+  Collection
 ) {
   'use strict';
+
+  var ResultCollection = Collection.extend({
+    url: '/qi/reports/outgoingQuality/results',
+    rqlQuery: 'rid=in=()',
+    model: Model.extend({
+      nlsDomain: 'qiResults',
+      clientUrlRoot: '#qi/results'
+    })
+  });
 
   return Model.extend({
 
@@ -22,9 +35,37 @@ define([
     defaults: function()
     {
       return {
+        interval: 'week',
         week: '',
-        interval: 'week'
+        options: {},
+        totals: {},
+        top: {},
+        groups: {}
       };
+    },
+
+    initialize: function()
+    {
+      this.results = _.assign(new ResultCollection(null, {paginate: false}), {report: this});
+
+      this.on('change:results', function()
+      {
+        var rids = (this.get('results') || []).map(function(r)
+        {
+          return r.rid;
+        });
+
+        this.results.rqlQuery.selector.args[0].args[1] = rids;
+
+        if (rids.length)
+        {
+          this.results.fetch({reset: true});
+        }
+        else
+        {
+          this.results.reset([]);
+        }
+      });
     },
 
     fetch: function(options)
@@ -48,9 +89,86 @@ define([
         + '?week=' + encodeURIComponent(this.get('week'));
     },
 
-    parse: function(report)
+    canManage: function()
     {
-      return _.omit(report, ['options']);
+      return user.isAllowedTo('QI:RESULTS:MANAGE', 'FN:quality_engineer');
+    },
+
+    getTopCount: function()
+    {
+      return this.attributes.options.topCount || 4;
+    },
+
+    getCurrentWeek: function()
+    {
+      return _.last(this.attributes.options.oqlWeeks) || null;
+    },
+
+    getSpecifiedResults: function()
+    {
+      var oqlWeek = this.getCurrentWeek();
+
+      return oqlWeek ? oqlWeek.results : [];
+    },
+
+    updateOqlWeek: function(newOqlWeek)
+    {
+      var options = this.attributes.options;
+      var oqlWeeks = options.oqlWeeks;
+
+      if (!options.oqlWeeks)
+      {
+        return;
+      }
+
+      if (newOqlWeek._id < options.fromTime || newOqlWeek._id >= options.toTime)
+      {
+        return;
+      }
+
+      var oqlWeek = _.find(oqlWeeks, function(w) { return w._id === newOqlWeek._id; });
+
+      if (oqlWeek)
+      {
+        newOqlWeek = _.assign(oqlWeek, newOqlWeek);
+      }
+      else
+      {
+        oqlWeeks.push(newOqlWeek);
+        oqlWeeks.sort(function(a, b) { return a._id - b._id; });
+      }
+
+      this.updateGroupTargets(newOqlWeek);
+
+      this.trigger('change:oqlWeek', this, newOqlWeek);
+      this.trigger('change', this);
+    },
+
+    updateGroupTargets: function()
+    {
+      var groups = this.get('groups');
+      var oqlWeeks = [].concat(this.get('options').oqlWeeks);
+      var oqlTarget = oqlWeeks[0].target;
+      var changed = true;
+
+      groups.forEach(function(group)
+      {
+        while (oqlWeeks.length && oqlWeeks[0]._id <= group.key)
+        {
+          oqlTarget = oqlWeeks.shift().target || oqlTarget;
+        }
+
+        if (group.oqlTarget !== oqlTarget)
+        {
+          group.oqlTarget = oqlTarget;
+          changed = true;
+        }
+      });
+
+      if (changed)
+      {
+        this.trigger('change:groups', this, groups);
+      }
     }
 
   }, {
@@ -77,6 +195,11 @@ define([
       else if (/[0-9]{1,2}/.test(input))
       {
         week = +input.match(/([0-9]{1,2})/)[1];
+      }
+
+      if (!year && !week)
+      {
+        moment.subtract(1, 'weeks');
       }
 
       if (!year)

@@ -31,14 +31,10 @@ define([
         formData.description = '';
       }
 
-      return formData;
-    },
-
-    serializeToForm: function()
-    {
-      var formData = this.model.toJSON();
-
-      formData.direct += '';
+      if (!formData.weight)
+      {
+        formData.weight = 0;
+      }
 
       return formData;
     }

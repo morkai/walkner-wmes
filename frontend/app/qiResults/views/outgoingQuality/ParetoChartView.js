@@ -3,15 +3,11 @@
 define([
   'underscore',
   'app/highcharts',
-  'app/core/View',
-  'app/reports/util/formatTooltipHeader',
-  'app/reports/util/formatXAxis'
+  'app/core/View'
 ], function(
   _,
   Highcharts,
-  View,
-  formatTooltipHeader,
-  formatXAxis
+  View
 ) {
   'use strict';
 
@@ -25,7 +21,7 @@ define([
       this.listenTo(this.model, 'request', this.onModelLoading);
       this.listenTo(this.model, 'sync', this.onModelLoaded);
       this.listenTo(this.model, 'error', this.onModelError);
-      this.listenTo(this.model, 'change:groups', this.render);
+      this.listenTo(this.model, 'change:totals', this.render);
     },
 
     destroy: function()
@@ -75,7 +71,8 @@ define([
         chart: {
           renderTo: this.el,
           plotBorderWidth: 1,
-          height: 400
+          height: 400,
+          zoomType: undefined
         },
         exporting: {
           filename: view.t('report:oql:filename:' + view.options.property),
@@ -94,17 +91,37 @@ define([
           categories: chartData.categories,
           showEmpty: false
         },
-        yAxis: {
+        yAxis: [{
           title: false,
           allowDecimals: false,
           labels: {
             format: '{value}%'
-          }
-        },
+          },
+          min: 0,
+          max: 100
+        }, {
+          title: false,
+          allowDecimals: false,
+          labels: {
+            format: '{value}%'
+          },
+          opposite: true,
+          min: 0,
+          max: 100,
+          plotLines: [{
+            value: 80,
+            color: '#E00',
+            width: 1,
+            zIndex: 1
+          }]
+        }],
         tooltip: {
           shared: true,
           valueDecimals: 0,
-          headerFormatter: formatTooltipHeader.bind(view),
+          headerFormatter: function(ctx)
+          {
+            return ctx.points[0].point.name;
+          },
           valueSuffix: '%'
         },
         legend: {
@@ -114,9 +131,10 @@ define([
           column: {
             dataLabels: {
               enabled: true,
+              y: 15,
               style: {
                 color: '#000',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 'bold',
                 textShadow: '0 0 6px #fff, 0 0 3px #fff'
               },
@@ -145,31 +163,47 @@ define([
       var series = [{
         id: 'value',
         type: 'column',
-        name: this.t('report:oql:' + property),
-        data: []
+        name: view.t('report:oql:' + property),
+        data: [],
+        color: '#337ab7'
+      }, {
+        id: 'pareto',
+        type: 'line',
+        name: view.t('report:oql:pareto'),
+        data: [],
+        yAxis: 1,
+        color: '#f0ad4e'
       }];
 
-      var totals = view.model.get(property) || [];
-      var maxRows = view.options.maxRows || 3;
+      var topCount = view.model.getTopCount();
+      var top = _.last(view.model.get('groups')) || {};
+      var values = top[property] || [];
+      var pareto = 0;
 
-      for (var i = 0; i < maxRows; ++i)
+      for (var i = 0; i < topCount; ++i)
       {
-        var total = totals[i];
+        var value = values[i];
 
-        if (!total)
+        if (!value)
         {
           break;
         }
 
-        var category = total[0];
+        var category = value[0];
 
         if (view.options.resolveTitle)
         {
           category += ': ' + view.options.resolveTitle(category, true);
         }
 
+        pareto += value[1];
+
         categories.push(category);
-        series[0].data.push(total[2]);
+        series[0].data.push({
+          name: value[0],
+          y: value[2]
+        });
+        series[1].data.push((pareto / top.nokCount) * 100);
       }
 
       return {

@@ -71,6 +71,18 @@
   "PROPERTY:comment": "Komentarz",
   "PROPERTY:ok": "Wynik",
 
+  "PROPERTY:kpi": "KPI",
+  "PROPERTY:site": "Fabryka",
+  "PROPERTY:date": "Data",
+  "PROPERTY:pareto": "Rodzina",
+  "PROPERTY:concern": "Wada",
+  "PROPERTY:cause": "Przyczyna",
+  "PROPERTY:countermeasure": "Akcja naprawcza",
+  "PROPERTY:check": "Check",
+  "PROPERTY:standard": "Standard",
+  "PROPERTY:who": "Kto",
+  "PROPERTY:when": "Kiedy",
+
   "source:prod": "Produkcja",
   "source:wh": "Magazyn",
 
@@ -161,6 +173,7 @@
   "report:oql:title:ppm": "Tygodniowy poziom PPM",
   "report:oql:title:where": "Gdzie",
   "report:oql:title:what": "Co",
+  "report:oql:title:results": "4C",
   "report:oql:series:oql": "OQL",
   "report:oql:series:oqlTarget": "Cel",
   "report:oql:filename:ppm": "WMES_OQL_TygPPM",
@@ -169,6 +182,7 @@
   "report:oql:week": "Tydzień",
   "report:oql:where": "Rodzina",
   "report:oql:what": "Wada",
+  "report:oql:pareto": "Pareto",
 
   "settings:tab:results": "Wyniki",
   "settings:tab:reports": "Raporty",

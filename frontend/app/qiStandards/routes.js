@@ -5,40 +5,36 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  './QiFault'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  QiFault
+  showDeleteFormPage
 ) {
   'use strict';
 
-  var nls = 'i18n!app/nls/qiFaults';
+  var nls = 'i18n!app/nls/qiStandards';
   var canView = user.auth('QI:DICTIONARIES:VIEW');
   var canManage = user.auth('QI:DICTIONARIES:MANAGE');
 
-  router.map('/qi/faults', canView, function(req)
+  router.map('/qi/standards', canView, function(req)
   {
     viewport.loadPage(
       [
         'app/core/pages/ListPage',
-        'app/qiFaults/QiFaultCollection',
+        'app/qiStandards/QiStandardCollection',
         nls
       ],
-      function(ListPage, QiFaultCollection)
+      function(ListPage, QiStandardCollection)
       {
         return new ListPage({
           baseBreadcrumb: true,
-          collection: new QiFaultCollection(null, {rqlQuery: req.rql}),
+          collection: new QiStandardCollection(null, {rqlQuery: req.rql}),
           columns: [
-            {id: '_id', className: 'is-min'},
-            'name',
+            {id: 'name', className: 'is-min'},
             'description',
-            {id: 'weight', className: 'is-min'},
             {id: 'active', className: 'is-min'}
           ]
         });
@@ -46,67 +42,67 @@ define([
     );
   });
 
-  router.map('/qi/faults/:id', canView, function(req)
+  router.map('/qi/standards/:id', canView, function(req)
   {
     viewport.loadPage(
       [
         'app/core/pages/DetailsPage',
-        'app/qiFaults/QiFault',
-        'app/qiFaults/templates/details',
+        'app/qiStandards/QiStandard',
+        'app/qiStandards/templates/details',
         nls
       ],
-      function(DetailsPage, QiFault, detailsTemplate)
+      function(DetailsPage, QiStandard, detailsTemplate)
       {
         return new DetailsPage({
           baseBreadcrumb: true,
-          model: new QiFault({_id: req.params.id}),
+          model: new QiStandard({_id: req.params.id}),
           detailsTemplate: detailsTemplate
         });
       }
     );
   });
 
-  router.map('/qi/faults;add', canManage, function()
+  router.map('/qi/standards;add', canManage, function()
   {
     viewport.loadPage(
       [
         'app/core/pages/AddFormPage',
-        'app/qiFaults/QiFault',
-        'app/qiFaults/views/QiFaultFormView',
+        'app/qiStandards/QiStandard',
+        'app/qiStandards/templates/form',
         nls
       ],
-      function(AddFormPage, QiFault, QiFaultFormView)
+      function(AddFormPage, QiStandard, formTemplate)
       {
         return new AddFormPage({
           baseBreadcrumb: true,
-          FormView: QiFaultFormView,
-          model: new QiFault()
+          formTemplate: formTemplate,
+          model: new QiStandard()
         });
       }
     );
   });
 
-  router.map('/qi/faults/:id;edit', canManage, function(req)
+  router.map('/qi/standards/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
       [
         'app/core/pages/EditFormPage',
-        'app/qiFaults/QiFault',
-        'app/qiFaults/views/QiFaultFormView',
+        'app/qiStandards/QiStandard',
+        'app/qiStandards/templates/form',
         nls
       ],
-      function(EditFormPage, QiFault, QiFaultFormView)
+      function(EditFormPage, QiStandard, formTemplate)
       {
         return new EditFormPage({
           baseBreadcrumb: true,
-          FormView: QiFaultFormView,
-          model: new QiFault({_id: req.params.id})
+          formTemplate: formTemplate,
+          model: new QiStandard({_id: req.params.id})
         });
       }
     );
   });
 
-  router.map('/qi/faults/:id;delete', canManage, _.partial(showDeleteFormPage, QiFault, _, _, {
+  router.map('/qi/standards/:id;delete', canManage, _.partial(showDeleteFormPage, 'app/qiStandards/QiStandard', _, _, {
     baseBreadcrumb: true
   }));
 });

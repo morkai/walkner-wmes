@@ -1,0 +1,11 @@
+{
+  "BREADCRUMBS:base": "Inspekcja Jakości",
+  "BREADCRUMBS:browse": "Standardy",
+
+  "PROPERTY:name": "Nazwa",
+  "PROPERTY:description": "Opis",
+  "PROPERTY:active": "Aktywny?",
+
+  "active:true": "Aktywny",
+  "active:false": "Nieaktywny"
+}

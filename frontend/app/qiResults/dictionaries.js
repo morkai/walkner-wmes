@@ -12,6 +12,7 @@ define([
   '../qiKinds/QiKindCollection',
   '../qiErrorCategories/QiErrorCategoryCollection',
   '../qiFaults/QiFaultCollection',
+  '../qiStandards/QiStandardCollection',
   '../qiActionStatuses/QiActionStatusCollection'
 ], function(
   _,
@@ -25,6 +26,7 @@ define([
   QiKindCollection,
   QiErrorCategoryCollection,
   QiFaultCollection,
+  QiStandardCollection,
   QiActionStatusCollection
 ) {
   'use strict';
@@ -33,12 +35,14 @@ define([
     'kinds',
     'errorCategories',
     'faults',
+    'standards',
     'actionStatuses'
   ];
   var PROP_TO_DICT = {
     kind: 'kinds',
     errorCategory: 'errorCategories',
     faultCode: 'faults',
+    standard: 'standards',
     actionStatus: 'actionStatuses'
   };
 
@@ -69,6 +73,7 @@ define([
     kinds: new QiKindCollection(),
     errorCategories: new QiErrorCategoryCollection(),
     faults: new QiFaultCollection(),
+    standards: new QiStandardCollection(),
     actionStatuses: new QiActionStatusCollection(),
     loaded: false,
     load: function()

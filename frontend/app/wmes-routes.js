@@ -75,6 +75,7 @@ define([
   './qiKinds/routes',
   './qiErrorCategories/routes',
   './qiFaults/routes',
+  './qiStandards/routes',
   './qiActionStatuses/routes',
   './pscs/routes',
   './mor/routes',

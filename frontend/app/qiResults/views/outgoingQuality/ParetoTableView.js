@@ -19,7 +19,7 @@ define([
 
     initialize: function()
     {
-      this.listenTo(this.model, 'change:' + this.options.property, this.render);
+      this.listenTo(this.model, 'change:groups', this.render);
     },
 
     getTemplateData: function()
@@ -27,11 +27,12 @@ define([
       var view = this;
       var property = view.options.property;
       var rows = [];
-      var totals = view.model.get(property) || [];
+      var topCount = view.model.getTopCount();
+      var top = view.model.get('top') || {nokCount: 0};
+      var totals = top[property] || [];
       var groups = view.model.get('groups') || [];
-      var maxRows = view.options.maxRows || 3;
 
-      for (var i = 0; i < maxRows; ++i)
+      for (var i = 0; i < topCount; ++i)
       {
         var total = totals[i];
 
@@ -45,20 +46,33 @@ define([
           label: total[0],
           title: view.options.resolveTitle ? view.options.resolveTitle(total[0]) : '',
           data: [],
-          total: total[2]
+          total: {
+            absolute: total[1],
+            relative: total[2],
+            total: top.nokCount
+          }
         };
 
-        for (var g = 0; g < groups.length; ++g)
+        for (var g = groups.length - topCount; g < groups.length; ++g)
         {
-          var match = _.find(groups[g][property], function(d) { return d[0] === row._id; }); // eslint-disable-line no-loop-func
+          var group = groups[g];
+          var match = _.find(group[property], function(d) { return d[0] === row._id; }); // eslint-disable-line no-loop-func
 
           if (match)
           {
-            row.data.push(match[2]);
+            row.data.push({
+              absolute: match[1],
+              relative: match[2],
+              total: group.nokCount
+            });
           }
           else
           {
-            row.data.push(0);
+            row.data.push({
+              absolute: 0,
+              relative: 0,
+              total: group.nokCount
+            });
           }
         }
 
@@ -67,7 +81,9 @@ define([
 
       return {
         property: property,
-        weeks: groups.map(function(g) { return formatXAxis(view, {value: g.key}); }),
+        weeks: groups
+          .slice(topCount * -1)
+          .map(function(g) { return formatXAxis(view, {value: g.key}); }),
         rows: rows
       };
     }
