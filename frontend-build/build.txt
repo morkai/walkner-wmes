@@ -1876,6 +1876,7 @@ app/qiErrorCategories/QiErrorCategory.js
 app/qiErrorCategories/routes.js
 app/qiFaults/QiFault.js
 app/qiFaults/routes.js
+app/qiStandards/routes.js
 app/qiActionStatuses/QiActionStatus.js
 app/qiActionStatuses/routes.js
 app/pscs/routes.js
