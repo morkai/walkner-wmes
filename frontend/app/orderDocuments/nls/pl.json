@@ -35,8 +35,7 @@
   "settings:prodLineName:help": "Nazwa wyświetlana w lewym górnym rogu aplikacji.",
   "settings:prefixFilter:inclusive": "Tylko dokumenty z 15NC zaczynającymi się na:",
   "settings:prefixFilter:exclusive": "Tylko dokumenty z 15NC nie zaczynającymi się na:",
-  "settings:localServerUrl": "URL lokalnego serwera HTTP",
-  "settings:localServerPath": "Ścieżka do lokalnego folderu z dokumentami",
+  "settings:spigotCheck": "Sprawdzanie Spigota",
   "settings:login": "Login",
   "settings:password": "Hasło",
   "settings:submit": "Zapisz ustawienia",
@@ -72,5 +71,10 @@
   "bom": "Lista komponentów",
   "eto": "Konstrukcja na zamówienie",
 
-  "bom:filter:ps": "Filtruj komponenty"
+  "bom:filter:ps": "Filtruj komponenty",
+
+  "spigot:request": "Zeskanuj Spigot:<br>{component}",
+  "spigot:checking": "<i class='fa fa-spinner fa-spin'></i> Sprawdzanie Spigota...",
+  "spigot:failure": "Zeskanowano nieprawidłowy Spigot.",
+  "spigot:success": "Zeskanowano prawidłowy Spigot."
 }

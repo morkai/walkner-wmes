@@ -70,8 +70,7 @@ define([
         prodLineName: prodLine.name,
         prefixFilterMode: model.get('prefixFilterMode'),
         prefixFilter: model.get('prefixFilter'),
-        localServerUrl: model.get('localServerUrl'),
-        localServerPath: model.get('localServerPath')
+        spigotCheck: model.get('spigotCheck')
       };
 
       if (!formData.prodLineId)
@@ -98,8 +97,7 @@ define([
       var reqData = _.defaults(form2js(this.el), {
         prefixFilterMode: 'inclusive',
         prefixFilter: '',
-        localServerUrl: '',
-        localServerPath: ''
+        spigotCheck: false
       });
 
       var req = this.ajax({
@@ -130,7 +128,8 @@ define([
             name: reqData.prodLineName
           },
           prefixFilterMode: reqData.prefixFilterMode,
-          prefixFilter: reqData.prefixFilter
+          prefixFilter: reqData.prefixFilter,
+          spigotCheck: reqData.spigotCheck
         });
       });
 

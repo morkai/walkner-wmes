@@ -36,8 +36,7 @@
     "settings:prodLineName:help": "Name displayed in an upper left corner of the application.",
     "settings:prefixFilter:inclusive": "Only documents with 15NC starting with:",
     "settings:prefixFilter:exclusive": "Only documents with 15NC not starting with:",
-    "settings:localServerUrl": "URL to the local HTTP server",
-    "settings:localServerPath": "Path to the local documents directory",
+    "settings:spigotCheck": "Spigot checking",
     "settings:login": "Login",
     "settings:password": "Password",
     "settings:submit": "Save settings",
@@ -71,7 +70,14 @@
 
     "order": "Order card",
     "bom": "Bill of materials",
-    "eto": "Engineering To Order"
+    "eto": "Engineering To Order",
+
+    "bom:filter:ps": "Filter components",
+
+    "spigot:request": "Scan a valid Spigot:<br>{component}",
+    "spigot:checking": "<i class='fa fa-spinner fa-spin'></i> Checking the Spigot...",
+    "spigot:failure": "Scanned an invalid Spigot.",
+    "spigot:success": "Scanned a valid Spigot."
   },
   "pl": true
 }

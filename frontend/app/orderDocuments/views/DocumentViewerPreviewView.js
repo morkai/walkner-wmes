@@ -199,7 +199,9 @@ define([
       view.req.fail(function()
       {
         view.req = null;
-        view.tryLoadLocalDocument(nc15);
+        view.$id('loading').addClass('is-failure');
+        view.model.setFileSource(null);
+        view.trigger('loadDocument:failure');
       });
 
       view.req.done(function(res, status, jqXhr)
@@ -213,51 +215,6 @@ define([
 
         view.req = null;
         view.loadFile(remoteFileUrl);
-      });
-    },
-
-    tryLoadLocalDocument: function(nc15)
-    {
-      var view = this;
-
-      view.model.setFileSource('local');
-      view.setLoadingMessage('localServer');
-
-      var localFileUrl = this.model.getLocalFileUrl(nc15);
-
-      if (view.req)
-      {
-        view.req.abort();
-        view.req = null;
-      }
-
-      if (localFileUrl === null)
-      {
-        view.$id('loading').addClass('is-failure');
-        view.model.setFileSource(null);
-        view.trigger('loadDocument:failure');
-
-        return;
-      }
-
-      view.req = this.ajax({
-        type: 'HEAD',
-        url: localFileUrl
-      });
-
-      view.req.fail(function()
-      {
-        view.req = null;
-        view.$id('loading').addClass('is-failure');
-        view.model.setFileSource(null);
-        view.setLoadingMessage('failure');
-        view.trigger('loadDocument:failure');
-      });
-
-      view.req.done(function()
-      {
-        view.req = null;
-        view.loadFile(localFileUrl);
       });
     },
 

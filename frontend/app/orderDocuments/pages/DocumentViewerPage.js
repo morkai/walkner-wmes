@@ -3,6 +3,7 @@
 define([
   'underscore',
   'jquery',
+  'app/i18n',
   'app/user',
   'app/core/View',
   'app/core/util/embedded',
@@ -14,6 +15,7 @@ define([
 ], function(
   _,
   $,
+  t,
   user,
   View,
   embedded,
@@ -85,6 +87,7 @@ define([
       var updateClientState = _.debounce(page.updateClientState.bind(page), 1000);
 
       page.listenTo(page.model, 'change:prodLine', page.joinProdLine);
+      page.listenTo(page.model, 'change:spigotCheck', page.defineSpigotBindings);
       page.listenTo(page.model, 'change:bom', page.onBomChanged);
       page.listenTo(page.model, 'save', function()
       {
@@ -109,6 +112,8 @@ define([
 
       page.socket.on('orderDocuments.remoteOrderUpdated', page.onRemoteOrderUpdated.bind(page));
 
+      page.defineSpigotBindings();
+
       $(window).on('resize.' + page.idPrefix, _.debounce(page.resize.bind(page), 1));
       $(window).on('keydown.' + page.idPrefix, page.onKeyDown.bind(page));
 
@@ -116,6 +121,38 @@ define([
       {
         $(window).on('contextmenu.' + page.idPrefix, function(e) { e.preventDefault(); });
       }
+    },
+
+    defineSpigotBindings: function()
+    {
+      var prodLineId = this.model.get('prodLine')._id;
+
+      if (!prodLineId || !this.model.get('spigotCheck'))
+      {
+        if (this.spigotCheckSub)
+        {
+          this.spigotCheckSub.cancel();
+          this.spigotCheckSub = null;
+        }
+
+        return;
+      }
+
+      if (this.spigotCheckSub)
+      {
+        if (this.spigotCheckSub.prodLineId === prodLineId)
+        {
+          return;
+        }
+
+        this.spigotCheckSub.cancel();
+      }
+
+      this.spigotCheckSub = this.pubsub.subscribe(
+        'production.spigotCheck.*.' + prodLineId,
+        this.onSpigotMessage.bind(this)
+      );
+      this.spigotCheckSub.prodLineId = prodLineId;
     },
 
     destroy: function()
@@ -195,6 +232,8 @@ define([
           settings: model.getSettings(),
           orderInfo: model.getCurrentOrderInfo()
         });
+
+        this.defineSpigotBindings();
       }
     },
 
@@ -218,8 +257,123 @@ define([
       }
     },
 
+    onSpigotMessage: function(message, topic)
+    {
+      switch (topic.split('.')[2])
+      {
+        case 'requested':
+          this.onSpigotRequested(message);
+          break;
+
+        case 'failure':
+          this.onSpigotFailure(message);
+          break;
+
+        case 'success':
+          this.onSpigotSuccess(message);
+          break;
+
+        case 'aborted':
+          this.onSpigotAborted();
+          break;
+      }
+    },
+
+    scheduleSpigotMessageHideTimer: function()
+    {
+      var page = this;
+
+      clearTimeout(page.timers.hideSpigotMessage);
+
+      page.timers.hideSpigotMessage = setTimeout(function()
+      {
+        page.skipNextSpigotRequest = false;
+        page.onSnScanned = null;
+
+        snManager.hideMessage();
+      }, 7500);
+    },
+
+    onSpigotAborted: function()
+    {
+      clearTimeout(this.timers.hideSpigotMessage);
+
+      this.skipNextSpigotRequest = false;
+      this.onSnScanned = null;
+
+      snManager.hideMessage();
+    },
+
+    onSpigotRequested: function(message)
+    {
+      this.onSnScanned = this.onSpigotScanned.bind(this);
+
+      if (this.skipNextSpigotRequest)
+      {
+        this.skipNextSpigotRequest = false;
+      }
+      else
+      {
+        snManager.showMessage({_id: '', orderNo: message.orderNo}, 'warning', function()
+        {
+          return t('orderDocuments', 'spigot:request', {
+            component: message.component ? message.component.name : '?'
+          });
+        }, 15000);
+      }
+
+      this.scheduleSpigotMessageHideTimer();
+    },
+
+    onSpigotFailure: function(message)
+    {
+      this.skipNextSpigotRequest = true;
+
+      snManager.showMessage({_id: message.input, orderNo: message.orderNo}, 'error', function()
+      {
+        return t('orderDocuments', 'spigot:failure');
+      }, 15000);
+
+      this.scheduleSpigotMessageHideTimer();
+    },
+
+    onSpigotSuccess: function(message)
+    {
+      this.skipNextSpigotRequest = true;
+
+      snManager.showMessage(
+        {_id: message.input, orderNo: message.orderNo},
+        'success',
+        function() { return t('orderDocuments', 'spigot:success'); },
+        message.source === 'spigotChecker' ? 3000 : 15000
+      );
+
+      this.scheduleSpigotMessageHideTimer();
+    },
+
+    onSpigotScanned: function(scanInfo)
+    {
+      this.skipNextSpigotRequest = true;
+
+      snManager.showMessage({_id: scanInfo._id}, 'warning', function()
+      {
+        return t('orderDocuments', 'spigot:checking');
+      }, 15000);
+
+      this.pubsub.publish('production.spigotCheck.scanned.' + this.model.get('prodLine')._id, {
+        nc12: scanInfo._id
+      });
+
+      this.scheduleSpigotMessageHideTimer();
+    },
+
     onKeyDown: function(e)
     {
+      if (embedded.isEnabled())
+      {
+        return;
+      }
+
       if (e.ctrlKey && e.keyCode === 70)
       {
         this.controlsView.focusFilter();

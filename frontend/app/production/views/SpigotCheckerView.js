@@ -24,26 +24,7 @@ define([
     events: {
       'submit': function()
       {
-        var $submit = this.$id('submit').prop('disabled', true);
-        var matches = this.$id('nc12').val().match(/([0-9]{12})/);
-        var nc12 = (matches ? matches[1] : '').trim();
-
-        if (!nc12.length || !this.model.checkSpigot(this.options.component, nc12))
-        {
-          this.$id('nc12')[0].setCustomValidity(t('production', 'spigotChecker:nc12:invalid'));
-
-          this.timers.submit = setTimeout(function() { $submit.prop('disabled', false).click(); }, 1);
-        }
-        else
-        {
-          viewport.msg.show({
-            type: 'success',
-            time: 3000,
-            text: t('production', 'spigotChecker:success')
-          });
-
-          this.closeDialog();
-        }
+        this.checkSpigot(false);
 
         return false;
       },
@@ -52,6 +33,15 @@ define([
         this.model.endWork();
         this.closeDialog();
       }
+    },
+
+    remoteTopics: function()
+    {
+      var topics = {};
+
+      topics['production.spigotCheck.scanned.' + this.model.prodLine.id] = 'onSpigotScanned';
+
+      return topics;
     },
 
     initialize: function()
@@ -74,6 +64,76 @@ define([
         component: this.options.component,
         embedded: this.options.embedded
       };
+    },
+
+    afterRender: function()
+    {
+      this.notifySpigotCheckRequest();
+    },
+
+    checkSpigot: function(notifyFailure)
+    {
+      var $submit = this.$id('submit').prop('disabled', true);
+      var input = this.$id('nc12').val();
+      var matches = input.match(/([0-9]{12})/);
+      var nc12 = (matches ? matches[1] : '').trim();
+
+      if (!nc12.length || !this.model.checkSpigot(this.options.component, nc12))
+      {
+        this.$id('nc12')[0].setCustomValidity(t('production', 'spigotChecker:nc12:invalid'));
+
+        this.timers.submit = setTimeout(function() { $submit.prop('disabled', false).click(); }, 1);
+
+        if (notifyFailure)
+        {
+          this.pubsub.publish('production.spigotCheck.failure.' + this.model.prodLine.id, {
+            prodLine: this.model.prodLine.id,
+            component: this.options.component,
+            orderNo: this.model.prodShiftOrder.get('orderId'),
+            input: input,
+            source: 'spigotChecker'
+          });
+        }
+      }
+      else
+      {
+        viewport.msg.show({
+          type: 'success',
+          time: 3000,
+          text: t('production', 'spigotChecker:success')
+        });
+
+        this.pubsub.publish('production.spigotCheck.success.' + this.model.prodLine.id, {
+          prodLine: this.model.prodLine.id,
+          component: this.options.component,
+          orderNo: this.model.prodShiftOrder.get('orderId'),
+          input: input,
+          nc12: nc12,
+          source: 'spigotChecker'
+        });
+
+        this.closeDialog();
+      }
+    },
+
+    notifySpigotCheckRequest: function()
+    {
+      clearTimeout(this.timers.notifySpigotCheckRequest);
+      this.timers.notifySpigotCheckRequest = setTimeout(this.notifySpigotCheckRequest.bind(this), 5000);
+
+      this.pubsub.publish('production.spigotCheck.requested.' + this.model.prodLine.id, {
+        prodLine: this.model.prodLine.id,
+        component: this.options.component,
+        orderNo: this.model.prodShiftOrder.get('orderId'),
+        source: 'spigotChecker'
+      });
+    },
+
+    onSpigotScanned: function(message)
+    {
+      this.$id('nc12').val(message.nc12)[0].setCustomValidity('');
+
+      this.checkSpigot(true);
     },
 
     onDialogShown: function(viewport)

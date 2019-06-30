@@ -48,6 +48,15 @@ define([
       'socket.disconnected': 'render'
     },
 
+    remoteTopics: function()
+    {
+      var topics = {};
+
+      topics['production.spigotCheck.scanned.' + this.model.prodLine.id] = 'onSpigotScanned';
+
+      return topics;
+    },
+
     events: {
       'focus [data-vkb]': function(e)
       {
@@ -183,6 +192,13 @@ define([
       {
         this.options.vkb.hide();
       }
+
+      if (this.$id('spigot-nc12').length)
+      {
+        this.pubsub.publish('production.spigotCheck.aborted.' + this.model.prodLine.id, {
+          prodLineId: this.model.prodLine.id
+        });
+      }
     },
 
     serialize: function()
@@ -245,7 +261,69 @@ define([
         this.$id('operation').val(this.model.prodShiftOrder.get('operationNo'));
       }
 
+      this.notifySpigotCheckRequest();
       this.focusFirstInput();
+    },
+
+    notifySpigotCheckRequest: function()
+    {
+      if (!this.$id('spigot-nc12').length)
+      {
+        return;
+      }
+
+      clearTimeout(this.timers.notifySpigotCheckRequest);
+      this.timers.notifySpigotCheckRequest = setTimeout(this.notifySpigotCheckRequest.bind(this), 5000);
+
+      this.pubsub.publish('production.spigotCheck.requested.' + this.model.prodLine.id, {
+        prodLine: this.model.prodLine.id,
+        component: this.model.prodShiftOrder.get('spigot').component,
+        orderNo: this.model.prodShiftOrder.get('orderId'),
+        source: 'newOrder'
+      });
+    },
+
+    onSpigotScanned: function(message)
+    {
+      var $spigot = this.$id('spigot-nc12').val(message.nc12);
+
+      if (!$spigot.length)
+      {
+        return;
+      }
+
+      $spigot[0].setCustomValidity('');
+
+      var prodLineId = this.model.prodLine.id;
+      var pso = this.model.prodShiftOrder;
+      var spigot = pso.get('spigot');
+
+      if (!spigot)
+      {
+        return;
+      }
+
+      if (this.model.checkSpigotValidity(message.nc12, spigot.component.nc12))
+      {
+        this.pubsub.publish('production.spigotCheck.success.' + prodLineId, {
+          prodLine: prodLineId,
+          component: spigot.component,
+          orderNo: pso.get('orderId'),
+          input: message.nc12,
+          nc12: spigot.component.nc12,
+          source: 'newOrder'
+        });
+      }
+      else
+      {
+        this.pubsub.publish('production.spigotCheck.failure.' + prodLineId, {
+          prodLine: prodLineId,
+          component: spigot.component,
+          orderNo: pso.get('orderId'),
+          input: message.nc12,
+          source: 'newOrder'
+        });
+      }
     },
 
     limitQuantityDone: function()

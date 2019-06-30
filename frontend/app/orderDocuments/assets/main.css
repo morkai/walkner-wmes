@@ -394,3 +394,6 @@
   margin-right: 15px;
 }
 
+.orderDocuments .production-snMessage-text {
+  width: 800px;
+}

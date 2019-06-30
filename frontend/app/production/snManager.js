@@ -159,7 +159,7 @@ define([
         }
       };
     },
-    showMessage: function(scanInfo, severity, message)
+    showMessage: function(scanInfo, severity, message, duration)
     {
       if (!this.view)
       {
@@ -178,10 +178,21 @@ define([
         ? (scanInfo._id.substring(0, 40) + '...')
         : scanInfo._id;
 
-      $('#snMessage-text').html(t('production', 'snMessage:' + message));
-      $('#snMessage-scannedValue').text(scannedValue);
-      $('#snMessage-orderNo').text(scanInfo.orderNo || '-');
-      $('#snMessage-serialNo').text(scanInfo.serialNo || '-');
+      $('#snMessage-text').html(typeof message === 'function' ? message() : t('production', 'snMessage:' + message));
+
+      $('#snMessage-scannedValue')
+        .text(scannedValue)
+        .closest('.production-snMessage-prop')
+        .toggleClass('hidden', scannedValue.length === 0);
+
+      $('#snMessage-orderNo').text(scanInfo.orderNo || '-')
+        .closest('.production-snMessage-prop')
+        .toggleClass('hidden', (scanInfo.orderNo || '').length === 0);
+
+      $('#snMessage-serialNo')
+        .text(scanInfo.serialNo || '-')
+        .closest('.production-snMessage-prop')
+        .toggleClass('hidden', (scanInfo.serialNo || '').length === 0);
 
       $message
         .css({top: '50%', marginTop: '-80px'})
@@ -193,7 +204,7 @@ define([
         clearTimeout(this.view.timers.hideSnMessage);
       }
 
-      this.view.timers.hideSnMessage = setTimeout(this.hideMessage.bind(this), 6000);
+      this.view.timers.hideSnMessage = setTimeout(this.hideMessage.bind(this), duration || 6000);
     },
     hideMessage: function()
     {
@@ -264,6 +275,13 @@ define([
 
       function onSnScanned(scanInfo)
       {
+        if (snManager.view && snManager.view.onSnScanned)
+        {
+          snManager.view.onSnScanned(scanInfo);
+
+          return;
+        }
+
         if (viewport.currentDialog)
         {
           if (!(viewport.currentDialog instanceof BomCheckerDialogView))

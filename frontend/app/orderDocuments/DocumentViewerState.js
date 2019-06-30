@@ -43,10 +43,9 @@ define([
           _id: null,
           name: ''
         },
-        localServerUrl: 'http://127.0.0.1:1335',
-        localServerPath: '',
         prefixFilterMode: 'exclusive',
         prefixFilter: '161 165 198',
+        spigotCheck: false,
         localOrder: {
           no: null,
           nc12: '',
@@ -92,7 +91,8 @@ define([
         localOrder: this.get('localOrder'),
         remoteOrder: this.get('remoteOrder'),
         prefixFilterMode: this.get('prefixFilterMode'),
-        prefixFilter: this.get('prefixFilter')
+        prefixFilter: this.get('prefixFilter'),
+        spigotCheck: this.get('spigotCheck')
       };
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -156,8 +156,7 @@ define([
         prodLineName: prodLine.name,
         prefixFilterMode: this.get('prefixFilterMode'),
         prefixFilter: this.get('prefixFilter'),
-        localServerUrl: this.get('localServerUrl'),
-        localServerPath: this.get('localServerPath')
+        spigotCheck: this.get('spigotCheck')
       };
     },
 
@@ -241,37 +240,6 @@ define([
       }
 
       return orderInfo;
-    },
-
-    getLocalFileUrl: function(nc15)
-    {
-      var localServerUrl = this.get('localServerUrl');
-
-      if (_.isEmpty(localServerUrl))
-      {
-        return null;
-      }
-
-      var localServerPath = this.get('localServerPath');
-
-      if (localServerUrl.substr(-1) !== '/')
-      {
-        localServerUrl += '/';
-      }
-
-      if (_.isEmpty(localServerPath))
-      {
-        return localServerUrl + nc15;
-      }
-
-      var lastPathChar = localServerPath.substr(-1);
-
-      if (lastPathChar !== '/' && lastPathChar !== '\\')
-      {
-        localServerPath += '/';
-      }
-
-      return localServerUrl + encodeURIComponent(localServerPath + nc15 + '.pdf');
     },
 
     getRemoteFileUrl: function(nc15)

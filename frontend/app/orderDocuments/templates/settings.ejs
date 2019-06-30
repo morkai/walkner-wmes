@@ -27,13 +27,11 @@
     </div>
     <input id="<%- idPrefix %>-prefixFilter" name="prefixFilter" class="form-control" type="text" autocomplete="new-password">
   </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-localServerUrl" class="control-label"><%- t('orderDocuments', 'settings:localServerUrl') %></label>
-    <input id="<%- idPrefix %>-localServerUrl" name="localServerUrl" class="form-control" type="url">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-localServerPath" class="control-label"><%- t('orderDocuments', 'settings:localServerPath') %></label>
-    <input id="<%- idPrefix %>-localServerPath" name="localServerPath" class="form-control" type="text" autocomplete="new-password">
+  <div class="checkbox">
+    <label>
+      <input id="<%- idPrefix %>-spigotCheck" value="true" type="checkbox" name="spigotCheck">
+      <%- t('orderDocuments', 'settings:spigotCheck') %>
+    </label>
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-login" class="control-label is-required"><%- t('orderDocuments', 'settings:login') %></label>

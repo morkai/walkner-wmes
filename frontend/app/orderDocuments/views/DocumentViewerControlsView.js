@@ -171,6 +171,11 @@ define([
       },
       'keydown .orderDocuments-document': function(e)
       {
+        if (embedded.isEnabled())
+        {
+          return;
+        }
+
         var keyCode = e.keyCode;
         var documentEl = e.currentTarget;
         var view = this;
@@ -935,6 +940,11 @@ define([
 
     onKeyPress: function(e)
     {
+      if (embedded.isEnabled())
+      {
+        return;
+      }
+
       var activeElement = document.activeElement;
 
       if (activeElement.tagName === 'INPUT'
