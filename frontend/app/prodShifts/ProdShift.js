@@ -903,7 +903,12 @@ define([
       }
       else
       {
-        prodDowntime = this.prodDowntimes.findFirstUnfinished().id;
+        prodDowntime = this.prodDowntimes.findFirstUnfinished() || this.prodDowntimes.first() || null;
+
+        if (prodDowntime)
+        {
+          prodDowntime = prodDowntime.id;
+        }
       }
 
       var valid = this.checkSpigotValidity(nc12, component.nc12);
