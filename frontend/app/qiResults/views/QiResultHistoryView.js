@@ -197,7 +197,7 @@ define([
 
         case 'correctiveActions':
           return '<a class="qiResults-history-correctiveActions" data-property="' + property + '"'
-            + 'data-index="' + changeIndex + '" data-which="' + (isOld ? '0' : '1') + '">'
+            + ' data-index="' + changeIndex + '" data-which="' + (isOld ? '0' : '1') + '">'
             + t('qiResults', 'history:correctiveActions', {count: value.length})
             + '</a>';
 

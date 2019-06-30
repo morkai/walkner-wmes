@@ -335,6 +335,11 @@ define([
 
       formData = _.assign(this.model.toJSON(), formData);
 
+      if (!formData.standard)
+      {
+        formData.standard = null;
+      }
+
       ['inspector', 'nokOwner', 'leader'].forEach(function(prop)
       {
         var optionEl = (view.$id(prop)[0] || {selectedOptions: []}).selectedOptions[0];
