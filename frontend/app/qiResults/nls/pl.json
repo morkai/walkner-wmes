@@ -174,7 +174,7 @@
   "report:oql:title:where": "Gdzie",
   "report:oql:title:what": "Co",
   "report:oql:title:results": "4C",
-  "report:oql:series:oql": "OQL",
+  "report:oql:series:oql": "PPM",
   "report:oql:series:oqlTarget": "Cel",
   "report:oql:filename:ppm": "WMES_OQL_TygPPM",
   "report:oql:filename:where": "WMES_OQL_Gdzie",
