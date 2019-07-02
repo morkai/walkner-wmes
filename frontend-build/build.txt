@@ -644,11 +644,17 @@ app/qiResults/assets/./list.css
 app/qiResults/assets/./form.css
 app/qiResults/assets/./details.css
 app/qiResults/assets/./history.css
+app/qiResults/assets/././oql.css
 app/qiResults/assets/./reports.css
 app/qiResults/assets/main.css
 
+app/qiResults/assets/oql.css
+----------------
+app/qiResults/assets/oql.css
+
 app/qiResults/assets/reports.css
 ----------------
+app/qiResults/assets/./oql.css
 app/qiResults/assets/reports.css
 
 app/reports/assets/main.css
