@@ -183,6 +183,7 @@
     "report:oql:where": "Family",
     "report:oql:what": "Fault",
     "report:oql:pareto": "Pareto",
+    "report:oql:printable": "Printable version",
 
     "settings:tab:results": "Results",
     "settings:tab:reports": "Reports",

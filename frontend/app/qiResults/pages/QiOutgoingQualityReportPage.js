@@ -56,6 +56,30 @@ define([
       ];
     },
 
+    actions: function()
+    {
+      var page = this;
+
+      return [{
+        icon: 'print',
+        label: this.t('report:oql:printable'),
+        className: page.model.get('printable') ? 'active' : '',
+        callback: function()
+        {
+          var printable = !page.model.get('printable');
+
+          page.model.set('printable', printable);
+
+          this.querySelector('.btn').classList.toggle('active', printable);
+
+          if (printable)
+          {
+            setTimeout(function() { window.print(); }, 1);
+          }
+        }
+      }];
+    },
+
     initialize: function()
     {
       var report = bindLoadingMessage(this.model, this);
@@ -92,6 +116,7 @@ define([
       this.setView('#-results', new ResultListView({collection: report.results}));
 
       this.listenTo(report, 'filtered', this.onFiltered);
+      this.listenTo(report, 'change:printable', this.onPrintableChange);
 
       function resolveWhereTitle(id)
       {
@@ -126,6 +151,13 @@ define([
       return when(this.model.fetch());
     },
 
+    getTemplateData: function()
+    {
+      return {
+        printable: this.model.get('printable')
+      };
+    },
+
     onFiltered: function()
     {
       this.promised(this.model.fetch());
@@ -135,6 +167,11 @@ define([
         trigger: false,
         replace: true
       });
+    },
+
+    onPrintableChange: function()
+    {
+      this.render();
     }
 
   });

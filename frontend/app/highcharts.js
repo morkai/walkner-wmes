@@ -251,7 +251,7 @@ define([
   {
     var plotOptions = {
       dataLabels: {
-        enabled: true,
+        enabled: !this.userOptions.exporting || this.userOptions.exporting.dataLabels !== false,
         padding: 0,
         allowOverlap: false,
         formatter: formatDataLabelForExport

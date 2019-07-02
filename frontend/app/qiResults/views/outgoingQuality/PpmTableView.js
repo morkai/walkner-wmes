@@ -113,7 +113,7 @@ define([
       var view = this;
 
       return {
-        canManage: view.model.canManage(),
+        canManage: !view.model.get('printable') && view.model.canManage(),
         data: _.map(view.model.get('groups'), function(group)
         {
           return {

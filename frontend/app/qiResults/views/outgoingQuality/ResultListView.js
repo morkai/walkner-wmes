@@ -25,14 +25,17 @@ define([
 
   return ListView.extend({
 
-    className: 'is-clickable',
+    className: function()
+    {
+      return this.collection.report.get('printable') ? '' : 'is-clickable';
+    },
 
     remoteTopics: {},
 
     events: _.assign(ListView.prototype.events, {
       'click td[data-id="rid"]': function(e)
       {
-        if (this.collection.report.canManage())
+        if (this.canManage())
         {
           this.showResultsEditor(e.currentTarget);
 
@@ -41,7 +44,7 @@ define([
       },
       'click td[data-id="standard"]': function(e)
       {
-        if (this.collection.report.canManage())
+        if (this.canManage())
         {
           this.showStandardEditor(e.currentTarget);
 
@@ -77,6 +80,13 @@ define([
       {
         this.render();
       }
+    },
+
+    canManage: function()
+    {
+      var report = this.collection.report;
+
+      return !report.get('printable') && report.canManage();
     },
 
     showResultsEditor: function(td)
@@ -311,8 +321,7 @@ define([
 
     serializeColumns: function()
     {
-      return [
-        {id: 'rid', tdClassName: 'is-min is-number'},
+      var columns = [
         {id: 'kpi', className: 'is-min'},
         {id: 'site', className: 'is-min'},
         {id: 'date', className: 'is-min'},
@@ -325,6 +334,13 @@ define([
         {id: 'who', className: 'is-min'},
         {id: 'when', className: 'is-min'}
       ];
+
+      if (!this.collection.report.get('printable'))
+      {
+        columns.unshift({id: 'rid', tdClassName: 'is-min is-number'});
+      }
+
+      return columns;
     },
 
     serializeActions: function()
@@ -353,10 +369,27 @@ define([
         }
       });
 
+      var printable = report.get('printable');
       var ridToRow = {};
       var allRows = results.map(function(result)
       {
         var obj = result.toJSON();
+
+        if (printable)
+        {
+          obj.check = obj.check.slice(0, 1);
+          obj.who = obj.who.slice(0, 1);
+
+          if (obj.cause.length > 130)
+          {
+            obj.cause = obj.cause.substring(0, 125) + '...';
+          }
+
+          if (obj.countermeasure.length > 130)
+          {
+            obj.countermeasure = obj.countermeasure.substring(0, 125) + '...';
+          }
+        }
 
         obj.kpi = 'OQ';
         obj.site = 'Kętrzyn';
@@ -371,7 +404,7 @@ define([
 
         var mrpController = orgUnits.getByTypeAndId('mrpController', obj.pareto);
 
-        if (mrpController)
+        if (!printable && mrpController)
         {
           obj.pareto += ': ' + mrpController.get('description');
         }
@@ -384,7 +417,11 @@ define([
         if (fault)
         {
           obj.weight = fault.get('weight');
-          obj.concern += ': ' + fault.get('name');
+
+          if (!printable)
+          {
+            obj.concern += ': ' + fault.get('name');
+          }
         }
 
         var standard = dictionaries.standards.get(obj.standard);

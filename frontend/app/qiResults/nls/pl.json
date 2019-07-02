@@ -183,6 +183,7 @@
   "report:oql:where": "Rodzina",
   "report:oql:what": "Wada",
   "report:oql:pareto": "Pareto",
+  "report:oql:printable": "Wersja do druku",
 
   "settings:tab:results": "Wyniki",
   "settings:tab:reports": "Raporty",

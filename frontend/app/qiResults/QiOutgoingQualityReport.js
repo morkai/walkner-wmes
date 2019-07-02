@@ -35,6 +35,7 @@ define([
     defaults: function()
     {
       return {
+        printable: false,
         interval: 'week',
         week: '',
         options: {},
