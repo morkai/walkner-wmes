@@ -485,6 +485,7 @@
   "clip:filter:dateOffset:2": "Filtr: ",
   "clip:filter:dateOffset:3": "Dane: ",
   "clip:exportOrders": "Eksportuj zlecenia",
+  "clip:showLineOrders": "Pokaż zlecenia linii",
   "clip:toggleSystemChanges": "Ukryj zmiany systemowe",
 
   "7:filter:statuses": "Status przestojów na liście",

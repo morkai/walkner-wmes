@@ -4,9 +4,11 @@ define([
   'underscore',
   'app/time',
   'app/i18n',
+  'app/user',
   'app/highcharts',
   'app/core/View',
   'app/core/util/pageActions',
+  'app/data/orgUnits',
   'app/orgUnits/util/renderOrgUnitPath',
   'app/reports/util/formatTooltipHeader',
   'app/reports/util/formatXAxis'
@@ -14,9 +16,11 @@ define([
   _,
   time,
   t,
+  user,
   Highcharts,
   View,
   pageActions,
+  orgUnits,
   renderOrgUnitPath,
   formatTooltipHeader,
   formatXAxis
@@ -159,7 +163,7 @@ define([
 
       if (!orgUnitType)
       {
-        return t('reports', 'charts:title:overall');
+        return this.t('charts:title:overall');
       }
 
       var orgUnit = this.model.get('orgUnit');
@@ -313,6 +317,20 @@ define([
           return Math.floor(this.y);
         }
       };
+      var menuItems = Highcharts.getDefaultMenuItems().concat([
+        {
+          text: view.t('clip:exportOrders'),
+          onclick: view.exportOrders.bind(view)
+        }
+      ]);
+
+      if (view.model.get('orgUnitType') === 'mrpController' && user.isAllowedTo('PROD_DATA:VIEW'))
+      {
+        menuItems.push({
+          text: view.t('clip:showLineOrders'),
+          onclick: view.showLineOrders.bind(view)
+        });
+      }
 
       view.chart = new Highcharts.Chart({
         chart: {
@@ -320,15 +338,10 @@ define([
           zoomType: null
         },
         exporting: {
-          filename: t('reports', 'filenames:2:clip'),
+          filename: view.t('filenames:2:clip'),
           buttons: {
             contextButton: {
-              menuItems: Highcharts.getDefaultMenuItems().concat([
-                {
-                  text: t('reports', 'clip:exportOrders'),
-                  onclick: view.exportOrders.bind(view)
-                }
-              ])
+              menuItems: menuItems
             }
           }
         },
@@ -380,7 +393,7 @@ define([
         series: [
           {
             id: 'clipOrderCount',
-            name: t('reports', 'metrics:clip:orderCount'),
+            name: view.t('metrics:clip:orderCount'),
             color: orderCountColor,
             type: 'area',
             yAxis: 0,
@@ -397,7 +410,7 @@ define([
           },
           {
             id: 'clipProductionCount',
-            name: t('reports', 'metrics:clip:productionCount'),
+            name: view.t('metrics:clip:productionCount'),
             color: productionColor,
             type: 'line',
             dashStyle: 'LongDash',
@@ -422,7 +435,7 @@ define([
           },
           {
             id: 'clipEndToEndCount',
-            name: t('reports', 'metrics:clip:endToEndCount'),
+            name: view.t('metrics:clip:endToEndCount'),
             color: endToEndColor,
             type: 'line',
             dashStyle: 'LongDash',
@@ -447,7 +460,7 @@ define([
           },
           {
             id: 'clipProduction',
-            name: t('reports', 'metrics:clip:production'),
+            name: view.t('metrics:clip:production'),
             color: productionColor,
             type: 'line',
             yAxis: 1,
@@ -468,7 +481,7 @@ define([
           },
           {
             id: 'clipEndToEnd',
-            name: t('reports', 'metrics:clip:endToEnd'),
+            name: view.t('metrics:clip:endToEnd'),
             color: endToEndColor,
             type: 'line',
             yAxis: 1,
@@ -539,6 +552,26 @@ define([
       }
 
       pageActions.exportXlsx(url);
+    },
+
+    showLineOrders: function()
+    {
+      var orgUnitType = this.model.query.get('orgUnitType');
+      var orgUnitId = this.model.query.get('orgUnitId');
+      var orgUnit = orgUnits.getByTypeAndId(orgUnitType, orgUnitId);
+      var division = orgUnits.getDivisionFor(orgUnit);
+      var url = '/#prodShiftOrders'
+        + '?exclude(creator,losses,orderData.bom,orderData.documents)&sort(-startedAt)&limit(30)'
+        + '&startedAt=ge=' + time.getMoment(+this.model.query.get('from')).subtract(7, 'days').valueOf()
+        + '&startedAt=lt=' + time.getMoment(+this.model.query.get('to')).add(7, 'days').valueOf()
+        + '&orderData.mrp=in=(' + this.model.get('mrps').join(',') + ')';
+
+      if (division)
+      {
+        url += '&division=' + encodeURIComponent(division.id);
+      }
+
+      window.open(url);
     }
 
   });

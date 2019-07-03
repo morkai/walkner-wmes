@@ -323,6 +323,25 @@ define([
 
       return this.RELATION_TYPES.UNRELATED;
     },
+    getDivisionFor: function(orgUnit)
+    {
+      if (!orgUnit)
+      {
+        return null;
+      }
+
+      if (orgUnit.constructor === divisions.model)
+      {
+        return orgUnit;
+      }
+
+      if (orgUnit.constructor !== subdivisions.model)
+      {
+        orgUnit = this.getSubdivisionFor(orgUnit);
+      }
+
+      return this.getParent(orgUnit);
+    },
     getSubdivisionFor: function(orgUnit)
     {
       if (!orgUnit || orgUnit.constructor === divisions.model)

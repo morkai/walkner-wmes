@@ -475,7 +475,12 @@
     "settings:clip:orderFilterMode:none": "None of the specified statuses - <span style='font-weight: normal'>only orders that do not have all of the specified statuses.</span>",
     "settings:clip:orderFilterMode:without": "Without the specified status - <span style='font-weight: normal'>only orders that do not have one of the specified statuses.</span>",
 
+    "clip:filter:dateOffset": "Date offset",
+    "clip:filter:dateOffset:1": "List: ",
+    "clip:filter:dateOffset:2": "Filter: ",
+    "clip:filter:dateOffset:3": "Data: ",
     "clip:exportOrders": "Export orders",
+    "clip:showLineOrders": "Show line orders",
     "clip:toggleSystemChanges": "Hide system changes",
 
     "7:filter:statuses": "Downtime statuses on the list",
