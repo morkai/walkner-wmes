@@ -998,7 +998,14 @@ define([
       }
       else if (scanInfo.orderNo !== currentOrderNo)
       {
-        error = 'INVALID_ORDER';
+        if (page.socket.isConnected())
+        {
+          logEntry = snManager.createDynamicLogEntry(scanInfo);
+        }
+        else
+        {
+          error = 'INVALID_ORDER';
+        }
       }
       else if (snManager.contains(scanInfo._id))
       {

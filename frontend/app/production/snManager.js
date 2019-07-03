@@ -222,6 +222,22 @@ define([
 
       $('#snMessage').addClass('hidden');
     },
+    createDynamicLogEntry: function(scanInfo)
+    {
+      var logEntry = {
+        _id: null,
+        instanceId: window.INSTANCE_ID,
+        type: 'checkSerialNumber',
+        data: scanInfo,
+        createdAt: time.getMoment().toDate(),
+        creator: user.getInfo(),
+        prodLine: window.WMES_LINE_ID
+      };
+
+      scanInfo.sapTaktTime = -1;
+
+      return logEntry;
+    },
     bind: function(view)
     {
       var snManager = this;
@@ -358,19 +374,7 @@ define([
             return snManager.showMessage(scanInfo, 'error', 'ALREADY_USED');
           }
 
-          var logEntry = {
-            _id: null,
-            instanceId: window.INSTANCE_ID,
-            type: 'checkSerialNumber',
-            data: scanInfo,
-            createdAt: time.getMoment().toDate(),
-            creator: user.getInfo(),
-            prodLine: window.WMES_LINE_ID
-          };
-
-          scanInfo.sapTaktTime = -1;
-
-          checkSn(logEntry, bomScanInfo);
+          checkSn(snManager.createDynamicLogEntry(scanInfo), bomScanInfo);
         }
       }
 
