@@ -1,7 +1,13 @@
-<tbody class="<%- change.user.id ? 'is-user-change' : 'is-system-change' %>">
+<tbody class="<%- change.user.id ? 'is-user-change' : 'is-system-change' %>" data-index="<%- i %>">
   <% if (change.values.length) { %>
   <tr>
-    <td class="is-min orders-changes-time" rowspan="<%- change.rowSpan %>"><%- change.timeText %></td>
+    <td class="is-min orders-changes-time" rowspan="<%- change.rowSpan %>">
+      <% if (change.timeEditable) { %>
+      <a class="link orders-changes-time-editable"><%- change.timeText %></a>
+      <% } else { %>
+      <%- change.timeText %>
+      <% } %>
+    </td>
     <td class="is-min orders-changes-user" rowspan="<%- change.rowSpan %>"><%- change.userText %></td>
     <td class="is-min orders-changes-property"><%- renderPropertyLabel(change.values[0], i) %></td>
     <td class="is-min"><%- renderValueChange(change.values[0], i, 'oldValue') %></td>

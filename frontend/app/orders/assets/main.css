@@ -84,6 +84,20 @@
 .orders-changes-user {
   vertical-align: top!important;
 }
+.orders-changes-time-editable {
+  display: block;
+  position: relative;
+  cursor: pointer;
+}
+.orders-changes-time-editor {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.orders-changes-time-editor input {
+  width: 150px;
+}
 .orders-changes .userInfo-cname {
   display: block;
 }

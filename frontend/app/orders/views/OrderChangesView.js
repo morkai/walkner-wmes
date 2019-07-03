@@ -73,6 +73,16 @@ define([
 
         localStorage.setItem('WMES_NO_SYSTEM_CHANGES', active ? '1' : '0');
         this.$el.toggleClass('orders-no-system-changes', active);
+      },
+      'click .orders-changes-time-editable': function(e)
+      {
+        if (this.$(e.target).closest('form').length)
+        {
+          return;
+        }
+
+        this.hideTimeEditor();
+        this.showTimeEditor(e.currentTarget);
       }
     },
 
@@ -86,12 +96,14 @@ define([
       this.documentListView = null;
       this.componentListView = null;
 
-      this.setView('.orders-commentForm-container', new OrderCommentFormView({
+      this.setView('#-commentForm', new OrderCommentFormView({
         model: this.model,
         delayReasons: this.delayReasons
       }));
 
       this.listenTo(this.model, 'push:change', this.onChangePush);
+
+      $(window).on('keydown.' + this.idPrefix, this.onKeyDown.bind(this));
     },
 
     destroy: function()
@@ -111,6 +123,7 @@ define([
         renderChange: renderChange,
         renderPropertyLabel: this.renderPropertyLabel,
         renderValueChange: this.renderValueChange,
+        canEditTime: user.isAllowedTo('ORDERS:MANAGE'),
         canComment: user.can.commentOrders(),
         noSystemChanges: localStorage.getItem('WMES_NO_SYSTEM_CHANGES') === '1'
       };
@@ -133,10 +146,13 @@ define([
         };
       }
 
+      change.timeEditable = false;
       change.timeText = time.format(change.time, 'L<br>LTS');
       change.userText = renderUserInfo({userInfo: change.user});
       change.values = Object.keys(change.oldValues || {}).map(function(property)
       {
+        change.timeEditable = change.timeEditable || property === 'statuses';
+
         return {
           property: property,
           oldValue: change.oldValues[property],
@@ -174,10 +190,22 @@ define([
       switch (valueChange.property)
       {
         case 'qtyMax':
-          return t('orders', 'CHANGES:qtyMax', {operationNo: valueChange.newValue.operationNo});
+          return this.t('changes:qtyMax', {operationNo: valueChange.newValue.operationNo});
+
+        case 'change':
+        {
+          var no = valueChange.newValue.oldIndex + 1;
+
+          if (no !== valueChange.newValue.newIndex + 1)
+          {
+            no += '->' + (valueChange.newValue.newIndex + 1);
+          }
+
+          return this.t('changes:change', {no: no});
+        }
 
         default:
-          return t('orders', 'PROPERTY:' + valueChange.property);
+          return this.t('PROPERTY:' + valueChange.property);
       }
     },
 
@@ -195,19 +223,19 @@ define([
         case 'operations':
           return '<a class="orders-changes-operations" '
             + 'data-i="' + i + '" data-property="' + valueProperty + '">'
-            + t('orders', 'CHANGES:operations', {count: value.length})
+            + this.t('changes:operations', {count: value.length})
             + '</a>';
 
         case 'documents':
           return '<a class="orders-changes-documents" '
             + 'data-i="' + i + '" data-property="' + valueProperty + '">'
-            + t('orders', 'CHANGES:documents', {count: value.length})
+            + this.t('changes:documents', {count: value.length})
             + '</a>';
 
         case 'bom':
           return '<a class="orders-changes-bom" '
             + 'data-i="' + i + '" data-property="' + valueProperty + '">'
-            + t('orders', 'CHANGES:bom', {count: value.length})
+            + this.t('changes:bom', {count: value.length})
             + '</a>';
 
         case 'statuses':
@@ -235,10 +263,13 @@ define([
         case 'whStatus':
         case 'm4':
         case 'psStatus':
-          return t('orders', valueChange.property + ':' + value);
+          return this.t(valueChange.property + ':' + value);
 
         case 'qtyMax':
           return value.value.toLocaleString();
+
+        case 'change':
+          return time.format(value.time, 'L LTS');
 
         default:
           return _.escape(String(value));
@@ -331,17 +362,191 @@ define([
 
     onChangePush: function(change)
     {
-      var $change = $(renderChange({
-        renderPropertyLabel: this.renderPropertyLabel,
-        renderValueChange: this.renderValueChange,
-        change: this.serializeChange(change),
-        i: this.model.get('changes').length
-      }));
+      var view = this;
+      var $table = view.$id('table');
+      var changes = view.model.get('changes');
+      var changedChange = change.newValues.change;
 
-      this.$id('empty').remove();
-      this.$id('table').append($change);
+      view.$id('empty').remove();
 
-      $change.find('td').addClass('highlight');
+      if (changedChange)
+      {
+        changes[changedChange.oldIndex].time = new Date(changedChange.time).toISOString();
+
+        var $time = view.$('tbody[data-index="' + changedChange.oldIndex + '"]').find('.orders-changes-time');
+
+        if ($time.find('a').length)
+        {
+          $time = $time.find('a');
+        }
+
+        $time.html(time.format(changedChange.time, 'L<br>LTS'));
+
+        if (changedChange.oldIndex !== changedChange.newIndex)
+        {
+          changes.sort(function(a, b) { return Date.parse(a.time) - Date.parse(b.time); });
+
+          $table.find('tbody').remove();
+
+          var html = '';
+          var changeI = -1;
+
+          changes.forEach(function(c, i)
+          {
+            if (c === change)
+            {
+              changeI = i;
+            }
+
+            html += view.renderPartialHtml(renderChange, {
+              renderPropertyLabel: view.renderPropertyLabel,
+              renderValueChange: view.renderValueChange,
+              change: view.serializeChange(c),
+              i: i
+            });
+          });
+
+          $table
+            .append(html)
+            .find('tbody')
+            .eq(changeI)
+            .find('td')
+            .addClass('highlight');
+
+          return;
+        }
+      }
+
+      var $change = view.renderPartial(renderChange, {
+        renderPropertyLabel: view.renderPropertyLabel,
+        renderValueChange: view.renderValueChange,
+        change: view.serializeChange(change),
+        i: changes.length
+      });
+
+      $change.appendTo($table).find('td').addClass('highlight');
+    },
+
+    onKeyDown: function(e)
+    {
+      if (e.key === 'Escape')
+      {
+        this.hideTimeEditor();
+      }
+    },
+
+    hideTimeEditor: function()
+    {
+      this.$('.orders-changes-time-editor').remove();
+    },
+
+    showTimeEditor: function(containerEl)
+    {
+      var view = this;
+      var timeFormat = 'YYYY-MM-DD HH:mm:ss';
+      var $container = view.$(containerEl);
+      var i = +$container.closest('tbody')[0].dataset.index;
+      var changes = view.model.get('changes');
+      var change = changes[i];
+      var prevChange = null;
+      var nextChange = null;
+
+      for (var p = i - 1; p >= 0; --p)
+      {
+        if (changes[p].oldValues.statuses)
+        {
+          prevChange = changes[p];
+
+          break;
+        }
+      }
+
+      for (var n = i + 1; n < changes.length; ++n)
+      {
+        if (changes[n].oldValues.statuses)
+        {
+          nextChange = changes[n];
+
+          break;
+        }
+      }
+
+      var curTime = time.getMoment(change.time);
+      var minTime = time.getMoment(prevChange ? prevChange.time : view.model.get('importTs'));
+      var maxTime = time.getMoment(nextChange ? nextChange.time : view.model.get('updatedAt'));
+
+      var $form = $('<form class="orders-changes-time-editor"></form>');
+      var $input = $('<input type="text" class="form-control" required>').val(curTime.format(timeFormat));
+      var $submit = $('<button class="btn btn-primary"><i class="fa fa-save"></i></button>');
+
+      $input.on('input', function()
+      {
+        $input[0].setCustomValidity('');
+      });
+
+      $form.on('submit', function(e)
+      {
+        e.preventDefault();
+
+        var newTime = time.getMoment($input.val(), timeFormat);
+
+        if (newTime.valueOf() === curTime.valueOf())
+        {
+          return view.hideTimeEditor();
+        }
+
+        if (!newTime.isValid())
+        {
+          return error('format');
+        }
+
+        if (newTime.valueOf() <= minTime.valueOf())
+        {
+          return error('min', {time: minTime.format(timeFormat)});
+        }
+
+        if (newTime.valueOf() >= maxTime.valueOf())
+        {
+          return error('max', {time: maxTime.format(timeFormat)});
+        }
+
+        viewport.msg.saving();
+
+        var req = view.ajax({
+          method: 'POST',
+          url: '/orders/' + view.model.id,
+          data: JSON.stringify({
+            change: {
+              index: i,
+              time: newTime.valueOf()
+            }
+          })
+        });
+
+        req.fail(function()
+        {
+          viewport.msg.savingFailed();
+
+
+        });
+
+        req.done(function()
+        {
+          viewport.msg.saved();
+
+          view.hideTimeEditor();
+        });
+      });
+
+      $form.append($input).append($submit).appendTo($container);
+      $input.focus();
+
+      function error(reason, data)
+      {
+        $input[0].setCustomValidity(view.t('changes:timeEditor:error:' + reason, data));
+
+        setTimeout(function() { $submit.click(); });
+      }
     }
 
   });
