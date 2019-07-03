@@ -7,9 +7,25 @@
         </div>
         <div class="panel-details">
           <%- helpers.props(model, [
-            {id: 'orderNo', visible: model.source === 'prod'},
+            {id: '!orderNo', visible: model.source === 'prod', value: function(orderNo)
+            {
+              if (user.isAllowedTo('ORDERS:VIEW'))
+              {
+                return '<a href="#orders/' + orderNo + '">' + orderNo + '</a>';
+              }
+
+              return orderNo;
+            }},
             {id: 'serialNumbers', visible: model.source === 'prod'},
-            {id: 'nc12', label: helpers.t('PROPERTY:nc12:' + model.source)},
+            {id: '!nc12', label: helpers.t('PROPERTY:nc12:' + model.source), value: function(nc12)
+              {
+                if (user.isAllowedTo('ORDERS:VIEW'))
+                {
+                  return '<a href="#orders?exclude(operations,bom,documents,changes)&sort(-scheduledStartDate)&limit(-1337)&scheduledStartDate=ge=' + time.getMoment(model.inspectedAtTime).startOf('day').subtract(7, 'days').valueOf() + '&nc12=string:' + nc12 + '">' + nc12 + '</a>';
+                }
+
+                return nc12;
+              }},
             {id: 'productFamily', visible: model.source === 'prod'},
             {id: 'productName', label: helpers.t('PROPERTY:productName:' + model.source)},
             'division',

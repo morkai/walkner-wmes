@@ -174,7 +174,8 @@ define([
       obj.creator = renderUserInfo({userInfo: obj.creator});
       obj.updatedAt = time.format(obj.updatedAt, 'LLLL');
       obj.updater = renderUserInfo({userInfo: obj.updater});
-      obj.inspectedAt = time.format(obj.inspectedAt, options.dateFormat || 'L');
+      obj.inspectedAtTime = Date.parse(obj.inspectedAt);
+      obj.inspectedAt = time.format(obj.inspectedAtTime, options.dateFormat || 'L');
       obj.inspector = renderUserInfo({userInfo: obj.inspector});
       obj.nokOwner = renderUserInfo({userInfo: obj.nokOwner});
       obj.leader = renderUserInfo({userInfo: obj.leader});
