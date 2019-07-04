@@ -369,6 +369,8 @@
     "settings:mrp": "MRP controller settings",
     "settings:mrp:help": "Select an MRP controller for which you want to define settings",
     "settings:mrp:placeholder": "MRP controller...",
+    "settings:limitSmallOrders": "Limit small orders",
+    "settings:limitSmallOrders:help": "During the first planning pass, the number of small orders that can be placed on a single line is limited by the number of lines that accept small orders. For example, MRP has 30 small orders and 5 lines that accept small orders. If the option is disabled, the first line will be completely filled with small orders. If the option is enabled, then each line will have 30/5=6 small orders.",
     "settings:extraOrderSeconds": "Extra order duration",
     "settings:extraOrderSeconds:help": "Number of seconds added to each planned order except the one stared at the beginning of the production shift.",
     "settings:extraShiftSeconds": "Time to start the shift",

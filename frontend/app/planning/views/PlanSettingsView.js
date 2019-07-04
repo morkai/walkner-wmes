@@ -599,6 +599,10 @@ define([
           .prop('disabled', disabled);
       });
 
+      view.$id('limitSmallOrders')
+        .prop('checked', disabled ? false : mrp.get('limitSmallOrders'))
+        .prop('disabled', disabled);
+
       [
         'extraOrderSeconds',
         'bigOrderQuantity',
@@ -930,6 +934,7 @@ define([
 
         case 'ignoreCompleted':
         case 'useRemainingQuantity':
+        case 'limitSmallOrders':
           v = $property.prop('checked');
           break;
 

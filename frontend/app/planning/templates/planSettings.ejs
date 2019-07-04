@@ -69,6 +69,14 @@
         <p class="help-block"><%- helpers.t('settings:mrp:help') %></p>
         <input id="<%- idPrefix %>-mrp" type="text" autocomplete="new-password">
       </div>
+      <div class="checkbox">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-limitSmallOrders" name="limitSmallOrders" type="checkbox" value="true" data-object="mrp">
+          <%- helpers.t('settings:limitSmallOrders') %>
+        </label>
+        <p class="help-block"><%- helpers.t('settings:limitSmallOrders:help') %></p>
+      </div>
+      <br>
       <div class="row">
         <div class="col-md-3 form-group">
           <label for="<%- idPrefix %>-extraOrderSeconds"><%- helpers.t('settings:extraOrderSeconds') %></label>

@@ -368,6 +368,8 @@
   "settings:mrp": "Ustawienia kontrolera MRP",
   "settings:mrp:help": "Wybierz kontroler MRP, dla którego chcesz zdefiniować ustawienia.",
   "settings:mrp:placeholder": "Kontroler MRP...",
+  "settings:limitSmallOrders": "Ogranicz małe zlecenia",
+  "settings:limitSmallOrders:help": "W pierwszym przejściu planowania, ilość małych zleceń rozplanowywanych na jednej linii zostanie ograniczona do ilości dostępnych linii. Na przykład, MRP ma 30 małych zleceń i 5 linii akceptujących małe zlecenia. Jeżeli opcja nie będzie włączona, to pierwsza linia zostanie zapełniona małymi zleceniami. Jeżeli opcja zostanie włączona, to na każdą linię trafi po 30/5=6 małych zleceń.",
   "settings:extraOrderSeconds": "Dodatkowy czas zlecenia",
   "settings:extraOrderSeconds:help": "Ilość sekund dodawana do każdego zlecenia oprócz zlecenia rozpoczętego na początku zmiany produkcyjnej.",
   "settings:extraShiftSeconds": "Czas na rozpoczęcie zmian",

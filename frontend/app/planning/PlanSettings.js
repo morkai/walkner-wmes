@@ -42,6 +42,7 @@ define([
     {
       return {
         locked: false,
+        limitSmallOrders: false,
         extraOrderSeconds: 0,
         extraShiftSeconds: [0, 0, 0],
         bigOrderQuantity: 0,
