@@ -42,6 +42,7 @@
   "filter:useLatestOrderData": "Najnowsze zlecenia",
   "filter:useDarkerTheme": "Wysoki kontrast",
   "filter:copyOrderList": "Kopiuj listę zleceń",
+  "filter:exportStats": "Eksportuj statystyki",
   "filter:stats:quantity": "Sztuki:",
   "filter:stats:manHours": "RBH:",
   "filter:stats:orders": "Zlecenia:",
@@ -311,10 +312,13 @@
   "wh:export:fileName": "WMES_PLAN_MAGAZYN_{date}",
   "wh:export:sheetName": "Plan magazynu {date}",
 
+  "stats:mrp": "MRP",
   "stats:orderCount": "Ilość zleceń",
   "stats:quantity": "Ilość sztuk",
   "stats:manHours": "RBH",
   "stats:hourlyPlan": "Plan godzinowy",
+  "stats:export:fileName": "WMES_Plan_Wykonanie_{date}",
+  "stats:export:sheetName": "Wykonanie planu {date}",
 
   "orderStatus:planned": "Zaplanowane",
   "orderStatus:unplanned": "Niezaplanowane",

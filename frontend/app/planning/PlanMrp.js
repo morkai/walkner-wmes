@@ -149,37 +149,34 @@ define([
           : 100;
       }
 
-      if (plan)
+      orders.forEach(function(planOrder)
       {
-        orders.forEach(function(planOrder)
+        var sapOrder = plan.sapOrders.get(planOrder.id);
+
+        if (!sapOrder || planOrder.get('mrp') !== mrp)
         {
-          var sapOrder = plan.sapOrders.get(planOrder.id);
+          return;
+        }
 
-          if (!sapOrder || planOrder.get('mrp') !== mrp)
-          {
-            return;
-          }
+        var quantityRemaining = sapOrder.get('quantityTodo') - sapOrder.getQuantityDone();
 
-          var quantityRemaining = sapOrder.get('quantityTodo') - sapOrder.getQuantityDone();
+        stats.manHours.todo += planOrder.get('manHours');
+        stats.quantity.todo += planOrder.getQuantityTodo();
+        stats.orders.todo += 1;
+        stats.manHours.remaining += planOrder.getManHours(quantityRemaining);
+        stats.quantity.remaining += quantityRemaining;
+        stats.orders.remaining += quantityRemaining > 0 ? 1 : 0;
+      });
 
-          stats.manHours.todo += planOrder.get('manHours');
-          stats.quantity.todo += planOrder.getQuantityTodo();
-          stats.orders.todo += 1;
-          stats.manHours.remaining += planOrder.getManHours(quantityRemaining);
-          stats.quantity.remaining += quantityRemaining;
-          stats.orders.remaining += quantityRemaining > 0 ? 1 : 0;
-        });
-
-        plan.lateOrders.mrp(this.id).forEach(function(lateOrder)
+      plan.lateOrders.mrp(this.id).forEach(function(lateOrder)
+      {
+        if (!orders.get(lateOrder.id))
         {
-          if (!orders.get(lateOrder.id))
-          {
-            stats.manHours.late += lateOrder.get('manHours');
-            stats.quantity.late += lateOrder.getQuantityTodo();
-            stats.orders.late += 1;
-          }
-        });
-      }
+          stats.manHours.late += lateOrder.get('manHours');
+          stats.quantity.late += lateOrder.getQuantityTodo();
+          stats.orders.late += 1;
+        }
+      });
 
       return stats;
     }

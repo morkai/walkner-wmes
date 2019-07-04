@@ -30,6 +30,9 @@
         <% }) %>
       </ul>
     </div>
+    <button id="<%- idPrefix %>-exportStats" type="button" class="btn btn-default">
+      <i class="fa fa-download"></i><span><%- t('planning', 'filter:exportStats') %></span>
+    </button>
   </div>
   <% if (showStats) { %>
   <div class="form-group" style="flex-grow: 1"></div>
@@ -52,7 +55,7 @@
         <% if (i === 0) { %>
         <td rowspan="3" data-group="execution" data-subgroup="percent" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent') %>">0</td>
         <% } %>
-        <td data-group="execution<%- i + 1 %>" data-subgroup="percent" data-shift-no="<%- i + 1 %>" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent:shift', {shiftNo: t('core', 'SHIFT:' + (i + 1))}) %>">0</td>
+        <td data-group="execution.<%- i + 1 %>" data-subgroup="percent" data-shift-no="<%- i + 1 %>" title="<%- t('planning', 'toolbar:stats:tooltip:execution:percent:shift', {shiftNo: t('core', 'SHIFT:' + (i + 1))}) %>">0</td>
       </tr>
       <% }) %>
       </tbody>
