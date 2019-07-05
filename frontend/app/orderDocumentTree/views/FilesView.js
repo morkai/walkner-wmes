@@ -9,9 +9,10 @@ define([
   'app/user',
   'app/core/View',
   'app/core/views/DialogView',
-  'app/orderDocumentTree/OrderDocumentTree',
-  'app/orderDocumentTree/views/EditFileDialogView',
-  'app/orderDocumentTree/views/FileChangesView',
+  'app/planning/util/contextMenu',
+  '../OrderDocumentTree',
+  './EditFileDialogView',
+  './FileChangesView',
   'app/orderDocumentTree/templates/files',
   'app/orderDocumentTree/templates/filesFile',
   'app/orderDocumentTree/templates/filesFolder',
@@ -26,6 +27,7 @@ define([
   user,
   View,
   DialogView,
+  contextMenu,
   OrderDocumentTree,
   EditFileDialogView,
   FileChangesView,
@@ -61,7 +63,7 @@ define([
           return;
         }
 
-        this.addUpload(
+        this.model.addUpload(
           e.currentTarget.dataset.fileId,
           e.currentTarget.dataset.hash
         );
@@ -89,7 +91,7 @@ define([
 
         if (e.altKey)
         {
-          this.addUpload(documentFile.id, null);
+          tree.addUpload(documentFile.id, null);
 
           return false;
         }
@@ -129,111 +131,15 @@ define([
       },
       'click #-editFile': function()
       {
-        var dialogView = new EditFileDialogView({
-          model: this.model.getSelectedFile(),
-          tree: this.model,
-          done: function() { viewport.closeDialog(); }
-        });
-
-        viewport.showDialog(dialogView, this.t('editFile:title'));
+        this.showEditFileDialog(this.model.getSelectedFile());
       },
       'click #-removeFile': function()
       {
-        var view = this;
-        var tree = view.model;
-        var selectedFolder = tree.getSelectedFolder();
-        var selectedFile = tree.getSelectedFile();
-        var isInTrash = tree.isInTrash(selectedFolder);
-        var dialogView = new DialogView({
-          template: removeFileDialogTemplate,
-          autoHide: false,
-          model: {
-            nc15: selectedFile.id,
-            multiple: selectedFile.get('folders').length > 1,
-            purge: isInTrash
-          }
-        });
-
-        view.listenTo(dialogView, 'answered', function(answer)
-        {
-          var req = answer === 'purge'
-            ? tree.purgeFile(selectedFile)
-            : answer === 'remove'
-              ? tree.removeFile(selectedFile)
-              : tree.unlinkFile(selectedFile, selectedFolder);
-
-          req.fail(function()
-          {
-            dialogView.enableAnswers();
-
-            viewport.msg.show({
-              type: 'error',
-              time: 3000,
-              text: view.t('removeFile:msg:failure')
-            });
-          });
-
-          req.done(function()
-          {
-            dialogView.closeDialog();
-
-            viewport.msg.show({
-              type: 'success',
-              time: 3000,
-              text: view.t('removeFile:msg:success')
-            });
-          });
-        });
-
-        viewport.showDialog(dialogView, view.t('removeFile:title'));
+        this.showRemoveFileDialog(this.model.getSelectedFolder(), this.model.getSelectedFile());
       },
       'click #-recoverFile': function()
       {
-        var view = this;
-        var selectedFile = view.model.getSelectedFile();
-        var dialogView = new DialogView({
-          template: recoverFileDialogTemplate,
-          autoHide: false,
-          model: {
-            nc15: selectedFile.id
-          }
-        });
-
-        view.listenTo(dialogView, 'answered', function(answer)
-        {
-          if (answer !== 'yes')
-          {
-            dialogView.closeDialog();
-
-            return;
-          }
-
-          var req = this.model.recoverFile(selectedFile);
-
-          req.fail(function()
-          {
-            dialogView.enableAnswers();
-
-            viewport.msg.show({
-              type: 'error',
-              time: 3000,
-              text: view.t('recoverFile:msg:failure')
-            });
-          });
-
-          req.done(function()
-          {
-            dialogView.closeDialog();
-
-            viewport.msg.show({
-              type: 'success',
-              time: 3000,
-              text: view.t('recoverFile:msg:success')
-            });
-          });
-        });
-
-        viewport.showDialog(dialogView, view.t('recoverFile:title'));
+        this.showRecoverFileDialog(this.model.getSelectedFile());
       },
       'click #-subFile': function()
       {
@@ -266,13 +172,72 @@ define([
       },
       'click #-showChanges': function()
       {
-        var file = this.model.getSelectedFile();
-        var dialogView = new FileChangesView({
-          nc15: file.id,
-          model: this.model
-        });
+        this.showFileChangesDialog(this.model.getSelectedFile());
+      },
+      'contextmenu .orderDocumentTree-files-file': function(e)
+      {
+        e.preventDefault();
 
-        viewport.showDialog(dialogView, file.id + ': ' + file.getLabel());
+        var view = this;
+        var tree = view.model;
+        var file = tree.files.get(e.currentTarget.dataset.id);
+
+        var menu = [
+          file.id
+        ];
+
+        if (user.isAllowedTo('DOCUMENTS:VIEW'))
+        {
+          menu.push({
+            icon: 'fa-calendar',
+            label: view.t('files:changes'),
+            handler: function() { view.showFileChangesDialog(file); }
+          });
+        }
+
+        if (user.isAllowedTo('DOCUMENTS:MANAGE'))
+        {
+          if (tree.isTrash())
+          {
+            menu.push({
+              icon: 'fa-undo',
+              label: view.t('files:recover'),
+              handler: function() { view.showRecoverFileDialog(file); }
+            });
+          }
+
+          menu.push({
+            icon: 'fa-edit',
+            label: view.t('files:edit'),
+            handler: function() { view.showEditFileDialog(file); }
+          });
+
+          var files = file.get('files');
+
+          if (files.length && files[0].hash !== e.target.dataset.hash)
+          {
+            menu.push({
+              label: view.t('files:edit:latestFile'),
+              handler: function() { tree.addUpload(file.id, files[0].hash); }
+            });
+          }
+
+          if (e.target.dataset.hash)
+          {
+            menu.push({
+              label: view.t('files:edit:specificFile', {date: e.target.textContent.trim()}),
+              handler: function() { tree.addUpload(file.id, e.target.dataset.hash); }
+            });
+          }
+
+          menu.push({
+            icon: 'fa-trash-o',
+            label: view.t('files:remove'),
+            handler: function() { view.showRemoveFileDialog(tree.getSelectedFolder(), file); }
+          });
+        }
+
+        contextMenu.show(view, e.pageY, e.pageX, menu);
       }
     },
 
@@ -324,14 +289,7 @@ define([
       view.listenTo(tree.folders, 'change:parent', view.onParentChange);
 
       $(window).on('resize.' + view.idPrefix, view.positionPreview.bind(view));
-
-      $('body').on('keydown.' + view.idPrefix, function(e)
-      {
-        if (e.keyCode === 27)
-        {
-          tree.setSelectedFile(null);
-        }
-      });
+      $('body').on('keydown.' + view.idPrefix, view.onKeyDown.bind(view));
     },
 
     destroy: function()
@@ -340,14 +298,14 @@ define([
       $('body').off('.' + this.idPrefix);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      return _.assign(View.prototype.serialize.apply(this, arguments), {
+      return {
         displayMode: this.model.getDisplayMode(),
         searchPhrase: this.model.getSearchPhrase(),
         folders: this.serializeFolders(),
         files: this.serializeFiles()
-      });
+      };
     },
 
     serializeMoreFiles: function()
@@ -455,23 +413,122 @@ define([
       this.showPreviewIfNeeded();
     },
 
-    addUpload: function(fileId, hash)
+    showEditFileDialog: function(file)
     {
-      var tree = this.model;
-      var selectedFolder = tree.getSelectedFolder();
+      var dialogView = new EditFileDialogView({
+        model: file,
+        tree: this.model,
+        done: function() { viewport.closeDialog(); }
+      });
 
-      if (tree.isInTrash(selectedFolder))
+      viewport.showDialog(dialogView, this.t('editFile:title'));
+    },
+
+    showFileChangesDialog: function(file)
+    {
+      var dialogView = new FileChangesView({
+        nc15: file.id,
+        model: this.model
+      });
+
+      viewport.showDialog(dialogView, file.id + ': ' + file.getLabel());
+    },
+
+    showRecoverFileDialog: function(file)
+    {
+      var view = this;
+      var dialogView = new DialogView({
+        template: recoverFileDialogTemplate,
+        autoHide: false,
+        model: {
+          nc15: file.id
+        }
+      });
+
+      view.listenTo(dialogView, 'answered', function(answer)
       {
-        return;
-      }
+        if (answer !== 'yes')
+        {
+          dialogView.closeDialog();
 
-      var documentFile = tree.files.get(fileId);
+          return;
+        }
 
-      var documentFolder = tree.hasSearchPhrase()
-        ? tree.folders.get(documentFile.get('folders')[0])
-        : selectedFolder;
+        var req = this.model.recoverFile(file);
 
-      this.model.uploads.addFromDocument(documentFile, documentFolder, hash);
+        req.fail(function()
+        {
+          dialogView.enableAnswers();
+
+          viewport.msg.show({
+            type: 'error',
+            time: 3000,
+            text: view.t('recoverFile:msg:failure')
+          });
+        });
+
+        req.done(function()
+        {
+          dialogView.closeDialog();
+
+          viewport.msg.show({
+            type: 'success',
+            time: 3000,
+            text: view.t('recoverFile:msg:success')
+          });
+        });
+      });
+
+      viewport.showDialog(dialogView, view.t('recoverFile:title'));
+    },
+
+    showRemoveFileDialog: function(folder, file)
+    {
+      var view = this;
+      var tree = view.model;
+      var isInTrash = tree.isInTrash(folder);
+      var dialogView = new DialogView({
+        template: removeFileDialogTemplate,
+        autoHide: false,
+        model: {
+          nc15: file.id,
+          multiple: file.get('folders').length > 1,
+          purge: isInTrash
+        }
+      });
+
+      view.listenTo(dialogView, 'answered', function(answer)
+      {
+        var req = answer === 'purge'
+          ? tree.purgeFile(file)
+          : answer === 'remove'
+            ? tree.removeFile(file)
+            : tree.unlinkFile(file, folder);
+
+        req.fail(function()
+        {
+          dialogView.enableAnswers();
+
+          viewport.msg.show({
+            type: 'error',
+            time: 3000,
+            text: view.t('removeFile:msg:failure')
+          });
+        });
+
+        req.done(function()
+        {
+          dialogView.closeDialog();
+
+          viewport.msg.show({
+            type: 'success',
+            time: 3000,
+            text: view.t('removeFile:msg:success')
+          });
+        });
+      });
+
+      viewport.showDialog(dialogView, view.t('removeFile:title'));
     },
 
     toggleMarkFile: function(file)
@@ -525,7 +582,7 @@ define([
 
       var tree = this.model;
       var selectedFolder = tree.getSelectedFolder();
-      var isTrash = selectedFolder && selectedFolder.id === '__TRASH__';
+      var isTrash = tree.isTrash();
       var isInTrash = tree.isInTrash(selectedFolder);
 
       $preview
@@ -817,7 +874,7 @@ define([
 
       this.$id('files').find('> p').remove();
 
-      this.$id('files').append(renderFile({
+      this.$id('files').append(this.renderPartialHtml(renderFile, {
         file: this.serializeFile(file)
       }));
     },
@@ -852,7 +909,7 @@ define([
         return;
       }
 
-      $file.replaceWith(renderFile({
+      $file.replaceWith(this.renderPartialHtml(renderFile, {
         file: this.serializeFile(file)
       }));
 
@@ -919,26 +976,27 @@ define([
 
     onFilesReset: function()
     {
+      var view = this;
       var html = '';
-      var files = this.serializeFiles();
+      var files = view.serializeFiles();
 
-      if (files.length === 0 && this.$('.orderDocumentTree-files-folder').length === 0)
+      if (files.length === 0 && view.$('.orderDocumentTree-files-folder').length === 0)
       {
         html = '<p>'
-          + this.t('files:' + (this.model.hasSearchPhrase() ? 'noResults' : 'empty'))
+          + view.t('files:' + (this.model.hasSearchPhrase() ? 'noResults' : 'empty'))
           + '</p>';
       }
       else
       {
         files.forEach(function(file)
         {
-          html += renderFile({file: file});
+          html += view.renderPartialHtml(renderFile, {file: file});
         });
       }
 
-      this.$id('files').html(html);
+      view.$id('files').html(html);
 
-      this.showPreviewIfNeeded();
+      view.showPreviewIfNeeded();
     },
 
     onFilesAdd: function(file)
@@ -995,7 +1053,7 @@ define([
         return;
       }
 
-      this.$id('folders').append(renderFolder({
+      this.$id('folders').append(this.renderPartialHtml(renderFolder, {
         folder: this.serializeFolder(folder)
       }));
     },
@@ -1024,6 +1082,44 @@ define([
         .addClass('is-' + this.model.getDisplayMode());
 
       this.positionPreview();
+    },
+
+    onKeyDown: function(e)
+    {
+      switch (e.key.toUpperCase())
+      {
+        case 'ESCAPE':
+        {
+          if (contextMenu.isVisible(this))
+          {
+            contextMenu.hide(this);
+          }
+          else if (this.model.hasSelectedFile())
+          {
+            this.model.setSelectedFile(null);
+          }
+          else if (this.model.getMarkedFileCount())
+          {
+            this.model.unmarkAllFiles();
+          }
+
+          break;
+        }
+
+        case 'A':
+        {
+          if (e.ctrlKey
+            && !document.getSelection().toString().length
+            && (!document.activeElement || document.activeElement.tagName !== 'INPUT'))
+          {
+            this.model.markAllFiles();
+
+            e.preventDefault();
+          }
+
+          break;
+        }
+      }
     }
 
   });

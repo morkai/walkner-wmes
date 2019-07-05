@@ -8,7 +8,7 @@ define([
   'app/user',
   'app/viewport',
   'app/core/View',
-  'app/orderDocumentTree/util/pasteDateEvents',
+  '../util/pasteDateEvents',
   'app/orderDocumentTree/templates/uploads',
   'app/orderDocumentTree/templates/upload'
 ], function(
@@ -51,6 +51,10 @@ define([
       'click #-setDate': function()
       {
         this.model.uploads.setDate(this.$id('date').val());
+      },
+      'click #-clear': function()
+      {
+        this.model.uploads.reset();
       },
       'click .orderDocumentTree-uploads-nc15[readonly]': function(e)
       {
@@ -101,6 +105,7 @@ define([
 
       view.uploadIndex = this.model.uploads.length;
 
+      view.listenTo(tree.uploads, 'reset', this.onReset);
       view.listenTo(tree.uploads, 'add', this.onAdd);
       view.listenTo(tree.uploads, 'remove', this.onRemove);
       view.listenTo(tree.uploads, 'focus', this.onFocus);
@@ -123,12 +128,12 @@ define([
       this.model.uploads.stopUploading();
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      return _.assign(View.prototype.serialize.apply(this, arguments), {
+      return {
         uploads: this.model.uploads.invoke('serializeDetails'),
         renderUpload: renderUpload
-      });
+      };
     },
 
     $upload: function(id)
@@ -206,9 +211,23 @@ define([
       }
     },
 
+    onReset: function()
+    {
+      var view = this;
+
+      view.model.uploads.stopUploading();
+
+      view.$id('uploads').html('');
+
+      view.model.uploads.forEach(function(upload)
+      {
+        view.addUpload(upload);
+      });
+    },
+
     onAdd: function(upload)
     {
-      this.$id('uploads').append(renderUpload({
+      this.$id('uploads').append(this.renderPartialHtml(renderUpload, {
         upload: upload.serializeDetails(),
         i: this.uploadIndex++
       }));

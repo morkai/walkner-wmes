@@ -86,7 +86,7 @@ define([
         return;
       }
 
-      upload.current = this.find(function(upload) { return upload.isUploadable(); });
+      upload.current = uploads.find(function(upload) { return upload.isUploadable(); });
 
       if (!upload.current)
       {

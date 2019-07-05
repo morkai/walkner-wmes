@@ -116,6 +116,21 @@ define([
         dialogView.once('dialog:hidden', this.toggleMarkedButtons.bind(this));
 
         viewport.showDialog(dialogView, t('orderDocumentTree', 'recoverFiles:title'));
+      },
+
+      'click #-editMarkedFiles': function()
+      {
+        var tree = this.model;
+
+        tree.getMarkedFiles().forEach(function(file)
+        {
+          var latestFile = file.get('files')[0];
+
+          if (latestFile)
+          {
+            tree.addUpload(file.id, latestFile.hash);
+          }
+        });
       }
 
     },
@@ -148,16 +163,16 @@ define([
       this.toggleMarkedButtons();
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
-      return _.assign(View.prototype.serialize.apply(this, arguments), {
+      return {
         displayMode: this.model.getDisplayMode(),
         searchPhrase: this.model.getSearchPhrase(),
         dateFilter: this.model.getDateFilter(),
         folderCount: this.serializeFolderCount(),
         fileCount: this.serializeFileCount(),
         markedFileCount: this.model.getMarkedFileCount()
-      });
+      };
     },
 
     serializeFolderCount: function()
@@ -235,6 +250,7 @@ define([
         .toggleClass('hidden', tree.isInTrash(selectedFolder));
 
       this.$id('removeMarkedFiles').prop('disabled', disabled);
+      this.$id('editMarkedFiles').prop('disabled', disabled);
     },
 
     onFilesRequest: function()

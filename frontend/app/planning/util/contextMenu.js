@@ -47,6 +47,11 @@ define([
 
   return {
 
+    isVisible: function(view)
+    {
+      return !!view.$contextMenu;
+    },
+
     hide: function(view, animate)
     {
       var $menu = view.$contextMenu;

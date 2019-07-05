@@ -249,6 +249,19 @@ define([
       }
     },
 
+    markAllFiles: function()
+    {
+      var tree = this;
+
+      tree.files.forEach(function(file)
+      {
+        if (!tree.isMarkedFile(file))
+        {
+          tree.markFile(file);
+        }
+      });
+    },
+
     unmarkAllFiles: function()
     {
       var tree = this;
@@ -362,6 +375,13 @@ define([
       return path;
     },
 
+    isTrash: function()
+    {
+      var selectedFolder = this.getSelectedFolder();
+
+      return !!selectedFolder && selectedFolder.id === '__TRASH__';
+    },
+
     isInTrash: function(folder)
     {
       return !!folder && this.getRoot(folder).id === '__TRASH__';
@@ -397,6 +417,24 @@ define([
       }
 
       return true;
+    },
+
+    addUpload: function(fileId, hash)
+    {
+      var selectedFolder = this.getSelectedFolder();
+
+      if (this.isInTrash(selectedFolder))
+      {
+        return;
+      }
+
+      var documentFile = this.files.get(fileId);
+
+      var documentFolder = this.hasSearchPhrase()
+        ? this.folders.get(documentFile.get('folders')[0])
+        : selectedFolder;
+
+      this.uploads.addFromDocument(documentFile, documentFolder, hash);
     },
 
     removeFolder: function(folder)
