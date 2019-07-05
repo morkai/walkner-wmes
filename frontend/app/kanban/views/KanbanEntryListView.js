@@ -3,52 +3,51 @@
 define([
   'underscore',
   'jquery',
+  'app/user',
   'app/viewport',
   'app/core/View',
-  'app/core/util/idAndLabel',
   'app/core/util/pageActions',
   'app/data/clipboard',
   'app/planning/util/contextMenu',
-  '../KanbanSettingCollection',
-  './KanbanSearchDialogView',
+  'app/orders/OrderCollection',
+  'app/pfepEntries/PfepEntryCollection',
+  './KanbanEntryListView.keyHandlers',
+  './KanbanEntryListView.filters',
+  './KanbanEntryListView.editors',
   'app/kanban/templates/entryList',
   'app/kanban/templates/entryListColumns',
-  'app/kanban/templates/entryListRow',
-  'app/kanban/templates/editors/input',
-  'app/kanban/templates/editors/select',
-  'app/kanban/templates/editors/textArea',
-  'app/kanban/templates/filters/numeric',
-  'app/kanban/templates/filters/text',
-  'app/kanban/templates/filters/select'
+  'app/kanban/templates/entryListRow'
 ], function(
   _,
   $,
+  user,
   viewport,
   View,
-  idAndLabel,
   pageActions,
   clipboard,
   contextMenu,
-  KanbanSettingCollection,
-  KanbanSearchDialogView,
+  OrderCollection,
+  PfepEntryCollection,
+  keyHandlers,
+  filters,
+  editors,
   template,
   columnsTemplate,
-  rowTemplate,
-  inputEditorTemplate,
-  selectEditorTemplate,
-  textAreaEditorTemplate,
-  numericFilterTemplate,
-  textFilterTemplate,
-  selectFilterTemplate
+  rowTemplate
 ) {
   'use strict';
 
-  var ROW_HEIGHT = 25;
-  var SCROLLBAR_HEIGHT = 17;
-
   return View.extend({
 
+    ROW_HEIGHT: 25,
+    SCROLLBAR_HEIGHT: 17,
+
     template: template,
+
+    filters: filters,
+    keyHandlers: keyHandlers,
+    editors: editors.editors,
+    editorPositioners: editors.positioners,
 
     localTopics: {
 
@@ -322,24 +321,24 @@ define([
 
       var entries = view.model.entries.filtered;
       var tbody = view.$tbody[0];
-      var visibleAreaHeight = view.$tbodyOuter.outerHeight() - SCROLLBAR_HEIGHT;
-      var visibleRowCount = Math.ceil(visibleAreaHeight / ROW_HEIGHT);
+      var visibleAreaHeight = view.$tbodyOuter.outerHeight() - view.SCROLLBAR_HEIGHT;
+      var visibleRowCount = Math.ceil(visibleAreaHeight / view.ROW_HEIGHT);
       var rowCount = view.model.entries.filtered.length;
-      var totalHeight = ROW_HEIGHT * (rowCount + 1);
+      var totalHeight = view.ROW_HEIGHT * (rowCount + 1);
       var scrollTop = view.$tbodyInner[0].scrollTop;
 
       if (newIndex >= 0)
       {
-        newPosition = newIndex * ROW_HEIGHT;
+        newPosition = newIndex * view.ROW_HEIGHT;
 
         if (newPosition >= scrollTop
-          && newPosition < (scrollTop + visibleAreaHeight - ROW_HEIGHT * 2))
+          && newPosition < (scrollTop + visibleAreaHeight - view.ROW_HEIGHT * 2))
         {
           newPosition = -1;
         }
-        else if ((newIndex + visibleRowCount) * ROW_HEIGHT >= totalHeight)
+        else if ((newIndex + visibleRowCount) * view.ROW_HEIGHT >= totalHeight)
         {
-          newPosition = totalHeight - visibleRowCount * ROW_HEIGHT;
+          newPosition = totalHeight - visibleRowCount * view.ROW_HEIGHT;
         }
       }
 
@@ -348,7 +347,7 @@ define([
         scrollTop = newPosition;
       }
 
-      var startIndex = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT));
+      var startIndex = Math.max(0, Math.floor(scrollTop / view.ROW_HEIGHT));
       var endIndex = startIndex + visibleRowCount;
       var lastIndex = endIndex - 1;
       var currentStartIndex = -1;
@@ -812,6 +811,83 @@ define([
               .setLimit(1);
           }
         });
+      }
+
+      var externalLinks = [];
+
+      if (cell.columnId === 'nc12')
+      {
+        if (user.isAllowedTo('PFEP:VIEW'))
+        {
+          externalLinks.push({
+            label: view.t('menu:nc12:pfep'),
+            handler: function()
+            {
+              var collection = new PfepEntryCollection();
+
+              collection.rqlQuery.selector.args = [{
+                name: 'eq',
+                args: ['nc12', cell.model.get('nc12')]
+              }];
+
+              viewport.msg.loading();
+
+              var req = view.promised(collection.fetch());
+
+              req.fail(function()
+              {
+                viewport.msg.loadingFailed();
+              });
+
+              req.done(function()
+              {
+                viewport.msg.loaded();
+
+                if (collection.length === 1)
+                {
+                  window.open(collection.at(0).genClientUrl());
+                }
+                else if (collection.length)
+                {
+                  window.open(collection.genClientUrl() + '?' + collection.rqlQuery);
+                }
+                else
+                {
+                  viewport.msg.show({
+                    type: 'warning',
+                    time: 2500,
+                    text: view.t('menu:nc12:pfep:notFound')
+                  });
+                }
+              });
+            }
+          });
+        }
+
+        if (user.isAllowedTo('ORDERS:VIEW'))
+        {
+          externalLinks.push({
+            label: view.t('menu:nc12:orders'),
+            handler: function()
+            {
+              var collection = new OrderCollection();
+
+              collection.rqlQuery.selector.args = [{
+                name: 'eq',
+                args: ['bom.nc12', cell.model.get('nc12')]
+              }];
+
+              window.open(collection.genClientUrl() + '?' + collection.rqlQuery);
+            }
+          });
+        }
+      }
+
+      if (externalLinks.length)
+      {
+        externalLinks[0].icon = 'fa-external-link';
+
+        options.menu = options.menu.concat(externalLinks);
       }
 
       cell.td.focus();
@@ -1295,14 +1371,14 @@ define([
       var tbodyInner = view.$tbodyInner[0];
       var entries = view.model.entries;
       var entry = view.focusedCell ? entries.filteredMap[view.focusedCell.model.id] : null;
-      var visibleAreaHeight = view.$tbodyOuter.outerHeight() - SCROLLBAR_HEIGHT;
+      var visibleAreaHeight = view.$tbodyOuter.outerHeight() - view.SCROLLBAR_HEIGHT;
 
       if (entry)
       {
         var newIndex = entries.filtered.indexOf(entry);
-        var newPosition = newIndex * ROW_HEIGHT;
+        var newPosition = newIndex * view.ROW_HEIGHT;
         var entryInVisibleArea = newPosition >= tbodyInner.scrollTop
-          && newPosition < (tbodyInner.scrollTop + visibleAreaHeight - ROW_HEIGHT * 2);
+          && newPosition < (tbodyInner.scrollTop + visibleAreaHeight - view.ROW_HEIGHT * 2);
 
         if (entryInVisibleArea || filtered)
         {
@@ -1513,388 +1589,6 @@ define([
       }
     },
 
-    keyHandlers: {
-      ArrowUp: function(e, cell)
-      {
-        var view = this;
-
-        if (cell.modelIndex === 0)
-        {
-          if (!cell.tr.parentNode)
-          {
-            view.$tbodyInner[0].scrollTop = 0;
-          }
-
-          return;
-        }
-
-        var prevTr = cell.tr.previousElementSibling;
-
-        if (prevTr)
-        {
-          prevTr.cells[cell.td.cellIndex].focus();
-
-          return;
-        }
-
-        view.afterRenderRows = function(modelIndex, cellIndex)
-        {
-          var row = view.$table.find('tr[data-model-index="' + modelIndex + '"]')[0];
-
-          if (row && row.cells[cellIndex])
-          {
-            row.cells[cellIndex].focus();
-          }
-        }.bind(null, cell.modelIndex - 1, cell.td.cellIndex);
-
-        if (cell.tr.parentNode)
-        {
-          view.$tbodyInner[0].scrollTop -= ROW_HEIGHT;
-        }
-        else
-        {
-          view.$tbodyInner[0].scrollTop = cell.modelIndex * ROW_HEIGHT - ROW_HEIGHT;
-        }
-      },
-      ArrowDown: function(e, cell)
-      {
-        var view = this;
-        var nextTr = cell.tr.nextElementSibling;
-
-        if (cell.modelIndex === view.model.entries.filtered.length - 1)
-        {
-          if (!cell.tr.parentNode)
-          {
-            view.$tbodyInner[0].scrollTop = view.$tbodyInner[0].scrollHeight;
-          }
-
-          return;
-        }
-
-        if (cell.tr.parentNode && cell.tr.rowIndex < (cell.tr.parentNode.childElementCount - 1))
-        {
-          var endPos = nextTr.offsetTop + nextTr.offsetHeight;
-          var visibleAreaHeight = view.$tbodyInner[0].offsetHeight - SCROLLBAR_HEIGHT;
-
-          if (endPos <= visibleAreaHeight)
-          {
-            nextTr.cells[cell.td.cellIndex].focus();
-
-            return;
-          }
-        }
-
-        view.afterRenderRows = function(modelIndex, cellIndex)
-        {
-          var row = view.$table.find('tr[data-model-index="' + modelIndex + '"]')[0];
-
-          if (row && row.cells[cellIndex])
-          {
-            row.cells[cellIndex].focus();
-          }
-        }.bind(null, cell.modelIndex + 1, cell.td.cellIndex);
-
-        if (cell.tr.parentNode)
-        {
-          view.$tbodyInner[0].scrollTop += ROW_HEIGHT * (nextTr ? 1 : 2);
-        }
-        else
-        {
-          view.$tbodyInner[0].scrollTop = cell.modelIndex * ROW_HEIGHT + ROW_HEIGHT;
-        }
-      },
-      ArrowRight: function(e, cell)
-      {
-        var nextTd = cell.td.nextElementSibling;
-
-        if (cell.tr.parentNode)
-        {
-          if (nextTd.dataset.columnId !== 'filler2')
-          {
-            nextTd.focus();
-          }
-
-          return;
-        }
-
-        var view = this;
-
-        view.afterRenderRows = function(modelIndex, cellIndex)
-        {
-          var tr = view.$table.find('tr[data-model-index="' + modelIndex + '"]')[0];
-
-          if (!tr)
-          {
-            return;
-          }
-
-          var td = tr.cells[cellIndex];
-
-          if (td.dataset.columnId === 'filler2')
-          {
-            td.previousElementSibling.focus();
-          }
-          else
-          {
-            td.focus();
-          }
-        }.bind(null, cell.modelIndex, cell.td.cellIndex + 1);
-
-        view.$tbodyInner[0].scrollTop = cell.modelIndex * ROW_HEIGHT;
-      },
-      ArrowLeft: function(e, cell)
-      {
-        var prevTd = cell.td.previousElementSibling;
-
-        if (cell.tr.parentNode)
-        {
-          if (prevTd)
-          {
-            prevTd.focus();
-          }
-
-          return;
-        }
-
-        var view = this;
-
-        view.afterRenderRows = function(modelIndex, cellIndex)
-        {
-          var tr = view.$table.find('tr[data-model-index="' + modelIndex + '"]')[0];
-
-          if (tr)
-          {
-            tr.cells[Math.max(0, cellIndex)].focus();
-          }
-        }.bind(null, cell.modelIndex, cell.td.cellIndex - 1);
-
-        view.$tbodyInner[0].scrollTop = cell.modelIndex * ROW_HEIGHT;
-      },
-      Tab: function(e, cell)
-      {
-        var view = this;
-
-        if (e.shiftKey)
-        {
-          return view.keyHandlers.ShiftTab.call(view, e, cell);
-        }
-
-        if (cell.td.nextElementSibling.tabIndex !== -1)
-        {
-          return cell.td.nextElementSibling.focus();
-        }
-
-        if (+cell.tr.dataset.modelIndex === (view.model.entries.filtered.length - 1))
-        {
-          view.lastKeyPressAt.Home = e.timeStamp;
-
-          return view.keyHandlers.Home.call(view, e, cell);
-        }
-
-        cell.tr.firstElementChild.focus();
-
-        view.keyHandlers.ArrowDown.call(view, e, view.focusedCell);
-      },
-      ShiftTab: function(e, cell)
-      {
-        var view = this;
-
-        if (cell.tr.firstElementChild !== cell.td)
-        {
-          return cell.td.previousElementSibling.focus();
-        }
-
-        if (cell.tr.dataset.modelIndex === '0')
-        {
-          view.lastKeyPressAt.End = e.timeStamp;
-
-          return view.keyHandlers.End.call(view, e, cell);
-        }
-
-        cell.tr.lastElementChild.previousElementSibling.focus();
-
-        view.keyHandlers.ArrowUp.call(view, e, view.focusedCell);
-      },
-      PageUp: function(e, cell)
-      {
-        var view = this;
-        var visibleAreaHeight = view.$tbodyOuter.outerHeight() - SCROLLBAR_HEIGHT;
-        var visibleRowCount = Math.ceil(visibleAreaHeight / ROW_HEIGHT);
-        var prevModelIndex = Math.max(0, cell.modelIndex - visibleRowCount);
-        var $tr = view.$tbody.find('tr[data-model-index="' + prevModelIndex + '"]');
-
-        if ($tr.length)
-        {
-          return $tr.find('td[data-column-id="' + cell.columnId + '"]').focus();
-        }
-
-        view.afterRenderRows = function()
-        {
-          var rows = view.$tbody[0].rows;
-          var row = rows[cell.rowIndex] || rows[0];
-
-          row.cells[cell.td.cellIndex].focus();
-        };
-
-        view.$tbodyInner[0].scrollTop -= visibleRowCount * ROW_HEIGHT;
-      },
-      PageDown: function(e, cell)
-      {
-        var view = this;
-        var visibleAreaHeight = view.$tbodyOuter.outerHeight() - SCROLLBAR_HEIGHT;
-        var visibleRowCount = Math.ceil(visibleAreaHeight / ROW_HEIGHT);
-        var nextModelIndex = Math.min(view.model.entries.filtered.length - 1, cell.modelIndex + visibleRowCount);
-        var $tr = view.$tbody.find('tr[data-model-index="' + nextModelIndex + '"]');
-
-        if ($tr.length)
-        {
-          return $tr.find('td[data-column-id="' + cell.columnId + '"]').focus();
-        }
-
-        view.afterRenderRows = function()
-        {
-          var rows = view.$tbody[0].rows;
-          var row = rows[cell.rowIndex] || rows[rows.length - 1];
-
-          row.cells[cell.td.cellIndex].focus();
-        };
-
-        view.$tbodyInner[0].scrollTop += visibleRowCount * ROW_HEIGHT;
-      },
-      Home: function(e, cell)
-      {
-        var view = this;
-
-        if (e.timeStamp - view.lastKeyPressAt.Home < 500)
-        {
-          if (view.$tbody[0].firstElementChild.dataset.modelIndex === '0')
-          {
-            view.$tbody[0].firstElementChild.firstElementChild.focus();
-
-            return;
-          }
-
-          view.afterRenderRows = function()
-          {
-            view.$tbody[0].firstElementChild.firstElementChild.focus();
-          };
-
-          view.$tbodyInner[0].scrollTop = 0;
-        }
-        else
-        {
-          cell.tr.firstElementChild.focus();
-        }
-      },
-      End: function(e, cell)
-      {
-        var view = this;
-
-        if (e.timeStamp - view.lastKeyPressAt.End < 500)
-        {
-          if (+view.$tbody[0].lastElementChild.dataset.modelIndex === (view.model.entries.filtered.length - 1))
-          {
-            view.$tbody[0].lastElementChild.lastElementChild.previousElementSibling.focus();
-
-            return;
-          }
-
-          view.afterRenderRows = function()
-          {
-            view.$tbody[0].lastElementChild.lastElementChild.previousElementSibling.focus();
-          };
-
-          view.$tbodyInner[0].scrollTop = view.$tbodyInner[0].scrollHeight;
-        }
-        else
-        {
-          cell.tr.lastElementChild.previousElementSibling.focus();
-        }
-      },
-      Escape: function()
-      {
-        contextMenu.hide(this);
-      },
-      ' ': function()
-      {
-
-      },
-      Enter: function(e, cell)
-      {
-        if (e.altKey)
-        {
-          this.showCellMenu(cell);
-        }
-
-        if (!e.altKey && cell.td.classList.contains('kanban-is-editable'))
-        {
-          this.showCellEditor(cell);
-        }
-      },
-      C: function(e, cell)
-      {
-        if (!e.ctrlKey || window.getSelection().toString() !== '')
-        {
-          return;
-        }
-
-        var view = this;
-
-        if (e.timeStamp - view.lastKeyPressAt.CtrlA < 1000)
-        {
-          view.handleCopyTable();
-        }
-        else if (e.timeStamp - view.lastKeyPressAt.C < 500)
-        {
-          view.handleCopyRow(cell.modelId);
-        }
-        else
-        {
-          view.handleCopyCell(cell.modelId, cell.columnId, cell.arrayIndex);
-        }
-      },
-      S: function(e)
-      {
-        if (e.ctrlKey)
-        {
-          this.handleExportTable();
-        }
-      },
-      A: function(e)
-      {
-        if (e.ctrlKey)
-        {
-          this.lastKeyPressAt.CtrlA = e.timeStamp;
-        }
-      },
-      F: function(e)
-      {
-        if (!e.ctrlKey || viewport.currentDialog)
-        {
-          return;
-        }
-
-        var view = this;
-        var searchDialog = new KanbanSearchDialogView({model: view.model});
-
-        view.listenToOnce(searchDialog, 'found', view.find.bind(view));
-
-        viewport.showDialog(searchDialog);
-
-        $('.viewport-dialog').removeClass('fade');
-
-        view.broker.subscribe('viewport.dialog.hidden').setLimit(1).on('message', function()
-        {
-          view.editing = null;
-
-          $('.viewport-dialog').addClass('fade');
-        });
-
-        view.editing = view.focusedCell;
-
-        return false;
-      }
-    },
 
     find: function(type, model)
     {
@@ -1935,7 +1629,7 @@ define([
           view.$tbody.find('tr[data-model-id="' + model.id + '"]')[0].firstElementChild.focus();
         };
 
-        view.$tbodyInner[0].scrollTop = view.model.entries.filtered.indexOf(model) * ROW_HEIGHT;
+        view.$tbodyInner[0].scrollTop = view.model.entries.filtered.indexOf(model) * view.ROW_HEIGHT;
       }
     },
 
@@ -2043,366 +1737,6 @@ define([
       this.editing = null;
     },
 
-    editors: {
-
-      input: function(cell, maxLength, pattern, placeholder)
-      {
-        var view = this;
-        var entry = cell.model.serialize(view.model);
-
-        $(document.body).append(inputEditorTemplate({
-          idPrefix: view.idPrefix,
-          columnId: cell.columnId,
-          maxLength: maxLength,
-          pattern: pattern,
-          placeholder: placeholder,
-          value: cell.column.editorValue(
-            cell.arrayIndex >= 0 ? entry[cell.columnId][cell.arrayIndex] : entry[cell.columnId],
-            cell.column,
-            cell.arrayIndex,
-            entry
-          )
-        }));
-
-        view.$id('editor-backdrop').one('click', hide);
-        view.$id('editor-form').on('submit', submit);
-        view.$id('editor-input').on('blur', hide).on('keydown', keyDown).select();
-
-        view.editorPositioners.input.call(view, cell);
-
-        function submit()
-        {
-          var newValue = cell.column.parseValue(
-            view.$id('editor-input').val(),
-            cell.column,
-            cell.arrayIndex,
-            cell.model.serialize(view.model)
-          );
-
-          view.handleEditorValue(cell.modelId, cell.columnId, cell.arrayIndex, newValue);
-
-          hide();
-
-          return false;
-        }
-
-        function hide()
-        {
-          view.$id('editor-backdrop').remove();
-          view.$id('editor-form').remove();
-
-          view.afterEdit();
-        }
-
-        function keyDown(e)
-        {
-          if (e.originalEvent.key === 'Escape')
-          {
-            hide();
-          }
-        }
-      },
-
-      select: function(cell, multiple, options, selected)
-      {
-        var view = this;
-        var changeAt = Number.MAX_VALUE;
-
-        $(document.body).append(selectEditorTemplate({
-          idPrefix: view.idPrefix,
-          columnId: cell.columnId,
-          multiple: multiple,
-          options: options.map(function(option)
-          {
-            option.selected = selected.indexOf(option.id) !== -1;
-
-            return option;
-          })
-        }));
-
-        view.$id('editor-backdrop').one('click', hide);
-        view.$id('editor-form').on('submit', submit);
-        view.$id('editor-input')
-          .on('blur', hide)
-          .on('keydown', keyDown)
-          .on('click', click)
-          .on('change', change).focus();
-
-        view.editorPositioners.input.call(view, cell);
-
-        function submit()
-        {
-          var newValue = cell.column.parseValue(
-            view.$id('editor-input').val(),
-            cell.column,
-            cell.arrayIndex,
-            cell.model.serialize(view.model)
-          );
-
-          view.handleEditorValue(cell.modelId, cell.columnId, cell.arrayIndex, newValue);
-
-          hide();
-
-          return false;
-        }
-
-        function hide()
-        {
-          view.$id('editor-backdrop').remove();
-          view.$id('editor-form').remove();
-
-          view.afterEdit();
-        }
-
-        function keyDown(e)
-        {
-          if (e.originalEvent.key === 'Escape')
-          {
-            hide();
-          }
-          else if (e.originalEvent.key === 'Enter')
-          {
-            submit();
-          }
-        }
-
-        function click()
-        {
-          var diff = Date.now() - changeAt;
-
-          if (diff >= 0 && diff < 50)
-          {
-            submit();
-          }
-        }
-
-        function change()
-        {
-          changeAt = Date.now();
-        }
-      },
-
-      textArea: function(cell)
-      {
-        var view = this;
-        var entry = cell.model.serialize(view.model);
-
-        $(document.body).append(textAreaEditorTemplate({
-          idPrefix: view.idPrefix,
-          columnId: cell.columnId,
-          value: cell.column.editorValue(
-            cell.arrayIndex >= 0 ? entry[cell.columnId][cell.arrayIndex] : entry[cell.columnId],
-            cell.column,
-            cell.arrayIndex,
-            entry
-          )
-        }));
-
-        view.$id('editor-backdrop').one('click', hide);
-
-        var inputEl = view.$id('editor-input').on('blur', hide).on('keydown', keyDown)[0];
-
-        inputEl.selectionStart = inputEl.value.length;
-        inputEl.selectionEnd = inputEl.value.length;
-        inputEl.focus();
-
-        view.editorPositioners.textArea.call(view, cell);
-
-        function submit()
-        {
-          var newValue = cell.column.parseValue(
-            view.$id('editor-input').val(),
-            cell.column,
-            cell.arrayIndex,
-            cell.model.serialize(view.model)
-          );
-
-          view.handleEditorValue(cell.modelId, cell.columnId, cell.arrayIndex, newValue);
-
-          hide();
-
-          return false;
-        }
-
-        function hide()
-        {
-          view.$id('editor-backdrop').remove();
-          view.$id('editor-form').remove();
-
-          view.afterEdit();
-        }
-
-        function keyDown(e)
-        {
-          if (e.key === 'Enter')
-          {
-            if (e.shiftKey || e.ctrlKey || e.altKey)
-            {
-              var inputEl = view.$id('editor-input')[0];
-              var selectionStart = inputEl.selectionStart;
-
-              inputEl.value = inputEl.value.substring(0, selectionStart)
-                + '\n'
-                + inputEl.value.substring(inputEl.selectionEnd);
-
-              inputEl.selectionStart = selectionStart + 1;
-              inputEl.selectionEnd = selectionStart + 1;
-
-              return false;
-            }
-
-            return submit();
-          }
-
-          if (e.key === 'Escape')
-          {
-            hide();
-          }
-        }
-      },
-
-      kind: function(cell)
-      {
-        var view = this;
-        var rect = cell.td.getBoundingClientRect();
-        var oldKind = cell.model.get('kind');
-        var menu = [];
-
-        ['kk', 'pk', null].forEach(function(newKind)
-        {
-          menu.push({
-            label: view.t('kind:' + newKind),
-            handler: view.handleEditorValue.bind(view, cell.modelId, cell.columnId, cell.arrayIndex, newKind),
-            disabled: oldKind === newKind
-          });
-        });
-
-        contextMenu.show(view, rect.top, rect.left, menu);
-
-        view.broker.subscribe('planning.contextMenu.hidden', view.afterEdit.bind(view)).setLimit(1);
-      },
-
-      container: function(cell)
-      {
-        var options = [{id: null, text: this.t('container:null')}].concat(this.model.containers.map(idAndLabel));
-        var selected = [cell.model.get('container')];
-
-        this.editors.select.call(this, cell, false, options, selected);
-      },
-
-      workCenter: function(cell)
-      {
-        var names = [cell.model.get('supplyArea')];
-        var options = [{id: '', text: this.t('workCenter:null')}].concat(
-          this.model.supplyAreas.getWorkCenters(names)
-        );
-        var selected = [cell.model.get('workCenter')];
-
-        this.editors.select.call(this, cell, false, options, selected);
-      },
-
-      discontinued: function(cell)
-      {
-        this.handleEditorValue(cell.modelId, cell.columnId, cell.arrayIndex, !cell.model.get('discontinued'));
-        this.afterEdit();
-      },
-
-      workstations: function(cell)
-      {
-        this.editors.input.call(this, cell, 3, '^([0-9]|[1-9][0-9]|[0-9](\.|,)5)$');
-      },
-
-      locations: function(cell)
-      {
-        this.editors.input.call(this, cell, 3, '^[A-Za-z]([0-9][0-9])$', 'X00');
-      },
-
-      comment: function(cell)
-      {
-        this.editors.textArea.call(this, cell);
-      },
-
-      markerColor: function(cell)
-      {
-        var entry = cell.model.serialize(this.model);
-        var options = [{id: '', text: this.t('color:null')}].concat(
-          KanbanSettingCollection.getMarkerColors()
-        );
-        var selected = [entry[cell.columnId] || ''];
-
-        this.editors.select.call(this, cell, false, options, selected);
-      },
-
-      newMarkerColor: 'markerColor'
-
-    },
-
-    editorPositioners: {
-
-      contextMenu: function(editingCell)
-      {
-        var cell = this.resolveCell(editingCell);
-
-        if (cell)
-        {
-          var rect = cell.td.getBoundingClientRect();
-
-          contextMenu.position(this, rect.top, rect.left);
-        }
-      },
-
-      input: function(editingCell)
-      {
-        var cell = this.resolveCell(editingCell);
-
-        if (cell)
-        {
-          var rect = cell.td.getBoundingClientRect();
-
-          this.$id('editor-form').css({
-            top: rect.top + 'px',
-            left: rect.left + 'px'
-          });
-        }
-      },
-
-      textArea: function(editingCell)
-      {
-        var cell = this.resolveCell(editingCell);
-
-        if (!cell)
-        {
-          return;
-        }
-
-        var rect = cell.td.getBoundingClientRect();
-        var top = rect.top;
-        var left = rect.left;
-        var height = this.$id('editor-input').outerHeight();
-
-        if (top + height >= window.innerHeight - 15)
-        {
-          top += window.innerHeight - (top + height) - 15;
-        }
-
-        if (left + rect.width >= window.innerWidth - 15)
-        {
-          left += window.innerWidth - (left + rect.width) - 15;
-        }
-
-        this.$id('editor-form').css({
-          top: top + 'px',
-          left: left + 'px'
-        });
-      },
-
-      kind: 'contextMenu',
-      workstations: 'input',
-      locations: 'input',
-      comment: 'textArea'
-
-    },
-
     handleFilterValue: function(columnId, type, data)
     {
       contextMenu.hide(this);
@@ -2441,8 +1775,8 @@ define([
 
       var tdRect = tdEl.getBoundingClientRect();
       var innerRect = innerEl.getBoundingClientRect();
-      var windowWidth = window.innerWidth - 15 - SCROLLBAR_HEIGHT;
-      var windowHeight = window.innerHeight - 15 - SCROLLBAR_HEIGHT;
+      var windowWidth = window.innerWidth - 15 - this.SCROLLBAR_HEIGHT;
+      var windowHeight = window.innerHeight - 15 - this.SCROLLBAR_HEIGHT;
 
       if (innerRect.left + innerRect.width < windowWidth && innerRect.width <= tdRect.width)
       {
@@ -2500,344 +1834,6 @@ define([
         this.$popover.popover('destroy');
         this.$popover = null;
       }
-    },
-
-    filters: {
-
-      numeric: {
-        type: 'numeric',
-        template: numericFilterTemplate,
-        handler: function(cell, $filter)
-        {
-          var view = this;
-          var $data = $filter.find('.form-control');
-          var oldData = (view.model.tableView.getFilter(cell.columnId) || {data: ''}).data;
-
-          $data.val(oldData).on('input', function()
-          {
-            this.setCustomValidity('');
-          });
-
-          $filter.find('.btn[data-action="clear"]').on('click', function()
-          {
-            view.handleFilterValue(cell.columnId);
-          });
-
-          $filter.find('form').on('submit', function()
-          {
-            var newData = $data.val()
-              .trim()
-              .replace(/and/ig, '&&')
-              .replace(/or/ig, '||');
-
-            if (newData === '')
-            {
-              return view.handleFilterValue(cell.columnId);
-            }
-
-            if (newData === '?')
-            {
-              return view.handleFilterValue(cell.columnId, 'empty', '?');
-            }
-
-            if (newData === '!')
-            {
-              return view.handleFilterValue(cell.columnId, 'notEmpty', '!');
-            }
-
-            if (/^[0-9]+$/.test(newData))
-            {
-              return view.handleFilterValue(cell.columnId, 'numeric', newData);
-            }
-
-            var code = newData;
-
-            if (newData.indexOf('$$') === -1)
-            {
-              if (newData.indexOf('$') === -1)
-              {
-                code = '$' + code;
-              }
-
-              code = code
-                .replace(/=+/g, '=')
-                .replace(/([^<>])=/g, '$1==')
-                .replace(/<>/g, '!=');
-            }
-
-            try
-            {
-              var o = view.model.entries.at(0).serialize(view.model);
-              var v = cell.arrayIndex >= 0 ? o[cell.columnId][cell.arrayIndex] : o[cell.columnId];
-              var result = eval( // eslint-disable-line no-eval
-                '(function($, $$) { return ' + code + '; })(' + JSON.stringify(v) + ', ' + JSON.stringify(o) + ');'
-              );
-
-              if (typeof result !== 'boolean')
-              {
-                throw new Error('Invalid result type. Expected boolean, got ' + typeof result + '.');
-              }
-            }
-            catch (err)
-            {
-              console.error(err);
-
-              $data[0].setCustomValidity(view.t('filters:invalid'));
-
-              view.timers.revalidate = setTimeout(function() { $filter.find('.btn-primary').click(); }, 1);
-
-              return false;
-            }
-
-            return view.handleFilterValue(cell.columnId, 'numeric', newData);
-          });
-        }
-      },
-      text: {
-        type: 'text',
-        template: textFilterTemplate,
-        handler: function(cell, $filter)
-        {
-          var view = this;
-          var $data = $filter.find('.form-control');
-          var oldData = (view.model.tableView.getFilter(cell.columnId) || {data: ''}).data;
-
-          $data.val(oldData).on('input', function()
-          {
-            this.setCustomValidity('');
-          });
-
-          $filter.find('.btn[data-action="clear"]').on('click', function()
-          {
-            view.handleFilterValue(cell.columnId);
-          });
-
-          $filter.find('form').on('submit', function()
-          {
-            var newData = $data.val().trim();
-
-            if (newData === '')
-            {
-              return view.handleFilterValue(cell.columnId);
-            }
-
-            if (newData === '?')
-            {
-              return view.handleFilterValue(cell.columnId, 'empty', '?');
-            }
-
-            if (newData === '!')
-            {
-              return view.handleFilterValue(cell.columnId, 'notEmpty', '!');
-            }
-
-            if (!/^\/.*?\/$/.test(newData) && newData.indexOf('$$') === -1)
-            {
-              if (!newData.replace(/[^A-Za-z0-9]+/g, '').length)
-              {
-                $data[0].setCustomValidity(view.t('filters:invalid'));
-
-                view.timers.revalidate = setTimeout(function() { $filter.find('.btn-primary').click(); }, 1);
-
-                return false;
-              }
-
-              return view.handleFilterValue(cell.columnId, 'text', newData);
-            }
-
-            var code = newData + (newData.indexOf('$$') === -1 ? 'i.test($)' : '');
-
-            try
-            {
-              var o = view.model.entries.at(0).serialize(view.model);
-              var v = cell.arrayIndex >= 0 ? o[cell.columnId][cell.arrayIndex] : o[cell.columnId];
-              var result = eval( // eslint-disable-line no-eval
-                '(function($, $$) { return ' + code + '; })(' + JSON.stringify(v) + ', ' + JSON.stringify(o) + ');'
-              );
-
-              if (typeof result !== 'boolean')
-              {
-                throw new Error('Invalid result type. Expected boolean, got ' + typeof result + '.');
-              }
-            }
-            catch (err)
-            {
-              console.error(err);
-
-              $data[0].setCustomValidity(view.t('filters:invalid'));
-
-              view.timers.revalidate = setTimeout(function() { $filter.find('.btn-primary').click(); }, 1);
-
-              return false;
-            }
-
-            return view.handleFilterValue(cell.columnId, 'text', newData);
-          });
-        }
-      },
-      select: function(cell, $filter, options, multiple)
-      {
-        var view = this;
-        var $data = $filter.find('.form-control').prop('multiple', multiple !== false);
-        var oldData = (view.model.tableView.getFilter(cell.columnId) || {data: []}).data;
-
-        $filter.find('select').html(options.map(function(option)
-        {
-          return '<option value="' + option.id + '" ' + (_.includes(oldData, option.id) ? 'selected' : '') + '>'
-            + _.escape(option.text)
-            + '</option>';
-        }).join(''));
-
-        $filter.find('.btn[data-action="clear"]').on('click', function()
-        {
-          view.handleFilterValue(cell.columnId);
-        });
-
-        $filter.find('form').on('submit', function()
-        {
-          var newData = $data.val();
-
-          if (!Array.isArray(newData))
-          {
-            newData = [newData];
-          }
-
-          return view.handleFilterValue(
-            cell.columnId,
-            'select',
-            newData.length === 0 ? null : newData
-          );
-        });
-      },
-      _id: 'numeric',
-      kanbanQtyUser: 'numeric',
-      componentQty: 'numeric',
-      kanbanId: 'text',
-      kanbanIdCount: 'numeric',
-      lineCount: 'numeric',
-      emptyFullCount: 'numeric',
-      stock: 'numeric',
-      maxBinQty: 'numeric',
-      minBinQty: 'numeric',
-      replenQty: 'numeric',
-      storageType: 'numeric',
-      nc12: 'text',
-      description: 'text',
-      storageBin: 'text',
-      newStorageBin: 'text',
-      comment: 'text',
-      supplyArea: {
-        type: 'select-multi',
-        template: selectFilterTemplate,
-        handler: function(cell, $filter)
-        {
-          this.filters.select.call(this, cell, $filter, this.model.supplyAreas.getNames());
-        }
-      },
-      workCenter: {
-        type: 'select-multi',
-        template: selectFilterTemplate,
-        handler: function(cell, $filter)
-        {
-          var options = [{id: '', text: this.t('filters:value:empty')}].concat(
-            this.model.supplyAreas.getWorkCenters([])
-          );
-
-          this.filters.select.call(this, cell, $filter, options);
-        }
-      },
-      family: {
-        type: 'select-multi',
-        template: selectFilterTemplate,
-        handler: function(cell, $filter)
-        {
-          var options = [{id: '', text: this.t('filters:value:empty')}].concat(
-            this.model.supplyAreas.getFamilies([])
-          );
-
-          this.filters.select.call(this, cell, $filter, options);
-        }
-      },
-      kind: {
-        type: 'select-multi',
-        template: selectFilterTemplate,
-        handler: function(cell, $filter)
-        {
-          this.filters.select.call(
-            this,
-            cell,
-            $filter,
-            [
-              {id: '', text: this.t('filters:value:empty')},
-              {id: 'kk', text: this.t('kind:kk')},
-              {id: 'pk', text: this.t('kind:pk')}
-            ]
-          );
-        }
-      },
-      container: {
-        type: 'select-multi',
-        template: selectFilterTemplate,
-        handler: function(cell, $filter)
-        {
-          this.filters.select.call(
-            this,
-            cell,
-            $filter,
-            [{id: '', text: this.t('filters:value:empty')}].concat(this.model.containers.map(idAndLabel))
-          );
-        }
-      },
-      workstations: {
-        type: 'select-one',
-        template: selectFilterTemplate,
-        handler: function(cell, $filter)
-        {
-          this.filters.select.call(
-            this,
-            cell,
-            $filter,
-            [
-              {id: 'valid', text: this.t('filters:value:valid')},
-              {id: 'invalid', text: this.t('filters:value:invalid')}
-            ],
-            false
-          );
-        }
-      },
-      locations: 'workstations',
-      discontinued: {
-        type: 'select-one',
-        template: selectFilterTemplate,
-        handler: function(cell, $filter)
-        {
-          this.filters.select.call(
-            this,
-            cell,
-            $filter,
-            [
-              {id: 'true', text: this.t('core', 'BOOL:true')},
-              {id: 'false', text: this.t('core', 'BOOL:false')}
-            ],
-            false
-          );
-        }
-      },
-      markerColor: {
-        type: 'select-multi',
-        template: selectFilterTemplate,
-        handler: function(cell, $filter)
-        {
-          this.filters.select.call(
-            this,
-            cell,
-            $filter,
-            [{id: '', text: this.t('filters:value:empty')}].concat(KanbanSettingCollection.getMarkerColors())
-          );
-        }
-      },
-      newMarkerColor: 'markerColor'
-
     }
 
   });

@@ -39,6 +39,9 @@
   "menu:edit": "Edytuj komórkę",
   "menu:queuePrint": "Drukuj etykiety",
   "menu:containerImage": "Pokaż obraz",
+  "menu:nc12:orders": "Zlecenia produkcyjne",
+  "menu:nc12:pfep": "Baza PFEP",
+  "menu:nc12:pfep:notFound": "12NC nie istnieje w bazie PFEP.",
 
   "column:_id": "CCN",
   "column:nc12": "12NC",

@@ -40,6 +40,9 @@
     "menu:edit": "Edit cell",
     "menu:queuePrint": "Print labels",
     "menu:containerImage": "Open image",
+    "menu:nc12:orders": "Production orders",
+    "menu:nc12:pfep": "PFEP DB",
+    "menu:nc12:pfep:notFound": "12NC not found in the PFEP DB.",
 
     "column:_id": "CCN",
     "column:nc12": "12NC",
