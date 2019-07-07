@@ -123,7 +123,9 @@ define([
 
       _.forEach(this.model.report.get('responseCountBySurvey'), function(byDivision, surveyId)
       {
-        categories.push(surveys.get(surveyId).getLabel());
+        var survey = surveys.get(surveyId);
+
+        categories.push(survey ? survey.getLabel() : surveyId);
       });
 
       return categories;
@@ -158,7 +160,7 @@ define([
       _.forEach(this.model.report.get('responseCountBySurvey'), function(byDivision, surveyId)
       {
         var survey = surveys.get(surveyId);
-        var allEmployeeCount = survey.cacheMaps.employeeCount;
+        var allEmployeeCount = survey ? survey.cacheMaps.employeeCount : 0;
 
         _.forEach(series, function(employerSeries)
         {

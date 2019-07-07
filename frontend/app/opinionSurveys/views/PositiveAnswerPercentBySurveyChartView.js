@@ -123,7 +123,9 @@ define([
 
       _.forEach(this.model.report.get('positiveAnswerCountBySurvey'), function(byEmployer, surveyId)
       {
-        categories.push(surveys.get(surveyId).getLabel());
+        var survey = surveys.get(surveyId);
+
+        categories.push(survey ? survey.getLabel() : surveyId);
       });
 
       return categories;

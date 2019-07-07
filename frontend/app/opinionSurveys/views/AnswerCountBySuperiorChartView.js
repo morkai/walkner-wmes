@@ -132,7 +132,8 @@ define([
 
             _.forEach(answerCountBySuperior, function(byQuestion, superiorId)
             {
-              var superior = view.model.surveys.get(superiorToSurvey[superiorId]).cacheMaps.superiors[superiorId];
+              var survey = view.model.surveys.get(superiorToSurvey[superiorId]);
+              var superior = survey && survey.cacheMaps.superiors[superiorId];
               var answerCount = byQuestion[questionId] || {no: 0, na: 0, yes: 0};
               var no = answerCount.no;
               var na = answerCount.na;
@@ -148,7 +149,7 @@ define([
               rows.push({
                 point: null,
                 color: selectedSuperiorId === superiorId ? 'blue' : 'black',
-                name: superior.full,
+                name: superior ? superior.full : superiorId,
                 value: no,
                 valueStyle: 'color: red',
                 decimals: 0,

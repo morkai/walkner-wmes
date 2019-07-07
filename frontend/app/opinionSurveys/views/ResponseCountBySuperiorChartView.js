@@ -167,16 +167,29 @@ define([
       var employers = [];
       var sortedSuperiors = Object.keys(superiorToSurvey).sort(function(a, b)
       {
-        a = surveys.get(superiorToSurvey[a]).cacheMaps.superiors[a];
-        b = surveys.get(superiorToSurvey[b]).cacheMaps.superiors[b];
+        var surveyA = surveys.get(superiorToSurvey[a]);
+        var surveyB = surveys.get(superiorToSurvey[b]);
 
-        return a.short.localeCompare(b.short);
+        a = surveyA && surveyA.cacheMaps.superiors[a];
+        b = surveyB && surveyB.cacheMaps.superiors[b];
+
+        if (a && b)
+        {
+          return a.short.localeCompare(b.short);
+        }
+
+        return 0;
       });
 
       _.forEach(sortedSuperiors, function(superiorId)
       {
         var byEmployer = responseCount[superiorId];
-        var superior = surveys.get(superiorToSurvey[superiorId]).cacheMaps.superiors[superiorId];
+        var survey = surveys.get(superiorToSurvey[superiorId]);
+        var superior = survey && survey.cacheMaps.superiors[superiorId] || {
+          _id: superiorId,
+          short: superiorId,
+          full: superiorId
+        };
         var superiorCount = 0;
 
         _.forEach(byEmployer, function(count, employerId)

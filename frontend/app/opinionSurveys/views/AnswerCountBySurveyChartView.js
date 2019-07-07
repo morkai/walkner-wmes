@@ -147,7 +147,7 @@ define([
               rows.push({
                 point: null,
                 color: selectedSurveyId === surveyId ? 'blue' : 'black',
-                name: survey.getLabel(),
+                name: survey ? survey.getLabel() : surveyId,
                 value: no,
                 valueStyle: 'color: red',
                 decimals: 0,
