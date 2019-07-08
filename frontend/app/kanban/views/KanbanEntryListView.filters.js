@@ -2,11 +2,15 @@
 
 define([
   'underscore',
+  'app/core/util/idAndLabel',
+  '../KanbanSettingCollection',
   'app/kanban/templates/filters/numeric',
   'app/kanban/templates/filters/text',
   'app/kanban/templates/filters/select'
 ], function(
   _,
+  idAndLabel,
+  KanbanSettingCollection,
   numericFilterTemplate,
   textFilterTemplate,
   selectFilterTemplate
@@ -237,6 +241,7 @@ define([
     storageBin: 'text',
     newStorageBin: 'text',
     comment: 'text',
+    unit: 'text',
     supplyArea: {
       type: 'select-multi',
       template: selectFilterTemplate,

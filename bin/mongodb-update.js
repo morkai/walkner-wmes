@@ -3,12 +3,4 @@
 
 'use strict';
 
-db.plansettings.find({}, {mrps: 1}).forEach(s =>
-{
-  s.mrps.forEach(mrp =>
-  {
-    mrp.limitSmallOrders = mrp.limitSmallOrders || false;
-  });
-
-  db.plansettings.updateOne({_id: s._id}, {$set: {mrps: s.mrps}});
-});
+db.kanbancomponents.updateMany({unit: {$exists: false}}, {$set: {unit: 'PCE'}});

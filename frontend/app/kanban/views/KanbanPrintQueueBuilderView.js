@@ -580,6 +580,7 @@ define([
               supplyArea: entry.supplyArea,
               family: entry.family,
               componentQty: entry.componentQty,
+              unit: entry.unit,
               storageBin: storageBin,
               minBinQty: entry.minBinQty,
               maxBinQty: entry.maxBinQty,

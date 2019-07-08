@@ -1,4 +1,62 @@
 <div class="hidden">
+  <h1>v0.139.0</h1>
+  <h2><%- time.format(Date.now(), 'LL') %></h2>
+  <h3>Malarnia</h3>
+  <ul>
+    <li>Poprawiono ustawianie statusu malarnii dla zlecenia produkcyjnego podzielonego na części tak, aby
+      po wykonaniu tylko jednej części status malarnii był ustawiany na 'Niekompletne malowanie' a nie
+      'Malowanie zakończone'.</li>
+    <li>Dodano nową opcję konfiguracyjną: WorkCentra wiercenia - zlecenia niemalowane muszą mieć przynajmniej jedną
+      operację z listy WorkCenterów wiercenia, aby zostały potraktowane jako zlecenia wiercenia.</li>
+  </ul>
+  <h3>FAP</h3>
+  <ul>
+    <li>Usunięto stare, nieaktywne kategorie bez żadnych zgłoszeń.</li>
+    <li>Poprawiono błąd powodujący, że do listy uczestników brany był tylko pierwszy użytkownik z listy
+      'Powiadamiani użytkownicy'.</li>
+  </ul>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Dodano nowy raport: Outgoing quality.</li>
+  </ul>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Usunięto skróty klawiszowe w trybie wsadowym.</li>
+    <li>Dodano funkcjonalność skanowania Spigota do przeglądarki dokumentów.</li>
+    <li>Dodano możliwość zaznaczenia wszystkich plików w katalogu za pomocą skrótu <kbd>Ctrl+A</kbd> oraz odznaczenia
+      wszystkich zaznaczonych plików za pomocą <kbd>Esc</kbd>.</li>
+    <li>Dodano menu kontekstowe do listy dokumentów w katalogu.</li>
+    <li>Dodano do katalogu możliwość dodania do edycji najnowszych plików ze wszystkich zaznaczonych dokumentów.</li>
+    <li>Dodano do katalogu możliwość wyczyszczenia listy dodawanych/edytowanych plików.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Zmieniono skanowanie numerów seryjnych tak, aby można było zeskanować nr seryjny z poprzedniego zlecenia,
+      jeżeli jest połączenie z serwerem.</li>
+  </ul>
+  <h3>Raporty > CLIP</h3>
+  <ul>
+    <li>Dodano do menu wykresu CLIP dla MRP pozycję 'Pokaż zlecenia linii', która otwiera nową stronę
+      'Dane produkcyjne > Zlecenia' z filtrami: Czas rozpoczęcia, Kontroler MRP zlecenia oraz Wydział.
+      Można tak znaleźć zlecenie, przez które dane MRP jest wliczane do nieprawidłowego Wydziału w raporcie CLIP.</li>
+  </ul>
+  <h3>Zlecenia produkcyjne</h3>
+  <ul>
+    <li>Dodano do historii zmian zlecenia możliwość edycji czasu zmiany statusów zlecenia. Wymaga uprawnienia
+      'Zlecenia produkcyjne: zarządzanie'.</li>
+  </ul>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Dodano możliwość wyeksportowania statystyk wykonania sekwencji planu.</li>
+    <li>Dodano nową opcję konfiguracyjną MRP: Ogranicz małe zlecenia.</li>
+  </ul>
+  <h3>Baza komponentów</h3>
+  <ul>
+    <li>Dodano możliwość wyeksportowania statystyk wykonania sekwencji planu.</li>
+    <li>Dodano nową opcję konfiguracyjną MRP: Ogranicz małe zlecenia.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.138.0</h1>
   <h2><%- time.format('2019-06-16', 'LL') %></h2>
   <h3>Baza testów > TRW</h3>

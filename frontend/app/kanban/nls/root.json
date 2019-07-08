@@ -90,6 +90,8 @@
     "column:markerColor:title": "Marker color (SAP)",
     "column:newMarkerColor": "Color (new)",
     "column:newMarkerColor:title": "Marker color (newt)",
+    "column:unit": "Unit",
+    "column:unit:title": "Unit of measure",
 
     "export:fileName": "WMES_KANBAN",
     "export:sheetName": "Kanban DB",

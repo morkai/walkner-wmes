@@ -268,6 +268,10 @@ define([
       rotated: true,
       tdClassName: invalidFifoTdClassName
     },
+    unit: {
+      type: 'string',
+      width: 4
+    },
     kind: {
       width: 3,
       rotated: true,

@@ -2,7 +2,7 @@
   <div class="panel-heading"><%- panelTitle %></div>
   <div class="panel-details row">
     <div class="col-md-8">
-      <%- helpers.props(model, ['_id', 'description', 'storageBin', 'newStorageBin', 'maxBinQty', 'minBinQty', 'replenQty']) %>
+      <%- helpers.props(model, ['_id', 'description', 'storageBin', 'newStorageBin', 'unit', 'maxBinQty', 'minBinQty', 'replenQty']) %>
     </div>
     <div class="col-md-4">
       <%- helpers.props(model, ['createdAt', 'updatedAt', '!updater', 'lastUsageAt']) %>

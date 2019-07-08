@@ -89,6 +89,8 @@
   "column:markerColor:title": "Kolor znacznika (SAP)",
   "column:newMarkerColor": "Kolor (nowy)",
   "column:newMarkerColor:title": "Kolor znacznika (nowy)",
+  "column:unit": "J.m.",
+  "column:unit:title": "Jednostka miary",
 
   "export:fileName": "WMES_KANBAN",
   "export:sheetName": "Baza Kanban",

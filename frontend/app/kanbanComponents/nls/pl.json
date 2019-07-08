@@ -12,6 +12,7 @@
   "PROPERTY:maxBinQty": "Maks. ilość w binie",
   "PROPERTY:minBinQty": "Min. ilość w binie",
   "PROPERTY:replenQty": "Ilość uzupełnienia",
+  "PROPERTY:unit": "Jednostka",
   "PROPERTY:createdAt": "Czas utworzenia",
   "PROPERTY:updatedAt": "Czas ostatniej zmiany",
   "PROPERTY:updater": "Ostatnio zmienione przez",

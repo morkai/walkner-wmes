@@ -334,7 +334,7 @@ define([
     },
     C: function(e, cell)
     {
-      if (!e.ctrlKey || window.getSelection().toString() !== '')
+      if (!e.ctrlKey || e.shiftKey || window.getSelection().toString() !== '')
       {
         return;
       }
@@ -356,21 +356,21 @@ define([
     },
     S: function(e)
     {
-      if (e.ctrlKey)
+      if (e.ctrlKey && !e.shiftKey)
       {
         this.handleExportTable();
       }
     },
     A: function(e)
     {
-      if (e.ctrlKey)
+      if (e.ctrlKey && !e.shiftKey)
       {
         this.lastKeyPressAt.CtrlA = e.timeStamp;
       }
     },
     F: function(e)
     {
-      if (!e.ctrlKey || viewport.currentDialog)
+      if (!e.ctrlKey || e.shiftKey || viewport.currentDialog)
       {
         return;
       }

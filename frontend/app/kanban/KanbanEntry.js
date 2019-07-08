@@ -71,6 +71,7 @@ define([
         entry.minBinQty = component.get('minBinQty');
         entry.maxBinQty = component.get('maxBinQty');
         entry.replenQty = component.get('replenQty');
+        entry.unit = component.get('unit');
 
         if (entry.storageType === 153)
         {
@@ -91,6 +92,7 @@ define([
         entry.minBinQty = 0;
         entry.maxBinQty = 0;
         entry.replenQty = 0;
+        entry.unit = 'PCE';
       }
 
       if (entry.storageBin)

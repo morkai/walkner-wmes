@@ -255,6 +255,9 @@ tr:hover > .kanban-is-invalid,
 .kanban-td[data-column-id="replenQty"] {
   width: 60px;
 }
+.kanban-td[data-column-id="unit"] {
+  width: 40px;
+}
 .kanban-td[data-column-id="kind"] {
   width: 30px;
 }

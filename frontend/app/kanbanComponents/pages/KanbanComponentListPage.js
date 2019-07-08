@@ -30,6 +30,7 @@ define([
       {id: '_id', className: 'is-min'},
       {id: 'description', className: 'is-min'},
       {id: 'storageBins', className: 'is-min'},
+      {id: 'unit', className: 'is-min'},
       {id: 'maxBinQty', className: 'is-min is-number'},
       {id: 'minBinQty', className: 'is-min is-number'},
       {id: 'replenQty', className: 'is-min is-number'},
