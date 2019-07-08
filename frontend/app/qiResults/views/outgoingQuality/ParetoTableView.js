@@ -28,7 +28,7 @@ define([
       var property = view.options.property;
       var rows = [];
       var topCount = view.model.getTopCount();
-      var top = view.model.get('top') || {nokCount: 0};
+      var top = view.model.get('top') || {qtyNok: 0};
       var totals = top[property] || [];
       var groups = view.model.get('groups') || [];
 
@@ -49,7 +49,7 @@ define([
           total: {
             absolute: total[1],
             relative: total[2],
-            total: top.nokCount
+            total: top.qtyNok
           }
         };
 
@@ -63,7 +63,7 @@ define([
             row.data.push({
               absolute: match[1],
               relative: match[2],
-              total: group.nokCount
+              total: group.qtyNok
             });
           }
           else
@@ -71,7 +71,7 @@ define([
             row.data.push({
               absolute: 0,
               relative: 0,
-              total: group.nokCount
+              total: group.qtyNok
             });
           }
         }

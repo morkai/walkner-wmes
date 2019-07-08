@@ -182,6 +182,7 @@
     "report:oql:week": "Week",
     "report:oql:where": "Family",
     "report:oql:what": "Fault",
+    "report:oql:qtyNok": "NOK quantity",
     "report:oql:pareto": "Pareto",
     "report:oql:printable": "Printable version",
 

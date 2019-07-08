@@ -182,6 +182,7 @@
   "report:oql:week": "Tydzień",
   "report:oql:where": "Rodzina",
   "report:oql:what": "Wada",
+  "report:oql:qtyNok": "Ilość niezgodnych",
   "report:oql:pareto": "Pareto",
   "report:oql:printable": "Wersja do druku",
 

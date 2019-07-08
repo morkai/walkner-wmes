@@ -62,3 +62,6 @@
 .qi-oqlReport-printable .row {
   margin-top: 0;
 }
+.qi-oqlReport-printable .row + h3 {
+  margin-top: 0;
+}

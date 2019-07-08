@@ -380,14 +380,14 @@ define([
           obj.check = obj.check.slice(0, 1);
           obj.who = obj.who.slice(0, 1);
 
-          if (obj.cause.length > 130)
+          if (obj.cause.length > 105)
           {
-            obj.cause = obj.cause.substring(0, 125) + '...';
+            obj.cause = obj.cause.substring(0, 100) + '...';
           }
 
-          if (obj.countermeasure.length > 130)
+          if (obj.countermeasure.length > 105)
           {
-            obj.countermeasure = obj.countermeasure.substring(0, 125) + '...';
+            obj.countermeasure = obj.countermeasure.substring(0, 100) + '...';
           }
         }
 

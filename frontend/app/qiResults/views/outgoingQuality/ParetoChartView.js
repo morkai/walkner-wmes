@@ -99,7 +99,11 @@ define([
         },
         yAxis: [{
           title: false,
+          allowDecimals: false
+        }, {
+          title: false,
           allowDecimals: false,
+          opposite: true,
           labels: {
             format: '{value}%'
           },
@@ -118,14 +122,16 @@ define([
           headerFormatter: function(ctx)
           {
             return ctx.points[0].point.name;
-          },
-          valueSuffix: '%'
+          }
         },
         legend: {
           enabled: false
         },
         plotOptions: {
           column: {
+            tooltip: {
+              valueSuffix: 'PCE'
+            },
             dataLabels: {
               enabled: !printable,
               y: 15,
@@ -139,6 +145,11 @@ define([
               {
                 return this.y || '';
               }
+            }
+          },
+          line: {
+            tooltip: {
+              valueSuffix: '%'
             }
           }
         },
@@ -160,7 +171,7 @@ define([
       var series = [{
         id: 'value',
         type: 'column',
-        name: view.t('report:oql:' + property),
+        name: view.t('report:oql:qtyNok'),
         data: [],
         color: '#337ab7'
       }, {
@@ -168,7 +179,8 @@ define([
         type: 'line',
         name: view.t('report:oql:pareto'),
         data: [],
-        color: '#f0ad4e'
+        color: '#f0ad4e',
+        yAxis: 1
       }];
 
       var report = view.model;
@@ -199,9 +211,9 @@ define([
         categories.push(category);
         series[0].data.push({
           name: value[0],
-          y: value[2]
+          y: value[1]
         });
-        series[1].data.push((pareto / top.nokCount) * 100);
+        series[1].data.push((pareto / top.qtyNok) * 100);
       }
 
       return {
