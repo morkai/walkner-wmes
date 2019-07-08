@@ -186,7 +186,7 @@ define([
       var report = view.model;
       var printable = report.get('printable');
       var topCount = report.getTopCount();
-      var top = _.last(report.get('groups')) || {};
+      var top = report.get('top') || {};
       var values = top[property] || [];
       var pareto = 0;
 
