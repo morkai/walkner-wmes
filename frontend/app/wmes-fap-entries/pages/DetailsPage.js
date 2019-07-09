@@ -252,21 +252,27 @@ define([
     {
       var change = message.change;
 
-      if (socket.getId() !== message.socketId)
+      if (socket.getId() === message.socketId)
       {
-        this.model.handleChange(change, message.notify);
+        var data = {};
+
+        Object.keys(change.data).forEach(function(prop)
+        {
+          if (/^subscribers/.test(prop))
+          {
+            data[prop] = change.data[prop];
+          }
+        });
+
+        if (_.isEmpty(data))
+        {
+          return;
+        }
+
+        change.data = data;
       }
-      else if (change.data.subscribers)
-      {
-        this.model.handleChange({
-          date: change.date,
-          user: change.user,
-          data: {
-            subscribers: change.data.subscribers
-          },
-          comment: ''
-        }, message.notify);
-      }
+
+      this.model.handleChange(change, message.notify);
     },
 
     onPresence: function(message)
