@@ -39,10 +39,10 @@
   <div class="form-group">
     <label for="<%- idPrefix %>-levels"><%- helpers.t('PROPERTY:level') %></label>
     <div id="<%- idPrefix %>-levels" class="btn-group filter-btn-group" data-toggle="buttons">
-      <% [1, 2, 3, 4].forEach(function(level) { %>
-        <label class="btn btn-default">
-          <input type="radio" name="levels" value="<%- level %>"> <%- level %>
-        </label>
+      <% [0, 1, 2, 3, 4].forEach(function(level) { %>
+      <label class="btn btn-default">
+        <input type="radio" name="levels" value="<%- level %>"> <%- level %>
+      </label>
       <% }) %>
     </div>
   </div>

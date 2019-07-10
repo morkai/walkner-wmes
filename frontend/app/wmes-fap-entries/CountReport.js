@@ -61,7 +61,7 @@ define([
         subdivisionTypes: [],
         divisions: [],
         mrps: [],
-        levels: 0
+        levels: -1
       };
     },
 
@@ -323,7 +323,7 @@ define([
         subdivisionTypes: _.isEmpty(query.subdivisionTypes) ? [] : query.subdivisionTypes.split(','),
         divisions: _.isEmpty(query.divisions) ? [] : query.divisions.split(','),
         mrps: _.isEmpty(query.mrps) ? [] : query.mrps.split(','),
-        levels: +query.levels || undefined
+        levels: query.levels == null ? undefined : +query.levels
       });
     }
 

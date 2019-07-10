@@ -112,11 +112,12 @@ define([
     {
       var view = this;
       var range = dateTimeRange.serialize(view);
+      var levels = buttonGroup.getValue(this.$id('levels'));
       var query = {
         from: range.from ? range.from.valueOf() : 0,
         to: range.to ? range.to.valueOf() : 0,
         interval: buttonGroup.getValue(this.$id('interval')),
-        levels: parseInt(buttonGroup.getValue(this.$id('levels')), 10) || 0
+        levels: levels == null ? -1 : (parseInt(levels, 10) || 0)
       };
 
       ['categories', 'mrps', 'subdivisionTypes', 'divisions'].forEach(function(prop)

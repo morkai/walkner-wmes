@@ -222,7 +222,7 @@ define([
         );
       }
 
-      if (level > 0)
+      if (level >= 0)
       {
         selector.push({name: 'eq', args: ['level', +level]});
       }
