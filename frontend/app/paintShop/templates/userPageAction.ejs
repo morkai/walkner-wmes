@@ -1,5 +1,5 @@
-<div class="paintShop-userPicker-pageAction <%- loggedIn ? '' : 'is-clickable' %>">
-  <% if (signedIn || loggedIn) { %>
+<div class="paintShop-userPicker-pageAction is-clickable">
+  <% if (signedIn) { %>
   <%= user.label %>
   <% } else { %>
   <%- t('paintShop', 'userPicker:guest') %>

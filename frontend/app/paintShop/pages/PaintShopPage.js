@@ -117,9 +117,8 @@ define([
           template: function()
           {
             return userPageActionTemplate({
-              loggedIn: user.isLoggedIn(),
               signedIn: !!page.orders.user,
-              user: page.orders.user || user.getInfo()
+              user: page.orders.user
             });
           },
           afterRender: function($action)
