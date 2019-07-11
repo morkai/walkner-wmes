@@ -96,7 +96,7 @@
     {
       var views = {};
 
-      if (!embedded.isEnabled())
+      if (!embedded.isEnabled() || window.WMES_APP_ID === 'main')
       {
         views['.navbar'] = createNavbarView();
       }
