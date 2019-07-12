@@ -79,6 +79,12 @@ define([
           plan: 0,
           remaining: 0
         },
+        orders: {
+          todo: 0,
+          late: 0,
+          plan: 0,
+          remaining: 0
+        },
         execution: {
           plan: 0,
           done: 0,
@@ -98,12 +104,6 @@ define([
             done: 0,
             percent: 0
           }
-        },
-        orders: {
-          todo: 0,
-          late: 0,
-          plan: 0,
-          remaining: 0
         }
       };
 
@@ -129,7 +129,7 @@ define([
           var quantityTodo = lineOrder.get('quantity');
 
           stats.manHours.plan += lineOrder.get('manHours');
-          stats.quantity.plan += lineOrder.get('quantity');
+          stats.quantity.plan += quantityTodo;
           stats.orders.plan += 1;
           stats.execution.plan += 1;
           stats.execution.done += quantityDone >= quantityTodo ? 1 : 0;

@@ -54,12 +54,23 @@ define([
         quantity = this.getQuantityTodo();
       }
 
-      var operation = this.attributes.operation;
-      var schedulingRate = this.collection ? this.collection.plan.settings.getSchedulingRate(this.attributes.mrp) : 1;
+      if (quantity <= 0)
+      {
+        return 0;
+      }
 
-      return operation.laborTime
-        ? (((operation.laborTime / 100 * quantity) + operation.laborSetupTime) * schedulingRate)
-        : 0;
+      var operation = this.attributes.operation;
+
+      if (!operation.laborTime)
+      {
+        return 0;
+      }
+
+      var schedulingRate = this.collection
+        ? this.collection.plan.settings.getSchedulingRate(this.attributes.mrp)
+        : 1;
+
+      return ((operation.laborTime / 100 * quantity) + operation.laborSetupTime) * schedulingRate;
     },
 
     getQuantityTodo: function()

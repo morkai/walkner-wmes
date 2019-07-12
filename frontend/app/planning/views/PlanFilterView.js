@@ -10,6 +10,7 @@ define([
   'app/core/util/pageActions',
   'app/data/clipboard',
   'app/mrpControllers/util/setUpMrpSelect2',
+  './ExportStatsDialogView',
   'app/planning/templates/planFilter'
 ], function(
   _,
@@ -21,6 +22,7 @@ define([
   pageActions,
   clipboard,
   setUpMrpSelect2,
+  ExportStatsDialogView,
   template
 ) {
   'use strict';
@@ -48,7 +50,10 @@ define([
       },
       'click #-exportStats': function()
       {
-        this.exportStats();
+        viewport.showDialog(
+          new ExportStatsDialogView({model: this.plan}),
+          this.t('stats:export:title')
+        );
       }
 
     },
@@ -243,162 +248,6 @@ define([
 
         this.textContent = stat[this.dataset.subgroup].toLocaleString();
       });
-    },
-
-    exportStats: function()
-    {
-      var view = this;
-
-      view.$exportMsg = viewport.msg.show({
-        type: 'info',
-        text: view.t('MSG:export:started')
-      });
-
-      var columns = {
-        mrp: {
-          type: 'string',
-          width: 5,
-          headerRotation: 0,
-          headerAlignmentH: 'Center',
-          headerAlignmentV: 'Center',
-          mergeV: 1,
-          caption: view.t('stats:mrp')
-        }
-      };
-
-      addStatColumn('todo');
-      addStatColumn('late');
-      addStatColumn('plan');
-      addStatColumn('remaining');
-      addExecutionColumn(1, 3, view.t('filter:stats:execution'));
-      addExecutionColumn(2);
-      addExecutionColumn(3);
-      addExecutionColumn(0);
-
-      var rows = [{
-        mrp: '',
-        todo$manHours: view.t('stats:manHours'),
-        todo$quantity: view.t('stats:quantity'),
-        todo$orders: view.t('stats:orderCount'),
-        late$manHours: view.t('stats:manHours'),
-        late$quantity: view.t('stats:quantity'),
-        late$orders: view.t('stats:orderCount'),
-        plan$manHours: view.t('stats:manHours'),
-        plan$quantity: view.t('stats:quantity'),
-        plan$orders: view.t('stats:orderCount'),
-        remaining$manHours: view.t('stats:manHours'),
-        remaining$quantity: view.t('stats:quantity'),
-        remaining$orders: view.t('stats:orderCount'),
-        execution$1: view.t('core', 'SHIFT:1'),
-        execution$2: view.t('core', 'SHIFT:2'),
-        execution$3: view.t('core', 'SHIFT:3'),
-        execution$0: view.t('core', 'SHIFT:1') + '-' + view.t('core', 'SHIFT:3')
-      }];
-
-      view.plan.mrps.forEach(function(mrp)
-      {
-        exportRow(mrp.id, mrp.getStats());
-      });
-
-      exportRow('', this.getStats());
-
-      var data = {
-        filename: view.t('stats:export:fileName', {date: view.plan.id}),
-        sheetName: view.t('stats:export:sheetName', {date: view.plan.id}),
-        freezeRows: 2,
-        freezeColumns: 1,
-        subHeader: true,
-        subHeaderAlignmentH: 'Center',
-        columns: columns,
-        data: rows
-      };
-
-      var req = view.ajax({
-        type: 'POST',
-        url: '/xlsxExporter',
-        data: JSON.stringify(data)
-      });
-
-      req.fail(function()
-      {
-        viewport.msg.hide(view.$exportMsg, true);
-
-        viewport.msg.show({
-          type: 'error',
-          time: 2500,
-          text: view.t('MSG:export:failure')
-        });
-      });
-
-      req.done(function(id)
-      {
-        viewport.msg.hide(view.$exportMsg, true);
-
-        pageActions.exportXlsx('/xlsxExporter/' + id);
-      });
-
-      function addStatColumn(id)
-      {
-        columns[id + '$manHours'] = {
-          type: 'decimal',
-          width: 10,
-          headerAlignmentH: 'Center',
-          headerAlignmentV: 'Center',
-          mergeH: 2,
-          caption: view.t('filter:stats:' + id)
-        };
-
-        columns[id + '$quantity'] = {
-          type: 'integer',
-          width: 10,
-          headerAlignmentH: 'Center',
-          headerAlignmentV: 'Center',
-          caption: ''
-        };
-
-        columns[id + '$orders'] = {
-          type: 'integer',
-          width: 10,
-          headerAlignmentH: 'Center',
-          headerAlignmentV: 'Center',
-          caption: ''
-        };
-      }
-
-      function addExecutionColumn(shift, mergeH, caption)
-      {
-        columns['execution$' + shift] = {
-          type: 'percent',
-          width: 7,
-          headerAlignmentH: 'Center',
-          headerAlignmentV: 'Center',
-          mergeH: mergeH || 0,
-          caption: caption || ''
-        };
-      }
-
-      function exportRow(mrp, stats)
-      {
-        rows.push({
-          mrp: mrp,
-          todo$manHours: stats.manHours.todo,
-          todo$quantity: stats.quantity.todo,
-          todo$orders: stats.orders.todo,
-          late$manHours: stats.manHours.late,
-          late$quantity: stats.quantity.late,
-          late$orders: stats.orders.late,
-          plan$manHours: stats.manHours.plan,
-          plan$quantity: stats.quantity.plan,
-          plan$orders: stats.orders.plan,
-          remaining$manHours: stats.manHours.remaining,
-          remaining$quantity: stats.quantity.remaining,
-          remaining$orders: stats.orders.remaining,
-          execution$1: stats.execution[1].percent / 100,
-          execution$2: stats.execution[2].percent / 100,
-          execution$3: stats.execution[3].percent / 100,
-          execution$0: stats.execution.percent / 100
-        });
-      }
     },
 
     updateToggles: function()
