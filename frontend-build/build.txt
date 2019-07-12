@@ -956,6 +956,7 @@ assets/../app/production/assets/vkb.css
 assets/../app/planning/assets/menu.css
 assets/../app/updater/assets/main.css
 assets/../app/orderDocuments/assets/main.css
+assets/../app/wmes-fap-entries/assets/main.css
 assets/./wmes-loading.css
 assets/wmes-docs.css
 
@@ -1924,6 +1925,8 @@ app/factoryLayout/ProdLineStateCollection.js
 app/factoryLayout/FactoryLayout.js
 app/factoryLayout/productionState.js
 app/planning/PlanDisplayOptions.js
+app/planning/templates/exportStatsDialog.js
+app/planning/views/ExportStatsDialogView.js
 app/planning/templates/planFilter.js
 app/planning/views/PlanFilterView.js
 app/prodShifts/ProdShiftCollection.js
