@@ -682,7 +682,7 @@ define([
 
           if (d3.event.ctrlKey || d3.event.button === 1)
           {
-            window.open('#' + url);
+            window.open('/#' + url);
           }
           else
           {

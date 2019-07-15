@@ -323,6 +323,12 @@ define([
 
       $(window).off('.' + this.idPrefix);
       $(document).off('.' + this.idPrefix);
+
+      if (this.orderDetailsWindow)
+      {
+        this.orderDetailsWindow.close();
+        this.orderDetailsWindow = null;
+      }
     },
 
     defineModels: function()
@@ -693,6 +699,70 @@ define([
     hideMenu: function()
     {
       contextMenu.hide(this);
+    },
+
+    handleOpenOrderAction: function(options)
+    {
+      var page = this;
+      var url = '/#orders/' + options.orderNo;
+
+      if (IS_EMBEDDED)
+      {
+        window.open(url);
+
+        return;
+      }
+
+      if (page.orderDetailsWindow && !page.orderDetailsWindow.closed)
+      {
+        page.orderDetailsWindow.location.href = url;
+        page.orderDetailsWindow.focus();
+
+        return;
+      }
+
+      var width = Math.min(window.screen.availWidth - 200, 1500);
+      var height = Math.min(window.screen.availHeight - 160, 800);
+      var left = window.screen.availWidth - width - 80;
+
+      var win = window.open(
+        '/#orders/' + options.orderNo,
+        'WMES_ORDER_DETAILS',
+        'top=80,left=' + left + ',width=' + width + ',height=' + height
+      );
+
+      if (!win)
+      {
+        return;
+      }
+
+      win.onPageShown = function()
+      {
+        if (!win || win.closed)
+        {
+          return;
+        }
+
+        win.focus();
+
+        page.orderDetailsWindow = win;
+      };
+
+      win.onfocus = function()
+      {
+        clearTimeout(page.timers.closeOrderDetails);
+      };
+
+      win.onblur = function()
+      {
+        page.timers.closeOrderDetails = setTimeout(function()
+        {
+          page.orderDetailsWindow.close();
+          page.orderDetailsWindow = null;
+        }, 30000);
+      };
+
+      win.focus();
     },
 
     handleCopyOrdersAction: function(e, options)
@@ -1262,6 +1332,10 @@ define([
     {
       switch (action)
       {
+        case 'openOrder':
+          action = this.handleOpenOrderAction;
+          break;
+
         case 'copyOrders':
           action = this.handleCopyOrdersAction;
           break;

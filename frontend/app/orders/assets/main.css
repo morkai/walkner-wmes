@@ -153,6 +153,10 @@
   display: none;
 }
 
+.orders-childOrders td[data-id="statusLabels"] {
+  white-space: nowrap;
+}
+
 .page[data-parent-app-id="docs"] {
   background-color: #525659;
 }

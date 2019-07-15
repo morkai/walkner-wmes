@@ -384,6 +384,10 @@ function(
   };
 
   user.can = {
+    viewOrders: function()
+    {
+      return user.isAllowedTo('LOCAL', 'ORDERS:VIEW');
+    },
     commentOrders: function()
     {
       return user.isAllowedTo(

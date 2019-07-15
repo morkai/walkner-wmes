@@ -359,7 +359,7 @@ define([
 
             var win = window.open(
               '/#orders/' + orderNo,
-              'WMES_PLANNING_COMMENT',
+              'WMES_ORDER_DETAILS',
               'top=80,left=' + left + ',width=' + width + ',height=' + height
             );
 

@@ -86,7 +86,7 @@ define([
           switch (e.currentTarget.dataset.type)
           {
             case 'order':
-              window.open('#orders/' + id);
+              window.open('/#orders/' + id);
               break;
 
             case 'product':
@@ -96,7 +96,7 @@ define([
             case 'document':
               if (user.isAllowedTo('DOCUMENTS:VIEW'))
               {
-                window.open('#orderDocuments/tree?file=' + id);
+                window.open('/#orderDocuments/tree?file=' + id);
               }
               else
               {

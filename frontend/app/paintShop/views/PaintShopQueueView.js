@@ -212,13 +212,15 @@ define([
 
     showMenu: function(e)
     {
-      if (this.timers.showMenu)
+      var view = this;
+
+      if (view.timers.showMenu)
       {
-        clearTimeout(this.timers.showMenu);
-        this.timers.showMenu = null;
+        clearTimeout(view.timers.showMenu);
+        view.timers.showMenu = null;
       }
 
-      var order = this.orders.get(e.currentTarget.dataset.orderId);
+      var order = view.orders.get(e.currentTarget.dataset.orderId);
 
       if (!order)
       {
@@ -227,13 +229,40 @@ define([
 
       var orderNo = order.get('order');
       var mrp = order.get('mrp');
-      var drilling = this.orders.isDrillingMrpSelected();
-      var menu = [
-        order.get('order'),
+      var drilling = view.orders.isDrillingMrpSelected();
+      var menu = [order.get('order')];
+
+      if (user.can.viewOrders())
+      {
+        menu.push({
+          icon: 'fa-file-o',
+          label: view.t('menu:openOrder', {orderNo: 'parent'}),
+          handler: view.trigger.bind(view, 'actionRequested', 'openOrder', {
+            orderNo: orderNo
+          })
+        });
+
+        order.get('childOrders').forEach(function(childOrder)
+        {
+          if (childOrder.order === orderNo)
+          {
+            return;
+          }
+
+          menu.push({
+            label: view.t('menu:openOrder', {orderNo: childOrder.order}),
+            handler: view.trigger.bind(view, 'actionRequested', 'openOrder', {
+              orderNo: childOrder.order
+            })
+          });
+        });
+      }
+
+      menu.push(
         {
           icon: 'fa-print',
-          label: this.t('menu:printOrder'),
-          handler: this.trigger.bind(this, 'actionRequested', 'printOrders', {
+          label: view.t('menu:printOrder'),
+          handler: view.trigger.bind(view, 'actionRequested', 'printOrders', {
             filterProperty: 'order',
             filterValue: orderNo,
             drilling: drilling
@@ -241,29 +270,29 @@ define([
         },
         {
           icon: 'fa-clipboard',
-          label: this.t('menu:copyOrder'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, {
+          label: view.t('menu:copyOrder'),
+          handler: view.trigger.bind(view, 'actionRequested', 'copyOrders', e, {
             filterProperty: 'order',
             filterValue: orderNo,
             drilling: drilling
           }),
-          visible: !this.options.embedded
+          visible: !view.options.embedded
         },
         {
-          label: this.t('menu:copyChildOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, {
+          label: view.t('menu:copyChildOrders'),
+          handler: view.trigger.bind(view, 'actionRequested', 'copyChildOrders', e, {
             filterProperty: 'order',
             filterValue: orderNo,
             drilling: drilling
           }),
-          visible: !this.options.embedded
+          visible: !view.options.embedded
         },
         '-',
-        this.t('menu:header:mrp', {mrp: mrp}),
+        view.t('menu:header:mrp', {mrp: mrp}),
         {
           icon: 'fa-print',
-          label: this.t('menu:printOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'printOrders', {
+          label: view.t('menu:printOrders'),
+          handler: view.trigger.bind(view, 'actionRequested', 'printOrders', {
             filterProperty: 'mrp',
             filterValue: mrp,
             drilling: drilling
@@ -271,51 +300,51 @@ define([
         },
         {
           icon: 'fa-clipboard',
-          label: this.t('menu:copyOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, {
+          label: view.t('menu:copyOrders'),
+          handler: view.trigger.bind(view, 'actionRequested', 'copyOrders', e, {
             filterProperty: 'mrp',
             filterValue: mrp,
             drilling: drilling
           }),
-          visible: !this.options.embedded
+          visible: !view.options.embedded
         },
         {
-          label: this.t('menu:copyChildOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, {
+          label: view.t('menu:copyChildOrders'),
+          handler: view.trigger.bind(view, 'actionRequested', 'copyChildOrders', e, {
             filterProperty: 'mrp',
             filterValue: mrp,
             drilling: drilling
           }),
-          visible: !this.options.embedded
+          visible: !view.options.embedded
         },
         {
           icon: 'fa-download',
-          label: this.t('menu:exportOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'exportOrders', {
+          label: view.t('menu:exportOrders'),
+          handler: view.trigger.bind(view, 'actionRequested', 'exportOrders', {
             filterProperty: 'mrp',
             filterValue: mrp,
             drilling: drilling
           }),
-          visible: !this.options.embedded
+          visible: !view.options.embedded
         }
-      ];
+      );
 
       if (!drilling && user.isAllowedTo('PAINT_SHOP:DROP_ZONES'))
       {
         menu.push({
           icon: 'fa-level-down',
-          label: this.t('menu:dropZone:' + this.dropZones.getState(mrp)),
-          handler: this.trigger.bind(this, 'actionRequested', 'dropZone', mrp, false)
+          label: view.t('menu:dropZone:' + view.dropZones.getState(mrp)),
+          handler: view.trigger.bind(view, 'actionRequested', 'dropZone', mrp, false)
         });
       }
 
       menu.push(
         '-',
-        this.t('menu:header:all'),
+        view.t('menu:header:all'),
         {
           icon: 'fa-print',
-          label: this.t('menu:printOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'printOrders', {
+          label: view.t('menu:printOrders'),
+          handler: view.trigger.bind(view, 'actionRequested', 'printOrders', {
             filterProperty: null,
             filterValue: null,
             drilling: drilling
@@ -323,47 +352,47 @@ define([
         },
         {
           icon: 'fa-clipboard',
-          label: this.t('menu:copyOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyOrders', e, {
+          label: view.t('menu:copyOrders'),
+          handler: view.trigger.bind(view, 'actionRequested', 'copyOrders', e, {
             filterProperty: null,
             filterValue: null,
             drilling: drilling
           }),
-          visible: !this.options.embedded
+          visible: !view.options.embedded
         },
         {
-          label: this.t('menu:copyChildOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'copyChildOrders', e, {
+          label: view.t('menu:copyChildOrders'),
+          handler: view.trigger.bind(view, 'actionRequested', 'copyChildOrders', e, {
             filterProperty: null,
             filterValue: null,
             drilling: drilling
           }),
-          visible: !this.options.embedded
+          visible: !view.options.embedded
         },
         {
           icon: 'fa-download',
-          label: this.t('menu:exportOrders'),
-          handler: this.trigger.bind(this, 'actionRequested', 'exportOrders', {
+          label: view.t('menu:exportOrders'),
+          handler: view.trigger.bind(view, 'actionRequested', 'exportOrders', {
             filterProperty: null,
             filterValue: null,
             drilling: drilling
           }),
-          visible: !this.options.embedded
+          visible: !view.options.embedded
         }
       );
 
-      var selectedPaint = this.orders.selectedPaint;
+      var selectedPaint = view.orders.selectedPaint;
 
       if (user.isAllowedTo('PAINT_SHOP:DROP_ZONES') && selectedPaint !== 'all')
       {
         menu.push({
           icon: 'fa-level-down',
-          label: this.t('menu:dropZone:' + this.dropZones.getState(selectedPaint)),
-          handler: this.trigger.bind(this, 'actionRequested', 'dropZone', selectedPaint, true)
+          label: view.t('menu:dropZone:' + view.dropZones.getState(selectedPaint)),
+          handler: view.trigger.bind(view, 'actionRequested', 'dropZone', selectedPaint, true)
         });
       }
 
-      contextMenu.show(this, e.pageY, e.pageX, menu);
+      contextMenu.show(view, e.pageY, e.pageX, menu);
     },
 
     hideMenu: function()

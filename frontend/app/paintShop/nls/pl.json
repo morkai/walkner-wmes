@@ -92,6 +92,7 @@
 
   "menu:header:mrp": "{mrp}",
   "menu:header:all": "Wszystkie przepływy",
+  "menu:openOrder": "Otwórz zlecenie {orderNo, select, parent{nadrzędne} other{{orderNo}}}",
   "menu:copyOrder": "Kopiuj nr zlecenia",
   "menu:copyOrders": "Kopiuj nr zleceń",
   "menu:copyOrders:success": "Lista skopiowana do schowka.",

@@ -60,7 +60,7 @@ define([
           return;
         }
 
-        window.open('#users/' + whUser.id);
+        window.open('/#users/' + whUser.id);
       }
     }, SettingsView.prototype.events),
 

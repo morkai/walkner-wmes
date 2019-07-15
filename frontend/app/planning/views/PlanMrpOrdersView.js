@@ -76,7 +76,7 @@ define([
 
           if (e.ctrlKey)
           {
-            window.open('#orders/' + orderNo);
+            window.open('/#orders/' + orderNo);
 
             return;
           }

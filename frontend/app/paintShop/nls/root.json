@@ -93,6 +93,7 @@
 
     "menu:header:mrp": "{mrp}",
     "menu:header:all": "All MRPs",
+    "menu:openOrder": "Open {orderNo, select, parent{parent order} other{order {orderNo}}}",
     "menu:copyOrder": "Copy order no",
     "menu:copyOrders": "Copy order nos",
     "menu:copyOrders:success": "List copied to clipboard.",
