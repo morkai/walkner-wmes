@@ -5,6 +5,7 @@
   background: #fff;
   border-top: 1px solid #333;
   overflow-x: scroll;
+  overflow-y: hidden;
 }
 .paintShop-tab {
   flex: 0 0 auto;

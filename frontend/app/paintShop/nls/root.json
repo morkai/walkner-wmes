@@ -139,6 +139,7 @@
     "settings:load:statuses:color": "Color",
     "settings:load:statuses:add": "Add status",
 
+    "mrp:all": "All MRPs",
     "mrp:KSJ": "Drilling",
 
     "planExecutionExport:title": "Export plan execution",

@@ -73,7 +73,7 @@
   "userPicker:logIn": "Zaloguj",
   "userPicker:logOut": "Wyloguj",
 
-  "tabs:all": "Wszystkie",
+  "tabs:all": "Wszystkie przepływy",
   "tabs:dropZone": "Drop zone wywołany",
   "tabs:paint:all": "Wszystkie farby",
   "tabs:paint:msp": "Farby MSP",
@@ -138,6 +138,7 @@
   "settings:load:statuses:color": "Kolor",
   "settings:load:statuses:add": "Dodaj status",
 
+  "mrp:all": "Wszystkie przepływy",
   "mrp:KSJ": "Wiercenie",
 
   "planExecutionExport:title": "Eksport wykonania planu",

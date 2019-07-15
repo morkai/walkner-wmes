@@ -461,7 +461,7 @@ define([
       var orders = page.orders;
       var dropZones = page.dropZones;
 
-      return (orders.allMrps || []).map(function(mrp)
+      return ['all'].concat(orders.allMrps || []).map(function(mrp)
       {
         return {
           mrp: mrp,
@@ -621,7 +621,7 @@ define([
       var mrp = e.currentTarget.dataset.mrp || null;
       var drilling = this.orders.isDrillingMrp(mrp);
 
-      if (drilling)
+      if (drilling || mrp === 'all')
       {
         mrp = null;
       }
@@ -1309,11 +1309,7 @@ define([
       this.renderTotals();
 
       this.$('.paintShop-tab.is-active').removeClass('is-active');
-
-      if (this.orders.selectedMrp !== 'all')
-      {
-        this.$('.paintShop-tab[data-mrp="' + this.orders.selectedMrp + '"]').addClass('is-active');
-      }
+      this.$('.paintShop-tab[data-mrp="' + this.orders.selectedMrp + '"]').addClass('is-active');
     },
 
     onPaintSelected: function()
