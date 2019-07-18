@@ -37,3 +37,12 @@
   <li>Zmieniono importowanie dokumentów z SAP tak, aby po każdym importowaniu aktualizowane były nazwy dokumentów
     w katalogu, które nie mają nazwy.</li>
 </ul>
+<h3>Baza testów > TRW</h3>
+<ul>
+  <li>Zmieniono proces testowania tak, aby pierwsze sprawdzenie wartości wejść w każdym kroku odbywało się po
+    minimum 150ms od ustawienia wyjścia a nie 1ms, aby przekaźniki z poprzedniego kroku miały szansę na
+    wyłączenie się.</li>
+  <li>Zmieniono proces testowania tak, aby przed odłączaniem przewodów wszystkie kroki były ponownie sprawdzane
+    po kolei, aby wykryć przypadek, gdy operator podczas podłączania przewodów w późniejszych krokach
+    przypadkowo odłączył wcześniej podłączone przewody.</li>
+</ul>

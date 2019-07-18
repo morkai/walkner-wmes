@@ -1083,6 +1083,7 @@ define([
       });
       this.model.set({
         state: 'test',
+        pass: 1,
         step: 1,
         error: null,
         test: uuid(),
@@ -1179,7 +1180,7 @@ define([
       }
 
       this.updateConnections();
-      this.setIo(false, this.checkIo);
+      this.setIo(false, this.checkIo, 150);
     },
 
     updateConnections: function()
@@ -1240,7 +1241,7 @@ define([
       }
     },
 
-    setIo: function(reset, nextAction)
+    setIo: function(reset, nextAction, delay)
     {
       var page = this;
       var outputs = [];
@@ -1273,7 +1274,7 @@ define([
           return page.error('setIo', {error: err.message});
         }
 
-        page.scheduleAction(nextAction);
+        page.scheduleAction(nextAction, delay);
       });
     },
 
@@ -1359,10 +1360,34 @@ define([
           }
           else
           {
-            page.scheduleAction(page.tearDown);
+            page.scheduleAction(page.nextPass);
           }
         }
       });
+    },
+
+    nextPass: function()
+    {
+      var currentPass = this.model.get('pass');
+
+      if (currentPass > 1)
+      {
+        return this.tearDown();
+      }
+
+      if (this.model.get('debug'))
+      {
+        console.log('nextPass', {currentPass: currentPass});
+      }
+
+      this.model.set({
+        pass: currentPass + 1,
+        step: 1,
+        setIo: {},
+        checkIo: {}
+      });
+
+      this.setIo(true, this.runStep);
     },
 
     tearDown: function()
