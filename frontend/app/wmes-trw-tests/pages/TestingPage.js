@@ -1179,66 +1179,12 @@ define([
         console.log({setIo: setIo, checkIo: checkIo});
       }
 
-      this.updateConnections();
+      if (this.model.get('state') === 'test')
+      {
+        this.updateConnections();
+      }
+
       this.setIo(false, this.checkIo, 150);
-    },
-
-    updateConnections: function()
-    {
-      var page = this;
-
-      if (!page.jsPlumb)
-      {
-        return;
-      }
-
-      page.jsPlumb.deleteEveryConnection();
-
-      var steps = page.model.program.get('steps');
-      var stepNo = page.model.get('step');
-
-      for (var stepI = 0; stepI < stepNo; ++stepI)
-      {
-        var step = steps[stepI];
-
-        if (!step.source.cluster || !step.target.cluster)
-        {
-          continue;
-        }
-
-        var faded = stepI < stepNo - 1;
-        var cssClass = ['trw-base-canvas-connector'];
-
-        if (faded)
-        {
-          cssClass.push('trw-base-canvas-faded');
-        }
-
-        var connection = page.jsPlumb.connect({
-          uuids: [
-            Program.formatEndpointUuid(step.source),
-            Program.formatEndpointUuid(step.target)
-          ],
-          parameters: {step: step._id},
-          detachable: false,
-          cssClass: cssClass.join(' ')
-        });
-
-        if (!connection)
-        {
-          return;
-        }
-
-        var label = connection.getOverlay('LABEL');
-
-        label.setLabel((stepI + 1).toString());
-        label.setVisible(true);
-
-        if (faded)
-        {
-          label.addClass('trw-base-canvas-faded');
-        }
-      }
     },
 
     setIo: function(reset, nextAction, delay)
@@ -1311,6 +1257,7 @@ define([
 
         var ok = [];
         var nok = [];
+        var testing = page.model.get('state') === 'test';
 
         _.forEach(checkIo, function(io)
         {
@@ -1326,11 +1273,11 @@ define([
 
           if (value >= min && value <= max)
           {
-            ok.push(io._id);
+            (testing ? ok : nok).push(io._id);
           }
           else
           {
-            nok.push(io._id);
+            (testing ? nok : ok).push(io._id);
           }
         });
 
@@ -1347,21 +1294,21 @@ define([
         if (nok.length)
         {
           page.scheduleAction(page.checkIo, 150);
+
+          return;
+        }
+
+        var currentStep = page.model.get('step');
+        var nextProgramStep = page.model.test.get('program').steps[currentStep];
+
+        if (nextProgramStep)
+        {
+          page.model.set('step', currentStep + 1);
+          page.scheduleAction(page.runStep);
         }
         else
         {
-          var currentStep = page.model.get('step');
-          var nextProgramStep = page.model.test.get('program').steps[currentStep];
-
-          if (nextProgramStep)
-          {
-            page.model.set('step', currentStep + 1);
-            page.scheduleAction(page.runStep);
-          }
-          else
-          {
-            page.scheduleAction(page.nextPass);
-          }
+          page.scheduleAction(page.nextPass);
         }
       });
     },
@@ -1396,122 +1343,41 @@ define([
 
       if (/^TEST/.test(page.model.get('line')))
       {
+        if (page.model.get('debug'))
+        {
+          console.log('tearDown skipped');
+        }
+
         page.setIo(true, page.saveTest);
 
         return;
       }
 
-      page.model.set({
-        state: 'test-teardown'
-      });
-
-      var allIo = page.model.get('allIo');
-      var setIo = {};
-      var checkIo = {};
-
-      _.forEach(allIo, function(io)
+      if (page.model.get('state') === 'test-teardown')
       {
-        if (!io.tearDown)
-        {
-          return;
-        }
-
-        if (io.type === 'output')
-        {
-          setIo[io._id] = io;
-        }
-        else
-        {
-          checkIo[io._id] = io;
-        }
-      });
-
-      page.model.set({
-        setIo: setIo,
-        checkIo: checkIo
-      });
-
-      if (page.model.get('debug'))
-      {
-        console.log('tearDown', {
-          setIo: setIo,
-          checkIo: checkIo
-        });
-      }
-
-      page.setIo(false, page.checkTearDown);
-    },
-
-    checkTearDown: function()
-    {
-      var page = this;
-      var inputs = [];
-      var checkIo = page.model.get('checkIo');
-
-      _.forEach(checkIo, function(io)
-      {
-        inputs.push({
-          device: io.device,
-          channel: io.channel
-        });
-      });
-
-      if (page.model.get('debug'))
-      {
-        console.log('checkTearDown', {inputs: inputs});
-      }
-
-      page.runCommand('getIo', {inputs: inputs}, function(err, res)
-      {
-        if (err)
-        {
-          return page.error('getIo', {error: err.message});
-        }
-
-        var ok = [];
-        var nok = [];
-
-        _.forEach(checkIo, function(io)
-        {
-          var value = res[io.device][io.channel];
-          var min = io.min;
-          var max = io.max;
-
-          if (min === 0 && max === 0)
-          {
-            min = 900;
-            max = 1024;
-          }
-
-          if (value >= min && value <= max)
-          {
-            nok.push(io._id);
-          }
-          else
-          {
-            ok.push(io._id);
-          }
-        });
-
         if (page.model.get('debug'))
         {
-          console.log('getIo', {
-            success: nok.length === 0,
-            ok: ok,
-            nok: nok,
-            res: res
-          });
+          console.log('tearDown completed');
         }
 
-        if (nok.length)
-        {
-          page.scheduleAction(page.checkTearDown, 100);
-        }
-        else
-        {
-          page.setIo(true, page.saveTest);
-        }
+        page.setIo(true, page.saveTest);
+
+        return;
+      }
+
+      if (page.model.get('debug'))
+      {
+        console.log('tearDown started');
+      }
+
+      page.model.set({
+        state: 'test-teardown',
+        step: 1,
+        setIo: {},
+        checkIo: {}
       });
+
+      page.setIo(true, page.runStep, 150);
     },
 
     saveTest: function()
@@ -1620,6 +1486,64 @@ define([
           done(null, res);
         })
         .catch(done);
+    },
+
+    updateConnections: function()
+    {
+      var page = this;
+
+      if (!page.jsPlumb)
+      {
+        return;
+      }
+
+      page.jsPlumb.deleteEveryConnection();
+
+      var steps = page.model.program.get('steps');
+      var stepNo = page.model.get('step');
+
+      for (var stepI = 0; stepI < stepNo; ++stepI)
+      {
+        var step = steps[stepI];
+
+        if (!step.source.cluster || !step.target.cluster)
+        {
+          continue;
+        }
+
+        var faded = stepI < stepNo - 1;
+        var cssClass = ['trw-base-canvas-connector'];
+
+        if (faded)
+        {
+          cssClass.push('trw-base-canvas-faded');
+        }
+
+        var connection = page.jsPlumb.connect({
+          uuids: [
+            Program.formatEndpointUuid(step.source),
+            Program.formatEndpointUuid(step.target)
+          ],
+          parameters: {step: step._id},
+          detachable: false,
+          cssClass: cssClass.join(' ')
+        });
+
+        if (!connection)
+        {
+          return;
+        }
+
+        var label = connection.getOverlay('LABEL');
+
+        label.setLabel((stepI + 1).toString());
+        label.setVisible(true);
+
+        if (faded)
+        {
+          label.addClass('trw-base-canvas-faded');
+        }
+      }
     },
 
     ioSet: function(device, channel, value, done)

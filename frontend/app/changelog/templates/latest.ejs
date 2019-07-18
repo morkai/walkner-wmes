@@ -45,4 +45,7 @@
   <li>Zmieniono proces testowania tak, aby przed odłączaniem przewodów wszystkie kroki były ponownie sprawdzane
     po kolei, aby wykryć przypadek, gdy operator podczas podłączania przewodów w późniejszych krokach
     przypadkowo odłączył wcześniej podłączone przewody.</li>
+  <li>Zmieniono proces testowania tak, aby odłączanie przewodów odbywało się krokowo: zamiast włączać wszystkie
+    zdefiniowane wyjścia i czekać na wyłączenie się wszystkich zdefiniowanych wejść, to wszystkie kroki testu są
+    są wykonywane ponownie ale z odwrotym warunkiem (wejście zamiast załączone musi być wyłączone).</li>
 </ul>
