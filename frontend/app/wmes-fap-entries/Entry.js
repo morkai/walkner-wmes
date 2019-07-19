@@ -364,7 +364,7 @@ define([
         observers: loggedIn,
         restart: manage,
         status: solver,
-        level: !finished && (solver || manager),
+        level: !finished && (solver || manager || whman),
         solution: solver,
         problem: started && (manage || procEng || designer || master || leader),
         category: manage || procEng || designer,
