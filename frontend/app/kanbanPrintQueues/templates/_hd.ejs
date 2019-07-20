@@ -13,7 +13,13 @@
   <td class="kanbanPrintQueues-jobCount-separator">/</td>
   <td class="kanbanPrintQueues-jobCount-total"><%- queue.jobCount.total %></td>
   <td class="kanbanPrintQueues-item-separator">▪</td>
-  <td class="kanbanPrintQueues-lineCount" title="<%= queue.lines.join('; ') %>"><%- helpers.t('lineCount', {count: queue.lines.length}) %></td>
+  <td class="kanbanPrintQueues-lineCount" title="<%= queue.lines.length > 2 ? queue.lines.join('; ') : '' %>">
+    <% if (queue.lines.length > 2) { %>
+    <%= queue.lines.slice(0, 2).join('; ') %>; +<%- queue.lines.length - 2 %>
+    <% } else { %>
+    <%= queue.lines.join('; ') %>
+    <% } %>
+  </td>
   <td class="kanbanPrintQueues-item-separator">▪</td>
   <td class="kanbanPrintQueues-kanbanCount" title="<%= queue.kanbans.join('; ') %>"><%- helpers.t('kanbanCount', {count: queue.kanbans.length}) %></td>
   <% ['kk', 'empty', 'full', 'wh', 'desc'].forEach(function(layout) { %>
