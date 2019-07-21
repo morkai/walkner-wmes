@@ -1891,6 +1891,8 @@ app/planning/templates/contextMenu.js
 app/planning/util/contextMenu.js
 app/printers/templates/pageAction.js
 app/printers/views/PrinterPickerView.js
+app/wmes-drilling/DrillingOrder.js
+app/wmes-drilling/DrillingOrderCollection.js
 app/paintShopPaints/PaintShopPaint.js
 app/paintShopPaints/PaintShopPaintCollection.js
 app/paintShop/PaintShopOrder.js
@@ -2160,8 +2162,6 @@ app/wmes-snf-programs/ProgramCollection.js
 app/wmes-snf-programs/routes.js
 app/wmes-snf-tests/routes.js
 app/wmes-luca-events/routes.js
-app/wmes-drilling/DrillingOrder.js
-app/wmes-drilling/DrillingOrderCollection.js
 app/wmes-drilling/DrillingSetting.js
 app/wmes-drilling/DrillingSettingCollection.js
 app/wmes-drilling/DrillingEvent.js
@@ -2909,6 +2909,8 @@ app/planning/templates/contextMenu.js
 app/planning/util/contextMenu.js
 app/printers/templates/pageAction.js
 app/printers/views/PrinterPickerView.js
+app/wmes-drilling/DrillingOrder.js
+app/wmes-drilling/DrillingOrderCollection.js
 app/paintShopPaints/PaintShopPaint.js
 app/paintShopPaints/PaintShopPaintCollection.js
 app/paintShop/PaintShopOrder.js
