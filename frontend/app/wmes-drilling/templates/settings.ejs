@@ -1,0 +1,16 @@
+<form class="settings drilling-settings">
+  <div class="list-group">
+    <% ['planning'].forEach(function(tab) { %>
+    <a class="list-group-item" href="#drilling;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- helpers.t('settings:tab:' + tab) %></a>
+    <% }) %>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-body" data-tab="planning">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-planning-workCenters"><%- helpers.t('settings:planning:workCenters') %></label>
+        <span class="help-block"><%- helpers.t('settings:planning:workCenters:help') %></span>
+        <input id="<%- idPrefix %>-planning-workCenters" name="drilling.workCenters" data-setting>
+      </div>
+    </div>
+  </div>
+</form>

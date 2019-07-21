@@ -103,6 +103,7 @@ exports.modules = [
   'wmes-snf',
   'wmes-trw',
   'wmes-luca-frontend',
+  'wmes-drilling',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'sms/sender',
@@ -197,6 +198,15 @@ exports.updater = {
       mainJsFile: '/wmes-heff.js',
       mainCssFile: '/assets/wmes-heff.css',
       template: manifestTemplates.main,
+      frontendAppData: {},
+      dictionaryModules: {}
+    },
+    {
+      frontendVersionKey: 'drilling',
+      path: '/drilling/manifest.appcache',
+      mainJsFile: '/wmes-drilling.js',
+      mainCssFile: '/assets/wmes-drilling.css',
+      template: manifestTemplates.ps,
       frontendAppData: {},
       dictionaryModules: {}
     },
@@ -448,7 +458,6 @@ exports.user = {
     'PSCS:VIEW', 'PSCS:MANAGE',
     'D8:VIEW', 'D8:MANAGE', 'D8:LEADER', 'D8:DICTIONARIES:VIEW', 'D8:DICTIONARIES:MANAGE',
     'MOR:MANAGE', 'MOR:MANAGE:USERS',
-    'PLANNING:VIEW', 'PLANNING:MANAGE', 'PLANNING:PLANNER', 'PLANNING:WHMAN',
     'PFEP:VIEW', 'PFEP:MANAGE',
     'HELP:MANAGE'
   ]
@@ -503,6 +512,7 @@ exports['messenger/client:wmes-planning'] = Object.assign({}, ports['wmes-planni
   broadcastTopics: [
     'planning.generator.requested',
     'paintShop.generator.requested',
+    'drilling.generator.requested',
     'wh.generator.requested',
     'settings.updated.orders.operations.groups',
     'settings.updated.wh.**'
@@ -611,11 +621,6 @@ exports['directoryWatcher:opinionSurveys'] = {
   maxDelay: 120 * 1000
 };
 
-exports.paintShop = {
-  generator: false,
-  loadSecretKey: ''
-};
-
 exports.prodDowntimeAlerts = {
   messengerServerId: null,
   messengerClientId: 'messenger/client:wmes-alerts'
@@ -643,6 +648,15 @@ exports.mor = {
 };
 
 exports.planning = {
+  generator: false
+};
+
+exports.paintShop = {
+  generator: false,
+  loadSecretKey: ''
+};
+
+exports['wmes-drilling'] = {
   generator: false
 };
 

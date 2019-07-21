@@ -1,0 +1,11 @@
+<% _.forEach(totals, function(total, status) { %>
+<% if (/painted/.test(status)) return %>
+<% if (/^finished/.test(status)) { %>
+<div class="drilling-totals-split">
+  <div class="drilling-totals-total" data-status="finished"><%- totals.finished %></div>
+  <div class="drilling-totals-total" data-status="painted"><%- totals.painted %></div>
+</div>
+<% } else { %>
+<div class="drilling-totals-total" data-status="<%- status %>"><%- total %></div>
+<% } %>
+<% }) %>

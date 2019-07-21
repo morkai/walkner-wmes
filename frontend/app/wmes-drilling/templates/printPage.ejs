@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title><%- helpers.t('printPage:title', {date: time.utc.format(date, 'LL')}) %></title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+      box-sizing: border-box;
+    }
+    body {
+      margin: 15px;
+      font-family: Verdana, sans-serif;
+      font-size: 12px;
+      text-rendering: optimizeLegibility;
+      color: #000;
+      background: #FFF;
+      text-align: center;
+    }
+    .page {
+      margin: auto;
+      text-align: left;
+      width: 21cm;
+      padding: 10mm;
+    }
+    header {
+      padding-bottom: 5mm;
+      margin-bottom: 5mm;
+      font-size: 32px;
+      font-weight: bold;
+      text-align: left;
+      border-bottom: 1px solid #000;
+    }
+    footer {
+      display: flex;
+      padding-top: 5mm;
+      margin-top: 5mm;
+      border-top: 1px solid #000;
+      font-size: 10px;
+    }
+    footer p:first-child {
+      margin-bottom: 3px;
+    }
+    footer > div:first-child {
+      flex: 1 1 auto;
+    }
+    footer > div:last-child {
+      flex: 1 1 auto;
+      text-align: right;
+    }
+    .props {
+      float: right;
+      display: flex;
+    }
+    .prop {
+      margin-left: 5mm;
+    }
+    .prop > span:first-child {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .prop > span:last-child {
+      display: block;
+      font-size: 16px;
+      font-weight: normal;
+    }
+    table {
+      width: 100%;
+      font-size: 12px;
+      border-collapse: collapse;
+    }
+    th {
+      text-align: left;
+      padding: 0 10px 4px 0;
+      white-space: nowrap;
+    }
+    td {
+      padding: 4px 10px 4px 0;
+      white-space: nowrap;
+      width: 1%;
+    }
+    th:last-child,
+    td:last-child {
+      padding-right: 0;
+    }
+    .name {
+      width: auto;
+    }
+    .name > span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 340px;
+    }
+    .no,
+    .qty,
+    .mrp {
+      text-align: right;
+    }
+    .is-component + .is-order > td {
+      border-top: 1px solid #ddd;
+    }
+    #info {
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 7px;
+      width: 100%;
+      background: #FFD1D1;
+      border-bottom: 1px solid #F8ACAC;
+      font-size: 28px;
+      text-align: center;
+    }
+    @media print {
+      body {
+        margin: 0;
+      }
+      .page {
+        width: 100%;
+        padding: 0;
+      }
+      .page + .page {
+        page-break-before: always;
+      }
+      .bd {
+        height: 900px;
+      }
+      #info {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="info"><%- helpers.t('printPage:info') %></div>
+<% pages.forEach(function(page, i) { %>
+<section class="page">
+  <header>
+    <div class="props">
+      <div class="prop">
+        <span><%- helpers.t('printPage:date') %></span>
+        <span><%= time.utc.format(date, 'dd, LL') %></span>
+      </div>
+      <% if (mrp) { %>
+      <div class="prop">
+        <span><%- helpers.t('printPage:mrp') %></span>
+        <span><%= mrp %> %></span>
+      </div>
+      <% } %>
+      <% if (orderNo) { %>
+      <div class="prop">
+        <span><%- helpers.t('printPage:order') %></span>
+        <span><%= orderNo %></span>
+      </div>
+      <% } %>
+    </div>
+    <%- helpers.t('printPage:hd') %>
+  </header>
+  <section class="bd">
+    <table>
+      <thead>
+        <th><%- helpers.t('PROPERTY:no') %></th>
+        <th><%- helpers.t('PROPERTY:order') %></th>
+        <th><%- helpers.t('PROPERTY:nc12') %></th>
+        <th><%- helpers.t('PROPERTY:qty') %></th>
+        <th></th>
+        <th><%- helpers.t('PROPERTY:name') %></th>
+        <th><%- helpers.t('PROPERTY:mrp') %></th>
+      </thead>
+      <tbody>
+      <% page.rows.forEach(function(row) { %>
+      <tr class="is-<%- row.type %>">
+        <td class="no"><%- row.no %></td>
+        <td class="orderNo"><%- row.order %></td>
+        <td class="nc12"><%- row.nc12 %></td>
+        <td class="qty"><%- row.qty.toLocaleString() %></td>
+        <td class="unit"><%- row.unit %></td>
+        <td class="name"><span><%= row.name %></span></td>
+        <td class="mrp"><%= row.mrp %></td>
+      </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </section>
+  <footer>
+    <div>
+      <p><%- helpers.t('printPage:ft', {date: time.utc.format(date, 'LL')}) %></p>
+      <p><%- helpers.t('printPage:printed', {time: time.format(Date.now(), 'LLLL'), user: user.getLabel()}) %></p>
+    </div>
+    <div>
+      <%- helpers.t('printPage:page', {n: i + 1, total: pages.length}) %>
+    </div>
+  </footer>
+</section>
+<% }) %>
+</body>
+</html>

@@ -17,6 +17,8 @@ define([
   'app/production/views/VkbView',
   'app/printers/views/PrinterPickerView',
   'app/planning/util/contextMenu',
+  'app/wmes-drilling/DrillingOrderCollection',
+  'app/wmes-drilling/DrillingOrder',
   'app/paintShopPaints/PaintShopPaintCollection',
   '../PaintShopOrder',
   '../PaintShopOrderCollection',
@@ -50,6 +52,8 @@ define([
   VkbView,
   PrinterPickerView,
   contextMenu,
+  DrillingOrderCollection,
+  DrillingOrder,
   PaintShopPaintCollection,
   PaintShopOrder,
   PaintShopOrderCollection,
@@ -69,8 +73,6 @@ define([
 ) {
   'use strict';
 
-  var APP_ID = window.location.pathname === '/' ? 'paintShop' : 'ps-queue';
-  var IS_EMBEDDED = window.parent !== window || APP_ID === 'ps-queue';
   var STATUS_WEIGHTS = {
     started: 1,
     partial: 2,
@@ -110,7 +112,7 @@ define([
       var page = this;
       var actions = [];
 
-      if (IS_EMBEDDED)
+      if (embedded.isEnabled())
       {
         actions.push({
           id: 'user',
@@ -138,6 +140,11 @@ define([
           privileges: 'PAINT_SHOP:VIEW',
           label: page.t('PAGE_ACTIONS:exportPlanExecution'),
           callback: page.exportPlanExecution.bind(page)
+        }, {
+          label: page.t('PAGE_ACTIONS:drilling'),
+          icon: 'circle-o',
+          privileges: 'DRILLING:VIEW',
+          href: '#drilling/' + page.orders.getDateFilter()
         }, {
           icon: 'balance-scale',
           href: '#paintShop/load',
@@ -219,6 +226,25 @@ define([
       'paintShop.paints.deleted': function(message)
       {
         this.paints.remove(message.model._id);
+      },
+      'drilling.orders.changed.*': function(message)
+      {
+        var currentDate = this.drillingOrders.getDateFilter();
+        var importedDate = time.utc.format(message.date, 'YYYY-MM-DD');
+
+        if (importedDate === currentDate)
+        {
+          this.drillingOrders.applyChanges(message.changes);
+        }
+      },
+      'drilling.orders.updated.*': function(changes)
+      {
+        var order = this.drillingOrders.get(changes._id);
+
+        if (order)
+        {
+          order.set(DrillingOrder.parse(changes));
+        }
       }
     },
 
@@ -294,13 +320,13 @@ define([
 
       this.defineModels();
       this.defineViews();
-      this.defineBindings();
+      this.once('afterRender', this.defineBindings);
 
       this.setView('#-queue', this.queueView);
       this.setView('#-todo', this.todoView);
       this.setView('#-done', this.doneView);
 
-      if (IS_EMBEDDED)
+      if (embedded.isEnabled())
       {
         this.setView('#-vkb', this.vkbView);
       }
@@ -334,27 +360,33 @@ define([
     defineModels: function()
     {
       this.settings = bindLoadingMessage(new PaintShopSettingCollection(null, {pubsub: this.pubsub}), this);
+
       this.paints = bindLoadingMessage(
         new PaintShopPaintCollection(null, {rqlQuery: 'limit(0)'}),
         this
       );
+
       this.dropZones = bindLoadingMessage(
         PaintShopDropZoneCollection.forDate(this.options.date),
         this
       );
+
+      this.drillingOrders = bindLoadingMessage(DrillingOrderCollection.forDate(this.options.date), this);
+
       this.orders = bindLoadingMessage(PaintShopOrderCollection.forDate(this.options.date, {
         selectedMrp: this.options.selectedMrp || 'all',
         selectedPaint: this.options.selectedPaint || 'all',
         settings: this.settings,
         paints: this.paints,
         dropZones: this.dropZones,
-        user: JSON.parse(sessionStorage.getItem('WMES_PS_USER') || 'null')
+        user: JSON.parse(sessionStorage.getItem('WMES_PS_USER') || 'null'),
+        drillingOrders: this.drillingOrders
       }), this);
     },
 
     defineViews: function()
     {
-      this.vkbView = IS_EMBEDDED ? new VkbView() : null;
+      this.vkbView = embedded.isEnabled() ? new VkbView() : null;
       this.todoView = new PaintShopListView({
         model: this.orders,
         showTimes: false,
@@ -395,7 +427,7 @@ define([
         orders: this.orders,
         dropZones: this.dropZones,
         vkb: this.vkbView,
-        embedded: IS_EMBEDDED
+        embedded: embedded.isEnabled()
       });
     },
 
@@ -404,12 +436,12 @@ define([
       var page = this;
       var idPrefix = page.idPrefix;
 
-      page.listenTo(page.orders, 'reset', _.after(2, page.onOrdersReset));
+      page.listenTo(page.orders, 'reset', page.onOrdersReset);
       page.listenTo(page.orders, 'mrpSelected', page.onMrpSelected);
       page.listenTo(page.orders, 'paintSelected', page.onPaintSelected);
       page.listenTo(page.orders, 'totalsRecounted', page.renderTotals);
 
-      page.listenTo(page.dropZones, 'reset', _.after(2, page.renderTabs));
+      page.listenTo(page.dropZones, 'reset', page.renderTabs);
       page.listenTo(page.dropZones, 'updated', page.onDropZoneUpdated);
 
       page.listenTo(page.paints, 'add change remove', page.onPaintUpdated);
@@ -423,32 +455,40 @@ define([
 
       $(window)
         .on('resize.' + idPrefix, page.onResize);
-
-      page.once('afterRender', function()
-      {
-        if (IS_EMBEDDED)
-        {
-          window.parent.postMessage({type: 'ready', app: APP_ID}, '*');
-        }
-
-        page.onOrdersReset();
-      });
     },
 
     load: function(when)
     {
-      return when(
-        this.settings.fetch({reset: true}),
-        this.orders.fetch({reset: true}),
-        this.dropZones.fetch({reset: true}),
-        this.paints.fetch({reset: true})
+      var page = this;
+      var deferred = $.Deferred();
+
+      var load1 = $.when(
+        page.settings.fetch({reset: true}),
+        page.dropZones.fetch({reset: true}),
+        page.paints.fetch({reset: true}),
+        page.drillingOrders.fetch({reset: true})
       );
+
+      load1.fail(function() { deferred.reject.apply(deferred, arguments); });
+
+      load1.done(function()
+      {
+        var load2 = page.promised(page.orders.fetch());
+
+        load2.fail(function() { deferred.reject.apply(deferred, arguments); });
+
+        load2.done(function() { deferred.resolve(); });
+      });
+
+      return when(deferred.promise());
     },
 
     getTemplateData: function()
     {
+      this.orders.serialize();
+
       return {
-        embedded: IS_EMBEDDED,
+        embedded: embedded.isEnabled(),
         height: this.calcInitialHeight() + 'px',
         renderTabs: mrpTabsTemplate,
         renderTotals: totalsTemplate,
@@ -488,7 +528,7 @@ define([
     {
       document.body.style.overflow = 'hidden';
       document.body.classList.toggle('paintShop-is-fullscreen', this.isFullscreen());
-      document.body.classList.toggle('paintShop-is-embedded', IS_EMBEDDED);
+      document.body.classList.toggle('paintShop-is-embedded', embedded.isEnabled());
     },
 
     afterRender: function()
@@ -499,8 +539,10 @@ define([
 
       $('.modal.fade').removeClass('fade');
 
-      embedded.render(this);
       this.resize();
+
+      embedded.render(this);
+      embedded.ready();
     },
 
     resize: function()
@@ -510,7 +552,7 @@ define([
 
     isFullscreen: function()
     {
-      return IS_EMBEDDED
+      return embedded.isEnabled()
         || this.options.fullscreen
         || window.innerWidth <= 800
         || (window.outerWidth === window.screen.width && window.outerHeight === window.screen.height);
@@ -584,7 +626,7 @@ define([
 
     updateUrl: function()
     {
-      if (!IS_EMBEDDED)
+      if (!embedded.isEnabled())
       {
         this.broker.publish('router.navigate', {
           url: this.genClientUrl(),
@@ -632,6 +674,7 @@ define([
         mrp = null;
       }
 
+      var isEmbedded = embedded.isEnabled();
       var actionOptions = {
         filterProperty: drilling || !mrp ? null : 'mrp',
         filterValue: mrp,
@@ -643,13 +686,13 @@ define([
           icon: 'fa-clipboard',
           label: this.t('menu:copyOrders'),
           handler: this.handleCopyOrdersAction.bind(this, e, actionOptions),
-          visible: !IS_EMBEDDED
+          visible: !isEmbedded
         },
         {
           icon: 'fa-clipboard',
           label: this.t('menu:copyChildOrders'),
           handler: this.handleCopyChildOrdersAction.bind(this, e, actionOptions),
-          visible: !IS_EMBEDDED
+          visible: !isEmbedded
         },
         {
           icon: 'fa-print',
@@ -660,7 +703,7 @@ define([
           icon: 'fa-download',
           label: this.t('menu:exportOrders'),
           handler: this.handleExportOrdersAction.bind(this, actionOptions),
-          visible: !IS_EMBEDDED
+          visible: !isEmbedded
         }
       ];
 
@@ -669,7 +712,7 @@ define([
         menu.push({
           label: this.t('menu:exportPaints'),
           handler: this.handleExportPaintsAction.bind(this, mrp),
-          visible: !IS_EMBEDDED
+          visible: !isEmbedded
         });
       }
 
@@ -706,7 +749,7 @@ define([
       var page = this;
       var url = '/#orders/' + options.orderNo;
 
-      if (IS_EMBEDDED)
+      if (!embedded.isEnabled())
       {
         window.open(url);
 
@@ -1439,11 +1482,23 @@ define([
 
     setDate: function(newDate)
     {
-      this.orders.setDateFilter(newDate);
-      this.dropZones.setDate(this.orders.getDateFilter());
+      var page = this;
 
-      this.promised(this.orders.fetch({reset: true}));
-      this.promised(this.dropZones.fetch({reset: true}));
+      page.orders.setDateFilter(newDate);
+      page.drillingOrders.setDateFilter(newDate);
+      page.dropZones.setDate(page.orders.getDateFilter());
+
+      page.orders.reset([]);
+      page.drillingOrders.reset([]);
+      page.dropZones.reset([]);
+
+      var dropZones = page.promised(page.dropZones.fetch({reset: true}));
+      var drillingOrders = page.drillingOrders.fetch({reset: true});
+
+      $.when(dropZones, drillingOrders).done(function()
+      {
+        page.promised(page.orders.fetch({reset: true}));
+      });
     },
 
     showDatePickerDialog: function()

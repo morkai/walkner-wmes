@@ -14,11 +14,12 @@ exports.modules = [
   'orders',
   'planning',
   'paintShop',
+  'wmes-drilling',
   'wh'
 ];
 
 exports.events = {
-  collection: function(app) { return app.mongoose.model('Event').collection; },
+  collection: app => app.mongoose.model('Event').collection,
   insertDelay: 1000,
   topics: {
     debug: [
@@ -36,7 +37,7 @@ exports.events = {
 exports.mongoose = {
   uri: mongodb.uri,
   mongoClient: Object.assign(mongodb.mongoClient, {
-    poolSize: 3,
+    poolSize: 5,
     readPreference: 'secondaryPreferred'
   }),
   maxConnectTries: 10,
@@ -60,6 +61,7 @@ exports['messenger/server'] = Object.assign({}, ports[exports.id], {
     'planning.generator.finished',
     'planning.changes.created',
     'paintShop.orders.changed.*',
+    'drilling.orders.changed.*',
     'wh.orders.changed.*'
   ]
 });
@@ -83,5 +85,9 @@ exports.paintShop = {
 };
 
 exports.wh = {
+  generator: true
+};
+
+exports['wmes-drilling'] = {
   generator: true
 };

@@ -14,6 +14,7 @@
     "MSG:deliver:failure": "Failed to deliver order.",
     "MSG:search:failure": "Order not found.",
 
+    "PAGE_ACTIONS:drilling": "Drilling",
     "PAGE_ACTIONS:load": "Load",
     "PAGE_ACTIONS:paints": "Paints",
     "PAGE_ACTIONS:settings": "Settings",

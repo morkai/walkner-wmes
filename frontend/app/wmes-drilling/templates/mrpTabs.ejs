@@ -1,0 +1,10 @@
+<% tabs.forEach(function(tab) { %>
+<div class="drilling-tab <%- tab.active ? 'is-active' : '' %>" data-mrp="<%- tab.mrp %>">
+  <% if (tab.description) { %>
+  <span class="drilling-tab-description"><%= tab.description %></span>
+  <% } else { %>
+  <%= tab.label %>
+  <% } %>
+</div>
+<% }) %>
+<div class="drilling-tab"></div>

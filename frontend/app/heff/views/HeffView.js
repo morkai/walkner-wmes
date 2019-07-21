@@ -114,7 +114,7 @@ define([
       this.loadData();
 
       embedded.render(this);
-      embedded.ready('heff');
+      embedded.ready();
     },
 
     loadData: function()

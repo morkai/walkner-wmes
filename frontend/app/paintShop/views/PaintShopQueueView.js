@@ -94,7 +94,7 @@ define([
       this.lastClickEvent = null;
       this.lastFocusedOrder = null;
 
-      this.listenTo(this.orders, 'reset', _.after(2, this.render));
+      this.listenTo(this.orders, 'reset', this.render);
       this.listenTo(this.orders, 'change', this.onChange);
       this.listenTo(this.orders, 'focus', this.onFocus);
       this.listenTo(this.orders, 'mrpSelected paintSelected', this.toggleVisibility);
@@ -117,7 +117,7 @@ define([
           first: false,
           last: false,
           commentVisible: true,
-          rowSpan: 'rowSpan',
+          rowSpan: 'rowSpanDetails',
           mrpDropped: view.dropZones.getState(order.mrp),
           getChildOrderDropZoneClass: getChildOrderDropZoneClass
         };
@@ -506,7 +506,7 @@ define([
         first: $order.hasClass('is-first'),
         last: $order.hasClass('is-last'),
         commentVisible: true,
-        rowSpan: 'rowSpan',
+        rowSpan: 'rowSpanDetails',
         mrpDropped: view.dropZones.getState(orderData.mrp),
         getChildOrderDropZoneClass: view.orders.getChildOrderDropZoneClass.bind(view.orders)
       }));

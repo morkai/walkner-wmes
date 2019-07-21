@@ -1,0 +1,12 @@
+<div class="drilling-queue">
+  <% if (!orders.length) { %>
+  <p id="<%- idPrefix %>-empty" class="drilling-queue-empty"><%- t('wmes-drilling', 'empty') %></p>
+  <% } else { %>
+  <table id="<%- idPrefix %>-orders" class="drilling-orders">
+    <% orders.forEach(function(order) { %>
+    <%- renderQueueOrder(order) %>
+    <% }) %>
+  </table>
+  <hr>
+  <% } %>
+</div>

@@ -13,6 +13,7 @@
   "MSG:deliver:failure": "Nie udało się dostarczyć zlecenia.",
   "MSG:search:failure": "Nie znaleziono zlecenia.",
 
+  "PAGE_ACTIONS:drilling": "Wiercenie",
   "PAGE_ACTIONS:load": "Obciążenie",
   "PAGE_ACTIONS:paints": "Farby",
   "PAGE_ACTIONS:settings": "Ustawienia",
@@ -82,6 +83,11 @@
   "multiPaint": "UWAGA! Zlecenie z {count, plural, one{jedną farbą} =2{dwiema farbami} other{{count} farbami}}.",
   "noPaints": "UWAGA! Zlecenie bez malowania.",
   "drilling": "UWAGA! Komponenty do wiercenia.",
+  "drilling:new": "UWAGA! Oczekiwanie na wiercenie komponentów.",
+  "drilling:started": "UWAGA! Wiercenie komponentów w toku.",
+  "drilling:partial": "UWAGA! Wiercenie komponentów zostało przerwane.",
+  "drilling:finished": "Wiercenie zakończone.",
+  "drilling:cancelled": "UWAGA! Zlecenie wiercenia zostało anulowane.",
 
   "orderChanges:change:reset": "Zresetowano zlecenie.",
   "orderChanges:change:cancel": "Anulowano zlecenie.",

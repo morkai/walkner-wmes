@@ -1,0 +1,8 @@
+<div class="drilling-userPicker-pageAction is-clickable">
+  <% if (signedIn) { %>
+  <%= user.label %>
+  <% } else { %>
+  <%- t('wmes-drilling', 'userPicker:guest') %>
+  <% } %>
+  <i class="fa fa-user"></i>
+</div>

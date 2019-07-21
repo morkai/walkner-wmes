@@ -13,6 +13,8 @@ define([
 
   return SettingCollection.extend({
 
+    nlsDomain: 'paintShop',
+
     model: PaintShopSetting,
 
     topicSuffix: 'paintShop.**',
@@ -26,7 +28,7 @@ define([
 
     prepareValue: function(id, newValue)
     {
-      if (/(workCenters|mspPaints|unpaintedMrps)$/i.test(id))
+      if (/workCenters$/i.test(id))
       {
         return newValue.split(',').filter(function(v) { return v.length > 0; });
       }

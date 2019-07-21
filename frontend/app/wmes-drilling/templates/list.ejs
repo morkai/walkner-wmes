@@ -1,0 +1,21 @@
+<div class="drilling-list <%- showTimes ? 'drilling-list-with-times' : '' %>">
+  <% orders.forEach(function(order) { %>
+  <div class="drilling-list-item <%- isVisible(order) ? 'visible' : 'hidden' %>" data-order-id="<%- order._id %>" data-status="<%- order.status %>" data-mrp="<%- order.mrp %>" data-cabin="<%- order.cabin %>">
+    <span class="drilling-list-order"><%- order.order %></span>
+    <% if (showTimes && order.startedAtTime) { %>
+    <span class="drilling-list-time"><i class="fa fa-hourglass-start"></i> <%- order.startedAtTime %></span>
+    <% } %>
+    <% if (showTimes) { %>
+    <% if (order.status === 'partial') { %>
+    <span class="drilling-list-time"><i class="fa fa-check"></i> <%- order.qtyDone.toLocaleString() %>/<%- order.qty.toLocaleString() %></span>
+    <% } else if (order.finishedAtTime) { %>
+    <span class="drilling-list-time"><i class="fa fa-hourglass-end"></i> <%- order.finishedAtTime %></span>
+    <% } %>
+    <% if (order.cabin) { %>
+    <span class="drilling-list-cabin"><%- order.cabin %></span>
+    <% } %>
+    <% } %>
+  </div>
+  <% }) %>
+  <div class="drilling-list-item">&nbsp;</div>
+</div>

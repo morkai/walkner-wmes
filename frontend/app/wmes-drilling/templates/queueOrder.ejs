@@ -1,0 +1,77 @@
+<tbody class="drilling-order <%- visible ? 'visible' : 'hidden' %> <%- first ? 'is-first' : '' %> <%- last ? 'is-last' : '' %>" data-order-id="<%- order._id %>" data-status="<%- order.status %>" data-mrp="<%= order.mrp %>">
+  <tr class="drilling-properties drilling-order-order">
+    <td class="drilling-property" data-property="no" rowspan="<%- order[rowSpan] %>">
+      <%- order.no %>
+      <% order.followups.forEach(function(followup) { %>
+      <br>
+      <span class="drilling-order-followup" data-followup-id="<%- followup.id %>">
+        <i class="fa fa-long-arrow-<%- order.no < followup.no ? 'down' : 'up' %>"></i>
+        <br>
+        <%- followup.no %>
+        </span>
+      <% }) %>
+    </td>
+    <td class="drilling-property" data-property="order"><%- order.order %></td>
+    <td class="drilling-property" data-property="nc12"><%- order.nc12 %></td>
+    <td class="drilling-property" data-property="qty"><%- order.qty.toLocaleString() %></td>
+    <td class="drilling-property" data-property="unit">PCE</td>
+    <td class="drilling-property" data-property="name"><%- order.name %></td>
+    <td class="drilling-property"></td>
+    <td class="drilling-property" data-property="mrpTimePlacement" rowspan="<%- order[rowSpan] %>">
+      <span class="drilling-property drilling-property-mrp" data-property="mrp" data-mrp="<%- order.mrp %>" title="<%- t('wmes-drilling', 'PROPERTY:mrp') %>">
+        <i class="fa fa-filter"></i><span><%- order.mrp %></span>
+      </span>
+      <% if (order.startTime) { %>
+      <span class="drilling-property" data-property="startTime" title="<%- t('wmes-drilling', 'PROPERTY:startTime') %>">
+      <i class="fa fa-clock-o"></i><span><%- order.startTimeTime %></span>
+      </span>
+      <% } %>
+      <% if (order.qtyDrill) { %>
+      <span class="drilling-property" data-property="qtyDrill" title="<%- t('wmes-drilling', 'PROPERTY:qtyDrill') %>">
+        <i class="fa fa-circle-o"></i><span><%- order.qtyDrill.toLocaleString() %></span>
+      </span>
+      <% } %>
+      <% if (order.qtyDone) { %>
+      <span class="drilling-property" data-property="qtyDone" title="<%- t('wmes-drilling', 'PROPERTY:qtyDone') %>">
+        <i class="fa fa-check"></i><span><%- order.qtyDone.toLocaleString() %></span>
+      </span>
+      <% } %>
+    </td>
+    <td class="drilling-property" rowspan="<%- order[rowSpan] %>" data-property="times">
+      <% if (order.startedAt) { %>
+      <span class="drilling-property" data-property="startedAt" title="<%- t('wmes-drilling', 'PROPERTY:startedAt') %>">
+        <i class="fa fa-hourglass-start"></i><span><%- order.startedAtDate %></span>
+      </span>
+      <% } %>
+      <% if (order.finishedAt) { %>
+      <span class="drilling-property" data-property="finishedAt" title="<%- t('wmes-drilling', 'PROPERTY:finishedAt') %>">
+        <i class="fa fa-hourglass-end"></i><span><%- order.finishedAtDate %></span>
+      </span>
+      <% } %>
+      <% if (commentVisible && order.comment) { %>
+      <span class="drilling-property" data-property="comment" title="<%- t('wmes-drilling', 'PROPERTY:comment') %>">
+        <i class="fa fa-comment"></i><span><%= order.comment %></span>
+      </span>
+      <% } %>
+    </td>
+  </tr>
+  <% order.childOrders.forEach(function(childOrder, i) { %>
+  <tr class="drilling-properties drilling-order-childOrder <%- childOrder.last ? 'is-last' : '' %> <%- childOrder.deleted ? 'is-deleted' : '' %>">
+    <td class="drilling-property" data-property="order" rowspan="<%- childOrder[rowSpan] %>"><%- childOrder.order %></td>
+    <td class="drilling-property" data-property="nc12"><%- childOrder.nc12 %></td>
+    <td class="drilling-property" data-property="qty"><%- childOrder.qty ? childOrder.qty.toLocaleString() : '?' %></td>
+    <td class="drilling-property">PCE</td>
+    <td class="drilling-property" data-property="name"><%= childOrder.name %></td>
+    <td class="drilling-property"></td>
+  </tr>
+  <% childOrder.components.forEach(function(component) { %>
+  <tr class="drilling-properties drilling-order-component <%- childOrder.deleted ? 'is-deleted' : '' %>">
+    <td class="drilling-property" data-property="nc12"><%- component.nc12 %></td>
+    <td class="drilling-property" data-property="qty"><%- Math.ceil(component.qty).toLocaleString() %></td>
+    <td class="drilling-property" data-property="unit"><%- component.unit %></td>
+    <td class="drilling-property" data-property="name"><%= component.name %></td>
+    <td class="drilling-property" data-property="placement"><%= component.placement %></td>
+  </tr>
+  <% }) %>
+  <% }) %>
+</tbody>

@@ -1,0 +1,58 @@
+<table class="drilling-orderDetails">
+  <thead>
+  <tr>
+    <th><%- helpers.t('PROPERTY:no') %></th>
+    <th><%- helpers.t('PROPERTY:order') %></th>
+    <th><%- helpers.t('PROPERTY:nc12') %></th>
+    <th colspan="2"><%- helpers.t('PROPERTY:qty') %></th>
+    <th><%- helpers.t('PROPERTY:name') %></th>
+    <th colspan="3"><%- helpers.t('PROPERTY:placement') %></th>
+  </tr>
+  </thead>
+  <% if (canAct) { %>
+  <tfoot>
+  <tr>
+    <td colspan="9">
+      <div class="drilling-orderDetails-actions">
+        <% if (order.status === 'new') { %>
+        <button class="btn btn-info" type="button" data-action="start" data-cabin="0"><%- helpers.t('action:start') %></button>
+        <button class="btn btn-danger" type="button" data-action="cancel"><%- helpers.t('action:cancel') %></button>
+        <% } else if (order.status === 'cancelled') { %>
+        <button class="btn btn-default" type="button" data-action="reset"><%- helpers.t('action:reset') %></button>
+        <% } else if (order.status === 'started') { %>
+        <div class="drilling-orderDetails-qtyDone">
+          <input id="<%- idPrefix %>-qtyDone" class="form-control" type="text" autocomplete="new-password" maxlength="3" min="0" max="999" placeholder="<%- order.qty %>" data-vkb="numeric">
+          <button class="btn btn-success" type="button" data-action="finish" title="<%- helpers.t('action:finish') %>"><i class="fa fa-check"></i></button>
+        </div>
+        <button class="btn btn-default" type="button" data-action="reset"><%- helpers.t('action:reset') %></button>
+        <button class="btn btn-danger" type="button" data-action="cancel"><%- helpers.t('action:cancel') %></button>
+        <% } else if (order.status === 'partial') { %>
+        <button class="btn btn-info" type="button" data-action="start"><%- helpers.t('action:continue') %></button>
+        <button class="btn btn-default" type="button" data-action="reset"><%- helpers.t('action:reset') %></button>
+        <button class="btn btn-danger" type="button" data-action="cancel"><%- helpers.t('action:cancel') %></button>
+        <% } else if (order.status === 'finished' || order.status === 'painted') { %>
+        <button class="btn btn-info" type="button" data-action="start"><%- helpers.t('action:continue') %></button>
+        <button class="btn btn-default" type="button" data-action="reset"><%- helpers.t('action:reset') %></button>
+        <button class="btn btn-danger" type="button" data-action="cancel"><%- helpers.t('action:cancel') %></button>
+        <% } %>
+      </div>
+    </td>
+  </tr>
+  </tfoot>
+  <% } %>
+  <%- renderQueueOrder({
+    order: order,
+    visible: true,
+    first: false,
+    last: false,
+    commentVisible: false,
+    rowSpan: 'rowSpanDetails'
+  }) %>
+  <% if (canAct) { %>
+  <tbody>
+  <tr>
+    <td id="<%- idPrefix %>-filler" class="drilling-orderDetails-filler" colspan="9" style="height: <%- fillerHeight %>px"></td>
+  </tr>
+  </tbody>
+  <% } %>
+</table>

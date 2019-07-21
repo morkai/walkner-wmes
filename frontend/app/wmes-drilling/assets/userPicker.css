@@ -1,0 +1,41 @@
+.drilling-userPicker-pageAction {
+  margin-top: -7px;
+  font-size: 34px;
+}
+.drilling-userPicker-pageAction.is-clickable {
+  cursor: pointer;
+  color: #337ab7;
+}
+.drilling-userPicker-pageAction.is-clickable:hover {
+  color: #23527c;
+}
+.drilling-userPicker-dialog .modal-body {
+  padding: 0;
+}
+.drilling-userPicker-users {
+  overflow-y: scroll;
+}
+.drilling-userPicker-actions {
+  display: flex;
+}
+.drilling-userPicker-actions .btn {
+  flex: 1 1 auto;
+  height: 65px;
+  font-size: 35px;
+}
+.drilling-userPicker-user {
+  padding: 7px 14px;
+  font-size: 35px;
+  border-bottom: 1px dotted #999;
+  cursor: pointer;
+}
+.drilling-userPicker-user:last-child {
+  border-bottom: none;
+}
+.drilling-userPicker-user:hover {
+  background-color: #ffffa6;
+}
+.drilling-userPicker-user.active {
+  background-color: #428BCA;
+  color: #fff;
+}

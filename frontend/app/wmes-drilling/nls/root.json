@@ -1,0 +1,103 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "Drilling",
+    "BREADCRUMBS:settings": "Settings",
+
+    "MSG:date:failure": "Failed to find date.",
+    "MSG:date:empty": "No orders.",
+    "MSG:start:failure": "Failed to start order.",
+    "MSG:continue:failure": "Failed to continue order.",
+    "MSG:finish:failure": "Failed to finish order.",
+    "MSG:reset:failure": "Failed to reset order.",
+    "MSG:cancel:failure": "Failed to cancel order.",
+    "MSG:search:failure": "Order not found.",
+
+    "PAGE_ACTIONS:paintShop": "Paint shop",
+    "PAGE_ACTIONS:settings": "Settings",
+
+    "PROPERTY:order": "Order",
+    "PROPERTY:nc12": "Product 12NC",
+    "PROPERTY:name": "Product/component name",
+    "PROPERTY:qty": "Quantity",
+    "PROPERTY:qtyDone": "Quantity drilled",
+    "PROPERTY:qtyDrill": "Quantity to drill",
+    "PROPERTY:mrp": "MRP",
+    "PROPERTY:startTime": "Assembly time",
+    "PROPERTY:placement": "Placement",
+    "PROPERTY:no": "No",
+    "PROPERTY:status": "Status",
+    "PROPERTY:startedAt": "Started at",
+    "PROPERTY:finishedAt": "Finished at",
+    "PROPERTY:comment": "Comment",
+
+    "status:new": "Pending",
+    "status:started": "Started",
+    "status:finished": "Finished",
+    "status:painted": "Painted",
+    "status:partial": "Partial",
+    "status:cancelled": "Cancelled",
+
+    "action:start": "Start",
+    "action:finish": "Finish",
+    "action:cancel": "Cancel",
+    "action:reset": "Reset",
+    "action:continue": "Continue",
+    "action:comment": "Comment",
+
+    "datePicker:d0": "Today",
+    "datePicker:d+1": "Tomorrow",
+    "datePicker:d+2": "Day after tomorrow",
+    "datePicker:d-1": "Yesterday",
+    "datePicker:d-2": "Day before yesterday",
+    "datePicker:submit": "Pick date",
+    "datePicker:placeholder:day": "dd",
+    "datePicker:placeholder:month": "mm",
+    "datePicker:placeholder:year": "yyyy",
+    "datePicker:invalid": "Enter a valid date.",
+
+    "userPicker:guest": "Log in",
+    "userPicker:logIn": "Log in",
+    "userPicker:logOut": "Log out",
+
+    "tabs:all": "All",
+
+    "empty": "No orders for the specified date.",
+
+    "orderChanges:change:reset": "Reset order.",
+    "orderChanges:change:cancel": "Cancelled order.",
+    "orderChanges:change:start": "Started order.",
+    "orderChanges:change:finish": "Finished {qtyDone} PCE",
+    "orderChanges:change:continue": "Resumed order.",
+
+    "menu:header:mrp": "{mrp}",
+    "menu:header:all": "All MRPs",
+    "menu:openOrder": "Open {orderNo, select, parent{parent order} other{order {orderNo}}}",
+    "menu:copyOrder": "Copy order no",
+    "menu:copyOrders": "Copy order nos",
+    "menu:copyOrders:success": "List copied to clipboard.",
+    "menu:copyChildOrders": "Copy child order nos",
+    "menu:copyChildOrders:success": "List copied to clipboard.",
+    "menu:printOrder": "Print order",
+    "menu:printOrders": "Print orders",
+    "menu:printOrders:all": "Print all orders",
+    "menu:printOrders:mrp": "Print {mrp} orders",
+    "menu:exportOrders": "Export orders",
+
+    "settings:tab:planning": "Planning",
+    "settings:planning:workCenters": "WorkCenters",
+    "settings:planning:workCenters:help": "WorkCenters used during the generation of the drilling order queue to load drilling child orders for the planned production orders.",
+
+    "mrp:all": "All MRPs",
+
+    "printPage:title": "Drilling plan for {date}",
+    "printPage:hd": "Drilling plan",
+    "printPage:ft": "Drilling plan for {date}.",
+    "printPage:info": "Press <kbd>Ctrl+P</kbd> to start printing.",
+    "printPage:date": "Date:",
+    "printPage:mrp": "MRP:",
+    "printPage:order": "Order:",
+    "printPage:page": "Page {n} of {total}",
+    "printPage:printed": "Printed on {time} by {user} with WMES."
+  },
+  "pl": true
+}

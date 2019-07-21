@@ -1,48 +1,38 @@
 <form class="settings paintShop-settings">
   <div class="list-group">
     <% ['planning', 'load'].forEach(function(tab) { %>
-    <a class="list-group-item" href="#paintShop;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- t('paintShop', 'settings:tab:' + tab) %></a>
+    <a class="list-group-item" href="#paintShop;settings?tab=<%- tab %>" data-tab="<%- tab %>"><%- helpers.t('settings:tab:' + tab) %></a>
     <% }) %>
   </div>
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="planning">
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-workCenters"><%- t('paintShop', 'settings:planning:workCenters') %></label>
-        <span class="help-block"><%- t('paintShop', 'settings:planning:workCenters:help') %></span>
+        <label for="<%- idPrefix %>-planning-workCenters"><%- helpers.t('settings:planning:workCenters') %></label>
+        <span class="help-block"><%- helpers.t('settings:planning:workCenters:help') %></span>
         <input id="<%- idPrefix %>-planning-workCenters" name="paintShop.workCenters" data-setting>
       </div>
       <div class="form-group">
-        <label for="<%- idPrefix %>-planning-unpaintedMrps"><%- t('paintShop', 'settings:planning:unpaintedMrps') %></label>
-        <span class="help-block"><%- t('paintShop', 'settings:planning:unpaintedMrps:help') %></span>
-        <input id="<%- idPrefix %>-planning-unpaintedMrps" name="paintShop.unpaintedMrps" data-setting>
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-planning-drillingWorkCenters"><%- t('paintShop', 'settings:planning:drillingWorkCenters') %></label>
-        <span class="help-block"><%- t('paintShop', 'settings:planning:drillingWorkCenters:help') %></span>
-        <input id="<%- idPrefix %>-planning-drillingWorkCenters" name="paintShop.drillingWorkCenters" data-setting>
-      </div>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-planning-mspPaints"><%- t('paintShop', 'settings:planning:mspPaints') %></label>
-        <span class="help-block"><%- t('paintShop', 'settings:planning:mspPaints:help') %></span>
+        <label for="<%- idPrefix %>-planning-mspPaints"><%- helpers.t('settings:planning:mspPaints') %></label>
+        <span class="help-block"><%- helpers.t('settings:planning:mspPaints:help') %></span>
         <input id="<%- idPrefix %>-planning-mspPaints" name="paintShop.mspPaints" data-setting>
       </div>
     </div>
     <div class="panel-body" data-tab="load">
-      <label><%- t('paintShop', 'settings:load:statuses') %></label>
+      <label><%- helpers.t('settings:load:statuses') %></label>
       <table class="table table-condensed table-with-tfoot">
         <thead>
         <tr>
-          <th class="is-min"><%- t('paintShop', 'settings:load:statuses:from') %></th>
-          <th class="is-min"><%- t('paintShop', 'settings:load:statuses:to') %></th>
-          <th class="is-min" colspan="2"><%- t('paintShop', 'settings:load:statuses:icon') %></th>
-          <th class="is-min"><%- t('paintShop', 'settings:load:statuses:color') %></th>
+          <th class="is-min"><%- helpers.t('settings:load:statuses:from') %></th>
+          <th class="is-min"><%- helpers.t('settings:load:statuses:to') %></th>
+          <th class="is-min" colspan="2"><%- helpers.t('settings:load:statuses:icon') %></th>
+          <th class="is-min"><%- helpers.t('settings:load:statuses:color') %></th>
           <th></th>
           <th><%- t('core', 'LIST:COLUMN:actions') %></th>
         </tr>
         </thead>
         <tfoot>
         <tr>
-          <td colspan="7"><button id="<%- idPrefix %>-load-addStatus" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- t('paintShop', 'settings:load:statuses:add') %></span></button></td>
+          <td colspan="7"><button id="<%- idPrefix %>-load-addStatus" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- helpers.t('settings:load:statuses:add') %></span></button></td>
         </tr>
         </tfoot>
         <tbody id="<%- idPrefix %>-load-statuses"></tbody>

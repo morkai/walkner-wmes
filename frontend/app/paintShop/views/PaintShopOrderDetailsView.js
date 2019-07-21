@@ -76,7 +76,7 @@ define([
       this.vkb = this.options.vkb;
       this.psEvents = PaintShopEventCollection.forOrder(this.model.id);
 
-      this.listenTo(this.model, 'change', this.reloadChanges.bind(this));
+      this.listenTo(this.orders, 'change', this.onChange);
 
       if (this.vkb)
       {
@@ -107,16 +107,6 @@ define([
     getTemplateData: function()
     {
       var order = this.model.serialize();
-
-      order.childOrders.forEach(function(childOrder)
-      {
-        childOrder.paintCount = 0;
-
-        childOrder.components.forEach(function(component)
-        {
-          childOrder.paintCount += component.unit === 'G' || component === 'KG' ? 1 : 0;
-        });
-      });
 
       return {
         order: order,
@@ -150,7 +140,7 @@ define([
 
     afterRender: function()
     {
-      if (1 || this.options.height === 0)
+      if (this.options.height === 0)
       {
         this.options.height = this.$('tbody')[0].clientHeight;
 
@@ -159,6 +149,7 @@ define([
 
       this.renderChanges();
       this.reloadChanges();
+      this.toggleActions();
     },
 
     renderChanges: function()
@@ -213,6 +204,16 @@ define([
           .html(html)
           .prop('scrollTop', 99999);
       });
+    },
+
+    toggleActions: function()
+    {
+      var disabled = _.some(this.model.serialize().childOrders, function(childOrder)
+      {
+        return childOrder.drilling && childOrder.drilling !== 'finished';
+      });
+
+      this.$('.btn[data-action="start"]').prop('disabled', disabled);
     },
 
     scheduleHideVkb: function()
@@ -317,6 +318,34 @@ define([
           });
         }
       });
+    },
+
+    onChange: function(order, options)
+    {
+      if (order !== this.model)
+      {
+        return;
+      }
+
+      var html = this.renderPartialHtml(queueOrderTemplate, {
+        order: order.serialize(),
+        visible: true,
+        first: false,
+        last: false,
+        commentVisible: false,
+        rowSpan: 'rowSpanDetails',
+        mrpDropped: this.dropZones.getState(order.get('mrp')),
+        getChildOrderDropZoneClass: this.orders.getChildOrderDropZoneClass.bind(this.orders)
+      });
+
+      this.$('.paintShop-order').replaceWith(html);
+
+      if (!options.drilling)
+      {
+        this.reloadChanges();
+      }
+
+      this.toggleActions();
     },
 
     onVkbFocused: function()

@@ -71,6 +71,7 @@ define([
       }
 
       var obj = order.toJSON();
+      var drillingOrders = orders.drillingOrders && orders.drillingOrders.getAllByOrderNo(obj.order);
       var childOrderCount = obj.childOrders.length;
       var lastChildOrderI = childOrderCount - 1;
 
@@ -93,9 +94,10 @@ define([
 
         var components = [];
 
-        obj.paintCount = 0;
         childOrder.paints = {};
         childOrder.paintList = [];
+        childOrder.paintCount = 0;
+        childOrder.drilling = order.getDrillingStatus(childOrder, drillingOrders);
 
         childOrder.components.forEach(function(component)
         {
@@ -106,7 +108,7 @@ define([
 
           if (component.unit === 'G' || component.unit === 'KG')
           {
-            obj.paintCount += 1;
+            childOrder.paintCount += 1;
 
             if (!obj.paints[component.nc12])
             {
@@ -139,7 +141,9 @@ define([
         });
 
         var rowSpan = components.length;
-        var rowSpanDetails = rowSpan + (obj.paintCount !== 1 ? 1 : 0);
+        var rowSpanDetails = rowSpan
+          + (childOrder.paintCount !== 1 ? 1 : 0)
+          + (childOrder.drilling ? 1 : 0);
 
         obj.rowSpan += rowSpan;
         obj.rowSpanDetails += rowSpanDetails;
@@ -204,6 +208,59 @@ define([
       obj.statusText = t('paintShop', 'status:' + obj.status);
 
       return obj;
+    },
+
+    getDrillingStatus: function(childOrder, drillingOrders)
+    {
+      if (drillingOrders.length === 0)
+      {
+        return null;
+      }
+
+      var statuses = {};
+      var components = {};
+
+      childOrder.components.forEach(function(component)
+      {
+        components[component.nc12] = true;
+      });
+
+      drillingOrders.forEach(function(drillingOrder)
+      {
+        if (!drillingOrder.hasAnyChildOrderForComponents(components))
+        {
+          return;
+        }
+
+        var status = drillingOrder.get('status');
+
+        if (!status[status])
+        {
+          statuses[status] = 1;
+        }
+        else
+        {
+          statuses[status] += 1;
+        }
+      });
+
+      var availableStatuses = Object.keys(statuses);
+
+      if (availableStatuses.length === 0)
+      {
+        return null;
+      }
+
+      delete statuses.cancelled;
+
+      availableStatuses = Object.keys(statuses);
+
+      if (availableStatuses.length === 1)
+      {
+        return availableStatuses[0];
+      }
+
+      return 'started';
     }
 
   }, {

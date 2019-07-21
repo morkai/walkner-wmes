@@ -1,0 +1,212 @@
+.drilling-queue {
+  line-height: 1;
+}
+.drilling-queue > hr {
+  margin-top: 0;
+  margin-bottom: 50px;
+  border-top: 1px solid #333;
+}
+.drilling-queue-empty {
+  padding: 10px;
+}
+.drilling-orders {
+  width: 100%;
+}
+.drilling-order {
+  cursor: pointer;
+}
+.drilling-properties {
+  font-size: 14px;
+}
+.drilling-order-order {
+  background-color: #ccc;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #bbb;
+}
+.drilling-order-order > td:last-child {
+  border-right: 1px solid #333;
+  width: auto;
+}
+.drilling-order.is-first > .drilling-order-order {
+  border-top: none;
+}
+.drilling-order-childOrder {
+  background-color: #e6e6e6;
+  border-top: 1px solid #c4c4c4;
+  border-bottom: 1px solid #c4c4c4;
+}
+.drilling-order-component {
+  background-color: #fff;
+}
+.drilling-order[data-status="started"] .drilling-order-order {
+  background-color: #5bc0de;
+  border-bottom-color: #39a0bc;
+  color: #000;
+}
+.drilling-order[data-status="started"] .drilling-order-childOrder {
+  background-color: #8ef3ff;
+  border-top-color: #6cd1dd;
+  border-bottom-color: #6cd1dd;
+}
+.drilling-order[data-status="started"] .drilling-order-component {
+  background-color: #f4ffff;
+}
+.drilling-order[data-status="started"][data-cabin="2"] .drilling-order-order {
+  background-color: #9c64a6;
+  border-bottom-color: #7a4284;
+  color: #fff;
+}
+.drilling-order[data-status="started"][data-cabin="2"] .drilling-order-childOrder {
+  background-color: #ce93d8;
+  border-top-color: #ac71b6;
+  border-bottom-color: #ac71b6;
+  color: #000;
+}
+.drilling-order[data-status="started"][data-cabin="2"] .drilling-order-component {
+  background-color: #ffc4ff;
+  color: #000;
+}
+.drilling-order[data-status="partial"] .drilling-order-order {
+  background-color: #f0ad4e;
+  border-bottom-color: #d08b2c;
+}
+.drilling-order[data-status="partial"] .drilling-order-childOrder {
+  background-color: #ffe081;
+  border-top-color: #ddc070;
+  border-bottom-color: #ddc070;
+}
+.drilling-order[data-status="partial"] .drilling-order-component {
+  background-color: #ffffe7;
+}
+.drilling-order[data-status="finished"] .drilling-order-order {
+  background-color: #449d44;
+  border-bottom-color: #227b22;
+  color: #fff;
+}
+.drilling-order[data-status="finished"] .drilling-order-childOrder {
+  background-color: #77d077;
+  border-top-color: #55b055;
+  border-bottom-color: #55b055;
+  color: #000;
+}
+.drilling-order[data-status="finished"] .drilling-order-component {
+  background-color: #ddffdd;
+}
+.drilling-order[data-status="painted"] .drilling-order-order {
+  background-color: #990;
+  border-bottom-color: #770;
+  color: #fff;
+}
+.drilling-order[data-status="painted"] .drilling-order-childOrder {
+  background-color: #cc0;
+  border-top-color: #aa0;
+  border-bottom-color: #aa0;
+  color: #000;
+}
+.drilling-order[data-status="painted"] .drilling-order-component {
+  background-color: #ff0;
+  color: #000;
+}
+.drilling-order[data-status="cancelled"] .drilling-order-order {
+  background-color: #d9534f;
+  border-bottom-color: #b7312d;
+  color: #eee;
+}
+.drilling-order[data-status="cancelled"] .drilling-order-childOrder {
+  background-color: #ff8682;
+  border-top-color: #dd6460;
+  border-bottom-color: #dd6460;
+  color: #000;
+}
+.drilling-order[data-status="cancelled"] .drilling-order-component {
+  background-color: #ffece8;
+}
+.drilling-order-order > td[rowspan] {
+  border-bottom: 1px solid #333;
+}
+.drilling-order:last-child > .drilling-order-order > td[rowspan] {
+  border-bottom: none;
+}
+td.drilling-property {
+  vertical-align: top;
+  padding: 5px;
+  white-space: nowrap;
+}
+.drilling-order-component > td.drilling-property {
+  padding-top: 0;
+}
+.is-paint > td.drilling-property {
+  font-weight: bold;
+}
+.drilling-orderDetails-message {
+  display: block;
+  padding: 5px;
+  color: #fff;
+  background: #d9534f;
+  box-shadow: 0 1px 3px #666;
+  text-shadow: 1px 1px 1px #333;
+  font-weight: bold;
+}
+.drilling-orderDetails-drilling {
+  background: #f0ad4e;
+}
+.drilling-order-childOrder + .drilling-order-component > td.drilling-property {
+  padding-top: 5px;
+}
+td.drilling-property[data-property="no"] {
+  text-align: right;
+  border-bottom: 1px solid #333;
+  white-space: normal;
+  width: 35px;
+}
+td.drilling-property[data-property="order"] {
+  width: 80px;
+}
+td.drilling-property[data-property="nc12"] {
+  width: 105px;
+}
+.is-last > td.drilling-property[data-property="order"] {
+  border-bottom: 1px solid #333;
+}
+.drilling-order.is-last > .drilling-order-order > td.drilling-property[rowspan],
+.drilling-order.is-last > .is-last > td.drilling-property[data-property="order"] {
+  border-bottom: none;
+}
+td.drilling-property[data-property="qty"] {
+  padding-right: 0;
+  text-align: right;
+  width: 60px;
+}
+td.drilling-property[data-property="unit"] {
+  text-align: left;
+  width: 40px;
+}
+td.drilling-property[data-property="name"] {
+  width: 350px;
+}
+td.drilling-property[data-property="placement"] {
+  width: 70px;
+}
+td.drilling-property[data-property="mrpTimePlacement"] {
+  width: 80px;
+}
+td.drilling-property[data-property="times"] {
+  position: relative;
+}
+span.drilling-property {
+  display: block;
+}
+span.drilling-property + span.drilling-property {
+  margin-top: 12px;
+}
+span.drilling-property > .fa {
+  width: 14px;
+  text-align: center;
+}
+.drilling-property[data-property="comment"] {
+  white-space: normal;
+  line-height: 1.2;
+}
+.drilling-order .is-deleted {
+  text-decoration: line-through;
+}

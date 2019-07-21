@@ -57,15 +57,14 @@ define([
       this.lastClickEvent = null;
       this.lastVisibleItem = null;
 
-      this.listenTo(this.model, 'reset', _.after(2, this.render));
+      this.listenTo(this.model, 'reset', this.render);
       this.listenTo(this.model, 'change', this.onChange);
       this.listenTo(this.model, 'mrpSelected paintSelected', this.toggleVisibility);
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         showTimes: this.options.showTimes,
         isVisible: this.model.isVisible.bind(this.model),
         orders: this.serializeOrders()

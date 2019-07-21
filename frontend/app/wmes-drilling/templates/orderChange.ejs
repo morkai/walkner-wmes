@@ -1,0 +1,11 @@
+<div class="drilling-orderChanges-change">
+  <p class="drilling-orderChanges-change-meta">
+    <time title="<%- change.time.long %>"><%- time.format(change.time.iso, 'L LT') %></time>, <%- change.user %>:
+  </p>
+  <% if (t.has('wmes-drilling', 'orderChanges:change:' + change.type)) { %>
+  <p class="drilling-orderChanges-change-type"><%- t('wmes-drilling', 'orderChanges:change:' + change.type, change.data) %></p>
+  <% } %>
+  <% if (change.comment) { %>
+  <p class="text-lines"><%= change.comment %></p>
+  <% } %>
+</div>

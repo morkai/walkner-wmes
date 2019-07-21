@@ -1,0 +1,21 @@
+<div class="drilling" style="height: <%- height %>">
+  <div class="drilling-left">
+    <div id="<%- idPrefix %>-todo" class="drilling-list-container is-scrollable"></div>
+    <input id="<%- idPrefix %>-search" class="drilling-search is-empty" data-vkb="numeric" maxlength="9" placeholder="&#xF002;">
+  </div>
+  <div class="drilling-center">
+    <div id="<%- idPrefix %>-queue" class="drilling-queue-container is-scrollable"></div>
+    <div class="drilling-tabs-container">
+      <div id="<%- idPrefix %>-tabs" class="drilling-tabs">
+        <%- renderTabs({tabs: tabs}) %>
+      </div>
+    </div>
+  </div>
+  <div class="drilling-right">
+    <div id="<%- idPrefix %>-done" class="drilling-list-container is-scrollable"></div>
+    <div id="<%- idPrefix %>-totals" class="drilling-totals">
+      <%- renderTotals({totals: totals}) %>
+    </div>
+  </div>
+  <div id="<%- idPrefix %>-vkb"></div>
+</div>

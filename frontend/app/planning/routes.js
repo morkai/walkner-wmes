@@ -136,22 +136,4 @@ define([
       });
     });
   });
-
-  viewport.once('afterRender', toggleNavbarPlanning2D);
-
-  function toggleNavbarPlanning2D()
-  {
-    var navbarView = viewport.currentLayout.getView('.navbar');
-
-    if (navbarView)
-    {
-      var moment = time.getMoment();
-      var hours = moment.hours();
-      var day = moment.day();
-
-      navbarView.$('.planning-navbar-2d').toggleClass('disabled', (day === 1 || day === 2 || day === 3) && hours < 17);
-    }
-
-    setTimeout(toggleNavbarPlanning2D, 60000);
-  }
 });

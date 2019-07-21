@@ -106,7 +106,8 @@ define([
   './wmes-trw-tests/routes',
   './wmes-snf-programs/routes',
   './wmes-snf-tests/routes',
-  './wmes-luca-events/routes'
+  './wmes-luca-events/routes',
+  './wmes-drilling/routes'
 ], function()
 {
   'use strict';

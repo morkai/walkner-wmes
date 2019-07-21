@@ -89,16 +89,14 @@ define([
     {
       SettingsView.prototype.afterRender.apply(this, arguments);
 
-      this.setUpWorkCenters('workCenters');
-      this.setUpWorkCenters('drillingWorkCenters');
-      this.setUpUnpaintedMrps();
+      this.setUpWorkCenters();
       this.setUpMspPaints();
       this.setUpLoadStatuses();
     },
 
     setUpWorkCenters: function(setting)
     {
-      this.$id('planning-' + setting).select2({
+      this.$id('planning-workCenters').select2({
         width: '100%',
         allowClear: true,
         multiple: true,
@@ -107,16 +105,7 @@ define([
           .map(idAndLabel)
       });
 
-      this.updateSettingField(this.settings.get('paintShop.' + setting));
-    },
-
-    setUpUnpaintedMrps: function()
-    {
-      setUpMrpSelect2(this.$id('planning-unpaintedMrps'), {
-        width: '100%'
-      });
-
-      this.updateSettingField(this.settings.get('paintShop.unpaintedMrps'));
+      this.updateSettingField(this.settings.get('paintShop.workCenters'));
     },
 
     setUpMspPaints: function()
@@ -201,8 +190,6 @@ define([
     shouldAutoUpdateSettingField: function(setting)
     {
       return setting.id !== 'paintShop.workCenters'
-        && setting.id !== 'paintShop.unpaintedMrps'
-        && setting.id !== 'paintShop.drillingWorkCenters'
         && setting.id !== 'paintShop.mspPaints'
         && setting.id !== 'paintShop.load.statuses';
     },
@@ -214,9 +201,9 @@ define([
         return;
       }
 
-      if (/(workCenters|unpaintedMrps|mspPaints)$/i.test(setting.id))
+      if (setting.id === 'paintShop.workCenters')
       {
-        return this.$id(setting.id.replace('.', '-')).select2('data', setting.getValue().map(function(v)
+        return this.$id('planning-workCenters').select2('data', setting.getValue().map(function(v)
         {
           return {
             id: v,

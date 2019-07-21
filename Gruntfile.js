@@ -112,10 +112,11 @@ module.exports = function(grunt)
             {name: 'wmes-heff'},
             {name: 'wmes-ps-queue'},
             {name: 'wmes-ps-load'},
+            {name: 'wmes-drilling'},
             {name: 'wmes-wh-pickup'},
             {name: 'wmes-wh-problems'},
-            //{name: 'wmes-wh-kitter'},
-            //{name: 'wmes-wh-packer'},
+            // {name: 'wmes-wh-kitter'},
+            // {name: 'wmes-wh-packer'},
             {name: 'wmes-isa'},
             {name: 'wmes-trw'}
           ],

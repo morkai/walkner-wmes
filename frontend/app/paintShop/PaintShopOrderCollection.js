@@ -39,31 +39,59 @@ define([
 
     initialize: function(models, options)
     {
-      this.settings = options ? options.settings : null;
-      this.paints = options ? options.paints : null;
-      this.dropZones = options ? options.dropZones : null;
-      this.user = options ? options.user : null;
-      this.selectedMrp = options && options.selectedMrp ? options.selectedMrp : 'all';
-      this.selectedPaint = options && options.selectedPaint ? options.selectedPaint : 'all';
+      var psOrders = this;
 
-      this.allMrps = null;
-      this.serializedList = null;
-      this.serializedMap = null;
-      this.totalQuantities = {};
+      psOrders.settings = options ? options.settings : null;
+      psOrders.paints = options ? options.paints : null;
+      psOrders.dropZones = options ? options.dropZones : null;
+      psOrders.drillingOrders = options ? options.drillingOrders : null;
+      psOrders.user = options ? options.user : null;
+      psOrders.selectedMrp = options && options.selectedMrp ? options.selectedMrp : 'all';
+      psOrders.selectedPaint = options && options.selectedPaint ? options.selectedPaint : 'all';
 
-      this.on('request', function()
+      psOrders.allMrps = null;
+      psOrders.serializedList = null;
+      psOrders.serializedMap = null;
+      psOrders.byOrderNo = null;
+      psOrders.totalQuantities = {};
+
+      psOrders.on('reset request', function()
       {
-        this.serializedList = null;
-        this.serializedMap = null;
+        psOrders.serializedList = null;
+        psOrders.serializedMap = null;
+        psOrders.byOrderNo = null;
       });
 
-      this.on('change', function(order)
+      psOrders.on('change', function(order)
       {
-        if (this.serializedMap && this.serializedMap[order.id])
+        if (psOrders.serializedMap && psOrders.serializedMap[order.id])
         {
-          _.assign(this.serializedMap[order.id], order.serialize(true, this.paints, this));
+          _.assign(psOrders.serializedMap[order.id], order.serialize(true, psOrders.paints, psOrders));
         }
       });
+
+      if (psOrders.drillingOrders)
+      {
+        psOrders.listenTo(psOrders.drillingOrders, 'add remove change', function(drillingOrder)
+        {
+          if (!psOrders.byOrderNo)
+          {
+            return;
+          }
+
+          var orders = psOrders.byOrderNo[drillingOrder.get('order')];
+
+          if (!orders)
+          {
+            return;
+          }
+
+          orders.forEach(function(psOrder)
+          {
+            psOrders.trigger('change', psOrder, {drilling: true});
+          });
+        });
+      }
     },
 
     parse: function(res)
@@ -261,6 +289,7 @@ define([
 
       var serializedList = [];
       var serializedMap = {};
+      var byOrderNo = {};
       var mrpMap = {};
       var totalQuantities = {
         all: createEmptyTotals()
@@ -269,6 +298,13 @@ define([
       orders.forEach(function(order)
       {
         var serializedOrder = serializedMap[order.id] = order.serialize(true, orders.paints, orders);
+
+        if (!byOrderNo[serializedOrder.order])
+        {
+          byOrderNo[serializedOrder.order] = [];
+        }
+
+        byOrderNo[serializedOrder.order].push(order);
 
         serializedList.push(serializedOrder);
 
@@ -284,6 +320,7 @@ define([
 
       orders.serializedList = serializedList;
       orders.serializedMap = serializedMap;
+      orders.byOrderNo = byOrderNo;
       orders.allMrps = Object.keys(mrpMap).sort();
       orders.totalQuantities = totalQuantities;
 
@@ -514,6 +551,7 @@ define([
         orders.allMrps = null;
         orders.serializedList = null;
         orders.serializedMap = null;
+        orders.byOrderNo = null;
 
         orders.sort({silent: true});
         orders.trigger('reset', orders);

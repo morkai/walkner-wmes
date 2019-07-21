@@ -84,7 +84,7 @@
   <tr class="paintShop-properties paintShop-order-component">
     <td class="paintShop-property" colspan="5">
       <span class="paintShop-orderDetails-message paintShop-orderDetails-multiPaint">
-        <%- t('paintShop', 'multiPaint', {count: childOrder.paintCount}) %>
+        <i class="fa fa-paint-brush"></i> <%- t('paintShop', 'multiPaint', {count: childOrder.paintCount}) %>
       </span>
     </td>
   </tr>
@@ -92,7 +92,16 @@
   <tr class="paintShop-properties paintShop-order-component">
     <td class="paintShop-property" colspan="5">
       <span class="paintShop-orderDetails-message paintShop-orderDetails-drilling">
-        <%- t('paintShop', 'drilling') %>
+        <i class="fa fa-circle-o"></i> <%- t('paintShop', 'drilling') %>
+      </span>
+    </td>
+  </tr>
+  <% } %>
+  <% if (childOrder.drilling) { %>
+  <tr class="paintShop-properties paintShop-order-component">
+    <td class="paintShop-property" colspan="5">
+      <span class="paintShop-orderDetails-message paintShop-orderDetails-drilling" data-drilling-status="<%- childOrder.drilling %>">
+        <i class="fa fa-circle-o"></i> <%- t('paintShop', 'drilling:' + childOrder.drilling) %>
       </span>
     </td>
   </tr>

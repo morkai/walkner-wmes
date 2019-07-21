@@ -250,17 +250,9 @@ define([
 
         return false;
       },
-      'click #-wh-old': function(e)
+      'click a[data-group]': function(e)
       {
-        this.toggleWh('old');
-
-        e.currentTarget.blur();
-
-        return false;
-      },
-      'click #-wh-new': function(e)
-      {
-        this.toggleWh('new');
+        this.toggleGroup(e.currentTarget.dataset.group);
 
         e.currentTarget.blur();
 
@@ -344,7 +336,7 @@ define([
     this.setConnectionStatus(this.socket.isConnected() ? 'online' : 'offline');
     this.hideNotAllowedEntries();
     this.hideEmptyEntries();
-    this.toggleWh(localStorage.getItem('WMES_NAVBAR_WH') || 'old');
+    this.toggleGroups();
 
     this.broker.publish('navbar.rendered', {
       view: this
@@ -1234,24 +1226,75 @@ define([
     });
   };
 
-  NavbarView.prototype.toggleWh = function(state)
+  NavbarView.prototype.toggleGroups = function()
   {
-    var urlTemplate = state === 'old' ? '#planning/wh/{id}' : '#wh/plans/{id}';
-    var $li = this.$id('wh-hd');
+    var view = this;
+    var groups = JSON.parse(localStorage.getItem('WMES_NAVBAR_GROUPS') || '{}');
+    var allowedGroups = {};
 
-    ['-1d', '0d', '1d', '2d'].forEach(function(id)
+    view.$('a[data-group]').each(function()
     {
-      $li = $li.next();
+      var parts = this.dataset.group.split('/');
+      var group = parts[0];
 
-      $li.find('a').attr('href', urlTemplate.replace('{id}', id));
+      if (!allowedGroups[group])
+      {
+        allowedGroups[group] = [];
+      }
+
+      if (this.dataset.privilege && !user.isAllowedTo.apply(user, this.dataset.privilege.split(' ')))
+      {
+        this.parentNode.removeChild(this);
+
+        return;
+      }
+
+      allowedGroups[group].push(this.dataset.group);
+
+      if (!groups[group])
+      {
+        groups[group] = this.dataset.group;
+      }
     });
 
-    $li.next().toggleClass('hidden', state === 'old');
+    Object.keys(groups).forEach(function(group)
+    {
+      var allowedGroup = allowedGroups[group];
 
-    this.$id('wh-old').toggleClass('active', state === 'old');
-    this.$id('wh-new').toggleClass('active', state === 'new');
+      if (_.isEmpty(allowedGroup))
+      {
+        return;
+      }
 
-    localStorage.setItem('WMES_NAVBAR_WH', state);
+      if (!groups[group] || allowedGroup.indexOf(groups[group]) === -1)
+      {
+        groups[group] = allowedGroup[0];
+      }
+
+      view.toggleGroup(groups[group]);
+    });
+  };
+
+  NavbarView.prototype.toggleGroup = function(newGroup)
+  {
+    var view = this;
+    var parts = newGroup.split('/');
+
+    view.$('a[data-group^="' + parts[0] + '"]').each(function()
+    {
+      this.classList.toggle('active', this.dataset.group === newGroup);
+    });
+
+    view.$('li[data-group^="' + parts[0] + '"]').each(function()
+    {
+      this.classList.toggle('navbar-group-hidden', this.dataset.group !== newGroup);
+    });
+
+    var groups = JSON.parse(localStorage.getItem('WMES_NAVBAR_GROUPS') || '{}');
+
+    groups[parts[0]] = newGroup;
+
+    localStorage.setItem('WMES_NAVBAR_GROUPS', JSON.stringify(groups));
   };
 
   NavbarView.prototype.collapse = function()

@@ -3,4 +3,9 @@
 
 'use strict';
 
-db.kanbancomponents.updateMany({unit: {$exists: false}}, {$set: {unit: 'PCE'}});
+db.settings.insertOne({
+  _id: 'drilling.workCenters',
+  value: ['MILING'],
+  updater: null,
+  updatedAt: new Date('2019-07-16T14:27:10.750+02:00')
+});
