@@ -64,20 +64,13 @@ define([
 
       this.$('.is-expandable').expandableSelect();
 
-      this.$id('categories').select2({
-        width: '350px',
-        allowClear: true,
-        multiple: true,
-        data: dictionaries.categories
-          .filter(function(c) { return c.get('active'); })
-          .map(idAndLabel)
-      });
-
       setUpMrpSelect2(this.$id('mrps'), {
         own: true,
         view: this,
         width: '250px'
       });
+
+      this.setUpCategorySelect2();
     },
 
     getTemplateData: function()
@@ -100,7 +93,7 @@ define([
         interval: model.get('interval'),
         'from-date': from ? time.format(from, 'YYYY-MM-DD') : '',
         'to-date': to ? time.format(to, 'YYYY-MM-DD') : '',
-        categories: model.get('categories').join(','),
+        categories: model.get('categories').concat(model.get('subCategories')).join(','),
         mrps: model.get('mrps').join(','),
         subdivisionTypes: model.get('subdivisionTypes').join(','),
         divisions: model.get('divisions').join(','),
@@ -127,8 +120,64 @@ define([
         query[prop] = Array.isArray(value) ? value : value ? value.split(',') : [];
       });
 
+      if (query.categories.length)
+      {
+        query.subCategories = [];
+        query.categories = query.categories.filter(function(id)
+        {
+          if (dictionaries.subCategories.get(id))
+          {
+            query.subCategories.push(id);
+
+            return false;
+          }
+
+          return true;
+        });
+      }
+
       view.model.set(query);
       view.model.trigger('filtered');
+    },
+
+    setUpCategorySelect2: function()
+    {
+      var parentToSub = {};
+
+      dictionaries.subCategories.forEach(function(subCategory)
+      {
+        if (!subCategory.get('active'))
+        {
+          return;
+        }
+
+        var parent = subCategory.get('parent');
+
+        if (!parentToSub[parent])
+        {
+          parentToSub[parent] = [];
+        }
+
+        parentToSub[parent].push(subCategory);
+      });
+
+      this.$id('categories').select2({
+        width: '350px',
+        multiple: true,
+        allowClear: true,
+        data: dictionaries.categories
+          .filter(function(c) { return c.get('active'); })
+          .map(function(category)
+          {
+            var subCategories = parentToSub[category.id];
+
+            return {
+              id: category.id,
+              text: category.getLabel(),
+              children: !subCategories ? [] : subCategories.map(idAndLabel)
+            };
+          })
+      });
     }
 
   });

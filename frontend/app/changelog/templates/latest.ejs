@@ -1,62 +1,6 @@
-<h1>v0.140.0</h1>
-<h2><%- time.format('2019-07-21', 'LL') %></h2>
-<h3>Baza komponentów</h3>
-<ul>
-  <li>Zmieniono drukowanie etykiet opisowych oraz stanowisk tak, aby po każdym wysłaniu etykiet do drukarki
-    serwer czekał dodatkowe 250ms * ilość wysłanych etykiet zanim wygenerowane zostaną nowe etykiety.</li>
-  <li>Zmieniono listę kolejek drukowania tak, aby zawsze wyświetlane były nazwy maksymalnie dwóch linii
-    zamiast 'n linii'.</li>
-  <li>Dodano nowe pole do komponentów: Jednostka miary.</li>
-</ul>
-<h3>Inspekcja jakości</h3>
-<ul>
-  <li>Zmieniono Gdzie/Co w raporcie Outgoing quality tak, aby zliczana była wartość <em>Ilość niezgodnych</em>
-    a nie ilość przeprowadzonych inspekcji oraz dane na wykresie były z trzech tygodni a nie tylko z tygodnia
-    wybranego w filtrze.
-  </li>
-</ul>
+<h1>v?.?.?</h1>
+<h2><%- time.format(Date.now(), 'LL') %></h2>
 <h3>FAP</h3>
 <ul>
-  <li>Poprawiono błąd powodujący brak aktualizacji listy uczestników dla użytkownika, który rozpoczął oczekujące
-    zlecenie.</li>
-  <li>Zmieniono uprawnienia do eskalacji zgłoszeń tak, aby Magazynierzy mogli eskalować wszystkie zgłoszenia bez
-    względu na wybrany Dział.</li>
-  <li>Dodano nowy poziom zgłoszenia: 0. Zgłoszenia dodawane od 17.06.2019 06:00 będą tworzone z poziomem 0.
-    Nowe zgłoszenia z poziomem 0 nie mają uzupełnianej listy uczestników. Lista uczestników będzie uzupełniana
-    dopiero po eskalacji zgłoszenia na wyższy poziom.</li>
-</ul>
-<h3>Wiercenie</h3>
-<ul>
-  <li>Dodano nowy moduł.</li>
-</ul>
-<h3>Malarnia</h3>
-<ul>
-  <li>Zmieniono logowanie w trybie wbudowanym tak, aby było dostępne bez względu na to czy przeglądarka jest
-    zalogowana w głównej aplikacji.</li>
-  <li>Zmieniono funkcjonalność wiercenia komponentów tak, aby wykorzystywała nowy moduł kolejki wiercenia.</li>
-  <li>Dodano do kolejki zleceń zakładkę 'Wszystkie przepływy'.</li>
-  <li>Dodano do menu kontekstowego zlecenia pozycje 'Otwórz zlecenie nadrzędne' oraz 'Otwórz zlecenie ...'
-    dla każdego zlecenia podrzędnego.</li>
-</ul>
-<h3>Planowanie</h3>
-<ul>
-  <li>Zmieniono eksportowanie statystyk tak, aby można było wyeksportować dane dla zakresu dat oraz wybranych
-    linii. Dodatkowo oddzielnie obliczane są statystyki dla całości, dnia, MRP i linii.</li>
-</ul>
-<h3>Dokumentacja</h3>
-<ul>
-  <li>Zmieniono importowanie dokumentów z SAP tak, aby po każdym importowaniu aktualizowane były nazwy dokumentów
-    w katalogu, które nie mają nazwy.</li>
-</ul>
-<h3>Baza testów > TRW</h3>
-<ul>
-  <li>Zmieniono proces testowania tak, aby pierwsze sprawdzenie wartości wejść w każdym kroku odbywało się po
-    minimum 150ms od ustawienia wyjścia a nie 1ms, aby przekaźniki z poprzedniego kroku miały szansę na
-    wyłączenie się.</li>
-  <li>Zmieniono proces testowania tak, aby przed odłączaniem przewodów wszystkie kroki były ponownie sprawdzane
-    po kolei, aby wykryć przypadek, gdy operator podczas podłączania przewodów w późniejszych krokach
-    przypadkowo odłączył wcześniej podłączone przewody.</li>
-  <li>Zmieniono proces testowania tak, aby odłączanie przewodów odbywało się krokowo: zamiast włączać wszystkie
-    zdefiniowane wyjścia i czekać na wyłączenie się wszystkich zdefiniowanych wejść, to wszystkie kroki testu są
-    są wykonywane ponownie ale z odwrotym warunkiem (wejście zamiast załączone musi być wyłączone).</li>
+  <li>Zmieniono filtr kategorii w raporcie tak, aby można było wybierać także podkategorie.</li>
 </ul>

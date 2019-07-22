@@ -58,6 +58,7 @@ define([
         to: 0,
         interval: 'month',
         categories: [],
+        subCategories: [],
         subdivisionTypes: [],
         divisions: [],
         mrps: [],
@@ -79,6 +80,7 @@ define([
           'to',
           'interval',
           'categories',
+          'subCategories',
           'subdivisionTypes',
           'divisions',
           'mrps',
@@ -86,10 +88,13 @@ define([
         ])
       );
 
-      options.data.categories = options.data.categories.join(',');
-      options.data.subdivisionTypes = options.data.subdivisionTypes.join(',');
-      options.data.divisions = options.data.divisions.join(',');
-      options.data.mrps = options.data.mrps.join(',');
+      Object.keys(options.data).forEach(function(key)
+      {
+        if (Array.isArray(options.data[key]))
+        {
+          options.data[key] = options.data[key].join(',');
+        }
+      });
 
       return Model.prototype.fetch.call(this, options);
     },
@@ -101,6 +106,7 @@ define([
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval')
         + '&categories=' + this.get('categories')
+        + '&subCategories=' + this.get('subCategories')
         + '&subdivisionTypes=' + this.get('subdivisionTypes')
         + '&divisions=' + this.get('divisions')
         + '&mrps=' + this.get('mrps')
@@ -315,16 +321,25 @@ define([
         query.interval = 'week';
       }
 
-      return new this({
+      var attrs = {
         from: +query.from || undefined,
         to: +query.to || undefined,
         interval: query.interval || undefined,
-        categories: _.isEmpty(query.categories) ? [] : query.categories.split(','),
-        subdivisionTypes: _.isEmpty(query.subdivisionTypes) ? [] : query.subdivisionTypes.split(','),
-        divisions: _.isEmpty(query.divisions) ? [] : query.divisions.split(','),
-        mrps: _.isEmpty(query.mrps) ? [] : query.mrps.split(','),
         levels: query.levels == null ? undefined : +query.levels
+      };
+
+      [
+        'categories',
+        'subCategories',
+        'subdivisionTypes',
+        'divisions',
+        'mrps'
+      ].forEach(function(prop)
+      {
+        attrs[prop] = _.isEmpty(query[prop]) ? [] : query[prop].split(',');
       });
+
+      return new this(attrs);
     }
 
   });
