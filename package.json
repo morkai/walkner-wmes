@@ -7,7 +7,7 @@
     "wmes": {
       "backend": 473,
       "frontend": 635,
-      "reports": 93,
+      "reports": 94,
       "attachments": 3,
       "importer-sap": 53,
       "importer-results": 12,
@@ -25,7 +25,7 @@
       "wh-packer": 5,
       "isa": 6,
       "luma2": 5,
-      "trw": 11,
+      "trw": 12,
       "luca": 7,
       "drilling": 1
     },
