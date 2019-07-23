@@ -51,6 +51,8 @@ define([
 ) {
   'use strict';
 
+  var CHECK_INTERVAL = 150;
+
   return View.extend({
 
     layoutName: 'blank',
@@ -1171,7 +1173,8 @@ define([
 
       this.model.set({
         setIo: setIo,
-        checkIo: checkIo
+        checkIo: checkIo,
+        lastValidCheckAt: 0
       });
 
       if (this.model.get('debug'))
@@ -1184,7 +1187,7 @@ define([
         this.updateConnections();
       }
 
-      this.setIo(false, this.checkIo, 150);
+      this.setIo(false, this.checkIo, CHECK_INTERVAL);
     },
 
     setIo: function(reset, nextAction, delay)
@@ -1258,6 +1261,7 @@ define([
         var ok = [];
         var nok = [];
         var testing = page.model.get('state') === 'test';
+        var anyAnalog = false;
 
         _.forEach(checkIo, function(io)
         {
@@ -1279,6 +1283,11 @@ define([
           {
             (testing ? nok : ok).push(io._id);
           }
+
+          if (io.type === 'analog')
+          {
+            anyAnalog = true;
+          }
         });
 
         if (page.model.get('debug'))
@@ -1293,7 +1302,32 @@ define([
 
         if (nok.length)
         {
-          page.scheduleAction(page.checkIo, 150);
+          page.model.set('lastValidCheckAt', 0);
+
+          page.scheduleAction(page.checkIo, CHECK_INTERVAL);
+
+          return;
+        }
+
+        var validCheckAt = Date.now();
+        var lastValidCheckAt = page.model.get('lastValidCheckAt');
+        var validDuration = validCheckAt - lastValidCheckAt;
+
+        if (!lastValidCheckAt)
+        {
+          page.model.set('lastValidCheckAt', validCheckAt);
+        }
+
+        var minValidDuration = CHECK_INTERVAL * (anyAnalog ? 6 : 3);
+
+        if (page.model.get('pass') > 1)
+        {
+          minValidDuration /= 3;
+        }
+
+        if (testing && (!lastValidCheckAt || validDuration < minValidDuration))
+        {
+          page.scheduleAction(page.checkIo, CHECK_INTERVAL);
 
           return;
         }
