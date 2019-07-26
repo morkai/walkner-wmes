@@ -4,8 +4,8 @@
 'use strict';
 
 db.settings.insertOne({
-  _id: 'drilling.workCenters',
-  value: ['MILING'],
+  _id: 'wh.planning.ignorePsStatus',
+  value: false,
   updater: null,
   updatedAt: new Date('2019-07-16T14:27:10.750+02:00')
 });

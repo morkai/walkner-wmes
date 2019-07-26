@@ -53,6 +53,11 @@ define([
       {
         return newValue.split(',').filter(function(mrp) { return !!mrp.length; });
       }
+
+      if (/ignorePsStatus/.test(id))
+      {
+        return !!newValue;
+      }
     }
 
   });

@@ -5,6 +5,12 @@
   </div>
   <div class="panel panel-primary">
     <div class="panel-body" data-tab="planning">
+      <div class="checkbox">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-planning-ignorePsStatus" name="wh.planning.ignorePsStatus" type="checkbox" value="true">
+          <%- helpers.t('settings:planning:ignorePsStatus') %>
+        </label>
+      </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-planning-groupDuration"><%- helpers.t('settings:planning:groupDuration') %></label>
         <input id="<%- idPrefix %>-planning-groupDuration" class="form-control" name="wh.planning.groupDuration" type="number" step="1" min="1" max="24">
