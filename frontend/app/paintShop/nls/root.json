@@ -41,6 +41,7 @@
 
     "status:new": "Pending",
     "status:started": "Started",
+    "status:started:cabin": "Started (cabin {cabin})",
     "status:finished": "Finished",
     "status:partial": "Partial",
     "status:cancelled": "Cancelled",

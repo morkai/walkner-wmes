@@ -2,10 +2,10 @@
 <% if (/painted/.test(status)) return %>
 <% if (/^finished/.test(status)) { %>
 <div class="drilling-totals-split">
-  <div class="drilling-totals-total" data-status="finished"><%- totals.finished %></div>
-  <div class="drilling-totals-total" data-status="painted"><%- totals.painted %></div>
+  <div class="drilling-totals-total" data-status="finished" title="<%= t('wmes-drilling', 'status:finished') %>"><%- totals.finished %></div>
+  <div class="drilling-totals-total" data-status="painted" title="<%= t('wmes-drilling', 'status:painted') %>"><%- totals.painted %></div>
 </div>
 <% } else { %>
-<div class="drilling-totals-total" data-status="<%- status %>"><%- total %></div>
+<div class="drilling-totals-total" data-status="<%- status %>" title="<%= t('wmes-drilling', 'status:' + status) %>"><%- total %></div>
 <% } %>
 <% }) %>

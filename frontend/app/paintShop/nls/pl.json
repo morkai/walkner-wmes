@@ -40,6 +40,7 @@
 
   "status:new": "Do realizacji",
   "status:started": "W realizacji",
+  "status:started:cabin": "W realizacji (kabina {cabin})",
   "status:finished": "Zrealizowane",
   "status:partial": "Niekompletne",
   "status:cancelled": "Anulowane",
