@@ -350,7 +350,9 @@ define([
           return value.length === 0 ? '-' : value.join(', ');
 
         case 'workerCount':
-          return Array.isArray(value) ? value.join(', ') : value;
+          return Array.isArray(value)
+            ? value.map(function(v) { return v.toLocaleString(); }).join('; ')
+            : value.toLocaleString();
 
         case 'operation':
           return value.no + '. ' + value.name + ' - ' + value.laborTime.toLocaleString();

@@ -223,10 +223,10 @@ define([
 
       if (workerCount[0] === workerCount[1] && workerCount[0] === workerCount[2])
       {
-        return workerCount[0].toString();
+        return workerCount[0].toLocaleString();
       }
 
-      return workerCount.join(', ');
+      return workerCount.map(function(v) { return v.toLocaleString(); }).join('; ');
     },
 
     hideMenu: function()

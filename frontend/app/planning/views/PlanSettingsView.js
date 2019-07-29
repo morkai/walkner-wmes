@@ -945,8 +945,11 @@ define([
         case 'bigOrderQuantity':
         case 'splitOrderQuantity':
         case 'maxSplitLineCount':
-        case 'workerCount':
           v = Math.max(0, parseInt($property.val(), 10) || 0);
+          break;
+
+        case 'workerCount':
+          v = Math.max(0, +parseFloat($property.val()).toFixed(2) || 0);
           break;
 
         case 'extraShiftSeconds':

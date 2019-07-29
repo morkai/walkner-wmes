@@ -76,7 +76,7 @@ define([
 
         mrpLineSettings.set('workerCount', view.$(this).find('[data-shift-no]').map(function()
         {
-          return Math.max(0, parseInt(this.value, 10) || 0);
+          return Math.max(0, +parseFloat(this.value).toFixed(2) || 0);
         }).get());
       });
 
