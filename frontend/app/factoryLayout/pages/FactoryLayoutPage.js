@@ -77,7 +77,8 @@ define([
 
     destroy: function()
     {
-      document.body.classList.remove('no-overflow');
+      $('body').removeClass('no-overflow');
+      $('.ft').removeClass('hidden');
 
       this.model.unload();
       this.model = null;
@@ -100,7 +101,8 @@ define([
 
     afterRender: function()
     {
-      document.body.classList.add('no-overflow');
+      $('body').addClass('no-overflow');
+      $('.ft').addClass('hidden');
 
       this.model.load(false);
     }

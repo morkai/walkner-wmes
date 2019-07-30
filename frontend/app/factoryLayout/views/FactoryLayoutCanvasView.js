@@ -566,9 +566,8 @@ define([
 
       var w = window.innerWidth - 28;
       var h = window.innerHeight
-        - 19
-        - $('.page > .hd').outerHeight(true)
-        - $('.page > .ft').outerHeight(true);
+        - 28
+        - $('.page > .hd').outerHeight(true);
 
       return {width: w, height: h};
     },
