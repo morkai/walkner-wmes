@@ -183,7 +183,7 @@ define([
               ? component.scanInfo.raw
               : (component.scanInfo.nc12 + ':' + component.scanInfo.sn)
           }),
-          timeout: 6000
+          timeout: 20000
         });
 
         req.fail(function()
