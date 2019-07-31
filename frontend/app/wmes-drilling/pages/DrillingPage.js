@@ -677,11 +677,6 @@ define([
             {
               return;
             }
-
-            if (!page.orders.isPaintVisible(order))
-            {
-              return;
-            }
           }
 
           if (usedOrders[orderNo])
