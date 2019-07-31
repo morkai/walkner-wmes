@@ -779,6 +779,11 @@ define([
 
       workingChartsView.$el.siblings().fadeTo(400, 0).promise().done(function()
       {
+        if (!this.$charts)
+        {
+          return;
+        }
+
         this.$charts.addClass('is-moving');
 
         var pos = workingChartsView.$el.position();
@@ -794,6 +799,11 @@ define([
 
         workingChartsView.$el.animate({left: workingIndex * CHART_WIDTH}, 300).promise().done(function()
         {
+          if (!this.$charts)
+          {
+            return;
+          }
+
           workingChartsView.$el.css('position', '');
           this.$charts.removeClass('is-moving');
           this.showChartsViews(operation, newChartsViews);
@@ -833,6 +843,11 @@ define([
 
       $(elsToFade).fadeTo(400, 1).promise().done(function()
       {
+        if (!page.$charts)
+        {
+          return;
+        }
+
         $(elsToShow).css('opacity', '');
         page.$el.removeClass('is-changing');
         page.toggleDeactivatedOrgUnits();
