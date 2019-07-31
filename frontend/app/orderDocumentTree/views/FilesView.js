@@ -1086,7 +1086,7 @@ define([
 
     onKeyDown: function(e)
     {
-      switch (e.key.toUpperCase())
+      switch (e.key && e.key.toUpperCase())
       {
         case 'ESCAPE':
         {
