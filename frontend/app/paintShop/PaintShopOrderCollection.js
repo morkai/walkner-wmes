@@ -390,7 +390,7 @@ define([
         all: createEmptyTotals()
       };
 
-      this.serializedList.forEach(this.recountOrder.bind(this, this.totalQuantities));
+      (this.serializedList || []).forEach(this.recountOrder.bind(this, this.totalQuantities));
 
       this.trigger('totalsRecounted');
     },
