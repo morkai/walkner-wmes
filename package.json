@@ -5,8 +5,8 @@
   "version": "0.140.0",
   "updater": {
     "wmes": {
-      "backend": 475,
-      "frontend": 637,
+      "backend": 476,
+      "frontend": 638,
       "reports": 94,
       "attachments": 3,
       "importer-sap": 53,
@@ -17,7 +17,7 @@
       "docs": 33,
       "heff": 33,
       "planning": 63,
-      "ps-queue": 42,
+      "ps-queue": 43,
       "ps-load": 14,
       "wh-pickup": 15,
       "wh-problems": 9,
@@ -27,7 +27,7 @@
       "luma2": 5,
       "trw": 12,
       "luca": 7,
-      "drilling": 2
+      "drilling": 3
     },
     "pos": {
       "backend": 88,
