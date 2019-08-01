@@ -932,6 +932,7 @@ define([
             .filter(function(v) { return v.length; });
           break;
 
+        case 'forceWorkDay':
         case 'ignoreCompleted':
         case 'useRemainingQuantity':
         case 'limitSmallOrders':

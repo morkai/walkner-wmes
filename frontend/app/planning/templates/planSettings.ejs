@@ -3,6 +3,13 @@
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
+      <div class="checkbox" style="margin-top: 0">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-forceWorkDay" name="forceWorkDay" type="checkbox" value="true" data-object="plan">
+          <%- helpers.t('settings:forceWorkDay') %>
+        </label>
+        <p class="help-block"><%- helpers.t('settings:forceWorkDay:help') %></p>
+      </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-freezeHour"><%- helpers.t('settings:freezeHour') %></label>
         <p class="help-block"><%- helpers.t('settings:freezeHour:help') %></p>
