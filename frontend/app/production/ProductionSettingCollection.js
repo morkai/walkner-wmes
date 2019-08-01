@@ -232,7 +232,7 @@ define([
       {
         var wcCoeffs = {};
         var remaining = line;
-        var re = /([A-Z0-9]+[A-Z0-9_\- ]*|\*)\s*=\s*([0-9]+(?:(?:\.|,)[0-9]+)?)/ig;
+        var re = /([A-Z0-9]+[A-Z0-9_\- ]*|\*)\s*=\s*([0-9]+(?:[.,][0-9]+)?)/ig;
         var matchCount = 0;
         var match;
 

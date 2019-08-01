@@ -9,7 +9,17 @@ define([
 
   return function(prodShiftOrder, pretty)
   {
-    var efficiency = (prodShiftOrder.laborTime / 100 * prodShiftOrder.totalQuantity)
+    var operation = prodShiftOrder.orderData.operations[prodShiftOrder.operationNo];
+    var taktTimeCoeff = 1;
+
+    if (operation && prodShiftOrder.orderData.taktTimeCoeff)
+    {
+      taktTimeCoeff = prodShiftOrder.orderData.taktTimeCoeff[operation.workCenter]
+        || prodShiftOrder.orderData.taktTimeCoeff['*']
+        || 1;
+    }
+
+    var efficiency = (prodShiftOrder.laborTime * taktTimeCoeff / 100 * prodShiftOrder.totalQuantity)
         / (prodShiftOrder.workDuration * prodShiftOrder.workerCount);
 
     efficiency = isNaN(efficiency) || !isFinite(efficiency) ? 0 : efficiency;
