@@ -285,7 +285,8 @@ define([
       'click #-lockUi': function(e)
       {
         this.control(e, this.lockUi);
-      }
+      },
+      'click #-confirm': 'confirmDocument'
     },
 
     localTopics: {
@@ -322,7 +323,7 @@ define([
       this.listenTo(this.model, 'change:fileSource', this.onFileSourceChange);
       this.listenTo(
         this.model,
-        'change:prefixFilterMode change:prefixFilter change:documents',
+        'change:prefixFilterMode change:prefixFilter change:documents change:confirmations',
         _.debounce(this.updateDocuments.bind(this), 1, true)
       );
       this.listenTo(
@@ -423,6 +424,11 @@ define([
 
       $expanded.remove();
 
+      if ($document.hasClass('is-locked'))
+      {
+        return;
+      }
+
       var position = $document.position();
       var $clone = $document.clone()
         .addClass('is-expanded')
@@ -445,6 +451,16 @@ define([
     {
       this.shrinkControls();
 
+      if (!this.model.isConfirmableDocument(nc15) && this.model.getOverallConfirmationStatus() !== 'confirmed')
+      {
+        return;
+      }
+
+      if (this.$id('confirm').find('.fa-spinner').length)
+      {
+        return;
+      }
+
       this.model.selectDocument(nc15, name);
 
       if (focus)
@@ -455,7 +471,7 @@ define([
 
     focusDocument: function(nc15)
     {
-      this.$id('documents').find('[data-nc15="' + nc15 + '"]').focus();
+      this.$id('documents').find('[data-nc15="' + nc15 + '"]').focus()[0].scrollIntoView();
     },
 
     focusNextDocument: function(documentEl)
@@ -716,6 +732,7 @@ define([
     {
       var model = this.model;
       var currentOrder = model.getCurrentOrder();
+      var confirmed = model.getOverallConfirmationStatus() === 'confirmed';
       var localFile = model.get('localFile');
       var $documents = this.$id('documents');
       var html = '';
@@ -730,7 +747,8 @@ define([
             name: name.replace(/\$__.*?__/g, ''),
             nc15: nc15,
             search: false,
-            external: name.indexOf('$__EXTERNAL__') !== -1
+            external: name.indexOf('$__EXTERNAL__') !== -1,
+            locked: !confirmed && !model.isConfirmableDocument(nc15)
           });
         }
       });
@@ -741,6 +759,7 @@ define([
         .on('mouseenter', this.onDocumentMouseEnter.bind(this));
 
       this.filter(this.$id('filterPhrase').val());
+      this.checkConfirmations();
 
       if (localFile || !currentOrder.documents[currentOrder.nc15])
       {
@@ -755,6 +774,11 @@ define([
     updateDocumentShortcuts: function()
     {
       this.$('.orderDocuments-document-shortcut').remove();
+
+      if (embedded.isEnabled())
+      {
+        return;
+      }
 
       var $documents = this.$('.orderDocuments-document');
       var n = 1;
@@ -966,6 +990,133 @@ define([
           this.selectDocument(selectedDocumentEl.dataset.nc15, true);
         }
       }
+    },
+
+    checkConfirmations: function()
+    {
+      this.updateConfirmButton();
+
+      var status = this.model.getOverallConfirmationStatus();
+
+      if (status === 'confirmed')
+      {
+        return;
+      }
+
+      var currentOrder = this.model.getCurrentOrder();
+      var selectedDocument = currentOrder.nc15;
+
+      if (this.model.isConfirmableDocument(currentOrder.nc15))
+      {
+        if (status === 'unknown')
+        {
+          this.fetchConfirmations(selectedDocument);
+        }
+
+        return;
+      }
+
+      this.selectDocument(this.model.getFirstUnconfirmedDocument(), true);
+    },
+
+    fetchConfirmations: function(oldSelectedDocument)
+    {
+      var view = this;
+
+      clearTimeout(view.timers.fetchConfirmations);
+
+      var currentOrder = view.model.getCurrentOrder();
+      var req = view.ajax({
+        url: '/orders/' + currentOrder.no + '/documents',
+        data: {
+          line: view.model.get('prodLine')._id,
+          station: view.model.get('station')
+        }
+      });
+
+      req.fail(function()
+      {
+        view.timers.fetchConfirmations = setTimeout(view.fetchConfirmations.bind(view, oldSelectedDocument), 5000);
+      });
+
+      req.done(function(orderData)
+      {
+        var station = view.model.get('station');
+        var confirmations = {};
+
+        _.forEach(orderData.confirmations, function(stations, nc15)
+        {
+          var status = stations[station];
+
+          confirmations[nc15] = status === undefined ? null : status;
+        });
+
+        view.model.setDocumentConfirmations(orderData.no, confirmations);
+
+        if (view.model.getOverallConfirmationStatus() === 'confirmed')
+        {
+          if (!oldSelectedDocument || view.model.isConfirmableDocument(oldSelectedDocument))
+          {
+            oldSelectedDocument = 'ORDER';
+          }
+
+          view.selectDocument(oldSelectedDocument, true);
+        }
+      });
+    },
+
+    confirmDocument: function()
+    {
+      var view = this;
+      var $confirm = view.$id('confirm');
+      var $icon = $confirm.find('.fa');
+
+      if ($icon.hasClass('fa-spinner'))
+      {
+        return;
+      }
+
+      $icon.removeClass('fa-thumbs-up').addClass('fa-spinner fa-spin');
+
+      var currentOrder = view.model.getCurrentOrder();
+      var message = {
+        clientId: view.model.id,
+        line: view.model.get('prodLine')._id,
+        station: view.model.get('station'),
+        orderNo: currentOrder.no,
+        nc15: currentOrder.nc15,
+        name: currentOrder.documents[currentOrder.nc15]
+      };
+
+      view.socket.emit('orderDocuments.confirm', message, function(err, confirmation)
+      {
+        if (err)
+        {
+          $confirm.removeClass('btn-success').addClass('btn-danger').find('.fa-spinner').removeClass('fa-spin');
+
+          view.timers.updateConfirmButton = setTimeout(view.updateConfirmButton.bind(view), 3000);
+
+          return;
+        }
+
+        view.model.handleConfirmation(confirmation);
+        view.updateConfirmButton();
+        view.selectDocument(view.model.getFirstUnconfirmedDocument() || 'ORDER', true);
+      });
+    },
+
+    updateConfirmButton: function()
+    {
+      var confirmed = this.model.isConfirmedDocumentSelected();
+      var confirmable = this.model.isConfirmableDocumentSelected();
+
+      this.$id('confirm')
+        .removeClass('btn-danger')
+        .addClass('btn-success')
+        .toggleClass('hidden', confirmed || !confirmable)
+        .find('.fa-spinner')
+        .removeClass('fa-spinner fa-spin')
+        .addClass('fa-thumbs-up');
     }
 
   });

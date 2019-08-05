@@ -153,13 +153,14 @@ define([
 
     submitForm: function()
     {
-      var $submit = this.$id('submit').prop('disabled', true);
+      var view = this;
+      var $submit = view.$id('submit').prop('disabled', true);
 
       $submit.find('.fa').removeClass('fa-search').addClass('fa-spin fa-spinner');
 
-      var no = this.$id('orderNo').val();
+      var no = view.$id('orderNo').val();
       var kind = no.length === 15 ? 'document' : 'order';
-      var req = this[kind === 'document' ? 'findDocument' : 'findOrder'](no);
+      var req = view[kind === 'document' ? 'findDocument' : 'findOrder'](no);
 
       req.fail(function(res)
       {
@@ -171,10 +172,10 @@ define([
         }
 
         var text = t.has('orderDocuments', 'localOrderPicker:error:' + code)
-          ? t('orderDocuments', 'localOrderPicker:error:' + code)
+          ? view.t('localOrderPicker:error:' + code)
           : t.has('orderDocuments', 'localOrderPicker:error:' + code + ':' + kind)
-          ? t('orderDocuments', 'localOrderPicker:error:' + code + ':' + kind)
-          : t('orderDocuments', 'localOrderPicker:error:failure');
+          ? view.t('localOrderPicker:error:' + code + ':' + kind)
+          : view.t('localOrderPicker:error:failure');
 
         viewport.msg.show({
           type: 'error',
@@ -198,7 +199,11 @@ define([
       var view = this;
       var req = view.ajax({
         type: 'GET',
-        url: '/orders/' + orderNo + '/documents'
+        url: '/orders/' + orderNo + '/documents',
+        data: {
+          line: view.model.get('prodLine')._id,
+          station: view.model.get('station')
+        }
       });
 
       req.done(function(localOrder)

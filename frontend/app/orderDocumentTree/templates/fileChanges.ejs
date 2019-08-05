@@ -6,7 +6,8 @@
     <th class="is-min"><%- helpers.t('fileChanges:type') %></th>
     <th class="is-min"><%- helpers.t('files:name') %></th>
     <th class="is-min"><%- helpers.t('files:folders') %></th>
-    <th><%- helpers.t('files:files') %></th>
+    <th class="is-min"><%- helpers.t('files:files') %></th>
+    <th><%- helpers.t('files:components') %></th>
   </tr>
   </thead>
   <tbody>
@@ -18,7 +19,8 @@
     <td class="is-min"><%- change.type %></td>
     <td class="is-min"><%= change.name %></td>
     <td class="is-min"><%- change.folders %></td>
-    <td><%- change.files %></td>
+    <td class="is-min"><%- change.files %></td>
+    <td><%- change.components %></td>
   </tr>
   <% }) %>
   <% } else { %>

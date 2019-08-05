@@ -68,6 +68,7 @@ define([
       var formData = {
         prodLineId: prodLine._id,
         prodLineName: prodLine.name,
+        station: model.get('station'),
         prefixFilterMode: model.get('prefixFilterMode'),
         prefixFilter: model.get('prefixFilter'),
         spigotCheck: model.get('spigotCheck')
@@ -90,17 +91,19 @@ define([
     submitForm: function()
     {
       var view = this;
-      var $submit = this.$id('submit').prop('disabled', true);
+      var $submit = view.$id('submit').prop('disabled', true);
 
       $submit.find('.fa').removeClass('fa-save').addClass('fa-spin fa-spinner');
 
-      var reqData = _.defaults(form2js(this.el), {
+      var reqData = _.defaults(form2js(view.el), {
         prefixFilterMode: 'inclusive',
         prefixFilter: '',
         spigotCheck: false
       });
 
-      var req = this.ajax({
+      reqData.station = parseInt(reqData.station, 10) || 0;
+
+      var req = view.ajax({
         type: 'POST',
         url: window.location.href,
         data: JSON.stringify(reqData)
@@ -110,8 +113,8 @@ define([
       {
         var code = ((res.responseJSON || {}).error || {}).message;
         var text = t.has('orderDocuments', 'settings:error:' + code)
-          ? t('orderDocuments', 'settings:error:' + code)
-          : t('orderDocuments', 'settings:error:failure');
+          ? view.t('settings:error:' + code)
+          : view.t('settings:error:failure');
 
         viewport.msg.show({
           type: 'error',
@@ -127,6 +130,7 @@ define([
             _id: reqData.prodLineId,
             name: reqData.prodLineName
           },
+          station: reqData.station,
           prefixFilterMode: reqData.prefixFilterMode,
           prefixFilter: reqData.prefixFilter,
           spigotCheck: reqData.spigotCheck

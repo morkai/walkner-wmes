@@ -48,11 +48,11 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var tree = this.tree;
 
-      return _.assign(FormView.prototype.serialize.apply(this, arguments), {
+      return {
         folders: _.map(this.model.get('folders'), function(folderId)
         {
           return {
@@ -60,12 +60,14 @@ define([
             path: tree.getPath(tree.folders.get(folderId)).map(function(f) { return f.getLabel(); }).join(' > ')
           };
         }).filter(function(d) { return d.path.length > 0; })
-      });
+      };
     },
 
     serializeToForm: function()
     {
       var formData = this.model.toJSON();
+
+      formData.components = '';
 
       formData.files = formData.files.map(function(file)
       {
@@ -79,6 +81,19 @@ define([
       return formData;
     },
 
+    serializeForm: function(formData)
+    {
+      formData.components = this.$id('components').select2('data').map(function(item)
+      {
+        return {
+          nc12: item.id,
+          name: item.text
+        };
+      });
+
+      return formData;
+    },
+
     request: function(formData)
     {
       return this.promised(this.tree.editFile(this.model, formData));
@@ -86,7 +101,7 @@ define([
 
     getFailureText: function()
     {
-      return t('orderDocumentTree', 'editFile:msg:failure');
+      return this.t('editFile:msg:failure');
     },
 
     handleSuccess: function()
@@ -99,13 +114,74 @@ define([
       viewport.msg.show({
         type: 'success',
         time: 2500,
-        text: t('orderDocumentTree', 'editFile:msg:success')
+        text: this.t('editFile:msg:success')
       });
     },
 
     onDialogShown: function(viewport)
     {
       this.closeDialog = viewport.closeDialog.bind(viewport);
+    },
+
+    afterRender: function()
+    {
+      FormView.prototype.afterRender.apply(this, arguments);
+
+      this.$id('components').select2({
+        width: '100%',
+        placeholder: '12NC...',
+        allowClear: true,
+        multiple: true,
+        minimumInputLength: 8,
+        ajax: {
+          cache: true,
+          quietMillis: 300,
+          url: function(term)
+          {
+            return '/orders/components?limit(100)&_id=regex=' + encodeURIComponent('^' + term);
+          },
+          results: function(data)
+          {
+            return {
+              results: (data.collection || []).map(function(component)
+              {
+                return {
+                  id: component._id,
+                  text: component.name
+                };
+              })
+            };
+          }
+        },
+        formatSelection: function(item)
+        {
+          return _.escape(item.id);
+        },
+        formatResult: function(item)
+        {
+          var id = item.id;
+
+          while (id.length < 12)
+          {
+            id = ' ' + id;
+          }
+
+          var html = ['<span class="text-mono">', _.escape(id), '</span>'];
+
+          if (item.text)
+          {
+            html.push('<span class="text-small">:', _.escape(item.text) + '</span>');
+          }
+
+          return html.join('');
+        }
+      }).select2('data', (this.model.get('components') || []).map(function(component)
+      {
+        return {
+          id: component.nc12,
+          text: component.name
+        };
+      }));
     }
 
   });

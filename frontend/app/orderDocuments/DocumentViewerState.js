@@ -32,6 +32,18 @@ define([
     };
   }
 
+  function createEmptyOrder()
+  {
+    return {
+      no: null,
+      nc12: '',
+      name: '',
+      documents: {},
+      confirmations: {},
+      nc15: null
+    };
+  }
+
   return Model.extend({
 
     nlsDomain: 'orderDocuments',
@@ -43,23 +55,12 @@ define([
           _id: null,
           name: ''
         },
+        station: 0,
         prefixFilterMode: 'exclusive',
         prefixFilter: '161 165 198',
         spigotCheck: false,
-        localOrder: {
-          no: null,
-          nc12: '',
-          name: '',
-          documents: {},
-          nc15: null
-        },
-        remoteOrder: {
-          no: null,
-          nc12: '',
-          name: '',
-          documents: {},
-          nc15: null
-        },
+        localOrder: createEmptyOrder(),
+        remoteOrder: createEmptyOrder(),
         localFile: null,
         fileSource: null,
         bom: null
@@ -77,17 +78,38 @@ define([
       {
         window.WMES_LINE_ID = (this.get('prodLine') || {_id: null})._id;
       });
+
+      this.on('change:prodLine', function()
+      {
+        window.WMES_STATION = this.get('station');
+      });
     },
 
     load: function()
     {
-      this.set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'));
+      var attrs = _.assign(
+        this.defaults(),
+        JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
+      );
+
+      if (!attrs.remoteOrder.confirmations)
+      {
+        attrs.remoteOrder.confirmations = {};
+      }
+
+      if (!attrs.localOrder.confirmations)
+      {
+        attrs.localOrder.confirmations = {};
+      }
+
+      this.set(attrs);
     },
 
     save: function()
     {
       var state = {
         prodLine: this.get('prodLine'),
+        station: this.get('station'),
         localOrder: this.get('localOrder'),
         remoteOrder: this.get('remoteOrder'),
         prefixFilterMode: this.get('prefixFilterMode'),
@@ -154,6 +176,7 @@ define([
       return {
         prodLineId: prodLine._id,
         prodLineName: prodLine.name,
+        station: this.get('station'),
         prefixFilterMode: this.get('prefixFilterMode'),
         prefixFilter: this.get('prefixFilter'),
         spigotCheck: this.get('spigotCheck')
@@ -259,13 +282,7 @@ define([
 
     resetLocalOrder: function()
     {
-      this.set('localOrder', {
-        no: null,
-        nc12: '',
-        name: '',
-        documents: {},
-        nc15: null
-      });
+      this.set('localOrder', createEmptyOrder());
       this.save();
     },
 
@@ -309,6 +326,7 @@ define([
         nc12: orderData.nc12,
         name: orderData.name,
         documents: {},
+        confirmations: {},
         nc15: null
       };
 
@@ -325,6 +343,15 @@ define([
       }
 
       _.assign(newOrder.documents, orderData.documents);
+
+      var station = this.get('station');
+
+      _.forEach(orderData.confirmations, function(stations, nc15)
+      {
+        var status = stations[station];
+
+        newOrder.confirmations[nc15] = status === undefined ? null : status;
+      });
 
       if (newOrder.no === oldOrder.no && newOrder.documents[oldOrder.nc15])
       {
@@ -427,6 +454,134 @@ define([
       var currentOrder = this.getCurrentOrder();
 
       return !!currentOrder.no && currentOrder.no === bom.orderNo;
+    },
+
+    getOverallConfirmationStatus: function()
+    {
+      var confirmations = this.getCurrentOrder().confirmations;
+      var documents = Object.keys(confirmations);
+
+      if (!documents.length)
+      {
+        return 'confirmed';
+      }
+
+      for (var i = 0; i < documents.length; ++i)
+      {
+        var nc15 = documents[i];
+        var status = confirmations[nc15];
+
+        if (status === null)
+        {
+          return 'unknown';
+        }
+
+        if (status === false)
+        {
+          return 'unconfirmed';
+        }
+      }
+
+      return 'confirmed';
+    },
+
+    isConfirmableDocumentSelected: function()
+    {
+      return this.isConfirmableDocument(this.getCurrentOrder().nc15);
+    },
+
+    isConfirmedDocumentSelected: function()
+    {
+      var currentOrder = this.getCurrentOrder();
+
+      return currentOrder.confirmations[currentOrder.nc15] === true;
+    },
+
+    isConfirmableDocument: function(nc15)
+    {
+      return this.getCurrentOrder().confirmations[nc15] !== undefined;
+    },
+
+    isDocumentConfirmed: function(nc15)
+    {
+      var confirmations = this.getCurrentOrder().confirmations;
+      var status = confirmations[nc15];
+
+      return status === true;
+    },
+
+    getFirstUnconfirmedDocument: function()
+    {
+      var confirmations = this.getCurrentOrder().confirmations;
+      var documents = Object.keys(confirmations);
+
+      for (var i = 0; i < documents.length; ++i)
+      {
+        var nc15 = documents[i];
+
+        if (confirmations[nc15] !== true)
+        {
+          return nc15;
+        }
+      }
+
+      return null;
+    },
+
+    setDocumentConfirmations: function(orderNo, newConfirmations)
+    {
+      var changed = false;
+
+      [this.get('localOrder'), this.get('remoteOrder')].forEach(function(order)
+      {
+        if (order.no === orderNo && !_.isEqual(order.confirmations, newConfirmations))
+        {
+          order.confirmations = newConfirmations;
+          changed = true;
+        }
+      });
+
+      if (changed)
+      {
+        this.trigger('change:confirmations');
+        this.save();
+      }
+    },
+
+    handleConfirmation: function(confirmation)
+    {
+      var changed = false;
+
+      [this.get('localOrder'), this.get('remoteOrder')].forEach(function(order)
+      {
+        if (order.no !== confirmation.orderNo)
+        {
+          return;
+        }
+
+        var oldConfirmations = order.confirmations;
+
+        if (oldConfirmations[confirmation.nc15] === undefined)
+        {
+          return;
+        }
+
+        var newConfirmations = _.clone(oldConfirmations);
+
+        newConfirmations[confirmation.nc15] = true;
+
+        if (!_.isEqual(oldConfirmations, newConfirmations))
+        {
+          order.confirmations = newConfirmations;
+          changed = true;
+        }
+      });
+
+      if (changed)
+      {
+        this.trigger('change:confirmations');
+        this.save();
+      }
     }
 
   });

@@ -23,6 +23,7 @@
     "controls:shutdown": "Shutdown after 3s",
     "controls:filter:ph": "Filter documents",
     "controls:lockUi": "Lock UI",
+    "controls:confirm": "I confirm that I have<br>read the document.",
 
     "uiLocked": "UI locked.<br>Touch here to unlock.",
 
@@ -34,6 +35,7 @@
     "settings:prodLineId:help": "Production line the application should connect to in order to get the current production order.",
     "settings:prodLineName": "Production line name",
     "settings:prodLineName:help": "Name displayed in an upper left corner of the application.",
+    "settings:station": "Workstation",
     "settings:prefixFilter:inclusive": "Only documents with 15NC starting with:",
     "settings:prefixFilter:exclusive": "Only documents with 15NC not starting with:",
     "settings:spigotCheck": "Spigot checking",

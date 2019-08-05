@@ -1,6 +1,6 @@
 <form class="orderDocuments-localOrderPicker <%- touch ? 'is-touch' : '' %>" autocomplete="off">
   <div class="form-group">
-    <label for="<%- idPrefix %>-orderNo" class="control-label is-required"><%- t('orderDocuments', 'localOrderPicker:orderNo') %></label>
+    <label for="<%- idPrefix %>-orderNo" class="control-label is-required"><%- helpers.t('localOrderPicker:orderNo') %></label>
     <input id="<%- idPrefix %>-orderNo" name="orderNo" class="form-control" type="text" autocomplete="new-password" required maxlength="15" pattern="^([0-9]{9}|[0-9]{15})$" autofocus>
   </div>
   <div class="row">
@@ -8,15 +8,15 @@
       <% include _numpad.ejs %>
     </div>
     <div id="<%- idPrefix %>-plannedOrders" class="col-md-3 orderDocuments-localOrderPicker-plannedOrders">
-      <label class="control-label"><%- t('orderDocuments', 'localOrderPicker:plannedOrders') %></label>
+      <label class="control-label"><%- helpers.t('localOrderPicker:plannedOrders') %></label>
       <i class="fa fa-spinner fa-spin"></i>
     </div>
     <div id="<%- idPrefix %>-lastOrders" class="col-md-3 orderDocuments-localOrderPicker-lastOrders">
-      <label class="control-label"><%- t('orderDocuments', 'localOrderPicker:lastOrders') %></label>
+      <label class="control-label"><%- helpers.t('localOrderPicker:lastOrders') %></label>
       <i class="fa fa-spinner fa-spin"></i>
     </div>
   </div>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" class="btn btn-primary <%- touch ? 'btn-lg' : '' %>" type="submit"><i class="fa fa-search"></i><span><%- t('orderDocuments', 'localOrderPicker:submit') %></span></button>
+    <button id="<%- idPrefix %>-submit" class="btn btn-primary <%- touch ? 'btn-lg' : '' %>" type="submit"><i class="fa fa-search"></i><span><%- helpers.t('localOrderPicker:submit') %></span></button>
   </div>
 </form>

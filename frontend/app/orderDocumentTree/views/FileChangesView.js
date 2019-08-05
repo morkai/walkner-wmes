@@ -50,7 +50,8 @@ define([
       var last = {
         name: '',
         folders: '',
-        files: ''
+        files: '',
+        components: ''
       };
 
       return {
@@ -71,7 +72,8 @@ define([
             type: view.t('fileChanges:type:' + change.get('type')),
             name: name,
             folders: view.serializeFolders(file, last),
-            files: view.serializeFiles(file, last)
+            files: view.serializeFiles(file, last),
+            components: view.serializeComponents(file, last)
           };
         })
       };
@@ -141,7 +143,38 @@ define([
 
       if (html)
       {
-        return '<ul>' + html + '</ul>';
+        return '<ul class="orderDocumentTree-changes-list">' + html + '</ul>';
+      }
+
+      return '';
+    },
+
+    serializeComponents: function(file, last)
+    {
+      if (!file || !Array.isArray(file.components))
+      {
+        return '';
+      }
+
+      var newComponents = JSON.stringify(file.components);
+
+      if (newComponents === last.components)
+      {
+        return '';
+      }
+
+      last.components = newComponents;
+
+      var html = '';
+
+      file.components.forEach(function(c)
+      {
+        html += '<li title="' + _.escape(c.name) + '">' + _.escape(c.nc12);
+      });
+
+      if (html)
+      {
+        return '<ul class="orderDocumentTree-changes-list">' + html + '</ul>';
       }
 
       return '';

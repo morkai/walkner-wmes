@@ -19,6 +19,7 @@
     "toolbar:markedFileCount": "Number of marked files",
     "toolbar:removeMarkedFiles": "Move marked files to the trash",
     "toolbar:unlinkMarkedFiles": "Remove marked files from the current folder",
+    "toolbar:recoverMarkedFiles": "Recover marked files",
     "toolbar:search:title": "Search documents by 15NC",
     "toolbar:search:placeholder": "15NC...",
     "toolbar:editMarkedFiles": "Edit latest files",
@@ -53,6 +54,8 @@
     "files:sub:failure": "Failed to change the subscription state.",
     "files:updatedAt": "Last change",
     "files:updatedAt:value": "{user}<br>{date}",
+    "files:components": "Components",
+    "files:components:help": "Components assigned to this document. If an order has one of the specified components, then this document will be added to the list in the document browser app with a requirement to confirm that it was read.",
 
     "unlinkFiles:title": "Unlinking files",
     "unlinkFiles:submit": "Unlink files",

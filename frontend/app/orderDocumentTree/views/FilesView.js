@@ -614,6 +614,7 @@ define([
         name: _.escape(selectedFile.getLabel()),
         folders: this.serializePreviewFolders(),
         files: this.serializePreviewFiles(),
+        components: this.serializePreviewComponents(),
         updatedAt: this.serializePreviewUpdatedAt()
       };
     },
@@ -697,6 +698,45 @@ define([
           + view.t('files:files:date', {date: time.utc.format(file.date, 'LL')})
           + '</a>';
       });
+
+      if (html)
+      {
+        return '<ul>' + html + '</ul>';
+      }
+
+      return '-';
+    },
+
+    serializePreviewComponents: function()
+    {
+      var view = this;
+      var selectedFile = view.model.getSelectedFile();
+      var components = selectedFile.get('components') || [];
+
+      if (components.length === 0)
+      {
+        return '-';
+      }
+      var html = '';
+      var max = 2;
+
+      for (var i = 0, l = Math.min(max, components.length); i < l; ++i)
+      {
+        var c = components[i];
+        var nc12 = c.nc12;
+
+        while (nc12.length < 12)
+        {
+          nc12 = '0' + nc12;
+        }
+
+        html += '<li title="' + _.escape(c.name) + '">' + _.escape(nc12);
+      }
+
+      if (components.length > max)
+      {
+        html += ' +' + (components.length - max);
+      }
 
       if (html)
       {

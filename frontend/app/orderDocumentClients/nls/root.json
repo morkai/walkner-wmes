@@ -8,6 +8,7 @@
     "PROPERTY:_id": "ID",
     "PROPERTY:status": "Status",
     "PROPERTY:prodLine": "Line",
+    "PROPERTY:station": "Workstation",
     "PROPERTY:lastSeenAt": "Last seen at",
     "PROPERTY:fileSource": "File source",
     "PROPERTY:orderNo": "Order no",

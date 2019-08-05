@@ -1,47 +1,50 @@
 <form class="orderDocuments-settings" autocomplete="off">
-  <div class="message message-inline message-warning"><%- t('orderDocuments', 'settings:msg:localServer:checking') %></div>
-  <div class="message message-inline message-success hidden"><%- t('orderDocuments', 'settings:msg:localServer:success') %></div>
-  <div class="message message-inline message-error hidden"><%- t('orderDocuments', 'settings:msg:localServer:failure') %></div>
   <input name="fake-login" type="text" autocomplete="new-password" style="display: none">
   <input name="fake-password" type="password" style="display: none">
-  <div class="form-group" title="<%- t('orderDocuments', 'settings:prodLineId:help') %>">
-    <label for="<%- idPrefix %>-prodLineId" class="control-label is-required"><%- t('orderDocuments', 'settings:prodLineId') %></label>
-    <input id="<%- idPrefix %>-prodLineId" name="prodLineId" class="form-control" type="text" autocomplete="new-password" required>
+  <div class="row">
+    <div class="col-md-8 form-group" title="<%- helpers.t('settings:prodLineId:help') %>">
+      <label for="<%- idPrefix %>-prodLineId" class="control-label is-required"><%- helpers.t('settings:prodLineId') %></label>
+      <input id="<%- idPrefix %>-prodLineId" name="prodLineId" class="form-control" type="text" required>
+    </div>
+    <div class="col-md-4 form-group">
+      <label for="<%- idPrefix %>-station" class="control-label is-required"><%- helpers.t('settings:station') %></label>
+      <input id="<%- idPrefix %>-station" name="station" class="form-control" type="number" required min="1" max="99">
+    </div>
   </div>
-  <div class="form-group" title="<%- t('orderDocuments', 'settings:prodLineName:help') %>">
-    <label for="<%- idPrefix %>-prodLineName" class="control-label is-required"><%- t('orderDocuments', 'settings:prodLineName') %></label>
-    <input id="<%- idPrefix %>-prodLineName" name="prodLineName" class="form-control" type="text" autocomplete="new-password" required>
+  <div class="form-group" title="<%- helpers.t('settings:prodLineName:help') %>">
+    <label for="<%- idPrefix %>-prodLineName" class="control-label is-required"><%- helpers.t('settings:prodLineName') %></label>
+    <input id="<%- idPrefix %>-prodLineName" name="prodLineName" class="form-control" type="text" required>
   </div>
   <div class="form-group">
     <div class="radio">
       <label class="control-label">
         <input name="prefixFilterMode" type="radio" value="inclusive">
-        <%- t('orderDocuments', 'settings:prefixFilter:inclusive') %>
+        <%- helpers.t('settings:prefixFilter:inclusive') %>
       </label>
     </div>
     <div class="radio">
       <label class="control-label">
         <input name="prefixFilterMode" type="radio" value="exclusive">
-        <%- t('orderDocuments', 'settings:prefixFilter:exclusive') %>
+        <%- helpers.t('settings:prefixFilter:exclusive') %>
       </label>
     </div>
-    <input id="<%- idPrefix %>-prefixFilter" name="prefixFilter" class="form-control" type="text" autocomplete="new-password">
+    <input id="<%- idPrefix %>-prefixFilter" name="prefixFilter" class="form-control" type="text">
   </div>
   <div class="checkbox">
     <label>
       <input id="<%- idPrefix %>-spigotCheck" value="true" type="checkbox" name="spigotCheck">
-      <%- t('orderDocuments', 'settings:spigotCheck') %>
+      <%- helpers.t('settings:spigotCheck') %>
     </label>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-login" class="control-label is-required"><%- t('orderDocuments', 'settings:login') %></label>
+    <label for="<%- idPrefix %>-login" class="control-label is-required"><%- helpers.t('settings:login') %></label>
     <input id="<%- idPrefix %>-login" name="login" class="form-control" type="text" autocomplete="new-password" required>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-password" class="control-label is-required"><%- t('orderDocuments', 'settings:password') %></label>
+    <label for="<%- idPrefix %>-password" class="control-label is-required"><%- helpers.t('settings:password') %></label>
     <input id="<%- idPrefix %>-password" name="password" class="form-control" type="password" required>
   </div>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" class="btn btn-primary" type="submit"><i class="fa fa-save"></i><span><%- t('orderDocuments', 'settings:submit') %></span></button>
+    <button id="<%- idPrefix %>-submit" class="btn btn-primary" type="submit"><i class="fa fa-save"></i><span><%- helpers.t('settings:submit') %></span></button>
   </div>
 </form>

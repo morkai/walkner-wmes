@@ -13,6 +13,8 @@ define([
 
     urlRoot: '/orderDocuments/files',
 
+    nlsDomain: 'orderDocumentTree',
+
     labelAttribute: 'name',
 
     getLabel: function()

@@ -7,6 +7,8 @@
 // /fix/clip/count-daily-mrp
 // /fix/fteMasterEntries/recount-totals
 
+db.orderdocumentfiles.updateMany({}, {$set: {components: []}});
+
 var toRemove = [
 
 ];

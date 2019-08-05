@@ -18,6 +18,7 @@
   "toolbar:markedFileCount": "Ilość oznaczonych plików",
   "toolbar:removeMarkedFiles": "Przenieś oznaczone pliki do śmietnika",
   "toolbar:unlinkMarkedFiles": "Usuń przypisania oznaczonych plików do aktualnego katalogu",
+  "toolbar:recoverMarkedFiles": "Przywróć oznaczone pliki",
   "toolbar:search:title": "Szukaj dokumentów po 15NC",
   "toolbar:search:placeholder": "15NC...",
   "toolbar:editMarkedFiles": "Edytuj najnowsze pliki",
@@ -52,6 +53,8 @@
   "files:sub:failure": "Zmiana subskrypcji nie powiodła się.",
   "files:updatedAt": "Ostatnia zmiana",
   "files:updatedAt:value": "{user}<br>{date}",
+  "files:components": "Komponenty",
+  "files:components:help": "Komponenty, do których dany dokument jest przypisany. Jeżeli zlecenie ma jeden ze zdefiniowanych komponentów, to ten dokument będzie dodany do listy w przeglądarce dokumentów z wymogiem potwierdzenia zapoznania się z treścią.",
 
   "unlinkFiles:title": "Usuwanie przypisania dokumentów",
   "unlinkFiles:submit": "Usuń przypisania",

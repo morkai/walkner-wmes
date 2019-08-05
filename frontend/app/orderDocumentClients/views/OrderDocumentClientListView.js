@@ -28,6 +28,7 @@ define([
     columns: [
       {id: '_id', className: 'is-min'},
       {id: 'prodLine', className: 'is-min'},
+      {id: 'station', className: 'is-min is-number'},
       {id: 'fileSource', className: 'is-min'},
       {id: 'orderNo', className: 'is-min'},
       {id: 'orderNc12', className: 'is-min'},

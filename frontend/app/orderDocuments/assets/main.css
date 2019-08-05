@@ -254,9 +254,16 @@
   color: #333;
   cursor: default;
 }
+.orderDocuments-document.is-locked {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
 .orderDocuments-document:hover {
   color: #aaa;
   text-decoration: none;
+}
+.orderDocuments-document.is-locked:hover {
+  color: #ddd;
 }
 .orderDocuments-document:focus {
   color: #000;
@@ -264,6 +271,11 @@
   outline: 2px solid #66afe9;
   outline-offset: -2px;
   text-decoration: none;
+}
+.orderDocuments-document.is-locked:focus {
+  color: #ddd;
+  background-color: #333;
+  outline: none;
 }
 .orderDocuments-document.is-expanded {
   min-width: 225px;
@@ -396,4 +408,24 @@
 
 .orderDocuments .production-snMessage-text {
   width: 800px;
+}
+
+.orderDocuments-confirm {
+  position: fixed;
+  bottom: 0;
+  left: 225px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  padding: 7px 14px;
+  text-align: left;
+  box-shadow: 0 4px 12px #666;
+}
+.orderDocuments-confirm > .fa {
+  margin-right: 14px;
+  font-size: 63px;
+}
+.orderDocuments-confirm > p {
+  font-size: 28px;
+  line-height: 1.2;
 }

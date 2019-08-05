@@ -85,15 +85,17 @@ define([
     {
       var page = this;
       var updateClientState = _.debounce(page.updateClientState.bind(page), 1000);
+      var joinProdLine = _.debounce(page.joinProdLine.bind(page), 1);
 
-      page.listenTo(page.model, 'change:prodLine', page.joinProdLine);
+      page.listenTo(page.model, 'change:prodLine change:station', joinProdLine);
+      page.listenTo(page.model, 'change:prodLkine', page.onProdLineChanged);
       page.listenTo(page.model, 'change:spigotCheck', page.defineSpigotBindings);
       page.listenTo(page.model, 'change:bom', page.onBomChanged);
       page.listenTo(page.model, 'save', function()
       {
         updateClientState();
 
-        if (!page.model.isBomActive())
+        if (!page.model.isBomActive() || page.controlsView.isConfirmableDocumentSelected())
         {
           page.model.set('bom', null);
         }
@@ -229,6 +231,7 @@ define([
         this.socket.emit('orderDocuments.join', {
           clientId: model.id,
           prodLineId: prodLine._id,
+          station: model.get('station'),
           settings: model.getSettings(),
           orderInfo: model.getCurrentOrderInfo()
         });
@@ -469,7 +472,11 @@ define([
         return done(true);
       }
 
-      if (newState === null)
+      if (this.model.isConfirmableDocumentSelected())
+      {
+        newState = false;
+      }
+      else if (newState === null)
       {
         newState = !this.model.isBomActive();
       }
@@ -576,6 +583,37 @@ define([
       }
 
       this.$id('bom').toggleClass('hidden', !active);
+    },
+
+    onProdLineChanged: function()
+    {
+      this.setUpConfirmedSub();
+    },
+
+    setUpConfirmedSub: function()
+    {
+      if (this.confirmedSub)
+      {
+        this.confirmedSub.cancel();
+        this.confirmedSub = null;
+      }
+
+      var prodLine = this.model.get('prodLine')._id;
+
+      if (!prodLine)
+      {
+        return;
+      }
+
+      this.confirmedSub = this.pubsub.subscribe(
+        'orderDocuments.confirmed.' + prodLine,
+        this.onDocumentConfirmed.bind(this)
+      );
+    },
+
+    onDocumentConfirmed: function(confirmation)
+    {
+      this.model.handleConfirmation(confirmation);
     }
 
   });

@@ -22,6 +22,7 @@
   "controls:shutdown": "Wyłącz komputer po 3s",
   "controls:filter:ph": "Filtruj dokumenty",
   "controls:lockUi": "Zablokuj interfejs",
+  "controls:confirm": "Potwierdzam zapoznanie<br>się z dokumentem",
 
   "uiLocked": "Interfejs zablokowany.<br>Dotknij tutaj, aby odblokować.",
 
@@ -33,6 +34,7 @@
   "settings:prodLineId:help": "Linia produkcyjna, do której aplikacja ma się połączyć w celu pobrania aktualnego zlecenia.",
   "settings:prodLineName": "Nazwa linii produkcyjnej",
   "settings:prodLineName:help": "Nazwa wyświetlana w lewym górnym rogu aplikacji.",
+  "settings:station": "Stanowisko",
   "settings:prefixFilter:inclusive": "Tylko dokumenty z 15NC zaczynającymi się na:",
   "settings:prefixFilter:exclusive": "Tylko dokumenty z 15NC nie zaczynającymi się na:",
   "settings:spigotCheck": "Sprawdzanie Spigota",

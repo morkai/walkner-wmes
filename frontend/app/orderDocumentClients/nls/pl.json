@@ -7,6 +7,7 @@
   "PROPERTY:_id": "ID",
   "PROPERTY:status": "Status",
   "PROPERTY:prodLine": "Linia",
+  "PROPERTY:station": "Stanowisko",
   "PROPERTY:lastSeenAt": "Ostatnio widziany",
   "PROPERTY:fileSource": "Źródło pliku",
   "PROPERTY:orderNo": "Nr zlecenia",
