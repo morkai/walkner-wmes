@@ -308,7 +308,6 @@ exports.events = {
       'prodDowntimes.confirmedEdited',
       'qi.*.deleted',
       'd8.*.deleted',
-      'orderDocuments.tree.filePurged', 'orderDocuments.tree.folderPurged',
       'pfep.entries.deleted'
     ],
     error: [
@@ -362,8 +361,6 @@ exports.pubsub = {
     'settings.updated.**',
     'icpo.results.synced', 'orders.intake.synced',
     'orders.updated.*', 'orders.quantityDone.*', 'orders.invalid.**',
-    'orderDocuments.tree.**', 'orderDocuments.clients.**', 'orderDocuments.remoteChecked.*',
-    'orderDocuments.eto.synced',
     'cags.nc12.synced', 'cags.nc12.syncFailed', 'cags.plan.synced', 'cags.plan.syncFailed',
     'isaRequests.**', 'isaEvents.saved', 'isaShiftPersonnel.updated',
     'pscs.**',

@@ -1,0 +1,12 @@
+{
+  "BREADCRUMBS:base": "Dokumentacja",
+  "BREADCRUMBS:browse": "Potwierdzenia",
+
+  "PROPERTY:user": "Użytkownik",
+  "PROPERTY:time": "Czas potwierdzenia",
+  "PROPERTY:nc15": "Kod dokumentu",
+  "PROPERTY:name": "Nazwa dokumentu",
+  "PROPERTY:line": "Linia",
+  "PROPERTY:station": "Stanowisko",
+  "PROPERTY:orderNo": "Nr zlecenia"
+}

@@ -161,6 +161,7 @@
     "NAVBAR:DOCUMENTS:TREE": "Documents",
     "NAVBAR:DOCUMENTS:CLIENTS": "Clients",
     "NAVBAR:DOCUMENTS:SETTINGS": "Settings",
+    "NAVBAR:DOCUMENTS:CONFIRMATIONS": "Confirmations",
     "NAVBAR:VENDORS": "Vendors",
     "NAVBAR:PURCHASE_ORDERS": "Purchase orders",
     "NAVBAR:MONITORING": "Monitoring",

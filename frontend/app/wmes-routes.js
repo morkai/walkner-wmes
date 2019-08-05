@@ -18,6 +18,7 @@ define([
   './orders/routes',
   './orderStatuses/routes',
   './orderDocumentClients/routes',
+  './orderDocumentConfirmations/routes',
   './orderDocumentTree/routes',
   './pressWorksheets/routes',
   './prodDowntimes/routes',

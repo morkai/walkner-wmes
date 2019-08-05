@@ -1,0 +1,15 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "Documentation",
+    "BREADCRUMBS:browse": "Clients",
+
+    "PROPERTY:user": "User",
+    "PROPERTY:time": "Time",
+    "PROPERTY:nc15": "Document code",
+    "PROPERTY:name": "Document name",
+    "PROPERTY:line": "Line",
+    "PROPERTY:station": "Workstation",
+    "PROPERTY:orderNo": "Order no"
+  },
+  "pl": true
+}
