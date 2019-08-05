@@ -94,7 +94,7 @@ define([
       this.setUpLoadStatuses();
     },
 
-    setUpWorkCenters: function(setting)
+    setUpWorkCenters: function()
     {
       this.$id('planning-workCenters').select2({
         width: '100%',

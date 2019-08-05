@@ -526,8 +526,6 @@ define([
         req.fail(function()
         {
           viewport.msg.savingFailed();
-
-
         });
 
         req.done(function()
