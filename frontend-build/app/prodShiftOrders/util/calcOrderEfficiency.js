@@ -1,1 +1,1 @@
-define([],function(){"use strict";return function(t,n){var r=t.laborTime/100*t.totalQuantity/(t.workDuration*t.workerCount);return r=isNaN(r)||!isFinite(r)?0:r,n?Math.round(100*r)+"%":r}});
+define([],function(){"use strict";return function(t,r){var e=t.orderData.operations[t.operationNo],o=1;e&&t.orderData.taktTimeCoeff&&(o=t.orderData.taktTimeCoeff[e.workCenter]||t.orderData.taktTimeCoeff["*"]||1);var a=t.laborTime*o/100*t.totalQuantity/(t.workDuration*t.workerCount);return a=isNaN(a)||!isFinite(a)?0:a,r?Math.round(100*a)+"%":a}});
