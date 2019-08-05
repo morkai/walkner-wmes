@@ -1,4 +1,71 @@
 <div class="hidden">
+  <h1>v0.141.0</h1>
+  <h2><%- time.format('2019-08-04', 'LL') %></h2>
+  <h3>FAP</h3>
+  <ul>
+    <li>Zmieniono filtr kategorii w raporcie tak, aby można było wybierać także podkategorie.</li>
+    <li>Zmieniono określanie powiadamianych działów tak, aby w przypadku gdy nie określono MRP (nie podano zlecenia)
+      lub dane MRP nie jest zdefiniowane w Matrycy odpowiedzialności, brane były wszystkie Działy przypisanego
+      do danych Kategorii.</li>
+    <li>Zmieniono określanie powiadamianych działów tak, aby w przypadku gdy określono MRP (podano zlecenie)
+      brane były pod uwagę Działy typu Tłocznia oraz Malarnia tylko z Wydziału, na którym ostatnio robiono
+      dane MRP.</li>
+  </ul>
+  <h3>Baza testów > TRW</h3>
+  <ul>
+    <li>Zmieniono wykonywanie kroków programu podczas testu tak, aby dany krok był zaliczany, jeżeli wszystkie
+      wejścia mają prawidłową wartość przez przynajmniej 900ms, jeżeli w kroku występuje wejście analogowe lub
+      450ms, jeżeli w kroku nie ma wejść analogowych. W drugiej turze (ponowne sprawdzenie wszystkich kroków) czasy
+      są mniejsze 3x.</li>
+  </ul>
+  <h3>Magazyn</h3>
+  <ul>
+    <li>Dodano nową opcję konfiguracyjną w ustawieniach: Ignoruj status malarnii podczas kompletacji.</li>
+  </ul>
+  <h3>Malarnia</h3>
+  <ul>
+    <li>Dodano dymki z opisem statusów do sum ilości komponentów.</li>
+  </ul>
+  <h3>Wiercenie</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający kopiowanie nr zleceń w niektórych przypadkach.</li>
+    <li>Dodano dymki z opisem statusów do sum ilości komponentów.</li>
+  </ul>
+  <h3>Planowanie</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący w niektórych przypadkach niekończącą się pętlę generowania jednego planu podczas
+      fazy rozszerzania zleceń.</li>
+    <li>Zmieniono ustawianie ilości pracowników na linii tak, aby można było podać wartość z dwoma miejscami po
+      przecinku.</li>
+    <li>Dodano nową opcję konfiguracyjną do ustawień planu: Wymuś pracujący dzień.</li>
+  </ul>
+  <h3>Inspekcja Jakości</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający edycję wyniku w niektórych przypadkach.</li>
+  </ul>
+  <h3>Formatka operatora</h3>
+  <ul>
+    <li>Poprawiono błąd powodujący zbyt długie sprawdzanie niepowtarzalności skanowanego kodu komponentu.</li>
+    <li>Zmieniono limit oczekiwania na sprawdzenie unikalności skanowanego kodu komponentu z 6s na 20s.</li>
+    <li>Zmieniono rozpoczynanie zlecenia tak, aby do danych zlecenia kopiowane były aktualne wartości współczynników
+      'Szybkość planowania' oraz 'Współczynnik operacji' (Takt Time).</li>
+  </ul>
+  <h3>Dane produkcyjne > Zlecenia</h3>
+  <ul>
+    <li>Zmieniono obliczanie wartości 'Wydajność' tak, aby pod uwagę brany był 'Współczynnik operacji' z ustawień
+      Takt Time.</li>
+  </ul>
+  <h3>Baza testów > SNF</h3>
+  <ul>
+    <li>Poprawiono błąd uniemożliwiający załadowanie się strony ze szczegółami wyniku testu.</li>
+  </ul>
+  <h3>Dokumentacja</h3>
+  <ul>
+    <li>Dodano funkcjonalność potwierdzania zapoznania się ze specjalnymi dokumentami. Dokumenty dodawane są do listy
+      dokumentów zlecenia w przeglądarce dokumentów na podstawie zdefiniowanych komponentów.</li>
+  </ul>
+</div>
+<div class="hidden">
   <h1>v0.140.0</h1>
   <h2><%- time.format('2019-07-21', 'LL') %></h2>
   <h3>Baza komponentów</h3>

@@ -124,10 +124,7 @@ define([
 
       this.prodShiftOrders = bindLoadingMessage(new ProdShiftOrderCollection(null, {
         rqlQuery: {
-          fields: {
-            orderData: 0,
-            spigot: 0
-          },
+          fields: {},
           sort: {startedAt: 1},
           limit: 9999,
           selector: {

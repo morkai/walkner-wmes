@@ -9,13 +9,14 @@ define([
 
   return function(prodShiftOrder, pretty)
   {
-    var operation = prodShiftOrder.orderData.operations[prodShiftOrder.operationNo];
+    var orderData = prodShiftOrder.orderData || {};
+    var operation = orderData.operations && orderData.operations[prodShiftOrder.operationNo] || null;
     var taktTimeCoeff = 1;
 
-    if (operation && prodShiftOrder.orderData.taktTimeCoeff)
+    if (operation && orderData.taktTimeCoeff)
     {
-      taktTimeCoeff = prodShiftOrder.orderData.taktTimeCoeff[operation.workCenter]
-        || prodShiftOrder.orderData.taktTimeCoeff['*']
+      taktTimeCoeff = orderData.taktTimeCoeff[operation.workCenter]
+        || orderData.taktTimeCoeff['*']
         || 1;
     }
 
