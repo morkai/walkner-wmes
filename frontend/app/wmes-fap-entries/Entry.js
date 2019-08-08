@@ -334,10 +334,11 @@ define([
 
     serializeAuth: function()
     {
-      var manage = user.isAllowedTo('FAP:MANAGE');
       var loggedIn = user.isLoggedIn();
+      var manage = user.isAllowedTo('FAP:MANAGE');
       var manager = user.isAllowedTo('FN:manager');
       var procEng = user.isAllowedTo('FN:process-engineer', 'FN:process-engineer-NPI');
+      var qualityEng = user.isAllowedTo('FN:quality_engineer');
       var designer = user.isAllowedTo('FN:designer', 'FN:designer_eto');
       var master = user.isAllowedTo('FN:master');
       var leader = user.isAllowedTo('FN:leader');
@@ -367,7 +368,7 @@ define([
         level: !finished && (solver || manager || whman),
         solution: solver,
         problem: started && (manage || procEng || designer || master || leader),
-        category: manage || procEng || designer,
+        category: manage || procEng || qualityEng || designer,
         subCategory: manage || procEng || designer,
         subdivisionType: manage || procEng || designer || master || leader,
         componentCode: started && (manage || procEng),
