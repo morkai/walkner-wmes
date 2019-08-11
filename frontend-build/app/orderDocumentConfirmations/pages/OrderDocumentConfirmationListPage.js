@@ -1,0 +1,1 @@
+define(["app/core/pages/FilteredListPage","../views/OrderDocumentConfirmationListView","../views/OrderDocumentConfirmationFilterView"],function(e,i,t){"use strict";return e.extend({baseBreadcrumb:!0,FilterView:t,ListView:i,actions:[]})});

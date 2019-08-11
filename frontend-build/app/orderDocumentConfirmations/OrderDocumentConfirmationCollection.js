@@ -1,0 +1,1 @@
+define(["../core/Collection","./OrderDocumentConfirmation"],function(e,r){"use strict";return e.extend({model:r,rqlQuery:function(e){return e.Query.fromObject({fields:{},sort:{time:-1},limit:-1337})}})});

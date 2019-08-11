@@ -1716,6 +1716,7 @@ app/orderStatuses/OrderStatusCollection.js
 app/data/orderStatuses.js
 app/orderStatuses/routes.js
 app/orderDocumentClients/routes.js
+app/orderDocumentConfirmations/routes.js
 app/orderDocumentTree/routes.js
 app/pressWorksheets/PressWorksheet.js
 app/pressWorksheets/routes.js
@@ -1893,6 +1894,11 @@ app/printers/templates/pageAction.js
 app/printers/views/PrinterPickerView.js
 app/wmes-drilling/DrillingOrder.js
 app/wmes-drilling/DrillingOrderCollection.js
+app/planning/util/shift.js
+app/orderStatuses/util/renderOrderStatusLabel.js
+app/planning/templates/orderStatusIcons.js
+app/wh/WhOrder.js
+app/wh/WhOrderCollection.js
 app/paintShopPaints/PaintShopPaint.js
 app/paintShopPaints/PaintShopPaintCollection.js
 app/paintShop/PaintShopOrder.js
@@ -1907,6 +1913,7 @@ app/paintShop/templates/orderDetails.js
 app/paintShop/templates/orderChanges.js
 app/paintShop/templates/orderChange.js
 app/paintShop/templates/queueOrder.js
+app/paintShop/templates/whOrders.js
 app/paintShop/views/PaintShopOrderDetailsView.js
 app/paintShop/templates/queue.js
 app/paintShop/views/PaintShopQueueView.js
@@ -1929,6 +1936,9 @@ app/paintShop/pages/PaintShopPage.js
 app/nls/paintShop.js
 app/nls/pl/paintShop.js
 i18n!app/nls/paintShop
+app/nls/wh.js
+app/nls/pl/wh.js
+i18n!app/nls/wh
 app/paintShop/routes.js
 app/qiResults/routes.js
 app/qiKinds/QiKind.js
@@ -1946,7 +1956,6 @@ app/nls/mor.js
 app/nls/pl/mor.js
 i18n!app/nls/mor
 app/mor/routes.js
-app/planning/util/shift.js
 app/planning/PlanOrder.js
 app/planning/changeHandlers.js
 app/planning/PlanOrderCollection.js
@@ -1987,8 +1996,6 @@ app/prodShifts/ProdShiftCollection.js
 app/planning/templates/toolbar.js
 app/planning/templates/toolbarPrintLineList.js
 app/planning/templates/printPage.js
-app/orderStatuses/util/renderOrderStatusLabel.js
-app/planning/templates/orderStatusIcons.js
 app/planning/templates/toggleLockDialog.js
 app/planning/views/PlanMrpToolbarView.js
 app/planning/templates/lineSettingsDialog.js
@@ -2067,8 +2074,6 @@ app/planning/routes.js
 app/wh/WhSetting.js
 app/wh/WhSettingCollection.js
 app/wh/settings.js
-app/wh/WhOrder.js
-app/wh/WhOrderCollection.js
 app/wh/templates/planFilter.js
 app/wh/views/WhFilterView.js
 app/wh/templates/whList.js
@@ -2106,9 +2111,6 @@ app/wh/templates/problemListItem.js
 app/wh/views/WhProblemListView.js
 app/wh/templates/problemListPage.js
 app/wh/pages/WhProblemListPage.js
-app/nls/wh.js
-app/nls/pl/wh.js
-i18n!app/nls/wh
 app/wh/routes.js
 app/sapLaborTimeFixer/routes.js
 app/printers/tags.js
@@ -2911,6 +2913,15 @@ app/printers/templates/pageAction.js
 app/printers/views/PrinterPickerView.js
 app/wmes-drilling/DrillingOrder.js
 app/wmes-drilling/DrillingOrderCollection.js
+app/core/templates/userInfo.js
+app/planning/util/shift.js
+app/orderStatuses/OrderStatus.js
+app/orderStatuses/OrderStatusCollection.js
+app/data/orderStatuses.js
+app/orderStatuses/util/renderOrderStatusLabel.js
+app/planning/templates/orderStatusIcons.js
+app/wh/WhOrder.js
+app/wh/WhOrderCollection.js
 app/paintShopPaints/PaintShopPaint.js
 app/paintShopPaints/PaintShopPaintCollection.js
 app/paintShop/PaintShopOrder.js
@@ -2921,13 +2932,13 @@ app/settings/Setting.js
 app/settings/SettingCollection.js
 app/paintShop/PaintShopSetting.js
 app/paintShop/PaintShopSettingCollection.js
-app/core/templates/userInfo.js
 app/paintShop/PaintShopEvent.js
 app/paintShop/PaintShopEventCollection.js
 app/paintShop/templates/orderDetails.js
 app/paintShop/templates/orderChanges.js
 app/paintShop/templates/orderChange.js
 app/paintShop/templates/queueOrder.js
+app/paintShop/templates/whOrders.js
 app/paintShop/views/PaintShopOrderDetailsView.js
 app/paintShop/templates/queue.js
 app/paintShop/views/PaintShopQueueView.js
@@ -2970,6 +2981,9 @@ app/paintShop/pages/PaintShopPage.js
 app/nls/paintShop.js
 app/nls/pl/paintShop.js
 i18n!app/nls/paintShop
+app/nls/wh.js
+app/nls/pl/wh.js
+i18n!app/nls/wh
 app/wmes-ps-queue-routes.js
 app/nls/core.js
 app/nls/pl/core.js

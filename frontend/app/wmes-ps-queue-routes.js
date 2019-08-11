@@ -8,7 +8,8 @@ define([
   './user',
   './core/util/getShiftStartInfo',
   './paintShop/pages/PaintShopPage',
-  'i18n!app/nls/paintShop'
+  'i18n!app/nls/paintShop',
+  'i18n!app/nls/wh'
 ], function(
   $,
   time,
