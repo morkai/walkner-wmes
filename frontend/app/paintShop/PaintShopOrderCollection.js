@@ -39,15 +39,21 @@ define([
 
     initialize: function(models, options)
     {
+      if (!options)
+      {
+        options = {};
+      }
+
       var psOrders = this;
 
-      psOrders.settings = options ? options.settings : null;
-      psOrders.paints = options ? options.paints : null;
-      psOrders.dropZones = options ? options.dropZones : null;
-      psOrders.drillingOrders = options ? options.drillingOrders : null;
-      psOrders.user = options ? options.user : null;
-      psOrders.selectedMrp = options && options.selectedMrp ? options.selectedMrp : 'all';
-      psOrders.selectedPaint = options && options.selectedPaint ? options.selectedPaint : 'all';
+      psOrders.settings = options.settings || null;
+      psOrders.paints = options.paints || null;
+      psOrders.dropZones = options.dropZones || null;
+      psOrders.drillingOrders = options.drillingOrders || null;
+      psOrders.whOrders = options.whOrders || null;
+      psOrders.user = options.user || null;
+      psOrders.selectedMrp = options.selectedMrp || 'all';
+      psOrders.selectedPaint = options.selectedPaint || 'all';
 
       psOrders.allMrps = null;
       psOrders.serializedList = null;
@@ -55,12 +61,7 @@ define([
       psOrders.byOrderNo = null;
       psOrders.totalQuantities = {};
 
-      psOrders.on('reset request', function()
-      {
-        psOrders.serializedList = null;
-        psOrders.serializedMap = null;
-        psOrders.byOrderNo = null;
-      });
+      psOrders.on('reset request', resetCache);
 
       psOrders.on('change', function(order)
       {
@@ -91,6 +92,38 @@ define([
             psOrders.trigger('change', psOrder, {drilling: true});
           });
         });
+      }
+
+      if (psOrders.whOrders)
+      {
+        psOrders.listenTo(psOrders.whOrders, 'reset', resetCache);
+
+        psOrders.listenTo(psOrders.whOrders, 'change', function(whOrder)
+        {
+          if (!psOrders.byOrderNo)
+          {
+            return;
+          }
+
+          var orders = psOrders.byOrderNo[whOrder.get('order')];
+
+          if (!orders)
+          {
+            return;
+          }
+
+          orders.forEach(function(whOrder)
+          {
+            psOrders.trigger('change', whOrder, {wh: true});
+          });
+        });
+      }
+
+      function resetCache()
+      {
+        psOrders.serializedList = null;
+        psOrders.serializedMap = null;
+        psOrders.byOrderNo = null;
       }
     },
 

@@ -210,7 +210,8 @@ td.paintShop-property[data-property="timesCabin"] {
 span.paintShop-property {
   display: block;
 }
-span.paintShop-property + span.paintShop-property {
+span.paintShop-property + span.paintShop-property,
+span.paintShop-property + .paintShop-whOrders {
   margin-top: 12px;
 }
 span.paintShop-property > .fa {
@@ -259,4 +260,44 @@ span.paintShop-property > .fa {
 }
 .paintShop-order .is-deleted {
   text-decoration: line-through;
+}
+.paintShop-whOrder > td {
+  vertical-align: top;
+  padding-right: 7px;
+  padding-bottom: 7px;
+}
+.paintShop-orderDetails td.paintShop-whOrder-line {
+  max-width: 94px;
+}
+.paintShop-orderDetails span.paintShop-whOrder-line {
+  display: inline-block;
+  max-width: 87px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.paintShop-whOrder-cancelled {
+  text-decoration: line-through;
+}
+.paintShop-whOrder-status {
+  text-shadow: 1px 1px 1px #000;
+}
+.paintShop-whOrder-status[data-wh-status="pending"] {
+  color: #fff;
+}
+.paintShop-whOrder-status[data-wh-status="started"] {
+  color: #5bc0de;
+}
+.paintShop-whOrder-status[data-wh-status="finished"] {
+  color: #0f0;
+}
+.paintShop-whOrder-status[data-wh-status="problem"] {
+  color: #f00;
+}
+.paintShop-whOrder-status[data-wh-status="cancelled"] {
+  color: #f0ad4e;
+}
+.paintShop-whOrder-time,
+.paintShop-whOrder-qty {
+  text-align: right;
 }

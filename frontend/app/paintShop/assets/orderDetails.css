@@ -106,6 +106,25 @@
 .paintShop-orderDetails-dialog .modal-content {
   background: #000;
 }
+.paintShop-orderDetails-whOrders {
+  width: 100%;
+  line-height: 1;
+}
+.paintShop-orderDetails-whOrders > thead > tr > th {
+  padding: 5px;
+  color: #fff;
+  background-color: #333;
+}
+.paintShop-orderDetails-whOrders > tbody > tr > td {
+  padding: 5px;
+  color: #333;
+  background-color: #fff;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #333;
+}
+.paintShop-orderDetails-whOrders > tbody > tr > td:last-child {
+  border-right: none;
+}
 @media (min-width: 768px) {
   .paintShop-orderDetails-dialog .modal-dialog {
     width: 900px;

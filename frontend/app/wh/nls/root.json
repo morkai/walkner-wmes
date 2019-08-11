@@ -59,6 +59,7 @@
     "prop:carts": "Carts",
     "prop:user": "Warehouseman",
     "prop:problemArea": "Problem area",
+    "prop:status": "Status",
 
     "func:fmx": "FMX",
     "func:kitter": "Kitter",

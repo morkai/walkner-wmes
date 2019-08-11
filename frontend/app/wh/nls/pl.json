@@ -58,6 +58,7 @@
   "prop:carts": "Wózki",
   "prop:user": "Magazynier",
   "prop:problemArea": "Pole problemów",
+  "prop:status": "Status",
 
   "func:fmx": "FMX",
   "func:kitter": "Kitter",

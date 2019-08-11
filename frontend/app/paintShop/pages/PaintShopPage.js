@@ -19,6 +19,7 @@ define([
   'app/planning/util/contextMenu',
   'app/wmes-drilling/DrillingOrderCollection',
   'app/wmes-drilling/DrillingOrder',
+  'app/wh/WhOrderCollection',
   'app/paintShopPaints/PaintShopPaintCollection',
   '../PaintShopOrder',
   '../PaintShopOrderCollection',
@@ -54,6 +55,7 @@ define([
   contextMenu,
   DrillingOrderCollection,
   DrillingOrder,
+  WhOrderCollection,
   PaintShopPaintCollection,
   PaintShopOrder,
   PaintShopOrderCollection,
@@ -245,6 +247,20 @@ define([
         {
           order.set(DrillingOrder.parse(changes));
         }
+      },
+      'wh.orders.changed.*': function(message)
+      {
+        var currentDate = this.whOrders.getDateFilter();
+        var importedDate = time.utc.format(message.date, 'YYYY-MM-DD');
+
+        if (importedDate === currentDate)
+        {
+          this.promised(this.whOrders.fetch({reset: true}));
+        }
+      },
+      'wh.orders.updated': function(message)
+      {
+        this.whOrders.update(message.orders);
       }
     },
 
@@ -359,29 +375,40 @@ define([
 
     defineModels: function()
     {
-      this.settings = bindLoadingMessage(new PaintShopSettingCollection(null, {pubsub: this.pubsub}), this);
+      var page = this;
 
-      this.paints = bindLoadingMessage(
+      page.settings = bindLoadingMessage(new PaintShopSettingCollection(null, {pubsub: page.pubsub}), page);
+
+      page.paints = bindLoadingMessage(
         new PaintShopPaintCollection(null, {rqlQuery: 'limit(0)'}),
-        this
+        page
       );
 
-      this.dropZones = bindLoadingMessage(
-        PaintShopDropZoneCollection.forDate(this.options.date),
-        this
+      page.dropZones = bindLoadingMessage(
+        PaintShopDropZoneCollection.forDate(page.options.date),
+        page
       );
 
-      this.drillingOrders = bindLoadingMessage(DrillingOrderCollection.forDate(this.options.date), this);
+      page.drillingOrders = bindLoadingMessage(DrillingOrderCollection.forDate(page.options.date), page);
 
-      this.orders = bindLoadingMessage(PaintShopOrderCollection.forDate(this.options.date, {
-        selectedMrp: this.options.selectedMrp || 'all',
-        selectedPaint: this.options.selectedPaint || 'all',
-        settings: this.settings,
-        paints: this.paints,
-        dropZones: this.dropZones,
+      page.whOrders = bindLoadingMessage(
+        new WhOrderCollection(null, {
+          date: page.options.date,
+          groupByOrderNo: true
+        }),
+        page
+      );
+
+      page.orders = bindLoadingMessage(PaintShopOrderCollection.forDate(page.options.date, {
+        selectedMrp: page.options.selectedMrp || 'all',
+        selectedPaint: page.options.selectedPaint || 'all',
+        settings: page.settings,
+        paints: page.paints,
+        dropZones: page.dropZones,
         user: JSON.parse(sessionStorage.getItem('WMES_PS_USER') || 'null'),
-        drillingOrders: this.drillingOrders
-      }), this);
+        drillingOrders: page.drillingOrders,
+        whOrders: page.whOrders
+      }), page);
     },
 
     defineViews: function()
@@ -466,7 +493,8 @@ define([
         page.settings.fetch({reset: true}),
         page.dropZones.fetch({reset: true}),
         page.paints.fetch({reset: true}),
-        page.drillingOrders.fetch({reset: true})
+        page.drillingOrders.fetch({reset: true}),
+        page.whOrders.fetch({reset: true})
       );
 
       load1.fail(function() { deferred.reject.apply(deferred, arguments); });
@@ -1486,16 +1514,19 @@ define([
 
       page.orders.setDateFilter(newDate);
       page.drillingOrders.setDateFilter(newDate);
+      page.whOrders.setDateFilter(newDate);
       page.dropZones.setDate(page.orders.getDateFilter());
 
       page.orders.reset([]);
       page.drillingOrders.reset([]);
+      page.whOrders.reset([]);
       page.dropZones.reset([]);
 
       var dropZones = page.promised(page.dropZones.fetch({reset: true}));
       var drillingOrders = page.drillingOrders.fetch({reset: true});
+      var whOrders = page.whOrders.fetch({reset: true});
 
-      $.when(dropZones, drillingOrders).done(function()
+      $.when(dropZones, drillingOrders, whOrders).done(function()
       {
         page.promised(page.orders.fetch({reset: true}));
       });

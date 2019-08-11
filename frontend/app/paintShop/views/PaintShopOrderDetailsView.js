@@ -11,7 +11,8 @@ define([
   'app/paintShop/templates/orderDetails',
   'app/paintShop/templates/orderChanges',
   'app/paintShop/templates/orderChange',
-  'app/paintShop/templates/queueOrder'
+  'app/paintShop/templates/queueOrder',
+  'app/paintShop/templates/whOrders'
 ], function(
   _,
   $,
@@ -23,7 +24,8 @@ define([
   orderDetailsTemplate,
   orderChangesTemplate,
   orderChangeTemplate,
-  queueOrderTemplate
+  queueOrderTemplate,
+  whOrdersTemplate
 ) {
   'use strict';
 
@@ -78,6 +80,12 @@ define([
 
       this.listenTo(this.orders, 'change', this.onChange);
 
+      if (this.orders.whOrders)
+      {
+        this.listenTo(this.orders.whOrders, 'reset', this.onWhOrdersReset);
+        this.listenTo(this.orders.whOrders, 'change', this.onWhOrdersChange);
+      }
+
       if (this.vkb)
       {
         this.listenTo(this.vkb, 'keyFocused', this.onVkbFocused);
@@ -112,6 +120,7 @@ define([
         order: order,
         fillerHeight: this.calcFillerHeight(),
         renderQueueOrder: queueOrderTemplate,
+        renderWhOrders: whOrdersTemplate,
         canAct: this.canAct(),
         mrpDropped: this.dropZones.getState(order.mrp),
         getChildOrderDropZoneClass: this.orders.getChildOrderDropZoneClass.bind(this.orders)
@@ -144,7 +153,7 @@ define([
       {
         this.options.height = this.$('tbody')[0].clientHeight;
 
-        this.$id('filler').css('height', this.calcFillerHeight() + 'px');
+        this.resizeFiller();
       }
 
       this.renderChanges();
@@ -242,9 +251,22 @@ define([
         .prop('scrollTop', 99999);
     },
 
+    resizeFiller: function()
+    {
+      this.$id('filler').css('height', this.calcFillerHeight() + 'px');
+    },
+
     calcFillerHeight: function()
     {
-      return Math.max(window.innerHeight - 30 * 2 - 25 - 75 - this.options.height, 0);
+      var height = window.innerHeight
+        - 30 * 2 // Margins
+        - 25
+        - 75
+        - this.options.height // PS order details
+        - 24 // WH orders header
+        - 25 * this.model.serialize().whOrders.length; // WH orders rows
+
+      return Math.max(height, 0);
     },
 
     calcChangesHeight: function()
@@ -335,12 +357,13 @@ define([
         commentVisible: false,
         rowSpan: 'rowSpanDetails',
         mrpDropped: this.dropZones.getState(order.get('mrp')),
-        getChildOrderDropZoneClass: this.orders.getChildOrderDropZoneClass.bind(this.orders)
+        getChildOrderDropZoneClass: this.orders.getChildOrderDropZoneClass.bind(this.orders),
+        details: true
       });
 
       this.$('.paintShop-order').replaceWith(html);
 
-      if (!options.drilling)
+      if (!options.drilling && !options.wh)
       {
         this.reloadChanges();
       }
@@ -360,9 +383,33 @@ define([
 
     onWindowResize: function()
     {
-      this.$id('filler').css('height', this.calcFillerHeight() + 'px');
-
+      this.resizeFiller();
       this.resizeChanges();
+    },
+
+    onWhOrdersReset: function()
+    {
+      this.renderWhOrders();
+      this.resizeFiller();
+    },
+
+    onWhOrdersChange: function(whOrder)
+    {
+      if (whOrder.get('order') !== this.model.get('order'))
+      {
+        return;
+      }
+
+      this.renderWhOrders();
+    },
+
+    renderWhOrders: function()
+    {
+      var html = this.renderPartialHtml(whOrdersTemplate, {
+        order: this.model.serialize()
+      });
+
+      this.$id('whOrders').html(html);
     }
 
   });

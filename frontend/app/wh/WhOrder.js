@@ -63,8 +63,8 @@ define([
     {
       var obj = this.toJSON();
 
-      var planOrder = plan.orders.get(obj.order);
-      var sapOrder = plan.sapOrders.get(obj.order);
+      var planOrder = plan && plan.orders.get(obj.order) || null;
+      var sapOrder = plan && plan.sapOrders.get(obj.order) || null;
       var startTime = Date.parse(obj.startTime);
       var finishTime = Date.parse(obj.finishTime);
 
@@ -95,6 +95,7 @@ define([
       obj.finishDate = time.utc.format(finishTime, 'LL');
       obj.startTimeMs = startTime;
       obj.startTime = time.utc.format(startTime, 'HH:mm:ss');
+      obj.startTimeShort = time.utc.format(startTime, 'H:mm');
       obj.finishTime = time.utc.format(finishTime, 'HH:mm:ss');
       obj.comment = sapOrder ? sapOrder.getCommentWithIcon() : '';
       obj.comments = sapOrder ? sapOrder.get('comments') : [];
@@ -104,8 +105,9 @@ define([
         kitter: FUNC_STATUS_TO_ICON[obj.funcs[1].status],
         packer: FUNC_STATUS_TO_ICON[obj.funcs[2].status]
       };
-      obj.psStatus = plan.sapOrders.getPsStatus(obj.order);
-      obj.hidden = startTime < filters.startTime.from
+      obj.psStatus = plan && plan.sapOrders.getPsStatus(obj.order) || 'unknown';
+      obj.hidden = !filters
+        || startTime < filters.startTime.from
         || startTime >= filters.startTime.to
         || (filters.whStatuses.length > 0 && filters.whStatuses.indexOf(obj.status) === -1)
         || (filters.psStatuses.length > 0 && filters.psStatuses.indexOf(obj.psStatus) === -1);

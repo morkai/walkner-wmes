@@ -119,7 +119,8 @@ define([
           commentVisible: true,
           rowSpan: 'rowSpanDetails',
           mrpDropped: view.dropZones.getState(order.mrp),
-          getChildOrderDropZoneClass: getChildOrderDropZoneClass
+          getChildOrderDropZoneClass: getChildOrderDropZoneClass,
+          details: false
         };
 
         if (order.visible)
@@ -508,7 +509,8 @@ define([
         commentVisible: true,
         rowSpan: 'rowSpanDetails',
         mrpDropped: view.dropZones.getState(orderData.mrp),
-        getChildOrderDropZoneClass: view.orders.getChildOrderDropZoneClass.bind(view.orders)
+        getChildOrderDropZoneClass: view.orders.getChildOrderDropZoneClass.bind(view.orders),
+        details: false
       }));
     },
 

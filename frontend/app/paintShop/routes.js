@@ -7,7 +7,8 @@ define([
   '../viewport',
   '../user',
   './pages/PaintShopPage',
-  'i18n!app/nls/paintShop'
+  'i18n!app/nls/paintShop',
+  'i18n!app/nls/wh'
 ], function(
   broker,
   time,

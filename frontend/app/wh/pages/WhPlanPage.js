@@ -356,10 +356,9 @@ define([
       );
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         darker: this.plan.displayOptions.isDarkerThemeUsed()
       };
     },

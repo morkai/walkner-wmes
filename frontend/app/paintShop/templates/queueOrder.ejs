@@ -51,9 +51,9 @@
         <i class="fa fa-hourglass-start"></i><span><%- order.startedAtDate %></span>
       </span>
       <% } %>
-      <% if (order.finishedAt) { %>
+      <% if (order.startedAt) { %>
       <span class="paintShop-property" data-property="finishedAt" title="<%- t('paintShop', 'PROPERTY:finishedAt') %>">
-        <i class="fa fa-hourglass-end"></i><span><%- order.finishedAtDate %></span>
+        <i class="fa fa-hourglass-end"></i><span><%- order.finishedAtDate || '-' %></span>
       </span>
       <% } %>
       <% if (commentVisible && order.comment) { %>
@@ -65,6 +65,22 @@
       <span class="paintShop-property" data-property="cabin" title="<%- t('paintShop', 'PROPERTY:cabin') %>">
         <span><%- order.cabin %></span>
       </span>
+      <% } %>
+      <% if (!details && order.whOrders) { %>
+      <table class="paintShop-whOrders">
+        <tbody>
+          <% order.whOrders.forEach(function(whOrder) { %>
+          <tr class="paintShop-whOrder <%- whOrder.status === 'cancelled' ? 'paintShop-whOrder-cancelled' : '' %>">
+            <td class="is-min paintShop-whOrder-status" data-wh-status="<%- whOrder.status %>"><i class="fa fa-truck"></i></td>
+            <td class="is-min paintShop-whOrder-line"><span class="paintShop-whOrder-line"><%- whOrder.line %></span></td>
+            <td class="is-min">•</td>
+            <td class="is-min paintShop-whOrder-time"><%- whOrder.startTimeShort %></td>
+            <td class="is-min">•</td>
+            <td class="is-min paintShop-whOrder-qty"><%- whOrder.qty %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
       <% } %>
     </td>
   </tr>

@@ -72,6 +72,7 @@ define([
 
       var obj = order.toJSON();
       var drillingOrders = orders.drillingOrders && orders.drillingOrders.getAllByOrderNo(obj.order);
+      var whOrders = orders.whOrders && orders.whOrders.byOrderNo[obj.order] || [];
       var childOrderCount = obj.childOrders.length;
       var lastChildOrderI = childOrderCount - 1;
 
@@ -206,6 +207,11 @@ define([
       }
 
       obj.statusText = t('paintShop', 'status:' + obj.status);
+
+      obj.whOrders = whOrders.map(function(whOrder)
+      {
+        return whOrder.serialize();
+      });
 
       return obj;
     },

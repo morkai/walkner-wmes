@@ -73,8 +73,18 @@
     commentVisible: false,
     rowSpan: 'rowSpanDetails',
     mrpDropped: mrpDropped,
-    getChildOrderDropZoneClass: getChildOrderDropZoneClass
+    getChildOrderDropZoneClass: getChildOrderDropZoneClass,
+    details: true
   }) %>
+  <tbody>
+  <tr>
+    <td id="<%- idPrefix %>-whOrders" colspan="9">
+      <%- renderWhOrders({
+        order: order
+      }) %>
+    </td>
+  </tr>
+  </tbody>
   <% if (canAct) { %>
   <tbody>
   <tr>

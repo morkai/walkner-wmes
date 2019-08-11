@@ -34,11 +34,33 @@ define([
       options = _.assign({date: getCurrentDate()}, options);
 
       this.date = options.date;
+
+      this.byOrderNo = {};
+
+      if (options.groupByOrderNo)
+      {
+        this.on('reset', this.groupByOrderNo);
+
+        if (this.length)
+        {
+          this.groupByOrderNo();
+        }
+      }
     },
 
     setCurrentDate: function()
     {
-      this.date = getCurrentDate();
+      this.setDateFilter(getCurrentDate());
+    },
+
+    getDateFilter: function()
+    {
+      return this.date;
+    },
+
+    setDateFilter: function(date)
+    {
+      this.date = date;
     },
 
     url: function()
@@ -100,6 +122,25 @@ define([
     act: function(action, data)
     {
       return this.constructor.act(data.date || this.date, action, data);
+    },
+
+    groupByOrderNo: function()
+    {
+      var byOrderNo = {};
+
+      this.forEach(function(whOrder)
+      {
+        var orderNo = whOrder.get('order');
+
+        if (!byOrderNo[orderNo])
+        {
+          byOrderNo[orderNo] = [];
+        }
+
+        byOrderNo[orderNo].push(whOrder);
+      });
+
+      this.byOrderNo = byOrderNo;
     }
 
   }, {

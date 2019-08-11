@@ -1,0 +1,22 @@
+<table class="paintShop-orderDetails-whOrders">
+  <thead>
+  <tr>
+    <th class="is-min"><%- t('wh', 'prop:status') %></th>
+    <th class="is-min"><%- t('wh', 'prop:line') %></th>
+    <th class="is-min"><%- t('wh', 'prop:startTime') %></th>
+    <th class="is-min"><%- t('wh', 'prop:qty') %></th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% order.whOrders.forEach(function(whOrder) { %>
+  <tr>
+    <td class="is-min"><%- t('wh', 'status:' + whOrder.status) %></td>
+    <td class="is-min"><%= whOrder.line %></td>
+    <td class="is-min"><%- whOrder.startTime %></td>
+    <td class="is-min is-number"><%- whOrder.qty %></td>
+    <td></td>
+  </tr>
+  <% }) %>
+  </tbody>
+</table>
