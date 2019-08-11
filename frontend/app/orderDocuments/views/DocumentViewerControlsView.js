@@ -471,7 +471,12 @@ define([
 
     focusDocument: function(nc15)
     {
-      this.$id('documents').find('[data-nc15="' + nc15 + '"]').focus()[0].scrollIntoView();
+      var $document = this.$id('documents').find('[data-nc15="' + nc15 + '"]');
+
+      if ($document.length)
+      {
+        $document.focus()[0].scrollIntoView();
+      }
     },
 
     focusNextDocument: function(documentEl)
@@ -594,7 +599,9 @@ define([
           name: xhr.getResponseHeader('X-Document-Name') || '?',
           nc15: nc15,
           search: true,
-          external: false
+          external: false,
+          locked: view.model.getOverallConfirmationStatus() !== 'confirmed'
+            && !view.model.isConfirmableDocument(nc15)
         }));
 
         view.$id('documents').find('.is-search').on('mouseenter', view.onDocumentMouseEnter.bind(view));

@@ -95,7 +95,7 @@ define([
       {
         updateClientState();
 
-        if (!page.model.isBomActive() || page.controlsView.isConfirmableDocumentSelected())
+        if (!page.model.isBomActive() || page.model.isConfirmableDocumentSelected())
         {
           page.model.set('bom', null);
         }
