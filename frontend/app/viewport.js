@@ -19,6 +19,28 @@ define([
     window.scrollTo(0, 0);
   });
 
+  broker.subscribe('viewport.page.loaded', function()
+  {
+    if (window.parent !== window && Array.isArray(window.parent.WMES_PAGE_LOADED))
+    {
+      window.parent.WMES_PAGE_LOADED.forEach(function(callback)
+      {
+        callback(true);
+      });
+    }
+  });
+
+  broker.subscribe('viewport.page.loadingFailed', function()
+  {
+    if (window.parent !== window && Array.isArray(window.parent.WMES_PAGE_LOADED))
+    {
+      window.parent.WMES_PAGE_LOADED.forEach(function(callback)
+      {
+        callback(false);
+      });
+    }
+  });
+
   window.viewport = viewport;
 
   Object.defineProperty(window, 'page', {

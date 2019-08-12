@@ -56,6 +56,8 @@
     "files:updatedAt:value": "{user}<br>{date}",
     "files:components": "Components",
     "files:components:help": "Components assigned to this document. If an order has one of the specified components, then this document will be added to the list in the document browser app with a requirement to confirm that it was read.",
+    "files:components:addByName": "Add by name",
+    "files:components:addByName:placeholder": "Component name...",
 
     "unlinkFiles:title": "Unlinking files",
     "unlinkFiles:submit": "Unlink files",

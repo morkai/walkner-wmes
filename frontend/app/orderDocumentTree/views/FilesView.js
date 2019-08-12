@@ -9,6 +9,7 @@ define([
   'app/user',
   'app/core/View',
   'app/core/views/DialogView',
+  'app/core/util/padString',
   'app/planning/util/contextMenu',
   '../OrderDocumentTree',
   './EditFileDialogView',
@@ -27,6 +28,7 @@ define([
   user,
   View,
   DialogView,
+  padString,
   contextMenu,
   OrderDocumentTree,
   EditFileDialogView,
@@ -723,14 +725,16 @@ define([
       for (var i = 0, l = Math.min(max, components.length); i < l; ++i)
       {
         var c = components[i];
-        var nc12 = c.nc12;
+        var title = c.name;
+        var label = padString.start(c.nc12, 12, '0');
 
-        while (nc12.length < 12)
+        if (c.nc12 === '000000000000')
         {
-          nc12 = '0' + nc12;
+          label = title;
+          title = '';
         }
 
-        html += '<li title="' + _.escape(c.name) + '">' + _.escape(nc12);
+        html += '<li title="' + _.escape(title) + '">' + _.escape(label);
       }
 
       if (components.length > max)

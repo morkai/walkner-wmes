@@ -4,6 +4,7 @@ define([
   'underscore',
   'app/time',
   'app/core/View',
+  'app/core/util/padString',
   'app/core/templates/userInfo',
   '../OrderDocumentChangeCollection',
   'app/orderDocumentTree/templates/fileChanges'
@@ -11,6 +12,7 @@ define([
   _,
   time,
   View,
+  padString,
   renderUserInfo,
   OrderDocumentChangeCollection,
   template
@@ -169,7 +171,16 @@ define([
 
       file.components.forEach(function(c)
       {
-        html += '<li title="' + _.escape(c.name) + '">' + _.escape(c.nc12);
+        var title = c.name;
+        var label = padString.start(c.nc12, 12, '0');
+
+        if (c.nc12 === '000000000000')
+        {
+          label = title;
+          title = '';
+        }
+
+        html += '<li title="' + _.escape(title) + '">' + _.escape(label);
       });
 
       if (html)

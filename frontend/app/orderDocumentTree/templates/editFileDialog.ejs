@@ -18,9 +18,19 @@
     </div>
     <% }) %>
   </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-components" class="control-label" title="<%- helpers.t('files:components:help') %>"><%- helpers.t('files:components') %> <i class="fa fa-question-circle"></i></label>
+  <div class="form-group" style="position: relative">
+    <label for="<%- idPrefix %>-components" class="control-label" style="display: flex">
+      <span title="<%- helpers.t('files:components:help') %>">
+        <%- helpers.t('files:components') %>
+        <i class="fa fa-question-circle"></i>
+      </span>
+      <a id="<%- idPrefix %>-components-addByName-toggle" href="javascript:void(0)" style="margin-left: auto"><%- helpers.t('files:components:addByName') %></a>
+    </label>
     <input id="<%- idPrefix %>-components" name="components" type="text">
+    <div id="<%- idPrefix %>-components-addByName" class="hidden" style="position: absolute; top: 0; right: 0; width: 200px; display: flex; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5)">
+      <input type="text" class="form-control" placeholder="<%- helpers.t('files:components:addByName:placeholder') %>" style="flex: 1 1 auto">
+      <button type="button" class="btn btn-default" style="flex: 0; margin-left: -1px"><i class="fa fa-plus"></i></button>
+    </div>
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-folders" class="control-label"><%- helpers.t('files:files') %></label>

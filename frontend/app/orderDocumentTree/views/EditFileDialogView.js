@@ -7,6 +7,7 @@ define([
   'app/time',
   'app/viewport',
   'app/core/views/FormView',
+  'app/core/util/padString',
   'app/orderDocumentTree/util/pasteDateEvents',
   'app/orderDocumentTree/templates/editFileDialog'
 ], function(
@@ -16,6 +17,7 @@ define([
   time,
   viewport,
   FormView,
+  padString,
   pasteDateEvents,
   template
 ) {
@@ -32,6 +34,37 @@ define([
         var $checkboxes = this.$('input[name="folders[]"]');
 
         $checkboxes.first().prop('required', $checkboxes.filter(':checked').length === 0);
+      },
+
+      'click #-components-addByName-toggle': function()
+      {
+        this.toggleAddByName(true);
+
+        return false;
+      },
+
+      'click #-components-addByName button': function()
+      {
+        this.submitAddByName();
+
+        return false;
+      },
+
+      'keydown #-components-addByName': function(e)
+      {
+        if (e.key === 'Escape')
+        {
+          this.toggleAddByName(false);
+
+          return false;
+        }
+
+        if (e.key === 'Enter')
+        {
+          this.submitAddByName();
+
+          return false;
+        }
       }
 
     }, pasteDateEvents, FormView.prototype.events),
@@ -86,8 +119,9 @@ define([
       formData.components = this.$id('components').select2('data').map(function(item)
       {
         return {
-          nc12: item.id,
-          name: item.text
+          nc12: /^0{10,}/.test(item.id) ? '000000000000' : item.id,
+          name: item.text,
+          searchName: item.text.toUpperCase().replace(/[^A-Z0-9]+/g, '')
         };
       });
 
@@ -127,6 +161,8 @@ define([
     {
       FormView.prototype.afterRender.apply(this, arguments);
 
+      var noCodeCount = 0;
+
       this.$id('components').select2({
         width: '100%',
         placeholder: '12NC...',
@@ -147,7 +183,7 @@ define([
               {
                 return {
                   id: component._id,
-                  text: component.name
+                  text: component.name.trim()
                 };
               })
             };
@@ -155,18 +191,11 @@ define([
         },
         formatSelection: function(item)
         {
-          return _.escape(item.id);
+          return _.escape(/^0{10,}/.test(item.id) ? item.text : item.id);
         },
         formatResult: function(item)
         {
-          var id = item.id;
-
-          while (id.length < 12)
-          {
-            id = ' ' + id;
-          }
-
-          var html = ['<span class="text-mono">', _.escape(id), '</span>'];
+          var html = ['<span class="text-mono">', _.escape(padString.start(item.id, 12, '0')), '</span>'];
 
           if (item.text)
           {
@@ -177,11 +206,63 @@ define([
         }
       }).select2('data', (this.model.get('components') || []).map(function(component)
       {
+        var id = component.nc12;
+
+        if (id === '000000000000')
+        {
+          noCodeCount += 1;
+
+          id = padString.start(noCodeCount.toString(), 12, '0');
+        }
+
         return {
-          id: component.nc12,
+          id: id,
           text: component.name
         };
       }));
+    },
+
+    toggleAddByName: function(state)
+    {
+      var $form = this.$id('components-addByName').toggleClass('hidden', !state);
+
+      if (state)
+      {
+        $form.find('input').val('').focus();
+      }
+    },
+
+    submitAddByName: function()
+    {
+      this.toggleAddByName(false);
+
+      var name = this.$id('components-addByName').find('input').val().trim();
+
+      if (name.toUpperCase().replace(/[^A-Z0-9]+/g, '') === '')
+      {
+        return;
+      }
+
+      var $components = this.$id('components');
+      var data = $components.select2('data');
+      var lastNoCode = 0;
+
+      data.forEach(function(item)
+      {
+        if (!/^0{10,}/.test(item.id))
+        {
+          return;
+        }
+
+        lastNoCode = Math.max(+item.id, lastNoCode);
+      });
+
+      data.push({
+        id: padString.start((lastNoCode + 1).toString(), 12, '0'),
+        text: name
+      });
+
+      $components.select2('data', data);
     }
 
   });

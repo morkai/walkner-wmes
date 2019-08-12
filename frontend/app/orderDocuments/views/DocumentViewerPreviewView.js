@@ -97,7 +97,7 @@ define([
 
       var $loading = this.$id('loading').removeClass('hidden is-failure');
 
-      this.$iframe.prop('src', '');
+      this.$iframe.css({visibility: 'hidden'});
 
       var localFile = this.model.get('localFile');
 
@@ -118,6 +118,8 @@ define([
         this.model.setFileSource(null);
 
         $loading.addClass('hidden');
+
+        this.$iframe.prop('src', '').css({visibility: 'visible'});
 
         return;
       }
@@ -159,13 +161,32 @@ define([
     loadFile: function(src)
     {
       var view = this;
-
-      this.$iframe.one('load', function()
+      var onLoad = _.once(function()
       {
+        window.WMES_PAGE_LOADED = _.without(window.WMES_PAGE_LOADED, onLoad);
+
         view.$id('loading').addClass('hidden');
+        view.$iframe.css({visibility: 'visible'});
         view.trigger('loadDocument:success', src);
       });
-      this.$iframe.prop('src', src);
+
+      if (!window.WMES_PAGE_LOADED)
+      {
+        window.WMES_PAGE_LOADED = [];
+      }
+
+      window.WMES_PAGE_LOADED.push(onLoad);
+
+      view.$iframe.one('load', onLoad);
+
+      if (view.$iframe.prop('src').indexOf(src) !== -1)
+      {
+        view.$iframe[0].contentWindow.location.reload();
+      }
+      else
+      {
+        view.$iframe.prop('src', src);
+      }
     },
 
     tryLoadRemoteDocument: function(nc15)
@@ -200,6 +221,7 @@ define([
       {
         view.req = null;
         view.$id('loading').addClass('is-failure');
+        view.$iframe.prop('src', '').css({visibility: 'visible'});
         view.model.setFileSource(null);
         view.trigger('loadDocument:failure');
       });
