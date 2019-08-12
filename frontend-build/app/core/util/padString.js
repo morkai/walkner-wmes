@@ -1,0 +1,1 @@
+define([],function(){"use strict";return{start:function(n,t,r){for(;n.length<t;)n=r+n;return n},end:function(n,t,r){for(;n.length<t;)n+=r;return n}}});
