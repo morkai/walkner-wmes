@@ -30,7 +30,7 @@ define([
 
   function handleWindowMessage(e)
   {
-    var msg = e.data;
+    var msg = e.data || {};
 
     switch (msg.type)
     {
@@ -44,7 +44,7 @@ define([
   {
     clearTimeout(switchTimer);
 
-    if (data.apps.length === 0)
+    if (!Array.isArray(data.apps) || data.apps.length === 0)
     {
       return;
     }

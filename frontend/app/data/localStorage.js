@@ -12,12 +12,22 @@ define(function()
   {
     var msg = e.data;
 
-    if (!window.IS_EMBEDDED || !window.IS_LINUX || msg.type !== 'localStorage')
+    if (window.parent === window || !window.IS_EMBEDDED || msg.type !== 'localStorage')
     {
       return;
     }
 
-    window.removeEventListener('message', handleWindowMessage);
+    if (msg.action)
+    {
+      handleInnerAction(e);
+
+      return;
+    }
+
+    if (!msg.data)
+    {
+      return;
+    }
 
     remoteData = msg.data;
 
@@ -63,6 +73,27 @@ define(function()
     remoteData = {};
 
     window.parent.postMessage({type: 'localStorage', action: 'clear'}, '*');
+  }
+
+  function handleInnerAction(e)
+  {
+    var msg = e.data;
+    var src = e.source;
+
+    switch (msg.action)
+    {
+      case 'read':
+        return src.postMessage({type: 'localStorage', data: remoteData}, '*');
+
+      case 'setItem':
+        return setRemoteItem(msg.key, msg.value);
+
+      case 'remoteItem':
+        return setRemoteItem(msg.key);
+
+      case 'clear':
+        return clearRemoteData();
+    }
   }
 
   window.addEventListener('message', handleWindowMessage);

@@ -371,7 +371,10 @@ define([
 
     toggleActions: function()
     {
-      this.$actions.empty();
+      if (this.$actions)
+      {
+        this.$actions.empty();
+      }
 
       if (this.model.isLocked())
       {

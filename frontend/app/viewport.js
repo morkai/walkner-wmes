@@ -21,23 +21,37 @@ define([
 
   broker.subscribe('viewport.page.loaded', function()
   {
-    if (window.parent !== window && Array.isArray(window.parent.WMES_PAGE_LOADED))
+    if (window.parent !== window)
     {
-      window.parent.WMES_PAGE_LOADED.forEach(function(callback)
-      {
-        callback(true);
-      });
+      window.parent.postMessage({
+        type: 'viewport.page.embeddedLoaded',
+        app: window.WMES_APP_ID,
+        loaded: true
+      }, '*');
     }
   });
 
   broker.subscribe('viewport.page.loadingFailed', function()
   {
-    if (window.parent !== window && Array.isArray(window.parent.WMES_PAGE_LOADED))
+    if (window.parent !== window)
     {
-      window.parent.WMES_PAGE_LOADED.forEach(function(callback)
-      {
-        callback(false);
-      });
+      window.parent.postMessage({
+        type: 'viewport.page.embeddedLoaded',
+        app: window.WMES_APP_ID,
+        loaded: false
+      }, '*');
+    }
+  });
+
+  window.addEventListener('message', function(e)
+  {
+    var msg = e.data;
+
+    switch (msg.type)
+    {
+      case 'viewport.page.embeddedLoaded':
+        broker.publish('viewport.page.embeddedLoaded', {app: msg.app, loaded: msg.loaded});
+        break;
     }
   });
 

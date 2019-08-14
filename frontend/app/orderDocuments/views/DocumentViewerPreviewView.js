@@ -25,6 +25,16 @@ define([
 
     template: template,
 
+    localTopics: {
+      'viewport.page.embeddedLoaded': function()
+      {
+        if (this.onEmbeddedLoaded)
+        {
+          this.onEmbeddedLoaded();
+        }
+      }
+    },
+
     initialize: function()
     {
       this.showMarksCounter = 0;
@@ -161,23 +171,17 @@ define([
     loadFile: function(src)
     {
       var view = this;
-      var onLoad = _.once(function()
+
+      view.onEmbeddedLoaded = _.once(function()
       {
-        window.WMES_PAGE_LOADED = _.without(window.WMES_PAGE_LOADED, onLoad);
+        view.onEmbeddedLoaded = null;
 
         view.$id('loading').addClass('hidden');
         view.$iframe.css({visibility: 'visible'});
         view.trigger('loadDocument:success', src);
       });
 
-      if (!window.WMES_PAGE_LOADED)
-      {
-        window.WMES_PAGE_LOADED = [];
-      }
-
-      window.WMES_PAGE_LOADED.push(onLoad);
-
-      view.$iframe.one('load', onLoad);
+      view.$iframe.one('load', view.onEmbeddedLoaded);
 
       if (view.$iframe.prop('src').indexOf(src) !== -1)
       {
