@@ -527,8 +527,14 @@ define([
 
       var isEmbedded = embedded.isEnabled();
       var mrp = e.currentTarget.dataset.mrp || null;
+
+      if (mrp === 'all')
+      {
+        mrp = null;
+      }
+
       var actionOptions = {
-        filterProperty: !mrp ? null : 'mrp',
+        filterProperty: mrp ? 'mrp' : null,
         filterValue: mrp
       };
       var menu = [
