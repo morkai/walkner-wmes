@@ -31,7 +31,13 @@
 .orderDocumentTree-path-label > code {
   padding: 0;
   font-size: 100%;
-  line-height: 1;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 450px;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: top;
 }
 .orderDocumentTree-path-dropdown {
   flex: 0 0 auto;

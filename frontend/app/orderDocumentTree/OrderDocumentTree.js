@@ -126,13 +126,6 @@ define([
         reset: false
       });
 
-      searchPhrase = searchPhrase.trim().replace(/\*{2,}/g, '*').replace(/[^0-9#*]+/g, '');
-
-      if (searchPhrase.length < 4 || (searchPhrase.indexOf('*') === -1 && searchPhrase.length !== 15))
-      {
-        searchPhrase = '';
-      }
-
       this.unmarkAllFiles();
 
       if (searchPhrase !== this.get('searchPhrase'))

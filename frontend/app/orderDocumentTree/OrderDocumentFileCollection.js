@@ -58,10 +58,31 @@ define([
     updateRqlQuery: function()
     {
       var rqlQuery = 'sort(_id)';
+      var searchPhrase = this.searchPhrase;
 
-      if (this.searchPhrase)
+      if (searchPhrase)
       {
-        rqlQuery += '&limit(75)&_id=regex=' + encodeURIComponent('^' + this.searchPhrase + '$');
+        rqlQuery += '&limit(75)';
+
+        if (searchPhrase.length < 15 || /[#*]/.test(searchPhrase))
+        {
+          var pattern = searchPhrase.replace(/#/g, '.').replace(/\*/g, '.+');
+
+          rqlQuery += '&_id=regex=' + encodeURIComponent('^' + pattern + '$');
+        }
+        else if (searchPhrase.length > 15)
+        {
+          var ids = searchPhrase
+            .split(/\s+/)
+            .map(function(v) { return 'string:' + v; })
+            .join(',');
+
+          rqlQuery += '&_id=in=(' + ids + ')';
+        }
+        else
+        {
+          rqlQuery = '_id=string:' + searchPhrase;
+        }
       }
       else
       {

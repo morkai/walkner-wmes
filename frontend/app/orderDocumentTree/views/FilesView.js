@@ -1152,9 +1152,12 @@ define([
 
         case 'A':
         {
+          var activeTag = (document.activeElement || document.body).tagName;
+
           if (e.ctrlKey
             && !document.getSelection().toString().length
-            && (!document.activeElement || document.activeElement.tagName !== 'INPUT'))
+            && activeTag !== 'INPUT'
+            && activeTag !== 'TEXTAREA')
           {
             this.model.markAllFiles();
 

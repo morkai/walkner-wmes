@@ -50,7 +50,7 @@ define([
 
       'keydown #-searchPhrase': function(e)
       {
-        if (e.keyCode === 27)
+        if (e.key === 'Escape')
         {
           this.model.setSearchPhrase('');
 
@@ -131,6 +131,98 @@ define([
             tree.addUpload(file.id, latestFile.hash);
           }
         });
+      },
+
+      'focus #-searchPhrase': function()
+      {
+        var view = this;
+        var $form = view.$id('searchForm').css({position: 'relative'});
+        var $phrase = view.$id('searchPhrase');
+        var $textarea = $form.find('textarea');
+
+        if (!$textarea.length)
+        {
+          $textarea = $('<textarea class="form-control" rows="4"></textarea>')
+            .css({
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              zIndex: 3
+            })
+            .appendTo($form)
+            .on('blur', function()
+            {
+              hide(false);
+            })
+            .on('keydown', function(e)
+            {
+              if (e.key === 'Escape')
+              {
+                $textarea.val('');
+
+                hide(true);
+
+                return false;
+              }
+
+              if (e.key === 'Enter')
+              {
+                if (e.ctrlKey || e.timeStamp - $textarea.data('lastEnterTs') <= 200)
+                {
+                  hide(true);
+
+                  return false;
+                }
+
+                $textarea.data('lastEnterTs', e.timeStamp);
+              }
+            });
+        }
+
+        $textarea.val($phrase.val().split(/\s+/).join('\n'));
+
+        setTimeout(function() { $textarea.focus(); }, 1);
+
+        function hide(submit)
+        {
+          var $phrase = view.$id('searchPhrase');
+          var $form = view.$id('searchForm').css({position: ''});
+          var $textarea = $form.find('textarea');
+          var phrase = $textarea.val().trim();
+          var pattern = '';
+
+          if (/^[0-9]{3,14}$/.test(phrase))
+          {
+            phrase = '*' + phrase + '*';
+          }
+
+          var codes = phrase.split(/\s+/).filter(function(word)
+          {
+            if (/^[0-9]{15}$/.test(word))
+            {
+              return true;
+            }
+
+            if (/[0-9]{3,}/.test(word) && /[#*]/.test(word))
+            {
+              pattern = word;
+            }
+
+            return false;
+          });
+
+          $textarea.remove();
+          $phrase.val(pattern || codes.join(' '));
+
+          if (submit)
+          {
+            $form.submit();
+          }
+          else
+          {
+            $form.find('.btn').focus();
+          }
+        }
       }
 
     },
