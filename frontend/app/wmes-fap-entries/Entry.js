@@ -369,7 +369,7 @@ define([
         solution: solver,
         problem: started && (manage || procEng || designer || master || leader),
         category: manage || procEng || qualityEng || designer,
-        subCategory: manage || procEng || designer,
+        subCategory: manage || procEng || qualityEng || designer,
         subdivisionType: manage || procEng || designer || master || leader,
         componentCode: started && (manage || procEng),
         orderNo: started && (manage || procEng),
