@@ -709,7 +709,7 @@ define([
 
       var $overlay = page.$id('messageOverlay');
 
-      if ($overlay[0].style.display === 'none')
+      if (!$overlay.length || $overlay[0].style.display === 'none')
       {
         return;
       }
