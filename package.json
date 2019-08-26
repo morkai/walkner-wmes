@@ -119,7 +119,7 @@
     "grunt-contrib-concat": "~1.0.1",
     "grunt-contrib-copy": "~1.0.0",
     "grunt-contrib-requirejs": "~1.0.0",
-    "grunt-contrib-uglify-es": "~3.3.0",
+    "grunt-uglify-es-multicore": "morkai/grunt-uglify-es-multicore",
     "grunt-ejs-amd": "morkai/grunt-ejs-amd#07b9f7ae3a",
     "grunt-eslint": "~21.0.0",
     "grunt-messageformat-amd": "morkai/grunt-messageformat-amd#052e4d4ee5",

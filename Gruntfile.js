@@ -147,7 +147,7 @@ module.exports = function(grunt)
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
-  grunt.loadNpmTasks('grunt-contrib-uglify-es');
+  grunt.loadNpmTasks('grunt-uglify-es-multicore');
   grunt.loadNpmTasks('grunt-ejs-amd');
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-messageformat-amd');
