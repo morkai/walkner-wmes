@@ -14,6 +14,7 @@ define([
     viewport.loadPage(
       [
         'app/changelog/pages/ListPage',
+        'css!app/changelog/assets/main',
         'i18n!app/nls/changelog'
       ],
       function(ListPage)

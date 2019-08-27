@@ -15,6 +15,7 @@ exports.modules = [
   'planning',
   'paintShop',
   'wmes-drilling',
+  'wmes-wiring',
   'wh'
 ];
 
@@ -62,6 +63,7 @@ exports['messenger/server'] = Object.assign({}, ports[exports.id], {
     'planning.changes.created',
     'paintShop.orders.changed.*',
     'drilling.orders.changed.*',
+    'wiring.orders.changed.*',
     'wh.orders.changed.*'
   ]
 });
@@ -89,5 +91,9 @@ exports.wh = {
 };
 
 exports['wmes-drilling'] = {
+  generator: true
+};
+
+exports['wmes-wiring'] = {
   generator: true
 };

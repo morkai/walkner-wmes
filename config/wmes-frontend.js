@@ -104,6 +104,7 @@ exports.modules = [
   'wmes-trw',
   'wmes-luca-frontend',
   'wmes-drilling',
+  'wmes-wiring',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'sms/sender',
@@ -206,6 +207,15 @@ exports.updater = {
       path: '/drilling/manifest.appcache',
       mainJsFile: '/wmes-drilling.js',
       mainCssFile: '/assets/wmes-drilling.css',
+      template: manifestTemplates.ps,
+      frontendAppData: {},
+      dictionaryModules: {}
+    },
+    {
+      frontendVersionKey: 'wiring',
+      path: '/wiring/manifest.appcache',
+      mainJsFile: '/wmes-wiring.js',
+      mainCssFile: '/assets/wmes-wiring.css',
       template: manifestTemplates.ps,
       frontendAppData: {},
       dictionaryModules: {}
@@ -507,9 +517,11 @@ exports['messenger/client:wmes-alerts'] = Object.assign({}, ports['wmes-alerts']
 exports['messenger/client:wmes-planning'] = Object.assign({}, ports['wmes-planning'], {
   responseTimeout: 5000,
   broadcastTopics: [
+    'orders.synced',
     'planning.generator.requested',
     'paintShop.generator.requested',
     'drilling.generator.requested',
+    'wiring.generator.requested',
     'wh.generator.requested',
     'settings.updated.orders.operations.groups',
     'settings.updated.wh.**'
@@ -654,6 +666,10 @@ exports.paintShop = {
 };
 
 exports['wmes-drilling'] = {
+  generator: false
+};
+
+exports['wmes-wiring'] = {
   generator: false
 };
 
