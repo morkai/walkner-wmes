@@ -6,42 +6,53 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  './XiconfProgram',
-  './XiconfProgramCollection'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   t,
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  XiconfProgram,
-  XiconfProgramCollection
+  showDeleteFormPage
 ) {
   'use strict';
 
+  var css = 'css!app/xiconfPrograms/assets/main';
   var nls = 'i18n!app/nls/xiconfPrograms';
   var canView = user.auth('XICONF:VIEW');
   var canManage = user.auth('XICONF:MANAGE');
 
   router.map('/xiconf/programs', canView, function(req)
   {
-    viewport.loadPage(['app/xiconfPrograms/pages/XiconfProgramListPage', nls], function(XiconfProgramListPage)
-    {
-      return new XiconfProgramListPage({
-        collection: new XiconfProgramCollection(null, {
-          rqlQuery: req.rql
-        })
-      });
-    });
+    viewport.loadPage(
+      [
+        'app/xiconfPrograms/XiconfProgramCollection',
+        'app/xiconfPrograms/pages/XiconfProgramListPage',
+        css,
+        nls
+      ],
+      function(XiconfProgramCollection, XiconfProgramListPage)
+      {
+        return new XiconfProgramListPage({
+          collection: new XiconfProgramCollection(null, {
+            rqlQuery: req.rql
+          })
+        });
+      }
+    );
   });
 
   router.map('/xiconf/programs/:id', canView, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/xiconfPrograms/views/XiconfProgramDetailsView', nls],
-      function(DetailsPage, XiconfProgramDetailsView)
+      [
+        'app/core/pages/DetailsPage',
+        'app/xiconfPrograms/XiconfProgram',
+        'app/xiconfPrograms/views/XiconfProgramDetailsView',
+        css,
+        nls
+      ],
+      function(DetailsPage, XiconfProgram, XiconfProgramDetailsView)
       {
         return new DetailsPage({
           pageClassName: 'page-max-flex',
@@ -56,8 +67,14 @@ define([
   router.map('/xiconf/programs;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/xiconfPrograms/views/XiconfProgramFormView', nls],
-      function(AddFormPage, XiconfProgramFormView)
+      [
+        'app/core/pages/AddFormPage',
+        'app/xiconfPrograms/XiconfProgram',
+        'app/xiconfPrograms/views/XiconfProgramFormView',
+        css,
+        nls
+      ],
+      function(AddFormPage, XiconfProgram, XiconfProgramFormView)
       {
         return new AddFormPage({
           pageClassName: 'page-max-flex',
@@ -72,8 +89,14 @@ define([
   router.map('/xiconf/programs/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/xiconfPrograms/views/XiconfProgramFormView', nls],
-      function(EditFormPage, XiconfProgramFormView)
+      [
+        'app/core/pages/EditFormPage',
+        'app/xiconfPrograms/XiconfProgram',
+        'app/xiconfPrograms/views/XiconfProgramFormView',
+        css,
+        nls
+      ],
+      function(EditFormPage, XiconfProgram, XiconfProgramFormView)
       {
         return new EditFormPage({
           pageClassName: 'page-max-flex',
@@ -88,7 +111,7 @@ define([
   router.map(
     '/xiconf/programs/:id;delete',
     canManage,
-    _.partial(showDeleteFormPage, XiconfProgram, _, _, {
+    _.partial(showDeleteFormPage, 'app/xiconfPrograms/XiconfProgram', _, _, {
       baseBreadcrumb: true
     })
   );

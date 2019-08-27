@@ -25,6 +25,7 @@ define([
       [
         'app/kanbanContainers/KanbanContainerCollection',
         'app/kanbanContainers/pages/KanbanContainerListPage',
+        'css!app/kanbanContainers/assets/main',
         nls
       ],
       function(KanbanContainerCollection, KanbanContainerListPage)

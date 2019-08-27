@@ -11,16 +11,14 @@ define([
 ) {
   'use strict';
 
-  var nls = 'i18n!app/nls/invalidOrders';
-  var canView = user.auth('ORDERS:VIEW');
-
-  router.map('/invalidOrders', canView, function(req)
+  router.map('/invalidOrders', user.auth('ORDERS:VIEW'), function(req)
   {
     viewport.loadPage(
       [
         'app/invalidOrders/InvalidOrderCollection',
         'app/invalidOrders/pages/InvalidOrderListPage',
-        nls
+        'css!app/invalidOrders/assets/main',
+        'i18n!app/nls/invalidOrders'
       ],
       function(InvalidOrderCollection, InvalidOrderListPage)
       {

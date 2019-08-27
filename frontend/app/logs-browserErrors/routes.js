@@ -20,6 +20,7 @@ define([
         'app/core/pages/ListPage',
         'app/logs-browserErrors/BrowserErrorCollection',
         'app/logs-browserErrors/views/ListView',
+        'css!app/logs-browserErrors/assets/main',
         'i18n!app/nls/logs-browserErrors'
       ],
       function(ListPage, Collection, ListView)

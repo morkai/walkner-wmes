@@ -19,6 +19,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/wmes-trw-bases/assets/main';
   var nls = 'i18n!app/nls/wmes-trw-bases';
   var model = 'app/wmes-trw-bases/Base';
   var canView = user.auth('TRW:VIEW');
@@ -56,6 +57,7 @@ define([
       [
         'app/wmes-trw-bases/pages/DetailsPage',
         model,
+        css,
         nls
       ],
       function(DetailsPage, Base)
@@ -75,6 +77,7 @@ define([
         'app/wmes-trw-tests/dictionaries',
         model,
         'app/wmes-trw-bases/views/FormView',
+        css,
         nls
       ],
       function(AddFormPage, dictionaries, Base, FormView)
@@ -118,6 +121,7 @@ define([
         'app/wmes-trw-tests/dictionaries',
         model,
         'app/wmes-trw-bases/views/FormView',
+        css,
         nls
       ],
       function(EditFormPage, dictionaries, Base, FormView)

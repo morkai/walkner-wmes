@@ -1,4 +1,15 @@
-.minutesForSafetyCards-details ul {
+.mfs-details ul {
   padding-left: 0;
   list-style-position: inside;
+}
+.mfs-details-cause > h5 {
+  margin-top: 0;
+  font-weight: bold;
+}
+.mfs-details-cause > ol {
+  margin-bottom: 0;
+  padding-left: 20px;
+}
+.mfs-details-cause > ol > li + li {
+  margin-top: 5px;
 }

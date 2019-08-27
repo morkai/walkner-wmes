@@ -2,13 +2,16 @@
 
 define([
   '../router',
-  '../viewport',
-  'i18n!app/nls/vis'
+  '../viewport'
 ], function(
   router,
   viewport
 ) {
   'use strict';
 
-  router.map('/vis/structure', viewport.loadPage.bind(viewport, 'app/vis/pages/StructureVisPage'));
+  router.map('/vis/structure', viewport.loadPage.bind(viewport, [
+    'app/vis/pages/StructureVisPage',
+    'css!app/vis/assets/main',
+    'i18n!app/nls/vis'
+  ]));
 });

@@ -7,7 +7,8 @@ define([
   'app/time',
   'app/core/View',
   'app/mrpControllers/util/setUpMrpSelect2',
-  'app/wh/templates/planFilter'
+  'app/wh/templates/planFilter',
+  'app/core/util/ExpandableSelect'
 ], function(
   _,
   $,

@@ -5,22 +5,18 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../time',
-  './pages/WhPlanPage',
-  './pages/WhProblemListPage',
-  'i18n!app/nls/planning',
-  'i18n!app/nls/wh'
+  '../time'
 ], function(
   broker,
   router,
   viewport,
   user,
-  time,
-  WhPlanPage,
-  WhProblemListPage
+  time
 ) {
   'use strict';
 
+  var css = ['css!app/wh/assets/main', 'css!app/planning/assets/main', 'css!app/paintShop/assets/main'];
+  var nls = ['i18n!app/nls/wh', 'i18n!app/nls/planning'];
   var canView = user.auth('LOCAL', 'WH:VIEW');
   var canManage = user.auth('WH:MANAGE', 'WH:MANAGE:USERS');
 
@@ -55,21 +51,36 @@ define([
         : req.query[prop].split(',').filter(function(v) { return v.length > 0; });
     });
 
-    viewport.showPage(new WhPlanPage(options));
+    viewport.loadPage(
+      ['app/wh/pages/WhPlanPage'].concat(css, nls),
+      function(WhPlanPage)
+      {
+        return new WhPlanPage(options);
+      }
+    );
   });
 
   router.map('/wh/problems', canView, function()
   {
-    viewport.showPage(new WhProblemListPage());
+    viewport.loadPage(
+      ['app/wh/pages/WhProblemListPage'].concat(css, nls),
+      function(WhProblemListPage)
+      {
+        return new WhProblemListPage();
+      }
+    );
   });
 
   router.map('/wh/settings', canManage, function(req)
   {
-    viewport.loadPage('app/wh/pages/WhSettingsPage', function(WhSettingsPage)
-    {
-      return new WhSettingsPage({
-        initialTab: req.query.tab
-      });
-    });
+    viewport.loadPage(
+      ['app/wh/pages/WhSettingsPage'].concat(nls),
+      function(WhSettingsPage)
+      {
+        return new WhSettingsPage({
+          initialTab: req.query.tab
+        });
+      }
+    );
   });
 });

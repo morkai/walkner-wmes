@@ -5,8 +5,7 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  './QiErrorCategory'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   router,
@@ -102,7 +101,11 @@ define([
     );
   });
 
-  router.map('/qi/errorCategories/:id;delete', canManage, _.partial(showDeleteFormPage, QiErrorCategory, _, _, {
-    baseBreadcrumb: true
-  }));
+  router.map('/qi/errorCategories/:id;delete', canManage, _.partial(
+    showDeleteFormPage,
+    'app/qiErrorCategories/QiErrorCategory',
+    _,
+    _,
+    {baseBreadcrumb: true}
+  ));
 });

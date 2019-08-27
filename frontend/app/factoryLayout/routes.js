@@ -3,8 +3,7 @@
 define([
   '../user',
   '../router',
-  '../viewport',
-  'i18n!app/nls/factoryLayout'
+  '../viewport'
 ], function(
   user,
   router,
@@ -12,6 +11,8 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/factoryLayout/assets/main';
+  var nls = 'i18n!app/nls/factoryLayout';
   var canView = user.auth('PROD_DATA:VIEW');
   var canManage = user.auth('FACTORY_LAYOUT:MANAGE');
 
@@ -23,7 +24,7 @@ define([
   router.map('/factoryLayout/:id', canView, function()
   {
     viewport.loadPage(
-      ['app/factoryLayout/productionState', 'app/factoryLayout/pages/FactoryLayoutPage'],
+      ['app/factoryLayout/productionState', 'app/factoryLayout/pages/FactoryLayoutPage', css, nls],
       function(productionState, FactoryLayoutPage)
       {
         return new FactoryLayoutPage({
@@ -36,7 +37,7 @@ define([
   router.map('/factoryLayout/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/factoryLayout/FactoryLayout', 'app/factoryLayout/pages/FactoryLayoutEditPage'],
+      ['app/factoryLayout/FactoryLayout', 'app/factoryLayout/pages/FactoryLayoutEditPage', css, nls],
       function(FactoryLayout, FactoryLayoutEditPage)
       {
         return new FactoryLayoutEditPage({model: new FactoryLayout({_id: req.params.id})});
@@ -51,7 +52,10 @@ define([
         'app/factoryLayout/productionState',
         'app/factoryLayout/ProdLineStateDisplayOptions',
         'app/factoryLayout/pages/ProdLineStateListPage',
-        'i18n!app/nls/prodShifts'
+        'css!app/prodShifts/assets/main',
+        css,
+        'i18n!app/nls/prodShifts',
+        nls
       ],
       function(productionState, ProdLineStateDisplayOptions, ProdLineStateListPage)
       {

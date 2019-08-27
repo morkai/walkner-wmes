@@ -19,6 +19,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/behaviorObsCards/assets/main';
   var nls = 'i18n!app/nls/behaviorObsCards';
   var canAccess = user.auth('LOCAL', 'USER');
 
@@ -28,6 +29,7 @@ define([
       [
         'app/behaviorObsCards/BehaviorObsCardCountReport',
         'app/behaviorObsCards/pages/BehaviorObsCardCountReportPage',
+        css,
         'i18n!app/nls/reports',
         nls
       ],
@@ -46,6 +48,7 @@ define([
       [
         'app/behaviorObsCards/BehaviorObsCardCollection',
         'app/behaviorObsCards/pages/BehaviorObsCardListPage',
+        css,
         nls
       ],
       function(BehaviorObsCardCollection, BehaviorObsCardListPage)
@@ -63,6 +66,7 @@ define([
       [
         'app/behaviorObsCards/BehaviorObsCard',
         'app/behaviorObsCards/pages/BehaviorObsCardDetailsPage',
+        css,
         nls
       ],
       function(BehaviorObsCard, BehaviorObsCardDetailsPage)
@@ -81,6 +85,7 @@ define([
       [
         'app/behaviorObsCards/BehaviorObsCard',
         'app/behaviorObsCards/pages/BehaviorObsCardAddFormPage',
+        css,
         nls
       ],
       function(BehaviorObsCard, BehaviorObsCardAddFormPage)
@@ -160,6 +165,7 @@ define([
       [
         'app/behaviorObsCards/BehaviorObsCard',
         'app/behaviorObsCards/pages/BehaviorObsCardEditFormPage',
+        css,
         nls
       ],
       function(BehaviorObsCard, BehaviorObsCardEditFormPage)

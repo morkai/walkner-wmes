@@ -13,6 +13,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/opinionSurveyOmrResults/assets/main';
   var nls = 'i18n!app/nls/opinionSurveyOmrResults';
   var canView = user.auth('OPINION_SURVEYS:MANAGE');
 
@@ -39,6 +40,7 @@ define([
       [
         'app/opinionSurveyOmrResults/OpinionSurveyOmrResult',
         'app/opinionSurveyOmrResults/pages/OpinionSurveyOmrResultDetailsPage',
+        css,
         nls
       ],
       function(OpinionSurveyOmrResult, OpinionSurveyOmrResultDetailsPage)

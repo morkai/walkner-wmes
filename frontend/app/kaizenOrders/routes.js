@@ -17,6 +17,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/kaizenOrders/assets/main';
   var nls = 'i18n!app/nls/kaizenOrders';
   var canAccess = user.auth();
   var canManage = user.auth('KAIZEN:DICTIONARIES:MANAGE');
@@ -28,6 +29,7 @@ define([
       [
         'app/kaizenOrders/KaizenOrderReport',
         'app/kaizenOrders/pages/KaizenOrderReportPage',
+        css,
         'i18n!app/nls/reports',
         nls
       ],
@@ -46,6 +48,7 @@ define([
       [
         'app/kaizenOrders/KaizenOrderSummaryReport',
         'app/kaizenOrders/pages/KaizenOrderSummaryReportPage',
+        css,
         'i18n!app/nls/reports',
         'i18n!app/nls/suggestions',
         nls
@@ -65,6 +68,7 @@ define([
       [
         'app/suggestions/SuggestionEngagementReport',
         'app/suggestions/pages/SuggestionEngagementReportPage',
+        css,
         'i18n!app/nls/reports',
         'i18n!app/nls/suggestions',
         nls
@@ -85,6 +89,7 @@ define([
       [
         'app/kaizenOrders/KaizenMetricsReport',
         'app/kaizenOrders/pages/KaizenMetricsReportPage',
+        css,
         'i18n!app/nls/reports',
         'i18n!app/nls/suggestions',
         nls
@@ -100,7 +105,7 @@ define([
 
   router.map('/kaizenHelp', function()
   {
-    viewport.loadPage(['app/core/View', 'app/kaizenOrders/templates/help', nls], function(View, helpTemplate)
+    viewport.loadPage(['app/core/View', 'app/kaizenOrders/templates/help', css, nls], function(View, helpTemplate)
     {
       return new View({
         layoutName: 'page',
@@ -115,6 +120,7 @@ define([
       [
         'app/kaizenOrders/KaizenOrderCollection',
         'app/kaizenOrders/pages/KaizenOrderListPage',
+        css,
         nls
       ],
       function(KaizenOrderCollection, KaizenOrderListPage)
@@ -132,6 +138,7 @@ define([
       [
         'app/kaizenOrders/pages/KaizenOrderDetailsPage',
         'app/kaizenOrders/views/KaizenOrderThankYouView',
+        css,
         nls
       ],
       function(KaizenOrderDetailsPage, KaizenOrderThankYouView)
@@ -167,6 +174,7 @@ define([
     viewport.loadPage(
       [
         'app/kaizenOrders/pages/KaizenOrderAddFormPage',
+        css,
         nls
       ],
       function(KaizenOrderAddFormPage)
@@ -211,6 +219,7 @@ define([
     viewport.loadPage(
       [
         'app/kaizenOrders/pages/KaizenOrderEditFormPage',
+        css,
         nls
       ],
       function(KaizenOrderEditFormPage)

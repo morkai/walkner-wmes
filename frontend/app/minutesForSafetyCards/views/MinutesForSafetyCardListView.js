@@ -29,10 +29,10 @@ define([
 
       return [
         {id: 'rid', className: 'is-min is-number'},
-        {id: 'status', className: 'is-min'},
         {id: 'date', className: 'is-min'},
         {id: 'section', className: 'is-min'},
         {id: 'owner', className: 'is-min'},
+        {id: 'confirmer', className: 'is-min'},
         'subject'
       ];
     },

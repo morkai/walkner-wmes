@@ -11,14 +11,13 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth('DOCUMENTS:VIEW');
-
-  router.map('/orderDocuments/clients', canView, function(req)
+  router.map('/orderDocuments/clients', user.auth('DOCUMENTS:VIEW'), function(req)
   {
     viewport.loadPage(
       [
         'app/orderDocumentClients/OrderDocumentClientCollection',
         'app/orderDocumentClients/pages/OrderDocumentClientListPage',
+        'css!app/orderDocumentClients/assets/main',
         'i18n!app/nls/orderDocumentClients'
       ],
       function(OrderDocumentClientCollection, OrderDocumentClientListPage)

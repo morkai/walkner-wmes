@@ -101,6 +101,7 @@
     "NAVBAR:PLANNING:hourly": "hourly",
     "NAVBAR:PLANNING:daily": "daily",
     "NAVBAR:PLANNING:drilling": "Drilling",
+    "NAVBAR:PLANNING:wiring": "Wiring",
     "NAVBAR:PLANNING:paintShop": "Paint shop",
     "NAVBAR:PLANNING:paintShop:load": "Load",
     "NAVBAR:PLANNING:wh": "Warehouse",

@@ -21,7 +21,7 @@ define([
 
   var DATE_PROPERTIES = ['date'];
   var TIME_PROPERTIES = ['createdAt', 'updatedAt'];
-  var USER_INFO_PROPERTIES = ['creator', 'updater', 'owner'];
+  var USER_INFO_PROPERTIES = ['creator', 'updater', 'owner', 'confirmer'];
 
   return Model.extend({
 
@@ -40,7 +40,6 @@ define([
     defaults: function()
     {
       return {
-        status: 'new',
         date: new Date(),
         owner: user.getInfo()
       };
@@ -53,7 +52,7 @@ define([
       var timeFormat = longDateTime ? 'LLLL' : 'L, LTS';
       var obj = this.toJSON();
 
-      obj.status = t(this.nlsDomain, 'status:' + obj.status);
+      obj.version = this.getVersion();
       obj.section = kaizenDictionaries.sections.getLabel(obj.section);
 
       DATE_PROPERTIES.forEach(function(dateProperty)
@@ -70,6 +69,8 @@ define([
       {
         obj[userInfoProperty] = renderUserInfo({userInfo: obj[userInfoProperty]});
       });
+
+      obj.participants = obj.participants.map(function(u) { return renderUserInfo({userInfo: u}); });
 
       return obj;
     },
@@ -94,31 +95,39 @@ define([
       return this.attributes.owner && this.attributes.owner.id === user.data._id;
     },
 
+    isConfirmer: function()
+    {
+      return this.attributes.confirmer && this.attributes.confirmer.id === user.data._id;
+    },
+
     canEdit: function()
     {
-      if (user.isAllowedTo(this.privilegePrefix + ':MANAGE'))
-      {
-        return true;
-      }
-
-      var attrs = this.attributes;
-
-      if (attrs.status === 'finished' || attrs.status === 'cancelled')
-      {
-        return false;
-      }
-
-      return this.isCreator() || this.isOwner();
+      return user.isAllowedTo(this.privilegePrefix + ':MANAGE')
+        || this.isCreator()
+        || this.isOwner()
+        || this.isConfirmer();
     },
 
     canDelete: function()
     {
-      if (user.isAllowedTo(this.privilegePrefix + ':MANAGE'))
+      return this.canEdit();
+    },
+
+    getVersion: function()
+    {
+      if (Array.isArray(this.attributes.causes) && this.attributes.causes.length > 0)
       {
-        return true;
+        return 2;
       }
 
-      return this.get('status') === 'new' && (this.isCreator() || this.isOwner());
+      var createdAt = Date.parse(this.attributes.createdAt) || Date.now();
+
+      if (createdAt >= Date.parse('2019-08-27 06:00:00')) // TODO Change to 2019-09-01
+      {
+        return 2;
+      }
+
+      return 1;
     }
 
   });

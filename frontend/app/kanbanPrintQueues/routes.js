@@ -11,14 +11,13 @@ define([
 ) {
   'use strict';
 
-  var canView = user.auth();
-
-  router.map('/kanban/printQueues', canView, function(req)
+  router.map('/kanban/printQueues', user.auth(), function(req)
   {
     viewport.loadPage(
       [
         'app/kanbanPrintQueues/KanbanPrintQueueCollection',
         'app/kanbanPrintQueues/pages/KanbanPrintQueueListPage',
+        'css!app/kanbanPrintQueues/assets/main',
         'i18n!app/nls/kanbanPrintQueues'
       ],
       function(KanbanPrintQueueCollection, KanbanPrintQueueListPage)

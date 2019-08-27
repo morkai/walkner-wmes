@@ -54,26 +54,4 @@ define([
       }
     );
   });
-
-  router.map('/trw/tests/:id', canView, function(req)
-  {
-    viewport.loadPage(
-      [
-        'app/core/pages/DetailsPage',
-        'app/wmes-trw-tests/dictionaries',
-        'app/wmes-trw-tests/Test',
-        'app/wmes-trw-tests/templates/details',
-        nls
-      ],
-      function(DetailsPage, dictionaries, Model, detailsTemplate)
-      {
-        return dictionaries.bind(new DetailsPage({
-          baseBreadcrumb: baseBreadcrumb,
-          pageClassName: 'page-max-flex',
-          model: new Model({_id: req.params.id}),
-          detailsTemplate: detailsTemplate
-        }));
-      }
-    );
-  });
 });

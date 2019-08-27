@@ -1,4 +1,4 @@
-<form class="well filter-form minutesForSafetyCards-report-filter">
+<form class="well filter-form mfs-report-filter">
   <%- forms.dateTimeRange({
     idPrefix: idPrefix
   }) %>
@@ -17,8 +17,16 @@
     <input id="<%- idPrefix %>-sections" name="sections" type="text" autocomplete="new-password">
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-owner"><%- helpers.t('PROPERTY:owner') %></label>
-    <input id="<%- idPrefix %>-owner" name="owner" type="text" autocomplete="new-password">
+    <div class="filter-radioLabels">
+      <label>
+        <input name="userType" type="radio" value="owner">
+        <%- helpers.t('filter:user:owner') %>
+      </label><label>
+        <input name="userType" type="radio" value="confirmer">
+        <%- helpers.t('filter:user:confirmer') %>
+      </label>
+    </div>
+    <input id="<%- idPrefix %>-user" name="user" type="text" autocomplete="new-password">
   </div>
   <div class="form-group filter-actions">
     <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>

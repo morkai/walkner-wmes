@@ -15,6 +15,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/opinionSurveyActions/assets/main';
   var nls = 'i18n!app/nls/opinionSurveyActions';
   var canView = user.auth();
   var canManage = user.auth('OPINION_SURVEYS:MANAGE', 'FN:manager', 'FN:master');
@@ -25,6 +26,7 @@ define([
       [
         'app/opinionSurveyActions/OpinionSurveyActionCollection',
         'app/opinionSurveyActions/pages/OpinionSurveyActionListPage',
+        css,
         nls
       ],
       function(OpinionSurveyActionCollection, OpinionSurveyActionListPage)
@@ -42,6 +44,7 @@ define([
       [
         'app/opinionSurveyActions/OpinionSurveyAction',
         'app/opinionSurveyActions/pages/OpinionSurveyActionDetailsPage',
+        css,
         nls
       ],
       function(OpinionSurveyAction, OpinionSurveyActionDetailsPage)
@@ -59,6 +62,7 @@ define([
       [
         'app/opinionSurveyActions/OpinionSurveyAction',
         'app/opinionSurveyActions/pages/OpinionSurveyActionAddFormPage',
+        css,
         nls
       ],
       function(OpinionSurveyAction, OpinionSurveyActionAddFormPage)
@@ -76,6 +80,7 @@ define([
       [
         'app/opinionSurveyActions/OpinionSurveyAction',
         'app/opinionSurveyActions/pages/OpinionSurveyActionEditFormPage',
+        css,
         nls
       ],
       function(OpinionSurveyAction, OpinionSurveyActionEditFormPage)

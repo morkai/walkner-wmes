@@ -1,8 +1,3 @@
-@import "./workstationPicker.css";
-@import "./orderPicker.css";
-@import "./programPicker.css";
-@import "./debug.css";
-
 .trw-testing-page {
   background: #fff;
   overflow: hidden;
@@ -175,4 +170,3 @@
 .trw-testing-image[src=""] {
   display: none;
 }
-

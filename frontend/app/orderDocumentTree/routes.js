@@ -28,6 +28,7 @@ define([
         'app/orderDocumentTree/uploads',
         'app/orderDocumentTree/OrderDocumentTree',
         'app/orderDocumentTree/pages/OrderDocumentTreePage',
+        'css!app/orderDocumentTree/assets/main',
         'i18n!app/nls/orderDocumentTree'
       ],
       function(uploads, OrderDocumentTree, OrderDocumentTreePage)

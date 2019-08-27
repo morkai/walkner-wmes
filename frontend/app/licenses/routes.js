@@ -4,28 +4,32 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  './LicenseCollection',
-  './License',
-  'i18n!app/nls/licenses'
+  '../core/util/showDeleteFormPage'
 ], function(
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  LicenseCollection,
-  License
+  showDeleteFormPage
 ) {
   'use strict';
 
+  var css = 'css!app/licenses/assets/main';
+  var nls = 'i18n!app/nls/licenses';
   var canView = user.auth('DICTIONARIES:VIEW');
   var canManage = user.auth('LICENSES:MANAGE');
 
   router.map('/licenses', canView, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/FilteredListPage', 'app/licenses/views/LicenseFilterView', 'app/licenses/views/LicenseListView'],
-      function(FilteredListPage, LicenseFilterView, LicenseListView)
+      [
+        'app/core/pages/FilteredListPage',
+        'app/licenses/LicenseCollection',
+        'app/licenses/views/LicenseFilterView',
+        'app/licenses/views/LicenseListView',
+        css,
+        nls
+      ],
+      function(FilteredListPage, LicenseCollection, LicenseFilterView, LicenseListView)
       {
         return new FilteredListPage({
           FilterView: LicenseFilterView,
@@ -39,8 +43,8 @@ define([
   router.map('/licenses/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/licenses/templates/details'],
-      function(DetailsPage, detailsTemplate)
+      ['app/core/pages/DetailsPage', 'app/licenses/License', 'app/licenses/templates/details', css, nls],
+      function(DetailsPage, License, detailsTemplate)
       {
         return new DetailsPage({
           detailsTemplate: detailsTemplate,
@@ -53,8 +57,8 @@ define([
   router.map('/licenses;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/licenses/views/LicenseFormView'],
-      function(AddFormPage, LicenseFormView)
+      ['app/core/pages/AddFormPage', 'app/licenses/License', 'app/licenses/views/LicenseFormView', nls],
+      function(AddFormPage, License, LicenseFormView)
       {
         return new AddFormPage({
           FormView: LicenseFormView,
@@ -67,8 +71,8 @@ define([
   router.map('/licenses/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/licenses/views/LicenseFormView'],
-      function(EditFormPage, LicenseFormView)
+      ['app/core/pages/EditFormPage', 'app/licenses/License', 'app/licenses/views/LicenseFormView', nls],
+      function(EditFormPage, License, LicenseFormView)
       {
         return new EditFormPage({
           FormView: LicenseFormView,
@@ -78,5 +82,5 @@ define([
     );
   });
 
-  router.map('/licenses/:id;delete', canManage, showDeleteFormPage.bind(null, License));
+  router.map('/licenses/:id;delete', canManage, showDeleteFormPage.bind(null, 'app/licenses/License'));
 });

@@ -9,7 +9,6 @@ define([
   '../core/util/showDeleteFormPage',
   '../core/util/getRelativeDateRange',
   '../core/util/fixRelativeDateInRql',
-  './HourlyPlan',
   './HourlyPlanCollection'
 ], function(
   broker,
@@ -20,11 +19,11 @@ define([
   showDeleteFormPage,
   getRelativeDateRange,
   fixRelativeDateInRql,
-  HourlyPlan,
   HourlyPlanCollection
 ) {
   'use strict';
 
+  var css = 'css!app/hourlyPlans/assets/main';
   var nls = 'i18n!app/nls/hourlyPlans';
   var canView = user.auth('HOURLY_PLANS:VIEW');
   var canManage = user.auth('HOURLY_PLANS:MANAGE', 'PROD_DATA:MANAGE');
@@ -64,16 +63,23 @@ define([
 
   router.map('/hourlyPlans;add', canManage, function(req)
   {
-    viewport.loadPage(['app/hourlyPlans/pages/HourlyPlanAddFormPage', nls], function(HourlyPlanAddFormPage)
-    {
-      var dateRange = getRelativeDateRange(req.query.date);
+    viewport.loadPage(
+      [
+        'app/hourlyPlans/HourlyPlan',
+        'app/hourlyPlans/pages/HourlyPlanAddFormPage',
+        nls
+      ],
+      function(HourlyPlan, HourlyPlanAddFormPage)
+      {
+        var dateRange = getRelativeDateRange(req.query.date);
 
-      return new HourlyPlanAddFormPage({
-        model: new HourlyPlan({
-          date: dateRange ? dateRange.from.setHours(6) : null
-        })
-      });
-    });
+        return new HourlyPlanAddFormPage({
+          model: new HourlyPlan({
+            date: dateRange ? dateRange.from.setHours(6) : null
+          })
+        });
+      }
+    );
   });
 
   router.map('/hourlyPlans/:date/:division', canView, function(req)
@@ -118,23 +124,39 @@ define([
 
   router.map('/hourlyPlans/:id', canView, function(req)
   {
-    viewport.loadPage(['app/hourlyPlans/pages/HourlyPlanDetailsPage', nls], function(HourlyPlanDetailsPage)
-    {
-      return new HourlyPlanDetailsPage({
-        model: new HourlyPlan({_id: req.params.id})
-      });
-    });
+    viewport.loadPage(
+      [
+        'app/hourlyPlans/HourlyPlan',
+        'app/hourlyPlans/pages/HourlyPlanDetailsPage',
+        css,
+        nls
+      ],
+      function(HourlyPlan, HourlyPlanDetailsPage)
+      {
+        return new HourlyPlanDetailsPage({
+          model: new HourlyPlan({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/hourlyPlans/:id;edit', canManage, function(req)
   {
-    viewport.loadPage(['app/hourlyPlans/pages/HourlyPlanEditFormPage', nls], function(HourlyPlanEditFormPage)
-    {
-      return new HourlyPlanEditFormPage({
-        model: new HourlyPlan({_id: req.params.id})
-      });
-    });
+    viewport.loadPage(
+      [
+        'app/hourlyPlans/HourlyPlan',
+        'app/hourlyPlans/pages/HourlyPlanEditFormPage',
+        css,
+        nls
+      ],
+      function(HourlyPlan, HourlyPlanEditFormPage)
+      {
+        return new HourlyPlanEditFormPage({
+          model: new HourlyPlan({_id: req.params.id})
+        });
+      }
+    );
   });
 
-  router.map('/hourlyPlans/:id;delete', canManage, showDeleteFormPage.bind(null, HourlyPlan));
+  router.map('/hourlyPlans/:id;delete', canManage, showDeleteFormPage.bind(null, 'app/hourlyPlans/HourlyPlan'));
 });

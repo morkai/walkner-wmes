@@ -1,4 +1,4 @@
-<form class="well filter-form minutesForSafetyCards-filter">
+<form class="well filter-form mfs-filter">
   <%- forms.dateTimeRange({
     idPrefix: idPrefix,
     labels: {text: helpers.t('PROPERTY:date'), ranges: true}
@@ -12,19 +12,14 @@
         <input name="userType" type="radio" value="owner">
         <%- helpers.t('filter:user:owner') %>
       </label><label>
+        <input name="userType" type="radio" value="confirmer">
+        <%- helpers.t('filter:user:confirmer') %>
+      </label><label>
         <input name="userType" type="radio" value="others">
         <%- helpers.t('filter:user:others') %>
       </label>
     </div>
     <input id="<%- idPrefix %>-user" name="user" type="text" autocomplete="new-password">
-  </div>
-  <div class="form-group">
-    <label for="<%- idPrefix %>-status"><%- helpers.t('PROPERTY:status') %></label>
-    <select id="<%- idPrefix %>-status" name="status[]" class="form-control is-expandable" multiple size="1">
-      <% statuses.forEach(function(status) { %>
-      <option value="<%- status %>"><%- helpers.t('status:' + status) %></option>
-      <% }) %>
-    </select>
   </div>
   <div class="form-group">
     <label for="<%- idPrefix %>-section"><%- helpers.t('PROPERTY:section') %></label>

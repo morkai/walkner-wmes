@@ -17,6 +17,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/pfepEntries/assets/main';
   var nls = 'i18n!app/nls/pfepEntries';
   var canView = user.auth();
   var canManage = user.auth('PFEP:MANAGE');
@@ -27,6 +28,7 @@ define([
       [
         'app/pfepEntries/PfepEntryCollection',
         'app/pfepEntries/pages/PfepEntryListPage',
+        css,
         nls
       ],
       function(PfepEntryCollection, PfepEntryListPage)
@@ -44,6 +46,7 @@ define([
       [
         'app/pfepEntries/PfepEntry',
         'app/pfepEntries/pages/PfepEntryDetailsPage',
+        css,
         nls
       ],
       function(PfepEntry, PfepEntryDetailsPage)

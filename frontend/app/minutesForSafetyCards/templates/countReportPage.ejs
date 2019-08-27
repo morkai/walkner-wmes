@@ -1,7 +1,7 @@
-<div class="minutesForSafetyCards-report">
+<div class="mfs-report">
   <div class="filter-container"></div>
   <% metrics.forEach(function(metric) { %>
   <h3><%- t('minutesForSafetyCards', 'report:title:' + metric) %></h3>
-  <div id="<%- idPrefix %>-<%- metric %>" class="minutesForSafetyCards-report-<%- metric %>"></div>
+  <div id="<%- idPrefix %>-<%- metric %>" class="mfs-report-<%- metric %>"></div>
   <% }) %>
 </div>

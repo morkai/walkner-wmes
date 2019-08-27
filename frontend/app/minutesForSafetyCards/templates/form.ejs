@@ -1,28 +1,24 @@
-<form class="minutesForSafetyCards-form" method="post" action="<%- formAction %>" autocomplete="off">
+<form class="mfs-form" method="post" action="<%- formAction %>" autocomplete="off">
   <input type="hidden" name="_method" value="<%- formMethod %>">
   <div class="panel panel-primary">
     <div class="panel-heading"><%- panelTitleText %></div>
     <div class="panel-body">
-      <div id="<%- idPrefix %>-statusGroup" class="form-group clearfix">
-        <label for="<%- idPrefix %>-status" class="control-label"><%- helpers.t('PROPERTY:status') %></label>
-        <div id="<%- idPrefix %>-status" class="btn-group minutesForSafetyCards-form-statusBtnGroup" data-toggle="buttons">
-          <% statuses.forEach(function(status) { %>
-          <label class="btn btn-default">
-            <input type="radio" name="status" value="<%- status %>"><%- helpers.t('status:' + status) %>
-          </label>
-          <% }) %>
-        </div>
-      </div>
       <div class="row">
         <div class="form-group col-lg-3 has-required-select2">
           <label for="<%- idPrefix %>-owner" class="control-label is-required"><%- helpers.t('PROPERTY:owner') %></label>
           <input id="<%- idPrefix %>-owner" type="text" autocomplete="new-password" name="owner" required>
         </div>
+        <% if (version > 1) { %>
+        <div class="form-group col-lg-3 has-required-select2">
+          <label for="<%- idPrefix %>-confirmer" class="control-label is-required"><%- helpers.t('PROPERTY:confirmer') %></label>
+          <input id="<%- idPrefix %>-confirmer" type="text" autocomplete="new-password" name="confirmer" required>
+        </div>
+        <% } %>
         <div class="form-group col-lg-3 has-required-select2">
           <label for="<%- idPrefix %>-section" class="control-label is-required"><%- helpers.t('PROPERTY:section') %></label>
           <input id="<%- idPrefix %>-section" type="text" autocomplete="new-password" name="section" required>
         </div>
-        <div class="form-group col-lg-6 has-required-select2">
+        <div class="form-group col-lg-3 has-required-select2">
           <label for="<%- idPrefix %>-date" class="control-label is-required"><%- helpers.t('PROPERTY:date') %></label>
           <input id="<%- idPrefix %>-date" class="form-control" type="date" name="date" required min="2017-01-01" max="<%- time.format(Date.now(), 'YYYY-MM-DD') %>">
         </div>
@@ -31,11 +27,21 @@
         <label for="<%- idPrefix %>-subject" class="control-label is-required"><%- helpers.t('PROPERTY:subject') %></label>
         <input id="<%- idPrefix %>-subject" class="form-control" type="text" autocomplete="new-password" name="subject" required>
       </div>
+      <% if (version > 1) { %>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-risks" class="control-label is-required"><%- helpers.t('PROPERTY:risks') %></label>
+        <textarea id="<%- idPrefix %>-risks" class="form-control" name="risks" required rows="2"></textarea>
+      </div>
+      <% } %>
       <hr>
+      <% if (version > 1) { %>
+      <h4 class="control-label" style="margin-bottom: 0"><%- helpers.t('PROPERTY:causes') %></h4>
+      <div id="<%- idPrefix %>-causes" class="mfs-form-causes row"></div>
+      <% } else { %>
       <h4 class="control-label"><%- helpers.t('PROPERTY:observations') %></h4>
       <p id="<%- idPrefix %>-nearMiss" class="message message-inline message-error">
-        <input class="minutesForSafetyCards-form-rid-required" name="nearMiss" type="text" autocomplete="new-password" tabindex="-1">
-        <span class="minutesForSafetyCards-form-rid-message">
+        <input class="mfs-form-rid-required" name="nearMiss" type="text" autocomplete="new-password" tabindex="-1">
+        <span class="mfs-form-rid-message">
           <% if (model.nearMiss) { %>
           <%- helpers.t('FORM:MSG:nearMiss:edit', {rid: model.nearMiss}) %>
           <% } else { %>
@@ -43,17 +49,18 @@
           <% } %>
         </span>
       </p>
-      <table class="table table-bordered table-hover minutesForSafetyCards-form-observations">
+      <table class="table table-bordered table-hover mfs-form-observations">
         <thead>
         <tr>
-          <th class="minutesForSafetyCards-half"><%- helpers.t('PROPERTY:observations:what') %></th>
-          <th class="minutesForSafetyCards-half"><%- helpers.t('PROPERTY:observations:why') %></th>
+          <th class="mfs-half"><%- helpers.t('PROPERTY:observations:what') %></th>
+          <th class="mfs-half"><%- helpers.t('PROPERTY:observations:why') %></th>
           <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
         </tr>
         </thead>
         <tbody id="<%- idPrefix %>-observations"></tbody>
       </table>
-      <button id="<%- idPrefix %>-addObservation" class="btn btn-default minutesForSafetyCards-form-addButton" type="button"><i class="fa fa-plus"></i></button>
+      <button id="<%- idPrefix %>-addObservation" class="btn btn-default mfs-form-addButton" type="button"><i class="fa fa-plus"></i></button>
+      <% } %>
       <hr>
       <div class="form-group">
         <label for="<%- idPrefix %>-safeBehavior" class="control-label"><%- helpers.t('PROPERTY:safeBehavior') %></label>
@@ -62,15 +69,16 @@
       <hr>
       <h4 class="control-label"><%- helpers.t('PROPERTY:orgPropositions') %></h4>
       <p id="<%- idPrefix %>-nearMiss" class="message message-inline message-warning">
-        <input class="minutesForSafetyCards-form-rid-required" name="suggestion" type="text" autocomplete="new-password" tabindex="-1">
-        <span class="minutesForSafetyCards-form-rid-message">
+        <input class="mfs-form-rid-required" name="suggestion" type="text" autocomplete="new-password" tabindex="-1">
+        <span class="mfs-form-rid-message">
           <% if (model.suggestion) { %>
           <%- helpers.t('FORM:MSG:suggestion:edit', {rid: model.suggestion}) %>
           <% } else { %>
-          <%- helpers.t('FORM:MSG:suggestion:add') %>
+          <%- helpers.t('FORM:MSG:suggestion:add:1') %>
           <% } %>
         </span>
       </p>
+      <% if (version < 2) { %>
       <table class="table table-bordered table-hover">
         <thead>
         <tr>
@@ -80,7 +88,7 @@
         </thead>
         <tbody id="<%- idPrefix %>-orgPropositions"></tbody>
       </table>
-      <button id="<%- idPrefix %>-addOrgProposition" class="btn btn-default minutesForSafetyCards-form-addButton" type="button"><i class="fa fa-plus"></i></button>
+      <button id="<%- idPrefix %>-addOrgProposition" class="btn btn-default mfs-form-addButton" type="button"><i class="fa fa-plus"></i></button>
       <hr>
       <h4 class="control-label"><%- helpers.t('PROPERTY:techPropositions') %></h4>
       <table class="table table-bordered table-hover">
@@ -92,7 +100,8 @@
         </thead>
         <tbody id="<%- idPrefix %>-techPropositions"></tbody>
       </table>
-      <button id="<%- idPrefix %>-addTechProposition" class="btn btn-default minutesForSafetyCards-form-addButton" type="button"><i class="fa fa-plus"></i></button>
+      <button id="<%- idPrefix %>-addTechProposition" class="btn btn-default mfs-form-addButton" type="button"><i class="fa fa-plus"></i></button>
+      <% } %>
       <hr>
       <div class="form-group has-required-select2">
         <label for="<%- idPrefix %>-participants" class="control-label is-required"><%- helpers.t('PROPERTY:participants') %></label>

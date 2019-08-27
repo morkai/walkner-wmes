@@ -43,6 +43,7 @@ define([
       [
         model,
         'app/wmes-toolcal-tools/pages/DetailsPage',
+        'css!app/wmes-toolcal-tools/assets/main',
         nls
       ],
       function(Tool, DetailsPage)

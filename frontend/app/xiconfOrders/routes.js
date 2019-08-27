@@ -11,6 +11,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/xiconfOrders/assets/main';
   var nls = 'i18n!app/nls/xiconfOrders';
   var canView = user.auth('XICONF:VIEW');
 
@@ -20,6 +21,7 @@ define([
       [
         'app/xiconfOrders/XiconfOrderCollection',
         'app/xiconfOrders/pages/XiconfOrderListPage',
+        css,
         nls
       ],
       function(XiconfOrderCollection, XiconfOrderListPage)
@@ -39,6 +41,8 @@ define([
       [
         'app/xiconfOrders/XiconfOrder',
         'app/xiconfOrders/pages/XiconfOrderDetailsPage',
+        'css!app/orders/assets/main',
+        css,
         'i18n!app/nls/orders',
         nls
       ],

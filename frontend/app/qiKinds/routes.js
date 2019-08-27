@@ -6,16 +6,14 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  './QiKind'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   t,
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  QiKind
+  showDeleteFormPage
 ) {
   'use strict';
 
@@ -107,7 +105,7 @@ define([
     );
   });
 
-  router.map('/qi/kinds/:id;delete', canManage, _.partial(showDeleteFormPage, QiKind, _, _, {
+  router.map('/qi/kinds/:id;delete', canManage, _.partial(showDeleteFormPage, 'app/qiKinds/QiKind', _, _, {
     baseBreadcrumb: true
   }));
 });

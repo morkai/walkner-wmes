@@ -5,16 +5,13 @@ define([
   '../time',
   '../router',
   '../viewport',
-  '../user',
-  './pages/DrillingPage',
-  'i18n!app/nls/wmes-drilling'
+  '../user'
 ], function(
   broker,
   time,
   router,
   viewport,
-  user,
-  DrillingPage
+  user
 ) {
   'use strict';
 
@@ -43,18 +40,29 @@ define([
       });
     }
 
-    viewport.showPage(new DrillingPage({
-      date: req.params.date,
-      selectedMrp: req.query.mrp,
-      fullscreen: req.query.fullscreen !== undefined
-    }));
+    viewport.loadPage(
+      [
+        'app/wmes-drilling/pages/DrillingPage',
+        'css!app/wmes-drilling/assets/main',
+        'i18n!app/nls/wmes-drilling'
+      ],
+      function(DrillingPage)
+      {
+        return new DrillingPage({
+          date: req.params.date,
+          selectedMrp: req.query.mrp,
+          fullscreen: req.query.fullscreen !== undefined
+        });
+      }
+    );
   });
 
   router.map('/drilling;settings', canManage, function(req)
   {
     viewport.loadPage(
       [
-        'app/wmes-drilling/pages/DrillingSettingsPage'
+        'app/wmes-drilling/pages/DrillingSettingsPage',
+        'i18n!app/nls/wmes-drilling'
       ],
       function(DrillingSettingsPage)
       {

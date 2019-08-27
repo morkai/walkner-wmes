@@ -17,6 +17,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/prodShifts/assets/main';
   var nls = 'i18n!app/nls/prodShifts';
   var canView = user.auth('PROD_DATA:VIEW');
   var canManage = user.auth('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST');
@@ -24,7 +25,7 @@ define([
   router.map('/prodShifts', canView, function(req)
   {
     viewport.loadPage(
-      ['app/prodShifts/ProdShiftCollection', 'app/prodShifts/pages/ProdShiftListPage', nls],
+      ['app/prodShifts/ProdShiftCollection', 'app/prodShifts/pages/ProdShiftListPage', css, nls],
       function(ProdShiftCollection, ProdShiftListPage)
       {
         return new ProdShiftListPage({
@@ -38,7 +39,7 @@ define([
 
   router.map('/prodShifts;add', canManage, function()
   {
-    viewport.loadPage(['app/prodShifts/pages/AddProdShiftFormPage', nls], function(AddProdShiftFormPage)
+    viewport.loadPage(['app/prodShifts/pages/AddProdShiftFormPage', css, nls], function(AddProdShiftFormPage)
     {
       return new AddProdShiftFormPage({
         model: new ProdShift()
@@ -51,6 +52,9 @@ define([
     viewport.loadPage(
       [
         'app/prodShifts/pages/ProdShiftDetailsPage',
+        'css!app/prodShiftOrders/assets/main',
+        'css!app/prodDowntimes/assets/main',
+        css,
         'i18n!app/nls/prodShiftOrders',
         'i18n!app/nls/prodDowntimes',
         nls
@@ -67,7 +71,7 @@ define([
 
   router.map('/prodShifts/:id;edit', canManage, function(req)
   {
-    viewport.loadPage(['app/prodShifts/pages/EditProdShiftFormPage', nls], function(EditProdShiftFormPage)
+    viewport.loadPage(['app/prodShifts/pages/EditProdShiftFormPage', css, nls], function(EditProdShiftFormPage)
     {
       return new EditProdShiftFormPage({
         model: new ProdShift({_id: req.params.id})

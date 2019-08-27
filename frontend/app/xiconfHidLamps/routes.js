@@ -8,8 +8,7 @@ define([
   '../user',
   '../core/pages/DetailsPage',
   '../core/util/showDeleteFormPage',
-  '../core/util/pageActions',
-  './XiconfHidLamp'
+  '../core/util/pageActions'
 ], function(
   _,
   t,
@@ -18,8 +17,7 @@ define([
   user,
   DetailsPage,
   showDeleteFormPage,
-  pageActions,
-  XiconfHidLamp
+  pageActions
 ) {
   'use strict';
 
@@ -46,8 +44,12 @@ define([
   router.map('/xiconf/hidLamps/:id', canView, function(req)
   {
     viewport.loadPage(
-      ['app/xiconfHidLamps/templates/details', nls],
-      function(detailsTemplate)
+      [
+        'app/xiconfHidLamps/XiconfHidLamp',
+        'app/xiconfHidLamps/templates/details',
+        nls
+      ],
+      function(XiconfHidLamp, detailsTemplate)
       {
         return new DetailsPage({
           detailsTemplate: detailsTemplate,
@@ -70,8 +72,13 @@ define([
   router.map('/xiconf/hidLamps;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/xiconfHidLamps/views/XiconfHidLampFormView', nls],
-      function(AddFormPage, XiconfHidLampFormView)
+      [
+        'app/core/pages/AddFormPage',
+        'app/xiconfHidLamps/XiconfHidLamp',
+        'app/xiconfHidLamps/views/XiconfHidLampFormView',
+        nls
+      ],
+      function(AddFormPage, XiconfHidLamp, XiconfHidLampFormView)
       {
         return new AddFormPage({
           FormView: XiconfHidLampFormView,
@@ -85,8 +92,13 @@ define([
   router.map('/xiconf/hidLamps/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/xiconfHidLamps/views/XiconfHidLampFormView', nls],
-      function(EditFormPage, XiconfHidLampFormView)
+      [
+        'app/core/pages/EditFormPage',
+        'app/xiconfHidLamps/XiconfHidLamp',
+        'app/xiconfHidLamps/views/XiconfHidLampFormView',
+        nls
+      ],
+      function(EditFormPage, XiconfHidLamp, XiconfHidLampFormView)
       {
         return new EditFormPage({
           FormView: XiconfHidLampFormView,
@@ -100,7 +112,7 @@ define([
   router.map(
     '/xiconf/hidLamps/:id;delete',
     canManage,
-    _.partial(showDeleteFormPage, XiconfHidLamp, _, _, {
+    _.partial(showDeleteFormPage, 'app/xiconfHidLamps/XiconfHidLamp', _, _, {
       baseBreadcrumb: true
     })
   );

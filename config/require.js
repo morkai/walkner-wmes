@@ -4,6 +4,8 @@ exports.paths = {
   'text': 'vendor/require/text',
   'i18n': 'vendor/require/i18n',
   'domReady': 'vendor/require/domReady',
+  'css': 'vendor/require-css/css',
+  'require-css': 'vendor/require-css',
   'underscore': 'vendor/underscore',
   'jquery': 'vendor/jquery',
   'jquery.kinetic': 'vendor/jquery.kinetic',

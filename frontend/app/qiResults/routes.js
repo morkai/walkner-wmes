@@ -8,7 +8,7 @@ define([
   '../user',
   '../time',
   '../core/util/showDeleteFormPage',
-  'app/data/localStorage'
+  '../data/localStorage'
 ], function(
   _,
   broker,
@@ -21,6 +21,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/qiResults/assets/main';
   var nls = 'i18n!app/nls/qiResults';
   var canView = user.auth('QI:RESULTS:VIEW', 'FN:master', 'FN:leader', 'FN:manager', 'FN:prod_whman');
   var canManage = user.auth('QI:INSPECTOR', 'QI:RESULTS:MANAGE');
@@ -33,6 +34,7 @@ define([
         'app/qiResults/QiCountReport',
         'app/qiResults/pages/QiCountReportPage',
         'i18n!app/nls/reports',
+        css,
         nls
       ],
       function(QiCountReport, QiCountReportPage)
@@ -51,6 +53,7 @@ define([
         'app/qiResults/QiOkRatioReport',
         'app/qiResults/pages/QiOkRatioReportPage',
         'i18n!app/nls/reports',
+        css,
         nls
       ],
       function(QiOkRatioReport, QiOkRatioReportPage)
@@ -69,6 +72,7 @@ define([
         'app/qiResults/QiNokRatioReport',
         'app/qiResults/pages/QiNokRatioReportPage',
         'i18n!app/nls/reports',
+        css,
         nls
       ],
       function(QiNokRatioReport, QiNokRatioReportPage)
@@ -88,6 +92,7 @@ define([
         'app/qiResults/QiOutgoingQualityReport',
         'app/qiResults/pages/QiOutgoingQualityReportPage',
         'i18n!app/nls/reports',
+        css,
         nls
       ],
       function(dictionaries, QiOutgoingQualityReport, QiOutgoingQualityReportPage)
@@ -105,6 +110,7 @@ define([
       [
         'app/qiResults/QiResultCollection',
         'app/qiResults/pages/QiResultListPage',
+        css,
         nls
       ],
       function(QiResultCollection, QiResultListPage)
@@ -140,6 +146,7 @@ define([
       [
         'app/qiResults/QiResult',
         'app/qiResults/pages/QiResultDetailsPage',
+        css,
         nls
       ],
       function(QiResult, QiResultDetailsPage)
@@ -157,6 +164,7 @@ define([
       [
         'app/qiResults/QiResult',
         'app/qiResults/pages/QiResultAddFormPage',
+        css,
         nls
       ],
       function(QiResult, QiResultAddFormPage)
@@ -186,6 +194,7 @@ define([
       [
         'app/qiResults/QiResult',
         'app/qiResults/pages/QiResultEditFormPage',
+        css,
         nls
       ],
       function(QiResult, QiResultEditFormPage)

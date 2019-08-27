@@ -13,9 +13,12 @@ define([
 
   router.map('/events', user.auth('EVENTS:VIEW'), function(req)
   {
-    viewport.loadPage(['app/events/pages/EventListPage', 'i18n!app/nls/events'], function(EventListPage)
-    {
-      return new EventListPage({rql: req.rql});
-    });
+    viewport.loadPage(
+      ['app/events/pages/EventListPage', 'css!app/events/assets/main', 'i18n!app/nls/events'],
+      function(EventListPage)
+      {
+        return new EventListPage({rql: req.rql});
+      }
+    );
   });
 });

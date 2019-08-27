@@ -1,20 +1,52 @@
-<div class="minutesForSafetyCards-details">
+<div class="mfs-details">
   <div class="panel panel-success">
-    <div class="panel-heading"><%- helpers.t('core', 'PANEL:TITLE:details') %></div>
+    <div class="panel-heading"><%= model.subject %></div>
     <div class="panel-details">
       <div class="row">
-        <div class="col-md-4">
-          <%- helpers.props(model, {first: true, props: ['status', 'section', 'subject']}) %>
+        <div class="col-md-6">
+          <%- helpers.props(model, {first: true, props: [
+            '!owner',
+            {
+              id: '!confirmer',
+              visible: model.version > 1
+            },
+            'section',
+            'date'
+           ]}) %>
         </div>
-        <div class="col-md-4">
-          <%- helpers.props(model, ['!owner', '!creator', '!updater']) %>
-        </div>
-        <div class="col-md-4">
-          <%- helpers.props(model, ['date', 'createdAt', 'updatedAt']) %>
+        <div class="col-md-6">
+          <%- helpers.props(model, ['!creator', 'createdAt', '!updater', 'updatedAt']) %>
         </div>
       </div>
     </div>
   </div>
+  <% if (model.risks) { %>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%- helpers.t('PROPERTY:risks') %></div>
+    <div class="panel-body">
+      <p class="text-lines"><%= model.risks %></p>
+    </div>
+  </div>
+  <% } %>
+  <% if (model.causes.length) { %>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%- helpers.t('PROPERTY:causes') %></div>
+    <div class="panel-body">
+      <div class="row">
+        <% model.causes.forEach(function(cause) { %>
+        <div class="col-md-4 mfs-details-cause">
+          <h5><%- helpers.t('causes:' + cause.category) %></h5>
+          <ol>
+            <% cause.why.forEach(function(why) { %>
+            <li><%= why %></li>
+            <% }) %>
+          </ol>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+  <% } %>
   <% if (model.observations.length || model.nearMiss) { %>
   <div class="panel panel-default">
     <div class="panel-heading is-with-actions">
@@ -28,8 +60,8 @@
     <table class="table table-bordered table-hover">
       <thead>
       <tr>
-        <th class="minutesForSafetyCards-half"><%- helpers.t('PROPERTY:observations:what') %></th>
-        <th class="minutesForSafetyCards-half"><%- helpers.t('PROPERTY:observations:why') %></th>
+        <th class="mfs-half"><%- helpers.t('PROPERTY:observations:what') %></th>
+        <th class="mfs-half"><%- helpers.t('PROPERTY:observations:why') %></th>
       </tr>
       </thead>
       <tbody>
@@ -56,6 +88,18 @@
     </div>
   </div>
   <% } %>
+  <% if (model.version > 1 && model.suggestion) { %>
+  <div class="panel panel-default">
+    <div class="panel-heading is-with-actions">
+      <%- helpers.t('PROPERTY:propositions') %>
+      <% if (model.suggestion) { %>
+        <div class="panel-actions">
+          <p><%- helpers.t('PANEL:ACTION:suggestion') %> <a href="#suggestions/<%- model.suggestion %>">#<%- model.suggestion %></a></p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+  <% } else { %>
   <% if (model.orgPropositions.length || model.suggestion) { %>
   <div class="panel panel-default">
     <div class="panel-heading is-with-actions">
@@ -87,6 +131,7 @@
     </table>
   </div>
   <% } %>
+  <% } %>
   <% if (model.techPropositions.length) { %>
   <div class="panel panel-default">
     <div class="panel-heading"><%- helpers.t('PROPERTY:techPropositions') %></div>
@@ -110,7 +155,7 @@
   <div class="panel panel-default">
     <div class="panel-heading"><%- helpers.t('PROPERTY:participants') %></div>
     <div class="panel-body">
-      <p class="text-lines"><%= model.participants.map(function(p) { return p.label }).join(', ') %></p>
+      <p class="text-lines"><%- model.participants.join(', ') %></p>
     </div>
   </div>
   <% } %>

@@ -47,7 +47,6 @@ define([
     defaultFormData: function()
     {
       return {
-        status: [],
         section: [],
         userType: 'others',
         user: null
@@ -59,6 +58,11 @@ define([
       'owner.id': function(propertyName, term, formData)
       {
         formData.userType = 'owner';
+        formData.user = term.args[1];
+      },
+      'confirmer.id': function(propertyName, term, formData)
+      {
+        formData.userType = 'confirmer';
         formData.user = term.args[1];
       },
       'users': function(propertyName, term, formData)
@@ -77,17 +81,12 @@ define([
       'section': function(propertyName, term, formData)
       {
         formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
-      },
-      'status': function(propertyName, term, formData)
-      {
-        formData[propertyName] = term.name === 'in' ? term.args[1] : [term.args[1]];
       }
     },
 
     getTemplateData: function()
     {
       return {
-        statuses: kaizenDictionaries.statuses,
         sections: kaizenDictionaries.sections.toJSON()
       };
     },
@@ -99,9 +98,9 @@ define([
 
       dateTimeRange.formToRql(this, selector);
 
-      if (userType === 'owner')
+      if (userType === 'owner' || userType === 'confirmer')
       {
-        selector.push({name: 'eq', args: ['owner.id', user]});
+        selector.push({name: 'eq', args: [userType + '.id', user]});
       }
       else if (userType === 'mine')
       {
@@ -112,7 +111,7 @@ define([
         selector.push({name: 'eq', args: ['users', user]});
       }
 
-      ['status', 'section'].forEach(function(property)
+      ['section'].forEach(function(property)
       {
         var values = (this.$id(property).val() || []).filter(function(v) { return !_.isEmpty(v); });
 
@@ -134,7 +133,7 @@ define([
       this.$('.is-expandable').expandableSelect();
 
       setUpUserSelect2(this.$id('user'), {
-        width: '300px',
+        width: '100%',
         view: this
       });
 
@@ -152,7 +151,7 @@ define([
     {
       var userType = this.$('input[name="userType"]:checked').val();
 
-      this.$id('user').select2('enable', userType === 'others' || userType === 'owner');
+      this.$id('user').select2('enable', userType !== 'mine');
     }
 
   });

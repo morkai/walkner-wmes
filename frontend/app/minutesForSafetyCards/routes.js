@@ -19,6 +19,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/minutesForSafetyCards/assets/main';
   var nls = 'i18n!app/nls/minutesForSafetyCards';
   var canAccess = user.auth();
 
@@ -28,6 +29,7 @@ define([
       [
         'app/minutesForSafetyCards/MinutesForSafetyCardCountReport',
         'app/minutesForSafetyCards/pages/MinutesForSafetyCardCountReportPage',
+        css,
         'i18n!app/nls/reports',
         nls
       ],
@@ -46,6 +48,7 @@ define([
       [
         'app/minutesForSafetyCards/MinutesForSafetyCardCollection',
         'app/minutesForSafetyCards/pages/MinutesForSafetyCardListPage',
+        css,
         nls
       ],
       function(MinutesForSafetyCardCollection, MinutesForSafetyCardListPage)
@@ -63,6 +66,7 @@ define([
       [
         'app/minutesForSafetyCards/MinutesForSafetyCard',
         'app/minutesForSafetyCards/pages/MinutesForSafetyCardDetailsPage',
+        css,
         nls
       ],
       function(MinutesForSafetyCard, MinutesForSafetyCardDetailsPage)
@@ -80,6 +84,7 @@ define([
       [
         'app/minutesForSafetyCards/MinutesForSafetyCard',
         'app/minutesForSafetyCards/pages/MinutesForSafetyCardAddFormPage',
+        css,
         nls
       ],
       function(MinutesForSafetyCard, MinutesForSafetyCardAddFormPage)
@@ -114,7 +119,7 @@ define([
         }
 
         return new MinutesForSafetyCardAddFormPage({
-          model: new MinutesForSafetyCard()
+          model: new MinutesForSafetyCard(lastCard)
         });
       }
     );
@@ -126,6 +131,7 @@ define([
       [
         'app/minutesForSafetyCards/MinutesForSafetyCard',
         'app/minutesForSafetyCards/pages/MinutesForSafetyCardEditFormPage',
+        css,
         nls
       ],
       function(MinutesForSafetyCard, MinutesForSafetyCardEditFormPage)

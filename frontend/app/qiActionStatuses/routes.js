@@ -5,15 +5,13 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  './QiActionStatus'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  QiActionStatus
+  showDeleteFormPage
 ) {
   'use strict';
 
@@ -104,7 +102,11 @@ define([
     );
   });
 
-  router.map('/qi/actionStatuses/:id;delete', canManage, _.partial(showDeleteFormPage, QiActionStatus, _, _, {
-    baseBreadcrumb: true
-  }));
+  router.map('/qi/actionStatuses/:id;delete', canManage, _.partial(
+    showDeleteFormPage,
+    'app/qiActionStatuses/QiActionStatus',
+    _,
+    _,
+    {baseBreadcrumb: true}
+  ));
 });

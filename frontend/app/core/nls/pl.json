@@ -108,6 +108,7 @@
   "NAVBAR:PLANNING:hourly": "godzinowe",
   "NAVBAR:PLANNING:daily": "dzienne",
   "NAVBAR:PLANNING:drilling": "Wiercenie",
+  "NAVBAR:PLANNING:wiring": "Przewody",
   "NAVBAR:PLANNING:paintShop": "Malarnia",
   "NAVBAR:PLANNING:paintShop:load": "Obciążenie",
   "NAVBAR:PLANNING:wh": "Magazyn",

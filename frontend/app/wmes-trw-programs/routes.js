@@ -19,6 +19,11 @@ define([
 ) {
   'use strict';
 
+  var css = [
+    'css!app/wmes-trw-programs/assets/main',
+    'css!app/wmes-trw-bases/assets/main',
+    'css!app/wmes-trw-tests/assets/testing'
+  ];
   var nls = 'i18n!app/nls/wmes-trw-programs';
   var model = 'app/wmes-trw-programs/Program';
   var canView = user.auth('TRW:VIEW');
@@ -59,7 +64,7 @@ define([
         model,
         'app/wmes-trw-programs/templates/details',
         nls
-      ],
+      ].concat(css),
       function(DetailsPage, Program, detailsTemplate)
       {
         return new DetailsPage({
@@ -89,7 +94,7 @@ define([
         model,
         'app/wmes-trw-programs/views/FormView',
         nls
-      ],
+      ].concat(css),
       function(AddFormPage, dictionaries, Program, FormView)
       {
         var model = new Program({_id: req.query.copy});
@@ -132,7 +137,7 @@ define([
         model,
         'app/wmes-trw-programs/views/FormView',
         nls
-      ],
+      ].concat(css),
       function(EditFormPage, dictionaries, Program, FormView)
       {
         return dictionaries.bind(new EditFormPage({

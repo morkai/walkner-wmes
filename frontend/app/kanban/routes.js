@@ -13,9 +13,9 @@ define([
 ) {
   'use strict';
 
+  var nls = 'i18n!app/nls/kanban';
   var canView = user.auth();
   var canManage = user.auth('KANBAN:MANAGE');
-  var nls = 'i18n!app/nls/kanban';
 
   router.map('/kanban', canView, function(req)
   {
@@ -35,6 +35,7 @@ define([
     viewport.loadPage(
       [
         'app/kanban/pages/KanbanEntryListPage',
+        'css!app/kanban/assets/main',
         nls,
         'i18n!app/nls/kanbanComponents',
         'i18n!app/nls/kanbanContainers'

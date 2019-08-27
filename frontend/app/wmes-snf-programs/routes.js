@@ -19,6 +19,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/wmes-snf-programs/assets/main';
   var nls = 'i18n!app/nls/wmes-snf-programs';
   var canView = user.auth('SNF:VIEW');
   var canManage = user.auth('SNF:MANAGE');
@@ -51,6 +52,7 @@ define([
     viewport.loadPage(
       [
         'app/wmes-snf-programs/pages/DetailsPage',
+        css,
         nls
       ],
       function(DetailsPage)
@@ -68,6 +70,7 @@ define([
       [
         'app/core/pages/AddFormPage',
         'app/wmes-snf-programs/views/FormView',
+        css,
         nls
       ],
       function(AddFormPage, FormView)
@@ -88,6 +91,7 @@ define([
       [
         'app/core/pages/EditFormPage',
         'app/wmes-snf-programs/views/FormView',
+        css,
         nls
       ],
       function(EditFormPage, FormView)

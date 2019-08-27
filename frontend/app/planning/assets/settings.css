@@ -1,6 +1,6 @@
 .planning-settings-form .checkbox + .checkbox {
   margin-top: 15px;
 }
-.row + hr {
+.planning-settings-form .row + hr {
   margin-top: 0;
 }

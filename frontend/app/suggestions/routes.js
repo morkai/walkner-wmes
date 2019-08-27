@@ -5,18 +5,17 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  './Suggestion'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  Suggestion
+  showDeleteFormPage
 ) {
   'use strict';
 
+  var css = 'css!app/suggestions/assets/main';
   var nls = 'i18n!app/nls/suggestions';
   var canAccess = user.auth();
   var canAccessLocal = user.auth('LOCAL', 'USER');
@@ -27,6 +26,7 @@ define([
       [
         'app/suggestions/SuggestionCountReport',
         'app/suggestions/pages/SuggestionCountReportPage',
+        css,
         'i18n!app/nls/reports',
         nls
       ],
@@ -45,6 +45,7 @@ define([
       [
         'app/suggestions/SuggestionSummaryReport',
         'app/suggestions/pages/SuggestionSummaryReportPage',
+        css,
         'i18n!app/nls/reports',
         nls
       ],
@@ -63,6 +64,7 @@ define([
       [
         'app/suggestions/SuggestionEngagementReport',
         'app/suggestions/pages/SuggestionEngagementReportPage',
+        css,
         'i18n!app/nls/reports',
         nls
       ],
@@ -78,7 +80,7 @@ define([
 
   router.map('/suggestionHelp', function()
   {
-    viewport.loadPage(['app/core/View', 'app/suggestions/templates/help', nls], function(View, helpTemplate)
+    viewport.loadPage(['app/core/View', 'app/suggestions/templates/help', css, nls], function(View, helpTemplate)
     {
       return new View({
         layoutName: 'page',
@@ -93,6 +95,7 @@ define([
       [
         'app/suggestions/SuggestionCollection',
         'app/suggestions/pages/SuggestionListPage',
+        css,
         nls
       ],
       function(SuggestionCollection, SuggestionListPage)
@@ -108,11 +111,13 @@ define([
   {
     viewport.loadPage(
       [
+        'app/suggestions/Suggestion',
         'app/suggestions/pages/SuggestionDetailsPage',
         'app/suggestions/views/SuggestionThankYouView',
+        css,
         nls
       ],
-      function(SuggestionDetailsPage, SuggestionThankYouView)
+      function(Suggestion, SuggestionDetailsPage, SuggestionThankYouView)
       {
         var page = new SuggestionDetailsPage({
           model: new Suggestion({_id: req.params.id}),
@@ -144,10 +149,12 @@ define([
   {
     viewport.loadPage(
       [
+        'app/suggestions/Suggestion',
         'app/suggestions/pages/SuggestionAddFormPage',
+        css,
         nls
       ],
-      function(SuggestionAddFormPage)
+      function(Suggestion, SuggestionAddFormPage)
       {
         var operator = null;
 
@@ -188,10 +195,12 @@ define([
   {
     viewport.loadPage(
       [
+        'app/suggestions/Suggestion',
         'app/suggestions/pages/SuggestionEditFormPage',
+        css,
         nls
       ],
-      function(SuggestionEditFormPage)
+      function(Suggestion, SuggestionEditFormPage)
       {
         return new SuggestionEditFormPage({
           model: new Suggestion({_id: req.params.id}),
@@ -201,7 +210,7 @@ define([
     );
   });
 
-  router.map('/suggestions/:id;delete', canAccess, _.partial(showDeleteFormPage, Suggestion, _, _, {
+  router.map('/suggestions/:id;delete', canAccess, _.partial(showDeleteFormPage, 'app/suggestions/Suggestion', _, _, {
     baseBreadcrumb: true
   }));
 });

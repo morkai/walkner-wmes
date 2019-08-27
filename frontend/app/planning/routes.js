@@ -5,65 +5,66 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../time',
-  './Plan',
-  './PlanSettings',
-  './PlanSettingsCollection',
-  './PlanChangesCollection',
-  './pages/PlanPage',
-  './pages/PlanListPage',
-  './pages/PlanSettingsPage',
-  './pages/PlanChangesPage',
-  './pages/WhPage',
-  'i18n!app/nls/planning'
+  '../time'
 ], function(
   broker,
   router,
   viewport,
   user,
-  time,
-  Plan,
-  PlanSettings,
-  PlanSettingsCollection,
-  PlanChangesCollection,
-  PlanPage,
-  PlanListPage,
-  PlanSettingsPage,
-  PlanChangesPage,
-  WhPage
+  time
 ) {
   'use strict';
 
+  var css = ['css!app/planning/assets/main', 'css!app/paintShop/assets/main'];
+  var nls = ['i18n!app/nls/planning', 'i18n!app/nls/paintShop'];
   var canView = user.auth('EMBEDDED', 'PLANNING:VIEW');
   var canManage = user.auth('PLANNING:MANAGE');
   var canViewWh = user.auth('WH:VIEW');
 
   router.map('/planning/settings/:id', canManage, function(req)
   {
-    viewport.showPage(new PlanSettingsPage({
-      model: new PlanSettings({_id: req.params.id}),
-      back: req.query.back === '1'
-    }));
+    viewport.loadPage(
+      ['app/planning/PlanSettings', 'app/planning/pages/PlanSettingsPage', css[0], nls[0]],
+      function(PlanSettings, PlanSettingsPage)
+      {
+        return new PlanSettingsPage({
+          model: new PlanSettings({_id: req.params.id}),
+          back: req.query.back === '1'
+        });
+      }
+    );
   });
 
   router.map('/planning/changes', canView, function(req)
   {
-    viewport.showPage(new PlanChangesPage({
-      collection: new PlanChangesCollection(null, {
-        rqlQuery: req.rql,
-        paginate: false
-      })
-    }));
+    viewport.loadPage(
+      ['app/planning/PlanChangesCollection', 'app/planning/pages/PlanChangesPage', css[0], nls[0]],
+      function(PlanChangesCollection, PlanChangesPage)
+      {
+        return new PlanChangesPage({
+          collection: new PlanChangesCollection(null, {
+            rqlQuery: req.rql,
+            paginate: false
+          })
+        });
+      }
+    );
   });
 
   router.map('/planning/plans', canView, function(req)
   {
-    viewport.showPage(new PlanListPage({
-      collection: new PlanSettingsCollection(null, {
-        rqlQuery: req.rql,
-        paginate: false
-      })
-    }));
+    viewport.loadPage(
+      ['app/planning/PlanSettingsCollection', 'app/planning/pages/PlanListPage', css[0], nls[0]],
+      function(PlanSettingsCollection, PlanListPage)
+      {
+        return new PlanListPage({
+          collection: new PlanSettingsCollection(null, {
+            rqlQuery: req.rql,
+            paginate: false
+          })
+        });
+      }
+    );
   });
 
   router.map('/planning/plans/:id', canView, function(req)
@@ -83,12 +84,18 @@ define([
       });
     }
 
-    viewport.showPage(new PlanPage({
-      date: req.params.id,
-      mrps: req.query.mrps === undefined ? null : req.query.mrps
-        .split(/[^A-Z0-9]+/i)
-        .filter(function(mrp) { return mrp.length > 0; })
-    }));
+    viewport.loadPage(
+      ['app/planning/pages/PlanPage'].concat(css, nls),
+      function(PlanPage)
+      {
+        return new PlanPage({
+          date: req.params.id,
+          mrps: req.query.mrps === undefined ? null : req.query.mrps
+            .split(/[^A-Z0-9]+/i)
+            .filter(function(mrp) { return mrp.length > 0; })
+        });
+      }
+    );
   });
 
   router.map('/planning/wh/:id', canViewWh, function(req)
@@ -124,16 +131,25 @@ define([
         : req.query[prop].split(',').filter(function(v) { return v.length > 0; });
     });
 
-    viewport.showPage(new WhPage(options));
+    viewport.loadPage(
+      ['app/planning/pages/WhPage'].concat(css, nls),
+      function(WhPage)
+      {
+        return new WhPage(options);
+      }
+    );
   });
 
   router.map('/planning/settings', canManage, function(req)
   {
-    viewport.loadPage('app/planning/pages/PlanningSettingsPage', function(PlanningSettingsPage)
-    {
-      return new PlanningSettingsPage({
-        initialTab: req.query.tab
-      });
-    });
+    viewport.loadPage(
+      ['app/planning/pages/PlanningSettingsPage', css[0], nls[0]],
+      function(PlanningSettingsPage)
+      {
+        return new PlanningSettingsPage({
+          initialTab: req.query.tab
+        });
+      }
+    );
   });
 });

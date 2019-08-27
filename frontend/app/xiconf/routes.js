@@ -11,6 +11,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/xiconf/assets/main';
   var nls = 'i18n!app/nls/xiconf';
   var canView = user.auth('XICONF:VIEW');
   var canManage = user.auth('XICONF:MANAGE');
@@ -20,6 +21,7 @@ define([
     viewport.loadPage([
       'app/xiconf/XiconfResultCollection',
       'app/xiconf/pages/XiconfResultListPage',
+      css,
       nls
     ], function(
       XiconfResultCollection,
@@ -35,6 +37,8 @@ define([
   {
     viewport.loadPage([
       'app/xiconf/pages/XiconfResultDetailsPage',
+      'css!app/xiconfPrograms/assets/main',
+      css,
       'i18n!app/nls/xiconfPrograms',
       nls
     ], function(XiconfResultDetailsPage)

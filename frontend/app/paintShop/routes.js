@@ -5,20 +5,18 @@ define([
   '../time',
   '../router',
   '../viewport',
-  '../user',
-  './pages/PaintShopPage',
-  'i18n!app/nls/paintShop',
-  'i18n!app/nls/wh'
+  '../user'
 ], function(
   broker,
   time,
   router,
   viewport,
-  user,
-  PaintShopPage
+  user
 ) {
   'use strict';
 
+  var css = ['css!app/paintShop/assets/main'];
+  var nls = ['i18n!app/nls/paintShop', 'i18n!app/nls/wh'];
   var canView = user.auth('PAINT_SHOP:VIEW');
   var canViewLocal = user.auth('LOCAL', 'PAINT_SHOP:VIEW');
   var canManage = user.auth('PAINT_SHOP:MANAGE');
@@ -45,12 +43,18 @@ define([
       });
     }
 
-    viewport.showPage(new PaintShopPage({
-      date: req.params.date,
-      selectedMrp: req.query.mrp,
-      selectedPaint: req.query.paint,
-      fullscreen: req.query.fullscreen !== undefined
-    }));
+    viewport.loadPage(
+      ['app/paintShop/pages/PaintShopPage'].concat(css, nls),
+      function(PaintShopPage)
+      {
+        return new PaintShopPage({
+          date: req.params.date,
+          selectedMrp: req.query.mrp,
+          selectedPaint: req.query.paint,
+          fullscreen: req.query.fullscreen !== undefined
+        });
+      }
+    );
   });
 
   router.map('/paintShop/paints', canView, function(req)
@@ -58,7 +62,8 @@ define([
     viewport.loadPage(
       [
         'app/paintShopPaints/PaintShopPaintCollection',
-        'app/paintShopPaints/pages/PaintShopPaintListPage'
+        'app/paintShopPaints/pages/PaintShopPaintListPage',
+        nls[0]
       ],
       function(PaintShopPaintCollection, PaintShopPaintListPage)
       {
@@ -73,9 +78,7 @@ define([
   router.map('/paintShop/load', canView, function(req)
   {
     viewport.loadPage(
-      [
-        'app/paintShop/pages/PaintShopLoadPage'
-      ],
+      ['app/paintShop/pages/PaintShopLoadPage'].concat(css, nls),
       function(PaintShopLoadPage)
       {
         return new PaintShopLoadPage({query: req.query});
@@ -85,11 +88,14 @@ define([
 
   router.map('/paintShop;settings', canManage, function(req)
   {
-    viewport.loadPage(['app/paintShop/pages/PaintShopSettingsPage'], function(PaintShopSettingsPage)
-    {
-      return new PaintShopSettingsPage({
-        initialTab: req.query.tab
-      });
-    });
+    viewport.loadPage(
+      ['app/paintShop/pages/PaintShopSettingsPage'].concat(css, nls),
+      function(PaintShopSettingsPage)
+      {
+        return new PaintShopSettingsPage({
+          initialTab: req.query.tab
+        });
+      }
+    );
   });
 });

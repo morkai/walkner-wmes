@@ -21,6 +21,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/pscs/main';
   var nls = 'i18n!app/nls/pscs';
   var canView = user.auth('PSCS:VIEW');
   var canManage = user.auth('PSCS:MANAGE');
@@ -28,7 +29,7 @@ define([
   router.map('/pscs', function()
   {
     viewport.loadPage(
-      ['app/pscs/pages/PscsIntroPage', nls],
+      ['app/pscs/pages/PscsIntroPage', css, nls],
       function(PscsIntroPage)
       {
         return new PscsIntroPage();
@@ -39,7 +40,7 @@ define([
   router.map('/pscs/learn', function()
   {
     viewport.loadPage(
-      ['app/pscs/pages/PscsLearnPage', nls],
+      ['app/pscs/pages/PscsLearnPage', css, nls],
       function(PscsLearnPage)
       {
         return new PscsLearnPage();
@@ -50,7 +51,7 @@ define([
   router.map('/pscs/exam', function()
   {
     viewport.loadPage(
-      ['app/pscs/PscsResult', 'app/pscs/views/ExamView', nls],
+      ['app/pscs/PscsResult', 'app/pscs/views/ExamView', css, nls],
       function(PscsResult, ExamView)
       {
         return new View({
@@ -78,6 +79,7 @@ define([
       [
         'app/pscs/PscsResultCollection',
         'app/pscs/pages/PscsResultListPage',
+        css,
         nls
       ],
       function(PscsResultCollection, PscsResultListPage)

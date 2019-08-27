@@ -20,6 +20,7 @@ define([
         'app/isa/IsaRequestCollection',
         'app/isa/IsaEventCollection',
         'app/isa/pages/IsaLineStatePage',
+        'css!app/isa/assets/main',
         'i18n!app/nls/isa'
       ],
       function(
@@ -50,6 +51,7 @@ define([
       [
         'app/isa/IsaEventCollection',
         'app/isa/pages/IsaEventListPage',
+        'css!app/isa/assets/main',
         'i18n!app/nls/isa'
       ],
       function(IsaEventCollection, IsaEventListPage)
@@ -67,6 +69,7 @@ define([
       [
         'app/isa/IsaRequestCollection',
         'app/isa/pages/IsaRequestListPage',
+        'css!app/isa/assets/main',
         'i18n!app/nls/isa'
       ],
       function(IsaRequestCollection, IsaRequestListPage)

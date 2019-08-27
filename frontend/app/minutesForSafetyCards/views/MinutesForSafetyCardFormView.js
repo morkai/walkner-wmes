@@ -15,6 +15,7 @@ define([
   'app/kaizenOrders/dictionaries',
   '../MinutesForSafetyCard',
   'app/minutesForSafetyCards/templates/form',
+  'app/minutesForSafetyCards/templates/_formCause',
   'app/minutesForSafetyCards/templates/_formObservation',
   'app/minutesForSafetyCards/templates/_formProposition',
   'app/minutesForSafetyCards/templates/_formRidEditor'
@@ -33,6 +34,7 @@ define([
   kaizenDictionaries,
   MinutesForSafetyCard,
   template,
+  renderCause,
   renderObservation,
   renderProposition,
   renderRidEditor
@@ -86,7 +88,7 @@ define([
           $(this).remove();
         });
       },
-      'click .minutesForSafetyCards-form-rid-message > a': function()
+      'click .mfs-form-rid-message > a': function()
       {
         localStorage.setItem(
           'MFS_LAST',
@@ -114,23 +116,24 @@ define([
       this.rowIndex = 0;
     },
 
-    getTemplateData: function()
-    {
-      return {
-        statuses: kaizenDictionaries.statuses
-      };
-    },
-
     checkValidity: function(formData)
     {
-      return (formData.observations || []).length
+      return (formData.causes || []).length
+        || (formData.observations || []).length
         || (formData.risks || []).length
         || (formData.difficulties || []).length;
     },
 
     handleInvalidity: function()
     {
-      this.$id('addObservation').focus();
+      if (this.model.getVersion() > 1)
+      {
+        this.$('textarea[name*="why"]').first().focus();
+      }
+      else
+      {
+        this.$id('addObservation').focus();
+      }
     },
 
     serializeToForm: function()
@@ -145,6 +148,7 @@ define([
     serializeForm: function(formData)
     {
       var owner = this.$id('owner').select2('data');
+      var confirmer = this.$id('confirmer').select2('data');
       var dateMoment = time.getMoment(formData.date, 'YYYY-MM-DD');
       var $orgPropositions = this.$id('orgPropositions').find('input[name$="who"]');
       var $techPropositions = this.$id('techPropositions').find('input[name$="who"]');
@@ -163,7 +167,29 @@ define([
         id: owner.id,
         label: owner.text
       };
+      formData.confirmer = !confirmer ? null : {
+        id: confirmer.id,
+        label: confirmer.text
+      };
       formData.date = dateMoment.isValid() ? dateMoment.toISOString() : null;
+
+      formData.risks = formData.risks || '';
+
+      formData.causes = formData.causes || [];
+
+      formData.causes.forEach(function(cause)
+      {
+        if (!cause.why)
+        {
+          cause.why = [];
+        }
+
+        while (cause.why.length < 5)
+        {
+          cause.why.push('');
+        }
+      });
+
       formData.observations = (formData.observations || []).filter(this.filterObservation);
 
       formData.orgPropositions = (formData.orgPropositions || []).map(function(p, i)
@@ -201,6 +227,13 @@ define([
       return p.what.length > 0;
     },
 
+    getTemplateData: function()
+    {
+      return {
+        version: this.model.getVersion()
+      };
+    },
+
     afterRender: function()
     {
       FormView.prototype.afterRender.call(this);
@@ -209,21 +242,28 @@ define([
         data: kaizenDictionaries.sections.map(idAndLabel)
       });
 
-      buttonGroup.toggle(this.$id('status'));
-
-      this.setUpOwnerSelect2();
+      this.setUpUserSelect2('owner');
       this.setUpParticipantsSelect2();
-      this.renderObservations();
-      this.renderPropositions('orgPropositions');
-      this.renderPropositions('techPropositions');
 
-      this.$('input[autofocus]').focus();
+      if (this.model.getVersion() > 1)
+      {
+        this.setUpUserSelect2('confirmer');
+        this.renderCauses();
+      }
+      else
+      {
+        this.renderObservations();
+        this.renderPropositions('orgPropositions');
+        this.renderPropositions('techPropositions');
+      }
+
+      this.$id('owner').focus();
     },
 
-    setUpOwnerSelect2: function()
+    setUpUserSelect2: function(prop)
     {
-      var owner = this.model.get('owner');
-      var $owner = setUpUserSelect2(this.$id('owner'), {
+      var user = this.model.get(prop);
+      var $user = setUpUserSelect2(this.$id(prop), {
         textFormatter: function(user, name)
         {
           return name;
@@ -231,11 +271,11 @@ define([
         activeOnly: !this.options.editMode
       });
 
-      if (owner)
+      if (user)
       {
-        $owner.select2('data', {
-          id: owner.id,
-          text: owner.label
+        $user.select2('data', {
+          id: user.id,
+          text: user.label
         });
       }
     },
@@ -287,14 +327,35 @@ define([
       }
     },
 
+    renderCauses: function()
+    {
+      var view = this;
+      var causes = view.model.get('causes') || [
+        {category: 'tech', why: ['', '', '', '', '']},
+        {category: 'org', why: ['', '', '', '', '']},
+        {category: 'human', why: ['', '', '', '', '']}
+      ];
+
+      view.$id('causes').html(
+        causes.map(function(cause)
+        {
+          return view.renderPartialHtml(renderCause, {
+            cause: cause,
+            i: ++view.rowIndex
+          });
+        })
+          .join('')
+      );
+    },
+
     renderObservations: function()
     {
       var view = this;
 
-      this.$id('observations').html(
-        (this.model.get('observations') || []).map(function(obs)
+      view.$id('observations').html(
+        (view.model.get('observations') || []).map(function(obs)
         {
-          return renderObservation({
+          return view.renderPartialHtml(renderObservation, {
             observation: obs,
             i: ++view.rowIndex
           });
@@ -306,9 +367,9 @@ define([
     renderPropositions: function(type)
     {
       var view = this;
-      var propositions = this.model.get(type) || [];
+      var propositions = view.model.get(type) || [];
 
-      this.$id(type).html(
+      view.$id(type).html(
         propositions.map(function(proposition)
         {
           return view.createProposition(type, {
@@ -320,7 +381,7 @@ define([
         .join('')
       );
 
-      this.$id(type).find('tr').each(function(i)
+      view.$id(type).find('tr').each(function(i)
       {
         view.setUpWhoSelect2($(this), propositions[i].who);
       });
@@ -328,7 +389,7 @@ define([
 
     createProposition: function(type, proposition)
     {
-      return renderProposition({
+      return this.renderPartialHtml(renderProposition, {
         type: type,
         proposition: proposition,
         i: ++this.rowIndex
@@ -437,7 +498,7 @@ define([
         $a
           .popover('destroy')
           .closest('.message')
-          .find('.minutesForSafetyCards-form-rid-message')
+          .find('.mfs-form-rid-message')
           .html(view.t('FORM:MSG:' + ridProperty + ':' + (newRid ? 'edit' : 'add'), {
             rid: newRid
           }));

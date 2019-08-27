@@ -7,11 +7,7 @@ define([
   '../user',
   '../prodChangeRequests/util/createShowDeleteFormPage',
   './ProdDowntime',
-  './ProdDowntimeCollection',
-  './pages/ProdDowntimeListPage',
-  './pages/ProdDowntimeDetailsPage',
-  './pages/ProdDowntimeEditFormPage',
-  'i18n!app/nls/prodDowntimes'
+  './ProdDowntimeCollection'
 ], function(
   broker,
   router,
@@ -19,23 +15,32 @@ define([
   user,
   createShowDeleteFormPage,
   ProdDowntime,
-  ProdDowntimeCollection,
-  ProdDowntimeListPage,
-  ProdDowntimeDetailsPage,
-  ProdDowntimeEditFormPage
+  ProdDowntimeCollection
 ) {
   'use strict';
 
+  var css = 'css!app/prodDowntimes/assets/main';
+  var nls = 'i18n!app/nls/prodDowntimes';
   var canView = user.auth('PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW');
   var canManage = user.auth('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST');
 
   router.map('/prodDowntimes', canView, function(req)
   {
-    viewport.showPage(new ProdDowntimeListPage({
-      collection: new ProdDowntimeCollection(null, {
-        rqlQuery: req.rql
-      })
-    }));
+    viewport.loadPage(
+      [
+        'app/prodDowntimes/pages/ProdDowntimeListPage',
+        css,
+        nls
+      ],
+      function(ProdDowntimeListPage)
+      {
+        return new ProdDowntimeListPage({
+          collection: new ProdDowntimeCollection(null, {
+            rqlQuery: req.rql
+          })
+        });
+      }
+    );
   });
 
   router.map('/prodDowntimes;alerts', function()
@@ -60,30 +65,55 @@ define([
 
   router.map('/prodDowntimes/:id', function(req)
   {
-    viewport.showPage(new ProdDowntimeDetailsPage({
-      model: new ProdDowntime({
-        _id: req.params.id
-      }),
-      corroborate: req.query.corroborate === '1'
-    }));
+    viewport.loadPage(
+      [
+        'app/prodDowntimes/pages/ProdDowntimeDetailsPage',
+        css,
+        nls
+      ],
+      function(ProdDowntimeDetailsPage)
+      {
+        return new ProdDowntimeDetailsPage({
+          model: new ProdDowntime({
+            _id: req.params.id
+          }),
+          corroborate: req.query.corroborate === '1'
+        });
+      }
+    );
   });
 
   router.map('/prodDowntimes/:id;edit', canManage, function(req)
   {
-    viewport.showPage(new ProdDowntimeEditFormPage({
-      model: new ProdDowntime({_id: req.params.id})
-    }));
+    viewport.loadPage(
+      [
+        'app/prodDowntimes/pages/ProdDowntimeEditFormPage',
+        nls
+      ],
+      function(ProdDowntimeEditFormPage)
+      {
+        return new ProdDowntimeEditFormPage({
+          model: new ProdDowntime({_id: req.params.id})
+        });
+      }
+    );
   });
 
   router.map('/prodDowntimes/:id;delete', canManage, createShowDeleteFormPage(ProdDowntime));
 
   router.map('/prodDowntimes;settings', canManage, function(req)
   {
-    viewport.loadPage('app/prodDowntimes/pages/ProdDowntimeSettingsPage', function(ProdDowntimeSettingsPage)
-    {
-      return new ProdDowntimeSettingsPage({
-        initialTab: req.query.tab
-      });
-    });
+    viewport.loadPage(
+      [
+        'app/prodDowntimes/pages/ProdDowntimeSettingsPage',
+        nls
+      ],
+      function(ProdDowntimeSettingsPage)
+      {
+        return new ProdDowntimeSettingsPage({
+          initialTab: req.query.tab
+        });
+      }
+    );
   });
 });

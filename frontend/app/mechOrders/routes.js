@@ -11,12 +11,13 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/mechOrders/assets/main';
   var nls = 'i18n!app/nls/mechOrders';
   var canView = user.auth('ORDERS:VIEW');
 
   router.map('/mechOrders', canView, function(req)
   {
-    viewport.loadPage(['app/mechOrders/pages/MechOrderListPage', nls], function(MechOrderListPage)
+    viewport.loadPage(['app/mechOrders/pages/MechOrderListPage', css, nls], function(MechOrderListPage)
     {
       return new MechOrderListPage({rql: req.rql});
     });
@@ -27,8 +28,9 @@ define([
     viewport.loadPage(
       [
         'app/mechOrders/pages/MechOrderDetailsPage',
+        css,
         'i18n!app/nls/orders',
-        'i18n!app/nls/mechOrders'
+        nls
       ],
       function(MechOrderDetailsPage)
       {

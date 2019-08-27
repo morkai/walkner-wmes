@@ -13,6 +13,8 @@ define([
 
   return DetailsPage.extend({
 
+    pageClassName: 'page-max-flex',
+
     DetailsView: MinutesForSafetyCardDetailsView,
     baseBreadcrumb: true,
 

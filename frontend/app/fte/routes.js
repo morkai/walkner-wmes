@@ -17,6 +17,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/fte/assets/main';
   var nls = 'i18n!app/nls/fte';
   var canViewMaster = user.auth('FTE:MASTER:VIEW');
   var canManageMaster = user.auth('FTE:MASTER:MANAGE', 'PROD_DATA:MANAGE');
@@ -27,7 +28,7 @@ define([
 
   router.map('/fte;settings', user.auth('PROD_DATA:MANAGE'), function(req)
   {
-    viewport.loadPage(['app/fte/pages/FteSettingsPage', nls], function(FteSettingsPage)
+    viewport.loadPage(['app/fte/pages/FteSettingsPage', css, nls], function(FteSettingsPage)
     {
       return new FteSettingsPage({
         initialTab: req.query.tab
@@ -42,6 +43,7 @@ define([
       [
         'app/fte/FteMasterEntryCollection',
         'app/fte/pages/FteMasterEntryListPage',
+        css,
         nls
       ],
       function(FteMasterEntryCollection, FteMasterEntryListPage)
@@ -59,6 +61,7 @@ define([
       [
         'app/fte/FteMasterEntry',
         'app/fte/pages/FteMasterEntryAddFormPage',
+        css,
         nls
       ],
       function(FteMasterEntry, FteMasterEntryAddFormPage)
@@ -85,6 +88,7 @@ define([
       [
         'app/fte/FteMasterEntry',
         'app/fte/pages/FteMasterEntryDetailsPage',
+        css,
         nls
       ],
       function(FteMasterEntry, FteMasterEntryDetailsPage)
@@ -103,6 +107,7 @@ define([
       [
         'app/fte/FteMasterEntry',
         'app/fte/pages/FteMasterEntryEditFormPage',
+        css,
         nls
       ],
       function(FteMasterEntry, FteMasterEntryEditFormPage)
@@ -120,6 +125,7 @@ define([
       [
         'app/fte/FteMasterEntry',
         'app/fte/pages/FteMasterEntryDetailsPrintablePage',
+        css,
         nls
       ],
       function(FteMasterEntry, FteMasterEntryDetailsPrintablePage)
@@ -146,6 +152,7 @@ define([
       [
         'app/fte/FteLeaderEntryCollection',
         'app/fte/pages/FteLeaderEntryListPage',
+        css,
         nls
       ],
       function(FteLeaderEntryCollection, FteLeaderEntryListPage)
@@ -163,6 +170,7 @@ define([
       [
         'app/fte/FteLeaderEntry',
         'app/fte/pages/FteLeaderEntryAddFormPage',
+        css,
         nls
       ],
       function(FteLeaderEntry, FteLeaderEntryAddFormPage)
@@ -189,6 +197,7 @@ define([
       [
         'app/fte/FteLeaderEntry',
         'app/fte/pages/FteLeaderEntryDetailsPage',
+        css,
         nls
       ],
       function(FteLeaderEntry, FteLeaderEntryDetailsPage)
@@ -207,6 +216,7 @@ define([
       [
         'app/fte/FteLeaderEntry',
         'app/fte/pages/FteLeaderEntryEditFormPage',
+        css,
         nls
       ],
       function(FteLeaderEntry, FteLeaderEntryEditFormPage)
@@ -224,6 +234,7 @@ define([
       [
         'app/fte/FteLeaderEntry',
         'app/fte/pages/FteLeaderEntryDetailsPrintablePage',
+        css,
         nls
       ],
       function(FteLeaderEntry, FteLeaderEntryDetailsPrintablePage)
@@ -250,6 +261,7 @@ define([
       [
         'app/fte/FteWhEntryCollection',
         'app/fte/pages/FteLeaderEntryListPage',
+        css,
         nls
       ],
       function(FteWhEntryCollection, FteLeaderEntryListPage)
@@ -267,6 +279,7 @@ define([
       [
         'app/fte/FteWhEntry',
         'app/fte/pages/FteLeaderEntryAddFormPage',
+        css,
         nls
       ],
       function(FteWhEntry, FteLeaderEntryAddFormPage)
@@ -293,6 +306,7 @@ define([
       [
         'app/fte/FteWhEntry',
         'app/fte/pages/FteLeaderEntryDetailsPage',
+        css,
         nls
       ],
       function(FteWhEntry, FteLeaderEntryDetailsPage)
@@ -311,6 +325,7 @@ define([
       [
         'app/fte/FteWhEntry',
         'app/fte/pages/FteLeaderEntryEditFormPage',
+        css,
         nls
       ],
       function(FteWhEntry, FteLeaderEntryEditFormPage)
@@ -328,6 +343,7 @@ define([
       [
         'app/fte/FteWhEntry',
         'app/fte/pages/FteLeaderEntryDetailsPrintablePage',
+        css,
         nls
       ],
       function(FteWhEntry, FteLeaderEntryDetailsPrintablePage)

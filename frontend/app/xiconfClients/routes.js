@@ -19,6 +19,8 @@ define([
       [
         'app/xiconfClients/XiconfClientCollection',
         'app/xiconfClients/pages/XiconfClientListPage',
+        'css!app/xiconfClients/assets/main',
+        'css!app/licenses/assets/main',
         'i18n!app/nls/xiconfClients',
         'i18n!app/nls/licenses'
       ],

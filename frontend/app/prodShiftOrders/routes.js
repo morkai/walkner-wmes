@@ -17,6 +17,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/prodShiftOrders/assets/main';
   var nls = 'i18n!app/nls/prodShiftOrders';
   var canView = user.auth('PROD_DATA:VIEW');
   var canManage = user.auth('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST');
@@ -24,7 +25,7 @@ define([
   router.map('/prodShiftOrders', canView, function(req)
   {
     viewport.loadPage(
-      ['app/prodShiftOrders/pages/ProdShiftOrderListPage', nls],
+      ['app/prodShiftOrders/pages/ProdShiftOrderListPage', css, nls],
       function(ProdShiftOrderListPage)
       {
         return new ProdShiftOrderListPage({
@@ -41,6 +42,9 @@ define([
     viewport.loadPage(
       [
         'app/prodShiftOrders/pages/ProdShiftOrderDetailsPage',
+        'css!app/orders/assets/main',
+        'css!app/mechOrders/assets/main',
+        css,
         'i18n!app/nls/orders',
         'i18n!app/nls/mechOrders',
         nls
@@ -55,7 +59,7 @@ define([
   router.map('/prodShiftOrders/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/prodShiftOrders/pages/EditProdShiftOrderFormPage', nls],
+      ['app/prodShiftOrders/pages/EditProdShiftOrderFormPage', css, nls],
       function(EditProdShiftFormPage)
       {
         return new EditProdShiftFormPage({

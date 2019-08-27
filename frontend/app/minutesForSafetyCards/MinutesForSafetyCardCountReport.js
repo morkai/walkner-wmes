@@ -20,11 +20,13 @@ define([
     'total',
     'countBySection',
     'owners',
+    'confirmers',
     'participants',
     'engaged'
   ];
   var USERS_METRICS = {
     owners: true,
+    confirmers: true,
     participants: true,
     engaged: true
   };
@@ -42,7 +44,8 @@ define([
         to: 0,
         interval: 'month',
         sections: [],
-        owner: ''
+        owner: '',
+        confirmer: ''
       };
     },
 
@@ -55,7 +58,7 @@ define([
 
       options.data = _.assign(
         options.data || {},
-        _.pick(this.attributes, ['from', 'to', 'interval', 'sections', 'owner'])
+        _.pick(this.attributes, ['from', 'to', 'interval', 'sections', 'owner', 'confirmer'])
       );
 
       options.data.sections = options.data.sections.join(',');
@@ -70,7 +73,8 @@ define([
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval')
         + '&sections=' + this.get('sections')
-        + '&owner=' + this.get('owner');
+        + '&owner=' + this.get('owner')
+        + '&confirmer=' + this.get('confirmer');
     },
 
     parse: function(report)
@@ -171,7 +175,7 @@ define([
         abs: 0,
         rel: 1,
         color: '#DDD',
-        label: t('minutesForSafetyCards', 'report:series:total')
+        label: t(this.nlsDomain, 'report:series:total')
       };
       var rows = values.map(function(value)
       {
@@ -228,7 +232,7 @@ define([
       var series = [
         {
           id: 'minutesForSafetyCards',
-          name: t.bound('minutesForSafetyCards', 'report:series:card'),
+          name: t.bound(this.nlsDomain, 'report:series:card'),
           data: [],
           color: COLOR_MINUTES_FOR_SAFETY_CARD
         }
@@ -259,7 +263,8 @@ define([
         to: +query.to || undefined,
         interval: query.interval || undefined,
         sections: _.isEmpty(query.sections) ? [] : query.sections.split(','),
-        owner: query.owner || ''
+        owner: query.owner || '',
+        confirmer: query.confirmer || ''
       });
     }
 

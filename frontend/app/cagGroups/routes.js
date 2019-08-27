@@ -10,8 +10,7 @@ define([
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  CagGroup
+  showDeleteFormPage
 ) {
   'use strict';
 
@@ -41,8 +40,8 @@ define([
   router.map('/cagGroups/:id', function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/DetailsPage', 'app/cagGroups/templates/details', nls],
-      function(DetailsPage, detailsTemplate)
+      ['app/core/pages/DetailsPage', 'app/cagGroups/CagGroup', 'app/cagGroups/templates/details', nls],
+      function(DetailsPage, CagGroup, detailsTemplate)
       {
         return new DetailsPage({
           baseBreadcrumb: '#reports/9',
@@ -56,8 +55,8 @@ define([
   router.map('/cagGroups;add', canManage, function()
   {
     viewport.loadPage(
-      ['app/core/pages/AddFormPage', 'app/cagGroups/views/CagGroupFormView', nls],
-      function(AddFormPage, CagGroupFormView)
+      ['app/core/pages/AddFormPage', 'app/cagGroups/CagGroup', 'app/cagGroups/views/CagGroupFormView', nls],
+      function(AddFormPage, CagGroup, CagGroupFormView)
       {
         return new AddFormPage({
           baseBreadcrumb: '#reports/9',
@@ -71,8 +70,8 @@ define([
   router.map('/cagGroups/:id;edit', canManage, function(req)
   {
     viewport.loadPage(
-      ['app/core/pages/EditFormPage', 'app/cagGroups/views/CagGroupFormView', nls],
-      function(EditFormPage, CagGroupFormView)
+      ['app/core/pages/EditFormPage', 'app/cagGroups/CagGroup', 'app/cagGroups/views/CagGroupFormView', nls],
+      function(EditFormPage, CagGroup, CagGroupFormView)
       {
         return new EditFormPage({
           baseBreadcrumb: '#reports/9',
@@ -83,5 +82,5 @@ define([
     );
   });
 
-  router.map('/cagGroups/:id;delete', canManage, showDeleteFormPage.bind(null, CagGroup));
+  router.map('/cagGroups/:id;delete', canManage, showDeleteFormPage.bind(null, 'app/cagGroups/CagGroup'));
 });

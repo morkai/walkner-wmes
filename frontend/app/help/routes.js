@@ -13,11 +13,18 @@ define([
 
   router.map('/help', user.auth('LOCAL', 'USER'), function(req)
   {
-    viewport.loadPage(['app/help/pages/HelpPage', 'i18n!app/nls/help'], function(HelpPage)
-    {
-      return new HelpPage({
-        file: req.query.file
-      });
-    });
+    viewport.loadPage(
+      [
+        'app/help/pages/HelpPage',
+        'css!app/help/assets/main',
+        'i18n!app/nls/help'
+      ],
+      function(HelpPage)
+      {
+        return new HelpPage({
+          file: req.query.file
+        });
+      }
+    );
   });
 });
