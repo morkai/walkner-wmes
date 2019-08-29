@@ -1,6 +1,11 @@
 <div class="mfs-form-cause col-md-4">
   <input type="hidden" name="causes[<%- i %>].category" value="<%= cause.category %>">
-  <label class="control-label"><%- helpers.t('causes:' + cause.category) %></label>
+  <label class="control-label" data-cause="<%- cause.category %>">
+    <%- helpers.t('causes:' + cause.category) %>
+    <% if (t.has('FORM:causes:help:' + cause.category)) { %>
+    <i class="fa fa-question-circle" title="<%- t('FORM:causes:help:' + cause.category) %>"></i>
+    <% } %>
+  </label>
   <% cause.why.forEach(function(why, whyI) { %>
   <div class="mfs-form-cause-why">
     <label for="<%- idPrefix %>-causes-<%- i %>-<%- whyI %>" class="control-label"><%- helpers.t('FORM:causes:why', {n: whyI + 1}) %></label>

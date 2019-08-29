@@ -61,8 +61,7 @@ define([
       return;
     }
 
-      sandboxedProperties[propertyName] = null;
-
+    sandboxedProperties[propertyName] = null;
 
     Object.defineProperty(obj, propertyName, {
       enumerable: true,

@@ -27,11 +27,8 @@ function(
     var view = this;
 
     view.idPrefix = _.uniqueId('v');
-
     view.options = options || {};
-
     view.timers = {};
-
     view.promises = [];
 
     _.forEach(view.sections, function(selector, section)
@@ -74,6 +71,19 @@ function(
     {
       util.subscribeTopics(view, 'pubsub', view.remoteTopics, true);
     }
+
+    Object.defineProperty(view, 't', {
+      enumerable: true,
+      configurable: true,
+      get: function()
+      {
+        delete view.t;
+
+        view.t = t.forDomain(view.getDefaultNlsDomain());
+
+        return view.t;
+      }
+    });
   }
 
   util.inherits(View, Layout);
@@ -184,9 +194,12 @@ function(
 
   View.prototype.getCommonTemplateData = function()
   {
+    var helpers = this.getTemplateHelpers();
+
     return {
       idPrefix: this.idPrefix,
-      helpers: this.getTemplateHelpers()
+      helpers: helpers,
+      t: helpers.t
     };
   };
 
@@ -198,7 +211,7 @@ function(
   View.prototype.getTemplateHelpers = function()
   {
     return {
-      t: this.t.bind(this),
+      t: this.t,
       props: this.props.bind(this)
     };
   };
@@ -291,24 +304,20 @@ function(
 
     var model = this.getDefaultModel();
 
-    return model.getNlsDomain ? model.getNlsDomain() : (model.nlsDomain || 'core');
-  };
-
-  View.prototype.t = function(domain, key, data)
-  {
-    if (data || typeof key === 'string')
+    if (model)
     {
-      return t(domain, key, data);
+      if (model.getNlsDomain)
+      {
+        return model.getNlsDomain();
+      }
+
+      if (model.nlsDomain)
+      {
+        return model.nlsDomain;
+      }
     }
 
-    var defaultDomain = this.getDefaultNlsDomain();
-
-    if (typeof key === 'object')
-    {
-      return t(defaultDomain, domain, key);
-    }
-
-    return t(defaultDomain, domain);
+    return 'core';
   };
 
   View.prototype.props = function(data, options)

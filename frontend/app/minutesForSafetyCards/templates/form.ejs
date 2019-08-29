@@ -25,7 +25,7 @@
       </div>
       <div class="form-group">
         <label for="<%- idPrefix %>-subject" class="control-label is-required"><%- helpers.t('PROPERTY:subject') %></label>
-        <input id="<%- idPrefix %>-subject" class="form-control" type="text" autocomplete="new-password" name="subject" required>
+        <input id="<%- idPrefix %>-subject" class="form-control" type="text" autocomplete="new-password" name="subject" required placeholder="<%- t.has('minutesForSafetyCards', 'FORM:subject:placeholder') ? helpers.t('FORM:subject:placeholder') : '' %>">
       </div>
       <% if (version > 1) { %>
       <div class="form-group">
@@ -111,5 +111,108 @@
     <div class="panel-footer">
       <button id="<%- idPrefix %>-submit" type="submit" class="btn btn-primary"><%- formActionText %></button>
     </div>
+  </div>
+  <div class="hidden" data-cause-help="tech">
+    <p>Wady konstrukcyjne czynnika materialnego będące źródłem zagrożenia:</p>
+    <ul>
+      <li>niewłaściwa struktura przestrzenna czynnika materialnego;
+      <li>nieodpowiednia wytrzymałość czynnika materialnego;
+      <li>niewłaściwa stateczność czynnika materialnego;
+      <li>brak lub niewłaściwe urządzenia zabezpieczające;
+      <li>brak lub niewłaściwe środki ochrony zbiorowej (np. osłony, kurtyny optyczne, poręcze, itp.);
+      <li>niewłaściwe elementy sterownicze;
+      <li>brak lub niewłaściwa sygnalizacja zagrożeń;
+      <li>niedostosowanie czynnika materialnego do transportu, konserwacji lub napraw.
+    </ul>
+    <p>Niewłaściwe wykonanie czynnika materialnego:</p>
+    <ul>
+      <li>zastosowanie materiałów zastępczych;
+      <li>niedotrzymanie wymaganych parametrów technicznych.
+    </ul>
+    <p>Wady materiałowe czynnika materialnego:</p>
+    <ul>
+      <li>ukryte wady materiałowe czynnika materialnego.
+    </ul>
+    <p>Niewłaściwa eksploatacja czynnika materialnego:</p>
+    <ul>
+      <li>nadmierna eksploatacja czynnika materialnego;
+      <li>niedostateczna konserwacja czynnika materialnego;
+      <li>niewłaściwe naprawy i remonty czynnika materialnego.
+    </ul>
+  </div>
+  <div class="hidden" data-cause-help="org">
+    <p>Niewłaściwa ogólna organizacja pracy:</p>
+    <ul>
+      <li>nieprawidłowy podział pracy lub rozplanowanie zadań;
+      <li>niewłaściwe polecenia przełożonych;
+      <li>brak nadzoru;
+      <li>niewłaściwa koordynacja prac zbiorowych;
+      <li>wykonywanie, z polecenia osób sprawujących nadzór, prac niewchodzących w zakres obowiązków pracownika;
+      <li>brak instrukcji posługiwania się czynnikiem materialnym;
+      <li>dopuszczenie do pracy czynnika materialnego bez wymaganych kontroli, przeglądów;
+      <li>tolerowanie, przez osoby sprawujące nadzór, odstępstw od przepisów i zasad bezpieczeństwa i higieny pracy;
+      <li>niedostateczne przygotowanie zawodowe pracownika;
+      <li>brak lub niewłaściwe przeszkolenie w zakresie bezpieczeństwa i higieny pracy;
+      <li>tolerowanie, przez osoby sprawujące nadzór, stosowania niewłaściwej technologii;
+      <li>wykonywanie pracy w zbyt małej obsadzie osobowej;
+      <li>wykonywanie prac pomimo niewłaściwego zaopatrzenia w narzędzia, surowce.
+    </ul>
+    <p>Niewłaściwa organizacja stanowiska pracy:</p>
+    <ul>
+      <li>niewłaściwe usytuowanie urządzeń na stanowisku pracy;
+      <li>nieodpowiednie przejścia i dojścia;
+      <li>nieodpowiednie rozmieszczenie i składowanie przedmiotów pracy (surowców, półproduktów, produktów itp.);
+      <li>nieusunięcie zbędnych przedmiotów, substancji lub energii (np. odpadów, opakowań, resztek substancji, niewyłącznie zasilania itp.);
+      <li>brak środków ochrony indywidualnej (nie zostały dostarczone dla pracownika);
+      <li>niewłaściwy dobór środków ochrony indywidualnej.
+    </ul>
+  </div>
+  <div class="hidden" data-cause-help="human">
+    <p>Brak lub niewłaściwe posługiwanie się czynnikiem materialnym przez pracownika:</p>
+    <ul>
+      <li>używanie nieodpowiedniego do danej pracy czynnika materialnego;
+      <li>wykonywanie pracy ręcznie zamiast przy użyciu czynnika materialnego;
+      <li>użycie czynnika materialnego podczas przebywania osób w strefie zagrożenia;
+      <li>niewłaściwe zabezpieczenie czynnika materialnego (np. niezaciągnięcie hamulca na postoju);
+      <li>udostępnienie przez pracownika czynnika materialnego osobie nieupoważnionej;
+      <li>użycie czynnika materialnego niezgodnie z jego przeznaczeniem;
+      <li>niewłaściwe uchwycenie, trzymanie czynnika materialnego;
+      <li>wadliwe zainstalowanie, zamocowanie, zawieszenie czynnika materialnego przez pracownika.
+    </ul>
+    <p>Nieużywanie sprzętu ochronnego przez pracownika:</p>
+    <ul>
+      <li>nieużywanie przez pracownika środków ochrony indywidualnej;
+      <li>nieużywanie przez pracownika urządzeń zabezpieczających;
+      <li>nieużywanie przez pracownika środków ochrony zbiorowej (osłon, kurtyn optycznych, poręczy, itp.).
+    </ul>
+    <p>Niewłaściwe samowolne zachowanie się pracownika:</p>
+    <ul>
+      <li>wykonywanie pracy niewchodzącej w zakres obowiązków pracownika;
+      <li>przechodzenie, przejeżdżanie lub przebywanie w miejscach niedozwolonych;
+      <li>wejście, wjechanie na obszar zagrożony bez upewnienia się, czy nie ma niebezpieczeństwa;
+      <li>wykonywanie czynności bez usunięcia zagrożenia (np. niewyłącznie maszyny, niewyłącznie napięcia);
+      <li>zbyt szybka jazda;
+      <li>operowanie kończynami w strefie zagrożenia;
+      <li>żarty, bójki.
+    </ul>
+    <p>Stan psychofizyczny pracownika, nie zapewniający bezpiecznego wykonywania pracy, spowodowany:</p>
+    <ul>
+      <li>nagłym zachorowaniem, niedyspozycją fizyczną;
+      <li>przewlekłą lub ostrą chorobą psychiczną;
+      <li>zmęczeniem;
+      <li>zdenerwowaniem;
+      <li>spożyciem alkoholu, środków odurzających lub substancji psychotropowych.
+    </ul>
+    <p>Nieprawidłowe zachowanie się pracownika spowodowane:</p>
+    <ul>
+      <li>nieznajomością zagrożenia;
+      <li>nieznajomością przepisów i zasad bezpieczeństwa i higieny pracy;
+      <li>lekceważeniem zagrożenia (brawura, ryzykanctwo);
+      <li>lekceważeniem poleceń przełożonych;
+      <li>niedostateczną koncentracją uwagi na wykonywanej czynności;
+      <li>zaskoczeniem niespodziewanym zdarzeniem;
+      <li>niewłaściwym tempem pracy;
+      <li>brakiem doświadczenia.
+    </ul>
   </div>
 </form>

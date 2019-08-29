@@ -114,6 +114,17 @@ define([
       FormView.prototype.initialize.apply(this, arguments);
 
       this.rowIndex = 0;
+
+      $('body').on('click.' + this.idPrefix, this.onDocumentClick.bind(this));
+    },
+
+    destroy: function()
+    {
+      FormView.prototype.destroy.apply(this, arguments);
+
+      this.$id('causes').popover('destroy');
+
+      $('body').off('click.' + this.idPrefix);
     },
 
     checkValidity: function(formData)
@@ -335,17 +346,40 @@ define([
         {category: 'org', why: ['', '', '', '', '']},
         {category: 'human', why: ['', '', '', '', '']}
       ];
+      var $causes = view.$id('causes');
 
-      view.$id('causes').html(
+      $causes.html(
         causes.map(function(cause)
         {
           return view.renderPartialHtml(renderCause, {
             cause: cause,
             i: ++view.rowIndex
           });
-        })
-          .join('')
+        }).join('')
       );
+
+      $causes.popover({
+        container: view.el,
+        selector: '.control-label[data-cause]',
+        placement: 'bottom',
+        trigger: 'click',
+        html: true,
+        content: function()
+        {
+          if (!this.querySelector('.fa'))
+          {
+            return;
+          }
+
+          return view.$('div[data-cause-help="' + this.dataset.cause + '"]').html();
+        },
+        className: 'mfs-form-cause-popover'
+      });
+
+      $causes.on('show.bs.popover', function()
+      {
+        $causes.find('.control-label[aria-describedby^="popover"]').popover('hide');
+      });
     },
 
     renderObservations: function()
@@ -506,6 +540,18 @@ define([
         view.model.attributes[ridProperty] = newRid;
 
         view.$('input[name=' + ridProperty + ']').val(newRid || '');
+      }
+    },
+
+    onDocumentClick: function(e)
+    {
+      var view = this;
+      var $target = view.$(e.target);
+
+      if (!$target.closest('.mfs-form-cause-popover').length
+        && !$target.closest('.control-label[data-cause]').length)
+      {
+        view.$id('causes').popover('hide');
       }
     }
 

@@ -47,6 +47,10 @@
   "FORM:ridEditor:failure": "Nie udało się sprawdzić zgłoszenia.",
   "FORM:causes:category": "Kategoria przyczyny",
   "FORM:causes:why": "{n} Why?",
+  "FORM:subject:placeholder": "Wybierz z aplikacji WMES zdarzenie z kategorii 'Incydent bez urazu' lub czynność (zagrożenie) z twojego obszaru odpowiedzialności",
+  "FORM:causes:help:tech": "Możliwe Przyczyny Techniczne",
+  "FORM:causes:help:org": "Możliwe Przyczyny Organizacyjne",
+  "FORM:causes:help:human": "Możliwe Przyczyny Ludzkie",
 
   "causes:tech": "Przyczyny techniczne",
   "causes:org": "Przyczyny organizacyjne",

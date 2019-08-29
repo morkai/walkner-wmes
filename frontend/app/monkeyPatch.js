@@ -147,6 +147,16 @@ function(
       }
 
       this.$tip = typeof template === 'string' ? $(template) : template;
+
+      if (this.options.css)
+      {
+        this.$tip.css(this.options.css);
+      }
+
+      if (this.options.className)
+      {
+        this.$tip.addClass(this.options.className);
+      }
     }
 
     return this.$tip;

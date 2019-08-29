@@ -20,12 +20,26 @@
   margin-top: 15px;
 }
 .mfs-form-cause .control-label {
+  display: block;
   margin-bottom: 0;
 }
 .mfs-form-cause-why .control-label {
   margin: 7px 0 0 0;
   font-weight: normal;
 }
+.mfs-form-cause .fa-question-circle {
+  cursor: pointer;
+}
 .mfs-form-cause-why .form-control {
   height: 54px;
+}
+.mfs-form-cause-popover {
+  max-width: 800px;
+}
+.mfs-form-cause-popover p {
+  margin-bottom: 0;
+  font-weight: bold;
+}
+.mfs-form-cause-popover ul:last-child {
+  margin-bottom: 0;
 }
