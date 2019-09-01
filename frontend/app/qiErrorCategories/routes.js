@@ -11,8 +11,7 @@ define([
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  QiErrorCategory
+  showDeleteFormPage
 ) {
   'use strict';
 

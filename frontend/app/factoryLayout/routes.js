@@ -72,7 +72,9 @@ define([
     viewport.loadPage(
       [
         'app/factoryLayout/productionState',
-        'app/factoryLayout/pages/FactoryLayoutSettingsPage'
+        'app/factoryLayout/pages/FactoryLayoutSettingsPage',
+        css,
+        nls
       ],
       function(productionState, FactoryLayoutSettingsPage)
       {

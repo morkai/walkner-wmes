@@ -91,7 +91,7 @@ define([
 
   router.map('/reports/7', auth(7), function(req)
   {
-    loadReportPage(7, req);
+    loadReportPage(7, req, ['css!app/prodDowntimes/assets/main', 'i18n!app/nls/prodDowntimes']);
   });
 
   router.map('/reports/8', auth(8), function(req)

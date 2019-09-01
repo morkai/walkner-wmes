@@ -44,9 +44,11 @@ define([
         'app/prodShiftOrders/pages/ProdShiftOrderDetailsPage',
         'css!app/orders/assets/main',
         'css!app/mechOrders/assets/main',
+        'css!app/prodDowntimes/assets/main',
         css,
         'i18n!app/nls/orders',
         'i18n!app/nls/mechOrders',
+        'i18n!app/nls/prodDowntimes',
         nls
       ],
       function(ProdShiftOrderDetailsPage)

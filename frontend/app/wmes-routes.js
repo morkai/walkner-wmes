@@ -82,7 +82,6 @@ define([
   './mor/routes',
   './planning/routes',
   './wh/routes',
-  './sapLaborTimeFixer/routes',
   './printers/routes',
   './kanban/routes',
   './kanbanComponents/routes',
@@ -108,7 +107,8 @@ define([
   './wmes-snf-programs/routes',
   './wmes-snf-tests/routes',
   './wmes-luca-events/routes',
-  './wmes-drilling/routes'
+  './wmes-drilling/routes',
+  './wmes-wiring/routes'
 ], function()
 {
   'use strict';

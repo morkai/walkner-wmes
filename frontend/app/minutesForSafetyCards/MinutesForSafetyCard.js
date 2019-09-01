@@ -122,7 +122,7 @@ define([
 
       var createdAt = Date.parse(this.attributes.createdAt) || Date.now();
 
-      if (createdAt >= Date.parse('2019-08-27 06:00:00')) // TODO Change to 2019-09-01
+      if (createdAt >= 1567310400000)
       {
         return 2;
       }
