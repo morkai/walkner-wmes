@@ -1,0 +1,50 @@
+<tr class="wiring-list-item <%- row.rowClassName %>" data-id="<%- row._id %>" data-nc12="<%- row.nc12 %>" data-status="<%- row.status %>">
+  <td data-column-id="mrps" data-popover="<%- row.mrps.join(' ') %>" class="is-min">
+    <%- row.mrps[0] %>
+    <% if (row.mrps.length > 1) { %>
+      +<%- row.mrps.length - 1 %>
+    <% } %>
+  </td>
+  <td data-column-id="nc12" class="is-min text-center"><%= row.nc12 %></td>
+  <td data-column-id="name" class="is-min"><%= row.name %></td>
+  <td data-column-id="qtyDone" class="is-min text-right"><%- row.qtyDone %></td>
+  <td data-column-id="qtySeparator">/</td>
+  <td data-column-id="qty" class="is-min text-right"><%- row.qty %></td>
+  <td data-column-id="leadingOrders" data-popover="<%- row.leadingOrders.join(' ') %>" class="is-min">
+    <% if (row.leadingOrders.length === 1 && user.isAllowedTo('ORDERS:VIEW')) { %>
+      <a href="#orders/<%- row.leadingOrders[0] %>" target="_blank"><%- row.leadingOrders[0] %></a>
+    <% } else { %>
+      <%- row.leadingOrders[0] %>
+    <% } %>
+    <% if (row.leadingOrders.length > 1) { %>
+      +<%- row.leadingOrders.length - 1 %>
+    <% } %>
+  </td>
+  <td data-column-id="status" class="is-min"><%- t('status:' + row.status) %></td>
+  <% if (canUpdate) { %>
+  <td class="actions">
+    <div class="actions-group">
+      <button type="button"
+              class="btn btn-<%- row.status === 'new' ? 'info' : 'warning' %>"
+              title="<%- t('action:' + (row.status === 'new' ? 'start' : 'continue')) %>"
+              data-action="<%- row.status === 'new' ? 'start' : 'continue' %>"
+              <%- row.actionInProgress || row.status === 'new' || row.status === 'partial' ? '' : 'disabled' %>>
+        <i class="fa fa-play"></i>
+      </button>
+      <button type="button" class="btn btn-success" title="<%- t('action:finish') %>" data-action="finish"
+              <%- row.actionInProgress || row.status === 'started' ? '' : 'disabled' %>>
+        <i class="fa fa-check"></i>
+      </button>
+      <button type="button" class="btn btn-default" title="<%- t('action:reset') %>" data-action="reset"
+              <%- row.actionInProgress || row.status === 'new' ? 'disabled' : '' %>>
+        <i class="fa fa-repeat"></i>
+      </button>
+      <button type="button" class="btn btn-danger" title="<%- t('action:cancel') %>" data-action="cancel"
+              <%- row.actionInProgress || row.status === 'cancelled' ? 'disabled' : '' %>>
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+  </td>
+  <% } %>
+  <td></td>
+</tr>

@@ -1,0 +1,46 @@
+@import "./filter.css";
+@import "./list.css";
+@import "./datePicker.css";
+@import "./userPicker.css";
+
+.page[data-id="wiring"] .page-actions .btn-link {
+  padding: 0;
+  width: 32px;
+  font-size: 32px;
+  line-height: 1;
+}
+.wiring-is-fullscreen {
+  margin: 0;
+}
+.wiring-is-fullscreen .navbar,
+.wiring-is-fullscreen .ft {
+  display: none;
+}
+.wiring-breadcrumb {
+  font-weight: normal;
+}
+.wiring-breadcrumb > a.disabled {
+  cursor: wait!important;
+  text-decoration: none!important;
+  color: inherit!important;
+}
+.wiring-breadcrumb > .fa {
+  padding: 0 20px 0 0;
+  text-decoration: none!important;
+  cursor: pointer;
+}
+.wiring-breadcrumb > .fa-chevron-right {
+  padding: 0 0 0 20px;
+}
+
+.wiring {
+  display: flex;
+}
+.wiring-filter-container {
+  flex: 0 0 auto;
+  width: 180px;
+  margin-right: 15px;
+}
+.wiring-list-container {
+  flex: 1 1 auto;
+}

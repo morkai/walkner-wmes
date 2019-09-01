@@ -47,6 +47,19 @@ function(
     util.defineSandboxedProperty(view, 'pubsub', pubsub);
     util.defineSandboxedProperty(view, 'socket', socket);
 
+    Object.defineProperty(view, 't', {
+      enumerable: true,
+      configurable: true,
+      get: function()
+      {
+        delete view.t;
+
+        view.t = t.forDomain(view.getDefaultNlsDomain());
+
+        return view.t;
+      }
+    });
+
     Layout.call(view, options);
 
     util.subscribeTopics(view, 'broker', view.localTopics, true);
@@ -71,19 +84,6 @@ function(
     {
       util.subscribeTopics(view, 'pubsub', view.remoteTopics, true);
     }
-
-    Object.defineProperty(view, 't', {
-      enumerable: true,
-      configurable: true,
-      get: function()
-      {
-        delete view.t;
-
-        view.t = t.forDomain(view.getDefaultNlsDomain());
-
-        return view.t;
-      }
-    });
   }
 
   util.inherits(View, Layout);

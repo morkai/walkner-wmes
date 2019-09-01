@@ -101,6 +101,9 @@ td.text-center {
 .is-shrinked > .table > tbody > tr > td:nth-last-child(2) {
   width: auto;
 }
+.table th {
+  background-color: #fff;
+}
 th.is-min,
 td.is-min {
   width: 1px;

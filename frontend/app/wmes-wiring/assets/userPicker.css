@@ -1,0 +1,41 @@
+.wiring-userPicker-pageAction {
+  margin-top: -7px;
+  font-size: 34px;
+}
+.wiring-userPicker-pageAction.is-clickable {
+  cursor: pointer;
+  color: #337ab7;
+}
+.wiring-userPicker-pageAction.is-clickable:hover {
+  color: #23527c;
+}
+.wiring-userPicker-dialog .modal-body {
+  padding: 0;
+}
+.wiring-userPicker-users {
+  overflow-y: scroll;
+}
+.wiring-userPicker-actions {
+  display: flex;
+}
+.wiring-userPicker-actions .btn {
+  flex: 1 1 auto;
+  height: 65px;
+  font-size: 35px;
+}
+.wiring-userPicker-user {
+  padding: 7px 14px;
+  font-size: 35px;
+  border-bottom: 1px dotted #999;
+  cursor: pointer;
+}
+.wiring-userPicker-user:last-child {
+  border-bottom: none;
+}
+.wiring-userPicker-user:hover {
+  background-color: #ffffa6;
+}
+.wiring-userPicker-user.active {
+  background-color: #428BCA;
+  color: #fff;
+}

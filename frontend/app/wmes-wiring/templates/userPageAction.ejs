@@ -1,0 +1,8 @@
+<div class="wiring-userPicker-pageAction is-clickable">
+  <% if (signedIn) { %>
+  <%= user.label %>
+  <% } else { %>
+  <%- t('wmes-wiring', 'userPicker:guest') %>
+  <% } %>
+  <i class="fa fa-user"></i>
+</div>

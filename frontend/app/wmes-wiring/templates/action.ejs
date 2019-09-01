@@ -1,0 +1,7 @@
+<form class="wiring-list-editor-form">
+  <% if (action === 'finish') { %>
+  <input class="form-control" type="text" value="<%- qtyDone %>" placeholder="<%- qty %>" pattern="^\+?[0-9]{1,4}$">
+  <% } %>
+  <button class="btn btn-success" type="submit"><i class="fa fa-check"></i><span><%- t('action:' + action) %></span></button>
+  <button class="btn btn-danger" type="button"><i class="fa fa-times"></i><span><%- t('action:nope') %></span></button>
+</form>

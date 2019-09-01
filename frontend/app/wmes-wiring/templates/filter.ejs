@@ -1,0 +1,24 @@
+<div class="wiring-filter">
+  <div id="<%- idPrefix %>-status" class="btn-group btn-group-vertical filter-btn-group wiring-filter-status" data-toggle="buttons">
+    <% statuses.forEach(function(status) { %>
+    <label class="btn btn-default" data-status="<%- status %>">
+      <input type="checkbox" name="status[]" value="<%- status %>" <%- _.includes(filters.status, status) ? 'checked' : '' %>>
+      <span class="wiring-filter-status-stats"><%- stats[filters.mrp] ? stats[filters.mrp][status] : 0 %></span>
+      <%- helpers.t('status:' + status) %>
+    </label>
+    <% }) %>
+  </div>
+  <div id="<%- idPrefix %>-mrp" class="btn-group btn-group-vertical filter-btn-group wiring-filter-mrp" data-toggle="buttons">
+    <label class="btn btn-default">
+      <input type="radio" name="mrp[]" value="all"> <%- helpers.t('mrp:all') %>
+      <span class="wiring-filter-mrp-stats" data-mrp="all"><%- stats.all.remaining || 0 %></span>
+    </label>
+    <% mrps.forEach(function(mrp) { %>
+    <label class="btn btn-default">
+      <input type="radio" name="mrp[]" value="<%= mrp %>" <%- mrp === filters.mrp ? 'checked' : '' %>>
+      <%= mrp %>
+      <span class="wiring-filter-mrp-stats" data-mrp="<%= mrp %>"><%- stats[mrp] ? stats[mrp].remaining : 0 %></span>
+    </label>
+    <% }) %>
+  </div>
+</div>

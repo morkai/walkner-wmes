@@ -1,0 +1,27 @@
+<div class="wiring-list is-colored">
+  <table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+      <% [
+        {id: 'mrp', class: 'is-min'},
+        {id: 'nc12', class: 'is-min'},
+        {id: 'name', class: 'is-min'},
+        {id: 'qty', class: 'is-min', colSpan: 3},
+        {id: 'leadingOrders', class: 'is-min'},
+        {id: 'status', class: 'is-min'}
+      ].forEach(function(column) { %>
+      <th class="<%- column.class || '' %>" colspan="<%- column.colSpan || 1 %>" style="min-width: <%- column.width ? column.width : '1' %>px"><%- helpers.t('prop:' + column.id) %></th>
+      <% }) %>
+      <% if (canUpdate) { %>
+      <th class="actions"><%- t('core', 'LIST:COLUMN:actions') %></th>
+      <% } %>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+      <% rows.forEach(function(row) { %>
+      <%- renderRow({canUpdate: canUpdate, row: row}) %>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

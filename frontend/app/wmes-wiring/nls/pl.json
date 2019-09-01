@@ -1,0 +1,68 @@
+{
+  "BREADCRUMBS:base": "Przewody",
+  "BREADCRUMBS:settings": "Ustawienia",
+
+  "MSG:date:failure": "Nie udało się znaleźć daty.",
+  "MSG:date:empty": "Brak zleceń.",
+  "MSG:start:failure": "Nie udało się rozpocząć zlecenia.",
+  "MSG:continue:failure": "Nie udało się kontynuować zlecenia.",
+  "MSG:finish:failure": "Nie udało się zakończyć zlecenia.",
+  "MSG:reset:failure": "Nie udało się zresetować zlecenia.",
+  "MSG:cancel:failure": "Nie udało się zignorować zlecenia.",
+  "msg:clipboard:mrps": "MRP skopiowane do schowka.",
+  "msg:clipboard:leadingOrders": "Numery zleceń skopiowane do schowka.",
+
+  "PAGE_ACTIONS:settings": "Ustawienia",
+
+  "prop:nc12": "12NC",
+  "prop:name": "Nazwa",
+  "prop:qty": "Ilość",
+  "prop:qtyTodo": "Ilość do zrobienia",
+  "prop:qtyDone": "Ilość zrobiona",
+  "prop:mrp": "Przepływ",
+  "prop:status": "Status",
+  "prop:startedAt": "Czas rozpoczęcia",
+  "prop:finishedAt": "Czas zakończenia",
+  "prop:comment": "Komentarz",
+  "prop:leadingOrders": "Zlecenia",
+
+  "status:all": "Wszystkie",
+  "status:new": "Do realizacji",
+  "status:started": "W realizacji",
+  "status:finished": "Zrealizowane",
+  "status:partial": "Niekompletne",
+  "status:cancelled": "Anulowane",
+
+  "mrp:all": "Wszystkie",
+
+  "action:start": "Rozpocznij",
+  "action:finish": "Zakończ",
+  "action:cancel": "Ignoruj",
+  "action:reset": "Resetuj",
+  "action:continue": "Kontynuuj",
+  "action:comment": "Komentuj",
+  "action:nope": "Anuluj",
+
+  "datePicker:d0": "Dzisiaj",
+  "datePicker:d+1": "Jutro",
+  "datePicker:d+2": "Pojutrze",
+  "datePicker:d-1": "Wczoraj",
+  "datePicker:d-2": "Przedwczoraj",
+  "datePicker:submit": "Wybierz datę",
+  "datePicker:placeholder:day": "dd",
+  "datePicker:placeholder:month": "mm",
+  "datePicker:placeholder:year": "rrrr",
+  "datePicker:invalid": "Podaj prawidłową datę.",
+
+  "userPicker:guest": "Zaloguj się",
+  "userPicker:logIn": "Zaloguj",
+  "userPicker:logOut": "Wyloguj",
+
+  "empty": "Brak zleceń dla wybranego dnia.",
+
+  "settings:tab:planning": "Planowanie",
+  "settings:planning:namePattern": "Wzorzec nazwy zlecenia",
+  "settings:planning:namePattern:help": "Wyrażenie regularne jakie musi spełniać nazwa wyrobu, aby było zlecenie było potraktowane jako zlecenie cięcia przewodów.",
+  "settings:planning:workCenters": "WorkCentra",
+  "settings:planning:workCenters:help": "WorkCenter jakie musi mieć przynajmniej jedna z operacji zlecenia, aby dane zlecenie było potraktowane jako zlecenie cięcia przewodów."
+}
