@@ -6,6 +6,7 @@ define([
   '../time',
   '../user',
   '../core/util/getShiftStartInfo',
+  '../core/util/embedded',
   '../core/Collection',
   './WiringOrder'
 ], function(
@@ -14,6 +15,7 @@ define([
   time,
   user,
   getShiftStartInfo,
+  embedded,
   Collection,
   WiringOrder
 ) {
@@ -255,7 +257,17 @@ define([
 
     canUpdate: function()
     {
-      return user.isAllowedTo('LOCAL', 'WIRING:WIRER', 'WIRING:MANAGE');
+      if (user.isAllowedTo('WIRING:WIRER', 'WIRING:MANAGE'))
+      {
+        return true;
+      }
+
+      if (embedded.isEnabled() && user.isAllowedTo('LOCAL'))
+      {
+        return true;
+      }
+
+      return false;
     },
 
     act: function(reqData, done)
