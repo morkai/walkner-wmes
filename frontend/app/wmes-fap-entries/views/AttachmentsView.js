@@ -453,7 +453,7 @@ define([
 
       entry.uploading.fail(function()
       {
-        view.removeUpload(upload._id);
+        view.removeAttachment(upload._id);
 
         if (entry.uploading.statusText === 'abort')
         {
