@@ -6,6 +6,7 @@
 /frontend-build/files
 /build
 /config/production
+/config/standalone
 /config/development
 /config/vps
 /config/license.ed.private.pem

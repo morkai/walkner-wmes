@@ -1,1 +1,1 @@
-define(["../router","../viewport","../user"],function(e,n,p){"use strict";e.map("/help",p.auth("LOCAL","USER"),function(e){n.loadPage(["app/help/pages/HelpPage","i18n!app/nls/help"],function(n){return new n({file:e.query.file})})})});
+define(["../router","../viewport","../user"],function(e,p,n){"use strict";e.map("/help",n.auth("LOCAL","USER"),function(e){p.loadPage(["app/help/pages/HelpPage","css!app/help/assets/main","i18n!app/nls/help"],function(p){return new p({file:e.query.file})})})});
