@@ -167,7 +167,7 @@
     "PRIVILEGE:DRILLING:DRILLER": "Drilling: operator",
     "PRIVILEGE:WIRING:VIEW": "Wiring: view",
     "PRIVILEGE:WIRING:MANAGE": "Wiring: manage",
-    "PRIVILEGE:WIRING:DRILLER": "Wiring: operator",
+    "PRIVILEGE:WIRING:WIRER": "Wiring: operator",
     "PRIVILEGE:KANBAN:VIEW": "Kanban DB: view",
     "PRIVILEGE:KANBAN:MANAGE": "Kanban DB: manage",
     "PRIVILEGE:KANBAN:PRINT": "Kanban DB: printing",
