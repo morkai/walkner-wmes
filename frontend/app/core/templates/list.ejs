@@ -30,7 +30,11 @@
           <% if (row._id) { %>data-id="<%- row._id %>"<% } %>
         >
           <% columns.forEach(function(column) { %>
-          <td <%- typeof column.tdAttrs === 'function' ? column.tdAttrs(row) : (column.tdAttrs || '') %> data-id="<%- column.id %>">
+          <td
+            <%- typeof column.tdAttrs === 'function' ? column.tdAttrs(row) : (column.tdAttrs || '') %>
+            data-id="<%- column.id %>"
+            <% if (column.titleProperty && row[column.titleProperty]) { %>title="<%= row[column.titleProperty] %>"<% } %>
+          >
           <% if (row[column.valueProperty] == null) { %>
             <% if (column.noData == null) { %>
             <em><%- t('core', 'LIST:NO_DATA:cell') %></em>

@@ -83,7 +83,7 @@ define([
     {
       var obj = this.toJSON();
 
-      obj.name = resolveProductName(obj);
+      obj.productName = resolveProductName(obj);
 
       DATE_PROPS.forEach(function(prop)
       {

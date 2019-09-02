@@ -61,18 +61,34 @@ define([
 
     }, ListView.prototype.events),
 
-    columns: [
-      {id: '_id', className: 'is-min'},
-      {id: 'nc12', className: 'is-min'},
-      {id: 'name', className: 'is-min'},
-      {id: 'mrp', className: 'is-min'},
-      {id: 'qtys', className: 'is-min is-number'},
-      {id: 'sapCreatedAtText', label: t.bound('orders', 'PROPERTY:sapCreatedAt'), className: 'is-min'},
-      {id: 'scheduledStartDateText', label: t.bound('orders', 'PROPERTY:scheduledStartDate'), className: 'is-min'},
-      {id: 'delayReason', className: 'is-min'},
-      {id: 'm4', className: 'is-min'},
-      {id: 'statusLabels', label: t.bound('orders', 'PROPERTY:statuses')}
-    ],
+    serializeColumns: function()
+    {
+      return [
+        {id: '_id', className: 'is-min'},
+        {id: 'nc12', className: 'is-min'},
+        {
+          id: 'name',
+          titleProperty: 'description',
+          className: 'is-min',
+          tdDecorator: function(columnId, value, row)
+          {
+            if (row.description && row.name !== row.description)
+            {
+              row.name += ' <i class="fa fa-question-circle"></i>';
+            }
+
+            return row.name;
+          }
+        },
+        {id: 'mrp', className: 'is-min'},
+        {id: 'qtys', className: 'is-min is-number'},
+        {id: 'sapCreatedAt', valueProperty: 'sapCreatedAtText', className: 'is-min'},
+        {id: 'scheduledStartDate', valueProperty: 'scheduledStartDateText', className: 'is-min'},
+        {id: 'delayReason', className: 'is-min'},
+        {id: 'm4', className: 'is-min'},
+        {id: 'statuses', valueProperty: 'statusLabels'}
+      ];
+    },
 
     serializeActions: function()
     {
