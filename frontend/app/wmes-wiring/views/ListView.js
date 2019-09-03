@@ -426,9 +426,11 @@ define([
         return;
       }
 
-      if (immediate)
+      var popover = this.$popover.data('bs.popover');
+
+      if (immediate && popover)
       {
-        this.$popover.data('bs.popover').tip().removeClass('fade');
+        popover.tip().removeClass('fade');
       }
 
       this.$popover.popover('destroy').removeData('sticky');

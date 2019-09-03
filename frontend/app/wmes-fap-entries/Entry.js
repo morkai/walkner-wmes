@@ -856,7 +856,7 @@ define([
       var observers = data.observers || [].concat(entry.get('observers'));
       var observerIndex = _.findIndex(observers, function(o)
       {
-        if (!o.user && window.WMES_LOG_BROWSER_ERROR)
+        if ((!o || !o.user) && window.WMES_LOG_BROWSER_ERROR)
         {
           window.WMES_LOG_BROWSER_ERROR(new Error('Invalid observer: ' + JSON.stringify({ // eslint-disable-line new-cap
             change: change,
@@ -864,7 +864,7 @@ define([
           })));
         }
 
-        return !!o.user && o.user.id === user.data._id;
+        return o && !!o.user && o.user.id === user.data._id;
       });
 
       if (observerIndex !== -1)
