@@ -1,1 +1,1 @@
-define(["underscore"],function(r){"use strict";var t=/^[A-Z0-9]{6}/;return function(i){if(!i)return"";var e=i.description||"",n=i.name||"";return r.isEmpty(e)?n.trim():r.isEmpty(n)?e.trim():t.test(n)?n.trim():(e||n).trim()}});
+define([],function(){"use strict";return function(n){return n?(n.name||n.description||"").trim():""}});
