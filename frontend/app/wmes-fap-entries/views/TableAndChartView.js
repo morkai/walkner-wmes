@@ -82,7 +82,7 @@ define([
     {
       var metric = this.options.metric;
       var series = this.serializeChartSeries();
-
+console.log(metric, series.length, series);
       this.chart = new Highcharts.Chart({
         chart: {
           renderTo: this.$id('chart')[0],
@@ -130,7 +130,9 @@ define([
           column: {
             borderWidth: 0,
             dataLabels: {
-              enabled: series.length ? (series.length * series[0].data.length <= 35) : false
+              enabled: series.length
+                ? (series.length * series[0].data.length <= (series[0].data.length === 1 ? 40 : 35))
+                : false
             }
           }
         },
