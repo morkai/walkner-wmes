@@ -191,7 +191,8 @@
     "settings:requiredCount": "Daily required inspections number",
     "settings:maxNokPerDay": "Upper limit of red strips per day",
     "settings:okRatioRef": "Quantity of OK goods target [%]",
-    "settings:nokRatioRef": "Quantity of NOK goods target [%]"
+    "settings:nokRatioRef": "Quantity of NOK goods target [%]",
+    "settings:oqlKinds": "Outgoing Quality inspection kinds"
   },
   "pl": true
 }

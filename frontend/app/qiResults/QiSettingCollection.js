@@ -31,6 +31,11 @@ define([
         return Math.round(parseFloat(newValue, 10) * 100) / 100 || 0;
       }
 
+      if (/oqlKinds$/.test(id))
+      {
+        return this.prepareMultiObjectIdValue(newValue);
+      }
+
       return parseInt(newValue, 10) || 0;
     },
 

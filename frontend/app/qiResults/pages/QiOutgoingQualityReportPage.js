@@ -77,6 +77,11 @@ define([
             setTimeout(function() { window.print(); }, 1);
           }
         }
+      }, {
+        label: this.t('PAGE_ACTION:settings'),
+        icon: 'cogs',
+        privileges: 'QI:DICTIONARIES:MANAGE',
+        href: '#qi/settings?tab=reports'
       }];
     },
 

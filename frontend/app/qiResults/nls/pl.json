@@ -191,5 +191,6 @@
   "settings:requiredCount": "Dzienna wymagana ilość kontroli",
   "settings:maxNokPerDay": "Górny limit czerwonych pasków na dzień",
   "settings:okRatioRef": "Cel dla % wyrobów zgodnych",
-  "settings:nokRatioRef": "Cel dla % wyrobów niezgodnych"
+  "settings:nokRatioRef": "Cel dla % wyrobów niezgodnych",
+  "settings:oqlKinds": "Rodzaje inspekcji w Outgoing Quality"
 }
