@@ -29,6 +29,7 @@ define([
       [
         'app/kaizenOrders/KaizenOrderReport',
         'app/kaizenOrders/pages/KaizenOrderReportPage',
+        'css!app/suggestions/assets/main',
         css,
         'i18n!app/nls/reports',
         nls
@@ -48,6 +49,7 @@ define([
       [
         'app/kaizenOrders/KaizenOrderSummaryReport',
         'app/kaizenOrders/pages/KaizenOrderSummaryReportPage',
+        'css!app/suggestions/assets/main',
         css,
         'i18n!app/nls/reports',
         'i18n!app/nls/suggestions',
