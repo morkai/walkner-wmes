@@ -52,7 +52,8 @@ define([
         from: 0,
         to: 0,
         interval: 'month',
-        sections: []
+        sections: [],
+        areas: []
       };
     },
 
@@ -65,9 +66,10 @@ define([
 
       options.data = _.assign(
         options.data || {},
-        _.pick(this.attributes, ['from', 'to', 'interval', 'sections'])
+        _.pick(this.attributes, ['from', 'to', 'interval', 'sections', 'areas'])
       );
       options.data.sections = options.data.sections.join(',');
+      options.data.areas = options.data.areas.join(',');
 
       return Model.prototype.fetch.call(this, options);
     },
@@ -78,7 +80,8 @@ define([
         + '?from=' + this.get('from')
         + '&to=' + this.get('to')
         + '&interval=' + this.get('interval')
-        + '&sections=' + this.get('sections');
+        + '&sections=' + this.get('sections')
+        + '&areas=' + this.get('areas');
     },
 
     parse: function(report)
@@ -341,7 +344,8 @@ define([
         from: +query.from || undefined,
         to: +query.to || undefined,
         interval: query.interval || undefined,
-        sections: _.isEmpty(query.sections) ? [] : query.sections.split(',')
+        sections: _.isEmpty(query.sections) ? [] : query.sections.split(','),
+        areas: _.isEmpty(query.areas) ? [] : query.areas.split(',')
       });
     }
 

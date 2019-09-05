@@ -42,10 +42,17 @@ define([
       buttonGroup.toggle(this.$id('interval'));
 
       this.$id('sections').select2({
-        width: '400px',
+        width: '350px',
         allowClear: true,
         multiple: true,
         data: kaizenDictionaries.sections.map(idAndLabel)
+      });
+
+      this.$id('areas').select2({
+        width: '350px',
+        allowClear: true,
+        multiple: true,
+        data: kaizenDictionaries.areas.map(idAndLabel)
       });
     },
 
@@ -59,7 +66,8 @@ define([
         interval: model.get('interval'),
         'from-date': from ? time.format(from, 'YYYY-MM-DD') : '',
         'to-date': to ? time.format(to, 'YYYY-MM-DD') : '',
-        sections: model.get('sections').join(',')
+        sections: model.get('sections').join(','),
+        areas: model.get('areas').join(',')
       };
     },
 
@@ -70,10 +78,12 @@ define([
         from: range.from ? range.from.valueOf() : 0,
         to: range.to ? range.to.valueOf() : 0,
         interval: buttonGroup.getValue(this.$id('interval')),
-        sections: this.$id('sections').val()
+        sections: this.$id('sections').val(),
+        areas: this.$id('areas').val()
       };
 
       query.sections = query.sections === '' ? [] : query.sections.split(',');
+      query.areas = query.areas === '' ? [] : query.areas.split(',');
 
       this.model.set(query);
       this.model.trigger('filtered');
