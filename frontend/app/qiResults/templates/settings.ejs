@@ -10,6 +10,10 @@
         <label for="<%- idPrefix %>-requiredCount"><%- helpers.t('settings:requiredCount') %></label>
         <input id="<%- idPrefix %>-requiredCount" class="form-control" name="qi.requiredCount" type="number" min="0" max="9999">
       </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-defaultErrorCategory"><%- helpers.t('settings:defaultErrorCategory') %></label>
+        <input id="<%- idPrefix %>-defaultErrorCategory" name="qi.defaultErrorCategory" type="text" data-setting>
+      </div>
     </div>
     <div class="panel-body" data-tab="reports">
       <div class="form-group">

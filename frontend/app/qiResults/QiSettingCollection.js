@@ -36,6 +36,11 @@ define([
         return this.prepareMultiObjectIdValue(newValue);
       }
 
+      if (/defaultErrorCategory/.test(id))
+      {
+        return this.prepareObjectIdValue(newValue);
+      }
+
       return parseInt(newValue, 10) || 0;
     },
 

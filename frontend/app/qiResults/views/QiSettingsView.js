@@ -32,7 +32,19 @@ define([
     {
       SettingsView.prototype.afterRender.apply(this, arguments);
 
+      this.setUpDefaultErrorCategories();
       this.setUpOqlKinds();
+    },
+
+    setUpDefaultErrorCategories: function()
+    {
+      this.$id('defaultErrorCategory').select2({
+        width: '100%',
+        allowClear: true,
+        data: dictionaries.errorCategories.map(idAndLabel)
+      });
+
+      this.updateSettingField(this.settings.get('qi.defaultErrorCategory'));
     },
 
     setUpOqlKinds: function()
@@ -63,11 +75,24 @@ define([
       {
         this.$id('oqlKinds').select2('data', setting.getValue().map(function(id)
         {
-          var prodFunction = dictionaries.kinds.get(id);
+          var kind = dictionaries.kinds.get(id);
 
           return {
             id: id,
-            text: prodFunction ? prodFunction.getLabel() : id
+            text: kind ? kind.getLabel() : id
+          };
+        }));
+      }
+
+      if (setting.id === 'qi.defaultErrorCategory')
+      {
+        this.$id('defaultErrorCategory').select2('data', setting.getValue().map(function(id)
+        {
+          var errorCategory = dictionaries.errorCategories.get(id);
+
+          return {
+            id: id,
+            text: errorCategory ? errorCategory.getLabel() : id
           };
         }));
       }

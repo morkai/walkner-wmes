@@ -118,6 +118,22 @@ define([
       this.findOrderReq = null;
       this.statuses = null;
       this.actions = 0;
+
+      this.listenToOnce(this, 'beforeRender', function()
+      {
+        if (this.model.get('errorCategory'))
+        {
+          return;
+        }
+
+        var defaultErrorCategory = qiDictionaries.settings.getValue('defaultErrorCategory');
+        var errorCategory = qiDictionaries.errorCategories.get(defaultErrorCategory);
+
+        if (errorCategory)
+        {
+          this.model.set({errorCategory: errorCategory.id}, {silent: true});
+        }
+      });
     },
 
     serialize: function()

@@ -192,5 +192,6 @@
   "settings:maxNokPerDay": "Górny limit czerwonych pasków na dzień",
   "settings:okRatioRef": "Cel dla % wyrobów zgodnych",
   "settings:nokRatioRef": "Cel dla % wyrobów niezgodnych",
-  "settings:oqlKinds": "Rodzaje inspekcji w Outgoing Quality"
+  "settings:oqlKinds": "Rodzaje inspekcji w Outgoing Quality",
+  "settings:defaultErrorCategory": "Domyślna kategoria błędu"
 }
