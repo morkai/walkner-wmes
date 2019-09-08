@@ -71,7 +71,12 @@ app/core/assets/./highcharts.css
 app/core/assets/./embedded.css
 app/core/assets/./messages.css
 app/core/assets/./notifications.css
+app/core/assets/./menu.css
 app/core/assets/main.css
+
+app/core/assets/menu.css
+----------------
+app/core/assets/menu.css
 
 app/core/assets/messages.css
 ----------------
@@ -491,12 +496,7 @@ app/planning/assets/./icons.css
 app/planning/assets/./plan.darker.css
 app/planning/assets/./wh.css
 app/planning/assets/./changes.css
-app/planning/assets/./menu.css
 app/planning/assets/main.css
-
-app/planning/assets/menu.css
-----------------
-app/planning/assets/menu.css
 
 app/planning/assets/plan.css
 ----------------
@@ -1013,7 +1013,6 @@ assets/../app/core/assets/main.css
 assets/../app/orders/assets/main.css
 assets/../app/orderStatuses/assets/main.css
 assets/../app/production/assets/vkb.css
-assets/../app/planning/assets/menu.css
 assets/../app/updater/assets/main.css
 assets/../app/orderDocuments/assets/main.css
 assets/../app/wmes-fap-entries/assets/main.css
@@ -1132,7 +1131,6 @@ assets/./select2.css
 assets/../app/core/assets/main.css
 assets/../app/updater/assets/main.css
 assets/../app/production/assets/vkb.css
-assets/../app/planning/assets/menu.css
 assets/../app/wmes-trw-bases/assets/main.css
 assets/../app/wmes-trw-tests/assets/main.css
 assets/./wmes-loading.css
