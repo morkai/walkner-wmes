@@ -343,10 +343,9 @@ define([
     });
   };
 
-  NavbarView.prototype.serialize = function()
+  NavbarView.prototype.getTemplateData = function()
   {
     return {
-      idPrefix: this.idPrefix,
       user: user
     };
   };

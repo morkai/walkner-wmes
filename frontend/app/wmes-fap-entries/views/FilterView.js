@@ -401,7 +401,7 @@ define([
         ? $filter.find('.active > input').val()
         : $filter.val();
 
-      return typeof value === 'string' && value.length > 0;
+      return !!value && value.length > 0;
     },
 
     showFilter: function(filter)

@@ -73,7 +73,7 @@ define([
         formAction: model.url(),
         formActionText: t(t.has(nlsDomain, 'FORM:ACTION:edit') ? nlsDomain : 'core', 'FORM:ACTION:edit'),
         failureText: t(t.has(nlsDomain, 'FORM:ACTION:editFailure') ? nlsDomain : 'core', 'FORM:ERROR:editFailure'),
-        panelTitleText: t(t.has(nlsDomain, 'FORM:ACTION:editForm') ? nlsDomain : 'core', 'PANEL:TITLE:editForm')
+        panelTitleText: t(t.has(nlsDomain, 'PANEL:TITLE:editForm') ? nlsDomain : 'core', 'PANEL:TITLE:editForm')
       };
 
       if (typeof this.options.formTemplate === 'function')

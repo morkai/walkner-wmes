@@ -22,7 +22,7 @@
   "PAGE_ACTION:export": "Eksportuj",
   "PAGE_ACTION:export:csv": "Eksportuj do CSV",
   "PAGE_ACTION:export:xlsx": "Eksportuj do XLSX",
-  "PAGE_ACTION:jump:title": "Skocz szczegółów po ID",
+  "PAGE_ACTION:jump:title": "Skocz do szczegółów po ID",
   "PAGE_ACTION:jump:placeholder": "ID",
 
   "LIST:COLUMN:actions": "Akcje",

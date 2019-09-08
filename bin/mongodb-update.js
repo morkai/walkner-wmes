@@ -3,7 +3,7 @@
 
 'use strict';
 
-var from = new Date('2013-12-01 06:00:00');
+var from = new Date('2019-09-01T06:00:00');
 var now = Date.now();
 
 while (from.getTime() <= now)
