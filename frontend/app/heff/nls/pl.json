@@ -1,9 +1,15 @@
 {
   "shift": "{shift}<br>zmiana",
   "line": "Linia:",
+  "station": "{line}, st. {station}",
   "title": "Wydajność godzinowa {from}-{to}",
   "planned": "Ilość zaplanowana [szt]",
   "actual": "Ilość zrobiona [szt]",
   "remaining": "Do końca zmiany pozostało:",
-  "unit": "szt"
+  "unit": "szt",
+
+  "unlockDialog:title": "Aktywacja Wydajności godzinowej",
+  "unlockDialog:prodLine": "Linia produkcyjna",
+  "unlockDialog:station": "Numer stanowiska pracy",
+  "unlockDialog:unlock": "Aktywuj Wydajność godzinową"
 }

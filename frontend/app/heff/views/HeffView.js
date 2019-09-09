@@ -12,6 +12,7 @@ define([
   'app/core/util/getShiftStartInfo',
   'app/core/util/embedded',
   'app/production/snManager',
+  './UnlockDialogView',
   'app/heff/templates/page'
 ], function(
   _,
@@ -25,6 +26,7 @@ define([
   getShiftStartInfo,
   embedded,
   snManager,
+  UnlockDialogView,
   template
 ) {
   'use strict';
@@ -43,9 +45,9 @@ define([
     {
       var topics = {};
 
-      if (this.model.prodLineId)
+      if (this.model.prodLine)
       {
-        topics['heff.reload.' + this.model.prodLineId] = 'onReload';
+        topics['heff.reload.' + this.model.prodLine] = 'onReload';
       }
 
       return topics;
@@ -58,35 +60,11 @@ define([
     events: {
       'click #-line': function()
       {
-        var $line = this.$id('line');
-
-        if ($line.find('select').length)
-        {
-          return;
-        }
-
-        $line.html('<i class="fa fa-spinner fa-spin"></i>');
-
-        this.ajax({url: '/prodLines?select(_id)&deactivatedAt=null'}).done(function(res)
-        {
-          var options = '';
-
-          _.forEach(res.collection, function(line)
-          {
-            options += '<option>' + _.escape(line._id) + '</option>';
-          });
-
-          var $select = $('<select></select>').html(options);
-
-          $line.empty().append($select);
-
-          $select.val(localStorage.getItem('HEFF:LINE')).on('change', function()
-          {
-            localStorage.setItem('HEFF:LINE', $select.val());
-
-            window.location.reload();
-          });
+        var dialogView = new UnlockDialogView({
+          model: this.model
         });
+
+        viewport.showDialog(dialogView, this.t('unlockDialog:title'));
       },
 
       'click #-snMessage': 'hideSnMessage'
@@ -115,18 +93,23 @@ define([
 
       embedded.render(this);
       embedded.ready();
+
+      if (!this.model.prodLine)
+      {
+        this.$id('line').click();
+      }
     },
 
     loadData: function()
     {
       var view = this;
 
-      if (!view.model.prodLineId)
+      if (!view.model.prodLine)
       {
         return;
       }
 
-      var url = '/heff/' + encodeURIComponent(view.model.prodLineId);
+      var url = '/heff/' + encodeURIComponent(view.model.prodLine);
 
       clearTimeout(view.timers.loadData);
 
@@ -177,7 +160,22 @@ define([
 
     updateLine: function()
     {
-      this.$id('line').html(this.model.prodLineId || '?');
+      var line = '?';
+
+      if (this.model.prodLine)
+      {
+        line = this.model.prodLine;
+
+        if (this.model.station)
+        {
+          line = this.t('station', {
+            line: line,
+            station: this.model.station
+          });
+        }
+      }
+
+      this.$id('line').text(line);
     },
 
     updateTitle: function(moment)

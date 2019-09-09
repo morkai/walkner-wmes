@@ -1,0 +1,25 @@
+<form class="heff-unlock" autocomplete="off">
+  <div class="production-form-btn-group" style="margin-top: 15px">
+    <label class="control-label is-required"><%- t('unlockDialog:prodLine') %></label>
+    <div id="<%- idPrefix %>-list" class="btn-group-vertical" style="max-height: 500px">
+      <p>
+        <i class="fa fa-spinner fa-spin"></i>
+      </p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label is-required"><%- t('unlockDialog:station') %></label>
+    <br>
+    <div class="btn-group" data-toggle="buttons">
+      <% [1, 2, 3, 4, 5, 6, 7].forEach(function(n) { %>
+      <label class="btn btn-default">
+        <input type="radio" name="station" value="<%- n %>"> <%- n %>
+      </label>
+      <% }) %>
+    </div>
+  </div>
+  <div class="form-actions">
+    <button id="<%- idPrefix %>-submit" class="btn btn-lg btn-primary" type="submit"><%- t('unlockDialog:unlock') %></button>
+    <button class="btn btn-lg btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
+  </div>
+</form>

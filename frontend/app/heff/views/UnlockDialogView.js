@@ -1,0 +1,113 @@
+// Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
+
+define([
+  'underscore',
+  'app/core/View',
+  'app/data/localStorage',
+  'app/heff/templates/unlockDialog'
+], function(
+  _,
+  View,
+  localStorage,
+  template
+) {
+  'use strict';
+
+  return View.extend({
+
+    template: template,
+
+    dialogClassName: 'production-modal',
+
+    events: {
+      'submit': function()
+      {
+        var line = this.$id('list').find('.active').text().trim();
+        var station = this.$('input[name="station"]:checked').val();
+
+        if (!line || !station)
+        {
+          return false;
+        }
+
+        this.$id('submit').prop('disabled', true);
+
+        localStorage.setItem('HEFF:LINE', line);
+        localStorage.setItem('HEFF:STATION', station);
+
+        setTimeout(function() { window.location.reload(); }, 1);
+
+        return false;
+      },
+      'click #-list .btn': function(e)
+      {
+        this.$id('list').find('.active').removeClass('active');
+        this.$(e.currentTarget).addClass('active');
+      }
+    },
+
+    afterRender: function()
+    {
+      this.loadLines();
+
+      this.$('input[name="station"][value="' + (this.model.station || 6) + '"]').click();
+    },
+
+    selectActiveLine: function()
+    {
+      var $active = this.$id('list').find('.active');
+
+      if ($active.length)
+      {
+        $active[0].scrollIntoView({block: 'center'});
+      }
+    },
+
+    onDialogShown: function()
+    {
+      this.selectActiveLine();
+    },
+
+    loadLines: function()
+    {
+      var view = this;
+
+      view.$id('submit').prop('disabled', true);
+
+      var req = view.ajax({url: '/prodLines?select(_id)&deactivatedAt=null'});
+
+      req.fail(function()
+      {
+        view.$('.fa-spin').removeClass('fa-spin');
+      });
+
+      req.done(function(res)
+      {
+        var html = '';
+
+        res.collection.sort(function(a, b)
+        {
+          return a._id.localeCompare(b._id, undefined, {numeric: true, ignorePunctuation: true});
+        });
+
+        _.forEach(res.collection, function(line)
+        {
+          var label = _.escape(line._id);
+          var className = 'btn btn-lg btn-default';
+
+          if (line._id === view.model.prodLine)
+          {
+            className += ' active';
+          }
+
+          html += '<button type="button" class="' + className + '">' + label + '</button>';
+        });
+
+        view.$id('list').html(html);
+        view.$id('submit').prop('disabled', false);
+        view.selectActiveLine();
+      });
+    }
+
+  });
+});

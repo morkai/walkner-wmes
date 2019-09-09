@@ -231,7 +231,8 @@ define([
         data: scanInfo,
         createdAt: time.getMoment().toDate(),
         creator: user.getInfo(),
-        prodLine: window.WMES_LINE_ID
+        prodLine: window.WMES_LINE_ID,
+        station: window.WMES_STATION || 0
       };
 
       scanInfo.sapTaktTime = -1;

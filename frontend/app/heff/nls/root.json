@@ -2,11 +2,17 @@
   "root": {
     "shift": "{shift}<br>shift",
     "line": "Line:",
+    "station": "{line}, st. {station}",
     "title": "Hourly efficiency {from}-{to}",
     "planned": "Quantity planned [PCE]",
     "actual": "Quantity done [PCE]",
     "remaining": "Total remaining quantity:",
-    "unit": "PCE"
+    "unit": "PCE",
+
+    "unlockDialog:title": "Hourly Efficiency app activation",
+    "unlockDialog:prodLine": "Production line",
+    "unlockDialog:station": "Workstation number",
+    "unlockDialog:unlock": "Activate app"
   },
   "pl": true
 }
