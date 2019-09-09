@@ -25,16 +25,25 @@ define([
       }
     },
 
-    columns: [
-      {id: 'prodLine', className: 'is-min'},
-      {id: 'type', className: 'is-min'},
-      'data',
-      {id: 'prodShift', className: 'is-min'},
-      {id: 'prodShiftOrder', className: 'is-min'},
-      {id: 'createdAt', className: 'is-min'},
-      {id: 'creator', className: 'is-min'},
-      {id: 'instanceId', className: 'is-min'}
-    ],
+    columns: function()
+    {
+      return [
+        {id: 'prodLine', className: 'is-min'},
+        {
+          id: 'station',
+          className: 'is-min is-number',
+          label: this.t('list:station'),
+          thAttrs: {title: this.t('PROPERTY:station')}
+        },
+        {id: 'type', className: 'is-min'},
+        'data',
+        {id: 'prodShift', className: 'is-min'},
+        {id: 'prodShiftOrder', className: 'is-min'},
+        {id: 'createdAt', className: 'is-min'},
+        {id: 'creator', className: 'is-min'},
+        {id: 'instanceId', className: 'is-min'}
+      ];
+    },
 
     serializeActions: function()
     {

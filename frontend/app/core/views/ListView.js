@@ -145,17 +145,14 @@ define([
 
     serializeColumns: function()
     {
-      var columns;
+      var columns = this.options.columns || this.columns;
 
-      if (Array.isArray(this.options.columns))
+      if (typeof columns === 'function')
       {
-        columns = this.options.columns;
+        columns = columns.call(this);
       }
-      else if (Array.isArray(this.columns))
-      {
-        columns = this.columns;
-      }
-      else
+
+      if (!Array.isArray(columns))
       {
         columns = [];
       }
@@ -193,15 +190,33 @@ define([
           column.label = t.bound(nlsDomain, 'PROPERTY:' + column.id);
         }
 
-        if (!column.thAttrs)
+        ['thAttrs', 'tdAttrs'].forEach(function(prop)
         {
-          column.thAttrs = '';
-        }
+          if (_.isObject(column[prop]))
+          {
+            var thAttrs = [];
 
-        if (!column.tdAttrs)
-        {
-          column.tdAttrs = '';
-        }
+            Object.keys(column[prop]).forEach(function(k)
+            {
+              var v = column[prop][k];
+
+              if (k.charAt(0) === '!')
+              {
+                v = _.escape(v);
+                k = k.substring(1);
+              }
+
+              thAttrs.push(k + '="' + v + '"');
+            });
+
+            column[prop] = thAttrs.join(' ');
+          }
+
+          if (!column[prop])
+          {
+            column[prop] = '';
+          }
+        });
 
         if (column.className || column.thClassName || column.tdClassName)
         {

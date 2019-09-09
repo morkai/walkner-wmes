@@ -44,10 +44,9 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         type: 'lock',
         prodLine: this.model.prodLine.id
       };

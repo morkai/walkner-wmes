@@ -5,7 +5,10 @@
   "filter:placeholder:type": "Dowolny typ",
   "filter:placeholder:prodLine": "Dowolna linia produkcyjna",
 
-  "PROPERTY:prodLine": "Linia produkcyjna",
+  "list:station": "St.",
+
+  "PROPERTY:prodLine": "Linia",
+  "PROPERTY:station": "Stanowisko",
   "PROPERTY:type": "Typ",
   "PROPERTY:createdAt": "Czas operacji",
   "PROPERTY:creator": "Wykonawca operacji",

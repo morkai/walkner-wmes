@@ -198,6 +198,8 @@ define([
       prodLogEntry.prodShiftOrder = t('prodLogEntries', 'noData:prodShiftOrder');
     }
 
+    prodLogEntry.station = prodLogEntry.station ? prodLogEntry.station.toString() : '';
+
     return prodLogEntry;
   };
 });

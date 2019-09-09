@@ -21,10 +21,6 @@ define([
 
     nlsDomain: 'prodLogEntries',
 
-    defaults: {
-      type: null
-    },
-
     serialize: function()
     {
       return decorateProdLogEntry(this);

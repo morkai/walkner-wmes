@@ -32,6 +32,7 @@
     "unlockDialog:login": "Login",
     "unlockDialog:password": "Password",
     "unlockDialog:prodLine": "Production line",
+    "unlockDialog:station": "Workstation number",
     "unlockDialog:unlock": "Activate production line",
     "unlockDialog:lock": "Deactivate production line",
     "unlockDialog:error:UNLOCK_FAILURE": "Production line activation failed.",

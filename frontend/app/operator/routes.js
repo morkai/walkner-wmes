@@ -23,8 +23,13 @@ define([
 
   router.map('/', function()
   {
+    var prodLine = localStorage.getItem(ProdShift.LINE_STORAGE_KEY);
+    var attrs = orgUnits.getAllForProdLine(prodLine);
+
+    attrs.station = +localStorage.getItem(ProdShift.STATION_STORAGE_KEY) || 0;
+
     viewport.showPage(new ProductionPage({
-      model: new ProdShift(orgUnits.getAllForProdLine(localStorage.getItem(ProdShift.LINE_STORAGE_KEY)), {
+      model: new ProdShift(attrs, {
         production: true
       })
     }));

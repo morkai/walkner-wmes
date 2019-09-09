@@ -15,6 +15,8 @@ define([
 
   return EditFormPage.extend({
 
+    pageClassName: 'page-max-flex',
+
     FormView: UserFormView,
 
     breadcrumbs: function()
@@ -26,10 +28,10 @@ define([
 
       return [
         {
-          label: t.bound('users', 'BREADCRUMBS:myAccount'),
+          label: this.t('BREADCRUMBS:myAccount'),
           href: this.model.genClientUrl()
         },
-        t.bound('users', 'BREADCRUMBS:editForm')
+        this.t('core', 'BREADCRUMBS:editForm')
       ];
     }
 

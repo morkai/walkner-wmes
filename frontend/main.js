@@ -92,6 +92,11 @@
       headers['X-WMES-LINE'] = window.WMES_LINE_ID;
     }
 
+    if (window.WMES_STATION)
+    {
+      headers['X-WMES-STATION'] = window.WMES_STATION;
+    }
+
     return headers;
   }
 

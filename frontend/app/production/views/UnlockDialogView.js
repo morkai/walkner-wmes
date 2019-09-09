@@ -42,7 +42,8 @@ define([
         submitEl.disabled = true;
 
         var req = {
-          prodLine: this.model.get('prodLine') || this.$id('prodLine').val(),
+          prodLine: this.$id('prodLine').val(),
+          station: +this.$id('station').val(),
           login: this.$id('login').val(),
           password: this.$id('password').val()
         };
@@ -51,12 +52,11 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         type: 'unlock',
-        prodLine: this.model.get('prodLine')
+        prodLine: ''
       };
     },
 
@@ -142,9 +142,9 @@ define([
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t.has('production', 'unlockDialog:error:' + err.message)
-            ? t('production', 'unlockDialog:error:' + err.message)
-            : t('production', 'unlockDialog:error:UNLOCK_FAILURE')
+          text: this.t.has('unlockDialog:error:' + err.message)
+            ? this.t('unlockDialog:error:' + err.message)
+            : this.t('unlockDialog:error:UNLOCK_FAILURE')
         });
 
         return this.$id('submit').prop('disabled', false);
@@ -188,6 +188,8 @@ define([
 
         remoteData = _.assign(remoteData, orgUnits.getAllForProdLine(prodLine));
       }
+
+      remoteData.station = res.station >= 1 && res.station <= 7 ? res.station : 0;
 
       this.model.setSecretKey(res.secretKey, remoteData, true);
       this.closeDialog();

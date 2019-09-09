@@ -181,6 +181,7 @@ define([
       prodFlow: prodShift.get('prodFlow'),
       workCenter: prodShift.get('workCenter'),
       prodLine: prodShift.prodLine.id,
+      station: prodShift.prodLine.station,
       prodShift: prodShift.id,
       prodShiftOrder: prodShift.prodShiftOrder.id || null
     };

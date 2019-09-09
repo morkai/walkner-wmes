@@ -1,21 +1,25 @@
 <form class="production-<%- type %>Dialog" autocomplete="off">
-  <p class="message message-inline message-info"><%- t('production', 'unlockDialog:message:' + type, {prodLine: prodLine || ''}) %></p>
-  <% if (!prodLine) { %>
+  <p class="message message-inline message-info"><%- t('unlockDialog:message:' + type, {prodLine: prodLine}) %></p>
+  <% if (type === 'unlock') { %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-prodLine"><%- t('production', 'unlockDialog:prodLine') %></label>
+    <label for="<%- idPrefix %>-prodLine" class="control-label is-required"><%- t('unlockDialog:prodLine') %></label>
     <input id="<%- idPrefix %>-prodLine" class="form-control" type="text" autocomplete="new-password" required>
+  </div>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-station" class="control-label is-required"><%- t('unlockDialog:station') %></label>
+    <input id="<%- idPrefix %>-station" class="form-control" type="number" min="1" max="7" required>
   </div>
   <% } %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-login"><%- t('production', 'unlockDialog:login') %></label>
-    <input id="<%- idPrefix %>-login" class="form-control" type="text" autocomplete="new-password" <%- prodLine ? 'autofocus' : '' %> required>
+    <label for="<%- idPrefix %>-login" class="control-label is-required"><%- t('unlockDialog:login') %></label>
+    <input id="<%- idPrefix %>-login" class="form-control" type="text" autocomplete="new-password" required>
   </div>
   <div class="form-group">
-    <label for="<%- idPrefix %>-password"><%- t('production', 'unlockDialog:password') %></label>
-    <input id="<%- idPrefix %>-password" class="form-control" type="password" required>
+    <label for="<%- idPrefix %>-password" class="control-label is-required"><%- t('unlockDialog:password') %></label>
+    <input id="<%- idPrefix %>-password" class="form-control" type="password" autocomplete="new-password" required>
   </div>
   <div class="form-actions">
-    <button id="<%- idPrefix %>-submit" class="btn btn-lg btn-primary" type="submit"><%- t('production', 'unlockDialog:' + type) %></button>
+    <button id="<%- idPrefix %>-submit" class="btn btn-lg btn-primary" type="submit"><%- t('unlockDialog:' + type) %></button>
     <button class="btn btn-lg btn-link cancel" type="button"><%- t('core', 'ACTION_FORM:BUTTON:cancel') %></button>
   </div>
 </form>

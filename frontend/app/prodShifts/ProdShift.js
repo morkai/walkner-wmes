@@ -58,6 +58,7 @@ define([
   'use strict';
 
   var LINE_STORAGE_KEY = 'PRODUCTION:LINE';
+  var STATION_STORAGE_KEY = 'PRODUCTION:STATION';
 
   return Model.extend({
 
@@ -109,7 +110,10 @@ define([
         return;
       }
 
+      this.nlsDomain = 'production';
+
       window.WMES_LINE_ID = this.get('prodLine');
+      window.WMES_STATION = this.get('station') || 0;
 
       this.prodLine = prodLines.get(window.WMES_LINE_ID);
 
@@ -119,6 +123,8 @@ define([
           _id: null
         });
       }
+
+      this.prodLine.station = window.WMES_STATION;
 
       this.shiftChangeTimer = null;
 
@@ -286,6 +292,11 @@ define([
         }
 
         this.set(data);
+      }
+
+      if (remoteData)
+      {
+        this.saveLocalData();
       }
 
       if (this.prodDowntimes.length)
@@ -1264,6 +1275,7 @@ define([
         this.stopShiftChangeMonitor();
         this.set({
           prodLine: null,
+          station: null,
           date: null,
           shift: null,
           state: null,
@@ -1285,6 +1297,8 @@ define([
         {
           localStorage.setItem(LINE_STORAGE_KEY, remoteData.prodLine);
         }
+
+        localStorage.setItem(STATION_STORAGE_KEY, remoteData.station || 0);
 
         if (!reload)
         {
@@ -1512,6 +1526,7 @@ define([
     },
 
     LINE_STORAGE_KEY: LINE_STORAGE_KEY,
+    STATION_STORAGE_KEY: STATION_STORAGE_KEY,
 
     parse: function(data)
     {

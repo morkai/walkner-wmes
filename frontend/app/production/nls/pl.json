@@ -31,6 +31,7 @@
   "unlockDialog:login": "Login",
   "unlockDialog:password": "Hasło",
   "unlockDialog:prodLine": "Linia produkcyjna",
+  "unlockDialog:station": "Numer stanowiska pracy",
   "unlockDialog:unlock": "Aktywuj linię produkcyjną",
   "unlockDialog:lock": "Dezaktywuj linię produkcyjną",
   "unlockDialog:error:UNLOCK_FAILURE": "Nie udało się aktywować linii produkcyjnej.",
