@@ -200,10 +200,9 @@ define([
       prodLog.disable();
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         locked: this.model.isLocked(),
         state: this.model.get('state'),
         mechOrder: !!this.model.prodShiftOrder.get('mechOrder'),
@@ -258,7 +257,11 @@ define([
       var model = page.model;
 
       page.vkbView = new VkbView();
-      page.controlsView = new ProductionControlsView({model: model});
+      page.controlsView = new ProductionControlsView({
+        model: model,
+        embedded: IS_EMBEDDED,
+        vkb: page.vkbView
+      });
       page.headerView = new ProductionHeaderView({
         model: model,
         embedded: IS_EMBEDDED,
@@ -456,6 +459,11 @@ define([
       }
 
       embedded.render(this);
+
+      if (this.model.isLocked())
+      {
+        this.controlsView.unlock();
+      }
     },
 
     onBeforeUnload: function()

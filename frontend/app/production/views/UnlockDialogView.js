@@ -32,6 +32,14 @@ define([
       {
         e.preventDefault();
 
+        var line = this.$id('list').find('.active').text().trim();
+        var station = this.$('input[name="station"]:checked').val();
+
+        if (!line || !station)
+        {
+          return;
+        }
+
         var submitEl = this.$id('submit')[0];
 
         if (submitEl.disabled)
@@ -42,13 +50,40 @@ define([
         submitEl.disabled = true;
 
         var req = {
-          prodLine: this.$id('prodLine').val(),
-          station: +this.$id('station').val(),
+          prodLine: line,
+          station: +station,
           login: this.$id('login').val(),
           password: this.$id('password').val()
         };
 
         this.socket.emit('production.unlock', req, this.handleUnlockResponse.bind(this));
+      },
+      'click #-list .btn': function(e)
+      {
+        this.$id('list').find('.active').removeClass('active');
+        this.$(e.currentTarget).addClass('active');
+      },
+      'click .btn': function()
+      {
+        if (this.options.vkb)
+        {
+          this.options.vkb.hide();
+        }
+      },
+      'focus [data-vkb]': function(e)
+      {
+        if (this.options.embedded && this.options.vkb)
+        {
+          this.options.vkb.show(e.target);
+        }
+      }
+    },
+
+    destroy: function()
+    {
+      if (this.options.vkb)
+      {
+        this.options.vkb.hide();
       }
     },
 
@@ -62,64 +97,56 @@ define([
 
     afterRender: function()
     {
-      if (!this.model.get('prodLine'))
+      this.loadLines();
+
+      this.$('input[name="station"][value="1"]').click();
+    },
+
+    selectActiveLine: function()
+    {
+      var $active = this.$id('list').find('.active');
+
+      if ($active.length)
       {
-        this.setUpProdLineSelect2();
+        $active[0].scrollIntoView({block: 'center'});
       }
     },
 
-    setUpProdLineSelect2: function()
+    loadLines: function()
     {
       var view = this;
-      var prodLineCollection = new ProdLineCollection(null, {
-        rqlQuery: 'deactivatedAt=null&sort(_id)'
-      });
 
-      prodLineCollection.once('reset', function()
+      view.$id('submit').prop('disabled', true);
+
+      var req = view.ajax({url: '/production/getActiveLines?subdivisionType=assembly'});
+
+      req.fail(function()
       {
-        var $prodLine = view.$id('prodLine');
-
-        if (!$prodLine.length)
-        {
-          return;
-        }
-
-        $prodLine.parent().addClass('has-required-select2');
-        $prodLine.removeClass('form-control').select2({
-          data: prodLineCollection.map(function(prodLine)
-          {
-            return {
-              id: prodLine.id,
-              text: prodLine.id,
-              description: prodLine.get('description')
-            };
-          }),
-          matcher: function(term, text, option)
-          {
-            term = term.toUpperCase();
-
-            return text.toUpperCase().indexOf(term) !== -1 || option.description.toUpperCase().indexOf(term) !== -1;
-          },
-          formatResult: function(result)
-          {
-            var html = '<div class="production-select2">';
-            html += '<p><strong>' + _.escape(result.id) + '</strong><br>';
-            html += _.escape(result.description) + '</p>';
-            html += '</div>';
-
-            return html;
-          }
-        }).select2('focus');
+        view.$('.fa-spin').removeClass('fa-spin');
       });
 
-      this.promised(prodLineCollection.fetch({reset: true}));
+      req.done(function(res)
+      {
+        var html = '';
+
+        _.forEach(res.collection, function(line)
+        {
+          html += '<button type="button" class="btn btn-lg btn-default">' + _.escape(line._id) + '</button>';
+        });
+
+        view.$id('list').html(html);
+        view.$id('submit').prop('disabled', false);
+
+        if (view.options.vkb)
+        {
+          view.options.vkb.reposition();
+        }
+      });
     },
 
     onDialogShown: function(viewport)
     {
       this.closeDialog = viewport.closeDialog.bind(viewport);
-
-      this.$id('prodLine').select2('focus');
     },
 
     closeDialog: function() {},

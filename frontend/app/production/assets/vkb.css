@@ -44,3 +44,7 @@
   opacity: 1;
   background: #eee;
 }
+.production-vkb-row > .btn[data-key="EXTENDED"] {
+  font-family: inherit;
+  font-size: 28px;
+}

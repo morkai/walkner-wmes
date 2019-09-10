@@ -20,14 +20,16 @@ define([
     dialogClassName: 'production-modal',
 
     events: {
-      'submit': function()
+      'submit': function(e)
       {
+        e.preventDefault();
+
         var line = this.$id('list').find('.active').text().trim();
         var station = this.$('input[name="station"]:checked').val();
 
         if (!line || !station)
         {
-          return false;
+          return;
         }
 
         this.$id('submit').prop('disabled', true);
@@ -36,8 +38,6 @@ define([
         localStorage.setItem('HEFF:STATION', station);
 
         setTimeout(function() { window.location.reload(); }, 1);
-
-        return false;
       },
       'click #-list .btn': function(e)
       {
@@ -74,7 +74,7 @@ define([
 
       view.$id('submit').prop('disabled', true);
 
-      var req = view.ajax({url: '/prodLines?select(_id)&deactivatedAt=null'});
+      var req = view.ajax({url: '/production/getActiveLines?subdivisionType=assembly'});
 
       req.fail(function()
       {
@@ -84,11 +84,6 @@ define([
       req.done(function(res)
       {
         var html = '';
-
-        res.collection.sort(function(a, b)
-        {
-          return a._id.localeCompare(b._id, undefined, {numeric: true, ignorePunctuation: true});
-        });
 
         _.forEach(res.collection, function(line)
         {

@@ -41,6 +41,21 @@ define([
         };
 
         this.socket.emit('production.lock', req, this.handleLockResponse.bind(this));
+      },
+      'focus [data-vkb]': function(e)
+      {
+        if (this.options.embedded && this.options.vkb)
+        {
+          this.options.vkb.show(e.target);
+        }
+      }
+    },
+
+    destroy: function()
+    {
+      if (this.options.vkb)
+      {
+        this.options.vkb.hide();
       }
     },
 
@@ -55,6 +70,8 @@ define([
     onDialogShown: function(viewport)
     {
       this.closeDialog = viewport.closeDialog.bind(viewport);
+
+      this.$id('login').focus();
     },
 
     closeDialog: function() {},
@@ -77,9 +94,9 @@ define([
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t.has('production', 'unlockDialog:error:' + err.message)
-            ? t('production', 'unlockDialog:error:' + err.message)
-            : t('production', 'unlockDialog:error:LOCK_FAILURE')
+          text: this.t.has('unlockDialog:error:' + err.message)
+            ? this.t('unlockDialog:error:' + err.message)
+            : this.t('unlockDialog:error:LOCK_FAILURE')
         });
 
         return this.$id('submit').prop('disabled', false);

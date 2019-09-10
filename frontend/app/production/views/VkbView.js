@@ -13,6 +13,13 @@ define([
 ) {
   'use strict';
 
+  var LABELS = {
+    BACKSPACE: '<i class="fa fa-long-arrow-left"></i>',
+    LEFT: '<',
+    RIGHT: '>',
+    CLEAR: '<i class="fa fa-eraser"></i>'
+  };
+
   return View.extend({
 
     template: template,
@@ -24,7 +31,10 @@ define([
       },
       'click .btn[data-key]': function(e)
       {
-        this.pressKey(e.currentTarget.dataset.key);
+        var key = e.currentTarget.dataset.key;
+        var extendedKey = e.currentTarget.dataset.extendedKey;
+
+        this.pressKey(extendedKey && this.extended && this.mode.extended ? extendedKey : key);
       }
     },
 
@@ -34,11 +44,14 @@ define([
 
       this.onValueChange = null;
 
+      this.extended = false;
+
       this.mode = {
         alpha: false,
         numeric: true,
         negative: false,
-        multiline: false
+        multiline: false,
+        extended: false
       };
 
       $(window).on('resize.' + this.idPrefix, _.debounce(this.reposition.bind(this), 30));
@@ -52,11 +65,11 @@ define([
       this.onValueChange = null;
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
-        mode: this.mode
+        mode: this.mode,
+        extended: this.extended
       };
     },
 
@@ -130,6 +143,7 @@ define([
       view.fieldEl = fieldEl;
       view.onValueChange = onValueChange;
 
+      view.updateExtended();
       view.reposition();
 
       return true;
@@ -183,6 +197,11 @@ define([
         return;
       }
 
+      if (key === 'EXTENDED')
+      {
+        return this.toggleExtended();
+      }
+
       var value = fieldEl.value;
       var start = fieldEl.selectionStart;
       var end = fieldEl.selectionEnd;
@@ -230,6 +249,29 @@ define([
       {
         this.onValueChange(fieldEl);
       }
+    },
+
+    toggleExtended: function()
+    {
+      this.extended = !this.extended;
+
+      this.updateExtended();
+    },
+
+    updateExtended: function()
+    {
+      var extended = this.mode.extended && this.extended;
+
+      this.$el.toggleClass('is-vkb-extended', extended);
+
+      this.$('.btn[data-key="EXTENDED"]').toggleClass('active', extended);
+
+      this.$('.btn[data-extended-key]').each(function()
+      {
+        var label = this.dataset[extended ? 'extendedKey' : 'key'];
+
+        this.innerHTML = LABELS[label] || label;
+      });
     }
 
   });

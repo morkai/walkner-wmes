@@ -160,28 +160,34 @@ define([
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: t('production', 'controls:msg:popup')
+          text: this.t('controls:msg:popup')
         });
       }
     },
 
     unlock: function()
     {
-      if (!this.socket.isConnected())
-      {
-        return viewport.msg.show({
-          type: 'warning',
-          time: 2000,
-          text: t('production', 'controls:msg:sync:noConnection')
-        });
-      }
-
       if (!this.model.isLocked())
       {
         return;
       }
 
-      viewport.showDialog(new UnlockDialogView({model: this.model}), t('production', 'unlockDialog:title:unlock'));
+      if (!this.socket.isConnected())
+      {
+        return viewport.msg.show({
+          type: 'warning',
+          time: 2000,
+          text: this.t('controls:msg:sync:noConnection')
+        });
+      }
+
+      var dialogView = new UnlockDialogView({
+        model: this.model,
+        embedded: this.options.embedded,
+        vkb: this.options.vkb
+      });
+
+      viewport.showDialog(dialogView, this.t('unlockDialog:title:unlock'));
     },
 
     lock: function()
@@ -191,7 +197,7 @@ define([
         return viewport.msg.show({
           type: 'warning',
           time: 2000,
-          text: t('production', 'controls:msg:sync:noConnection')
+          text: this.t('controls:msg:sync:noConnection')
         });
       }
 
@@ -200,7 +206,13 @@ define([
         return;
       }
 
-      viewport.showDialog(new LockDialogView({model: this.model}), t('production', 'unlockDialog:title:lock'));
+      var dialogView = new LockDialogView({
+        model: this.model,
+        embedded: this.options.embedded,
+        vkb: this.options.vkb
+      });
+
+      viewport.showDialog(dialogView, this.t('unlockDialog:title:lock'));
     },
 
     showMor: function()
