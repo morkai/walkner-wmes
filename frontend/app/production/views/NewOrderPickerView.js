@@ -124,7 +124,7 @@ define([
 
           if (!nc12.length || !this.model.checkSpigot(null, nc12))
           {
-            $nc12[0].setCustomValidity(t('production', 'newOrderPicker:spigot:invalid'));
+            $nc12[0].setCustomValidity(this.t('newOrderPicker:spigot:invalid'));
 
             this.timers.submit = setTimeout(
               function()
@@ -201,7 +201,7 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var shift = this.model;
       var order = shift.prodShiftOrder;
@@ -211,7 +211,6 @@ define([
       var submitLabel = replacingOrder ? ':replacing' : correctingOrder ? ':correcting' : '';
 
       return {
-        idPrefix: this.idPrefix,
         embedded: this.options.embedded,
         spigot: shift.settings.getValue('spigotFinish') && !!order.get('spigot'),
         offline: !this.socket.isConnected(),
@@ -224,12 +223,12 @@ define([
         maxWorkerCount: order.getMaxWorkerCount(),
         orderPlaceholder: this.options.embedded
           ? (orderIdType === 'no' ? '000000000' : '000000000000')
-          : t('production', 'newOrderPicker:order:placeholder:' + orderIdType),
+          : this.t('newOrderPicker:order:placeholder:' + orderIdType),
         orderMaxLength: orderIdType === 'no' ? 9 : 12,
         operationPlaceholder: this.options.embedded
           ? '0000'
-          : t('production', 'newOrderPicker:operation:placeholder'),
-        submitLabel: t('production', 'newOrderPicker:submit' + submitLabel)
+          : this.t('newOrderPicker:operation:placeholder'),
+        submitLabel: this.t('newOrderPicker:submit' + submitLabel)
       };
     },
 
@@ -478,7 +477,7 @@ define([
         return viewport.msg.show({
           type: 'error',
           time: 2000,
-          text: t('production', 'newOrderPicker:msg:emptyOrder')
+          text: this.t('newOrderPicker:msg:emptyOrder')
         });
       }
 
@@ -505,7 +504,7 @@ define([
         return viewport.msg.show({
           type: 'error',
           time: 2000,
-          text: t('production', 'newOrderPicker:msg:emptyOrder')
+          text: this.t('newOrderPicker:msg:emptyOrder')
         });
       }
 
@@ -518,7 +517,7 @@ define([
         return viewport.msg.show({
           type: 'error',
           time: 2000,
-          text: t('production', 'newOrderPicker:msg:emptyOperation')
+          text: this.t('newOrderPicker:msg:emptyOperation')
         });
       }
 
@@ -733,7 +732,7 @@ define([
       {
         done();
 
-        return '<p>' + t('production', 'newOrderPicker:order:tooShort') + '</p>';
+        return '<p>' + view.t('newOrderPicker:order:tooShort') + '</p>';
       }
 
       if (view.searchReq)
@@ -741,7 +740,7 @@ define([
         view.searchReq.abort();
       }
 
-      view.searchReq = this.ajax({
+      view.searchReq = view.ajax({
         url: '/production/orders?' + this.model.getOrderIdType() + '=' + phrase
       });
 
@@ -762,7 +761,7 @@ define([
         }
         else
         {
-          html = '<p>' + t('production', 'newOrderPicker:order:notFound') + '</p>';
+          html = '<p>' + view.t('newOrderPicker:order:notFound') + '</p>';
         }
 
         var $active = view.$id('operationGroup').find('div').html(html).find('.active');
@@ -810,7 +809,7 @@ define([
           + '</button>';
       });
 
-      return html.length ? html : ('<p>' + t('production', 'newOrderPicker:order:notFound') + '</p>');
+      return html.length ? html : ('<p>' + this.t('newOrderPicker:order:notFound') + '</p>');
     },
 
     updateNewWorkerCount: function(newWorkerCount)
@@ -859,11 +858,11 @@ define([
 
       if (val < min)
       {
-        err = t('production', 'error:min', {min: min});
+        err = this.t('error:min', {min: min});
       }
       else if (val > max)
       {
-        err = t('production', 'error:max', {max: max});
+        err = this.t('error:max', {max: max});
       }
 
       el.setCustomValidity(err);
