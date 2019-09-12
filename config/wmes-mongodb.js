@@ -18,7 +18,8 @@ module.exports = {
     promiseLibrary: global.Promise,
     useNewUrlParser: true,
     useCreateIndex: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useUnifiedTopology: true
   }
 };
 
