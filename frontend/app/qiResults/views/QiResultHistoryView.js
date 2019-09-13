@@ -166,6 +166,7 @@ define([
         case 'inspector':
         case 'nokOwner':
         case 'leader':
+        case 'coach':
           return renderUserInfo({userInfo: value});
 
         case 'kind':

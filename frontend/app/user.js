@@ -40,6 +40,8 @@ function(
 
   delete window.GUEST_USER;
 
+  user.idProperty = 'id';
+
   user.data = guestUser;
 
   user.lang = window.APP_LOCALE || window.appLocale || 'pl';
@@ -152,12 +154,14 @@ function(
    */
   user.getInfo = function()
   {
-    return {
-      id: user.data._id,
-      ip: user.data.ip || user.data.ipAddress || '0.0.0.0',
-      cname: window.COMPUTERNAME,
-      label: user.getLabel()
-    };
+    var userInfo = {};
+
+    userInfo[user.idProperty] = user.data._id;
+    userInfo.ip = user.data.ip || user.data.ipAddress || '0.0.0.0';
+    userInfo.cname = window.COMPUTERNAME;
+    userInfo.label = user.getLabel();
+
+    return userInfo;
   };
 
   user.isAllowedTo = function(privilege)

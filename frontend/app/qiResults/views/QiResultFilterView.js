@@ -36,6 +36,7 @@ define([
     'inspector',
     'nokOwner',
     'leader',
+    'coach',
     'limit'
   ];
   var FILTER_MAP = {
@@ -76,25 +77,6 @@ define([
 
     }, FilterView.prototype.events),
 
-    defaultFormData: function()
-    {
-      return {
-        result: '',
-        order: '',
-        serialNumbers: '',
-        productFamily: '',
-        division: '',
-        line: '',
-        kind: '',
-        errorCategory: '',
-        faultCode: '',
-        inspector: '',
-        nokOwner: '',
-        leader: '',
-        status: ''
-      };
-    },
-
     termToForm: {
       'inspectedAt': dateTimeRange.rqlToForm,
       'ok': function(propertyName, term, formData)
@@ -121,6 +103,7 @@ define([
       'serialNumbers': 'division',
       'nokOwner.id': 'inspector.id',
       'leader.id': 'inspector.id',
+      'coach.id': 'inspector.id',
       'line': 'inspector.id',
       'kind': 'division',
       'errorCategory': 'division',
@@ -130,18 +113,16 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var result = this.getButtonGroupValue('result');
-      var order = this.$id('order').val().replace(/[^0-9A-Za-z]+/g, '').toUpperCase();
-      var serialNumbers = this.$id('serialNumbers').val().toUpperCase();
-      var inspector = this.$id('inspector').val();
-      var nokOwner = this.$id('nokOwner').val();
-      var leader = this.$id('leader').val();
-      var productFamily = this.$id('productFamily').val();
-      var line = this.$id('line').val();
-      var faultCode = this.$id('faultCode').val();
-      var status = this.$id('status').val();
+      var view = this;
+      var result = view.getButtonGroupValue('result');
+      var order = view.$id('order').val().replace(/[^0-9A-Za-z]+/g, '').toUpperCase();
+      var serialNumbers = view.$id('serialNumbers').val().toUpperCase();
+      var productFamily = view.$id('productFamily').val();
+      var line = view.$id('line').val();
+      var faultCode = view.$id('faultCode').val();
+      var status = view.$id('status').val();
 
-      dateTimeRange.formToRql(this, selector);
+      dateTimeRange.formToRql(view, selector);
 
       if (result === 'ok')
       {
@@ -170,41 +151,22 @@ define([
         selector.push({name: 'eq', args: ['serialNumbers', serialNumbers]});
       }
 
-      if (inspector.length)
+      ['inspector', 'nokOwner', 'leader', 'coach'].forEach(function(prop)
       {
-        if (inspector.indexOf(',') === -1)
-        {
-          selector.push({name: 'eq', args: ['inspector.id', inspector]});
-        }
-        else
-        {
-          selector.push({name: 'in', args: ['inspector.id', inspector.split(',')]});
-        }
-      }
+        var value = view.$id(prop).val();
 
-      if (nokOwner.length)
-      {
-        if (nokOwner.indexOf(',') === -1)
+        if (value.length)
         {
-          selector.push({name: 'eq', args: ['nokOwner.id', nokOwner]});
+          if (value.indexOf(',') === -1)
+          {
+            selector.push({name: 'eq', args: [prop + '.id', value]});
+          }
+          else
+          {
+            selector.push({name: 'in', args: [prop + '.id', value.split(',')]});
+          }
         }
-        else
-        {
-          selector.push({name: 'in', args: ['nokOwner.id', nokOwner.split(',')]});
-        }
-      }
-
-      if (leader.length)
-      {
-        if (leader.indexOf(',') === -1)
-        {
-          selector.push({name: 'eq', args: ['leader.id', leader]});
-        }
-        else
-        {
-          selector.push({name: 'in', args: ['leader.id', leader.split(',')]});
-        }
-      }
+      });
 
       if (line.length)
       {
@@ -249,13 +211,13 @@ define([
 
       ['division', 'kind', 'errorCategory'].forEach(function(property)
       {
-        var value = this.$id(property).val();
+        var value = view.$id(property).val();
 
         if (value)
         {
           selector.push({name: 'eq', args: [property, value]});
         }
-      }, this);
+      });
     },
 
     changeFilter: function()
@@ -367,6 +329,15 @@ define([
         data: qiDictionaries.leaders.map(idAndLabel)
       });
 
+      setUpUserSelect2(this.$id('coach'), {
+        view: this,
+        width: '230px',
+        multiple: true,
+        allowClear: true,
+        placeholder: ' ',
+        noPersonnelId: true
+      });
+
       this.toggleFilters();
     },
 
@@ -389,7 +360,7 @@ define([
         return +value !== 20;
       }
 
-      return value.length > 0;
+      return !!value && value.length > 0;
     },
 
     showFilter: function(filter)

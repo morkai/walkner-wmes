@@ -244,6 +244,35 @@ define([
   {
     return transliterate(value.toUpperCase()).replace(/[^A-Z0-9]+/g, '');
   };
+  setUpUserSelect2.getUserInfo = function($input)
+  {
+    var data = $input.select2('data');
+
+    if (Array.isArray(data))
+    {
+      return data.map(function(item)
+      {
+        var userInfo = {};
+
+        userInfo[user.idProperty] = item.id;
+        userInfo.label = item.text;
+
+        return userInfo;
+      });
+    }
+
+    if (data)
+    {
+      var userInfo = {};
+
+      userInfo[user.idProperty] = data.id;
+      userInfo.label = data.text;
+
+      return userInfo;
+    }
+
+    return null;
+  };
 
   return setUpUserSelect2;
 });

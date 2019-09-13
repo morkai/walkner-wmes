@@ -12,9 +12,9 @@
   <div class="userInfoPopover-position"><%= userInfo.company %></div>
   <% } %>
   <% if (userInfo.email) { %>
-  <div class="userInfoPopover-contact"><i class="fa fa-envelope"></i> <a href="mailto:<%= userInfo.email %>" target="_blank"><%= userInfo.email %></a></div>
+  <div class="userInfoPopover-contact"><i class="fa fa-envelope"></i><a href="mailto:<%= userInfo.email %>" target="_blank"><%= userInfo.email %></a></div>
   <% } %>
   <% if (userInfo.mobile) { %>
-  <div class="userInfoPopover-contact"><i class="fa fa-phone"></i> <a href="tel:<%= userInfo.mobile.number %>" target="_blank"><%= userInfo.mobile.label %></a></div>
+  <div class="userInfoPopover-contact"><i class="fa fa-phone"></i><a href="tel:<%= userInfo.mobile.number %>" target="_blank"><%= userInfo.mobile.label %></a></div>
   <% } %>
 </div>

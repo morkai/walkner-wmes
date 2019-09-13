@@ -307,6 +307,7 @@ define([
       formData.inspector = formData.inspector ? formData.inspector.id : '';
       formData.nokOwner = formData.nokOwner ? formData.nokOwner.id : '';
       formData.leader = formData.leader ? formData.leader.id : '';
+      formData.coach = formData.coach ? formData.coach.id : '';
       formData.inspectedAt = time.format(formData.inspectedAt, 'YYYY-MM-DD');
       formData.serialNumbers = formData.serialNumbers ? formData.serialNumbers.join(', ') : '';
 
@@ -355,6 +356,8 @@ define([
       {
         formData.standard = null;
       }
+
+      formData.coach = setUpUserSelect2.getUserInfo(view.$id('coach'));
 
       ['inspector', 'nokOwner', 'leader'].forEach(function(prop)
       {
@@ -455,6 +458,7 @@ define([
       this.setUpInspectorSelect2();
       this.setUpMasterSelect2();
       this.setUpLeaderSelect2();
+      this.setUpCoachSelect2();
       buttonGroup.toggle(this.$id('source'));
       buttonGroup.toggle(this.$id('result'));
       this.toggleRoleFields();
@@ -537,6 +541,22 @@ define([
         placeholder: ' ',
         allowClear: true
       });
+    },
+
+    setUpCoachSelect2: function()
+    {
+      var $coach = this.$id('coach');
+      var coach = this.model.get('coach');
+
+      setUpUserSelect2($coach, {noPersonnelId: true});
+
+      if (coach)
+      {
+        $coach.select2('data', {
+          id: coach.id,
+          text: coach.label
+        });
+      }
     },
 
     parseSerialNumbers: function(sns)

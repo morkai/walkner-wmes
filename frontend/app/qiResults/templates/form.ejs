@@ -100,9 +100,13 @@
           <label for="<%- idPrefix %>-inspector" class="control-label is-required"><%- helpers.t('PROPERTY:inspector') %></label>
           <select id="<%- idPrefix %>-inspector" name="inspector" class="form-control" required data-role="inspector">
             <% inspectors.forEach(function(inspector) { %>
-            <option value="<%- inspector.id %>"><%= inspector.text %></option>
+              <option value="<%- inspector.id %>"><%= inspector.text %></option>
             <% }) %>
           </select>
+        </div>
+        <div class="col-lg-4 form-group">
+          <label for="<%- idPrefix %>-coach" class="control-label"><%- helpers.t('PROPERTY:coach') %></label>
+          <input id="<%- idPrefix %>-coach" name="coach" type="text" data-role="inspector">
         </div>
       </div>
       <div class="row">
