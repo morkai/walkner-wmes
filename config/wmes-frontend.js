@@ -105,6 +105,7 @@ exports.modules = [
   'wmes-luca-frontend',
   'wmes-drilling',
   'wmes-wiring',
+  'wmes-ct-frontend',
   {id: 'directoryWatcher', name: 'directoryWatcher:opinionSurveys'},
   'mail/sender',
   'sms/sender',
@@ -122,6 +123,7 @@ exports.modules = [
   {id: 'messenger/client', name: 'messenger/client:wmes-planning'},
   {id: 'messenger/client', name: 'messenger/client:wmes-luma2'},
   {id: 'messenger/client', name: 'messenger/client:wmes-luca'},
+  {id: 'messenger/client', name: 'messenger/client:wmes-ct'},
   'httpServer',
   'sio'
 ];
@@ -543,6 +545,15 @@ exports['messenger/client:wmes-luca'] = Object.assign({}, ports['wmes-luca'], {
   ]
 });
 
+exports['messenger/client:wmes-ct'] = Object.assign({}, ports['wmes-ct'], {
+  responseTimeout: 5000,
+  broadcastTopics: [
+    'ct.lines.*',
+    'ct.downtimeReasonUpdated',
+    'ct.todos.saved'
+  ]
+});
+
 exports.reports = {
   messengerClientId: 'messenger/client:wmes-reports-1',
   messengerType: 'push',
@@ -700,4 +711,8 @@ exports['wmes-fap'] = {
 
 exports['wmes-luca-frontend'] = {
   messengerClientId: 'messenger/client:wmes-luca'
+};
+
+exports['wmes-ct-frontend'] = {
+  messengerClientId: 'messenger/client:wmes-ct'
 };

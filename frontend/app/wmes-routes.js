@@ -108,7 +108,8 @@ define([
   './wmes-snf-tests/routes',
   './wmes-luca-events/routes',
   './wmes-drilling/routes',
-  './wmes-wiring/routes'
+  './wmes-wiring/routes',
+  './wmes-ct-pces/routes'
 ], function()
 {
   'use strict';

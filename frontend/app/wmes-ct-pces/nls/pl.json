@@ -1,0 +1,18 @@
+{
+  "BREADCRUMBS:base": "Czas cyklu",
+  "BREADCRUMBS:browse": "Sztuki",
+
+  "PROPERTY:line": "Linia",
+  "PROPERTY:station": "Stanowisko",
+  "PROPERTY:station:short": "St.",
+  "PROPERTY:cart": "Wózek",
+  "PROPERTY:order": "Zlecenie",
+  "PROPERTY:pce": "Sztuka",
+  "PROPERTY:startedAt": "Czas rozpoczęcia",
+  "PROPERTY:finishedAt": "Czas zakończenia",
+  "PROPERTY:duration": "Czas trwania",
+  "PROPERTY:durations:total": "Całkowity czas trwania",
+  "PROPERTY:durations:work": "Czas pracy",
+  "PROPERTY:durations:downtime": "Czas wszystkich przestojów",
+  "PROPERTY:durations:scheduled": "Czas planowanych przestojów"
+}

@@ -176,5 +176,11 @@ module.exports = {
     pubPort: nextPort++,
     repHost: '127.0.0.1',
     repPort: nextPort++
+  },
+  'wmes-ct': {
+    pubHost: '127.0.0.1',
+    pubPort: nextPort++,
+    repHost: '127.0.0.1',
+    repPort: nextPort++
   }
 };
