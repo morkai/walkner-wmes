@@ -180,19 +180,25 @@ define([
 
       $('#snMessage-text').html(typeof message === 'function' ? message() : t('production', 'snMessage:' + message));
 
+      var noScannedValue = scannedValue.length === 0;
+      var noOrderNo = (scanInfo.orderNo || '').length === 0;
+      var noSerialNo = (scanInfo.serialNo || '').length === 0;
+
+      $message.find('.production-snMessage-props').toggleClass('hidden', noScannedValue && noOrderNo && noSerialNo);
+
       $('#snMessage-scannedValue')
         .text(scannedValue)
         .closest('.production-snMessage-prop')
-        .toggleClass('hidden', scannedValue.length === 0);
+        .toggleClass('hidden', noScannedValue);
 
       $('#snMessage-orderNo').text(scanInfo.orderNo || '-')
         .closest('.production-snMessage-prop')
-        .toggleClass('hidden', (scanInfo.orderNo || '').length === 0);
+        .toggleClass('hidden', noOrderNo);
 
       $('#snMessage-serialNo')
         .text(scanInfo.serialNo || '-')
         .closest('.production-snMessage-prop')
-        .toggleClass('hidden', (scanInfo.serialNo || '').length === 0);
+        .toggleClass('hidden', noSerialNo);
 
       $message
         .css({top: '50%', marginTop: '-80px'})

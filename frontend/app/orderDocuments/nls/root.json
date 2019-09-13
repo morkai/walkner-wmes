@@ -24,6 +24,7 @@
     "controls:filter:ph": "Filter documents",
     "controls:lockUi": "Lock UI",
     "controls:confirm": "I confirm that I have<br>read the document.",
+    "controls:confirm:noStation": "Please set the workstation number.",
 
     "uiLocked": "UI locked.<br>Touch here to unlock.",
 

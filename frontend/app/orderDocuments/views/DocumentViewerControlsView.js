@@ -8,6 +8,7 @@ define([
   'app/core/View',
   'app/core/util/embedded',
   'app/data/localStorage',
+  'app/production/snManager',
   './LocalOrderPickerView',
   './DocumentViewerSettingsView',
   'app/orderDocuments/templates/documentListItem',
@@ -21,6 +22,7 @@ define([
   View,
   embedded,
   localStorage,
+  snManager,
   LocalOrderPickerView,
   DocumentViewerSettingsView,
   renderDocumentListItem,
@@ -1103,6 +1105,11 @@ define([
 
           view.timers.updateConfirmButton = setTimeout(view.updateConfirmButton.bind(view), 3000);
 
+          if (err.errors && err.errors.station)
+          {
+            view.handleNoStationError();
+          }
+
           return;
         }
 
@@ -1110,6 +1117,20 @@ define([
         view.updateConfirmButton();
         view.selectDocument(view.model.getFirstUnconfirmedDocument() || 'ORDER', true);
       });
+    },
+
+    handleNoStationError: function()
+    {
+      var view = this;
+
+      view.broker.subscribe('viewport.dialog.shown').setLimit(1).on('message', function()
+      {
+        snManager.showMessage({_id: ''}, 'error', t.bind(t, 'orderDocuments', 'controls:confirm:noStation'), 3000);
+
+        viewport.currentDialog.$id('submit').click();
+      });
+
+      view.openSettingsDialog();
     },
 
     updateConfirmButton: function()
