@@ -5,17 +5,17 @@
   "version": "0.142.0",
   "updater": {
     "wmes": {
-      "backend": 483,
-      "frontend": 650,
+      "backend": 484,
+      "frontend": 651,
       "reports": 96,
       "attachments": 3,
       "importer-sap": 53,
       "importer-results": 12,
       "watchdog": 13,
       "mailer": 14,
-      "operator": 85,
+      "operator": 86,
       "docs": 37,
-      "heff": 34,
+      "heff": 35,
       "planning": 63,
       "ps-queue": 45,
       "ps-load": 15,
@@ -28,7 +28,8 @@
       "trw": 12,
       "luca": 7,
       "drilling": 4,
-      "wiring": 1
+      "wiring": 1,
+      "ct": 1
     },
     "pos": {
       "backend": 88,

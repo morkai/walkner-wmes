@@ -574,6 +574,7 @@ app/production/assets/modal.css
 app/production/assets/execution.css
 app/production/assets/multiPersonnelPicker.css
 app/production/assets/message.css
+app/production/assets/unlock.css
 app/production/assets/main.css
 
 app/production/assets/message.css
@@ -595,6 +596,10 @@ app/production/assets/settings.css
 app/production/assets/taktTime.css
 ----------------
 app/production/assets/taktTime.css
+
+app/production/assets/unlock.css
+----------------
+app/production/assets/unlock.css
 
 app/production/assets/vkb.css
 ----------------
@@ -1038,6 +1043,7 @@ assets/../vendor/font-awesome/css/font-awesome.css
 assets/../vendor/select2/select2.css
 assets/./select2.css
 assets/../app/core/assets/main.css
+assets/../app/production/assets/main.css
 assets/../app/heff/assets/main.css
 assets/../app/updater/assets/main.css
 assets/./wmes-loading.css
@@ -1869,6 +1875,7 @@ app/wmes-snf-tests/routes.js
 app/wmes-luca-events/routes.js
 app/wmes-drilling/routes.js
 app/wmes-wiring/routes.js
+app/wmes-ct-pces/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
@@ -2470,6 +2477,8 @@ app/nls/production.js
 app/nls/pl/production.js
 i18n!app/nls/production
 app/production/snManager.js
+app/heff/templates/unlockDialog.js
+app/heff/views/UnlockDialogView.js
 app/heff/templates/page.js
 app/heff/views/HeffView.js
 app/nls/heff.js
