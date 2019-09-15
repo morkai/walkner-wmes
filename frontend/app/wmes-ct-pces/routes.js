@@ -11,7 +11,7 @@ define([
 ) {
   'use strict';
 
-  router.map('/ct/pces', user.auth('CT:VIEW'), function(req)
+  router.map('/ct/pces', user.auth('PROD_DATA:VIEW'), function(req)
   {
     viewport.loadPage(
       [
@@ -25,6 +25,7 @@ define([
       {
         return new FilteredListPage({
           baseBreadcrumb: '#ct',
+          actions: null,
           FilterView: FilterView,
           ListView: ListView,
           collection: new PceCollection(null, {rqlQuery: req.rql})

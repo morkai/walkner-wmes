@@ -1,0 +1,16 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "Cycle time",
+    "BREADCRUMBS:browse": "Lines",
+
+    "PROPERTY:_id": "ID",
+    "PROPERTY:active": "Active?",
+    "PROPERTY:type": "Type",
+    "PROPERTY:stationCount": "Stations",
+    "PROPERTY:stations": "Stations",
+    "PROPERTY:stations:lampIp": "Lamp IP address",
+
+    "type:inveo": "INVEO"
+  },
+  "pl": true
+}

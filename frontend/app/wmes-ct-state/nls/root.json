@@ -1,0 +1,30 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "Cycle time",
+
+    "PAGE_ACTIONS:pces": "PCEs",
+    "PAGE_ACTIONS:lines": "Lines",
+
+    "PROPERTY:cart": "Cart",
+    "PROPERTY:order": "Order",
+    "PROPERTY:order:_id": "Order no",
+    "PROPERTY:order:nc12": "Product 12NC",
+    "PROPERTY:order:name": "Product name",
+    "PROPERTY:order:qty": "Quantity",
+    "PROPERTY:order:workerCount": "Worker count",
+    "PROPERTY:order:sapTaktTime": "Takt Time (SAP)",
+    "PROPERTY:orderStartedAt": "First PCE started at",
+    "PROPERTY:pceStartedAt": "Last PCE started at",
+    "PROPERTY:pceFinishedAt": "Last PCE finished at",
+    "PROPERTY:qtyDone": "Quantity done",
+    "PROPERTY:qtyTodo": "Quantity todo",
+    "PROPERTY:durations:total": "Total duration",
+    "PROPERTY:durations:work": "Work duration",
+    "PROPERTY:durations:downtime": "Total downtime duration",
+    "PROPERTY:durations:scheduled": "Scheduled downtime duration",
+    "PROPERTY:taktTime:order": "Order Takt Time",
+    "PROPERTY:taktTime:target": "Station Takt Time",
+    "PROPERTY:taktTime:actual": "Station Cycle Time"
+  },
+  "pl": true
+}

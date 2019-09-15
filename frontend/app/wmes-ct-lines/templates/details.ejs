@@ -1,0 +1,13 @@
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitle %></div>
+    <div class="panel-details">
+      <%- helpers.props(model, ['_id', 'active', 'type', 'stationCount']) %>
+    </div>
+  </div>
+  <% model.stations.forEach(function(station, stationIndex) { %>
+  <% if (type === 'inveo') { %>
+  <% include _inveoDetails.ejs %>
+  <% } %>
+  <% }) %>
+</div>

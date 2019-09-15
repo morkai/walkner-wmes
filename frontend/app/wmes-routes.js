@@ -109,7 +109,9 @@ define([
   './wmes-luca-events/routes',
   './wmes-drilling/routes',
   './wmes-wiring/routes',
-  './wmes-ct-pces/routes'
+  './wmes-ct-pces/routes',
+  './wmes-ct-lines/routes',
+  './wmes-ct-state/routes'
 ], function()
 {
   'use strict';

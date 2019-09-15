@@ -4,11 +4,13 @@ define([
   'underscore',
   '../i18n',
   '../time',
+  '../user',
   '../core/Model'
 ], function(
   _,
   t,
   time,
+  user,
   Model
 ) {
   'use strict';
@@ -21,7 +23,7 @@ define([
 
     topicPrefix: 'ct.pces',
 
-    privilegePrefix: 'CT',
+    privilegePrefix: 'PROD_DATA',
 
     nlsDomain: 'wmes-ct-pces',
 
@@ -40,6 +42,12 @@ define([
       var obj = this.serialize();
 
       obj.order = obj.order._id;
+
+      if (user.isAllowedTo('ORDERS:VIEW'))
+      {
+        obj.order = '<a href="#orders/' + obj.order + '">' + obj.order + '</a>';
+      }
+
       obj.duration = time.toString(obj.durations.total / 1000, false, false);
 
       return obj;

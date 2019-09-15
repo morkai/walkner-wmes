@@ -47,6 +47,8 @@ define([
 
     template: navbarTemplate,
 
+    nlsDomain: 'core',
+
     localTopics: {
       'router.executing': function onRouterExecuting(message)
       {
@@ -341,13 +343,6 @@ define([
     this.broker.publish('navbar.rendered', {
       view: this
     });
-  };
-
-  NavbarView.prototype.getTemplateData = function()
-  {
-    return {
-      user: user
-    };
   };
 
   /**
@@ -769,7 +764,7 @@ define([
     {
       this.$id('searchResults').html(
         '<li class="disabled"><a>'
-        + t('core', 'NAVBAR:SEARCH:' + (searchPhrase === '' ? 'help' : 'empty'))
+        + this.t('NAVBAR:SEARCH:' + (searchPhrase === '' ? 'help' : 'empty'))
         + '</a></li>'
       );
     }

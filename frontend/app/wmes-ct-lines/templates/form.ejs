@@ -1,0 +1,33 @@
+<form method="post" action="<%- formAction %>">
+  <input type="hidden" name="_method" value="<%- formMethod %>">
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitleText %></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="<%- idPrefix %>-id" class="control-label is-required"><%- helpers.t('PROPERTY:_id') %></label>
+        <input id="<%- idPrefix %>-id" class="form-control" type="text" autocomplete="new-password" name="_id" autofocus required maxlength="40" pattern="^[A-Za-z0-9-_]+$">
+      </div>
+      <div class="checkbox">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-active" type="checkbox" name="active" value="true">
+          <%- t('PROPERTY:active') %>
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="control-label is-required"><%- helpers.t('PROPERTY:type') %></label>
+        <br>
+        <label class="radio-inline">
+          <input type="radio" name="type" value="inveo" required>
+          <%- t('type:inveo') %>
+        </label>
+      </div>
+      <div id="<%- idPrefix %>-stations" class="ct-lines-form-stations" style="margin-bottom: 20px"></div>
+      <div class="form-group">
+        <button id="<%- idPrefix %>-addStation" class="btn btn-default" type="button"><i class="fa fa-plus"></i><span><%- helpers.t('form:stations:add') %></span></button>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary"><%- formActionText %></button>
+    </div>
+  </div>
+</form>

@@ -1,6 +1,28 @@
 {
   "root": {
+    "BREADCRUMBS:base": "Cycle time",
+    "BREADCRUMBS:browse": "PCE",
 
+    "PROPERTY:line": "Line",
+    "PROPERTY:station": "Station",
+    "PROPERTY:station:short": "St.",
+    "PROPERTY:cart": "Cart",
+    "PROPERTY:order": "Order",
+    "PROPERTY:order:_id": "Order no",
+    "PROPERTY:order:nc12": "Product 12NC",
+    "PROPERTY:order:name": "Product name",
+    "PROPERTY:order:qty": "Quantity",
+    "PROPERTY:order:workerCount": "Worker count",
+    "PROPERTY:order:sapTaktTime": "Takt Time (SAP)",
+    "PROPERTY:pce": "PCE",
+    "PROPERTY:pce:short": "PCE",
+    "PROPERTY:startedAt": "Started at",
+    "PROPERTY:finishedAt": "Finished at",
+    "PROPERTY:duration": "Duration",
+    "PROPERTY:durations:total": "Total duration",
+    "PROPERTY:durations:work": "Work duration",
+    "PROPERTY:durations:downtime": "Total downtime duration",
+    "PROPERTY:durations:scheduled": "Scheduled downtime duration"
   },
   "pl": true
 }

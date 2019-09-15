@@ -1,0 +1,6 @@
+<dl>
+  <% Object.keys(durations).forEach(function(prop) { %>
+  <dt><%- t('PROPERTY:durations:' + prop) %></dt>
+  <dd><%- durations[prop] %></dd>
+  <% }) %>
+</dl>

@@ -17,7 +17,7 @@ define([
 
     topicPrefix: 'luma2.lines',
 
-    privilegePrefix: 'LUMA2:MANAGE',
+    privilegePrefix: 'LUMA2',
 
     nlsDomain: 'wmes-luma2-lines',
 

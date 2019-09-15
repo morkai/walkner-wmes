@@ -79,6 +79,10 @@ define([
 
   return {
     TYPES: TYPES,
+    getCollection: function(orgUnitType)
+    {
+      return TYPE_TO_COLLECTION[orgUnitType] || null;
+    },
     getProdFlowsForSubdivision: function(subdivision)
     {
       if (typeof subdivision === 'string')

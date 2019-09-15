@@ -1,0 +1,27 @@
+{
+  "BREADCRUMBS:base": "Czas cyklu",
+
+  "PAGE_ACTIONS:pces": "Sztuki",
+  "PAGE_ACTIONS:lines": "Linie",
+
+  "PROPERTY:cart": "Wózek",
+  "PROPERTY:order": "Zlecenie",
+  "PROPERTY:order:_id": "Nr zlecenia",
+  "PROPERTY:order:nc12": "12NC wyrobu",
+  "PROPERTY:order:name": "Nazwa wyrobu",
+  "PROPERTY:order:qty": "Ilość do zrobienia",
+  "PROPERTY:order:workerCount": "Ilość osób w zleceniu",
+  "PROPERTY:order:sapTaktTime": "Takt Time (SAP)",
+  "PROPERTY:orderStartedAt": "Czas rozpoczęcia pierwszej sztuki w zleceniu",
+  "PROPERTY:pceStartedAt": "Czas rozpoczęcia ostatniej sztuki",
+  "PROPERTY:pceFinishedAt": "Czas zakończenia ostatniej sztuki",
+  "PROPERTY:qtyDone": "Ilość zrobiona",
+  "PROPERTY:qtyTodo": "Ilość do zrobienia",
+  "PROPERTY:durations:total": "Całkowity czas trwania",
+  "PROPERTY:durations:work": "Czas pracy",
+  "PROPERTY:durations:downtime": "Czas wszystkich przestojów",
+  "PROPERTY:durations:scheduled": "Czas planowanych przestojów",
+  "PROPERTY:taktTime:order": "Czas taktu SAP dla zlecenia",
+  "PROPERTY:taktTime:target": "Czas taktu SAP dla stanowiska",
+  "PROPERTY:taktTime:actual": "Rzeczywisty czas cyklu stanowiska"
+}

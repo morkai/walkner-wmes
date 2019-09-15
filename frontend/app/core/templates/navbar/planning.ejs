@@ -1,74 +1,74 @@
 <li data-online class="dropdown">
   <a class="dropdown-toggle" data-toggle="dropdown">
-    <%- t('core', 'NAVBAR:PLANNING:main') %>
+    <%- t('NAVBAR:PLANNING:main') %>
     <b class="caret"></b>
   </a>
   <ul class="dropdown-menu">
     <li class="dropdown-header">
       <span class="navbar-group-header">
-        <span><%- t('core', 'NAVBAR:PLANNING:plans') %></span>
-        <a data-privilege="PLANNING:VIEW" data-group="planning/daily" class="active" href="javascript:void(0)"><%- t('core', 'NAVBAR:PLANNING:daily') %></a>
-        <a data-privilege="HOURLY_PLANS:VIEW" data-group="planning/hourly" href="javascript:void(0)"><%- t('core', 'NAVBAR:PLANNING:hourly') %></a>
+        <span><%- t('NAVBAR:PLANNING:plans') %></span>
+        <a data-privilege="PLANNING:VIEW" data-group="planning/daily" class="active" href="javascript:void(0)"><%- t('NAVBAR:PLANNING:daily') %></a>
+        <a data-privilege="HOURLY_PLANS:VIEW" data-group="planning/hourly" href="javascript:void(0)"><%- t('NAVBAR:PLANNING:hourly') %></a>
       </span>
     </li>
-    <li data-privilege="PLANNING:VIEW" data-module data-group="planning/daily"><a href="#planning/plans"><%- t('core', 'NAVBAR:PLANNING:all') %></a></li>
-    <li data-privilege="PLANNING:VIEW" data-module data-group="planning/daily"><a href="#planning/plans/-1d"><%- t('core', 'NAVBAR:PLANNING:-1d') %></a></li>
-    <li data-privilege="PLANNING:VIEW" data-module data-group="planning/daily"><a href="#planning/plans/0d"><%- t('core', 'NAVBAR:PLANNING:0d') %></a></li>
-    <li data-privilege="PLANNING:VIEW" data-module data-group="planning/daily"><a href="#planning/plans/1d"><%- t('core', 'NAVBAR:PLANNING:1d') %></a></li>
-    <li data-privilege="PLANNING:VIEW" data-module data-group="planning/daily"><a href="#planning/plans/2d"><%- t('core', 'NAVBAR:PLANNING:2d') %></a></li>
+    <li data-privilege="PLANNING:VIEW" data-module data-group="planning/daily"><a href="#planning/plans"><%- t('NAVBAR:PLANNING:all') %></a></li>
+    <li data-privilege="PLANNING:VIEW" data-module data-group="planning/daily"><a href="#planning/plans/-1d"><%- t('NAVBAR:PLANNING:-1d') %></a></li>
+    <li data-privilege="PLANNING:VIEW" data-module data-group="planning/daily"><a href="#planning/plans/0d"><%- t('NAVBAR:PLANNING:0d') %></a></li>
+    <li data-privilege="PLANNING:VIEW" data-module data-group="planning/daily"><a href="#planning/plans/1d"><%- t('NAVBAR:PLANNING:1d') %></a></li>
+    <li data-privilege="PLANNING:VIEW" data-module data-group="planning/daily"><a href="#planning/plans/2d"><%- t('NAVBAR:PLANNING:2d') %></a></li>
     <li class="navbar-with-button" data-privilege="HOURLY_PLANS:VIEW" data-module data-group="planning/hourly">
-      <a href="#hourlyPlans"><%- t('core', 'NAVBAR:PLANNING:all') %></a>
+      <a href="#hourlyPlans"><%- t('NAVBAR:PLANNING:all') %></a>
       <button class="btn btn-default" data-privilege="HOURLY_PLANS:MANAGE PROD_DATA:MANAGE" data-href="#hourlyPlans;add"><i class="fa fa-plus"></i></button>
     </li>
     <li class="navbar-with-button" data-privilege="HOURLY_PLANS:VIEW" data-module data-group="planning/hourly">
-      <a href="#hourlyPlans?date=0-1d&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:PLANNING:0d') %></a>
+      <a href="#hourlyPlans?date=0-1d&sort(-date)&limit(20)"><%- t('NAVBAR:PLANNING:0d') %></a>
       <button class="btn btn-default" data-privilege="HOURLY_PLANS:MANAGE PROD_DATA:MANAGE" data-href="#hourlyPlans;add?date=0d"><i class="fa fa-edit"></i></button>
     </li>
     <li class="navbar-with-button" data-privilege="HOURLY_PLANS:VIEW" data-module data-group="planning/hourly">
-      <a href="#hourlyPlans?date=1-2d&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:PLANNING:1d') %></a>
+      <a href="#hourlyPlans?date=1-2d&sort(-date)&limit(20)"><%- t('NAVBAR:PLANNING:1d') %></a>
       <button class="btn btn-default" data-privilege="HOURLY_PLANS:MANAGE PROD_DATA:MANAGE" data-href="#hourlyPlans;add?date=1d"><i class="fa fa-edit"></i></button>
     </li>
     <li class="navbar-with-button" data-privilege="HOURLY_PLANS:VIEW" data-module data-group="planning/hourly">
-      <a href="#hourlyPlans?date=2-3d&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:PLANNING:2d') %></a>
+      <a href="#hourlyPlans?date=2-3d&sort(-date)&limit(20)"><%- t('NAVBAR:PLANNING:2d') %></a>
       <button class="btn btn-default" data-privilege="HOURLY_PLANS:MANAGE PROD_DATA:MANAGE" data-href="#hourlyPlans;add?date=2d"><i class="fa fa-edit"></i></button>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">
       <span class="navbar-group-header">
-        <a data-privilege="PAINT_SHOP:VIEW" data-group="ps/ps" class="active" href="javascript:void(0)"><%- t('core', 'NAVBAR:PLANNING:paintShop') %></a>
-        <a data-privilege="DRILLING:VIEW" data-group="ps/drill" href="javascript:void(0)"><%- t('core', 'NAVBAR:PLANNING:drilling') %></a>
-        <a data-privilege="WIRING:VIEW" data-group="ps/wire" href="javascript:void(0)"><%- t('core', 'NAVBAR:PLANNING:wiring') %></a>
+        <a data-privilege="PAINT_SHOP:VIEW" data-group="ps/ps" class="active" href="javascript:void(0)"><%- t('NAVBAR:PLANNING:paintShop') %></a>
+        <a data-privilege="DRILLING:VIEW" data-group="ps/drill" href="javascript:void(0)"><%- t('NAVBAR:PLANNING:drilling') %></a>
+        <a data-privilege="WIRING:VIEW" data-group="ps/wire" href="javascript:void(0)"><%- t('NAVBAR:PLANNING:wiring') %></a>
       </span>
     </li>
-    <li data-privilege="PAINT_SHOP:VIEW" data-module data-group="ps/ps"><a href="#paintShop/-1d"><%- t('core', 'NAVBAR:PLANNING:-1d') %></a></li>
-    <li data-privilege="PAINT_SHOP:VIEW" data-module data-group="ps/ps"><a href="#paintShop/0d"><%- t('core', 'NAVBAR:PLANNING:0d') %></a></li>
-    <li data-privilege="PAINT_SHOP:VIEW" data-module data-group="ps/ps"><a href="#paintShop/1d"><%- t('core', 'NAVBAR:PLANNING:1d') %></a></li>
-    <li data-privilege="PAINT_SHOP:VIEW" data-module data-group="ps/ps"><a href="#paintShop/2d"><%- t('core', 'NAVBAR:PLANNING:2d') %></a></li>
-    <li data-privilege="PAINT_SHOP:VIEW" data-module data-group="ps/ps"><a href="#paintShop/load"><%- t('core', 'NAVBAR:PLANNING:paintShop:load') %></a></li>
-    <li data-privilege="DRILLING:VIEW" data-module="wmes-drilling" data-group="ps/drill"><a href="#drilling/-1d"><%- t('core', 'NAVBAR:PLANNING:-1d') %></a></li>
-    <li data-privilege="DRILLING:VIEW" data-module="wmes-drilling" data-group="ps/drill"><a href="#drilling/0d"><%- t('core', 'NAVBAR:PLANNING:0d') %></a></li>
-    <li data-privilege="DRILLING:VIEW" data-module="wmes-drilling" data-group="ps/drill"><a href="#drilling/1d"><%- t('core', 'NAVBAR:PLANNING:1d') %></a></li>
-    <li data-privilege="DRILLING:VIEW" data-module="wmes-drilling" data-group="ps/drill"><a href="#drilling/2d"><%- t('core', 'NAVBAR:PLANNING:2d') %></a></li>
-    <li data-privilege="WIRING:VIEW" data-module="wmes-wiring" data-group="ps/wire"><a href="#wiring/-1d"><%- t('core', 'NAVBAR:PLANNING:-1d') %></a></li>
-    <li data-privilege="WIRING:VIEW" data-module="wmes-wiring" data-group="ps/wire"><a href="#wiring/0d"><%- t('core', 'NAVBAR:PLANNING:0d') %></a></li>
-    <li data-privilege="WIRING:VIEW" data-module="wmes-wiring" data-group="ps/wire"><a href="#wiring/1d"><%- t('core', 'NAVBAR:PLANNING:1d') %></a></li>
-    <li data-privilege="WIRING:VIEW" data-module="wmes-wiring" data-group="ps/wire"><a href="#wiring/2d"><%- t('core', 'NAVBAR:PLANNING:2d') %></a></li>
+    <li data-privilege="PAINT_SHOP:VIEW" data-module data-group="ps/ps"><a href="#paintShop/-1d"><%- t('NAVBAR:PLANNING:-1d') %></a></li>
+    <li data-privilege="PAINT_SHOP:VIEW" data-module data-group="ps/ps"><a href="#paintShop/0d"><%- t('NAVBAR:PLANNING:0d') %></a></li>
+    <li data-privilege="PAINT_SHOP:VIEW" data-module data-group="ps/ps"><a href="#paintShop/1d"><%- t('NAVBAR:PLANNING:1d') %></a></li>
+    <li data-privilege="PAINT_SHOP:VIEW" data-module data-group="ps/ps"><a href="#paintShop/2d"><%- t('NAVBAR:PLANNING:2d') %></a></li>
+    <li data-privilege="PAINT_SHOP:VIEW" data-module data-group="ps/ps"><a href="#paintShop/load"><%- t('NAVBAR:PLANNING:paintShop:load') %></a></li>
+    <li data-privilege="DRILLING:VIEW" data-module="wmes-drilling" data-group="ps/drill"><a href="#drilling/-1d"><%- t('NAVBAR:PLANNING:-1d') %></a></li>
+    <li data-privilege="DRILLING:VIEW" data-module="wmes-drilling" data-group="ps/drill"><a href="#drilling/0d"><%- t('NAVBAR:PLANNING:0d') %></a></li>
+    <li data-privilege="DRILLING:VIEW" data-module="wmes-drilling" data-group="ps/drill"><a href="#drilling/1d"><%- t('NAVBAR:PLANNING:1d') %></a></li>
+    <li data-privilege="DRILLING:VIEW" data-module="wmes-drilling" data-group="ps/drill"><a href="#drilling/2d"><%- t('NAVBAR:PLANNING:2d') %></a></li>
+    <li data-privilege="WIRING:VIEW" data-module="wmes-wiring" data-group="ps/wire"><a href="#wiring/-1d"><%- t('NAVBAR:PLANNING:-1d') %></a></li>
+    <li data-privilege="WIRING:VIEW" data-module="wmes-wiring" data-group="ps/wire"><a href="#wiring/0d"><%- t('NAVBAR:PLANNING:0d') %></a></li>
+    <li data-privilege="WIRING:VIEW" data-module="wmes-wiring" data-group="ps/wire"><a href="#wiring/1d"><%- t('NAVBAR:PLANNING:1d') %></a></li>
+    <li data-privilege="WIRING:VIEW" data-module="wmes-wiring" data-group="ps/wire"><a href="#wiring/2d"><%- t('NAVBAR:PLANNING:2d') %></a></li>
     <li class="divider"></li>
     <li id="<%- idPrefix %>-wh-hd" class="dropdown-header">
       <span class="navbar-group-header">
-        <span><%- t('core', 'NAVBAR:PLANNING:wh') %></span>
-        <a class="active" href="javascript:void(0)" data-group="wh/old"><%- t('core', 'NAVBAR:PLANNING:wh:old') %></a>
-        <a href="javascript:void(0)" data-group="wh/new"><%- t('core', 'NAVBAR:PLANNING:wh:new') %></a>
+        <span><%- t('NAVBAR:PLANNING:wh') %></span>
+        <a class="active" href="javascript:void(0)" data-group="wh/old"><%- t('NAVBAR:PLANNING:wh:old') %></a>
+        <a href="javascript:void(0)" data-group="wh/new"><%- t('NAVBAR:PLANNING:wh:new') %></a>
       </span>
     </li>
-    <li data-privilege="WH:VIEW" data-module data-group="wh/old"><a href="#planning/wh/-1d"><%- t('core', 'NAVBAR:PLANNING:-1d') %></a></li>
-    <li data-privilege="WH:VIEW" data-module data-group="wh/old"><a href="#planning/wh/0d"><%- t('core', 'NAVBAR:PLANNING:0d') %></a></li>
-    <li data-privilege="WH:VIEW" data-module data-group="wh/old"><a href="#planning/wh/1d"><%- t('core', 'NAVBAR:PLANNING:1d') %></a></li>
-    <li data-privilege="WH:VIEW" data-module data-group="wh/old"><a href="#planning/wh/2d"><%- t('core', 'NAVBAR:PLANNING:2d') %></a></li>
-    <li data-privilege="WH:VIEW" data-module data-group="wh/new"><a href="#wh/plans/-1d"><%- t('core', 'NAVBAR:PLANNING:-1d') %></a></li>
-    <li data-privilege="WH:VIEW" data-module data-group="wh/new"><a href="#wh/plans/0d"><%- t('core', 'NAVBAR:PLANNING:0d') %></a></li>
-    <li data-privilege="WH:VIEW" data-module data-group="wh/new"><a href="#wh/plans/1d"><%- t('core', 'NAVBAR:PLANNING:1d') %></a></li>
-    <li data-privilege="WH:VIEW" data-module data-group="wh/new"><a href="#wh/plans/2d"><%- t('core', 'NAVBAR:PLANNING:2d') %></a></li>
-    <li data-privilege="WH:VIEW" data-module data-group="wh/new"><a href="#wh/problems"><%- t('core', 'NAVBAR:PLANNING:wh:problems') %></a></li>
+    <li data-privilege="WH:VIEW" data-module data-group="wh/old"><a href="#planning/wh/-1d"><%- t('NAVBAR:PLANNING:-1d') %></a></li>
+    <li data-privilege="WH:VIEW" data-module data-group="wh/old"><a href="#planning/wh/0d"><%- t('NAVBAR:PLANNING:0d') %></a></li>
+    <li data-privilege="WH:VIEW" data-module data-group="wh/old"><a href="#planning/wh/1d"><%- t('NAVBAR:PLANNING:1d') %></a></li>
+    <li data-privilege="WH:VIEW" data-module data-group="wh/old"><a href="#planning/wh/2d"><%- t('NAVBAR:PLANNING:2d') %></a></li>
+    <li data-privilege="WH:VIEW" data-module data-group="wh/new"><a href="#wh/plans/-1d"><%- t('NAVBAR:PLANNING:-1d') %></a></li>
+    <li data-privilege="WH:VIEW" data-module data-group="wh/new"><a href="#wh/plans/0d"><%- t('NAVBAR:PLANNING:0d') %></a></li>
+    <li data-privilege="WH:VIEW" data-module data-group="wh/new"><a href="#wh/plans/1d"><%- t('NAVBAR:PLANNING:1d') %></a></li>
+    <li data-privilege="WH:VIEW" data-module data-group="wh/new"><a href="#wh/plans/2d"><%- t('NAVBAR:PLANNING:2d') %></a></li>
+    <li data-privilege="WH:VIEW" data-module data-group="wh/new"><a href="#wh/problems"><%- t('NAVBAR:PLANNING:wh:problems') %></a></li>
   </ul>
 </li>

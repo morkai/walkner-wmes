@@ -1,0 +1,16 @@
+{
+  "BREADCRUMBS:base": "Czas cyklu",
+  "BREADCRUMBS:browse": "Linie",
+
+  "PROPERTY:_id": "ID",
+  "PROPERTY:active": "Aktywna?",
+  "PROPERTY:type": "Typ",
+  "PROPERTY:stationCount": "Ilość stanowisk",
+  "PROPERTY:stations": "Stanowiska pracy",
+  "PROPERTY:stations:lampIp": "Adres lampy",
+
+  "type:inveo": "INVEO",
+
+  "stations:title": "Stanowisko {no}",
+  "form:stations:add": "Dodaj stanowisko"
+}

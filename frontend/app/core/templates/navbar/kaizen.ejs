@@ -1,38 +1,38 @@
 <li data-online class="dropdown">
   <a class="dropdown-toggle" data-toggle="dropdown">
-    <%- t('core', 'NAVBAR:KAIZEN:main') %>
+    <%- t('NAVBAR:KAIZEN:main') %>
     <b class="caret"></b>
   </a>
   <ul class="dropdown-menu">
-    <li class="dropdown-header"><%- t('core', 'NAVBAR:KAIZEN:orders') %>
-    <li data-privilege="LOCAL USER" data-module="kaizen" class="navbar-with-button"><a href="#kaizenOrders"><%- t('core', 'NAVBAR:KAIZEN:all') %></a><button class="btn btn-default" data-href="#kaizenOrders;add"><i class="fa fa-plus"></i></button>
-    <li data-privilege="LOCAL USER" data-module="kaizen"><a href="#kaizenOrders?status=in=(new,accepted,todo,inProgress,paused)&sort(-eventDate)&limit(20)"><%- t('core', 'NAVBAR:KAIZEN:open') %></a>
-    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenOrders?observers.user.id=mine&sort(-eventDate)&limit(20)"><%- t('core', 'NAVBAR:KAIZEN:mine') %></a>
-    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenOrders?observers.user.id=unseen&sort(-eventDate)&limit(20)"><%- t('core', 'NAVBAR:KAIZEN:unseen') %></a>
+    <li class="dropdown-header"><%- t('NAVBAR:KAIZEN:orders') %>
+    <li data-privilege="LOCAL USER" data-module="kaizen" class="navbar-with-button"><a href="#kaizenOrders"><%- t('NAVBAR:KAIZEN:all') %></a><button class="btn btn-default" data-href="#kaizenOrders;add"><i class="fa fa-plus"></i></button>
+    <li data-privilege="LOCAL USER" data-module="kaizen"><a href="#kaizenOrders?status=in=(new,accepted,todo,inProgress,paused)&sort(-eventDate)&limit(20)"><%- t('NAVBAR:KAIZEN:open') %></a>
+    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenOrders?observers.user.id=mine&sort(-eventDate)&limit(20)"><%- t('NAVBAR:KAIZEN:mine') %></a>
+    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenOrders?observers.user.id=unseen&sort(-eventDate)&limit(20)"><%- t('NAVBAR:KAIZEN:unseen') %></a>
     <li class="divider">
-    <li class="dropdown-header"><%- t('core', 'NAVBAR:KAIZEN:observations') %>
-    <li data-privilege="LOCAL USER" data-module class="navbar-with-button"><a href="#behaviorObsCards"><%- t('core', 'NAVBAR:KAIZEN:all') %></a><button class="btn btn-default" data-href="#behaviorObsCards;add"><i class="fa fa-plus"></i></button>
-    <li data-privilege="USER" data-module><a href="#behaviorObsCards?users=mine&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:KAIZEN:mine') %></a>
+    <li class="dropdown-header"><%- t('NAVBAR:KAIZEN:observations') %>
+    <li data-privilege="LOCAL USER" data-module class="navbar-with-button"><a href="#behaviorObsCards"><%- t('NAVBAR:KAIZEN:all') %></a><button class="btn btn-default" data-href="#behaviorObsCards;add"><i class="fa fa-plus"></i></button>
+    <li data-privilege="USER" data-module><a href="#behaviorObsCards?users=mine&sort(-date)&limit(20)"><%- t('NAVBAR:KAIZEN:mine') %></a>
     <li class="divider">
-    <li class="dropdown-header"><%- t('core', 'NAVBAR:KAIZEN:minutesForSafety') %>
-    <li data-privilege="USER" data-module class="navbar-with-button"><a href="#minutesForSafetyCards"><%- t('core', 'NAVBAR:KAIZEN:all') %></a><button class="btn btn-default" data-href="#minutesForSafetyCards;add"><i class="fa fa-plus"></i></button>
-    <li data-privilege="USER" data-module><a href="#minutesForSafetyCards?users=mine&sort(-date)&limit(20)"><%- t('core', 'NAVBAR:KAIZEN:mine') %></a>
+    <li class="dropdown-header"><%- t('NAVBAR:KAIZEN:minutesForSafety') %>
+    <li data-privilege="USER" data-module class="navbar-with-button"><a href="#minutesForSafetyCards"><%- t('NAVBAR:KAIZEN:all') %></a><button class="btn btn-default" data-href="#minutesForSafetyCards;add"><i class="fa fa-plus"></i></button>
+    <li data-privilege="USER" data-module><a href="#minutesForSafetyCards?users=mine&sort(-date)&limit(20)"><%- t('NAVBAR:KAIZEN:mine') %></a>
     <li class="divider">
-    <li class="dropdown-header"><%- t('core', 'NAVBAR:KAIZEN:reports') %>
-    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenReport"><%- t('core', 'NAVBAR:KAIZEN:reports:count') %></a>
-    <li data-privilege="USER" data-module="behaviorObsCards"><a href="#behaviorObsCardCountReport"><%- t('core', 'NAVBAR:KAIZEN:reports:observations') %></a>
-    <li data-privilege="USER" data-module="minutesForSafetyCards"><a href="#minutesForSafetyCardCountReport"><%- t('core', 'NAVBAR:KAIZEN:reports:minutes') %></a>
-    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenSummaryReport"><%- t('core', 'NAVBAR:KAIZEN:reports:summary') %></a>
-    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenEngagementReport"><%- t('core', 'NAVBAR:KAIZEN:reports:engagement') %></a>
-    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenMetricsReport"><%- t('core', 'NAVBAR:KAIZEN:reports:metrics') %></a>
+    <li class="dropdown-header"><%- t('NAVBAR:KAIZEN:reports') %>
+    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenReport"><%- t('NAVBAR:KAIZEN:reports:count') %></a>
+    <li data-privilege="USER" data-module="behaviorObsCards"><a href="#behaviorObsCardCountReport"><%- t('NAVBAR:KAIZEN:reports:observations') %></a>
+    <li data-privilege="USER" data-module="minutesForSafetyCards"><a href="#minutesForSafetyCardCountReport"><%- t('NAVBAR:KAIZEN:reports:minutes') %></a>
+    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenSummaryReport"><%- t('NAVBAR:KAIZEN:reports:summary') %></a>
+    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenEngagementReport"><%- t('NAVBAR:KAIZEN:reports:engagement') %></a>
+    <li data-privilege="USER" data-module="kaizen"><a href="#kaizenMetricsReport"><%- t('NAVBAR:KAIZEN:reports:metrics') %></a>
     <li class="divider">
-    <li class="dropdown-header"><%- t('core', 'NAVBAR:KAIZEN:dictionaries') %>
-    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenSections"><%- t('core', 'NAVBAR:KAIZEN:sections') %></a>
-    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenAreas"><%- t('core', 'NAVBAR:KAIZEN:areas') %></a>
-    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenCategories"><%- t('core', 'NAVBAR:KAIZEN:categories') %></a>
-    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenCauses"><%- t('core', 'NAVBAR:KAIZEN:causes') %></a>
-    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenRisks"><%- t('core', 'NAVBAR:KAIZEN:risks') %></a>
-    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenBehaviours"><%- t('core', 'NAVBAR:KAIZEN:behaviours') %></a>
+    <li class="dropdown-header"><%- t('NAVBAR:KAIZEN:dictionaries') %>
+    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenSections"><%- t('NAVBAR:KAIZEN:sections') %></a>
+    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenAreas"><%- t('NAVBAR:KAIZEN:areas') %></a>
+    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenCategories"><%- t('NAVBAR:KAIZEN:categories') %></a>
+    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenCauses"><%- t('NAVBAR:KAIZEN:causes') %></a>
+    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenRisks"><%- t('NAVBAR:KAIZEN:risks') %></a>
+    <li data-privilege="KAIZEN:DICTIONARIES:VIEW" data-module="kaizen"><a href="#kaizenBehaviours"><%- t('NAVBAR:KAIZEN:behaviours') %></a>
     <li class="divider">
-    <li data-module="kaizen"><a href="#kaizenHelp"><%- t('core', 'NAVBAR:KAIZEN:help') %></a>
+    <li data-module="kaizen"><a href="#kaizenHelp"><%- t('NAVBAR:KAIZEN:help') %></a>
   </ul>

@@ -1,29 +1,30 @@
 <li data-online class="dropdown">
   <a class="dropdown-toggle" data-toggle="dropdown">
-    <%- t('core', 'NAVBAR:PROD') %>
+    <%- t('NAVBAR:PROD') %>
     <b class="caret"></b>
   </a>
   <ul class="dropdown-menu">
-    <li class="dropdown-header"><%- t('core', 'NAVBAR:MONITORING') %>
-    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#factoryLayout/default"><%- t('core', 'NAVBAR:MONITORING:LAYOUT') %></a>
-    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#factoryLayout;list"><%- t('core', 'NAVBAR:MONITORING:LIST') %></a>
-    <li data-privilege="PROD_DATA:VIEW ISA:VIEW" data-module><a href="#isa"><%- t('core', 'NAVBAR:ISA') %></a>
-    <li data-privilege="LOCAL DOCUMENTS:VIEW" data-module="orderDocuments" class="navbar-with-button"><a id="<%- idPrefix %>-openLayout" href="/orderDocuments/133700000000001"><%- t('core', 'NAVBAR:layout') %> &nbsp;<i class="fa fa-external-link"></i></a><button class="btn btn-default" data-privilege="USER" data-href="#orderDocuments/tree?folder=55F39BA8-380E-4EA5-80A7-009F6208A20D&file=133700000000001"><i class="fa fa-edit"></i></button>
+    <li class="dropdown-header"><%- t('NAVBAR:MONITORING') %>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#factoryLayout/default"><%- t('NAVBAR:MONITORING:LAYOUT') %></a>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#factoryLayout;list"><%- t('NAVBAR:MONITORING:LIST') %></a>
+    <li data-privilege="PROD_DATA:VIEW" data-module="wmes-ct-frontend"><a href="#ct"><%- t('NAVBAR:ct') %></a>
+    <li data-privilege="PROD_DATA:VIEW ISA:VIEW" data-module><a href="#isa"><%- t('NAVBAR:ISA') %></a>
+    <li data-privilege="LOCAL DOCUMENTS:VIEW" data-module="orderDocuments" class="navbar-with-button"><a id="<%- idPrefix %>-openLayout" href="/orderDocuments/133700000000001"><%- t('NAVBAR:layout') %> &nbsp;<i class="fa fa-external-link"></i></a><button class="btn btn-default" data-privilege="USER" data-href="#orderDocuments/tree?folder=55F39BA8-380E-4EA5-80A7-009F6208A20D&file=133700000000001"><i class="fa fa-edit"></i></button>
     <li class="divider">
-    <li class="dropdown-header"><%- t('core', 'NAVBAR:PROD:DATA') %>
-    <li data-privilege="PROD_DATA:VIEW PRESS_WORKSHEETS:VIEW" data-module class="navbar-with-button"><a href="#pressWorksheets"><%- t('core', 'NAVBAR:PRESS_WORKSHEETS') %></a><button class="btn btn-default" data-privilege="PRESS_WORKSHEETS:MANAGE" data-href="#pressWorksheets;add"><i class="fa fa-plus"></i></button>
-    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodLogEntries"><%- t('core', 'NAVBAR:PROD:LOG_ENTRIES') %></a>
-    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodShifts"><%- t('core', 'NAVBAR:PROD:SHIFTS') %></a>
-    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodShiftOrders"><%- t('core', 'NAVBAR:PROD:SHIFT_ORDERS') %></a>
-    <li data-privilege="PROD_DATA:VIEW PROD_DOWNTIMES:VIEW" data-module><a href="#prodDowntimes"><%- t('core', 'NAVBAR:PROD:DOWNTIMES') %></a>
-    <li data-privilege="PROD_DATA:VIEW PROD_DOWNTIMES:VIEW" data-module="prodDowntimes" data-client-module="prodDowntimeAlerts"><a href="#prodDowntimes;alerts"><%- t('core', 'NAVBAR:PROD:ALERTS') %></a>
-    <li data-privilege="PROD_DATA:CHANGES:*" data-module><a href="#prodChangeRequests"><%- t('core', 'NAVBAR:PROD:CHANGE_REQUESTS') %></a>
-    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodSerialNumbers"><%- t('core', 'NAVBAR:PROD:SERIAL_NUMBERS') %></a>
-    <li data-privilege="PROD_DATA:MANAGE PROD_DATA:MANAGE:SPIGOT_ONLY" data-module><a href="#production;settings"><%- t('core', 'NAVBAR:PROD:SETTINGS') %></a>
+    <li class="dropdown-header"><%- t('NAVBAR:PROD:DATA') %>
+    <li data-privilege="PROD_DATA:VIEW PRESS_WORKSHEETS:VIEW" data-module class="navbar-with-button"><a href="#pressWorksheets"><%- t('NAVBAR:PRESS_WORKSHEETS') %></a><button class="btn btn-default" data-privilege="PRESS_WORKSHEETS:MANAGE" data-href="#pressWorksheets;add"><i class="fa fa-plus"></i></button>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodLogEntries"><%- t('NAVBAR:PROD:LOG_ENTRIES') %></a>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodShifts"><%- t('NAVBAR:PROD:SHIFTS') %></a>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodShiftOrders"><%- t('NAVBAR:PROD:SHIFT_ORDERS') %></a>
+    <li data-privilege="PROD_DATA:VIEW PROD_DOWNTIMES:VIEW" data-module><a href="#prodDowntimes"><%- t('NAVBAR:PROD:DOWNTIMES') %></a>
+    <li data-privilege="PROD_DATA:VIEW PROD_DOWNTIMES:VIEW" data-module="prodDowntimes" data-client-module="prodDowntimeAlerts"><a href="#prodDowntimes;alerts"><%- t('NAVBAR:PROD:ALERTS') %></a>
+    <li data-privilege="PROD_DATA:CHANGES:*" data-module><a href="#prodChangeRequests"><%- t('NAVBAR:PROD:CHANGE_REQUESTS') %></a>
+    <li data-privilege="PROD_DATA:VIEW" data-module><a href="#prodSerialNumbers"><%- t('NAVBAR:PROD:SERIAL_NUMBERS') %></a>
+    <li data-privilege="PROD_DATA:MANAGE PROD_DATA:MANAGE:SPIGOT_ONLY" data-module><a href="#production;settings"><%- t('NAVBAR:PROD:SETTINGS') %></a>
     <li class="divider">
-    <li class="dropdown-header"><%- t('core', 'NAVBAR:DOCUMENTS') %>
-    <li data-privilege="USER DOCUMENTS:VIEW" data-module><a href="#orderDocuments/tree"><%- t('core', 'NAVBAR:DOCUMENTS:TREE') %></a>
-    <li data-privilege="DOCUMENTS:VIEW" data-module><a href="#orderDocuments/confirmations"><%- t('core', 'NAVBAR:DOCUMENTS:CONFIRMATIONS') %></a>
-    <li data-privilege="DOCUMENTS:VIEW" data-module><a href="#orderDocuments/clients"><%- t('core', 'NAVBAR:DOCUMENTS:CLIENTS') %></a>
-    <li data-privilege="ORDERS:MANAGE" data-module="orderDocuments"><a href="#orders;settings?tab=documents"><%- t('core', 'NAVBAR:DOCUMENTS:SETTINGS') %></a>
+    <li class="dropdown-header"><%- t('NAVBAR:DOCUMENTS') %>
+    <li data-privilege="USER DOCUMENTS:VIEW" data-module><a href="#orderDocuments/tree"><%- t('NAVBAR:DOCUMENTS:TREE') %></a>
+    <li data-privilege="DOCUMENTS:VIEW" data-module><a href="#orderDocuments/confirmations"><%- t('NAVBAR:DOCUMENTS:CONFIRMATIONS') %></a>
+    <li data-privilege="DOCUMENTS:VIEW" data-module><a href="#orderDocuments/clients"><%- t('NAVBAR:DOCUMENTS:CLIENTS') %></a>
+    <li data-privilege="ORDERS:MANAGE" data-module="orderDocuments"><a href="#orders;settings?tab=documents"><%- t('NAVBAR:DOCUMENTS:SETTINGS') %></a>
   </ul>

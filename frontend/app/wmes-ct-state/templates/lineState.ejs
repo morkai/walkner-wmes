@@ -1,0 +1,12 @@
+<div class="ct-state-line">
+  <div class="ct-state-line-hd">
+    <h1><%= model._id %></h1>
+  </div>
+  <div class="ct-state-stations-outer">
+  <div class="ct-state-stations">
+    <% model.stations.forEach(function(station) { %>
+    <%- renderStation({station: station}) %>
+    <% }) %>
+  </div>
+  </div>
+</div>

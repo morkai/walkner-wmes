@@ -1,0 +1,27 @@
+<div class="ct-state-station <%- station.lamp ? 'is-lamp-on' : 'is-lamp-off' %>" data-id="<%- station._id %>">
+  <div class="ct-state-station-row ct-state-station-orderInfo">
+    <span title="<%- t('PROPERTY:order:_id') %>"><%- station.order._id %></span>
+    <span title="<%- t('PROPERTY:order:nc12') %>"><%- station.order.nc12 %></span>
+    <span title="<%- t('PROPERTY:order:qty') %>" style="margin-left: auto"><i class="fa fa-cubes"></i> <%- station.order.qty %></span>
+    <span title="<%- t('PROPERTY:order:workerCount') %>"><i class="fa fa-user"></i> <%- station.order.workerCount %></span>
+  </div>
+  <div class="ct-state-station-orderName" title="<%= station.order.name %>">
+    <%- station.order.name || '-' %>
+  </div>
+  <div class="ct-state-station-row">
+    <span title="<%- t('PROPERTY:orderStartedAt') %>
+<%- station.times.orderStartedAt.full %>"><i class="fa fa-hourglass-o"></i> <%- station.times.orderStartedAt.short %></span>
+    <span title="<%- t('PROPERTY:pceStartedAt') %>
+<%- station.times.pceStartedAt.full %>"><i class="fa fa-hourglass-start"></i> <%- station.times.pceStartedAt.short %></span>
+    <span title="<%- t('PROPERTY:pceFinishedAt') %>
+<%- station.times.pceFinishedAt.full %>"><i class="fa fa-hourglass-end"></i> <%- station.times.pceFinishedAt.short %></span>
+  </div>
+  <div class="ct-state-station-row">
+    <span title="<%- t('PROPERTY:qtyDone') %>"><i class="fa fa-cube"></i> <%- station.qtyDone %></span>
+    <span title="<%- station.duration.title %>"><i class="fa fa-hourglass"></i> <%- station.duration.value %></span>
+    <span title="<%- station.taktTime.title %>">
+      <i class="fa fa-clock-o"></i>
+      <%- station.taktTime.actual.short %>/<%- station.taktTime.target.short %>s
+    </span>
+  </div>
+</div>
