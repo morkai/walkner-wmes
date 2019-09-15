@@ -759,6 +759,10 @@ app/wh/assets/set.css
 ----------------
 app/wh/assets/set.css
 
+app/wmes-ct-state/assets/main.css
+----------------
+app/wmes-ct-state/assets/main.css
+
 app/wmes-drilling/assets/datePicker.css
 ----------------
 app/wmes-drilling/assets/datePicker.css
@@ -1876,6 +1880,8 @@ app/wmes-luca-events/routes.js
 app/wmes-drilling/routes.js
 app/wmes-wiring/routes.js
 app/wmes-ct-pces/routes.js
+app/wmes-ct-lines/routes.js
+app/wmes-ct-state/routes.js
 app/wmes-routes.js
 app/nls/core.js
 app/nls/pl/core.js
