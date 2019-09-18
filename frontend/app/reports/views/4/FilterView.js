@@ -37,7 +37,6 @@ define([
       'change input[name=mode]': function()
       {
         this.toggleMode();
-        this.toggleSubmit();
       },
       'change input[name="divisions[]"]': function()
       {
@@ -62,6 +61,10 @@ define([
         });
 
         this.model.set('shifts', shifts.length === $shifts.length ? [] : shifts);
+      },
+      'change input': function()
+      {
+        this.toggleSubmit();
       }
     },
 
