@@ -16,7 +16,7 @@ define([
   View,
   buttonGroup,
   dateTimeRange,
-  setUpUsersSelect2,
+  setUpUserSelect2,
   template
 ) {
   'use strict';
@@ -65,10 +65,9 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       return {
-        idPrefix: this.idPrefix,
         divisions: divisions
           .filter(function(division)
           {
@@ -98,7 +97,7 @@ define([
       this.$('input[name="interval"]:checked').closest('.btn').addClass('active');
       this.$('input[name="shift"]:checked').closest('.btn').addClass('active');
 
-      var $users = setUpUsersSelect2(this.$id('users'), {
+      var $users = setUpUserSelect2(this.$id('users'), {
         width: 550,
         multiple: true,
         view: this
@@ -185,7 +184,7 @@ define([
         shift: this.model.get('shift'),
         divisions: this.model.get('divisions'),
         shifts: this.model.get('shifts'),
-        users: this.model.getUsersForSelect2().map(function(u) { return u.id; }).join('')
+        users: this.model.getUsersForSelect2().map(function(u) { return u.id; }).join(',')
       };
     },
 
