@@ -241,6 +241,38 @@ define([
 
       function afterRender($container)
       {
+        afterRenderCsv($container);
+        afterRenderXlsx($container);
+      }
+
+      function afterRenderCsv($container)
+      {
+        var $csv = $container.find('.page-actions-export');
+
+        if ($csv.hasClass('btn-group'))
+        {
+          $csv = $csv.find('a[data-export-type="csv"]');
+        }
+
+        if (!$csv.length)
+        {
+          return;
+        }
+
+        var href = $csv.prop('href');
+
+        $csv.prop('href', 'javascript:void(0)'); // eslint-disable-line no-script-url
+
+        $csv.on('click', function(e)
+        {
+          e.preventDefault();
+
+          window.open(href);
+        });
+      }
+
+      function afterRenderXlsx($container)
+      {
         var $xlsx = $container.find('a[data-export-type="xlsx"]');
 
         if (!$xlsx.length)
