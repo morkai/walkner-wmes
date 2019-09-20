@@ -98,7 +98,6 @@ define([
       js2form(this.el, formData);
 
       this.$('input[name="interval"]:checked').closest('.btn').addClass('active');
-      this.$('input[name="shift"]:checked').closest('.btn').addClass('active');
 
       var $users = setUpUserSelect2(this.$id('users'), {
         width: 550,
@@ -107,24 +106,10 @@ define([
       });
       $users.on('change', this.toggleSubmit.bind(this));
 
-      this.toggleShift();
       this.toggleMode();
       this.toggleDivisions();
       this.toggleShifts();
       this.toggleSubmit();
-    },
-
-    toggleShift: function()
-    {
-      var $shift = this.$id('shift');
-
-      if (!$shift.find('> .active').length)
-      {
-        $shift.find('> .btn').addClass('active');
-        $shift.find('input').prop('checked', true);
-      }
-
-      return $shift;
     },
 
     toggleMode: function()
@@ -184,7 +169,6 @@ define([
         'from-date': time.format(+this.model.get('from'), 'YYYY-MM-DD'),
         'to-date': time.format(+this.model.get('to'), 'YYYY-MM-DD'),
         mode: this.model.get('mode'),
-        shift: this.model.get('shift'),
         divisions: this.model.get('divisions'),
         shifts: this.model.get('shifts'),
         users: this.model.getUsersForSelect2().map(function(u) { return u.id; }).join(',')
@@ -212,11 +196,7 @@ define([
       this.$id('from-date').val(fromMoment.format('YYYY-MM-DD'));
       this.$id('to-date').val(toMoment.format('YYYY-MM-DD'));
 
-      if (query.mode === 'shift')
-      {
-        query.shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
-      }
-      else
+      if (query.mode !== 'shift')
       {
         query[query.mode] = this.$id('users').select2('val');
       }

@@ -18,14 +18,12 @@ define([
     defaults: function()
     {
       var from = time.getMoment().weekday(0).hours(0).minutes(0).seconds(0).milliseconds(0);
-      var shiftStartInfo = getShiftStartInfo(new Date());
 
       return {
         from: from.valueOf(),
         to: from.add(7, 'days').valueOf(),
         interval: 'day',
         mode: 'shift',
-        shift: shiftStartInfo.no,
         masters: undefined,
         operators: undefined,
         divisions: [],
@@ -44,7 +42,7 @@ define([
         shifts: this.get('shifts').join(',')
       };
 
-      if (obj.mode)
+      if (obj.mode !== 'shift')
       {
         obj[obj.mode] = this.get(obj.mode);
 
@@ -65,15 +63,15 @@ define([
       if (attrs.mode)
       {
         str += '&mode=' + attrs.mode;
-        str += '&' + attrs.mode + '=';
 
-        if (Array.isArray(attrs[attrs.mode]))
+        if (attrs.mode !== 'shift')
         {
-          str += this.serializeUsers();
-        }
-        else
-        {
-          str += attrs[attrs.mode];
+          str += '&' + attrs.mode + '=';
+
+          if (Array.isArray(attrs[attrs.mode]))
+          {
+            str += this.serializeUsers();
+          }
         }
       }
 
@@ -166,17 +164,7 @@ define([
       {
         attrs.mode = query.mode;
 
-        if (query.mode === 'shift')
-        {
-          attrs.shift = parseInt(query.shift, 10);
-
-          if (attrs.shift < 1 || attrs.shift > 3)
-          {
-            delete attrs.mode;
-            delete attrs.shift;
-          }
-        }
-        else if (query.mode === 'masters' || query.mode === 'operators')
+        if (query.mode === 'masters' || query.mode === 'operators')
         {
           attrs[attrs.mode] = String(query[attrs.mode]).split(',');
 
@@ -186,7 +174,7 @@ define([
             delete attrs[attrs.mode];
           }
         }
-        else
+        else if (query.mode !== 'shift')
         {
           delete attrs.mode;
         }
