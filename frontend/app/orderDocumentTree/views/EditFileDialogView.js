@@ -65,6 +65,14 @@ define([
 
           return false;
         }
+      },
+
+      'change #-stations': function(e)
+      {
+        e.target.value = e.target.value.split(/[^0-9]+/)
+          .filter(function(v) { return v >= 1 && v <= 7; })
+          .sort(function(a, b) { return a - b; })
+          .join(', ');
       }
 
     }, pasteDateEvents, FormView.prototype.events),
@@ -102,6 +110,8 @@ define([
 
       formData.components = '';
 
+      formData.stations = formData.stations.join(', ');
+
       formData.files = formData.files.map(function(file)
       {
         return {
@@ -124,6 +134,10 @@ define([
           searchName: item.text.toUpperCase().replace(/[^A-Z0-9]+/g, '')
         };
       });
+
+      formData.stations = (formData.stations || '').split(/[^0-9]+/)
+        .filter(function(v) { return v >= 1 && v <= 7; })
+        .sort(function(a, b) { return a - b; });
 
       return formData;
     },

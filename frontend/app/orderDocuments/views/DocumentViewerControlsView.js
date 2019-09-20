@@ -750,7 +750,7 @@ define([
 
       _.forEach(currentOrder.documents, function(name, nc15)
       {
-        if (model.filterNc15(nc15))
+        if (model.filterNc15(nc15) && !model.isIgnored(nc15))
         {
           html += renderDocumentListItem({
             name: name.replace(/\$__.*?__/g, ''),
@@ -1057,7 +1057,7 @@ define([
         {
           var status = stations[station];
 
-          confirmations[nc15] = status === undefined ? null : status;
+          confirmations[nc15] = status === undefined ? 'unknown' : status;
         });
 
         view.model.setDocumentConfirmations(orderData.no, confirmations);

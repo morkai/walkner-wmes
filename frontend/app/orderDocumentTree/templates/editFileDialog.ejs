@@ -33,6 +33,10 @@
     </div>
   </div>
   <div class="form-group">
+    <label for="<%- idPrefix %>-stations" class="control-label"><%- helpers.t('files:stations') %></label>
+    <input id="<%- idPrefix %>-stations" name="stations" class="form-control" type="text" autocomplete="new-password" placeholder="1, 2, 3, 4, 5, 6, 7">
+  </div>
+  <div class="form-group">
     <label for="<%- idPrefix %>-folders" class="control-label"><%- helpers.t('files:files') %></label>
     <% model.files.forEach(function(file, i) { %>
     <div class="checkbox">

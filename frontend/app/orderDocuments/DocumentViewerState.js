@@ -350,7 +350,7 @@ define([
       {
         var status = stations[station];
 
-        newOrder.confirmations[nc15] = status === undefined ? null : status;
+        newOrder.confirmations[nc15] = status === undefined ? 'unknown' : status;
       });
 
       if (newOrder.no === oldOrder.no && newOrder.documents[oldOrder.nc15])
@@ -471,14 +471,9 @@ define([
         var nc15 = documents[i];
         var status = confirmations[nc15];
 
-        if (status === null)
+        if (status === 'unknown' || status === 'unconfirmed')
         {
-          return 'unknown';
-        }
-
-        if (status === false)
-        {
-          return 'unconfirmed';
+          return status;
         }
       }
 
@@ -494,12 +489,14 @@ define([
     {
       var currentOrder = this.getCurrentOrder();
 
-      return currentOrder.confirmations[currentOrder.nc15] === true;
+      return currentOrder.confirmations[currentOrder.nc15] === 'confirmed';
     },
 
     isConfirmableDocument: function(nc15)
     {
-      return this.getCurrentOrder().confirmations[nc15] !== undefined;
+      var status = this.getCurrentOrder().confirmations[nc15];
+
+      return status !== undefined && status !== 'ignored';
     },
 
     isDocumentConfirmed: function(nc15)
@@ -507,7 +504,7 @@ define([
       var confirmations = this.getCurrentOrder().confirmations;
       var status = confirmations[nc15];
 
-      return status === true;
+      return status === 'confirmed';
     },
 
     getFirstUnconfirmedDocument: function()
@@ -518,8 +515,9 @@ define([
       for (var i = 0; i < documents.length; ++i)
       {
         var nc15 = documents[i];
+        var status = confirmations[nc15];
 
-        if (confirmations[nc15] !== true)
+        if (status === 'unknown' || status === 'unconfirmed')
         {
           return nc15;
         }
@@ -568,7 +566,7 @@ define([
 
         var newConfirmations = _.clone(oldConfirmations);
 
-        newConfirmations[confirmation.nc15] = true;
+        newConfirmations[confirmation.nc15] = 'confirmed';
 
         if (!_.isEqual(oldConfirmations, newConfirmations))
         {
@@ -582,6 +580,14 @@ define([
         this.trigger('change:confirmations');
         this.save();
       }
+    },
+
+    isIgnored: function(nc15)
+    {
+      var confirmations = this.getCurrentOrder().confirmations;
+      var status = confirmations[nc15];
+
+      return status === 'ignored';
     }
 
   });

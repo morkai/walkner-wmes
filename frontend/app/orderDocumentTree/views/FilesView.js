@@ -579,7 +579,12 @@ define([
 
       _.forEach(props, function(html, prop)
       {
-        $preview.find('dd[data-prop="' + prop + '"]').html(html);
+        $preview
+          .find('dd[data-prop="' + prop + '"]')
+          .html(html)
+          .toggleClass('hidden', !html.length)
+          .prev()
+          .toggleClass('hidden', !html.length);
       });
 
       var tree = this.model;
@@ -617,6 +622,7 @@ define([
         folders: this.serializePreviewFolders(),
         files: this.serializePreviewFiles(),
         components: this.serializePreviewComponents(),
+        stations: selectedFile.get('stations').join(', '),
         updatedAt: this.serializePreviewUpdatedAt()
       };
     },
@@ -674,7 +680,7 @@ define([
         return '<ul>' + html + '</ul>';
       }
 
-      return '-';
+      return '';
     },
 
     serializePreviewFiles: function()
@@ -706,7 +712,7 @@ define([
         return '<ul>' + html + '</ul>';
       }
 
-      return '-';
+      return '';
     },
 
     serializePreviewComponents: function()
@@ -717,8 +723,9 @@ define([
 
       if (components.length === 0)
       {
-        return '-';
+        return '';
       }
+
       var html = '';
       var max = 2;
 
@@ -747,7 +754,7 @@ define([
         return '<ul>' + html + '</ul>';
       }
 
-      return '-';
+      return '';
     },
 
     serializePreviewUpdatedAt: function()

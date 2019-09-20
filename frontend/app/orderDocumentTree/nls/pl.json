@@ -57,6 +57,7 @@
   "files:components:help": "Komponenty, do których dany dokument jest przypisany. Jeżeli zlecenie ma jeden ze zdefiniowanych komponentów, to ten dokument będzie dodany do listy w przeglądarce dokumentów z wymogiem potwierdzenia zapoznania się z treścią.",
   "files:components:addByName": "Dodaj po nazwie",
   "files:components:addByName:placeholder": "Nazwa komponentu...",
+  "files:stations": "Stanowiska",
 
   "unlinkFiles:title": "Usuwanie przypisania dokumentów",
   "unlinkFiles:submit": "Usuń przypisania",
