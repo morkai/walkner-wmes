@@ -343,6 +343,7 @@ define([
       var master = user.isAllowedTo('FN:master');
       var leader = user.isAllowedTo('FN:leader');
       var whman = user.isAllowedTo('FN:whman', 'FN:prod_whman', 'FN:in_whman');
+      var prodPlanner = user.isAllowedTo('FN:production-planner');
       var analyzers = this.get('analyzers');
       var analyzer = _.some(analyzers, function(u) { return user.data._id === u.id; });
       var mainAnalyzer = analyzer && analyzers[0].id === user.data._id;
@@ -368,8 +369,8 @@ define([
         level: !finished && (solver || manager || whman),
         solution: solver,
         problem: started && (manage || procEng || designer || master || leader),
-        category: manage || procEng || qualityEng || designer,
-        subCategory: manage || procEng || qualityEng || designer,
+        category: manage || procEng || qualityEng || designer || prodPlanner,
+        subCategory: manage || procEng || qualityEng || designer || prodPlanner,
         subdivisionType: manage || procEng || designer || master || leader,
         componentCode: started && (manage || procEng),
         orderNo: started && (manage || procEng),
@@ -858,10 +859,9 @@ define([
       {
         if ((!o || !o.user) && window.WMES_LOG_BROWSER_ERROR)
         {
-          window.WMES_LOG_BROWSER_ERROR(new Error('Invalid observer: ' + JSON.stringify({ // eslint-disable-line new-cap
-            change: change,
-            observer: o
-          })));
+          window.WMES_LOG_BROWSER_ERROR(new Error( // eslint-disable-line new-cap
+            'Invalid observer: ' + JSON.stringify({change: change, observer: o})
+          ));
         }
 
         return o && !!o.user && o.user.id === user.data._id;
