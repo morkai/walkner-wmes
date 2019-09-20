@@ -530,8 +530,8 @@ define([
       var requiredStatuses = this.settings.getValue('clip.requiredStatuses');
       var ignoredStatuses = this.settings.getValue('clip.ignoredStatuses');
       var mrps = this.model.get('mrps');
-      var from = this.model.query.get('from');
-      var to = this.model.query.get('to');
+      var from = this.model.get('fromTimeLocal');
+      var to = this.model.get('toTimeLocal');
       var url = '/orders;export.xlsx'
         + '?' + findDateProperty + '>=' + from
         + '&' + findDateProperty + '<' + to;

@@ -29,6 +29,8 @@ define([
         parent: null,
         children: [],
         mrps: [],
+        fromTimeLocal: 0,
+        toTimeLocal: 0,
         clip: {
           orderCount: [],
           production: [],
@@ -84,6 +86,8 @@ define([
         parent: report.parent,
         children: report.children,
         mrps: report.mrps,
+        fromTimeLocal: report.fromTimeLocal,
+        toTimeLocal: report.toTimeLocal,
         clip: null,
         delayReasons: null,
         m4s: null,
