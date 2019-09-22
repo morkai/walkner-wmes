@@ -41,9 +41,9 @@ define([
     {
       var obj = this.serialize();
 
-      obj.order = obj.order._id;
+      obj.order = obj.order._id || '';
 
-      if (user.isAllowedTo('ORDERS:VIEW'))
+      if (obj.order && user.isAllowedTo('ORDERS:VIEW'))
       {
         obj.order = '<a href="#orders/' + obj.order + '">' + obj.order + '</a>';
       }

@@ -1,4 +1,4 @@
-/* globals $, LANG, SURVEY, alert */
+/* globals $, LANG, SURVEY */
 /* eslint-disable strict, no-alert */
 
 'use strict';

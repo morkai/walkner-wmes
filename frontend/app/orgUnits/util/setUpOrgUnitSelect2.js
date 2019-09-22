@@ -22,8 +22,6 @@ define([
 
   function reload(orgUnitType)
   {
-    var maxIdLength = 0;
-
     cachedItems[orgUnitType] = orgUnits.getAllByType(orgUnitType)
       .map(function(model)
       {

@@ -192,8 +192,8 @@ define([
         obj.subCategory = '-';
       }
 
-      obj.divisions = obj.divisions.join('; ');
-      obj.lines = obj.lines.join('; ');
+      obj.divisions = obj.divisions ? obj.divisions.join('; ') : '';
+      obj.lines = obj.lines ? obj.lines.join('; ') : '';
 
       obj.assessment = t(this.nlsDomain, 'assessment:' + obj.assessment);
       obj.analyzing = obj.status !== 'pending' && obj.analysisNeed && !obj.analysisDone;

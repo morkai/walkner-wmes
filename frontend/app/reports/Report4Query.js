@@ -3,13 +3,11 @@
 define([
   'h5.rql/index',
   '../time',
-  '../core/Model',
-  '../core/util/getShiftStartInfo'
+  '../core/Model'
 ], function(
   rql,
   time,
-  Model,
-  getShiftStartInfo
+  Model
 ) {
   'use strict';
 

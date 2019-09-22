@@ -123,6 +123,11 @@ define([
 
     serializeTermToForm: function(term, formData)
     {
+      if (!term || !Array.isArray(term.args))
+      {
+        return;
+      }
+
       var propertyName = typeof term.args[0] === 'string' ? term.args[0] : null;
       var termToForm = this.termToForm[propertyName];
 
