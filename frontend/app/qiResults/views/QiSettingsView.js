@@ -61,7 +61,7 @@ define([
 
     shouldAutoUpdateSettingField: function(setting)
     {
-      return this.$('[data-setting="' + setting.id + ']')[0].dataset.setting === undefined;
+      return this.$('[data-setting="' + setting.id + '"]')[0].dataset.setting === undefined;
     },
 
     updateSettingField: function(setting)
@@ -86,15 +86,13 @@ define([
 
       if (setting.id === 'qi.defaultErrorCategory')
       {
-        this.$id('defaultErrorCategory').select2('data', setting.getValue().map(function(id)
-        {
-          var errorCategory = dictionaries.errorCategories.get(id);
+        var id = setting.getValue();
+        var errorCategory = dictionaries.errorCategories.get(setting.getValue());
 
-          return {
-            id: id,
-            text: errorCategory ? errorCategory.getLabel() : id
-          };
-        }));
+        this.$id('defaultErrorCategory').select2('data', {
+          id: id,
+          text: errorCategory ? errorCategory.getLabel() : id
+        });
       }
     }
 
