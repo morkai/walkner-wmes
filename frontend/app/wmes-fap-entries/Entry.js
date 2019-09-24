@@ -339,6 +339,7 @@ define([
       var manager = user.isAllowedTo('FN:manager');
       var procEng = user.isAllowedTo('FN:process-engineer', 'FN:process-engineer-NPI');
       var qualityEng = user.isAllowedTo('FN:quality_engineer');
+      var whEng = user.isAllowedTo('FN:warehouse-process-engineer');
       var designer = user.isAllowedTo('FN:designer', 'FN:designer_eto');
       var master = user.isAllowedTo('FN:master');
       var leader = user.isAllowedTo('FN:leader');
@@ -369,7 +370,7 @@ define([
         level: !finished && (solver || manager || whman),
         solution: solver,
         problem: started && (manage || procEng || designer || master || leader),
-        category: manage || procEng || qualityEng || designer || prodPlanner,
+        category: manage || procEng || qualityEng || whEng || designer || prodPlanner,
         subCategory: manage || procEng || qualityEng || designer || prodPlanner,
         subdivisionType: manage || procEng || designer || master || leader,
         componentCode: started && (manage || procEng),
