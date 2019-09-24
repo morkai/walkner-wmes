@@ -307,7 +307,7 @@
   "wh:status:all": "Wszystkie",
   "wh:status:0": "Nieokreślony",
   "wh:status:1": "Lista",
-  "wh:status:2": "Kompletacja",
+  "wh:status:2": "Buffor",
   "wh:status:3": "{qtySent, plural, =0{Wysyłka} other{Wysłano {qtySent} szt.}}",
   "wh:sent:comment": "Wysłano {qtySent, plural, one{1 sztukę} few{{qtySent} sztuki} other{{qtySent} sztuk}} na linię {line} {date} o {time}.",
   "wh:sent:label": "Wysyłana<br>ilość:",

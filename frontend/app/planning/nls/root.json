@@ -308,7 +308,7 @@
     "wh:status:all": "All",
     "wh:status:0": "Unspecified",
     "wh:status:1": "List",
-    "wh:status:2": "Pickup",
+    "wh:status:2": "Buffer",
     "wh:status:3": "{qtySent, plural, =0{Distribution} other{Sent {qtySent} szt.}}",
     "wh:sent:comment": "Sent {qtySent} PCE to line {line} {date} at {time}.",
     "wh:sent:label": "Quantity<br>Sent:",
