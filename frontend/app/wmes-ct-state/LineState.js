@@ -66,23 +66,11 @@ define([
           short: station.order.sapTaktTime || '-',
           full: station.order.sapTaktTime ? this.formatFullDuration(station.order.sapTaktTime * 1000) : '-'
         },
-        target: {
-          short: '-',
-          full: '-'
-        },
         actual: {
           short: '-',
           full: '-'
         }
       };
-
-      if (station.order.sapTaktTime && station.order.workerCount)
-      {
-        var ttt = Math.ceil(station.order.sapTaktTime / station.order.workerCount);
-
-        taktTime.target.short = ttt;
-        taktTime.target.full = this.formatFullDuration(ttt * 1000);
-      }
 
       if (station.durations.work && station.qtyDone)
       {
@@ -95,8 +83,6 @@ define([
       taktTime.title = [
         t(this.nlsDomain, 'PROPERTY:taktTime:actual'),
         '  ' + taktTime.actual.full,
-        t(this.nlsDomain, 'PROPERTY:taktTime:target'),
-        '  ' + taktTime.target.full,
         t(this.nlsDomain, 'PROPERTY:taktTime:order'),
         '  ' + taktTime.order.full
       ].join('\n');
