@@ -53,6 +53,19 @@ define([
         view.listenTo(addFormView, 'cancel', view.hideAddForm);
 
         view.setView('#-addForm', addFormView).render();
+      },
+      'click #-unseen': function()
+      {
+        if (this.unseenEntries && this.unseenEntries.length === 1)
+        {
+          this.broker.publish('router.navigate', {
+            url: '/#fap/entries/' + this.unseenEntries[0],
+            trigger: true,
+            replace: false
+          });
+
+          return false;
+        }
       }
     },
 
