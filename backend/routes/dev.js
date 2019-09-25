@@ -11,7 +11,13 @@ module.exports = (app, express) =>
 
   express.get('/dev/restart', () => process.exit(10001)); // eslint-disable-line no-process-exit
 
-  express.post('/dev/inspect', (req, res) =>
+  express.head('/dev/inspect', inspectRoute);
+  express.get('/dev/inspect', inspectRoute);
+  express.post('/dev/inspect', inspectRoute);
+  express.put('/dev/inspect', inspectRoute);
+  express.delete('/dev/inspect', inspectRoute);
+
+  function inspectRoute(req, res)
   {
     res.sendStatus(204);
 
@@ -20,5 +26,5 @@ module.exports = (app, express) =>
       headers: req.headers,
       body: req.body
     });
-  });
+  }
 };
