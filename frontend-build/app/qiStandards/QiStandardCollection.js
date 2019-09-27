@@ -1,1 +1,0 @@
-define(["../core/Collection","./QiStandard"],function(e,n){"use strict";return e.extend({model:n,rqlQuery:"sort(name)"})});

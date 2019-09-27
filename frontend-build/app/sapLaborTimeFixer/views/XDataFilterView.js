@@ -1,1 +1,0 @@
-define(["app/core/views/FilterView","app/sapLaborTimeFixer/templates/filter"],function(e,t){"use strict";return e.extend({template:t,defaultFormData:function(){return{title:""}},termToForm:{title:function(e,t,i){i.title=this.unescapeRegExp(t.args[1])}},serializeFormToQuery:function(e){this.serializeRegexTerm(e,"title",null,null,!0,!1)}})});

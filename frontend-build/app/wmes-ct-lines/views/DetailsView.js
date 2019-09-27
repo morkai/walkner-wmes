@@ -1,1 +1,0 @@
-define(["app/core/views/DetailsView","app/wmes-ct-lines/templates/details"],function(e,t){"use strict";return e.extend({template:t,getTemplateData:function(){return{type:this.model.get("type")}}})});

@@ -1,1 +1,0 @@
-define(["../settings/Setting"],function(n){"use strict";return n.extend({urlRoot:"/drilling/settings",nlsDomain:"wmes-drilling"})});

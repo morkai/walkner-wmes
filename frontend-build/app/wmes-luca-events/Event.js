@@ -1,1 +1,0 @@
-define(["../i18n","../time","../core/Model"],function(e,t,i){"use strict";return i.extend({urlRoot:"/luca/events",clientUrlRoot:"#luca/events",topicPrefix:"luca.events",privilegePrefix:"LUCA",nlsDomain:"wmes-luca-events",serialize:function(){var i=this.toJSON();return i.type=e(this.nlsDomain,"type:"+i.type),i.time=t.format(i.time,"L, HH:mm:ss.SSS"),i}})});

@@ -1,1 +1,0 @@
-define(["underscore","../i18n","../time","../core/Model"],function(e,t,i,n){"use strict";return n.extend({urlRoot:"/luma2/events",clientUrlRoot:"#luma2/events",topicPrefix:"luma2.events",privilegePrefix:"LUMA2",nlsDomain:"wmes-luma2-events",serialize:function(){var e=this.toJSON();return e.type=t(this.nlsDomain,"type:"+e.type),e.time=i.format(e.time,"L, HH:mm:ss.SSS"),e}})});

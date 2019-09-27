@@ -1,1 +1,0 @@
-define(["app/core/views/DetailsView","app/xiconfPrograms/templates/details"],function(e,t){"use strict";return e.extend({template:t})});

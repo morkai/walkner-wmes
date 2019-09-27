@@ -1,1 +1,0 @@
-define(["./time","./router","./viewport","./user","./core/util/getShiftStartInfo","./wh/pages/WhProblemListPage","i18n!app/nls/wh","i18n!app/nls/planning","i18n!app/nls/paintShop"],function(e,n,t,i,a,r){"use strict";n.map("/",i.auth("LOCAL","WH:VIEW"),function(e){t.showPage(new r({returnDate:e.query.returnDate}))})});

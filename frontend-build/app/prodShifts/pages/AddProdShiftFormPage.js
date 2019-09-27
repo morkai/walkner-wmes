@@ -1,1 +1,0 @@
-define(["app/core/pages/AddFormPage","../views/ProdShiftFormView"],function(e,r){"use strict";return e.extend({FormView:r})});

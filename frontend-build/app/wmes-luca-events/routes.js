@@ -1,1 +1,0 @@
-define(["../router","../viewport","../user"],function(e,n,t){"use strict";e.map("/luca/events",t.auth("LUCA:VIEW"),function(e){n.loadPage(["app/wmes-luca-events/dictionaries","app/wmes-luca-events/EventCollection","app/wmes-luca-events/pages/ListPage","i18n!app/nls/wmes-luca-events"],function(n,t,a){return n.bind(new a({collection:new t(null,{rqlQuery:e.rql})}))})})});

@@ -1,1 +1,0 @@
-define(["../router","../viewport"],function(s,i){"use strict";s.map("/vis/structure",i.loadPage.bind(i,["app/vis/pages/StructureVisPage","css!app/vis/assets/main","i18n!app/nls/vis"]))});

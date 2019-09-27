@@ -1,1 +1,0 @@
-define(["../data/createSettings","./ProductionSettingCollection"],function(t,e){"use strict";return t(e)});

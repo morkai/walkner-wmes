@@ -1,1 +1,0 @@
-define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMBS:base":function(n){return"Tool calibration"},"BREADCRUMBS:browse":function(n){return"Tool types"},"PROPERTY:_id":function(n){return"ID"},"PROPERTY:name":function(n){return"Name"},"PROPERTY:active":function(n){return"Active?"}},pl:!0}});

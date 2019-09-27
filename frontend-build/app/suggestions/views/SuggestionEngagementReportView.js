@@ -1,1 +1,0 @@
-define(["underscore","app/i18n","app/core/View","app/reports/util/formatTooltipHeader","app/suggestions/templates/engagementReport"],function(e,t,i,n,r){"use strict";return i.extend({template:r,initialize:function(){this.listenTo(this.model,"change:groups",this.render)},getTemplateData:function(){return{formatHeader:n.bind(this),groups:this.model.get("groups")}}})});

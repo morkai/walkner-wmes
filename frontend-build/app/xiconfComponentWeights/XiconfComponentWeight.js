@@ -1,1 +1,0 @@
-define(["../core/Model"],function(e){"use strict";return e.extend({urlRoot:"/xiconf/componentWeights",clientUrlRoot:"#xiconf/componentWeights",privilegePrefix:"XICONF",topicPrefix:"xiconfComponentWeights",nlsDomain:"xiconfComponentWeights",labelAttribute:"description"})});

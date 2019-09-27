@@ -1,1 +1,0 @@
-define(["app/core/pages/EditFormPage","../dictionaries","../views/FormView"],function(e,t,o){"use strict";return e.extend({pageClassName:"page-max-flex",FormView:o,load:function(e){return e(this.model.fetch(),t.load())},destroy:function(){e.prototype.destroy.call(this),t.unload()},afterRender:function(){e.prototype.afterRender.call(this),t.load()}})});

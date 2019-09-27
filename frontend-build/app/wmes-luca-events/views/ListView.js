@@ -1,1 +1,0 @@
-define(["app/core/views/ListView"],function(e){"use strict";return e.extend({className:"",remoteTopics:{"luca.events.saved":"refreshCollection"},serializeColumns:function(){return[{id:"time",className:"is-min"},{id:"type",className:"is-min"},{id:"line",className:"is-min"},{id:"station",className:"is-min"},{id:"order"}]},serializeActions:function(){return null}})});

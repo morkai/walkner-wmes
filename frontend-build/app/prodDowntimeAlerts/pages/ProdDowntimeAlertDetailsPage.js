@@ -1,1 +1,0 @@
-define(["app/core/pages/DetailsPage","app/prodDowntimeAlerts/templates/details"],function(e,t){"use strict";return e.extend({baseBreadcrumb:"#prodDowntimes",detailsTemplate:t})});

@@ -1,1 +1,0 @@
-define(["../core/Model"],function(e){"use strict";return e.extend({urlRoot:"/qi/errorCategories",clientUrlRoot:"#qi/errorCategories",topicPrefix:"qi.errorCategories",privilegePrefix:"QI:DICTIONARIES",nlsDomain:"qiErrorCategories",labelAttribute:"name"})});

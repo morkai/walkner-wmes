@@ -1,1 +1,0 @@
-define(["../core/Collection","./QiErrorCategory"],function(e,r){"use strict";return e.extend({model:r})});

@@ -1,1 +1,0 @@
-define(["app/settings/views/SettingsView","app/wmes-luma2-lines/templates/settings"],function(e,t){"use strict";return e.extend({clientUrl:"#luma2/settings",template:t})});

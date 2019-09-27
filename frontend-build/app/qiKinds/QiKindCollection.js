@@ -1,1 +1,0 @@
-define(["../core/Collection","./QiKind"],function(o,e){"use strict";return o.extend({model:e,rqlQuery:"sort(position)",comparator:"position"})});

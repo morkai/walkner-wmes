@@ -1,1 +1,0 @@
-define(["../data/createSettings","./ReportSettingCollection"],function(t,e){"use strict";return t(e)});

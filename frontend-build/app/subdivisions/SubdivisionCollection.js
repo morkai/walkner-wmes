@@ -1,1 +1,0 @@
-define(["../core/Collection","./Subdivision"],function(i,e){"use strict";return i.extend({model:e,rqlQuery:"sort(division,name)",comparator:"division"})});

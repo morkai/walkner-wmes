@@ -1,1 +1,0 @@
-define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMBS:base":function(n){return"QI"},"BREADCRUMBS:browse":function(n){return"Error categories"},"PROPERTY:name":function(n){return"Name"}},pl:!0}});

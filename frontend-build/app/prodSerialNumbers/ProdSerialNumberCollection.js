@@ -1,1 +1,0 @@
-define(["../time","../core/Collection","./ProdSerialNumber"],function(e,t,r){"use strict";return t.extend({model:r,rowHeight:!1,rqlQuery:function(t){return t.Query.fromObject({fields:{},sort:{scannedAt:-1},limit:-1337,selector:{name:"and",args:[{name:"ge",args:["scannedAt",e.getMoment().subtract(1,"week").startOf("day").valueOf()]}]}})}})});

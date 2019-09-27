@@ -1,1 +1,0 @@
-define(["../core/Collection","./LineState"],function(e,t){"use strict";return e.extend({model:t,paginate:!1,parse:function(e){return e},update:function(e){var t=this.get(e.line);t&&t.update(e)}})});

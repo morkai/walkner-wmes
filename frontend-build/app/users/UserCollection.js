@@ -1,1 +1,0 @@
-define(["../core/Collection","./User"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"&sort(+lastName,+firstName)&limit(-1337)"})});

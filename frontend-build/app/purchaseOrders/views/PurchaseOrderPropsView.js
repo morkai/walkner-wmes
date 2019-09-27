@@ -1,1 +1,0 @@
-define(["app/core/View","app/purchaseOrders/templates/props"],function(e,t){"use strict";return e.extend({template:t,beforeRender:function(){this.stopListening(this.model,"change",this.render)},afterRender:function(){this.listenToOnce(this.model,"change",this.render)},getTemplateData:function(){return{model:this.model.serialize()}}})});

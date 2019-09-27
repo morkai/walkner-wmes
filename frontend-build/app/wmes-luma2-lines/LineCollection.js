@@ -1,1 +1,0 @@
-define(["../core/Collection","./Line"],function(e,n){"use strict";return e.extend({model:n})});

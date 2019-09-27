@@ -1,1 +1,0 @@
-define(["app/i18n","app/core/pages/EditFormPage","../views/ProdDowntimeFormView"],function(e,i,r){"use strict";return i.extend({FormView:r})});

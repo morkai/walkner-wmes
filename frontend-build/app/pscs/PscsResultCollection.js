@@ -1,1 +1,0 @@
-define(["../core/Collection","./PscsResult"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"sort(-startedAt)&limit(15)"})});

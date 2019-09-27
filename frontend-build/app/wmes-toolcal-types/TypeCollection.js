@@ -1,1 +1,0 @@
-define(["../core/Collection","./Type"],function(e,n){"use strict";return e.extend({model:n,comparator:"name"})});

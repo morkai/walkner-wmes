@@ -1,1 +1,0 @@
-define(["../core/Collection","./Tester"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"sort(name)&limit(-1337)"})});

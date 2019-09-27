@@ -1,1 +1,0 @@
-define(function(n,t,i){"use strict";i.exports=function(n,t){this.name=n||null,this.args=t||[]}});

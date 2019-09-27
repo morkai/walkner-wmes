@@ -1,1 +1,0 @@
-define(["../core/Collection","./Test"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"sort(-startedAt)&limit(-1337)"})});

@@ -1,1 +1,0 @@
-define(["../core/Collection","./ProdFunction"],function(e,o){"use strict";return e.extend({model:o,rqlQuery:"sort(label)",comparator:"label"})});

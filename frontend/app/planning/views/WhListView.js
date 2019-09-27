@@ -427,7 +427,7 @@ define([
         return;
       }
 
-      if (lastPart.line !== prevPart.line && this.plan.getMoment().after('2019-10-01'))
+      if (lastPart.line !== prevPart.line && this.plan.getMoment().isAfter('2019-10-01'))
       {
         return;
       }

@@ -1,1 +1,0 @@
-define(["app/core/pages/FilteredListPage","../views/VendorNc12FilterView","../views/VendorNc12ListView"],function(e,i,t){"use strict";return e.extend({FilterView:i,ListView:t})});

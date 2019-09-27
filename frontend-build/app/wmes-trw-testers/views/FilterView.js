@@ -1,1 +1,0 @@
-define(["app/core/views/FilterView","app/wmes-trw-testers/templates/filter"],function(e,t){"use strict";return e.extend({template:t,termToForm:{name:function(e,t,r){r[e]=this.unescapeRegExp(t.args[1])}},serializeFormToQuery:function(e){this.serializeRegexTerm(e,"name",100,null,!0,!1)}})});

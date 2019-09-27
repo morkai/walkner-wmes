@@ -1,1 +1,0 @@
-define(["../router","../viewport","../user"],function(t,e,s){"use strict";t.map("/ct",s.auth("PROD_DATA:VIEW"),function(){e.loadPage(["app/wmes-ct-state/LineStateCollection","app/wmes-ct-state/pages/ListPage","css!app/wmes-ct-state/assets/main","i18n!app/nls/wmes-ct-state"],function(t,e){return new e({collection:new t})})})});

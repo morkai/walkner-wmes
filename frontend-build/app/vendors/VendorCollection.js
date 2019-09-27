@@ -1,1 +1,0 @@
-define(["../core/Collection","./Vendor"],function(e,n){"use strict";return e.extend({model:n,rqlQuery:"limit(-1337)&sort(name)"})});

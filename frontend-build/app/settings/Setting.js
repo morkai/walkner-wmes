@@ -1,1 +1,0 @@
-define(["../core/Model"],function(e){"use strict";return e.extend({urlRoot:"/settings",clientUrlRoot:"#settings",topicPrefix:"settings",privilegePrefix:"SETTINGS",nlsDomain:"core",defaults:{value:null},getValue:function(){return this.get("value")}})});

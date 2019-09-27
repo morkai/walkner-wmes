@@ -1,1 +1,0 @@
-define(["app/core/View","app/prodShiftOrders/templates/serialNumbers"],function(e,t){"use strict";return e.extend({template:t,remoteTopics:{},getTemplateData:function(){return{prodShiftOrderId:this.model.id,serialNumbers:this.collection.toJSON()}}})});

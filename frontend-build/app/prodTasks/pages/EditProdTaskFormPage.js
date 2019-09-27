@@ -1,1 +1,0 @@
-define(["jquery","app/core/pages/EditFormPage","../ProdTaskCollection","../views/ProdTaskFormView"],function(e,s,a,t){"use strict";return s.extend({FormView:t,load:function(s){var t=this.model;t.allTags=[],t.allTasks=new a;var o=t.allTasks.fetch({reset:!0}),r=e.ajax({url:"/prodTaskTags",success:function(e){t.allTags=e}});return s(t.fetch(this.options.fetchOptions),o,r)}})});

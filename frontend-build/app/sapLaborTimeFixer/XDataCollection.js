@@ -1,1 +1,0 @@
-define(["../core/Collection","./XData"],function(e,t){"use strict";return e.extend({model:t,rqlQuery:"exclude(data)&sort(-createdAt)&limit(15)"})});
