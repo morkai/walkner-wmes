@@ -427,6 +427,11 @@ define([
         return;
       }
 
+      if (lastPart.line !== prevPart.line && this.plan.getMoment().after('2019-10-01'))
+      {
+        return;
+      }
+
       if (lastPart.qtyPlan <= this.groupExtraItems)
       {
         prevPart.finishTime = lastPart.finishTime;
