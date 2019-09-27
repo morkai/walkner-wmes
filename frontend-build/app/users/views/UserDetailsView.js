@@ -1,0 +1,1 @@
+define(["underscore","app/data/loadedModules","app/core/views/DetailsView","app/users/templates/details"],function(e,s,a,r){"use strict";return a.extend({template:r,localTopics:{"companies.synced":"render","aors.synced":"render"},serialize:function(){return e.assign(a.prototype.serialize.call(this),{loadedModules:s})}})});

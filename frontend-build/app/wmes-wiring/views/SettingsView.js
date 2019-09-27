@@ -1,0 +1,1 @@
+define(["app/settings/views/SettingsView","app/wmes-wiring/templates/settings"],function(e,t){"use strict";return e.extend({clientUrl:"#wiring;settings",template:t})});

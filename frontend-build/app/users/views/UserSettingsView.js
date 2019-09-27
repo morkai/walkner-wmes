@@ -1,0 +1,1 @@
+define(["app/settings/views/SettingsView","app/users/templates/settings"],function(e,t){"use strict";return e.extend({clientUrl:"#users;settings",template:t})});

@@ -1,0 +1,1 @@
+define(["../i18n","../core/Model"],function(t,i){"use strict";return i.extend({urlRoot:"/qi/standards",clientUrlRoot:"#qi/standards",topicPrefix:"qi.standards",privilegePrefix:"QI:DICTIONARIES",nlsDomain:"qiStandards",labelAttribute:"name",defaults:{active:!0},serialize:function(){var i=this.toJSON();return i.active=t("qiStandards","active:"+(!1!==i.active)),i}})});

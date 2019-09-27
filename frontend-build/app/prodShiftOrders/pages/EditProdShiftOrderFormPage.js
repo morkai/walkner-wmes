@@ -1,0 +1,1 @@
+define(["app/core/pages/EditFormPage","../views/ProdShiftOrderFormView"],function(e,r){"use strict";return e.extend({FormView:r})});

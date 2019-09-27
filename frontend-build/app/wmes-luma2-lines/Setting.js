@@ -1,0 +1,1 @@
+define(["../settings/Setting"],function(t){"use strict";return t.extend({urlRoot:"/luma2/settings",nlsDomain:"wmes-luma2-lines"})});

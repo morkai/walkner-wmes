@@ -1,0 +1,1 @@
+define(["app/i18n","app/core/util/pageActions","app/core/pages/FilteredListPage","../views/ProdShiftOrderFilterView","../views/ProdShiftOrderListView"],function(e,i,r,t,s){"use strict";return r.extend({FilterView:t,ListView:s,pageId:"prodShiftOrderList",breadcrumbs:[e.bound("prodShiftOrders","BREADCRUMBS:browse")],actions:function(e){return[i.export(e,this,this.collection)]}})});

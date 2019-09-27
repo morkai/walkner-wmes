@@ -1,0 +1,1 @@
+define(["../core/Model","./util/decorateProdLogEntry"],function(r,e){"use strict";return r.extend({urlRoot:"/prodLogEntries",clientUrlRoot:"#prodLogEntries",topicPrefix:"prodLogEntries",privilegePrefix:"PROD_DATA",nlsDomain:"prodLogEntries",serialize:function(){return e(this)}})});

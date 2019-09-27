@@ -1,0 +1,1 @@
+define(["app/core/util/pageActions","app/core/pages/FilteredListPage","app/xiconf/views/XiconfResultFilterView","app/xiconf/views/XiconfResultListView"],function(e,i,t,n){"use strict";return i.extend({baseBreadcrumb:!0,FilterView:t,ListView:n,actions:function(i){return[e.export(i,this,this.collection)]}})});

@@ -1,0 +1,1 @@
+define(function(n,i,e){"use strict";e.exports={true:!0,false:!1,null:null,undefined:void 0,Infinity:1/0,"-Infinity":-1/0}});

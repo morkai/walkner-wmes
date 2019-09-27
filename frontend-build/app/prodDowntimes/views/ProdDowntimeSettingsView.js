@@ -1,0 +1,1 @@
+define(["underscore","app/settings/views/SettingsView","app/prodDowntimes/templates/settings"],function(e,t,s){"use strict";return t.extend({clientUrl:"#prodDowntimes;settings",template:s})});

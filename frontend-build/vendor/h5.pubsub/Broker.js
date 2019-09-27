@@ -1,0 +1,1 @@
+define(function(o,t,n){function p(){}n.exports=p,p.prototype.destroy=function(){},p.prototype.sandbox=function(){},p.prototype.publish=function(o,t,n){},p.prototype.subscribe=function(o,t){},p.prototype.unsubscribe=function(o){}});

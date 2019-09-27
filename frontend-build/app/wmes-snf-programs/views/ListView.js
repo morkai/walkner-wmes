@@ -1,0 +1,1 @@
+define(["app/core/views/ListView"],function(e){"use strict";return e.extend({className:"is-clickable",columns:[{id:"name",className:"is-min"},{id:"kind"}]})});

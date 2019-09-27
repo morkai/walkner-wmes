@@ -1,0 +1,1 @@
+define(["app/core/pages/EditFormPage","../views/ProdDowntimeAlertFormView"],function(e,r){"use strict";return e.extend({baseBreadcrumb:"#prodDowntimes",FormView:r})});

@@ -1,0 +1,1 @@
+define(["app/core/views/FilterView","app/prodDowntimeAlerts/templates/filter"],function(e,t){"use strict";return e.extend({template:t,defaultFormData:function(){return{name:""}},termToForm:{name:function(e,t,r){r[e]=t.args[1].replace(/\\(.)/g,"$1")}},serializeFormToQuery:function(e){this.serializeRegexTerm(e,"name",-1,null,!0)}})});

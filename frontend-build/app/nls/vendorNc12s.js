@@ -1,0 +1,1 @@
+define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMBS:browse":function(n){return"12NC"},"filter:submit":function(n){return"Filter"},"PROPERTY:vendor":function(n){return"Vendor no"},"PROPERTY:nc12":function(n){return"12NC"},"PROPERTY:value":function(n){return"Value 1"},"PROPERTY:unit":function(n){return"Unit 1"}},pl:!0}});

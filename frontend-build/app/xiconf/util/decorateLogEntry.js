@@ -1,0 +1,1 @@
+define(["app/i18n","app/time"],function(t,r){"use strict";return function(e){e.duration&&(e.duration=r.toString(e.duration/1e3,!1,!0)),e.errorCode&&(e.error=t("xiconf","error:"+e.errorCode));var o=r.getMoment(e.time);return{datetime:o.toISOString(),time:o.format("HH:mm:ss.SSS"),text:t("xiconf","log:"+e.text,e)}}});

@@ -1,0 +1,1 @@
+define(["app/core/views/FormView","app/qiFaults/templates/form"],function(e,t){"use strict";return e.extend({template:t,afterRender:function(){e.prototype.afterRender.call(this),this.options.editMode&&(this.$id("id").prop("readonly",!0),this.$id("name").focus())},serializeForm:function(e){return e.description||(e.description=""),e.weight||(e.weight=0),e}})});

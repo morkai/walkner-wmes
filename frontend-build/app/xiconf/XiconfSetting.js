@@ -1,0 +1,1 @@
+define(["../settings/Setting"],function(n){"use strict";return n.extend({urlRoot:"/xiconf/settings",nlsDomain:"xiconf"})});

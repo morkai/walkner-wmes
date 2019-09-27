@@ -1,0 +1,1 @@
+define(["zeroclipboard"],function(e){"use strict";return e.config({swfPath:"/vendor/zeroclipboard/ZeroClipboard.swf",cacheBust:!1,zIndex:100}),e});

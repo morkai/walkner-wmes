@@ -1,0 +1,1 @@
+define(["../core/Collection","./QiActionStatus"],function(t,o){"use strict";return t.extend({model:o,comparator:"position"})});

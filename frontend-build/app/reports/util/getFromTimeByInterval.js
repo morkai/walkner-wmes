@@ -1,0 +1,1 @@
+define(["app/time"],function(e){"use strict";return function(t){var r=e.getMoment().hours(6).startOf("hour");switch(t){case"year":case"quarter":case"month":case"week":r.startOf(t)}return r.valueOf()}});

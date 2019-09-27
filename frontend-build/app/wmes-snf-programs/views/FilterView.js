@@ -1,0 +1,1 @@
+define(["app/core/views/FilterView","app/wmes-snf-programs/templates/filter"],function(e,r){"use strict";return e.extend({template:r,defaultFormData:{name:""},termToForm:{name:function(e,r,a){"regex"===r.name&&(a[e]=r.args[1].replace("^",""))}},serializeFormToQuery:function(e){var r=this.$id("name").val().trim();r.length&&e.push({name:"regex",args:["name",r,"i"]})}})});

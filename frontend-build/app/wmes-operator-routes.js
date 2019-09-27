@@ -1,0 +1,1 @@
+define(["./operator/routes"],function(){"use strict"});

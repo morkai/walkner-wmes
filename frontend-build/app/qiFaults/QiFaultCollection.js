@@ -1,0 +1,1 @@
+define(["../core/Collection","./QiFault"],function(e,r){"use strict";return e.extend({model:r,rqlQuery:"sort(_id)",comparator:"_id"})});

@@ -1,0 +1,1 @@
+define(["app/licenses/util/createLicenseFeaturesSerializer"],function(e){"use strict";return e(["wmes","sol","t24vdc","led","gprs","glp2","fl","ft","hid","weight"])});

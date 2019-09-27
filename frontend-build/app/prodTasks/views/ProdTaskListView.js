@@ -1,0 +1,1 @@
+define(["app/core/views/ListView"],function(e){"use strict";return e.extend({columns:["name","parent","tags","fteDiv","inProd","clipColor"]})});

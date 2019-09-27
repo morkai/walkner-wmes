@@ -1,0 +1,1 @@
+define(["app/core/pages/AddFormPage","app/qiResults/dictionaries","../views/QiResultFormView"],function(e,t,a){"use strict";return e.extend({pageClassName:"page-max-flex",baseBreadcrumb:!0,FormView:a,load:function(e){return e(t.load())},destroy:function(){e.prototype.destroy.call(this),t.unload()},afterRender:function(){e.prototype.afterRender.call(this),t.load()}})});

@@ -1,0 +1,1 @@
+define(["../data/createSettings","./ProdDowntimeSettingCollection"],function(t,e){"use strict";return t(e)});

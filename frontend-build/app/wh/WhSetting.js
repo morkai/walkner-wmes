@@ -1,0 +1,1 @@
+define(["../settings/Setting"],function(t){"use strict";return t.extend({nlsDomain:"wh",urlRoot:"/wh/settings"})});

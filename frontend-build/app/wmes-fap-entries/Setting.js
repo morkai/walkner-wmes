@@ -1,0 +1,1 @@
+define(["../settings/Setting"],function(t){"use strict";return t.extend({urlRoot:"/fap/settings",nlsDomain:"wmes-fap-entries"})});

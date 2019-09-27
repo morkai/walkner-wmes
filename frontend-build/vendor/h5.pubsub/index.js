@@ -1,0 +1,1 @@
+define(function(e,s,r){"use strict";s.MessageBroker=e("./MessageBroker")});

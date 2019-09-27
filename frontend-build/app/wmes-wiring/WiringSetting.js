@@ -1,0 +1,1 @@
+define(["../settings/Setting"],function(n){"use strict";return n.extend({urlRoot:"/wiring/settings",nlsDomain:"wmes-wiring"})});
