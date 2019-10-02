@@ -37,7 +37,7 @@ define([
         obj.rowClassName += ' is-inProgress';
       }
 
-      obj.rowSpan = obj.schedule.length;
+      obj.rowSpan = obj.schedule.length || 1;
 
       return obj;
     }
