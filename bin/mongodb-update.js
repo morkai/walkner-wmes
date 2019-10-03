@@ -2,3 +2,5 @@
 /* global ObjectId,db,print,printjson,load */
 
 'use strict';
+
+db.toolcaltools.updateMany({certificateFile: {$exists: false}}, {$set: {certificateFile: null}});

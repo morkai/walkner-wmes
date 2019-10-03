@@ -75,6 +75,7 @@ define([
       obj.lastDate = time.format(obj.lastDate, 'L');
       obj.nextDate = time.format(obj.nextDate, 'L');
       obj.interval = t(this.nlsDomain, 'interval:' + obj.intervalUnit, {v: obj.interval});
+      obj.url = this.url();
 
       return obj;
     },

@@ -10,6 +10,11 @@
 
   "PANEL:TITLE:changes": "Historia zmian urządzenia",
 
+  "FORM:attachment:old": "Aktualny plik:",
+  "FORM:attachment:new": "Nowy plik:",
+  "FORM:attachment:empty": "nie załączono żadnego pliku.",
+  "FORM:attachment:help": "Wybierz nowy plik, tylko gdy chcesz zastąpić istniejący.",
+
   "PROPERTY:rid": "ID",
   "PROPERTY:name": "Nazwa urządzenia",
   "PROPERTY:type": "Typ urządzenia",
@@ -24,6 +29,7 @@
   "PROPERTY:status": "Status",
   "PROPERTY:comment": "Komentarz",
   "PROPERTY:remaining": "Dni do kalibracji",
+  "PROPERTY:certificateFile": "Skan certifikatu",
 
   "status:in-use": "W użyciu",
   "status:retired": "Wycofane",

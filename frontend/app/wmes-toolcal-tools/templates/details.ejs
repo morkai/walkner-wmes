@@ -10,7 +10,16 @@
       <%- helpers.props(model, ['interval', 'lastDate', 'nextDate', 'remaining']) %>
     </div>
     <div class="col-md-4">
-      <%- helpers.props(model, ['!individualUsers', '!currentUsers']) %>
+      <%- helpers.props(model, [
+        {id: '!certificateFile', value: function(file)
+        {
+          return file
+            ? ('<a href="' + model.url + '/attachments/certificate" target="_blank">' + _.escape(file.name) + '</a>')
+            : t('FORM:attachment:empty');
+        }},
+        '!individualUsers',
+        '!currentUsers'
+      ]) %>
     </div>
   </div>
 </div>

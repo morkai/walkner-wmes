@@ -11,6 +11,11 @@
 
     "PANEL:TITLE:changes": "Tool history",
 
+    "FORM:attachment:old": "Current file:",
+    "FORM:attachment:new": "New file:",
+    "FORM:attachment:empty": "no file was attached.",
+    "FORM:attachment:help": "Select a new file only if you want to override the existing one.",
+
     "PROPERTY:rid": "ID",
     "PROPERTY:name": "Tool name",
     "PROPERTY:type": "Tool type",
@@ -25,6 +30,7 @@
     "PROPERTY:status": "Status",
     "PROPERTY:comment": "Comment",
     "PROPERTY:remaining": "Days to calibration",
+    "PROPERTY:certificateFile": "Certificate file",
 
     "status:in-use": "In use",
     "status:retired": "Retired",

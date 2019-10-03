@@ -57,6 +57,30 @@
         <label for="<%- idPrefix %>-currentUsers" class="control-label"><%- helpers.t('PROPERTY:currentUsers') %></label>
         <input id="<%- idPrefix %>-currentUsers" type="text" name="currentUsers">
       </div>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-certificateFile" class="control-label"><%- t('PROPERTY:certificateFile') %></label>
+        <table>
+          <tbody>
+          <tr>
+            <td class="is-min" style="padding: 0 10px 5px 0"><%- t('FORM:attachment:old') %></td>
+            <td style="padding-bottom: 5px">
+              <% if (model.certificateFile) { %>
+              <a href="/toolcal/attachments/<%- model._id %>/certificate" target="_blank"><%= model.certificateFile.name %></a>
+              <% } else { %>
+              <%- t('FORM:attachment:empty') %>
+              <% } %>
+            </td>
+          </tr>
+          <tr>
+            <td class="is-min" style="padding-right: 10px"><%- t('FORM:attachment:new') %></td>
+            <td><input id="<%- idPrefix %>-certificateFile" name="certificateFile" class="form-control" type="file"></td>
+          </tr>
+          </tbody>
+        </table>
+        <% if (model.certificateFile) { %>
+        <p class="help-block"><%- t('FORM:attachment:help') %></p>
+        <% } %>
+      </div>
       <% if (editMode) { %>
       <div class="form-group">
         <label for="<%- idPrefix %>-comment" class="control-label"><%- helpers.t('PROPERTY:comment') %></label>

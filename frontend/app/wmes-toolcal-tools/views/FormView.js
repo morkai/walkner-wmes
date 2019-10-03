@@ -6,6 +6,7 @@ define([
   'app/i18n',
   'app/time',
   'app/user',
+  'app/viewport',
   'app/core/util/buttonGroup',
   'app/core/util/idAndLabel',
   'app/core/views/FormView',
@@ -19,6 +20,7 @@ define([
   t,
   time,
   user,
+  viewport,
   buttonGroup,
   idAndLabel,
   FormView,
@@ -28,11 +30,6 @@ define([
   template
 ) {
   'use strict';
-
-  function formatUserSelect2Text(user, name)
-  {
-    return name;
-  }
 
   return FormView.extend({
 
@@ -97,6 +94,8 @@ define([
 
       formData.lastDate = dateMoment.isValid() ? dateMoment.toISOString() : null;
 
+      delete formData.certificateFile;
+
       return formData;
     },
 
@@ -141,9 +140,70 @@ define([
         }
       }
 
-      setUpUserSelect2(this.$id(kind + 'Users'), {multiple: true, textFormatter: formatUserSelect2Text})
+      setUpUserSelect2(this.$id(kind + 'Users'), {multiple: true, noPersonnelId: true})
         .select2('data', data)
         .select2('enable', user.isAllowedTo('TOOLCAL:MANAGE'));
+    },
+
+    submitRequest: function()
+    {
+      viewport.msg.saving();
+
+      this.$('.panel-footer').find('.btn').prop('disabled', true);
+
+      var files = this.$('input[type="file"]').filter(function() { return !!this.value; }).get();
+
+      this.uploadNextFile(files, arguments);
+    },
+
+    uploadNextFile: function(files, submitArgs)
+    {
+      var view = this;
+
+      if (files.length === 0)
+      {
+        FormView.prototype.submitRequest.apply(view, submitArgs);
+
+        return;
+      }
+
+      var file = files.shift();
+      var formData = new FormData();
+
+      formData.append('file', file.files[0]);
+
+      var req = view.ajax({
+        type: 'POST',
+        url: '/toolcal/attachments;upload',
+        data: formData,
+        processData: false,
+        contentType: false
+      });
+
+      req.fail(view.handleFailure.bind(view));
+
+      req.done(function(attachment)
+      {
+        view.model.set(file.name, attachment, {silent: true});
+        view.uploadNextFile(files, submitArgs);
+      });
+    },
+
+    handleSuccess: function()
+    {
+      viewport.msg.saved();
+
+      FormView.prototype.handleSuccess.apply(this, arguments);
+    },
+
+    handleFailure: function()
+    {
+      viewport.msg.hide(null, true);
+      viewport.msg.savingFailed();
+
+      this.$('.panel-footer').find('.btn').prop('disabled', false);
+
+      FormView.prototype.handleFailure.apply(this, arguments);
     }
 
   });

@@ -20,7 +20,7 @@ define([
   user,
   viewport,
   View,
-  renderUserInfo,
+  userInfoTemplate,
   dictionaries,
   renderHistoryItem,
   template
@@ -124,13 +124,13 @@ define([
 
       return {
         time: time.toTagData(change.date),
-        user: renderUserInfo({userInfo: change.user}),
+        user: userInfoTemplate({userInfo: change.user}),
         changes: changes,
         comment: comment
       };
     },
 
-    serializeItemValue: function(property, value)
+    serializeItemValue: function(property, value, old, changeIndex)
     {
       if (value == null || value === '')
       {
@@ -142,10 +142,20 @@ define([
         return time.format(value, 'LL');
       }
 
+      if (/File$/.test(property))
+      {
+        var file = property.replace(/File$/, '');
+        var href = this.model.url() + '/attachments/' + file + '?change=' + changeIndex + '&old=' + (old ? 1 : 0);
+
+        return '<a href="' + href + '" target="_blank">' + _.escape(value.name) + '</a>';
+      }
+
       switch (property)
       {
         case 'users':
-          return value.map(function(u) { return (u.label || '').replace(/\s*\(.*?\)/, ''); }).join(', ');
+          return value
+            .map(function(userInfo) { return userInfoTemplate({userInfo: userInfo, noIp: true}); })
+            .join(', ');
 
         case 'status':
           return this.t('status:' + value);
