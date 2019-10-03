@@ -139,7 +139,26 @@ define([
         className: _.result(this, 'className'),
         tableClassName: _.result(this, 'tableClassName'),
         noData: this.options.noData || t('core', 'LIST:NO_DATA'),
-        panel: this.options.panel
+        panel: this.options.panel,
+        renderValue: function(column, row)
+        {
+          if (row[column.valueProperty] == null)
+          {
+            if (column.noData == null)
+            {
+              return '<em>' + t('core', 'LIST:NO_DATA:cell') + '</em>';
+            }
+
+            return column.noData;
+          }
+
+          if (typeof column.tdDecorator === 'function')
+          {
+            return column.tdDecorator(column.id, row[column.valueProperty], row);
+          }
+
+          return row[column.valueProperty];
+        }
       };
     },
 

@@ -4,7 +4,7 @@
   </div>
   <div class="panel-details row">
     <div class="col-md-4">
-      <%- helpers.props(model, ['status', 'type', 'name', 'sn']) %>
+      <%- helpers.props(model, ['status', 'type', 'name', {id: 'sn', valueClassName: 'text-mono'}]) %>
     </div>
     <div class="col-md-4">
       <%- helpers.props(model, ['interval', 'lastDate', 'nextDate', 'remaining']) %>
