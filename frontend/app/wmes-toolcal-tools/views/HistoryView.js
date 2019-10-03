@@ -76,6 +76,14 @@ define([
 
     },
 
+    initialize: function()
+    {
+      this.once('afterRender', function()
+      {
+        this.listenTo(this.model, 'change:changes', this.updateHistory);
+      });
+    },
+
     getTemplateData: function()
     {
       return {
@@ -164,16 +172,9 @@ define([
       }
     },
 
-    beforeRender: function()
-    {
-      this.stopListening(this.model, 'change:changes', this.updateHistory);
-    },
-
     afterRender: function()
     {
       this.lastChangeCount = this.model.get('changes').length;
-
-      this.listenTo(this.model, 'change:changes', this.updateHistory);
 
       this.$el.popover({
         container: 'body',
@@ -206,7 +207,19 @@ define([
         html += renderHistoryItem({item: this.serializeItem(changes[i], i)});
       }
 
-      $(html).insertAfter(this.$('.toolcal-tools-history-item').last()).addClass('highlight');
+      var $newItem = $(html);
+      var $lastItem = this.$('.toolcal-tools-history-item').last();
+
+      if ($lastItem.length)
+      {
+        $newItem.insertAfter($lastItem);
+      }
+      else
+      {
+        $newItem.insertAfter(this.$('.panel-heading'));
+      }
+
+      $newItem.addClass('highlight');
 
       this.lastChangeCount = changes.length;
     },
