@@ -24,12 +24,12 @@ window.<%- key %> = <%- appData[key] %>;
 </script>
 <script src="config.js"></script>
 <script>
-if (window.navigator.userAgent.indexOf('Trident') !== -1)
+if (/(Trident|Edge)\//.test(window.navigator.userAgent))
 {
   document.body.style.margin = '20px';
   document.body.innerHTML = appLocale === 'pl'
-    ? 'Przeglądarka Microsoft Internet Explorer nie jest wspierana. Wypróbuj <a href="https://www.google.com/chrome">Google Chrome</a>, Operę, Mozilla Firefox lub Microsoft Edge!'
-    : 'Microsoft Internet Explorer browser is not supported. Try <a href="https://www.google.com/chrome">Google Chrome</a>, Opera, Mozilla Firefox or Microsoft Edge!';
+    ? 'Twoja przeglądarka nie jest wspierana. Wypróbuj <a href="https://www.google.com/chrome">Google Chrome</a>, <a href="https://www.mozilla.org/pl/firefox/new/">Firefox</a>, <a href="https://www.microsoftedgeinsider.com/">nowy Microsoft Edge</a> lub Operę!'
+    : 'Your browser is not supported. Try <a href="https://www.google.com/chrome">Google Chrome</a>, <a href="https://www.mozilla.org/pl/firefox/new/">Firefox</a>, <a href="https://www.microsoftedgeinsider.com/">the new Microsoft Edge</a> or Opera!';
 }
 </script>
 <script src="vendor/require/require.js"></script>
