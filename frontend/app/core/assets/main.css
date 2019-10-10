@@ -253,6 +253,14 @@ code.multiline {
   text-shadow: 1px 1px 1px #333;
 }
 
+.dropdown-menu {
+  overflow-y: auto;
+  max-height: 60vh;
+}
+.is-embedded .dropdown-menu {
+  overflow-y: initial;
+  max-height: unset;
+}
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
   color: #fff;
