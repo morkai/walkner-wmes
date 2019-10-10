@@ -66,7 +66,13 @@
   </tr>
   <% childOrder.components.forEach(function(component) { %>
   <tr class="drilling-properties drilling-order-component <%- childOrder.deleted ? 'is-deleted' : '' %>">
-    <td class="drilling-property" data-property="nc12"><%- component.nc12 %></td>
+    <td class="drilling-property" data-property="nc12">
+      <% if (view === 'details') { %>
+      <a href="/orderDocuments/000<%- component.nc12 %>?order=<%- order.order %>" target="_blank" data-action="openDocument"><%- component.nc12 %></a>
+      <% } else { %>
+      <%- component.nc12 %>
+      <% } %>
+    </td>
     <td class="drilling-property" data-property="qty"><%- Math.ceil(component.qty).toLocaleString() %></td>
     <td class="drilling-property" data-property="unit"><%- component.unit %></td>
     <td class="drilling-property" data-property="name"><%= component.name %></td>

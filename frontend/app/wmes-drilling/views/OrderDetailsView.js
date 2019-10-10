@@ -27,6 +27,9 @@ define([
 ) {
   'use strict';
 
+  var ORDER_DOCUMENT_PREVIEW_ID = null;
+  var ORDER_DOCUMENT_PREVIEW_WINDOW = null;
+
   return View.extend({
 
     template: orderDetailsTemplate,
@@ -68,6 +71,38 @@ define([
       'click .btn[data-action]': function(e)
       {
         this.handleAction(e.currentTarget.dataset);
+      },
+      'click a[data-action="openDocument"]': function(e)
+      {
+        var view = this;
+        var aEl = e.currentTarget;
+
+        if (aEl.dataset.checking === '1')
+        {
+          return false;
+        }
+
+        var id = aEl.textContent.trim();
+
+        if (id === ORDER_DOCUMENT_PREVIEW_ID
+          && ORDER_DOCUMENT_PREVIEW_WINDOW
+          && !ORDER_DOCUMENT_PREVIEW_WINDOW.closed)
+        {
+          ORDER_DOCUMENT_PREVIEW_WINDOW.focus();
+
+          return false;
+        }
+
+        if (aEl.dataset.checked !== '1')
+        {
+          view.tryOpenDocument(aEl);
+
+          return false;
+        }
+
+        view.openDocumentWindow(aEl);
+
+        return false;
       }
     },
 
@@ -302,6 +337,80 @@ define([
           });
         }
       });
+    },
+
+    tryOpenDocument: function(aEl)
+    {
+      var view = this;
+
+      viewport.msg.loading();
+
+      aEl.dataset.checking = '1';
+
+      view
+        .ajax({method: 'HEAD', url: aEl.href})
+        .done(function() { view.openDocumentWindow(aEl); })
+        .always(function()
+        {
+          aEl.parentElement.textContent = aEl.textContent;
+          aEl.dataset.checking = '0';
+          aEl.dataset.checked = '1';
+
+          viewport.msg.loaded();
+        });
+    },
+
+    openDocumentWindow: function(aEl)
+    {
+      var view = this;
+      var ready = false;
+      var id = aEl.textContent.trim();
+      var screen = window.screen;
+      var availHeight = screen.availHeight;
+
+      if (screen.availWidth === window.innerWidth && screen.availHeight !== window.innerHeight)
+      {
+        availHeight *= 0.9;
+      }
+
+      var width = screen.availWidth * 0.8;
+      var height = availHeight * 0.9;
+      var left = Math.floor((screen.availWidth - width) / 2);
+      var top = Math.floor((availHeight - height) / 2);
+      var windowFeatures = 'resizable,scrollbars,location=no'
+        + ',top=' + top
+        + ',left=' + left
+        + ',width=' + Math.floor(width)
+        + ',height=' + Math.floor(height);
+      var windowName = 'WMES_ORDER_DOCUMENT_PREVIEW';
+      var win = window.open(aEl.href, windowName, windowFeatures);
+
+      if (!win)
+      {
+        return;
+      }
+
+      ORDER_DOCUMENT_PREVIEW_ID = id;
+      ORDER_DOCUMENT_PREVIEW_WINDOW = win;
+
+      clearInterval(view.timers[windowName]);
+
+      view.timers[windowName] = setInterval(function()
+      {
+        if (win.closed)
+        {
+          ORDER_DOCUMENT_PREVIEW_ID = null;
+          ORDER_DOCUMENT_PREVIEW_WINDOW = null;
+
+          clearInterval(view.timers[windowName]);
+        }
+        else if (!ready && win.ready)
+        {
+          ready = true;
+
+          win.focus();
+        }
+      }, 250);
     },
 
     onVkbFocused: function()

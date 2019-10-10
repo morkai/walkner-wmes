@@ -113,7 +113,8 @@ define([
           first: false,
           last: false,
           commentVisible: true,
-          rowSpan: 'rowSpan'
+          rowSpan: 'rowSpan',
+          view: 'queue'
         };
 
         if (order.visible)
@@ -141,7 +142,7 @@ define([
 
       return {
         orders: orders,
-        renderQueueOrder: queueOrderTemplate
+        renderQueueOrder: this.renderPartialHtml.bind(this, queueOrderTemplate)
       };
     },
 

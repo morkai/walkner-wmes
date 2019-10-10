@@ -55,10 +55,12 @@ define([
       }
     },
 
-    destroy: function()
+    initialize: function()
     {
-      ORDER_DOCUMENT_PREVIEW_NC15 = null;
-      ORDER_DOCUMENT_PREVIEW_WINDOW = null;
+      this.once('afterRender', function()
+      {
+        this.listenTo(this.model, 'change:documents', this.render);
+      });
     },
 
     getTemplateData: function()
@@ -68,16 +70,6 @@ define([
         documents: this.model.get('documents').toJSON(),
         canView: !window.IS_EMBEDDED && user.isAllowedTo('LOCAL', 'DOCUMENTS:VIEW')
       };
-    },
-
-    beforeRender: function()
-    {
-      this.stopListening(this.model, 'change:documents', this.render);
-    },
-
-    afterRender: function()
-    {
-      this.listenToOnce(this.model, 'change:documents', this.render);
     },
 
     tryOpenDocument: function(aEl)
