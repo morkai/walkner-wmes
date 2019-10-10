@@ -106,13 +106,19 @@ window.addEventListener('load', function()
     window.location.href = href + (href.indexOf('?') === -1 ? '?' : '&') + 'pdf=1';
   });
 
-  document.getElementById('lockUi').addEventListener('click', function()
+  var lockUiEl = document.getElementById('lockUi');
+
+  if (window.parent.WMES_DOCS_LOCK_UI)
   {
-    if (window.parent.WMES_DOCS_LOCK_UI)
+    lockUiEl.addEventListener('click', function()
     {
       window.parent.WMES_DOCS_LOCK_UI(); // eslint-disable-line new-cap
-    }
-  });
+    });
+  }
+  else
+  {
+    lockUiEl.style.display = 'none';
+  }
 
   if (firstEl)
   {
@@ -195,13 +201,17 @@ window.addEventListener('load', function()
     });
   }
 
+  var bomToggle = document.getElementById('bomToggle');
+
   if (window.parent.WMES_DOCS_BOM_TOGGLE)
   {
-    var bomToggle = document.getElementById('bomToggle');
-
     bomToggle.addEventListener('click', function() { toggleBom(); });
 
     toggleBom(window.parent.WMES_DOCS_BOM_ACTIVE()); // eslint-disable-line new-cap
+  }
+  else
+  {
+    bomToggle.style.display = 'none';
   }
 });
 
