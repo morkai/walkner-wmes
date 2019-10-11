@@ -445,6 +445,7 @@ define([
     updateLevel: function()
     {
       this.$id('levelIndicator').html(this.model.serializeDetails().levelIndicator);
+      this.toggleWhy5();
     },
 
     updateMessage: function()
@@ -487,6 +488,17 @@ define([
       {
         view.updateText(this, why5[i] || '', valueSelector);
       });
+    },
+
+    toggleWhy5: function()
+    {
+      var hidden = this.model.get('level') !== 4;
+
+      this.$('.fap-prop[data-prop="why5"]')
+        .parent()
+        .toggleClass('hidden', hidden)
+        .next()
+        .toggleClass('hidden', hidden);
     },
 
     updateAnalysis: function()

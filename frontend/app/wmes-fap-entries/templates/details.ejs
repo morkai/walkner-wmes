@@ -129,7 +129,7 @@
       </div>
     </div>
     <div class="fap-prop-separator"></div>
-    <div class="fap-props">
+    <div class="fap-props <%- model.level === 4 ? '' : 'hidden' %>">
       <div class="fap-prop" data-prop="why5" style="flex: 1 1 auto">
         <div class="fap-prop-name"><%- helpers.t('PROPERTY:why5') %></div>
         <div class="fap-prop-value">
@@ -142,7 +142,7 @@
         </div>
       </div>
     </div>
-    <div class="fap-prop-separator"></div>
+    <div class="fap-prop-separator <%- model.level === 4 ? '' : 'hidden' %>"></div>
     <div class="fap-props">
       <div class="fap-prop fap-is-textarea <%- model.multiline.solutionSteps ? 'fap-is-multiline' : '' %>" data-prop="solutionSteps" style="flex: 1 1 auto">
         <div class="fap-prop-name"><%- helpers.t('PROPERTY:solutionSteps') %></div>
