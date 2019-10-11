@@ -27,6 +27,8 @@
   "PAGE_ACTION:changes": "Historia zmian",
   "PAGE_ACTION:settings": "Ustawienia",
   "PAGE_ACTION:settings:copy": "Kopiuj ustawienia linii",
+  "PAGE_ACTION:toggleChanges:expand": "Rozwiń",
+  "PAGE_ACTION:toggleChanges:collapse": "Zwiń",
 
   "filter:date": "Data planu",
   "filter:mrps": "MRP",

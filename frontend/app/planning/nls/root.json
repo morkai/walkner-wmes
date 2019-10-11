@@ -28,6 +28,8 @@
     "PAGE_ACTION:changes": "Change history",
     "PAGE_ACTION:settings": "Settings",
     "PAGE_ACTION:settings:copy": "Copy line settings",
+    "PAGE_ACTION:toggleChanges:expand": "Expand",
+    "PAGE_ACTION:toggleChanges:collapse": "Collapse",
 
     "filter:date": "Plan date",
     "filter:mrps": "All MRP",

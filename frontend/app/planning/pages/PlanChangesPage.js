@@ -44,6 +44,22 @@ define([
       ];
     },
 
+    actions: function()
+    {
+      return [
+        {
+          icon: 'chevron-down',
+          label: this.t('PAGE_ACTION:toggleChanges:expand'),
+          callback: this.toggleChanges.bind(this, true)
+        },
+        {
+          icon: 'chevron-up',
+          label: this.t('PAGE_ACTION:toggleChanges:collapse'),
+          callback: this.toggleChanges.bind(this, false)
+        }
+      ];
+    },
+
     remoteTopics: {
 
       'planning.changes.created': function(change)
@@ -368,6 +384,26 @@ define([
         default:
           return String(value);
       }
+    },
+
+    toggleChanges: function(state)
+    {
+      this.$('.planning-change-hd').each(function()
+      {
+        if (state)
+        {
+          if (this.classList.contains('is-expanded'))
+          {
+            return;
+          }
+
+          this.click();
+        }
+        else
+        {
+          this.classList.remove('is-expanded');
+        }
+      });
     }
 
   });
