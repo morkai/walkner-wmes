@@ -164,18 +164,40 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-4 form-group">
+        <div class="col-lg-6 form-group">
           <label for="<%- idPrefix %>-problem" class="control-label"><%- helpers.t('PROPERTY:problem') %></label>
           <textarea id="<%- idPrefix %>-problem" name="problem" class="form-control" rows="4" data-role="inspector"></textarea>
         </div>
-        <div class="col-lg-4 form-group">
+        <div class="col-lg-6 form-group">
           <label for="<%- idPrefix %>-immediateActions" class="control-label"><%- helpers.t('PROPERTY:immediateActions') %></label>
           <textarea id="<%- idPrefix %>-immediateActions" name="immediateActions" class="form-control" rows="4" data-role="inspector specialist nokOwner leader"></textarea>
         </div>
-        <div class="col-lg-4 form-group">
-          <label for="<%- idPrefix %>-rootCause" class="control-label"><%- helpers.t('PROPERTY:rootCause') %></label>
-          <textarea id="<%- idPrefix %>-rootCause" name="rootCause" class="form-control" rows="4" data-role="inspector specialist nokOwner leader"></textarea>
-        </div>
+      </div>
+<%
+
+  var rootCause = [];
+
+  if (Array.isArray(model.rootCause))
+  {
+    rootCause = model.rootCause.concat([]);
+  }
+
+  while (rootCause.length < 2)
+  {
+    rootCause.push('');
+  }
+
+  if (_.last(rootCause) !== '')
+  {
+    rootCause.push('');
+  }
+
+%>
+      <div class="form-group">
+        <label for="<%- idPrefix %>-rootCause" class="control-label is-required"><%- helpers.t('PROPERTY:rootCause') %></label>
+        <% rootCause.forEach(function(why, i) { %>
+        <input name="rootCause[<%- i %>]" class="form-control qiResults-form-rootCause" <%- i < 2 ? 'required' : '' %> data-role="inspector specialist nokOwner leader" placeholder="<%- t('FORM:rootCause:placeholder', {n: i + 1}) %>">
+        <% }) %>
       </div>
       <% if (model.okFile || model.nokFile) { %>
       <% if (canEditAttachments) { %>

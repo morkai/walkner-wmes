@@ -39,7 +39,8 @@ define([
 
       'submit form': function()
       {
-        var $comment = this.$id('comment');
+        var view = this;
+        var $comment = view.$id('comment');
         var comment = $comment.val().trim();
 
         if (comment === '')
@@ -47,11 +48,11 @@ define([
           return false;
         }
 
-        var $submit = this.$id('submit').prop('disabled', true);
+        var $submit = view.$id('submit').prop('disabled', true);
 
-        var req = this.ajax({
+        var req = view.ajax({
           type: 'PUT',
-          url: '/qi/results/' + this.model.id,
+          url: '/qi/results/' + view.model.id,
           data: JSON.stringify({comment: comment})
         });
 
@@ -65,7 +66,7 @@ define([
           viewport.msg.show({
             type: 'error',
             time: 3000,
-            text: t('qiResults', 'MSG:comment:failure')
+            text: view.t('MSG:comment:failure')
           });
         });
 
@@ -132,7 +133,7 @@ define([
         changes: _.map(change.data, function(values, property)
         {
           return {
-            label: t('qiResults', 'PROPERTY:' + property),
+            label: this.t('PROPERTY:' + property),
             oldValue: this.serializeItemValue(property, values[0], true, changeIndex),
             newValue: this.serializeItemValue(property, values[1], false, changeIndex)
           };
@@ -145,7 +146,7 @@ define([
     {
       if (property === 'ok')
       {
-        return t('qiResults', 'ok:' + value);
+        return this.t('ok:' + value);
       }
 
       if (typeof value === 'number')
@@ -156,6 +157,22 @@ define([
       if (_.isEmpty(value))
       {
         return '-';
+      }
+
+      var more = null;
+
+      if (property === 'rootCause')
+      {
+        more = '<ol>';
+
+        value.forEach(function(why)
+        {
+          more += '<li>' + _.escape(why) + '</li>';
+        });
+
+        more += '</ol>';
+
+        value = value.join('\n');
       }
 
       switch (property)
@@ -179,16 +196,6 @@ define([
           return model ? model.getLabel() : value;
         }
 
-        case 'faultDescription':
-        case 'problem':
-        case 'immediateActions':
-        case 'immediateResults':
-        case 'rootCause':
-          return value.length <= 43 ? value : {
-            more: value,
-            toString: function() { return value.substr(0, 40) + '...'; }
-          };
-
         case 'okFile':
         case 'nokFile':
           return '<a href="/qi/results/' + this.model.id
@@ -199,14 +206,17 @@ define([
         case 'correctiveActions':
           return '<a class="qiResults-history-correctiveActions" data-property="' + property + '"'
             + ' data-index="' + changeIndex + '" data-which="' + (isOld ? '0' : '1') + '">'
-            + t('qiResults', 'history:correctiveActions', {count: value.length})
+            + this.t('history:correctiveActions', {count: value.length})
             + '</a>';
 
         case 'serialNumbers':
           return value.join(', ');
 
         default:
-          return value || '';
+          return value.length <= 43 ? value : {
+            more: more || value,
+            toString: function() { return value.substr(0, 40) + '...'; }
+          };
       }
     },
 
@@ -226,6 +236,7 @@ define([
         selector: '.has-more',
         placement: 'top',
         trigger: 'hover',
+        html: true,
         template: this.$el.popover.Constructor.DEFAULTS.template.replace(
           'class="popover"',
           'class="popover qiResults-history-popover"'

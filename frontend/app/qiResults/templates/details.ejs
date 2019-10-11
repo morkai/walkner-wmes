@@ -81,7 +81,24 @@
             {id: 'faultDescription', valueClassName: 'text-lines'},
             {id: 'problem', valueClassName: 'text-lines'},
             {id: 'immediateActions', valueClassName: 'text-lines'},
-            {id: 'rootCause', valueClassName: 'text-lines'},
+            {id: '!rootCause', valueClassName: 'text-lines', value: function(rootCause)
+            {
+              if (!Array.isArray(rootCause) || !rootCause.length)
+              {
+                return '';
+              }
+
+              var html = '<ol>';
+
+              rootCause.forEach(function(why)
+              {
+                html += '<li>' + _.escape(why) + '</li>';
+              });
+
+              html += '</ol>';
+
+              return html;
+            }}
           ]) %>
         </div>
       </div>

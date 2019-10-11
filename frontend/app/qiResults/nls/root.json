@@ -131,6 +131,7 @@
     "FORM:nokFile:current": "Current NOK file",
     "FORM:attachments:remove": "remove",
     "FORM:attachments:update": "Select new files only if you want to replace the existing ones.",
+    "FORM:rootCause:placeholder": "Why?",
 
     "correctiveActions:#": "#",
     "correctiveActions:what": "Action",

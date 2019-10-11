@@ -131,6 +131,7 @@
   "FORM:nokFile:current": "Aktualne zdjęcie NOK",
   "FORM:attachments:remove": "usuń",
   "FORM:attachments:update": "Wybierz nowe pliki tylko wtedy, gdy chcesz nadpisać aktualne.",
+  "FORM:rootCause:placeholder": "Dlaczego?",
 
   "correctiveActions:#": "#",
   "correctiveActions:what": "Akcja",

@@ -28,6 +28,9 @@
 .row + .qiResults-form-comment {
   margin-top: 0;
 }
+.qiResults-form-rootCause + .qiResults-form-rootCause {
+  margin-top: 5px;
+}
 @media (max-width: 1200px) {
   .qiResults-form textarea[name="faultDescription"] {
     height: auto;

@@ -104,6 +104,50 @@ define([
       'change #-serialNumbers': function(e)
       {
         e.target.value = this.parseSerialNumbers(e.target.value).join(', ');
+      },
+      'input .qiResults-form-rootCause': function(e)
+      {
+        var $inputs = this.$('.qiResults-form-rootCause');
+
+        if ($inputs.length > 2)
+        {
+          var remaining = $inputs.length;
+
+          $inputs.each(function()
+          {
+            if (this === e.target || remaining === 2)
+            {
+              return;
+            }
+
+            if (this.value.trim() === '')
+            {
+              remaining -= 1;
+
+              $(this).remove();
+            }
+          });
+        }
+
+        var $last = this.$('.qiResults-form-rootCause').last();
+
+        if ($last.val().trim() !== '')
+        {
+          $last
+            .clone()
+            .attr('name', 'rootCause[' + Date.now() + ']')
+            .val('')
+            .insertAfter($last);
+        }
+
+        this.$('.qiResults-form-rootCause').each(function(i)
+        {
+          this.required = i < 2;
+        });
+      },
+      'click label[for$="rootCause"]': function()
+      {
+        this.$('.qiResults-form-rootCause').first().focus();
       }
 
     }, FormView.prototype.events),
@@ -136,11 +180,11 @@ define([
       });
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var faultCode = this.model.get('faultCode');
 
-      return _.assign(FormView.prototype.serialize.call(this), {
+      return {
         inspectedAtMin: time.getMoment(this.model.get('inspectedAt')).clone().subtract(14, 'days').format('YYYY-MM-DD'),
         inspectedAtMax: time.getMoment().startOf('day').add(1, 'days').format('YYYY-MM-DD'),
         kinds: qiDictionaries.kinds.map(idAndLabel),
@@ -164,7 +208,7 @@ define([
         canEditAttachments: this.model.canEditAttachments(this.options.editMode),
         canEditActions: this.model.canEditActions(this.options.editMode),
         canAddActions: this.model.canAddActions()
-      });
+      };
     },
 
     serializeInspectors: function()
@@ -436,6 +480,10 @@ define([
       }
 
       formData.mrp = view.$id('division').attr('data-orders-mrp') || '';
+
+      formData.rootCause = (formData.rootCause || [])
+        .map(function(why) { return why.trim(); })
+        .filter(function(why) { return /[a-zA-Z]+/.test(why); });
 
       return formData;
     },
