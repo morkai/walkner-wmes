@@ -413,7 +413,7 @@ define([
       }
       else
       {
-        html = '<a href="javascript:void(0)" class="fap-autolink" data-type="order" data-id="' + details.orderNo + '">'
+        html = '<a class="fap-autolink" data-type="order" data-id="' + details.orderNo + '">'
           + details.orderNo
           + '</a>';
       }

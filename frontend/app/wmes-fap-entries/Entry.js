@@ -653,7 +653,7 @@ define([
         }
 
         return prefix
-          + '<a href="javascript:void(0)" class="fap-autolink"'
+          + '<a class="fap-autolink"'
           + ' title="' + t(nlsDomain, 'autolink:' + type) + '"'
           + ' data-type="' + type + '"'
           + ' data-id="' + id.toUpperCase() + '">'

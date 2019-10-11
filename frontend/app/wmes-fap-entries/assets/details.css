@@ -3,7 +3,6 @@
   width: 1200px;
   text-align: center;
 }
-
 .fap-details-hd {
   display: flex;
   margin-bottom: 30px;
@@ -22,6 +21,9 @@
   padding: 5px 20px;
   font-size: 28px;
   min-width: 320px;
+}
+.fap-autolink {
+  cursor: pointer;
 }
 .fap-props {
   display: flex;
