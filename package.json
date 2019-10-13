@@ -5,15 +5,15 @@
   "version": "0.143.0",
   "updater": {
     "wmes": {
-      "backend": 487,
-      "frontend": 656,
+      "backend": 488,
+      "frontend": 657,
       "reports": 98,
       "attachments": 3,
       "importer-sap": 53,
       "importer-results": 12,
       "watchdog": 13,
       "mailer": 14,
-      "operator": 87,
+      "operator": 88,
       "docs": 39,
       "heff": 35,
       "planning": 63,
@@ -27,7 +27,7 @@
       "luma2": 5,
       "trw": 12,
       "luca": 7,
-      "drilling": 4,
+      "drilling": 5,
       "wiring": 1,
       "ct": 4
     },

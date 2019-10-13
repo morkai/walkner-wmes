@@ -1078,7 +1078,7 @@ assets/../vendor/select2/select2.css
 assets/./select2.css
 assets/../vendor/datatables/media/css/jquery.dataTables.css
 assets/../vendor/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.css
-assets/../vendor/highlight/styles/monokai.css
+assets/../vendor/highlight/styles/monokai-sublime.css
 assets/../app/core/assets/main.css
 assets/../app/orgUnits/assets/main.css
 assets/../app/settings/assets/main.css
@@ -1246,9 +1246,9 @@ vendor/font-awesome/css/font-awesome.css
 ----------------
 vendor/font-awesome/css/font-awesome.css
 
-vendor/highlight/styles/monokai.css
+vendor/highlight/styles/monokai-sublime.css
 ----------------
-vendor/highlight/styles/monokai.css
+vendor/highlight/styles/monokai-sublime.css
 
 vendor/select2/select2.css
 ----------------
@@ -1841,6 +1841,7 @@ app/pfepEntries/routes.js
 app/orderBomMatchers/routes.js
 app/help/routes.js
 app/logs-browserErrors/routes.js
+app/sapLaborTimeFixer/routes.js
 app/wmes-toolcal-types/routes.js
 app/wmes-toolcal-tools/routes.js
 app/wmes-fap-categories/Category.js
