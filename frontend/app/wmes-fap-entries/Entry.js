@@ -345,7 +345,7 @@ define([
       var leader = user.isAllowedTo('FN:leader');
       var whman = user.isAllowedTo('FN:whman', 'FN:prod_whman', 'FN:in_whman');
       var prodPlanner = user.isAllowedTo('FN:production-planner');
-      var analyzers = this.get('analyzers');
+      var analyzers = this.get('analyzers') || [];
       var analyzer = _.some(analyzers, function(u) { return user.data._id === u.id; });
       var mainAnalyzer = analyzer && analyzers[0].id === user.data._id;
       var subdivisionType = this.get('subdivisionType');

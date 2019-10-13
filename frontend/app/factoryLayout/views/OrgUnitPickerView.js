@@ -135,6 +135,11 @@ define([
 
       var choicesEl = $input.select2('container').find('.select2-choices')[0];
 
+      if (!choicesEl)
+      {
+        return;
+      }
+
       this.sortables.push(new Sortable(choicesEl, {
         draggable: '.select2-search-choice',
         filter: '.select2-search-choice-close',

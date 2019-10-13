@@ -280,6 +280,11 @@ define([
 
     onDisplayOptionsChange: function()
     {
+      if (!this.chart)
+      {
+        return;
+      }
+
       var visibleSeries = this.displayOptions.get('series');
       var hourlyInterval = this.model.query.get('interval') === 'hour';
 

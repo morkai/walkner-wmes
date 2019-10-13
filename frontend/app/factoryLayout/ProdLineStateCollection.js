@@ -48,6 +48,11 @@ define([
      */
     getByOrgUnit: function(orgUnitType, orgUnitIds, isBlacklisted)
     {
+      if (_.isEmpty(orgUnitIds))
+      {
+        return [];
+      }
+
       if (orgUnitType === 'prodLine' || typeof isBlacklisted !== 'function')
       {
         isBlacklisted = function() { return false; };

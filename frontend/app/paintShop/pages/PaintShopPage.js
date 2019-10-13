@@ -828,8 +828,11 @@ define([
       {
         page.timers.closeOrderDetails = setTimeout(function()
         {
-          page.orderDetailsWindow.close();
-          page.orderDetailsWindow = null;
+          if (page.orderDetailsWindow)
+          {
+            page.orderDetailsWindow.close();
+            page.orderDetailsWindow = null;
+          }
         }, 30000);
       };
 

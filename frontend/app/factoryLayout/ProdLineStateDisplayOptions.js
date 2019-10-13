@@ -40,7 +40,7 @@ define([
       var str = 'statuses=' + attrs.statuses
         + '&states=' + attrs.states
         + '&orgUnitType=' + attrs.orgUnitType
-        + '&orgUnitIds=' + attrs.orgUnitIds.map(encodeURIComponent);
+        + '&orgUnitIds=' + (attrs.orgUnitIds || []).map(encodeURIComponent);
 
       if (attrs.blacklisted)
       {

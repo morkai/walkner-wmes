@@ -122,9 +122,12 @@ define([
     {
       var $messages = this.$id('messages');
 
-      $messages[0].scrollTop = this.chatScrollTop === -1 ? 9999999 : this.chatScrollTop;
+      if ($messages.length)
+      {
+        $messages[0].scrollTop = this.chatScrollTop === -1 ? 9999999 : this.chatScrollTop;
 
-      $messages.on('scroll', this.onScroll.bind(this));
+        $messages.on('scroll', this.onScroll.bind(this));
+      }
     },
 
     send: function()

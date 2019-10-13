@@ -241,6 +241,12 @@ define([
     resize: function()
     {
       var $action = this.$('.planning-mrp-list-action');
+
+      if (!$action.length)
+      {
+        return;
+      }
+
       var $scrollIndicator = this.$id('scrollIndicator');
       var pos = $action.position();
 

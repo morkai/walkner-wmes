@@ -48,6 +48,11 @@ define([
 
   Collection.prototype.parse = function(res)
   {
+    if (!res)
+    {
+      res = {totalCount: 0, collection: []};
+    }
+
     if (this.paginationData)
     {
       this.paginationData.set(this.getPaginationData(res));
@@ -146,7 +151,7 @@ define([
   Collection.prototype.getPaginationData = function(res)
   {
     return {
-      totalCount: res.totalCount,
+      totalCount: res.totalCount || 0,
       urlTemplate: this.genPaginationUrlTemplate(),
       skip: this.rqlQuery.skip,
       limit: this.rqlQuery.limit

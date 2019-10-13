@@ -1475,13 +1475,14 @@ define([
     isBetweenInitialDowntimeWindow: function(time)
     {
       var initialDowntimeWindow = parseInt(this.settings.getValue('initialDowntimeWindow'), 10);
+      var date = this.get('date');
 
-      if (isNaN(initialDowntimeWindow) || initialDowntimeWindow < 1)
+      if (isNaN(initialDowntimeWindow) || initialDowntimeWindow < 1 || !date)
       {
         return false;
       }
 
-      var windowStart = this.get('date').getTime();
+      var windowStart = date.getTime();
       var windowEnd = windowStart + initialDowntimeWindow * 60 * 1000;
 
       return time >= windowStart && time <= windowEnd;
