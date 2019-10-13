@@ -23,11 +23,9 @@ define([
       'mrpControllers.synced': 'render'
     },
 
-    getTemplateData: function()
+    serializeDetails: function()
     {
-      return _.assign(DetailsView.prototype.getTemplateData.apply(this, arguments), {
-        model: decorateProdFlow(this.model)
-      });
+      return decorateProdFlow(this.model);
     }
 
   });

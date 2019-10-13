@@ -7,7 +7,7 @@
       '!subdivision',
       {id: '!mrpControllers', value: function(mrps)
       {
-        if (mrps.length)
+        if (Array.isArray(mrps) && mrps.length)
         {
           return '<ul>' + mrps.map(function(mrp) { return '<li><a href="' + mrp.href + '">' + mrp.label + '</a>'; }) + '</ul>';
         }
