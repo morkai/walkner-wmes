@@ -79,5 +79,7 @@
   "data:checkSerialNumber:error": "Zeskanowano nr seryjny: {sn} ({error})",
   "data:setNextOrder": "Ustawiono kolejkę zleceń: {queue}",
 
-  "noData:prodShiftOrder": "<em>brak zlecenia</em>"
+  "noData:prodShiftOrder": "<em>brak zlecenia</em>",
+
+  "ipCopied": "{ip} w schowku"
 }

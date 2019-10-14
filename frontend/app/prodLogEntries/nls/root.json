@@ -80,7 +80,9 @@
     "data:checkSerialNumber:error": "Scanned serial number: {sn} ({error})",
     "data:setNextOrder": "Set orders queue: {queue}",
 
-    "noData:prodShiftOrder": "<em>no order</em>"
+    "noData:prodShiftOrder": "<em>no order</em>",
+
+    "ipCopied": "{ip} in clipboard"
   },
   "pl": true
 }

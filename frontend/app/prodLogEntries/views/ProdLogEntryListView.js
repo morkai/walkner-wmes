@@ -1,16 +1,20 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
+  'underscore',
   'app/user',
   'app/viewport',
   'app/core/views/ListView',
   'app/data/prodLines',
+  'app/data/clipboard',
   'app/orgUnits/util/renderOrgUnitPath'
 ], function(
+  _,
   user,
   viewport,
   ListView,
   prodLines,
+  clipboard,
   renderOrgUnitPath
 ) {
   'use strict';
@@ -24,6 +28,31 @@ define([
         this.refreshCollection();
       }
     },
+
+    events: _.assign({
+
+      'click td[data-id="creator"]': function(e)
+      {
+        var view = this;
+        var logEntry = view.collection.get(view.$(e.target).closest('.list-item')[0].dataset.id);
+        var creator = logEntry.get('creator');
+
+        if (!creator || !creator.ip)
+        {
+          return;
+        }
+
+        clipboard.copy(function(clipboardData)
+        {
+          clipboardData.setData('text/plain', creator.ip);
+
+          clipboard.showTooltip(view, e.currentTarget, e.pageX, e.pageY, {
+            title: view.t('ipCopied', {ip: creator.ip})
+          });
+        });
+      }
+
+    }, ListView.prototype.events),
 
     columns: function()
     {
