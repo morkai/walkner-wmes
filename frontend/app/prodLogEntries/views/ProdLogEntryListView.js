@@ -21,6 +21,8 @@ define([
 
   return ListView.extend({
 
+    className: '',
+
     remoteTopics: {
       'production.synced.**': 'refreshCollection',
       'production.edited.**': function()
@@ -81,11 +83,11 @@ define([
 
     afterRender: function()
     {
-      ListView.prototype.afterRender.call(this);
-
       var view = this;
 
-      this.$('.list-item > td[data-id="prodLine"]')
+      ListView.prototype.afterRender.apply(view, arguments);
+
+      view.$('.list-item > td[data-id="prodLine"]')
         .popover({
           container: this.el,
           trigger: 'hover',

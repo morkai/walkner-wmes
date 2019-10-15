@@ -1,5 +1,7 @@
 {
   "BREADCRUMBS:browse": "Historia operacji na liniach produkcyjnych",
+  "BREADCRUMBS:browse:shift": "Historia operacji z {shift}",
+  "BREADCRUMBS:browse:order": "Historia operacji z {order}",
 
   "filter:submit": "Filtruj",
   "filter:placeholder:type": "Dowolny typ",
@@ -78,8 +80,6 @@
   "data:checkSerialNumber": "Zeskanowano nr seryjny: {sn}",
   "data:checkSerialNumber:error": "Zeskanowano nr seryjny: {sn} ({error})",
   "data:setNextOrder": "Ustawiono kolejkę zleceń: {queue}",
-
-  "noData:prodShiftOrder": "<em>brak zlecenia</em>",
 
   "ipCopied": "{ip} w schowku"
 }

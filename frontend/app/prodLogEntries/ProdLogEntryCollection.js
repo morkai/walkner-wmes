@@ -4,16 +4,18 @@ define([
   '../time',
   '../user',
   '../core/Collection',
+  '../core/util/matchesDate',
   '../core/util/matchesOperType',
-  '../core/util/matchesProdLine',
+  '../core/util/matchesEquals',
   '../orgUnits/util/limitOrgUnits',
   './ProdLogEntry'
 ], function(
   time,
   user,
   Collection,
+  matchesDate,
   matchesOperType,
-  matchesProdLine,
+  matchesEquals,
   limitOrgUnits,
   ProdLogEntry
 ) {
@@ -50,8 +52,11 @@ define([
 
     matches: function(message)
     {
-      return matchesOperType(this.rqlQuery, message.types)
-        && matchesProdLine(this.rqlQuery, message.prodLine);
+      var rql = this.rqlQuery;
+
+      return matchesDate(rql, 'createdAt', message.createdAt)
+        && matchesOperType(rql, message.types)
+        && matchesEquals(rql, 'prodLine', message.prodLine);
     }
 
   });

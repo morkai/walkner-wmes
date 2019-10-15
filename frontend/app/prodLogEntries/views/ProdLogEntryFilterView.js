@@ -41,9 +41,19 @@ define([
     {
       FilterView.prototype.initialize.apply(this, arguments);
 
-      this.setView('#-orgUnit', new OrgUnitPickerView({
-        filterView: this
-      }));
+      if (!this.options.prodShift && !this.options.prodShiftOrder)
+      {
+        this.setView('#-orgUnit', new OrgUnitPickerView({
+          filterView: this
+        }));
+      }
+    },
+
+    getTemplateData: function()
+    {
+      return {
+        extended: !this.options.prodShift && !this.options.prodShiftOrder
+      };
     },
 
     afterRender: function()
@@ -60,7 +70,18 @@ define([
     {
       var type = this.$id('type').val();
 
-      dateTimeRange.formToRql(this, selector);
+      if (this.options.prodShift)
+      {
+        selector.push({name: 'eq', args: ['prodShift', this.options.prodShift]});
+      }
+      else if (this.options.prodShiftOrder)
+      {
+        selector.push({name: 'eq', args: ['prodShiftOrder', this.options.prodShiftOrder]});
+      }
+      else
+      {
+        dateTimeRange.formToRql(this, selector);
+      }
 
       if (type && type.length)
       {

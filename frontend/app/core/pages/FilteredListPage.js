@@ -64,9 +64,21 @@ define([
 
     createListView: function()
     {
-      var ListViewClass = this.ListView || this.options.ListView || ListView;
+      var ListViewClass = this.getListViewClass();
 
-      return new ListViewClass({
+      return new ListViewClass(this.getListViewOptions());
+    },
+
+    getListViewClass: function()
+    {
+      return this.ListView || this.options.ListView || ListView;
+    },
+
+    getListViewOptions: function()
+    {
+      var ListViewClass = this.getListViewClass();
+
+      return {
         collection: this.collection,
         model: this.collection ? undefined : this.getDefaultModel(),
         columns: this.options.columns
@@ -84,16 +96,26 @@ define([
           ListViewClass.prototype.className,
           'is-clickable'
         ], function(className) { return className !== undefined; })
-      });
+      };
     },
 
     createFilterView: function()
     {
-      var FilterViewClass = this.FilterView || this.options.FilterView;
+      var FilterViewClass = this.getFilterViewClass();
 
-      return new FilterViewClass({
+      return new FilterViewClass(this.getFilterViewOptions());
+    },
+
+    getFilterViewClass: function()
+    {
+      return this.FilterView || this.options.FilterView;
+    },
+
+    getFilterViewOptions: function()
+    {
+      return {
         model: this.getDefaultModel()
-      });
+      };
     },
 
     load: function(when)

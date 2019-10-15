@@ -1,6 +1,8 @@
 {
   "root": {
     "BREADCRUMBS:browse": "Operation log",
+    "BREADCRUMBS:browse:shift": "Operation log from {shift}",
+    "BREADCRUMBS:browse:order": "Operation log from {order}",
 
     "filter:submit": "Filter",
     "filter:placeholder:type": "Any type",
@@ -79,8 +81,6 @@
     "data:checkSerialNumber": "Scanned serial number: {sn}",
     "data:checkSerialNumber:error": "Scanned serial number: {sn} ({error})",
     "data:setNextOrder": "Set orders queue: {queue}",
-
-    "noData:prodShiftOrder": "<em>no order</em>",
 
     "ipCopied": "{ip} in clipboard"
   },

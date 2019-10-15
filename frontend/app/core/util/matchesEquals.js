@@ -24,7 +24,7 @@ define([
       return true;
     }
 
-    if (term.args[0] === 'eq')
+    if (term.name === 'eq')
     {
       return String(term.args[1]) === String(value);
     }

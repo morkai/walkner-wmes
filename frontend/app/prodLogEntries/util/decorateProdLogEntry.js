@@ -195,7 +195,7 @@ define([
     }
     else
     {
-      prodLogEntry.prodShiftOrder = t('prodLogEntries', 'noData:prodShiftOrder');
+      prodLogEntry.prodShiftOrder = '';
     }
 
     prodLogEntry.station = prodLogEntry.station ? prodLogEntry.station.toString() : '';

@@ -1,83 +1,82 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'app/i18n',
-  'app/viewport',
-  'app/core/util/bindLoadingMessage',
-  'app/core/View',
-  '../ProdLogEntryCollection',
-  '../views/ProdLogEntryListView',
+  'underscore',
+  'app/core/pages/FilteredListPage',
+  'app/prodShifts/ProdShift',
+  'app/prodShiftOrders/ProdShiftOrder',
   '../views/ProdLogEntryFilterView',
-  'app/core/templates/listPage'
+  '../views/ProdLogEntryListView'
 ], function(
-  t,
-  viewport,
-  bindLoadingMessage,
-  View,
-  ProdLogEntryCollection,
-  ProdLogEntryListView,
-  ProdLogEntryFilterView,
-  listPageTemplate
+  _,
+  FilteredListPage,
+  ProdShift,
+  ProdShiftOrder,
+  FilterView,
+  ListView
 ) {
   'use strict';
 
-  return View.extend({
+  return FilteredListPage.extend({
 
-    template: listPageTemplate,
+    FilterView: FilterView,
+    ListView: ListView,
 
-    layoutName: 'page',
+    actions: null,
 
-    pageId: 'prodLogEntryList',
-
-    breadcrumbs: [
-      t.bound('prodLogEntries', 'BREADCRUMBS:browse')
-    ],
-
-    initialize: function()
+    breadcrumbs: function()
     {
-      this.defineModels();
-      this.defineViews();
+      if (this.prodShift)
+      {
+        return [{
+          href: this.prodShift.genClientUrl(),
+          label: this.t('BREADCRUMBS:browse:shift', {
+            shift: this.prodShift.getLabel()
+          })
+        }];
+      }
 
-      this.setView('.filter-container', this.filterView);
-      this.setView('.list-container', this.listView);
+      if (this.prodShiftOrder)
+      {
+        return [{
+          href: this.prodShiftOrder.genClientUrl(),
+          label: this.t('BREADCRUMBS:browse:order', {
+            order: this.prodShiftOrder.getLabel()
+          })
+        }];
+      }
+
+      return FilteredListPage.prototype.breadcrumbs.apply(this, arguments);
+    },
+
+    getFilterViewOptions: function()
+    {
+      return _.assign(FilteredListPage.prototype.getFilterViewOptions.apply(this, arguments), {
+        prodShift: this.options.prodShift,
+        prodShiftOrder: this.options.prodShiftOrder
+      });
     },
 
     defineModels: function()
     {
-      this.prodLogEntryList = bindLoadingMessage(
-        new ProdLogEntryCollection(null, {rqlQuery: this.options.rql}), this
-      );
-    },
+      FilteredListPage.prototype.defineModels.apply(this, arguments);
 
-    defineViews: function()
-    {
-      this.listView = new ProdLogEntryListView({collection: this.prodLogEntryList});
+      this.prodShift = !this.options.prodShift
+        ? null
+        : new ProdShift({_id: this.options.prodShift});
 
-      this.filterView = new ProdLogEntryFilterView({
-        model: {
-          rqlQuery: this.prodLogEntryList.rqlQuery
-        }
-      });
-
-      this.listenTo(this.filterView, 'filterChanged', this.refreshList);
+      this.prodShiftOrder = !this.options.prodShiftOrder
+        ? null
+        : new ProdShiftOrder({_id: this.options.prodShiftOrder});
     },
 
     load: function(when)
     {
-      return when(this.prodLogEntryList.fetch({reset: true}));
-    },
-
-    refreshList: function(newRqlQuery)
-    {
-      this.prodLogEntryList.rqlQuery = newRqlQuery;
-
-      this.listView.refreshCollectionNow();
-
-      this.broker.publish('router.navigate', {
-        url: this.prodLogEntryList.genClientUrl() + '?' + newRqlQuery,
-        trigger: false,
-        replace: true
-      });
+      return when(
+        this.collection.fetch({reset: true}),
+        this.prodShift ? this.prodShift.fetch() : null,
+        this.prodShiftOrder ? this.prodShiftOrder.fetch() : null
+      );
     }
 
   });

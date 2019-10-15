@@ -1,15 +1,17 @@
 <form id="<%- idPrefix %>-form" class="well filter-form">
+  <% if (extended) { %>
   <%- forms.dateTimeRange({
     idPrefix: idPrefix,
     property: 'createdAt',
     type: 'date+time',
     startHour: 6,
-    labels: {text: t('prodLogEntries', 'PROPERTY:createdAt'), ranges: '+shifts'}
+    labels: {text: t('PROPERTY:createdAt'), ranges: '+shifts'}
   }) %>
   <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>
+  <% } %>
   <div class="form-group">
-    <label for="<%- idPrefix %>-type"><%- t('prodLogEntries', 'PROPERTY:type') %></label>
-    <select id="<%- idPrefix %>-type" name="type" data-placeholder="<%- t('prodLogEntries', 'filter:placeholder:type') %>">
+    <label for="<%- idPrefix %>-type"><%- t('PROPERTY:type') %></label>
+    <select id="<%- idPrefix %>-type" name="type" data-placeholder="<%- t('filter:placeholder:type') %>">
       <option></option>
       <% [
           'changeShift', 'changeMaster', 'changeLeader', 'changeOperator', 'changeOperators',
@@ -22,12 +24,12 @@
           'deleteShift', 'deleteOrder', 'deleteDowntime',
           'checkSpigot', 'checkSerialNumber'
         ].forEach(function(type) { %>
-      <option value="<%- type %>"><%- t('prodLogEntries', 'type:' + type) %></option>
+      <option value="<%- type %>"><%- t('type:' + type) %></option>
       <% }) %>
     </select>
   </div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('prodLogEntries', 'filter:submit') %></span></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= t('filter:submit') %></span></button>
   </div>
 </form>
