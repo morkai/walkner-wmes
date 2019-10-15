@@ -289,6 +289,8 @@
     "snMessage:ORDER_NOT_FOUND": "Line order not found.",
     "snMessage:STANDARD_LABEL": "The virtual SN cannot be used in this order.",
     "snMessage:SUCCESS": "Serial number successfully registered.",
+    "snMessage:MAX_TOTAL": "Order completed.",
+    "snMessage:MAX_LINE": "Line order completed.",
 
     "bomChecker:title": "Checking components",
     "bomChecker:message:todo": "Scan the component label.",

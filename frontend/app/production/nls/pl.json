@@ -286,6 +286,8 @@
   "snMessage:ORDER_NOT_FOUND": "Nie znaleziono zlecenia z linii.",
   "snMessage:STANDARD_LABEL": "Nie można używać wirtualnego numeru seryjnego w tym zleceniu.",
   "snMessage:SUCCESS": "Numer seryjny został pomyślnie zarejestrowany.",
+  "snMessage:MAX_TOTAL": "Wykonano już wszystkie sztuki w zleceniu.",
+  "snMessage:MAX_LINE": "Wykonano już wszystkie sztuki zaplanowane dla linii.",
 
   "bomChecker:title": "Sprawdzanie komponentów",
   "bomChecker:message:todo": "Zeskanuj etykietę komponentu.",

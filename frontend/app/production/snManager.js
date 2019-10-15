@@ -34,6 +34,11 @@ define([
   var handleTimeout = null;
   var scanBuffer = '';
   var snBuffer = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  var maxCheck = {
+    _id: '',
+    count: 0,
+    time: 0
+  };
 
   function handleScanBuffer(buffer)
   {
@@ -177,6 +182,11 @@ define([
       var scannedValue = scanInfo._id.length > 43
         ? (scanInfo._id.substring(0, 40) + '...')
         : scanInfo._id;
+
+      if (!duration && _.includes(['MAX_TOTAL', 'MAX_LINE'], message))
+      {
+        duration = 18000;
+      }
 
       $('#snMessage-text').html(typeof message === 'function' ? message() : t('production', 'snMessage:' + message));
 
@@ -392,6 +402,13 @@ define([
 
         snManager.showMessage(logEntry.data, 'warning', 'CHECKING');
 
+        if (maxCheck._id === logEntry.data._id
+          && maxCheck.count >= 2
+          && logEntry.data.scannedAt - maxCheck.time < 3000)
+        {
+          logEntry.data.skipMaxCheck = true;
+        }
+
         var req = view.ajax({
           method: 'POST',
           url: '/production/checkSerialNumber?bomCheck=' + (bomScanInfo ? 1 : 0),
@@ -425,6 +442,25 @@ define([
 
         req.done(function(res)
         {
+          if (res.result === 'MAX_TOTAL' || res.result === 'MAX_LINE')
+          {
+            if (maxCheck._id === logEntry.data._id && logEntry.data.scannedAt - maxCheck.time < 3000)
+            {
+              maxCheck.count += 1;
+            }
+            else
+            {
+              maxCheck._id = logEntry.data._id;
+              maxCheck.count = 1;
+            }
+
+            maxCheck.time = logEntry.data.scannedAt.getTime();
+          }
+          else
+          {
+            maxCheck._id = '';
+          }
+
           if (res.result === 'CHECK_BOM')
           {
             showBomChecker(res, bomScanInfo);
