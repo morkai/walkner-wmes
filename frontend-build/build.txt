@@ -2327,6 +2327,7 @@ app/production/views/EndWorkDialogView.js
 app/production/templates/orderQueue.js
 app/production/templates/orderQueueRow.js
 app/production/views/OrderQueueView.js
+app/core/util/matchesDate.js
 app/prodSerialNumbers/ProdSerialNumber.js
 app/prodSerialNumbers/ProdSerialNumberCollection.js
 app/core/templates/actionForm.js
