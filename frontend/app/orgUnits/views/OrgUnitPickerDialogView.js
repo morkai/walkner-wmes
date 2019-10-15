@@ -73,12 +73,11 @@ define([
       }
     },
 
-    serialize: function()
+    getTemplateData: function()
     {
       var view = this;
 
       return {
-        idPrefix: view.idPrefix,
         orgUnits: view.model.orgUnitTypes.map(function(type)
         {
           return {
@@ -92,13 +91,23 @@ define([
 
     afterRender: function()
     {
-      var formData = this.serializeFormData();
-
-      js2form(this.el, formData);
+      js2form(this.el, this.serializeFormData());
 
       this.setUpOrgUnitsSelect2();
+    },
 
-      this.$id(formData.orgUnitType).attr('autofocus', true);
+    onDialogShown: function()
+    {
+      var orgUnitType = this.$('input[name="orgUnitType"]:checked').val();
+
+      if (!orgUnitType)
+      {
+        this.$('input[name="orgUnitType"]').last().click();
+      }
+      else
+      {
+        this.$id(orgUnitType).select2('focus');
+      }
     },
 
     serializeFormData: function()
