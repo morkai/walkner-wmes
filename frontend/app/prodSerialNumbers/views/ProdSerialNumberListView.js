@@ -88,6 +88,14 @@ define([
             return html + '</dl>';
           }
         });
+    },
+
+    refreshCollection: function(message)
+    {
+      if (!message || this.collection.matches(message))
+      {
+        ListView.prototype.refreshCollection.apply(this, arguments);
+      }
     }
 
   });

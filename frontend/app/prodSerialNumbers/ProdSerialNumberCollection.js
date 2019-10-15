@@ -3,10 +3,14 @@
 define([
   '../time',
   '../core/Collection',
+  '../core/util/matchesDate',
+  '../core/util/matchesEquals',
   './ProdSerialNumber'
 ], function(
   time,
   Collection,
+  matchesDate,
+  matchesEquals,
   ProdSerialNumber
 ) {
   'use strict';
@@ -32,6 +36,16 @@ define([
           ]
         }
       });
+    },
+
+    matches: function(message)
+    {
+      var rql = this.rqlQuery;
+
+      return matchesDate(rql, 'scannedAt', message.scannedAt)
+        && matchesEquals(rql, 'serialNo', message.serialNo)
+        && matchesEquals(rql, 'orderNo', message.orderNo)
+        && matchesEquals(rql, 'prodLine', message.prodLine);
     }
 
   });
