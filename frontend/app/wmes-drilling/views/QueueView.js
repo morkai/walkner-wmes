@@ -435,7 +435,8 @@ define([
         first: $order.hasClass('is-first'),
         last: $order.hasClass('is-last'),
         commentVisible: true,
-        rowSpan: 'rowSpan'
+        rowSpan: 'rowSpan',
+        view: 'queue'
       }));
     },
 
