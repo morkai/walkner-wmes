@@ -188,6 +188,11 @@ define([
 
     updateData: function(quantitiesDone)
     {
+      if (!Array.isArray(quantitiesDone) || quantitiesDone.length !== 8)
+      {
+        return;
+      }
+
       var currentTime = time.getMoment();
       var currentHour = currentTime.hours();
       var currentHourIndex = HOUR_TO_INDEX[currentHour];
