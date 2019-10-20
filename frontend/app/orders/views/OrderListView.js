@@ -72,12 +72,23 @@ define([
           className: 'is-min',
           tdDecorator: function(columnId, value, row)
           {
+            var name = [row.name];
+
             if (row.description && row.name !== row.description)
             {
-              row.name += ' <i class="fa fa-question-circle"></i>';
+              name.unshift('<i class="fa fa-question-circle"></i>');
             }
 
-            return row.name;
+            if (row.etoCont)
+            {
+              name.unshift('<span class="label label-default">EK</span>');
+            }
+            else if (row.priority === 'E')
+            {
+              name.unshift('<span class="label label-default">E</span>');
+            }
+
+            return name.join(' ');
           }
         },
         {id: 'mrp', className: 'is-min'},

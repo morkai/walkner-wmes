@@ -372,7 +372,6 @@ exports.pubsub = {
     'prodShifts.**', 'prodDowntimes.**', 'prodShiftOrders.**', 'prodChangeRequests.**', 'prodSerialNumbers.created.**',
     'settings.updated.**',
     'icpo.results.synced', 'orders.intake.synced',
-    'orders.updated.*', 'orders.quantityDone.*', 'orders.invalid.**',
     'cags.nc12.synced', 'cags.nc12.syncFailed', 'cags.plan.synced', 'cags.plan.syncFailed',
     'isaRequests.**', 'isaEvents.saved', 'isaShiftPersonnel.updated',
     'pscs.**',

@@ -179,7 +179,8 @@ define([
       return order ? order.getActualOrderData() : {
         quantityTodo: -1,
         quantityDone: -1,
-        statuses: []
+        statuses: [],
+        etoCont: false
       };
     },
 

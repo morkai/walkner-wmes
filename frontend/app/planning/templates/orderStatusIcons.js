@@ -66,12 +66,14 @@ define([
       statuses.push(formatIcon(planOrder.getIcon('eto'), 'orders:eto'));
     }
 
-    if (orderData.priority === 'E')
+    var priority = orderData.etoCont ? 'EK' : orderData.priority;
+
+    if (priority === 'E' || priority === 'EK')
     {
       statuses.push(
         '<span class="planning-mrp-list-property planning-mrp-list-property-priority" '
-        + 'title="' + t('planning', 'orders:priority', {priority: orderData.priority}) + '" '
-        + '>' + orderData.priority + '</span>'
+        + 'title="' + t('planning', 'orders:priority', {priority: priority}) + '" '
+        + '>' + priority + '</span>'
       );
     }
 

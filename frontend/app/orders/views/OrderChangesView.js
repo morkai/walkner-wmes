@@ -271,6 +271,9 @@ define([
         case 'change':
           return time.format(value.time, 'L LTS');
 
+        case 'etoCont':
+          return t('core', 'BOOL:' + value);
+
         default:
           return _.escape(String(value));
       }

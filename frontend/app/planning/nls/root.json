@@ -175,7 +175,7 @@
     "orders:urgent": "Urgent",
     "orders:pinned": "Pinned",
     "orders:eto": "ETO",
-    "orders:priority": "{priority, select, E{ETO Pilot} other{Order priority}}",
+    "orders:priority": "{priority, select, E{ETO Pilot} E{ETO Pilot continuation} other{Order priority}}",
     "orders:lines": "Line",
     "orders:source:plan": "Planned",
     "orders:source:added": "Added",
