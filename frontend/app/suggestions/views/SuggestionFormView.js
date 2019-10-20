@@ -197,6 +197,11 @@ define([
 
     serializeBackTo: function()
     {
+      if (this.backTo !== undefined)
+      {
+        return this.backTo;
+      }
+
       var type = 'behaviorObsCards';
       var data = JSON.parse(localStorage.getItem('BOC_LAST') || 'null');
 
@@ -206,17 +211,27 @@ define([
 
         if (!data)
         {
-          return null;
+          cleanUp();
+
+          return this.backTo = null;
         }
 
         type = 'minutesForSafetyCards';
       }
 
-      return {
+      cleanUp();
+
+      return this.backTo = {
         submitLabel: this.t('FORM:backTo:' + type + ':' + (data._id ? 'edit' : 'add')),
         cancelLabel: this.t('FORM:backTo:' + type + ':cancel'),
         cancelUrl: '#' + type + (data._id ? ('/' + data._id + ';edit') : ';add')
       };
+
+      function cleanUp()
+      {
+        localStorage.removeItem('BOC_LAST');
+        localStorage.removeItem('MFS_LAST');
+      }
     },
 
     checkValidity: function()
