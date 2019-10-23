@@ -166,11 +166,13 @@ define([
           this.$id('login').val('').focus();
         }
 
+        var key = err.code || err.message;
+
         viewport.msg.show({
           type: 'error',
           time: 3000,
-          text: this.t.has('unlockDialog:error:' + err.message)
-            ? this.t('unlockDialog:error:' + err.message)
+          text: this.t.has('unlockDialog:error:' + key)
+            ? this.t('unlockDialog:error:' + key)
             : this.t('unlockDialog:error:UNLOCK_FAILURE')
         });
 
