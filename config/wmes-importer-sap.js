@@ -35,7 +35,6 @@ exports.modules = [
   'xiconf/importer/orders',
   'orderDocuments/importer',
   'orderDocuments/importer/eto',
-  'reports/clipOrderCounter',
   'cags/importer/nc12',
   'cags/importer/plan',
   'kanban/importer'
