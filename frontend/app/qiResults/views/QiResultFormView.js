@@ -207,7 +207,7 @@ define([
         isAndroid: IS_ANDROID,
         canEditAttachments: this.model.canEditAttachments(this.options.editMode),
         canEditActions: this.model.canEditActions(this.options.editMode),
-        canAddActions: this.model.canAddActions()
+        canAddActions: this.model.canAddActions(this.options.editMode)
       };
     },
 

@@ -115,8 +115,13 @@ define([
       return user.isAllowedTo('QI:INSPECTOR', 'QI:RESULTS:MANAGE');
     },
 
-    canAddActions: function()
+    canAddActions: function(editMode)
     {
+      if (editMode)
+      {
+        return this.canEditActions(editMode);
+      }
+
       return user.isAllowedTo('QI:SPECIALIST', 'QI:RESULTS:MANAGE') || this.isNokOwner();
     },
 
