@@ -5,31 +5,35 @@
     startHour: 6,
     labels: {text: helpers.t('PROPERTY:startedAt'), ranges: true}
   }) %>
-  <div class="form-group">
+  <div class="form-group" data-filter="shift">
     <label><%- t('core', 'filter:shift') %></label>
     <div id="<%- idPrefix %>-shift" class="btn-group filter-btn-group" data-toggle="buttons">
       <% [0, 1, 2, 3].forEach(function(shift) { %>
       <label class="btn btn-default">
-        <input type="radio" name="shift" value="<%- shift %>"> <%- t('core', 'SHIFT:' + shift) %>
+        <input type="radio" name="shift" value="<%- shift || '' %>"> <%- t('core', 'SHIFT:' + shift) %>
       </label>
       <% }) %>
     </div>
   </div>
-  <div class="form-group">
+  <div class="form-group" data-filter="orderId">
     <label for="<%- idPrefix %>-orderId"><%- helpers.t('filter:orderId') %></label>
     <input id="<%- idPrefix %>-orderId" class="form-control prodShiftOrders-filter-orderId" name="orderId" type="text" autocomplete="new-password">
   </div>
-  <div class="form-group">
+  <div class="form-group" data-filter="product">
+    <label for="<%- idPrefix %>-product"><%- helpers.t('filter:product') %></label>
+    <input id="<%- idPrefix %>-product" class="form-control" name="product" type="text" autocomplete="new-password">
+  </div>
+  <div class="form-group" data-filter="bom">
     <label for="<%- idPrefix %>-bom"><%- helpers.t('filter:bom') %></label>
     <input id="<%- idPrefix %>-bom" class="form-control prodShiftOrders-filter-orderId" name="bom" type="text" autocomplete="new-password">
   </div>
-  <div class="form-group">
+  <div class="form-group" data-filter="mrp">
     <label for="<%- idPrefix %>-mrp"><%- helpers.t('filter:mrp') %></label>
     <input id="<%- idPrefix %>-mrp" name="mrp" type="text" autocomplete="new-password" data-placeholder=" ">
   </div>
-  <div id="<%- idPrefix %>-orgUnit" class="form-group"></div>
+  <div id="<%- idPrefix %>-orgUnit" class="form-group" data-filter="orgUnit"></div>
   <%- renderLimit() %>
   <div class="form-group filter-actions">
-    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%= helpers.t('filter:submit') %></span></button>
+    <%- renderButton() %>
   </div>
 </form>

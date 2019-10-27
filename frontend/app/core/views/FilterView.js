@@ -10,6 +10,7 @@ define([
   'app/core/util',
   'app/core/util/buttonGroup',
   'app/core/templates/filterLimit',
+  'app/core/templates/filterButton',
   'select2'
 ], function(
   _,
@@ -20,7 +21,8 @@ define([
   View,
   util,
   buttonGroup,
-  filterLimitTemplate
+  filterLimitTemplate,
+  filterButtonTemplate
 ) {
   'use strict';
 
@@ -31,15 +33,27 @@ define([
     termToForm: {},
     defaultFormData: {},
     formData: null,
+    filterList: [],
+    filterMap: {},
 
     events: {
+
       'submit': function()
       {
         this.changeFilter();
 
         return false;
       },
-      'click .filter-toggle': 'toggle'
+
+      'click .filter-toggle': 'toggleExpand',
+
+      'click a[data-filter]': function(e)
+      {
+        e.preventDefault();
+
+        this.showFilter(e.currentTarget.dataset.filter);
+      }
+
     },
 
     collapsed: false,
@@ -51,11 +65,16 @@ define([
       return _.assign(View.prototype.serialize.apply(view, arguments), {
         renderLimit: function(templateData)
         {
-          return filterLimitTemplate(_.assign({
-            idPrefix: view.idPrefix,
+          return view.renderPartialHtml(filterLimitTemplate, _.assign({
             min: view.minLimit,
             max: view.maxLimit,
             hidden: false
+          }, templateData));
+        },
+        renderButton: function(templateData)
+        {
+          return view.renderPartialHtml(filterButtonTemplate, _.assign({
+            filters: view.filterList
           }, templateData));
         }
       });
@@ -77,16 +96,22 @@ define([
 
       js2form(this.el, this.formData);
 
+      if (this.filterList.length)
+      {
+        this.$id('limit').parent().attr('data-filter', 'limit');
+      }
+
       this.$toggleFilter = $('<button class="btn btn-default btn-block filter-toggle" type="button"></button>')
         .append('<i class="fa"></i>')
         .append('<span></span>');
 
       this.$el.append(this.$toggleFilter);
 
-      this.toggle();
+      this.toggleExpand();
+      this.toggleFilters();
     },
 
-    toggle: function()
+    toggleExpand: function()
     {
       if (window.innerWidth < 768)
       {
@@ -101,6 +126,61 @@ define([
       this.$toggleFilter.find('.fa')
         .removeClass('fa-caret-up fa-caret-down')
         .addClass('fa-caret-' + (this.collapsed ? 'down' : 'up'));
+    },
+
+    toggleFilters: function()
+    {
+      var view = this;
+
+      view.filterList.forEach(function(filter)
+      {
+        view.$('.form-group[data-filter="' + filter + '"]').toggleClass('hidden', !view.filterHasValue(filter));
+      });
+    },
+
+    filterHasValue: function(filter)
+    {
+      var $input = this.$id(filter);
+      var value;
+
+      if ($input.hasClass('btn-group'))
+      {
+        value = $input.find('input:checked').val();
+      }
+      else if ($input.find('.orgUnits-picker').length)
+      {
+        value = $input.find('.btn.active').length === 1;
+      }
+      else
+      {
+        value = $input.val();
+      }
+
+      if (filter === 'limit')
+      {
+        return +value !== _.result(this.model, 'getDefaultPageLimit', 20);
+      }
+
+      if (!value)
+      {
+        return false;
+      }
+
+      if (value.length)
+      {
+        return true;
+      }
+
+      return !!value;
+    },
+
+    showFilter: function(filter)
+    {
+      this.$('.form-group[data-filter="' + (this.filterMap[filter] || filter) + '"]')
+        .removeClass('hidden')
+        .find('input, select')
+        .first()
+        .focus();
     },
 
     serializeQueryToForm: function()
@@ -177,6 +257,7 @@ define([
       }
 
       this.trigger('filterChanged', rqlQuery);
+      this.toggleFilters();
     },
 
     copyPopulateTerms: function(selector)
@@ -231,7 +312,7 @@ define([
         args.push('i');
       }
 
-      args[1] = util.escapeRegExp(args[1]);
+      args[1] = this.escapeRegExp(args[1]);
 
       if (value.length === maxLength)
       {
@@ -243,6 +324,11 @@ define([
       }
 
       selector.push({name: 'regex', args: args});
+    },
+
+    escapeRegExp: function(string)
+    {
+      return util.escapeRegExp(string);
     },
 
     unescapeRegExp: function(string)

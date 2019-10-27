@@ -1,7 +1,6 @@
 // Part of <https://miracle.systems/p/walkner-wmes> licensed under <CC BY-NC-SA 4.0>
 
 define([
-  'jquery',
   'app/i18n',
   'app/user',
   'app/core/pages/FilteredListPage',
@@ -11,7 +10,6 @@ define([
   '../views/QiResultListView',
   'app/qiResults/templates/addPageActions'
 ], function(
-  $,
   t,
   user,
   FilteredListPage,
@@ -41,7 +39,7 @@ define([
           privileges: function() { return user.isAllowedTo('QI:INSPECTOR', 'QI:RESULTS:MANAGE'); }
         },
         {
-          label: t.bound('qiResults', 'PAGE_ACTION:settings'),
+          label: page.t('PAGE_ACTION:settings'),
           icon: 'cogs',
           privileges: 'QI:DICTIONARIES:MANAGE',
           href: '#qi/settings?tab=results'
@@ -51,24 +49,7 @@ define([
 
     load: function(when)
     {
-      return when(this.collection.fetch({reset: true}), qiDictionaries.load());
-    },
-
-    defineViews: function()
-    {
-      FilteredListPage.prototype.defineViews.apply(this, arguments);
-
-      this.listenTo(this.listView, 'showFilter', function(filter)
-      {
-        if (filter === 'rid')
-        {
-          $('.page-actions-jump').find('input[name="rid"]').focus();
-        }
-        else
-        {
-          this.filterView.showFilter(filter);
-        }
-      });
+      return when(qiDictionaries.load(), this.collection.fetch({reset: true}));
     },
 
     destroy: function()

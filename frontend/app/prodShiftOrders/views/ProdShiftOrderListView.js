@@ -29,16 +29,31 @@ define([
       'prodShiftOrders.deleted.*': 'refreshIfMatches'
     },
 
+    events: _.assign({
+
+      'click .is-filter': function(e)
+      {
+        this.trigger('showFilter', e.currentTarget.dataset.columnId);
+      }
+
+    }, ListView.prototype.events),
+
     serializeColumns: function()
     {
       return [
-        {id: 'mrpControllers', titleProperty: 'mrpControllersText', className: 'is-overflow w100'},
-        {id: 'prodFlow', className: 'is-overflow w250'},
-        {id: 'prodLine', className: 'is-overflow w100'},
-        {id: 'order', titleProperty: 'productName', className: 'is-overflow w400'},
-        {id: 'operation', titleProperty: 'operationName', className: 'is-overflow w250'},
-        {id: 'prodShift', className: 'is-min', width: '105px'},
-        {id: 'startedAt', className: 'is-min'},
+        {
+          id: 'mrpControllers',
+          titleProperty: 'mrpControllersText',
+          className: 'is-overflow w100',
+          thClassName: 'is-filter'
+        },
+        {id: 'prodFlow', className: 'is-overflow w250', thClassName: 'is-filter'},
+        {id: 'prodLine', className: 'is-overflow w100', thClassName: 'is-filter'},
+        {id: 'orderId', className: 'is-min', thClassName: 'is-filter'},
+        {id: 'product', className: 'is-overflow w350', thClassName: 'is-filter'},
+        {id: 'operation', titleProperty: 'operationName', className: 'is-overflow w225'},
+        {id: 'prodShift', className: 'is-min', width: '105px', thClassName: 'is-filter'},
+        {id: 'startedAt', className: 'is-min', thClassName: 'is-filter'},
         {id: 'duration', className: 'is-min'},
         {id: 'quantityDone', className: 'is-min is-number'},
         {id: 'workerCount', className: 'is-min is-number'},

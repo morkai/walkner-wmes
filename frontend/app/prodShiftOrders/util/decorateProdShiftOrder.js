@@ -86,6 +86,13 @@ define([
       {
         obj.operation += ': ' + obj.operationName;
       }
+
+      obj.product = obj.productName;
+
+      if (obj.orderData.nc12 && obj.orderData.nc12 !== obj.orderId)
+      {
+        obj.product = obj.orderData.nc12 + ': ' + obj.product;
+      }
     }
     else
     {

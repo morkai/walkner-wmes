@@ -25,14 +25,6 @@
   </div>
   <%- renderLimit({hidden: true}) %>
   <div class="form-group filter-actions">
-    <div class="btn-group">
-      <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('pfepEntries', 'filter:submit') %></span></button>
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="<%- t('pfepEntries', 'filter:filters') %>"><span class="caret"></span></button>
-      <ul class="dropdown-menu">
-        <% filters.forEach(function(filter) { %>
-        <li><a data-filter="<%- filter %>"><%= t('pfepEntries', 'filter:' + filter) %></a></li>
-        <% }) %>
-      </ul>
-    </div>
+    <%- renderButton() %>
   </div>
 </form>

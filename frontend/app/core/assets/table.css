@@ -104,6 +104,12 @@ td.text-center {
 .table th {
   background-color: #fff;
 }
+.table th.is-filter {
+  cursor: pointer;
+}
+.table th.is-filter:hover {
+  background: #e6e6e6;
+}
 th.is-min,
 td.is-min {
   width: 1px;
@@ -158,6 +164,18 @@ td.is-overflow {
 .w300 {
   width: 300px;
   max-width: 300px;
+}
+.w325 {
+  width: 325px;
+  max-width: 325px;
+}
+.w350 {
+  width: 350px;
+  max-width: 350px;
+}
+.w375 {
+  width: 375px;
+  max-width: 375px;
 }
 .w400 {
   width: 400px;

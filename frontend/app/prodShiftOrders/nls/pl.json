@@ -12,7 +12,8 @@
   "PANEL:TITLE:addForm": "Formularz dodawania zlecenia",
   "PANEL:TITLE:editForm": "Formularz edycji zlecenia",
 
-  "filter:orderId": "Nr/12NC zleceń",
+  "filter:orderId": "Zlecenia",
+  "filter:product": "Wyrób",
   "filter:bom": "Komponenty",
   "filter:mrp": "Kontroler MRP zlecenia",
   "filter:submit": "Filtruj",
@@ -54,6 +55,7 @@
   "PROPERTY:operationNo": "Operacja",
   "PROPERTY:pressWorksheet": "Karta pracy",
   "PROPERTY:efficiency": "Wydajność",
+  "PROPERTY:product": "Wyrób",
 
   "LIST:COLUMN:mrpControllers": "MRP",
   "LIST:COLUMN:prodLine": "Linia",

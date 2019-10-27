@@ -96,13 +96,13 @@
       i zostaje automatycznie wpisane do formularza rozpoczynania nowego zlecenia.</li>
     <li>Dodano wyświetlanie wartości 'Całkowita zrobiona ilość w zleceniu' oraz 'Całkowita ilość do zrobienia'.</li>
   </ul>
-  <h3>Dane produkcyjne > Zmiany</h3>
+  <h3>Produkcja > Zmiany</h3>
   <ul>
     <li>Zmieniono oś czasu tak, aby kolor tła zlecenia wskazywał czy 'Średni czas cyklu' został przekroczony.</li>
     <li>Dodano wyświetlanie wartości 'Czas taktu' i 'Średni czas cyklu' w dymkach zleceń. Wartości wydoczne tylko dla
       użytkowników z uprawnieniami 'Dane produkcyjne: zarządzanie'.</li>
   </ul>
-  <h3>Dane produkcyjne > Zlecenia</h3>
+  <h3>Produkcja > Zlecenia</h3>
   <ul>
     <li>Zmieniono kolumnę 'Zlecenie' tak, aby wyświetlała wartość 'Opis' zamiast 'Nazwa wyrobu' zlecenia (jeżeli
       jest dostępna).</li>
@@ -114,7 +114,7 @@
     <li>Dodano wyświetlanie procentowego stosunku 'Czasu taktu' do 'Średniego czasu cyklu' na stronie ze szczegółami
       zlecenia.</li>
   </ul>
-  <h3>Dane produkcyjne > Numery seryjne</h3>
+  <h3>Produkcja > Numery seryjne</h3>
   <ul>
     <li>Zmieniono kolor tła numerów seryjnych przekraczających 'Czas taktu' z czerwonego na pomarańczowy, aby pasował do
       koloru stanu linii produkcyjnej.</li>
@@ -153,7 +153,7 @@
     <li>Usunięto efekt pojawiania się/znikania z komunikatów skanowania nr seryjnego oraz z okienek dialogowych, aby
       ograniczyć możliwe zawieszanie się starej wersji przeglądarki.</li>
   </ul>
-  <h3>Dane produkcyjne > Zmiany</h3>
+  <h3>Produkcja > Zmiany</h3>
   <ul>
     <li>Poprawiono błąd podczas wyświetlania zleceń na osi czasu zmiany produkcyjnej, jeżeli użytkownik miał zdefiniowaną
       jednostkę organizacyjną inną niż zmiana produkcyjna, dla której oś czasu wyświetlał.</li>
@@ -222,7 +222,7 @@
   <ul>
     <li>Dodano dymek wyświetlający informację o aktualnym zleceniu i przestoju po najechaniu na linię produkcyjną.</li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Poprawiono błąd powodujący niezaznaczanie statusu 'Aktywny alarm' po wejściu do przestojów z pozycji
       menu 'Alarmy'.</li>
@@ -291,7 +291,7 @@
     <li>Zmieniono filtr 'Rodzina' tak, aby można było wybrać kilka opcji na raz.</li>
     <li>Zmieniono filtr 'Centrum' tak, aby pokazywał także wydziały typu 'Dystrybucja'.</li>
   </ul>
-  <h3>Zlecenia</h3>
+  <h3>Produkcja > Zlecenia</h3>
   <ul>
     <li>Zmieniono wyświetlanie czasów operacji na bardziej czytelne. Teraz czasy wyświetlane są w formacie: <code><em>czas z SAP</em> -> <em>czas przeskalowany</em> (<em>czas zgrupowany</em>)</code>.</li>
   </ul>
@@ -308,7 +308,7 @@
     <li>Zmieniono importowanie zleceń tak, aby ilości z pozycji o takim samym 12NC były sumowane, a nie nadpisywane.</li>
     <li>Dodano wsparcie dla opcji ważenia komponentów.</li>
   </ul>
-  <h3>Dane produkcyjne > Zlecenia</h3>
+  <h3>Produkcja > Zlecenia</h3>
   <ul>
     <li>Dodano wyświetlanie zsumowanych wartości wybranej operacji na liście operacji w szczegółach zlecenia.</li>
   </ul>
@@ -351,7 +351,7 @@
   <ul>
     <li>Poprawiono błąd niepozwalający na użycie znaku <code>-</code> w ID linii.</li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Poprawiono błąd wywalający serwer z powodu cofnięcia zegara systemowego podczas automatycznego potwierdzania
       przestojów.</li>
@@ -360,7 +360,7 @@
 <div class="hidden">
   <h1>v0.96.1</h1>
   <h2><%- time.format('2016-10-24', 'LL') %></h2>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Zmieniono kolumnę MRP na liście przestojów tak, aby pokazywała wartość 'MRP' ze zlecenia w SAP, a nie 'Kontroler
       MRP' linii, na której przestój został rozpoczęty (ta wartość dostępna jest w dymku po najechaniu myszką).</li>
@@ -404,7 +404,7 @@
     <li>Dodano eksportowanie akcji korygujących razem z resztą danych.</li>
     <li>Dodano nowy raport: % wyrobów zgodnych.</li>
   </ul>
-  <h3>Zlecenia</h3>
+  <h3>Produkcja > Zlecenia</h3>
   <ul>
     <li>Dodano możliwość grupowania operacji. Operacje z tej samej grupy mają sumowane czasy we wskaźnikach.</li>
   </ul>
@@ -487,7 +487,7 @@
 <div class="hidden">
   <h1>v0.93.5</h1>
   <h2><%- time.format('2016-09-25', 'LL') %></h2>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Poprawiono błąd uniemożliwiający w niektórych przypadkach pobranie listy przestojów.</li>
   </ul>
@@ -532,7 +532,7 @@
 <div class="hidden">
   <h1>v0.93.3</h1>
   <h2><%- time.format('2016-08-31', 'LL') %></h2>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Dodano rodzinę wyrobu do kolumny 'Przepływ' na liście przestojów.
       Po najechaniu na rodzinę, w dymku pojawi się opis lub nazwa wyrobu.</li>
@@ -577,7 +577,7 @@
     <li>Dodano możliwość tworzenia kilku użytkowników z tym samym loginem (ale z tylko jeden z nich może mieć aktywne
       konto w tym samym czasie).</li>
   </ul>
-  <h3>Przestoje > Alarmy</h3>
+  <h3>Produkcja > Alarmy</h3>
   <ul>
     <li>Zmieniono temat wysyłanych e-maili tak, aby zawierał opis lub nazwę produktu ze zlecenia, w którym rozpoczęto
       przestój.</li>
@@ -974,11 +974,11 @@
   <ul>
     <li>Poprawiono brakujące tłumaczenia.</li>
   </ul>
-  <h3>Historia operacji na liniach</h3>
+  <h3>Produkcja > Historia operacji</h3>
   <ul>
     <li>Poprawiono brakujące tłumaczenia.</li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Poprawiono błąd mogący spowodować zatrzymanie się procesu automatycznego potwierdzania przestojów.</li>
   </ul>
@@ -1210,7 +1210,7 @@
 <div class="hidden">
   <h1>v0.82.0</h1>
   <h2><%- time.format('2016-02-14', 'LL') %></h2>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Zmieniono listę Powodów przestojów w formularzu Potwierdzania przestoju tak, aby wyświetlały się tylko te
       Powody, które pasują do typu Działu, w którym rozpoczęto dany Przestój.</li>

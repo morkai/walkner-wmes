@@ -9,7 +9,7 @@
   <ul>
     <li>Zmieniono domyślny filtr Od-Do tak, aby pokazywał zlecenia z ostatnich 30 dni.</li>
   </ul>
-  <h3>Alarmy</h3>
+  <h3>Produkcja > Alarmy</h3>
   <ul>
     <li>Poprawiono błąd powodujący nie zaznaczanie pozycji 'Produkcja' w menu, jeżeli aktualnie używany moduł to
       Alarmy.
@@ -27,7 +27,7 @@
   <ul>
     <li>Poprawiono błąd powodujący wyświetlanie kodu w kolumnie 'Status' tabelki ze zgłoszeniami usprawnień.</li>
   </ul>
-  <h3>Alarmy</h3>
+  <h3>Produkcja > Alarmy</h3>
   <ul>
     <li>Poprawiono błąd powodujący wyświetlanie 'undefined' zamiast ID linii produkcyjnej w treści powiadomienia SMS.
     </li>
@@ -71,7 +71,7 @@
   <ul>
     <li>Zmieniono format powiadomień e-mail z tekstowego na HTML.</li>
   </ul>
-  <h3>Alarmy</h3>
+  <h3>Produkcja > Alarmy</h3>
   <ul>
     <li>Dodano automatyczne kończenie alarmów z poprzedniej zmiany, 10s po rozpoczęciu nowej zmiany.</li>
   </ul>
@@ -113,18 +113,18 @@
   <ul>
     <li>Poprawiono błąd uniemożliwiający usunięcie wartości dla imienia, nazwiska, nr kardowego oraz adresu e-mail.</li>
   </ul>
-  <h3>Historia operacji na liniach produkcyjnych</h3>
+  <h3>Produkcja > Historia operacji</h3>
   <ul>
     <li>Dodano kolumnę 'ID instancji'.</li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Poprawiono błąd powodujący podwójne automatyczne zatwierdzanie tych samych przestojów.</li>
     <li>Zmieniono wyświetlanie wartości 'Czas trwania', tak aby był obliczany nawet wtedy, gdy przestój nie został
       jeszcze zakończony.
     </li>
   </ul>
-  <h3>Alarmy</h3>
+  <h3>Produkcja > Alarmy</h3>
   <ul>
     <li>Poprawiono błąd powodujący wyświetlanie czasu trwania zawsze jako 0 lub 1 min.</li>
     <li>Zmieniono format powiadomienia e-mail z tekstowego na HTML.</li>
@@ -158,7 +158,7 @@
 <div class="hidden">
   <h1>v0.76.0</h1>
   <h2><%- time.format('2015-12-06', 'LL') %></h2>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Poprawiono błąd mogący powodować podwójne automatyczne potwierdzenie przestoju.</li>
     <li>Zmieniono domyślny filtr Od z 30 dni na 7 dni.</li>
@@ -295,7 +295,7 @@
       operacji Zakończenie pracy na Formatce operatora.
     </li>
   </ul>
-  <h3>Produkcja > Żądania zmian danych produkcyjnych</h3>
+  <h3>Produkcja > Żądania zmian</h3>
   <ul>
     <li>Dodano możliwość żądania edycji wpisów FTE.</li>
   </ul>
@@ -322,7 +322,7 @@
 <div class="hidden">
   <h1>v0.72.0</h1>
   <h2><%- time.format('2015-10-18', 'LL') %></h2>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Poprawiono błąd powodujący podwójne automatyczne potwierdzanie przestojów.</li>
   </ul>
@@ -514,7 +514,7 @@
 <div class="hidden">
   <h1>v0.68.1</h1>
   <h2><%- time.format('2015-09-04', 'LL') %></h2>
-  <h3>Zmiany produkcyjne</h3>
+  <h3>Produkcja > Zmiany</h3>
   <ul>
     <li>Poprawiono błąd podczas generowania osi czasu.</li>
   </ul>
@@ -535,7 +535,7 @@
       - NOK, czarny - nie wykonany.
     </li>
   </ul>
-  <h3>Zmiany produkcyjne</h3>
+  <h3>Produkcja > Zmiany</h3>
   <ul>
     <li>Poprawiono błąd powodujący nie wyświetlanie się zleceń oraz przestojów na osi czasu po załadowaniu strony w
       trybie Aktualnej zmiany.
@@ -563,7 +563,7 @@
   <ul>
     <li>Dodano nowy indeks w bazie danych w celu przyśpieszenia filtra Tylko moje.</li>
   </ul>
-  <h3>Żądania zmian danych produkcyjnych</h3>
+  <h3>Produkcja > Żądania zmian</h3>
   <ul>
     <li>Poprawiono odnośnik do usuwanego zlecenia.</li>
     <li>Dodano oś czasu zmiany produkcyjnej do szczegółów żądania zmiany.</li>
@@ -593,7 +593,7 @@
 <div class="hidden">
   <h1>v0.66.0</h1>
   <h2><%- time.format('2015-07-26', 'LL') %></h2>
-  <h3>Dane produkcyjne > Historia operacji</h3>
+  <h3>Produkcja > Historia operacji</h3>
   <ul>
     <li>Zmieniono filtr Linia produkcyjna tak, aby można było wyczyścić wybraną wartość.</li>
     <li>Zmieniono filtr listy tak, aby domyślnie korzystała z indeksu bazy danych.</li>
@@ -619,7 +619,7 @@
       przestój wybrany w polu Automatyczny przestój Działu, w którym znajduje się dana Linia produkcyjna.
     </li>
   </ul>
-  <h3>Żądania zmian</h3>
+  <h3>Produkcja > Żądania zmian</h3>
   <ul>
     <li>Dodano nowy moduł: żądania zmian danych produkcyjnych - umożliwia osobom z odpowiednimi uprawnieniami zgłaszanie
       zmian dodania/edycji/usuwania zmian/zleceń/przestojów. Osoby zgłaszające korzystają z tych samych interfejsów co
@@ -844,7 +844,7 @@
     </li>
     <li>Dodano możliwość otworzenia aktualnie załadowanego dokumentu w nowym oknie przeglądarki.</li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Poprawiono błąd mogący powodować wielokrotne automatyczne potwierdzenie tych samym przestojów.</li>
   </ul>
@@ -1261,7 +1261,7 @@
       ustawionego ID linii produkcyjnej.
     </li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Zmieniono domyślny filtr tak, aby wyświetlane były przestoje z ostatnich 30 dni (w celu trafienia w indeksy,
       jeżeli użytkownik ma przypisane obszary odpowiedzialności).
@@ -1290,7 +1290,7 @@
     <li>Dodano do listy przestojów wyświetlanie ilości zmian Obszaru odpowiedzialnego, Powodu oraz ilości Odrzuceń
       danego przestoju.
     </li>
-    <li>Dodano generowanie zdarzenia <span style="font-style: italic">Przestoje: edycja potwierdzonego</span>, gdy
+    <li>Dodano generowanie zdarzenia <span style="font-style: italic">Produkcja > Przestoje: edycja potwierdzonego</span>, gdy
       zmodyfikowany zostanie Przestój o statusie Potwierdzony.
     </li>
   </ul>
@@ -1385,9 +1385,9 @@
       żądanie aktualizacji do wszystkich przestarzałych klientów.
     </li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
-    <li>Zmieniono potwierdzanie przestojów tak, aby Użytkownik z uprawieniem <span style="font-style: italic">Przestoje: zarządzanie</span>,
+    <li>Zmieniono potwierdzanie przestojów tak, aby Użytkownik z uprawieniem <span style="font-style: italic">Produkcja > Przestoje: zarządzanie</span>,
       ale bez uprawnienia <span style="font-style: italic">Dane produkcyjne: zarządzanie</span> nie mógł zmieniać
       statusu Potwierdzonego przestoju.
     </li>
@@ -1408,7 +1408,7 @@
   <ul>
     <li>Dodano kolumnę Opcje do listy klientów wskazującą jakie opcje wspiera wykorzystywana licencja.</li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Poprawiono błąd powodujący wywalanie się serwera podczas automatycznego potwierdzania przestojów.</li>
   </ul>
@@ -1455,7 +1455,7 @@
       linii, która nie miała rozpoczętej żadnej zmiany.
     </li>
   </ul>
-  <h3>Dane produkcyjne > Zlecenia</h3>
+  <h3>Produkcja > Zlecenia</h3>
   <ul>
     <li>Poprawiono błąd powodujący nie przeliczanie czasów trwania zlecenia po edycji, jeżeli zlecenie to nie miało
       żadnych przestojów.
@@ -1492,7 +1492,7 @@
   <ul>
     <li>Nieznacznie zoptymalizowano zmianę planowanych ilości i flagi 'Brak planu?' po stronie serwera.</li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Zmieniono proces potwierdzania przestojów:<br>
       <ul>

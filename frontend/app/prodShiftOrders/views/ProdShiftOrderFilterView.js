@@ -27,6 +27,23 @@ define([
 
   return FilterView.extend({
 
+    filterList: [
+      'shift',
+      'orderId',
+      'product',
+      'bom',
+      'mrp',
+      'orgUnit',
+      'limit'
+    ],
+    filterMap: {
+      mrpControllers: 'mrp',
+      prodFlow: 'orgUnit',
+      prodLine: 'orgUnit',
+      order: 'orderId',
+      prodShift: 'shift'
+    },
+
     template: template,
 
     events: _.assign({
@@ -114,6 +131,14 @@ define([
         formData.bom = filter.trim();
       },
       'orderData.bom.item': 'orderData.bom.nc12',
+      'orderData.nc12': function(propertyName, term, formData)
+      {
+        formData.product = term.args[1];
+      },
+      'orderData.description': function(propertyName, term, formData)
+      {
+        formData.product = this.unescapeRegExp(term.args[1].substring(1));
+      },
       'shift': function(propertyName, term, formData)
       {
         formData[propertyName] = term.args[1];
@@ -260,23 +285,53 @@ define([
 
     serializeFormToQuery: function(selector)
     {
-      var mrp = this.$id('mrp').val();
-      var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
-
       this.serializeOrderId(selector);
       this.serializeBom(selector);
 
       dateTimeRange.formToRql(this, selector);
+
+      var product = this.$id('product').val();
+
+      if (product)
+      {
+        if (product.length === 12)
+        {
+          selector.push({name: 'eq', args: ['orderData.nc12', product]});
+        }
+        else
+        {
+          selector.push({name: 'regex', args: [
+            'orderData.description',
+            '^' + this.escapeRegExp(product.toUpperCase())
+          ]});
+        }
+      }
+
+      var mrp = this.$id('mrp').val();
 
       if (mrp && mrp.length)
       {
         selector.push({name: 'in', args: ['orderData.mrp', mrp.split(',')]});
       }
 
+      var shift = parseInt(this.$('input[name=shift]:checked').val(), 10);
+
       if (shift)
       {
         selector.push({name: 'eq', args: ['shift', shift]});
       }
+    },
+
+    showFilter: function(filter)
+    {
+      if (filter === 'startedAt')
+      {
+        this.$id('from-date').focus();
+
+        return;
+      }
+
+      FilterView.prototype.showFilter.apply(this, arguments);
     }
 
   });

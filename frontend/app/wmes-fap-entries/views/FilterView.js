@@ -30,24 +30,24 @@ define([
 ) {
   'use strict';
 
-  var FILTER_LIST = [
-    'createdAt',
-    'order',
-    'mrp',
-    'category',
-    'subdivisionType',
-    'divisions',
-    'level',
-    'limit'
-  ];
-  var FILTER_MAP = {
-    orderNo: 'order',
-    nc12: 'order',
-    productName: 'search',
-    problem: 'search'
-  };
-
   return FilterView.extend({
+
+    filterList: [
+      'createdAt',
+      'order',
+      'mrp',
+      'category',
+      'subdivisionType',
+      'divisions',
+      'level',
+      'limit'
+    ],
+    filterMap: {
+      orderNo: 'order',
+      nc12: 'order',
+      productName: 'search',
+      problem: 'search'
+    },
 
     template: template,
 
@@ -56,13 +56,6 @@ define([
       'click a[data-date-time-range]': dateTimeRange.handleRangeEvent,
       'change input[name="userType"]': function() { this.toggleUserSelect2(true); },
       'change input[name="statusType"]': 'toggleStatus',
-
-      'click a[data-filter]': function(e)
-      {
-        e.preventDefault();
-
-        this.showFilter(e.currentTarget.dataset.filter);
-      },
 
       'click #-level .active': function(e)
       {
@@ -163,7 +156,6 @@ define([
     serialize: function()
     {
       return _.assign(FilterView.prototype.serialize.call(this), {
-        filters: FILTER_LIST,
         statuses: ['pending', 'started', 'finished'],
         divisions: orgUnits.getAllByType('division')
           .filter(function(d) { return d.isActive() && d.get('type') === 'prod'; })
@@ -305,7 +297,6 @@ define([
       this.toggleButtonGroup('level');
       this.toggleUserSelect2(false);
       this.toggleStatus();
-      this.toggleFilters();
     },
 
     destroy: function()
@@ -373,18 +364,6 @@ define([
       this.$id('status').prop('disabled', statusType !== 'specific');
     },
 
-    toggleFilters: function()
-    {
-      var view = this;
-
-      FILTER_LIST.forEach(function(filter)
-      {
-        view.$('.form-group[data-filter="' + filter + '"]').toggleClass(
-          'hidden', filter === 'limit' || !view.filterHasValue(filter)
-        );
-      });
-    },
-
     filterHasValue: function(filter)
     {
       if (filter === 'createdAt')
@@ -395,22 +374,7 @@ define([
         return $from.val().length > 0 || $to.val().length > 0;
       }
 
-      var $filter = this.$id(filter);
-
-      var value = $filter.hasClass('btn-group')
-        ? $filter.find('.active > input').val()
-        : $filter.val();
-
-      return !!value && value.length > 0;
-    },
-
-    showFilter: function(filter)
-    {
-      this.$('.form-group[data-filter="' + (FILTER_MAP[filter] || filter) + '"]')
-        .removeClass('hidden')
-        .find('input, select')
-        .first()
-        .focus();
+      return FilterView.prototype.filterHasValue.apply(this, arguments);
     }
 
   });

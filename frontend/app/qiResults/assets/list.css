@@ -11,9 +11,4 @@
   width: auto;
   white-space: normal;
 }
-.qiResults-list .is-filter {
-  cursor: pointer;
-}
-.qiResults-list .is-filter:hover {
-  background: #e6e6e6;
-}
+

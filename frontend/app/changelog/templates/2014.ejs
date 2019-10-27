@@ -89,7 +89,7 @@
 <div class="hidden">
   <h1>v0.48.1</h1>
   <h2><%- time.format('2014-12-07', 'LL') %></h2>
-  <h3>Historia operacji</h3>
+  <h3>Produkcja > Historia operacji</h3>
   <ul>
     <li>Dodano brakujący filtr dla operacji typu Usunięcie zmiany.</li>
   </ul>
@@ -121,11 +121,11 @@
     <li>Dodano wsparcie dla drugiego poziomu Zadań produkcyjnych.</li>
     <li>Dodano możliwość wpisania komentarza do każdego Zadania.</li>
   </ul>
-  <h3>Historia operacji</h3>
+  <h3>Produkcja > Historia operacji</h3>
   <ul>
     <li>Poprawiono błąd powodujący nie zapisywanie operacji dodawania/edycji zlecenia/przestoju w historii.</li>
   </ul>
-  <h3>Zmiany</h3>
+  <h3>Produkcja > Zmiany</h3>
   <ul>
     <li>Usprawniono sprawdzanie nakładających się na siebie zleceń/przestojów podczas dodawania/edycji, aby można było
       rozpocząć zlecenie/przestój w tej samej sekundzie, w jakiej skończyło się poprzednie zlecenie/przestój (lub
@@ -186,7 +186,7 @@
 <div class="hidden">
   <h1>v0.47.1</h1>
   <h2><%- time.format('2014-11-21', 'LL') %></h2>
-  <h3>Zmiany produkcyjne</h3>
+  <h3>Produkcja > Zmiany</h3>
   <ul>
     <li>Usprawiono oś czasu, aby zlecenia i przestoje otwierały się w nowym oknie, jeżeli kliknie się na nie środkowym
       przyciskiem myszy lub Ctrl+lewym.
@@ -196,7 +196,7 @@
   <ul>
     <li>Usprawniono dodawanie, edycję i usuwanie zleceń i przestojów.</li>
   </ul>
-  <h3>Historia operacji</h3>
+  <h3>Produkcja > Historia operacji</h3>
   <ul>
     <li>Dodano brakujące teksty i filtry operacji dodawania zmiany, zlecenia i przestoju.</li>
   </ul>
@@ -278,7 +278,7 @@
     </li>
     <li>Dodano możliwość wyeksportowania aktualnego stanu tabeli do pliku CSV.</li>
   </ul>
-  <h3>Historia zleceń</h3>
+  <h3>Produkcja > Zlecenia</h3>
   <ul>
     <li>Dodano nazwę zlecenia i nazwę operacji do eksportowanych danych.</li>
   </ul>
@@ -384,7 +384,7 @@
   <ul>
     <li>Dodano dostęp do danych produkcyjnych dla Gości łączących się z sieci 192.168.</li>
   </ul>
-  <h3>Zmiany produkcyjne</h3>
+  <h3>Produkcja > Zmiany</h3>
   <ul>
     <li>Dodano możliwość monitorowania ostatniej zmiany wybranej Linii produkcyjnej wpisując w adresie ID Linii
       produkcyjnej zamiast ID zmiany (np. /#prodShifts/IM1).
@@ -522,7 +522,8 @@
 <div class="hidden">
   <h1>v0.40.1</h1>
   <h2><%- time.format('2014-09-01', 'LL') %></h2>
-  <h3>Zlecenia, Przestoje</h3>
+  <h3>Produkcja > Zlecenia</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Poprawiono błąd powodujący złe sortowanie listy zleceń i przestojów.</li>
   </ul>
@@ -588,7 +589,7 @@
       nieprawidłowym dzieleniem planowanych ilości.
     </li>
   </ul>
-  <h3>Zmiany produkcyjne</h3>
+  <h3>Produkcja > Zmiany</h3>
   <ul>
     <li>Usunięto liczby dziesiętne na wykresie Wykonanych ilości.</li>
     <li>Poszczególne wartości na wykrsie Wykonanych ilości są teraz wyświetlane nad słupkami.</li>
@@ -821,7 +822,7 @@
       operacyjnej (zamiast 0).
     </li>
   </ul>
-  <h3>Zmiany</h3>
+  <h3>Produkcja > Zmiany</h3>
   <ul>
     <li>Poprawiono błąd wywalający serwer przy usuwaniu zmiany.</li>
   </ul>
@@ -951,7 +952,7 @@
       tym samym czasie (lub tego samego użytkownika po przejściu głębiej w strukturę organizacyjną i z powrotem).
     </li>
   </ul>
-  <h3>Zlecenia</h3>
+  <h3>Produkcja > Zlecenia</h3>
   <ul>
     <li>Zmieniono wartości czasów Labor/Machine na liście operacji, aby wyświetlane były w formacie języka przeglądarki
       użytkownika.
@@ -1091,7 +1092,7 @@
 <div class="hidden">
   <h1>2014-04-23.01</h1>
   <h2><%- time.format('2014-04-23', 'LL') %></h2>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Poprawiono błąd uniemożliwiający edycję przestoju, jeżeli nie zmieniono czasu rozpoczęcia lub zakończenia.</li>
   </ul>
@@ -1115,7 +1116,7 @@
       dowolnej daty wpisując ją ręcznie).
     </li>
   </ul>
-  <h3>Zmiany produkcyjne</h3>
+  <h3>Produkcja > Zmiany</h3>
   <ul>
     <li>Dodano możliwość usuwania zmian produkcyjnych. Akcja Usuń zmianę dostępna jest na stronie szczegółów danej
       zmiany dla użytkowników z uprawnieniem Dane produkcyjne: zarządzanie.
@@ -1137,7 +1138,7 @@
       Akcja Dodaj zlecenie dostępna jest na obszarach Bezczynności (pamarańcz).
     </li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Dodano możliwość dodawania przestojów. Przestoje można dodawać na stronie szczegółów wybranej Zmiany
       produkcyjnej. Akcja Dodaj przestój dostępna jest na obszarach Bezczynności (pamarańcz; przestój nie powiązany ze
@@ -1177,7 +1178,7 @@
       było wygenerować raport dla operatorów, których nr kadrowy się powtarza).
     </li>
   </ul>
-  <h3>Zlecenia</h3>
+  <h3>Produkcja > Zlecenia</h3>
   <ul>
     <li>Dodano więcej danych do eksportu. Eksportowane są teraz następujące wartości: orderNo (nr zlecenia), 12nc,
       operationNo (nr operacji), startedAt (czas rozpoczęcia), finishedAt (czas zakończenia), totalDuration (całkowity
@@ -1190,7 +1191,7 @@
     </li>
     <li>Dodano możliwość usuwania Zleceń (wraz ze Zleceniem usuwane są wszystkie rozpoczęte w nim Przestoje).</li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Poprawiono sprawdzanie uprawnień dla akcji Usuwania po stronie serwera (wcześniej sprawdzał Przestoje:
       przeglądanie, a teraz Dane produkcyjne: zarządzanie).
@@ -1262,7 +1263,7 @@
 <div class="hidden">
   <h1>2014-04-07.02</h1>
   <h2><%- time.format('2014-04-07', 'LL') %></h2>
-  <h3>Zmiany produkcyjne</h3>
+  <h3>Produkcja > Zmiany</h3>
   <ul>
     <li>Zmieniono na osi czasu wysokość Przestojów zawierających się w Zleceniu (w celu ich wyróżnienia).</li>
   </ul>
@@ -1312,12 +1313,12 @@
 <div class="hidden">
   <h1>2014-04-06.01</h1>
   <h2><%- time.format('2014-04-06', 'LL') %></h2>
-  <h3>Zmiany</h3>
+  <h3>Produkcja > Zmiany</h3>
   <ul>
     <li>Poprawiono błąd powodujący nie branie pod uwagę operacji Edycji danych produkcyjnych przy rysowaniu osi czasu.
     </li>
   </ul>
-  <h3>Zlecenia</h3>
+  <h3>Produkcja > Zlecenia</h3>
   <ul>
     <li>Poprawiono błąd powodujący niewyświetlanie 12NC <span
         style="font-style: italic">zlecenia w momencie utworzenia</span> w zleceniach wygenerowanych z Kart pracy.
@@ -1332,7 +1333,7 @@
       generowaniem nieprawidłowych operacji, jeżeli odblokowano formatkę bez odświeżania przeglądarki).
     </li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Dodano możliwość usuwania przestojów.</li>
     <li>Dodano nowy atrybut: czytelne ID - unikalny, automatycznie generowany numer. Ze strony Przestojów można szybko
@@ -1471,7 +1472,7 @@
 <div class="hidden">
   <h1>2014-03-23.01</h1>
   <h2><%- time.format('2014-03-23', 'LL') %></h2>
-  <h3>Zmiany produkcyjne</h3>
+  <h3>Produkcja > Zmiany</h3>
   <ul>
     <li>Zlecenia, które zostały poprawione, od teraz będą poprawnie wyświetlać nowy nr zlecenia i nr operacji na osi
       czasu.
@@ -1524,7 +1525,7 @@
       </ul>
     </li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>W odpowiedzi na feedback, dodano pod filtrem informację o możliwości powrotu do widoku zfiltrowanej listy
       przestojów ze strony szczegółów wybranego przestoju poprzez wciśnięcie przycisku Wstecz przeglądarki lub klawisza
@@ -1602,7 +1603,7 @@
   <ul>
     <li>Poprawiono eksport wpisów, gdy w filtrze wybrano cały Wydział.</li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Poprawiono brak wartości dla kolumny `shiftId` (ID wpisu Zmiany produkcyjnej) w eksportowanych danych
       Przestojów.
@@ -1671,13 +1672,13 @@
       pochodzi dane zlecenie (jeżeli zostało wygenerowane przez Kartę pracy).
     </li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Potwierdzenie przestoju generuje nową operację w Historii operacji na liniach produkcyjnych: Potwierdzenie
       przestoju.
     </li>
   </ul>
-  <h3>Historia operacji</h3>
+  <h3>Produkcja > Historia operacji</h3>
   <h3>Dane produkcyjne</h3>
 </div>
 <div class="hidden">
@@ -1815,7 +1816,7 @@
       jest do 8% wartości (czyli 600*0,08=48%, bo 5 min/60 min=0,08).
     </li>
   </ul>
-  <h3>Historia operacji</h3>
+  <h3>Produkcja > Historia operacji</h3>
   <ul>
     <li>Dodano do kolumny Czas operacji różnicę czasów zapisania wpisu operacji w bazie, a utworzeniem tego wpisu w
       przeglądarce. Różnica ta obliczana będzie tylko dla nowych operacji.
@@ -1987,7 +1988,7 @@
   <ul>
     <li>Dodano wsparcie dla funkcji Kopiuj &amp; Wklej do pola Uprawnienia w formularzu Użytkownika.</li>
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Poprawiono błąd powodujący, że przycisk Potwierdź przestój pojawiał się Użytkownikowi na stronie szczegółów
       przestoju nawet wtedy, gdy ten nie miał uprawnień do potwierdzenia danego przestoju.
@@ -2029,7 +2030,7 @@
     </li>
     <li>Formularz nie będzie już wysyłany po wciśnięciu klawisza Enter (trzeba wcisnąć przycisk Dodaj kartę pracy).</li>
   </ul>
-  <h3>Historia zleceń</h3>
+  <h3>Produkcja > Zlecenia</h3>
   <ul>
     <li>Poprawiono niepoprawne zapisywanie ID wpisu zmiany, w której rozpoczęto zlecenie, co skutkowało nie możliwością
       powiązania wpisu Zlecenia z wpisem Zmiany.
@@ -2094,7 +2095,7 @@
       rozpoczynania przestoju, ale jako Powód zaznaczona jest opcja A - Przerwa, jako Obszar odpowiedzialny
       zaznaczony jest Domyślny obszar odp. i zaznaczany jest przycisk Rozpocznij przestój.
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Użytkownicy widzą teraz przestoje ze wszystkich obszarów odpowiedzialności (wcześniej tylko przypisane),
       ale potwierdzać mogą tylko z tych obszarów, jakie mają przypisane.
@@ -2186,7 +2187,7 @@
     <li>Poprawiono importowanie zleceń z pliku CSV, aby uwzględniało dwie nowe kolumny: Norma materiałowa
       i Kontroler MRP.
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Filtry znajdują się teraz po lewej stronie tabeli, a nie nad tabelą.
     <li>Poprawiono czytelność filtra Status.
@@ -2205,7 +2206,7 @@
     <li>Naprawiono błąd podczas obliczania daty ukończenia zlecenia, jeżeli podana godzina mieściła się między 00:00
       a 06:00 (3 zmiana, następny dzień).
   </ul>
-  <h3>Przestoje</h3>
+  <h3>Produkcja > Przestoje</h3>
   <ul>
     <li>Dodano kolumny Kontroler MRP i Przepływ do listy przestojów.
     <li>W szczegółach przestoju, kliknięcie na wartość atrybutu Zmiana przeniesie użytkownika do wpisu danej zmiany
@@ -2216,7 +2217,7 @@
   <ul>
     <li>Kliknięcie na obszar zlecenia na osi czasu przeniesie użytkownika do wpisu danego zlecenia produkcyjnego.
   </ul>
-  <h3>Historia zleceń produkcyjnych</h3>
+  <h3>Produkcja > Zlecenia</h3>
   <ul>
     <li>Dodano moduł umożliwiający przeglądanie historię zleceń. Dostępny w menu jako Produkcja > Zlecenia.
   </ul>

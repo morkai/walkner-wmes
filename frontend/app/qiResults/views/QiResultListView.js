@@ -23,8 +23,6 @@ define([
 ) {
   'use strict';
 
-  t = t.forDomain('qiResults');
-
   return ListView.extend({
 
     className: 'qiResults-list is-clickable is-colored',
@@ -71,9 +69,9 @@ define([
         {id: 'rid', tdClassName: 'is-min is-number', thClassName: 'is-filter'},
         {id: 'orderNo', tdClassName: 'is-min is-number', thClassName: 'is-filter'},
         {id: 'nc12', tdClassName: 'is-min is-number', thClassName: 'is-filter'},
-        {id: 'productFamily', tdClassName: 'is-min', thClassName: 'is-filter'},
+        {id: 'productFamily', tdClassName: 'is-overflow w75', thClassName: 'is-filter'},
         {id: 'productName'},
-        {id: 'division', tdClassName: 'is-min', thClassName: 'is-filter', label: t('LIST:COLUMN:division')},
+        {id: 'division', tdClassName: 'is-min', thClassName: 'is-filter'},
         {id: 'line', tdClassName: 'is-min', thClassName: 'is-filter'},
         {id: 'kind', thClassName: 'is-filter'},
         {id: 'inspectedAt', tdClassName: 'is-min', thClassName: 'is-filter'},
@@ -83,24 +81,30 @@ define([
       if (hasAnyNokResult)
       {
         columns.push(
-          {id: 'nokOwner', thClassName: 'is-filter', label: t('LIST:COLUMN:nokOwner')}
+          {id: 'nokOwner', thClassName: 'is-filter'}
         );
       }
 
       columns.push(
-        {id: 'qtyOrder', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyOrder')},
-        {id: 'qtyInspected', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyInspected')}
+        {id: 'qtyOrder', tdClassName: 'is-min is-number'},
+        {id: 'qtyInspected', tdClassName: 'is-min is-number'}
       );
 
       if (hasAnyNokResult)
       {
         columns.push(
-          {id: 'qtyNokInspected', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyNokInspected')},
-          {id: 'qtyToFix', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyToFix')},
-          {id: 'qtyNok', tdClassName: 'is-min is-number', label: t('LIST:COLUMN:qtyNok')},
+          {id: 'qtyNokInspected', tdClassName: 'is-min is-number'},
+          {id: 'qtyToFix', tdClassName: 'is-min is-number'},
+          {id: 'qtyNok', tdClassName: 'is-min is-number'},
           {id: 'errorCategory', tdClassName: 'is-min', thClassName: 'is-filter'},
-          {id: 'faultCode', tdClassName: 'is-min', thClassName: 'is-filter'},
-          {id: 'correctiveAction', label: t('PROPERTY:correctiveActions'), noData: '', thClassName: 'is-filter'}
+          {id: 'faultCode', tdClassName: 'is-min has-popover', thClassName: 'is-filter'},
+          {
+            id: 'correctiveAction',
+            label: this.t('PROPERTY:correctiveActions'),
+            noData: '',
+            thClassName: 'is-filter',
+            tdClassName: 'has-popover'
+          }
         );
       }
 
@@ -122,18 +126,18 @@ define([
 
     serializeActions: function()
     {
-      var collection = this.collection;
+      var view = this;
 
       return function(row)
       {
-        var model = collection.get(row._id);
+        var model = view.collection.get(row._id);
         var actions = [ListView.actions.viewDetails(model)];
         var pdfUrl = model.url() + '.pdf';
 
         actions.push({
           id: 'print',
           icon: 'print',
-          label: t(model.getNlsDomain(), 'PAGE_ACTION:print'),
+          label: view.t('PAGE_ACTION:print'),
           href: pdfUrl,
           className: model.get('ok') ? 'disabled' : ''
         });
@@ -154,12 +158,12 @@ define([
 
     afterRender: function()
     {
-      ListView.prototype.afterRender.call(this);
-
       var view = this;
 
-      this.$el.popover({
-        selector: '.list-item > td',
+      ListView.prototype.afterRender.apply(view, arguments);
+
+      view.$el.popover({
+        selector: '.has-popover',
         container: this.el,
         trigger: 'hover',
         placement: 'auto left',

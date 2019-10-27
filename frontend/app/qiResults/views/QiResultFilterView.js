@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'jquery',
   'app/time',
   'app/core/views/FilterView',
   'app/core/util/idAndLabel',
@@ -12,40 +13,41 @@ define([
   'app/qiResults/templates/filter'
 ], function(
   _,
+  $,
   time,
   FilterView,
   idAndLabel,
   dateTimeRange,
   orgUnits,
   setUpUserSelect2,
-  qiDictionaries,
+  dictionaries,
   template
 ) {
   'use strict';
 
-  var FILTER_LIST = [
-    'order',
-    'serialNumbers',
-    'productFamily',
-    'division',
-    'line',
-    'kind',
-    'errorCategory',
-    'faultCode',
-    'status',
-    'inspector',
-    'nokOwner',
-    'leader',
-    'coach',
-    'limit'
-  ];
-  var FILTER_MAP = {
-    orderNo: 'order',
-    nc12: 'order',
-    correctiveAction: 'status'
-  };
-
   return FilterView.extend({
+
+    filterList: [
+      'order',
+      'serialNumbers',
+      'productFamily',
+      'division',
+      'line',
+      'kind',
+      'errorCategory',
+      'faultCode',
+      'status',
+      'inspector',
+      'nokOwner',
+      'leader',
+      'coach',
+      'limit'
+    ],
+    filterMap: {
+      orderNo: 'order',
+      nc12: 'order',
+      correctiveAction: 'status'
+    },
 
     template: template,
 
@@ -66,13 +68,6 @@ define([
             radioEl.checked = false;
           }, 1);
         }
-      },
-
-      'click a[data-filter]': function(e)
-      {
-        e.preventDefault();
-
-        this.showFilter(e.currentTarget.dataset.filter);
       }
 
     }, FilterView.prototype.events),
@@ -220,25 +215,9 @@ define([
       });
     },
 
-    changeFilter: function()
-    {
-      FilterView.prototype.changeFilter.apply(this, arguments);
-
-      this.toggleFilters();
-    },
-
-    serialize: function()
-    {
-      return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
-        filters: FILTER_LIST
-      });
-    },
-
     afterRender: function()
     {
       FilterView.prototype.afterRender.call(this);
-
-      this.$id('limit').parent().attr('data-filter', 'limit');
 
       this.toggleButtonGroup('result');
 
@@ -251,7 +230,7 @@ define([
         allowClear: true,
         multiple: true,
         placeholder: ' ',
-        data: qiDictionaries.productFamilies.map(function(d) { return {id: d, text: d}; })
+        data: dictionaries.productFamilies.map(function(d) { return {id: d, text: d}; })
       });
 
       this.$id('division').select2({
@@ -280,14 +259,14 @@ define([
         width: '200px',
         allowClear: true,
         placeholder: ' ',
-        data: qiDictionaries.kinds.map(idAndLabel)
+        data: dictionaries.kinds.map(idAndLabel)
       });
 
       this.$id('errorCategory').select2({
         width: '140px',
         allowClear: true,
         placeholder: ' ',
-        data: qiDictionaries.errorCategories.map(idAndLabel)
+        data: dictionaries.errorCategories.map(idAndLabel)
       });
 
       this.$id('faultCode').select2({
@@ -295,14 +274,14 @@ define([
         allowClear: true,
         multiple: true,
         placeholder: ' ',
-        data: qiDictionaries.faults.map(idAndLabel)
+        data: dictionaries.faults.map(idAndLabel)
       });
 
       this.$id('status').select2({
         width: '125px',
         allowClear: true,
         placeholder: ' ',
-        data: qiDictionaries.actionStatuses.map(idAndLabel)
+        data: dictionaries.actionStatuses.map(idAndLabel)
       });
 
       this.$id('inspector').select2({
@@ -310,7 +289,7 @@ define([
         multiple: true,
         allowClear: true,
         placeholder: ' ',
-        data: qiDictionaries.inspectors.map(idAndLabel)
+        data: dictionaries.inspectors.map(idAndLabel)
       });
 
       this.$id('nokOwner').select2({
@@ -318,7 +297,7 @@ define([
         multiple: true,
         allowClear: true,
         placeholder: ' ',
-        data: qiDictionaries.masters.map(idAndLabel)
+        data: dictionaries.masters.map(idAndLabel)
       });
 
       this.$id('leader').select2({
@@ -326,7 +305,7 @@ define([
         multiple: true,
         allowClear: true,
         placeholder: ' ',
-        data: qiDictionaries.leaders.map(idAndLabel)
+        data: dictionaries.leaders.map(idAndLabel)
       });
 
       setUpUserSelect2(this.$id('coach'), {
@@ -337,30 +316,6 @@ define([
         placeholder: ' ',
         noPersonnelId: true
       });
-
-      this.toggleFilters();
-    },
-
-    toggleFilters: function()
-    {
-      var view = this;
-
-      FILTER_LIST.forEach(function(filter)
-      {
-        view.$('.form-group[data-filter="' + filter + '"]').toggleClass('hidden', !view.filterHasValue(filter));
-      });
-    },
-
-    filterHasValue: function(filter)
-    {
-      var value = this.$id(filter).val();
-
-      if (filter === 'limit')
-      {
-        return +value !== 20;
-      }
-
-      return !!value && value.length > 0;
     },
 
     showFilter: function(filter)
@@ -372,11 +327,7 @@ define([
         return;
       }
 
-      this.$('.form-group[data-filter="' + (FILTER_MAP[filter] || filter) + '"]')
-        .removeClass('hidden')
-        .find('input, select')
-        .first()
-        .focus();
+      FilterView.prototype.showFilter.apply(this, arguments);
     }
 
   });

@@ -30,23 +30,6 @@ define([
         pageActions.export(layout, this, collection, false),
         pageActions.add(collection)
       ];
-    },
-
-    defineViews: function()
-    {
-      FilteredListPage.prototype.defineViews.apply(this, arguments);
-
-      this.listenTo(this.listView, 'showFilter', function(filter)
-      {
-        if (filter === 'rid')
-        {
-          $('.page-actions-jump').find('input[name="phrase"]').focus();
-        }
-        else
-        {
-          this.filterView.showFilter(filter);
-        }
-      });
     }
 
   });

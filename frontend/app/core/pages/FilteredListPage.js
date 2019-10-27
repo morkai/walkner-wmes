@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'jquery',
   'app/i18n',
   '../util/bindLoadingMessage',
   '../util/pageActions',
@@ -11,6 +12,7 @@ define([
   'app/core/templates/listPage'
 ], function(
   _,
+  jquery,
   t,
   bindLoadingMessage,
   pageActions,
@@ -60,6 +62,7 @@ define([
       this.filterView = this.createFilterView();
 
       this.listenTo(this.filterView, 'filterChanged', this.onFilterChanged);
+      this.listenTo(this.listView, 'showFilter', this.onShowFilter);
     },
 
     createListView: function()
@@ -128,6 +131,23 @@ define([
       this.getDefaultModel().rqlQuery = newRqlQuery;
 
       this.refreshCollection();
+    },
+
+    onShowFilter: function(filter)
+    {
+      if (filter === 'rid')
+      {
+        var $input = $('.page-actions-jump .form-control');
+
+        if ($input.length)
+        {
+          $input.focus();
+
+          return;
+        }
+      }
+
+      this.filterView.showFilter(filter);
     },
 
     refreshCollection: function()

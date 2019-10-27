@@ -19,18 +19,16 @@ define([
 ) {
   'use strict';
 
-  var FILTER_LIST = [
-    'nc12',
-    'packType',
-    'vendor',
-    'creator',
-    'limit'
-  ];
-  var FILTER_MAP = {
-
-  };
-
   return FilterView.extend({
+
+    filterList: [
+      'nc12',
+      'packType',
+      'vendor',
+      'creator',
+      'limit'
+    ],
+    filterMap: {},
 
     template: template,
 
@@ -51,13 +49,6 @@ define([
             radioEl.checked = false;
           }, 1);
         }
-      },
-
-      'click a[data-filter]': function(e)
-      {
-        e.preventDefault();
-
-        this.showFilter(e.currentTarget.dataset.filter);
       }
 
     }, FilterView.prototype.events),
@@ -127,20 +118,6 @@ define([
       }, this);
     },
 
-    changeFilter: function()
-    {
-      FilterView.prototype.changeFilter.apply(this, arguments);
-
-      this.toggleFilters();
-    },
-
-    serialize: function()
-    {
-      return _.assign(FilterView.prototype.serialize.apply(this, arguments), {
-        filters: FILTER_LIST
-      });
-    },
-
     afterRender: function()
     {
       FilterView.prototype.afterRender.call(this);
@@ -155,30 +132,6 @@ define([
         view: this,
         width: '275px'
       });
-
-      this.toggleFilters();
-    },
-
-    toggleFilters: function()
-    {
-      var view = this;
-
-      FILTER_LIST.forEach(function(filter)
-      {
-        view.$('.form-group[data-filter="' + filter + '"]').toggleClass('hidden', !view.filterHasValue(filter));
-      });
-    },
-
-    filterHasValue: function(filter)
-    {
-      var value = this.$id(filter).val();
-
-      if (filter === 'limit')
-      {
-        return +value !== 15;
-      }
-
-      return value.length > 0;
     },
 
     showFilter: function(filter)
@@ -190,11 +143,7 @@ define([
         return;
       }
 
-      this.$('.form-group[data-filter="' + (FILTER_MAP[filter] || filter) + '"]')
-        .removeClass('hidden')
-        .find('input, select')
-        .first()
-        .focus();
+      FilterView.prototype.showFilter.apply(this, arguments);
     }
 
   });
