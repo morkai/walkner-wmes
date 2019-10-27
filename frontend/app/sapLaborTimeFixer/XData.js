@@ -61,9 +61,22 @@ define([
       }
 
       this.workCenter = newWorkCenter;
+
+      var nullDeps = this.isDepSelected('__NULL__');
+
       this.deps = _.intersection(this.getSelectedWorkCenter().deps, this.deps);
 
+      if (nullDeps)
+      {
+        this.deps.push('__NULL__');
+      }
+
       this.trigger('change:workCenter');
+    },
+
+    iSelectedWorkCenter: function(workCenter)
+    {
+      return this.getSelectedWorkCenter()._id === workCenter;
     },
 
     getSelectedDeps: function()
@@ -71,9 +84,25 @@ define([
       return this.deps;
     },
 
+    selectDeps: function(deps)
+    {
+      this.deps = [];
+
+      if (deps !== '__ALL__')
+      {
+        this.deps.push(deps);
+      }
+
+      this.trigger('change:deps');
+    },
+
     toggleDeps: function(deps)
     {
-      if (_.includes(this.deps, deps))
+      if (deps === '__ALL__')
+      {
+        this.deps = [];
+      }
+      else if (_.includes(this.deps, deps))
       {
         this.deps = _.without(this.deps, deps);
       }
@@ -87,6 +116,16 @@ define([
 
     isDepSelected: function(dep)
     {
+      if (dep === '__ALL__')
+      {
+        return this.deps.length === 0;
+      }
+
+      if (dep === null)
+      {
+        dep = '__NULL__';
+      }
+
       return _.includes(this.deps, dep);
     }
 

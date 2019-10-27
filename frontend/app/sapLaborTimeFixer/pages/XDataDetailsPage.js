@@ -7,6 +7,7 @@ define([
   'app/core/View',
   'app/core/util/pageActions',
   '../views/XDataTabsView',
+  '../views/XDataViewerView',
   'app/sapLaborTimeFixer/templates/details'
 ], function(
   _,
@@ -15,6 +16,7 @@ define([
   View,
   pageActions,
   XDataTabsView,
+  XDataViewerView,
   template
 ) {
   'use strict';
@@ -44,6 +46,9 @@ define([
       this.defineBindings();
 
       this.setView('#-tabs', this.tabsView);
+      this.insertView('#-viewer', this.currentView);
+      this.insertView('#-viewer', this.draftView);
+      this.insertView('#-viewer', this.diffView);
     },
 
     destroy: function()
@@ -54,11 +59,31 @@ define([
     defineViews: function()
     {
       this.tabsView = new XDataTabsView({model: this.model});
+
+      var height = this.calcHeight();
+
+      this.currentView = new XDataViewerView({
+        model: this.model,
+        height: height
+      });
+      this.draftView = new XDataViewerView({
+        model: this.model,
+        height: height
+      });
+      this.diffView = new XDataViewerView({
+        model: this.model,
+        height: height
+      });
     },
 
     defineBindings: function()
     {
-      this.listenTo(this.model, 'change:workCenter change:deps', this.updateUrl);
+      this.once('afterRender', function()
+      {
+        this.listenTo(this.model, 'change:workCenter change:deps', this.updateUrl);
+      });
+
+      $(window).on('resize.' + this.idPrefix, _.debounce(this.resize.bind(this), 30));
     },
 
     load: function(when)
@@ -66,13 +91,41 @@ define([
       return when(this.model.fetch());
     },
 
+    afterRender: function()
+    {
+      this.resize();
+    },
+
     updateUrl: function()
     {
       this.broker.publish('router.navigate', {
         url: this.model.genClientUrl()
           + '?workCenter=' + encodeURIComponent(this.model.getSelectedWorkCenter()._id)
-          + '&deps=' + encodeURIComponent(this.model.getSelectedDeps().join(','))
+          + '&deps=' + encodeURIComponent(this.model.getSelectedDeps().join(',')),
+        trigger: false,
+        replace: true
       });
+    },
+
+    resize: function()
+    {
+      var height = this.calcHeight();
+
+      this.currentView.resize(height);
+      this.draftView.resize(height);
+      this.diffView.resize(height);
+    },
+
+    calcHeight: function()
+    {
+      var height = window.innerHeight;
+
+      height -= this.tabsView.$el.outerHeight() || 83;
+      height -= $('.hd').outerHeight(true) || 87;
+      height -= $('.ft').outerHeight(true) || 66;
+      height -= 15;
+
+      return height;
     }
 
   });

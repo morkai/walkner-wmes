@@ -59,5 +59,8 @@
   "prop:LABELPOS": "",
   "prop:LABELTXT ": "",
   "prop:LTUNERESULT": "",
-  "prop:REVISION": ""
+  "prop:REVISION": "",
+
+  "dep:__ALL__": "Wszystkie",
+  "dep:__NULL__": "Brak"
 }

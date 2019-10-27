@@ -1,5 +1,47 @@
 .sapLaborTimeFixer-xData-tabs-deps {
-  padding: 7px;
+  padding: 4px;
   border: 1px solid #dddddd;
   border-top: 0;
+}
+.sapLaborTimeFixer-xData-tabs-deps .nav > li > a {
+  padding: 6px 15px;
+}
+.sapLaborTimeFixer-xData-viewers {
+  display: flex;
+  border-left: 1px solid #ddd;
+}
+.sapLaborTimeFixer-xData-viewer {
+  overflow: scroll;
+  height: 400px;
+  background: #fff;
+  width: 600px;
+}
+.sapLaborTimeFixer-xData-viewer:last-child {
+  flex: 1 1 auto;
+  width: auto;
+}
+.sapLaborTimeFixer-xData-viewer .xdata {
+  white-space: pre;
+  overflow: visible;
+  font-size: 14px;
+  background: none;
+  color: #000;
+}
+.xdata .hljs-comment {
+  color: #999;
+}
+.xdata .hljs-keyword {
+  color: #000;
+}
+.xdata .hljs-number {
+  color: red;
+  font-weight: bold;
+}
+.xdata .hljs-string {
+  color: green;
+  font-weight: bold;
+}
+.xdata .hljs-symbol {
+  color: blue;
+  font-weight: bold;
 }

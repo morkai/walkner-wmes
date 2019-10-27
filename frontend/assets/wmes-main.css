@@ -5,7 +5,7 @@
 @import url("./select2.css");
 @import url("../vendor/datatables/media/css/jquery.dataTables.css");
 @import url("../vendor/datatables/extensions/FixedColumns/css/dataTables.fixedColumns.css");
-@import url("../vendor/highlight/styles/monokai.css");
+@import url("../vendor/highlight/styles/monokai-sublime.css");
 @import url("../app/core/assets/main.css");
 @import url("../app/orgUnits/assets/main.css");
 @import url("../app/settings/assets/main.css");

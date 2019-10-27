@@ -1,17 +1,9 @@
 .hljs {
   font-family: Consolas, Menlo, Monaco, monospace;
   font-size: 16px;
-  color: #FF0;
 }
-.hljs-tag {
-  color: #666;
-}
-.hljs-tag .hljs-value {
-  color: #bbb;
-}
-.hljs-title {
-  font-weight: normal;
-}
-.hljs-number {
-  color: #fff;
+.hljs-comment,
+.hljs-deletion,
+.hljs-meta {
+  color: #999;
 }

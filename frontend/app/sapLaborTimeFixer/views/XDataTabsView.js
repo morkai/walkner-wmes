@@ -29,7 +29,16 @@ define([
 
       'click #-deps a': function(e)
       {
-        this.model.toggleDeps(e.currentTarget.dataset.deps);
+        var deps = e.currentTarget.dataset.deps;
+
+        if (e.ctrlKey)
+        {
+          this.model.toggleDeps(deps);
+        }
+        else
+        {
+          this.model.selectDeps(deps);
+        }
 
         return false;
       }
@@ -67,12 +76,13 @@ define([
     serializeDeps: function()
     {
       var view = this;
+      var deps = ['__ALL__', '__NULL__'].concat(view.model.getSelectedWorkCenter().deps);
 
-      return view.model.getSelectedWorkCenter().deps.map(function(dep)
+      return deps.map(function(dep)
       {
         return {
           _id: dep,
-          label: dep,
+          label: view.t.has('dep:' + dep) ? view.t('dep:' + dep) : dep,
           active: view.model.isDepSelected(dep) ? 'active' : ''
         };
       });

@@ -11,6 +11,7 @@ define([
 ) {
   'use strict';
 
+  var css = 'css!app/sapLaborTimeFixer/assets/main';
   var nls = 'i18n!app/nls/sapLaborTimeFixer';
   var canView = user.auth('ORDERS:VIEW');
 
@@ -20,6 +21,7 @@ define([
       [
         'app/sapLaborTimeFixer/pages/XDataListPage',
         'app/sapLaborTimeFixer/XDataCollection',
+        css,
         nls
       ],
       function(XDataListPage, XDataCollection)
@@ -37,6 +39,7 @@ define([
       [
         'app/sapLaborTimeFixer/pages/XDataDetailsPage',
         'app/sapLaborTimeFixer/XData',
+        css,
         nls
       ],
       function(XDataDetailsPage, XData)
