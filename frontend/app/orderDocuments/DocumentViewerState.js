@@ -342,6 +342,10 @@ define([
         newOrder.documents.ETO = t('orderDocuments', 'eto');
       }
 
+      delete orderData.documents.ETO;
+      delete orderData.documents.BOM;
+      delete orderData.documents.ORDER;
+
       _.assign(newOrder.documents, orderData.documents);
 
       var station = this.get('station');
@@ -456,22 +460,6 @@ define([
       return !!currentOrder.no && currentOrder.no === bom.orderNo;
     },
 
-    // TODO Remove after 01.10.2019
-    fixConfirmationStatus: function(status)
-    {
-      if (status === undefined || typeof status === 'string')
-      {
-        return status;
-      }
-
-      if (status === null)
-      {
-        return 'unknown';
-      }
-
-      return status ? 'confirmed' : 'unconfirmed';
-    },
-
     getOverallConfirmationStatus: function()
     {
       var confirmations = this.getCurrentOrder().confirmations;
@@ -485,7 +473,7 @@ define([
       for (var i = 0; i < documents.length; ++i)
       {
         var nc15 = documents[i];
-        var status = this.fixConfirmationStatus(confirmations[nc15]);
+        var status = confirmations[nc15];
 
         if (status === 'unknown' || status === 'unconfirmed')
         {
@@ -505,12 +493,12 @@ define([
     {
       var currentOrder = this.getCurrentOrder();
 
-      return this.fixConfirmationStatus(currentOrder.confirmations[currentOrder.nc15]) === 'confirmed';
+      return currentOrder.confirmations[currentOrder.nc15] === 'confirmed';
     },
 
     isConfirmableDocument: function(nc15)
     {
-      var status = this.fixConfirmationStatus(this.getCurrentOrder().confirmations[nc15]);
+      var status = this.getCurrentOrder().confirmations[nc15];
 
       return status !== undefined && status !== 'ignored';
     },
@@ -518,7 +506,7 @@ define([
     isDocumentConfirmed: function(nc15)
     {
       var confirmations = this.getCurrentOrder().confirmations;
-      var status = this.fixConfirmationStatus(confirmations[nc15]);
+      var status = confirmations[nc15];
 
       return status === 'confirmed';
     },
@@ -531,7 +519,7 @@ define([
       for (var i = 0; i < documents.length; ++i)
       {
         var nc15 = documents[i];
-        var status = this.fixConfirmationStatus(confirmations[nc15]);
+        var status = confirmations[nc15];
 
         if (status === 'unknown' || status === 'unconfirmed')
         {
@@ -601,7 +589,7 @@ define([
     isIgnored: function(nc15)
     {
       var confirmations = this.getCurrentOrder().confirmations;
-      var status = this.fixConfirmationStatus(confirmations[nc15]);
+      var status = confirmations[nc15];
 
       return status === 'ignored';
     }
