@@ -1419,6 +1419,7 @@ app/purchaseOrders/views/PurchaseOrderListView.js
 vendor/js2form.js
 app/core/util/buttonGroup.js
 app/core/templates/filterLimit.js
+app/core/templates/filterButton.js
 app/core/views/FilterView.js
 app/core/util/fixTimeRange.js
 app/vendors/util/setUpVendorSelect2.js
