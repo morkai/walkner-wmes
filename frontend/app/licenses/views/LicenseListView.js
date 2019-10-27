@@ -18,12 +18,14 @@ define([
       {id: 'appName', className: 'is-min'},
       {id: 'appVersion', className: 'is-min'},
       {id: 'date', className: 'is-min'},
-      {id: 'expireDate', thAttrs: 'class="is-min"', tdAttrs: function(row)
+      {id: 'expireDate', thClassName: 'is-min', tdAttrs: function(row)
       {
         var expireMoment = time.getMoment(row.expireDate, 'L');
         var expireClassName = expireMoment.isValid() && expireMoment.diff() <= 0 ? 'licenses-invalid' : '';
 
-        return 'class="is-min ' + expireClassName + '"';
+        return {
+          className: ['is-min', expireClassName]
+        };
       }},
       {id: 'features', className: 'is-min'},
       'licensee'

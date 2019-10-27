@@ -11,21 +11,19 @@ define([
 ) {
   'use strict';
 
-  function prepareTdAttrs(row, className)
+  function prepareTdAttrs(row, column)
   {
-    var classNames = '';
-
-    if (className)
+    if (row.observer
+      && row.observer.notify
+      && row.observer.changes
+      && row.observer.changes[column.id])
     {
-      classNames += ' ' + className;
+      return {
+        className: 'is-changed'
+      };
     }
 
-    if (row.observer && row.observer.notify && row.observer.changes && row.observer.changes[this.id])
-    {
-      classNames += ' is-changed';
-    }
-
-    return 'class="' + classNames + '"';
+    return {};
   }
 
   return ListView.extend({
@@ -42,25 +40,26 @@ define([
         },
         {
           id: 'status',
-          tdAttrs: simple ? '' : _.partial(prepareTdAttrs, _, 'is-min'),
-          className: simple ? 'is-min' : ''
+          className: 'is-min',
+          tdAttrs: simple ? '' : prepareTdAttrs
         },
         {
           id: 'subject',
+          className: 'has-popover',
           tdAttrs: prepareTdAttrs,
-          label: t('suggestions', 'PROPERTY:subjectAndDescription')
+          label: this.t('PROPERTY:subjectAndDescription')
         }
       ];
 
       if (!simple)
       {
         columns.push.apply(columns, [
-          {id: 'date', tdAttrs: prepareTdAttrs},
+          {id: 'date', className: 'is-min', tdAttrs: prepareTdAttrs},
           {id: 'categories', tdAttrs: prepareTdAttrs},
           {id: 'productFamily', tdAttrs: prepareTdAttrs},
           {id: 'section', tdAttrs: prepareTdAttrs},
           {id: 'confirmer', tdAttrs: prepareTdAttrs},
-          {id: 'owners', label: t('suggestions', 'PROPERTY:owners')}
+          {id: 'owners', className: 'has-popover', label: this.t('PROPERTY:owners')}
         ]);
       }
 
@@ -97,7 +96,7 @@ define([
       var view = this;
 
       this.$el.popover({
-        selector: '.list-item > td',
+        selector: '.has-popover',
         container: this.el,
         trigger: 'hover',
         placement: function(popoverEl, sourceEl)

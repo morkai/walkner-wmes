@@ -93,6 +93,7 @@ define([
   './orderBomMatchers/routes',
   './help/routes',
   './logs-browserErrors/routes',
+  './sapLaborTimeFixer/routes',
   './wmes-toolcal-types/routes',
   './wmes-toolcal-tools/routes',
   './wmes-fap-categories/routes',

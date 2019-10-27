@@ -143,9 +143,17 @@ td.is-overflow {
   width: 200px;
   max-width: 200px;
 }
+.w225 {
+  width: 225px;
+  max-width: 225px;
+}
 .w250 {
   width: 250px;
   max-width: 250px;
+}
+.w275 {
+  width: 275px;
+  max-width: 275px;
 }
 .w300 {
   width: 300px;

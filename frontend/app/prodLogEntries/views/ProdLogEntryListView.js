@@ -63,7 +63,6 @@ define([
         {
           id: 'station',
           className: 'is-min is-number',
-          label: this.t('list:station'),
           thAttrs: {title: this.t('PROPERTY:station')}
         },
         {id: 'type', className: 'is-min'},

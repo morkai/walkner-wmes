@@ -15,21 +15,24 @@ define([
 ) {
   'use strict';
 
-  function createNameTdAttrs(row)
-  {
-    return row.deactivatedAt === '-' ? '' : 'class="is-deleted"';
-  }
-
   return ListView.extend({
 
     deactivatedVisible: false,
 
-    columns: [
-      {id: 'subdivision', className: 'is-min'},
-      {id: 'mrpControllers', className: 'is-min'},
-      {id: 'name', tdAttrs: createNameTdAttrs},
-      {id: 'deactivatedAt', className: 'is-min'}
-    ],
+    columns: function()
+    {
+      return [
+        {id: 'subdivision', className: 'is-min'},
+        {id: 'mrpControllers', className: 'is-min'},
+        {id: 'name', tdAttrs: function(row)
+        {
+          return {
+            className: row.deactivatedAt ? 'is-deleted' : ''
+          };
+        }},
+        {id: 'deactivatedAt', className: 'is-min'}
+      ];
+    },
 
     serializeActions: function()
     {

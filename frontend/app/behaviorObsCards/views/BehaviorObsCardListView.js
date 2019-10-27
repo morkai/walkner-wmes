@@ -49,9 +49,14 @@ define([
       {
         return '<span class="behaviorObsCards-list-text">' + value + '</span>';
       };
-      var textAttrs = function(row)
+      var textAttrs = function(row, column)
       {
-        return 'class="behaviorObsCards-list-expander is-' + (row[this.id] ? 'enabled' : 'disabled') + '"';
+        return {
+          className: [
+            'behaviorObsCards-list-expander',
+            'is-' + (row[column.id] ? 'enabled' : 'disabled')
+          ]
+        };
       };
 
       return [

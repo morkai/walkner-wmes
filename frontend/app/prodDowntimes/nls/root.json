@@ -7,8 +7,6 @@
     "PAGE_ACTION:alerts": "Alerts",
     "PAGE_ACTION:comment": "Comment downtime",
     "PAGE_ACTION:corroborate": "Corroborate downtime",
-    "PAGE_ACTION:jump:title": "Jump to downtime by ID",
-    "PAGE_ACTION:jump:placeholder": "Downtime ID",
 
     "PANEL:TITLE:addForm": "Downtime add form",
     "PANEL:TITLE:editForm": "Downtime edit form",
@@ -23,6 +21,8 @@
 
     "LIST:ACTION:comment": "Comment downtime",
     "LIST:ACTION:corroborate": "Corroborate downtime",
+    "LIST:COLUMN:orderMrp": "MRP",
+    "LIST:COLUMN:prodLine": "Line/<br>Machine",
 
     "PROPERTY:rid": "ID",
     "PROPERTY:orgUnit": "Org Unit",

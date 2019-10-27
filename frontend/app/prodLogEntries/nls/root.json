@@ -8,7 +8,7 @@
     "filter:placeholder:type": "Any type",
     "filter:placeholder:prodLine": "Any production line",
 
-    "list:station": "St.",
+    "LIST:COLUMN:station": "St.",
 
     "PROPERTY:prodLine": "Line",
     "PROPERTY:station": "Station",

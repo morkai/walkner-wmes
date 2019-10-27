@@ -72,7 +72,7 @@ define([
       ? time.format(obj.finishedAt, longDateFormat)
       : t('prodDowntimes', 'NO_DATA:finishedAt');
 
-    obj.corroboratedAt = time.format(obj.corroboratedAt, longDateFormat) || '-';
+    obj.corroboratedAt = time.format(obj.corroboratedAt, longDateFormat) || '';
 
     obj.order = obj.prodShiftOrder
       ? (obj.orderId + '; ' + obj.operationNo)
@@ -87,12 +87,12 @@ define([
     var subdivision = subdivisions.get(obj.subdivision);
     var prodFlow = prodFlows.get(obj.prodFlow);
 
-    obj.subdivision = subdivision ? subdivision.getLabel() : '?';
-    obj.prodFlow = prodFlow ? prodFlow.getLabel() : '?';
+    obj.subdivision = subdivision ? subdivision.getLabel() : '';
+    obj.prodFlow = prodFlow ? prodFlow.getLabel() : '';
     obj.mrpControllers
       = Array.isArray(obj.mrpControllers) && obj.mrpControllers.length
         ? obj.mrpControllers.join('; ')
-        : '?';
+        : '';
 
     var pso = obj.prodShiftOrder;
 
@@ -171,6 +171,8 @@ define([
           + '">' + changesCount.aor + '</span>';
       }
     }
+
+    obj.prodFlowText = obj.prodFlow;
 
     if (options && options.productFamily && obj.productFamily)
     {

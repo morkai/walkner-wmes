@@ -7,7 +7,7 @@
   "filter:placeholder:type": "Dowolny typ",
   "filter:placeholder:prodLine": "Dowolna linia produkcyjna",
 
-  "list:station": "St.",
+  "LIST:COLUMN:station": "St.",
 
   "PROPERTY:prodLine": "Linia",
   "PROPERTY:station": "Stanowisko",

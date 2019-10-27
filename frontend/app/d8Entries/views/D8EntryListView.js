@@ -11,26 +11,21 @@ define([
 ) {
   'use strict';
 
-  function prepareTdAttrs(row, className, propName1, propName2)
+  function tdAttrs(row, column, propName1, propName2)
   {
-    var classNames = '';
-
-    if (className)
-    {
-      classNames += ' ' + className;
-    }
-
     var observer = row.observer;
 
     if (observer
       && observer.notify
       && observer.changes
-      && (observer.changes[propName1 || this.id] || observer.changes[propName2]))
+      && (observer.changes[propName1 || column.id] || observer.changes[propName2]))
     {
-      classNames += ' is-changed';
+      return {
+        className: ['is-changed']
+      };
     }
 
-    return 'class="' + classNames + '"';
+    return {};
   }
 
   return ListView.extend({
@@ -39,22 +34,21 @@ define([
 
     serializeColumns: function()
     {
-      var minTdAttrs = _.partial(prepareTdAttrs, _, 'is-min');
-      var stripsTdAttrs = _.partial(prepareTdAttrs, _, 'is-min', 'strips');
+      var stripsTdAttrs = _.partial(tdAttrs, _, _, 'strips');
 
       return [
         {id: 'rid', className: 'is-min is-number'},
-        {id: 'statusText', tdAttrs: minTdAttrs, label: this.t('PROPERTY:status')},
-        {id: 'entrySource', tdAttrs: minTdAttrs},
-        {id: 'stripNos', tdAttrs: stripsTdAttrs, label: this.t('PROPERTY:strips.no')},
-        {id: 'stripFamilies', tdAttrs: stripsTdAttrs, label: this.t('PROPERTY:strips.family')},
-        {id: 'subject', tdAttrs: prepareTdAttrs},
-        {id: 'problemSource', tdAttrs: prepareTdAttrs},
-        {id: 'team', tdAttrs: _.partial(prepareTdAttrs, _, null, 'owner', 'members')},
-        {id: 'crsRegisterDate', tdAttrs: minTdAttrs, label: this.t('LIST:crsRegisterDate')},
-        {id: 'd5PlannedCloseDate', tdAttrs: minTdAttrs, label: this.t('LIST:d5PlannedCloseDate')},
-        {id: 'd5CloseDate', tdAttrs: minTdAttrs, label: this.t('LIST:d5CloseDate')},
-        {id: 'd8CloseDate', tdAttrs: minTdAttrs, label: this.t('LIST:d8CloseDate')}
+        {id: 'status', valueProperty: 'statusText', className: 'is-min', tdAttrs: tdAttrs},
+        {id: 'entrySource', className: 'is-min', tdAttrs: tdAttrs},
+        {id: 'stripNos', className: 'is-min', tdAttrs: stripsTdAttrs, label: this.t('PROPERTY:strips.no')},
+        {id: 'stripFamilies', className: 'is-min', tdAttrs: stripsTdAttrs, label: this.t('PROPERTY:strips.family')},
+        {id: 'subject', tdAttrs: tdAttrs},
+        {id: 'problemSource', tdAttrs: tdAttrs},
+        {id: 'team', tdAttrs: _.partial(tdAttrs, _, _, 'owner', 'members')},
+        {id: 'crsRegisterDate', className: 'is-min', tdAttrs: tdAttrs, label: this.t('LIST:crsRegisterDate')},
+        {id: 'd5PlannedCloseDate', className: 'is-min', tdAttrs: tdAttrs, label: this.t('LIST:d5PlannedCloseDate')},
+        {id: 'd5CloseDate', className: 'is-min', tdAttrs: tdAttrs, label: this.t('LIST:d5CloseDate')},
+        {id: 'd8CloseDate', className: 'is-min', tdAttrs: tdAttrs, label: this.t('LIST:d8CloseDate')}
       ];
     },
 

@@ -7,9 +7,6 @@
   "PAGE_ACTION:comment": "Komentuj przestój",
   "PAGE_ACTION:corroborate": "Potwierdź przestój",
 
-  "LIST:ACTION:comment": "Komentuj przestój",
-  "LIST:ACTION:corroborate": "Potwierdź przestój",
-
   "PANEL:TITLE:addForm": "Formularz dodawania przestoju",
   "PANEL:TITLE:editForm": "Formularz edycji przestoju",
   "PANEL:TITLE:history": "Historia przestoju",
@@ -20,6 +17,11 @@
   "filter:placeholder:reason": "Dowolny powód przestoju",
   "filter:placeholder:orgUnit": "Dowolna jednostka organizacyjna",
   "filter:mrp": "Kontroler MRP zlecenia",
+
+  "LIST:ACTION:comment": "Komentuj przestój",
+  "LIST:ACTION:corroborate": "Potwierdź przestój",
+  "LIST:COLUMN:orderMrp": "MRP",
+  "LIST:COLUMN:prodLine": "Linia/<br>Maszyna",
 
   "PROPERTY:rid": "ID",
   "PROPERTY:orgUnit": "Jednostka organizacyjna",

@@ -32,17 +32,18 @@ define([
     serializeColumns: function()
     {
       return [
-        {id: 'mrpControllers', className: 'is-min'},
-        'prodFlow',
-        {id: 'prodLine', className: 'is-min'},
-        'order',
-        'operation',
-        {id: 'prodShift', className: 'is-min'},
+        {id: 'mrpControllers', titleProperty: 'mrpControllersText', className: 'is-overflow w100'},
+        {id: 'prodFlow', className: 'is-overflow w250'},
+        {id: 'prodLine', className: 'is-overflow w100'},
+        {id: 'order', titleProperty: 'productName', className: 'is-overflow w400'},
+        {id: 'operation', titleProperty: 'operationName', className: 'is-overflow w250'},
+        {id: 'prodShift', className: 'is-min', width: '105px'},
         {id: 'startedAt', className: 'is-min'},
         {id: 'duration', className: 'is-min'},
-        {id: 'quantityDone', className: 'is-min'},
-        {id: 'workerCount', className: 'is-min'},
-        (user.isAllowedTo('PROD_DATA:VIEW:EFF') ? {id: 'efficiency', className: 'is-min'} : null)
+        {id: 'quantityDone', className: 'is-min is-number'},
+        {id: 'workerCount', className: 'is-min is-number'},
+        (user.isAllowedTo('PROD_DATA:VIEW:EFF') ? {id: 'efficiency', className: 'is-min is-number'} : null),
+        '-'
       ];
     },
 

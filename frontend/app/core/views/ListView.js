@@ -154,7 +154,7 @@ define([
 
           if (typeof column.tdDecorator === 'function')
           {
-            return column.tdDecorator(column.id, row[column.valueProperty], row);
+            return column.tdDecorator(column.id, row[column.valueProperty], row, column);
           }
 
           return row[column.valueProperty];
@@ -181,7 +181,8 @@ define([
 
     decorateColumns: function(columns)
     {
-      var nlsDomain = this.collection.getNlsDomain();
+      var view = this;
+      var nlsDomain = view.collection.getNlsDomain();
 
       return columns.map(function(column)
       {
@@ -196,7 +197,7 @@ define([
         }
         else if (typeof column === 'string')
         {
-          column = {id: column, label: t.bound(nlsDomain, 'PROPERTY:' + column)};
+          column = {id: column};
         }
 
         if (!column.valueProperty)
@@ -206,45 +207,147 @@ define([
 
         if (!column.label && column.label !== '')
         {
-          column.label = t.bound(nlsDomain, 'PROPERTY:' + column.id);
+          var labelKey = 'LIST:COLUMN:' + column.id;
+
+          if (!t.has(nlsDomain, labelKey))
+          {
+            labelKey = 'PROPERTY:' + column.id;
+          }
+
+          column.label = t.bound(nlsDomain, labelKey);
         }
 
-        ['thAttrs', 'tdAttrs'].forEach(function(prop)
+        ['th', 'td'].forEach(function(prefix)
         {
-          if (_.isObject(column[prop]))
+          var prop = prefix + 'Attrs';
+          var _prop = '_' + prop;
+          var attrs = column[_prop] || column[prop];
+
+          if (_.isFunction(attrs) || (_.isObject(attrs) && !_.isArray(attrs)))
           {
-            var thAttrs = [];
-
-            Object.keys(column[prop]).forEach(function(k)
-            {
-              var v = column[prop][k];
-
-              if (k.charAt(0) === '!')
-              {
-                v = _.escape(v);
-                k = k.substring(1);
-              }
-
-              thAttrs.push(k + '="' + v + '"');
-            });
-
-            column[prop] = thAttrs.join(' ');
+            // OK
+          }
+          else
+          {
+            attrs = {};
           }
 
-          if (!column[prop])
+          if (!column[_prop])
           {
-            column[prop] = '';
+            column[_prop] = attrs;
           }
+
+          column[prop] = view.decorateAttrs.bind(view, prefix, column[_prop]);
         });
-
-        if (column.className || column.thClassName || column.tdClassName)
-        {
-          column.thAttrs += ' class="' + (column.className || '') + ' ' + (column.thClassName || '') + '"';
-          column.tdAttrs += ' class="' + (column.className || '') + ' ' + (column.tdClassName || '') + '"';
-        }
 
         return column;
       }).filter(function(column) { return column !== null; });
+    },
+
+    decorateAttrs: function(prefix, attrs, row, column)
+    {
+      if (prefix === 'th')
+      {
+        column = row;
+        row = {};
+      }
+
+      if (_.isFunction(attrs))
+      {
+        attrs = prefix === 'th' ? attrs(column) : attrs(row, column);
+      }
+
+      var className = [];
+
+      if (_.isArray(attrs.className))
+      {
+        className = className.concat(attrs.className);
+      }
+      else if (_.isString(attrs.className))
+      {
+        className.push(attrs.className);
+      }
+
+      className.push(
+        _.result(column, 'className'),
+        _.result(column, prefix + 'ClassName')
+      );
+
+      className = className.filter(function(cn) { return !!cn; }).join(' ');
+
+      var htmlAttrs = [];
+
+      if (className.length)
+      {
+        htmlAttrs.push('class="' + className + '"');
+      }
+
+      if (!attrs.title)
+      {
+        if (!column.titleProperty && prefix === 'td' && className.indexOf('is-overflow') !== -1)
+        {
+          column.titleProperty = column.id;
+        }
+
+        if (column.titleProperty)
+        {
+          attrs.title = row[column.titleProperty];
+        }
+      }
+
+      if (column.width)
+      {
+        if (!attrs.style)
+        {
+          attrs.style = {};
+        }
+
+        attrs.style.width = column.width;
+      }
+
+      Object.keys(attrs).forEach(function(key)
+      {
+        if (key === 'className')
+        {
+          return;
+        }
+
+        var value = attrs[key];
+
+        if (_.isFunction(value))
+        {
+          value = value(key, attrs, row, column);
+        }
+
+        if (_.isArray(value))
+        {
+          value = value.join(' ');
+        }
+        else if (key === 'style' && _.isObject(value))
+        {
+          var style = [];
+
+          Object.keys(value).forEach(function(k)
+          {
+            style.push(k + ': ' + value[k]);
+          });
+
+          value = style.join('; ');
+        }
+
+        if (key.charAt(0) === '!')
+        {
+          key = key.substring(1);
+        }
+        else
+        {
+          value = _.escape(value);
+        }
+
+        htmlAttrs.push(key + '="' + value + '"');
+      });
+
+      return htmlAttrs.join(' ');
     },
 
     serializeActions: function()

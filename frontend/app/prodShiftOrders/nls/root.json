@@ -56,6 +56,12 @@
     "PROPERTY:pressWorksheet": "Worksheet",
     "PROPERTY:efficiency": "Efficiency",
 
+    "LIST:COLUMN:mrpControllers": "MRP",
+    "LIST:COLUMN:prodLine": "Line",
+    "LIST:COLUMN:quantityDone": "Quantity<br>done",
+    "LIST:COLUMN:workerCount": "Worker<br>count",
+    "LIST:COLUMN:efficiency": "Eff%",
+
     "losses:reason": "Reason",
     "losses:quantity": "Quantity [PCE]",
 

@@ -23,6 +23,8 @@ define([
 
     model: ProdShiftOrder,
 
+    theadHeight: 2,
+
     rqlQuery: function(rql)
     {
       var selector = [

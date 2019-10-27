@@ -31,7 +31,7 @@
         >
           <% columns.forEach(function(column) { %>
           <td
-            <%- typeof column.tdAttrs === 'function' ? column.tdAttrs(row) : (column.tdAttrs || '') %>
+            <%- typeof column.tdAttrs === 'function' ? column.tdAttrs(row, column) : (column.tdAttrs || '') %>
             data-id="<%- column.id %>"
             <% if (column.titleProperty && row[column.titleProperty]) { %>title="<%= row[column.titleProperty] %>"<% } %>
           ><%- renderValue(column, row) %></td>

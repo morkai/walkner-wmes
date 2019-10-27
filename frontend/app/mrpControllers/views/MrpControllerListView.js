@@ -9,23 +9,26 @@ define([
 ) {
   'use strict';
 
-  function createDescriptionTdAttrs(row)
-  {
-    return !row.deactivatedAt ? '' : 'class="is-deleted"';
-  }
-
   return ListView.extend({
 
     deactivatedVisible: false,
 
-    columns: [
-      {id: 'subdivision', className: 'is-min'},
-      {id: '_id', className: 'is-min'},
-      {id: 'inout', className: 'is-min'},
-      {id: 'description', tdAttrs: createDescriptionTdAttrs},
-      {id: 'deactivatedAt', className: 'is-min'},
-      {id: 'replacedBy', className: 'is-min'}
-    ],
+    columns: function()
+    {
+      return [
+        {id: 'subdivision', className: 'is-min'},
+        {id: '_id', className: 'is-min'},
+        {id: 'inout', className: 'is-min'},
+        {id: 'description', tdAttrs: function(row)
+        {
+          return {
+            className: row.deactivatedAt ? 'is-deleted' : ''
+          };
+        }},
+        {id: 'deactivatedAt', className: 'is-min'},
+        {id: 'replacedBy', className: 'is-min'}
+      ];
+    },
 
     serializeActions: function()
     {

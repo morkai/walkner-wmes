@@ -49,7 +49,7 @@ define([
     obj.shift = t('core', 'SHIFT:' + obj.shift);
     obj.startedAt = time.format(obj.startedAt, 'LTS');
     obj.finishedAt = time.format(obj.finishedAt, 'LTS');
-    obj.duration = finishedAt ? time.toString((finishedAt - startedAt) / 1000) : '';
+    obj.duration = finishedAt ? time.toString((finishedAt - startedAt) / 1000, !options.details) : '';
     obj.creator = renderUserInfo({userInfo: obj.creator});
 
     if (options.orgUnits)
@@ -60,8 +60,8 @@ define([
       obj.subdivision = subdivision ? subdivision.getLabel() : '?';
       obj.prodFlow = prodFlow ? prodFlow.getLabel() : '?';
       obj.mrpControllers = Array.isArray(obj.mrpControllers) && obj.mrpControllers.length
-        ? obj.mrpControllers.join('; ')
-        : '?';
+        ? obj.mrpControllers.join(' ')
+        : '';
     }
 
     obj.prodShift = obj.prodShift
@@ -72,11 +72,25 @@ define([
     {
       var operation = (obj.orderData.operations || {})[obj.operationNo] || {};
 
-      obj.order = obj.orderId + ': <em>' + (resolveProductName(obj.orderData) || '?') + '</em>';
-      obj.operation = obj.operationNo + ': <em>' + (operation.name || '?') + '</em>';
+      obj.productName = resolveProductName(obj.orderData);
+      obj.operationName = operation.name || '';
+      obj.order = obj.orderId;
+      obj.operation = obj.operationNo;
+
+      if (obj.productName)
+      {
+        obj.order += ': ' + obj.productName;
+      }
+
+      if (obj.operationName)
+      {
+        obj.operation += ': ' + obj.operationName;
+      }
     }
     else
     {
+      obj.productName = '';
+      obj.operationName = '';
       obj.order = obj.orderId;
       obj.operation = obj.operationNo;
     }

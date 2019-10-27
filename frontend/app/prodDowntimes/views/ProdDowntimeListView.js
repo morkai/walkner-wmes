@@ -27,17 +27,19 @@ define([
       'prodDowntimes.deleted.*': 'refreshIfMatches'
     },
 
-    columns: [
-      {id: 'rid', className: 'is-min'},
-      {id: 'orderMrp', tdClassName: 'is-min', label: t.bound('prodDowntimes', 'PROPERTY:mrpControllers')},
-      'prodFlow',
-      'aor',
-      {id: 'prodLine', tdClassName: 'is-min'},
-      'reason',
-      'startedAt',
-      'finishedAt',
-      {id: 'duration', tdClassName: 'is-min'}
-    ],
+    columns: function()
+    {
+      return [
+        {id: 'rid', className: 'is-min'},
+        {id: 'orderMrp', tdClassName: 'is-min', label: t.bound('prodDowntimes', 'PROPERTY:mrpControllers')},
+        {id: 'prodFlow', className: 'is-overflow w275', titleProperty: 'prodFlowText'},
+        {id: 'aor', className: 'is-overflow w275'},
+        {id: 'prodLine', className: 'is-overflow w125'},
+        'reason',
+        {id: 'startedAt', tdClassName: 'is-min'},
+        {id: 'duration', tdClassName: 'is-min'}
+      ];
+    },
 
     serializeRows: function()
     {

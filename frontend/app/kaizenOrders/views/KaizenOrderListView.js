@@ -9,11 +9,11 @@ define([
 ) {
   'use strict';
 
-  function prepareTdAttrs(row)
+  function tdAttrs(row, column)
   {
-    return row.observer && row.observer.notify && row.observer.changes && row.observer.changes[this.id]
-      ? 'class="is-changed"'
-      : '';
+    return row.observer && row.observer.notify && row.observer.changes && row.observer.changes[column.id]
+      ? {className: 'is-changed'}
+      : {};
   }
 
   return ListView.extend({
@@ -31,29 +31,38 @@ define([
       }
 
       columns.push(
-        {id: 'status', tdAttrs: simple ? '' : prepareTdAttrs, className: simple ? 'is-min' : ''},
-        {id: 'subject', tdAttrs: prepareTdAttrs, label: t('kaizenOrders', 'PROPERTY:subjectAndDescription')}
+        {
+          id: 'status',
+          tdAttrs: simple ? {} : tdAttrs,
+          className: 'is-min'
+        },
+        {
+          id: 'subject',
+          className: 'has-popover',
+          tdAttrs: tdAttrs,
+          label: this.t('PROPERTY:subjectAndDescription')
+        }
       );
 
       if (!simple)
       {
         columns.push(
-          {id: 'eventDate', tdAttrs: prepareTdAttrs},
-          {id: 'area', tdAttrs: prepareTdAttrs},
-          {id: 'cause', tdAttrs: prepareTdAttrs},
-          {id: 'risk', tdAttrs: prepareTdAttrs},
-          {id: 'nearMissCategory', tdAttrs: prepareTdAttrs}
+          {id: 'eventDate', className: 'is-min', tdAttrs: tdAttrs},
+          {id: 'area', tdAttrs: tdAttrs},
+          {id: 'cause', tdAttrs: tdAttrs},
+          {id: 'risk', tdAttrs: tdAttrs},
+          {id: 'nearMissCategory', tdAttrs: tdAttrs}
         );
 
         if (window.KAIZEN_MULTI)
         {
-          columns.push({id: 'suggestionCategory', tdAttrs: prepareTdAttrs});
+          columns.push({id: 'suggestionCategory', tdAttrs: tdAttrs});
         }
 
         columns.push(
-          {id: 'section', tdAttrs: prepareTdAttrs},
-          {id: 'confirmer', tdAttrs: prepareTdAttrs},
-          {id: 'owners', label: t('kaizenOrders', 'PROPERTY:nearMissOwners')}
+          {id: 'section', tdAttrs: tdAttrs},
+          {id: 'confirmer', tdAttrs: tdAttrs},
+          {id: 'owners', className: 'has-popover', label: this.t('PROPERTY:nearMissOwners')}
         );
       }
 
@@ -90,7 +99,7 @@ define([
       var view = this;
 
       this.$el.popover({
-        selector: '.list-item > td',
+        selector: '.has-popover',
         container: this.el,
         trigger: 'hover',
         placement: function(popoverEl, sourceEl)

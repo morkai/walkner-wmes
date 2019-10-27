@@ -68,7 +68,13 @@ define([
 
       if (orderMrp && orgUnitMrp.indexOf(orderMrp) === -1)
       {
-        row.mrpControllers = orderMrp + ' <span style="text-decoration: line-through">' + row.mrpControllers + '</span>';
+        row.mrpControllersText = '+' + orderMrp + '\n-' + row.mrpControllers;
+        row.mrpControllers = orderMrp
+          + ' <span style="text-decoration: line-through">' + row.mrpControllers + '</span>';
+      }
+      else
+      {
+        row.mrpControllersText = row.mrpControllers;
       }
 
       return row;
@@ -78,7 +84,8 @@ define([
     {
       return this.serialize({
         orgUnits: true,
-        orderUrl: true
+        orderUrl: true,
+        details: true
       });
     },
 
