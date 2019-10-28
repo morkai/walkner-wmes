@@ -50,10 +50,11 @@ define([
     }),
 
     columns: [
-      {id: '_id', className: 'is-min'},
-      'name',
-      'mrp',
-      {id: 'materialNorm', className: 'is-min'}
+      {id: '_id', className: 'is-min text-fixed'},
+      {id: 'name', className: 'is-min'},
+      {id: 'mrp', className: 'is-min'},
+      {id: 'materialNorm', className: 'is-min is-number'},
+      '-'
     ],
 
     serializeActions: function()

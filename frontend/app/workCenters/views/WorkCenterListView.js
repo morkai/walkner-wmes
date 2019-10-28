@@ -72,7 +72,7 @@ define([
 
           row.orgUnitPath = renderOrgUnitPath(workCenter, true);
           row.orgUnitsText = renderOrgUnitPath(workCenter, false, false);
-          row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '-';
+          row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '';
 
           return row;
         })

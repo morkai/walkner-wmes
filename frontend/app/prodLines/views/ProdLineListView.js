@@ -86,8 +86,8 @@ define([
           row.orgUnits = renderOrgUnitPath(prodLine);
           row.orgUnitsText = renderOrgUnitPath(prodLine, false, false);
           row.workCenter = renderOrgUnitPath(prodLine, true);
-          row.inventoryNo = row.inventoryNo || '-';
-          row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '-';
+          row.inventoryNo = row.inventoryNo || '';
+          row.deactivatedAt = row.deactivatedAt ? time.format(row.deactivatedAt, 'LL') : '';
 
           return row;
         })

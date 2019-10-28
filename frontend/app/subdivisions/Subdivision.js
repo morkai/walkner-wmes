@@ -63,7 +63,7 @@ define([
       o.prodTaskTags = o.prodTaskTags && o.prodTaskTags.length ? o.prodTaskTags.join('; ') : null;
 
       var aor = aors.get(o.aor);
-      o.aor = aor ? aor.getLabel() : '-';
+      o.aor = aor ? aor.getLabel() : '';
 
       o.autoDowntimes = _.map(o.autoDowntimes, function(autoDowntime)
       {
@@ -93,7 +93,7 @@ define([
     {
       var obj = this.serialize(options);
 
-      obj.autoDowntimes = obj.autoDowntimes.length === 0 ? '-' : obj.autoDowntimes
+      obj.autoDowntimes = obj.autoDowntimes.length === 0 ? '' : obj.autoDowntimes
         .map(function(autoDowntime) { return autoDowntime.reason; })
         .join('; ');
 
