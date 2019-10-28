@@ -306,21 +306,14 @@ exports.updater = {
 };
 
 exports.events = {
-  collection: function(app) { return app.mongoose.model('Event').collection; },
+  collection: app => app.mongoose.model('Event').collection,
   insertDelay: 1000,
   topics: {
     debug: [
-      '*.added', '*.edited',
-      'qi.*.added', 'qi.*.edited',
-      'd8.*.added', 'd8.*.edited'
+      '*.added', '*.edited'
     ],
     warning: [
-      '*.deleted',
-      'fte.leader.deleted', 'fte.master.deleted',
-      'prodDowntimes.confirmedEdited',
-      'qi.*.deleted',
-      'd8.*.deleted',
-      'pfep.entries.deleted'
+      '*.deleted'
     ],
     error: [
       '*.syncFailed',
@@ -328,12 +321,7 @@ exports.events = {
     ]
   },
   blacklist: [
-    'pressWorksheets.added', 'pressWorksheets.edited',
-    'prodDowntimeAlerts.added',
-    'qi.results.added', 'qi.results.edited',
-    'd8.entries.added', 'd8.entries.edited',
-    'orderBomMatchers.added', 'orderBomMatchers.edited',
-    'subscriptions.added', 'subscriptions.edited', 'subscriptions.deleted'
+
   ]
 };
 
@@ -362,27 +350,8 @@ exports.sio = {
 exports.pubsub = {
   statsPublishInterval: 60000,
   republishTopics: [
-    'ping',
-    'sockets.connected', 'sockets.disconnected',
     'dictionaries.updated',
-    '*.added', '*.edited', '*.deleted', '*.synced',
-    'shiftChanged',
-    'fte.master.**', 'fte.leader.**',
-    'hourlyPlans.created', 'hourlyPlans.updated.*',
-    'prodShifts.**', 'prodDowntimes.**', 'prodShiftOrders.**', 'prodChangeRequests.**', 'prodSerialNumbers.created.**',
-    'settings.updated.**',
-    'icpo.results.synced', 'orders.intake.synced',
-    'cags.nc12.synced', 'cags.nc12.syncFailed', 'cags.plan.synced', 'cags.plan.syncFailed',
-    'isaRequests.**', 'isaEvents.saved', 'isaShiftPersonnel.updated',
-    'pscs.**',
-    'd8.**',
-    'vis.**',
-    'mor.**',
-    'planning.**',
-    'sapLaborTimeFixer.**',
-    'printing.**',
-    'pfep.**',
-    'help.**'
+    '*.added', '*.edited', '*.deleted', '*.synced'
   ]
 };
 
@@ -444,30 +413,7 @@ exports.user = {
   userInfoIdProperty: 'id',
   localAddresses: [/^192\.168\./, /^161\.87\./],
   privileges: [
-    'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE',
-    'FTE:LEADER:VIEW', 'FTE:LEADER:MANAGE', 'FTE:LEADER:ALL',
-    'FTE:MASTER:VIEW', 'FTE:MASTER:MANAGE', 'FTE:MASTER:ALL',
-    'FTE:WH:VIEW', 'FTE:WH:MANAGE', 'FTE:WH:ALL',
-    'HOURLY_PLANS:VIEW', 'HOURLY_PLANS:MANAGE', 'HOURLY_PLANS:ALL',
-    'PROD_DOWNTIMES:VIEW', 'PROD_DOWNTIMES:MANAGE', 'PROD_DOWNTIMES:ALL',
-    'PRESS_WORKSHEETS:VIEW', 'PRESS_WORKSHEETS:MANAGE',
-    'PROD_DATA:VIEW', 'PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST', 'PROD_DATA:CHANGES:MANAGE',
-    'PROD_DATA:MANAGE:SPIGOT_ONLY', 'PROD_DATA:VIEW:EFF',
-    'REPORTS:VIEW', 'REPORTS:MANAGE', 'REPORTS:1:VIEW', 'REPORTS:2:VIEW', 'REPORTS:3:VIEW', 'REPORTS:4:VIEW',
-    'REPORTS:5:VIEW', 'REPORTS:6:VIEW', 'REPORTS:7:VIEW', 'REPORTS:8:VIEW', 'REPORTS:9:VIEW',
-    'XICONF:VIEW', 'XICONF:MANAGE', 'XICONF:MANAGE:HID_LAMPS', 'XICONF:NOTIFY', 'ICPO:VIEW', 'ICPO:MANAGE',
-    'FACTORY_LAYOUT:MANAGE',
-    'DOCUMENTS:VIEW', 'DOCUMENTS:MANAGE',
-    'PROD_DOWNTIME_ALERTS:VIEW', 'PROD_DOWNTIME_ALERTS:MANAGE',
-    'ISA:VIEW', 'ISA:MANAGE', 'ISA:WHMAN',
-    'QI:INSPECTOR', 'QI:SPECIALIST',
-    'QI:RESULTS:VIEW', 'QI:RESULTS:MANAGE',
-    'QI:DICTIONARIES:VIEW', 'QI:DICTIONARIES:MANAGE',
-    'PSCS:VIEW', 'PSCS:MANAGE',
-    'D8:VIEW', 'D8:MANAGE', 'D8:LEADER', 'D8:DICTIONARIES:VIEW', 'D8:DICTIONARIES:MANAGE',
-    'MOR:MANAGE', 'MOR:MANAGE:USERS',
-    'PFEP:VIEW', 'PFEP:MANAGE',
-    'HELP:MANAGE'
+    'DICTIONARIES:VIEW', 'DICTIONARIES:MANAGE'
   ]
 };
 
