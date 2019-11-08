@@ -1,71 +1,7 @@
-<h1>v0.144.0</h1>
-<h2><%- time.format('2019-10-27', 'LL') %></h2>
+<h1>v?.?.?</h1>
+<h2><%- time.format(Date.now(), 'LL') %></h2>
 <h3>FAP</h3>
 <ul>
-  <li>Poprawiono błąd podczas aktualizacji indeksu tekstowego wyszukiwania zgłoszeń, jeżeli w danym zgłoszeniu
-    w krótkim czasie zmieniono jedną z indeksowanych wartości oraz dodano komentarz na czacie.</li>
-  <li>Poprawiono błąd powodujący wywalenie się serwera jeżeli dodano zgłoszenia FAP z numerem zlecenia, które
-    zostało zaimportowane do systemu z danych operacji.</li>
-  <li>Zmieniono przycisk wyświetlający aktualną ilość nieprzeczytanych zgłoszeń tak, aby po kliknięciu
-    na niego, użytkownik był przeniesiony do strony ze szczegółami zgłoszenia a nie listą zgłoszeń, jeżeli
-    jest tylko jedno nieprzeczytane zgłoszenie.</li>
-  <li>Zmieniono 'Przyczynę problemu' (5xWhy?) tak, aby była widoczna dopiero po wyeskalowaniu zgłoszenia
-    do czwartego poziomu.</li>
-  <li>Dodano uprawnienia do zmiany kategorii dla funkcji 'Inżynier procesu dystrybucji'.</li>
-</ul>
-<h3>Magazyn (stary)</h3>
-<ul>
-  <li>Poprawiono błąd powodujący łączenie zleceń z tym samym numerem, ale na innych liniach, jeżeli
-    występowały jedno po drugim w kolejce.</li>
-  <li>Zmieniono etap 'Kompletacja' na 'Buffor'.</li>
-</ul>
-<h3>Narzędzia pomiarowe</h3>
-<ul>
-  <li>Poprawiono błąd powodujący niepojawianie się nowej zmiany w historii zmian urządzenia, jeżeli wcześniej
-    nie było jeszcze żadnych pozycji w historii.</li>
-  <li>Dodano możliwość załączenia pliku ze skanem certifikatu do każdego narzędzia.</li>
-</ul>
-<h3>Wiercenie</h3>
-<ul>
-  <li>Dodano możliwość otworzenia dokumentu po kliknięciu na 12NC komponentu. Otwierany jest dokument
-    o 15NC równym <code>000<12NC komponentu></code>.</li>
-</ul>
-<h3>Planowanie</h3>
-<ul>
-  <li>Dodano do historii zmian planu dziennego akcje 'Rozwiń' oraz 'Zwiń' (wszystkie zmiany).</li>
-  <li>Dodano do zleceń znacznik 'EK' (Kontynuacja pilota ETO). Znacznik dodawany jest do wszystkich zleceń
-    z danym 12NC w pierwszym dniu następującym po pojawieniu się nowego zlecenia ETO (priorytet 'E').</li>
-</ul>
-<h3>Inspekcja Jakości</h3>
-<ul>
-  <li>Zmieniono pojedyńcze pole 'Przyczyna źródłowa' na kilka pół 'Dlaczego?'.</li>
-</ul>
-<h3>Struktura organizacyjna > Przepływy</h3>
-<ul>
-  <li>Poprawiono błąd uniemożliwiający wyświetlenie strony ze szczegółami przepływu.</li>
-</ul>
-<h3>Formatka operatora</h3>
-<ul>
-  <li>Poprawiono błąd uniemożliwiający sprawdzanie spigota.</li>
-  <li>Zmieniono skanowanie numerów seryjnych tak, aby nie można było zeskanować nowego numeru, jeżeli całe zlecenie
-    zostało juz zrobione.</li>
-</ul>
-<h3>Obserwacje zachowań</h3>
-<h3>Minuty dla Bezpieczeństwa</h3>
-<ul>
-  <li>Poprawiono błąd powodujący wyświetlanie akcji powrotu do Obserwacji lub Minutek po porzuceniu
-    akcji przypisania nowego zgłoszenia ZPW/Usprawnień.</li>
-</ul>
-<h3>Inspekcja Jakości</h3>
-<ul>
-  <li>Dodano uprawnienia do Dodawania akcji korygujących dla Liderów przypisanych do Wyniku inspekcji.</li>
-</ul>
-<h3>Produkcja > Zlecenia</h3>
-<ul>
-  <li>Dodano filtr 'Wyrób' przeszukujący zlecenia po 12NC lub opisie wyrobu.</li>
-</ul>
-<h3>Dokumentacja</h3>
-<ul>
-  <li>Zmieniono funkcjonalność potwierdzania dokumentów tak, aby ETO zawsze było pierwszym, potwierdzalnym
-    dokumentem.</li>
+  <li>Zmieniono sprawdzanie uprawnień do zmiany kategorii zgłoszenia tak, aby lista uprawnionych Funkcji produkcyjnych
+    była definiowana w ustawieniach.</li>
 </ul>

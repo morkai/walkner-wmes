@@ -2,10 +2,12 @@
 
 define([
   'underscore',
-  '../settings/SettingCollection',
+  'app/user',
+  'app/settings/SettingCollection',
   './Setting'
 ], function(
   _,
+  user,
   SettingCollection,
   Setting
 ) {
@@ -15,18 +17,13 @@ define([
 
     model: Setting,
 
+    idPrefix: 'fap.',
+
     topicSuffix: 'fap.**',
-
-    getValue: function(suffix)
-    {
-      var setting = this.get('fap.' + suffix);
-
-      return setting ? setting.getValue() : null;
-    },
 
     prepareValue: function(id, newValue)
     {
-      if (/pendingFunctions/.test(id))
+      if (/Functions$/.test(id))
       {
         return Array.isArray(newValue) ? newValue : typeof newValue === 'string' ? newValue.split(',') : [];
       }
@@ -35,6 +32,11 @@ define([
     prepareFormValue: function(id, value)
     {
       return value;
+    },
+
+    canChangeCategory: function()
+    {
+      return _.includes(this.getValue('categoryFunctions'), user.data.prodFunction);
     }
 
   });

@@ -332,19 +332,24 @@ define([
       return this.serialized = obj;
     },
 
+    updateAuth: function()
+    {
+      if (this.serialized)
+      {
+        this.serialized.auth = this.serializeAuth();
+      }
+    },
+
     serializeAuth: function()
     {
       var loggedIn = user.isLoggedIn();
       var manage = user.isAllowedTo('FAP:MANAGE');
       var manager = user.isAllowedTo('FN:manager');
       var procEng = user.isAllowedTo('FN:process-engineer', 'FN:process-engineer-NPI');
-      var qualityEng = user.isAllowedTo('FN:quality_engineer');
-      var whEng = user.isAllowedTo('FN:warehouse-process-engineer');
       var designer = user.isAllowedTo('FN:designer', 'FN:designer_eto');
       var master = user.isAllowedTo('FN:master');
       var leader = user.isAllowedTo('FN:leader');
       var whman = user.isAllowedTo('FN:whman', 'FN:prod_whman', 'FN:in_whman');
-      var prodPlanner = user.isAllowedTo('FN:production-planner');
       var analyzers = this.get('analyzers') || [];
       var analyzer = _.some(analyzers, function(u) { return user.data._id === u.id; });
       var mainAnalyzer = analyzer && analyzers[0].id === user.data._id;
@@ -358,6 +363,7 @@ define([
       var analysisDone = this.get('analysisDone');
       var mainAnalyzerAuth = !pending && analysisNeed && !analysisDone && (manage || procEng || master);
       var solver = manage || procEng || designer || master || leader || (wh && whman);
+      var category = dictionaries.settings.canChangeCategory();
 
       return {
         delete: this.canDelete(),
@@ -370,8 +376,8 @@ define([
         level: !finished && (solver || manager || whman),
         solution: solver,
         problem: started && (manage || procEng || designer || master || leader),
-        category: manage || procEng || qualityEng || whEng || designer || prodPlanner,
-        subCategory: manage || procEng || qualityEng || designer || prodPlanner,
+        category: manage || category,
+        subCategory: manage || category,
         subdivisionType: manage || procEng || designer || master || leader,
         componentCode: started && (manage || procEng),
         orderNo: started && (manage || procEng),

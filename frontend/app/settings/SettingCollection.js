@@ -170,6 +170,23 @@ define([
     prepareFormValue: function(id, value)
     {
       return value || '';
+    },
+
+    getValue: function(idSuffix, defaultValue)
+    {
+      var setting = this.get((this.idPrefix || '') + idSuffix);
+
+      if (setting)
+      {
+        return setting.getValue();
+      }
+
+      if (defaultValue == null)
+      {
+        return null;
+      }
+
+      return defaultValue;
     }
 
   });

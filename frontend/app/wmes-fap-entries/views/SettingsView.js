@@ -44,17 +44,30 @@ define([
         data: prodFunctions.map(idAndLabel)
       });
 
+      this.$id('categoryFunctions').select2({
+        width: '100%',
+        allowClear: true,
+        multiple: true,
+        data: prodFunctions.map(idAndLabel)
+      });
+
       this.updateSettingField(this.settings.get('fap.pendingFunctions'));
+      this.updateSettingField(this.settings.get('fap.categoryFunctions'));
     },
 
     shouldAutoUpdateSettingField: function(setting)
     {
-      return !/pendingFunctions$/i.test(setting.id);
+      return !/Functions$/i.test(setting.id);
     },
 
     updateSettingField: function(setting)
     {
-      if (setting && /pendingFunctions$/i.test(setting.id))
+      if (!setting)
+      {
+        return;
+      }
+
+      if (/Functions$/i.test(setting.id))
       {
         var data = setting.getValue().map(function(f)
         {
@@ -66,7 +79,7 @@ define([
           };
         });
 
-        this.$id('pendingFunctions').select2('data', data);
+        this.$id(setting.id.split('.')[1]).select2('data', data);
       }
     }
 

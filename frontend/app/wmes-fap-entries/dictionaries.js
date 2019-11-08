@@ -6,14 +6,16 @@ define([
   '../pubsub',
   '../user',
   '../wmes-fap-categories/CategoryCollection',
-  '../wmes-fap-subCategories/SubCategoryCollection'
+  '../wmes-fap-subCategories/SubCategoryCollection',
+  './SettingCollection'
 ], function(
   $,
   broker,
   pubsub,
   user,
   CategoryCollection,
-  SubCategoryCollection
+  SubCategoryCollection,
+  SettingCollection
 ) {
   'use strict';
 
@@ -30,6 +32,7 @@ define([
     statuses: ['pending', 'started', 'finished'],
     categories: new CategoryCollection(),
     subCategories: new SubCategoryCollection(),
+    settings: new SettingCollection(),
     loaded: false,
     load: function()
     {
@@ -70,6 +73,8 @@ define([
       {
         pubsubSandbox.subscribe(TOPIC_PREFIX + PROP_TO_DICT[prop] + '.**', handleDictionaryMessage);
       });
+
+      dictionaries.settings.setUpPubsub(pubsubSandbox);
 
       return req;
     },
@@ -132,6 +137,8 @@ define([
 
       dictionaries[dict].reset(data ? data[dict] : []);
     });
+
+    dictionaries.settings.reset(data ? data.settings : []);
   }
 
   function unload()

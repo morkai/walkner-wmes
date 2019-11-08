@@ -131,6 +131,7 @@ define([
       view.listenTo(entry, 'change', view.update);
       view.listenTo(entry, 'editor:show', view.showEditor);
       view.listenTo(entry, 'editor:hide', view.hideEditor);
+      view.listenTo(dictionaries.settings, 'change reset', view.onSettingChange);
 
       $(window).on('keydown.' + view.idPrefix, view.onKeyDown.bind(view));
     },
@@ -647,6 +648,12 @@ define([
       {
         this.hideEditor();
       }
+    },
+
+    onSettingChange: function()
+    {
+      this.model.updateAuth();
+      this.updateAuth();
     },
 
     editors: {
