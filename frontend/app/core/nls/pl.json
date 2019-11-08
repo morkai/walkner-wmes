@@ -453,6 +453,7 @@
   "embedded:apps:isa": "Pola odkładcze",
   "embedded:apps:remote": "Zdalna",
   "embedded:apps:heff": "Wydajność godzinowa",
+  "embedded:apps:trw": "TRW",
   "embedded:reboot:title": "Ponowne uruchamianie komputera",
   "embedded:reboot:message": "Czy na pewno chcesz ponownie uruchomić komputer?",
   "embedded:reboot:yes": "Uruchom ponownie",

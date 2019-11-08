@@ -447,6 +447,7 @@
     "embedded:apps:isa": "ISA",
     "embedded:apps:remote": "Remote",
     "embedded:apps:heff": "Hourly efficiency",
+    "embedded:apps:trw": "TRW",
     "embedded:reboot:title": "Rebooting",
     "embedded:reboot:message": "Are you sure you want to reboot the computer?",
     "embedded:reboot:yes": "Reboot",
