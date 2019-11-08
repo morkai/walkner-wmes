@@ -221,6 +221,10 @@ define([
       if (!obj.componentCode)
       {
         obj.componentCode = '-';
+      }
+
+      if (!obj.componentName)
+      {
         obj.componentName = '-';
       }
 

@@ -1398,7 +1398,7 @@ define([
         var view = this;
         var oldValue = view.model.get('componentCode');
         var $form = $('<form class="fap-editor"></form>');
-        var $value = $('<input class="form-control" type="text" pattern="^[0-9]{1,12}$" maxlength="12">');
+        var $value = $('<input class="form-control" type="text" pattern="^[0-9]{12}$" maxlength="12">');
         var $submit = $('<button class="btn btn-primary"><i class="fa fa-check"></i></button>');
 
         $value.on('input', function()
@@ -1444,22 +1444,26 @@ define([
               return;
             }
 
-            $value.prop('disabled', false);
-            $submit.prop('disabled', false);
+            if (req.status !== 404)
+            {
+              $value.prop('disabled', false);
+              $submit.prop('disabled', false);
 
-            if (req.status === 404)
-            {
-              $value[0].setCustomValidity(view.t('componentCode:404'));
-              $submit.click();
-            }
-            else
-            {
               viewport.msg.show({
                 type: 'error',
                 time: 2500,
                 text: view.t('componentCode:failure')
               });
+
+              return;
             }
+
+            view.model.multiChange({
+              componentCode: newValue,
+              componentName: ''
+            });
+
+            view.hideEditor();
           });
 
           req.done(function(res)

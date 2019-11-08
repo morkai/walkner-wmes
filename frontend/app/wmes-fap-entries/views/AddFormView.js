@@ -861,7 +861,7 @@ define([
       var $componentCode = view.$id('componentCode');
       var nc12 = $componentCode.val();
 
-      if (!/^[0-9]{1,12}$/.test(nc12) || nc12 === '000000000000')
+      if (!/^[0-9]{12}$/.test(nc12) || nc12 === '000000000000')
       {
         return;
       }
@@ -884,11 +884,6 @@ define([
 
       req.fail(function()
       {
-        if (req.status === 404)
-        {
-          $componentCode[0].setCustomValidity(view.t('addForm:componentCode:notFound'));
-        }
-
         view.$id('componentName').text('');
       });
 
