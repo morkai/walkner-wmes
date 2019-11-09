@@ -30,6 +30,8 @@ define([
   var pubsubSandbox = null;
   var dictionaries = {
     statuses: ['pending', 'started', 'finished'],
+    subdivisionTypes: ['assembly', 'press', 'wh'],
+    reqFields: ['orderNo', 'lines', 'componentCode'],
     categories: new CategoryCollection(),
     subCategories: new SubCategoryCollection(),
     settings: new SettingCollection(),

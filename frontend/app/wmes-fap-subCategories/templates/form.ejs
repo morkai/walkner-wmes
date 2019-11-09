@@ -27,6 +27,31 @@
         <input id="<%- idPrefix %>-etoCategory" type="text" autocomplete="new-password" name="etoCategory">
       </div>
       <div class="form-group">
+        <label class="control-label">
+          <input id="<%- idPrefix %>-reqFieldsEnabled" name="reqFields.enabled" type="checkbox" value="true">
+          <%- helpers.t('PROPERTY:reqFields') %>
+        </label>
+        <table id="<%- idPrefix %>-reqFields">
+          <tbody>
+            <tr>
+              <td class="is-min"></td>
+              <% subdivisionTypes.forEach(function(subdivisionType) { %>
+              <td class="is-min" style="padding: 0 7px"><%- t('wmes-fap-entries', 'subdivisionType:' + subdivisionType) %></td>
+              <% }) %>
+            </tr>
+            <% reqFields.forEach(function(field) { %>
+            <tr>
+              <td class="is-min text-right"><%- t('wmes-fap-categories', 'reqField:' + field) %></td>
+              <% subdivisionTypes.forEach(function(subdivisionType) { %>
+              <td class="is-min text-center"><input name="reqFields.<%- subdivisionType %>.<%- field %>" type="checkbox" value="true"></td>
+              <% }) %>
+              <td></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <div class="form-group">
         <div class="checkbox">
           <label class="control-label">
             <input type="checkbox" name="planners" value="true">

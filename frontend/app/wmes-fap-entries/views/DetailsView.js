@@ -859,7 +859,7 @@ define([
       subdivisionType: function($prop)
       {
         var view = this;
-        var options = Entry.SUBDIVISION_TYPES.map(function(type)
+        var options = dictionaries.subdivisionTypes.map(function(type)
         {
           return {
             id: type,

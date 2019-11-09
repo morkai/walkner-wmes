@@ -49,6 +49,11 @@ define([
       if (parent)
       {
         obj.parent = parent.getLabel();
+
+        if (!obj.reqFields || !obj.reqFields.enabled)
+        {
+          obj.reqFields = parent.get('reqFields') || {};
+        }
       }
 
       obj.etoCategory = etoCategory

@@ -19,7 +19,11 @@ define([
 ) {
   'use strict';
 
-  var nls = 'i18n!app/nls/wmes-fap-subCategories';
+  var nls = [
+    'i18n!app/nls/wmes-fap-entries',
+    'i18n!app/nls/wmes-fap-categories',
+    'i18n!app/nls/wmes-fap-subCategories'
+  ];
   var baseBreadcrumb = '#fap/entries';
   var canView = user.auth('FAP:MANAGE');
   var canManage = canView;
@@ -28,9 +32,8 @@ define([
   {
     viewport.loadPage(
       [
-        'app/core/pages/ListPage',
-        nls
-      ],
+        'app/core/pages/ListPage'
+      ].concat(nls),
       function(ListPage)
       {
         return dictionaries.bind(new ListPage({
@@ -55,15 +58,14 @@ define([
     viewport.loadPage(
       [
         'app/core/pages/DetailsPage',
-        'app/wmes-fap-subCategories/templates/details',
-        nls
-      ],
-      function(DetailsPage, detailsTemplate)
+        'app/wmes-fap-subCategories/views/DetailsView'
+      ].concat(nls),
+      function(DetailsPage, DetailsView)
       {
         return dictionaries.bind(new DetailsPage({
+          DetailsView: DetailsView,
           pageClassName: 'page-max-flex',
           baseBreadcrumb: baseBreadcrumb,
-          detailsTemplate: detailsTemplate,
           model: new SubCategory({_id: req.params.id})
         }));
       }
@@ -76,9 +78,8 @@ define([
       [
         'app/core/pages/AddFormPage',
         'app/wmes-fap-subCategories/views/FormView',
-        'i18n!app/nls/users',
-        nls
-      ],
+        'i18n!app/nls/users'
+      ].concat(nls),
       function(AddFormPage, FormView)
       {
         return dictionaries.bind(new AddFormPage({
@@ -97,9 +98,8 @@ define([
       [
         'app/core/pages/EditFormPage',
         'app/wmes-fap-subCategories/views/FormView',
-        'i18n!app/nls/users',
-        nls
-      ],
+        'i18n!app/nls/users'
+      ].concat(nls),
       function(EditFormPage, FormView)
       {
         return dictionaries.bind(new EditFormPage({

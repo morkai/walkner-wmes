@@ -84,6 +84,7 @@ define([
 
         this.updateNotifications('subCategory');
         this.updateEtoCategory('subCategory');
+        this.toggleRequiredFields();
       },
       'change #-lines, #-subdivisions': function(e)
       {
@@ -222,51 +223,50 @@ define([
 
     toggleRequiredFields: function()
     {
-      var orderNo = false;
-      var lines = false;
-      var componentCode = false;
+      var reqFields = {
+        orderNo: false,
+        lines: false,
+        componentCode: false
+      };
+      var subdivisionType = this.model.get('subdivisionType');
+      var category = dictionaries.categories.get(this.model.get('category'));
+      var subCategory = dictionaries.subCategories.get(this.model.get('subCategory'));
 
-      switch (this.model.get('subdivisionType'))
+      if (category)
       {
-        case 'assembly':
-          orderNo = true;
-          break;
-
-        case 'press':
-          componentCode = true;
-          lines = true;
-          break;
-
-        case 'wh':
-          componentCode = true;
-          break;
+        _.assign(reqFields, (category.get('reqFields') || {})[subdivisionType]);
       }
 
-      // TODO Change to category flags?
-      if (this.model.get('category') === '5544b9182b5949f80d80b369')
+      if (subCategory)
       {
-        orderNo = false;
-        lines = true;
+        var subCategoryReqFields = subCategory.get('reqFields') || {};
+
+        if (subCategoryReqFields.enabled)
+        {
+          _.assign(reqFields, subCategoryReqFields[subdivisionType]);
+        }
       }
 
       this.$id('orderNo')
-        .prop('required', orderNo)
+        .prop('required', reqFields.orderNo)
         .closest('.form-group')
         .find('.control-label')
-        .toggleClass('is-required', orderNo);
+        .toggleClass('is-required', reqFields.orderNo);
 
       this.$id('lines')
-        .prop('required', lines)
+        .prop('required', reqFields.lines)
         .closest('.form-group')
-        .toggleClass('has-required-select2', lines)
+        .toggleClass('has-required-select2', reqFields.lines)
         .find('.control-label')
-        .toggleClass('is-required', lines);
+        .toggleClass('is-required', reqFields.lines);
 
       this.$id('componentCode')
-        .prop('required', componentCode)
+        .prop('required', reqFields.componentCode)
         .closest('.form-group')
         .find('.control-label')
-        .toggleClass('is-required', componentCode);
+        .toggleClass('is-required', reqFields.componentCode);
+
+console.log('toggleRequiredFields', {reqFields, subdivisionType, category, subCategory});
     },
 
     renderUploads: function()
@@ -994,7 +994,7 @@ define([
     getTemplateData: function()
     {
       return {
-        subdivisionTypes: Entry.SUBDIVISION_TYPES
+        subdivisionTypes: dictionaries.subdivisionTypes
       };
     },
 

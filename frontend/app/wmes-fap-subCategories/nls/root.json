@@ -12,6 +12,7 @@
     "PROPERTY:notifications.prodFunctions": "Functions",
     "PROPERTY:etoCategory": "ETO subcategory",
     "PROPERTY:planners": "Planners?",
+    "PROPERTY:reqFields": "Required fields",
 
     "FORM:notifications:add": "Add notification",
     "FORM:tester:label": "Notifications tester",

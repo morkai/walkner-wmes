@@ -29,12 +29,6 @@ define([
 ) {
   'use strict';
 
-  var SUBDIVISION_TYPES = [
-    'assembly',
-    'press',
-    'wh'
-  ];
-
   var AUTH_PROPS = {
     status: true,
     analysisNeed: true,
@@ -1062,7 +1056,6 @@ define([
 
   }, {
 
-    SUBDIVISION_TYPES: SUBDIVISION_TYPES,
     AUTH_PROPS: AUTH_PROPS
 
   });

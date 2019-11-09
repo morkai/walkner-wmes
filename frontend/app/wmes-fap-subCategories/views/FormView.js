@@ -53,15 +53,56 @@ define([
 
       'input #-tester-mrp, #-tester-orderNo, #-tester-nc12': 'testNotifications',
       'change #-tester-date': 'testNotifications',
-      'change input[name="parent"]': 'testNotifications',
       'change input[name="users"]': 'testNotifications',
       'change input[name^="notifications"]': 'testNotifications',
 
       'change #-etoCategoryToggle': 'toggleEtoCategory',
 
-      'change #-parent': 'setUpEtoCategorySelect2'
+      'click #-reqFields td': function(e)
+      {
+        if (!this.$id('reqFieldsEnabled').prop('checked'))
+        {
+          return;
+        }
+
+        var inputEl = this.$(e.target).find('input')[0];
+
+        if (inputEl)
+        {
+          inputEl.checked = !inputEl.checked;
+        }
+      },
+
+      'change #-reqFieldsEnabled': 'toggleReqFields',
+      'change #-parent': function()
+      {
+        this.setUpEtoCategorySelect2();
+        this.testNotifications();
+        this.toggleReqFields();
+      }
 
     }, FormView.prototype.events),
+
+    toggleReqFields: function()
+    {
+      var category = dictionaries.categories.get(this.$id('parent').val());
+      var reqFields = category ? category.get('reqFields') : {};
+      var disabled = !this.$id('reqFieldsEnabled').prop('checked');
+
+      this.$id('reqFields').find('input').each(function()
+      {
+        this.disabled = disabled;
+
+        if (disabled)
+        {
+          var parts = this.name.split('.');
+          var subdivisionType = parts[1];
+          var field = parts[2];
+
+          this.checked = !!reqFields[subdivisionType] && !!reqFields[subdivisionType][field];
+        }
+      });
+    },
 
     initialize: function()
     {
@@ -89,6 +130,14 @@ define([
       this.prodFunctions = prodFunctions.map(idAndLabel);
     },
 
+    getTemplateData: function()
+    {
+      return {
+        subdivisionTypes: dictionaries.subdivisionTypes,
+        reqFields: dictionaries.reqFields
+      };
+    },
+
     afterRender: function()
     {
       var view = this;
@@ -113,6 +162,7 @@ define([
       view.setUpCategorySelect2('parent', dictionaries.categories);
       view.setUpEtoCategorySelect2();
       view.toggleEtoCategory();
+      view.toggleReqFields();
     },
 
     setUpCategorySelect2: function(property, models)

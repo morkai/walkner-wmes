@@ -11,6 +11,7 @@
   "PROPERTY:notifications.prodFunctions": "Funkcje",
   "PROPERTY:etoCategory": "Podkategoria ETO",
   "PROPERTY:planners": "Planiści?",
+  "PROPERTY:reqFields": "Wymagane pola",
 
   "FORM:notifications:add": "Dodaj nowe powiadomienie",
   "FORM:tester:label": "Tester powiadomień",

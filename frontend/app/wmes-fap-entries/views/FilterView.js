@@ -160,7 +160,7 @@ define([
         divisions: orgUnits.getAllByType('division')
           .filter(function(d) { return d.isActive() && d.get('type') === 'prod'; })
           .map(idAndLabel),
-        subdivisionTypes: Entry.SUBDIVISION_TYPES
+        subdivisionTypes: dictionaries.subdivisionTypes
       });
     },
 

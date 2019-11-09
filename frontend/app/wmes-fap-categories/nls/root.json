@@ -11,6 +11,7 @@
     "PROPERTY:notifications.prodFunctions": "Functions",
     "PROPERTY:etoCategory": "ETO category",
     "PROPERTY:planners": "Planners?",
+    "PROPERTY:reqFields": "Required fields",
 
     "FORM:notifications:add": "Add notification",
     "FORM:tester:label": "Notifications tester",
@@ -18,6 +19,10 @@
     "FORM:tester:mrp": "MRP",
     "FORM:tester:orderNo": "Order",
     "FORM:tester:nc12": "12NC",
+
+    "reqField:orderNo": "Order",
+    "reqField:lines": "Line",
+    "reqField:componentCode": "Component",
 
     "noNotifications": "No notifications defined."
   },

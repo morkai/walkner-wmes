@@ -56,7 +56,17 @@ define([
       'change input[name="users"]': 'testNotifications',
       'change input[name^="notifications"]': 'testNotifications',
 
-      'change #-etoCategoryToggle': 'toggleEtoCategory'
+      'change #-etoCategoryToggle': 'toggleEtoCategory',
+
+      'click #-reqFields td': function(e)
+      {
+        var inputEl = this.$(e.target).find('input')[0];
+
+        if (inputEl)
+        {
+          inputEl.checked = !inputEl.checked;
+        }
+      }
 
     }, FormView.prototype.events),
 
@@ -84,6 +94,14 @@ define([
       });
 
       this.prodFunctions = prodFunctions.map(idAndLabel);
+    },
+
+    getTemplateData: function()
+    {
+      return {
+        subdivisionTypes: dictionaries.subdivisionTypes,
+        reqFields: dictionaries.reqFields
+      };
     },
 
     afterRender: function()

@@ -13,6 +13,33 @@
     </div>
   </div>
   <div class="panel panel-default">
+    <div class="panel-heading"><%- helpers.t('PROPERTY:reqFields') %></div>
+    <table class="table table-bordered table-condensed">
+      <tbody>
+        <tr>
+          <td class="is-min"></td>
+          <% subdivisionTypes.forEach(function(subdivisionType) { %>
+          <td class="is-min"><%- t('wmes-fap-entries', 'subdivisionType:' + subdivisionType) %></td>
+          <% }) %>
+          <td></td>
+        </tr>
+        <% reqFields.forEach(function(field) { %>
+        <tr>
+          <td class="is-min text-right"><%- t('wmes-fap-categories', 'reqField:' + field) %></td>
+          <% subdivisionTypes.forEach(function(subdivisionType) { %>
+          <td class="is-min text-center">
+            <% if (model.reqFields && model.reqFields[subdivisionType] && model.reqFields[subdivisionType][field]) { %>
+            <i class="fa fa-check"></i>
+            <% } %>
+          </td>
+          <% }) %>
+          <td></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel panel-default">
     <div class="panel-heading"><%- helpers.t('PROPERTY:notifications') %></div>
     <% if (model.notifications.length) { %>
       <table class="table table-bordered table-condensed">

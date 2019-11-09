@@ -10,6 +10,7 @@
   "PROPERTY:notifications.prodFunctions": "Funkcje",
   "PROPERTY:etoCategory": "Kategoria ETO",
   "PROPERTY:planners": "Planiści?",
+  "PROPERTY:reqFields": "Wymagane pola",
 
   "FORM:notifications:add": "Dodaj nowe powiadomienie",
   "FORM:tester:label": "Tester powiadomień",
@@ -17,6 +18,10 @@
   "FORM:tester:mrp": "MRP",
   "FORM:tester:orderNo": "Zlecenie",
   "FORM:tester:nc12": "12NC",
+
+  "reqField:orderNo": "Zlecenie",
+  "reqField:lines": "Linia",
+  "reqField:componentCode": "Komponent",
 
   "noNotifications": "Brak zdefiniowanych powiadomień."
 }
