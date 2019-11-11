@@ -1,0 +1,1 @@
+define(["app/core/views/DetailsView","app/wmes-fap-entries/dictionaries","app/wmes-fap-subCategories/templates/details"],function(e,i,s){"use strict";return e.extend({template:s,getTemplateData:function(){return{subdivisionTypes:i.subdivisionTypes,reqFields:i.reqFields}}})});

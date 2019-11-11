@@ -1849,6 +1849,8 @@ app/wmes-fap-categories/Category.js
 app/wmes-fap-categories/CategoryCollection.js
 app/wmes-fap-subCategories/SubCategory.js
 app/wmes-fap-subCategories/SubCategoryCollection.js
+app/wmes-fap-entries/Setting.js
+app/wmes-fap-entries/SettingCollection.js
 app/wmes-fap-entries/dictionaries.js
 app/wmes-fap-categories/routes.js
 app/wmes-fap-subCategories/routes.js
@@ -2065,6 +2067,10 @@ app/wmes-fap-categories/Category.js
 app/wmes-fap-categories/CategoryCollection.js
 app/wmes-fap-subCategories/SubCategory.js
 app/wmes-fap-subCategories/SubCategoryCollection.js
+app/settings/Setting.js
+app/settings/SettingCollection.js
+app/wmes-fap-entries/Setting.js
+app/wmes-fap-entries/SettingCollection.js
 app/wmes-fap-entries/dictionaries.js
 vendor/autolinker.js
 app/data/colorFactory.js
