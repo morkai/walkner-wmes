@@ -6,9 +6,9 @@ if (process.env.WMES_PORTS)
   catch (err) {} // eslint-disable-line no-empty
 }
 
-const REPORTS_PUSH_PORT = 28000;
+const REPORTS_PUSH_PORT = parseInt(process.env.WMES_PORTS_START, 10) || 28000;
 
-let nextPort = 28010;
+let nextPort = REPORTS_PUSH_PORT + 10;
 
 module.exports = {
   'wmes-frontend': {
