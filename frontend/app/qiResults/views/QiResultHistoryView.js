@@ -163,16 +163,21 @@ define([
 
       if (property === 'rootCause')
       {
-        more = '<ol>';
+        more = '';
 
-        value.forEach(function(why)
+        value.forEach(function(rootCause)
         {
-          more += '<li>' + _.escape(why) + '</li>';
+          more += '<ol>';
+
+          rootCause.forEach(function(why)
+          {
+            more += '<li>' + _.escape(why) + '</li>';
+          });
+
+          more += '</ol>';
         });
 
-        more += '</ol>';
-
-        value = value.join('\n');
+        value = value[0].join('\n');
       }
 
       switch (property)

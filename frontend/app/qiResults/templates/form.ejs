@@ -173,14 +173,11 @@
           <textarea id="<%- idPrefix %>-immediateActions" name="immediateActions" class="form-control" rows="4" data-role="inspector specialist nokOwner leader"></textarea>
         </div>
       </div>
+      <div id="<%- idPrefix %>-rootCauses" class="qiResults-form-rootCauses">
+        <% model.rootCause.forEach(function(rootCause, i) { %>
 <%
 
-  var rootCause = [];
-
-  if (Array.isArray(model.rootCause))
-  {
-    rootCause = model.rootCause.concat([]);
-  }
+  rootCause = rootCause.concat([]);
 
   while (rootCause.length < 2)
   {
@@ -193,18 +190,24 @@
   }
 
 %>
-      <div class="form-group">
-        <label for="<%- idPrefix %>-rootCause" class="control-label is-required"><%- helpers.t('PROPERTY:rootCause') %></label>
-        <% rootCause.forEach(function(why, i) { %>
-        <input name="rootCause[<%- i %>]" class="form-control qiResults-form-rootCause" <%- i < 2 ? 'required' : '' %> data-role="inspector specialist nokOwner leader" placeholder="<%- t('FORM:rootCause:placeholder', {n: i + 1}) %>">
+        <div class="form-group" data-i="<%- i %>">
+          <label class="control-label is-required">
+            <span><%- helpers.t('FORM:rootCause:label', {n: i + 1, total: model.rootCause.length}) %></span>
+            <a class="qiResults-form-removeRootCause" href="javascript:void(0)" title="<%- t('FORM:rootCause:remove') %>"><i class="fa fa-times"></i></a>
+          </label>
+          <% rootCause.forEach(function(why, whyI) { %>
+          <input name="rootCause[<%- i %>][<%- whyI %>]" class="form-control qiResults-form-rootCause" <%- whyI < 2 ? 'required' : '' %> data-role="inspector specialist nokOwner leader" placeholder="<%- t('FORM:rootCause:placeholder', {n: whyI + 1}) %>">
+          <% }) %>
+        </div>
         <% }) %>
       </div>
+      <button id="<%- idPrefix %>-addRootCause" type="button" class="btn btn-default" style="margin: 7px 0 15px 0"><i class="fa fa-plus"></i><span><%- t('FORM:rootCause:add') %></span></button>
       <% if (model.okFile || model.nokFile) { %>
       <% if (canEditAttachments) { %>
       <div class="message message-inline message-warning"><%- helpers.t('FORM:attachments:update') %></div>
       <% } %>
       <div class="row">
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-3 form-group">
           <label class="control-label"><%- helpers.t('FORM:okFile:current') %></label>
           <p class="form-control-static">
             <% if (model.okFile) { %>
@@ -217,7 +220,7 @@
             <% } %>
           </p>
         </div>
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-3 form-group">
           <label class="control-label"><%- helpers.t('FORM:nokFile:current') %></label>
           <p class="form-control-static">
             <% if (model.nokFile) { %>
@@ -234,11 +237,11 @@
       <% } %>
       <% if (canEditAttachments) { %>
       <div class="row">
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-3 form-group">
           <label for="<%- idPrefix %>-okFile" class="control-label"><%- helpers.t('FORM:okFile:new') %></label>
           <input id="<%- idPrefix %>-okFile" name="okFile" class="form-control" type="file">
         </div>
-        <div class="col-lg-2 form-group">
+        <div class="col-lg-3 form-group">
           <label for="<%- idPrefix %>-nokFile" class="control-label"><%- helpers.t('FORM:nokFile:new') %></label>
           <input id="<%- idPrefix %>-nokFile" name="nokFile" class="form-control" type="file">
         </div>

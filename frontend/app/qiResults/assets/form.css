@@ -28,6 +28,9 @@
 .row + .qiResults-form-comment {
   margin-top: 0;
 }
+.qiResults-form-rootCauses .form-group:first-child .qiResults-form-removeRootCause {
+  display: none;
+}
 .qiResults-form-rootCause + .qiResults-form-rootCause {
   margin-top: 5px;
 }

@@ -80,26 +80,33 @@
             'faultCode',
             {id: 'faultDescription', valueClassName: 'text-lines'},
             {id: 'problem', valueClassName: 'text-lines'},
-            {id: 'immediateActions', valueClassName: 'text-lines'},
-            {id: '!rootCause', valueClassName: 'text-lines', value: function(rootCause)
-            {
-              if (!Array.isArray(rootCause) || !rootCause.length)
+            {id: 'immediateActions', valueClassName: 'text-lines'}
+          ].concat(model.rootCause.map(function(rootCause, i)
+          {
+            return {
+              id: '!rootCause' + i,
+              valueClassName: 'text-lines',
+              label: t('FORM:rootCause:label', {n: i + 1, total: model.rootCause.length}),
+              value: function()
               {
-                return '';
+                if (!Array.isArray(rootCause) || !rootCause.length)
+                {
+                  return '';
+                }
+
+                var html = '<ol>';
+
+                rootCause.forEach(function(why)
+                {
+                  html += '<li>' + _.escape(why) + '</li>';
+                });
+
+                html += '</ol>';
+
+                return html;
               }
-
-              var html = '<ol>';
-
-              rootCause.forEach(function(why)
-              {
-                html += '<li>' + _.escape(why) + '</li>';
-              });
-
-              html += '</ol>';
-
-              return html;
-            }}
-          ]) %>
+            }
+          }))) %>
         </div>
       </div>
     </div>

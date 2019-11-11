@@ -107,7 +107,9 @@ define([
       },
       'input .qiResults-form-rootCause': function(e)
       {
-        var $inputs = this.$('.qiResults-form-rootCause');
+        var $group = this.$(e.currentTarget).closest('.form-group');
+        var groupI = $group[0].dataset.i;
+        var $inputs = $group.find('.qiResults-form-rootCause');
 
         if ($inputs.length > 2)
         {
@@ -129,25 +131,88 @@ define([
           });
         }
 
-        var $last = this.$('.qiResults-form-rootCause').last();
+        var $last = $group.find('.qiResults-form-rootCause').last();
 
         if ($last.val().trim() !== '')
         {
           $last
             .clone()
-            .attr('name', 'rootCause[' + Date.now() + ']')
+            .attr('name', 'rootCause[' + groupI + '][' + Date.now() + ']')
             .val('')
             .insertAfter($last);
         }
 
-        this.$('.qiResults-form-rootCause').each(function(i)
+        if (groupI === '0')
         {
-          this.required = i < 2;
+          $group.find('.qiResults-form-rootCause').each(function(i)
+          {
+            this.required = i < 2;
+          });
+        }
+      },
+      'click #-rootCauses label': function(e)
+      {
+        this.$(e.currentTarget)
+          .closest('.form-group')
+          .find('.qiResults-form-rootCause')
+          .first()
+          .focus();
+      },
+      'click #-addRootCause': function()
+      {
+        var view = this;
+        var $rootCauses = view.$id('rootCauses');
+        var $rootCause = $rootCauses.find('.form-group').last().clone();
+        var groupI = Date.now().toString();
+
+        $rootCause.attr('data-i', groupI).find('input').each(function(i)
+        {
+          if (i > 1)
+          {
+            $(this).remove();
+          }
+          else
+          {
+            this.value = '';
+            this.name = 'rootCause[' + groupI + '][' + i + ']';
+          }
+        });
+
+        $rootCauses.append($rootCause);
+
+        var $groups = $rootCauses.find('.form-group');
+
+        $rootCauses.find('.form-group').each(function(i)
+        {
+          $(this).find('label')
+            .toggleClass('is-required', i === 0)
+            .find('span')
+            .text(view.t('FORM:rootCause:label', {n: i + 1, total: $groups.length}));
+
+          if (i > 0)
+          {
+            $(this).find('input').prop('required', false);
+          }
         });
       },
-      'click label[for$="rootCause"]': function()
+
+      'click .qiResults-form-removeRootCause': function(e)
       {
-        this.$('.qiResults-form-rootCause').first().focus();
+        var view = this;
+
+        view.$(e.currentTarget).closest('.form-group').fadeOut('fast', function()
+        {
+          $(this).remove();
+
+          var $labels = view.$id('rootCauses').find('label');
+
+          $labels.each(function(i)
+          {
+            $(this)
+              .find('span')
+              .text(view.t('FORM:rootCause:label', {n: i + 1, total: $labels.length}));
+          });
+        });
       }
 
     }, FormView.prototype.events),
@@ -482,8 +547,13 @@ define([
       formData.mrp = view.$id('division').attr('data-orders-mrp') || '';
 
       formData.rootCause = (formData.rootCause || [])
-        .map(function(why) { return why.trim(); })
-        .filter(function(why) { return /[a-zA-Z]+/.test(why); });
+        .map(function(rootCause)
+        {
+          return (rootCause || [])
+            .map(function(why) { return why.trim(); })
+            .filter(function(why) { return /[a-zA-Z]+/.test(why); });
+        })
+        .filter(function(rootCause) { return rootCause.length > 0; });
 
       return formData;
     },

@@ -131,7 +131,10 @@
     "FORM:nokFile:current": "Current NOK file",
     "FORM:attachments:remove": "remove",
     "FORM:attachments:update": "Select new files only if you want to replace the existing ones.",
+    "FORM:rootCause:label": "{total, plural, one{Root cause} other{Root cause #{n}}}",
     "FORM:rootCause:placeholder": "Why?",
+    "FORM:rootCause:add": "Add a new cause",
+    "FORM:rootCause:remove": "Remove the cause",
 
     "correctiveActions:#": "#",
     "correctiveActions:what": "Action",
