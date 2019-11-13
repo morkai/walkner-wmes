@@ -245,6 +245,23 @@ define([
       });
     },
 
+    serializeModel: function()
+    {
+      var model = this.model.toJSON();
+
+      if (!Array.isArray(model.rootCause))
+      {
+        model.rootCause = [];
+      }
+
+      if (!model.rootCause.length)
+      {
+        model.rootCause.push([]);
+      }
+
+      return model;
+    },
+
     getTemplateData: function()
     {
       var faultCode = this.model.get('faultCode');

@@ -53,13 +53,18 @@ define([
         formAction: options.formAction,
         formActionText: options.formActionText,
         panelTitleText: options.panelTitleText,
-        model: this.model.toJSON()
+        model: this.serializeModel()
       });
     },
 
     afterRender: function()
     {
       js2form(this.el, this.serializeToForm(false));
+    },
+
+    serializeModel: function()
+    {
+      return this.model.toJSON();
     },
 
     serializeToForm: function(partial) // eslint-disable-line no-unused-vars
