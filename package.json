@@ -6,7 +6,7 @@
   "updater": {
     "wmes": {
       "backend": 492,
-      "frontend": 662,
+      "frontend": 663,
       "reports": 98,
       "attachments": 3,
       "importer-sap": 53,
