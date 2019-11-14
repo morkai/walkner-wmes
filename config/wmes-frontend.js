@@ -418,7 +418,9 @@ exports.user = {
 };
 
 exports.users = {
-  browsePrivileges: ['LOCAL', 'USER']
+  browsePrivileges: ['LOCAL', 'USER'],
+  loginIn: {},
+  loginAs: {}
 };
 
 exports.production = {
