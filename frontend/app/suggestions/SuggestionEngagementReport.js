@@ -85,7 +85,7 @@ define([
             totals.minutesForSafety += user.minutesForSafety;
 
             return {
-              name: report.users[userKey],
+              name: report.users[userKey] || userKey,
               nearMisses: user.nearMisses,
               suggestions: user.suggestions,
               behaviorObs: user.behaviorObs,
