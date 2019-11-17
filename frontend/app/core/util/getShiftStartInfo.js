@@ -26,12 +26,29 @@ define([
     for (; shift <= shiftCount; ++shift)
     {
       var shiftStartTime = moment.valueOf();
-      var shiftEndTime = moment.add(shiftLength, 'hours').valueOf();
+      var shiftStartHour = moment.hours();
+      var shiftEndHour = shiftStartHour + shiftLength;
+
+      if (shiftEndHour >= 24)
+      {
+        shiftEndHour -= 24;
+      }
+
+      moment.add(shiftLength, 'hours');
+
+      var actualShiftEndHour = moment.hours();
+
+      if (actualShiftEndHour !== shiftEndHour)
+      {
+        moment.add(shiftEndHour - actualShiftEndHour, 'hours');
+      }
+
+      var shiftEndTime = moment.valueOf();
 
       if (now >= shiftStartTime && now < shiftEndTime)
       {
         return {
-          moment: moment.subtract(shiftLength, 'hours').startOf('hour'),
+          moment: time.getMoment(shiftStartTime),
           no: shift,
           startTime: shiftStartTime,
           endTime: shiftEndTime,
@@ -42,6 +59,6 @@ define([
       }
     }
 
-    throw new Error('Could resolve the shift start info!');
+    throw new Error('Could not resolve the shift start info!');
   };
 });
