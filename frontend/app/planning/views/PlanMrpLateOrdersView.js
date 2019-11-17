@@ -168,13 +168,17 @@ define([
     resize: function()
     {
       var $action = this.$('.planning-mrp-list-action').first();
-      var $scrollIndicator = this.$id('scrollIndicator');
-      var pos = $action.position();
 
-      $scrollIndicator.css({
-        top: (pos.top + 1) + 'px',
-        left: ($action.outerWidth() + pos.left) + 'px'
-      });
+      if ($action.length)
+      {
+        var $scrollIndicator = this.$id('scrollIndicator');
+        var pos = $action.position();
+
+        $scrollIndicator.css({
+          top: (pos.top + 1) + 'px',
+          left: ($action.outerWidth() + pos.left) + 'px'
+        });
+      }
 
       contextMenu.hide(this);
     },
