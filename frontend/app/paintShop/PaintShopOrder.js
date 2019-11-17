@@ -71,8 +71,14 @@ define([
       }
 
       var obj = order.toJSON();
-      var drillingOrders = orders.drillingOrders && orders.drillingOrders.getAllByOrderNo(obj.order);
-      var whOrders = orders.whOrders && orders.whOrders.byOrderNo[obj.order] || [];
+      var drillingOrders = orders
+        && orders.drillingOrders
+        && orders.drillingOrders.getAllByOrderNo(obj.order)
+        || [];
+      var whOrders = orders
+        && orders.whOrders
+        && orders.whOrders.byOrderNo[obj.order]
+        || [];
       var childOrderCount = obj.childOrders.length;
       var lastChildOrderI = childOrderCount - 1;
 
