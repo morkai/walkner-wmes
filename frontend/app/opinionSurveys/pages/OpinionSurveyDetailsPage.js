@@ -36,7 +36,7 @@ define([
           {
             return page.renderPartial(printActionTemplate, {
               surveyId: model.id,
-              langs: ['pl'].concat(Object.keys(model.get('lang')))
+              langs: ['pl'].concat(Object.keys(model.get('lang') || {}))
             })[0].outerHTML;
           }
         },
