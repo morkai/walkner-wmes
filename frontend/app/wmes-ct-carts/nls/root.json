@@ -1,0 +1,10 @@
+{
+  "root": {
+    "BREADCRUMBS:base": "Cycle time",
+    "BREADCRUMBS:browse": "Carts",
+
+    "PROPERTY:description": "Description",
+    "PROPERTY:cards": "Cards"
+  },
+  "pl": true
+}

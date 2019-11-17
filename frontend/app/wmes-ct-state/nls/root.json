@@ -4,6 +4,7 @@
 
     "PAGE_ACTIONS:pces": "PCEs",
     "PAGE_ACTIONS:lines": "Lines",
+    "PAGE_ACTIONS:carts": "Carts",
 
     "PROPERTY:cart": "Cart",
     "PROPERTY:order": "Order",

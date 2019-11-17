@@ -10,7 +10,10 @@
     "PROPERTY:stations": "Stations",
     "PROPERTY:stations:lampIp": "Lamp IP address",
 
-    "type:inveo": "INVEO"
+    "type:inveo": "INVEO",
+
+    "stations:title": "Station {no}",
+    "form:stations:add": "Add station"
   },
   "pl": true
 }

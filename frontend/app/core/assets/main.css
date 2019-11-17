@@ -327,6 +327,9 @@ code.multiline {
   max-height: 300px;
 }
 
+.text-fixed {
+  font-family: Consolas, Menlo, Monaco, monospace;
+}
 .text-mono {
   font-family: Consolas, Menlo, Monaco, monospace;
   white-space: pre-wrap;

@@ -1,0 +1,11 @@
+<div>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%- panelTitle %></div>
+    <div class="panel-details">
+      <%- helpers.props(model, [
+        'description',
+        {id: 'cards', valueClassName: 'text-fixed'}
+      ]) %>
+    </div>
+  </div>
+</div>

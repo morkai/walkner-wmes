@@ -112,6 +112,7 @@ define([
   './wmes-wiring/routes',
   './wmes-ct-pces/routes',
   './wmes-ct-lines/routes',
+  './wmes-ct-carts/routes',
   './wmes-ct-state/routes'
 ], function()
 {

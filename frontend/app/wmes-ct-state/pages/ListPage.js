@@ -35,6 +35,11 @@ define([
           href: '#ct/lines',
           label: this.t('PAGE_ACTIONS:lines'),
           privileges: 'PROD_DATA:MANAGE'
+        },
+        {
+          href: '#ct/carts',
+          label: this.t('PAGE_ACTIONS:carts'),
+          privileges: 'PROD_DATA:MANAGE'
         }
       ];
     },
