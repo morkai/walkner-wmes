@@ -1,0 +1,1 @@
+define(["app/nls/locale/en"],function(n){return{root:{"BREADCRUMBS:base":function(n){return"Cycle time"},"BREADCRUMBS:browse":function(n){return"Carts"},"PROPERTY:description":function(n){return"Description"},"PROPERTY:cards":function(n){return"Cards"}},pl:!0}});

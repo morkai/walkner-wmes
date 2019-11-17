@@ -1,0 +1,1 @@
+define(["../i18n","../core/Model"],function(t,r){"use strict";return r.extend({urlRoot:"/ct/carts",clientUrlRoot:"#ct/carts",topicPrefix:"ct.carts",privilegePrefix:"PROD_DATA",nlsDomain:"wmes-ct-carts",labelAttribute:"description",serialize:function(){var t=this.toJSON();return t.cards=t.cards.join(" "),t}})});
