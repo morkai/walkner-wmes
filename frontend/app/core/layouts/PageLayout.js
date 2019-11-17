@@ -188,14 +188,17 @@ define([
    */
   PageLayout.prototype.setClassName = function(className)
   {
-    if (this.model.className)
+    if (document.body)
     {
-      document.body.classList.remove(this.model.className);
-    }
+      if (this.model.className)
+      {
+        document.body.classList.remove(this.model.className);
+      }
 
-    if (this.isRendered() && className)
-    {
-      document.body.classList.add(className);
+      if (this.isRendered() && className)
+      {
+        document.body.classList.add(className);
+      }
     }
 
     this.model.className = className;
