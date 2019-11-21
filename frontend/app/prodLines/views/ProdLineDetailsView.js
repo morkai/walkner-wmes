@@ -22,9 +22,9 @@ define([
       'prodFlows.synced': 'render'
     },
 
-    serialize: function()
+    serializeDetails: function()
     {
-      var data = DetailsView.prototype.serialize.call(this);
+      var data = this.model.toJSON();
 
       data.orgUnitPath = renderOrgUnitPath(this.model, true);
 
