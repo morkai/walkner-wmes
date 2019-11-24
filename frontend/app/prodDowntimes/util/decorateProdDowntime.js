@@ -35,6 +35,7 @@ define([
 
   return function decorateProdDowntime(prodDowntime, options)
   {
+    var canViewProdData = user.isAllowedTo('PROD_DATA:VIEW');
     var longDateFormat = options && options.longDate ? 'LLLL' : 'L, LTS';
     var obj = prodDowntime.toJSON();
 
@@ -78,7 +79,7 @@ define([
       ? (obj.orderId + '; ' + obj.operationNo)
       : t('prodDowntimes', 'NO_DATA:order');
 
-    if (user.isAllowedTo('PROD_DATA:VIEW') && obj.prodShiftOrder)
+    if (canViewProdData && obj.prodShiftOrder)
     {
       obj.order = '<a href="#prodShiftOrders/' + (obj.prodShiftOrder._id || obj.prodShiftOrder) + '">'
         + obj.order + '</a>';
@@ -127,7 +128,7 @@ define([
     obj.shift = obj.shift ? t('core', 'SHIFT:' + obj.shift) : '?';
     obj.prodShiftText = obj.date + ', ' + obj.shift;
 
-    if (user.isAllowedTo('PROD_DATA:VIEW') && obj.prodShift)
+    if (canViewProdData && obj.prodShift)
     {
       obj.prodShiftText = '<a href="#prodShifts/' + obj.prodShift + '">' + obj.prodShiftText + '</a>';
     }

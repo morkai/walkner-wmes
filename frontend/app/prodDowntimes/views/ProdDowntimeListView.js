@@ -36,6 +36,7 @@ define([
         {id: 'aor', className: 'is-overflow w275'},
         {id: 'prodLine', className: 'is-overflow w125'},
         'reason',
+        this.options.shiftColumn ? {id: 'shift', tdClassName: 'is-min', valueProperty: 'prodShiftText'} : null,
         {id: 'startedAt', tdClassName: 'is-min'},
         {id: 'duration', tdClassName: 'is-min'}
       ];
@@ -43,16 +44,26 @@ define([
 
     serializeRows: function()
     {
-      var options = this.options.simple ? null : {
+      var view = this;
+      var options = view.options.simple ? {} : {
         changesCount: true,
         maxReasonChanges: this.settings.getValue('maxReasonChanges') || Number.MAX_VALUE,
         maxAorChanges: this.settings.getValue('maxAorChanges') || Number.MAX_VALUE,
         productFamily: true
       };
+      var canViewProdData = user.isAllowedTo('PROD_DATA:VIEW');
 
       return this.collection.map(function(model)
       {
-        return decorateProdDowntime(model, options);
+        var row = decorateProdDowntime(model, options);
+
+        if (canViewProdData && view.options.shiftColumn && row.prodShiftOrder)
+        {
+          row.startedAt = '<a href="#prodShiftOrders/' + (row.prodShiftOrder._id || row.prodShiftOrder) + '">'
+            + row.startedAt + '</a>';
+        }
+
+        return row;
       });
     },
 

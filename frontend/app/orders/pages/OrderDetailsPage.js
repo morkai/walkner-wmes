@@ -11,6 +11,7 @@ define([
   'app/printers/views/PrinterPickerView',
   'app/wmes-fap-entries/dictionaries',
   'app/wmes-fap-entries/EntryCollection',
+  'app/prodDowntimes/ProdDowntimeCollection',
   '../Order',
   '../OrderCollection',
   '../ComponentCollection',
@@ -23,6 +24,7 @@ define([
   '../views/OrderChangesView',
   '../views/EtoView',
   '../views/FapEntryListView',
+  '../views/DowntimeListView',
   'app/orders/templates/detailsJumpList',
   'i18n!app/nls/wmes-fap-entries'
 ], function(
@@ -36,6 +38,7 @@ define([
   PrinterPickerView,
   fapDictionaries,
   FapEntryCollection,
+  ProdDowntimeCollection,
   Order,
   OrderCollection,
   ComponentCollection,
@@ -48,6 +51,7 @@ define([
   OrderChangesView,
   EtoView,
   FapEntryListView,
+  DowntimeListView,
   jumpListTemplate
 ) {
   'use strict';
@@ -114,6 +118,11 @@ define([
         this.insertView(this.fapEntriesView);
       }
 
+      if (this.downtimesView)
+      {
+        this.insertView(this.downtimesView);
+      }
+
       this.insertView(this.childOrdersView);
       this.insertView(this.operationsView);
       this.insertView(this.documentsView);
@@ -132,6 +141,12 @@ define([
     defineModels: function()
     {
       this.model = bindLoadingMessage(new Order({_id: this.options.modelId}), this);
+
+      this.downtimes = !user.isAllowedTo('PROD_DATA:VIEW', 'PROD_DOWNTIMES:VIEW')
+        ? null
+        : bindLoadingMessage(new ProdDowntimeCollection(null, {
+          rqlQuery: 'exclude(changes)&sort(prodLine,startedAt)&orderId=string:' + this.model.id
+        }), this);
 
       this.delayReasons = bindLoadingMessage(delayReasonsStorage.acquire(), this);
 
@@ -161,6 +176,10 @@ define([
       this.detailsView = new OrderDetailsView({
         model: this.model,
         delayReasons: this.delayReasons
+      });
+
+      this.downtimesView = !this.downtimes ? null : new DowntimeListView({
+        collection: this.downtimes
       });
 
       this.fapEntriesView = !this.fapEntries ? null : new FapEntryListView({
@@ -222,6 +241,7 @@ define([
         this.model.fetch(),
         fapDictionaries.load(),
         this.fapEntries ? this.fapEntries.fetch({reset: true}) : null,
+        this.downtimes ? this.downtimes.fetch({reset: true}) : null,
         this.childOrders.fetch({reset: true}),
         this.paintOrders.fetch({reset: true}),
         this.delayReasons.isEmpty() ? this.delayReasons.fetch({reset: true}) : null

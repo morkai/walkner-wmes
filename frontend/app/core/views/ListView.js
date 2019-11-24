@@ -295,6 +295,11 @@ define([
         }
       }
 
+      if (attrs.title)
+      {
+        attrs.title = attrs.title.replace(/<\/?[a-z].*?>/g, '');
+      }
+
       if (column.width)
       {
         if (!attrs.style)
