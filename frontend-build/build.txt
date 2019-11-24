@@ -2078,6 +2078,10 @@ app/data/colorFactory.js
 app/wmes-fap-entries/templates/levelIndicator.js
 app/wmes-fap-entries/Entry.js
 app/wmes-fap-entries/EntryCollection.js
+app/prodDowntimes/util/decorateProdDowntimeChange.js
+app/prodDowntimes/util/decorateProdDowntime.js
+app/prodDowntimes/ProdDowntime.js
+app/prodDowntimes/ProdDowntimeCollection.js
 app/orderStatuses/OrderStatus.js
 app/orderStatuses/OrderStatusCollection.js
 app/data/orderStatuses.js
@@ -2118,6 +2122,12 @@ app/orders/views/EtoView.js
 app/wmes-fap-entries/views/ListView.js
 app/orders/templates/fapEntryList.js
 app/orders/views/FapEntryListView.js
+app/prodDowntimes/views/ProdDowntimeListView.js
+app/orders/templates/downtimeList.js
+app/nls/prodDowntimes.js
+app/nls/pl/prodDowntimes.js
+i18n!app/nls/prodDowntimes
+app/orders/views/DowntimeListView.js
 app/orders/templates/detailsJumpList.js
 app/nls/wmes-fap-entries.js
 app/nls/pl/wmes-fap-entries.js
