@@ -286,6 +286,7 @@
     "snMessage:ALREADY_USED": "Scanned SN is already registered.",
     "snMessage:CHECKING": "<span class='fa fa-spinner fa-spin'></span><br>Checking the serial number...",
     "snMessage:SERVER_FAILURE": "Remote server error while checking the serial number.",
+    "snMessage:OFFLINE": "Failed to connect to the server.",
     "snMessage:SHIFT_NOT_FOUND": "Line shift not found.",
     "snMessage:ORDER_NOT_FOUND": "Line order not found.",
     "snMessage:STANDARD_LABEL": "The virtual SN cannot be used in this order.",

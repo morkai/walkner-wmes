@@ -283,6 +283,7 @@
   "snMessage:ALREADY_USED": "Zeskanowany numer seryjny został już użyty.",
   "snMessage:CHECKING": "<span class='fa fa-spinner fa-spin'></span><br>Sprawdzanie numeru seryjnego...",
   "snMessage:SERVER_FAILURE": "Błąd podczas sprawdzania numeru seryjnego.",
+  "snMessage:OFFLINE": "Błąd połączenia z serwerem.",
   "snMessage:SHIFT_NOT_FOUND": "Nie znaleziono zmiany z linii.",
   "snMessage:ORDER_NOT_FOUND": "Nie znaleziono zlecenia z linii.",
   "snMessage:STANDARD_LABEL": "Nie można używać wirtualnego numeru seryjnego w tym zleceniu.",
