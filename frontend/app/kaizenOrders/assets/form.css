@@ -77,3 +77,12 @@
 .kaizenOrders-form .help-block {
   font-size: 0.9em;
 }
+.kaizenOrders-form-rid-value {
+  position: absolute;
+  opacity: 0;
+  border: 0;
+  width: 1px
+}
+.kaizenOrders-form-rid-message {
+  vertical-align: middle;
+}

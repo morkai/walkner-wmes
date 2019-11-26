@@ -10,11 +10,11 @@ define([
   'app/core/util/idAndLabel',
   'app/core/util/formatResultWithDescription',
   'app/core/views/FormView',
-  'app/data/localStorage',
   'app/users/util/setUpUserSelect2',
   '../dictionaries',
   '../KaizenOrder',
-  'app/kaizenOrders/templates/form'
+  'app/kaizenOrders/templates/form',
+  'app/minutesForSafetyCards/templates/_formRidEditor'
 ], function(
   _,
   $,
@@ -25,11 +25,11 @@ define([
   idAndLabel,
   formatResultWithDescription,
   FormView,
-  localStorage,
   setUpUserSelect2,
   kaizenDictionaries,
   KaizenOrder,
-  template
+  template,
+  renderRidEditor
 ) {
   'use strict';
 
@@ -139,6 +139,35 @@ define([
 
           $email.select();
         }
+      },
+
+      'click #-relatedSuggestion-message > a': function()
+      {
+        sessionStorage.setItem(
+          'KO_LAST',
+          JSON.stringify(
+            _.assign(
+              this.model.toJSON(),
+              this.getFormData()
+            )
+          )
+        );
+      },
+      'click a[role=rid]': function(e)
+      {
+        this.showRidEditor('relatedSuggestion', e.currentTarget);
+
+        return false;
+      },
+
+      'change #-stdReturn': function()
+      {
+        this.togglePreventiveMeasuresValidity();
+      },
+
+      'change #-relatedSuggestion-checkbox': function()
+      {
+        this.togglePreventiveMeasuresValidity();
       }
 
     }, FormView.prototype.events),
@@ -156,6 +185,7 @@ define([
       }
 
       return _.assign(FormView.prototype.serialize.call(this), {
+        relatedSuggestion: this.model.supportsRelatedSuggestion(),
         multiType: !!window.KAIZEN_MULTI || this.model.isMulti(),
         multiOwner: this.isMultiOwner(),
         today: time.format(new Date(), 'YYYY-MM-DD'),
@@ -174,11 +204,11 @@ define([
       }
 
       var type = 'behaviorObsCards';
-      var data = JSON.parse(localStorage.getItem('BOC_LAST') || 'null');
+      var data = JSON.parse(sessionStorage.getItem('BOC_LAST') || 'null');
 
       if (!data)
       {
-        data = JSON.parse(localStorage.getItem('MFS_LAST') || 'null');
+        data = JSON.parse(sessionStorage.getItem('MFS_LAST') || 'null');
 
         if (!data)
         {
@@ -200,8 +230,8 @@ define([
 
       function cleanUp()
       {
-        localStorage.removeItem('BOC_LAST');
-        localStorage.removeItem('MFS_LAST');
+        sessionStorage.removeItem('BOC_LAST');
+        sessionStorage.removeItem('MFS_LAST');
       }
     },
 
@@ -268,8 +298,8 @@ define([
 
     handleSuccess: function()
     {
-      var lastBoc = JSON.parse(localStorage.getItem('BOC_LAST') || 'null');
-      var lastMfs = JSON.parse(localStorage.getItem('MFS_LAST') || 'null');
+      var lastBoc = JSON.parse(sessionStorage.getItem('BOC_LAST') || 'null');
+      var lastMfs = JSON.parse(sessionStorage.getItem('MFS_LAST') || 'null');
       var type = lastBoc ? 'behaviorObsCards' : lastMfs ? 'minutesForSafetyCards' : null;
       var data = lastBoc || lastMfs;
 
@@ -394,6 +424,17 @@ define([
 
       formData.eventDate = eventDate.isValid() ? eventDate.toISOString() : null;
 
+      if (this.model.supportsRelatedSuggestion())
+      {
+        formData.stdReturn = !!formData.stdReturn;
+        formData.relatedSuggestion = parseInt(formData.relatedSuggestion, 10) || null;
+      }
+      else
+      {
+        formData.stdReturn = null;
+        formData.relatedSuggestion = null;
+      }
+
       return formData;
 
       function serializeOwners(type)
@@ -480,6 +521,7 @@ define([
       this.toggleSubmit();
       this.toggleRequiredToFinishFlags();
       this.togglePanels();
+      this.toggleRelatedSuggestion();
 
       this.$('input[autofocus]').focus();
     },
@@ -629,6 +671,11 @@ define([
 
       this.$('.is-requiredToFinish').toggleClass('is-required', required).each(function()
       {
+        if (this.dataset.required)
+        {
+          return view.handleRequiredToFinishFlags(this.dataset.required, required);
+        }
+
         if (this.nextElementSibling.classList.contains('select2-container'))
         {
           this.parentNode.classList.toggle('has-required-select2', required);
@@ -648,15 +695,58 @@ define([
       }
     },
 
+    handleRequiredToFinishFlags: function(prop)
+    {
+      if (prop === 'preventiveMeasures')
+      {
+        this.togglePreventiveMeasuresValidity();
+      }
+    },
+
+    togglePreventiveMeasuresValidity: function()
+    {
+      var $label = this.$('.control-label[data-required="preventiveMeasures"]');
+
+      if (!$label.length)
+      {
+        return;
+      }
+
+      var required = $label.hasClass('is-required');
+      var $stdReturn = this.$id('stdReturn');
+      var $relatedSuggestion = this.$id('relatedSuggestion');
+
+      if (required)
+      {
+        var $relatedSuggestionCheckbox = $relatedSuggestion.find('input[type="checkbox"]');
+        var $relatedSuggestionValue = $relatedSuggestion.find('input[name="relatedSuggestion"]');
+
+        $relatedSuggestionCheckbox.prop('checked', !!$relatedSuggestionValue.val());
+        $stdReturn.prop('required', !$relatedSuggestionCheckbox.prop('checked'));
+      }
+      else
+      {
+        $stdReturn.prop('required', false);
+        $relatedSuggestion.prop('required', false);
+      }
+    },
+
     toggleRequiredFlags: function()
     {
-      this.$('.kaizenOrders-form-typePanel').each(function()
+      var view = this;
+
+      view.$('.kaizenOrders-form-typePanel').each(function()
       {
         var $panel = $(this);
         var required = $panel.hasClass('is-expanded');
 
         $panel.find('.is-required').each(function()
         {
+          if (this.dataset.required)
+          {
+            return view.handleRequiredToFinishFlags(this.dataset.required, required);
+          }
+
           $panel.find('#' + this.htmlFor).prop('required', required);
         });
       });
@@ -715,6 +805,122 @@ define([
     togglePanels: function()
     {
       (this.model.get('types') || []).forEach(function(type) { this.expandPanel(type, false); }, this);
+    },
+
+    showRidEditor: function(ridProperty, aEl)
+    {
+      var view = this;
+      var $a = view.$(aEl);
+
+      if ($a.next('.popover').length)
+      {
+        $a.popover('destroy');
+
+        return;
+      }
+
+      $a.popover({
+        placement: 'auto top',
+        html: true,
+        trigger: 'manual',
+        content: this.renderPartialHtml(renderRidEditor, {
+          property: ridProperty,
+          rid: this.model.get(ridProperty) || ''
+        })
+      }).popover('show');
+
+      var $popover = $a.next('.popover');
+      var $input = $popover.find('.form-control').select();
+      var $submit = $popover.find('.btn-default');
+      var $cancel = $popover.find('.btn-link');
+
+      $cancel.on('click', function()
+      {
+        $a.popover('destroy');
+      });
+
+      $input.on('keydown', function(e)
+      {
+        if (e.keyCode === 13)
+        {
+          return false;
+        }
+      });
+
+      $input.on('keyup', function(e)
+      {
+        if (e.keyCode === 13)
+        {
+          $submit.click();
+
+          return false;
+        }
+      });
+
+      $submit.on('click', function()
+      {
+        $input.prop('disabled', true);
+        $submit.prop('disabled', true);
+        $cancel.prop('disabled', true);
+
+        var rid = parseInt($input.val(), 10) || 0;
+
+        if (rid <= 0)
+        {
+          return updateRid(null);
+        }
+
+        var url = (/suggestion/i.test(ridProperty) ? '/suggestions' : '/kaizen/orders') + '/' + rid;
+        var req = view.ajax({url: url});
+
+        req.fail(function(jqXhr)
+        {
+          view.showErrorMessage(view.t(
+            'FORM:ridEditor:' + (jqXhr.status === 404 ? 'notFound' : 'failure')
+          ));
+
+          $input.prop('disabled', false);
+          $submit.prop('disabled', false);
+          $cancel.prop('disabled', false);
+
+          (jqXhr.status === 404 ? $input : $submit).focus();
+        });
+
+        req.done(function()
+        {
+          updateRid(rid);
+        });
+
+        return false;
+      });
+
+      function updateRid(newRid)
+      {
+        $a
+          .popover('destroy')
+          .parent()
+          .html(view.t('FORM:' + ridProperty + ':' + (newRid ? 'edit' : 'add'), {
+            rid: newRid
+          }));
+
+        view.model.attributes[ridProperty] = newRid;
+
+        view.$('input[name=' + ridProperty + ']').val(newRid || '');
+
+        if (ridProperty === 'relatedSuggestion')
+        {
+          view.toggleRelatedSuggestion();
+          view.togglePreventiveMeasuresValidity();
+        }
+      }
+    },
+
+    toggleRelatedSuggestion: function()
+    {
+      var $relatedSuggestion = this.$id('relatedSuggestion');
+      var rid = $relatedSuggestion.find('input[name="relatedSuggestion"]').val();
+
+      $relatedSuggestion.find('input[type="checkbox"]').prop('checked', !!rid);
     }
 
   });

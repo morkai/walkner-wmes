@@ -54,6 +54,13 @@ define([
       this.prepareUsers();
     },
 
+    supportsRelatedSuggestion: function()
+    {
+      var createdAt = Date.parse(this.get('createdAt'));
+
+      return window.ENV === 'development' || !createdAt || createdAt >= 1575176400000;
+    },
+
     isMulti: function()
     {
       var types = this.get('types');
@@ -98,6 +105,7 @@ define([
       obj.cause = kaizenDictionaries.causes.getLabel(obj.cause);
       obj.risk = kaizenDictionaries.risks.getLabel(obj.risk);
       obj.kaizenDuration = obj.kaizenDuration ? time.toString(obj.kaizenDuration) : null;
+      obj.stdReturn = t('core', 'BOOL:' + !!obj.stdReturn);
 
       USER_INFO_PROPERTIES.forEach(function(userInfoProperty)
       {

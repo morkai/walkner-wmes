@@ -158,7 +158,7 @@ define([
 
     serializeItemValue: function(property, value, isOld, changeIndex)
     {
-      if (_.isEmpty(value))
+      if (value == null || (value && value.length === 0))
       {
         return '-';
       }
@@ -227,6 +227,12 @@ define([
 
         case 'subscribers':
           return value.join('; ');
+
+        case 'stdReturn':
+          return t('core', 'BOOL:' + value);
+
+        case 'relatedSuggestion':
+          return '<a href="#suggestions/' + value + '">' + value + '</a>';
 
         default:
           return value || '';

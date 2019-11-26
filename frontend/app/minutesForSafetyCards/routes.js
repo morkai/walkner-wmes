@@ -6,16 +6,14 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  '../data/localStorage'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   broker,
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  localStorage
+  showDeleteFormPage
 ) {
   'use strict';
 
@@ -93,9 +91,9 @@ define([
           owner: user.getInfo()
         };
 
-        try { _.assign(lastCard, JSON.parse(localStorage.getItem('MFS_LAST'))); }
+        try { _.assign(lastCard, JSON.parse(sessionStorage.getItem('MFS_LAST'))); }
         catch (err) {} // eslint-disable-line no-empty
-        finally { localStorage.removeItem('MFS_LAST'); }
+        finally { sessionStorage.removeItem('MFS_LAST'); }
 
         if (req.query.nearMiss)
         {
@@ -139,9 +137,9 @@ define([
         var model = new MinutesForSafetyCard({_id: req.params.id});
         var lastCard = {};
 
-        try { _.assign(lastCard, JSON.parse(localStorage.getItem('MFS_LAST'))); }
+        try { _.assign(lastCard, JSON.parse(sessionStorage.getItem('MFS_LAST'))); }
         catch (err) {} // eslint-disable-line no-empty
-        finally { localStorage.removeItem('MFS_LAST'); }
+        finally { sessionStorage.removeItem('MFS_LAST'); }
 
         if (req.query.nearMiss)
         {

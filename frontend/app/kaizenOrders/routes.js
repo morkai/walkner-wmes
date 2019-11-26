@@ -2,18 +2,18 @@
 
 define([
   'underscore',
+  '../broker',
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  './KaizenOrder'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
+  broker,
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  KaizenOrder
+  showDeleteFormPage
 ) {
   'use strict';
 
@@ -138,12 +138,13 @@ define([
   {
     viewport.loadPage(
       [
+        'app/kaizenOrders/KaizenOrder',
         'app/kaizenOrders/pages/KaizenOrderDetailsPage',
         'app/kaizenOrders/views/KaizenOrderThankYouView',
         css,
         nls
       ],
-      function(KaizenOrderDetailsPage, KaizenOrderThankYouView)
+      function(KaizenOrder, KaizenOrderDetailsPage, KaizenOrderThankYouView)
       {
         var page = new KaizenOrderDetailsPage({
           model: new KaizenOrder({_id: req.params.id}),
@@ -175,11 +176,12 @@ define([
   {
     viewport.loadPage(
       [
+        'app/kaizenOrders/KaizenOrder',
         'app/kaizenOrders/pages/KaizenOrderAddFormPage',
         css,
         nls
       ],
-      function(KaizenOrderAddFormPage)
+      function(KaizenOrder, KaizenOrderAddFormPage)
       {
         var operator = null;
 
@@ -207,8 +209,25 @@ define([
           };
         }
 
+        var data = {};
+
+        try { _.assign(data, JSON.parse(sessionStorage.getItem('KO_LAST'))); }
+        catch (err) {} // eslint-disable-line no-empty
+        finally { sessionStorage.removeItem('KO_LAST'); }
+
+        if (req.query.suggestion)
+        {
+          data.relatedSuggestion = +req.query.suggestion;
+
+          broker.publish('router.navigate', {
+            url: '/kaizenOrders;add',
+            trigger: false,
+            replace: true
+          });
+        }
+
         return new KaizenOrderAddFormPage({
-          model: new KaizenOrder(),
+          model: new KaizenOrder(data),
           standalone: standalone,
           operator: operator
         });
@@ -220,22 +239,55 @@ define([
   {
     viewport.loadPage(
       [
+        'app/kaizenOrders/KaizenOrder',
         'app/kaizenOrders/pages/KaizenOrderEditFormPage',
         css,
         nls
       ],
-      function(KaizenOrderEditFormPage)
+      function(KaizenOrder, KaizenOrderEditFormPage)
       {
-        return new KaizenOrderEditFormPage({
-          model: new KaizenOrder({_id: req.params.id})
+        var model = new KaizenOrder({_id: req.params.id});
+        var data = {};
+
+        try { _.assign(data, JSON.parse(sessionStorage.getItem('KO_LAST'))); }
+        catch (err) {} // eslint-disable-line no-empty
+        finally { sessionStorage.removeItem('KO_LAST'); }
+
+        if (req.query.suggestion)
+        {
+          data.relatedSuggestion = +req.query.suggestion;
+
+          broker.publish('router.navigate', {
+            url: '/kaizenOrders/' + req.params.id + ';edit',
+            trigger: false,
+            replace: true
+          });
+        }
+
+        var page = new KaizenOrderEditFormPage({
+          model: model
         });
+
+        if (data._id === req.params.id)
+        {
+          page.listenToOnce(model, 'sync', function()
+          {
+            _.assign(model.attributes, data);
+          });
+        }
+
+        return page;
       }
     );
   });
 
-  router.map('/kaizenOrders/:id;delete', canAccess, _.partial(showDeleteFormPage, KaizenOrder, _, _, {
-    baseBreadcrumb: true
-  }));
+  router.map(
+    '/kaizenOrders/:id;delete',
+    canAccess,
+    _.partial(showDeleteFormPage, 'app/kaizenOrders/KaizenOrder', _, _, {
+      baseBreadcrumb: true
+    })
+  );
 
   router.map('/kaizenOrders;settings', canManage, function(req)
   {

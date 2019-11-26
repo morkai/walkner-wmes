@@ -11,7 +11,6 @@ define([
   'app/core/views/FormView',
   'app/users/util/setUpUserSelect2',
   'app/data/prodLines',
-  'app/data/localStorage',
   'app/kaizenOrders/dictionaries',
   '../MinutesForSafetyCard',
   'app/minutesForSafetyCards/templates/form',
@@ -30,7 +29,6 @@ define([
   FormView,
   setUpUserSelect2,
   prodLines,
-  localStorage,
   kaizenDictionaries,
   MinutesForSafetyCard,
   template,
@@ -90,7 +88,7 @@ define([
       },
       'click .mfs-form-rid-message > a': function()
       {
-        localStorage.setItem(
+        sessionStorage.setItem(
           'MFS_LAST',
           JSON.stringify(
             _.assign(
@@ -432,7 +430,7 @@ define([
 
     handleSuccess: function()
     {
-      localStorage.removeItem('MFS_LAST');
+      sessionStorage.removeItem('MFS_LAST');
 
       return FormView.prototype.handleSuccess.apply(this, arguments);
     },

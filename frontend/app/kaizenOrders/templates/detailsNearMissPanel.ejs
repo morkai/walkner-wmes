@@ -52,10 +52,27 @@
           <div class="prop-name <%- model.changed.correctiveMeasures ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:correctiveMeasures') %></div>
           <div class="prop-value text-lines"><%= model.correctiveMeasures || '-' %></div>
         </div>
+        <% if (relatedSuggestion) { %>
+        <div class="prop">
+          <div class="prop-name <%- model.changed.stdReturn ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:stdReturn') %></div>
+          <div class="prop-value"><%= model.stdReturn || '-' %></div>
+        </div>
+        <div class="prop">
+          <div class="prop-name <%- model.changed.relatedSuggestion ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:relatedSuggestion') %></div>
+          <div class="prop-value">
+            <% if (model.relatedSuggestion) { %>
+            <a href="#suggestions/<%- model.preventiveMeasures %>"><%- model.preventiveMeasures %></a>
+            <% } else { %>
+            -
+            <% } %>
+          </div>
+        </div>
+        <% } else { %>
         <div class="prop">
           <div class="prop-name <%- model.changed.preventiveMeasures ? 'is-changed' : '' %>"><%- helpers.t('PROPERTY:preventiveMeasures') %></div>
           <div class="prop-value text-lines"><%= model.preventiveMeasures || '-' %></div>
         </div>
+        <% } %>
       </div>
     </div>
   </div>

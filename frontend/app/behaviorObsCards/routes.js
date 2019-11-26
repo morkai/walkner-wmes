@@ -6,16 +6,14 @@ define([
   '../router',
   '../viewport',
   '../user',
-  '../core/util/showDeleteFormPage',
-  '../data/localStorage'
+  '../core/util/showDeleteFormPage'
 ], function(
   _,
   broker,
   router,
   viewport,
   user,
-  showDeleteFormPage,
-  localStorage
+  showDeleteFormPage
 ) {
   'use strict';
 
@@ -94,9 +92,9 @@ define([
           observer: user.getInfo()
         };
 
-        try { _.assign(lastCard, JSON.parse(localStorage.getItem('BOC_LAST'))); }
+        try { _.assign(lastCard, JSON.parse(sessionStorage.getItem('BOC_LAST'))); }
         catch (err) {} // eslint-disable-line no-empty
-        finally { localStorage.removeItem('BOC_LAST'); }
+        finally { sessionStorage.removeItem('BOC_LAST'); }
 
         if (req.query.nearMiss)
         {
@@ -173,9 +171,9 @@ define([
         var model = new BehaviorObsCard({_id: req.params.id});
         var lastCard = {};
 
-        try { _.assign(lastCard, JSON.parse(localStorage.getItem('BOC_LAST'))); }
+        try { _.assign(lastCard, JSON.parse(sessionStorage.getItem('BOC_LAST'))); }
         catch (err) {} // eslint-disable-line no-empty
-        finally { localStorage.removeItem('BOC_LAST'); }
+        finally { sessionStorage.removeItem('BOC_LAST'); }
 
         if (req.query.nearMiss)
         {

@@ -64,6 +64,8 @@
     "PROPERTY:observers:name": "Name",
     "PROPERTY:observers:role": "Role",
     "PROPERTY:observers:lastSeenAt": "Last seen at",
+    "PROPERTY:stdReturn": "Back to the standard",
+    "PROPERTY:relatedSuggestion": "Related suggestion",
 
     "type:nearMiss": "Near Miss",
     "type:suggestion": "Suggestion",
@@ -128,6 +130,14 @@
     "FORM:help:subscribers": "You can select additional people, that weren't selected in the previous fields, but may be interesed in this entry or you want for them to express their opinion.<br>Those people will be added to a list of participants with an Observer role, and will be notified about changes in this entry.",
     "FORM:help:date:diff": "The chosen date is {days} days in the {dir}.",
     "FORM:fm24:confirmation": "Include a request to confirm FM-24 report acceptance by e-mail:",
+    "FORM:relatedSuggestion:message": "Proposed solutions were registered in the Suggestions database - ",
+    "FORM:relatedSuggestion:add": "<a href='#suggestions;add'>Add a new suggestion</a> or <a href=# role=rid>assign an existing one</a>!",
+    "FORM:relatedSuggestion:edit": "<a href='#suggestions/{rid}' target=_blank>entry #{rid}</a>! (<a href=# role=rid>change</a>)",
+    "FORM:ridEditor:rid": "Entry ID",
+    "FORM:ridEditor:submit": "Change",
+    "FORM:ridEditor:cancel": "Cancel",
+    "FORM:ridEditor:notFound": "The specified entry doesn't exist!",
+    "FORM:ridEditor:failure": "Failed to check the entry.",
 
     "filter:cause": "Cause",
     "filter:user:mine": "Mine",

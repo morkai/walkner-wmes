@@ -93,11 +93,36 @@
             <textarea id="<%- idPrefix %>-correctiveMeasures" class="form-control" name="correctiveMeasures" rows="3"></textarea>
             <p class="help-block"><%- helpers.t('FORM:help:correctiveMeasures') %></p>
           </div>
+          <% if (relatedSuggestion) { %>
+          <div id="<%- idPrefix %>-preventiveMeasuresFormGroup" class="form-group">
+            <label class="control-label is-requiredToFinish" data-required="preventiveMeasures"><%- helpers.t('PROPERTY:preventiveMeasures') %></label>
+            <br>
+            <label class="checkbox-inline">
+              <input id="<%- idPrefix %>-stdReturn" name="stdReturn" type="checkbox" value="true">
+              <%- helpers.t('PROPERTY:stdReturn') %>
+            </label>
+            <div id="<%- idPrefix %>-relatedSuggestion">
+              <label class="checkbox-inline">
+                <input id="<%- idPrefix %>-relatedSuggestion-checkbox" type="checkbox" value="true">
+                <%- helpers.t('FORM:relatedSuggestion:message') %>
+              </label>
+              <input class="kaizenOrders-form-rid-value" name="relatedSuggestion" type="text" tabindex="-1">
+              <span id="<%- idPrefix %>-relatedSuggestion-message" class="kaizenOrders-form-rid-message">
+                <% if (model.relatedSuggestion) { %>
+                <%- helpers.t('FORM:relatedSuggestion:edit', {rid: model.relatedSuggestion}) %>
+                <% } else { %>
+                <%- helpers.t('FORM:relatedSuggestion:add') %>
+                <% } %>
+              </span>
+            </div>
+          </div>
+          <% } else { %>
           <div id="<%- idPrefix %>-preventiveMeasuresFormGroup" class="form-group">
             <label for="<%- idPrefix %>-preventiveMeasures" class="control-label is-requiredToFinish"><%- helpers.t('PROPERTY:preventiveMeasures') %></label>
             <textarea id="<%- idPrefix %>-preventiveMeasures" class="form-control" name="preventiveMeasures" rows="3"></textarea>
             <p class="help-block"><%- helpers.t('FORM:help:preventiveMeasures') %></p>
           </div>
+          <% } %>
         </div>
       </div>
       <div id="<%- idPrefix %>-panel-suggestion" class="panel panel-default kaizenOrders-form-typePanel is-collapsed <%- multiType ? '' : 'hidden' %>" data-type="suggestion" data-expanded-class="panel-warning">

@@ -63,6 +63,8 @@
   "PROPERTY:observers:name": "Imię i nazwisko",
   "PROPERTY:observers:role": "Rola",
   "PROPERTY:observers:lastSeenAt": "Ostatnio widziany",
+  "PROPERTY:stdReturn": "Powrót do standardu",
+  "PROPERTY:relatedSuggestion": "Powiązane usprawnienie",
 
   "type:nearMiss": "Zdarzenie Potencjalnie Wypadkowe",
   "type:suggestion": "Sugestia",
@@ -128,6 +130,14 @@
   "FORM:help:subscribers": "W tym polu możesz wybrać dodatkowe osoby, które nie zostały wskazane we wcześniejszych polach, a mogą być zainteresowane tym zgłoszeniem lub chcesz, aby wyraziły swoją opinię.<br>Osoby te zostaną dodane do listy uczestników zgłoszenia z rolą Obserwatora, dzięki czemu będą powiadamiani o zmianach w tym zgłoszeniu.",
   "FORM:help:date:diff": "Wybrano datę będącą {days} dni w {dir, select, past{przeszłości} other{przyszłości}}.",
   "FORM:fm24:confirmation": "Dodaj prośbę o potwierdzenie przyjęcia zgłoszenia przez FM24 na adres e-mail:",
+  "FORM:relatedSuggestion:message": "Proponowane rozwiązanie zarejestrowano w bazie Usprawnień - ",
+  "FORM:relatedSuggestion:add": "<a href='#suggestions;add'>Zgłoś nową sugestię</a> lub <a href=# role=rid>przypisz istniejącą</a>!",
+  "FORM:relatedSuggestion:edit": "<a href='#suggestions/{rid}' target=_blank>zgłoszenie #{rid}</a>! (<a href=# role=rid>zmień</a>)",
+  "FORM:ridEditor:rid": "ID zgłoszenia",
+  "FORM:ridEditor:submit": "Zmień",
+  "FORM:ridEditor:cancel": "Anuluj",
+  "FORM:ridEditor:notFound": "Dane zgłoszenie nie istnieje!",
+  "FORM:ridEditor:failure": "Nie udało się sprawdzić zgłoszenia.",
 
   "filter:cause": "Przyczyna",
   "filter:user:mine": "Moje",

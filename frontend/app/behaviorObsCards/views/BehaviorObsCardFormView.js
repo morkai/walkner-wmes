@@ -12,7 +12,6 @@ define([
   'app/users/util/setUpUserSelect2',
   'app/data/prodLines',
   'app/data/companies',
-  'app/data/localStorage',
   'app/kaizenOrders/dictionaries',
   '../BehaviorObsCard',
   'app/behaviorObsCards/templates/form',
@@ -32,7 +31,6 @@ define([
   setUpUserSelect2,
   prodLines,
   companies,
-  localStorage,
   kaizenDictionaries,
   BehaviorObsCard,
   template,
@@ -139,7 +137,7 @@ define([
       },
       'click .behaviorObsCards-form-rid-message > a': function()
       {
-        localStorage.setItem(
+        sessionStorage.setItem(
           'BOC_LAST',
           JSON.stringify(
             _.assign(
@@ -630,7 +628,7 @@ define([
 
     handleSuccess: function()
     {
-      localStorage.removeItem('BOC_LAST');
+      sessionStorage.removeItem('BOC_LAST');
 
       this.broker.publish('router.navigate', {
         url: this.model.genClientUrl() + '?'

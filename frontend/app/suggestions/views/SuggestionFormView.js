@@ -9,7 +9,6 @@ define([
   'app/core/util/buttonGroup',
   'app/core/util/idAndLabel',
   'app/core/views/FormView',
-  'app/data/localStorage',
   'app/users/util/setUpUserSelect2',
   'app/kaizenOrders/dictionaries',
   '../Suggestion',
@@ -23,7 +22,6 @@ define([
   buttonGroup,
   idAndLabel,
   FormView,
-  localStorage,
   setUpUserSelect2,
   kaizenDictionaries,
   Suggestion,
@@ -202,36 +200,43 @@ define([
         return this.backTo;
       }
 
-      var type = 'behaviorObsCards';
-      var data = JSON.parse(localStorage.getItem('BOC_LAST') || 'null');
+      var type;
+      var data;
+      var types = {
+        KO_LAST: 'kaizenOrders',
+        BOC_LAST: 'behaviorObsCards',
+        MFS_LAST: 'minutesForSafetyCards'
+      };
 
-      if (!data)
+      _.forEach(types, function(v, k)
       {
-        data = JSON.parse(localStorage.getItem('MFS_LAST') || 'null');
-
-        if (!data)
+        if (type)
         {
-          cleanUp();
-
-          return this.backTo = null;
+          return;
         }
 
-        type = 'minutesForSafetyCards';
+        data = JSON.parse(sessionStorage.getItem(k) || 'null');
+
+        if (data)
+        {
+          type = v;
+        }
+      });
+
+      if (!type)
+      {
+        _.forEach(types, function(k) { sessionStorage.removeItem(k); });
+
+        return this.backTo = null;
       }
 
-      cleanUp();
-
       return this.backTo = {
+        type: type,
+        data: data,
         submitLabel: this.t('FORM:backTo:' + type + ':' + (data._id ? 'edit' : 'add')),
         cancelLabel: this.t('FORM:backTo:' + type + ':cancel'),
         cancelUrl: '#' + type + (data._id ? ('/' + data._id + ';edit') : ';add')
       };
-
-      function cleanUp()
-      {
-        localStorage.removeItem('BOC_LAST');
-        localStorage.removeItem('MFS_LAST');
-      }
     },
 
     checkValidity: function()
@@ -292,16 +297,11 @@ define([
 
     handleSuccess: function()
     {
-      var lastBoc = JSON.parse(localStorage.getItem('BOC_LAST') || 'null');
-      var lastMfs = JSON.parse(localStorage.getItem('MFS_LAST') || 'null');
-      var type = lastBoc ? 'behaviorObsCards' : lastMfs ? 'minutesForSafetyCards' : null;
-      var data = lastBoc || lastMfs;
-
-      if (!this.options.editMode && type)
+      if (!this.options.editMode && this.backTo)
       {
         this.broker.publish('router.navigate', {
-          url: '/' + type
-            + (data._id ? ('/' + data._id + ';edit') : ';add')
+          url: '/' + this.backTo.type
+            + (this.backTo.data._id ? ('/' + this.backTo.data._id + ';edit') : ';add')
             + '?suggestion=' + this.model.get('rid'),
           trigger: true
         });
