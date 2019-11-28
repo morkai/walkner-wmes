@@ -55,19 +55,19 @@
   <div class="dateTimeRange-fields">
     <div class="dateTimeRange-field dateTimeRange-from">
       <% if (/date|month/.test(type)) { %>
-        <input id="<%- idPrefix %>-from-date" name="from-date" class="form-control" type="<%- /month/.test(type) ? 'month' : 'date' %>" placeholder="<%- t('core', 'dateTimeRange:placeholder:date') %>" min="<%- minDate %>" max="<%- maxDate %>" <%- required.date ? 'required' : '' %>>
+        <input id="<%- idPrefix %>-from-date" name="from-date" class="form-control" type="<%- /month/.test(type) ? 'month' : 'date' %>" placeholder="<%- t('core', 'dateTimeRange:placeholder:date') %>" min="<%- minDate %>" max="<%- maxDate %>" <%- required.date[0] ? 'required' : '' %>>
       <% } %>
       <% if (/time/.test(type)) { %>
-      <input id="<%- idPrefix %>-from-time" name="from-time" class="form-control" type="time" placeholder="<%- t('core', 'dateTimeRange:placeholder:time') %>" <%- required.time ? 'required' : '' %>>
+      <input id="<%- idPrefix %>-from-time" name="from-time" class="form-control" type="time" placeholder="<%- t('core', 'dateTimeRange:placeholder:time') %>" <%- required.time[0] ? 'required' : '' %>>
       <% } %>
     </div>
     <div class="dateTimeRange-separator"><%- separator %></div>
     <div class="dateTimeRange-field dateTimeRange-to">
       <% if (/date|month/.test(type)) { %>
-      <input id="<%- idPrefix %>-to-date" name="to-date" class="form-control" type="<%- /month/.test(type) ? 'month' : 'date' %>" placeholder="<%- t('core', 'dateTimeRange:placeholder:date') %>" min="<%- minDate %>" max="<%- maxDate %>" <%- required.date ? 'required' : '' %>>
+      <input id="<%- idPrefix %>-to-date" name="to-date" class="form-control" type="<%- /month/.test(type) ? 'month' : 'date' %>" placeholder="<%- t('core', 'dateTimeRange:placeholder:date') %>" min="<%- minDate %>" max="<%- maxDate %>" <%- required.date[1] ? 'required' : '' %>>
       <% } %>
       <% if (/time/.test(type)) { %>
-      <input id="<%- idPrefix %>-to-time" name="to-time" class="form-control" type="time" placeholder="<%- t('core', 'dateTimeRange:placeholder:time') %>" <%- required.time ? 'required' : '' %>>
+      <input id="<%- idPrefix %>-to-time" name="to-time" class="form-control" type="time" placeholder="<%- t('core', 'dateTimeRange:placeholder:time') %>" <%- required.time[1] ? 'required' : '' %>>
       <% } %>
     </div>
   </div>

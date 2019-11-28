@@ -206,8 +206,8 @@ define([
       labels: [],
       separator: options.separator || '–',
       required: {
-        date: false,
-        time: false
+        date: [false, false],
+        time: [false, false]
       }
     };
 
@@ -217,13 +217,33 @@ define([
 
       if (typeof options.required === 'boolean')
       {
-        req.date = true;
-        req.time = true;
+        req.date = [options.required, options.required];
+        req.time = [options.required, options.required];
+      }
+      else if (Array.isArray(options.required))
+      {
+        req.date = [!!options.required[0], !!options.required[1]];
+        req.time = [!!options.required[0], !!options.required[1]];
       }
       else
       {
-        req.date = !!options.required.date;
-        req.time = !!options.required.time;
+        if (Array.isArray(options.required.date))
+        {
+          req.date = [!!options.required.date[0], !!options.required.date[1]];
+        }
+        else
+        {
+          req.date = [!!options.required.date, !!options.required.date];
+        }
+
+        if (Array.isArray(options.required.time))
+        {
+          req.time = [!!options.required.time[0], !!options.required.time[1]];
+        }
+        else
+        {
+          req.time = [!!options.required.time, !!options.required.time];
+        }
       }
     }
 
