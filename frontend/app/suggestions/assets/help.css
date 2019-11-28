@@ -1,18 +1,18 @@
-.kaizenHelp {
+.suggestionsHelp {
 
 }
-.kaizenHelp > .page-breadcrumbs {
+.suggestionsHelp > .page-breadcrumbs {
   margin-bottom: 15px;
 }
-.kaizenHelp p,
-.kaizenHelp dl {
+.suggestionsHelp p,
+.suggestionsHelp dl {
   max-width: 780px;
   font-size: 1.2em;
 }
-.kaizenHelp dt + dt {
+.suggestionsHelp dt + dt {
   margin-top: 0;
 }
-.kaizenHelp img {
+.suggestionsHelp img {
   display: block;
   margin: 22px auto;
   padding: 7px;

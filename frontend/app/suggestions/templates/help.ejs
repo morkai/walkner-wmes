@@ -1,83 +1,57 @@
-<div class="kaizenHelp">
+<div class="suggestionsHelp">
   <ul class="page-breadcrumbs">
     <li><a href="#suggestions">Usprawnienia</a></li>
     <li>Pomoc</li>
   </ul>
   <h3>Logowanie do systemu</h3>
   <p>
-    W celu zalogowania się do programu, korzystamy z przeglądarki Google Chrome.<br>
+    W celu zalogowania się do programu, korzystamy z przeglądarki Google Chrome lub Firefox.<br>
     Do paska adresu wpisujemy: <%- window.location.origin %>
   </p>
-  <p><img src="/app/suggestions/assets/help/new_tab.png" alt="Pasek adresu"></p>
+  <p><img src="/app/kaizenOrders/assets/help/new_tab.png" alt="Pasek adresu"></p>
   <p>
     Loginem oraz pierwszym hasłem dostępu jest numer karty kontroli dostępu pracownika (np. 46000058).
-    Po zalogowaniu się, jest możliwość zmiany hasła. W tym celu klikamy na swoje imię i nazwisko w prawym, górnym rogu
-    ekranu i wybieramy z menu pozycję <em>Moje konto</em>,
-    a następnie klikamy przycisk <button class="btn btn-default"><i class="fa fa-edit"></i><span>Edytuj konto</span></button>.
+    Jeżeli login i hasło są takie same, to system wymusi zmianę hasła. Do zmiany hasła konto musi mieć
+    przypisany adres e-mail. Jeżeli nie możesz zmienić hasła, ponieważ Twoje konto  nie ma przypisanego
+    adresu e-mail, to skontaktuj się z przełożonym.
   </p>
-  <p><img src="/app/suggestions/assets/help/my_account.png" alt="Moje konto"></p>
+  <p><img src="/app/kaizenOrders/assets/help/login_form.png" alt="Formularz logowania"></p>
+  <p>
+    Po zalogowaniu się jest możliwość zmiany hasła. W tym celu klikamy na swoje imię i nazwisko w prawym,
+    górnym rogu ekranu i wybieramy z menu pozycję <em>Moje konto</em>,
+    a następnie klikamy przycisk <button class="btn btn-default"><i class="fa fa-edit"></i><span>Edytuj</span></button>.
+  </p>
+  <p><img src="/app/kaizenOrders/assets/help/my_account.png" alt="Moje konto"></p>
   <p>
     W przypadku wystąpienia problemów technicznych związanych z otwarciem strony, przed zgłoszeniem problemu
     administratorowi, należy spróbować odświeżyć stronę za pomocą klawisza <kbd>F5</kbd>.
   </p>
-  <p><img src="/app/suggestions/assets/help/login_form.png" alt="Formularz logowania"></p>
   <h3>Dodawanie zgłoszenia</h3>
   <p>
-    Po zalogowaniu do systemu, otworzy się strona <strong>Usprawnienia \ Zgłoszenia</strong>.
-    Klikamy przycisk <button class="btn btn-default"><i class="fa fa-plus"></i><span>Dodaj zgłoszenie</span></button>.
+    Po zalogowaniu do systemu, otworzy się pulpit WMES.
+    Klikamy przycisk <button class="btn btn-warning">Zgłoś sugestię!</button>.
   </p>
-  <p><img src="/app/suggestions/assets/help/add_order.png" alt="Akcja dodawania zgłoszenia"></p>
-  <p>Po kliknięciu pojawi się formularz dodawania nowego zgłoszenia usprawnień:</p>
+  <p><img src="/app/kaizenOrders/assets/help/dashboard.png" alt="Pulpit WMES"></p>
+  <p>Po kliknięciu pojawi się formularz dodawania nowego zgłoszenia:</p>
   <p><img src="/app/suggestions/assets/help/add_form.png" alt="Formularz dodawania zgłoszenia"></p>
-  <p>i wypełniamy poszczególne pola:</p>
-  <dl>
-    <dt>Temat zgłoszenia
-    <dd>Wpisujemy krótką informację (słowo klucz) identyfikujące dane zdarzenie. Pole wymagane.
-    <dt>Dział zgłaszający
-    <dd>Wybieramy swój dział z listy rozwijalnej. Pole wymagane.
-    <dt>Osoba zatwierdzająca
-    <dd>Wyszukujemy przełożonego, w którego obszarze odpowiedzialności stwierdzono zdarzenie. Wyszukiwanie rozpocznie się po wpisaniu przynajmniej trzech liter nazwiska. Pole wymagane.
-    <dt>Osoby zgłaszające
-    <dd>Wyszukujemy osobę lub osoby, które zgłosiły zdarzenie. Pole wymagane.
-    <dt>Czas zdarzenia
-    <dd>Wpisujemy faktyczną datę i godzinę wystąpienia zdarzenia. Pole wymagane.
-    <dt>Miejsce zdarzenia
-    <dd>Wybieramy miejsce wystąpienia zdarzenia z listy rozwijalnej. Pole wymagane.
-    <dt>Opis zdarzenia (jak jest)
-    <dd>Opisujemy zdarzenie, które zostało zgłoszone. Pole wymagane.
-  </dl>
+  <p>i wypełniamy poszczególne pola. Pola oznaczone czerwoną gwiazdką są wymagane.</p>
   <p>
-    Następujące pola wypełnia się w przypadku, gdy posiadamy pełne informacje na temat zdarzenia lub chcemy zakończyć zgłoszenie:
-  </p>
-  <dl>
-    <dt>Przyczyna wystąpienia zdarzenia
-    <dd>Opisujemy przyczynę wystąpienia zgłaszanego zdarzenia.
-    <dt>Kategoria przyczyny
-    <dt>Rodzaj ryzyka
-    <dt>Kategoria zdarzenia
-    <dd>Wybieramy właściwe wartości z list rozwijalnych.
-    <dt>Podjęte działania korekcyjne (gaszenie pożaru)
-    <dd>Opisujemy co zrobiono, aby usunąć <em>skutek</em> wystąpienia tego konkretnego zdarzenia.
-    <dt>Podjęte działania korygujące
-    <dd>Opisujemy co zrobiono, aby usunąć <em>przyczynę</em> występowania podobnych zdarzeń.
-  </dl>
-  <p>
-    W przypadku posiadania zdjęć i dokumentów towarzyszących zdarzeniu możemy je dodać do zgłoszenia w polach:
+    W przypadku posiadania zdjęć i dokumentów towarzyszących zgłoszeniu możemy je dodać w polach:
     Skan dokumentu, Stan przed oraz Stan po:
   </p>
-  <p><img src="/app/suggestions/assets/help/add_form_attachments.png" alt="Dodawanie załączników"></p>
+  <p><img src="/app/kaizenOrders/assets/help/add_form_attachments.png" alt="Dodawanie załączników"></p>
   <p>
     W przypadku, gdy chcemy poinformować inne osoby (od tych wybranych we wcześniejszych polach) o dodanym zgłoszeniu
     (np. w celu wyrażenia opinii), to możemy dodać je do listy Obserwatorów zgłoszenia.
     Osoby te zostaną dodane do listy uczestników zgłoszenia z rolą Obserwatora,
     dzięki czemu będą powiadamiani e-mailem o zmianach w tym zgłoszeniu.
   </p>
-  <p><img src="/app/suggestions/assets/help/add_form_observers.png" alt="Dodawanie obserwatorów"></p>
+  <p><img src="/app/kaizenOrders/assets/help/add_form_observers.png" alt="Dodawanie obserwatorów"></p>
   <p>
     Po wypełnieniu pól klikamy przycisk <button class="btn btn-primary">Dodaj zgłoszenie</button>,
     w celu zapisania zgłoszenia w bazie danych. Prawidłowe przyjęcie zgłoszenia zostanie potwierdzone komunikatem:
   </p>
-  <p><img src="/app/suggestions/assets/help/add_thanks.png" alt="Komunikat podziękowania"></p>
+  <p><img src="/app/kaizenOrders/assets/help/add_thanks.png" alt="Komunikat podziękowania"></p>
   <h3>Zarządzanie statusami</h3>
   <p>
     Każde zgłoszenie posiada swój status.
