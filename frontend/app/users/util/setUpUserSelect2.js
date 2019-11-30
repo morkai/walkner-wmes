@@ -150,22 +150,72 @@ define([
     return rql.Query.fromObject(rqlQuery);
   }
 
+  function resolveTextFormatter(options)
+  {
+    return options.textFormatter || formatText.bind(null, !!options.noPersonnelId);
+  }
+
+  function prepareData(options)
+  {
+    var textFormatter = resolveTextFormatter(options);
+    var data = [];
+
+    (options.currentUserInfo || []).forEach(function(userInfo)
+    {
+      if (!options.collection.get(userInfo[user.idProperty]))
+      {
+        data.push({
+          id: userInfo[user.idProperty],
+          text: userInfo.label
+        });
+      }
+    });
+
+    options.collection.forEach(function(user)
+    {
+      data.push(userToData(user.toJSON(), textFormatter));
+    });
+
+    data.sort(function(a, b)
+    {
+      return a.text.localeCompare(b.text, undefined, {ignorePunctuation: true, sensitivity: 'base'});
+    });
+
+    return data;
+  }
+
   function setUpUserSelect2($input, options)
   {
+    if (!$input.length)
+    {
+      return $input;
+    }
+
     if (!options)
     {
       options = {};
     }
 
-    var rqlQueryProvider = options.rqlQueryProvider ? options.rqlQueryProvider : createDefaultRqlQuery;
-    var userFilter = options.userFilter ? options.userFilter : null;
-
-    $input.select2(_.assign({
+    var textFormatter = resolveTextFormatter(options);
+    var defaultOptions = {
       openOnEnter: null,
       allowClear: true,
       minimumInputLength: 3,
-      placeholder: t('users', 'select2:placeholder'),
-      ajax: {
+      placeholder: t('users', 'select2:placeholder')
+    };
+
+    if (options.collection)
+    {
+      options.minimumInputLength = 0;
+      options.placeholder = ' ';
+      options.data = prepareData(options);
+    }
+    else
+    {
+      var rqlQueryProvider = options.rqlQueryProvider ? options.rqlQueryProvider : createDefaultRqlQuery;
+      var userFilter = options.userFilter ? options.userFilter : null;
+
+      defaultOptions.ajax = {
         cache: true,
         quietMillis: 300,
         url: function(term)
@@ -186,16 +236,33 @@ define([
             users = users.filter(userFilter);
           }
 
-          var textFormatter = options.textFormatter || formatText.bind(null, !!options.noPersonnelId);
-
           return {
             results: users
               .map(function(user) { return userToData(user, textFormatter, query); })
               .sort(function(a, b) { return a.text.localeCompare(b.text); })
           };
         }
-      }
-    }, options));
+      };
+    }
+
+    $input.select2(_.assign(defaultOptions, options));
+
+    if (options.collection)
+    {
+      var instance = $input.data('select2');
+      var oldDestroy = instance.destroy;
+
+      instance.destroy = function()
+      {
+        options.collection.off(null, null, $input);
+        oldDestroy.apply(instance, arguments);
+      };
+
+      options.collection.once('reset add change remove', function()
+      {
+        setUpUserSelect2($input, options);
+      });
+    }
 
     var userId = $input.val();
     var rootData = getRootData();
@@ -219,7 +286,6 @@ define([
       {
         if (res.collection && res.collection.length)
         {
-          var textFormatter = options.textFormatter || formatText.bind(null, !!options.noPersonnelId);
           var data = res.collection.map(function(userData)
           {
             return userToData(userData, textFormatter);
