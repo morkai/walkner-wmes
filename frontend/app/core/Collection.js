@@ -5,13 +5,15 @@ define([
   'backbone',
   'h5.rql/index',
   './util',
-  './PaginationData'
+  './PaginationData',
+  './Model'
 ], function(
   _,
   Backbone,
   rql,
   util,
-  PaginationData
+  PaginationData,
+  Model
 ) {
   'use strict';
 
@@ -45,6 +47,8 @@ define([
   }
 
   util.inherits(Collection, Backbone.Collection);
+
+  Collection.prototype.model = Model;
 
   Collection.prototype.parse = function(res)
   {

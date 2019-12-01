@@ -62,13 +62,19 @@ define([
 
     actions: function()
     {
-      var page = this;
-      var orderNo = page.model.id;
+      var orderNo = this.model.id;
 
-      return [PrinterPickerView.pageAction({view: page, tag: 'orders'}, function(printer)
-      {
-        openOrderPrint([orderNo], printer);
-      })];
+      return [
+        {
+          label: this.t('PAGE_ACTION:cycleTime'),
+          icon: 'clock-o',
+          href: '#ct/reports/pce?orders=' + orderNo
+        },
+        PrinterPickerView.pageAction({view: this, tag: 'orders'}, function(printer)
+        {
+          openOrderPrint([orderNo], printer);
+        })
+      ];
     },
 
     remoteTopics: function()

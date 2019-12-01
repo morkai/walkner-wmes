@@ -2,8 +2,8 @@
   "root": {
     "BREADCRUMBS:browse": "Orders",
 
-    "PAGE_ACTION:prodLogEntries": "Show operation log",
-    "PAGE_ACTION:prodDowntimes": "Show downtimes",
+    "PAGE_ACTION:prodLogEntries": "Operation log",
+    "PAGE_ACTION:cycleTime": "Cycle time",
 
     "PANEL:TITLE:details": "Order's production details",
     "PANEL:TITLE:orderDetails": "Order's details at the moment of start",

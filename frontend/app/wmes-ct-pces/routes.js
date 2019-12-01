@@ -11,7 +11,10 @@ define([
 ) {
   'use strict';
 
-  router.map('/ct/pces', user.auth('PROD_DATA:VIEW'), function(req)
+  const nls = 'i18n!app/nls/wmes-ct-pces';
+  const canView = user.auth('PROD_DATA:VIEW');
+
+  router.map('/ct/pces', canView, function(req)
   {
     viewport.loadPage(
       [
@@ -19,7 +22,7 @@ define([
         'app/wmes-ct-pces/PceCollection',
         'app/wmes-ct-pces/views/FilterView',
         'app/wmes-ct-pces/views/ListView',
-        'i18n!app/nls/wmes-ct-pces'
+        nls
       ],
       function(FilteredListPage, PceCollection, FilterView, ListView)
       {
@@ -29,6 +32,25 @@ define([
           FilterView: FilterView,
           ListView: ListView,
           collection: new PceCollection(null, {rqlQuery: req.rql})
+        });
+      }
+    );
+  });
+
+  router.map('/ct/reports/pce', canView, function(req)
+  {
+    viewport.loadPage(
+      [
+        'app/wmes-ct-pces/PceReport',
+        'app/wmes-ct-pces/pages/PceReportPage',
+        'css!app/wmes-ct-pces/assets/pceReport',
+        'i18n!app/nls/reports',
+        nls
+      ],
+      function(Report, ReportPage)
+      {
+        return new ReportPage({
+          model: Report.fromQuery(req.query)
         });
       }
     );

@@ -1,0 +1,16 @@
+<form class="well filter-form ct-report-pce-filter" autocomplete="off">
+  <div class="form-group">
+    <label for="<%- idPrefix %>-orders" class="control-label is-required"><%- t('pceReport:filter:orders') %></label>
+    <input id="<%- idPrefix %>-orders" name="orders" class="form-control" type="text" required maxlength="12" style="width: 125px">
+  </div>
+  <%- forms.dateTimeRange({
+    idPrefix: idPrefix
+  }) %>
+  <div class="form-group">
+    <label for="<%- idPrefix %>-lines" class="control-label"><%- t('pceReport:filter:lines') %></label>
+    <input id="<%- idPrefix %>-lines" name="lines" type="text">
+  </div>
+  <div class="form-group filter-actions">
+    <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i><span><%- t('reports', 'filter:submit') %></span></button>
+  </div>
+</form>

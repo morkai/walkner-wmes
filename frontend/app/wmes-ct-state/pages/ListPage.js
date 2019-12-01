@@ -28,6 +28,10 @@ define([
     {
       return [
         {
+          href: '#ct/reports/pce',
+          label: this.t('PAGE_ACTIONS:pceReport')
+        },
+        {
           href: '#ct/pces',
           label: this.t('PAGE_ACTIONS:pces')
         },
@@ -47,7 +51,6 @@ define([
     remoteTopics: {
       'ct.state.updated': function(message)
       {
-        console.log('update', message);
         this.collection.update(message);
       },
       'ct.lines.*': function()

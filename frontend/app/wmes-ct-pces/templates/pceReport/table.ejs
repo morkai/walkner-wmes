@@ -1,0 +1,70 @@
+<table class="table table-bordered table-condensed table-hover">
+  <thead>
+  <tr>
+    <th class="is-min" rowspan="2"><%- t('pceReport:column:order') %></th>
+    <th class="is-min" rowspan="2"><%- t('pceReport:column:line') %></th>
+    <th class="is-min" rowspan="2"><%- t('pceReport:column:shift') %></th>
+    <th class="is-min" rowspan="2"><%- t('pceReport:column:startedAt') %></th>
+    <th class="is-min text-center" colspan="2"><%- t('pceReport:column:pce') %></th>
+    <th class="is-min" rowspan="2"></th>
+    <% for (var stationNo = 1; stationNo <= stationCount; ++stationNo) { %>
+    <th class="is-min text-center" rowspan="2"><%- t('pceReport:column:station', {no: stationNo}) %></th>
+    <% } %>
+    <th class="is-min" rowspan="2"></th>
+    <th class="is-min text-center" rowspan="2"><%- t('pceReport:column:min') %></th>
+    <th class="is-min text-center" rowspan="2"><%- t('pceReport:column:max') %></th>
+    <th rowspan="2"></th>
+  </tr>
+  <tr>
+    <th class="text-center" title="<%- t('pceReport:column:pce:order:title') %>" style="min-width: 35px"><%- t('pceReport:column:pce:order') %></th>
+    <th class="text-center" title="<%- t('pceReport:column:pce:shift:title') %>" style="min-width: 35px"><%- t('pceReport:column:pce:shift') %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% pces.forEach(function(pce, pceI) { %>
+  <tr class="<%- pce.metric ? 'ct-report-pce-metric-row' : '' %>">
+    <% if (pce.scope !== 'product') { %>
+    <td class="is-min is-number">
+      <a href="#orders/<%- pce.orderNo %>"><%- pce.orderNo %></a>
+    </td>
+    <% } %>
+    <% if (!pce.metric || pce.scope === 'pso') { %>
+    <td class="is-min"><%= pce.line %></td>
+    <td class="is-min">
+      <% if (pce.shift) { %>
+      <a href="#prodShifts/<%- pce.shift._id %>"><%- pce.shift.date %>, <%- pce.shift.no %></a>
+      <% } %>
+    </td>
+    <% } %>
+    <% if (!pce.metric) { %>
+    <td class="is-min">
+      <% if (pce.startedAt) { %>
+      <a href="#prodShiftOrders/<%- pce.pso %>"><%- time.format(pce.startedAt, 'HH:mm:ss') %></a>
+      <% } %>
+    </td>
+    <% } %>
+    <% if (pce.metric) { %>
+    <td class="ct-report-pce-metric-label" colspan="<%- pce.scope === 'pso' ? 3 : pce.scope === 'order' ? 5 : 6 %>">
+      <%- t('pceReport:metric:' + pce.metric) %>:
+    </td>
+    <% } else { %>
+    <td class="is-min is-number"><%= pce.orderPce %></td>
+    <td class="is-min is-number"><%= pce.shiftPce %></td>
+    <% } %>
+    <td class="is-min"></td>
+    <% pce.stations.forEach(function(d, stationI) { %>
+    <td class="is-min <%- stationI === pce.minStationI ? 'ct-report-pce-minStation' : '' %> <%- stationI === pce.maxStationI ? 'ct-report-pce-maxStation' : '' %>"><%- d %></td>
+    <% }) %>
+    <td class="is-min"></td>
+    <td class="is-min ct-report-pce-minDuration"><%- pce.minDuration %></td>
+    <td class="is-min ct-report-pce-maxDuration"><%- pce.maxDuration %></td>
+    <th></th>
+  </tr>
+  <% if (pce.metric && pces[pceI + 1] && (!pces[pceI + 1].metric || pces[pceI + 1].scope !== pce.scope)) { %>
+  <tr class="ct-report-pce-metric-separator">
+    <td colspan="<%- 7 + stationCount + 4 %>"></td>
+  </tr>
+  <% } %>
+  <% }) %>
+  </tbody>
+</table>

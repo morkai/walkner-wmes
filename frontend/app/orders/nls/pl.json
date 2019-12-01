@@ -7,6 +7,7 @@
   "PAGE_ACTION:openOrdersPrint": "Drukuj zlecenia",
   "PAGE_ACTION:jump:title": "Skocz do zlecenia po nr",
   "PAGE_ACTION:jump:placeholder": "Nr zlecenia",
+  "PAGE_ACTION:cycleTime": "Czas cyklu",
 
   "LIST:ACTION:print": "Drukuj",
 

@@ -1,8 +1,8 @@
 {
   "BREADCRUMBS:browse": "Zlecenia",
 
-  "PAGE_ACTION:prodLogEntries": "Pokaż historię operacji",
-  "PAGE_ACTION:prodDowntimes": "Pokaż przestoje",
+  "PAGE_ACTION:prodLogEntries": "Historia operacji",
+  "PAGE_ACTION:cycleTime": "Czas cyklu",
 
   "PANEL:TITLE:details": "Szczegóły zlecenia produkcyjnego",
   "PANEL:TITLE:orderDetails": "Szczegóły zlecenia w momencie rozpoczęcia",

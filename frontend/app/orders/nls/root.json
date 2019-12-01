@@ -8,6 +8,7 @@
     "PAGE_ACTION:openOrdersPrint": "Print orders",
     "PAGE_ACTION:jump:title": "Jump to order by no",
     "PAGE_ACTION:jump:placeholder": "Order no",
+    "PAGE_ACTION:cycleTime": "Cycle time",
 
     "LIST:ACTION:print": "Print",
 

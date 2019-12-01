@@ -1,6 +1,7 @@
 {
   "BREADCRUMBS:base": "Czas cyklu",
   "BREADCRUMBS:browse": "Sztuki",
+  "BREADCRUMBS:pceReport": "Raport",
 
   "PROPERTY:line": "Linia",
   "PROPERTY:station": "Stanowisko",
@@ -21,5 +22,27 @@
   "PROPERTY:durations:total": "Całkowity czas trwania",
   "PROPERTY:durations:work": "Czas pracy",
   "PROPERTY:durations:downtime": "Czas wszystkich przestojów",
-  "PROPERTY:durations:scheduled": "Czas planowanych przestojów"
+  "PROPERTY:durations:scheduled": "Czas planowanych przestojów",
+
+  "pceReport:filter:orders": "Zlecenie/Wyrób",
+  "pceReport:filter:lines": "Linia",
+  "pceReport:column:line": "Linia",
+  "pceReport:column:order": "Zlecenie",
+  "pceReport:column:shift": "Zmiana",
+  "pceReport:column:startedAt": "Czas<br>rozp.",
+  "pceReport:column:pce": "Sztuka",
+  "pceReport:column:pce:order": "Zl.",
+  "pceReport:column:pce:order:title": "Nr sztuki w całym zleceniu",
+  "pceReport:column:pce:shift": "Zm.",
+  "pceReport:column:pce:shift:title": "Nr sztuki w zleceniu zmiany produkcyjnej",
+  "pceReport:column:station": "{no}",
+  "pceReport:column:min": "Min.",
+  "pceReport:column:max": "Maks.",
+  "pceReport:metric:min": "Minimum",
+  "pceReport:metric:max": "Maksimum",
+  "pceReport:metric:med": "Mediana",
+  "pceReport:metric:avg": "Średnia",
+  "pceReport:metric:stt": "Takt Time SAP",
+  "pceReport:chart:title": "Czas cyklu",
+  "pceReport:chart:filename": "WMES_CzasCyklu"
 }

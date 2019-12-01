@@ -2,6 +2,7 @@
   "root": {
     "BREADCRUMBS:base": "Cycle time",
     "BREADCRUMBS:browse": "PCE",
+    "BREADCRUMBS:pceReport": "Report",
 
     "PROPERTY:line": "Line",
     "PROPERTY:station": "Station",
@@ -22,7 +23,29 @@
     "PROPERTY:durations:total": "Total duration",
     "PROPERTY:durations:work": "Work duration",
     "PROPERTY:durations:downtime": "Total downtime duration",
-    "PROPERTY:durations:scheduled": "Scheduled downtime duration"
+    "PROPERTY:durations:scheduled": "Scheduled downtime duration",
+
+    "pceReport:filter:orders": "Order/Product",
+    "pceReport:filter:lines": "Line",
+    "pceReport:column:line": "Line",
+    "pceReport:column:order": "Order",
+    "pceReport:column:shift": "Shift",
+    "pceReport:column:startedAt": "Start<br>time",
+    "pceReport:column:pce": "PCE",
+    "pceReport:column:pce:order": "O",
+    "pceReport:column:pce:order:title": "PCE number in the production order",
+    "pceReport:column:pce:shift": "L",
+    "pceReport:column:pce:shift:title": "PCE number in the line order",
+    "pceReport:column:station": "{no}",
+    "pceReport:column:min": "Min.",
+    "pceReport:column:max": "Max.",
+    "pceReport:metric:min": "Minimum",
+    "pceReport:metric:max": "Maximum",
+    "pceReport:metric:med": "Median",
+    "pceReport:metric:avg": "Average",
+    "pceReport:metric:stt": "Takt Time SAP",
+    "pceReport:chart:title": "Cycle time",
+    "pceReport:chart:filename": "WMES_CycleTime"
   },
   "pl": true
 }

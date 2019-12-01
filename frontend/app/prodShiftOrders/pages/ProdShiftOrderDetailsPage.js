@@ -67,12 +67,21 @@ define([
 
     actions: function()
     {
-      var actions = [{
-        label: t.bound('prodShiftOrders', 'PAGE_ACTION:prodLogEntries'),
-        icon: 'list-ol',
-        href: '#prodLogEntries?sort(createdAt)&limit(-1337)'
-          + '&prodShiftOrder=' + encodeURIComponent(this.prodShiftOrder.id)
-      }];
+      var actions = [
+        {
+          label: this.t('PAGE_ACTION:cycleTime'),
+          icon: 'clock-o',
+          href: '#ct/reports/pce'
+            + '?orders=' + this.prodShiftOrder.get('orderId')
+            + '&lines=' + encodeURIComponent(this.prodShiftOrder.get('prodLine'))
+        },
+        {
+          label: this.t('PAGE_ACTION:prodLogEntries'),
+          icon: 'list-ol',
+          href: '#prodLogEntries?sort(createdAt)&limit(-1337)'
+            + '&prodShiftOrder=' + encodeURIComponent(this.prodShiftOrder.id)
+        }
+      ];
 
       if (this.prodShiftOrder.isEditable() && user.isAllowedTo('PROD_DATA:MANAGE', 'PROD_DATA:CHANGES:REQUEST'))
       {

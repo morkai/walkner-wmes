@@ -1,6 +1,7 @@
 {
   "BREADCRUMBS:base": "Czas cyklu",
 
+  "PAGE_ACTIONS:pceReport": "Raport",
   "PAGE_ACTIONS:pces": "Sztuki",
   "PAGE_ACTIONS:lines": "Linie",
   "PAGE_ACTIONS:carts": "Wózki",
