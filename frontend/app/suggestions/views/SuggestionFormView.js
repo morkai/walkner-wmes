@@ -162,7 +162,11 @@ define([
         {
           $kaizenEvent.focus();
         }
-      }
+      },
+
+      'change #-confirmer': 'checkOwnerValidity',
+      'change #-suggestionOwners': 'checkOwnerValidity',
+      'change #-kaizenOwners': 'checkOwnerValidity'
 
     }, FormView.prototype.events),
 
@@ -242,6 +246,28 @@ define([
     checkValidity: function()
     {
       return true;
+    },
+
+    checkOwnerValidity: function()
+    {
+      var view = this;
+      var $confirmer = view.$id('confirmer');
+      var confirmer = $confirmer.select2('data');
+
+      [this.$id('suggestionOwners'), view.$id('kaizenOwners')].forEach(function($owners)
+      {
+        if (!$owners.length)
+        {
+          return;
+        }
+
+        var owners = $owners.select2('data');
+        var valid = !confirmer
+          || owners.length === 0
+          || _.every(owners, function(owner) { return owner.id !== confirmer.id; });
+
+        $owners[0].setCustomValidity(valid ? '' : view.t('FORM:ERROR:ownerConfirmer'));
+      });
     },
 
     submitRequest: function($submitEl, formData)

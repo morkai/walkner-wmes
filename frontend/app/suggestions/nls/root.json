@@ -103,6 +103,7 @@
     "FORM:backTo:kaizenOrders:edit": "Save and go back to the near miss",
     "FORM:ERROR:upload": "Failed to upload the attachments.",
     "FORM:ERROR:date": "The specified date cannot differ from the current date by more than {days} days.",
+    "FORM:ERROR:ownerConfirmer": "Owner cannot be the Confirmer.",
     "FORM:MSG:attachmentEdit": "Choose new files only if you want to override the current files.",
     "FORM:help:subject": "Enter a short text...",
     "FORM:help:section": "Choose your section...",

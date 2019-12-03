@@ -102,6 +102,7 @@
   "FORM:backTo:kaizenOrders:edit": "Zapisz i wróć do ZPW",
   "FORM:ERROR:upload": "Nie udało się załadować załączników.",
   "FORM:ERROR:date": "Podana data nie może się różnić o więcej niż {days} dni od aktualnej daty.",
+  "FORM:ERROR:ownerConfirmer": "Osoba nie może być osobą zatwierdzajacą.",
   "FORM:MSG:attachmentEdit": "Wybierz nowe pliki tylko wtedy, gdy chcesz nadpisać już istniejące pliki.",
   "FORM:help:subject": "Wpisz krótki tekst...",
   "FORM:help:section": "Wybierz swój dział...",
