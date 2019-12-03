@@ -97,8 +97,8 @@ define([
       this.listenTo(this.orders, 'reset', this.render);
       this.listenTo(this.orders, 'change', this.onChange);
       this.listenTo(this.orders, 'focus', this.onFocus);
-      this.listenTo(this.orders, 'mrpSelected paintSelected', this.toggleVisibility);
-      this.listenTo(this.orders, 'paintSelected', this.toggleChildOrderDropZones);
+      this.listenTo(this.orders, 'mrpSelected', this.toggleVisibility);
+      this.listenTo(this.orders, 'paintSelected', this.onPaintSelected);
 
       this.listenTo(this.dropZones, 'updated', this.onDropZoneUpdated);
     },
@@ -135,6 +135,39 @@ define([
 
         return order;
       });
+
+      if (view.orders.selectedPaint !== 'all')
+      {
+        orders.sort(function(a, b)
+        {
+          if (a.order.mrp === b.order.mrp)
+          {
+            return a.order.no - b.order.no;
+          }
+
+          return a.order.mrp.localeCompare(b.order.mrp, undefined, {numeric: true});
+        });
+
+        for (var firstI = 0; firstI < orders.length; ++firstI)
+        {
+          if (orders[firstI].visible)
+          {
+            first = orders[firstI];
+
+            break;
+          }
+        }
+
+        for (var lastI = orders.length - 1; lastI >= 0; --lastI)
+        {
+          if (orders[lastI].visible)
+          {
+            last = orders[lastI];
+
+            break;
+          }
+        }
+      }
 
       if (first)
       {
@@ -554,6 +587,11 @@ define([
       {
         this.toggleChildOrderDropZones();
       }
+    },
+
+    onPaintSelected: function()
+    {
+      this.render();
     }
 
   });
