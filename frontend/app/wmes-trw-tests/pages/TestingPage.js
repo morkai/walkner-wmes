@@ -1196,6 +1196,15 @@ define([
       var outputs = [];
       var allIo = page.model.get('allIo');
       var setIo = page.model.get('setIo');
+      var on = 0;
+      var off = 8000;
+
+      // TODO remove
+      if (page.model.get('line').includes('LM-42'))
+      {
+        on = 8000;
+        off = 0;
+      }
 
       _.forEach(allIo, function(io)
       {
@@ -1207,7 +1216,7 @@ define([
         outputs.push({
           device: io.device,
           channel: io.channel,
-          value: !reset && setIo[io._id] ? 0 : 8000
+          value: !reset && setIo[io._id] ? on : off
         });
       });
 
