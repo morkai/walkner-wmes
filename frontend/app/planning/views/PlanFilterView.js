@@ -11,6 +11,7 @@ define([
   'app/data/clipboard',
   'app/mrpControllers/util/setUpMrpSelect2',
   './ExportStatsDialogView',
+  './ExportTransportDialogView',
   'app/planning/templates/planFilter'
 ], function(
   _,
@@ -23,6 +24,7 @@ define([
   clipboard,
   setUpMrpSelect2,
   ExportStatsDialogView,
+  ExportTransportDialogView,
   template
 ) {
   'use strict';
@@ -53,6 +55,13 @@ define([
         viewport.showDialog(
           new ExportStatsDialogView({model: this.plan}),
           this.t('stats:export:title')
+        );
+      },
+      'click #-exportTransport': function()
+      {
+        viewport.showDialog(
+          new ExportTransportDialogView({model: this.plan}),
+          this.t('transport:export:title')
         );
       }
 

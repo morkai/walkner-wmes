@@ -30,5 +30,6 @@ module.exports = {
   'paintShop/load': require(`${MODULES}/paintShop/loadReport`),
   'wmes-fap/count': require(`${MODULES}/wmes-fap/reports/count`),
   'planning/execution': require(`${MODULES}/planning/reports/execution`),
+  'planning/transport': require(`${MODULES}/planning/reports/transport`),
   'wmes-ct/pce': require(`${MODULES}/wmes-ct-frontend/reports/pce`)
 };
