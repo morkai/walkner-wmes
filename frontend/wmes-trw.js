@@ -42,7 +42,7 @@
       'app/data/localStorage',
       'app/core/layouts/BlankLayout',
       'app/time',
-      'app/wmes-' + window.WMES_APP_ID + '-routes',
+      'app/wmes-trw-routes',
       'bootstrap',
       'moment-lang/' + window.appLocale,
       'select2-lang/' + window.appLocale,
