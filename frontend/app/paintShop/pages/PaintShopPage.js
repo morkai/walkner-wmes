@@ -568,6 +568,7 @@ define([
       $('.modal.fade').removeClass('fade');
 
       this.resize();
+      this.toggleTabs();
 
       embedded.render(this);
       embedded.ready();
@@ -1464,6 +1465,7 @@ define([
     {
       this.updateUrl();
       this.renderTotals();
+      this.toggleTabs();
 
       this.$id('selectedPaint')
         .toggleClass('is-dropped', this.isSelectedPaintDropped())
@@ -1660,6 +1662,25 @@ define([
       });
 
       viewport.showDialog(dialogView);
+    },
+
+    toggleTabs: function()
+    {
+      var page = this;
+      var paint = page.orders.selectedPaint;
+      var paintMrps = page.orders.paintToMrp[paint] || {};
+
+      page.$('.paintShop-tab[data-mrp]').each(function()
+      {
+        var mrp = this.dataset.mrp;
+
+        if (!mrp || mrp === 'all')
+        {
+          return;
+        }
+
+        this.classList.toggle('is-disabled', paint !== 'all' && !paintMrps[mrp]);
+      });
     }
 
   });

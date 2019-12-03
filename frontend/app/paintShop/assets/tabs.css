@@ -31,6 +31,9 @@
   background: #333;
   color: #fff;
 }
+.paintShop-tab.is-disabled {
+  opacity: 0.4;
+}
 .paintShop-tab .fa-level-down {
   display: none;
 }

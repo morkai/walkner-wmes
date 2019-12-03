@@ -324,6 +324,7 @@ define([
       var serializedMap = {};
       var byOrderNo = {};
       var mrpMap = {};
+      var paintToMrpMap = {};
       var totalQuantities = {
         all: createEmptyTotals()
       };
@@ -343,6 +344,16 @@ define([
 
         mrpMap[serializedOrder.mrp] = 1;
 
+        _.forEach(serializedOrder.paints, function(qty, paint)
+        {
+          if (!paintToMrpMap[paint])
+          {
+            paintToMrpMap[paint] = {};
+          }
+
+          paintToMrpMap[paint][serializedOrder.mrp] = 1;
+        });
+
         if (serializedOrder.drilling)
         {
           mrpMap[PaintShopOrder.DRILLING_MRP] = 1;
@@ -354,6 +365,7 @@ define([
       orders.serializedList = serializedList;
       orders.serializedMap = serializedMap;
       orders.byOrderNo = byOrderNo;
+      orders.paintToMrp = paintToMrpMap;
       orders.allMrps = Object.keys(mrpMap).sort();
       orders.totalQuantities = totalQuantities;
 
