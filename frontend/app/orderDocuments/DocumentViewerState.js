@@ -348,6 +348,14 @@ define([
 
       _.assign(newOrder.documents, orderData.documents);
 
+      _.forEach(oldOrder.documents, function(name, nc15)
+      {
+        if (/\$__.*?__$/.test(name) && !newOrder.documents[nc15])
+        {
+          newOrder.documents[nc15] = name;
+        }
+      });
+
       var station = this.get('station');
 
       _.forEach(orderData.confirmations, function(stations, nc15)
