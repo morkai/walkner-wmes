@@ -68,8 +68,11 @@
     "localOrderPicker:error:failure": "Failed to find the order/document.",
     "localOrderPicker:error:failure:order": "Failed to find the order.",
     "localOrderPicker:error:failure:document": "Failed to find the document.",
-    "localOrderPicker:error:NOT_FOUND:order": "Order does not exist!",
-    "localOrderPicker:error:NOT_FOUND:document": "Document does not exist!",
+    "localOrderPicker:error:NOT_FOUND:order": "Order does not exist.",
+    "localOrderPicker:error:NOT_FOUND:document": "Document does not exist.",
+    "localOrderPicker:error:DOCUMENT_NOT_FOUND:document": "Document does not exist in the catalog.",
+    "localOrderPicker:error:DOCUMENT_NO_FILES:document": "Document does not have any files.",
+    "localOrderPicker:error:DATE_NOT_FOUND:document": "Document does not have any matching file.<br>Required availability date: {required}<br>Files available from: {actual}",
 
     "order": "Order card",
     "bom": "Bill of materials",

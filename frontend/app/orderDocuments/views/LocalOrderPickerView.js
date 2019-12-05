@@ -6,6 +6,7 @@ define([
   'js2form',
   'form2js',
   'app/i18n',
+  'app/time',
   'app/viewport',
   'app/core/View',
   'app/core/util/embedded',
@@ -17,6 +18,7 @@ define([
   js2form,
   form2js,
   t,
+  time,
   viewport,
   View,
   embedded,
@@ -164,23 +166,39 @@ define([
 
       req.fail(function(res)
       {
-        var code = ((res.responseJSON || {}).error || {}).message;
+        var code = res.getResponseHeader('X-Error-Code') || '';
+        var text = view.t('localOrderPicker:error:failure:' + kind);
+        var duration = 2500;
 
-        if (res.status === 404)
+        if (code)
         {
-          code = 'NOT_FOUND';
-        }
+          if (view.t.has('localOrderPicker:error:' + code + ':' + kind))
+          {
+            var data = {};
 
-        var text = t.has('orderDocuments', 'localOrderPicker:error:' + code)
-          ? view.t('localOrderPicker:error:' + code)
-          : t.has('orderDocuments', 'localOrderPicker:error:' + code + ':' + kind)
-          ? view.t('localOrderPicker:error:' + code + ':' + kind)
-          : view.t('localOrderPicker:error:failure');
+            if (code === 'DATE_NOT_FOUND')
+            {
+              duration = 6000;
+              data.required = time.format(+res.getResponseHeader('X-Error-Required'), 'L');
+              data.actual = res.getResponseHeader('X-Error-Actual')
+                .split(', ')
+                .map(function(v) { return time.format(+v, 'L'); })
+                .join(', ');
+            }
+
+            text = view.t('localOrderPicker:error:' + code + ':' + kind, data);
+          }
+          else if (view.t.has('localOrderPicker:error:' + code))
+          {
+            text = view.t('localOrderPicker:error:' + code);
+          }
+        }
 
         viewport.msg.show({
           type: 'error',
-          time: 3000,
-          text: text
+          time: duration,
+          text: text,
+          className: 'text-left'
         });
       });
 
@@ -219,7 +237,7 @@ define([
       var view = this;
       var req = view.ajax({
         type: 'HEAD',
-        url: '/orderDocuments/' + nc15 + '?name=1'
+        url: '/orderDocuments/' + nc15 + '?name=1&order=' + this.model.getCurrentOrder().no
       });
 
       req.done(function()

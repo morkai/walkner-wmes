@@ -67,8 +67,11 @@
   "localOrderPicker:error:failure": "Nie udało się znaleźć zlecenia/dokumentu.",
   "localOrderPicker:error:failure:order": "Nie udało się znaleźć zlecenia.",
   "localOrderPicker:error:failure:document": "Nie udało się znaleźć dokumentu.",
-  "localOrderPicker:error:NOT_FOUND:order": "Zlecenie o podanym numerze nie istnieje!",
-  "localOrderPicker:error:NOT_FOUND:document": "Dokument o podanym numerze nie istnieje!",
+  "localOrderPicker:error:NOT_FOUND:order": "Zlecenie o podanym numerze nie istnieje.",
+  "localOrderPicker:error:NOT_FOUND:document": "Dokument o podanym numerze nie istnieje.",
+  "localOrderPicker:error:DOCUMENT_NOT_FOUND:document": "Dokument nie istnieje w katalogu.",
+  "localOrderPicker:error:DOCUMENT_NO_FILES:document": "Dokument nie ma żadnych plików.",
+  "localOrderPicker:error:DATE_NOT_FOUND:document": "Dokument nie ma pliku pasującego do daty dostępności.<br>Wymagana data dostępności: {required}<br>Dostępne pliki od: {actual}",
 
   "order": "Karta zlecenia",
   "bom": "Lista komponentów",

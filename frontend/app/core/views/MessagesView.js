@@ -142,6 +142,7 @@ define([
   MessagesView.prototype.show = function(options)
   {
     var $message = $(messageTemplate({
+      className: options.className || '',
       type: options.type || 'info',
       text: options.text,
       sticky: !!options.sticky
