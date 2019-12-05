@@ -733,7 +733,7 @@ define([
         var text = orderInfo[this.dataset.property];
 
         this.style.display = text ? '' : 'none';
-        this.textContent = text;
+        this.textContent = text.replace(/\$__.*?__/g, '');
       });
     },
 
