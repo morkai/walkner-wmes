@@ -1,11 +1,13 @@
 {
   "root": {
     "BREADCRUMBS:base": "Cycle time",
+    "BREADCRUMBS:diag": "Diagnostics",
 
     "PAGE_ACTIONS:pceReport": "Report",
     "PAGE_ACTIONS:pces": "PCEs",
     "PAGE_ACTIONS:lines": "Lines",
     "PAGE_ACTIONS:carts": "Carts",
+    "PAGE_ACTIONS:diag": "Diagnostics",
 
     "PROPERTY:cart": "Cart",
     "PROPERTY:order": "Order",
@@ -26,7 +28,19 @@
     "PROPERTY:durations:scheduled": "Scheduled downtime duration",
     "PROPERTY:taktTime:order": "Order Takt Time",
     "PROPERTY:taktTime:target": "Station Takt Time",
-    "PROPERTY:taktTime:actual": "Station Cycle Time"
+    "PROPERTY:taktTime:actual": "Station Cycle Time",
+
+    "diag:time": "Time",
+    "diag:line": "Line",
+    "diag:station": "Station",
+    "diag:action": "Action",
+    "diag:data": "Data",
+    "todo:action:cart": "Cart read",
+    "todo:action:input": "Input change",
+    "todo:action:sn": "Serial number scan",
+    "todo:action:reset": "Line state reset",
+    "todo:action:changeOrder": "Order change",
+    "todo:action:correctOrder": "Order correction"
   },
   "pl": true
 }

@@ -11,20 +11,40 @@ define([
 ) {
   'use strict';
 
-  router.map('/ct', user.auth('PROD_DATA:VIEW'), function()
+  var css = 'css!app/wmes-ct-state/assets/main';
+  var nls = 'i18n!app/nls/wmes-ct-state';
+  var canView = user.auth('PROD_DATA:VIEW');
+  var canManage = user.auth('PROD_DATA:MANAGE');
+
+  router.map('/ct', canView, function()
   {
     viewport.loadPage(
       [
         'app/wmes-ct-state/LineStateCollection',
         'app/wmes-ct-state/pages/ListPage',
-        'css!app/wmes-ct-state/assets/main',
-        'i18n!app/nls/wmes-ct-state'
+        css,
+        nls
       ],
       function(LineStateCollection, ListPage)
       {
         return new ListPage({
           collection: new LineStateCollection()
         });
+      }
+    );
+  });
+
+  router.map('/ct/diag', canManage, function()
+  {
+    viewport.loadPage(
+      [
+        'app/wmes-ct-state/pages/DiagPage',
+        css,
+        nls
+      ],
+      function(DiagPage)
+      {
+        return new DiagPage();
       }
     );
   });

@@ -1,10 +1,12 @@
 {
   "BREADCRUMBS:base": "Czas cyklu",
+  "BREADCRUMBS:diag": "Diagnostyka",
 
   "PAGE_ACTIONS:pceReport": "Raport",
   "PAGE_ACTIONS:pces": "Sztuki",
   "PAGE_ACTIONS:lines": "Linie",
   "PAGE_ACTIONS:carts": "Wózki",
+  "PAGE_ACTIONS:diag": "Diagnostyka",
 
   "PROPERTY:cart": "Wózek",
   "PROPERTY:order": "Zlecenie",
@@ -25,5 +27,17 @@
   "PROPERTY:durations:scheduled": "Czas planowanych przestojów",
   "PROPERTY:taktTime:order": "Czas taktu SAP dla zlecenia",
   "PROPERTY:taktTime:target": "Czas taktu SAP dla stanowiska",
-  "PROPERTY:taktTime:actual": "Rzeczywisty czas cyklu stanowiska"
+  "PROPERTY:taktTime:actual": "Rzeczywisty czas cyklu stanowiska",
+
+  "todo:time": "Czas",
+  "todo:line": "Linia",
+  "todo:station": "Stanowisko",
+  "todo:action": "Akcja",
+  "todo:data": "Dane",
+  "todo:action:cart": "Odczyt wózka",
+  "todo:action:input": "Zmiana wejścia",
+  "todo:action:sn": "Skan numeru seryjnego",
+  "todo:action:reset": "Reset stanu linii",
+  "todo:action:changeOrder": "Zmiana zlecenia",
+  "todo:action:correctOrder": "Poprawa zlecenia"
 }
