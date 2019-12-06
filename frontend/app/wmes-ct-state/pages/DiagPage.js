@@ -2,6 +2,7 @@
 
 define([
   'underscore',
+  'jquery',
   'app/time',
   'app/core/View',
   'app/core/util/bindLoadingMessage',
@@ -10,6 +11,7 @@ define([
   'app/wmes-ct-state/templates/diagRow'
 ], function(
   _,
+  $,
   time,
   View,
   bindLoadingMessage,
@@ -43,10 +45,40 @@ define([
       }
     },
 
+    initialize: function()
+    {
+      this.scrollY = 0;
+      this.scrollLock = true;
+
+      $(window).on('scroll.' + this.idPrefix, this.onWindowScroll.bind(this));
+    },
+
+    destroy: function()
+    {
+      $(window).off('.' + this.idPrefix);
+    },
+
+    afterRender: function()
+    {
+      this.scrollY = window.scrollY;
+    },
+
+    onWindowScroll: function()
+    {
+      if (window.scrollY < this.scrollY)
+      {
+        this.scrollLock = false;
+      }
+      else if (window.scrollY > this.scrollY && !this.scrollLock)
+      {
+        this.scrollLock = this.isScrolledToBottom();
+      }
+
+      this.scrollY = window.scrollY;
+    },
+
     addTodo: function(todo, ignored)
     {
-      var scroll = this.isScrolledToBottom();
-
       this.$('tbody').append(this.renderPartialHtml(rowTemplate, {
         row: {
           ignored: ignored,
@@ -58,7 +90,7 @@ define([
         }
       }));
 
-      if (scroll)
+      if (this.scrollLock)
       {
         this.scrollToBottom();
       }
