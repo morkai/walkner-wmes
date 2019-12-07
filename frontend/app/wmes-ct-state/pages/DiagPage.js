@@ -37,11 +37,11 @@ define([
     remoteTopics: {
       'ct.todos.saved': function(todo)
       {
-        this.addTodo(todo, false);
+        this.addTodo(todo);
       },
       'ct.todos.ignored': function(todo)
       {
-        this.addTodo(todo, true);
+        this.addTodo(todo);
       }
     },
 
@@ -49,6 +49,7 @@ define([
     {
       this.scrollY = 0;
       this.scrollLock = true;
+      this.todos = [];
 
       $(window).on('scroll.' + this.idPrefix, this.onWindowScroll.bind(this));
     },
@@ -60,7 +61,29 @@ define([
 
     afterRender: function()
     {
-      this.scrollY = window.scrollY;
+      var view = this;
+
+      if (view.todos.length)
+      {
+        var scrollLock = view.scrollLock;
+        var scrollY = view.scrollY;
+
+        view.scrollLock = false;
+
+        view.todos.forEach(function(todo) { view.renderTodo(todo, false); });
+
+        view.scrollLock = scrollLock;
+
+        window.scrollTo({
+          top: scrollY,
+          left: 0,
+          behavior: 'auto'
+        });
+      }
+      else
+      {
+        view.scrollY = window.scrollY;
+      }
     },
 
     onWindowScroll: function()
@@ -77,11 +100,17 @@ define([
       this.scrollY = window.scrollY;
     },
 
-    addTodo: function(todo, ignored)
+    addTodo: function(todo)
+    {
+      this.todos.push(todo);
+      this.renderTodo(todo, true);
+    },
+
+    renderTodo: function(todo, isNew)
     {
       this.$('tbody').append(this.renderPartialHtml(rowTemplate, {
         row: {
-          ignored: ignored,
+          isNew: !!isNew,
           time: time.format(todo.time, 'YYYY-MM-DD, HH:mm:ss.SSS'),
           line: todo.line,
           station: todo.station ? todo.station.toString() : '',
