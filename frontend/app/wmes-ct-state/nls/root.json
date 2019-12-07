@@ -40,7 +40,8 @@
     "todo:action:sn": "Serial number scan",
     "todo:action:reset": "Line state reset",
     "todo:action:changeOrder": "Order change",
-    "todo:action:correctOrder": "Order correction"
+    "todo:action:correctOrder": "Order correction",
+    "diag:clear": "Clear"
   },
   "pl": true
 }

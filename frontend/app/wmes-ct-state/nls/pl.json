@@ -39,5 +39,6 @@
   "todo:action:sn": "Skan numeru seryjnego",
   "todo:action:reset": "Reset stanu linii",
   "todo:action:changeOrder": "Zmiana zlecenia",
-  "todo:action:correctOrder": "Poprawa zlecenia"
+  "todo:action:correctOrder": "Poprawa zlecenia",
+  "diag:clear": "Wyczyść"
 }

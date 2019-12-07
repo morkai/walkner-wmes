@@ -34,6 +34,23 @@ define([
       ];
     },
 
+    actions: function()
+    {
+      var view = this;
+
+      return [
+        {
+          label: view.t('diag:clear'),
+          icon: 'eraser',
+          callback: function()
+          {
+            view.todos = [];
+            view.$('tbody').html('');
+          }
+        }
+      ];
+    },
+
     remoteTopics: {
       'ct.todos.saved': function(todo)
       {
