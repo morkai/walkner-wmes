@@ -122,9 +122,12 @@ define([
 
     setUpUnseen: function()
     {
-      if (this.notifications)
+      var topic = 'fap.entries.notifications.' + user.data._id;
+
+      if (this.notifications && this.notifications.topic !== topic)
       {
         this.notifications.cancel();
+        this.notifications = null;
       }
 
       this.reloadUnseen();
@@ -134,10 +137,13 @@ define([
         return;
       }
 
-      this.notifications = this.pubsub.subscribe(
-        'fap.entries.notifications.' + user.data._id,
-        this.onNotification.bind(this)
-      );
+      if (!this.notifications)
+      {
+        this.notifications = this.pubsub.subscribe(
+          'fap.entries.notifications.' + user.data._id,
+          this.onNotification.bind(this)
+        );
+      }
     },
 
     reloadUnseen: function()
