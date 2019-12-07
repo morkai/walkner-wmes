@@ -105,7 +105,7 @@
         views: views,
         version: updater.getCurrentVersionString(),
         changelogUrl: '#changelog',
-        hdHidden: !!window.toolbar && !window.toolbar.visible
+        hdHidden: !!window.toolbar && !window.toolbar.visible && !window.IS_MOBILE
       });
     });
 
