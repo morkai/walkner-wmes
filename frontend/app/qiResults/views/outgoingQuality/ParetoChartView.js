@@ -186,8 +186,8 @@ define([
       var report = view.model;
       var printable = report.get('printable');
       var topCount = report.getTopCount();
-      var top = report.get('top') || {};
-      var values = top[property] || [];
+      var group = _.last(report.get('groups'));
+      var values = group[property] || [];
       var pareto = 0;
 
       for (var i = 0; i < topCount; ++i)
@@ -213,7 +213,7 @@ define([
           name: value[0],
           y: value[1]
         });
-        series[1].data.push((pareto / top.qtyNok) * 100);
+        series[1].data.push((pareto / group.qtyNok) * 100);
       }
 
       return {

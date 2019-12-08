@@ -428,10 +428,9 @@ define([
           obj.standard = standard.get('name');
         }
 
-        obj.rootCause = obj.rootCause.map(function(rootCause)
-        {
-          return '<ol><li>' + rootCause.join('<li>') + '</ol>';
-        }).join('');
+        obj.rootCause = obj.rootCause
+          .map(function(rootCause) { return '<ol><li>' + rootCause.join('<li>') + '</ol>'; })
+          .join('');
 
         ridToRow[obj.rid] = obj;
 

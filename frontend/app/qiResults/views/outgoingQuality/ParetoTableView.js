@@ -32,13 +32,11 @@ define([
       var totals = top[property] || [];
       var groups = view.model.get('groups') || [];
 
-      for (var i = 0; i < topCount; ++i)
+      totals.forEach(function(total)
       {
-        var total = totals[i];
-
-        if (!total)
+        if (rows.length === topCount)
         {
-          break;
+          return;
         }
 
         var row = {
@@ -53,10 +51,9 @@ define([
           }
         };
 
-        for (var g = groups.length - topCount; g < groups.length; ++g)
+        groups.forEach(function(group)
         {
-          var group = groups[g];
-          var match = _.find(group[property], function(d) { return d[0] === row._id; }); // eslint-disable-line no-loop-func
+          var match = _.find(group[property], function(d) { return d[0] === row._id; });
 
           if (match)
           {
@@ -74,10 +71,15 @@ define([
               total: group.qtyNok
             });
           }
-        }
+        });
 
-        rows.push(row);
-      }
+        if (row.data[row.data.length - 1].absolute)
+        {
+          row.data = row.data.slice(-3);
+
+          rows.push(row);
+        }
+      });
 
       return {
         property: property,
