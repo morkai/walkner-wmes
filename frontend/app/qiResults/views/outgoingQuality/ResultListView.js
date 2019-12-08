@@ -321,26 +321,23 @@ define([
 
     serializeColumns: function()
     {
-      var columns = [
+      var printable = this.collection.report.get('printable');
+
+      return [
+        {id: 'rid', tdClassName: 'is-min is-number', visible: !printable},
         {id: 'kpi', className: 'is-min'},
         {id: 'site', className: 'is-min'},
         {id: 'date', className: 'is-min'},
         {id: 'pareto'},
         {id: 'concern'},
-        {id: 'cause'},
+        {id: 'rootCause', visible: !printable},
+        {id: 'problem'},
         {id: 'countermeasure'},
-        {id: 'check', className: 'is-min'},
+        {id: 'check', className: printable ? '' : 'is-min'},
         {id: 'standard', className: 'is-min'},
-        {id: 'who', className: 'is-min'},
+        {id: 'who', className: printable ? '' : 'is-min'},
         {id: 'when', className: 'is-min'}
       ];
-
-      if (!this.collection.report.get('printable'))
-      {
-        columns.unshift({id: 'rid', tdClassName: 'is-min is-number'});
-      }
-
-      return columns;
     },
 
     serializeActions: function()
@@ -380,9 +377,9 @@ define([
           obj.check = obj.check.slice(0, 1);
           obj.who = obj.who.slice(0, 1);
 
-          if (obj.cause.length > 105)
+          if (obj.problem.length > 105)
           {
-            obj.cause = obj.cause.substring(0, 100) + '...';
+            obj.problem = obj.problem.substring(0, 100) + '...';
           }
 
           if (obj.countermeasure.length > 105)
@@ -430,6 +427,11 @@ define([
         {
           obj.standard = standard.get('name');
         }
+
+        obj.rootCause = obj.rootCause.map(function(rootCause)
+        {
+          return '<ol><li>' + rootCause.join('<li>') + '</ol>';
+        }).join('');
 
         ridToRow[obj.rid] = obj;
 

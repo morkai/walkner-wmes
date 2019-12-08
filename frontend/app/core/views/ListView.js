@@ -200,6 +200,11 @@ define([
           column = {id: column};
         }
 
+        if (column.visible === false)
+        {
+          return null;
+        }
+
         if (!column.valueProperty)
         {
           column.valueProperty = column.id;
