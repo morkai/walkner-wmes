@@ -251,7 +251,12 @@ define([
             rank += 1;
           }
 
-          if (/mont/i.test(op.name))
+          if (/^monta/i.test(op.name))
+          {
+            rank += 1;
+          }
+
+          if (/monta/i.test(op.name))
           {
             rank += 2;
           }
