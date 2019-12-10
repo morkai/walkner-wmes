@@ -336,7 +336,7 @@
   "transport:export:mrps": "MRP",
   "transport:export:lines": "Linie",
   "transport:export:submit": "Eksportuj plan transportu",
-  "transport:export:fileName": "WMES_Plan_Transportu_{from}_{to}",
+  "transport:export:fileName": "WMES_Plan_Transportu",
   "transport:export:sheetName": "Plan trans. {from}-{to}",
   "transport:date": "Data",
   "transport:time": "Czas",
