@@ -194,7 +194,7 @@ define([
       {
         var value = values[i];
 
-        if (!value)
+        if (!value || !value[1])
         {
           break;
         }

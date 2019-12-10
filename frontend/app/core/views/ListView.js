@@ -132,7 +132,7 @@ define([
 
     serialize: function()
     {
-      return {
+      return _.assign(View.prototype.serialize.apply(this, arguments), {
         columns: this.decorateColumns(this.serializeColumns()),
         actions: this.serializeActions(),
         rows: this.serializeRows(),
@@ -159,7 +159,7 @@ define([
 
           return row[column.valueProperty];
         }
-      };
+      });
     },
 
     serializeColumns: function()

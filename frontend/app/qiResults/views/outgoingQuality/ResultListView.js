@@ -9,7 +9,8 @@ define([
   'app/data/orgUnits',
   'app/data/prodFunctions',
   'app/qiResults/dictionaries',
-  'app/core/templates/userInfo'
+  'app/core/templates/userInfo',
+  'app/qiResults/templates/outgoingQuality/resultListPrint'
 ], function(
   _,
   $,
@@ -19,7 +20,8 @@ define([
   orgUnits,
   prodFunctions,
   dictionaries,
-  userInfoTemplate
+  userInfoTemplate,
+  printTemplate
 ) {
   'use strict';
 
@@ -27,7 +29,12 @@ define([
 
     className: function()
     {
-      return this.collection.report.get('printable') ? '' : 'is-clickable';
+      return this.isPrintable() ? '' : 'is-clickable';
+    },
+
+    template: function(context)
+    {
+      return (this.isPrintable() ? printTemplate : ListView.prototype.template)(context);
     },
 
     remoteTopics: {},
@@ -319,9 +326,14 @@ define([
       $el.html(html);
     },
 
+    isPrintable: function()
+    {
+      return this.collection.report.get('printable');
+    },
+
     serializeColumns: function()
     {
-      var printable = this.collection.report.get('printable');
+      var printable = this.isPrintable();
 
       return [
         {id: 'rid', tdClassName: 'is-min is-number', visible: !printable},
@@ -366,25 +378,43 @@ define([
         }
       });
 
-      var printable = report.get('printable');
+      var printable = this.isPrintable();
+      var maxLength = 200;
       var ridToRow = {};
       var allRows = results.map(function(result)
       {
         var obj = result.toJSON();
+
+        obj.rootCause = obj.rootCause
+          .map(function(rootCause)
+          {
+            if (printable)
+            {
+              return rootCause.map(function(s, i) { return (i + 1) + '. ' + _.escape(s); }).join('; ');
+            }
+
+            return '<ol><li>' + rootCause.map(function(s) { return _.escape(s); }).join('<li>') + '</ol>';
+          })
+          .join('');
 
         if (printable)
         {
           obj.check = obj.check.slice(0, 1);
           obj.who = obj.who.slice(0, 1);
 
-          if (obj.problem.length > 105)
+          if (obj.rootCause.length > maxLength + 5)
           {
-            obj.problem = obj.problem.substring(0, 100) + '...';
+            obj.rootCause = obj.rootCause.substring(0, maxLength) + '...';
           }
 
-          if (obj.countermeasure.length > 105)
+          if (obj.problem.length > maxLength + 5)
           {
-            obj.countermeasure = obj.countermeasure.substring(0, 100) + '...';
+            obj.problem = obj.problem.substring(0, maxLength) + '...';
+          }
+
+          if (obj.countermeasure.length > maxLength + 5)
+          {
+            obj.countermeasure = obj.countermeasure.substring(0, maxLength) + '...';
           }
         }
 
@@ -401,9 +431,14 @@ define([
 
         var mrpController = orgUnits.getByTypeAndId('mrpController', obj.pareto);
 
-        if (!printable && mrpController)
+        if (mrpController)
         {
           obj.pareto += ': ' + mrpController.get('description');
+        }
+
+        if (printable && obj.pareto.length > 95)
+        {
+          obj.pareto = obj.pareto.substring(0, 90) + '...';
         }
 
         obj.fault = obj.concern;
@@ -427,10 +462,6 @@ define([
         {
           obj.standard = standard.get('name');
         }
-
-        obj.rootCause = obj.rootCause
-          .map(function(rootCause) { return '<ol><li>' + rootCause.join('<li>') + '</ol>'; })
-          .join('');
 
         ridToRow[obj.rid] = obj;
 
