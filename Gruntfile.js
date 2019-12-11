@@ -122,6 +122,7 @@ module.exports = function(grunt)
             {name: 'wmes-isa'},
             {name: 'wmes-trw'}
           ],
+          packages: requirejsConfig.packages,
           paths: requirejsConfig.buildPaths,
           shim: requirejsConfig.buildShim,
           locale: 'pl'
