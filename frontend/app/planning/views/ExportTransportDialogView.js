@@ -185,9 +185,16 @@ define([
 
       data.forEach(function(row)
       {
-        row.date = Date.parse(row.startAt);
-        row.time = row.date;
+        row.time = Date.parse(row.startAt);
         row.startAt = undefined;
+        row.date = time.utc.getMoment(row.time);
+
+        if (row.date.hours() < 6)
+        {
+          row.date.subtract(1, 'days');
+        }
+
+        row.date = row.date.startOf('day').valueOf();
       });
 
       var nlsData = {
