@@ -24,12 +24,12 @@
       "wh-kitter": 5,
       "wh-packer": 5,
       "isa": 6,
-      "luma2": 5,
+      "luma2": 6,
       "trw": 13,
       "luca": 7,
       "drilling": 8,
       "wiring": 1,
-      "ct": 6
+      "ct": 7
     },
     "pos": {
       "backend": 89,
