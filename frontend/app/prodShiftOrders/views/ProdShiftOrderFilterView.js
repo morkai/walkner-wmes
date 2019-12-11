@@ -59,7 +59,7 @@ define([
             position: 'absolute',
             marginTop: '-34px',
             width: '383px',
-            zIndex: '2'
+            zIndex: '3'
           })
           .val($input.val().split(' ').join('\n'))
           .appendTo($group)
